@@ -13,4 +13,10 @@ namespace Everglow.Sources.Commons
         public void Load();
         public void Unload();
     }
+
+    [AttributeUsage(AttributeTargets.Class)]
+    public class DontAutoLoadAttribute : Attribute
+    {
+
+    }
 }

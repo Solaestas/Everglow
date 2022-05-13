@@ -29,17 +29,10 @@ namespace Everglow
             get { return m_instance; }
         }
 
-        public ModuleManager ModuleManager
-        {
-            get
-            {
-                return m_moduleManager;
-            }
-        }
 
         private static Everglow m_instance;
 
-        private ModuleManager m_moduleManager;
+        //private ModuleManager m_moduleManager;
 
 
         public Everglow()
@@ -50,14 +43,16 @@ namespace Everglow
         {
             m_instance = this;
 
-            m_moduleManager = new ModuleManager();
-            m_moduleManager.LoadAll();
+            //m_moduleManager = new ModuleManager();
+            //m_moduleManager.LoadAll();
+            //直接使用单例模式
+            ModuleManager.Instance.Load();
         }
 
         public override void Unload()
         {
-            m_moduleManager.UnloadAll();
-
+            //m_moduleManager.UnloadAll();
+            ModuleManager.Instance.Unload();
             m_instance = null;
         }
     }

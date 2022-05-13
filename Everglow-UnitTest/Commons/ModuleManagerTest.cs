@@ -7,11 +7,11 @@ namespace Everglow_UnitTest
     [TestClass]
     public class ModuleManagerTest
     {
-        private readonly ModuleManager m_moduleManager;
+        //private readonly ModuleManager m_moduleManager;
 
         public ModuleManagerTest()
         {
-            m_moduleManager = new ModuleManager();
+            ModuleManager.Instance.Load();
         }
 
         [TestMethod]
@@ -21,12 +21,13 @@ namespace Everglow_UnitTest
             mockModule.Setup(m => m.Name).Returns("Test");
 
             // Add a module named "Test"
-            m_moduleManager.AddModule(mockModule.Object);
+            ModuleManager.AddModule(mockModule.Object);
 
             // Should be able to get the object
-            var module = m_moduleManager.GetModule("Test");
+            var module = ModuleManager.GetModule("Test");
 
             Assert.AreEqual("Test", module.Name);
         }
+
     }
 }
