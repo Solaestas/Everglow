@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32421.90
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Everglow", "Everglow.csproj", "{1D5650AA-56A6-4BBD-9AE5-A002EAD597ED}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1D5650AA-56A6-4BBD-9AE5-A002EAD597ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D5650AA-56A6-4BBD-9AE5-A002EAD597ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D5650AA-56A6-4BBD-9AE5-A002EAD597ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D5650AA-56A6-4BBD-9AE5-A002EAD597ED}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {932F3A57-89F2-4FD7-A1BC-864E6BA3A044}
+	EndGlobalSection
+EndGlobal

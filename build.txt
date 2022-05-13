@@ -1,0 +1,3 @@
+displayName = Everglow
+author = Dream Chaser Group
+version = 0.1
