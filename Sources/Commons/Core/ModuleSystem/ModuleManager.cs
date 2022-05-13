@@ -76,11 +76,22 @@ namespace Everglow.Sources.Commons.ModuleSystem
         public IEnumerable<IModule> FindModule(string name) => from ins in modules 
                                                                where ins.Name == name select ins;
         /// <summary>
-        /// 虽然我觉得Module应该不会后期加载，但还是写上去了
+        /// 缺乏依赖会抛出异常
         /// </summary>
         /// <param name="module"></param>
         public void AddModule(IModule module)
         {
+            if (Attribute.IsDefined(module.GetType(), typeof(ModuleDependencyAttribute)))
+            {
+                var attr = module.GetType().GetCustomAttribute<ModuleDependencyAttribute>();
+                foreach(var type in attr.DependTypes)
+                {
+                    if(!modulesByType.ContainsKey(type))
+                    {
+                        throw new InvalidOperationException($"当前加载Module的依赖Module  {type.Name}  并未加载");
+                    }
+                }
+            }
             modules.Add(module);
             //应该不会重复加同一种module吧……，反正这样写是不会报错就是了
             modulesByName[module.Name] = module;
@@ -89,6 +100,7 @@ namespace Everglow.Sources.Commons.ModuleSystem
         }
         /// <summary>
         /// 提前卸载一个Module
+        /// 依赖项不能自动卸载
         /// </summary>
         /// <param name="module"></param>
         public bool RemoveModule(IModule module)
