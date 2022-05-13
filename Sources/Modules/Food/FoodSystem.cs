@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Everglow.Sources.Modules.Food
+﻿namespace Everglow.Sources.Modules.Food
 {
-    internal class FoodSystem
+    internal class FoodSystem : ModSystem
     {
         
     }
