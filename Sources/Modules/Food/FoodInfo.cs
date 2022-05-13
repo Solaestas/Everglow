@@ -1,6 +1,6 @@
 ﻿namespace Everglow.Sources.Modules.Food
 {
-    public struct FoodInfo
+    public class FoodInfo
     {
         public Item_id Satiety
         {
