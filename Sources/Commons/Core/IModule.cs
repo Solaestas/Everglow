@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace Everglow.Sources.Commons
 {
-    internal interface IModule
+    public interface IModule
     {
         public string Name { get; }
         public string Description { get; }
-
         public void Load();
-
         public void Unload();
     }
 }

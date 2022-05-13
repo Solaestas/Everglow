@@ -8,5 +8,6 @@ namespace Everglow.Sources.Modules.Test
 {
     internal class Class1
     {
+        
     }
 }
