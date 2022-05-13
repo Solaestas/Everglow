@@ -17,7 +17,5 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Documents\" />
-    <Folder Include="Sources\Commons\" />
-    <Folder Include="Sources\Modules\" />
   </ItemGroup>
 </Project>
