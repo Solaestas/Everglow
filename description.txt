@@ -1,164 +1,37 @@
-Everglow is a comprehensive mod
+Everglow is a comprehensive content mod
 
-Team: Dream Chaser Group（According to alphabetical order）
+Developed by Dream Chaser Group
 
-Coder: Colin-Weiss, Mr.Skirt, Omni-Element, yiyang233, Zi You
+Programmers: Colin Weiss, Mr.Skirt, Omnielement, yiyang233, Ye_you
+Artist: Jelly, Omnielement, Vedotek Lily, 仙阁
+Musician：Dirty Octopus, Setnour6, Uni
+Localization：Lacewing(en-US), NooN iS oN(ru-RU)
+Publicists: 承影，绮逾依
+Moderators: Dirty Octopus, 绮逾依，Lacewing，夜鸽，Redusty
 
-Artist:  Jelly, Omni Element, Vedotek Lily, XianGe
+Special thanks to: 
+Publicity: Starlight River, Endless Escape, Blood Soul, Ryuusei (BabeElena)
+Sprites: flowey, Nomis, Verycd, 余墨, and some anonymous spriters
+Codes: SilverMoon, Uin
+Wiki: Moonseer
+Translations: Zero Project
 
-Musician：Dirty Octopus, Setnour6
+--------------------------------------
 
-Localization：Lacewing(CH), NooN iS oN(RU)
+流光无际是一个综合内容性模组
 
-Publicists: Cheng-ying, Little jellyfish
-
-Moderators: Dirty Octopus, Little jellyfish, Lacewing, Night song,  Redusty
-
-Special thanks to:  egshels (!angela) [Publicity], flowey [Sprite], Moonseer [Creating wiki],  Nomis [Sprite], Ryuusei (BabeElena) [Publicity], SilverMoon [Code​], Uin [Code​], Verycd  [Sprite], Yu_Mo[Sprite], and some anonymous spriters.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Streamer infinity ist ein umfassendes Modul
-
-Entwickelt von [lonely boat dream hunting team] (Ranking nach alphabetischer Reihenfolge englischer Namen)
-
-Programm: Colin Weiss, kleiner Rock, vientianische Elemente, Yegu Ziyou, yiyang233
-
-Künstler: Jelly, Vientiane elements, Vitotech, Lily, Xiange
-
-Musiker: dirty fish, sernour6
-
-Übersetzung: lacewing [Chinesisch], mittag ist an [Russisch]
-
-Werbung: Fotografieren, Qiyuyi
-
-Spielermanagement: schmutziger Fisch, Qi Yuyi, Schnürsenkel, Nachttaube, rote Welt
-
-Extra Dank: egshels (! Angela) [publicity], Xiaohua [maler], Moonseer [wiki], Nomis [maler], ryuusei (babelena) [publicity], Yinyue [programmer], Youyin [programmer], Herzspiel [gesponserte maler], Yu Mo [maler] und einige anonyme Maler
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Streamer infinity è un modulo completo
-
-Sviluppato da [solitaria barca dream chasing team] (classifica secondo l'ordine alfabetico dei nomi inglesi)
-
-Programma: Colin Weiss, gonna piccola, elementi Vientiane, Yegu Ziyou, yiyang233
-
-Artista: gelatina, elementi Vientiane, vitotech, giglio, Xiange
-
-Musicista: pesce sporco, sernour6
-
-Traduzione: lacewing [cinese], mezzogiorno è su [russo]
-
-Pubblicità: scattare foto, qiyuyi
-
-Gestione giocatore: pesce sporco, Qi Yuyi, lacewing, piccione notturno, mondo rosso
-
-Grazie extra: egshels (! Angela) [pubblicità], Xiaohua [pittore], moonseer [wiki], Nomis [pittore], ryuusei (babelena) [pubblicità], Yinyue [programmatore], Youyin [programmatore], gioco di cuore [pittore sponsorizzato], Yu Mo [pittore], e alcuni pittori anonimi
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Streamlight Infinity est un module complet
-
-Développé par [l'équipe de rêve de bateau solitaire] (classement selon l'ordre alphabétique des noms anglais)
-
-Procédure: collingweiss, petite jupe, élément Vientiane, night Valley Purple, yiyang233
-
-Peintre: gelée, éléments de Vientiane, Vito Tai Keli, Senkaku
-
-Musicien: Dirty Fish Brother, sernour6
-
-Traduction: lacewing [chinois], noon is on [russe]
-
-Publicité: Cheng Ying, Qi Yuyi
-
-Gestion des joueurs: poisson sale, qiyuyi, lacewing, pigeon de nuit, poussière rouge
-
-Merci encore: egshels (! Angela) [propaganda], Flower [Painter], moonseer [wiki], nomis [Painter], ryuusei (babeena) [propaganda], Silver Moon [programmeur], youyin [programmeur], heart Games [sponsored Painter], yu mo [Painter], and some Anonymous Painters.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Streamer Infinity es un módulo integrado
-
-Desarrollado por [Lone Boat to Dream Team] (ranking basado en el orden alfabético de los nombres en inglés)
-
-Procedimiento: Collins, falda pequeña, element of Vientiane, Night Valley ziyou, Yiyang 233
-
-Pintores: Gelatina, Element Vientiane, vidotec Lilly, Fairy Pavilion
-
-Músico: pescado sucio, sernour6
-
-Traducción: lacewing [chino], noon is on [ruso]
-
-Propaganda: Cheng Ying, Qi Yue Yi
-
-Player Management: Dirty Fish brother, Chee yee, lacewing, Night Pigeon, Red Dust
-
-Gracias extra: egshels (! Angela) [publicidad], Floret [artista], moonseer [wiki], nomis [artista], ryuusei (babeelena) [publicidad], Silver moon [programador], youyin [programador], videojuegos [patrocinador], Yu mo [pintor], y algunos pintores anónimos.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-свет без границ представляет собой комплексный модуль 
-
- [одинокие люди мечтают о команде] 
-
- Программа: коринфис, юбка, Вьентьян элементы, ночная долина, yiyang233 
-
- художник: желе, элементы Вьентьяна, Виктория 
-
- младший брат грязной рыбы, сернур 6 
-
- Перевод: Lacewing [на русском языке] 
-
- пропаганда: фотография, узорчатость 
-
- управление игроками: грязные рыбки, шелуха, лакевинг, ночные голуби, красная пыль 
-
- Дополнительную благодарность: egshels (! Angela) [пропаганда], цветочек [художник], Moonseer [Вики], Nomis [художник], Ryuusei (BabeElena) [пропаганда], серебряный месяц [программист], пилюля и серебро [программист], кардиограммы [спонсор], чернила [художник] и некоторые анонимные художники. 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-流光无际是一个综合性模组
-
-由【孤舟逐梦团队】开发(排行根据英文名字母先后顺序)
+由【孤舟逐梦团队】开发
 
 程序：科林维斯，小裙子，万象元素，夜谷紫幽，yiyang233
-
 画师：果冻，万象元素, 维多泰克莉莉，仙阁
+乐师：脏渔歌，Setnour6, Uni
+翻译：Lacewing[英]，NooN iS oN[俄]
+宣传：承影，绮逾依
+社区管理：脏渔歌，绮逾依，Lacewing，夜鸽，红尘
 
-乐师：脏鱼哥，Sernour6
-
-翻译：Lacewing[中]，NooN iS oN[俄]
-
-宣传：承影， 绮逾依
-
-玩家管理：脏鱼哥，绮逾依，Lacewing，夜鸽，红尘
-
-额外感谢：egshels (!angela) [宣传], 小花 [画师], Moonseer [维基],  Nomis [画师], Ryuusei (BabeElena) [宣传], 银月[程序员], 幽银[程序员], 心动游戏 [赞助画师], 余墨[画师], 以及一些匿名画师.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-O infinito do corredor é um módulo abrangente
-
-Desenvolvido por [equipe solitária de perseguição de sonhos de barco] (classificado de acordo com a ordem alfabética dos nomes ingleses)
-
-Program: Colin Weiss, small skirt, Vientiane elements, Yegu Ziyou, yiyang233
-
-Artista: jelly, elementos Vientianes, vitotech, lily, Xiange
-
-Músico: peixe sujo, sernour6
-
-Tradução: lacering [chinês], o meio-dia está [russo]
-
-Publicidade: tirar fotos, qiyuyi
-
-Gestão dos jogadores: peixe sujo, Qi Yuyi, lacewing, pombo noite, mundo vermelho
-
-Extra obrigação: egshels (! Angela) [publicidade], Xiaohua [pintor], moonseer [wiki], Nomis [pintor], ryuusei (babelena) [publicidade], Yinyue [programador], Youyin [programador], jogo cardíaco [pintor patrocinado], Yu Mo [pintor], e alguns pintores anônimos
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Streamer nieskończoność to kompleksowy moduł
-
-Opracowany przez [lonely boat dream hunting team] (ranking według alfabetycznej kolejności angielskich nazw)
-
-Program: Colin Weiss, mała spódnica, elementy wientiańskie, Yegu Ziyou, yiyang233
-
-Artysta: galaretka, elementy wientiańskie, vitotech, lilie, Xiange
-
-Muzyk: brudna ryba, sernour6
-
-Tłumaczenie: lacewing [chiński], południe jest [rosyjski]
-
-Publiczność: robienie zdjęć, qiyuyi
-
-Zarządzanie graczem: brudna ryba, Qi Yuyi, lacewing, nocny gołąb, czerwony świat
-
-Dodatkowe podziękowania: egshels (! Angela) [publicity], Xiaohua [malarz], księżyc [wiki], Nomis [malarz], ryuusei (babelena) [publicity], Yinyue [programista], Youyin [programista], gra serca [sponsorowany malarz], Yu Mo [malarz] i kilku anonimowych malarzy
-
-
-
+特别感谢：
+宣传: Starlight River (星光之河), Endless Escape (无尽逃脱), 血魂 (Blood Soul), Ryuusei (BabeElena)
+贴图: 小花, Nomis, 心动游戏, 余墨, 以及一些匿名画师
+程序: 银月, 幽银
+维基: Moonseer
+翻译: Zero Project
