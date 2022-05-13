@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Everglow.Sources.Modules.Test
+namespace Everglow.Sources.Modules.Food
 {
-    internal class Class1
+    internal class FoodSystem
     {
         
     }
