@@ -19,11 +19,24 @@ namespace Everglow.Sources.Commons.Core.ModuleSystem
             m_dependencyGraph = new Dictionary<int, List<int>>();
             m_dependencyFanin = new Dictionary<int, int>();
         }
-
-        public void AddDependency(Type U, Type V)
+        /// <summary>
+        /// 添加一个没有依赖的<paramref name="type"/>
+        /// </summary>
+        /// <param name="type"></param>
+        public void AddType(Type type)
         {
-            int u = GetInternalID(U);
-            int v = GetInternalID(V);
+            int t = GetInternalID(type);
+        }
+
+        /// <summary>
+        /// 添加一个依赖于<paramref name="depend"/>的<paramref name="type"/>
+        /// </summary>
+        /// <param name="depend"></param>
+        /// <param name="type"></param>
+        public void AddDependency(Type depend, Type type)
+        {
+            int u = GetInternalID(depend);
+            int v = GetInternalID(type);
 
             if (m_dependencyGraph.ContainsKey(u))
             {
@@ -93,6 +106,7 @@ namespace Everglow.Sources.Commons.Core.ModuleSystem
         {
             if (!m_typeToIdMapping.ContainsKey(t))
             {
+                m_typeToIdMapping.Add(t, m_types.Count);//是漏了吗？
                 m_types.Add(t);
                 return m_types.Count - 1;
             }

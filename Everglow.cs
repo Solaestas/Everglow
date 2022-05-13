@@ -38,10 +38,10 @@ namespace Everglow
 
         private ModuleManager m_moduleManager;
 
-
-        private Everglow()
-        {
-        }
+        //草，这mod类的构造可封不得啊，TML要new的
+        //private Everglow()
+        //{
+        //}
 
         public override void Load()
         {

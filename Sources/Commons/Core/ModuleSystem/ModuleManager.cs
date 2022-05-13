@@ -31,16 +31,23 @@ namespace Everglow.Sources.Commons.ModuleSystem
                 .Where(type => 
                 !type.IsAbstract &&
                 type.GetInterfaces().Contains(typeof(IModule)) &&
-                Attribute.IsDefined(type, typeof(DontAutoLoadAttribute))
+                !Attribute.IsDefined(type, typeof(DontAutoLoadAttribute))
                 ))
             {
-                var dependency = type.GetCustomAttribute(typeof(ModuleDependencyAttribute), false) as ModuleDependencyAttribute;
-                foreach (var dependType in dependency.DependTypes)
+                var dependency = type.GetCustomAttribute<ModuleDependencyAttribute>(true);
+                if (dependency is null)
                 {
-                    dependencyGraph.AddDependency(dependType, type);
+                    dependencyGraph.AddType(type);
+                }
+                else
+                { 
+                    foreach (var dependType in dependency.DependTypes)
+                    {
+                        dependencyGraph.AddDependency(dependType, type);
+                    }
                 }
             }
-
+            
 
             foreach(var type in dependencyGraph.TopologicalSort())
             {
