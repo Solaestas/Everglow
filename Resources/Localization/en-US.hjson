@@ -1,0 +1,577 @@
+Mods: {
+	MythMod: {
+		NPCName: {
+
+		}
+
+		MapObject: {
+
+		}
+
+
+		Common: {
+			WarWhipGT :
+				'''
+				No summon tag damage
+				Your summons will focus struck enemies
+				'''
+				#{$Mods.MythMod.Common.WarWhipGT}
+			WhipGT :
+				'''
+				 summon tag damage
+				Your summons will focus struck enemies
+				'''
+				#{$Mods.MythMod.Common.WhipGT}
+			ClubGT : Spin to strike enemies
+			#{$Mods.MythMod.Common.ClubGT}
+			RapierGT : Right click and hold to charge an invincibility dash with high damage
+			#{$Mods.MythMod.Common.RapierGT}
+			NoAmmoConsum : Does not consum ammo
+			#{$Mods.MythMod.Common.NoAmmoConsum}
+			Acytaea : Acytaea
+			#{$Mods.MythMod.Common.Acytaea}
+			ExcluWeapon : Exclusive weapon
+			#{$Mods.MythMod.Common.ExcluWeapon}
+			MythWeapon : Mythical weapon
+			#{$Mods.MythMod.Common.MythWeapon}
+			LegendWeapon : Legendary weapon
+			#{$Mods.MythMod.Common.LegendWeapon}
+
+		}
+
+		ItemName: 
+		{
+			AshBone : Stashed Bones
+			BoneFeatherMagic : Book of Bone Feather
+			CloudBall : Cloud Cluster
+			CloudGun : Cloud Cannon
+			ComingGhost : Warped Blade
+			CyanFrost : Cyfrost Blade
+			FeatherMagic : Book of Feather
+			FireFeatherMagic : Book of Flaming Feather
+			FreezeFeatherMagic : Book of Ice Feather
+			GoldRoundYoyo : "Golden Round"
+			Hepuyuan : "Prinomial Jade Winged Spear"
+			SilveralGun : "Fox Hunter Fx01"
+			SilveralRifle : "Silver Shadow Ct01"
+			Sunflower : "Sunflower Disc"
+			ThunderFlower : "Flower of Lighting"
+			World : "The World"
+			XmaxWhip : "Christmas Tree Whip"
+			BloodGoldBlade : "Dull Gold Massacre"
+			BloodLightCyanFlame : "Bloody Lasers and Cyan Flames"
+			BlueRain : "Seperate Ocean"
+			ChaosCurrent : "Chaotic Currents"
+			DarknessFan : "Fan of Phantom Butterflies and Fireflies"
+			FrozenStormPine : "Ice Storm Pine"
+			GelPowerGun : "Gelatin Charger"
+			LaserWhip : "Laser Whip"
+			MachineFit : "Commander's Fist"
+			MachineSkeGun : "Slaughterous Gear"
+			RainbowLight : "Divine Light"
+			SilenceMirror : "Silent Mirror"
+			ThornBomb : "Thorn Bombs"
+			ToothBow : "Tusk Bow"
+			ToothSpear : "Bloody Dragon Spine"
+			TrapYoyo : "Trap Yoyo"
+			BlueGel : "Coagulated Blue Gel"
+			BlueTorchFlower : "Jade Blue Icy Poker"
+			CorruptEye : "Scaled Cursed Eye"
+			CyanBranch : "Porcelianized Flower"
+			CyanPedal : "Four-pointed Borage Flower"
+			DarkHat : "Ornamental Poppy"
+			DukeTooth : "Tusks of the Duke"
+			FlameBorageBadge : "Badge of Firefly Borage"
+			GoldLiquidPupil : "Arrogating Eye"
+			GoldRound : "Marigoldisc"
+			GreenGel : "Coagulated Green Gel"
+			HotPinkCrown : "Vitalized Tulip"
+			JungleVitamin : "Jungle Vitamin"
+			LightPurplePen : "Rabit Hair Calligraphy Brush"
+			ManyWhiteFlower : "Bouquet of Silk Star"
+			MothEye : "Ommateum of the Moth"
+			Odd8Ring : "Strange Ring of 8"
+			OrangeCrown : "Tenacious Tulip"
+			OrangeStick : "Pennisetum Arantius"
+			PinkFourPedal : "Pink Samsara"
+			PurpleBall : "Purple Hydrangea Pandents"
+			PurpleReedHalo : "Purple Reed Headband"
+			RedGel : "Coagulated Red Gel"
+			RedTriangle : "Three-pointed Red Blossom"
+			SilverCupFlower : "Royal Goblet"
+			SilverWing : "Badge of Silver Wings"
+			ThreeColorCrown : "Three-colored Wreath"
+			TuskLace : "Tusk Necklace"
+			WalnutClip : "Nutcracker"
+			WhiteCrown : "Flower of Hope"
+			WhitePedal : "Veil of Light"
+			WhiteWoodFlower : "Snow Ear Flower"
+			WindMoveSeed : "Aeolus' Seed"
+			YellowBellFlower : "Bananea of the Valley"
+			FixCoinCrit1 : "Enchanted Coin Crit ChanceⅠ"
+			FixCoinCrit2 : "Enchanted Coin Crit ChanceⅡ"
+			FixCoinCrit3 : "Enchanted Coin Crit ChanceⅢ"
+			FixCoinCrit4 : "Enchanted Coin Crit ChanceⅣ"
+			FixCoinCrit5 : "Enchanted Coin Crit ChanceⅤ"
+			FixCoinDamage1 : "Enchanted Coin DamageⅠ"
+			FixCoinDamage2 : "Enchanted Coin DamageⅡ"
+			FixCoinDamage3 : "Enchanted Coin DamageⅢ"
+			FixCoinDamage4 : "Enchanted Coin DamageⅣ"
+			FixCoinDamage5 : "Enchanted Coin DamageⅤ"
+			FixCoinDefense1 : "Enchanted Coin DefenseⅠ"
+			FixCoinDefense2 : "Enchanted Coin DefenseⅡ"
+			FixCoinDefense3 : "Enchanted Coin DefenseⅢ"
+			FixCoinDefense4 : "Enchanted Coin DefenseⅣ"
+			FixCoinDefense5 : "Enchanted Coin DefenseⅤ"
+			FixCoinMelee1 : "Enchanted Coin Melee SpeedⅠ"
+			FixCoinMelee2 : "Enchanted Coin Melee SpeedⅡ"
+			FixCoinMelee3 : "Enchanted Coin Melee SpeedⅢ"
+			FixCoinSpeed1 : "Enchanted Coin Movement SpeedⅠ"
+			FixCoinSpeed2 : "Enchanted Coin Movement SpeedⅡ"
+			FixCoinSpeed3 : "Enchanted Coin Movement SpeedⅢ"
+			BloodyTuskTrophy : "The Tusk Trophy"
+			CorruptMothTrophy : "Corrupted Moth Trophy"
+			MothRelic : "Corrupted Moth Relic"
+			TuskRelic : "The Tusk Relic"
+			CorruptMothTreasureBag : "Treasure Bag (Corrupted Moth)"
+			CursedJawbone : "Cursed Jawbone"
+			EvilCocoon : "Magical Cocoon"
+			TuskTreasureBag : "Treasure Bag (The Tusk)"
+			FragransBoomerang : Swirl Cloud At Night
+			FragransBow : Fragrans Branch
+			FragransGun : Fragrans Flame
+			FragransMagic : Moon & Fragrans Magic
+			FragransSpear : Moon Dosn't Shine
+			FragransStaff : Fragrans Bomb Staff
+			BlackWoodenClub : Ebonwood Club
+			BloodClub : Crimson Club
+			BloodLiquidClub : Ichor Club
+			CactusClub : Cactus Club
+			CobaltClub : Cobalt Club
+			ColdWoodenClub : Boreal Wood Club
+			CopperClub : Copper Club
+			CorruptClub : Corruption Club
+			CrystalClub : Crystal Club
+			CurseClub : Cursed Flame Club
+			DarkWoodenClub : Shadewood Club
+			GoldClub : Gold Club
+			IronClub : Iron Club
+			LeadClub : Lead Club
+			LeafClub : Chlorophyte Club
+			MeteorClub : Meteor Club
+			MithrilClub : Mythril Club
+			MountainCuClub : Orichalcum Club
+			PalladiumClub : Palladium Club
+			PalmWoodenClub : Palm Wood Club
+			PearlWoodenClub : Pearlwood Club
+			PlatinumClub : Platinum Club
+			RedWoodenClub : Mahogany Club
+			RefinedClub : Adamantite Club
+			SilverClub : Silver Club
+			SpikeClub : Spike Club
+			StarDancer : Star Dancer
+			TinClub : Tin Club
+			TitaniumClub : Titanium Club
+			TungstenClub : Tungsten Club
+			WoodenClub : Wooden Club
+			DustOfCorrupt : Corrupted Scales
+			EvilChrysalis : Cocoon Staff
+			PhosphorescenceGun : Scale Shotgun
+			ScaleWingBlade : Lepidoptera Blade
+			ShadowWingBow : Occulting Wings
+			AmbiguousNight : Ambiguous Night
+			BlackWoodSlingshot : Ebonwood Slingshot
+			BlueGemSlingshot : Sapphire Slingshot
+			CactusSlingShot : Cactus SlingShot
+			ColdWoodSlingshot : Borealwood Slingshot
+			DarkWoodSlingShot : Shadewood SlingShot
+			GreenGemSlingshot : Emerald Slingshot
+			JellySlingshot : Jelly Slingshot
+			JungleSlingshot : JungleSlingshot
+			PalmWoodSlingshot : Palm Wood Slingshot
+			PearlWoodSlingshot : Pearlwood Slingshot
+			PurpleGemSlingshot : Amethyst Purple Gem Slingshot
+			RedGemSlingshot : Ruby Slingshot
+			RedWoodSlingshot : Rich Mahogany Slingshot
+			StarSlingshot : Star Slingshot
+			WhiteGemSlingshot : Diamond Slingshot
+			WoodSlingshot : Wood Slingshot
+			YellowGemSlingshot : Topaz Slingshot
+			BloodyBoneYoyo : Bloody Bone Yoyo
+			SpineGun : Spine Musket
+			ToothKnfe : Tusk Blade
+			ToothMagicBall : Sanguine Orb
+			ToothStaff : Tusk Staff
+			Acropora : Acropora
+			Alcyonarian : Alcyonarian
+			Barnacle : Barnacle
+			BarrelSponge : Barrel Sponge
+			Basalt : Basalt
+			BlueAcropora : Blue Acropora
+			BlueTreeCoral : BlueTree Coral
+			BubbleCoral : Bubble Coral
+			DragonScaleWood : Dragon Scale Wood
+			GoldGorgonianBranch : GoldGorgonianBranch
+			GorgonianPiece : Gorgonian Piece
+			LargeBlueStarfish : Large Blue Starfish
+			LargeOrangeStarfish : Large Orange Starfish
+			MarbleCono : MarbleCono
+			OceanWorld : Ocean World(Not working)
+			OldMoss : Moss
+			ReefSharkSpecimen : Reefshark Specimen
+			StoneDragonScaleWood : Fossilized Dragon Scale Wood
+			TerrariaContinent : Terraria Continent(Not working)
+			CyanVineBar : Cyan Bar
+			CyanVineOre : Cyan Ore
+			DarkSeaBar : Abyssal Bar
+			DarkSeaOre : Abyssal Ore
+			OceanBlueBar : Current Bar
+			OceanBlueOre : Current Ore
+			Chinalamp1 : Traditional Lamp
+			Chinalamp2 : Traditional Lamp
+			LanternCrystal : Royal City Pylon
+			LanternPost1 : Lantern Post
+			LanternPost2 : Lantern Post
+			YellowDynastyShingles : Yellow Dynasty Shingles
+			DiscordBallF1 : Discord Crystal Ball · The Ancient Path
+			LiftLamp : Lift Indicator
+			TestItem : Wooden Lift
+			EkandaBrick : Ekanda Brick
+			Guding : Ekanda Alloy
+			NoFlawsDream : Flawless Dream
+			Origin : Pure Sapphire
+			DurableAxe : Durable Axe
+			ElectricHeatingPlate : Electric Heating Axe
+			BrokenPick : Broken Pickaxe
+			BloodGoldBayonet : Crimson Rapier
+			DreamStar : Star of Dream
+			EternalNight : Eternal Night Rapier
+			GoldenStabbingSword : Gold Rapier
+			IronStabbingSword : Iran Rapier
+			LeadStabbingSword : Lead Rapier
+			PlatinumStabbingSword : Platinum Rapier
+			PrisonFireBayonet : Molten Rapier
+			RottenGoldBayonet : Corrupted Rapier
+			SilverStabbingSword : Silver Rapier
+			VegetationBayonet : Rapier of Grass
+			TDMT : Catastrophic Lightning
+		}
+
+		ItemTooltip :
+		{
+			AshBone : 
+				'''
+				{$Mods.MythMod.Common.WarWhipGT}
+				Brusts out several damaging bones and olden enemies struck, weaken their attack and defense
+				'''
+			BoneFeatherMagic : Shoots piercing bone feathers, olden enemies struck, weaken their attack and defense
+			CloudGun : Launches cloud clusters
+			ComingGhost : Randomly 'surprises' a 'lucky' enemy nearby
+			FeatherMagic : "'I love harpies♥'"
+			FireFeatherMagic : Shoots explosive feathers
+			FreezeFeatherMagic : Shoots icebounding feathers
+			GoldRoundYoyo : "Leaves a track of homing golden rings"
+			Hepuyuan : "#{$Mods.MythMod.Common.ExcluWeapon}\nLeft click to dash, right click to smash\n'You should't be getting it'\nHomaging to Genshin Impact"
+			SilveralGun : "5% increased movement speed and damage after hitting enemies"
+			SilveralRifle : "5% increased movement speed and damage after hitting enemies"
+			Sunflower : "'A weapon made of sunflowers, has a color of hope'"
+			ThunderFlower : "Fires thunderstrom orbs\n'Too many projectiles!'"
+			World : "Summons 'World' at the curser, right click when it is summoned to switch between following mode and slashing mode\n'Power of the entire land is gathered here...'"
+			XmaxWhip : "{$Mods.MythMod.Common.WarWhipGT}\nBrusts out damaging Christmas lights on hitting enemies\n'Much better than the Christmas Tree Sword'"
+			BloodGoldBlade : "{$Mods.MythMod.Common.MythWeapon}\nEmits ichor blades to surrounding\nA god-slaying blade, contaminated by blood of gods"
+			BloodLightCyanFlame : "{$Mods.MythMod.Common.LegendWeapon}\nAlternately throws boomerblades of laser or cursed flame\n'They should be weapons of the Twins, fortunately you have saved the Mechanic'"
+			BlueRain : "{$Mods.MythMod.Common.LegendWeapon}\nRight click and hold to make a charged attack\n'Rain drops refused to be blend with sea water to maintain their purity, finally converged to this form in chaotic currents'"
+			ChaosCurrent : "{$Mods.MythMod.Common.LegendWeapon}\nLauches chaotic currents that disturb nerves\nIgnore immunity frames\n'Cause massive nerve injury!'"
+			DarknessFan : "{$Mods.MythMod.Common.LegendWeapon}{$Mods.MythMod.Common.WarWhipGT}Strike enemies with the fan and Phantom Butterflies(PBs), right click to throw out the fan\nThe fan itself inflicts Mark of PB(stackable), each level incraeses damage dealt by PBs by 10%\nMax stack increases with Sync level"
+			GelPowerGun : "{$Mods.MythMod.Common.LegendWeapon}\nUses gel for ammo\nShoots bouncy gelatin balls\nRelease small bouncy gelatin balls on the first three bounces\n'Bouncing bouncy, bounce the Destroyer away'"
+			LaserWhip : "{$Mods.MythMod.Common.LegendWeapon}{$Mods.MythMod.Common.WarWhipGT}Hitting enemies has a chance to generate Laser Worms as temporary summons and mark enemies\nMarked enemies take 50% more damage and 25% more crit damage\n'According to a legend some worms can align their lasers into a line'"
+			MachineFit : "{$Mods.MythMod.Common.LegendWeapon}\nA ruthless killing fist\nSplits into 5 homing missiles upon hitting enemies\n'Make good use of its hand, not head'"
+			MachineSkeGun : "{$Mods.MythMod.Common.MythWeapon}\nShoot continueously to fire additional bullets\n'The ultimate weapon that the Skeletron would obtain in the future'"
+			RainbowLight : "{$Mods.MythMod.Common.LegendWeapon}\nChargable, does not deal damage\nChoose and create one aurora realm out of seven, doesn't consume buff slot\n[c/FF0000:Red]:Increases crit chance\n[c/FF8E00:Orange]:Increases defense\n[c/FFFF00:Yellow]:Increase damage\n[c/00FF00:Green]:Increases life regen\n[c/00FFFF:Cyan]:Increases evade\n[c/0000FF:Blue]:Increases mana regen\n[c/B600FF:Purple]:Increases mobility\nStrength depends on damage, doubles if crit\n'You should take the responsibility!'"
+			SilenceMirror : "{$Mods.MythMod.Common.MythWeapon}\nRight click to swith between two swords\nCombo to increase damage\n'Detached from the worldliness and has no conflict'"
+			ThornBomb : "{$Mods.MythMod.Common.LegendWeapon}\nAlternately throws pink and green bombs\n'Boom boom bomb!'"
+			ToothBow : "{$Mods.MythMod.Common.LegendWeapon}\nGenerates tusk arrows when firing\nRight click to gather the tusk arrows\n'It can manipulate other tusks'"
+			ToothSpear : "{$Mods.MythMod.Common.MythWeapon}\nRight click to dash\nHas a 8s CD\nSync reduces the CD\n'Go, follow the ancient heros to slay dragons'"
+			TrapYoyo : "{$Mods.MythMod.Common.LegendWeapon}\nGenerates an unreal yoyo every 1.5s\nRight click to release solar rays when there're 5 unreal yoyos\n'A sophisticated masterpiece of ancient lizards'"
+			BlueGel : "Increases max mana by 30 and mana regen by 4"
+			BlueTorchFlower : "Increases max mana by 20\nstrike an enemy recovers 2 mana, this effect has a 0.2s CD\n'A varietas of red hot poker'"
+			CorruptEye : "5 defence\nincreases crit chance by 4%\nGrants immunity to Cursed Inferno\nRelease cursed flame when struck\nTough its owner has gone, it's still filled with curse to enemies'"
+			CyanBranch : "Increases evade by 8 for 10s after struck\n'It's pretty hard, but also brittle'"
+			CyanPedal : "Increases evade by 4\n'The missing petal was converted to your braveness'"
+			DarkHat : "Increases crit chance by 4% and crit damage by 12%\n'Not recommanded to use except for combat or decoration purpose'"
+			DukeTooth : "Increases armor penetration by 12\n'Fortunately, Duke Fishron is not an endangered species...as long as there're truffle worms'"
+			FlameBorageBadge : "-12 defence\nIncreases damage by 18%\n'Affected by rage of that giant moth, your attacks become wilder'"
+			GoldLiquidPupil : "Your attacks ignore 35% of enemies' defense\nGenerates a Ring of Ichor after struck, lasts 12s and unstackable\nDeals high damage while it's generating\nDamages enemies on the ring continuously\nInflicts Ichor to enemies inside the ring"
+			GoldRound : "7 defence\nIncreases damage by 7%\n'Traditional Terrarians usually wear this to keep them healthy'"
+			GreenGel : "Increases max Hp by 30 and Hp regen by 4\n'Studies have shown that green slimes generally have more vitality than blue slimes'"
+			HotPinkCrown : "Increases crit damage by (Max Hp * 5%)%\n'Catalyzed by Essence of Wind, now it will react to vitality'"
+			JungleVitamin : "Increases max Hp by 50\n'It helps a lot in humid, dangerous jungle'"
+			LightPurplePen : "Increases melee damege, melee crit chance and melee speed by 6%\n'No rabit was hurt during the production process'"
+			ManyWhiteFlower : "Increases melee speed by 18%\n'You don't want these lovely magical flowers to be dameged'"
+			MothEye : "Increases minion slots by 1\nIncreases summon damage by 6%\n'Sophisticated structures of the ommatuem have amazed you'"
+			Odd8Ring : "Increases damage dealt by flat 8\n'Mystrious relic, mechanism unknown, seems to be related to certain Mathematical cult'"
+			OrangeCrown : "Increases defense by (max Hp * 3%)%\n'A tulip blessed by Aeolus, its structural strength is suprisingly high'"
+			OrangeStick : "After struck, grants 5 defence and immunity to knockback for 3s\n'Different from most grasses, it stands fast when wind blows fiercely'"
+			PinkFourPedal : "Increases max Hp by 40\n'It's said that injured animals will eat it to recover...it's true, but it seems not to be effective to human'"
+			PurpleBall : "Hitting enemies around you launches an explosion of petals\nDamage of the petals increases with damage of the attack\nHas a 0.5s CD\n'Angry Hydrangea Purpura'"
+			PurpleReedHalo : "Increases max Hp by 30\nIncreases max mana by 40\n'smells good and looks good'"
+			RedGel : "Increases crit chance by 6%\nInceases crit damage by 9%\n'Some slimes were also affected by the power of the Blood of Gods, though they didn't have any blood'"
+			RedTriangle : "Increases crit damage by 18%\n'It is an aggressive shape in Terrarian culture'"
+			SilverCupFlower : "8 defense\nIncreases max Hp by 20\n'There was a vicious king who has really tried to use it as a goblet, he failed to drink anything'"
+			SilverWing : "Increases crit damage by 8%\nIf you have not been using a weapon for 3s, increases damage by 40%\n'Concentrate the power of your soul'"
+			ThreeColorCrown : "Hitting enemies randomly grants you one of the three effects below for 7s\nRed:Inceasing damage by 22%, increasing crit chance by 11%\nViolet:Immunity to most debuffs\nBlue:Increasing max mana by 300\nIt has a 30s CD\n'Pray for not being so lucky'"
+			TuskLace : "Increases armor penetration by 5\nIncreases damage and crit chance by 5%\n'A tusk was knocked down from mouth of a beast, again you knocked down a small part of it'"
+			WalnutClip : "Increases crit damage by 16%\nWhen your Hp is below 50% of the max Hp, increases damage by (50% of max Hp - current Hp)%\n'Besides cracking nuts and crabs, it can crack enemies, too'"
+			WhiteCrown : "Increases running speed by (max Hp * 0.2%)\n'A plain white flower, seems to mourn for someone'"
+			WhitePedal : "Increases evade by 2\nIncreases crit chance by 4%\n'It's such a gauzy petal'"
+			WhiteWoodFlower : "Increases minion slots by 2\n'Fantastic symbiosis'"
+			YellowBellFlower : "Increases damage by (defense * 20%)%\n'Rare and beautiful'"
+			AngelSword : Right click to fire a powerful golden blade
+			FixCoinCrit1 : "Gives a random accessory in inventory a prefix which increases crit chance by 1%"
+			FixCoinCrit2 : "Gives a random accessory in inventory a prefix which increases crit chance by 2%~3%"
+			FixCoinCrit3 : "Gives a random accessory in inventory a prefix which increases crit chance by 4%"
+			FixCoinCrit4 : "Gives a random accessory in inventory a prefix which increases crit chance by 5%~6%"
+			FixCoinCrit5 : "Gives a random accessory in inventory a prefix which increases crit chance by 7%~9%"
+			FixCoinDamage1 : "Gives a random accessory in inventory a prefix which increases damage by 1%"
+			FixCoinDamage2 : "Gives a random accessory in inventory a prefix which increases damage by 2%~3%"
+			FixCoinDamage3 : "Gives a random accessory in inventory a prefix which increases damage by 4%"
+			FixCoinDamage4 : "Gives a random accessory in inventory a prefix which increases damage by 5%~6%"
+			FixCoinDamage5 : "Gives a random accessory in inventory a prefix which increases damage by 7%~9%"
+			FixCoinDefense1 : "Gives a random accessory in inventory a prefix which increases defense by 1"
+			FixCoinDefense2 : "Gives a random accessory in inventory a prefix which increases defense by 2~3"
+			FixCoinDefense3 : "Gives a random accessory in inventory a prefix which increases defense by 4"
+			FixCoinDefense4 : "Gives a random accessory in inventory a prefix which increases defense by 5~6"
+			FixCoinDefense5 : "Gives a random accessory in inventory a prefix which increases defense by 7~9"
+			FixCoinMelee1 : "Gives a random accessory in inventory a prefix which increases melee speed by 1%"
+			FixCoinMelee2 : "Gives a random accessory in inventory a prefix which increases melee speed by 2~3%"
+			FixCoinMelee3 : "Gives a random accessory in inventory a prefix which increases melee speed by 4%"
+			FixCoinSpeed1 : "Gives a random accessory in inventory a prefix which increases movement speed by 1%"
+			FixCoinSpeed2 : "Gives a random accessory in inventory a prefix which increases movement speed by 2%~3%"
+			FixCoinSpeed3 : "Gives a random accessory in inventory a prefix which increases movement speed by 4%"
+			DustOfCorrupt : Scatter moth scales
+			EvilChrysalis : 
+				'''
+				Summoms little black moths to fight for you
+				Deal 400% damage to nearby enemies while summoning
+				'''
+			PhosphorescenceGun : Shoots out shots and blue scale bullets which deal 36% damage
+			ScaleWingBlade : TODO
+			ShadowWingBow : 
+				'''
+				Hold to charge to  increase damage, capped at +200%, and additionally fires Blue Butterfly Arrows.
+				Needs 1.5s to be fully charged
+				'''
+			AmbiguousNight : 
+				'''
+				Shoots phantom pebbles
+				{$Mods.MythMod.Common.NoAmmoConsum}
+				'''
+			BlackWoodSlingshot : 
+				'''
+				Shoots little pebbles
+				{$Mods.MythMod.Common.NoAmmoConsum}
+				'''
+			BlueGemSlingshot : 
+				'''
+				Shoots energized gems
+				{$Mods.MythMod.Common.NoAmmoConsum}
+				'''
+			CactusSlingShot : 
+				'''
+				Shoots little pebbles
+				{$Mods.MythMod.Common.NoAmmoConsum}
+				'''
+			ColdWoodSlingshot : 
+				'''
+				Shoots little pebbles
+				{$Mods.MythMod.Common.NoAmmoConsum}
+				'''
+			DarkWoodSlingShot : 
+				'''
+				Shoots little pebbles
+				{$Mods.MythMod.Common.NoAmmoConsum}
+				'''
+			GreenGemSlingshot : 
+				'''
+				Shoots energized gems
+				{$Mods.MythMod.Common.NoAmmoConsum}
+				'''
+			JellySlingshot : 
+				'''
+				{Mods.MythMod.Common.LegendWeapon}
+				Shoots super bouncy jelly balls
+				{$Mods.MythMod.Common.NoAmmoConsum}
+				'''
+			JungleSlingshot : 
+				'''
+				Shoots flouroscent poisonous balls
+				{$Mods.MythMod.Common.NoAmmoConsum}
+				'''
+			PalmWoodSlingshot : 
+				'''
+				Shoots little pebbles
+				{$Mods.MythMod.Common.NoAmmoConsum}
+				'''
+			PearlWoodSlingshot : 
+				'''
+				Shoots little pebbles
+				{$Mods.MythMod.Common.NoAmmoConsum}
+				'''
+			PurpleGemSlingshot : 
+				'''
+				Shoots energized gems
+				{$Mods.MythMod.Common.NoAmmoConsum}
+				'''
+			RedGemSlingshot : 
+				'''
+				Shoots energized gems
+				{$Mods.MythMod.Common.NoAmmoConsum}
+				'''
+			RedWoodSlingshot : 
+				'''
+				Shoots little pebbles
+				{$Mods.MythMod.Common.NoAmmoConsum}
+				'''
+			StarSlingshot : 
+				'''
+				Shoots little pebbles
+				{$Mods.MythMod.Common.NoAmmoConsum}
+				'''
+			WhiteGemSlingshot : 
+				'''
+				Shoots energized gems
+				{$Mods.MythMod.Common.NoAmmoConsum}
+				'''
+			WoodSlingshot : 
+				'''
+				Shoots little pebbles
+				{$Mods.MythMod.Common.NoAmmoConsum}
+				'''
+			YellowGemSlingshot : 
+				'''
+				Shoots energized gem
+				{$Mods.MythMod.Common.NoAmmoConsum}
+				'''
+			BloodyBoneYoyo : Releases tusk nails on every 5 hits
+			SpineGun : Fires bullets which split upon detecting enemies
+			ToothKnfe : ""
+			ToothMagicBall : ""
+			ToothStaff : Raises tusks from the ground
+			FragransBlade : Don't be lonely when moon and fragrans bright, breeze and moon still.
+			FragransBoomerang : Don't be lonely when moon and fragrans bright, breeze and moon still.
+			FragransBow : Don't be lonely when moon and fragrans bright, breeze and moon still.
+			FragransGun : Don't be lonely when moon and fragrans bright, breeze and moon still.
+			FragransMagic : Don't be lonely when moon and fragrans bright, breeze and moon still.
+			FragransSpear : Don't be lonely when moon and fragrans bright, breeze and moon still.
+			FragransStaff : Don't be lonely when moon and fragrans bright, breeze and moon still.
+			BlackWoodenClub : "{$Mods.MythMod.Common.ClubGT}"
+			BloodClub : "{$Mods.MythMod.Common.ClubGT}"
+			BloodLiquidClub : "{$Mods.MythMod.Common.ClubGT}"
+			CactusClub : "{$Mods.MythMod.Common.ClubGT}"
+			CobaltClub : "{$Mods.MythMod.Common.ClubGT}"
+			ColdWoodenClub : "{$Mods.MythMod.Common.ClubGT}"
+			CopperClub : "{$Mods.MythMod.Common.ClubGT}"
+			CorruptClub : "{$Mods.MythMod.Common.ClubGT}"
+			CrystalClub : "{$Mods.MythMod.Common.ClubGT}"
+			CurseClub : "{$Mods.MythMod.Common.ClubGT}"
+			DarkWoodenClub : "{$Mods.MythMod.Common.ClubGT}"
+			GoldClub : "{$Mods.MythMod.Common.ClubGT}"
+			IronClub : "{$Mods.MythMod.Common.ClubGT}"
+			LeadClub : "{$Mods.MythMod.Common.ClubGT}"
+			LeafClub : "{$Mods.MythMod.Common.ClubGT}"
+			MeteorClub : "{$Mods.MythMod.Common.ClubGT}"
+			MithrilClub : "{$Mods.MythMod.Common.ClubGT}"
+			MountainCuClub : "{$Mods.MythMod.Common.ClubGT}"
+			PalladiumClub : "{$Mods.MythMod.Common.ClubGT}"
+			PalmWoodenClub : "{$Mods.MythMod.Common.ClubGT}"
+			PearlWoodenClub : "{$Mods.MythMod.Common.ClubGT}"
+			PlatinumClub : "{$Mods.MythMod.Common.ClubGT}"
+			RedWoodenClub : "{$Mods.MythMod.Common.ClubGT}"
+			RefinedClub : "{$Mods.MythMod.Common.ClubGT}"
+			SilverClub : "{$Mods.MythMod.Common.ClubGT}"
+			SpikeClub : "{$Mods.MythMod.Common.ClubGT}"
+			StarDancer : 
+				'''
+				{$Mods.MythMod.Common.ClubGT}
+				Launches falling stars to strike nearby enemies
+				'''
+			TinClub : "{$Mods.MythMod.Common.ClubGT}"
+			TitaniumClub : "{$Mods.MythMod.Common.ClubGT}"
+			TungstenClub : "{$Mods.MythMod.Common.ClubGT}"
+			WoodenClub : "{$Mods.MythMod.Common.ClubGT}"
+			LiftLamp : ""
+			TestItem : ""
+			EkandaBrick : ""
+			Guding : ""
+			NoFlawsDream : ""
+			Origin : Invaluable gem of origin in tales
+			DurableAxe : ""
+			ElectricHeatingPlate : ""
+			BrokenPick : ""
+			BloodGoldBayonet : "{$Mods.MythMod.Common.RapierGT}"
+			DreamStar : "{$Mods.MythMod.Common.RapierGT}"
+			EternalNight : "{$Mods.MythMod.Common.RapierGT}"
+			GoldenStabbingSword : "{$Mods.MythMod.Common.RapierGT}"
+			IronStabbingSword : "{$Mods.MythMod.Common.RapierGT}"
+			LeadStabbingSword : "{$Mods.MythMod.Common.RapierGT}"
+			PlatinumStabbingSword : "{$Mods.MythMod.Common.RapierGT}"
+			PrisonFireBayonet : "{$Mods.MythMod.Common.RapierGT}"
+			RottenGoldBayonet : "{$Mods.MythMod.Common.RapierGT}"
+			SilverStabbingSword : "{$Mods.MythMod.Common.RapierGT}"
+			VegetationBayonet : "{$Mods.MythMod.Common.RapierGT}"
+			TDMT : "{$Mods.MythMod.Common.RapierGT}"
+		}
+		ProjectileName: {
+
+		}
+
+		BuffName : 
+		{
+			BanTransport : "Lock of Reality"
+			CorruptMothBuff : "Little Corrupted Moth"
+			Freeze : "Icebounded"
+			Freeze2 : "Icebounded Ⅱ"
+			LaserWormBuff : "Laser Worm"
+			MoonAndFragrans : "Osmanthus Blossom Over the Moon"
+			MoonAndFragransII : "Osmanthus Blossom Over the Moon Ⅱ"
+			MoonAndFragransIII : "Osmanthus Blossom Over the Moon Ⅲ"
+			OnMoth : "Mark of Phantom Butterfly"
+			BlueImmune : "Blue Flame Immunity"
+			BrownImmune : "Brown Flame Immunity"
+			GreenImmune : "Green Flame Immunity"
+			PinkImmune : "Pink Flame Immunity"
+			PurpleImmune : "Violet Flame Immunity"
+			RedImmune : "Red Flame Immunity"
+			WhiteImmune : "White Flame Immunity"
+			YellowImmune : "Yellow Flame Immuniy"
+		}
+		BuffDescription : 
+		{
+			BanTransport : "You shall not teleport!"
+			CorruptMothBuff : "The Little Corrupted Moth will fight for you"
+			Freeze : ""
+			Freeze2 : ""
+			LaserWormBuff : "Laser worms fight for you"
+			MoonAndFragrans : "Blooms and moon, await for you\n25% increased damage, 15% increased crit chance and overall damage multiplier takes effect twice"
+			MoonAndFragransII : "Blooms and moon, await for you\n50% increased damage, 30% increased crit chance and overall damage multiplier takes effect three times"
+			MoonAndFragransIII : "Blooms and moon, await for you\n75% increased damage, 45% increased crit chance and overall damage multiplier takes effect four times"
+			OnMoth : "Receive more damage from the phantom butterflies"
+			BlueImmune : "Spiritual Fiery Core's blue flame cannot hurt you"
+			BrownImmune : "Spiritual Fiery Core's Brown flame cannot hurt you"
+			GreenImmune : "Spiritual Fiery Core's green flame cannot hurt you"
+			PinkImmune : "Spiritual Fiery Core's pink flame cannot hurt you"
+			PurpleImmune : "Spiritual Fiery Core's violet flame cannot hurt you"
+			RedImmune : "Spiritual Fiery Core's red flame cannot hurt you"
+			WhiteImmune : "Spiritual Fiery Core's white flame cannot hurt you"
+			YellowImmune : "Spiritual Fiery Core's yellow flame cannot hurt you"
+		}
+
+		RecipeConditions: {
+
+		}
+
+		Bestiary: {
+
+		}
+	}
+}

@@ -8,6 +8,16 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Everglow-UnitTest\**" />
+    <EmbeddedResource Remove="Everglow-UnitTest\**" />
+    <None Remove="Everglow-UnitTest\**" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Documents\" />
+    <Folder Include="Sources\Commons\" />
+    <Folder Include="Sources\Modules\" />
   </ItemGroup>
 </Project>
