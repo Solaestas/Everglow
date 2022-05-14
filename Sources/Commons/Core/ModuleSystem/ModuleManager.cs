@@ -23,10 +23,13 @@ namespace Everglow.Sources.Commons.ModuleSystem
         }
 
 
+        /// <summary>
+        /// 从程序集的类型中加载所有Module，并且按照其加载依赖关系排序
+        /// </summary>
         private void LoadAllModules()
         {
             var dependencyGraph = new DependencyGraph();
-            var assembly = Assembly.GetAssembly(typeof(ModuleManager));
+            var assembly = Assembly.GetExecutingAssembly();
             foreach (var type in assembly.GetTypes()
                 .Where(type => 
                 !type.IsAbstract &&
@@ -47,20 +50,19 @@ namespace Everglow.Sources.Commons.ModuleSystem
                     }
                 }
             }
-            
 
             foreach(var type in dependencyGraph.TopologicalSort())
             {
-                IModule ins = Activator.CreateInstance(type) as IModule;
-                ins.Load();
-                modules.Add(ins);
-                modulesByType[type] = ins;
-                modulesByName[ins.Name] = ins;
+                IModule module = Activator.CreateInstance(type) as IModule;
+                module.Load();
+                modules.Add(module);
+                modulesByName.Add(module.Name, module);
+                modulesByType.Add(module.GetType(), module);
             }
         }
 
         /// <summary>
-        /// 为了方便，直接写成了static
+        /// 按照类型获取模块
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -68,14 +70,32 @@ namespace Everglow.Sources.Commons.ModuleSystem
         {
             return (T)modulesByType[typeof(T)];
         }
-        public IModule GetModule(Type type) => modulesByType[type];
-        public IModule GetModule(string name) => modulesByName[name];
         /// <summary>
-        /// 查找类型为或者继承自T的IModule
+        /// 按照类型获取模块
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public IModule GetModule(Type type) => modulesByType[type];
+
+        /// <summary>
+        /// 按照模块的名字获取模块
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public IModule GetModule(string name) => modulesByName[name];
+
+        /// <summary>
+        /// 查找类型为或者继承自<typeparamref name="T"/>的IModule
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         public IEnumerable<T> FindModule<T>() where T : IModule => from ins in modules where ins is T select (T)ins;
+
+        /// <summary>
+        /// 查找类型为或者继承自<paramref name="type"/>的IModule
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public IEnumerable<IModule> FindModule(Type type) => from ins in modules
                                                                     where ins.GetType().IsSubclassOf(type) 
                                                                        || ins.GetType() == type
@@ -88,6 +108,10 @@ namespace Everglow.Sources.Commons.ModuleSystem
         /// <param name="module"></param>
         public void AddModule(IModule module)
         {
+            if (modulesByName.ContainsKey(module.Name) || modulesByType.ContainsKey(module.GetType()))
+            {
+                throw new InvalidOperationException("Module already registered");
+            }
             if (Attribute.IsDefined(module.GetType(), typeof(ModuleDependencyAttribute)))
             {
                 var attr = module.GetType().GetCustomAttribute<ModuleDependencyAttribute>();
@@ -100,13 +124,12 @@ namespace Everglow.Sources.Commons.ModuleSystem
                 }
             }
             modules.Add(module);
-            //应该不会重复加同一种module吧……，反正这样写是不会报错就是了
-            modulesByName[module.Name] = module;
-            modulesByType[module.GetType()] = module;
+            modulesByName.Add(module.Name, module);
+            modulesByType.Add(module.GetType(), module);
             module.Load();
         }
         /// <summary>
-        /// 提前卸载一个Module
+        /// 【不建议使用】提前卸载一个Module
         /// 依赖项不能自动卸载
         /// </summary>
         /// <param name="module"></param>
@@ -122,7 +145,10 @@ namespace Everglow.Sources.Commons.ModuleSystem
             return true;
         }
 
-        public void Unload()
+        /// <summary>
+        /// 按照依赖逆序卸载所有模块
+        /// </summary>
+        public void UnloadAllModules()
         {
             if (modules is not null)
             {
