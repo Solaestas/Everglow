@@ -29,6 +29,9 @@ namespace Everglow
             get { return m_instance; }
         }
 
+        /// <summary>
+        /// 获取 ModuleManager 实例
+        /// </summary>
         public static ModuleManager ModuleManager
         {
             get { return Instance.m_moduleManager; }
@@ -38,10 +41,9 @@ namespace Everglow
 
         private ModuleManager m_moduleManager;
 
-        //草，这mod类的构造可封不得啊，TML要new的
-        //private Everglow()
-        //{
-        //}
+        public Everglow()
+        {
+        }
 
         public override void Load()
         {
@@ -51,7 +53,7 @@ namespace Everglow
 
         public override void Unload()
         {
-            m_moduleManager.Unload();
+            m_moduleManager.UnloadAllModules();
             m_instance = null;
         }
     }

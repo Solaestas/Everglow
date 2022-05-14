@@ -20,6 +20,9 @@ namespace Everglow.Sources.Commons.ModuleSystem
 
     }
 
+    /// <summary>
+    /// 用于指定一个IModule类型的加载前置依赖类型
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public class ModuleDependencyAttribute : Attribute
     {
@@ -27,6 +30,7 @@ namespace Everglow.Sources.Commons.ModuleSystem
         public ModuleDependencyAttribute(params Type[] types)
         {
             m_dependTypes = types.ToList();
+            Debug.Assert(types.All(t => typeof(IModule).IsAssignableFrom(t)));
         }
         public List<Type> DependTypes { get { return m_dependTypes; } }
     }
