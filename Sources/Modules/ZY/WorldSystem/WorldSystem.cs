@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.IO;
-using Terraria.ModLoader.IO;
+﻿using Everglow.Sources.Commons.ModuleSystem;
 using Terraria.GameContent.UI.Elements;
+using Terraria.IO;
 using Terraria.UI;
-using ZYMod.WorldSystem;
-using Everglow.Sources.Commons.Core;
-using Everglow.Sources.Commons.ModuleSystem;
 
 namespace Everglow.Sources.Modules.ZY.WorldSystem
 {
@@ -52,39 +44,43 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
                 self.MinHeight = StyleDimension.Empty;
                 self.SetPadding(6);
                 fName["_needsTextureLoading"].SetValue(self, true);
-                fName["_fileSize"].SetValue(self, 0ul);
+                if (File.Exists(data.Path))
+                {
+                    fName["_fileSize"].SetValue(self, (ulong)(long)Terraria.Utilities.FileUtilities.GetFileSize(data.Path, data.IsCloudSave));
+                }
+                else
+                {
+                    fName["_fileSize"].SetValue(self, 0ul);
+                }
                 fName["_orderInList"].SetValue(self, orderInList);
-                //this._orderInList = orderInList;
                 fName["_data"].SetValue(self, data);
-                //this._data = data;
-                //this._fileSize = (ulong)((long)FileUtilities.GetFileSize(data.Path, data.IsCloudSave));
                 fName["_canBePlayed"].SetValue(self, canBePlayed);
-                //this._canBePlayed = canBePlayed;
                 type.GetMethod("LoadTextures", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(self, null);
-                //this.LoadTextures();
                 type.GetMethod("InitializeAppearance", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(self, null);
-                //this.InitializeAppearance();
+
+                //图标UI
                 var _worldIcon = new UIImage(customDatas[data].WorldIcon);
-                float num = 4f;
                 _worldIcon.Left.Set(4f, 0f);
-                //_worldIcon.OnDoubleClick += this.PlayGame;
                 fName["_worldIcon"].SetValue(self, _worldIcon);
+                _worldIcon.OnDoubleClick += customDatas[data].EnterWorld;
+                _worldIcon.Recalculate();
                 self.Append(_worldIcon);
 
-                UIImageButton uIImageButton = new UIImageButton((Asset<Texture2D>)fName["_buttonPlayTexture"].GetValue(self));
-                //UIImageButton uIImageButton = new UIImageButton(this._buttonPlayTexture);
-                uIImageButton.VAlign = 1f;
+                //进入世界UI
+                float num = 4f;
+                UIImageButton uIImageButton = new UIImageButton((Asset<Texture2D>)fName["_buttonPlayTexture"].GetValue(self))
+                {
+                    VAlign = 1f
+                };
                 uIImageButton.Left.Set(num, 0f);
                 uIImageButton.OnClick += customDatas[data].EnterWorld;
                 fName["OnDoubleClick"].SetValue(self, (UIElement.MouseEvent)customDatas[data].EnterWorld);
-                //uIImageButton.OnMouseOver += mName["PlayMouseOver"].CreateDelegate<UIElement.MouseEvent>();
                 uIImageButton.OnMouseOut += mName["ButtonMouseOut"].CreateDelegate<UIElement.MouseEvent>(self);
                 self.Append(uIImageButton);
                 num += 24f;
 
 
-
-                //UIImageButton uIImageButton2 = new UIImageButton(data.IsFavorite ? this._buttonFavoriteActiveTexture : this._buttonFavoriteInactiveTexture);
+                //收藏UI
                 UIImageButton uIImageButton2 = new UIImageButton(data.IsFavorite ?
                     (Asset<Texture2D>)fName["_buttonFavoriteActiveTexture"].GetValue(self)
                     : (Asset<Texture2D>)fName["_buttonFavoriteInactiveTexture"].GetValue(self))
@@ -124,17 +120,21 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
                 //    base.Append(uIImageButton4);
                 //    num += 24f;
                 //}
-                //UIImageButton uIImageButton5 = new UIImageButton(this._buttonRenameTexture);
-                UIImageButton uIImageButton5 = new UIImageButton((Asset<Texture2D>)fName["_buttonRenameTexture"].GetValue(self));
-                uIImageButton5.VAlign = 1f;
+
+                //重命名UI
+                UIImageButton uIImageButton5 = new UIImageButton((Asset<Texture2D>)fName["_buttonRenameTexture"].GetValue(self))
+                {
+                    VAlign = 1f
+                };
                 uIImageButton5.Left.Set(num, 0f);
-                //uIImageButton5.OnClick += this.RenameButtonClick;
-                //uIImageButton5.OnMouseOver += this.RenameMouseOver;
-                //uIImageButton5.OnMouseOut += this.ButtonMouseOut;
+                uIImageButton5.OnClick += mName["RenameButtonClick"].CreateDelegate<UIElement.MouseEvent>(self);
+                uIImageButton5.OnMouseOver += mName["RenameMouseOver"].CreateDelegate<UIElement.MouseEvent>(self);
+                uIImageButton5.OnMouseOut += mName["ButtonMouseOut"].CreateDelegate<UIElement.MouseEvent>(self);
                 uIImageButton5.SetSnapPoint("Rename", orderInList, null, null);
                 self.Append(uIImageButton5);
                 num += 24f;
-                //UIImageButton uIImageButton6 = new UIImageButton(this._buttonDeleteTexture)
+
+                //删除UI
                 UIImageButton uIImageButton6 = new UIImageButton((Asset<Texture2D>)fName["_buttonDeleteTexture"].GetValue(self))
                 {
                     VAlign = 1f,
@@ -144,22 +144,27 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
                 //{
                 //    uIImageButton6.OnClick += this.DeleteButtonClick;
                 //}
-                //uIImageButton6.OnMouseOver += this.DeleteMouseOver;
-                //uIImageButton6.OnMouseOut += this.DeleteMouseOut;
+                uIImageButton6.OnMouseOver += mName["DeleteMouseOver"].CreateDelegate<UIElement.MouseEvent>(self);
+                uIImageButton6.OnMouseOut += mName["DeleteMouseOut"].CreateDelegate<UIElement.MouseEvent>(self);
                 fName["_deleteButton"].SetValue(self, uIImageButton6);
                 //this._deleteButton = uIImageButton6;
                 self.Append(uIImageButton6);
                 num += 4f;
-                //this._buttonLabel = new UIText("", 1f, false);
-                var _buttonLabel = new UIText("", 1f, false);
-                _buttonLabel.VAlign = 1f;
+
+                //文本
+                var _buttonLabel = new UIText("", 1f, false)
+                {
+                    VAlign = 1f
+                };
                 _buttonLabel.Left.Set(num, 0f);
                 _buttonLabel.Top.Set(-3f, 0f);
                 fName["_buttonLabel"].SetValue(self, _buttonLabel);
                 self.Append(_buttonLabel);
-                var _deleteButtonLabel = new UIText("", 1f, false);
-                _deleteButtonLabel.VAlign = 1f;
-                _deleteButtonLabel.HAlign = 1f;
+                var _deleteButtonLabel = new UIText("", 1f, false)
+                {
+                    VAlign = 1f,
+                    HAlign = 1f
+                };
                 _deleteButtonLabel.Left.Set(-30f, 0f);
                 _deleteButtonLabel.Top.Set(-3f, 0f);
                 fName["_deleteButtonLabel"].SetValue(self, _buttonLabel);
@@ -169,6 +174,12 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
                 uIImageButton5.SetSnapPoint("Rename", orderInList, null, null);
                 uIImageButton6.SetSnapPoint("Delete", orderInList, null, null);
 
+                var info = typeof(UIElement).GetField("_idCounter", BindingFlags.NonPublic | BindingFlags.Static);
+                int count = (int)info.GetValue(null);
+                typeof(UIElement).GetProperty("UniqueId")
+                    .GetSetMethod(true)
+                    .Invoke(self, new object[] { count });
+                info.SetValue(null, count + 1);
             }
             else
             {
@@ -195,10 +206,12 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
             bool has = false;
             foreach (WorldFileData d in datas)
             {
-                if (World.GetWorldName(d) != "Terraria")
+                var name = World.GetWorldName(d);
+                if (name != "Terraria")
                 {
-                    customDatas.Add(d, World.Worlds[d.WorldGeneratorVersion]);
-                    World.Worlds[d.WorldGeneratorVersion].data = d;
+                    var world = World.CreateInstance(name);
+                    customDatas.Add(d, world);
+                    world.data = d;
                     has = true;
                 }
             }
@@ -216,7 +229,7 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
         {
 
         }
-        public string WorldType { get; set; } = "Vanilla";
+        public string WorldType { get; set; } = "Terraria";
 
         public string Name => "WorldSystem";
 

@@ -1,30 +1,25 @@
-﻿using Everglow.Sources.Modules.ZY.WorldSystem;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.IO;
+﻿using Terraria.IO;
 
-namespace ZYMod.WorldSystem;
-
-internal class Elsewhere : World
+namespace Everglow.Sources.Modules.ZY.WorldSystem
 {
-    public Elsewhere()
+    internal class Elsewhere : World
     {
-    }
+        public Elsewhere()
+        {
+        }
 
-    public Elsewhere(WorldFileData data) : base(data)
-    {
-    }
+        public Elsewhere(WorldFileData data) : base(data)
+        {
+        }
 
-    public override string WorldName => "Elsewhere";
-    
-    public override uint Version => 1;
+        public override string WorldName => "Elsewhere";
 
-    //public override Asset<Texture2D> WorldIcon => ModContent.Request<Texture2D>("ZYMod/IconOcean");
-    public override void GenerateWorld()
-    {
-        
+        public override uint Version => 1;
+
+        public override Asset<Texture2D> WorldIcon => ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZY/WorldSystem/IconOcean");
+        public override void GenerateWorld()
+        {
+
+        }
     }
 }

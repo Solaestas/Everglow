@@ -82,6 +82,7 @@ namespace Everglow.Sources.Commons.ModuleSystem
                                                                     select ins;
         public IEnumerable<IModule> FindModule(string name) => from ins in modules 
                                                                where ins.Name == name select ins;
+        public IEnumerable<IModule> FindModule(Func<IModule, bool> predicate) => modules.Where(predicate);
         /// <summary>
         /// 缺乏依赖会抛出异常
         /// </summary>

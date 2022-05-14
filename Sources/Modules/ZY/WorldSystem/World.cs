@@ -1,17 +1,11 @@
 ﻿using Everglow.Sources.Commons.ModuleSystem;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.GameContent.UI.Elements;
 using Terraria.IO;
 using Terraria.UI;
 
 namespace Everglow.Sources.Modules.ZY.WorldSystem
 {
-    [ModuleDependency(typeof(WorldSystem))]
+    //[ModuleDependency(typeof(WorldSystem))] 目前是不要的
     internal abstract class World : IModule
     {
         public WorldFileData data;
@@ -51,8 +45,6 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
         public string Name => WorldName;
 
         public string Description => WorldName;
-
-        public static Dictionary<ulong, World> Worlds = new Dictionary<ulong, World>();
         public World()
         {
 
@@ -63,7 +55,17 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
             size.X = data.WorldSizeX;
             size.Y = data.WorldSizeY;
         }
-
+        public static World CreateInstance(string name)
+        {
+            foreach(var world in Everglow.ModuleManager.FindModule<World>())
+            {
+                if(world.WorldName == name)
+                {
+                    return Activator.CreateInstance(world.GetType()) as World;
+                }
+            }
+            return null;
+        }
         public abstract void GenerateWorld();
         public virtual WorldFileData CreateMetaData(string displayName, string fileName, int GameMode, string seed)
         {
@@ -109,7 +111,6 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
                 Main.spawnTileY = DefaultSpawnPoint.Y;
                 WorldFile.SaveWorld();
             }
-            //WorldFile.LoadWorld(false);
             Main.statusText = "正在进入世界";
             WorldGen.playWorld();
         }
@@ -133,12 +134,11 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
         }
         public void Load()
         {
-            Worlds.Add(FileVersion, this);
+
         }
 
         public void Unload()
         {
-            Worlds = null;
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Everglow.Sources.Commons.ModuleSystem
     public interface IModule
     {
         public string Name { get; }
-        public string Description { get; }
+        public string Description => Name;
         public void Load();
         public void Unload();
     }
