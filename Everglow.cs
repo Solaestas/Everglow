@@ -15,7 +15,7 @@ global using Terraria.ID;
 global using Terraria.ModLoader;
 global using ReLogic.Content;
 
-using Everglow.Sources.Commons;
+using Everglow.Sources.Commons.ModuleSystem;
 
 namespace Everglow
 {
@@ -29,18 +29,17 @@ namespace Everglow
             get { return m_instance; }
         }
 
-        public ModuleManager ModuleManager
+        /// <summary>
+        /// »ñÈ¡ ModuleManager ÊµÀý
+        /// </summary>
+        public static ModuleManager ModuleManager
         {
-            get
-            {
-                return m_moduleManager;
-            }
+            get { return Instance.m_moduleManager; }
         }
 
         private static Everglow m_instance;
 
         private ModuleManager m_moduleManager;
-
 
         public Everglow()
         {
@@ -49,15 +48,12 @@ namespace Everglow
         public override void Load()
         {
             m_instance = this;
-
             m_moduleManager = new ModuleManager();
-            m_moduleManager.LoadAll();
         }
 
         public override void Unload()
         {
-            m_moduleManager.UnloadAll();
-
+            m_moduleManager.UnloadAllModules();
             m_instance = null;
         }
     }
