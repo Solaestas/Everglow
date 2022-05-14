@@ -23,5 +23,10 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
         {
 
         }
+        //在Load时给WorldSystem里添加一个假的世界
+        public override void Load()
+        {
+            Everglow.ModuleManager.GetModule<WorldSystem>().AddWorld(CreateInstance(WorldName), "Elsewhere", "Elsewhere", 3, "Test");
+        }
     }
 }

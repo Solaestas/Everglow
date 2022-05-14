@@ -8,10 +8,11 @@ using Terraria.UI;
 using Terraria.ID;
 using System.Threading.Tasks;
 using Terraria.GameContent.UI.States;
+using System.Threading;
 
 namespace Everglow.Sources.Modules.ZY.WorldSystem
 {
-    //[ModuleDependency(typeof(WorldSystem))] 目前是不要的
+    [ModuleDependency(typeof(WorldSystem))]
     internal abstract class World : IModule
     {
         public WorldFileData data;
@@ -131,18 +132,18 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
                 {
                     if (!File.Exists(data.Path))
                     {
-                        Main.menuMode = 888;
+                        Main.menuMode = 10;//888是有UI的 10是只有文字的
                         Main.MenuUI.SetState(new UIWorldLoad());
                         WorldGen.clearWorld();
-                        //TODO Hjson
-                        Main.statusText = "开始创建世界";
+                        //TODO MythMod
+                        Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.MythMod.Common.WorldSystem.WorldCreate_Def");
                         Main.spawnTileX = DefaultSpawnPoint.X;
                         Main.spawnTileY = DefaultSpawnPoint.Y;
                         GenerateWorld();
                         WorldFile.SaveWorld();
                     }
                     Main.menuMode = 10;
-                    Main.statusText = "正在进入世界";
+                    Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.MythMod.Common.WorldSystem.WorldEnter_Def");
                     WorldGen.playWorld();
                 }
             });
@@ -181,12 +182,11 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
         {
             return (uint)(dataVersion & 0xFF_FF_FF_FF);
         }
-        public void Load()
+        public virtual void Load()
         {
 
         }
-
-        public void Unload()
+        public virtual void Unload()
         {
         }
     }
