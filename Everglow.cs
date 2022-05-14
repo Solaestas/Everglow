@@ -48,7 +48,6 @@ namespace Everglow
         public override void Load()
         {
             m_instance = this;
-            Main.graphics.
             m_moduleManager = new ModuleManager();
         }
 
