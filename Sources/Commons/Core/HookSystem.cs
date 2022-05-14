@@ -9,7 +9,6 @@
         internal Action action;
         public string Name { get; internal set; }
         public bool Enable { get; set; } = true;
-        public bool Debug { get; set; } = false;
         public ActionHandler(Action action)
         {
             this.action = action;
@@ -186,7 +185,7 @@
                     {
                         Everglow.Instance.Logger.Error($"{handler.Name} 抛出了异常 {ex}");
                         handler.Enable = false;
-                        if (handler.Debug)
+                        if (Function.FeatureFlags.EverglowConfig.debugMode)
                         {
                             //自动暂停的，方便监视
                             Debug.Assert(false);
