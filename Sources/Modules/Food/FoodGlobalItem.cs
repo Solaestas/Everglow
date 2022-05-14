@@ -9,6 +9,11 @@ namespace Everglow.Sources.Modules.Food
 
         public FoodGlobalItem()
         {
+
+        }
+
+        public override void SetStaticDefaults()
+        {
             m_vanillaFoodInfos = new Dictionary<Item_id, FoodInfo>
             {
                 // 香蕉奶昔？饱食度20，会给一个弹药箱的buff
