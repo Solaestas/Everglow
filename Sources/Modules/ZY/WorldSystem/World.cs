@@ -1,7 +1,13 @@
 ﻿using Everglow.Sources.Commons.ModuleSystem;
 using System.Security.Cryptography;
+using Terraria.Audio;
 using Terraria.IO;
+using Terraria.ModLoader.Config;
+using Terraria.Social;
 using Terraria.UI;
+using Terraria.ID;
+using System.Threading.Tasks;
+using Terraria.GameContent.UI.States;
 
 namespace Everglow.Sources.Modules.ZY.WorldSystem
 {
@@ -40,7 +46,9 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
         public virtual Point DefaultSpawnPoint => new Point(data.WorldSizeX / 2, data.WorldSizeY / 2);
         public Point size;
         public bool SinglePlay => data is not null;
-        public virtual Asset<Texture2D> WorldIcon => ModContent.Request<Texture2D>("Terraria/Images/UI/Icon" + (data.IsHardMode ? "Hallow" : "") + (data.HasCorruption ? "Corruption" : "Crimson"));
+        public virtual Asset<Texture2D> WorldIcon =>
+            ModContent.Request<Texture2D>("Terraria/Images/UI/Icon" + (data.IsHardMode ? "Hallow" : "") + (data.HasCorruption ? "Corruption" : "Crimson"), 
+                AssetRequestMode.ImmediateLoad);
 
         public string Name => WorldName;
 
@@ -66,7 +74,20 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
             }
             return null;
         }
-        public abstract void GenerateWorld();
+        /// <summary>
+        /// 世界生成，使用Main.status输出进度
+        /// </summary>
+        public virtual void GenerateWorld() 
+        { 
+
+        }
+        /// <summary>
+        /// 从服务端调用的世界生成，使用Console输出进度
+        /// </summary>
+        public virtual void GenerateWorld_Server()
+        {
+
+        }
         public virtual WorldFileData CreateMetaData(string displayName, string fileName, int GameMode, string seed)
         {
             string path = $"{Main.SavePath}\\Worlds\\{fileName}.wld";
@@ -85,38 +106,66 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
             this.data = data;
             return data;
         }
-        public virtual void SetBaseWorldData()
+        public void SetBaseWorldData()
         {
-            Main.maxTilesX = data.WorldSizeX;
-            Main.maxTilesY = data.WorldSizeY;
-            Main.mapMaxX = data.WorldSizeX;
-            Main.mapMaxY = data.WorldSizeY;
-            Main.worldSurface = data.WorldSizeY / 3;
-            Main.undergroundBackground = data.WorldSizeY / 2;
+            Main.mapMaxX = Main.maxTilesX = data.WorldSizeX;
+            Main.mapMaxY = Main.maxTilesY = data.WorldSizeY;
+            Main.worldName = data.Name;
+            Main.WorldFileMetadata = data.Metadata;
+            Main.worldID = int.Parse(data.UniqueId.ToString().ToUpper()[^5..^1], System.Globalization.NumberStyles.HexNumber);
         }
+        /// <summary>
+        /// 替代了原版UI中的开始游戏
+        /// </summary>
+        /// <param name="evt"></param>
+        /// <param name="listeningElement"></param>
         public virtual void EnterWorld(UIMouseEvent evt, UIElement listeningElement)
         {
-            Main.ActiveWorldFileData = data;
-            Main.WorldFileMetadata = FileMetadata.FromCurrentSettings(FileType.World);
-            Main.worldName = Main.ActiveWorldFileData.Name;
+            data.SetAsActive();
             SetBaseWorldData();
-            Main.menuMode = 10;
+			SoundEngine.PlaySound(SoundID.MenuOpen);
+			Main.GetInputText("");
+            Task.Run(() =>
+            {
+                if (!Main.menuMultiplayer)
+                {
+                    if (!File.Exists(data.Path))
+                    {
+                        Main.menuMode = 888;
+                        Main.MenuUI.SetState(new UIWorldLoad());
+                        WorldGen.clearWorld();
+                        //TODO Hjson
+                        Main.statusText = "开始创建世界";
+                        Main.spawnTileX = DefaultSpawnPoint.X;
+                        Main.spawnTileY = DefaultSpawnPoint.Y;
+                        GenerateWorld();
+                        WorldFile.SaveWorld();
+                    }
+                    Main.menuMode = 10;
+                    Main.statusText = "正在进入世界";
+                    WorldGen.playWorld();
+                }
+            });
+        }
+        /// <summary>
+        /// 在服务端进入世界前执行的世界生成代码
+        /// </summary>
+        public virtual void EnterWorld_Server()
+        {
             if (!File.Exists(data.Path))
             {
-                WorldGen.clearWorld();
-                //TODO Hjson
-                Main.statusText = "开始创建世界";
-                GenerateWorld();
+                Console.WriteLine("开始创建世界");
+                SetBaseWorldData();
                 Main.spawnTileX = DefaultSpawnPoint.X;
                 Main.spawnTileY = DefaultSpawnPoint.Y;
+                GenerateWorld_Server();
                 WorldFile.SaveWorld();
             }
-            Main.statusText = "正在进入世界";
-            WorldGen.playWorld();
+            WorldSystem.CurrentWorld = this;
         }
-        public static string GetWorldName(WorldFileData data)
+        public static string GetWorldName(ulong dataVersion)
         {
-            uint mcode = (uint)(data.WorldGeneratorVersion >> 32);
+            uint mcode = (uint)(dataVersion >> 32);
             foreach (var world in Everglow.ModuleManager.FindModule<World>())
             {
                 uint code = world.WorldNameCode;
@@ -128,9 +177,9 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
             return "Terraria";
         }
 
-        public static uint GetWorldVersion(WorldFileData data)
+        public static uint GetWorldVersion(ulong dataVersion)
         {
-            return (uint)(data.WorldGeneratorVersion & 0xFF_FF_FF_FF);
+            return (uint)(dataVersion & 0xFF_FF_FF_FF);
         }
         public void Load()
         {

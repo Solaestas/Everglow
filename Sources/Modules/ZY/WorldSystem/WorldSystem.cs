@@ -1,23 +1,63 @@
-﻿using Everglow.Sources.Commons.ModuleSystem;
+﻿using Everglow.Sources.Commons.Core;
+using Everglow.Sources.Commons.ModuleSystem;
 using Terraria.GameContent.UI.Elements;
 using Terraria.IO;
 using Terraria.UI;
+using Terraria.ID;
+using Terraria.Social;
 
 namespace Everglow.Sources.Modules.ZY.WorldSystem
 {
     internal class WorldSystem : IModule
     {
+        public Dictionary<WorldFileData, World> dataToWorld = new Dictionary<WorldFileData, World>();
+        public Dictionary<WorldFileData, UIWorldListItem> dataToUI = new Dictionary<WorldFileData, UIWorldListItem>();
+        public List<(World world, string displayName, string fileName, int gameMode, string seed)> worlds = new List<(World world, string displayName, string fileName, int gameMode, string seed)>();
+        public string Name => "WorldSystem";
         public static World CurrentWorld { get; internal set; }
         public void Load()
         {
             On.Terraria.Main.LoadWorlds += Main_LoadWorlds;
             On.Terraria.GameContent.UI.Elements.UIWorldListItem.ctor += UIWorldListItem_ctor;
+
+            ModContent.GetInstance<HookSystem>().AddMethod(() =>
+            {
+                dataToWorld[Main.ActiveWorldFileData].EnterWorld_Server();
+            }, CallOpportunity.PostEnterWorld_Server);
+
+            ModContent.GetInstance<HookSystem>().AddMethod(() =>
+            {
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    CurrentWorld = World.CreateInstance(World.GetWorldName(Main.ActiveWorldFileData.WorldGeneratorVersion));
+                }
+                else
+                {
+                    var pack = Everglow.Instance.GetPacket(1);
+                    pack.Write((byte)0);
+                    pack.Send();
+                }
+            }, CallOpportunity.PostEnterWorld_Single);
+
         }
+        public void Unload()
+        {
+            CurrentWorld = null;
+        }
+        /// <summary>
+        /// 添加虚假的世界选择
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="displayName"></param>
+        /// <param name="fileName"></param>
+        /// <param name="gameMode"></param>
+        /// <param name="seed"></param>
+        public void AddWorld(World world, string displayName, string fileName, int gameMode, string seed) => worlds.Add((world, displayName, fileName, gameMode, seed));
         private void UIWorldListItem_ctor(On.Terraria.GameContent.UI.Elements.UIWorldListItem.orig_ctor orig, UIWorldListItem self, WorldFileData data, int orderInList, bool canBePlayed)
         {
-            if (World.GetWorldName(data) != "Terraria")
+            if (dataToWorld.ContainsKey(data))
             {
-                uiDats[self] = data;
+                dataToUI[data] = self;
                 var type = self.GetType();
                 var Fields = type.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance).Concat(
                     typeof(UIPanel).GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance).Concat(
@@ -33,6 +73,7 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
                 {
                     mName[method.Name] = method;
                 }
+                //构造
                 fName["Elements"].SetValue(self, new List<UIElement>());
                 fName["BackgroundColor"].SetValue(self, new Color(63, 82, 151) * 0.7f);
                 fName["BorderColor"].SetValue(self, Color.Black);
@@ -42,8 +83,16 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
                 self.MaxHeight = StyleDimension.Fill;
                 self.MinWidth = StyleDimension.Empty;
                 self.MinHeight = StyleDimension.Empty;
-                self.SetPadding(6);
+                self.SetPadding(12);
                 fName["_needsTextureLoading"].SetValue(self, true);
+
+                var info = typeof(UIElement).GetField("_idCounter", BindingFlags.NonPublic | BindingFlags.Static);
+                int count = (int)info.GetValue(null);
+                typeof(UIElement).GetProperty("UniqueId")
+                    .GetSetMethod(true)
+                    .Invoke(self, new object[] { count });
+                info.SetValue(null, count + 1);
+
                 if (File.Exists(data.Path))
                 {
                     fName["_fileSize"].SetValue(self, (ulong)(long)Terraria.Utilities.FileUtilities.GetFileSize(data.Path, data.IsCloudSave));
@@ -59,10 +108,10 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
                 type.GetMethod("InitializeAppearance", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(self, null);
 
                 //图标UI
-                var _worldIcon = new UIImage(customDatas[data].WorldIcon);
+                var _worldIcon = new UIImage(dataToWorld[data].WorldIcon);
                 _worldIcon.Left.Set(4f, 0f);
                 fName["_worldIcon"].SetValue(self, _worldIcon);
-                _worldIcon.OnDoubleClick += customDatas[data].EnterWorld;
+                _worldIcon.OnDoubleClick += dataToWorld[data].EnterWorld;
                 _worldIcon.Recalculate();
                 self.Append(_worldIcon);
 
@@ -73,8 +122,10 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
                     VAlign = 1f
                 };
                 uIImageButton.Left.Set(num, 0f);
-                uIImageButton.OnClick += customDatas[data].EnterWorld;
-                fName["OnDoubleClick"].SetValue(self, (UIElement.MouseEvent)customDatas[data].EnterWorld);
+                uIImageButton.OnClick += dataToWorld[data].EnterWorld;
+                fName["OnDoubleClick"].SetValue(self, (UIElement.MouseEvent)dataToWorld[data].EnterWorld);
+                uIImageButton.OnMouseOut += mName["ButtonMouseOut"].CreateDelegate<UIElement.MouseEvent>(self);
+                uIImageButton.OnMouseOver += mName["PlayMouseOver"].CreateDelegate<UIElement.MouseEvent>(self);
                 uIImageButton.OnMouseOut += mName["ButtonMouseOut"].CreateDelegate<UIElement.MouseEvent>(self);
                 self.Append(uIImageButton);
                 num += 24f;
@@ -96,30 +147,36 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
                 num += 24f;
 
 
-                //if (SocialAPI.Cloud != null)
-                //{
-                //    UIImageButton uIImageButton3 = new UIImageButton(this._data.IsCloudSave ? this._buttonCloudActiveTexture : this._buttonCloudInactiveTexture);
-                //    uIImageButton3.VAlign = 1f;
-                //    uIImageButton3.Left.Set(num, 0f);
-                //    uIImageButton3.OnClick += this.CloudButtonClick;
-                //    uIImageButton3.OnMouseOver += this.CloudMouseOver;
-                //    uIImageButton3.OnMouseOut += this.ButtonMouseOut;
-                //    uIImageButton3.SetSnapPoint("Cloud", orderInList, null, null);
-                //    base.Append(uIImageButton3);
-                //    num += 24f;
-                //}
-                //if (this._data.WorldGeneratorVersion != 0UL)
-                //{
-                //    UIImageButton uIImageButton4 = new UIImageButton(this._buttonSeedTexture);
-                //    uIImageButton4.VAlign = 1f;
-                //    uIImageButton4.Left.Set(num, 0f);
-                //    uIImageButton4.OnClick += this.SeedButtonClick;
-                //    uIImageButton4.OnMouseOver += this.SeedMouseOver;
-                //    uIImageButton4.OnMouseOut += this.ButtonMouseOut;
-                //    uIImageButton4.SetSnapPoint("Seed", orderInList, null, null);
-                //    base.Append(uIImageButton4);
-                //    num += 24f;
-                //}
+                if (SocialAPI.Cloud != null)
+                {
+                    UIImageButton uIImageButton3 = new UIImageButton(data.IsCloudSave ?
+                        (Asset<Texture2D>)fName["_buttonCloudActiveTexture"].GetValue(self) :
+                        (Asset<Texture2D>)fName["_buttonCloudInactiveTexture"].GetValue(self))
+                    {
+                        VAlign = 1f
+                    };
+                    uIImageButton3.Left.Set(num, 0f);
+                    uIImageButton3.OnClick += mName["CloudButtonClick"].CreateDelegate<UIElement.MouseEvent>(self);
+                    uIImageButton3.OnMouseOver += mName["CloudMouseOver"].CreateDelegate<UIElement.MouseEvent>(self);
+                    uIImageButton3.OnMouseOut += mName["ButtonMouseOut"].CreateDelegate<UIElement.MouseEvent>(self);
+                    uIImageButton3.SetSnapPoint("Cloud", orderInList, null, null);
+                    self.Append(uIImageButton3);
+                    num += 24f;
+                }
+                if (data.WorldGeneratorVersion != 0UL)
+                {
+                    UIImageButton uIImageButton4 = new UIImageButton((Asset<Texture2D>)fName["_buttonSeedTexture"].GetValue(self))
+                    {
+                        VAlign = 1f
+                    };
+                    uIImageButton4.Left.Set(num, 0f);
+                    uIImageButton4.OnClick += mName["SeedButtonClick"].CreateDelegate<UIElement.MouseEvent>(self);
+                    uIImageButton4.OnMouseOver += mName["SeedMouseOver"].CreateDelegate<UIElement.MouseEvent>(self);
+                    uIImageButton4.OnMouseOut += mName["ButtonMouseOut"].CreateDelegate<UIElement.MouseEvent>(self);
+                    uIImageButton4.SetSnapPoint("Seed", orderInList, null, null);
+                    self.Append(uIImageButton4);
+                    num += 24f;
+                }
 
                 //重命名UI
                 UIImageButton uIImageButton5 = new UIImageButton((Asset<Texture2D>)fName["_buttonRenameTexture"].GetValue(self))
@@ -140,14 +197,13 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
                     VAlign = 1f,
                     HAlign = 1f
                 };
-                //if (!data.IsFavorite)
-                //{
-                //    uIImageButton6.OnClick += this.DeleteButtonClick;
-                //}
+                if (!data.IsFavorite)
+                {
+                    uIImageButton6.OnClick += mName["DeleteButtonClick"].CreateDelegate<UIElement.MouseEvent>(self);
+                }
                 uIImageButton6.OnMouseOver += mName["DeleteMouseOver"].CreateDelegate<UIElement.MouseEvent>(self);
                 uIImageButton6.OnMouseOut += mName["DeleteMouseOut"].CreateDelegate<UIElement.MouseEvent>(self);
                 fName["_deleteButton"].SetValue(self, uIImageButton6);
-                //this._deleteButton = uIImageButton6;
                 self.Append(uIImageButton6);
                 num += 4f;
 
@@ -158,8 +214,9 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
                 };
                 _buttonLabel.Left.Set(num, 0f);
                 _buttonLabel.Top.Set(-3f, 0f);
-                fName["_buttonLabel"].SetValue(self, _buttonLabel);
                 self.Append(_buttonLabel);
+                fName["_buttonLabel"].SetValue(self, _buttonLabel);
+
                 var _deleteButtonLabel = new UIText("", 1f, false)
                 {
                     VAlign = 1f,
@@ -167,75 +224,38 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
                 };
                 _deleteButtonLabel.Left.Set(-30f, 0f);
                 _deleteButtonLabel.Top.Set(-3f, 0f);
-                fName["_deleteButtonLabel"].SetValue(self, _buttonLabel);
                 self.Append(_deleteButtonLabel);
+                fName["_deleteButtonLabel"].SetValue(self, _deleteButtonLabel);
+
                 uIImageButton.SetSnapPoint("Play", orderInList, null, null);
                 uIImageButton2.SetSnapPoint("Favorite", orderInList, null, null);
                 uIImageButton5.SetSnapPoint("Rename", orderInList, null, null);
                 uIImageButton6.SetSnapPoint("Delete", orderInList, null, null);
-
-                var info = typeof(UIElement).GetField("_idCounter", BindingFlags.NonPublic | BindingFlags.Static);
-                int count = (int)info.GetValue(null);
-                typeof(UIElement).GetProperty("UniqueId")
-                    .GetSetMethod(true)
-                    .Invoke(self, new object[] { count });
-                info.SetValue(null, count + 1);
             }
             else
             {
                 orig(self, data, orderInList, canBePlayed);
             }
         }
-
         private void Main_LoadWorlds(On.Terraria.Main.orig_LoadWorlds orig)
         {
-            //var world = ZYContent.GetInstance<Elsewhere>();
-            //var data = world.CreateMetaData("eee", 3, "dsa");
-            //Main.ActiveWorldFileData = data;
-            //Main.maxTilesX = data.WorldSizeX;
-            //Main.maxTilesY = data.WorldSizeY;
-            //Main.WorldFileMetadata = data.Metadata;
-            //Main.worldName = Main.ActiveWorldFileData.Name;
-            //WorldGen.clearWorld();
-            ////WorldGen.GenerateWorld(0);
-            //Main.spawnTileX = data.WorldSizeX / 2;
-            //Main.spawnTileY = data.WorldSizeY / 2;
-            //WorldFile.SaveWorld();
             orig();
             List<WorldFileData> datas = Main.WorldList;
-            bool has = false;
             foreach (WorldFileData d in datas)
             {
-                var name = World.GetWorldName(d);
-                if (name != "Terraria")
-                {
-                    var world = World.CreateInstance(name);
-                    customDatas.Add(d, world);
-                    world.data = d;
-                    has = true;
-                }
+                var name = World.GetWorldName(d.WorldGeneratorVersion);
+                var world = World.CreateInstance(name);
+                dataToWorld.Add(d, world);
+                world.data = d;
             }
 
-            if (!has)
+            foreach(var (world, displayName, fileName, gameMode, seed) in worlds)
             {
-                World world = new Elsewhere();
-                WorldFileData data = world.CreateMetaData("elsewhere", "elsewhere", 0, "");
+                var data = world.CreateMetaData(displayName, fileName, gameMode, seed);
                 datas.Add(data);
-                customDatas.Add(data, world);
-                world.data = data;
+                dataToWorld.Add(data, world); 
             }
         }
-        public void Unload()
-        {
 
-        }
-        public string WorldType { get; set; } = "Terraria";
-
-        public string Name => "WorldSystem";
-
-        public string Description => "WorldSystem";
-
-        public Dictionary<WorldFileData, World> customDatas = new Dictionary<WorldFileData, World>();
-        public Dictionary<UIWorldListItem, WorldFileData> uiDats = new Dictionary<UIWorldListItem, WorldFileData>();
     }
 }

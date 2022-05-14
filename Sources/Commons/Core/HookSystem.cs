@@ -39,8 +39,9 @@
         PostUpdatePlayers,
         PostUpdateNPCs,
         PostUpdateDusts,
-        LoadWorlds,
-        UnloadWorlds,
+        PostEnterWorld_Single,
+        PostEnterWorld_Server,
+        PostExitWorld_Single,
         ResolutionChanged
     }
     /// <summary>
@@ -65,8 +66,9 @@
             CallOpportunity.PostUpdateNPCs,
             CallOpportunity.PostUpdateDusts,
             //Misc
-            CallOpportunity.LoadWorlds,
-            CallOpportunity.UnloadWorlds,
+            CallOpportunity.PostEnterWorld_Single,
+            CallOpportunity.PostExitWorld_Single,
+            CallOpportunity.PostEnterWorld_Server,
             CallOpportunity.ResolutionChanged
         };
         internal Dictionary<CallOpportunity, List<ActionHandler>> methods = new Dictionary<CallOpportunity, List<ActionHandler>>();
@@ -158,11 +160,13 @@
             On.Terraria.Main.DrawNPCs += Main_DrawNPCs;
             On.Terraria.Graphics.Renderers.LegacyPlayerRenderer.DrawPlayers += LegacyPlayerRenderer_DrawPlayers;
             On.Terraria.Main.DoDraw += Main_DoDraw;
-            On.Terraria.Main.LoadWorlds += Main_LoadWorlds;
+            On.Terraria.WorldGen.playWorld += WorldGen_playWorld;
             On.Terraria.WorldGen.SaveAndQuit += WorldGen_SaveAndQuit;
             On.Terraria.Main.DrawMiscMapIcons += Main_DrawMiscMapIcons;
+            On.Terraria.WorldGen.serverLoadWorldCallBack += WorldGen_serverLoadWorldCallBack;
             Main.OnResolutionChanged += Main_OnResolutionChanged;
         }
+
         public override void Unload()
         {
             methods = null;
@@ -190,6 +194,11 @@
                     }
                 }
             }
+        }
+        internal void WorldGen_serverLoadWorldCallBack(On.Terraria.WorldGen.orig_serverLoadWorldCallBack orig)
+        {
+            orig();
+            Invoke(CallOpportunity.PostEnterWorld_Server);
         }
         internal void Main_DrawMiscMapIcons(On.Terraria.Main.orig_DrawMiscMapIcons orig, Main self, SpriteBatch spriteBatch, Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale, float drawScale, ref string mouseTextString)
         {
@@ -224,13 +233,13 @@
         }
         internal void WorldGen_SaveAndQuit(On.Terraria.WorldGen.orig_SaveAndQuit orig, Action callback)
         {
-            Invoke(CallOpportunity.UnloadWorlds);
+            Invoke(CallOpportunity.PostExitWorld_Single);
             orig(callback);
         }
-        internal void Main_LoadWorlds(On.Terraria.Main.orig_LoadWorlds orig)
+        internal void WorldGen_playWorld(On.Terraria.WorldGen.orig_playWorld orig)
         {
             orig();
-            Invoke(CallOpportunity.LoadWorlds);
+            Invoke(CallOpportunity.PostEnterWorld_Single);
         }
         internal void Main_OnResolutionChanged(Vector2 obj)
         {
@@ -249,13 +258,11 @@
                 Invoke(CallOpportunity.PostDrawNPCs);
             }
         }
-
         internal void Main_DrawDust(On.Terraria.Main.orig_DrawDust orig, Main self)
         {
             orig.Invoke(self);
             Invoke(CallOpportunity.PostDrawDusts);
         }
-
         internal void Main_DrawProjectiles(On.Terraria.Main.orig_DrawProjectiles orig, Main self)
         {
             orig.Invoke(self);
@@ -274,426 +281,6 @@
             DrawTimer++;
         }
     }
-    ////TimeSlow
-    //internal int timeSlowTarget;
-    //internal int[] timeSlowTimer;
-    //internal int[] timeSlowTimeLeft;
-    //internal int[] timeSlowScale;
-    //internal readonly HashSet<int> heldProjIndex = new HashSet<int>();
-    //internal readonly (Vector2 oldpos, float oldrot, Vector2 pos, float rot, bool active)[][] timeSlowOldValue
-    //    = new (Vector2 oldpos, float oldrot, Vector2 pos, float rot, bool active)[TARGET_COUNT][];
-    //public const int TARGET_DUST = 0b100000;
-    //public const int TARGET_GORE = 0b010000;
-    //public const int TARGET_ITEM = 0b001000;
-    //public const int TARGET_NPC = 0b000100;
-    //public const int TARTET_PLAYER = 0b000010;
-    //public const int TARGET_PROJ = 0b000001;
-    //public const int TARGET_ALL = 0b111111;
-    //public const int TARGET_NOPLAYER = 0b111101;
-    //public const int TARGET_DUST_INDEX = 5;
-    //public const int TARGET_GORE_INDEX = 4;
-    //public const int TARGET_ITEM_INDEX = 3;
-    //public const int TARGET_NPC_INDEX = 2;
-    //public const int TARGET_PLAYER_INDEX = 1;
-    //public const int TARGET_PROJ_INDEX = 0;
-    //public const int TARGET_COUNT = 6;
-
-    //public void ApplyTimeSlow(int target, int time, int scale)
-    //{
-    //    timeSlowTimer ??= new int[TARGET_COUNT];
-    //    timeSlowTimeLeft ??= new int[TARGET_COUNT];
-    //    timeSlowScale ??= new int[TARGET_COUNT];
-    //    for (int index = 0; target != 0; index++, target >>= 1)
-    //    {
-    //        if (BitUtils.IsTrue(target, 0))
-    //        {
-    //            timeSlowTimeLeft[index] = time;
-    //            timeSlowScale[index] = scale;
-    //            timeSlowOldValue[index] = index switch
-    //            {
-    //                TARGET_DUST_INDEX => new (Vector2 oldpos, float oldrot, Vector2 pos, float rot, bool active)[Main.dust.Length],
-    //                TARGET_GORE_INDEX => new (Vector2 oldpos, float oldrot, Vector2 pos, float rot, bool active)[Main.gore.Length],
-    //                TARGET_ITEM_INDEX => new (Vector2 oldpos, float oldrot, Vector2 pos, float rot, bool active)[Main.item.Length],
-    //                TARGET_NPC_INDEX => new (Vector2 oldpos, float oldrot, Vector2 pos, float rot, bool active)[Main.npc.Length],
-    //                TARGET_PLAYER_INDEX => new (Vector2 oldpos, float oldrot, Vector2 pos, float rot, bool active)[Main.player.Length],
-    //                TARGET_PROJ_INDEX => new (Vector2 oldpos, float oldrot, Vector2 pos, float rot, bool active)[Main.projectile.Length],
-    //                _ => throw new Exception("Noknown error"),
-    //            };
-    //            timeSlowTarget |= 1 << index;
-    //        }
-    //    }
-    //}
-    //public void UpdateTimeSlow()
-    //{
-    //    if (timeSlowTarget != 0)
-    //    {
-    //        for (int i = 0; i < TARGET_COUNT; i++)
-    //        {
-    //            if (timeSlowTimeLeft[i] != 0)
-    //            {
-    //                --timeSlowTimeLeft[i];
-    //                ++timeSlowTimer[i];
-    //            }
-    //            else
-    //            {
-    //                timeSlowTimer[i] = 0;
-    //                timeSlowScale[i] = 0;
-    //                timeSlowOldValue[i] = null;
-    //                timeSlowTarget = BitUtils.SetFalse(timeSlowTarget, i);
-    //            }
-    //        }
-    //    }
-    //}
-    //public override void PreUpdateDusts()
-    //{
-    //    if (BitUtils.IsTrue(timeSlowTarget, TARGET_DUST_INDEX) && timeSlowTimer[TARGET_DUST_INDEX] % timeSlowScale[TARGET_DUST_INDEX] == 0)
-    //    {
-    //        for (int i = 0; i < Main.dust.Length; i++)
-    //        {
-    //            var dust = Main.dust[i];
-    //            if (dust.active)
-    //            {
-    //                timeSlowOldValue[TARGET_DUST_INDEX][i].oldpos = dust.position;
-    //                timeSlowOldValue[TARGET_DUST_INDEX][i].oldrot = dust.rotation;
-    //                timeSlowOldValue[TARGET_DUST_INDEX][i].active = true;
-    //            }
-    //            else
-    //            {
-    //                timeSlowOldValue[TARGET_DUST_INDEX][i].active = false;
-    //            }
-    //        }
-    //    }
-    //}
-    //public override void PreUpdateGores()
-    //{
-    //    if (BitUtils.IsTrue(timeSlowTarget, TARGET_GORE_INDEX) && timeSlowTimer[TARGET_GORE_INDEX] % timeSlowScale[TARGET_GORE_INDEX] == 0)
-    //    {
-    //        for (int i = 0; i < Main.gore.Length; i++)
-    //        {
-    //            var gore = Main.gore[i];
-    //            if (gore.active)
-    //            {
-    //                timeSlowOldValue[TARGET_GORE_INDEX][i].oldpos = gore.position;
-    //                timeSlowOldValue[TARGET_GORE_INDEX][i].oldrot = gore.rotation;
-    //                timeSlowOldValue[TARGET_GORE_INDEX][i].active = true;
-    //            }
-    //            else
-    //            {
-    //                timeSlowOldValue[TARGET_GORE_INDEX][i].active = false;
-    //            }
-    //        }
-    //    }
-    //}
-    //public override void PreUpdateItems()
-    //{
-    //    if (BitUtils.IsTrue(timeSlowTarget, TARGET_ITEM_INDEX) && timeSlowTimer[TARGET_ITEM_INDEX] % timeSlowScale[TARGET_ITEM_INDEX] == 0)
-    //    {
-    //        for (int i = 0; i < Main.item.Length; i++)
-    //        {
-    //            var item = Main.item[i];
-    //            if (item.active)
-    //            {
-    //                timeSlowOldValue[TARGET_ITEM_INDEX][i].oldpos = item.position;
-    //                timeSlowOldValue[TARGET_ITEM_INDEX][i].active = true;
-    //            }
-    //            else
-    //            {
-    //                timeSlowOldValue[TARGET_ITEM_INDEX][i].active = false;
-    //            }
-    //        }
-    //    }
-    //}
-    //public override void PreUpdateNPCs()
-    //{
-    //    if (BitUtils.IsTrue(timeSlowTarget, TARGET_NPC_INDEX) && timeSlowTimer[TARGET_NPC_INDEX] % timeSlowScale[TARGET_NPC_INDEX] == 0)
-    //    {
-    //        for (int i = 0; i < Main.npc.Length; i++)
-    //        {
-    //            var npc = Main.npc[i];
-    //            if (npc.active)
-    //            {
-    //                timeSlowOldValue[TARGET_NPC_INDEX][i].oldpos = npc.position;
-    //                timeSlowOldValue[TARGET_NPC_INDEX][i].oldrot = npc.rotation;
-    //                timeSlowOldValue[TARGET_NPC_INDEX][i].active = true;
-    //            }
-    //            else
-    //            {
-    //                timeSlowOldValue[TARGET_NPC_INDEX][i].active = false;
-    //            }
-    //        }
-    //    }
-    //}
-    //public override void PreUpdatePlayers()
-    //{
-    //    if (BitUtils.IsTrue(timeSlowTarget, TARGET_PLAYER_INDEX) && timeSlowTimer[TARGET_PLAYER_INDEX] % timeSlowScale[TARGET_PLAYER_INDEX] == 0)
-    //    {
-    //        for (int i = 0; i < Main.player.Length; i++)
-    //        {
-    //            var player = Main.player[i];
-    //            if (player.active)
-    //            {
-    //                timeSlowOldValue[TARGET_PLAYER_INDEX][i].oldpos = player.position;
-    //                timeSlowOldValue[TARGET_PLAYER_INDEX][i].active = true;
-    //            }
-    //            else
-    //            {
-    //                timeSlowOldValue[TARGET_PLAYER_INDEX][i].active = false;
-    //            }
-    //        }
-    //    }
-    //}
-    //public override void PreUpdateProjectiles()
-    //{
-    //    if (BitUtils.IsTrue(timeSlowTarget, TARGET_PROJ_INDEX) && timeSlowTimer[TARGET_PROJ_INDEX] % timeSlowScale[TARGET_PROJ_INDEX] == 0)
-    //    {
-    //        for (int i = 0; i < Main.projectile.Length; i++)
-    //        {
-    //            var projectile = Main.projectile[i];
-    //            if (projectile.active && !heldProjIndex.Contains(i))
-    //            {
-    //                timeSlowOldValue[TARGET_PROJ_INDEX][i].oldpos = projectile.position;
-    //                timeSlowOldValue[TARGET_PROJ_INDEX][i].oldrot = projectile.rotation;
-    //                timeSlowOldValue[TARGET_PROJ_INDEX][i].active = true;
-    //            }
-    //            else
-    //            {
-    //                timeSlowOldValue[TARGET_PROJ_INDEX][i].active = false;
-    //            }
-    //        }
-    //    }
-    //}
-    //public override void PostUpdateDusts()
-    //{
-    //    if (BitUtils.IsTrue(timeSlowTarget, TARGET_DUST_INDEX))
-    //    {
-    //        if (timeSlowTimer[TARGET_DUST_INDEX] % timeSlowScale[TARGET_DUST_INDEX] == 0)
-    //        {
-    //            for (int i = 0; i < Main.dust.Length; i++)
-    //            {
-    //                var dust = Main.dust[i];
-    //                timeSlowOldValue[TARGET_DUST_INDEX][i].pos = dust.position;
-    //                timeSlowOldValue[TARGET_DUST_INDEX][i].rot = dust.rotation;
-    //            }
-    //        }
-    //        for (int i = 0; i < Main.dust.Length; i++)
-    //        {
-    //            var dust = Main.dust[i];
-    //            var (oldpos, oldrot, pos, rot, active) = timeSlowOldValue[TARGET_DUST_INDEX][i];
-    //            if (active)
-    //            {
-    //                float factor = (float)(timeSlowTimer[TARGET_DUST_INDEX] % timeSlowScale[TARGET_DUST_INDEX]) / (timeSlowScale[TARGET_DUST_INDEX] + 1);
-    //                dust.position = MathUtils.Lerp(oldpos, pos, factor);
-    //                dust.rotation = MathUtils.RadianLerp(oldrot, rot, factor);
-    //            }
-    //        }
-    //    }
-    //}
-    //public override void PostUpdateGores()
-    //{
-    //    if (BitUtils.IsTrue(timeSlowTarget, TARGET_DUST_INDEX))
-    //    {
-    //        if (timeSlowTimer[TARGET_GORE_INDEX] % timeSlowScale[TARGET_GORE_INDEX] == 0)
-    //        {
-    //            for (int i = 0; i < Main.gore.Length; i++)
-    //            {
-    //                var gore = Main.gore[i];
-    //                timeSlowOldValue[TARGET_GORE_INDEX][i].pos = gore.position;
-    //                timeSlowOldValue[TARGET_GORE_INDEX][i].rot = gore.rotation;
-    //            }
-    //        }
-    //        for (int i = 0; i < Main.gore.Length; i++)
-    //        {
-    //            var gore = Main.gore[i];
-    //            var (oldpos, oldrot, pos, rot, active) = timeSlowOldValue[TARGET_GORE_INDEX][i];
-    //            if (active)
-    //            {
-    //                float factor = (float)(timeSlowTimer[TARGET_GORE_INDEX] % timeSlowScale[TARGET_GORE_INDEX]) / (timeSlowScale[TARGET_GORE_INDEX] + 1);
-    //                gore.position = MathUtils.Lerp(oldpos, pos, factor);
-    //                gore.rotation = MathUtils.RadianLerp(oldrot, rot, factor);
-    //            }
-    //        }
-    //    }
-    //}
-    //public override void PostUpdateItems()
-    //{
-    //    if (BitUtils.IsTrue(timeSlowTarget, TARGET_DUST_INDEX))
-    //    {
-    //        if (timeSlowTimer[TARGET_ITEM_INDEX] % timeSlowScale[TARGET_ITEM_INDEX] == 0)
-    //        {
-    //            for (int i = 0; i < Main.item.Length; i++)
-    //            {
-    //                var item = Main.item[i];
-    //                timeSlowOldValue[TARGET_ITEM_INDEX][i].pos = item.position;
-    //            }
-    //        }
-    //        for (int i = 0; i < Main.item.Length; i++)
-    //        {
-    //            var item = Main.item[i];
-    //            var (oldpos, _, pos, _, active) = timeSlowOldValue[TARGET_ITEM_INDEX][i];
-    //            if (active)
-    //            {
-    //                float factor = (float)(timeSlowTimer[TARGET_ITEM_INDEX] % timeSlowScale[TARGET_ITEM_INDEX]) / (timeSlowScale[TARGET_ITEM_INDEX] + 1);
-    //                item.position = MathUtils.Lerp(oldpos, pos, factor);
-    //            }
-    //        }
-    //    }
-    //}
-    //public override void PostUpdateNPCs()
-    //{
-    //    if (BitUtils.IsTrue(timeSlowTarget, TARGET_NPC_INDEX))
-    //    {
-    //        if (timeSlowTimer[TARGET_NPC_INDEX] % timeSlowScale[TARGET_NPC_INDEX] == 0)
-    //        {
-    //            for (int i = 0; i < Main.npc.Length; i++)
-    //            {
-    //                var npc = Main.npc[i];
-    //                timeSlowOldValue[TARGET_NPC_INDEX][i].pos = npc.position;
-    //                timeSlowOldValue[TARGET_NPC_INDEX][i].rot = npc.rotation;
-    //            }
-    //        }
-    //        for (int i = 0; i < Main.npc.Length; i++)
-    //        {
-    //            var npc = Main.npc[i];
-    //            var (oldpos, oldrot, pos, rot, active) = timeSlowOldValue[TARGET_NPC_INDEX][i];
-    //            if (active)
-    //            {
-    //                float factor = (float)(timeSlowTimer[TARGET_NPC_INDEX] % timeSlowScale[TARGET_NPC_INDEX]) / (timeSlowScale[TARGET_NPC_INDEX] + 1);
-    //                npc.position = MathUtils.Lerp(oldpos, pos, factor);
-    //                npc.rotation = MathUtils.RadianLerp(oldrot, rot, factor);
-    //            }
-    //        }
-    //    }
-    //}
-    //public override void PostUpdatePlayers()
-    //{
-    //    if (BitUtils.IsTrue(timeSlowTarget, TARGET_PLAYER_INDEX))
-    //    {
-    //        if (timeSlowTimer[TARGET_PLAYER_INDEX] % timeSlowScale[TARGET_PLAYER_INDEX] == 0)
-    //        {
-    //            for (int i = 0; i < Main.player.Length; i++)
-    //            {
-    //                var player = Main.player[i];
-    //                timeSlowOldValue[TARGET_PLAYER_INDEX][i].pos = player.position;
-    //            }
-    //        }
-    //        for (int i = 0; i < Main.player.Length; i++)
-    //        {
-    //            var player = Main.player[i];
-    //            var (oldpos, _, pos, _, active) = timeSlowOldValue[TARGET_PLAYER_INDEX][i];
-    //            if (active)
-    //            {
-    //                float factor = (float)(timeSlowTimer[TARGET_PLAYER_INDEX] % timeSlowScale[TARGET_PLAYER_INDEX]) / (timeSlowScale[TARGET_PLAYER_INDEX] + 1);
-    //                player.position = MathUtils.Lerp(oldpos, pos, factor);
-    //            }
-    //        }
-    //    }
-    //}
-    //public override void PostUpdateProjectiles()
-    //{
-    //    if (BitUtils.IsTrue(timeSlowTarget, TARGET_PROJ_INDEX))
-    //    {
-    //        if (timeSlowTimer[TARGET_PROJ_INDEX] % timeSlowScale[TARGET_PROJ_INDEX] == 0)
-    //        {
-    //            for (int i = 0; i < Main.projectile.Length; i++)
-    //            {
-    //                var projectile = Main.projectile[i];
-    //                timeSlowOldValue[TARGET_PROJ_INDEX][i].pos = projectile.position;
-    //                timeSlowOldValue[TARGET_PROJ_INDEX][i].rot = projectile.rotation;
-    //            }
-    //            if (!BitUtils.IsTrue(timeSlowTarget, TARGET_PLAYER_INDEX))
-    //            {
-    //                heldProjIndex.Clear();
-    //                foreach (var player in Main.player)
-    //                {
-    //                    heldProjIndex.Add(player.heldProj);
-    //                }
-    //            }
-    //        }
-    //        for (int i = 0; i < Main.projectile.Length; i++)
-    //        {
-    //            var projectile = Main.projectile[i];
-    //            var (oldpos, oldrot, pos, rot, active) = timeSlowOldValue[TARGET_PROJ_INDEX][i];
-    //            if (active && !heldProjIndex.Contains(i))
-    //            {
-    //                float factor = (float)(timeSlowTimer[TARGET_PROJ_INDEX] % timeSlowScale[TARGET_PROJ_INDEX]) / (timeSlowScale[TARGET_PROJ_INDEX] + 1);
-    //                projectile.position = MathUtils.Lerp(oldpos, pos, factor);
-    //                projectile.rotation = MathUtils.RadianLerp(oldrot, rot, factor);
-    //            }
-    //        }
-    //    }
-    //}
-    //public void Hook_UpdateDusts(On.Terraria.Dust.orig_UpdateDust orig)
-    //{
-    //    if (BitUtils.IsTrue(timeSlowTarget, TARGET_DUST_INDEX))
-    //    {
-    //        if (timeSlowTimer[TARGET_DUST_INDEX] % timeSlowScale[TARGET_DUST_INDEX] != 0)
-    //        {
-    //            return;
-    //        }
-    //    }
-    //    orig.Invoke();
-    //}
-    //public void Hook_UpdateGores(On.Terraria.Gore.orig_Update orig, Gore self)
-    //{
-    //    if (BitUtils.IsTrue(timeSlowTarget, TARGET_GORE_INDEX))
-    //    {
-    //        if (timeSlowTimer[TARGET_GORE_INDEX] % timeSlowScale[TARGET_GORE_INDEX] != 0)
-    //        {
-    //            return;
-    //        }
-    //    }
-    //    orig.Invoke(self);
-    //}
-    //public void Hook_UpdateItems(On.Terraria.Item.orig_UpdateItem orig, Terraria.Item self, int i)
-    //{
-    //    if (BitUtils.IsTrue(timeSlowTarget, TARGET_ITEM_INDEX))
-    //    {
-    //        if (timeSlowTimer[TARGET_ITEM_INDEX] % timeSlowScale[TARGET_ITEM_INDEX] != 0)
-    //        {
-    //            return;
-    //        }
-    //    }
-    //    orig.Invoke(self, i);
-    //}
-
-    //public void Hook_UpdatePlayers(On.Terraria.Player.orig_Update orig, Player self, int i)
-    //{
-    //    if (BitUtils.IsTrue(timeSlowTarget, TARGET_PLAYER_INDEX))
-    //    {
-    //        if (timeSlowTimer[TARGET_PLAYER_INDEX] % timeSlowScale[TARGET_PLAYER_INDEX] != 0)
-    //        {
-    //            return;
-    //        }
-    //    }
-    //    orig.Invoke(self, i);
-    //}
-
-    //public void Hook_UpdateProjectiles(On.Terraria.Projectile.orig_Update orig, Projectile self, int i)
-    //{
-    //    if (BitUtils.IsTrue(timeSlowTarget, TARGET_PROJ_INDEX))
-    //    {
-    //        if (timeSlowTimer[TARGET_PROJ_INDEX] % timeSlowScale[TARGET_PROJ_INDEX] != 0)
-    //        {
-    //            if (!heldProjIndex.Contains(i))
-    //            {
-    //                return;
-    //            }
-    //        }
-    //    }
-    //    orig.Invoke(self, i);
-    //}
-
-    //public void Hook_UpdateNPCs(On.Terraria.NPC.orig_UpdateNPC orig, NPC self, int i)
-    //{
-    //    if (BitUtils.IsTrue(timeSlowTarget, TARGET_NPC_INDEX))
-    //    {
-    //        if (timeSlowTimer[TARGET_NPC_INDEX] % timeSlowScale[TARGET_NPC_INDEX] != 0)
-    //        {
-    //            return;
-    //        }
-    //    }
-    //    orig.Invoke(self, i);
-    //}
 
 }
 

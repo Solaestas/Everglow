@@ -16,7 +16,9 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
 
         public override uint Version => 1;
 
-        public override Asset<Texture2D> WorldIcon => ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZY/WorldSystem/IconOcean");
+        public override Asset<Texture2D> WorldIcon 
+            => ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZY/WorldSystem/IconOcean", 
+                AssetRequestMode.ImmediateLoad);
         public override void GenerateWorld()
         {
 
