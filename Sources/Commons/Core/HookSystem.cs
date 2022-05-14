@@ -186,7 +186,7 @@
                     {
                         Everglow.Instance.Logger.Error($"{handler.Name} 抛出了异常 {ex}");
                         handler.Enable = false;
-                        if (Function.FeatureFlags.EverglowConfig.debugMode)
+                        if (Function.FeatureFlags.EverglowConfig.DebugMode)
                         {
                             //自动暂停的，方便监视
                             Debug.Assert(false);
@@ -233,8 +233,8 @@
         }
         internal void WorldGen_SaveAndQuit(On.Terraria.WorldGen.orig_SaveAndQuit orig, Action callback)
         {
-            Invoke(CallOpportunity.PostExitWorld_Single);
             orig(callback);
+            Invoke(CallOpportunity.PostExitWorld_Single);
         }
         internal void WorldGen_playWorld(On.Terraria.WorldGen.orig_playWorld orig)
         {
