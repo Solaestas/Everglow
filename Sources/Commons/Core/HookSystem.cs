@@ -39,8 +39,9 @@
         PostUpdatePlayers,
         PostUpdateNPCs,
         PostUpdateDusts,
-        LoadWorlds,
-        UnloadWorlds,
+        PostEnterWorld_Single,
+        PostEnterWorld_Server,
+        PostExitWorld_Single,
         ResolutionChanged
     }
     /// <summary>
@@ -65,8 +66,9 @@
             CallOpportunity.PostUpdateNPCs,
             CallOpportunity.PostUpdateDusts,
             //Misc
-            CallOpportunity.LoadWorlds,
-            CallOpportunity.UnloadWorlds,
+            CallOpportunity.PostEnterWorld_Single,
+            CallOpportunity.PostExitWorld_Single,
+            CallOpportunity.PostEnterWorld_Server,
             CallOpportunity.ResolutionChanged
         };
         internal Dictionary<CallOpportunity, List<ActionHandler>> methods = new Dictionary<CallOpportunity, List<ActionHandler>>();
@@ -158,11 +160,13 @@
             On.Terraria.Main.DrawNPCs += Main_DrawNPCs;
             On.Terraria.Graphics.Renderers.LegacyPlayerRenderer.DrawPlayers += LegacyPlayerRenderer_DrawPlayers;
             On.Terraria.Main.DoDraw += Main_DoDraw;
-            On.Terraria.Main.LoadWorlds += Main_LoadWorlds;
+            On.Terraria.WorldGen.playWorld += WorldGen_playWorld;
             On.Terraria.WorldGen.SaveAndQuit += WorldGen_SaveAndQuit;
             On.Terraria.Main.DrawMiscMapIcons += Main_DrawMiscMapIcons;
+            On.Terraria.WorldGen.serverLoadWorldCallBack += WorldGen_serverLoadWorldCallBack;
             Main.OnResolutionChanged += Main_OnResolutionChanged;
         }
+
         public override void Unload()
         {
             methods = null;
@@ -182,7 +186,7 @@
                     {
                         Everglow.Instance.Logger.Error($"{handler.Name} 抛出了异常 {ex}");
                         handler.Enable = false;
-                        if (handler.Debug)
+                        if (Function.FeatureFlags.EverglowConfig.DebugMode)
                         {
                             //自动暂停的，方便监视
                             Debug.Assert(false);
@@ -190,6 +194,11 @@
                     }
                 }
             }
+        }
+        internal void WorldGen_serverLoadWorldCallBack(On.Terraria.WorldGen.orig_serverLoadWorldCallBack orig)
+        {
+            orig();
+            Invoke(CallOpportunity.PostEnterWorld_Server);
         }
         internal void Main_DrawMiscMapIcons(On.Terraria.Main.orig_DrawMiscMapIcons orig, Main self, SpriteBatch spriteBatch, Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale, float drawScale, ref string mouseTextString)
         {
@@ -224,13 +233,13 @@
         }
         internal void WorldGen_SaveAndQuit(On.Terraria.WorldGen.orig_SaveAndQuit orig, Action callback)
         {
-            Invoke(CallOpportunity.UnloadWorlds);
             orig(callback);
+            Invoke(CallOpportunity.PostExitWorld_Single);
         }
-        internal void Main_LoadWorlds(On.Terraria.Main.orig_LoadWorlds orig)
+        internal void WorldGen_playWorld(On.Terraria.WorldGen.orig_playWorld orig)
         {
             orig();
-            Invoke(CallOpportunity.LoadWorlds);
+            Invoke(CallOpportunity.PostEnterWorld_Single);
         }
         internal void Main_OnResolutionChanged(Vector2 obj)
         {
@@ -274,5 +283,6 @@
             DrawTimer++;
         }
     }
+
 }
 

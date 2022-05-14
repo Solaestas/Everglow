@@ -16,6 +16,7 @@ global using Terraria.ModLoader;
 global using ReLogic.Content;
 
 using Everglow.Sources.Commons.ModuleSystem;
+using Everglow.Sources.Modules.ZY.WorldSystem;
 
 namespace Everglow
 {
@@ -56,5 +57,42 @@ namespace Everglow
             m_moduleManager.UnloadAllModules();
             m_instance = null;
         }
+
+
+        public override void HandlePacket(BinaryReader reader, int whoAmI)
+        {
+            PackageType id = (PackageType)reader.ReadByte();
+            if(Main.netMode == NetmodeID.MultiplayerClient)
+            {
+                switch(id)
+                {
+                    case PackageType.WorldType:
+                        ulong version = reader.ReadUInt64();
+                        WorldSystem.CurrentWorld = World.CreateInstance(World.GetWorldName(version));
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else if(Main.netMode == NetmodeID.Server)
+            {
+                switch (id)
+                {
+                    case PackageType.WorldType:
+                        var pack = GetPacket();
+                        pack.Write((byte)0);
+                        pack.Write(Main.ActiveWorldFileData.WorldGeneratorVersion);
+                        pack.Send(whoAmI);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+        }
+    }
+    public enum PackageType
+    {
+        WorldType
     }
 }

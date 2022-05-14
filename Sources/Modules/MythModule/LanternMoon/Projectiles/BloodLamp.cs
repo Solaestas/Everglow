@@ -1,5 +1,3 @@
-using Terraria.Audio;
-using Terraria.Localization;
 using Everglow.Sources.Modules.MythModule.Common;
 namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
 {
@@ -43,6 +41,14 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
                 Projectile.velocity.Y -= 0.25f * Projectile.timeLeft / 600f;
             }
             Vector2 Cen = new Vector2(19f, 19f);
+            if (Projectile.timeLeft == 5)
+            {
+                Projectile.NewProjectile(null,Projectile.Center,new Vector2(0, -1),ModContent.ProjectileType<LMeteor>(),0,0,Projectile.owner);
+            }
+            if (Projectile.timeLeft == 420)
+            {
+                Projectile.timeLeft = 30;
+            }
             if (Projectile.timeLeft < 10)
             {
                 for (int x = 1; x < 16; x++)

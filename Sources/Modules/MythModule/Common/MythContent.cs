@@ -3,11 +3,30 @@
 namespace Everglow.Sources.Modules.MythModule.Common
 {
     public class MythContent
-    { 
+    {
+        /// <summary>
+        /// 对于神话模块专用的获取图片封装
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static Texture2D QuickTexture(string path)
         {
-            return ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/" + path).Value;//对于神话模块专用的获取图片封装
+            return ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/" + path).Value;
         }
+        /// <summary>
+        /// 对于神话模块专用的获取特效封装
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static Effect QuickEffect(string path)
+        {
+            return ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/" + path).Value;
+        }
+        /// <summary>
+        /// 对于神话模块专用的Glowmask获取
+        /// </summary>
+        /// <param name="modItem"></param>
+        /// <returns></returns>
         public static short SetStaticDefaultsGlowMask(ModItem modItem)
         {
             if (!Terraria.Main.dedServ)
