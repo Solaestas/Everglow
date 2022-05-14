@@ -1,5 +1,5 @@
 displayName = Everglow
 author = Dream Chaser Group
-version = 0.1
+version = 0.0
 includePDB = true
 buildIgnore = Everglow-UnitTest/*
