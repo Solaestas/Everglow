@@ -1,4 +1,5 @@
-﻿using Everglow.Sources.Modules.Food.Items;
+﻿using Everglow.Sources.Modules.Food.Buffs;
+using Everglow.Sources.Modules.Food.Items;
 
 namespace Everglow.Sources.Modules.Food
 {
@@ -9,22 +10,24 @@ namespace Everglow.Sources.Modules.Food
 
         public FoodGlobalItem()
         {
-
+            m_vanillaFoodInfos = new Dictionary<Item_id, FoodInfo>
+            {
+                // 香蕉奶昔？饱食度20，会给一个弹药箱的buff
+                { ItemID.BananaSplit, new FoodInfo() { Satiety = 20, BuffType = BuffID.AmmoBox } },
+                // 盒装牛奶 饱食度20，会给一个4防御的buff
+                { ItemID.MilkCarton, new FoodInfo() { Satiety = 20, BuffType = ModContent.BuffType<MilkCartonBuff>() } }
+            };
         }
 
         public override void SetStaticDefaults()
         {
-            m_vanillaFoodInfos = new Dictionary<Item_id, FoodInfo>
-            {
-                // 香蕉奶昔？饱食度20，会给一个弹药箱的buff
-                { ItemID.BananaSplit, new FoodInfo() { Satiety = 20, BuffType = BuffID.AmmoBox } }
-            };
+            
         }
 
         public override void SetDefaults(Item item)
         {
             // 如果是原版的食物，那么就手动处理
-            if (m_vanillaFoodInfos.ContainsKey(item.type))
+          if (m_vanillaFoodInfos.ContainsKey(item.type))
             {
                 var foodInfo = m_vanillaFoodInfos[item.type];
 
@@ -45,6 +48,8 @@ namespace Everglow.Sources.Modules.Food
                 // 增加饱食度，并且应用一些特效
                 foodPlayer.CurrentSatiety += foodInfo.Satiety;
                 Main.NewText($"Added {foodInfo.Satiety}! Current Satiety {foodPlayer.CurrentSatiety} / {foodPlayer.MaximumSatiety}");
+
+
             }
             return true;
         }
