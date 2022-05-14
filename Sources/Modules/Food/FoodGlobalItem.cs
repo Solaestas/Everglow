@@ -37,7 +37,7 @@ namespace Everglow.Sources.Modules.Food
             base.SetDefaults(item);
         }
 
-        public override bool? UseItem(Item item, Player player)
+        public override void OnConsumeItem(Item item, Player player)
         {
             // 如果是原版的食物，那么就手动处理，因为已经使用了物品，说明玩家满足饱食度要求
             if (m_vanillaFoodInfos.ContainsKey(item.type))
@@ -48,13 +48,10 @@ namespace Everglow.Sources.Modules.Food
                 // 增加饱食度，并且应用一些特效
                 foodPlayer.CurrentSatiety += foodInfo.Satiety;
                 Main.NewText($"Added {foodInfo.Satiety}! Current Satiety {foodPlayer.CurrentSatiety} / {foodPlayer.MaximumSatiety}");
-
-
             }
-            return true;
         }
 
-        public override bool CanUseItem(Item item, Player player)
+        public override bool ConsumeItem(Item item, Player player)
         {
             var foodPlayer = player.GetModPlayer<FoodModPlayer>();
             // 判断能否吃下物品
@@ -67,7 +64,7 @@ namespace Everglow.Sources.Modules.Food
                     return false;
                 }
             }
-            else if(item.ModItem is FoodBase)
+            else if (item.ModItem is FoodBase)
             {
                 var foodItem = item.ModItem as FoodBase;
                 var foodInfo = foodItem.FoodInfo;
@@ -77,7 +74,7 @@ namespace Everglow.Sources.Modules.Food
                     return false;
                 }
             }
-            return base.CanUseItem(item, player);
+            return base.ConsumeItem(item, player);
         }
     }
 }
