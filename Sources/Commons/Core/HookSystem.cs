@@ -9,6 +9,7 @@
         internal Action action;
         public string Name { get; internal set; }
         public bool Enable { get; set; } = true;
+        public bool Debug { get; set; } = false;
         public ActionHandler(Action action)
         {
             this.action = action;
@@ -257,11 +258,13 @@
                 Invoke(CallOpportunity.PostDrawNPCs);
             }
         }
+
         internal void Main_DrawDust(On.Terraria.Main.orig_DrawDust orig, Main self)
         {
             orig.Invoke(self);
             Invoke(CallOpportunity.PostDrawDusts);
         }
+
         internal void Main_DrawProjectiles(On.Terraria.Main.orig_DrawProjectiles orig, Main self)
         {
             orig.Invoke(self);
