@@ -8,9 +8,13 @@ namespace Everglow.Sources.Commons.Core.ModuleSystem
 {
     public class DependencyGraph
     {
+        // 类型到Id的映射
         private Dictionary<Type, int> m_typeToIdMapping;
+        // 类型列表，用于确定Id
         private List<Type> m_types;
+        // 依赖图的邻接表
         private Dictionary<int, List<int>> m_dependencyGraph;
+        // 依赖图中节点的入度表
         private Dictionary<int, int> m_dependencyFanin;
         public DependencyGraph()
         {
@@ -25,11 +29,11 @@ namespace Everglow.Sources.Commons.Core.ModuleSystem
         /// <param name="type"></param>
         public void AddType(Type type)
         {
-            int t = GetInternalID(type);
+            int _ = GetInternalID(type);
         }
 
         /// <summary>
-        /// 添加一个依赖于<paramref name="depend"/>的<paramref name="type"/>
+        /// 添加一个依赖链，表示<paramref name="depend"/>必须先于<paramref name="type"/>被加载
         /// </summary>
         /// <param name="depend"></param>
         /// <param name="type"></param>
@@ -61,6 +65,11 @@ namespace Everglow.Sources.Commons.Core.ModuleSystem
             }
         }
 
+        /// <summary>
+        /// 对依赖图进行拓扑排序，如果该图是个DAG，则会返回类型的正确顺序
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
         public List<Type> TopologicalSort()
         {
             List<Type> result = new List<Type>();
@@ -102,13 +111,19 @@ namespace Everglow.Sources.Commons.Core.ModuleSystem
             return result;
         }
 
+        /// <summary>
+        /// 获取某个类型的内部ID，如果该类型没有出现过就新分配一个ID
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
         private int GetInternalID(Type t)
         {
             if (!m_typeToIdMapping.ContainsKey(t))
             {
-                m_typeToIdMapping.Add(t, m_types.Count);//是漏了吗？
+                int id = m_types.Count;
+                m_typeToIdMapping.Add(t, id);//是漏了吗？
                 m_types.Add(t);
-                return m_types.Count - 1;
+                return id;
             }
             return m_typeToIdMapping[t];
         }
