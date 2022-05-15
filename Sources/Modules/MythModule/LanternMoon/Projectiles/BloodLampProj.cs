@@ -45,7 +45,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
             {
                 Projectile.NewProjectile(null,Projectile.Center,new Vector2(0, -1),ModContent.ProjectileType<LMeteor>(),0,0,Projectile.owner);
             }
-            if (Projectile.timeLeft == 540)
+            if (Projectile.timeLeft == 480)
             {
                 Projectile.timeLeft = 150;
             }
