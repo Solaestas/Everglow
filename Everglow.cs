@@ -16,6 +16,7 @@ global using Terraria.ModLoader;
 global using ReLogic.Content;
 
 using Everglow.Sources.Commons.ModuleSystem;
+using Everglow.Sources.Commons.Network.PacketHandle;
 
 namespace Everglow
 {
@@ -37,9 +38,18 @@ namespace Everglow
             get { return Instance.m_moduleManager; }
         }
 
+        /// <summary>
+        /// »ñÈ¡ PacketResolver ÊµÀý
+        /// </summary>
+        public static PacketResolver PacketResolver
+        {
+            get { return Instance.m_packetResolver; }
+        }
+
         private static Everglow m_instance;
 
         private ModuleManager m_moduleManager;
+        private PacketResolver m_packetResolver;
 
         public Everglow()
         {
@@ -49,12 +59,21 @@ namespace Everglow
         {
             m_instance = this;
             m_moduleManager = new ModuleManager();
+            m_packetResolver = new PacketResolver();
         }
 
         public override void Unload()
         {
             m_moduleManager.UnloadAllModules();
+
+            m_packetResolver = null;
+            m_moduleManager = null;
             m_instance = null;
+        }
+
+        public override void HandlePacket(BinaryReader reader, int whoAmI)
+        {
+            m_packetResolver.Resolve(reader, whoAmI);
         }
     }
 }
