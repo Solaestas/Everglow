@@ -1,7 +1,5 @@
 global using Microsoft.Xna.Framework;
 global using Microsoft.Xna.Framework.Graphics;
-global using Mono.Cecil.Cil;
-global using MonoMod.Cil;
 global using System;
 global using System.Collections.Generic;
 global using System.Diagnostics;
@@ -9,19 +7,16 @@ global using System.IO;
 global using System.Linq;
 global using System.Reflection;
 global using Terraria;
-global using Terraria.DataStructures;
-global using Terraria.GameContent;
 global using Terraria.ID;
 global using Terraria.ModLoader;
-global using ReLogic.Content;
 
 using Everglow.Sources.Commons.ModuleSystem;
-using Everglow.Sources.Modules.ZY.WorldSystem;
+using Everglow.Sources.Commons.Network.PacketHandle;
 
 namespace Everglow
 {
-	public class Everglow : Mod
-	{
+    public class Everglow : Mod
+    {
         /// <summary>
         /// Get the instance of Everglow
         /// </summary>
@@ -31,16 +26,25 @@ namespace Everglow
         }
 
         /// <summary>
-        /// ��ȡ ModuleManager ʵ��
+        /// 获取 ModuleManager 实例
         /// </summary>
         public static ModuleManager ModuleManager
         {
             get { return Instance.m_moduleManager; }
         }
 
+        /// <summary>
+        /// 获取 PacketResolver 实例
+        /// </summary>
+        public static PacketResolver PacketResolver
+        {
+            get { return Instance.m_packetResolver; }
+        }
+
         private static Everglow m_instance;
 
         private ModuleManager m_moduleManager;
+        private PacketResolver m_packetResolver;
 
         public Everglow()
         {
@@ -50,49 +54,21 @@ namespace Everglow
         {
             m_instance = this;
             m_moduleManager = new ModuleManager();
+            m_packetResolver = new PacketResolver();
         }
 
         public override void Unload()
         {
             m_moduleManager.UnloadAllModules();
+
+            m_packetResolver = null;
+            m_moduleManager = null;
             m_instance = null;
         }
 
-
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {
-            PackageType id = (PackageType)reader.ReadByte();
-            if(Main.netMode == NetmodeID.MultiplayerClient)
-            {
-                switch(id)
-                {
-                    case PackageType.WorldType:
-                        ulong version = reader.ReadUInt64();
-                        WorldSystem.CurrentWorld = World.CreateInstance(World.GetWorldName(version));
-                        break;
-                    default:
-                        break;
-                }
-            }
-            else if(Main.netMode == NetmodeID.Server)
-            {
-                switch (id)
-                {
-                    case PackageType.WorldType:
-                        var pack = GetPacket();
-                        pack.Write((byte)0);
-                        pack.Write(Main.ActiveWorldFileData.WorldGeneratorVersion);
-                        pack.Send(whoAmI);
-                        break;
-                    default:
-                        break;
-                }
-            }
-
+            m_packetResolver.Resolve(reader, whoAmI);
         }
-    }
-    public enum PackageType
-    {
-        WorldType
     }
 }
