@@ -1,9 +1,4 @@
 ﻿using Everglow.Sources.Commons.Core.ModuleSystem;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Everglow.Sources.Commons.ModuleSystem
 {
@@ -31,7 +26,7 @@ namespace Everglow.Sources.Commons.ModuleSystem
             var dependencyGraph = new DependencyGraph();
             var assembly = Assembly.GetExecutingAssembly();
             foreach (var type in assembly.GetTypes()
-                .Where(type => 
+                .Where(type =>
                 !type.IsAbstract &&
                 type.GetInterfaces().Contains(typeof(IModule)) &&
                 !Attribute.IsDefined(type, typeof(DontAutoLoadAttribute))
@@ -43,7 +38,7 @@ namespace Everglow.Sources.Commons.ModuleSystem
                     dependencyGraph.AddType(type);
                 }
                 else
-                { 
+                {
                     foreach (var dependType in dependency.DependTypes)
                     {
                         dependencyGraph.AddDependency(dependType, type);
@@ -51,7 +46,7 @@ namespace Everglow.Sources.Commons.ModuleSystem
                 }
             }
 
-            foreach(var type in dependencyGraph.TopologicalSort())
+            foreach (var type in dependencyGraph.TopologicalSort())
             {
                 IModule module = Activator.CreateInstance(type) as IModule;
                 module.Load();
@@ -97,11 +92,12 @@ namespace Everglow.Sources.Commons.ModuleSystem
         /// <param name="type"></param>
         /// <returns></returns>
         public IEnumerable<IModule> FindModule(Type type) => from ins in modules
-                                                                    where ins.GetType().IsSubclassOf(type) 
-                                                                       || ins.GetType() == type
-                                                                    select ins;
-        public IEnumerable<IModule> FindModule(string name) => from ins in modules 
-                                                               where ins.Name == name select ins;
+                                                             where ins.GetType().IsSubclassOf(type)
+                                                                || ins.GetType() == type
+                                                             select ins;
+        public IEnumerable<IModule> FindModule(string name) => from ins in modules
+                                                               where ins.Name == name
+                                                               select ins;
         public IEnumerable<IModule> FindModule(Func<IModule, bool> predicate) => modules.Where(predicate);
         /// <summary>
         /// 缺乏依赖会抛出异常
@@ -116,9 +112,9 @@ namespace Everglow.Sources.Commons.ModuleSystem
             if (Attribute.IsDefined(module.GetType(), typeof(ModuleDependencyAttribute)))
             {
                 var attr = module.GetType().GetCustomAttribute<ModuleDependencyAttribute>();
-                foreach(var type in attr.DependTypes)
+                foreach (var type in attr.DependTypes)
                 {
-                    if(!modulesByType.ContainsKey(type))
+                    if (!modulesByType.ContainsKey(type))
                     {
                         throw new InvalidOperationException($"当前加载Module的依赖Module  {type.Name}  并未加载");
                     }
@@ -136,7 +132,7 @@ namespace Everglow.Sources.Commons.ModuleSystem
         /// <param name="module"></param>
         public bool RemoveModule(IModule module)
         {
-            if(!modules.Remove(module))
+            if (!modules.Remove(module))
             {
                 return false;
             }
@@ -162,6 +158,6 @@ namespace Everglow.Sources.Commons.ModuleSystem
             modulesByType = null;
             modulesByName = null;
         }
-        
+
     }
 }
