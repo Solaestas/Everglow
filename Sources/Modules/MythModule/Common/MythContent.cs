@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using Terraria.GameContent;
 
 namespace Everglow.Sources.Modules.MythModule.Common
 {
