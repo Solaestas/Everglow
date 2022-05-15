@@ -1,7 +1,5 @@
 global using Microsoft.Xna.Framework;
 global using Microsoft.Xna.Framework.Graphics;
-global using Mono.Cecil.Cil;
-global using MonoMod.Cil;
 global using System;
 global using System.Collections.Generic;
 global using System.Diagnostics;
@@ -9,19 +7,16 @@ global using System.IO;
 global using System.Linq;
 global using System.Reflection;
 global using Terraria;
-global using Terraria.DataStructures;
-global using Terraria.GameContent;
 global using Terraria.ID;
 global using Terraria.ModLoader;
-global using ReLogic.Content;
 
 using Everglow.Sources.Commons.ModuleSystem;
 using Everglow.Sources.Commons.Network.PacketHandle;
 
 namespace Everglow
 {
-	public class Everglow : Mod
-	{
+    public class Everglow : Mod
+    {
         /// <summary>
         /// Get the instance of Everglow
         /// </summary>
@@ -31,7 +26,7 @@ namespace Everglow
         }
 
         /// <summary>
-        /// 获取 ModuleManager 实例
+        /// 鑾峰彇 ModuleManager 瀹炰緥
         /// </summary>
         public static ModuleManager ModuleManager
         {
@@ -39,7 +34,7 @@ namespace Everglow
         }
 
         /// <summary>
-        /// 获取 PacketResolver 实例
+        /// 鑾峰彇 PacketResolver 瀹炰緥
         /// </summary>
         public static PacketResolver PacketResolver
         {

@@ -159,9 +159,9 @@ namespace Everglow.Sources.Commons.Network.PacketHandle
             }
 
             // 如果有封包没有绑定任何handler就发出警告
-            foreach(var packetId in m_packetIDToTypeMapping)
+            foreach (var packetId in m_packetIDToTypeMapping)
             {
-                if(!m_packetHandlers.ContainsKey(packetId.Key)
+                if (!m_packetHandlers.ContainsKey(packetId.Key)
                     || m_packetHandlers[packetId.Key].Count == 0)
                 {
                     Everglow.Instance.Logger.Warn($"Packet {packetId.Value} does not have any handler binded");

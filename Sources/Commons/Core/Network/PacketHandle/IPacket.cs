@@ -1,5 +1,3 @@
-using System.IO;
-
 namespace Everglow.Sources.Commons.Network.PacketHandle
 {
     /// <summary>

@@ -1,9 +1,4 @@
 ﻿using Everglow.Sources.Commons.Network.PacketHandle;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Everglow.Sources.Commons.Core.Network.Packets
 {
@@ -33,7 +28,7 @@ namespace Everglow.Sources.Commons.Core.Network.Packets
         {
             // 这里注意最好不要直接改 TestPacket 的内容，因为这样可能会影响后续的handler
             // 如果只有一个handler那没问题
-            var testPacket = packet as TestPacket; 
+            var testPacket = packet as TestPacket;
             if (Main.netMode == NetmodeID.Server)
             {
                 Everglow.PacketResolver.Send(new TestPacket(114514 * testPacket.TestValue));
