@@ -1,7 +1,7 @@
 using Everglow.Sources.Modules.MythModule.Common;
 namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
 {
-    public class BloodLamp : ModProjectile
+    public class BloodLampProj : ModProjectile
     {
         public override void SetStaticDefaults()
         {
@@ -25,7 +25,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
         float PearlOmega = 0;
         public override ModProjectile Clone(Projectile projectile)
         {
-            var clone = base.Clone(projectile) as BloodLamp;
+            var clone = base.Clone(projectile) as BloodLampProj;
             BLantern = new Texture2D[16];
             NoPedal = new bool[16];
             PearlRot = 0;

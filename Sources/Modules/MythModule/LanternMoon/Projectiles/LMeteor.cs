@@ -18,6 +18,14 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
         float ka = 0;
         Vector2 AIMpos;
         int TrueL = 1;
+        public override ModProjectile Clone(Projectile projectile)
+        {
+            var clone = base.Clone(projectile) as LMeteor;
+            ka = 0;
+            AIMpos = Vector2.Zero;
+            TrueL = 1;
+            return clone;
+        }
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
@@ -67,7 +75,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
                 bars.Add(new VertexBase.Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(10, 10) - Main.screenPosition, new Color(255, 0, 0, 0), new Vector3(factor, 0, w)));
             }
             List<VertexBase.Vertex2D> Vx = new List<VertexBase.Vertex2D>();
-            if (bars.Count > 2)
+            if (Vx.Count > 2)
             {
                 Vx.Add(bars[0]);
                 var vertex = new VertexBase.Vertex2D((bars[0].Position + bars[1].Position) * 0.5f + Vector2.Normalize(Projectile.velocity) * 30, new Color(255, 0, 0, 0), new Vector3(0, 0.5f, 1));
