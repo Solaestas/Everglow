@@ -36,8 +36,6 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
                     Main.MenuUI.SetState(new UIWorldLoad());
                     Main.AutogenProgress.Value = 0;
                     WorldGen.clearWorld();
-                    //TODO Hjson
-                    Main.statusText = "开始创建世界";
                     Main.spawnTileX = DefaultSpawnPoint.X;
                     Main.spawnTileY = DefaultSpawnPoint.Y;
                     UIWorldCreation.ProcessSpecialWorldSeeds(data.SeedText);

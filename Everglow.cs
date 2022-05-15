@@ -40,7 +40,7 @@ namespace Everglow
 
         private static Everglow m_instance;
 
-        private ModuleManager m_moduleManager;
+        private ModuleManager m_moduleManager = new ModuleManager();
 
         public Everglow()
         {
@@ -49,7 +49,7 @@ namespace Everglow
         public override void Load()
         {
             m_instance = this;
-            m_moduleManager = new ModuleManager();
+            m_moduleManager.LoadAllModules();
         }
 
         public override void Unload()
