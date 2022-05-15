@@ -91,10 +91,14 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
                     Vx.Add(bars[i + 2]);
                     Vx.Add(bars[i + 3]);
                 }
+
             }
-            Texture2D t = MythModule.Common.MythContent.QuickTexture("LanternMoon/Projectiles/LMeteor");
-            Main.graphics.GraphicsDevice.Textures[0] = t;
-            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
+            if(Vx.Count > 2)
+            {
+                Texture2D t = MythModule.Common.MythContent.QuickTexture("LanternMoon/Projectiles/LMeteor");
+                Main.graphics.GraphicsDevice.Textures[0] = t;
+                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
+            }
         }
     }
 }
