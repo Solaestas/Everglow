@@ -20,5 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Documents\" />
+    <Folder Include="Resources\Tools\" />
   </ItemGroup>
 </Project>
