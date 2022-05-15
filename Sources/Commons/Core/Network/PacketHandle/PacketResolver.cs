@@ -20,7 +20,7 @@ namespace Everglow.Sources.Commons.Network.PacketHandle
             m_packetIDToTypeMapping = new Dictionary<Packet_Id, Type>();
             m_packetHandlers = new Dictionary<Packet_Id, List<IPacketHandler>>();
 
-            registerPackets();
+            RegisterPackets();
         }
 
         /// <summary>
@@ -42,12 +42,10 @@ namespace Everglow.Sources.Commons.Network.PacketHandle
             {
                 BinaryWriter bw = new BinaryWriter(ms);
                 packet.Send(bw);
-
                 if (CompileTimeFeatureFlags.NetworkPacketIDUseInt32)
                 {
-                    modPacket.Write((int)QueryPacketId<T>());
-                }
-                else
+                    modPacket.Write(QueryPacketId<T>());
+                }else
                 {
                     modPacket.Write((byte)QueryPacketId<T>());
                 }
@@ -75,7 +73,6 @@ namespace Everglow.Sources.Commons.Network.PacketHandle
         /// <summary>
         /// 处理封包
         /// </summary>
-        /// <param name="mod"></param>
         /// <param name="reader"></param>
         /// <param name="whoAmI"></param>
         public void Resolve(BinaryReader reader, int whoAmI)
@@ -96,8 +93,7 @@ namespace Everglow.Sources.Commons.Network.PacketHandle
                 return;
             }
             // 直接从reader里构造packet数据
-            IPacket packet = Activator.CreateInstance(m_packetIDToTypeMapping[packetID])
-                as IPacket;
+            IPacket packet = Activator.CreateInstance(m_packetIDToTypeMapping[packetID]) as IPacket;
             packet.Receive(reader, whoAmI);
 
             // 让handler处理封包数据
@@ -110,7 +106,7 @@ namespace Everglow.Sources.Commons.Network.PacketHandle
         /// <summary>
         /// 注册所有IPacket类型和IPacketHandler
         /// </summary>
-        private void registerPackets()
+        private void RegisterPackets()//命名改为首字母大写
         {
             var assembly = Assembly.GetExecutingAssembly();
             foreach (var type in assembly.GetTypes().Where(type =>
@@ -132,8 +128,7 @@ namespace Everglow.Sources.Commons.Network.PacketHandle
                 ))
             {
                 // 将 packet 和 PacketHandler 绑定
-                var handlePacket = Attribute.GetCustomAttribute(type, typeof(HandlePacketAttribute)) as HandlePacketAttribute;
-                if (handlePacket != null)
+                if (Attribute.GetCustomAttribute(type, typeof(HandlePacketAttribute)) is HandlePacketAttribute handlePacket)
                 {
                     Type packetType = handlePacket.PacketType;
                     if (!m_packetIDMapping.ContainsKey(packetType))
