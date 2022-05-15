@@ -40,6 +40,15 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
                     pack.Send();
                 }
             }, CallOpportunity.PostEnterWorld_Single);
+            
+            //TestHook
+            //ModContent.GetInstance<HookSystem>().AddMethod(() =>
+            //{
+            //    if (Main.netMode == NetmodeID.MultiplayerClient)
+            //    {
+            //        Main.NewText(CurrentWorld.Name);
+            //    }
+            //}, CallOpportunity.PostUpdateEverything);
 
         }
         public void Unload()
@@ -283,6 +292,7 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
         }
     }
 
+    [HandlePacket(typeof(WorldVersionPacket))]
     internal class WorldVersionPacketHandler : IPacketHandler
     {
         public void Handle(IPacket packet, int whoAmI)
@@ -297,7 +307,7 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
             else if (Main.netMode == NetmodeID.Server)
             {
                 //直接复用当前的Packet
-                Everglow.PacketResolver.Send(packet, whoAmI);
+                Everglow.PacketResolver.Send(new WorldVersionPacket(), whoAmI);
             }
         }
     }
