@@ -28,6 +28,10 @@ Mods: {
 			LegendWeapon : 传说武器
 			#{$Mods.MythMod.Common.LegendWeapon}
 
+			WorldSystem:{
+				WorldCreate_Def : 开始创建世界
+				WorldEnter_Def : 正在进入世界
+			}
 		}
 
 		NPCName: {

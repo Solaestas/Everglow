@@ -16,11 +16,14 @@ namespace Everglow.Sources.Commons.Function.FeatureFlags
         [DefaultValue(false)]
         [Label("Enable Debug Mode")]
         [Tooltip("[For developers] Enable debug mode to allow debug functions to run")]
-        public bool DebugMode;
+        public bool debugMode;
 
-        public override void OnLoaded()
+        public static bool DebugMode
         {
-            base.OnLoaded();
+            get
+            {
+                return ModContent.GetInstance<EverglowConfig>().debugMode;
+            }
         }
     }
 }
