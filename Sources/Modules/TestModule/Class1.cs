@@ -1,6 +1,6 @@
-﻿using Everglow.Sources.Commons.Core.Network.Packets;
+﻿using Everglow.Sources.Modules.TestModule.Packets;
 
-namespace Everglow.Sources.Modules.Test
+namespace Everglow.Sources.Modules.TestModule
 {
     internal class Class1 : ModSystem
     {

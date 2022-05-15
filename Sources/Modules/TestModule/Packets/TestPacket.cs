@@ -1,7 +1,7 @@
 ﻿using Everglow.Sources.Commons.ModuleSystem;
 using Everglow.Sources.Commons.Network.PacketHandle;
 
-namespace Everglow.Sources.Commons.Core.Network.Packets
+namespace Everglow.Sources.Modules.TestModule.Packets
 {
     //public class TestSystem : ModPlayer
     //{
