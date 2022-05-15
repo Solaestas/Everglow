@@ -51,22 +51,6 @@ namespace Everglow.Sources.Commons.ModuleSystem
             }
 
         }
-        /// <summary>
-        /// 按照依赖逆序卸载所有模块
-        /// </summary>
-        public void UnloadAllModules()
-        {
-            if (modules is not null)
-            {
-                foreach (var mod in modules.Reverse<IModule>())
-                {
-                    mod.Unload();
-                }
-                modules = null;
-            }
-            modulesByType = null;
-            modulesByName = null;
-        }
 
         /// <summary>
         /// 按照类型获取模块

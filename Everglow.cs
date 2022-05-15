@@ -44,8 +44,8 @@ namespace Everglow
 
         private static Everglow m_instance;
 
-        private ModuleManager m_moduleManager;
-        private PacketResolver m_packetResolver;
+        private ModuleManager m_moduleManager = new ModuleManager();
+        private PacketResolver m_packetResolver = new PacketResolver();
 
         public Everglow()
         {

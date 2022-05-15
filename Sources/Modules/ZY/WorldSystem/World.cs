@@ -9,6 +9,7 @@ using Terraria.ID;
 using System.Threading.Tasks;
 using Terraria.GameContent.UI.States;
 using System.Threading;
+using ReLogic.Content;
 
 namespace Everglow.Sources.Modules.ZY.WorldSystem
 {
