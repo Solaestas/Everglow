@@ -26,6 +26,7 @@ namespace Everglow.Sources.Commons.Core.Network.Packets
         }
     }
 
+    [HandlePacket(typeof(TestPacket))]
     public class TestPacketHandler : IPacketHandler
     {
         public void Handle(IPacket packet, int whoAmI)

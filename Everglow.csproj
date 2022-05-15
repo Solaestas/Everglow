@@ -9,8 +9,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Everglow-UnitTest\**" />
+    <Compile Remove="Sources\Tools\**" />
     <EmbeddedResource Remove="Everglow-UnitTest\**" />
+    <EmbeddedResource Remove="Sources\Tools\**" />
     <None Remove="Everglow-UnitTest\**" />
+    <None Remove="Sources\Tools\**" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />

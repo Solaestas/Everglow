@@ -132,10 +132,10 @@ namespace Everglow.Sources.Commons.Network.PacketHandle
                 ))
             {
                 // 将 packet 和 PacketHandler 绑定
-                var handlePacket = type.GetCustomAttribute<HandlePacketAttribute>(true);
+                var handlePacket = Attribute.GetCustomAttribute(type, typeof(HandlePacketAttribute)) as HandlePacketAttribute;
                 if (handlePacket != null)
                 {
-                    Type packetType = handlePacket.GetType();
+                    Type packetType = handlePacket.PacketType;
                     if (!m_packetIDMapping.ContainsKey(packetType))
                     {
                         throw new InvalidOperationException("Unknown packet type");
@@ -151,6 +151,20 @@ namespace Everglow.Sources.Commons.Network.PacketHandle
                     {
                         m_packetHandlers.Add(packetId, new List<IPacketHandler> { handler });
                     }
+                }
+                else
+                {
+                    Everglow.Instance.Logger.Warn($"Packet Handler {type} does not bind to any packet");
+                }
+            }
+
+            // 如果有封包没有绑定任何handler就发出警告
+            foreach(var packetId in m_packetIDToTypeMapping)
+            {
+                if(!m_packetHandlers.ContainsKey(packetId.Key)
+                    || m_packetHandlers[packetId.Key].Count == 0)
+                {
+                    Everglow.Instance.Logger.Warn($"Packet {packetId.Value} does not have any handler binded");
                 }
             }
         }
