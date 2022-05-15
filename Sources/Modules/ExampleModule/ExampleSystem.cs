@@ -1,8 +1,8 @@
-﻿using Everglow.Sources.Modules.TestModule.Packets;
+﻿using Everglow.Sources.Modules.ExampleModule.Packets;
 
-namespace Everglow.Sources.Modules.TestModule
+namespace Everglow.Sources.Modules.ExampleModule
 {
-    internal class Class1 : ModSystem
+    internal class ExampleSystem : ModSystem
     {
         public override void PostUpdateEverything()
         {
@@ -10,7 +10,7 @@ namespace Everglow.Sources.Modules.TestModule
             {
                 if (Main.time % 60 < 1)
                 {
-                    Everglow.PacketResolver.Send(new TestPacket(1));
+                    Everglow.PacketResolver.Send(new ExamplePacket(1));
                 }
             }
         }
