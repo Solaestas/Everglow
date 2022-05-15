@@ -1,4 +1,4 @@
-﻿using Everglow.Sources.Modules.Test.Packets;
+﻿using Everglow.Sources.Modules.TestModule.Packets;
 
 namespace Everglow.Sources.Modules.TestModule
 {
