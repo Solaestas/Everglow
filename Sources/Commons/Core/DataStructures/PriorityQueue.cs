@@ -13,8 +13,10 @@ namespace Everglow.Sources.Commons.Core.DataStructures
         public PriorityQueue()
         {
             m_top = 0;
-            m_heap = new List<T>();
-            m_heap.Add(new T());
+            m_heap = new List<T>
+            {
+                new T()
+            };
         }
 
         /// <summary>
