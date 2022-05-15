@@ -1,5 +1,6 @@
 ﻿using Terraria.Localization;
 using Everglow.Sources.Modules.MythModule.Common;
+using Terraria.GameContent;
 
 namespace Everglow.Sources.Modules.MythModule.LanternMoon.LanternCommon
 {

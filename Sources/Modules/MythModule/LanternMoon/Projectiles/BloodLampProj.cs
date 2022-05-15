@@ -45,7 +45,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
             {
                 Projectile.NewProjectile(null,Projectile.Center,new Vector2(0, -1),ModContent.ProjectileType<LMeteor>(),0,0,Projectile.owner);
             }
-            if (Projectile.timeLeft == 540)
+            if (Projectile.timeLeft == 480)
             {
                 Projectile.timeLeft = 150;
             }
@@ -171,7 +171,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
                     Rot = PearlRot;
                     Cen = new Vector2(19f, 51f);
                 }
-                if(!NoPedal[x] || x < 1)
+                if(!NoPedal[x] || x < 2)
                 {
                     Main.spriteBatch.Draw(BLantern[x], Projectile.Center - Main.screenPosition + Cen - BLantern[x].Size() / 2f/*坐标校正*/, null, color, Rot, Cen, 1, SpriteEffects.None, 0);
                 }
