@@ -4,14 +4,17 @@ namespace Everglow.Sources.Modules.ZY.InvasionSystem
 {
     internal class InvasionSystem : IModule
     {
-        private Dictionary<int, Invasion> invasions = new Dictionary<int, Invasion>();
+        public static Invasion CurrentInvasion { get; private set; }
         public string Name => "InvasionSystem";
-        public bool InvasionBegin<T>() where T : Invasion
+        public static bool InvasionBegin<T>() where T : Invasion
         {
-            var invasion = Everglow.ModuleManager.FindModule<T>();
-            if(invasion is null || invasion.Count() > 1)
-            return false;
-            return false;
+            if(Main.invasionProgressMode != 0)
+            {
+                return false;
+            }
+            var invasion = Everglow.ModuleManager.GetModule<T>();
+            CurrentInvasion = invasion;
+            return true;
         }
         public void Load()
         {
@@ -25,12 +28,12 @@ namespace Everglow.Sources.Modules.ZY.InvasionSystem
                 orig();
                 return;
             }
-            invasions[Main.invasionProgressMode]
+            CurrentInvasion.Draw();
         }
 
         public void Unload()
         {
-
+            CurrentInvasion = null;
         }
     }
 }
