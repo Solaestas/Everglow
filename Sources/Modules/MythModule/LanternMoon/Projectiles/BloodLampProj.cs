@@ -1,4 +1,5 @@
 using Everglow.Sources.Modules.MythModule.Common;
+using Terraria.Audio;
 namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
 {
     public class BloodLampProj : ModProjectile
@@ -23,6 +24,8 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
         bool[] NoPedal = new bool[16];
         float PearlRot = 0;
         float PearlOmega = 0;
+        int Col = 100;
+        float Vl = -1;
         public override ModProjectile Clone(Projectile projectile)
         {
             var clone = base.Clone(projectile) as BloodLampProj;
@@ -30,24 +33,62 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
             NoPedal = new bool[16];
             PearlRot = 0;
             PearlOmega = 0;
+            Col = 100;
+            Vl = -1;
             return clone;
         }
         public override void AI()
-        {
+        {       
             Projectile.rotation = Projectile.velocity.X * 0.05f;
             Projectile.velocity *= 0.9f * Projectile.timeLeft / 600f;
             if (Projectile.velocity.Length() > 0.3f)
             {
                 Projectile.velocity.Y -= 0.25f * Projectile.timeLeft / 600f;
             }
-            Vector2 Cen = new Vector2(19f, 19f);
-            if (Projectile.timeLeft == 25)
+            Vector2 Cen;
+            Col = Math.Clamp(Col + Main.rand.Next(-45, 55),0,255);
+            if(Projectile.timeLeft == 600)
             {
-                Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center,new Vector2(0, -1),ModContent.ProjectileType<LMeteor>(),0,0,Projectile.owner);//金色的核心
-                Gore.NewGore(Projectile.GetSource_Death(), Projectile.Center,Vector2.Zero,ModContent.GoreType<Gores.BloodLanternBody>());
-                NoPedal[1] = true;
+                SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sources/Modules/MythModule/LanternMoon/Sounds/PowerBomb"), Projectile.Center);
+                if(Vl == -1)
+                {
+                    Vl = Main.musicVolume;
+                }
             }
-            if (Projectile.timeLeft == 480)
+            if (Main.audioSystem is LegacyAudioSystem system)
+            {
+                if(Projectile.timeLeft >= 65)
+                {
+                    Main.musicVolume *= 0.98f;
+                }
+                else
+                {
+                    Main.musicVolume = Main.musicVolume * 0.96f + Vl * 0.04f;
+                    if(Projectile.timeLeft == 1)
+                    {
+                        Main.musicVolume = Vl;
+                    }
+                }
+            }
+            if (Projectile.timeLeft == 75)
+            {
+                Col = 255;
+                Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center,new Vector2(0, -1),ModContent.ProjectileType<LMeteor>(),0,0,Projectile.owner);//金色的核心
+                Gore.NewGore(Projectile.GetSource_Death(), Projectile.position,Vector2.Zero,ModContent.GoreType<Gores.BloodLanternBody>());
+                for(int h = 0;h < 11;h++)
+                {
+                    int f = Projectile.NewProjectile(null, Projectile.Center, new Vector2(0, Main.rand.NextFloat(9, 24f)).RotatedByRandom(6.283), ModContent.ProjectileType<LBloodEffectGra>(), 0, 0, Projectile.owner, Projectile.whoAmI);
+                    Main.projectile[f].scale = Main.rand.NextFloat(0.75f,1.25f);
+                    Main.projectile[f].timeLeft = Main.rand.Next(80, 130);
+                }
+                NoPedal[1] = true;
+
+            }
+            if(Projectile.timeLeft == 70)
+            {
+                Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, new Vector2(0, -1), ModContent.ProjectileType<RainbowWave>(), 0, 0, Projectile.owner);//彩虹光环
+            }
+            if (Projectile.timeLeft == 430)
             {
                 Projectile.timeLeft = 150;
             }
@@ -55,7 +96,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
             {
                 for (int x = 2; x < 16; x++)
                 {
-                    if(!NoPedal[x])
+                    if (!NoPedal[x])
                     {
                         if (Main.rand.Next(Projectile.timeLeft) < 3)
                         {
@@ -172,6 +213,12 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
                 {
                     Main.spriteBatch.Draw(BLantern[x], Projectile.Center - Main.screenPosition + Cen - BLantern[x].Size() / 2f/*坐标校正*/, null, color, Rot, Cen, 1, SpriteEffects.None, 0);
                 }
+            }
+            if (!NoPedal[1])
+            {
+                Vector2 Cen2 = new Vector2(19f, 19f);
+                Texture2D Glow = MythContent.QuickTexture("LanternMoon/Projectiles/BloodLampFrame/BloodLamp_Glow");
+                Main.spriteBatch.Draw(Glow, Projectile.Center - Main.screenPosition + Cen2 - Glow.Size() / 2f/*坐标校正*/, null, new Color(Col, Col, Col, 0), Projectile.rotation, Cen2, 1, SpriteEffects.None, 0);
             }
         }
         public override bool PreDraw(ref Color lightColor)

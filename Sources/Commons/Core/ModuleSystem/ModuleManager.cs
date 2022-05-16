@@ -1,6 +1,4 @@
-﻿using Everglow.Sources.Commons.Core.ModuleSystem;
-
-namespace Everglow.Sources.Commons.ModuleSystem
+﻿namespace Everglow.Sources.Commons.Core.ModuleSystem
 {
     public class ModuleManager
     {

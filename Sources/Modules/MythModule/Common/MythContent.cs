@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using Terraria.GameContent;
+﻿using Terraria.GameContent;
 
 namespace Everglow.Sources.Modules.MythModule.Common
 {
@@ -12,7 +11,7 @@ namespace Everglow.Sources.Modules.MythModule.Common
         /// <returns></returns>
         public static Texture2D QuickTexture(string path)
         {
-            return ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/" + path).Value;
+            return ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/" + path, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
         }
         /// <summary>
         /// 对于神话模块专用的获取特效封装
@@ -21,7 +20,7 @@ namespace Everglow.Sources.Modules.MythModule.Common
         /// <returns></returns>
         public static Effect QuickEffect(string path)
         {
-            return ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/" + path).Value;
+            return ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/" + path, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
         }
         /// <summary>
         /// 对于神话模块专用的Glowmask获取

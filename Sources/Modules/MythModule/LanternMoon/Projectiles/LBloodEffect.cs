@@ -8,7 +8,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
             Projectile.width = 20;
             Projectile.height = 20;
             Projectile.friendly = false;
-            Projectile.hostile = true;
+            Projectile.hostile = false;
             Projectile.penetrate = -1;
             Projectile.timeLeft = 180;
             Projectile.tileCollide = false;

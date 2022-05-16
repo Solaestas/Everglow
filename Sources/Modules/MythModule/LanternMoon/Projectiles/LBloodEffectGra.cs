@@ -1,7 +1,7 @@
 ﻿using Everglow.Sources.Commons.Function.Vertex;
 namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
 {
-    class LMeteor : ModProjectile
+    class LBloodEffectGra : ModProjectile
     {
         public override void SetDefaults()
         {
@@ -10,37 +10,27 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
             Projectile.friendly = false;
             Projectile.hostile = false;
             Projectile.penetrate = -1;
-            Projectile.timeLeft = 180;
+            Projectile.timeLeft = 90;
             Projectile.tileCollide = false;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 40;
         }
-        float ka = 0;
-        Vector2 AIMpos;
         int TrueL = 1;
-        float Stre = 0.85f;
-        float Sca = 0;
         public override ModProjectile Clone(Projectile projectile)
         {
-            var clone = base.Clone(projectile) as LMeteor;
-            ka = 0;
-            AIMpos = Vector2.Zero;
+            var clone = base.Clone(projectile) as LBloodEffectGra;
             TrueL = 1;
-            Stre = 0.85f;
-            Sca = 0;
             return clone;
         }
         public override void AI()
         {
-            if(Projectile.timeLeft >= 140)
+            Projectile.velocity.Y += 0.25f;
+            Projectile.velocity.X += Main.windSpeedCurrent * 0.02f / Projectile.scale;
+            Projectile.velocity *= 0.96f;
+            Projectile.scale -= 0.005f;
+            if(Projectile.scale <= 0.005f)
             {
-                Sca = (float)(-Math.Cos((180 - Projectile.timeLeft) / 40d * Math.PI) + 1) * 0.65f;
-            }
-            else
-            {
-                Sca = 0.96f + Sca * 0.04f;
-                Lighting.AddLight(Projectile.Center, (float)(255 - Projectile.alpha) * 1.2f / 50f * ka, 0, 0);
-                Projectile.velocity.Y -= 0.25f;
+                Projectile.Kill();
             }
         }
         public override bool PreDraw(ref Color lightColor)
@@ -50,10 +40,10 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
         public override void PostDraw(Color lightColor)
         {
             List<VertexBase.Vertex2D> bars = new List<VertexBase.Vertex2D>();
-            int width = 60;
+            float width = 6 * Projectile.scale;
             if (Projectile.timeLeft < 60)
             {
-                width = Projectile.timeLeft;
+                width = Projectile.timeLeft / 10f * Projectile.scale;
             }
             TrueL = 0;
             for (int i = 1; i < Projectile.oldPos.Length; ++i)
@@ -96,16 +86,16 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
             }
             if(Vx.Count > 2)
             {
-                Texture2D t = Common.MythContent.QuickTexture("LanternMoon/Projectiles/LMeteor");
+                Texture2D t = Common.MythContent.QuickTexture("LanternMoon/Projectiles/LBloodEffect");
                 Main.graphics.GraphicsDevice.Textures[0] = t;
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
             }
-            Texture2D LightE = Common.MythContent.QuickTexture("VisualTextures/LightEffect");
-            Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition, null, new Color(0.3f * Stre * Stre, 0.21f * Stre * Stre, 0, 0), -(float)(Math.Sin(Main.time / 26d)) + 0.6f, new Vector2(128f, 128f), (1.5f + (float)(0.75 * Math.Sin(Main.time / 26d))) * Sca, SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition, null, new Color(1f * Stre * Stre, 0.7f * Stre * Stre, 0, 0), (float)(Math.Sin(Main.time / 12d + 2)) + 1.6f, new Vector2(128f, 128f), (1.5f + (float)(0.75 * Math.Sin(Main.time / 26d))) * Sca, SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition, null, new Color(0.3f * Stre * Stre, 0.21f * Stre * Stre, 0, 0), (float)Math.PI / 2f + (float)(Main.time / 9d), new Vector2(128f, 128f), (1.5f + (float)(0.75 * Math.Sin(Main.time / 26d + 1.57))) * Sca, SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition, null, new Color(1f * Stre * Stre, 0.7f * Stre * Stre, 0, 0), (float)(Main.time / 26d), new Vector2(128f, 128f), (1.5f + (float)(0.75 * Math.Sin(Main.time / 26d + 3.14))) * Sca, SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition, null, new Color(1f * Stre * Stre, 0.7f * Stre * Stre, 0, 0), -(float)(Main.time / 26d), new Vector2(128f, 128f), (1.5f + (float)(0.75 * Math.Sin(Main.time / 26d + 4.71))) * Sca, SpriteEffects.None, 0);
+            //Texture2D LightE = Common.MythContent.QuickTexture("VisualTextures/LightEffect");
+            //Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition, null, new Color(55, 46, 0, 0), -(float)(Math.Sin(Main.time / 26d)) + 0.6f, new Vector2(128f, 128f), 0.15f + (float)(0.075 * Math.Sin(Main.time / 26d)), SpriteEffects.None, 0);
+            //Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition, null, new Color(55, 46, 0, 0), (float)(Math.Sin(Main.time / 12d + 2)) + 1.6f, new Vector2(128f, 128f), 0.15f + (float)(0.075 * Math.Sin(Main.time / 26d)), SpriteEffects.None, 0);
+            //Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition, null, new Color(55, 46, 0, 0), (float)Math.PI / 2f + (float)(Main.time / 9d), new Vector2(128f, 128f), 0.15f + (float)(0.075 * Math.Sin(Main.time / 26d + 1.57)), SpriteEffects.None, 0);
+            //Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition, null, new Color(55, 46, 0, 0), (float)(Main.time / 26d), new Vector2(128f, 128f), 0.15f + (float)(0.075 * Math.Sin(Main.time / 26d + 3.14)), SpriteEffects.None, 0);
+            //Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition, null, new Color(55, 46, 0, 0), -(float)(Main.time / 26d), new Vector2(128f, 128f), 0.15f + (float)(0.075 * Math.Sin(Main.time / 26d + 4.71)), SpriteEffects.None, 0);
         }
     }
 }

@@ -31,6 +31,13 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Items
         }
         public override bool? UseItem(Player player)
         {
+            for(int x = 0;x < Main.maxProjectiles;x++)
+            {
+                if(Main.projectile[x].type == ModContent.ProjectileType<Projectiles.BloodLampProj>())
+                {
+                    return false;
+                }
+            }
             Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center + new Vector2(12, 0) * player.direction, new Vector2(16, 0) * player.direction, ModContent.ProjectileType<Projectiles.BloodLampProj>(), 0, 0, player.whoAmI);
             LanternMoonProgress LanterMoon = ModContent.GetInstance<LanternMoonProgress>();
             if (!LanterMoon.OnLanternMoon && !Main.dayTime && !Main.snowMoon && !Main.pumpkinMoon)

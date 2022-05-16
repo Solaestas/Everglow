@@ -10,7 +10,7 @@ global using Terraria;
 global using Terraria.ID;
 global using Terraria.ModLoader;
 
-using Everglow.Sources.Commons.ModuleSystem;
+using Everglow.Sources.Commons.Core.ModuleSystem;
 using Everglow.Sources.Commons.Network.PacketHandle;
 
 namespace Everglow
