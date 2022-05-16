@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Terraria.Audio;
 using Terraria.GameContent.UI.States;
 using Terraria.IO;
+using Terraria.Social;
 using Terraria.UI;
 
 namespace Everglow.Sources.Modules.ZY.WorldSystem
@@ -125,6 +126,7 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
             Main.GetInputText("");
             Task.Run(() =>
             {
+                //单人游戏
                 if (!Main.menuMultiplayer)
                 {
                     if (!File.Exists(data.Path))
@@ -142,6 +144,16 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
                     Main.menuMode = 10;
                     Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.MythMod.Common.WorldSystem.WorldEnter_Def");
                     WorldGen.playWorld();
+                }
+                else//多人游戏-开服
+                {
+                    if(SocialAPI.Network != null)
+                    {
+                        Main.menuMode = 889;
+                    }else
+                    {
+                        Main.menuMode = 30;
+                    }
                 }
             });
         }

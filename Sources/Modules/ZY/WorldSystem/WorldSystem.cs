@@ -42,13 +42,13 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
             }, CallOpportunity.PostEnterWorld_Single);
 
             //TestHook
-            //ModContent.GetInstance<HookSystem>().AddMethod(() =>
-            //{
-            //    if (Main.netMode == NetmodeID.MultiplayerClient)
-            //    {
-            //        Main.NewText(CurrentWorld.Name);
-            //    }
-            //}, CallOpportunity.PostUpdateEverything);
+            ModContent.GetInstance<HookSystem>().AddMethod(() =>
+            {
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                {
+                    Main.NewText(CurrentWorld.Name);
+                }
+            }, CallOpportunity.PostUpdateEverything);
 
         }
         public void Unload()
@@ -307,7 +307,7 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
             else if (Main.netMode == NetmodeID.Server)
             {
                 //直接复用当前的Packet
-                Everglow.PacketResolver.Send(new WorldVersionPacket(), whoAmI);
+                Everglow.PacketResolver.Send<WorldVersionPacket>(whoAmI);
             }
         }
     }
