@@ -69,7 +69,7 @@ namespace Everglow.Sources.Commons.Network.PacketHandle
             {
                 return m_packetIDMapping[type];
             }
-            return -1;
+            throw new ArgumentException("不存在的Packet类型");
         }
 
         /// <summary>
