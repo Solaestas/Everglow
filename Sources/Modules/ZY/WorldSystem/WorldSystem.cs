@@ -1,6 +1,7 @@
 ﻿using Everglow.Sources.Commons.Core;
 using Everglow.Sources.Commons.ModuleSystem;
 using Everglow.Sources.Commons.Network.PacketHandle;
+using Everglow.Sources.Modules.ZY.ZYPacket;
 using ReLogic.Content;
 using Terraria.GameContent.UI.Elements;
 using Terraria.IO;
@@ -269,7 +270,7 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
 
     }
 
-    internal class WorldVersionPacket : IPacket
+    internal class WorldVersionPacket : IZYPacket
     {
         public ulong version;
         public void Receive(BinaryReader reader, int whoAmI)

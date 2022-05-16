@@ -1,4 +1,5 @@
 ﻿using Everglow.Sources.Modules.ZY.WorldSystem;
+using Everglow.Sources.Modules.ZY.ZYPacket;
 
 namespace Everglow.Sources.Modules.ZY.Common
 {
@@ -8,7 +9,7 @@ namespace Everglow.Sources.Modules.ZY.Common
         {
             if (newPlayer)
             {
-                Everglow.PacketResolver.Send(new WorldVersionPacket());
+                Everglow.PacketResolver.Send<WorldVersionPacket>();
             }
         }
     }
