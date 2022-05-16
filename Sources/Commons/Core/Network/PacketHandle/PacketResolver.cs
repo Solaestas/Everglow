@@ -46,7 +46,8 @@ namespace Everglow.Sources.Commons.Network.PacketHandle
                 if (CompileTimeFeatureFlags.NetworkPacketIDUseInt32)
                 {
                     modPacket.Write(id);
-                }else
+                }
+                else
                 {
                     modPacket.Write((byte)id);
                 }

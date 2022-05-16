@@ -11,7 +11,6 @@ global using Terraria.ID;
 global using Terraria.ModLoader;
 
 using Everglow.Sources.Commons.ModuleSystem;
-using Everglow.Sources.Modules.ZY.WorldSystem;
 using Everglow.Sources.Commons.Network.PacketHandle;
 
 namespace Everglow
