@@ -38,7 +38,7 @@ namespace Everglow.Sources.Commons.ModuleSystem
             }
 
             //这里先把List和Dictionary设置好，在执行Load，可以避免一些基本的因为调用其他Module产生的依赖关系
-            foreach(var type in dependencyGraph.TopologicalSort())
+            foreach (var type in dependencyGraph.TopologicalSort())
             {
                 IModule module = Activator.CreateInstance(type) as IModule;
                 modules.Add(module);

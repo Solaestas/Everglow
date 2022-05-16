@@ -1,6 +1,4 @@
-﻿using Everglow.Sources.Modules.ExampleModule.Packets;
-
-namespace Everglow.Sources.Modules.ExampleModule
+﻿namespace Everglow.Sources.Modules.ExampleModule
 {
     internal class ExampleSystem : ModSystem
     {

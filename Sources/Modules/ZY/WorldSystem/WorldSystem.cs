@@ -1,12 +1,11 @@
 ﻿using Everglow.Sources.Commons.Core;
 using Everglow.Sources.Commons.ModuleSystem;
+using Everglow.Sources.Commons.Network.PacketHandle;
+using ReLogic.Content;
 using Terraria.GameContent.UI.Elements;
 using Terraria.IO;
-using Terraria.UI;
-using Terraria.ID;
 using Terraria.Social;
-using ReLogic.Content;
-using Everglow.Sources.Commons.Network.PacketHandle;
+using Terraria.UI;
 
 namespace Everglow.Sources.Modules.ZY.WorldSystem
 {
@@ -40,7 +39,7 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
                     pack.Send();
                 }
             }, CallOpportunity.PostEnterWorld_Single);
-            
+
             //TestHook
             //ModContent.GetInstance<HookSystem>().AddMethod(() =>
             //{
@@ -260,11 +259,11 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
                 world.data = d;
             }
 
-            foreach(var (world, displayName, fileName, gameMode, seed) in worlds)
+            foreach (var (world, displayName, fileName, gameMode, seed) in worlds)
             {
                 var data = world.CreateMetaData(displayName, fileName, gameMode, seed);
                 datas.Add(data);
-                dataToWorld.Add(data, world); 
+                dataToWorld.Add(data, world);
             }
         }
 
@@ -275,7 +274,7 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
         public ulong version;
         public void Receive(BinaryReader reader, int whoAmI)
         {
-            if(Main.netMode == NetmodeID.MultiplayerClient)
+            if (Main.netMode == NetmodeID.MultiplayerClient)
             {
                 version = reader.ReadUInt64();
             }
@@ -285,7 +284,7 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
         {
             //如果是服务器，就发送version
             //如果是客户端，只利用whoAmI
-            if(Main.netMode == NetmodeID.Server)
+            if (Main.netMode == NetmodeID.Server)
             {
                 writer.Write(Main.ActiveWorldFileData.WorldGeneratorVersion);
             }

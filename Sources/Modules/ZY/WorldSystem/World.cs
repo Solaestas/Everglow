@@ -1,15 +1,11 @@
 ﻿using Everglow.Sources.Commons.ModuleSystem;
-using System.Security.Cryptography;
-using Terraria.Audio;
-using Terraria.IO;
-using Terraria.ModLoader.Config;
-using Terraria.Social;
-using Terraria.UI;
-using Terraria.ID;
-using System.Threading.Tasks;
-using Terraria.GameContent.UI.States;
-using System.Threading;
 using ReLogic.Content;
+using System.Security.Cryptography;
+using System.Threading.Tasks;
+using Terraria.Audio;
+using Terraria.GameContent.UI.States;
+using Terraria.IO;
+using Terraria.UI;
 
 namespace Everglow.Sources.Modules.ZY.WorldSystem
 {
@@ -49,7 +45,7 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
         public Point size;
         public bool SinglePlay => data is not null;
         public virtual Asset<Texture2D> WorldIcon =>
-            ModContent.Request<Texture2D>("Terraria/Images/UI/Icon" + (data.IsHardMode ? "Hallow" : "") + (data.HasCorruption ? "Corruption" : "Crimson"), 
+            ModContent.Request<Texture2D>("Terraria/Images/UI/Icon" + (data.IsHardMode ? "Hallow" : "") + (data.HasCorruption ? "Corruption" : "Crimson"),
                 AssetRequestMode.ImmediateLoad);
 
         public string Name => WorldName;
@@ -67,9 +63,9 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
         }
         public static World CreateInstance(string name)
         {
-            foreach(var world in Everglow.ModuleManager.FindModule<World>())
+            foreach (var world in Everglow.ModuleManager.FindModule<World>())
             {
-                if(world.WorldName == name)
+                if (world.WorldName == name)
                 {
                     return Activator.CreateInstance(world.GetType()) as World;
                 }
@@ -79,8 +75,8 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
         /// <summary>
         /// 世界生成，使用Main.status输出进度
         /// </summary>
-        public virtual void GenerateWorld() 
-        { 
+        public virtual void GenerateWorld()
+        {
 
         }
         /// <summary>
@@ -125,8 +121,8 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
         {
             data.SetAsActive();
             SetBaseWorldData();
-			SoundEngine.PlaySound(SoundID.MenuOpen);
-			Main.GetInputText("");
+            SoundEngine.PlaySound(SoundID.MenuOpen);
+            Main.GetInputText("");
             Task.Run(() =>
             {
                 if (!Main.menuMultiplayer)
