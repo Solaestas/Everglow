@@ -33,6 +33,8 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
         //值类型就不必在clone里重新初始化了
         private float PearlRot = 0;
         private float PearlOmega = 0;
+        private int Col = 100;
+        private float Vl = -1;
         public override ModProjectile Clone(Projectile projectile)
         {
             var clone = base.Clone(projectile) as BloodLampProj;
@@ -47,7 +49,6 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
             {
                 Projectile.velocity.Y -= 0.25f * Projectile.timeLeft / 600f;
             }
-            Vector2 Cen;
             Col = Math.Clamp(Col + Main.rand.Next(-45, 55),0,255);
             if(Projectile.timeLeft == 600)
             {
