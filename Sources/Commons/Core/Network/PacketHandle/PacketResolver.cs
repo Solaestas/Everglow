@@ -30,7 +30,7 @@ namespace Everglow.Sources.Commons.Network.PacketHandle
         /// <param name="packet"></param>
         /// <param name="toClient"></param>
         /// <param name="ignoreClient"></param>
-        public void Send<T>(T packet, int toClient = -1, int ignoreClient = -1) where T : IPacket
+        public void Send(IPacket packet, int toClient = -1, int ignoreClient = -1)
         {
             // 单人模式不要有任何动作
             if (Main.netMode == NetmodeID.SinglePlayer)
@@ -41,13 +41,15 @@ namespace Everglow.Sources.Commons.Network.PacketHandle
             using (MemoryStream ms = new MemoryStream())
             {
                 BinaryWriter bw = new BinaryWriter(ms);
+                int id = m_packetIDMapping[packet.GetType()];
                 packet.Send(bw);
                 if (CompileTimeFeatureFlags.NetworkPacketIDUseInt32)
                 {
-                    modPacket.Write(QueryPacketId<T>());
-                }else
+                    modPacket.Write(id);
+                }
+                else
                 {
-                    modPacket.Write((byte)QueryPacketId<T>());
+                    modPacket.Write((byte)id);
                 }
                 modPacket.Write(ms.GetBuffer(), 0, (int)ms.Position);
                 modPacket.Flush();
@@ -67,7 +69,7 @@ namespace Everglow.Sources.Commons.Network.PacketHandle
             {
                 return m_packetIDMapping[type];
             }
-            return -1;
+            throw new ArgumentException("不存在的Packet类型");
         }
 
         /// <summary>

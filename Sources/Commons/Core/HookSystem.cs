@@ -2,14 +2,12 @@
 {
     /// <summary>
     /// 对一个方法的管理，可以用来控制钩子是否启用
-    /// Debug暂时用于异常处理，以后可能会改成调用专门的方法来解决
     /// </summary>
     public class ActionHandler
     {
         internal Action action;
         public string Name { get; internal set; }
         public bool Enable { get; set; } = true;
-        public bool Debug { get; set; } = false;
         public ActionHandler(Action action)
         {
             this.action = action;

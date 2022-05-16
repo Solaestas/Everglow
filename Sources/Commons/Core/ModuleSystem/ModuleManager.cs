@@ -4,24 +4,15 @@ namespace Everglow.Sources.Commons.ModuleSystem
 {
     public class ModuleManager
     {
-        private Dictionary<Type, IModule> modulesByType;
-        private Dictionary<string, IModule> modulesByName;
-        private List<IModule> modules;
-
-        public ModuleManager()
-        {
-            modulesByType = new Dictionary<Type, IModule>();
-            modulesByName = new Dictionary<string, IModule>();
-            modules = new List<IModule>();
-
-            LoadAllModules();
-        }
+        private Dictionary<Type, IModule> modulesByType = new Dictionary<Type, IModule>();
+        private Dictionary<string, IModule> modulesByName = new Dictionary<string, IModule>();
+        private List<IModule> modules = new List<IModule>();
 
 
         /// <summary>
         /// 从程序集的类型中加载所有Module，并且按照其加载依赖关系排序
         /// </summary>
-        private void LoadAllModules()
+        public void LoadAllModules()
         {
             var dependencyGraph = new DependencyGraph();
             var assembly = Assembly.GetExecutingAssembly();
@@ -46,14 +37,19 @@ namespace Everglow.Sources.Commons.ModuleSystem
                 }
             }
 
+            //这里先把List和Dictionary设置好，在执行Load，可以避免一些基本的因为调用其他Module产生的依赖关系
             foreach (var type in dependencyGraph.TopologicalSort())
             {
                 IModule module = Activator.CreateInstance(type) as IModule;
-                module.Load();
                 modules.Add(module);
                 modulesByName.Add(module.Name, module);
                 modulesByType.Add(module.GetType(), module);
             }
+            foreach (var module in modules)
+            {
+                module.Load();
+            }
+
         }
 
         /// <summary>
