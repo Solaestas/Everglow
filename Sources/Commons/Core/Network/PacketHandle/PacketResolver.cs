@@ -1,6 +1,6 @@
 using Everglow.Sources.Commons.Function.FeatureFlags;
 
-namespace Everglow.Sources.Commons.Network.PacketHandle
+namespace Everglow.Sources.Commons.Core.Network.PacketHandle
 {
     using Packet_Id = Int32;
     public class PacketResolver

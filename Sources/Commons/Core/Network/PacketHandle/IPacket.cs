@@ -1,4 +1,4 @@
-namespace Everglow.Sources.Commons.Network.PacketHandle
+namespace Everglow.Sources.Commons.Core.Network.PacketHandle
 {
     /// <summary>
     /// 用于表示一个封包的读写操作以及其数据，注意一般在这里我们只操作数据，不做接收后的操作

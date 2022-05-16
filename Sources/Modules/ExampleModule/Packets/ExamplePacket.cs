@@ -1,4 +1,4 @@
-﻿using Everglow.Sources.Commons.Network.PacketHandle;
+﻿using Everglow.Sources.Commons.Core.Network.PacketHandle;
 
 namespace Everglow.Sources.Modules.ExampleModule.Packets
 {

@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Commons.ModuleSystem
+﻿namespace Everglow.Sources.Commons.Core.ModuleSystem
 {
     public interface IModule
     {
