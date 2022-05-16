@@ -41,9 +41,11 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
                 Projectile.velocity.Y -= 0.25f * Projectile.timeLeft / 600f;
             }
             Vector2 Cen = new Vector2(19f, 19f);
-            if (Projectile.timeLeft == 5)
+            if (Projectile.timeLeft == 25)
             {
-                Projectile.NewProjectile(null,Projectile.Center,new Vector2(0, -1),ModContent.ProjectileType<LMeteor>(),0,0,Projectile.owner);
+                Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center,new Vector2(0, -1),ModContent.ProjectileType<LMeteor>(),0,0,Projectile.owner);//金色的核心
+                Gore.NewGore(Projectile.GetSource_Death(), Projectile.Center,Vector2.Zero,ModContent.GoreType<Gores.BloodLanternBody>());
+                NoPedal[1] = true;
             }
             if (Projectile.timeLeft == 480)
             {
@@ -51,20 +53,13 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
             }
             if (Projectile.timeLeft < 150)
             {
-                for (int x = 1; x < 16; x++)
+                for (int x = 2; x < 16; x++)
                 {
                     if(!NoPedal[x])
                     {
                         if (Main.rand.Next(Projectile.timeLeft) < 3)
                         {
                             NoPedal[x] = true;
-                            if (Projectile.timeLeft < 10)
-                            {
-                                if (x == 1)
-                                {
-                                    Gore.NewGore(Projectile.GetSource_Death(), Projectile.Center, Vector2.Zero, ModContent.GoreType<Gores.BloodLanternBody>());
-                                }
-                            }
                             if (x == 2)
                             {
                                 Cen = new Vector2(12f, 9f) - new Vector2(6f, 7f);
@@ -75,6 +70,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
                             {
                                 Cen = new Vector2(26f, 9f) - new Vector2(6f, 7f);
                                 Dust.NewDust(Projectile.Center + Cen - BLantern[x].Size() / 2f, 0, 0, ModContent.DustType<Dusts.BloodPedal>());
+                                Projectile.NewProjectile(null, Projectile.Center + Cen - BLantern[x].Size() / 2f, new Vector2(0, Main.rand.NextFloat(12, 20f)).RotatedByRandom(6.283), ModContent.ProjectileType<LBloodEffect>(), 0, 0, Projectile.owner, Projectile.whoAmI);
                             }
                             if (x == 4)
                             {
@@ -86,6 +82,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
                             {
                                 Cen = new Vector2(34f, 14f) - new Vector2(6f, 7f);
                                 Dust.NewDust(Projectile.Center + Cen - BLantern[x].Size() / 2f, 0, 0, ModContent.DustType<Dusts.BloodPedal>());
+                                Projectile.NewProjectile(null, Projectile.Center + Cen - BLantern[x].Size() / 2f, new Vector2(0, Main.rand.NextFloat(12, 20f)).RotatedByRandom(6.283), ModContent.ProjectileType<LBloodEffect>(), 0, 0, Projectile.owner, Projectile.whoAmI);
                             }
                             if (x == 6)
                             {
@@ -102,7 +99,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
                             {
                                 Cen = new Vector2(30f, 10f) - new Vector2(6f, 7f);
                                 Dust.NewDust(Projectile.Center + Cen - BLantern[x].Size() / 2f, 0, 0, ModContent.DustType<Dusts.BloodPedal>());
-                                //Projectile.NewProjectile(null, Projectile.Center, new Vector2(0, Main.rand.NextFloat(12, 20f)).RotatedByRandom(6.283), ModContent.ProjectileType<LBloodEffect>(), 0, 0, Projectile.owner, Projectile.whoAmI);
+                                Projectile.NewProjectile(null, Projectile.Center, new Vector2(0, Main.rand.NextFloat(12, 20f)).RotatedByRandom(6.283), ModContent.ProjectileType<LBloodEffect>(), 0, 0, Projectile.owner, Projectile.whoAmI);
                             }
                             if (x == 9)
                             {
@@ -124,7 +121,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
                             {
                                 Cen = new Vector2(6f, 21f) - new Vector2(6f, 7f);
                                 Dust.NewDust(Projectile.Center + Cen - BLantern[x].Size() / 2f, 0, 0, ModContent.DustType<Dusts.BloodPedal>());
-                                //Projectile.NewProjectile(null, Projectile.Center, new Vector2(0, Main.rand.NextFloat(12, 20f)).RotatedByRandom(6.283), ModContent.ProjectileType<LBloodEffect>(), 0, 0, Projectile.owner, Projectile.whoAmI);
+                                Projectile.NewProjectile(null, Projectile.Center, new Vector2(0, Main.rand.NextFloat(12, 20f)).RotatedByRandom(6.283), ModContent.ProjectileType<LBloodEffect>(), 0, 0, Projectile.owner, Projectile.whoAmI);
                             }
                             if (x == 13)
                             {
@@ -135,7 +132,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
                             {
                                 Cen = new Vector2(23f, 16f) - new Vector2(6f, 7f);
                                 Dust.NewDust(Projectile.Center + Cen - BLantern[x].Size() / 2f, 0, 0, ModContent.DustType<Dusts.BloodPedal>());
-                                //Projectile.NewProjectile(null, Projectile.Center, new Vector2(0, Main.rand.NextFloat(12, 20f)).RotatedByRandom(6.283), ModContent.ProjectileType<LBloodEffect>(), 0, 0, Projectile.owner, Projectile.whoAmI);
+                                Projectile.NewProjectile(null, Projectile.Center, new Vector2(0, Main.rand.NextFloat(12, 20f)).RotatedByRandom(6.283), ModContent.ProjectileType<LBloodEffect>(), 0, 0, Projectile.owner, Projectile.whoAmI);
                             }
                             if (x == 15)
                             {
@@ -171,7 +168,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
                     Rot = PearlRot;
                     Cen = new Vector2(19f, 51f);
                 }
-                if(!NoPedal[x] || x < 2)
+                if(!NoPedal[x] || x < 1)
                 {
                     Main.spriteBatch.Draw(BLantern[x], Projectile.Center - Main.screenPosition + Cen - BLantern[x].Size() / 2f/*坐标校正*/, null, color, Rot, Cen, 1, SpriteEffects.None, 0);
                 }

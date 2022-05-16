@@ -19,6 +19,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
         Vector2 AIMpos;
         int TrueL = 1;
         float Stre = 0.85f;
+        float Sca = 0;
         public override ModProjectile Clone(Projectile projectile)
         {
             var clone = base.Clone(projectile) as LMeteor;
@@ -26,23 +27,21 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
             AIMpos = Vector2.Zero;
             TrueL = 1;
             Stre = 0.85f;
+            Sca = 0;
             return clone;
         }
         public override void AI()
         {
-            Player player = Main.player[Projectile.owner];
-            AIMpos = new Vector2(0, -1000);
-            ka = 1;
-            if (Projectile.timeLeft < 60f)
+            if(Projectile.timeLeft >= 140)
             {
-                ka = Projectile.timeLeft / 60f;
+                Sca = (float)(-Math.Cos((180 - Projectile.timeLeft) / 40d * Math.PI) + 1) * 0.65f;
             }
-            Lighting.AddLight(Projectile.Center, (float)(255 - Projectile.alpha) * 1.2f / 50f * ka, 0, 0);
-            Projectile.velocity *= 0.96f;
-            Vector2 v0 = AIMpos + player.Center;
-            Vector2 v1 = Vector2.Normalize(v0 - Projectile.Center);
-            v1 = (v0 - Projectile.Center + v1 * 60f) / 480f;
-            Projectile.velocity += v1;
+            else
+            {
+                Sca = 0.96f + Sca * 0.04f;
+                Lighting.AddLight(Projectile.Center, (float)(255 - Projectile.alpha) * 1.2f / 50f * ka, 0, 0);
+                Projectile.velocity.Y -= 0.25f;
+            }
         }
         public override bool PreDraw(ref Color lightColor)
         {
@@ -102,11 +101,11 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
             }
             Texture2D LightE = Common.MythContent.QuickTexture("VisualTextures/LightEffect");
-            Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition, null, new Color(0.3f * Stre * Stre, 0.21f * Stre * Stre, 0, 0), -(float)(Math.Sin(Main.time / 26d)) + 0.6f, new Vector2(128f, 128f), 1.5f + (float)(0.75 * Math.Sin(Main.time / 26d)), SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition, null, new Color(1f * Stre * Stre, 0.7f * Stre * Stre, 0, 0), (float)(Math.Sin(Main.time / 12d + 2)) + 1.6f, new Vector2(128f, 128f), 1.5f + (float)(0.75 * Math.Sin(Main.time / 26d)), SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition, null, new Color(0.3f * Stre * Stre, 0.21f * Stre * Stre, 0, 0), (float)Math.PI / 2f + (float)(Main.time / 9d), new Vector2(128f, 128f), 1.5f + (float)(0.75 * Math.Sin(Main.time / 26d + 1.57)), SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition, null, new Color(1f * Stre * Stre, 0.7f * Stre * Stre, 0, 0), (float)(Main.time / 26d), new Vector2(128f, 128f), 1.5f + (float)(0.75 * Math.Sin(Main.time / 26d + 3.14)), SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition, null, new Color(1f * Stre * Stre, 0.7f * Stre * Stre, 0, 0), -(float)(Main.time / 26d), new Vector2(128f, 128f), 1.5f + (float)(0.75 * Math.Sin(Main.time / 26d + 4.71)), SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition, null, new Color(0.3f * Stre * Stre, 0.21f * Stre * Stre, 0, 0), -(float)(Math.Sin(Main.time / 26d)) + 0.6f, new Vector2(128f, 128f), (1.5f + (float)(0.75 * Math.Sin(Main.time / 26d))) * Sca, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition, null, new Color(1f * Stre * Stre, 0.7f * Stre * Stre, 0, 0), (float)(Math.Sin(Main.time / 12d + 2)) + 1.6f, new Vector2(128f, 128f), (1.5f + (float)(0.75 * Math.Sin(Main.time / 26d))) * Sca, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition, null, new Color(0.3f * Stre * Stre, 0.21f * Stre * Stre, 0, 0), (float)Math.PI / 2f + (float)(Main.time / 9d), new Vector2(128f, 128f), (1.5f + (float)(0.75 * Math.Sin(Main.time / 26d + 1.57))) * Sca, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition, null, new Color(1f * Stre * Stre, 0.7f * Stre * Stre, 0, 0), (float)(Main.time / 26d), new Vector2(128f, 128f), (1.5f + (float)(0.75 * Math.Sin(Main.time / 26d + 3.14))) * Sca, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition, null, new Color(1f * Stre * Stre, 0.7f * Stre * Stre, 0, 0), -(float)(Main.time / 26d), new Vector2(128f, 128f), (1.5f + (float)(0.75 * Math.Sin(Main.time / 26d + 4.71))) * Sca, SpriteEffects.None, 0);
         }
     }
 }
