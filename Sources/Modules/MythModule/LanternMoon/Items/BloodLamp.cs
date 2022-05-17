@@ -31,9 +31,13 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Items
         }
         public override bool? UseItem(Player player)
         {
+            if(Main.dayTime)
+            {
+                return false;
+            }
             for(int x = 0;x < Main.maxProjectiles;x++)
             {
-                if(Main.projectile[x].type == ModContent.ProjectileType<Projectiles.BloodLampProj>())
+                if(Main.projectile[x].type == ModContent.ProjectileType<Projectiles.BloodLampProj>() && Main.projectile[x].active)
                 {
                     return false;
                 }
