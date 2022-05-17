@@ -23,11 +23,12 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
         public override ModProjectile Clone(Projectile projectile)
         {
             var clone = base.Clone(projectile) as LBloodEffect;
-            AIMpos = Vector2.Zero;
-            TrueL = 1;
-            Acc = Vector2.Zero;
-            Omega = 0;
-            AimProj = -1;
+            //值类型不必重新赋值
+            //AIMpos = Vector2.Zero;
+            //TrueL = 1;
+            //Acc = Vector2.Zero;
+            //Omega = 0;
+            //AimProj = -1;
             return clone;
         }
         public override void AI()

@@ -41,11 +41,8 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
         private int timer = 0;
         private bool volumeRecover = false;
         public override ModProjectile Clone(Projectile projectile)
+        private readonly Vector2[] PedalPos = new Vector2[]
         {
-            var clone = base.Clone(projectile) as BloodLampProj;
-            NoPedal = new bool[16];
-            PedalPos = new Vector2[]
-            { 
                 new Vector2(19, 19),
                 new Vector2(19, 19),
                 new Vector2(12, 9),
@@ -62,11 +59,17 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
                 new Vector2(19, 23),
                 new Vector2(23, 16),
                 new Vector2(15, 16)
-            };
+        };
+
+
+        private bool volumeRecover = false;
+        public override ModProjectile Clone(Projectile projectile)
+        {
+            var clone = base.Clone(projectile) as BloodLampProj;
+            NoPedal = new bool[16];
             _coroutineManager = new CoroutineManager();
             return clone;
         }
-        private Vector2[] PedalPos;
         public override void AI()
         {
             timer++;
