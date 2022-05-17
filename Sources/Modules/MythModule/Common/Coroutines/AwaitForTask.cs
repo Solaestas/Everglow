@@ -24,7 +24,7 @@ namespace Everglow.Sources.Modules.MythModule.Common.Coroutines
 
 		public bool ShouldWait()
 		{
-			return true;
+			return false;
 		}
 
 		public void Update() 

@@ -13,9 +13,11 @@ namespace Everglow.Sources.Modules.MythModule.Common.Coroutines
     public class Coroutine : ICoroutine
     {
         private List<IEnumerator<ICoroutineInstruction>> m_enumerator;
+        private ICoroutineInstruction m_lastInstruction;
         public Coroutine(IEnumerator<ICoroutineInstruction> enumerator)
         {
             m_enumerator = new List<IEnumerator<ICoroutineInstruction>> { enumerator };
+            m_lastInstruction = null;
         }
 
         public bool MoveNext()
@@ -25,32 +27,36 @@ namespace Everglow.Sources.Modules.MythModule.Common.Coroutines
                 return false;
             }
 
-            var currentIE = m_enumerator[^1];
-            var instruction = currentIE.Current;
+            bool canRunNext = m_lastInstruction == null || !m_lastInstruction.ShouldWait();
 
-            if (instruction != null)
+            if (!canRunNext)
             {
-                if(instruction is AwaitForTask)
+                m_lastInstruction.Update();
+                return true;
+            }
+
+            if (canRunNext)
+            {
+                var currentIE = m_enumerator[^1];
+                if (!currentIE.MoveNext())
+                {
+                    m_enumerator.RemoveAt(m_enumerator.Count - 1);
+                    if (m_enumerator.Count == 0)
+                    {
+                        return false;
+                    }
+                }
+
+                var instruction = currentIE.Current;
+                if (instruction is AwaitForTask)
                 {
                     m_enumerator.Add((instruction as AwaitForTask).Task);
-                }
-                instruction.Update();
-
-                if (instruction.ShouldWait())
-                {
+                    m_lastInstruction = null;
                     return true;
                 }
-            }
 
-            if (!currentIE.MoveNext())
-            {
-                m_enumerator.RemoveAt(m_enumerator.Count - 1);
-                if (m_enumerator.Count == 0)
-                {
-                    return false;
-                }
+                m_lastInstruction = instruction;
             }
-
             return true;
         }
     }

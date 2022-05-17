@@ -43,6 +43,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
         {
             var clone = base.Clone(projectile) as BloodLampProj;
             NoPedal = new bool[16];
+            _coroutineManager = new CoroutineManager();
             return clone;
         }
         public override void AI()
@@ -230,9 +231,17 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
             for(int i = 0; i < 120; i++)
             {
                 float r = (float)i / 120f * MathHelper.TwoPi;
+                yield return new AwaitForTask(Task1(r));
+            }
+        }
 
-                Dust.NewDustDirect(Projectile.Center + r.ToRotationVector2() * 64, 1, 1, DustID.Torch, 0, 0, 100);
-                yield return new WaitForFrames(1);
+        private IEnumerator<ICoroutineInstruction> Task1(float r)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                Dust.NewDustDirect(Projectile.Center + r.ToRotationVector2() * (64 + 40 * i), 1, 1,
+                    DustID.Torch + i, 0, 0, 100);
+                yield return new SkipThisFrame();
             }
         }
     }
