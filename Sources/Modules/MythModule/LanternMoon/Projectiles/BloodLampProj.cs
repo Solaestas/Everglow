@@ -39,8 +39,6 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
         private int Col = 0;
         private float Vl = -1;
         private int timer = 0;
-        private bool volumeRecover = false;
-        public override ModProjectile Clone(Projectile projectile)
         private readonly Vector2[] PedalPos = new Vector2[]
         {
                 new Vector2(19, 19),
