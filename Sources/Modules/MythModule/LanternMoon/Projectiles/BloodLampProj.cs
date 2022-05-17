@@ -2,10 +2,14 @@ using ReLogic.Content;
 
 using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.Audio;
+using Everglow.Sources.Modules.MythModule.Common.Coroutines;
+
 namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
 {
     public class BloodLampProj : ModProjectile
     {
+        private CoroutineManager _coroutineManager = new CoroutineManager();
+
         public override void SetStaticDefaults()
         {
             for (int x = -1; x < 15; x++)
@@ -42,7 +46,14 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
             return clone;
         }
         public override void AI()
-        {       
+        {
+            if (Projectile.localAI[0] == 0f)
+            {
+                _coroutineManager.StartCoroutine(new Coroutine(Task()));
+                Projectile.localAI[0] = 1.0f;
+            }
+            _coroutineManager.Update();
+
             Projectile.rotation = Projectile.velocity.X * 0.05f;
             Projectile.velocity *= 0.9f * Projectile.timeLeft / 600f;
             if (Projectile.velocity.Length() > 0.3f)
@@ -212,6 +223,17 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
         public override bool PreDraw(ref Color lightColor)
         {
             return false;
+        }
+
+        private IEnumerator<ICoroutineInstruction> Task()
+        {
+            for(int i = 0; i < 120; i++)
+            {
+                float r = (float)i / 120f * MathHelper.TwoPi;
+
+                Dust.NewDustDirect(Projectile.Center + r.ToRotationVector2() * 64, 1, 1, DustID.Torch, 0, 0, 100);
+                yield return new WaitForFrames(1);
+            }
         }
     }
 }
