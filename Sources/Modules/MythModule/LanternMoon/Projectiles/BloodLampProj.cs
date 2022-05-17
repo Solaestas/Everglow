@@ -73,8 +73,32 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
             {
                 Projectile.velocity.Y -= 0.25f * Projectile.timeLeft / 600f;
             }
-            Col = Math.Clamp(Col + Main.rand.Next(-45, 55),0,255);
-            _coroutineManager.StartCoroutine(new Coroutine(SoundEffect()));//声音控制
+
+            if (Projectile.timeLeft == 600)
+            {
+                SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sources/Modules/MythModule/LanternMoon/Sounds/PowerBomb"), Projectile.Center);
+                if (Vl == -1)
+                {
+                    Vl = Main.musicVolume;
+                }
+            }
+            if (Main.audioSystem is LegacyAudioSystem system)
+            {
+                if (Projectile.timeLeft >= 65)
+                {
+                    Main.musicVolume *= 0.98f;
+                }
+                else
+                {
+                    Main.musicVolume = Main.musicVolume * 0.96f + Vl * 0.04f;
+                    if (Projectile.timeLeft == 1)
+                    {
+                        Main.musicVolume = Vl;
+                    }
+                }
+            }
+
+            Col = Math.Clamp(Col + Main.rand.Next(-45, 55), 0, 255);
             if (Projectile.timeLeft == 75)//金色流星
             {
                 _coroutineManager.StartCoroutine(new Coroutine(GoldMeteor()));
@@ -157,40 +181,6 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
                 Main.projectile[f].timeLeft = Main.rand.Next(80, 130);
             }
             NoPedal[1] = true;
-            yield return new SkipThisFrame();
-        }
-        private IEnumerator<ICoroutineInstruction> SoundEffect()
-        {
-            if (Projectile.timeLeft == 600)
-            {
-                SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sources/Modules/MythModule/LanternMoon/Sounds/PowerBomb"), Projectile.Center);
-                if (Vl == -1)
-                {
-                    Vl = Main.musicVolume;
-                }
-            }
-            if (Main.gamePaused)
-            {
-                Main.musicVolume = Vl;
-            }
-            else
-            {
-                if (Main.audioSystem is LegacyAudioSystem system)
-                {
-                    if (Projectile.timeLeft >= 65)
-                    {
-                        Main.musicVolume *= 0.98f;
-                    }
-                    else
-                    {
-                        Main.musicVolume = Main.musicVolume * 0.96f + Vl * 0.04f;
-                        if (Projectile.timeLeft == 1)
-                        {
-                            Main.musicVolume = Vl;
-                        }
-                    }
-                }
-            }            
             yield return new SkipThisFrame();
         }
     }
