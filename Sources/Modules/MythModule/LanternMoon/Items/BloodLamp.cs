@@ -42,10 +42,10 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Items
                     return false;
                 }
             }
-            Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center + new Vector2(12, 0) * player.direction, new Vector2(16, 0) * player.direction, ModContent.ProjectileType<Projectiles.BloodLampProj>(), 0, 0, player.whoAmI);
-            LanternMoonProgress LanterMoon = ModContent.GetInstance<LanternMoonProgress>();
+            LanternMoonProgress LanterMoon = ModContent.GetInstance<LanternMoonProgress>();         
             if (!LanterMoon.OnLanternMoon && !Main.dayTime && !Main.snowMoon && !Main.pumpkinMoon)
             {
+                Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center + new Vector2(12, 0) * player.direction, new Vector2(16, 0) * player.direction, ModContent.ProjectileType<Projectiles.BloodLampProj>(), 0, 0, player.whoAmI);
                 LanterMoon.OnLanternMoon = true;
                 LanterMoon.Point = 0;
                 LanterMoon.WavePoint = 0;
