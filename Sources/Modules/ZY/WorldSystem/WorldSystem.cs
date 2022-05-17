@@ -1,6 +1,6 @@
 ﻿using Everglow.Sources.Commons.Core;
 using Everglow.Sources.Commons.Core.ModuleSystem;
-using Everglow.Sources.Commons.Network.PacketHandle;
+using Everglow.Sources.Commons.Core.Network.PacketHandle;
 using ReLogic.Content;
 using Terraria.GameContent.UI.Elements;
 using Terraria.IO;
