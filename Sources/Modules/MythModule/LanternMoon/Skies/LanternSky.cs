@@ -21,7 +21,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Skies
         }
         public override void Activate(Vector2 position, params object[] args)
         {
-            TimeLeft = 600;
+            TimeLeft = 600000;
             this.skyActive = true;
         }
         public override void Draw(SpriteBatch spriteBatch, float minDepth, float maxDepth)
@@ -30,7 +30,10 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Skies
             {
                 spriteBatch.Draw(Common.MythContent.QuickTexture("LanternMoon/Skies/LanternSky"), new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), new Color(255, 255, 255, 255));
             }
+            Texture2D LMoon = Common.MythContent.QuickTexture("UIimages/LanternMoon");
+            spriteBatch.Draw(LMoon, Common.MythContent.GetSunPos(), null, Color.White, 0, LMoon.Size() / 2f, 1, SpriteEffects.None, 0);
         }
+        
         public override void Update(GameTime gameTime)
         {
             if (this.skyActive && this.opacity < 1f)
@@ -57,6 +60,6 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Skies
 
         private float opacity;
 
-        public int TimeLeft = 600;
+        public int TimeLeft = 600000;
     }
 }

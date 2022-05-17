@@ -45,5 +45,24 @@ namespace Everglow.Sources.Modules.MythModule.Common
                 return 0;
             }
         }
+        /// <summary>
+        /// 获取太阳位置
+        /// </summary>
+        public static Vector2 GetSunPos()
+        {
+            float HalfMaxTime = Main.dayTime ? 27000 : 16200;
+            float bgTop = -Main.screenPosition.Y / (float)(Main.worldSurface * 16.0 - 600.0) * 200f;
+            float value = 1 - (float)Main.time / HalfMaxTime;
+            float StarX = (1 - value) * Main.screenWidth / 2f - 100 * value;
+            float t = value * value;
+            float StarY = bgTop + t * 250f + 180;
+            if (Main.LocalPlayer != null)
+                if (Main.LocalPlayer.gravDir == -1)
+                {
+                    float y = StarY;
+                    return new Vector2(StarX, Main.screenHeight - y);
+                }
+            return new Vector2(StarX, StarY);
+        }
     }
 }
