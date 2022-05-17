@@ -69,11 +69,5 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Items
                .AddTile(26)
                .Register();
         }*/
-        public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
-        {
-            Texture2D LMoon = Common.MythContent.QuickTexture("UIimages/LanternMoon");
-            spriteBatch.Draw(LMoon, Common.MythContent.GetSunPos(), null, Color.White, 0, LMoon.Size() / 2f, 1, SpriteEffects.None, 0);
-            base.PostDrawInWorld(spriteBatch, lightColor, alphaColor, rotation, scale, whoAmI);
-        }
     }
 }

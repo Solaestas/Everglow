@@ -42,18 +42,31 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
         {
             var clone = base.Clone(projectile) as BloodLampProj;
             NoPedal = new bool[16];
+            PedalPos = new Vector2[]
+            { 
+                new Vector2(19, 19),
+                new Vector2(19, 19),
+                new Vector2(12, 9),
+                new Vector2(26, 9),
+                new Vector2(19, 8),
+                new Vector2(34, 14),
+                new Vector2(4, 14),
+                new Vector2(8, 10),
+                new Vector2(30, 10),
+                new Vector2(8, 25),
+                new Vector2(30, 25),
+                new Vector2(32, 21),
+                new Vector2(6, 21),
+                new Vector2(19, 23),
+                new Vector2(23, 16),
+                new Vector2(15, 16)
+            };
             _coroutineManager = new CoroutineManager();
             return clone;
         }
+        private Vector2[] PedalPos;
         public override void AI()
         {
-            if (Projectile.localAI[0] == 0f)
-            {
-                _coroutineManager.StartCoroutine(new Coroutine(Task()));
-                Projectile.localAI[0] = 1.0f;
-            }
-            _coroutineManager.Update();
-
             Projectile.rotation = Projectile.velocity.X * 0.05f;
             Projectile.velocity *= 0.9f * Projectile.timeLeft / 600f;
             if (Projectile.velocity.Length() > 0.3f)
@@ -61,129 +74,27 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
                 Projectile.velocity.Y -= 0.25f * Projectile.timeLeft / 600f;
             }
             Col = Math.Clamp(Col + Main.rand.Next(-45, 55),0,255);
-            if(Projectile.timeLeft == 600)
+            _coroutineManager.StartCoroutine(new Coroutine(SoundEffect()));//声音控制
+            if (Projectile.timeLeft == 75)//金色流星
             {
-                SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sources/Modules/MythModule/LanternMoon/Sounds/PowerBomb"), Projectile.Center);
-                if(Vl == -1)
-                {
-                    Vl = Main.musicVolume;
-                }
+                _coroutineManager.StartCoroutine(new Coroutine(GoldMeteor()));
             }
-            if (Main.audioSystem is LegacyAudioSystem system)
-            {
-                if(Projectile.timeLeft >= 65)
-                {
-                    Main.musicVolume *= 0.98f;
-                }
-                else
-                {
-                    Main.musicVolume = Main.musicVolume * 0.96f + Vl * 0.04f;
-                    if(Projectile.timeLeft == 1)
-                    {
-                        Main.musicVolume = Vl;
-                    }
-                }
-            }
-            if (Projectile.timeLeft == 75)
-            {
-                Col = 255;
-                Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center,new Vector2(0, -1),ModContent.ProjectileType<LMeteor>(),0,0,Projectile.owner);//金色的核心
-                Gore.NewGore(Projectile.GetSource_Death(), Projectile.position,Vector2.Zero,ModContent.GoreType<Gores.BloodLanternBody>());
-                for(int h = 0;h < 11;h++)
-                {
-                    int f = Projectile.NewProjectile(null, Projectile.Center, new Vector2(0, Main.rand.NextFloat(9, 24f)).RotatedByRandom(6.283), ModContent.ProjectileType<LBloodEffectGra>(), 0, 0, Projectile.owner, Projectile.whoAmI);
-                    Main.projectile[f].scale = Main.rand.NextFloat(0.75f,1.25f);
-                    Main.projectile[f].timeLeft = Main.rand.Next(80, 130);
-                }
-                NoPedal[1] = true;
-
-            }
-            if(Projectile.timeLeft == 70)
+            if(Projectile.timeLeft == 70)//彩虹晕环
             {
                 Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, new Vector2(0, -1), ModContent.ProjectileType<RainbowWave>(), 0, 0, Projectile.owner);//彩虹光环
             }
-            if (Projectile.timeLeft == 430)
+            if (Projectile.timeLeft == 430)//控制爆炸延时
             {
                 Projectile.timeLeft = 150;
             }
-            if (Projectile.timeLeft < 150)
+            if (Projectile.timeLeft < 150)//花瓣脱落
             {
                 for (int x = 2; x < 16; x++)
                 {
                     if (!NoPedal[x] && Main.rand.Next(Projectile.timeLeft) < 3)
                     {
                         NoPedal[x] = true;
-                        Vector2 Cen;//移动到变量使用附近了
-                        switch (x)
-                        {
-                            case 2:
-                                Cen = new Vector2(12f, 9f) - new Vector2(6f, 7f);
-                                Dust.NewDust(Projectile.Center + Cen - BLantern[x].Size() / 2f, 0, 0, ModContent.DustType<Dusts.BloodPedal>());
-                                Projectile.NewProjectile(null, Projectile.Center + Cen - BLantern[x].Size() / 2f, new Vector2(0, Main.rand.NextFloat(12, 20f)).RotatedByRandom(6.283), ModContent.ProjectileType<LBloodEffect>(), 0, 0, Projectile.owner, Projectile.whoAmI);
-                                break;
-                            case 3:
-                                Cen = new Vector2(26f, 9f) - new Vector2(6f, 7f);
-                                Dust.NewDust(Projectile.Center + Cen - BLantern[x].Size() / 2f, 0, 0, ModContent.DustType<Dusts.BloodPedal>());
-                                Projectile.NewProjectile(null, Projectile.Center + Cen - BLantern[x].Size() / 2f, new Vector2(0, Main.rand.NextFloat(12, 20f)).RotatedByRandom(6.283), ModContent.ProjectileType<LBloodEffect>(), 0, 0, Projectile.owner, Projectile.whoAmI);
-                                break;
-                            case 4:
-                                Cen = new Vector2(19f, 8f) - new Vector2(6f, 7f);
-                                Dust.NewDust(Projectile.Center + Cen - BLantern[x].Size() / 2f, 0, 0, ModContent.DustType<Dusts.BloodPedal>());
-                                Projectile.NewProjectile(null, Projectile.Center + Cen - BLantern[x].Size() / 2f, new Vector2(0, Main.rand.NextFloat(12, 20f)).RotatedByRandom(6.283), ModContent.ProjectileType<LBloodEffect>(), 0, 0, Projectile.owner, Projectile.whoAmI);
-                                break;
-                            case 5:
-                                Cen = new Vector2(34f, 14f) - new Vector2(6f, 7f);
-                                Dust.NewDust(Projectile.Center + Cen - BLantern[x].Size() / 2f, 0, 0, ModContent.DustType<Dusts.BloodPedal>());
-                                Projectile.NewProjectile(null, Projectile.Center + Cen - BLantern[x].Size() / 2f, new Vector2(0, Main.rand.NextFloat(12, 20f)).RotatedByRandom(6.283), ModContent.ProjectileType<LBloodEffect>(), 0, 0, Projectile.owner, Projectile.whoAmI);
-                                break;
-                            case 6:
-                                Cen = new Vector2(4f, 14f) - new Vector2(6f, 7f);
-                                Dust.NewDust(Projectile.Center + Cen - BLantern[x].Size() / 2f, 0, 0, ModContent.DustType<Dusts.BloodPedal>());
-                                Projectile.NewProjectile(null, Projectile.Center + Cen - BLantern[x].Size() / 2f, new Vector2(0, Main.rand.NextFloat(12, 20f)).RotatedByRandom(6.283), ModContent.ProjectileType<LBloodEffect>(), 0, 0, Projectile.owner, Projectile.whoAmI);
-                                break;
-                            case 7:
-                                Cen = new Vector2(8f, 10f) - new Vector2(6f, 7f);
-                                Dust.NewDust(Projectile.Center + Cen - BLantern[x].Size() / 2f, 0, 0, ModContent.DustType<Dusts.BloodPedal>());
-                                break;
-                            case 8:
-                                Cen = new Vector2(30f, 10f) - new Vector2(6f, 7f);
-                                Dust.NewDust(Projectile.Center + Cen - BLantern[x].Size() / 2f, 0, 0, ModContent.DustType<Dusts.BloodPedal>());
-                                Projectile.NewProjectile(null, Projectile.Center, new Vector2(0, Main.rand.NextFloat(12, 20f)).RotatedByRandom(6.283), ModContent.ProjectileType<LBloodEffect>(), 0, 0, Projectile.owner, Projectile.whoAmI);
-                                break;
-                            case 9:
-                                Cen = new Vector2(8f, 25f) - new Vector2(6f, 7f);
-                                Dust.NewDust(Projectile.Center + Cen - BLantern[x].Size() / 2f, 0, 0, ModContent.DustType<Dusts.BloodPedal>());
-                                break;
-                            case 10:
-                                Cen = new Vector2(30f, 25f) - new Vector2(6f, 7f);
-                                Dust.NewDust(Projectile.Center + Cen - BLantern[x].Size() / 2f, 0, 0, ModContent.DustType<Dusts.BloodPedal>());
-                                Projectile.NewProjectile(null, Projectile.Center + Cen - BLantern[x].Size() / 2f, new Vector2(0, Main.rand.NextFloat(12, 20f)).RotatedByRandom(6.283), ModContent.ProjectileType<LBloodEffect>(), 0, 0, Projectile.owner, Projectile.whoAmI);
-                                break;
-                            case 11:
-                                Cen = new Vector2(32f, 21f) - new Vector2(6f, 7f);
-                                Dust.NewDust(Projectile.Center + Cen - BLantern[x].Size() / 2f, 0, 0, ModContent.DustType<Dusts.BloodPedal>());
-                                break;
-                            case 12:
-                                Cen = new Vector2(6f, 21f) - new Vector2(6f, 7f);
-                                Dust.NewDust(Projectile.Center + Cen - BLantern[x].Size() / 2f, 0, 0, ModContent.DustType<Dusts.BloodPedal>());
-                                Projectile.NewProjectile(null, Projectile.Center, new Vector2(0, Main.rand.NextFloat(12, 20f)).RotatedByRandom(6.283), ModContent.ProjectileType<LBloodEffect>(), 0, 0, Projectile.owner, Projectile.whoAmI);
-                                break;
-                            case 13:
-                                Cen = new Vector2(19f, 23f) - new Vector2(6f, 7f);
-                                Dust.NewDust(Projectile.Center + Cen - BLantern[x].Size() / 2f, 0, 0, ModContent.DustType<Dusts.BloodPedal>());
-                                break;
-                            case 14:
-                                Cen = new Vector2(23f, 16f) - new Vector2(6f, 7f);
-                                Dust.NewDust(Projectile.Center + Cen - BLantern[x].Size() / 2f, 0, 0, ModContent.DustType<Dusts.BloodPedal>());
-                                Projectile.NewProjectile(null, Projectile.Center, new Vector2(0, Main.rand.NextFloat(12, 20f)).RotatedByRandom(6.283), ModContent.ProjectileType<LBloodEffect>(), 0, 0, Projectile.owner, Projectile.whoAmI);
-                                break;
-                            case 15:
-                                Cen = new Vector2(15f, 16f) - new Vector2(6f, 7f);
-                                Dust.NewDust(Projectile.Center + Cen - BLantern[x].Size() / 2f, 0, 0, ModContent.DustType<Dusts.BloodPedal>());
-                                break;
-                            default:
-                                break;
-                        }
+                        _coroutineManager.StartCoroutine(new Coroutine(DropPedal(x)));
                     }
                 }
             }
@@ -219,30 +130,68 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
                     }
                 }
             }
-            
+            _coroutineManager.Update();
         }
         public override bool PreDraw(ref Color lightColor)
         {
             return false;
         }
 
-        private IEnumerator<ICoroutineInstruction> Task()
+        private IEnumerator<ICoroutineInstruction> DropPedal(int num)
         {
-            for(int i = 0; i < 120; i++)
-            {
-                float r = (float)i / 120f * MathHelper.TwoPi;
-                yield return new AwaitForTask(Task1(r));
-            }
+            Vector2 Cen = PedalPos[num] - new Vector2(6f, 7f);
+            Dust.NewDust(Projectile.Center + Cen - BLantern[num].Size() / 2f, 0, 0, ModContent.DustType<Dusts.BloodPedal>());
+            Projectile.NewProjectile(null, Projectile.Center + Cen - BLantern[num].Size() / 2f, new Vector2(0, Main.rand.NextFloat(12, 20f)).RotatedByRandom(6.283), ModContent.ProjectileType<LBloodEffect>(), 0, 0, Projectile.owner, Projectile.whoAmI);
+            yield return new SkipThisFrame();
         }
 
-        private IEnumerator<ICoroutineInstruction> Task1(float r)
+        private IEnumerator<ICoroutineInstruction> GoldMeteor()
         {
-            for (int i = 0; i < 3; i++)
+            Col = 255;
+            Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, new Vector2(0, -1), ModContent.ProjectileType<LMeteor>(), 0, 0, Projectile.owner);//金色的核心
+            Gore.NewGore(Projectile.GetSource_Death(), Projectile.position, Vector2.Zero, ModContent.GoreType<Gores.BloodLanternBody>());
+            for (int h = 0; h < 11; h++)
             {
-                Dust.NewDustDirect(Projectile.Center + r.ToRotationVector2() * (64 + 40 * i), 1, 1,
-                    DustID.Torch + i, 0, 0, 100);
-                yield return new SkipThisFrame();
+                int f = Projectile.NewProjectile(null, Projectile.Center, new Vector2(0, Main.rand.NextFloat(9, 24f)).RotatedByRandom(6.283), ModContent.ProjectileType<LBloodEffectGra>(), 0, 0, Projectile.owner, Projectile.whoAmI);
+                Main.projectile[f].scale = Main.rand.NextFloat(0.75f, 1.25f);
+                Main.projectile[f].timeLeft = Main.rand.Next(80, 130);
             }
+            NoPedal[1] = true;
+            yield return new SkipThisFrame();
+        }
+        private IEnumerator<ICoroutineInstruction> SoundEffect()
+        {
+            if (Projectile.timeLeft == 600)
+            {
+                SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sources/Modules/MythModule/LanternMoon/Sounds/PowerBomb"), Projectile.Center);
+                if (Vl == -1)
+                {
+                    Vl = Main.musicVolume;
+                }
+            }
+            if (Main.gamePaused)
+            {
+                Main.musicVolume = Vl;
+            }
+            else
+            {
+                if (Main.audioSystem is LegacyAudioSystem system)
+                {
+                    if (Projectile.timeLeft >= 65)
+                    {
+                        Main.musicVolume *= 0.98f;
+                    }
+                    else
+                    {
+                        Main.musicVolume = Main.musicVolume * 0.96f + Vl * 0.04f;
+                        if (Projectile.timeLeft == 1)
+                        {
+                            Main.musicVolume = Vl;
+                        }
+                    }
+                }
+            }            
+            yield return new SkipThisFrame();
         }
     }
 }
