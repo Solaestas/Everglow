@@ -1,5 +1,6 @@
 ﻿using Terraria.Graphics.Effects;
 using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Modules.MythModule.LanternMoon.Skies;
 namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
 {
     class RainbowWave : ModProjectile
@@ -51,9 +52,14 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
             Texture2D RainbowTex = MythContent.QuickTexture("LanternMoon/Projectiles/Rainbow");
             if (Projectile.timeLeft > 6)
             {
+                LanternSky lanternSky = ModContent.GetInstance<LanternSky>();
                 if (!Filters.Scene["RainbowVague"].IsActive())
                 {
                     Filters.Scene.Activate("RainbowVague");
+                }
+                if(!SkyManager.Instance["LanternSky"].IsActive())
+                {
+                    SkyManager.Instance.Activate("LanternSky");
                 }
                 Vector2 ScreenPosTOShader = Projectile.Center - Main.screenPosition;
                 ScreenPosTOShader.X /= (float)(Main.screenWidth);

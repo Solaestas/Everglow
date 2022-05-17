@@ -1,5 +1,4 @@
 using ReLogic.Content;
-
 using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.Audio;
 namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
@@ -200,14 +199,15 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
                 if (!NoPedal[x] || x < 1)
                 {
                     Main.spriteBatch.Draw(BLantern[x].Value, Projectile.Center - Main.screenPosition + Cen - BLantern[x].Size() / 2f/*坐标校正*/, null, color, Rot, Cen, 1, SpriteEffects.None, 0);
+                    if (!NoPedal[x] && x == 1)
+                    {
+                        Vector2 Cen2 = new Vector2(19f, 19f);
+                        Texture2D Glow = MythContent.QuickTexture("LanternMoon/Projectiles/BloodLampFrame/BloodLamp_Glow");
+                        Main.spriteBatch.Draw(Glow, Projectile.Center - Main.screenPosition + Cen2 - Glow.Size() / 2f/*坐标校正*/, null, new Color(Col, Col, Col, 0), Projectile.rotation, Cen2, 1, SpriteEffects.None, 0);
+                    }
                 }
             }
-            if (!NoPedal[1])
-            {
-                Vector2 Cen2 = new Vector2(19f, 19f);
-                Texture2D Glow = MythContent.QuickTexture("LanternMoon/Projectiles/BloodLampFrame/BloodLamp_Glow");
-                Main.spriteBatch.Draw(Glow, Projectile.Center - Main.screenPosition + Cen2 - Glow.Size() / 2f/*坐标校正*/, null, new Color(Col, Col, Col, 0), Projectile.rotation, Cen2, 1, SpriteEffects.None, 0);
-            }
+            
         }
         public override bool PreDraw(ref Color lightColor)
         {
