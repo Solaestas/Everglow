@@ -59,8 +59,7 @@ namespace Everglow.Sources.Modules.MythModule.Common
             if (Main.LocalPlayer != null)
                 if (Main.LocalPlayer.gravDir == -1)
                 {
-                    float y = StarY;
-                    return new Vector2(StarX, Main.screenHeight - y);
+                    return new Vector2(StarX, Main.screenHeight - StarY);
                 }
             return new Vector2(StarX, StarY);
         }

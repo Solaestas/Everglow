@@ -36,9 +36,9 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
         //值类型就不必在clone里重新初始化了
         private float PearlRot = 0;
         private float PearlOmega = 0;
-        private int Col = 100;
+        private int Col = 0;
         private float Vl = -1;
-
+        private int timer = 0;
         private bool volumeRecover = false;
         public override ModProjectile Clone(Projectile projectile)
         {
@@ -69,7 +69,8 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
         private Vector2[] PedalPos;
         public override void AI()
         {
-            if(Projectile.localAI[0] == 0)
+            timer++;
+            if (Projectile.localAI[0] == 0)
             {
                 _coroutineManager.StartCoroutine(new Coroutine(Task()));
                 Projectile.localAI[0] = 1; 
@@ -80,7 +81,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
             Projectile.velocity *= 0.9f * Projectile.timeLeft / 600f;
             if (Projectile.velocity.Length() > 0.3f)
             {
-                Projectile.velocity.Y -= 0.25f * Projectile.timeLeft / 600f;
+                Projectile.velocity.Y -= 0.15f * Projectile.timeLeft / 600f;
             }
 
             if (volumeRecover)
@@ -95,8 +96,8 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
             {
                 Main.musicVolume *= 0.98f;
             }
-
-            Col = Math.Clamp(Col + Main.rand.Next(-45, 55), 0, 255);
+            double x0 = timer * 0.0156923;
+            Col = (int)(Math.Clamp(Math.Sin(x0 * x0) + Math.Log(x0 + 1), 0, 2) / 2d * 255);
         }
 
         public override void PostDraw(Color lightColor)
