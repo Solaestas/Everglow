@@ -23,11 +23,12 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
         public override ModProjectile Clone(Projectile projectile)
         {
             var clone = base.Clone(projectile) as LMeteor;
-            ka = 0;
-            AIMpos = Vector2.Zero;
-            TrueL = 1;
-            Stre = 0.85f;
-            Sca = 0;
+            //优化从小事做起（bushi）
+            //ka = 0;
+            //AIMpos = Vector2.Zero;
+            //TrueL = 1;
+            //Stre = 0.85f;
+            //Sca = 0;
             return clone;
         }
         public override void AI()

@@ -23,7 +23,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
         public override ModProjectile Clone(Projectile projectile)
         {
             var clone = base.Clone(projectile) as RainbowWave;
-            AimProj = -1;
+            //AimProj = -1;
             return clone;
         }
         public override void AI()
