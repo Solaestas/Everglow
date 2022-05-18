@@ -7,15 +7,15 @@ namespace Everglow.Sources.Modules.Food.Buffs
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("MilkCarton Buff");
-			Description.SetDefault("Grants +4 defense.");
+			DisplayName.SetDefault("BBQRibsBuff");
+			Description.SetDefault("滋阴补血 \n 加50血量上限 ");
 			Main.buffNoTimeDisplay[Type] = false;
 			Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
 		}
 
 		public override void Update(Player player, ref int buffIndex)
 		{
-			player.statDefense += 4; // 加4防御
+			player.statLifeMax2  += 50 ; // 加50血量上限
 		}
 	}
 }
