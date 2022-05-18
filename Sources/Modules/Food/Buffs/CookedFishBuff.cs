@@ -7,15 +7,16 @@ namespace Everglow.Sources.Modules.Food.Buffs
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("MilkCarton Buff");
-			Description.SetDefault("Grants +4 defense.");
+			DisplayName.SetDefault("CookedFishBuff");
+			Description.SetDefault("益气健脾 \n 加0魔力上限,5%魔法暴击率");
 			Main.buffNoTimeDisplay[Type] = false;
 			Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
 		}
 
 		public override void Update(Player player, ref int buffIndex)
 		{
-			player.statDefense += 4; // 加4防御
+			player.GetCritChance (DamageClass.Magic) += 0.05f;//加5%魔法暴击率
+			player.statManaMax2 += 40;//加40魔力上限
 		}
 	}
 }
