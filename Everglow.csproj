@@ -6,6 +6,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <LangVersion>latest</LangVersion>
+    <BaseOutputPath></BaseOutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Everglow-UnitTest\**" />
@@ -22,4 +23,7 @@
     <Folder Include="Documents\" />
     <Folder Include="Resources\Tools\" />
   </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /y /d  &quot;$(OutDir)Everglow.dll&quot; &quot;$(ProjectDir)&quot;" />
+  </Target>
 </Project>
