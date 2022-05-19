@@ -1,4 +1,4 @@
-﻿using Everglow.Sources.Commons.ModuleSystem;
+﻿using Everglow.Sources.Commons.Core.ModuleSystem;
 using ReLogic.Content;
 using System.Security.Cryptography;
 using System.Threading.Tasks;

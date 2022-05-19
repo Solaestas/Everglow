@@ -1,4 +1,4 @@
-namespace Everglow.Sources.Commons.Network.PacketHandle
+namespace Everglow.Sources.Commons.Core.Network.PacketHandle
 {
     /// <summary>
     /// 接收和处理某个类型的封包的逻辑
