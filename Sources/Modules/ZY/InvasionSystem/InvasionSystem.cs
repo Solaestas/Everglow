@@ -1,4 +1,4 @@
-﻿using Everglow.Sources.Commons.ModuleSystem;
+﻿using Everglow.Sources.Commons.Core.ModuleSystem;
 
 namespace Everglow.Sources.Modules.ZY.InvasionSystem
 {

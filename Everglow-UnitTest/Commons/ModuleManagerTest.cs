@@ -1,5 +1,4 @@
 using Everglow.Sources.Commons.Core.ModuleSystem;
-using Everglow.Sources.Commons.ModuleSystem;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
