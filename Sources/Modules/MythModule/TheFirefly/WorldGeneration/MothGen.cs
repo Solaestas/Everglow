@@ -6,6 +6,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         {
             CanSoilC = false;
         }
+        public override void PostWorldGen()
+        {
+            BuildMothCave();
+        }
         public bool CanSoilC = false;
         public void BuildMothCave()
         {
