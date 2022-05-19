@@ -15,7 +15,7 @@ namespace Everglow.Sources.Modules.Food.Buffs
 
 		public override void Update(Player player, ref int buffIndex)
 		{
-			player.aggro -= 20;//仇恨值减400
+			player.aggro -= 400;//仇恨值减400
 		}
 	}
 }
