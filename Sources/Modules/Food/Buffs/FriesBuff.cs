@@ -8,7 +8,7 @@ namespace Everglow.Sources.Modules.Food.Buffs
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("FriesBuff");
-			Description.SetDefault("高油高盐 \n ");
+			Description.SetDefault("高油高盐 \n 加4防御，4%暴击");
 			Main.buffNoTimeDisplay[Type] = false;
 			Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
 		}

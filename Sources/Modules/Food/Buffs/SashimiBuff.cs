@@ -7,8 +7,8 @@ namespace Everglow.Sources.Modules.Food.Buffs
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("MilkCarton Buff");
-			Description.SetDefault("Grants +4 defense.");
+			DisplayName.SetDefault("SashimiBuff");
+			Description.SetDefault("j寄生虫！\n ");
 			Main.buffNoTimeDisplay[Type] = false;
 			Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
 		}

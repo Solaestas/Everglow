@@ -7,15 +7,15 @@ namespace Everglow.Sources.Modules.Food.Buffs
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("MilkCarton Buff");
-			Description.SetDefault("Grants +4 defense.");
+			DisplayName.SetDefault("SugarCookieBuff");
+			Description.SetDefault("养胃滋润 \n 加10%远程伤害");
 			Main.buffNoTimeDisplay[Type] = false;
 			Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
 		}
 
 		public override void Update(Player player, ref int buffIndex)
 		{
-			player.statDefense += 4; // 加4防御
+			player.GetDamage(DamageClass.Ranged).Base += 0.10f; // 加10%伤害
 		}
 	}
 }

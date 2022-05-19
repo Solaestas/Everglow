@@ -15,7 +15,8 @@ namespace Everglow.Sources.Modules.Food.Buffs
 
 		public override void Update(Player player, ref int buffIndex)
 		{
-			player.statDefense += 4; // 加4防御
+			//player.GetWingStats().FlyTime += 0.1f;
+			//player.wingAccRunSpeed *= 1.1f;
 		}
 	}
 }

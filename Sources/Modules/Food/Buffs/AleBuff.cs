@@ -7,7 +7,7 @@ namespace Everglow.Sources.Modules.Food.Buffs
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Ale Buff");
+			DisplayName.SetDefault("AleBuff");
 			Description.SetDefault("酿跄 \n 防御减8，伤害、暴击率和近战攻速各增加8%");
 			Main.buffNoTimeDisplay[Type] = false;
 			Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff

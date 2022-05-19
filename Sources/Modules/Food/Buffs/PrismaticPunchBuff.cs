@@ -7,15 +7,17 @@ namespace Everglow.Sources.Modules.Food.Buffs
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("MilkCarton Buff");
-			Description.SetDefault("Grants +4 defense.");
+			DisplayName.SetDefault("PrismaticPunchBuff");
+			Description.SetDefault("高雅兴致 \n 加400仇恨值,1召唤栏,减4防御 ");
 			Main.buffNoTimeDisplay[Type] = false;
 			Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
 		}
 
 		public override void Update(Player player, ref int buffIndex)
 		{
-			player.statDefense += 4; // 加4防御
+			player.maxMinions += 1; //加1召唤栏
+			player.aggro += 400; //加400仇恨值
+			player.statDefense -= 4 ; // 减4防御
 		}
 	}
 }
