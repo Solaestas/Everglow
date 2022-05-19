@@ -1,4 +1,6 @@
-﻿namespace Everglow.Sources.Commons.Core
+﻿using Everglow.Sources.Commons.Core.Profiler.Fody;
+
+namespace Everglow.Sources.Commons.Core
 {
     /// <summary>
     /// 对一个方法的管理，可以用来控制钩子是否启用
@@ -147,6 +149,8 @@
             }
             return null;
         }
+
+        [ProfilerMeasure]
         public override void Load()
         {
             foreach (var op in validOpportunity)

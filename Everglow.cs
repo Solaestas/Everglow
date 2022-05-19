@@ -10,6 +10,8 @@ global using Terraria;
 global using Terraria.ID;
 global using Terraria.ModLoader;
 using Everglow.Sources.Commons.Core.Network.PacketHandle;
+using Everglow.Sources.Commons.Core.Profiler;
+using Everglow.Sources.Commons.Core.Profiler.Fody;
 using Everglow.Sources.Commons.ModuleSystem;
 
 namespace Everglow
@@ -40,18 +42,30 @@ namespace Everglow
             get { return Instance.m_packetResolver; }
         }
 
+        /// <summary>
+        /// 获取 ProfilerManager 实例
+        /// </summary>
+        internal static ProfilerManager ProfilerManager
+        {
+            get
+            {
+                return Instance.m_profilerManager;
+            }
+        }
+
         private static Everglow m_instance;
 
         private ModuleManager m_moduleManager = new ModuleManager();
         private PacketResolver m_packetResolver = new PacketResolver();
+        private ProfilerManager m_profilerManager = new ProfilerManager();
 
         public Everglow()
         {
+            m_instance = this;
         }
 
         public override void Load()
         {
-            m_instance = this;
             m_moduleManager.LoadAllModules();
         }
 
@@ -59,11 +73,14 @@ namespace Everglow
         {
             m_moduleManager.UnloadAllModules();
 
+            m_profilerManager.Clear();
+
             m_packetResolver = null;
             m_moduleManager = null;
             m_instance = null;
         }
 
+        [ProfilerMeasure]
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {
             m_packetResolver.Resolve(reader, whoAmI);

@@ -1,3 +1,4 @@
+using Everglow.Sources.Commons.Core.Profiler.Fody;
 using Everglow.Sources.Commons.Function.FeatureFlags;
 
 namespace Everglow.Sources.Commons.Core.Network.PacketHandle
@@ -23,6 +24,7 @@ namespace Everglow.Sources.Commons.Core.Network.PacketHandle
             RegisterPackets();
         }
 
+        [ProfilerMeasure]
         /// <summary>
         /// 发送一个封包数据的实例，并且指定发送方式
         /// </summary>

@@ -7,6 +7,8 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <LangVersion>latest</LangVersion>
     <BaseOutputPath></BaseOutputPath>
+	<DisableFody Condition="'$(Configuration)' != 'Debug'">true</DisableFody>
+	<Configurations>Debug;Release;DebugWithoutFody</Configurations>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Everglow-UnitTest\**" />
@@ -17,11 +19,13 @@
     <None Remove="Sources\Tools\**" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="MethodBoundaryAspect.Fody" Version="2.0.145" />
     <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Documents\" />
     <Folder Include="Resources\Tools\" />
+    <Folder Include="lib\" />
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="xcopy /y /d  &quot;$(OutDir)Everglow.dll&quot; &quot;$(ProjectDir)&quot;" />
