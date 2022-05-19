@@ -1,4 +1,5 @@
 ﻿using Everglow.Sources.Commons.Core.ModuleSystem;
+using Everglow.Sources.Commons.Core.Profiler.Fody;
 
 namespace Everglow.Sources.Commons.ModuleSystem
 {
@@ -9,6 +10,7 @@ namespace Everglow.Sources.Commons.ModuleSystem
         private List<IModule> modules = new List<IModule>();
 
 
+        [ProfilerMeasure]
         /// <summary>
         /// 从程序集的类型中加载所有Module，并且按照其加载依赖关系排序
         /// </summary>
@@ -138,6 +140,7 @@ namespace Everglow.Sources.Commons.ModuleSystem
             return true;
         }
 
+        [ProfilerMeasure]
         /// <summary>
         /// 按照依赖逆序卸载所有模块
         /// </summary>

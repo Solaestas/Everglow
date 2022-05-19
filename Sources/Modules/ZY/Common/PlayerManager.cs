@@ -4,6 +4,7 @@ namespace Everglow.Sources.Modules.ZY.Common
 {
     internal class PlayerManager : ModPlayer
     {
+        [ProfilerMeasure]
         public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
         {
             if (newPlayer)
