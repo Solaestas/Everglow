@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Everglow.Sources.Commons.Core.Profiler
 {
+    /// <summary>
+    /// 用于管理性能分析数据的类
+    /// </summary>
     internal class ProfilerManager
     {
         private Dictionary<string, UnitInfo> m_unitInfoTable;
@@ -15,6 +18,11 @@ namespace Everglow.Sources.Commons.Core.Profiler
             m_unitInfoTable = new Dictionary<string, UnitInfo>();
         }
 
+        /// <summary>
+        /// 向当前分析数据里添加一个条目
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="timeInMs"></param>
         public void AddEntry(string name, double timeInMs)
         {
             if (m_unitInfoTable.ContainsKey(name))

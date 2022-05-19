@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Everglow.Sources.Commons.Core.Profiler.Fody
 {
+    /// <summary>
+    /// 用于将一个函数标记为可以被分析，在Profiler模式下该函数的调用信息会被记录
+    /// </summary>
     internal class ProfilerMeasureAttribute : OnMethodBoundaryAspect
     {
         private Stopwatch _stopwatch;
