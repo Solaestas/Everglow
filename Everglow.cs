@@ -12,7 +12,7 @@ global using Terraria.ModLoader;
 using Everglow.Sources.Commons.Core.Network.PacketHandle;
 using Everglow.Sources.Commons.Core.Profiler;
 using Everglow.Sources.Commons.Core.Profiler.Fody;
-using Everglow.Sources.Commons.ModuleSystem;
+using Everglow.Sources.Commons.Core.ModuleSystem;
 
 namespace Everglow
 {

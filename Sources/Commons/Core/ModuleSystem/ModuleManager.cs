@@ -1,7 +1,7 @@
 ﻿using Everglow.Sources.Commons.Core.ModuleSystem;
 using Everglow.Sources.Commons.Core.Profiler.Fody;
 
-namespace Everglow.Sources.Commons.ModuleSystem
+namespace Everglow.Sources.Commons.Core.ModuleSystem
 {
     [ProfilerMeasure]
     /// <summary>

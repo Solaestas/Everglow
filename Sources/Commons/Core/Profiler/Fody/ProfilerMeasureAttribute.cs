@@ -30,7 +30,7 @@ namespace Everglow.Sources.Commons.Core.Profiler.Fody
         {
             if (Everglow.Instance == null || Everglow.ProfilerManager == null)
             {
-                return;
+                return; 
             }
             _stopwatch.Stop();
             var fullName = $"{args.Method.DeclaringType.FullName}:{args.Method.Name}";
