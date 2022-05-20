@@ -4,4 +4,4 @@ version = 0.1
 includePDB = true
 noCompile = true
 dllReferences = MethodBoundaryAspect
-buildIgnore = Everglow-UnitTest/*, Sources/Tools/*
+buildIgnore = Everglow-UnitTest/*, Sources/Tools/*, Documents/*
