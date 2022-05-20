@@ -15,7 +15,7 @@ namespace Everglow.Sources.Modules.Food.Buffs
 
 		public override void Update(Player player, ref int buffIndex)
 		{
-			player.manaCost *= 75f;//减25%魔力消耗
+			player.manaCost *= 0.75f;//减25%魔力消耗
 		}
 	}
 }

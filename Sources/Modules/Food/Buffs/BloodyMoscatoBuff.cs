@@ -8,7 +8,7 @@ namespace Everglow.Sources.Modules.Food.Buffs
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("BloodyMoscatoBuff");
-			Description.SetDefault("血色 \n 迅速回血");
+			Description.SetDefault("血色 \n 短时间内迅速回血");
 			Main.buffNoTimeDisplay[Type] = false;
 			Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
 		}
