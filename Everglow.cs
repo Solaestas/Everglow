@@ -55,15 +55,20 @@ namespace Everglow
 
         private static Everglow m_instance;
 
-        private ModuleManager m_moduleManager = new ModuleManager();
-        private PacketResolver m_packetResolver = new PacketResolver();
-        private ProfilerManager m_profilerManager = new ProfilerManager();
+        private ModuleManager m_moduleManager;
+        private PacketResolver m_packetResolver;
+        private ProfilerManager m_profilerManager;
 
         public Everglow()
         {
             m_instance = this;
+            // 必须手动确定顺序
+            m_profilerManager = new ProfilerManager();
+            m_moduleManager = new ModuleManager();
+            m_packetResolver = new PacketResolver();
         }
 
+        [ProfilerMeasure]
         public override void Load()
         {
             m_moduleManager.LoadAllModules();
@@ -80,7 +85,6 @@ namespace Everglow
             m_instance = null;
         }
 
-        [ProfilerMeasure]
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {
             m_packetResolver.Resolve(reader, whoAmI);

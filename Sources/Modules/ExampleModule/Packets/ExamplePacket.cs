@@ -3,6 +3,7 @@ using Everglow.Sources.Commons.Core.Profiler.Fody;
 
 namespace Everglow.Sources.Modules.ExampleModule.Packets
 {
+    [ProfilerMeasure]
     public class ExamplePacket : IPacket
     {
         public int TestValue { get; set; }
@@ -11,23 +12,23 @@ namespace Everglow.Sources.Modules.ExampleModule.Packets
 
         public ExamplePacket(int x) { TestValue = x; }
 
-        [ProfilerMeasure]
+
         public void Receive(BinaryReader reader, int whoAmI)
         {
             TestValue = reader.ReadInt32();
         }
 
-        [ProfilerMeasure]
         public void Send(BinaryWriter writer)
         {
             writer.Write(TestValue);
         }
     }
 
+    [ProfilerMeasure]
     [HandlePacket(typeof(ExamplePacket))]
     public class TestPacketHandler : IPacketHandler
     {
-        [ProfilerMeasure]
+
         public void Handle(IPacket packet, int whoAmI)
         {
             // 这里注意最好不要直接改 TestPacket 的内容，因为这样可能会影响后续的handler

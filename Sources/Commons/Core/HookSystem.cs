@@ -44,6 +44,8 @@ namespace Everglow.Sources.Commons.Core
         PostExitWorld_Single,
         ResolutionChanged
     }
+
+    [ProfilerMeasure]
     /// <summary>
     /// 钩子统一管理，不用继承一大堆ModSystem或者加很多的On，一些常见的加载时刻都写了
     /// </summary>
@@ -150,7 +152,6 @@ namespace Everglow.Sources.Commons.Core
             return null;
         }
 
-        [ProfilerMeasure]
         public override void Load()
         {
             foreach (var op in validOpportunity)
@@ -198,14 +199,12 @@ namespace Everglow.Sources.Commons.Core
             }
         }
 
-        [ProfilerMeasure]
         internal void WorldGen_serverLoadWorldCallBack(On.Terraria.WorldGen.orig_serverLoadWorldCallBack orig)
         {
             orig();
             Invoke(CallOpportunity.PostEnterWorld_Server);
         }
 
-        [ProfilerMeasure]
         internal void Main_DrawMiscMapIcons(On.Terraria.Main.orig_DrawMiscMapIcons orig, Main self, SpriteBatch spriteBatch, Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale, float drawScale, ref string mouseTextString)
         {
             orig(self, spriteBatch, mapTopLeft, mapX2Y2AndOff, mapRect, mapScale, drawScale, ref mouseTextString);
@@ -213,71 +212,60 @@ namespace Everglow.Sources.Commons.Core
             Invoke(CallOpportunity.PostDrawMapIcons);
         }
 
-        [ProfilerMeasure]
         public override void PostUpdateEverything()
         {
             Invoke(CallOpportunity.PostUpdateEverything);
             UpdateTimer++;
         }
 
-        [ProfilerMeasure]
         public override void PostUpdateNPCs()
         {
             Invoke(CallOpportunity.PostUpdateNPCs);
         }
 
-        [ProfilerMeasure]
         public override void PostUpdateProjectiles()
         {
             Invoke(CallOpportunity.PostUpdateProjectiles);
         }
 
-        [ProfilerMeasure]
         public override void PostUpdateDusts()
         {
             Invoke(CallOpportunity.PostUpdateDusts);
         }
 
-        [ProfilerMeasure]
         public override void PostUpdatePlayers()
         {
             Invoke(CallOpportunity.PostUpdatePlayers);
         }
 
-        [ProfilerMeasure]
         public override void PostDrawTiles()
         {
             Invoke(CallOpportunity.PostDrawTiles);
         }
 
-        [ProfilerMeasure]
         internal void WorldGen_SaveAndQuit(On.Terraria.WorldGen.orig_SaveAndQuit orig, Action callback)
         {
             orig(callback);
             Invoke(CallOpportunity.PostExitWorld_Single);
         }
 
-        [ProfilerMeasure]
         internal void WorldGen_playWorld(On.Terraria.WorldGen.orig_playWorld orig)
         {
             orig();
             Invoke(CallOpportunity.PostEnterWorld_Single);
         }
 
-        [ProfilerMeasure]
         internal void Main_OnResolutionChanged(Vector2 obj)
         {
             Invoke(CallOpportunity.ResolutionChanged);
         }
 
-        [ProfilerMeasure]
         internal void LegacyPlayerRenderer_DrawPlayers(On.Terraria.Graphics.Renderers.LegacyPlayerRenderer.orig_DrawPlayers orig, Terraria.Graphics.Renderers.LegacyPlayerRenderer self, Terraria.Graphics.Camera camera, IEnumerable<Player> players)
         {
             orig.Invoke(self, camera, players);
             Invoke(CallOpportunity.PostDrawPlayers);
         }
 
-        [ProfilerMeasure]
         internal void Main_DrawNPCs(On.Terraria.Main.orig_DrawNPCs orig, Main self, bool behindTiles)
         {
             orig.Invoke(self, behindTiles);
@@ -287,21 +275,18 @@ namespace Everglow.Sources.Commons.Core
             }
         }
 
-        [ProfilerMeasure]
         internal void Main_DrawDust(On.Terraria.Main.orig_DrawDust orig, Main self)
         {
             orig.Invoke(self);
             Invoke(CallOpportunity.PostDrawDusts);
         }
 
-        [ProfilerMeasure]
         internal void Main_DrawProjectiles(On.Terraria.Main.orig_DrawProjectiles orig, Main self)
         {
             orig.Invoke(self);
             Invoke(CallOpportunity.PostDrawProjectiles);
         }
 
-        [ProfilerMeasure]
         private void Main_DoDraw(On.Terraria.Main.orig_DoDraw orig, Main self, GameTime gameTime)
         {
             orig(self, gameTime);
@@ -309,7 +294,6 @@ namespace Everglow.Sources.Commons.Core
             DrawTimer++;
         }
 
-        [ProfilerMeasure]
         internal void EndCapture(On.Terraria.Graphics.Effects.FilterManager.orig_EndCapture orig, Terraria.Graphics.Effects.FilterManager self, RenderTarget2D finalTexture, RenderTarget2D screenTarget1, RenderTarget2D screenTarget2, Color clearColor)
         {
             orig(self, finalTexture, screenTarget1, screenTarget2, clearColor);

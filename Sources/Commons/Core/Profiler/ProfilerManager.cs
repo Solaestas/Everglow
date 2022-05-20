@@ -59,7 +59,7 @@ namespace Everglow.Sources.Commons.Core.Profiler
 
             foreach (var unitInfo in entries)
             {
-                Console.WriteLine($"{unitInfo.Name}, Time = {unitInfo.TimeInMs}, Count = {unitInfo.Count}");
+                Console.WriteLine($"{unitInfo.Name}, Time = {unitInfo.TimeInMs:F2}ms, Count = {unitInfo.Count}");
             }
         }
     }
