@@ -1,20 +1,22 @@
-﻿namespace Everglow.Sources.Modules.Food
+﻿using Everglow.Sources.Modules.Food.DataStructures;
+
+namespace Everglow.Sources.Modules.Food
 {
     public class FoodInfo
     {
-        public Item_id Satiety
+        public int Satiety
         {
             get;
             set;
         }
 
-        public Buff_id BuffType
+        public int BuffType
         {
             get;
             set;
         }
 
-        public int BuffTime
+        public FoodDuration BuffTime
         {
             get;
             set;

@@ -82,7 +82,7 @@
         public override bool CanConsumeAmmo(Item weapon, Item ammo)
         {
 
-            if (BananaBuff && Main.rand.Next(5) == 0)
+            if (BananaBuff && Main.rand.NextBool(5))
             {
                 return false;
             }
@@ -90,7 +90,7 @@
             {
                 return false;
             }
-            if (BananaSplitBuff && Main.rand.Next(3) == 0)
+            if (BananaSplitBuff && Main.rand.NextBool(3))
             {
                 return false;
             }
@@ -99,7 +99,7 @@
 
         public override void Hurt(bool pvp, bool quiet, double damage, int hitDirection, bool crit)
         {
-            if (Player.whoAmI == Main.myPlayer && SmoothieofDarknessBuff && Main.rand.Next(5) != 0)
+            if (Player.whoAmI == Main.myPlayer && SmoothieofDarknessBuff && !Main.rand.NextBool(5))
             {
                 Player.NinjaDodge();
             }

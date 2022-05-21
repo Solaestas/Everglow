@@ -8,13 +8,16 @@ namespace Everglow.Sources.Modules.Food
         {
             Player player = Main.player[projectile.owner];
             FoodModPlayer FoodModPlayer = player.GetModPlayer<FoodModPlayer>();
-            if (FoodModPlayer.StarfruitBuff)
+
+            if (source is EntitySource_ItemUse_WithAmmo)
             {
-                if (source is EntitySource_ItemUse_WithAmmo)
+                var sourceAmmo = source as EntitySource_ItemUse_WithAmmo;
+                if (FoodModPlayer.StarfruitBuff)
                 {
                     var newSource = projectile.GetSource_FromThis();
                     var velocity = projectile.velocity.RotatedBy(MathHelper.ToRadians(180f));
-                    Projectile.NewProjectile(newSource, projectile.position, velocity, projectile.type, projectile.damage, projectile.knockBack, projectile.owner);
+                    Projectile.NewProjectile(newSource, projectile.position, velocity, projectile.type, 
+                        projectile.damage, projectile.knockBack, projectile.owner);
                 }
             }
         }
