@@ -13,7 +13,10 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
     internal abstract class World : IModule
     {
         public WorldFileData data;
-        public abstract string WorldName { get; }
+        public abstract string WorldName
+        {
+            get;
+        }
         /// <summary>
         /// Code为存档version的高位
         /// </summary>
@@ -40,7 +43,10 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
         /// <summary>
         /// Version为存档version的低位
         /// </summary>
-        public abstract uint Version { get; }
+        public abstract uint Version
+        {
+            get;
+        }
         public virtual Point DefaultSpawnPoint => new Point(data.WorldSizeX / 2, data.WorldSizeY / 2);
         public Point size;
         public bool SinglePlay => data is not null;

@@ -1,4 +1,3 @@
-using Everglow.Sources.Commons.ModuleSystem;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
@@ -18,16 +17,24 @@ namespace Everglow.Sources.Commons.Core.ModuleSystem.Tests
         {
             public string Name => "ModuleA";
             public string Description => "";
-            public void Load() { }
-            public void Unload() { }
+            public void Load()
+            {
+            }
+            public void Unload()
+            {
+            }
         }
 
         private class ModuleB : IModule
         {
             public string Name => "ModuleB";
             public string Description => "";
-            public void Load() { }
-            public void Unload() { }
+            public void Load()
+            {
+            }
+            public void Unload()
+            {
+            }
         }
 
         [ModuleDependency(typeof(ModuleA), typeof(ModuleB))]
@@ -35,8 +42,12 @@ namespace Everglow.Sources.Commons.Core.ModuleSystem.Tests
         {
             public string Name => "ModuleC";
             public string Description => "";
-            public void Load() { }
-            public void Unload() { }
+            public void Load()
+            {
+            }
+            public void Unload()
+            {
+            }
         }
 
         [TestMethod]

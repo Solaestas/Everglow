@@ -9,8 +9,10 @@ global using System.Reflection;
 global using Terraria;
 global using Terraria.ID;
 global using Terraria.ModLoader;
-using Everglow.Sources.Commons.Core.Network.PacketHandle;
 using Everglow.Sources.Commons.Core.ModuleSystem;
+using Everglow.Sources.Commons.Core.Network.PacketHandle;
+using Everglow.Sources.Commons.Core.Profiler;
+using Everglow.Sources.Commons.Core.Profiler.Fody;
 
 namespace Everglow
 {
@@ -21,7 +23,10 @@ namespace Everglow
         /// </summary>
         public static Everglow Instance
         {
-            get { return m_instance; }
+            get
+            {
+                return m_instance;
+            }
         }
 
         /// <summary>
@@ -29,7 +34,10 @@ namespace Everglow
         /// </summary>
         public static ModuleManager ModuleManager
         {
-            get { return Instance.m_moduleManager; }
+            get
+            {
+                return Instance.m_moduleManager;
+            }
         }
 
         /// <summary>
@@ -37,27 +45,49 @@ namespace Everglow
         /// </summary>
         public static PacketResolver PacketResolver
         {
-            get { return Instance.m_packetResolver; }
+            get
+            {
+                return Instance.m_packetResolver;
+            }
+        }
+
+        /// <summary>
+        /// 获取 ProfilerManager 实例
+        /// </summary>
+        internal static ProfilerManager ProfilerManager
+        {
+            get
+            {
+                return Instance.m_profilerManager;
+            }
         }
 
         private static Everglow m_instance;
 
-        private ModuleManager m_moduleManager = new ModuleManager();
-        private PacketResolver m_packetResolver = new PacketResolver();
+        private ModuleManager m_moduleManager;
+        private PacketResolver m_packetResolver;
+        private ProfilerManager m_profilerManager;
 
         public Everglow()
         {
+            m_instance = this;
+            // 必须手动确定顺序
+            m_profilerManager = new ProfilerManager();
+            m_moduleManager = new ModuleManager();
+            m_packetResolver = new PacketResolver();
         }
 
+        [ProfilerMeasure]
         public override void Load()
         {
-            m_instance = this;
             m_moduleManager.LoadAllModules();
         }
 
         public override void Unload()
         {
             m_moduleManager.UnloadAllModules();
+
+            m_profilerManager.Clear();
 
             m_packetResolver = null;
             m_moduleManager = null;

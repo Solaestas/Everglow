@@ -98,7 +98,7 @@ git fetch origin <分支名称>
 ```
 在 VS 里是这个功能
 
-![提交PR](Images/GIT_FETCH.png)
+![提取分支](Images/GIT_FETCH.png)
 
 或者用
 ```

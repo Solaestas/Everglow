@@ -1,11 +1,16 @@
-﻿namespace Everglow.Sources.Commons.Core.ModuleSystem
+﻿using Everglow.Sources.Commons.Core.Profiler.Fody;
+
+namespace Everglow.Sources.Commons.Core.ModuleSystem
 {
+    [ProfilerMeasure]
+    /// <summary>
+    /// 用于管理模块加载、卸载的类
+    /// </summary>
     public class ModuleManager
     {
         private Dictionary<Type, IModule> modulesByType = new Dictionary<Type, IModule>();
         private Dictionary<string, IModule> modulesByName = new Dictionary<string, IModule>();
         private List<IModule> modules = new List<IModule>();
-
 
         /// <summary>
         /// 从程序集的类型中加载所有Module，并且按照其加载依赖关系排序
