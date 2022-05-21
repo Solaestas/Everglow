@@ -1,8 +1,14 @@
+using Everglow.Sources.Commons.Core.Profiler.Fody;
 using Everglow.Sources.Commons.Function.FeatureFlags;
 
 namespace Everglow.Sources.Commons.Core.Network.PacketHandle
 {
     using Packet_Id = Int32;
+
+    [ProfilerMeasure]
+    /// <summary>
+    /// 用于管理封包发送、接收的类
+    /// </summary>
     public class PacketResolver
     {
         private Dictionary<Packet_Id, List<IPacketHandler>> m_packetHandlers;
