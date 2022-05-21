@@ -1,15 +1,18 @@
-﻿namespace Everglow.Sources.Commons.Core
+﻿using Everglow.Sources.Commons.Core.Profiler.Fody;
+
+namespace Everglow.Sources.Commons.Core
 {
     /// <summary>
     /// 对一个方法的管理，可以用来控制钩子是否启用
-    /// Debug暂时用于异常处理，以后可能会改成调用专门的方法来解决
     /// </summary>
     public class ActionHandler
     {
         internal Action action;
-        public string Name { get; internal set; }
+        public string Name
+        {
+            get; internal set;
+        }
         public bool Enable { get; set; } = true;
-        public bool Debug { get; set; } = false;
         public ActionHandler(Action action)
         {
             this.action = action;
@@ -39,10 +42,13 @@
         PostUpdatePlayers,
         PostUpdateNPCs,
         PostUpdateDusts,
-        LoadWorlds,
-        UnloadWorlds,
+        PostEnterWorld_Single,
+        PostEnterWorld_Server,
+        PostExitWorld_Single,
         ResolutionChanged
     }
+
+    [ProfilerMeasure]
     /// <summary>
     /// 钩子统一管理，不用继承一大堆ModSystem或者加很多的On，一些常见的加载时刻都写了
     /// </summary>
@@ -65,15 +71,19 @@
             CallOpportunity.PostUpdateNPCs,
             CallOpportunity.PostUpdateDusts,
             //Misc
-            CallOpportunity.LoadWorlds,
-            CallOpportunity.UnloadWorlds,
+            CallOpportunity.PostEnterWorld_Single,
+            CallOpportunity.PostExitWorld_Single,
+            CallOpportunity.PostEnterWorld_Server,
             CallOpportunity.ResolutionChanged
         };
         internal Dictionary<CallOpportunity, List<ActionHandler>> methods = new Dictionary<CallOpportunity, List<ActionHandler>>();
         /// <summary>
         /// 现在存在的问题就是，这里的method都是无参数的Action，但是如DrawMapIcon这样的方法就需要传参了，只好用这种这种定义字段的方法
         /// </summary>
-        public (Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale) MapIconInfomation { get; internal set; }
+        public (Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale) MapIconInfomation
+        {
+            get; internal set;
+        }
         /// <summary>
         /// 更新的计时器，PostUpateEverything后加一
         /// </summary>
@@ -147,6 +157,7 @@
             }
             return null;
         }
+
         public override void Load()
         {
             foreach (var op in validOpportunity)
@@ -158,11 +169,13 @@
             On.Terraria.Main.DrawNPCs += Main_DrawNPCs;
             On.Terraria.Graphics.Renderers.LegacyPlayerRenderer.DrawPlayers += LegacyPlayerRenderer_DrawPlayers;
             On.Terraria.Main.DoDraw += Main_DoDraw;
-            On.Terraria.Main.LoadWorlds += Main_LoadWorlds;
+            On.Terraria.WorldGen.playWorld += WorldGen_playWorld;
             On.Terraria.WorldGen.SaveAndQuit += WorldGen_SaveAndQuit;
             On.Terraria.Main.DrawMiscMapIcons += Main_DrawMiscMapIcons;
+            On.Terraria.WorldGen.serverLoadWorldCallBack += WorldGen_serverLoadWorldCallBack;
             Main.OnResolutionChanged += Main_OnResolutionChanged;
         }
+
         public override void Unload()
         {
             methods = null;
@@ -182,7 +195,7 @@
                     {
                         Everglow.Instance.Logger.Error($"{handler.Name} 抛出了异常 {ex}");
                         handler.Enable = false;
-                        if (handler.Debug)
+                        if (Function.FeatureFlags.EverglowConfig.DebugMode)
                         {
                             //自动暂停的，方便监视
                             Debug.Assert(false);
@@ -191,56 +204,74 @@
                 }
             }
         }
+
+        internal void WorldGen_serverLoadWorldCallBack(On.Terraria.WorldGen.orig_serverLoadWorldCallBack orig)
+        {
+            orig();
+            Invoke(CallOpportunity.PostEnterWorld_Server);
+        }
+
         internal void Main_DrawMiscMapIcons(On.Terraria.Main.orig_DrawMiscMapIcons orig, Main self, SpriteBatch spriteBatch, Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale, float drawScale, ref string mouseTextString)
         {
             orig(self, spriteBatch, mapTopLeft, mapX2Y2AndOff, mapRect, mapScale, drawScale, ref mouseTextString);
             MapIconInfomation = (mapTopLeft, mapX2Y2AndOff, mapRect, mapScale);
             Invoke(CallOpportunity.PostDrawMapIcons);
         }
+
         public override void PostUpdateEverything()
         {
             Invoke(CallOpportunity.PostUpdateEverything);
             UpdateTimer++;
         }
+
         public override void PostUpdateNPCs()
         {
             Invoke(CallOpportunity.PostUpdateNPCs);
         }
+
         public override void PostUpdateProjectiles()
         {
             Invoke(CallOpportunity.PostUpdateProjectiles);
         }
+
         public override void PostUpdateDusts()
         {
             Invoke(CallOpportunity.PostUpdateDusts);
         }
+
         public override void PostUpdatePlayers()
         {
             Invoke(CallOpportunity.PostUpdatePlayers);
         }
+
         public override void PostDrawTiles()
         {
             Invoke(CallOpportunity.PostDrawTiles);
         }
+
         internal void WorldGen_SaveAndQuit(On.Terraria.WorldGen.orig_SaveAndQuit orig, Action callback)
         {
-            Invoke(CallOpportunity.UnloadWorlds);
             orig(callback);
+            Invoke(CallOpportunity.PostExitWorld_Single);
         }
-        internal void Main_LoadWorlds(On.Terraria.Main.orig_LoadWorlds orig)
+
+        internal void WorldGen_playWorld(On.Terraria.WorldGen.orig_playWorld orig)
         {
             orig();
-            Invoke(CallOpportunity.LoadWorlds);
+            Invoke(CallOpportunity.PostEnterWorld_Single);
         }
+
         internal void Main_OnResolutionChanged(Vector2 obj)
         {
             Invoke(CallOpportunity.ResolutionChanged);
         }
+
         internal void LegacyPlayerRenderer_DrawPlayers(On.Terraria.Graphics.Renderers.LegacyPlayerRenderer.orig_DrawPlayers orig, Terraria.Graphics.Renderers.LegacyPlayerRenderer self, Terraria.Graphics.Camera camera, IEnumerable<Player> players)
         {
             orig.Invoke(self, camera, players);
             Invoke(CallOpportunity.PostDrawPlayers);
         }
+
         internal void Main_DrawNPCs(On.Terraria.Main.orig_DrawNPCs orig, Main self, bool behindTiles)
         {
             orig.Invoke(self, behindTiles);
@@ -261,12 +292,14 @@
             orig.Invoke(self);
             Invoke(CallOpportunity.PostDrawProjectiles);
         }
+
         private void Main_DoDraw(On.Terraria.Main.orig_DoDraw orig, Main self, GameTime gameTime)
         {
             orig(self, gameTime);
             Invoke(CallOpportunity.PostDrawEverything);
             DrawTimer++;
         }
+
         internal void EndCapture(On.Terraria.Graphics.Effects.FilterManager.orig_EndCapture orig, Terraria.Graphics.Effects.FilterManager self, RenderTarget2D finalTexture, RenderTarget2D screenTarget1, RenderTarget2D screenTarget2, Color clearColor)
         {
             orig(self, finalTexture, screenTarget1, screenTarget2, clearColor);
@@ -274,5 +307,6 @@
             DrawTimer++;
         }
     }
+
 }
 

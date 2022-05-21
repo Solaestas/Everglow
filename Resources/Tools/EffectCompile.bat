@@ -1,0 +1,1 @@
+XNBCompiler.exe ..\..\Sources

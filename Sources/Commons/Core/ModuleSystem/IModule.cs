@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Everglow.Sources.Commons.ModuleSystem
+﻿namespace Everglow.Sources.Commons.Core.ModuleSystem
 {
     public interface IModule
     {
-        public string Name { get; }
+        public string Name
+        {
+            get;
+        }
         public string Description => Name;
         public void Load();
         public void Unload();
@@ -32,6 +29,12 @@ namespace Everglow.Sources.Commons.ModuleSystem
             m_dependTypes = types.ToList();
             Debug.Assert(types.All(t => typeof(IModule).IsAssignableFrom(t)));
         }
-        public List<Type> DependTypes { get { return m_dependTypes; } }
+        public List<Type> DependTypes
+        {
+            get
+            {
+                return m_dependTypes;
+            }
+        }
     }
 }

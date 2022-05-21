@@ -1,5 +1,7 @@
 displayName = Everglow
 author = Dream Chaser Group
-version = 0.0
+version = 0.1
 includePDB = true
-buildIgnore = Everglow-UnitTest/*
+noCompile = true
+dllReferences = MethodBoundaryAspect
+buildIgnore = Everglow-UnitTest/*, Sources/Tools/*, Documents/*

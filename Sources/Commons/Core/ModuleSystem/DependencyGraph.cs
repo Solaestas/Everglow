@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Everglow.Sources.Commons.Core.ModuleSystem
+﻿namespace Everglow.Sources.Commons.Core.ModuleSystem
 {
     public class DependencyGraph
     {
@@ -83,7 +77,7 @@ namespace Everglow.Sources.Commons.Core.ModuleSystem
                 }
             }
 
-            while(queue.Count > 0)
+            while (queue.Count > 0)
             {
                 int u = queue.Dequeue();
 
@@ -104,7 +98,7 @@ namespace Everglow.Sources.Commons.Core.ModuleSystem
             }
 
             // 如果依赖图出现环就直接报错加载失败
-            if(result.Count < m_types.Count)
+            if (result.Count < m_types.Count)
             {
                 throw new ArgumentException("Circular dependency detected, please remove the circle");
             }

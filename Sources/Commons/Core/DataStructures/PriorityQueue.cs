@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Everglow.Sources.Commons.Core.DataStructures
+﻿namespace Everglow.Sources.Commons.Core.DataStructures
 {
     /// <summary>
     /// 优先队列数据结构，使用小根堆实现。Pop，Push复杂度保证O(log n)
@@ -13,8 +11,10 @@ namespace Everglow.Sources.Commons.Core.DataStructures
         public PriorityQueue()
         {
             m_top = 0;
-            m_heap = new List<T>();
-            m_heap.Add(new T());
+            m_heap = new List<T>
+            {
+                new T()
+            };
         }
 
         /// <summary>
