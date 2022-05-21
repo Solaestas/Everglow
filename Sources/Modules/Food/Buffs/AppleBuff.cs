@@ -7,15 +7,15 @@ namespace Everglow.Sources.Modules.Food.Buffs
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("MilkCarton Buff");
-			Description.SetDefault("Grants +4 defense.");
+			DisplayName.SetDefault("AppleBuff");
+			Description.SetDefault("一天一苹果，医生远离我 \n 加8%减伤");
 			Main.buffNoTimeDisplay[Type] = false;
 			Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
 		}
 
 		public override void Update(Player player, ref int buffIndex)
 		{
-			player.statDefense += 4; // 加4防御
+			player.endurance *= 0.92f;// 加8%减伤
 		}
 	}
 }

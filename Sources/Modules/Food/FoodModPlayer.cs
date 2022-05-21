@@ -1,5 +1,6 @@
 ﻿using Terraria;
 using Terraria.ModLoader;
+using Everglow.Sources.Modules.Food.Buffs;
 using System;
 
 namespace Everglow.Sources.Modules.Food
@@ -102,7 +103,10 @@ namespace Everglow.Sources.Modules.Food
                 Player.NinjaDodge();
             }
         }
-        
+        public override void PostUpdateBuffs()
+        {
+            
+        }
 
         public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
         { 

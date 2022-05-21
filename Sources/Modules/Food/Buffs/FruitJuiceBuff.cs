@@ -18,7 +18,7 @@ namespace Everglow.Sources.Modules.Food.Buffs
 		{
 			player.statDefense += 2; // 加2防御
 			player.GetCritChance(DamageClass.Generic ) += 2; // 加2%暴击
-			player.endurance *= 0.9f;// 加10%减伤
+			player.endurance *= 0.95f;// 加5%减伤
 			player.GetDamage(DamageClass.Generic ).Base += 0.02f; // 加2%伤害
 			player.GetAttackSpeed(DamageClass.Generic) += 0.02f; // 加2%攻速
 			player.lifeRegen += 1; // 加1生命回复

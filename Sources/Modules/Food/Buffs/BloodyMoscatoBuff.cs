@@ -15,7 +15,7 @@ namespace Everglow.Sources.Modules.Food.Buffs
 
 		public override void Update(Player player, ref int buffIndex)
 		{
-			player.lifeRegen += 20; // 加20生命恢复
+			player.lifeRegen += 75; // 加75生命恢复
 		}
 	}
 }
