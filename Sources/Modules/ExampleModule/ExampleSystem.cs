@@ -1,15 +1,15 @@
-﻿namespace Everglow.Sources.Modules.ExampleModule
+﻿using Everglow.Sources.Commons.Core.Profiler.Fody;
+
+namespace Everglow.Sources.Modules.ExampleModule
 {
+    [ProfilerMeasure]
     internal class ExampleSystem : ModSystem
     {
         public override void PostUpdateEverything()
         {
-            //if (Main.netMode == NetmodeID.MultiplayerClient)
+            //if (Main.time % 600 < 1)
             //{
-            //    if (Main.time % 60 < 1)
-            //    {
-            //        Everglow.PacketResolver.Send(new ExamplePacket(1));
-            //    }
+            //    Everglow.ProfilerManager.PrintSummary();
             //}
         }
     }

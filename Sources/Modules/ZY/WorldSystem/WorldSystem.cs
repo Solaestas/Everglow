@@ -1,6 +1,7 @@
 ﻿using Everglow.Sources.Commons.Core;
 using Everglow.Sources.Commons.Core.ModuleSystem;
 using Everglow.Sources.Commons.Core.Network.PacketHandle;
+using Everglow.Sources.Commons.Core.Profiler.Fody;
 using ReLogic.Content;
 using Terraria.GameContent.UI.Elements;
 using Terraria.IO;
@@ -9,13 +10,17 @@ using Terraria.UI;
 
 namespace Everglow.Sources.Modules.ZY.WorldSystem
 {
+    [ProfilerMeasure]
     internal class WorldSystem : IModule
     {
         public Dictionary<WorldFileData, World> dataToWorld = new Dictionary<WorldFileData, World>();
         public Dictionary<WorldFileData, UIWorldListItem> dataToUI = new Dictionary<WorldFileData, UIWorldListItem>();
         public List<(World world, string displayName, string fileName, int gameMode, string seed)> worlds = new List<(World world, string displayName, string fileName, int gameMode, string seed)>();
         public string Name => "WorldSystem";
-        public static World CurrentWorld { get; internal set; }
+        public static World CurrentWorld
+        {
+            get; internal set;
+        }
         public void Load()
         {
             On.Terraria.Main.LoadWorlds += Main_LoadWorlds;

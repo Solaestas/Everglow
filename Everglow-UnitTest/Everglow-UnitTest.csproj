@@ -17,7 +17,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Everglow.csproj" />
+	  <ProjectReference Include="..\Everglow.csproj" />
 	</ItemGroup>
 
 </Project>
