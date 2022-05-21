@@ -14,11 +14,6 @@ using Everglow.Sources.Commons.Core.Network.PacketHandle;
 using Everglow.Sources.Commons.Core.Profiler;
 using Everglow.Sources.Commons.Core.Profiler.Fody;
 
-global using Item_id = System.Int32;
-global using Buff_id = System.Int32;
-
-using Everglow.Sources.Commons.ModuleSystem;
-
 namespace Everglow
 {
     public class Everglow : Mod

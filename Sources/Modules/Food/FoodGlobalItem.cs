@@ -175,13 +175,13 @@ namespace Everglow.Sources.Modules.Food
 
         public override void SetStaticDefaults()
         {
-            
+
         }
 
         public override void SetDefaults(Item item)
         {
             // 如果是原版的食物，那么就手动处理
-          if (m_vanillaFoodInfos.ContainsKey(item.type))
+            if (m_vanillaFoodInfos.ContainsKey(item.type))
             {
                 var foodInfo = m_vanillaFoodInfos[item.type];
 
@@ -232,7 +232,8 @@ namespace Everglow.Sources.Modules.Food
                     return false;
                 }
             }
-             return base.CanUseItem(item, player); ;
+            return base.CanUseItem(item, player);
+            ;
         }
 
         public override bool ConsumeItem(Item item, Player player)
@@ -244,7 +245,7 @@ namespace Everglow.Sources.Modules.Food
                 var foodInfo = m_vanillaFoodInfos[item.type];
                 if (!foodPlayer.CanEat(foodInfo))
                 {
-                    
+
                     Main.NewText($"Cannot eat this!");
                     return false;
 

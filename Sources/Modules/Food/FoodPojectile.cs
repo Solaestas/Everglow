@@ -1,10 +1,8 @@
-﻿using Terraria;
-using Terraria.ModLoader;
-using Everglow.Sources.Modules.Food;
+﻿using Terraria.DataStructures;
 
 namespace Everglow.Sources.Modules.Food
 {
-    public class FoodPojectile : GlobalProjectile 
+    public class FoodPojectile : GlobalProjectile
     {
         public override void OnSpawn(Projectile projectile, IEntitySource source)
         {
@@ -18,7 +16,7 @@ namespace Everglow.Sources.Modules.Food
                     var velocity = projectile.velocity.RotatedBy(MathHelper.ToRadians(180f));
                     Projectile.NewProjectile(newSource, projectile.position, velocity, projectile.type, projectile.damage, projectile.knockBack, projectile.owner);
                 }
-            }        
+            }
         }
     }
 }

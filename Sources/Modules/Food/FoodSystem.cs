@@ -1,4 +1,6 @@
-﻿using Everglow.Sources.Modules.Food.Buffs;
+﻿global using Item_id = System.Int32;
+global using Buff_id = System.Int32;
+using Everglow.Sources.Modules.Food.Buffs;
 
 namespace Everglow.Sources.Modules.Food
 {
@@ -9,7 +11,10 @@ namespace Everglow.Sources.Modules.Food
 
         public Dictionary<Item_id, FoodInfo> VanillaFoodInfos
         {
-            get { return m_vanillaFoodInfos; }
+            get
+            {
+                return m_vanillaFoodInfos;
+            }
         }
 
         public override void PostSetupContent()

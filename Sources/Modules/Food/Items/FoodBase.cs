@@ -5,6 +5,9 @@
     /// </summary>
     public abstract class FoodBase : ModItem
     {
-        public abstract FoodInfo FoodInfo { get; }
+        public abstract FoodInfo FoodInfo
+        {
+            get;
+        }
     }
 }

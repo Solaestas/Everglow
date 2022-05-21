@@ -1,22 +1,23 @@
-﻿using Terraria;
-using Terraria.ModLoader;
-using Everglow.Sources.Modules.Food.Buffs;
-using System;
-
-namespace Everglow.Sources.Modules.Food
+﻿namespace Everglow.Sources.Modules.Food
 {
     public class FoodModPlayer : ModPlayer
     {
-    
+
         /// <summary>
         /// 玩家当前饱食度
         /// </summary>
-        public int CurrentSatiety { get; set; }
+        public int CurrentSatiety
+        {
+            get; set;
+        }
 
         /// <summary>
         /// 玩家最大饱食度
         /// </summary>
-        public int MaximumSatiety { get; set; }
+        public int MaximumSatiety
+        {
+            get; set;
+        }
 
         public FoodModPlayer()
         {
@@ -77,10 +78,10 @@ namespace Everglow.Sources.Modules.Food
             StarfruitBuff = false;
             NachosBuff = false;
         }
-        
+
         public override bool CanConsumeAmmo(Item weapon, Item ammo)
         {
-            
+
             if (BananaBuff && Main.rand.Next(5) == 0)
             {
                 return false;
@@ -95,7 +96,7 @@ namespace Everglow.Sources.Modules.Food
             }
             return true;
         }
-        
+
         public override void Hurt(bool pvp, bool quiet, double damage, int hitDirection, bool crit)
         {
             if (Player.whoAmI == Main.myPlayer && SmoothieofDarknessBuff && Main.rand.Next(5) != 0)
@@ -105,11 +106,11 @@ namespace Everglow.Sources.Modules.Food
         }
         public override void PostUpdateBuffs()
         {
-            
+
         }
 
         public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
-        { 
+        {
             if (DragonfruitBuff)
             {
                 target.AddBuff(BuffID.OnFire, 180);
@@ -117,9 +118,9 @@ namespace Everglow.Sources.Modules.Food
             if (NachosBuff)
             {
                 target.AddBuff(BuffID.OnFire, 180);
-                target.AddBuff(BuffID.CursedInferno , 180);
-                target.AddBuff(BuffID.ShadowFlame , 180);
-                target.AddBuff(BuffID.Frostburn , 180);
+                target.AddBuff(BuffID.CursedInferno, 180);
+                target.AddBuff(BuffID.ShadowFlame, 180);
+                target.AddBuff(BuffID.Frostburn, 180);
                 target.AddBuff(BuffID.Oiled, 180);
             }
 
@@ -142,7 +143,7 @@ namespace Everglow.Sources.Modules.Food
                     Player.lifeRegenTime = 0;
                     Player.lifeRegen -= 4;
                 }
-                
+
             }
             if (MonsterLasagnaBuff)
             {
@@ -160,7 +161,7 @@ namespace Everglow.Sources.Modules.Food
                     Player.lifeRegenTime = 0;
                     Player.lifeRegen -= 10;
                 }
-                
+
             }
             if (SashimiBuff)
             {
@@ -178,7 +179,7 @@ namespace Everglow.Sources.Modules.Food
                     Player.lifeRegenTime = 0;
                     Player.lifeRegen -= 6;
                 }
-                
+
             }
             if (ShuckedOysterBuff)
             {
