@@ -53,6 +53,14 @@
     /// </summary>
     public class HookSystem : ModSystem
     {
+        public HookSystem()
+        {
+            methods = new Dictionary<CallOpportunity, List<ActionHandler>>();
+            foreach (var op in validOpportunity)
+            {
+                methods.Add(op, new List<ActionHandler>());
+            }
+        }
         public static readonly CallOpportunity[] validOpportunity = new CallOpportunity[]
         {
             //Draw
@@ -80,7 +88,7 @@
         internal bool DisableDrawNPCs { get; set; } = false;
         internal bool DisableDrawSkyAndHell { get; set; } = false;
         internal bool DisableDrawBackground { get; set; } = false;
-        internal Dictionary<CallOpportunity, List<ActionHandler>> methods = new Dictionary<CallOpportunity, List<ActionHandler>>();
+        internal Dictionary<CallOpportunity, List<ActionHandler>> methods;
         /// <summary>
         /// 现在存在的问题就是，这里的method都是无参数的Action，但是如DrawMapIcon这样的方法就需要传参了，只好用这种这种定义字段的方法
         /// </summary>
@@ -161,13 +169,8 @@
             }
             return null;
         }
-
-        public override void Load()
-        {
-            foreach (var op in validOpportunity)
-            {
-                methods.Add(op, new List<ActionHandler>());
-            }
+        public void HookLoad()
+        {            
             On.Terraria.Main.DrawDust += Main_DrawDust;
             On.Terraria.Main.DrawProjectiles += Main_DrawProjectiles;
             On.Terraria.Main.DrawNPCs += Main_DrawNPCs;
@@ -182,9 +185,7 @@
             On.Terraria.Main.DrawBackgroundBlackFill += Main_DrawBackgroundBlackFill;
             Main.OnResolutionChanged += Main_OnResolutionChanged;
         }
-
-
-        public override void Unload()
+        public void HookUnload()
         {
             Main.OnResolutionChanged -= Main_OnResolutionChanged;
         }

@@ -9,6 +9,7 @@ global using System.Reflection;
 global using Terraria;
 global using Terraria.ID;
 global using Terraria.ModLoader;
+using Everglow.Sources.Commons.Core;
 using Everglow.Sources.Commons.Core.ModuleSystem;
 using Everglow.Sources.Commons.Core.Network.PacketHandle;
 using Everglow.Sources.Commons.Core.Profiler;
@@ -62,6 +63,16 @@ namespace Everglow
             }
         }
 
+        /// <summary>
+        /// 获取HookSystem实例
+        /// </summary>
+        internal static HookSystem HookSystem
+        {
+            get
+            {
+                return ModContent.GetInstance<HookSystem>();
+            }
+        }
         private static Everglow m_instance;
 
         private ModuleManager m_moduleManager;
@@ -77,15 +88,16 @@ namespace Everglow
             m_packetResolver = new PacketResolver();
         }
 
-        [ProfilerMeasure]
         public override void Load()
         {
+            HookSystem.HookLoad();
             m_moduleManager.LoadAllModules();
         }
 
         public override void Unload()
         {
             m_moduleManager.UnloadAllModules();
+            HookSystem.HookUnload();
 
             m_profilerManager.Clear();
 

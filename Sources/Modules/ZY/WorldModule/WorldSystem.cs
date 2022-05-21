@@ -10,7 +10,7 @@ using Terraria.Social;
 using Terraria.UI;
 
 namespace Everglow.Sources.Modules.ZY.WorldModule;
-[ProfilerMeasure]
+
 internal class WorldSystem : IModule
 {
     public Dictionary<WorldFileData, World> dataToWorld = new Dictionary<WorldFileData, World>();
