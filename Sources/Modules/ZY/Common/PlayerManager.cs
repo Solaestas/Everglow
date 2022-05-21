@@ -1,17 +1,15 @@
-﻿using Everglow.Sources.Commons.Core.Profiler.Fody;
-using Everglow.Sources.Modules.ZY.WorldSystem;
+﻿using Everglow.Sources.Modules.ZY.WorldModule;
+using Everglow.Sources.Modules.ZY.ZYPacket;
 
-namespace Everglow.Sources.Modules.ZY.Common
+namespace Everglow.Sources.Modules.ZY.Common;
+
+internal class PlayerManager : ModPlayer
 {
-    [ProfilerMeasure]
-    internal class PlayerManager : ModPlayer
+    public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
     {
-        public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
+        if (newPlayer)
         {
-            if (newPlayer)
-            {
-                Everglow.PacketResolver.Send(new WorldVersionPacket());
-            }
+            Everglow.PacketResolver.Send<WorldVersionPacket>();
         }
     }
 }
