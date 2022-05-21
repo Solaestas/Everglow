@@ -1,5 +1,6 @@
 ﻿using Everglow.Sources.Commons.Core;
 using Everglow.Sources.Commons.Core.ModuleSystem;
+using Everglow.Sources.Commons.Core.Profiler.Fody;
 
 namespace Everglow.Sources.Modules.ZY.InvasionModule;
 
@@ -59,6 +60,8 @@ internal class InvasionSystem : IModule
             if(inv.InvasionID == Main.invasionType)
             {
                 CurrentInvasion = inv;
+                inv.active = true;
+                inv.progress = Main.invasionProgress;
                 return;
             }
         }

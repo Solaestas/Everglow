@@ -1,5 +1,10 @@
+using Everglow.Sources.Modules.MythModule.Common;
 using System.Drawing;
 using Terraria.DataStructures;
+using Terraria.GameContent;
+using Color = Microsoft.Xna.Framework.Color;
+using Point = Microsoft.Xna.Framework.Point;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
 {
@@ -148,6 +153,76 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         {
             Vector4 v0 = new Vector4(c0.R, c0.G, c0.B, c0.A);
             return v0 == RGBA;
+        }
+        public override void OnModLoad()
+        {
+            Everglow.HookSystem.AddMethod(DrawBackground, Commons.Core.CallOpportunity.PostDrawBG);
+        }
+        public override void PostUpdateEverything()
+        {
+            Everglow.HookSystem.DisableDrawBackground = true;
+        }
+        private void DrawBackground()
+        {
+            var tex = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyClose");
+            var glowmask = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyClose_Glow");
+            Vector2 min = Main.screenPosition;
+            Vector2 max = Main.screenPosition + Main.ScreenSize.ToVector2();
+            Point tlTile = min.ToTileCoordinates();
+            Point rbTile = max.ToTileCoordinates() + new Point(1, 1);
+            int width = rbTile.X - tlTile.X;
+            int height = rbTile.Y - tlTile.Y;
+            Point sampleTopleft = Point.Zero;
+            Point sampleSize = tex.Size().ToPoint();
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    Color light = Lighting.GetColor(tlTile.X + i, tlTile.Y + j);
+                    if (light == Color.Black)
+                    {
+                        continue;
+                    }
+                    int x = (tlTile.X + i) * 16;
+                    int y = (tlTile.Y + j) * 16;
+                    int a = x + 16, b = y + 16;
+                    x = Math.Clamp(x, (int)min.X, (int)max.X);
+                    y = Math.Clamp(y, (int)min.Y, (int)max.Y);
+                    a = Math.Clamp(a, (int)min.X, (int)max.X);
+                    b = Math.Clamp(b, (int)min.Y, (int)max.Y);
+                    Rectangle rect = new Rectangle(x - (int)Main.screenPosition.X, y - (int)Main.screenPosition.Y, a - x, b - y);
+                    Rectangle source = new Rectangle(sampleTopleft.X + sampleSize.X * (x - (int)min.X) / Main.screenWidth, sampleTopleft.Y + sampleSize.Y * (y - (int)min.Y) / Main.screenHeight, a - x, b - y);
+                    Main.spriteBatch.Draw(tex, rect, source, light);
+                }
+            }
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
+            Main.spriteBatch.Draw(glowmask, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), new Rectangle(sampleTopleft.X, sampleTopleft.Y, sampleSize.X, sampleSize.Y), Color.White);
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    Color light = Lighting.GetColor(tlTile.X + i, tlTile.Y + j);
+                    Tile tile = Main.tile[tlTile.X + i, tlTile.Y + j];
+                    if (light != Color.Black || !tile.HasTile)
+                    {
+                        continue;
+                    }
+                    int x = (tlTile.X + i) * 16;
+                    int y = (tlTile.Y + j) * 16;
+                    int a = x + 16, b = y + 16;
+                    x = Math.Clamp(x, (int)min.X, (int)max.X);
+                    y = Math.Clamp(y, (int)min.Y, (int)max.Y);
+                    a = Math.Clamp(a, (int)min.X, (int)max.X);
+                    b = Math.Clamp(b, (int)min.Y, (int)max.Y);
+                    Rectangle rect = new Rectangle(x - (int)Main.screenPosition.X, y - (int)Main.screenPosition.Y, a - x, b - y);
+                    Rectangle source = new Rectangle(sampleTopleft.X + sampleSize.X * (x - (int)min.X) / Main.screenWidth, sampleTopleft.Y + sampleSize.Y * (y - (int)min.Y) / Main.screenHeight, a - x, b - y);
+                    Main.spriteBatch.Draw(TextureAssets.BlackTile.Value, rect, source, light);
+                }
+            }
         }
     }
 }

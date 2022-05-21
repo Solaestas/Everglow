@@ -1,6 +1,7 @@
 ﻿using Everglow.Sources.Commons.Core;
 using Everglow.Sources.Commons.Core.ModuleSystem;
 using Everglow.Sources.Commons.Core.Network.PacketHandle;
+using Everglow.Sources.Commons.Core.Profiler.Fody;
 using Everglow.Sources.Modules.ZY.ZYPacket;
 using ReLogic.Content;
 using Terraria.GameContent.UI.Elements;

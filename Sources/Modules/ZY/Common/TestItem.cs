@@ -1,5 +1,4 @@
-﻿using Everglow.Sources.Modules.ZY.InvasionModule;
-namespace Everglow.Sources.Modules.ZY.Common;
+﻿namespace Everglow.Sources.Modules.ZY.Common;
 
 internal class TestItem : ModItem
 {
@@ -12,14 +11,30 @@ internal class TestItem : ModItem
     }
     public override bool CanUseItem(Player player)
     {
-        if (Main.invasionType != 0)
+        //if (Main.invasionType != 0)
+        //{
+        //    InvasionSystem.InvasionEnd();
+        //}else
+        //{
+        //    InvasionSystem.InvasionBegin<TestInvasion>();
+        //}
+        if (Everglow.HookSystem.DisableDrawBackground)
         {
-            InvasionSystem.InvasionEnd();
-        }else
+            Everglow.HookSystem.DisableDrawBackground = false;
+        }
+        else
         {
-            InvasionSystem.InvasionBegin<TestInvasion>();
+            Everglow.HookSystem.DisableDrawBackground = true;
         }
 
+        if (Everglow.HookSystem.DisableDrawSkyAndHell)
+        {
+            Everglow.HookSystem.DisableDrawSkyAndHell = false;
+        }
+        else
+        {
+            Everglow.HookSystem.DisableDrawSkyAndHell = true;
+        }
         return true;
     }
 

@@ -1,6 +1,4 @@
-﻿using Everglow.Sources.Commons.Core.Profiler.Fody;
-
-namespace Everglow.Sources.Commons.Core
+﻿namespace Everglow.Sources.Commons.Core
 {
     /// <summary>
     /// 对一个方法的管理，可以用来控制钩子是否启用
@@ -36,24 +34,33 @@ namespace Everglow.Sources.Commons.Core
         PostDrawNPCs,
         PostDrawPlayers,
         PostDrawMapIcons,
+        PostDrawBG,
         //加载
         PostUpdateEverything,
         PostUpdateProjectiles,
         PostUpdatePlayers,
         PostUpdateNPCs,
         PostUpdateDusts,
+        PostUpdateInvasions,
         PostEnterWorld_Single,
         PostEnterWorld_Server,
         PostExitWorld_Single,
         ResolutionChanged
     }
 
-    [ProfilerMeasure]
     /// <summary>
     /// 钩子统一管理，不用继承一大堆ModSystem或者加很多的On，一些常见的加载时刻都写了
     /// </summary>
     public class HookSystem : ModSystem
     {
+        public HookSystem()
+        {
+            methods = new Dictionary<CallOpportunity, List<ActionHandler>>();
+            foreach (var op in validOpportunity)
+            {
+                methods.Add(op, new List<ActionHandler>());
+            }
+        }
         public static readonly CallOpportunity[] validOpportunity = new CallOpportunity[]
         {
             //Draw
@@ -64,19 +71,24 @@ namespace Everglow.Sources.Commons.Core
             CallOpportunity.PostDrawPlayers,
             CallOpportunity.PostDrawEverything,
             CallOpportunity.PostDrawMapIcons,
+            CallOpportunity.PostDrawBG,
             //Update
             CallOpportunity.PostUpdateEverything,
             CallOpportunity.PostUpdateProjectiles,
             CallOpportunity.PostUpdatePlayers,
             CallOpportunity.PostUpdateNPCs,
             CallOpportunity.PostUpdateDusts,
+            CallOpportunity.PostUpdateInvasions,
             //Misc
             CallOpportunity.PostEnterWorld_Single,
             CallOpportunity.PostExitWorld_Single,
             CallOpportunity.PostEnterWorld_Server,
             CallOpportunity.ResolutionChanged
         };
-        internal Dictionary<CallOpportunity, List<ActionHandler>> methods = new Dictionary<CallOpportunity, List<ActionHandler>>();
+        internal bool DisableDrawNPCs { get; set; } = false;
+        internal bool DisableDrawSkyAndHell { get; set; } = false;
+        internal bool DisableDrawBackground { get; set; } = false;
+        internal Dictionary<CallOpportunity, List<ActionHandler>> methods;
         /// <summary>
         /// 现在存在的问题就是，这里的method都是无参数的Action，但是如DrawMapIcon这样的方法就需要传参了，只好用这种这种定义字段的方法
         /// </summary>
@@ -157,28 +169,24 @@ namespace Everglow.Sources.Commons.Core
             }
             return null;
         }
-
-        public override void Load()
-        {
-            foreach (var op in validOpportunity)
-            {
-                methods.Add(op, new List<ActionHandler>());
-            }
+        public void HookLoad()
+        {            
             On.Terraria.Main.DrawDust += Main_DrawDust;
             On.Terraria.Main.DrawProjectiles += Main_DrawProjectiles;
             On.Terraria.Main.DrawNPCs += Main_DrawNPCs;
             On.Terraria.Graphics.Renderers.LegacyPlayerRenderer.DrawPlayers += LegacyPlayerRenderer_DrawPlayers;
             On.Terraria.Main.DoDraw += Main_DoDraw;
-            On.Terraria.WorldGen.playWorld += WorldGen_playWorld;
+            On.Terraria.WorldGen.playWorldCallBack += WorldGen_playWorldCallBack; ;
             On.Terraria.WorldGen.SaveAndQuit += WorldGen_SaveAndQuit;
             On.Terraria.Main.DrawMiscMapIcons += Main_DrawMiscMapIcons;
             On.Terraria.WorldGen.serverLoadWorldCallBack += WorldGen_serverLoadWorldCallBack;
+            On.Terraria.Main.DrawBG += Main_DrawBG;
+            On.Terraria.Main.DrawBackground += Main_DrawBackground;
+            On.Terraria.Main.DrawBackgroundBlackFill += Main_DrawBackgroundBlackFill;
             Main.OnResolutionChanged += Main_OnResolutionChanged;
         }
-
-        public override void Unload()
+        public void HookUnload()
         {
-            methods = null;
             Main.OnResolutionChanged -= Main_OnResolutionChanged;
         }
         internal void Invoke(CallOpportunity op)
@@ -204,6 +212,25 @@ namespace Everglow.Sources.Commons.Core
                 }
             }
         }
+        private void Main_DrawBackground(On.Terraria.Main.orig_DrawBackground orig, Main self)
+        {
+            if (!DisableDrawBackground)
+            {
+                orig(self);
+            }
+        }
+        private void Main_DrawBackgroundBlackFill(On.Terraria.Main.orig_DrawBackgroundBlackFill orig, Main self)
+        {
+            orig(self);
+            Invoke(CallOpportunity.PostDrawBG);
+        }
+        private void Main_DrawBG(On.Terraria.Main.orig_DrawBG orig, Main self)
+        {
+            if (!DisableDrawSkyAndHell)
+            {
+                orig(self);
+            }
+        }
 
         internal void WorldGen_serverLoadWorldCallBack(On.Terraria.WorldGen.orig_serverLoadWorldCallBack orig)
         {
@@ -217,7 +244,10 @@ namespace Everglow.Sources.Commons.Core
             MapIconInfomation = (mapTopLeft, mapX2Y2AndOff, mapRect, mapScale);
             Invoke(CallOpportunity.PostDrawMapIcons);
         }
-
+        public override void PostUpdateInvasions()
+        {
+            Invoke(CallOpportunity.PostUpdateInvasions);
+        }
         public override void PostUpdateEverything()
         {
             Invoke(CallOpportunity.PostUpdateEverything);
@@ -255,9 +285,9 @@ namespace Everglow.Sources.Commons.Core
             Invoke(CallOpportunity.PostExitWorld_Single);
         }
 
-        internal void WorldGen_playWorld(On.Terraria.WorldGen.orig_playWorld orig)
+        private void WorldGen_playWorldCallBack(On.Terraria.WorldGen.orig_playWorldCallBack orig, object threadContext)
         {
-            orig();
+            orig(threadContext);
             Invoke(CallOpportunity.PostEnterWorld_Single);
         }
 
