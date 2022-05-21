@@ -1,5 +1,5 @@
 ﻿using Terraria.Graphics.Effects;
-using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Sources.Modules.MythModule.Common;
 
 namespace Everglow.Sources.Modules.MythModule.LanternMoon.Skies
 {
