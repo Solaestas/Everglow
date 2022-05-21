@@ -102,10 +102,7 @@ namespace Everglow.Sources.Modules.Food
                 Player.NinjaDodge();
             }
         }
-        public override void PostUpdateBuffs()
-        {
-            Main.debuff = false;
-        }
+        
 
         public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
         { 
