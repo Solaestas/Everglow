@@ -1,9 +1,4 @@
 ﻿using MethodBoundaryAspect.Fody.Attributes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Everglow.Sources.Commons.Core.Profiler.Fody
 {
@@ -30,7 +25,7 @@ namespace Everglow.Sources.Commons.Core.Profiler.Fody
         {
             if (Everglow.Instance == null || Everglow.ProfilerManager == null)
             {
-                return; 
+                return;
             }
             _stopwatch.Stop();
             var fullName = $"{args.Method.DeclaringType.FullName}:{args.Method.Name}";

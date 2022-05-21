@@ -1,5 +1,4 @@
-﻿using Everglow.Sources.Commons.Core.ModuleSystem;
-using Everglow.Sources.Commons.Core.Profiler.Fody;
+﻿using Everglow.Sources.Commons.Core.Profiler.Fody;
 
 namespace Everglow.Sources.Commons.Core.ModuleSystem
 {

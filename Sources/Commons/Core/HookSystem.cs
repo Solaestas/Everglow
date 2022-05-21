@@ -8,7 +8,10 @@ namespace Everglow.Sources.Commons.Core
     public class ActionHandler
     {
         internal Action action;
-        public string Name { get; internal set; }
+        public string Name
+        {
+            get; internal set;
+        }
         public bool Enable { get; set; } = true;
         public ActionHandler(Action action)
         {
@@ -77,7 +80,10 @@ namespace Everglow.Sources.Commons.Core
         /// <summary>
         /// 现在存在的问题就是，这里的method都是无参数的Action，但是如DrawMapIcon这样的方法就需要传参了，只好用这种这种定义字段的方法
         /// </summary>
-        public (Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale) MapIconInfomation { get; internal set; }
+        public (Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale) MapIconInfomation
+        {
+            get; internal set;
+        }
         /// <summary>
         /// 更新的计时器，PostUpateEverything后加一
         /// </summary>

@@ -25,6 +25,12 @@ namespace Everglow.Sources.Commons.Core.Network.PacketHandle
             m_packetType = type;
             Debug.Assert(typeof(IPacket).IsAssignableFrom(type));
         }
-        public Type PacketType { get { return m_packetType; } }
+        public Type PacketType
+        {
+            get
+            {
+                return m_packetType;
+            }
+        }
     }
 }

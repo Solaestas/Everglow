@@ -6,11 +6,19 @@ namespace Everglow.Sources.Modules.ExampleModule.Packets
     [ProfilerMeasure]
     public class ExamplePacket : IPacket
     {
-        public int TestValue { get; set; }
+        public int TestValue
+        {
+            get; set;
+        }
 
-        public ExamplePacket() { }
+        public ExamplePacket()
+        {
+        }
 
-        public ExamplePacket(int x) { TestValue = x; }
+        public ExamplePacket(int x)
+        {
+            TestValue = x;
+        }
 
 
         public void Receive(BinaryReader reader, int whoAmI)
