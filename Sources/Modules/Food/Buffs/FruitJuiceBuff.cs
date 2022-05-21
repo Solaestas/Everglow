@@ -11,6 +11,7 @@ namespace Everglow.Sources.Modules.Food.Buffs
 			Description.SetDefault("维生素！ \n 小幅提升大部分属性");
 			Main.buffNoTimeDisplay[Type] = false;
 			Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
+			
 		}
 
 		public override void Update(Player player, ref int buffIndex)
@@ -24,7 +25,7 @@ namespace Everglow.Sources.Modules.Food.Buffs
 			player.manaRegen += 2; // 魔力再生加2
 			player.maxRunSpeed += 0.05f;//加速
 			player.jumpSpeedBoost += 1;
-
+			
 		}
 	}
 }

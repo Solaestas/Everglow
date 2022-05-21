@@ -1,5 +1,6 @@
 ﻿using Terraria;
 using Terraria.ModLoader;
+using System;
 
 namespace Everglow.Sources.Modules.Food
 {
@@ -55,6 +56,8 @@ namespace Everglow.Sources.Modules.Food
         public bool SashimiBuff;
         public bool ShuckedOysterBuff;
         public bool MangoBuff;
+        public bool StarfruitBuff;
+        public bool NachosBuff;
 
 
         public override void ResetEffects()
@@ -70,12 +73,10 @@ namespace Everglow.Sources.Modules.Food
             SashimiBuff = false;
             ShuckedOysterBuff = false;
             MangoBuff = false;
+            StarfruitBuff = false;
+            NachosBuff = false;
         }
-        public override bool Shoot(Item item, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
-        {
-           // Projectile.NewProjectile();
-            return true ;
-        }
+        
         public override bool CanConsumeAmmo(Item weapon, Item ammo)
         {
             
@@ -101,13 +102,24 @@ namespace Everglow.Sources.Modules.Food
                 Player.NinjaDodge();
             }
         }
-        
-        public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
+        public override void PostUpdateBuffs()
         {
-            
+            Main.debuff = false;
+        }
+
+        public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
+        { 
             if (DragonfruitBuff)
             {
                 target.AddBuff(BuffID.OnFire, 180);
+            }
+            if (NachosBuff)
+            {
+                target.AddBuff(BuffID.OnFire, 180);
+                target.AddBuff(BuffID.CursedInferno , 180);
+                target.AddBuff(BuffID.ShadowFlame , 180);
+                target.AddBuff(BuffID.Frostburn , 180);
+                target.AddBuff(BuffID.Oiled, 180);
             }
 
         }

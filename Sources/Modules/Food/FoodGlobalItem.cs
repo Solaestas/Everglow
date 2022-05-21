@@ -114,7 +114,7 @@ namespace Everglow.Sources.Modules.Food
                 { ItemID.Milkshake, new FoodInfo() { Satiety = 10, BuffType = ModContent.BuffType<MilkshakeBuff>() , BuffTime = 18000 } },
                 //怪物三明治 饱食度20 加25%暴击率，每秒减4生命
                 { ItemID.MonsterLasagna, new FoodInfo() { Satiety = 20, BuffType = ModContent.BuffType<MonsterLasagnaBuff>() , BuffTime = 28800 } },
-                //
+                //玉米片 饱食度20 攻击造成涂油以及所有火焰减益
                 { ItemID.Nachos, new FoodInfo() { Satiety = 20, BuffType = ModContent.BuffType<NachosBuff>() , BuffTime = 28800 } },
                 //泰式炒面 饱食度20 加50%召唤物击退
                 { ItemID.PadThai, new FoodInfo() { Satiety = 20, BuffType = ModContent.BuffType<PadThaiBuff>() , BuffTime = 28800 } },
@@ -140,9 +140,9 @@ namespace Everglow.Sources.Modules.Food
                 { ItemID.PumpkinPie, new FoodInfo() { Satiety = 20, BuffType = ModContent.BuffType<PumpkinPieBuff>() , BuffTime = 28800 } },
                 //红毛丹 饱食度10 免疫中毒和毒液
                 { ItemID.Rambutan, new FoodInfo() { Satiety = 10, BuffType = ModContent.BuffType<RambutanBuff>() , BuffTime = 14400 } },
-                //
+                //烤鸟 饱食度20 中幅增强飞行能力
                 { ItemID.RoastedBird, new FoodInfo() { Satiety = 20, BuffType = ModContent.BuffType<RoastedBirdBuff>() , BuffTime = 28800 } },
-                //
+                //烤鸭 饱食度20 可以在水上行走，小幅增强飞行能力
                 { ItemID.RoastedDuck, new FoodInfo() { Satiety = 20, BuffType = ModContent.BuffType<RoastedDuckBuff>() , BuffTime = 28800 } },
                 //清酒 饱食度5 短时间内减18防御，加80%暴击，加80%伤害， 加80%攻速
                 { ItemID.Sake, new FoodInfo() { Satiety = 5, BuffType = ModContent.BuffType<SakeBuff>() , BuffTime = 450 } },
@@ -160,7 +160,7 @@ namespace Everglow.Sources.Modules.Food
                 { ItemID.SmoothieofDarkness, new FoodInfo() { Satiety = 5, BuffType = ModContent.BuffType<SmoothieofDarknessBuff>() , BuffTime = 450 } },
                 //意大利面 饱食度20 加1召唤栏
                 { ItemID.Spaghetti, new FoodInfo() { Satiety = 20, BuffType = ModContent.BuffType<SpaghettiBuff>() , BuffTime = 28800 } },
-                //
+                //杨桃 饱食度10 使用远程武器时会生成向后的射弹
                 { ItemID.Starfruit, new FoodInfo() { Satiety = 10, BuffType = ModContent.BuffType<StarfruitBuff>() , BuffTime = 14400 } },
                 //牛排 饱食度20 减33%魔力消耗
                 { ItemID.Steak, new FoodInfo() { Satiety = 20, BuffType = ModContent.BuffType<SteakBuff>() , BuffTime = 28800 } },
