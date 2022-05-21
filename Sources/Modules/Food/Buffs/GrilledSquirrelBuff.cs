@@ -8,7 +8,7 @@ namespace Everglow.Sources.Modules.Food.Buffs
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("GrilledSquirrelBuff");
-			Description.SetDefault("欢跃");
+			Description.SetDefault("欢跃 \n 增加跳跃能力");
 			Main.buffNoTimeDisplay[Type] = false;
 			Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
 		}
@@ -17,6 +17,7 @@ namespace Everglow.Sources.Modules.Food.Buffs
 		{
 			player.jumpSpeedBoost += 2;
 			player.maxFallSpeed *= 0.75f;
+			player.extraFall += 30;
 		}
 	}
 }

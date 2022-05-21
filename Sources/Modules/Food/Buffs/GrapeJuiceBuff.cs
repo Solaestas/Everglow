@@ -17,8 +17,8 @@ namespace Everglow.Sources.Modules.Food.Buffs
 		{
 			player.maxMinions += 5; //加5召唤栏
 			player.GetKnockback(DamageClass.Summon) += 1f;//加100%召唤物击退
-			player.GetDamage(DamageClass.Summon) += 1f;//加100%召唤物伤害
-			player.luck += 100000;
+			player.GetDamage(DamageClass.Summon) += 0.5f;//加50%召唤物伤害
+			player.luck += 1000;
 		}
 	}
 }

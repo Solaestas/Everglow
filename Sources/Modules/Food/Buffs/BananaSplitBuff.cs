@@ -18,7 +18,7 @@ namespace Everglow.Sources.Modules.Food.Buffs
 		{
 			FoodModPlayer FoodModPlayer = player.GetModPlayer<FoodModPlayer>();
 			FoodModPlayer.BananaSplitBuff = true;
-			player.GetCritChance(DamageClass.Melee) += 8; // 加8%暴击
+			player.GetCritChance(DamageClass.Ranged) += 8; // 加8%暴击
 
 		}
 	}

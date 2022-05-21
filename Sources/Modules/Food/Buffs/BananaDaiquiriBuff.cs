@@ -18,7 +18,8 @@ namespace Everglow.Sources.Modules.Food.Buffs
 		{
 			FoodModPlayer FoodModPlayer = player.GetModPlayer<FoodModPlayer>();
 			FoodModPlayer.BananaDaiquiriBuff = true;
-			player.GetDamage(DamageClass.Melee).Base += 1f; // 加100%伤害
+			player.GetDamage(DamageClass.Ranged ).Base += 0.5f; // 加50%伤害
+			player.GetCritChance(DamageClass.Ranged) += 50; // 加50%暴击
 		}
 	}
 }
