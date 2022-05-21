@@ -18,12 +18,12 @@ namespace Everglow.Sources.Modules.Food
             {
                 //麦芽酒 饱食度5 防御减8，伤害、暴击率和近战攻速各增加8%
                 { ItemID.Ale, new FoodInfo() { Satiety = 5, BuffType = ModContent.BuffType<AleBuff>() , BuffTime = 36000 } },
-                //
-                { ItemID.Apple, new FoodInfo() { Satiety = 10, BuffType = ModContent.BuffType<AppleBuff>() , BuffTime = 450 } },
-                //
+                //苹果 饱食度10 加8%减伤
+                { ItemID.Apple, new FoodInfo() { Satiety = 10, BuffType = ModContent.BuffType<AppleBuff>() , BuffTime = 14400 } },
+                //苹果汁 饱食度5 短时间内60%减伤 
                 { ItemID.AppleJuice, new FoodInfo() { Satiety = 5, BuffType = ModContent.BuffType<AppleJuiceBuff>() , BuffTime = 450} },
-                //
-                { ItemID.ApplePie, new FoodInfo() { Satiety =15, BuffType = ModContent.BuffType<ApplePieBuff>() , BuffTime = 450 } },
+                //苹果派 加10%减伤,1生命回复
+                { ItemID.ApplePie, new FoodInfo() { Satiety =15, BuffType = ModContent.BuffType<ApplePieBuff>() , BuffTime = 21600 } },
                 //杏 饱食度10 魔力再生加4
                 { ItemID.Apricot, new FoodInfo() { Satiety = 10, BuffType = ModContent.BuffType<ApricotBuff>() , BuffTime = 14400} },
                 //培根 饱食度10 加2生命回复，所受冷系伤害降低
