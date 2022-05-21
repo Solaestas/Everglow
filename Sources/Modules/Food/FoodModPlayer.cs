@@ -50,7 +50,11 @@ namespace Everglow.Sources.Modules.Food
         public bool DragonfruitBuff;
         public bool GoldenDelightBuff;
         public bool SmoothieofDarknessBuff;
-        
+        public bool GrubSoupBuff;
+        public bool MonsterLasagnaBuff;
+        public bool SashimiBuff;
+        public bool ShuckedOysterBuff;
+        public bool MangoBuff;
 
 
         public override void ResetEffects()
@@ -61,7 +65,11 @@ namespace Everglow.Sources.Modules.Food
             DragonfruitBuff = false;
             GoldenDelightBuff = false;
             SmoothieofDarknessBuff = false;
-
+            GrubSoupBuff = false;
+            MonsterLasagnaBuff = false;
+            SashimiBuff = false;
+            ShuckedOysterBuff = false;
+            MangoBuff = false;
         }
         public override bool Shoot(Item item, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
@@ -103,6 +111,81 @@ namespace Everglow.Sources.Modules.Food
             }
 
         }
-     
+        public override void UpdateBadLifeRegen()
+        {
+            if (GrubSoupBuff)
+            {
+                if (MangoBuff)
+                {
+                    if (Player.lifeRegen > 0)
+                        Player.lifeRegen = 0;
+                    Player.lifeRegenTime = 0;
+                    Player.lifeRegen -= 2;
+                }
+                else
+                {
+                    if (Player.lifeRegen > 0)
+                        Player.lifeRegen = 0;
+                    Player.lifeRegenTime = 0;
+                    Player.lifeRegen -= 4;
+                }
+                
+            }
+            if (MonsterLasagnaBuff)
+            {
+                if (MangoBuff)
+                {
+                    if (Player.lifeRegen > 0)
+                        Player.lifeRegen = 0;
+                    Player.lifeRegenTime = 0;
+                    Player.lifeRegen -= 4;
+                }
+                else
+                {
+                    if (Player.lifeRegen > 0)
+                        Player.lifeRegen = 0;
+                    Player.lifeRegenTime = 0;
+                    Player.lifeRegen -= 10;
+                }
+                
+            }
+            if (SashimiBuff)
+            {
+                if (MangoBuff)
+                {
+                    if (Player.lifeRegen > 0)
+                        Player.lifeRegen = 0;
+                    Player.lifeRegenTime = 0;
+                    Player.lifeRegen -= 2;
+                }
+                else
+                {
+                    if (Player.lifeRegen > 0)
+                        Player.lifeRegen = 0;
+                    Player.lifeRegenTime = 0;
+                    Player.lifeRegen -= 6;
+                }
+                
+            }
+            if (ShuckedOysterBuff)
+            {
+                if (MangoBuff)
+                {
+                    if (Player.lifeRegen > 0)
+                        Player.lifeRegen = 0;
+                    Player.lifeRegenTime = 0;
+                    Player.lifeRegen -= 2;
+                }
+                else
+                {
+                    if (Player.lifeRegen > 0)
+                        Player.lifeRegen = 0;
+                    Player.lifeRegenTime = 0;
+                    Player.lifeRegen -= 6;
+                }
+            }
+
+        }
+
     }
 }

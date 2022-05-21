@@ -66,7 +66,7 @@ namespace Everglow.Sources.Modules.Food
                 { ItemID.CreamSoda, new FoodInfo() { Satiety = 5, BuffType = ModContent.BuffType<CreamSodaBuff>(), BuffTime = 18000 } },
                 //火龙果 饱食度10 攻击造成着火
                 { ItemID.Dragonfruit, new FoodInfo() { Satiety = 10, BuffType = ModContent.BuffType<DragonfruitBuff>() , BuffTime = 14400 } },
-                //
+                //接骨木果 饱食度10 你可以短距离冲刺
                 { ItemID.Elderberry, new FoodInfo() { Satiety = 10, BuffType = ModContent.BuffType<ElderberryBuff>() , BuffTime = 14400 } },
                 //食用蜗牛 饱食度10 大大减速，加60%减伤
                 { ItemID.Escargot, new FoodInfo() { Satiety = 20, BuffType = ModContent.BuffType<EscargotBuff>() , BuffTime = 28800 } },
@@ -92,7 +92,7 @@ namespace Everglow.Sources.Modules.Food
                 { ItemID.Grapes, new FoodInfo() { Satiety = 10, BuffType = ModContent.BuffType<GrapesBuff>() , BuffTime = 14400 } },
                 //烤松鼠 饱食度20 增加跳跃能力
                 { ItemID.GrilledSquirrel, new FoodInfo() { Satiety = 20, BuffType = ModContent.BuffType<GrilledSquirrelBuff>(), BuffTime = 28800 } },
-                //
+                //蛆虫汤 饱食度15 加25渔力，每秒减2血
                 { ItemID.GrubSoup, new FoodInfo() { Satiety = 15, BuffType = ModContent.BuffType<GrubSoupBuff>() , BuffTime = 21600 } },
                 //热狗 饱食度15 减少移速，增加防御
                 { ItemID.Hotdog, new FoodInfo() { Satiety = 15, BuffType = ModContent.BuffType<HotdogBuff>() , BuffTime = 21600 } },
@@ -104,7 +104,7 @@ namespace Everglow.Sources.Modules.Food
                 { ItemID.Lemon, new FoodInfo() { Satiety = 10, BuffType = ModContent.BuffType<LemonBuff>() , BuffTime = 14400 } },
                 //龙虾尾 饱食度20 加6防御,25%挖矿速度
                 { ItemID.LobsterTail, new FoodInfo() { Satiety = 20, BuffType = ModContent.BuffType<LobsterTailBuff>() , BuffTime = 28800 } },
-                //
+                //芒果 饱食度10 减缓因食物中毒而产生的持续减血效果
                 { ItemID.Mango, new FoodInfo() { Satiety = 10, BuffType = ModContent.BuffType<MangoBuff>() , BuffTime = 14400 } },
                 //棉花糖 饱食度5 减50%最大掉落速度，增加额外摔伤距离
                 { ItemID.Marshmallow, new FoodInfo() { Satiety = 5 , BuffType = ModContent.BuffType<MarshmallowBuff>() , BuffTime = 14400 } },
@@ -112,7 +112,7 @@ namespace Everglow.Sources.Modules.Food
                 { ItemID.MilkCarton, new FoodInfo() { Satiety = 10, BuffType = ModContent.BuffType<MilkCartonBuff>() , BuffTime = 36000 } },
                 //奶昔 饱食度10 加10%移速
                 { ItemID.Milkshake, new FoodInfo() { Satiety = 10, BuffType = ModContent.BuffType<MilkshakeBuff>() , BuffTime = 18000 } },
-                //
+                //怪物三明治 饱食度20 加25%暴击率，每秒减4生命
                 { ItemID.MonsterLasagna, new FoodInfo() { Satiety = 20, BuffType = ModContent.BuffType<MonsterLasagnaBuff>() , BuffTime = 28800 } },
                 //
                 { ItemID.Nachos, new FoodInfo() { Satiety = 20, BuffType = ModContent.BuffType<NachosBuff>() , BuffTime = 28800 } },
@@ -138,7 +138,7 @@ namespace Everglow.Sources.Modules.Food
                 { ItemID.PrismaticPunch, new FoodInfo() { Satiety = 5, BuffType = ModContent.BuffType<PrismaticPunchBuff>() , BuffTime = 18000 } },
                 //南瓜派 饱食度20 最大生命值加50
                 { ItemID.PumpkinPie, new FoodInfo() { Satiety = 20, BuffType = ModContent.BuffType<PumpkinPieBuff>() , BuffTime = 28800 } },
-                //
+                //红毛丹 饱食度10 免疫中毒和毒液
                 { ItemID.Rambutan, new FoodInfo() { Satiety = 10, BuffType = ModContent.BuffType<RambutanBuff>() , BuffTime = 14400 } },
                 //
                 { ItemID.RoastedBird, new FoodInfo() { Satiety = 20, BuffType = ModContent.BuffType<RoastedBirdBuff>() , BuffTime = 28800 } },
@@ -146,7 +146,7 @@ namespace Everglow.Sources.Modules.Food
                 { ItemID.RoastedDuck, new FoodInfo() { Satiety = 20, BuffType = ModContent.BuffType<RoastedDuckBuff>() , BuffTime = 28800 } },
                 //清酒 饱食度5 短时间内减18防御，加80%暴击，加80%伤害， 加80%攻速
                 { ItemID.Sake, new FoodInfo() { Satiety = 5, BuffType = ModContent.BuffType<SakeBuff>() , BuffTime = 450 } },
-                //
+                //生鱼片 饱食度20 可以游泳，水下呼吸，加10%伤害，20%移速，每秒减3生命
                 { ItemID.Sashimi, new FoodInfo() { Satiety = 20, BuffType = ModContent.BuffType<SashimiBuff>() , BuffTime = 28800 } },
                 //炒蛙腿 饱食度20 自动跳跃，增加跳跃能力
                 { ItemID.SauteedFrogLegs, new FoodInfo() { Satiety = 20, BuffType = ModContent.BuffType<SauteedFrogLegsBuff>() , BuffTime = 28800 } },
@@ -154,8 +154,8 @@ namespace Everglow.Sources.Modules.Food
                 { ItemID.SeafoodDinner, new FoodInfo() { Satiety = 30, BuffType = ModContent.BuffType<SeafoodDinnerBuff>() , BuffTime = 36000 } },
                 //鲜虾三明治 饱食度15 加6防御,25%挖矿速度.
                 { ItemID.ShrimpPoBoy, new FoodInfo() { Satiety = 15, BuffType = ModContent.BuffType<ShrimpPoBoyBuff>() , BuffTime = 21600 } },
-                //
-                { ItemID.ShuckedOyster, new FoodInfo() { Satiety = 15, BuffType = ModContent.BuffType<ShuckedOysterBuff>() , BuffTime = 21600 } },
+                //去壳牡蛎 饱食度20 加10穿甲,减5防御，每秒减3生命
+                { ItemID.ShuckedOyster, new FoodInfo() { Satiety = 20, BuffType = ModContent.BuffType<ShuckedOysterBuff>() , BuffTime = 21600 } },
                 //暗黑奶昔 饱食度5 短时间内80%闪避
                 { ItemID.SmoothieofDarkness, new FoodInfo() { Satiety = 5, BuffType = ModContent.BuffType<SmoothieofDarknessBuff>() , BuffTime = 450 } },
                 //意大利面 饱食度20 加1召唤栏

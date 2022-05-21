@@ -8,14 +8,15 @@ namespace Everglow.Sources.Modules.Food.Buffs
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("RambutanBuff");
-			Description.SetDefault("Grants +4 defense.");
+			Description.SetDefault("提高免疫 \n 免疫中毒和毒液");
 			Main.buffNoTimeDisplay[Type] = false;
 			Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
 		}
 
 		public override void Update(Player player, ref int buffIndex)
 		{
-			player.statDefense += 4; // 加4防御
+			player.buffImmune[20] = true;
+			player.buffImmune[70] = true;
 		}
 	}
 }
