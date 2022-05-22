@@ -2,6 +2,7 @@ using Everglow.Sources.Modules.MythModule.Common;
 using System.Drawing;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.ModLoader.IO;
 using Color = Microsoft.Xna.Framework.Color;
 using Point = Microsoft.Xna.Framework.Point;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
@@ -14,6 +15,35 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         {
             BuildMothCave();
         }
+        /// <summary>
+        /// µØÐÎÖÐÐÄ×ø±ê
+        /// </summary>
+        public static int FireflyCenterX = 2000;
+        public static int FireflyCenterY = 500;
+        //¶Á´æ
+        public override void OnWorldLoad()
+        {
+            FireflyCenterX = 2000;
+            FireflyCenterY = 500;
+        }
+
+        public override void OnWorldUnload()
+        {
+            FireflyCenterX = 2000;
+            FireflyCenterY = 500;
+        }
+        public override void SaveWorldData(TagCompound tag)
+        {
+            tag["FIREFLYcenterX"] = FireflyCenterX;
+            tag["FIREFLYcenterY"] = FireflyCenterY;
+        }
+
+        public override void LoadWorldData(TagCompound tag)
+        {
+            FireflyCenterX = tag.GetAsInt("FIREFLYcenterX");
+            FireflyCenterY = tag.GetAsInt("FIREFLYcenterY");
+        }
+
         /// <summary>
         /// type = 0:Kill,type = 1:place Tiles,type = 2:place Walls
         /// </summary>
@@ -73,16 +103,19 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             Point16 AB = CocoonPos();
             int a = AB.X;
             int b = AB.Y;
+            FireflyCenterX = a + 140;
+            FireflyCenterY = b + 140;
             ShapeTile("CocoonKill.bmp", a, b, 0);
             ShapeTile("Cocoon.bmp", a, b, 1);
             ShapeTile("CocoonWall.bmp", a, b, 2);
+            SmoothMothTile(a, b);
         }
         private int GetCrash(int PoX, int PoY)
         {
             int CrashCount = 0;
             ushort[] DangerTileType = new ushort[]
             {
-                41,//À¶µØÀÎ×©                
+                41,//À¶µØÀÎ×©
                 43,//ÂÌµØÀÎ×©
                 44,//·ÛµØÀÎ×©
                 48,//¼â´Ì
@@ -164,6 +197,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         }
         private void DrawBackground()
         {
+            if(Main.gameMenu)
+            {
+                return;
+            }
             var tex = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyClose");
             var glowmask = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyClose_Glow");
             Vector2 min = Main.screenPosition;
@@ -174,7 +211,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             int height = rbTile.Y - tlTile.Y;
             Point sampleTopleft = Point.Zero;
             Point sampleSize = tex.Size().ToPoint();
-            for (int i = 0; i < width; i++)
+            Point sampleCenter = sampleTopleft + (tex.Size() / 2).ToPoint();
+            Point screenSize = new Point(Main.screenWidth, Main.screenHeight);
+            Player localP = Main.LocalPlayer;
+            Vector2 deltaPos = localP.Center - new Vector2(FireflyCenterX * 16f, FireflyCenterY * 16f);
+            deltaPos *= 0.25f;
+            Point Move = new Point((int)deltaPos.X, (int)(deltaPos.Y));
+            //Light Background
+            /*for (int i = 0; i < width; i++)
             {
                 for (int j = 0; j < height; j++)
                 {
@@ -195,19 +239,22 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                     Main.spriteBatch.Draw(tex, rect, source, light);
                 }
             }
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
-            Main.spriteBatch.Draw(glowmask, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), new Rectangle(sampleTopleft.X, sampleTopleft.Y, sampleSize.X, sampleSize.Y), Color.White);
+            */
+
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-
+            //Main.spriteBatch.Draw(tex, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), new Rectangle(sampleCenter.X - screenSize.X / 8 + Move.X, sampleCenter.Y - screenSize.Y / 8 + Move.Y, screenSize.X / 4, screenSize.Y / 4), Color.White);
+            Main.spriteBatch.Draw(tex, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), new Rectangle(sampleCenter.X - screenSize.X / 2 + Move.X, sampleCenter.Y - screenSize.Y / 2 + Move.Y, screenSize.X, screenSize.Y), Color.White);
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            
             for (int i = 0; i < width; i++)
             {
                 for (int j = 0; j < height; j++)
                 {
                     Color light = Lighting.GetColor(tlTile.X + i, tlTile.Y + j);
                     Tile tile = Main.tile[tlTile.X + i, tlTile.Y + j];
-                    if (light != Color.Black || !tile.HasTile)
+                    if (light != Color.Black || (!tile.HasTile && tile.WallType <= 0))
                     {
                         continue;
                     }
