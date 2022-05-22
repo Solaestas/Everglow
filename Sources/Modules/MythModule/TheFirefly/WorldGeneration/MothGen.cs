@@ -247,28 +247,28 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             deltaPos *= 0.25f;
             Point Move = new Point((int)deltaPos.X, (int)(deltaPos.Y));
             //Light Background
-            /*for (int i = 0; i < width; i++)
-            {
-                for (int j = 0; j < height; j++)
-                {
-                    Color light = Lighting.GetColor(tlTile.X + i, tlTile.Y + j);
-                    if (light == Color.Black)
-                    {
-                        continue;
-                    }
-                    int x = (tlTile.X + i) * 16;
-                    int y = (tlTile.Y + j) * 16;
-                    int a = x + 16, b = y + 16;
-                    x = Math.Clamp(x, (int)min.X, (int)max.X);
-                    y = Math.Clamp(y, (int)min.Y, (int)max.Y);
-                    a = Math.Clamp(a, (int)min.X, (int)max.X);
-                    b = Math.Clamp(b, (int)min.Y, (int)max.Y);
-                    Rectangle rect = new Rectangle(x - (int)Main.screenPosition.X, y - (int)Main.screenPosition.Y, a - x, b - y);
-                    Rectangle source = new Rectangle(sampleTopleft.X + sampleSize.X * (x - (int)min.X) / Main.screenWidth, sampleTopleft.Y + sampleSize.Y * (y - (int)min.Y) / Main.screenHeight, a - x, b - y);
-                    Main.spriteBatch.Draw(tex, rect, source, light);
-                }
-            }
-            */
+            //for (int i = 0; i < width; i++)
+            //{
+            //    for (int j = 0; j < height; j++)
+            //    {
+            //        Color light = Lighting.GetColor(tlTile.X + i, tlTile.Y + j);
+            //        if (light == Color.Black)
+            //        {
+            //            continue;
+            //        }
+            //        int x = (tlTile.X + i) * 16;
+            //        int y = (tlTile.Y + j) * 16;
+            //        int a = x + 16, b = y + 16;
+            //        x = Math.Clamp(x, (int)min.X, (int)max.X);
+            //        y = Math.Clamp(y, (int)min.Y, (int)max.Y);
+            //        a = Math.Clamp(a, (int)min.X, (int)max.X);
+            //        b = Math.Clamp(b, (int)min.Y, (int)max.Y);
+            //        Rectangle rect = new Rectangle(x - (int)Main.screenPosition.X, y - (int)Main.screenPosition.Y, a - x, b - y);
+            //        Rectangle source = new Rectangle(sampleTopleft.X + sampleSize.X * (x - (int)min.X) / Main.screenWidth, sampleTopleft.Y + sampleSize.Y * (y - (int)min.Y) / Main.screenHeight, a - x, b - y);
+            //        Main.spriteBatch.Draw(tex, rect, source, light);
+            //    }
+            //}
+
 
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
