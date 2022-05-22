@@ -10,4 +10,14 @@
             get;
         }
     }
+    /// <summary>
+    /// 饮料类物品的基类，填写DrinkInfo即可
+    /// </summary>
+    public abstract class DrinkBase : ModItem
+    {
+        public abstract DrinkInfo DrinkInfo
+        {
+            get;
+        }
+    }
 }

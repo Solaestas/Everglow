@@ -17,7 +17,7 @@ namespace Everglow.Sources.Modules.Food
                     var newSource = projectile.GetSource_FromThis();
                     var velocity = projectile.velocity.RotatedBy(MathHelper.ToRadians(180f));
                     Projectile.NewProjectile(newSource, projectile.position, velocity, projectile.type,
-                        projectile.damage, projectile.knockBack, projectile.owner);
+                    projectile.damage, projectile.knockBack, projectile.owner);
                 }
             }
         }

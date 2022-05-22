@@ -18,13 +18,20 @@
         {
             get; set;
         }
-
+        /// <summary>
+        /// 玩家当前渴觉状态
+        /// </summary>
+        public bool Thirstystate
+        {
+            get; set;
+        }
         public FoodModPlayer()
         {
             CurrentSatiety = 0;
             MaximumSatiety = 50;
+            Thirstystate = true; 
         }
-
+        
         /// <summary>
         /// 如果能吃下，返回true，否则为false
         /// </summary>
@@ -38,6 +45,18 @@
             }
             return false;
         }
+        /// <summary>
+        /// 如果能喝下，返回true，否则为false
+        /// </summary>
+        public bool CanDrink(DrinkInfo drinkInfo)
+        {
+            if (Thirstystate)
+            {
+                return true;
+            }
+            return false;
+        }
+        
         /*
 
 

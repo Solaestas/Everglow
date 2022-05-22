@@ -15,8 +15,7 @@ namespace Everglow.Sources.Modules.Food.Items
 		
 		public override void SetDefaults()
 		{
-			Item.width = 24;
-			Item.height = 28;
+
 			Item.value = Item.buyPrice(50000);
 			Item.rare = ItemRarityID.Green;
 			Item.accessory = true;
