@@ -792,42 +792,5 @@ public class Vertices : List<Vector2>
         }
         return true;
     }
-    public bool IsConvex(out CPolygon polygon)
-    {
-        polygon = null;
-        if (Count < 3)
-        {
-            return false;
-        }
-
-        polygon = new CPolygon(this);
-        if (Count == 3)
-        {
-            return true;
-        }
-
-        for (int i = 0; i < Count; i++)
-        {
-            int next = i + 1 < Count ? i + 1 : 0;
-            Vector2 edge = polygon[next] - polygon[i];
-            for (int j = 0; j < Count; j++)
-            {
-                if (i == j || next == j)
-                {
-                    continue;
-                }
-
-                Vector2 line = polygon[j] - polygon[j];
-                if (line.Cross(edge) < 0)
-                {
-                    polygon.RemoveAt(j);
-                    i--;
-                    break;
-                }
-            }
-        }
-        return true;
-    }
-
 }
 
