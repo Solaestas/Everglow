@@ -18,8 +18,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         /// <summary>
         /// 地形中心坐标
         /// </summary>
-        public static int FireflyCenterX = 2000;
-        public static int FireflyCenterY = 500;
+        public int FireflyCenterX = 2000;
+        public int FireflyCenterY = 500;
         //读存
         public override void OnWorldLoad()
         {
