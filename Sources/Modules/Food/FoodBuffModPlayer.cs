@@ -2,6 +2,7 @@
 {
     public class FoodBuffModPlayer : ModPlayer
     {
+        public float WingTimeModifier;
 
         public bool BananaBuff;
         public bool BananaDaiquiriBuff;
@@ -16,10 +17,15 @@
         public bool MangoBuff;
         public bool StarfruitBuff;
         public bool NachosBuff;
+        public bool RoastedBirdBuff;
+        public bool RoastedDuckBuff;
+        public bool BloodyMoscatoBuff;
 
 
         public override void ResetEffects()
         {
+            WingTimeModifier = 1f;
+
             BananaBuff = false;
             BananaDaiquiriBuff = false;
             BananaSplitBuff = false;
@@ -33,6 +39,9 @@
             MangoBuff = false;
             StarfruitBuff = false;
             NachosBuff = false;
+            RoastedBirdBuff = false;
+            RoastedDuckBuff = false;
+            BloodyMoscatoBuff = false;
         }
 
         public override bool CanConsumeAmmo(Item weapon, Item ammo)
@@ -62,22 +71,35 @@
         }
         public override void PostUpdateBuffs()
         {
-
+            if (RoastedBirdBuff)
+            {
+                Player.wingTimeMax = (int)(Player.wingTimeMax * WingTimeModifier);
+            }
+            if (RoastedDuckBuff)
+            {
+                Player.wingTimeMax = (int)(Player.wingTimeMax * WingTimeModifier);
+            }
         }
 
         public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
         {
             if (DragonfruitBuff)
             {
-                target.AddBuff(BuffID.OnFire, 180);
+                target.AddBuff(BuffID.Oiled, 600);
+                target.AddBuff(BuffID.OnFire, 600);
             }
             if (NachosBuff)
             {
-                target.AddBuff(BuffID.OnFire, 180);
-                target.AddBuff(BuffID.CursedInferno, 180);
-                target.AddBuff(BuffID.ShadowFlame, 180);
-                target.AddBuff(BuffID.Frostburn, 180);
-                target.AddBuff(BuffID.Oiled, 180);
+                target.AddBuff(BuffID.OnFire, 600);
+                target.AddBuff(BuffID.CursedInferno, 600);
+                target.AddBuff(BuffID.ShadowFlame, 600);
+                target.AddBuff(BuffID.Frostburn, 600);
+                target.AddBuff(BuffID.Oiled, 600);
+            }
+            if (BloodyMoscatoBuff)
+            {
+                Player.HealEffect(5, true);
+                Player.statLife += 5;
             }
 
         }
@@ -157,5 +179,5 @@
 
         }
 
-    }
+      }
 }

@@ -12,8 +12,9 @@
 
         public override void Update(Player player, ref int buffIndex)
         {
-            player.jumpSpeedBoost += 3;
-            player.maxFallSpeed *= 0.5f;
+            FoodBuffModPlayer FoodBuffModPlayer = player.GetModPlayer<FoodBuffModPlayer>();
+            FoodBuffModPlayer.RoastedBirdBuff = true;
+            FoodBuffModPlayer.WingTimeModifier = 1.25f;
             player.extraFall += 30;
             player.wingAccRunSpeed *= 1.2f;
         }

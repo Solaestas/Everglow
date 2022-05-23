@@ -17,8 +17,9 @@
             player.gills = true;
             player.ignoreWater = true;
             player.accFlipper = true;
-            player.maxRunSpeed += 0.2f;
-            player.GetDamage(DamageClass.Generic) *= 1.1f;
+            player.maxRunSpeed *= 1.2f;
+            player.runAcceleration *= 1.2f;
+            player.GetDamage(DamageClass.Generic) += 0.1f;
         }
     }
 }

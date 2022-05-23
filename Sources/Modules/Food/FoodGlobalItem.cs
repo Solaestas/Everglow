@@ -362,24 +362,6 @@ namespace Everglow.Sources.Modules.Food
                         BuffTime = new FoodDuration(4, 0, 0)
                     }
                 },
-                //盒装牛奶 饱食度10 同十字章一样的免疫效果
-                {
-                    ItemID.MilkCarton,
-                    new FoodInfo() {
-                        Satiety = 10,
-                        BuffType = ModContent.BuffType<MilkCartonBuff>(), 
-                        BuffTime = new FoodDuration(10, 0, 0)
-                    }
-                },
-                //奶昔 饱食度10 加10%移速
-                {
-                    ItemID.Milkshake,
-                    new FoodInfo() {
-                        Satiety = 10, 
-                        BuffType = ModContent.BuffType<MilkshakeBuff>(), 
-                        BuffTime = new FoodDuration(5, 0, 0)
-                    }
-                },
                 //怪物三明治 饱食度20 加25%暴击率，每秒减4生命
                 {
                     ItemID.MonsterLasagna,

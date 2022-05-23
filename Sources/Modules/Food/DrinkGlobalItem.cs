@@ -20,7 +20,7 @@ namespace Everglow.Sources.Modules.Food
                     new DrinkInfo() {
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<AleBuff> (),
-                        BuffTime = new FoodDuration(10, 0, 0)
+                        BuffTime = new FoodDuration(0, 7, 30)
                     }
                 },
                 //苹果汁 饱食度5 短时间内60%减伤 
@@ -56,7 +56,7 @@ namespace Everglow.Sources.Modules.Food
                     new DrinkInfo() {
                         Thirsty = false , 
                         BuffType = ModContent.BuffType<CreamSodaBuff>(), 
-                        BuffTime = new FoodDuration(5, 0, 0)
+                        BuffTime = new FoodDuration(0, 7, 30)
                     }
                 },
                 //咖啡 饱食度5 加25%铺墙铺砖速度，5%攻速
@@ -65,7 +65,7 @@ namespace Everglow.Sources.Modules.Food
                     new DrinkInfo() {
                         Thirsty = false , 
                         BuffType = ModContent.BuffType<CoffeeCupBuff>(), 
-                        BuffTime = new FoodDuration(5, 0, 0)
+                        BuffTime = new FoodDuration(0, 7, 30)
                     }
                 },
                 //果汁 饱食度5 小幅提升大部分属性
@@ -74,7 +74,7 @@ namespace Everglow.Sources.Modules.Food
                     new DrinkInfo() {
                        Thirsty = false , 
                        BuffType = ModContent.BuffType<FruitJuiceBuff>(), 
-                       BuffTime = new FoodDuration(4, 0, 0)
+                       BuffTime = new FoodDuration(0, 7, 30)
                     }
                 },
                 //葡萄汁 饱食度5 短时间内加5召唤栏，加100%召唤物伤害，击退，极其幸运
@@ -94,14 +94,32 @@ namespace Everglow.Sources.Modules.Food
                         BuffType = ModContent.BuffType<LemonadeBuff>(), 
                         BuffTime = new FoodDuration(0, 7, 30)
                     }
-                },                
+                },     
+                //盒装牛奶 饱食度10 同十字章一样的免疫效果
+                {
+                    ItemID.MilkCarton,
+                    new DrinkInfo() {
+                        Thirsty = false ,
+                        BuffType = ModContent.BuffType<MilkCartonBuff>(),
+                        BuffTime = new FoodDuration(0, 7, 30)
+                    }
+                },
+                //奶昔 饱食度10 加10%移速
+                {
+                    ItemID.Milkshake,
+                    new DrinkInfo() {
+                        Thirsty = false ,
+                        BuffType = ModContent.BuffType<MilkshakeBuff>(),
+                        BuffTime = new FoodDuration(0, 7, 30)
+                    }
+                },
                 //桃子果酒 饱食度5 增加心的拾取范围，1生命回复，减8防御
                 {
                     ItemID.PeachSangria,
                     new DrinkInfo() {
                         Thirsty = false, 
                         BuffType = ModContent.BuffType<PeachSangriaBuff>(), 
-                        BuffTime = new FoodDuration(5, 0, 0)
+                        BuffTime = new FoodDuration(0, 7, 30)
                     }
                 },
                 //椰林飘香 饱食度5 加5%减伤，2防御，33%反伤
@@ -110,7 +128,7 @@ namespace Everglow.Sources.Modules.Food
                     new DrinkInfo() {
                         Thirsty = false, 
                         BuffType = ModContent.BuffType<PinaColadaBuff>(), 
-                        BuffTime = new FoodDuration(5, 0, 0)
+                        BuffTime = new FoodDuration(0, 7, 30)
                     }
                 },
                 //七彩潘趣酒 饱食度5 加400仇恨值,1召唤栏,减8防御
@@ -119,7 +137,7 @@ namespace Everglow.Sources.Modules.Food
                     new DrinkInfo() {
                         Thirsty = false, 
                         BuffType = ModContent.BuffType<PrismaticPunchBuff>(), 
-                        BuffTime = new FoodDuration(5, 0, 0)
+                        BuffTime = new FoodDuration(0, 7, 30)
                     }
                 },                
                 //清酒 饱食度5 短时间内减18防御，加80%暴击，加80%伤害， 加80%攻速
@@ -147,7 +165,7 @@ namespace Everglow.Sources.Modules.Food
                     new DrinkInfo() {
                         Thirsty = false, 
                         BuffType = ModContent.BuffType<TeacupBuff>(), 
-                        BuffTime = new FoodDuration(5, 0, 0)
+                        BuffTime = new FoodDuration(0, 7, 30)
                     }
                 },
                 //热带奶昔 饱食度5 短时间内不消耗魔力，加100%魔力攻击，100%暴击
@@ -192,7 +210,7 @@ namespace Everglow.Sources.Modules.Food
 
                 // 变得不渴，并且应用一些特效
                 foodPlayer.Thirstystate = drinkInfo.Thirsty;
-                // Main.NewText($"Added {drinkInfo.Thirsty}! Current Satiety {foodPlayer.CurrentSatiety} / {foodPlayer.MaximumSatiety}");
+              
             }
         }
 
