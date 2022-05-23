@@ -236,13 +236,27 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             v0.X *= 0.9f;
             return (v0.Length() < 2000);
         }
+        public Rectangle GetDrawRec(Vector2 texSize, float MoveStep)
+        {
+            Vector2 sampleTopleft = Vector2.Zero;
+            Vector2 sampleCenter = sampleTopleft + (texSize / 2);
+            Vector2 screenSize = new Vector2(Main.screenWidth, Main.screenHeight);
+            Player localP = Main.LocalPlayer;
+            Vector2 deltaPos = localP.Center - new Vector2(FireflyCenterX * 16f, FireflyCenterY * 16f);
+            deltaPos *= MoveStep;
+            Vector2 Move = new Vector2((int)deltaPos.X, (int)(deltaPos.Y));
+            return new Rectangle((int)(sampleCenter.X - screenSize.X / 2 + Move.X), (int)(sampleCenter.Y - screenSize.Y / 2 + Move.Y), (int)(screenSize.X), (int)(screenSize.Y));
+        }
         private void DrawBackground()
         {
             if (!BiomeActive())
             {
                 return;
             }
-            var tex = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyClose");
+            var texSky = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflySky");
+            var texFar = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyFar");
+            var texMiddle = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyMiddle");
+            var texClose = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyClose");
             var glowmask = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyClose_Glow");
             Vector2 min = Main.screenPosition;
             Vector2 max = Main.screenPosition + Main.ScreenSize.ToVector2();
@@ -251,8 +265,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             int width = rbTile.X - tlTile.X;
             int height = rbTile.Y - tlTile.Y;
             Point sampleTopleft = Point.Zero;
-            Point sampleSize = tex.Size().ToPoint();
-            Point sampleCenter = sampleTopleft + (tex.Size() / 2).ToPoint();
+            Point sampleSize = texClose.Size().ToPoint();
+            Point sampleCenter = sampleTopleft + (texClose.Size() / 2).ToPoint();
             Point screenSize = new Point(Main.screenWidth, Main.screenHeight);
             Player localP = Main.LocalPlayer;
             Vector2 deltaPos = localP.Center - new Vector2(FireflyCenterX * 16f, FireflyCenterY * 16f);
@@ -281,11 +295,15 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             //    }
             //}
 
-
+            float FarMove = 0.15f;
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            Rectangle screen = new Rectangle(0, 0, Main.screenWidth, Main.screenHeight);
             //Main.spriteBatch.Draw(tex, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), new Rectangle(sampleCenter.X - screenSize.X / 8 + Move.X, sampleCenter.Y - screenSize.Y / 8 + Move.Y, screenSize.X / 4, screenSize.Y / 4), Color.White);
-            Main.spriteBatch.Draw(tex, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), new Rectangle(sampleCenter.X - screenSize.X / 2 + Move.X, sampleCenter.Y - screenSize.Y / 2 + Move.Y, screenSize.X, screenSize.Y), Color.White);
+            Main.spriteBatch.Draw(texSky, screen, GetDrawRec(texSky.Size(), 0), Color.White);
+            Main.spriteBatch.Draw(texFar, screen, GetDrawRec(texFar.Size(), 0.03f), Color.White);
+            Main.spriteBatch.Draw(texMiddle, screen, GetDrawRec(texMiddle.Size(), 0.17f), Color.White);
+            Main.spriteBatch.Draw(texClose, screen, GetDrawRec(texClose.Size(), 0.25f), Color.White);
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 
