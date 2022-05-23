@@ -12,8 +12,8 @@
 
         public override void Update(Player player, ref int buffIndex)
         {
-            FoodModPlayer FoodModPlayer = player.GetModPlayer<FoodModPlayer>();
-            FoodModPlayer.StarfruitBuff = true;
+            FoodBuffModPlayer FoodBuffModPlayer = player.GetModPlayer<FoodBuffModPlayer>();
+            FoodBuffModPlayer.StarfruitBuff = true;
         }
     }
 }

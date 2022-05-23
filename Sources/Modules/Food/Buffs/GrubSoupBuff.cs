@@ -13,8 +13,8 @@
         public override void Update(Player player, ref int buffIndex)
         {
             player.fishingSkill += 25;
-            FoodModPlayer FoodModPlayer = player.GetModPlayer<FoodModPlayer>();
-            FoodModPlayer.GrubSoupBuff = true;
+            FoodBuffModPlayer FoodBuffModPlayer = player.GetModPlayer<FoodBuffModPlayer>();
+            FoodBuffModPlayer.GrubSoupBuff = true;
         }
     }
 }

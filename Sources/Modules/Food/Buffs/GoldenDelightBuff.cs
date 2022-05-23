@@ -13,8 +13,8 @@
         public override void Update(Player player, ref int buffIndex)
         {
 
-            FoodModPlayer FoodModPlayer = player.GetModPlayer<FoodModPlayer>();
-            FoodModPlayer.GoldenDelightBuff = true;
+            FoodBuffModPlayer FoodBuffModPlayer = player.GetModPlayer<FoodBuffModPlayer>();
+            FoodBuffModPlayer.GoldenDelightBuff = true;
             player.statDefense += 3; // 加3防御
             player.GetCritChance(DamageClass.Generic) += 3; // 加3%暴击
             player.GetDamage(DamageClass.Generic).Base += 0.03f; // 加3%伤害

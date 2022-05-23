@@ -21,7 +21,13 @@ namespace Everglow.Sources.Modules.Food
             get;
             set;
         }
+        public string Description
+        {
+            get;
+            set;
+        }
     }
+
     public class DrinkInfo
     {
         public bool Thirsty
@@ -37,6 +43,11 @@ namespace Everglow.Sources.Modules.Food
         }
 
         public FoodDuration BuffTime
+        {
+            get;
+            set;
+        }
+        public string Description
         {
             get;
             set;

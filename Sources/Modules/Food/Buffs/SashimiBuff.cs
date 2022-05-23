@@ -12,8 +12,8 @@
 
         public override void Update(Player player, ref int buffIndex)
         {
-            FoodModPlayer FoodModPlayer = player.GetModPlayer<FoodModPlayer>();
-            FoodModPlayer.SashimiBuff = true;
+            FoodBuffModPlayer FoodBuffModPlayer = player.GetModPlayer<FoodBuffModPlayer>();
+            FoodBuffModPlayer.SashimiBuff = true;
             player.gills = true;
             player.ignoreWater = true;
             player.accFlipper = true;

@@ -4,7 +4,7 @@
     {
 
         /// <summary>
-        /// 玩家当前饱食度
+        /// 玩家当前CurrentSatiety
         /// </summary>
         public int CurrentSatiety
         {
@@ -12,7 +12,7 @@
         }
 
         /// <summary>
-        /// 玩家最大饱食度
+        /// 玩家最大CurrentSatiety
         /// </summary>
         public int MaximumSatiety
         {
@@ -56,166 +56,63 @@
             }
             return false;
         }
-        
         /*
+         
 
 
 
 
+         
          */
-        public bool BananaBuff;
-        public bool BananaDaiquiriBuff;
-        public bool BananaSplitBuff;
-        public bool DragonfruitBuff;
-        public bool GoldenDelightBuff;
-        public bool SmoothieofDarknessBuff;
-        public bool GrubSoupBuff;
-        public bool MonsterLasagnaBuff;
-        public bool SashimiBuff;
-        public bool ShuckedOysterBuff;
-        public bool MangoBuff;
-        public bool StarfruitBuff;
-        public bool NachosBuff;
-
-
-        public override void ResetEffects()
+        /// <summary>
+        /// 
+        /// </summary>
+        public int SatietyLossTimer { get; private set; }//饱食损失计时器
+        public int ThirstyChangeTimer { get; private set; }//口渴变化计时器
+        public override void PostUpdate()
         {
-            BananaBuff = false;
-            BananaDaiquiriBuff = false;
-            BananaSplitBuff = false;
-            DragonfruitBuff = false;
-            GoldenDelightBuff = false;
-            SmoothieofDarknessBuff = false;
-            GrubSoupBuff = false;
-            MonsterLasagnaBuff = false;
-            SashimiBuff = false;
-            ShuckedOysterBuff = false;
-            MangoBuff = false;
-            StarfruitBuff = false;
-            NachosBuff = false;
+            if (Player.active)
+            {
+                FoodState(); 
+            }
+            if (!Player.active)
+            {
+                CurrentSatiety = 0;
+                Thirstystate = true;
+            }
         }
 
-        public override bool CanConsumeAmmo(Item weapon, Item ammo)
+        public void FoodState()
         {
-
-            if (BananaBuff && Main.rand.NextBool(5))
-            {
-                return false;
+            //从吃食物后开始计时
+            if(CurrentSatiety > 0){
+                 SatietyLossTimer++;
             }
-            if (BananaDaiquiriBuff)
+            //从喝饮料后开始计时
+            if (!Thirstystate)
             {
-                return false;
+                ThirstyChangeTimer++;
             }
-            if (BananaSplitBuff && Main.rand.NextBool(3))
+            
+            //每三十秒减少一饱食度
+            if (SatietyLossTimer>=1800)
             {
-                return false;
+                CurrentSatiety -= 1 ;
+                SatietyLossTimer = 0;
             }
-            return true;
-        }
-
-        public override void Hurt(bool pvp, bool quiet, double damage, int hitDirection, bool crit)
-        {
-            if (Player.whoAmI == Main.myPlayer && SmoothieofDarknessBuff && !Main.rand.NextBool(5))
+            if (CurrentSatiety <= 0)
             {
-                Player.NinjaDodge();
+                CurrentSatiety = 0;
             }
-        }
-        public override void PostUpdateBuffs()
-        {
-
-        }
-
-        public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
-        {
-            if (DragonfruitBuff)
+            //每五分钟从口渴变得不口渴
+            if (ThirstyChangeTimer >= 1800)
             {
-                target.AddBuff(BuffID.OnFire, 180);
-            }
-            if (NachosBuff)
-            {
-                target.AddBuff(BuffID.OnFire, 180);
-                target.AddBuff(BuffID.CursedInferno, 180);
-                target.AddBuff(BuffID.ShadowFlame, 180);
-                target.AddBuff(BuffID.Frostburn, 180);
-                target.AddBuff(BuffID.Oiled, 180);
-            }
-
-        }
-        public override void UpdateBadLifeRegen()
-        {
-            if (GrubSoupBuff)
-            {
-                if (MangoBuff)
-                {
-                    if (Player.lifeRegen > 0)
-                        Player.lifeRegen = 0;
-                    Player.lifeRegenTime = 0;
-                    Player.lifeRegen -= 2;
-                }
-                else
-                {
-                    if (Player.lifeRegen > 0)
-                        Player.lifeRegen = 0;
-                    Player.lifeRegenTime = 0;
-                    Player.lifeRegen -= 4;
-                }
-
-            }
-            if (MonsterLasagnaBuff)
-            {
-                if (MangoBuff)
-                {
-                    if (Player.lifeRegen > 0)
-                        Player.lifeRegen = 0;
-                    Player.lifeRegenTime = 0;
-                    Player.lifeRegen -= 4;
-                }
-                else
-                {
-                    if (Player.lifeRegen > 0)
-                        Player.lifeRegen = 0;
-                    Player.lifeRegenTime = 0;
-                    Player.lifeRegen -= 10;
-                }
-
-            }
-            if (SashimiBuff)
-            {
-                if (MangoBuff)
-                {
-                    if (Player.lifeRegen > 0)
-                        Player.lifeRegen = 0;
-                    Player.lifeRegenTime = 0;
-                    Player.lifeRegen -= 2;
-                }
-                else
-                {
-                    if (Player.lifeRegen > 0)
-                        Player.lifeRegen = 0;
-                    Player.lifeRegenTime = 0;
-                    Player.lifeRegen -= 6;
-                }
-
-            }
-            if (ShuckedOysterBuff)
-            {
-                if (MangoBuff)
-                {
-                    if (Player.lifeRegen > 0)
-                        Player.lifeRegen = 0;
-                    Player.lifeRegenTime = 0;
-                    Player.lifeRegen -= 2;
-                }
-                else
-                {
-                    if (Player.lifeRegen > 0)
-                        Player.lifeRegen = 0;
-                    Player.lifeRegenTime = 0;
-                    Player.lifeRegen -= 6;
-                }
+                Thirstystate = true ;
+                SatietyLossTimer = 0;
             }
 
         }
 
+        
     }
 }

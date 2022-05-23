@@ -12,8 +12,8 @@
 
         public override void Update(Player player, ref int buffIndex)
         {
-            FoodModPlayer FoodModPlayer = player.GetModPlayer<FoodModPlayer>();
-            FoodModPlayer.BananaSplitBuff = true;
+            FoodBuffModPlayer FoodBuffModPlayer = player.GetModPlayer<FoodBuffModPlayer>();
+            FoodBuffModPlayer.BananaSplitBuff = true;
             player.GetCritChance(DamageClass.Ranged) += 8; // 加8%暴击
 
         }

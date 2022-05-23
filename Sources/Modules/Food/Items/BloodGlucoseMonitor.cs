@@ -11,6 +11,7 @@ namespace Everglow.Sources.Modules.Food.Items
 		public override void SetStaticDefaults()
 		{
 			Tooltip.SetDefault("it can display CurrentSatiety");
+			
 		}
 		
 		public override void SetDefaults()

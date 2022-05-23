@@ -12,8 +12,8 @@
 
         public override void Update(Player player, ref int buffIndex)
         {
-            FoodModPlayer FoodModPlayer = player.GetModPlayer<FoodModPlayer>();
-            FoodModPlayer.ShuckedOysterBuff = true;
+            FoodBuffModPlayer FoodBuffModPlayer = player.GetModPlayer<FoodBuffModPlayer>();
+            FoodBuffModPlayer.ShuckedOysterBuff = true;
             player.GetArmorPenetration(DamageClass.Generic) += 10;
             player.statDefense -= 5;
         }

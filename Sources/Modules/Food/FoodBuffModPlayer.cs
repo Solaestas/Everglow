@@ -1,0 +1,161 @@
+﻿namespace Everglow.Sources.Modules.Food
+{
+    public class FoodBuffModPlayer : ModPlayer
+    {
+
+        public bool BananaBuff;
+        public bool BananaDaiquiriBuff;
+        public bool BananaSplitBuff;
+        public bool DragonfruitBuff;
+        public bool GoldenDelightBuff;
+        public bool SmoothieofDarknessBuff;
+        public bool GrubSoupBuff;
+        public bool MonsterLasagnaBuff;
+        public bool SashimiBuff;
+        public bool ShuckedOysterBuff;
+        public bool MangoBuff;
+        public bool StarfruitBuff;
+        public bool NachosBuff;
+
+
+        public override void ResetEffects()
+        {
+            BananaBuff = false;
+            BananaDaiquiriBuff = false;
+            BananaSplitBuff = false;
+            DragonfruitBuff = false;
+            GoldenDelightBuff = false;
+            SmoothieofDarknessBuff = false;
+            GrubSoupBuff = false;
+            MonsterLasagnaBuff = false;
+            SashimiBuff = false;
+            ShuckedOysterBuff = false;
+            MangoBuff = false;
+            StarfruitBuff = false;
+            NachosBuff = false;
+        }
+
+        public override bool CanConsumeAmmo(Item weapon, Item ammo)
+        {
+
+            if (BananaBuff && Main.rand.NextBool(5))
+            {
+                return false;
+            }
+            if (BananaDaiquiriBuff)
+            {
+                return false;
+            }
+            if (BananaSplitBuff && Main.rand.NextBool(3))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public override void Hurt(bool pvp, bool quiet, double damage, int hitDirection, bool crit)
+        {
+            if (Player.whoAmI == Main.myPlayer && SmoothieofDarknessBuff && !Main.rand.NextBool(5))
+            {
+                Player.NinjaDodge();
+            }
+        }
+        public override void PostUpdateBuffs()
+        {
+
+        }
+
+        public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
+        {
+            if (DragonfruitBuff)
+            {
+                target.AddBuff(BuffID.OnFire, 180);
+            }
+            if (NachosBuff)
+            {
+                target.AddBuff(BuffID.OnFire, 180);
+                target.AddBuff(BuffID.CursedInferno, 180);
+                target.AddBuff(BuffID.ShadowFlame, 180);
+                target.AddBuff(BuffID.Frostburn, 180);
+                target.AddBuff(BuffID.Oiled, 180);
+            }
+
+        }
+        public override void UpdateBadLifeRegen()
+        {
+            if (GrubSoupBuff)
+            {
+                if (MangoBuff)
+                {
+                    if (Player.lifeRegen > 0)
+                        Player.lifeRegen = 0;
+                    Player.lifeRegenTime = 0;
+                    Player.lifeRegen -= 2;
+                }
+                else
+                {
+                    if (Player.lifeRegen > 0)
+                        Player.lifeRegen = 0;
+                    Player.lifeRegenTime = 0;
+                    Player.lifeRegen -= 4;
+                }
+
+            }
+            if (MonsterLasagnaBuff)
+            {
+                if (MangoBuff)
+                {
+                    if (Player.lifeRegen > 0)
+                        Player.lifeRegen = 0;
+                    Player.lifeRegenTime = 0;
+                    Player.lifeRegen -= 4;
+                }
+                else
+                {
+                    if (Player.lifeRegen > 0)
+                        Player.lifeRegen = 0;
+                    Player.lifeRegenTime = 0;
+                    Player.lifeRegen -= 10;
+                }
+
+            }
+            if (SashimiBuff)
+            {
+                if (MangoBuff)
+                {
+                    if (Player.lifeRegen > 0)
+                        Player.lifeRegen = 0;
+                    Player.lifeRegenTime = 0;
+                    Player.lifeRegen -= 2;
+                }
+                else
+                {
+                    if (Player.lifeRegen > 0)
+                        Player.lifeRegen = 0;
+                    Player.lifeRegenTime = 0;
+                    Player.lifeRegen -= 6;
+                }
+
+            }
+            if (ShuckedOysterBuff)
+            {
+                if (MangoBuff)
+                {
+                    if (Player.lifeRegen > 0)
+                        Player.lifeRegen = 0;
+                    Player.lifeRegenTime = 0;
+                    Player.lifeRegen -= 2;
+                }
+                else
+                {
+                    if (Player.lifeRegen > 0)
+                        Player.lifeRegen = 0;
+                    Player.lifeRegenTime = 0;
+                    Player.lifeRegen -= 6;
+                }
+            }
+
+        }
+
+    }
+}
