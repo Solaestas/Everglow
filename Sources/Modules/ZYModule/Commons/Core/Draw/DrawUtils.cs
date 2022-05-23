@@ -17,4 +17,15 @@ internal static class DrawUtils
     {
         spriteBatch.Begin(spriteSortMode, drawState.blendState, drawState.samplerState, drawState.depthStencilState, drawState.rasterizerState, null, matrix);
     }
+
+    public static void Reset(this SpriteBatch spriteBatch, SpriteSortMode spriteSortMode, DrawState drawState)
+    {
+        spriteBatch.End();
+        spriteBatch.Begin(spriteSortMode, drawState);
+    }
+    public static void Reset(this SpriteBatch spriteBatch, SpriteSortMode spriteSortMode, DrawState drawState, Matrix matrix)
+    {
+        spriteBatch.End();
+        spriteBatch.Begin(spriteSortMode, drawState, matrix);
+    }
 }

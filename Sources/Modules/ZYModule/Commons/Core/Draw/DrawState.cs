@@ -23,12 +23,6 @@ internal class DrawState
         graphicsDevice.RasterizerState = rasterizerState;
     }
 
-    public DrawState Reset(GraphicsDevice graphicsDevice)
-    {
-        DrawState oldState = graphicsDevice.GetState();
-        SetState(graphicsDevice);
-        return oldState;
-    }
 
     public readonly DrawState Default = new DrawState(BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone);
     public readonly DrawState Additive = new DrawState(BlendState.Additive, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone);
