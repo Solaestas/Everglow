@@ -14,4 +14,11 @@ internal static class Quick
     public static Asset<Effect> RequestEffect(string path, bool async = false) =>
         ModContent.Request<Effect>("Everglow/Sources/ZY/" + path,
         async ? AssetRequestMode.AsyncLoad : AssetRequestMode.ImmediateLoad);
+
+    public static void Log(object obj)
+    {
+        Everglow.Instance.Logger.Info(obj);
+        Main.NewText(obj, Color.Green);
+        Console.WriteLine(obj);
+    }
 }
