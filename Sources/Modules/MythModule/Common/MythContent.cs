@@ -23,6 +23,23 @@ namespace Everglow.Sources.Modules.MythModule.Common
             return ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/" + path, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
         }
         /// <summary>
+        /// 对于神话模块专用的获取音乐封装
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static int QuickMusic(string path)
+        {
+            Mod everglow = ModLoader.GetMod("Everglow");
+            if(everglow != null)
+            {
+                return MusicLoader.GetMusicSlot(everglow, "Sources/Modules/MythModule/Musics/" + path);
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        /// <summary>
         /// 对于神话模块专用的Glowmask获取
         /// </summary>
         /// <param name="modItem"></param>

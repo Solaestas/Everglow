@@ -118,8 +118,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             Point16 AB = CocoonPos();
             int a = AB.X;
             int b = AB.Y;
-            FireflyCenterX = a + 140;
-            FireflyCenterY = b + 140;
+            MothLand mothLand = ModContent.GetInstance<MothLand>();
+            mothLand.FireflyCenterX = a + 140;
+            mothLand.FireflyCenterY = b + 140;
             ShapeTile("CocoonKill.bmp", a, b, 0);
             ShapeTile("Cocoon.bmp", a, b, 1);
             ShapeTile("CocoonWall.bmp", a, b, 2);
@@ -217,16 +218,27 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         }
 
         public override void PostUpdateEverything()
-        {
-            if (Main.gameMenu)
+        {          
+            if (BiomeActive())
             {
-                return;
+                Everglow.HookSystem.DisableDrawBackground = true;
             }
-            Everglow.HookSystem.DisableDrawBackground = true;
+            else
+            {
+                Everglow.HookSystem.DisableDrawBackground = false;
+            }      
+        }
+        public bool BiomeActive()
+        {
+            Vector2 BiomeCenter = new Vector2(FireflyCenterX * 16, (FireflyCenterY - 20) * 16);
+            Vector2 v0 = Main.LocalPlayer.Center - BiomeCenter;
+            v0.Y *= 1.35f;
+            v0.X *= 0.9f;
+            return (v0.Length() < 2000);
         }
         private void DrawBackground()
         {
-            if (Main.gameMenu)
+            if (!BiomeActive())
             {
                 return;
             }
