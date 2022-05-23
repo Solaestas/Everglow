@@ -182,23 +182,20 @@ namespace Everglow.Sources.Commons.Core.UI
                 Container.ContainerElement.SetLocation( new Vector2( Mouse.GetState( ).X, Mouse.GetState( ).Y ) - _selectPoint );
             if ( Main.mouseLeftRelease && Drop && _droping )
                 _droping = false;
-            Container seekAt = Container.SeekAt( );
-            if ( seekAt == null )
-                return;
-            if ( seekAt.Events.Interview )
-                seekAt.Events.DoInterviewEvent( );
-            if ( Main.mouseLeft && Main.mouseLeftRelease )
-                seekAt.Events.DoMouseLeftClickEvent( );
-            else if ( Main.mouseLeft )
-                seekAt.Events.DoMouseLeftDownEvent( );
-            else if ( Main.mouseLeftRelease )
-                seekAt.Events.DoMouseLeftUpEvent( );
-            if ( Main.mouseRight && Main.mouseRightRelease )
-                seekAt.Events.DoMouseRightClickEvent( );
-            else if ( Main.mouseRight )
-                seekAt.Events.DoMouseRightDownEvent( );
-            else if ( Main.mouseRightRelease )
-                seekAt.Events.DoMouseRightUpEvent( );
+            if ( Interview )
+                DoInterviewEvent( );
+            if ( Input.MouseLeftClick )
+                DoMouseLeftClickEvent( );
+            else if ( Input.MouseLeftDown )
+                DoMouseLeftDownEvent( );
+            else if ( Input.MouseLeftUp )
+                DoMouseLeftUpEvent( );
+            if ( Input.MouseRightClick )
+                DoMouseRightClickEvent( );
+            else if ( Input.MouseRightDown )
+                DoMouseRightDownEvent( );
+            else if ( Input.MouseRightUp )
+                DoMouseRightUpEvent( );
         }
     }
 }

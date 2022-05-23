@@ -1,11 +1,11 @@
-﻿using Colin.Common.Graphics;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terraria.GameContent;
 
 namespace Everglow.Sources.Commons.Core.UI.Preforms
 {
@@ -19,13 +19,7 @@ namespace Everglow.Sources.Commons.Core.UI.Preforms
         /// </summary>
         public Texture2D Image { get; private set; }
 
-        public IFrameAnimation? FrameAnimation;
-
-        public Button( )
-        {
-            _primitiveBatch = new PrimitiveBatch( 4 );
-        }
-
+        public Button( ) { }
         public Button( Texture2D img )
         {
             Image = img;
@@ -34,13 +28,10 @@ namespace Everglow.Sources.Commons.Core.UI.Preforms
         protected override void DrawSelf( )
         {
             if ( Image == null )
-                _primitiveBatch.DrawRectangle( Location, Size, Color.White );
+                Main.spriteBatch.Draw( TextureAssets.MagicPixel.Value, BaseRectangle, Color.White );
             else
-                EngineInfo.SpriteBatch.Draw( Image, BaseRectangle, FrameAnimation?.GetFrame( ), Color.White );
+                Main.spriteBatch.Draw( Image, BaseRectangle, Color.White );
             base.DrawSelf( );
         }
-
-        PrimitiveBatch _primitiveBatch;
-
     }
 }

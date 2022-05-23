@@ -8,10 +8,15 @@ namespace Everglow.Sources.Commons.Core.UI
 {
     public class ContainerSystem : ModSystem
     {
-        internal static Container Page { get; private set; } = new Container( );
+        internal static Container Page { get; set; } = new Container( );
 
+        bool _started = false;
         public override void UpdateUI( GameTime gameTime )
         {
+            Input.GetInformationFromDevice( );
+            Page.SeekAt()?.Events.Update( );
+            Page.CanSeek = false;
+            Page.ContainerElement.SetLayerout( 0 , 0 , Main.screenWidth , Main.screenHeight );
             Page.DoUpdate( );
             base.UpdateUI( gameTime );
         }

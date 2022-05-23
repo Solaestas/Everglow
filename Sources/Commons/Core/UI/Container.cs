@@ -119,19 +119,19 @@ namespace Everglow.Sources.Commons.Core.UI
         public virtual Container SeekAt( )
         {
             Container target = null;
-            for ( int sub = ContainerItems.Count - 1; sub > 0; sub-- )
+            for ( int sub = 0; sub < ContainerItems.Count; sub++ )
             {
                 if ( ContainerItems[ sub ].SeekAt( ) == null )
                 {
                     target = null;
                 }
-                else if ( ContainerItems[ sub ].SeekAt( ) != null && ContainerItems[ sub ].CanSeek )
+                else if ( ContainerItems[ sub ].SeekAt( ) != null )
                 {
                     target = ContainerItems[ sub ].SeekAt( );
                     return target;
                 }
             }
-            if ( CanSeek && GetInterviewState( ) )
+            if ( GetInterviewState( ) )
             {
                 return this;
             }
@@ -145,7 +145,10 @@ namespace Everglow.Sources.Commons.Core.UI
         public virtual bool GetInterviewState( )
         {
             if ( BaseRectangle.Contains( new Point( Mouse.GetState().X , Mouse.GetState().Y )) )
+            {
+                Main.LocalPlayer.mouseInterface = true;
                 return true;
+            }
             return false;
         }
 
@@ -193,7 +196,6 @@ namespace Everglow.Sources.Commons.Core.UI
             ContainerElement.UpdateElement( );
             this?.UpdateSelf( );
             this?.UpdateContainerItems( );
-            Events.Update( );
             MoveFunction?.UpdateLocation( ContainerElement );
             if ( MoveFunction != null )
                 ContainerElement.SetLocation( Location.X + MoveFunction.VelocityX, Location.Y + MoveFunction.VelocityY );
