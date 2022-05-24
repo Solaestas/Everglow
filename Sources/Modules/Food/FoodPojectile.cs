@@ -9,8 +9,9 @@ namespace Everglow.Sources.Modules.Food
             Player player = Main.player[projectile.owner];
             FoodBuffModPlayer FoodBuffModPlayer = player.GetModPlayer<FoodBuffModPlayer>();
 
-            if (source is EntitySource_ItemUse_WithAmmo)
+            if (source is EntitySource_ItemUse_WithAmmo & projectile.DamageType ==DamageClass.Ranged)
             {
+                
                 var sourceAmmo = source as EntitySource_ItemUse_WithAmmo;
                 if (FoodBuffModPlayer.StarfruitBuff)
                 {

@@ -58,14 +58,10 @@
         }
         /*
          
-
-
-
-
          
          */
         /// <summary>
-        /// 
+        /// 以下为计时器
         /// </summary>
         public int SatietyLossTimer { get; private set; }//饱食损失计时器
         public int ThirstyChangeTimer { get; private set; }//口渴变化计时器
