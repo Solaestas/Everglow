@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.ZY.Common;
+﻿namespace Everglow.Sources.Modules.ZYModule.Commons.Function;
 
 internal class TestItem : ModItem
 {

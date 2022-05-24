@@ -633,11 +633,6 @@ public class CPolygon : ICollider
     }
     public void RemoveAt(int index)
     {
-        if (vertices.Count == 3)
-        {
-            throw new Exception("Triangle Can't Remove vertex");
-        }
-
         vertices.RemoveAt(index);
         Initialize();
     }
@@ -645,7 +640,7 @@ public class CPolygon : ICollider
     {
         if (!vertices.IsConvex())
         {
-            return;
+            throw new Exception($"{this} is not convex");
         }
 
         normals = new Vector2[vertices.Count];

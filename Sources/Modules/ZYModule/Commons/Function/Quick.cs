@@ -1,13 +1,60 @@
-﻿using ReLogic.Content;
+﻿using Everglow.Sources.Modules.ZYModule.Commons.Core;
+using ReLogic.Content;
 
 
 namespace Everglow.Sources.Modules.ZY.Commons.Function;
 
+
+internal enum TextureType
+{
+    Noise,
+    WhitePixel
+}
+internal enum EffectType
+{
+
+}
 internal static class Quick
 {
+    public static Dictionary<TextureType, Asset<Texture2D>> textures = new Dictionary<TextureType, Asset<Texture2D>>();
+    public static Dictionary<EffectType, Asset<Effect>> effects = new Dictionary<EffectType, Asset<Effect>>();
     public static GraphicsDevice GD => Main.instance.GraphicsDevice;
     public static SpriteBatch SB => Main.spriteBatch;
-
+    public static string ResourcePath => "Everglow/Sources/ZYModule/Commons/Resource/";
+    public static Texture2D GetValue(this TextureType type, bool async = false)
+    {
+        string path = ResourcePath + type.ToString().Replace('_', '/');
+        if (textures.TryGetValue(type, out var texture))
+        {
+            if (!async && !texture.IsLoaded)
+            {
+                texture = ModContent.Request<Texture2D>(path, AssetRequestMode.ImmediateLoad);
+            }
+            return texture.Value;
+        }
+        else
+        {
+            textures[type] = ModContent.Request<Texture2D>(path, async ? AssetRequestMode.AsyncLoad : AssetRequestMode.ImmediateLoad);
+            return textures[type].Value;
+        }
+    }
+    public static Effect GetValue(this EffectType type, bool async = false)
+    {
+        string path = ResourcePath + type.ToString().Replace('_', '/');
+        if (effects.TryGetValue(type, out var effect))
+        {
+            if (!async && !effect.IsLoaded)
+            {
+                effect = ModContent.Request<Effect>(path, AssetRequestMode.ImmediateLoad);
+            }
+            return effect.Value;
+        }
+        else
+        {
+            effects[type] = ModContent.Request<Effect>(path, async ? AssetRequestMode.AsyncLoad : AssetRequestMode.ImmediateLoad);
+            return effects[type].Value;
+        }
+    }
     public static Asset<Texture2D> RequestTexture(string path, bool async = true) =>
         ModContent.Request<Texture2D>("Everglow/Sources/ZY/" + path,
         async ? AssetRequestMode.AsyncLoad : AssetRequestMode.ImmediateLoad);
@@ -21,4 +68,25 @@ internal static class Quick
         Main.NewText(obj, Color.Green);
         Console.WriteLine(obj);
     }
+
+    public static bool IsH(this Direction dir) => dir == Direction.Left || dir == Direction.Right;
+    public static bool IsV(this Direction dir) => dir == Direction.Top || dir == Direction.Bottom;
+    public static Vector2 ToVector2(this Direction dir) => dir switch
+    {
+        Direction.Top => new Vector2(0, -1),
+        Direction.Left => new Vector2(-1, 0),
+        Direction.Right => new Vector2(1, 0),
+        Direction.Bottom => new Vector2(0, 1),
+        Direction.TopLeft => new Vector2(-1, -1),
+        Direction.TopRight => new Vector2(1, -1),
+        Direction.BottomLeft => new Vector2(-1, 1),
+        Direction.BottomRight => new Vector2(1, 1),
+        _ => Vector2.Zero
+    };
+    public static Direction GetControlDirectionH(this Player player) =>
+        (player.controlLeft ^ player.controlRight) ? (player.controlLeft ? Direction.Left : Direction.Right) : Direction.None;
+    public static Direction GetControlDirectionV(this Player player) =>
+        (player.controlUp ^ player.controlDown) ? (player.controlDown ? Direction.Bottom : Direction.Top) : Direction.None;
+    public static CRectangle GetCollider(this Entity entity) => new CRectangle(entity.position.X, entity.position.Y, entity.width, entity.height);
+
 }
