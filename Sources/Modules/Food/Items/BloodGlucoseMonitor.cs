@@ -21,7 +21,6 @@
         {
             FoodSatietyInfoDisplayplayer SatietyInfo = player.GetModPlayer<FoodSatietyInfoDisplayplayer>();
             SatietyInfo.AccBloodGlucoseMonitor = true;
-
         }
 
         public override void AddRecipes()

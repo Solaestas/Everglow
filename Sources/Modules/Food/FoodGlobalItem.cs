@@ -13,7 +13,7 @@ namespace Everglow.Sources.Modules.Food
         {
             m_vanillaFoodInfos = new Dictionary<int, FoodInfo>
             {
-                //苹果 饱食度10 加8%减伤
+                //苹果 
                 {
                     ItemID.Apple,
                     new FoodInfo() {
@@ -23,7 +23,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="增加8%减伤\n“一天一苹果，医生远离我”"
                     }
                 },
-                //苹果派 加10%减伤,1生命回复
+                //苹果派 
                 {
                     ItemID.ApplePie,
                     new FoodInfo() {
@@ -33,7 +33,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="加8%减伤,1生命回复\n“一天一苹果，医生远离我”"
                     }
                 },
-                //杏 饱食度10 魔力再生加4
+                //杏 
                 {
                     ItemID.Apricot,
                     new FoodInfo() {
@@ -43,7 +43,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="增加加4魔力再生\n“止渴润肺”"
                     }
                 },
-                //培根 饱食度10 加2生命回复，所受冷系伤害降低
+                //培根
                 {
                     ItemID.Bacon,
                     new FoodInfo() {
@@ -53,7 +53,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="加2生命回复，所受冷系伤害降低\n“开胃祛寒”"
                     }
                 },
-                //香蕉 饱食度10 20%不消耗弹药，加5%远程伤害
+                //香蕉
                 {
                     ItemID.Banana,
                     new FoodInfo() {
@@ -63,7 +63,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="20%不消耗弹药，加5%远程伤害\n“低血压”"
                     }
                 },
-                //香蕉船 饱食度15 33%不消耗弹药，加8%暴击
+                //香蕉船
                 {
                     ItemID.BananaSplit,
                     new FoodInfo() {
@@ -73,7 +73,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="33%不消耗弹药，增加8%远程暴击\n“低血压”"
                     }
                 },
-                //烧烤肋排 饱食度20 加50血量上限
+                //烧烤肋排
                 {
                     ItemID.BBQRibs,
                     new FoodInfo() {
@@ -83,7 +83,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="加50血量上限\n“滋阴补血”"
                     }
                 },
-                //黑醋栗  饱食度10 获得夜视、危险感知能力
+                //黑醋栗
                 {
                     ItemID.BlackCurrant,
                     new FoodInfo() {
@@ -93,7 +93,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="获得夜视、危险感知能力\n“改善視力” "
                     }
                 },
-                //血橙 饱食度10 加25血量上限
+                //血橙
                 {
                     ItemID.BloodOrange,
                     new FoodInfo() {
@@ -103,7 +103,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="增加加25血量上限\n“这里不是崽饿”"
                     }
                 },
-                //鱼菇汤 饱食度15 加20魔力上限,5%魔法伤害
+                //鱼菇汤
                 {
                     ItemID.BowlofSoup,
                     new FoodInfo() {
@@ -113,7 +113,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="增加20魔力上限,5%魔法伤害\n“补脑”"
                     }
                 },
-                //炖兔兔 饱食度20 自动跳跃，增加跳跃能力
+                //炖兔兔
                 {
                     ItemID.BunnyStew,
                     new FoodInfo() {
@@ -123,7 +123,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="自动跳跃，增加跳跃能力\n“没有任何兔子在制作过程中受到伤害 ”"
                     }
                 },
-                //汉堡 饱食度15 减少移速，增加防御
+                //汉堡
                 {
                     ItemID.Burger,
                     new FoodInfo() {
@@ -133,7 +133,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="减少移速，增加防御\n“热量炸弹”"
                     }
                 },
-                //樱桃 饱食度10 增加移速与跳跃高度
+                //樱桃
                 {
                     ItemID.Cherry,
                     new FoodInfo() {
@@ -143,7 +143,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="增加移速与跳跃高度\n“你所热爱的，就是你的生活”"
                     }
                 },
-                //鸡块 饱食度10 增加1生命回复、4%攻速
+                //鸡块
                 {
                     ItemID.ChickenNugget,
                     new FoodInfo() {
@@ -153,7 +153,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="增加1生命回复、8%攻速\n“数一数二的鸡块！”"
                     }
                 },
-                //巧克力曲奇饼干 饱食度10 短时间内快速恢复生命与魔力
+                //巧克力曲奇饼干
                 {
                     ItemID.ChocolateChipCookie,
                     new FoodInfo() {
@@ -163,7 +163,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="增加2点生命回复和魔力回复\n“补充能量”"
                     }
                 },
-                //圣诞布丁 饱食度10 仇恨值减600
+                //圣诞布丁
                 {
                     ItemID.ChristmasPudding,
                     new FoodInfo() {
@@ -173,7 +173,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="仇恨值减少800\n“美容养颜”"
                     }
                 },
-                //椰子 饱食度10 加4防御，5%减伤
+                //椰子
                 {
                     ItemID.Coconut,
                     new FoodInfo() {
@@ -183,7 +183,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="增加4防御，5%减伤\n“我从小啃到大”"
                     }
                 },
-                //熟鱼 饱食度20 加40魔力上限,8%魔法暴击率
+                //熟鱼
                 {
                     ItemID.CookedFish,
                     new FoodInfo() {
@@ -193,7 +193,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="加40魔力上限,8%魔法暴击率\n“益气健脾”"
                     }
                 },
-                //熟棉花糖 饱食度5 减40%最大掉落速度，增加额外摔伤距离
+                //熟棉花糖
                 {
                     ItemID.CookedMarshmallow,
                     new FoodInfo() {
@@ -203,7 +203,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="减75%最大掉落速度,但无法操控下落速度\n“轻飘飘的”"
                     }
                 },
-                //熟虾 饱食度20 加10防御,4穿甲
+                //熟虾
                 {
                     ItemID.CookedShrimp,
                     new FoodInfo() {
@@ -213,7 +213,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="加10防御,4穿甲\n“补钙”"
                     }
                 },
-                //火龙果 饱食度10 攻击造成着火
+                //火龙果
                 {
                     ItemID.Dragonfruit,
                     new FoodInfo() {
@@ -223,7 +223,7 @@ namespace Everglow.Sources.Modules.Food
                         Description = "攻击造成着火以及涂油\n“红红火火恍恍惚惚”"
                     }
                 },
-                //接骨木果 饱食度10 你可以短距离冲刺
+                //接骨木果
                 {
                     ItemID.Elderberry,
                     new FoodInfo() {
@@ -233,7 +233,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="你可以短距离冲刺\n“抗氧化”"
                     }
                 },
-                //食用蜗牛 饱食度10 大大减速，加60%减伤
+                //食用蜗牛
                 {
                     ItemID.Escargot,
                     new FoodInfo() {
@@ -243,7 +243,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="大大减速，加50%减伤\n“这不是神龟药水！”"
                     }
                 },
-                //煎蛋 饱食度10 加8%伤害
+                //煎蛋
                 {
                     ItemID.FriedEgg,
                     new FoodInfo() {
@@ -253,7 +253,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="加8%伤害\n“蛋白质”"
                     }
                 },
-                //薯条 饱食度10 加4防御，4%暴击
+                //薯条
                 {
                     ItemID.Fries,
                     new FoodInfo() {
@@ -263,7 +263,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="加4防御，8%暴击\n“高油高盐”"
                     }
                 },
-                //蛙腿三明治 饱食度20 饱食度20 自动跳跃，增加伤害和跳跃能力
+                //蛙腿三明治
                 {
                     ItemID.FroggleBunwich,
                     new FoodInfo() {
@@ -273,7 +273,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="自动跳跃，增加伤害和跳跃能力\n“你能真正尝到沼泽的味道。”"
                     }
                 },
-                //水果色拉 饱食度10 中幅提升大部分属性
+                //水果色拉
                 {
                     ItemID.FruitSalad,
                     new FoodInfo() {
@@ -283,7 +283,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="提升大部分属性\n“长久的维生素！”"
                     }
                 },
-                //姜饼 饱食度10 加1生命回复,保暖
+                //姜饼
                 {
                     ItemID.GingerbreadCookie,
                     new FoodInfo() {
@@ -293,7 +293,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="加1生命回复,保暖\n“驱寒排毒”"
                     }
                 },
-                //金美味 饱食度30 攻击造迈达斯，中幅提升大部分属性
+                //金美味
                 {
                     ItemID.GoldenDelight,
                     new FoodInfo() {
@@ -303,7 +303,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="攻击造迈达斯，提升大部分属性\n“金灿灿!”"
                     }
                 },
-                //葡萄柚 饱食度10 加10%召唤物击退
+                //葡萄柚
                 {
                     ItemID.Grapefruit,
                     new FoodInfo() {
@@ -313,7 +313,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="加50%召唤物击退\n “拒绝肾透支”"
                     }
                 },
-                //葡萄 饱食度10 加1召唤栏，幸运值加10%，减8防御
+                //葡萄
                 {
                     ItemID.Grapes,
                     new FoodInfo() {
@@ -323,7 +323,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="加1召唤栏，幸运值加10%，减8防御\n“多子多福 ”"
                     }
                 },
-                //烤松鼠 饱食度20 增加跳跃能力
+                //烤松鼠
                 {
                     ItemID.GrilledSquirrel,
                     new FoodInfo() {
@@ -333,7 +333,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="增加跳跃能力\n“欢跃”"
                     }
                 },
-                //蛆虫汤 饱食度15 加25渔力，每秒减2血
+                //蛆虫汤
                 {
                     ItemID.GrubSoup,
                     new FoodInfo() {
@@ -343,7 +343,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="加25渔力，每秒减2生命\n“吃啥补啥，就是有点恶心”"
                     }
                 },
-                //热狗 饱食度15 减少移速，增加防御
+                //热狗
                 {
                     ItemID.Hotdog,
                     new FoodInfo() {
@@ -353,7 +353,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="减少移速，增加近战伤害\n“热量炸弹”"
                     }
                 },
-                //冰淇淋 饱食度10 免疫着火和火块
+                //冰淇淋
                 {
                     ItemID.IceCream,
                     new FoodInfo() {
@@ -363,7 +363,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="免疫着火和火块\n“吃雪（bushi”"
                     }
                 },
-                //柠檬 饱食度10 加5%远程暴击,仇恨值减300
+                //柠檬
                 {
                     ItemID.Lemon,
                     new FoodInfo() {
@@ -373,7 +373,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="加5%远程暴击,仇恨值减300\n“消炎美容”"
                     }
                 },
-                //龙虾尾 饱食度20 加6防御,25%挖矿速度
+                //龙虾尾
                 {
                     ItemID.LobsterTail,
                     new FoodInfo() {
@@ -383,7 +383,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="加6防御,25%挖矿速度\n“壮阳”"
                     }
                 },
-                //芒果 饱食度10 减缓因食物中毒而产生的持续减血效果
+                //芒果
                 {
                     ItemID.Mango,
                     new FoodInfo() {
@@ -393,7 +393,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="减缓因食物中毒而产生的持续减血效果\n“清胃解毒”"
                     }
                 },
-                //棉花糖 饱食度5 减50%最大掉落速度，增加额外摔伤距离
+                //棉花糖
                 {
                     ItemID.Marshmallow,
                     new FoodInfo() {
@@ -403,7 +403,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="可以二段跳\n“像云一样”"
                     }
                 },
-                //怪物三明治 饱食度20 加25%暴击率，每秒减4生命
+                //怪物三明治
                 {
                     ItemID.MonsterLasagna,
                     new FoodInfo() {
@@ -413,7 +413,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="增加25%暴击率，但每秒减4生命\n“弄熟的恶魔还是恶魔，在千层饼中也不会改变。”"
                     }
                 },
-                //玉米片 饱食度20 攻击造成涂油以及所有火焰减益
+                //玉米片
                 {
                     ItemID.Nachos,
                     new FoodInfo() {
@@ -423,7 +423,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="攻击造成涂油以及所有火焰减益\n“爆米花”"
                     }
                 },
-                //泰式炒面 饱食度20 加50%召唤物击退
+                //泰式炒面
                 {
                     ItemID.PadThai,
                     new FoodInfo() {
@@ -433,7 +433,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="增加50%召唤物击退\n“异域风情”"
                     }
                 },
-                //桃子 饱食度10 增加心的拾取范围，1生命回复
+                //桃子
                 {
                     ItemID.Peach,
                     new FoodInfo() {
@@ -443,7 +443,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="增加心的拾取范围，1生命回复\n“在想peach”"
                     }
                 },
-                //越南河粉 饱食度20 加10%召唤物伤害
+                //越南河粉
                 {
                     ItemID.Pho,
                     new FoodInfo() {
@@ -453,7 +453,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="增加10%召唤物伤害\n“异域风情 ”"
                     }
                 },
-                //菠萝 饱食度10 加6防御，50%反伤
+                //菠萝
                 {
                     ItemID.Pineapple,
                     new FoodInfo() {
@@ -463,7 +463,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="增加6防御，50%反伤\n“菠萝碱”"
                     }
                 },
-                //披萨 饱食度15 加8穿甲
+                //披萨
                 {
                     ItemID.Pizza,
                     new FoodInfo() {
@@ -473,7 +473,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="增加10穿甲\n“会让意大利人破防的菠萝披萨。”"
                     }
                 },
-                //李子 饱食度10 加600仇恨值，8%攻速
+                //李子
                 {
                     ItemID.Plum,
                     new FoodInfo() {
@@ -483,7 +483,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="加600仇恨值，8%攻速\n“至于我的建议，还是再等等吧”"
                     }
                 },
-                //薯片 饱食度15 加4防御，4%伤害
+                //薯片
                 {
                     ItemID.PotatoChips,
                     new FoodInfo() {
@@ -493,7 +493,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="加4防御，8%伤害\n“高油高盐”"
                     }
                 },
-                //南瓜派 饱食度20 最大生命值加50
+                //南瓜派
                 {
                     ItemID.PumpkinPie,
                     new FoodInfo() {
@@ -503,7 +503,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="最大生命值加50\n“丰收的喜悦”"
                     }
                 },
-                //红毛丹 饱食度10 免疫中毒和毒液
+                //红毛丹
                 {
                     ItemID.Rambutan,
                     new FoodInfo() {
@@ -513,7 +513,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="免疫中毒和毒液以及十字章一样的免疫效果\n“提高免疫”"
                     }
                 },
-                //烤鸟 饱食度20 中幅增强飞行能力
+                //烤鸟
                 {
                     ItemID.RoastedBird,
                     new FoodInfo() {
@@ -523,7 +523,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="增加飞行能力\n“我是一只小小小鸟”"
                     }
                 },
-                //烤鸭 饱食度20 可以在水上行走，小幅增强飞行能力
+                //烤鸭
                 {
                     ItemID.RoastedDuck,
                     new FoodInfo() {
@@ -533,7 +533,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="可以在水上行走，增加飞行能力\n“这是烤鸭”"
                     }
                 },
-                //生鱼片 饱食度20 可以游泳，水下呼吸，加10%伤害，20%移速，每秒减3生命
+                //生鱼片
                 {
                     ItemID.Sashimi,
                     new FoodInfo() {
@@ -543,7 +543,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="可以游泳，水下呼吸，增加10%伤害，20%移速，但每秒减3生命\n“寄生虫！”"
                     }
                 },
-                //炒蛙腿 饱食度20 自动跳跃，增加跳跃能力
+                //炒蛙腿
                 {
                     ItemID.SauteedFrogLegs,
                     new FoodInfo() {
@@ -553,7 +553,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="自动跳跃，增加跳跃能力\n“钓不到蛙腿？那就吃吧。”"
                     }
                 },
-                //海鲜大餐 饱食度30 增加12%暴击，伤害，攻速
+                //海鲜大餐
                 {
                     ItemID.SeafoodDinner,
                     new FoodInfo() {
@@ -563,7 +563,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="增加12%暴击，伤害，攻速\n“够生猛！”"
                     }
                 },
-                //鲜虾三明治 饱食度15 加6防御,25%挖矿速度.
+                //鲜虾三明治
                 {
                     ItemID.ShrimpPoBoy,
                     new FoodInfo() {
@@ -573,7 +573,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="加6防御,25%挖矿速度\n“壮阳”"
                     }
                 },
-                //去壳牡蛎 饱食度20 加10穿甲,减5防御，每秒减3生命
+                //去壳牡蛎
                 {
                     ItemID.ShuckedOyster,
                     new FoodInfo() {
@@ -583,7 +583,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="减5防御，加10穿甲，每秒减3生命\n“寄生虫！”"
                     }
                 },
-                //意大利面 饱食度20 加1召唤栏
+                //意大利面
                 {
                     ItemID.Spaghetti,
                     new FoodInfo() {
@@ -593,7 +593,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="增加1召唤栏\n“异域风情”"
                     }
                 },
-                //杨桃 饱食度10 使用远程武器时会生成向后的射弹
+                //杨桃
                 {
                     ItemID.Starfruit,
                     new FoodInfo() {
@@ -603,7 +603,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="使用远程武器时会生成向后的射弹\n“1437大帝的淫威”"
                     }
                 },
-                //牛排 饱食度20 减33%魔力消耗
+                //牛排
                 {
                     ItemID.Steak,
                     new FoodInfo() {
@@ -613,7 +613,7 @@ namespace Everglow.Sources.Modules.Food
                         Description ="减少33%魔力消耗\n“上流 ”"
                     }
                 },
-                //蜜糖饼干 饱食度10 加10%远程伤害
+                //蜜糖饼干
                 {
                     ItemID.SugarCookie,
                     new FoodInfo() {
@@ -626,11 +626,20 @@ namespace Everglow.Sources.Modules.Food
             };
 
         }
-
+        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
+        {
+            if (m_vanillaFoodInfos.ContainsKey(item.type))
+            {
+                tooltips.RemoveRange(2,2);
+                var foodInfo = m_vanillaFoodInfos[item.type];
+                TooltipLine tooltip = new TooltipLine(Mod,item.Name, foodInfo.Description);
+                tooltips.Add(tooltip);
+            }
+        }
         public override void SetStaticDefaults()
         {
 
-            //Tooltip.SetDefault("it can display CurrentSatiety");
+            
         }
 
         public override void SetDefaults(Item item)

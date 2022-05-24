@@ -4,6 +4,7 @@
     {
         public override void SetStaticDefaults()
         {
+            
             Tooltip.SetDefault("it can display CurrentSatiety");
 
         }

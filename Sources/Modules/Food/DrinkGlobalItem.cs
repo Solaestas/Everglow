@@ -198,6 +198,17 @@ namespace Everglow.Sources.Modules.Food
             };
         }
 
+        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
+        {
+            if (m_vanillaDrinkInfos.ContainsKey(item.type))
+            {
+                tooltips.RemoveRange(2, 2);
+                var DrinkInfo = m_vanillaDrinkInfos[item.type];
+                TooltipLine tooltip = new TooltipLine(Mod, item.Name, DrinkInfo.Description);
+                tooltips.Add(tooltip);
+            }
+        }
+
         public override void SetStaticDefaults()
         {
             
