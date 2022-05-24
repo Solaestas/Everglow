@@ -5,7 +5,7 @@
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("RambutanBuff");
-            Description.SetDefault("提高免疫 \n 免疫中毒和毒液以及十字章一样的免疫效果");
+            Description.SetDefault("免疫中毒和毒液以及十字章一样的免疫效果\n“提高免疫”");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
         }

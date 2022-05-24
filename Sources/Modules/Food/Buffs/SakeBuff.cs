@@ -5,7 +5,7 @@
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("SakeBuff");
-            Description.SetDefault("纯度，太高了 \n 短时间内减18防御，短时间内大幅增加近战能力");
+            Description.SetDefault("短时间内减18防御，大幅增加近战能力\n“纯度，太高了。”");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
         }

@@ -5,7 +5,7 @@
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("IceCreamBuff");
-            Description.SetDefault("吃雪（bushi \n 免疫着火和火块");
+            Description.SetDefault("免疫着火和火块\n“吃雪（bushi”");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
         }

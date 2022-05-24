@@ -5,7 +5,7 @@
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("StarfruitBuff");
-            Description.SetDefault("1437大帝的淫威 \n 使用远程武器时会生成向后的射弹");
+            Description.SetDefault("使用远程武器时会生成向后的射弹\n“1437大帝的淫威”");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
         }

@@ -5,7 +5,7 @@
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("CookedShrimpBuff");
-            Description.SetDefault("补钙 \n 加10防御,4穿甲");
+            Description.SetDefault("加10防御,4穿甲\n“补钙”");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
         }

@@ -5,7 +5,7 @@
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("MarshmallowBuff");
-            Description.SetDefault("像云一样 \n 可以二段跳");
+            Description.SetDefault("可以二段跳\n“像云一样”");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
         }

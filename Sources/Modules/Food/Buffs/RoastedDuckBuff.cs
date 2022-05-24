@@ -5,7 +5,7 @@
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("RoastedDuckBuff");
-            Description.SetDefault("别看成烧鸡，是烤鸭 \n 可以在水上行走，增加飞行能力");
+            Description.SetDefault("可以在水上行走，增加飞行能力\n“这是烤鸭”");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
         }

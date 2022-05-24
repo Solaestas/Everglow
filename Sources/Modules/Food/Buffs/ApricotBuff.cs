@@ -5,7 +5,7 @@
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("ApricotBuff");
-            Description.SetDefault("止渴润肺 \n 魔力再生加4");
+            Description.SetDefault("增加加4魔力再生\n“止渴润肺”");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
         }

@@ -5,7 +5,7 @@
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("PeachSangriaBuff");
-            Description.SetDefault("我也是桃饱用户 \n 短时间内大幅回复生命，增加心的拾取范围");
+            Description.SetDefault("短时间内大幅回复生命，增加心的拾取范围\n“我也是桃饱用户”");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
         }

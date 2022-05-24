@@ -5,7 +5,7 @@
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("FriedEggBuff");
-            Description.SetDefault("蛋白质 \n加8%伤害");
+            Description.SetDefault("加8%伤害\n“蛋白质”");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
         }

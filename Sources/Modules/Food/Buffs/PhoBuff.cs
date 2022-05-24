@@ -5,7 +5,7 @@
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("PhoBuff");
-            Description.SetDefault("异域风情 \n 加10%召唤物伤害");
+            Description.SetDefault("增加10%召唤物伤害\n“异域风情 ”");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
         }

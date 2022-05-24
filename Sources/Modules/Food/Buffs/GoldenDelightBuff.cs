@@ -5,7 +5,7 @@
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("GoldenDelightBuff");
-            Description.SetDefault("金灿灿! \n 攻击造迈达斯，提升大部分属性");
+            Description.SetDefault("攻击造迈达斯，提升大部分属性\n“金灿灿!”");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
         }

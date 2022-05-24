@@ -5,7 +5,7 @@
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("SashimiBuff");
-            Description.SetDefault("寄生虫！\n 可以游泳，水下呼吸，加10%伤害，20%移速，每秒减3生命");
+            Description.SetDefault("可以游泳，水下呼吸，增加10%伤害，20%移速，但每秒减3生命\n“寄生虫！”");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
         }

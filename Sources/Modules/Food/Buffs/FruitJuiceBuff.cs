@@ -5,7 +5,7 @@
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("FruitJuiceBuff");
-            Description.SetDefault("维生素！ \n 短时间内幅大大提升大部分属性");
+            Description.SetDefault("短时间内幅大大提升大部分属性\n“维生素！”");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
 
