@@ -14,167 +14,185 @@ namespace Everglow.Sources.Modules.Food
         {
             m_vanillaDrinkInfos = new Dictionary<int, DrinkInfo>
             {
-                //麦芽酒 饱食度5 防御减8，伤害、暴击率和近战攻速各增加8%
+                //麦芽酒
                 {
                     ItemID.Ale,
                     new DrinkInfo() {
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<AleBuff> (),
-                        BuffTime = new FoodDuration(0, 7, 30)
+                        BuffTime = new FoodDuration(0, 7, 30),
+                        Description =  "短时间内鞭子的范围和速度提升至2.5倍\n“耍酒疯”"
                     }
                 },
-                //苹果汁 饱食度5 短时间内60%减伤 
+                //苹果汁
                 {
                     ItemID.AppleJuice,
                     new DrinkInfo() {
                        Thirsty = false ,
                        BuffType = ModContent.BuffType<AppleJuiceBuff>(),
-                       BuffTime = new FoodDuration(0, 7, 30)
+                       BuffTime = new FoodDuration(0, 7, 30),
+                       Description =  " 短时间内增加80%减伤\n“一天一苹果，医生远离我”"
                     }
                 },
-                 //冰冻香蕉代基里 饱食度5 短时间内不消耗子弹，极大增加远程伤害暴击
+                 //冰冻香蕉代基里
                 {
                     ItemID.BananaDaiquiri,
                     new DrinkInfo() {
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<BananaDaiquiriBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30)
+                        BuffTime = new FoodDuration(0, 7, 30),
+                        Description = "短时间内不消耗子弹，大幅增加远程伤害与暴击\n“低体温血压”"
                     }
                 },
-                 //血腥麝香葡萄 饱食度5 短时间内迅速回血
+                 //血腥麝香葡萄
                 {
                     ItemID.BloodyMoscato,
                     new DrinkInfo() {
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<BloodyMoscatoBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30)
+                        BuffTime = new FoodDuration(0, 7, 30),
+                        Description ="短时间内每次攻击回5点生命\n血色"
                     }
                 },
-                //奶油苏打水 饱食度5 加8%远程伤害
+                //奶油苏打水
                 {
                     ItemID.CreamSoda,
                     new DrinkInfo() {
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<CreamSodaBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30)
+                        BuffTime = new FoodDuration(0, 7, 30),
+                        Description ="短时间内大幅增加近战能力，但极其吸引仇恨\n“喷射！”"
                     }
                 },
-                //咖啡 饱食度5 加25%铺墙铺砖速度，5%攻速
+                //咖啡
                 {
                     ItemID.CoffeeCup,
                     new DrinkInfo() {
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<CoffeeCupBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30)
+                        BuffTime = new FoodDuration(0, 7, 30),
+                        Description ="短时间内大幅增加铺墙铺砖速度，高亮标记敌人、陷阱和宝藏，你会散发光芒\n“社畜的宝物”"
                     }
                 },
-                //果汁 饱食度5 小幅提升大部分属性
+                //果汁
                 {
                     ItemID.FruitJuice,
                     new DrinkInfo() {
                        Thirsty = false ,
                        BuffType = ModContent.BuffType<FruitJuiceBuff>(),
-                       BuffTime = new FoodDuration(0, 7, 30)
+                       BuffTime = new FoodDuration(0, 7, 30),
+                        Description ="短时间内幅大大提升大部分属性\n“维生素！”"
                     }
                 },
-                //葡萄汁 饱食度5 短时间内加5召唤栏，加100%召唤物伤害，击退，极其幸运
+                //葡萄汁
                 {
                     ItemID.GrapeJuice,
                     new DrinkInfo() {
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<GrapeJuiceBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30)
+                        BuffTime = new FoodDuration(0, 7, 30),
+                        Description ="短时间极其幸运\n“浓缩的幸福”"
                     }
                 },                
-                //柠檬水 饱食度5 短时间内远程击退加倍,仇恨值减2400
+                //柠檬水
                 {
                     ItemID.Lemonade,
                     new DrinkInfo() {
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<LemonadeBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30)
+                        BuffTime = new FoodDuration(0, 7, 30),
+                        Description ="短时间内远程击退加倍,仇恨值减2400\n“消炎美容”"
                     }
                 },     
-                //盒装牛奶 饱食度10 同十字章一样的免疫效果
+                //盒装牛奶
                 {
                     ItemID.MilkCarton,
                     new DrinkInfo() {
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<MilkCartonBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30)
+                        BuffTime = new FoodDuration(0, 7, 30),
+                        Description ="短时间内免疫几乎所有debuff\n“一奶解百毒 ”"
                     }
                 },
-                //奶昔 饱食度10 加10%移速
+                //奶昔
                 {
                     ItemID.Milkshake,
                     new DrinkInfo() {
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<MilkshakeBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30)
+                        BuffTime = new FoodDuration(0, 7, 30),
+                        Description ="短时间内大幅加移速\n“节食减肥 ”"
                     }
                 },
-                //桃子果酒 饱食度5 增加心的拾取范围，1生命回复，减8防御
+                //桃子果酒
                 {
                     ItemID.PeachSangria,
                     new DrinkInfo() {
                         Thirsty = false,
                         BuffType = ModContent.BuffType<PeachSangriaBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30)
+                        BuffTime = new FoodDuration(0, 7, 30),
+                        Description ="短时间内大幅回复生命，增加心的拾取范围\n“我也是桃饱用户”"
                     }
                 },
-                //椰林飘香 饱食度5 加5%减伤，2防御，33%反伤
+                //椰林飘香
                 {
                     ItemID.PinaColada,
                     new DrinkInfo() {
                         Thirsty = false,
                         BuffType = ModContent.BuffType<PinaColadaBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30)
+                        BuffTime = new FoodDuration(0, 7, 30),
+                        Description ="短时间内十倍反伤（上限1000）,防御增加20\n“从不添加香精当生榨 。"
                     }
                 },
-                //七彩潘趣酒 饱食度5 加400仇恨值,1召唤栏,减8防御
+                //七彩潘趣酒
                 {
                     ItemID.PrismaticPunch,
                     new DrinkInfo() {
                         Thirsty = false,
                         BuffType = ModContent.BuffType<PrismaticPunchBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30)
+                        BuffTime = new FoodDuration(0, 7, 30),
+                        Description ="短时间内增加10召唤栏，增加50%召唤伤害，击退\n“高雅兴致”"
                     }
                 },                
-                //清酒 饱食度5 短时间内减18防御，加80%暴击，加80%伤害， 加80%攻速
+                //清酒
                 {
                     ItemID.Sake,
                     new DrinkInfo() {
                         Thirsty = false,
                         BuffType = ModContent.BuffType<SakeBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30)
+                        BuffTime = new FoodDuration(0, 7, 30),
+                        Description ="短时间内减18防御，大幅增加近战能力\n“纯度，太高了。”"
                     }
                 },
-                //暗黑奶昔 饱食度5 短时间内80%闪避
+                //暗黑奶昔
                 {
                     ItemID.SmoothieofDarkness,
                     new DrinkInfo() {
                         Thirsty = false,
                         BuffType = ModContent.
                         BuffType<SmoothieofDarknessBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30)
+                        BuffTime = new FoodDuration(0, 7, 30),
+                        Description ="短时间内80%闪避\n“腹黑（字面意义上）”"
                     }
                 }, 
-                //一杯茶 饱食度5 加2魔力回复，20魔力上限
+                //一杯茶
                 {
                     ItemID.Teacup,
                     new DrinkInfo() {
                         Thirsty = false,
                         BuffType = ModContent.BuffType<TeacupBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30)
+                        BuffTime = new FoodDuration(0, 7, 30),
+                        Description ="短时间内大幅增加魔力回复，魔法攻击，暴击\n“醇香四溢”"
                     }
                 },
-                //热带奶昔 饱食度5 短时间内不消耗魔力，加100%魔力攻击，100%暴击
+                //热带奶昔
                 {
                     ItemID.TropicalSmoothie,
                     new DrinkInfo() {
                         Thirsty = false,
                         BuffType = ModContent.BuffType<TropicalSmoothieBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30)
+                        BuffTime = new FoodDuration(0, 7, 30),
+                        Description ="短时间内魔法攻击仅消耗一点魔力，大幅增加5%魔法攻击，暴击\n“热带风暴”"
                     }
                 }
             };
@@ -182,7 +200,7 @@ namespace Everglow.Sources.Modules.Food
 
         public override void SetStaticDefaults()
         {
-
+            
         }
 
         public override void SetDefaults(Item item)
@@ -196,6 +214,7 @@ namespace Everglow.Sources.Modules.Food
                 // 替换掉原版的 buff 类型
                 item.buffType = drinkInfo.BuffType;
                 item.buffTime = drinkInfo.BuffTime.TotalFrames;
+                
             }
             base.SetDefaults(item);
         }
