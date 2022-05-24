@@ -1,4 +1,4 @@
-using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds;
 namespace Everglow.Sources.Modules.MythModule.TheFirefly
 {
     public class FireflyBiome : ModBiome
@@ -15,8 +15,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
 		}
 		public override bool IsBiomeActive(Player player)
 		{
-			MothLand mothLand = ModContent.GetInstance<MothLand>();
-			return mothLand.BiomeActive();
+			MothBackground mothBackground = ModContent.GetInstance<MothBackground>();
+			return mothBackground.BiomeActive();
 		}
 	}
 }
