@@ -71,10 +71,7 @@
         public int ThirstyChangeTimer { get; private set; }//口渴变化计时器
         public override void PostUpdate()
         {
-            if (Player.active)
-            {
-                FoodState(); 
-            }
+            FoodState(); 
             if (!Player.active)
             {
                 CurrentSatiety = 0;
@@ -93,9 +90,9 @@
             {
                 ThirstyChangeTimer++;
             }
-            
+
             //每三十秒减少一饱食度
-            if (SatietyLossTimer>=1800)
+            if (SatietyLossTimer>=180)
             {
                 CurrentSatiety -= 1 ;
                 SatietyLossTimer = 0;
@@ -105,10 +102,10 @@
                 CurrentSatiety = 0;
             }
             //每五分钟从口渴变得不口渴
-            if (ThirstyChangeTimer >= 1800)
+            if (ThirstyChangeTimer >= 180)
             {
                 Thirstystate = true ;
-                SatietyLossTimer = 0;
+                ThirstyChangeTimer = 0;
             }
 
         }
