@@ -1,40 +1,40 @@
-﻿using System.Linq;
-using Terraria;
-using Terraria.ModLoader;
-
-
-namespace Everglow.Sources.Modules.Food
+﻿namespace Everglow.Sources.Modules.Food
 {
-	class FoodSatietyInfoDisplay : InfoDisplay
-	{
-		public override void SetStaticDefaults() {
-			InfoName.SetDefault("Current Satiety");
-		}
+    class FoodSatietyInfoDisplay : InfoDisplay
+    {
+        public override void SetStaticDefaults()
+        {
+            InfoName.SetDefault("Current Satiety");
+        }
 
 
-		public override bool Active() {
-			return Main.LocalPlayer.GetModPlayer<FoodSatietyInfoDisplayplayer>().showCurrentSatiety;
-		}
+        public override bool Active()
+        {
+            return Main.LocalPlayer.GetModPlayer<FoodSatietyInfoDisplayplayer>().ShowCurrentSatiety;
+        }
 
-		public override string DisplayValue() {
+        public override string DisplayValue()
+        {
 
-			int CurrentSatiety = Main.LocalPlayer.GetModPlayer<FoodModPlayer>().CurrentSatiety;
-			return $"{CurrentSatiety} Satiety .";
-		}
-	}
+            int CurrentSatiety = Main.LocalPlayer.GetModPlayer<FoodModPlayer>().CurrentSatiety;
+            return $"{CurrentSatiety} Satiety .";
+        }
+    }
 
-	public class FoodSatietyInfoDisplayplayer : ModPlayer
-	{
-		public bool accBloodGlucoseMonitor;
-		public bool showCurrentSatiety;
-		public override void ResetEffects() {
-			accBloodGlucoseMonitor = false;
-			showCurrentSatiety = false;
-		}
+    public class FoodSatietyInfoDisplayplayer : ModPlayer
+    {
+        public bool AccBloodGlucoseMonitor;
+        public bool ShowCurrentSatiety;
+        public override void ResetEffects()
+        {
+            AccBloodGlucoseMonitor = false;
+            ShowCurrentSatiety = false;
+        }
 
-		public override void UpdateEquips() {
-			if (accBloodGlucoseMonitor)
-				showCurrentSatiety = true;
-		}
-	}
+        public override void UpdateEquips()
+        {
+            if (AccBloodGlucoseMonitor)
+                ShowCurrentSatiety = true;
+        }
+    }
 }

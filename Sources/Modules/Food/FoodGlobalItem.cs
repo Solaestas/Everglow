@@ -8,7 +8,7 @@ namespace Everglow.Sources.Modules.Food
     {
         // 对于原版的食物进行类型Id到 FoodInfo 的映射，直接获取FoodInfo实例
         private static Dictionary<int, FoodInfo> m_vanillaFoodInfos;
-    
+
         public FoodGlobalItem()
         {
             m_vanillaFoodInfos = new Dictionary<int, FoodInfo>
@@ -17,8 +17,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.Apple,
                     new FoodInfo() {
-                        Satiety = 10, 
-                        BuffType = ModContent.BuffType<AppleBuff>(), 
+                        Satiety = 10,
+                        BuffType = ModContent.BuffType<AppleBuff>(),
                         BuffTime = new FoodDuration(4, 0, 0)
                     }
                 },
@@ -26,8 +26,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.ApplePie,
                     new FoodInfo() {
-                        Satiety = 15, 
-                        BuffType = ModContent.BuffType<ApplePieBuff>(), 
+                        Satiety = 15,
+                        BuffType = ModContent.BuffType<ApplePieBuff>(),
                         BuffTime = new FoodDuration(6, 0, 0)
                     }
                 },
@@ -35,8 +35,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.Apricot,
                     new FoodInfo() {
-                        Satiety = 10, 
-                        BuffType = ModContent.BuffType<ApricotBuff>(), 
+                        Satiety = 10,
+                        BuffType = ModContent.BuffType<ApricotBuff>(),
                         BuffTime = new FoodDuration(4, 0, 0)
                     }
                 },
@@ -44,8 +44,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.Bacon,
                     new FoodInfo() {
-                        Satiety = 20, 
-                        BuffType = ModContent.BuffType<MilkCartonBuff>(), 
+                        Satiety = 20,
+                        BuffType = ModContent.BuffType<MilkCartonBuff>(),
                         BuffTime = new FoodDuration(8, 0, 0)
                     }
                 },
@@ -53,8 +53,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.Banana,
                     new FoodInfo() {
-                        Satiety = 10, 
-                        BuffType = ModContent.BuffType<BaconBuff>(), 
+                        Satiety = 10,
+                        BuffType = ModContent.BuffType<BaconBuff>(),
                         BuffTime = new FoodDuration(4, 0, 0)
                     }
                 },
@@ -62,8 +62,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.BananaSplit,
                     new FoodInfo() {
-                        Satiety = 15, 
-                        BuffType = ModContent.BuffType<BananaSplitBuff>(), 
+                        Satiety = 15,
+                        BuffType = ModContent.BuffType<BananaSplitBuff>(),
                         BuffTime = new FoodDuration(6, 0, 0)
                     }
                 },
@@ -71,8 +71,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.BBQRibs,
                     new FoodInfo() {
-                        Satiety = 20, 
-                        BuffType = ModContent.BuffType<BBQRibsBuff>(), 
+                        Satiety = 20,
+                        BuffType = ModContent.BuffType<BBQRibsBuff>(),
                         BuffTime = new FoodDuration(8, 0, 0)
                     }
                 },
@@ -80,8 +80,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.BlackCurrant,
                     new FoodInfo() {
-                        Satiety = 10, 
-                        BuffType = ModContent.BuffType<BlackCurrantBuff>(), 
+                        Satiety = 10,
+                        BuffType = ModContent.BuffType<BlackCurrantBuff>(),
                         BuffTime = new FoodDuration(4, 0, 0)
                     }
                 },
@@ -89,8 +89,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.BloodOrange,
                     new FoodInfo() {
-                        Satiety = 10, 
-                        BuffType = ModContent.BuffType<BloodOrangeBuff>(), 
+                        Satiety = 10,
+                        BuffType = ModContent.BuffType<BloodOrangeBuff>(),
                         BuffTime = new FoodDuration(4, 0, 0)
                     }
                 },
@@ -98,8 +98,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.BowlofSoup,
                     new FoodInfo() {
-                        Satiety = 15, 
-                        BuffType = ModContent.BuffType<BowlofSoupBuff>(), 
+                        Satiety = 15,
+                        BuffType = ModContent.BuffType<BowlofSoupBuff>(),
                         BuffTime = new FoodDuration(6, 0, 0)
                     }
                 },
@@ -107,8 +107,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.BunnyStew,
                     new FoodInfo() {
-                        Satiety = 20, 
-                        BuffType = ModContent.BuffType<BunnyStewBuff>(), 
+                        Satiety = 20,
+                        BuffType = ModContent.BuffType<BunnyStewBuff>(),
                         BuffTime = new FoodDuration(8, 0, 0)
                     }
                 },
@@ -116,8 +116,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.Burger,
                     new FoodInfo() {
-                        Satiety = 15, 
-                        BuffType = ModContent.BuffType<BurgerBuff>(), 
+                        Satiety = 15,
+                        BuffType = ModContent.BuffType<BurgerBuff>(),
                         BuffTime = new FoodDuration(6, 0, 0)
                     }
                 },
@@ -125,8 +125,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.Cherry,
                     new FoodInfo() {
-                        Satiety = 10, 
-                        BuffType = ModContent.BuffType<CherryBuff>(), 
+                        Satiety = 10,
+                        BuffType = ModContent.BuffType<CherryBuff>(),
                         BuffTime = new FoodDuration(4, 0, 0)
                     }
                 },
@@ -134,8 +134,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.ChickenNugget,
                     new FoodInfo() {
-                        Satiety = 10, 
-                        BuffType = ModContent.BuffType<ChickenNuggetBuff>(), 
+                        Satiety = 10,
+                        BuffType = ModContent.BuffType<ChickenNuggetBuff>(),
                         BuffTime = new FoodDuration(4, 0, 0)
                     }
                 },
@@ -143,8 +143,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.ChocolateChipCookie,
                     new FoodInfo() {
-                        Satiety = 10, 
-                        BuffType = ModContent.BuffType<ChocolateChipCookieBuff>(), 
+                        Satiety = 10,
+                        BuffType = ModContent.BuffType<ChocolateChipCookieBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30)
                     }
                 },
@@ -152,8 +152,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.ChristmasPudding,
                     new FoodInfo() {
-                        Satiety = 10, 
-                        BuffType = ModContent.BuffType<ChristmasPuddingBuff>(), 
+                        Satiety = 10,
+                        BuffType = ModContent.BuffType<ChristmasPuddingBuff>(),
                         BuffTime = new FoodDuration(6, 0, 0)
                     }
                 },
@@ -161,8 +161,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.Coconut,
                     new FoodInfo() {
-                        Satiety = 10, 
-                        BuffType = ModContent.BuffType<CoconutBuff>(), 
+                        Satiety = 10,
+                        BuffType = ModContent.BuffType<CoconutBuff>(),
                         BuffTime = new FoodDuration(4, 0, 0)
                     }
                 },
@@ -170,8 +170,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.CookedFish,
                     new FoodInfo() {
-                        Satiety = 20, 
-                        BuffType = ModContent.BuffType<CookedFishBuff>(), 
+                        Satiety = 20,
+                        BuffType = ModContent.BuffType<CookedFishBuff>(),
                         BuffTime = new FoodDuration(8, 0, 0)
                     }
                 },
@@ -179,8 +179,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.CookedMarshmallow,
                     new FoodInfo() {
-                        Satiety = 5, 
-                        BuffType = ModContent.BuffType<CookedMarshmallowBuff>(), 
+                        Satiety = 5,
+                        BuffType = ModContent.BuffType<CookedMarshmallowBuff>(),
                         BuffTime = new FoodDuration(5, 0, 0)
                     }
                 },
@@ -188,8 +188,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.CookedShrimp,
                     new FoodInfo() {
-                        Satiety = 20, 
-                        BuffType = ModContent.BuffType<CookedShrimpBuff>(), 
+                        Satiety = 20,
+                        BuffType = ModContent.BuffType<CookedShrimpBuff>(),
                         BuffTime = new FoodDuration(8, 0, 0)
                     }
                 },
@@ -197,8 +197,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.Dragonfruit,
                     new FoodInfo() {
-                        Satiety = 10, 
-                        BuffType = ModContent.BuffType<DragonfruitBuff>(), 
+                        Satiety = 10,
+                        BuffType = ModContent.BuffType<DragonfruitBuff>(),
                         BuffTime = new FoodDuration(4, 0, 0)
                     }
                 },
@@ -206,8 +206,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.Elderberry,
                     new FoodInfo() {
-                        Satiety = 10, 
-                        BuffType = ModContent.BuffType<ElderberryBuff>(), 
+                        Satiety = 10,
+                        BuffType = ModContent.BuffType<ElderberryBuff>(),
                         BuffTime = new FoodDuration(4, 0, 0)
                     }
                 },
@@ -313,7 +313,7 @@ namespace Everglow.Sources.Modules.Food
                     ItemID.Hotdog,
                     new FoodInfo() {
                         Satiety = 15,
-                        BuffType = ModContent.BuffType<HotdogBuff>(), 
+                        BuffType = ModContent.BuffType<HotdogBuff>(),
                         BuffTime = new FoodDuration(6, 0, 0)
                     }
                 },
@@ -321,8 +321,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.IceCream,
                     new FoodInfo() {
-                        Satiety = 10, 
-                        BuffType = ModContent.BuffType<IceCreamBuff>(), 
+                        Satiety = 10,
+                        BuffType = ModContent.BuffType<IceCreamBuff>(),
                         BuffTime = new FoodDuration(4, 0, 0)
                     }
                 },
@@ -330,8 +330,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.Lemon,
                     new FoodInfo() {
-                        Satiety = 10, 
-                        BuffType = ModContent.BuffType<LemonBuff>(), 
+                        Satiety = 10,
+                        BuffType = ModContent.BuffType<LemonBuff>(),
                         BuffTime = new FoodDuration(4, 0, 0)
                     }
                 },
@@ -340,7 +340,7 @@ namespace Everglow.Sources.Modules.Food
                     ItemID.LobsterTail,
                     new FoodInfo() {
                         Satiety = 20,
-                        BuffType = ModContent.BuffType<LobsterTailBuff>(), 
+                        BuffType = ModContent.BuffType<LobsterTailBuff>(),
                         BuffTime = new FoodDuration(8, 0, 0)
                     }
                 },
@@ -357,7 +357,7 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.Marshmallow,
                     new FoodInfo() {
-                        Satiety = 5, 
+                        Satiety = 5,
                         BuffType = ModContent.BuffType<MarshmallowBuff>(),
                         BuffTime = new FoodDuration(4, 0, 0)
                     }
@@ -367,7 +367,7 @@ namespace Everglow.Sources.Modules.Food
                     ItemID.MonsterLasagna,
                     new FoodInfo() {
                         Satiety = 20,
-                        BuffType = ModContent.BuffType<MonsterLasagnaBuff>(), 
+                        BuffType = ModContent.BuffType<MonsterLasagnaBuff>(),
                         BuffTime = new FoodDuration(8, 0, 0)
                     }
                 },
@@ -376,7 +376,7 @@ namespace Everglow.Sources.Modules.Food
                     ItemID.Nachos,
                     new FoodInfo() {
                         Satiety = 20,
-                        BuffType = ModContent.BuffType<NachosBuff>(), 
+                        BuffType = ModContent.BuffType<NachosBuff>(),
                         BuffTime = new FoodDuration(8, 0, 0)
                     }
                 },
@@ -384,7 +384,7 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.PadThai,
                     new FoodInfo() {
-                        Satiety = 20, 
+                        Satiety = 20,
                         BuffType = ModContent.BuffType<PadThaiBuff>(),
                         BuffTime = new FoodDuration(8, 0, 0)
                     }
@@ -520,7 +520,7 @@ namespace Everglow.Sources.Modules.Food
                     ItemID.ShuckedOyster,
                     new FoodInfo() {
                         Satiety = 20,
-                        BuffType = ModContent.BuffType<ShuckedOysterBuff>(), 
+                        BuffType = ModContent.BuffType<ShuckedOysterBuff>(),
                         BuffTime = new FoodDuration(6, 0, 0)
                     }
                 },
@@ -528,7 +528,7 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.Spaghetti,
                     new FoodInfo() {
-                        Satiety = 20, 
+                        Satiety = 20,
                         BuffType = ModContent.BuffType<SpaghettiBuff>(),
                         BuffTime = new FoodDuration(8, 0, 0)
                     }
@@ -561,12 +561,12 @@ namespace Everglow.Sources.Modules.Food
                     }
                 },
             };
-            
+
         }
 
         public override void SetStaticDefaults()
         {
-            
+
             //Tooltip.SetDefault("it can display CurrentSatiety");
         }
 
@@ -594,9 +594,9 @@ namespace Everglow.Sources.Modules.Food
 
                 // 增加饱食度，并且应用一些特效
                 foodPlayer.CurrentSatiety += foodInfo.Satiety;
-              //  Main.NewText($"Added {foodInfo.Satiety}! Current Satiety {foodPlayer.CurrentSatiety} / {foodPlayer.MaximumSatiety}");
+                //  Main.NewText($"Added {foodInfo.Satiety}! Current Satiety {foodPlayer.CurrentSatiety} / {foodPlayer.MaximumSatiety}");
             }
-            
+
         }
 
         public override bool CanUseItem(Item item, Player player)
@@ -635,7 +635,7 @@ namespace Everglow.Sources.Modules.Food
                 if (!foodPlayer.CanEat(foodInfo))
                 {
 
-                  //  Main.NewText($"Cannot eat this!");
+                    //  Main.NewText($"Cannot eat this!");
                     return false;
                 }
             }
@@ -645,10 +645,10 @@ namespace Everglow.Sources.Modules.Food
                 var foodInfo = foodItem.FoodInfo;
                 if (!foodPlayer.CanEat(foodInfo))
                 {
-                //    Main.NewText($"Cannot eat this!");
+                    //    Main.NewText($"Cannot eat this!");
                     return false;
                 }
-            } 
+            }
             return base.ConsumeItem(item, player);
         }
     }

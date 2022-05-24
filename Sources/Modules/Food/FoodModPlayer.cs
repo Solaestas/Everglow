@@ -4,7 +4,7 @@
     {
 
         /// <summary>
-        /// 玩家当前CurrentSatiety
+        /// 玩家当前饱食度
         /// </summary>
         public int CurrentSatiety
         {
@@ -12,7 +12,7 @@
         }
 
         /// <summary>
-        /// 玩家最大CurrentSatiety
+        /// 玩家最大饱食度
         /// </summary>
         public int MaximumSatiety
         {
@@ -29,9 +29,9 @@
         {
             CurrentSatiety = 0;
             MaximumSatiety = 50;
-            Thirstystate = true; 
+            Thirstystate = true;
         }
-        
+
         /// <summary>
         /// 如果能吃下，返回true，否则为false
         /// </summary>
@@ -63,11 +63,17 @@
         /// <summary>
         /// 以下为计时器
         /// </summary>
-        public int SatietyLossTimer { get; private set; }//饱食损失计时器
-        public int ThirstyChangeTimer { get; private set; }//口渴变化计时器
+        public int SatietyLossTimer
+        {
+            get; private set;
+        }//饱食损失计时器
+        public int ThirstyChangeTimer
+        {
+            get; private set;
+        }//口渴变化计时器
         public override void PostUpdate()
         {
-            FoodState(); 
+            FoodState();
             if (!Player.active)
             {
                 CurrentSatiety = 0;
@@ -78,8 +84,9 @@
         public void FoodState()
         {
             //从吃食物后开始计时
-            if(CurrentSatiety > 0){
-                 SatietyLossTimer++;
+            if (CurrentSatiety > 0)
+            {
+                SatietyLossTimer++;
             }
             //从喝饮料后开始计时
             if (!Thirstystate)
@@ -88,9 +95,9 @@
             }
 
             //每三十秒减少一饱食度
-            if (SatietyLossTimer>=180)
+            if (SatietyLossTimer >= 180)
             {
-                CurrentSatiety -= 1 ;
+                CurrentSatiety -= 1;
                 SatietyLossTimer = 0;
             }
             if (CurrentSatiety <= 0)
@@ -100,12 +107,12 @@
             //每五分钟从口渴变得不口渴
             if (ThirstyChangeTimer >= 180)
             {
-                Thirstystate = true ;
+                Thirstystate = true;
                 ThirstyChangeTimer = 0;
             }
 
         }
 
-        
+
     }
 }

@@ -12,7 +12,7 @@
 
         public override void Update(Player player, ref int buffIndex)
         {
-            player.aggro -= 2400; 
+            player.aggro -= 2400;
             player.GetCritChance(DamageClass.Melee) += 40; // 加40%暴击
             player.GetDamage(DamageClass.Melee).Base += 0.4f; // 加40%伤害
             player.GetAttackSpeed(DamageClass.Generic) += 0.4f; // 加40%攻速

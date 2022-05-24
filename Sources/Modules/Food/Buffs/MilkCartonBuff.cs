@@ -19,12 +19,12 @@
                     player.buffImmune[i] = true;
                 }
                 else
-                { 
+                {
                     player.buffImmune[i] = false;
                 }
 
             }
-            
+
         }
     }
 }

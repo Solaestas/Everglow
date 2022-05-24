@@ -7,7 +7,7 @@ namespace Everglow.Sources.Modules.Food
 {
     public class DrinkGlobalItem : GlobalItem
     {
-      
+
         // 对于原版的饮料进行类型Id到 DrinkInfo 的映射，直接获取DrinkInfo实例
         private static Dictionary<int, DrinkInfo> m_vanillaDrinkInfos;
         public DrinkGlobalItem()
@@ -27,7 +27,7 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.AppleJuice,
                     new DrinkInfo() {
-                       Thirsty = false , 
+                       Thirsty = false ,
                        BuffType = ModContent.BuffType<AppleJuiceBuff>(),
                        BuffTime = new FoodDuration(0, 7, 30)
                     }
@@ -36,8 +36,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.BananaDaiquiri,
                     new DrinkInfo() {
-                        Thirsty = false , 
-                        BuffType = ModContent.BuffType<BananaDaiquiriBuff>(), 
+                        Thirsty = false ,
+                        BuffType = ModContent.BuffType<BananaDaiquiriBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30)
                     }
                 },
@@ -45,8 +45,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.BloodyMoscato,
                     new DrinkInfo() {
-                        Thirsty = false , 
-                        BuffType = ModContent.BuffType<BloodyMoscatoBuff>(), 
+                        Thirsty = false ,
+                        BuffType = ModContent.BuffType<BloodyMoscatoBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30)
                     }
                 },
@@ -54,8 +54,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.CreamSoda,
                     new DrinkInfo() {
-                        Thirsty = false , 
-                        BuffType = ModContent.BuffType<CreamSodaBuff>(), 
+                        Thirsty = false ,
+                        BuffType = ModContent.BuffType<CreamSodaBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30)
                     }
                 },
@@ -63,8 +63,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.CoffeeCup,
                     new DrinkInfo() {
-                        Thirsty = false , 
-                        BuffType = ModContent.BuffType<CoffeeCupBuff>(), 
+                        Thirsty = false ,
+                        BuffType = ModContent.BuffType<CoffeeCupBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30)
                     }
                 },
@@ -72,8 +72,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.FruitJuice,
                     new DrinkInfo() {
-                       Thirsty = false , 
-                       BuffType = ModContent.BuffType<FruitJuiceBuff>(), 
+                       Thirsty = false ,
+                       BuffType = ModContent.BuffType<FruitJuiceBuff>(),
                        BuffTime = new FoodDuration(0, 7, 30)
                     }
                 },
@@ -81,8 +81,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.GrapeJuice,
                     new DrinkInfo() {
-                        Thirsty = false , 
-                        BuffType = ModContent.BuffType<GrapeJuiceBuff>(), 
+                        Thirsty = false ,
+                        BuffType = ModContent.BuffType<GrapeJuiceBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30)
                     }
                 },                
@@ -90,8 +90,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.Lemonade,
                     new DrinkInfo() {
-                        Thirsty = false , 
-                        BuffType = ModContent.BuffType<LemonadeBuff>(), 
+                        Thirsty = false ,
+                        BuffType = ModContent.BuffType<LemonadeBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30)
                     }
                 },     
@@ -117,8 +117,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.PeachSangria,
                     new DrinkInfo() {
-                        Thirsty = false, 
-                        BuffType = ModContent.BuffType<PeachSangriaBuff>(), 
+                        Thirsty = false,
+                        BuffType = ModContent.BuffType<PeachSangriaBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30)
                     }
                 },
@@ -126,8 +126,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.PinaColada,
                     new DrinkInfo() {
-                        Thirsty = false, 
-                        BuffType = ModContent.BuffType<PinaColadaBuff>(), 
+                        Thirsty = false,
+                        BuffType = ModContent.BuffType<PinaColadaBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30)
                     }
                 },
@@ -135,8 +135,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.PrismaticPunch,
                     new DrinkInfo() {
-                        Thirsty = false, 
-                        BuffType = ModContent.BuffType<PrismaticPunchBuff>(), 
+                        Thirsty = false,
+                        BuffType = ModContent.BuffType<PrismaticPunchBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30)
                     }
                 },                
@@ -144,8 +144,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.Sake,
                     new DrinkInfo() {
-                        Thirsty = false, 
-                        BuffType = ModContent.BuffType<SakeBuff>(), 
+                        Thirsty = false,
+                        BuffType = ModContent.BuffType<SakeBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30)
                     }
                 },
@@ -153,9 +153,9 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.SmoothieofDarkness,
                     new DrinkInfo() {
-                        Thirsty = false, 
+                        Thirsty = false,
                         BuffType = ModContent.
-                        BuffType<SmoothieofDarknessBuff>(), 
+                        BuffType<SmoothieofDarknessBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30)
                     }
                 }, 
@@ -163,8 +163,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.Teacup,
                     new DrinkInfo() {
-                        Thirsty = false, 
-                        BuffType = ModContent.BuffType<TeacupBuff>(), 
+                        Thirsty = false,
+                        BuffType = ModContent.BuffType<TeacupBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30)
                     }
                 },
@@ -172,8 +172,8 @@ namespace Everglow.Sources.Modules.Food
                 {
                     ItemID.TropicalSmoothie,
                     new DrinkInfo() {
-                        Thirsty = false, 
-                        BuffType = ModContent.BuffType<TropicalSmoothieBuff>(), 
+                        Thirsty = false,
+                        BuffType = ModContent.BuffType<TropicalSmoothieBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30)
                     }
                 }
@@ -182,9 +182,9 @@ namespace Everglow.Sources.Modules.Food
 
         public override void SetStaticDefaults()
         {
-            
+
         }
-        
+
         public override void SetDefaults(Item item)
         {
 
@@ -210,14 +210,14 @@ namespace Everglow.Sources.Modules.Food
 
                 // 变得不渴，并且应用一些特效
                 foodPlayer.Thirstystate = drinkInfo.Thirsty;
-              
+
             }
         }
 
         public override bool CanUseItem(Item item, Player player)
         {
             var foodPlayer = player.GetModPlayer<FoodModPlayer>();
-             // 判断能否喝下物品
+            // 判断能否喝下物品
             if (m_vanillaDrinkInfos.ContainsKey(item.type))
             {
                 var drinkInfo = m_vanillaDrinkInfos[item.type];
