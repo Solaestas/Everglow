@@ -202,7 +202,7 @@ namespace Everglow.Sources.Modules.Food
         {
             if (m_vanillaDrinkInfos.ContainsKey(item.type))
             {
-                tooltips.RemoveRange(2, 2);
+                tooltips.RemoveRange(2, 3);
                 var DrinkInfo = m_vanillaDrinkInfos[item.type];
                 TooltipLine tooltip = new TooltipLine(Mod, item.Name, DrinkInfo.Description);
                 tooltips.Add(tooltip);

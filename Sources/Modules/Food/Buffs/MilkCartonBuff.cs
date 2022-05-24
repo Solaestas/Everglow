@@ -13,6 +13,7 @@
         public override void Update(Player player, ref int buffIndex)
         {
             player.buffImmune[30] = true;
+            player.buffImmune[20] = true;
             player.buffImmune[24] = true;
             player.buffImmune[70] = true;
             player.buffImmune[22] = true; 
