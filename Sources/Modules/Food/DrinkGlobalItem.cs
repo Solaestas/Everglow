@@ -219,6 +219,12 @@ namespace Everglow.Sources.Modules.Food
                     // 否则加到最后面
                     tooltips.Add(new TooltipLine(Mod, item.Name, DrinkInfo.Description));
                 }
+
+                int buffTimeIndex = tooltips.FindIndex((tp) => tp.Name.Contains("BuffTime"));
+                if (buffTimeIndex != -1)
+                {
+                    tooltips.RemoveAt(buffTimeIndex);
+                }
             }
         }
 
