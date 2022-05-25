@@ -2,7 +2,7 @@
 using ReLogic.Content;
 
 
-namespace Everglow.Sources.Modules.ZY.Commons.Function;
+namespace Everglow.Sources.Modules.ZYModule.Commons.Function;
 
 
 internal enum TextureType
@@ -20,7 +20,8 @@ internal static class Quick
     public static Dictionary<EffectType, Asset<Effect>> effects = new Dictionary<EffectType, Asset<Effect>>();
     public static GraphicsDevice GD => Main.instance.GraphicsDevice;
     public static SpriteBatch SB => Main.spriteBatch;
-    public static string ResourcePath => "Everglow/Sources/ZYModule/Commons/Resource/";
+    public static string ModulePath => "Everglow/Sources/Modules/ZYModule/";
+    public static string ResourcePath => ModulePath + "Commons/Resource/";
     public static Texture2D GetValue(this TextureType type, bool async = false)
     {
         string path = ResourcePath + type.ToString().Replace('_', '/');
@@ -56,10 +57,10 @@ internal static class Quick
         }
     }
     public static Asset<Texture2D> RequestTexture(string path, bool async = true) =>
-        ModContent.Request<Texture2D>("Everglow/Sources/ZY/" + path,
+        ModContent.Request<Texture2D>(ModulePath + path,
         async ? AssetRequestMode.AsyncLoad : AssetRequestMode.ImmediateLoad);
     public static Asset<Effect> RequestEffect(string path, bool async = false) =>
-        ModContent.Request<Effect>("Everglow/Sources/ZY/" + path,
+        ModContent.Request<Effect>(ModulePath + path,
         async ? AssetRequestMode.AsyncLoad : AssetRequestMode.ImmediateLoad);
 
     public static void Log(object obj)
@@ -67,6 +68,12 @@ internal static class Quick
         Everglow.Instance.Logger.Info(obj);
         Main.NewText(obj, Color.Green);
         Console.WriteLine(obj);
+    }
+    public static void Throw(Exception ex)
+    {
+        Everglow.Instance.Logger.Error($"{ex.Source} : {ex.Message}");
+        Console.WriteLine(ex);
+        throw ex;
     }
 
     public static bool IsH(this Direction dir) => dir == Direction.Left || dir == Direction.Right;
@@ -83,10 +90,27 @@ internal static class Quick
         Direction.BottomRight => new Vector2(1, 1),
         _ => Vector2.Zero
     };
+    /// <summary>
+    /// 以朝右为0, -π &lt; 返回值 &lt;= π
+    /// </summary>
+    /// <param name="dir"></param>
+    /// <returns></returns>
+    public static float ToRotation(this Direction dir) => dir switch
+    {
+        Direction.Top => -MathHelper.PiOver2,
+        Direction.Left => MathHelper.Pi,
+        Direction.Right => 0,
+        Direction.Bottom => MathHelper.PiOver2,
+        Direction.TopLeft => -MathHelper.PiOver4 * 3,
+        Direction.TopRight => MathHelper.PiOver4,
+        Direction.BottomLeft => MathHelper.PiOver4 * 3,
+        Direction.BottomRight => MathHelper.PiOver4,
+        _ or Direction.None or Direction.Inside => 0,
+    };
     public static Direction GetControlDirectionH(this Player player) =>
-        (player.controlLeft ^ player.controlRight) ? (player.controlLeft ? Direction.Left : Direction.Right) : Direction.None;
+        player.controlLeft ^ player.controlRight ? player.controlLeft ? Direction.Left : Direction.Right : Direction.None;
     public static Direction GetControlDirectionV(this Player player) =>
-        (player.controlUp ^ player.controlDown) ? (player.controlDown ? Direction.Bottom : Direction.Top) : Direction.None;
+        player.controlUp ^ player.controlDown ? player.controlDown ? Direction.Bottom : Direction.Top : Direction.None;
     public static CRectangle GetCollider(this Entity entity) => new CRectangle(entity.position.X, entity.position.Y, entity.width, entity.height);
 
 }

@@ -9,9 +9,11 @@ namespace Everglow_UnitTest.ZYModule
         [TestMethod]
         public void Collision()
         {
-            ICollider collider = new CRectangle(0, 0, 1, 1);
-            ICollider rect = new CRectangle(0, 1, 1, 1);
-            Assert.IsFalse(collider.Colliding(rect));
+            ICollider rec = new CRectangle(0, 0, 1, 1);
+            ICollider collider = new CRectangle(0, -1, 1, 1);
+            ICollider line = new CLine(new Vector2(0, 0), new Vector2(1, 0));
+            CCircle circle = new CCircle(new Vector2(0, 0), 1);
+            Assert.IsFalse(rec.Colliding(line));
         }
     }
 }

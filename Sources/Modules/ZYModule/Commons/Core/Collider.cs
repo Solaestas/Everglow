@@ -125,6 +125,85 @@ public interface ICollider
         get;
     }
 }
+public class CLine : ICollider
+{
+    public Vector2 begin;
+    public Vector2 end;
+
+    public CLine()
+    {
+    }
+
+    public CLine(Vector2 begin, Vector2 end)
+    {
+        this.begin = begin;
+        this.end = end;
+    }
+
+    public CRectangle AABB => CollisionUtils.LineToAABB(begin, end);
+
+    public bool Colliding(ICollider collider)
+    {
+        if (collider == null)
+        {
+            return false;
+        }
+        else if (collider is CPoint point)
+        {
+            if (Math.Abs((begin - point.pos).Cross(end - point.pos)) < CollisionUtils.Epsilon)
+            {
+                return true;
+            }
+        }
+        else if (collider is CRectangle rect)
+        {
+            Vector2 to = end - begin;
+            bool? side = null;
+            foreach(var p in rect.Vertices.Select(p => p - begin))
+            {
+                float n = to.Cross(p);
+                if(n == 0)//重合视作不相交
+                {
+                    continue;
+                }
+                bool t = n > 0;
+                if (side is null)
+                {
+                    side = t;
+                }
+                else if (side != t)
+                {
+                    return true;
+                }
+            }
+        }
+        else if (collider is CCircle circle)
+        {
+            Vector2 to = end - begin;
+            float dis = Math.Abs(to.Y * circle.pos.X - to.X * circle.pos.Y + end.X * begin.Y - begin.X * end.Y) / to.Length();
+            return dis < circle.radius;
+        }
+        else if (collider is CPolygon polygon)
+        {
+            throw new NotImplementedException();
+        }
+        else if (collider is Colliders colliders)
+        {
+            foreach (var c in colliders.colliders)
+            {
+                if (Colliding(c))
+                {
+                    return true;
+                }
+            }
+        }
+        else
+        {
+            return collider.Colliding(this);
+        }
+        return false;
+    }
+}
 public class CPoint : ICollider
 {
     public Vector2 pos;
@@ -278,13 +357,7 @@ public class CRectangle : ICollider
     }
 
 
-    public Vector2[] Edges
-    {
-        get
-        {
-            return new Vector2[] { pos, pos + new Vector2(size.X, 0), pos + new Vector2(0, size.Y), pos + size };
-        }
-    }
+    public Vertices Vertices => new Vertices() { pos, pos + new Vector2(size.X, 0), pos + new Vector2(0, size.Y), pos + size };
 
     public Rectangle Rectangle => new Rectangle((int)pos.X, (int)pos.Y, (int)size.X, (int)size.Y);
     public CRectangle AABB => this;
@@ -334,7 +407,6 @@ public class CRectangle : ICollider
         }
 
         return collider.Colliding(this);
-        ;
     }
     /// <summary>
     /// ()
@@ -385,17 +457,17 @@ public class CRectangle : ICollider
         foreach (var nor in polygon.Normals)
         {
             var p1 = CollisionUtils.Projection(nor, polygon.Vs);
-            var p2 = CollisionUtils.Projection(nor, Edges);
+            var p2 = CollisionUtils.Projection(nor, Vertices);
             if (!CollisionUtils.Intersect(p1.Min(), p1.Max(), p2.Min(), p2.Max()))
             {
                 return false;
             }
         }
-        foreach (var e in Edges)
+        foreach (var e in Vertices)
         {
             Vector2 nor = e.NormalLine();
             var p1 = CollisionUtils.Projection(nor, polygon.Vs);
-            var p2 = CollisionUtils.Projection(nor, Edges);
+            var p2 = CollisionUtils.Projection(nor, Vertices);
             if (!CollisionUtils.Intersect(p1.Min(), p1.Max(), p2.Min(), p2.Max()))
             {
                 return false;

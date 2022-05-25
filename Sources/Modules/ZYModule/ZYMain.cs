@@ -8,12 +8,12 @@ namespace Everglow.Sources.Modules.ZYModule
 
         public void Load()
         {
-            throw new NotImplementedException();
+
         }
 
         public void Unload()
         {
-            throw new NotImplementedException();
+
         }
     }
 }

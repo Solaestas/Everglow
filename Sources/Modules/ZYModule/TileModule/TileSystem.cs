@@ -1,12 +1,13 @@
 using Everglow.Sources.Commons.Core;
 using Everglow.Sources.Commons.Core.ModuleSystem;
 using Everglow.Sources.Modules.ZYModule.Commons.Core;
+using Everglow.Sources.Modules.ZYModule.TileModule.EntityColliding;
+using Everglow.Sources.Modules.ZYModule.TileModule.Tiles;
 
 namespace Everglow.Sources.Modules.ZYModule.TileModule;
 
 internal class TileSystem : IModule
 {
-
     private static List<IDynamicTile> dynamicTiles = new List<IDynamicTile>();
     public static IEnumerable<IDynamicTile> DynamicTiles => dynamicTiles;
     public static IEnumerable<DynamicTile> Tiles => dynamicTiles.Where(tile => tile is DynamicTile).Select(tile => tile as DynamicTile);
@@ -35,12 +36,10 @@ internal class TileSystem : IModule
 
     public void Load()
     {
-        On.Terraria.Collision.SolidCollision_Vector2_int_int += Collision_SolidCollision_Vector2_int_int;
-        On.Terraria.Collision.SolidCollision_Vector2_int_int_bool += Collision_SolidCollision_Vector2_int_int_bool;
         On.Terraria.Collision.LaserScan += Collision_LaserScan;
         On.Terraria.Collision.TileCollision += Collision_TileCollision;
-        On.Terraria.Collision.SolidCollision_Vector2_int_int += Collision_SolidCollision_Vector2_int_int1;
-        On.Terraria.Collision.SolidCollision_Vector2_int_int_bool += Collision_SolidCollision_Vector2_int_int_bool1;
+        On.Terraria.Collision.SolidCollision_Vector2_int_int += Collision_SolidCollision_Vector2_int_int;
+        On.Terraria.Collision.SolidCollision_Vector2_int_int_bool += Collision_SolidCollision_Vector2_int_int_bool;
         ModContent.GetInstance<HookSystem>().AddMethod(Update, CallOpportunity.PostUpdateEverything);
         ModContent.GetInstance<HookSystem>().AddMethod(Draw, CallOpportunity.PostDrawTiles);
         ModContent.GetInstance<HookSystem>().AddMethod(DrawToMap, CallOpportunity.PostDrawMapIcons);
@@ -57,6 +56,11 @@ internal class TileSystem : IModule
         }
         dynamicTiles.Clear();
     }
+    public static IDynamicTile GetTile(int whoAmI) => dynamicTiles[whoAmI];
+    /// <summary>
+    /// 增加一个Tile，不会进行联机同步，需要手动发包
+    /// </summary>
+    /// <param name="tile"></param>
     public static void AddTile(IDynamicTile tile)
     {
         tile.WhoAmI = dynamicTiles.Count;
@@ -93,7 +97,7 @@ internal class TileSystem : IModule
         entity.position += Terraria.Collision.TileCollision(entity.position, move, entity.width, entity.height, fallthrough);
         return list;
     }
-    public static bool MoveCollidingNoInfo(CRectangle rect, ref Vector2 velocity, bool fallthrough = false)
+    public static bool MoveColliding(CRectangle rect, ref Vector2 velocity, bool fallthrough = false)
     {
         bool flag = false;
         Vector2 move = velocity;
@@ -126,7 +130,14 @@ internal class TileSystem : IModule
     }
     public static bool Collision(ICollider collider)
     {
-        return Collision(collider, out _);
+        foreach (var c in dynamicTiles)
+        {
+            if (c.Collision(collider))
+            {
+                return true;
+            }
+        }
+        return false;
     }
     public static void Update()
     {
@@ -161,17 +172,13 @@ internal class TileSystem : IModule
         }
     }
     public static bool EnableDTCollision = true;
-    private bool Collision_SolidCollision_Vector2_int_int1(On.Terraria.Collision.orig_SolidCollision_Vector2_int_int orig, Vector2 Position, int Width, int Height)
-    {
-        return orig(Position, Width, Height) || Collision(new CRectangle(Position.X, Position.Y, Width, Height));
-    }
     private static Vector2 Collision_TileCollision(On.Terraria.Collision.orig_TileCollision orig, Vector2 Position, Vector2 Velocity, int Width, int Height, bool fallThrough, bool fall2, int gravDir)
     {
         Vector2 result = orig(Position, Velocity, Width, Height, fallThrough, fall2, gravDir);
-        if (EnableDTCollision)
+        if (EnableDTCollision && Enable)
         {
             var rect = new CRectangle(Position.X, Position.Y, Width, Height);
-            if (MoveCollidingNoInfo(rect, ref result, fallThrough))
+            if (MoveColliding(rect, ref result, fallThrough))
             {
                 return rect.pos - Position;
             }
@@ -180,47 +187,41 @@ internal class TileSystem : IModule
     }
     private static void Collision_LaserScan(On.Terraria.Collision.orig_LaserScan orig, Vector2 samplingPoint, Vector2 directionUnit, float samplingWidth, float maxDistance, float[] samples)
     {
-        if (dynamicTiles.Count != 0)
+        if (!Enable)
         {
             orig(samplingPoint, directionUnit, samplingWidth, maxDistance, samples);
-            for (int i = 0; i < samples.Length; i++)
-            {
-                for (int j = 0; j < 20; j++)
-                {
-                    float t = MathHelper.Lerp(0, samples[i], j / 50f);
-                    Vector2 p = samplingPoint + t * directionUnit;
-                    if (Collision(new CRectangle(p - Vector2.One, Vector2.One * 2)))
-                    {
-                        samples[i] = t;
-                        break;
-                    }
-                }
-            }
             return;
         }
         orig(samplingPoint, directionUnit, samplingWidth, maxDistance, samples);
+        for (int i = 0; i < samples.Length; i++)
+        {
+            for (int j = 0; j < 20; j++)
+            {
+                float t = MathHelper.Lerp(0, samples[i], j / 20f);
+                Vector2 p = samplingPoint + t * directionUnit;
+                if (Collision(new CRectangle(p - Vector2.One, Vector2.One * 2)))
+                {
+                    samples[i] = t;
+                    break;
+                }
+            }
+        }
     }
     private static bool Collision_SolidCollision_Vector2_int_int_bool(On.Terraria.Collision.orig_SolidCollision_Vector2_int_int_bool orig, Vector2 Position, int Width, int Height, bool acceptTopSurfaces)
     {
-        if (dynamicTiles.Count != 0)
+        if (!Enable)
         {
-            var rect = new CRectangle(Position, new Vector2(Width, Height));
-            return orig(Position, Width, Height, acceptTopSurfaces) || Collision(rect);
+            return orig(Position, Width, Height, acceptTopSurfaces);
         }
-        return orig(Position, Width, Height, acceptTopSurfaces);
-    }
-    private static bool Collision_SolidCollision_Vector2_int_int_bool1(On.Terraria.Collision.orig_SolidCollision_Vector2_int_int_bool orig, Vector2 Position, int Width, int Height, bool acceptTopSurfaces)
-    {
         return orig(Position, Width, Height, acceptTopSurfaces) || Collision(new CRectangle(Position.X, Position.Y, Width, Height));
     }
     private static bool Collision_SolidCollision_Vector2_int_int(On.Terraria.Collision.orig_SolidCollision_Vector2_int_int orig, Vector2 Position, int Width, int Height)
     {
-        if (dynamicTiles.Count != 0)
+        if (!Enable)
         {
-            var rect = new CRectangle(Position, new Vector2(Width, Height));
-            return orig(Position, Width, Height) || Collision(rect);
+            return orig(Position, Width, Height);
         }
-        return orig(Position, Width, Height);
+        return orig(Position, Width, Height) || Collision(new CRectangle(Position.X, Position.Y, Width, Height));
     }
 
 }

@@ -1,4 +1,8 @@
-﻿namespace Everglow.Sources.Modules.ZYModule.Commons.Function;
+﻿using Everglow.Sources.Modules.ZYModule.Commons.Core;
+using Everglow.Sources.Modules.ZYModule.TileModule;
+using Everglow.Sources.Modules.ZYModule.TileModule.Tiles;
+
+namespace Everglow.Sources.Modules.ZYModule.Commons.Function;
 
 internal class TestItem : ModItem
 {
@@ -9,32 +13,17 @@ internal class TestItem : ModItem
         Item.useTime = 10;
         Item.useStyle = ItemUseStyleID.Swing;
     }
+    public class TestBlock : Block
+    {
+        public TestBlock(Vector2 position, Vector2 size) : base(position, size)
+        {
+            velocity = new Vector2(0, 1);
+        }
+    }
     public override bool CanUseItem(Player player)
     {
-        //if (Main.invasionType != 0)
-        //{
-        //    InvasionSystem.InvasionEnd();
-        //}else
-        //{
-        //    InvasionSystem.InvasionBegin<TestInvasion>();
-        //}
-        if (Everglow.HookSystem.DisableDrawBackground)
-        {
-            Everglow.HookSystem.DisableDrawBackground = false;
-        }
-        else
-        {
-            Everglow.HookSystem.DisableDrawBackground = true;
-        }
-
-        if (Everglow.HookSystem.DisableDrawSkyAndHell)
-        {
-            Everglow.HookSystem.DisableDrawSkyAndHell = false;
-        }
-        else
-        {
-            Everglow.HookSystem.DisableDrawSkyAndHell = true;
-        }
+        var block = new TestBlock(Main.MouseWorld, Vector2.One * 32);
+        TileSystem.AddTile(block);
         return true;
     }
 
