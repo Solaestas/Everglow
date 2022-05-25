@@ -202,7 +202,7 @@ namespace Everglow.Sources.Modules.Food
         {
             if (m_vanillaDrinkInfos.ContainsKey(item.type))
             {
-                if (item.type == ItemID.Ale)//这个tooltip与其他的有区别
+                if (item.type == ItemID.Ale)    //这个物品tooltip与其他的有区别
                 {
                     tooltips.RemoveRange(2, 4);
                 }
