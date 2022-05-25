@@ -13,7 +13,7 @@
         public override void Update(Player player, ref int buffIndex)
         {
             player.statDefense += 4; // 加4防御
-            player.GetDamage(DamageClass.Melee) += 4; // 加4%伤害
+            player.GetDamage(DamageClass.Melee) *= 1.04f; // 加4%伤害
         }
     }
 }

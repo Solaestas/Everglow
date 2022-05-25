@@ -12,7 +12,7 @@
 
         public override void Update(Player player, ref int buffIndex)
         {
-            player.GetDamage(DamageClass.Generic).Base += 0.04f; // 加8%伤害
+            player.GetDamage(DamageClass.Generic) *= 1.04f; // 加8%伤害
             player.autoJump = true;
             player.jumpSpeedBoost += 2;
             player.jumpBoost = true;

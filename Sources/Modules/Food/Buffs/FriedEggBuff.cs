@@ -12,7 +12,7 @@
 
         public override void Update(Player player, ref int buffIndex)
         {
-            player.GetDamage(DamageClass.Generic).Base += 0.08f; // 加8%伤害
+            player.GetDamage(DamageClass.Generic) *= 1.08f; // 加8%伤害
 
         }
     }

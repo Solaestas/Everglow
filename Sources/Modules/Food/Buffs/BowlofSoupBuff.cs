@@ -12,7 +12,7 @@
 
         public override void Update(Player player, ref int buffIndex)
         {
-            player.GetDamage(DamageClass.Magic).Base += 0.05f;//加5%魔法伤害
+            player.GetDamage(DamageClass.Magic) *= 1.05f;//加5%魔法伤害
             player.statManaMax2 += 20;//加20魔力上限
         }
     }

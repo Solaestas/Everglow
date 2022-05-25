@@ -12,7 +12,7 @@
 
         public override void Update(Player player, ref int buffIndex)
         {
-            player.endurance *= 0.92f;// 加8%减伤
+            player.endurance += 0.08f;// 加8%减伤
         }
     }
 }

@@ -13,10 +13,17 @@
         public override void Update(Player player, ref int buffIndex)
         {
             player.maxRunSpeed *= 0.2f;//减速
+            player.desertBoots = false;
+            player.fairyBoots = false;
+            player.frogLegJumpBoost = false;
+            player.rocketBoots = 0;
+            player.socialShadowRocketBoots = false;
+            player.spikedBoots = 0;
+            player.vanityRocketBoots = 0;
             player.moveSpeed *= 0.2f ;
             player.runAcceleration *= 0.2f;
             player.jumpSpeedBoost *= 0.2f;
-            player.endurance *= 0.5f;//加50%减伤
+            player.endurance += 0.5f;//加50%减伤
         }
     }
 }

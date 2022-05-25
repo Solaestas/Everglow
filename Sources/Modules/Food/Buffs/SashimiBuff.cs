@@ -19,7 +19,7 @@
             player.accFlipper = true;
             player.maxRunSpeed *= 1.2f;
             player.runAcceleration *= 1.2f;
-            player.GetDamage(DamageClass.Generic) += 0.1f;
+            player.GetDamage(DamageClass.Generic) *= 1.1f;
         }
     }
 }
