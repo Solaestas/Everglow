@@ -1,4 +1,8 @@
-﻿namespace Everglow.Sources.Modules.Food
+﻿using Everglow.Sources.Modules.Food.DataStructures;
+using Everglow.Sources.Modules.Food.Utils;
+using Terraria.ModLoader.IO;
+
+namespace Everglow.Sources.Modules.Food
 {
     public class FoodModPlayer : ModPlayer
     {
@@ -27,9 +31,6 @@
         }
         public FoodModPlayer()
         {
-            CurrentSatiety = 0;
-            MaximumSatiety = 50;
-            Thirstystate = true;
         }
 
         /// <summary>
@@ -80,6 +81,35 @@
                 Thirstystate = true;
             }
         }
+        public override void Initialize()
+        {
+            CurrentSatiety = 0;
+            MaximumSatiety = 50;
+            SatietyLossTimer = 0;
+
+            Thirstystate = true;
+            ThirstyChangeTimer = 0;
+            base.Initialize();
+        }
+        public override void SaveData(TagCompound tag)
+        {
+            tag.Add("CurrentSatiety", CurrentSatiety);
+            tag.Add("Thirstystate", Thirstystate);
+            base.SaveData(tag);
+        }
+
+        public override void LoadData(TagCompound tag)
+        {
+            if (tag.ContainsKey("CurrentSatiety"))
+            {
+                CurrentSatiety = tag.GetInt("CurrentSatiety");
+            }
+
+            if (tag.ContainsKey("Thirstystate"))
+            {
+                Thirstystate = tag.GetBool("Thirstystate");
+            }
+        }
 
         public void FoodState()
         {
@@ -95,7 +125,7 @@
             }
 
             //每三十秒减少一饱食度
-            if (SatietyLossTimer >= 180)
+            if (SatietyLossTimer >= FoodUtils.GetFrames(0, 0, 30, 0))
             {
                 CurrentSatiety -= 1;
                 SatietyLossTimer = 0;
@@ -105,14 +135,11 @@
                 CurrentSatiety = 0;
             }
             //每五分钟从口渴变得不口渴
-            if (ThirstyChangeTimer >= 180)
+            if (ThirstyChangeTimer >= FoodUtils.GetFrames(0, 5, 0, 0))
             {
                 Thirstystate = true;
                 ThirstyChangeTimer = 0;
             }
-
         }
-
-
     }
 }
