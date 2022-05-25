@@ -4,9 +4,8 @@
     {
         public override void SetStaticDefaults()
         {
-            
-            Tooltip.SetDefault("it can display CurrentSatiety");
-
+            DisplayName.SetDefault("渗透压检测仪");
+            Tooltip.SetDefault("显示口渴状态");
         }
 
         public override void SetDefaults()

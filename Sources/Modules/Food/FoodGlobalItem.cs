@@ -630,7 +630,7 @@ namespace Everglow.Sources.Modules.Food
         {
             if (m_vanillaFoodInfos.ContainsKey(item.type))
             {
-                tooltips.RemoveRange(2,3);
+                tooltips.RemoveRange(2,4);
                 var foodInfo = m_vanillaFoodInfos[item.type];
                 TooltipLine tooltip = new TooltipLine(Mod,item.Name, foodInfo.Description);
                 tooltips.Add(tooltip);
@@ -664,9 +664,9 @@ namespace Everglow.Sources.Modules.Food
                 var foodInfo = m_vanillaFoodInfos[item.type];
                 var foodPlayer = player.GetModPlayer<FoodModPlayer>();
 
-                // 增加饱食度，并且应用一些特效
+                // 增加饱食度
                 foodPlayer.CurrentSatiety += foodInfo.Satiety;
-                //  Main.NewText($"Added {foodInfo.Satiety}! Current Satiety {foodPlayer.CurrentSatiety} / {foodPlayer.MaximumSatiety}");
+                
             }
 
         }

@@ -202,7 +202,7 @@ namespace Everglow.Sources.Modules.Food
         {
             if (m_vanillaDrinkInfos.ContainsKey(item.type))
             {
-                tooltips.RemoveRange(2, 3);
+                tooltips.RemoveRange(2, 4);
                 var DrinkInfo = m_vanillaDrinkInfos[item.type];
                 TooltipLine tooltip = new TooltipLine(Mod, item.Name, DrinkInfo.Description);
                 tooltips.Add(tooltip);
@@ -232,13 +232,13 @@ namespace Everglow.Sources.Modules.Food
 
         public override void OnConsumeItem(Item item, Player player)
         {
-            // 如果是原版的食物，那么就手动处理，因为已经使用了物品，说明玩家满足饱食度要求
+            // 如果是原版的饮料，那么就手动处理，因为已经使用了物品，说明玩家满足饱食度要求
             if (m_vanillaDrinkInfos.ContainsKey(item.type))
             {
                 var drinkInfo = m_vanillaDrinkInfos[item.type];
                 var foodPlayer = player.GetModPlayer<FoodModPlayer>();
 
-                // 变得不渴，并且应用一些特效
+                // 变得不渴
                 foodPlayer.Thirstystate = drinkInfo.Thirsty;
 
             }
