@@ -30,7 +30,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 15,
                         BuffType = ModContent.BuffType<ApplePieBuff>(),
                         BuffTime = new FoodDuration(6, 0, 0),
-                        Description ="加8%减伤,1生命回复\n“一天一苹果，医生远离我”"
+                        Description ="加8%减伤,1生命回复\n“一天一苹果，医生远离我”\n6分钟持续时间"
                     }
                 },
                 //杏 
@@ -50,7 +50,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 20,
                         BuffType = ModContent.BuffType<MilkCartonBuff>(),
                         BuffTime = new FoodDuration(8, 0, 0),
-                        Description ="加2生命回复，所受冷系伤害降低\n“开胃祛寒”"
+                        Description ="加2生命回复，所受冷系伤害降低\n“开胃祛寒”\n8分钟持续时间"
                     }
                 },
                 //香蕉
@@ -70,7 +70,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 15,
                         BuffType = ModContent.BuffType<BananaSplitBuff>(),
                         BuffTime = new FoodDuration(6, 0, 0),
-                        Description ="33%不消耗弹药，增加8%远程暴击\n“低血压”"
+                        Description ="33%不消耗弹药，增加8%远程暴击\n“低血压”\n6分钟持续时间"
                     }
                 },
                 //烧烤肋排
@@ -80,7 +80,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 20,
                         BuffType = ModContent.BuffType<BBQRibsBuff>(),
                         BuffTime = new FoodDuration(8, 0, 0),
-                        Description ="加50血量上限\n“滋阴补血”"
+                        Description ="加50血量上限\n“滋阴补血”\n8分钟持续时间"
                     }
                 },
                 //黑醋栗
@@ -110,7 +110,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 15,
                         BuffType = ModContent.BuffType<BowlofSoupBuff>(),
                         BuffTime = new FoodDuration(6, 0, 0),
-                        Description ="增加20魔力上限,5%魔法伤害\n“补脑”"
+                        Description ="增加20魔力上限,5%魔法伤害\n“补脑”\n6分钟持续时间"
                     }
                 },
                 //炖兔兔
@@ -120,7 +120,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 20,
                         BuffType = ModContent.BuffType<BunnyStewBuff>(),
                         BuffTime = new FoodDuration(8, 0, 0),
-                        Description ="自动跳跃，增加跳跃能力\n“没有任何兔子在制作过程中受到伤害 ”"
+                        Description ="自动跳跃，增加跳跃能力\n“没有任何兔子在制作过程中受到伤害 ”\n8分钟持续时间"
                     }
                 },
                 //汉堡
@@ -130,7 +130,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 15,
                         BuffType = ModContent.BuffType<BurgerBuff>(),
                         BuffTime = new FoodDuration(6, 0, 0),
-                        Description ="减少移速，增加防御\n“热量炸弹”"
+                        Description ="减少移速，增加防御\n“热量炸弹”\n6分钟持续时间"
                     }
                 },
                 //樱桃
@@ -170,7 +170,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 10,
                         BuffType = ModContent.BuffType<ChristmasPuddingBuff>(),
                         BuffTime = new FoodDuration(6, 0, 0),
-                        Description ="仇恨值减少800\n“美容养颜”"
+                        Description ="仇恨值减少800\n“美容养颜”\n6分钟持续时间"
                     }
                 },
                 //椰子
@@ -190,7 +190,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 20,
                         BuffType = ModContent.BuffType<CookedFishBuff>(),
                         BuffTime = new FoodDuration(8, 0, 0),
-                        Description ="加40魔力上限,8%魔法暴击率\n“益气健脾”"
+                        Description ="加40魔力上限,8%魔法暴击率\n“益气健脾”\n8分钟持续时间"
                     }
                 },
                 //熟棉花糖
@@ -200,7 +200,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 5,
                         BuffType = ModContent.BuffType<CookedMarshmallowBuff>(),
                         BuffTime = new FoodDuration(5, 0, 0),
-                        Description ="减75%最大掉落速度,但无法操控下落速度\n“轻飘飘的”"
+                        Description ="减75%最大掉落速度,但无法操控下落速度\n“轻飘飘的”\n5分钟持续时间"
                     }
                 },
                 //熟虾
@@ -210,7 +210,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 20,
                         BuffType = ModContent.BuffType<CookedShrimpBuff>(),
                         BuffTime = new FoodDuration(8, 0, 0),
-                        Description ="加10防御,4穿甲\n“补钙”"
+                        Description ="加10防御,4穿甲\n“补钙”\n8分钟持续时间"
                     }
                 },
                 //火龙果
@@ -240,7 +240,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 20,
                         BuffType = ModContent.BuffType<EscargotBuff>(),
                         BuffTime = new FoodDuration(8, 0, 0),
-                        Description ="大大减速，加50%减伤\n“这不是神龟药水！”"
+                        Description ="大大减速，加50%减伤\n“这不是神龟药水！”\n8分钟持续时间"
                     }
                 },
                 //煎蛋
@@ -270,7 +270,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 20,
                         BuffType = ModContent.BuffType<FroggleBunwichBuff>(),
                         BuffTime = new FoodDuration(8, 0, 0),
-                        Description ="自动跳跃，增加伤害和跳跃能力\n“你能真正尝到沼泽的味道。”"
+                        Description ="自动跳跃，增加伤害和跳跃能力\n“你能真正尝到沼泽的味道。”\n8分钟持续时间"
                     }
                 },
                 //水果色拉
@@ -300,7 +300,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 30,
                         BuffType = ModContent.BuffType<GoldenDelightBuff>(),
                         BuffTime = new FoodDuration(10, 0, 0),
-                        Description ="攻击造迈达斯，提升大部分属性\n“金灿灿!”"
+                        Description ="攻击造迈达斯，提升大部分属性\n“金灿灿!”\n10分钟持续时间"
                     }
                 },
                 //葡萄柚
@@ -330,7 +330,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 20,
                         BuffType = ModContent.BuffType<GrilledSquirrelBuff>(),
                         BuffTime = new FoodDuration(8, 0, 0),
-                        Description ="增加跳跃能力\n“欢跃”"
+                        Description ="增加跳跃能力\n“欢跃”\n8分钟持续时间"
                     }
                 },
                 //蛆虫汤
@@ -340,7 +340,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 15,
                         BuffType = ModContent.BuffType<GrubSoupBuff>(), 
                         BuffTime = new FoodDuration(6, 0, 0),
-                        Description ="加25渔力，每秒减2生命\n“吃啥补啥，就是有点恶心”"
+                        Description ="加25渔力，每秒减2生命\n“吃啥补啥，就是有点恶心”\n6分钟持续时间"
                     }
                 },
                 //热狗
@@ -350,7 +350,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 15,
                         BuffType = ModContent.BuffType<HotdogBuff>(),
                         BuffTime = new FoodDuration(6, 0, 0),
-                        Description ="减少移速，增加近战伤害\n“热量炸弹”"
+                        Description ="减少移速，增加近战伤害\n“热量炸弹”\n6分钟持续时间"
                     }
                 },
                 //冰淇淋
@@ -380,7 +380,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 20,
                         BuffType = ModContent.BuffType<LobsterTailBuff>(),
                         BuffTime = new FoodDuration(8, 0, 0),
-                        Description ="加6防御,25%挖矿速度\n“壮阳”"
+                        Description ="加6防御,25%挖矿速度\n“壮阳”\n8分钟持续时间"
                     }
                 },
                 //芒果
@@ -410,7 +410,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 20,
                         BuffType = ModContent.BuffType<MonsterLasagnaBuff>(),
                         BuffTime = new FoodDuration(8, 0, 0),
-                        Description ="增加25%暴击率，但每秒减4生命\n“弄熟的恶魔还是恶魔，在千层饼中也不会改变。”"
+                        Description ="增加25%暴击率，但每秒减4生命\n“弄熟的恶魔还是恶魔，在千层饼中也不会改变。”\n8分钟持续时间"
                     }
                 },
                 //玉米片
@@ -420,7 +420,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 20,
                         BuffType = ModContent.BuffType<NachosBuff>(),
                         BuffTime = new FoodDuration(8, 0, 0),
-                        Description ="攻击造成涂油以及所有火焰减益\n“爆米花”"
+                        Description ="攻击造成涂油以及所有火焰减益\n“爆米花”\n8分钟持续时间"
                     }
                 },
                 //泰式炒面
@@ -430,7 +430,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 20,
                         BuffType = ModContent.BuffType<PadThaiBuff>(),
                         BuffTime = new FoodDuration(8, 0, 0),
-                        Description ="增加50%召唤物击退\n“异域风情”"
+                        Description ="增加50%召唤物击退\n“异域风情”\n8分钟持续时间"
                     }
                 },
                 //桃子
@@ -450,7 +450,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 20,
                         BuffType = ModContent.BuffType<PhoBuff>(),
                         BuffTime = new FoodDuration(8, 0, 0),
-                        Description ="增加10%召唤物伤害\n“异域风情 ”"
+                        Description ="增加10%召唤物伤害\n“异域风情 ”\n8分钟持续时间"
                     }
                 },
                 //菠萝
@@ -470,7 +470,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 15,
                         BuffType = ModContent.BuffType<PizzaBuff>(),
                         BuffTime = new FoodDuration(6, 0, 0),
-                        Description ="增加10穿甲\n“会让意大利人破防的菠萝披萨。”"
+                        Description ="增加10穿甲\n“会让意大利人破防的菠萝披萨。”\n6分钟持续时间"
                     }
                 },
                 //李子
@@ -490,7 +490,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 15,
                         BuffType = ModContent.BuffType<PotatoChipsBuff>(),
                         BuffTime = new FoodDuration(6, 0, 0),
-                        Description ="加4防御，8%伤害\n“高油高盐”"
+                        Description ="加4防御，8%伤害\n“高油高盐”\n6分钟持续时间"
                     }
                 },
                 //南瓜派
@@ -500,7 +500,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 20,
                         BuffType = ModContent.BuffType<PumpkinPieBuff>(),
                         BuffTime = new FoodDuration(8, 0, 0),
-                        Description ="最大生命值加50\n“丰收的喜悦”"
+                        Description ="最大生命值加50\n“丰收的喜悦”\n8分钟持续时间"
                     }
                 },
                 //红毛丹
@@ -520,7 +520,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 20,
                         BuffType = ModContent.BuffType<RoastedBirdBuff>(),
                         BuffTime = new FoodDuration(8, 0, 0),
-                        Description ="增加飞行能力\n“我是一只小小小鸟”"
+                        Description ="增加飞行能力\n“我是一只小小小鸟”\n8分钟持续时间"
                     }
                 },
                 //烤鸭
@@ -530,7 +530,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 20,
                         BuffType = ModContent.BuffType<RoastedDuckBuff>(),
                         BuffTime = new FoodDuration(8, 0, 0),
-                        Description ="可以在水上行走，增加飞行能力\n“这是烤鸭”"
+                        Description ="可以在水上行走，增加飞行能力\n“这是烤鸭”\n8分钟持续时间"
                     }
                 },
                 //生鱼片
@@ -540,7 +540,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 20,
                         BuffType = ModContent.BuffType<SashimiBuff>(),
                         BuffTime = new FoodDuration(8, 0, 0),
-                        Description ="可以游泳，水下呼吸，增加10%伤害，20%移速，但每秒减3生命\n“寄生虫！”"
+                        Description ="可以游泳，水下呼吸，增加10%伤害，20%移速，但每秒减3生命\n“寄生虫！”\n8分钟持续时间"
                     }
                 },
                 //炒蛙腿
@@ -550,7 +550,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 20,
                         BuffType = ModContent.BuffType<SauteedFrogLegsBuff>(),
                         BuffTime = new FoodDuration(8, 0, 0),
-                        Description ="自动跳跃，增加跳跃能力\n“钓不到蛙腿？那就吃吧。”"
+                        Description ="自动跳跃，增加跳跃能力\n“钓不到蛙腿？那就吃吧。”\n8分钟持续时间"
                     }
                 },
                 //海鲜大餐
@@ -560,7 +560,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 30,
                         BuffType = ModContent.BuffType<SeafoodDinnerBuff>(),
                         BuffTime = new FoodDuration(10, 0, 0),
-                        Description ="增加12%暴击，伤害，攻速\n“够生猛！”"
+                        Description ="增加12%暴击，伤害，攻速\n“够生猛！”\n10分钟持续时间"
                     }
                 },
                 //鲜虾三明治
@@ -570,7 +570,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 15,
                         BuffType = ModContent.BuffType<ShrimpPoBoyBuff>(),
                         BuffTime = new FoodDuration(6, 0, 0),
-                        Description ="加6防御,25%挖矿速度\n“壮阳”"
+                        Description ="加6防御,25%挖矿速度\n“壮阳”\n6分钟持续时间"
                     }
                 },
                 //去壳牡蛎
@@ -580,7 +580,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 20,
                         BuffType = ModContent.BuffType<ShuckedOysterBuff>(),
                         BuffTime = new FoodDuration(6, 0, 0),
-                        Description ="减5防御，加10穿甲，每秒减3生命\n“寄生虫！”"
+                        Description ="减5防御，加10穿甲，每秒减3生命\n“寄生虫！”\n6分钟持续时间"
                     }
                 },
                 //意大利面
@@ -590,7 +590,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 20,
                         BuffType = ModContent.BuffType<SpaghettiBuff>(),
                         BuffTime = new FoodDuration(8, 0, 0),
-                        Description ="增加1召唤栏\n“异域风情”"
+                        Description ="增加1召唤栏\n“异域风情”\n8分钟持续时间"
                     }
                 },
                 //杨桃
@@ -610,7 +610,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 20,
                         BuffType = ModContent.BuffType<SteakBuff>(),
                         BuffTime = new FoodDuration(8, 0, 0),
-                        Description ="减少33%魔力消耗\n“上流 ”"
+                        Description ="减少33%魔力消耗\n“上流 ”\n8分钟持续时间"
                     }
                 },
                 //蜜糖饼干
