@@ -634,9 +634,13 @@ namespace Everglow.Sources.Modules.Food
                 {
                     tooltips.RemoveRange(2, 2);
                 }
+                else if (item.type == ItemID.Marshmallow)
+                {
+                    tooltips.RemoveRange(2, 5);
+                }
                 else if (item.type == ItemID.Apple || item.type == ItemID.Apricot || item.type == ItemID.Banana 
                     || item.type == ItemID.BloodOrange || item.type == ItemID.Coconut || item.type == ItemID.Elderberry 
-                    || item.type == ItemID.Grapes || item.type == ItemID.Lemon || item.type == ItemID.Marshmallow )    //这几个物品tooltip与其他的有区别
+                    || item.type == ItemID.Grapes || item.type == ItemID.Lemon )    //这几个物品tooltip与其他的有区别
                     
                 {
                     tooltips.RemoveRange(2, 4);
