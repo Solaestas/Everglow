@@ -630,7 +630,22 @@ namespace Everglow.Sources.Modules.Food
         {
             if (m_vanillaFoodInfos.ContainsKey(item.type))
             {
-                tooltips.RemoveRange(2,4);
+                if (item.type == ItemID.FruitSalad)
+                {
+                    tooltips.RemoveRange(2, 2);
+                }
+                else if (item.type == ItemID.Apple || item.type == ItemID.Apricot || item.type == ItemID.Banana 
+                    || item.type == ItemID.BloodyMoscato || item.type == ItemID.Coconut || item.type == ItemID.Elderberry 
+                    || item.type == ItemID.Grapes || item.type == ItemID.Lemon || item.type == ItemID.Marshmallow )//这几个tooltip与其他的有区别
+                    
+                {
+                    tooltips.RemoveRange(2, 4);
+                }
+                else 
+                {
+                    tooltips.RemoveRange(2, 3);
+                }
+                
                 var foodInfo = m_vanillaFoodInfos[item.type];
                 TooltipLine tooltip = new TooltipLine(Mod,item.Name, foodInfo.Description);
                 tooltips.Add(tooltip);
