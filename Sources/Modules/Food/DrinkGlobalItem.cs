@@ -202,17 +202,23 @@ namespace Everglow.Sources.Modules.Food
         {
             if (m_vanillaDrinkInfos.ContainsKey(item.type))
             {
-                if (item.type == ItemID.Ale)    //这个物品tooltip与其他的有区别
+                int firstIndex = -1;
+                firstIndex = tooltips.FindIndex((tpline) =>
                 {
-                    tooltips.RemoveRange(2, 4);
+                    return tpline.Name.Contains("Tooltip");
+                });
+                // 如果有tooltip，就删掉所有Tooltip的line然后插入到第一个所在位置
+                var DrinkInfo = m_vanillaDrinkInfos[item.type];
+                if (firstIndex >= 0)
+                {
+                    tooltips.RemoveAll((tp) => tp.Name.Contains("Tooltip"));
+                    tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, DrinkInfo.Description));
                 }
                 else
                 {
-                    tooltips.RemoveRange(2, 3);
+                    // 否则加到最后面
+                    tooltips.Add(new TooltipLine(Mod, item.Name, DrinkInfo.Description));
                 }
-                var DrinkInfo = m_vanillaDrinkInfos[item.type];
-                TooltipLine tooltip = new TooltipLine(Mod, item.Name, DrinkInfo.Description);
-                tooltips.Add(tooltip);
             }
         }
 
