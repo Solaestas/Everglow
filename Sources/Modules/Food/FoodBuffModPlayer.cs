@@ -103,6 +103,29 @@
             }
 
         }
+        public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
+        {
+
+            if (DragonfruitBuff)
+            {
+                target.AddBuff(BuffID.Oiled, 600);
+                target.AddBuff(BuffID.OnFire, 600);
+            }
+            if (NachosBuff)
+            {
+                target.AddBuff(BuffID.OnFire, 600);
+                target.AddBuff(BuffID.CursedInferno, 600);
+                target.AddBuff(BuffID.ShadowFlame, 600);
+                target.AddBuff(BuffID.Frostburn, 600);
+                target.AddBuff(BuffID.Oiled, 600);
+            }
+            if (BloodyMoscatoBuff)
+            {
+                Player.HealEffect(5, true);
+                Player.statLife += 5;
+            }
+
+        }
         public override void UpdateBadLifeRegen()
         {
             if (GrubSoupBuff)
