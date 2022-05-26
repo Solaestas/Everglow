@@ -21,7 +21,27 @@
         public bool RoastedDuckBuff;
         public bool BloodyMoscatoBuff;
 
+        public override void UpdateDead()
+        {
+            WingTimeModifier = 1f;
 
+            BananaBuff = false;
+            BananaDaiquiriBuff = false;
+            BananaSplitBuff = false;
+            DragonfruitBuff = false;
+            GoldenDelightBuff = false;
+            SmoothieofDarknessBuff = false;
+            GrubSoupBuff = false;
+            MonsterLasagnaBuff = false;
+            SashimiBuff = false;
+            ShuckedOysterBuff = false;
+            MangoBuff = false;
+            StarfruitBuff = false;
+            NachosBuff = false;
+            RoastedBirdBuff = false;
+            RoastedDuckBuff = false;
+            BloodyMoscatoBuff = false;
+        }
         public override void ResetEffects()
         {
             WingTimeModifier = 1f;

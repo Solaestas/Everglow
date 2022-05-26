@@ -14,7 +14,7 @@
         {
             FoodBuffModPlayer FoodBuffModPlayer = player.GetModPlayer<FoodBuffModPlayer>();
             FoodBuffModPlayer.RoastedDuckBuff = true;
-            FoodBuffModPlayer.WingTimeModifier = 1.1f;
+            FoodBuffModPlayer.WingTimeModifier += 0.1f;
             player.maxFallSpeed *= 0.5f;
             player.extraFall += 30;
             player.waterWalk = true;

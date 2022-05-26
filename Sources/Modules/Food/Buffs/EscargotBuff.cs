@@ -14,12 +14,9 @@
         {
             player.maxRunSpeed *= 0.2f;//减速
             player.desertBoots = false;
-            player.fairyBoots = false;
-            player.frogLegJumpBoost = false;
-            player.rocketBoots = 0;
-            player.socialShadowRocketBoots = false;
-            player.spikedBoots = 0;
-            player.vanityRocketBoots = 0;
+            player.wingTime = 0;
+            player.wingTimeMax = 0;
+            player.rocketTime = 0;
             player.moveSpeed *= 0.2f ;
             player.runAcceleration *= 0.2f;
             player.jumpSpeedBoost *= 0.2f;
