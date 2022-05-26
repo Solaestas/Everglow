@@ -96,7 +96,7 @@ namespace Everglow.Sources.Commons.Function.BezierCurve
                 {
                     float rotCur = (origPath[i] - origPath[i - 1]).ToRotation();
                     float rotNext  = (origPath[i + 1] - origPath[i]).ToRotation();
-                    int dom = (int)(Math.Abs(MathHelper.WrapAngle(rotCur - rotNext)) / 0.33f) + 2;
+                    int dom = (int)(Math.Abs(MathHelper.WrapAngle(rotCur - rotNext)) / 0.22f) + 2;
                     float factor = 1.0f / dom;
                     for (float j = 0; j <= 1.0f; j += factor)
                     {
