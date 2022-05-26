@@ -630,29 +630,29 @@ namespace Everglow.Sources.Modules.Food
         {
             if (m_vanillaFoodInfos.ContainsKey(item.type))
             {
-                if (item.type == ItemID.FruitSalad)
+                int firstIndex = -1;
+                firstIndex = tooltips.FindIndex((tpline) =>
                 {
-                    tooltips.RemoveRange(2, 2);
-                }
-                else if (item.type == ItemID.Marshmallow)
+                    return tpline.Name.Contains("Tooltip");
+                });
+                // 如果有tooltip，就删掉所有Tooltip的line然后插入到第一个所在位置
+                var FoodInfo = m_vanillaFoodInfos[item.type];
+                if (firstIndex >= 0)
                 {
-                    tooltips.RemoveRange(2, 5);
+                    tooltips.RemoveAll((tp) => tp.Name.Contains("Tooltip"));
+                    tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, FoodInfo.Description));
                 }
-                else if (item.type == ItemID.Apple || item.type == ItemID.Apricot || item.type == ItemID.Banana 
-                    || item.type == ItemID.BloodOrange || item.type == ItemID.Coconut || item.type == ItemID.Elderberry 
-                    || item.type == ItemID.Grapes || item.type == ItemID.Lemon )    //这几个物品tooltip与其他的有区别
-                    
+                else
                 {
-                    tooltips.RemoveRange(2, 4);
+                    // 否则加到最后面
+                    tooltips.Add(new TooltipLine(Mod, item.Name, FoodInfo.Description));
                 }
-                else 
+
+                int buffTimeIndex = tooltips.FindIndex((tp) => tp.Name.Contains("BuffTime"));
+                if (buffTimeIndex != -1)
                 {
-                    tooltips.RemoveRange(2, 3);
+                    tooltips.RemoveAt(buffTimeIndex);
                 }
-                
-                var foodInfo = m_vanillaFoodInfos[item.type];
-                TooltipLine tooltip = new TooltipLine(Mod,item.Name, foodInfo.Description);
-                tooltips.Add(tooltip);
             }
         }
         public override void SetStaticDefaults()
