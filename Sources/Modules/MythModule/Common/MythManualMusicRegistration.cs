@@ -5,9 +5,8 @@
     {
         public void Load(Mod mod)
         {
-            //MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Misc/Storm/StormMusic");
+            MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Musics/MothBiome");
         }
-
         public void Unload()
         {
 

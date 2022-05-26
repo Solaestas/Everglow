@@ -1,14 +1,62 @@
+using Everglow.Sources.Modules.MythModule.Common;
 using System.Drawing;
 using Terraria.DataStructures;
+using Terraria.GameContent;
+using Terraria.IO;
+using Terraria.WorldBuilding;
+using Terraria.ModLoader.IO;
+using Color = Microsoft.Xna.Framework.Color;
+using Point = Microsoft.Xna.Framework.Point;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
 {
     public class MothLand : ModSystem
     {
-        public override void PostWorldGen()
+        private class MothLandGenPass : GenPass
         {
-            BuildMothCave();
+            public MothLandGenPass() : base("MothLand", 10)
+            {
+            }
+
+            protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
+            {
+                //TODO 翻译
+                Main.statusText = "Building MothCave";
+                BuildMothCave();
+            }
         }
+
+        public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight) => tasks.Add(new MothLandGenPass());
+        /// <summary>
+        /// 地形中心坐标
+        /// </summary>
+        public int FireflyCenterX = 2000;
+        public int FireflyCenterY = 500;
+        //读存
+        public override void OnWorldLoad()
+        {
+            FireflyCenterX = 2000;
+            FireflyCenterY = 500;
+        }
+
+        public override void OnWorldUnload()
+        {
+            FireflyCenterX = 2000;
+            FireflyCenterY = 500;
+        }
+        public override void SaveWorldData(TagCompound tag)
+        {
+            tag["FIREFLYcenterX"] = FireflyCenterX;
+            tag["FIREFLYcenterY"] = FireflyCenterY;
+        }
+
+        public override void LoadWorldData(TagCompound tag)
+        {
+            FireflyCenterX = tag.GetAsInt("FIREFLYcenterX");
+            FireflyCenterY = tag.GetAsInt("FIREFLYcenterY");
+        }
+
         /// <summary>
         /// type = 0:Kill,type = 1:place Tiles,type = 2:place Walls
         /// </summary>
@@ -16,68 +64,75 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <param name="type"></param>
-        public void ShapeTile(string Shapepath, int a, int b, int type)
+        public static void ShapeTile(string Shapepath, int a, int b, int type)
         {
-            using (Stream Img = Everglow.Instance.GetFileStream("Sources/Modules/MythModule/TheFirefly/WorldGeneration/" + Shapepath))
+            if (!OperatingSystem.IsWindows())
             {
-                Bitmap cocoon = new Bitmap(Img);
-                for (int y = 0; y < cocoon.Height; y += 1)
+                throw new Exception("Windows限定");
+            }
+            using Stream Img = Everglow.Instance.GetFileStream("Sources/Modules/MythModule/TheFirefly/WorldGeneration/" + Shapepath);
+            Bitmap cocoon = new Bitmap(Img);
+            for (int y = 0; y < cocoon.Height; y += 1)
+            {
+                for (int x = 0; x < cocoon.Width; x += 1)
                 {
-                    for (int x = 0; x < cocoon.Width; x += 1)
+                    switch (type)
                     {
-                        switch (type)
-                        {
-                            case 0:
-                                if (CheckColor(cocoon.GetPixel(x, y), new Vector4(255, 0, 0, 255)))
+                        case 0:
+                            if (CheckColor(cocoon.GetPixel(x, y), new Vector4(255, 0, 0, 255)))
+                            {
+                                if (Main.tile[x + a, y + b].TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
                                 {
-                                    if (Main.tile[x + a, y + b].TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
-                                    {
-                                        Main.tile[x + a, y + b].ClearEverything();
-                                    }
+                                    Main.tile[x + a, y + b].ClearEverything();
                                 }
-                                break;
-                            case 1:
-                                if (CheckColor(cocoon.GetPixel(x, y), new Vector4(56, 48, 61, 255)))
+                            }
+                            break;
+                        case 1:
+                            if (CheckColor(cocoon.GetPixel(x, y), new Vector4(56, 48, 61, 255)))
+                            {
+                                if (Main.tile[x + a, y + b].TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
                                 {
-                                    if (Main.tile[x + a, y + b].TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
-                                    {
-                                        Main.tile[x + a, y + b].TileType = (ushort)ModContent.TileType<Tiles.DarkCocoon>();
-                                        ((Tile)Main.tile[x + a, y + b]).HasTile = true;
-                                    }
+                                    Main.tile[x + a, y + b].TileType = (ushort)ModContent.TileType<Tiles.DarkCocoon>();
+                                    ((Tile)Main.tile[x + a, y + b]).HasTile = true;
                                 }
-                                break;
-                            case 2:
-                                if (CheckColor(cocoon.GetPixel(x, y), new Vector4(0, 0, 5, 255)))
+                            }
+                            break;
+                        case 2:
+                            if (CheckColor(cocoon.GetPixel(x, y), new Vector4(0, 0, 5, 255)))
+                            {
+                                if (Main.tile[x + a, y + b].TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
                                 {
-                                    if (Main.tile[x + a, y + b].TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
-                                    {
-                                        Main.tile[x + a, y + b].WallType = (ushort)ModContent.WallType<Walls.DarkCocoonWall>();
-                                    }
+                                    Main.tile[x + a, y + b].WallType = (ushort)ModContent.WallType<Walls.DarkCocoonWall>();
                                 }
-                                break;
-                        }
+                            }
+                            break;
                     }
                 }
             }
         }
+        }
         /// <summary>
         /// 建造流萤之茧
         /// </summary>
-        public void BuildMothCave()
+        public static void BuildMothCave()
         {
             Point16 AB = CocoonPos();
-            int a = 800;
-            int b = 600;
+            int a = AB.X;
+            int b = AB.Y;
+            MothLand mothLand = ModContent.GetInstance<MothLand>();
+            mothLand.FireflyCenterX = a + 140;
+            mothLand.FireflyCenterY = b + 140;
             ShapeTile("CocoonKill.bmp", a, b, 0);
             ShapeTile("Cocoon.bmp", a, b, 1);
             ShapeTile("CocoonWall.bmp", a, b, 2);
+            SmoothMothTile(a, b);
         }
-        private int GetCrash(int PoX, int PoY)
+        private static int GetCrash(int PoX, int PoY)
         {
             int CrashCount = 0;
             ushort[] DangerTileType = new ushort[]
             {
-                41,//蓝地牢砖                
+                41,//蓝地牢砖
                 43,//绿地牢砖
                 44,//粉地牢砖
                 48,//尖刺
@@ -107,7 +162,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         /// 获取一个不与原版地形冲突的点
         /// </summary>
         /// <returns></returns>
-        private Point16 CocoonPos()
+        private static Point16 CocoonPos()
         {
             int PoX = Main.rand.Next(300, Main.maxTilesX - 600);
             int PoY = Main.rand.Next(400, Main.maxTilesY - 300);
@@ -119,7 +174,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             }
             return new Point16(PoX, PoY);
         }
-        private void SmoothMothTile(int a, int b)
+        private static void SmoothMothTile(int a, int b)
         {
             for (int y = 0; y < 256; y += 1)
             {
@@ -144,7 +199,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         /// <param name="c0"></param>
         /// <param name="RGBA"></param>
         /// <returns></returns>
-        private bool CheckColor(System.Drawing.Color c0, Vector4 RGBA)
+        private static bool CheckColor(System.Drawing.Color c0, Vector4 RGBA)
         {
             Vector4 v0 = new Vector4(c0.R, c0.G, c0.B, c0.A);
             return v0 == RGBA;
