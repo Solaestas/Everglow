@@ -246,6 +246,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             //List<Vector2> L = Commons.Function.BezierCurve.Bezier.GetBezier(oldM, 90);
             //List<Vector2> K = Commons.Function.BezierCurve.Bezier.GetBezier(L, 2000);
             List<Vector2> K = Commons.Function.BezierCurve.Bezier.SmoothPath(oldM);
+            // K = Commons.Function.BezierCurve.Bezier.SmoothPath(K);
+            // 可多次采样但是效果不明显，而点的数量急剧增加
 
             if (K.Count >= 2)
             {

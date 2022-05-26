@@ -74,7 +74,7 @@ namespace Everglow.Sources.Commons.Function.BezierCurve
 
 
         /// <summary>
-        /// 根据输入点的List获得贝塞尔曲线
+        /// 根据输入点的List获得一个使用CatmullRom样条平滑过后的路径
         /// </summary>
         /// <param name="OrigLine"></param>
         /// <param name="aimCount"></param>
@@ -89,6 +89,8 @@ namespace Everglow.Sources.Commons.Function.BezierCurve
             {
                 List<Vector2> result = new List<Vector2>();
                 int sz = origPath.Count;
+
+                // 头尾增加两个不影响曲线效果的点
                 origPath.Insert(0, 2 * origPath[0] - origPath[1]);
                 origPath.Add(2 * origPath[sz - 1] - origPath[sz - 2]);
 
@@ -96,6 +98,9 @@ namespace Everglow.Sources.Commons.Function.BezierCurve
                 {
                     float rotCur = (origPath[i] - origPath[i - 1]).ToRotation();
                     float rotNext  = (origPath[i + 1] - origPath[i]).ToRotation();
+
+                    // 根据当前和下一个节点所代表的向量的旋转差异来增加采样数量
+                    // 如果旋转差异越大，采样数量就越大
                     int dom = (int)(Math.Abs(MathHelper.WrapAngle(rotCur - rotNext)) / 0.22f) + 2;
                     float factor = 1.0f / dom;
                     for (float j = 0; j <= 1.0f; j += factor)
