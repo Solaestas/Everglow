@@ -60,6 +60,10 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Items
                 return false;
             }
         }
+        public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
+        {
+
+        }
         /*public override void AddRecipes()
         {
             CreateRecipe()

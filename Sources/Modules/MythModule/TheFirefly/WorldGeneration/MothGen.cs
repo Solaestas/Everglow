@@ -110,7 +110,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                 }
             }
         }
-        }
         /// <summary>
         /// 建造流萤之茧
         /// </summary>

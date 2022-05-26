@@ -4,6 +4,7 @@ using System.Drawing;
 using Color = Microsoft.Xna.Framework.Color;
 using Point = Microsoft.Xna.Framework.Point;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
+using Terraria.GameContent;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
 {
@@ -228,7 +229,35 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             DrawGlow(texClose.Size(), 0.25f);
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            OldMouseW[0] = Main.MouseWorld;
+            for (int f = OldMouseW.Length - 1; f > 0; f--)
+            {
+                OldMouseW[f] = OldMouseW[f - 1];
+            }
+            List<Vector2> oldM = new List<Vector2>();
+            for (int f = 0; f < OldMouseW.Length; f++)
+            {
+                if (OldMouseW[f] != Vector2.Zero)
+                {
+                    oldM.Add(OldMouseW[f]);
+                }
+            }
+            List<Vector2> L = Commons.Function.BezierCurve.Bezier.GetBezier(oldM, 90);
+            List<Vector2> K = Commons.Function.BezierCurve.Bezier.GetBezier(L, 2000);
+            for (int f = 0; f < K.Count; f++)
+            {
+                Texture2D t0 = TextureAssets.MagicPixel.Value;
+                Main.spriteBatch.Draw(t0, K[f] - Main.screenPosition, new Rectangle(0, 0, 4, 4), Color.Red, 0, new Vector2(2), 1, SpriteEffects.None, 0);
+            }
+            for (int f = 0; f < L.Count; f++)
+            {
+                Texture2D t0 = TextureAssets.MagicPixel.Value;
+                Main.spriteBatch.Draw(t0, L[f] - Main.screenPosition, new Rectangle(0, 0, 4, 4), Color.Green, 0, new Vector2(2), 2, SpriteEffects.None, 0);
+            }
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
         }
+        public Vector2[] OldMouseW = new Vector2[30];
     }
 }
 
