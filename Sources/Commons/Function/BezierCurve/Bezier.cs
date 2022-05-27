@@ -88,12 +88,12 @@ namespace Everglow.Sources.Commons.Function.BezierCurve
             else
             {
                 List<Vector2> result = new List<Vector2>();
-                int sz = origPath.Count;
+
 
                 // 头尾增加两个不影响曲线效果的点
                 origPath.Insert(0, 2 * origPath[0] - origPath[1]);
-                origPath.Add(2 * origPath[sz - 1] - origPath[sz - 2]);
-
+                origPath.Add(2 * origPath[origPath.Count - 1] - origPath[origPath.Count - 2]);
+                int sz = origPath.Count;
                 for (int i = 1; i < sz - 2; i++)
                 {
                     float rotCur = (origPath[i] - origPath[i - 1]).ToRotation();
@@ -103,11 +103,12 @@ namespace Everglow.Sources.Commons.Function.BezierCurve
                     // 如果旋转差异越大，采样数量就越大
                     int dom = (int)(Math.Abs(MathHelper.WrapAngle(rotCur - rotNext)) / 0.22f) + 2;
                     float factor = 1.0f / dom;
-                    for (float j = 0; j <= 1.0f; j += factor)
+                    for (float j = 0; j < 1.0f; j += factor)
                     {
                         result.Add(Vector2.CatmullRom(origPath[i - 1], origPath[i], origPath[i + 1], origPath[i + 2], j));
                     }
                 }
+                result.Add(origPath[sz - 1]);
                 return result;
             }
         }

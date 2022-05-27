@@ -41,15 +41,24 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
         private void ForceSingleDirection(Mass m1, Mass m2, float deltaTime)
         {
             // 求解阻尼简谐运动的微分方程解析解
-            float gamma = 0.5f * MathF.Sqrt(4 * elasticity - damping);
+            if (4 * elasticity - damping * damping <= 0)
+            {
+                return;
+            }
+            float gamma = 0.5f * MathF.Sqrt(4 * elasticity - damping * damping);
             Vector2 unit = Vector2.Normalize(m1.position - m2.position);
             Vector2 dir = m1.position - m2.position - unit * restLength;
             Vector2 c = dir * (damping / (2 * gamma)) + m1.velocity * (1.0f / gamma);
             Vector2 target = dir * MathF.Cos(gamma * deltaTime) + c * MathF.Sin(gamma * deltaTime);
             target *= MathF.Exp(-0.5f * deltaTime * damping);
-            Vector2 acc = (target - dir) * (1.0f / deltaTime / deltaTime) - m1.velocity * deltaTime;
+            Vector2 acc = (target - dir) * (1.0f / deltaTime / deltaTime) - m1.velocity * (1.0f / deltaTime);
 
-            m1.force += acc * m1.mass;
+            m1.force += acc;
+
+            //float dis = (m2.position - m1.position).Length();
+            //Vector2 n = Vector2.Normalize(m2.position - m1.position);
+            //Vector2 acc = n * (dis - restLength) * (elasticity);
+            //m1.force += acc * m1.mass;
         }
 
         public void ApplyForce(float deltaTime)

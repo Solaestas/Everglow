@@ -29,7 +29,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
             {
                 return;
             }
-            velocity += (force * deltaTime) / mass;
+            velocity += force / mass * deltaTime;
             position += velocity * deltaTime;
             force = Vector2.Zero;
         }
