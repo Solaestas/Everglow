@@ -1,4 +1,5 @@
 using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Physics;
 using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
 using System.Drawing;
 using Color = Microsoft.Xna.Framework.Color;
@@ -228,6 +229,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             DrawGlow(texClose.Size(), 0.25f);
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+
+            List<Mass> masses = new List<Mass>();
+            for (int i = 0; i < 10; i++)
+            {
+                masses.Add(new Mass())
+            }
         }
     }
 }
