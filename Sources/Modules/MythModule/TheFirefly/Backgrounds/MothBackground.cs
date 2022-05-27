@@ -212,6 +212,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             var texSky = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflySky");
             var texFar = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyFar");
             var texMiddle = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyMiddle");
+            var texMidClose = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyMidClose");
             var texClose = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyClose");
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
@@ -224,12 +225,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             DrawGlowSec(texClose.Size(), 0.17f);
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-            Main.spriteBatch.Draw(texClose, screen, GetDrawRec(texClose.Size(), 0.25f), Color.White);
+            Main.spriteBatch.Draw(texMidClose, screen, GetDrawRec(texMidClose.Size(), 0.25f), Color.White);
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             DrawGlow(texClose.Size(), 0.25f);
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            Main.spriteBatch.Draw(texClose, screen, GetDrawRec(texClose.Size(), 0.33f), Color.White);
             OldMouseW[0] = Main.MouseWorld;
             for (int f = OldMouseW.Length - 1; f > 0; f--)
             {
