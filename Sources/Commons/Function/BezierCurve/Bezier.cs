@@ -97,7 +97,7 @@ namespace Everglow.Sources.Commons.Function.BezierCurve
                 for (int i = 1; i < sz - 2; i++)
                 {
                     float rotCur = (origPath[i] - origPath[i - 1]).ToRotation();
-                    float rotNext  = (origPath[i + 1] - origPath[i]).ToRotation();
+                    float rotNext  = (origPath[i + 2] - origPath[i + 1]).ToRotation();
 
                     // 根据当前和下一个节点所代表的向量的旋转差异来增加采样数量
                     // 如果旋转差异越大，采样数量就越大
