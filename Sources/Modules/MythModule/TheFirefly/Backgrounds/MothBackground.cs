@@ -1,4 +1,5 @@
 using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Physics;
 using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
 using System.Drawing;
 using Color = Microsoft.Xna.Framework.Color;
@@ -18,6 +19,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         {
             Everglow.HookSystem.AddMethod(DrawBackground, Commons.Core.CallOpportunity.PostDrawBG);
             On.Terraria.Graphics.Light.TileLightScanner.GetTileLight += TileLightScanner_GetTileLight;
+
+            InitMass_Spring();
         }
         /// <summary>
         /// 荧光悬挂物的数据结构
@@ -245,26 +248,25 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                     oldM.Add(OldMouseW[f]);
                 }
             }
-            //List<Vector2> L = Commons.Function.BezierCurve.Bezier.GetBezier(oldM, 90);
-            //List<Vector2> K = Commons.Function.BezierCurve.Bezier.GetBezier(L, 2000);
-            List<Vector2> K = Commons.Function.BezierCurve.Bezier.SmoothPath(oldM);
-            // K = Commons.Function.BezierCurve.Bezier.SmoothPath(K);
-            // 可多次采样但是效果不明显，而点的数量急剧增加
+            ////List<Vector2> L = Commons.Function.BezierCurve.Bezier.GetBezier(oldM, 90);
+            ////List<Vector2> K = Commons.Function.BezierCurve.Bezier.GetBezier(L, 2000);
+            //List<Vector2> K = Commons.Function.BezierCurve.Bezier.SmoothPath(oldM);
+            //// K = Commons.Function.BezierCurve.Bezier.SmoothPath(K);
+            //// 可多次采样但是效果不明显，而点的数量急剧增加
 
-            if (K.Count >= 2)
-            {
-                for (int f = 0; f < K.Count - 1; f++)
-                {
-                    Texture2D t0 = TextureAssets.MagicPixel.Value;
-                    float distance = Math.Max(Vector2.Distance(K[f + 1], K[f]) / 4f, 2);
-                    for (int i = 0; i < distance; i++)
-                    {
-                        Vector2 pos = Vector2.Lerp(K[f], K[f + 1], i / distance);
-                        Main.spriteBatch.Draw(t0, pos - Main.screenPosition, new Rectangle(0, 0, 4, 4), Color.Red, 0, new Vector2(2), 1, SpriteEffects.None, 0);
-                    }
-                }
-            }
-
+            //if (K.Count >= 2)
+            //{
+            //    for (int f = 0; f < K.Count - 1; f++)
+            //    {
+            //        Texture2D t0 = TextureAssets.MagicPixel.Value;
+            //        float distance = Math.Max(Vector2.Distance(K[f + 1], K[f]) / 4f, 2);
+            //        for (int i = 0; i < distance; i++)
+            //        {
+            //            Vector2 pos = Vector2.Lerp(K[f], K[f + 1], i / distance);
+            //            Main.spriteBatch.Draw(t0, pos - Main.screenPosition, new Rectangle(0, 0, 4, 4), Color.Red, 0, new Vector2(2), 1, SpriteEffects.None, 0);
+            //        }
+            //    }
+            //}
 
 
             //for (int f = 0; f < L.Count; f++)
@@ -274,8 +276,104 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             //}
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+
+            //InitMass_Spring();
+            float gravity = 1.0f;
+            masses[0].position = Main.MouseScreen;
+            float deltaTime = 1;
+            foreach (var spring in springs)
+            {
+                spring.ApplyForce(deltaTime);
+            }
+
+            List<Vector2> massPositions = new List<Vector2>();
+            foreach (var mass in masses)
+            {
+                if (Main.time % 120 < 1)
+                {
+                    mass.force += new Vector2(5, 0);
+                }
+                //mass.force -= mass.velocity * 0.1f;
+                // 重力加速度（可调
+                mass.force += new Vector2(0, gravity) * mass.mass;
+                mass.Update(deltaTime);
+                Texture2D t0 = TextureAssets.MagicPixel.Value;
+                Main.spriteBatch.Draw(t0, mass.position, new Rectangle(0, 0, 4, 4), Color.Red, 0, new Vector2(2), 1, SpriteEffects.None, 0);
+                massPositions.Add(mass.position);
+            }
+
+            List<VertexBase.Vertex2D> Vertices = new List<VertexBase.Vertex2D>();
+            List<Vector2> massPositionsSmooth = Commons.Function.BezierCurve.Bezier.SmoothPath(massPositions);
+            for (int i = -5; i <= 5; i++)
+            {
+                DrawRope(massPositionsSmooth, new Vector2(i * 30, 0), Vertices);
+            }
+            if (Vertices.Count > 2)
+            {
+                var rasterState = new RasterizerState()
+                {
+                    CullMode = CullMode.None,
+                    FillMode = FillMode.WireFrame
+                };
+                Effect effect = MythContent.QuickEffect("Effects/MeshTest");
+                var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+                var model = Matrix.CreateTranslation(new Vector3(0, 0, 0)) * Main.GameViewMatrix.ZoomMatrix;
+                effect.Parameters["uTransform"].SetValue(model * projection);
+                effect.CurrentTechnique.Passes[0].Apply();
+                Main.graphics.GraphicsDevice.RasterizerState = rasterState;
+                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, Vertices.ToArray(), 0, Vertices.Count);
+            }
         }
         public Vector2[] OldMouseW = new Vector2[30];
+        private List<Mass> masses = new List<Mass>();
+        private List<Spring> springs = new List<Spring>();
+
+        private void InitMass_Spring()
+        {
+            masses.Clear();
+            springs.Clear();
+            for (int i = 0; i < 10; i++)
+            {
+                masses.Add(new Mass(1.0f, Main.MouseScreen + new Vector2(0, 10 * i), i == 0));
+            }
+            for (int i = 1; i < 10; i++)
+            {
+                springs.Add(new Spring(0.3f, 20, 0.05f, masses[i - 1], masses[i]));
+            }
+        }
+
+        private void DrawRope(List<Vector2> massPositionsSmooth, Vector2 offset, List<VertexBase.Vertex2D> vertices)
+        {
+            int count = massPositionsSmooth.Count;
+            float baseWidth = 10;
+            bool firstInsert = true;
+            // count 必须大于1
+            for (int i = 0; i < count; i++)
+            {
+                Vector2 dir;
+                if (i == 0)
+                {
+                    dir = massPositionsSmooth[1] - massPositionsSmooth[0];
+
+                }
+                else
+                {
+                    dir = massPositionsSmooth[i] - massPositionsSmooth[i - 1];
+                }
+                Vector2 normalDir = Vector2.Normalize(new Vector2(-dir.Y, dir.X));
+                float width = baseWidth * (count - i - 1) / (float)(count - 1);
+                if (firstInsert)
+                {
+                    // 复制一个顶点，构造一个退化三角形
+                    vertices.Add(new VertexBase.Vertex2D(massPositionsSmooth[i] + offset + normalDir * width, Color.White, Vector3.Zero));
+                    firstInsert = false;
+                }
+                vertices.Add(new VertexBase.Vertex2D(massPositionsSmooth[i] + offset + normalDir * width, Color.White, Vector3.Zero));
+                vertices.Add(new VertexBase.Vertex2D(massPositionsSmooth[i] + offset - normalDir * width, Color.White, Vector3.Zero));
+            }
+            // 复制一个顶点，构造一个退化三角形
+            vertices.Add(vertices.Last());
+        }
     }
 }
 
