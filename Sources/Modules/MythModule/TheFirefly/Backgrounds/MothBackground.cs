@@ -5,6 +5,7 @@ using System.Drawing;
 using Color = Microsoft.Xna.Framework.Color;
 using Point = Microsoft.Xna.Framework.Point;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
+using Terraria.GameContent;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
 {
@@ -202,6 +203,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 }
             }
         }
+
         private void DrawBackground()
         {
             if (!BiomeActive())
@@ -211,6 +213,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             var texSky = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflySky");
             var texFar = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyFar");
             var texMiddle = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyMiddle");
+            var texMidClose = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyMidClose");
             var texClose = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyClose");
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
@@ -223,12 +226,57 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             DrawGlowSec(texClose.Size(), 0.17f);
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-            Main.spriteBatch.Draw(texClose, screen, GetDrawRec(texClose.Size(), 0.25f), Color.White);
+            Main.spriteBatch.Draw(texMidClose, screen, GetDrawRec(texMidClose.Size(), 0.25f), Color.White);
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             DrawGlow(texClose.Size(), 0.25f);
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            Main.spriteBatch.Draw(texClose, screen, GetDrawRec(texClose.Size(), 0.33f), Color.White);
+            OldMouseW[0] = Main.MouseWorld;
+            for (int f = OldMouseW.Length - 1; f > 0; f--)
+            {
+                OldMouseW[f] = OldMouseW[f - 1];
+            }
+            List<Vector2> oldM = new List<Vector2>();
+            for (int f = 0; f < OldMouseW.Length; f++)
+            {
+                if (OldMouseW[f] != Vector2.Zero)
+                {
+                    oldM.Add(OldMouseW[f]);
+                }
+            }
+            //List<Vector2> L = Commons.Function.BezierCurve.Bezier.GetBezier(oldM, 90);
+            //List<Vector2> K = Commons.Function.BezierCurve.Bezier.GetBezier(L, 2000);
+            List<Vector2> K = Commons.Function.BezierCurve.Bezier.SmoothPath(oldM);
+            // K = Commons.Function.BezierCurve.Bezier.SmoothPath(K);
+            // 可多次采样但是效果不明显，而点的数量急剧增加
+
+            if (K.Count >= 2)
+            {
+                for (int f = 0; f < K.Count - 1; f++)
+                {
+                    Texture2D t0 = TextureAssets.MagicPixel.Value;
+                    float distance = Math.Max(Vector2.Distance(K[f + 1], K[f]) / 4f, 2);
+                    for (int i = 0; i < distance; i++)
+                    {
+                        Vector2 pos = Vector2.Lerp(K[f], K[f + 1], i / distance);
+                        Main.spriteBatch.Draw(t0, pos - Main.screenPosition, new Rectangle(0, 0, 4, 4), Color.Red, 0, new Vector2(2), 1, SpriteEffects.None, 0);
+                    }
+                }
+            }
+
+
+
+            //for (int f = 0; f < L.Count; f++)
+            //{
+            //    Texture2D t0 = TextureAssets.MagicPixel.Value;
+            //    Main.spriteBatch.Draw(t0, L[f] - Main.screenPosition, new Rectangle(0, 0, 4, 4), Color.Green, 0, new Vector2(2), 2, SpriteEffects.None, 0);
+            //}
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+        }
+        public Vector2[] OldMouseW = new Vector2[30];
 
             List<Mass> masses = new List<Mass>();
             for (int i = 0; i < 10; i++)
