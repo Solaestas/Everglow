@@ -15,6 +15,7 @@
             player.GetCritChance(DamageClass.Generic) += 12; // 加12%暴击
             player.GetDamage(DamageClass.Generic) *= 1.12f; // 加12%伤害
             player.GetAttackSpeed(DamageClass.Generic) += 0.12f; // 加12%攻速
+            player.wellFed = true;
         }
     }
 }

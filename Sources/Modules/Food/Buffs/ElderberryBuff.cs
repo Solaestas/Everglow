@@ -14,6 +14,7 @@
         {
             ElderberryBuffDash ElderberryBuffDash = player.GetModPlayer<ElderberryBuffDash>();
             ElderberryBuffDash.ElderberryBuff = true;
+            player.wellFed = true;
         }
     }
     public class ElderberryBuffDash : ModPlayer

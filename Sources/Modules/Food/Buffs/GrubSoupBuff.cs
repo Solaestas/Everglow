@@ -15,6 +15,7 @@
             player.fishingSkill += 25;
             FoodBuffModPlayer FoodBuffModPlayer = player.GetModPlayer<FoodBuffModPlayer>();
             FoodBuffModPlayer.GrubSoupBuff = true;
+            player.wellFed = true;
         }
     }
 }

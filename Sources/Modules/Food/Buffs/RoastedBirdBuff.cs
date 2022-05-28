@@ -17,6 +17,7 @@
             FoodBuffModPlayer.WingTimeModifier += 0.25f;
             player.extraFall += 30;
             player.wingAccRunSpeed *= 1.2f;
+            player.wellFed = true;
         }
     }
 }

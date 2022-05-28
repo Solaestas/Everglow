@@ -14,6 +14,7 @@
         {
             player.GetCritChance(DamageClass.Magic) += 0.08f;//加8%魔法暴击率
             player.statManaMax2 += 40;//加40魔力上限
+            player.wellFed = true;
         }
     }
 }

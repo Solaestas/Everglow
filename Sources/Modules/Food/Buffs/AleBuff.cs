@@ -14,7 +14,7 @@
         {
             player.whipRangeMultiplier *= 2.5f;//
             player.GetAttackSpeed(DamageClass.Summon) *= 2.5f;
-
+            player.wellFed = true;
         }
     }
 }

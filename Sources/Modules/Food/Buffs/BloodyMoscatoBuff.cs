@@ -14,6 +14,7 @@
         {
             FoodBuffModPlayer FoodBuffModPlayer = player.GetModPlayer<FoodBuffModPlayer>();
             FoodBuffModPlayer.BloodyMoscatoBuff = true;
+            player.wellFed = true;
         }
     }
 }

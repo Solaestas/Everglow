@@ -14,6 +14,7 @@
         {
             FoodBuffModPlayer FoodBuffModPlayer = player.GetModPlayer<FoodBuffModPlayer>();
             FoodBuffModPlayer.DragonfruitBuff = true;
+            player.wellFed = true;
         }
     }
 }

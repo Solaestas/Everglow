@@ -13,6 +13,7 @@
         public override void Update(Player player, ref int buffIndex)
         {
             player.endurance += 0.8f;// 加80%减伤
+            player.wellFed = true;
         }
     }
 }

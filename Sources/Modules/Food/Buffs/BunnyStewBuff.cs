@@ -15,6 +15,7 @@
             player.autoJump = true;
             player.jumpSpeedBoost += 2;
             player.jumpBoost = true;
+            player.wellFed = true;
         }
     }
 }

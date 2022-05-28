@@ -16,6 +16,7 @@
             FoodBuffModPlayer.BananaDaiquiriBuff = true;
             player.GetDamage(DamageClass.Ranged) *= 1.5f; // 加50%伤害
             player.GetCritChance(DamageClass.Ranged) += 50; // 加50%暴击
+            player.wellFed = true;
         }
     }
 }

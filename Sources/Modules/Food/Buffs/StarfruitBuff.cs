@@ -14,6 +14,7 @@
         {
             FoodBuffModPlayer FoodBuffModPlayer = player.GetModPlayer<FoodBuffModPlayer>();
             FoodBuffModPlayer.StarfruitBuff = true;
+            player.wellFed = true;
         }
     }
 }

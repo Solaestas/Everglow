@@ -13,6 +13,7 @@
         public override void Update(Player player, ref int buffIndex)
         {
             player.GetKnockback(DamageClass.Generic) += 0.50f; // 加50%击退
+            player.wellFed = true;
         }
     }
 }

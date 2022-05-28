@@ -24,6 +24,7 @@
             player.buffImmune[35] = true;
             player.buffImmune[23] = true;
             player.buffImmune[22] = true;//十字章一样的免疫
+            player.wellFed = true;
         }
     }
 }

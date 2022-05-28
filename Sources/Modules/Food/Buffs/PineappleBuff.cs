@@ -14,6 +14,7 @@
         {
             player.statDefense += 6; // 加6防御
             player.thorns += 0.5f;//50%反伤
+            player.wellFed = true;
         }
     }
 }

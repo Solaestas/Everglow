@@ -15,6 +15,7 @@
             player.maxMinions += 10; //加10召唤栏
             player.GetKnockback(DamageClass.Summon) *= 2f; // 击退加倍
             player.GetDamage(DamageClass.Summon) *= 1.5f; // 加50%伤害
+            player.wellFed = true;
         }
     }
 }

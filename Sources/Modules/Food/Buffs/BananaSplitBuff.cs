@@ -15,7 +15,7 @@
             FoodBuffModPlayer FoodBuffModPlayer = player.GetModPlayer<FoodBuffModPlayer>();
             FoodBuffModPlayer.BananaSplitBuff = true;
             player.GetCritChance(DamageClass.Ranged) += 8; // 加8%暴击
-
+            player.wellFed = true;
         }
     }
 }

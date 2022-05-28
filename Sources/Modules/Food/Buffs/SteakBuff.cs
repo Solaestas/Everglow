@@ -13,6 +13,7 @@
         public override void Update(Player player, ref int buffIndex)
         {
             player.manaCost *= 0.66f;//减33%魔力消耗
+            player.wellFed = true;
         }
     }
 }

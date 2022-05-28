@@ -14,6 +14,7 @@
         {
             player.lifeRegen += 1;//加1生命回复
             player.lifeMagnet = true;//增加心的拾取范围
+            player.wellFed = true;
         }
     }
 }

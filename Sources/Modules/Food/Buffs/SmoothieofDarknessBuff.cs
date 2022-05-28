@@ -14,6 +14,7 @@
         {
             FoodBuffModPlayer FoodBuffModPlayer = player.GetModPlayer<FoodBuffModPlayer>();
             FoodBuffModPlayer.SmoothieofDarknessBuff = true;
+            player.wellFed = true;
         }
     }
 }

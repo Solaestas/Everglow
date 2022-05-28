@@ -13,6 +13,7 @@
         public override void Update(Player player, ref int buffIndex)
         {
             player.statLifeMax2 += 50; // 加50血量上限
+            player.wellFed = true;
         }
     }
 }

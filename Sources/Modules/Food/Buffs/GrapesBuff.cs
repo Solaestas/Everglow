@@ -15,6 +15,7 @@
             player.maxMinions += 1;// 加1召唤栏
             player.luck *= 1.1f;
             player.statDefense -= 8; // 减8防御
+            player.wellFed = true;
         }
     }
 }

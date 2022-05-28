@@ -15,7 +15,7 @@
             FoodBuffModPlayer FoodBuffModPlayer = player.GetModPlayer<FoodBuffModPlayer>();
             FoodBuffModPlayer.BananaBuff = true;
             player.GetDamage(DamageClass.Ranged) *= 1.05f; // 加5%伤害
-
+            player.wellFed = true;
         }
     }
 }

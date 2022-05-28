@@ -14,6 +14,7 @@
         {
             player.lifeRegen += 1; // 加1生命回复
             player.GetAttackSpeed(DamageClass.Generic) += 0.08f;// 加8%攻速
+            player.wellFed = true;
         }
     }
 }

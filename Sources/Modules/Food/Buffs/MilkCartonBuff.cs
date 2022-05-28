@@ -50,6 +50,7 @@
             player.buffImmune[203] = true;
             player.buffImmune[169] = true;
             player.buffImmune[189] = true;
+            player.wellFed = true;
         }
     }
 }
