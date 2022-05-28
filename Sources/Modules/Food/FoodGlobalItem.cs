@@ -240,7 +240,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 20,
                         BuffType = ModContent.BuffType<EscargotBuff>(),
                         BuffTime = new FoodDuration(8, 0, 0),
-                        Description ="大大减速，加50%减伤\n“这不是神龟药水！”\n8分钟持续时间"
+                        Description ="大大减速，加50%减伤\n“神龟药水?”\n8分钟持续时间"
                     }
                 },
                 //煎蛋
@@ -470,7 +470,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 15,
                         BuffType = ModContent.BuffType<PizzaBuff>(),
                         BuffTime = new FoodDuration(6, 0, 0),
-                        Description ="增加10穿甲\n“会让意大利人破防的菠萝披萨。”\n6分钟持续时间"
+                        Description ="增加10穿甲\n“会让意大利人破防的菠萝披萨”\n6分钟持续时间"
                     }
                 },
                 //李子
@@ -480,7 +480,7 @@ namespace Everglow.Sources.Modules.Food
                         Satiety = 10,
                         BuffType = ModContent.BuffType<PlumBuff>(),
                         BuffTime = new FoodDuration(4, 0, 0),
-                        Description ="加600仇恨值，8%攻速\n“至于我的建议，还是再等等吧”\n4分钟持续时间"
+                        Description ="加600仇恨值，8%攻速\n“至于我的建议，还是再等等吧!”\n4分钟持续时间"
                     }
                 },
                 //薯片
