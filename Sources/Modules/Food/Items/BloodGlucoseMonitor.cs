@@ -22,10 +22,20 @@
             FoodSatietyInfoDisplayplayer SatietyInfo = player.GetModPlayer<FoodSatietyInfoDisplayplayer>();
             SatietyInfo.AccBloodGlucoseMonitor = true;
         }
+        public override void UpdateAccessory(Player player, bool hideVisual)
+        {
+            FoodSatietyInfoDisplayplayer SatietyInfo = player.GetModPlayer<FoodSatietyInfoDisplayplayer>();
+            SatietyInfo.AccBloodGlucoseMonitor = true;
+        }
 
         public override void AddRecipes()
         {
-
+            CreateRecipe()
+                .AddIngredient(ItemID.Wire, 10)
+                .AddIngredient(ItemID.Lens, 5)
+                .AddRecipeGroup(RecipeGroupID.IronBar, 10)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
     }
 }
