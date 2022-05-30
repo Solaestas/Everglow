@@ -338,7 +338,7 @@ namespace Everglow.Sources.Modules.Food
                     ItemID.GrubSoup,
                     new FoodInfo() {
                         Satiety = 15,
-                        BuffType = ModContent.BuffType<GrubSoupBuff>(), 
+                        BuffType = ModContent.BuffType<GrubSoupBuff>(),
                         BuffTime = new FoodDuration(6, 0, 0),
                         Description ="加25渔力，每秒减2生命\n“吃啥补啥，就是有点恶心”\n6分钟持续时间"
                     }
@@ -658,7 +658,7 @@ namespace Everglow.Sources.Modules.Food
         public override void SetStaticDefaults()
         {
 
-            
+
         }
 
         public override void SetDefaults(Item item)
@@ -685,7 +685,7 @@ namespace Everglow.Sources.Modules.Food
 
                 // 增加饱食度
                 foodPlayer.CurrentSatiety += foodInfo.Satiety;
-                
+
             }
 
         }
