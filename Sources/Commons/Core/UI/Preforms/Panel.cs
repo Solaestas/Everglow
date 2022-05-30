@@ -46,10 +46,14 @@ namespace Everglow.Sources.Commons.Core.UI.Preforms
             Main.spriteBatch.GraphicsDevice.RasterizerState = OverflowHiddenRasterizerState;
             Main.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, OverflowHiddenRasterizerState, null );
             if( Image != null )
-                Main.spriteBatch.Draw( Image, BaseRectangle , Color.Gray );
+                Main.spriteBatch.Draw( Image, BaseRectangle , ContainerElement.Color  );
             else
-                Main.spriteBatch.Draw( TextureAssets.MagicPixel.Value, BaseRectangle, Color.Gray );
+                Main.spriteBatch.Draw( TextureAssets.MagicPixel.Value, BaseRectangle, ContainerElement.Color );
             base.DrawSelf( );
+        }
+        protected override void PostDraw( )
+        {
+            base.PostDraw( );
             Main.spriteBatch.End( );
             Main.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, null, null );
         }

@@ -105,11 +105,6 @@ namespace Everglow.Sources.Commons.Core.UI
         public static bool SlideUp
         { get { return MouseState.ScrollWheelValue > MouseStateLast.ScrollWheelValue; } }
 
-        /// <summary>
-        /// 表示鼠标进行了左键双击操作的值.
-        /// </summary>
-        public static bool MouseDoubleLeftClick { get; set; } = false;
-
         // 用于计算左键双击的计时器.
         private static int _doubleLeftClickTimer = 30;
 
@@ -129,18 +124,6 @@ namespace Everglow.Sources.Commons.Core.UI
             MouseState = Mouse.GetState( );
             KeyboardStateLast = KeyboardState;
             KeyboardState = Keyboard.GetState( );
-            if ( MouseLeftUp && _doubleLeftClickTimer <= 0 && !MouseDoubleLeftClick )
-            {
-                _doubleLeftClickTimer = 30;
-            }
-            else if ( MouseLeftUp && _doubleLeftClickTimer > 0 )
-            {
-                MouseDoubleLeftClick = true;
-            }
-            else if ( _doubleLeftClickTimer <= 0 )
-                MouseDoubleLeftClick = false;
-            if ( _doubleLeftClickTimer > 0 )
-                _doubleLeftClickTimer--;
         }
 
         /// <summary>

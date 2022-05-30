@@ -182,6 +182,29 @@ namespace Everglow.Sources.Commons.Core.UI
         /// <para>[!] 于上级容器判断.</para>
         /// </summary>
         protected virtual bool UpdateEnable { get; } = true;
+
+        /// <summary>
+        /// 对每帧需要重置的数据进行重置.
+        /// <para>[!] 该方法的执行同样受 <see cref="UpdateEnable"/> 控制.</para>
+        /// </summary>
+        public void DoReset( )
+        {
+            ResetUpdate( );
+            for ( int count = 0; count < ContainerItems.Count; count++ )
+                if ( ContainerItems[ count ].UpdateEnable )
+                    ContainerItems[ count ].DoReset( );
+        }
+
+        /// <summary>
+        /// 重写该方法以自定义对每帧需要重置的数据进行重置的操作.
+        /// <para>[!] 它将先于 <see cref="DoUpdate"/> 执行.</para>
+        /// <para>[!] 该方法的执行同样受 <see cref="UpdateEnable"/> 控制.</para>
+        /// </summary>
+        protected virtual void ResetUpdate( )
+        {
+
+        }
+
         /// <summary>
         /// 执行该容器的逻辑刷新.
         /// </summary>
@@ -199,6 +222,8 @@ namespace Everglow.Sources.Commons.Core.UI
             MoveFunction?.UpdateLocation( ContainerElement );
             if ( MoveFunction != null )
                 ContainerElement.SetLocation( Location.X + MoveFunction.VelocityX, Location.Y + MoveFunction.VelocityY );
+            if ( Events.Droping )
+                ContainerElement.SetLocation( new Vector2( Mouse.GetState( ).X, Mouse.GetState( ).Y ) - Events.SelectPoint );
             ScaleFunction?.UpdateScale( ContainerElement );
             this?.PostUpdate( );
         }

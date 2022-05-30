@@ -12,7 +12,7 @@ namespace Everglow.Sources.Commons.Core.UI
     /// </summary>
     public struct ContainerElement
     {
-        Container Container;
+        private Container Container;
 
         public float LocationX { get; private set; }
 
@@ -70,6 +70,11 @@ namespace Everglow.Sources.Commons.Core.UI
         /// </summary>
         public float PaddingHeight { get; private set; }
 
+        /// <summary>
+        /// 颜色.
+        /// </summary>
+        public Color Color { get; private set; }
+
         public ContainerElement( Container container )
         {
             Container = container;
@@ -85,22 +90,7 @@ namespace Everglow.Sources.Commons.Core.UI
             PercentageY = 0;
             PercentageWidth = 0;
             PercentageHeight = 0;
-        }
-
-        public void Reset( )
-        {
-            PaddingWidth = 0;
-            PaddingHeight = 0;
-            MarginWidth = 0;
-            MarginHeight = 0;
-            Width = 0;
-            Height = 0;
-            LocationX = 0;
-            LocationY = 0;
-            PercentageX = -1;
-            PercentageY = -1;
-            PercentageWidth = -1;
-            PercentageHeight = -1;
+            Color = Color.White;
         }
 
         public void UpdateElement( )
@@ -109,12 +99,25 @@ namespace Everglow.Sources.Commons.Core.UI
                 return;
             if ( LocationX == 0 && PercentageX != -1 )
                 LocationX = PercentageX * Container.ParentContainer.ContainerElement.Width + Container.ParentContainer.ContainerElement.LocationX;
+            else
+                LocationX += Container.ParentContainer.ContainerElement.PaddingWidth + MarginWidth;
             if ( LocationY == 0 && PercentageY != -1 )
                 LocationY = PercentageX * Container.ParentContainer.ContainerElement.Height + Container.ParentContainer.ContainerElement.LocationY;
+            else
+                LocationY += Container.ParentContainer.ContainerElement.PaddingHeight + MarginHeight;
             if ( Width == 0 && PercentageWidth != -1 )
                 Width = PercentageWidth * Container.ParentContainer.ContainerElement.Width;
             if ( Height == 0 && PercentageHeight != -1 )
                 Height = PercentageHeight * Container.ParentContainer.ContainerElement.Height;
+        }
+
+        /// <summary>
+        /// 设置颜色.
+        /// </summary>
+        /// <param name="color">要设置的颜色.</param>
+        public void SetColor( Color color )
+        {
+            Color = color;
         }
 
         /// <summary>
@@ -146,8 +149,16 @@ namespace Everglow.Sources.Commons.Core.UI
         /// <param name="y">相对于父容器的纵坐标.</param>
         public void SetLocation( float x, float y )
         {
-            LocationX = x;
-            LocationY = y;
+            if ( Container.ParentContainer != null )
+            {
+                LocationX = Container.ParentContainer.ContainerElement.LocationX + x;
+                LocationY = Container.ParentContainer.ContainerElement.LocationY + y;
+            }
+            else
+            {
+                LocationX = x;
+                LocationY = y;
+            }
         }
 
         /// <summary>
@@ -156,8 +167,16 @@ namespace Everglow.Sources.Commons.Core.UI
         /// <param name="location">相对于父容器的坐标.</param>
         public void SetLocation( Vector2 location )
         {
-            LocationX = location.X;
-            LocationY = location.Y;
+            if ( Container.ParentContainer != null )
+            {
+                LocationX = Container.ParentContainer.ContainerElement.LocationX + location.X;
+                LocationY = Container.ParentContainer.ContainerElement.LocationY + location.Y;
+            }
+            else
+            {
+                LocationX = location.X;
+                LocationY = location.Y;
+            }
         }
 
         /// <summary>
@@ -191,8 +210,16 @@ namespace Everglow.Sources.Commons.Core.UI
         /// <param name="height">高度.</param>
         public void SetLayerout( float x, float y, float width, float height )
         {
-            LocationX = x;
-            LocationY = y;
+            if ( Container.ParentContainer != null )
+            {
+                LocationX = Container.ParentContainer.ContainerElement.LocationX + x;
+                LocationY = Container.ParentContainer.ContainerElement.LocationY + y;
+            }
+            else
+            {
+                LocationX = x;
+                LocationY = y;
+            }
             Width = width;
             Height = height;
         }

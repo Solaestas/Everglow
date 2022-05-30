@@ -11,6 +11,10 @@ namespace Everglow.Sources.Commons.Core.UI
     /// </summary>
     public class ContainerPage : Container
     {
+        public override sealed bool GetInterviewState( )
+        {
+            return false;
+        }
         public static void RegisterContainerPage( ContainerPage containerPage )
         {
             containerPage.DoInitialize( );
