@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace Everglow.Sources.Modules.ZYModule.Commons.Core
+﻿namespace Everglow.Sources.Modules.ZYModule.Commons.Core
 {
     public struct AABB
     {
@@ -82,6 +80,9 @@ namespace Everglow.Sources.Modules.ZYModule.Commons.Core
                 size.Y = value;
             }
         }
+        /// <summary>
+        /// 右下角顶点位置不变，移动左上角顶点
+        /// </summary>
         public Vector2 TopLeft
         {
             get
@@ -150,7 +151,7 @@ namespace Everglow.Sources.Modules.ZYModule.Commons.Core
                 position = value - size / 2;
             }
         }
-    
+
         public AABB(Vector2 position, Vector2 size)
         {
             this.position = position;
@@ -168,7 +169,7 @@ namespace Everglow.Sources.Modules.ZYModule.Commons.Core
         }
         public override string ToString()
         {
-            return $"AABB - position : {{{position.X}, {position.Y}}} size : {{{size.X}, {size.Y}}}";
+            return $"position = {{{position.X}, {position.Y}}} size = {{{size.X}, {size.Y}}}";
         }
     }
 
@@ -186,20 +187,66 @@ namespace Everglow.Sources.Modules.ZYModule.Commons.Core
 
         public override string ToString()
         {
-            return $"LineSegment - begin : {{{begin.X}, {begin.Y}}} end : {{{end.X}, {end.Y}}}";
+            return $"begin = {{{begin.X}, {begin.Y}}} end = {{{end.X}, {end.Y}}}";
         }
     }
 
 
     public struct Rotation
     {
-        public float angle;
-
+        private float angle;
+        private float cos;
+        private float sin;
+        public float Angle
+        {
+            get => angle;
+            set
+            {
+                angle = value;
+                cos = MathUtils.Cos(value);
+                sin = MathUtils.Sin(value);
+            }
+        }
+        public float Cos
+        {
+            get => cos;
+            set
+            {
+                angle = (float)Math.Acos(value);
+                cos = value;
+                sin = MathUtils.Sin(angle);
+            }
+        }
+        public float Sin
+        {
+            get => sin;
+            set
+            {
+                angle = (float)Math.Asin(value);
+                cos = MathUtils.Sin(angle);
+                sin = value;
+            }
+        }
         public Rotation(float angle)
         {
             this.angle = angle;
+            cos = MathUtils.Cos(angle);
+            sin = MathUtils.Sin(angle);
         }
+        public static Rotation operator +(Rotation rot, float angle)
+        {
+            return new Rotation(rot.angle + angle);
+        }
+        public static Rotation operator +(float angle, Rotation rot) => rot + angle;
+        public static Rotation operator -(Rotation rot, float angle)
+        {
+            return new Rotation(rot.angle - angle);
+        }
+        public static Rotation operator -(float angle, Rotation rot)
+        {
+            return new Rotation(angle - rot.angle);
+        }
+        public static Rotation operator -(Rotation rot) => new Rotation(-rot.angle);
+        public static implicit operator float(Rotation rot) => rot.Angle;
     }
-
-    
 }

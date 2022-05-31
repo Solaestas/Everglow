@@ -41,10 +41,10 @@ namespace Everglow.Sources.Modules.ZYModule.TileModule.Tiles
                 return Direction.None;
             }
 
-            const float SmallScale = 8;
+            const float SmallScale = 7;
             AABB smallBox = collider;
-            smallBox.position += new Vector2(SmallScale, SmallScale);
-            smallBox.size -= new Vector2(SmallScale * 2, SmallScale * 2);
+            smallBox.TopLeft += new Vector2(SmallScale, SmallScale);
+            smallBox.BottomRight -= new Vector2(SmallScale * 2, SmallScale * 2);
             if (smallBox.Intersect(aabb))
             {
                 return Direction.Inside;
