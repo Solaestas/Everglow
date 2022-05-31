@@ -15,6 +15,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         public readonly Vector3 ambient = new Vector3(0.001f, 0.001f, 0.05f);
         public List<GHang> GPos = new List<GHang>();
         public List<GHang> GPosSec = new List<GHang>();
+        public List<Vector2> RopPosFir = new List<Vector2>();
         public override void OnModLoad()
         {
             Everglow.HookSystem.AddMethod(DrawBackground, Commons.Core.CallOpportunity.PostDrawBG);
@@ -132,6 +133,31 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             }
         }
         /// <summary>
+        /// 获取第一层树条点位
+        /// </summary>
+        /// <param name="Shapepath"></param>
+        /// <exception cref="Exception"></exception>
+        public void GetRopePosFir(string Shapepath, float MoveStep)
+        {
+            if (!OperatingSystem.IsWindows())
+            {
+                throw new Exception("Windows限定");
+            }
+
+            using Stream Img = Everglow.Instance.GetFileStream("Sources/Modules/MythModule/TheFirefly/Backgrounds/" + Shapepath);
+            Bitmap image = new Bitmap(Img);
+            for (int y = image.Height - 1; y > 0; y -= 1)
+            {
+                for (int x = image.Width - 1; x > 0; x -= 1)
+                {
+                    if (image.GetPixel(x, y).R == 255)
+                    {
+                        RopPosFir.Add(new Vector2(x * 5, y * 5f + 484));
+                    }
+                }
+            }
+        }
+        /// <summary>
         /// 绘制荧光
         /// </summary>
         private void DrawGlow(Vector2 texSize, float MoveStep)
@@ -234,7 +260,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             DrawGlow(texClose.Size(), 0.25f);
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-            Main.spriteBatch.Draw(texClose, screen, GetDrawRec(texClose.Size(), 0.33f), Color.White);
+            Rectangle rvc = GetDrawRec(texClose.Size(), 0.33f);
+            rvc.Y -= 100;
+            Main.spriteBatch.Draw(texClose, screen, rvc, Color.White);
             OldMouseW[0] = Main.MouseWorld;
             for (int f = OldMouseW.Length - 1; f > 0; f--)
             {
@@ -248,65 +276,66 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                     oldM.Add(OldMouseW[f]);
                 }
             }
-            ////List<Vector2> L = Commons.Function.BezierCurve.Bezier.GetBezier(oldM, 90);
-            ////List<Vector2> K = Commons.Function.BezierCurve.Bezier.GetBezier(L, 2000);
-            //List<Vector2> K = Commons.Function.BezierCurve.Bezier.SmoothPath(oldM);
-            //// K = Commons.Function.BezierCurve.Bezier.SmoothPath(K);
-            //// 可多次采样但是效果不明显，而点的数量急剧增加
 
-            //if (K.Count >= 2)
-            //{
-            //    for (int f = 0; f < K.Count - 1; f++)
-            //    {
-            //        Texture2D t0 = TextureAssets.MagicPixel.Value;
-            //        float distance = Math.Max(Vector2.Distance(K[f + 1], K[f]) / 4f, 2);
-            //        for (int i = 0; i < distance; i++)
-            //        {
-            //            Vector2 pos = Vector2.Lerp(K[f], K[f + 1], i / distance);
-            //            Main.spriteBatch.Draw(t0, pos - Main.screenPosition, new Rectangle(0, 0, 4, 4), Color.Red, 0, new Vector2(2), 1, SpriteEffects.None, 0);
-            //        }
-            //    }
-            //}
-
-
-            //for (int f = 0; f < L.Count; f++)
-            //{
-            //    Texture2D t0 = TextureAssets.MagicPixel.Value;
-            //    Main.spriteBatch.Draw(t0, L[f] - Main.screenPosition, new Rectangle(0, 0, 4, 4), Color.Green, 0, new Vector2(2), 2, SpriteEffects.None, 0);
-            //}
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 
             //InitMass_Spring();
             float gravity = 1.0f;
-            masses[0].position = Main.MouseScreen;
+            masses[0].position = Vector2.Zero;
             float deltaTime = 1;
             foreach (var spring in springs)
             {
                 spring.ApplyForce(deltaTime);
             }
 
-            List<Vector2> massPositions = new List<Vector2>();
-            foreach (var mass in masses)
+            List<List<Vector2>> massPositions = new List<List<Vector2>>();
+            Vector2 TexLT = GetRopeMove(new Vector2(800, 400), 0.33f);
+            if (RopPosFir.Count == 0)
             {
-                if (Main.time % 120 < 1)
+                GetRopePosFir("TreeRope.bmp", 0.33f);
+            }
+            List<List<Mass>> massClone = new List<List<Mass>>();
+            for (int i = 0; i < RopPosFir.Count; i++)
+            {
+                if(massClone[i].Count < 1)
                 {
-                    mass.force += new Vector2(5, 0);
+                    massClone[i] = masses;
                 }
-                //mass.force -= mass.velocity * 0.1f;
-                // 重力加速度（可调
-                mass.force += new Vector2(0, gravity) * mass.mass;
-                mass.Update(deltaTime);
-                Texture2D t0 = TextureAssets.MagicPixel.Value;
-                Main.spriteBatch.Draw(t0, mass.position, new Rectangle(0, 0, 4, 4), Color.Red, 0, new Vector2(2), 1, SpriteEffects.None, 0);
-                massPositions.Add(mass.position);
+                for (int j = 0; j < massClone[i].Count; j++)
+                {
+                    Main.NewText(massClone[i][j].position);
+                    massClone[i][j].force += new Vector2(0.3f + 0.12f * (float)(Math.Sin(Main.timeForVisualEffects / 72f + massClone[i][j].position.X / 13d)), 0);
+                    //mass.force -= mass.velocity * 0.1f;
+                    // 重力加速度（可调
+                    massClone[i][j].force += new Vector2(0, gravity) * massClone[i][j].mass;
+                    massClone[i][j].Update(deltaTime);
+                    Texture2D t0 = TextureAssets.MagicPixel.Value;
+                    Main.spriteBatch.Draw(t0, massClone[i][j].position + RopPosFir[i] - TexLT, new Rectangle(0, 0, 4, 4), new Color(0, 0.45f * j / 2.2f, 1f / 5f * j), 0, new Vector2(2), 1, SpriteEffects.None, 0);
+                    massPositions[i].Add(massClone[i][j].position);
+                }
+            }
+            /*
+            List<VertexBase.Vertex2D> Vertices = new List<VertexBase.Vertex2D>();
+            List<Vector2>[] massPositionsSmooth = new List<Vector2>[600];
+            for(int x = 0;x < 600;x++)
+            {
+                if(massPositions[x].Count > 0)
+                {
+                    massPositionsSmooth[x] = Commons.Function.BezierCurve.Bezier.SmoothPath(massPositions[x]);
+                }
             }
 
-            List<VertexBase.Vertex2D> Vertices = new List<VertexBase.Vertex2D>();
-            List<Vector2> massPositionsSmooth = Commons.Function.BezierCurve.Bezier.SmoothPath(massPositions);
-            for (int i = -5; i <= 5; i++)
+
+            else
             {
-                DrawRope(massPositionsSmooth, new Vector2(i * 30, 0), Vertices);
+                for (int i = 0; i < RopPosFir.Count; i++)
+                {
+                    if (massPositionsSmooth[i].Count > 0)
+                    {
+                        DrawRope(massPositionsSmooth[i], RopPosFir[i], Vertices);
+                    }
+                }
             }
             if (Vertices.Count > 2)
             {
@@ -320,9 +349,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 var model = Matrix.CreateTranslation(new Vector3(0, 0, 0)) * Main.GameViewMatrix.ZoomMatrix;
                 effect.Parameters["uTransform"].SetValue(model * projection);
                 effect.CurrentTechnique.Passes[0].Apply();
+                Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("TheFirefly/Backgrounds/Dark");
                 Main.graphics.GraphicsDevice.RasterizerState = rasterState;
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, Vertices.ToArray(), 0, Vertices.Count);
-            }
+            }*/
+
         }
         public Vector2[] OldMouseW = new Vector2[30];
         private List<Mass> masses = new List<Mass>();
@@ -332,21 +363,34 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         {
             masses.Clear();
             springs.Clear();
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 5; i++)
             {
                 masses.Add(new Mass(1.0f, Main.MouseScreen + new Vector2(0, 10 * i), i == 0));
             }
-            for (int i = 1; i < 10; i++)
+            for (int i = 1; i < 5; i++)
             {
                 springs.Add(new Spring(0.3f, 20, 0.05f, masses[i - 1], masses[i]));
             }
         }
-
+        private Vector2 GetRopeMove(Vector2 Size, float move)
+        {
+            Player localP = Main.LocalPlayer;
+            MothLand mothLand = ModContent.GetInstance<MothLand>();
+            Vector2 sampleTopleft = Vector2.Zero;
+            Vector2 sampleCenter = sampleTopleft + Size;
+            Vector2 screenSize = new Vector2(Main.screenWidth, Main.screenHeight);
+            Vector2 deltaPos = localP.Center - new Vector2(mothLand.FireflyCenterX * 16f, mothLand.FireflyCenterY * 16f);
+            deltaPos *= move;
+            Vector2 TexLT = sampleCenter - screenSize / 2f + deltaPos;
+            return TexLT;
+        }
         private void DrawRope(List<Vector2> massPositionsSmooth, Vector2 offset, List<VertexBase.Vertex2D> vertices)
         {
             int count = massPositionsSmooth.Count;
-            float baseWidth = 10;
+            float baseWidth = 4;
             bool firstInsert = true;
+            Vector2 TexLT = GetRopeMove(new Vector2(800, 400), 0.33f);
+            offset -= TexLT;
             // count 必须大于1
             for (int i = 0; i < count; i++)
             {
@@ -365,11 +409,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 if (firstInsert)
                 {
                     // 复制一个顶点，构造一个退化三角形
-                    vertices.Add(new VertexBase.Vertex2D(massPositionsSmooth[i] + offset + normalDir * width, Color.White, Vector3.Zero));
+                    vertices.Add(new VertexBase.Vertex2D(massPositionsSmooth[i] + offset + normalDir * width, new Color(11, 9, 25), Vector3.Zero));
                     firstInsert = false;
                 }
-                vertices.Add(new VertexBase.Vertex2D(massPositionsSmooth[i] + offset + normalDir * width, Color.White, Vector3.Zero));
-                vertices.Add(new VertexBase.Vertex2D(massPositionsSmooth[i] + offset - normalDir * width, Color.White, Vector3.Zero));
+                vertices.Add(new VertexBase.Vertex2D(massPositionsSmooth[i] + offset + normalDir * width, new Color(11, 9, 25), Vector3.Zero));//
+                vertices.Add(new VertexBase.Vertex2D(massPositionsSmooth[i] + offset - normalDir * width, new Color(11, 9, 25), Vector3.Zero));
             }
             // 复制一个顶点，构造一个退化三角形
             vertices.Add(vertices.Last());
