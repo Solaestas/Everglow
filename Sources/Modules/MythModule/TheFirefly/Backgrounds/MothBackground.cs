@@ -315,7 +315,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                     massPositions[i].Add(massClone[i][j].position);
                 }
             }
-            /*
+
             List<VertexBase.Vertex2D> Vertices = new List<VertexBase.Vertex2D>();
             List<Vector2>[] massPositionsSmooth = new List<Vector2>[600];
             for(int x = 0;x < 600;x++)
@@ -352,7 +352,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("TheFirefly/Backgrounds/Dark");
                 Main.graphics.GraphicsDevice.RasterizerState = rasterState;
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, Vertices.ToArray(), 0, Vertices.Count);
-            }*/
+            }
 
         }
         public Vector2[] OldMouseW = new Vector2[30];
