@@ -31,7 +31,7 @@ namespace Everglow.Sources.Modules.FoodModule
                        Thirsty = false ,
                        BuffType = ModContent.BuffType<AppleJuiceBuff>(),
                        BuffTime = new FoodDuration(0, 7, 30),
-                       Description =  " 短时间内增加80%减伤\n“一天一苹果，医生远离我”7秒5持续时间"
+                       Description =  " 短时间内增加80%减伤\n“一天一苹果，医生远离我”"
                     }
                 },
                  //冰冻香蕉代基里
