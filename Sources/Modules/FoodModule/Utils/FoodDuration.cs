@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Text;
 
 namespace Everglow.Sources.Modules.FoodModule.DataStructures
 {
@@ -91,6 +92,29 @@ namespace Everglow.Sources.Modules.FoodModule.DataStructures
             m_minutes %= 60;
 
             m_hours += carry;
+        }
+
+        public string ToBuffTimeString()
+        {
+            StringBuilder sb = new StringBuilder();
+            if (m_hours != 0)
+            {
+                sb.Append($"{m_hours}小时");
+            }
+            if (m_minutes != 0)
+            {
+                sb.Append($"{m_minutes}分钟");
+            }
+            if (m_seconds != 0 && m_frames == 0)
+            {
+                sb.Append($"{m_seconds}秒");
+            }
+            else if (m_seconds != 0 && m_frames != 0)
+            {
+                sb.Append($"{(m_seconds + (m_frames / 60.0)).ToString("0.##")}秒");
+            }
+            sb.Append("持续时间");
+            return sb.ToString();
         }
     }
 }

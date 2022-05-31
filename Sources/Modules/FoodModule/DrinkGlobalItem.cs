@@ -21,7 +21,7 @@ namespace Everglow.Sources.Modules.FoodModule
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<AleBuff> (),
                         BuffTime = new FoodDuration(0, 7, 30),
-                        Description =  "短时间内鞭子的范围和速度提升至2.5倍\n“耍酒疯”\n7秒5持续时间"
+                        Description =  "短时间内鞭子的范围和速度提升至2.5倍\n“耍酒疯”"
                     }
                 },
                 //苹果汁
@@ -31,7 +31,7 @@ namespace Everglow.Sources.Modules.FoodModule
                        Thirsty = false ,
                        BuffType = ModContent.BuffType<AppleJuiceBuff>(),
                        BuffTime = new FoodDuration(0, 7, 30),
-                       Description =  " 短时间内增加80%减伤\n“一天一苹果，医生远离我”7秒5持续时间\n7秒5持续时间"
+                       Description =  " 短时间内增加80%减伤\n“一天一苹果，医生远离我”7秒5持续时间"
                     }
                 },
                  //冰冻香蕉代基里
@@ -41,7 +41,7 @@ namespace Everglow.Sources.Modules.FoodModule
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<BananaDaiquiriBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30),
-                        Description = "短时间内不消耗子弹，大幅增加远程伤害与暴击\n“低体温血压”\n7秒5持续时间"
+                        Description = "短时间内不消耗子弹，大幅增加远程伤害与暴击\n“低体温血压”"
                     }
                 },
                  //血腥麝香葡萄
@@ -51,7 +51,7 @@ namespace Everglow.Sources.Modules.FoodModule
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<BloodyMoscatoBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30),
-                        Description ="短时间内每次攻击回5点生命\n血色\n7秒5持续时间"
+                        Description ="短时间内每次攻击回5点生命\n血色"
                     }
                 },
                 //奶油苏打水
@@ -61,7 +61,7 @@ namespace Everglow.Sources.Modules.FoodModule
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<CreamSodaBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30),
-                        Description ="短时间内大幅增加近战能力，但极其吸引仇恨\n“喷射！”\n7秒5持续时间"
+                        Description ="短时间内大幅增加近战能力，但极其吸引仇恨\n“喷射！”"
                     }
                 },
                 //咖啡
@@ -71,7 +71,7 @@ namespace Everglow.Sources.Modules.FoodModule
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<CoffeeCupBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30),
-                        Description ="短时间内大幅增加铺墙铺砖速度，高亮标记敌人、陷阱和宝藏，你会散发光芒\n“社畜的宝物”\n7秒5持续时间"
+                        Description ="短时间内大幅增加铺墙铺砖速度，高亮标记敌人、陷阱和宝藏，你会散发光芒\n“社畜的宝物”"
                     }
                 },
                 //果汁
@@ -81,7 +81,7 @@ namespace Everglow.Sources.Modules.FoodModule
                        Thirsty = false ,
                        BuffType = ModContent.BuffType<FruitJuiceBuff>(),
                        BuffTime = new FoodDuration(0, 7, 30),
-                        Description ="短时间内幅大大提升大部分属性\n“维生素！”\n7秒5持续时间"
+                        Description ="短时间内幅大大提升大部分属性\n“维生素！”"
                     }
                 },
                 //葡萄汁
@@ -91,7 +91,7 @@ namespace Everglow.Sources.Modules.FoodModule
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<GrapeJuiceBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30),
-                        Description ="短时间极其幸运\n“浓缩的幸福”\n7秒5持续时间"
+                        Description ="短时间极其幸运\n“浓缩的幸福”"
                     }
                 },                
                 //柠檬水
@@ -101,7 +101,7 @@ namespace Everglow.Sources.Modules.FoodModule
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<LemonadeBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30),
-                        Description ="短时间内远程击退加倍,仇恨值减2400\n“消炎美容”\n7秒5持续时间"
+                        Description ="短时间内远程击退加倍,仇恨值减2400\n“消炎美容”"
                     }
                 },     
                 //盒装牛奶
@@ -111,7 +111,7 @@ namespace Everglow.Sources.Modules.FoodModule
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<MilkCartonBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30),
-                        Description ="短时间内免疫几乎所有debuff\n“一奶解百毒 ”\n7秒5持续时间"
+                        Description ="短时间内免疫几乎所有debuff\n“一奶解百毒 ”"
                     }
                 },
                 //奶昔
@@ -121,7 +121,7 @@ namespace Everglow.Sources.Modules.FoodModule
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<MilkshakeBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30),
-                        Description ="短时间内大幅加移速\n“节食减肥 ”\n7秒5持续时间"
+                        Description ="短时间内大幅加移速\n“节食减肥 ”"
                     }
                 },
                 //桃子果酒
@@ -131,7 +131,7 @@ namespace Everglow.Sources.Modules.FoodModule
                         Thirsty = false,
                         BuffType = ModContent.BuffType<PeachSangriaBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30),
-                        Description ="短时间内大幅回复生命，增加心的拾取范围\n“我也是桃饱用户”\n7秒5持续时间"
+                        Description ="短时间内大幅回复生命，增加心的拾取范围\n“我也是桃饱用户”"
                     }
                 },
                 //椰林飘香
@@ -141,7 +141,7 @@ namespace Everglow.Sources.Modules.FoodModule
                         Thirsty = false,
                         BuffType = ModContent.BuffType<PinaColadaBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30),
-                        Description ="短时间内十倍反伤（上限1000）,防御增加20\n“从不添加香精当生榨 。”\n7秒5持续时间"
+                        Description ="短时间内十倍反伤（上限1000）,防御增加20\n“从不添加香精当生榨 。”"
                     }
                 },
                 //七彩潘趣酒
@@ -151,7 +151,7 @@ namespace Everglow.Sources.Modules.FoodModule
                         Thirsty = false,
                         BuffType = ModContent.BuffType<PrismaticPunchBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30),
-                        Description ="短时间内增加10召唤栏，增加50%召唤伤害，击退\n“高雅兴致”\n7秒5持续时间"
+                        Description ="短时间内增加10召唤栏，增加50%召唤伤害，击退\n“高雅兴致”"
                     }
                 },                
                 //清酒
@@ -161,7 +161,7 @@ namespace Everglow.Sources.Modules.FoodModule
                         Thirsty = false,
                         BuffType = ModContent.BuffType<SakeBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30),
-                        Description ="短时间内减18防御，大幅增加近战能力\n“纯度，太高了。”\n7秒5持续时间"
+                        Description ="短时间内减18防御，大幅增加近战能力\n“纯度，太高了。”"
                     }
                 },
                 //暗黑奶昔
@@ -172,7 +172,7 @@ namespace Everglow.Sources.Modules.FoodModule
                         BuffType = ModContent.
                         BuffType<SmoothieofDarknessBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30),
-                        Description ="短时间内80%闪避\n“腹黑（字面意义上）”\n7秒5持续时间"
+                        Description ="短时间内80%闪避\n“腹黑（字面意义上）”"
                     }
                 }, 
                 //一杯茶
@@ -182,7 +182,7 @@ namespace Everglow.Sources.Modules.FoodModule
                         Thirsty = false,
                         BuffType = ModContent.BuffType<TeacupBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30),
-                        Description ="短时间内大幅增加魔力回复，魔法攻击，暴击\n“醇香四溢”\n7秒5持续时间"
+                        Description ="短时间内大幅增加魔力回复，魔法攻击，暴击\n“醇香四溢”"
                     }
                 },
                 //热带奶昔
@@ -192,7 +192,7 @@ namespace Everglow.Sources.Modules.FoodModule
                         Thirsty = false,
                         BuffType = ModContent.BuffType<TropicalSmoothieBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30),
-                        Description ="短时间内魔法攻击仅消耗一点魔力，大幅增加5%魔法攻击，暴击\n“热带风暴”\n7秒5持续时间"
+                        Description ="短时间内魔法攻击仅消耗一点魔力，大幅增加5%魔法攻击，暴击\n“热带风暴”"
                     }
                 }
             };
@@ -223,7 +223,7 @@ namespace Everglow.Sources.Modules.FoodModule
                 int buffTimeIndex = tooltips.FindIndex((tp) => tp.Name.Contains("BuffTime"));
                 if (buffTimeIndex != -1)
                 {
-                    tooltips.RemoveAt(buffTimeIndex);
+                    tooltips[buffTimeIndex].Text = DrinkInfo.BuffTime.ToBuffTimeString();
                 }
             }
         }
