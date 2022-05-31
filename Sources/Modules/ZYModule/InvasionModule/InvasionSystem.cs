@@ -2,7 +2,7 @@
 using Everglow.Sources.Commons.Core.ModuleSystem;
 using Everglow.Sources.Commons.Core.Profiler.Fody;
 
-namespace Everglow.Sources.Modules.ZY.InvasionModule;
+namespace Everglow.Sources.Modules.ZYModule.InvasionModule;
 
 /// <summary>
 /// TML有一个要做ModIvasion的PR，但是目前只是草稿
@@ -26,7 +26,7 @@ internal class InvasionSystem : IModule
     public static void InvasionEnd()
     {
         Main.invasionProgressMode = Main.invasionType = Main.invasionSizeStart = Main.invasionSize = 0;
-        if(CurrentInvasion is not null)
+        if (CurrentInvasion is not null)
         {
             CurrentInvasion.active = false;
         }
@@ -41,7 +41,7 @@ internal class InvasionSystem : IModule
 
     private void Main_InvasionWarning(On.Terraria.Main.orig_InvasionWarning orig)
     {
-        if(Main.invasionType > Invasion.VanillaCount)
+        if (Main.invasionType > Invasion.VanillaCount)
         {
             return;
         }
@@ -50,14 +50,14 @@ internal class InvasionSystem : IModule
 
     private void LoadInvasion()
     {
-        if(Main.invasionType <= Invasion.VanillaCount)
+        if (Main.invasionType <= Invasion.VanillaCount)
         {
             CurrentInvasion = null;
             return;
         }
-        foreach(var inv in Everglow.ModuleManager.FindModule<Invasion>())
+        foreach (var inv in Everglow.ModuleManager.FindModule<Invasion>())
         {
-            if(inv.InvasionID == Main.invasionType)
+            if (inv.InvasionID == Main.invasionType)
             {
                 CurrentInvasion = inv;
                 inv.active = true;

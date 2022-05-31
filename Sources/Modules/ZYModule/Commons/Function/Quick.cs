@@ -1,4 +1,5 @@
 ﻿using Everglow.Sources.Modules.ZYModule.Commons.Core;
+using Everglow.Sources.Modules.ZYModule.Commons.Core.Collide;
 using ReLogic.Content;
 
 
@@ -111,6 +112,6 @@ internal static class Quick
         player.controlLeft ^ player.controlRight ? player.controlLeft ? Direction.Left : Direction.Right : Direction.None;
     public static Direction GetControlDirectionV(this Player player) =>
         player.controlUp ^ player.controlDown ? player.controlDown ? Direction.Bottom : Direction.Top : Direction.None;
-    public static CRectangle GetCollider(this Entity entity) => new CRectangle(entity.position.X, entity.position.Y, entity.width, entity.height);
+    public static CAABB GetCollider(this Entity entity) => new CAABB(new AABB(entity.position.X, entity.position.Y, entity.width, entity.height));
 
 }

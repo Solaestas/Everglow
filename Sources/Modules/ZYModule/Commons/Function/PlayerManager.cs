@@ -1,6 +1,6 @@
 ﻿using Everglow.Sources.Commons.Core.Profiler.Fody;
-using Everglow.Sources.Modules.ZY.WorldModule;
-using Everglow.Sources.Modules.ZY.ZYPacket;
+using Everglow.Sources.Modules.ZYModule.WorldModule;
+using Everglow.Sources.Modules.ZYModule.ZYPacket;
 
 namespace Everglow.Sources.Modules.ZYModule.Commons.Function;
 

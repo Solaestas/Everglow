@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Everglow.Sources.Modules.ZY.InvasionModule;
+namespace Everglow.Sources.Modules.ZYModule.InvasionModule;
 
 internal class TestInvasion : Invasion
 {

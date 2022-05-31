@@ -6,7 +6,7 @@ namespace Everglow.Sources.Modules.ZYModule.TileModule.EntityColliding;
 internal class NPCColliding : GlobalNPC
 {
     public override bool InstancePerEntity => true;
-    public IDynamicTile standTile;
+    public DynamicTile standTile;
     public bool fall;
     public override void Load()
     {
@@ -35,40 +35,56 @@ internal class NPCColliding : GlobalNPC
         }
 
         TileSystem.EnableDTCollision = false;
+         
         var npc = self.GetGlobalNPC<NPCColliding>();
-        Vector2 last = self.position;
-        orig(self, oldDryVelocity, Slowdown);
-        Vector2 move = self.position - last;
-        self.position = last;
         if (npc.standTile is not null)
         {
-            if (npc.standTile.Active is false || !npc.standTile.OnTile(self, npc.fall))
-            {
-                self.position -= self.velocity;
-                npc.standTile.StandingLeaving(self);
-                self.position += self.velocity;
-                npc.standTile = null;
-                self.position.Y += 0.001f;
-            }
-            else
-            {
-                npc.standTile.StandingMoving(self);
-            }
+            self.position += new Vector2(0, self.gfxOffY);
+            self.gfxOffY = 0;
         }
-        var result = TileSystem.MoveColliding(self, move, npc.fall);
+        Vector2 oldpos = self.position;
+
+        orig(self, oldDryVelocity, Slowdown);
+        Vector2 move = self.position - oldpos;
+        self.position = oldpos;
+        var result = TileSystem.MoveCollision(self, move, npc.fall);
+        DynamicTile newStand = null;
+        if (npc.standTile != null && !npc.standTile.Active)
+        {
+            npc.standTile = null;
+        }
 
         foreach (var (tile, info) in result)
         {
-            if (info == Direction.Bottom)
-            {
-                npc.standTile = tile;
-                tile.StandingBegin(self);
-            }
-            else if (info == Direction.Inside && !self.boss)
+            if (info == Direction.Inside)
             {
                 self.StrikeNPC(10, 0, 0);
             }
+
+            if (info == Direction.Bottom)
+            {
+                npc.standTile = tile;
+            }
         }
+
+        if (newStand == null)
+        {
+            if (npc.standTile != null)
+            {
+                npc.standTile.Leave(self);
+            }
+        }
+        else if (npc.standTile != newStand)
+        {
+            npc.standTile?.Leave(self);
+            newStand.Stand(self, true);
+            npc.standTile = newStand;
+        }
+        else if (npc.standTile == newStand)
+        {
+            newStand.Stand(self, false);
+        }
+
         TileSystem.EnableDTCollision = true;
     }
     private static void NPC_Collision_MoveWhileDry(On.Terraria.NPC.orig_Collision_MoveWhileDry orig, NPC self)
@@ -80,40 +96,56 @@ internal class NPCColliding : GlobalNPC
         }
 
         TileSystem.EnableDTCollision = false;
+
         var npc = self.GetGlobalNPC<NPCColliding>();
-        Vector2 last = self.position;
-        orig(self);
-        Vector2 move = self.position - last;
-        self.position = last;
         if (npc.standTile is not null)
         {
-            if (npc.standTile.Active is false || !npc.standTile.OnTile(self, npc.fall))
-            {
-                self.position -= self.velocity;
-                npc.standTile.StandingLeaving(self);
-                self.position += self.velocity;
-                npc.standTile = null;
-                self.position.Y += 0.001f;
-            }
-            else
-            {
-                npc.standTile.StandingMoving(self);
-            }
+            self.position += new Vector2(0, self.gfxOffY);
+            self.gfxOffY = 0;
         }
-        var result = TileSystem.MoveColliding(self, move, npc.fall);
+        Vector2 oldpos = self.position;
+
+        orig(self);
+        Vector2 move = self.position - oldpos;
+        self.position = oldpos;
+        var result = TileSystem.MoveCollision(self, move, npc.fall);
+        DynamicTile newStand = null;
+        if (npc.standTile != null && !npc.standTile.Active)
+        {
+            npc.standTile = null;
+        }
 
         foreach (var (tile, info) in result)
         {
-            if (info == Direction.Bottom)
-            {
-                npc.standTile = tile;
-                tile.StandingBegin(self);
-            }
-            else if (info == Direction.Inside && !self.boss)
+            if (info == Direction.Inside)
             {
                 self.StrikeNPC(10, 0, 0);
             }
+
+            if (info == Direction.Bottom)
+            {
+                npc.standTile = tile;
+            }
         }
+
+        if (newStand == null)
+        {
+            if (npc.standTile != null)
+            {
+                npc.standTile.Leave(self);
+            }
+        }
+        else if (npc.standTile != newStand)
+        {
+            npc.standTile?.Leave(self);
+            newStand.Stand(self, true);
+            npc.standTile = newStand;
+        }
+        else if (npc.standTile == newStand)
+        {
+            newStand.Stand(self, false);
+        }
+
         TileSystem.EnableDTCollision = true;
     }
 }

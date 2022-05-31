@@ -1,10 +1,11 @@
 ﻿using Everglow.Sources.Modules.ZYModule.Commons.Core;
+using Everglow.Sources.Modules.ZYModule.Commons.Core.Collide;
 using Everglow.Sources.Modules.ZYModule.Commons.Function;
 using Terraria.GameContent;
 
 namespace Everglow.Sources.Modules.ZYModule.TileModule.Tiles
 {
-    internal abstract class Block : DynamicTile, IGrabbable
+    internal abstract class Block : DynamicTile, IGrabbable, IHookable
     {
         internal static readonly Direction[] _AngleToInfo = new Direction[]
         {
@@ -24,177 +25,136 @@ namespace Everglow.Sources.Modules.ZYModule.TileModule.Tiles
             this.size = size;
         }
         public override Color MapColor => new Color(255, 255, 255, 255);
-        public override int KnockBack => 0;
-        public override int Damage => 0;
         public override TextureType TextureType => TextureType.WhitePixel;
-        public override ICollider Collider => new CRectangle(position, size);
-        public Vector2 Center => position + new Vector2(size.X / 2f, size.Y / 2f);
-        public Vector2 Left => position + new Vector2(0, size.Y / 2f);
-        public Vector2 Right => position + new Vector2(size.X, size.Y / 2f);
-        public Vector2 Top => position + new Vector2(size.X / 2f, 0);
-        public Vector2 Bottom => position + new Vector2(size.X / 2f, size.Y);
-        public Vector2 LeftBottom => position + new Vector2(0, size.Y);
-        public Vector2 RightBottom => position + new Vector2(size.X, size.Y);
-        public Vector2 LeftTop => position + new Vector2(0, 0);
-        public Vector2 RightTop => position + new Vector2(size.X, 0);
-        public override Direction MoveCollision(CRectangle rect, ref Vector2 velocity, ref Vector2 move, bool ignorePlats = false)
+        public AABB AABB => new AABB(position, size);
+        public override Collider Collider => new CAABB(new AABB(position, size));
+        public override Direction MoveCollision(AABB aabb, ref Vector2 velocity, ref Vector2 move, bool ignorePlats = false)
         {
-            var collider = Collider;
+            AABB collider = AABB;
 
-            Vector2 rV = move - this.velocity;
-            if (rV == Vector2.Zero)
-            {
-                return Direction.None;
-            }
-            Vector2 pos = rect.pos;
-            Vector2[] vs = new Vector2[4] { rect.TopLeft, rect.BottomRight, rect.TopLeft + rV, rect.BottomRight + rV };
-            Vector2 min = Vector2.One * float.MaxValue, max = Vector2.Zero;
-            foreach (var v in vs)
-            {
-                min = Vector2.Min(v, min);
-                max = Vector2.Max(v, max);
-            }
-            var aabb = CollisionUtils.LineToAABB(min, max);
-            if (!aabb.Colliding(collider))
-            {
-                return Direction.None;
-            }
-            if (collider.Colliding(rect))
-            {
-                for (int r = 1; r <= 8; r += 1)
-                {
-                    for (int a = 0; a < 5; a += 1)
-                    {
-                        var vec = new Vector2(r, 0).RotatedBy(a * MathHelper.PiOver2 - MathHelper.Pi);
-                        var c = new CRectangle(rect.pos + vec, rect.size);
-                        if (!collider.Colliding(c))
-                        {
-                            rect.pos += vec;
-                            move -= vec;
-                            goto GOTO_A;//跳出双重循环
-                        }
-                    }
-                }
+            Vector2 rvel = move - this.velocity;
+            Vector2 pos0 = aabb.position;
 
-                if (collider.Colliding(rect))
-                {
-                    rect.pos += this.velocity;
-                    move = rect.pos - pos;
-                    return Direction.Inside;
-                }
-            }
-        GOTO_A:
-            const float stepLength = 1;
-            Vector2 target = rect.pos + move - this.velocity;
-            if (target == rect.pos)
+
+            if (!aabb.Scan(rvel).Intersect(collider))
             {
                 return Direction.None;
             }
-            Vector2 dir = rV.Normalize_S().Abs();
-            dir = Vector2.Max(dir, new Vector2(0.01f, 0.01f));//防止浮点误差出事（指无限次循环）
+
+            const float SmallScale = 8;
+            AABB smallBox = collider;
+            smallBox.position += new Vector2(SmallScale, SmallScale);
+            smallBox.size -= new Vector2(SmallScale * 2, SmallScale * 2);
+            if (smallBox.Intersect(aabb))
+            {
+                return Direction.Inside;
+            }
+
+            bool onGround = velocity.Y == 0;
+            bool? isX = null;
+            Vector2 target = aabb.position + rvel;
             do
             {
-                rect.pos.X = MathUtils.Approach(rect.pos.X, target.X, stepLength * dir.X);//横向移动
-                if (collider.Colliding(rect))
+                aabb.position = MathUtils.Approach(aabb.position, target, 1);
+                if (aabb.Intersect(collider, out var area))
                 {
-                    rect.pos.X = rect.pos.X > position.X + this.velocity.X + size.X / 2 ? position.X + size.X : position.X - rect.size.X;
-                    rect.pos.Y = target.Y;
-                    rect.pos += this.velocity;
-                    move = rect.pos - pos;
-                    velocity.X = this.velocity.X - Math.Sign(velocity.X) * KnockBack * MathUtils.Sqrt(Math.Abs(velocity.X));
-                    return KnockBack != 0 ? Direction.None : rV.X > 0 ? Direction.Right : Direction.Left;
+                    isX = area.size.X < area.size.Y;
+                    break;
                 }
-                rect.pos.Y = MathUtils.Approach(rect.pos.Y, target.Y, stepLength * dir.Y);//纵向移动
-                if (collider.Colliding(rect))
-                {
-                    rect.pos.Y = rect.pos.Y > position.Y + this.velocity.Y + size.Y / 2 ? position.Y + size.Y : position.Y - rect.size.Y;
-                    rect.pos.X = target.X;
-                    rect.pos += this.velocity;
-                    move = rect.pos - pos;
-                    velocity.Y = this.velocity.Y - Math.Sign(velocity.Y) * KnockBack * MathUtils.Sqrt(Math.Abs(velocity.Y));
-                    return KnockBack != 0 ? Direction.None : rV.Y > 0 ? Direction.Bottom : Direction.Top;
-                }
-            } while (rect.pos != target);
-            move = rect.pos - pos;
-            return Direction.None;
-        }
-        public virtual void OnPlayerStanding(Player player)
-        {
+            } while (aabb.position != target);
 
+            if(isX is null)
+            {
+                return Direction.None;
+            }
+            else if (isX.Value)
+            {
+                aabb.position.X = aabb.Left < collider.Left ? collider.Left - aabb.size.X : collider.Right;
+                aabb.position.Y = target.Y;
+                move = aabb.position - pos0 + this.velocity;
+                velocity.X = this.velocity.X;
+                return aabb.Left < collider.Left ? Direction.Right : Direction.Left;
+            }
+            else
+            {
+                aabb.position.Y = aabb.Top < collider.Top ? collider.Top - aabb.size.Y : collider.Top;
+                aabb.position.X = target.X;
+                move = aabb.position - pos0 + this.velocity;
+                velocity.Y = this.velocity.Y == 0 ?
+                    (onGround ? 0 : CollisionUtils.Epsilon * 10) :
+                    this.velocity.Y;
+                return aabb.Top < collider.Top ? Direction.Bottom : Direction.Top;
+            }
         }
-        public override void StandingBegin(Entity entity)
+        public override void Stand(Entity entity, bool newStand)
         {
-            entity.velocity.Y = 0;
-            //避免滑下去，就速度减半好了
-            entity.velocity.X = MathUtils.Approach(entity.velocity.X, 0, velocity.X / 2);
+            if (newStand)
+            {
+                entity.velocity -= this.velocity / 2;
+            }
+            entity.position += this.velocity;
         }
-        public override void StandingMoving(Entity entity)
+        public override void Leave(Entity entity)
         {
-            entity.position += velocity;
-            entity.velocity.Y = 0;
-            if (entity is Player player)
-            {
-                OnPlayerStanding(player);
-            }
+            entity.velocity += this.velocity;
         }
-        public override void StandingLeaving(Entity entity)
+        public override Vector2 GetTrueVelocity(Entity entity)
         {
-            entity.velocity += velocity;
+            return entity.velocity + this.velocity;
         }
-        public override Vector2 GetSafePlayerPosition(Projectile hook)
-        {
-            Vector2 target = Main.player[hook.owner].position;
-            if (position.X > hook.position.X)
-            {
-                target.X = position.X - Main.player[hook.owner].width;
-            }
-            if (position.X + size.X < hook.position.X + hook.width)
-            {
-                target.X = position.X + size.X;
-            }
-            if (position.Y > hook.position.Y)
-            {
-                target.Y = position.Y - Main.player[hook.owner].height;
-            }
-            if (position.Y + size.Y < hook.position.Y + hook.height)
-            {
-                target.Y = position.Y + size.Y;
-            }
-            return target;
-        }
-        public override Vector2 GetSafeHookPosition(Projectile hook)
-        {
-            Vector2 target = hook.position;
-            var size = this.size;
-            if (hook.position.X + hook.width > position.X + size.X)
-            {
-                target.X = position.X + this.size.X - hook.width;
-            }
-            else if (hook.position.X < position.X)
-            {
-                target.X = position.X;
-            }
-            if (hook.position.Y + hook.height > position.Y + size.Y)
-            {
-                target.Y = position.Y + this.size.Y - hook.height;
-            }
-            else if (hook.position.Y < position.Y)
-            {
-                target.Y = position.Y;
-            }
-            return target;
-        }
-        public override Vector2 GetHookMovement(Projectile hook)
-        {
-            return velocity;
-        }
-        public override bool OnTile(Entity entity, bool fallThrough = false)
-        {
-            return Collider.Colliding(new CRectangle(entity.position + Vector2.UnitY * ((entity as Player)?.gravDir ?? 1), entity.Size));
-        }
+
+        //public override void StandingBegin(Entity entity)
+        //{
+        //    entity.velocity.Y = 0;
+        //    //避免滑下去，就速度减半好了
+        //    entity.velocity.X = MathUtils.Approach(entity.velocity.X, 0, velocity.X / 2);
+        //}
+        //public override void StandingMoving(Entity entity)
+        //{
+        //    entity.position += velocity;
+        //    entity.velocity.Y = 0;
+        //    if (entity is Player player)
+        //    {
+        //        OnPlayerStanding(player);
+        //    }
+        //}
+        //public override void StandingLeaving(Entity entity)
+        //{
+        //    entity.velocity += velocity;
+        //}
+        //public override Vector2 GetSafeHookPosition(Projectile hook)
+        //{
+        //    Vector2 target = hook.position;
+        //    var size = this.size;
+        //    if (hook.position.X + hook.width > position.X + size.X)
+        //    {
+        //        target.X = position.X + this.size.X - hook.width;
+        //    }
+        //    else if (hook.position.X < position.X)
+        //    {
+        //        target.X = position.X;
+        //    }
+        //    if (hook.position.Y + hook.height > position.Y + size.Y)
+        //    {
+        //        target.Y = position.Y + this.size.Y - hook.height;
+        //    }
+        //    else if (hook.position.Y < position.Y)
+        //    {
+        //        target.Y = position.Y;
+        //    }
+        //    return target;
+        //}
+        //public override Vector2 GetHookMovement(Projectile hook)
+        //{
+        //    return velocity;
+        //}
+        //public override bool OnTile(Entity entity, bool fallThrough = false)
+        //{
+        //    return Collider.Colliding(new CRectangle(entity.position + Vector2.UnitY * ((entity as Player)?.gravDir ?? 1), entity.Size));
+        //}
         public virtual bool CanGrab(Player player)
         {
-            return Collider.Colliding(new CRectangle(player.position + player.slideDir * Vector2.UnitX, player.Size));
+            return AABB.Intersect(new AABB(player.position + player.slideDir * Vector2.UnitX, player.Size));
         }
         public virtual void OnGrab(Player player)
         {
@@ -250,6 +210,17 @@ namespace Everglow.Sources.Modules.ZYModule.TileModule.Tiles
         public override void Draw()
         {
             Main.spriteBatch.Draw(TextureType.GetValue(), position - Main.screenPosition, new Rectangle(0, 0, (int)size.X, (int)size.Y), Color.White);
+        }
+
+        public virtual void SetHookPosition(Projectile hook)
+        {
+            hook.position = Vector2.Clamp(hook.position, position, position + size - hook.Size);
+            hook.position += this.velocity;
+        }
+
+        public Vector2 GetSafePlayerPosition(Projectile hook)
+        {
+            return hook.position;
         }
     }
 

@@ -13,18 +13,32 @@ internal class TestItem : ModItem
         Item.useTime = 10;
         Item.useStyle = ItemUseStyleID.Swing;
     }
+    //public class TestPlat : RotatedPlat
+    //{
+    //    public TestPlat(Vector2 position)
+    //    {
+    //        rotation = MathHelper.PiOver2;
+    //        this.position = position;
+    //        width = 300;
+    //    }
+    //}
     public class TestBlock : Block
     {
         public TestBlock(Vector2 position, Vector2 size) : base(position, size)
         {
-            velocity = new Vector2(0, 1);
         }
     }
     public override bool CanUseItem(Player player)
     {
-        var block = new TestBlock(Main.MouseWorld, Vector2.One * 32);
+        var block = new TestBlock(Main.MouseWorld, Vector2.One * 256);
+        block.Velocity = Vector2.UnitY * -1;
+        //var plat = new TestPlat(Main.MouseWorld);
         TileSystem.AddTile(block);
         return true;
+    }
+    public override void AddRecipes()
+    {
+        CreateRecipe().Register();
     }
 
 }

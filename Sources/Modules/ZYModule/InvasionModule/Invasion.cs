@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Terraria.GameContent;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.ZY.InvasionModule;
+namespace Everglow.Sources.Modules.ZYModule.InvasionModule;
 
 [ModuleDependency(typeof(InvasionSystem))]
 internal abstract class Invasion : IModule

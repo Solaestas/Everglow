@@ -1,4 +1,5 @@
 ﻿using Everglow.Sources.Modules.ZYModule.Commons.Core;
+using Everglow.Sources.Modules.ZYModule.Commons.Core.Collide;
 using Everglow.Sources.Modules.ZYModule.Commons.Function;
 using Everglow.Sources.Modules.ZYModule.TileModule.Tiles;
 using Mono.Cecil.Cil;
@@ -10,7 +11,7 @@ internal class ProjColliding : GlobalProjectile
 {
     public static HashSet<Projectile> callFromHook = new HashSet<Projectile>();
     public override bool InstancePerEntity => true;
-    public IDynamicTile standTile;
+    public DynamicTile standTile;
     public override void Load()
     {
         On.Terraria.Projectile.AI_007_GrapplingHooks += Projectile_AI_007_GrapplingHooks_On;
@@ -33,36 +34,55 @@ internal class ProjColliding : GlobalProjectile
             return;
         }
 
-        orig(self, wetVelocity, out overrideWidth, out overrideHeight);
         TileSystem.EnableDTCollision = false;
+
         var proj = self.GetGlobalProjectile<ProjColliding>();
-        Vector2 last = self.position;
-        Vector2 move = self.position - last;
-        self.position = last;
         if (proj.standTile is not null)
         {
-            if (proj.standTile.Active is false || !proj.standTile.OnTile(self, true))
-            {
-                self.position -= self.velocity;
-                proj.standTile.StandingLeaving(self);
-                self.position += self.velocity;
-                proj.standTile = null;
-                self.position.Y += 0.001f;
-            }
-            else
-            {
-                proj.standTile.StandingMoving(self);
-            }
+            self.position += new Vector2(0, self.gfxOffY);
+            self.gfxOffY = 0;
         }
-        var result = TileSystem.MoveColliding(self, move, true);
+        Vector2 oldpos = self.position;
+
+        orig(self, wetVelocity, out overrideWidth, out overrideHeight);
+        Vector2 move = self.position - oldpos;
+        self.position = oldpos;
+        var result = TileSystem.MoveCollision(self, move, true);
+        DynamicTile newStand = null;
+        if (proj.standTile != null && !proj.standTile.Active)
+        {
+            proj.standTile = null;
+        }
 
         foreach (var (tile, info) in result)
         {
+            if (info == Direction.Inside)
+            {
+                self.Kill();
+            }
+
             if (info == Direction.Bottom)
             {
                 proj.standTile = tile;
-                tile.StandingBegin(self);
             }
+        }
+
+        if (newStand == null)
+        {
+            if (proj.standTile != null)
+            {
+                proj.standTile.Leave(self);
+            }
+        }
+        else if (proj.standTile != newStand)
+        {
+            proj.standTile?.Leave(self);
+            newStand.Stand(self, true);
+            proj.standTile = newStand;
+        }
+        else if (proj.standTile == newStand)
+        {
+            newStand.Stand(self, false);
         }
 
         TileSystem.EnableDTCollision = true;
@@ -127,11 +147,10 @@ internal class ProjColliding : GlobalProjectile
                 {
                     if (tile is IHookable hookable)
                     {
-                        CRectangle c = self.GetCollider();
+                        CAABB c = new CAABB(new AABB(self.position, self.Size));
                         if (tile.Collision(c))
                         {
-                            self.position = hookable.GetSafeHookPosition(self);
-                            self.position += hookable.GetHookMovement(self);
+                            hookable.SetHookPosition(self);
                             if (self.type == 935 && self.alpha == 0 && Main.myPlayer == self.owner)
                             {
                                 player.DoQueenSlimeHookTeleport(hookable.GetSafePlayerPosition(self));
@@ -157,7 +176,7 @@ internal class ProjColliding : GlobalProjectile
                 if (gproj.standTile.Active)
                 {
                     callFromHook.Add(self);
-                    self.position += (gproj.standTile as IHookable).GetHookMovement(self);
+                    (gproj.standTile as IHookable).SetHookPosition(self);
                 }
                 else
                 {

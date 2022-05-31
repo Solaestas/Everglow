@@ -1,6 +1,7 @@
 using Everglow.Sources.Commons.Core;
 using Everglow.Sources.Commons.Core.ModuleSystem;
 using Everglow.Sources.Modules.ZYModule.Commons.Core;
+using Everglow.Sources.Modules.ZYModule.Commons.Core.Collide;
 using Everglow.Sources.Modules.ZYModule.TileModule.EntityColliding;
 using Everglow.Sources.Modules.ZYModule.TileModule.Tiles;
 
@@ -8,13 +9,12 @@ namespace Everglow.Sources.Modules.ZYModule.TileModule;
 
 internal class TileSystem : IModule
 {
-    private static List<IDynamicTile> dynamicTiles = new List<IDynamicTile>();
-    public static IEnumerable<IDynamicTile> DynamicTiles => dynamicTiles;
-    public static IEnumerable<DynamicTile> Tiles => dynamicTiles.Where(tile => tile is DynamicTile).Select(tile => tile as DynamicTile);
+    private static List<DynamicTile> dynamicTiles = new List<DynamicTile>();
+    public static IEnumerable<DynamicTile> DynamicTiles => dynamicTiles;
     public static IEnumerable<Block> Blocks => dynamicTiles.Where(tile => tile is Block).Select(tile => tile as Block);
     public static IEnumerable<IHookable> Hookables => dynamicTiles.Where(tile => tile is IHookable).Select(tile => tile as IHookable);
     public static IEnumerable<T> GetTiles<T>() where T : class => dynamicTiles.Where(tile => tile is T).Select(tile => tile as T);
-    public static IDynamicTile GetStandTile(Entity entity)
+    public static DynamicTile GetStandTile(Entity entity)
     {
         if (entity is Player player)
         {
@@ -56,15 +56,24 @@ internal class TileSystem : IModule
         }
         dynamicTiles.Clear();
     }
-    public static IDynamicTile GetTile(int whoAmI) => dynamicTiles[whoAmI];
+    public static DynamicTile GetTile(int whoAmI) => dynamicTiles[whoAmI];
     /// <summary>
     /// 增加一个Tile，不会进行联机同步，需要手动发包
     /// </summary>
     /// <param name="tile"></param>
-    public static void AddTile(IDynamicTile tile)
+    public static void AddTile(DynamicTile tile)
     {
-        tile.WhoAmI = dynamicTiles.Count;
-        dynamicTiles.Add(tile);
+        int index = dynamicTiles.FindIndex(tile => !tile.Active);
+        if (index == -1)
+        {
+            tile.WhoAmI = dynamicTiles.Count;
+            dynamicTiles.Add(tile);
+        }
+        else
+        {
+            tile.WhoAmI = index;
+            dynamicTiles[index] = tile;
+        }
     }
     /// <summary>
     /// 求出所有路径上的物块和碰撞信息
@@ -72,50 +81,43 @@ internal class TileSystem : IModule
     /// <param name="rect"></param>
     /// <param name="velocity"></param>
     /// <returns></returns>
-    public static List<(IDynamicTile tile, Direction info)> MoveColliding(Entity entity, Vector2 move, bool fallthrough = false)
+    public static List<(DynamicTile tile, Direction info)> MoveCollision(Entity entity, Vector2 move, bool fallthrough = false)
     {
-        List<(IDynamicTile tile, Direction info)> list = new();
-        var standTile = GetStandTile(entity);
-        Vector2 oldpos = entity.position;
-        if (standTile is not null)
-        {
-            standTile.StandingMoving(entity);
-        }
-        Vector2 delta = entity.position - oldpos;
-        Vector2 trueVelocity = entity.velocity + delta;
-        entity.position = oldpos;
+        List<(DynamicTile tile, Direction info)> list = new();
+        AABB aabb = new AABB(entity.position, entity.Size);
+        Vector2 trueVelocity = GetStandTile(entity)?.GetTrueVelocity(entity) ?? entity.velocity;
+        Vector2 delta = trueVelocity - entity.velocity;
+        Vector2 trueMove = move + delta;
         foreach (var tile in dynamicTiles)
         {
-            Direction info;
-            CRectangle tr = new CRectangle(entity.position, entity.Size);
-            if (standTile != tile && (info = tile.MoveCollision(tr, ref trueVelocity, ref move, fallthrough)) != Direction.None)
+            Direction info = tile.MoveCollision(aabb, ref trueVelocity, ref trueMove, fallthrough);
+            if (info != Direction.None)
             {
                 list.Add((tile, info));
             }
         }
         entity.velocity = trueVelocity - delta;
-        entity.position += Terraria.Collision.TileCollision(entity.position, move, entity.width, entity.height, fallthrough);
+        entity.position += Terraria.Collision.TileCollision(entity.position, trueMove - delta, entity.width, entity.height, fallthrough);
         return list;
     }
-    public static bool MoveColliding(CRectangle rect, ref Vector2 velocity, bool fallthrough = false)
+    public static bool MoveCollision(ref AABB aabb, ref Vector2 velocity, bool fallthrough = false)
     {
         bool flag = false;
         Vector2 move = velocity;
         foreach (var tile in dynamicTiles)
         {
             Direction info;
-            CRectangle tr = new CRectangle(rect.pos, rect.size);
-            if ((info = tile.MoveCollision(tr, ref velocity, ref move, true)) != Direction.None)
+            if ((info = tile.MoveCollision(aabb, ref velocity, ref move, true)) != Direction.None)
             {
                 flag = true;
             }
         }
         EnableDTCollision = false;
-        rect.pos += Terraria.Collision.TileCollision(rect.pos, move, (int)rect.size.X, (int)rect.size.Y, fallthrough);
+        aabb.position += Terraria.Collision.TileCollision(aabb.position, move, (int)aabb.size.X, (int)aabb.size.Y, fallthrough);
         EnableDTCollision = true;
         return flag;
     }
-    public static bool Collision(ICollider collider, out IDynamicTile tile)
+    public static bool Collision(Collider collider, out DynamicTile tile)
     {
         foreach (var c in dynamicTiles)
         {
@@ -128,7 +130,7 @@ internal class TileSystem : IModule
         tile = null;
         return false;
     }
-    public static bool Collision(ICollider collider)
+    public static bool Collision(Collider collider)
     {
         foreach (var c in dynamicTiles)
         {
@@ -177,11 +179,11 @@ internal class TileSystem : IModule
         Vector2 result = orig(Position, Velocity, Width, Height, fallThrough, fall2, gravDir);
         if (EnableDTCollision && Enable)
         {
-            var rect = new CRectangle(Position.X, Position.Y, Width, Height);
-            if (MoveColliding(rect, ref result, fallThrough))
-            {
-                return rect.pos - Position;
-            }
+            //var rect = new AABB(Position.X, Position.Y, Width, Height);
+            //if (MoveCollision(ref rect, ref result, fallThrough))
+            //{
+            //    return rect.position - Position;
+            //}
         }
         return result;
     }
@@ -199,7 +201,7 @@ internal class TileSystem : IModule
             {
                 float t = MathHelper.Lerp(0, samples[i], j / 20f);
                 Vector2 p = samplingPoint + t * directionUnit;
-                if (Collision(new CRectangle(p - Vector2.One, Vector2.One * 2)))
+                if (Collision(new CAABB(new AABB(p - Vector2.One, Vector2.One * 2))))
                 {
                     samples[i] = t;
                     break;
@@ -213,7 +215,7 @@ internal class TileSystem : IModule
         {
             return orig(Position, Width, Height, acceptTopSurfaces);
         }
-        return orig(Position, Width, Height, acceptTopSurfaces) || Collision(new CRectangle(Position.X, Position.Y, Width, Height));
+        return orig(Position, Width, Height, acceptTopSurfaces) || Collision(new CAABB(new AABB(Position.X, Position.Y, Width, Height)));
     }
     private static bool Collision_SolidCollision_Vector2_int_int(On.Terraria.Collision.orig_SolidCollision_Vector2_int_int orig, Vector2 Position, int Width, int Height)
     {
@@ -221,7 +223,7 @@ internal class TileSystem : IModule
         {
             return orig(Position, Width, Height);
         }
-        return orig(Position, Width, Height) || Collision(new CRectangle(Position.X, Position.Y, Width, Height));
+        return orig(Position, Width, Height) || Collision(new CAABB(new AABB(Position.X, Position.Y, Width, Height)));
     }
 
 }

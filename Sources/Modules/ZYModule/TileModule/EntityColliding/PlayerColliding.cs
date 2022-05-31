@@ -1,4 +1,5 @@
 ﻿using Everglow.Sources.Modules.ZYModule.Commons.Core;
+using Everglow.Sources.Modules.ZYModule.Commons.Core.Collide;
 using Everglow.Sources.Modules.ZYModule.Commons.Function;
 using Everglow.Sources.Modules.ZYModule.TileModule.Tiles;
 using Mono.Cecil.Cil;
@@ -9,23 +10,15 @@ namespace Everglow.Sources.Modules.ZYModule.TileModule.EntityColliding;
 
 internal class PlayerColliding : ModPlayer
 {
-    public IDynamicTile standTile;
-    public IDynamicTile grabTile;
-
-    public override void PostUpdateRunSpeeds()
-    {
-        if (standTile is not null && standTile.Active)
-        {
-            Player.gravity = 0;
-        }
-    }
+    public DynamicTile standTile;
+    public DynamicTile grabTile;
 
     public override void Load()
     {
         On.Terraria.Player.CanFitSpace += Player_CanFitSpace;
         On.Terraria.Player.DryCollision += Player_DryCollision;
         On.Terraria.Player.WaterCollision += Player_WaterCollision;
-        On.Terraria.Player.ItemCheck_UseMiningTools_ActuallyUseMiningTool += Player_ItemCheck_UseMiningTools_ActuallyUseMiningTool;
+        //On.Terraria.Player.ItemCheck_UseMiningTools_ActuallyUseMiningTool += Player_ItemCheck_UseMiningTools_ActuallyUseMiningTool;
         On.Terraria.Player.HoneyCollision += Player_HoneyCollision;
         try
         {
@@ -36,6 +29,13 @@ internal class PlayerColliding : ModPlayer
             ILException.Throw("Player_WallslideMovement_Error", ex);
         }
     }
+    public override void PostUpdateRunSpeeds()
+    {
+        if(standTile != null)
+        {
+            Player.gravity = 0;
+        }
+    }
     private static void Player_DryCollision(On.Terraria.Player.orig_DryCollision orig, Player self, bool fallThrough, bool ignorePlats)
     {
         if (!TileSystem.Enable || self.ghost)
@@ -43,6 +43,7 @@ internal class PlayerColliding : ModPlayer
             orig(self, fallThrough, ignorePlats);
             return;
         }
+        TileSystem.EnableDTCollision = false;
 
         var player = self.GetModPlayer<PlayerColliding>();
         if (player.standTile is not null)
@@ -50,48 +51,53 @@ internal class PlayerColliding : ModPlayer
             self.position += new Vector2(0, self.gfxOffY);
             self.gfxOffY = 0;
         }
-        TileSystem.EnableDTCollision = false;
-        Vector2 last = self.position;
+        Vector2 oldpos = self.position;
 
         orig(self, fallThrough, ignorePlats);
-        if (player.standTile is not null)
+        Vector2 move = self.position - oldpos;
+        self.position = oldpos;
+        var result = TileSystem.MoveCollision(self, move, fallThrough);
+        DynamicTile newStand = null;
+        if (player.standTile != null && !player.standTile.Active)
         {
-            if (player.standTile.Active is false || self.justJumped || self.mount.Active && self.mount.CanFly() ||
-                !player.standTile.OnTile(self, fallThrough) || self.grapCount > 0)
-            {
-                self.position -= self.velocity;
-                player.standTile.StandingLeaving(self);
-                self.position += self.velocity;
-                player.standTile = null;
-                self.GetModPlayer<PlayerManager>().Jump(self.jump, self.velocity.Y);
-                self.position.Y += 0.001f;
-            }
-            else
-            {
-                player.standTile.StandingMoving(self);
-            }
+            player.standTile = null;
         }
-        Vector2 move = self.position - last;
-        self.position = last;
-        var result = TileSystem.MoveColliding(self, move, fallThrough);
+
         foreach (var (tile, info) in result)
         {
             if (info == Direction.Inside)
             {
                 self.Hurt(PlayerDeathReason.ByCustomReason("物块内部"), 10, 1);
             }
-            if (tile.Damage != 0)
-            {
-                self.Hurt(PlayerDeathReason.ByCustomReason("伤害物块"), tile.Damage, 0);
-            }
             Direction GroundEdge = self.gravDir > 0 ? Direction.Bottom : Direction.Top;
-            if (info == GroundEdge && self.grapCount == 0 && !(self.mount.Active && self.mount.CanFly()) && !self.ghost && player.standTile is null)
+            if (info == GroundEdge && self.grapCount == 0 && !(self.mount.Active && self.mount.CanFly()))
             {
-                player.standTile = tile;
-                tile.StandingBegin(self);
+                newStand = tile;
             }
         }
 
+        if (newStand == null)
+        {
+            if (player.standTile != null)
+            {
+                player.standTile.Leave(self);
+                self.GetModPlayer<PlayerManager>().Jump();
+                player.standTile = null;
+            }
+        }
+        else if (player.standTile != newStand)
+        {
+            player.standTile?.Leave(self);
+            newStand.Stand(self, true);
+            player.standTile = newStand;
+            self.velocity.Y = 0;
+        }
+        else if (player.standTile != null && player.standTile == newStand)
+        {
+            self.velocity.Y = 0;
+            newStand.Stand(self, false);
+        }
+        Main.NewText(self.velocity);
         TileSystem.EnableDTCollision = true;
     }
     private static void Player_WaterCollision(On.Terraria.Player.orig_WaterCollision orig, Player self, bool fallThrough, bool ignorePlats)
@@ -102,53 +108,60 @@ internal class PlayerColliding : ModPlayer
             return;
         }
 
+        TileSystem.EnableDTCollision = false;
+
         var player = self.GetModPlayer<PlayerColliding>();
         if (player.standTile is not null)
         {
             self.position += new Vector2(0, self.gfxOffY);
             self.gfxOffY = 0;
         }
-        TileSystem.EnableDTCollision = false;
-        Vector2 last = self.position;
+        Vector2 oldpos = self.position;
 
         orig(self, fallThrough, ignorePlats);
-        if (player.standTile is not null)
+        Vector2 move = self.position - oldpos;
+        self.position = oldpos;
+        var result = TileSystem.MoveCollision(self, move, fallThrough);
+        DynamicTile newStand = null;
+        if (player.standTile != null && !player.standTile.Active)
         {
-            if (player.standTile.Active is false || self.justJumped || self.mount.Active && self.mount.CanFly() ||
-                !player.standTile.OnTile(self, fallThrough) || self.grapCount > 0)
-            {
-                self.position -= self.velocity;
-                player.standTile.StandingLeaving(self);
-                self.position += self.velocity;
-                player.standTile = null;
-                self.GetModPlayer<PlayerManager>().Jump(self.jump, self.velocity.Y);
-                self.position.Y += 0.001f;
-            }
-            else
-            {
-                player.standTile.StandingMoving(self);
-            }
+            player.standTile = null;
         }
-        Vector2 move = self.position - last;
-        self.position = last;
-        var result = TileSystem.MoveColliding(self, move, fallThrough);
+
         foreach (var (tile, info) in result)
         {
             if (info == Direction.Inside)
             {
                 self.Hurt(PlayerDeathReason.ByCustomReason("物块内部"), 10, 1);
             }
-            if (tile.Damage != 0)
-            {
-                self.Hurt(PlayerDeathReason.ByCustomReason("伤害物块"), tile.Damage, 0);
-            }
             Direction GroundEdge = self.gravDir > 0 ? Direction.Bottom : Direction.Top;
-            if (info == GroundEdge && self.grapCount == 0 && !(self.mount.Active && self.mount.CanFly()) && !self.ghost && player.standTile is null)
+            if (info == GroundEdge && self.grapCount == 0 && !(self.mount.Active && self.mount.CanFly()))
             {
                 player.standTile = tile;
-                tile.StandingBegin(self);
             }
         }
+
+        if (newStand == null)
+        {
+            if (player.standTile != null)
+            {
+                player.standTile.Leave(self);
+                self.GetModPlayer<PlayerManager>().Jump();
+            }
+        }
+        else if (player.standTile != newStand)
+        {
+
+            player.standTile.Leave(self);
+            self.GetModPlayer<PlayerManager>().Jump();
+            newStand.Stand(self, true);
+            player.standTile = newStand;
+        }
+        else if (player.standTile == newStand)
+        {
+            newStand.Stand(self, false);
+        }
+
         TileSystem.EnableDTCollision = true;
     }
     private static void Player_HoneyCollision(On.Terraria.Player.orig_HoneyCollision orig, Player self, bool fallThrough, bool ignorePlats)
@@ -158,53 +171,64 @@ internal class PlayerColliding : ModPlayer
             orig(self, fallThrough, ignorePlats);
             return;
         }
+        TileSystem.EnableDTCollision = false;
+
         var player = self.GetModPlayer<PlayerColliding>();
         if (player.standTile is not null)
         {
             self.position += new Vector2(0, self.gfxOffY);
             self.gfxOffY = 0;
         }
-        TileSystem.EnableDTCollision = false;
-        Vector2 last = self.position;
+        Vector2 oldpos = self.position;
 
         orig(self, fallThrough, ignorePlats);
-        if (player.standTile is not null)
+        Vector2 move = self.position - oldpos;
+        self.position = oldpos;
+        var result = TileSystem.MoveCollision(self, move, fallThrough);
+        DynamicTile newStand = null;
+        if (player.standTile != null && !player.standTile.Active)
         {
-            if (player.standTile.Active is false || self.justJumped || self.mount.Active && self.mount.CanFly() ||
-                !player.standTile.OnTile(self, fallThrough) || self.grapCount > 0)
-            {
-                self.position -= self.velocity;
-                player.standTile.StandingLeaving(self);
-                self.position += self.velocity;
-                player.standTile = null;
-                self.GetModPlayer<PlayerManager>().Jump(self.jump, self.velocity.Y);
-                self.position.Y += 0.001f;
-            }
-            else
-            {
-                player.standTile.StandingMoving(self);
-            }
+            player.standTile = null;
         }
-        Vector2 move = self.position - last;
-        self.position = last;
-        var result = TileSystem.MoveColliding(self, move, fallThrough);
+
         foreach (var (tile, info) in result)
         {
             if (info == Direction.Inside)
             {
                 self.Hurt(PlayerDeathReason.ByCustomReason("物块内部"), 10, 1);
             }
-            if (tile.Damage != 0)
-            {
-                self.Hurt(PlayerDeathReason.ByCustomReason("伤害物块"), tile.Damage, 0);
-            }
             Direction GroundEdge = self.gravDir > 0 ? Direction.Bottom : Direction.Top;
-            if (info == GroundEdge && self.grapCount == 0 && !(self.mount.Active && self.mount.CanFly()) && !self.ghost && player.standTile is null)
+            if (info == GroundEdge && self.grapCount == 0 && !(self.mount.Active && self.mount.CanFly()))
             {
                 player.standTile = tile;
-                tile.StandingBegin(self);
             }
         }
+
+        if (newStand == null)
+        {
+            if (player.standTile != null)
+            {
+                player.standTile.Leave(self);
+                self.GetModPlayer<PlayerManager>().Jump();
+            }
+        }
+        else if (player.standTile != newStand)
+        {
+            player?.standTile.Leave(self);
+            self.GetModPlayer<PlayerManager>().Jump();
+            newStand.Stand(self, true);
+            player.standTile = newStand;
+        }
+        else if (player.standTile == newStand)
+        {
+            newStand.Stand(self, false);
+        }
+
+        if(player.standTile != null)
+        {
+            self.velocity.Y = 0;
+        }
+
         TileSystem.EnableDTCollision = true;
     }
     private static bool Player_CanFitSpace(On.Terraria.Player.orig_CanFitSpace orig, Player self, int heightBoost)
@@ -254,7 +278,7 @@ internal class PlayerColliding : ModPlayer
             {
                 if (grabbable.CanGrab(player))
                 {
-                    modplayer.grabTile = grabbable as IDynamicTile;
+                    modplayer.grabTile = grabbable as DynamicTile;
                     grabbable.OnGrab(player);
                     return true;
                 }
@@ -268,26 +292,26 @@ internal class PlayerColliding : ModPlayer
         });
         cursor.Emit(OpCodes.Stloc_0);//flag
     }
-    private static void Player_ItemCheck_UseMiningTools_ActuallyUseMiningTool(On.Terraria.Player.orig_ItemCheck_UseMiningTools_ActuallyUseMiningTool orig, Player self, Item sItem, out bool canHitWalls, int x, int y)
-    {
-        //TODO 大概联机会炸……
-        if (!TileSystem.Enable || sItem.pick == 0)
-        {
-            orig(self, sItem, out canHitWalls, x, y);
-            return;
-        }
+    //private static void Player_ItemCheck_UseMiningTools_ActuallyUseMiningTool(On.Terraria.Player.orig_ItemCheck_UseMiningTools_ActuallyUseMiningTool orig, Player self, Item sItem, out bool canHitWalls, int x, int y)
+    //{
+    //    //TODO 大概联机会炸……
+    //    if (!TileSystem.Enable || sItem.pick == 0)
+    //    {
+    //        orig(self, sItem, out canHitWalls, x, y);
+    //        return;
+    //    }
 
-        CPoint mouse = new CPoint(Main.MouseWorld);
-        foreach (var tile in TileSystem.GetTiles<IPickable>())
-        {
-            IDynamicTile dynamicTile = tile as IDynamicTile;
-            if (dynamicTile.Collision(mouse))
-            {
-                tile.PickTile(sItem.pick);
-                canHitWalls = false;
-                return;
-            }
-        }
-        orig(self, sItem, out canHitWalls, x, y);
-    }
+    //    CPoint mouse = new CPoint(Main.MouseWorld);
+    //    foreach (var tile in TileSystem.GetTiles<IPickable>())
+    //    {
+    //        IDynamicTile dynamicTile = tile as IDynamicTile;
+    //        if (dynamicTile.Collision(mouse))
+    //        {
+    //            tile.PickTile(sItem.pick);
+    //            canHitWalls = false;
+    //            return;
+    //        }
+    //    }
+    //    orig(self, sItem, out canHitWalls, x, y);
+    //}
 }

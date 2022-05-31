@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.ZY.Commons.Core.Draw;
+﻿namespace Everglow.Sources.Modules.ZYModule.Commons.Core.Draw;
 
 internal static class DrawUtils
 {

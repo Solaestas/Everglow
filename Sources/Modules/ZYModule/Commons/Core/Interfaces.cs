@@ -24,4 +24,11 @@ namespace Everglow.Sources.Modules.ZYModule.Commons.Core
             Active = false;
         }
     }
+
+    public interface IMoveable
+    {
+        Vector2 Position { get; set; }
+        Vector2 Velocity { get; set; }
+        void Move();
+    }
 }

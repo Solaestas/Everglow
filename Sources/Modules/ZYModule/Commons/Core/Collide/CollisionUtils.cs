@@ -1,0 +1,196 @@
+﻿using System.Runtime.CompilerServices;
+namespace Everglow.Sources.Modules.ZYModule.Commons.Core.Collide;
+
+public static class CollisionUtils
+{
+    public const float Epsilon = 1e-4f;
+    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+    public static float Cross(this Vector2 a, Vector2 b) => a.X * b.Y - a.Y * b.X;
+    public static Vector2 Abs(this Vector2 v) => new Vector2(Math.Abs(v.X), Math.Abs(v.Y));
+    public static AABB ToAABB(this Edge line)
+    {
+        Vector2 min = Vector2.Min(line.begin, line.end);
+        Vector2 max = Vector2.Max(line.begin, line.end);
+        return new AABB(min, max - min);
+    }
+    public static AABB ToAABB(this Vertices vertices)
+    {
+        Vector2 min = new Vector2(float.MaxValue, float.MaxValue);
+        Vector2 max = new Vector2(float.MinValue, float.MinValue);
+        foreach (var v in vertices)
+        {
+            min = Vector2.Min(min, v);
+            max = Vector2.Max(max, v);
+        }
+        return new AABB(min, max - min);
+    }
+    /// <summary>
+    /// 判断两个AABB是否相交，边缘重叠视为相交
+    /// </summary>
+    /// <param name="a"></param>
+    /// <param name="b"></param>
+    /// <returns></returns>
+    public static bool Intersect(this AABB a, AABB b)
+    {
+        if (a.position.X > b.position.X + b.size.X || a.position.X + a.size.X < b.position.X ||
+            a.position.Y > b.position.Y + b.size.Y || a.position.Y + a.size.Y < b.position.Y)
+        {
+            return false;
+        }
+        return true;
+    }
+    public static bool Intersect(this AABB a, AABB b, out AABB area)
+    {
+        if (a.position.X > b.position.X + b.size.X || a.position.X + a.size.X < b.position.X ||
+            a.position.Y > b.position.Y + b.size.Y || a.position.Y + a.size.Y < b.position.Y)
+        {
+            area = default;
+            return false;
+        }
+        Vector2 topLeft = Vector2.Max(a.TopLeft, b.TopLeft);
+        Vector2 bottomRight = Vector2.Min(a.BottomRight, b.BottomRight);
+        area = new AABB(topLeft, bottomRight - topLeft);
+        return true;
+    }
+    public static bool Intersect(this Edge a, Edge b)
+    {
+        float factor = (b.end - b.begin).Cross(a.begin - b.begin);
+        float u = (a.end - a.begin).Cross(a.begin - b.begin);
+        float denom = (b.end - b.begin).Cross(a.end - a.begin);
+        if (denom < Epsilon)
+        {
+            return false;
+        }
+
+        factor /= denom;
+        u /= denom;
+        if (0 < factor && factor < 1 && 0 < u && u < 1)
+        {
+            return true;
+        }
+        return false;
+    }
+    public static bool Intersect(this Edge a, Edge b, out float factor)
+    {
+        factor = (b.end - b.begin).Cross(a.begin - b.begin);
+        float u = (a.end - a.begin).Cross(a.begin - b.begin);
+        float denom = (b.end - b.begin).Cross(a.end - a.begin);
+        if (denom < Epsilon)
+        {
+            return false;
+        }
+
+        factor /= denom;
+        u /= denom;
+        if (0 < factor && factor < 1 && 0 < u && u < 1)
+        {
+            return true;
+        }
+        return false;
+    }
+    public static bool Intersect(this Edge line, AABB aabb)
+    {
+        if (aabb.Contain(line.begin) || aabb.Contain(line.end))
+        {
+            return true;
+        }
+        if (line.Intersect(new Edge(aabb.TopLeft, aabb.BottomRight)) || line.Intersect(new Edge(aabb.TopRight, aabb.BottomLeft)))
+        {
+            return true;
+        }
+        return false;
+    }
+    public static bool Intersect(this AABB aabb, Edge line)
+    {
+        if (aabb.Contain(line.begin) || aabb.Contain(line.end))
+        {
+            return true;
+        }
+        if (line.Intersect(new Edge(aabb.TopLeft, aabb.BottomRight)) || line.Intersect(new Edge(aabb.TopRight, aabb.BottomLeft)))
+        {
+            return true;
+        }
+        return false;
+    }
+    public static bool Intersect(float u0, float v0, float u1, float v1)
+    {
+        return !(u1 > v0 || v1 < u0);
+    }
+    public static bool Contain(this AABB aabb, Vector2 position)
+    {
+        return aabb.position.X <= position.X && position.X <= aabb.position.X + aabb.size.X &&
+            aabb.position.Y <= position.Y && position.Y <= aabb.position.Y + aabb.size.Y;
+    }
+    public static AABB Scan(this AABB aabb, Vector2 move)
+    {
+        Vector2[] vs = new Vector2[4] { aabb.TopLeft, aabb.BottomRight, aabb.TopLeft + move, aabb.BottomRight + move };
+        Vector2 min = new Vector2(float.MaxValue, float.MaxValue), max = new Vector2(float.MinValue, float.MinValue);
+        foreach (var v in vs)
+        {
+            min = Vector2.Min(v, min);
+            max = Vector2.Max(v, max);
+        }
+        return new AABB(min, max - min);
+    }
+    //public static CRectangle LineToAABB(Vector2 start, Vector2 end)
+    //{
+    //    Vector2 min = Vector2.Min(start, end);
+    //    Vector2 max = Vector2.Max(start, end);
+    //    return new CRectangle(min, Vector2.Max(Vector2.One, max - min));
+    //}
+
+    public static Vector2 Normalize_S(this Vector2 vector)
+    {
+        if (vector == Vector2.Zero)
+        {
+            return Vector2.UnitX;
+        }
+        else
+        {
+            return Vector2.Normalize(vector);
+        }
+    }
+    public static Vector2 NormalLine(this Vector2 vec) => new Vector2(-vec.Y, vec.X).Normalize_S();
+    public static float Projection(Vector2 dir, Vector2 vec)
+    {
+        return Vector2.Dot(dir.Normalize_S(), vec);
+    }
+    public static List<float> Projection(Vector2 dir, params Vector2[] vec)
+    {
+        List<float> vs = new List<float>(vec.Length);
+        for (int i = 0; i < vec.Length; i++)
+        {
+            vs.Add(Projection(dir, vec[i]));
+        }
+        return vs;
+    }
+    public static List<float> Projection(Vector2 dir, IEnumerable<Vector2> vec)
+    {
+        List<float> vs = new List<float>();
+        foreach (var v in vec)
+        {
+            vs.Add(Projection(dir, v));
+        }
+        return vs;
+    }
+    public static Vector2 MinValue(this IEnumerable<Vector2> vector2s)
+    {
+        Vector2 v = new Vector2(float.MaxValue, float.MaxValue);
+        foreach (var it in vector2s)
+        {
+            v = Vector2.Min(it, v);
+        }
+        return v;
+    }
+    public static Vector2 MaxValue(this IEnumerable<Vector2> vector2s)
+    {
+        Vector2 v = new Vector2(0, 0);
+        foreach (var it in vector2s)
+        {
+            v = Vector2.Max(it, v);
+        }
+        return v;
+    }
+    internal static CAABB ToCAABB(this Rectangle rectangle) => new CAABB(rectangle.TopLeft(), rectangle.Size());
+}
+

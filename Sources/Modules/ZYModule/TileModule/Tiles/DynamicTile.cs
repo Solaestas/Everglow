@@ -1,33 +1,15 @@
 using Everglow.Sources.Modules.ZYModule.Commons.Core;
+using Everglow.Sources.Modules.ZYModule.Commons.Core.Collide;
 using Everglow.Sources.Modules.ZYModule.Commons.Function;
 using IDrawable = Everglow.Sources.Modules.ZYModule.Commons.Core.IDrawable;
 using IUpdateable = Everglow.Sources.Modules.ZYModule.Commons.Core.IUpdateable;
 
 namespace Everglow.Sources.Modules.ZYModule.TileModule.Tiles
 {
-    public interface IDynamicTile : IActive, IUpdateable, IDrawable
-    {
-        public Direction MoveCollision(CRectangle rect, ref Vector2 velocity, ref Vector2 move, bool ignorePlats = false);
-        public bool Collision(ICollider collider);
-        public int Damage
-        {
-            get;
-        }
-        public int WhoAmI
-        {
-            get; set;
-        }
-        public void StandingBegin(Entity entity);
-        public void StandingMoving(Entity entity);
-        public void StandingLeaving(Entity entity);
-        public bool OnTile(Entity entity, bool fallThrough = false);
-        public void DrawToMap(Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale);
-    }
     internal interface IHookable
     {
-        public Vector2 GetSafeHookPosition(Projectile hook);
+        public void SetHookPosition(Projectile hook);
         public Vector2 GetSafePlayerPosition(Projectile hook);
-        public Vector2 GetHookMovement(Projectile hook);
     }
     internal interface IGrabbable
     {
@@ -35,21 +17,10 @@ namespace Everglow.Sources.Modules.ZYModule.TileModule.Tiles
         public void EndGrab(Player player);
         public bool CanGrab(Player player);
     }
-    internal interface IPickable
-    {
-        public int Health
-        {
-            get; set;
-        }
-        public void PickTile(int pickPower);
-    }
-    internal abstract class DynamicTile : IDynamicTile, IHookable
+    internal abstract class DynamicTile : IActive, IMoveable, IUpdateable, IDrawable
     {
         public virtual TextureType TextureType => TextureType.WhitePixel;
-        public virtual int Damage => 0;
-        public virtual int KnockBack => 0;
-        public virtual bool TileCollding => true;
-        public virtual ICollider Collider
+        public virtual Collider Collider
         {
             get;
         }
@@ -58,9 +29,10 @@ namespace Everglow.Sources.Modules.ZYModule.TileModule.Tiles
             get;
         }
 
-        public Vector2 position;
-        public Vector2 velocity;
-        private int whoAmI = -1;
+        protected Vector2 position;
+        protected Vector2 velocity;
+        protected Vector2 oldVelocity;
+        protected int whoAmI = -1;
         public virtual int WhoAmI
         {
             get
@@ -80,27 +52,23 @@ namespace Everglow.Sources.Modules.ZYModule.TileModule.Tiles
                 whoAmI = value;
             }
         }
-        /// <summary>
-        /// 加载顺序问题，要用oldvel进行移动
-        /// </summary>
-        public Vector2 oldVelocity;
         public bool Active { get; set; } = true;
+        public Vector2 Position { get => position; set => position = value; }
+        public Vector2 Velocity
+        {
+            get => oldVelocity;
+            set => velocity = value;
+        }
+
         public void Update()
         {
             AI();
             Move();
             oldVelocity = velocity;
         }
-        public void Kill()
+        public virtual void Kill()
         {
-            if (PreKill())
-            {
-                Active = false;
-            }
-        }
-        public virtual bool PreKill()
-        {
-            return true;
+            Active = false;
         }
         public virtual void AI()
         {
@@ -114,51 +82,18 @@ namespace Everglow.Sources.Modules.ZYModule.TileModule.Tiles
         {
             position += oldVelocity;
         }
-        public virtual void OnTileColliding()
+        public abstract Direction MoveCollision(AABB aabb, ref Vector2 velocity, ref Vector2 move, bool ignorePlats = false);
+        public virtual bool Collision(Collider collider)
         {
-
-        }
-        public virtual Direction MoveCollision(CRectangle rect, ref Vector2 velocity, ref Vector2 move, bool ignorePlats = false)
-        {
-            return Direction.None;
-        }
-        public virtual bool Collision(ICollider collider)
-        {
-            return Collider.Colliding(collider);
-        }
-        public virtual Vector2 GetSafeHookPosition(Projectile hook)
-        {
-            return hook.position;
-        }
-        public virtual Vector2 GetSafePlayerPosition(Projectile hook)
-        {
-            return hook.position;
+            return Collider.Collision(collider);
         }
         public virtual void DrawToMap(Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale)
         {
 
         }
-        public virtual Vector2 GetHookMovement(Projectile hook)
-        {
-            return Vector2.Zero;
-        }
-        public virtual void StandingBegin(Entity entity)
-        {
-
-        }
-        public virtual void StandingMoving(Entity entity)
-        {
-
-        }
-        public virtual void StandingLeaving(Entity entity)
-        {
-
-        }
-
-        public virtual bool OnTile(Entity entity, bool fallThrough = false)
-        {
-            return false;
-        }
+        public abstract void Stand(Entity entity, bool newStand);
+        public abstract Vector2 GetTrueVelocity(Entity entity);
+        public abstract void Leave(Entity entity);
     }
 
 }
