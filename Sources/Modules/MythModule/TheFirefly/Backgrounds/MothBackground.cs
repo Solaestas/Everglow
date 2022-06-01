@@ -325,16 +325,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                     massPositionsSmooth[x] = Commons.Function.BezierCurve.Bezier.SmoothPath(massPositions[x]);
                 }
             }
-
-
-            else
+            for (int i = 0; i < RopPosFir.Count; i++)
             {
-                for (int i = 0; i < RopPosFir.Count; i++)
+                if (massPositionsSmooth[i].Count > 0)
                 {
-                    if (massPositionsSmooth[i].Count > 0)
-                    {
-                        DrawRope(massPositionsSmooth[i], RopPosFir[i], Vertices);
-                    }
+                    DrawRope(massPositionsSmooth[i], RopPosFir[i], Vertices);
                 }
             }
             if (Vertices.Count > 2)
