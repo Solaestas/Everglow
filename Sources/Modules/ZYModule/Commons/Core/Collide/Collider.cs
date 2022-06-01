@@ -1,3 +1,5 @@
+using Everglow.Sources.Modules.ZYModule.Commons.Core.DataStructures;
+
 namespace Everglow.Sources.Modules.ZYModule.Commons.Core.Collide;
 public abstract class Collider
 {

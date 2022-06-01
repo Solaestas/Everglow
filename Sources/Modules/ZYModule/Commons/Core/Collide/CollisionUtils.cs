@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using Everglow.Sources.Modules.ZYModule.Commons.Core.DataStructures;
+using System.Runtime.CompilerServices;
 namespace Everglow.Sources.Modules.ZYModule.Commons.Core.Collide;
 
 public static class CollisionUtils

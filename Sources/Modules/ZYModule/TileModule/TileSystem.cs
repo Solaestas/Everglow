@@ -2,6 +2,7 @@ using Everglow.Sources.Commons.Core;
 using Everglow.Sources.Commons.Core.ModuleSystem;
 using Everglow.Sources.Modules.ZYModule.Commons.Core;
 using Everglow.Sources.Modules.ZYModule.Commons.Core.Collide;
+using Everglow.Sources.Modules.ZYModule.Commons.Core.DataStructures;
 using Everglow.Sources.Modules.ZYModule.TileModule.EntityColliding;
 using Everglow.Sources.Modules.ZYModule.TileModule.Tiles;
 

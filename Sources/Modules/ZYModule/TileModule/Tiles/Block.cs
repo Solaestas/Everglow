@@ -1,5 +1,6 @@
 ﻿using Everglow.Sources.Modules.ZYModule.Commons.Core;
 using Everglow.Sources.Modules.ZYModule.Commons.Core.Collide;
+using Everglow.Sources.Modules.ZYModule.Commons.Core.DataStructures;
 using Everglow.Sources.Modules.ZYModule.Commons.Function;
 using Terraria.GameContent;
 
