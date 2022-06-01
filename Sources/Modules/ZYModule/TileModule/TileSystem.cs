@@ -15,22 +15,6 @@ internal class TileSystem : IModule
     public static IEnumerable<Block> Blocks => dynamicTiles.Where(tile => tile is Block).Select(tile => tile as Block);
     public static IEnumerable<IHookable> Hookables => dynamicTiles.Where(tile => tile is IHookable).Select(tile => tile as IHookable);
     public static IEnumerable<T> GetTiles<T>() where T : class => dynamicTiles.Where(tile => tile is T).Select(tile => tile as T);
-    public static DynamicTile GetStandTile(Entity entity)
-    {
-        if (entity is Player player)
-        {
-            return player.GetModPlayer<PlayerColliding>().standTile;
-        }
-        else if (entity is NPC npc)
-        {
-            return npc.GetGlobalNPC<NPCColliding>().standTile;
-        }
-        else if (entity is Projectile proj)
-        {
-            return proj.GetGlobalProjectile<ProjColliding>().standTile;
-        }
-        return null;
-    }
     public static bool Enable => dynamicTiles.Count > 0;
 
     public string Name => "TileSystem";
@@ -82,23 +66,19 @@ internal class TileSystem : IModule
     /// <param name="rect"></param>
     /// <param name="velocity"></param>
     /// <returns></returns>
-    public static List<(DynamicTile tile, Direction info)> MoveCollision(Entity entity, Vector2 move, bool fallthrough = false)
+    public static List<(DynamicTile tile, Direction info)> MoveCollision(EntityHandler handler, Vector2 move, bool fallthrough = false)
     {
         List<(DynamicTile tile, Direction info)> list = new();
-        AABB aabb = new AABB(entity.position, entity.Size);
-        Vector2 trueVelocity = GetStandTile(entity)?.GetTrueVelocity(entity) ?? entity.velocity;
-        Vector2 delta = trueVelocity - entity.velocity;
-        Vector2 trueMove = move + delta;
+        AABB aabb = handler.HitBox;
         foreach (var tile in dynamicTiles)
         {
-            Direction info = tile.MoveCollision(aabb, ref trueVelocity, ref trueMove, fallthrough);
+            Direction info = tile.MoveCollision(aabb, ref handler.velocity, ref move, fallthrough);
             if (info != Direction.None)
             {
                 list.Add((tile, info));
             }
         }
-        entity.velocity = trueVelocity - delta;
-        entity.position += Terraria.Collision.TileCollision(entity.position, trueMove - delta, entity.width, entity.height, fallthrough);
+        handler.position += Terraria.Collision.TileCollision(handler.position, move, handler.GetEntity().width, handler.GetEntity().height, fallthrough);
         return list;
     }
     public static bool MoveCollision(ref AABB aabb, ref Vector2 velocity, bool fallthrough = false)
@@ -180,11 +160,11 @@ internal class TileSystem : IModule
         Vector2 result = orig(Position, Velocity, Width, Height, fallThrough, fall2, gravDir);
         if (EnableDTCollision && Enable)
         {
-            //var rect = new AABB(Position.X, Position.Y, Width, Height);
-            //if (MoveCollision(ref rect, ref result, fallThrough))
-            //{
-            //    return rect.position - Position;
-            //}
+            var rect = new AABB(Position.X, Position.Y, Width, Height);
+            if (MoveCollision(ref rect, ref result, fallThrough))
+            {
+                return rect.position - Position;
+            }
         }
         return result;
     }

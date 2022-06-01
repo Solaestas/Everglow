@@ -98,6 +98,7 @@
         public static Rotation operator -(Rotation a, Rotation b) => new Rotation(a.angle - b.angle);
         public static Rotation operator -(Rotation rot) => new Rotation(-rot.angle);
         public static implicit operator float(Rotation rot) => rot.Angle;
+        public static implicit operator Vector2(Rotation rot) => rot.XAxis;
         #endregion
         #region Compare
         public static bool operator ==(Rotation a, Rotation b) => a.angle == b.angle;

@@ -37,15 +37,15 @@ namespace Everglow.Sources.Modules.ZYModule.TileModule.Tiles
             Vector2 pos0 = aabb.position;
 
 
-            if (!aabb.Scan(rvel).Intersect(collider))
-            {
-                return Direction.None;
-            }
+            //if (!aabb.Scan(rvel).Intersect(collider))
+            //{
+            //    return Direction.None;
+            //}
 
             const float SmallScale = 7;
             AABB smallBox = collider;
             smallBox.TopLeft += new Vector2(SmallScale, SmallScale);
-            smallBox.BottomRight -= new Vector2(SmallScale * 2, SmallScale * 2);
+            smallBox.BottomRight -= new Vector2(SmallScale, SmallScale);
             if (smallBox.Intersect(aabb))
             {
                 return Direction.Inside;
@@ -78,7 +78,7 @@ namespace Everglow.Sources.Modules.ZYModule.TileModule.Tiles
             }
             else
             {
-                aabb.position.Y = aabb.Top < collider.Top ? collider.Top - aabb.size.Y : collider.Top;
+                aabb.position.Y = aabb.Top < collider.Top ? collider.Top - aabb.size.Y : collider.Bottom;
                 aabb.position.X = target.X;
                 move = aabb.position - pos0 + this.velocity;
                 velocity.Y = this.velocity.Y == 0 ?
@@ -93,7 +93,6 @@ namespace Everglow.Sources.Modules.ZYModule.TileModule.Tiles
             {
                 entity.velocity -= this.velocity / 2;
             }
-            entity.position += this.velocity;
         }
         public override void Leave(Entity entity)
         {

@@ -1,5 +1,6 @@
 ﻿using Everglow.Sources.Modules.ZYModule.Commons.Core;
 using Everglow.Sources.Modules.ZYModule.Commons.Core.Collide;
+using Everglow.Sources.Modules.ZYModule.Commons.Core.DataStructures;
 using ReLogic.Content;
 
 
@@ -21,6 +22,7 @@ internal static class Quick
     public static Dictionary<EffectType, Asset<Effect>> effects = new Dictionary<EffectType, Asset<Effect>>();
     public static GraphicsDevice GD => Main.instance.GraphicsDevice;
     public static SpriteBatch SB => Main.spriteBatch;
+    public static float AirSpeed => 0.001f;
     public static string ModulePath => "Everglow/Sources/Modules/ZYModule/";
     public static string ResourcePath => ModulePath + "Commons/Resource/";
     public static Texture2D GetValue(this TextureType type, bool async = false)
@@ -113,5 +115,6 @@ internal static class Quick
     public static Direction GetControlDirectionV(this Player player) =>
         player.controlUp ^ player.controlDown ? player.controlDown ? Direction.Bottom : Direction.Top : Direction.None;
     public static CAABB GetCollider(this Entity entity) => new CAABB(new AABB(entity.position.X, entity.position.Y, entity.width, entity.height));
+
 
 }

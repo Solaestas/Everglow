@@ -1,5 +1,6 @@
 ﻿namespace Everglow.Sources.Modules.ZYModule.Commons.Core.DataStructures
 {
+    [DebuggerDisplay("begin = ({begin.X}, {begin.Y}) end = ({end.X}, {end.Y})")]
     public struct Edge
     {
         public Vector2 begin;
@@ -14,7 +15,7 @@
 
         public override string ToString()
         {
-            return $"begin = {{{begin.X}, {begin.Y}}} end = {{{end.X}, {end.Y}}}";
+            return $"({begin.X}, {begin.Y}) ({end.X}, {end.Y})";
         }
     }
 }

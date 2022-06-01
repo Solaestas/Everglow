@@ -1,5 +1,6 @@
 ﻿namespace Everglow.Sources.Modules.ZYModule.Commons.Core.DataStructures
 {
+    [DebuggerDisplay("position = ({position.X}, {position.Y}) size = ({size.X}, {size.Y})")]
     public struct AABB
     {
         public Vector2 position;
@@ -169,7 +170,7 @@
         }
         public override string ToString()
         {
-            return $"position = {{{position.X}, {position.Y}}} size = {{{size.X}, {size.Y}}}";
+            return $"({position.X}, {position.Y}, {size.X}, {size.Y})";
         }
     }
 }

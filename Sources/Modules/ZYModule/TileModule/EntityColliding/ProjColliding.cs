@@ -1,17 +1,50 @@
 ﻿using Everglow.Sources.Modules.ZYModule.Commons.Core;
 using Everglow.Sources.Modules.ZYModule.Commons.Core.Collide;
+using Everglow.Sources.Modules.ZYModule.Commons.Core.DataStructures;
 using Everglow.Sources.Modules.ZYModule.Commons.Function;
 using Everglow.Sources.Modules.ZYModule.TileModule.Tiles;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 
 namespace Everglow.Sources.Modules.ZYModule.TileModule.EntityColliding;
-
+internal class ProjHandler : EntityHandler<Projectile>
+{
+    public ProjHandler(Projectile entity) : base(entity) { }
+    public override void OnCollision(DynamicTile tile, Direction dir)
+    {
+        if(dir == Direction.Inside)
+        {
+            Entity.Kill();
+        }
+    }
+    public override void Update()
+    {
+        if (attachTile is not null)
+        {
+            Entity.position += new Vector2(0, Entity.gfxOffY);
+            Entity.gfxOffY = 0;
+        }
+        base.Update();
+    }
+    public override void OnAttach()
+    {
+        Entity.velocity.Y = 0;
+    }
+}
 internal class ProjColliding : GlobalProjectile
 {
+    public ProjHandler handler;
     public static HashSet<Projectile> callFromHook = new HashSet<Projectile>();
+    public const int HookAiStyle = 7;
     public override bool InstancePerEntity => true;
-    public DynamicTile standTile;
+    protected override bool CloneNewInstances => true;
+    public override bool IsCloneable => true;
+    public override GlobalProjectile Clone(Projectile from, Projectile to)
+    {
+        var clone = base.Clone(from, to) as ProjColliding;
+        clone.handler = new ProjHandler(to);
+        return clone;
+    }
     public override void Load()
     {
         On.Terraria.Projectile.AI_007_GrapplingHooks += Projectile_AI_007_GrapplingHooks_On;
@@ -28,63 +61,16 @@ internal class ProjColliding : GlobalProjectile
 
     private static void Projectile_HandleMovement(On.Terraria.Projectile.orig_HandleMovement orig, Projectile self, Vector2 wetVelocity, out int overrideWidth, out int overrideHeight)
     {
-        if (!TileSystem.Enable || !self.tileCollide || self.aiStyle == 7)
+        if (!TileSystem.Enable || !self.tileCollide || self.aiStyle == HookAiStyle)
         {
             orig(self, wetVelocity, out overrideWidth, out overrideHeight);
             return;
         }
 
+
         TileSystem.EnableDTCollision = false;
-
-        var proj = self.GetGlobalProjectile<ProjColliding>();
-        if (proj.standTile is not null)
-        {
-            self.position += new Vector2(0, self.gfxOffY);
-            self.gfxOffY = 0;
-        }
-        Vector2 oldpos = self.position;
-
         orig(self, wetVelocity, out overrideWidth, out overrideHeight);
-        Vector2 move = self.position - oldpos;
-        self.position = oldpos;
-        var result = TileSystem.MoveCollision(self, move, true);
-        DynamicTile newStand = null;
-        if (proj.standTile != null && !proj.standTile.Active)
-        {
-            proj.standTile = null;
-        }
-
-        foreach (var (tile, info) in result)
-        {
-            if (info == Direction.Inside)
-            {
-                self.Kill();
-            }
-
-            if (info == Direction.Bottom)
-            {
-                proj.standTile = tile;
-            }
-        }
-
-        if (newStand == null)
-        {
-            if (proj.standTile != null)
-            {
-                proj.standTile.Leave(self);
-            }
-        }
-        else if (proj.standTile != newStand)
-        {
-            proj.standTile?.Leave(self);
-            newStand.Stand(self, true);
-            proj.standTile = newStand;
-        }
-        else if (proj.standTile == newStand)
-        {
-            newStand.Stand(self, false);
-        }
-
+        self.GetGlobalProjectile<ProjColliding>().handler.Update();
         TileSystem.EnableDTCollision = true;
     }
     private static void Projectile_AI_007_GrapplingHooks_On(On.Terraria.Projectile.orig_AI_007_GrapplingHooks orig, Projectile self)
@@ -141,7 +127,7 @@ internal class ProjColliding : GlobalProjectile
         if (self.ai[0] != 1)
         {
             var gproj = self.GetGlobalProjectile<ProjColliding>();
-            if (gproj.standTile is null)
+            if (gproj.handler.attachTile is null)
             {
                 foreach (var tile in TileSystem.DynamicTiles)
                 {
@@ -165,7 +151,7 @@ internal class ProjColliding : GlobalProjectile
                                 self.alpha = 1;
                                 Terraria.Audio.SoundEngine.PlaySound(SoundID.Dig, self.Center);
                             }
-                            gproj.standTile = tile;
+                            gproj.handler.attachTile = tile;
                             break;
                         }
                     }
@@ -173,14 +159,14 @@ internal class ProjColliding : GlobalProjectile
             }
             else
             {
-                if (gproj.standTile.Active)
+                if (gproj.handler.attachTile.Active)
                 {
                     callFromHook.Add(self);
-                    (gproj.standTile as IHookable).SetHookPosition(self);
+                    (gproj.handler.attachTile as IHookable).SetHookPosition(self);
                 }
                 else
                 {
-                    gproj.standTile = null;
+                    gproj.handler.attachTile = null;
                 }
             }
         }
