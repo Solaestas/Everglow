@@ -121,7 +121,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
 
         private IEnumerator<ICoroutineInstruction> Task()
         {
-            SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod,
+            SoundEngine.PlaySound(new SoundStyle(
                 "Sources/Modules/MythModule/LanternMoon/Sounds/PowerBomb"), Projectile.Center);
             _coroutineManager.StartCoroutine(new Coroutine(ControlVolume()));
             _coroutineManager.StartCoroutine(new Coroutine(JitterFlash()));

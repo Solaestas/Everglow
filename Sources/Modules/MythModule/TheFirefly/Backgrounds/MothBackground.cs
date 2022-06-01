@@ -289,66 +289,54 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 spring.ApplyForce(deltaTime);
             }
 
-            List<List<Vector2>> massPositions = new List<List<Vector2>>();
+            List<Vector2> massPositions = new List<Vector2>();
             Vector2 TexLT = GetRopeMove(new Vector2(800, 400), 0.33f);
             if (RopPosFir.Count == 0)
             {
                 GetRopePosFir("TreeRope.bmp", 0.33f);
             }
-            List<List<Mass>> massClone = new List<List<Mass>>();
-            for (int i = 0; i < RopPosFir.Count; i++)
+            foreach(var mass in masses)
             {
-                if(massClone[i].Count < 1)
+                Main.NewText(mass.position);
+                mass.force += new Vector2(0.3f + 0.12f * (float)(Math.Sin(Main.timeForVisualEffects / 72f + mass.position.X / 13d)), 0);
+                //mass.force -= mass.velocity * 0.1f;
+                // 重力加速度（可调
+                mass.force += new Vector2(0, gravity) * mass.mass;
+                mass.Update(deltaTime);
+                Texture2D t0 = TextureAssets.MagicPixel.Value;
+                for (int i = 0; i < RopPosFir.Count; i++)
                 {
-                    massClone[i] = masses;
+                    Main.spriteBatch.Draw(t0, mass.position + RopPosFir[i] - TexLT, new Rectangle(0, 0, 4, 4), new Color(0, 0.45f, 1f / 5f), 0, new Vector2(2), 1, SpriteEffects.None, 0);
                 }
-                for (int j = 0; j < massClone[i].Count; j++)
-                {
-                    Main.NewText(massClone[i][j].position);
-                    massClone[i][j].force += new Vector2(0.3f + 0.12f * (float)(Math.Sin(Main.timeForVisualEffects / 72f + massClone[i][j].position.X / 13d)), 0);
-                    //mass.force -= mass.velocity * 0.1f;
-                    // 重力加速度（可调
-                    massClone[i][j].force += new Vector2(0, gravity) * massClone[i][j].mass;
-                    massClone[i][j].Update(deltaTime);
-                    Texture2D t0 = TextureAssets.MagicPixel.Value;
-                    Main.spriteBatch.Draw(t0, massClone[i][j].position + RopPosFir[i] - TexLT, new Rectangle(0, 0, 4, 4), new Color(0, 0.45f * j / 2.2f, 1f / 5f * j), 0, new Vector2(2), 1, SpriteEffects.None, 0);
-                    massPositions[i].Add(massClone[i][j].position);
-                }
+                massPositions.Add(mass.position);
             }
 
-            List<VertexBase.Vertex2D> Vertices = new List<VertexBase.Vertex2D>();
-            List<Vector2>[] massPositionsSmooth = new List<Vector2>[600];
-            for(int x = 0;x < 600;x++)
-            {
-                if(massPositions[x].Count > 0)
-                {
-                    massPositionsSmooth[x] = Commons.Function.BezierCurve.Bezier.SmoothPath(massPositions[x]);
-                }
-            }
-            for (int i = 0; i < RopPosFir.Count; i++)
-            {
-                if (massPositionsSmooth[i].Count > 0)
-                {
-                    DrawRope(massPositionsSmooth[i], RopPosFir[i], Vertices);
-                }
-            }
-            if (Vertices.Count > 2)
-            {
-                var rasterState = new RasterizerState()
-                {
-                    CullMode = CullMode.None,
-                    FillMode = FillMode.WireFrame
-                };
-                Effect effect = MythContent.QuickEffect("Effects/MeshTest");
-                var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-                var model = Matrix.CreateTranslation(new Vector3(0, 0, 0)) * Main.GameViewMatrix.ZoomMatrix;
-                effect.Parameters["uTransform"].SetValue(model * projection);
-                effect.CurrentTechnique.Passes[0].Apply();
-                Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("TheFirefly/Backgrounds/Dark");
-                Main.graphics.GraphicsDevice.RasterizerState = rasterState;
-                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, Vertices.ToArray(), 0, Vertices.Count);
-            }
-
+             List<VertexBase.Vertex2D> Vertices = new List<VertexBase.Vertex2D>();
+             List<Vector2> massPositionsSmooth = new List<Vector2>();
+             massPositionsSmooth = Commons.Function.BezierCurve.Bezier.SmoothPath(massPositions);
+             for (int i = 0; i < RopPosFir.Count; i++)
+             {
+                 if (massPositionsSmooth.Count > 0)
+                 {
+                     DrawRope(massPositionsSmooth, RopPosFir[i], Vertices);
+                 }
+             }
+             if (Vertices.Count > 2)
+             {
+                 var rasterState = new RasterizerState()
+                 {
+                     CullMode = CullMode.None,
+                     FillMode = FillMode.WireFrame
+                 };
+                 Effect effect = MythContent.QuickEffect("Effects/MeshTest");
+                 var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+                 var model = Matrix.CreateTranslation(new Vector3(0, 0, 0)) * Main.GameViewMatrix.ZoomMatrix;
+                 effect.Parameters["uTransform"].SetValue(model * projection);
+                 effect.CurrentTechnique.Passes[0].Apply();
+                 Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("TheFirefly/Backgrounds/Dark");
+                 Main.graphics.GraphicsDevice.RasterizerState = rasterState;
+                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, Vertices.ToArray(), 0, Vertices.Count);
+             }
         }
         public Vector2[] OldMouseW = new Vector2[30];
         private List<Mass> masses = new List<Mass>();
