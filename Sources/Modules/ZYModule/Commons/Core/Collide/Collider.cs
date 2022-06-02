@@ -108,7 +108,8 @@ public class CEdge : Collider
 
     public override Vector2 Position { get => edge.begin; set => edge.begin = value; }
     public override AABB AABB => edge.ToAABB();
-
+    public Vector2 Begin { get => edge.begin; set => edge.begin = value; }
+    public Vector2 End { get => edge.end; set => edge.end = value; }
     public override bool Collision(Collider other, bool newCheck = true)
     {
         if (newCheck && !other.AABB.Intersect(edge))
@@ -140,6 +141,51 @@ public class CEdge : Collider
     public override Collider Clone()
     {
         return new CEdge(edge);
+    }
+}
+public class CCircle : Collider
+{
+    public Circle circle;
+    public CCircle(Vector2 position, float radius)
+    {
+        this.circle = new Circle(position, radius);
+    }
+    public CCircle(Circle circle)
+    {
+        this.circle = circle;
+    }
+
+    public override Vector2 Position { get => circle.position; set => circle.position = value; }
+    public override AABB AABB => new AABB(circle.position - new Vector2(circle.radius, circle.radius), new Vector2(circle.radius * 2, circle.radius * 2));
+    public override Collider Clone()
+    {
+        return new CCircle(circle);
+    }
+
+    public override bool Collision(Collider other, bool newCheck = true)
+    {
+        if (newCheck && !circle.Intersect(other.AABB))
+        {
+            return false;
+        }
+
+        if (other is CPoint)
+        {
+            return circle.Contain(other.Position);
+        }
+        else if (other is CAABB)
+        {
+            return true;
+        }
+        else if (other is CEdge edge)
+        {
+            return edge.edge.Distance(circle.position) < circle.radius;
+        }
+        else if (newCheck)
+        {
+            return other.Collision(this, false);
+        }
+        return false;
     }
 }
 //public class CLine : ICollider

@@ -10,7 +10,7 @@ namespace Everglow.Sources.Modules.ZYModule.TileModule.EntityColliding;
 internal class ProjHandler : EntityHandler<Projectile>
 {
     public ProjHandler(Projectile entity) : base(entity) { }
-    public override void OnCollision(DynamicTile tile, Direction dir)
+    public override void OnCollision(DynamicTile tile, Direction dir, ref DynamicTile newAttach)
     {
         if(dir == Direction.Inside)
         {

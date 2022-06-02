@@ -22,7 +22,7 @@ internal class TestItem : ModItem
     //        width = 300;
     //    }
     //}
-    public class TestBlock : Block
+    public class TestBlock : DBlock
     {
         public TestBlock(Vector2 position, Vector2 size) : base(position, size)
         {
@@ -31,7 +31,7 @@ internal class TestItem : ModItem
     public override bool CanUseItem(Player player)
     {
         var block = new TestBlock(Main.MouseWorld, Vector2.One * 256);
-        block.Velocity = Vector2.UnitY * -1;
+        block.Velocity = Vector2.UnitX * -1;
         //var plat = new TestPlat(Main.MouseWorld);
         TileSystem.AddTile(block);
         return true;

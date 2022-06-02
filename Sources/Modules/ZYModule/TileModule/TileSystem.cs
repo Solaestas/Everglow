@@ -12,7 +12,7 @@ internal class TileSystem : IModule
 {
     private static List<DynamicTile> dynamicTiles = new List<DynamicTile>();
     public static IEnumerable<DynamicTile> DynamicTiles => dynamicTiles;
-    public static IEnumerable<Block> Blocks => dynamicTiles.Where(tile => tile is Block).Select(tile => tile as Block);
+    public static IEnumerable<DBlock> Blocks => dynamicTiles.Where(tile => tile is DBlock).Select(tile => tile as DBlock);
     public static IEnumerable<IHookable> Hookables => dynamicTiles.Where(tile => tile is IHookable).Select(tile => tile as IHookable);
     public static IEnumerable<T> GetTiles<T>() where T : class => dynamicTiles.Where(tile => tile is T).Select(tile => tile as T);
     public static bool Enable => dynamicTiles.Count > 0;

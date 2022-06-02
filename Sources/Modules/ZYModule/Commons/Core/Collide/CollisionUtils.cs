@@ -113,6 +113,70 @@ public static class CollisionUtils
         }
         return false;
     }
+    public static bool Intersect(this Circle circle, AABB aabb)
+    {
+        Vector2 or = (circle.position - aabb.Center).Abs();
+        if (or.X > aabb.Width / 2)
+        {
+            if (or.Y > aabb.Height / 2)
+            {
+                return or.Distance(aabb.size / 2) <= circle.radius;
+            }
+            else
+            {
+                return or.X - aabb.Width / 2 <= circle.radius;
+            }
+        }
+        else
+        {
+            return or.Y - aabb.Height/ 2 <= circle.radius;
+        }
+    }
+    public static bool Intersect(this Circle circle, AABB aabb, out Direction dir)
+    {
+        Vector2 or = circle.position - aabb.Center;
+        bool flipX = or.X < 0;
+        bool flipY = or.Y < 0;
+        or = or.Abs();
+        dir = Direction.None;
+        bool result;
+        if (or.X > aabb.Width / 2)
+        {
+            if (or.Y > aabb.Height / 2)
+            {
+                result = or.Distance(aabb.size / 2) <= circle.radius;
+                if (result)
+                {
+                    dir = (flipX, flipY) switch
+                    {
+                        (true, true) => Direction.TopLeft,
+                        (true, false) => Direction.TopRight,
+                        (false, true) => Direction.BottomLeft,
+                        (false, false) => Direction.BottomRight
+                    };
+                }
+                return result;
+            }
+            else
+            {
+                result = or.X - aabb.Width / 2 <= circle.radius;
+                if (result)
+                {
+                    dir = flipX ? Direction.Left : Direction.Right;
+                }
+                return result;
+            }
+        }
+        else
+        {
+            result = or.Y - aabb.Height / 2 <= circle.radius;
+            if (result)
+            {
+                dir = flipY ? Direction.Top : Direction.Bottom;
+            }
+            return result;
+        }
+    }
     public static bool Intersect(float u0, float v0, float u1, float v1)
     {
         return !(u1 > v0 || v1 < u0);
@@ -121,6 +185,30 @@ public static class CollisionUtils
     {
         return aabb.position.X <= position.X && position.X <= aabb.position.X + aabb.size.X &&
             aabb.position.Y <= position.Y && position.Y <= aabb.position.Y + aabb.size.Y;
+    }
+    public static bool Contain(this Circle circle, Vector2 position) => position.Distance(circle.position) <= circle.radius;
+    public static float Distance(this Edge edge, Vector2 point)
+    {
+        if (edge.begin == edge.end)
+        {
+            return point.Distance(edge.begin);
+        }
+
+        Vector2 v = edge.end - edge.begin;
+        Vector2 w = point - edge.begin;
+        float c1 = Vector2.Dot(w, v);
+        if (c1 <= 0)
+        {
+            return point.Distance(edge.begin);
+        }
+
+        float c2 = Vector2.Dot(v, v);
+        if (c2 <= c1)
+        {
+            return point.Distance(edge.end);
+        }
+
+        return point.Distance(edge.begin + v * c1 / c2);
     }
     public static AABB Scan(this AABB aabb, Vector2 move)
     {

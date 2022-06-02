@@ -35,7 +35,7 @@ internal abstract class EntityHandler<TEntity> : EntityHandler where TEntity : E
 
     public virtual bool CanAttach() => true;
     public virtual Direction Ground => Direction.Bottom;
-    public virtual void OnCollision(DynamicTile tile, Direction dir) { }
+    public virtual void OnCollision(DynamicTile tile, Direction dir, ref DynamicTile newAttach) { }
     public virtual void OnAttach() { }
     public virtual void OnLeave() { }
     public virtual void Update()
@@ -51,7 +51,7 @@ internal abstract class EntityHandler<TEntity> : EntityHandler where TEntity : E
         }
         foreach (var (tile, dir) in TileSystem.MoveCollision(this, move))
         {
-            OnCollision(tile, dir);
+            OnCollision(tile, dir, ref newAttach);
             if (dir == Direction.Bottom && CanAttach())
             {
                 newAttach = tile;

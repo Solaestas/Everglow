@@ -19,7 +19,7 @@ internal class NPCHandler : EntityHandler<NPC>
         }
         base.Update();
     }
-    public override void OnCollision(DynamicTile tile, Direction dir)
+    public override void OnCollision(DynamicTile tile, Direction dir, ref DynamicTile newAttach)
     {
         if(dir == Direction.Inside && !Entity.boss)
         {

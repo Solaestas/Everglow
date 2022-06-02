@@ -54,8 +54,8 @@ namespace Everglow.Sources.Modules.ZYModule.TileModule.Tiles
             }
         }
         public bool Active { get; set; } = true;
-        public Vector2 Position { get => position; set => position = value; }
-        public Vector2 Velocity
+        public virtual Vector2 Position { get => position; set => position = value; }
+        public virtual Vector2 Velocity
         {
             get => oldVelocity;
             set => velocity = value;
@@ -93,7 +93,6 @@ namespace Everglow.Sources.Modules.ZYModule.TileModule.Tiles
 
         }
         public abstract void Stand(Entity entity, bool newStand);
-        public abstract Vector2 GetTrueVelocity(Entity entity);
         public abstract void Leave(Entity entity);
     }
 

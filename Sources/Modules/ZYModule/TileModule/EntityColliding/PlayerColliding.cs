@@ -34,7 +34,7 @@ internal class PlayerHandler : EntityHandler<Player>
             Entity.velocity.Y = Quick.AirSpeed;
         }
     }
-    public override void OnCollision(DynamicTile tile, Direction dir)
+    public override void OnCollision(DynamicTile tile, Direction dir, ref DynamicTile newAttach)
     {
         if(dir == Direction.Inside)
         {
@@ -50,9 +50,9 @@ internal class PlayerHandler : EntityHandler<Player>
             {
                 return;
             }
-            attachTile = tile;
+            newAttach = tile;
             attachDir = dir;
-            OnAttach();
+            attachType = AttachType.Grab;
         }
     }
 }
@@ -76,7 +76,9 @@ internal class PlayerColliding : ModPlayer
         {
             ILException.Throw("Player_WallslideMovement_Error", ex);
         }
+        
     }
+
     public override ModPlayer Clone(Player newEntity)
     {
         var clone = base.Clone(newEntity) as PlayerColliding;
@@ -132,39 +134,26 @@ internal class PlayerColliding : ModPlayer
     private static void Player_WallslideMovement(ILContext il)
     {
         var cursor = new ILCursor(il);
-        cursor.Emit(OpCodes.Ldarg_0);
-        cursor.EmitDelegate((Player player) =>
-        {
-            player.slideDir = (int)player.GetControlDirectionH().ToVector2().X;
-        });
-        if (!cursor.TryGotoNext(MoveType.Before, ins => ins.MatchRet()))
+        var label = cursor.DefineLabel();
+        if (!cursor.TryGotoNext(MoveType.After, ins => ins.MatchStfld<Player>("sliding")))
         {
             ILException.Throw("Player_WallslideMovement_NotFound_0");
         }
-        //cursor.Emit(OpCodes.Ldarg_0);
-        //cursor.EmitDelegate((Player player) =>
-        //{
-        //    var modplayer = player.GetModPlayer<PlayerColliding>();
-        //    if (modplayer.grabTile is not null)
-        //    {
-        //        (modplayer.grabTile as IGrabbable).EndGrab(player);
-        //        modplayer.grabTile = null;
-        //    }
-        //});
-
-        if (!cursor.TryGotoNext(MoveType.Before, ins => ins.MatchLdcI4(0) &&
-            (ins.Next?.MatchStloc(0) ?? false) &&
-            (ins.Next.Next?.MatchLdarg(0) ?? false)))
-        {
-            ILException.Throw("Player_WallslideMovement_NotFound_1");
-        }
         cursor.Emit(OpCodes.Ldarg_0);
         cursor.EmitDelegate((Player player) =>
         {
-            var modplayer = player.GetModPlayer<PlayerColliding>();
-            return modplayer.handler.attachDir.IsH();
+            return player.GetModPlayer<PlayerColliding>().handler.attachType == AttachType.Grab;
         });
-        cursor.Emit(OpCodes.Stloc_0);//flag
+        cursor.Emit(OpCodes.Brtrue, label);
+
+
+        if (!cursor.TryGotoNext(MoveType.After, ins => ins.MatchStloc(0) && ins.Previous.MatchLdcI4(0)))
+        {
+            ILException.Throw("Player_WallslideMovement_NotFound_1");
+        }
+        cursor.MarkLabel(label);
+        cursor.Emit(OpCodes.Ldc_I4_1);
+        cursor.Emit(OpCodes.Stloc_0);
     }
     //private static void Player_ItemCheck_UseMiningTools_ActuallyUseMiningTool(On.Terraria.Player.orig_ItemCheck_UseMiningTools_ActuallyUseMiningTool orig, Player self, Item sItem, out bool canHitWalls, int x, int y)
     //{
