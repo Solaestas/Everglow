@@ -317,11 +317,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                     DrawRope(massPositionsSmooth, RopPosFir[i], Vertices);
                 }
             }
+
+
             if (Vertices.Count > 2)
             {
                 var rasterState = new RasterizerState()
                 {
-                    CullMode = CullMode.None,
+                    CullMode = CullMode.CullClockwiseFace,
                     FillMode = FillMode.Solid
                 };
                 Effect effect = MythContent.QuickEffect("Effects/MeshTest");
@@ -333,6 +335,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 Main.graphics.GraphicsDevice.RasterizerState = rasterState;
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, Vertices.ToArray(), 0, Vertices.Count);
             }
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
         }
         public Vector2[] OldMouseW = new Vector2[30];
         private List<List<Mass>> masses = new List<List<Mass>>();
@@ -389,7 +393,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                     dir = massPositionsSmooth[i] - massPositionsSmooth[i - 1];
                 }
                 
-                Vector2 normalDir = Utils.SafeNormalize(new Vector2(-dir.Y, dir.X),new Vector2(0.01f));
+                Vector2 normalDir = Vector2.Normalize(new Vector2(-dir.Y, dir.X));
                 float width = baseWidth * (count - i - 1) / (float)(count - 1);
                 if (firstInsert)
                 {
