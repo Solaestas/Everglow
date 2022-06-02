@@ -8,13 +8,6 @@ namespace Everglow.Sources.Modules.ZYModule.TileModule.Tiles;
 
 internal abstract class DBlock : DynamicTile, IGrabbable, IHookable
 {
-    internal static readonly Direction[] _AngleToInfo = new Direction[]
-    {
-        Direction.Right,
-        Direction.Bottom,
-        Direction.Left,
-        Direction.Top
-    };
     public Vector2 size;
     public DBlock()
     {
@@ -212,10 +205,5 @@ internal abstract class DBlock : DynamicTile, IGrabbable, IHookable
     {
         hook.position = Vector2.Clamp(hook.position, position, position + size - hook.Size);
         hook.position += this.velocity;
-    }
-
-    public Vector2 GetSafePlayerPosition(Projectile hook)
-    {
-        return hook.position;
     }
 }

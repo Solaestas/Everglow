@@ -10,7 +10,6 @@ namespace Everglow.Sources.Modules.ZYModule.TileModule.Tiles
     internal interface IHookable
     {
         public void SetHookPosition(Projectile hook);
-        public Vector2 GetSafePlayerPosition(Projectile hook);
     }
     internal interface IGrabbable
     {

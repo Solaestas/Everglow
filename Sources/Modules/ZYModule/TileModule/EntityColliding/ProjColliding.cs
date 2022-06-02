@@ -68,8 +68,8 @@ internal class ProjColliding : GlobalProjectile
         }
 
 
-        TileSystem.EnableDTCollision = false;
         orig(self, wetVelocity, out overrideWidth, out overrideHeight);
+        TileSystem.EnableDTCollision = false;
         self.GetGlobalProjectile<ProjColliding>().handler.Update();
         TileSystem.EnableDTCollision = true;
     }
@@ -139,7 +139,7 @@ internal class ProjColliding : GlobalProjectile
                             hookable.SetHookPosition(self);
                             if (self.type == 935 && self.alpha == 0 && Main.myPlayer == self.owner)
                             {
-                                player.DoQueenSlimeHookTeleport(hookable.GetSafePlayerPosition(self));
+                                player.DoQueenSlimeHookTeleport(self.position);
                                 NetMessage.SendData(MessageID.PlayerControls, -1, -1, null, self.owner);
                             }
                             callFromHook.Add(self);

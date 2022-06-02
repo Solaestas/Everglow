@@ -152,7 +152,8 @@
                 position = value - size / 2;
             }
         }
-
+        public Edge[] Edges => new Edge[4] { new Edge(TopLeft, TopRight), new Edge(TopRight, BottomRight), 
+                new Edge(BottomRight, BottomLeft), new Edge(BottomLeft, TopLeft) };
         public AABB(Vector2 position, Vector2 size)
         {
             this.position = position;

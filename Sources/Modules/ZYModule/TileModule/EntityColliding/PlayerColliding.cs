@@ -4,7 +4,7 @@ using Everglow.Sources.Modules.ZYModule.TileModule.Tiles;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using Terraria.DataStructures;
-
+using Everglow.Sources.Modules.ZYModule.Commons.Core.Collide;
 namespace Everglow.Sources.Modules.ZYModule.TileModule.EntityColliding;
 internal class PlayerHandler : EntityHandler<Player>
 {
@@ -16,6 +16,7 @@ internal class PlayerHandler : EntityHandler<Player>
             Entity.position += new Vector2(0, Entity.gfxOffY);
             Entity.gfxOffY = 0;
         }
+
         base.Update();
     }
     public override bool CanAttach()
@@ -92,7 +93,6 @@ internal class PlayerColliding : ModPlayer
             orig(self, fallThrough, ignorePlats);
             return;
         }
-
         TileSystem.EnableDTCollision = false;
         orig(self, fallThrough, ignorePlats);
         self.GetModPlayer<PlayerColliding>().handler.Update();

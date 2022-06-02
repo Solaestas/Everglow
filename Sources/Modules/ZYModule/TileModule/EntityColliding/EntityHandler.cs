@@ -40,6 +40,11 @@ internal abstract class EntityHandler<TEntity> : EntityHandler where TEntity : E
     public virtual void OnLeave() { }
     public virtual void Update()
     {
+        if(position == Vector2.Zero)
+        {
+            position = entity.position;
+            return;
+        }
 
         Vector2 move = entity.position - position + (attachTile?.Velocity ?? Vector2.Zero);
         velocity = entity.velocity + (attachTile?.Velocity ?? Vector2.Zero);

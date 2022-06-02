@@ -57,7 +57,7 @@ public static class CollisionUtils
     {
         float factor = (b.end - b.begin).Cross(a.begin - b.begin);
         float u = (a.end - a.begin).Cross(a.begin - b.begin);
-        float denom = (b.end - b.begin).Cross(a.end - a.begin);
+        float denom = Math.Abs((b.end - b.begin).Cross(a.end - a.begin));
         if (denom < Epsilon)
         {
             return false;
@@ -75,7 +75,7 @@ public static class CollisionUtils
     {
         factor = (b.end - b.begin).Cross(a.begin - b.begin);
         float u = (a.end - a.begin).Cross(a.begin - b.begin);
-        float denom = (b.end - b.begin).Cross(a.end - a.begin);
+        float denom = Math.Abs((b.end - b.begin).Cross(a.end - a.begin));
         if (denom < Epsilon)
         {
             return false;
@@ -110,6 +110,19 @@ public static class CollisionUtils
         if (line.Intersect(new Edge(aabb.TopLeft, aabb.BottomRight)) || line.Intersect(new Edge(aabb.TopRight, aabb.BottomLeft)))
         {
             return true;
+        }
+        return false;
+    }
+    public static bool Intersect(this Edge edge, AABB aabb, out Vector2 point)
+    {
+        point = Vector2.Zero;
+        foreach(var e in aabb.Edges)
+        {
+            if(e.Intersect(edge, out var factor))
+            {
+                point = e.begin + factor * e.BeginToEnd;
+                return true;
+            }
         }
         return false;
     }
@@ -150,8 +163,8 @@ public static class CollisionUtils
                     dir = (flipX, flipY) switch
                     {
                         (true, true) => Direction.TopLeft,
-                        (true, false) => Direction.TopRight,
-                        (false, true) => Direction.BottomLeft,
+                        (false, true) => Direction.TopRight,
+                        (true, false) => Direction.BottomLeft,
                         (false, false) => Direction.BottomRight
                     };
                 }
@@ -221,28 +234,11 @@ public static class CollisionUtils
         }
         return new AABB(min, max - min);
     }
-    //public static CRectangle LineToAABB(Vector2 start, Vector2 end)
-    //{
-    //    Vector2 min = Vector2.Min(start, end);
-    //    Vector2 max = Vector2.Max(start, end);
-    //    return new CRectangle(min, Vector2.Max(Vector2.One, max - min));
-    //}
+    public static bool Equal(float a, float b) => Math.Abs(a - b) <= Epsilon;
 
-    public static Vector2 Normalize_S(this Vector2 vector)
-    {
-        if (vector == Vector2.Zero)
-        {
-            return Vector2.UnitX;
-        }
-        else
-        {
-            return Vector2.Normalize(vector);
-        }
-    }
-    public static Vector2 NormalLine(this Vector2 vec) => new Vector2(-vec.Y, vec.X).Normalize_S();
     public static float Projection(Vector2 dir, Vector2 vec)
     {
-        return Vector2.Dot(dir.Normalize_S(), vec);
+        return Vector2.Dot(dir.NormalizeSafe(), vec);
     }
     public static List<float> Projection(Vector2 dir, params Vector2[] vec)
     {

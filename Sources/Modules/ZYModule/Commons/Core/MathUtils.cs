@@ -24,7 +24,7 @@ namespace Everglow.Sources.Modules.ZYModule.Commons.Core
             {
                 return target;
             }
-            return val + (target - val).Normalize_S() * maxMove;
+            return val + (target - val).NormalizeSafe() * maxMove;
         }
         /// <summary>
         /// :[)
@@ -147,6 +147,7 @@ namespace Everglow.Sources.Modules.ZYModule.Commons.Core
                 return new Vector2(vector.X / len, vector.Y / len);
             }
         }
+        public static Vector2 NormalLine(this Vector2 vec) => new Vector2(-vec.Y, vec.X).NormalizeSafe();
         public static float ToRotationSafe(this Vector2 vector)
         {
             float len = Sqrt(vector.X * vector.X + vector.Y * vector.Y);

@@ -10,7 +10,8 @@ namespace Everglow.Sources.Modules.ZYModule.Commons.Function;
 internal enum TextureType
 {
     Noise,
-    WhitePixel
+    WhitePixel,
+    Circle
 }
 internal enum EffectType
 {
