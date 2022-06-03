@@ -30,7 +30,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
             Projectile.scale = 1;
         }
         //这种贴图每个Proj都是一样的也不会变化，干脆直接readonly然后在SSD里Request，然后所有Proj共用一个数组
-        private readonly Asset<Texture2D>[] BLantern = new Asset<Texture2D>[16];
+        private Asset<Texture2D>[] BLantern = new Asset<Texture2D>[16];
         //这个bool数组每个Proj不同，所以要到Clone里new，但是直接构造是不必要的，因为不是clone获得的那个实例不会调用AI与Draw
         private bool[] NoPedal;
         //值类型就不必在clone里重新初始化了
@@ -89,6 +89,18 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
             PearlOmega *= 0.95f;
             PearlRot += PearlOmega;
             Color color = Lighting.GetColor((int)(Projectile.Center.X / 16d), (int)(Projectile.Center.Y / 16d));
+            if (NoPedal == null)
+            {
+                NoPedal = new bool[16];
+            }
+            if(BLantern == null)
+            {
+                BLantern = new Asset<Texture2D>[16];
+                for (int x = -1; x < 15; x++)
+                {
+                    BLantern[x + 1] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/LanternMoon/Projectiles/BloodLampFrame/BloodLamp_" + x.ToString());
+                }
+            }
             for (int x = 0; x < 16; x++)
             {
                 float Rot = Projectile.rotation;
@@ -122,7 +134,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
         private IEnumerator<ICoroutineInstruction> Task()
         {
             SoundEngine.PlaySound(new SoundStyle(
-                "Sources/Modules/MythModule/LanternMoon/Sounds/PowerBomb"), Projectile.Center);
+                "Everglow/Sources/Modules/MythModule/LanternMoon/Sounds/PowerBomb"), Projectile.Center);
             _coroutineManager.StartCoroutine(new Coroutine(ControlVolume()));
             _coroutineManager.StartCoroutine(new Coroutine(JitterFlash()));
             yield return new WaitForFrames(170);
@@ -193,7 +205,5 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
                 yield return new SkipThisFrame();
             }
         }
-
-
     }
 }

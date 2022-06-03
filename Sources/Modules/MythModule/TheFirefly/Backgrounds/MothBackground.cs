@@ -384,7 +384,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
 
             for (int i = 0; i < RopPosFir.Count; i++)
             {
-
                 Vector2 TexLT = GetRopeMove(new Vector2(800, 400), 0.33f);
                 foreach (var massJ in masses[i])
                 {
