@@ -372,13 +372,23 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             Vector2 TexLT = sampleCenter - screenSize / 2f + deltaPos;
             return TexLT;
         }
+
+        /// <summary>
+        /// 将当前绳子的顶点Mesh数据传入vertices里
+        /// </summary>
+        /// <param name="massPositionsSmooth"></param>
+        /// <param name="offset"></param>
+        /// <param name="vertices"></param>
         private void DrawRope(List<Vector2> massPositionsSmooth, Vector2 offset, List<VertexBase.Vertex2D> vertices)
         {
+            if (vertices.Count != 0)
+            {
+                // 复制一个顶点，构造上一个Rope Mesh的退化三角形
+                vertices.Add(vertices.Last());
+            }
             int count = massPositionsSmooth.Count;
             float baseWidth = 4;
-            bool firstInsert = true;
-            Vector2 TexLT = GetRopeMove(new Vector2(800, 400), 0.33f);
-            offset -= TexLT;
+            offset -= GetRopeMove(new Vector2(800, 400), 0.33f);
             // count 必须大于1
             for (int i = 0; i < count; i++)
             {
@@ -394,18 +404,18 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 }
                 
                 Vector2 normalDir = Vector2.Normalize(new Vector2(-dir.Y, dir.X));
-                float width = baseWidth * (count - i - 1) / (float)(count - 1);
-                if (firstInsert)
+                float width = baseWidth * (count - i - 1) / (count - 1);
+
+                var vertex1 = new VertexBase.Vertex2D(massPositionsSmooth[i] + offset + normalDir * width, new Color(11, 9, 25), Vector3.Zero);
+                if (i == 0)
                 {
-                    // 复制一个顶点，构造一个退化三角形
-                    vertices.Add(new VertexBase.Vertex2D(massPositionsSmooth[i] + offset + normalDir * width, new Color(11, 9, 25), Vector3.Zero));
-                    firstInsert = false;
+                    // 再增加一个退化三角形顶点
+                    vertices.Add(vertex1);
                 }
-                vertices.Add(new VertexBase.Vertex2D(massPositionsSmooth[i] + offset + normalDir * width, new Color(11, 9, 25), Vector3.Zero));//
+                vertices.Add(vertex1);
                 vertices.Add(new VertexBase.Vertex2D(massPositionsSmooth[i] + offset - normalDir * width, new Color(11, 9, 25), Vector3.Zero));
             }
-            // 复制一个顶点，构造一个退化三角形
-            vertices.Add(vertices.Last());
+
         }
     }
 }
