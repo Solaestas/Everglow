@@ -64,7 +64,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         {
             MothLand mothLand = ModContent.GetInstance<MothLand>();
             Vector2 BiomeCenter = new Vector2(mothLand.FireflyCenterX * 16, (mothLand.FireflyCenterY - 20) * 16);//读取地形信息
-            Vector2 v0 = Main.LocalPlayer.Center - BiomeCenter;//距离中心
+            Vector2 v0 = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f - BiomeCenter;//距离中心Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f
             v0.Y *= 1.35f;
             v0.X *= 0.9f;//近似于椭圆形，所以xy坐标变换
             return (v0.Length() < 2000);
@@ -153,15 +153,15 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             Vector2 sampleTopleft = Vector2.Zero;
             Vector2 sampleCenter = sampleTopleft + (texSize / 2);
             Vector2 screenSize = new Vector2(Main.screenWidth, Main.screenHeight);
-            Player localP = Main.LocalPlayer;
-            Vector2 deltaPos = localP.Center - new Vector2((mothLand.FireflyCenterX + 34) * 16f, mothLand.FireflyCenterY * 16f);
+            Vector2 DCen = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
+            Vector2 deltaPos = DCen - new Vector2((mothLand.FireflyCenterX + 34) * 16f, mothLand.FireflyCenterY * 16f);
             deltaPos *= MoveStep;
             Vector2 TexLT = sampleCenter - screenSize / 2f + deltaPos;
             if (GPos.Count <= 1)
             {
                 GetGlowPos("GlosPos.bmp");
             }
-            float deltaY = localP.Center.Y - (mothLand.FireflyCenterY - 90) * 16f;
+            float deltaY = DCen.Y - (mothLand.FireflyCenterY - 90) * 16f;
             deltaY *= MoveStep * 0.4f;
             if (GPos.Count > 0)
             {
@@ -201,15 +201,15 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             Vector2 sampleTopleft = Vector2.Zero;
             Vector2 sampleCenter = sampleTopleft + (texSize / 2);
             Vector2 screenSize = new Vector2(Main.screenWidth, Main.screenHeight);
-            Player localP = Main.LocalPlayer;
-            Vector2 deltaPos = localP.Center - new Vector2((mothLand.FireflyCenterX + 34) * 16f, mothLand.FireflyCenterY * 16f);
+            Vector2 DCen = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
+            Vector2 deltaPos = DCen - new Vector2((mothLand.FireflyCenterX + 34) * 16f, mothLand.FireflyCenterY * 16f);
             deltaPos *= MoveStep;
             Vector2 TexLT = sampleCenter - screenSize / 2f + deltaPos;
             if (GPosSec.Count <= 1)
             {
                 GetGlowPosSec("GlowHangingMiddle.bmp");
             }
-            float deltaY = localP.Center.Y - (mothLand.FireflyCenterY - 90) * 16f;
+            float deltaY = DCen.Y - (mothLand.FireflyCenterY - 90) * 16f;
             deltaY *= MoveStep * 0.4f;
             if (GPosSec.Count > 0)
             {
@@ -242,8 +242,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             Vector2 sampleTopleft = Vector2.Zero;
             Vector2 sampleCenter = sampleTopleft + (texSize / 2);
             Vector2 screenSize = new Vector2(Main.screenWidth, Main.screenHeight);
-            Player localP = Main.LocalPlayer;
-            Vector2 deltaPos = localP.Center - new Vector2((mothLand.FireflyCenterX + 34) * 16f, mothLand.FireflyCenterY * 16f);
+            Vector2 DCen = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
+            Vector2 deltaPos = DCen - new Vector2((mothLand.FireflyCenterX + 34) * 16f, mothLand.FireflyCenterY * 16f);
             deltaPos *= MoveStep;
             Vector2 Cor = GetZoomByScreenSize();
             int RX = (int)(sampleCenter.X - screenSize.X / 2f + deltaPos.X);
@@ -291,11 +291,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             Vector2 ScreenCen = new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
             Vector2 DSize = GetZoomByScreenSize();
             Vector2 ZoomDelta = GetZoomDelta();
-            Main.spriteBatch.Draw(texSky, ScreenCen + ZoomDelta / 2f, GetDrawRec(texSky.Size(), 0, true), Color.White,0, 
+            Main.spriteBatch.Draw(texSky, ScreenCen + ZoomDelta * 0.75f, GetDrawRec(texSky.Size(), 0, true), Color.White,0, 
                 ScreenCen, DSize, SpriteEffects.None,0);
-            Main.spriteBatch.Draw(texFar, ScreenCen + ZoomDelta / 2f, GetDrawRec(texSky.Size(), 0.03f, true), Color.White, 0,
+            Main.spriteBatch.Draw(texFar, ScreenCen + ZoomDelta * 0.75f, GetDrawRec(texSky.Size(), 0.03f, true), Color.White, 0,
                 ScreenCen, DSize, SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(texMiddle, ScreenCen + ZoomDelta / 2f, GetDrawRec(texSky.Size(), 0.17f, true), Color.White, 0,
+            Main.spriteBatch.Draw(texMiddle, ScreenCen + ZoomDelta * 0.75f, GetDrawRec(texSky.Size(), 0.17f, true), Color.White, 0,
                 ScreenCen, DSize, SpriteEffects.None, 0);
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
@@ -363,8 +363,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 };
                 Effect effect = MythContent.QuickEffect("Effects/MeshTest");
                 var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-                var model = Matrix.CreateTranslation(new Vector3(0, 0, 0)) * Main.GameViewMatrix.TransformationMatrix;
-                effect.Parameters["uTransform"].SetValue(model * projection);
+                effect.Parameters["uTransform"].SetValue(projection);
                 effect.CurrentTechnique.Passes[0].Apply();
                 Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("TheFirefly/Backgrounds/Dark");
                 Main.graphics.GraphicsDevice.RasterizerState = rasterState;
@@ -424,12 +423,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         }
         private Vector2 GetRopeMove(Vector2 Size, float move)
         {
-            Player localP = Main.LocalPlayer;
+            Vector2 DCen = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
             MothLand mothLand = ModContent.GetInstance<MothLand>();
             Vector2 sampleTopleft = Vector2.Zero;
             Vector2 sampleCenter = sampleTopleft + Size;
             Vector2 screenSize = new Vector2(Main.screenWidth, Main.screenHeight);
-            Vector2 deltaPos = localP.Center - new Vector2(mothLand.FireflyCenterX * 16f, mothLand.FireflyCenterY * 16f);
+            Vector2 deltaPos = DCen - new Vector2(mothLand.FireflyCenterX * 16f, mothLand.FireflyCenterY * 16f);
             deltaPos *= move;
             Vector2 TexLT = sampleCenter - screenSize / 2f + deltaPos;
             return TexLT;
