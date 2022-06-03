@@ -49,7 +49,7 @@ internal class DCircle : DynamicTile
     {
     }
 
-    public float LinearVelocitiy => angularVelocity * circle.radius;
+    public float LinearVelocitiy => angularVelocity.Angle * circle.radius;
     public override Collider Collider => new CCircle(circle);
     public override void Leave(Entity entity)
     {
@@ -121,7 +121,7 @@ internal class DCircle : DynamicTile
                         float leftRot = (target - aabb.position).Length() / circle.radius;
                         rot -= leftRot * sign;
                         velocity = -rot.YAxis * Math.Abs(velocity.Length()) * sign;
-                        Debug.Assert(CollisionUtils.Equal(t.Length(), velocity.Length()));
+                        Debug.Assert(CollisionUtils.FloatEquals(t.Length(), velocity.Length()));
                         //aabb.position = circle.position + rot.XAxis * circle.radius + rot.YAxis * LinearVelocitiy * lambda;
                         result = Direction.TopLeft;
                         break;
@@ -134,7 +134,7 @@ internal class DCircle : DynamicTile
                         break;
                     case Direction.BottomLeft:
                         rot = (aabb.BottomLeft - circle.position).ToRot();
-                        if(Math.Tan(-MathHelper.PiOver2 - rot) <= miu)
+                        if(Math.Tan(-MathHelper.PiOver2 - rot.Angle) <= miu)
                         {
                             velocity.Y = 0;
                             leftRot = (target.X - aabb.position.X) / circle.radius;
@@ -147,14 +147,14 @@ internal class DCircle : DynamicTile
                         aabb.position += velocity.NormalizeSafe() * Vector2.Dot(velocity, rot.XAxis);
                         velocity = velocity.NormalizeSafe() * Vector2.Dot(velocity, rot.YAxis) + this.velocity;
                         aabb.position = circle.position + rot.XAxis * circle.radius + rot.YAxis * LinearVelocitiy * lambda;
-                        result = Math.Tan(-MathHelper.PiOver2 - rot) <= miu ? Direction.Bottom : Direction.BottomLeft;
+                        result = Math.Tan(-MathHelper.PiOver2 - rot.Angle) <= miu ? Direction.Bottom : Direction.BottomLeft;
                         break;
                     case Direction.BottomRight:
                         rot = (aabb.BottomRight - circle.position).ToRot();
                         aabb.position += velocity.NormalizeSafe() * Vector2.Dot(velocity, rot.XAxis);
                         velocity = velocity.NormalizeSafe() * Vector2.Dot(velocity, rot.YAxis) + this.velocity;
                         aabb.position = circle.position + rot.XAxis * circle.radius + rot.YAxis * LinearVelocitiy * lambda;
-                        result = Math.Tan(MathHelper.PiOver2 + rot) <= miu ? Direction.Bottom : Direction.BottomRight;
+                        result = Math.Tan(MathHelper.PiOver2 + rot.Angle) <= miu ? Direction.Bottom : Direction.BottomRight;
                         break;
                     default:
                         break;
@@ -180,7 +180,7 @@ internal class DCircle : DynamicTile
             circle.position - Main.screenPosition,
             null,
             Color.White,
-            rotation,
+            rotation.Angle,
             new Vector2(64, 64),
             circle.radius / 64f,
             SpriteEffects.None, 0);

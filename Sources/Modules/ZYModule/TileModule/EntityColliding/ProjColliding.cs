@@ -17,14 +17,14 @@ internal class ProjHandler : EntityHandler<Projectile>
             Entity.Kill();
         }
     }
-    public override void Update()
+    public override void Update(bool ignorePlats = false)
     {
         if (attachTile is not null)
         {
             Entity.position += new Vector2(0, Entity.gfxOffY);
             Entity.gfxOffY = 0;
         }
-        base.Update();
+        base.Update(ignorePlats);
     }
     public override void OnAttach()
     {
@@ -70,7 +70,7 @@ internal class ProjColliding : GlobalProjectile
 
         orig(self, wetVelocity, out overrideWidth, out overrideHeight);
         TileSystem.EnableDTCollision = false;
-        self.GetGlobalProjectile<ProjColliding>().handler.Update();
+        self.GetGlobalProjectile<ProjColliding>().handler.Update(true);
         TileSystem.EnableDTCollision = true;
     }
     private static void Projectile_AI_007_GrapplingHooks_On(On.Terraria.Projectile.orig_AI_007_GrapplingHooks orig, Projectile self)

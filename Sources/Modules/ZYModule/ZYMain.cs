@@ -4,7 +4,6 @@ using Everglow.Sources.Modules.ZYModule.Commons;
 using Everglow.Sources.Modules.ZYModule.Commons.Core;
 using Everglow.Sources.Modules.ZYModule.Commons.Function;
 using Everglow.Sources.Modules.ZYModule.ZYPacket;
-
 namespace Everglow.Sources.Modules.ZYModule
 {
     internal class ZYMain : IModule

@@ -9,7 +9,7 @@ namespace Everglow.Sources.Modules.ZYModule.TileModule.EntityColliding;
 internal class PlayerHandler : EntityHandler<Player>
 {
     public PlayerHandler(Player entity) : base(entity) { }
-    public override void Update()
+    public override void Update(bool ignorePlats = false)
     {
         if (attachTile is not null)
         {
@@ -17,7 +17,8 @@ internal class PlayerHandler : EntityHandler<Player>
             Entity.gfxOffY = 0;
         }
 
-        base.Update();
+        base.Update(ignorePlats);
+
     }
     public override bool CanAttach()
     {
@@ -47,7 +48,8 @@ internal class PlayerHandler : EntityHandler<Player>
             var player = Entity;
             player.slideDir = (int)player.GetControlDirectionH().ToVector2().X;
             if (player.slideDir == 0 || player.spikedBoots <= 0 || player.mount.Active ||
-                ((!player.controlLeft || player.slideDir != -1) && (!player.controlRight || player.slideDir != 1)))
+                ((!player.controlLeft || player.slideDir != -1 || dir != Direction.Left) && 
+                (!player.controlRight || player.slideDir != 1 || dir != Direction.Right)))
             {
                 return;
             }
@@ -95,7 +97,7 @@ internal class PlayerColliding : ModPlayer
         }
         TileSystem.EnableDTCollision = false;
         orig(self, fallThrough, ignorePlats);
-        self.GetModPlayer<PlayerColliding>().handler.Update();
+        self.GetModPlayer<PlayerColliding>().handler.Update(ignorePlats);
         TileSystem.EnableDTCollision = true;
     }
     private static void Player_WaterCollision(On.Terraria.Player.orig_WaterCollision orig, Player self, bool fallThrough, bool ignorePlats)
@@ -108,7 +110,7 @@ internal class PlayerColliding : ModPlayer
 
         TileSystem.EnableDTCollision = false;
         orig(self, fallThrough, ignorePlats);
-        self.GetModPlayer<PlayerColliding>().handler.Update();
+        self.GetModPlayer<PlayerColliding>().handler.Update(ignorePlats);
         TileSystem.EnableDTCollision = true;
     }
     private static void Player_HoneyCollision(On.Terraria.Player.orig_HoneyCollision orig, Player self, bool fallThrough, bool ignorePlats)
@@ -121,7 +123,7 @@ internal class PlayerColliding : ModPlayer
 
         TileSystem.EnableDTCollision = false;
         orig(self, fallThrough, ignorePlats);
-        self.GetModPlayer<PlayerColliding>().handler.Update();
+        self.GetModPlayer<PlayerColliding>().handler.Update(ignorePlats);
         TileSystem.EnableDTCollision = true;
     }
     private static bool Player_CanFitSpace(On.Terraria.Player.orig_CanFitSpace orig, Player self, int heightBoost)

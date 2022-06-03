@@ -10,14 +10,14 @@ internal class NPCHandler : EntityHandler<NPC>
     {
         Entity.velocity.Y = 0;
     }
-    public override void Update()
+    public override void Update(bool ignorePlats = false)
     {
         if (attachTile is not null)
         {
             Entity.position += new Vector2(0, Entity.gfxOffY);
             Entity.gfxOffY = 0;
         }
-        base.Update();
+        base.Update(ignorePlats);
     }
     public override void OnCollision(DynamicTile tile, Direction dir, ref DynamicTile newAttach)
     {
@@ -54,13 +54,8 @@ internal class NPCColliding : GlobalNPC
     private static void NPC_ApplyTileCollision(On.Terraria.NPC.orig_ApplyTileCollision orig, NPC self, bool fall, Vector2 cPosition, int cWidth, int cHeight)
     {
         TileSystem.EnableDTCollision = false;
+        self.GetGlobalNPC<NPCColliding>().fall = fall;
         orig(self, fall, cPosition, cWidth, cHeight);
-        //var modnpc = self.GetGlobalNPC<NPCColliding>();
-        //modnpc.fall = fall;
-        //if (modnpc.standTile is not null)
-        //{
-        //    self.velocity.Y = 0;
-        //}
         TileSystem.EnableDTCollision = true;
     }
     private static void NPC_Collision_MoveWhileWet(On.Terraria.NPC.orig_Collision_MoveWhileWet orig, NPC self, Vector2 oldDryVelocity, float Slowdown)
@@ -74,7 +69,8 @@ internal class NPCColliding : GlobalNPC
         
         TileSystem.EnableDTCollision = false;
         orig(self, oldDryVelocity, Slowdown);
-        self.GetGlobalNPC<NPCColliding>().handler.Update();
+        var npc = self.GetGlobalNPC<NPCColliding>();
+        npc.handler.Update(npc.fall);
         TileSystem.EnableDTCollision = true;
     }
     private static void NPC_Collision_MoveWhileDry(On.Terraria.NPC.orig_Collision_MoveWhileDry orig, NPC self)
@@ -88,7 +84,8 @@ internal class NPCColliding : GlobalNPC
         
         TileSystem.EnableDTCollision = false;
         orig(self);
-        self.GetGlobalNPC<NPCColliding>().handler.Update();
+        var npc = self.GetGlobalNPC<NPCColliding>();
+        npc.handler.Update(npc.fall);
         TileSystem.EnableDTCollision = true;
 
     }

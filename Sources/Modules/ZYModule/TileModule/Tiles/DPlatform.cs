@@ -1,32 +1,53 @@
-﻿using Everglow.Sources.Modules.ZYModule.Commons.Core;
+﻿#define DEBUG
+using Everglow.Sources.Modules.ZYModule.Commons.Core;
 using Everglow.Sources.Modules.ZYModule.Commons.Core.Collide;
 using Everglow.Sources.Modules.ZYModule.Commons.Core.DataStructures;
 using Everglow.Sources.Modules.ZYModule.Commons.Function;
-using Microsoft.Xna.Framework;
 
 namespace Everglow.Sources.Modules.ZYModule.TileModule.Tiles;
 
 internal abstract class DPlatform : DynamicTile, IHookable
 {
+    private readonly Dictionary<(Direction, Direction), Direction> hitEdges = new Dictionary<(Direction, Direction), Direction>()
+    {
+        [(Direction.Top, Direction.Right)] = Direction.TopRight,
+        [(Direction.Right, Direction.Bottom)] = Direction.BottomRight,
+        [(Direction.Bottom, Direction.Left)] = Direction.BottomLeft,
+        [(Direction.Top, Direction.Left)] = Direction.TopLeft,
+        [(Direction.Top, Direction.Bottom)] = Direction.Inside,
+        [(Direction.Right, Direction.Left)] = Direction.Inside,
+        [(Direction.Top, Direction.None)] = Direction.Top,
+        [(Direction.Right, Direction.None)] = Direction.Right,
+        [(Direction.Bottom, Direction.None)] = Direction.Bottom,
+        [(Direction.Left, Direction.None)] = Direction.Left,
+    };
     public DPlatform()
     {
 
     }
-    public DPlatform(Vector2 pos, Vector2 vel, float width, Rotation rot)
+    protected DPlatform(Vector2 position, Vector2 velocity, float width)
     {
-        position = pos;
+        this.position = position;
+        this.velocity = velocity;
         this.width = width;
-        rotation = rot;
-        velocity = vel;
     }
-    /// <summary>
-    /// 角度，面朝右为0
-    /// </summary>
-    public Rotation rotation;
+    protected DPlatform(Vector2 position, Vector2 velocity, float width, Rotation rotation, float miu)
+    {
+        this.position = position;
+        this.velocity = velocity;
+        this.width = width;
+        this.rotation = rotation;
+        this.miu = miu;
+    }
+
     /// <summary>
     /// 宽度
     /// </summary>
     public float width;
+    /// <summary>
+    /// 角度，面朝右为0
+    /// </summary>
+    public Rotation rotation;
     /// <summary>
     /// 摩擦系数
     /// </summary>
@@ -40,53 +61,96 @@ internal abstract class DPlatform : DynamicTile, IHookable
             return Direction.None;
         }
 
-        AABB smallBox = aabb;
-        smallBox.TopLeft += Vector2.One * 2;
-        smallBox.BottomRight -= Vector2.One * 2;
+        var smallBox = aabb;
+        smallBox.TopLeft += Vector2.One;
+        smallBox.BottomRight -= Vector2.One;
         if(smallBox.Intersect(Edge))
         {
             return Direction.None;
         }
-
+        bool onGround = velocity.Y == 0;
         Vector2 rvel = move - this.velocity;
         Vector2 pos0 = aabb.position;
         Vector2 target = aabb.position + rvel;
         Direction result = Direction.None;
-        if(Vector2.Dot(rotation.XAxis,rvel) > 0)
+        if (Vector2.Dot(rotation.XAxis, aabb.Center - position) < 0)
         {
             return Direction.None;
         }
+        aabb.position.Y = MathUtils.Approach(aabb.position.Y, target.Y, 1);
+        Test.TestLog(velocity.Y);
+
         do
         {
             aabb.position = MathUtils.Approach(aabb.position, target, 1);
-            if(Edge.Intersect(aabb, out var point))
+            if (Edge.Intersect(aabb, out var directions))
             {
-                Vector2 offset = Vector2.Dot(point - position, rotation.YAxis) * rotation.YAxis + position - point;
-                aabb.position += Vector2.Dot(target - aabb.position, rotation.YAxis) * rotation.YAxis + offset;
-                float angle = rotation.Angle + MathHelper.PiOver2;
-                int sign = Math.Sign(angle);
-                if (Math.Tan(sign * angle) <= miu)
+                result = hitEdges[directions.Tuple];
+                if (result == Direction.Inside)
                 {
-                    result = Direction.Bottom;
+                    if (-MathHelper.PiOver4 * 3 < rotation.Angle && rotation.Angle <= -MathHelper.PiOver4 ||
+                        (MathHelper.PiOver4 < rotation.Angle && rotation.Angle <= MathHelper.PiOver4 * 3))
+                    {
+                        result = aabb.Center.Y > position.Y ? Direction.Top : Direction.Right;
+                    }
+                    else
+                    {
+                        result = aabb.Center.X > position.X ? Direction.Left : Direction.Right;
+                    }
+                }
+                if(result == Direction.Bottom)
+                {
+                    float min = Math.Min(Edge.begin.Y, Edge.end.Y);
+                    aabb.position.Y = min - aabb.Height;
+                    aabb.position.X = target.X;
+                    velocity.Y = this.velocity.Y;
+                }
+                else if(result == Direction.Top)
+                {
+                    float max = Math.Max(Edge.begin.Y, Edge.end.Y);
+                    aabb.position.Y = max;
+                    aabb.position.X = target.X;
+                    velocity.Y = this.velocity.Y;
+                    velocity.Y = onGround && this.velocity.Y == 0 ?
+                        Quick.AirSpeed :
+                        this.velocity.Y;
+                }
+                else if(result == Direction.Right)
+                {
+                    float min = Math.Min(Edge.begin.X, Edge.end.X);
+                    aabb.position.X = min - aabb.Width;
+                    aabb.position.Y = target.Y;
+                    velocity.X = this.velocity.X;
+                }
+                else if(result == Direction.Left)
+                {
+                    float max = Math.Max(Edge.begin.X, Edge.end.X);
+                    aabb.position.X = max;
+                    aabb.position.Y = target.Y;
+                    velocity.X = this.velocity.X;
+                }
+                else if (Math.Tan(Math.Abs(rotation.Angle + MathHelper.PiOver2)) <= miu)
+                {
+                    Direction h = result & (Direction.Right | Direction.Left);
+                    result = result & (~Direction.Right) & (~Direction.Left);
+                    if ((rotation.Angle < 0 && result == Direction.Top) || (rotation.Angle > 0 && result == Direction.Bottom))
+                    {
+                        result = Direction.None;
+                    }
+                    else
+                    {
+                        aabb.position.X = target.X;
+                        aabb.position.Y = (h == Direction.Left ? aabb.Left : aabb.Right) * Edge.K + Edge.B - aabb.Height;
+                    }
                 }
                 else
                 {
-                    result = rotation.Angle switch
-                    {
-                        >= -MathHelper.Pi and < -MathHelper.PiOver2 => Direction.BottomRight,
-                        >= -MathHelper.PiOver2 and < 0 => Direction.BottomLeft,
-                        >= 0 and < MathHelper.PiOver2 => Direction.TopRight,
-                        >= MathHelper.PiOver2 and < MathHelper.Pi => Direction.TopLeft,
-                        _ => throw new NotImplementedException(),
-                    };
                     velocity = Vector2.Dot(velocity, rotation.YAxis) * rotation.YAxis + this.velocity;
                 }
-                
                 move = aabb.position - pos0 + this.velocity;
                 break;
             }
         } while (aabb.position != target);
-
         return result;
     }
     public override void Draw()
@@ -95,15 +159,15 @@ internal abstract class DPlatform : DynamicTile, IHookable
             position - Main.screenPosition,
             new Rectangle(0, 0, 1, (int)width),
             Color.White,
-            rotation,
+            rotation.Angle,
             new Vector2(0, width / 2f), 1,
             SpriteEffects.None, 0);
     }
 
     public void SetHookPosition(Projectile hook)
     {
-        float proj = Vector2.Dot(hook.position - position, rotation.YAxis);
-        hook.position = position + rotation.YAxis * proj;
+        float proj = Vector2.Dot(hook.Center - position, rotation.YAxis);
+        hook.Center = position + rotation.YAxis * proj;
     }
     public override void Leave(Entity entity)
     {
@@ -111,7 +175,7 @@ internal abstract class DPlatform : DynamicTile, IHookable
     }
     public override void Stand(Entity entity, bool newStand)
     {
-        if(newStand)
+        if (newStand)
         {
             entity.velocity -= velocity;
         }

@@ -66,19 +66,19 @@ internal class TileSystem : IModule
     /// <param name="rect"></param>
     /// <param name="velocity"></param>
     /// <returns></returns>
-    public static List<(DynamicTile tile, Direction info)> MoveCollision(EntityHandler handler, Vector2 move, bool fallthrough = false)
+    public static List<(DynamicTile tile, Direction info)> MoveCollision(EntityHandler handler, Vector2 move, bool ignorePlats = false)
     {
         List<(DynamicTile tile, Direction info)> list = new();
         AABB aabb = handler.HitBox;
         foreach (var tile in dynamicTiles)
         {
-            Direction info = tile.MoveCollision(aabb, ref handler.velocity, ref move, fallthrough);
+            Direction info = tile.MoveCollision(aabb, ref handler.velocity, ref move, ignorePlats);
             if (info != Direction.None)
             {
                 list.Add((tile, info));
             }
         }
-        handler.position += Terraria.Collision.TileCollision(handler.position, move, handler.GetEntity().width, handler.GetEntity().height, fallthrough);
+        handler.position += Terraria.Collision.TileCollision(handler.position, move, handler.GetEntity().width, handler.GetEntity().height, ignorePlats);
         return list;
     }
     public static bool MoveCollision(ref AABB aabb, ref Vector2 velocity, bool fallthrough = false)

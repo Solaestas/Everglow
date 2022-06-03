@@ -55,17 +55,21 @@ public static class CollisionUtils
     }
     public static bool Intersect(this Edge a, Edge b)
     {
+        if(!a.ToAABB().Intersect(b.ToAABB()))
+        {
+            return false;
+        }
         float factor = (b.end - b.begin).Cross(a.begin - b.begin);
         float u = (a.end - a.begin).Cross(a.begin - b.begin);
-        float denom = Math.Abs((b.end - b.begin).Cross(a.end - a.begin));
-        if (denom < Epsilon)
+        float denom = (a.end - a.begin).Cross(b.end - b.begin);
+        if (Math.Abs(denom) < Epsilon)
         {
             return false;
         }
 
         factor /= denom;
         u /= denom;
-        if (0 < factor && factor < 1 && 0 < u && u < 1)
+        if (0 <= factor && factor <= 1 && 0 <= u && u <= 1)
         {
             return true;
         }
@@ -73,17 +77,22 @@ public static class CollisionUtils
     }
     public static bool Intersect(this Edge a, Edge b, out float factor)
     {
+        if (!a.ToAABB().Intersect(b.ToAABB()))
+        {
+            factor = 0;
+            return false;
+        }
         factor = (b.end - b.begin).Cross(a.begin - b.begin);
         float u = (a.end - a.begin).Cross(a.begin - b.begin);
-        float denom = Math.Abs((b.end - b.begin).Cross(a.end - a.begin));
-        if (denom < Epsilon)
+        float denom = (b.end - b.begin).Cross(a.end - a.begin);
+        if (Math.Abs(denom) < Epsilon)
         {
             return false;
         }
 
         factor /= denom;
         u /= denom;
-        if (0 < factor && factor < 1 && 0 < u && u < 1)
+        if (0 <= factor && factor <= 1 && 0 <= u && u <= 1)
         {
             return true;
         }
@@ -113,18 +122,49 @@ public static class CollisionUtils
         }
         return false;
     }
-    public static bool Intersect(this Edge edge, AABB aabb, out Vector2 point)
+    public static bool Intersect(this Edge edge, AABB aabb, out Array2<Direction> directions)
     {
-        point = Vector2.Zero;
-        foreach(var e in aabb.Edges)
+        directions = new Array2<Direction>();
+        var it = directions.GetEnumerator();
+        it.MoveNext();
+        bool result = false;
+        if(new Edge(aabb.TopLeft, aabb.TopRight).Intersect(edge))
         {
-            if(e.Intersect(edge, out var factor))
+            it.Current = Direction.Top;
+            if(!it.MoveNext())
             {
-                point = e.begin + factor * e.BeginToEnd;
                 return true;
             }
+            result = true;
         }
-        return false;
+        if (new Edge(aabb.TopRight, aabb.BottomRight).Intersect(edge))
+        {
+            it.Current = Direction.Right;
+            if (!it.MoveNext())
+            {
+                return true;
+            }
+            result = true;
+        }
+        if (new Edge(aabb.BottomRight, aabb.BottomLeft).Intersect(edge))
+        {
+            it.Current = Direction.Bottom;
+            if (!it.MoveNext())
+            {
+                return true;
+            }
+            result = true;
+        }
+        if (new Edge(aabb.BottomLeft, aabb.TopLeft).Intersect(edge))
+        {
+            it.Current = Direction.Left;
+            if (!it.MoveNext())
+            {
+                return true;
+            }
+            result = true;
+        }
+        return result;
     }
     public static bool Intersect(this Circle circle, AABB aabb)
     {
@@ -234,7 +274,7 @@ public static class CollisionUtils
         }
         return new AABB(min, max - min);
     }
-    public static bool Equal(float a, float b) => Math.Abs(a - b) <= Epsilon;
+    public static bool FloatEquals(float a, float b) => Math.Abs(a - b) <= Epsilon;
 
     public static float Projection(Vector2 dir, Vector2 vec)
     {
@@ -276,6 +316,6 @@ public static class CollisionUtils
         }
         return v;
     }
-    internal static CAABB ToCAABB(this Rectangle rectangle) => new CAABB(rectangle.TopLeft(), rectangle.Size());
+    internal static AABB ToAABB(this Rectangle rectangle) => new AABB(rectangle.TopLeft(), rectangle.Size());
 }
 

@@ -56,7 +56,6 @@
         {
             int sign = Math.Sign(from.angle);
             sign = sign == 0 ? 1 : sign;
-
             to *= sign;
             to += to < from * sign - MathHelper.Pi ? MathHelper.TwoPi : 0;
             to *= sign;
@@ -97,8 +96,9 @@
         }
         public static Rotation operator -(Rotation a, Rotation b) => new Rotation(a.angle - b.angle);
         public static Rotation operator -(Rotation rot) => new Rotation(-rot.angle);
-        public static implicit operator float(Rotation rot) => rot.Angle;
-        public static implicit operator Vector2(Rotation rot) => rot.XAxis;
+        public static explicit operator float(Rotation rot) => rot.Angle;
+        public static explicit operator Vector2(Rotation rot) => rot.XAxis;
+        public static implicit operator Rotation(float v) => new Rotation(v);
         #endregion
         #region Compare
         public static bool operator ==(Rotation a, Rotation b) => a.angle == b.angle;
@@ -139,6 +139,7 @@
         {
             return left.CompareTo(right) >= 0;
         }
+
         #endregion
         #region Convert
         public TypeCode GetTypeCode()

@@ -37,7 +37,7 @@ internal class TestItem : ModItem
     }
     public class TestPlat : DPlatform
     {
-        public TestPlat(Vector2 pos, Vector2 vel, float width, Rotation rot) : base(pos, vel, width, rot)
+        public TestPlat(Vector2 position, Vector2 velocity, float width, Rotation rotation, float miu) : base(position, velocity, width, rotation, miu)
         {
         }
     }
@@ -46,7 +46,8 @@ internal class TestItem : ModItem
         //var block = new TestBlock(Main.MouseWorld, Vector2.One * 256);
         //block.Velocity = Vector2.UnitX * -1;
         //TileSystem.AddTile(block);
-        var plat = new TestPlat(Main.MouseWorld, Vector2.Zero, 200, new Rotation(-MathHelper.PiOver2));
+        var plat = new TestPlat(Main.MouseWorld, Vector2.Zero, 200, 0,1);
+        //plat.miu = 1;
         TileSystem.AddTile(plat);
         //var circle = new TestCircle(new Circle(Main.MouseWorld, 256), 1);
         //TileSystem.AddTile(circle);
