@@ -2,6 +2,7 @@
 using Everglow.Sources.Modules.ZYModule.Commons.Core.Collide;
 using Everglow.Sources.Modules.ZYModule.Commons.Core.DataStructures;
 using Everglow.Sources.Modules.ZYModule.Commons.Function;
+using Everglow.Sources.Modules.ZYModule.TileModule.EntityColliding;
 using Terraria.GameContent;
 
 namespace Everglow.Sources.Modules.ZYModule.TileModule.Tiles;
@@ -80,16 +81,17 @@ internal abstract class DBlock : DynamicTile, IGrabbable, IHookable
             return aabb.Top < collider.Top ? Direction.Bottom : Direction.Top;
         }
     }
-    public override void Stand(Entity entity, bool newStand)
+    public override void Stand(EntityHandler handler, bool newStand)
     {
-        if (newStand)
+        handler.extraVelocity = velocity;//记录额外位移
+        if(newStand && handler.attachType == AttachType.Stand)//不让实体滑动，但是写了可以小跳叠速度
         {
-            entity.velocity -= this.velocity / 2;
+            handler.trueVelocity += velocity;
         }
     }
-    public override void Leave(Entity entity)
+    public override void Leave(EntityHandler handler)
     {
-        entity.velocity += this.velocity;
+        
     }
 
     //public override void StandingBegin(Entity entity)

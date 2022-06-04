@@ -54,8 +54,13 @@ internal class NPCColliding : GlobalNPC
     private static void NPC_ApplyTileCollision(On.Terraria.NPC.orig_ApplyTileCollision orig, NPC self, bool fall, Vector2 cPosition, int cWidth, int cHeight)
     {
         TileSystem.EnableDTCollision = false;
-        self.GetGlobalNPC<NPCColliding>().fall = fall;
         orig(self, fall, cPosition, cWidth, cHeight);
+        //var modnpc = self.GetGlobalNPC<NPCColliding>();
+        //modnpc.fall = fall;
+        //if (modnpc.standTile is not null)
+        //{
+        //    self.velocity.Y = 0;
+        //}
         TileSystem.EnableDTCollision = true;
     }
     private static void NPC_Collision_MoveWhileWet(On.Terraria.NPC.orig_Collision_MoveWhileWet orig, NPC self, Vector2 oldDryVelocity, float Slowdown)

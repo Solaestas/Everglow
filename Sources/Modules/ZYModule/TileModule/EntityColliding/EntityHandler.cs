@@ -14,7 +14,8 @@ internal abstract class EntityHandler
 {
     public abstract Entity GetEntity();
     public Vector2 position;
-    public Vector2 velocity;
+    public Vector2 extraVelocity;
+    public Vector2 trueVelocity;
     public DynamicTile attachTile;
     public AttachType attachType;
     public Direction attachDir;
@@ -29,7 +30,7 @@ internal abstract class EntityHandler<TEntity> : EntityHandler where TEntity : E
     {
         this.entity = entity;
         position = entity.position;
-        velocity = entity.velocity;
+        extraVelocity = entity.velocity;
         attachTile = null;
     }
 
@@ -43,11 +44,12 @@ internal abstract class EntityHandler<TEntity> : EntityHandler where TEntity : E
         if(position == Vector2.Zero)
         {
             position = entity.position;
+            extraVelocity = trueVelocity = entity.velocity;
             return;
         }
 
-        Vector2 move = entity.position - position + (attachTile?.Velocity ?? Vector2.Zero);
-        velocity = entity.velocity + (attachTile?.Velocity ?? Vector2.Zero);
+        Vector2 move = entity.position - position + extraVelocity;//计算获得物块推动的强制位移
+        trueVelocity = entity.velocity + extraVelocity;//当前帧实体速度的变化
 
         DynamicTile newAttach = null;
         if (attachTile != null && !attachTile.Active)
@@ -57,38 +59,45 @@ internal abstract class EntityHandler<TEntity> : EntityHandler where TEntity : E
         foreach (var (tile, dir) in TileSystem.MoveCollision(this, move, ignorePlats))
         {
             OnCollision(tile, dir, ref newAttach);
-            if (dir == Direction.Bottom && CanAttach())
+            if (dir == Ground && CanAttach())
             {
                 newAttach = tile;
                 attachType = AttachType.Stand;
                 attachDir = dir;
             }
         }
+
         //处理站在方块上
         if (newAttach == null)
         {
             if (attachTile != null)
             {
-                attachTile.Leave(entity);
+                attachTile.Leave(this);
                 OnLeave();
+                extraVelocity *= 0;
                 attachTile = null;
                 attachType = AttachType.None;
             }
         }
         else if (attachTile != newAttach)
         {
-            attachTile?.Leave(entity);
+            if (attachTile != null)
+            {
+                attachTile.Leave(this);
+                OnLeave();
+            }
+            extraVelocity *= 0;
             attachTile = newAttach;
-            newAttach.Stand(entity, true);
+            newAttach.Stand(this, true);
         }
         else if (attachTile != null && attachTile == newAttach)
         {
-            newAttach.Stand(entity, false);
+            newAttach.Stand(this, false);
         }
 
-        //同步位置和速度
+        //同步位置
         entity.position = position;
-        entity.velocity = velocity - (attachTile?.Velocity ?? Vector2.Zero);
+        entity.velocity = trueVelocity - extraVelocity;
         if (attachTile != null)
         {
             OnAttach();

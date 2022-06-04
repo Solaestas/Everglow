@@ -72,10 +72,11 @@ internal class TileSystem : IModule
         AABB aabb = handler.HitBox;
         foreach (var tile in dynamicTiles)
         {
-            Direction info = tile.MoveCollision(aabb, ref handler.velocity, ref move, ignorePlats);
+            Direction info = tile.MoveCollision(aabb, ref handler.trueVelocity, ref move, ignorePlats);
             if (info != Direction.None)
             {
                 list.Add((tile, info));
+                tile.OnCollision(aabb, info);
             }
         }
         handler.position += Terraria.Collision.TileCollision(handler.position, move, handler.GetEntity().width, handler.GetEntity().height, ignorePlats);

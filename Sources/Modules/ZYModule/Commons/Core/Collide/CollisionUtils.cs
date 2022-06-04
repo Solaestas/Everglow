@@ -263,6 +263,7 @@ public static class CollisionUtils
 
         return point.Distance(edge.begin + v * c1 / c2);
     }
+    public static float Distance(this float a, float b) => Math.Abs(a - b);
     public static AABB Scan(this AABB aabb, Vector2 move)
     {
         Vector2[] vs = new Vector2[4] { aabb.TopLeft, aabb.BottomRight, aabb.TopLeft + move, aabb.BottomRight + move };

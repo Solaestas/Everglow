@@ -2,6 +2,7 @@
 using Everglow.Sources.Modules.ZYModule.Commons.Core.Collide;
 using Everglow.Sources.Modules.ZYModule.Commons.Core.DataStructures;
 using Everglow.Sources.Modules.ZYModule.Commons.Function;
+using Everglow.Sources.Modules.ZYModule.TileModule.EntityColliding;
 
 namespace Everglow.Sources.Modules.ZYModule.TileModule.Tiles;
 
@@ -51,9 +52,9 @@ internal class DCircle : DynamicTile
 
     public float LinearVelocitiy => angularVelocity.Angle * circle.radius;
     public override Collider Collider => new CCircle(circle);
-    public override void Leave(Entity entity)
+    public override void Leave(EntityHandler entity)
     {
-        entity.velocity += velocity;
+        //entity.velocity += velocity;
     }
 
     public override Direction MoveCollision(AABB aabb, ref Vector2 velocity, ref Vector2 move, bool ignorePlats = false)
@@ -166,11 +167,11 @@ internal class DCircle : DynamicTile
         return result;
     }
 
-    public override void Stand(Entity entity, bool newStand)
+    public override void Stand(EntityHandler entity, bool newStand)
     {
         if(newStand)
         {
-            entity.velocity -= this.velocity;
+            entity.extraVelocity -= this.velocity;
         }
     }
 

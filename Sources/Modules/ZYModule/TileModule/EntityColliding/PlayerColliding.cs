@@ -17,7 +17,7 @@ internal class PlayerHandler : EntityHandler<Player>
             Entity.gfxOffY = 0;
         }
 
-        base.Update(ignorePlats);
+        base.Update(ignorePlats || Entity.grapCount > 0);
 
     }
     public override bool CanAttach()
@@ -96,6 +96,8 @@ internal class PlayerColliding : ModPlayer
             return;
         }
         TileSystem.EnableDTCollision = false;
+        var player = self.GetModPlayer<PlayerColliding>();
+        player.handler.position = self.position;//记录位置，否则会把传送当成位移
         orig(self, fallThrough, ignorePlats);
         self.GetModPlayer<PlayerColliding>().handler.Update(ignorePlats);
         TileSystem.EnableDTCollision = true;
