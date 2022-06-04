@@ -10,8 +10,8 @@ namespace Everglow.Sources.Modules.MythModule.Common
         public virtual void Load()
         {
             //SkyManager.Instance["LanternSky"] = new LanternSky();
-            Filters.Scene["RainbowVague"] = new Filter(new MythScreenShaderData(new Ref<Effect>(MythContent.QuickEffect("LanternMoon/Projectiles/RainbowVague")), "Test"), EffectPriority.Medium);
-            Filters.Scene["RainbowVague"].Load();
+            //Filters.Scene["RainbowVague"] = new Filter(new MythScreenShaderData(new Ref<Effect>(MythContent.QuickEffect("LanternMoon/Projectiles/RainbowVague")), "Test"), EffectPriority.Medium);
+            //Filters.Scene["RainbowVague"].Load();
         }
         public virtual void Unload()
         {
