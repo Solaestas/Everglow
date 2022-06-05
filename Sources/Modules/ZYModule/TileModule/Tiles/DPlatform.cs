@@ -1,5 +1,4 @@
-﻿#define DEBUG
-using Everglow.Sources.Modules.ZYModule.Commons.Core;
+﻿using Everglow.Sources.Modules.ZYModule.Commons.Core;
 using Everglow.Sources.Modules.ZYModule.Commons.Core.Collide;
 using Everglow.Sources.Modules.ZYModule.Commons.Core.DataStructures;
 using Everglow.Sources.Modules.ZYModule.Commons.Function;
@@ -65,6 +64,7 @@ internal abstract class DPlatform : DynamicTile, IHookable
     public override Collider Collider => new CEdge(Edge);
     public override Direction MoveCollision(AABB aabb, ref Vector2 velocity, ref Vector2 move, bool ignorePlats = false)
     {
+        Debug.Assert(false);
         if (ignorePlats)
         {
             return Direction.None;
