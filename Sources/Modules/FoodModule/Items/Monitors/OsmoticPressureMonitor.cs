@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.FoodModule.Items
+﻿namespace Everglow.Sources.Modules.FoodModule.Items.Monitors
 {
     public class OsmoticPressureMonitor : ModItem
     {

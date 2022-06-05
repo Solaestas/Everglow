@@ -23,8 +23,8 @@
                 Recipe recipe = Main.recipe[i];
                 if (recipe.TryGetIngredient(ItemID.PDA, out Item ingredient))
                 {
-                    recipe.AddIngredient(ModContent.ItemType<OsmoticPressureMonitor>());
-                    recipe.AddIngredient(ModContent.ItemType<BloodGlucoseMonitor>());
+                    recipe.AddIngredient(ModContent.ItemType<Monitors.OsmoticPressureMonitor>());
+                    recipe.AddIngredient(ModContent.ItemType<Monitors.BloodGlucoseMonitor>());
                 }
             }
         }
