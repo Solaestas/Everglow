@@ -170,7 +170,7 @@
             return null;
         }
         public void HookLoad()
-        {            
+        {
             On.Terraria.Main.DrawDust += Main_DrawDust;
             On.Terraria.Main.DrawProjectiles += Main_DrawProjectiles;
             On.Terraria.Main.DrawNPCs += Main_DrawNPCs;
@@ -203,11 +203,7 @@
                     {
                         Everglow.Instance.Logger.Error($"{handler.Name} 抛出了异常 {ex}");
                         handler.Enable = false;
-                        if (Function.FeatureFlags.EverglowConfig.DebugMode)
-                        {
-                            //自动暂停的，方便监视
-                            Debug.Assert(false);
-                        }
+                        Debug.Assert(false);
                     }
                 }
             }
