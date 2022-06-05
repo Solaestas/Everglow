@@ -17,7 +17,7 @@ namespace Everglow.Sources.Commons.Core.UI
         /// <summary>
         /// 指示该容器是否启用拖动功能.
         /// </summary>
-        public bool Drop = false;
+        public bool Drag = false;
 
         /// <summary>
         /// 若启用拖动功能, 记录当前容器是否正处于拖动状态.
@@ -28,16 +28,6 @@ namespace Everglow.Sources.Commons.Core.UI
         /// 若启用拖动功能, 在第一帧按下时记录鼠标在容器内的位置.
         /// </summary>
         public Vector2 SelectPoint;
-
-        /// <summary>
-        /// 用于计算输入动作: 确定开始交互与结束交互的容器是否为同一个.
-        /// </summary>
-        private bool _clickRecordSeek = false;
-
-        /// <summary>
-        /// 用于计算输入动作: 确定开始交互与结束交互的容器是否为同一个.
-        /// </summary>
-        private bool _pressedRecordSeek = false;
 
         /// <summary>
         /// 指示该容器是否会被父容器的指针寻找到.
@@ -88,8 +78,7 @@ namespace Everglow.Sources.Commons.Core.UI
         /// </summary>
         public void DoMouseLeftClickEvent( )
         {
-            _clickRecordSeek = true;
-            if ( Drop )
+            if ( Drag )
             {
                 Droping = true;
                 SelectPoint = new Vector2( Mouse.GetState( ).X, Mouse.GetState( ).Y ) - Container.Location;
@@ -112,7 +101,6 @@ namespace Everglow.Sources.Commons.Core.UI
         /// </summary>
         public void DoMouseLeftDownEvent( )
         {
-            _pressedRecordSeek = true;
             OnMouseLeftDown.Invoke( );
         }
         /// <summary>
@@ -131,8 +119,6 @@ namespace Everglow.Sources.Commons.Core.UI
         /// </summary>
         public void DoMouseLeftUpEvent( )
         {
-            _clickRecordSeek = false;
-            _pressedRecordSeek = false;
             OnMouseLeftUp.Invoke( );
         }
         /// <summary>
@@ -166,7 +152,6 @@ namespace Everglow.Sources.Commons.Core.UI
         /// </summary>
         public void DoMouseRightClickEvent( ) 
         {
-            _clickRecordSeek = true;
             OnMouseRightClick.Invoke( ); 
         }
         /// <summary>
@@ -185,7 +170,6 @@ namespace Everglow.Sources.Commons.Core.UI
         /// </summary>
         public void DoMouseRightDownEvent( ) 
         {
-            _pressedRecordSeek = true;
             OnMouseRightDown.Invoke( );
         }
         /// <summary>
@@ -204,8 +188,6 @@ namespace Everglow.Sources.Commons.Core.UI
         /// </summary>
         public void DoMouseRightUpEvent( )
         {
-            _clickRecordSeek = false;
-            _pressedRecordSeek = false;
             OnMouseRightUp.Invoke( );
         }
         /// <summary>
@@ -217,22 +199,22 @@ namespace Everglow.Sources.Commons.Core.UI
 
         public virtual void Update( )
         {
-            if ( Main.mouseLeftRelease && Drop && Droping )
+            if ( Main.mouseLeftRelease && Drag && Droping )
                 Droping = false;
             Interview = Container.GetInterviewState( );
             if ( Interview )
                 DoInterviewEvent( );
             if ( Input.MouseLeftClick )
                 DoMouseLeftClickEvent( );
-            else if ( Input.MouseLeftDown && _clickRecordSeek )
+            else if ( Input.MouseLeftDown && ContainerSystem.LeftClickContainer == Container )
                 DoMouseLeftDownEvent( );
-            else if ( Input.MouseLeftUp && _pressedRecordSeek )
+            else if ( Input.MouseLeftUp && ContainerSystem.LeftClickContainer == Container )
                 DoMouseLeftUpEvent( );
             if ( Input.MouseRightClick )
                 DoMouseRightClickEvent( );
-            else if ( Input.MouseRightDown && _clickRecordSeek )
+            else if ( Input.MouseRightDown && ContainerSystem.RightClickContainer == Container )
                 DoMouseRightDownEvent( );
-            else if ( Input.MouseRightUp && _pressedRecordSeek )
+            else if ( Input.MouseRightUp && ContainerSystem.RightClickContainer == Container )
                 DoMouseRightUpEvent( );
 
         }

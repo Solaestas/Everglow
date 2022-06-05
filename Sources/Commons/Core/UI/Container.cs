@@ -14,7 +14,6 @@ namespace Everglow.Sources.Commons.Core.UI
     /// </summary>
     public class Container
     {
-
         /// <summary>
         /// 指示该容器是否可被 <seealso cref="SeekAt"/> 检索到.
         /// </summary>
@@ -57,8 +56,7 @@ namespace Everglow.Sources.Commons.Core.UI
             List<Container> result = new List<Container>( );
             result.Add( this );
             for ( int count = 0; count < ContainerItems.Count; count++ )
-                for ( int sub = 0; sub < ContainerItems[ count ].GetContainerTree( ).Count; sub++ )
-                    result.Add( ContainerItems[ count ].GetContainerTree( )[ sub ] );
+                result.Concat( ContainerItems[ count ].GetContainerTree( ) );
             return result;
         }
 
@@ -73,9 +71,7 @@ namespace Everglow.Sources.Commons.Core.UI
                 result.Add( this );
             for ( int sub = 0; sub < ContainerItems.Count; sub++ )
                 if ( ContainerItems[ sub ].UpdateEnable )
-                    for ( int count = 0; count < ContainerItems[ sub ].GetActiveContainerTree( ).Count; count++ )
-                        if ( ContainerItems[ sub ].GetActiveContainerTree( )[ count ].UpdateEnable )
-                            result.Add( ContainerItems[ sub ].GetActiveContainerTree( )[ count ] );
+                    result.Concat( ContainerItems[ sub ].GetActiveContainerTree( ) );
             return result;
         }
 
@@ -101,6 +97,21 @@ namespace Everglow.Sources.Commons.Core.UI
         /// 获取该容器的基础矩形.
         /// </summary>
         public Rectangle BaseRectangle => new Rectangle( (int)ContainerElement.LocationX, (int)ContainerElement.LocationY, (int)ContainerElement.Width, (int)ContainerElement.Height );
+
+        /// <summary>
+        /// 指示该容器是否启用剪裁功能.
+        /// </summary>
+        public bool EnableScissor = false;
+
+        /// <summary>
+        /// 指示该容器在启用剪裁功能的情况下是否也启用着色器应用功能.
+        /// </summary>
+        public bool EnableScissorShader = false;
+
+        /// <summary>
+        /// 指示该容器的矩形剪裁范围.
+        /// </summary>
+        public Rectangle ScissorRectangle;
 
         /// <summary>
         /// 表示该控件的移动方法.
@@ -144,7 +155,7 @@ namespace Everglow.Sources.Commons.Core.UI
         /// <returns>若是, 返回 <seealso href="true"/> , 否则返回 <seealso href="false"/>.</returns>
         public virtual bool GetInterviewState( )
         {
-            if ( BaseRectangle.Contains( new Point( Mouse.GetState().X , Mouse.GetState().Y )) )
+            if ( ScissorRectangle.Contains( new Point( Mouse.GetState( ).X, Mouse.GetState( ).Y ) ) && BaseRectangle.Contains( new Point( Mouse.GetState().X , Mouse.GetState().Y )) )
             {
                 Main.LocalPlayer.mouseInterface = true;
                 return true;
@@ -215,15 +226,20 @@ namespace Everglow.Sources.Commons.Core.UI
                 _started = true;
                 UpdateStart( );
             }
-            SetLayerout( ref ContainerElement );
-            ContainerElement.UpdateElement( );
+            if ( Events.Droping && ContainerSystem.LeftClickContainer == this )
+                ContainerElement.SetLocation( new Vector2( Mouse.GetState( ).X, Mouse.GetState( ).Y ) - Events.SelectPoint );
             this?.UpdateSelf( );
             this?.UpdateContainerItems( );
+            ScissorRectangle = BaseRectangle;
+            if ( ParentContainer != null && ParentContainer.CanSeek )
+                ScissorRectangle = ParentContainer.BaseRectangle;
+            if ( ParentContainer != null && ParentContainer.CanSeek && ParentContainer.EnableScissor )
+                EnableScissor = true;
+            SetLayerout( ref ContainerElement );
+            ContainerElement.UpdateElement( );
             MoveFunction?.UpdateLocation( ContainerElement );
             if ( MoveFunction != null )
                 ContainerElement.SetLocation( Location.X + MoveFunction.VelocityX, Location.Y + MoveFunction.VelocityY );
-            if ( Events.Droping )
-                ContainerElement.SetLocation( new Vector2( Mouse.GetState( ).X, Mouse.GetState( ).Y ) - Events.SelectPoint );
             ScaleFunction?.UpdateScale( ContainerElement );
             this?.PostUpdate( );
         }
@@ -274,9 +290,29 @@ namespace Everglow.Sources.Commons.Core.UI
         /// </summary>
         public void DoDraw( )
         {
+            if( EnableScissor )
+            {
+                Main.spriteBatch.End( );
+                RasterizerState OverflowHiddenRasterizerState = new RasterizerState
+                {
+                    CullMode = CullMode.None,
+                    ScissorTestEnable = true
+                };
+                Main.spriteBatch.GraphicsDevice.ScissorRectangle = ScissorRectangle;
+                Main.spriteBatch.GraphicsDevice.RasterizerState = OverflowHiddenRasterizerState;
+                if( !EnableScissorShader )
+                    Main.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, OverflowHiddenRasterizerState, null );
+                else
+                    Main.spriteBatch.Begin( SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, OverflowHiddenRasterizerState, null );
+            }
             this?.DrawSelf( );
             this?.DrawContainerItems( );
             this?.PostDraw( );
+            if ( EnableScissor )
+            {
+                Main.spriteBatch.End( );
+                Main.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, null, null );
+            }
         }
         /// <summary>
         /// 绘制于该容器的子容器绘制前.
