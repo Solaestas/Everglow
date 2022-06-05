@@ -3,7 +3,9 @@ using Everglow.Sources.Modules.MythModule.TheFirefly.Physics;
 using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
 using System.Drawing;
 using Color = Microsoft.Xna.Framework.Color;
+using Point = Microsoft.Xna.Framework.Point;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
+using Terraria.GameContent;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
 {
@@ -64,26 +66,20 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             if (BiomeActive())
             {
                 if (alpha < 1)
-                {
                     alpha += increase;
-                }
                 else
-                {
                     alpha = 1;
-                    Everglow.HookSystem.DisableDrawBackground = true;
-                }
 
+                Everglow.HookSystem.DisableDrawBackground = true;
             }
             else
             {
                 if (alpha > 0)
-                {
                     alpha -= increase;
-                    Everglow.HookSystem.DisableDrawBackground = false;
-                }
                 else
                 {
                     alpha = 0;
+                    Everglow.HookSystem.DisableDrawBackground = false;
                 }
             }
         }
@@ -330,27 +326,28 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             var texMidClose = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyMidClose");
             var texClose = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyClose");
             Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             Rectangle screen = new Rectangle(0, 0, Main.screenWidth, Main.screenHeight);
             Vector2 ScreenCen = new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
             Vector2 DSize = GetZoomByScreenSize();
             Vector2 ZoomDelta = GetZoomDelta();
-            Main.spriteBatch.Draw(texSky, Vector2.Zero, GetDrawRec(texSky.Size(), 0, true), Color.White * alpha, 0,
-                Vector2.Zero, DSize, SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(texFar, Vector2.Zero, GetDrawRec(texSky.Size(), 0.03f, true), Color.White * alpha, 0,
-                Vector2.Zero, DSize, SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(texMiddle, Vector2.Zero, GetDrawRec(texSky.Size(), 0.17f, true), Color.White * alpha, 0,
-                Vector2.Zero, DSize, SpriteEffects.None, 0);
+            Vector2 DrawPos = ScreenCen;
+            Main.spriteBatch.Draw(texSky, DrawPos, GetDrawRec(texSky.Size(), 0, true), Color.White * alpha, 0,
+                 ScreenCen, DSize, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(texFar, DrawPos, GetDrawRec(texSky.Size(), 0.03f, true), Color.White * alpha, 0,
+                 ScreenCen, DSize, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(texMiddle, DrawPos, GetDrawRec(texSky.Size(), 0.17f, true), Color.White * alpha, 0,
+                 ScreenCen, DSize, SpriteEffects.None, 0);
             DrawGlowSec(texClose.Size(), 0.17f);
-            Main.spriteBatch.Draw(texMidClose, Vector2.Zero, GetDrawRec(texSky.Size(), 0.25f, false), Color.White * alpha, 0,
-                Vector2.Zero, DSize, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(texMidClose, DrawPos, GetDrawRec(texSky.Size(), 0.25f, false), Color.White * alpha, 0,
+                 ScreenCen, DSize, SpriteEffects.None, 0);
             DrawGlow(texClose.Size(), 0.25f);
             Rectangle rvc = GetDrawRec(texClose.Size(), 0.33f, false);
-            RopOffset = new(-150 * 1.2f, 484);
+            RopOffset = new(-150 * 1.12f, 484 + 120 * 0.17f);//Æ«ÒÆÁ¿
             rvc.Y -= 120;
             rvc.X += 150;
             Main.spriteBatch.Draw(texClose, Vector2.Zero, rvc, Color.White * alpha);
-
+            /*
             OldMouseW[0] = Main.MouseWorld;
             for (int f = OldMouseW.Length - 1; f > 0; f--)
             {
@@ -363,11 +360,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 {
                     oldM.Add(OldMouseW[f]);
                 }
-            }
-
+            }*/
             Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null);
             //InitMass_Spring();
             float gravity = 1.0f;
             List<VertexBase.Vertex2D> Vertices = new List<VertexBase.Vertex2D>();
@@ -389,24 +384,17 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 massPositionsSmooth = Commons.Function.BezierCurve.Bezier.SmoothPath(massPositions);
                 if (massPositionsSmooth.Count > 0)
                 {
-                    DrawRope(massPositionsSmooth, RopPosFir[i], Vertices);
+                    DrawRope(massPositionsSmooth, RopPosFir[i] + RopOffset, Vertices);
                 }
             }
             if (Vertices.Count > 2)
             {
-                //var rasterState = new RasterizerState()
-                //{
-                //    CullMode = CullMode.CullClockwiseFace,
-                //    FillMode = FillMode.Solid
-                //};
-                Effect effect = MythContent.QuickEffect("Effects/MeshTest");
-                var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-                effect.Parameters["uTransform"].SetValue(Main.GameViewMatrix.TransformationMatrix * projection);
-                effect.CurrentTechnique.Passes[0].Apply();
-                Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("TheFirefly/Backgrounds/Dark");
-                //Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+                Main.graphics.GraphicsDevice.Textures[0] = TextureAssets.MagicPixel.Value;
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, Vertices.ToArray(), 0, Vertices.Count - 2);
             }
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
             for (int i = 0; i < RopPosFir.Count; i++)
             {
                 Vector2 TexLT = GetRopeMove(new Vector2(800, 400), 0.33f);
