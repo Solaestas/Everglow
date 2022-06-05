@@ -19,6 +19,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         public List<float> RopPosFirS = new List<float>();
         public List<int> RopPosFirC = new List<int>();
         private float alpha = 0f;
+        private Vector2 RopOffset=Vector2.Zero;//树条的位置偏移量
         /// <summary>
         /// 初始化
         /// </summary>
@@ -163,7 +164,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 {
                     if (image.GetPixel(x, y).R == 255)
                     {
-                        RopPosFir.Add(new Vector2(x * 5, y * 5f + 484));
+                        RopPosFir.Add(new Vector2(x * 5 , y * 5f ));
                         RopPosFirC.Add(image.GetPixel(x, y).G + 2);
                         RopPosFirS.Add((image.GetPixel(x, y).B + 240) / 300f);
                     }
@@ -296,7 +297,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         /// <returns></returns>
         public Vector2 GetZoomByScreenSize()
         {
-            return new Vector2(Main.screenWidth / 1366f, Main.screenHeight / 768f);
+            //return new Vector2(Main.screenWidth / 1366f, Main.screenHeight / 768f);
+            return Vector2.One;
         }
         /// <summary>
         /// 获取因为不同分辨率导致点位偏移坐标
@@ -329,27 +331,22 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             Vector2 ScreenCen = new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
             Vector2 DSize = GetZoomByScreenSize();
             Vector2 ZoomDelta = GetZoomDelta();
-            Main.spriteBatch.Draw(texSky, ScreenCen + ZoomDelta * 0.75f, GetDrawRec(texSky.Size(), 0, true), Color.White * alpha, 0, 
-                ScreenCen, DSize, SpriteEffects.None,0);
-            Main.spriteBatch.Draw(texFar, ScreenCen + ZoomDelta * 0.75f, GetDrawRec(texSky.Size(), 0.03f, true), Color.White * alpha, 0,
-                ScreenCen, DSize, SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(texMiddle, ScreenCen + ZoomDelta * 0.75f, GetDrawRec(texSky.Size(), 0.17f, true), Color.White * alpha, 0,
-                ScreenCen, DSize, SpriteEffects.None, 0);
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            Main.spriteBatch.Draw(texSky, Vector2.Zero, GetDrawRec(texSky.Size(), 0, true), Color.White * alpha, 0,
+                Vector2.Zero, DSize, SpriteEffects.None,0);
+            Main.spriteBatch.Draw(texFar, Vector2.Zero, GetDrawRec(texSky.Size(), 0.03f, true), Color.White * alpha, 0,
+                Vector2.Zero, DSize, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(texMiddle, Vector2.Zero, GetDrawRec(texSky.Size(), 0.17f, true), Color.White * alpha, 0,
+                Vector2.Zero, DSize, SpriteEffects.None, 0);
             DrawGlowSec(texClose.Size(), 0.17f);
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-            Main.spriteBatch.Draw(texMidClose, ScreenCen, GetDrawRec(texSky.Size(), 0.25f, false), Color.White * alpha, 0,
-                ScreenCen, DSize, SpriteEffects.None, 0);
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            Main.spriteBatch.Draw(texMidClose, Vector2.Zero, GetDrawRec(texSky.Size(), 0.25f, false), Color.White * alpha, 0,
+                Vector2.Zero, DSize, SpriteEffects.None, 0);
             DrawGlow(texClose.Size(), 0.25f);
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             Rectangle rvc = GetDrawRec(texClose.Size(), 0.33f, false);
-            rvc.Y -= 100;
-            Main.spriteBatch.Draw(texClose, screen, rvc, Color.White * alpha);
+            RopOffset = new(-150*1.2f,484);
+            rvc.Y -= 120;
+            rvc.X += 150;
+            Main.spriteBatch.Draw(texClose, Vector2.Zero, rvc, Color.White * alpha);
+
             OldMouseW[0] = Main.MouseWorld;
             for (int f = OldMouseW.Length - 1; f > 0; f--)
             {
@@ -384,12 +381,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                     massJ.Update(deltaTime);
                     massPositions.Add(massJ.position);
                 }
-
                 List<Vector2> massPositionsSmooth = new List<Vector2>();
                 massPositionsSmooth = Commons.Function.BezierCurve.Bezier.SmoothPath(massPositions);
                 if (massPositionsSmooth.Count > 0)
                 {
-                    DrawRope(massPositionsSmooth, RopPosFir[i], Vertices);
+                    //DrawRope(massPositionsSmooth, RopPosFir[i], Vertices);
                 }
             }
             if (Vertices.Count > 2)
@@ -407,14 +403,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 Main.graphics.GraphicsDevice.RasterizerState = rasterState;
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, Vertices.ToArray(), 0, Vertices.Count);
             }
-
             for (int i = 0; i < RopPosFir.Count; i++)
             {
                 Vector2 TexLT = GetRopeMove(new Vector2(800, 400), 0.33f);
                 foreach (var massJ in masses[i])
                 {
-                    Vector2 DrawP = massJ.position + RopPosFir[i];
-                    massJ.force += new Vector2(0.02f + 0.02f * (float)(Math.Sin(Main.timeForVisualEffects / 72f + DrawP.X / 13d + DrawP.Y / 4d)), 0) * Main.windSpeedCurrent * 2f;
+                    Vector2 DrawP = massJ.position + RopPosFir[i]+RopOffset;
+                    massJ.force += new Vector2(0.02f + 0.02f * (float)(Math.Sin(Main.timeForVisualEffects / 72f + DrawP.X / 13d + DrawP.Y / 4d)), 0) * (Main.windSpeedCurrent+1f) * 2f;
                     //mass.force -= mass.velocity * 0.1f;
                     // 重力加速度（可调
                     massJ.force += new Vector2(0, gravity) * massJ.mass;
