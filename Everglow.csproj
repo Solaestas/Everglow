@@ -9,7 +9,6 @@
     <BaseOutputPath></BaseOutputPath>
 	<DisableFody Condition="'$(Configuration)' != 'Debug'">true</DisableFody>
 	<Configurations>Debug;Release;DebugWithoutFody;ReleaseWithoutFody</Configurations>
-	<DefineDebug>true</DefineDebug>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Everglow-UnitTest\**" />
