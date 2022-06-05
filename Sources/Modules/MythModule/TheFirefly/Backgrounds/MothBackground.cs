@@ -19,6 +19,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         public List<float> RopPosFirS = new List<float>();
         public List<int> RopPosFirC = new List<int>();
         private float alpha = 0f;
+        /// <summary>
+        /// 初始化
+        /// </summary>
         public override void OnModLoad()
         {
             Everglow.HookSystem.AddMethod(DrawBackground, Commons.Core.CallOpportunity.PostDrawBG);
@@ -43,6 +46,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 this.Type = type;
             }
         }
+        /// <summary>
+        /// 环境光的钩子
+        /// </summary>
+        /// <param name="orig"></param>
+        /// <param name="self"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="outputColor"></param>
         private void TileLightScanner_GetTileLight(On.Terraria.Graphics.Light.TileLightScanner.orig_GetTileLight orig, Terraria.Graphics.Light.TileLightScanner self, int x, int y, out Vector3 outputColor)
         {
             orig(self, x, y, out outputColor);
@@ -71,7 +82,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 }
             }
         }
-        //判定是否开启地形
+        /// <summary>
+        /// 判定是否开启地形
+        /// </summary>
+        /// <returns></returns>
         public bool BiomeActive()
         {
             MothLand mothLand = ModContent.GetInstance<MothLand>();
@@ -194,6 +208,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 }
             }
         }
+        /// <summary>
+        /// 根据屏幕分辨率重置顶层和树上的荧光悬挂物点位
+        /// </summary>
+        /// <param name="OrigPoint"></param>
+        /// <returns></returns>
         private Vector2 PointCorrection(Vector2 OrigPoint)
         {
             Vector2 ScreenCen = new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
@@ -270,7 +289,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             return new Rectangle(RX, RY, (int)(screenSize.X) , (int)(screenSize.Y));
         }
         /// <summary>
-        /// 获取缩放比例
+        /// 获取XY向缩放比例
         /// </summary>
         /// <param name="texSize"></param>
         /// <param name="MoveStep"></param>
@@ -279,6 +298,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         {
             return new Vector2(Main.screenWidth / 1366f, Main.screenHeight / 768f);
         }
+        /// <summary>
+        /// 获取因为不同分辨率导致点位偏移坐标
+        /// </summary>
+        /// <returns></returns>
         public Vector2 GetZoomDelta()
         {
             Vector2 screenSize = new Vector2(Main.screenWidth, Main.screenHeight);
@@ -286,6 +309,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             Vector2 v0 = screenSize / 2f - screenSize / 2f / Cor;
             return v0;
         }
+        /// <summary>
+        /// 当然是绘制主体啦
+        /// </summary>
         private void DrawBackground()
         {
             if (alpha<=0)
@@ -411,7 +437,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         public Vector2[] OldMouseW = new Vector2[30];
         private List<List<Mass>> masses = new List<List<Mass>>();
         private List<List<Spring>> springs = new List<List<Spring>>();
-
+        /// <summary>
+        /// 初始化
+        /// </summary>
         private void InitMass_Spring()
         {
             masses.Clear();
@@ -432,6 +460,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 }
             }
         }
+        /// <summary>
+        /// 校正荧光绳的位置
+        /// </summary>
+        /// <param name="Size"></param>
+        /// <param name="move"></param>
+        /// <returns></returns>
         private Vector2 GetRopeMove(Vector2 Size, float move)
         {
             Vector2 DCen = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
