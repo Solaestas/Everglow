@@ -28,16 +28,4 @@ namespace Everglow.Sources.Modules.ZYModule.Commons.Function
         }
     }
 
-    internal static class ILUtils
-    {
-        public static void PrintILContext(ILContext il)
-        {
-            using var fileStream = new FileStream("IL.txt", FileMode.Create);
-            using var writer = new StreamWriter(fileStream);
-            foreach(var ins in il.Instrs)
-            {
-                writer.WriteLine($"IL_{ins.Offset:X} {ins.OpCode} {ins.Operand}");
-            }
-        }
-    }
 }
