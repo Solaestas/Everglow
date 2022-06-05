@@ -8,7 +8,7 @@ namespace Everglow.Sources.Modules.ZYModule.TileModule.Tiles;
 
 internal abstract class DPlatform : DynamicTile, IHookable
 {
-    private readonly Dictionary<(Direction, Direction), Direction> hitEdges = new Dictionary<(Direction, Direction), Direction>()
+    private static readonly Dictionary<(Direction, Direction), Direction> hitEdges = new Dictionary<(Direction, Direction), Direction>()
     {
         [(Direction.Top, Direction.Right)] = Direction.TopRight,
         [(Direction.Right, Direction.Bottom)] = Direction.BottomRight,
@@ -39,6 +39,15 @@ internal abstract class DPlatform : DynamicTile, IHookable
         this.rotation = rotation;
         this.miu = miu;
     }
+    protected DPlatform(Vector2 position, Vector2 velocity, float width, Rotation rotation, Rotation angularVelocity, float miu)
+    {
+        this.position = position;
+        this.velocity = velocity;
+        this.width = width;
+        this.rotation = rotation;
+        this.angularVelocity = angularVelocity;
+        this.miu = miu;
+    }
 
     /// <summary>
     /// 宽度 
@@ -64,7 +73,6 @@ internal abstract class DPlatform : DynamicTile, IHookable
     public override Collider Collider => new CEdge(Edge);
     public override Direction MoveCollision(AABB aabb, ref Vector2 velocity, ref Vector2 move, bool ignorePlats = false)
     {
-        Debug.Assert(false);
         if (ignorePlats)
         {
             return Direction.None;
@@ -99,17 +107,6 @@ internal abstract class DPlatform : DynamicTile, IHookable
 
                 switch (result)
                 {
-                    //case Direction.Inside:
-                    //    if (-MathHelper.PiOver4 * 3 < rotation.Angle && rotation.Angle <= -MathHelper.PiOver4 ||
-                    //        (MathHelper.PiOver4 < rotation.Angle && rotation.Angle <= MathHelper.PiOver4 * 3))
-                    //    {
-                    //        result = aabb.Center.Y > position.Y ? Direction.Top : Direction.Bottom;
-                    //    }
-                    //    else
-                    //    {
-                    //        result = aabb.Center.X > position.X ? Direction.Left : Direction.Right;
-                    //    }
-                    //    break;
                     case Direction.Left:
                         if (!(aabb.Left.Distance(edge.begin.X) < 1) && !(aabb.Left.Distance(edge.end.X) < 1))
                         {
@@ -131,9 +128,19 @@ internal abstract class DPlatform : DynamicTile, IHookable
                         (MathHelper.PiOver4 < rotation.Angle && rotation.Angle <= MathHelper.PiOver4 * 3))
                     {
                         result = aabb.Center.Y > position.Y ? Direction.Top : Direction.Bottom;
-                        float w = (rotation.Angle < -MathHelper.PiOver2 ? aabb.Right : aabb.Left) - position.X;
-                        float h = (rotation.Angle < -MathHelper.PiOver2 ? aabb.Right : aabb.Left) * edge.K + edge.B;
-                        aabb.position.Y = h - (result == Direction.Bottom ? aabb.Height : 0);
+                        float w;
+                        float h;
+                        if(result == Direction.Bottom)
+                        {
+                            w = (rotation.Angle < -MathHelper.PiOver2 ? aabb.Right : aabb.Left) - position.X;
+                            h = (rotation.Angle < -MathHelper.PiOver2 ? aabb.Right : aabb.Left) * edge.K + edge.B;
+                            aabb.position.Y = h - aabb.Height;
+                        }else
+                        {
+                            w = (rotation.Angle > MathHelper.PiOver2 ? aabb.Right : aabb.Left) - position.X;
+                            h = (rotation.Angle > MathHelper.PiOver2 ? aabb.Right : aabb.Left) * edge.K + edge.B;
+                            aabb.position.Y = h;
+                        }
                         aabb.position.X = target.X;
                         cache = angularVelocity.YAxis * w * Math.Abs(angularVelocity.Angle) * Vector2.UnitY;
                         velocity.Y = this.velocity.Y + cache.Y;
@@ -144,6 +151,23 @@ internal abstract class DPlatform : DynamicTile, IHookable
                     else
                     {
                         result = aabb.Center.X > position.X ? Direction.Left : Direction.Right;
+                        float w;
+                        float h;
+                        if (result == Direction.Right)
+                        {
+                            w = (rotation.Angle < -MathHelper.PiOver2 ? aabb.Right : aabb.Left) - position.X;
+                            h = (rotation.Angle < -MathHelper.PiOver2 ? aabb.Right : aabb.Left) * edge.K + edge.B;
+                            aabb.position.X = h - aabb.Width;
+                        }
+                        else
+                        {
+                            w = (rotation.Angle > 0 ? aabb.Top : aabb.Bottom) - position.Y;
+                            h = (rotation.Angle > 0 ? aabb.Top : aabb.Bottom - edge.B) / edge.K;
+                            aabb.position.X = h;
+                        }
+                        aabb.position.Y = target.Y;
+                        cache = angularVelocity.YAxis * w * Math.Abs(angularVelocity.Angle) * Vector2.UnitX;
+                        velocity.X = this.velocity.X + cache.X;
                     }
                 }
                 else if (result == Direction.Bottom)
@@ -229,10 +253,6 @@ internal abstract class DPlatform : DynamicTile, IHookable
     {
         float proj = Vector2.Dot(hook.Center - position, rotation.YAxis);
         hook.Center = position + rotation.YAxis * proj;
-    }
-    public override void Leave(EntityHandler handler)
-    {
-        //entity.velocity += velocity;
     }
     public override void Stand(EntityHandler handler, bool newStand)
     {

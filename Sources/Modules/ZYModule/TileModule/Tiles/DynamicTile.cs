@@ -132,8 +132,8 @@ namespace Everglow.Sources.Modules.ZYModule.TileModule.Tiles
         {
 
         }
-        public abstract void Stand(EntityHandler entity, bool newStand);
-        public abstract void Leave(EntityHandler entity);
+        public virtual void Stand(EntityHandler entity, bool newStand) { }
+        public virtual void Leave(EntityHandler entity) { }
         [Obsolete]
         public virtual Vector2 GetMove(EntityHandler entity)
         {
