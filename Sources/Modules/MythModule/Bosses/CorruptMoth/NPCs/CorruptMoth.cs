@@ -44,6 +44,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
 				new FlavorTextBestiaryInfoElement(tex)
             });
         }
+        
         public override void OnKill()
         {
             //NPC.SetEventFlagCleared(ref DownedBossSystem.downedMoth, -1);
@@ -88,7 +89,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             if (!Main.dedServ)
             {
                 Music = Common.MythContent.QuickMusic("MothFighting");
-                
             }
         }
         public override bool CheckActive()
@@ -359,7 +359,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                     }
                     if (tt > 120 && tt < 150)
                         MoveTo(player.Center + npc.DirectionFrom(player.Center) * 150, 10, 20);
-                    if (t == 220 && phase2)
+                    if (t == 220 && phase2&&Main.netMode!=1)
                         for (int i = 0; i < 20; i++)
                         {
                             Vector2 v = new Vector2(0.1f + (i % 4) / 16f, 0).RotatedBy(i * MathHelper.TwoPi / 20);
@@ -452,7 +452,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                 if (t >= 60)
                 {   //90,240,390
                     //140,240,340
-                    if ((t + 60) % (npc.ai[2] == 1 ? 100 : 150) == 0)//发射弹幕
+                    if ((t + 60) % (npc.ai[2] == 1 ? 100 : 150) == 0&&Main.netMode!=1)//发射弹幕
                     {
                         //npc.Center += npc.DirectionTo(player.Center)*Main.rand.Next(100,150);
                         lightVisual = 1.5f;
@@ -659,7 +659,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                     MoveTo(player.Center + new Vector2(0, -200), 10, 20);
                     GetDir_ByPlayer();
                 }
-                if (t == 60)
+                if (t == 60&&Main.netMode!=1)
                 {
                     Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, Vector2.Zero, ModContent.ProjectileType<MothBall>(), npc.damage / 6, 0, Main.myPlayer);
                 }
@@ -966,7 +966,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
         }
         private void GreyVFx()
         {
-            if (NPC.velocity.Length() > 10)
+            if (NPC.velocity.Length() > 10&&Main.netMode!=1)
             {
                 if (t % 12 == 0)
                 {
