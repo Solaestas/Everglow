@@ -1,20 +1,21 @@
 ﻿using Everglow.Sources.Commons.Core.ModuleSystem;
 using Everglow.Sources.Commons.Core.UI;
+using Everglow.Sources.Modules.MythModule.TheFirefly.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Everglow.Sources.Modules.ExampleModule.UI
+namespace Everglow.Sources.Modules.MythModule
 {
-    public class UIModule: IModule
+    public class MythModule: IModule
     {
-        public string Name { get; } = "测试用用户交互界面";
+        public string Name { get; } = "神话";
 
         public void Load( )
         {
-            ContainerPage.RegisterContainerPage( new UIModuleContainerPage( ) ); //在IModule类内手动注册容器页.
+            ContainerPage.RegisterContainerPage(new FireflyContainerPage()); //在IModule类内手动注册容器页.
         }
 
         public void Unload( )
