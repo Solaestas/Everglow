@@ -28,9 +28,6 @@ namespace Everglow.Sources.Modules.ExampleModule
             Main.OnResolutionChanged += Main_OnResolutionChanged;
             m_renderTargetIndex = 0;
 
-
-            Main.OnRenderTargetsInitialized += Main_OnRenderTargetsInitialized;
-            Main.OnPreDraw += Main_OnPreDraw;
             // On.Terraria.GameContent.Shaders.WaterShaderData.Apply += WaterShaderData_Apply;
             IL.Terraria.GameContent.Shaders.WaterShaderData.Apply += WaterShaderData_Apply1;
             ReplaceEffectPass = m_waveDisortionScreen.Value.CurrentTechnique.Passes[0];
@@ -39,18 +36,6 @@ namespace Everglow.Sources.Modules.ExampleModule
         }
 
         public static EffectPass ReplaceEffectPass = null;
-        //private void WaterShaderData_Apply(On.Terraria.GameContent.Shaders.WaterShaderData.orig_Apply orig, Terraria.GameContent.Shaders.WaterShaderData self)
-        //{
-        //    if (m_prevEffect == null)
-        //    {
-        //        var effectPass = typeof(WaterShaderData)
-        //            .GetField("_effectPass", BindingFlags.NonPublic | BindingFlags.Instance);
-        //        m_prevEffect = (EffectPass)effectPass.GetValue(self);
-        //        effectPass.SetValue(self, m_waveDisortionScreen.Value);
-        //    }
-        //    orig(self);
-        //    IL.Terraria.GameContent.Shaders.WaterShaderData.Apply += WaterShaderData_Apply1;
-        //}
 
 
 
@@ -105,78 +90,6 @@ namespace Everglow.Sources.Modules.ExampleModule
             });
         }
 
-        public override void PostSetupContent()
-        {
-
-        }
-
-
-        private void Main_OnRenderTargetsInitialized(int width, int height)
-        {
-
-        }
-
-        private void Main_OnPreDraw(GameTime gameTime)
-        {
-            var device = Main.graphics.GraphicsDevice;
-            if (!init)
-            {
-                for (int i = 0; i < 2; i++)
-                {
-                    m_waveDataTarget[i] = new RenderTarget2D(device, 512, 512, false, SurfaceFormat.Vector4, DepthFormat.None);
-                    device.SetRenderTarget(m_waveDataTarget[i]);
-                    device.Clear(new Color(0.5f, 0.5f, 0.5f, 1.0f));
-                }
-                init = true;
-                device.SetRenderTarget(null);
-                return;
-            }
-            var effect = m_waveEffect.Value;
-            if (effect == null)
-            {
-                return;
-            }
-            int nextIndex = (m_renderTargetIndex + 1) % 2;
-            var spriteBatch = Main.spriteBatch;
-
-            device.SetRenderTarget(m_waveDataTarget[m_renderTargetIndex]);
-            device.Clear(new Color(0.5f, 0.5f, 0.5f, 1.0f));
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque, 
-                SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
-            effect.Parameters["uDeltaXY"].SetValue(new Vector2(1.0f / 512f, 1.0f / 512f));
-            effect.Parameters["uDamping"].SetValue(0.99f);
-            effect.CurrentTechnique.Passes[0].Apply();
-            device.Textures[0] = m_waveDataTarget[nextIndex];
-            spriteBatch.Draw(m_waveDataTarget[nextIndex],
-                Vector2.Zero, Color.White);
-            spriteBatch.End();
-
-            if (Main.time % 300 < 1)
-            {
-                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Opaque);
-                spriteBatch.Draw(TextureAssets.MagicPixel.Value,
-                    new Rectangle(100, 100, 10, 10), new Color(0.1f, 0f, 0f));
-                spriteBatch.End();
-            }
-
-
-            device.SetRenderTarget(null);
-
-            //var shader = Filters.Scene["HeatDistortion"];
-            //if (true)
-            //{
-
-            //}
-
-
-            Vector2 value = new Vector2(Main.screenWidth, Main.screenHeight) * 0.5f * (Vector2.One - Vector2.One / Main.GameViewMatrix.Zoom);
-            Vector2 value2 = (Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange, Main.offScreenRange)) - Main.screenPosition - value;
-
-
-
-            //-(value2 * 0.25f - _lastDistortionDrawOffset) / new Vector2(_distortionTarget.Width, _distortionTarget.Height)
-        }
-
         private void Main_OnResolutionChanged(Vector2 obj)
         {
         }
@@ -191,14 +104,6 @@ namespace Everglow.Sources.Modules.ExampleModule
 
         public override void PostDrawInterface(SpriteBatch spriteBatch)
         {
-            //spriteBatch.End();
-            //spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
-            ////m_waveDisplay.Value.CurrentTechnique.Passes[0].Apply();
-            //spriteBatch.Draw(m_waveDataTarget[m_renderTargetIndex],
-            //    new Vector2(Main.ScreenSize.X, Main.ScreenSize.Y) * 0.5f - new Vector2(256, 256), Color.White);
-            //m_renderTargetIndex = (m_renderTargetIndex + 1) % 2;
-            //spriteBatch.End();
-            //spriteBatch.Begin();
             base.PostDrawInterface(spriteBatch);
         }
     }

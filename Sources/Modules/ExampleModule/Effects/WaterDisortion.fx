@@ -135,7 +135,7 @@ float4 PixelShaderFunction(float2 texCoord : TEXCOORD) : COLOR0
 	r0.x = r0.x * r0.w;
 	r0.xyz = r3.wwww * r0.xxxx;
 	r1.xyz = r1.xyzx + r0.xyzx;
-	if (x > 0.05)
+	if (x > 0.09)
 	{
 		r1.xyz += float3(0, 0.5, 1) * exp(pow(x - .50, 2.) * -20.);
 	}
