@@ -5,7 +5,7 @@ using Terraria.GameContent.UI.States;
 using Terraria.IO;
 using Terraria.UI;
 
-namespace Everglow.Sources.Modules.ZY.WorldModule;
+namespace Everglow.Sources.Modules.ZYModule.WorldModule;
 
 internal class TerrariaWorld : World
 {

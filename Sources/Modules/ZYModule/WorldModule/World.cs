@@ -8,7 +8,7 @@ using Terraria.IO;
 using Terraria.Social;
 using Terraria.UI;
 
-namespace Everglow.Sources.Modules.ZY.WorldModule;
+namespace Everglow.Sources.Modules.ZYModule.WorldModule;
 
 [ModuleDependency(typeof(WorldSystem))]
 internal abstract class World : IModule

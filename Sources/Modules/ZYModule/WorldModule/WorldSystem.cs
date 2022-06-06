@@ -2,14 +2,14 @@
 using Everglow.Sources.Commons.Core.ModuleSystem;
 using Everglow.Sources.Commons.Core.Network.PacketHandle;
 using Everglow.Sources.Commons.Core.Profiler.Fody;
-using Everglow.Sources.Modules.ZY.ZYPacket;
+using Everglow.Sources.Modules.ZYModule.ZYPacket;
 using ReLogic.Content;
 using Terraria.GameContent.UI.Elements;
 using Terraria.IO;
 using Terraria.Social;
 using Terraria.UI;
 
-namespace Everglow.Sources.Modules.ZY.WorldModule;
+namespace Everglow.Sources.Modules.ZYModule.WorldModule;
 
 internal class WorldSystem : IModule
 {
