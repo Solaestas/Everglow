@@ -204,11 +204,7 @@
                     {
                         Everglow.Instance.Logger.Error($"{handler.Name} 抛出了异常 {ex}");
                         handler.Enable = false;
-                        if (Function.FeatureFlags.EverglowConfig.DebugMode)
-                        {
-                            //自动暂停的，方便监视
-                            Debug.Assert(false);
-                        }
+                        Debug.Assert(false);
                     }
                 }
             }

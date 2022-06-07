@@ -242,7 +242,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 GetGlowPosSec("GlowHangingMiddle.bmp");
             }
             float deltaY = DCen.Y - (mothLand.FireflyCenterY - 90) * 16f;
-            deltaY *= MoveStep * 0.4f;
+            deltaY *= MoveStep * 0.14f;
             if (GPosSec.Count > 0)
             {
                 var texGlow = MythContent.QuickTexture("TheFirefly/Backgrounds/GlowHangingMiddle");
@@ -250,7 +250,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 {
                     Vector2 GP = GPosSec[x].Pos;
                     GP.Y += deltaY / (GPosSec[x].Size + 1);
-                    Vector2 dPos = GP - TexLT + new Vector2(0, -194);
+                    Vector2 dPos = GP - TexLT + new Vector2(0, -180);
                     dPos = PointCorrection(dPos);
                     Rectangle sRtTop = new Rectangle(GPosSec[x].Type * 10, 0, 10, 3);
                     Rectangle sRtLine = new Rectangle(GPosSec[x].Type * 10, 3, 10, 5);
