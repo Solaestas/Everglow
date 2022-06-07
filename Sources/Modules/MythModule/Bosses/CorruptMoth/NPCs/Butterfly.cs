@@ -31,8 +31,21 @@
         }
         public Vector2 TargetPos;
         NPC owner => Main.npc[(int)npc.ai[3]];
+        private void CheckOwnerActive()
+        {
+            if(owner.active&&owner.type == ModContent.NPCType<CorruptMoth>())
+            {
+
+            }
+            else
+            {
+                npc.active = false;
+                npc.life = 0;
+            }
+        }
         public override void AI()
         {
+            
             if (npc.ai[0] == -2)
             {
                 NPC.spriteDirection = Math.Sign(NPC.velocity.X);
@@ -44,6 +57,7 @@
                 if (Vector2.Distance(npc.Center, owner.Center) > 80)
                     MoveTo(owner.Center + npc.ai[2].ToRotationVector2() * 200, 20, 20);
                 npc.friendly = false;
+                CheckOwnerActive();
             }
             if (npc.ai[0] == -1)
             {
@@ -55,6 +69,8 @@
                 if(Vector2.Distance(npc.Center,owner.Center)>300)
                     MoveTo(owner.Center+Main.rand.NextVector2Unit()*100, 10, 20);
                 npc.friendly = true;
+                CheckOwnerActive();
+
 
             }//在boss附近游荡
             if (npc.ai[0] == 0)
@@ -90,7 +106,9 @@
             {
                 NPC.spriteDirection = Math.Sign(NPC.velocity.X);
                 Vector2 trueTargetPos = owner.Center + TargetPos.RotatedBy(npc.ai[2]);
-                Player player= Main.player[owner.target];
+                CheckOwnerActive();
+
+                Player player = Main.player[owner.target];
                 if (t == 0)
                 {
                     npc.dontTakeDamage = true;
@@ -119,6 +137,8 @@
             }
             if (npc.ai[0] == 2)//箭,rot:ai2，distance:localAI0
             {
+                CheckOwnerActive();
+
                 NPC.spriteDirection = Math.Sign(NPC.velocity.X);
                 Vector2 trueTargetPos = owner.Center + TargetPos.RotatedBy(npc.ai[2]);
                 Player player = Main.player[owner.target];
@@ -165,6 +185,8 @@
             }
             if (npc.ai[0] == 3)//剑
             {
+                CheckOwnerActive();
+
                 Vector2 trueTargetPos = owner.Center + TargetPos.RotatedBy(npc.ai[2]);
                 Player player = Main.player[owner.target];
                 if (t == 0)
@@ -211,6 +233,8 @@
             }
             if (npc.ai[0] == 4)//拳
             {
+                CheckOwnerActive();
+
                 NPC.spriteDirection = Math.Sign(NPC.velocity.X);
                 Vector2 trueTargetPos = owner.Center + TargetPos.RotatedBy(npc.ai[2]);
                 Player player = Main.player[owner.target];
