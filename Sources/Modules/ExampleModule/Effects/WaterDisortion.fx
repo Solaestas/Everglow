@@ -44,9 +44,9 @@ float4 PixelShaderFunction(float2 texCoord : TEXCOORD) : COLOR0
 	r5.xy = r5.xy;
 	r6.xyzw = tex2D(noise, r6.xy).xyzw;
 	r6.xy = r6.xy;
-	r7.xyzw = tex2D(wave, r4.zw).xzyw;
+	r7.xyzw = tex2D(wave, r4.zw).xyyw;
 	r7.xy = r7.xy;
-	float x = r7.x;
+	float ws = r7.x;
 	r4.zw = r0.zz + r5.xy;
 	r5.xy = r0.zz + r6.xy;
 	r5.xy = -r5.xy;
@@ -98,7 +98,7 @@ float4 PixelShaderFunction(float2 texCoord : TEXCOORD) : COLOR0
 	r5.x = r5.x;
 	r6.xyzw = tex2D(water, r2.xz).wxyz;
 	r6.x = r6.x;
-	x = (1.35 - x * 2.) * r6.x;
+	float x = (1.35 - ws * 2.) * r6.x;
 	r7.xyzw = tex2D(originalTexture, texCoord.xy).xyzw;
 	r0.y = r2.y * r5.x;
 	r0.y = min(r1.x, r0.y);
