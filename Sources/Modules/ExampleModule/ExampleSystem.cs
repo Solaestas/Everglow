@@ -86,7 +86,8 @@ namespace Everglow.Sources.Modules.ExampleModule
                 shader.Parameters["cb8"].SetValue(new Vector4(targetPos, 0, 0));
                 shader.Parameters["cb9"].SetValue(new Vector4(a8, 0, 0, 0));
                 shader.Parameters["cb10"].SetValue(new Vector4(imageOffset, 0, 0));
-                shader.Parameters["uThreashHold"].SetValue(0.01f);
+                shader.Parameters["uThreashhold"].SetValue(0.05f);
+                shader.Parameters["uPower"].SetValue(1.5f);
 
                 effect.Apply();
             });
