@@ -14,6 +14,7 @@ float4 cb7;
 float4 cb8;
 float4 cb9;
 float4 cb10;
+float uThreashHold;
 
 float4 PixelShaderFunction(float2 texCoord : TEXCOORD) : COLOR0
 {
@@ -44,9 +45,10 @@ float4 PixelShaderFunction(float2 texCoord : TEXCOORD) : COLOR0
 	r5.xy = r5.xy;
 	r6.xyzw = tex2D(noise, r6.xy).xyzw;
 	r6.xy = r6.xy;
-	r7.xyzw = tex2D(wave, r4.zw).xyyw;
+	r7.xyzw = tex2D(wave, r4.zw).xzyw;
 	r7.xy = r7.xy;
 	float ws = r7.x;
+	float ws2 = r7.x * 2 - 1;
 	r4.zw = r0.zz + r5.xy;
 	r5.xy = r0.zz + r6.xy;
 	r5.xy = -r5.xy;
@@ -135,9 +137,9 @@ float4 PixelShaderFunction(float2 texCoord : TEXCOORD) : COLOR0
 	r0.x = r0.x * r0.w;
 	r0.xyz = r3.wwww * r0.xxxx;
 	r1.xyz = r1.xyzx + r0.xyzx;
-	if (x > 0.09)
+	if (ws2 * r6.x > uThreashHold)
 	{
-		r1.xyz += float3(0, 0.5, 1) * exp(pow(x - .50, 2.) * -20.);
+		r1.xyz += float3(0, 0.5, 1) * pow(exp(pow(x - .50, 2.) * -20.), 1.66);
 	}
 	r1.w = r1.w;
 	return r1.xyzw;
