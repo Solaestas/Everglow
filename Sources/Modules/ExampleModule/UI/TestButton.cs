@@ -1,11 +1,5 @@
 ﻿using Everglow.Sources.Commons.Core.UI;
 using Everglow.Sources.Commons.Core.UI.Preforms;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.ID;
 
 namespace Everglow.Sources.Modules.ExampleModule.UI
 {
@@ -18,8 +12,8 @@ namespace Everglow.Sources.Modules.ExampleModule.UI
         }
         protected override void MouseLeftDownEvent( )
         {
-            Dust.NewDust( Main.LocalPlayer.Center , 0 , 0 , DustID.Dirt , 0 , -10 );
-            Container.ContainerElement.SetColor( Color.Gray ); 
+            Dust.NewDust( Main.LocalPlayer.Center, 0, 0, DustID.Dirt, 0, -10 );
+            Container.ContainerElement.SetColor( Color.Gray );
             //如果一开始可交互对象就是绑定的容器,
             //而且此时按着左键, 那么变成灰的.
             base.MouseLeftDownEvent( );

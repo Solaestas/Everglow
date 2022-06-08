@@ -1,14 +1,9 @@
 ﻿using Everglow.Sources.Commons.Core.ModuleSystem;
 using Everglow.Sources.Commons.Core.UI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Everglow.Sources.Modules.ExampleModule.UI
 {
-    public class UIModule: IModule
+    public class UIModule : IModule
     {
         public string Name { get; } = "测试用用户交互界面";
 

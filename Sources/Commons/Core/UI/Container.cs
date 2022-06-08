@@ -1,10 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Xna.Framework.Input;
 
 namespace Everglow.Sources.Commons.Core.UI
 {
@@ -155,7 +149,7 @@ namespace Everglow.Sources.Commons.Core.UI
         /// <returns>若是, 返回 <seealso href="true"/> , 否则返回 <seealso href="false"/>.</returns>
         public virtual bool GetInterviewState( )
         {
-            if ( ScissorRectangle.Contains( new Point( Mouse.GetState( ).X, Mouse.GetState( ).Y ) ) && BaseRectangle.Contains( new Point( Mouse.GetState().X , Mouse.GetState().Y )) )
+            if ( ScissorRectangle.Contains( new Point( Mouse.GetState( ).X, Mouse.GetState( ).Y ) ) && BaseRectangle.Contains( new Point( Mouse.GetState( ).X, Mouse.GetState( ).Y ) ) )
             {
                 Main.LocalPlayer.mouseInterface = true;
                 return true;
@@ -290,7 +284,7 @@ namespace Everglow.Sources.Commons.Core.UI
         /// </summary>
         public void DoDraw( )
         {
-            if( EnableScissor )
+            if ( EnableScissor )
             {
                 Main.spriteBatch.End( );
                 RasterizerState OverflowHiddenRasterizerState = new RasterizerState
@@ -300,7 +294,7 @@ namespace Everglow.Sources.Commons.Core.UI
                 };
                 Main.spriteBatch.GraphicsDevice.ScissorRectangle = ScissorRectangle;
                 Main.spriteBatch.GraphicsDevice.RasterizerState = OverflowHiddenRasterizerState;
-                if( !EnableScissorShader )
+                if ( !EnableScissorShader )
                     Main.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, OverflowHiddenRasterizerState, null );
                 else
                     Main.spriteBatch.Begin( SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, OverflowHiddenRasterizerState, null );

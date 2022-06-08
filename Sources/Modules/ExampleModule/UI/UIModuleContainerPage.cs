@@ -1,10 +1,5 @@
 ﻿using Everglow.Sources.Commons.Core.UI;
 using Everglow.Sources.Commons.Core.UI.Preforms;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Everglow.Sources.Modules.ExampleModule.UI
 {
@@ -46,8 +41,8 @@ namespace Everglow.Sources.Modules.ExampleModule.UI
 
             base.InitializeContainer( );
             //在初始化容器后进行布局的初次设置
-            Button0.ContainerElement.SetLayerout( 66 , 66 , 66 , 66 );
-            TestButton0.ContainerElement.SetLayerout( 800 , 400 , 50 , 50 );
+            Button0.ContainerElement.SetLayerout( 66, 66, 66, 66 );
+            TestButton0.ContainerElement.SetLayerout( 800, 400, 50, 50 );
         }
     }
 }

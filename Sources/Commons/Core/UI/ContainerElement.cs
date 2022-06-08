@@ -1,11 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Everglow.Sources.Commons.Core.UI
+﻿namespace Everglow.Sources.Commons.Core.UI
 {
     /// <summary>
     /// 存储容器主体属性的结构.

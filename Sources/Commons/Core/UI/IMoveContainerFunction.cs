@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-
-namespace Everglow.Sources.Commons.Core.UI
+﻿namespace Everglow.Sources.Commons.Core.UI
 {
     /// <summary>
     /// 表示一个根据一组速度数据进行移动的容器方法.
