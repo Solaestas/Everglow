@@ -202,7 +202,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                     Rectangle sRtTop = new Rectangle(GPos[x].Type * 20, 0, 20, 10);
                     Rectangle sRtLine = new Rectangle(GPos[x].Type * 20, 10, 20, 20);
                     Rectangle sRtDrop = new Rectangle(GPos[x].Type * 20, 65, 20, 35);
-                    float Dlength = (float)(GPos[x].Length + Math.Sin(Main.time / 128d + GPos[x].Pos.X / 70d + GPos[x].Pos.Y / 120d) * GPos[x].Length * 0.2f);
+                    float Dlength = (float)(GPos[x].Length + Math.Sin(Main.timeForVisualEffects / 128d + GPos[x].Pos.X / 70d + GPos[x].Pos.Y / 120d) * GPos[x].Length * 0.2f);
                     Main.spriteBatch.Draw(texGlow, dPos, sRtTop, Color.White * alpha, 0, new Vector2(10, 0), GPos[x].Size, SpriteEffects.None, 0);
                     Main.spriteBatch.Draw(texGlow, dPos + new Vector2(0, 10 + Dlength) * GPos[x].Size, sRtLine, Color.White * alpha, 0, new Vector2(10, 10), new Vector2(1f, Dlength / 10f) * GPos[x].Size, SpriteEffects.None, 0);
                     Main.spriteBatch.Draw(texGlow, dPos + new Vector2(0, 27.5f + Dlength * 2) * GPos[x].Size, sRtDrop, Color.White * alpha, 0, new Vector2(10, 17.5f), GPos[x].Size, SpriteEffects.None, 0);
@@ -255,7 +255,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                     Rectangle sRtTop = new Rectangle(GPosSec[x].Type * 10, 0, 10, 3);
                     Rectangle sRtLine = new Rectangle(GPosSec[x].Type * 10, 3, 10, 5);
                     Rectangle sRtDrop = new Rectangle(GPosSec[x].Type * 10, 10, 10, 15);
-                    float Dlength = (float)(GPosSec[x].Length + Math.Sin(Main.time / 128d + GPosSec[x].Pos.X / 70d + GPosSec[x].Pos.Y / 120d) * GPosSec[x].Length * 0.2f);
+                    float Dlength = (float)(GPosSec[x].Length + Math.Sin(Main.timeForVisualEffects / 128d + GPosSec[x].Pos.X / 70d + GPosSec[x].Pos.Y / 120d) * GPosSec[x].Length * 0.2f);
                     Main.spriteBatch.Draw(texGlow, dPos, sRtTop, Color.White * alpha, 0, new Vector2(5, 0), GPosSec[x].Size, SpriteEffects.None, 0);
                     Main.spriteBatch.Draw(texGlow, dPos + new Vector2(0, 3 + Dlength) * GPosSec[x].Size, sRtLine, Color.White * alpha, 0, new Vector2(5, 2.5f), new Vector2(1f, Dlength / 2.5f) * GPosSec[x].Size, SpriteEffects.None, 0);
                     Main.spriteBatch.Draw(texGlow, dPos + new Vector2(0, 10.5f + Dlength * 2) * GPosSec[x].Size, sRtDrop, Color.White * alpha, 0, new Vector2(5, 7.5f), GPosSec[x].Size, SpriteEffects.None, 0);
