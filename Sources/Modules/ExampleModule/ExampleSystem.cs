@@ -56,7 +56,7 @@ namespace Everglow.Sources.Modules.ExampleModule
                 var targetPos = shaderData.Shader.Parameters["uTargetPosition"].GetValueVector2();
                 var imageOffset = shaderData.Shader.Parameters["uImageOffset"].GetValueVector2();
                 var screenPos = Main.screenPosition - targetPos;
-                var a = shaderData.Shader.Parameters["uColor"].GetValueVector3();
+                var a = shaderData.Shader.Parameters["uSaturation"].GetValueVector3();
                 var a1 = shaderData.Shader.Parameters["uOpacity"].GetValueSingle();
                 var a2 = shaderData.Shader.Parameters["uSecondaryColor"].GetValueVector3();
                 var a3 = shaderData.Shader.Parameters["uTime"].GetValueSingle();
@@ -71,16 +71,17 @@ namespace Everglow.Sources.Modules.ExampleModule
                 var a13 = shaderData.Shader.Parameters["uImageSize1"].GetValueVector2();
                 var a14 = shaderData.Shader.Parameters["uImageSize2"].GetValueVector2();
                 var a15 = shaderData.Shader.Parameters["uImageSize3"].GetValueVector2();
+                var a16 = shaderData.Shader.Parameters["uSourceRect"].GetValueVector4();
 
 
                 var shader = m_waveDisortionScreen.Value;
                 shader.Parameters["cb0"].SetValue(new Vector4(1 / a13.X, 1 / a13.Y, 0, 0));
-                shader.Parameters["cb1"].SetValue(new Vector4(a9 * 0.1f, 0, 0, 0));
-                shader.Parameters["cb2"].SetValue(new Vector4(-a9 * 0.1f, 0, 0, 0));
-                shader.Parameters["cb3"].SetValue(new Vector4(a11, 0, 0));
-                shader.Parameters["cb4"].SetValue(new Vector4(0.04f, 0.444f, 0, 0));
+                shader.Parameters["cb1"].SetValue(new Vector4(a9 * 0.05f, 0, 0, 0));
+                shader.Parameters["cb2"].SetValue(new Vector4(-a9 * 0.05f, 0, 0, 0));
+                shader.Parameters["cb3"].SetValue(new Vector4(1f / a11.X, 1f / a11.Y, 0, 0));
+                shader.Parameters["cb4"].SetValue(new Vector4(0.0167f, 0.320f, 0, 0));
                 shader.Parameters["cb5"].SetValue(new Vector4(1f / a15.X, 1f / a15.Y, 0, 0));
-                shader.Parameters["cb6"].SetValue(new Vector4(Main.screenWidth, Main.screenHeight, 0, 0));
+                shader.Parameters["cb6"].SetValue(new Vector4(a4, 0, 0));
                 shader.Parameters["cb7"].SetValue(new Vector4(screenPos, 0, 0));
                 shader.Parameters["cb8"].SetValue(new Vector4(targetPos, 0, 0));
                 shader.Parameters["cb9"].SetValue(new Vector4(a8, 0, 0, 0));
