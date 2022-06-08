@@ -96,7 +96,6 @@ internal abstract class DPlatform : DynamicTile, IHookable
             return Direction.None;
         }
         aabb.position.Y = MathUtils.Approach(aabb.position.Y, target.Y, 1);
-        Test.TestLog(velocity.Y);
 
         do
         {
