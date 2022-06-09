@@ -43,7 +43,8 @@ namespace Everglow.Sources.Modules.ExampleModule
             orig(self, gameTime);
             if (ModContent.GetInstance<MothBackground>().BiomeActive())
             {
-                self.GetType().GetField("_useViscosityFilter", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(self, false);
+
+                self._useViscosityFilter = false;
             }
         }
 
