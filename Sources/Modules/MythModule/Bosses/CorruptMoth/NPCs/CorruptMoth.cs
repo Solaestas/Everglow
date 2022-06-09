@@ -170,6 +170,9 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
         {
 
         }
+        /// <summary>
+        /// 发射弹幕，调用前检测服务端
+        /// </summary>
         private void Create4DCube()
         {
             int scale = 300;
@@ -186,7 +189,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                         {
                             Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CorMoth4DProj>(), NPC.damage / 5, 0, Main.myPlayer, NPC.whoAmI);
                             (proj.ModProjectile as CorMoth4DProj).targetPos = new Vector4(Vector3.Lerp(v1, v2, (float)i / (counts - 1)), w);
-                            proj.netUpdate = true;
+                            proj.netUpdate2 = true;
                         }
                     }
                     Vector3 v3 = cubeVec[ii] * scale;
@@ -195,7 +198,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                     {
                         Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CorMoth4DProj>(), NPC.damage / 5, 0, Main.myPlayer, NPC.whoAmI);
                         (proj.ModProjectile as CorMoth4DProj).targetPos = new Vector4(Vector3.Lerp(v3, v4, (float)i / (counts - 1)), w);
-                        proj.netUpdate = true;
+                        proj.netUpdate2 = true;
                     }
                 }
             }
@@ -208,12 +211,13 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                     float c = (counts - 1) / 2;
                     Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CorMoth4DProj>(), NPC.damage / 5, 0, Main.myPlayer, NPC.whoAmI);
                     (proj.ModProjectile as CorMoth4DProj).targetPos = new Vector4(v * scale, (float)(i - c) * scale / c);
-                    proj.netUpdate = true;
+                    proj.netUpdate2 = true;
                 }
             }
         }
         public override void AI()
         {
+            NPC.netUpdate2 = true;
             bool phase2 = NPC.life < NPC.lifeMax * 0.6f;
             Lighting.AddLight(NPC.Center, 0f, 0f, 0.8f * (1 - NPC.alpha / 255f));
             NPC.friendly = NPC.dontTakeDamage;
@@ -246,12 +250,15 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             {
                 NPC.ai[0] = 0;
                 //NPC.ai[0] = 114514;
-                //Create4DCube();
                 NPC.noTileCollide = true;
                 Start = true;
-                for (int h = 0; h < 15; h++)
+                if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    NPC.NewNPC(null, (int)NPC.Center.X + 25, (int)NPC.Center.Y + 150, ModContent.NPCType<MothSummonEffect>());
+                    Create4DCube();
+                    for (int h = 0; h < 15; h++)
+                    {
+                        NPC.NewNPC(null, (int)NPC.Center.X + 25, (int)NPC.Center.Y + 150, ModContent.NPCType<MothSummonEffect>());
+                    }
                 }
                 NPC.localAI[0] = 0;
                 return;
@@ -534,10 +541,10 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                 }
                 if (Timer == 40)
                 {
-
                     NPC.Center = player.Center + Main.rand.NextVector2Unit() * new Vector2(1.4f, 1f) * 300;
                     PhamtomDis = 0;
                     NPC.alpha = 255;
+                    NPC.netUpdate2 = true;
                     if (phase2)
                     {
                         Timer += 20;
@@ -752,7 +759,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                         Vector2 vel = (i * MathHelper.TwoPi / 30).ToRotationVector2();
                         var proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, vel, ModContent.ProjectileType<ButterflyDream>(), 1, 0, Main.myPlayer, NPC.whoAmI, 1);
                         proj.timeLeft = 800;
-                        proj.netUpdate = true;
+                        proj.netUpdate2 = true;
                     }
                 }
                 if (Timer > 60 && Timer < 260)
@@ -884,7 +891,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                                 butterfly.ai[1] = 0;//清空计时器
                                 butterfly.ai[3] = NPC.whoAmI;
                                 butterfly.velocity = Vector2.Zero;
-                                (butterfly.ModNPC as Butterfly).TargetPos = new Vector2((x - BBowColorsWidth / 2f) * scale, (y - BBowColorsWidth / 2f) * scale).RotatedBy(rot);//指定其目标
+                                (butterfly.ModNPC as Butterfly).targetPos = new Vector2((x - BBowColorsWidth / 2f) * scale, (y - BBowColorsWidth / 2f) * scale).RotatedBy(rot);//指定其目标
                             }
                         }
                     }
@@ -903,7 +910,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                                 butterfly.ai[1] = 0;//清空计时器
                                 butterfly.ai[3] = NPC.whoAmI;
                                 butterfly.velocity = Vector2.Zero;
-                                (butterfly.ModNPC as Butterfly).TargetPos = new Vector2((x - BArrowColorsWidth / 2f) * scale, (y - BArrowColorsHeight / 2f) * scale).RotatedBy(rot);//指定其目标
+                                (butterfly.ModNPC as Butterfly).targetPos = new Vector2((x - BArrowColorsWidth / 2f) * scale, (y - BArrowColorsHeight / 2f) * scale).RotatedBy(rot);//指定其目标
                             }
                         }
                     }
@@ -1009,7 +1016,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                                 butterfly.ai[1] = 0;//清空计时器
                                 butterfly.ai[3] = NPC.whoAmI;
                                 butterfly.velocity = Vector2.Zero;
-                                (butterfly.ModNPC as Butterfly).TargetPos = new Vector2(x * scale, (y - BSwordColorsHeight) * scale).RotatedBy(rot);//指定其目标
+                                (butterfly.ModNPC as Butterfly).targetPos = new Vector2(x * scale, (y - BSwordColorsHeight) * scale).RotatedBy(rot);//指定其目标
                             }
                         }
                     }
@@ -1075,7 +1082,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                                 butterfly.ai[1] = 0;//清空计时器
                                 butterfly.ai[3] = NPC.whoAmI;
                                 butterfly.velocity = Vector2.Zero;
-                                (butterfly.ModNPC as Butterfly).TargetPos = new Vector2((x - BFistColorsWidth / 2) * scale, (y - BFistColorsHeight / 2) * scale).RotatedBy(rot);//指定其目标
+                                (butterfly.ModNPC as Butterfly).targetPos = new Vector2((x - BFistColorsWidth / 2) * scale, (y - BFistColorsHeight / 2) * scale).RotatedBy(rot);//指定其目标
                             }
                         }
                     }
@@ -1262,7 +1269,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             Texture2D tg = Common.MythContent.QuickTexture("Bosses/CorruptMoth/NPCs/CorruptMothGlow");
 
             Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             float t = (float)Main.timeForVisualEffects * 0.2f;
             for (int i = 0; i < 6; i++)//周围的幻影
             {
@@ -1279,7 +1286,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             }
             Main.spriteBatch.Draw(tg, NPC.Center - Main.screenPosition, new Rectangle?(NPC.frame), NPC.GetAlpha(Color.White) * 0.5f, NPC.rotation, origin, 1f, effects, 0f);
             Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
             return false;
         }

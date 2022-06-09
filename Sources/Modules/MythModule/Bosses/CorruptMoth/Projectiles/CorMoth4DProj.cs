@@ -27,7 +27,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
 
         private NPC Owner => Main.npc[(int)Projectile.ai[0]];
         public Vector4 targetPos;
-        private Vector4 Position;
+        private Vector4 v4Position;
         private int maxTimeleft;
         public override void SendExtraAI(BinaryWriter writer)
         {
@@ -59,23 +59,23 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
             //逐维度展开
             if (t < 50)
             {
-                Position.Y = MathHelper.Lerp(Position.Y, targetPos.Y, 0.05f);
+                v4Position.Y = MathHelper.Lerp(v4Position.Y, targetPos.Y, 0.05f);
             }
             else if (t < 100)
             {
-                Position.X = MathHelper.Lerp(Position.X, targetPos.X, 0.05f);
+                v4Position.X = MathHelper.Lerp(v4Position.X, targetPos.X, 0.05f);
             }
             else if (t < 150)
             {
-                Position.Z = MathHelper.Lerp(Position.Z, targetPos.Z, 0.05f);
+                v4Position.Z = MathHelper.Lerp(v4Position.Z, targetPos.Z, 0.05f);
             }
             else if (t < 200)
             {
-                Position.W = MathHelper.Lerp(Position.W, targetPos.W, 0.05f);
+                v4Position.W = MathHelper.Lerp(v4Position.W, targetPos.W, 0.05f);
             }
             else
             {
-                Position = VecRotByYoZ(Position, 0.01f);
+                v4Position = VecRotByYoZ(v4Position, 0.01f);
                 Projectile.ai[1] += 0.001f;
                 //Position = Vector4.Normalize(Position) * (Position.Length() + 1f);
             }
@@ -86,7 +86,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
                 return;
             }
 
-            Vector3 v3 = Projection(Position * Projectile.ai[1] + new Vector4(Owner.Center, 0, 0), Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2, 1000);
+            Vector3 v3 = Projection(v4Position * Projectile.ai[1] + new Vector4(Owner.Center, 0, 0), 1000);
             if (v3.Z < 800)
             {
                 Projectile.hostile = true;
@@ -116,7 +116,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
             Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
             Vector2 origin = new Vector2(tex.Width / 2, tex.Height / 6);
             Rectangle sourceRec = tex.Frame(1, 3, 0, Projectile.frame % 3);
-            Vector3 v3 = Projection(Position * Projectile.ai[1] + new Vector4(Owner.Center, 0, 0), Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2, 1000);
+            Vector3 v3 = Projection(v4Position * Projectile.ai[1] + new Vector4(Owner.Center, 0, 0), 1000);
             if (v3.Z < 900)
             {
 
@@ -129,7 +129,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
             return false;
         }
 
-        private Vector3 Projection(Vector4 vec, Vector2 center, float viewZ)
+        private Vector3 Projection(Vector4 vec, float viewZ)
         {
             float k1 = -viewZ / (vec.W - viewZ);
             Vector3 v3 = new Vector3(vec.X, vec.Y, vec.Z);

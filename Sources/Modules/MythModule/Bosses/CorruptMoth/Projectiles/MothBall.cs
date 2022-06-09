@@ -5,6 +5,17 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
 {
     public class MothBall : ModProjectile
     {
+        private float r = 0;
+        private Vector2 v0;
+        private int Fra = 0;
+        private int FraX = 0;
+        private int FraY = 0;
+        private Vector2[] vB = new Vector2[15];
+        private Vector2[] vloB = new Vector2[15];
+        private int[] yB = new int[15];
+        private float Stre2 = 1;
+        protected override bool CloneNewInstances => false;
+        public override bool IsCloneable => false;
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("幻蝶泡");
@@ -18,26 +29,24 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
             Projectile.aiStyle = -1;
             Projectile.penetrate = -1;
             Projectile.timeLeft = 300;
-            Projectile.tileCollide =true;
+            Projectile.tileCollide = true;
         }
-        float r = 0;
-        private Vector2 v0;
-        private int Fra = 0;
-        private int FraX = 0;
-        private int FraY = 0;
+
         public override void AI()
         {
             int p = Player.FindClosest(Projectile.Center, 1000, 1000);
 
             if (p >= 0 && p < 255)
             {
-                float speed = MathHelper.Clamp((300-Projectile.timeLeft)*0.1f,0,30);
-                speed *= MathHelper.Clamp(Vector2.Distance(Projectile.Center, Main.player[p].Center)/300,1,2f);
+                float speed = MathHelper.Clamp((300 - Projectile.timeLeft) * 0.1f, 0, 30);
+                speed *= MathHelper.Clamp(Vector2.Distance(Projectile.Center, Main.player[p].Center) / 300, 1, 2f);
 
-                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.player[p].Center+new Vector2(1)) * speed, 0.012f);
+                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.player[p].Center + new Vector2(1)) * speed, 0.012f);
             }
             if (Projectile.timeLeft < 50)
+            {
                 Projectile.velocity *= 0.95f;
+            }
             #region Origin
             if (Stre2 > 0)
             {
@@ -67,9 +76,9 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
             }
             int Dx = (int)(r * 1.5f);
             int Dy = (int)(r * 1.5f);
-            Fra = ((600 - Projectile.timeLeft) / (int)3) % 30;
+            Fra = ((600 - Projectile.timeLeft) / 3) % 30;
             FraX = (Fra % 6) * 270;
-            FraY = (Fra / (int)6) * 290;
+            FraY = (Fra / 6) * 290;
             if (v0 != Vector2.Zero)
             {
                 // Projectile.position = v0 - new Vector2(Dx, Dy) / 2f;
@@ -99,9 +108,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
             }
             #endregion
         }
-        Vector2[] vB = new Vector2[15];
-        Vector2[] vloB = new Vector2[15];
-        int[] yB = new int[15];
         public override void Kill(int timeLeft)
         {
             /*震屏
@@ -111,44 +117,46 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
 
             mplayer.ShakeStrength = Str;*/
             SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, Projectile.Center);
-            for (int h = 0; h < 120; h+=3)
+            for (int h = 0; h < 120; h += 3)
             {
                 Vector2 v3 = new Vector2(0, (float)Math.Sin(h * Math.PI / 4d + Projectile.ai[0]) + 5).RotatedBy(h * Math.PI / 10d) * Main.rand.NextFloat(0.2f, 1.1f);
                 int r = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4), 0, 0, ModContent.DustType<Dusts.PureBlue>(), 0, 0, 0, default(Color), 15f * Main.rand.NextFloat(0.7f, 2.9f));
                 Main.dust[r].noGravity = true;
                 Main.dust[r].velocity = v3 * 6;
             }
-            for (int y = 0; y < 180; y+=3)
+            for (int y = 0; y < 180; y += 3)
             {
-                int num90 = Dust.NewDust(Projectile.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(1.3f, 6.2f));
-                Main.dust[num90].noGravity = true;
-                Main.dust[num90].velocity = new Vector2(Main.rand.NextFloat(0.0f, 4.5f), Main.rand.NextFloat(1.8f, 5.5f)).RotatedByRandom(Math.PI * 2d);
+                int index = Dust.NewDust(Projectile.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(1.3f, 6.2f));
+                Main.dust[index].noGravity = true;
+                Main.dust[index].velocity = new Vector2(Main.rand.NextFloat(0.0f, 4.5f), Main.rand.NextFloat(1.8f, 5.5f)).RotatedByRandom(Math.PI * 2d);
             }
-            for (int y = 0; y < 180; y+=3)
+            for (int y = 0; y < 180; y += 3)
             {
-                int num90 = Dust.NewDust(Projectile.Center + new Vector2(0, Main.rand.NextFloat(2f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(1.3f, 6.2f));
-                Main.dust[num90].noGravity = true;
-                Main.dust[num90].velocity = new Vector2(0, Main.rand.NextFloat(3.0f, 27.5f)).RotatedByRandom(Math.PI * 2d);
+                int index = Dust.NewDust(Projectile.Center + new Vector2(0, Main.rand.NextFloat(2f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(1.3f, 6.2f));
+                Main.dust[index].noGravity = true;
+                Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(3.0f, 27.5f)).RotatedByRandom(Math.PI * 2d);
             }
             for (int y = 0; y < 36; y++)
             {
-                int num90 = Dust.NewDust(Projectile.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(1.3f, 4.2f));
-                Main.dust[num90].noGravity = true;
-                Main.dust[num90].velocity = new Vector2(Main.rand.NextFloat(0.0f, 2.5f), Main.rand.NextFloat(1.8f, 5.5f)).RotatedByRandom(Math.PI * 2d);
+                int index = Dust.NewDust(Projectile.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(1.3f, 4.2f));
+                Main.dust[index].noGravity = true;
+                Main.dust[index].velocity = new Vector2(Main.rand.NextFloat(0.0f, 2.5f), Main.rand.NextFloat(1.8f, 5.5f)).RotatedByRandom(Math.PI * 2d);
             }
-            if (Main.netMode != 1)
+            if (Main.netMode != NetmodeID.MultiplayerClient)
             {
                 for (int y = 0; y < 10; y++)
                 {
                     for (int i = 0; i < 5; i++)
                     {
-                        int g = NPC.NewNPC(null, (int)(Projectile.Center + vB[y]).X, (int)(Projectile.Center + vB[y]).Y, ModContent.NPCType<NPCs.Butterfly>());
-                        Main.npc[g].velocity = Main.rand.NextVector2Unit() * Main.rand.Next(4, 12);
+                        var npc = NPC.NewNPCDirect(Projectile.GetSource_FromAI(), (int)(Projectile.Center.X + vB[y].X), (int)(Projectile.Center.Y + vB[y].Y), ModContent.NPCType<NPCs.Butterfly>());
+                        npc.velocity = Main.rand.NextVector2Unit() * Main.rand.Next(4, 12);
+                        npc.netUpdate = true;
                     }
                     for (int i = 0; i < 4; i++)
                     {
-                        int a = NPC.NewNPC(null, (int)(Projectile.Center).X, (int)(Projectile.Center).Y, ModContent.NPCType<NPCs.Butterfly>());
-                        Main.npc[a].velocity = Main.rand.NextVector2Unit() * Main.rand.Next(2, 5);
+                        var npc = NPC.NewNPCDirect(Projectile.GetSource_FromAI(), (int)Projectile.Center.X, (int)Projectile.Center.Y, ModContent.NPCType<NPCs.Butterfly>());
+                        npc.velocity = Main.rand.NextVector2Unit() * Main.rand.Next(2, 5);
+                        npc.netUpdate = true;
                     }
                 }
 
@@ -162,12 +170,12 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
                 {
                     if (h % 6 < 3)
                     {
-                        Vector2 v = new Vector2(0, 12f).RotatedBy(h  * MathHelper.TwoPi / 36f + X);
-                        Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center + v, v, ModContent.ProjectileType<Projectiles.BlueMissil>(), Projectile.damage / 7, 0f, Main.myPlayer, 2);
+                        Vector2 v = new Vector2(0, 12f).RotatedBy(h * MathHelper.TwoPi / 36f + X);
+                        Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center + v, v, ModContent.ProjectileType<BlueMissil>(), Projectile.damage / 7, 0f, Main.myPlayer, 2);
                     }
                 }
             }
-            
+
             //Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.CorruptMoth.FruitBomb>(), 0, 0f, Main.myPlayer, 1);
             base.Kill(timeLeft);
         }
@@ -192,6 +200,5 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
             Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color((int)(255 * Stre2), (int)(255 * Stre2), (int)(255 * Stre2), 0), Projectile.rotation, new Vector2(168f, 168f), Projectile.scale * 2 * r / 60f, SpriteEffects.None, 0);
             return false;
         }
-        private float Stre2 = 1;
     }
 }
