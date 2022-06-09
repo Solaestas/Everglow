@@ -5,7 +5,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
     {
 		public override int Music => Common.MythContent.QuickMusic("MothBiome");
 
-		public override SceneEffectPriority Priority => SceneEffectPriority.Environment;
+		public override SceneEffectPriority Priority => SceneEffectPriority.BiomeHigh;
 		public override string BestiaryIcon => "Everglow/Sources/Modules/MythModule/TheFirefly/FireflyIcon";
 		public override string BackgroundPath => base.BackgroundPath;
 		public override Color? BackgroundColor => base.BackgroundColor;

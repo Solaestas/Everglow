@@ -43,7 +43,6 @@ namespace Everglow.Sources.Modules.ExampleModule
             orig(self, gameTime);
             if (ModContent.GetInstance<MothBackground>().BiomeActive())
             {
-
                 self._useViscosityFilter = false;
             }
         }
@@ -66,6 +65,10 @@ namespace Everglow.Sources.Modules.ExampleModule
             c.Emit(Mono.Cecil.Cil.OpCodes.Ldsfld, typeof(ExampleSystem).GetField("ReplaceEffectPass"));
             c.EmitDelegate<Action<WaterShaderData, EffectPass>>((shaderData, effect) =>
             {
+                if (!ModContent.GetInstance<MothBackground>().BiomeActive())
+                {
+                    return;
+                }
                 var targetPos = shaderData.Shader.Parameters["uTargetPosition"].GetValueVector2();
                 var imageOffset = shaderData.Shader.Parameters["uImageOffset"].GetValueVector2();
                 var screenPos = Main.screenPosition - targetPos;
@@ -92,15 +95,15 @@ namespace Everglow.Sources.Modules.ExampleModule
                 shader.Parameters["cb1"].SetValue(new Vector4(a9 * 0.05f, 0, 0, 0));
                 shader.Parameters["cb2"].SetValue(new Vector4(-a9 * 0.05f, 0, 0, 0));
                 shader.Parameters["cb3"].SetValue(new Vector4(1f / a11.X, 1f / a11.Y, 0, 0));
-                shader.Parameters["cb4"].SetValue(new Vector4(0.0167f, 0.320f, 0, 0));
+                shader.Parameters["cb4"].SetValue(new Vector4(32 / a4.X, 320 / a4.Y, 0, 0));
                 shader.Parameters["cb5"].SetValue(new Vector4(1f / a15.X, 1f / a15.Y, 0, 0));
                 shader.Parameters["cb6"].SetValue(new Vector4(a4, 0, 0));
                 shader.Parameters["cb7"].SetValue(new Vector4(screenPos, 0, 0));
                 shader.Parameters["cb8"].SetValue(new Vector4(targetPos, 0, 0));
                 shader.Parameters["cb9"].SetValue(new Vector4(a8, 0, 0, 0));
                 shader.Parameters["cb10"].SetValue(new Vector4(imageOffset, 0, 0));
-                shader.Parameters["uThreashhold"].SetValue(0.03f);
-                shader.Parameters["uPower"].SetValue(1.5f);
+                shader.Parameters["uThreashhold"].SetValue(0.04f);
+                shader.Parameters["uPower"].SetValue(2.0f);
 
                 effect.Apply();
             });
