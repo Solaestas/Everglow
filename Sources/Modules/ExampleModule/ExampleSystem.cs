@@ -1,4 +1,5 @@
 ﻿using Everglow.Sources.Commons.Core.Profiler.Fody;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds;
 using MonoMod.Cil;
 using ReLogic.Content;
 using Terraria.GameContent;
@@ -29,10 +30,22 @@ namespace Everglow.Sources.Modules.ExampleModule
             m_renderTargetIndex = 0;
 
             // On.Terraria.GameContent.Shaders.WaterShaderData.Apply += WaterShaderData_Apply;
+            On.Terraria.GameContent.Shaders.WaterShaderData.Update += WaterShaderData_Update;
             IL.Terraria.GameContent.Shaders.WaterShaderData.Apply += WaterShaderData_Apply1;
             ReplaceEffectPass = m_waveDisortionScreen.Value.CurrentTechnique.Passes[0];
 
             base.OnModLoad();
+        }
+
+        private void WaterShaderData_Update(On.Terraria.GameContent.Shaders.WaterShaderData.orig_Update orig, WaterShaderData self, GameTime gameTime)
+        {
+            // 关掉_useViscosityFilter来防止出现明显视觉bug
+            orig(self, gameTime);
+            if (ModContent.GetInstance<MothBackground>().BiomeActive())
+            {
+
+                self._useViscosityFilter = false;
+            }
         }
 
         public static EffectPass ReplaceEffectPass = null;
@@ -86,6 +99,8 @@ namespace Everglow.Sources.Modules.ExampleModule
                 shader.Parameters["cb8"].SetValue(new Vector4(targetPos, 0, 0));
                 shader.Parameters["cb9"].SetValue(new Vector4(a8, 0, 0, 0));
                 shader.Parameters["cb10"].SetValue(new Vector4(imageOffset, 0, 0));
+                shader.Parameters["uThreashhold"].SetValue(0.03f);
+                shader.Parameters["uPower"].SetValue(1.5f);
 
                 effect.Apply();
             });
@@ -101,6 +116,8 @@ namespace Everglow.Sources.Modules.ExampleModule
             //{
             //    Everglow.ProfilerManager.PrintSummary();
             //}
+
+
         }
 
         public override void PostDrawInterface(SpriteBatch spriteBatch)
