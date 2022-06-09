@@ -24,10 +24,10 @@ internal class NPCColliding : GlobalNPC
     }
     private static void NPC_ApplyTileCollision(On.Terraria.NPC.orig_ApplyTileCollision orig, NPC self, bool fall, Vector2 cPosition, int cWidth, int cHeight)
     {
-        TileSystem.EnableDTCollision = false;
+        TileSystem.EnableCollisionHook = false;
         self.GetGlobalNPC<NPCColliding>().fall = fall;
         orig(self, fall, cPosition, cWidth, cHeight);
-        TileSystem.EnableDTCollision = true;
+        TileSystem.EnableCollisionHook = true;
     }
     private static void NPC_Collision_MoveWhileWet(On.Terraria.NPC.orig_Collision_MoveWhileWet orig, NPC self, Vector2 oldDryVelocity, float Slowdown)
     {
@@ -38,12 +38,12 @@ internal class NPCColliding : GlobalNPC
         }
 
         
-        TileSystem.EnableDTCollision = false;
+        TileSystem.EnableCollisionHook = false;
         var npc = self.GetGlobalNPC<NPCColliding>();
         npc.handler.position = self.position;
         orig(self, oldDryVelocity, Slowdown);
         npc.handler.Update(npc.fall);
-        TileSystem.EnableDTCollision = true;
+        TileSystem.EnableCollisionHook = true;
     }
     private static void NPC_Collision_MoveWhileDry(On.Terraria.NPC.orig_Collision_MoveWhileDry orig, NPC self)
     {
@@ -54,12 +54,12 @@ internal class NPCColliding : GlobalNPC
         }
 
         
-        TileSystem.EnableDTCollision = false;
+        TileSystem.EnableCollisionHook = false;
         var npc = self.GetGlobalNPC<NPCColliding>();
         npc.handler.position = self.position;
         orig(self);
         npc.handler.Update(npc.fall);
-        TileSystem.EnableDTCollision = true;
+        TileSystem.EnableCollisionHook = true;
 
     }
 }

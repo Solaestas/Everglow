@@ -41,7 +41,7 @@ internal class PlayerHandler : EntityHandler<Player>
             Entity.Hurt(PlayerDeathReason.ByCustomReason("Inside Tile"), 10, 0);
         }
 
-        if (dir.IsH())
+        if (tile.IsGrabbable && dir.IsH())
         {
             var player = Entity;
             player.slideDir = (int)player.GetControlDirectionH().ToVector2().X;

@@ -46,15 +46,9 @@ internal class TestItem : ModItem
         int timer = 30;
         public override void AI()
         {
-            //timer++;
-            //if ((timer % 240) < 120)
-            //{
-            //    angularVelocity = 0;
-            //}
-            //else
-            //{
-            //    angularVelocity = -0;
-            //}
+            timer++;
+            //velocity.Y = (float)Math.Sin(timer / 60f);
+            //angularVelocity = (float)Math.Sin(timer / 60f) * 0.01f;
         }
     }
     public override bool CanUseItem(Player player)
@@ -62,7 +56,7 @@ internal class TestItem : ModItem
         //var block = new TestBlock(Main.MouseWorld, new Vector2(1000, 16));
         //block.Velocity = Vector2.UnitX * -10;
         //TileSystem.AddTile(block);
-        var plat = new TestPlat(Main.MouseWorld, -Vector2.UnitY, 200, -MathHelper.PiOver2, 0, 1);
+        var plat = new TestPlat(Main.MouseWorld, Vector2.Zero, 200, -MathHelper.Pi / 12, 0, 1);
         //plat.miu = 1;
         TileSystem.AddTile(plat);
         //var circle = new TestCircle(new Circle(Main.MouseWorld, 256), 1);

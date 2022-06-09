@@ -47,12 +47,12 @@ internal class ProjColliding : GlobalProjectile
         }
 
 
-        TileSystem.EnableDTCollision = false;
+        TileSystem.EnableCollisionHook = false;
         var proj = self.GetGlobalProjectile<ProjColliding>();
         proj.handler.position = self.position;//记录位置，否则会把传送当成位移
         orig(self, wetVelocity, out overrideWidth, out overrideHeight);
         proj.handler.Update(true);
-        TileSystem.EnableDTCollision = true;
+        TileSystem.EnableCollisionHook = true;
     }
     private static void Projectile_AI_007_GrapplingHooks_On(On.Terraria.Projectile.orig_AI_007_GrapplingHooks orig, Projectile self)
     {

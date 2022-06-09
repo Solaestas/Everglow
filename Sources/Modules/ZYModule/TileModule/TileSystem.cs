@@ -94,9 +94,9 @@ internal class TileSystem : IModule
                 flag = true;
             }
         }
-        EnableDTCollision = false;
+        EnableCollisionHook = false;
         aabb.position += Terraria.Collision.TileCollision(aabb.position, move, (int)aabb.size.X, (int)aabb.size.Y, fallthrough);
-        EnableDTCollision = true;
+        EnableCollisionHook = true;
         return flag;
     }
     public static bool Collision(Collider collider, out DynamicTile tile)
@@ -155,11 +155,11 @@ internal class TileSystem : IModule
             tile.DrawToMap(mapTopLeft, mapX2Y2AndOff, mapRect, mapScale);
         }
     }
-    public static bool EnableDTCollision = true;
+    public static bool EnableCollisionHook = true;
     private static Vector2 Collision_TileCollision(On.Terraria.Collision.orig_TileCollision orig, Vector2 Position, Vector2 Velocity, int Width, int Height, bool fallThrough, bool fall2, int gravDir)
     {
         Vector2 result = orig(Position, Velocity, Width, Height, fallThrough, fall2, gravDir);
-        if (EnableDTCollision && Enable)
+        if (EnableCollisionHook && Enable)
         {
             var rect = new AABB(Position.X, Position.Y, Width, Height);
             if (MoveCollision(ref rect, ref result, fallThrough))
@@ -171,7 +171,7 @@ internal class TileSystem : IModule
     }
     private static void Collision_LaserScan(On.Terraria.Collision.orig_LaserScan orig, Vector2 samplingPoint, Vector2 directionUnit, float samplingWidth, float maxDistance, float[] samples)
     {
-        if (!Enable)
+        if (!Enable || !EnableCollisionHook)
         {
             orig(samplingPoint, directionUnit, samplingWidth, maxDistance, samples);
             return;
@@ -193,7 +193,7 @@ internal class TileSystem : IModule
     }
     private static bool Collision_SolidCollision_Vector2_int_int_bool(On.Terraria.Collision.orig_SolidCollision_Vector2_int_int_bool orig, Vector2 Position, int Width, int Height, bool acceptTopSurfaces)
     {
-        if (!Enable)
+        if (!Enable || !EnableCollisionHook)
         {
             return orig(Position, Width, Height, acceptTopSurfaces);
         }
@@ -201,7 +201,7 @@ internal class TileSystem : IModule
     }
     private static bool Collision_SolidCollision_Vector2_int_int(On.Terraria.Collision.orig_SolidCollision_Vector2_int_int orig, Vector2 Position, int Width, int Height)
     {
-        if (!Enable)
+        if (!Enable || !EnableCollisionHook)
         {
             return orig(Position, Width, Height);
         }

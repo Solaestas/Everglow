@@ -16,14 +16,16 @@ internal class PlayerColliding : ModPlayer
         On.Terraria.Player.HoneyCollision += Player_HoneyCollision;
         try
         {
-            IL.Terraria.Player.WallslideMovement += Player_WallslideMovement;
+            IL.Terraria.Player.WallslideMovement += Player_WallslideMovement_IL;
         }
         catch (Exception ex)
         {
             ILException.Throw("Player_WallslideMovement_Error", ex);
         }
+        On.Terraria.Player.WallslideMovement += Player_WallslideMovement_On;
 
     }
+
 
     public override ModPlayer Clone(Player newEntity)
     {
@@ -38,12 +40,12 @@ internal class PlayerColliding : ModPlayer
             orig(self, fallThrough, ignorePlats);
             return;
         }
-        TileSystem.EnableDTCollision = false;
+        TileSystem.EnableCollisionHook = false;
         var player = self.GetModPlayer<PlayerColliding>();
         player.handler.position = self.position;//记录位置，否则会把传送当成位移
         orig(self, fallThrough, ignorePlats);
         self.GetModPlayer<PlayerColliding>().handler.Update(ignorePlats || fallThrough);
-        TileSystem.EnableDTCollision = true;
+        TileSystem.EnableCollisionHook = true;
     }
     private static void Player_WaterCollision(On.Terraria.Player.orig_WaterCollision orig, Player self, bool fallThrough, bool ignorePlats)
     {
@@ -53,12 +55,12 @@ internal class PlayerColliding : ModPlayer
             return;
         }
 
-        TileSystem.EnableDTCollision = false;
+        TileSystem.EnableCollisionHook = false;
         var player = self.GetModPlayer<PlayerColliding>();
         player.handler.position = self.position;//记录位置，否则会把传送当成位移
         orig(self, fallThrough, ignorePlats);
         self.GetModPlayer<PlayerColliding>().handler.Update(ignorePlats || fallThrough);
-        TileSystem.EnableDTCollision = true;
+        TileSystem.EnableCollisionHook = true;
     }
     private static void Player_HoneyCollision(On.Terraria.Player.orig_HoneyCollision orig, Player self, bool fallThrough, bool ignorePlats)
     {
@@ -68,42 +70,64 @@ internal class PlayerColliding : ModPlayer
             return;
         }
 
-        TileSystem.EnableDTCollision = false;
+        TileSystem.EnableCollisionHook = false;
         var player = self.GetModPlayer<PlayerColliding>();
         player.handler.position = self.position;//记录位置，否则会把传送当成位移
         orig(self, fallThrough, ignorePlats);
         self.GetModPlayer<PlayerColliding>().handler.Update(ignorePlats || fallThrough);
-        TileSystem.EnableDTCollision = true;
+        TileSystem.EnableCollisionHook = true;
     }
     private static bool Player_CanFitSpace(On.Terraria.Player.orig_CanFitSpace orig, Player self, int heightBoost)
     {
-        TileSystem.EnableDTCollision = false;
+        TileSystem.EnableCollisionHook = false;
         bool flag = orig(self, heightBoost);
-        TileSystem.EnableDTCollision = true;
+        TileSystem.EnableCollisionHook = true;
         return flag;
     }
-    private static void Player_WallslideMovement(ILContext il)
+    private static void Player_WallslideMovement_IL(ILContext il)
     {
         var cursor = new ILCursor(il);
-        var label = cursor.DefineLabel();
+        var skipControlCheck = cursor.DefineLabel();
+        var skipSetFlag = cursor.DefineLabel();
         if (!cursor.TryGotoNext(MoveType.After, ins => ins.MatchStfld<Player>("sliding")))
         {
             ILException.Throw("Player_WallslideMovement_NotFound_0");
         }
-        cursor.Emit(OpCodes.Ldarg_0);
-        cursor.EmitDelegate((Player player) =>
+        MethodInfo method = null;
+        foreach(var m in typeof(Player).GetMethods(BindingFlags.Instance | BindingFlags.Public))
         {
-            return player.GetModPlayer<PlayerColliding>().handler.attachType == AttachType.Grab;
-        });
-        cursor.Emit(OpCodes.Brtrue, label);
-
+            if(m.Name == "GetModPlayer" && m.GetParameters().Length == 0)
+            {
+                method = m;
+            }
+        }
+        Debug.Assert(method != null);
+        //if(player.GetModPlayer<PlayerColliding>().handler.attachType == AttachType.Grab)
+        //{
+        //    flag = true;
+        //    goto
+        //}
+        cursor.Emit(OpCodes.Ldarg_0);
+        cursor.Emit(OpCodes.Call, method.MakeGenericMethod(typeof(PlayerColliding)));
+        cursor.Emit(OpCodes.Ldfld, typeof(PlayerColliding).GetField(nameof(handler)));
+        cursor.Emit(OpCodes.Ldfld, typeof(EntityHandler).GetField(nameof(EntityHandler.attachType)));
+        cursor.Emit(OpCodes.Ldc_I4, (int)AttachType.Grab);
+        cursor.Emit(OpCodes.Bne_Un, skipSetFlag);
+        cursor.Emit(OpCodes.Ldc_I4, 1);
+        cursor.Emit(OpCodes.Stloc_0);
+        cursor.Emit(OpCodes.Br, skipControlCheck);
+        cursor.MarkLabel(skipSetFlag);
 
         if (!cursor.TryGotoNext(MoveType.After, ins => ins.MatchStloc(0) && ins.Previous.MatchLdcI4(0)))
         {
             ILException.Throw("Player_WallslideMovement_NotFound_1");
         }
-        cursor.MarkLabel(label);
-        cursor.Emit(OpCodes.Ldc_I4_1);
-        cursor.Emit(OpCodes.Stloc_0);
+        cursor.MarkLabel(skipControlCheck);
+    }
+    private static void Player_WallslideMovement_On(On.Terraria.Player.orig_WallslideMovement orig, Player self)
+    {
+        TileSystem.EnableCollisionHook = false;
+        orig(self);
+        TileSystem.EnableCollisionHook = true;
     }
 }
