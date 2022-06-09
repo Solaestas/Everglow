@@ -9,7 +9,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
 		public override string BestiaryIcon => "Everglow/Sources/Modules/MythModule/TheFirefly/FireflyIcon";
 		public override string BackgroundPath => base.BackgroundPath;
 		public override Color? BackgroundColor => base.BackgroundColor;
-		public override void SetStaticDefaults()
+
+        public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Glowing Cocoon");
 		}
