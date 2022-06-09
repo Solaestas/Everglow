@@ -150,13 +150,13 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
                     {
                         var npc = NPC.NewNPCDirect(Projectile.GetSource_FromAI(), (int)(Projectile.Center.X + vB[y].X), (int)(Projectile.Center.Y + vB[y].Y), ModContent.NPCType<NPCs.Butterfly>());
                         npc.velocity = Main.rand.NextVector2Unit() * Main.rand.Next(4, 12);
-                        npc.netUpdate = true;
+                        npc.netUpdate2 = true;
                     }
                     for (int i = 0; i < 4; i++)
                     {
                         var npc = NPC.NewNPCDirect(Projectile.GetSource_FromAI(), (int)Projectile.Center.X, (int)Projectile.Center.Y, ModContent.NPCType<NPCs.Butterfly>());
                         npc.velocity = Main.rand.NextVector2Unit() * Main.rand.Next(2, 5);
-                        npc.netUpdate = true;
+                        npc.netUpdate2 = true;
                     }
                 }
 

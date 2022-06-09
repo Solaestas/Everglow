@@ -217,7 +217,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
         }
         public override void AI()
         {
-            NPC.netUpdate2 = true;
             bool phase2 = NPC.life < NPC.lifeMax * 0.6f;
             Lighting.AddLight(NPC.Center, 0f, 0f, 0.8f * (1 - NPC.alpha / 255f));
             NPC.friendly = NPC.dontTakeDamage;

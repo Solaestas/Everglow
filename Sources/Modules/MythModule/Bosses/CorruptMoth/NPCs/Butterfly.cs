@@ -77,7 +77,7 @@
                 if (Vector2.Distance(NPC.Center, Owner.Center) > 300)
                 {
                     MoveTo(Owner.Center + Main.rand.NextVector2Unit() * 100, 10, 20);
-                    NPC.netUpdate = true;
+                    NPC.netUpdate2 = true;
                 }
 
                 NPC.friendly = true;
@@ -103,7 +103,7 @@
                 {
                     NPC.ai[2] = Main.rand.Next(60, 200);
                     base.NPC.frame.Y = Main.rand.Next(2) * 24;
-                    NPC.netUpdate = true;
+                    NPC.netUpdate2 = true;
                 }
                 if (++Timer > NPC.ai[2] && Timer < NPC.ai[2] + 350)//追踪玩家
                 {
@@ -196,7 +196,7 @@
                     NPC.velocity *= 0.5f;
                     NPC.velocity += Main.rand.NextVector2Unit() * 10;
                     NPC.friendly = true;
-                    NPC.netUpdate = true;
+                    NPC.netUpdate2 = true;
                 }
                 if (Timer > 240)
                 {
@@ -295,7 +295,7 @@
                     Timer = 0;
                     NPC.ai[0] = 0;
                     NPC.dontTakeDamage = false;
-                    NPC.netUpdate = true;
+                    NPC.netUpdate2 = true;
                 }
             }
 
