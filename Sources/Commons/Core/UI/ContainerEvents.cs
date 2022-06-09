@@ -1,10 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Xna.Framework.Input;
 
 namespace Everglow.Sources.Commons.Core.UI
 {
@@ -150,9 +144,9 @@ namespace Everglow.Sources.Commons.Core.UI
         /// <summary>
         /// 由执行器调用: 执行自定义的操作于当前容器处于可交互状态下时, 鼠标右键单击时.
         /// </summary>
-        public void DoMouseRightClickEvent( ) 
+        public void DoMouseRightClickEvent( )
         {
-            OnMouseRightClick.Invoke( ); 
+            OnMouseRightClick.Invoke( );
         }
         /// <summary>
         /// 在容器于可交互状态下, 鼠标右键单击时执行.
@@ -168,7 +162,7 @@ namespace Everglow.Sources.Commons.Core.UI
         /// <summary>
         /// 由执行器调用: 执行自定义的操作于当前容器处于可交互状态下时, 鼠标右键长按时.
         /// </summary>
-        public void DoMouseRightDownEvent( ) 
+        public void DoMouseRightDownEvent( )
         {
             OnMouseRightDown.Invoke( );
         }
