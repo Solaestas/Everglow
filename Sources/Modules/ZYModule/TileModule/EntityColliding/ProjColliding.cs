@@ -1,5 +1,4 @@
-﻿using Everglow.Sources.Modules.ZYModule.Commons.Core;
-using Everglow.Sources.Modules.ZYModule.Commons.Core.Collide;
+﻿using Everglow.Sources.Modules.ZYModule.Commons.Core.Collide;
 using Everglow.Sources.Modules.ZYModule.Commons.Core.DataStructures;
 using Everglow.Sources.Modules.ZYModule.Commons.Function;
 using Everglow.Sources.Modules.ZYModule.TileModule.Tiles;
@@ -7,30 +6,6 @@ using Mono.Cecil.Cil;
 using MonoMod.Cil;
 
 namespace Everglow.Sources.Modules.ZYModule.TileModule.EntityColliding;
-internal class ProjHandler : EntityHandler<Projectile>
-{
-    public ProjHandler(Projectile entity) : base(entity) { }
-    public override void OnCollision(DynamicTile tile, Direction dir, ref DynamicTile newAttach)
-    {
-        if(dir == Direction.Inside)
-        {
-            Entity.Kill();
-        }
-    }
-    public override void Update(bool ignorePlats = false)
-    {
-        if (attachTile is not null)
-        {
-            Entity.position += new Vector2(0, Entity.gfxOffY);
-            Entity.gfxOffY = 0;
-        }
-        base.Update(ignorePlats);
-    }
-    public override void OnAttach()
-    {
-        Entity.velocity.Y = 0;
-    }
-}
 internal class ProjColliding : GlobalProjectile
 {
     public ProjHandler handler;
@@ -44,6 +19,10 @@ internal class ProjColliding : GlobalProjectile
         var clone = base.Clone(from, to) as ProjColliding;
         clone.handler = new ProjHandler(to);
         return clone;
+    }
+    public override bool AppliesToEntity(Projectile entity, bool lateInstantiation)
+    {
+        return entity.tileCollide || entity.aiStyle == HookAiStyle;
     }
     public override void Load()
     {
@@ -68,9 +47,11 @@ internal class ProjColliding : GlobalProjectile
         }
 
 
-        orig(self, wetVelocity, out overrideWidth, out overrideHeight);
         TileSystem.EnableDTCollision = false;
-        self.GetGlobalProjectile<ProjColliding>().handler.Update(true);
+        var proj = self.GetGlobalProjectile<ProjColliding>();
+        proj.handler.position = self.position;//记录位置，否则会把传送当成位移
+        orig(self, wetVelocity, out overrideWidth, out overrideHeight);
+        proj.handler.Update(true);
         TileSystem.EnableDTCollision = true;
     }
     private static void Projectile_AI_007_GrapplingHooks_On(On.Terraria.Projectile.orig_AI_007_GrapplingHooks orig, Projectile self)
@@ -175,7 +156,6 @@ internal class ProjColliding : GlobalProjectile
     }
     private static void Projectile_AI_007_GrapplingHooks_IL(ILContext il)
     {
-        //TODO offset多次修改会炸，要改
         var cursor = new ILCursor(il);
         if (!cursor.TryGotoNext(MoveType.After, ins => (ins.Previous?.MatchLdcI4(1) ?? false) &&
             ins.MatchStloc(44) &&
