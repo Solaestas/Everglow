@@ -170,7 +170,7 @@
             return null;
         }
         public void HookLoad()
-        {            
+        {
             On.Terraria.Main.DrawDust += Main_DrawDust;
             On.Terraria.Main.DrawProjectiles += Main_DrawProjectiles;
             On.Terraria.Main.DrawNPCs += Main_DrawNPCs;
@@ -182,9 +182,10 @@
             On.Terraria.WorldGen.serverLoadWorldCallBack += WorldGen_serverLoadWorldCallBack;
             On.Terraria.Main.DrawBG += Main_DrawBG;
             On.Terraria.Main.DrawBackground += Main_DrawBackground;
-            On.Terraria.Main.DrawBackgroundBlackFill += Main_DrawBackgroundBlackFill;
+            On.Terraria.Main.DoDraw_WallsTilesNPCs += Main_DoDraw_WallsTilesNPCs;
             Main.OnResolutionChanged += Main_OnResolutionChanged;
         }
+
         public void HookUnload()
         {
             Main.OnResolutionChanged -= Main_OnResolutionChanged;
@@ -203,33 +204,32 @@
                     {
                         Everglow.Instance.Logger.Error($"{handler.Name} 抛出了异常 {ex}");
                         handler.Enable = false;
-                        if (Function.FeatureFlags.EverglowConfig.DebugMode)
-                        {
-                            //自动暂停的，方便监视
-                            Debug.Assert(false);
-                        }
+                        Debug.Assert(false);
                     }
                 }
             }
         }
         private void Main_DrawBackground(On.Terraria.Main.orig_DrawBackground orig, Main self)
         {
-            if (!DisableDrawBackground)
+            if (DisableDrawBackground)
             {
-                orig(self);
+                return;
             }
-        }
-        private void Main_DrawBackgroundBlackFill(On.Terraria.Main.orig_DrawBackgroundBlackFill orig, Main self)
-        {
             orig(self);
-            Invoke(CallOpportunity.PostDrawBG);
         }
         private void Main_DrawBG(On.Terraria.Main.orig_DrawBG orig, Main self)
         {
-            if (!DisableDrawSkyAndHell)
+            if (DisableDrawSkyAndHell)
             {
-                orig(self);
+                return;
             }
+            orig(self);
+        }
+
+        private void Main_DoDraw_WallsTilesNPCs(On.Terraria.Main.orig_DoDraw_WallsTilesNPCs orig, Main self)
+        {
+            Invoke(CallOpportunity.PostDrawBG);
+            orig(self);
         }
 
         internal void WorldGen_serverLoadWorldCallBack(On.Terraria.WorldGen.orig_serverLoadWorldCallBack orig)
