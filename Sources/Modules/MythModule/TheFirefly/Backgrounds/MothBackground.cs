@@ -30,6 +30,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             GetRopePosFir("TreeRope.bmp", 0.33f);
             InitMass_Spring();
         }
+
         /// <summary>
         /// 荧光悬挂物的数据结构
         /// </summary>
