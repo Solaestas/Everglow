@@ -10,20 +10,20 @@ namespace Everglow.Sources.Commons.Core.Network.PacketHandle
         /// </summary>
         /// <param name="packet"></param>
         /// <param name="whoAmI"></param>
-        public void Handle(IPacket packet, int whoAmI);
+        public void Handle( IPacket packet, int whoAmI );
     }
 
     /// <summary>
     /// 用于指定一个IPacketHandler需要处理的IPacket类型，初步认定一个Handler只处理一种封包
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class)]
+    [AttributeUsage( AttributeTargets.Class )]
     public class HandlePacketAttribute : Attribute
     {
         private Type m_packetType;
-        public HandlePacketAttribute(Type type)
+        public HandlePacketAttribute( Type type )
         {
             m_packetType = type;
-            Debug.Assert(typeof(IPacket).IsAssignableFrom(type));
+            Debug.Assert( typeof( IPacket ).IsAssignableFrom( type ) );
         }
         public Type PacketType
         {
