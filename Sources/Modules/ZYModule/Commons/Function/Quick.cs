@@ -2,7 +2,7 @@
 using Everglow.Sources.Modules.ZYModule.Commons.Core.Collide;
 using Everglow.Sources.Modules.ZYModule.Commons.Core.DataStructures;
 using ReLogic.Content;
-
+using System.Diagnostics.CodeAnalysis;
 
 namespace Everglow.Sources.Modules.ZYModule.Commons.Function;
 
@@ -73,6 +73,7 @@ internal static class Quick
         Main.NewText(obj, Color.Green);
         Console.WriteLine(obj);
     }
+    [DoesNotReturn]
     public static void Throw(Exception ex)
     {
         Everglow.Instance.Logger.Error($"{ex.Source} : {ex.Message}");

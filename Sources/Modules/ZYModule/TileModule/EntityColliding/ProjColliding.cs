@@ -34,7 +34,7 @@ internal class ProjColliding : GlobalProjectile
         }
         catch (Exception ex)
         {
-            ILException.Throw("AI_007_GrapplingHooks_Error", ex);
+            HookException.Throw("AI_007_GrapplingHooks_Error", ex);
         }
     }
 
@@ -161,7 +161,7 @@ internal class ProjColliding : GlobalProjectile
             ins.MatchStloc(44) &&
             (ins.Next?.MatchLdsflda<Main>(nameof(Main.tile)) ?? false)))
         {
-            ILException.Throw("Projectile_AI_007_GrapplingHooks_NotFound_0");
+            HookException.Throw("Projectile_AI_007_GrapplingHooks_NotFound_0");
         }
         cursor.Emit(OpCodes.Ldarg_0);
         cursor.EmitDelegate((Projectile proj) => callFromHook.Contains(proj));
@@ -170,7 +170,7 @@ internal class ProjColliding : GlobalProjectile
         if (!cursor.TryGotoNext(MoveType.Before, ins => ins.MatchLdsfld<Main>(nameof(Main.player)) &&
             ins.Previous.MatchRet()))
         {
-            ILException.Throw("Projectile_AI_007_GrapplingHooks_NotFound_1");
+            HookException.Throw("Projectile_AI_007_GrapplingHooks_NotFound_1");
         }
         cursor.MarkLabel(label);
     }

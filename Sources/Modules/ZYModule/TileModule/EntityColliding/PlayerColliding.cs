@@ -20,7 +20,7 @@ internal class PlayerColliding : ModPlayer
         }
         catch (Exception ex)
         {
-            ILException.Throw("Player_WallslideMovement_Error", ex);
+            HookException.Throw("Player_WallslideMovement_Error", ex);
         }
         On.Terraria.Player.WallslideMovement += Player_WallslideMovement_On;
 
@@ -91,7 +91,7 @@ internal class PlayerColliding : ModPlayer
         var skipSetFlag = cursor.DefineLabel();
         if (!cursor.TryGotoNext(MoveType.After, ins => ins.MatchStfld<Player>("sliding")))
         {
-            ILException.Throw("Player_WallslideMovement_NotFound_0");
+            HookException.Throw("Player_WallslideMovement_NotFound_0");
         }
         MethodInfo method = null;
         foreach(var m in typeof(Player).GetMethods(BindingFlags.Instance | BindingFlags.Public))
@@ -120,7 +120,7 @@ internal class PlayerColliding : ModPlayer
 
         if (!cursor.TryGotoNext(MoveType.After, ins => ins.MatchStloc(0) && ins.Previous.MatchLdcI4(0)))
         {
-            ILException.Throw("Player_WallslideMovement_NotFound_1");
+            HookException.Throw("Player_WallslideMovement_NotFound_1");
         }
         cursor.MarkLabel(skipControlCheck);
     }
