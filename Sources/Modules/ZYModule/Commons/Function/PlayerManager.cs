@@ -1,5 +1,4 @@
-﻿using Everglow.Sources.Modules.ZYModule.WorldModule;
-using Everglow.Sources.Modules.ZYModule.ZYPacket;
+﻿using Everglow.Sources.Modules.ZYModule.ZYPacket;
 using Terraria.GameInput;
 
 namespace Everglow.Sources.Modules.ZYModule.Commons.Function;
