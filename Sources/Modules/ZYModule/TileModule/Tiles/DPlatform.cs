@@ -71,10 +71,14 @@ internal abstract class DPlatform : DynamicTile, IHookable
     private Vector2 cache;
     public Edge Edge => new Edge(position - rotation.YAxis * width / 2, position + rotation.YAxis * width / 2);
     public override bool IsGrabbable => false;
+    /// <summary>
+    /// 能否通过按住上下键来下平台
+    /// </summary>
+    public virtual bool IsControllable => true;
     public override Collider Collider => new CEdge(Edge);
     public override Direction MoveCollision(AABB aabb, ref Vector2 velocity, ref Vector2 move, bool ignorePlats = false)
     {
-        if (ignorePlats)
+        if (ignorePlats && IsControllable && rotation < 0)
         {
             return Direction.None;
         }

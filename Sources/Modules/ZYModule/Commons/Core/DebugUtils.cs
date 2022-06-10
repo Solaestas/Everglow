@@ -17,22 +17,23 @@ internal static class DebugUtils
     [Conditional("DEBUG")]
     public static void DebugInvoke(Action action) => action();
 
-    private static HashSet<HookFlag> flags = new HashSet<HookFlag>();
+    private static Dictionary<HookFlag, int> flags = new Dictionary<HookFlag, int>();
     [Conditional("DEBUG")]
     public static void TriggerFlag(HookFlag flag)
     {
-        if (flags.Contains(flag))
+        if (flags.ContainsKey(flag))
         {
+            flags[flag]++;
             return;
         }
-        flags.Add(flag);
+        flags.Add(flag, 0);
     }
 
     [Conditional("DEBUG")]
     public static void PrintFlags()
     {
-        Console.WriteLine($"未触发Flag ： {(from flag in EnumUtils.GetEnums<HookFlag>() where !flags.Contains(flag) select flag.ToString() + " ").BuildString()}");
-        Console.WriteLine($"已触发Flag ： {(from flag in EnumUtils.GetEnums<HookFlag>() where flags.Contains(flag) select flag.ToString() + " ").BuildString()}");
+        Console.WriteLine($"未触发Flag ： {(from flag in EnumUtils.GetEnums<HookFlag>() where !flags.ContainsKey(flag) select flag.ToString() + " ").BuildString()}");
+        Console.WriteLine($"已触发Flag ： {(from flag in EnumUtils.GetEnums<HookFlag>() where flags.ContainsKey(flag) select $"{flag} : {flags[flag]}次 ").BuildString()}");
     }
     [Conditional("DEBUG"), ProfilerMeasure]
     public static void ProfilerInvoke(Action action) => action();

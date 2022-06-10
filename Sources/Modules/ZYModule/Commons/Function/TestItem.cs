@@ -14,15 +14,7 @@ internal class TestItem : ModItem
         Item.useTime = 10;
         Item.useStyle = ItemUseStyleID.Swing;
     }
-    //public class TestPlat : RotatedPlat
-    //{
-    //    public TestPlat(Vector2 position)
-    //    {
-    //        rotation = MathHelper.PiOver2;
-    //        this.position = position;
-    //        width = 300;
-    //    }
-    //}
+
     public class TestBlock : DBlock
     {
         public TestBlock(Vector2 position, Vector2 size) : base(position, size)
@@ -47,8 +39,8 @@ internal class TestItem : ModItem
         public override void AI()
         {
             timer++;
-            //velocity.Y = (float)Math.Sin(timer / 60f);
-            //angularVelocity = (float)Math.Sin(timer / 60f) * 0.01f;
+            velocity.Y = (float)Math.Sin(timer / 60f);
+            angularVelocity = (float)Math.Sin(timer / 60f * MathHelper.Pi) * 0.01f;
         }
     }
     public override bool CanUseItem(Player player)
