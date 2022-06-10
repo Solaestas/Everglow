@@ -22,7 +22,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
         public override ModUndergroundBackgroundStyle UndergroundBackgroundStyle => ModContent.GetInstance<Backgrounds.FakeMothBackground>();
         public override ModWaterStyle WaterStyle => ModContent.GetInstance<Water.FireflyWaterStyle>();
 		public override Color? BackgroundColor => base.BackgroundColor;
-		public override ModWaterStyle WaterStyle => ModContent.Find<ModWaterStyle>("Everglow/FireflyWaterStyle");
+		//public override ModWaterStyle WaterStyle => ModContent.Find<ModWaterStyle>("Everglow/FireflyWaterStyle");
 		public override ModSurfaceBackgroundStyle SurfaceBackgroundStyle => ModContent.GetInstance<FireflyBiomeBG>();
 
 		public override void SetStaticDefaults()

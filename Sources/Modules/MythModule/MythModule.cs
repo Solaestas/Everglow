@@ -76,6 +76,7 @@ namespace Everglow.Sources.Modules.MythModule
                 var waterTargetSize = shaderData.Shader.Parameters["uImageSize3"].GetValueVector2();
 
 
+
                 var shader = m_waveDisortionScreen.Value;
                 shader.Parameters["cb0"].SetValue(new Vector4(1 / noiseSize.X, 1 / noiseSize.Y, 0, 0));
                 shader.Parameters["cb1"].SetValue(new Vector4(progress * 0.05f, 0, 0, 0));
@@ -88,8 +89,8 @@ namespace Everglow.Sources.Modules.MythModule
                 shader.Parameters["cb8"].SetValue(new Vector4(targetPos, 0, 0));
                 shader.Parameters["cb9"].SetValue(new Vector4(intensity, 0, 0, 0));
                 shader.Parameters["cb10"].SetValue(new Vector4(imageOffset, 0, 0));
-                shader.Parameters["uThreashhold"].SetValue(0.04f);
-                shader.Parameters["uPower"].SetValue(2.0f);
+                shader.Parameters["uThreashhold"].SetValue(0.02f);
+                shader.Parameters["uPower"].SetValue(0.8f);
 
                 effect.Apply();
             });
