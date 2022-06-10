@@ -3,6 +3,15 @@ using Terraria.GameContent.Liquid;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly
 {
+
+    public class FireflyBiomeBG : ModSurfaceBackgroundStyle
+    {
+		public override void ModifyFarFades(float[] fades, float transitionSpeed)
+        {
+            
+        }
+    }
+
     public class FireflyBiome : ModBiome
     {
 		public override int Music => Common.MythContent.QuickMusic("MothBiome");
@@ -12,6 +21,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
 		public override string BackgroundPath => base.BackgroundPath;
 		public override Color? BackgroundColor => base.BackgroundColor;
 		public override ModWaterStyle WaterStyle => ModContent.Find<ModWaterStyle>("Everglow/FireflyWaterStyle");
+		public override ModSurfaceBackgroundStyle SurfaceBackgroundStyle => ModContent.GetInstance<FireflyBiomeBG>();
+
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Glowing Cocoon");
@@ -68,11 +79,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
 			{
 				if (Main.IsLiquidStyleWater(j) && Main.liquidAlpha[j] > 0f && j != Main.waterStyle)
 				{
-					main_DrawWater.Invoke(null, new object[] { isBackground, j, isBackground ? 1f : Main.liquidAlpha[j] });
+					main_DrawWater.Invoke(Main.instance, new object[] { isBackground, j, isBackground ? 1f : Main.liquidAlpha[j] });
 					flag = true;
 				}
 			}
-			main_DrawWater.Invoke(null, new object[] { isBackground, Main.waterStyle, flag ? Main.liquidAlpha[Main.waterStyle] : 1f });
+			main_DrawWater.Invoke(Main.instance, new object[] { isBackground, Main.waterStyle, flag ? Main.liquidAlpha[Main.waterStyle] : 1f });
 			LoaderManager.Get<WaterStylesLoader>().DrawWatersToScreen(isBackground);
 		}
 
@@ -85,8 +96,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
 
         public override void OnInBiome(Player player)
         {
-			player.CurrentSceneEffect.waterStyle.value = ModContent.Find<ModWaterStyle>("Everglow/FireflyWaterStyle").Slot;
-			player.CurrentSceneEffect.waterStyle.priority = SceneEffectPriority.BossHigh;
 			base.OnInBiome(player);
         }
     }
