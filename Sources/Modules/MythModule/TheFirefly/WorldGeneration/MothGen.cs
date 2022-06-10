@@ -175,12 +175,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         private static Point16 CocoonPos()
         {
             int PoX = Main.rand.Next(300, Main.maxTilesX - 600);
-            int PoY = Main.rand.Next(400, Main.maxTilesY - 300);
+            int PoY = Main.rand.Next(400, Main.maxTilesY - 700);
 
             while (GetCrash(PoX, PoY) > 0)
             {
                 PoX = Main.rand.Next(300, Main.maxTilesX - 600);
-                PoY = Main.rand.Next(400, Main.maxTilesY - 300);
+                PoY = Main.rand.Next(400, Main.maxTilesY - 700);
             }
             return new Point16(PoX, PoY);
         }
