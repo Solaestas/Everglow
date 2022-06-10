@@ -1,10 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Xna.Framework.Input;
 
 namespace Everglow.Sources.Commons.Core.UI
 {
@@ -20,12 +14,12 @@ namespace Everglow.Sources.Commons.Core.UI
         /// </summary>
         public bool CanSeek = true;
 
-        public Container( )
+        public Container()
         {
-            Events = new ContainerEvents( this );
-            ContainerElement = new ContainerElement( this );
-            ContainerPointer = new ContainerPointer( this );
-            ContainerItems = new List<Container>( );
+            Events = new ContainerEvents(this);
+            ContainerElement = new ContainerElement(this);
+            ContainerPointer = new ContainerPointer(this);
+            ContainerItems = new List<Container>();
         }
 
         /// <summary>
@@ -52,13 +46,20 @@ namespace Everglow.Sources.Commons.Core.UI
         /// 获取该容器的容器树..
         /// </summary>
         /// <returns>该容器的容器树.</returns>
-        public List<Container> GetContainerTree( )
+        public List<Container> GetContainerTree()
         {
-            List<Container> result = new List<Container>( );
-            result.Add( this );
-            for ( int count = 0; count < ContainerItems.Count; count++ )
-                for ( int sub = 0; sub < ContainerItems[ count ].GetContainerTree( ).Count; sub++ )
-                    result.Add( ContainerItems[ count ].GetContainerTree( )[ sub ] );
+            List<Container> result = new List<Container>
+            {
+                this
+            };
+            for (int count = 0; count < ContainerItems.Count; count++)
+            {
+                for (int sub = 0; sub < ContainerItems[count].GetContainerTree().Count; sub++)
+                {
+                    result.Add(ContainerItems[count].GetContainerTree()[sub]);
+                }
+            }
+
             return result;
         }
 
@@ -66,16 +67,28 @@ namespace Everglow.Sources.Commons.Core.UI
         /// 获取该容器的目前处于启用状态下的容器的树.
         /// </summary>
         /// <returns>该容器的已启用的容器的树.</returns>
-        public List<Container> GetActiveContainerTree( )
+        public List<Container> GetActiveContainerTree()
         {
-            List<Container> result = new List<Container>( );
-            if ( UpdateEnable )
-                result.Add( this );
-            for ( int sub = 0; sub < ContainerItems.Count; sub++ )
-                if ( ContainerItems[ sub ].UpdateEnable )
-                    for ( int count = 0; count < ContainerItems[ sub ].GetActiveContainerTree( ).Count; count++ )
-                        if ( ContainerItems[ sub ].GetActiveContainerTree( )[ count ].UpdateEnable )
-                            result.Add( ContainerItems[ sub ].GetActiveContainerTree( )[ count ] );
+            List<Container> result = new List<Container>();
+            if (UpdateEnable)
+            {
+                result.Add(this);
+            }
+
+            for (int sub = 0; sub < ContainerItems.Count; sub++)
+            {
+                if (ContainerItems[sub].UpdateEnable)
+                {
+                    for (int count = 0; count < ContainerItems[sub].GetActiveContainerTree().Count; count++)
+                    {
+                        if (ContainerItems[sub].GetActiveContainerTree()[count].UpdateEnable)
+                        {
+                            result.Add(ContainerItems[sub].GetActiveContainerTree()[count]);
+                        }
+                    }
+                }
+            }
+
             return result;
         }
 
@@ -85,22 +98,22 @@ namespace Everglow.Sources.Commons.Core.UI
         /// 将具有指定引用的容器注册进该容器的列表内.
         /// </summary>
         /// <param name="container">具有指定引用的容器.</param>
-        public void Register( Container container )
+        public void Register(Container container)
         {
             container.ParentContainer = this;
-            ContainerItems.Add( container );
+            ContainerItems.Add(container);
         }
 
         public ContainerElement ContainerElement;
 
-        public Vector2 Size => new Vector2( ContainerElement.Width, ContainerElement.Height );
+        public Vector2 Size => new Vector2(ContainerElement.Width, ContainerElement.Height);
 
-        public Vector2 Location => new Vector2( ContainerElement.LocationX, ContainerElement.LocationY );
+        public Vector2 Location => new Vector2(ContainerElement.LocationX, ContainerElement.LocationY);
 
         /// <summary>
         /// 获取该容器的基础矩形.
         /// </summary>
-        public Rectangle BaseRectangle => new Rectangle( (int)ContainerElement.LocationX, (int)ContainerElement.LocationY, (int)ContainerElement.Width, (int)ContainerElement.Height );
+        public Rectangle BaseRectangle => new Rectangle((int)ContainerElement.LocationX, (int)ContainerElement.LocationY, (int)ContainerElement.Width, (int)ContainerElement.Height);
 
         /// <summary>
         /// 表示该控件的移动方法.
@@ -116,22 +129,22 @@ namespace Everglow.Sources.Commons.Core.UI
         /// 返回该容器目前可最先交互的容器.
         /// </summary>
         /// <returns>如果寻找到非该容器之外的容器, 则返回寻找到的容器; 否则返回自己.</returns>
-        public virtual Container SeekAt( )
+        public virtual Container SeekAt()
         {
             Container target = null;
-            for ( int sub = 0; sub < ContainerItems.Count; sub++ )
+            for (int sub = 0; sub < ContainerItems.Count; sub++)
             {
-                if ( ContainerItems[ sub ].SeekAt( ) == null )
+                if (ContainerItems[sub].SeekAt() == null)
                 {
                     target = null;
                 }
-                else if ( ContainerItems[ sub ].SeekAt( ) != null )
+                else if (ContainerItems[sub].SeekAt() != null)
                 {
-                    target = ContainerItems[ sub ].SeekAt( );
+                    target = ContainerItems[sub].SeekAt();
                     return target;
                 }
             }
-            if ( GetInterviewState( ) )
+            if (GetInterviewState())
             {
                 return this;
             }
@@ -142,9 +155,9 @@ namespace Everglow.Sources.Commons.Core.UI
         /// 获取当前该容器是否允许进行交互的值.
         /// </summary>
         /// <returns>若是, 返回 <seealso href="true"/> , 否则返回 <seealso href="false"/>.</returns>
-        public virtual bool GetInterviewState( )
+        public virtual bool GetInterviewState()
         {
-            if ( BaseRectangle.Contains( new Point( Mouse.GetState().X , Mouse.GetState().Y )) )
+            if (BaseRectangle.Contains(new Point(Mouse.GetState().X, Mouse.GetState().Y)))
             {
                 Main.LocalPlayer.mouseInterface = true;
                 return true;
@@ -152,16 +165,16 @@ namespace Everglow.Sources.Commons.Core.UI
             return false;
         }
 
-        public void DoInitialize( )
+        public void DoInitialize()
         {
-            InitializeContainer( );
-            InitializeContainerItems( );
+            InitializeContainer();
+            InitializeContainerItems();
         }
 
         /// <summary>
         /// 执行于该容器进行初始化操作时.
         /// </summary>
-        protected virtual void InitializeContainer( )
+        protected virtual void InitializeContainer()
         {
 
         }
@@ -169,13 +182,15 @@ namespace Everglow.Sources.Commons.Core.UI
         /// <summary>
         /// 执行该容器的子容器的 <see cref="DoInitialize"/>, 于该容器本身的初始化执行的末尾执行.
         /// </summary>
-        protected virtual void InitializeContainerItems( )
+        protected virtual void InitializeContainerItems()
         {
-            for ( int count = 0; count < ContainerItems.Count; count++ )
-                ContainerItems[ count ].DoInitialize( );
+            for (int count = 0; count < ContainerItems.Count; count++)
+            {
+                ContainerItems[count].DoInitialize();
+            }
         }
 
-        bool _started = false;
+        private bool _started = false;
         /// <summary>
         /// 性能优化可选项: 若设为<seealso href="true"/>, 该容器将执行 <seealso cref="DoUpdate"/>.
         /// <para>[!] 默认为 <seealso href="true"/> .</para>
@@ -187,12 +202,16 @@ namespace Everglow.Sources.Commons.Core.UI
         /// 对每帧需要重置的数据进行重置.
         /// <para>[!] 该方法的执行同样受 <see cref="UpdateEnable"/> 控制.</para>
         /// </summary>
-        public void DoReset( )
+        public void DoReset()
         {
-            ResetUpdate( );
-            for ( int count = 0; count < ContainerItems.Count; count++ )
-                if ( ContainerItems[ count ].UpdateEnable )
-                    ContainerItems[ count ].DoReset( );
+            ResetUpdate();
+            for (int count = 0; count < ContainerItems.Count; count++)
+            {
+                if (ContainerItems[count].UpdateEnable)
+                {
+                    ContainerItems[count].DoReset();
+                }
+            }
         }
 
         /// <summary>
@@ -200,7 +219,7 @@ namespace Everglow.Sources.Commons.Core.UI
         /// <para>[!] 它将先于 <see cref="DoUpdate"/> 执行.</para>
         /// <para>[!] 该方法的执行同样受 <see cref="UpdateEnable"/> 控制.</para>
         /// </summary>
-        protected virtual void ResetUpdate( )
+        protected virtual void ResetUpdate()
         {
 
         }
@@ -208,58 +227,68 @@ namespace Everglow.Sources.Commons.Core.UI
         /// <summary>
         /// 执行该容器的逻辑刷新.
         /// </summary>
-        public void DoUpdate( )
+        public void DoUpdate()
         {
-            if ( !_started )
+            if (!_started)
             {
                 _started = true;
-                UpdateStart( );
+                UpdateStart();
             }
-            SetLayerout( ref ContainerElement );
-            ContainerElement.UpdateElement( );
-            this?.UpdateSelf( );
-            this?.UpdateContainerItems( );
-            MoveFunction?.UpdateLocation( ContainerElement );
-            if ( MoveFunction != null )
-                ContainerElement.SetLocation( Location.X + MoveFunction.VelocityX, Location.Y + MoveFunction.VelocityY );
-            if ( Events.Droping )
-                ContainerElement.SetLocation( new Vector2( Mouse.GetState( ).X, Mouse.GetState( ).Y ) - Events.SelectPoint );
-            ScaleFunction?.UpdateScale( ContainerElement );
-            this?.PostUpdate( );
+            SetLayerout(ref ContainerElement);
+            ContainerElement.UpdateElement();
+            this?.UpdateSelf();
+            this?.UpdateContainerItems();
+            MoveFunction?.UpdateLocation(ContainerElement);
+            if (MoveFunction != null)
+            {
+                ContainerElement.SetLocation(Location.X + MoveFunction.VelocityX, Location.Y + MoveFunction.VelocityY);
+            }
+
+            if (Events.Droping)
+            {
+                ContainerElement.SetLocation(new Vector2(Mouse.GetState().X, Mouse.GetState().Y) - Events.SelectPoint);
+            }
+
+            ScaleFunction?.UpdateScale(ContainerElement);
+            this?.PostUpdate();
         }
         /// <summary>
         /// 执行于该容器最开始进行更新的第一帧.
         /// </summary>
-        protected virtual void UpdateStart( )
+        protected virtual void UpdateStart()
         {
         }
         /// <summary>
         /// 重写该函数以进行对容器元素主体的数值调整.
         /// </summary>
-        protected virtual void SetLayerout( ref ContainerElement containerElement )
+        protected virtual void SetLayerout(ref ContainerElement containerElement)
         {
         }
         /// <summary>
         /// 执行于该容器进行交互检测前.
         /// <para>于该容器调用.</para>
         /// </summary>
-        protected virtual void UpdateSelf( )
+        protected virtual void UpdateSelf()
         {
         }
         /// <summary>
         /// 执行该容器的容器项目的  <seealso cref="DoUpdate"/>, 于 <seealso cref="UpdateSelf"/> 后调用.
         /// </summary>
-        protected virtual void UpdateContainerItems( )
+        protected virtual void UpdateContainerItems()
         {
-            for ( int count = 0; count < ContainerItems.Count; count++ )
-                if ( ContainerItems[ count ].UpdateEnable )
-                    ContainerItems[ count ].DoUpdate( );
+            for (int count = 0; count < ContainerItems.Count; count++)
+            {
+                if (ContainerItems[count].UpdateEnable)
+                {
+                    ContainerItems[count].DoUpdate();
+                }
+            }
         }
         /// <summary>
         /// 执行于该容器进行交互检测后.
         /// <para>于该容器调用.</para>
         /// </summary>
-        protected virtual void PostUpdate( )
+        protected virtual void PostUpdate()
         {
         }
 
@@ -272,33 +301,37 @@ namespace Everglow.Sources.Commons.Core.UI
         /// <summary>
         /// 执行该容器的纹理绘制.
         /// </summary>
-        public void DoDraw( )
+        public void DoDraw()
         {
-            this?.DrawSelf( );
-            this?.DrawContainerItems( );
-            this?.PostDraw( );
+            this?.DrawSelf();
+            this?.DrawContainerItems();
+            this?.PostDraw();
         }
         /// <summary>
         /// 绘制于该容器的子容器绘制前.
         /// <para>于该容器调用.</para>
         /// </summary>
-        protected virtual void DrawSelf( )
+        protected virtual void DrawSelf()
         {
 
         }
         /// <summary>
         /// 执行该容器的容器项目的  <seealso cref="DoDraw"/>, 于 <seealso cref="DrawSelf"/> 后调用.
         /// </summary>
-        protected virtual void DrawContainerItems( )
+        protected virtual void DrawContainerItems()
         {
-            for ( int count = ContainerItems.Count - 1; count >= 0; count-- )
-                if ( ContainerItems[ count ].Visable )
-                    ContainerItems[ count ].DoDraw( );
+            for (int count = ContainerItems.Count - 1; count >= 0; count--)
+            {
+                if (ContainerItems[count].Visable)
+                {
+                    ContainerItems[count].DoDraw();
+                }
+            }
         }
         /// <summary>
         /// 绘制于该容器进行自身及其子容器的绘制后.
         /// </summary>
-        protected virtual void PostDraw( )
+        protected virtual void PostDraw()
         {
 
         }

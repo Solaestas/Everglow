@@ -1,6 +1,6 @@
 ﻿namespace Everglow.Sources.Modules.FoodModule
 {
-    class ThirstystateInfoDisplay : InfoDisplay
+    internal class ThirstystateInfoDisplay : InfoDisplay
     {
         public override void SetStaticDefaults()
         {
@@ -41,7 +41,9 @@
         public override void UpdateEquips()
         {
             if (AccOsmoticPressureMonitor)
+            {
                 ShowThirstystate = true;
+            }
         }
     }
 }

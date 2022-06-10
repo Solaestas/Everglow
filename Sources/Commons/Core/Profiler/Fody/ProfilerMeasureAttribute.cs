@@ -8,39 +8,39 @@ namespace Everglow.Sources.Commons.Core.Profiler.Fody
     internal class ProfilerMeasureAttribute : OnMethodBoundaryAspect
     {
         private Stopwatch _stopwatch;
-        public ProfilerMeasureAttribute( )
+        public ProfilerMeasureAttribute()
         {
-            _stopwatch = new Stopwatch( );
+            _stopwatch = new Stopwatch();
         }
-        public override void OnEntry( MethodExecutionArgs args )
+        public override void OnEntry(MethodExecutionArgs args)
         {
-            if ( Everglow.Instance == null || Everglow.ProfilerManager == null )
+            if (Everglow.Instance == null || Everglow.ProfilerManager == null)
             {
                 return;
             }
-            _stopwatch.Restart( );
-        }
-
-        public override void OnExit( MethodExecutionArgs args )
-        {
-            if ( Everglow.Instance == null || Everglow.ProfilerManager == null )
-            {
-                return;
-            }
-            _stopwatch.Stop( );
-            var fullName = $"{args.Method.DeclaringType.FullName}:{args.Method.Name}";
-            Everglow.ProfilerManager.AddEntry( fullName, _stopwatch.Elapsed.TotalMilliseconds );
+            _stopwatch.Restart();
         }
 
-        public override void OnException( MethodExecutionArgs args )
+        public override void OnExit(MethodExecutionArgs args)
         {
-            if ( Everglow.Instance == null || Everglow.ProfilerManager == null )
+            if (Everglow.Instance == null || Everglow.ProfilerManager == null)
             {
                 return;
             }
-            _stopwatch.Stop( );
+            _stopwatch.Stop();
             var fullName = $"{args.Method.DeclaringType.FullName}:{args.Method.Name}";
-            Everglow.ProfilerManager.AddEntry( fullName, _stopwatch.Elapsed.TotalMilliseconds );
+            Everglow.ProfilerManager.AddEntry(fullName, _stopwatch.Elapsed.TotalMilliseconds);
+        }
+
+        public override void OnException(MethodExecutionArgs args)
+        {
+            if (Everglow.Instance == null || Everglow.ProfilerManager == null)
+            {
+                return;
+            }
+            _stopwatch.Stop();
+            var fullName = $"{args.Method.DeclaringType.FullName}:{args.Method.Name}";
+            Everglow.ProfilerManager.AddEntry(fullName, _stopwatch.Elapsed.TotalMilliseconds);
         }
     }
 

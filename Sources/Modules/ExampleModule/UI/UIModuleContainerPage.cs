@@ -16,33 +16,33 @@ namespace Everglow.Sources.Modules.ExampleModule.UI
 
         public TestPanel TestPanel;
 
-        protected override void InitializeContainer( )
+        protected override void InitializeContainer()
         {
-            Button0 = new Button( );
-            Button0.Events.OnMouseLeftClick += ( ) =>
+            Button0 = new Button();
+            Button0.Events.OnMouseLeftClick += () =>
             {
-                Main.NewText( "Button被左键单击了！" ); //添加左键单击事件.
+                Main.NewText("Button被左键单击了！"); //添加左键单击事件.
             };
-            Button0.Events.OnMouseLeftDown += ( ) =>
+            Button0.Events.OnMouseLeftDown += () =>
             {
-                Main.NewText( "Button被左键长按了！" ); //添加左键长按事件.
+                Main.NewText("Button被左键长按了！"); //添加左键长按事件.
             };
-            Button0.Events.OnMouseLeftUp += ( ) =>
+            Button0.Events.OnMouseLeftUp += () =>
             {
-                Main.NewText( "Button被左键松开了！" ); //添加左键松开事件.
+                Main.NewText("Button被左键松开了！"); //添加左键松开事件.
             };
-            Register( Button0 );
+            Register(Button0);
 
-            TestButton0 = new TestButton( );
-            Register( TestButton0 );
+            TestButton0 = new TestButton();
+            Register(TestButton0);
 
-            TestPanel = new TestPanel( );
-            Register( TestPanel );
+            TestPanel = new TestPanel();
+            Register(TestPanel);
 
-            base.InitializeContainer( );
+            base.InitializeContainer();
             //在初始化容器后进行布局的初次设置
-            Button0.ContainerElement.SetLayerout( 66, 66, 66, 66 );
-            TestButton0.ContainerElement.SetLayerout( 800, 400, 50, 50 );
+            Button0.ContainerElement.SetLayerout(66, 66, 66, 66);
+            TestButton0.ContainerElement.SetLayerout(800, 400, 50, 50);
         }
     }
 }
