@@ -230,7 +230,7 @@ namespace Everglow.Sources.Modules.FoodModule
 
         public override void SetStaticDefaults()
         {
-            
+
         }
 
         public override void SetDefaults(Item item)
@@ -244,7 +244,7 @@ namespace Everglow.Sources.Modules.FoodModule
                 // 替换掉原版的 buff 类型
                 item.buffType = drinkInfo.BuffType;
                 item.buffTime = drinkInfo.BuffTime.TotalFrames;
-                
+
             }
             base.SetDefaults(item);
         }

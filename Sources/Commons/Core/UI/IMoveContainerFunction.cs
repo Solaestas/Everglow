@@ -18,7 +18,7 @@
         /// <summary>
         /// 该方法决定了容器对速度的修改.
         /// </summary>
-        public void UpdateLocation( ContainerElement containerElement );
+        public void UpdateLocation(ContainerElement containerElement);
 
     }
 }
