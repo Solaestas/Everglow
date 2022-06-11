@@ -90,7 +90,9 @@ namespace Everglow.Sources.Modules.MythModule
                 shader.Parameters["cb9"].SetValue(new Vector4(intensity, 0, 0, 0));
                 shader.Parameters["cb10"].SetValue(new Vector4(imageOffset, 0, 0));
                 shader.Parameters["uThreashhold"].SetValue(0.02f);
-                shader.Parameters["uPower"].SetValue(0.8f);
+                shader.Parameters["uPower"].SetValue(1.5f);
+                shader.Parameters["uColor"].SetValue(new Vector3(0, 0.5f, 1.0f));
+
 
                 effect.Apply();
             });

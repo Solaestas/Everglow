@@ -16,6 +16,12 @@ float4 cb9;
 float4 cb10;
 float uThreashhold;
 float uPower;
+float3 uColor;
+
+float RandXY(float2 coord)
+{
+	return frac(cos(coord.x * (12.9898) + coord.y * (4.1414)) * 43758.5453);
+}
 
 float4 PixelShaderFunction(float2 texCoord : TEXCOORD) : COLOR0
 {
@@ -48,8 +54,11 @@ float4 PixelShaderFunction(float2 texCoord : TEXCOORD) : COLOR0
 	r6.xy = r6.xy;
 	r7.xyzw = tex2D(wave, r4.zw).xzyw;
 	r7.xy = r7.xy;
-	float ws = r7.x;
-	float ws2 = r7.x * 2 - 1;
+	
+	r4.z += (RandXY(r4.zw) - 0.5) * r7.x * 0.01;
+	r4.w += (RandXY(r4.wz) - 0.5) * r7.x * 0.01;
+	float ws = tex2D(wave, r4.zw).x;
+	float ws2 = ws * 2 - 1;
 	r4.zw = r0.zz + r5.xy;
 	r5.xy = r0.zz + r6.xy;
 	r5.xy = -r5.xy;
@@ -141,7 +150,7 @@ float4 PixelShaderFunction(float2 texCoord : TEXCOORD) : COLOR0
 	if (ws2 > uThreashhold)
 	{
 		float value = r6.x > 0 ? 1.0 : 0.0;
-		r1.xyz += float3(0, 0.5, 1) * pow(exp(pow(x - .50, 2.) * -20.) * value, uPower);
+		r1.xyz += uColor * pow(exp(pow(x - .50, 2.) * -20.) * value, uPower);
 	}
 	r1.w = r1.w;
 	return r1.xyzw;
