@@ -4,7 +4,8 @@ namespace Everglow.Sources.Commons.Function
 {
     internal class MainThread : IModule
     {
-        private Stack<Action> tasks = new Stack<Action>();
+        private static object m_lock = new object();
+        private List<Action> tasks = new List<Action>();
         public string Name => "MainThread";
         public void Load()
         {
@@ -15,7 +16,13 @@ namespace Everglow.Sources.Commons.Function
         {
             tasks = null;
         }
-        public static void Add(Action task) => Everglow.ModuleManager.GetModule<MainThread>().tasks.Push(task);
+        public static void Add(Action task)
+        {
+            lock (m_lock)
+            {
+                Everglow.ModuleManager.GetModule<MainThread>().tasks.Add(task);
+            }
+        }
         public static Color[] GetColors(Texture2D texture)
         {
             Color[] colors = new Color[texture.Width * texture.Height];
@@ -30,9 +37,20 @@ namespace Everglow.Sources.Commons.Function
         /// <param name="gameTime"></param>
         private void Main_Update(On.Terraria.Main.orig_Update orig, Main self, GameTime gameTime)
         {
-            if (tasks.Count != 0)
+            lock (m_lock)
             {
-                tasks.Pop().Invoke();
+                foreach (var task in tasks)
+                {
+                    try
+                    {
+                        task.Invoke();
+                    }
+                    catch (Exception ex)
+                    {
+                        throw;
+                    }
+                }
+                tasks.Clear();
             }
             orig(self, gameTime);
         }
