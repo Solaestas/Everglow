@@ -30,8 +30,47 @@ namespace Everglow.Sources.Modules.MythModule
 
             On.Terraria.GameContent.Shaders.WaterShaderData.Update += WaterShaderData_Update;
             IL.Terraria.GameContent.Shaders.WaterShaderData.Apply += WaterShaderData_Apply;
+
+
+            On.Terraria.GameContent.Shaders.WaterShaderData.StepLiquids += WaterShaderData_StepLiquids;
         }
 
+        private void WaterShaderData_StepLiquids(On.Terraria.GameContent.Shaders.WaterShaderData.orig_StepLiquids orig, WaterShaderData self)
+        {
+            orig(self);
+
+            var distortionTarget = (RenderTarget2D)typeof(WaterShaderData).GetField("_distortionTarget", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(self);
+            var lastDistortionDrawOffset = (Vector2)typeof(WaterShaderData).GetField("_lastDistortionDrawOffset", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(self);
+
+            Color[] colors = new Color[distortionTarget.Width * distortionTarget.Height];
+            distortionTarget.GetData<Color>(colors);
+
+            Vector2 offscreen = new Vector2(Main.offScreenRange, Main.offScreenRange);
+            Vector2 resol = new Vector2(Main.screenWidth, Main.screenHeight);
+            Vector2 value = new Vector2(Main.screenWidth, Main.screenHeight) * 0.5f * (Vector2.One - Vector2.One / Main.GameViewMatrix.Zoom);
+            Vector2 value2 = (Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange, Main.offScreenRange)) - Main.screenPosition - value;
+            Vector2 offset = -(value2 * 0.25f - lastDistortionDrawOffset) / new Vector2(distortionTarget.Width, distortionTarget.Height);
+
+            for (int i = 0; i < colors.Length; i++)
+            {
+                int row = i / distortionTarget.Width;
+                int col = i % distortionTarget.Width;
+
+                float y = (row + 0.5f) / distortionTarget.Height;
+                float x = (col + 0.5f) / distortionTarget.Width;
+
+                float v = (colors[i].R / 255f) * 2 - 1;
+                if (v > 0.05)
+                {
+                    Vector2 pos = new Vector2(x, y) - offset;
+                    pos *= Main.GameViewMatrix.Zoom;
+
+                    var dust = Dust.NewDustDirect(Main.screenPosition + resol * pos, 1, 1, 6);
+                    dust.velocity *= 0f;
+                    dust.noGravity = true;
+                }
+            }
+        }
 
         private void WaterShaderData_Update(On.Terraria.GameContent.Shaders.WaterShaderData.orig_Update orig, WaterShaderData self, GameTime gameTime)
         {
