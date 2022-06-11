@@ -23,7 +23,7 @@ namespace Everglow.Sources.Commons.Function
                 Everglow.ModuleManager.GetModule<MainThread>().tasks.Add(task);
             }
         }
-        public static Color[] GetColors(Texture2D texture)
+        public static Color[] DelayGetColorArray(Texture2D texture)
         {
             Color[] colors = new Color[texture.Width * texture.Height];
             Add(() => texture.GetData(colors));
