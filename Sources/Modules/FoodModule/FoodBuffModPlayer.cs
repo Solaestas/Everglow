@@ -153,14 +153,20 @@
                 if (MangoBuff)
                 {
                     if (Player.lifeRegen > 0)
+                    {
                         Player.lifeRegen = 0;
+                    }
+
                     Player.lifeRegenTime = 0;
                     Player.lifeRegen -= 2;
                 }
                 else
                 {
                     if (Player.lifeRegen > 0)
+                    {
                         Player.lifeRegen = 0;
+                    }
+
                     Player.lifeRegenTime = 0;
                     Player.lifeRegen -= 4;
                 }
@@ -171,14 +177,20 @@
                 if (MangoBuff)
                 {
                     if (Player.lifeRegen > 0)
+                    {
                         Player.lifeRegen = 0;
+                    }
+
                     Player.lifeRegenTime = 0;
                     Player.lifeRegen -= 4;
                 }
                 else
                 {
                     if (Player.lifeRegen > 0)
+                    {
                         Player.lifeRegen = 0;
+                    }
+
                     Player.lifeRegenTime = 0;
                     Player.lifeRegen -= 10;
                 }
@@ -189,14 +201,20 @@
                 if (MangoBuff)
                 {
                     if (Player.lifeRegen > 0)
+                    {
                         Player.lifeRegen = 0;
+                    }
+
                     Player.lifeRegenTime = 0;
                     Player.lifeRegen -= 2;
                 }
                 else
                 {
                     if (Player.lifeRegen > 0)
+                    {
                         Player.lifeRegen = 0;
+                    }
+
                     Player.lifeRegenTime = 0;
                     Player.lifeRegen -= 6;
                 }
@@ -207,14 +225,20 @@
                 if (MangoBuff)
                 {
                     if (Player.lifeRegen > 0)
+                    {
                         Player.lifeRegen = 0;
+                    }
+
                     Player.lifeRegenTime = 0;
                     Player.lifeRegen -= 2;
                 }
                 else
                 {
                     if (Player.lifeRegen > 0)
+                    {
                         Player.lifeRegen = 0;
+                    }
+
                     Player.lifeRegenTime = 0;
                     Player.lifeRegen -= 6;
                 }

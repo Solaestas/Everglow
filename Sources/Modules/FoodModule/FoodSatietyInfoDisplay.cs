@@ -1,6 +1,6 @@
 ﻿namespace Everglow.Sources.Modules.FoodModule
 {
-    class FoodSatietyInfoDisplay : InfoDisplay
+    internal class FoodSatietyInfoDisplay : InfoDisplay
     {
         public override void SetStaticDefaults()
         {
@@ -34,7 +34,9 @@
         public override void UpdateEquips()
         {
             if (AccBloodGlucoseMonitor)
+            {
                 ShowCurrentSatiety = true;
+            }
         }
     }
 }
