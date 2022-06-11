@@ -45,11 +45,14 @@
             }
 
             entries.Sort((a, b) =>
-            {
-                if (a.TimeInMs == b.TimeInMs)
-                    return 0;
-                return a.TimeInMs > b.TimeInMs ? -1 : 1;
-            });
+             {
+                 if (a.TimeInMs == b.TimeInMs)
+                 {
+                     return 0;
+                 }
+
+                 return a.TimeInMs > b.TimeInMs ? -1 : 1;
+             });
 
             foreach (var unitInfo in entries)
             {
