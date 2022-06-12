@@ -12,13 +12,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Everglow-UnitTest\**" />
-    <Compile Remove="Sources\Modules\ZYModule\Items\**" />
+    <Compile Remove="Sources\Modules\DeltaMachine\**" />
     <Compile Remove="Sources\Tools\**" />
     <EmbeddedResource Remove="Everglow-UnitTest\**" />
-    <EmbeddedResource Remove="Sources\Modules\ZYModule\Items\**" />
+    <EmbeddedResource Remove="Sources\Modules\DeltaMachine\**" />
     <EmbeddedResource Remove="Sources\Tools\**" />
     <None Remove="Everglow-UnitTest\**" />
-    <None Remove="Sources\Modules\ZYModule\Items\**" />
+    <None Remove="Sources\Modules\DeltaMachine\**" />
     <None Remove="Sources\Tools\**" />
   </ItemGroup>
   <ItemGroup>

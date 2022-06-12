@@ -17,7 +17,7 @@
             player.wingTime = 0;
             player.wingTimeMax = 0;
             player.rocketTime = 0;
-            player.moveSpeed *= 0.2f ;
+            player.moveSpeed *= 0.2f;
             player.runAcceleration *= 0.2f;
             player.jumpSpeedBoost *= 0.2f;
             player.endurance += 0.5f;//加50%减伤
