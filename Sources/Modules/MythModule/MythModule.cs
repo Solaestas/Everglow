@@ -38,7 +38,7 @@ namespace Everglow.Sources.Modules.MythModule
         private void WaterShaderData_StepLiquids(On.Terraria.GameContent.Shaders.WaterShaderData.orig_StepLiquids orig, WaterShaderData self)
         {
             orig(self);
-
+            /*
             var distortionTarget = (RenderTarget2D)typeof(WaterShaderData).GetField("_distortionTarget", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(self);
             var lastDistortionDrawOffset = (Vector2)typeof(WaterShaderData).GetField("_lastDistortionDrawOffset", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(self);
 
@@ -51,7 +51,7 @@ namespace Everglow.Sources.Modules.MythModule
             Vector2 value2 = (Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange, Main.offScreenRange)) - Main.screenPosition - value;
             Vector2 offset = -(value2 * 0.25f - lastDistortionDrawOffset) / new Vector2(distortionTarget.Width, distortionTarget.Height);
 
-            for (int i = 0; i < colors.Length; i++)
+            for (int i = 0; i < colors.Length; i+=48 + Main.rand.Next(-6, 7))
             {
                 int row = i / distortionTarget.Width;
                 int col = i % distortionTarget.Width;
@@ -65,11 +65,11 @@ namespace Everglow.Sources.Modules.MythModule
                     Vector2 pos = new Vector2(x, y) - offset;
                     pos *= Main.GameViewMatrix.Zoom;
 
-                    var dust = Dust.NewDustDirect(Main.screenPosition + resol * pos, 1, 1, 6);
-                    dust.velocity *= 0f;
+                    var dust = Dust.NewDustDirect(Main.screenPosition + resol * pos, 1, 1, ModContent.DustType<Bosses.CorruptMoth.Dusts.MothBlue2>());
+                    dust.velocity *= new Vector2(0, Main.rand.NextFloat(0, 2f)).RotatedByRandom(6.283);
                     dust.noGravity = true;
                 }
-            }
+            }*/
         }
 
         private void WaterShaderData_Update(On.Terraria.GameContent.Shaders.WaterShaderData.orig_Update orig, WaterShaderData self, GameTime gameTime)
