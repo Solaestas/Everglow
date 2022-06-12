@@ -96,7 +96,9 @@
             }
 
             if (DashDelay > 0)
+            {
                 DashDelay--;
+            }
 
             if (DashTimer > 0)
             {

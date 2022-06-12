@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework.Input;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 
 namespace Everglow.Sources.Commons.Core.UI
@@ -12,7 +11,7 @@ namespace Everglow.Sources.Commons.Core.UI
         /// <summary>
         /// 键盘上的键位数字数组.
         /// </summary>
-        public static Keys[ ] Digits = new Keys[ ]
+        public static Keys[] Digits = new Keys[]
         {
             Keys.D1,
             Keys.D2,
@@ -34,13 +33,13 @@ namespace Everglow.Sources.Commons.Core.UI
         /// <summary>
         /// 由 <seealso cref="MouseState"/> 获取上一帧的 <seealso cref="Mouse.GetState( )"/>.
         /// </summary>
-        public static MouseState MouseStateLast { get; private set; } = new MouseState( );
+        public static MouseState MouseStateLast { get; private set; } = new MouseState();
 
         /// <summary>
         /// 获取鼠标在屏幕上的位置.
         /// </summary>
         public static Vector2 MousePosition
-        { get { return new Vector2( Mouse.GetState( ).X, Mouse.GetState( ).Y ); } }
+        { get { return new Vector2(Mouse.GetState().X, Mouse.GetState().Y); } }
 
         /// <summary>
         /// 获取鼠标是否进行了左键单击操作的值.
@@ -111,28 +110,28 @@ namespace Everglow.Sources.Commons.Core.UI
         /// <summary>
         /// 由 <seealso cref="Keyboard.GetState( )"/> 获取本帧的键盘状态.
         /// </summary>
-        public static KeyboardState KeyboardState = new KeyboardState( );
+        public static KeyboardState KeyboardState = new KeyboardState();
 
         /// <summary>
         /// 由 <seealso cref="KeyboardState"/> 获取上一帧的 <seealso cref="Keyboard.GetState( )"/>.
         /// </summary>
-        public static KeyboardState KeyboardStateLast = new KeyboardState( );
+        public static KeyboardState KeyboardStateLast = new KeyboardState();
 
-        internal static void GetInformationFromDevice( )
+        internal static void GetInformationFromDevice()
         {
             MouseStateLast = MouseState;
-            MouseState = Mouse.GetState( );
+            MouseState = Mouse.GetState();
             KeyboardStateLast = KeyboardState;
-            KeyboardState = Keyboard.GetState( );
+            KeyboardState = Keyboard.GetState();
         }
 
         /// <summary>
         /// 将上一帧与这一帧的鼠标状态相统一.
         /// </summary>
-        public static void ResetMouseState( )
+        public static void ResetMouseState()
         {
-            MouseStateLast = Mouse.GetState( );
-            MouseState = Mouse.GetState( );
+            MouseStateLast = Mouse.GetState();
+            MouseState = Mouse.GetState();
         }
 
         /// <summary>
@@ -140,9 +139,9 @@ namespace Everglow.Sources.Commons.Core.UI
         /// </summary>
         /// <param name="keys">键.</param>
         /// <returns>如若是, 返回 <seealso href="true"/>, 否则返回 <seealso href="false"/>.</returns>
-        public static bool KeyClick( Keys keys )
+        public static bool KeyClick(Keys keys)
         {
-            return KeyboardState.IsKeyDown( keys ) && KeyboardStateLast.IsKeyUp( keys );
+            return KeyboardState.IsKeyDown(keys) && KeyboardStateLast.IsKeyUp(keys);
         }
 
         /// <summary>
@@ -150,9 +149,9 @@ namespace Everglow.Sources.Commons.Core.UI
         /// </summary>
         /// <param name="keys">键.</param>
         /// <returns>如若是, 返回 <seealso href="true"/>, 否则返回 <seealso href="false"/>.</returns>
-        public static bool KeyUp( Keys keys )
+        public static bool KeyUp(Keys keys)
         {
-            return KeyboardState.IsKeyUp( keys ) && KeyboardStateLast.IsKeyDown( keys );
+            return KeyboardState.IsKeyUp(keys) && KeyboardStateLast.IsKeyDown(keys);
         }
 
     }

@@ -1,5 +1,4 @@
-﻿using Everglow.Sources.Modules.FoodModule.DataStructures;
-using Everglow.Sources.Modules.FoodModule.Utils;
+﻿using Everglow.Sources.Modules.FoodModule.Utils;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Sources.Modules.FoodModule

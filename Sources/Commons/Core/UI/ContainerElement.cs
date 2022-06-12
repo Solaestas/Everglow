@@ -1,11 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Everglow.Sources.Commons.Core.UI
+﻿namespace Everglow.Sources.Commons.Core.UI
 {
     /// <summary>
     /// 存储容器主体属性的结构.
@@ -75,7 +68,7 @@ namespace Everglow.Sources.Commons.Core.UI
         /// </summary>
         public Color Color { get; private set; }
 
-        public ContainerElement( Container container )
+        public ContainerElement(Container container)
         {
             Container = container;
             PaddingWidth = 0;
@@ -93,29 +86,47 @@ namespace Everglow.Sources.Commons.Core.UI
             Color = Color.White;
         }
 
-        public void UpdateElement( )
+        public void UpdateElement()
         {
-            if ( Container.ParentContainer == null )
+            if (Container.ParentContainer == null)
+            {
                 return;
-            if ( LocationX == 0 && PercentageX != -1 )
+            }
+
+            if (LocationX == 0 && PercentageX != -1)
+            {
                 LocationX = PercentageX * Container.ParentContainer.ContainerElement.Width + Container.ParentContainer.ContainerElement.LocationX;
+            }
             else
+            {
                 LocationX += Container.ParentContainer.ContainerElement.PaddingWidth + MarginWidth;
-            if ( LocationY == 0 && PercentageY != -1 )
+            }
+
+            if (LocationY == 0 && PercentageY != -1)
+            {
                 LocationY = PercentageX * Container.ParentContainer.ContainerElement.Height + Container.ParentContainer.ContainerElement.LocationY;
+            }
             else
+            {
                 LocationY += Container.ParentContainer.ContainerElement.PaddingHeight + MarginHeight;
-            if ( Width == 0 && PercentageWidth != -1 )
+            }
+
+            if (Width == 0 && PercentageWidth != -1)
+            {
                 Width = PercentageWidth * Container.ParentContainer.ContainerElement.Width;
-            if ( Height == 0 && PercentageHeight != -1 )
+            }
+
+            if (Height == 0 && PercentageHeight != -1)
+            {
                 Height = PercentageHeight * Container.ParentContainer.ContainerElement.Height;
+            }
         }
 
         /// <summary>
         /// 设置颜色.
         /// </summary>
         /// <param name="color">要设置的颜色.</param>
-        public void SetColor( Color color )
+        public void SetColor(Color color)
         {
             Color = color;
         }
@@ -125,7 +136,7 @@ namespace Everglow.Sources.Commons.Core.UI
         /// </summary>
         /// <param name="width">外边框宽度.</param>
         /// <param name="height">外边框高度.</param>
-        public void SetMargin( float width, float height )
+        public void SetMargin(float width, float height)
         {
             MarginWidth = width;
             MarginHeight = height;
@@ -136,7 +147,7 @@ namespace Everglow.Sources.Commons.Core.UI
         /// </summary>
         /// <param name="width">内边框宽度.</param>
         /// <param name="height">内边框高度.</param>
-        public void SetPadding( float width, float height )
+        public void SetPadding(float width, float height)
         {
             PaddingWidth = width;
             PaddingHeight = height;
@@ -147,9 +158,9 @@ namespace Everglow.Sources.Commons.Core.UI
         /// </summary>
         /// <param name="x">相对于父容器的横坐标.</param>
         /// <param name="y">相对于父容器的纵坐标.</param>
-        public void SetLocation( float x, float y )
+        public void SetLocation(float x, float y)
         {
-            if ( Container.ParentContainer != null )
+            if (Container.ParentContainer != null)
             {
                 LocationX = Container.ParentContainer.ContainerElement.LocationX + x;
                 LocationY = Container.ParentContainer.ContainerElement.LocationY + y;
@@ -165,9 +176,9 @@ namespace Everglow.Sources.Commons.Core.UI
         /// 设置容器相对于父容器的位置.
         /// </summary>
         /// <param name="location">相对于父容器的坐标.</param>
-        public void SetLocation( Vector2 location )
+        public void SetLocation(Vector2 location)
         {
-            if ( Container.ParentContainer != null )
+            if (Container.ParentContainer != null)
             {
                 LocationX = Container.ParentContainer.ContainerElement.LocationX + location.X;
                 LocationY = Container.ParentContainer.ContainerElement.LocationY + location.Y;
@@ -184,7 +195,7 @@ namespace Everglow.Sources.Commons.Core.UI
         /// </summary>
         /// <param name="width">宽度.</param>
         /// <param name="height">高度.</param>
-        public void SetSize( float width, float height )
+        public void SetSize(float width, float height)
         {
             Width = width;
             Height = height;
@@ -195,7 +206,7 @@ namespace Everglow.Sources.Commons.Core.UI
         /// </summary>
         /// <param name="width">相对于父容器的宽度.</param>
         /// <param name="height">相对于父容器的高度.</param>
-        public void SetPercentageSize( float width, float height )
+        public void SetPercentageSize(float width, float height)
         {
             PercentageWidth = width;
             PercentageHeight = height;
@@ -208,9 +219,9 @@ namespace Everglow.Sources.Commons.Core.UI
         /// <param name="y">相对于父容器的纵坐标.</param>
         /// <param name="width">宽度.</param>
         /// <param name="height">高度.</param>
-        public void SetLayerout( float x, float y, float width, float height )
+        public void SetLayerout(float x, float y, float width, float height)
         {
-            if ( Container.ParentContainer != null )
+            if (Container.ParentContainer != null)
             {
                 LocationX = Container.ParentContainer.ContainerElement.LocationX + x;
                 LocationY = Container.ParentContainer.ContainerElement.LocationY + y;
@@ -231,7 +242,7 @@ namespace Everglow.Sources.Commons.Core.UI
         /// <param name="y">相对于父容器的百分比纵坐标.</param>
         /// <param name="width">相对于父容器的百分比宽度.</param>
         /// <param name="height">相对于父容器的百分比高度.</param>
-        public void SetPercentageLayerout( float x, float y, float width, float height )
+        public void SetPercentageLayerout(float x, float y, float width, float height)
         {
             PercentageX = x;
             PercentageY = y;
