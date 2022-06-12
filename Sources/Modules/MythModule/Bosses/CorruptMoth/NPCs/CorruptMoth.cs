@@ -1,7 +1,7 @@
-﻿using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles;
+﻿using Everglow.Sources.Commons.Function;
+using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles;
 using Terraria.GameContent.Bestiary;
 using Terraria.Localization;
-using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
 {
@@ -10,24 +10,25 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
     {
         protected override bool CloneNewInstances => true;
         [CloneByReference]
-        private Color[] BBowColors = new Color[BBowColorsWidth * BBowColorsHeight];
+        private Future<Color[]> BBowColors = new Future<Color[]>();
         private const int BBowColorsWidth = 60;
         private const int BBowColorsHeight = 60;
 
         [CloneByReference]
-        private Color[] BArrowColors = new Color[BArrowColorsWidth * BArrowColorsHeight];
+        private Future<Color[]> BArrowColors = new Future<Color[]>();
         private const int BArrowColorsWidth = 60;
         private const int BArrowColorsHeight = 60;
 
         [CloneByReference]
-        private Color[] BSwordColors = new Color[BSwordColorsWidth * BSwordColorsHeight];
+        private Future<Color[]> BSwordColors = new Future<Color[]>();
         private const int BSwordColorsWidth = 60;
         private const int BSwordColorsHeight = 60;
 
         [CloneByReference]
-        private Color[] BFistColors = new Color[BFistColorsWidth * BFistColorsHeight];
+        private Future<Color[]> BFistColors = new Future<Color[]>();
         private const int BFistColorsWidth = 60;
         private const int BFistColorsHeight = 60;
+        private static bool startLoading = false;
 
         private bool canDespawn;
         public static int secondStageHeadSlot = -1;
@@ -76,26 +77,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
             NPCID.Sets.TrailCacheLength[NPC.type] = 4;
             //NPCID.Sets.TrailingMode[NPC.type] = 0;
-            //蠢死的写法，以后一定要写个负责在主线程调用的东西
-            Texture2D tex = null;
-            Everglow.HookSystem.AddMethod(() =>
-            {
-                if (tex is null)
-                {
-                    tex = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BBow");
-                    tex.GetData(BBowColors);
-
-                    tex = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BArrow");
-                    tex.GetData(BArrowColors);
-
-                    tex = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BSword");
-                    tex.GetData(BSwordColors);
-
-                    tex = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BFist");
-                    tex.GetData(BFistColors);
-                }
-            }, Commons.Core.CallOpportunity.PostDrawEverything);
-
         }
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
@@ -160,6 +141,15 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             if (!Main.dedServ)
             {
                 Music = Common.MythContent.QuickMusic("MothFighting");
+            }
+            //这里在SetDefault里才开始Load，减少空间占用
+            if (!startLoading)
+            {
+                startLoading = true;
+                BBowColors = MainThread.GetColors(Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BBow"));
+                BArrowColors = MainThread.GetColors(Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BArrow"));
+                BSwordColors = MainThread.GetColors(Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BSword"));
+                BFistColors = MainThread.GetColors(Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BFist"));
             }
         }
         public override bool CheckActive()
@@ -253,7 +243,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                 Start = true;
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    Create4DCube();
                     for (int h = 0; h < 15; h++)
                     {
                         NPC.NewNPC(null, (int)NPC.Center.X + 25, (int)NPC.Center.Y + 150, ModContent.NPCType<MothSummonEffect>());
@@ -883,7 +872,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                         for (int x = 0; x < BBowColorsWidth; x++)
                         {
                             int i = y * BBowColorsHeight + x;
-                            if (BBowColors[i] == new Color(58, 169, 255) && butterfies.Count > 0)
+                            if (BBowColors.Value[i] == new Color(58, 169, 255) && butterfies.Count > 0)
                             {
                                 NPC butterfly = butterfies.Pop();
                                 butterfly.ai[0] = 1;//切换为弓AI
@@ -902,7 +891,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                         for (int x = 0; x < BArrowColorsWidth; x++)
                         {
                             int i = y * BArrowColorsHeight + x;
-                            if (BArrowColors[i] == new Color(58, 169, 255) && butterfies.Count > 0)
+                            if (BArrowColors.Value[i] == new Color(58, 169, 255) && butterfies.Count > 0)
                             {
                                 NPC butterfly = butterfies.Pop();
                                 butterfly.ai[0] = 2;//切换为箭AI
@@ -1008,7 +997,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                         for (int x = 0; x < BSwordColorsWidth; x++)
                         {
                             int i = y * BSwordColorsHeight + x;
-                            if (BSwordColors[i] == new Color(58, 169, 255) && butterfies.Count > 0)
+                            if (BSwordColors.Value[i] == new Color(58, 169, 255) && butterfies.Count > 0)
                             {
                                 NPC butterfly = butterfies.Pop();
                                 butterfly.ai[0] = 3;//切换为剑AI
@@ -1074,7 +1063,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                         for (int x = 0; x < BFistColorsWidth; x++)
                         {
                             int i = y * BFistColorsHeight + x;
-                            if (BFistColors[i] == new Color(58, 169, 255) && butterfies.Count > 0)
+                            if (BFistColors.Value[i] == new Color(58, 169, 255) && butterfies.Count > 0)
                             {
                                 NPC butterfly = butterfies.Pop();
                                 butterfly.ai[0] = 4;//切换为拳AI
