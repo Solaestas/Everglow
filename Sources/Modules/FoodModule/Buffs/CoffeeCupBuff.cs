@@ -21,7 +21,7 @@
             player.dangerSense = true;
             Lighting.AddLight(player.Center, 0.8f, 0.8f, 0);
             player.wellFed = true;
-        }   
+        }
     }
 }
 

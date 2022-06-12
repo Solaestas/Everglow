@@ -76,33 +76,44 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             {
                 for (int x = 0; x < cocoon.Width; x += 1)
                 {
-                    switch (type)
+                    Tile tile = Main.tile[x + a, y + b];
+                    switch (type)//21ÊÇÏä×Ó
                     {
                         case 0:
                             if (CheckColor(cocoon.GetPixel(x, y), new Vector4(255, 0, 0, 255)))
                             {
-                                if (Main.tile[x + a, y + b].TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+                                if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
                                 {
-                                    Main.tile[x + a, y + b].ClearEverything();
+                                    tile.ClearEverything();
                                 }
                             }
                             break;
                         case 1:
                             if (CheckColor(cocoon.GetPixel(x, y), new Vector4(56, 48, 61, 255)))
                             {
-                                if (Main.tile[x + a, y + b].TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+                                if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
                                 {
-                                    Main.tile[x + a, y + b].TileType = (ushort)ModContent.TileType<Tiles.DarkCocoon>();
-                                    ((Tile)Main.tile[x + a, y + b]).HasTile = true;
+                                    tile.TileType = (ushort)ModContent.TileType<Tiles.DarkCocoon>();
+                                    ((Tile)tile).HasTile = true;
+                                }
+                            }
+                            if (CheckColor(cocoon.GetPixel(x, y), new Vector4(0, 0, 255, 255)))
+                            {
+                                if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+                                {
+                                    tile.LiquidType = LiquidID.Water;
+                                    tile.LiquidAmount = 200;
+                                    tile.HasTile = false;
+                                    //WorldGen.PlaceLiquid(x, y, byte.MaxValue, 255);
                                 }
                             }
                             break;
                         case 2:
                             if (CheckColor(cocoon.GetPixel(x, y), new Vector4(0, 0, 5, 255)))
                             {
-                                if (Main.tile[x + a, y + b].TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+                                if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
                                 {
-                                    Main.tile[x + a, y + b].WallType = (ushort)ModContent.WallType<Walls.DarkCocoonWall>();
+                                    tile.WallType = (ushort)ModContent.WallType<Walls.DarkCocoonWall>();
                                 }
                             }
                             break;
@@ -164,12 +175,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         private static Point16 CocoonPos()
         {
             int PoX = Main.rand.Next(300, Main.maxTilesX - 600);
-            int PoY = Main.rand.Next(400, Main.maxTilesY - 300);
+            int PoY = Main.rand.Next(400, Main.maxTilesY - 700);
 
             while (GetCrash(PoX, PoY) > 0)
             {
                 PoX = Main.rand.Next(300, Main.maxTilesX - 600);
-                PoY = Main.rand.Next(400, Main.maxTilesY - 300);
+                PoY = Main.rand.Next(400, Main.maxTilesY - 700);
             }
             return new Point16(PoX, PoY);
         }

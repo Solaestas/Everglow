@@ -21,9 +21,9 @@ namespace Everglow.Sources.Commons.Core.ModuleSystem
             var assembly = Assembly.GetExecutingAssembly();
             foreach (var type in assembly.GetTypes()
                 .Where(type =>
-                !type.IsAbstract &&
-                type.GetInterfaces().Contains(typeof(IModule)) &&
-                !Attribute.IsDefined(type, typeof(DontAutoLoadAttribute))
+                 !type.IsAbstract &&
+                 type.GetInterfaces().Contains(typeof(IModule)) &&
+                 !Attribute.IsDefined(type, typeof(DontAutoLoadAttribute))
                 ))
             {
                 var dependency = type.GetCustomAttribute<ModuleDependencyAttribute>(true);

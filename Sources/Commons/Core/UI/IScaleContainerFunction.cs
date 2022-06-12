@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-
-namespace Everglow.Sources.Commons.Core.UI
+﻿namespace Everglow.Sources.Commons.Core.UI
 {
     /// <summary>
     /// 表示一个根据一组缩放数据进行缩放的对象.
@@ -32,7 +30,7 @@ namespace Everglow.Sources.Commons.Core.UI
         /// <para>[!] <seealso cref="ScaleAdd"/> 和 <seealso cref="ScaleTarget"/> 并不强制使用, </para>
         /// <para>[!] 但仍建议你根据这两者进行缩放的更新.</para>
         /// </summary>
-        public void UpdateScale( ContainerElement containerElement );
+        public void UpdateScale(ContainerElement containerElement);
 
     }
 }
