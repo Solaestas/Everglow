@@ -30,6 +30,7 @@ internal class Future<T>
 }
 internal class MainThread : IModule
 {
+    private static object m_lock = new object();
     private Stack<Action> tasks = new Stack<Action>();
     public string Name => "MainThread";
     public void Load()
@@ -43,7 +44,10 @@ internal class MainThread : IModule
     }
     public static void Call(Action task)
     {
-        Everglow.ModuleManager.GetModule<MainThread>().tasks.Push(task);
+        lock (m_lock)
+        {
+            Everglow.ModuleManager.GetModule<MainThread>().tasks.Push(task);
+        }
     }
     public static Future<Color[]> GetColors(Texture2D texture)
     {
@@ -73,9 +77,20 @@ internal class MainThread : IModule
     /// <param name="gameTime"></param>
     private void Main_Update(On.Terraria.Main.orig_Update orig, Main self, GameTime gameTime)
     {
-        if (tasks.Count != 0)
+        lock (m_lock)
         {
-            tasks.Pop().Invoke();
+            if (tasks.Count != 0)
+            {
+                try
+                {
+                    tasks.Pop().Invoke();
+                }
+                catch (Exception ex)
+                {
+                    Everglow.Instance.Logger.Error(ex);
+                    Debug.Fail(ex.ToString());
+                }
+            }
         }
         orig(self, gameTime);
     }
