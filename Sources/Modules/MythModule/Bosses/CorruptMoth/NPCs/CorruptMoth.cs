@@ -1,5 +1,6 @@
 ﻿using Everglow.Sources.Commons.Function;
 using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles;
+using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
 using Terraria.Localization;
 
@@ -9,23 +10,19 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
     public class CorruptMoth : ModNPC
     {
         protected override bool CloneNewInstances => true;
-        [CloneByReference]
-        private Future<Color[]> BBowColors = new Future<Color[]>();
+        private static Future<Color[]> BBowColors;
         private const int BBowColorsWidth = 60;
         private const int BBowColorsHeight = 60;
 
-        [CloneByReference]
-        private Future<Color[]> BArrowColors = new Future<Color[]>();
+        private static Future<Color[]> BArrowColors;
         private const int BArrowColorsWidth = 60;
         private const int BArrowColorsHeight = 60;
 
-        [CloneByReference]
-        private Future<Color[]> BSwordColors = new Future<Color[]>();
+        private static Future<Color[]> BSwordColors;
         private const int BSwordColorsWidth = 60;
         private const int BSwordColorsHeight = 60;
 
-        [CloneByReference]
-        private Future<Color[]> BFistColors = new Future<Color[]>();
+        private static Future<Color[]> BFistColors;
         private const int BFistColorsWidth = 60;
         private const int BFistColorsHeight = 60;
         private static bool startLoading = false;
@@ -77,6 +74,17 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
             NPCID.Sets.TrailCacheLength[NPC.type] = 4;
             //NPCID.Sets.TrailingMode[NPC.type] = 0;
+        }
+        public override void OnSpawn(IEntitySource source)
+        {
+            if (!startLoading)
+            {
+                startLoading = true;
+                BBowColors = MainThread.GetColors(Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BBow"));
+                BArrowColors = MainThread.GetColors(Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BArrow"));
+                BSwordColors = MainThread.GetColors(Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BSword"));
+                BFistColors = MainThread.GetColors(Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BFist"));
+            }
         }
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
@@ -141,15 +149,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             if (!Main.dedServ)
             {
                 Music = Common.MythContent.QuickMusic("MothFighting");
-            }
-            //这里在SetDefault里才开始Load，减少空间占用
-            if (!startLoading)
-            {
-                startLoading = true;
-                BBowColors = MainThread.GetColors(Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BBow"));
-                BArrowColors = MainThread.GetColors(Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BArrow"));
-                BSwordColors = MainThread.GetColors(Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BSword"));
-                BFistColors = MainThread.GetColors(Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BFist"));
             }
         }
         public override bool CheckActive()
