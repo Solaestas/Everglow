@@ -1,4 +1,4 @@
-﻿using Everglow.Sources.Commons.Function;
+﻿using Everglow.Sources.Commons.Core;
 using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles;
 using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
@@ -80,10 +80,10 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             if (!startLoading)
             {
                 startLoading = true;
-                BBowColors = MainThread.GetColors(Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BBow"));
-                BArrowColors = MainThread.GetColors(Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BArrow"));
-                BSwordColors = MainThread.GetColors(Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BSword"));
-                BFistColors = MainThread.GetColors(Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BFist"));
+                BBowColors = Everglow.MainThreadContext.DelayGetColors(Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BBow"));
+                BArrowColors = Everglow.MainThreadContext.DelayGetColors(Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BArrow"));
+                BSwordColors = Everglow.MainThreadContext.DelayGetColors(Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BSword"));
+                BFistColors = Everglow.MainThreadContext.DelayGetColors(Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BFist"));
             }
         }
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)

@@ -1,6 +1,6 @@
 ﻿using Everglow.Sources.Commons.Core.ModuleSystem;
 
-namespace Everglow.Sources.Commons.Function;
+namespace Everglow.Sources.Commons.Core;
 
 internal class Future<T>
 {
@@ -10,7 +10,7 @@ internal class Future<T>
     {
         get
         {
-            if(!IsLoaded)
+            if (!IsLoaded)
             {
                 throw new InvalidOperationException("Hasn't been Loaded");
             }
@@ -18,7 +18,7 @@ internal class Future<T>
         }
         set
         {
-            if(IsLoaded)
+            if (IsLoaded)
             {
                 throw new InvalidOperationException("Has been Loaded");
             }
@@ -28,11 +28,10 @@ internal class Future<T>
     }
     public bool IsLoaded => isLoaded;
 }
-internal class MainThread : IModule
+internal class MainThreadContext
 {
-    private static object m_lock = new object();
+    private object m_lock = new object();
     private Stack<Action> tasks = new Stack<Action>();
-    public string Name => "MainThread";
     public void Load()
     {
         On.Terraria.Main.Update += Main_Update;
@@ -40,19 +39,20 @@ internal class MainThread : IModule
 
     public void Unload()
     {
+        On.Terraria.Main.Update -= Main_Update;
         tasks = null;
     }
-    public static void Call(Action task)
+    public void AddTask(Action task)
     {
         lock (m_lock)
         {
-            Everglow.ModuleManager.GetModule<MainThread>().tasks.Push(task);
+            Everglow.MainThreadContext.tasks.Push(task);
         }
     }
-    public static Future<Color[]> GetColors(Texture2D texture)
+    public Future<Color[]> DelayGetColors(Texture2D texture)
     {
         Future<Color[]> future = new Future<Color[]>();
-        Call(() =>
+        AddTask(() =>
         {
             Color[] temp = new Color[texture.Width * texture.Height];
             texture.GetData(temp);
@@ -60,10 +60,10 @@ internal class MainThread : IModule
         });
         return future;
     }
-    public static Future<T> GetData<T>(Func<T> func)
+    public Future<T> DelayGetData<T>(Func<T> func)
     {
         Future<T> future = new Future<T>();
-        Call(() =>
+        AddTask(() =>
         {
             future.Value = func();
         });
