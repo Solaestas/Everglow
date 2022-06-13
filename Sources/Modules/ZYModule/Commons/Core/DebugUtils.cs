@@ -10,7 +10,7 @@ namespace Everglow.Sources.Modules.ZYModule.Commons.Core;
 
 enum HookFlag
 {
-
+    WallSlideException
 }
 internal static class DebugUtils
 {

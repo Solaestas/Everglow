@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ReLogic.Content;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +9,8 @@ namespace Everglow.Sources.Modules.ZYModule.Commons.Function.Base
 {
     internal abstract class BaseProjectile : ModProjectile
     {
+        public Asset<Texture2D> Asset => ModContent.Request<Texture2D>(Texture);
         protected override bool CloneNewInstances => true;
         public override bool IsCloneable => true;
-        public Player Owner => Main.player[Projectile.owner];
     }
 }

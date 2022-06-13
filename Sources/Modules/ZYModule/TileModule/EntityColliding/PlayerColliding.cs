@@ -1,4 +1,5 @@
-﻿using Everglow.Sources.Modules.ZYModule.Commons.Function;
+﻿using Everglow.Sources.Modules.ZYModule.Commons.Core;
+using Everglow.Sources.Modules.ZYModule.Commons.Function;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 namespace Everglow.Sources.Modules.ZYModule.TileModule.EntityColliding;
@@ -93,22 +94,13 @@ internal class PlayerColliding : ModPlayer
         {
             HookException.Throw("Player_WallslideMovement_NotFound_0");
         }
-        MethodInfo method = null;
-        foreach(var m in typeof(Player).GetMethods(BindingFlags.Instance | BindingFlags.Public))
-        {
-            if(m.Name == "GetModPlayer" && m.GetParameters().Length == 0)
-            {
-                method = m;
-            }
-        }
-        Debug.Assert(method != null);
         //if(player.GetModPlayer<PlayerColliding>().handler.attachType == AttachType.Grab)
         //{
         //    flag = true;
         //    goto
         //}
         cursor.Emit(OpCodes.Ldarg_0);
-        cursor.Emit(OpCodes.Call, method.MakeGenericMethod(typeof(PlayerColliding)));
+        cursor.Emit(OpCodes.Call, typeof(Player).GetMethod(nameof(Player.GetModPlayer), BindingFlags.Public | BindingFlags.Instance, Array.Empty<Type>()).MakeGenericMethod(typeof(PlayerColliding)));
         cursor.Emit(OpCodes.Ldfld, typeof(PlayerColliding).GetField(nameof(handler)));
         cursor.Emit(OpCodes.Ldfld, typeof(EntityHandler).GetField(nameof(EntityHandler.attachType)));
         cursor.Emit(OpCodes.Ldc_I4, (int)AttachType.Grab);
@@ -127,7 +119,14 @@ internal class PlayerColliding : ModPlayer
     private static void Player_WallslideMovement_On(On.Terraria.Player.orig_WallslideMovement orig, Player self)
     {
         TileSystem.EnableCollisionHook = false;
-        orig(self);
+        try
+        {
+            orig(self);
+        }
+        catch (Exception)
+        {
+            DebugUtils.TriggerFlag(HookFlag.WallSlideException);
+        }
         TileSystem.EnableCollisionHook = true;
     }
 }
