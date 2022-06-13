@@ -326,6 +326,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             var texMiddle = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyMiddle");
             var texMidClose = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyMidClose");
             var texClose = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyClose");
+            var texCloseII = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyClose2");
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             Rectangle screen = new Rectangle(0, 0, Main.screenWidth, Main.screenHeight);
@@ -348,6 +349,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             rvc.Y -= 120;
             rvc.X += 150;
             Main.spriteBatch.Draw(texClose, Vector2.Zero, rvc, Color.White * alpha);
+
+
             /*
             OldMouseW[0] = Main.MouseWorld;
             for (int f = OldMouseW.Length - 1; f > 0; f--)
@@ -421,6 +424,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                     }
                 }
             }
+
+            Rectangle rvcII = GetDrawRec(texClose.Size(), 0.57f, false);
+            Main.spriteBatch.Draw(texCloseII, new Vector2(0, 300), rvcII, Color.White * alpha);
         }
         public Vector2[] OldMouseW = new Vector2[30];
         private List<List<Mass>> masses = new List<List<Mass>>();
