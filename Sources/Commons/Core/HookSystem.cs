@@ -182,9 +182,10 @@
             On.Terraria.WorldGen.serverLoadWorldCallBack += WorldGen_serverLoadWorldCallBack;
             On.Terraria.Main.DrawBG += Main_DrawBG;
             On.Terraria.Main.DrawBackground += Main_DrawBackground;
-            On.Terraria.Main.DrawBackgroundBlackFill += Main_DrawBackgroundBlackFill;
+            On.Terraria.Main.DoDraw_WallsTilesNPCs += Main_DoDraw_WallsTilesNPCs;
             Main.OnResolutionChanged += Main_OnResolutionChanged;
         }
+
         public void HookUnload()
         {
             Main.OnResolutionChanged -= Main_OnResolutionChanged;
@@ -210,22 +211,25 @@
         }
         private void Main_DrawBackground(On.Terraria.Main.orig_DrawBackground orig, Main self)
         {
-            if (!DisableDrawBackground)
+            if (DisableDrawBackground)
             {
-                orig(self);
+                return;
             }
-        }
-        private void Main_DrawBackgroundBlackFill(On.Terraria.Main.orig_DrawBackgroundBlackFill orig, Main self)
-        {
             orig(self);
-            Invoke(CallOpportunity.PostDrawBG);
         }
         private void Main_DrawBG(On.Terraria.Main.orig_DrawBG orig, Main self)
         {
-            if (!DisableDrawSkyAndHell)
+            if (DisableDrawSkyAndHell)
             {
-                orig(self);
+                return;
             }
+            orig(self);
+        }
+
+        private void Main_DoDraw_WallsTilesNPCs(On.Terraria.Main.orig_DoDraw_WallsTilesNPCs orig, Main self)
+        {
+            Invoke(CallOpportunity.PostDrawBG);
+            orig(self);
         }
 
         internal void WorldGen_serverLoadWorldCallBack(On.Terraria.WorldGen.orig_serverLoadWorldCallBack orig)
