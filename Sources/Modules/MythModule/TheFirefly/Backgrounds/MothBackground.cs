@@ -63,7 +63,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         }
         public override void PostUpdateEverything()//¿ªÆôµØÏÂ±³¾°
         {
-            //Main.NewText(Main.bgStyle);
             float increase = 0.02f;
             if (BiomeActive() && Main.BackgroundEnabled)
             {
@@ -327,6 +326,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             var texMiddle = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyMiddle");
             var texMidClose = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyMidClose");
             var texClose = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyClose");
+            var texCloseII = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyClose2");
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             Rectangle screen = new Rectangle(0, 0, Main.screenWidth, Main.screenHeight);
@@ -349,6 +349,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             rvc.Y -= 120;
             rvc.X += 150;
             Main.spriteBatch.Draw(texClose, Vector2.Zero, rvc, Color.White * alpha);
+
+
             /*
             OldMouseW[0] = Main.MouseWorld;
             for (int f = OldMouseW.Length - 1; f > 0; f--)
@@ -422,6 +424,31 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                     }
                 }
             }
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+            Rectangle rvcII = GetDrawRec(texCloseII.Size(), 0.57f, false);
+            rvcII.Y -= 300;
+            rvcII.X += 300;
+            List<VertexBase.Vertex2D> CloseII = new List<VertexBase.Vertex2D>();
+            CloseII.Add(new VertexBase.Vertex2D(new Vector2(0, 0), Color.White * alpha, new Vector3(rvcII.X / (float)texCloseII.Width, rvcII.Y / (float)texCloseII.Height, 0)));
+            CloseII.Add(new VertexBase.Vertex2D(new Vector2(Main.screenWidth, 0), Color.White * alpha, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, rvcII.Y / (float)texCloseII.Height, 0)));
+            CloseII.Add(new VertexBase.Vertex2D(new Vector2(0, Main.screenHeight), Color.White * alpha, new Vector3(rvcII.X / (float)texCloseII.Width, (rvcII.Y + rvcII.Height) / (float)texCloseII.Height, 0)));
+
+            CloseII.Add(new VertexBase.Vertex2D(new Vector2(0, Main.screenHeight), Color.White * alpha, new Vector3(rvcII.X / (float)texCloseII.Width, (rvcII.Y + rvcII.Height) / (float)texCloseII.Height, 0)));
+            CloseII.Add(new VertexBase.Vertex2D(new Vector2(Main.screenWidth, 0), Color.White * alpha, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, rvcII.Y / (float)texCloseII.Height, 0)));
+            CloseII.Add(new VertexBase.Vertex2D(new Vector2(Main.screenWidth, Main.screenHeight), Color.White * alpha, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, (rvcII.Y + rvcII.Height) / (float)texCloseII.Height, 0)));
+            Effect bgW = MythContent.QuickEffect("Effects/BackgroundWrap");
+            bgW.Parameters["alpha"].SetValue(alpha);
+            bgW.CurrentTechnique.Passes[0].Apply();
+
+            if (CloseII.Count > 2)
+            {
+                Main.graphics.GraphicsDevice.Textures[0] = texCloseII;
+                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, CloseII.ToArray(), 0, CloseII.Count - 2);
+            }
+
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
         }
         public Vector2[] OldMouseW = new Vector2[30];
         private List<List<Mass>> masses = new List<List<Mass>>();

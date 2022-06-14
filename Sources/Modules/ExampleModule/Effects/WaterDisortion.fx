@@ -150,7 +150,8 @@ float4 PixelShaderFunction(float2 texCoord : TEXCOORD) : COLOR0
 	if (ws2 > uThreashhold)
 	{
 		float value = r6.x > 0 ? 1.0 : 0.0;
-		r1.xyz += uColor * pow(exp(pow(x - .50, 2.) * -20.) * value, uPower);
+		float value2 =  pow(exp(pow(x - .50, 2.) * -20.) * value, uPower);
+		r1.xyz += uColor * value2;
 	}
 	r1.w = r1.w;
 	return r1.xyzw;
