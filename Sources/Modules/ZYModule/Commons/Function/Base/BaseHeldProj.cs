@@ -20,16 +20,28 @@ namespace Everglow.Sources.Modules.ZYModule.Commons.Function.Base
         public override void OnSpawn(IEntitySource source)
         {
             item = (T)Main.player[Projectile.owner].inventory[(int)Projectile.ai[0]].ModItem;
+            Projectile.netUpdate2 = true;
         }
         public override void SendExtraAI(BinaryWriter writer)
         {
             base.SendExtraAI(writer);
-            writer.Write(Array.FindIndex(Owner.inventory, i => i == item.Item));
+            if (item is null)
+            {
+                writer.Write(-1);
+            }
+            else
+            {
+                writer.Write(Array.FindIndex(Owner.inventory, i => i == item.Item));
+            }
         }
         public override void ReceiveExtraAI(BinaryReader reader)
         {
             base.ReceiveExtraAI(reader);
-            item = (T)Main.player[Projectile.owner].inventory[reader.ReadInt32()].ModItem;
+            int index = reader.ReadInt32();
+            if (index > 0)
+            {
+                item = (T)Main.player[Projectile.owner].inventory[index].ModItem;
+            }
         }
     }
 }
