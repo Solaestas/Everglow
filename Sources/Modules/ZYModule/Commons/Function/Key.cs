@@ -4,6 +4,7 @@ internal class VirtualKey
 {
     internal const int DoubleClickMaxInterval = 10;
     internal ulong cache;
+    public ulong Cache => cache;
     public bool Press => (cache & 1) == 1;
     public bool Release => (cache & 1) == 0;
     public bool JustPress => (cache & 2) == 2;

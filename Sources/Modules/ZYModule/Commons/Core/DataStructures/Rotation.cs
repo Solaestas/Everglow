@@ -57,6 +57,12 @@ public struct Rotation : IComparable, IComparable<Rotation>, IConvertible, IEqua
         cos = (float)Math.Cos(angle);
         sin = (float)Math.Sin(angle);
     }
+    public void Reset()
+    {
+        angle = 0;
+        cos = 1;
+        sin = 0;
+    }
     public static float AngleWrap(float angle)
     {
         while (angle >= MathHelper.Pi) angle -= MathHelper.TwoPi;
