@@ -123,7 +123,7 @@ internal class PlayerColliding : ModPlayer
         {
             orig(self);
         }
-        catch (Exception)
+        catch
         {
             DebugUtils.TriggerFlag(HookFlag.WallSlideException);
         }

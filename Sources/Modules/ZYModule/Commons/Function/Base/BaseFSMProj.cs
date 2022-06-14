@@ -2,6 +2,7 @@
 
 using Everglow.Sources.Modules.MythModule.Common.Coroutines;
 using System.Diagnostics.CodeAnalysis;
+using Terraria.DataStructures;
 
 namespace Everglow.Sources.Modules.ZYModule.Commons.Function.Base;
 
@@ -99,11 +100,12 @@ internal abstract class BaseFSMProj : BaseProjectile
                 {
                     coroutine.Replace(State.Corrutine());
                 }
+                StateID = State.Update();
             }
         }
     }
     public int Timer { get => (int)Projectile.ai[0]; set => Projectile.ai[0] = value; }
-    public int LocalTimer { get => (int)Projectile.localAI[0]; set => Projectile.localAI[0] = value; }
+    public float LocalValue { get => Projectile.localAI[0]; set => Projectile.localAI[0] = value; }
     public ProjState State => states[StateID];
     public override ModProjectile Clone(Projectile newEntity)
     {
@@ -138,7 +140,7 @@ internal abstract class BaseFSMProj : BaseProjectile
     }
     public virtual void Reset()
     {
-        Timer = LocalTimer = 0;
+        LocalValue = Timer = 0;
     }
     public void RegisterState(ProjState projState) => states.Add(projState);
     public void RegisterState(string name, Func<int> update, Action begin = null, Action end = null, Func<IEnumerator<ICoroutineInstruction>> func = null)
@@ -149,6 +151,7 @@ internal abstract class BaseFSMProj : BaseProjectile
     public ProjState GetState(int id) => states[id];
     public sealed override void AI()
     {
+        Timer++;
         coroutine.Update();
         StateID = State.Update();
     }

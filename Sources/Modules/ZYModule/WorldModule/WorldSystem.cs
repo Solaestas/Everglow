@@ -25,7 +25,10 @@ internal class WorldSystem : IModule
 
         ModContent.GetInstance<HookSystem>().AddMethod(() =>
         {
-            dataToWorld[Main.ActiveWorldFileData].EnterWorld_Server();
+            if(dataToWorld.ContainsKey(Main.ActiveWorldFileData))
+            {
+                dataToWorld[Main.ActiveWorldFileData].EnterWorld_Server();
+            }
         }, CallOpportunity.PostEnterWorld_Server);
 
         ModContent.GetInstance<HookSystem>().AddMethod(() =>

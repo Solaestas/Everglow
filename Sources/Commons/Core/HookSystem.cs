@@ -204,7 +204,7 @@
                     {
                         Everglow.Instance.Logger.Error($"{handler.Name} 抛出了异常 {ex}");
                         handler.Enable = false;
-                        Debug.Assert(false);
+                        Debug.Fail($"{handler.Name} 抛出了异常 {ex}");
                     }
                 }
             }

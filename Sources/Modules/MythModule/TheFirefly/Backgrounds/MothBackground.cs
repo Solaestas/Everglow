@@ -63,7 +63,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         }
         public override void PostUpdateEverything()//¿ªÆôµØÏÂ±³¾°
         {
-            Main.NewText(Main.bgStyle);
+            //Main.NewText(Main.bgStyle);
             float increase = 0.02f;
             if (BiomeActive() && Main.BackgroundEnabled)
             {

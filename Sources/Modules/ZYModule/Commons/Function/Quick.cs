@@ -118,5 +118,8 @@ internal static class Quick
         player.controlUp ^ player.controlDown ? player.controlDown ? Direction.Bottom : Direction.Top : Direction.None;
     public static CAABB GetCollider(this Entity entity) => new CAABB(new AABB(entity.position.X, entity.position.Y, entity.width, entity.height));
 
+    public static Vector2 ToInteger(this Vector2 vector2) => new Vector2((int)vector2.X, (int)vector2.Y);
+    public static Vector2 ToMouse(this Player player) => player.GetModPlayer<PlayerManager>().MouseWorld - player.Center;
+
 
 }

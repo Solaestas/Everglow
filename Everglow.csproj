@@ -17,7 +17,8 @@
     <DefineConstants>$(DefineConstants);TML_2022_05</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugWithoutFody|AnyCPU'">
-    <DefineConstants>$(DefineConstants);TML_2022_05</DefineConstants>
+	  <DefineConstants>DEBUG</DefineConstants>
+	  <DefineConstants>$(DefineConstants);TML_2022_05</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseWithoutFody|AnyCPU'">
     <DefineConstants>$(DefineConstants);TML_2022_05</DefineConstants>

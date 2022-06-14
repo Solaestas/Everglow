@@ -16,6 +16,12 @@ public struct Rotation : IComparable, IComparable<Rotation>, IConvertible, IEqua
             sin = (float)Math.Sin(value);
         }
     }
+    public float HFilpAngle => angle switch
+    {
+        < 0 => -MathHelper.Pi - angle,
+        _ => MathHelper.Pi - angle
+    };
+    public float VFilpAngle => -angle;
     public float Cos
     {
         get => cos;

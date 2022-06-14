@@ -1,4 +1,6 @@
-﻿namespace Everglow.Sources.Modules.ZYModule.Commons.Function.Base
+﻿using Terraria.DataStructures;
+
+namespace Everglow.Sources.Modules.ZYModule.Commons.Function.Base
 {
     internal abstract class BaseHeldItem : BaseItem
     {
@@ -15,21 +17,20 @@
         }
         public override void SetDefaults()
         {
-            Item.useStyle = ItemUseStyleID.None;
+            Item.useStyle = ItemUseStyleID.HiddenAnimation;
             Item.noMelee = true;
             Item.noUseGraphic = true;
         }
         public override void HoldItem(Player player)
         {
-            if (Main.netMode == player.whoAmI && (projectile == null || !projectile.Projectile.active))
+            if (Main.myPlayer == player.whoAmI && (projectile == null || !projectile.Projectile.active))
             {
                 projectile = (T)Projectile.NewProjectileDirect(
                     player.GetSource_ItemUse(Item),
                     player.position, Vector2.Zero,
                     ModContent.ProjectileType<T>(),
-                    Item.damage, Item.knockBack, player.whoAmI)
+                    Item.damage, Item.knockBack, player.whoAmI, Array.FindIndex(player.inventory, i => i == Item))
                     .ModProjectile;
-                projectile.SetItem(Item);
             }
         }
     }

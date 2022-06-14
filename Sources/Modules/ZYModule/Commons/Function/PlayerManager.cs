@@ -1,5 +1,4 @@
 ﻿using Everglow.Sources.Modules.ZYModule.ZYPacket;
-using Terraria.GameInput;
 
 namespace Everglow.Sources.Modules.ZYModule.Commons.Function;
 
@@ -24,7 +23,7 @@ internal class PlayerManager : ModPlayer
     public VirtualKey MouseLeft { get; private set; } = new VirtualKey();
     public VirtualKey MouseRight { get; private set; } = new VirtualKey();
     public Vector2 MouseWorld { get; internal set; }
-    public override void ProcessTriggers(TriggersSet triggersSet)
+    public override void PostUpdate()
     {
         ControlLeft.Update(Player.controlLeft);
         ControlRight.Update(Player.controlRight);
@@ -32,13 +31,13 @@ internal class PlayerManager : ModPlayer
         ControlDown.Update(Player.controlDown);
         ControlJump.Update(Player.controlJump);
         ControlUseItem.Update(Player.controlUseItem);
-        ControlUseTile.Update(Player.controlUseTile);
         if (Main.myPlayer == Player.whoAmI)
         {
             MouseLeft.Update(Main.mouseLeft);
             MouseRight.Update(Main.mouseRight);
+            ControlUseTile.Update(Player.controlUseTile);
             MouseWorld = Main.MouseWorld;
-            Everglow.PacketResolver.Send<MousePacketToServer>();
+            Everglow.PacketResolver.Send<InputPacketToServer>();
         }
     }
     private float jumpSpeed;
