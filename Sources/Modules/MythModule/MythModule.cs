@@ -2,6 +2,7 @@
 using Everglow.Sources.Commons.Core.UI;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds;
 using Everglow.Sources.Modules.MythModule.TheFirefly.UI;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Water;
 using MonoMod.Cil;
 using ReLogic.Content;
 using Terraria.GameContent.Shaders;
@@ -15,8 +16,6 @@ namespace Everglow.Sources.Modules.MythModule
 
         private Asset<Effect> m_waveDisortionScreen = null;
 
-        private RenderTarget2D m_dustTarget = null;
-
         public void Load()
         {
             ContainerPage.RegisterContainerPage(new FireflyContainerPage()); //在IModule类内手动注册容器页.
@@ -26,13 +25,13 @@ namespace Everglow.Sources.Modules.MythModule
                 // 水波扰动Shader
                 m_waveDisortionScreen = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/WaterDisortion", AssetRequestMode.ImmediateLoad);
                 ReplaceEffectPass = m_waveDisortionScreen.Value.CurrentTechnique.Passes[0];
-                m_dustTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, 1000, 1000);
 
                 On.Terraria.GameContent.Shaders.WaterShaderData.Update += WaterShaderData_Update;
                 IL.Terraria.GameContent.Shaders.WaterShaderData.Apply += WaterShaderData_Apply;
                 On.Terraria.GameContent.Shaders.WaterShaderData.StepLiquids += WaterShaderData_StepLiquids;
             }
         }
+
 
         private void WaterShaderData_StepLiquids(On.Terraria.GameContent.Shaders.WaterShaderData.orig_StepLiquids orig, WaterShaderData self)
         {

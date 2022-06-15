@@ -102,6 +102,7 @@ namespace Everglow
 
         public override void Load()
         {
+            m_mainThreadContext.Load();
             HookSystem.HookLoad();
             m_moduleManager.LoadAllModules();
         }
@@ -118,6 +119,7 @@ namespace Everglow
             HookSystem.HookUnload();
 
             m_profilerManager.Clear();
+            m_mainThreadContext.Unload();
 
             m_packetResolver = null;
             m_moduleManager = null;
