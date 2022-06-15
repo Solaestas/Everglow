@@ -168,6 +168,30 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             }
             return CrashCount;
         }
+
+        private static int GetMergeToJungle(int PoX, int PoY)
+        {
+            int CrashCount = 0;
+            ushort[] MustHaveTileType = new ushort[]
+            {
+                60,//丛林草方块
+                61,//丛林草
+                62,//丛林藤
+                74,//高大丛林草
+                233//丛林花
+            };
+            for (int x = -256; x < 257; x += 8)
+            {
+                for (int y = -128; y < 129; y += 8)
+                {
+                    if (Array.Exists<ushort>(MustHaveTileType, Ttype => Ttype == Main.tile[x + PoX, y + PoY].TileType))
+                    {
+                        CrashCount++;
+                    }
+                }
+            }
+            return CrashCount;
+        }
         /// <summary>
         /// 获取一个不与原版地形冲突的点
         /// </summary>
@@ -175,12 +199,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         private static Point16 CocoonPos()
         {
             int PoX = Main.rand.Next(300, Main.maxTilesX - 600);
-            int PoY = Main.rand.Next(400, Main.maxTilesY - 700);
+            int PoY = Main.rand.Next(500, Main.maxTilesY - 700);
 
-            while (GetCrash(PoX, PoY) > 0)
+            while (GetCrash(PoX, PoY) > 0 || GetMergeToJungle(PoX, PoY) <= 10)
             {
                 PoX = Main.rand.Next(300, Main.maxTilesX - 600);
-                PoY = Main.rand.Next(400, Main.maxTilesY - 700);
+                PoY = Main.rand.Next(500, Main.maxTilesY - 700);
             }
             return new Point16(PoX, PoY);
         }
