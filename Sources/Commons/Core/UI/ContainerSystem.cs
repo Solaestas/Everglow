@@ -17,13 +17,13 @@
         public override void UpdateUI( GameTime gameTime )
         {
             Input.GetInformationFromDevice( );
-            if( Input.MouseLeftClick && Page.SeekAt( ) != null )
-                LeftClickContainer = Page.SeekAt( );
-            if( Input.MouseRightClick && Page.SeekAt( ) != null )
-                RightClickContainer = Page.SeekAt( );
+            if( Input.MouseLeftClick&&Page.SeekAt( )!=null )
+                LeftClickContainer=Page.SeekAt( );
+            if( Input.MouseRightClick&&Page.SeekAt( )!=null )
+                RightClickContainer=Page.SeekAt( );
             Page.DoReset( );
             Page.SeekAt( )?.Events.Update( );
-            Page.CanSeek = false;
+            Page.CanSeek=false;
             Page.DoUpdate( );
 
             base.UpdateUI(gameTime);

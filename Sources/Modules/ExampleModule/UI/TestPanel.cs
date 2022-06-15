@@ -8,11 +8,11 @@ namespace Everglow.Sources.Modules.ExampleModule.UI
         public Button Button;
         protected override void InitializeContainer( )
         {
-            Button = new Button( );
-            Button.Events.OnMouseLeftClick += ( ) =>
-            {
-                Main.NewText("科林可可爱爱捏❤");
-            };
+            Button=new Button( );
+            Button.Events.OnMouseLeftClick+=( ) =>
+          {
+              Main.NewText("科林可可爱爱捏❤");
+          };
             Register(Button);
             base.InitializeContainer( );
             Button.ContainerElement.SetSize(50,50); //设置按钮的大小, 当然, 写在 SetLayerout 也是可以的.

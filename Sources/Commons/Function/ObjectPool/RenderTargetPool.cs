@@ -11,11 +11,11 @@ namespace Everglow.Sources.Commons.Function.ObjectPool
 
         public RenderTargetPool( )
         {
-            m_renderTargetsPool = new List<RenderTarget2D>( );
-            m_renderTargetsFreeList = new LinkedList<int>( );
-            m_graphicsDevice = Main.graphics.GraphicsDevice;
+            m_renderTargetsPool=new List<RenderTarget2D>( );
+            m_renderTargetsFreeList=new LinkedList<int>( );
+            m_graphicsDevice=Main.graphics.GraphicsDevice;
 
-            Main.OnResolutionChanged += Main_OnResolutionChanged;
+            Main.OnResolutionChanged+=Main_OnResolutionChanged;
         }
 
         /// <summary>
@@ -25,14 +25,14 @@ namespace Everglow.Sources.Commons.Function.ObjectPool
         private void Main_OnResolutionChanged( Vector2 size )
         {
             int poolSize = m_renderTargetsPool.Count;
-            for( int i = 0; i < poolSize; i++ )
+            for( int i = 0; i<poolSize; i++ )
             {
-                if( m_renderTargetsPool[i] != null )
+                if( m_renderTargetsPool[i]!=null )
                 {
                     m_renderTargetsPool[i].Dispose( );
-                    m_renderTargetsPool[i] = null;
+                    m_renderTargetsPool[i]=null;
                 }
-                m_renderTargetsPool[i] = new RenderTarget2D(m_graphicsDevice,
+                m_renderTargetsPool[i]=new RenderTarget2D(m_graphicsDevice,
                     (int)size.X,
                     (int)size.Y);
             }
@@ -60,7 +60,7 @@ namespace Everglow.Sources.Commons.Function.ObjectPool
         {
             List<int> indices = new List<int>( );
             List<RenderTarget2D> renderTargets = new List<RenderTarget2D>( );
-            for( int i = 0; i < size; i++ )
+            for( int i = 0; i<size; i++ )
             {
                 int index = GetNextFreeIndexAndOccupy( );
                 indices.Add(index);
@@ -86,7 +86,7 @@ namespace Everglow.Sources.Commons.Function.ObjectPool
             lock( this )
             {
                 // 如果 freelist 没有空位就扩充我们的 rendertarget 池子
-                if( m_renderTargetsFreeList.Count == 0 )
+                if( m_renderTargetsFreeList.Count==0 )
                 {
                     int index = m_renderTargetsPool.Count;
                     m_renderTargetsPool.Add(new RenderTarget2D(m_graphicsDevice,

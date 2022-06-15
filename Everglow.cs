@@ -70,11 +70,11 @@ namespace Everglow
 
         public Everglow( )
         {
-            m_instance = this;
+            m_instance=this;
             // 必须手动确定顺序
-            m_profilerManager = new ProfilerManager( );
-            m_moduleManager = new ModuleManager( );
-            m_packetResolver = new PacketResolver( );
+            m_profilerManager=new ProfilerManager( );
+            m_moduleManager=new ModuleManager( );
+            m_packetResolver=new PacketResolver( );
         }
 
         [ProfilerMeasure]
@@ -89,9 +89,9 @@ namespace Everglow
 
             m_profilerManager.Clear( );
 
-            m_packetResolver = null;
-            m_moduleManager = null;
-            m_instance = null;
+            m_packetResolver=null;
+            m_moduleManager=null;
+            m_instance=null;
         }
 
         public override void HandlePacket( BinaryReader reader,int whoAmI )

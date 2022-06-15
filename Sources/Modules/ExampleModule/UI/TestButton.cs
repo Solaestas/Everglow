@@ -26,7 +26,7 @@ namespace Everglow.Sources.Modules.ExampleModule.UI
     {
         protected override void InitializeContainer( )
         {
-            Events = new TestButtonEvents(this); //将事件更改为自己定制的事件.
+            Events=new TestButtonEvents(this); //将事件更改为自己定制的事件.
             base.InitializeContainer( );
         }
         protected override void ResetUpdate( )

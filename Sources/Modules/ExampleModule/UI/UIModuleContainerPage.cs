@@ -18,25 +18,25 @@ namespace Everglow.Sources.Modules.ExampleModule.UI
 
         protected override void InitializeContainer( )
         {
-            Button0 = new Button( );
-            Button0.Events.OnMouseLeftClick += ( ) =>
-            {
-                Main.NewText("Button被左键单击了！"); //添加左键单击事件.
-            };
-            Button0.Events.OnMouseLeftDown += ( ) =>
-            {
-                Main.NewText("Button被左键长按了！"); //添加左键长按事件.
-            };
-            Button0.Events.OnMouseLeftUp += ( ) =>
-            {
-                Main.NewText("Button被左键松开了！"); //添加左键松开事件.
-            };
+            Button0=new Button( );
+            Button0.Events.OnMouseLeftClick+=( ) =>
+          {
+              Main.NewText("Button被左键单击了！"); //添加左键单击事件.
+          };
+            Button0.Events.OnMouseLeftDown+=( ) =>
+          {
+              Main.NewText("Button被左键长按了！"); //添加左键长按事件.
+          };
+            Button0.Events.OnMouseLeftUp+=( ) =>
+          {
+              Main.NewText("Button被左键松开了！"); //添加左键松开事件.
+          };
             Register(Button0);
 
-            TestButton0 = new TestButton( );
+            TestButton0=new TestButton( );
             Register(TestButton0);
 
-            TestPanel = new TestPanel( );
+            TestPanel=new TestPanel( );
             Register(TestPanel);
 
             base.InitializeContainer( );

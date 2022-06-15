@@ -10,8 +10,8 @@
         private int m_top;
         public PriorityQueue( )
         {
-            m_top = 0;
-            m_heap = new List<T>
+            m_top=0;
+            m_heap=new List<T>
             {
                 new T()
             };
@@ -20,7 +20,7 @@
         /// <summary>
         /// 判断堆内是否有元素
         /// </summary>
-        public bool Empty => m_top == 0;
+        public bool Empty => m_top==0;
 
         /// <summary>
         /// 获取堆顶值
@@ -29,7 +29,7 @@
         {
             get
             {
-                if( m_top < 1 )
+                if( m_top<1 )
                 {
                     throw new IndexOutOfRangeException( );
                 }
@@ -61,33 +61,33 @@
         }
         private void Swap( int i,int j )
         {
-            (m_heap[j], m_heap[i]) = (m_heap[i], m_heap[j]);
+            (m_heap[j], m_heap[i])=(m_heap[i], m_heap[j]);
         }
         private void Swim( )
         {
             int k = m_top;
-            while( k > 1 && m_heap[k >> 1].CompareTo(m_heap[k]) > 0 )
+            while( k>1&&m_heap[k>>1].CompareTo(m_heap[k])>0 )
             {
-                Swap(k >> 1,k);
-                k >>= 1;
+                Swap(k>>1,k);
+                k>>=1;
             }
         }
         private void Sink( )
         {
             int k = 1;
-            while( (k << 1) <= m_top )
+            while( (k<<1)<=m_top )
             {
-                int j = k << 1;
-                if( j + 1 <= m_top && m_heap[j].CompareTo(m_heap[j + 1]) > 0 )
+                int j = k<<1;
+                if( j+1<=m_top&&m_heap[j].CompareTo(m_heap[j+1])>0 )
                 {
                     j++;
                 }
-                if( m_heap[k].CompareTo(m_heap[j]) <= 0 )
+                if( m_heap[k].CompareTo(m_heap[j])<=0 )
                 {
                     break;
                 }
                 Swap(k,j);
-                k = j;
+                k=j;
             }
         }
     }

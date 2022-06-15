@@ -32,15 +32,15 @@ namespace Everglow.Sources.Commons.Core.UI
 
         public ContainerEvents( Container container )
         {
-            Container = container;
-            OnMouseLeftClick += MouseLeftClickEvent;
-            OnMouseLeftDown += MouseLeftDownEvent;
-            OnMouseLeftUp += MouseLeftUpEvent;
-            OnMouseRightClick += MouseRightClickEvent;
-            OnMouseRightDown += MouseRightDownEvent;
-            OnMouseRightUp += MouseRightUpEvent;
-            OnInterview += InterviewEvent;
-            OnInterviewStateChange += InterviewStateChangeEvent;
+            Container=container;
+            OnMouseLeftClick+=MouseLeftClickEvent;
+            OnMouseLeftDown+=MouseLeftDownEvent;
+            OnMouseLeftUp+=MouseLeftUpEvent;
+            OnMouseRightClick+=MouseRightClickEvent;
+            OnMouseRightDown+=MouseRightDownEvent;
+            OnMouseRightUp+=MouseRightUpEvent;
+            OnInterview+=InterviewEvent;
+            OnInterviewStateChange+=InterviewStateChangeEvent;
         }
 
         /// <summary>
@@ -74,8 +74,8 @@ namespace Everglow.Sources.Commons.Core.UI
         {
             if( Drag )
             {
-                Droping = true;
-                SelectPoint = new Vector2(Mouse.GetState( ).X,Mouse.GetState( ).Y) - Container.Location;
+                Droping=true;
+                SelectPoint=new Vector2(Mouse.GetState( ).X,Mouse.GetState( ).Y)-Container.Location;
             }
             OnMouseLeftClick.Invoke( );
         }
@@ -193,22 +193,22 @@ namespace Everglow.Sources.Commons.Core.UI
 
         public virtual void Update( )
         {
-            if( Main.mouseLeftRelease && Drag && Droping )
-                Droping = false;
-            Interview = Container.GetInterviewState( );
+            if( Main.mouseLeftRelease&&Drag&&Droping )
+                Droping=false;
+            Interview=Container.GetInterviewState( );
             if( Interview )
                 DoInterviewEvent( );
             if( Input.MouseLeftClick )
                 DoMouseLeftClickEvent( );
-            else if( Input.MouseLeftDown && ContainerSystem.LeftClickContainer == Container )
+            else if( Input.MouseLeftDown&&ContainerSystem.LeftClickContainer==Container )
                 DoMouseLeftDownEvent( );
-            else if( Input.MouseLeftUp && ContainerSystem.LeftClickContainer == Container )
+            else if( Input.MouseLeftUp&&ContainerSystem.LeftClickContainer==Container )
                 DoMouseLeftUpEvent( );
             if( Input.MouseRightClick )
                 DoMouseRightClickEvent( );
-            else if( Input.MouseRightDown && ContainerSystem.RightClickContainer == Container )
+            else if( Input.MouseRightDown&&ContainerSystem.RightClickContainer==Container )
                 DoMouseRightDownEvent( );
-            else if( Input.MouseRightUp && ContainerSystem.RightClickContainer == Container )
+            else if( Input.MouseRightUp&&ContainerSystem.RightClickContainer==Container )
                 DoMouseRightUpEvent( );
 
         }

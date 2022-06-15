@@ -9,7 +9,7 @@
 
         public ProfilerManager( )
         {
-            m_unitInfoTable = new Dictionary<string,UnitInfo>( );
+            m_unitInfoTable=new Dictionary<string,UnitInfo>( );
         }
 
         /// <summary>
@@ -22,7 +22,7 @@
             if( m_unitInfoTable.ContainsKey(name) )
             {
                 var info = m_unitInfoTable[name];
-                info.TimeInMs += timeInMs;
+                info.TimeInMs+=timeInMs;
                 info.Count++;
             }
             else
@@ -46,9 +46,9 @@
 
             entries.Sort(( a,b ) =>
             {
-                if( a.TimeInMs == b.TimeInMs )
+                if( a.TimeInMs==b.TimeInMs )
                     return 0;
-                return a.TimeInMs > b.TimeInMs ? -1 : 1;
+                return a.TimeInMs>b.TimeInMs ? -1 : 1;
             });
 
             foreach( var unitInfo in entries )

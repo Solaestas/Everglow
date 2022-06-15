@@ -19,7 +19,7 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
 
         public override string WorldName => "Terraria";
 
-        public override uint Version => (uint)(Main.WorldGeneratorVersion & 0x00_00_00_00_FF_FF_FF_FFul);
+        public override uint Version => (uint)(Main.WorldGeneratorVersion&0x00_00_00_00_FF_FF_FF_FFul);
 
         public override void EnterWorld( UIMouseEvent evt,UIElement listeningElement )
         {
@@ -31,18 +31,18 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
             {
                 if( !File.Exists(data.Path) )
                 {
-                    Main.menuMode = 888;
+                    Main.menuMode=888;
                     Main.MenuUI.SetState(new UIWorldLoad( ));
-                    Main.AutogenProgress.Value = 0;
+                    Main.AutogenProgress.Value=0;
                     WorldGen.clearWorld( );
-                    Main.spawnTileX = DefaultSpawnPoint.X;
-                    Main.spawnTileY = DefaultSpawnPoint.Y;
+                    Main.spawnTileX=DefaultSpawnPoint.X;
+                    Main.spawnTileY=DefaultSpawnPoint.Y;
                     UIWorldCreation.ProcessSpecialWorldSeeds(data.SeedText);
                     WorldGen.GenerateWorld(data.Seed,null);
                     WorldFile.SaveWorld(Main.ActiveWorldFileData.IsCloudSave,true);
                 }
-                Main.menuMode = 10;
-                typeof(UIWorldListItem).GetMethod("PlayGame",BindingFlags.NonPublic | BindingFlags.Instance)
+                Main.menuMode=10;
+                typeof(UIWorldListItem).GetMethod("PlayGame",BindingFlags.NonPublic|BindingFlags.Instance)
                     .CreateDelegate<UIElement.MouseEvent>(Everglow.ModuleManager.GetModule<WorldSystem>( ).dataToUI[data])
                     .Invoke(evt,listeningElement);
 

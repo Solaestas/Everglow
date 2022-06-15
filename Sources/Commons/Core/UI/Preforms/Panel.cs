@@ -15,14 +15,14 @@ namespace Everglow.Sources.Commons.Core.UI.Preforms
         public Panel( ) { }
         public Panel( Texture2D img,int borderSize )
         {
-            Image = img;
-            _borderSize = borderSize;
+            Image=img;
+            _borderSize=borderSize;
         }
 
         protected override void InitializeContainer( )
         {
-            Events.Drop = true;
-            Events.CanGetForPointer = false;
+            Events.Drag=true;
+            Events.CanGetForPointer=false;
             base.InitializeContainer( );
         }
 
@@ -31,14 +31,14 @@ namespace Everglow.Sources.Commons.Core.UI.Preforms
             Main.spriteBatch.End( );
             RasterizerState OverflowHiddenRasterizerState = new RasterizerState
             {
-                CullMode = CullMode.None,
-                ScissorTestEnable = true
+                CullMode=CullMode.None,
+                ScissorTestEnable=true
             };
             Rectangle clippingRectangle = BaseRectangle;
-            Main.spriteBatch.GraphicsDevice.ScissorRectangle = clippingRectangle;
-            Main.spriteBatch.GraphicsDevice.RasterizerState = OverflowHiddenRasterizerState;
+            Main.spriteBatch.GraphicsDevice.ScissorRectangle=clippingRectangle;
+            Main.spriteBatch.GraphicsDevice.RasterizerState=OverflowHiddenRasterizerState;
             Main.spriteBatch.Begin(SpriteSortMode.Deferred,BlendState.AlphaBlend,SamplerState.AnisotropicClamp,DepthStencilState.None,OverflowHiddenRasterizerState,null);
-            if( Image != null )
+            if( Image!=null )
                 Main.spriteBatch.Draw(Image,BaseRectangle,ContainerElement.Color);
             else
                 Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value,BaseRectangle,ContainerElement.Color);

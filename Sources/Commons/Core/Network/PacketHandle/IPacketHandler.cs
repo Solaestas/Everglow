@@ -22,7 +22,7 @@ namespace Everglow.Sources.Commons.Core.Network.PacketHandle
         private Type m_packetType;
         public HandlePacketAttribute( Type type )
         {
-            m_packetType = type;
+            m_packetType=type;
             Debug.Assert(typeof(IPacket).IsAssignableFrom(type));
         }
         public Type PacketType

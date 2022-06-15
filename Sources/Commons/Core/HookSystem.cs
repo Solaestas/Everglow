@@ -15,13 +15,13 @@ namespace Everglow.Sources.Commons.Core
         public bool Enable { get; set; } = true;
         public ActionHandler( Action action )
         {
-            this.action = action;
-            Name = action.ToString( );
+            this.action=action;
+            Name=action.ToString( );
         }
         public ActionHandler( Action action,string name )
         {
-            this.action = action;
-            Name = name;
+            this.action=action;
+            Name=name;
         }
         public void Invoke( ) => action.Invoke( );
     }
@@ -112,7 +112,7 @@ namespace Everglow.Sources.Commons.Core
                 //除非搞事不然应该不会执行这行代码
                 throw new ArgumentException("Invaild Opportunity");
             }
-            var handler = new ActionHandler(action,name ?? action.ToString( ));
+            var handler = new ActionHandler(action,name??action.ToString( ));
             methods[op].Add(new ActionHandler(action));
             return handler;
         }
@@ -132,13 +132,13 @@ namespace Everglow.Sources.Commons.Core
         /// <returns></returns>
         public ActionHandler Find( string name,CallOpportunity op = CallOpportunity.None )
         {
-            if( op == CallOpportunity.None )
+            if( op==CallOpportunity.None )
             {
                 foreach( var vs in methods.Values )
                 {
                     foreach( var handler in vs )
                     {
-                        if( handler.Name == name )
+                        if( handler.Name==name )
                         {
                             return handler;
                         }
@@ -149,7 +149,7 @@ namespace Everglow.Sources.Commons.Core
             {
                 foreach( var handler in methods[op] )
                 {
-                    if( handler.Name == name )
+                    if( handler.Name==name )
                     {
                         return handler;
                     }
@@ -164,22 +164,22 @@ namespace Everglow.Sources.Commons.Core
             {
                 methods.Add(op,new List<ActionHandler>( ));
             }
-            On.Terraria.Main.DrawDust += Main_DrawDust;
-            On.Terraria.Main.DrawProjectiles += Main_DrawProjectiles;
-            On.Terraria.Main.DrawNPCs += Main_DrawNPCs;
-            On.Terraria.Graphics.Renderers.LegacyPlayerRenderer.DrawPlayers += LegacyPlayerRenderer_DrawPlayers;
-            On.Terraria.Main.DoDraw += Main_DoDraw;
-            On.Terraria.WorldGen.playWorld += WorldGen_playWorld;
-            On.Terraria.WorldGen.SaveAndQuit += WorldGen_SaveAndQuit;
-            On.Terraria.Main.DrawMiscMapIcons += Main_DrawMiscMapIcons;
-            On.Terraria.WorldGen.serverLoadWorldCallBack += WorldGen_serverLoadWorldCallBack;
-            Main.OnResolutionChanged += Main_OnResolutionChanged;
+            On.Terraria.Main.DrawDust+=Main_DrawDust;
+            On.Terraria.Main.DrawProjectiles+=Main_DrawProjectiles;
+            On.Terraria.Main.DrawNPCs+=Main_DrawNPCs;
+            On.Terraria.Graphics.Renderers.LegacyPlayerRenderer.DrawPlayers+=LegacyPlayerRenderer_DrawPlayers;
+            On.Terraria.Main.DoDraw+=Main_DoDraw;
+            On.Terraria.WorldGen.playWorld+=WorldGen_playWorld;
+            On.Terraria.WorldGen.SaveAndQuit+=WorldGen_SaveAndQuit;
+            On.Terraria.Main.DrawMiscMapIcons+=Main_DrawMiscMapIcons;
+            On.Terraria.WorldGen.serverLoadWorldCallBack+=WorldGen_serverLoadWorldCallBack;
+            Main.OnResolutionChanged+=Main_OnResolutionChanged;
         }
 
         public override void Unload( )
         {
-            methods = null;
-            Main.OnResolutionChanged -= Main_OnResolutionChanged;
+            methods=null;
+            Main.OnResolutionChanged-=Main_OnResolutionChanged;
         }
         internal void Invoke( CallOpportunity op )
         {
@@ -194,7 +194,7 @@ namespace Everglow.Sources.Commons.Core
                     catch( Exception ex )
                     {
                         Everglow.Instance.Logger.Error($"{handler.Name} 抛出了异常 {ex}");
-                        handler.Enable = false;
+                        handler.Enable=false;
                         if( Function.FeatureFlags.EverglowConfig.DebugMode )
                         {
                             //自动暂停的，方便监视
@@ -214,7 +214,7 @@ namespace Everglow.Sources.Commons.Core
         internal void Main_DrawMiscMapIcons( On.Terraria.Main.orig_DrawMiscMapIcons orig,Main self,SpriteBatch spriteBatch,Vector2 mapTopLeft,Vector2 mapX2Y2AndOff,Rectangle? mapRect,float mapScale,float drawScale,ref string mouseTextString )
         {
             orig(self,spriteBatch,mapTopLeft,mapX2Y2AndOff,mapRect,mapScale,drawScale,ref mouseTextString);
-            MapIconInfomation = (mapTopLeft, mapX2Y2AndOff, mapRect, mapScale);
+            MapIconInfomation=(mapTopLeft, mapX2Y2AndOff, mapRect, mapScale);
             Invoke(CallOpportunity.PostDrawMapIcons);
         }
 

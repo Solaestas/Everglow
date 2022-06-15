@@ -21,8 +21,8 @@ namespace Everglow.Sources.Commons.Core.ModuleSystem
             var assembly = Assembly.GetExecutingAssembly( );
             foreach( var type in assembly.GetTypes( )
                 .Where(type =>
-                !type.IsAbstract &&
-                type.GetInterfaces( ).Contains(typeof(IModule)) &&
+                !type.IsAbstract&&
+                type.GetInterfaces( ).Contains(typeof(IModule))&&
                 !Attribute.IsDefined(type,typeof(DontAutoLoadAttribute))
                 ) )
             {
@@ -92,10 +92,10 @@ namespace Everglow.Sources.Commons.Core.ModuleSystem
         /// <returns></returns>
         public IEnumerable<IModule> FindModule( Type type ) => from ins in modules
                                                                where ins.GetType( ).IsSubclassOf(type)
-                                                                  || ins.GetType( ) == type
+                                                                  ||ins.GetType( )==type
                                                                select ins;
         public IEnumerable<IModule> FindModule( string name ) => from ins in modules
-                                                                 where ins.Name == name
+                                                                 where ins.Name==name
                                                                  select ins;
         public IEnumerable<IModule> FindModule( Func<IModule,bool> predicate ) => modules.Where(predicate);
         /// <summary>
@@ -104,7 +104,7 @@ namespace Everglow.Sources.Commons.Core.ModuleSystem
         /// <param name="module"></param>
         public void AddModule( IModule module )
         {
-            if( modulesByName.ContainsKey(module.Name) || modulesByType.ContainsKey(module.GetType( )) )
+            if( modulesByName.ContainsKey(module.Name)||modulesByType.ContainsKey(module.GetType( )) )
             {
                 throw new InvalidOperationException("Module already registered");
             }
@@ -152,10 +152,10 @@ namespace Everglow.Sources.Commons.Core.ModuleSystem
                 {
                     mod.Unload( );
                 }
-                modules = null;
+                modules=null;
             }
-            modulesByType = null;
-            modulesByName = null;
+            modulesByType=null;
+            modulesByName=null;
         }
 
     }

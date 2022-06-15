@@ -10,7 +10,7 @@ namespace Everglow.Sources.Commons.Core.ModuleSystem.Tests
 
         public ModuleManagerTest( )
         {
-            m_moduleManager = new ModuleManager( );
+            m_moduleManager=new ModuleManager( );
         }
 
         private class ModuleA : IModule

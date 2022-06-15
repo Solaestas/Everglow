@@ -45,37 +45,37 @@ namespace Everglow.Sources.Commons.Core.UI
         /// 获取鼠标是否进行了左键单击操作的值.
         /// </summary>
         public static bool MouseLeftClick
-        { get { return MouseState.LeftButton == ButtonState.Pressed && MouseStateLast.LeftButton == ButtonState.Released; } }
+        { get { return MouseState.LeftButton==ButtonState.Pressed&&MouseStateLast.LeftButton==ButtonState.Released; } }
 
         /// <summary>
         /// 获取鼠标是否进行了左键长按操作的值.
         /// </summary>
         public static bool MouseLeftDown
-        { get { return MouseState.LeftButton == ButtonState.Pressed && MouseStateLast.LeftButton == ButtonState.Pressed; } }
+        { get { return MouseState.LeftButton==ButtonState.Pressed&&MouseStateLast.LeftButton==ButtonState.Pressed; } }
 
         /// <summary>
         /// 获取鼠标是否进行了释放左键操作的值.
         /// </summary>
         public static bool MouseLeftUp
-        { get { return MouseState.LeftButton == ButtonState.Released && MouseStateLast.LeftButton == ButtonState.Pressed; } }
+        { get { return MouseState.LeftButton==ButtonState.Released&&MouseStateLast.LeftButton==ButtonState.Pressed; } }
 
         /// <summary>
         /// 表示鼠标是否进行了右键单击操作的值.
         /// </summary>
         public static bool MouseRightClick
-        { get { return MouseState.RightButton == ButtonState.Pressed && MouseStateLast.RightButton == ButtonState.Released; } }
+        { get { return MouseState.RightButton==ButtonState.Pressed&&MouseStateLast.RightButton==ButtonState.Released; } }
 
         /// <summary>
         /// 获取鼠标是否进行了右键长按操作的值.
         /// </summary>
         public static bool MouseRightDown
-        { get { return MouseState.RightButton == ButtonState.Pressed && MouseStateLast.RightButton == ButtonState.Pressed; } }
+        { get { return MouseState.RightButton==ButtonState.Pressed&&MouseStateLast.RightButton==ButtonState.Pressed; } }
 
         /// <summary>
         /// 表示鼠标是否进行了释放右键操作的值.
         /// </summary>
         public static bool MouseRightUp
-        { get { return MouseState.RightButton == ButtonState.Released && MouseStateLast.RightButton == ButtonState.Pressed; } }
+        { get { return MouseState.RightButton==ButtonState.Released&&MouseStateLast.RightButton==ButtonState.Pressed; } }
 
         /// <summary>
         /// 表示鼠标是否进行了双键释放操作的值.
@@ -85,10 +85,10 @@ namespace Everglow.Sources.Commons.Core.UI
             get
             {
                 return
-                    MouseState.LeftButton == ButtonState.Released &&
-                    MouseStateLast.LeftButton == ButtonState.Released &&
-                    MouseState.RightButton == ButtonState.Released &&
-                    MouseStateLast.RightButton == ButtonState.Released;
+                    MouseState.LeftButton==ButtonState.Released&&
+                    MouseStateLast.LeftButton==ButtonState.Released&&
+                    MouseState.RightButton==ButtonState.Released&&
+                    MouseStateLast.RightButton==ButtonState.Released;
             }
         }
 
@@ -96,13 +96,13 @@ namespace Everglow.Sources.Commons.Core.UI
         /// 表示鼠标滑轮进行了向下滑操作的值.
         /// </summary>
         public static bool SlideDown
-        { get { return MouseState.ScrollWheelValue < MouseStateLast.ScrollWheelValue; } }
+        { get { return MouseState.ScrollWheelValue<MouseStateLast.ScrollWheelValue; } }
 
         /// <summary>
         /// 表示鼠标滑轮进行了上滑操作的值.
         /// </summary>
         public static bool SlideUp
-        { get { return MouseState.ScrollWheelValue > MouseStateLast.ScrollWheelValue; } }
+        { get { return MouseState.ScrollWheelValue>MouseStateLast.ScrollWheelValue; } }
 
         // 用于计算左键双击的计时器.
         private static int _doubleLeftClickTimer = 30;
@@ -119,10 +119,10 @@ namespace Everglow.Sources.Commons.Core.UI
 
         internal static void GetInformationFromDevice( )
         {
-            MouseStateLast = MouseState;
-            MouseState = Mouse.GetState( );
-            KeyboardStateLast = KeyboardState;
-            KeyboardState = Keyboard.GetState( );
+            MouseStateLast=MouseState;
+            MouseState=Mouse.GetState( );
+            KeyboardStateLast=KeyboardState;
+            KeyboardState=Keyboard.GetState( );
         }
 
         /// <summary>
@@ -130,8 +130,8 @@ namespace Everglow.Sources.Commons.Core.UI
         /// </summary>
         public static void ResetMouseState( )
         {
-            MouseStateLast = Mouse.GetState( );
-            MouseState = Mouse.GetState( );
+            MouseStateLast=Mouse.GetState( );
+            MouseState=Mouse.GetState( );
         }
 
         /// <summary>
@@ -141,7 +141,7 @@ namespace Everglow.Sources.Commons.Core.UI
         /// <returns>如若是, 返回 <seealso href="true"/>, 否则返回 <seealso href="false"/>.</returns>
         public static bool KeyClick( Keys keys )
         {
-            return KeyboardState.IsKeyDown(keys) && KeyboardStateLast.IsKeyUp(keys);
+            return KeyboardState.IsKeyDown(keys)&&KeyboardStateLast.IsKeyUp(keys);
         }
 
         /// <summary>
@@ -151,7 +151,7 @@ namespace Everglow.Sources.Commons.Core.UI
         /// <returns>如若是, 返回 <seealso href="true"/>, 否则返回 <seealso href="false"/>.</returns>
         public static bool KeyUp( Keys keys )
         {
-            return KeyboardState.IsKeyUp(keys) && KeyboardStateLast.IsKeyDown(keys);
+            return KeyboardState.IsKeyUp(keys)&&KeyboardStateLast.IsKeyDown(keys);
         }
 
     }

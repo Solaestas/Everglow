@@ -11,7 +11,7 @@ namespace Everglow_UnitTest
 
         public ModuleManagerTest( )
         {
-            m_moduleManager = new ModuleManager( );
+            m_moduleManager=new ModuleManager( );
         }
 
         private class ModuleA : IModule

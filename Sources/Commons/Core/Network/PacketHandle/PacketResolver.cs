@@ -21,10 +21,10 @@ namespace Everglow.Sources.Commons.Core.Network.PacketHandle
         /// </summary>
         public PacketResolver( )
         {
-            m_packetIDCounter = 0;
-            m_packetIDMapping = new Dictionary<Type,Packet_Id>( );
-            m_packetIDToTypeMapping = new Dictionary<Packet_Id,Type>( );
-            m_packetHandlers = new Dictionary<Packet_Id,List<IPacketHandler>>( );
+            m_packetIDCounter=0;
+            m_packetIDMapping=new Dictionary<Type,Packet_Id>( );
+            m_packetIDToTypeMapping=new Dictionary<Packet_Id,Type>( );
+            m_packetHandlers=new Dictionary<Packet_Id,List<IPacketHandler>>( );
 
             RegisterPackets( );
         }
@@ -39,7 +39,7 @@ namespace Everglow.Sources.Commons.Core.Network.PacketHandle
         public void Send( IPacket packet,int toClient = -1,int ignoreClient = -1 )
         {
             // 单人模式不要有任何动作
-            if( Main.netMode == NetmodeID.SinglePlayer )
+            if( Main.netMode==NetmodeID.SinglePlayer )
             {
                 return;
             }
@@ -89,11 +89,11 @@ namespace Everglow.Sources.Commons.Core.Network.PacketHandle
             // 首先读取封包ID
             if( CompileTimeFeatureFlags.NetworkPacketIDUseInt32 )
             {
-                packetID = reader.ReadInt32( );
+                packetID=reader.ReadInt32( );
             }
             else
             {
-                packetID = reader.ReadByte( );
+                packetID=reader.ReadByte( );
             }
             if( !m_packetHandlers.ContainsKey(packetID) )
             {
@@ -118,7 +118,7 @@ namespace Everglow.Sources.Commons.Core.Network.PacketHandle
         {
             var assembly = Assembly.GetExecutingAssembly( );
             foreach( var type in assembly.GetTypes( ).Where(type =>
-                 !type.IsAbstract &&
+                 !type.IsAbstract&&
                  type.GetInterfaces( ).Contains(typeof(IPacket))
                 ) )
             {
@@ -131,7 +131,7 @@ namespace Everglow.Sources.Commons.Core.Network.PacketHandle
             }
 
             foreach( var type in assembly.GetTypes( ).Where(type =>
-                 !type.IsAbstract &&
+                 !type.IsAbstract&&
                  type.GetInterfaces( ).Contains(typeof(IPacketHandler))
                 ) )
             {
@@ -165,7 +165,7 @@ namespace Everglow.Sources.Commons.Core.Network.PacketHandle
             foreach( var packetId in m_packetIDToTypeMapping )
             {
                 if( !m_packetHandlers.ContainsKey(packetId.Key)
-                    || m_packetHandlers[packetId.Key].Count == 0 )
+                    ||m_packetHandlers[packetId.Key].Count==0 )
                 {
                     Everglow.Instance.Logger.Warn($"Packet {packetId.Value} does not have any handler binded");
                 }

@@ -15,12 +15,12 @@ namespace Everglow.Sources.Commons.Core.UI.Preforms
         public Button( ) { }
         public Button( Texture2D img )
         {
-            Image = img;
+            Image=img;
         }
 
         protected override void DrawSelf( )
         {
-            if( Image == null )
+            if( Image==null )
                 Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value,BaseRectangle,ContainerElement.Color);
             else
                 Main.spriteBatch.Draw(Image,BaseRectangle,ContainerElement.Color);
