@@ -73,23 +73,36 @@ namespace Everglow
                 return ModContent.GetInstance<HookSystem>();
             }
         }
+
+        internal static MainThreadContext MainThreadContext
+        {
+            get
+            {
+                return Instance.m_mainThreadContext;
+            }
+        }
+
         private static Everglow m_instance;
 
         private ModuleManager m_moduleManager;
         private PacketResolver m_packetResolver;
         private ProfilerManager m_profilerManager;
+        private MainThreadContext m_mainThreadContext;
 
         public Everglow()
         {
             m_instance = this;
+
             // 必须手动确定顺序
             m_profilerManager = new ProfilerManager();
+            m_mainThreadContext = new MainThreadContext();
             m_moduleManager = new ModuleManager();
             m_packetResolver = new PacketResolver();
         }
 
         public override void Load()
         {
+            m_mainThreadContext.Load();
             HookSystem.HookLoad();
             m_moduleManager.LoadAllModules();
         }
@@ -104,12 +117,14 @@ namespace Everglow
         {
             m_moduleManager.UnloadAllModules();
             HookSystem.HookUnload();
+            m_mainThreadContext.Unload();
 
             m_profilerManager.Clear();
 
             m_packetResolver = null;
             m_moduleManager = null;
             m_instance = null;
+            m_mainThreadContext = null;
         }
 
         public override void HandlePacket(BinaryReader reader, int whoAmI)

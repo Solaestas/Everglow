@@ -1,10 +1,6 @@
 using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Physics;
 using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
-using System.Drawing;
-using Color = Microsoft.Xna.Framework.Color;
-using Point = Microsoft.Xna.Framework.Point;
-using Rectangle = Microsoft.Xna.Framework.Rectangle;
 using Terraria.GameContent;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
@@ -27,7 +23,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         {
             Everglow.HookSystem.AddMethod(DrawBackground, Commons.Core.CallOpportunity.PostDrawBG);
             On.Terraria.Graphics.Light.TileLightScanner.GetTileLight += TileLightScanner_GetTileLight;
-            GetRopePosFir("TreeRope.bmp", 0.33f);
+            Everglow.MainThreadContext.AddTask(() => GetRopePosFir("TreeRope"));
             InitMass_Spring();
         }
 
@@ -67,16 +63,22 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             if (BiomeActive() && Main.BackgroundEnabled)
             {
                 if (alpha < 1)
+                {
                     alpha += increase;
+                }
                 else
+                {
                     alpha = 1;
+                }
 
                 Everglow.HookSystem.DisableDrawBackground = true;
             }
             else
             {
                 if (alpha > 0)
+                {
                     alpha -= increase;
+                }
                 else
                 {
                     alpha = 0;
@@ -88,7 +90,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         /// 判定是否开启地形
         /// </summary>
         /// <returns></returns>
-        public bool BiomeActive()
+        public static bool BiomeActive()
         {
             MothLand mothLand = ModContent.GetInstance<MothLand>();
             Vector2 BiomeCenter = new Vector2(mothLand.FireflyCenterX * 16, (mothLand.FireflyCenterY - 20) * 16);//读取地形信息
@@ -104,19 +106,17 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         /// <exception cref="Exception"></exception>
         public void GetGlowPos(string Shapepath)
         {
-            if (!OperatingSystem.IsWindows())
-            {
-                throw new Exception("Windows限定");
-            }
-            using Stream Img = Everglow.Instance.GetFileStream("Sources/Modules/MythModule/TheFirefly/Backgrounds/" + Shapepath);
-            Bitmap image = new Bitmap(Img);
+            Texture2D image = MythContent.QuickTexture("TheFirefly/Backgrounds/" + Shapepath);
+            Color[] colors = new Color[image.Width * image.Height];
+            image.GetData(colors);
             for (int y = image.Height - 1; y > 0; y -= 1)
             {
                 for (int x = image.Width - 1; x > 0; x -= 1)
                 {
-                    if (image.GetPixel(x, y).R == 255)
+                    Color temp = colors[x * image.Height + y];
+                    if (temp.R == 255)
                     {
-                        GPos.Add(new GHang(new Vector2(x * 10, y * 10), (image.GetPixel(x, y).G / 4f + 2), image.GetPixel(x, y).B / 255f + 0.5f, Main.rand.Next(5)));
+                        GPos.Add(new GHang(new Vector2(x * 10, y * 10), (temp.G / 4f + 2), temp.B / 255f + 0.5f, Main.rand.Next(5)));
                     }
                 }
             }
@@ -128,19 +128,17 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         /// <exception cref="Exception"></exception>
         public void GetGlowPosSec(string Shapepath)
         {
-            if (!OperatingSystem.IsWindows())
-            {
-                throw new Exception("Windows限定");
-            }
-            using Stream Img = Everglow.Instance.GetFileStream("Sources/Modules/MythModule/TheFirefly/Backgrounds/" + Shapepath);
-            Bitmap image = new Bitmap(Img);
+            Texture2D image = MythContent.QuickTexture("TheFirefly/Backgrounds/" + Shapepath);
+            Color[] colors = new Color[image.Width * image.Height];
+            image.GetData(colors);
             for (int y = image.Height - 1; y > 0; y -= 1)
             {
                 for (int x = image.Width - 1; x > 0; x -= 1)
                 {
-                    if (image.GetPixel(x, y).R == 255)
+                    Color temp = colors[x * image.Height + y];
+                    if (temp.R == 255)
                     {
-                        GPosSec.Add(new GHang(new Vector2(x * 10, y * 4.2f), (image.GetPixel(x, y).G / 4f + 2), image.GetPixel(x, y).B / 255f + 0.5f, Main.rand.Next(5)));
+                        GPosSec.Add(new GHang(new Vector2(x * 10, y * 4.2f), (temp.G / 4f + 2), temp.B / 255f + 0.5f, Main.rand.Next(5)));
                     }
                 }
             }
@@ -150,24 +148,21 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         /// </summary>
         /// <param name="Shapepath"></param>
         /// <exception cref="Exception"></exception>
-        public void GetRopePosFir(string Shapepath, float MoveStep)
+        public void GetRopePosFir(string Shapepath)
         {
-            if (!OperatingSystem.IsWindows())
-            {
-                throw new Exception("Windows限定");
-            }
-
-            using Stream Img = Everglow.Instance.GetFileStream("Sources/Modules/MythModule/TheFirefly/Backgrounds/" + Shapepath);
-            Bitmap image = new Bitmap(Img);
+            Texture2D image = MythContent.QuickTexture("TheFirefly/Backgrounds/" + Shapepath);
+            Color[] colors = new Color[image.Width * image.Height];
+            image.GetData(colors);
             for (int y = image.Height - 1; y > 0; y -= 1)
             {
                 for (int x = image.Width - 1; x > 0; x -= 1)
                 {
-                    if (image.GetPixel(x, y).R == 255)
+                    Color temp = colors[x + y * image.Width];
+                    if (temp.R == 255)
                     {
                         RopPosFir.Add(new Vector2(x * 5, y * 5f));
-                        RopPosFirC.Add(image.GetPixel(x, y).G + 2);
-                        RopPosFirS.Add((image.GetPixel(x, y).B + 240) / 300f);
+                        RopPosFirC.Add(temp.G + 2);
+                        RopPosFirS.Add((temp.B + 240) / 300f);
                     }
                 }
             }
@@ -177,6 +172,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         /// </summary>
         private void DrawGlow(Vector2 texSize, float MoveStep)
         {
+            if (GPos.Count <= 1)
+            {
+                Everglow.MainThreadContext.AddTask(() => GetGlowPos("GlosPos"));
+                return;
+            }
             MothLand mothLand = ModContent.GetInstance<MothLand>();
             Vector2 sampleTopleft = Vector2.Zero;
             Vector2 sampleCenter = sampleTopleft + (texSize / 2);
@@ -185,10 +185,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             Vector2 deltaPos = DCen - new Vector2((mothLand.FireflyCenterX + 34) * 16f, mothLand.FireflyCenterY * 16f);
             deltaPos *= MoveStep;
             Vector2 TexLT = sampleCenter - screenSize / 2f + deltaPos;
-            if (GPos.Count <= 1)
-            {
-                GetGlowPos("GlosPos.bmp");
-            }
             float deltaY = DCen.Y - (mothLand.FireflyCenterY - 90) * 16f;
             deltaY *= MoveStep * 0.4f;
             if (GPos.Count > 0)
@@ -220,8 +216,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             Vector2 ScreenCen = new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
             Vector2 dPoss = OrigPoint - ScreenCen;
             Vector2 DSize = GetZoomByScreenSize();
-            dPoss.X = dPoss.X * (DSize.X - 1);
-            dPoss.Y = dPoss.Y * (DSize.Y - 1);
+            dPoss.X *= (DSize.X - 1);
+            dPoss.Y *= (DSize.Y - 1);
             OrigPoint += dPoss;
             return OrigPoint;
         }
@@ -230,6 +226,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         /// </summary>
         private void DrawGlowSec(Vector2 texSize, float MoveStep)
         {
+            if (GPosSec.Count <= 1)
+            {
+                Everglow.MainThreadContext.AddTask(() => GetGlowPosSec("GlowHangingMiddlePosition"));
+                return;
+            }
             MothLand mothLand = ModContent.GetInstance<MothLand>();
             Vector2 sampleTopleft = Vector2.Zero;
             Vector2 sampleCenter = sampleTopleft + (texSize / 2);
@@ -238,10 +239,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             Vector2 deltaPos = DCen - new Vector2((mothLand.FireflyCenterX + 34) * 16f, mothLand.FireflyCenterY * 16f);
             deltaPos *= MoveStep;
             Vector2 TexLT = sampleCenter - screenSize / 2f + deltaPos;
-            if (GPosSec.Count <= 1)
-            {
-                GetGlowPosSec("GlowHangingMiddle.bmp");
-            }
             float deltaY = DCen.Y - (mothLand.FireflyCenterY - 90) * 16f;
             deltaY *= MoveStep * 0.14f;
             if (GPosSec.Count > 0)
@@ -482,7 +479,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         /// <param name="Size"></param>
         /// <param name="move"></param>
         /// <returns></returns>
-        private Vector2 GetRopeMove(Vector2 Size, float move)
+        private static Vector2 GetRopeMove(Vector2 Size, float move)
         {
             Vector2 DCen = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
             MothLand mothLand = ModContent.GetInstance<MothLand>();

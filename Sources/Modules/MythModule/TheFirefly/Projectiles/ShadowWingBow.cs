@@ -21,14 +21,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         }
 
         private int Ran = -1;
-        private int Tokill = -1;
+        //private int Tokill = -1;
         public override Color? GetAlpha(Color lightColor)
         {
             return new Color(255 - Projectile.alpha, 255 - Projectile.alpha, 255 - Projectile.alpha, 0);
         }
 
         private bool Release = true;
-        private int PdamF = 0;
+        //private int PdamF = 0;
         private Vector2 oldPo = Vector2.Zero;
         private float[] ArRot = new float[5];
         private float[] ArVel = new float[5];
@@ -83,7 +83,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             {
                 if (Projectile.timeLeft > 80)
                 {
-                    PdamF = Projectile.damage;
+                    //PdamF = Projectile.damage;
                 }
                 Projectile.rotation = (float)(Math.Atan2(v0.Y, v0.X) + Math.PI * 0.25);
                 Projectile.Center = Main.player[Projectile.owner].Center + Vector2.Normalize(v0) * 22f;
@@ -141,18 +141,16 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 Ran = Main.rand.Next(9);
             }
         }
-        private bool Nul = false;
         public override bool PreDraw(ref Color lightColor)
         {
             return false;
         }
 
         private int Energy = 0;
-        private Vector2[] Vlaser = new Vector2[501];
         public override void PostDraw(Color lightColor)
         {
             Player player = Main.player[Projectile.owner];
-            Texture2D TexString = MythContent.QuickTexture("TheFirefly/Items/Weapons/ShadowWingBowString0");
+            //Texture2D TexString = MythContent.QuickTexture("TheFirefly/Items/Weapons/ShadowWingBowString0");
             Texture2D TexMainU0 = MythContent.QuickTexture("TheFirefly/Items/Weapons/ShadowWingBowU0");
             Texture2D TexMainU1 = MythContent.QuickTexture("TheFirefly/Items/Weapons/ShadowWingBowU1");
             Texture2D TexMainU0G = MythContent.QuickTexture("TheFirefly/Items/Weapons/ShadowWingBowU0Glow");
@@ -164,10 +162,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Texture2D TexMainG = MythContent.QuickTexture("TheFirefly/Items/Weapons/ShadowWingBowMainGlow");
             Texture2D TexArrow = TextureAssets.Projectile[(int)(Projectile.ai[0])].Value;
             Texture2D TexMothArrow = MythContent.QuickTexture("TheFirefly/Projectiles/MothArrow");
-            float a0 = Energy % 60f;
-            float a1 = (60 - a0) / 60f;
-            float a2 = a1 * 1.5f;
-            float a3 = a2 * a2;
+            //float a0 = Energy % 60f;
+            //float a1 = (60 - a0) / 60f;
+            //float a2 = a1 * 1.5f;
+            //float a3 = a2 * a2;
             float b0 = Math.Clamp(Energy / 2f, 0, 60);
             float b1 = b0 / 60f;
             float b2 = b1;
@@ -183,9 +181,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             {
                 player.direction = 1;
             }
-            int StringFrame = 0;
-            StringFrame = Math.Clamp((int)(Energy / 20f), 0, 5);
-            TexString = MythContent.QuickTexture("TheFirefly/Items/Weapons/ShadowWingBowString" + StringFrame.ToString());
+            //int StringFrame = 0;
+            //StringFrame = Math.Clamp((int)(Energy / 20f), 0, 5);
+            //TexString = MythContent.QuickTexture("TheFirefly/Items/Weapons/ShadowWingBowString" + StringFrame.ToString());
             Vector2 v0 = Main.MouseWorld - player.Center;
             if (Main.mouseLeft)
             {
@@ -217,34 +215,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 
         }
 
-        private bool[] HasHit = new bool[200];
-        private float x = 0;
-        private struct CustomVertexInfo : IVertexType
-        {
-            private static VertexDeclaration _vertexDeclaration = new VertexDeclaration(new VertexElement[3]
-            {
-                new VertexElement(0, VertexElementFormat.Vector2, VertexElementUsage.Position, 0),
-                new VertexElement(8, VertexElementFormat.Color, VertexElementUsage.Color, 0),
-                new VertexElement(12, VertexElementFormat.Vector3, VertexElementUsage.TextureCoordinate, 0)
-            });
-            public Vector2 Position;
-            public Color Color;
-            public Vector3 TexCoord;
-
-            public CustomVertexInfo(Vector2 position, Color color, Vector3 texCoord)
-            {
-                this.Position = position;
-                this.Color = color;
-                this.TexCoord = texCoord;
-            }
-
-            public VertexDeclaration VertexDeclaration
-            {
-                get
-                {
-                    return _vertexDeclaration;
-                }
-            }
-        }
+        //private bool[] HasHit = new bool[200];
+        //private float x = 0;
     }
 }

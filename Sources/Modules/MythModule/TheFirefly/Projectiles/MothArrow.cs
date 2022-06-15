@@ -19,8 +19,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         {
             return new Color?(new Color(255, 255, 255, 0));
         }
-        private float Vd = 0;
-        private int addi = 0;
+        private int addi;
         public override void AI()
         {
             Projectile.rotation = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + Math.PI * 0.25);

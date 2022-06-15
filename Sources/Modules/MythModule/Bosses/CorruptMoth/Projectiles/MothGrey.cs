@@ -25,10 +25,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 60;
         }
-        private bool initialization = true;
-        private double X;
-        private float Omega;
-        private float b;
         public override void AI()
         {
             Projectile.velocity = Projectile.velocity.RotatedBy(5f / Projectile.timeLeft * Projectile.ai[0] + Math.Sin(Main.time / 10f) * 0.17f);
@@ -38,7 +34,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
         {
             return new Color?(new Color(0, 0, 0, 0));
         }
-        private Effect ef;
         private int TrueL = 1;
         public override void PostDraw(Color lightColor)
         {
@@ -95,8 +90,10 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
             }
             Texture2D t = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/MothGreyLine");
             Main.graphics.GraphicsDevice.Textures[0] = t;
-            if(Vx.Count>3)
-                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
+            if (Vx.Count > 3)
+            {
+                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
+            }
         }
     }
 }

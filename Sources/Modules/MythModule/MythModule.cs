@@ -37,45 +37,46 @@ namespace Everglow.Sources.Modules.MythModule
         private void WaterShaderData_StepLiquids(On.Terraria.GameContent.Shaders.WaterShaderData.orig_StepLiquids orig, WaterShaderData self)
         {
             orig(self);
-            /*
-            var distortionTarget = (RenderTarget2D)typeof(WaterShaderData).GetField("_distortionTarget", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(self);
-            var lastDistortionDrawOffset = (Vector2)typeof(WaterShaderData).GetField("_lastDistortionDrawOffset", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(self);
 
-            Color[] colors = new Color[distortionTarget.Width * distortionTarget.Height];
-            distortionTarget.GetData<Color>(colors);
+            // Dust生成，太过耗时
+            //var distortionTarget = (RenderTarget2D)typeof(WaterShaderData).GetField("_distortionTarget", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(self);
+            //var lastDistortionDrawOffset = (Vector2)typeof(WaterShaderData).GetField("_lastDistortionDrawOffset", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(self);
 
-            Vector2 offscreen = new Vector2(Main.offScreenRange, Main.offScreenRange);
-            Vector2 resol = new Vector2(Main.screenWidth, Main.screenHeight);
-            Vector2 value = new Vector2(Main.screenWidth, Main.screenHeight) * 0.5f * (Vector2.One - Vector2.One / Main.GameViewMatrix.Zoom);
-            Vector2 value2 = (Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange, Main.offScreenRange)) - Main.screenPosition - value;
-            Vector2 offset = -(value2 * 0.25f - lastDistortionDrawOffset) / new Vector2(distortionTarget.Width, distortionTarget.Height);
+            //Color[] colors = new Color[distortionTarget.Width * distortionTarget.Height];
+            //distortionTarget.GetData<Color>(colors);
 
-            for (int i = 0; i < colors.Length; i+=48 + Main.rand.Next(-6, 7))
-            {
-                int row = i / distortionTarget.Width;
-                int col = i % distortionTarget.Width;
+            //Vector2 offscreen = new Vector2(Main.offScreenRange, Main.offScreenRange);
+            //Vector2 resol = new Vector2(Main.screenWidth, Main.screenHeight);
+            //Vector2 value = new Vector2(Main.screenWidth, Main.screenHeight) * 0.5f * (Vector2.One - Vector2.One / Main.GameViewMatrix.Zoom);
+            //Vector2 value2 = (Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange, Main.offScreenRange)) - Main.screenPosition - value;
+            //Vector2 offset = -(value2 * 0.25f - lastDistortionDrawOffset) / new Vector2(distortionTarget.Width, distortionTarget.Height);
 
-                float y = (row + 0.5f) / distortionTarget.Height;
-                float x = (col + 0.5f) / distortionTarget.Width;
+            //for (int i = 0; i < colors.Length; i++)
+            //{
+            //    int row = i / distortionTarget.Width;
+            //    int col = i % distortionTarget.Width;
 
-                float v = (colors[i].R / 255f) * 2 - 1;
-                if (v > 0.05)
-                {
-                    Vector2 pos = new Vector2(x, y) - offset;
-                    pos *= Main.GameViewMatrix.Zoom;
+            //    float y = (row + 0.5f) / distortionTarget.Height;
+            //    float x = (col + 0.5f) / distortionTarget.Width;
 
-                    var dust = Dust.NewDustDirect(Main.screenPosition + resol * pos, 1, 1, ModContent.DustType<Bosses.CorruptMoth.Dusts.MothBlue2>());
-                    dust.velocity *= new Vector2(0, Main.rand.NextFloat(0, 2f)).RotatedByRandom(6.283);
-                    dust.noGravity = true;
-                }
-            }*/
+            //    float v = (colors[i].R / 255f) * 2 - 1;
+            //    if (v > 0.05)
+            //    {
+            //        Vector2 pos = new Vector2(x, y) - offset;
+            //        pos *= Main.GameViewMatrix.Zoom;
+
+            //        var dust = Dust.NewDustDirect(Main.screenPosition + resol * pos, 1, 1, 6);
+            //        dust.velocity *= 0f;
+            //        dust.noGravity = true;
+            //    }
+            //}
         }
 
         private void WaterShaderData_Update(On.Terraria.GameContent.Shaders.WaterShaderData.orig_Update orig, WaterShaderData self, GameTime gameTime)
         {
             // 关掉_useViscosityFilter来防止出现明显视觉bug
             orig(self, gameTime);
-            if (ModContent.GetInstance<MothBackground>().BiomeActive())
+            if (MothBackground.BiomeActive())
             {
                 self._useViscosityFilter = false;
             }
@@ -85,7 +86,7 @@ namespace Everglow.Sources.Modules.MythModule
 
 
 
-        private void WaterShaderData_Apply(MonoMod.Cil.ILContext il)
+        private void WaterShaderData_Apply(ILContext il)
         {
             var c = new ILCursor(il);
             // Try to find where 566 is placed onto the stack
@@ -99,7 +100,7 @@ namespace Everglow.Sources.Modules.MythModule
             c.Emit(Mono.Cecil.Cil.OpCodes.Ldsfld, typeof(MythModule).GetField("ReplaceEffectPass"));
             c.EmitDelegate<Action<WaterShaderData, EffectPass>>((shaderData, effect) =>
             {
-                if (!ModContent.GetInstance<MothBackground>().BiomeActive())
+                if (!MothBackground.BiomeActive())
                 {
                     return;
                 }

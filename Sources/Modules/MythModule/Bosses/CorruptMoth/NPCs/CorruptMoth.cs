@@ -1,7 +1,7 @@
-﻿using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles;
-using ReLogic.Content;
+﻿using Everglow.Sources.Commons.Core;
+using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles;
+using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
-using Terraria.GameContent.ItemDropRules;
 using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
@@ -9,6 +9,56 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
     [AutoloadBossHead]
     public class CorruptMoth : ModNPC
     {
+        protected override bool CloneNewInstances => true;
+        private static Future<Color[]> BBowColors;
+        private const int BBowColorsWidth = 60;
+        private const int BBowColorsHeight = 60;
+
+        private static Future<Color[]> BArrowColors;
+        private const int BArrowColorsWidth = 60;
+        private const int BArrowColorsHeight = 60;
+
+        private static Future<Color[]> BSwordColors;
+        private const int BSwordColorsWidth = 60;
+        private const int BSwordColorsHeight = 60;
+
+        private static Future<Color[]> BFistColors;
+        private const int BFistColorsWidth = 60;
+        private const int BFistColorsHeight = 60;
+        private static bool startLoading = false;
+
+        private bool canDespawn;
+        public static int secondStageHeadSlot = -1;
+        private bool Start = false;
+        public static int StaTime = 0;
+        private float PhamtomDis//特效幻影的距离和透明度
+        {
+            get => NPC.localAI[2];
+            set => NPC.localAI[2] = value;
+        }
+
+        private float lightVisual = 0;
+        [CloneByReference]
+        private readonly Vector3[] cubeVec = new Vector3[]
+        {
+            new Vector3(1,1,1),
+            new Vector3(1,1,-1),
+            new Vector3(1,-1,-1),
+            new Vector3(1,-1,1),
+            new Vector3(-1,1,1),
+            new Vector3(-1,1,-1),
+            new Vector3(-1,-1,-1),
+            new Vector3(-1,-1,1)
+        };
+        /// <summary>
+        /// 发射弹幕，在调用时判断是否不为客户端
+        /// </summary>
+        private int Timer
+        {
+            set => NPC.ai[1] = value;
+            get => (int)NPC.ai[1];
+        }
+        private Player Player => Main.player[NPC.target];
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Corrupted Moth");
@@ -24,6 +74,17 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
             NPCID.Sets.TrailCacheLength[NPC.type] = 4;
             //NPCID.Sets.TrailingMode[NPC.type] = 0;
+        }
+        public override void OnSpawn(IEntitySource source)
+        {
+            if (!startLoading)
+            {
+                startLoading = true;
+                BBowColors = Everglow.MainThreadContext.DelayGetColors(Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BBow"));
+                BArrowColors = Everglow.MainThreadContext.DelayGetColors(Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BArrow"));
+                BSwordColors = Everglow.MainThreadContext.DelayGetColors(Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BSword"));
+                BFistColors = Everglow.MainThreadContext.DelayGetColors(Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BFist"));
+            }
         }
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
@@ -44,7 +105,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
 				new FlavorTextBestiaryInfoElement(tex)
             });
         }
-        
         public override void OnKill()
         {
             //NPC.SetEventFlagCleared(ref DownedBossSystem.downedMoth, -1);
@@ -95,25 +155,16 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
         {
             return canDespawn;
         }
-        private bool canDespawn;
-        public static int secondStageHeadSlot = -1;
         public override void BossHeadSlot(ref int index)
         {
 
         }
-        private bool Start = false;
-        public static int StaTime = 0;
-        private float phamtomDis//特效幻影的距离和透明度
-        {
-            get => npc.localAI[2];
-            set => npc.localAI[2] = value;
-        }
-        float lightVisual = 0;
+        /// <summary>
+        /// 发射弹幕，调用前检测服务端
+        /// </summary>
         private void Create4DCube()
         {
             int scale = 300;
-            Vector3[] cubeVec = new Vector3[] {new(1,1,1),new(1,1,-1), new(1,-1,-1),new(1,-1,1),
-                                           new(-1,1,1),new(-1,1,-1) ,new(-1,-1,-1),new(-1,-1,1)};
             int counts = 5;
             for (int w = -scale; w <= scale; w += scale * 2)
             {
@@ -125,16 +176,18 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                         Vector3 v2 = cubeVec[(ii + 1) % 4 + a] * scale;
                         for (int i = 0; i < counts - 1; i++)
                         {
-                            Projectile proj = Projectile.NewProjectileDirect(npc.GetSource_FromAI(), npc.Center, Vector2.Zero, ModContent.ProjectileType<CorMoth4DProj>(), npc.damage / 5, 0, Main.myPlayer, npc.whoAmI);
+                            Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CorMoth4DProj>(), NPC.damage / 5, 0, Main.myPlayer, NPC.whoAmI);
                             (proj.ModProjectile as CorMoth4DProj).targetPos = new Vector4(Vector3.Lerp(v1, v2, (float)i / (counts - 1)), w);
+                            proj.netUpdate2 = true;
                         }
                     }
                     Vector3 v3 = cubeVec[ii] * scale;
                     Vector3 v4 = cubeVec[ii + 4] * scale;
                     for (int i = 1; i < counts - 1; i++)
                     {
-                        Projectile proj = Projectile.NewProjectileDirect(npc.GetSource_FromAI(), npc.Center, Vector2.Zero, ModContent.ProjectileType<CorMoth4DProj>(), npc.damage / 5, 0, Main.myPlayer, npc.whoAmI);
+                        Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CorMoth4DProj>(), NPC.damage / 5, 0, Main.myPlayer, NPC.whoAmI);
                         (proj.ModProjectile as CorMoth4DProj).targetPos = new Vector4(Vector3.Lerp(v3, v4, (float)i / (counts - 1)), w);
+                        proj.netUpdate2 = true;
                     }
                 }
             }
@@ -145,40 +198,54 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                 for (int i = 1; i < counts - 1; i++)
                 {
                     float c = (counts - 1) / 2;
-                    Projectile proj = Projectile.NewProjectileDirect(npc.GetSource_FromAI(), npc.Center, Vector2.Zero, ModContent.ProjectileType<CorMoth4DProj>(), npc.damage / 5, 0, Main.myPlayer, npc.whoAmI);
+                    Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CorMoth4DProj>(), NPC.damage / 5, 0, Main.myPlayer, NPC.whoAmI);
                     (proj.ModProjectile as CorMoth4DProj).targetPos = new Vector4(v * scale, (float)(i - c) * scale / c);
+                    proj.netUpdate2 = true;
                 }
             }
         }
         public override void AI()
         {
-            bool phase2 = npc.life < npc.lifeMax * 0.6f;
-            Lighting.AddLight(npc.Center, 0f, 0f, 0.8f * (1 - npc.alpha / 255f));
-            npc.friendly = npc.dontTakeDamage;
+            bool phase2 = NPC.life < NPC.lifeMax * 0.6f;
+            Lighting.AddLight(NPC.Center, 0f, 0f, 0.8f * (1 - NPC.alpha / 255f));
+            NPC.friendly = NPC.dontTakeDamage;
             if (lightVisual > 0)//光效
+            {
                 lightVisual -= 0.04f;
+            }
             else
+            {
                 lightVisual = 0;
+            }
 
             //贴图旋转
-            if (npc.spriteDirection > 0)
-                npc.rotation = npc.velocity.Y / 15;
+            if (NPC.spriteDirection > 0)
+            {
+                NPC.rotation = NPC.velocity.Y / 15;
+            }
             else
-                npc.rotation = -npc.velocity.Y / 15;
-            if (Math.Abs(npc.rotation) > 1.2f)
-                npc.rotation = Math.Sign(npc.rotation) * 1.2f;
+            {
+                NPC.rotation = -NPC.velocity.Y / 15;
+            }
+
+            if (Math.Abs(NPC.rotation) > 1.2f)
+            {
+                NPC.rotation = Math.Sign(NPC.rotation) * 1.2f;
+            }
             #region #前言
 
             if (!Start)
             {
-                npc.ai[0] = 0;
-                //npc.ai[0] = 114514;
-                //Create4DCube();
-                npc.noTileCollide = true;
+                NPC.ai[0] = 0;
+                //NPC.ai[0] = 114514;
+                NPC.noTileCollide = true;
                 Start = true;
-                for (int h = 0; h < 15; h++)
+                if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    NPC.NewNPC(null, (int)NPC.Center.X + 25, (int)NPC.Center.Y + 150, ModContent.NPCType<MothSummonEffect>());
+                    for (int h = 0; h < 15; h++)
+                    {
+                        NPC.NewNPC(null, (int)NPC.Center.X + 25, (int)NPC.Center.Y + 150, ModContent.NPCType<MothSummonEffect>());
+                    }
                 }
                 NPC.localAI[0] = 0;
                 return;
@@ -202,38 +269,41 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             }
             #endregion
 
-            if (npc.ai[0] == 0)
+            if (NPC.ai[0] == 0)
             {
-                npc.dontTakeDamage = true;
-                npc.noTileCollide = false;
-                npc.noGravity = false;
-                phamtomDis = (150 - t) * 120f / 150;
-                if (++t > 150)
+                NPC.dontTakeDamage = true;
+                NPC.noTileCollide = false;
+                NPC.noGravity = false;
+                PhamtomDis = (150 - Timer) * 120f / 150;
+                if (++Timer > 150)
                 {
-                    npc.dontTakeDamage = false;
-                    npc.noTileCollide = true;
-                    npc.noGravity = true;
-                    npc.ai[0]++;
-                    t = 0;
+                    NPC.dontTakeDamage = false;
+                    NPC.noTileCollide = true;
+                    NPC.noGravity = true;
+                    NPC.ai[0]++;
+                    Timer = 0;
                 }
             }//生成
-            if (npc.ai[0] == 1)
+            if (NPC.ai[0] == 1)
             {
-                if (++t < 200)
+                if (++Timer < 200)
                 {
                     MoveTo(player.Center, 5, 40);
                     GetDir_ByPlayer();
                 }
-                if (t == 200)
+                if (Timer == 200)
                 {
-                    npc.ai[2] = phase2 ? 1 : 0;
+                    NPC.ai[2] = phase2 ? 1 : 0;
                 }
-                if (t > 200 && t < 650 && npc.ai[2] == 0)//冲刺
+                if (Timer > 200 && Timer < 650 && NPC.ai[2] == 0)//冲刺
                 {
-                    int tt = (t - 200) % 150;
-                    Vector2 getVec = new Vector2(npc.direction);
-                    if (t > 500)
-                        getVec = new Vector2(npc.direction, 0);
+                    int tt = (Timer - 200) % 150;
+                    Vector2 getVec = new Vector2(NPC.direction);
+                    if (Timer > 500)
+                    {
+                        getVec = new Vector2(NPC.direction, 0);
+                    }
+
                     if (tt < 50)
                     {
                         GetDir_ByPlayer();
@@ -241,37 +311,59 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                     }
                     if (tt > 50 && tt < 70)//前摇
                     {
-                        npc.velocity = Vector2.Lerp(npc.velocity, -getVec * 10, 0.1f);
+                        NPC.velocity = Vector2.Lerp(NPC.velocity, -getVec * 10, 0.1f);
                     }
                     if (tt > 30 && tt < 70)
-                        phamtomDis += (50 - tt) * 0.5f;
+                    {
+                        PhamtomDis += (50 - tt) * 0.5f;
+                    }
+
                     if (tt == 70)
+                    {
                         lightVisual = 2;
+                    }
+
                     if (tt > 70 && tt < 120)//冲刺
                     {
-                        GreyVFx();
-                        Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default(Color), Main.rand.NextFloat(0.8f, 1.7f));
-                        if (t > 500 && t % 10 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, -2), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 6, 0f, Main.myPlayer);
-                        if (t > 500)
-                            npc.velocity = Vector2.Lerp(npc.velocity, getVec * 20, 0.15f);
-                        else if (Vector2.Distance(npc.Center, player.Center) > 100)
-                            npc.velocity = Vector2.Lerp(npc.velocity, npc.DirectionTo(player.Center) * 20, 0.1f);
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            GreyVFx();
+                            if (Timer > 500 && Timer % 10 == 0)
+                            {
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, -2), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 6, 0f, Main.myPlayer);
+                            }
+                        }
+
+                        Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
+                        if (Timer > 500)
+                        {
+                            NPC.velocity = Vector2.Lerp(NPC.velocity, getVec * 20, 0.15f);
+                        }
+                        else if (Vector2.Distance(NPC.Center, player.Center) > 100)
+                        {
+                            NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(player.Center) * 20, 0.1f);
+                        }
                     }
                     if (tt > 120)
                     {
-                        if (Vector2.Distance(npc.Center, player.Center) > 600)
-                            t++;
+                        if (Vector2.Distance(NPC.Center, player.Center) > 600)
+                        {
+                            Timer++;
+                        }
+
                         GetDir_ByPlayer();
                         MoveTo(player.Center, 6, 20);
                     }
                 }
-                if (t > 200 && t < 500 && npc.ai[2] == 1)//二阶段冲刺
+                if (Timer > 200 && Timer < 500 && NPC.ai[2] == 1)//二阶段冲刺
                 {
-                    int tt = t % 100;
-                    Vector2 getVec = new Vector2(npc.direction);
-                    if (t > 400)
-                        getVec = new Vector2(npc.direction, 0);
+                    int tt = Timer % 100;
+                    Vector2 getVec = new Vector2(NPC.direction);
+                    if (Timer > 400)
+                    {
+                        getVec = new Vector2(NPC.direction, 0);
+                    }
+
                     if (tt < 20)
                     {
                         GetDir_ByPlayer();
@@ -279,71 +371,105 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                     }
                     if (tt > 20 && tt < 40)//前摇
                     {
-                        npc.velocity = Vector2.Lerp(npc.velocity, -getVec * 10, 0.1f);
+                        NPC.velocity = Vector2.Lerp(NPC.velocity, -getVec * 10, 0.1f);
                     }
                     if (tt > 0 && tt < 40)
-                        phamtomDis += (20 - tt) * 0.5f;
+                    {
+                        PhamtomDis += (20 - tt) * 0.5f;
+                    }
+
                     if (tt == 40)
+                    {
                         lightVisual = 2;
+                    }
+
                     if (tt > 40 && tt < 80)//冲刺
                     {
-                        GreyVFx();
-                        Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default(Color), Main.rand.NextFloat(0.8f, 1.7f));
-                        if (t % 6 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, -2), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 6, 0f, Main.myPlayer);
-                        if (t > 500)
-                            npc.velocity = Vector2.Lerp(npc.velocity, getVec * 20, 0.15f);
-                        else if (Vector2.Distance(npc.Center, player.Center) > 100)
-                            npc.velocity = Vector2.Lerp(npc.velocity, npc.DirectionTo(player.Center) * 21, 0.1f);
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            GreyVFx();
+                            if (Timer % 6 == 0)
+                            {
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, -2), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 6, 0f, Main.myPlayer);
+                            }
+                        }
+
+                        Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
+                        if (Timer > 500)
+                        {
+                            NPC.velocity = Vector2.Lerp(NPC.velocity, getVec * 20, 0.15f);
+                        }
+                        else if (Vector2.Distance(NPC.Center, player.Center) > 100)
+                        {
+                            NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(player.Center) * 21, 0.1f);
+                        }
                     }
                     if (tt > 80)
                     {
-                        if (Vector2.Distance(npc.Center, player.Center) > 600)
-                            t++;
+                        if (Vector2.Distance(NPC.Center, player.Center) > 600)
+                        {
+                            Timer++;
+                        }
+
                         GetDir_ByPlayer();
                         MoveTo(player.Center, 6, 20);
                     }
                 }
-                if (t > (npc.ai[2] == 1 ? 510 : 680))
+                if (Timer > (NPC.ai[2] == 1 ? 510 : 680))
                 {
-                    phamtomDis = 0;
-                    npc.ai[2] = 0;
-                    npc.ai[0]++;
-                    t = 0;
+                    PhamtomDis = 0;
+                    NPC.ai[2] = 0;
+                    NPC.ai[0]++;
+                    Timer = 0;
                     if (phase2)
-                        t += 80;
+                    {
+                        Timer += 80;
+                    }
                 }
             }//冲刺1
-            if (npc.ai[0] == 2)
+            if (NPC.ai[0] == 2)
             {
 
-                if (++t < 100)
+                if (++Timer < 100)
                 {
                     MoveTo(player.Center, 5, 40);
                     GetDir_ByPlayer();
                 }
-                if (t > 100 && t < 550)
+                if (Timer > 100 && Timer < 550)
                 {
-                    int tt = (t - 100) % 150;
+                    int tt = (Timer - 100) % 150;
                     if (tt < 20)
-                        npc.velocity = Vector2.Lerp(npc.velocity, new Vector2(0, -8), 0.1f);
+                    {
+                        NPC.velocity = Vector2.Lerp(NPC.velocity, new Vector2(0, -8), 0.1f);
+                    }
+
                     if (tt > 20 && tt < 120)
                     {
                         int Freq = 27;
                         if (Main.expertMode)
+                        {
                             Freq = 20;
+                        }
+
                         if (Main.masterMode)
+                        {
                             Freq = 16;
+                        }
+
                         GetDir_ByVel();
                         if (!phase2)
-                            MoveTo(player.Center + new Vector2(0, -230), t > 400 ? 18 : 10, 30);
+                        {
+                            MoveTo(player.Center + new Vector2(0, -230), Timer > 400 ? 18 : 10, 30);
+                        }
                         else
-                            MoveTo(player.Center + new Vector2(0, -200), t > 400 ? 22 : 15, 30);
+                        {
+                            MoveTo(player.Center + new Vector2(0, -200), Timer > 400 ? 22 : 15, 30);
+                        }
 
-                        Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.MothBlue>(), NPC.velocity.X, NPC.velocity.Y, 0, default(Color), Main.rand.NextFloat(0.8f, 1.7f));
-                        Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.MothBlue2>(), NPC.velocity.X, NPC.velocity.Y, 0, default(Color), Main.rand.NextFloat(0.8f, 1.7f));
+                        Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.MothBlue>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
+                        Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.MothBlue2>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
 
-                        if (t % Freq == 0 && Main.netMode != 1)
+                        if (Timer % Freq == 0 && Main.netMode != NetmodeID.MultiplayerClient)
                         {
                             Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, 1), ModContent.ProjectileType<Projectiles.BlackCorruptRain>(), NPC.damage / 4, 0f, Main.myPlayer, 1);
                             if (Main.expertMode && !Main.masterMode)
@@ -358,24 +484,33 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                         }
                     }
                     if (tt > 120 && tt < 150)
-                        MoveTo(player.Center + npc.DirectionFrom(player.Center) * 150, 10, 20);
-                    if (t == 220 && phase2&&Main.netMode!=1)
+                    {
+                        MoveTo(player.Center + NPC.DirectionFrom(player.Center) * 150, 10, 20);
+                    }
+
+                    if (Timer == 220 && phase2 && Main.netMode != NetmodeID.MultiplayerClient)
+                    {
                         for (int i = 0; i < 20; i++)
                         {
                             Vector2 v = new Vector2(0.1f + (i % 4) / 16f, 0).RotatedBy(i * MathHelper.TwoPi / 20);
                             Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v, ModContent.ProjectileType<Projectiles.BlackCorruptRain3>(), NPC.damage / 5, 0f, Main.myPlayer, 0);
                         }
+                    }
                 }
-                if (t > 550)
+                if (Timer > 550)
                 {
-                    t = 0;
-                    if (npc.life < npc.lifeMax * 0.9f)
-                        npc.ai[0]++;
+                    Timer = 0;
+                    if (NPC.life < NPC.lifeMax * 0.9f)
+                    {
+                        NPC.ai[0]++;
+                    }
                     else
-                        npc.ai[0] = 1;
+                    {
+                        NPC.ai[0] = 1;
+                    }
                 }
             }//光球
-            if (npc.ai[0] == 3)
+            if (NPC.ai[0] == 3)
             {
                 int endTime = 220;
                 int counts = 2;
@@ -384,343 +519,385 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                     counts = 3;
                     endTime = 150;
                 }
-                if (++t < 30)
+                if (++Timer < 30)
                 {
-                    npc.alpha += (int)(255 / 30f);
-                    phamtomDis += 5;
+                    NPC.alpha += (int)(255 / 30f);
+                    PhamtomDis += 5;
                     MoveTo(player.Center, 5, 40);
-                    npc.dontTakeDamage = true;
+                    NPC.dontTakeDamage = true;
                 }
-                if (t == 40)
+                if (Timer == 40)
                 {
-
-                    npc.Center = player.Center + Main.rand.NextVector2Unit() * new Vector2(1.4f, 1f) * 300;
-                    phamtomDis = 0;
-                    npc.alpha = 255;
+                    NPC.Center = player.Center + Main.rand.NextVector2Unit() * new Vector2(1.4f, 1f) * 300;
+                    PhamtomDis = 0;
+                    NPC.alpha = 255;
+                    NPC.netUpdate2 = true;
                     if (phase2)
-                        t += 20;
+                    {
+                        Timer += 20;
+                    }
                 }
-                if (t > 60 && t < 90)
+                if (Timer > 60 && Timer < 90)
                 {
-                    if (t == 70)
-                        npc.dontTakeDamage = false;
-                    npc.alpha -= (int)(255 / 30f);
-                    phamtomDis += (75 - t);
-                    npc.velocity = Vector2.Lerp(npc.velocity, npc.DirectionFrom(player.Center) * 10, 0.08f);
+                    if (Timer == 70)
+                    {
+                        NPC.dontTakeDamage = false;
+                    }
+
+                    NPC.alpha -= (int)(255 / 30f);
+                    PhamtomDis += (75 - Timer);
+                    NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionFrom(player.Center) * 10, 0.08f);
                 }
-                if (t == 90)
+                if (Timer == 90)
+                {
                     lightVisual = 2;
-                if (t > 90 && t < 130)
+                }
+
+                if (Timer > 90 && Timer < 130)
                 {
                     GreyVFx();
-                    Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default(Color), Main.rand.NextFloat(0.8f, 1.7f));
-                    if (t % 8 == 0 && npc.ai[2] == 2 && Main.netMode != NetmodeID.MultiplayerClient)
+                    Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
+                    if (Timer % 8 == 0 && NPC.ai[2] == 2 && Main.netMode != NetmodeID.MultiplayerClient)
+                    {
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, -2), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 6, 0f, Main.myPlayer);
+                    }
 
-                    if (Vector2.Distance(npc.Center, player.Center) > 100)
-                        npc.velocity = Vector2.Lerp(npc.velocity, npc.DirectionTo(player.Center) * 20, 0.1f);
+                    if (Vector2.Distance(NPC.Center, player.Center) > 100)
+                    {
+                        NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(player.Center) * 20, 0.1f);
+                    }
                 }
-                if (t > 130 && t < endTime)
+                if (Timer > 130 && Timer < endTime)
                 {
                     MoveTo(player.Center, 5, 40);
                     GetDir_ByPlayer();
                 }
-                if (t > endTime)
+                if (Timer > endTime)
                 {
-                    t = 0;
-                    if (++npc.ai[2] >= counts)
+                    Timer = 0;
+                    if (++NPC.ai[2] >= counts)
                     {
-                        npc.ai[0]++;
-                        npc.ai[2] = 0;
+                        NPC.ai[0]++;
+                        NPC.ai[2] = 0;
                     }
                 }
             }//瞬移冲刺
-            if (npc.ai[0] == 4)
+            if (NPC.ai[0] == 4)
             {
-                if (phamtomDis > 0)
-                    phamtomDis -= 1;
+                if (PhamtomDis > 0)
+                {
+                    PhamtomDis -= 1;
+                }
 
-                if (++t < 60)
+                if (++Timer < 60)
                 {
                     MoveTo(player.Center + new Vector2(0, -200), 10, 20);
                     GetDir_ByPlayer();
                 }
-                else if (t == 60)
+                else if (Timer == 60)
                 {
-                    npc.ai[2] = phase2 ? 1 : 0;
+                    NPC.ai[2] = phase2 ? 1 : 0;
                 }
-                if (t >= 60)
+                if (Timer >= 60)
                 {   //90,240,390
                     //140,240,340
-                    if ((t + 60) % (npc.ai[2] == 1 ? 100 : 150) == 0&&Main.netMode!=1)//发射弹幕
+                    if ((Timer + 60) % (NPC.ai[2] == 1 ? 100 : 150) == 0)
                     {
-                        //npc.Center += npc.DirectionTo(player.Center)*Main.rand.Next(100,150);
-                        lightVisual = 1.5f;
-                        phamtomDis = 80;
+                        //NPC.Center += NPC.DirectionTo(player.Center)*Main.rand.Next(100,150);
                         for (int y = 0; y < 60; y++)
                         {
-                            int num90 = Dust.NewDust(npc.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(1.3f, 4.2f));
-                            Main.dust[num90].noGravity = true;
-                            Main.dust[num90].velocity = new Vector2(Main.rand.NextFloat(0.0f, 2.5f), Main.rand.NextFloat(1.8f, 5.5f)).RotatedByRandom(Math.PI * 2d);
+                            int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(1.3f, 4.2f));
+                            Main.dust[index].noGravity = true;
+                            Main.dust[index].velocity = new Vector2(Main.rand.NextFloat(0.0f, 2.5f), Main.rand.NextFloat(1.8f, 5.5f)).RotatedByRandom(Math.PI * 2d);
                         }
-                        int style = Main.rand.Next(3);
-                        float r = Main.rand.NextFloat() * 10;
-                        if (style == 0)
+                        if (Main.netMode != NetmodeID.MultiplayerClient)//发射弹幕
                         {
-                            int c = phase2 ? 6 : 5;
-                            for (int i = 0; i < c; i++)
+                            lightVisual = 1.5f;
+                            PhamtomDis = 80;
+                            int style = Main.rand.Next(3);
+                            float r = Main.rand.NextFloat() * 10;
+                            if (style == 0)
                             {
-                                for (int j = -3; j <= 3; j++)
+                                int c = phase2 ? 6 : 5;
+                                for (int i = 0; i < c; i++)
                                 {
-                                    Vector2 v = new Vector2(0.1f + j * 0.11f, 0).RotatedBy(j * 0.15f + i * MathHelper.TwoPi / c + r);
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v, ModContent.ProjectileType<Projectiles.BlackCorruptRain3>(), NPC.damage / 5, 0f, Main.myPlayer, 0);
+                                    for (int j = -3; j <= 3; j++)
+                                    {
+                                        Vector2 v = new Vector2(0.1f + j * 0.11f, 0).RotatedBy(j * 0.15f + i * MathHelper.TwoPi / c + r);
+                                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v, ModContent.ProjectileType<Projectiles.BlackCorruptRain3>(), NPC.damage / 5, 0f, Main.myPlayer, 0);
+                                    }
                                 }
                             }
-                        }
-                        if (style == 1)
-                        {
-                            for (int i = 0; i < 40; i++)
+                            if (style == 1)
                             {
-                                Vector2 v = new Vector2(0.1f + (i % 5) / 16f, 0).RotatedBy(i * MathHelper.TwoPi / 40 + r);
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v, ModContent.ProjectileType<Projectiles.BlackCorruptRain3>(), NPC.damage / 5, 0f, Main.myPlayer, 0);
+                                for (int i = 0; i < 40; i++)
+                                {
+                                    Vector2 v = new Vector2(0.1f + (i % 5) / 16f, 0).RotatedBy(i * MathHelper.TwoPi / 40 + r);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v, ModContent.ProjectileType<Projectiles.BlackCorruptRain3>(), NPC.damage / 5, 0f, Main.myPlayer, 0);
 
+                                }
                             }
-                        }
-                        if (style == 2)
-                        {
-                            int c = phase2 ? 60 : 50;
-                            for (int i = 0; i < c; i++)
+                            if (style == 2)
                             {
-                                Vector2 v = new Vector2(0.18f + (float)Math.Sin(i * MathHelper.TwoPi / 10) * 0.17f, 0).RotatedBy(i * MathHelper.TwoPi / c + r);
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v, ModContent.ProjectileType<Projectiles.BlackCorruptRain3>(), NPC.damage / 5, 0f, Main.myPlayer, 0);
+                                int c = phase2 ? 60 : 50;
+                                for (int i = 0; i < c; i++)
+                                {
+                                    Vector2 v = new Vector2(0.18f + (float)Math.Sin(i * MathHelper.TwoPi / 10) * 0.17f, 0).RotatedBy(i * MathHelper.TwoPi / c + r);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v, ModContent.ProjectileType<Projectiles.BlackCorruptRain3>(), NPC.damage / 5, 0f, Main.myPlayer, 0);
 
+                                }
                             }
                         }
                     }
                     MoveTo(player.Center + new Vector2(0, -300), 8, 40);
                     GetDir_ByPlayer();
-
                 }
-                if (t >= 400)
+                if (Timer >= 400)
                 {
-                    phamtomDis = 0;
-                    npc.ai[2] = 0;
-                    t = 0;
+                    PhamtomDis = 0;
+                    NPC.ai[2] = 0;
+                    Timer = 0;
                     if (phase2)
-                        npc.ai[0]++;
+                    {
+                        NPC.ai[0]++;
+                    }
                     else
-                        npc.ai[0] = 0;
+                    {
+                        NPC.ai[0] = 0;
+                    }
                 }
-
             }//弹幕
-            if (npc.ai[0] == 5 || npc.ai[0] == 7)
+            if (NPC.ai[0] == 5 || NPC.ai[0] == 7)
             {
-                if (++t < 50)
+                if (++Timer < 50)
                 {
                     MoveTo(player.Center, 8, 20);
                     GetDir_ByPlayer();
-                    if (t > 20)
-                        phamtomDis = MathHelper.Lerp(phamtomDis, 120, 0.1f);
+                    if (Timer > 20)
+                    {
+                        PhamtomDis = MathHelper.Lerp(PhamtomDis, 120, 0.1f);
+                    }
                 }
 
-                if (t > 50 && t < 80)
+                if (Timer > 50 && Timer < 80)
                 {
-                    StraightMoveTo(player.Center + npc.DirectionFrom(player.Center) * 200, 0.1f);
+                    StraightMoveTo(player.Center + NPC.DirectionFrom(player.Center) * 200, 0.1f);
                     GetDir_ByPlayer();
                 }
-                if (t > 70 && t < 90)
-                    phamtomDis = MathHelper.Lerp(phamtomDis, 0, 0.1f);
-                if (t > 80 && t < 90)
+                if (Timer > 70 && Timer < 90)
                 {
-                    npc.velocity = Vector2.Lerp(npc.velocity, npc.DirectionTo(player.Center).RotatedBy(npc.spriteDirection * 1.57f) * 20f, 0.1f);
+                    PhamtomDis = MathHelper.Lerp(PhamtomDis, 0, 0.1f);
                 }
-                if (t > 90 && t < 130)
+
+                if (Timer > 80 && Timer < 90)
+                {
+                    NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(player.Center).RotatedBy(NPC.spriteDirection * 1.57f) * 20f, 0.1f);
+                }
+                if (Timer > 90 && Timer < 130)
                 {
                     lightVisual = 1;
-                    SpinAI(npc, player.Center, npc.spriteDirection * MathHelper.TwoPi / 30, true);
-                    int num90 = Dust.NewDust(npc.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(1.3f, 4.2f));
-                    Main.dust[num90].noGravity = true;
-                    Main.dust[num90].velocity = new Vector2(Main.rand.NextFloat(0.0f, 2.5f), Main.rand.NextFloat(1.8f, 5.5f)).RotatedByRandom(Math.PI * 2d);
-                    if (t % 2 == 0 && Main.netMode != 1)
+                    SpinAI(NPC, player.Center, NPC.spriteDirection * MathHelper.TwoPi / 30, true);
+                    int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(1.3f, 4.2f));
+                    Main.dust[index].noGravity = true;
+                    Main.dust[index].velocity = new Vector2(Main.rand.NextFloat(0.0f, 2.5f), Main.rand.NextFloat(1.8f, 5.5f)).RotatedByRandom(Math.PI * 2d);
+                    if (Timer % 2 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.05f + new Vector2(0, -2), ModContent.ProjectileType<Projectiles.BlackCorruptRain>(), NPC.damage / 4, 0f, Main.myPlayer, 1);
                     }
                     //GetDir_ByVel();
                 }
-                if (t > 130)
+                if (Timer > 130)
                 {
-                    npc.velocity *= 0.5f;
-                    npc.ai[0]++;
+                    NPC.velocity *= 0.5f;
+                    NPC.ai[0]++;
 
-                    t = 0;
+                    Timer = 0;
                 }
             }//绕玩家转圈发弹幕
-            if (npc.ai[0] == 6)
+            if (NPC.ai[0] == 6)
             {
-                if (++t < 60)
+                if (++Timer < 60)
                 {
                     MoveTo(player.Center + new Vector2(0, -200), 20, 20);
                     GetDir_ByPlayer();
                 }
-                if (t == 60)
+                if (Timer == 60)
                 {
                     lightVisual += 1;
-                    Create4DCube();
-                }
-                if (t >= 60 && t <= 210 && (t - 10) % 50 == 0)
-                {
-                    int counts = t / 10;
-                    for (int y = 0; y < counts; y++)
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        int num90 = Dust.NewDust(npc.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(1.3f, 4.2f));
-                        Main.dust[num90].noGravity = true;
-                        Main.dust[num90].velocity = new Vector2(Main.rand.NextFloat(0.0f, 2.5f), Main.rand.NextFloat(1.8f, 5.5f)).RotatedByRandom(Math.PI * 2d);
+                        Create4DCube();
                     }
                 }
-                if (t == 60 && Main.netMode != 1)
+                if (Timer >= 60 && Timer <= 210 && (Timer - 10) % 50 == 0)
+                {
+                    int counts = Timer / 10;
+                    for (int y = 0; y < counts; y++)
+                    {
+                        int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(1.3f, 4.2f));
+                        Main.dust[index].noGravity = true;
+                        Main.dust[index].velocity = new Vector2(Main.rand.NextFloat(0.0f, 2.5f), Main.rand.NextFloat(1.8f, 5.5f)).RotatedByRandom(Math.PI * 2d);
+                    }
+                }
+                if (Timer == 60 && Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     for (int i = 0; i < 30; i++)
                     {
                         Vector2 vel = (i * MathHelper.TwoPi / 30).ToRotationVector2();
-                        Projectile.NewProjectileDirect(npc.GetSource_FromAI(), npc.Center, vel, ModContent.ProjectileType<ButterflyDream>(), 1, 0, Main.myPlayer, npc.whoAmI, 1).timeLeft = 800;
+                        var proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, vel, ModContent.ProjectileType<ButterflyDream>(), 1, 0, Main.myPlayer, NPC.whoAmI, 1);
+                        proj.timeLeft = 800;
+                        proj.netUpdate2 = true;
                     }
                 }
-                if (t > 60 && t < 260)
+                if (Timer > 60 && Timer < 260)
                 {
-                    phamtomDis = MathHelper.Lerp(phamtomDis, 120, 0.02f);
-                    npc.velocity *= 0.95f;
+                    PhamtomDis = MathHelper.Lerp(PhamtomDis, 120, 0.02f);
+                    NPC.velocity *= 0.95f;
                     GetDir_ByPlayer();
                 }
-                if (t > 260 && t < 960)
+                if (Timer > 260 && Timer < 960)
                 {
-                    phamtomDis = MathHelper.Lerp(phamtomDis, 0, 0.02f);
+                    PhamtomDis = MathHelper.Lerp(PhamtomDis, 0, 0.02f);
                     MoveTo(player.Center, 3, 20);
                     GetDir_ByPlayer();
                 }
-                if (t > 960)
+                if (Timer > 960)
                 {
-                    t = 0;
-                    if (npc.life < npc.lifeMax * 0.4f)
-                        npc.ai[0]++;
+                    Timer = 0;
+                    if (NPC.life < NPC.lifeMax * 0.4f)
+                    {
+                        NPC.ai[0]++;
+                    }
                     else
                     {
-                        npc.ai[0] = 1;
-                        t += 150;
+                        NPC.ai[0] = 1;
+                        Timer += 150;
                     }
                 }
             }//超立方体
-            if (npc.ai[0] == 8)
+            if (NPC.ai[0] == 8)
             {
-                if (++t < 60)
+                if (++Timer < 60)
                 {
                     MoveTo(player.Center - new Vector2(0, 500), 10, 20);
 
                 }
-                if (t > 60 && t < 120)
+                if (Timer > 60 && Timer < 120)
                 {
                     GetDir_ByPlayer();
                     MoveTo(player.Center - new Vector2(+player.velocity.X * 10, 500), 40, 20);
                 }
-                if (t == 120)
+                if (Timer == 120)
                 {
-                    npc.velocity = new Vector2(0, 25);
-                    npc.ai[2] = 6;//ai2->发射数量
+                    NPC.velocity = new Vector2(0, 25);
+                    NPC.ai[2] = 6;//ai2->发射数量
                 }
-                if (t >= 120 && t <= 160)
+                if (Timer >= 120 && Timer <= 160)
                 {
-                    if (t % 8 == 0 && Main.netMode != 1)
+                    if (Timer % 8 == 0)
                     {
-                        if (t < 140)
-                            npc.ai[2] += 2;
-                        else
-                            npc.ai[2] -= 2;
-                        for (int i = 0; i < npc.ai[2]; i++)
+                        if (Timer < 140)
                         {
-                            Vector2 vel = (i * MathHelper.TwoPi / npc.ai[2]).ToRotationVector2();
-                            Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, vel * npc.ai[2] / 2, ModContent.ProjectileType<ButterflyDream>(), 1, 0, Main.myPlayer, -vel.Y);
+                            NPC.ai[2] += 2;
+                        }
+                        else
+                        {
+                            NPC.ai[2] -= 2;
+                        }
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            for (int i = 0; i < NPC.ai[2]; i++)
+                            {
+                                Vector2 vel = (i * MathHelper.TwoPi / NPC.ai[2]).ToRotationVector2();
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vel * NPC.ai[2] / 2, ModContent.ProjectileType<ButterflyDream>(), 1, 0, Main.myPlayer, -vel.Y);
+                            }
                         }
                     }
                 }
-                if (t > 160 && t < 240)
+                if (Timer > 160 && Timer < 240)
                 {
                     GetDir_ByPlayer();
                     MoveTo(player.Center, 5, 20);
                 }
-                if (t >= 240)
+                if (Timer >= 240)
                 {
-                    npc.ai[0]++;
-                    t = 0;
+                    NPC.ai[0]++;
+                    Timer = 0;
                 }
             }//下冲+蝶弹
-            if (npc.ai[0] == 9)
+            if (NPC.ai[0] == 9)
             {
-                if (++t < 60)
+                if (++Timer < 60)
                 {
                     MoveTo(player.Center + new Vector2(0, -200), 10, 20);
                     GetDir_ByPlayer();
                 }
-                if (t == 60&&Main.netMode!=1)
+                if (Timer == 60 && Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, Vector2.Zero, ModContent.ProjectileType<MothBall>(), npc.damage / 6, 0, Main.myPlayer);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<MothBall>(), NPC.damage / 6, 0, Main.myPlayer);
                 }
-                if (t > 60 && t < 700)
+                if (Timer > 60 && Timer < 700)
                 {
                     MoveTo(player.Center, 6, 20);
                     GetDir_ByPlayer();
                 }
-                if (t > 700)
+                if (Timer > 700)
                 {
-                    npc.ai[0]++;
-                    t = 0;
+                    NPC.ai[0]++;
+                    Timer = 0;
                 }
             }//飞蛾球
-            if (npc.ai[0] == 10)
+            if (NPC.ai[0] == 10)
             {
-                if (t == 0)
+                if (Timer == 0)
                 {
                     Stack<NPC> butterfies = new();
-                    foreach (NPC npc in Main.npc)//记录所有蝴蝶
-                        if (npc.active && npc.type == ModContent.NPCType<Butterfly>())
-                            butterfies.Push(npc);
+                    foreach (NPC NPC in Main.npc)//记录所有蝴蝶
+                    {
+                        if (NPC.active && NPC.type == ModContent.NPCType<Butterfly>())
+                        {
+                            butterfies.Push(NPC);
+                        }
+                    }
 
                     int scale = 15;
                     float rot = 3.14f;//把贴图旋转为向右边
-                    
-                    Texture2D tex = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BBow");
-                    Color[] colors = new Color[tex.Width * tex.Height];
-                    tex.GetData(colors);
-                    for (int y = 0; y < tex.Height; y++)
+
+                    //Texture2D tex = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BBow");
+                    //Color[] colors = new Color[tex.Width * tex.Height];
+                    //tex.GetData(colors);
+                    for (int y = 0; y < BBowColorsHeight; y++)
                     {
-                        for (int x = 0; x < tex.Width; x++)
+                        for (int x = 0; x < BBowColorsWidth; x++)
                         {
-                            int i = y * tex.Height + x;
-                            if (colors[i] == new Color(58, 169, 255) && butterfies.Count > 0)
+                            int i = y * BBowColorsHeight + x;
+                            if (BBowColors.Value[i] == new Color(58, 169, 255) && butterfies.Count > 0)
                             {
                                 NPC butterfly = butterfies.Pop();
                                 butterfly.ai[0] = 1;//切换为弓AI
                                 butterfly.ai[1] = 0;//清空计时器
-                                butterfly.ai[3] = npc.whoAmI;
+                                butterfly.ai[3] = NPC.whoAmI;
                                 butterfly.velocity = Vector2.Zero;
-                                (butterfly.ModNPC as Butterfly).TargetPos = new Vector2((x - tex.Width / 2f) * scale, (y - tex.Height / 2f) * scale).RotatedBy(rot);//指定其目标
+                                (butterfly.ModNPC as Butterfly).targetPos = new Vector2((x - BBowColorsWidth / 2f) * scale, (y - BBowColorsWidth / 2f) * scale).RotatedBy(rot);//指定其目标
                             }
                         }
                     }
-                    tex = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BArrow");
-                    colors = new Color[tex.Width * tex.Height];
-                    tex.GetData(colors);
-                    for (int y = 0; y < tex.Height; y++)
+                    //tex = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BArrow");
+                    //colors = new Color[tex.Width * tex.Height];
+                    //tex.GetData(colors);
+                    for (int y = 0; y < BArrowColorsHeight; y++)
                     {
-                        for (int x = 0; x < tex.Width; x++)
+                        for (int x = 0; x < BArrowColorsWidth; x++)
                         {
-                            int i = y * tex.Height + x;
-                            if (colors[i] == new Color(58, 169, 255) && butterfies.Count > 0)
+                            int i = y * BArrowColorsHeight + x;
+                            if (BArrowColors.Value[i] == new Color(58, 169, 255) && butterfies.Count > 0)
                             {
                                 NPC butterfly = butterfies.Pop();
                                 butterfly.ai[0] = 2;//切换为箭AI
                                 butterfly.ai[1] = 0;//清空计时器
-                                butterfly.ai[3] = npc.whoAmI;
+                                butterfly.ai[3] = NPC.whoAmI;
                                 butterfly.velocity = Vector2.Zero;
-                                (butterfly.ModNPC as Butterfly).TargetPos = new Vector2((x - tex.Width / 2f) * scale, (y - tex.Height / 2f) * scale).RotatedBy(rot);//指定其目标
+                                (butterfly.ModNPC as Butterfly).targetPos = new Vector2((x - BArrowColorsWidth / 2f) * scale, (y - BArrowColorsHeight / 2f) * scale).RotatedBy(rot);//指定其目标
                             }
                         }
                     }
@@ -728,88 +905,105 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                     {
                         butterfly.ai[0] = -1;//切换为游荡AI
                         butterfly.ai[1] = 0;//清空计时器
-                        butterfly.ai[3] = npc.whoAmI;
+                        butterfly.ai[3] = NPC.whoAmI;
                     }
                 }
-                t++;
-                if (t < 120)
+                Timer++;
+                if (Timer < 120)
                 {
                     MoveTo(player.Center + new Vector2(0, -300), 8, 20);
                     GetDir_ByPlayer();
                 }
-                if (t > 120)
+                if (Timer > 120)
                 {
                     MoveTo(player.Center + new Vector2(0, -300), 5, 20);
                     GetDir_ByPlayer();
                 }
-                if (t > 120 && t < 180)
+                if (Timer > 120 && Timer < 180)
                 {
-                    if (t < 150)
-                        phamtomDis += 4;
+                    if (Timer < 150)
+                    {
+                        PhamtomDis += 4;
+                    }
                     else
-                        phamtomDis -= 4;
+                    {
+                        PhamtomDis -= 4;
+                    }
                 }
-                if (t > 340 && t < 400)
+                if (Timer > 340 && Timer < 400)
                 {
-                    if (t < 370)
-                        phamtomDis += 4;
+                    if (Timer < 370)
+                    {
+                        PhamtomDis += 4;
+                    }
                     else
-                        phamtomDis -= 4;
+                    {
+                        PhamtomDis -= 4;
+                    }
                 }
-                if (t == 400)//第二次射箭
+                if (Timer == 400)//第二次射箭
                 {
 
                 }
-                if (t > 480)
+                if (Timer > 480)
                 {
-                    npc.ai[0]++;
-                    t = 0;
+                    NPC.ai[0]++;
+                    Timer = 0;
                 }
             }//弓
-            if (npc.ai[0] == 11)
+            if (NPC.ai[0] == 11)
             {
-                if (t < 180)
+                if (Timer < 180)
                 {
                     MoveTo(player.Center + new Vector2(0, -200), 8, 20);
-                    if (t > 140 && t < 160)
-                        phamtomDis += 5;
+                    if (Timer > 140 && Timer < 160)
+                    {
+                        PhamtomDis += 5;
+                    }
                     else
-                        phamtomDis -= 5;
+                    {
+                        PhamtomDis -= 5;
+                    }
                 }
-                if (t == 180)//开始挥剑
+                if (Timer == 180)//开始挥剑
                 {
                     lightVisual += 2;
-                    npc.velocity = npc.DirectionTo(player.Center) * 20;
+                    NPC.velocity = NPC.DirectionTo(player.Center) * 20;
                 }
-                if (t > 220)
+                if (Timer > 220)
                 {
                     MoveTo(player.Center, 5, 20);
                 }
                 GetDir_ByPlayer();
-                if (t == 0)
+                if (Timer == 0)
                 {
                     Stack<NPC> butterfies = new();
-                    foreach (NPC npc in Main.npc)//记录所有蝴蝶
-                        if (npc.active && npc.type == ModContent.NPCType<Butterfly>())
-                            butterfies.Push(npc);
+                    foreach (NPC NPC in Main.npc)//记录所有蝴蝶
+                    {
+                        if (NPC.active && NPC.type == ModContent.NPCType<Butterfly>())
+                        {
+                            butterfies.Push(NPC);
+                        }
+                    }
+
                     float rot = 0.785f;
                     int scale = 15;
-                    Texture2D tex = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BSword");
-                    Color[] colors = new Color[tex.Width * tex.Height];
-                    tex.GetData(colors);
-                    for (int y = 0; y < tex.Height; y++)
+                    //Texture2D tex = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BSword");
+                    //Color[] colors = new Color[tex.Width * tex.Height];
+                    //tex.GetData(colors);
+                    for (int y = 0; y < BSwordColorsHeight; y++)
                     {
-                        for (int x = 0; x < tex.Width; x++)
+                        for (int x = 0; x < BSwordColorsWidth; x++)
                         {
-                            int i = y * tex.Height + x;
-                            if (colors[i] == new Color(58, 169, 255) && butterfies.Count > 0)
+                            int i = y * BSwordColorsHeight + x;
+                            if (BSwordColors.Value[i] == new Color(58, 169, 255) && butterfies.Count > 0)
                             {
                                 NPC butterfly = butterfies.Pop();
                                 butterfly.ai[0] = 3;//切换为剑AI
                                 butterfly.ai[1] = 0;//清空计时器
-                                butterfly.ai[3] = npc.whoAmI;
+                                butterfly.ai[3] = NPC.whoAmI;
                                 butterfly.velocity = Vector2.Zero;
-                                (butterfly.ModNPC as Butterfly).TargetPos = new Vector2(x * scale, (y - tex.Height) * scale).RotatedBy(rot);//指定其目标
+                                (butterfly.ModNPC as Butterfly).targetPos = new Vector2(x * scale, (y - BSwordColorsHeight) * scale).RotatedBy(rot);//指定其目标
                             }
                         }
                     }
@@ -817,54 +1011,65 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                     {
                         butterfly.ai[0] = -1;//切换为游荡AI
                         butterfly.ai[1] = 0;//清空计时器
-                        butterfly.ai[3] = npc.whoAmI;
+                        butterfly.ai[3] = NPC.whoAmI;
                     }
                 }
-                t++;
-                if (t > 240)
+                Timer++;
+                if (Timer > 240)
                 {
-                    t = 0;
-                    npc.ai[0]++;
+                    Timer = 0;
+                    NPC.ai[0]++;
                 }
             }//剑
-            if (npc.ai[0] == 12)
+            if (NPC.ai[0] == 12)
             {
-                if (t > 120 && t < 160)
+                if (Timer > 120 && Timer < 160)
                 {
-                    MoveTo(player.Center + npc.DirectionFrom(player.Center) * 600, 8, 20);
-                    if (t < 140)
-                        phamtomDis += 5;
+                    MoveTo(player.Center + NPC.DirectionFrom(player.Center) * 600, 8, 20);
+                    if (Timer < 140)
+                    {
+                        PhamtomDis += 5;
+                    }
                     else
-                        phamtomDis -= 5;
+                    {
+                        PhamtomDis -= 5;
+                    }
                 }
-                else if (t < 300)
+                else if (Timer < 300)
+                {
                     MoveTo(player.Center + new Vector2(0, -200), 8, 20);
+                }
 
                 GetDir_ByPlayer();
-                if (t == 0)
+                if (Timer == 0)
                 {
                     Stack<NPC> butterfies = new();
-                    foreach (NPC npc in Main.npc)//记录所有蝴蝶
-                        if (npc.active && npc.type == ModContent.NPCType<Butterfly>())
-                            butterfies.Push(npc);
+                    foreach (NPC NPC in Main.npc)//记录所有蝴蝶
+                    {
+                        if (NPC.active && NPC.type == ModContent.NPCType<Butterfly>())
+                        {
+                            butterfies.Push(NPC);
+                        }
+                    }
+
                     float rot = 3.14f;
                     int scale = 10;
-                    Texture2D tex = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BFist");
-                    Color[] colors = new Color[tex.Width * tex.Height];
-                    tex.GetData(colors);
-                    for (int y = 0; y < tex.Height; y++)
+                    //Texture2D tex = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BFist");
+                    //Color[] colors = new Color[tex.Width * tex.Height];
+                    //tex.GetData(colors);
+                    for (int y = 0; y < BFistColorsHeight; y++)
                     {
-                        for (int x = 0; x < tex.Width; x++)
+                        for (int x = 0; x < BFistColorsWidth; x++)
                         {
-                            int i = y * tex.Height + x;
-                            if (colors[i] == new Color(58, 169, 255) && butterfies.Count > 0)
+                            int i = y * BFistColorsHeight + x;
+                            if (BFistColors.Value[i] == new Color(58, 169, 255) && butterfies.Count > 0)
                             {
                                 NPC butterfly = butterfies.Pop();
                                 butterfly.ai[0] = 4;//切换为拳AI
                                 butterfly.ai[1] = 0;//清空计时器
-                                butterfly.ai[3] = npc.whoAmI;
+                                butterfly.ai[3] = NPC.whoAmI;
                                 butterfly.velocity = Vector2.Zero;
-                                (butterfly.ModNPC as Butterfly).TargetPos = new Vector2((x - tex.Height / 2) * scale, (y - tex.Height / 2) * scale).RotatedBy(rot);//指定其目标
+                                (butterfly.ModNPC as Butterfly).targetPos = new Vector2((x - BFistColorsWidth / 2) * scale, (y - BFistColorsHeight / 2) * scale).RotatedBy(rot);//指定其目标
                             }
                         }
                     }
@@ -872,41 +1077,41 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                     {
                         butterfly.ai[0] = -1;//切换为游荡AI
                         butterfly.ai[1] = 0;//清空计时器
-                        butterfly.ai[3] = npc.whoAmI;
+                        butterfly.ai[3] = NPC.whoAmI;
                     }
                 }
-                t++;
-                if (t > 300)
+                Timer++;
+                if (Timer > 300)
                 {
-                    npc.ai[0]++;
-                    t = 0;
+                    NPC.ai[0]++;
+                    Timer = 0;
                 }
             }//拳
-            if (npc.ai[0] == 13)//
+            if (NPC.ai[0] == 13)//
             {
                 int counts = 0;
-                foreach (NPC npc in Main.npc)
+                foreach (NPC NPC in Main.npc)
                 {
-                    if (npc.type == ModContent.NPCType<Butterfly>() && npc.active)
+                    if (NPC.type == ModContent.NPCType<Butterfly>() && NPC.active)
                     {
                         counts++;
                     }
                 }
-                if (t == 0)
+                if (Timer == 0)
                 {
-                    npc.dontTakeDamage = true;
-                    foreach (NPC npc in Main.npc)
+                    NPC.dontTakeDamage = true;
+                    foreach (NPC NPC in Main.npc)
                     {
-                        if (npc.type == ModContent.NPCType<Butterfly>() && npc.active && npc.ai[0] == -1)
+                        if (NPC.type == ModContent.NPCType<Butterfly>() && NPC.active && NPC.ai[0] == -1)
                         {
-                            npc.ai[0]--;
-                            npc.ai[2] = Main.rand.NextFloat() * 6.28f;
+                            NPC.ai[0]--;
+                            NPC.ai[2] = Main.rand.NextFloat() * 6.28f;
                         }
                     }
                 }
-                if (t > 300 && t % 60 == 0)
+                if (Timer > 300 && Timer % 60 == 0)
                 {
-                    if (Main.netMode != 1)
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, 1), ModContent.ProjectileType<Projectiles.BlackCorruptRain>(), NPC.damage / 4, 0f, Main.myPlayer, 1);
                         if (Main.expertMode && !Main.masterMode)
@@ -920,8 +1125,8 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                         }
                     }
                 }
-                t++;
-                phamtomDis = MathHelper.Lerp(phamtomDis, MathHelper.Clamp(counts, 0, 40) * 3, 0.1f);
+                Timer++;
+                PhamtomDis = MathHelper.Lerp(PhamtomDis, MathHelper.Clamp(counts, 0, 40) * 3, 0.1f);
                 if (counts > 0)
                 {
                     MoveTo(player.Center, 5, 20);
@@ -929,32 +1134,28 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                 }
                 else
                 {
-                    npc.ai[0] = 1;
-                    t = 150;
-                    npc.dontTakeDamage = false;
+                    NPC.ai[0] = 1;
+                    Timer = 150;
+                    NPC.dontTakeDamage = false;
                 }
             }
-            for (int i = npc.oldPos.Length - 1; i > 0; i--)
-                npc.oldPos[i] = npc.oldPos[i - 1];
-            npc.oldPos[0] = npc.Center;
+            for (int i = NPC.oldPos.Length - 1; i > 0; i--)
+            {
+                NPC.oldPos[i] = NPC.oldPos[i - 1];
+            }
+
+            NPC.oldPos[0] = NPC.Center;
         }
-        private NPC npc => NPC;
-        private int t
-        {
-            set => npc.ai[1] = value;
-            get => (int)npc.ai[1];
-        }
-        private Player player => Main.player[npc.target];
         private void MoveTo(Vector2 targetPos, float Speed, float n)
         {
-            Vector2 targetVec = Utils.SafeNormalize(targetPos - npc.Center, Vector2.Zero) * Speed;
-            npc.velocity = (npc.velocity * n + targetVec) / (n + 1);
+            Vector2 targetVec = Utils.SafeNormalize(targetPos - NPC.Center, Vector2.Zero) * Speed;
+            NPC.velocity = (NPC.velocity * n + targetVec) / (n + 1);
         }
         private void StraightMoveTo(Vector2 targetPos, float n)
         {
-            npc.Center = Vector2.Lerp(npc.Center, targetPos, n);
+            NPC.Center = Vector2.Lerp(NPC.Center, targetPos, n);
         }
-        private void SpinAI(Entity entity, Vector2 center, float v, bool changeVelocity = true)
+        private static void SpinAI(Entity entity, Vector2 center, float v, bool changeVelocity = true)
         {
             Vector2 oldPos = entity.Center;
             entity.Center = center + (oldPos - center).RotatedBy(v);
@@ -964,15 +1165,18 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                 entity.position -= entity.velocity;
             }
         }
+        /// <summary>
+        /// 发射弹幕，在调用时判断是否不为客户端
+        /// </summary>
         private void GreyVFx()
         {
-            if (NPC.velocity.Length() > 10&&Main.netMode!=1)
+            if (NPC.velocity.Length() > 10 && Main.netMode != NetmodeID.MultiplayerClient)
             {
-                if (t % 12 == 0)
+                if (Timer % 12 == 0)
                 {
                     Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, Main.rand.NextFloat(0, 50f)).RotatedByRandom(3.14), NPC.velocity, ModContent.ProjectileType<Projectiles.MothGrey>(), 0, 0f, Main.myPlayer, 1);
                 }
-                if (t % 12 == 6)
+                if (Timer % 12 == 6)
                 {
                     Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, Main.rand.NextFloat(0, 50f)).RotatedByRandom(3.14), NPC.velocity, ModContent.ProjectileType<Projectiles.MothGrey>(), 0, 0f, Main.myPlayer, -1);
                 }
@@ -980,17 +1184,19 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
         }
         private void GetDir_ByPlayer()
         {
-            npc.direction = npc.spriteDirection = (npc.Center.X - player.Center.X) > 0 ? -1 : 1;
+            NPC.direction = NPC.spriteDirection = (NPC.Center.X - Player.Center.X) > 0 ? -1 : 1;
         }
         private void GetDir_ByVel()
         {
-            npc.direction = npc.spriteDirection = npc.velocity.X > 0 ? 1 : -1;
+            NPC.direction = NPC.spriteDirection = NPC.velocity.X > 0 ? 1 : -1;
         }
         //int locktime = 0;
         public override void HitEffect(int hitDirection, double damage)
         {
             if (lightVisual < 1)
+            {
                 lightVisual += 0.3f;
+            }
         }
         public override void OnHitPlayer(Player player, int damage, bool crit)
         {
@@ -998,7 +1204,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
         }
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-            
+
 
             //npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsMasterMode(), ModContent.ItemType<Items.Weapons.Legendary.ToothSpear>(), 40/*概率分母*/, 1/*最小*/, 1/*最大*/, 1/*概率分子*/));
             /*
@@ -1031,41 +1237,43 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
         {
             SpriteEffects effects = SpriteEffects.None;
             if (NPC.spriteDirection == 1)
+            {
                 effects = SpriteEffects.FlipHorizontally;
-            
+            }
+
             Texture2D tx = ModContent.Request<Texture2D>(Texture).Value;
             Vector2 origin = new Vector2(tx.Width, tx.Height / 4) / 2;
             Color origColor = NPC.GetAlpha(drawColor);
             for (int k = 0; k < NPC.oldPos.Length; k++)
             {
                 Color color = origColor * ((NPC.oldPos.Length - k) / (float)NPC.oldPos.Length);
-                spriteBatch.Draw(tx, NPC.oldPos[k] - Main.screenPosition, npc.frame, color, NPC.rotation, origin, NPC.scale, effects, 0f);
+                spriteBatch.Draw(tx, NPC.oldPos[k] - Main.screenPosition, NPC.frame, color, NPC.rotation, origin, NPC.scale, effects, 0f);
             }
-            spriteBatch.Draw(tx, NPC.Center - Main.screenPosition, npc.frame, origColor, NPC.rotation, origin, NPC.scale, effects, 0f);
+            spriteBatch.Draw(tx, NPC.Center - Main.screenPosition, NPC.frame, origColor, NPC.rotation, origin, NPC.scale, effects, 0f);
             origColor.A = 0;
-            spriteBatch.Draw(tx, NPC.Center - Main.screenPosition, npc.frame, origColor * 0.6f, NPC.rotation, origin, NPC.scale*1.05f, effects, 0f);
+            spriteBatch.Draw(tx, NPC.Center - Main.screenPosition, NPC.frame, origColor * 0.6f, NPC.rotation, origin, NPC.scale * 1.05f, effects, 0f);
 
             Texture2D tg = Common.MythContent.QuickTexture("Bosses/CorruptMoth/NPCs/CorruptMothGlow");
 
             Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             float t = (float)Main.timeForVisualEffects * 0.2f;
             for (int i = 0; i < 6; i++)//周围的幻影
             {
-                Color color = NPC.GetAlpha(Color.White) * (phamtomDis / 120f);
-                spriteBatch.Draw(tx, npc.Center + (t * 0.1f + i * t / 6).ToRotationVector2() * phamtomDis - Main.screenPosition, npc.frame, color, NPC.rotation, origin, NPC.scale, effects, 0f);
+                Color color = NPC.GetAlpha(Color.White) * (PhamtomDis / 120f);
+                spriteBatch.Draw(tx, NPC.Center + (t * 0.1f + i * t / 6).ToRotationVector2() * PhamtomDis - Main.screenPosition, NPC.frame, color, NPC.rotation, origin, NPC.scale, effects, 0f);
             }
             if (lightVisual > 0)//发光特效
             {
                 for (int k = 0; k < NPC.oldPos.Length; k++)
                 {
                     Color color = Color.White * ((1 + NPC.oldPos.Length - k) / (float)NPC.oldPos.Length) * lightVisual;
-                    spriteBatch.Draw(tx, NPC.oldPos[k] - Main.screenPosition, npc.frame, color, NPC.rotation, origin, NPC.scale, effects, 0f);
+                    spriteBatch.Draw(tx, NPC.oldPos[k] - Main.screenPosition, NPC.frame, color, NPC.rotation, origin, NPC.scale, effects, 0f);
                 }
             }
             Main.spriteBatch.Draw(tg, NPC.Center - Main.screenPosition, new Rectangle?(NPC.frame), NPC.GetAlpha(Color.White) * 0.5f, NPC.rotation, origin, 1f, effects, 0f);
             Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
             return false;
         }

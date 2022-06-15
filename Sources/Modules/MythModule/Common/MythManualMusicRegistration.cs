@@ -7,6 +7,7 @@
         {
             MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Musics/MothBiome");
             MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Musics/MothFighting");
+
         }
         public void Unload()
         {
