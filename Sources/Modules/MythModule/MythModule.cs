@@ -15,6 +15,8 @@ namespace Everglow.Sources.Modules.MythModule
 
         private Asset<Effect> m_waveDisortionScreen = null;
 
+        private RenderTarget2D m_dustTarget = null;
+
         public void Load()
         {
             ContainerPage.RegisterContainerPage(new FireflyContainerPage()); //在IModule类内手动注册容器页.
@@ -22,8 +24,9 @@ namespace Everglow.Sources.Modules.MythModule
             if (Main.netMode != NetmodeID.Server)
             {
                 // 水波扰动Shader
-                m_waveDisortionScreen = ModContent.Request<Effect>("Everglow/Sources/Modules/ExampleModule/Effects/WaterDisortion", AssetRequestMode.ImmediateLoad);
+                m_waveDisortionScreen = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/WaterDisortion", AssetRequestMode.ImmediateLoad);
                 ReplaceEffectPass = m_waveDisortionScreen.Value.CurrentTechnique.Passes[0];
+                m_dustTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, 1000, 1000);
 
                 On.Terraria.GameContent.Shaders.WaterShaderData.Update += WaterShaderData_Update;
                 IL.Terraria.GameContent.Shaders.WaterShaderData.Apply += WaterShaderData_Apply;
