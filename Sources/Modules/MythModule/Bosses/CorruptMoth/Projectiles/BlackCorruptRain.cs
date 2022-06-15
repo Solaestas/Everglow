@@ -1,4 +1,6 @@
 using Terraria.Localization;
+using Terraria.ID;
+
 namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
 {
     public class BlackCorruptRain : ModProjectile
@@ -56,11 +58,11 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
             if (Projectile.timeLeft < 995)
             {
                 Vector2 vector = base.Projectile.position + new Vector2(2);
-                int num = Dust.NewDust(vector, 2, 2, 191, 0f, 0f, 0, default(Color), (float)Projectile.scale * 0.8f);
-                Main.dust[num].velocity *= 0.0f;
-                Main.dust[num].noGravity = true;
-                Main.dust[num].scale *= 1.2f;
-                Main.dust[num].alpha = 200;
+                int index = Dust.NewDust(vector, 2, 2, DustID.SpookyWood, 0f, 0f, 0, default(Color), (float)Projectile.scale * 0.8f);
+                Main.dust[index].velocity *= 0.0f;
+                Main.dust[index].noGravity = true;
+                Main.dust[index].scale *= 1.2f;
+                Main.dust[index].alpha = 200;
             }
             if (Projectile.timeLeft < 600 && Projectile.timeLeft >= 585)
             {

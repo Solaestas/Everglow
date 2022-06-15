@@ -1,4 +1,6 @@
-﻿namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
+﻿using Terraria.ID;
+
+namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
 {
     public class Butterfly : ModNPC
     {
@@ -208,7 +210,6 @@
                 CheckOwnerActive();
 
                 Vector2 trueTargetPos = Owner.Center + targetPos.RotatedBy(NPC.ai[2]);
-                Player player = Main.player[Owner.target];
                 if (Timer == 0)
                 {
                     NPC.friendly = false;
@@ -336,7 +337,7 @@
         {
             for (int i = 0; i < 6; i++)
             {
-                int index = Dust.NewDust(base.NPC.position - new Vector2(8), base.NPC.width, base.NPC.height, 226, 0f, 0f, 100, Color.Blue, Main.rand.NextFloat(0.7f, 1.2f));
+                int index = Dust.NewDust(base.NPC.position - new Vector2(8), base.NPC.width, base.NPC.height, DustID.Electric, 0f, 0f, 100, Color.Blue, Main.rand.NextFloat(0.7f, 1.2f));
                 Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(5f, 10f)).RotatedByRandom(6.283);
                 Main.dust[index].noGravity = true;
             }

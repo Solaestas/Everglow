@@ -77,7 +77,7 @@ namespace Everglow.Sources.Modules.MythModule
         {
             // 关掉_useViscosityFilter来防止出现明显视觉bug
             orig(self, gameTime);
-            if (ModContent.GetInstance<MothBackground>().BiomeActive())
+            if (MothBackground.BiomeActive())
             {
                 self._useViscosityFilter = false;
             }
@@ -87,7 +87,7 @@ namespace Everglow.Sources.Modules.MythModule
 
 
 
-        private void WaterShaderData_Apply(MonoMod.Cil.ILContext il)
+        private void WaterShaderData_Apply(ILContext il)
         {
             var c = new ILCursor(il);
             // Try to find where 566 is placed onto the stack
@@ -101,7 +101,7 @@ namespace Everglow.Sources.Modules.MythModule
             c.Emit(Mono.Cecil.Cil.OpCodes.Ldsfld, typeof(MythModule).GetField("ReplaceEffectPass"));
             c.EmitDelegate<Action<WaterShaderData, EffectPass>>((shaderData, effect) =>
             {
-                if (!ModContent.GetInstance<MothBackground>().BiomeActive())
+                if (!MothBackground.BiomeActive())
                 {
                     return;
                 }

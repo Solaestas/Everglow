@@ -334,7 +334,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                             }
                         }
 
-                        Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default(Color), Main.rand.NextFloat(0.8f, 1.7f));
+                        Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
                         if (Timer > 500)
                         {
                             NPC.velocity = Vector2.Lerp(NPC.velocity, getVec * 20, 0.15f);
@@ -394,7 +394,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                             }
                         }
 
-                        Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default(Color), Main.rand.NextFloat(0.8f, 1.7f));
+                        Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
                         if (Timer > 500)
                         {
                             NPC.velocity = Vector2.Lerp(NPC.velocity, getVec * 20, 0.15f);
@@ -466,8 +466,8 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                             MoveTo(player.Center + new Vector2(0, -200), Timer > 400 ? 22 : 15, 30);
                         }
 
-                        Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.MothBlue>(), NPC.velocity.X, NPC.velocity.Y, 0, default(Color), Main.rand.NextFloat(0.8f, 1.7f));
-                        Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.MothBlue2>(), NPC.velocity.X, NPC.velocity.Y, 0, default(Color), Main.rand.NextFloat(0.8f, 1.7f));
+                        Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.MothBlue>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
+                        Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.MothBlue2>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
 
                         if (Timer % Freq == 0 && Main.netMode != NetmodeID.MultiplayerClient)
                         {
@@ -556,7 +556,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                 if (Timer > 90 && Timer < 130)
                 {
                     GreyVFx();
-                    Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default(Color), Main.rand.NextFloat(0.8f, 1.7f));
+                    Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
                     if (Timer % 8 == 0 && NPC.ai[2] == 2 && Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, -2), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 6, 0f, Main.myPlayer);
@@ -1155,7 +1155,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
         {
             NPC.Center = Vector2.Lerp(NPC.Center, targetPos, n);
         }
-        private void SpinAI(Entity entity, Vector2 center, float v, bool changeVelocity = true)
+        private static void SpinAI(Entity entity, Vector2 center, float v, bool changeVelocity = true)
         {
             Vector2 oldPos = entity.Center;
             entity.Center = center + (oldPos - center).RotatedBy(v);

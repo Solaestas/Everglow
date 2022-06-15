@@ -83,7 +83,10 @@ internal class MainThreadContext
             {
                 try
                 {
-                    tasks.Pop().Invoke();
+                    while (tasks.Count > 0)
+                    {
+                        tasks.Pop().Invoke();
+                    }
                 }
                 catch (Exception ex)
                 {
