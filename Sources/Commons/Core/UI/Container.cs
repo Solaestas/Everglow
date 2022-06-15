@@ -42,33 +42,36 @@ namespace Everglow.Sources.Commons.Core.UI
         public List<Container> ContainerItems { get; private set; }
 
         /// <summary>
-        /// 获取该容器的容器树..
+        /// 获取该容器内的所有元素.
         /// </summary>
-        /// <returns>该容器的容器树.</returns>
-        public List<Container> GetContainerTree( )
+        /// <returns>元素们.</returns>
+        public List<Container> GetContainerElements( )
         {
-            List<Container> result = new List<Container>( );
-            result.Add( this );
+            List<Container> result = new List<Container> { this };
             for ( int count = 0; count < ContainerItems.Count; count++ )
-                result.Concat( ContainerItems[ count ].GetContainerTree( ) );
+                result.AddRange( ContainerItems[ count ].GetContainerElements( ) );
             return result;
         }
 
         /// <summary>
-        /// 获取该容器的目前处于启用状态下的容器的树.
+        /// 获取该容器的目前处于启用状态下的所有容器子元素.
         /// </summary>
-        /// <returns>该容器的已启用的容器的树.</returns>
-        public List<Container> GetActiveContainerTree( )
+        /// <returns>该容器的已启用的所有容器子元素.</returns>
+        public List<Container> GetActiveContainerElements( )
         {
             List<Container> result = new List<Container>( );
             if ( UpdateEnable )
                 result.Add( this );
+            else
+                return result;
+            Container container;
             for ( int sub = 0; sub < ContainerItems.Count; sub++ )
-                if ( ContainerItems[ sub ].UpdateEnable )
-                    result.Concat( ContainerItems[ sub ].GetActiveContainerTree( ) );
+            {
+                container = ContainerItems[ sub ];
+                result.AddRange( container.GetActiveContainerElements( ) );
+            }
             return result;
         }
-
         public ContainerPointer ContainerPointer;
 
         /// <summary>
@@ -124,15 +127,17 @@ namespace Everglow.Sources.Commons.Core.UI
         public virtual Container SeekAt( )
         {
             Container target = null;
+            Container container;
             for ( int sub = 0; sub < ContainerItems.Count; sub++ )
             {
-                if ( ContainerItems[ sub ].SeekAt( ) == null )
+                container = ContainerItems[ sub ];
+                if ( container.SeekAt( ) == null )
                 {
                     target = null;
                 }
-                else if ( ContainerItems[ sub ].SeekAt( ) != null )
+                else if ( container.SeekAt( ) != null )
                 {
-                    target = ContainerItems[ sub ].SeekAt( );
+                    target = container.SeekAt( );
                     return target;
                 }
             }
@@ -195,9 +200,13 @@ namespace Everglow.Sources.Commons.Core.UI
         public void DoReset( )
         {
             ResetUpdate( );
+            Container container;
             for ( int count = 0; count < ContainerItems.Count; count++ )
-                if ( ContainerItems[ count ].UpdateEnable )
-                    ContainerItems[ count ].DoReset( );
+            {
+                container = ContainerItems[ count ];
+                if ( container.UpdateEnable )
+                    container.DoReset( );
+            }
         }
 
         /// <summary>
@@ -261,9 +270,13 @@ namespace Everglow.Sources.Commons.Core.UI
         /// </summary>
         protected virtual void UpdateContainerItems( )
         {
+            Container container;
             for ( int count = 0; count < ContainerItems.Count; count++ )
-                if ( ContainerItems[ count ].UpdateEnable )
-                    ContainerItems[ count ].DoUpdate( );
+            {
+                container = ContainerItems[ count ];
+                if ( container.UpdateEnable )
+                    container.DoUpdate( );
+            }
         }
         /// <summary>
         /// 执行于该容器进行交互检测后.
@@ -321,9 +334,13 @@ namespace Everglow.Sources.Commons.Core.UI
         /// </summary>
         protected virtual void DrawContainerItems( )
         {
+            Container container;
             for ( int count = ContainerItems.Count - 1; count >= 0; count-- )
-                if ( ContainerItems[ count ].Visable )
-                    ContainerItems[ count ].DoDraw( );
+            {
+                container = ContainerItems[ count ];
+                if ( container.Visable )
+                    container.DoDraw( );
+            }
         }
         /// <summary>
         /// 绘制于该容器进行自身及其子容器的绘制后.
