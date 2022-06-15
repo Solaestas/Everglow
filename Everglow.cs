@@ -9,6 +9,7 @@ global using System.Reflection;
 global using Terraria;
 global using Terraria.ID;
 global using Terraria.ModLoader;
+using Everglow.Sources.Commons.Core;
 using Everglow.Sources.Commons.Core.ModuleSystem;
 using Everglow.Sources.Commons.Core.Network.PacketHandle;
 using Everglow.Sources.Commons.Core.Profiler;
@@ -62,36 +63,66 @@ namespace Everglow
             }
         }
 
+        /// <summary>
+        /// 获取HookSystem实例
+        /// </summary>
+        internal static HookSystem HookSystem
+        {
+            get
+            {
+                return ModContent.GetInstance<HookSystem>();
+            }
+        }
+
+        internal static MainThreadContext MainThreadContext
+        {
+            get
+            {
+                return Instance.m_mainThreadContext;
+            }
+        }
+
         private static Everglow m_instance;
 
         private ModuleManager m_moduleManager;
         private PacketResolver m_packetResolver;
         private ProfilerManager m_profilerManager;
+        private MainThreadContext m_mainThreadContext;
 
         public Everglow()
         {
             m_instance = this;
+
             // 必须手动确定顺序
             m_profilerManager = new ProfilerManager();
+            m_mainThreadContext = new MainThreadContext();
             m_moduleManager = new ModuleManager();
             m_packetResolver = new PacketResolver();
         }
 
-        [ProfilerMeasure]
         public override void Load()
         {
+            HookSystem.HookLoad();
             m_moduleManager.LoadAllModules();
+        }
+
+
+        public override void AddRecipes()
+        {
+            base.AddRecipes();
         }
 
         public override void Unload()
         {
             m_moduleManager.UnloadAllModules();
+            HookSystem.HookUnload();
 
             m_profilerManager.Clear();
 
             m_packetResolver = null;
             m_moduleManager = null;
             m_instance = null;
+            m_mainThreadContext = null;
         }
 
         public override void HandlePacket(BinaryReader reader, int whoAmI)
