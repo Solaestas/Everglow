@@ -1,11 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.GameContent;
+﻿using Terraria.GameContent;
 
 namespace Everglow.Sources.Commons.Core.UI.Preforms
 {
@@ -45,8 +38,8 @@ namespace Everglow.Sources.Commons.Core.UI.Preforms
             Main.spriteBatch.GraphicsDevice.ScissorRectangle = clippingRectangle;
             Main.spriteBatch.GraphicsDevice.RasterizerState = OverflowHiddenRasterizerState;
             Main.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, OverflowHiddenRasterizerState, null );
-            if( Image != null )
-                Main.spriteBatch.Draw( Image, BaseRectangle , ContainerElement.Color  );
+            if ( Image != null )
+                Main.spriteBatch.Draw( Image, BaseRectangle, ContainerElement.Color );
             else
                 Main.spriteBatch.Draw( TextureAssets.MagicPixel.Value, BaseRectangle, ContainerElement.Color );
             base.DrawSelf( );
