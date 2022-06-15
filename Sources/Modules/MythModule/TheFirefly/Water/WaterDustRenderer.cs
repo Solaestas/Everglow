@@ -1,10 +1,4 @@
-﻿using Everglow.Sources.Commons.Core.ModuleSystem;
-using ReLogic.Content;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ReLogic.Content;
 using Terraria.GameContent;
 using Terraria.GameContent.Shaders;
 
@@ -34,7 +28,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
         private RenderTarget2D[] m_dustTargetSwap = null;
         private int m_currentDustTarget;
         private Vector2 m_lastDrawPosition;
-        private Asset<Effect> m_dustLogicEffect; 
+        private Asset<Effect> m_dustLogicEffect;
         private Asset<Effect> m_dustDrawEffect;
         private Asset<Effect> m_dustSpawnEffect;
 
@@ -54,7 +48,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
             }
         }
 
-        private float scale
+        private float Scale
         {
             get
             {
@@ -62,7 +56,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
             }
         }
 
-        public string Name => throw new NotImplementedException();
 
         public WaterDustRenderer()
         {
@@ -72,11 +65,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
             m_dustTargetSwap = new RenderTarget2D[2];
             Everglow.MainThreadContext.AddTask(() =>
             {
+                var parameters = Main.instance.GraphicsDevice.PresentationParameters;
                 m_dustTargetSwap[0] = new RenderTarget2D(Main.graphics.GraphicsDevice,
-                    (int)Math.Floor(Main.screenWidth * scale), (int)Math.Floor(Main.screenHeight * scale), false, SurfaceFormat.Color,
+                    (int)Math.Floor(parameters.BackBufferWidth * Scale), (int)Math.Floor(parameters.BackBufferHeight * Scale), false, SurfaceFormat.Color,
                     DepthFormat.None);
                 m_dustTargetSwap[1] = new RenderTarget2D(Main.graphics.GraphicsDevice,
-                    (int)Math.Floor(Main.screenWidth * scale), (int)Math.Floor(Main.screenHeight * scale), false, SurfaceFormat.Color,
+                    (int)Math.Floor(parameters.BackBufferWidth * Scale), (int)Math.Floor(parameters.BackBufferHeight * Scale), false, SurfaceFormat.Color,
                     DepthFormat.None);
             });
 
@@ -100,11 +94,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
             m_dustDrawEffect.Wait();
             var dustDraw = m_dustDrawEffect.Value.CurrentTechnique.Passes[0];
 
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.AnisotropicClamp, 
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.AnisotropicClamp,
                 DepthStencilState.None, RasterizerState.CullNone, null, Main.Transform);
             dustDraw.Apply();
             spriteBatch.Draw(CurrentDustTarget,
-                new Rectangle(0, 0, (int)(CurrentDustTarget.Width / scale), (int)(CurrentDustTarget.Height / scale)), Color.White);
+                new Rectangle(0, 0, (int)(CurrentDustTarget.Width / Scale), (int)(CurrentDustTarget.Height / Scale)), Color.White);
             spriteBatch.End();
         }
 
@@ -140,7 +134,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
                 DepthStencilState.None, RasterizerState.CullNone);
             {
                 dustLogicShader.Apply();
-                spriteBatch.Draw(CurrentDustTarget, motionVector * scale, Color.White);
+                spriteBatch.Draw(CurrentDustTarget, motionVector * Scale, Color.White);
             }
             spriteBatch.End();
 
@@ -171,10 +165,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
 
         private void Main_OnResolutionChanged(Vector2 obj)
         {
-            m_dustTargetSwap[0] = new RenderTarget2D(Main.graphics.GraphicsDevice, (int)Math.Floor(Main.screenWidth * scale),
-                (int)Math.Floor(Main.screenHeight * scale), false, SurfaceFormat.Color, DepthFormat.None);
+            m_dustTargetSwap[0] = new RenderTarget2D(Main.graphics.GraphicsDevice, (int)Math.Floor(Main.screenWidth * Scale),
+                (int)Math.Floor(Main.screenHeight * Scale), false, SurfaceFormat.Color, DepthFormat.None);
             m_dustTargetSwap[1] = new RenderTarget2D(Main.graphics.GraphicsDevice,
-                (int)Math.Floor(Main.screenWidth * scale), (int)Math.Floor(Main.screenHeight * scale), false, SurfaceFormat.Color, DepthFormat.None);
+                (int)Math.Floor(Main.screenWidth * Scale), (int)Math.Floor(Main.screenHeight * Scale), false, SurfaceFormat.Color, DepthFormat.None);
         }
 
         public void Unload()

@@ -11,18 +11,29 @@ using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
 {
+    //TODO 这种小东西可以合起来丢到一个ModPlayer里面
+    public class MothLandSyncPlayer : ModPlayer
+    {
+        public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
+        {
+            if(newPlayer)
+            {
+                //新玩家进入世界是发送请求
+                Everglow.PacketResolver.Send(new MothPositionPacket());
+            }
+        }
+    }
+
     public class MothLand : ModSystem
     {
         private class MothLandGenPass : GenPass
         {
-            public MothLandGenPass() : base("MothLand", 10)
+            public MothLandGenPass() : base("MothLand", 500)
             {
             }
 
             protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
             {
-                //TODO 翻译
-                Main.statusText = "Building MothCave";
                 BuildMothCave();
             }
         }
@@ -31,32 +42,21 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         /// <summary>
         /// 地形中心坐标
         /// </summary>
-        public int FireflyCenterX = 2000;
-        public int FireflyCenterY = 500;
-        //读存
-        public override void OnWorldLoad()
-        {
-            FireflyCenterX = 2000;
-            FireflyCenterY = 500;
-        }
+        public int fireflyCenterX = 2000;
+        public int fireflyCenterY = 500;
 
-        public override void OnWorldUnload()
-        {
-            FireflyCenterX = 2000;
-            FireflyCenterY = 500;
-        }
         public override void SaveWorldData(TagCompound tag)
         {
-            tag["FIREFLYcenterX"] = FireflyCenterX;
-            tag["FIREFLYcenterY"] = FireflyCenterY;
+            tag["FIREFLYcenterX"] = fireflyCenterX;
+            tag["FIREFLYcenterY"] = fireflyCenterY;
         }
 
         public override void LoadWorldData(TagCompound tag)
         {
-            FireflyCenterX = tag.GetAsInt("FIREFLYcenterX");
-            FireflyCenterY = tag.GetAsInt("FIREFLYcenterY");
+            fireflyCenterX = tag.GetAsInt("FIREFLYcenterX");
+            fireflyCenterY = tag.GetAsInt("FIREFLYcenterY");
         }
-
+        
         /// <summary>
         /// type = 0:Kill,type = 1:place Tiles,type = 2:place Walls
         /// </summary>
@@ -94,7 +94,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                                 if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
                                 {
                                     tile.TileType = (ushort)ModContent.TileType<Tiles.DarkCocoon>();
-                                    ((Tile)tile).HasTile = true;
+                                    tile.HasTile = true;
                                 }
                             }
                             if (CheckColor(cocoon.GetPixel(x, y), new Vector4(0, 0, 255, 255)))
@@ -130,8 +130,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             int a = AB.X;
             int b = AB.Y;
             MothLand mothLand = ModContent.GetInstance<MothLand>();
-            mothLand.FireflyCenterX = a + 140;
-            mothLand.FireflyCenterY = b + 140;
+            mothLand.fireflyCenterX = a + 140;
+            mothLand.fireflyCenterY = b + 140;
             ShapeTile("CocoonKill.bmp", a, b, 0);
             ShapeTile("Cocoon.bmp", a, b, 1);
             ShapeTile("CocoonWall.bmp", a, b, 2);
@@ -160,7 +160,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             {
                 for (int y = -128; y < 129; y += 8)
                 {
-                    if (Array.Exists<ushort>(DangerTileType, Ttype => Ttype == Main.tile[x + PoX, y + PoY].TileType))
+                    if (Array.Exists(DangerTileType, Ttype => Ttype == Main.tile[x + PoX, y + PoY].TileType))
                     {
                         CrashCount++;
                     }
@@ -184,7 +184,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             {
                 for (int y = -128; y < 129; y += 8)
                 {
-                    if (Array.Exists<ushort>(MustHaveTileType, Ttype => Ttype == Main.tile[x + PoX, y + PoY].TileType))
+                    if (Array.Exists(MustHaveTileType, Ttype => Ttype == Main.tile[x + PoX, y + PoY].TileType))
                     {
                         CrashCount++;
                     }

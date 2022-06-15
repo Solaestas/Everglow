@@ -2,7 +2,6 @@
 using Everglow.Sources.Commons.Core.UI;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds;
 using Everglow.Sources.Modules.MythModule.TheFirefly.UI;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Water;
 using MonoMod.Cil;
 using ReLogic.Content;
 using Terraria.GameContent.Shaders;
@@ -55,33 +54,6 @@ namespace Everglow.Sources.Modules.MythModule
             //    int row = i / distortionTarget.Width;
             //    int col = i % distortionTarget.Width;
             //    int col = i % distortionTarget.Width;
-=========
-            for (int i = 0; i < colors.Length; i+=48 + Main.rand.Next(-6, 7))
-            {
-                int row = i / distortionTarget.Width;
-                int col = i % distortionTarget.Width;
->>>>>>>>> Temporary merge branch 2
-            //    int col = i % distortionTarget.Width;
-=========
-            for (int i = 0; i < colors.Length; i+=48 + Main.rand.Next(-6, 7))
-            {
-                int row = i / distortionTarget.Width;
-                int col = i % distortionTarget.Width;
->>>>>>>>> Temporary merge branch 2
-            //    int col = i % distortionTarget.Width;
-=========
-            for (int i = 0; i < colors.Length; i+=48 + Main.rand.Next(-6, 7))
-            {
-                int row = i / distortionTarget.Width;
-                int col = i % distortionTarget.Width;
->>>>>>>>> Temporary merge branch 2
-            //    int col = i % distortionTarget.Width;
-=========
-            for (int i = 0; i < colors.Length; i+=48 + Main.rand.Next(-6, 7))
-            {
-                int row = i / distortionTarget.Width;
-                int col = i % distortionTarget.Width;
->>>>>>>>> Temporary merge branch 2
 
             //    float y = (row + 0.5f) / distortionTarget.Height;
             //    float x = (col + 0.5f) / distortionTarget.Width;
@@ -98,13 +70,6 @@ namespace Everglow.Sources.Modules.MythModule
             //    }
             //}
             //}
-=========
-                    var dust = Dust.NewDustDirect(Main.screenPosition + resol * pos, 1, 1, ModContent.DustType<Bosses.CorruptMoth.Dusts.MothBlue2>());
-                    dust.velocity *= new Vector2(0, Main.rand.NextFloat(0, 2f)).RotatedByRandom(6.283);
-                    dust.noGravity = true;
-                }
-            }*/
->>>>>>>>> Temporary merge branch 2
         }
 
         private void WaterShaderData_Update(On.Terraria.GameContent.Shaders.WaterShaderData.orig_Update orig, WaterShaderData self, GameTime gameTime)
@@ -126,7 +91,9 @@ namespace Everglow.Sources.Modules.MythModule
             var c = new ILCursor(il);
             // Try to find where 566 is placed onto the stack
             if (!c.TryGotoNext(i => i.MatchCall(typeof(ScreenShaderData).FullName, "Apply")))
+            {
                 return; // Patch unable to be applied
+            }
 
             //c.Remove();
             c.Index++;
