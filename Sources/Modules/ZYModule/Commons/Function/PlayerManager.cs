@@ -1,4 +1,5 @@
-﻿using Everglow.Sources.Modules.ZYModule.ZYPacket;
+﻿using Everglow.Sources.Modules.ZYModule.Items;
+using Everglow.Sources.Modules.ZYModule.ZYPacket;
 
 namespace Everglow.Sources.Modules.ZYModule.Commons.Function;
 
@@ -52,7 +53,6 @@ internal class PlayerManager : ModPlayer
     {
         On.Terraria.Player.JumpMovement += Player_JumpMovement;
     }
-
     internal static void Player_JumpMovement(On.Terraria.Player.orig_JumpMovement orig, Player self)
     {
         var player = self.GetModPlayer<PlayerManager>();
@@ -70,5 +70,56 @@ internal class PlayerManager : ModPlayer
             player.jumpTime--;
         }
         orig(self);
+    }
+
+
+    public WoodShieldProj shield;
+    public override void ModifyHitByNPC(NPC npc, ref int damage, ref bool crit)
+    {
+        if(shield.IsDefending && npc.Hitbox.Intersects(shield.Projectile.Hitbox))
+        {
+            crit = false;
+            float knockBackRate = 1;
+            if(shield.DefendTimer <= 10)
+            {
+                shield.DefendTimer = 60;
+                Player.immuneTime = 30;
+                knockBackRate = 1.5f;
+                damage = 0;
+            }
+            else
+            {
+                Player.immuneTime = 30;
+                damage = shield.CalculateDamage(damage);
+            }
+            if (npc.width < 60 && npc.height < 60 && !npc.boss)
+            {
+                npc.velocity += new Vector2(knockBackRate * 5 * shield.Projectile.knockBack, 0).RotatedBy(shield.Projectile.rotation) + Player.velocity;
+            }
+            else
+            {
+                npc.velocity += new Vector2(knockBackRate * shield.Projectile.knockBack, 0).RotatedBy(shield.Projectile.rotation);
+
+            }
+        }
+    }
+    public override void ModifyHitByProjectile(Projectile proj, ref int damage, ref bool crit)
+    {
+        if (shield.IsDefending && proj.Colliding(proj.Hitbox, shield.Projectile.Hitbox))
+        {
+            crit = false;
+            if (shield.DefendTimer <= 10)
+            {
+                shield.DefendTimer = 60;
+                Player.immuneTime = 30;
+                damage = 0;
+            }
+            else
+            {
+                Player.immuneTime = 30;
+                damage = shield.CalculateDamage(damage);
+            }
+
+        }
     }
 }

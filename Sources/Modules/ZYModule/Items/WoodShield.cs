@@ -22,11 +22,18 @@ internal class WoodShield : BaseHeldItem<WoodShieldProj>
         return true;
     }
 }
-
+public struct DefendData
+{
+    public float damageRate;//乘算
+    public float damageReduce;//乘前减算
+    public float damageImmune;//乘后减算
+    public event Action<Entity, int> OnDefend;
+}
 internal class WoodShieldProj : BaseHeldProj<WoodShield>
 {
     public uint rotRecord;
     public Rotation internalRotation;
+    public DefendData defendData;
     //目测手臂帧图的位置
     public static readonly Vector2[] HoldOffset = new Vector2[]
     {
@@ -52,6 +59,8 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
         new Vector2(-5, 3)
     };
     public override string Texture => Quick.ModulePath + "Items/WoodShield";
+    public bool IsDefending => GetStateID("Defend") == StateID;
+    public int DefendTimer { get => (int)Projectile.ai[1]; set => Projectile.ai[1] = value; }
     public const int MaxLength = 20;
     public override void Initialize()
     {
@@ -61,6 +70,12 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
         Projectile.manualDirectionChange = true;
         Projectile.aiStyle = -1;
         Projectile.penetrate = -1;
+        defendData = new DefendData()
+        {
+            damageRate = 1,
+            damageImmune = 1,
+            damageReduce = 5,
+        };
         RegisterState("Normal", NormalUpdate);
         RegisterState("Attack", AttackUpdate, AttackBegin, AttackEnd);
         RegisterState("Defend", DefendUpdate);
@@ -80,6 +95,7 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
     {
         Vector2 offset = HoldOffset[Owner.bodyFrame.Y / Owner.bodyFrame.Height];
         Projectile.frame = 0;
+        DefendTimer = (int)MathUtils.Approach(DefendTimer, 0, 1);
         Projectile.Center = Owner.Center + new Vector2(offset.X * Owner.direction, offset.Y);
         var player = Owner.GetModPlayer<PlayerManager>();
         rotRecord |= (Owner.direction != LocalValue && LocalValue != 0 && Owner.direction != 0) ? 1u : 0u;
@@ -220,6 +236,10 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
             Timer = Math.Max(50, Timer);
         }
     }
+    public int CalculateDamage(int damage)
+    {
+        return (int)((damage - defendData.damageReduce) * defendData.damageRate - defendData.damageImmune);
+    }
     public int DashAttackUpdate()
     {
         return -1;
@@ -235,6 +255,7 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
         Projectile.spriteDirection = Projectile.direction = Math.Sign(mouse.X);
         LocalValue = 1;
         Projectile.frame = 1;
+        ++DefendTimer;
         Owner.direction = Projectile.direction;
         Owner.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, Projectile.rotation - MathHelper.PiOver2);
         Projectile.Center = Owner.Center + new Vector2(18, 0).RotatedBy(Projectile.rotation) + new Vector2(-5 * Projectile.direction, -2);
