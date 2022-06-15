@@ -99,7 +99,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
         }
         public override void PostDraw(Color lightColor)
         {
-            Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
+            Texture2D texture = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/Lightball");
             Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(10, 83, 110, 0), Projectile.rotation, new Vector2(250f, 250f), Projectile.scale * 0.25f * (float)(1.4 + Math.Sin(Projectile.timeLeft / 15d + Projectile.position.X / 36d)) / 5f * E, SpriteEffects.None, 0);
         }
         public override bool PreDraw(ref Color lightColor)

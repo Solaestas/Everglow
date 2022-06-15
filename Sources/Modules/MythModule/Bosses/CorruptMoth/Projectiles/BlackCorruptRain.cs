@@ -16,7 +16,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
             Projectile.friendly = false;
             Projectile.hostile = true;
             Projectile.ignoreWater = true;
-            Projectile.tileCollide = false;
+            Projectile.tileCollide = true;
             Projectile.extraUpdates = 3;
             Projectile.timeLeft = 1000;
             Projectile.alpha = 0;

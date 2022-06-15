@@ -21,6 +21,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
             Projectile.usesLocalNPCImmunity = false;
         }
         Vector2 va;
+        private float Stre2 = 1;
         public override void AI()
         {
             if (Stre2 > 0)
@@ -45,7 +46,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
             int num90 = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(0.7f, 3.9f));
             Main.dust[num90].velocity = Projectile.velocity * 0.8f;
         }
-        private int y = 0;
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
         }
@@ -62,7 +62,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
                 Main.dust[num90].noGravity = true;
             }
         }
-        private float Stre2 = 1;
         public override Color? GetAlpha(Color lightColor)
         {
             return new Color(1f, 1f, 1f, 0);
