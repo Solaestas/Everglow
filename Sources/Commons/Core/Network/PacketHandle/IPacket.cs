@@ -16,6 +16,6 @@ namespace Everglow.Sources.Commons.Core.Network.PacketHandle
         /// </summary>
         /// <param name="reader"></param>
         /// <param name="whoAmI">the ID of whomever sent the packet (equivalent to the Main.myPlayer of the sender)</param>
-        public void Receive( BinaryReader reader, int whoAmI );
+        public void Receive( BinaryReader reader,int whoAmI );
     }
 }

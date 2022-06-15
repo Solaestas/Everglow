@@ -25,16 +25,16 @@ namespace Everglow.Sources.Commons.Function.ObjectPool
         private void Main_OnResolutionChanged( Vector2 size )
         {
             int poolSize = m_renderTargetsPool.Count;
-            for ( int i = 0; i < poolSize; i++ )
+            for( int i = 0; i < poolSize; i++ )
             {
-                if ( m_renderTargetsPool[ i ] != null )
+                if( m_renderTargetsPool[i] != null )
                 {
-                    m_renderTargetsPool[ i ].Dispose( );
-                    m_renderTargetsPool[ i ] = null;
+                    m_renderTargetsPool[i].Dispose( );
+                    m_renderTargetsPool[i] = null;
                 }
-                m_renderTargetsPool[ i ] = new RenderTarget2D( m_graphicsDevice,
+                m_renderTargetsPool[i] = new RenderTarget2D(m_graphicsDevice,
                     (int)size.X,
-                    (int)size.Y );
+                    (int)size.Y);
             }
         }
 
@@ -45,10 +45,10 @@ namespace Everglow.Sources.Commons.Function.ObjectPool
         public ResourceLocker<RenderTarget2D> GetRenderTarget2D( )
         {
             int index = GetNextFreeIndexAndOccupy( );
-            return new ResourceLocker<RenderTarget2D>( m_renderTargetsPool[ index ], ( ) =>
-               {
-                   ReleaseResourceAt( index );
-               } );
+            return new ResourceLocker<RenderTarget2D>(m_renderTargetsPool[index],( ) =>
+           {
+               ReleaseResourceAt(index);
+           });
         }
 
         /// <summary>
@@ -56,24 +56,24 @@ namespace Everglow.Sources.Commons.Function.ObjectPool
         /// </summary>
         /// <param name="size"></param>
         /// <returns></returns>
-        public ResourceLocker<RenderTarget2D[ ]> GetRenderTarget2DArray( int size )
+        public ResourceLocker<RenderTarget2D[]> GetRenderTarget2DArray( int size )
         {
             List<int> indices = new List<int>( );
             List<RenderTarget2D> renderTargets = new List<RenderTarget2D>( );
-            for ( int i = 0; i < size; i++ )
+            for( int i = 0; i < size; i++ )
             {
                 int index = GetNextFreeIndexAndOccupy( );
-                indices.Add( index );
-                renderTargets.Add( m_renderTargetsPool[ index ] );
+                indices.Add(index);
+                renderTargets.Add(m_renderTargetsPool[index]);
             }
 
-            return new ResourceLocker<RenderTarget2D[ ]>( renderTargets.ToArray( ), ( ) =>
-               {
-                   foreach ( var i in indices )
-                   {
-                       ReleaseResourceAt( i );
-                   }
-               } );
+            return new ResourceLocker<RenderTarget2D[]>(renderTargets.ToArray( ),( ) =>
+            {
+                foreach( var i in indices )
+                {
+                    ReleaseResourceAt(i);
+                }
+            });
 
         }
 
@@ -83,15 +83,15 @@ namespace Everglow.Sources.Commons.Function.ObjectPool
         /// <returns></returns>
         private int GetNextFreeIndexAndOccupy( )
         {
-            lock ( this )
+            lock( this )
             {
                 // 如果 freelist 没有空位就扩充我们的 rendertarget 池子
-                if ( m_renderTargetsFreeList.Count == 0 )
+                if( m_renderTargetsFreeList.Count == 0 )
                 {
                     int index = m_renderTargetsPool.Count;
-                    m_renderTargetsPool.Add( new RenderTarget2D( m_graphicsDevice,
+                    m_renderTargetsPool.Add(new RenderTarget2D(m_graphicsDevice,
                         m_graphicsDevice.Viewport.Width,
-                        m_graphicsDevice.Viewport.Height ) );
+                        m_graphicsDevice.Viewport.Height));
                     return index;
                 }
                 else
@@ -106,9 +106,9 @@ namespace Everglow.Sources.Commons.Function.ObjectPool
 
         private void ReleaseResourceAt( int index )
         {
-            lock ( this )
+            lock( this )
             {
-                m_renderTargetsFreeList.AddFirst( index );
+                m_renderTargetsFreeList.AddFirst(index);
             }
         }
     }

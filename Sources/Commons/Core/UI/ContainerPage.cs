@@ -12,12 +12,12 @@
         public static void RegisterContainerPage( ContainerPage containerPage )
         {
             containerPage.DoInitialize( );
-            ContainerSystem.Page.Register( containerPage );
+            ContainerSystem.Page.Register(containerPage);
         }
         protected override sealed void SetLayerout( ref ContainerElement containerElement )
         {
-            containerElement.SetLayerout( 0, 0, Main.screenWidth, Main.screenHeight );
-            base.SetLayerout( ref containerElement );
+            containerElement.SetLayerout(0,0,Main.screenWidth,Main.screenHeight);
+            base.SetLayerout(ref containerElement);
         }
     }
 }

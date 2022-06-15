@@ -15,9 +15,9 @@ namespace Everglow.Sources.Commons.Core.UI
 
         public Container( )
         {
-            Events = new ContainerEvents( this );
-            ContainerElement = new ContainerElement( this );
-            ContainerPointer = new ContainerPointer( this );
+            Events = new ContainerEvents(this);
+            ContainerElement = new ContainerElement(this);
+            ContainerPointer = new ContainerPointer(this);
             ContainerItems = new List<Container>( );
         }
 
@@ -48,8 +48,8 @@ namespace Everglow.Sources.Commons.Core.UI
         public List<Container> GetContainerElements( )
         {
             List<Container> result = new List<Container> { this };
-            for ( int count = 0; count < ContainerItems.Count; count++ )
-                result.AddRange( ContainerItems[ count ].GetContainerElements( ) );
+            for( int count = 0; count < ContainerItems.Count; count++ )
+                result.AddRange(ContainerItems[count].GetContainerElements( ));
             return result;
         }
 
@@ -60,15 +60,15 @@ namespace Everglow.Sources.Commons.Core.UI
         public List<Container> GetActiveContainerElements( )
         {
             List<Container> result = new List<Container>( );
-            if ( UpdateEnable )
-                result.Add( this );
+            if( UpdateEnable )
+                result.Add(this);
             else
                 return result;
             Container container;
-            for ( int sub = 0; sub < ContainerItems.Count; sub++ )
+            for( int sub = 0; sub < ContainerItems.Count; sub++ )
             {
-                container = ContainerItems[ sub ];
-                result.AddRange( container.GetActiveContainerElements( ) );
+                container = ContainerItems[sub];
+                result.AddRange(container.GetActiveContainerElements( ));
             }
             return result;
         }
@@ -81,19 +81,19 @@ namespace Everglow.Sources.Commons.Core.UI
         public void Register( Container container )
         {
             container.ParentContainer = this;
-            ContainerItems.Add( container );
+            ContainerItems.Add(container);
         }
 
         public ContainerElement ContainerElement;
 
-        public Vector2 Size => new Vector2( ContainerElement.Width, ContainerElement.Height );
+        public Vector2 Size => new Vector2(ContainerElement.Width,ContainerElement.Height);
 
-        public Vector2 Location => new Vector2( ContainerElement.LocationX, ContainerElement.LocationY );
+        public Vector2 Location => new Vector2(ContainerElement.LocationX,ContainerElement.LocationY);
 
         /// <summary>
         /// 获取该容器的基础矩形.
         /// </summary>
-        public Rectangle BaseRectangle => new Rectangle( (int)ContainerElement.LocationX, (int)ContainerElement.LocationY, (int)ContainerElement.Width, (int)ContainerElement.Height );
+        public Rectangle BaseRectangle => new Rectangle((int)ContainerElement.LocationX,(int)ContainerElement.LocationY,(int)ContainerElement.Width,(int)ContainerElement.Height);
 
         /// <summary>
         /// 指示该容器是否启用剪裁功能.
@@ -128,20 +128,20 @@ namespace Everglow.Sources.Commons.Core.UI
         {
             Container target = null;
             Container container;
-            for ( int sub = 0; sub < ContainerItems.Count; sub++ )
+            for( int sub = 0; sub < ContainerItems.Count; sub++ )
             {
-                container = ContainerItems[ sub ];
-                if ( container.SeekAt( ) == null )
+                container = ContainerItems[sub];
+                if( container.SeekAt( ) == null )
                 {
                     target = null;
                 }
-                else if ( container.SeekAt( ) != null )
+                else if( container.SeekAt( ) != null )
                 {
                     target = container.SeekAt( );
                     return target;
                 }
             }
-            if ( GetInterviewState( ) )
+            if( GetInterviewState( ) )
             {
                 return this;
             }
@@ -154,7 +154,7 @@ namespace Everglow.Sources.Commons.Core.UI
         /// <returns>若是, 返回 <seealso href="true"/> , 否则返回 <seealso href="false"/>.</returns>
         public virtual bool GetInterviewState( )
         {
-            if ( ScissorRectangle.Contains( new Point( Mouse.GetState( ).X, Mouse.GetState( ).Y ) ) && BaseRectangle.Contains( new Point( Mouse.GetState( ).X, Mouse.GetState( ).Y ) ) )
+            if( ScissorRectangle.Contains(new Point(Mouse.GetState( ).X,Mouse.GetState( ).Y)) && BaseRectangle.Contains(new Point(Mouse.GetState( ).X,Mouse.GetState( ).Y)) )
             {
                 Main.LocalPlayer.mouseInterface = true;
                 return true;
@@ -181,8 +181,8 @@ namespace Everglow.Sources.Commons.Core.UI
         /// </summary>
         protected virtual void InitializeContainerItems( )
         {
-            for ( int count = 0; count < ContainerItems.Count; count++ )
-                ContainerItems[ count ].DoInitialize( );
+            for( int count = 0; count < ContainerItems.Count; count++ )
+                ContainerItems[count].DoInitialize( );
         }
 
         bool _started = false;
@@ -201,10 +201,10 @@ namespace Everglow.Sources.Commons.Core.UI
         {
             ResetUpdate( );
             Container container;
-            for ( int count = 0; count < ContainerItems.Count; count++ )
+            for( int count = 0; count < ContainerItems.Count; count++ )
             {
-                container = ContainerItems[ count ];
-                if ( container.UpdateEnable )
+                container = ContainerItems[count];
+                if( container.UpdateEnable )
                     container.DoReset( );
             }
         }
@@ -224,26 +224,26 @@ namespace Everglow.Sources.Commons.Core.UI
         /// </summary>
         public void DoUpdate( )
         {
-            if ( !_started )
+            if( !_started )
             {
                 _started = true;
                 UpdateStart( );
             }
-            if ( Events.Droping && ContainerSystem.LeftClickContainer == this )
-                ContainerElement.SetLocation( new Vector2( Mouse.GetState( ).X, Mouse.GetState( ).Y ) - Events.SelectPoint );
+            if( Events.Droping && ContainerSystem.LeftClickContainer == this )
+                ContainerElement.SetLocation(new Vector2(Mouse.GetState( ).X,Mouse.GetState( ).Y) - Events.SelectPoint);
             this?.UpdateSelf( );
             this?.UpdateContainerItems( );
             ScissorRectangle = BaseRectangle;
-            if ( ParentContainer != null && ParentContainer.CanSeek )
+            if( ParentContainer != null && ParentContainer.CanSeek )
                 ScissorRectangle = ParentContainer.BaseRectangle;
-            if ( ParentContainer != null && ParentContainer.CanSeek && ParentContainer.EnableScissor )
+            if( ParentContainer != null && ParentContainer.CanSeek && ParentContainer.EnableScissor )
                 EnableScissor = true;
-            SetLayerout( ref ContainerElement );
+            SetLayerout(ref ContainerElement);
             ContainerElement.UpdateElement( );
-            MoveFunction?.UpdateLocation( ContainerElement );
-            if ( MoveFunction != null )
-                ContainerElement.SetLocation( Location.X + MoveFunction.VelocityX, Location.Y + MoveFunction.VelocityY );
-            ScaleFunction?.UpdateScale( ContainerElement );
+            MoveFunction?.UpdateLocation(ContainerElement);
+            if( MoveFunction != null )
+                ContainerElement.SetLocation(Location.X + MoveFunction.VelocityX,Location.Y + MoveFunction.VelocityY);
+            ScaleFunction?.UpdateScale(ContainerElement);
             this?.PostUpdate( );
         }
         /// <summary>
@@ -271,10 +271,10 @@ namespace Everglow.Sources.Commons.Core.UI
         protected virtual void UpdateContainerItems( )
         {
             Container container;
-            for ( int count = 0; count < ContainerItems.Count; count++ )
+            for( int count = 0; count < ContainerItems.Count; count++ )
             {
-                container = ContainerItems[ count ];
-                if ( container.UpdateEnable )
+                container = ContainerItems[count];
+                if( container.UpdateEnable )
                     container.DoUpdate( );
             }
         }
@@ -297,7 +297,7 @@ namespace Everglow.Sources.Commons.Core.UI
         /// </summary>
         public void DoDraw( )
         {
-            if ( EnableScissor )
+            if( EnableScissor )
             {
                 Main.spriteBatch.End( );
                 RasterizerState OverflowHiddenRasterizerState = new RasterizerState
@@ -307,18 +307,18 @@ namespace Everglow.Sources.Commons.Core.UI
                 };
                 Main.spriteBatch.GraphicsDevice.ScissorRectangle = ScissorRectangle;
                 Main.spriteBatch.GraphicsDevice.RasterizerState = OverflowHiddenRasterizerState;
-                if ( !EnableScissorShader )
-                    Main.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, OverflowHiddenRasterizerState, null );
+                if( !EnableScissorShader )
+                    Main.spriteBatch.Begin(SpriteSortMode.Deferred,BlendState.AlphaBlend,SamplerState.AnisotropicClamp,DepthStencilState.None,OverflowHiddenRasterizerState,null);
                 else
-                    Main.spriteBatch.Begin( SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, OverflowHiddenRasterizerState, null );
+                    Main.spriteBatch.Begin(SpriteSortMode.Immediate,BlendState.AlphaBlend,SamplerState.AnisotropicClamp,DepthStencilState.None,OverflowHiddenRasterizerState,null);
             }
             this?.DrawSelf( );
             this?.DrawContainerItems( );
             this?.PostDraw( );
-            if ( EnableScissor )
+            if( EnableScissor )
             {
                 Main.spriteBatch.End( );
-                Main.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, null, null );
+                Main.spriteBatch.Begin(SpriteSortMode.Deferred,BlendState.AlphaBlend,SamplerState.PointWrap,null,null);
             }
         }
         /// <summary>
@@ -335,10 +335,10 @@ namespace Everglow.Sources.Commons.Core.UI
         protected virtual void DrawContainerItems( )
         {
             Container container;
-            for ( int count = ContainerItems.Count - 1; count >= 0; count-- )
+            for( int count = ContainerItems.Count - 1; count >= 0; count-- )
             {
-                container = ContainerItems[ count ];
-                if ( container.Visable )
+                container = ContainerItems[count];
+                if( container.Visable )
                     container.DoDraw( );
             }
         }
@@ -349,6 +349,5 @@ namespace Everglow.Sources.Commons.Core.UI
         {
 
         }
-
     }
 }

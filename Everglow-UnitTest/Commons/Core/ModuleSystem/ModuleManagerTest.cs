@@ -37,7 +37,7 @@ namespace Everglow.Sources.Commons.Core.ModuleSystem.Tests
             }
         }
 
-        [ModuleDependency( typeof( ModuleA ), typeof( ModuleB ) )]
+        [ModuleDependency(typeof(ModuleA),typeof(ModuleB))]
         private class ModuleC : IModule
         {
             public string Name => "ModuleC";
@@ -54,34 +54,34 @@ namespace Everglow.Sources.Commons.Core.ModuleSystem.Tests
         public void UT_ModuleManager_TestIf_AddModule_IsCorrect( )
         {
             Mock<IModule> mockModule = new Mock<IModule>( );
-            mockModule.Setup( m => m.Name ).Returns( "Test" );
+            mockModule.Setup(m => m.Name).Returns("Test");
 
             // Add a module named "Test"
-            m_moduleManager.AddModule( mockModule.Object );
+            m_moduleManager.AddModule(mockModule.Object);
 
             // Should be able to get the object
-            var module = m_moduleManager.GetModule( "Test" );
-            var moduleA = m_moduleManager.GetModule( "ModuleA" );
+            var module = m_moduleManager.GetModule("Test");
+            var moduleA = m_moduleManager.GetModule("ModuleA");
 
-            Assert.AreEqual( "Test", module.Name );
-            Assert.AreEqual( "ModuleA", moduleA.Name );
-            Assert.AreEqual( mockModule, module );
+            Assert.AreEqual("Test",module.Name);
+            Assert.AreEqual("ModuleA",moduleA.Name);
+            Assert.AreEqual(mockModule,module);
         }
 
         [TestMethod]
         public void UT_ModuleManager_TestIf_DependencyOrderIsCorrect( )
         {
             Mock<IModule> mockModule = new Mock<IModule>( );
-            mockModule.Setup( m => m.Name ).Returns( "Test" );
+            mockModule.Setup(m => m.Name).Returns("Test");
 
             // Add a module named "Test"
-            m_moduleManager.AddModule( mockModule.Object );
+            m_moduleManager.AddModule(mockModule.Object);
 
             // Should be able to get the object
-            var module = m_moduleManager.GetModule( "Test" );
+            var module = m_moduleManager.GetModule("Test");
 
-            Assert.AreEqual( "Test", module.Name );
-            Assert.AreEqual( mockModule, module );
+            Assert.AreEqual("Test",module.Name);
+            Assert.AreEqual(mockModule,module);
         }
 
     }

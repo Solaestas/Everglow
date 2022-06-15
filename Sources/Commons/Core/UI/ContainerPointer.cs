@@ -21,10 +21,10 @@
         public void LastControl( )
         {
             Count--;
-            if ( Count < 0 )
+            if( Count < 0 )
                 Count = Container.GetActiveContainerElements( ).Count - 1;
-            Container = Container.GetActiveContainerElements( )[ Count ];
-            if ( !Container.Events.CanGetForPointer )
+            Container = Container.GetActiveContainerElements( )[Count];
+            if( !Container.Events.CanGetForPointer )
                 LastControl( );
         }
 
@@ -34,10 +34,10 @@
         public void NextControl( )
         {
             Count++;
-            if ( Count > Container.GetActiveContainerElements( ).Count - 1 )
+            if( Count > Container.GetActiveContainerElements( ).Count - 1 )
                 Count = 0;
-            Container = Container.GetActiveContainerElements( )[ Count ];
-            if ( !Container.Events.CanGetForPointer )
+            Container = Container.GetActiveContainerElements( )[Count];
+            if( !Container.Events.CanGetForPointer )
                 NextControl( );
         }
 

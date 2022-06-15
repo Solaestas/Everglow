@@ -72,10 +72,10 @@ namespace Everglow.Sources.Commons.Core.UI
         /// </summary>
         public void DoMouseLeftClickEvent( )
         {
-            if ( Drag )
+            if( Drag )
             {
                 Droping = true;
-                SelectPoint = new Vector2( Mouse.GetState( ).X, Mouse.GetState( ).Y ) - Container.Location;
+                SelectPoint = new Vector2(Mouse.GetState( ).X,Mouse.GetState( ).Y) - Container.Location;
             }
             OnMouseLeftClick.Invoke( );
         }
@@ -193,22 +193,22 @@ namespace Everglow.Sources.Commons.Core.UI
 
         public virtual void Update( )
         {
-            if ( Main.mouseLeftRelease && Drag && Droping )
+            if( Main.mouseLeftRelease && Drag && Droping )
                 Droping = false;
             Interview = Container.GetInterviewState( );
-            if ( Interview )
+            if( Interview )
                 DoInterviewEvent( );
-            if ( Input.MouseLeftClick )
+            if( Input.MouseLeftClick )
                 DoMouseLeftClickEvent( );
-            else if ( Input.MouseLeftDown && ContainerSystem.LeftClickContainer == Container )
+            else if( Input.MouseLeftDown && ContainerSystem.LeftClickContainer == Container )
                 DoMouseLeftDownEvent( );
-            else if ( Input.MouseLeftUp && ContainerSystem.LeftClickContainer == Container )
+            else if( Input.MouseLeftUp && ContainerSystem.LeftClickContainer == Container )
                 DoMouseLeftUpEvent( );
-            if ( Input.MouseRightClick )
+            if( Input.MouseRightClick )
                 DoMouseRightClickEvent( );
-            else if ( Input.MouseRightDown && ContainerSystem.RightClickContainer == Container )
+            else if( Input.MouseRightDown && ContainerSystem.RightClickContainer == Container )
                 DoMouseRightDownEvent( );
-            else if ( Input.MouseRightUp && ContainerSystem.RightClickContainer == Container )
+            else if( Input.MouseRightUp && ContainerSystem.RightClickContainer == Container )
                 DoMouseRightUpEvent( );
 
         }

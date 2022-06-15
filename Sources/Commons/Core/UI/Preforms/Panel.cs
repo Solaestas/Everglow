@@ -13,7 +13,7 @@ namespace Everglow.Sources.Commons.Core.UI.Preforms
         public Texture2D Image { get; private set; }
 
         public Panel( ) { }
-        public Panel( Texture2D img, int borderSize )
+        public Panel( Texture2D img,int borderSize )
         {
             Image = img;
             _borderSize = borderSize;
@@ -37,18 +37,18 @@ namespace Everglow.Sources.Commons.Core.UI.Preforms
             Rectangle clippingRectangle = BaseRectangle;
             Main.spriteBatch.GraphicsDevice.ScissorRectangle = clippingRectangle;
             Main.spriteBatch.GraphicsDevice.RasterizerState = OverflowHiddenRasterizerState;
-            Main.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, OverflowHiddenRasterizerState, null );
-            if ( Image != null )
-                Main.spriteBatch.Draw( Image, BaseRectangle, ContainerElement.Color );
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred,BlendState.AlphaBlend,SamplerState.AnisotropicClamp,DepthStencilState.None,OverflowHiddenRasterizerState,null);
+            if( Image != null )
+                Main.spriteBatch.Draw(Image,BaseRectangle,ContainerElement.Color);
             else
-                Main.spriteBatch.Draw( TextureAssets.MagicPixel.Value, BaseRectangle, ContainerElement.Color );
+                Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value,BaseRectangle,ContainerElement.Color);
             base.DrawSelf( );
         }
         protected override void PostDraw( )
         {
             base.PostDraw( );
             Main.spriteBatch.End( );
-            Main.spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, null, null );
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred,BlendState.AlphaBlend,SamplerState.PointWrap,null,null);
         }
     }
 }

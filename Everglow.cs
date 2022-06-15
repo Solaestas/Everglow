@@ -94,9 +94,9 @@ namespace Everglow
             m_instance = null;
         }
 
-        public override void HandlePacket( BinaryReader reader, int whoAmI )
+        public override void HandlePacket( BinaryReader reader,int whoAmI )
         {
-            m_packetResolver.Resolve( reader, whoAmI );
+            m_packetResolver.Resolve(reader,whoAmI);
         }
     }
 }

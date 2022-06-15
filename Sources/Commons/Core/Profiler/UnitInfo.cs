@@ -17,7 +17,7 @@
             get; set;
         }
 
-        public UnitInfo( string name, int count, double timeInMs )
+        public UnitInfo( string name,int count,double timeInMs )
         {
             Name = name;
             Count = count;

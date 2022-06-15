@@ -14,7 +14,7 @@ namespace Everglow.Sources.Commons.Core.Profiler.Fody
         }
         public override void OnEntry( MethodExecutionArgs args )
         {
-            if ( Everglow.Instance == null || Everglow.ProfilerManager == null )
+            if( Everglow.Instance == null || Everglow.ProfilerManager == null )
             {
                 return;
             }
@@ -23,24 +23,24 @@ namespace Everglow.Sources.Commons.Core.Profiler.Fody
 
         public override void OnExit( MethodExecutionArgs args )
         {
-            if ( Everglow.Instance == null || Everglow.ProfilerManager == null )
+            if( Everglow.Instance == null || Everglow.ProfilerManager == null )
             {
                 return;
             }
             _stopwatch.Stop( );
             var fullName = $"{args.Method.DeclaringType.FullName}:{args.Method.Name}";
-            Everglow.ProfilerManager.AddEntry( fullName, _stopwatch.Elapsed.TotalMilliseconds );
+            Everglow.ProfilerManager.AddEntry(fullName,_stopwatch.Elapsed.TotalMilliseconds);
         }
 
         public override void OnException( MethodExecutionArgs args )
         {
-            if ( Everglow.Instance == null || Everglow.ProfilerManager == null )
+            if( Everglow.Instance == null || Everglow.ProfilerManager == null )
             {
                 return;
             }
             _stopwatch.Stop( );
             var fullName = $"{args.Method.DeclaringType.FullName}:{args.Method.Name}";
-            Everglow.ProfilerManager.AddEntry( fullName, _stopwatch.Elapsed.TotalMilliseconds );
+            Everglow.ProfilerManager.AddEntry(fullName,_stopwatch.Elapsed.TotalMilliseconds);
         }
     }
 

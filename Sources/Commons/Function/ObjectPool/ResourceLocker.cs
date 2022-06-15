@@ -13,13 +13,13 @@
         {
             get
             {
-                if ( !m_released )
+                if( !m_released )
                 {
                     return m_resource;
                 }
                 else
                 {
-                    throw new InvalidOperationException( "Cannot access a released resource" );
+                    throw new InvalidOperationException("Cannot access a released resource");
                 }
             }
         }
@@ -41,7 +41,7 @@
         /// </summary>
         /// <param name="resource"></param>
         /// <param name="releaseAction"></param>
-        public ResourceLocker( T resource, Action releaseAction )
+        public ResourceLocker( T resource,Action releaseAction )
         {
             m_resource = resource;
             m_releaseAction = releaseAction;
@@ -50,14 +50,14 @@
 
         public void Release( )
         {
-            if ( !m_released )
+            if( !m_released )
             {
                 m_released = true;
                 m_releaseAction( );
             }
             else
             {
-                throw new InvalidOperationException( "Resource already been released" );
+                throw new InvalidOperationException("Resource already been released");
             }
         }
     }
