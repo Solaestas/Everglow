@@ -2,6 +2,7 @@
 using Everglow.Sources.Commons.Core.UI;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds;
 using Everglow.Sources.Modules.MythModule.TheFirefly.UI;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Water;
 using MonoMod.Cil;
 using ReLogic.Content;
 using Terraria.GameContent.Shaders;
@@ -15,8 +16,6 @@ namespace Everglow.Sources.Modules.MythModule
 
         private Asset<Effect> m_waveDisortionScreen = null;
 
-        private RenderTarget2D m_dustTarget = null;
-
         public void Load()
         {
             ContainerPage.RegisterContainerPage(new FireflyContainerPage()); //在IModule类内手动注册容器页.
@@ -26,13 +25,13 @@ namespace Everglow.Sources.Modules.MythModule
                 // 水波扰动Shader
                 m_waveDisortionScreen = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/WaterDisortion", AssetRequestMode.ImmediateLoad);
                 ReplaceEffectPass = m_waveDisortionScreen.Value.CurrentTechnique.Passes[0];
-                m_dustTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, 1000, 1000);
 
                 On.Terraria.GameContent.Shaders.WaterShaderData.Update += WaterShaderData_Update;
                 IL.Terraria.GameContent.Shaders.WaterShaderData.Apply += WaterShaderData_Apply;
                 On.Terraria.GameContent.Shaders.WaterShaderData.StepLiquids += WaterShaderData_StepLiquids;
             }
         }
+
 
         private void WaterShaderData_StepLiquids(On.Terraria.GameContent.Shaders.WaterShaderData.orig_StepLiquids orig, WaterShaderData self)
         {
@@ -55,6 +54,34 @@ namespace Everglow.Sources.Modules.MythModule
             //{
             //    int row = i / distortionTarget.Width;
             //    int col = i % distortionTarget.Width;
+            //    int col = i % distortionTarget.Width;
+=========
+            for (int i = 0; i < colors.Length; i+=48 + Main.rand.Next(-6, 7))
+            {
+                int row = i / distortionTarget.Width;
+                int col = i % distortionTarget.Width;
+>>>>>>>>> Temporary merge branch 2
+            //    int col = i % distortionTarget.Width;
+=========
+            for (int i = 0; i < colors.Length; i+=48 + Main.rand.Next(-6, 7))
+            {
+                int row = i / distortionTarget.Width;
+                int col = i % distortionTarget.Width;
+>>>>>>>>> Temporary merge branch 2
+            //    int col = i % distortionTarget.Width;
+=========
+            for (int i = 0; i < colors.Length; i+=48 + Main.rand.Next(-6, 7))
+            {
+                int row = i / distortionTarget.Width;
+                int col = i % distortionTarget.Width;
+>>>>>>>>> Temporary merge branch 2
+            //    int col = i % distortionTarget.Width;
+=========
+            for (int i = 0; i < colors.Length; i+=48 + Main.rand.Next(-6, 7))
+            {
+                int row = i / distortionTarget.Width;
+                int col = i % distortionTarget.Width;
+>>>>>>>>> Temporary merge branch 2
 
             //    float y = (row + 0.5f) / distortionTarget.Height;
             //    float x = (col + 0.5f) / distortionTarget.Width;
@@ -70,6 +97,14 @@ namespace Everglow.Sources.Modules.MythModule
             //        dust.noGravity = true;
             //    }
             //}
+            //}
+=========
+                    var dust = Dust.NewDustDirect(Main.screenPosition + resol * pos, 1, 1, ModContent.DustType<Bosses.CorruptMoth.Dusts.MothBlue2>());
+                    dust.velocity *= new Vector2(0, Main.rand.NextFloat(0, 2f)).RotatedByRandom(6.283);
+                    dust.noGravity = true;
+                }
+            }*/
+>>>>>>>>> Temporary merge branch 2
         }
 
         private void WaterShaderData_Update(On.Terraria.GameContent.Shaders.WaterShaderData.orig_Update orig, WaterShaderData self, GameTime gameTime)
