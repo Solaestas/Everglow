@@ -165,5 +165,6 @@ namespace Everglow.Sources.Modules.ZYModule.Commons.Core
         public static float Sqrt(float num) => (float)Math.Sqrt(num);
         public static float Cos(float num) => (float)Math.Cos(num);
         public static float Sin(float num) => (float)Math.Sin(num);
+        public static float Lerp(float from, float to, float t) => (1 - t) * from + to * t;
     }
 }

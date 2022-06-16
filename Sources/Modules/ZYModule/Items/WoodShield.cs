@@ -14,6 +14,7 @@ internal class WoodShield : BaseHeldItem<WoodShieldProj>
         Item.height = 32;
         Item.useTime = 20;
         Item.useAnimation = 20;
+        Item.knockBack = 5;
         Item.damage = 10;
         Item.shootSpeed = 20;
     }
@@ -78,12 +79,12 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
         };
         RegisterState("Normal", NormalUpdate);
         RegisterState("Attack", AttackUpdate, AttackBegin, AttackEnd);
-        RegisterState("Defend", DefendUpdate);
+        RegisterState("Defend", DefendUpdate, DefendBegin);
         RegisterState("Throw", ThrowUpdate, ThrowBegin, ThrowEnd);
     }
     public override bool PreAI()
     {
-        if (Main.myPlayer == Owner.whoAmI && Owner.HeldItem?.ModItem != item)
+        if (Main.myPlayer == Owner.whoAmI && (Owner.HeldItem?.ModItem != item || Owner.dead))
         {
             item.projectile = null;
             Projectile.Kill();
@@ -177,30 +178,42 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
             rotRecord >>= 1;
         }
         var mouse = Owner.ToMouse();
-        Projectile.frame = 2;
-        Projectile.rotation = mouse.ToRotation();
-        Projectile.direction = Math.Sign(mouse.X);
-        Projectile.tileCollide = true;
-        Projectile.velocity = mouse.NormalizeSafe() * item.Item.shootSpeed * Math.Max(1, mul * 0.2f);
-        LocalValue = Projectile.damage;
-        Projectile.damage = (int)(Projectile.damage * mul);
+        Projectile projectile = Projectile;
+        projectile.frame = 2;
+        projectile.ai[1] = projectile.rotation;//AI[1]记录投掷时的角度
+        projectile.localAI[1] = Main.rand.NextBool() ? 1 : -1;//LocalAI[1]记录挥动方向，视觉效果不用同步
+        projectile.rotation = mouse.ToRotation();
+        projectile.direction = Math.Sign(mouse.X);
+        projectile.tileCollide = true;
+        projectile.velocity = mouse.NormalizeSafe() * item.Item.shootSpeed * Math.Max(1, mul * 0.2f);
+        LocalValue = projectile.damage;
+        projectile.damage = (int)(projectile.damage * mul);
         internalRotation.Reset();
     }
     public int ThrowUpdate()
     {
-        Owner.itemTime = 2;
-        Projectile.friendly = true;
-        Projectile.velocity += (Owner.Center - Projectile.Center).NormalizeSafe() * 0.5f;
-        internalRotation += 0.05f;
-        if(Projectile.velocity.Y < 2f)
+        Player owner = Owner;
+        Projectile projectile = Projectile;
+        owner.itemTime = 2;
+        if(Timer < 10f)
         {
-            Projectile.velocity.Y += 0.04f;
+            owner.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full,
+                MathUtils.Lerp(projectile.ai[1] + 1f * projectile.localAI[1], projectile.ai[1] - 1f * projectile.localAI[1], Timer / 10f) 
+                - MathHelper.PiOver2);
+        }
+        projectile.friendly = true;
+        projectile.velocity += (owner.Center - projectile.Center).NormalizeSafe() * 0.5f;
+        projectile.rotation = (projectile.Center - owner.Center).ToRotation();
+        internalRotation += 0.05f;
+        if(projectile.velocity.Y < 2f)
+        {
+            projectile.velocity.Y += 0.04f;
         }
         if(Timer > 60)
         {
-            Projectile.tileCollide = false;
-            Projectile.Center = MathUtils.Approach(Projectile.Center, Owner.Center, Math.Min((Timer - 60) * 0.2f, 20));
-            if(Projectile.Center.Distance(Owner.Center) < 20)
+            projectile.tileCollide = false;
+            projectile.Center = MathUtils.Approach(projectile.Center, owner.Center, Math.Min((Timer - 60) * 0.2f, 20));
+            if(projectile.Center.Distance(owner.Center) < 20)
             {
                 return GetStateID("Normal");
             }
@@ -219,6 +232,7 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
         Projectile.tileCollide = false;
         Timer = 60;
         Projectile.velocity *= 0;
+        Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.WoodFurniture);
         Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.WoodFurniture);
         return false;
     }
@@ -248,9 +262,14 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
     {
         return -1;
     }
+    public void DefendBegin()
+    {
+        Owner.GetModPlayer<PlayerManager>().shield = this;
+    }
     public int DefendUpdate()
     {
         var mouse = Owner.ToMouse();
+
         Projectile.rotation = mouse.ToRot().Angle;
         Projectile.spriteDirection = Projectile.direction = Math.Sign(mouse.X);
         LocalValue = 1;
