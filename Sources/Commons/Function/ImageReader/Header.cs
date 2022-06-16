@@ -21,9 +21,9 @@ namespace Everglow.Sources.Commons.Function.ImageReader
             height = reader.ReadInt32();
             BitVector32 bits = new BitVector32(reader.ReadInt32());
             red = bits[1];
-            green = bits[2];
-            blue = bits[3];
-            alpha = bits[4];
+            green = bits[1 << 1];
+            blue = bits[1 << 2];
+            alpha = bits[1 << 3];
         }
     }
 }

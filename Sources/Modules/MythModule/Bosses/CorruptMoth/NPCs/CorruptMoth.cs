@@ -1,5 +1,7 @@
 ﻿using Everglow.Sources.Commons.Core;
+using Everglow.Sources.Commons.Function.ImageReader;
 using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles;
+using System.Threading.Tasks;
 using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
 using Terraria.Localization;
@@ -10,24 +12,24 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
     public class CorruptMoth : ModNPC
     {
         protected override bool CloneNewInstances => true;
-        private static Future<Color[]> BBowColors;
+        private static Color[,] BBowColors;
         private const int BBowColorsWidth = 60;
         private const int BBowColorsHeight = 60;
 
-        private static Future<Color[]> BArrowColors;
+        private static Color[,] BArrowColors;
         private const int BArrowColorsWidth = 60;
         private const int BArrowColorsHeight = 60;
 
-        private static Future<Color[]> BSwordColors;
+        private static Color[,] BSwordColors;
         private const int BSwordColorsWidth = 60;
         private const int BSwordColorsHeight = 60;
 
-        private static Future<Color[]> BFistColors;
+        private static Color[,] BFistColors;
         private const int BFistColorsWidth = 60;
         private const int BFistColorsHeight = 60;
         private static bool startLoading = false;
 
-        private bool canDespawn;
+        private bool canDespawn = false;
         public static int secondStageHeadSlot = -1;
         private bool Start = false;
         public static int StaTime = 0;
@@ -74,17 +76,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
             NPCID.Sets.TrailCacheLength[NPC.type] = 4;
             //NPCID.Sets.TrailingMode[NPC.type] = 0;
-        }
-        public override void OnSpawn(IEntitySource source)
-        {
-            if (!startLoading)
-            {
-                startLoading = true;
-                BBowColors = Everglow.MainThreadContext.DelayGetColors(Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BBow"));
-                BArrowColors = Everglow.MainThreadContext.DelayGetColors(Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BArrow"));
-                BSwordColors = Everglow.MainThreadContext.DelayGetColors(Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BSword"));
-                BFistColors = Everglow.MainThreadContext.DelayGetColors(Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BFist"));
-            }
         }
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
@@ -206,6 +197,17 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
         }
         public override void AI()
         {
+            if (!startLoading)
+            {
+                startLoading = true;
+                Task.Factory.StartNew(() =>
+                {
+                    BBowColors = ImageReader.Read("Everglow/Sources/Modules/MythModule/Bosses/CorruptMoth/Projectiles/BBow");
+                    BArrowColors = ImageReader.Read("Everglow/Sources/Modules/MythModule/Bosses/CorruptMoth/Projectiles/BArrow");
+                    BSwordColors = ImageReader.Read("Everglow/Sources/Modules/MythModule/Bosses/CorruptMoth/Projectiles/BSword");
+                    BFistColors = ImageReader.Read("Everglow/Sources/Modules/MythModule/Bosses/CorruptMoth/Projectiles/BFist");
+                });
+            }
             bool phase2 = NPC.life < NPC.lifeMax * 0.6f;
             Lighting.AddLight(NPC.Center, 0f, 0f, 0.8f * (1 - NPC.alpha / 255f));
             NPC.friendly = NPC.dontTakeDamage;
@@ -237,7 +239,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             if (!Start)
             {
                 NPC.ai[0] = 0;
-                //NPC.ai[0] = 114514;
                 NPC.noTileCollide = true;
                 Start = true;
                 if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -863,34 +864,28 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                     int scale = 15;
                     float rot = 3.14f;//把贴图旋转为向右边
 
-                    //Texture2D tex = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BBow");
-                    //Color[] colors = new Color[tex.Width * tex.Height];
-                    //tex.GetData(colors);
-                    for (int y = 0; y < BBowColorsHeight; y++)
+                    //TODO 只需要一个通道就可以了，有时间可以来稍微优化下
+                    for (int x = 0; x < BBowColorsWidth; x++)
                     {
-                        for (int x = 0; x < BBowColorsWidth; x++)
+                        for (int y = 0; y < BBowColorsHeight; y++)
                         {
-                            int i = y * BBowColorsHeight + x;
-                            if (BBowColors.Value[i] == new Color(58, 169, 255) && butterfies.Count > 0)
+                            if (BBowColors[x, y] == new Color(58, 169, 255) && butterfies.Count > 0)
                             {
                                 NPC butterfly = butterfies.Pop();
                                 butterfly.ai[0] = 1;//切换为弓AI
                                 butterfly.ai[1] = 0;//清空计时器
                                 butterfly.ai[3] = NPC.whoAmI;
                                 butterfly.velocity = Vector2.Zero;
-                                (butterfly.ModNPC as Butterfly).targetPos = new Vector2((x - BBowColorsWidth / 2f) * scale, (y - BBowColorsWidth / 2f) * scale).RotatedBy(rot);//指定其目标
+                                (butterfly.ModNPC as Butterfly).targetPos = new Vector2((x - BBowColorsWidth / 2f) * scale, (y - BBowColorsHeight / 2f) * scale).RotatedBy(rot);//指定其目标
                             }
                         }
                     }
-                    //tex = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BArrow");
-                    //colors = new Color[tex.Width * tex.Height];
-                    //tex.GetData(colors);
-                    for (int y = 0; y < BArrowColorsHeight; y++)
+
+                    for (int x = 0; x < BArrowColorsWidth; x++)
                     {
-                        for (int x = 0; x < BArrowColorsWidth; x++)
+                        for (int y = 0; y < BArrowColorsHeight; y++)
                         {
-                            int i = y * BArrowColorsHeight + x;
-                            if (BArrowColors.Value[i] == new Color(58, 169, 255) && butterfies.Count > 0)
+                            if (BArrowColors[x, y] == new Color(58, 169, 255) && butterfies.Count > 0)
                             {
                                 NPC butterfly = butterfies.Pop();
                                 butterfly.ai[0] = 2;//切换为箭AI
@@ -988,15 +983,11 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
 
                     float rot = 0.785f;
                     int scale = 15;
-                    //Texture2D tex = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BSword");
-                    //Color[] colors = new Color[tex.Width * tex.Height];
-                    //tex.GetData(colors);
-                    for (int y = 0; y < BSwordColorsHeight; y++)
+                    for (int x = 0; x < BSwordColorsWidth; x++)
                     {
-                        for (int x = 0; x < BSwordColorsWidth; x++)
+                        for (int y = 0; y < BSwordColorsHeight; y++)
                         {
-                            int i = y * BSwordColorsHeight + x;
-                            if (BSwordColors.Value[i] == new Color(58, 169, 255) && butterfies.Count > 0)
+                            if (BSwordColors[x, y] == new Color(58, 169, 255) && butterfies.Count > 0)
                             {
                                 NPC butterfly = butterfies.Pop();
                                 butterfly.ai[0] = 3;//切换为剑AI
@@ -1054,15 +1045,11 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
 
                     float rot = 3.14f;
                     int scale = 10;
-                    //Texture2D tex = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BFist");
-                    //Color[] colors = new Color[tex.Width * tex.Height];
-                    //tex.GetData(colors);
                     for (int y = 0; y < BFistColorsHeight; y++)
                     {
                         for (int x = 0; x < BFistColorsWidth; x++)
                         {
-                            int i = y * BFistColorsHeight + x;
-                            if (BFistColors.Value[i] == new Color(58, 169, 255) && butterfies.Count > 0)
+                            if (BFistColors[x, y] == new Color(58, 169, 255) && butterfies.Count > 0)
                             {
                                 NPC butterfly = butterfies.Pop();
                                 butterfly.ai[0] = 4;//切换为拳AI

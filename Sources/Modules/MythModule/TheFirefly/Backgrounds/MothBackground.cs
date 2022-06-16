@@ -178,7 +178,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         {
             if (GPos.Count <= 1)
             {
-                Everglow.MainThreadContext.AddTask(() => GetGlowPos("GlosPos"));
+                GetGlowPos("GlosPos");
             }
             MothLand mothLand = ModContent.GetInstance<MothLand>();
             Vector2 sampleTopleft = Vector2.Zero;
@@ -231,7 +231,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         {
             if (GPosSec.Count <= 1)
             {
-                Everglow.MainThreadContext.AddTask(() => GetGlowPosSec("GlowHangingMiddlePosition"));
+                GetGlowPosSec("GlowHangingMiddlePosition");
             }
             MothLand mothLand = ModContent.GetInstance<MothLand>();
             Vector2 sampleTopleft = Vector2.Zero;

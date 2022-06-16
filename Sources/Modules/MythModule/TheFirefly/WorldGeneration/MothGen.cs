@@ -1,13 +1,8 @@
-using Everglow.Sources.Modules.MythModule.Common;
-using System.Drawing;
+using Everglow.Sources.Commons.Function.ImageReader;
 using Terraria.DataStructures;
-using Terraria.GameContent;
 using Terraria.IO;
-using Terraria.WorldBuilding;
 using Terraria.ModLoader.IO;
-using Color = Microsoft.Xna.Framework.Color;
-using Point = Microsoft.Xna.Framework.Point;
-using Rectangle = Microsoft.Xna.Framework.Rectangle;
+using Terraria.WorldBuilding;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
 {
@@ -16,7 +11,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
     {
         public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
         {
-            if(newPlayer)
+            if (newPlayer)
             {
                 //新玩家进入世界是发送请求
                 Everglow.PacketResolver.Send(new MothPositionPacket());
@@ -56,7 +51,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             fireflyCenterX = tag.GetAsInt("FIREFLYcenterX");
             fireflyCenterY = tag.GetAsInt("FIREFLYcenterY");
         }
-        
+
         /// <summary>
         /// type = 0:Kill,type = 1:place Tiles,type = 2:place Walls
         /// </summary>
@@ -66,21 +61,18 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         /// <param name="type"></param>
         public static void ShapeTile(string Shapepath, int a, int b, int type)
         {
-            if (!OperatingSystem.IsWindows())
+            Color[,] colors = ImageReader.Read("Everglow/Sources/Modules/MythModule/TheFirefly/WorldGeneration/" + Shapepath);
+            int width = colors.GetLength(0);
+            int height = colors.GetLength(1);
+            for (int y = 0; y < height; y += 1)
             {
-                throw new Exception("Windows限定");
-            }
-            using Stream Img = Everglow.Instance.GetFileStream("Sources/Modules/MythModule/TheFirefly/WorldGeneration/" + Shapepath);
-            Bitmap cocoon = new Bitmap(Img);
-            for (int y = 0; y < cocoon.Height; y += 1)
-            {
-                for (int x = 0; x < cocoon.Width; x += 1)
+                for (int x = 0; x < width; x += 1)
                 {
                     Tile tile = Main.tile[x + a, y + b];
                     switch (type)//21是箱子
                     {
                         case 0:
-                            if (CheckColor(cocoon.GetPixel(x, y), new Vector4(255, 0, 0, 255)))
+                            if (colors[x, y] == new Color(255, 0, 0, 255))
                             {
                                 if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
                                 {
@@ -89,7 +81,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                             }
                             break;
                         case 1:
-                            if (CheckColor(cocoon.GetPixel(x, y), new Vector4(56, 48, 61, 255)))
+                            if (colors[x, y] == new Color(56, 48, 61, 255))
                             {
                                 if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
                                 {
@@ -97,7 +89,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                                     tile.HasTile = true;
                                 }
                             }
-                            if (CheckColor(cocoon.GetPixel(x, y), new Vector4(0, 0, 255, 255)))
+                            if (colors[x, y] == new Color(0, 0, 255, 255))
                             {
                                 if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
                                 {
@@ -109,7 +101,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                             }
                             break;
                         case 2:
-                            if (CheckColor(cocoon.GetPixel(x, y), new Vector4(0, 0, 5, 255)))
+                            if (colors[x, y] == new Color(0, 0, 5, 255))
                             {
                                 if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
                                 {
@@ -174,11 +166,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             int CrashCount = 0;
             ushort[] MustHaveTileType = new ushort[]
             {
-                60,//丛林草方块
-                61,//丛林草
-                62,//丛林藤
-                74,//高大丛林草
-                233//丛林花
+                TileID.JungleGrass,//丛林草方块
+                TileID.JunglePlants,//丛林草
+                TileID.JungleVines,//丛林藤
+                TileID.JunglePlants2,//高大丛林草
+                TileID.PlantDetritus//丛林花
             };
             for (int x = -256; x < 257; x += 8)
             {
@@ -226,17 +218,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                     WorldGen.SquareWallFrame(x + a, y + b, true);
                 }
             }
-        }
-        /// <summary>
-        /// 判定颜色是否吻合
-        /// </summary>
-        /// <param name="c0"></param>
-        /// <param name="RGBA"></param>
-        /// <returns></returns>
-        private static bool CheckColor(System.Drawing.Color c0, Vector4 RGBA)
-        {
-            Vector4 v0 = new Vector4(c0.R, c0.G, c0.B, c0.A);
-            return v0 == RGBA;
         }
     }
 }

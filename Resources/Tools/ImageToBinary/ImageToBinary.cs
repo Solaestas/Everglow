@@ -26,10 +26,15 @@ namespace ImageToBinary
             ".jpg"
         };
         public List<string> ChosenFiles = new List<string>();
+        public string defaultPath = string.Empty;
         private void ChooseFile_Click(object sender, EventArgs e)
         {
-            string defaultPath = GetType().Assembly.Location;
-            defaultPath = defaultPath.Substring(0, defaultPath.IndexOf("Everglow") + 8);
+            if (defaultPath == "")
+            {
+                defaultPath = GetType().Assembly.Location;
+                defaultPath = defaultPath.Substring(0, defaultPath.IndexOf("Everglow") + 8);
+            }
+
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
                 Title = "选择图片",
@@ -40,6 +45,7 @@ namespace ImageToBinary
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 string[] names = openFileDialog.FileNames;
+                defaultPath = Path.GetDirectoryName(names[0]);
                 foreach (string name in names)
                 {
                     if (ImageExtensions.Contains(Path.GetExtension(name)))
@@ -104,7 +110,8 @@ namespace ImageToBinary
 
                     using (var fileStream = new FileStream(file, FileMode.Open))
                     {
-                        using var bitmap = new Bitmap(fileStream);
+                        using var temp = new Bitmap(fileStream);
+                        using var bitmap = temp.Clone() as Bitmap;
                         int width = bitmap.Width;
                         int height = bitmap.Height;
                         writer.Write(width);
@@ -142,6 +149,8 @@ namespace ImageToBinary
                     outputFile.Write(memoryStream.ToArray(), 0, (int)memoryStream.Length);
                 }
                 MessageBox.Show("All success!");
+                ChosenFiles.Clear();
+                FileDisplay.Text = string.Empty;
             }
             catch (Exception ex)
             {
