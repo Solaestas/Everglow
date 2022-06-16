@@ -56,6 +56,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
             }
         }
 
+        /// <summary>
+        /// DEBUG usage
+        /// </summary>
         private float scale
         {
             get
@@ -112,6 +115,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
 
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp,
                 DepthStencilState.None, RasterizerState.CullNone, null, Main.Transform);
+            m_dustDrawEffect.Value.Parameters["uColor"].SetValue(new Vector3(1f, 1.0f, 1.0f));
             m_dustDrawEffect.Value.Parameters["uResolution"].SetValue(new Vector2(Main.screenWidth, Main.screenHeight));
             m_dustDrawEffect.Value.Parameters["uResolutionInv"].SetValue(new Vector2(1f / Main.screenWidth, 1f / Main.screenHeight));
             dustDraw.Apply();
@@ -147,6 +151,16 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
 
             if (!Main.gamePaused)
             {
+                var waterShader = ((WaterShaderData)Terraria.Graphics.Effects.Filters.Scene["WaterDistortion"].GetShader());
+                var disortionTarget = (RenderTarget2D)typeof(WaterShaderData).GetField("_distortionTarget", BindingFlags.NonPublic | BindingFlags.Instance)
+                    .GetValue(waterShader);
+                var lastDistortionDrawOffset = (Vector2)typeof(WaterShaderData).GetField("_lastDistortionDrawOffset", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(waterShader);
+                Vector2 value = new Vector2(Main.screenWidth, Main.screenHeight) * 0.5f * (Vector2.One - Vector2.One / Main.GameViewMatrix.Zoom);
+                Vector2 value2 = (Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange, Main.offScreenRange)) - Main.screenPosition - value;
+                Vector2 offset = -(value2 * 0.25f - lastDistortionDrawOffset) / new Vector2(disortionTarget.Width, disortionTarget.Height);
+                Vector2 targetPos = Main.screenPosition - Main.sceneWaterPos
+                    + new Vector2(Main.offScreenRange, Main.offScreenRange) + value - new Vector2(Main.offScreenRange, Main.offScreenRange);
+
                 m_dustLogicEffect.Wait();
                 m_dustSpawnEffect.Wait();
                 var dustLogicShader = m_dustLogicEffect.Value.CurrentTechnique.Passes[0];
@@ -160,25 +174,24 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
                     spriteBatch.Draw(CurrentDustTarget, motionVector * scale, Color.White);
                 }
                 spriteBatch.End();
+                Vector2 screenSizeZoom = new Vector2(Main.screenWidth, Main.screenHeight) / Main.GameViewMatrix.Zoom;
 
-                var waterShader = ((WaterShaderData)Terraria.Graphics.Effects.Filters.Scene["WaterDistortion"].GetShader());
-                var disortionTarget = (RenderTarget2D)typeof(WaterShaderData).GetField("_distortionTarget", BindingFlags.NonPublic | BindingFlags.Instance)
-                    .GetValue(waterShader);
-                var lastDistortionDrawOffset = (Vector2)typeof(WaterShaderData).GetField("_lastDistortionDrawOffset", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(waterShader);
-                Vector2 value = new Vector2(Main.screenWidth, Main.screenHeight) * 0.5f * (Vector2.One - Vector2.One / Main.GameViewMatrix.Zoom);
-                Vector2 value2 = (Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange, Main.offScreenRange)) - Main.screenPosition - value;
-                Vector2 offset = -(value2 * 0.25f - lastDistortionDrawOffset) / new Vector2(disortionTarget.Width, disortionTarget.Height);
                 spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp,
                     DepthStencilState.None, RasterizerState.CullNone);
                 {
                     graphicsDevice.Textures[1] = disortionTarget;
                     graphicsDevice.SamplerStates[1] = SamplerState.PointClamp;
+                    graphicsDevice.Textures[2] = Main.waterTarget;
+                    graphicsDevice.SamplerStates[2] = SamplerState.PointClamp;
 
+                    m_dustSpawnEffect.Value.Parameters["uResolution"].SetValue(screenSizeZoom);
+                    m_dustSpawnEffect.Value.Parameters["uTargetPos"].SetValue(targetPos);
+                    m_dustSpawnEffect.Value.Parameters["uInvWaterSize"].SetValue(new Vector2(1f / Main.waterTarget.Width, 1f / Main.waterTarget.Height));
                     m_dustSpawnEffect.Value.Parameters["uZoom"].SetValue(new Vector2(1f / Main.GameViewMatrix.Zoom.X, 1f / Main.GameViewMatrix.Zoom.Y));
                     m_dustSpawnEffect.Value.Parameters["uOffset"].SetValue(offset);
-                    m_dustSpawnEffect.Value.Parameters["uThreasholdMin"].SetValue(0.05f);
-                    m_dustSpawnEffect.Value.Parameters["uThreasholdMax"].SetValue(0.1f);
-                    m_dustSpawnEffect.Value.Parameters["uSpawnChance"].SetValue(0.1f);
+                    m_dustSpawnEffect.Value.Parameters["uThreasholdMin"].SetValue(0.03f);
+                    m_dustSpawnEffect.Value.Parameters["uThreasholdMax"].SetValue(0.08f);
+                    m_dustSpawnEffect.Value.Parameters["uSpawnChance"].SetValue(1f);
                     m_dustSpawnEffect.Value.Parameters["uVFXTime"].SetValue((float)Main.timeForVisualEffects * 0.2f);
 
                     dustSpawnShader.Apply();
