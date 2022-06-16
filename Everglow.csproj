@@ -26,12 +26,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Everglow-UnitTest\**" />
+    <Compile Remove="Resources\Tools\ImageToBinary\**" />
     <Compile Remove="Sources\Modules\DeltaMachine\**" />
     <Compile Remove="Sources\Tools\**" />
     <EmbeddedResource Remove="Everglow-UnitTest\**" />
+    <EmbeddedResource Remove="Resources\Tools\ImageToBinary\**" />
     <EmbeddedResource Remove="Sources\Modules\DeltaMachine\**" />
     <EmbeddedResource Remove="Sources\Tools\**" />
     <None Remove="Everglow-UnitTest\**" />
+    <None Remove="Resources\Tools\ImageToBinary\**" />
     <None Remove="Sources\Modules\DeltaMachine\**" />
     <None Remove="Sources\Tools\**" />
   </ItemGroup>

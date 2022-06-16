@@ -1,3 +1,4 @@
+using Everglow.Sources.Commons.Function.ImageReader;
 using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Physics;
 using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
@@ -25,11 +26,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             {
                 Everglow.HookSystem.AddMethod(DrawBackground, Commons.Core.CallOpportunity.PostDrawBG);
                 On.Terraria.Graphics.Light.TileLightScanner.GetTileLight += TileLightScanner_GetTileLight;
-                Everglow.MainThreadContext.AddTask(() =>
-                {
-                    GetRopePosFir("TreeRope");
-                    InitMass_Spring();
-                });
+                GetRopePosFir("TreeRope");
+                InitMass_Spring();
             }
         }
 
@@ -112,14 +110,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         /// <exception cref="Exception"></exception>
         public void GetGlowPos(string Shapepath)
         {
-            Texture2D image = MythContent.QuickTexture("TheFirefly/Backgrounds/" + Shapepath);
-            Color[] colors = new Color[image.Width * image.Height];
-            image.GetData(colors);
-            for (int y = image.Height - 1; y > 0; y -= 1)
+            Color[,] colors = ImageReader.Read("Everglow/Sources/Modules/MythModule/TheFirefly/Backgrounds/" + Shapepath);
+            int w = colors.GetLength(0);
+            int h = colors.GetLength(1);
+            for (int y = 0; y < h; ++y)
             {
-                for (int x = image.Width - 1; x > 0; x -= 1)
+                for (int x = 0; x < w; ++x)
                 {
-                    Color temp = colors[x + y * image.Width];
+                    Color temp = colors[x, y];
                     if (temp.R == 255)
                     {
                         GPos.Add(new GHang(new Vector2(x * 10, y * 10), (temp.G / 4f + 2), temp.B / 255f + 0.5f, Main.rand.Next(5)));
@@ -134,14 +132,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         /// <exception cref="Exception"></exception>
         public void GetGlowPosSec(string Shapepath)
         {
-            Texture2D image = MythContent.QuickTexture("TheFirefly/Backgrounds/" + Shapepath);
-            Color[] colors = new Color[image.Width * image.Height];
-            image.GetData(colors);
-            for (int y = image.Height - 1; y > 0; y -= 1)
+            Color[,] colors = ImageReader.Read("Everglow/Sources/Modules/MythModule/TheFirefly/Backgrounds/" + Shapepath);
+            int w = colors.GetLength(0);
+            int h = colors.GetLength(1);
+            for (int y = 0; y < h; ++y)
             {
-                for (int x = image.Width - 1; x > 0; x -= 1)
+                for (int x = 0; x < w; ++x)
                 {
-                    Color temp = colors[x + y * image.Width];
+                    Color temp = colors[x, y];
                     if (temp.R == 255)
                     {
                         GPosSec.Add(new GHang(new Vector2(x * 10, y * 4.2f), (temp.G / 4f + 2), temp.B / 255f + 0.5f, Main.rand.Next(5)));
@@ -156,14 +154,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         /// <exception cref="Exception"></exception>
         public void GetRopePosFir(string Shapepath)
         {
-            Texture2D image = MythContent.QuickTexture("TheFirefly/Backgrounds/" + Shapepath);
-            Color[] colors = new Color[image.Width * image.Height];
-            image.GetData(colors);
-            for (int y = image.Height - 1; y > 0; y -= 1)
+            Color[,] colors = ImageReader.Read("Everglow/Sources/Modules/MythModule/TheFirefly/Backgrounds/" + Shapepath);
+            int w = colors.GetLength(0);
+            int h = colors.GetLength(1);
+            for (int y = 0; y < h; ++y)
             {
-                for (int x = image.Width - 1; x > 0; x -= 1)
+                for (int x = 0; x < w; ++x)
                 {
-                    Color temp = colors[x + y * image.Width];
+                    Color temp = colors[x, y];
                     if (temp.R == 255)
                     {
                         RopPosFir.Add(new Vector2(x * 5, y * 5f));
@@ -181,7 +179,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             if (GPos.Count <= 1)
             {
                 Everglow.MainThreadContext.AddTask(() => GetGlowPos("GlosPos"));
-                return;
             }
             MothLand mothLand = ModContent.GetInstance<MothLand>();
             Vector2 sampleTopleft = Vector2.Zero;
@@ -217,7 +214,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         /// </summary>
         /// <param name="OrigPoint"></param>
         /// <returns></returns>
-        private Vector2 PointCorrection(Vector2 OrigPoint)
+        private static Vector2 PointCorrection(Vector2 OrigPoint)
         {
             Vector2 ScreenCen = new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
             Vector2 dPoss = OrigPoint - ScreenCen;
@@ -235,7 +232,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             if (GPosSec.Count <= 1)
             {
                 Everglow.MainThreadContext.AddTask(() => GetGlowPosSec("GlowHangingMiddlePosition"));
-                return;
             }
             MothLand mothLand = ModContent.GetInstance<MothLand>();
             Vector2 sampleTopleft = Vector2.Zero;
@@ -299,7 +295,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         /// <param name="texSize"></param>
         /// <param name="MoveStep"></param>
         /// <returns></returns>
-        public Vector2 GetZoomByScreenSize()
+        public static Vector2 GetZoomByScreenSize()
         {
             //return new Vector2(Main.screenWidth / 1366f, Main.screenHeight / 768f);
             return Vector2.One;
@@ -308,7 +304,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         /// 获取因为不同分辨率导致点位偏移坐标
         /// </summary>
         /// <returns></returns>
-        public Vector2 GetZoomDelta()
+        public static Vector2 GetZoomDelta()
         {
             Vector2 screenSize = new Vector2(Main.screenWidth, Main.screenHeight);
             Vector2 Cor = GetZoomByScreenSize();
