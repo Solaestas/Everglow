@@ -630,6 +630,7 @@ namespace Everglow.Sources.Modules.FoodModule
         {
             if (m_vanillaFoodInfos.ContainsKey(item.type))
             {
+               
                 int firstIndex = -1;
                 firstIndex = tooltips.FindIndex((tpline) =>
                 {
@@ -641,11 +642,13 @@ namespace Everglow.Sources.Modules.FoodModule
                 {
                     tooltips.RemoveAll((tp) => tp.Name.Contains("Tooltip"));
                     tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, FoodInfo.Description));
+                    tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, $"提供{FoodInfo.Satiety}饱食度"));
                 }
                 else
                 {
                     // 否则加到最后面
                     tooltips.Add(new TooltipLine(Mod, item.Name, FoodInfo.Description));
+                    tooltips.Add(new TooltipLine(Mod, item.Name, $"提供{FoodInfo.Satiety}饱食度"));
                 }
 
                 int buffTimeIndex = tooltips.FindIndex((tp) => tp.Name.Contains("BuffTime"));
@@ -654,6 +657,7 @@ namespace Everglow.Sources.Modules.FoodModule
                     tooltips[buffTimeIndex].Text = FoodInfo.BuffTime.ToBuffTimeString();
                     //tooltips.RemoveAt(buffTimeIndex);
                 }
+ 
             }
         }
         public override void SetStaticDefaults()
@@ -667,11 +671,11 @@ namespace Everglow.Sources.Modules.FoodModule
             // 如果是原版的食物，那么就手动处理
             if (m_vanillaFoodInfos.ContainsKey(item.type))
             {
-                var foodInfo = m_vanillaFoodInfos[item.type];
+                var FoodInfo = m_vanillaFoodInfos[item.type];
 
                 // 替换掉原版的 buff 类型
-                item.buffType = foodInfo.BuffType;
-                item.buffTime = foodInfo.BuffTime.TotalFrames;
+                item.buffType = FoodInfo.BuffType;
+                item.buffTime = FoodInfo.BuffTime.TotalFrames;
             }
             base.SetDefaults(item);
         }
@@ -681,11 +685,11 @@ namespace Everglow.Sources.Modules.FoodModule
             // 如果是原版的食物，那么就手动处理，因为已经使用了物品，说明玩家满足饱食度要求
             if (m_vanillaFoodInfos.ContainsKey(item.type))
             {
-                var foodInfo = m_vanillaFoodInfos[item.type];
-                var foodPlayer = player.GetModPlayer<FoodModPlayer>();
+                var FoodInfo = m_vanillaFoodInfos[item.type];
+                var FoodPlayer = player.GetModPlayer<FoodModPlayer>();
 
                 // 增加饱食度
-                foodPlayer.CurrentSatiety += foodInfo.Satiety;
+                FoodPlayer.CurrentSatiety += FoodInfo.Satiety;
 
             }
         }
@@ -696,8 +700,8 @@ namespace Everglow.Sources.Modules.FoodModule
             // 判断能否吃下物品
             if (m_vanillaFoodInfos.ContainsKey(item.type))
             {
-                var foodInfo = m_vanillaFoodInfos[item.type];
-                if (!foodPlayer.CanEat(foodInfo))
+                var FoodInfo = m_vanillaFoodInfos[item.type];
+                if (!foodPlayer.CanEat(FoodInfo))
                 {
                     Main.NewText($"Cannot eat this!");
                     return false;
@@ -706,8 +710,8 @@ namespace Everglow.Sources.Modules.FoodModule
             else if (item.ModItem is FoodBase)
             {
                 var foodItem = item.ModItem as FoodBase;
-                var foodInfo = foodItem.FoodInfo;
-                if (!foodPlayer.CanEat(foodInfo))
+                var FoodInfo = foodItem.FoodInfo;
+                if (!foodPlayer.CanEat(FoodInfo))
                 {
                     Main.NewText($"Cannot eat this!");
                     return false;
