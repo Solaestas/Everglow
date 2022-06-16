@@ -45,7 +45,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
                 Projectile.velocity.Y *= 0.98f;
                 if (Projectile.timeLeft % 3 == 0)
                 {
-                    int num90 = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(0.7f, 1.9f));
+                    int num90 = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.7f, 1.9f));
                     Main.dust[num90].velocity = Projectile.velocity * 0.5f;
                 }
             }
@@ -80,7 +80,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
                 Projectile.Center = npc.Center + Projectile.velocity;
                 if (Projectile.timeLeft < 740 && Projectile.timeLeft % 2 == 0)
                 {
-                    int num90 = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(0.4f, 0.9f));
+                    int num90 = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.4f, 0.9f));
                     Main.dust[num90].velocity = Vector2.Normalize(Projectile.velocity.RotatedBy(1.57f)) * 2;
                 }
             }
@@ -111,7 +111,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
         {
             for (int i = 0; i < 18; i++)
             {
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Clentaminator_Blue, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default(Color), 0.6f);
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Clentaminator_Blue, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, 0.6f);
             }
             for (int i = 0; i < 6; i++)
             {

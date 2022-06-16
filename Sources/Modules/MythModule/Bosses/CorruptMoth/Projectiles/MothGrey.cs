@@ -64,8 +64,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
 
                 var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
                 normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
-                var factor = 1f;
-                factor = i / (float)TrueL;
+                var factor = i / (float)TrueL;
                 var w = MathHelper.Lerp(1f, 0.05f, factor);
                 bars.Add(new VertexBase.Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(1f, 1f) - Main.screenPosition, Color.White, new Vector3(factor, 1, w)));
                 bars.Add(new VertexBase.Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(1f, 1f) - Main.screenPosition, Color.White, new Vector3(factor, 0, w)));

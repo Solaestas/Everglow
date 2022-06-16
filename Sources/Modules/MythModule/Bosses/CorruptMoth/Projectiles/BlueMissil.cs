@@ -44,7 +44,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
                     Projectile.velocity *= 0.94f;
                 }
             }
-            int num90 = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(0.7f, 3.9f));
+            int num90 = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.7f, 3.9f));
             Main.dust[num90].velocity = Projectile.velocity * 0.8f;
         }
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
@@ -54,7 +54,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
         {
             for (int i = 0; i < 18; i++)
             {
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Clentaminator_Blue, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default(Color), 0.6f);
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Clentaminator_Blue, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, 0.6f);
             }
             for (int i = 0; i < 6; i++)
             {

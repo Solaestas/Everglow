@@ -1,6 +1,4 @@
-﻿using Terraria.ID;
-
-namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
+﻿namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
 {
     public class Butterfly : ModNPC
     {
@@ -14,19 +12,19 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
         public override void SetStaticDefaults()
         {
             base.DisplayName.SetDefault("幻蝶");
-            Main.npcFrameCount[base.NPC.type] = 3;
+            Main.npcFrameCount[NPC.type] = 3;
         }
         public override void SetDefaults()
         {
-            base.NPC.width = 24;
-            base.NPC.height = 24;
-            base.NPC.friendly = false;
-            base.NPC.noGravity = true;
-            base.NPC.noTileCollide = false;
-            base.NPC.lifeMax = 1;
-            base.NPC.aiStyle = -1;
-            base.NPC.damage = 20;
-            base.NPC.dontTakeDamageFromHostiles = true;
+            NPC.width = 24;
+            NPC.height = 24;
+            NPC.friendly = false;
+            NPC.noGravity = true;
+            NPC.noTileCollide = false;
+            NPC.lifeMax = 1;
+            NPC.aiStyle = -1;
+            NPC.damage = 20;
+            NPC.dontTakeDamageFromHostiles = true;
         }
         public override bool? CanFallThroughPlatforms()
         {
@@ -49,7 +47,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
 
             if (NPC.ai[0] == -2)
             {
-                base.NPC.spriteDirection = Math.Sign(base.NPC.velocity.X);
+                NPC.spriteDirection = Math.Sign(NPC.velocity.X);
                 NPC.dontTakeDamage = false;
                 Timer++;
                 if (NPC.alpha > 0)
@@ -68,7 +66,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             }
             if (NPC.ai[0] == -1)
             {
-                base.NPC.spriteDirection = Math.Sign(base.NPC.velocity.X);
+                NPC.spriteDirection = Math.Sign(NPC.velocity.X);
                 NPC.dontTakeDamage = true;
                 Timer++;
                 if (NPC.alpha < 120)
@@ -89,9 +87,9 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             }//在boss附近游荡
             if (NPC.ai[0] == 0)
             {
-                base.NPC.spriteDirection = Math.Sign(base.NPC.velocity.X);
-                base.NPC.TargetClosest(false);
-                Player player = Main.player[base.NPC.target];
+                NPC.spriteDirection = Math.Sign(NPC.velocity.X);
+                NPC.TargetClosest(false);
+                Player player = Main.player[NPC.target];
                 if (Timer < 30)
                 {
                     NPC.dontTakeDamage = true;
@@ -104,12 +102,12 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                 if (Timer == 0)
                 {
                     NPC.ai[2] = Main.rand.Next(60, 200);
-                    base.NPC.frame.Y = Main.rand.Next(2) * 24;
+                    NPC.frame.Y = Main.rand.Next(2) * 24;
                     NPC.netUpdate2 = true;
                 }
                 if (++Timer > NPC.ai[2] && Timer < NPC.ai[2] + 350)//追踪玩家
                 {
-                    base.NPC.TargetClosest(false);
+                    NPC.TargetClosest(false);
                     MoveTo(player.Center, 8, 80);
                 }
                 if (Timer > NPC.ai[2] + 600)
@@ -124,7 +122,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             }//延迟后朝玩家运动
             if (NPC.ai[0] == 1)//弓,rot:ai2
             {
-                base.NPC.spriteDirection = Math.Sign(base.NPC.velocity.X);
+                NPC.spriteDirection = Math.Sign(NPC.velocity.X);
                 Vector2 trueTargetPos = Owner.Center + targetPos.RotatedBy(NPC.ai[2]);
                 CheckOwnerActive();
 
@@ -159,7 +157,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             {
                 CheckOwnerActive();
 
-                base.NPC.spriteDirection = Math.Sign(base.NPC.velocity.X);
+                NPC.spriteDirection = Math.Sign(NPC.velocity.X);
                 Vector2 trueTargetPos = Owner.Center + targetPos.RotatedBy(NPC.ai[2]);
                 Player player = Main.player[Owner.target];
                 if (Timer == 0)
@@ -244,6 +242,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                 if (Timer == 220)
                 {
                     NPC.velocity = Main.rand.NextVector2Unit() * 10f;
+                    NPC.netUpdate2 = true;
                 }
                 if (Timer > 250)
                 {
@@ -256,7 +255,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             {
                 CheckOwnerActive();
 
-                base.NPC.spriteDirection = Math.Sign(base.NPC.velocity.X);
+                NPC.spriteDirection = Math.Sign(NPC.velocity.X);
                 Vector2 trueTargetPos = Owner.Center + targetPos.RotatedBy(NPC.ai[2]);
                 Player player = Main.player[Owner.target];
                 if (Timer == 0)
@@ -316,20 +315,20 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
         }
         public override void FindFrame(int frameHeight)
         {
-            if (base.NPC.frame.Y > 48)
+            if (NPC.frame.Y > 48)
             {
-                base.NPC.frame.Y = 0;
+                NPC.frame.Y = 0;
             }
 
             if (Timer % 10 == 0)
             {
-                base.NPC.frame.Y += 24;
+                NPC.frame.Y += 24;
             }
 
             if (Timer % 3 == 0 && NPC.alpha < 20)
             {
-                int index = Dust.NewDust(base.NPC.position - new Vector2(8), base.NPC.width, base.NPC.height, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(0.7f, 1.9f));
-                Main.dust[index].velocity = base.NPC.velocity * 0.5f;
+                int index = Dust.NewDust(NPC.position - new Vector2(8), NPC.width, NPC.height, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.7f, 1.9f));
+                Main.dust[index].velocity = NPC.velocity * 0.5f;
             }
 
         }
@@ -337,7 +336,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
         {
             for (int i = 0; i < 6; i++)
             {
-                int index = Dust.NewDust(base.NPC.position - new Vector2(8), base.NPC.width, base.NPC.height, DustID.Electric, 0f, 0f, 100, Color.Blue, Main.rand.NextFloat(0.7f, 1.2f));
+                int index = Dust.NewDust(NPC.position - new Vector2(8), NPC.width, NPC.height, DustID.Electric, 0f, 0f, 100, Color.Blue, Main.rand.NextFloat(0.7f, 1.2f));
                 Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(5f, 10f)).RotatedByRandom(6.283);
                 Main.dust[index].noGravity = true;
             }

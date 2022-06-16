@@ -30,16 +30,16 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
         private static bool startLoading = false;
 
         private bool canDespawn = false;
-        public static int secondStageHeadSlot = -1;
-        private bool Start = false;
-        public static int StaTime = 0;
+        private bool start = false;
+        private float lightVisual = 0;
+        //public static int secondStageHeadSlot = -1;
+        //public static int StaTime = 0;
         private float PhamtomDis//特效幻影的距离和透明度
         {
             get => NPC.localAI[2];
             set => NPC.localAI[2] = value;
         }
 
-        private float lightVisual = 0;
         [CloneByReference]
         private readonly Vector3[] cubeVec = new Vector3[]
         {
@@ -219,7 +219,10 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             {
                 lightVisual = 0;
             }
-
+            if(Timer % 15 == 0)
+            {
+                NPC.netUpdate2 = true;
+            }
             //贴图旋转
             if (NPC.spriteDirection > 0)
             {
@@ -236,11 +239,11 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             }
             #region #前言
 
-            if (!Start)
+            if (!start)
             {
                 NPC.ai[0] = 0;
                 NPC.noTileCollide = true;
-                Start = true;
+                start = true;
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     for (int h = 0; h < 15; h++)
@@ -251,7 +254,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                 NPC.localAI[0] = 0;
                 return;
             }
-            StaTime++;
+            //StaTime++;
             Player player = Main.player[NPC.target];
             NPC.TargetClosest(false);
             if (!player.active || player.dead)

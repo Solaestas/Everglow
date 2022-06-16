@@ -58,7 +58,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
             if (Projectile.timeLeft < 995)
             {
                 Vector2 vector = base.Projectile.position + new Vector2(2);
-                int index = Dust.NewDust(vector, 2, 2, DustID.SpookyWood, 0f, 0f, 0, default(Color), (float)Projectile.scale * 0.8f);
+                int index = Dust.NewDust(vector, 2, 2, DustID.SpookyWood, 0f, 0f, 0, default, (float)Projectile.scale * 0.8f);
                 Main.dust[index].velocity *= 0.0f;
                 Main.dust[index].noGravity = true;
                 Main.dust[index].scale *= 1.2f;
