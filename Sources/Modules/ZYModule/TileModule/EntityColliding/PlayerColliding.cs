@@ -1,7 +1,7 @@
-﻿using Everglow.Sources.Modules.ZYModule.Commons.Core;
-using Everglow.Sources.Modules.ZYModule.Commons.Function;
+﻿using Everglow.Sources.Modules.ZYModule.Commons.Function;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
+
 namespace Everglow.Sources.Modules.ZYModule.TileModule.EntityColliding;
 internal class PlayerColliding : ModPlayer
 {
@@ -15,6 +15,7 @@ internal class PlayerColliding : ModPlayer
         On.Terraria.Player.WaterCollision += Player_WaterCollision;
         //On.Terraria.Player.ItemCheck_UseMiningTools_ActuallyUseMiningTool += Player_ItemCheck_UseMiningTools_ActuallyUseMiningTool;
         On.Terraria.Player.HoneyCollision += Player_HoneyCollision;
+        On.Terraria.Player.WallslideMovement += Player_WallslideMovement_On;
         try
         {
             IL.Terraria.Player.WallslideMovement += Player_WallslideMovement_IL;
@@ -23,10 +24,8 @@ internal class PlayerColliding : ModPlayer
         {
             HookException.Throw("Player_WallslideMovement_Error", ex);
         }
-        On.Terraria.Player.WallslideMovement += Player_WallslideMovement_On;
 
     }
-
 
     public override ModPlayer Clone(Player newEntity)
     {
@@ -94,17 +93,14 @@ internal class PlayerColliding : ModPlayer
         {
             HookException.Throw("Player_WallslideMovement_NotFound_0");
         }
-        //if(player.GetModPlayer<PlayerColliding>().handler.attachType == AttachType.Grab)
-        //{
-        //    flag = true;
-        //    goto
-        //}
+
         cursor.Emit(OpCodes.Ldarg_0);
-        cursor.Emit(OpCodes.Call, typeof(Player).GetMethod(nameof(Player.GetModPlayer), BindingFlags.Public | BindingFlags.Instance, Array.Empty<Type>()).MakeGenericMethod(typeof(PlayerColliding)));
-        cursor.Emit(OpCodes.Ldfld, typeof(PlayerColliding).GetField(nameof(handler)));
-        cursor.Emit(OpCodes.Ldfld, typeof(EntityHandler).GetField(nameof(EntityHandler.attachType)));
-        cursor.Emit(OpCodes.Ldc_I4, (int)AttachType.Grab);
-        cursor.Emit(OpCodes.Bne_Un, skipSetFlag);
+        cursor.EmitDelegate((Player player) =>
+        {
+            return player.GetModPlayer<PlayerColliding>().handler.attachType == AttachType.Grab;
+        });
+        cursor.Emit(OpCodes.Brfalse, skipSetFlag);
+
         cursor.Emit(OpCodes.Ldc_I4, 1);
         cursor.Emit(OpCodes.Stloc_0);
         cursor.Emit(OpCodes.Br, skipControlCheck);
@@ -119,14 +115,7 @@ internal class PlayerColliding : ModPlayer
     private static void Player_WallslideMovement_On(On.Terraria.Player.orig_WallslideMovement orig, Player self)
     {
         TileSystem.EnableCollisionHook = false;
-        try
-        {
-            orig(self);
-        }
-        catch
-        {
-            DebugUtils.TriggerFlag(HookFlag.WallSlideException);
-        }
+        orig(self);
         TileSystem.EnableCollisionHook = true;
     }
 }
