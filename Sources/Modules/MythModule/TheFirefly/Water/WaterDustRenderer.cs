@@ -67,8 +67,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
             }
         }
 
-        public string Name => throw new NotImplementedException();
-
         public WaterDustRenderer()
         {
             m_dustLogicEffect = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/DustLogic");
@@ -88,52 +86,16 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
             m_currentDustTarget = 0;
             m_lastDrawPosition = Vector2.Zero;
 
-            Main.OnPreDraw += Main_OnPreDraw;
+            On.Terraria.GameContent.Shaders.WaterShaderData.PreDraw += WaterShaderData_PreDraw;
 
             m_oldScreenWidth = Main.screenWidth;
             m_oldScreenHeight = Main.screenHeight;
         }
 
-
-        public void PresentDusts()
+        private void WaterShaderData_PreDraw(On.Terraria.GameContent.Shaders.WaterShaderData.orig_PreDraw orig, WaterShaderData self, GameTime gameTime)
         {
-            if (CurrentDustTarget == null || NextDustTarget == null)
-            {
-                return;
-            }
+            orig(self, gameTime);
 
-            if (m_oldScreenWidth != Main.screenWidth || m_oldScreenHeight != Main.screenHeight)
-            {
-                OnResolutionChanged();
-                m_oldScreenWidth = Main.screenWidth;
-                m_oldScreenHeight = Main.screenHeight;
-            }
-            var spriteBatch = Main.spriteBatch;
-            var graphicsDevice = Main.graphics.GraphicsDevice;
-            m_dustDrawEffect.Wait();
-            var dustDraw = m_dustDrawEffect.Value.CurrentTechnique.Passes[0];
-
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp,
-                DepthStencilState.None, RasterizerState.CullNone, null, Main.Transform);
-            m_dustDrawEffect.Value.Parameters["uColor"].SetValue(new Vector3(1f, 1.0f, 1.0f));
-            m_dustDrawEffect.Value.Parameters["uResolution"].SetValue(new Vector2(Main.screenWidth, Main.screenHeight));
-            m_dustDrawEffect.Value.Parameters["uResolutionInv"].SetValue(new Vector2(1f / Main.screenWidth, 1f / Main.screenHeight));
-            dustDraw.Apply();
-            spriteBatch.Draw(CurrentDustTarget,
-                new Rectangle(0, 0, (int)(CurrentDustTarget.Width / scale), (int)(CurrentDustTarget.Height / scale)), Color.White);
-            spriteBatch.End();
-        }
-
-        private void EndPass()
-        {
-            var graphicsDevice = Main.graphics.GraphicsDevice;
-            m_lastDrawPosition = Main.screenPosition;
-            m_currentDustTarget = (m_currentDustTarget + 1) % 2;
-            graphicsDevice.SetRenderTarget(null);
-        }
-
-        private void Main_OnPreDraw(GameTime obj)
-        {
             if (CurrentDustTarget == null || NextDustTarget == null
                 || m_dustLogicEffect.Value == null || m_dustSpawnEffect.Value == null)
             {
@@ -174,7 +136,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
                 spriteBatch.End();
                 Vector2 screenSizeZoom = new Vector2(Main.screenWidth, Main.screenHeight) / Main.GameViewMatrix.Zoom;
 
-                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp,
+                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp,
                     DepthStencilState.None, RasterizerState.CullNone);
                 {
                     graphicsDevice.Textures[1] = disortionTarget;
@@ -189,17 +151,59 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
                     m_dustSpawnEffect.Value.Parameters["uOffset"].SetValue(offset);
                     m_dustSpawnEffect.Value.Parameters["uThreasholdMin"].SetValue(0.03f);
                     m_dustSpawnEffect.Value.Parameters["uThreasholdMax"].SetValue(0.08f);
-                    m_dustSpawnEffect.Value.Parameters["uSpawnChance"].SetValue(1f);
+                    m_dustSpawnEffect.Value.Parameters["uSpawnChance"].SetValue(0.25f);
+                    m_dustSpawnEffect.Value.Parameters["uWaterDisortionTargetSize"].SetValue(new Vector2(disortionTarget.Width, disortionTarget.Height));
                     m_dustSpawnEffect.Value.Parameters["uVFXTime"].SetValue((float)Main.timeForVisualEffects * 0.2f);
 
                     dustSpawnShader.Apply();
-                    spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle(0, 0, NextDustTarget.Width, NextDustTarget.Height), Color.White);
+
+                    var invZoom = new Vector2(1f / Main.GameViewMatrix.Zoom.X, 1f / Main.GameViewMatrix.Zoom.Y);
+                    Vector2 size = new Vector2(NextDustTarget.Width, NextDustTarget.Height);
+                    Vector2 topLeft = size * 0.5f * (Vector2.One - invZoom);
+                    size *= invZoom;
+
+                    spriteBatch.Draw(CurrentDustTarget, new Rectangle((int)topLeft.X, (int)topLeft.Y, (int)size.X, (int)size.Y), Color.White);
                 }
                 spriteBatch.End();
                 EndPass();
             }
+        }
 
+        public void PresentDusts()
+        {
+            if (CurrentDustTarget == null || NextDustTarget == null)
+            {
+                return;
+            }
 
+            if (m_oldScreenWidth != Main.screenWidth || m_oldScreenHeight != Main.screenHeight)
+            {
+                OnResolutionChanged();
+                m_oldScreenWidth = Main.screenWidth;
+                m_oldScreenHeight = Main.screenHeight;
+            }
+            var spriteBatch = Main.spriteBatch;
+            var graphicsDevice = Main.graphics.GraphicsDevice;
+            m_dustDrawEffect.Wait();
+            var dustDraw = m_dustDrawEffect.Value.CurrentTechnique.Passes[0];
+
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp,
+                DepthStencilState.None, RasterizerState.CullNone, null, Main.Transform);
+            m_dustDrawEffect.Value.Parameters["uColor"].SetValue(new Vector3(1f, 1.0f, 1.0f));
+            m_dustDrawEffect.Value.Parameters["uResolution"].SetValue(new Vector2(Main.screenWidth, Main.screenHeight));
+            m_dustDrawEffect.Value.Parameters["uResolutionInv"].SetValue(new Vector2(1f / Main.screenWidth, 1f / Main.screenHeight));
+            dustDraw.Apply();
+            spriteBatch.Draw(CurrentDustTarget,
+                new Rectangle(0, 0, (int)(CurrentDustTarget.Width / scale), (int)(CurrentDustTarget.Height / scale)), Color.White);
+            spriteBatch.End();
+        }
+
+        private void EndPass()
+        {
+            var graphicsDevice = Main.graphics.GraphicsDevice;
+            m_lastDrawPosition = Main.screenPosition;
+            m_currentDustTarget = (m_currentDustTarget + 1) % 2;
+            graphicsDevice.SetRenderTarget(null);
         }
 
         private void OnResolutionChanged()
@@ -212,7 +216,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
 
         public void Unload()
         {
-            Main.OnPreDraw -= Main_OnPreDraw;
+            On.Terraria.GameContent.Shaders.WaterShaderData.PreDraw -= WaterShaderData_PreDraw;
         }
     }
 }
