@@ -630,7 +630,7 @@ namespace Everglow.Sources.Modules.FoodModule
         {
             if (m_vanillaFoodInfos.ContainsKey(item.type))
             {
-               
+
                 int firstIndex = -1;
                 firstIndex = tooltips.FindIndex((tpline) =>
                 {
@@ -657,7 +657,7 @@ namespace Everglow.Sources.Modules.FoodModule
                     tooltips[buffTimeIndex].Text = FoodInfo.BuffTime.ToBuffTimeString();
                     //tooltips.RemoveAt(buffTimeIndex);
                 }
- 
+
             }
         }
         public override void SetStaticDefaults()
