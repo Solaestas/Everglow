@@ -135,7 +135,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
         private void Main_OnPreDraw(GameTime obj)
         {
             if (CurrentDustTarget == null || NextDustTarget == null
-                || m_dustLogicEffect == null || m_dustSpawnEffect == null)
+                || m_dustLogicEffect.Value == null || m_dustSpawnEffect.Value == null)
             {
                 return;
             }
@@ -146,8 +146,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
 
 
             var motionVector = m_lastDrawPosition - Main.screenPosition;
-
-
 
             if (!Main.gamePaused)
             {
