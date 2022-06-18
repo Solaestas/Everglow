@@ -883,7 +883,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
 
                     //切换为箭AI
                     //清空计时器
-                    FormatButterfliesFlocks(BArrowColors, butterfies, scale, rot, 1);
+                    FormatButterfliesFlocks(BArrowColors, butterfies, scale, rot, 2);
 
                     //foreach (var keypoint in BBowColors)
                     //{
