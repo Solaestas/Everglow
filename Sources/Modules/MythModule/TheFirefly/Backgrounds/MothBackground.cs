@@ -4,6 +4,7 @@ using Everglow.Sources.Modules.MythModule.TheFirefly.Physics;
 using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
 using Terraria.GameContent;
 
+
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
 {
     public class MothBackground : ModSystem
@@ -110,20 +111,36 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         /// <exception cref="Exception"></exception>
         public void GetGlowPos(string Shapepath)
         {
-            Color[,] colors = ImageReader.Read("Everglow/Sources/Modules/MythModule/TheFirefly/Backgrounds/" + Shapepath);
-            int w = colors.GetLength(0);
-            int h = colors.GetLength(1);
-            for (int y = 0; y < h; ++y)
+            var imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Sources/Modules/MythModule/TheFirefly/Backgrounds/" + Shapepath);
+            imageData.ProcessPixelRows(accessor =>
             {
-                for (int x = 0; x < w; ++x)
+                for (int y = 0; y < accessor.Height; y++)
                 {
-                    Color temp = colors[x, y];
-                    if (temp.R == 255)
+                    var pixelRow = accessor.GetRowSpan(y);
+                    for (int x = 0; x < pixelRow.Length; x++)
                     {
-                        GPos.Add(new GHang(new Vector2(x * 10, y * 10), (temp.G / 4f + 2), temp.B / 255f + 0.5f, Main.rand.Next(5)));
+                        ref var pixel = ref pixelRow[x];
+                        if (pixel.R == 255)
+                        {
+                            GPos.Add(new GHang(new Vector2(x * 10, y * 10), (pixel.G / 4f + 2), pixel.B / 255f + 0.5f, Main.rand.Next(5)));
+                        }
                     }
                 }
-            }
+            });
+
+            //int w = colors.GetLength(0);
+            //int h = colors.GetLength(1);
+            //for (int y = 0; y < h; ++y)
+            //{
+            //    for (int x = 0; x < w; ++x)
+            //    {
+            //        Color temp = colors[x, y];
+            //        if (temp.R == 255)
+            //        {
+
+            //        }
+            //    }
+            //}
         }
         /// <summary>
         /// 获取第二层荧光悬挂物点位
@@ -132,20 +149,37 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         /// <exception cref="Exception"></exception>
         public void GetGlowPosSec(string Shapepath)
         {
-            Color[,] colors = ImageReader.Read("Everglow/Sources/Modules/MythModule/TheFirefly/Backgrounds/" + Shapepath);
-            int w = colors.GetLength(0);
-            int h = colors.GetLength(1);
-            for (int y = 0; y < h; ++y)
+            var imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Sources/Modules/MythModule/TheFirefly/Backgrounds/" + Shapepath);
+            imageData.ProcessPixelRows(accessor =>
             {
-                for (int x = 0; x < w; ++x)
+                for (int y = 0; y < accessor.Height; y++)
                 {
-                    Color temp = colors[x, y];
-                    if (temp.R == 255)
+                    var pixelRow = accessor.GetRowSpan(y);
+                    for (int x = 0; x < pixelRow.Length; x++)
                     {
-                        GPosSec.Add(new GHang(new Vector2(x * 10, y * 4.2f), (temp.G / 4f + 2), temp.B / 255f + 0.5f, Main.rand.Next(5)));
+                        ref var pixel = ref pixelRow[x];
+                        if (pixel.R == 255)
+                        {
+                            GPosSec.Add(new GHang(new Vector2(x * 10, y * 4.2f), (pixel.G / 4f + 2), pixel.B / 255f + 0.5f, Main.rand.Next(5)));
+                        }
                     }
                 }
-            }
+            });
+
+            //Color[,] colors = ImageReader.Read("Everglow/Sources/Modules/MythModule/TheFirefly/Backgrounds/" + Shapepath);
+            //int w = colors.GetLength(0);
+            //int h = colors.GetLength(1);
+            //for (int y = 0; y < h; ++y)
+            //{
+            //    for (int x = 0; x < w; ++x)
+            //    {
+            //        Color temp = colors[x, y];
+            //        if (temp.R == 255)
+            //        {
+            //            GPosSec.Add(new GHang(new Vector2(x * 10, y * 4.2f), (temp.G / 4f + 2), temp.B / 255f + 0.5f, Main.rand.Next(5)));
+            //        }
+            //    }
+            //}
         }
         /// <summary>
         /// 获取第一层树条点位
@@ -154,22 +188,40 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         /// <exception cref="Exception"></exception>
         public void GetRopePosFir(string Shapepath)
         {
-            Color[,] colors = ImageReader.Read("Everglow/Sources/Modules/MythModule/TheFirefly/Backgrounds/" + Shapepath);
-            int w = colors.GetLength(0);
-            int h = colors.GetLength(1);
-            for (int y = 0; y < h; ++y)
+            var imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Sources/Modules/MythModule/TheFirefly/Backgrounds/" + Shapepath);
+            imageData.ProcessPixelRows(accessor =>
             {
-                for (int x = 0; x < w; ++x)
+                for (int y = 0; y < accessor.Height; y++)
                 {
-                    Color temp = colors[x, y];
-                    if (temp.R == 255)
+                    var pixelRow = accessor.GetRowSpan(y);
+                    for (int x = 0; x < pixelRow.Length; x++)
                     {
-                        RopPosFir.Add(new Vector2(x * 5, y * 5f));
-                        RopPosFirC.Add(temp.G + 2);
-                        RopPosFirS.Add((temp.B + 240) / 300f);
+                        ref var pixel = ref pixelRow[x];
+                        if (pixel.R == 255)
+                        {
+                            RopPosFir.Add(new Vector2(x * 5, y * 5f));
+                            RopPosFirC.Add(pixel.G + 2);
+                            RopPosFirS.Add((pixel.B + 240) / 300f);
+                        }
                     }
                 }
-            }
+            });
+            //Color[,] colors = ImageReader.Read("Everglow/Sources/Modules/MythModule/TheFirefly/Backgrounds/" + Shapepath);
+            //int w = colors.GetLength(0);
+            //int h = colors.GetLength(1);
+            //for (int y = 0; y < h; ++y)
+            //{
+            //    for (int x = 0; x < w; ++x)
+            //    {
+            //        Color temp = colors[x, y];
+            //        if (temp.R == 255)
+            //        {
+            //            RopPosFir.Add(new Vector2(x * 5, y * 5f));
+            //            RopPosFirC.Add(temp.G + 2);
+            //            RopPosFirS.Add((temp.B + 240) / 300f);
+            //        }
+            //    }
+            //}
         }
         /// <summary>
         /// 绘制荧光
