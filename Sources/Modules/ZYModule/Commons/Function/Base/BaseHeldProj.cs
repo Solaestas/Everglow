@@ -11,6 +11,7 @@ namespace Everglow.Sources.Modules.ZYModule.Commons.Function.Base
         public T item;
         public override void SetItem(BaseHeldItem item) => this.item = (T)item;
         public Player Owner => Main.player[Projectile.owner];
+        public PlayerManager PlayerManager => Main.player[Projectile.owner].GetModPlayer<PlayerManager>();
         public override void Initialize()
         {
             Projectile.timeLeft = 2;

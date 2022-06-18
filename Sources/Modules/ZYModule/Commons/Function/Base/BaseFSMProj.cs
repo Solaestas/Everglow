@@ -105,7 +105,6 @@ internal abstract class BaseFSMProj : BaseProjectile
         }
     }
     public int Timer { get => (int)Projectile.ai[0]; set => Projectile.ai[0] = value; }
-    public float LocalValue { get => Projectile.localAI[0]; set => Projectile.localAI[0] = value; }
     public ProjState State => states[StateID];
     public override ModProjectile Clone(Projectile newEntity)
     {
@@ -140,7 +139,7 @@ internal abstract class BaseFSMProj : BaseProjectile
     }
     public virtual void Reset()
     {
-        LocalValue = Timer = 0;
+        Timer = 0;
     }
     public void RegisterState(ProjState projState) => states.Add(projState);
     public void RegisterState(string name, Func<int> update, Action begin = null, Action end = null, Func<IEnumerator<ICoroutineInstruction>> func = null)

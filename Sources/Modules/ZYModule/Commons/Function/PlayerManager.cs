@@ -89,30 +89,7 @@ internal class PlayerManager : ModPlayer
         if (shield.IsDefending && npc.Hitbox.Intersects(shield.Projectile.Hitbox))
         {
             crit = false;
-            Player.noKnockback = true;
-            float knockBackRate = 1;
-            if (shield.DefendTimer <= 10)
-            {
-                shield.DefendTimer = 60;
-                Player.immuneTime = 30;
-                knockBackRate = 1.5f;
-                damage = 0;
-                SoundEngine.PlaySound(SoundID.DD2_CrystalCartImpact, Player.Center);
-            }
-            else
-            {
-                Player.immuneTime = 30;
-                damage = shield.CalculateDamage(damage);
-                SoundEngine.PlaySound(SoundID.DD2_CrystalCartImpact, Player.Center);
-            }
-            if (npc.width < 60 && npc.height < 60 && !npc.boss)
-            {
-                npc.velocity += new Vector2(knockBackRate * 2 * shield.Projectile.knockBack, 0).RotatedBy(shield.Projectile.rotation) + Player.velocity;
-            }
-            else
-            {
-                npc.velocity += new Vector2(knockBackRate * shield.Projectile.knockBack, 0).RotatedBy(shield.Projectile.rotation);
-            }
+            shield.DefendDamage(npc, ref damage);
         }
     }
     public override void ModifyHitByProjectile(Projectile proj, ref int damage, ref bool crit)
@@ -121,23 +98,15 @@ internal class PlayerManager : ModPlayer
         {
             return;
         }
+        if (!shield.Projectile.active)
+        {
+            shield = null;
+            return;
+        }
         if (shield.IsDefending && proj.Colliding(proj.Hitbox, shield.Projectile.Hitbox))
         {
             crit = false;
-            if (shield.DefendTimer <= 10)
-            {
-                shield.DefendTimer = 60;
-                Player.immuneTime = 30;
-                damage = 0;
-                SoundEngine.PlaySound(SoundID.DD2_CrystalCartImpact, Player.Center);
-            }
-            else
-            {
-                Player.immuneTime = 30;
-                damage = shield.CalculateDamage(damage);
-                SoundEngine.PlaySound(SoundID.DD2_CrystalCartImpact, Player.Center);
-            }
-
+            shield.DefendDamage(proj, ref damage);
         }
     }
 }
