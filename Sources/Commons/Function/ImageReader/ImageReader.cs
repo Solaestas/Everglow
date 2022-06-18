@@ -75,6 +75,7 @@ internal static class ImageReader
         path = ConvertImagePath(path);
         using var memoryStream = new MemoryStream(ModContent.GetFileBytes(path));
         using var image = Image.Load(memoryStream);
+        CorpImage(image, rect);
         int maxX = rect.X + rect.Width, maxY = rect.Y + rect.Height;
         Color[,] colors = new Color[rect.Width, rect.Height];
         Debug.Assert(maxX <= image.Width && maxY <= image.Height);
