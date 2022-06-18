@@ -1,6 +1,7 @@
 ﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 using Color = Microsoft.Xna.Framework.Color;
 using Point = Microsoft.Xna.Framework.Point;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
@@ -22,6 +23,13 @@ internal static class ImageReader
         }
         return path;
     }
+
+    /// <summary>
+    /// 读取图片中和targetColor匹配的坐标位置们
+    /// </summary>
+    /// <param name="path"></param>
+    /// <param name="targetColor"></param>
+    /// <returns></returns>
     public static List<ImageKeyPoint> ReadImageKeyPoints(string path, Rgb24 targetColor)
     {
         List<ImageKeyPoint> keyPoints = new List<ImageKeyPoint>();
@@ -44,7 +52,7 @@ internal static class ImageReader
     }
 
     /// <summary>
-    /// RGB通道默认值0，Alpha默认值255，默认路径名为.bmp
+    /// 直接读取图片并且强转至TPixel格式
     /// </summary>
     /// <param name="path">路径，可以不带后缀名</param>
     /// <returns></returns>
@@ -54,43 +62,8 @@ internal static class ImageReader
         using var memoryStream = new MemoryStream(ModContent.GetFileBytes(path));
         using var image = Image.Load(memoryStream, out IImageFormat format);
         return image.CloneAs<TPixel>();
-        //if (image is Image<Rgba32> png)
-        //{
-        //    png.ProcessPixelRows(accessor =>
-        //    {
-        //        for (int j = 0; j < height; j++)
-        //        {
-        //            var span = accessor.GetRowSpan(j);
-        //            for (int i = 0; i < width; i++)
-        //            {
-        //                var t = span[i];
-        //                colors[i, j] = new Color(t.R, t.G, t.B, t.A);
-        //            }
-        //        }
-        //    });
-        //}
-        //else if (image is Image<Rgb24> jpg)
-        //{
-        //    jpg.ProcessPixelRows(accessor =>
-        //    {
-        //        for (int j = 0; j < height; j++)
-        //        {
-        //            var span = accessor.GetRowSpan(j);
-        //            for (int i = 0; i < width; i++)
-        //            {
-        //                var t = span[i];
-        //                colors[i, j] = new Color(t.R, t.G, t.B, 255);
-        //            }
-        //        }
-        //    });
-        //}
-        //else
-        //{
-        //    Debug.Fail("剩下格式没写");
-        //}
-
-        //return colors;
     }
+
     /// <summary>
     /// RGB通道默认值0，Alpha默认值255，默认路径名为.bmp
     /// </summary>
@@ -99,10 +72,7 @@ internal static class ImageReader
     /// <returns></returns>
     public static Color[,] Read(string path, Rectangle rect)
     {
-        if (Path.GetExtension(path) == string.Empty)
-        {
-            path = Path.ChangeExtension(path, ".png");
-        }
+        path = ConvertImagePath(path);
         using var memoryStream = new MemoryStream(ModContent.GetFileBytes(path));
         using var image = Image.Load(memoryStream);
         int maxX = rect.X + rect.Width, maxY = rect.Y + rect.Height;
@@ -144,35 +114,17 @@ internal static class ImageReader
         }
         return colors;
     }
+
     /// <summary>
-    /// RGB通道默认值0，Alpha默认值255，默认路径名为.bmp
+    /// 根据传入矩形剪裁图片的一部分
     /// </summary>
-    /// <param name="path">路径，可以不带后缀名</param>
-    /// <param name="point">读取位置</param>
-    /// <returns></returns>
-    public static Color Read(string path, Point point)
+    /// <param name="input"></param>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    private static void CorpImage(Image input, Rectangle rect)
     {
-        if (Path.GetExtension(path) == string.Empty)
-        {
-            path = Path.ChangeExtension(path, ".png");
-        }
-        using var memoryStream = new MemoryStream(ModContent.GetFileBytes(path));
-        using var image = Image.Load(memoryStream);
-        Debug.Assert(point.X <= image.Width && point.Y <= image.Height);
-        if (image is Image<Rgba32> png)
-        {
-            var t = png[point.X, point.Y];
-            return new Color(t.R, t.G, t.B, t.A);
-        }
-        else if (image is Image<Rgb24> jpg)
-        {
-            var t = jpg[point.X, point.Y];
-            return new Color(t.R, t.G, t.B, 255);
-        }
-        else
-        {
-            Debug.Fail("剩下格式没写");
-        }
-        return Color.Transparent;
+        input.Mutate(img => img.Crop(SixLabors.ImageSharp.Rectangle.FromLTRB(rect.X, rect.Y, rect.Width + rect.X, rect.Height + rect.Y)));
     }
 }
