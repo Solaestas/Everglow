@@ -5,9 +5,6 @@ using System.Threading.Tasks;
 using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
 using Terraria.Localization;
-using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp;
-
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 using Color = Microsoft.Xna.Framework.Color;
 
@@ -18,7 +15,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
     {
         protected override bool CloneNewInstances => true;
 
-        private readonly Rgb24 IdentifierValue = new Rgb24(58, 169, 255);
+        private readonly Color IdentifierValue = new Color(58, 169, 255);
 
         private static List<ImageKeyPoint> BBowColors;
         private const int BBowColorsWidth = 60;

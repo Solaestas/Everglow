@@ -30,7 +30,7 @@ internal static class ImageReader
     /// <param name="path"></param>
     /// <param name="targetColor"></param>
     /// <returns></returns>
-    public static List<ImageKeyPoint> ReadImageKeyPoints(string path, Rgb24 targetColor)
+    public static List<ImageKeyPoint> ReadImageKeyPoints(string path, Color targetColor)
     {
         List<ImageKeyPoint> keyPoints = new List<ImageKeyPoint>();
         using var image = Read<Rgb24>(path);
@@ -41,7 +41,8 @@ internal static class ImageReader
                     var pixelRow = accessor.GetRowSpan(y);
                     for (int x = 0; x < pixelRow.Length; x++)
                     {
-                        if (pixelRow[x] == targetColor)
+                        ref var pixel = ref pixelRow[x];
+                        if (pixel.R == targetColor.R && pixel.G == targetColor.G && pixel.B == targetColor.B)
                         {
                             keyPoints.Add(new ImageKeyPoint() { Row = y, Column = x });
                         }
