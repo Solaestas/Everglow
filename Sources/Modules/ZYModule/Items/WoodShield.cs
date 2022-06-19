@@ -15,8 +15,8 @@ internal class WoodShield : BaseHeldItem<WoodShieldProj>
         base.SetDefaults();
         Item.width = 32;
         Item.height = 32;
-        Item.useTime = 60;
-        Item.useAnimation = 60;
+        Item.useTime = 40;
+        Item.useAnimation = 40;
         Item.knockBack = 5;
         Item.damage = 10;
         Item.shootSpeed = 20;
@@ -38,6 +38,7 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
     public Direction playerDirection;
     public Rotation internalRotation;
     public DefendData defendData;
+    public float oldDamage;
     //目测手臂帧图的位置
     public static readonly Vector2[] HoldOffset = new Vector2[]
     {
@@ -146,7 +147,7 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
         Projectile.friendly = true;
         Projectile.knockBack *= 3;
     }
-    public int AttackUpdate()
+    public int AttackUpdate()//localAI[0] -> stretchRate
     {
         ref float stretchRate = ref Projectile.localAI[0];
         Projectile.frame = 1;
@@ -154,13 +155,13 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
         Owner.itemTime = 2;
         //TODO 更换个更好的插值函数
         float factor = (float)Timer / Owner.itemTimeMax;
-        if (factor < 0.3f)
+        if (factor < 0.4f)
         {
-            stretchRate = MathUtils.Lerp(Math.Max(stretchRate, 0), -0.3f, factor / 0.3f);
+            stretchRate = MathUtils.Lerp(Math.Max(stretchRate, 0), -0.3f, factor / 0.4f);
         }
         else
         {
-            stretchRate = MathUtils.Lerp(-0.3f, 1, (factor - 0.3f) / 0.7f);
+            stretchRate = MathUtils.Lerp(-0.3f, 1, (factor - 0.4f) / 0.6f);
         }
         stretch = stretchRate switch
         {
@@ -199,17 +200,16 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
         var mouse = Owner.ToMouse();
         Projectile projectile = Projectile;
         projectile.frame = 2;
-        projectile.ai[1] = projectile.rotation;//AI[1]记录投掷时的角度
+        projectile.localAI[0] = projectile.rotation;//AI[1]记录投掷时的角度
         projectile.localAI[1] = Main.rand.NextBool() ? 1 : -1;//LocalAI[1]记录挥动方向，视觉效果不用同步
         FaceTo(mouse);
         projectile.tileCollide = true;
         projectile.velocity = mouse.NormalizeSafe() * item.Item.shootSpeed * Math.Max(1, mul * 0.2f);
-        ref float oldDamage = ref projectile.localAI[0];
         oldDamage = projectile.damage;
         projectile.damage = (int)(projectile.damage * mul * 0.4f);
         internalRotation.Reset();
     }
-    public int ThrowUpdate()
+    public int ThrowUpdate()//localAI[0] -> swingRotation localAI[1] -> swingDirection
     {
         Player owner = Owner;
         Projectile projectile = Projectile;
@@ -217,7 +217,8 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
         if (Timer < 10f)
         {
             owner.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full,
-                MathUtils.Lerp(projectile.ai[1] + 1f * projectile.localAI[1], projectile.ai[1] - 1f * projectile.localAI[1], Timer / 10f)
+                MathUtils.Lerp(projectile.localAI[0] + 1f * projectile.localAI[1], 
+                projectile.localAI[0] - 1f * projectile.localAI[1], Timer / 10f)
                 - MathHelper.PiOver2);
         }
         projectile.friendly = true;
@@ -242,9 +243,7 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
     public void ThrowEnd()
     {
         Projectile projectile = Projectile;
-        ref float oldDamage = ref projectile.localAI[0];
         projectile.damage = (int)oldDamage;
-        oldDamage = 0;
         projectile.friendly = false;
         projectile.velocity *= 0;
     }
@@ -323,20 +322,9 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
         player.noKnockback = true;
         StateID = GetStateID("PostDefend");
     }
-    public void DashAttackBegin()
-    {
-        var mouse = Owner.ToMouse();
-        FaceTo(mouse);
-        //TODO SoundEngine
-
-    }
     public int DashAttackUpdate()
     {
 
-        return -1;
-    }
-    public int DashThrowUpdate()
-    {
         return -1;
     }
     public void DefendBegin()
