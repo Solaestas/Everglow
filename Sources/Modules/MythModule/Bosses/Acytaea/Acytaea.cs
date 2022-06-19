@@ -9,28 +9,20 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea;
 public class Acytaea : ModNPC
 {
     private bool canDespawn = false;
-    private float DSdx = 0;
-    private float DSdy = 0;
     private int kill = -5;
     private int TranIndex = 0;
-    public bool Fly = false;
-    public bool Battle = false;
-    public bool CanUseWing = false;
-    private Vector2 AIMpos = new Vector2(200, 0);
-    private int FirstDir = -1;
+    public bool isFly = false;
+    public bool isBattle = false;
+    public bool canUseWing = false;
+    private Vector2 aiMpos = new Vector2(200, 0);
+    private int firstDir = -1;
     private int Dam = 140;
-    public static int MinorDir = -1;
-    private bool CheckSpwan = true;
+    public int minorDir = -1;
+    private bool checkSpwan = true;
     public static float ToPlayerRot = 0;
-    public static Vector2 HeadPos;
-    public static Vector2 LeftArmPos;
-    public static Vector2 RightArmPos;
-    public static Vector2 BodyPos;
-    public static Vector2 LeftWingPos;
-    public static Vector2 RightWingPos;
-    public static Vector2 LegPos;
-    public static Vector2 BladePos;
-    public static Vector2 BowPos;
+    public readonly static Vector2 RightWingPos = new Vector2(-18, 0);
+    public readonly static Vector2 RightArmPos = new Vector2(-10, 0);
+    public readonly static Vector2 LeftWingPos = new Vector2(-18, 0);
     public static float LeftArmRot = 0;
     public static float RightArmRot = 0;
     public static float BladePro = 0;
@@ -75,10 +67,6 @@ public class Acytaea : ModNPC
         NPCID.Sets.ActsLikeTownNPC[Type] = true;
         DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "雅斯塔亚");
     }
-    public override bool CheckActive()
-    {
-        return canDespawn;
-    }
     public override void SetDefaults()
     {
         NPC.townNPC = true;
@@ -104,14 +92,18 @@ public class Acytaea : ModNPC
         NPC.knockBackResist = 0;
         Music = MusicLoader.GetMusicSlot(Mod, "Musics/Acytaea");
     }
+    public override bool CheckActive()
+    {
+        return canDespawn;
+    }
     public override void AI()
     {
-        if (Battle)
+        if (isBattle)
         {
             NPC.aiStyle = -1;
-            if (CheckSpwan)
+            if (checkSpwan)
             {
-                CheckSpwan = false;
+                checkSpwan = false;
             }
             NPC.TargetClosest(false);
             Player player = Main.player[NPC.target];
@@ -119,118 +111,121 @@ public class Acytaea : ModNPC
             {
                 NPC.active = false;
                 NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, NPC.type);
-                if (Language.ActiveCulture.Name == "zh-Hans")
-                {
-                    int h = Main.rand.Next(6);
-                    if (h == 0)
-                    {
-                        Main.NewText("唔,好像……玩过了点", new Color(193, 0, 29));
-                    }
-                    if (h == 1)
-                    {
-                        Main.NewText("下手好像,有点重了", new Color(193, 0, 29));
-                    }
-                    if (h == 2)
-                    {
-                        Main.NewText("抱歉……我看你好像比其他生物强了不少,没控制住力度", new Color(193, 0, 29));
-                    }
-                    if (h == 3)
-                    {
-                        Main.NewText("诶,你的头怎么掉了", new Color(193, 0, 29));
-                    }
-                    if (h == 4)
-                    {
-                        Main.NewText("下次我会放点水", new Color(193, 0, 29));
-                    }
-                    if (h == 5)
-                    {
-                        Main.NewText("怎么,这就死了?", new Color(193, 0, 29));
-                    }
-                }
-                else if (Language.ActiveCulture.Name == "en-US")
-                {
-                    int h = Main.rand.Next(6);
-                    if (h == 0)
-                    {
-                        Main.NewText("Hmm...seems like I've done it too far", new Color(193, 0, 29));
-                    }
-                    if (h == 1)
-                    {
-                        Main.NewText("It might be a little bit heavy, to you", new Color(193, 0, 29));
-                    }
-                    if (h == 2)
-                    {
-                        Main.NewText("Sorry, I didn't control it much cuz you seemed to be much stronger than other creatures", new Color(193, 0, 29));
-                    }
-                    if (h == 3)
-                    {
-                        Main.NewText("Hey, where's your head?", new Color(193, 0, 29));
-                    }
-                    if (h == 4)
-                    {
-                        Main.NewText("Next time I'll try to be more gentle", new Color(193, 0, 29));
-                    }
-                    if (h == 5)
-                    {
-                        Main.NewText("What, died already?", new Color(193, 0, 29));
-                    }
-                }
-                else if (Language.ActiveCulture.Name == "ru-RU")
-                {
-                    int h = Main.rand.Next(6);
-                    if (h == 0)
-                    {
-                        Main.NewText("Хмм... кажется я зашла слишком далеко", new Color(193, 0, 29));
-                    }
-                    if (h == 1)
-                    {
-                        Main.NewText("Это может быть немного тяжело, для тебя", new Color(193, 0, 29));
-                    }
-                    if (h == 2)
-                    {
-                        Main.NewText("Прости, я не контролировала это потому что ты казался намного сильнее других существ", new Color(193, 0, 29));
-                    }
-                    if (h == 3)
-                    {
-                        Main.NewText("Хей, где твоя голова?", new Color(193, 0, 29));
-                    }
-                    if (h == 4)
-                    {
-                        Main.NewText("В следующий раз я постараюсь быть более нежнее", new Color(193, 0, 29));
-                    }
-                    if (h == 5)
-                    {
-                        Main.NewText("Что, ты уже умер?", new Color(193, 0, 29));
-                    }
-                }
-                else
-                {
-                    int h = Main.rand.Next(6);
-                    if (h == 0)
-                    {
-                        Main.NewText("Hmm...seems like I've done it too far", new Color(193, 0, 29));
-                    }
-                    if (h == 1)
-                    {
-                        Main.NewText("It might be a little bit heavy, to you", new Color(193, 0, 29));
-                    }
-                    if (h == 2)
-                    {
-                        Main.NewText("Sorry, I didn't control it much cuz you seemed to be much stronger than other creatures", new Color(193, 0, 29));
-                    }
-                    if (h == 3)
-                    {
-                        Main.NewText("Hey, where's your head?", new Color(193, 0, 29));
-                    }
-                    if (h == 4)
-                    {
-                        Main.NewText("Next time I'll try to be more gentle", new Color(193, 0, 29));
-                    }
-                    if (h == 5)
-                    {
-                        Main.NewText("What, died already?", new Color(193, 0, 29));
-                    }
-                }
+                //TODO 改用HJson
+                #region 对话
+                //if (Language.ActiveCulture.Name == "zh-Hans")
+                //{
+                //    int h = Main.rand.Next(6);
+                //    if (h == 0)
+                //    {
+                //        Main.NewText("唔,好像……玩过了点", new Color(193, 0, 29));
+                //    }
+                //    if (h == 1)
+                //    {
+                //        Main.NewText("下手好像,有点重了", new Color(193, 0, 29));
+                //    }
+                //    if (h == 2)
+                //    {
+                //        Main.NewText("抱歉……我看你好像比其他生物强了不少,没控制住力度", new Color(193, 0, 29));
+                //    }
+                //    if (h == 3)
+                //    {
+                //        Main.NewText("诶,你的头怎么掉了", new Color(193, 0, 29));
+                //    }
+                //    if (h == 4)
+                //    {
+                //        Main.NewText("下次我会放点水", new Color(193, 0, 29));
+                //    }
+                //    if (h == 5)
+                //    {
+                //        Main.NewText("怎么,这就死了?", new Color(193, 0, 29));
+                //    }
+                //}
+                //else if (Language.ActiveCulture.Name == "en-US")
+                //{
+                //    int h = Main.rand.Next(6);
+                //    if (h == 0)
+                //    {
+                //        Main.NewText("Hmm...seems like I've done it too far", new Color(193, 0, 29));
+                //    }
+                //    if (h == 1)
+                //    {
+                //        Main.NewText("It might be a little bit heavy, to you", new Color(193, 0, 29));
+                //    }
+                //    if (h == 2)
+                //    {
+                //        Main.NewText("Sorry, I didn't control it much cuz you seemed to be much stronger than other creatures", new Color(193, 0, 29));
+                //    }
+                //    if (h == 3)
+                //    {
+                //        Main.NewText("Hey, where's your head?", new Color(193, 0, 29));
+                //    }
+                //    if (h == 4)
+                //    {
+                //        Main.NewText("Next time I'll try to be more gentle", new Color(193, 0, 29));
+                //    }
+                //    if (h == 5)
+                //    {
+                //        Main.NewText("What, died already?", new Color(193, 0, 29));
+                //    }
+                //}
+                //else if (Language.ActiveCulture.Name == "ru-RU")
+                //{
+                //    int h = Main.rand.Next(6);
+                //    if (h == 0)
+                //    {
+                //        Main.NewText("Хмм... кажется я зашла слишком далеко", new Color(193, 0, 29));
+                //    }
+                //    if (h == 1)
+                //    {
+                //        Main.NewText("Это может быть немного тяжело, для тебя", new Color(193, 0, 29));
+                //    }
+                //    if (h == 2)
+                //    {
+                //        Main.NewText("Прости, я не контролировала это потому что ты казался намного сильнее других существ", new Color(193, 0, 29));
+                //    }
+                //    if (h == 3)
+                //    {
+                //        Main.NewText("Хей, где твоя голова?", new Color(193, 0, 29));
+                //    }
+                //    if (h == 4)
+                //    {
+                //        Main.NewText("В следующий раз я постараюсь быть более нежнее", new Color(193, 0, 29));
+                //    }
+                //    if (h == 5)
+                //    {
+                //        Main.NewText("Что, ты уже умер?", new Color(193, 0, 29));
+                //    }
+                //}
+                //else
+                //{
+                //    int h = Main.rand.Next(6);
+                //    if (h == 0)
+                //    {
+                //        Main.NewText("Hmm...seems like I've done it too far", new Color(193, 0, 29));
+                //    }
+                //    if (h == 1)
+                //    {
+                //        Main.NewText("It might be a little bit heavy, to you", new Color(193, 0, 29));
+                //    }
+                //    if (h == 2)
+                //    {
+                //        Main.NewText("Sorry, I didn't control it much cuz you seemed to be much stronger than other creatures", new Color(193, 0, 29));
+                //    }
+                //    if (h == 3)
+                //    {
+                //        Main.NewText("Hey, where's your head?", new Color(193, 0, 29));
+                //    }
+                //    if (h == 4)
+                //    {
+                //        Main.NewText("Next time I'll try to be more gentle", new Color(193, 0, 29));
+                //    }
+                //    if (h == 5)
+                //    {
+                //        Main.NewText("What, died already?", new Color(193, 0, 29));
+                //    }
+                //}
+                #endregion
                 if ((player.Center - NPC.Center).Length() > 6000)
                 {
                     NPC.active = false;
@@ -247,15 +242,12 @@ public class Acytaea : ModNPC
                 canDespawn = false;
             }
             NPC.localAI[0] += 1;
-            MinorDir = NPC.spriteDirection * -1;
-            RightWingPos = new Vector2(-18, 0) * NPC.spriteDirection;
-            LeftWingPos = new Vector2(-18, 0) * NPC.spriteDirection;
-            RightArmPos = new Vector2(-10, 0) * NPC.spriteDirection;
+            minorDir = NPC.spriteDirection * -1;
             if (NPC.localAI[0] == 1)
             {
                 if (Main.rand.Next(100) > 50)
                 {
-                    FirstDir = 1;
+                    firstDir = 1;
                 }
                 HasCricle = false;
                 ACircleR = 0;
@@ -293,8 +285,8 @@ public class Acytaea : ModNPC
                 {
                     Music = MusicLoader.GetMusicSlot(Mod, "Musics/Acytaea");
                 }
-                AIMpos = new Vector2(200 * FirstDir, 0);
-                if ((AIMpos + player.Center - NPC.Center).Length() < 240)
+                aiMpos = new Vector2(200 * firstDir, 0);
+                if ((aiMpos + player.Center - NPC.Center).Length() < 240)
                 {
                     if (NPC.Center.X > player.Center.X)
                     {
@@ -318,10 +310,10 @@ public class Acytaea : ModNPC
                     }
                     NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
                 }
-                Fly = true;
-                if (Fly)
+                isFly = true;
+                if (isFly)
                 {
-                    Vector2 v0 = AIMpos + player.Center;
+                    Vector2 v0 = aiMpos + player.Center;
                     Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
                     v1 = Vector2.Normalize(v0 - NPC.Center - NPC.velocity);
                     NPC.noGravity = true;
@@ -341,24 +333,24 @@ public class Acytaea : ModNPC
                     NPC.velocity.X += v1.X * 0.08f;
                     NPC.velocity.Y += 0.08f;
                 }
-                CanUseWing = (AIMpos + player.Center - NPC.Center).Length() > 1 && (AIMpos + player.Center - NPC.Center).Y < 0;
+                canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
             }//前往固定位置
             if (NPC.localAI[0] > 400 && NPC.localAI[0] <= 500)
             {
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
                 NPC.velocity *= 0.96f;
-                CanUseWing = false;
+                canUseWing = false;
             }//刹车
             if (NPC.localAI[0] > 500 && NPC.localAI[0] <= 530)
             {
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
                 NPC.velocity *= 0.96f;
-                CanUseWing = false;
-                RightArmRot += (float)(Math.PI * 1.1 / 30f) * MinorDir;
+                canUseWing = false;
+                RightArmRot += (float)(Math.PI * 1.1 / 30f) * minorDir;
                 if (NPC.localAI[0] == 520)
                 {
                     SoundEngine.PlaySound(new SoundStyle("MythMod/Sounds/AcytaeaPortalOpening"), NPC.Center);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(88 * MinorDir - (MinorDir - 1) * 8, -158), Vector2.Zero, ModContent.ProjectileType<Projectiles.Typeless.AcytaeaEffect>(), 0, 1, Main.myPlayer, MinorDir);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(88 * minorDir - (minorDir - 1) * 8, -158), Vector2.Zero, ModContent.ProjectileType<Projectiles.Typeless.AcytaeaEffect>(), 0, 1, Main.myPlayer, minorDir);
                 }
             }//上特效
             if (NPC.localAI[0] > 530 && NPC.localAI[0] <= 650)
@@ -368,7 +360,7 @@ public class Acytaea : ModNPC
                 NPC.velocity *= 0.96f;
                 float a0 = (NPC.localAI[0] - 530) / 120f;
                 BladePro = a0 * a0;
-                CanUseWing = false;
+                canUseWing = false;
             }//抬右手
             if (NPC.localAI[0] > 650 && NPC.localAI[0] <= 680)
             {
@@ -382,13 +374,13 @@ public class Acytaea : ModNPC
                 }
                 HasBlade = true;//拿刀
                 float CosA0 = (float)(Math.Cos((NPC.localAI[0] - 650) / 30d * Math.PI) + 1) / 2f;//构造辅助函数
-                RightArmRot = CosA0 * (float)(Math.PI * 1.1) * MinorDir;//旋转角度撕裂感
+                RightArmRot = CosA0 * (float)(Math.PI * 1.1) * minorDir;//旋转角度撕裂感
                 OldBladeRot = BladeRot;//保证旋转方向正确记录
-                BladeRot = (float)(RightArmRot - Math.PI * 1.1 - (MinorDir - 1) * -0.3854);//刀的角度等于手臂角度-1.1Pi,此项由贴图决定
+                BladeRot = (float)(RightArmRot - Math.PI * 1.1 - (minorDir - 1) * -0.3854);//刀的角度等于手臂角度-1.1Pi,此项由贴图决定
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;//随速度前倾
                 NPC.velocity *= 0.96f;//考虑阻力
                 BladePro = 1;//进程打满
-                CanUseWing = false;//不准飞
+                canUseWing = false;//不准飞
             }//第一刀
             if (NPC.localAI[0] > 690 && NPC.localAI[0] <= 720)
             {
@@ -406,13 +398,13 @@ public class Acytaea : ModNPC
                     AimBladeSquz = Main.rand.NextFloat(0.65f, 1f);
                 }
                 float CosA0 = (float)(Math.Cos((NPC.localAI[0] - 690) / 30d * Math.PI) + 1) / 2f;//构造辅助函数
-                RightArmRot = (1 - CosA0) * (float)(Math.PI * 1.1) * MinorDir;//旋转角度撕裂感
+                RightArmRot = (1 - CosA0) * (float)(Math.PI * 1.1) * minorDir;//旋转角度撕裂感
                 OldBladeRot = BladeRot;//保证旋转方向正确记录
-                BladeRot = (float)(RightArmRot - Math.PI * 1.1 - (MinorDir - 1) * -0.3854);//刀的角度等于手臂角度-1.1Pi,此项由贴图决定
+                BladeRot = (float)(RightArmRot - Math.PI * 1.1 - (minorDir - 1) * -0.3854);//刀的角度等于手臂角度-1.1Pi,此项由贴图决定
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;//随速度前倾
                 NPC.velocity *= 0.96f;//考虑阻力
                 BladePro = 1;//进程打满
-                CanUseWing = false;//不准飞
+                canUseWing = false;//不准飞
             }//第二刀
             if (NPC.localAI[0] > 730 && NPC.localAI[0] <= 820)
             {
@@ -430,13 +422,13 @@ public class Acytaea : ModNPC
                     AimBladeSquz = Main.rand.NextFloat(0.25f, 0.4f);
                 }
                 float CosA0 = (float)(Math.Cos((NPC.localAI[0] - 730) / 90d * Math.PI) + 1) * 2f;//构造辅助函数
-                RightArmRot = (CosA0 + 1) * (float)(Math.PI * 1) * MinorDir;//旋转角度撕裂感
+                RightArmRot = (CosA0 + 1) * (float)(Math.PI * 1) * minorDir;//旋转角度撕裂感
                 OldBladeRot = BladeRot;//保证旋转方向正确记录
-                BladeRot = (float)(RightArmRot - Math.PI * 1 - (MinorDir - 1) * -0.3854);//刀的角度等于手臂角度-1.1Pi,此项由贴图决定
+                BladeRot = (float)(RightArmRot - Math.PI * 1 - (minorDir - 1) * -0.3854);//刀的角度等于手臂角度-1.1Pi,此项由贴图决定
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;//随速度前倾
                 NPC.velocity *= 0.96f;//考虑阻力
                 BladePro = 1;//进程打满
-                CanUseWing = false;//不准飞
+                canUseWing = false;//不准飞
             }//第三刀
             if (NPC.localAI[0] > 830 && NPC.localAI[0] <= 860)
             {
@@ -454,13 +446,13 @@ public class Acytaea : ModNPC
                     AimBladeSquz = Main.rand.NextFloat(0.75f, 0.9f);
                 }
                 float CosA0 = (float)(Math.Cos((NPC.localAI[0] - 830) / 30d * Math.PI) + 1) / 2f;//构造辅助函数
-                RightArmRot = (0.7f - CosA0) * (float)(Math.PI * 1.6) * MinorDir;//旋转角度撕裂感
+                RightArmRot = (0.7f - CosA0) * (float)(Math.PI * 1.6) * minorDir;//旋转角度撕裂感
                 OldBladeRot = BladeRot;//保证旋转方向正确记录
-                BladeRot = (float)(RightArmRot - Math.PI * 1 - (MinorDir - 1) * -0.3854);//刀的角度等于手臂角度-1.1Pi,此项由贴图决定
+                BladeRot = (float)(RightArmRot - Math.PI * 1 - (minorDir - 1) * -0.3854);//刀的角度等于手臂角度-1.1Pi,此项由贴图决定
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;//随速度前倾
                 NPC.velocity *= 0.96f;//考虑阻力
                 BladePro = 1;//进程打满
-                CanUseWing = false;//不准飞
+                canUseWing = false;//不准飞
             }//第四刀
             if (NPC.localAI[0] > 860 && NPC.localAI[0] <= 900)
             {
@@ -468,7 +460,7 @@ public class Acytaea : ModNPC
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;//随速度前倾
                 NPC.velocity *= 0.96f;//考虑阻力
                 BladePro = 1;//进程打满
-                CanUseWing = false;//不准飞
+                canUseWing = false;//不准飞
             }//休息
             if (NPC.localAI[0] > 900 && NPC.localAI[0] <= 920)
             {
@@ -510,9 +502,9 @@ public class Acytaea : ModNPC
                 NPC.velocity *= 0.96f;//考虑阻力
                 BladePro = 1;//进程打满
                 BladeGlowPro = (float)(-Math.Cos((NPC.localAI[0] - 900) / 60d * Math.PI) + 1) / 2f;
-                CanUseWing = false;//不准飞
+                canUseWing = false;//不准飞
                 RightArmRot = (float)(1.1 * Math.PI);//旋转角度撕裂感
-                BladeRot = (float)(RightArmRot - Math.PI * 1 - (MinorDir - 1) * -0.3854);//刀的角度等于手臂角度-1.1Pi,此项由贴图决定
+                BladeRot = (float)(RightArmRot - Math.PI * 1 - (minorDir - 1) * -0.3854);//刀的角度等于手臂角度-1.1Pi,此项由贴图决定
             }//释放能量
             if (NPC.localAI[0] > 960 && NPC.localAI[0] <= 990)
             {
@@ -530,14 +522,14 @@ public class Acytaea : ModNPC
                     AimBladeSquz = Main.rand.NextFloat(0.65f, 1f);
                 }
                 float CosA0 = (float)(Math.Cos((NPC.localAI[0] - 960) / 30d * Math.PI) + 1) / 2f;//构造辅助函数
-                RightArmRot = CosA0 * (float)(Math.PI * 1.1) * MinorDir;//旋转角度撕裂感
+                RightArmRot = CosA0 * (float)(Math.PI * 1.1) * minorDir;//旋转角度撕裂感
                 OldBladeRot = BladeRot;//保证旋转方向正确记录
-                BladeRot = (float)(RightArmRot - Math.PI * 1.1 - (MinorDir - 1) * -0.3854);//刀的角度等于手臂角度-1.1Pi,此项由贴图决定
+                BladeRot = (float)(RightArmRot - Math.PI * 1.1 - (minorDir - 1) * -0.3854);//刀的角度等于手臂角度-1.1Pi,此项由贴图决定
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;//随速度前倾
                 NPC.velocity *= 0.96f;//考虑阻力
                 BladePro = 1;//进程打满
                 BladeGlowPro = 1;
-                CanUseWing = false;//不准飞
+                canUseWing = false;//不准飞
                 float ka = Main.rand.NextFloat(Main.rand.NextFloat(0.65f, 1f), 1f);
                 if (NPC.localAI[0] == 975)
                 {
@@ -561,14 +553,14 @@ public class Acytaea : ModNPC
                     AimBladeSquz = Main.rand.NextFloat(0.65f, 1f);
                 }
                 float CosA0 = (float)(Math.Cos((NPC.localAI[0] - 1000) / 30d * Math.PI) + 1) / 2f;//构造辅助函数
-                RightArmRot = (1 - CosA0) * (float)(Math.PI * 1.1) * MinorDir;//旋转角度撕裂感
+                RightArmRot = (1 - CosA0) * (float)(Math.PI * 1.1) * minorDir;//旋转角度撕裂感
                 OldBladeRot = BladeRot;//保证旋转方向正确记录
-                BladeRot = (float)(RightArmRot - Math.PI * 1.1 - (MinorDir - 1) * -0.3854);//刀的角度等于手臂角度-1.1Pi,此项由贴图决定
+                BladeRot = (float)(RightArmRot - Math.PI * 1.1 - (minorDir - 1) * -0.3854);//刀的角度等于手臂角度-1.1Pi,此项由贴图决定
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;//随速度前倾
                 NPC.velocity *= 0.96f;//考虑阻力
                 BladePro = 1;//进程打满
                 BladeGlowPro = 1;
-                CanUseWing = false;//不准飞
+                canUseWing = false;//不准飞
                 float ka = Main.rand.NextFloat(Main.rand.NextFloat(0.65f, 1f), 1f);
                 if (NPC.localAI[0] == 1015)
                 {
@@ -579,8 +571,8 @@ public class Acytaea : ModNPC
             if (NPC.localAI[0] > 1030 && NPC.localAI[0] <= 1200)//拉位置
             {
                 HasBlade = true;//拿刀
-                AIMpos = new Vector2(500 * FirstDir, 0);
-                if ((AIMpos + player.Center - NPC.Center).Length() < 240)
+                aiMpos = new Vector2(500 * firstDir, 0);
+                if ((aiMpos + player.Center - NPC.Center).Length() < 240)
                 {
                     if (NPC.Center.X > player.Center.X)
                     {
@@ -604,10 +596,10 @@ public class Acytaea : ModNPC
                     }
                     NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
                 }
-                Fly = true;
-                if (Fly)
+                isFly = true;
+                if (isFly)
                 {
-                    Vector2 v0 = AIMpos + player.Center;
+                    Vector2 v0 = aiMpos + player.Center;
                     Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
                     v1 = Vector2.Normalize(v0 - NPC.Center - NPC.velocity);
                     NPC.noGravity = true;
@@ -627,7 +619,7 @@ public class Acytaea : ModNPC
                     NPC.velocity.X += v1.X * 0.08f;
                     NPC.velocity.Y += 0.08f;
                 }
-                CanUseWing = (AIMpos + player.Center - NPC.Center).Length() > 1 && (AIMpos + player.Center - NPC.Center).Y < 0;//可以飞了
+                canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;//可以飞了
                 BladePro = 1;//进程打满
                 BladeGlowPro = 1;
             }//换位
@@ -644,11 +636,11 @@ public class Acytaea : ModNPC
                 }
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
                 NPC.velocity *= 0.96f;
-                CanUseWing = false;
+                canUseWing = false;
             }//释放幻影
             if (NPC.localAI[0] > 1290 && NPC.localAI[0] <= 1920)
             {
-                AIMpos = new Vector2(400, 0).RotatedBy(NPC.localAI[0] / 40d);
+                aiMpos = new Vector2(400, 0).RotatedBy(NPC.localAI[0] / 40d);
                 if (NPC.Center.X > player.Center.X)
                 {
                     NPC.spriteDirection = -1;
@@ -658,17 +650,17 @@ public class Acytaea : ModNPC
                     NPC.spriteDirection = 1;
                 }
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
-                Fly = true;
-                if (Fly)
+                isFly = true;
+                if (isFly)
                 {
-                    Vector2 v0 = AIMpos + player.Center;
+                    Vector2 v0 = aiMpos + player.Center;
                     Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
                     v1 = (v0 - NPC.Center + v1 * 60f) / 480f;
                     NPC.noGravity = true;
                     NPC.velocity += v1;
                     NPC.velocity *= 0.96f;
                 }
-                CanUseWing = (AIMpos + player.Center - NPC.Center).Length() > 1 && (AIMpos + player.Center - NPC.Center).Y < 0;
+                canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
                 if (NPC.localAI[0] % 70 > 0 && NPC.localAI[0] % 70 <= 30)
                 {
                     HasBlade = true;//拿刀
@@ -679,13 +671,13 @@ public class Acytaea : ModNPC
                         ToPlayerRot = 0;//记录玩家方向
                     }
                     float CosA0 = (float)(Math.Cos(NPC.localAI[0] % 70 / 30d * Math.PI) + 1) / 2f;//构造辅助函数
-                    RightArmRot = CosA0 * (float)(Math.PI * 1.1) * MinorDir + ToPlayerRot;//旋转角度撕裂感
+                    RightArmRot = CosA0 * (float)(Math.PI * 1.1) * minorDir + ToPlayerRot;//旋转角度撕裂感
                     OldBladeRot = BladeRot;//保证旋转方向正确记录
-                    BladeRot = (float)(RightArmRot - Math.PI * 1.1 - (MinorDir - 1) * -0.3854);//刀的角度等于手臂角度-1.1Pi,此项由贴图决定
+                    BladeRot = (float)(RightArmRot - Math.PI * 1.1 - (minorDir - 1) * -0.3854);//刀的角度等于手臂角度-1.1Pi,此项由贴图决定
                     NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;//随速度前倾
                     BladePro = 1;//进程打满
                     BladeGlowPro = 1;
-                    CanUseWing = false;//不准飞
+                    canUseWing = false;//不准飞
                     float ka = Main.rand.NextFloat(Main.rand.NextFloat(0.65f, 1f), 1f);
                     if (NPC.localAI[0] % 70 == 15)
                     {
@@ -707,13 +699,13 @@ public class Acytaea : ModNPC
                         ToPlayerRot = 0;//记录玩家方向
                     }
                     float CosA0 = (float)(Math.Cos((NPC.localAI[0] % 70 - 40) / 30d * Math.PI) + 1) / 2f;//构造辅助函数
-                    RightArmRot = (1 - CosA0) * (float)(Math.PI * 1.1) * MinorDir + ToPlayerRot;//旋转角度撕裂感
+                    RightArmRot = (1 - CosA0) * (float)(Math.PI * 1.1) * minorDir + ToPlayerRot;//旋转角度撕裂感
                     OldBladeRot = BladeRot;//保证旋转方向正确记录
-                    BladeRot = (float)(RightArmRot - Math.PI * 1.1 - (MinorDir - 1) * -0.3854);//刀的角度等于手臂角度-1.1Pi,此项由贴图决定
+                    BladeRot = (float)(RightArmRot - Math.PI * 1.1 - (minorDir - 1) * -0.3854);//刀的角度等于手臂角度-1.1Pi,此项由贴图决定
                     NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;//随速度前倾
                     BladePro = 1;//进程打满
                     BladeGlowPro = 1;
-                    CanUseWing = false;//不准飞
+                    canUseWing = false;//不准飞
                     float ka = Main.rand.NextFloat(Main.rand.NextFloat(0.65f, 1f), 1f);
                     if (NPC.localAI[0] % 70 == 45)
                     {
@@ -797,7 +789,7 @@ public class Acytaea : ModNPC
 
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
                 NPC.velocity *= 0.96f;
-                CanUseWing = false;
+                canUseWing = false;
             }//打爆幻影
             if (NPC.localAI[0] > 1960 && NPC.localAI[0] <= 2080)//回收碎片
             {
@@ -830,7 +822,7 @@ public class Acytaea : ModNPC
                 }
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
                 NPC.velocity *= 0.96f;
-                CanUseWing = false;
+                canUseWing = false;
             }//回收碎片
             if (NPC.localAI[0] > 2080 && NPC.localAI[0] <= 2380)
             {
@@ -858,9 +850,9 @@ public class Acytaea : ModNPC
                     Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaTornado5>(), 0, 1, Main.myPlayer);
                 }
                 float CosA0 = (float)(Math.Cos((NPC.localAI[0] - 2080) / 300d * Math.PI) + 1) * 16f;//构造辅助函数
-                RightArmRot = (CosA0 + 1) * (float)(Math.PI * 1) * MinorDir;//旋转角度撕裂感
+                RightArmRot = (CosA0 + 1) * (float)(Math.PI * 1) * minorDir;//旋转角度撕裂感
                 OldBladeRot = BladeRot;//保证旋转方向正确记录
-                BladeRot = (float)(RightArmRot - Math.PI * 1 - (MinorDir - 1) * -0.3854);//刀的角度等于手臂角度-1.1Pi,此项由贴图决定
+                BladeRot = (float)(RightArmRot - Math.PI * 1 - (minorDir - 1) * -0.3854);//刀的角度等于手臂角度-1.1Pi,此项由贴图决定
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;//随速度前倾
                 BladePro = 1;//进程打满
                 BladeGlowPro = 1;
@@ -868,13 +860,13 @@ public class Acytaea : ModNPC
                 NPC.velocity.X -= b0 * b0;
                 NPC.velocity *= 0.98f;
                 NPC.spriteDirection = Math.Sign(NPC.velocity.X);
-                CanUseWing = true;//不准飞
+                canUseWing = true;//不准飞
             }//龙卷风
             if (NPC.localAI[0] > 2400 && NPC.localAI[0] <= 2500)
             {
                 COmega = 0;
                 SwirlPro = 12;
-                AIMpos = new Vector2(-600, -400);
+                aiMpos = new Vector2(-600, -400);
                 if (NPC.Center.X > player.Center.X)
                 {
                     NPC.spriteDirection = -1;
@@ -884,10 +876,10 @@ public class Acytaea : ModNPC
                     NPC.spriteDirection = 1;
                 }
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
-                Fly = true;
-                if (Fly)
+                isFly = true;
+                if (isFly)
                 {
-                    Vector2 v0 = AIMpos + player.Center;
+                    Vector2 v0 = aiMpos + player.Center;
                     Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
                     v1 = (v0 - NPC.Center + v1 * 60f) / 480f;
                     NPC.noGravity = true;
@@ -905,11 +897,11 @@ public class Acytaea : ModNPC
                     Vector2 vf = Vector2.Normalize(player.Center - NPC.Center);
                     Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - vf * 60, vf * 2, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaLight>(), Dam, 3, player.whoAmI, ka);
                 }
-                CanUseWing = (AIMpos + player.Center - NPC.Center).Length() > 1 && (AIMpos + player.Center - NPC.Center).Y < 0;
+                canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
             }//左上
             if (NPC.localAI[0] > 2500 && NPC.localAI[0] <= 2600)
             {
-                AIMpos = new Vector2(600, -400);
+                aiMpos = new Vector2(600, -400);
                 if (NPC.Center.X > player.Center.X)
                 {
                     NPC.spriteDirection = -1;
@@ -919,10 +911,10 @@ public class Acytaea : ModNPC
                     NPC.spriteDirection = 1;
                 }
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
-                Fly = true;
-                if (Fly)
+                isFly = true;
+                if (isFly)
                 {
-                    Vector2 v0 = AIMpos + player.Center;
+                    Vector2 v0 = aiMpos + player.Center;
                     Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
                     v1 = (v0 - NPC.Center + v1 * 60f) / 480f;
                     NPC.noGravity = true;
@@ -940,11 +932,11 @@ public class Acytaea : ModNPC
                     Vector2 vf = Vector2.Normalize(player.Center - NPC.Center);
                     Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - vf * 60, vf * 2, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaLight>(), Dam, 3, player.whoAmI, ka);
                 }
-                CanUseWing = (AIMpos + player.Center - NPC.Center).Length() > 1 && (AIMpos + player.Center - NPC.Center).Y < 0;
+                canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
             }//右上
             if (NPC.localAI[0] > 2600 && NPC.localAI[0] <= 2700)
             {
-                AIMpos = new Vector2(-600, 400);
+                aiMpos = new Vector2(-600, 400);
                 if (NPC.Center.X > player.Center.X)
                 {
                     NPC.spriteDirection = -1;
@@ -954,10 +946,10 @@ public class Acytaea : ModNPC
                     NPC.spriteDirection = 1;
                 }
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
-                Fly = true;
-                if (Fly)
+                isFly = true;
+                if (isFly)
                 {
-                    Vector2 v0 = AIMpos + player.Center;
+                    Vector2 v0 = aiMpos + player.Center;
                     Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
                     v1 = (v0 - NPC.Center + v1 * 60f) / 480f;
                     NPC.noGravity = true;
@@ -975,11 +967,11 @@ public class Acytaea : ModNPC
                     Vector2 vf = Vector2.Normalize(player.Center - NPC.Center);
                     Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - vf * 60, vf * 2, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaLight>(), Dam, 3, player.whoAmI, ka);
                 }
-                CanUseWing = (AIMpos + player.Center - NPC.Center).Length() > 1 && (AIMpos + player.Center - NPC.Center).Y < 0;
+                canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
             }//左下
             if (NPC.localAI[0] > 2700 && NPC.localAI[0] <= 2800)
             {
-                AIMpos = new Vector2(600, 400);
+                aiMpos = new Vector2(600, 400);
                 if (NPC.Center.X > player.Center.X)
                 {
                     NPC.spriteDirection = -1;
@@ -989,10 +981,10 @@ public class Acytaea : ModNPC
                     NPC.spriteDirection = 1;
                 }
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
-                Fly = true;
-                if (Fly)
+                isFly = true;
+                if (isFly)
                 {
-                    Vector2 v0 = AIMpos + player.Center;
+                    Vector2 v0 = aiMpos + player.Center;
                     Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
                     v1 = (v0 - NPC.Center + v1 * 60f) / 480f;
                     NPC.noGravity = true;
@@ -1010,11 +1002,11 @@ public class Acytaea : ModNPC
                     Vector2 vf = Vector2.Normalize(player.Center - NPC.Center);
                     Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - vf * 60, vf * 2, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaLight>(), Dam, 3, player.whoAmI, ka);
                 }
-                CanUseWing = (AIMpos + player.Center - NPC.Center).Length() > 1 && (AIMpos + player.Center - NPC.Center).Y < 0;
+                canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
             }//右下
             if (NPC.localAI[0] > 2800 && NPC.localAI[0] <= 2900)
             {
-                AIMpos = new Vector2(-500, 0);
+                aiMpos = new Vector2(-500, 0);
                 if (NPC.Center.X > player.Center.X)
                 {
                     NPC.spriteDirection = -1;
@@ -1024,17 +1016,17 @@ public class Acytaea : ModNPC
                     NPC.spriteDirection = 1;
                 }
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
-                Fly = true;
-                if (Fly)
+                isFly = true;
+                if (isFly)
                 {
-                    Vector2 v0 = AIMpos + player.Center;
+                    Vector2 v0 = aiMpos + player.Center;
                     Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
                     v1 = (v0 - NPC.Center + v1 * 60f) / 480f;
                     NPC.noGravity = true;
                     NPC.velocity += v1;
                     NPC.velocity *= 0.96f;
                 }
-                CanUseWing = (AIMpos + player.Center - NPC.Center).Length() > 1 && (AIMpos + player.Center - NPC.Center).Y < 0;
+                canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
             }//归位
             if (NPC.localAI[0] > 2900 && NPC.localAI[0] <= 3060)
             {
@@ -1045,7 +1037,7 @@ public class Acytaea : ModNPC
                 else
                 {
                     NPC.alpha = 255;
-                    AIMpos = new Vector2(350, 0);
+                    aiMpos = new Vector2(350, 0);
                     if (NPC.Center.X > player.Center.X)
                     {
                         NPC.spriteDirection = -1;
@@ -1055,17 +1047,17 @@ public class Acytaea : ModNPC
                         NPC.spriteDirection = 1;
                     }
                     NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
-                    Fly = true;
-                    if (Fly)
+                    isFly = true;
+                    if (isFly)
                     {
-                        Vector2 v0 = AIMpos + player.Center;
+                        Vector2 v0 = aiMpos + player.Center;
                         Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
                         v1 = (v0 - NPC.Center + v1 * 60f) / 480f;
                         NPC.noGravity = true;
                         NPC.velocity += v1;
                         NPC.velocity *= 0.96f;
                     }
-                    CanUseWing = (AIMpos + player.Center - NPC.Center).Length() > 1 && (AIMpos + player.Center - NPC.Center).Y < 0;
+                    canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
                 }
 
                 if (NPC.localAI[0] == 2905)
@@ -1073,7 +1065,7 @@ public class Acytaea : ModNPC
                     for (int f = 0; f < 4; f++)
                     {
                         int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow2>(), 0, -100, (f - 1.5f) * 200, 1);
-                        Vector2 vc = (new Vector2(-100, (f - 1.5f) * 200) - AIMpos) / 30f;
+                        Vector2 vc = (new Vector2(-100, (f - 1.5f) * 200) - aiMpos) / 30f;
                         Main.npc[g].velocity = vc;
                     }
                 }
@@ -1088,7 +1080,7 @@ public class Acytaea : ModNPC
                 {
                     NPC.alpha = 0;
                 }
-                AIMpos = new Vector2(350, 0);
+                aiMpos = new Vector2(350, 0);
                 if (NPC.Center.X > player.Center.X)
                 {
                     NPC.spriteDirection = -1;
@@ -1098,21 +1090,21 @@ public class Acytaea : ModNPC
                     NPC.spriteDirection = 1;
                 }
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
-                Fly = true;
-                if (Fly)
+                isFly = true;
+                if (isFly)
                 {
-                    Vector2 v0 = AIMpos + player.Center;
+                    Vector2 v0 = aiMpos + player.Center;
                     Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
                     v1 = (v0 - NPC.Center + v1 * 60f) / 480f;
                     NPC.noGravity = true;
                     NPC.velocity += v1;
                     NPC.velocity *= 0.96f;
                 }
-                CanUseWing = (AIMpos + player.Center - NPC.Center).Length() > 1 && (AIMpos + player.Center - NPC.Center).Y < 0;
+                canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
             }//显现
             if (NPC.localAI[0] > 3212 && NPC.localAI[0] <= 3250)
             {
-                AIMpos = new Vector2(350, 0);
+                aiMpos = new Vector2(350, 0);
                 if (NPC.Center.X > player.Center.X)
                 {
                     NPC.spriteDirection = -1;
@@ -1122,17 +1114,17 @@ public class Acytaea : ModNPC
                     NPC.spriteDirection = 1;
                 }
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
-                Fly = true;
-                if (Fly)
+                isFly = true;
+                if (isFly)
                 {
-                    Vector2 v0 = AIMpos + player.Center;
+                    Vector2 v0 = aiMpos + player.Center;
                     Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
                     v1 = (v0 - NPC.Center + v1 * 60f) / 480f;
                     NPC.noGravity = true;
                     NPC.velocity += v1;
                     NPC.velocity *= 0.96f;
                 }
-                CanUseWing = (AIMpos + player.Center - NPC.Center).Length() > 1 && (AIMpos + player.Center - NPC.Center).Y < 0;
+                canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
                 if (NPC.Center.X > player.Center.X)
                 {
                     NPC.spriteDirection = -1;
@@ -1147,14 +1139,14 @@ public class Acytaea : ModNPC
                     AimBladeSquz = Main.rand.NextFloat(0.65f, 1f);
                 }
                 float CosA0 = (float)(Math.Cos((NPC.localAI[0] - 3212) / 38d * Math.PI) + 1) / 2f;//构造辅助函数
-                RightArmRot = CosA0 * (float)(Math.PI * 1.1) * MinorDir;//旋转角度撕裂感
+                RightArmRot = CosA0 * (float)(Math.PI * 1.1) * minorDir;//旋转角度撕裂感
                 OldBladeRot = BladeRot;//保证旋转方向正确记录
-                BladeRot = (float)(RightArmRot - Math.PI * 1.1 - (MinorDir - 1) * -0.3854);//刀的角度等于手臂角度-1.1Pi,此项由贴图决定
+                BladeRot = (float)(RightArmRot - Math.PI * 1.1 - (minorDir - 1) * -0.3854);//刀的角度等于手臂角度-1.1Pi,此项由贴图决定
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;//随速度前倾
                 NPC.velocity *= 0.96f;//考虑阻力
                 BladePro = 1;//进程打满
                 BladeGlowPro = 1;
-                CanUseWing = false;//不准飞
+                canUseWing = false;//不准飞
                 float ka = Main.rand.NextFloat(Main.rand.NextFloat(0.65f, 1f), 1f);
                 if (NPC.localAI[0] == 3227)
                 {
@@ -1201,7 +1193,7 @@ public class Acytaea : ModNPC
             }//神环
             if (NPC.localAI[0] > 3250 && NPC.localAI[0] <= 3500)
             {
-                AIMpos = new Vector2(350, 0);
+                aiMpos = new Vector2(350, 0);
                 if (NPC.Center.X > player.Center.X)
                 {
                     NPC.spriteDirection = -1;
@@ -1211,17 +1203,17 @@ public class Acytaea : ModNPC
                     NPC.spriteDirection = 1;
                 }
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
-                Fly = true;
-                if (Fly)
+                isFly = true;
+                if (isFly)
                 {
-                    Vector2 v0 = AIMpos + player.Center;
+                    Vector2 v0 = aiMpos + player.Center;
                     Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
                     v1 = (v0 - NPC.Center + v1 * 60f) / 480f;
                     NPC.noGravity = true;
                     NPC.velocity += v1;
                     NPC.velocity *= 0.96f;
                 }
-                CanUseWing = (AIMpos + player.Center - NPC.Center).Length() > 1 && (AIMpos + player.Center - NPC.Center).Y < 0;
+                canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
                 if (NPC.localAI[0] < 3252)
                 {
                     NPC.alpha = 0;
@@ -1242,7 +1234,7 @@ public class Acytaea : ModNPC
             }//←
             if (NPC.localAI[0] > 3500 && NPC.localAI[0] <= 3750)
             {
-                AIMpos = new Vector2(0, -350);
+                aiMpos = new Vector2(0, -350);
                 if (NPC.Center.X > player.Center.X)
                 {
                     NPC.spriteDirection = -1;
@@ -1252,17 +1244,17 @@ public class Acytaea : ModNPC
                     NPC.spriteDirection = 1;
                 }
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
-                Fly = true;
-                if (Fly)
+                isFly = true;
+                if (isFly)
                 {
-                    Vector2 v0 = AIMpos + player.Center;
+                    Vector2 v0 = aiMpos + player.Center;
                     Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
                     v1 = (v0 - NPC.Center + v1 * 60f) / 480f;
                     NPC.noGravity = true;
                     NPC.velocity += v1;
                     NPC.velocity *= 0.96f;
                 }
-                CanUseWing = (AIMpos + player.Center - NPC.Center).Length() > 1 && (AIMpos + player.Center - NPC.Center).Y < 0;
+                canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
                 if (NPC.localAI[0] < 3502)
                 {
                     NPC.alpha = 0;
@@ -1283,7 +1275,7 @@ public class Acytaea : ModNPC
             }//↓
             if (NPC.localAI[0] > 3750 && NPC.localAI[0] <= 4000)
             {
-                AIMpos = new Vector2(-350, 0);
+                aiMpos = new Vector2(-350, 0);
                 if (NPC.Center.X > player.Center.X)
                 {
                     NPC.spriteDirection = -1;
@@ -1293,17 +1285,17 @@ public class Acytaea : ModNPC
                     NPC.spriteDirection = 1;
                 }
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
-                Fly = true;
-                if (Fly)
+                isFly = true;
+                if (isFly)
                 {
-                    Vector2 v0 = AIMpos + player.Center;
+                    Vector2 v0 = aiMpos + player.Center;
                     Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
                     v1 = (v0 - NPC.Center + v1 * 60f) / 480f;
                     NPC.noGravity = true;
                     NPC.velocity += v1;
                     NPC.velocity *= 0.96f;
                 }
-                CanUseWing = (AIMpos + player.Center - NPC.Center).Length() > 1 && (AIMpos + player.Center - NPC.Center).Y < 0;
+                canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
                 if (NPC.localAI[0] < 3752)
                 {
                     NPC.alpha = 0;
@@ -1324,7 +1316,7 @@ public class Acytaea : ModNPC
             }//→
             if (NPC.localAI[0] > 4000 && NPC.localAI[0] <= 4250)
             {
-                AIMpos = new Vector2(0, 350);
+                aiMpos = new Vector2(0, 350);
                 if (NPC.Center.X > player.Center.X)
                 {
                     NPC.spriteDirection = -1;
@@ -1334,17 +1326,17 @@ public class Acytaea : ModNPC
                     NPC.spriteDirection = 1;
                 }
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
-                Fly = true;
-                if (Fly)
+                isFly = true;
+                if (isFly)
                 {
-                    Vector2 v0 = AIMpos + player.Center;
+                    Vector2 v0 = aiMpos + player.Center;
                     Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
                     v1 = (v0 - NPC.Center + v1 * 60f) / 480f;
                     NPC.noGravity = true;
                     NPC.velocity += v1;
                     NPC.velocity *= 0.96f;
                 }
-                CanUseWing = (AIMpos + player.Center - NPC.Center).Length() > 1 && (AIMpos + player.Center - NPC.Center).Y < 0;
+                canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
                 if (NPC.localAI[0] < 4002)
                 {
                     NPC.alpha = 0;
@@ -1367,8 +1359,8 @@ public class Acytaea : ModNPC
             {
                 double Ro1 = (NPC.localAI[0] - 4250) / 100d;
                 double Ro = Ro1 * Ro1 * Math.PI;
-                AIMpos = new Vector2(0, 350).RotatedBy(Ro);
-                if ((AIMpos + player.Center - NPC.Center).Length() < 240)
+                aiMpos = new Vector2(0, 350).RotatedBy(Ro);
+                if ((aiMpos + player.Center - NPC.Center).Length() < 240)
                 {
                     if (NPC.Center.X > player.Center.X)
                     {
@@ -1392,17 +1384,17 @@ public class Acytaea : ModNPC
                     }
                     NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
                 }
-                Fly = true;
-                if (Fly)
+                isFly = true;
+                if (isFly)
                 {
-                    Vector2 v0 = AIMpos + player.Center;
+                    Vector2 v0 = aiMpos + player.Center;
                     Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
                     v1 = (v0 - NPC.Center + v1 * 60f) / 48f;
                     NPC.noGravity = true;
                     NPC.velocity += v1;
                     NPC.velocity *= 0.8f;
                 }
-                CanUseWing = (AIMpos + player.Center - NPC.Center).Length() > 1 && (AIMpos + player.Center - NPC.Center).Y < 0;
+                canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
                 if (NPC.localAI[0] < 4252)
                 {
                     NPC.alpha = 0;
@@ -1441,7 +1433,7 @@ public class Acytaea : ModNPC
             }//旋转
             if (NPC.localAI[0] > 4800 && NPC.localAI[0] <= 5400)
             {
-                AIMpos = new Vector2(450, 0);
+                aiMpos = new Vector2(450, 0);
                 if (NPC.Center.X > player.Center.X)
                 {
                     NPC.spriteDirection = -1;
@@ -1451,17 +1443,17 @@ public class Acytaea : ModNPC
                     NPC.spriteDirection = 1;
                 }
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
-                Fly = true;
-                if (Fly)
+                isFly = true;
+                if (isFly)
                 {
-                    Vector2 v0 = AIMpos + player.Center;
+                    Vector2 v0 = aiMpos + player.Center;
                     Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
                     v1 = (v0 - NPC.Center + v1 * 60f) / 480f;
                     NPC.noGravity = true;
                     NPC.velocity += v1;
                     NPC.velocity *= 0.96f;
                 }
-                CanUseWing = (AIMpos + player.Center - NPC.Center).Length() > 1 && (AIMpos + player.Center - NPC.Center).Y < 0;
+                canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
                 if (NPC.localAI[0] < 4802)
                 {
                     NPC.alpha = 0;
@@ -1481,7 +1473,7 @@ public class Acytaea : ModNPC
             }//分裂箭
             if (NPC.localAI[0] > 5400 && NPC.localAI[0] <= 5600)
             {
-                AIMpos = new Vector2(-450, 0);
+                aiMpos = new Vector2(-450, 0);
                 if (NPC.Center.X > player.Center.X)
                 {
                     NPC.spriteDirection = -1;
@@ -1491,17 +1483,17 @@ public class Acytaea : ModNPC
                     NPC.spriteDirection = 1;
                 }
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
-                Fly = true;
-                if (Fly)
+                isFly = true;
+                if (isFly)
                 {
-                    Vector2 v0 = AIMpos + player.Center;
+                    Vector2 v0 = aiMpos + player.Center;
                     Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
                     v1 = (v0 - NPC.Center + v1 * 60f) / 480f;
                     NPC.noGravity = true;
                     NPC.velocity += v1;
                     NPC.velocity *= 0.96f;
                 }
-                CanUseWing = (AIMpos + player.Center - NPC.Center).Length() > 1 && (AIMpos + player.Center - NPC.Center).Y < 0;
+                canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
                 if (NPC.localAI[0] < 5402)
                 {
                     NPC.alpha = 0;
@@ -1525,7 +1517,7 @@ public class Acytaea : ModNPC
             }//→→→
             if (NPC.localAI[0] > 5600 && NPC.localAI[0] <= 5700)
             {
-                AIMpos = new Vector2(0, -90);
+                aiMpos = new Vector2(0, -90);
                 if (NPC.Center.X > player.Center.X)
                 {
                     NPC.spriteDirection = -1;
@@ -1535,17 +1527,17 @@ public class Acytaea : ModNPC
                     NPC.spriteDirection = 1;
                 }
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
-                Fly = true;
-                if (Fly)
+                isFly = true;
+                if (isFly)
                 {
-                    Vector2 v0 = AIMpos + player.Center;
+                    Vector2 v0 = aiMpos + player.Center;
                     Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
                     v1 = (v0 - NPC.Center + v1 * 60f) / 480f;
                     NPC.noGravity = true;
                     NPC.velocity += v1;
                     NPC.velocity *= 0.96f;
                 }
-                CanUseWing = (AIMpos + player.Center - NPC.Center).Length() > 1 && (AIMpos + player.Center - NPC.Center).Y < 0;
+                canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
                 if (NPC.localAI[0] < 5602)
                 {
                     NPC.alpha = 0;
@@ -1573,7 +1565,7 @@ public class Acytaea : ModNPC
             }//↖↑↗
             if (NPC.localAI[0] > 5700 && NPC.localAI[0] <= 6000)
             {
-                AIMpos = new Vector2(-120, -90);
+                aiMpos = new Vector2(-120, -90);
                 if (NPC.Center.X > player.Center.X)
                 {
                     NPC.spriteDirection = -1;
@@ -1583,17 +1575,17 @@ public class Acytaea : ModNPC
                     NPC.spriteDirection = 1;
                 }
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
-                Fly = true;
-                if (Fly)
+                isFly = true;
+                if (isFly)
                 {
-                    Vector2 v0 = AIMpos + player.Center;
+                    Vector2 v0 = aiMpos + player.Center;
                     Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
                     v1 = (v0 - NPC.Center + v1 * 60f) / 480f;
                     NPC.noGravity = true;
                     NPC.velocity += v1;
                     NPC.velocity *= 0.96f;
                 }
-                CanUseWing = (AIMpos + player.Center - NPC.Center).Length() > 1 && (AIMpos + player.Center - NPC.Center).Y < 0;
+                canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
                 if (NPC.localAI[0] < 5702)
                 {
                     NPC.alpha = 0;
@@ -1621,7 +1613,7 @@ public class Acytaea : ModNPC
             }//↓↓↓
             if (NPC.localAI[0] > 6000 && NPC.localAI[0] <= 6200)
             {
-                AIMpos = new Vector2(-400, 0);
+                aiMpos = new Vector2(-400, 0);
                 if (NPC.Center.X > player.Center.X)
                 {
                     NPC.spriteDirection = -1;
@@ -1633,17 +1625,17 @@ public class Acytaea : ModNPC
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
                 if (NPC.localAI[0] < 6100)
                 {
-                    Fly = true;
-                    if (Fly)
+                    isFly = true;
+                    if (isFly)
                     {
-                        Vector2 v0 = AIMpos + player.Center;
+                        Vector2 v0 = aiMpos + player.Center;
                         Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
                         v1 = (v0 - NPC.Center + v1 * 60f) / 480f;
                         NPC.noGravity = true;
                         NPC.velocity += v1;
                         NPC.velocity *= 0.96f;
                     }
-                    CanUseWing = (AIMpos + player.Center - NPC.Center).Length() > 1 && (AIMpos + player.Center - NPC.Center).Y < 0;
+                    canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
                 }
                 else
                 {
@@ -1738,7 +1730,7 @@ public class Acytaea : ModNPC
             }//放幻影箭
             if (NPC.localAI[0] > 6450 && NPC.localAI[0] <= 6550)
             {
-                AIMpos = new Vector2(0, -150);
+                aiMpos = new Vector2(0, -150);
                 if (NPC.Center.X > player.Center.X)
                 {
                     NPC.spriteDirection = -1;
@@ -1748,17 +1740,17 @@ public class Acytaea : ModNPC
                     NPC.spriteDirection = 1;
                 }
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
-                Fly = true;
-                if (Fly)
+                isFly = true;
+                if (isFly)
                 {
-                    Vector2 v0 = AIMpos + player.Center;
+                    Vector2 v0 = aiMpos + player.Center;
                     Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
                     v1 = (v0 - NPC.Center + v1 * 60f) / 480f;
                     NPC.noGravity = true;
                     NPC.velocity += v1;
                     NPC.velocity *= 0.96f;
                 }
-                CanUseWing = (AIMpos + player.Center - NPC.Center).Length() > 1 && (AIMpos + player.Center - NPC.Center).Y < 0;
+                canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
                 if (NPC.localAI[0] < 6452)
                 {
                     NPC.alpha = 0;
@@ -1784,7 +1776,7 @@ public class Acytaea : ModNPC
             }//↖↖ ↑ ↗↗
             if (NPC.localAI[0] > 6550 && NPC.localAI[0] <= 6950)
             {
-                AIMpos = new Vector2(900, -400);
+                aiMpos = new Vector2(900, -400);
                 if (NPC.Center.X > player.Center.X)
                 {
                     NPC.spriteDirection = -1;
@@ -1794,17 +1786,17 @@ public class Acytaea : ModNPC
                     NPC.spriteDirection = 1;
                 }
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
-                Fly = true;
-                if (Fly)
+                isFly = true;
+                if (isFly)
                 {
-                    Vector2 v0 = AIMpos + player.Center;
+                    Vector2 v0 = aiMpos + player.Center;
                     Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
                     v1 = (v0 - NPC.Center + v1 * 60f) / 480f;
                     NPC.noGravity = true;
                     NPC.velocity += v1;
                     NPC.velocity *= 0.96f;
                 }
-                CanUseWing = (AIMpos + player.Center - NPC.Center).Length() > 1 && (AIMpos + player.Center - NPC.Center).Y < 0;
+                canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
                 if (NPC.localAI[0] < 6552)
                 {
                     NPC.alpha = 0;
@@ -1828,7 +1820,7 @@ public class Acytaea : ModNPC
             }//↓↓↓
             if (NPC.localAI[0] > 6950 && NPC.localAI[0] <= 7150)
             {
-                AIMpos = new Vector2(0, -450);
+                aiMpos = new Vector2(0, -450);
                 if (NPC.Center.X > player.Center.X)
                 {
                     NPC.spriteDirection = -1;
@@ -1838,17 +1830,17 @@ public class Acytaea : ModNPC
                     NPC.spriteDirection = 1;
                 }
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
-                Fly = true;
-                if (Fly)
+                isFly = true;
+                if (isFly)
                 {
-                    Vector2 v0 = AIMpos + player.Center;
+                    Vector2 v0 = aiMpos + player.Center;
                     Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
                     v1 = (v0 - NPC.Center + v1 * 60f) / 480f;
                     NPC.noGravity = true;
                     NPC.velocity += v1;
                     NPC.velocity *= 0.96f;
                 }
-                CanUseWing = (AIMpos + player.Center - NPC.Center).Length() > 1 && (AIMpos + player.Center - NPC.Center).Y < 0;
+                canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
                 if (NPC.localAI[0] < 6952)
                 {
                     NPC.alpha = 0;
@@ -1874,13 +1866,13 @@ public class Acytaea : ModNPC
             }//↙↓↓↓↘
             if (NPC.localAI[0] > 7150 && NPC.localAI[0] <= 7500)
             {
-                AIMpos = new Vector2(450, 0);
+                aiMpos = new Vector2(450, 0);
                 NPC.spriteDirection = -1;
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
-                Fly = true;
-                if (Fly)
+                isFly = true;
+                if (isFly)
                 {
-                    Vector2 v0 = AIMpos + player.Center;
+                    Vector2 v0 = aiMpos + player.Center;
                     Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
                     v1 = (v0 - NPC.Center + v1 * 60f) / 80f;
                     NPC.noGravity = true;
@@ -1893,7 +1885,7 @@ public class Acytaea : ModNPC
                     float a = k;
                     NPC.velocity *= a;
                 }
-                CanUseWing = (AIMpos + player.Center - NPC.Center).Length() > 1 && (AIMpos + player.Center - NPC.Center).Y < 0;
+                canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
                 if (NPC.localAI[0] < 7152)
                 {
                     NPC.alpha = 0;
@@ -1947,7 +1939,7 @@ public class Acytaea : ModNPC
             }//左侧幻影
             if (NPC.localAI[0] > 7500 && NPC.localAI[0] <= 7800)
             {
-                AIMpos = new Vector2(-500, 0);
+                aiMpos = new Vector2(-500, 0);
                 if (NPC.Center.X > player.Center.X)
                 {
                     NPC.spriteDirection = -1;
@@ -1957,17 +1949,17 @@ public class Acytaea : ModNPC
                     NPC.spriteDirection = 1;
                 }
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
-                Fly = true;
-                if (Fly)
+                isFly = true;
+                if (isFly)
                 {
-                    Vector2 v0 = AIMpos + player.Center;
+                    Vector2 v0 = aiMpos + player.Center;
                     Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
                     v1 = (v0 - NPC.Center + v1 * 60f) / 480f;
                     NPC.noGravity = true;
                     NPC.velocity += v1;
                     NPC.velocity *= 0.96f;
                 }
-                CanUseWing = (AIMpos + player.Center - NPC.Center).Length() > 1 && (AIMpos + player.Center - NPC.Center).Y < 0;
+                canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
                 if (NPC.localAI[0] < 7502)
                 {
                     NPC.alpha = 0;
@@ -1992,8 +1984,8 @@ public class Acytaea : ModNPC
             if (NPC.localAI[0] > 7800 && NPC.localAI[0] <= 8400)
             {
                 double Ro = (float)((NPC.localAI[0] - 7800) / 300d * Math.PI);
-                AIMpos = new Vector2(0, 350).RotatedBy(Ro);
-                if ((AIMpos + player.Center - NPC.Center).Length() < 240)
+                aiMpos = new Vector2(0, 350).RotatedBy(Ro);
+                if ((aiMpos + player.Center - NPC.Center).Length() < 240)
                 {
                     if (NPC.Center.X > player.Center.X)
                     {
@@ -2017,17 +2009,17 @@ public class Acytaea : ModNPC
                     }
                     NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
                 }
-                Fly = true;
-                if (Fly)
+                isFly = true;
+                if (isFly)
                 {
-                    Vector2 v0 = AIMpos + player.Center;
+                    Vector2 v0 = aiMpos + player.Center;
                     Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
                     v1 = (v0 - NPC.Center + v1 * 60f) / 48f;
                     NPC.noGravity = true;
                     NPC.velocity += v1;
                     NPC.velocity *= 0.8f;
                 }
-                CanUseWing = (AIMpos + player.Center - NPC.Center).Length() > 1 && (AIMpos + player.Center - NPC.Center).Y < 0;
+                canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
                 if (NPC.localAI[0] < 7802)
                 {
                     NPC.alpha = 0;
@@ -2092,7 +2084,7 @@ public class Acytaea : ModNPC
             }//神环
             if (NPC.localAI[0] > 8520 && NPC.localAI[0] <= 9000)
             {
-                AIMpos = new Vector2(-500, 0);
+                aiMpos = new Vector2(-500, 0);
                 if (NPC.Center.X > player.Center.X)
                 {
                     NPC.spriteDirection = -1;
@@ -2102,17 +2094,17 @@ public class Acytaea : ModNPC
                     NPC.spriteDirection = 1;
                 }
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
-                Fly = true;
-                if (Fly)
+                isFly = true;
+                if (isFly)
                 {
-                    Vector2 v0 = AIMpos + player.Center;
+                    Vector2 v0 = aiMpos + player.Center;
                     Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
                     v1 = (v0 - NPC.Center + v1 * 60f) / 480f;
                     NPC.noGravity = true;
                     NPC.velocity += v1;
                     NPC.velocity *= 0.96f;
                 }
-                CanUseWing = (AIMpos + player.Center - NPC.Center).Length() > 1 && (AIMpos + player.Center - NPC.Center).Y < 0;
+                canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
                 if (NPC.localAI[0] < 8522)
                 {
                     NPC.alpha = 0;
@@ -2129,7 +2121,7 @@ public class Acytaea : ModNPC
             if (NPC.localAI[0] > 9000 && NPC.localAI[0] <= 9600)
             {
                 double k0 = (NPC.localAI[0] - 9000) / 80d;
-                AIMpos = new Vector2(0, -445).RotatedBy(Math.Sin(k0 * k0) * 0.4f);
+                aiMpos = new Vector2(0, -445).RotatedBy(Math.Sin(k0 * k0) * 0.4f);
                 if (NPC.Center.X > player.Center.X)
                 {
                     NPC.spriteDirection = -1;
@@ -2139,17 +2131,17 @@ public class Acytaea : ModNPC
                     NPC.spriteDirection = 1;
                 }
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
-                Fly = true;
-                if (Fly)
+                isFly = true;
+                if (isFly)
                 {
-                    Vector2 v0 = AIMpos + player.Center;
+                    Vector2 v0 = aiMpos + player.Center;
                     Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
                     v1 = (v0 - NPC.Center + v1 * 60f) / 80f;
                     NPC.noGravity = true;
                     NPC.velocity += v1;
                     NPC.velocity *= 0.92f;
                 }
-                CanUseWing = (AIMpos + player.Center - NPC.Center).Length() > 1 && (AIMpos + player.Center - NPC.Center).Y < 0;
+                canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
                 if (NPC.localAI[0] < 9002)
                 {
                     NPC.alpha = 0;
@@ -2170,7 +2162,7 @@ public class Acytaea : ModNPC
             }//弹珠
             if (NPC.localAI[0] > 9600 && NPC.localAI[0] <= 10600)
             {
-                AIMpos = new Vector2(-300, -245);
+                aiMpos = new Vector2(-300, -245);
                 if (NPC.Center.X > player.Center.X)
                 {
                     NPC.spriteDirection = -1;
@@ -2180,10 +2172,10 @@ public class Acytaea : ModNPC
                     NPC.spriteDirection = 1;
                 }
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
-                Fly = true;
-                if (Fly)
+                isFly = true;
+                if (isFly)
                 {
-                    Vector2 v0 = AIMpos + player.Center;
+                    Vector2 v0 = aiMpos + player.Center;
                     Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
                     v1 = (v0 - NPC.Center + v1 * 60f) / 480f;
                     NPC.noGravity = true;
@@ -2195,7 +2187,7 @@ public class Acytaea : ModNPC
                     }
                     NPC.velocity *= 1 - k0;
                 }
-                CanUseWing = (AIMpos + player.Center - NPC.Center).Length() > 1 && (AIMpos + player.Center - NPC.Center).Y < 0;
+                canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
                 if (NPC.localAI[0] < 9602)
                 {
                     NPC.alpha = 0;
@@ -2230,7 +2222,7 @@ public class Acytaea : ModNPC
             }//激光法阵
             if (NPC.localAI[0] > 10600 && NPC.localAI[0] <= 11000)
             {
-                AIMpos = new Vector2(0, -245);
+                aiMpos = new Vector2(0, -245);
                 if (NPC.Center.X > player.Center.X)
                 {
                     NPC.spriteDirection = -1;
@@ -2240,10 +2232,10 @@ public class Acytaea : ModNPC
                     NPC.spriteDirection = 1;
                 }
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
-                Fly = true;
-                if (Fly)
+                isFly = true;
+                if (isFly)
                 {
-                    Vector2 v0 = AIMpos + player.Center;
+                    Vector2 v0 = aiMpos + player.Center;
                     Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
                     v1 = (v0 - NPC.Center + v1 * 60f) / 480f;
                     NPC.noGravity = true;
@@ -2255,7 +2247,7 @@ public class Acytaea : ModNPC
                     }
                     NPC.velocity *= 1 - k0;
                 }
-                CanUseWing = (AIMpos + player.Center - NPC.Center).Length() > 1 && (AIMpos + player.Center - NPC.Center).Y < 0;
+                canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
                 if (NPC.localAI[0] < 10602)
                 {
                     NPC.alpha = 0;
@@ -2279,7 +2271,7 @@ public class Acytaea : ModNPC
                 NPC.localAI[0] = 960;
                 BladeGlowPro = 0;
             }
-            if (Fly)
+            if (isFly)
             {
                 if (DrawAI % 6 == 0)
                 {
@@ -2296,7 +2288,7 @@ public class Acytaea : ModNPC
                     }
                     else
                     {
-                        if (CanUseWing)
+                        if (canUseWing)
                         {
                             if (wingFrame < 3)
                             {
@@ -2641,7 +2633,7 @@ public class Acytaea : ModNPC
             NPC.life = 275000;
             NPC.boss = true;
             NPC.localAI[0] = 0;
-            Battle = true;
+            isBattle = true;
             NPC.width = 40;
             NPC.height = 56;
             t0 = "MythMod/NPCs/Acytaea/Acytaea_Head_Boss";
@@ -2769,8 +2761,8 @@ public class Acytaea : ModNPC
             {
                 return;
             }
-            List<VertexBase.CustomVertexInfo> Vx = new List<VertexBase.CustomVertexInfo>();
-            Vector2 vBla = new Vector2(88 - (MinorDir - 1) * 8, -158).RotatedBy(BladeRot);
+            List<Vertex2D> Vx = new List<Vertex2D>();
+            Vector2 vBla = new Vector2(88 - (minorDir - 1) * 8, -158).RotatedBy(BladeRot);
             vBla.Y *= BladeSquz;
             Vector2 vc = Main.npc[NPCWHOAMI].Center + vBla;
             BladeSquz = BladeSquz * 0.75f + AimBladeSquz * 0.25f;
@@ -2792,7 +2784,7 @@ public class Acytaea : ModNPC
                 }
                 MaxH++;
             }
-            Vector2 vf = Main.npc[NPCWHOAMI].Center + RightArmPos - Main.screenPosition + new Vector2(-7f, 3).RotatedBy(RightArmRot);
+            Vector2 vf = Main.npc[NPCWHOAMI].Center + RightArmPos * NPC.spriteDirection - Main.screenPosition + new Vector2(-7f, 3).RotatedBy(RightArmRot);
 
             for (int h = 0; h < 60; h++)
             {
@@ -2806,15 +2798,15 @@ public class Acytaea : ModNPC
                 Vector2 v0 = OldBladePos[h] - vf;
                 if (BladeRot < OldBladeRot)
                 {
-                    Vx.Add(new VertexBase.CustomVertexInfo(OldBladePos[h] - Main.screenPosition, color3, new Vector3(h / 60f, 0, 0)));
-                    Vx.Add(new VertexBase.CustomVertexInfo(OldBladePos[h + 1] - Main.screenPosition, color3, new Vector3((h + 1) / 60f, 0, 0)));
-                    Vx.Add(new VertexBase.CustomVertexInfo(vf, color3, new Vector3(0, 1, 0)));
+                    Vx.Add(new Vertex2D(OldBladePos[h] - Main.screenPosition, color3, new Vector3(h / 60f, 0, 0)));
+                    Vx.Add(new Vertex2D(OldBladePos[h + 1] - Main.screenPosition, color3, new Vector3((h + 1) / 60f, 0, 0)));
+                    Vx.Add(new Vertex2D(vf, color3, new Vector3(0, 1, 0)));
                 }
                 else
                 {
-                    Vx.Add(new VertexBase.CustomVertexInfo(OldBladePos[h + 1] - Main.screenPosition, color3, new Vector3((h + 1) / 60f, 0, 0)));
-                    Vx.Add(new VertexBase.CustomVertexInfo(OldBladePos[h] - Main.screenPosition, color3, new Vector3(h / 60f, 0, 0)));
-                    Vx.Add(new VertexBase.CustomVertexInfo(vf, color3, new Vector3(0, 1, 0)));
+                    Vx.Add(new Vertex2D(OldBladePos[h + 1] - Main.screenPosition, color3, new Vector3((h + 1) / 60f, 0, 0)));
+                    Vx.Add(new Vertex2D(OldBladePos[h] - Main.screenPosition, color3, new Vector3(h / 60f, 0, 0)));
+                    Vx.Add(new Vertex2D(vf, color3, new Vector3(0, 1, 0)));
                 }
                 if (!Main.gamePaused)
                 {
@@ -2841,12 +2833,11 @@ public class Acytaea : ModNPC
         }
 
     }
-
     public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
     {
         Main.spriteBatch.End();
         Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-        if (!Battle)
+        if (!isBattle)
         {
             return;
         }
@@ -2888,19 +2879,19 @@ public class Acytaea : ModNPC
                 }
             }
         }
-        if (MinorDir == 1)
+        if (minorDir == 1)
         {
-            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaRightWing").Value, NPC.Center + RightWingPos - Main.screenPosition, new Rectangle(0, wingFrame * 56, 86, 56), color, NPC.rotation, new Vector2(43, 28), 1f, effects, 0f);
-            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaLeftWing").Value, NPC.Center + LeftWingPos - Main.screenPosition, new Rectangle(0, wingFrame * 56, 86, 56), color, NPC.rotation, new Vector2(43, 28), 1f, effects, 0f);
+            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaRightWing").Value, NPC.Center + RightWingPos * NPC.spriteDirection - Main.screenPosition, new Rectangle(0, wingFrame * 56, 86, 56), color, NPC.rotation, new Vector2(43, 28), 1f, effects, 0f);
+            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaLeftWing").Value, NPC.Center + LeftWingPos * NPC.spriteDirection - Main.screenPosition, new Rectangle(0, wingFrame * 56, 86, 56), color, NPC.rotation, new Vector2(43, 28), 1f, effects, 0f);
         }
         else
         {
-            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaRightWing").Value, NPC.Center + RightWingPos - Main.screenPosition + new Vector2(10, 0), new Rectangle(0, wingFrame * 56, 86, 56), color, NPC.rotation, new Vector2(43, 28), 1f, effects, 0f);
-            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaLeftWing").Value, NPC.Center + LeftWingPos - Main.screenPosition + new Vector2(10, 0), new Rectangle(0, wingFrame * 56, 86, 56), color, NPC.rotation, new Vector2(43, 28), 1f, effects, 0f);
+            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaRightWing").Value, NPC.Center + RightWingPos * NPC.spriteDirection - Main.screenPosition + new Vector2(10, 0), new Rectangle(0, wingFrame * 56, 86, 56), color, NPC.rotation, new Vector2(43, 28), 1f, effects, 0f);
+            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaLeftWing").Value, NPC.Center + LeftWingPos * NPC.spriteDirection - Main.screenPosition + new Vector2(10, 0), new Rectangle(0, wingFrame * 56, 86, 56), color, NPC.rotation, new Vector2(43, 28), 1f, effects, 0f);
         }
-        Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaLeftArm").Value, NPC.Center + LeftArmPos - Main.screenPosition, null, color, NPC.rotation + LeftArmRot, NPC.Size / 2f, 1f, effects, 0f);
-        Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaBody").Value, NPC.Center + BodyPos - Main.screenPosition, null, color, NPC.rotation, NPC.Size / 2f, 1f, effects, 0f);
-        Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaLeg").Value, NPC.Center + LegPos - Main.screenPosition, null, color, NPC.rotation, NPC.Size / 2f, 1f, effects, 0f);
+        Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaLeftArm").Value, NPC.Center - Main.screenPosition, null, color, NPC.rotation + LeftArmRot, NPC.Size / 2f, 1f, effects, 0f);
+        Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaBody").Value, NPC.Center - Main.screenPosition, null, color, NPC.rotation, NPC.Size / 2f, 1f, effects, 0f);
+        Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaLeg").Value, NPC.Center - Main.screenPosition, null, color, NPC.rotation, NPC.Size / 2f, 1f, effects, 0f);
         if (HasBlade)
         {
             if (NPC.localAI[0] <= 900)
@@ -2909,8 +2900,8 @@ public class Acytaea : ModNPC
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
                 if (BladePro == 1)
                 {
-                    List<VertexBase.CustomVertexInfo> Vx = new List<VertexBase.CustomVertexInfo>();
-                    Vector2 vBla = new Vector2(88 - (MinorDir - 1) * 8, -158).RotatedBy(BladeRot);
+                    List<Vertex2D> Vx = new List<Vertex2D>();
+                    Vector2 vBla = new Vector2(88 - (minorDir - 1) * 8, -158).RotatedBy(BladeRot);
                     vBla.Y *= BladeSquz;
                     Vector2 vc = NPC.Center + vBla;
                     BladeSquz = BladeSquz * 0.75f + AimBladeSquz * 0.25f;
@@ -2932,7 +2923,7 @@ public class Acytaea : ModNPC
                         }
                         MaxH++;
                     }
-                    Vector2 vf = NPC.Center + RightArmPos - Main.screenPosition + new Vector2(-7f, 3).RotatedBy(RightArmRot);
+                    Vector2 vf = NPC.Center + RightArmPos * NPC.spriteDirection - Main.screenPosition + new Vector2(-7f, 3).RotatedBy(RightArmRot);
 
                     for (int h = 0; h < 60; h++)
                     {
@@ -2949,15 +2940,15 @@ public class Acytaea : ModNPC
                         Vector2 v0 = OldBladePos[h] - vf;
                         if (BladeRot < OldBladeRot)
                         {
-                            Vx.Add(new VertexBase.CustomVertexInfo(OldBladePos[h] - Main.screenPosition, color3, new Vector3(h / 60f, 0, 0)));
-                            Vx.Add(new VertexBase.CustomVertexInfo(OldBladePos[h + 1] - Main.screenPosition, color3, new Vector3((h + 1) / 60f, 0, 0)));
-                            Vx.Add(new VertexBase.CustomVertexInfo(vf, color3, new Vector3(0, 1, 0)));
+                            Vx.Add(new Vertex2D(OldBladePos[h] - Main.screenPosition, color3, new Vector3(h / 60f, 0, 0)));
+                            Vx.Add(new Vertex2D(OldBladePos[h + 1] - Main.screenPosition, color3, new Vector3((h + 1) / 60f, 0, 0)));
+                            Vx.Add(new Vertex2D(vf, color3, new Vector3(0, 1, 0)));
                         }
                         else
                         {
-                            Vx.Add(new VertexBase.CustomVertexInfo(OldBladePos[h + 1] - Main.screenPosition, color3, new Vector3((h + 1) / 60f, 0, 0)));
-                            Vx.Add(new VertexBase.CustomVertexInfo(OldBladePos[h] - Main.screenPosition, color3, new Vector3(h / 60f, 0, 0)));
-                            Vx.Add(new VertexBase.CustomVertexInfo(vf, color3, new Vector3(0, 1, 0)));
+                            Vx.Add(new Vertex2D(OldBladePos[h + 1] - Main.screenPosition, color3, new Vector3((h + 1) / 60f, 0, 0)));
+                            Vx.Add(new Vertex2D(OldBladePos[h] - Main.screenPosition, color3, new Vector3(h / 60f, 0, 0)));
+                            Vx.Add(new Vertex2D(vf, color3, new Vector3(0, 1, 0)));
                         }
                         if (!Main.gamePaused)
                         {
@@ -2987,7 +2978,7 @@ public class Acytaea : ModNPC
         {
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            List<VertexBase.CustomVertexInfo> Vx = new List<VertexBase.CustomVertexInfo>();
+            List<Vertex2D> Vx = new List<Vertex2D>();
             Color color3 = Lighting.GetColor((int)NPC.Center.X / 16, (int)NPC.Center.Y / 16);
             color3.R = (byte)(color3.R * (255 - NPC.alpha) / 255f);
             color3.G = (byte)(color3.G * (255 - NPC.alpha) / 255f);
@@ -2995,43 +2986,43 @@ public class Acytaea : ModNPC
             color3.A = (byte)(color3.A * (255 - NPC.alpha) / 255f);
             if (BladePro < 1)
             {
-                Vector2 vc = NPC.Center + new Vector2(88 * MinorDir - (MinorDir - 1) * 8, -158) - Main.screenPosition;
-                Vector2 vd = new Vector2(17.02f, 0).RotatedBy(0.4 * MinorDir) + vc;
-                Vector2 ve = new Vector2(-17.02f, 0).RotatedBy(0.4 * MinorDir) + vc;
-                Vector2 vf = new Vector2(0, 185 * BladePro).RotatedBy(0.4 * MinorDir) + vc;
-                Vector2 vg = new Vector2(17.02f, 0).RotatedBy(0.4 * MinorDir) + vf;
-                Vector2 vh = new Vector2(-17.02f, 0).RotatedBy(0.4 * MinorDir) + vf;
+                Vector2 vc = NPC.Center + new Vector2(88 * minorDir - (minorDir - 1) * 8, -158) - Main.screenPosition;
+                Vector2 vd = new Vector2(17.02f, 0).RotatedBy(0.4 * minorDir) + vc;
+                Vector2 ve = new Vector2(-17.02f, 0).RotatedBy(0.4 * minorDir) + vc;
+                Vector2 vf = new Vector2(0, 185 * BladePro).RotatedBy(0.4 * minorDir) + vc;
+                Vector2 vg = new Vector2(17.02f, 0).RotatedBy(0.4 * minorDir) + vf;
+                Vector2 vh = new Vector2(-17.02f, 0).RotatedBy(0.4 * minorDir) + vf;
 
-                Vx.Add(new VertexBase.CustomVertexInfo(vg, color3, new Vector3(Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).X + 0.03f, 0, 1), Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).Y + 0.97f, 0, 1), 0)));
-                Vx.Add(new VertexBase.CustomVertexInfo(vh, color3, new Vector3(Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).X + 0.03f, 0, 1), Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).Y + 0.97f, 0, 1), 0)));
-                Vx.Add(new VertexBase.CustomVertexInfo(vd, color3, new Vector3(Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).X + 0.03f + BladePro * 0.65f, 0, 1), Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).Y + 0.97f - BladePro * 0.65f, 0, 1), 0)));
+                Vx.Add(new Vertex2D(vg, color3, new Vector3(Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).X + 0.03f, 0, 1), Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).Y + 0.97f, 0, 1), 0)));
+                Vx.Add(new Vertex2D(vh, color3, new Vector3(Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).X + 0.03f, 0, 1), Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).Y + 0.97f, 0, 1), 0)));
+                Vx.Add(new Vertex2D(vd, color3, new Vector3(Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).X + 0.03f + BladePro * 0.65f, 0, 1), Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).Y + 0.97f - BladePro * 0.65f, 0, 1), 0)));
 
-                Vx.Add(new VertexBase.CustomVertexInfo(vh, color3, new Vector3(Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).X + 0.03f, 0, 1), Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).Y + 0.97f, 0, 1), 0)));
-                Vx.Add(new VertexBase.CustomVertexInfo(ve, color3, new Vector3(Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).X + 0.03f + BladePro * 0.65f, 0, 1), Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).Y + 0.97f - BladePro * 0.65f, 0, 1), 0)));
-                Vx.Add(new VertexBase.CustomVertexInfo(vd, color3, new Vector3(Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).X + 0.03f + BladePro * 0.65f, 0, 1), Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).Y + 0.97f - BladePro * 0.65f, 0, 1), 0)));
+                Vx.Add(new Vertex2D(vh, color3, new Vector3(Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).X + 0.03f, 0, 1), Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).Y + 0.97f, 0, 1), 0)));
+                Vx.Add(new Vertex2D(ve, color3, new Vector3(Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).X + 0.03f + BladePro * 0.65f, 0, 1), Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).Y + 0.97f - BladePro * 0.65f, 0, 1), 0)));
+                Vx.Add(new Vertex2D(vd, color3, new Vector3(Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).X + 0.03f + BladePro * 0.65f, 0, 1), Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).Y + 0.97f - BladePro * 0.65f, 0, 1), 0)));
             }
             else
             {
-                Vector2 vBla = new Vector2(88 - (MinorDir - 1) * 8, -158).RotatedBy(BladeRot);
+                Vector2 vBla = new Vector2(88 - (minorDir - 1) * 8, -158).RotatedBy(BladeRot);
                 vBla.Y *= BladeSquz;
                 Vector2 vc = NPC.Center + vBla - Main.screenPosition;
                 Vector2 vd = new Vector2(17.02f, 0).RotatedBy(0.4 + BladeRot) + vc;
                 Vector2 ve = new Vector2(-17.02f, 0).RotatedBy(0.4 + BladeRot) + vc;
-                Vector2 vf = NPC.Center + RightArmPos - Main.screenPosition + new Vector2(-7f, 3).RotatedBy(RightArmRot);
+                Vector2 vf = NPC.Center + RightArmPos * NPC.spriteDirection - Main.screenPosition + new Vector2(-7f, 3).RotatedBy(RightArmRot);
                 Vector2 vg = new Vector2(17.02f, 0).RotatedBy(0.4 + BladeRot) + vf;
                 Vector2 vh = new Vector2(-17.02f, 0).RotatedBy(0.4 + BladeRot) + vf;
 
-                Vx.Add(new VertexBase.CustomVertexInfo(vg, color3, new Vector3(Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).X + 0.03f, 0, 1), Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).Y + 0.97f, 0, 1), 0)));
-                Vx.Add(new VertexBase.CustomVertexInfo(vh, color3, new Vector3(Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).X + 0.03f, 0, 1), Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).Y + 0.97f, 0, 1), 0)));
-                Vx.Add(new VertexBase.CustomVertexInfo(vd, color3, new Vector3(Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).X + 0.68f, 0, 1), Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).Y + 0.32f, 0, 1), 0)));
+                Vx.Add(new Vertex2D(vg, color3, new Vector3(Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).X + 0.03f, 0, 1), Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).Y + 0.97f, 0, 1), 0)));
+                Vx.Add(new Vertex2D(vh, color3, new Vector3(Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).X + 0.03f, 0, 1), Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).Y + 0.97f, 0, 1), 0)));
+                Vx.Add(new Vertex2D(vd, color3, new Vector3(Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).X + 0.68f, 0, 1), Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).Y + 0.32f, 0, 1), 0)));
 
-                Vx.Add(new VertexBase.CustomVertexInfo(vh, color3, new Vector3(Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).X + 0.03f, 0, 1), Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).Y + 0.97f, 0, 1), 0)));
-                Vx.Add(new VertexBase.CustomVertexInfo(ve, color3, new Vector3(Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).X + 0.68f, 0, 1), Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).Y + 0.32f, 0, 1), 0)));
-                Vx.Add(new VertexBase.CustomVertexInfo(vd, color3, new Vector3(Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).X + 0.68f, 0, 1), Math.Clamp(new Vector2(11.85f / 122f, 0).RotatedBy(0.4).Y + 0.32f, 0, 1), 0)));
+                Vx.Add(new Vertex2D(vh, color3, new Vector3(Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).X + 0.03f, 0, 1), Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).Y + 0.97f, 0, 1), 0)));
+                Vx.Add(new Vertex2D(ve, color3, new Vector3(Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).X + 0.68f, 0, 1), Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).Y + 0.32f, 0, 1), 0)));
+                Vx.Add(new Vertex2D(vd, color3, new Vector3(Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).X + 0.68f, 0, 1), Math.Clamp(new Vector2(11.85f / 122f, 0).RotatedBy(0.4).Y + 0.32f, 0, 1), 0)));
             }
 
             Texture2D t = ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/GlodenBloodScaleMirror").Value;
-            if (MinorDir == -1)
+            if (minorDir == -1)
             {
                 t = ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/GlodenBloodScale").Value;
             }
@@ -3042,31 +3033,31 @@ public class Acytaea : ModNPC
         {
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            List<VertexBase.CustomVertexInfo> Vx = new List<VertexBase.CustomVertexInfo>();
+            List<Vertex2D> Vx = new List<Vertex2D>();
             Color color3 = new Color((int)(200 * BladeGlowPro), (int)(200 * BladeGlowPro), (int)(200 * BladeGlowPro), 0);
             color3.R = (byte)(color3.R * (255 - NPC.alpha) / 255f);
             color3.G = (byte)(color3.G * (255 - NPC.alpha) / 255f);
             color3.B = (byte)(color3.B * (255 - NPC.alpha) / 255f);
             color3.A = (byte)(color3.A * (255 - NPC.alpha) / 255f);
-            Vector2 vBla = new Vector2(88 - (MinorDir - 1) * 8, -158).RotatedBy(BladeRot);
+            Vector2 vBla = new Vector2(88 - (minorDir - 1) * 8, -158).RotatedBy(BladeRot);
             vBla.Y *= BladeSquz;
             Vector2 vc = NPC.Center + vBla - Main.screenPosition;
             Vector2 vd = new Vector2(17.02f, 0).RotatedBy(0.4 + BladeRot) + vc;
             Vector2 ve = new Vector2(-17.02f, 0).RotatedBy(0.4 + BladeRot) + vc;
-            Vector2 vf = NPC.Center + RightArmPos - Main.screenPosition + new Vector2(-7f, 3).RotatedBy(RightArmRot);
+            Vector2 vf = NPC.Center + RightArmPos * NPC.spriteDirection - Main.screenPosition + new Vector2(-7f, 3).RotatedBy(RightArmRot);
             Vector2 vg = new Vector2(17.02f, 0).RotatedBy(0.4 + BladeRot) + vf;
             Vector2 vh = new Vector2(-17.02f, 0).RotatedBy(0.4 + BladeRot) + vf;
 
-            Vx.Add(new VertexBase.CustomVertexInfo(vg, color3, new Vector3(Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).X + 0.03f, 0, 1), Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).Y + 0.97f, 0, 1), 0)));
-            Vx.Add(new VertexBase.CustomVertexInfo(vh, color3, new Vector3(Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).X + 0.03f, 0, 1), Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).Y + 0.97f, 0, 1), 0)));
-            Vx.Add(new VertexBase.CustomVertexInfo(vd, color3, new Vector3(Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).X + 0.68f, 0, 1), Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).Y + 0.32f, 0, 1), 0)));
+            Vx.Add(new Vertex2D(vg, color3, new Vector3(Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).X + 0.03f, 0, 1), Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).Y + 0.97f, 0, 1), 0)));
+            Vx.Add(new Vertex2D(vh, color3, new Vector3(Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).X + 0.03f, 0, 1), Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).Y + 0.97f, 0, 1), 0)));
+            Vx.Add(new Vertex2D(vd, color3, new Vector3(Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).X + 0.68f, 0, 1), Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).Y + 0.32f, 0, 1), 0)));
 
-            Vx.Add(new VertexBase.CustomVertexInfo(vh, color3, new Vector3(Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).X + 0.03f, 0, 1), Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).Y + 0.97f, 0, 1), 0)));
-            Vx.Add(new VertexBase.CustomVertexInfo(ve, color3, new Vector3(Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).X + 0.68f, 0, 1), Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).Y + 0.32f, 0, 1), 0)));
-            Vx.Add(new VertexBase.CustomVertexInfo(vd, color3, new Vector3(Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).X + 0.68f, 0, 1), Math.Clamp(new Vector2(11.85f / 122f, 0).RotatedBy(0.4).Y + 0.32f, 0, 1), 0)));
+            Vx.Add(new Vertex2D(vh, color3, new Vector3(Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).X + 0.03f, 0, 1), Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).Y + 0.97f, 0, 1), 0)));
+            Vx.Add(new Vertex2D(ve, color3, new Vector3(Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).X + 0.68f, 0, 1), Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).Y + 0.32f, 0, 1), 0)));
+            Vx.Add(new Vertex2D(vd, color3, new Vector3(Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).X + 0.68f, 0, 1), Math.Clamp(new Vector2(11.85f / 122f, 0).RotatedBy(0.4).Y + 0.32f, 0, 1), 0)));
 
             Texture2D t = ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/GlodenBloodScaleGlowMirror").Value;
-            if (MinorDir == -1)
+            if (minorDir == -1)
             {
                 t = ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/GlodenBloodScaleGlow").Value;
             }
@@ -3077,7 +3068,7 @@ public class Acytaea : ModNPC
         {
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            List<VertexBase.CustomVertexInfo> Vx = new List<VertexBase.CustomVertexInfo>();
+            List<Vertex2D> Vx = new List<Vertex2D>();
 
             Vector2 vf = NPC.Center - Main.screenPosition;
 
@@ -3092,15 +3083,15 @@ public class Acytaea : ModNPC
                 Vector2 v1 = new Vector2(0, ACircleR).RotatedBy((h + 1) / 45d * Math.PI + CirR0);
                 if (h % 2 == 0)
                 {
-                    Vx.Add(new VertexBase.CustomVertexInfo(vf + v0, color3, new Vector3((0.999f + CirPro0) / 30f % 1f, 0, 0)));
-                    Vx.Add(new VertexBase.CustomVertexInfo(vf + v1, color3, new Vector3(CirPro0 / 30f % 1f, 0, 0)));
-                    Vx.Add(new VertexBase.CustomVertexInfo(vf, color3, new Vector3((0.5f + CirPro0) / 30f % 1f, 1, 0)));
+                    Vx.Add(new Vertex2D(vf + v0, color3, new Vector3((0.999f + CirPro0) / 30f % 1f, 0, 0)));
+                    Vx.Add(new Vertex2D(vf + v1, color3, new Vector3(CirPro0 / 30f % 1f, 0, 0)));
+                    Vx.Add(new Vertex2D(vf, color3, new Vector3((0.5f + CirPro0) / 30f % 1f, 1, 0)));
                 }
                 else
                 {
-                    Vx.Add(new VertexBase.CustomVertexInfo(vf + v0, color3, new Vector3(CirPro0 / 30f % 1f, 0, 0)));
-                    Vx.Add(new VertexBase.CustomVertexInfo(vf + v1, color3, new Vector3((0.999f + CirPro0) / 30f % 1f, 0, 0)));
-                    Vx.Add(new VertexBase.CustomVertexInfo(vf, color3, new Vector3((0.5f + CirPro0) / 30f % 1f, 1, 0)));
+                    Vx.Add(new Vertex2D(vf + v0, color3, new Vector3(CirPro0 / 30f % 1f, 0, 0)));
+                    Vx.Add(new Vertex2D(vf + v1, color3, new Vector3((0.999f + CirPro0) / 30f % 1f, 0, 0)));
+                    Vx.Add(new Vertex2D(vf, color3, new Vector3((0.5f + CirPro0) / 30f % 1f, 1, 0)));
                 }
             }
             Texture2D t = ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaCircle3").Value;
@@ -3118,7 +3109,7 @@ public class Acytaea : ModNPC
 
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            List<VertexBase.CustomVertexInfo> Vx9 = new List<VertexBase.CustomVertexInfo>();
+            List<Vertex2D> Vx9 = new List<Vertex2D>();
             for (int h = 0; h < 90; h++)
             {
                 Color color3 = Lighting.GetColor((int)NPC.Center.X / 16, (int)NPC.Center.Y / 16);
@@ -3128,9 +3119,9 @@ public class Acytaea : ModNPC
                 color3.B = (byte)(color3.B * (255 - NPC.alpha) / 255f);
                 Vector2 v0 = new Vector2(0, ACircleR).RotatedBy(h / 45d * Math.PI + CirR0);
                 Vector2 v1 = new Vector2(0, ACircleR).RotatedBy((h + 1) / 45d * Math.PI + CirR0);
-                Vx9.Add(new VertexBase.CustomVertexInfo(vf + v0, color3, new Vector3(h / 30f % 1f, 0, 0)));
-                Vx9.Add(new VertexBase.CustomVertexInfo(vf + v1, color3, new Vector3((0.999f + h) / 30f % 1f, 0, 0)));
-                Vx9.Add(new VertexBase.CustomVertexInfo(vf, color3, new Vector3((0.5f + h) / 30f % 1f, 1, 0)));
+                Vx9.Add(new Vertex2D(vf + v0, color3, new Vector3(h / 30f % 1f, 0, 0)));
+                Vx9.Add(new Vertex2D(vf + v1, color3, new Vector3((0.999f + h) / 30f % 1f, 0, 0)));
+                Vx9.Add(new Vertex2D(vf, color3, new Vector3((0.5f + h) / 30f % 1f, 1, 0)));
             }
             t = ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaCircle4").Value;
             if (NPC.localAI[0] > 3270 && NPC.localAI[0] <= 8500)
@@ -3146,7 +3137,7 @@ public class Acytaea : ModNPC
 
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            List<VertexBase.CustomVertexInfo> Vx2 = new List<VertexBase.CustomVertexInfo>();
+            List<Vertex2D> Vx2 = new List<Vertex2D>();
 
             if (NPC.localAI[0] > 3270)
             {
@@ -3161,9 +3152,9 @@ public class Acytaea : ModNPC
                         color3.B = (byte)(color3.B * (255 - NPC.alpha) / 255f);
                         Vector2 v0 = new Vector2(0, ACircleR * 0.67f).RotatedBy(h / 8d * Math.PI + CirR0 * -3.6f);
                         Vector2 v1 = new Vector2(0, ACircleR * 0.67f).RotatedBy((h + 1) / 8d * Math.PI + CirR0 * -3.6f);
-                        Vx2.Add(new VertexBase.CustomVertexInfo(vf + v0, color3, new Vector3(0, 0, 0)));
-                        Vx2.Add(new VertexBase.CustomVertexInfo(vf + v1, color3, new Vector3(1, 0, 0)));
-                        Vx2.Add(new VertexBase.CustomVertexInfo(vf, color3, new Vector3(0.5f, 1, 0)));
+                        Vx2.Add(new Vertex2D(vf + v0, color3, new Vector3(0, 0, 0)));
+                        Vx2.Add(new Vertex2D(vf + v1, color3, new Vector3(1, 0, 0)));
+                        Vx2.Add(new Vertex2D(vf, color3, new Vector3(0.5f, 1, 0)));
                     }
                 }
                 else
@@ -3177,9 +3168,9 @@ public class Acytaea : ModNPC
                         color3.B = (byte)(color3.B * (255 - NPC.alpha) / 255f);
                         Vector2 v0 = new Vector2(0, ACircleR * 0.5f).RotatedBy(h / 15d * Math.PI + CirR0 * -3.6f);
                         Vector2 v1 = new Vector2(0, ACircleR * 0.5f).RotatedBy((h + 1) / 15d * Math.PI + CirR0 * -3.6f);
-                        Vx2.Add(new VertexBase.CustomVertexInfo(vf + v0, color3, new Vector3(0, 0, 0)));
-                        Vx2.Add(new VertexBase.CustomVertexInfo(vf + v1, color3, new Vector3(1, 0, 0)));
-                        Vx2.Add(new VertexBase.CustomVertexInfo(vf, color3, new Vector3(0.5f, 1, 0)));
+                        Vx2.Add(new Vertex2D(vf + v0, color3, new Vector3(0, 0, 0)));
+                        Vx2.Add(new Vertex2D(vf + v1, color3, new Vector3(1, 0, 0)));
+                        Vx2.Add(new Vertex2D(vf, color3, new Vector3(0.5f, 1, 0)));
                     }
                 }
             }
@@ -3194,9 +3185,9 @@ public class Acytaea : ModNPC
                     color3.B = (byte)(color3.B * (255 - NPC.alpha) / 255f);
                     Vector2 v0 = new Vector2(0, ACircleR * 0.8f).RotatedBy(h / 45d * Math.PI + CirR0 * -3.6f);
                     Vector2 v1 = new Vector2(0, ACircleR * 0.8f).RotatedBy((h + 1) / 45d * Math.PI + CirR0 * -3.6f);
-                    Vx2.Add(new VertexBase.CustomVertexInfo(vf + v0, color3, new Vector3(0, 0, 0)));
-                    Vx2.Add(new VertexBase.CustomVertexInfo(vf + v1, color3, new Vector3(1, 0, 0)));
-                    Vx2.Add(new VertexBase.CustomVertexInfo(vf, color3, new Vector3(0.5f, 1, 0)));
+                    Vx2.Add(new Vertex2D(vf + v0, color3, new Vector3(0, 0, 0)));
+                    Vx2.Add(new Vertex2D(vf + v1, color3, new Vector3(1, 0, 0)));
+                    Vx2.Add(new Vertex2D(vf, color3, new Vector3(0.5f, 1, 0)));
                 }
             }
             t = ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaCircle2").Value;
@@ -3215,8 +3206,8 @@ public class Acytaea : ModNPC
             {
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-                List<VertexBase.CustomVertexInfo> Vx3 = new List<VertexBase.CustomVertexInfo>();
-                List<VertexBase.CustomVertexInfo> Vx4 = new List<VertexBase.CustomVertexInfo>();
+                List<Vertex2D> Vx3 = new List<Vertex2D>();
+                List<Vertex2D> Vx4 = new List<Vertex2D>();
                 for (int h = 0; h < 90; h++)
                 {
                     Color color3 = Lighting.GetColor((int)NPC.Center.X / 16, (int)NPC.Center.Y / 16);
@@ -3228,15 +3219,15 @@ public class Acytaea : ModNPC
                     Vector2 v1 = new Vector2(0, ACircleR * 0.8f).RotatedBy((h + 1) / 45d * Math.PI + CirR0 * -10.6f);
                     if (h % 9 >= 4)
                     {
-                        Vx3.Add(new VertexBase.CustomVertexInfo(vf + v0, color3, new Vector3(0, 0, 0)));
-                        Vx3.Add(new VertexBase.CustomVertexInfo(vf + v1, color3, new Vector3(1, 0, 0)));
-                        Vx3.Add(new VertexBase.CustomVertexInfo(vf, color3, new Vector3(0.5f, 1, 0)));
+                        Vx3.Add(new Vertex2D(vf + v0, color3, new Vector3(0, 0, 0)));
+                        Vx3.Add(new Vertex2D(vf + v1, color3, new Vector3(1, 0, 0)));
+                        Vx3.Add(new Vertex2D(vf, color3, new Vector3(0.5f, 1, 0)));
                     }
                     else
                     {
-                        Vx4.Add(new VertexBase.CustomVertexInfo(vf + v0, color3, new Vector3(0, 0, 0)));
-                        Vx4.Add(new VertexBase.CustomVertexInfo(vf + v1, color3, new Vector3(1, 0, 0)));
-                        Vx4.Add(new VertexBase.CustomVertexInfo(vf, color3, new Vector3(0.5f, 1, 0)));
+                        Vx4.Add(new Vertex2D(vf + v0, color3, new Vector3(0, 0, 0)));
+                        Vx4.Add(new Vertex2D(vf + v1, color3, new Vector3(1, 0, 0)));
+                        Vx4.Add(new Vertex2D(vf, color3, new Vector3(0.5f, 1, 0)));
                     }
                 }
                 t = ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaCircle4").Value;
@@ -3250,7 +3241,7 @@ public class Acytaea : ModNPC
 
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            List<VertexBase.CustomVertexInfo> Vx5 = new List<VertexBase.CustomVertexInfo>();
+            List<Vertex2D> Vx5 = new List<Vertex2D>();
             for (int h = 0; h < 90; h++)
             {
                 Color color3 = Lighting.GetColor((int)NPC.Center.X / 16, (int)NPC.Center.Y / 16);
@@ -3260,9 +3251,9 @@ public class Acytaea : ModNPC
                 color3.B = (byte)(color3.B * (255 - NPC.alpha) / 255f);
                 Vector2 v0 = new Vector2(0, ACircleR).RotatedBy(h / 45d * Math.PI + CirR0 * -19f);
                 Vector2 v1 = new Vector2(0, ACircleR).RotatedBy((h + 1) / 45d * Math.PI + CirR0 * -19f);
-                Vx5.Add(new VertexBase.CustomVertexInfo(vf + v0, color3, new Vector3(h / 30f % 1f, 0, 0)));
-                Vx5.Add(new VertexBase.CustomVertexInfo(vf + v1, color3, new Vector3((0.999f + h) / 30f % 1f, 0, 0)));
-                Vx5.Add(new VertexBase.CustomVertexInfo(vf, color3, new Vector3((0.5f + h) / 30f % 1f, 1, 0)));
+                Vx5.Add(new Vertex2D(vf + v0, color3, new Vector3(h / 30f % 1f, 0, 0)));
+                Vx5.Add(new Vertex2D(vf + v1, color3, new Vector3((0.999f + h) / 30f % 1f, 0, 0)));
+                Vx5.Add(new Vertex2D(vf, color3, new Vector3((0.5f + h) / 30f % 1f, 1, 0)));
             }
             t = ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaCircle5").Value;
             if (NPC.localAI[0] > 3270 && NPC.localAI[0] <= 8500)
@@ -3278,7 +3269,7 @@ public class Acytaea : ModNPC
 
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            List<VertexBase.CustomVertexInfo> Vx6 = new List<VertexBase.CustomVertexInfo>();
+            List<Vertex2D> Vx6 = new List<Vertex2D>();
             for (int h = 0; h < 90; h++)
             {
                 Color color3 = Lighting.GetColor((int)NPC.Center.X / 16, (int)NPC.Center.Y / 16);
@@ -3288,9 +3279,9 @@ public class Acytaea : ModNPC
                 color3.B = (byte)(color3.B * (255 - NPC.alpha) / 255f);
                 Vector2 v0 = new Vector2(0, ACircleR).RotatedBy(h / 45d * Math.PI + CirR0 * -12f);
                 Vector2 v1 = new Vector2(0, ACircleR).RotatedBy((h + 1) / 45d * Math.PI + CirR0 * -12f);
-                Vx6.Add(new VertexBase.CustomVertexInfo(vf + v0, color3, new Vector3(h / 30f % 1f, 0, 0)));
-                Vx6.Add(new VertexBase.CustomVertexInfo(vf + v1, color3, new Vector3((0.999f + h) / 30f % 1f, 0, 0)));
-                Vx6.Add(new VertexBase.CustomVertexInfo(vf, color3, new Vector3((0.5f + h) / 30f % 1f, 1, 0)));
+                Vx6.Add(new Vertex2D(vf + v0, color3, new Vector3(h / 30f % 1f, 0, 0)));
+                Vx6.Add(new Vertex2D(vf + v1, color3, new Vector3((0.999f + h) / 30f % 1f, 0, 0)));
+                Vx6.Add(new Vertex2D(vf, color3, new Vector3((0.5f + h) / 30f % 1f, 1, 0)));
             }
             t = ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaCircle6").Value;
             if (NPC.localAI[0] > 3270 && NPC.localAI[0] <= 8500)
@@ -3306,8 +3297,8 @@ public class Acytaea : ModNPC
 
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            List<VertexBase.CustomVertexInfo> Vx7 = new List<VertexBase.CustomVertexInfo>();
-            List<VertexBase.CustomVertexInfo> Vx8 = new List<VertexBase.CustomVertexInfo>();
+            List<Vertex2D> Vx7 = new List<Vertex2D>();
+            List<Vertex2D> Vx8 = new List<Vertex2D>();
             for (int h = 0; h < 72; h++)
             {
                 Color color3 = Lighting.GetColor((int)NPC.Center.X / 16, (int)NPC.Center.Y / 16);
@@ -3319,15 +3310,15 @@ public class Acytaea : ModNPC
                 Vector2 v1 = new Vector2(0, ACircleR * 0.65f).RotatedBy((h + 1) / 36d * Math.PI + CirR0 * -12f);
                 if (h % 12 >= SwirlPro)
                 {
-                    Vx7.Add(new VertexBase.CustomVertexInfo(vf + v0, color3, new Vector3(h / 30f % 1f, 0, 0)));
-                    Vx7.Add(new VertexBase.CustomVertexInfo(vf + v1, color3, new Vector3((0.999f + h) / 30f % 1f, 0, 0)));
-                    Vx7.Add(new VertexBase.CustomVertexInfo(vf, color3, new Vector3((0.5f + h) / 30f % 1f, 1, 0)));
+                    Vx7.Add(new Vertex2D(vf + v0, color3, new Vector3(h / 30f % 1f, 0, 0)));
+                    Vx7.Add(new Vertex2D(vf + v1, color3, new Vector3((0.999f + h) / 30f % 1f, 0, 0)));
+                    Vx7.Add(new Vertex2D(vf, color3, new Vector3((0.5f + h) / 30f % 1f, 1, 0)));
                 }
                 else
                 {
-                    Vx8.Add(new VertexBase.CustomVertexInfo(vf + v0, color3, new Vector3(h / 30f % 1f, 0, 0)));
-                    Vx8.Add(new VertexBase.CustomVertexInfo(vf + v1, color3, new Vector3((0.999f + h) / 30f % 1f, 0, 0)));
-                    Vx8.Add(new VertexBase.CustomVertexInfo(vf, color3, new Vector3((0.5f + h) / 30f % 1f, 1, 0)));
+                    Vx8.Add(new Vertex2D(vf + v0, color3, new Vector3(h / 30f % 1f, 0, 0)));
+                    Vx8.Add(new Vertex2D(vf + v1, color3, new Vector3((0.999f + h) / 30f % 1f, 0, 0)));
+                    Vx8.Add(new Vertex2D(vf, color3, new Vector3((0.5f + h) / 30f % 1f, 1, 0)));
                 }
             }
             t = ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaCircle7").Value;
@@ -3338,34 +3329,34 @@ public class Acytaea : ModNPC
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx8.ToArray(), 0, Vx8.Count / 3);
 
         }
-        if (MinorDir == 1)
+        if (minorDir == 1)
         {
             if (RightArmRot <= Math.PI / 2d)
             {
-                Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaRightArm").Value, NPC.Center + RightArmPos - Main.screenPosition, null, color, NPC.rotation + RightArmRot, new Vector2(33, 23), 1f, effects, 0f);
+                Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaRightArm").Value, NPC.Center + RightArmPos * NPC.spriteDirection - Main.screenPosition, null, color, NPC.rotation + RightArmRot, new Vector2(33, 23), 1f, effects, 0f);
             }
         }
         else
         {
             if (RightArmRot >= -Math.PI / 2d)
             {
-                Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaRightArm").Value, NPC.Center + RightArmPos - Main.screenPosition + new Vector2(10, 0), null, color, NPC.rotation + RightArmRot, new Vector2(17, 23), 1f, effects, 0f);
+                Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaRightArm").Value, NPC.Center + RightArmPos * NPC.spriteDirection - Main.screenPosition + new Vector2(10, 0), null, color, NPC.rotation + RightArmRot, new Vector2(17, 23), 1f, effects, 0f);
             }
         }
-        Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaHead").Value, NPC.Center + HeadPos - Main.screenPosition, new Rectangle(0, headFrame * 56, 50, 56), color, NPC.rotation, NPC.Size / 2f, 1f, effects, 0f);
-        Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaEye").Value, NPC.Center + HeadPos - Main.screenPosition, new Rectangle(0, headFrame * 56, 50, 56), new Color(255, 255, 255, 0), NPC.rotation, NPC.Size / 2f, 1f, effects, 0f);
-        if (MinorDir == 1)
+        Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaHead").Value, NPC.Center - Main.screenPosition, new Rectangle(0, headFrame * 56, 50, 56), color, NPC.rotation, NPC.Size / 2f, 1f, effects, 0f);
+        Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaEye").Value, NPC.Center - Main.screenPosition, new Rectangle(0, headFrame * 56, 50, 56), new Color(255, 255, 255, 0), NPC.rotation, NPC.Size / 2f, 1f, effects, 0f);
+        if (minorDir == 1)
         {
             if (RightArmRot > Math.PI / 2d)
             {
-                Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaRightArm").Value, NPC.Center + RightArmPos - Main.screenPosition, null, color, NPC.rotation + RightArmRot, new Vector2(33, 23), 1f, effects, 0f);
+                Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaRightArm").Value, NPC.Center + RightArmPos * NPC.spriteDirection - Main.screenPosition, null, color, NPC.rotation + RightArmRot, new Vector2(33, 23), 1f, effects, 0f);
             }
         }
         else
         {
             if (RightArmRot < -Math.PI / 2d)
             {
-                Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaRightArm").Value, NPC.Center + RightArmPos - Main.screenPosition + new Vector2(10, 0), null, color, NPC.rotation + RightArmRot, new Vector2(17, 23), 1f, effects, 0f);
+                Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaRightArm").Value, NPC.Center + RightArmPos * NPC.spriteDirection - Main.screenPosition + new Vector2(10, 0), null, color, NPC.rotation + RightArmRot, new Vector2(17, 23), 1f, effects, 0f);
             }
         }
         if (NPC.localAI[0] > 2020 && NPC.localAI[0] < 2070)
@@ -3421,7 +3412,6 @@ public class Acytaea : ModNPC
             }
         }
     }
-
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
     {
         /*for (int s = 0; s < 10; s++)
@@ -3452,7 +3442,7 @@ public class Acytaea : ModNPC
         }
         Main.spriteBatch.End();
         Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullClockwise, null, Main.GameViewMatrix.ZoomMatrix);
-        List<VertexBase.CustomVertexInfo> Vy = new List<VertexBase.CustomVertexInfo>();
+        List<Vertex2D> Vy = new List<Vertex2D>();
 
         Vector2 vq = NPC.Center - Main.screenPosition;
 
@@ -3463,14 +3453,14 @@ public class Acytaea : ModNPC
             color3.R = (byte)(color3.R * (255 - NPC.alpha) / 255f);
             color3.G = (byte)(color3.G * (255 - NPC.alpha) / 255f);
             color3.B = (byte)(color3.B * (255 - NPC.alpha) / 255f);
-            Vy.Add(new VertexBase.CustomVertexInfo(Skirt2[s] - Main.screenPosition + new Vector2(-1, 0), color3, new Vector3(1, 0, 0)));
-            Vy.Add(new VertexBase.CustomVertexInfo(Skirt1[s] - Main.screenPosition, color3, new Vector3(1, 1, 0)));
-            Vy.Add(new VertexBase.CustomVertexInfo(Skirt2[s + 1] - Main.screenPosition + new Vector2(1, 0), color3, new Vector3(0, 0, 0)));
+            Vy.Add(new Vertex2D(Skirt2[s] - Main.screenPosition + new Vector2(-1, 0), color3, new Vector3(1, 0, 0)));
+            Vy.Add(new Vertex2D(Skirt1[s] - Main.screenPosition, color3, new Vector3(1, 1, 0)));
+            Vy.Add(new Vertex2D(Skirt2[s + 1] - Main.screenPosition + new Vector2(1, 0), color3, new Vector3(0, 0, 0)));
             if (s < 9)
             {
-                Vy.Add(new VertexBase.CustomVertexInfo(Skirt1[s] - Main.screenPosition + new Vector2(-1, 0), color3, new Vector3(1, 0, 0)));
-                Vy.Add(new VertexBase.CustomVertexInfo(Skirt1[s + 1] - Main.screenPosition + new Vector2(1, 0), color3, new Vector3(0, 0, 0)));
-                Vy.Add(new VertexBase.CustomVertexInfo(Skirt2[s] - Main.screenPosition, color3, new Vector3(1, 1, 0)));
+                Vy.Add(new Vertex2D(Skirt1[s] - Main.screenPosition + new Vector2(-1, 0), color3, new Vector3(1, 0, 0)));
+                Vy.Add(new Vertex2D(Skirt1[s + 1] - Main.screenPosition + new Vector2(1, 0), color3, new Vector3(0, 0, 0)));
+                Vy.Add(new Vertex2D(Skirt2[s] - Main.screenPosition, color3, new Vector3(1, 1, 0)));
             }
         }
         Texture2D ta = ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaCircle4").Value;
@@ -3478,7 +3468,7 @@ public class Acytaea : ModNPC
         Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vy.ToArray(), 0, Vy.Count / 3);
         Main.spriteBatch.End();
         Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);*/
-        if (Battle)
+        if (isBattle)
         {
             return false;
         }
