@@ -154,7 +154,8 @@ namespace Everglow.Sources.Commons.Core.UI
         /// <returns>若是, 返回 <seealso href="true"/> , 否则返回 <seealso href="false"/>.</returns>
         public virtual bool GetInterviewState()
         {
-            if (ScissorRectangle.Contains(new Point(Mouse.GetState().X, Mouse.GetState().Y)) && BaseRectangle.Contains(new Point(Mouse.GetState().X, Mouse.GetState().Y)))
+            Point mousePos = new Point(Mouse.GetState().X, Mouse.GetState().Y);
+            if (ScissorRectangle.Contains(mousePos) && BaseRectangle.Contains(mousePos))
             {
                 Main.LocalPlayer.mouseInterface = true;
                 return true;
