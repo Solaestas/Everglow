@@ -89,37 +89,19 @@
         public void UpdateElement()
         {
             if (Container.ParentContainer == null)
-            {
                 return;
-            }
-
             if (LocationX == 0 && PercentageX != -1)
-            {
                 LocationX = PercentageX * Container.ParentContainer.ContainerElement.Width + Container.ParentContainer.ContainerElement.LocationX;
-            }
             else
-            {
                 LocationX += Container.ParentContainer.ContainerElement.PaddingWidth + MarginWidth;
-            }
-
             if (LocationY == 0 && PercentageY != -1)
-            {
                 LocationY = PercentageX * Container.ParentContainer.ContainerElement.Height + Container.ParentContainer.ContainerElement.LocationY;
-            }
             else
-            {
                 LocationY += Container.ParentContainer.ContainerElement.PaddingHeight + MarginHeight;
-            }
-
             if (Width == 0 && PercentageWidth != -1)
-            {
                 Width = PercentageWidth * Container.ParentContainer.ContainerElement.Width;
-            }
-
             if (Height == 0 && PercentageHeight != -1)
-            {
                 Height = PercentageHeight * Container.ParentContainer.ContainerElement.Height;
-            }
         }
 
         /// <summary>

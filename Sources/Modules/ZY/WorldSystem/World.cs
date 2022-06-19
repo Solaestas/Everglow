@@ -1,7 +1,10 @@
 ﻿using Everglow.Sources.Commons.Core.ModuleSystem;
+
 using ReLogic.Content;
+
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+
 using Terraria.Audio;
 using Terraria.GameContent.UI.States;
 using Terraria.IO;
@@ -130,26 +133,26 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
             SoundEngine.PlaySound(SoundID.MenuOpen);
             Main.GetInputText("");
             Task.Run(() =>
-             {
-                 if (!Main.menuMultiplayer)
-                 {
-                     if (!File.Exists(data.Path))
-                     {
-                         Main.menuMode = 10;//888是有UI的 10是只有文字的
-                         Main.MenuUI.SetState(new UIWorldLoad());
-                         WorldGen.clearWorld();
-                         //TODO MythMod
-                         Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.MythMod.Common.WorldSystem.WorldCreate_Def");
-                         Main.spawnTileX = DefaultSpawnPoint.X;
-                         Main.spawnTileY = DefaultSpawnPoint.Y;
-                         GenerateWorld();
-                         WorldFile.SaveWorld();
-                     }
-                     Main.menuMode = 10;
-                     Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.MythMod.Common.WorldSystem.WorldEnter_Def");
-                     WorldGen.playWorld();
-                 }
-             });
+            {
+                if (!Main.menuMultiplayer)
+                {
+                    if (!File.Exists(data.Path))
+                    {
+                        Main.menuMode = 10;//888是有UI的 10是只有文字的
+                        Main.MenuUI.SetState(new UIWorldLoad());
+                        WorldGen.clearWorld();
+                        //TODO MythMod
+                        Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.MythMod.Common.WorldSystem.WorldCreate_Def");
+                        Main.spawnTileX = DefaultSpawnPoint.X;
+                        Main.spawnTileY = DefaultSpawnPoint.Y;
+                        GenerateWorld();
+                        WorldFile.SaveWorld();
+                    }
+                    Main.menuMode = 10;
+                    Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.MythMod.Common.WorldSystem.WorldEnter_Def");
+                    WorldGen.playWorld();
+                }
+            });
         }
         /// <summary>
         /// 在服务端进入世界前执行的世界生成代码

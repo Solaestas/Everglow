@@ -1,14 +1,17 @@
 global using Microsoft.Xna.Framework;
 global using Microsoft.Xna.Framework.Graphics;
+
 global using System;
 global using System.Collections.Generic;
 global using System.Diagnostics;
 global using System.IO;
 global using System.Linq;
 global using System.Reflection;
+
 global using Terraria;
 global using Terraria.ID;
 global using Terraria.ModLoader;
+
 using Everglow.Sources.Commons.Core.ModuleSystem;
 using Everglow.Sources.Commons.Core.Network.PacketHandle;
 using Everglow.Sources.Commons.Core.Profiler;

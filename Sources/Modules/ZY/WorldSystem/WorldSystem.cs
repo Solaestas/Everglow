@@ -2,7 +2,9 @@
 using Everglow.Sources.Commons.Core.ModuleSystem;
 using Everglow.Sources.Commons.Core.Network.PacketHandle;
 using Everglow.Sources.Commons.Core.Profiler.Fody;
+
 using ReLogic.Content;
+
 using Terraria.GameContent.UI.Elements;
 using Terraria.IO;
 using Terraria.Social;
@@ -27,23 +29,23 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
             On.Terraria.GameContent.UI.Elements.UIWorldListItem.ctor += UIWorldListItem_ctor;
 
             ModContent.GetInstance<HookSystem>().AddMethod(() =>
-              {
-                  dataToWorld[Main.ActiveWorldFileData].EnterWorld_Server();
-              }, CallOpportunity.PostEnterWorld_Server);
+             {
+                 dataToWorld[Main.ActiveWorldFileData].EnterWorld_Server();
+             }, CallOpportunity.PostEnterWorld_Server);
 
             ModContent.GetInstance<HookSystem>().AddMethod(() =>
-              {
-                  if (Main.netMode != NetmodeID.MultiplayerClient)
-                  {
-                      CurrentWorld = World.CreateInstance(World.GetWorldName(Main.ActiveWorldFileData.WorldGeneratorVersion));
-                  }
-                  else
-                  {
-                      var pack = Everglow.Instance.GetPacket(1);
-                      pack.Write((byte)0);
-                      pack.Send();
-                  }
-              }, CallOpportunity.PostEnterWorld_Single);
+             {
+                 if (Main.netMode != NetmodeID.MultiplayerClient)
+                 {
+                     CurrentWorld = World.CreateInstance(World.GetWorldName(Main.ActiveWorldFileData.WorldGeneratorVersion));
+                 }
+                 else
+                 {
+                     var pack = Everglow.Instance.GetPacket(1);
+                     pack.Write((byte)0);
+                     pack.Send();
+                 }
+             }, CallOpportunity.PostEnterWorld_Single);
 
             //TestHook
             //ModContent.GetInstance<HookSystem>().AddMethod(() =>

@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+
 using Terraria.Audio;
 using Terraria.GameContent.UI.Elements;
 using Terraria.GameContent.UI.States;
@@ -28,25 +29,25 @@ namespace Everglow.Sources.Modules.ZY.WorldSystem
             SoundEngine.PlaySound(SoundID.MenuOpen);
             Main.GetInputText("");
             Task.Run(() =>
-             {
-                 if (!File.Exists(data.Path))
-                 {
-                     Main.menuMode = 888;
-                     Main.MenuUI.SetState(new UIWorldLoad());
-                     Main.AutogenProgress.Value = 0;
-                     WorldGen.clearWorld();
-                     Main.spawnTileX = DefaultSpawnPoint.X;
-                     Main.spawnTileY = DefaultSpawnPoint.Y;
-                     UIWorldCreation.ProcessSpecialWorldSeeds(data.SeedText);
-                     WorldGen.GenerateWorld(data.Seed, null);
-                     WorldFile.SaveWorld(Main.ActiveWorldFileData.IsCloudSave, true);
-                 }
-                 Main.menuMode = 10;
-                 typeof(UIWorldListItem).GetMethod("PlayGame", BindingFlags.NonPublic | BindingFlags.Instance)
-                     .CreateDelegate<UIElement.MouseEvent>(Everglow.ModuleManager.GetModule<WorldSystem>().dataToUI[data])
-                     .Invoke(evt, listeningElement);
+            {
+                if (!File.Exists(data.Path))
+                {
+                    Main.menuMode = 888;
+                    Main.MenuUI.SetState(new UIWorldLoad());
+                    Main.AutogenProgress.Value = 0;
+                    WorldGen.clearWorld();
+                    Main.spawnTileX = DefaultSpawnPoint.X;
+                    Main.spawnTileY = DefaultSpawnPoint.Y;
+                    UIWorldCreation.ProcessSpecialWorldSeeds(data.SeedText);
+                    WorldGen.GenerateWorld(data.Seed, null);
+                    WorldFile.SaveWorld(Main.ActiveWorldFileData.IsCloudSave, true);
+                }
+                Main.menuMode = 10;
+                typeof(UIWorldListItem).GetMethod("PlayGame", BindingFlags.NonPublic | BindingFlags.Instance)
+                    .CreateDelegate<UIElement.MouseEvent>(Everglow.ModuleManager.GetModule<WorldSystem>().dataToUI[data])
+                    .Invoke(evt, listeningElement);
 
-             });
+            });
         }
     }
 }
