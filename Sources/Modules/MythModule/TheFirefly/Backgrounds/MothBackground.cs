@@ -3,6 +3,7 @@ using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Physics;
 using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
 using Terraria.GameContent;
+using Everglow.Sources.Commons.Function.Vertex;
 
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
@@ -420,7 +421,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null);
             //InitMass_Spring();
             float gravity = 1.0f;
-            List<VertexBase.Vertex2D> Vertices = new List<VertexBase.Vertex2D>();
+            List<Vertex2D> Vertices = new List<Vertex2D>();
             for (int i = 0; i < RopPosFir.Count; i++)
             {
                 masses[i][0].position = Vector2.Zero;
@@ -554,7 +555,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         /// <param name="massPositionsSmooth"></param>
         /// <param name="offset"></param>
         /// <param name="vertices"></param>
-        private void DrawRope(List<Vector2> massPositionsSmooth, Vector2 offset, List<VertexBase.Vertex2D> vertices)
+        private void DrawRope(List<Vector2> massPositionsSmooth, Vector2 offset, List<Vertex2D> vertices)
         {
             if (vertices.Count != 0)
             {
@@ -581,14 +582,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 Vector2 normalDir = Vector2.Normalize(new Vector2(-dir.Y, dir.X));
                 float width = baseWidth * (count - i - 1) / (count - 1);
 
-                var vertex1 = new VertexBase.Vertex2D(massPositionsSmooth[i] + offset + normalDir * width, new Color(11, 9, 25) * alpha, Vector3.Zero);
+                var vertex1 = new Vertex2D(massPositionsSmooth[i] + offset + normalDir * width, new Color(11, 9, 25) * alpha, Vector3.Zero);
                 if (i == 0)
                 {
                     // 再增加一个退化三角形顶点
                     vertices.Add(vertex1);
                 }
                 vertices.Add(vertex1);
-                vertices.Add(new VertexBase.Vertex2D(massPositionsSmooth[i] + offset - normalDir * width, new Color(11, 9, 25) * alpha, Vector3.Zero));
+                vertices.Add(new Vertex2D(massPositionsSmooth[i] + offset - normalDir * width, new Color(11, 9, 25) * alpha, Vector3.Zero));
             }
 
         }
