@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+
 using Terraria.ModLoader.Config;
 
 namespace Everglow.Sources.Commons.Function.FeatureFlags

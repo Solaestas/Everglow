@@ -118,8 +118,8 @@ namespace Everglow.Sources.Commons.Core.Network.PacketHandle
         {
             var assembly = Assembly.GetExecutingAssembly();
             foreach (var type in assembly.GetTypes().Where(type =>
-                   !type.IsAbstract &&
-                   type.GetInterfaces().Contains(typeof(IPacket))
+                 !type.IsAbstract &&
+                 type.GetInterfaces().Contains(typeof(IPacket))
                 ))
             {
                 if (!m_packetIDMapping.ContainsKey(type))
@@ -131,8 +131,8 @@ namespace Everglow.Sources.Commons.Core.Network.PacketHandle
             }
 
             foreach (var type in assembly.GetTypes().Where(type =>
-                   !type.IsAbstract &&
-                   type.GetInterfaces().Contains(typeof(IPacketHandler))
+                 !type.IsAbstract &&
+                 type.GetInterfaces().Contains(typeof(IPacketHandler))
                 ))
             {
                 // 将 packet 和 PacketHandler 绑定
