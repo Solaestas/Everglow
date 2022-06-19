@@ -1,14 +1,14 @@
 ﻿
 using Terraria.Localization;
 
-namespace MythMod.NPCs.Acytaea
+namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
 {
     [AutoloadBossHead]
     public class FakeAcytaea : ModNPC
     {
         public override void SetStaticDefaults()
         {
-            base.DisplayName.SetDefault("Acytaea");
+            DisplayName.SetDefault("Acytaea");
             /*Main.npcFrameCount[NPC.type] = 50;
             NPCID.Sets.ExtraFramesCount[NPC.type] = 9;
             NPCID.Sets.AttackFrameCount[NPC.type] = 4;*/
@@ -17,7 +17,7 @@ namespace MythMod.NPCs.Acytaea
         private bool canDespawn = false;
         public override bool CheckActive()
         {
-            return this.canDespawn;
+            return canDespawn;
         }
         public override void SetDefaults()
         {

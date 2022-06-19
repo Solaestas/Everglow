@@ -1,14 +1,14 @@
 
 using Terraria.Localization;
 
-namespace MythMod.NPCs.Acytaea
+namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
 {
     [AutoloadBossHead]
     public class AcytaeaShadow3 : ModNPC
     {
         public override void SetStaticDefaults()
         {
-            base.DisplayName.SetDefault("Acytaea");
+            DisplayName.SetDefault("Acytaea");
             /*Main.npcFrameCount[NPC.type] = 50;
             NPCID.Sets.ExtraFramesCount[NPC.type] = 9;
             NPCID.Sets.AttackFrameCount[NPC.type] = 4;*/
@@ -21,7 +21,7 @@ namespace MythMod.NPCs.Acytaea
         private bool canDespawn = false;
         public override bool CheckActive()
         {
-            return this.canDespawn;
+            return canDespawn;
         }
         public override void SetDefaults()
         {
@@ -55,7 +55,7 @@ namespace MythMod.NPCs.Acytaea
         private int AIMNPC = -1;
         public override void AI()
         {
-            if (NPC.CountNPCS(ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Acytaea>()) <= 0 || Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Acytaea.BossIndex == 0)
+            if (NPC.CountNPCS(ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.Acytaea>()) <= 0 || Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.Acytaea.BossIndex == 0)
             {
                 if (NPC.active)
                 {
@@ -74,7 +74,7 @@ namespace MythMod.NPCs.Acytaea
             {
                 for (int g = 0; g < 200; g++)
                 {
-                    if (Main.npc[g].type == ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Acytaea>())
+                    if (Main.npc[g].type == ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.Acytaea>())
                     {
                         AIMNPC = g;
                         break;
@@ -149,7 +149,7 @@ namespace MythMod.NPCs.Acytaea
                         {
                             NPC.spriteDirection = -1;
                         }
-                        NPC.rotation = Math.Clamp((NPC.velocity.X / 10f) * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
+                        NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
                     }
                     Fly = true;
                     if (Fly)
@@ -182,7 +182,7 @@ namespace MythMod.NPCs.Acytaea
                     NPC.active = false;
                 }
             }
-            if (NPC.CountNPCS(ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Acytaea>()) <= 0)
+            if (NPC.CountNPCS(ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.Acytaea>()) <= 0)
             {
                 if (NPC.active)
                 {
@@ -322,9 +322,9 @@ namespace MythMod.NPCs.Acytaea
                             {
                                 A = 0
                             };
-                            color3.R = (byte)(color3.R * (MaxH - h - 1) / (float)(MaxH));
-                            color3.G = (byte)(color3.G * (MaxH - h - 1) / (float)(MaxH));
-                            color3.B = (byte)(color3.B * (MaxH - h - 1) / (float)(MaxH));
+                            color3.R = (byte)(color3.R * (MaxH - h - 1) / (float)MaxH);
+                            color3.G = (byte)(color3.G * (MaxH - h - 1) / (float)MaxH);
+                            color3.B = (byte)(color3.B * (MaxH - h - 1) / (float)MaxH);
                             if (OldBladePos[h + 1] == Vector2.Zero)
                             {
                                 break;
@@ -333,14 +333,14 @@ namespace MythMod.NPCs.Acytaea
                             Vector2 v0 = OldBladePos[h] - vf;
                             if (BladeRot < OldBladeRot)
                             {
-                                Vx.Add(new VertexBase.CustomVertexInfo(OldBladePos[h] - Main.screenPosition, color3, new Vector3((h) / 60f, 0, 0)));
+                                Vx.Add(new VertexBase.CustomVertexInfo(OldBladePos[h] - Main.screenPosition, color3, new Vector3(h / 60f, 0, 0)));
                                 Vx.Add(new VertexBase.CustomVertexInfo(OldBladePos[h + 1] - Main.screenPosition, color3, new Vector3((h + 1) / 60f, 0, 0)));
                                 Vx.Add(new VertexBase.CustomVertexInfo(vf, color3, new Vector3(0, 1, 0)));
                             }
                             else
                             {
                                 Vx.Add(new VertexBase.CustomVertexInfo(OldBladePos[h + 1] - Main.screenPosition, color3, new Vector3((h + 1) / 60f, 0, 0)));
-                                Vx.Add(new VertexBase.CustomVertexInfo(OldBladePos[h] - Main.screenPosition, color3, new Vector3((h) / 60f, 0, 0)));
+                                Vx.Add(new VertexBase.CustomVertexInfo(OldBladePos[h] - Main.screenPosition, color3, new Vector3(h / 60f, 0, 0)));
                                 Vx.Add(new VertexBase.CustomVertexInfo(vf, color3, new Vector3(0, 1, 0)));
                             }
                         }

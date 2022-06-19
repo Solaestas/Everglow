@@ -1,14 +1,14 @@
 
 using Terraria.Localization;
 
-namespace MythMod.NPCs.Acytaea
+namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
 {
     [AutoloadBossHead]
     public class AcytaeaShadow2 : ModNPC
     {
         public override void SetStaticDefaults()
         {
-            base.DisplayName.SetDefault("Acytaea");
+            DisplayName.SetDefault("Acytaea");
             /*Main.npcFrameCount[NPC.type] = 50;
             NPCID.Sets.ExtraFramesCount[NPC.type] = 9;
             NPCID.Sets.AttackFrameCount[NPC.type] = 4;*/
@@ -21,7 +21,7 @@ namespace MythMod.NPCs.Acytaea
         private bool canDespawn = false;
         public override bool CheckActive()
         {
-            return this.canDespawn;
+            return canDespawn;
         }
         public override void SetDefaults()
         {
@@ -55,7 +55,7 @@ namespace MythMod.NPCs.Acytaea
         private int MinorDir = -1;
         public override void AI()
         {
-            if (NPC.CountNPCS(ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Acytaea>()) <= 0)
+            if (NPC.CountNPCS(ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.Acytaea>()) <= 0)
             {
                 if (NPC.active)
                 {
@@ -110,31 +110,31 @@ namespace MythMod.NPCs.Acytaea
                     {
                         if (Math.Abs(NPC.ai[1] - 300) < 10f)
                         {
-                            int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow2>(), 0, 150, 100, 2, 0);
+                            int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.AcytaeaShadow2>(), 0, 150, 100, 2, 0);
                             Vector2 vc = (new Vector2(Main.npc[g].ai[0], Main.npc[g].ai[1]) - AIMpos) / 30f;
                             Main.npc[g].velocity = vc;
                         }
                         else if (Math.Abs(NPC.ai[1] + 300) < 10f)
                         {
-                            int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow2>(), 0, 150, -100, 2, 1);
+                            int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.AcytaeaShadow2>(), 0, 150, -100, 2, 1);
                             Vector2 vc = (new Vector2(Main.npc[g].ai[0], Main.npc[g].ai[1]) - AIMpos) / 30f;
                             Main.npc[g].velocity = vc;
                         }
                         else if (Math.Abs(NPC.ai[1] + 100) < 10f)
                         {
-                            int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow2>(), 0, 150, 0, 2, 0);
+                            int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.AcytaeaShadow2>(), 0, 150, 0, 2, 0);
                             Vector2 vc = (new Vector2(Main.npc[g].ai[0], Main.npc[g].ai[1]) - AIMpos) / 30f;
                             Main.npc[g].velocity = vc;
-                            g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow2>(), 0, 150, -100, 2, 0);
+                            g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.AcytaeaShadow2>(), 0, 150, -100, 2, 0);
                             vc = (new Vector2(Main.npc[g].ai[0], Main.npc[g].ai[1]) - AIMpos) / 30f;
                             Main.npc[g].velocity = vc;
                         }
                         else
                         {
-                            int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow2>(), 0, 150, 0, 2, 1);
+                            int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.AcytaeaShadow2>(), 0, 150, 0, 2, 1);
                             Vector2 vc = (new Vector2(Main.npc[g].ai[0], Main.npc[g].ai[1]) - AIMpos) / 30f;
                             Main.npc[g].velocity = vc;
-                            g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow2>(), 0, 150, 100, 2, 1);
+                            g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.AcytaeaShadow2>(), 0, 150, 100, 2, 1);
                             vc = (new Vector2(Main.npc[g].ai[0], Main.npc[g].ai[1]) - AIMpos) / 30f;
                             Main.npc[g].velocity = vc;
                         }
@@ -143,28 +143,28 @@ namespace MythMod.NPCs.Acytaea
                     {
                         if (Math.Abs(NPC.ai[1] - 100) < 10f)
                         {
-                            int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow2>(), 0, 270, 190, 3, 0);
+                            int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.AcytaeaShadow2>(), 0, 270, 190, 3, 0);
                             Vector2 vc = (new Vector2(Main.npc[g].ai[0], Main.npc[g].ai[1]) - AIMpos) / 30f;
                             Main.npc[g].velocity = vc;
-                            g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow2>(), 0, 360, 120, 3, 0);
+                            g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.AcytaeaShadow2>(), 0, 360, 120, 3, 0);
                             vc = (new Vector2(Main.npc[g].ai[0], Main.npc[g].ai[1]) - AIMpos) / 30f;
                             Main.npc[g].velocity = vc;
                         }
                         else if (Math.Abs(NPC.ai[1] + 100) < 10f)
                         {
-                            int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow2>(), 0, 270, -190, 3, 0);
+                            int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.AcytaeaShadow2>(), 0, 270, -190, 3, 0);
                             Vector2 vc = (new Vector2(Main.npc[g].ai[0], Main.npc[g].ai[1]) - AIMpos) / 30f;
                             Main.npc[g].velocity = vc;
-                            g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow2>(), 0, 360, -120, 3, 0);
+                            g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.AcytaeaShadow2>(), 0, 360, -120, 3, 0);
                             vc = (new Vector2(Main.npc[g].ai[0], Main.npc[g].ai[1]) - AIMpos) / 30f;
                             Main.npc[g].velocity = vc;
                         }
                         else
                         {
-                            int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow2>(), 0, -250, -100, 3, 0);
+                            int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.AcytaeaShadow2>(), 0, -250, -100, 3, 0);
                             Vector2 vc = (new Vector2(Main.npc[g].ai[0], Main.npc[g].ai[1]) - AIMpos) / 30f;
                             Main.npc[g].velocity = vc;
-                            g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow2>(), 0, -250, 100, 3, 0);
+                            g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.AcytaeaShadow2>(), 0, -250, 100, 3, 0);
                             vc = (new Vector2(Main.npc[g].ai[0], Main.npc[g].ai[1]) - AIMpos) / 30f;
                             Main.npc[g].velocity = vc;
                         }
@@ -173,56 +173,56 @@ namespace MythMod.NPCs.Acytaea
                     {
                         if (Math.Abs(NPC.ai[1] + 190) < 10f)
                         {
-                            int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow2>(), 0, -150, -150, 4, 0);
+                            int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.AcytaeaShadow2>(), 0, -150, -150, 4, 0);
                             Vector2 vc = (new Vector2(Main.npc[g].ai[0], Main.npc[g].ai[1]) - AIMpos) / 30f;
                             Main.npc[g].velocity = vc;
                         }
                         else if (Math.Abs(NPC.ai[1] - 190) < 10f)
                         {
-                            int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow2>(), 0, 150, 150, 4, 0);
+                            int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.AcytaeaShadow2>(), 0, 150, 150, 4, 0);
                             Vector2 vc = (new Vector2(Main.npc[g].ai[0], Main.npc[g].ai[1]) - AIMpos) / 30f;
                             Main.npc[g].velocity = vc;
                         }
                         else if (Math.Abs(NPC.ai[1] - 120) < 10f)
                         {
-                            int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow2>(), 0, 150, -150, 4, 0);
+                            int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.AcytaeaShadow2>(), 0, 150, -150, 4, 0);
                             Vector2 vc = (new Vector2(Main.npc[g].ai[0], Main.npc[g].ai[1]) - AIMpos) / 30f;
                             Main.npc[g].velocity = vc;
                         }
                         else if (Math.Abs(NPC.ai[1] + 120) < 10f)
                         {
-                            int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow2>(), 0, -150, 150, 4, 0);
+                            int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.AcytaeaShadow2>(), 0, -150, 150, 4, 0);
                             Vector2 vc = (new Vector2(Main.npc[g].ai[0], Main.npc[g].ai[1]) - AIMpos) / 30f;
                             Main.npc[g].velocity = vc;
                         }
                         else if (Math.Abs(NPC.ai[1] - 100) < 10f)
                         {
-                            int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow2>(), 0, 0, 150, 4, 0);
+                            int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.AcytaeaShadow2>(), 0, 0, 150, 4, 0);
                             Vector2 vc = (new Vector2(Main.npc[g].ai[0], Main.npc[g].ai[1]) - AIMpos) / 30f;
                             Main.npc[g].velocity = vc;
-                            g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow2>(), 0, -90, 200, 4, 0);
+                            g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.AcytaeaShadow2>(), 0, -90, 200, 4, 0);
                             vc = (new Vector2(Main.npc[g].ai[0], Main.npc[g].ai[1]) - AIMpos) / 30f;
                             Main.npc[g].velocity = vc;
-                            g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow2>(), 0, 90, 200, 4, 0);
+                            g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.AcytaeaShadow2>(), 0, 90, 200, 4, 0);
                             vc = (new Vector2(Main.npc[g].ai[0], Main.npc[g].ai[1]) - AIMpos) / 30f;
                             Main.npc[g].velocity = vc;
                         }
                         else if (Math.Abs(NPC.ai[1] + 100) < 10f)
                         {
-                            int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow2>(), 0, 0, -150, 4, 0);
+                            int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.AcytaeaShadow2>(), 0, 0, -150, 4, 0);
                             Vector2 vc = (new Vector2(Main.npc[g].ai[0], Main.npc[g].ai[1]) - AIMpos) / 30f;
                             Main.npc[g].velocity = vc;
-                            g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow2>(), 0, -90, -200, 4, 0);
+                            g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.AcytaeaShadow2>(), 0, -90, -200, 4, 0);
                             vc = (new Vector2(Main.npc[g].ai[0], Main.npc[g].ai[1]) - AIMpos) / 30f;
                             Main.npc[g].velocity = vc;
-                            g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow2>(), 0, 90, -200, 4, 0);
+                            g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.AcytaeaShadow2>(), 0, 90, -200, 4, 0);
                             vc = (new Vector2(Main.npc[g].ai[0], Main.npc[g].ai[1]) - AIMpos) / 30f;
                             Main.npc[g].velocity = vc;
                         }
                     }
                     if (NPC.ai[2] == 4 && NPC.ai[3] == 0)
                     {
-                        int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow2>(), 0, 175, 0, 5, 1);
+                        int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.AcytaeaShadow2>(), 0, 175, 0, 5, 1);
                         Vector2 vc = (new Vector2(Main.npc[g].ai[0], Main.npc[g].ai[1]) - AIMpos) / 30f;
                         Main.npc[g].velocity = vc;
                     }
@@ -250,7 +250,7 @@ namespace MythMod.NPCs.Acytaea
                     {
                         NPC.spriteDirection = -1;
                     }
-                    NPC.rotation = Math.Clamp((NPC.velocity.X / 10f) * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
+                    NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
                 }
                 Fly = true;
                 if (Fly)
@@ -282,7 +282,7 @@ namespace MythMod.NPCs.Acytaea
                     NPC.active = false;
                 }
             }
-            if (NPC.CountNPCS(ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Acytaea>()) <= 0 || Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Acytaea.BossIndex == 0)
+            if (NPC.CountNPCS(ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.Acytaea>()) <= 0 || Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.Acytaea.BossIndex == 0)
             {
                 if (NPC.active)
                 {
@@ -418,9 +418,9 @@ namespace MythMod.NPCs.Acytaea
                             {
                                 A = 0
                             };
-                            color3.R = (byte)(color3.R * (MaxH - h - 1) / (float)(MaxH));
-                            color3.G = (byte)(color3.G * (MaxH - h - 1) / (float)(MaxH));
-                            color3.B = (byte)(color3.B * (MaxH - h - 1) / (float)(MaxH));
+                            color3.R = (byte)(color3.R * (MaxH - h - 1) / (float)MaxH);
+                            color3.G = (byte)(color3.G * (MaxH - h - 1) / (float)MaxH);
+                            color3.B = (byte)(color3.B * (MaxH - h - 1) / (float)MaxH);
                             if (OldBladePos[h + 1] == Vector2.Zero)
                             {
                                 break;
@@ -429,14 +429,14 @@ namespace MythMod.NPCs.Acytaea
                             Vector2 v0 = OldBladePos[h] - vf;
                             if (BladeRot < OldBladeRot)
                             {
-                                Vx.Add(new VertexBase.CustomVertexInfo(OldBladePos[h] - Main.screenPosition, color3, new Vector3((h) / 60f, 0, 0)));
+                                Vx.Add(new VertexBase.CustomVertexInfo(OldBladePos[h] - Main.screenPosition, color3, new Vector3(h / 60f, 0, 0)));
                                 Vx.Add(new VertexBase.CustomVertexInfo(OldBladePos[h + 1] - Main.screenPosition, color3, new Vector3((h + 1) / 60f, 0, 0)));
                                 Vx.Add(new VertexBase.CustomVertexInfo(vf, color3, new Vector3(0, 1, 0)));
                             }
                             else
                             {
                                 Vx.Add(new VertexBase.CustomVertexInfo(OldBladePos[h + 1] - Main.screenPosition, color3, new Vector3((h + 1) / 60f, 0, 0)));
-                                Vx.Add(new VertexBase.CustomVertexInfo(OldBladePos[h] - Main.screenPosition, color3, new Vector3((h) / 60f, 0, 0)));
+                                Vx.Add(new VertexBase.CustomVertexInfo(OldBladePos[h] - Main.screenPosition, color3, new Vector3(h / 60f, 0, 0)));
                                 Vx.Add(new VertexBase.CustomVertexInfo(vf, color3, new Vector3(0, 1, 0)));
                             }
                         }

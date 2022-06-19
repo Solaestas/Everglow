@@ -1,14 +1,14 @@
 
 using Terraria.Localization;
 
-namespace MythMod.NPCs.Acytaea
+namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
 {
     [AutoloadBossHead]
     public class AcytaeaShadow : ModNPC
     {
         public override void SetStaticDefaults()
         {
-            base.DisplayName.SetDefault("Acytaea");
+            DisplayName.SetDefault("Acytaea");
             /*Main.npcFrameCount[NPC.type] = 50;
             NPCID.Sets.ExtraFramesCount[NPC.type] = 9;
             NPCID.Sets.AttackFrameCount[NPC.type] = 4;*/
@@ -21,7 +21,7 @@ namespace MythMod.NPCs.Acytaea
         private bool canDespawn = false;
         public override bool CheckActive()
         {
-            return this.canDespawn;
+            return canDespawn;
         }
 
         private int Dam = 12;
@@ -64,7 +64,7 @@ namespace MythMod.NPCs.Acytaea
             {
                 Dam = 8;
             }
-            if (NPC.CountNPCS(ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Acytaea>()) <= 0 || Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Acytaea.BossIndex == 0)
+            if (NPC.CountNPCS(ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.Acytaea>()) <= 0 || Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.Acytaea.BossIndex == 0)
             {
                 if (NPC.active)
                 {
@@ -128,7 +128,7 @@ namespace MythMod.NPCs.Acytaea
                     {
                         NPC.spriteDirection = -1;
                     }
-                    NPC.rotation = Math.Clamp((NPC.velocity.X / 10f) * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
+                    NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
                 }
                 Fly = true;
                 if (Fly)
@@ -144,14 +144,14 @@ namespace MythMod.NPCs.Acytaea
             }
             if (NPC.localAI[0] > 400 && NPC.localAI[0] <= 500)
             {
-                NPC.rotation = Math.Clamp((NPC.velocity.X / 10f) * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
+                NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
                 NPC.velocity *= 0.9f;
                 CanUseWing = false;
             }
             if (NPC.localAI[0] > 500 && NPC.localAI[0] <= 530)
             {
                 MinorDir = NPC.spriteDirection * -1;
-                NPC.rotation = Math.Clamp((NPC.velocity.X / 10f) * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
+                NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
                 NPC.velocity *= 0.96f;
                 CanUseWing = false;
                 RightArmRot += (float)(Math.PI * 1.1 / 30f) * MinorDir;
@@ -160,7 +160,7 @@ namespace MythMod.NPCs.Acytaea
             {
                 MinorDir = NPC.spriteDirection * -1;
                 HasBlade = true;
-                NPC.rotation = Math.Clamp((NPC.velocity.X / 10f) * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
+                NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
                 BladeRot = (float)(RightArmRot - Math.PI * 1.1 - (MinorDir - 1) * -0.3854);//刀的角度等于手臂角度-1.1Pi,此项由贴图决定
                 NPC.velocity *= 0.96f;
                 float a0 = (NPC.localAI[0] - 530) / 20f;
@@ -173,7 +173,7 @@ namespace MythMod.NPCs.Acytaea
                 RightArmRot = CosA0 * (float)(Math.PI * 1.1) * MinorDir;//旋转角度撕裂感
                 OldBladeRot = BladeRot;//保证旋转方向正确记录
                 BladeRot = (float)(RightArmRot - Math.PI * 1.1 - (MinorDir - 1) * -0.3854);//刀的角度等于手臂角度-1.1Pi,此项由贴图决定
-                NPC.rotation = Math.Clamp((NPC.velocity.X / 10f) * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;//随速度前倾
+                NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;//随速度前倾
                 NPC.velocity *= 0.96f;//考虑阻力
                 BladePro = 1;//进程打满
                 CanUseWing = false;//不准飞
@@ -197,7 +197,7 @@ namespace MythMod.NPCs.Acytaea
                 RightArmRot = (1 - CosA0) * (float)(Math.PI * 1.1) * MinorDir;//旋转角度撕裂感
                 OldBladeRot = BladeRot;//保证旋转方向正确记录
                 BladeRot = (float)(RightArmRot - Math.PI * 1.1 - (MinorDir - 1) * -0.3854);//刀的角度等于手臂角度-1.1Pi,此项由贴图决定
-                NPC.rotation = Math.Clamp((NPC.velocity.X / 10f) * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;//随速度前倾
+                NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;//随速度前倾
                 NPC.velocity *= 0.96f;//考虑阻力
                 BladePro = 1;//进程打满
                 CanUseWing = false;//不准飞
@@ -366,9 +366,9 @@ namespace MythMod.NPCs.Acytaea
                             {
                                 A = 0
                             };
-                            color3.R = (byte)(color3.R * (MaxH - h - 1) / (float)(MaxH));
-                            color3.G = (byte)(color3.G * (MaxH - h - 1) / (float)(MaxH));
-                            color3.B = (byte)(color3.B * (MaxH - h - 1) / (float)(MaxH));
+                            color3.R = (byte)(color3.R * (MaxH - h - 1) / (float)MaxH);
+                            color3.G = (byte)(color3.G * (MaxH - h - 1) / (float)MaxH);
+                            color3.B = (byte)(color3.B * (MaxH - h - 1) / (float)MaxH);
                             if (OldBladePos[h + 1] == Vector2.Zero)
                             {
                                 break;
@@ -377,14 +377,14 @@ namespace MythMod.NPCs.Acytaea
                             Vector2 v0 = OldBladePos[h] - vf;
                             if (BladeRot < OldBladeRot)
                             {
-                                Vx.Add(new VertexBase.CustomVertexInfo(OldBladePos[h] - Main.screenPosition, color3, new Vector3((h) / 60f, 0, 0)));
+                                Vx.Add(new VertexBase.CustomVertexInfo(OldBladePos[h] - Main.screenPosition, color3, new Vector3(h / 60f, 0, 0)));
                                 Vx.Add(new VertexBase.CustomVertexInfo(OldBladePos[h + 1] - Main.screenPosition, color3, new Vector3((h + 1) / 60f, 0, 0)));
                                 Vx.Add(new VertexBase.CustomVertexInfo(vf, color3, new Vector3(0, 1, 0)));
                             }
                             else
                             {
                                 Vx.Add(new VertexBase.CustomVertexInfo(OldBladePos[h + 1] - Main.screenPosition, color3, new Vector3((h + 1) / 60f, 0, 0)));
-                                Vx.Add(new VertexBase.CustomVertexInfo(OldBladePos[h] - Main.screenPosition, color3, new Vector3((h) / 60f, 0, 0)));
+                                Vx.Add(new VertexBase.CustomVertexInfo(OldBladePos[h] - Main.screenPosition, color3, new Vector3(h / 60f, 0, 0)));
                                 Vx.Add(new VertexBase.CustomVertexInfo(vf, color3, new Vector3(0, 1, 0)));
                             }
                         }

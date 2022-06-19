@@ -1,8 +1,10 @@
+using Everglow.Sources.Commons.Function.Vertex;
+
 using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.Personalities;
 using Terraria.Localization;
-namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea;
+namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs;
 
 [AutoloadHead]
 //[AutoloadBossHead]
@@ -20,9 +22,9 @@ public class Acytaea : ModNPC
     public int minorDir = -1;
     private bool checkSpwan = true;
     public static float ToPlayerRot = 0;
-    public readonly static Vector2 RightWingPos = new Vector2(-18, 0);
-    public readonly static Vector2 RightArmPos = new Vector2(-10, 0);
-    public readonly static Vector2 LeftWingPos = new Vector2(-18, 0);
+    public static readonly Vector2 RightWingPos = new Vector2(-18, 0);
+    public static readonly Vector2 RightArmPos = new Vector2(-10, 0);
+    public static readonly Vector2 LeftWingPos = new Vector2(-18, 0);
     public static float LeftArmRot = 0;
     public static float RightArmRot = 0;
     public static float BladePro = 0;
@@ -257,7 +259,7 @@ public class Acytaea : ModNPC
                 {
                     if (Main.npc[y].active)
                     {
-                        if (Main.npc[y].type == ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow>() || Main.npc[y].type == ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow2>() || Main.npc[y].type == ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow3>())
+                        if (Main.npc[y].type == ModContent.NPCType<Acytaea.AcytaeaShadow>() || Main.npc[y].type == ModContent.NPCType<Acytaea.AcytaeaShadow2>() || Main.npc[y].type == ModContent.NPCType<Acytaea.AcytaeaShadow3>())
                         {
                             Main.npc[y].active = false;
                         }
@@ -630,7 +632,7 @@ public class Acytaea : ModNPC
                 {
                     if (NPC.localAI[0] % 5 == 0)
                     {
-                        int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow>(), 0, (float)(NPC.localAI[0] % 7));
+                        int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Acytaea.AcytaeaShadow>(), 0, (float)(NPC.localAI[0] % 7));
                         Main.npc[g].velocity = new Vector2(0, 16).RotatedBy(NPC.localAI[0] % 7 * Math.PI / 3.5d);
                     }
                 }
@@ -748,7 +750,7 @@ public class Acytaea : ModNPC
                     bool Trans = true;
                     for (int k = 0; k < 200; k++)
                     {
-                        if (Main.npc[k].type == ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow>() && Main.npc[k].active)
+                        if (Main.npc[k].type == ModContent.NPCType<Acytaea.AcytaeaShadow>() && Main.npc[k].active)
                         {
                             if (Main.npc[k].ai[0] == NPC.localAI[0] % 7)
                             {
@@ -1064,7 +1066,7 @@ public class Acytaea : ModNPC
                 {
                     for (int f = 0; f < 4; f++)
                     {
-                        int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow2>(), 0, -100, (f - 1.5f) * 200, 1);
+                        int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Acytaea.AcytaeaShadow2>(), 0, -100, (f - 1.5f) * 200, 1);
                         Vector2 vc = (new Vector2(-100, (f - 1.5f) * 200) - aiMpos) / 30f;
                         Main.npc[g].velocity = vc;
                     }
@@ -1663,8 +1665,8 @@ public class Acytaea : ModNPC
                     if (NPC.localAI[0] % 7 == 0)
                     {
                         float K = (NPC.localAI[0] - 6148) * 10;
-                        NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow3>(), 0, K, K * 0.7f, 1, 1);
-                        NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow3>(), 0, K, -K * 0.7f, -1, 1);
+                        NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Acytaea.AcytaeaShadow3>(), 0, K, K * 0.7f, 1, 1);
+                        NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Acytaea.AcytaeaShadow3>(), 0, K, -K * 0.7f, -1, 1);
                     }
                 }
             }//幻影箭阵
@@ -1706,7 +1708,7 @@ public class Acytaea : ModNPC
                         Main.projectile[i].timeLeft = 100;
                         for (int z = 0; z < 200; z++)
                         {
-                            if (Main.npc[z].active && Main.npc[z].type == ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow3>())
+                            if (Main.npc[z].active && Main.npc[z].type == ModContent.NPCType<Acytaea.AcytaeaShadow3>())
                             {
                                 Vector2 vλ = new Vector2(0.5f, -0.5f * Main.npc[z].ai[2]);
                                 int λ = Projectile.NewProjectile(NPC.GetSource_FromAI(), Main.npc[z].Center, vλ * 34, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrow>(), Dam, 3, player.whoAmI);
@@ -1902,8 +1904,8 @@ public class Acytaea : ModNPC
                     float Dx = NPC.Center.X - player.Center.X;
                     for (int f = 0; f < 7; f++)
                     {
-                        NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow3>(), 0, 0, (float)Math.Sqrt(f + 1) * 72, 0, -1);
-                        NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow3>(), 0, 0, (float)Math.Sqrt(f + 1) * -72, 0, -1);
+                        NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Acytaea.AcytaeaShadow3>(), 0, 0, (float)Math.Sqrt(f + 1) * 72, 0, -1);
+                        NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Acytaea.AcytaeaShadow3>(), 0, 0, (float)Math.Sqrt(f + 1) * -72, 0, -1);
                     }
                 }
                 if (NPC.localAI[0] > 7250 && NPC.localAI[0] < 7450)
@@ -1915,7 +1917,7 @@ public class Acytaea : ModNPC
                         Main.projectile[f].timeLeft = 100;
                         for (int z = 0; z < 200; z++)
                         {
-                            if (Main.npc[z].active && Main.npc[z].type == ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow3>())
+                            if (Main.npc[z].active && Main.npc[z].type == ModContent.NPCType<Acytaea.AcytaeaShadow3>())
                             {
                                 Vector2 vλ = new Vector2(-1f * (float)Math.Sqrt(Math.Abs(Main.npc[z].ai[1] / 300f) + 1), 0f);
                                 int λ = Projectile.NewProjectile(NPC.GetSource_FromAI(), Main.npc[z].Center, vλ * 34, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrow>(), Dam, 3, player.whoAmI);
@@ -2637,7 +2639,7 @@ public class Acytaea : ModNPC
             NPC.width = 40;
             NPC.height = 56;
             t0 = "MythMod/NPCs/Acytaea/Acytaea_Head_Boss";
-            NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<NPCs.Acytaea.FakeAcytaea>());
+            NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Acytaea.FakeAcytaea>());
         }
         else
         {
