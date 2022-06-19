@@ -61,57 +61,112 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         /// <param name="type"></param>
         public static void ShapeTile(string Shapepath, int a, int b, int type)
         {
-            Color[,] colors = ImageReader.Read("Everglow/Sources/Modules/MythModule/TheFirefly/WorldGeneration/" + Shapepath);
-            int width = colors.GetLength(0);
-            int height = colors.GetLength(1);
-            for (int y = 0; y < height; y += 1)
+            var imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Sources/Modules/MythModule/TheFirefly/WorldGeneration/" + Shapepath);
+            imageData.ProcessPixelRows(accessor =>
             {
-                for (int x = 0; x < width; x += 1)
+                for (int y = 0; y < accessor.Height; y++)
                 {
-                    Tile tile = Main.tile[x + a, y + b];
-                    switch (type)//21是箱子
+                    var pixelRow = accessor.GetRowSpan(y);
+                    for (int x = 0; x < pixelRow.Length; x++)
                     {
-                        case 0:
-                            if (colors[x, y] == new Color(255, 0, 0, 255))
-                            {
-                                if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+                        ref var pixel = ref pixelRow[x];
+
+                        Tile tile = Main.tile[x + a, y + b];
+                        switch (type)//21是箱子
+                        {
+                            case 0:
+                                if (pixel == new SixLabors.ImageSharp.PixelFormats.Rgb24(255, 0, 0))
                                 {
-                                    tile.ClearEverything();
+                                    if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+                                    {
+                                        tile.ClearEverything();
+                                    }
                                 }
-                            }
-                            break;
-                        case 1:
-                            if (colors[x, y] == new Color(56, 48, 61, 255))
-                            {
-                                if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+                                break;
+                            case 1:
+                                if (pixel == new SixLabors.ImageSharp.PixelFormats.Rgb24(56, 48, 61))
                                 {
-                                    tile.TileType = (ushort)ModContent.TileType<Tiles.DarkCocoon>();
-                                    tile.HasTile = true;
+                                    if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+                                    {
+                                        tile.TileType = (ushort)ModContent.TileType<Tiles.DarkCocoon>();
+                                        tile.HasTile = true;
+                                    }
                                 }
-                            }
-                            if (colors[x, y] == new Color(0, 0, 255, 255))
-                            {
-                                if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+                                if (pixel == new SixLabors.ImageSharp.PixelFormats.Rgb24(0, 0, 255))
                                 {
-                                    tile.LiquidType = LiquidID.Water;
-                                    tile.LiquidAmount = 200;
-                                    tile.HasTile = false;
-                                    //WorldGen.PlaceLiquid(x, y, byte.MaxValue, 255);
+                                    if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+                                    {
+                                        tile.LiquidType = LiquidID.Water;
+                                        tile.LiquidAmount = 200;
+                                        tile.HasTile = false;
+                                        //WorldGen.PlaceLiquid(x, y, byte.MaxValue, 255);
+                                    }
                                 }
-                            }
-                            break;
-                        case 2:
-                            if (colors[x, y] == new Color(0, 0, 5, 255))
-                            {
-                                if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+                                break;
+                            case 2:
+                                if (pixel == new SixLabors.ImageSharp.PixelFormats.Rgb24(0, 0, 5))
                                 {
-                                    tile.WallType = (ushort)ModContent.WallType<Walls.DarkCocoonWall>();
+                                    if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+                                    {
+                                        tile.WallType = (ushort)ModContent.WallType<Walls.DarkCocoonWall>();
+                                    }
                                 }
-                            }
-                            break;
+                                break;
+                        }
                     }
                 }
-            }
+            });
+
+            //int width = colors.GetLength(0);
+            //int height = colors.GetLength(1);
+            //for (int y = 0; y < height; y += 1)
+            //{
+            //    for (int x = 0; x < width; x += 1)
+            //    {
+            //        Tile tile = Main.tile[x + a, y + b];
+            //        switch (type)//21是箱子
+            //        {
+            //            case 0:
+            //                if (colors[x, y] == new Color(255, 0, 0, 255))
+            //                {
+            //                    if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+            //                    {
+            //                        tile.ClearEverything();
+            //                    }
+            //                }
+            //                break;
+            //            case 1:
+            //                if (colors[x, y] == new Color(56, 48, 61, 255))
+            //                {
+            //                    if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+            //                    {
+            //                        tile.TileType = (ushort)ModContent.TileType<Tiles.DarkCocoon>();
+            //                        tile.HasTile = true;
+            //                    }
+            //                }
+            //                if (colors[x, y] == new Color(0, 0, 255, 255))
+            //                {
+            //                    if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+            //                    {
+            //                        tile.LiquidType = LiquidID.Water;
+            //                        tile.LiquidAmount = 200;
+            //                        tile.HasTile = false;
+            //                        //WorldGen.PlaceLiquid(x, y, byte.MaxValue, 255);
+            //                    }
+            //                }
+            //                break;
+            //            case 2:
+            //                if (colors[x, y] == new Color(0, 0, 5, 255))
+            //                {
+            //                    if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+            //                    {
+            //                        tile.WallType = (ushort)ModContent.WallType<Walls.DarkCocoonWall>();
+            //                    }
+            //                }
+            //                break;
+            //        }
+            //    }
+            //}
         }
         /// <summary>
         /// 建造流萤之茧
