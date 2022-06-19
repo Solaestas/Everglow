@@ -8,7 +8,10 @@ namespace Everglow.Sources.Modules.FoodModule
     {
         // 对于原版的食物进行类型Id到 FoodInfo 的映射，直接获取FoodInfo实例
         private static Dictionary<int, FoodInfo> m_vanillaFoodInfos;
-
+        public override void Unload()
+        {
+            m_vanillaFoodInfos = null;
+        }
         public FoodGlobalItem()
         {
             m_vanillaFoodInfos = new Dictionary<int, FoodInfo>

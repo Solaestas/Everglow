@@ -8,5 +8,11 @@
         /// </summary>
         public static readonly bool NetworkPacketIDUseInt32 = true;
 
+
+        /// <summary>
+        /// 是否显示ExampleModule的UI
+        /// </summary>
+        public static readonly bool ShowExampleUI = true;
+
     }
 }
