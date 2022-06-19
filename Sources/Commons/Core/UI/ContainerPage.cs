@@ -5,18 +5,18 @@
     /// </summary>
     public class ContainerPage : Container
     {
-        public override sealed bool GetInterviewState( )
+        public sealed override bool GetInterviewState()
         {
             return false;
         }
-        public static void RegisterContainerPage( ContainerPage containerPage )
+        public static void RegisterContainerPage(ContainerPage containerPage)
         {
-            containerPage.DoInitialize( );
+            containerPage.DoInitialize();
             ContainerSystem.Page.Register(containerPage);
         }
-        protected override sealed void SetLayerout( ref ContainerElement containerElement )
+        protected sealed override void SetLayerout(ref ContainerElement containerElement)
         {
-            containerElement.SetLayerout(0,0,Main.screenWidth,Main.screenHeight);
+            containerElement.SetLayerout(0, 0, Main.screenWidth, Main.screenHeight);
             base.SetLayerout(ref containerElement);
         }
     }

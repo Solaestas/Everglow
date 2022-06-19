@@ -13,17 +13,17 @@ namespace Everglow.Sources.Commons.Core
             get; internal set;
         }
         public bool Enable { get; set; } = true;
-        public ActionHandler( Action action )
+        public ActionHandler(Action action)
         {
-            this.action=action;
-            Name=action.ToString( );
+            this.action = action;
+            Name = action.ToString();
         }
-        public ActionHandler( Action action,string name )
+        public ActionHandler(Action action, string name)
         {
-            this.action=action;
-            Name=name;
+            this.action = action;
+            Name = name;
         }
-        public void Invoke( ) => action.Invoke( );
+        public void Invoke() => action.Invoke();
     }
     public enum CallOpportunity
     {
@@ -76,7 +76,7 @@ namespace Everglow.Sources.Commons.Core
             CallOpportunity.PostEnterWorld_Server,
             CallOpportunity.ResolutionChanged
         };
-        internal Dictionary<CallOpportunity,List<ActionHandler>> methods = new Dictionary<CallOpportunity,List<ActionHandler>>( );
+        internal Dictionary<CallOpportunity, List<ActionHandler>> methods = new Dictionary<CallOpportunity, List<ActionHandler>>();
         /// <summary>
         /// 现在存在的问题就是，这里的method都是无参数的Action，但是如DrawMapIcon这样的方法就需要传参了，只好用这种这种定义字段的方法
         /// </summary>
@@ -105,20 +105,20 @@ namespace Everglow.Sources.Commons.Core
         /// <param name="op"></param>
         /// <param name="name">Handler的名字，方便查找</param>
         /// <exception cref="ArgumentException"></exception>
-        public ActionHandler AddMethod( Action action,CallOpportunity op,string name = null )
+        public ActionHandler AddMethod(Action action, CallOpportunity op, string name = null)
         {
-            if( !validOpportunity.Contains(op) )
+            if (!validOpportunity.Contains(op))
             {
                 //除非搞事不然应该不会执行这行代码
                 throw new ArgumentException("Invaild Opportunity");
             }
-            var handler = new ActionHandler(action,name??action.ToString( ));
+            var handler = new ActionHandler(action, name ?? action.ToString());
             methods[op].Add(new ActionHandler(action));
             return handler;
         }
-        public void AddMethod( ActionHandler handler,CallOpportunity op )
+        public void AddMethod(ActionHandler handler, CallOpportunity op)
         {
-            if( !validOpportunity.Contains(op) )
+            if (!validOpportunity.Contains(op))
             {
                 //除非搞事不然应该不会执行这行代码
                 throw new ArgumentException("Invaild Opportunity");
@@ -130,15 +130,15 @@ namespace Everglow.Sources.Commons.Core
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public ActionHandler Find( string name,CallOpportunity op = CallOpportunity.None )
+        public ActionHandler Find(string name, CallOpportunity op = CallOpportunity.None)
         {
-            if( op==CallOpportunity.None )
+            if (op == CallOpportunity.None)
             {
-                foreach( var vs in methods.Values )
+                foreach (var vs in methods.Values)
                 {
-                    foreach( var handler in vs )
+                    foreach (var handler in vs)
                     {
-                        if( handler.Name==name )
+                        if (handler.Name == name)
                         {
                             return handler;
                         }
@@ -147,9 +147,9 @@ namespace Everglow.Sources.Commons.Core
             }
             else
             {
-                foreach( var handler in methods[op] )
+                foreach (var handler in methods[op])
                 {
-                    if( handler.Name==name )
+                    if (handler.Name == name)
                     {
                         return handler;
                     }
@@ -158,44 +158,44 @@ namespace Everglow.Sources.Commons.Core
             return null;
         }
 
-        public override void Load( )
+        public override void Load()
         {
-            foreach( var op in validOpportunity )
+            foreach (var op in validOpportunity)
             {
-                methods.Add(op,new List<ActionHandler>( ));
+                methods.Add(op, new List<ActionHandler>());
             }
-            On.Terraria.Main.DrawDust+=Main_DrawDust;
-            On.Terraria.Main.DrawProjectiles+=Main_DrawProjectiles;
-            On.Terraria.Main.DrawNPCs+=Main_DrawNPCs;
-            On.Terraria.Graphics.Renderers.LegacyPlayerRenderer.DrawPlayers+=LegacyPlayerRenderer_DrawPlayers;
-            On.Terraria.Main.DoDraw+=Main_DoDraw;
-            On.Terraria.WorldGen.playWorld+=WorldGen_playWorld;
-            On.Terraria.WorldGen.SaveAndQuit+=WorldGen_SaveAndQuit;
-            On.Terraria.Main.DrawMiscMapIcons+=Main_DrawMiscMapIcons;
-            On.Terraria.WorldGen.serverLoadWorldCallBack+=WorldGen_serverLoadWorldCallBack;
-            Main.OnResolutionChanged+=Main_OnResolutionChanged;
+            On.Terraria.Main.DrawDust += Main_DrawDust;
+            On.Terraria.Main.DrawProjectiles += Main_DrawProjectiles;
+            On.Terraria.Main.DrawNPCs += Main_DrawNPCs;
+            On.Terraria.Graphics.Renderers.LegacyPlayerRenderer.DrawPlayers += LegacyPlayerRenderer_DrawPlayers;
+            On.Terraria.Main.DoDraw += Main_DoDraw;
+            On.Terraria.WorldGen.playWorld += WorldGen_playWorld;
+            On.Terraria.WorldGen.SaveAndQuit += WorldGen_SaveAndQuit;
+            On.Terraria.Main.DrawMiscMapIcons += Main_DrawMiscMapIcons;
+            On.Terraria.WorldGen.serverLoadWorldCallBack += WorldGen_serverLoadWorldCallBack;
+            Main.OnResolutionChanged += Main_OnResolutionChanged;
         }
 
-        public override void Unload( )
+        public override void Unload()
         {
-            methods=null;
-            Main.OnResolutionChanged-=Main_OnResolutionChanged;
+            methods = null;
+            Main.OnResolutionChanged -= Main_OnResolutionChanged;
         }
-        internal void Invoke( CallOpportunity op )
+        internal void Invoke(CallOpportunity op)
         {
-            foreach( var handler in methods[op] )
+            foreach (var handler in methods[op])
             {
-                if( handler.Enable )
+                if (handler.Enable)
                 {
                     try
                     {
-                        handler.Invoke( );
+                        handler.Invoke();
                     }
-                    catch( Exception ex )
+                    catch (Exception ex)
                     {
                         Everglow.Instance.Logger.Error($"{handler.Name} 抛出了异常 {ex}");
-                        handler.Enable=false;
-                        if( Function.FeatureFlags.EverglowConfig.DebugMode )
+                        handler.Enable = false;
+                        if (Function.FeatureFlags.EverglowConfig.DebugMode)
                         {
                             //自动暂停的，方便监视
                             Debug.Assert(false);
@@ -205,104 +205,104 @@ namespace Everglow.Sources.Commons.Core
             }
         }
 
-        internal void WorldGen_serverLoadWorldCallBack( On.Terraria.WorldGen.orig_serverLoadWorldCallBack orig )
+        internal void WorldGen_serverLoadWorldCallBack(On.Terraria.WorldGen.orig_serverLoadWorldCallBack orig)
         {
-            orig( );
+            orig();
             Invoke(CallOpportunity.PostEnterWorld_Server);
         }
 
-        internal void Main_DrawMiscMapIcons( On.Terraria.Main.orig_DrawMiscMapIcons orig,Main self,SpriteBatch spriteBatch,Vector2 mapTopLeft,Vector2 mapX2Y2AndOff,Rectangle? mapRect,float mapScale,float drawScale,ref string mouseTextString )
+        internal void Main_DrawMiscMapIcons(On.Terraria.Main.orig_DrawMiscMapIcons orig, Main self, SpriteBatch spriteBatch, Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale, float drawScale, ref string mouseTextString)
         {
-            orig(self,spriteBatch,mapTopLeft,mapX2Y2AndOff,mapRect,mapScale,drawScale,ref mouseTextString);
-            MapIconInfomation=(mapTopLeft, mapX2Y2AndOff, mapRect, mapScale);
+            orig(self, spriteBatch, mapTopLeft, mapX2Y2AndOff, mapRect, mapScale, drawScale, ref mouseTextString);
+            MapIconInfomation = (mapTopLeft, mapX2Y2AndOff, mapRect, mapScale);
             Invoke(CallOpportunity.PostDrawMapIcons);
         }
 
-        public override void PostUpdateEverything( )
+        public override void PostUpdateEverything()
         {
             Invoke(CallOpportunity.PostUpdateEverything);
             UpdateTimer++;
         }
 
-        public override void PostUpdateNPCs( )
+        public override void PostUpdateNPCs()
         {
             Invoke(CallOpportunity.PostUpdateNPCs);
         }
 
-        public override void PostUpdateProjectiles( )
+        public override void PostUpdateProjectiles()
         {
             Invoke(CallOpportunity.PostUpdateProjectiles);
         }
 
-        public override void PostUpdateDusts( )
+        public override void PostUpdateDusts()
         {
             Invoke(CallOpportunity.PostUpdateDusts);
         }
 
-        public override void PostUpdatePlayers( )
+        public override void PostUpdatePlayers()
         {
             Invoke(CallOpportunity.PostUpdatePlayers);
         }
 
-        public override void PostDrawTiles( )
+        public override void PostDrawTiles()
         {
             Invoke(CallOpportunity.PostDrawTiles);
         }
 
-        internal void WorldGen_SaveAndQuit( On.Terraria.WorldGen.orig_SaveAndQuit orig,Action callback )
+        internal void WorldGen_SaveAndQuit(On.Terraria.WorldGen.orig_SaveAndQuit orig, Action callback)
         {
             orig(callback);
             Invoke(CallOpportunity.PostExitWorld_Single);
         }
 
-        internal void WorldGen_playWorld( On.Terraria.WorldGen.orig_playWorld orig )
+        internal void WorldGen_playWorld(On.Terraria.WorldGen.orig_playWorld orig)
         {
-            orig( );
+            orig();
             Invoke(CallOpportunity.PostEnterWorld_Single);
         }
 
-        internal void Main_OnResolutionChanged( Vector2 obj )
+        internal void Main_OnResolutionChanged(Vector2 obj)
         {
             Invoke(CallOpportunity.ResolutionChanged);
         }
 
-        internal void LegacyPlayerRenderer_DrawPlayers( On.Terraria.Graphics.Renderers.LegacyPlayerRenderer.orig_DrawPlayers orig,Terraria.Graphics.Renderers.LegacyPlayerRenderer self,Terraria.Graphics.Camera camera,IEnumerable<Player> players )
+        internal void LegacyPlayerRenderer_DrawPlayers(On.Terraria.Graphics.Renderers.LegacyPlayerRenderer.orig_DrawPlayers orig, Terraria.Graphics.Renderers.LegacyPlayerRenderer self, Terraria.Graphics.Camera camera, IEnumerable<Player> players)
         {
-            orig.Invoke(self,camera,players);
+            orig.Invoke(self, camera, players);
             Invoke(CallOpportunity.PostDrawPlayers);
         }
 
-        internal void Main_DrawNPCs( On.Terraria.Main.orig_DrawNPCs orig,Main self,bool behindTiles )
+        internal void Main_DrawNPCs(On.Terraria.Main.orig_DrawNPCs orig, Main self, bool behindTiles)
         {
-            orig.Invoke(self,behindTiles);
-            if( !behindTiles )
+            orig.Invoke(self, behindTiles);
+            if (!behindTiles)
             {
                 Invoke(CallOpportunity.PostDrawNPCs);
             }
         }
 
-        internal void Main_DrawDust( On.Terraria.Main.orig_DrawDust orig,Main self )
+        internal void Main_DrawDust(On.Terraria.Main.orig_DrawDust orig, Main self)
         {
             orig.Invoke(self);
             Invoke(CallOpportunity.PostDrawDusts);
         }
 
-        internal void Main_DrawProjectiles( On.Terraria.Main.orig_DrawProjectiles orig,Main self )
+        internal void Main_DrawProjectiles(On.Terraria.Main.orig_DrawProjectiles orig, Main self)
         {
             orig.Invoke(self);
             Invoke(CallOpportunity.PostDrawProjectiles);
         }
 
-        private void Main_DoDraw( On.Terraria.Main.orig_DoDraw orig,Main self,GameTime gameTime )
+        private void Main_DoDraw(On.Terraria.Main.orig_DoDraw orig, Main self, GameTime gameTime)
         {
-            orig(self,gameTime);
+            orig(self, gameTime);
             Invoke(CallOpportunity.PostDrawEverything);
             DrawTimer++;
         }
 
-        internal void EndCapture( On.Terraria.Graphics.Effects.FilterManager.orig_EndCapture orig,Terraria.Graphics.Effects.FilterManager self,RenderTarget2D finalTexture,RenderTarget2D screenTarget1,RenderTarget2D screenTarget2,Color clearColor )
+        internal void EndCapture(On.Terraria.Graphics.Effects.FilterManager.orig_EndCapture orig, Terraria.Graphics.Effects.FilterManager self, RenderTarget2D finalTexture, RenderTarget2D screenTarget1, RenderTarget2D screenTarget2, Color clearColor)
         {
-            orig(self,finalTexture,screenTarget1,screenTarget2,clearColor);
+            orig(self, finalTexture, screenTarget1, screenTarget2, clearColor);
             Invoke(CallOpportunity.PostDrawEverything);
             DrawTimer++;
         }

@@ -13,7 +13,7 @@
         {
             get
             {
-                if( !m_released )
+                if (!m_released)
                 {
                     return m_resource;
                 }
@@ -41,19 +41,19 @@
         /// </summary>
         /// <param name="resource"></param>
         /// <param name="releaseAction"></param>
-        public ResourceLocker( T resource,Action releaseAction )
+        public ResourceLocker(T resource, Action releaseAction)
         {
-            m_resource=resource;
-            m_releaseAction=releaseAction;
-            m_released=false;
+            m_resource = resource;
+            m_releaseAction = releaseAction;
+            m_released = false;
         }
 
-        public void Release( )
+        public void Release()
         {
-            if( !m_released )
+            if (!m_released)
             {
-                m_released=true;
-                m_releaseAction( );
+                m_released = true;
+                m_releaseAction();
             }
             else
             {

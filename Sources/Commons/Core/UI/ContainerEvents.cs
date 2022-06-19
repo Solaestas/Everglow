@@ -11,7 +11,7 @@ namespace Everglow.Sources.Commons.Core.UI
         /// <summary>
         /// 指示该容器是否启用拖动功能.
         /// </summary>
-        public bool Drag = false;
+        public bool Drop = false;
 
         /// <summary>
         /// 若启用拖动功能, 记录当前容器是否正处于拖动状态.
@@ -24,23 +24,33 @@ namespace Everglow.Sources.Commons.Core.UI
         public Vector2 SelectPoint;
 
         /// <summary>
+        /// 用于计算输入动作: 确定开始交互与结束交互的容器是否为同一个.
+        /// </summary>
+        private bool _clickRecordSeek = false;
+
+        /// <summary>
+        /// 用于计算输入动作: 确定开始交互与结束交互的容器是否为同一个.
+        /// </summary>
+        private bool _pressedRecordSeek = false;
+
+        /// <summary>
         /// 指示该容器是否会被父容器的指针寻找到.
         /// </summary>
         public bool CanGetForPointer = false;
 
         public Container Container { get; private set; }
 
-        public ContainerEvents( Container container )
+        public ContainerEvents(Container container)
         {
-            Container=container;
-            OnMouseLeftClick+=MouseLeftClickEvent;
-            OnMouseLeftDown+=MouseLeftDownEvent;
-            OnMouseLeftUp+=MouseLeftUpEvent;
-            OnMouseRightClick+=MouseRightClickEvent;
-            OnMouseRightDown+=MouseRightDownEvent;
-            OnMouseRightUp+=MouseRightUpEvent;
-            OnInterview+=InterviewEvent;
-            OnInterviewStateChange+=InterviewStateChangeEvent;
+            Container = container;
+            OnMouseLeftClick += MouseLeftClickEvent;
+            OnMouseLeftDown += MouseLeftDownEvent;
+            OnMouseLeftUp += MouseLeftUpEvent;
+            OnMouseRightClick += MouseRightClickEvent;
+            OnMouseRightDown += MouseRightDownEvent;
+            OnMouseRightUp += MouseRightUpEvent;
+            OnInterview += InterviewEvent;
+            OnInterviewStateChange += InterviewStateChangeEvent;
         }
 
         /// <summary>
@@ -55,11 +65,11 @@ namespace Everglow.Sources.Commons.Core.UI
         /// <summary>
         /// 由执行器调用: 执行自定义的操作于当前容器可交互状态更改时.
         /// </summary>
-        public void DoInterviewStateChangeEvent( ) => OnInterviewStateChange.Invoke( );
+        public void DoInterviewStateChangeEvent() => OnInterviewStateChange.Invoke();
         /// <summary>
         /// 在容器的可交互状态发生改变时执行.
         /// </summary>
-        protected virtual void InterviewStateChangeEvent( )
+        protected virtual void InterviewStateChangeEvent()
         {
         }
 
@@ -70,19 +80,20 @@ namespace Everglow.Sources.Commons.Core.UI
         /// <summary>
         /// 由执行器调用: 执行自定义的操作于当前容器处于可交互状态下时, 鼠标左键单击时.
         /// </summary>
-        public void DoMouseLeftClickEvent( )
+        public void DoMouseLeftClickEvent()
         {
-            if( Drag )
+            _clickRecordSeek = true;
+            if (Drop)
             {
-                Droping=true;
-                SelectPoint=new Vector2(Mouse.GetState( ).X,Mouse.GetState( ).Y)-Container.Location;
+                Droping = true;
+                SelectPoint = new Vector2(Mouse.GetState().X, Mouse.GetState().Y) - Container.Location;
             }
-            OnMouseLeftClick.Invoke( );
+            OnMouseLeftClick.Invoke();
         }
         /// <summary>
         /// 在容器于可交互状态下, 鼠标左键单击时执行.
         /// </summary>
-        protected virtual void MouseLeftClickEvent( )
+        protected virtual void MouseLeftClickEvent()
         {
         }
 
@@ -93,14 +104,15 @@ namespace Everglow.Sources.Commons.Core.UI
         /// <summary>
         /// 由执行器调用: 执行自定义的操作于当前容器处于可交互状态下时, 鼠标左键长按时.
         /// </summary>
-        public void DoMouseLeftDownEvent( )
+        public void DoMouseLeftDownEvent()
         {
-            OnMouseLeftDown.Invoke( );
+            _pressedRecordSeek = true;
+            OnMouseLeftDown.Invoke();
         }
         /// <summary>
         /// 在容器于可交互状态下, 鼠标左键长按时执行.
         /// </summary>
-        protected virtual void MouseLeftDownEvent( )
+        protected virtual void MouseLeftDownEvent()
         {
         }
 
@@ -111,14 +123,16 @@ namespace Everglow.Sources.Commons.Core.UI
         /// <summary>
         /// 由执行器调用: 执行自定义的操作于当前容器处于可交互状态下时, 鼠标左键抬起时.
         /// </summary>
-        public void DoMouseLeftUpEvent( )
+        public void DoMouseLeftUpEvent()
         {
-            OnMouseLeftUp.Invoke( );
+            _clickRecordSeek = false;
+            _pressedRecordSeek = false;
+            OnMouseLeftUp.Invoke();
         }
         /// <summary>
         /// 在容器于可交互状态下, 鼠标左键抬起时执行.
         /// </summary>
-        protected virtual void MouseLeftUpEvent( )
+        protected virtual void MouseLeftUpEvent()
         {
         }
 
@@ -129,11 +143,11 @@ namespace Everglow.Sources.Commons.Core.UI
         /// <summary>
         /// 由执行器调用: 执行自定义的操作于当前容器处于可交互状态下时.
         /// </summary>
-        public void DoInterviewEvent( ) => OnInterview.Invoke( );
+        public void DoInterviewEvent() => OnInterview.Invoke();
         /// <summary>
         /// 在容器处于可交互状态下时执行.
         /// </summary>
-        protected virtual void InterviewEvent( )
+        protected virtual void InterviewEvent()
         {
         }
 
@@ -144,14 +158,15 @@ namespace Everglow.Sources.Commons.Core.UI
         /// <summary>
         /// 由执行器调用: 执行自定义的操作于当前容器处于可交互状态下时, 鼠标右键单击时.
         /// </summary>
-        public void DoMouseRightClickEvent( )
+        public void DoMouseRightClickEvent()
         {
-            OnMouseRightClick.Invoke( );
+            _clickRecordSeek = true;
+            OnMouseRightClick.Invoke();
         }
         /// <summary>
         /// 在容器于可交互状态下, 鼠标右键单击时执行.
         /// </summary>
-        protected virtual void MouseRightClickEvent( )
+        protected virtual void MouseRightClickEvent()
         {
         }
 
@@ -162,14 +177,15 @@ namespace Everglow.Sources.Commons.Core.UI
         /// <summary>
         /// 由执行器调用: 执行自定义的操作于当前容器处于可交互状态下时, 鼠标右键长按时.
         /// </summary>
-        public void DoMouseRightDownEvent( )
+        public void DoMouseRightDownEvent()
         {
-            OnMouseRightDown.Invoke( );
+            _pressedRecordSeek = true;
+            OnMouseRightDown.Invoke();
         }
         /// <summary>
         /// 在容器于可交互状态下, 鼠标右键长按时执行.
         /// </summary>
-        protected virtual void MouseRightDownEvent( )
+        protected virtual void MouseRightDownEvent()
         {
         }
 
@@ -180,37 +196,57 @@ namespace Everglow.Sources.Commons.Core.UI
         /// <summary>
         /// 由执行器调用: 执行自定义的操作于当前容器处于可交互状态下时, 鼠标右键抬起时.
         /// </summary>
-        public void DoMouseRightUpEvent( )
+        public void DoMouseRightUpEvent()
         {
-            OnMouseRightUp.Invoke( );
+            _clickRecordSeek = false;
+            _pressedRecordSeek = false;
+            OnMouseRightUp.Invoke();
         }
         /// <summary>
         /// 在容器于可交互状态下, 鼠标右键抬起时执行.
         /// </summary>
-        protected virtual void MouseRightUpEvent( )
+        protected virtual void MouseRightUpEvent()
         {
         }
 
-        public virtual void Update( )
+        public virtual void Update()
         {
-            if( Main.mouseLeftRelease&&Drag&&Droping )
-                Droping=false;
-            Interview=Container.GetInterviewState( );
-            if( Interview )
-                DoInterviewEvent( );
-            if( Input.MouseLeftClick )
-                DoMouseLeftClickEvent( );
-            else if( Input.MouseLeftDown&&ContainerSystem.LeftClickContainer==Container )
-                DoMouseLeftDownEvent( );
-            else if( Input.MouseLeftUp&&ContainerSystem.LeftClickContainer==Container )
-                DoMouseLeftUpEvent( );
-            if( Input.MouseRightClick )
-                DoMouseRightClickEvent( );
-            else if( Input.MouseRightDown&&ContainerSystem.RightClickContainer==Container )
-                DoMouseRightDownEvent( );
-            else if( Input.MouseRightUp&&ContainerSystem.RightClickContainer==Container )
-                DoMouseRightUpEvent( );
+            if (Main.mouseLeftRelease && Drop && Droping)
+            {
+                Droping = false;
+            }
 
+            Interview = Container.GetInterviewState();
+            if (Interview)
+            {
+                DoInterviewEvent();
+            }
+
+            if (Input.MouseLeftClick)
+            {
+                DoMouseLeftClickEvent();
+            }
+            else if (Input.MouseLeftDown && _clickRecordSeek)
+            {
+                DoMouseLeftDownEvent();
+            }
+            else if (Input.MouseLeftUp && _pressedRecordSeek)
+            {
+                DoMouseLeftUpEvent();
+            }
+
+            if (Input.MouseRightClick)
+            {
+                DoMouseRightClickEvent();
+            }
+            else if (Input.MouseRightDown && _clickRecordSeek)
+            {
+                DoMouseRightDownEvent();
+            }
+            else if (Input.MouseRightUp && _pressedRecordSeek)
+            {
+                DoMouseRightUpEvent();
+            }
         }
     }
 }

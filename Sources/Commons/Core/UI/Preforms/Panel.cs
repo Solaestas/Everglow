@@ -12,43 +12,48 @@ namespace Everglow.Sources.Commons.Core.UI.Preforms
         private int _borderSize;
         public Texture2D Image { get; private set; }
 
-        public Panel( ) { }
-        public Panel( Texture2D img,int borderSize )
+        public Panel() { }
+        public Panel(Texture2D img, int borderSize)
         {
-            Image=img;
-            _borderSize=borderSize;
+            Image = img;
+            _borderSize = borderSize;
         }
 
-        protected override void InitializeContainer( )
+        protected override void InitializeContainer()
         {
-            Events.Drag=true;
-            Events.CanGetForPointer=false;
-            base.InitializeContainer( );
+            Events.Drop = true;
+            Events.CanGetForPointer = false;
+            base.InitializeContainer();
         }
 
-        protected override void DrawSelf( )
+        protected override void DrawSelf()
         {
-            Main.spriteBatch.End( );
+            Main.spriteBatch.End();
             RasterizerState OverflowHiddenRasterizerState = new RasterizerState
             {
-                CullMode=CullMode.None,
-                ScissorTestEnable=true
+                CullMode = CullMode.None,
+                ScissorTestEnable = true
             };
             Rectangle clippingRectangle = BaseRectangle;
-            Main.spriteBatch.GraphicsDevice.ScissorRectangle=clippingRectangle;
-            Main.spriteBatch.GraphicsDevice.RasterizerState=OverflowHiddenRasterizerState;
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred,BlendState.AlphaBlend,SamplerState.AnisotropicClamp,DepthStencilState.None,OverflowHiddenRasterizerState,null);
-            if( Image!=null )
-                Main.spriteBatch.Draw(Image,BaseRectangle,ContainerElement.Color);
+            Main.spriteBatch.GraphicsDevice.ScissorRectangle = clippingRectangle;
+            Main.spriteBatch.GraphicsDevice.RasterizerState = OverflowHiddenRasterizerState;
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, OverflowHiddenRasterizerState, null);
+            if (Image != null)
+            {
+                Main.spriteBatch.Draw(Image, BaseRectangle, ContainerElement.Color);
+            }
             else
-                Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value,BaseRectangle,ContainerElement.Color);
-            base.DrawSelf( );
+            {
+                Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, BaseRectangle, ContainerElement.Color);
+            }
+
+            base.DrawSelf();
         }
-        protected override void PostDraw( )
+        protected override void PostDraw()
         {
-            base.PostDraw( );
-            Main.spriteBatch.End( );
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred,BlendState.AlphaBlend,SamplerState.PointWrap,null,null);
+            base.PostDraw();
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, null, null);
         }
     }
 }

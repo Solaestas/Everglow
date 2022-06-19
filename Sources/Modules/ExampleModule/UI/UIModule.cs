@@ -7,12 +7,12 @@ namespace Everglow.Sources.Modules.ExampleModule.UI
     {
         public string Name { get; } = "测试用用户交互界面";
 
-        public void Load( )
+        public void Load()
         {
-            ContainerPage.RegisterContainerPage(new UIModuleContainerPage( )); //在IModule类内手动注册容器页.
+            ContainerPage.RegisterContainerPage(new UIModuleContainerPage()); //在IModule类内手动注册容器页.
         }
 
-        public void Unload( )
+        public void Unload()
         {
 
         }

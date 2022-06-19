@@ -22,7 +22,7 @@ namespace Everglow.Sources.Commons.Function.FeatureFlags
         {
             get
             {
-                return ModContent.GetInstance<EverglowConfig>( ).debugMode;
+                return ModContent.GetInstance<EverglowConfig>().debugMode;
             }
         }
     }

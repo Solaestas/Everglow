@@ -7,11 +7,11 @@ namespace Everglow.Sources.Commons.Core.DataStructures.Tests
     public class PriorityQueueTests
     {
         [TestMethod]
-        public void PopTest( )
+        public void PopTest()
         {
             // Pop需要一直能够吐出最小值
 
-            var queue = new PriorityQueue<int>( );
+            var queue = new PriorityQueue<int>();
             queue.Push(1);
             queue.Push(1);
             queue.Push(4);
@@ -19,26 +19,26 @@ namespace Everglow.Sources.Commons.Core.DataStructures.Tests
             queue.Push(1);
             queue.Push(4);
 
-            Assert.AreEqual(1,queue.Pop( ));
-            Assert.AreEqual(1,queue.Pop( ));
-            Assert.AreEqual(1,queue.Pop( ));
-            Assert.AreEqual(4,queue.Pop( ));
-            Assert.AreEqual(4,queue.Pop( ));
-            Assert.AreEqual(5,queue.Pop( ));
+            Assert.AreEqual(1, queue.Pop());
+            Assert.AreEqual(1, queue.Pop());
+            Assert.AreEqual(1, queue.Pop());
+            Assert.AreEqual(4, queue.Pop());
+            Assert.AreEqual(4, queue.Pop());
+            Assert.AreEqual(5, queue.Pop());
         }
 
         [TestMethod]
-        public void EmptyGetTest( )
+        public void EmptyGetTest()
         {
             // 优先队列要能正确处理内容为空的情况
 
-            var queue = new PriorityQueue<int>( );
+            var queue = new PriorityQueue<int>();
             queue.Push(114514);
-            queue.Pop( );
+            queue.Pop();
 
-            Assert.AreEqual(true,queue.Empty);
-            Assert.ThrowsException<IndexOutOfRangeException>(( ) => { int t = queue.Top; });
-            Assert.ThrowsException<IndexOutOfRangeException>(( ) => { queue.Pop( ); });
+            Assert.AreEqual(true, queue.Empty);
+            Assert.ThrowsException<IndexOutOfRangeException>(() => { int t = queue.Top; });
+            Assert.ThrowsException<IndexOutOfRangeException>(() => { queue.Pop(); });
         }
     }
 }

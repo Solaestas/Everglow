@@ -9,30 +9,30 @@ namespace Everglow.Sources.Commons.Function.ObjectPool
         private LinkedList<int> m_renderTargetsFreeList;
         private GraphicsDevice m_graphicsDevice;
 
-        public RenderTargetPool( )
+        public RenderTargetPool()
         {
-            m_renderTargetsPool=new List<RenderTarget2D>( );
-            m_renderTargetsFreeList=new LinkedList<int>( );
-            m_graphicsDevice=Main.graphics.GraphicsDevice;
+            m_renderTargetsPool = new List<RenderTarget2D>();
+            m_renderTargetsFreeList = new LinkedList<int>();
+            m_graphicsDevice = Main.graphics.GraphicsDevice;
 
-            Main.OnResolutionChanged+=Main_OnResolutionChanged;
+            Main.OnResolutionChanged += Main_OnResolutionChanged;
         }
 
         /// <summary>
         /// 屏幕大小变化时刷新 RT 的尺寸
         /// </summary>
         /// <param name="size"></param>
-        private void Main_OnResolutionChanged( Vector2 size )
+        private void Main_OnResolutionChanged(Vector2 size)
         {
             int poolSize = m_renderTargetsPool.Count;
-            for( int i = 0; i<poolSize; i++ )
+            for (int i = 0; i < poolSize; i++)
             {
-                if( m_renderTargetsPool[i]!=null )
+                if (m_renderTargetsPool[i] != null)
                 {
-                    m_renderTargetsPool[i].Dispose( );
-                    m_renderTargetsPool[i]=null;
+                    m_renderTargetsPool[i].Dispose();
+                    m_renderTargetsPool[i] = null;
                 }
-                m_renderTargetsPool[i]=new RenderTarget2D(m_graphicsDevice,
+                m_renderTargetsPool[i] = new RenderTarget2D(m_graphicsDevice,
                     (int)size.X,
                     (int)size.Y);
             }
@@ -42,13 +42,13 @@ namespace Everglow.Sources.Commons.Function.ObjectPool
         /// 从对象池中获取1个 RT，并且返回句柄
         /// </summary>
         /// <returns></returns>
-        public ResourceLocker<RenderTarget2D> GetRenderTarget2D( )
+        public ResourceLocker<RenderTarget2D> GetRenderTarget2D()
         {
-            int index = GetNextFreeIndexAndOccupy( );
-            return new ResourceLocker<RenderTarget2D>(m_renderTargetsPool[index],( ) =>
-           {
-               ReleaseResourceAt(index);
-           });
+            int index = GetNextFreeIndexAndOccupy();
+            return new ResourceLocker<RenderTarget2D>(m_renderTargetsPool[index], () =>
+               {
+                   ReleaseResourceAt(index);
+               });
         }
 
         /// <summary>
@@ -56,24 +56,24 @@ namespace Everglow.Sources.Commons.Function.ObjectPool
         /// </summary>
         /// <param name="size"></param>
         /// <returns></returns>
-        public ResourceLocker<RenderTarget2D[]> GetRenderTarget2DArray( int size )
+        public ResourceLocker<RenderTarget2D[]> GetRenderTarget2DArray(int size)
         {
-            List<int> indices = new List<int>( );
-            List<RenderTarget2D> renderTargets = new List<RenderTarget2D>( );
-            for( int i = 0; i<size; i++ )
+            List<int> indices = new List<int>();
+            List<RenderTarget2D> renderTargets = new List<RenderTarget2D>();
+            for (int i = 0; i < size; i++)
             {
-                int index = GetNextFreeIndexAndOccupy( );
+                int index = GetNextFreeIndexAndOccupy();
                 indices.Add(index);
                 renderTargets.Add(m_renderTargetsPool[index]);
             }
 
-            return new ResourceLocker<RenderTarget2D[]>(renderTargets.ToArray( ),( ) =>
-            {
-                foreach( var i in indices )
-                {
-                    ReleaseResourceAt(i);
-                }
-            });
+            return new ResourceLocker<RenderTarget2D[]>(renderTargets.ToArray(), () =>
+               {
+                   foreach (var i in indices)
+                   {
+                       ReleaseResourceAt(i);
+                   }
+               });
 
         }
 
@@ -81,12 +81,12 @@ namespace Everglow.Sources.Commons.Function.ObjectPool
         /// 获取下一个空位的ID，并且占有它
         /// </summary>
         /// <returns></returns>
-        private int GetNextFreeIndexAndOccupy( )
+        private int GetNextFreeIndexAndOccupy()
         {
-            lock( this )
+            lock (this)
             {
                 // 如果 freelist 没有空位就扩充我们的 rendertarget 池子
-                if( m_renderTargetsFreeList.Count==0 )
+                if (m_renderTargetsFreeList.Count == 0)
                 {
                     int index = m_renderTargetsPool.Count;
                     m_renderTargetsPool.Add(new RenderTarget2D(m_graphicsDevice,
@@ -98,15 +98,15 @@ namespace Everglow.Sources.Commons.Function.ObjectPool
                 {
                     // 否则我们就把之前的空位复用
                     int index = m_renderTargetsFreeList.First.Value;
-                    m_renderTargetsFreeList.RemoveFirst( );
+                    m_renderTargetsFreeList.RemoveFirst();
                     return index;
                 }
             }
         }
 
-        private void ReleaseResourceAt( int index )
+        private void ReleaseResourceAt(int index)
         {
-            lock( this )
+            lock (this)
             {
                 m_renderTargetsFreeList.AddFirst(index);
             }
