@@ -13,7 +13,6 @@
             Item.useTime = 10;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.consumable = true;
-            Item.createTile = ModContent.TileType<Tiles.GlowWood>();
         }
     }
 }

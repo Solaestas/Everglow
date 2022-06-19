@@ -12,19 +12,20 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             Main.tileFrameImportant[Type] = true;
             Main.tileBlockLight[Type] = false;
             Main.tileLighted[Type] = true;
+            Main.tileAxe[(int)base.Type] = true;
 
             TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
-            TileObjectData.newTile.Height = 4;
+            TileObjectData.newTile.Height = 8;
             TileObjectData.newTile.Width = 1;
-            TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16, 16 };
+            TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16, 16, 16, 16, 16, 16 };
             TileObjectData.addTile(Type);
 
             AddMapEntry(new Color(51, 26, 58));
             DustType = ModContent.DustType<Bosses.CorruptMoth.Dusts.MothBlue2>();
             AdjTiles = new int[] { Type };
             ModTranslation modTranslation = base.CreateMapEntryName(null);
-            modTranslation.SetDefault("Wood");
-            modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "木");
+            modTranslation.SetDefault("Tree");
+            modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "树");
             base.AddMapEntry(new Color(155, 173, 183), modTranslation);
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
@@ -48,17 +49,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
         {
             num = (fail ? 1 : 3);
         }
-        public override void PlaceInWorld(int i, int j, Item item)
-        {
-            /*short num = (short)(Main.rand.Next(0, 4));
-            Main.tile[i, j - 3].TileFrameX = (short)(num * 84);
-            if (Main.tile[i - 1, j - 3].TileFrameX != 7)
-            {
-                Main.tile[i - 1, j - 3].TileFrameX = 7;
-            }*/
-        }
         public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
-        {
+        {     
             Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
             if (Main.drawToScreen)
             {
@@ -72,12 +64,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                 {
                     Texture2D value = MythContent.QuickTexture("TheFirefly/Tiles/GlowWood");
                     Texture2D valueG = MythContent.QuickTexture("TheFirefly/Tiles/GlowWoodGlow");
-                    Vector2 value2 = point.ToWorldCoordinates(8f, 8f);
+                    Vector2 value2 = point.ToWorldCoordinates();
                     Color color = Lighting.GetColor(point.X, point.Y);
                     SpriteEffects effects = SpriteEffects.None;
+                    int Count = 16;
                     Vector2 HalfSize = value.Size() / 2f;
-                    Main.spriteBatch.Draw(value, value2 - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, 0, value.Width, value.Height), color, 0f, HalfSize, 1f, effects, 0f);
-                    Main.spriteBatch.Draw(valueG, value2 - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, 0, value.Width, value.Height), new Color(1f, 1f, 1f,0), 0f, HalfSize, 1f, effects, 0f);
+                    HalfSize.X /= Count;
+                    Main.spriteBatch.Draw(value, value2 - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, 0, value.Width / Count, value.Height), color, 0f, HalfSize, 1f, effects, 0f);
+                    Main.spriteBatch.Draw(valueG, value2 - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, 0, value.Width / Count, value.Height), new Color(1f, 1f, 1f,0), 0f, HalfSize, 1f, effects, 0f);
                 }
             }
             return false;
