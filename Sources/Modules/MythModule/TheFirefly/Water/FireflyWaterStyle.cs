@@ -4,7 +4,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
 {
     public class FireflyWaterStyle : ModWaterStyle
     {
-        public override int ChooseWaterfallStyle() => Find<ModWaterfallStyle>("Everglow/FireflyWaterfallStyle").Slot;
+        public override int ChooseWaterfallStyle() => GetInstance<FireflyWaterfallStyle>().Slot;
 
         public override int GetSplashDust() => DustType<MothBlue2>();
 
