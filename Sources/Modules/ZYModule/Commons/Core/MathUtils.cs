@@ -48,13 +48,14 @@ namespace Everglow.Sources.Modules.ZYModule.Commons.Core
             return t;
         }
         /// <summary>
-        /// [-π，π)
+        /// 将<paramref name="vector"/>投影到<paramref name="axis"/>上的长度
         /// </summary>
-        /// <param name="angle"></param>
+        /// <param name="axis"></param>
+        /// <param name="vector"></param>
         /// <returns></returns>
-        public static float AngleWrap(float angle)
+        public static float Projection(Vector2 axis, Vector2 vector)
         {
-            return Wrap(-MathHelper.Pi, MathHelper.Pi, angle);
+            return Vector2.Dot(axis, vector) / axis.Length();
         }
         public static float Clamp(float from, float to, float t)
         {
