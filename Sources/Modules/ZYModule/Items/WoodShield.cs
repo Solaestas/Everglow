@@ -10,6 +10,11 @@ namespace Everglow.Sources.Modules.ZYModule.Items;
 
 internal class WoodShield : BaseHeldItem<WoodShieldProj>
 {
+    public override void SetStaticDefaults()
+    {
+        DisplayName.SetDefault("WoodShield");
+        Tooltip.SetDefault($"左键攻击，右键防御\n\"只是一面普通的盾牌，不会有人想用盾牌去打人吧\"");
+    }
     public override void SetDefaults()
     {
         base.SetDefaults();
@@ -28,17 +33,26 @@ internal class WoodShield : BaseHeldItem<WoodShieldProj>
 }
 public struct DefendData
 {
-    public float damageRate;//乘算
-    public float damageReduce;//乘前减算
-    public float damageImmune;//乘后减算
+    /// <summary>
+    /// 乘算
+    /// </summary>
+    public float damageRate;
+    /// <summary>
+    /// 乘前减算
+    /// </summary>
+    public float damageReduce;
+    /// <summary>
+    /// 乘后减算
+    /// </summary>
+    public float damageImmune;
 }
 internal class WoodShieldProj : BaseHeldProj<WoodShield>
 {
     public uint rotRecord;
     public Direction playerDirection;
-    public Rotation internalRotation;
     public DefendData defendData;
     public float oldDamage;
+    public int doubleClickTimer;
     //目测手臂帧图的位置
     public static readonly Vector2[] HoldOffset = new Vector2[]
     {
@@ -64,9 +78,13 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
         new Vector2(-5, 3)
     };
     public override string Texture => Quick.ModulePath + "Items/WoodShield";
-    public bool IsDefending => GetStateID("Defend") == StateID;
+    public bool IsDefending => GetStateID("Defend") == StateID || GetStateID("Dash") == StateID;
     public int DefendTimer { get => (int)Projectile.ai[1]; set => Projectile.ai[1] = value; }
     public const int MaxLength = 18;
+    public override void SetStaticDefaults()
+    {
+        DisplayName.SetDefault("Shield");
+    }
     public override void Initialize()
     {
         base.Initialize();
@@ -86,6 +104,48 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
         RegisterState("Defend", DefendUpdate, DefendBegin);
         RegisterState("Throw", ThrowUpdate, ThrowBegin, ThrowEnd);
         RegisterState("PostDefend", PostDefendUpdate, null, null, PostDefendCoroutine);
+        RegisterState("Dash", DashUpdate, DashBegin, DashEnd, DashCoroutine);
+    }
+    public void Using()
+    {
+        ref float stretchRate = ref Projectile.localAI[0];
+        Projectile.frame = 1;
+        Owner.direction = Projectile.direction;
+        Player.CompositeArmStretchAmount stretch;
+        stretch = stretchRate switch
+        {
+            < 0.25f => Player.CompositeArmStretchAmount.None,
+            < 0.5f => Player.CompositeArmStretchAmount.Quarter,
+            < 0.75f => Player.CompositeArmStretchAmount.ThreeQuarters,
+            _ => Player.CompositeArmStretchAmount.Full
+        };
+        Owner.SetCompositeArmFront(true, stretch, Projectile.rotation - MathHelper.PiOver2);
+        Projectile.Center = Owner.Center
+            + new Vector2(stretchRate * MaxLength, 0).RotatedBy(Projectile.rotation)
+            + new Vector2(-5 * Projectile.direction, -2);
+
+    }
+    public void Holding()
+    {
+        Projectile.frame = 0;
+        Projectile.direction = Owner.direction;
+        Vector2 offset = HoldOffset[Owner.bodyFrame.Y / Owner.bodyFrame.Height];
+        offset.X *= Projectile.direction;
+        Projectile.Center = Owner.Center + offset;
+    }
+    public int GetDirectionSwitchCount()
+    {
+        uint temp = rotRecord;
+        int count = 0;
+        while (temp != 0)
+        {
+            if ((temp & 1u) == 1u)
+            {
+                ++count;
+            }
+            temp >>= 1;
+        }
+        return count;
     }
     public override bool PreAI()
     {
@@ -105,29 +165,39 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
     {
         ref float stretchRate = ref Projectile.localAI[0];
         stretchRate = MathUtils.Approach(stretchRate, 0, 0.07f);
-        Vector2 offset = HoldOffset[Owner.bodyFrame.Y / Owner.bodyFrame.Height];
-        Projectile.frame = 1;
         DefendTimer = (int)MathUtils.Approach(DefendTimer, 0, 1);
-        Projectile.Center = Owner.Center + new Vector2(offset.X * Owner.direction, offset.Y);
-        var player = Owner.GetModPlayer<PlayerManager>();
-        rotRecord |= (Owner.GetControlDirectionH() != playerDirection && playerDirection != Direction.None) ? 1u : 0u;
-        playerDirection = Owner.GetControlDirectionH();
+        Holding();
+        Direction now = Owner.GetControlDirectionH();
+        if (now != Direction.None && now != playerDirection)
+        {
+            rotRecord |= 1u;
+            playerDirection = now;
+        }
         rotRecord <<= 1;
+
+        var player = Owner.GetModPlayer<PlayerManager>();
+        if (player.ControlLeft.DoubleClick)
+        {
+            doubleClickTimer = -10;
+        }
+        else if (player.ControlRight.DoubleClick)
+        {
+            doubleClickTimer = 10;
+        }
+        doubleClickTimer = (int)MathUtils.Approach(doubleClickTimer, 0, 1);
         if (player.ControlUseItem.Press)
         {
-            uint temp = rotRecord;
-            int count = 0;
-            while (temp != 0)
-            {
-                if ((temp & 1u) == 1u)
-                {
-                    ++count;
-                }
-                temp >>= 1;
-            }
-            if (count > 2)
+            var angle = Owner.ToMouse().ToRotation();
+            ref float dashDirection = ref Projectile.localAI[1];
+            if (GetDirectionSwitchCount() > 2)
             {
                 return GetStateID("Throw");
+            }
+            else if ((doubleClickTimer < 0 && angle is > MathHelper.PiOver4 * 3 or < MathHelper.PiOver4 * 3)
+                || (doubleClickTimer > 0 && angle is > -MathHelper.PiOver4 and < MathHelper.PiOver4))
+            {
+                Projectile.rotation = angle;
+                return GetStateID("Dash");
             }
             else
             {
@@ -151,28 +221,16 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
     {
         ref float stretchRate = ref Projectile.localAI[0];
         Projectile.frame = 1;
-        Player.CompositeArmStretchAmount stretch;
         Owner.itemTime = 2;
         //TODO 更换个更好的插值函数
         float factor = (float)Timer / Owner.itemTimeMax;
-        if (factor < 0.4f)
+        stretchRate = factor switch
         {
-            stretchRate = MathUtils.Lerp(Math.Max(stretchRate, 0), -0.3f, factor / 0.4f);
-        }
-        else
-        {
-            stretchRate = MathUtils.Lerp(-0.3f, 1, (factor - 0.4f) / 0.6f);
-        }
-        stretch = stretchRate switch
-        {
-            < 0.25f => Player.CompositeArmStretchAmount.None,
-            < 0.5f => Player.CompositeArmStretchAmount.Quarter,
-            < 0.75f => Player.CompositeArmStretchAmount.ThreeQuarters,
-            _ => Player.CompositeArmStretchAmount.Full
+            < 0.4f => MathUtils.Approach(stretchRate, -0.3f, 0.3f),
+            < 0.5f => -0.3f,
+            _ => MathUtils.Approach(stretchRate, 1, 0.2f)
         };
-        Projectile.Center = Owner.Center + new Vector2(stretchRate * MaxLength, 0).RotatedBy(Projectile.rotation);
-        Owner.direction = Projectile.direction;
-        Owner.SetCompositeArmFront(true, stretch, Projectile.rotation - MathHelper.PiOver2);
+        Using();
         if (Timer >= Owner.itemTimeMax)
         {
             return GetStateID("Normal");
@@ -183,20 +241,10 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
     {
         Projectile.friendly = false;
         Projectile.knockBack /= 3;
-        ref float stretchRate = ref Projectile.localAI[0];
-        stretchRate = 0;
     }
     public void ThrowBegin()
     {
-        int mul = 0;
-        while (rotRecord != 0)
-        {
-            if ((rotRecord & 1u) == 1u)
-            {
-                mul++;
-            }
-            rotRecord >>= 1;
-        }
+        int mul = GetDirectionSwitchCount();
         var mouse = Owner.ToMouse();
         Projectile projectile = Projectile;
         projectile.frame = 2;
@@ -207,7 +255,7 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
         projectile.velocity = mouse.NormalizeSafe() * item.Item.shootSpeed * Math.Max(1, mul * 0.2f);
         oldDamage = projectile.damage;
         projectile.damage = (int)(projectile.damage * mul * 0.4f);
-        internalRotation.Reset();
+        rotRecord = 0;
     }
     public int ThrowUpdate()//localAI[0] -> swingRotation localAI[1] -> swingDirection
     {
@@ -217,14 +265,13 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
         if (Timer < 10f)
         {
             owner.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full,
-                MathUtils.Lerp(projectile.localAI[0] + 1f * projectile.localAI[1], 
+                MathUtils.Lerp(projectile.localAI[0] + 1f * projectile.localAI[1],
                 projectile.localAI[0] - 1f * projectile.localAI[1], Timer / 10f)
                 - MathHelper.PiOver2);
         }
         projectile.friendly = true;
         projectile.velocity += (owner.Center - projectile.Center).NormalizeSafe() * 0.5f;
         projectile.rotation = (projectile.Center - owner.Center).ToRotation();
-        internalRotation += 0.05f;
         if (projectile.velocity.Y < 2f)
         {
             projectile.velocity.Y += 0.04f;
@@ -250,8 +297,9 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
     public override bool OnTileCollide(Vector2 oldVelocity)
     {
         Projectile.tileCollide = false;
-        Timer = 60;
-        Projectile.velocity *= 0;
+        Timer = 50;
+        Vector2 dir = Vector2.Normalize(Owner.Center - Projectile.Center);
+        Projectile.velocity = Math.Abs(Vector2.Dot(dir, Projectile.velocity)) * dir;
         Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.WoodFurniture);
         Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.WoodFurniture);
         return false;
@@ -274,7 +322,7 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
     {
         return (int)((damage - defendData.damageReduce) * defendData.damageRate - defendData.damageImmune);
     }
-    public void DefendDamage(Entity entity, ref int damage)
+    public void DefendDamage(Entity entity, ref int damage)// localAI[1] -> DefendBoss
     {
         var player = Owner;
         float knockBackRate = 1;
@@ -322,10 +370,46 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
         player.noKnockback = true;
         StateID = GetStateID("PostDefend");
     }
-    public int DashAttackUpdate()
+    public void DashBegin()
     {
-
+        doubleClickTimer = 0;
+        Projectile.damage *= 4;
+        Projectile.knockBack *= 2;
+        Projectile.friendly = true;
+        defendData.damageRate /= 5;
+    }
+    public int DashUpdate()//localAI[0] -> stretchRate
+    {
+        ref float stretchRate = ref Projectile.localAI[0];
+        Rotation rot = Projectile.rotation;
+        stretchRate = 1;
+        float proj = MathUtils.Projection(rot.XAxis, Projectile.velocity);
+        Owner.noKnockback = true;
+        Owner.velocity = Math.Max(proj,Math.Max(12, Owner.accRunSpeed * 3)) * rot.XAxis;
+        Using();
+        if (Timer > 9)
+        {
+            return GetStateID("Normal");
+        }
         return -1;
+    }
+    public void DashEnd()
+    {
+        Projectile.damage /= 4;
+        Projectile.knockBack /= 2;
+        Projectile.friendly = false;
+        defendData.damageRate *= 5;
+    }
+    public IEnumerator<ICoroutineInstruction> DashCoroutine()
+    {
+        yield return new WaitForFrames(15);
+        float len = Owner.velocity.Length();
+        if(len == 0)
+        {
+            yield break;
+        }
+        Owner.velocity = Math.Min(len, Owner.accRunSpeed) * Vector2.Normalize(Owner.velocity);
+        yield break;
     }
     public void DefendBegin()
     {
@@ -335,25 +419,20 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
         rotRecord = 0;
         defendBoss = 0;
     }
-    public int DefendUpdate()
+    public int DefendUpdate()//localAI[0] -> stretchRate
     {
-        var mouse = Owner.ToMouse();
         ref float stretchRate = ref Projectile.localAI[0];
-        Projectile.rotation = mouse.ToRot().Angle;
-        Projectile.spriteDirection = Projectile.direction = Math.Sign(mouse.X);
         stretchRate = 1;
-        Projectile.frame = 1;
         ++DefendTimer;
-        Owner.direction = Projectile.direction;
-        Owner.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, Projectile.rotation - MathHelper.PiOver2);
-        Projectile.Center = Owner.Center + new Vector2(MaxLength, 0).RotatedBy(Projectile.rotation) + new Vector2(-5 * Projectile.direction, -2);
+        FaceTo(Owner.ToMouse());
+        Using();
         if (Owner.GetModPlayer<PlayerManager>().ControlUseTile.Press)
         {
             return -1;
         }
         return GetStateID("Normal");
     }
-    public int PostDefendUpdate()
+    public int PostDefendUpdate()//localAI[1] -> defendBoss
     {
         ref float defendBoss = ref Projectile.localAI[1];
         Owner.direction = Projectile.direction;
@@ -376,6 +455,29 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
         yield return new WaitForFrames(20);
         Projectile.damage /= 3;
         yield break;
+    }
+    public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
+    {
+        width = (int)(width * 0.7f);
+        height = (int)(height * 0.7f);
+        return true;
+    }
+    public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+    {
+        if (Projectile.frame != 2)
+        {
+            return targetHitbox.Intersects(projHitbox);
+        }
+
+        ref float stretchRate = ref Projectile.localAI[0];
+        float factor = 1 - 0.5f * MathUtils.Clamp(0, 1, stretchRate);
+        float point = 0;
+        Vector2 vec = new Vector2(0, Projectile.height / 2f).RotatedBy(Projectile.rotation);
+        return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(),
+            Projectile.Center + vec,
+            Projectile.Center - vec,
+            Projectile.width * factor * 0.4f,
+            ref point);
     }
     public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
     {
@@ -404,11 +506,13 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
                 break;
             case 1:
                 ref float stretchRate = ref Projectile.localAI[0];
+                float factor = 1 - 0.5f * MathUtils.Clamp(0, 1, stretchRate);
                 Main.EntitySpriteDraw(Asset.Value,
                     Projectile.Center - Main.screenPosition + new Vector2(0, Owner.gfxOffY),
                     null, lightColor,
-                    Projectile.rotation, Asset.Value.Size() / 2,
-                    new Vector2(MathUtils.Clamp(0, 1, 1 - 0.5f * MathUtils.Clamp(0, 1, stretchRate)), 1),
+                    Projectile.rotation,
+                    Asset.Value.Size() / 2,
+                    new Vector2(factor, 1),
                     Projectile.direction == 1 ? SpriteEffects.None : SpriteEffects.FlipVertically, 0);
                 break;
             case 2:
