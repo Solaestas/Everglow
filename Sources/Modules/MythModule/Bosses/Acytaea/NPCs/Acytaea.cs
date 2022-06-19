@@ -1,4 +1,5 @@
 using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles;
 
 using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
@@ -19,7 +20,7 @@ public class Acytaea : ModNPC
     private Vector2 aiMpos = new Vector2(200, 0);
     private int firstDir = -1;
     private int Dam = 140;
-    public int minorDir = -1;
+    public static int minorDir = -1;
     private bool checkSpwan = true;
     public static float ToPlayerRot = 0;
     public static readonly Vector2 RightWingPos = new Vector2(-18, 0);
@@ -55,7 +56,9 @@ public class Acytaea : ModNPC
     private Vector2[] Skirt2 = new Vector2[11];
     private Vector2[] AIMSkirt2 = new Vector2[11];
     private Vector2[] vSkirt2 = new Vector2[11];
-    public override string HeadTexture => "Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Acytaea_Head";
+    public override string HeadTexture => NPC.boss ?
+        "Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Acytaea_Head_Boss" :
+        "Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Acytaea_Head";
     public override void SetStaticDefaults()
     {
         DisplayName.SetDefault("Acytaea");
@@ -259,7 +262,7 @@ public class Acytaea : ModNPC
                 {
                     if (Main.npc[y].active)
                     {
-                        if (Main.npc[y].type == ModContent.NPCType<Acytaea.AcytaeaShadow>() || Main.npc[y].type == ModContent.NPCType<Acytaea.AcytaeaShadow2>() || Main.npc[y].type == ModContent.NPCType<Acytaea.AcytaeaShadow3>())
+                        if (Main.npc[y].type == ModContent.NPCType<AcytaeaShadow>() || Main.npc[y].type == ModContent.NPCType<AcytaeaShadow2>() || Main.npc[y].type == ModContent.NPCType<AcytaeaShadow3>())
                         {
                             Main.npc[y].active = false;
                         }
@@ -352,7 +355,7 @@ public class Acytaea : ModNPC
                 if (NPC.localAI[0] == 520)
                 {
                     SoundEngine.PlaySound(new SoundStyle("MythMod/Sounds/AcytaeaPortalOpening"), NPC.Center);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(88 * minorDir - (minorDir - 1) * 8, -158), Vector2.Zero, ModContent.ProjectileType<Projectiles.Typeless.AcytaeaEffect>(), 0, 1, Main.myPlayer, minorDir);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(88 * minorDir - (minorDir - 1) * 8, -158), Vector2.Zero, ModContent.ProjectileType<AcytaeaEffect>(), 0, 1, Main.myPlayer, minorDir);
                 }
             }//上特效
             if (NPC.localAI[0] > 530 && NPC.localAI[0] <= 650)
@@ -474,7 +477,7 @@ public class Acytaea : ModNPC
                     Vector2 v1 = new Vector2(0, Main.rand.NextFloat(0, 1f)).RotatedByRandom(6.28);
                     Dust.NewDustDirect(v0, 0, 0, ModContent.DustType<Dusts.CosmicFlame2>(), v1.X, v1.Y, 0, default, ((h + f0) + 10) / 18f);
                 }*/
-                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaEffectUp>(), Dam, 3, player.whoAmI);
+                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<AcytaeaEffectUp>(), Dam, 3, player.whoAmI);
             }//过屏
             if (NPC.localAI[0] > 940 && NPC.localAI[0] <= 980)
             {
@@ -536,7 +539,7 @@ public class Acytaea : ModNPC
                 if (NPC.localAI[0] == 975)
                 {
                     SoundEngine.PlaySound(SoundID.Item71, NPC.Center);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - new Vector2(NPC.spriteDirection * 60, 0), new Vector2(2 * NPC.spriteDirection, 0), ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaLight>(), Dam, 3, player.whoAmI, ka);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - new Vector2(NPC.spriteDirection * 60, 0), new Vector2(2 * NPC.spriteDirection, 0), ModContent.ProjectileType<AcytaeaLight>(), Dam, 3, player.whoAmI, ka);
                 }
             }//第五刀
             if (NPC.localAI[0] > 1000 && NPC.localAI[0] <= 1030)
@@ -567,7 +570,7 @@ public class Acytaea : ModNPC
                 if (NPC.localAI[0] == 1015)
                 {
                     SoundEngine.PlaySound(SoundID.Item71, NPC.Center);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - new Vector2(NPC.spriteDirection * 60, 0), new Vector2(2 * NPC.spriteDirection, 0), ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaLight>(), Dam, 3, player.whoAmI, ka);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - new Vector2(NPC.spriteDirection * 60, 0), new Vector2(2 * NPC.spriteDirection, 0), ModContent.ProjectileType<AcytaeaLight>(), Dam, 3, player.whoAmI, ka);
                 }
             }//第六刀
             if (NPC.localAI[0] > 1030 && NPC.localAI[0] <= 1200)//拉位置
@@ -632,7 +635,7 @@ public class Acytaea : ModNPC
                 {
                     if (NPC.localAI[0] % 5 == 0)
                     {
-                        int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Acytaea.AcytaeaShadow>(), 0, (float)(NPC.localAI[0] % 7));
+                        int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<AcytaeaShadow>(), 0, (float)(NPC.localAI[0] % 7));
                         Main.npc[g].velocity = new Vector2(0, 16).RotatedBy(NPC.localAI[0] % 7 * Math.PI / 3.5d);
                     }
                 }
@@ -687,7 +690,7 @@ public class Acytaea : ModNPC
                         {
                             SoundEngine.PlaySound(SoundID.Item71, NPC.Center);
                             Vector2 v0a = Vector2.Normalize(player.Center - NPC.Center).RotatedBy(k / 3d);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - v0a * 60, v0a * 2, ModContent.ProjectileType<Projectiles.Acytaea.BloodBlade>(), Dam, 3, player.whoAmI, ka);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - v0a * 60, v0a * 2, ModContent.ProjectileType<BloodBlade>(), Dam, 3, player.whoAmI, ka);
                         }
                     }
                 }//正刀
@@ -715,7 +718,7 @@ public class Acytaea : ModNPC
                         {
                             SoundEngine.PlaySound(SoundID.Item71, NPC.Center);
                             Vector2 v0a = Vector2.Normalize(player.Center - NPC.Center).RotatedBy(k / 3d);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - v0a * 60, v0a * 2, ModContent.ProjectileType<Projectiles.Acytaea.BloodBlade>(), Dam, 3, player.whoAmI, ka);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - v0a * 60, v0a * 2, ModContent.ProjectileType<BloodBlade>(), Dam, 3, player.whoAmI, ka);
                         }
                     }
                 }//反刀
@@ -725,9 +728,10 @@ public class Acytaea : ModNPC
 
                 if (NPC.localAI[0] % 2 == 1)
                 {
-                    MythPlayer mplayer = Main.player[Main.myPlayer].GetModPlayer<MythPlayer>();
-                    mplayer.ShakeStrength = 7;
-                    mplayer.Shake = 1;
+                    //TODO 震屏
+                    //MythPlayer mplayer = Main.player[Main.myPlayer].GetModPlayer<MythPlayer>();
+                    //mplayer.ShakeStrength = 7;
+                    //mplayer.Shake = 1;
                 }
 
                 HasBlade = true;//拿刀
@@ -750,7 +754,7 @@ public class Acytaea : ModNPC
                     bool Trans = true;
                     for (int k = 0; k < 200; k++)
                     {
-                        if (Main.npc[k].type == ModContent.NPCType<Acytaea.AcytaeaShadow>() && Main.npc[k].active)
+                        if (Main.npc[k].type == ModContent.NPCType<AcytaeaShadow>() && Main.npc[k].active)
                         {
                             if (Main.npc[k].ai[0] == NPC.localAI[0] % 7)
                             {
@@ -769,7 +773,7 @@ public class Acytaea : ModNPC
                                 for (int j = 0; j < 20; j++)
                                 {
                                     Vector2 v = new Vector2(0, Main.rand.NextFloat(0, 7f)).RotatedByRandom(6.28) + new Vector2(12, 0).RotatedBy(Main.npc[k].ai[0] * Math.PI / 7d * 2);
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v * 2f, v, ModContent.ProjectileType<Projectiles.Acytaea.BrokenAcytaea>(), 0, 1, Main.myPlayer);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v * 2f, v, ModContent.ProjectileType<BrokenAcytaea>(), 0, 1, Main.myPlayer);
                                 }
                                 Trans = false;
                                 break;
@@ -808,7 +812,7 @@ public class Acytaea : ModNPC
                                 //SoundEngine.PlaySound(new SoundStyle("MythMod/Sounds/Item_71_Flurry"), NPC.Center); //TO DO: Make sound follow NPC/relative to NPC.
                 for (int u = 0; u < 1000; u++)
                 {
-                    if (Main.projectile[u].type == ModContent.ProjectileType<Projectiles.Acytaea.BrokenAcytaea>())
+                    if (Main.projectile[u].type == ModContent.ProjectileType<BrokenAcytaea>())
                     {
                         Vector2 v0 = NPC.Center;
                         Vector2 v1 = Vector2.Normalize(v0 - Main.projectile[u].Center);
@@ -844,12 +848,12 @@ public class Acytaea : ModNPC
                 if (NPC.localAI[0] < 2082)
                 {
                     AimBladeSquz = Main.rand.NextFloat(0.25f, 0.4f);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaTornadoHit>(), Dam, 1, Main.myPlayer);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaTornado>(), 0, 1, Main.myPlayer);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaTornado2>(), 0, 1, Main.myPlayer);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaTornado3>(), 0, 1, Main.myPlayer);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaTornado4>(), 0, 1, Main.myPlayer);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaTornado5>(), 0, 1, Main.myPlayer);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<AcytaeaTornadoHit>(), Dam, 1, Main.myPlayer);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<AcytaeaTornado>(), 0, 1, Main.myPlayer);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<AcytaeaTornado2>(), 0, 1, Main.myPlayer);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<AcytaeaTornado3>(), 0, 1, Main.myPlayer);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<AcytaeaTornado4>(), 0, 1, Main.myPlayer);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<AcytaeaTornado5>(), 0, 1, Main.myPlayer);
                 }
                 float CosA0 = (float)(Math.Cos((NPC.localAI[0] - 2080) / 300d * Math.PI) + 1) * 16f;//构造辅助函数
                 RightArmRot = (CosA0 + 1) * (float)(Math.PI * 1) * minorDir;//旋转角度撕裂感
@@ -893,11 +897,11 @@ public class Acytaea : ModNPC
                     for (int k = -3; k < 5; k += 2)
                     {
                         Vector2 v0a = Vector2.Normalize(player.Center - NPC.Center).RotatedBy(k / 3d);
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - v0a * 60, v0a * 2, ModContent.ProjectileType<Projectiles.Acytaea.BloodBlade>(), Dam, 3, player.whoAmI);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - v0a * 60, v0a * 2, ModContent.ProjectileType<BloodBlade>(), Dam, 3, player.whoAmI);
                     }
                     float ka = Main.rand.NextFloat(Main.rand.NextFloat(0.65f, 1f), 1f);
                     Vector2 vf = Vector2.Normalize(player.Center - NPC.Center);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - vf * 60, vf * 2, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaLight>(), Dam, 3, player.whoAmI, ka);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - vf * 60, vf * 2, ModContent.ProjectileType<AcytaeaLight>(), Dam, 3, player.whoAmI, ka);
                 }
                 canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
             }//左上
@@ -928,11 +932,11 @@ public class Acytaea : ModNPC
                     for (int k = -3; k < 5; k += 2)
                     {
                         Vector2 v0a = Vector2.Normalize(player.Center - NPC.Center).RotatedBy(k / 3d);
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - v0a * 60, v0a * 2, ModContent.ProjectileType<Projectiles.Acytaea.BloodBlade>(), Dam, 3, player.whoAmI);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - v0a * 60, v0a * 2, ModContent.ProjectileType<BloodBlade>(), Dam, 3, player.whoAmI);
                     }
                     float ka = Main.rand.NextFloat(Main.rand.NextFloat(0.65f, 1f), 1f);
                     Vector2 vf = Vector2.Normalize(player.Center - NPC.Center);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - vf * 60, vf * 2, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaLight>(), Dam, 3, player.whoAmI, ka);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - vf * 60, vf * 2, ModContent.ProjectileType<AcytaeaLight>(), Dam, 3, player.whoAmI, ka);
                 }
                 canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
             }//右上
@@ -963,11 +967,11 @@ public class Acytaea : ModNPC
                     for (int k = -3; k < 5; k += 2)
                     {
                         Vector2 v0a = Vector2.Normalize(player.Center - NPC.Center).RotatedBy(k / 3d);
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - v0a * 60, v0a * 2, ModContent.ProjectileType<Projectiles.Acytaea.BloodBlade>(), Dam, 3, player.whoAmI);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - v0a * 60, v0a * 2, ModContent.ProjectileType<BloodBlade>(), Dam, 3, player.whoAmI);
                     }
                     float ka = Main.rand.NextFloat(Main.rand.NextFloat(0.65f, 1f), 1f);
                     Vector2 vf = Vector2.Normalize(player.Center - NPC.Center);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - vf * 60, vf * 2, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaLight>(), Dam, 3, player.whoAmI, ka);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - vf * 60, vf * 2, ModContent.ProjectileType<AcytaeaLight>(), Dam, 3, player.whoAmI, ka);
                 }
                 canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
             }//左下
@@ -998,11 +1002,11 @@ public class Acytaea : ModNPC
                     for (int k = -3; k < 5; k += 2)
                     {
                         Vector2 v0a = Vector2.Normalize(player.Center - NPC.Center).RotatedBy(k / 3d);
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - v0a * 60, v0a * 2, ModContent.ProjectileType<Projectiles.Acytaea.BloodBlade>(), Dam, 3, player.whoAmI);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - v0a * 60, v0a * 2, ModContent.ProjectileType<BloodBlade>(), Dam, 3, player.whoAmI);
                     }
                     float ka = Main.rand.NextFloat(Main.rand.NextFloat(0.65f, 1f), 1f);
                     Vector2 vf = Vector2.Normalize(player.Center - NPC.Center);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - vf * 60, vf * 2, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaLight>(), Dam, 3, player.whoAmI, ka);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - vf * 60, vf * 2, ModContent.ProjectileType<AcytaeaLight>(), Dam, 3, player.whoAmI, ka);
                 }
                 canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
             }//右下
@@ -1066,7 +1070,7 @@ public class Acytaea : ModNPC
                 {
                     for (int f = 0; f < 4; f++)
                     {
-                        int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Acytaea.AcytaeaShadow2>(), 0, -100, (f - 1.5f) * 200, 1);
+                        int g = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<AcytaeaShadow2>(), 0, -100, (f - 1.5f) * 200, 1);
                         Vector2 vc = (new Vector2(-100, (f - 1.5f) * 200) - aiMpos) / 30f;
                         Main.npc[g].velocity = vc;
                     }
@@ -1231,7 +1235,7 @@ public class Acytaea : ModNPC
                 {
                     Vector2 vf = Vector2.Normalize(player.Center - NPC.Center);
                     vf = new Vector2(-1, 0);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 34, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrow>(), Dam, 3, player.whoAmI);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 34, ModContent.ProjectileType<AcytaeaArrow>(), Dam, 3, player.whoAmI);
                 }
             }//←
             if (NPC.localAI[0] > 3500 && NPC.localAI[0] <= 3750)
@@ -1272,7 +1276,7 @@ public class Acytaea : ModNPC
                 {
                     Vector2 vf = Vector2.Normalize(player.Center - NPC.Center);
                     vf = new Vector2(0, 1);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 34, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrow>(), Dam, 3, player.whoAmI);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 34, ModContent.ProjectileType<AcytaeaArrow>(), Dam, 3, player.whoAmI);
                 }
             }//↓
             if (NPC.localAI[0] > 3750 && NPC.localAI[0] <= 4000)
@@ -1313,7 +1317,7 @@ public class Acytaea : ModNPC
                 {
                     Vector2 vf = Vector2.Normalize(player.Center - NPC.Center);
                     vf = new Vector2(1, 0);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 34, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrow>(), Dam, 3, player.whoAmI);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 34, ModContent.ProjectileType<AcytaeaArrow>(), Dam, 3, player.whoAmI);
                 }
             }//→
             if (NPC.localAI[0] > 4000 && NPC.localAI[0] <= 4250)
@@ -1354,7 +1358,7 @@ public class Acytaea : ModNPC
                 {
                     Vector2 vf = Vector2.Normalize(player.Center - NPC.Center);
                     vf = new Vector2(0, -1);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 34, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrow>(), Dam, 3, player.whoAmI);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 34, ModContent.ProjectileType<AcytaeaArrow>(), Dam, 3, player.whoAmI);
                 }
             }//↑
             if (NPC.localAI[0] > 4250 && NPC.localAI[0] <= 4800)
@@ -1415,18 +1419,18 @@ public class Acytaea : ModNPC
                     Vector2 vf = Vector2.Normalize(va);
                     for (int g = 0; g < 6; g++)
                     {
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf.RotatedBy(Math.Sqrt(Math.Abs(g - 2.5)) * Math.Sign(g - 2.5) * (400 - va.Length()) / 200f) * 34, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrow>(), Dam, 3, player.whoAmI);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf.RotatedBy(Math.Sqrt(Math.Abs(g - 2.5)) * Math.Sign(g - 2.5) * (400 - va.Length()) / 200f) * 34, ModContent.ProjectileType<AcytaeaArrow>(), Dam, 3, player.whoAmI);
                     }
                     if (NPC.localAI[0] < 4799)
                     {
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaBow>(), Dam, 3, player.whoAmI, (float)(Math.Atan2(va.Y, va.X) + Math.PI));
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<AcytaeaBow>(), Dam, 3, player.whoAmI, (float)(Math.Atan2(va.Y, va.X) + Math.PI));
                     }
                 }
                 if (NPC.localAI[0] == 4799)
                 {
                     for (int g = 0; g < Main.projectile.Length; g++)
                     {
-                        if (Main.projectile[g].type == ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaBow>())
+                        if (Main.projectile[g].type == ModContent.ProjectileType<AcytaeaBow>())
                         {
                             Main.projectile[g].timeLeft = 30;
                         }
@@ -1470,7 +1474,7 @@ public class Acytaea : ModNPC
                 {
                     Vector2 vf = Vector2.Normalize(player.Center - NPC.Center);
                     vf = new Vector2(-1, 0);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 34, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrow2>(), Dam, 3, player.whoAmI, 1);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 34, ModContent.ProjectileType<AcytaeaArrow2>(), Dam, 3, player.whoAmI, 1);
                 }
             }//分裂箭
             if (NPC.localAI[0] > 5400 && NPC.localAI[0] <= 5600)
@@ -1512,9 +1516,9 @@ public class Acytaea : ModNPC
                     Vector2 vf = new Vector2(1, 0);
                     Vector2 vg = vf.RotatedBy(Math.PI / 2d) * 16;
                     Vector2 vh = vf.RotatedBy(Math.PI / 2d) * -16;
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 34, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrow>(), Dam, 3, player.whoAmI);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + vg, vf * 34, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrow>(), Dam, 3, player.whoAmI);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + vh, vf * 34, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrow>(), Dam, 3, player.whoAmI);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 34, ModContent.ProjectileType<AcytaeaArrow>(), Dam, 3, player.whoAmI);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + vg, vf * 34, ModContent.ProjectileType<AcytaeaArrow>(), Dam, 3, player.whoAmI);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + vh, vf * 34, ModContent.ProjectileType<AcytaeaArrow>(), Dam, 3, player.whoAmI);
                 }
             }//→→→
             if (NPC.localAI[0] > 5600 && NPC.localAI[0] <= 5700)
@@ -1556,12 +1560,12 @@ public class Acytaea : ModNPC
                     for (int d = -9; d < 10; d++)
                     {
                         Vector2 vf = new Vector2(0, -1).RotatedBy(d / 13d);
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 14, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrowGra>(), Dam, 3, player.whoAmI);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 14, ModContent.ProjectileType<AcytaeaArrowGra>(), Dam, 3, player.whoAmI);
                     }
                     for (int d = -9; d < 9; d++)
                     {
                         Vector2 vf = new Vector2(0, -1).RotatedBy((d + 0.5) / 13d);
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 12, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrowGra>(), Dam, 3, player.whoAmI);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 12, ModContent.ProjectileType<AcytaeaArrowGra>(), Dam, 3, player.whoAmI);
                     }
                 }
             }//↖↑↗
@@ -1602,15 +1606,15 @@ public class Acytaea : ModNPC
                 if (NPC.localAI[0] == 5865)
                 {
                     Vector2 vf = new Vector2(0, -1);
-                    int f = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 34, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrow>(), Dam, 3, player.whoAmI);
+                    int f = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 34, ModContent.ProjectileType<AcytaeaArrow>(), Dam, 3, player.whoAmI);
                     Main.projectile[f].scale = 3;
                 }
                 if (NPC.localAI[0] >= 5905 && NPC.localAI[0] < 5950)
                 {
                     float PoX = NPC.localAI[0] - 5905;
                     Vector2 vf = new Vector2(0, -1);
-                    int f = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(PoX * 72, -300), Vector2.Zero, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaWarningArrow>(), Dam, 3, player.whoAmI);
-                    int g = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-PoX * 72, -300), Vector2.Zero, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaWarningArrow>(), Dam, 3, player.whoAmI);
+                    int f = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(PoX * 72, -300), Vector2.Zero, ModContent.ProjectileType<AcytaeaWarningArrow>(), Dam, 3, player.whoAmI);
+                    int g = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-PoX * 72, -300), Vector2.Zero, ModContent.ProjectileType<AcytaeaWarningArrow>(), Dam, 3, player.whoAmI);
                 }
             }//↓↓↓
             if (NPC.localAI[0] > 6000 && NPC.localAI[0] <= 6200)
@@ -1665,8 +1669,8 @@ public class Acytaea : ModNPC
                     if (NPC.localAI[0] % 7 == 0)
                     {
                         float K = (NPC.localAI[0] - 6148) * 10;
-                        NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Acytaea.AcytaeaShadow3>(), 0, K, K * 0.7f, 1, 1);
-                        NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Acytaea.AcytaeaShadow3>(), 0, K, -K * 0.7f, -1, 1);
+                        NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<AcytaeaShadow3>(), 0, K, K * 0.7f, 1, 1);
+                        NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<AcytaeaShadow3>(), 0, K, -K * 0.7f, -1, 1);
                     }
                 }
             }//幻影箭阵
@@ -1698,20 +1702,20 @@ public class Acytaea : ModNPC
                         Vector2 vg = new Vector2(0.8f, -0.12f);
                         Vector2 vh = new Vector2(0.6f, 0.17f);
                         Vector2 vi = new Vector2(0.6f, -0.17f);
-                        int f = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 34, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrow>(), Dam, 3, player.whoAmI);
-                        int g = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vg * 34, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrow>(), Dam, 3, player.whoAmI);
-                        int h = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vh * 34, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrow>(), Dam, 3, player.whoAmI);
-                        int i = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vi * 34, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrow>(), Dam, 3, player.whoAmI);
+                        int f = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 34, ModContent.ProjectileType<AcytaeaArrow>(), Dam, 3, player.whoAmI);
+                        int g = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vg * 34, ModContent.ProjectileType<AcytaeaArrow>(), Dam, 3, player.whoAmI);
+                        int h = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vh * 34, ModContent.ProjectileType<AcytaeaArrow>(), Dam, 3, player.whoAmI);
+                        int i = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vi * 34, ModContent.ProjectileType<AcytaeaArrow>(), Dam, 3, player.whoAmI);
                         Main.projectile[f].timeLeft = 100;
                         Main.projectile[g].timeLeft = 100;
                         Main.projectile[h].timeLeft = 100;
                         Main.projectile[i].timeLeft = 100;
                         for (int z = 0; z < 200; z++)
                         {
-                            if (Main.npc[z].active && Main.npc[z].type == ModContent.NPCType<Acytaea.AcytaeaShadow3>())
+                            if (Main.npc[z].active && Main.npc[z].type == ModContent.NPCType<AcytaeaShadow3>())
                             {
                                 Vector2 vλ = new Vector2(0.5f, -0.5f * Main.npc[z].ai[2]);
-                                int λ = Projectile.NewProjectile(NPC.GetSource_FromAI(), Main.npc[z].Center, vλ * 34, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrow>(), Dam, 3, player.whoAmI);
+                                int λ = Projectile.NewProjectile(NPC.GetSource_FromAI(), Main.npc[z].Center, vλ * 34, ModContent.ProjectileType<AcytaeaArrow>(), Dam, 3, player.whoAmI);
                                 Main.projectile[λ].timeLeft = 100;
                             }
                         }
@@ -1721,13 +1725,13 @@ public class Acytaea : ModNPC
                 {
                     BowRot = (float)(Math.PI * 1.25);
                     Vector2 vf = new Vector2(1f, 0.7f);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 25, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrow3>(), Dam, 3, player.whoAmI);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 25, ModContent.ProjectileType<AcytaeaArrow3>(), Dam, 3, player.whoAmI);
                 }
                 if (NPC.localAI[0] == 6449)
                 {
                     BowRot = (float)(Math.PI * 0.75);
                     Vector2 vf = new Vector2(1f, -0.7f);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 25, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrow3>(), Dam, 3, player.whoAmI);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 25, ModContent.ProjectileType<AcytaeaArrow3>(), Dam, 3, player.whoAmI);
                 }
             }//放幻影箭
             if (NPC.localAI[0] > 6450 && NPC.localAI[0] <= 6550)
@@ -1771,7 +1775,7 @@ public class Acytaea : ModNPC
                         if ((d + 30) % 24 < 12)
                         {
                             Vector2 vf = new Vector2(0, -1).RotatedBy(d / 13d);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 14, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrowGra>(), Dam, 3, player.whoAmI);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 14, ModContent.ProjectileType<AcytaeaArrowGra>(), Dam, 3, player.whoAmI);
                         }
                     }
                 }
@@ -1817,7 +1821,7 @@ public class Acytaea : ModNPC
                 if (NPC.localAI[0] % 4 == 0 && NPC.localAI[0] > 6590)
                 {
                     Vector2 vf = new Vector2(0, 1);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 2, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrowGra>(), Dam, 3, player.whoAmI);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 2, ModContent.ProjectileType<AcytaeaArrowGra>(), Dam, 3, player.whoAmI);
                 }
             }//↓↓↓
             if (NPC.localAI[0] > 6950 && NPC.localAI[0] <= 7150)
@@ -1859,11 +1863,11 @@ public class Acytaea : ModNPC
                     Vector2 vf = new Vector2(0, 1);
                     Vector2 vg = vf.RotatedBy(Math.PI / 2d) * 16;
                     Vector2 vh = vf.RotatedBy(Math.PI / 2d) * -16;
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 34, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrow>(), Dam, 3, player.whoAmI);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + vg, vf * 34, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrow>(), Dam, 3, player.whoAmI);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + vh, vf * 34, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrow>(), Dam, 3, player.whoAmI);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf.RotatedBy(0.6) * 34, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrow>(), Dam, 3, player.whoAmI);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf.RotatedBy(-0.6) * 34, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrow>(), Dam, 3, player.whoAmI);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 34, ModContent.ProjectileType<AcytaeaArrow>(), Dam, 3, player.whoAmI);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + vg, vf * 34, ModContent.ProjectileType<AcytaeaArrow>(), Dam, 3, player.whoAmI);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + vh, vf * 34, ModContent.ProjectileType<AcytaeaArrow>(), Dam, 3, player.whoAmI);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf.RotatedBy(0.6) * 34, ModContent.ProjectileType<AcytaeaArrow>(), Dam, 3, player.whoAmI);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf.RotatedBy(-0.6) * 34, ModContent.ProjectileType<AcytaeaArrow>(), Dam, 3, player.whoAmI);
                 }
             }//↙↓↓↓↘
             if (NPC.localAI[0] > 7150 && NPC.localAI[0] <= 7500)
@@ -1904,8 +1908,8 @@ public class Acytaea : ModNPC
                     float Dx = NPC.Center.X - player.Center.X;
                     for (int f = 0; f < 7; f++)
                     {
-                        NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Acytaea.AcytaeaShadow3>(), 0, 0, (float)Math.Sqrt(f + 1) * 72, 0, -1);
-                        NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Acytaea.AcytaeaShadow3>(), 0, 0, (float)Math.Sqrt(f + 1) * -72, 0, -1);
+                        NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<AcytaeaShadow3>(), 0, 0, (float)Math.Sqrt(f + 1) * 72, 0, -1);
+                        NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<AcytaeaShadow3>(), 0, 0, (float)Math.Sqrt(f + 1) * -72, 0, -1);
                     }
                 }
                 if (NPC.localAI[0] > 7250 && NPC.localAI[0] < 7450)
@@ -1913,14 +1917,14 @@ public class Acytaea : ModNPC
                     if (NPC.localAI[0] % 20 == 0)
                     {
                         Vector2 vf = new Vector2(-1f, 0);
-                        int f = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 34, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrow>(), Dam, 3, player.whoAmI);
+                        int f = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 34, ModContent.ProjectileType<AcytaeaArrow>(), Dam, 3, player.whoAmI);
                         Main.projectile[f].timeLeft = 100;
                         for (int z = 0; z < 200; z++)
                         {
-                            if (Main.npc[z].active && Main.npc[z].type == ModContent.NPCType<Acytaea.AcytaeaShadow3>())
+                            if (Main.npc[z].active && Main.npc[z].type == ModContent.NPCType<AcytaeaShadow3>())
                             {
                                 Vector2 vλ = new Vector2(-1f * (float)Math.Sqrt(Math.Abs(Main.npc[z].ai[1] / 300f) + 1), 0f);
-                                int λ = Projectile.NewProjectile(NPC.GetSource_FromAI(), Main.npc[z].Center, vλ * 34, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrow>(), Dam, 3, player.whoAmI);
+                                int λ = Projectile.NewProjectile(NPC.GetSource_FromAI(), Main.npc[z].Center, vλ * 34, ModContent.ProjectileType<AcytaeaArrow>(), Dam, 3, player.whoAmI);
                                 Main.projectile[λ].timeLeft = 100;
                             }
                         }
@@ -1930,13 +1934,13 @@ public class Acytaea : ModNPC
                 {
                     BowRot = (float)(Math.PI * 0.5);
                     Vector2 vf = new Vector2(0, -1f);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 25, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrow3>(), Dam, 3, player.whoAmI);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 25, ModContent.ProjectileType<AcytaeaArrow3>(), Dam, 3, player.whoAmI);
                 }
                 if (NPC.localAI[0] == 7489)
                 {
                     BowRot = (float)(-Math.PI * 0.5);
                     Vector2 vf = new Vector2(0, 1f);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 25, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrow3>(), Dam, 3, player.whoAmI);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 25, ModContent.ProjectileType<AcytaeaArrow3>(), Dam, 3, player.whoAmI);
                 }
             }//左侧幻影
             if (NPC.localAI[0] > 7500 && NPC.localAI[0] <= 7800)
@@ -1976,10 +1980,10 @@ public class Acytaea : ModNPC
                 if (NPC.localAI[0] % 3 == 0 && NPC.localAI[0] > 7540)
                 {
                     Vector2 vf = new Vector2(1, 0).RotatedBy(Math.Sin(NPC.localAI[0] / 15d) * 0.75);
-                    int f = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 20, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrow>(), Dam, 3, player.whoAmI);
+                    int f = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 20, ModContent.ProjectileType<AcytaeaArrow>(), Dam, 3, player.whoAmI);
                     Main.projectile[f].timeLeft = 100;
                     vf = new Vector2(1, 0).RotatedBy(-Math.Sin(NPC.localAI[0] / 15d) * 0.75);
-                    f = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 20, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrow>(), Dam, 3, player.whoAmI);
+                    f = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 20, ModContent.ProjectileType<AcytaeaArrow>(), Dam, 3, player.whoAmI);
                     Main.projectile[f].timeLeft = 100;
                 }
             }//↗→↘
@@ -2040,9 +2044,9 @@ public class Acytaea : ModNPC
                     Vector2 vf = Vector2.Normalize(va);
                     for (int g = 0; g < 12; g++)
                     {
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf.RotatedBy((g - 5.5) / 6d * Math.PI) * 34, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrow>(), Dam, 3, player.whoAmI);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf.RotatedBy((g - 5.5) / 6d * Math.PI) * 34, ModContent.ProjectileType<AcytaeaArrow>(), Dam, 3, player.whoAmI);
                     }
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaCenterBow>(), Dam, 0, player.whoAmI);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<AcytaeaCenterBow>(), Dam, 0, player.whoAmI);
                 }
             }//旋转
             if (NPC.localAI[0] > 8400 && NPC.localAI[0] <= 8440)
@@ -2115,9 +2119,9 @@ public class Acytaea : ModNPC
                 if (NPC.localAI[0] % 15 == 0 && NPC.localAI[0] > 8560)
                 {
                     Vector2 vf = new Vector2(1, 0).RotatedBy(Math.Sin(NPC.localAI[0] / 15d) * 0.75);
-                    int f = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 20, ModContent.ProjectileType<Projectiles.Acytaea.Metero>(), Dam, 3, player.whoAmI, -1);
+                    int f = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 20, ModContent.ProjectileType<Metero>(), Dam, 3, player.whoAmI, -1);
                     vf = new Vector2(1, 0).RotatedBy(-Math.Sin(NPC.localAI[0] / 15d) * 0.75);
-                    f = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 20, ModContent.ProjectileType<Projectiles.Acytaea.Metero>(), Dam, 3, player.whoAmI, 1);
+                    f = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 20, ModContent.ProjectileType<Metero>(), Dam, 3, player.whoAmI, 1);
                 }
             }//散漫法术
             if (NPC.localAI[0] > 9000 && NPC.localAI[0] <= 9600)
@@ -2153,13 +2157,13 @@ public class Acytaea : ModNPC
                 {
                     Vector2 v0 = Vector2.Normalize(player.Center - NPC.Center) * 0.3f;
                     Vector2 vf = new Vector2(0, -1) + v0;
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 20, ModContent.ProjectileType<Projectiles.Acytaea.Metero2>(), Dam, 3, player.whoAmI, 1);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 20, ModContent.ProjectileType<Metero2>(), Dam, 3, player.whoAmI, 1);
                 }
                 if (NPC.localAI[0] % 14 == 7 && NPC.localAI[0] > 9000)
                 {
                     Vector2 v0 = Vector2.Normalize(player.Center - NPC.Center) * 0.3f;
                     Vector2 vf = new Vector2(0, -1) + v0;
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 20, ModContent.ProjectileType<Projectiles.Acytaea.Metero2>(), Dam, 3, player.whoAmI, -1);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 20, ModContent.ProjectileType<Metero2>(), Dam, 3, player.whoAmI, -1);
                 }
             }//弹珠
             if (NPC.localAI[0] > 9600 && NPC.localAI[0] <= 10600)
@@ -2201,11 +2205,11 @@ public class Acytaea : ModNPC
                     {
                         Vector2 v0 = Vector2.Normalize(player.Center - NPC.Center) * 100f;
                         Vector2 vf = v0.RotatedBy(h / 2.5 * Math.PI);
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + vf, Vector2.Zero, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaLaserBall>(), Dam, 3, player.whoAmI, -1);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + vf, Vector2.Zero, ModContent.ProjectileType<AcytaeaLaserBall>(), Dam, 3, player.whoAmI, -1);
                         for (int a = 0; a < 3; a++)
                         {
                             Vector2 va = Vector2.Normalize(player.Center - NPC.Center).RotatedByRandom(6.283) * Main.rand.NextFloat(0.4f, 6f);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + vf, va, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaLaserLight>(), Dam, 3, player.whoAmI, -1);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + vf, va, ModContent.ProjectileType<AcytaeaLaserLight>(), Dam, 3, player.whoAmI, -1);
                         }
                     }
                 }
@@ -2217,7 +2221,7 @@ public class Acytaea : ModNPC
                         Vector2 vf = v0.RotatedBy(h / 10d * Math.PI);
                         if (h % 4 >= 2)
                         {
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + vf, vf, ModContent.ProjectileType<Projectiles.Acytaea.Metero3>(), Dam, 3, player.whoAmI, -1);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + vf, vf, ModContent.ProjectileType<Metero3>(), Dam, 3, player.whoAmI, -1);
                         }
                     }
                 }
@@ -2258,7 +2262,7 @@ public class Acytaea : ModNPC
                 if (NPC.localAI[0] >= 10620 && NPC.localAI[0] % 60 == 0)
                 {
                     Vector2 v0 = Vector2.Normalize(player.Center - NPC.Center) * 12f;
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v0, ModContent.ProjectileType<Projectiles.Acytaea.Metero4>(), Dam, 3, player.whoAmI, -1);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v0, ModContent.ProjectileType<Metero4>(), Dam, 3, player.whoAmI, -1);
                 }
             }//激光法阵
             if (NPC.localAI[0] > 11000)
@@ -2638,8 +2642,7 @@ public class Acytaea : ModNPC
             isBattle = true;
             NPC.width = 40;
             NPC.height = 56;
-            t0 = "MythMod/NPCs/Acytaea/Acytaea_Head_Boss";
-            NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<Acytaea.FakeAcytaea>());
+            NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<FakeAcytaea>());
         }
         else
         {
@@ -2737,16 +2740,16 @@ public class Acytaea : ModNPC
     {
         for (int d = 0; d < Main.projectile.Length; d++)
         {
-            if (Main.projectile[d].type == ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaMagicBook>())
+            if (Main.projectile[d].type == ModContent.ProjectileType<AcytaeaMagicBook>())
             {
                 return;
             }
         }
-        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaMagicBook>(), 0, 1, Main.myPlayer);
+        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<AcytaeaMagicBook>(), 0, 1, Main.myPlayer);
     }
     public override void TownNPCAttackProj(ref int projType, ref int attackDelay)
     {
-        projType = ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaMagicBook>();
+        projType = ModContent.ProjectileType<AcytaeaMagicBook>();
         attackDelay = 60;
     }
     public override void TownNPCAttackProjSpeed(ref float multiplier, ref float gravityCorrection, ref float randomOffset)
@@ -2786,7 +2789,7 @@ public class Acytaea : ModNPC
                 }
                 MaxH++;
             }
-            Vector2 vf = Main.npc[NPCWHOAMI].Center + RightArmPos * NPC.spriteDirection - Main.screenPosition + new Vector2(-7f, 3).RotatedBy(RightArmRot);
+            Vector2 vf = Main.npc[NPCWHOAMI].Center + RightArmPos * Main.npc[NPCWHOAMI].spriteDirection - Main.screenPosition + new Vector2(-7f, 3).RotatedBy(RightArmRot);
 
             for (int h = 0; h < 60; h++)
             {
@@ -2820,7 +2823,7 @@ public class Acytaea : ModNPC
                             {
                                 if ((Main.player[j].Center - OldBladePos[h]).Length() < 40)
                                 {
-                                    Projectile.NewProjectile(Main.npc[NPCWHOAMI].GetSource_FromAI(), Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.Typeless.playerHit>(), Main.npc[NPCWHOAMI].damage, 0, j, 0, 0);
+                                    Projectile.NewProjectile(Main.npc[NPCWHOAMI].GetSource_FromAI(), Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<playerHit>(), Main.npc[NPCWHOAMI].damage, 0, j, 0, 0);
                                 }
                             }
                         }
@@ -2962,7 +2965,7 @@ public class Acytaea : ModNPC
                                     {
                                         if ((Main.player[j].Center - OldBladePos[h]).Length() < 40)
                                         {
-                                            Projectile.NewProjectile(NPC.GetSource_FromAI(), Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.Typeless.playerHit>(), Dam, 0, j, 0, 0);
+                                            Projectile.NewProjectile(NPC.GetSource_FromAI(), Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<playerHit>(), Dam, 0, j, 0, 0);
                                         }
                                     }
                                 }
@@ -3374,7 +3377,7 @@ public class Acytaea : ModNPC
         }
         if (HasBow)
         {
-            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaBow").Value, NPC.Center + BowPos - Main.screenPosition, null, color, NPC.rotation + BowRot, new Vector2(30, 28), 1f, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaBow").Value, NPC.Center - Main.screenPosition, null, color, NPC.rotation + BowRot, new Vector2(30, 28), 1f, SpriteEffects.None, 0f);
         }
         if (HasBook)
         {

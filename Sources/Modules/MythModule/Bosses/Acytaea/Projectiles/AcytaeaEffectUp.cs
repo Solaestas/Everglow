@@ -1,4 +1,4 @@
-﻿using MythMod.Common.Players;
+﻿using Everglow.Sources.Commons.Function.Vertex;
 
 namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 {
@@ -48,7 +48,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             {
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-                List<VertexBase.CustomVertexInfo> bars = new List<VertexBase.CustomVertexInfo>();
+                List<Vertex2D> bars = new List<Vertex2D>();
 
                 float step = 8;
                 float fx = (200 - Projectile.timeLeft) / 200f;
@@ -72,20 +72,20 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                     Lighting.AddLight(Vlaser[k, i], (255 - Projectile.alpha) * 1.2f / 50f * yd, 0, 0);
                     if (Count - i < 5)
                     {
-                        bars.Add(new VertexBase.CustomVertexInfo(Vlaser[k, i] + normalDir * width - Main.screenPosition, new Color(Math.Clamp((int)(155 * (Count - i - 1) / 5f), 0, 155), 0, 0, 0), new Vector3(factor % 1f, 1, w)));
-                        bars.Add(new VertexBase.CustomVertexInfo(Vlaser[k, i] + normalDir * -width - Main.screenPosition, new Color(Math.Clamp((int)(155 * (Count - i - 1) / 5f), 0, 155), 0, 0, 0), new Vector3(factor % 1f, 0, w)));
+                        bars.Add(new Vertex2D(Vlaser[k, i] + normalDir * width - Main.screenPosition, new Color(Math.Clamp((int)(155 * (Count - i - 1) / 5f), 0, 155), 0, 0, 0), new Vector3(factor % 1f, 1, w)));
+                        bars.Add(new Vertex2D(Vlaser[k, i] + normalDir * -width - Main.screenPosition, new Color(Math.Clamp((int)(155 * (Count - i - 1) / 5f), 0, 155), 0, 0, 0), new Vector3(factor % 1f, 0, w)));
                     }
                     else
                     {
-                        bars.Add(new VertexBase.CustomVertexInfo(Vlaser[k, i] + normalDir * width - Main.screenPosition, new Color(155, 0, 0, 0), new Vector3(factor % 1f, 1, w)));
-                        bars.Add(new VertexBase.CustomVertexInfo(Vlaser[k, i] + normalDir * -width - Main.screenPosition, new Color(155, 0, 0, 0), new Vector3(factor % 1f, 0, w)));
+                        bars.Add(new Vertex2D(Vlaser[k, i] + normalDir * width - Main.screenPosition, new Color(155, 0, 0, 0), new Vector3(factor % 1f, 1, w)));
+                        bars.Add(new Vertex2D(Vlaser[k, i] + normalDir * -width - Main.screenPosition, new Color(155, 0, 0, 0), new Vector3(factor % 1f, 0, w)));
                     }
                 }
-                List<VertexBase.CustomVertexInfo> Vx = new List<VertexBase.CustomVertexInfo>();
+                List<Vertex2D> Vx = new List<Vertex2D>();
                 if (bars.Count > 2)
                 {
                     Vx.Add(bars[0]);
-                    var vertex = new VertexBase.CustomVertexInfo((bars[0].Position + bars[1].Position) * 0.5f + new Vector2(-5, 0).RotatedBy(Projectile.rotation), new Color(255, 0, 0, 0), new Vector3(0, 0.5f, 1));
+                    var vertex = new Vertex2D((bars[0].position + bars[1].position) * 0.5f + new Vector2(-5, 0).RotatedBy(Projectile.rotation), new Color(255, 0, 0, 0), new Vector3(0, 0.5f, 1));
                     Vx.Add(bars[1]);
                     Vx.Add(vertex);
                     for (int i = 0; i < bars.Count - 2; i += 2)

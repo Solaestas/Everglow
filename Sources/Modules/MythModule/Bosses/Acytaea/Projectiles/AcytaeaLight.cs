@@ -45,7 +45,7 @@
             int width = (int)fx;
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-            List<VertexBase.CustomVertexInfo> bars = new List<VertexBase.CustomVertexInfo>();
+            List<Vertex2D> bars = new List<Vertex2D>();
             ef = ModContent.Request<Effect>("MythMod/Effects/Trail").Value;
 
 
@@ -96,8 +96,8 @@
                 var color = Color.Lerp(Color.White, Color.Red, factor);
                 var w = MathHelper.Lerp(1f, 0.05f, 0.1f);
 
-                bars.Add(new VertexBase.CustomVertexInfo(Projectile.Center + v3 * (1 - width / 200f) / (float)Math.Sqrt(ka), color, new Vector3((float)factor, 1, w)));
-                bars.Add(new VertexBase.CustomVertexInfo(Projectile.Center + v3 * (1 + width / 200f) / (float)Math.Sqrt(ka), color, new Vector3((float)factor, 0, w)));
+                bars.Add(new Vertex2D(Projectile.Center + v3 * (1 - width / 200f) / (float)Math.Sqrt(ka), color, new Vector3((float)factor, 1, w)));
+                bars.Add(new Vertex2D(Projectile.Center + v3 * (1 + width / 200f) / (float)Math.Sqrt(ka), color, new Vector3((float)factor, 0, w)));
                 if (i % 8 == 0)
                 {
                     float h0 = 1;
@@ -110,12 +110,12 @@
                 }
             }
 
-            List<VertexBase.CustomVertexInfo> triangleList = new List<VertexBase.CustomVertexInfo>();
+            List<Vertex2D> triangleList = new List<Vertex2D>();
 
             if (bars.Count > 2)
             {
                 triangleList.Add(bars[0]);
-                var vertex = new VertexBase.CustomVertexInfo((bars[0].Position + bars[1].Position) * 0.5f + Projectile.velocity, Color.White, new Vector3(0, 0.5f, 1));
+                var vertex = new Vertex2D((bars[0].Position + bars[1].Position) * 0.5f + Projectile.velocity, Color.White, new Vector3(0, 0.5f, 1));
                 triangleList.Add(bars[1]);
                 triangleList.Add(vertex);
                 for (int i = 0; i < bars.Count - 2; i += 2)

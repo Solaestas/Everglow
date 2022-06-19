@@ -68,7 +68,7 @@
         {
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            List<VertexBase.CustomVertexInfo> bars = new List<VertexBase.CustomVertexInfo>();
+            List<Vertex2D> bars = new List<Vertex2D>();
 
             float step = 4;
             int Count = 0;
@@ -100,13 +100,13 @@
                 Lighting.AddLight(Vlaser[i], (255 - Projectile.alpha) * 1.2f / 50f * yd, 0, 0);
                 if (Count - i < 5)
                 {
-                    bars.Add(new VertexBase.CustomVertexInfo(Vlaser[i] + normalDir * width - Main.screenPosition, new Color(Math.Clamp((int)(255 * (Count - i - 1) / 5f), 0, 255), 0, 0, 0), new Vector3(factor % 1f, 1, w)));
-                    bars.Add(new VertexBase.CustomVertexInfo(Vlaser[i] + normalDir * -width - Main.screenPosition, new Color(Math.Clamp((int)(255 * (Count - i - 1) / 5f), 0, 255), 0, 0, 0), new Vector3(factor % 1f, 0, w)));
+                    bars.Add(new Vertex2D(Vlaser[i] + normalDir * width - Main.screenPosition, new Color(Math.Clamp((int)(255 * (Count - i - 1) / 5f), 0, 255), 0, 0, 0), new Vector3(factor % 1f, 1, w)));
+                    bars.Add(new Vertex2D(Vlaser[i] + normalDir * -width - Main.screenPosition, new Color(Math.Clamp((int)(255 * (Count - i - 1) / 5f), 0, 255), 0, 0, 0), new Vector3(factor % 1f, 0, w)));
                 }
                 else
                 {
-                    bars.Add(new VertexBase.CustomVertexInfo(Vlaser[i] + normalDir * width - Main.screenPosition, new Color(255, 0, 0, 0), new Vector3(factor % 1f, 1, w)));
-                    bars.Add(new VertexBase.CustomVertexInfo(Vlaser[i] + normalDir * -width - Main.screenPosition, new Color(255, 0, 0, 0), new Vector3(factor % 1f, 0, w)));
+                    bars.Add(new Vertex2D(Vlaser[i] + normalDir * width - Main.screenPosition, new Color(255, 0, 0, 0), new Vector3(factor % 1f, 1, w)));
+                    bars.Add(new Vertex2D(Vlaser[i] + normalDir * -width - Main.screenPosition, new Color(255, 0, 0, 0), new Vector3(factor % 1f, 0, w)));
                 }
                 if (!Main.gamePaused)
                 {
@@ -125,11 +125,11 @@
                     }
                 }
             }
-            List<VertexBase.CustomVertexInfo> Vx = new List<VertexBase.CustomVertexInfo>();
+            List<Vertex2D> Vx = new List<Vertex2D>();
             if (bars.Count > 2)
             {
                 Vx.Add(bars[0]);
-                var vertex = new VertexBase.CustomVertexInfo((bars[0].Position + bars[1].Position) * 0.5f + new Vector2(-5, 0).RotatedBy(Projectile.rotation), new Color(255, 0, 0, 0), new Vector3(0, 0.5f, 1));
+                var vertex = new Vertex2D((bars[0].Position + bars[1].Position) * 0.5f + new Vector2(-5, 0).RotatedBy(Projectile.rotation), new Color(255, 0, 0, 0), new Vector3(0, 0.5f, 1));
                 Vx.Add(bars[1]);
                 Vx.Add(vertex);
                 for (int i = 0; i < bars.Count - 2; i += 2)
@@ -149,7 +149,7 @@
 
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            List<VertexBase.CustomVertexInfo> Vx2 = new List<VertexBase.CustomVertexInfo>();
+            List<Vertex2D> Vx2 = new List<Vertex2D>();
 
             Vector2 vf = Vlaser[Math.Clamp(Count - 1, 0, 507)] - Main.screenPosition;
             float ACircleR = 150 * yd;
@@ -160,15 +160,15 @@
                 Vector2 v1 = new Vector2(0, ACircleR).RotatedBy((h + 1) / 50d * Math.PI + CirR0);
                 if (h % 20 >= 10)
                 {
-                    Vx2.Add(new VertexBase.CustomVertexInfo(vf + v0, color3, new Vector3((0.999f + CirPro0) / 25f % 1f, 0, 0)));
-                    Vx2.Add(new VertexBase.CustomVertexInfo(vf + v1, color3, new Vector3(CirPro0 / 25f % 1f, 0, 0)));
-                    Vx2.Add(new VertexBase.CustomVertexInfo(vf, color3, new Vector3((0.5f + CirPro0) / 25f % 1f, 1, 0)));
+                    Vx2.Add(new Vertex2D(vf + v0, color3, new Vector3((0.999f + CirPro0) / 25f % 1f, 0, 0)));
+                    Vx2.Add(new Vertex2D(vf + v1, color3, new Vector3(CirPro0 / 25f % 1f, 0, 0)));
+                    Vx2.Add(new Vertex2D(vf, color3, new Vector3((0.5f + CirPro0) / 25f % 1f, 1, 0)));
                 }
                 else
                 {
-                    Vx2.Add(new VertexBase.CustomVertexInfo(vf + v0, color3, new Vector3(CirPro0 / 25f % 1f, 0, 0)));
-                    Vx2.Add(new VertexBase.CustomVertexInfo(vf + v1, color3, new Vector3((0.999f + CirPro0) / 25f % 1f, 0, 0)));
-                    Vx2.Add(new VertexBase.CustomVertexInfo(vf, color3, new Vector3((0.5f + CirPro0) / 25f % 1f, 1, 0)));
+                    Vx2.Add(new Vertex2D(vf + v0, color3, new Vector3(CirPro0 / 25f % 1f, 0, 0)));
+                    Vx2.Add(new Vertex2D(vf + v1, color3, new Vector3((0.999f + CirPro0) / 25f % 1f, 0, 0)));
+                    Vx2.Add(new Vertex2D(vf, color3, new Vector3((0.5f + CirPro0) / 25f % 1f, 1, 0)));
                 }
             }
             Texture2D t1 = ModContent.Request<Texture2D>("MythMod/UIImages/LightCrack").Value;

@@ -92,7 +92,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
         {
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-            List<VertexBase.CustomVertexInfo> bars = new List<VertexBase.CustomVertexInfo>();
+            List<Vertex2D> bars = new List<Vertex2D>();
             ef = ModContent.Request<Effect>("MythMod/Effects/Trail").Value;
             // 把所有的点都生成出来，按照顺序
             int width = 40;
@@ -113,18 +113,18 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 
 
 
-                bars.Add(new VertexBase.CustomVertexInfo(Projectile.oldPos[i] + normalDir * width + new Vector2(30, 30), color, new Vector3((float)Math.Sqrt(factor), 1, w)));
-                bars.Add(new VertexBase.CustomVertexInfo(Projectile.oldPos[i] + normalDir * -width + new Vector2(30, 30), color, new Vector3((float)Math.Sqrt(factor), 0, w)));
+                bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(30, 30), color, new Vector3((float)Math.Sqrt(factor), 1, w)));
+                bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(30, 30), color, new Vector3((float)Math.Sqrt(factor), 0, w)));
             }
 
-            List<VertexBase.CustomVertexInfo> triangleList = new List<VertexBase.CustomVertexInfo>();
+            List<Vertex2D> triangleList = new List<Vertex2D>();
 
             if (bars.Count > 2)
             {
 
                 // 按照顺序连接三角形
                 triangleList.Add(bars[0]);
-                var vertex = new VertexBase.CustomVertexInfo((bars[0].Position + bars[1].Position) * 0.5f + Vector2.Normalize(Projectile.velocity) * 30, Color.White, new Vector3(0, 0.5f, 1));
+                var vertex = new Vertex2D((bars[0].Position + bars[1].Position) * 0.5f + Vector2.Normalize(Projectile.velocity) * 30, Color.White, new Vector3(0, 0.5f, 1));
                 triangleList.Add(bars[1]);
                 triangleList.Add(vertex);
                 for (int i = 0; i < bars.Count - 2; i += 2)

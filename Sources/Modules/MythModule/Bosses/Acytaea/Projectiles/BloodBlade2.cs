@@ -1,5 +1,4 @@
-
-using MythMod.Common.Players;
+using Everglow.Sources.Commons.Function.Vertex;
 
 using Terraria.Audio;
 
@@ -59,16 +58,16 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                     Projectile.Kill();
                 }
                 K += Main.rand.NextFloat(-0.025f, 0.025f);
-                int num = Dust.NewDust(Projectile.Center - new Vector2(4, 4) + new Vector2(0, 12).RotatedBy(Projectile.timeLeft / 4f), 2, 2, ModContent.DustType<Dusts.RedEffect2>(), 0, 0, 0, default, 1f);
-                Main.dust[num].noGravity = false;
-                Main.dust[num].velocity *= 0;
-                int num20 = Dust.NewDust(Projectile.Center - new Vector2(4, 4) - new Vector2(0, 12).RotatedBy(Projectile.timeLeft / 4f), 2, 2, ModContent.DustType<Dusts.RedEffect2>(), 0, 0, 0, default, 1f);
-                Main.dust[num20].noGravity = false;
-                Main.dust[num20].velocity *= 0;
-                int num21 = Dust.NewDust(Projectile.Center - new Vector2(4, 4), 2, 2, ModContent.DustType<Dusts.RedEffect2>(), 0, 0, 0, default, 1.5f);
-                Main.dust[num21].velocity *= 0;
-                int num22 = Dust.NewDust(Projectile.Center - new Vector2(4, 4) + new Vector2(0, Main.rand.NextFloat(0, 8f)).RotatedByRandom(Math.PI * 2), 2, 2, ModContent.DustType<Dusts.RedEffect2>(), 0, 0, 0, default, 1.5f);
-                Main.dust[num22].velocity *= 0.2f;
+                int index = Dust.NewDust(Projectile.Center - new Vector2(4, 4) + new Vector2(0, 12).RotatedBy(Projectile.timeLeft / 4f), 2, 2, ModContent.DustType<Dusts.RedEffect2>(), 0, 0, 0, default, 1f);
+                Main.dust[index].noGravity = false;
+                Main.dust[index].velocity *= 0;
+                index = Dust.NewDust(Projectile.Center - new Vector2(4, 4) - new Vector2(0, 12).RotatedBy(Projectile.timeLeft / 4f), 2, 2, ModContent.DustType<Dusts.RedEffect2>(), 0, 0, 0, default, 1f);
+                Main.dust[index].noGravity = false;
+                Main.dust[index].velocity *= 0;
+                index = Dust.NewDust(Projectile.Center - new Vector2(4, 4), 2, 2, ModContent.DustType<Dusts.RedEffect2>(), 0, 0, 0, default, 1.5f);
+                Main.dust[index].velocity *= 0;
+                index = Dust.NewDust(Projectile.Center - new Vector2(4, 4) + new Vector2(0, Main.rand.NextFloat(0, 8f)).RotatedByRandom(Math.PI * 2), 2, 2, ModContent.DustType<Dusts.RedEffect2>(), 0, 0, 0, default, 1.5f);
+                Main.dust[index].velocity *= 0.2f;
 
                 if (Collision.CanHit(Projectile.Center - Vector2.Normalize(Projectile.velocity) * 84, 1, 1, Main.player[Player.FindClosest(Projectile.Center, 60, 60)].Center, 1, 1))
                 {
@@ -139,7 +138,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
         {
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-            List<VertexBase.CustomVertexInfo> bars = new List<VertexBase.CustomVertexInfo>();
+            List<Vertex2D> bars = new List<Vertex2D>();
             ef = ModContent.Request<Effect>("MythMod/Effects/Trail").Value;
             // 把所有的点都生成出来，按照顺序
             int width = 40;
@@ -160,18 +159,18 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 
 
 
-                bars.Add(new VertexBase.CustomVertexInfo(Projectile.oldPos[i] + normalDir * width + new Vector2(30, 30), color, new Vector3((float)Math.Sqrt(factor), 1, w)));
-                bars.Add(new VertexBase.CustomVertexInfo(Projectile.oldPos[i] + normalDir * -width + new Vector2(30, 30), color, new Vector3((float)Math.Sqrt(factor), 0, w)));
+                bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(30, 30), color, new Vector3((float)Math.Sqrt(factor), 1, w)));
+                bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(30, 30), color, new Vector3((float)Math.Sqrt(factor), 0, w)));
             }
 
-            List<VertexBase.CustomVertexInfo> triangleList = new List<VertexBase.CustomVertexInfo>();
+            List<Vertex2D> triangleList = new List<Vertex2D>();
 
             if (bars.Count > 2)
             {
 
                 // 按照顺序连接三角形
                 triangleList.Add(bars[0]);
-                var vertex = new VertexBase.CustomVertexInfo((bars[0].Position + bars[1].Position) * 0.5f + Vector2.Normalize(Projectile.velocity) * 30, Color.White, new Vector3(0, 0.5f, 1));
+                var vertex = new Vertex2D((bars[0].position + bars[1].position) * 0.5f + Vector2.Normalize(Projectile.velocity) * 30, Color.White, new Vector3(0, 0.5f, 1));
                 triangleList.Add(bars[1]);
                 triangleList.Add(vertex);
                 for (int i = 0; i < bars.Count - 2; i += 2)

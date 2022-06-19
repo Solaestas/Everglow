@@ -117,7 +117,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             {
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-                List<VertexBase.CustomVertexInfo> Vx = new List<VertexBase.CustomVertexInfo>();
+                List<Vertex2D> Vx = new List<Vertex2D>();
 
                 for (int h = 0; h < 60; h++)
                 {
@@ -137,24 +137,24 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                     {
                         color3 = new Color(1200 - Projectile.timeLeft, 1200 - Projectile.timeLeft, 1200 - Projectile.timeLeft, 0);
                     }
-                    Vx.Add(new VertexBase.CustomVertexInfo(vc - Main.screenPosition + new Vector2(0, 0), color3, new Vector3((h + 1) / 60f, 0, 0)));
-                    Vx.Add(new VertexBase.CustomVertexInfo(vb - Main.screenPosition + new Vector2(0, 0), color3, new Vector3((h) / 60f, 0, 0)));
-                    Vx.Add(new VertexBase.CustomVertexInfo(Projectile.Center - Main.screenPosition + new Vector2(0, 0) + new Vector2(0, St / 160f * Sca[z]).RotatedBy(0.4 + Rota[z]), color3, new Vector3(0.5f, 1, 0)));
+                    Vx.Add(new Vertex2D(vc - Main.screenPosition + new Vector2(0, 0), color3, new Vector3((h + 1) / 60f, 0, 0)));
+                    Vx.Add(new Vertex2D(vb - Main.screenPosition + new Vector2(0, 0), color3, new Vector3((h) / 60f, 0, 0)));
+                    Vx.Add(new Vertex2D(Projectile.Center - Main.screenPosition + new Vector2(0, 0) + new Vector2(0, St / 160f * Sca[z]).RotatedBy(0.4 + Rota[z]), color3, new Vector3(0.5f, 1, 0)));
                 }
                 Texture2D t = ModContent.Request<Texture2D>("MythMod/Projectiles/Acytaea/AcytaeaTornado5").Value;
                 Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
             }*/
             ef2 = ModContent.Request<Effect>("MythMod/Effects/ef3/SpherePerspective3").Value;
-            List<VertexBase.CustomVertexInfo> triangleList2 = new List<VertexBase.CustomVertexInfo>();
+            List<Vertex2D> triangleList2 = new List<Vertex2D>();
             int radius = (int)(St / 80f);//sss
-            triangleList2.Add(new VertexBase.CustomVertexInfo(Projectile.Center - new Vector2(radius, radius), Color.White, new Vector3(-1, 1, 0)));
-            triangleList2.Add(new VertexBase.CustomVertexInfo(Projectile.Center - new Vector2(radius, -radius), Color.White, new Vector3(-1, -1, 0)));
-            triangleList2.Add(new VertexBase.CustomVertexInfo(Projectile.Center - new Vector2(-radius, -radius), Color.White, new Vector3(1, -1, 0)));
+            triangleList2.Add(new Vertex2D(Projectile.Center - new Vector2(radius, radius), Color.White, new Vector3(-1, 1, 0)));
+            triangleList2.Add(new Vertex2D(Projectile.Center - new Vector2(radius, -radius), Color.White, new Vector3(-1, -1, 0)));
+            triangleList2.Add(new Vertex2D(Projectile.Center - new Vector2(-radius, -radius), Color.White, new Vector3(1, -1, 0)));
 
-            triangleList2.Add(new VertexBase.CustomVertexInfo(Projectile.Center - new Vector2(radius, radius), Color.White, new Vector3(-1, 1, 0)));
-            triangleList2.Add(new VertexBase.CustomVertexInfo(Projectile.Center - new Vector2(-radius, -radius), Color.White, new Vector3(1, -1, 0)));
-            triangleList2.Add(new VertexBase.CustomVertexInfo(Projectile.Center - new Vector2(-radius, radius), Color.White, new Vector3(1, 1, 0)));
+            triangleList2.Add(new Vertex2D(Projectile.Center - new Vector2(radius, radius), Color.White, new Vector3(-1, 1, 0)));
+            triangleList2.Add(new Vertex2D(Projectile.Center - new Vector2(-radius, -radius), Color.White, new Vector3(1, -1, 0)));
+            triangleList2.Add(new Vertex2D(Projectile.Center - new Vector2(-radius, radius), Color.White, new Vector3(1, 1, 0)));
 
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);

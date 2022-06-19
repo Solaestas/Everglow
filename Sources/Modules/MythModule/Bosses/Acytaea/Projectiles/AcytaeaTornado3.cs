@@ -55,7 +55,7 @@
             {
                 for (int z = -15; z < 16; z++)
                 {
-                    List<VertexBase.CustomVertexInfo> Vx = new List<VertexBase.CustomVertexInfo>();
+                    List<Vertex2D> Vx = new List<Vertex2D>();
 
                     for (int h = 0; h < 60; h++)
                     {
@@ -80,9 +80,9 @@
                         color3.G = (byte)(color3.G * a0);
                         color3.B = (byte)(color3.B * a0);
                         color3.A = (byte)(color3.A * a0);
-                        Vx.Add(new VertexBase.CustomVertexInfo(vc - Main.screenPosition + new Vector2(0, z * 40), color3, new Vector3((h + 1) / 60f, 0, 0)));
-                        Vx.Add(new VertexBase.CustomVertexInfo(vb - Main.screenPosition + new Vector2(0, z * 40), color3, new Vector3(h / 60f, 0, 0)));
-                        Vx.Add(new VertexBase.CustomVertexInfo(Main.projectile[WHOAMI].Center - Main.screenPosition + new Vector2(0, -70) + new Vector2(0, z * 40), color3, new Vector3(0.5f, 1, 0)));
+                        Vx.Add(new Vertex2D(vc - Main.screenPosition + new Vector2(0, z * 40), color3, new Vector3((h + 1) / 60f, 0, 0)));
+                        Vx.Add(new Vertex2D(vb - Main.screenPosition + new Vector2(0, z * 40), color3, new Vector3(h / 60f, 0, 0)));
+                        Vx.Add(new Vertex2D(Main.projectile[WHOAMI].Center - Main.screenPosition + new Vector2(0, -70) + new Vector2(0, z * 40), color3, new Vector3(0.5f, 1, 0)));
                     }
                     Texture2D t = ModContent.Request<Texture2D>("MythMod/Projectiles/Acytaea/AcytaeaTornado3").Value;
                     Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror

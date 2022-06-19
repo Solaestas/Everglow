@@ -335,7 +335,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
                     Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
                     if (BladePro == 1)
                     {
-                        List<VertexBase.CustomVertexInfo> Vx = new List<VertexBase.CustomVertexInfo>();
+                        List<Vertex2D> Vx = new List<Vertex2D>();
                         Vector2 vBla = new Vector2(88 - (MinorDir - 1) * 8, -158).RotatedBy(BladeRot);
                         vBla.Y *= BladeSquz;
                         Vector2 vc = NPC.Center + vBla;
@@ -377,15 +377,15 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
                             Vector2 v0 = OldBladePos[h] - vf;
                             if (BladeRot < OldBladeRot)
                             {
-                                Vx.Add(new VertexBase.CustomVertexInfo(OldBladePos[h] - Main.screenPosition, color3, new Vector3(h / 60f, 0, 0)));
-                                Vx.Add(new VertexBase.CustomVertexInfo(OldBladePos[h + 1] - Main.screenPosition, color3, new Vector3((h + 1) / 60f, 0, 0)));
-                                Vx.Add(new VertexBase.CustomVertexInfo(vf, color3, new Vector3(0, 1, 0)));
+                                Vx.Add(new Vertex2D(OldBladePos[h] - Main.screenPosition, color3, new Vector3(h / 60f, 0, 0)));
+                                Vx.Add(new Vertex2D(OldBladePos[h + 1] - Main.screenPosition, color3, new Vector3((h + 1) / 60f, 0, 0)));
+                                Vx.Add(new Vertex2D(vf, color3, new Vector3(0, 1, 0)));
                             }
                             else
                             {
-                                Vx.Add(new VertexBase.CustomVertexInfo(OldBladePos[h + 1] - Main.screenPosition, color3, new Vector3((h + 1) / 60f, 0, 0)));
-                                Vx.Add(new VertexBase.CustomVertexInfo(OldBladePos[h] - Main.screenPosition, color3, new Vector3(h / 60f, 0, 0)));
-                                Vx.Add(new VertexBase.CustomVertexInfo(vf, color3, new Vector3(0, 1, 0)));
+                                Vx.Add(new Vertex2D(OldBladePos[h + 1] - Main.screenPosition, color3, new Vector3((h + 1) / 60f, 0, 0)));
+                                Vx.Add(new Vertex2D(OldBladePos[h] - Main.screenPosition, color3, new Vector3(h / 60f, 0, 0)));
+                                Vx.Add(new Vertex2D(vf, color3, new Vector3(0, 1, 0)));
                             }
                         }
                         Texture2D t = ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/GlodenBloodScaleShader").Value;
@@ -399,7 +399,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
             {
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-                List<VertexBase.CustomVertexInfo> Vx = new List<VertexBase.CustomVertexInfo>();
+                List<Vertex2D> Vx = new List<Vertex2D>();
                 Color color3 = new Color((int)(255 * BladePro), (int)(255 * BladePro), (int)(255 * BladePro), 0);
                 Vector2 vBla = new Vector2(88 - (MinorDir - 1) * 8, -158).RotatedBy(BladeRot);
                 vBla.Y *= BladeSquz;
@@ -410,13 +410,13 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
                 Vector2 vg = new Vector2(17.02f, 0).RotatedBy(0.4 + BladeRot) + vf;
                 Vector2 vh = new Vector2(-17.02f, 0).RotatedBy(0.4 + BladeRot) + vf;
 
-                Vx.Add(new VertexBase.CustomVertexInfo(vg, color3, new Vector3(Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).X + 0.03f, 0, 1), Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).Y + 0.97f, 0, 1), 0)));
-                Vx.Add(new VertexBase.CustomVertexInfo(vh, color3, new Vector3(Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).X + 0.03f, 0, 1), Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).Y + 0.97f, 0, 1), 0)));
-                Vx.Add(new VertexBase.CustomVertexInfo(vd, color3, new Vector3(Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).X + 0.68f, 0, 1), Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).Y + 0.32f, 0, 1), 0)));
+                Vx.Add(new Vertex2D(vg, color3, new Vector3(Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).X + 0.03f, 0, 1), Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).Y + 0.97f, 0, 1), 0)));
+                Vx.Add(new Vertex2D(vh, color3, new Vector3(Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).X + 0.03f, 0, 1), Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).Y + 0.97f, 0, 1), 0)));
+                Vx.Add(new Vertex2D(vd, color3, new Vector3(Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).X + 0.68f, 0, 1), Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).Y + 0.32f, 0, 1), 0)));
 
-                Vx.Add(new VertexBase.CustomVertexInfo(vh, color3, new Vector3(Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).X + 0.03f, 0, 1), Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).Y + 0.97f, 0, 1), 0)));
-                Vx.Add(new VertexBase.CustomVertexInfo(ve, color3, new Vector3(Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).X + 0.68f, 0, 1), Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).Y + 0.32f, 0, 1), 0)));
-                Vx.Add(new VertexBase.CustomVertexInfo(vd, color3, new Vector3(Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).X + 0.68f, 0, 1), Math.Clamp(new Vector2(11.85f / 122f, 0).RotatedBy(0.4).Y + 0.32f, 0, 1), 0)));
+                Vx.Add(new Vertex2D(vh, color3, new Vector3(Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).X + 0.03f, 0, 1), Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).Y + 0.97f, 0, 1), 0)));
+                Vx.Add(new Vertex2D(ve, color3, new Vector3(Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).X + 0.68f, 0, 1), Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).Y + 0.32f, 0, 1), 0)));
+                Vx.Add(new Vertex2D(vd, color3, new Vector3(Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).X + 0.68f, 0, 1), Math.Clamp(new Vector2(11.85f / 122f, 0).RotatedBy(0.4).Y + 0.32f, 0, 1), 0)));
 
                 Texture2D t = ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/GlodenBloodScaleMirror").Value;
                 if (MinorDir == -1)
