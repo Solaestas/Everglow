@@ -39,7 +39,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
         {
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            List<VertexBase.Vertex2D> bars = new List<VertexBase.Vertex2D>();
+            List<Vertex2D> bars = new List<Vertex2D>();
             float width = 2;
             if (Projectile.timeLeft < 60)
             {
@@ -66,14 +66,14 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
                 normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
                 var factor = i / (float)TrueL;
                 var w = MathHelper.Lerp(1f, 0.05f, factor);
-                bars.Add(new VertexBase.Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(1f, 1f) - Main.screenPosition, Color.White, new Vector3(factor, 1, w)));
-                bars.Add(new VertexBase.Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(1f, 1f) - Main.screenPosition, Color.White, new Vector3(factor, 0, w)));
+                bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(1f, 1f) - Main.screenPosition, Color.White, new Vector3(factor, 1, w)));
+                bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(1f, 1f) - Main.screenPosition, Color.White, new Vector3(factor, 0, w)));
             }
-            List<VertexBase.Vertex2D> Vx = new List<VertexBase.Vertex2D>();
+            List<Vertex2D> Vx = new List<Vertex2D>();
             if (bars.Count > 2)
             {
                 Vx.Add(bars[0]);
-                var vertex = new VertexBase.Vertex2D((bars[0].Position + bars[1].Position) * 0.5f + Vector2.Normalize(Projectile.velocity), Color.White, new Vector3(0, 0.5f, 1));
+                var vertex = new Vertex2D((bars[0].position + bars[1].position) * 0.5f + Vector2.Normalize(Projectile.velocity), Color.White, new Vector3(0, 0.5f, 1));
                 Vx.Add(bars[1]);
                 Vx.Add(vertex);
                 for (int i = 0; i < bars.Count - 2; i += 2)

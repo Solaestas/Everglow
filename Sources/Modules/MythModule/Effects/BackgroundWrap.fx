@@ -2,12 +2,11 @@
 
 float4x4 uTransform;
 float uTime;
-float alpha;
 
-float4 PixelShaderFunction(float2 coords : TEXCOORD0) : COLOR0
+float4 PixelShaderFunction(float4 drawColor : COLOR0, float2 coords : TEXCOORD0) : COLOR0
 {
     float4 BackG = tex2D(uImage0, float2(coords.x + uTime, clamp(coords.y,0,1)));
-	return BackG * alpha;
+	return BackG * drawColor;
 }
 
 technique Technique1

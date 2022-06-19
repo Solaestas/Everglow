@@ -29,7 +29,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
             Projectile.aiStyle = -1;
             Projectile.penetrate = -1;
             Projectile.timeLeft = 300;
-            Projectile.tileCollide = true;
+            Projectile.tileCollide = false;
         }
 
         public override void AI()
@@ -171,7 +171,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
                     if (h % 6 < 3)
                     {
                         Vector2 v = new Vector2(0, 12f).RotatedBy(h * MathHelper.TwoPi / 36f + X);
-                        Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center + v, v, ModContent.ProjectileType<BlueMissil>(), Projectile.damage / 7, 0f, Main.myPlayer, 2);
+                        Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center + v, v, ModContent.ProjectileType<BlueMissil>(), Projectile.damage, 0f, Main.myPlayer, 2);
                     }
                 }
             }

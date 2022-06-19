@@ -13,6 +13,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
     [AutoloadBossHead]
     public class CorruptMoth : ModNPC
     {
+        public static NPC CorruputMothNPC;
         protected override bool CloneNewInstances => true;
 
         private readonly Color IdentifierValue = new Color(58, 169, 255);
@@ -34,7 +35,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
         private const int BFistColorsHeight = 60;
         private static bool startLoading = false;
 
-        private bool canDespawn = false;
+        private bool canDespawn = true;
         private bool start = false;
         private float lightVisual = 0;
         //public static int secondStageHeadSlot = -1;
@@ -57,9 +58,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             new Vector3(-1,-1,-1),
             new Vector3(-1,-1,1)
         };
-        /// <summary>
-        /// 发射弹幕，在调用时判断是否不为客户端
-        /// </summary>
+
         private int Timer
         {
             set => NPC.ai[1] = value;
@@ -116,7 +115,8 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             NPC.width = 80;
             NPC.height = 120;
             NPC.defense = 0;
-            NPC.lifeMax = 7000;
+            NPC.lifeMax = 12000;
+            NPC.npcSlots = 80;
             if (Main.expertMode)
             {
                 NPC.lifeMax = 4000;
@@ -213,6 +213,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                     BFistColors = ImageReader.ReadImageKeyPoints("Everglow/Sources/Modules/MythModule/Bosses/CorruptMoth/Projectiles/BFist", IdentifierValue);
                 });
             }
+            
             bool phase2 = NPC.life < NPC.lifeMax * 0.6f;
             Lighting.AddLight(NPC.Center, 0f, 0f, 0.8f * (1 - NPC.alpha / 255f));
             NPC.friendly = NPC.dontTakeDamage;
@@ -246,6 +247,15 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
 
             if (!start)
             {
+                if (CorruputMothNPC != null)
+                {
+                    if (CorruputMothNPC.active && NPC != CorruputMothNPC)
+                    {
+                        NPC.active = false;
+                        return;
+                    }
+                }
+                CorruputMothNPC = NPC;
                 NPC.ai[0] = 0;
                 NPC.noTileCollide = true;
                 start = true;
@@ -727,7 +737,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             {
                 if (++Timer < 60)
                 {
-                    MoveTo(player.Center + new Vector2(0, -200), 20, 20);
+                    MoveTo(player.Center + new Vector2(0, -230), 15, 20);
                     GetDir_ByPlayer();
                 }
                 if (Timer == 60)
@@ -843,7 +853,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                 }
                 if (Timer == 60 && Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<MothBall>(), NPC.damage / 6, 0, Main.myPlayer);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<MothBall>(), NPC.damage / 4, 0, Main.myPlayer);
                 }
                 if (Timer > 60 && Timer < 700)
                 {

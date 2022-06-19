@@ -20,10 +20,10 @@
             NPC.height = 24;
             NPC.friendly = false;
             NPC.noGravity = true;
-            NPC.noTileCollide = false;
+            NPC.noTileCollide = true;
             NPC.lifeMax = 1;
             NPC.aiStyle = -1;
-            NPC.damage = 20;
+            NPC.damage = 80;
             NPC.dontTakeDamageFromHostiles = true;
         }
         public override bool? CanFallThroughPlatforms()
@@ -210,7 +210,7 @@
                 Vector2 trueTargetPos = Owner.Center + targetPos.RotatedBy(NPC.ai[2]);
                 if (Timer == 0)
                 {
-                    NPC.friendly = false;
+                    NPC.friendly = true;
                     NPC.dontTakeDamage = true;
                     NPC.ai[2] = -1.57f;
                     NPC.velocity = Vector2.Zero;
@@ -218,7 +218,6 @@
                 if (++Timer < 60)
                 {
                     NPC.alpha = (int)MathHelper.Lerp(NPC.alpha, 120, 0.1f);
-                    NPC.friendly = true;
                     MoveTo(trueTargetPos, 10, 40);
                     NPC.localAI[0] = Owner.spriteDirection * -1;
                 }
@@ -230,6 +229,7 @@
                 }
                 if (Timer > 120 && Timer < 180)
                 {
+                    NPC.friendly = false;
                     NPC.alpha = (int)MathHelper.Lerp(NPC.alpha, 0, 0.1f);
                     NPC.ai[2] = Utils.AngleLerp(NPC.ai[2], -1.57f + NPC.localAI[0] * 1f, 0.05f);
                     NPC.Center = Vector2.Lerp(NPC.Center, trueTargetPos, 0.5f);
@@ -299,14 +299,7 @@
                 }
             }
 
-            if (NPC.ai[0] == 1 || NPC.ai[0] == 3 || NPC.ai[0] == 4)
-            {
-                NPC.noTileCollide = true;
-            }
-            else
-            {
-                NPC.noTileCollide = false;
-            }
+            
         }
         private void MoveTo(Vector2 targetPos, float Speed, float n)
         {
