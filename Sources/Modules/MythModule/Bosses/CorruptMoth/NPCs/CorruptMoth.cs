@@ -52,9 +52,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             new Vector3(-1,-1,-1),
             new Vector3(-1,-1,1)
         };
-        /// <summary>
-        /// 发射弹幕，在调用时判断是否不为客户端
-        /// </summary>
+
         private int Timer
         {
             set => NPC.ai[1] = value;
