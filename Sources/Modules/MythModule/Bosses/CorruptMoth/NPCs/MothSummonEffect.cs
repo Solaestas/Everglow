@@ -120,7 +120,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
         {
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-            List<VertexBase.Vertex2D> bars = new List<VertexBase.Vertex2D>();
+            List<Vertex2D> bars = new List<Vertex2D>();
             ef = Common.MythContent.QuickEffect("Effects/Trail");
             int width = (int)(2 * kx);
             for (int i = 1; i < NPC.oldPos.Length - 1; ++i)
@@ -138,18 +138,18 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
 
                 var w = MathHelper.Lerp(1f, 0.05f, factor);
 
-                bars.Add(new VertexBase.Vertex2D(NPC.oldPos[i] + normalDir * width + new Vector2(4, 35), color, new Vector3((float)Math.Sqrt(factor), 1, w)));
-                bars.Add(new VertexBase.Vertex2D(NPC.oldPos[i] + normalDir * -width + new Vector2(4, 35), color, new Vector3((float)Math.Sqrt(factor), 0, w)));
+                bars.Add(new Vertex2D(NPC.oldPos[i] + normalDir * width + new Vector2(4, 35), color, new Vector3((float)Math.Sqrt(factor), 1, w)));
+                bars.Add(new Vertex2D(NPC.oldPos[i] + normalDir * -width + new Vector2(4, 35), color, new Vector3((float)Math.Sqrt(factor), 0, w)));
             }
 
-            List<VertexBase.Vertex2D> triangleList = new List<VertexBase.Vertex2D>();
+            List<Vertex2D> triangleList = new List<Vertex2D>();
 
 
 
             if (bars.Count > 2)
             {
                 triangleList.Add(bars[0]);
-                var vertex = new VertexBase.Vertex2D((bars[0].Position + bars[1].Position) * 0.5f + Vector2.Normalize(NPC.velocity) * 5, Color.White, new Vector3(0, 0.5f, 1));
+                var vertex = new Vertex2D((bars[0].position + bars[1].position) * 0.5f + Vector2.Normalize(NPC.velocity) * 5, Color.White, new Vector3(0, 0.5f, 1));
                 triangleList.Add(bars[1]);
                 triangleList.Add(vertex);
                 for (int i = 0; i < bars.Count - 2; i += 2)
