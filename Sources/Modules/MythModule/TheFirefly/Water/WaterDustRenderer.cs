@@ -1,4 +1,5 @@
 ﻿using Everglow.Sources.Commons.Core.ModuleSystem;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds;
 using ReLogic.Content;
 using System;
 using System.Collections.Generic;
@@ -167,12 +168,19 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
                 return;
             }
 
+
+            if (!ModContent.GetInstance<MothBackground>().BiomeActive())
+            {
+                return;
+            }
+
             if (m_oldScreenWidth != Main.screenWidth || m_oldScreenHeight != Main.screenHeight)
             {
                 OnResolutionChanged();
                 m_oldScreenWidth = Main.screenWidth;
                 m_oldScreenHeight = Main.screenHeight;
             }
+
             var spriteBatch = Main.spriteBatch;
             var graphicsDevice = Main.graphics.GraphicsDevice;
             m_dustDrawEffect.Wait();
