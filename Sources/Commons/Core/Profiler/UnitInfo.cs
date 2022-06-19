@@ -17,18 +17,18 @@
             get; set;
         }
 
-        public UnitInfo( string name,int count,double timeInMs )
+        public UnitInfo(string name, int count, double timeInMs)
         {
-            Name=name;
-            Count=count;
-            TimeInMs=timeInMs;
+            Name = name;
+            Count = count;
+            TimeInMs = timeInMs;
         }
 
-        public UnitInfo( )
+        public UnitInfo()
         {
-            Name="";
-            Count=0;
-            TimeInMs=0;
+            Name = "";
+            Count = 0;
+            TimeInMs = 0;
         }
     }
 }

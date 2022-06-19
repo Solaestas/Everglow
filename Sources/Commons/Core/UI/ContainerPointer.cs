@@ -18,33 +18,33 @@
         /// <summary>
         /// 将指针移向上一个容器.
         /// </summary>
-        public void LastControl( )
+        public void LastControl()
         {
             Count--;
-            if( Count<0 )
-                Count=Container.GetActiveContainerElements( ).Count-1;
-            Container=Container.GetActiveContainerElements( )[Count];
-            if( !Container.Events.CanGetForPointer )
-                LastControl( );
+            if (Count < 0)
+                Count = Container.GetActiveContainerElements().Count - 1;
+            Container = Container.GetActiveContainerElements()[Count];
+            if (!Container.Events.CanGetForPointer)
+                LastControl();
         }
 
         /// <summary>
         /// 将指针移向下一个容器.
         /// </summary>
-        public void NextControl( )
+        public void NextControl()
         {
             Count++;
-            if( Count>Container.GetActiveContainerElements( ).Count-1 )
-                Count=0;
-            Container=Container.GetActiveContainerElements( )[Count];
-            if( !Container.Events.CanGetForPointer )
-                NextControl( );
+            if (Count > Container.GetActiveContainerElements().Count - 1)
+                Count = 0;
+            Container = Container.GetActiveContainerElements()[Count];
+            if (!Container.Events.CanGetForPointer)
+                NextControl();
         }
 
-        public ContainerPointer( Container container )
+        public ContainerPointer(Container container)
         {
-            Count=0;
-            Container=container;
+            Count = 0;
+            Container = container;
         }
 
     }

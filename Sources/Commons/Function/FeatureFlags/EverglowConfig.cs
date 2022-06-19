@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+
 using Terraria.ModLoader.Config;
 
 namespace Everglow.Sources.Commons.Function.FeatureFlags
@@ -22,7 +23,7 @@ namespace Everglow.Sources.Commons.Function.FeatureFlags
         {
             get
             {
-                return ModContent.GetInstance<EverglowConfig>( ).debugMode;
+                return ModContent.GetInstance<EverglowConfig>().debugMode;
             }
         }
     }

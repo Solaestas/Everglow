@@ -7,8 +7,8 @@
             get;
         }
         public string Description => Name;
-        public void Load( );
-        public void Unload( );
+        public void Load();
+        public void Unload();
     }
 
     [AttributeUsage(AttributeTargets.Class)]
@@ -24,9 +24,9 @@
     public class ModuleDependencyAttribute : Attribute
     {
         private List<Type> m_dependTypes;
-        public ModuleDependencyAttribute( params Type[] types )
+        public ModuleDependencyAttribute(params Type[] types)
         {
-            m_dependTypes=types.ToList( );
+            m_dependTypes = types.ToList();
             Debug.Assert(types.All(t => typeof(IModule).IsAssignableFrom(t)));
         }
         public List<Type> DependTypes

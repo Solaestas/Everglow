@@ -1,14 +1,17 @@
 global using Microsoft.Xna.Framework;
 global using Microsoft.Xna.Framework.Graphics;
+
 global using System;
 global using System.Collections.Generic;
 global using System.Diagnostics;
 global using System.IO;
 global using System.Linq;
 global using System.Reflection;
+
 global using Terraria;
 global using Terraria.ID;
 global using Terraria.ModLoader;
+
 using Everglow.Sources.Commons.Core.ModuleSystem;
 using Everglow.Sources.Commons.Core.Network.PacketHandle;
 using Everglow.Sources.Commons.Core.Profiler;
@@ -68,35 +71,35 @@ namespace Everglow
         private PacketResolver m_packetResolver;
         private ProfilerManager m_profilerManager;
 
-        public Everglow( )
+        public Everglow()
         {
-            m_instance=this;
+            m_instance = this;
             // 必须手动确定顺序
-            m_profilerManager=new ProfilerManager( );
-            m_moduleManager=new ModuleManager( );
-            m_packetResolver=new PacketResolver( );
+            m_profilerManager = new ProfilerManager();
+            m_moduleManager = new ModuleManager();
+            m_packetResolver = new PacketResolver();
         }
 
         [ProfilerMeasure]
-        public override void Load( )
+        public override void Load()
         {
-            m_moduleManager.LoadAllModules( );
+            m_moduleManager.LoadAllModules();
         }
 
-        public override void Unload( )
+        public override void Unload()
         {
-            m_moduleManager.UnloadAllModules( );
+            m_moduleManager.UnloadAllModules();
 
-            m_profilerManager.Clear( );
+            m_profilerManager.Clear();
 
-            m_packetResolver=null;
-            m_moduleManager=null;
-            m_instance=null;
+            m_packetResolver = null;
+            m_moduleManager = null;
+            m_instance = null;
         }
 
-        public override void HandlePacket( BinaryReader reader,int whoAmI )
+        public override void HandlePacket(BinaryReader reader, int whoAmI)
         {
-            m_packetResolver.Resolve(reader,whoAmI);
+            m_packetResolver.Resolve(reader, whoAmI);
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Everglow.Sources.Commons.Core.Network.PacketHandle
         /// </summary>
         /// <param name="packet"></param>
         /// <param name="whoAmI"></param>
-        public void Handle( IPacket packet,int whoAmI );
+        public void Handle(IPacket packet, int whoAmI);
     }
 
     /// <summary>
@@ -20,9 +20,9 @@ namespace Everglow.Sources.Commons.Core.Network.PacketHandle
     public class HandlePacketAttribute : Attribute
     {
         private Type m_packetType;
-        public HandlePacketAttribute( Type type )
+        public HandlePacketAttribute(Type type)
         {
-            m_packetType=type;
+            m_packetType = type;
             Debug.Assert(typeof(IPacket).IsAssignableFrom(type));
         }
         public Type PacketType
