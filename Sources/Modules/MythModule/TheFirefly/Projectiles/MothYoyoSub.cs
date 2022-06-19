@@ -1,5 +1,4 @@
 using Terraria.Localization;
-using static Everglow.Sources.Commons.Function.Vertex.VertexBase;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
