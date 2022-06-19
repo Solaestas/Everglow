@@ -481,15 +481,15 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             Rectangle rvcII = GetDrawRec(texCloseII.Size(), 0.57f, false);
             rvcII.Y -= 300;
             rvcII.X += 300;
-            List<VertexBase.Vertex2D> CloseII = new List<VertexBase.Vertex2D>
+            List<Vertex2D> CloseII = new List<Vertex2D>
             {
-                new VertexBase.Vertex2D(new Vector2(0, 0), Color.White * alpha, new Vector3(rvcII.X / (float)texCloseII.Width, rvcII.Y / (float)texCloseII.Height, 0)),
-                new VertexBase.Vertex2D(new Vector2(Main.screenWidth, 0), Color.White * alpha, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, rvcII.Y / (float)texCloseII.Height, 0)),
-                new VertexBase.Vertex2D(new Vector2(0, Main.screenHeight), Color.White * alpha, new Vector3(rvcII.X / (float)texCloseII.Width, (rvcII.Y + rvcII.Height) / (float)texCloseII.Height, 0)),
+                new Vertex2D(new Vector2(0, 0), Color.White * alpha, new Vector3(rvcII.X / (float)texCloseII.Width, rvcII.Y / (float)texCloseII.Height, 0)),
+                new Vertex2D(new Vector2(Main.screenWidth, 0), Color.White * alpha, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, rvcII.Y / (float)texCloseII.Height, 0)),
+                new Vertex2D(new Vector2(0, Main.screenHeight), Color.White * alpha, new Vector3(rvcII.X / (float)texCloseII.Width, (rvcII.Y + rvcII.Height) / (float)texCloseII.Height, 0)),
 
-                new VertexBase.Vertex2D(new Vector2(0, Main.screenHeight), Color.White * alpha, new Vector3(rvcII.X / (float)texCloseII.Width, (rvcII.Y + rvcII.Height) / (float)texCloseII.Height, 0)),
-                new VertexBase.Vertex2D(new Vector2(Main.screenWidth, 0), Color.White * alpha, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, rvcII.Y / (float)texCloseII.Height, 0)),
-                new VertexBase.Vertex2D(new Vector2(Main.screenWidth, Main.screenHeight), Color.White * alpha, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, (rvcII.Y + rvcII.Height) / (float)texCloseII.Height, 0))
+                new Vertex2D(new Vector2(0, Main.screenHeight), Color.White * alpha, new Vector3(rvcII.X / (float)texCloseII.Width, (rvcII.Y + rvcII.Height) / (float)texCloseII.Height, 0)),
+                new Vertex2D(new Vector2(Main.screenWidth, 0), Color.White * alpha, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, rvcII.Y / (float)texCloseII.Height, 0)),
+                new Vertex2D(new Vector2(Main.screenWidth, Main.screenHeight), Color.White * alpha, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, (rvcII.Y + rvcII.Height) / (float)texCloseII.Height, 0))
             };
             Effect bgW = MythContent.QuickEffect("Effects/BackgroundWrap");
             bgW.Parameters["alpha"].SetValue(alpha);
