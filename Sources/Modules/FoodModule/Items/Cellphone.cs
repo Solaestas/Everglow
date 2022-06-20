@@ -4,7 +4,7 @@
     {
         public override void UpdateInventory(Item item, Player player)
         {
-            if (item.type == ItemID.CellPhone) 
+            if (item.type == ItemID.CellPhone)
             {
                 FoodSatietyInfoDisplayplayer SatietyInfo = player.GetModPlayer<FoodSatietyInfoDisplayplayer>();
                 SatietyInfo.AccBloodGlucoseMonitor = true;//显示当前饱食度

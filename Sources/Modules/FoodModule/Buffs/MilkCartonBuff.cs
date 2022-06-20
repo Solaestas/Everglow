@@ -16,7 +16,7 @@
             player.buffImmune[20] = true;
             player.buffImmune[24] = true;
             player.buffImmune[70] = true;
-            player.buffImmune[22] = true; 
+            player.buffImmune[22] = true;
             player.buffImmune[80] = true;
             player.buffImmune[35] = true;
             player.buffImmune[23] = true;
