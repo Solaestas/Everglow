@@ -239,7 +239,9 @@ namespace Everglow.Sources.Modules.FoodModule
             // 如果是原版的饮料，那么就手动处理
             if (m_vanillaDrinkInfos.ContainsKey(item.type))
             {
-                var drinkInfo = m_vanillaDrinkInfos[item.type];         
+                var drinkInfo = m_vanillaDrinkInfos[item.type];
+                item.buffType = ModContent.BuffType<FoodBuff>();
+                item.buffTime = drinkInfo.BuffTime.TotalFrames;
             }
             base.SetDefaults(item);
         }

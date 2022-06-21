@@ -74,11 +74,9 @@ namespace Everglow.Sources.Modules.FoodModule
         {
             get; private set;
         }//口渴变化计时器
+
         public override void PostUpdate()
         {
-            Player.buffImmune[BuffID.WellFed] = true;
-            Player.buffImmune[BuffID.WellFed2] = true;
-            Player.buffImmune[BuffID.WellFed3] = true;
             FoodState();
             if (!Player.active)
             {
