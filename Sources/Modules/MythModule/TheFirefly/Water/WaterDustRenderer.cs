@@ -143,7 +143,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
                     m_dustSpawnEffect.Value.Parameters["uOffset"].SetValue(offset);
                     m_dustSpawnEffect.Value.Parameters["uThreasholdMin"].SetValue(0.03f);
                     m_dustSpawnEffect.Value.Parameters["uThreasholdMax"].SetValue(0.08f);
-                    m_dustSpawnEffect.Value.Parameters["uSpawnChance"].SetValue(0.25f);
+                    m_dustSpawnEffect.Value.Parameters["uSpawnChance"].SetValue(0.02f);
                     m_dustSpawnEffect.Value.Parameters["uWaterDisortionTargetSize"].SetValue(new Vector2(disortionTarget.Width, disortionTarget.Height));
                     m_dustSpawnEffect.Value.Parameters["uVFXTime"].SetValue((float)Main.timeForVisualEffects * 0.2f);
 
@@ -168,8 +168,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
                 return;
             }
 
-
-            if (!ModContent.GetInstance<MothBackground>().BiomeActive())
+            MothBackground mbione = ModContent.GetInstance<MothBackground>();
+            if (!MothBackground.BiomeActive())
             {
                 return;
             }
@@ -188,7 +188,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
 
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp,
                 DepthStencilState.None, RasterizerState.CullNone, null, Main.Transform);
-            m_dustDrawEffect.Value.Parameters["uColor"].SetValue(new Vector3(1f, 1.0f, 1.0f));
+            m_dustDrawEffect.Value.Parameters["uColor"].SetValue(new Vector3(0f, 0.9f, 1.0f));
             m_dustDrawEffect.Value.Parameters["uResolution"].SetValue(new Vector2(Main.screenWidth, Main.screenHeight));
             m_dustDrawEffect.Value.Parameters["uResolutionInv"].SetValue(new Vector2(1f / Main.screenWidth, 1f / Main.screenHeight));
             dustDraw.Apply();

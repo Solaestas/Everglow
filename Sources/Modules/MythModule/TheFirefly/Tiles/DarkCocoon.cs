@@ -16,13 +16,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
         {
             if(Main.rand.NextBool(6))
             {
-                if (!Main.tile[i, j].IsHalfBlock)
+                if (!Main.tile[i, j].IsHalfBlock && !Main.tile[i + 1, j].IsHalfBlock && !Main.tile[i - 1, j].IsHalfBlock)
                 {
                     for (int x = -2; x < 3; x++)
                     {
                         for (int y = -12; y < 0; y++)
                         {
-                            if (Main.tile[i + x, j + y].HasTile)
+                            if (Main.tile[i + x, j + y].HasTile || Main.tile[i + x, j + y].LiquidAmount > 3)
                             {
                                 return;
                             }
@@ -32,7 +32,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                     for (int y = -8; y < 0; y++)
                     {
                         Tile tile = Main.tile[i, j + y];
-                        tile.TileType = (ushort)ModContent.TileType<Tiles.GlowWood>();
+                        tile.TileType = (ushort)ModContent.TileType<Tiles.FireflyTree>();
                         tile.HasTile = true;
                         tile.TileFrameX = (short)(FrX * 256);
                         tile.TileFrameY = (short)((y + 8) * 16);
