@@ -1,4 +1,5 @@
-﻿namespace Everglow.Sources.Modules.FoodModule.Items
+﻿using Everglow.Sources.Modules.FoodModule.Infos;
+namespace Everglow.Sources.Modules.FoodModule.Items
 {
     public class Cellphone : GlobalItem
     {
