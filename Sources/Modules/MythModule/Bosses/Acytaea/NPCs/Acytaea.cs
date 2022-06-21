@@ -8,7 +8,6 @@ using Terraria.Localization;
 namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs;
 
 [AutoloadHead]
-//[AutoloadBossHead]
 public class Acytaea : ModNPC
 {
     private bool canDespawn = false;
@@ -55,8 +54,8 @@ public class Acytaea : ModNPC
     private Vector2[] AIMSkirt2 = new Vector2[11];
     private Vector2[] vSkirt2 = new Vector2[11];
     public override string HeadTexture => NPC.boss ?
-        "Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Acytaea_Head_Boss" :
-        "Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Acytaea_Head";
+        "Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea_Head_Boss" :
+        "Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea_Head";
     public override void SetStaticDefaults()
     {
         DisplayName.SetDefault("Acytaea");
@@ -1996,7 +1995,7 @@ public class Acytaea : ModNPC
         else
         {
             TranIndex = 0;
-            NPC.aiStyle = 7;
+            //NPC.aiStyle = 7;
         }
         if (!NPC.boss)
         {
