@@ -99,6 +99,27 @@ public class Acytaea : ModNPC
     {
         return canDespawn;
     }
+    public void UseBlade(int timerBegin, int add, int mul)
+    {
+        ref float Timer = ref NPC.localAI[0];
+        float CosA0 = (float)(Math.Cos((Timer - timerBegin) / 30d * Math.PI) + 1) / 2f;//构造辅助函数
+        RightArmRot = (add + mul * CosA0) * (float)(Math.PI * 1.1) * minorDir;//旋转角度撕裂感
+        OldBladeRot = BladeRot;//保证旋转方向正确记录
+        BladeRot = (float)(RightArmRot - Math.PI * 1.1 - (minorDir - 1) * -0.3854);//刀的角度等于手臂角度-1.1Pi,此项由贴图决定
+        NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;//随速度前倾
+        NPC.velocity *= 0.96f;//考虑阻力
+        BladePro = 1;//进程打满
+        canUseWing = false;//不准飞
+    }
+    public void Fly()
+    {
+        Vector2 v0 = aiMpos + Main.player[NPC.target].Center;
+        Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
+        v1 = (v0 - NPC.Center + v1 * 60f) / 480f;
+        NPC.noGravity = true;
+        NPC.velocity += v1;
+        NPC.velocity *= 0.96f;
+    }
     public override void AI()
     {
         if (NPC.aiStyle != -1)
@@ -338,14 +359,7 @@ public class Acytaea : ModNPC
         {
             NPC.spriteDirection = NPC.Center.X > player.Center.X ? -1 : 1;
             HasBlade = true;//拿刀
-            float CosA0 = (float)(Math.Cos((Timer - 650) / 30d * Math.PI) + 1) / 2f;//构造辅助函数
-            RightArmRot = CosA0 * (float)(Math.PI * 1.1) * minorDir;//旋转角度撕裂感
-            OldBladeRot = BladeRot;//保证旋转方向正确记录
-            BladeRot = (float)(RightArmRot - Math.PI * 1.1 - (minorDir - 1) * -0.3854);//刀的角度等于手臂角度-1.1Pi,此项由贴图决定
-            NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;//随速度前倾
-            NPC.velocity *= 0.96f;//考虑阻力
-            BladePro = 1;//进程打满
-            canUseWing = false;//不准飞
+            UseBlade(650, 0, 1);
         }//第一刀
         if (Timer > 690 && Timer <= 720)
         {
@@ -356,14 +370,7 @@ public class Acytaea : ModNPC
                 AimBladeSquz = Main.rand.NextFloat(0.65f, 1f);
                 NPC.netUpdate2 = true;
             }
-            float CosA0 = (float)(Math.Cos((Timer - 690) / 30d * Math.PI) + 1) / 2f;//构造辅助函数
-            RightArmRot = (1 - CosA0) * (float)(Math.PI * 1.1) * minorDir;//旋转角度撕裂感
-            OldBladeRot = BladeRot;//保证旋转方向正确记录
-            BladeRot = (float)(RightArmRot - Math.PI * 1.1 - (minorDir - 1) * -0.3854);//刀的角度等于手臂角度-1.1Pi,此项由贴图决定
-            NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;//随速度前倾
-            NPC.velocity *= 0.96f;//考虑阻力
-            BladePro = 1;//进程打满
-            canUseWing = false;//不准飞
+            UseBlade(690, 1, -1);
         }//第二刀
         if (Timer > 730 && Timer <= 820)
         {
@@ -464,15 +471,7 @@ public class Acytaea : ModNPC
                 AimBladeSquz = Main.rand.NextFloat(0.65f, 1f);
                 NPC.netUpdate2 = true;
             }
-            float CosA0 = (float)(Math.Cos((Timer - 960) / 30d * Math.PI) + 1) / 2f;//构造辅助函数
-            RightArmRot = CosA0 * (float)(Math.PI * 1.1) * minorDir;//旋转角度撕裂感
-            OldBladeRot = BladeRot;//保证旋转方向正确记录
-            BladeRot = (float)(RightArmRot - Math.PI * 1.1 - (minorDir - 1) * -0.3854);//刀的角度等于手臂角度-1.1Pi,此项由贴图决定
-            NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;//随速度前倾
-            NPC.velocity *= 0.96f;//考虑阻力
-            BladePro = 1;//进程打满
-            BladeGlowPro = 1;
-            canUseWing = false;//不准飞
+            UseBlade(960, 0, 1);
             float ka = Main.rand.NextFloat(Main.rand.NextFloat(0.65f, 1f), 1f);
             if (Timer == 975)
             {
@@ -493,15 +492,7 @@ public class Acytaea : ModNPC
                 AimBladeSquz = Main.rand.NextFloat(0.65f, 1f);
                 NPC.netUpdate2 = true;
             }
-            float CosA0 = (float)(Math.Cos((Timer - 1000) / 30d * Math.PI) + 1) / 2f;//构造辅助函数
-            RightArmRot = (1 - CosA0) * (float)(Math.PI * 1.1) * minorDir;//旋转角度撕裂感
-            OldBladeRot = BladeRot;//保证旋转方向正确记录
-            BladeRot = (float)(RightArmRot - Math.PI * 1.1 - (minorDir - 1) * -0.3854);//刀的角度等于手臂角度-1.1Pi,此项由贴图决定
-            NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;//随速度前倾
-            NPC.velocity *= 0.96f;//考虑阻力
-            BladePro = 1;//进程打满
-            BladeGlowPro = 1;
-            canUseWing = false;//不准飞
+            UseBlade(1000, 1, -1);
             float ka = Main.rand.NextFloat(Main.rand.NextFloat(0.65f, 1f), 1f);
             if (Timer == 1015)
             {
@@ -936,12 +927,7 @@ public class Acytaea : ModNPC
                 NPC.spriteDirection = NPC.Center.X > player.Center.X ? -1 : 1;
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
                 isFly = true;
-                Vector2 v0 = aiMpos + player.Center;
-                Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
-                v1 = (v0 - NPC.Center + v1 * 60f) / 480f;
-                NPC.noGravity = true;
-                NPC.velocity += v1;
-                NPC.velocity *= 0.96f;
+                Fly();
                 canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
             }
 
@@ -1307,12 +1293,7 @@ public class Acytaea : ModNPC
             isFly = true;
             if (isFly)
             {
-                Vector2 v0 = aiMpos + player.Center;
-                Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
-                v1 = (v0 - NPC.Center + v1 * 60f) / 480f;
-                NPC.noGravity = true;
-                NPC.velocity += v1;
-                NPC.velocity *= 0.96f;
+                Fly();
             }
             canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
             if (Timer < 5602)
@@ -1326,7 +1307,7 @@ public class Acytaea : ModNPC
                 RightArmRot = 0;
                 BowRot = (float)(Math.PI * 0.5);
             }
-            if (Timer == 5685)
+            if (Timer == 5685 && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 for (int d = -9; d < 10; d++)
                 {
@@ -1348,12 +1329,7 @@ public class Acytaea : ModNPC
             isFly = true;
             if (isFly)
             {
-                Vector2 v0 = aiMpos + player.Center;
-                Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
-                v1 = (v0 - NPC.Center + v1 * 60f) / 480f;
-                NPC.noGravity = true;
-                NPC.velocity += v1;
-                NPC.velocity *= 0.96f;
+                Fly();
             }
             canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
             if (Timer < 5702)
@@ -1391,12 +1367,7 @@ public class Acytaea : ModNPC
                 isFly = true;
                 if (isFly)
                 {
-                    Vector2 v0 = aiMpos + player.Center;
-                    Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
-                    v1 = (v0 - NPC.Center + v1 * 60f) / 480f;
-                    NPC.noGravity = true;
-                    NPC.velocity += v1;
-                    NPC.velocity *= 0.96f;
+                    Fly();
                 }
                 canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
             }
@@ -1499,12 +1470,7 @@ public class Acytaea : ModNPC
             isFly = true;
             if (isFly)
             {
-                Vector2 v0 = aiMpos + player.Center;
-                Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
-                v1 = (v0 - NPC.Center + v1 * 60f) / 480f;
-                NPC.noGravity = true;
-                NPC.velocity += v1;
-                NPC.velocity *= 0.96f;
+                Fly();
             }
             canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
             if (Timer < 6452)
@@ -1538,12 +1504,7 @@ public class Acytaea : ModNPC
             isFly = true;
             if (isFly)
             {
-                Vector2 v0 = aiMpos + player.Center;
-                Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
-                v1 = (v0 - NPC.Center + v1 * 60f) / 480f;
-                NPC.noGravity = true;
-                NPC.velocity += v1;
-                NPC.velocity *= 0.96f;
+                Fly();
             }
             canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
             if (Timer < 6552)
@@ -1575,12 +1536,7 @@ public class Acytaea : ModNPC
             isFly = true;
             if (isFly)
             {
-                Vector2 v0 = aiMpos + player.Center;
-                Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
-                v1 = (v0 - NPC.Center + v1 * 60f) / 480f;
-                NPC.noGravity = true;
-                NPC.velocity += v1;
-                NPC.velocity *= 0.96f;
+                Fly();
             }
             canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
             if (Timer < 6952)
@@ -1594,7 +1550,7 @@ public class Acytaea : ModNPC
                 RightArmRot = 0;
                 BowRot = (float)(Math.PI * 1.5);
             }
-            if (Timer % 16 == 0 && Timer > 6970)
+            if (Timer % 16 == 0 && Timer > 6970 && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 Vector2 vf = new Vector2(0, 1);
                 Vector2 vg = vf.RotatedBy(Math.PI / 2d) * 16;
@@ -1639,8 +1595,9 @@ public class Acytaea : ModNPC
                 RightArmRot = 0;
                 BowRot = 0;
             }
-            if (Timer == 7205)
+            if (Timer == 7205 && Main.netMode != NetmodeID.MultiplayerClient)
             {
+                //TODO Meaningless
                 float Dx = NPC.Center.X - player.Center.X;
                 for (int f = 0; f < 7; f++)
                 {
@@ -1650,7 +1607,7 @@ public class Acytaea : ModNPC
             }
             if (Timer > 7250 && Timer < 7450)
             {
-                if (Timer % 20 == 0)
+                if (Timer % 20 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     Vector2 vf = new Vector2(-1f, 0);
                     int f = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 34, ModContent.ProjectileType<AcytaeaArrow>(), NPC.damage, 3, player.whoAmI);
@@ -1666,13 +1623,13 @@ public class Acytaea : ModNPC
                     }
                 }
             }
-            if (Timer == 7464)
+            if (Timer == 7464 && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 BowRot = (float)(Math.PI * 0.5);
                 Vector2 vf = new Vector2(0, -1f);
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 25, ModContent.ProjectileType<AcytaeaArrow3>(), NPC.damage, 3, player.whoAmI);
             }
-            if (Timer == 7489)
+            if (Timer == 7489 && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 BowRot = (float)(-Math.PI * 0.5);
                 Vector2 vf = new Vector2(0, 1f);
@@ -1687,12 +1644,7 @@ public class Acytaea : ModNPC
             isFly = true;
             if (isFly)
             {
-                Vector2 v0 = aiMpos + player.Center;
-                Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
-                v1 = (v0 - NPC.Center + v1 * 60f) / 480f;
-                NPC.noGravity = true;
-                NPC.velocity += v1;
-                NPC.velocity *= 0.96f;
+                Fly();
             }
             canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
             if (Timer < 7502)
@@ -1706,7 +1658,7 @@ public class Acytaea : ModNPC
                 RightArmRot = 0;
                 BowRot = (float)(Math.PI * 1);
             }
-            if (Timer % 3 == 0 && Timer > 7540)
+            if (Timer % 3 == 0 && Timer > 7540 && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 Vector2 vf = new Vector2(1, 0).RotatedBy(Math.Sin(Timer / 15d) * 0.75);
                 int f = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 20, ModContent.ProjectileType<AcytaeaArrow>(), NPC.damage, 3, player.whoAmI);
@@ -1727,14 +1679,7 @@ public class Acytaea : ModNPC
             }
             else
             {
-                if (NPC.velocity.X > 0)
-                {
-                    NPC.spriteDirection = 1;
-                }
-                else
-                {
-                    NPC.spriteDirection = -1;
-                }
+                NPC.spriteDirection = NPC.velocity.X > 0 ? 1 : -1;
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
             }
             isFly = true;
@@ -1760,7 +1705,7 @@ public class Acytaea : ModNPC
             }
             Vector2 vk = Vector2.Normalize(player.Center - NPC.Center);
             BowRot = (float)Math.Atan2(vk.Y, vk.X) + (float)Math.PI;
-            if (Timer % 60 == 30 && Timer > 7820)
+            if (Timer % 60 == 30 && Timer > 7820 && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 Vector2 va = player.Center - NPC.Center;
                 Vector2 vf = Vector2.Normalize(va);
@@ -1818,12 +1763,7 @@ public class Acytaea : ModNPC
             isFly = true;
             if (isFly)
             {
-                Vector2 v0 = aiMpos + player.Center;
-                Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
-                v1 = (v0 - NPC.Center + v1 * 60f) / 480f;
-                NPC.noGravity = true;
-                NPC.velocity += v1;
-                NPC.velocity *= 0.96f;
+                Fly();
             }
             canUseWing = (aiMpos + player.Center - NPC.Center).Length() > 1 && (aiMpos + player.Center - NPC.Center).Y < 0;
             if (Timer < 8522)
@@ -1831,7 +1771,7 @@ public class Acytaea : ModNPC
                 NPC.alpha = 0;
                 RightArmRot = 0;
             }
-            if (Timer % 15 == 0 && Timer > 8560)
+            if (Timer % 15 == 0 && Timer > 8560 && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 Vector2 vf = new Vector2(1, 0).RotatedBy(Math.Sin(Timer / 15d) * 0.75);
                 int f = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 20, ModContent.ProjectileType<Metero>(), NPC.damage, 3, player.whoAmI, -1);
@@ -1861,13 +1801,13 @@ public class Acytaea : ModNPC
                 NPC.alpha = 0;
                 RightArmRot = 0;
             }
-            if (Timer % 14 == 0 && Timer > 9000)
+            if (Timer % 14 == 0 && Timer > 9000 && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 Vector2 v0 = Vector2.Normalize(player.Center - NPC.Center) * 0.3f;
                 Vector2 vf = new Vector2(0, -1) + v0;
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 20, ModContent.ProjectileType<Metero2>(), NPC.damage, 3, player.whoAmI, 1);
             }
-            if (Timer % 14 == 7 && Timer > 9000)
+            if (Timer % 14 == 7 && Timer > 9000 && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 Vector2 v0 = Vector2.Normalize(player.Center - NPC.Center) * 0.3f;
                 Vector2 vf = new Vector2(0, -1) + v0;
@@ -1900,7 +1840,7 @@ public class Acytaea : ModNPC
                 NPC.alpha = 0;
                 RightArmRot = 0;
             }
-            if (Timer == 9820)
+            if (Timer == 9820 && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 for (int h = 0; h < 5; h++)
                 {
@@ -1914,7 +1854,7 @@ public class Acytaea : ModNPC
                     }
                 }
             }
-            if (Timer >= 9820 && Timer % 15 == 0)
+            if (Timer >= 9820 && Timer % 15 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 for (int h = 0; h < 20; h++)
                 {
@@ -1953,7 +1893,7 @@ public class Acytaea : ModNPC
                 NPC.alpha = 0;
                 RightArmRot = 0;
             }
-            if (Timer >= 10620 && Timer % 60 == 0)
+            if (Timer >= 10620 && Timer % 60 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 Vector2 v0 = Vector2.Normalize(player.Center - NPC.Center) * 12f;
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v0, ModContent.ProjectileType<Metero4>(), NPC.damage, 3, player.whoAmI, -1);
@@ -2038,7 +1978,7 @@ public class Acytaea : ModNPC
                     BossIndex = 0;
                 }
             }
-            if (kill < 3)
+            if (kill < 3 && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 NPC.active = false;
                 NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, NPC.type);

@@ -238,14 +238,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
                 }
                 else
                 {
-                    if (NPC.velocity.X > 0)
-                    {
-                        NPC.spriteDirection = 1;
-                    }
-                    else
-                    {
-                        NPC.spriteDirection = -1;
-                    }
+                    NPC.spriteDirection = NPC.velocity.X > 0 ? 1 : -1;
                     NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
                 }
                 Fly = true;
