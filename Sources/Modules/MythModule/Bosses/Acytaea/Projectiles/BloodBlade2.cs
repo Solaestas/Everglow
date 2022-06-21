@@ -140,7 +140,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
             List<Vertex2D> bars = new List<Vertex2D>();
-            ef = ModContent.Request<Effect>("MythMod/Effects/Trail").Value;
+            ef = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/Trail").Value;
             // 把所有的点都生成出来，按照顺序
             int width = 40;
             for (int i = 1; i < Projectile.oldPos.Length; ++i)
@@ -197,9 +197,9 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                 // 把变换和所需信息丢给shader
                 ef.Parameters["uTransform"].SetValue(model * projection);
                 ef.Parameters["uTime"].SetValue(-(float)Main.time * 0.06f);
-                Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("MythMod/UIImages/heatmapRed").Value;
-                Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("MythMod/UIImages/Lightline").Value;
-                Main.graphics.GraphicsDevice.Textures[2] = ModContent.Request<Texture2D>("MythMod/UIImages/FogTrace").Value;
+                Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/VisualTextures/heatmapRed").Value;
+                Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/VisualTextures/Lightline").Value;
+                Main.graphics.GraphicsDevice.Textures[2] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/VisualTextures/FogTrace").Value;
                 Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
                 Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
                 Main.graphics.GraphicsDevice.SamplerStates[2] = SamplerState.PointWrap;

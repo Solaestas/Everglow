@@ -338,7 +338,7 @@ public class Acytaea : ModNPC
             RightArmRot += (float)(Math.PI * 1.1 / 30f) * minorDir;
             if (Timer == 520)
             {
-                SoundEngine.PlaySound(new SoundStyle("MythMod/Sounds/AcytaeaPortalOpening"), NPC.Center);
+                SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/AcytaeaPortalOpening"), NPC.Center);
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(88 * minorDir - (minorDir - 1) * 8, -158), Vector2.Zero, ModContent.ProjectileType<AcytaeaEffect>(), 0, 1, Main.myPlayer, minorDir);
@@ -719,7 +719,7 @@ public class Acytaea : ModNPC
             //}
             HasBlade = true;//拿刀
             //TODO 音频
-            //SoundEngine.PlaySound(new SoundStyle("MythMod/Sounds/Item_71_Flurry"), NPC.Center); //TO DO: Make sound follow NPC/relative to NPC.
+            //SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/Item_71_Flurry"), NPC.Center); //TO DO: Make sound follow NPC/relative to NPC.
             for (int u = 0; u < Main.projectile.Length; u++)
             {
                 if (Main.projectile[u].type == ModContent.ProjectileType<BrokenAcytaea>())
@@ -2465,7 +2465,7 @@ public class Acytaea : ModNPC
                     }
                 }
             }
-            Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/RedBloodScaleShader").Value;
+            Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/RedBloodScaleShader").Value;
             Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
             Main.spriteBatch.End();
@@ -2507,7 +2507,7 @@ public class Acytaea : ModNPC
         {
             if (h % 2 == 1)
             {
-                Texture2D tx = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaShadow").Value;
+                Texture2D tx = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaShadow").Value;
                 if (NPC.oldPos[h] != Vector2.Zero)
                 {
                     float ColR = Math.Clamp(NPC.velocity.Length() / 10f, 0, 1) * (8 - h) / 8f * color.R / 255f;
@@ -2521,17 +2521,17 @@ public class Acytaea : ModNPC
         }
         if (minorDir == 1)
         {
-            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaRightWing").Value, NPC.Center + RightWingPos * NPC.spriteDirection - Main.screenPosition, new Rectangle(0, wingFrame * 56, 86, 56), color, NPC.rotation, new Vector2(43, 28), 1f, effects, 0f);
-            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaLeftWing").Value, NPC.Center + LeftWingPos * NPC.spriteDirection - Main.screenPosition, new Rectangle(0, wingFrame * 56, 86, 56), color, NPC.rotation, new Vector2(43, 28), 1f, effects, 0f);
+            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaRightWing").Value, NPC.Center + RightWingPos * NPC.spriteDirection - Main.screenPosition, new Rectangle(0, wingFrame * 56, 86, 56), color, NPC.rotation, new Vector2(43, 28), 1f, effects, 0f);
+            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaLeftWing").Value, NPC.Center + LeftWingPos * NPC.spriteDirection - Main.screenPosition, new Rectangle(0, wingFrame * 56, 86, 56), color, NPC.rotation, new Vector2(43, 28), 1f, effects, 0f);
         }
         else
         {
-            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaRightWing").Value, NPC.Center + RightWingPos * NPC.spriteDirection - Main.screenPosition + new Vector2(10, 0), new Rectangle(0, wingFrame * 56, 86, 56), color, NPC.rotation, new Vector2(43, 28), 1f, effects, 0f);
-            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaLeftWing").Value, NPC.Center + LeftWingPos * NPC.spriteDirection - Main.screenPosition + new Vector2(10, 0), new Rectangle(0, wingFrame * 56, 86, 56), color, NPC.rotation, new Vector2(43, 28), 1f, effects, 0f);
+            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaRightWing").Value, NPC.Center + RightWingPos * NPC.spriteDirection - Main.screenPosition + new Vector2(10, 0), new Rectangle(0, wingFrame * 56, 86, 56), color, NPC.rotation, new Vector2(43, 28), 1f, effects, 0f);
+            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaLeftWing").Value, NPC.Center + LeftWingPos * NPC.spriteDirection - Main.screenPosition + new Vector2(10, 0), new Rectangle(0, wingFrame * 56, 86, 56), color, NPC.rotation, new Vector2(43, 28), 1f, effects, 0f);
         }
-        Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaLeftArm").Value, NPC.Center - Main.screenPosition, null, color, NPC.rotation, NPC.Size / 2f, 1f, effects, 0f);
-        Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaBody").Value, NPC.Center - Main.screenPosition, null, color, NPC.rotation, NPC.Size / 2f, 1f, effects, 0f);
-        Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaLeg").Value, NPC.Center - Main.screenPosition, null, color, NPC.rotation, NPC.Size / 2f, 1f, effects, 0f);
+        Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaLeftArm").Value, NPC.Center - Main.screenPosition, null, color, NPC.rotation, NPC.Size / 2f, 1f, effects, 0f);
+        Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaBody").Value, NPC.Center - Main.screenPosition, null, color, NPC.rotation, NPC.Size / 2f, 1f, effects, 0f);
+        Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaLeg").Value, NPC.Center - Main.screenPosition, null, color, NPC.rotation, NPC.Size / 2f, 1f, effects, 0f);
         if (HasBlade)
         {
             if (NPC.localAI[0] <= 900)
@@ -2607,7 +2607,7 @@ public class Acytaea : ModNPC
                             }
                         }
                     }
-                    Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/GlodenBloodScaleShader").Value;
+                    Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/GlodenBloodScaleShader").Value;
                     Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
                     Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
                 }
@@ -2661,10 +2661,10 @@ public class Acytaea : ModNPC
                 Vx.Add(new Vertex2D(vd, color3, new Vector3(Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).X + 0.68f, 0, 1), Math.Clamp(new Vector2(11.85f / 122f, 0).RotatedBy(0.4).Y + 0.32f, 0, 1), 0)));
             }
 
-            Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/GlodenBloodScaleMirror").Value;
+            Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/GlodenBloodScaleMirror").Value;
             if (minorDir == -1)
             {
-                t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/GlodenBloodScale").Value;
+                t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/GlodenBloodScale").Value;
             }
             Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
@@ -2696,10 +2696,10 @@ public class Acytaea : ModNPC
             Vx.Add(new Vertex2D(ve, color3, new Vector3(Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).X + 0.68f, 0, 1), Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).Y + 0.32f, 0, 1), 0)));
             Vx.Add(new Vertex2D(vd, color3, new Vector3(Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).X + 0.68f, 0, 1), Math.Clamp(new Vector2(11.85f / 122f, 0).RotatedBy(0.4).Y + 0.32f, 0, 1), 0)));
 
-            Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/GlodenBloodScaleGlowMirror").Value;
+            Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/GlodenBloodScaleGlowMirror").Value;
             if (minorDir == -1)
             {
-                t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/GlodenBloodScaleGlow").Value;
+                t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/GlodenBloodScaleGlow").Value;
             }
             Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
@@ -2734,14 +2734,14 @@ public class Acytaea : ModNPC
                     Vx.Add(new Vertex2D(vf, color3, new Vector3((0.5f + CirPro0) / 30f % 1f, 1, 0)));
                 }
             }
-            Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaCircle3").Value;
+            Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaCircle3").Value;
             if (NPC.localAI[0] > 3270 && NPC.localAI[0] <= 8500)
             {
-                t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaCircle4").Value;
+                t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaCircle4").Value;
             }
             if (NPC.localAI[0] > 8500)
             {
-                t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaCircle4").Value;
+                t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaCircle4").Value;
             }
             Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
@@ -2763,14 +2763,14 @@ public class Acytaea : ModNPC
                 Vx9.Add(new Vertex2D(vf + v1, color3, new Vector3((0.999f + h) / 30f % 1f, 0, 0)));
                 Vx9.Add(new Vertex2D(vf, color3, new Vector3((0.5f + h) / 30f % 1f, 1, 0)));
             }
-            t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaCircle4").Value;
+            t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaCircle4").Value;
             if (NPC.localAI[0] > 3270 && NPC.localAI[0] <= 8500)
             {
-                t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaCircle8").Value;
+                t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaCircle8").Value;
             }
             if (NPC.localAI[0] > 8500)
             {
-                t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaCircle12").Value;
+                t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaCircle12").Value;
             }
             Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirrorsss
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx9.ToArray(), 0, Vx9.Count / 3);
@@ -2830,14 +2830,14 @@ public class Acytaea : ModNPC
                     Vx2.Add(new Vertex2D(vf, color3, new Vector3(0.5f, 1, 0)));
                 }
             }
-            t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaCircle2").Value;
+            t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaCircle2").Value;
             if (NPC.localAI[0] > 3270 && NPC.localAI[0] <= 8500)
             {
-                t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaCircle11").Value;
+                t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaCircle11").Value;
             }
             if (NPC.localAI[0] > 8500)
             {
-                t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaCircle13").Value;
+                t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaCircle13").Value;
             }
             Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx2.ToArray(), 0, Vx2.Count / 3);
@@ -2870,10 +2870,10 @@ public class Acytaea : ModNPC
                         Vx4.Add(new Vertex2D(vf, color3, new Vector3(0.5f, 1, 0)));
                     }
                 }
-                t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaCircle4").Value;
+                t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaCircle4").Value;
                 Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx4.ToArray(), 0, Vx4.Count / 3);
-                t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaCircle").Value;
+                t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaCircle").Value;
                 Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx3.ToArray(), 0, Vx3.Count / 3);
             }
@@ -2895,14 +2895,14 @@ public class Acytaea : ModNPC
                 Vx5.Add(new Vertex2D(vf + v1, color3, new Vector3((0.999f + h) / 30f % 1f, 0, 0)));
                 Vx5.Add(new Vertex2D(vf, color3, new Vector3((0.5f + h) / 30f % 1f, 1, 0)));
             }
-            t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaCircle5").Value;
+            t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaCircle5").Value;
             if (NPC.localAI[0] > 3270 && NPC.localAI[0] <= 8500)
             {
-                t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaCircle9").Value;
+                t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaCircle9").Value;
             }
             if (NPC.localAI[0] > 8500)
             {
-                t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaCircle14").Value;
+                t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaCircle14").Value;
             }
             Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx5.ToArray(), 0, Vx5.Count / 3);
@@ -2923,14 +2923,14 @@ public class Acytaea : ModNPC
                 Vx6.Add(new Vertex2D(vf + v1, color3, new Vector3((0.999f + h) / 30f % 1f, 0, 0)));
                 Vx6.Add(new Vertex2D(vf, color3, new Vector3((0.5f + h) / 30f % 1f, 1, 0)));
             }
-            t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaCircle6").Value;
+            t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaCircle6").Value;
             if (NPC.localAI[0] > 3270 && NPC.localAI[0] <= 8500)
             {
-                t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaCircle10").Value;
+                t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaCircle10").Value;
             }
             if (NPC.localAI[0] > 8500)
             {
-                t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaCircle15").Value;
+                t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaCircle15").Value;
             }
             Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx6.ToArray(), 0, Vx6.Count / 3);
@@ -2961,10 +2961,10 @@ public class Acytaea : ModNPC
                     Vx8.Add(new Vertex2D(vf, color3, new Vector3((0.5f + h) / 30f % 1f, 1, 0)));
                 }
             }
-            t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaCircle7").Value;
+            t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaCircle7").Value;
             Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx7.ToArray(), 0, Vx7.Count / 3);
-            t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaCircle4").Value;
+            t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaCircle4").Value;
             Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx8.ToArray(), 0, Vx8.Count / 3);
 
@@ -2973,35 +2973,35 @@ public class Acytaea : ModNPC
         {
             if (RightArmRot <= Math.PI / 2d)
             {
-                Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaRightArm").Value, NPC.Center + RightArmPos * NPC.spriteDirection - Main.screenPosition, null, color, NPC.rotation + RightArmRot, new Vector2(33, 23), 1f, effects, 0f);
+                Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaRightArm").Value, NPC.Center + RightArmPos * NPC.spriteDirection - Main.screenPosition, null, color, NPC.rotation + RightArmRot, new Vector2(33, 23), 1f, effects, 0f);
             }
         }
         else
         {
             if (RightArmRot >= -Math.PI / 2d)
             {
-                Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaRightArm").Value, NPC.Center + RightArmPos * NPC.spriteDirection - Main.screenPosition + new Vector2(10, 0), null, color, NPC.rotation + RightArmRot, new Vector2(17, 23), 1f, effects, 0f);
+                Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaRightArm").Value, NPC.Center + RightArmPos * NPC.spriteDirection - Main.screenPosition + new Vector2(10, 0), null, color, NPC.rotation + RightArmRot, new Vector2(17, 23), 1f, effects, 0f);
             }
         }
-        Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaHead").Value, NPC.Center - Main.screenPosition, new Rectangle(0, headFrame * 56, 50, 56), color, NPC.rotation, NPC.Size / 2f, 1f, effects, 0f);
-        Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaEye").Value, NPC.Center - Main.screenPosition, new Rectangle(0, headFrame * 56, 50, 56), new Color(255, 255, 255, 0), NPC.rotation, NPC.Size / 2f, 1f, effects, 0f);
+        Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaHead").Value, NPC.Center - Main.screenPosition, new Rectangle(0, headFrame * 56, 50, 56), color, NPC.rotation, NPC.Size / 2f, 1f, effects, 0f);
+        Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaEye").Value, NPC.Center - Main.screenPosition, new Rectangle(0, headFrame * 56, 50, 56), new Color(255, 255, 255, 0), NPC.rotation, NPC.Size / 2f, 1f, effects, 0f);
         if (minorDir == 1)
         {
             if (RightArmRot > Math.PI / 2d)
             {
-                Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaRightArm").Value, NPC.Center + RightArmPos * NPC.spriteDirection - Main.screenPosition, null, color, NPC.rotation + RightArmRot, new Vector2(33, 23), 1f, effects, 0f);
+                Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaRightArm").Value, NPC.Center + RightArmPos * NPC.spriteDirection - Main.screenPosition, null, color, NPC.rotation + RightArmRot, new Vector2(33, 23), 1f, effects, 0f);
             }
         }
         else
         {
             if (RightArmRot < -Math.PI / 2d)
             {
-                Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaRightArm").Value, NPC.Center + RightArmPos * NPC.spriteDirection - Main.screenPosition + new Vector2(10, 0), null, color, NPC.rotation + RightArmRot, new Vector2(17, 23), 1f, effects, 0f);
+                Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaRightArm").Value, NPC.Center + RightArmPos * NPC.spriteDirection - Main.screenPosition + new Vector2(10, 0), null, color, NPC.rotation + RightArmRot, new Vector2(17, 23), 1f, effects, 0f);
             }
         }
         if (NPC.localAI[0] > 2020 && NPC.localAI[0] < 2070)
         {
-            Texture2D tx = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaShadow").Value;
+            Texture2D tx = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaShadow").Value;
             for (int k = 0; k < 15; k++)
             {
                 float Col = ((float)-Math.Cos((NPC.localAI[0] - 2020) / 25d * Math.PI) + 1) / 2f;
@@ -3012,7 +3012,7 @@ public class Acytaea : ModNPC
         }
         if (HasBow)
         {
-            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaBow").Value, NPC.Center - Main.screenPosition, null, color, NPC.rotation + BowRot, new Vector2(30, 28), 1f, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaBow").Value, NPC.Center - Main.screenPosition, null, color, NPC.rotation + BowRot, new Vector2(30, 28), 1f, SpriteEffects.None, 0f);
         }
         if (HasBook)
         {
@@ -3030,11 +3030,11 @@ public class Acytaea : ModNPC
                         BookFrame = 0;
                     }
                 }
-                Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaMagicBook2").Value, NPC.Center - Main.screenPosition, new Rectangle(0, BookFrame * 56, 50, 56), color, NPC.rotation, new Vector2(25, 28), 1f, effects, 0f);
+                Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaMagicBook2").Value, NPC.Center - Main.screenPosition, new Rectangle(0, BookFrame * 56, 50, 56), color, NPC.rotation, new Vector2(25, 28), 1f, effects, 0f);
             }
             else
             {
-                Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea/AcytaeaMagicBook").Value, NPC.Center - Main.screenPosition, new Rectangle(0, BookFrame * 56, 50, 56), color, NPC.rotation, new Vector2(25, 28), 1f, effects, 0f);
+                Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaMagicBook").Value, NPC.Center - Main.screenPosition, new Rectangle(0, BookFrame * 56, 50, 56), color, NPC.rotation, new Vector2(25, 28), 1f, effects, 0f);
             }
         }
         if (!CloseBook)

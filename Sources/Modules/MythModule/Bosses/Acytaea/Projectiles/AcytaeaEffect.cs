@@ -77,7 +77,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
         public static float AI0 = 0;
         public static void DrawAll(SpriteBatch sb)
         {
-            Texture2D tex2 = ModContent.Request<Texture2D>("MythMod/Dusts/CosmicCrack").Value;
+            Texture2D tex2 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Dusts/CosmicCrack").Value;
             if (AI0 == -1)
             {
             }
@@ -99,7 +99,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                     Col = f * f * f;
                 }
             }
-            Texture2D tex2 = ModContent.Request<Texture2D>("MythMod/Dusts/CosmicCrack2").Value;
+            Texture2D tex2 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Dusts/CosmicCrack2").Value;
             Main.spriteBatch.Draw(tex2, v0 - Main.screenPosition, new Rectangle(0, 0, Pro, 50), new Color(Col, Col, Col, 0), 0.4f * AI0, tex2.Size() / 2, Scale * 2.1f, SpriteEffects.None, 0);
             return true;
         }

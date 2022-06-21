@@ -90,7 +90,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                         ka = Main.projectile[WHOAMI].timeLeft / 60f;
                     }
                     Lighting.AddLight(Main.projectile[WHOAMI].Center + new Vector2(0, z * 40), (255 - Main.projectile[WHOAMI].alpha) * 1.2f / 250f * ka, 0, 0);
-                    Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Projectiles/Acytaea/AcytaeaTornado").Value;
+                    Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Projectiles/AcytaeaTornado").Value;
                     Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
                     Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
                 }

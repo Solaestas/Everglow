@@ -143,7 +143,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                     Vx.Add(new Vertex2D(vb - Main.screenPosition + new Vector2(0, 0), color3, new Vector3((h) / 60f, 0, 0)));
                     Vx.Add(new Vertex2D(Projectile.Center - Main.screenPosition + new Vector2(0, 0) + new Vector2(0, St / 160f * Sca[z]).RotatedBy(0.4 + Rota[z]), color3, new Vector3(0.5f, 1, 0)));
                 }
-                Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Projectiles/Acytaea/AcytaeaTornado5").Value;
+                Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Projectiles/AcytaeaTornado5").Value;
                 Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
             }*/
@@ -174,7 +174,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             ef2.Parameters["circleCenter"].SetValue(new Vector3(0, 0, -2));
             ef2.Parameters["radiusOfCircle"].SetValue(1f);
             ef2.Parameters["uTime"].SetValue((float)Main.time * 0.02f);
-            Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("MythMod/UIImages/RedBall2").Value;
+            Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/VisualTextures/RedBall2").Value;
             Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
             ef2.CurrentTechnique.Passes[0].Apply();
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList2.ToArray(), 0, triangleList2.Count / 3);

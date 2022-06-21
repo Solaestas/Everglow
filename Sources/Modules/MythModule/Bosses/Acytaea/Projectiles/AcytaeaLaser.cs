@@ -145,7 +145,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                     Vx.Add(bars[i + 3]);
                 }
             }
-            Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Projectiles/Acytaea/AcytaeaLaser").Value;
+            Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Projectiles/AcytaeaLaser").Value;
             Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 
@@ -173,7 +173,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                     Vx2.Add(new Vertex2D(vf, color3, new Vector3((0.5f + CirPro0) / 25f % 1f, 1, 0)));
                 }
             }
-            Texture2D t1 = ModContent.Request<Texture2D>("MythMod/UIImages/LightCrack").Value;
+            Texture2D t1 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/VisualTextures/LightCrack").Value;
             Main.graphics.GraphicsDevice.Textures[0] = t1;//GlodenBloodScaleMirror
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx2.ToArray(), 0, Vx2.Count / 3);
         }

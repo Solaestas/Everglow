@@ -35,8 +35,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             }
         }
 
-        private Effect ef;
-        private Effect ef2;
         private float Range = 30;
         private float dx = 0;
         private float fx = 40;
@@ -48,8 +46,8 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
             List<Vertex2D> bars = new List<Vertex2D>();
-            ef = ModContent.Request<Effect>("MythMod/Effects/Trail").Value;
-
+            Effect ef = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/Trail", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+            
 
 
             for (int i = 0; i < Range; ++i)
@@ -135,9 +133,9 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                 var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
                 ef.Parameters["uTransform"].SetValue(model * projection);
                 ef.Parameters["uTime"].SetValue(0);
-                Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("MythMod/UIImages/heatmapGhost").Value;
-                Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("MythMod/UIImages/MoonLight2").Value;
-                Main.graphics.GraphicsDevice.Textures[2] = ModContent.Request<Texture2D>("MythMod/UIImages/Grey").Value;
+                Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/VisualTextures/heatmapGhost").Value;
+                Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/VisualTextures/MoonLight2").Value;
+                Main.graphics.GraphicsDevice.Textures[2] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/VisualTextures/Grey").Value;
                 Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
                 Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
                 Main.graphics.GraphicsDevice.SamplerStates[2] = SamplerState.PointWrap;
