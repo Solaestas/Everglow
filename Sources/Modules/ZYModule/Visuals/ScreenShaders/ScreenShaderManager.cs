@@ -89,7 +89,6 @@ internal class ScreenShaderManager : IModule
         gd.SetRenderTarget(Main.screenTarget);
         gd.Clear(Color.Transparent);
         sb.Draw((Texture2D)gd.GetRenderTargets()[0].RenderTarget, Vector2.Zero, Color.White);
-        gd.Clear(Color.Transparent);
 
         foreach (var shader in enableShaders)
         {
