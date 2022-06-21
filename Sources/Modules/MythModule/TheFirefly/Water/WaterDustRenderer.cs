@@ -167,8 +167,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
             {
                 return;
             }
-
-            MothBackground mbione = ModContent.GetInstance<MothBackground>();
             if (!MothBackground.BiomeActive())
             {
                 return;
