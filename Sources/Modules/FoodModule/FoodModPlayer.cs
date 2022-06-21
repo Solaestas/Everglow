@@ -1,6 +1,8 @@
 ﻿using Everglow.Sources.Modules.FoodModule.DataStructures;
 using Everglow.Sources.Modules.FoodModule.Utils;
 using Terraria.ModLoader.IO;
+using Terraria;
+using Everglow.Sources.Modules.FoodModule.Buffs;
 
 namespace Everglow.Sources.Modules.FoodModule
 {
@@ -74,12 +76,16 @@ namespace Everglow.Sources.Modules.FoodModule
         }//口渴变化计时器
         public override void PostUpdate()
         {
+            Player.buffImmune[BuffID.WellFed] = true;
+            Player.buffImmune[BuffID.WellFed2] = true;
+            Player.buffImmune[BuffID.WellFed3] = true;
             FoodState();
             if (!Player.active)
             {
                 CurrentSatiety = 0;
                 Thirstystate = true;
             }
+            
         }
         public override void Initialize()
         {
@@ -89,6 +95,7 @@ namespace Everglow.Sources.Modules.FoodModule
 
             Thirstystate = true;
             ThirstyChangeTimer = 0;
+
             base.Initialize();
         }
         public override void SaveData(TagCompound tag)

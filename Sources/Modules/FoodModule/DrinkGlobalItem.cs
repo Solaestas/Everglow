@@ -239,12 +239,7 @@ namespace Everglow.Sources.Modules.FoodModule
             // 如果是原版的饮料，那么就手动处理
             if (m_vanillaDrinkInfos.ContainsKey(item.type))
             {
-                var drinkInfo = m_vanillaDrinkInfos[item.type];
-
-                // 替换掉原版的 buff 类型
-                item.buffType = drinkInfo.BuffType;
-                item.buffTime = drinkInfo.BuffTime.TotalFrames;
-                
+                var drinkInfo = m_vanillaDrinkInfos[item.type];         
             }
             base.SetDefaults(item);
         }
@@ -259,7 +254,8 @@ namespace Everglow.Sources.Modules.FoodModule
 
                 // 变得不渴
                 foodPlayer.Thirstystate = drinkInfo.Thirsty;
-
+                //加上Buff
+                player.AddBuff(drinkInfo.BuffType, drinkInfo.BuffTime.TotalFrames);
             }
         }
 

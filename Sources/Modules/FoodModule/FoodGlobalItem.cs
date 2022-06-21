@@ -1,7 +1,7 @@
-﻿using Everglow.Sources.Modules.FoodModule.Buffs;
+﻿using Everglow.Sources.Modules.FoodModule.Buffs.VanillaFoodBuffs;
 using Everglow.Sources.Modules.FoodModule.DataStructures;
+using Everglow.Sources.Modules.FoodModule.Buffs;
 using Everglow.Sources.Modules.FoodModule.Items;
-using Everglow.Sources.Modules.FoodModule.Buffs.VanillaFoodBuffs;
 
 namespace Everglow.Sources.Modules.FoodModule
 {
@@ -658,7 +658,6 @@ namespace Everglow.Sources.Modules.FoodModule
                     tooltips[buffTimeIndex].Text = FoodInfo.BuffTime.ToBuffTimeString();
                     //tooltips.RemoveAt(buffTimeIndex);
                 }
-
             }
         }
         public override void SetStaticDefaults()
@@ -672,11 +671,7 @@ namespace Everglow.Sources.Modules.FoodModule
             // 如果是原版的食物，那么就手动处理
             if (m_vanillaFoodInfos.ContainsKey(item.type))
             {
-                var FoodInfo = m_vanillaFoodInfos[item.type];
-
-                // 替换掉原版的 buff 类型
-                item.buffType = FoodInfo.BuffType;
-                item.buffTime = FoodInfo.BuffTime.TotalFrames;
+                var FoodInfo = m_vanillaFoodInfos[item.type];   
             }
             base.SetDefaults(item);
         }
@@ -691,7 +686,8 @@ namespace Everglow.Sources.Modules.FoodModule
 
                 // 增加饱食度
                 FoodPlayer.CurrentSatiety += FoodInfo.Satiety;
-
+                //加上Buff
+                player.AddBuff(FoodInfo.BuffType, FoodInfo.BuffTime.TotalFrames);
             }
         }
 
@@ -730,7 +726,6 @@ namespace Everglow.Sources.Modules.FoodModule
                 var foodInfo = m_vanillaFoodInfos[item.type];
                 if (!foodPlayer.CanEat(foodInfo))
                 {
-
                     //  Main.NewText($"Cannot eat this!");
                     return false;
                 }
@@ -745,7 +740,7 @@ namespace Everglow.Sources.Modules.FoodModule
                     return false;
                 }
             }
-            return base.ConsumeItem(item, player);
+            return true;
         }
     }
 }
