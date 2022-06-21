@@ -29,6 +29,8 @@
   <ItemGroup>
     <Folder Include="Resources\Tools\" />
     <Folder Include="lib\" />
+    <Folder Include="Sources\Modules\FoodModule\Buffs\ModDrinkBuffs\" />
+    <Folder Include="Sources\Modules\FoodModule\Buffs\ModFoodBuffs\" />
     <Folder Include="Sources\Modules\FoodModule\Items\ModFood\" />
     <Folder Include="Sources\Modules\FoodModule\Items\ModDrink\" />
   </ItemGroup>

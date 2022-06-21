@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.FoodModule.Buffs.VanillaFoodBuffs
+﻿namespace Everglow.Sources.Modules.FoodModule.Buffs.VanillaDrinkBuffs
 {
     public class SmoothieofDarknessBuff : ModBuff
     {

@@ -49,7 +49,7 @@ namespace Everglow.Sources.Modules.FoodModule
                     ItemID.Bacon,
                     new FoodInfo() {
                         Satiety = 20,
-                        BuffType = ModContent.BuffType<MilkCartonBuff>(),
+                        BuffType = ModContent.BuffType<BaconBuff>(),
                         BuffTime = new FoodDuration(8, 0, 0),
                         Description ="加2生命回复，所受冷系伤害降低\n“开胃祛寒”"
                     }
@@ -59,7 +59,7 @@ namespace Everglow.Sources.Modules.FoodModule
                     ItemID.Banana,
                     new FoodInfo() {
                         Satiety = 10,
-                        BuffType = ModContent.BuffType<BaconBuff>(),
+                        BuffType = ModContent.BuffType<BananaBuff>(),
                         BuffTime = new FoodDuration(4, 0, 0),
                         Description ="20%不消耗弹药，加5%远程伤害\n“低血压”"
                     }

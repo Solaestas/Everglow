@@ -1,4 +1,4 @@
-﻿using Everglow.Sources.Modules.FoodModule.Infos;
+﻿using Everglow.Sources.Modules.FoodModule.InfoDisplays;
 namespace Everglow.Sources.Modules.FoodModule.Items.Monitors
 {
     public class BloodGlucoseMonitor : ModItem

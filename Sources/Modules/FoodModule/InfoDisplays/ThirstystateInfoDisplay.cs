@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.FoodModule.Infos
+﻿namespace Everglow.Sources.Modules.FoodModule.InfoDisplays
 {
     class ThirstystateInfoDisplay : InfoDisplay
     {
