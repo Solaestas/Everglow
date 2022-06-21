@@ -1,8 +1,8 @@
 ﻿using Terraria.DataStructures;
 
-namespace Everglow.Sources.Modules.FoodModule
+namespace Everglow.Sources.Modules.FoodModule.Buffs
 {
-    public class FoodPojectile : GlobalProjectile
+    public class FoodBuffPojectile : GlobalProjectile
     {
         public override void OnSpawn(Projectile projectile, IEntitySource source)
         {

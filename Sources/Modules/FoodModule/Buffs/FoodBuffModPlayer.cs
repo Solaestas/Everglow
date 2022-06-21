@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.FoodModule
+﻿namespace Everglow.Sources.Modules.FoodModule.Buffs
 {
     public class FoodBuffModPlayer : ModPlayer
     {
