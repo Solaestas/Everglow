@@ -21,7 +21,7 @@
         {
             if (Projectile.timeLeft % 5 == 2)
             {
-                Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaBow2>(), Projectile.damage, 3, Main.LocalPlayer.whoAmI, (float)(Projectile.timeLeft / 20d * Math.PI));
+                Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<AcytaeaBow2>(), Projectile.damage, 3, Main.LocalPlayer.whoAmI, (float)(Projectile.timeLeft / 20d * Math.PI));
             }
         }
     }

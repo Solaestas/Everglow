@@ -1,4 +1,6 @@
 
+using Everglow.Sources.Commons.Function.Vertex;
+
 using Terraria.Audio;
 
 namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
@@ -124,7 +126,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 
                 // 按照顺序连接三角形
                 triangleList.Add(bars[0]);
-                var vertex = new Vertex2D((bars[0].Position + bars[1].Position) * 0.5f + Vector2.Normalize(Projectile.velocity) * 30, Color.White, new Vector3(0, 0.5f, 1));
+                var vertex = new Vertex2D((bars[0].position + bars[1].position) * 0.5f + Vector2.Normalize(Projectile.velocity) * 30, Color.White, new Vector3(0, 0.5f, 1));
                 triangleList.Add(bars[1]);
                 triangleList.Add(vertex);
                 for (int i = 0; i < bars.Count - 2; i += 2)

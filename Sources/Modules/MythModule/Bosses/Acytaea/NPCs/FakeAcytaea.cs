@@ -45,7 +45,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
             {
                 for (int f = 0; f < 200; f++)
                 {
-                    if (Main.npc[f].type == ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Acytaea>())
+                    if (Main.npc[f].type == ModContent.NPCType<Acytaea>())
                     {
                         AIMNPC = f;
                         break;
@@ -57,7 +57,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
                 NPC.position = Main.npc[AIMNPC].position;
                 NPC.life = Main.npc[AIMNPC].life;
                 NPC.lifeMax = Main.npc[AIMNPC].lifeMax;
-                if (Main.npc[AIMNPC].life <= 0 || Main.npc[AIMNPC].active == false || Main.npc[AIMNPC].type != ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Acytaea>() || !Main.npc[AIMNPC].boss || Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Acytaea.BossIndex == 0)
+                if (Main.npc[AIMNPC].life <= 0 || Main.npc[AIMNPC].active == false || Main.npc[AIMNPC].type != ModContent.NPCType<Acytaea>() || !Main.npc[AIMNPC].boss || Acytaea.BossIndex == 0)
                 {
                     if (NPC.active)
                     {

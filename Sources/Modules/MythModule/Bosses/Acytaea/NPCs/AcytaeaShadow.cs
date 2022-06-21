@@ -1,4 +1,6 @@
 
+using Everglow.Sources.Commons.Function.Vertex;
+
 using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
@@ -17,11 +19,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
             NPCID.Sets.AttackTime[NPC.type] = 60;
             NPCID.Sets.AttackAverageChance[NPC.type] = 15;
             DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "雅斯塔亚");
-        }
-        private bool canDespawn = false;
-        public override bool CheckActive()
-        {
-            return canDespawn;
         }
 
         private int Dam = 12;
@@ -64,17 +61,16 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
             {
                 Dam = 8;
             }
-            if (NPC.CountNPCS(ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.Acytaea>()) <= 0 || Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.Acytaea.BossIndex == 0)
+            if (NPC.CountNPCS(ModContent.NPCType<Acytaea>()) <= 0 || Acytaea.BossIndex == 0)
             {
                 if (NPC.active)
                 {
-                    Vector2 vz = new Vector2(0, 0.0007f).RotatedByRandom(6.28);
-                    //int g = Projectile.NewProjectile(null, NPC.Center, vz, ModContent.ProjectileType<Projectiles.Acytaea.BloodBlade2>(), NPC.damage, 3, player.whoAmI, 1);
+                    //int g = Projectile.NewProjectile(null, NPC.Center, vz, ModContent.ProjectileType<BloodBlade2>(), NPC.damage, 3, player.whoAmI, 1);
                     //Main.projectile[g].rotation = (float)Math.Atan2(vz.Y, vz.X);
                     for (int j = 0; j < 6; j++)
                     {
                         Vector2 v = new Vector2(0, Main.rand.NextFloat(0, 7f)).RotatedByRandom(6.28);
-                        Projectile.NewProjectile(null, NPC.Center + v * 2f, v, ModContent.ProjectileType<Projectiles.Acytaea.BrokenAcytaea2>(), 0, 1, Main.myPlayer);
+                        Projectile.NewProjectile(null, NPC.Center + v * 2f, v, ModContent.ProjectileType<Projectiles.BrokenAcytaea2>(), 0, 1, Main.myPlayer);
                     }
                     NPC.active = false;
                 }
@@ -87,16 +83,13 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
                 {
                     NPC.active = false;
                 }
-                canDespawn = true;
             }
             else
             {
                 if ((player.Center - NPC.Center).Length() > 15000)
                 {
-                    canDespawn = true;
                     NPC.active = false;
                 }
-                canDespawn = false;
             }
             NPC.localAI[0] += 1;
             MinorDir = NPC.spriteDirection * -1;
@@ -182,7 +175,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
                     for (int k = -3; k < 5; k += 2)
                     {
                         Vector2 v0a = Vector2.Normalize(player.Center - NPC.Center).RotatedBy(k / 3d);
-                        Projectile.NewProjectile(null, NPC.Center - v0a * 60, v0a * 2, ModContent.ProjectileType<Projectiles.Acytaea.BloodBladeShadow>(), Dam, 3, player.whoAmI);
+                        Projectile.NewProjectile(null, NPC.Center - v0a * 60, v0a * 2, ModContent.ProjectileType<Projectiles.BloodBladeShadow>(), Dam, 3, player.whoAmI);
                     }
                 }
             }
@@ -246,7 +239,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
             {
                 NPC.velocity.Y *= (float)(2 - Math.Pow(1.01, NPC.velocity.Length()));//空气阻力于速度指数相关
             }
-            NPCWHOAMI = NPC.whoAmI;
         }
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
@@ -279,9 +271,8 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
         private int headFrame = 0;
         private bool HasBlade = false;
         private int DrawAI = 0;
-        private int NPCWHOAMI = -1;
         private Vector2[] OldBladePos = new Vector2[70];
-        public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             if (!Main.gamePaused)
             {
@@ -456,9 +447,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
                     Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaRightArm").Value, NPC.Center + RightArmPos - Main.screenPosition + new Vector2(10, 0), null, color, NPC.rotation + RightArmRot, new Vector2(17, 23), 1f, effects, 0f);
                 }
             }
-        }
-        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
-        {
             return false;
         }
     }

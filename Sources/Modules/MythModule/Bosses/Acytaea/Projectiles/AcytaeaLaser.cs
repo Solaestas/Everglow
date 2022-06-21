@@ -1,4 +1,6 @@
-﻿namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
+﻿using Everglow.Sources.Commons.Function.Vertex;
+
+namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 {
     class AcytaeaLaser : ModProjectile
     {
@@ -28,7 +30,7 @@
             Vector2 vp = Vector2.One;
             for (int f = 0; f < 200; f++)
             {
-                if (Main.npc[f].type == ModContent.NPCType<NPCs.Acytaea.Acytaea>())
+                if (Main.npc[f].type == ModContent.NPCType<NPCs.Acytaea>())
                 {
                     AIMNpc = f;
 
@@ -118,7 +120,7 @@
                             {
                                 if ((Main.player[j].Center - Vlaser[i]).Length() < 40)
                                 {
-                                    Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.Typeless.playerHit>(), Projectile.damage, 0, j, 0, 0);
+                                    Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.playerHit>(), Projectile.damage, 0, j, 0, 0);
                                 }
                             }
                         }
@@ -129,7 +131,7 @@
             if (bars.Count > 2)
             {
                 Vx.Add(bars[0]);
-                var vertex = new Vertex2D((bars[0].Position + bars[1].Position) * 0.5f + new Vector2(-5, 0).RotatedBy(Projectile.rotation), new Color(255, 0, 0, 0), new Vector3(0, 0.5f, 1));
+                var vertex = new Vertex2D((bars[0].position + bars[1].position) * 0.5f + new Vector2(-5, 0).RotatedBy(Projectile.rotation), new Color(255, 0, 0, 0), new Vector3(0, 0.5f, 1));
                 Vx.Add(bars[1]);
                 Vx.Add(vertex);
                 for (int i = 0; i < bars.Count - 2; i += 2)

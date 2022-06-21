@@ -1,4 +1,6 @@
 ﻿
+using Everglow.Sources.Commons.Function.Vertex;
+
 using Terraria.Localization;
 
 
@@ -43,7 +45,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             {
                 for (int i = 0; i < 200; i++)
                 {
-                    if (Main.npc[i].type == ModContent.NPCType<NPCs.Acytaea.Acytaea>())
+                    if (Main.npc[i].type == ModContent.NPCType<NPCs.Acytaea>())
                     {
                         AIMNpc = i;
                         break;
@@ -58,7 +60,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             }
             if (AIMNpc != -1)
             {
-                if (Main.npc[AIMNpc].type == ModContent.NPCType<NPCs.Acytaea.Acytaea>() && Main.npc[AIMNpc].active)
+                if (Main.npc[AIMNpc].type == ModContent.NPCType<NPCs.Acytaea>() && Main.npc[AIMNpc].active)
                 {
                     Projectile.velocity += Vector2.Normalize(Main.npc[AIMNpc].Center - Projectile.Center) * 1 / Radius;
                 }
@@ -68,7 +70,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                 Vector2 vp = Vector2.One;
                 for (int f = 0; f < 200; f++)
                 {
-                    if (Main.npc[f].type == ModContent.NPCType<NPCs.Acytaea.Acytaea>())
+                    if (Main.npc[f].type == ModContent.NPCType<NPCs.Acytaea>())
                     {
                         vp = Main.npc[f].Center - Projectile.Center;
                         break;

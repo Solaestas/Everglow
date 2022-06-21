@@ -68,12 +68,12 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                     for (int i = 0; i < 4; i++)
                     {
                         Vector2 vf = new Vector2(-1, 0).RotatedBy(i / 2d * Math.PI);
-                        Projectile.NewProjectile(null, Projectile.Center, vf * 14, ModContent.ProjectileType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles.AcytaeaArrow2>(), Projectile.damage, 3, player.whoAmI, 3);
+                        Projectile.NewProjectile(null, Projectile.Center, vf * 14, ModContent.ProjectileType<AcytaeaArrow2>(), Projectile.damage, 3, player.whoAmI, 3);
                     }
                     for (int i = 0; i < 4; i++)
                     {
                         Vector2 vf = new Vector2(0.3f, 0.3f).RotatedBy(i / 2d * Math.PI);
-                        Projectile.NewProjectile(null, Projectile.Center, vf * 14, ModContent.ProjectileType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles.AcytaeaArrow2>(), Projectile.damage, 3, player.whoAmI, 2);
+                        Projectile.NewProjectile(null, Projectile.Center, vf * 14, ModContent.ProjectileType<AcytaeaArrow2>(), Projectile.damage, 3, player.whoAmI, 2);
                     }
                     Projectile.Kill();
                 }
@@ -85,7 +85,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                     for (int i = -1; i < 2; i++)
                     {
                         Vector2 vf = Projectile.velocity.RotatedBy(i / 14d * Math.PI);
-                        Projectile.NewProjectile(null, Projectile.Center, vf * 0.9f, ModContent.ProjectileType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles.AcytaeaArrow2>(), Projectile.damage, 3, player.whoAmI, 4);
+                        Projectile.NewProjectile(null, Projectile.Center, vf * 0.9f, ModContent.ProjectileType<AcytaeaArrow2>(), Projectile.damage, 3, player.whoAmI, 4);
                     }
                     Projectile.Kill();
                 }
@@ -97,7 +97,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                     for (int i = -1; i < 2; i++)
                     {
                         Vector2 vf = Projectile.velocity.RotatedBy(i / 6d * Math.PI);
-                        Projectile.NewProjectile(null, Projectile.Center, vf * 0.6f, ModContent.ProjectileType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles.AcytaeaArrow2>(), Projectile.damage, 3, player.whoAmI, 5);
+                        Projectile.NewProjectile(null, Projectile.Center, vf * 0.6f, ModContent.ProjectileType<AcytaeaArrow2>(), Projectile.damage, 3, player.whoAmI, 5);
                     }
                     Projectile.Kill();
                 }
@@ -109,7 +109,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                     for (int i = -2; i < 3; i++)
                     {
                         Vector2 vf = Projectile.velocity.RotatedBy(i / 7d * Math.PI);
-                        int f = Projectile.NewProjectile(null, Projectile.Center, vf * (10 + i) / 10f, ModContent.ProjectileType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles.AcytaeaArrow2>(), Projectile.damage, 3, player.whoAmI, 6);
+                        int f = Projectile.NewProjectile(null, Projectile.Center, vf * (10 + i) / 10f, ModContent.ProjectileType<AcytaeaArrow2>(), Projectile.damage, 3, player.whoAmI, 6);
                         Main.projectile[f].timeLeft = 120;
                     }
                     Projectile.Kill();
@@ -124,7 +124,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                         if (i != 0)
                         {
                             Vector2 vf = Projectile.velocity.RotatedBy(i / 4.8d * Math.PI);
-                            int f = Projectile.NewProjectile(null, Projectile.Center, vf * 2.6f, ModContent.ProjectileType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles.AcytaeaArrow2>(), Projectile.damage, 3, player.whoAmI, 7);
+                            int f = Projectile.NewProjectile(null, Projectile.Center, vf * 2.6f, ModContent.ProjectileType<AcytaeaArrow2>(), Projectile.damage, 3, player.whoAmI, 7);
                             Main.projectile[f].timeLeft = 120;
                         }
                     }

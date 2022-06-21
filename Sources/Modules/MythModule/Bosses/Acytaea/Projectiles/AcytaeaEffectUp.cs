@@ -19,16 +19,17 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
         }
-        bool shake;
+        //bool shake;
         public override void AI()
         {
-            if (!shake)
-            {
-                MythPlayer mplayer = Main.player[Main.myPlayer].GetModPlayer<MythPlayer>();
-                mplayer.ShakeStrength = 7;
-                mplayer.Shake = 15;
-                shake = true;
-            }
+            //TODO Shake
+            //if (!shake)
+            //{
+            //    MythPlayer mplayer = Main.player[Main.myPlayer].GetModPlayer<MythPlayer>();
+            //    mplayer.ShakeStrength = 7;
+            //    mplayer.Shake = 15;
+            //    shake = true;
+            //}
         }
         public override bool PreDraw(ref Color lightColor)
         {

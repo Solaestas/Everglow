@@ -1,4 +1,7 @@
 
+using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles;
+
 using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
@@ -55,17 +58,17 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
         private int AIMNPC = -1;
         public override void AI()
         {
-            if (NPC.CountNPCS(ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.Acytaea>()) <= 0 || Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.Acytaea.BossIndex == 0)
+            if (NPC.CountNPCS(ModContent.NPCType<Acytaea>()) <= 0 || Acytaea.BossIndex == 0)
             {
                 if (NPC.active)
                 {
                     Vector2 vz = new Vector2(0, 0.0007f).RotatedByRandom(6.28);
-                    //int g = Projectile.NewProjectile(null, NPC.Center, vz, ModContent.ProjectileType<Projectiles.Acytaea.BloodBlade2>(), NPC.damage, 3, player.whoAmI, 1);
+                    //int g = Projectile.NewProjectile(null, NPC.Center, vz, ModContent.ProjectileType<BloodBlade2>(), NPC.damage, 3, player.whoAmI, 1);
                     //Main.projectile[g].rotation = (float)Math.Atan2(vz.Y, vz.X);
                     for (int j = 0; j < 6; j++)
                     {
                         Vector2 v = new Vector2(0, Main.rand.NextFloat(0, 7f)).RotatedByRandom(6.28);
-                        Projectile.NewProjectile(null, NPC.Center + v * 2f, v, ModContent.ProjectileType<Projectiles.Acytaea.BrokenAcytaea2>(), 0, 1, Main.myPlayer);
+                        Projectile.NewProjectile(null, NPC.Center + v * 2f, v, ModContent.ProjectileType<BrokenAcytaea2>(), 0, 1, Main.myPlayer);
                     }
                     NPC.active = false;
                 }
@@ -74,7 +77,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
             {
                 for (int g = 0; g < 200; g++)
                 {
-                    if (Main.npc[g].type == ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.Acytaea>())
+                    if (Main.npc[g].type == ModContent.NPCType<Acytaea>())
                     {
                         AIMNPC = g;
                         break;
@@ -171,30 +174,30 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
                     if (NPC.ai[3] == 0)
                     {
                         Vector2 vz = new Vector2(0, 0.0007f).RotatedByRandom(6.28);
-                        //int g = Projectile.NewProjectile(null, NPC.Center, vz, ModContent.ProjectileType<Projectiles.Acytaea.BloodBlade2>(), NPC.damage, 3, player.whoAmI, 1);
+                        //int g = Projectile.NewProjectile(null, NPC.Center, vz, ModContent.ProjectileType<BloodBlade2>(), NPC.damage, 3, player.whoAmI, 1);
                         //Main.projectile[g].rotation = (float)Math.Atan2(vz.Y, vz.X);
                         for (int j = 0; j < 6; j++)
                         {
                             Vector2 v = new Vector2(0, Main.rand.NextFloat(0, 7f)).RotatedByRandom(6.28);
-                            Projectile.NewProjectile(null, NPC.Center + v * 2f, v, ModContent.ProjectileType<Projectiles.Acytaea.BrokenAcytaea2>(), 0, 1, Main.myPlayer);
+                            Projectile.NewProjectile(null, NPC.Center + v * 2f, v, ModContent.ProjectileType<BrokenAcytaea2>(), 0, 1, Main.myPlayer);
                         }
                     }
                     NPC.active = false;
                 }
             }
-            if (NPC.CountNPCS(ModContent.NPCType<Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs.Acytaea>()) <= 0)
+            if (NPC.CountNPCS(ModContent.NPCType<Acytaea>()) <= 0)
             {
                 if (NPC.active)
                 {
                     if (NPC.ai[3] == 0)
                     {
                         Vector2 vz = new Vector2(0, 0.0007f).RotatedByRandom(6.28);
-                        //int g = Projectile.NewProjectile(null, NPC.Center, vz, ModContent.ProjectileType<Projectiles.Acytaea.BloodBlade2>(), NPC.damage, 3, player.whoAmI, 1);
+                        //int g = Projectile.NewProjectile(null, NPC.Center, vz, ModContent.ProjectileType<BloodBlade2>(), NPC.damage, 3, player.whoAmI, 1);
                         //Main.projectile[g].rotation = (float)Math.Atan2(vz.Y, vz.X);
                         for (int j = 0; j < 6; j++)
                         {
                             Vector2 v = new Vector2(0, Main.rand.NextFloat(0, 7f)).RotatedByRandom(6.28);
-                            Projectile.NewProjectile(null, NPC.Center + v * 2f, v, ModContent.ProjectileType<Projectiles.Acytaea.BrokenAcytaea2>(), 0, 1, Main.myPlayer);
+                            Projectile.NewProjectile(null, NPC.Center + v * 2f, v, ModContent.ProjectileType<BrokenAcytaea2>(), 0, 1, Main.myPlayer);
                         }
                     }
                     NPC.active = false;

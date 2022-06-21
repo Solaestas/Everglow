@@ -1,4 +1,6 @@
-﻿namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
+﻿using Everglow.Sources.Commons.Function.Vertex;
+
+namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 {
     class AcytaeaLight : ModProjectile
     {
@@ -84,7 +86,7 @@
                                     haihit[j] = true;
                                     if (!hi)
                                     {
-                                        Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.Typeless.playerHit>(), Projectile.damage, 0, j, 0, 0);
+                                        //Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.Typeless.playerHit>(), Projectile.damage, 0, j, 0, 0);
                                     }
                                     hi = true;
                                 }
@@ -115,7 +117,7 @@
             if (bars.Count > 2)
             {
                 triangleList.Add(bars[0]);
-                var vertex = new Vertex2D((bars[0].Position + bars[1].Position) * 0.5f + Projectile.velocity, Color.White, new Vector3(0, 0.5f, 1));
+                var vertex = new Vertex2D((bars[0].position + bars[1].position) * 0.5f + Projectile.velocity, Color.White, new Vector3(0, 0.5f, 1));
                 triangleList.Add(bars[1]);
                 triangleList.Add(vertex);
                 for (int i = 0; i < bars.Count - 2; i += 2)

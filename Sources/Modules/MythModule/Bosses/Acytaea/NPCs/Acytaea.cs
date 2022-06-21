@@ -1,5 +1,6 @@
 using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles;
+using Everglow.Sources.Modules.ZYModule.Commons.Function;
 
 using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
@@ -26,7 +27,6 @@ public class Acytaea : ModNPC
     public static readonly Vector2 RightWingPos = new Vector2(-18, 0);
     public static readonly Vector2 RightArmPos = new Vector2(-10, 0);
     public static readonly Vector2 LeftWingPos = new Vector2(-18, 0);
-    public static float LeftArmRot = 0;
     public static float RightArmRot = 0;
     public static float BladePro = 0;
     public static float BladeGlowPro = 0;
@@ -2894,7 +2894,7 @@ public class Acytaea : ModNPC
             Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaRightWing").Value, NPC.Center + RightWingPos * NPC.spriteDirection - Main.screenPosition + new Vector2(10, 0), new Rectangle(0, wingFrame * 56, 86, 56), color, NPC.rotation, new Vector2(43, 28), 1f, effects, 0f);
             Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaLeftWing").Value, NPC.Center + LeftWingPos * NPC.spriteDirection - Main.screenPosition + new Vector2(10, 0), new Rectangle(0, wingFrame * 56, 86, 56), color, NPC.rotation, new Vector2(43, 28), 1f, effects, 0f);
         }
-        Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaLeftArm").Value, NPC.Center - Main.screenPosition, null, color, NPC.rotation + LeftArmRot, NPC.Size / 2f, 1f, effects, 0f);
+        Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaLeftArm").Value, NPC.Center - Main.screenPosition, null, color, NPC.rotation, NPC.Size / 2f, 1f, effects, 0f);
         Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaBody").Value, NPC.Center - Main.screenPosition, null, color, NPC.rotation, NPC.Size / 2f, 1f, effects, 0f);
         Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/NPCs/Acytaea/AcytaeaLeg").Value, NPC.Center - Main.screenPosition, null, color, NPC.rotation, NPC.Size / 2f, 1f, effects, 0f);
         if (HasBlade)

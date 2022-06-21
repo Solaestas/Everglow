@@ -33,13 +33,13 @@
                 else
                 {
                     Projectile.frame = 0;
-                    Projectile.NewProjectile(null, Projectile.Center, new Vector2(Projectile.spriteDirection * 5, -3), ModContent.ProjectileType<Projectiles.Acytaea.MeteroFri>(), 40, 3, Main.myPlayer);
+                    Projectile.NewProjectile(null, Projectile.Center, new Vector2(Projectile.spriteDirection * 5, -3), ModContent.ProjectileType<MeteroFri>(), 40, 3, Main.myPlayer);
                 }
             }
             ka = 1;
             for (int f = 0; f < 200; f++)
             {
-                if (Main.npc[f].type == ModContent.NPCType<NPCs.Acytaea.Acytaea>())
+                if (Main.npc[f].type == ModContent.NPCType<NPCs.Acytaea>())
                 {
                     AIMNpc = f;
                     break;

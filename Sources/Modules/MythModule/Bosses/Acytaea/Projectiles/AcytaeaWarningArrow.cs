@@ -16,7 +16,7 @@
         }
         public override void Kill(int timeLeft)
         {
-            Projectile.NewProjectile(null, Projectile.Center + new Vector2(0, -800), new Vector2(0, 34), ModContent.ProjectileType<Projectiles.Acytaea.AcytaeaArrow>(), 0, 1, Main.myPlayer);
+            Projectile.NewProjectile(null, Projectile.Center + new Vector2(0, -800), new Vector2(0, 34), ModContent.ProjectileType<AcytaeaArrow>(), 0, 1, Main.myPlayer);
         }
         public override Color? GetAlpha(Color lightColor)
         {

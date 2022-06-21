@@ -1,4 +1,7 @@
-﻿namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
+﻿using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs;
+
+namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 {
     class AcytaeaTornado : ModProjectile
     {
@@ -16,10 +19,7 @@
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 70;
         }
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-        {
-        }
-        float ka = 0;
+
         int AIMNpc = -1;
         public override void AI()
         {
@@ -27,7 +27,7 @@
             {
                 for (int i = 0; i < 200; i++)
                 {
-                    if (Main.npc[i].type == ModContent.NPCType<NPCs.Acytaea.Acytaea>())
+                    if (Main.npc[i].type == ModContent.NPCType<NPCs.Acytaea>())
                     {
                         AIMNpc = i;
                         break;

@@ -1,4 +1,6 @@
 ﻿
+using Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs;
+
 using Terraria.Audio;
 
 namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
@@ -50,7 +52,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             Projectile.rotation = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + Math.PI * 0.25);
             for (int z = 0; z < 200; z++)
             {
-                if (Main.npc[z].active && Main.npc[z].type == ModContent.NPCType<NPCs.Acytaea.AcytaeaShadow3>())
+                if (Main.npc[z].active && Main.npc[z].type == ModContent.NPCType<AcytaeaShadow3>())
                 {
                     if ((Main.npc[z].Center - Projectile.Center).Length() < 60)
                     {

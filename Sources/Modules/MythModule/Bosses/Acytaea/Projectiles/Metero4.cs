@@ -1,4 +1,6 @@
-﻿namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
+﻿using Everglow.Sources.Commons.Function.Vertex;
+
+namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 {
     class Metero4 : ModProjectile
     {
@@ -45,7 +47,7 @@
                 for (int a = 0; a < 20; a++)
                 {
                     Vector2 va = new Vector2(0, 3).RotatedBy(a / 10d * Math.PI + Math.Sin(a / 5d * Math.PI) / 40d);
-                    Projectile.NewProjectile(null, Projectile.Center + va, va, ModContent.ProjectileType<Projectiles.Acytaea.Metero3>(), Projectile.damage, 3, player.whoAmI, -1);
+                    Projectile.NewProjectile(null, Projectile.Center + va, va, ModContent.ProjectileType<Metero3>(), Projectile.damage, 3, player.whoAmI, -1);
                 }
             }
         }
@@ -88,7 +90,7 @@
             if (bars.Count > 2)
             {
                 Vx.Add(bars[0]);
-                var vertex = new Vertex2D((bars[0].Position + bars[1].Position) * 0.5f + Vector2.Normalize(Projectile.velocity) * 30, new Color(255, 0, 0, 0), new Vector3(0, 0.5f, 1));
+                var vertex = new Vertex2D((bars[0].position + bars[1].position) * 0.5f + Vector2.Normalize(Projectile.velocity) * 30, new Color(255, 0, 0, 0), new Vector3(0, 0.5f, 1));
                 Vx.Add(bars[1]);
                 Vx.Add(vertex);
                 for (int i = 0; i < bars.Count - 2; i += 2)

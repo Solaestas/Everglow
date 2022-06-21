@@ -27,7 +27,7 @@
             {
                 for (int i = 0; i < 200; i++)
                 {
-                    if (Main.npc[i].type == ModContent.NPCType<NPCs.Acytaea.Acytaea>())
+                    if (Main.npc[i].type == ModContent.NPCType<NPCs.Acytaea>())
                     {
                         AIMNpc = i;
                         break;

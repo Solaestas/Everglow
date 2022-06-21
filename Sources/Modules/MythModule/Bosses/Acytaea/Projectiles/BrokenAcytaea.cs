@@ -1,4 +1,5 @@
 ﻿
+using Terraria.GameContent;
 using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles

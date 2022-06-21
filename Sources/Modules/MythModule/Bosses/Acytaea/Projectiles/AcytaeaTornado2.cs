@@ -1,4 +1,6 @@
-﻿namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
+﻿using Everglow.Sources.Commons.Function.Vertex;
+
+namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 {
     class AcytaeaTornado2 : ModProjectile
     {
@@ -19,7 +21,7 @@
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
         }
-        float ka = 0;
+
         int AIMNpc = -1;
         public override void AI()
         {
@@ -27,7 +29,7 @@
             {
                 for (int i = 0; i < 200; i++)
                 {
-                    if (Main.npc[i].type == ModContent.NPCType<NPCs.Acytaea.Acytaea>())
+                    if (Main.npc[i].type == ModContent.NPCType<NPCs.Acytaea>())
                     {
                         AIMNpc = i;
                         break;
