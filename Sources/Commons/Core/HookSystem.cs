@@ -7,25 +7,49 @@ namespace Everglow.Sources.Commons.Core
     /// <summary>
     /// 对一个方法的管理，可以用来控制钩子是否启用
     /// </summary>
+    [DebuggerDisplay("{name} : {enable ? \"Enable\" : \"Disable\"}")]
     public class ActionHandler
     {
-        internal Action action;
-        public string Name
+        public Action Action
         {
-            get; internal set;
+            get => action;
+            set
+            {
+                enable = value is not null;
+                action = value;
+            }
         }
-        public bool Enable { get; set; } = true;
+        private Action action;
+        private string name;
+        private bool enable;
+        public bool Enable
+        {
+            get => enable;
+            set => enable = value;
+        }
+        public string Name => name;
         public ActionHandler(Action action)
         {
             this.action = action;
-            Name = action.ToString();
+            name = action.ToString();
+            enable = true;
         }
         public ActionHandler(Action action, string name)
         {
             this.action = action;
-            Name = name;
+            this.name = name;
+            enable = true;
         }
+
+        public ActionHandler()
+        {
+            action = null;
+            name = string.Empty;
+            enable = false;
+        }
+
         public void Invoke() => action.Invoke();
+        public override string ToString() => name;
     }
     public enum CallOpportunity
     {
@@ -59,12 +83,14 @@ namespace Everglow.Sources.Commons.Core
     {
         public HookSystem()
         {
+            waitToRemove = new List<(CallOpportunity op, ActionHandler handler)>();
             methods = new Dictionary<CallOpportunity, List<ActionHandler>>();
             foreach (var op in validOpportunity)
             {
                 methods.Add(op, new List<ActionHandler>());
             }
         }
+        private List<(CallOpportunity op, ActionHandler handler)> waitToRemove;
         public static readonly CallOpportunity[] validOpportunity = new CallOpportunity[]
         {
             //Draw
@@ -129,7 +155,7 @@ namespace Everglow.Sources.Commons.Core
                 throw new ArgumentException("Invaild Opportunity");
             }
             var handler = new ActionHandler(action, name ?? action.ToString());
-            methods[op].Add(new ActionHandler(action));
+            methods[op].Add(handler);
             return handler;
         }
         public void AddMethod(ActionHandler handler, CallOpportunity op)
@@ -173,6 +199,38 @@ namespace Everglow.Sources.Commons.Core
             }
             return null;
         }
+        /// <summary>
+        /// 根据Handler移除一个方法
+        /// </summary>
+        /// <param name="handler"></param>
+        /// <returns>是否成功移除</returns>
+        public bool Remove(ActionHandler handler)
+        {
+            foreach(var op in validOpportunity)
+            {
+                var handlers = methods[op];
+                for (int i = 0; i < handlers.Count; i++)
+                {
+                    if(handler == handlers[i])
+                    {
+                        waitToRemove.Add((op, handler));
+                        handler.Enable = false;
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        /// <summary>
+        /// 移除所有被Disable的Action
+        /// </summary>
+        public void RemoveDisabledAction()
+        {
+            foreach(var op in validOpportunity)
+            {
+                methods[op].RemoveAll(handler => !handler.Enable);
+            }
+        }
         public void HookLoad()
         {
             IL.Terraria.Main.DoDraw += Main_DoDraw;
@@ -207,9 +265,9 @@ namespace Everglow.Sources.Commons.Core
                     }
                     catch (Exception ex)
                     {
-                        Everglow.Instance.Logger.Error($"{handler.Name} 抛出了异常 {ex}");
+                        Debug.Fail($"{handler} 抛出了异常 {ex}");
+                        Everglow.Instance.Logger.Error($"{handler} 抛出了异常 {ex}");
                         handler.Enable = false;
-                        Debug.Fail($"{handler.Name} 抛出了异常 {ex}");
                     }
                 }
             }
@@ -222,6 +280,10 @@ namespace Everglow.Sources.Commons.Core
         {
             Invoke(CallOpportunity.PostUpdateEverything);
             UpdateTimer++;
+            foreach(var (op, handler) in waitToRemove)
+            {
+                methods[op].Remove(handler);
+            }
         }
 
         public override void PostUpdateNPCs()
