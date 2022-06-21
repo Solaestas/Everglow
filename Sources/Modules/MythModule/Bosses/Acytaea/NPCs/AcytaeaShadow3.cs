@@ -132,14 +132,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
                 {
                     if ((AIMpos + player.Center - NPC.Center).Length() < 240)
                     {
-                        if (NPC.Center.X > player.Center.X)
-                        {
-                            NPC.spriteDirection = -1;
-                        }
-                        else
-                        {
-                            NPC.spriteDirection = 1;
-                        }
+                        NPC.spriteDirection = NPC.Center.X > player.Center.X ? -1 : 1;
                         NPC.rotation *= 0.99f;
                     }
                     else
