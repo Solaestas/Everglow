@@ -1,4 +1,6 @@
-﻿using Terraria.Audio;
+﻿using Everglow.Sources.Modules.ZYModule.Visuals.ScreenShaders;
+
+using Terraria.Audio;
 
 namespace Everglow.Sources.Modules.ZYModule.Commons.Function;
 
@@ -13,6 +15,9 @@ internal class TestItem : ModItem
             .Select(f => (SoundStyle)f.GetValue(null))
             .ToList();
         enumerator = soundStyles.GetEnumerator();
+        var shader = new ScreenShader(EffectType.Test, ScreenParameter.uTime | ScreenParameter.uOpacity | ScreenParameter.uResolution | ScreenParameter.uNoise);
+        ScreenShaderManager.Add("Test", shader);
+        shader.effectParameters["uColorBar"].SetValue(TextureType.WhiteGreenBar.GetValue(false));
     }
     public override void SetDefaults()
     {
@@ -26,18 +31,25 @@ internal class TestItem : ModItem
     private IEnumerator<SoundStyle> enumerator;
     public override bool CanUseItem(Player player)
     {
-        SoundEngine.PlaySound(SoundID.DD2_CrystalCartImpact, player.Center);
-        return true;
-        if (enumerator.MoveNext())
+        //if (enumerator.MoveNext())
+        //{
+        //    SoundEngine.PlaySound(enumerator.Current, player.Center);
+        //    Main.NewText(enumerator.Current.SoundPath);
+        //}
+        //else
+        //{
+        //    enumerator.Reset();
+        //    Main.NewText("Over!");
+        //}
+        if (!ScreenShaderManager.Instance["Test"].active)
         {
-            SoundEngine.PlaySound(enumerator.Current, player.Center);
-            Main.NewText(enumerator.Current.SoundPath);
+            ScreenShaderManager.Activate("Test");
         }
         else
         {
-            enumerator.Reset();
-            Main.NewText("Over!");
+            ScreenShaderManager.Deactivate("Test");
         }
+
         return true;
     }
     public override void AddRecipes()
