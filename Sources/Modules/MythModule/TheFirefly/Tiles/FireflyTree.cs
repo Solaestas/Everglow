@@ -1,3 +1,4 @@
+using Everglow.Sources.Commons.Function.Curves;
 using Everglow.Sources.Commons.Function.ImageReader;
 using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Physics;
@@ -172,7 +173,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                         massPositions.Add(massJ.position);
                     }
                     List<Vector2> massPositionsSmooth = new List<Vector2>();
-                    massPositionsSmooth = Commons.Function.BezierCurve.Bezier.SmoothPath(massPositions);
+                    massPositionsSmooth = CatmullRom.SmoothPath(massPositions);
                     if (massPositionsSmooth.Count > 0)
                     {
                         //DrawRope(massPositionsSmooth, RopPosFir[k] + RopOffset, Vertices);
