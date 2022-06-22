@@ -1,7 +1,9 @@
 ﻿using Everglow.Sources.Commons.Core.ModuleSystem;
 using Everglow.Sources.Commons.Core.UI;
+using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds;
 using Everglow.Sources.Modules.MythModule.TheFirefly.UI;
+using Everglow.Sources.Modules.MythModule.TheTusk.Configs;
 using MonoMod.Cil;
 using ReLogic.Content;
 using System;
@@ -18,9 +20,11 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
     {
         private Asset<Effect> m_boxKernelEffect;
         private Asset<Effect> m_gaussianKernelEffect;
-        private Asset<Effect> m_fogEffect;
+        private Asset<Effect> m_fogScreenEffect;
 
-        private RenderTarget2D[] m_progressiveRenderTarget;
+        private RenderTarget2D[] m_downSampleRenderTargets;
+        private RenderTarget2D[] m_upSampleRenderTargets;
+
         private RenderTarget2D m_renderTargetSwap;
         private RenderTarget2D m_filteredScreenTarget;
         private Color[] m_lightMap;
@@ -34,6 +38,12 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
         private int m_tileWidth, m_tileHeight;
         private bool m_shouldResetRenderTargets;
         private bool m_enableGaussian, m_enableProgressiveUpSampling;
+
+        private readonly int MAX_DOWNSAMPLE_LEVEL = 4;
+        private readonly int MAX_UPSAMPLE_LEVEL = 4;
+
+        private int m_maxDownsampleLevels;
+        private int m_maxUpsampleLevels;
 
         //private Effect _bloomThreasholdFilter;
         //private Effect _luminanceFilter;
@@ -107,94 +117,96 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
         {
             m_screenWidth = 0;
             m_screenHeight = 0;
+
+            m_boxKernelEffect = MythContent.QuickEffectAsset("Effects/BoxFilter");
+            m_gaussianKernelEffect = MythContent.QuickEffectAsset("Effects/GBlur");
+            m_fogScreenEffect = MythContent.QuickEffectAsset("Effects/Fog");
+
+            m_downSampleRenderTargets = new RenderTarget2D[MAX_DOWNSAMPLE_LEVEL];
+            m_upSampleRenderTargets = new RenderTarget2D[MAX_UPSAMPLE_LEVEL];
+            m_shouldResetRenderTargets = true;
         }
 
-        public override void Preprocess()
+        public void Preprocess()
         {
-            _boxFilter = TeaNPC.ShaderManager.Get("BoxFilter");
-            //_luminanceFilter = TeaNPC.ShaderManager.Get("Luminance");
-            //_bloomThreasholdFilter = TeaNPC.ShaderManager.Get("Threashold");
-            _gaussianBlurFilter = TeaNPC.ShaderManager.Get("GBlur");
-            _fogEffect = TeaNPC.ShaderManager.Get("Fog");
-            _samplingRenderTargets = new RenderTarget2D[12];
-            _shouldResetRenderTargets = true;
+
             UpdateParameters();
         }
 
         private void UpdateParameters()
         {
-            //_enable = TeaNPC.BloomConfigs.EnableBloom;
 
-            //_bloomIntensity = TeaNPC.FogConfigs.BloomIntensity;
+            var fogConfig = ModContent.GetInstance<FogConfigs>();
 
-            _shouldResetRenderTargets = (_bloomRadius != TeaNPC.FogConfigs.BloomRadius);
-            _bloomRadius = TeaNPC.FogConfigs.BloomRadius;
+            BloomRadius = fogConfig.MaxBloomRadius;
 
-            //_shouldResetRenderTargets |= (_adaptiveLuminanceBlockSize != TeaNPC.FogConfigs.AdaptiveBrightnessSize);
-            //_adaptiveLuminanceBlockSize = TeaNPC.FogConfigs.AdaptiveBrightnessSize;
+            m_shouldResetRenderTargets |= (m_offscreenTilesSize != fogConfig.OffscreenTiles);
+            m_offscreenTilesSize = fogConfig.OffscreenTiles;
 
-            _shouldResetRenderTargets |= (_offscreenTilesSize != TeaNPC.FogConfigs.OffscreenTiles);
-            _offscreenTilesSize = TeaNPC.FogConfigs.OffscreenTiles;
-
-
-            _enableGaussian = TeaNPC.FogConfigs.GaussianKernel;
-            _enableProgressiveUpSampling = TeaNPC.FogConfigs.EnableProgressiveUpSampling;
-
-            //_luminTheashold = TeaNPC.FogConfigs.LightLuminanceThreashold;
+            Enable = fogConfig.GaussianKernel;
+            m_enableProgressiveUpSampling = fogConfig.EnableProgressiveUpSampling;
         }
 
         private void ResetLightMap()
         {
-            _tileWidth = Main.screenWidth / 16 + _offscreenTilesSize * 2 + 10;
-            _tileHeight = Main.screenHeight / 16 + _offscreenTilesSize * 2 + 10;
-            _lightMap = new Color[_tileWidth * _tileHeight];
-            _lightTexture = new Texture2D(GraphicsDevice, _tileWidth, _tileHeight);
+            m_tileWidth = Main.screenWidth / 16 + m_offscreenTilesSize * 2 + 2;
+            m_tileHeight = Main.screenHeight / 16 + m_offscreenTilesSize * 2 + 2;
+            m_lightMap = new Color[m_tileWidth * m_tileHeight];
+            m_lightTexture = new Texture2D(Main.graphics.GraphicsDevice, m_tileWidth, m_tileHeight, false,
+                SurfaceFormat.Rgba1010102);
         }
 
         private void ExtractLightMap()
         {
-            int rows = _lightTexture.Height;
-            int cols = _lightTexture.Width;
-            for (int i = 0; i < rows; i++)
+            int rows = m_lightTexture.Height;
+            int cols = m_lightTexture.Width;
+
+            Parallel.For(0, rows, i =>
             {
                 for (int j = 0; j < cols; j++)
                 {
-                    _lightMap[i * cols + j] = Color.Transparent;
+                    m_lightMap[i * cols + j] = Color.Transparent;
                 }
-            }
-            int startTileX = Math.Max(0, (int)(Main.screenPosition.X / 16) - _offscreenTilesSize);
-            int endTileX = Math.Min(Main.maxTilesX - 1,
-                (int)((Main.screenPosition.X + Main.screenWidth) / 16) + _offscreenTilesSize);
-            int startTileY = Math.Max(0, (int)(Main.screenPosition.Y / 16) - _offscreenTilesSize);
-            int endTileY = Math.Min(Main.maxTilesY - 1,
-                (int)((Main.screenPosition.Y + Main.screenHeight) / 16) + _offscreenTilesSize);
+            });
 
-            for (int j = startTileY; j <= endTileY; j++)
+            int startTileX = Math.Max(0, (int)(Main.screenPosition.X / 16) - m_offscreenTilesSize);
+            int endTileX = Math.Min(Main.maxTilesX - 1,
+                (int)((Main.screenPosition.X + Main.screenWidth) / 16) + m_offscreenTilesSize);
+            int startTileY = Math.Max(0, (int)(Main.screenPosition.Y / 16) - m_offscreenTilesSize);
+            int endTileY = Math.Min(Main.maxTilesY - 1,
+                (int)((Main.screenPosition.Y + Main.screenHeight) / 16) + m_offscreenTilesSize);
+
+
+            int offX = (int)(Main.screenPosition.X / 16);
+            int offY = (int)(Main.screenPosition.Y / 16);
+
+            Parallel.For(startTileY, endTileY, i =>
             {
-                for (int i = startTileX; i <= endTileX; i++)
+                for (int j = startTileX; j <= endTileX; j++)
                 {
-                    int x = i - (int)(Main.screenPosition.X / 16) + _offscreenTilesSize + 2;
-                    int y = j - (int)(Main.screenPosition.Y / 16) + _offscreenTilesSize + 2;
+                    int x = j - offX + m_offscreenTilesSize + 2;
+                    int y = i - offY + m_offscreenTilesSize + 2;
                     var color = Lighting.GetColor(i, j);
 
                     var s = color.ToVector3();
                     if ((s.X + s.Y + s.Z) * 0.333f > LuminanceThreashold)
                     {
-                        _lightMap[y * cols + x] = color;
+                        m_lightMap[y * cols + x] = color;
                     }
                 }
-            }
-            _lightTexture.SetData(_lightMap);
+            });
+
+            m_lightTexture.SetData(m_lightMap);
         }
 
-        public override void Apply(RenderTarget2D screenTarget)
+        public void Apply(RenderTarget2D screenTarget)
         {
             UpdateParameters();
             if (!Enable)
                 return;
 
-            if (_screenWidth != Main.screenWidth || _screenHeight != Main.screenHeight
-                || _shouldResetRenderTargets)
+            if (m_screenWidth != Main.screenWidth || m_screenHeight != Main.screenHeight
+                || m_shouldResetRenderTargets)
             {
                 //int sz = 256;
                 //while (sz < Math.Max(Main.screenWidth, Main.screenHeight))
@@ -202,137 +214,45 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
                 //    sz *= 2;
                 //}
                 ResetLightMap();
-                _frameWidth = _tileWidth * 16;
-                _frameHeight = _tileHeight * 16;
-                int factor = 1;
-                int maxSz = _bloomRadius;
-                for (int j = 0; j <= maxSz; j++)
-                {
-                    _samplingRenderTargets[j] = new RenderTarget2D(Main.graphics.GraphicsDevice,
-                        _frameWidth / factor, _frameHeight / factor, false,
-                        SurfaceFormat.Rgba1010102, DepthFormat.None);
-                    factor <<= 1;
-                }
-                _renderTargetSwap = new RenderTarget2D(Main.graphics.GraphicsDevice,
-                        _frameWidth / (1 << _bloomRadius), _frameHeight / (1 << _bloomRadius), false, SurfaceFormat.Rgba1010102, DepthFormat.None);
-                _filteredScreenTarget = new RenderTarget2D(Main.graphics.GraphicsDevice,
-                        Main.screenWidth, Main.screenHeight,
-                        false, SurfaceFormat.Rgba1010102, DepthFormat.None);
-                _screenWidth = Main.screenWidth;
-                _screenHeight = Main.screenHeight;
+                m_frameWidth = m_tileWidth * 16;
+                m_frameHeight = m_tileHeight * 16;
 
-                _shouldResetRenderTargets = false;
+                int l = 0;
+                for (; l < MAX_DOWNSAMPLE_LEVEL; l++)
+                {
+                    if ((m_tileWidth >> l) == 0 || (m_tileHeight >> l) == 0)
+                    {
+                        break;
+                    }
+                    m_downSampleRenderTargets[l] = new RenderTarget2D(Main.graphics.GraphicsDevice,
+                            m_tileWidth >> l, m_tileHeight >> l, false,
+                            SurfaceFormat.Rgba1010102, DepthFormat.None);
+                }
+                m_maxDownsampleLevels = l;
+
+                for (int i = 0; i < MAX_UPSAMPLE_LEVEL; i++)
+                {
+                    m_upSampleRenderTargets[l] = new RenderTarget2D(Main.graphics.GraphicsDevice,
+                            m_tileWidth << l, m_tileHeight << l, false,
+                            SurfaceFormat.Rgba1010102, DepthFormat.None);
+                }
+
+                int maxKernel = m_maxDownsampleLevels - 1;
+                m_renderTargetSwap = new RenderTarget2D(Main.graphics.GraphicsDevice,
+                        m_tileWidth >> maxKernel, m_tileHeight >> maxKernel,
+                        false, SurfaceFormat.Rgba1010102, DepthFormat.None);
+                //_filteredScreenTarget = new RenderTarget2D(Main.graphics.GraphicsDevice,
+                //        Main.screenWidth, Main.screenHeight,
+                //        false, SurfaceFormat.Rgba1010102, DepthFormat.None);
+                m_screenWidth = Main.screenWidth;
+                m_screenHeight = Main.screenHeight;
+
+                m_shouldResetRenderTargets = false;
             }
 
             ExtractLightMap();
 
-            var spriteBatch = Main.spriteBatch;
-
-            GraphicsDevice.SetRenderTarget(_samplingRenderTargets[0]);
-            GraphicsDevice.Clear(Color.Transparent);
-            spriteBatch.Begin(SpriteSortMode.Immediate,
-                    BlendState.Opaque,
-                    SamplerState.PointClamp,
-                    DepthStencilState.Default,
-                    RasterizerState.CullNone, null);
-            spriteBatch.TeaNPCDraw(_lightTexture, new Rectangle(0, 0, _frameWidth, _frameHeight),
-                Color.White);
-            spriteBatch.End();
-
-
-            // Downsampling
-            for (int i = 0; i < _bloomRadius; i++)
-            {
-                int block = 1 << (i + 1);
-                int curWidth = _frameWidth / block;
-                int curHeight = _frameHeight / block;
-                Main.graphics.GraphicsDevice.SetRenderTarget(_samplingRenderTargets[i + 1]);
-                Main.graphics.GraphicsDevice.Clear(Color.Transparent);
-                spriteBatch.Begin(SpriteSortMode.Immediate,
-                    BlendState.Opaque,
-                    SamplerState.AnisotropicClamp,
-                    DepthStencilState.Default,
-                    RasterizerState.CullNone, null);
-                _boxFilter.Parameters["uImageSize0"].SetValue(_samplingRenderTargets[i].Size());
-                _boxFilter.Parameters["uDelta"].SetValue(1.0f);
-                _boxFilter.CurrentTechnique.Passes[0].Apply();
-                spriteBatch.TeaNPCDraw(_samplingRenderTargets[i], new Rectangle(0, 0, curWidth, curHeight),
-                    Color.White);
-                spriteBatch.End();
-            }
-
-            if (_enableGaussian)
-            {
-                _gaussianBlurFilter.Parameters["uImageSize0"].SetValue(_samplingRenderTargets[_bloomRadius].Size());
-                _gaussianBlurFilter.Parameters["uDelta"].SetValue(1.0f);
-                // Blur
-                Main.graphics.GraphicsDevice.SetRenderTarget(_renderTargetSwap);
-                Main.graphics.GraphicsDevice.Clear(Color.Transparent);
-                spriteBatch.Begin(SpriteSortMode.Immediate,
-                    BlendState.Opaque,
-                    SamplerState.AnisotropicClamp,
-                    DepthStencilState.Default,
-                    RasterizerState.CullNone, null);
-                _gaussianBlurFilter.Parameters["uHorizontal"].SetValue(true);
-                _gaussianBlurFilter.CurrentTechnique.Passes[0].Apply();
-                spriteBatch.TeaNPCDraw(_samplingRenderTargets[_bloomRadius], Vector2.Zero,
-                    Color.White);
-                spriteBatch.End();
-
-                Main.graphics.GraphicsDevice.SetRenderTarget(_samplingRenderTargets[_bloomRadius]);
-                Main.graphics.GraphicsDevice.Clear(Color.Transparent);
-                spriteBatch.Begin(SpriteSortMode.Immediate,
-                    BlendState.Opaque,
-                    SamplerState.AnisotropicClamp,
-                    DepthStencilState.Default,
-                    RasterizerState.CullNone, null);
-                _gaussianBlurFilter.Parameters["uHorizontal"].SetValue(false);
-                _gaussianBlurFilter.CurrentTechnique.Passes[0].Apply();
-                spriteBatch.TeaNPCDraw(_renderTargetSwap, Vector2.Zero,
-                    Color.White);
-                spriteBatch.End();
-
-            }
-
-            // Upsampling
-            if (_enableProgressiveUpSampling)
-            {
-                for (int i = _bloomRadius; i > 0; i--)
-                {
-                    int block = 1 << (i - 1);
-                    int curWidth = _frameWidth / block;
-                    int curHeight = _frameHeight / block;
-                    Main.graphics.GraphicsDevice.SetRenderTarget(_samplingRenderTargets[i - 1]);
-                    Main.graphics.GraphicsDevice.Clear(Color.Transparent);
-                    spriteBatch.Begin(SpriteSortMode.Immediate,
-                        BlendState.Opaque,
-                        SamplerState.AnisotropicClamp,
-                        DepthStencilState.Default,
-                        RasterizerState.CullNone, null);
-                    _boxFilter.Parameters["uImageSize0"].SetValue(_samplingRenderTargets[i].Size());
-                    _boxFilter.Parameters["uDelta"].SetValue(1.0f);
-                    _boxFilter.CurrentTechnique.Passes[0].Apply();
-                    spriteBatch.TeaNPCDraw(_samplingRenderTargets[i], new Rectangle(0, 0, curWidth, curHeight),
-                        Color.White);
-                    spriteBatch.End();
-                }
-            }
-            else
-            {
-                if (_bloomRadius != 0)
-                {
-                    Main.graphics.GraphicsDevice.SetRenderTarget(_samplingRenderTargets[0]);
-                    Main.graphics.GraphicsDevice.Clear(Color.Transparent);
-                    spriteBatch.Begin(SpriteSortMode.Immediate,
-                        BlendState.Opaque,
-                        SamplerState.AnisotropicClamp,
-                        DepthStencilState.Default,
-                        RasterizerState.CullNone, null);
-                    spriteBatch.TeaNPCDraw(_samplingRenderTargets[_bloomRadius], new Rectangle(0, 0, _frameWidth, _frameHeight),
-                        Color.White);
-                    spriteBatch.End();
-                }
-            }
+            Generate(2, 4);
 
             int x = (int)(Main.screenPosition.X / 16) - _offscreenTilesSize - 2;
             x *= 16;
@@ -384,9 +304,109 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
             spriteBatch.End();
         }
 
-        public override bool IsActive()
+        private void Generate(int down, int up)
         {
-            return true;
+            var spriteBatch = Main.spriteBatch;
+            var graphicsDevice = Main.graphics.GraphicsDevice;
+
+            graphicsDevice.SetRenderTarget(m_downSampleRenderTargets[0]);
+            graphicsDevice.Clear(Color.Transparent);
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque,
+                    SamplerState.PointClamp,
+                    DepthStencilState.None,
+                    RasterizerState.CullNone, null);
+            spriteBatch.Draw(m_lightTexture, Vector2.Zero, Color.White);
+            spriteBatch.End();
+
+            var filterBox = m_boxKernelEffect.Value;
+
+            int downLevels = Math.Min(m_maxDownsampleLevels, down);
+
+            // Downsampling
+            for (int i = 1; i < downLevels; i++)
+            {
+                int curWidth = m_tileWidth >> i;
+                int curHeight = m_tileHeight >> i;
+                Main.graphics.GraphicsDevice.SetRenderTarget(m_downSampleRenderTargets[i]);
+                Main.graphics.GraphicsDevice.Clear(Color.Transparent);
+                spriteBatch.Begin(SpriteSortMode.Immediate,
+                    BlendState.Opaque,
+                    SamplerState.AnisotropicClamp,
+                    DepthStencilState.None,
+                    RasterizerState.CullNone, null);
+                filterBox.Parameters["uImageSize0"].SetValue(m_downSampleRenderTargets[i - 1].Size());
+                filterBox.Parameters["uDelta"].SetValue(1.0f);
+                filterBox.CurrentTechnique.Passes[0].Apply();
+                spriteBatch.Draw(m_downSampleRenderTargets[i - 1], new Rectangle(0, 0, curWidth, curHeight),
+                    Color.White);
+                spriteBatch.End();
+            }
+
+            ApplyGaussian();
+
+            // Upsampling
+            for (int i = downLevels; i > 0; i--)
+            {
+                int curWidth = m_tileWidth >> (i - 1);
+                int curHeight = m_tileHeight >> (i - 1);
+                Main.graphics.GraphicsDevice.SetRenderTarget(m_downSampleRenderTargets[i + 1]);
+                Main.graphics.GraphicsDevice.Clear(Color.Transparent);
+                spriteBatch.Begin(SpriteSortMode.Immediate,
+                    BlendState.Opaque,
+                    SamplerState.AnisotropicClamp,
+                    DepthStencilState.Default,
+                    RasterizerState.CullNone, null);
+                filterBox.Parameters["uImageSize0"].SetValue(m_downSampleRenderTargets[i].Size());
+                filterBox.Parameters["uDelta"].SetValue(1.0f);
+                filterBox.CurrentTechnique.Passes[0].Apply();
+                spriteBatch.Draw(m_downSampleRenderTargets[i], new Rectangle(0, 0, curWidth, curHeight),
+                    Color.White);
+                spriteBatch.End();
+            }
         }
+
+        private void ApplyGaussian()
+        {
+            if (m_enableGaussian)
+            {
+                var gaussianFilter = m_gaussianKernelEffect.Value;
+                var spriteBatch = Main.spriteBatch;
+                var graphicsDevice = Main.graphics.GraphicsDevice;
+
+                var target = m_downSampleRenderTargets[m_maxDownsampleLevels - 1];
+
+                gaussianFilter.Parameters["uImageSize0"].SetValue(target.Size());
+                gaussianFilter.Parameters["uDelta"].SetValue(1.0f);
+
+                // Blur
+                graphicsDevice.SetRenderTarget(m_renderTargetSwap);
+                graphicsDevice.Clear(Color.Transparent);
+                spriteBatch.Begin(SpriteSortMode.Immediate,
+                    BlendState.Opaque,
+                    SamplerState.AnisotropicClamp,
+                    DepthStencilState.Default,
+                    RasterizerState.CullNone, null);
+                gaussianFilter.Parameters["uHorizontal"].SetValue(true);
+                gaussianFilter.CurrentTechnique.Passes[0].Apply();
+                spriteBatch.Draw(target, Vector2.Zero,
+                    Color.White);
+                spriteBatch.End();
+
+                graphicsDevice.SetRenderTarget(target);
+                graphicsDevice.Clear(Color.Transparent);
+                spriteBatch.Begin(SpriteSortMode.Immediate,
+                    BlendState.Opaque,
+                    SamplerState.AnisotropicClamp,
+                    DepthStencilState.Default,
+                    RasterizerState.CullNone, null);
+                gaussianFilter.Parameters["uHorizontal"].SetValue(false);
+                gaussianFilter.CurrentTechnique.Passes[0].Apply();
+                spriteBatch.Draw(m_renderTargetSwap, Vector2.Zero,
+                    Color.White);
+                spriteBatch.End();
+            }
+        }
+
+
     }
 }

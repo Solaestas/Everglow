@@ -1,4 +1,5 @@
-﻿using Terraria.GameContent;
+﻿using ReLogic.Content;
+using Terraria.GameContent;
 
 namespace Everglow.Sources.Modules.MythModule.Common
 {
@@ -21,6 +22,16 @@ namespace Everglow.Sources.Modules.MythModule.Common
         public static Effect QuickEffect(string path)
         {
             return ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/" + path, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+        }
+
+        /// <summary>
+        /// 对于神话模块专用的获取特效封装
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static Asset<Effect> QuickEffectAsset(string path)
+        {
+            return ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/" + path);
         }
         /// <summary>
         /// 对于神话模块专用的获取音乐封装

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria.ModLoader.Config;
 
-namespace Everglow.Sources.Modules.MythModule.Common.Configs
+namespace Everglow.Sources.Modules.MythModule.TheTusk.Configs
 {
     /// <summary>
     /// 用于给美术调节雾效最终效果
@@ -24,7 +24,7 @@ namespace Everglow.Sources.Modules.MythModule.Common.Configs
         [Range(0, 10)]
         [Label("Bloom Radius")]
         [Tooltip("光效的最大溢出半径，最终半径是以2为底的指数，越大越影响性能")]
-        public int BloomRadius;
+        public int MaxBloomRadius;
 
         [DefaultValue(0.7f)]
         [Range(0, 5.0f)]
