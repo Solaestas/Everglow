@@ -672,8 +672,6 @@ namespace Everglow.Sources.Modules.FoodModule
             if (m_vanillaFoodInfos.ContainsKey(item.type))
             {
                 var FoodInfo = m_vanillaFoodInfos[item.type];
-                item.buffType = ModContent.BuffType<FoodBuff>();
-                item.buffTime = FoodInfo.BuffTime.TotalFrames;
             }
             base.SetDefaults(item);
         }
