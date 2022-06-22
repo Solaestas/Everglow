@@ -394,7 +394,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 ropes = ropeManager.LoadRope("Everglow/Sources/Modules/MythModule/TheFirefly/Backgrounds/TreeRope",
                     null,
                     new Vector2(mothLand.fireflyCenterX * 16, mothLand.fireflyCenterY * 16),
-                    () => GetRopeMove(new Vector2(800, 600), 0.33f));
+                    () => GetRopeMove(new Vector2(800, 600), 0.33f * 2));//我也不知道为什么要 * 2反正 * 2就对了
             }
 
             var texSky = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflySky");
@@ -427,37 +427,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             Main.spriteBatch.Draw(texClose, Vector2.Zero, rvc, GetLuminace(color0));
  
             Main.spriteBatch.End();
-            //Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null);
-            ////InitMass_Spring();
-            //float gravity = 1.0f;
-            //List<Vertex2D> Vertices = new List<Vertex2D>();
-            //for (int i = 0; i < RopPosFir.Count; i++)
-            //{
-            //    masses[i][0].position = Vector2.Zero;
-            //    float deltaTime = 1;
-            //    foreach (var spring in springs[i])
-            //    {
-            //        spring.ApplyForce(deltaTime);
-            //    }
-            //    List<Vector2> massPositions = new List<Vector2>();
-            //    foreach (var massJ in masses[i])
-            //    {
-            //        massJ.Update(deltaTime);
-            //        massPositions.Add(massJ.position);
-            //    }
-            //    List<Vector2> massPositionsSmooth = new List<Vector2>();
-            //    massPositionsSmooth = Commons.Function.Curves.CatmullRom.SmoothPath(massPositions);
-            //    if (massPositionsSmooth.Count > 0)
-            //    {
-            //        DrawRope(massPositionsSmooth, RopPosFir[i] + RopOffset, Vertices);
-            //    }
-            //}
-            //if (Vertices.Count > 2)
-            //{
-            //    Main.graphics.GraphicsDevice.Textures[0] = TextureAssets.MagicPixel.Value;
-            //    Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, Vertices.ToArray(), 0, Vertices.Count - 2);
-            //}
-            //Main.spriteBatch.End();
             ropeManager.Draw();
 
             Vector2 offset = ropes[0].GetOffset();
@@ -499,7 +468,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             if (CloseII.Count > 2)
             {
                 Main.graphics.GraphicsDevice.Textures[0] = texCloseII;
-                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, CloseII.ToArray(), 0, CloseII.Count - 2);
+                //Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, CloseII.ToArray(), 0, CloseII.Count - 2);
             }
 
             Main.spriteBatch.End();
@@ -543,7 +512,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             Vector2 deltaPos = ScreenCenter - new Vector2(mothLand.fireflyCenterX * 16f, mothLand.fireflyCenterY * 16f);
             deltaPos *= move;
             Vector2 TexLT = sampleCenter - screenSize / 2f + deltaPos;
-            return TexLT;
+            return TexLT + new Vector2(-147, 286);
         }
 
         ///// <summary>

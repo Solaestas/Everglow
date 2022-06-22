@@ -57,7 +57,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
             {
                 for (int j = 0; j < rect.Height; j++)
                 {
-                    var span = accessor.GetRowSpan(j + rect.X);
+                    var span = accessor.GetRowSpan(j + rect.Y);
                     for (int i = 0; i < rect.Width; i++)
                     {
                         var pixel = span[i + rect.X];
@@ -99,7 +99,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
             foreach (var rope in ropes)
             {
                 Vector2 offset = rope.GetOffset();
-                List<Vector2> massPositionsSmooth = Commons.Function.Curves.CatmullRom.SmoothPath(rope.mass.Select(m => m.position + offset));
+                List<Vector2> massPositionsSmooth = Commons.Function.Curves.CatmullRom.SmoothPath(rope.mass.Select(m => m.position + offset), 4);
                 DrawRope(massPositionsSmooth, vertices, indices);
             }
             sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null,
