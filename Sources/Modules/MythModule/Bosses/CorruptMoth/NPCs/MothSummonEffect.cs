@@ -4,6 +4,13 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
 {
     public class MothSummonEffect : ModNPC
     {
+        private bool Start = false;
+        private Vector2 Cent;
+        private Vector2 Acc;
+        private float Ome = 0;
+        private float kx = 1;
+        private int AimN = -1;
+        private Effect ef;
         public override string Texture => "Terraria/Images/NPC_0";
         public override void SetStaticDefaults()
         {
@@ -29,16 +36,14 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             NPCID.Sets.TrailingMode[NPC.type] = 0;
             NPCID.Sets.TrailCacheLength[NPC.type] = 40;
         }
-        bool Start = false;
-        Vector2 Cent;
-        Vector2 Acc;
-        float Ome = 0;
-        float kx = 1;
-        int AimN = -1;
+
         public override void AI()
         {
             if (++NPC.ai[0] > 180)
+            {
                 NPC.active = false;
+            }
+
             if (!Start)
             {
                 NPC.velocity = new Vector2(Main.rand.NextFloat(0, 10f), 0).RotatedByRandom(6.28);
@@ -111,19 +116,20 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
         {
             return false;
         }
-        private Effect ef;
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-            List<VertexBase.Vertex2D> bars = new List<VertexBase.Vertex2D>();
+            List<Vertex2D> bars = new List<Vertex2D>();
             ef = Common.MythContent.QuickEffect("Effects/Trail");
-            Vector2 v = Cent - NPC.Center;
             int width = (int)(2 * kx);
             for (int i = 1; i < NPC.oldPos.Length - 1; ++i)
             {
                 if (NPC.oldPos[i] == Vector2.Zero)
+                {
                     break;
+                }
+
                 var normalDir = NPC.oldPos[i - 1] - NPC.oldPos[i];
                 normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
 
@@ -132,18 +138,18 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
 
                 var w = MathHelper.Lerp(1f, 0.05f, factor);
 
-                bars.Add(new VertexBase.Vertex2D(NPC.oldPos[i] + normalDir * width + new Vector2(4, 35), color, new Vector3((float)Math.Sqrt(factor), 1, w)));
-                bars.Add(new VertexBase.Vertex2D(NPC.oldPos[i] + normalDir * -width + new Vector2(4, 35), color, new Vector3((float)Math.Sqrt(factor), 0, w)));
+                bars.Add(new Vertex2D(NPC.oldPos[i] + normalDir * width + new Vector2(4, 35), color, new Vector3((float)Math.Sqrt(factor), 1, w)));
+                bars.Add(new Vertex2D(NPC.oldPos[i] + normalDir * -width + new Vector2(4, 35), color, new Vector3((float)Math.Sqrt(factor), 0, w)));
             }
 
-            List<VertexBase.Vertex2D> triangleList = new List<VertexBase.Vertex2D>();
+            List<Vertex2D> triangleList = new List<Vertex2D>();
 
 
 
             if (bars.Count > 2)
             {
                 triangleList.Add(bars[0]);
-                var vertex = new VertexBase.Vertex2D((bars[0].Position + bars[1].Position) * 0.5f + Vector2.Normalize(NPC.velocity) * 5, Color.White, new Vector3(0, 0.5f, 1));
+                var vertex = new Vertex2D((bars[0].position + bars[1].position) * 0.5f + Vector2.Normalize(NPC.velocity) * 5, Color.White, new Vector3(0, 0.5f, 1));
                 triangleList.Add(bars[1]);
                 triangleList.Add(vertex);
                 for (int i = 0; i < bars.Count - 2; i += 2)

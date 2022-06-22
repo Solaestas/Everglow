@@ -25,10 +25,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 60;
         }
-        private bool initialization = true;
-        private double X;
-        private float Omega;
-        private float b;
         public override void AI()
         {
             Projectile.velocity = Projectile.velocity.RotatedBy(5f / Projectile.timeLeft * Projectile.ai[0] + Math.Sin(Main.time / 10f) * 0.17f);
@@ -38,13 +34,12 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
         {
             return new Color?(new Color(0, 0, 0, 0));
         }
-        private Effect ef;
         private int TrueL = 1;
         public override void PostDraw(Color lightColor)
         {
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            List<VertexBase.Vertex2D> bars = new List<VertexBase.Vertex2D>();
+            List<Vertex2D> bars = new List<Vertex2D>();
             float width = 2;
             if (Projectile.timeLeft < 60)
             {
@@ -72,14 +67,14 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
                 var factor = 1f;
                 factor = i / (float)TrueL;
                 var w = MathHelper.Lerp(1f, 0.05f, factor);
-                bars.Add(new VertexBase.Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(1f, 1f) - Main.screenPosition, Color.White, new Vector3(factor, 1, w)));
-                bars.Add(new VertexBase.Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(1f, 1f) - Main.screenPosition, Color.White, new Vector3(factor, 0, w)));
+                bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(1f, 1f) - Main.screenPosition, Color.White, new Vector3(factor, 1, w)));
+                bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(1f, 1f) - Main.screenPosition, Color.White, new Vector3(factor, 0, w)));
             }
-            List<VertexBase.Vertex2D> Vx = new List<VertexBase.Vertex2D>();
+            List<Vertex2D> Vx = new List<Vertex2D>();
             if (bars.Count > 2)
             {
                 Vx.Add(bars[0]);
-                var vertex = new VertexBase.Vertex2D((bars[0].Position + bars[1].Position) * 0.5f + Vector2.Normalize(Projectile.velocity), Color.White, new Vector3(0, 0.5f, 1));
+                var vertex = new Vertex2D((bars[0].position + bars[1].position) * 0.5f + Vector2.Normalize(Projectile.velocity), Color.White, new Vector3(0, 0.5f, 1));
                 Vx.Add(bars[1]);
                 Vx.Add(vertex);
                 for (int i = 0; i < bars.Count - 2; i += 2)
@@ -95,8 +90,10 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
             }
             Texture2D t = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/MothGreyLine");
             Main.graphics.GraphicsDevice.Textures[0] = t;
-            if(Vx.Count>3)
-                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
+            if (Vx.Count > 3)
+            {
+                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
+            }
         }
     }
 }
