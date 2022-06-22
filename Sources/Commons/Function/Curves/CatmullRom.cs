@@ -37,14 +37,14 @@ public static class CatmullRom
             // 根据当前和下一个节点所代表的向量的旋转差异来增加采样数量
             // 如果旋转差异越大，采样数量就越大
             float dis = Math.Abs(rotCurrent - rotNext);
-            int dom = (int)((dis >= MathHelper.Pi ? MathHelper.TwoPi - dis : dis) / 0.22f + 3);
+            int dom = (int)((dis >= MathHelper.Pi ? MathHelper.TwoPi - dis : dis) / 0.22f + 2);
             float factor = 1.0f / dom;
             for (float j = 0; j < 1.0f; j += factor)
             {
                 result.Add(Vector2.CatmullRom(path[i - 1], path[i], path[i + 1], path[i + 2], j));
             }
         }
-        result.Add(path[count - 1]);
+        result.Add(path[^2]);
         return result;
 
     }
