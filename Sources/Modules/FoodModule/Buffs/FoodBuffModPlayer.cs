@@ -89,7 +89,7 @@
                 Player.NinjaDodge();
             }
         }
-        public override void PostUpdateBuffs()
+        public override void PostUpdateMiscEffects()
         {
             if (RoastedBirdBuff)
             {
@@ -100,6 +100,17 @@
                 Player.wingTimeMax = (int)(Player.wingTimeMax * WingTimeModifier);
             }
         }
+       /* public override void PostUpdateBuffs()
+        {
+            if (RoastedBirdBuff)
+            {
+                Player.wingTimeMax = (int)(Player.wingTimeMax * WingTimeModifier);
+            }
+            if (RoastedDuckBuff)
+            {
+                Player.wingTimeMax = (int)(Player.wingTimeMax * WingTimeModifier);
+            }
+        }*/
 
         public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
         {
