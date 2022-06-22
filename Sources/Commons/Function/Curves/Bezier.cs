@@ -1,8 +1,9 @@
-﻿using Terraria.GameContent;
-namespace Everglow.Sources.Commons.Function.BezierCurve
+﻿
+using Terraria.GameContent;
+namespace Everglow.Sources.Commons.Function.Curves;
+
+public class Bezier
 {
-    public class Bezier
-    {
     /// <summary>
     /// 根据输入点的List获得贝塞尔曲线
     /// </summary>
@@ -32,7 +33,7 @@ namespace Everglow.Sources.Commons.Function.BezierCurve
                         List<Vector2> Line = new List<Vector2>();
                         for (int x = 0; x < aimCount; x++)
                         {
-                                float t = (x + 0.5f) / (float)aimCount;
+                            float t = (x + 0.5f) / aimCount;
                             Line.Add(OrigLine[0] * (1 - t) + OrigLine[1] * t);
                         }
                         return Line;//2长度传入,返回1阶贝塞尔曲线(直线)
@@ -42,7 +43,7 @@ namespace Everglow.Sources.Commons.Function.BezierCurve
                         List<Vector2> Line = new List<Vector2>();
                         for (int x = 0; x < aimCount; x++)
                         {
-                                float t = (x + 0.5f) / (float)aimCount;
+                            float t = (x + 0.5f) / aimCount;
                             Line.Add(OrigLine[0] * (1 - t * t) + OrigLine[1] * (2 * t) * (1 - t) + OrigLine[2] * t * t);
                         }
                         return Line;//3长度传入,返回2阶贝塞尔曲线
@@ -58,7 +59,7 @@ namespace Everglow.Sources.Commons.Function.BezierCurve
             for (int x = 0; x < aimCount; x++)
             {
                 float amo = x / TrueCount * OrigCount / 4f;//进度插值
-                    int Addx = (int)(Math.Clamp(x / TrueCount * OrigCount, 0, OrigCount - 4));//换点增量
+                int Addx = (int)Math.Clamp(x / TrueCount * OrigCount, 0, OrigCount - 4);//换点增量
                 float Tamo = amo % 1f;//插值处理，这里不是很理解
                 if (Addx >= OrigCount - 7)
                 {
@@ -73,5 +74,4 @@ namespace Everglow.Sources.Commons.Function.BezierCurve
     }
 
 
-}
 }
