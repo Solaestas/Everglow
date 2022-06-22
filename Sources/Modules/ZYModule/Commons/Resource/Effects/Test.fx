@@ -55,7 +55,6 @@ float4 PixelShaderFunction(float2 texCoord : TEXCOORD0) : COLOR0
     float3 hitColor = float3(0, 1, 0) * smoothstep(_HIT_MAX_ * t1 * intensity, 0, len) + float3(1, 1, 1) * smoothstep(_HIT_MAX_ * t1 * 0.4 * intensity, 0, len);
     //float3 lightColor = tex2D(uColorBarSampler, float2(intensity * (smoothstep(0.45, 0.5, texCoord.x) - smoothstep(0.5, 0.55, texCoord.x)), 0)) * step(texCoord.y, 0.5);
     return float4(color.rgb + hitColor, 1);
-    //return color;
 }
 
 technique Technique1

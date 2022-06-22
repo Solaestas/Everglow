@@ -53,6 +53,7 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
     public DefendData defendData;
     public float oldDamage;
     public int doubleClickTimer;
+    public int dashCoolDown;
     //目测手臂帧图的位置
     public static readonly Vector2[] HoldOffset = new Vector2[]
     {
@@ -155,6 +156,7 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
             Projectile.Kill();
         }
         Projectile.timeLeft = 2;
+        dashCoolDown = (int)MathUtils.Approach(dashCoolDown, 0, 1);
         return true;
     }
     public void NormalBegin()
@@ -193,8 +195,8 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
             {
                 return GetStateID("Throw");
             }
-            else if ((doubleClickTimer < 0 && angle is > MathHelper.PiOver4 * 3 or < MathHelper.PiOver4 * 3)
-                || (doubleClickTimer > 0 && angle is > -MathHelper.PiOver4 and < MathHelper.PiOver4))
+            else if (dashCoolDown == 0 && ((doubleClickTimer < 0 && angle is > MathHelper.PiOver4 * 3 or < MathHelper.PiOver4 * 3)
+                || (doubleClickTimer > 0 && angle is > -MathHelper.PiOver4 and < MathHelper.PiOver4)))
             {
                 Projectile.rotation = angle;
                 return GetStateID("Dash");
@@ -377,6 +379,7 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
         Projectile.knockBack *= 2;
         Projectile.friendly = true;
         defendData.damageRate /= 5;
+        dashCoolDown = 90;
     }
     public int DashUpdate()//localAI[0] -> stretchRate
     {
@@ -385,7 +388,7 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
         stretchRate = 1;
         float proj = MathUtils.Projection(rot.XAxis, Projectile.velocity);
         Owner.noKnockback = true;
-        Owner.velocity = Math.Max(proj,Math.Max(12, Owner.accRunSpeed * 3)) * rot.XAxis;
+        Owner.velocity = Math.Max(proj, Math.Max(12, Owner.accRunSpeed * 3)) * rot.XAxis;
         Using();
         if (Timer > 9)
         {
@@ -404,7 +407,7 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
     {
         yield return new WaitForFrames(15);
         float len = Owner.velocity.Length();
-        if(len == 0)
+        if (len == 0)
         {
             yield break;
         }
