@@ -120,6 +120,7 @@ namespace Everglow
             m_mainThreadContext.Unload();
 
             m_profilerManager.Clear();
+            m_mainThreadContext.Unload();
 
             m_packetResolver = null;
             m_moduleManager = null;

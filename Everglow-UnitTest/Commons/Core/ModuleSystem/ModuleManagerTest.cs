@@ -1,7 +1,8 @@
+using Everglow.Sources.Commons.Core.ModuleSystem;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
-namespace Everglow.Sources.Commons.Core.ModuleSystem.Tests
+namespace Everglow_UnitTest.Commons.Core.ModuleSystem
 {
     [TestClass]
     public class ModuleManagerTest

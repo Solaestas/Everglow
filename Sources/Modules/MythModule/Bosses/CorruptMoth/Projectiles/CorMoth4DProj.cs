@@ -106,9 +106,8 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
         }
         private static Vector4 VecRotByYoZ(Vector4 vec, float rot)
         {
-            //Vector2 v = new Vector2(vec.X, vec.W).RotatedBy(rot);
-            //return new Vector4(v.X, vec.Y, vec.Z, v.Y);
-            return Vector4.Transform(vec, Matrix.CreateRotationZ(rot));
+            Vector2 v = new Vector2(vec.X, vec.W).RotatedBy(rot);
+            return new Vector4(v.X, vec.Y, vec.Z, v.Y);
         }
         public override bool PreDraw(ref Color lightColor)
         {

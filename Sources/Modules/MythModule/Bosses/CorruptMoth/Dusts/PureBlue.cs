@@ -20,7 +20,6 @@
             dust.velocity *= 0.93f;
             dust.velocity = dust.velocity.RotatedBy(-dust.velocity.Length() * dust.dustIndex / 33000f);
 
-            float scale = dust.scale;
             Lighting.AddLight(dust.position, dust.scale * 0f, dust.scale * 0f, dust.scale * 0.25f);
             if (dust.scale < 0.25f)
             {

@@ -1,43 +1,51 @@
 ﻿using Everglow.Sources.Commons.Core;
+using Everglow.Sources.Commons.Function.ImageReader;
 using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles;
+using System.Threading.Tasks;
 using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
 using Terraria.Localization;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
+using Color = Microsoft.Xna.Framework.Color;
 
 namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
 {
     [AutoloadBossHead]
     public class CorruptMoth : ModNPC
     {
+        public static NPC CorruputMothNPC;
         protected override bool CloneNewInstances => true;
-        private static Future<Color[]> BBowColors;
+
+        private readonly Color IdentifierValue = new Color(58, 169, 255);
+
+        private static List<ImageKeyPoint> BBowColors;
         private const int BBowColorsWidth = 60;
         private const int BBowColorsHeight = 60;
 
-        private static Future<Color[]> BArrowColors;
+        private static List<ImageKeyPoint> BArrowColors;
         private const int BArrowColorsWidth = 60;
         private const int BArrowColorsHeight = 60;
 
-        private static Future<Color[]> BSwordColors;
+        private static List<ImageKeyPoint> BSwordColors;
         private const int BSwordColorsWidth = 60;
         private const int BSwordColorsHeight = 60;
 
-        private static Future<Color[]> BFistColors;
+        private static List<ImageKeyPoint> BFistColors;
         private const int BFistColorsWidth = 60;
         private const int BFistColorsHeight = 60;
         private static bool startLoading = false;
 
-        private bool canDespawn;
-        public static int secondStageHeadSlot = -1;
-        private bool Start = false;
-        public static int StaTime = 0;
+        private bool canDespawn = true;
+        private bool start = false;
+        private float lightVisual = 0;
+        //public static int secondStageHeadSlot = -1;
+        //public static int StaTime = 0;
         private float PhamtomDis//特效幻影的距离和透明度
         {
             get => NPC.localAI[2];
             set => NPC.localAI[2] = value;
         }
 
-        private float lightVisual = 0;
         [CloneByReference]
         private readonly Vector3[] cubeVec = new Vector3[]
         {
@@ -50,9 +58,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             new Vector3(-1,-1,-1),
             new Vector3(-1,-1,1)
         };
-        /// <summary>
-        /// 发射弹幕，在调用时判断是否不为客户端
-        /// </summary>
+
         private int Timer
         {
             set => NPC.ai[1] = value;
@@ -74,17 +80,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
             NPCID.Sets.TrailCacheLength[NPC.type] = 4;
             //NPCID.Sets.TrailingMode[NPC.type] = 0;
-        }
-        public override void OnSpawn(IEntitySource source)
-        {
-            if (!startLoading)
-            {
-                startLoading = true;
-                BBowColors = Everglow.MainThreadContext.DelayGetColors(Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BBow"));
-                BArrowColors = Everglow.MainThreadContext.DelayGetColors(Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BArrow"));
-                BSwordColors = Everglow.MainThreadContext.DelayGetColors(Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BSword"));
-                BFistColors = Everglow.MainThreadContext.DelayGetColors(Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BFist"));
-            }
         }
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
@@ -120,7 +115,8 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             NPC.width = 80;
             NPC.height = 120;
             NPC.defense = 0;
-            NPC.lifeMax = 7000;
+            NPC.lifeMax = 12000;
+            NPC.npcSlots = 80;
             if (Main.expertMode)
             {
                 NPC.lifeMax = 4000;
@@ -133,7 +129,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             }
             NPC.knockBackResist = 0f;
             NPC.value = Item.buyPrice(0, 2, 0, 0);
-            NPC.color = new Color(0, 0, 0, 0);
+            NPC.color = new Microsoft.Xna.Framework.Color(0, 0, 0, 0);
             NPC.alpha = 0;
             NPC.aiStyle = -1;
             NPC.boss = true;
@@ -206,6 +202,18 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
         }
         public override void AI()
         {
+            if (!startLoading)
+            {
+                startLoading = true;
+                Task.Factory.StartNew(() =>
+                {
+                    BBowColors = ImageReader.ReadImageKeyPoints("Everglow/Sources/Modules/MythModule/Bosses/CorruptMoth/Projectiles/BBow", IdentifierValue);
+                    BArrowColors = ImageReader.ReadImageKeyPoints("Everglow/Sources/Modules/MythModule/Bosses/CorruptMoth/Projectiles/BArrow", IdentifierValue);
+                    BSwordColors = ImageReader.ReadImageKeyPoints("Everglow/Sources/Modules/MythModule/Bosses/CorruptMoth/Projectiles/BSword", IdentifierValue);
+                    BFistColors = ImageReader.ReadImageKeyPoints("Everglow/Sources/Modules/MythModule/Bosses/CorruptMoth/Projectiles/BFist", IdentifierValue);
+                });
+            }
+            
             bool phase2 = NPC.life < NPC.lifeMax * 0.6f;
             Lighting.AddLight(NPC.Center, 0f, 0f, 0.8f * (1 - NPC.alpha / 255f));
             NPC.friendly = NPC.dontTakeDamage;
@@ -217,7 +225,10 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             {
                 lightVisual = 0;
             }
-
+            if(Timer % 15 == 0)
+            {
+                NPC.netUpdate2 = true;
+            }
             //贴图旋转
             if (NPC.spriteDirection > 0)
             {
@@ -234,12 +245,20 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             }
             #region #前言
 
-            if (!Start)
+            if (!start)
             {
+                if (CorruputMothNPC != null)
+                {
+                    if (CorruputMothNPC.active && NPC != CorruputMothNPC)
+                    {
+                        NPC.active = false;
+                        return;
+                    }
+                }
+                CorruputMothNPC = NPC;
                 NPC.ai[0] = 0;
-                //NPC.ai[0] = 114514;
                 NPC.noTileCollide = true;
-                Start = true;
+                start = true;
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     for (int h = 0; h < 15; h++)
@@ -250,7 +269,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                 NPC.localAI[0] = 0;
                 return;
             }
-            StaTime++;
+            //StaTime++;
             Player player = Main.player[NPC.target];
             NPC.TargetClosest(false);
             if (!player.active || player.dead)
@@ -334,7 +353,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                             }
                         }
 
-                        Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default(Color), Main.rand.NextFloat(0.8f, 1.7f));
+                        Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
                         if (Timer > 500)
                         {
                             NPC.velocity = Vector2.Lerp(NPC.velocity, getVec * 20, 0.15f);
@@ -394,7 +413,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                             }
                         }
 
-                        Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default(Color), Main.rand.NextFloat(0.8f, 1.7f));
+                        Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
                         if (Timer > 500)
                         {
                             NPC.velocity = Vector2.Lerp(NPC.velocity, getVec * 20, 0.15f);
@@ -466,8 +485,8 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                             MoveTo(player.Center + new Vector2(0, -200), Timer > 400 ? 22 : 15, 30);
                         }
 
-                        Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.MothBlue>(), NPC.velocity.X, NPC.velocity.Y, 0, default(Color), Main.rand.NextFloat(0.8f, 1.7f));
-                        Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.MothBlue2>(), NPC.velocity.X, NPC.velocity.Y, 0, default(Color), Main.rand.NextFloat(0.8f, 1.7f));
+                        Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.MothBlue>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
+                        Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.MothBlue2>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
 
                         if (Timer % Freq == 0 && Main.netMode != NetmodeID.MultiplayerClient)
                         {
@@ -556,7 +575,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                 if (Timer > 90 && Timer < 130)
                 {
                     GreyVFx();
-                    Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default(Color), Main.rand.NextFloat(0.8f, 1.7f));
+                    Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
                     if (Timer % 8 == 0 && NPC.ai[2] == 2 && Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, -2), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 6, 0f, Main.myPlayer);
@@ -718,7 +737,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             {
                 if (++Timer < 60)
                 {
-                    MoveTo(player.Center + new Vector2(0, -200), 20, 20);
+                    MoveTo(player.Center + new Vector2(0, -230), 15, 20);
                     GetDir_ByPlayer();
                 }
                 if (Timer == 60)
@@ -834,7 +853,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                 }
                 if (Timer == 60 && Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<MothBall>(), NPC.damage / 6, 0, Main.myPlayer);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<MothBall>(), NPC.damage / 4, 0, Main.myPlayer);
                 }
                 if (Timer > 60 && Timer < 700)
                 {
@@ -863,44 +882,61 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                     int scale = 15;
                     float rot = 3.14f;//把贴图旋转为向右边
 
-                    //Texture2D tex = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BBow");
-                    //Color[] colors = new Color[tex.Width * tex.Height];
-                    //tex.GetData(colors);
-                    for (int y = 0; y < BBowColorsHeight; y++)
-                    {
-                        for (int x = 0; x < BBowColorsWidth; x++)
-                        {
-                            int i = y * BBowColorsHeight + x;
-                            if (BBowColors.Value[i] == new Color(58, 169, 255) && butterfies.Count > 0)
-                            {
-                                NPC butterfly = butterfies.Pop();
-                                butterfly.ai[0] = 1;//切换为弓AI
-                                butterfly.ai[1] = 0;//清空计时器
-                                butterfly.ai[3] = NPC.whoAmI;
-                                butterfly.velocity = Vector2.Zero;
-                                (butterfly.ModNPC as Butterfly).targetPos = new Vector2((x - BBowColorsWidth / 2f) * scale, (y - BBowColorsWidth / 2f) * scale).RotatedBy(rot);//指定其目标
-                            }
-                        }
-                    }
-                    //tex = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BArrow");
-                    //colors = new Color[tex.Width * tex.Height];
-                    //tex.GetData(colors);
-                    for (int y = 0; y < BArrowColorsHeight; y++)
-                    {
-                        for (int x = 0; x < BArrowColorsWidth; x++)
-                        {
-                            int i = y * BArrowColorsHeight + x;
-                            if (BArrowColors.Value[i] == new Color(58, 169, 255) && butterfies.Count > 0)
-                            {
-                                NPC butterfly = butterfies.Pop();
-                                butterfly.ai[0] = 2;//切换为箭AI
-                                butterfly.ai[1] = 0;//清空计时器
-                                butterfly.ai[3] = NPC.whoAmI;
-                                butterfly.velocity = Vector2.Zero;
-                                (butterfly.ModNPC as Butterfly).targetPos = new Vector2((x - BArrowColorsWidth / 2f) * scale, (y - BArrowColorsHeight / 2f) * scale).RotatedBy(rot);//指定其目标
-                            }
-                        }
-                    }
+                    //TODO 只需要一个通道就可以了，有时间可以来稍微优化下
+
+                    //切换为弓AI
+                    //清空计时器
+                    FormatButterfliesFlocks(BBowColors, butterfies, scale, rot, 1);
+
+                    //切换为箭AI
+                    //清空计时器
+                    FormatButterfliesFlocks(BArrowColors, butterfies, scale, rot, 2);
+
+                    //foreach (var keypoint in BBowColors)
+                    //{
+                    //    if (butterfies.Count == 0)
+                    //    {
+                    //        break;
+                    //    }
+                    //    NPC butterfly = butterfies.Pop();
+                    //    butterfly.ai[0] = 1;
+                    //    butterfly.ai[1] = 0;
+                    //    butterfly.ai[3] = NPC.whoAmI;
+                    //    butterfly.velocity = Vector2.Zero;
+                    //    (butterfly.ModNPC as Butterfly).targetPos = new Vector2((keypoint.Column - BBowColorsWidth / 2f) * scale, (keypoint.Row - BBowColorsHeight / 2f) * scale).RotatedBy(rot);//指定其目标
+                    //}
+
+                    //for (int x = 0; x < BBowColorsWidth; x++)
+                    //{
+                    //    for (int y = 0; y < BBowColorsHeight; y++)
+                    //    {
+                    //        if (BBowColors[x, y] == new Rgba32(58, 169, 255) && butterfies.Count > 0)
+                    //        {
+                    //            NPC butterfly = butterfies.Pop();
+                    //            butterfly.ai[0] = 1;//切换为弓AI
+                    //            butterfly.ai[1] = 0;//清空计时器
+                    //            butterfly.ai[3] = NPC.whoAmI;
+                    //            butterfly.velocity = Vector2.Zero;
+                    //            (butterfly.ModNPC as Butterfly).targetPos = new Vector2((x - BBowColorsWidth / 2f) * scale, (y - BBowColorsHeight / 2f) * scale).RotatedBy(rot);//指定其目标
+                    //        }
+                    //    }
+                    //}
+
+                    //for (int x = 0; x < BArrowColorsWidth; x++)
+                    //{
+                    //    for (int y = 0; y < BArrowColorsHeight; y++)
+                    //    {
+                    //        if (BArrowColors[x, y] == new Color(58, 169, 255) && butterfies.Count > 0)
+                    //        {
+                    //            NPC butterfly = butterfies.Pop();
+                    //            butterfly.ai[0] = 2;//切换为箭AI
+                    //            butterfly.ai[1] = 0;//清空计时器
+                    //            butterfly.ai[3] = NPC.whoAmI;
+                    //            butterfly.velocity = Vector2.Zero;
+                    //            (butterfly.ModNPC as Butterfly).targetPos = new Vector2((x - BArrowColorsWidth / 2f) * scale, (y - BArrowColorsHeight / 2f) * scale).RotatedBy(rot);//指定其目标
+                    //        }
+                    //    }
+                    //}
                     foreach (NPC butterfly in butterfies)//对于剩余蝴蝶
                     {
                         butterfly.ai[0] = -1;//切换为游荡AI
@@ -988,25 +1024,37 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
 
                     float rot = 0.785f;
                     int scale = 15;
-                    //Texture2D tex = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BSword");
-                    //Color[] colors = new Color[tex.Width * tex.Height];
-                    //tex.GetData(colors);
-                    for (int y = 0; y < BSwordColorsHeight; y++)
+
+                    foreach (var keypoint in BSwordColors)
                     {
-                        for (int x = 0; x < BSwordColorsWidth; x++)
+                        if (butterfies.Count == 0)
                         {
-                            int i = y * BSwordColorsHeight + x;
-                            if (BSwordColors.Value[i] == new Color(58, 169, 255) && butterfies.Count > 0)
-                            {
-                                NPC butterfly = butterfies.Pop();
-                                butterfly.ai[0] = 3;//切换为剑AI
-                                butterfly.ai[1] = 0;//清空计时器
-                                butterfly.ai[3] = NPC.whoAmI;
-                                butterfly.velocity = Vector2.Zero;
-                                (butterfly.ModNPC as Butterfly).targetPos = new Vector2(x * scale, (y - BSwordColorsHeight) * scale).RotatedBy(rot);//指定其目标
-                            }
+                            break;
                         }
+                        NPC butterfly = butterfies.Pop();
+                        butterfly.ai[0] = 3;            //切换为剑AI
+                        butterfly.ai[1] = 0;            //清空计时器
+                        butterfly.ai[3] = NPC.whoAmI;
+                        butterfly.velocity = Vector2.Zero;
+                        (butterfly.ModNPC as Butterfly).targetPos = new Vector2(keypoint.Column * scale, (keypoint.Row - BSwordColorsHeight) * scale).RotatedBy(rot);//指定其目标
                     }
+
+
+                    //for (int x = 0; x < BSwordColorsWidth; x++)
+                    //{
+                    //    for (int y = 0; y < BSwordColorsHeight; y++)
+                    //    {
+                    //        if (BSwordColors[x, y] == new Color(58, 169, 255) && butterfies.Count > 0)
+                    //        {
+                    //            NPC butterfly = butterfies.Pop();
+                    //            butterfly.ai[0] = 3;//切换为剑AI
+                    //            butterfly.ai[1] = 0;//清空计时器
+                    //            butterfly.ai[3] = NPC.whoAmI;
+                    //            butterfly.velocity = Vector2.Zero;
+                    //            (butterfly.ModNPC as Butterfly).targetPos = new Vector2(x * scale, (y - BSwordColorsHeight) * scale).RotatedBy(rot);//指定其目标
+                    //        }
+                    //    }
+                    //}
                     foreach (NPC butterfly in butterfies)//对于剩余蝴蝶
                     {
                         butterfly.ai[0] = -1;//切换为游荡AI
@@ -1054,25 +1102,35 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
 
                     float rot = 3.14f;
                     int scale = 10;
-                    //Texture2D tex = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BFist");
-                    //Color[] colors = new Color[tex.Width * tex.Height];
-                    //tex.GetData(colors);
-                    for (int y = 0; y < BFistColorsHeight; y++)
+
+                    foreach (var keypoint in BFistColors)
                     {
-                        for (int x = 0; x < BFistColorsWidth; x++)
+                        if (butterfies.Count == 0)
                         {
-                            int i = y * BFistColorsHeight + x;
-                            if (BFistColors.Value[i] == new Color(58, 169, 255) && butterfies.Count > 0)
-                            {
-                                NPC butterfly = butterfies.Pop();
-                                butterfly.ai[0] = 4;//切换为拳AI
-                                butterfly.ai[1] = 0;//清空计时器
-                                butterfly.ai[3] = NPC.whoAmI;
-                                butterfly.velocity = Vector2.Zero;
-                                (butterfly.ModNPC as Butterfly).targetPos = new Vector2((x - BFistColorsWidth / 2) * scale, (y - BFistColorsHeight / 2) * scale).RotatedBy(rot);//指定其目标
-                            }
+                            break;
                         }
+                        NPC butterfly = butterfies.Pop();
+                        butterfly.ai[0] = 4;            //切换为拳AI
+                        butterfly.ai[1] = 0;            //清空计时器
+                        butterfly.ai[3] = NPC.whoAmI;
+                        butterfly.velocity = Vector2.Zero;
+                        (butterfly.ModNPC as Butterfly).targetPos = new Vector2((keypoint.Column - BFistColorsWidth / 2) * scale, (keypoint.Row - BFistColorsHeight / 2) * scale).RotatedBy(rot);//指定其目标
                     }
+                    //for (int y = 0; y < BFistColorsHeight; y++)
+                    //{
+                    //    for (int x = 0; x < BFistColorsWidth; x++)
+                    //    {
+                    //        if (BFistColors[x, y] == new Color(58, 169, 255) && butterfies.Count > 0)
+                    //        {
+                    //            NPC butterfly = butterfies.Pop();
+                    //            butterfly.ai[0] = 4;//切换为拳AI
+                    //            butterfly.ai[1] = 0;//清空计时器
+                    //            butterfly.ai[3] = NPC.whoAmI;
+                    //            butterfly.velocity = Vector2.Zero;
+                    //            (butterfly.ModNPC as Butterfly).targetPos = new Vector2((x - BFistColorsWidth / 2) * scale, (y - BFistColorsHeight / 2) * scale).RotatedBy(rot);//指定其目标
+                    //        }
+                    //    }
+                    //}
                     foreach (NPC butterfly in butterfies)//对于剩余蝴蝶
                     {
                         butterfly.ai[0] = -1;//切换为游荡AI
@@ -1155,7 +1213,28 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
         {
             NPC.Center = Vector2.Lerp(NPC.Center, targetPos, n);
         }
-        private void SpinAI(Entity entity, Vector2 center, float v, bool changeVelocity = true)
+
+        /// <summary>
+        /// 将蝴蝶按照keypoints重新编队，并且赋予新的AI
+        /// </summary>
+        private void FormatButterfliesFlocks(List<ImageKeyPoint> keypoints, Stack<NPC> butterflies,
+            float scale, float rot, float AISwitch)
+        {
+            foreach (var keypoint in keypoints)
+            {
+                if (butterflies.Count == 0)
+                {
+                    break;
+                }
+                NPC butterfly = butterflies.Pop();
+                butterfly.ai[0] = AISwitch;     
+                butterfly.ai[1] = 0;            //清空计时器
+                butterfly.ai[3] = NPC.whoAmI;
+                butterfly.velocity = Vector2.Zero;
+                (butterfly.ModNPC as Butterfly).targetPos = new Vector2((keypoint.Column - BBowColorsWidth / 2f) * scale, (keypoint.Row - BBowColorsHeight / 2f) * scale).RotatedBy(rot);//指定其目标
+            }
+        }
+        private static void SpinAI(Entity entity, Vector2 center, float v, bool changeVelocity = true)
         {
             Vector2 oldPos = entity.Center;
             entity.Center = center + (oldPos - center).RotatedBy(v);

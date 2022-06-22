@@ -18,7 +18,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items
         public override bool? UseItem(Player player)
         {
             MothLand mothLand = ModContent.GetInstance<MothLand>();
-            player.position = new Vector2(mothLand.FireflyCenterX, mothLand.FireflyCenterY) * 16;
+            player.position = new Vector2(mothLand.fireflyCenterX, mothLand.fireflyCenterY) * 16;
             return base.UseItem(player);
         }
         public override void AddRecipes()

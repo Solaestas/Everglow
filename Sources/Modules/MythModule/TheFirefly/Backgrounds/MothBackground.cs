@@ -1,12 +1,10 @@
+using Everglow.Sources.Commons.Function.ImageReader;
 using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Physics;
 using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
-using System.Drawing;
-using Color = Microsoft.Xna.Framework.Color;
-using Point = Microsoft.Xna.Framework.Point;
-using Rectangle = Microsoft.Xna.Framework.Rectangle;
 using Terraria.GameContent;
 using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
 {
@@ -20,16 +18,20 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         public List<float> RopPosFirS = new List<float>();
         public List<int> RopPosFirC = new List<int>();
         private float alpha = 0f;
+        private float luminance = 1f;//发光物亮度，boss战时变暗
         private Vector2 RopOffset = Vector2.Zero;//树条的位置偏移量
         /// <summary>
         /// 初始化
         /// </summary>
         public override void OnModLoad()
         {
-            Everglow.HookSystem.AddMethod(DrawBackground, Commons.Core.CallOpportunity.PostDrawBG);
-            On.Terraria.Graphics.Light.TileLightScanner.GetTileLight += TileLightScanner_GetTileLight;
-            GetRopePosFir("TreeRope.bmp", 0.33f);
-            InitMass_Spring();
+            if (Main.netMode != NetmodeID.Server)
+            {
+                Everglow.HookSystem.AddMethod(DrawBackground, Commons.Core.CallOpportunity.PostDrawBG);
+                On.Terraria.Graphics.Light.TileLightScanner.GetTileLight += TileLightScanner_GetTileLight;
+                GetRopePosFir("TreeRope");
+                InitMass_Spring();
+            }
         }
 
         /// <summary>
@@ -68,31 +70,52 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             if (BiomeActive() && Main.BackgroundEnabled)
             {
                 if (alpha < 1)
+                {
                     alpha += increase;
+                }
                 else
+                {
                     alpha = 1;
+                }
 
                 Everglow.HookSystem.DisableDrawBackground = true;
             }
             else
             {
                 if (alpha > 0)
+                {
                     alpha -= increase;
+                }
                 else
                 {
                     alpha = 0;
                     Everglow.HookSystem.DisableDrawBackground = false;
                 }
             }
+            if (CorruptMoth.CorruputMothNPC != null)//发光物体在boss战时变暗
+            {
+                if (CorruptMoth.CorruputMothNPC.active)
+                {
+                    luminance = MathHelper.Lerp(luminance, 0.1f, 0.02f);
+                }
+                else
+                {
+                    luminance = MathHelper.Lerp(luminance, 1, 0.02f);
+                }
+            }
+            else
+            {
+                luminance = MathHelper.Lerp(luminance, 1, 0.02f);
+            }
         }
         /// <summary>
         /// 判定是否开启地形
         /// </summary>
         /// <returns></returns>
-        public bool BiomeActive()
+        public static bool BiomeActive()
         {
             MothLand mothLand = ModContent.GetInstance<MothLand>();
-            Vector2 BiomeCenter = new Vector2(mothLand.FireflyCenterX * 16, (mothLand.FireflyCenterY - 20) * 16);//读取地形信息
+            Vector2 BiomeCenter = new Vector2(mothLand.fireflyCenterX * 16, (mothLand.fireflyCenterY - 20) * 16);//读取地形信息
             Vector2 v0 = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f - BiomeCenter;//距离中心Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f
             v0.Y *= 1.35f;
             v0.X *= 0.9f;//近似于椭圆形，所以xy坐标变换
@@ -105,22 +128,36 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         /// <exception cref="Exception"></exception>
         public void GetGlowPos(string Shapepath)
         {
-            if (!OperatingSystem.IsWindows())
+            var imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Sources/Modules/MythModule/TheFirefly/Backgrounds/" + Shapepath);
+            imageData.ProcessPixelRows(accessor =>
             {
-                throw new Exception("Windows限定");
-            }
-            using Stream Img = Everglow.Instance.GetFileStream("Sources/Modules/MythModule/TheFirefly/Backgrounds/" + Shapepath);
-            Bitmap image = new Bitmap(Img);
-            for (int y = image.Height - 1; y > 0; y -= 1)
-            {
-                for (int x = image.Width - 1; x > 0; x -= 1)
+                for (int y = 0; y < accessor.Height; y++)
                 {
-                    if (image.GetPixel(x, y).R == 255)
+                    var pixelRow = accessor.GetRowSpan(y);
+                    for (int x = 0; x < pixelRow.Length; x++)
                     {
-                        GPos.Add(new GHang(new Vector2(x * 10, y * 10), (image.GetPixel(x, y).G / 4f + 2), image.GetPixel(x, y).B / 255f + 0.5f, Main.rand.Next(5)));
+                        ref var pixel = ref pixelRow[x];
+                        if (pixel.R == 255)
+                        {
+                            GPos.Add(new GHang(new Vector2(x * 10, y * 10), (pixel.G / 4f + 2), pixel.B / 255f + 0.5f, Main.rand.Next(5)));
+                        }
                     }
                 }
-            }
+            });
+
+            //int w = colors.GetLength(0);
+            //int h = colors.GetLength(1);
+            //for (int y = 0; y < h; ++y)
+            //{
+            //    for (int x = 0; x < w; ++x)
+            //    {
+            //        Color temp = colors[x, y];
+            //        if (temp.R == 255)
+            //        {
+
+            //        }
+            //    }
+            //}
         }
         /// <summary>
         /// 获取第二层荧光悬挂物点位
@@ -129,68 +166,98 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         /// <exception cref="Exception"></exception>
         public void GetGlowPosSec(string Shapepath)
         {
-            if (!OperatingSystem.IsWindows())
+            var imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Sources/Modules/MythModule/TheFirefly/Backgrounds/" + Shapepath);
+            imageData.ProcessPixelRows(accessor =>
             {
-                throw new Exception("Windows限定");
-            }
-            using Stream Img = Everglow.Instance.GetFileStream("Sources/Modules/MythModule/TheFirefly/Backgrounds/" + Shapepath);
-            Bitmap image = new Bitmap(Img);
-            for (int y = image.Height - 1; y > 0; y -= 1)
-            {
-                for (int x = image.Width - 1; x > 0; x -= 1)
+                for (int y = 0; y < accessor.Height; y++)
                 {
-                    if (image.GetPixel(x, y).R == 255)
+                    var pixelRow = accessor.GetRowSpan(y);
+                    for (int x = 0; x < pixelRow.Length; x++)
                     {
-                        GPosSec.Add(new GHang(new Vector2(x * 10, y * 4.2f), (image.GetPixel(x, y).G / 4f + 2), image.GetPixel(x, y).B / 255f + 0.5f, Main.rand.Next(5)));
+                        ref var pixel = ref pixelRow[x];
+                        if (pixel.R == 255)
+                        {
+                            GPosSec.Add(new GHang(new Vector2(x * 10, y * 4.2f), (pixel.G / 4f + 2), pixel.B / 255f + 0.5f, Main.rand.Next(5)));
+                        }
                     }
                 }
-            }
+            });
+
+            //Color[,] colors = ImageReader.Read("Everglow/Sources/Modules/MythModule/TheFirefly/Backgrounds/" + Shapepath);
+            //int w = colors.GetLength(0);
+            //int h = colors.GetLength(1);
+            //for (int y = 0; y < h; ++y)
+            //{
+            //    for (int x = 0; x < w; ++x)
+            //    {
+            //        Color temp = colors[x, y];
+            //        if (temp.R == 255)
+            //        {
+            //            GPosSec.Add(new GHang(new Vector2(x * 10, y * 4.2f), (temp.G / 4f + 2), temp.B / 255f + 0.5f, Main.rand.Next(5)));
+            //        }
+            //    }
+            //}
         }
         /// <summary>
         /// 获取第一层树条点位
         /// </summary>
         /// <param name="Shapepath"></param>
         /// <exception cref="Exception"></exception>
-        public void GetRopePosFir(string Shapepath, float MoveStep)
+        public void GetRopePosFir(string Shapepath)
         {
-            if (!OperatingSystem.IsWindows())
+            var imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Sources/Modules/MythModule/TheFirefly/Backgrounds/" + Shapepath);
+            imageData.ProcessPixelRows(accessor =>
             {
-                throw new Exception("Windows限定");
-            }
-
-            using Stream Img = Everglow.Instance.GetFileStream("Sources/Modules/MythModule/TheFirefly/Backgrounds/" + Shapepath);
-            Bitmap image = new Bitmap(Img);
-            for (int y = image.Height - 1; y > 0; y -= 1)
-            {
-                for (int x = image.Width - 1; x > 0; x -= 1)
+                for (int y = 0; y < accessor.Height; y++)
                 {
-                    if (image.GetPixel(x, y).R == 255)
+                    var pixelRow = accessor.GetRowSpan(y);
+                    for (int x = 0; x < pixelRow.Length; x++)
                     {
-                        RopPosFir.Add(new Vector2(x * 5, y * 5f));
-                        RopPosFirC.Add(image.GetPixel(x, y).G + 2);
-                        RopPosFirS.Add((image.GetPixel(x, y).B + 240) / 300f);
+                        ref var pixel = ref pixelRow[x];
+                        if (pixel.R == 255)
+                        {
+                            RopPosFir.Add(new Vector2(x * 5, y * 5f));
+                            RopPosFirC.Add(pixel.G + 2);
+                            RopPosFirS.Add((pixel.B + 240) / 300f);
+                        }
                     }
                 }
-            }
+            });
+            //Color[,] colors = ImageReader.Read("Everglow/Sources/Modules/MythModule/TheFirefly/Backgrounds/" + Shapepath);
+            //int w = colors.GetLength(0);
+            //int h = colors.GetLength(1);
+            //for (int y = 0; y < h; ++y)
+            //{
+            //    for (int x = 0; x < w; ++x)
+            //    {
+            //        Color temp = colors[x, y];
+            //        if (temp.R == 255)
+            //        {
+            //            RopPosFir.Add(new Vector2(x * 5, y * 5f));
+            //            RopPosFirC.Add(temp.G + 2);
+            //            RopPosFirS.Add((temp.B + 240) / 300f);
+            //        }
+            //    }
+            //}
         }
         /// <summary>
         /// 绘制荧光
         /// </summary>
         private void DrawGlow(Vector2 texSize, float MoveStep)
         {
+            if (GPos.Count <= 1)
+            {
+                GetGlowPos("GlosPos");
+            }
             MothLand mothLand = ModContent.GetInstance<MothLand>();
             Vector2 sampleTopleft = Vector2.Zero;
             Vector2 sampleCenter = sampleTopleft + (texSize / 2);
             Vector2 screenSize = new Vector2(Main.screenWidth, Main.screenHeight);
             Vector2 DCen = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
-            Vector2 deltaPos = DCen - new Vector2((mothLand.FireflyCenterX + 34) * 16f, mothLand.FireflyCenterY * 16f);
+            Vector2 deltaPos = DCen - new Vector2((mothLand.fireflyCenterX + 34) * 16f, mothLand.fireflyCenterY * 16f);
             deltaPos *= MoveStep;
             Vector2 TexLT = sampleCenter - screenSize / 2f + deltaPos;
-            if (GPos.Count <= 1)
-            {
-                GetGlowPos("GlosPos.bmp");
-            }
-            float deltaY = DCen.Y - (mothLand.FireflyCenterY - 90) * 16f;
+            float deltaY = DCen.Y - (mothLand.fireflyCenterY - 90) * 16f;
             deltaY *= MoveStep * 0.4f;
             if (GPos.Count > 0)
             {
@@ -205,9 +272,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                     Rectangle sRtLine = new Rectangle(GPos[x].Type * 20, 10, 20, 20);
                     Rectangle sRtDrop = new Rectangle(GPos[x].Type * 20, 65, 20, 35);
                     float Dlength = (float)(GPos[x].Length + Math.Sin(Main.timeForVisualEffects / 128d + GPos[x].Pos.X / 70d + GPos[x].Pos.Y / 120d) * GPos[x].Length * 0.2f);
-                    Main.spriteBatch.Draw(texGlow, dPos, sRtTop, Color.White * alpha, 0, new Vector2(10, 0), GPos[x].Size, SpriteEffects.None, 0);
-                    Main.spriteBatch.Draw(texGlow, dPos + new Vector2(0, 10 + Dlength) * GPos[x].Size, sRtLine, Color.White * alpha, 0, new Vector2(10, 10), new Vector2(1f, Dlength / 10f) * GPos[x].Size, SpriteEffects.None, 0);
-                    Main.spriteBatch.Draw(texGlow, dPos + new Vector2(0, 27.5f + Dlength * 2) * GPos[x].Size, sRtDrop, Color.White * alpha, 0, new Vector2(10, 17.5f), GPos[x].Size, SpriteEffects.None, 0);
+                    Color color = GetLuminace(Color.White * alpha);
+                    Main.spriteBatch.Draw(texGlow, dPos, sRtTop, color, 0, new Vector2(10, 0), GPos[x].Size, SpriteEffects.None, 0);
+                    Main.spriteBatch.Draw(texGlow, dPos + new Vector2(0, 10 + Dlength) * GPos[x].Size, sRtLine, color, 0, new Vector2(10, 10), new Vector2(1f, Dlength / 10f) * GPos[x].Size, SpriteEffects.None, 0);
+                    Main.spriteBatch.Draw(texGlow, dPos + new Vector2(0, 27.5f + Dlength * 2) * GPos[x].Size, sRtDrop, color, 0, new Vector2(10, 17.5f), GPos[x].Size, SpriteEffects.None, 0);
                 }
             }
         }
@@ -216,13 +284,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         /// </summary>
         /// <param name="OrigPoint"></param>
         /// <returns></returns>
-        private Vector2 PointCorrection(Vector2 OrigPoint)
+        private static Vector2 PointCorrection(Vector2 OrigPoint)
         {
             Vector2 ScreenCen = new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
             Vector2 dPoss = OrigPoint - ScreenCen;
             Vector2 DSize = GetZoomByScreenSize();
-            dPoss.X = dPoss.X * (DSize.X - 1);
-            dPoss.Y = dPoss.Y * (DSize.Y - 1);
+            dPoss.X *= (DSize.X - 1);
+            dPoss.Y *= (DSize.Y - 1);
             OrigPoint += dPoss;
             return OrigPoint;
         }
@@ -231,19 +299,19 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         /// </summary>
         private void DrawGlowSec(Vector2 texSize, float MoveStep)
         {
+            if (GPosSec.Count <= 1)
+            {
+                GetGlowPosSec("GlowHangingMiddlePosition");
+            }
             MothLand mothLand = ModContent.GetInstance<MothLand>();
             Vector2 sampleTopleft = Vector2.Zero;
             Vector2 sampleCenter = sampleTopleft + (texSize / 2);
             Vector2 screenSize = new Vector2(Main.screenWidth, Main.screenHeight);
             Vector2 DCen = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
-            Vector2 deltaPos = DCen - new Vector2((mothLand.FireflyCenterX + 34) * 16f, mothLand.FireflyCenterY * 16f);
+            Vector2 deltaPos = DCen - new Vector2((mothLand.fireflyCenterX + 34) * 16f, mothLand.fireflyCenterY * 16f);
             deltaPos *= MoveStep;
             Vector2 TexLT = sampleCenter - screenSize / 2f + deltaPos;
-            if (GPosSec.Count <= 1)
-            {
-                GetGlowPosSec("GlowHangingMiddle.bmp");
-            }
-            float deltaY = DCen.Y - (mothLand.FireflyCenterY - 90) * 16f;
+            float deltaY = DCen.Y - (mothLand.fireflyCenterY - 90) * 16f;
             deltaY *= MoveStep * 0.14f;
             if (GPosSec.Count > 0)
             {
@@ -257,10 +325,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                     Rectangle sRtTop = new Rectangle(GPosSec[x].Type * 10, 0, 10, 3);
                     Rectangle sRtLine = new Rectangle(GPosSec[x].Type * 10, 3, 10, 5);
                     Rectangle sRtDrop = new Rectangle(GPosSec[x].Type * 10, 10, 10, 15);
+                    Color color = GetLuminace(Color.White * alpha);
                     float Dlength = (float)(GPosSec[x].Length + Math.Sin(Main.timeForVisualEffects / 128d + GPosSec[x].Pos.X / 70d + GPosSec[x].Pos.Y / 120d) * GPosSec[x].Length * 0.2f);
-                    Main.spriteBatch.Draw(texGlow, dPos, sRtTop, Color.White * alpha, 0, new Vector2(5, 0), GPosSec[x].Size, SpriteEffects.None, 0);
-                    Main.spriteBatch.Draw(texGlow, dPos + new Vector2(0, 3 + Dlength) * GPosSec[x].Size, sRtLine, Color.White * alpha, 0, new Vector2(5, 2.5f), new Vector2(1f, Dlength / 2.5f) * GPosSec[x].Size, SpriteEffects.None, 0);
-                    Main.spriteBatch.Draw(texGlow, dPos + new Vector2(0, 10.5f + Dlength * 2) * GPosSec[x].Size, sRtDrop, Color.White * alpha, 0, new Vector2(5, 7.5f), GPosSec[x].Size, SpriteEffects.None, 0);
+                    Main.spriteBatch.Draw(texGlow, dPos, sRtTop, color, 0, new Vector2(5, 0), GPosSec[x].Size, SpriteEffects.None, 0);
+                    Main.spriteBatch.Draw(texGlow, dPos + new Vector2(0, 3 + Dlength) * GPosSec[x].Size, sRtLine, color, 0, new Vector2(5, 2.5f), new Vector2(1f, Dlength / 2.5f) * GPosSec[x].Size, SpriteEffects.None, 0);
+                    Main.spriteBatch.Draw(texGlow, dPos + new Vector2(0, 10.5f + Dlength * 2) * GPosSec[x].Size, sRtDrop, color, 0, new Vector2(5, 7.5f), GPosSec[x].Size, SpriteEffects.None, 0);
                 }
             }
         }
@@ -277,7 +346,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             Vector2 sampleCenter = sampleTopleft + (texSize / 2);
             Vector2 screenSize = new Vector2(Main.screenWidth, Main.screenHeight);
             Vector2 DCen = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
-            Vector2 deltaPos = DCen - new Vector2((mothLand.FireflyCenterX + 34) * 16f, mothLand.FireflyCenterY * 16f);
+            Vector2 deltaPos = DCen - new Vector2((mothLand.fireflyCenterX + 34) * 16f, mothLand.fireflyCenterY * 16f);
             deltaPos *= MoveStep;
             Vector2 Cor = GetZoomByScreenSize();
             int RX = (int)(sampleCenter.X - screenSize.X / 2f + deltaPos.X);
@@ -297,7 +366,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         /// <param name="texSize"></param>
         /// <param name="MoveStep"></param>
         /// <returns></returns>
-        public Vector2 GetZoomByScreenSize()
+        public static Vector2 GetZoomByScreenSize()
         {
             //return new Vector2(Main.screenWidth / 1366f, Main.screenHeight / 768f);
             return Vector2.One;
@@ -306,7 +375,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         /// 获取因为不同分辨率导致点位偏移坐标
         /// </summary>
         /// <returns></returns>
-        public Vector2 GetZoomDelta()
+        public static Vector2 GetZoomDelta()
         {
             Vector2 screenSize = new Vector2(Main.screenWidth, Main.screenHeight);
             Vector2 Cor = GetZoomByScreenSize();
@@ -327,6 +396,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             var texMiddle = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyMiddle");
             var texMidClose = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyMidClose");
             var texClose = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyClose");
+            var texCloseII = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyClose2");
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             Rectangle screen = new Rectangle(0, 0, Main.screenWidth, Main.screenHeight);
@@ -334,21 +404,24 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             Vector2 DSize = GetZoomByScreenSize();
             Vector2 ZoomDelta = GetZoomDelta();
             Vector2 DrawPos = ScreenCen;
-            Main.spriteBatch.Draw(texSky, DrawPos, GetDrawRec(texSky.Size(), 0, true), Color.White * alpha, 0,
+            Color color0 = Color.White * alpha;
+            Main.spriteBatch.Draw(texSky, DrawPos, GetDrawRec(texSky.Size(), 0, true), color0, 0,
                  ScreenCen, DSize, SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(texFar, DrawPos, GetDrawRec(texSky.Size(), 0.03f, true), Color.White * alpha, 0,
+            Main.spriteBatch.Draw(texFar, DrawPos, GetDrawRec(texSky.Size(), 0.03f, true), color0, 0,
                  ScreenCen, DSize, SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(texMiddle, DrawPos, GetDrawRec(texSky.Size(), 0.17f, true), Color.White * alpha, 0,
+            Main.spriteBatch.Draw(texMiddle, DrawPos, GetDrawRec(texSky.Size(), 0.17f, true), color0, 0,
                  ScreenCen, DSize, SpriteEffects.None, 0);
             DrawGlowSec(texClose.Size(), 0.17f);
-            Main.spriteBatch.Draw(texMidClose, DrawPos, GetDrawRec(texSky.Size(), 0.25f, false), Color.White * alpha, 0,
+            Main.spriteBatch.Draw(texMidClose, DrawPos, GetDrawRec(texSky.Size(), 0.25f, false), GetLuminace( color0), 0,
                  ScreenCen, DSize, SpriteEffects.None, 0);
             DrawGlow(texClose.Size(), 0.25f);
             Rectangle rvc = GetDrawRec(texClose.Size(), 0.33f, false);
             RopOffset = new(-150 * 1.12f, 484 + 120 * 0.17f);//偏移量
             rvc.Y -= 120;
             rvc.X += 150;
-            Main.spriteBatch.Draw(texClose, Vector2.Zero, rvc, Color.White * alpha);
+            Main.spriteBatch.Draw(texClose, Vector2.Zero, rvc, GetLuminace(color0));
+
+
             /*
             OldMouseW[0] = Main.MouseWorld;
             for (int f = OldMouseW.Length - 1; f > 0; f--)
@@ -415,13 +488,41 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                     {
                         Vector2 v0 = massJ.position - masses[i][FiIdx - 1].position;
                         float Rot = (float)(Math.Atan2(v0.Y, v0.X)) - (float)(Math.PI / 2d);
+                        Color color = GetLuminace( new Color(0, 0.15f * FiIdx, 1f / 5f * FiIdx, 0) * alpha);
                         for (int z = 0; z < FiIdx; z++)
                         {
-                            Main.spriteBatch.Draw(t0, DrawP - TexLT, null, new Color(0, 0.15f * FiIdx, 1f / 5f * FiIdx, 0) * alpha, Rot, t0.Size() / 2f, Scale, SpriteEffects.None, 0);
+                            Main.spriteBatch.Draw(t0, DrawP - TexLT, null, color, Rot, t0.Size() / 2f, Scale, SpriteEffects.None, 0);
                         }
                     }
                 }
             }
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+            Rectangle rvcII = GetDrawRec(texCloseII.Size(), 0.57f, false);
+            rvcII.Y -= 300;
+            rvcII.X += 300;
+            Color colorCloseII = GetLuminace(Color.White * alpha);
+            List<Vertex2D> CloseII = new List<Vertex2D>
+            {
+                new Vertex2D(new Vector2(0, 0), colorCloseII, new Vector3(rvcII.X / (float)texCloseII.Width, rvcII.Y / (float)texCloseII.Height, 0)),
+                new Vertex2D(new Vector2(Main.screenWidth, 0), colorCloseII, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, rvcII.Y / (float)texCloseII.Height, 0)),
+                new Vertex2D(new Vector2(0, Main.screenHeight), colorCloseII, new Vector3(rvcII.X / (float)texCloseII.Width, (rvcII.Y + rvcII.Height) / (float)texCloseII.Height, 0)),
+
+                new Vertex2D(new Vector2(0, Main.screenHeight), colorCloseII, new Vector3(rvcII.X / (float)texCloseII.Width, (rvcII.Y + rvcII.Height) / (float)texCloseII.Height, 0)),
+                new Vertex2D(new Vector2(Main.screenWidth, 0), colorCloseII, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, rvcII.Y / (float)texCloseII.Height, 0)),
+                new Vertex2D(new Vector2(Main.screenWidth, Main.screenHeight), colorCloseII, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, (rvcII.Y + rvcII.Height) / (float)texCloseII.Height, 0))
+            };
+            Effect bgW = MythContent.QuickEffect("Effects/BackgroundWrap");
+            bgW.CurrentTechnique.Passes[0].Apply();
+
+            if (CloseII.Count > 2)
+            {
+                Main.graphics.GraphicsDevice.Textures[0] = texCloseII;
+                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, CloseII.ToArray(), 0, CloseII.Count - 2);
+            }
+
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
         }
         public Vector2[] OldMouseW = new Vector2[30];
         private List<List<Mass>> masses = new List<List<Mass>>();
@@ -455,14 +556,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         /// <param name="Size"></param>
         /// <param name="move"></param>
         /// <returns></returns>
-        private Vector2 GetRopeMove(Vector2 Size, float move)
+        private static Vector2 GetRopeMove(Vector2 Size, float move)
         {
             Vector2 DCen = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
             MothLand mothLand = ModContent.GetInstance<MothLand>();
             Vector2 sampleTopleft = Vector2.Zero;
             Vector2 sampleCenter = sampleTopleft + Size;
             Vector2 screenSize = new Vector2(Main.screenWidth, Main.screenHeight);
-            Vector2 deltaPos = DCen - new Vector2(mothLand.FireflyCenterX * 16f, mothLand.FireflyCenterY * 16f);
+            Vector2 deltaPos = DCen - new Vector2(mothLand.fireflyCenterX * 16f, mothLand.fireflyCenterY * 16f);
             deltaPos *= move;
             Vector2 TexLT = sampleCenter - screenSize / 2f + deltaPos;
             return TexLT;
@@ -500,17 +601,26 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
 
                 Vector2 normalDir = Vector2.Normalize(new Vector2(-dir.Y, dir.X));
                 float width = baseWidth * (count - i - 1) / (count - 1);
-
-                var vertex1 = new Vertex2D(massPositionsSmooth[i] + offset + normalDir * width, new Color(11, 9, 25) * alpha, Vector3.Zero);
+                Color color = GetLuminace(new Color(11, 9, 25) * alpha);
+                var vertex1 = new Vertex2D(massPositionsSmooth[i] + offset + normalDir * width,color , Vector3.Zero);
                 if (i == 0)
                 {
                     // 再增加一个退化三角形顶点
                     vertices.Add(vertex1);
                 }
                 vertices.Add(vertex1);
-                vertices.Add(new Vertex2D(massPositionsSmooth[i] + offset - normalDir * width, new Color(11, 9, 25) * alpha, Vector3.Zero));
+                vertices.Add(new Vertex2D(massPositionsSmooth[i] + offset - normalDir * width, color, Vector3.Zero));
             }
-
+        }
+        private Color GetLuminace(Color color)
+        {
+            if (luminance != 1)
+            {
+                byte a = color.A;
+                color *= luminance;
+                color.A = a;
+            }
+            return color;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Everglow.Sources.Modules.FoodModule.DataStructures;
+﻿using Everglow.Sources.Modules.FoodModule.Utils;
 
 namespace Everglow.Sources.Modules.FoodModule
 {

@@ -90,8 +90,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
 
         public override bool IsBiomeActive(Player player)
 		{
-			MothBackground mothBackground = ModContent.GetInstance<MothBackground>();
-			return mothBackground.BiomeActive();
+			return MothBackground.BiomeActive();
 		}
 
         public override void OnInBiome(Player player)

@@ -17,7 +17,8 @@
     <DefineConstants>$(DefineConstants);TML_2022_05</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugWithoutFody|AnyCPU'">
-    <DefineConstants>$(DefineConstants);TML_2022_05</DefineConstants>
+	  <DefineConstants>DEBUG</DefineConstants>
+	  <DefineConstants>$(DefineConstants);TML_2022_05</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseWithoutFody|AnyCPU'">
     <DefineConstants>$(DefineConstants);TML_2022_05</DefineConstants>
@@ -25,12 +26,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Everglow-UnitTest\**" />
+    <Compile Remove="Resources\Tools\ImageToBinary\**" />
     <Compile Remove="Sources\Modules\DeltaMachine\**" />
     <Compile Remove="Sources\Tools\**" />
     <EmbeddedResource Remove="Everglow-UnitTest\**" />
+    <EmbeddedResource Remove="Resources\Tools\ImageToBinary\**" />
     <EmbeddedResource Remove="Sources\Modules\DeltaMachine\**" />
     <EmbeddedResource Remove="Sources\Tools\**" />
     <None Remove="Everglow-UnitTest\**" />
+    <None Remove="Resources\Tools\ImageToBinary\**" />
     <None Remove="Sources\Modules\DeltaMachine\**" />
     <None Remove="Sources\Tools\**" />
   </ItemGroup>
@@ -40,6 +44,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="MethodBoundaryAspect.Fody" Version="2.0.145" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.2" />
     <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
   </ItemGroup>
   <ItemGroup>

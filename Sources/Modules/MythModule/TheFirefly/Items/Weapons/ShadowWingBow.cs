@@ -1,6 +1,7 @@
 ﻿using Terraria.DataStructures;
 using Terraria.Localization;
 using Everglow.Sources.Modules.MythModule.Common;
+using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 {
@@ -23,7 +24,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             Item.glowMask = GetGlowMask;
             Item.width = 46;
             Item.height = 82;
-            Item.rare = 2;
+            Item.rare = ItemRarityID.Green;
 
             Item.useTime = 18;
             Item.useAnimation = 18;

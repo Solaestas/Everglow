@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Text;
 
-namespace Everglow.Sources.Modules.FoodModule.DataStructures
+namespace Everglow.Sources.Modules.FoodModule.Utils
 {
     public class FoodDuration
     {
@@ -33,7 +33,7 @@ namespace Everglow.Sources.Modules.FoodModule.DataStructures
         {
             get
             {
-                return (((m_hours * 60 + m_minutes) * 60 + m_seconds) * 60) + m_frames;
+                return ((m_hours * 60 + m_minutes) * 60 + m_seconds) * 60 + m_frames;
             }
         }
 
@@ -111,7 +111,7 @@ namespace Everglow.Sources.Modules.FoodModule.DataStructures
             }
             else if (m_seconds != 0 && m_frames != 0)
             {
-                sb.Append($"{(m_seconds + (m_frames / 60.0)).ToString("0.##")}秒");
+                sb.Append($"{(m_seconds + m_frames / 60.0).ToString("0.##")}秒");
             }
             sb.Append("持续时间");
             return sb.ToString();
