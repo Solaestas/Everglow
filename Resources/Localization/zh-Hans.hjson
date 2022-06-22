@@ -646,319 +646,84 @@ Mods: {
 			RedImmune : "花火幻魂心的红色火焰无法伤害到你"
 			WhiteImmune : "花火幻魂心的白色火焰无法伤害到你"
 			YellowImmune : "花火幻魂心的黄色火焰无法伤害到你"
-			AleBuff : 
-				'''
-				 防御减8，伤害、暴击率和近战攻速各增加8%
-				'''
-			AppleBuff : 8%伤害减免
-			AppleJuiceBuff : 8%伤害减免
-			ApplePieBuff : 8%伤害减免
-			ApricotBuff : 
-				'''
-				魔力再生加4
-				止渴润肺
-				'''
-			BaconBuff : 
-				'''
-				加2生命回复，所受冷系伤害降低
-				开胃祛寒
-				'''
-			BananaBuff : 防御+4
-			BananaDaiquiriBuff : 防御+4
-			BananaSplitBuff : 防御+4
-			BBQRibsBuff : 
-				'''
-				加50血量上限
-				滋阴补血
-				'''
-			BlackCurrantBuff : 
-				'''
-				获得夜视、危险感知能力
-				改善視力
-				'''
-			BloodOrangeBuff : 
-				'''
-				加25血量上限
-				这里不是崽饿
-				'''
-			BloodyMoscatoBuff : 
-				'''
-				迅速回血
-				血色
-				'''
-			BowlofSoupBuff : 
-				'''
-				加20魔力上限,5%魔法伤害
-				补脑
-				'''
-			BunnyStewBuff : 
-				'''
-				自动跳跃，增加跳跃能力
-				没有任何兔子在制作过程中受到伤害
-				'''
-			BurgerBuff : 
-				'''
-				减少移速，增加防御
-				热量炸弹
-				'''
-			CherryBuff : 
-				'''
-				增加移速与跳跃高度
-				cr,nmsl
-				'''
-			ChickenNuggetBuff : 
-				'''
-				增加1生命回复、4%攻速
-				数一数二的鸡块！
-				'''
-			ChocolateChipCookieBuff : 
-				'''
-				快速恢复生命与魔力
-				补充能量
-				'''
-			ChristmasPuddingBuff : 
-				'''
-				仇恨值减400
-				美容养颜
-				'''
-			CoconutBuff : 
-				'''
-				加4防御，5%减伤
-				我从小啃到大
-				'''
-			CoffeeCupBuff : 
-				''' 
-				加25%铺墙铺砖速度，5%攻速
-				神清气爽
-				'''
-			CookedFishBuff : 
-				'''
-				加0魔力上限,5%魔法暴击率
-				益气健脾
-				'''
-			CookedMarshmallowBuff : 防御+4
-			CookedShrimpBuff : 
-				'''
-				加8防御
-				补钙
-				'''
-			CreamSodaBuff : 
-				'''
-				清凉一下
-				
-				'''
-			DragonfruitBuff : 防御+4
-			ElderberryBuff : 
-				'''
-				你可以短距离冲刺
-				抗氧化
-				'''
-			EscargotBuff : 
-				'''
-				大大减速，加80%减伤
-				这不是神龟药水
-				'''
-			FriedEggBuff : 
-				'''
-				蛋白质
-				
-				'''
-			FriesBuff : 
-				'''
-				加4防御，4%暴击
-				高油高盐
-				'''
-			FroggleBunwichBuff : 
-				'''
-				自动跳跃，增加伤害和跳跃能力
-				你能真正尝到沼泽的味道
-				'''
-			FruitJuiceBuff : 
-				'''
-				小幅提升大部分属性
-				维生素！
-				'''
-			FruitSaladBuff : 
-				'''
-				中幅提升大部分属性
-				更多维生素！
-				'''
-			GingerbreadCookieBuff : 
-				'''
-				加1生命回复,保暖
-				驱寒排毒
-				'''
-			GoldenDelightBuff : 防御+4
-			GrapefruitBuff : 防御+4
-			GrapeJuiceBuff : 
-				'''
-				加1召唤栏，减6防御
-				多子多福
-				'''
-			GrapesBuff : 
-				'''
-				加1召唤栏，减5防御
-				多子多福
-				'''
-			GrilledSquirrelBuff : 欢跃
-			GrubSoupBuff : 防御+4
-			HotdogBuff : 
-				'''
-				减少移速，增加防御
-				热量炸弹
-				'''
-			IceCreamBuff : 防御+4
-			LemonadeBuff : 
-				'''
-				加4%远程暴击,仇恨值减200
-				消炎美容
-				'''
-			LemonBuff : 
-				'''
-				加5%远程暴击,仇恨值减300
-				消炎美容 
-				'''
-			LobsterTailBuff : 
-				'''
-				加6防御,25%挖矿速度
-				抗氧化
-				'''
-			MangoBuff : 清肺
-			MarshmallowBuff : 
-				'''
-				减20%最大掉落速度
-				轻飘飘
-				'''
-			MilkCartonBuff : 防御+4
-			MilkshakeBuff : 
-				'''
-				加10%移速
-				节食减肥
-				'''
-			MonsterLasagnaBuff : 
-				'''
-				弄熟的恶魔还是恶魔，在千层饼中也不会改变
-				
-				'''
-			NachosBuff : 防御+4
-			PadThaiBuff : 
-				'''
-				加50%召唤物击退
-				异域风情
-				'''
-			PeachBuff : 
-				'''
-				增加心的拾取范围，1生命回复
-				我也是桃饱用户
-				'''
-			PeachSangriaBuff : 
-				'''
-				增加心的拾取范围，1生命回复，减4防御
-				我也是桃饱用户
-				'''
-			PhoBuff : 
-				'''
-				加10%召唤物伤害
-				异域风情
-				'''
-			PinaColadaBuff : 
-				'''
-				加4防御，33%反伤
-				从不添加香精当生榨
-				'''
-			PineappleBuff : 
-				'''
-				加6防御，50%反伤
-				菠萝碱
-				'''
-			PizzaBuff : 
-				'''
-				加5穿甲
-				会让意大利人破防的菠萝披萨
-				'''
-			PlumBuff : 
-				'''
-				加600仇恨值，8%攻速
-				至于我的意见，那还是再等等吧
-				'''
-			PotatoChipsBuff : 
-				'''
-				加4防御，4%伤害
-				高油高盐
-				'''
-			PrismaticPunchBuff : 
-				'''
-				加400仇恨值,1召唤栏,减4防御
-				高雅兴致
-				'''
-			PumpkinPieBuff : 
-				'''
-				最大生命值加50
-				丰收的喜悦
-				'''
-			RambutanBuff : 防御+4
-			RoastedBirdBuff : 防御+4
-			RoastedDuckBuff : 防御+4
-			SakeBuff : 
-				'''
-				防御减8，伤害、暴击率和近战攻速各增加8%
-				'''
-			SashimiBuff : 
-				'''
-				寄生虫！
-				
-				'''
-			SauteedFrogLegsBuff : 
-				'''
-				自动跳跃，增加跳跃能力
-				钓不到蛙腿？那就吃吧
-				'''
-			SeafoodDinnerBuff : 
-				'''
-				够生猛！
-				
-				'''
-			ShrimpPoBoyBuff : 
-				'''
-				抗氧化
-				加6防御,25%挖矿速度
-				'''
-			ShuckedOysterBuff : 
-				'''
-				寄生虫！
-				
-				'''
-			SmoothieofDarknessBuff : 
-				'''
-				腹黑（字面意义上）
-				
-				'''
-			SpaghettiBuff : 
-				'''
-				加1召唤栏
-				异域风情
-				'''
-			StarfruitBuff : 1437大帝的淫威
-			SteakBuff : 
-				'''
-				减25%魔力消耗
-				异域风情
-				'''
-			SugarCookieBuff : 
-				'''
-				加10%远程伤害
-				养胃滋润
-				'''
-			TeacupBuff : 
-				'''
-				加2魔力回复，20魔力上限
-				醇香四溢
-				'''
-			TropicalSmoothieBuff : 
-				'''
-				加5%暴击
-				热带风暴
-				'''
+			AppleBuff : "增加8%减伤\n“一天一苹果，医生远离我”"
+			AppleJuiceBuff : " 短时间内增加80%减伤\n“一天一苹果，医生远离我”"
+			ApplePieBuff : "加8%减伤,1生命回复\n“一天一苹果，医生远离我”"
+			ApricotBuff : "增加加4魔力再生\n“止渴润肺”"
+			BaconBuff : "加2生命回复，所受冷系伤害降低\n“开胃祛寒”"
+			BananaBuff : "20%不消耗弹药，加5%远程伤害\n“低血压”"
+			BananaDaiquiriBuff : "短时间内不消耗子弹，大幅增加远程伤害与暴击\n“低体温血压”"
+			BananaSplitBuff : "33%不消耗弹药，增加8%远程暴击\n“低血压”"
+			BBQRibsBuff : "加50血量上限\n“滋阴补血”"
+			BlackCurrantBuff : "获得夜视、危险感知能力\n“改善視力”"
+			BloodOrangeBuff : "增加加25血量上限\n“这里不是崽饿”"
+			BloodyMoscatoBuff : "短时间内每次攻击回5点生命\n血色"
+			BowlofSoupBuff : "增加20魔力上限,5%魔法伤害\n“补脑”"
+			BunnyStewBuff : "自动跳跃，增加跳跃能力\n“没有任何兔子在制作过程中受到伤害 ”"
+			BurgerBuff : "减少移速，增加防御\n“热量炸弹”"
+			CherryBuff : "增加移速与跳跃高度\n“你所热爱的，就是你的生活”"
+			ChickenNuggetBuff : "增加1生命回复、8%攻速\n“数一数二的鸡块！”"
+			ChocolateChipCookieBuff : "增加2点生命回复和魔力回复\n“补充能量”"
+			ChristmasPuddingBuff : "仇恨值减少800\n“美容养颜”"
+			CoconutBuff : "增加4防御，5%减伤\n“我从小啃到大”"
+			CoffeeCupBuff : "短时间内大幅增加铺墙铺砖速度，高亮标记敌人、陷阱和宝藏，你会散发光芒\n“社畜的宝物”"
+			CookedFishBuff : "加40魔力上限,8%魔法暴击率\n“益气健脾”"
+			CookedMarshmallowBuff : "减75%最大掉落速度,但无法操控下落速度\n“轻飘飘的”"
+			CookedShrimpBuff : "加10防御,4穿甲\n“补钙”"
+			CreamSodaBuff : "短时间内大幅增加近战能力，但极其吸引仇恨\n“喷射！”"
+			DragonfruitBuff : "攻击造成着火以及涂油\n“红红火火恍恍惚惚”"
+			ElderberryBuff : "你可以短距离冲刺\n“抗氧化”"
+			EscargotBuff : "大大减速，加50%减伤\n“神龟药水？”"
+			FriedEggBuff : "加8%伤害\n“蛋白质”"
+			FriesBuff : "加4防御，8%暴击\n“高油高盐”"
+			FroggleBunwichBuff : "自动跳跃，增加伤害和跳跃能力\n“你能真正尝到沼泽的味道。”"
+			FruitJuiceBuff : "短时间内幅大大提升大部分属性\n“维生素！”"
+			FruitSaladBuff : "提升大部分属性\n“长久的维生素！”"
+			GingerbreadCookieBuff : "加1生命回复,保暖\n“驱寒排毒”"
+			GoldenDelightBuff : "攻击造迈达斯，提升大部分属性\n“金灿灿!”"
+			GrapefruitBuff : "加50%召唤物击退\n “拒绝肾透支”"
+			GrapeJuiceBuff : "短时间极其幸运\n“浓缩的幸福”"
+			GrapesBuff : "加1召唤栏，幸运值加10%，减8防御\n“多子多福 ”"
+			GrilledSquirrelBuff : "增加跳跃能力\n“欢跃”"
+			GrubSoupBuff : "加25渔力，每秒减2生命\n“吃啥补啥，就是有点恶心”"
+			HotdogBuff : "减少移速，增加近战伤害\n“热量炸弹”"
+			IceCreamBuff : "免疫着火和火块\n“吃雪（bushi”"
+			LemonadeBuff : "短时间内远程击退加倍,仇恨值减2400\n“消炎美容”"
+			LemonBuff : "加5%远程暴击,仇恨值减300\n“消炎美容”"
+			LobsterTailBuff : "加6防御,25%挖矿速度\n“壮阳”"
+			MangoBuff : "减缓因食物中毒而产生的持续减血效果\n“清胃解毒”"
+			MarshmallowBuff : "可以二段跳\n“像云一样”"
+			MilkCartonBuff : "短时间内免疫几乎所有debuff\n“一奶解百毒 ”"
+			MilkshakeBuff : "短时间内大幅加移速\n“节食减肥 ”"
+			MonsterLasagnaBuff : "增加25%暴击率，但每秒减4生命\n“弄熟的恶魔还是恶魔，在千层饼中也不会改变。”"
+			NachosBuff : "攻击造成涂油以及所有火焰减益\n“爆米花”"
+			PadThaiBuff : "增加50%召唤物击退\n“异域风情”"
+			PeachBuff : "增加心的拾取范围，1生命回复\n“在想peach”"
+			PeachSangriaBuff : "短时间内大幅回复生命，增加心的拾取范围\n“我也是桃饱用户”"
+			PhoBuff : "增加10%召唤物伤害\n“异域风情 ”"
+			PinaColadaBuff : "短时间内十倍反伤（上限1000）,防御增加20\n“从不添加香精当生榨 。"
+			PineappleBuff : "增加6防御，50%反伤\n“菠萝碱”"
+			PizzaBuff : "增加10穿甲\n“会让意大利人破防的菠萝披萨”"
+			PlumBuff : "加600仇恨值，8%攻速\n“至于我的建议，还是再等等吧!”"
+			PotatoChipsBuff : "加4防御，8%伤害\n“高油高盐”"
+			PrismaticPunchBuff : "短时间内增加10召唤栏，增加50%召唤伤害，击退\n“高雅兴致”"
+			PumpkinPieBuff : "最大生命值加50\n“丰收的喜悦”"
+			RambutanBuff : "免疫中毒和毒液以及十字章一样的免疫效果\n“提高免疫”"
+			RoastedBirdBuff : "增加飞行能力\n“我是一只小小小鸟”"
+			RoastedDuckBuff : "可以在水上行走，增加飞行能力\n“这是烤鸭”"
+			SakeBuff : "短时间内减18防御，大幅增加近战能力\n“纯度，太高了。”"
+			SashimiBuff : "可以游泳，水下呼吸，增加10%伤害，20%移速，但每秒减3生命\n“寄生虫！”"
+			SauteedFrogLegsBuff : "自动跳跃，增加跳跃能力\n“钓不到蛙腿？那就吃吧。”"
+			SeafoodDinnerBuff : "增加12%暴击，伤害，攻速\n“够生猛！”"
+			ShrimpPoBoyBuff : "加6防御,25%挖矿速度\n“壮阳”"
+			ShuckedOysterBuff : "减5防御，加10穿甲，每秒减3生命\n“寄生虫！”"
+			SmoothieofDarknessBuff : "短时间内80%闪避\n“腹黑（字面意义上）”"
+			SpaghettiBuff : "增加1召唤栏\n“异域风情”"
+			StarfruitBuff : "使用远程武器时会生成向后的射弹\n“1437大帝的淫威”"
+			SteakBuff : "减少33%魔力消耗\n“上流 ”"
+			SugarCookieBuff : "加5%远程伤害\n“养胃滋润”"
+			TeacupBuff : "短时间内大幅增加魔力回复，魔法攻击，暴击\n“醇香四溢”"
+			TropicalSmoothieBuff : "短时间内魔法攻击仅消耗一点魔力，大幅增加5%魔法攻击，暴击\n“热带风暴”"
 		}
 	}
 }
