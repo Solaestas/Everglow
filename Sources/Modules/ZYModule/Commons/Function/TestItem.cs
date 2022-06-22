@@ -6,6 +6,19 @@ namespace Everglow.Sources.Modules.ZYModule.Commons.Function;
 
 internal class TestItem : ModItem
 {
+    private class TestShader : ScreenShader
+    {
+        public TestShader() : base(EffectType.Test, ScreenParameter.uTime | ScreenParameter.uOpacity | ScreenParameter.uResolution | ScreenParameter.uNoise)
+        {
+        }
+        public override void Update()
+        {
+            if(time >= 120)
+            {
+                active = false;
+            }
+        }
+    }
     protected override bool CloneNewInstances => true;
     public override string Texture => "Terraria/Images/UI/Wires_0";
     public override void SetStaticDefaults()
@@ -15,7 +28,7 @@ internal class TestItem : ModItem
             .Select(f => (SoundStyle)f.GetValue(null))
             .ToList();
         enumerator = soundStyles.GetEnumerator();
-        var shader = new ScreenShader(EffectType.Test, ScreenParameter.uTime | ScreenParameter.uOpacity | ScreenParameter.uResolution | ScreenParameter.uNoise);
+        var shader = new TestShader();
         ScreenShaderManager.Add("Test", shader);
         shader.effectParameters["uColorBar"].SetValue(TextureType.WhiteGreenBar.GetValue(false));
     }

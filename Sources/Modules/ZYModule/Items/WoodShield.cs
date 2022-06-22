@@ -122,14 +122,14 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
         Owner.SetCompositeArmFront(true, stretch, Projectile.rotation - MathHelper.PiOver2);
         Projectile.Center = Owner.Center
             + new Vector2(stretchRate * MaxLength, 0).RotatedBy(Projectile.rotation)
-            + new Vector2(-5 * Projectile.direction, -2);
+            + new Vector2(-5 * Projectile.direction, -2).RotatedBy(Owner.fullRotation);
 
     }
     public void Holding()
     {
         Projectile.frame = 0;
         Projectile.direction = Owner.direction;
-        Vector2 offset = HoldOffset[Owner.bodyFrame.Y / Owner.bodyFrame.Height];
+        Vector2 offset = HoldOffset[Owner.bodyFrame.Y / Owner.bodyFrame.Height].RotatedBy(Owner.fullRotation);
         offset.X *= Projectile.direction;
         Projectile.Center = Owner.Center + offset;
     }

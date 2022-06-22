@@ -26,7 +26,7 @@ namespace Everglow.Sources.Modules.ZYModule.Visuals.ScreenShaders
                 effectParameters["uNoise"].SetValue(TextureType.Noise.GetValue(false));
             }
         }
-        public void AutoSetParameters()
+        public void AutoSetValue()
         {
             if (parameters.HasFlag(ScreenParameter.uResolution))
             {
@@ -53,8 +53,7 @@ namespace Everglow.Sources.Modules.ZYModule.Visuals.ScreenShaders
                 effectParameters["uZoomMatrix"].SetValue(Main.GameViewMatrix.ZoomMatrix);
             }
         }
-        public virtual void SetParameters() { }
-        public virtual void PreDraw() { }
-        public virtual void PostDraw() { }
+        public virtual void Update() { }
+        public virtual void SetValue() { }
     }
 }

@@ -56,22 +56,9 @@ internal class ScreenShaderManager : IModule
     {
         foreach (var shader in screenShaders.Values)
         {
-            if (shader.active)
-            {
-                shader.opacity = MathUtils.Approach(shader.opacity, 1, 0.05f);
-            }
-            else
-            {
-                shader.opacity = MathUtils.Approach(shader.opacity, 0, 0.05f);
-            }
-            if (shader.opacity != 0)
-            {
-                ++shader.time;
-            }
-            else
-            {
-                shader.time = 0;
-            }
+            shader.opacity = shader.active ? MathUtils.Approach(shader.opacity, 1, 0.05f) : MathUtils.Approach(shader.opacity, 0, 0.05f);
+            shader.time = shader.opacity == 0 ? 0 : shader.time + 1;
+            shader.Update();
         }
     }
     public void Render()
@@ -86,16 +73,13 @@ internal class ScreenShaderManager : IModule
         rtIndex = 0;
 
         sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
-        gd.SetRenderTarget(Main.screenTarget);
-        gd.Clear(Color.Transparent);
-        sb.Draw((Texture2D)gd.GetRenderTargets()[0].RenderTarget, Vector2.Zero, Color.White);
-
+        
         foreach (var shader in enableShaders)
         {
             gd.SetRenderTarget(Next);
             gd.Clear(Color.Transparent);
-            shader.AutoSetParameters();
-            shader.SetParameters();
+            shader.AutoSetValue();
+            shader.SetValue();
             shader.effectPass.Apply();
             sb.Draw(Current, Vector2.Zero, Color.White);
             Switch();
