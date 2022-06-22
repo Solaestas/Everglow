@@ -4,8 +4,8 @@
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("FriesBuff");
-            Description.SetDefault("加4防御，8%暴击\n“高油高盐”");
+            //DisplayName.SetDefault("FriesBuff");
+            //Description.SetDefault("加4防御，8%暴击\n“高油高盐”");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
         }
