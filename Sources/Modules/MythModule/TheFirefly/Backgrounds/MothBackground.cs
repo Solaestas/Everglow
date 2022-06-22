@@ -425,13 +425,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             rvc.Y -= 120;
             rvc.X += 150;
             Main.spriteBatch.Draw(texClose, Vector2.Zero, rvc, GetLuminace(color0));
- 
+
             Main.spriteBatch.End();
             ropeManager.Draw();
 
             Vector2 offset = ropes[0].GetOffset();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null,
-                Matrix.CreateTranslation(offset.X-Main.screenPosition.X , offset.Y-Main.screenPosition.Y, 0) * Main.GameViewMatrix.TransformationMatrix);
+                Matrix.CreateTranslation(offset.X - Main.screenPosition.X, offset.Y - Main.screenPosition.Y, 0) * Main.GameViewMatrix.TransformationMatrix);
             Texture2D dropTexture = MythContent.QuickTexture("TheFirefly/Backgrounds/Drop");
             for (int i = 0; i < ropes.Count; i++)
             {
@@ -441,7 +441,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                     float scale = mass.mass * 2;
                     Vector2 vector = mass.position - ropes[i].mass[j - 1].position;
                     float rotation = vector.ToRotation() - MathHelper.PiOver2;
-                    Color color = GetLuminace(new Color(0, 0.15f * j, 1f / 5f * j, 0) * alpha);
+                    Color color = GetLuminace(new Color(0, 0.15f * j, 1f / 5f * j, 0) * alpha * 5);
                     Main.spriteBatch.Draw(dropTexture, mass.position, null, color, rotation, dropTexture.Size() / 2f, scale, SpriteEffects.None, 0);
                 }
             }
@@ -512,7 +512,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             Vector2 deltaPos = ScreenCenter - new Vector2(mothLand.fireflyCenterX * 16f, mothLand.fireflyCenterY * 16f);
             deltaPos *= move;
             Vector2 TexLT = sampleCenter - screenSize / 2f + deltaPos;
-            return TexLT + new Vector2(-147, 286);
+            return TexLT + new Vector2(-422 + 10, 252 + 55);
         }
 
         ///// <summary>

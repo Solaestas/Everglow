@@ -63,7 +63,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
                         var pixel = span[i + rect.X];
                         if (pixel.R == 255)
                         {
-                            var rope = new Rope(new Vector2(i * 5, j * 5) + basePosition, (pixel.B + 140) / 300f, pixel.G, offset);
+                            var rope = new Rope(new Vector2(i * 5, j * 5) + basePosition, (pixel.B + 140) / 300f, Math.Max((int)pixel.G, 3), offset);
                             ropes.Add(rope);
                             result.Add(rope);
                         }
@@ -102,11 +102,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
                 List<Vector2> massPositionsSmooth = Commons.Function.Curves.CatmullRom.SmoothPath(rope.mass.Select(m => m.position + offset), 4);
                 DrawRope(massPositionsSmooth, vertices, indices);
             }
-            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null,
+            sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null,
                 Matrix.CreateTranslation(-Main.screenPosition.X, -Main.screenPosition.Y, 0) * Main.GameViewMatrix.TransformationMatrix);
-            sb.End();
             gd.Textures[0] = MythContent.QuickTexture("TheFirefly/Tiles/Branch");
             gd.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, vertices.ToArray(), 0, vertices.Count, indices.ToArray(), 0, indices.Count / 3);
+            sb.End();
         }
 
         private void DrawRope(List<Vector2> path, List<Vertex2D> vertices, List<int> indices)
