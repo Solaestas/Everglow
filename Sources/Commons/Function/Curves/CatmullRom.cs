@@ -5,10 +5,10 @@ public static class CatmullRom
     /// <summary>
     /// 根据输入点的List获得一个使用CatmullRom样条平滑过后的路径
     /// </summary>
-    /// <param name="OrigLine"></param>
-    /// <param name="aimCount"></param>
+    /// <param name="origPath"></param>
+    /// <param name="precision">null : 根据角度差自动适配取点个数， not null ：最少为2</param>
     /// <returns></returns>
-    public static List<Vector2> SmoothPath(IEnumerable<Vector2> origPath)
+    public static List<Vector2> SmoothPath(IEnumerable<Vector2> origPath, int? precision = null)
     {
         int count = origPath.Count();
         if (count <= 2)
@@ -33,11 +33,18 @@ public static class CatmullRom
         {
             float rotCurrent = (path[i] - path[i - 1]).ToRotation();
             float rotNext = (path[i + 2] - path[i + 1]).ToRotation();
-
-            // 根据当前和下一个节点所代表的向量的旋转差异来增加采样数量
-            // 如果旋转差异越大，采样数量就越大
-            float dis = Math.Abs(rotCurrent - rotNext);
-            int dom = (int)((dis >= MathHelper.Pi ? MathHelper.TwoPi - dis : dis) / 0.22f + 2);
+            int dom;
+            if (precision is null)
+            {
+                // 根据当前和下一个节点所代表的向量的旋转差异来增加采样数量
+                // 如果旋转差异越大，采样数量就越大
+                float dis = Math.Abs(rotCurrent - rotNext);
+                dom = (int)((dis >= MathHelper.Pi ? MathHelper.TwoPi - dis : dis) / 0.22f + 2);
+            }
+            else
+            {
+                dom = precision.Value;
+            }
             float factor = 1.0f / dom;
             for (float j = 0; j < 1.0f; j += factor)
             {
