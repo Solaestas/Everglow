@@ -2,6 +2,7 @@
 using Everglow.Sources.Commons.Core.UI;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds;
 using Everglow.Sources.Modules.MythModule.TheFirefly.UI;
+using Everglow.Sources.Modules.MythModule.TheTusk.Sky;
 using MonoMod.Cil;
 using ReLogic.Content;
 using Terraria.GameContent.Shaders;
@@ -14,6 +15,8 @@ namespace Everglow.Sources.Modules.MythModule
         public string Name { get; } = "神话";
 
         private Asset<Effect> m_waveDisortionScreen = null;
+
+        private FogPass m_fogPass = null;
 
         public void Load()
         {
@@ -28,9 +31,18 @@ namespace Everglow.Sources.Modules.MythModule
                 On.Terraria.GameContent.Shaders.WaterShaderData.Update += WaterShaderData_Update;
                 IL.Terraria.GameContent.Shaders.WaterShaderData.Apply += WaterShaderData_Apply;
                 On.Terraria.GameContent.Shaders.WaterShaderData.StepLiquids += WaterShaderData_StepLiquids;
+
+                On.Terraria.Graphics.Effects.FilterManager.EndCapture += FilterManager_EndCapture;
+
+                m_fogPass = new FogPass();
             }
         }
 
+        private void FilterManager_EndCapture(On.Terraria.Graphics.Effects.FilterManager.orig_EndCapture orig, Terraria.Graphics.Effects.FilterManager self, RenderTarget2D finalTexture, RenderTarget2D screenTarget1, RenderTarget2D screenTarget2, Color clearColor)
+        {
+            m_fogPass.Apply();
+            orig(self, finalTexture, screenTarget1, screenTarget2, clearColor);
+        }
 
         private void WaterShaderData_StepLiquids(On.Terraria.GameContent.Shaders.WaterShaderData.orig_StepLiquids orig, WaterShaderData self)
         {

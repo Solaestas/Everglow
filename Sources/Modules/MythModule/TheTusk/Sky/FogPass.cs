@@ -22,11 +22,10 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
         private Asset<Effect> m_gaussianKernelEffect;
         private Asset<Effect> m_fogScreenEffect;
 
-        private RenderTarget2D[] m_downSampleRenderTargets;
-        private RenderTarget2D[] m_upSampleRenderTargets;
-
+        private RenderTarget2D[] m_blurRenderTargets;
         private RenderTarget2D m_renderTargetSwap;
         private RenderTarget2D m_filteredScreenTarget;
+
         private Color[] m_lightMap;
         private Texture2D m_lightTexture;
 
@@ -39,11 +38,10 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
         private bool m_shouldResetRenderTargets;
         private bool m_enableGaussian, m_enableProgressiveUpSampling;
 
-        private readonly int MAX_DOWNSAMPLE_LEVEL = 4;
-        private readonly int MAX_UPSAMPLE_LEVEL = 4;
+        private readonly int MAX_BLUR_LEVELS = 10;
 
-        private int m_maxDownsampleLevels;
-        private int m_maxUpsampleLevels;
+        private int m_maxBlurLevel;
+
 
         //private Effect _bloomThreasholdFilter;
         //private Effect _luminanceFilter;
@@ -122,8 +120,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
             m_gaussianKernelEffect = MythContent.QuickEffectAsset("Effects/GBlur");
             m_fogScreenEffect = MythContent.QuickEffectAsset("Effects/Fog");
 
-            m_downSampleRenderTargets = new RenderTarget2D[MAX_DOWNSAMPLE_LEVEL];
-            m_upSampleRenderTargets = new RenderTarget2D[MAX_UPSAMPLE_LEVEL];
+            m_blurRenderTargets = new RenderTarget2D[MAX_BLUR_LEVELS];
             m_shouldResetRenderTargets = true;
         }
 
@@ -135,7 +132,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
 
         private void UpdateParameters()
         {
-
             var fogConfig = ModContent.GetInstance<FogConfigs>();
 
             BloomRadius = fogConfig.MaxBloomRadius;
@@ -143,7 +139,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
             m_shouldResetRenderTargets |= (m_offscreenTilesSize != fogConfig.OffscreenTiles);
             m_offscreenTilesSize = fogConfig.OffscreenTiles;
 
-            Enable = fogConfig.GaussianKernel;
+            Enable = fogConfig.EnableScattering;
             m_enableProgressiveUpSampling = fogConfig.EnableProgressiveUpSampling;
         }
 
@@ -153,7 +149,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
             m_tileHeight = Main.screenHeight / 16 + m_offscreenTilesSize * 2 + 2;
             m_lightMap = new Color[m_tileWidth * m_tileHeight];
             m_lightTexture = new Texture2D(Main.graphics.GraphicsDevice, m_tileWidth, m_tileHeight, false,
-                SurfaceFormat.Rgba1010102);
+                SurfaceFormat.Color);
         }
 
         private void ExtractLightMap()
@@ -184,9 +180,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
             {
                 for (int j = startTileX; j <= endTileX; j++)
                 {
-                    int x = j - offX + m_offscreenTilesSize + 2;
-                    int y = i - offY + m_offscreenTilesSize + 2;
-                    var color = Lighting.GetColor(i, j);
+                    int x = j - offX + m_offscreenTilesSize + 1;
+                    int y = i - offY + m_offscreenTilesSize + 1;
+                    var color = Lighting.GetColor(j, i);
 
                     var s = color.ToVector3();
                     if ((s.X + s.Y + s.Z) * 0.333f > LuminanceThreashold)
@@ -199,7 +195,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
             m_lightTexture.SetData(m_lightMap);
         }
 
-        public void Apply(RenderTarget2D screenTarget)
+        public void Apply()
         {
             UpdateParameters();
             if (!Enable)
@@ -218,32 +214,32 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
                 m_frameHeight = m_tileHeight * 16;
 
                 int l = 0;
-                for (; l < MAX_DOWNSAMPLE_LEVEL; l++)
+                for (; l < MAX_BLUR_LEVELS; l++)
                 {
-                    if ((m_tileWidth >> l) == 0 || (m_tileHeight >> l) == 0)
+                    if ((m_frameWidth >> l) == 0 || (m_frameHeight >> l) == 0)
                     {
                         break;
                     }
-                    m_downSampleRenderTargets[l] = new RenderTarget2D(Main.graphics.GraphicsDevice,
-                            m_tileWidth >> l, m_tileHeight >> l, false,
+                    m_blurRenderTargets[l] = new RenderTarget2D(Main.graphics.GraphicsDevice,
+                            m_frameWidth >> l, m_frameWidth >> l, false,
                             SurfaceFormat.Rgba1010102, DepthFormat.None);
                 }
-                m_maxDownsampleLevels = l;
+                m_maxBlurLevel = l;
 
-                for (int i = 0; i < MAX_UPSAMPLE_LEVEL; i++)
+                for (int i = 0; i < m_maxBlurLevel; i++)
                 {
-                    m_upSampleRenderTargets[l] = new RenderTarget2D(Main.graphics.GraphicsDevice,
-                            m_tileWidth << l, m_tileHeight << l, false,
+                    m_blurRenderTargets[i] = new RenderTarget2D(Main.graphics.GraphicsDevice,
+                            m_frameWidth >> i, m_frameHeight >> i, false,
                             SurfaceFormat.Rgba1010102, DepthFormat.None);
                 }
 
-                int maxKernel = m_maxDownsampleLevels - 1;
+                int maxKernel = m_maxBlurLevel - 1;
                 m_renderTargetSwap = new RenderTarget2D(Main.graphics.GraphicsDevice,
-                        m_tileWidth >> maxKernel, m_tileHeight >> maxKernel,
+                        m_frameWidth >> maxKernel, m_frameHeight >> maxKernel,
                         false, SurfaceFormat.Rgba1010102, DepthFormat.None);
-                //_filteredScreenTarget = new RenderTarget2D(Main.graphics.GraphicsDevice,
-                //        Main.screenWidth, Main.screenHeight,
-                //        false, SurfaceFormat.Rgba1010102, DepthFormat.None);
+                m_filteredScreenTarget = new RenderTarget2D(Main.graphics.GraphicsDevice,
+                        Main.screenWidth, Main.screenHeight,
+                        false, SurfaceFormat.Rgba1010102, DepthFormat.None);
                 m_screenWidth = Main.screenWidth;
                 m_screenHeight = Main.screenHeight;
 
@@ -254,51 +250,56 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
 
             Generate(2, 4);
 
-            int x = (int)(Main.screenPosition.X / 16) - _offscreenTilesSize - 2;
+            var spriteBatch = Main.spriteBatch;
+            var graphicsDevice = Main.graphics.GraphicsDevice;
+            int x = (int)(Main.screenPosition.X / 16) - m_offscreenTilesSize - 2;
             x *= 16;
-            int y = (int)(Main.screenPosition.Y / 16) - _offscreenTilesSize - 2;
+            int y = (int)(Main.screenPosition.Y / 16) - m_offscreenTilesSize - 2;
             y *= 16;
-            GraphicsDevice.SetRenderTarget(_filteredScreenTarget);
-            GraphicsDevice.Clear(Color.Transparent);
+            graphicsDevice.SetRenderTarget(m_filteredScreenTarget);
+            graphicsDevice.Clear(Color.Transparent);
             spriteBatch.Begin(SpriteSortMode.Immediate,
                     BlendState.Opaque,
                     SamplerState.PointClamp,
                     DepthStencilState.Default,
                     RasterizerState.CullNone, null);
-            spriteBatch.TeaNPCDraw(_samplingRenderTargets[0], new Rectangle((int)(x - Main.screenPosition.X),
-                (int)(y - Main.screenPosition.Y), _samplingRenderTargets[0].Width, _samplingRenderTargets[0].Height),
+            spriteBatch.Draw(m_blurRenderTargets[0], new Rectangle((int)(x - Main.screenPosition.X),
+                (int)(y - Main.screenPosition.Y), m_blurRenderTargets[0].Width, m_blurRenderTargets[0].Height),
                 Color.White);
             spriteBatch.End();
 
-            RenderTarget2D tmpTarget = (screenTarget == Main.screenTarget) ? Main.screenTargetSwap : Main.screenTarget;
-            GraphicsDevice.SetRenderTarget(tmpTarget);
-            GraphicsDevice.Clear(Color.Transparent);
+            graphicsDevice.SetRenderTarget(Main.screenTargetSwap);
+            graphicsDevice.Clear(Color.Transparent);
             spriteBatch.Begin(SpriteSortMode.Immediate,
                     BlendState.Opaque,
                     SamplerState.PointClamp,
                     DepthStencilState.Default,
                     RasterizerState.CullNone, null);
-            spriteBatch.TeaNPCDraw(screenTarget, Vector2.Zero,
+            spriteBatch.Draw(Main.screenTarget, Vector2.Zero,
                 Color.White);
             spriteBatch.End();
 
-            GraphicsDevice.SetRenderTarget(screenTarget);
-            GraphicsDevice.Clear(Color.Transparent);
-            _fogEffect.Parameters["uImageSize0"].SetValue(new Vector2(Main.screenWidth, Main.screenHeight));
-            _fogEffect.Parameters["uAspectRatio"].SetValue(Main.screenWidth / (float)Main.screenHeight);
-            _fogEffect.Parameters["uAbsorption"].SetValue(TeaNPC.FogConfigs.FogAbsorption * 0.05f);
-            _fogEffect.Parameters["uBloomIntensity"].SetValue(BloomIntensity);
-            _fogEffect.Parameters["uBloomAbsorption"].SetValue(BloomAbsorptionRate);
+            var fogEffect = m_fogScreenEffect.Value;
+            graphicsDevice.SetRenderTarget(Main.screenTarget);
+            graphicsDevice.Clear(Color.Transparent);
+            fogEffect.Parameters["uImageSize0"].SetValue(new Vector2(Main.screenWidth, Main.screenHeight));
+
+            var config = ModContent.GetInstance<FogConfigs>();
+            var absorption = new Vector3(config.FogAbsorptionR, config.FogAbsorptionG, config.FogAbsorptionB);
+            absorption *= absorption;
+            fogEffect.Parameters["uAbsorption"].SetValue(absorption);
+            fogEffect.Parameters["uBloomIntensity"].SetValue(BloomIntensity);
+            fogEffect.Parameters["uBloomAbsorption"].SetValue(BloomAbsorptionRate);
             spriteBatch.Begin(SpriteSortMode.Immediate,
                 BlendState.Opaque,
                 SamplerState.PointClamp,
                 DepthStencilState.Default,
                 RasterizerState.CullNone, null);
             {
-                GraphicsDevice.Textures[1] = _filteredScreenTarget;
-                GraphicsDevice.SamplerStates[1] = SamplerState.PointClamp;
-                _fogEffect.CurrentTechnique.Passes[0].Apply();
-                spriteBatch.TeaNPCDraw(tmpTarget, Vector2.Zero,
+                graphicsDevice.Textures[1] = m_filteredScreenTarget;
+                graphicsDevice.SamplerStates[1] = SamplerState.PointClamp;
+                fogEffect.CurrentTechnique.Passes[0].Apply();
+                spriteBatch.Draw(Main.screenTargetSwap, Vector2.Zero,
                     Color.White);
             }
             spriteBatch.End();
@@ -309,7 +310,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
             var spriteBatch = Main.spriteBatch;
             var graphicsDevice = Main.graphics.GraphicsDevice;
 
-            graphicsDevice.SetRenderTarget(m_downSampleRenderTargets[0]);
+            graphicsDevice.SetRenderTarget(m_blurRenderTargets[4]);
             graphicsDevice.Clear(Color.Transparent);
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque,
                     SamplerState.PointClamp,
@@ -320,52 +321,52 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
 
             var filterBox = m_boxKernelEffect.Value;
 
-            int downLevels = Math.Min(m_maxDownsampleLevels, down);
+            int downLevels = Math.Min(m_maxBlurLevel - 4, down);
 
             // Downsampling
-            for (int i = 1; i < downLevels; i++)
+            for (int i = 4; i < 4 + downLevels; i++)
             {
-                int curWidth = m_tileWidth >> i;
-                int curHeight = m_tileHeight >> i;
-                Main.graphics.GraphicsDevice.SetRenderTarget(m_downSampleRenderTargets[i]);
+                int curWidth = m_frameWidth >> (i + 1);
+                int curHeight = m_frameHeight >> (i + 1);
+                Main.graphics.GraphicsDevice.SetRenderTarget(m_blurRenderTargets[i + 1]);
                 Main.graphics.GraphicsDevice.Clear(Color.Transparent);
                 spriteBatch.Begin(SpriteSortMode.Immediate,
                     BlendState.Opaque,
                     SamplerState.AnisotropicClamp,
                     DepthStencilState.None,
                     RasterizerState.CullNone, null);
-                filterBox.Parameters["uImageSize0"].SetValue(m_downSampleRenderTargets[i - 1].Size());
+                filterBox.Parameters["uImageSize0"].SetValue(m_blurRenderTargets[i].Size());
                 filterBox.Parameters["uDelta"].SetValue(1.0f);
                 filterBox.CurrentTechnique.Passes[0].Apply();
-                spriteBatch.Draw(m_downSampleRenderTargets[i - 1], new Rectangle(0, 0, curWidth, curHeight),
+                spriteBatch.Draw(m_blurRenderTargets[i], new Rectangle(0, 0, curWidth, curHeight),
                     Color.White);
                 spriteBatch.End();
             }
 
-            ApplyGaussian();
+            ApplyGaussian(downLevels + 4);
 
             // Upsampling
-            for (int i = downLevels; i > 0; i--)
+            for (int i = 4 + downLevels; i > 0; i--)
             {
-                int curWidth = m_tileWidth >> (i - 1);
-                int curHeight = m_tileHeight >> (i - 1);
-                Main.graphics.GraphicsDevice.SetRenderTarget(m_downSampleRenderTargets[i + 1]);
+                int curWidth = m_frameWidth >> (i - 1);
+                int curHeight = m_frameHeight >> (i - 1);
+                Main.graphics.GraphicsDevice.SetRenderTarget(m_blurRenderTargets[i]);
                 Main.graphics.GraphicsDevice.Clear(Color.Transparent);
                 spriteBatch.Begin(SpriteSortMode.Immediate,
                     BlendState.Opaque,
                     SamplerState.AnisotropicClamp,
                     DepthStencilState.Default,
                     RasterizerState.CullNone, null);
-                filterBox.Parameters["uImageSize0"].SetValue(m_downSampleRenderTargets[i].Size());
+                filterBox.Parameters["uImageSize0"].SetValue(m_blurRenderTargets[i].Size());
                 filterBox.Parameters["uDelta"].SetValue(1.0f);
                 filterBox.CurrentTechnique.Passes[0].Apply();
-                spriteBatch.Draw(m_downSampleRenderTargets[i], new Rectangle(0, 0, curWidth, curHeight),
+                spriteBatch.Draw(m_blurRenderTargets[i], new Rectangle(0, 0, curWidth, curHeight),
                     Color.White);
                 spriteBatch.End();
             }
         }
 
-        private void ApplyGaussian()
+        private void ApplyGaussian(int level)
         {
             if (m_enableGaussian)
             {
@@ -373,7 +374,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
                 var spriteBatch = Main.spriteBatch;
                 var graphicsDevice = Main.graphics.GraphicsDevice;
 
-                var target = m_downSampleRenderTargets[m_maxDownsampleLevels - 1];
+                var target = m_blurRenderTargets[level];
 
                 gaussianFilter.Parameters["uImageSize0"].SetValue(target.Size());
                 gaussianFilter.Parameters["uDelta"].SetValue(1.0f);
