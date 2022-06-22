@@ -54,9 +54,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
         private List<List<Mass>> masses = new List<List<Mass>>();
         private List<List<Spring>> springs = new List<List<Spring>>();
         private List<Vector2> RopPosFir = new List<Vector2>();
-        public List<float> RopPosFirS = new List<float>();
-        public List<int> RopPosFirC = new List<int>();
-        public void GetRopePosFir(string Shapepath)
+        private List<float> RopPosFirS = new List<float>();
+        private List<int> RopPosFirC = new List<int>();
+        private void GetRopePos(string Shapepath)
         {
             var imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Sources/Modules/MythModule/TheFirefly/Tiles/" + Shapepath);
             imageData.ProcessPixelRows(accessor =>
@@ -70,8 +70,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                         if (pixel.R == 255)
                         {
                             RopPosFir.Add(new Vector2(x * 5, y * 5));
-                            RopPosFirC.Add(pixel.G + 2);
-                            RopPosFirS.Add((pixel.B + 240) / 300f);
+                            RopPosFirC.Add(pixel.G);
+                            RopPosFirS.Add((pixel.B + 140) / 300f);
                         }
                     }
                 }
@@ -88,8 +88,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                 for (int i = 0; i < RopPosFirC[j]; i++)
                 {
                     float x = i == RopPosFirC[j] - 1 ? 1.3f : 1f;
-                    masses[j].Add(new Mass(RopPosFirS[j] * Main.rand.NextFloat(0.45f, 0.55f) * x,
-                        Main.MouseScreen + new Vector2(0, 6 * i), i == 0));
+                    masses[j].Add(new Mass(RopPosFirS[j] * Main.rand.NextFloat(0.25f, 0.37f) * x,
+                        new Vector2(0, 6 * i), i == 0));
                 }
                 for (int i = 1; i < RopPosFirC[j]; i++)
                 {
@@ -101,7 +101,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
         {     
             if(RopPosFir.Count < 1)
             {
-                GetRopePosFir("FireflyTreeRope");
+                GetRopePos("FireflyTreeRope");
                 InitMass_Spring();
             }
             Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
@@ -126,22 +126,23 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                     Main.spriteBatch.Draw(value, value2 - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, 0, value.Width / Count, value.Height), color, 0f, HalfSize, 1f, effects, 0f);
                     Main.spriteBatch.Draw(valueG, value2 - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, 0, value.Width / Count, value.Height), new Color(1f, 1f, 1f,0), 0f, HalfSize, 1f, effects, 0f);
 
-                    Vector2 RopOffset = new Vector2(i * 16 - tile.TileFrameX, j * 16) - Main.screenPosition;
+                    Vector2 RopOffset = new Vector2(i * 16 - tile.TileFrameX - 128, j * 16 - 128) - Main.screenPosition;
 
                    
 
                     for (int k = 0; k < RopPosFir.Count; k++)
                     {
-                        foreach (var massJ in masses[k])
+                        if (RopPosFir[k].X > tile.TileFrameX && RopPosFir[k].X <= tile.TileFrameX + 256)
                         {
-                            if(RopPosFir[k].X > tile.TileFrameX && RopPosFir[k].X <= tile.TileFrameX + 256)
+                            foreach (var massJ in masses[k])
                             {
-                                Vector2 DrawP = massJ.position + RopPosFir[k] + RopOffset;
+                                Vector2 DrawP = massJ.position + RopPosFir[k] + RopOffset + zero;
                                 massJ.force += new Vector2(0.02f + 0.02f * (float)(Math.Sin(Main.timeForVisualEffects / 72f + DrawP.X / 13d + DrawP.Y / 4d)), 0) * (Main.windSpeedCurrent + 1f) * 2f;
+
                                 //mass.force -= mass.velocity * 0.1f;
                                 //重力加速度（可调
                                 massJ.force += new Vector2(0, 1.0f) * massJ.mass;
-                                Texture2D t0 = MythContent.QuickTexture("TheFirefly/Backgrounds/Drop");
+                                Texture2D t0 = MythContent.QuickTexture("TheFirefly/Tiles/Branch");
                                 int FiIdx = masses[k].FindIndex(mass => mass.position == massJ.position);
                                 float Scale = massJ.mass * 2f;
                                 if (FiIdx > 0)
@@ -151,31 +152,28 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                                     for (int z = 0; z < FiIdx; z++)
                                     {
                                         Main.spriteBatch.Draw(t0, DrawP, null, color, Rot, t0.Size() / 2f, Scale, SpriteEffects.None, 0);
+                                        Main.spriteBatch.Draw(t0, DrawP, null, new Color(255,255,255,0), Rot, t0.Size() / 2f, Scale, SpriteEffects.None, 0);
                                     }
                                 }
-                            }             
-                        }
-                    }
-
-                    for (int k = 0; k < RopPosFir.Count; k++)
-                    {
-                        masses[k][0].position = Vector2.Zero;
-                        float deltaTime = 1;
-                        foreach (var spring in springs[k])
-                        {
-                            spring.ApplyForce(deltaTime);
-                        }
-                        List<Vector2> massPositions = new List<Vector2>();
-                        foreach (var massJ in masses[k])
-                        {
-                            massJ.Update(deltaTime);
-                            massPositions.Add(massJ.position);
-                        }
-                        List<Vector2> massPositionsSmooth = new List<Vector2>();
-                        massPositionsSmooth = Commons.Function.BezierCurve.Bezier.SmoothPath(massPositions);
-                        if (massPositionsSmooth.Count > 0)
-                        {
-                            //DrawRope(massPositionsSmooth, RopPosFir[k] + RopOffset, Vertices);
+                            }
+                            masses[k][0].position = Vector2.Zero;
+                            float deltaTime = 1;
+                            foreach (var spring in springs[k])
+                            {
+                                spring.ApplyForce(deltaTime);
+                            }
+                            List<Vector2> massPositions = new List<Vector2>();
+                            foreach (var massJ in masses[k])
+                            {
+                                massJ.Update(deltaTime);
+                                massPositions.Add(massJ.position);
+                            }
+                            List<Vector2> massPositionsSmooth = new List<Vector2>();
+                            massPositionsSmooth = Commons.Function.BezierCurve.Bezier.SmoothPath(massPositions);
+                            if (massPositionsSmooth.Count > 0)
+                            {
+                                //DrawRope(massPositionsSmooth, RopPosFir[k] + RopOffset, Vertices);
+                            }
                         }
                     }
                 }
