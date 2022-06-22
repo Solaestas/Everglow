@@ -1,8 +1,9 @@
-using Terraria.Localization;
-using Terraria.ObjectData;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Physics;
 using Everglow.Sources.Commons.Function.ImageReader;
 using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Physics;
+
+using Terraria.Localization;
+using Terraria.ObjectData;
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 {
     public class FireflyTree : ModTile
@@ -14,7 +15,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             Main.tileFrameImportant[Type] = true;
             Main.tileBlockLight[Type] = false;
             Main.tileLighted[Type] = true;
-            Main.tileAxe[(int)base.Type] = true;
+            Main.tileAxe[Type] = true;
 
             TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
             TileObjectData.newTile.Height = 8;
@@ -25,10 +26,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             AddMapEntry(new Color(51, 26, 58));
             DustType = ModContent.DustType<Bosses.CorruptMoth.Dusts.MothBlue2>();
             AdjTiles = new int[] { Type };
-            ModTranslation modTranslation = base.CreateMapEntryName(null);
+            //TODO Hjson
+            ModTranslation modTranslation = CreateMapEntryName(null);
             modTranslation.SetDefault("Tree");
             modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "树");
-            base.AddMapEntry(new Color(155, 173, 183), modTranslation);
+            AddMapEntry(new Color(155, 173, 183), modTranslation);
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
@@ -98,8 +100,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             }
         }
         public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
-        {     
-            if(RopPosFir.Count < 1)
+        {
+            if (RopPosFir.Count < 1)
             {
                 GetRopePos("FireflyTreeRope");
                 InitMass_Spring();
@@ -110,76 +112,75 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                 zero = Vector2.Zero;
             }
             Tile tile = Main.tile[i, j];
-            if (tile.TileFrameY == 0)
+            if (tile.TileFrameY != 0 || !tile.HasTile)
             {
-                Point point = new Point(i, j);
-                if (tile != null && tile.HasTile)
+                return false;
+            }
+            Point point = new Point(i, j);
+
+            Texture2D treeTexture = MythContent.QuickTexture("TheFirefly/Tiles/FireflyTree");
+            Texture2D glowTexture = MythContent.QuickTexture("TheFirefly/Tiles/FireflyTreeGlow");
+            Vector2 worldCoord = point.ToWorldCoordinates(8f, 8f);
+            Color color = Lighting.GetColor(i, j);
+            SpriteEffects effects = SpriteEffects.None;
+            const int Count = 16;
+            Vector2 HalfSize = treeTexture.Size() / 2f;
+            HalfSize.X /= Count;
+            spriteBatch.Draw(treeTexture, worldCoord - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, 0, treeTexture.Width / Count, treeTexture.Height), color, 0f, HalfSize, 1f, effects, 0f);
+            spriteBatch.Draw(glowTexture, worldCoord - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, 0, treeTexture.Width / Count, treeTexture.Height), new Color(1f, 1f, 1f, 0), 0f, HalfSize, 1f, effects, 0f);
+
+            Vector2 RopOffset = new Vector2(i * 16 - tile.TileFrameX - 128, j * 16 - 128) - Main.screenPosition;
+
+
+
+            for (int k = 0; k < RopPosFir.Count; k++)
+            {
+                if (RopPosFir[k].X > tile.TileFrameX && RopPosFir[k].X <= tile.TileFrameX + 256)
                 {
-                    Texture2D value = MythContent.QuickTexture("TheFirefly/Tiles/FireflyTree");
-                    Texture2D valueG = MythContent.QuickTexture("TheFirefly/Tiles/FireflyTreeGlow");
-                    Vector2 value2 = point.ToWorldCoordinates(8f, 8f);
-                    Color color = Lighting.GetColor(i ,j);
-                    SpriteEffects effects = SpriteEffects.None;
-                    int Count = 16;
-                    Vector2 HalfSize = value.Size() / 2f;
-                    HalfSize.X /= Count;
-                    Main.spriteBatch.Draw(value, value2 - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, 0, value.Width / Count, value.Height), color, 0f, HalfSize, 1f, effects, 0f);
-                    Main.spriteBatch.Draw(valueG, value2 - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, 0, value.Width / Count, value.Height), new Color(1f, 1f, 1f,0), 0f, HalfSize, 1f, effects, 0f);
-
-                    Vector2 RopOffset = new Vector2(i * 16 - tile.TileFrameX - 128, j * 16 - 128) - Main.screenPosition;
-
-                   
-
-                    for (int k = 0; k < RopPosFir.Count; k++)
+                    foreach (var massJ in masses[k])
                     {
-                        if (RopPosFir[k].X > tile.TileFrameX && RopPosFir[k].X <= tile.TileFrameX + 256)
-                        {
-                            foreach (var massJ in masses[k])
-                            {
-                                Vector2 DrawP = massJ.position + RopPosFir[k] + RopOffset + zero;
-                                massJ.force += new Vector2(0.02f + 0.02f * (float)(Math.Sin(Main.timeForVisualEffects / 72f + DrawP.X / 13d + DrawP.Y / 4d)), 0) * (Main.windSpeedCurrent + 1f) * 2f;
+                        Vector2 DrawP = massJ.position + RopPosFir[k] + RopOffset + zero;
+                        massJ.force += new Vector2(0.02f + 0.02f * (float)(Math.Sin(Main.timeForVisualEffects / 72f + DrawP.X / 13d + DrawP.Y / 4d)), 0) * (Main.windSpeedCurrent + 1f) * 2f;
 
-                                //mass.force -= mass.velocity * 0.1f;
-                                //重力加速度（可调
-                                massJ.force += new Vector2(0, 1.0f) * massJ.mass;
-                                Texture2D t0 = MythContent.QuickTexture("TheFirefly/Tiles/Branch");
-                                int FiIdx = masses[k].FindIndex(mass => mass.position == massJ.position);
-                                float Scale = massJ.mass * 2f;
-                                if (FiIdx > 0)
-                                {
-                                    Vector2 v0 = massJ.position - masses[k][FiIdx - 1].position;
-                                    float Rot = (float)(Math.Atan2(v0.Y, v0.X)) - (float)(Math.PI / 2d);
-                                    for (int z = 0; z < FiIdx; z++)
-                                    {
-                                        Main.spriteBatch.Draw(t0, DrawP, null, color, Rot, t0.Size() / 2f, Scale, SpriteEffects.None, 0);
-                                        Main.spriteBatch.Draw(t0, DrawP, null, new Color(255,255,255,0), Rot, t0.Size() / 2f, Scale, SpriteEffects.None, 0);
-                                    }
-                                }
-                            }
-                            masses[k][0].position = Vector2.Zero;
-                            float deltaTime = 1;
-                            foreach (var spring in springs[k])
+                        //mass.force -= mass.velocity * 0.1f;
+                        //重力加速度（可调
+                        massJ.force += new Vector2(0, 1.0f) * massJ.mass;
+                        Texture2D t0 = MythContent.QuickTexture("TheFirefly/Tiles/Branch");
+                        int FiIdx = masses[k].FindIndex(mass => mass.position == massJ.position);
+                        float Scale = massJ.mass * 2f;
+                        if (FiIdx > 0)
+                        {
+                            Vector2 v0 = massJ.position - masses[k][FiIdx - 1].position;
+                            float Rot = (float)(Math.Atan2(v0.Y, v0.X)) - (float)(Math.PI / 2d);
+                            for (int z = 0; z < FiIdx; z++)
                             {
-                                spring.ApplyForce(deltaTime);
-                            }
-                            List<Vector2> massPositions = new List<Vector2>();
-                            foreach (var massJ in masses[k])
-                            {
-                                massJ.Update(deltaTime);
-                                massPositions.Add(massJ.position);
-                            }
-                            List<Vector2> massPositionsSmooth = new List<Vector2>();
-                            massPositionsSmooth = Commons.Function.BezierCurve.Bezier.SmoothPath(massPositions);
-                            if (massPositionsSmooth.Count > 0)
-                            {
-                                //DrawRope(massPositionsSmooth, RopPosFir[k] + RopOffset, Vertices);
+                                spriteBatch.Draw(t0, DrawP, null, color, Rot, t0.Size() / 2f, Scale, SpriteEffects.None, 0);
+                                spriteBatch.Draw(t0, DrawP, null, new Color(255, 255, 255, 0), Rot, t0.Size() / 2f, Scale, SpriteEffects.None, 0);
                             }
                         }
+                    }
+                    masses[k][0].position = Vector2.Zero;
+                    float deltaTime = 1;
+                    foreach (var spring in springs[k])
+                    {
+                        spring.ApplyForce(deltaTime);
+                    }
+                    List<Vector2> massPositions = new List<Vector2>();
+                    foreach (var massJ in masses[k])
+                    {
+                        massJ.Update(deltaTime);
+                        massPositions.Add(massJ.position);
+                    }
+                    List<Vector2> massPositionsSmooth = new List<Vector2>();
+                    massPositionsSmooth = Commons.Function.BezierCurve.Bezier.SmoothPath(massPositions);
+                    if (massPositionsSmooth.Count > 0)
+                    {
+                        //DrawRope(massPositionsSmooth, RopPosFir[k] + RopOffset, Vertices);
                     }
                 }
             }
 
-            
+
             return false;
         }
     }
