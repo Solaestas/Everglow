@@ -29,7 +29,7 @@ public struct Rotation : IComparable, IComparable<Rotation>, IConvertible, IEqua
         {
             angle = (float)Math.Acos(value);
             cos = value;
-            sin = MathUtils.Sin(angle);
+            sin = (float)Math.Sin(angle);
         }
     }
     public float Sin
@@ -38,7 +38,7 @@ public struct Rotation : IComparable, IComparable<Rotation>, IConvertible, IEqua
         set
         {
             angle = (float)Math.Asin(value);
-            cos = MathUtils.Sin(angle);
+            cos = (float)Math.Cos(value);
             sin = value;
         }
     }
@@ -106,8 +106,8 @@ public struct Rotation : IComparable, IComparable<Rotation>, IConvertible, IEqua
         return angle * (1 - t) + to * t;
     }
     #endregion
-    public static Rotation Distance(Rotation a, Rotation b) => a.Distance(b);
-    public Rotation Distance(Rotation rot)
+    public static float Distance(Rotation a, Rotation b) => a.Distance(b);
+    public float Distance(Rotation rot)
     {
         float dis = Math.Abs(angle - rot.angle);
         return dis >= MathHelper.Pi ? MathHelper.TwoPi - dis : dis;
