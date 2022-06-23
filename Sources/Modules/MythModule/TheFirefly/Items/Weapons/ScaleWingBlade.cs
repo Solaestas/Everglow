@@ -34,7 +34,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             {
                 if(Main.myPlayer==player.whoAmI)
                 {
-                    Projectile.NewProjectile(Item.GetSource_ItemUse(Item),player.Center,Vector2.Zero,ModContent.ProjectileType<ScaleWingBladeProj>(),player.GetWeaponDamage(Item),Item.knockBack,player.whoAmI);
+                    Projectile.NewProjectile(player.GetSource_ItemUse(Item),player.Center,Vector2.Zero,ModContent.ProjectileType<ScaleWingBladeProj>(),player.GetWeaponDamage(Item),Item.knockBack,player.whoAmI);
                 }
                 return false;
             }
