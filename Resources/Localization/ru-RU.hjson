@@ -1,32 +1,32 @@
 ﻿Mods: {
-	MythMod: {
+	Everglow: {
 		Common: {
 			WarWhipGT :
 				'''
 				No summon tag damage
 				Your summons will focus struck enemies
 				'''
-				#{$Mods.MythMod.Common.WarWhipGT}
+				#{$Mods.Everglow.Common.WarWhipGT}
 			WhipGT :
 				'''
 				 summon tag damage
 				Your summons will focus struck enemies
 				'''
-				#{$Mods.MythMod.Common.WhipGT}
+				#{$Mods.Everglow.Common.WhipGT}
 			ClubGT : Spin to strike enemies
-			#{$Mods.MythMod.Common.ClubGT}
+			#{$Mods.Everglow.Common.ClubGT}
 			RapierGT : Right click and hold to charge an invincibility dash with high damage
-			#{$Mods.MythMod.Common.RapierGT}
+			#{$Mods.Everglow.Common.RapierGT}
 			NoAmmoConsum : Does not consum ammo
-			#{$Mods.MythMod.Common.NoAmmoConsum}
+			#{$Mods.Everglow.Common.NoAmmoConsum}
 			Acytaea : Acytaea
-			#{$Mods.MythMod.Common.Acytaea}
+			#{$Mods.Everglow.Common.Acytaea}
 			ExcluWeapon : Exclusive weapon
-			#{$Mods.MythMod.Common.ExcluWeapon}
+			#{$Mods.Everglow.Common.ExcluWeapon}
 			MythWeapon : Mythical weapon
-			#{$Mods.MythMod.Common.MythWeapon}
+			#{$Mods.Everglow.Common.MythWeapon}
 			LegendWeapon : Legendary weapon
-			#{$Mods.MythMod.Common.LegendWeapon}
+			#{$Mods.Everglow.Common.LegendWeapon}
 
 		}
 
@@ -97,7 +97,7 @@
 		{
 			AshBone :
 				'''
-				{$Mods.MythMod.Common.WarWhipGTooltip}
+				{$Mods.Everglow.Common.WarWhipGTooltip}
 				Наносит несколько повреждений костями и поражая врагов эффектом старения, ослабляя их атаку и защиту
 				'''
 			BoneFeatherMagic : Стреляет пронзающими костяными перьями, поражая старением врагов, ослабляют их атаку и защиту
@@ -112,7 +112,7 @@
 			Sunflower : "Оружие, сделанное из подсолнухов, имеет цвет надежды"
 			ThunderFlower : "Стреляет грозовыми шарами \n'Слишком много снарядов!'"
 			World : "Призывает 'Мир' на курсоре, щелкните правой кнопкой мыши, когда он вызывается, чтобы переключиться между режимом следования и режимом разреза\n 'Здесь собрана сила всей земли...'"
-			XmaxWhip : "{$Mods.MythMod.Common.WarWhipGTooltip}\nНаносит урон рождественским огням при попадании во врагов \n 'Намного лучше, чем меч Рождественской елки'"
+			XmaxWhip : "{$Mods.Everglow.Common.WarWhipGTooltip}\nНаносит урон рождественским огням при попадании во врагов \n 'Намного лучше, чем меч Рождественской елки'"
 			BlueGel : "Увеличивает максимальную ману на 30 и регенерацию маны на 4"
 			BlueTorchFlower : "Увеличивает максимальную ману на 20\nУдар по врагу восстанавливает 2 маны, этот эффект имеет 0,2 сек кд\n'Разновидность раскаленного докрасна покера'"
 			CorruptEye : "5 защиты\nувеличивает шанс крита на 4%\nДает иммунитет к Проклятому Огню\nВысвобождает проклятое пламя при ударе\nКуда бы ни ушел его владелец, он все еще полон проклятий врагам'"

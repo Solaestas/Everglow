@@ -1,36 +1,38 @@
 Mods: {
-	MythMod: {
+	Everglow: {
 		Common: {
 			WarWhipGT :
 				'''
 				无召唤标记伤害
 				你的召唤物将集中攻击被击中的敌人
 				'''
-				#{$Mods.MythMod.Common.WarWhipGT}
+				#{$Mods.Everglow.Common.WarWhipGT}
 			WhipGT :
 				'''
 				召唤标记伤害
 				你的召唤物将集中攻击被击中的敌人
 				'''
-				#{$Mods.MythMod.Common.WhipGT}
+				#{$Mods.Everglow.Common.WhipGT}
 			ClubGT : 旋转挥舞以攻击敌人
-			#{$Mods.MythMod.Common.ClubGT}
+			#{$Mods.Everglow.Common.ClubGT}
 			RapierGT : Right click and hold to charge an invincibility dash with high damage
-			#{$Mods.MythMod.Common.RapierGT}
+			#{$Mods.Everglow.Common.RapierGT}
 			NoAmmoConsum : 不消耗弹药
-			#{$Mods.MythMod.Common.NoAmmoConsum}
+			#{$Mods.Everglow.Common.NoAmmoConsum}
 			Acytaea : 雅思塔亚
-			#{$Mods.MythMod.Common.Acytaea}
+			#{$Mods.Everglow.Common.Acytaea}
 			ExcluWeapon : 专属武器
-			#{$Mods.MythMod.Common.ExcluWeapon}
+			#{$Mods.Everglow.Common.ExcluWeapon}
 			MythWeapon : 神话武器
-			#{$Mods.MythMod.Common.MythWeapon}
+			#{$Mods.Everglow.Common.MythWeapon}
 			LegendWeapon : 传说武器
-			#{$Mods.MythMod.Common.LegendWeapon}
+			#{$Mods.Everglow.Common.LegendWeapon}
 
 			WorldSystem:{
 				WorldCreate_Def : 开始创建世界
 				WorldEnter_Def : 正在进入世界
+				BuildMothCave : "正在生成流萤之茧"
+
 			}
 		}
 
@@ -43,8 +45,8 @@ Mods: {
 		}
 
 		ItemName:
-		#神话传说武器，常规武器，棍棒，弹弓，饰品，附魔币，boss宝藏袋圣物召唤物，金秋武器
 		{
+			#神话传说武器，常规武器，棍棒，弹弓，饰品，附魔币，boss宝藏袋圣物召唤物，金秋武器
 			AshBone : 烬中白骨
 			BoneFeatherMagic : 白骨羽箭
 			CloudBall : 云团
@@ -260,13 +262,17 @@ Mods: {
 			SilverStabbingSword : 银刺剑
 			VegetationBayonet : 草木刺剑
 			TDMT : 陨雷之劫
+
+			#食物系统物品
+			BloodGlucoseMonitor : "血糖检测仪"
+			OsmoticPressureMonitor : "渗透压检测仪"
 		}
 		
 		ItemTooltip:
 		{
 			AshBone :
 				'''
-				{$Mods.MythMod.Common.WarWhipGT}
+				{$Mods.Everglow.Common.WarWhipGT}
 				命中时爆出数根伤害性的的白骨并使敌人衰老,削弱其攻防
 				'''
 			BoneFeatherMagic : 射出穿透性骨羽，使命中的敌人衰老，削弱其攻防
@@ -276,28 +282,28 @@ Mods: {
 			FireFeatherMagic : 射出爆燃羽毛
 			FreezeFeatherMagic : 射出冰封羽毛
 			GoldRoundYoyo : "留下跟踪的金圈轨迹"
-			Hepuyuan : "{$Mods.MythMod.Common.ExcluWeapon}\n左键突刺,右键打桩\n你不应该得到它\n致敬<原神>"
+			Hepuyuan : "{$Mods.Everglow.Common.ExcluWeapon}\n左键突刺,右键打桩\n你不应该得到它\n致敬<原神>"
 			SilveralGun : "命中后移速和伤害提升5%,持续5秒"
 			SilveralRifle : "命中后移速和伤害提升5%,持续5秒"
 			Sunflower : "葵花打造的武器,拥有象征希望的色彩"
 			ThunderFlower : "射出雷暴球\n'射弹太多了！'"
 			World : "在鼠标处召唤“世界”，召唤时右键以在跟随与斩击模式间切换\n'整片大地的力量,归结于此...'"
-			XmaxWhip : "{$Mods.MythMod.Common.WarWhipGT}\n击中敌人时爆出伤害性的彩灯\n'比圣诞树剑好太多'"
-			BloodGoldBlade : "{$Mods.MythMod.Common.MythWeapon}\n向四周释放灵液刃\n弑神之刃,沾染了众神之血"
-			BloodLightCyanFlame : "{$Mods.MythMod.Common.LegendWeapon}\n交替掷出激光旋刃和咒火旋刃\n'它们本应是双子魔眼的武器,幸好你救出了机械师'"
-			BlueRain : "{$Mods.MythMod.Common.LegendWeapon}\n长按右键蓄力重击\n雨滴为保持纯净抗拒与海水融合,最终在深海的乱流中汇聚成这个形状"
-			ChaosCurrent : "{$Mods.MythMod.Common.LegendWeapon}\n发射一团扰乱神经的乱流\n无视无敌帧\n'造成大量神经损伤！'"
-			DarknessFan : "{$Mods.MythMod.Common.LegendWeapon}\n无召唤标记伤害\n你的召唤物将集中打击敌人\n无召唤标记伤害\n你的召唤物将集中打击被扇子击中的敌人\n以扇子和幻蝶打击敌人，右键扔出扇子\n扇子本体施加幻蝶之印(可叠加), 每层使幻蝶造成的伤害提高10%\n层数上限随共鸣层数增长\n'蕴含着被巨蛾吞噬的灵魂'"
-			GelPowerGun : "{$Mods.MythMod.Common.LegendWeapon}\n以凝胶作为弹药\n射出弹性凝胶团\n前3次弹射释放小团弹力凝胶\n'弹弹弹，弹走毁灭者'"
-			LaserWhip : "{$Mods.MythMod.Common.LegendWeapon}\n{$Mods.MythMod.Common.WarWhipGT}\n命中敌人有概率生成临时召唤物激光虫并施加激光标记\n有激光标记的敌人受到的伤害增加50%，受到的暴击伤害增加25%\n'传说中有的蠕虫可以使它们的激光连成一线'"
-			MachineFit : "{$Mods.MythMod.Common.LegendWeapon}\n无情的灭杀之拳\n命中敌人后分裂成5发追踪导弹\n'利用好它的手，而不是头"
-			MachineSkeGun : "{$Mods.MythMod.Common.MythWeapon}\n连续射击以发射额外子弹\n'钢铁骷髅未来得及的终极杀器'"
-			RainbowLight : "{$Mods.MythMod.Common.LegendWeapon}\n可以蓄力，不造成伤害\n选择并释放七种光罩之一，不占用Buff栏位\n[c/FF0000:红]:提升暴击\n[c/FF8E00:橙]:提升防御\n[c/FFFF00:黄]:提升攻击\n[c/00FF00:绿]:加速恢复生命\n[c/00FFFF:青]:增加闪避\n[c/0000FF:蓝]:迅速回复法力\n[c/B600FF:紫]:加快速度\n效果强度由伤害决定,暴击翻倍\n'你要负起责任来啊！'"
-			SilenceMirror : "{$Mods.MythMod.Common.MythWeapon}\n右键在血色镜与寂魂之间切换\n连击以提升伤害\n超脱凡尘之外便再无争战"
-			ThornBomb : "{$Mods.MythMod.Common.LegendWeapon}\n交替掷出双色炸弹\n'砰砰炸弹！'"
-			ToothBow : "{$Mods.MythMod.Common.LegendWeapon}\n射击时产生齿箭\n右键聚集齿箭\n'它能掌控其它牙齿'"
-			ToothSpear : "{$Mods.MythMod.Common.MythWeapon}\n右键冲刺，有8秒冷却\n共鸣缩减冷却\n'去吧,效仿上古的勇士,拿它屠龙'"
-			TrapYoyo : "{$Mods.MythMod.Common.LegendWeapon}\n每1.5秒产生一个虚幻的光球\n凑够5个光球按下右键可以释放太阳粒子流\n'结构精巧,是太阳崇拜者万年来的智慧结晶'"
+			XmaxWhip : "{$Mods.Everglow.Common.WarWhipGT}\n击中敌人时爆出伤害性的彩灯\n'比圣诞树剑好太多'"
+			BloodGoldBlade : "{$Mods.Everglow.Common.MythWeapon}\n向四周释放灵液刃\n弑神之刃,沾染了众神之血"
+			BloodLightCyanFlame : "{$Mods.Everglow.Common.LegendWeapon}\n交替掷出激光旋刃和咒火旋刃\n'它们本应是双子魔眼的武器,幸好你救出了机械师'"
+			BlueRain : "{$Mods.Everglow.Common.LegendWeapon}\n长按右键蓄力重击\n雨滴为保持纯净抗拒与海水融合,最终在深海的乱流中汇聚成这个形状"
+			ChaosCurrent : "{$Mods.Everglow.Common.LegendWeapon}\n发射一团扰乱神经的乱流\n无视无敌帧\n'造成大量神经损伤！'"
+			DarknessFan : "{$Mods.Everglow.Common.LegendWeapon}\n无召唤标记伤害\n你的召唤物将集中打击敌人\n无召唤标记伤害\n你的召唤物将集中打击被扇子击中的敌人\n以扇子和幻蝶打击敌人，右键扔出扇子\n扇子本体施加幻蝶之印(可叠加), 每层使幻蝶造成的伤害提高10%\n层数上限随共鸣层数增长\n'蕴含着被巨蛾吞噬的灵魂'"
+			GelPowerGun : "{$Mods.Everglow.Common.LegendWeapon}\n以凝胶作为弹药\n射出弹性凝胶团\n前3次弹射释放小团弹力凝胶\n'弹弹弹，弹走毁灭者'"
+			LaserWhip : "{$Mods.Everglow.Common.LegendWeapon}\n{$Mods.Everglow.Common.WarWhipGT}\n命中敌人有概率生成临时召唤物激光虫并施加激光标记\n有激光标记的敌人受到的伤害增加50%，受到的暴击伤害增加25%\n'传说中有的蠕虫可以使它们的激光连成一线'"
+			MachineFit : "{$Mods.Everglow.Common.LegendWeapon}\n无情的灭杀之拳\n命中敌人后分裂成5发追踪导弹\n'利用好它的手，而不是头"
+			MachineSkeGun : "{$Mods.Everglow.Common.MythWeapon}\n连续射击以发射额外子弹\n'钢铁骷髅未来得及的终极杀器'"
+			RainbowLight : "{$Mods.Everglow.Common.LegendWeapon}\n可以蓄力，不造成伤害\n选择并释放七种光罩之一，不占用Buff栏位\n[c/FF0000:红]:提升暴击\n[c/FF8E00:橙]:提升防御\n[c/FFFF00:黄]:提升攻击\n[c/00FF00:绿]:加速恢复生命\n[c/00FFFF:青]:增加闪避\n[c/0000FF:蓝]:迅速回复法力\n[c/B600FF:紫]:加快速度\n效果强度由伤害决定,暴击翻倍\n'你要负起责任来啊！'"
+			SilenceMirror : "{$Mods.Everglow.Common.MythWeapon}\n右键在血色镜与寂魂之间切换\n连击以提升伤害\n超脱凡尘之外便再无争战"
+			ThornBomb : "{$Mods.Everglow.Common.LegendWeapon}\n交替掷出双色炸弹\n'砰砰炸弹！'"
+			ToothBow : "{$Mods.Everglow.Common.LegendWeapon}\n射击时产生齿箭\n右键聚集齿箭\n'它能掌控其它牙齿'"
+			ToothSpear : "{$Mods.Everglow.Common.MythWeapon}\n右键冲刺，有8秒冷却\n共鸣缩减冷却\n'去吧,效仿上古的勇士,拿它屠龙'"
+			TrapYoyo : "{$Mods.Everglow.Common.LegendWeapon}\n每1.5秒产生一个虚幻的光球\n凑够5个光球按下右键可以释放太阳粒子流\n'结构精巧,是太阳崇拜者万年来的智慧结晶'"
 			BlueGel : "增加30魔力上限和4魔力回复\n史莱姆的尸体通常会化作一滩水,但有的凝结了起来"
 			BlueTorchFlower : "增加20魔力上限\n命中敌人回复2魔力,有0.2秒冷却\n'火炬花的一个变种'"
 			CorruptEye : "5防御\n增加4%暴击率\n免疫咒火\n受伤时释放咒火\n'即便它的主人已经死了,它仍充满着对敌人的诅咒'"
@@ -376,134 +382,134 @@ Mods: {
 			AmbiguousNight : 
 				'''
 				射出幻影石子
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			BlackWoodSlingshot : 
 				'''
 				射出石子
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			BlueGemSlingshot : 
 				'''
 				射出富含能量的宝石
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			CactusSlingShot : 
 				'''
 				射出石子
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			ColdWoodSlingshot : 
 				'''
 				射出石子
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			DarkWoodSlingShot : 
 				'''
 				射出石子
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			GreenGemSlingshot : 
 				'''
 				射出富含能量的宝石
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			JellySlingshot : 
 				'''
-				{Mods.MythMod.Common.LegendWeapon}
+				{Mods.Everglow.Common.LegendWeapon}
 				射出超级弹力球
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			JungleSlingshot : 
 				'''
 				射出荧光蜂毒弹,接近荧光孢子粉的怪物会被染上毒素
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			PalmWoodSlingshot : 
 				'''
 				射出石子
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			PearlWoodSlingshot : 
 				'''
 				射出石子
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			PurpleGemSlingshot : 
 				'''
 				射出富含能量的宝石
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			RedGemSlingshot : 
 				'''
 				射出富含能量的宝石
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			RedWoodSlingshot : 
 				'''
 				射出石子
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			StarSlingshot : 
 				'''
 				射出坠星
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			WhiteGemSlingshot : 
 				'''
 				射出富含能量的宝石
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			WoodSlingshot : 
 				'''
 				射出石子
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			YellowGemSlingshot : 
 				'''
 				射出富含能量的宝石
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			BloodyBoneYoyo : 每击中5次敌人会释放1次獠牙钉
 			SpineGun : 射出一发勘测到敌人就会分裂的子母弹
 			ToothKnfe : ""
 			ToothMagicBall : ""
 			ToothStaff : 释放拔地而起的獠牙刺
-			BlackWoodenClub : "{$Mods.MythMod.Common.ClubGT}"
-			BloodClub : "{$Mods.MythMod.Common.ClubGT}"
-			BloodLiquidClub : "{$Mods.MythMod.Common.ClubGT}"
-			CactusClub : "{$Mods.MythMod.Common.ClubGT}"
-			CobaltClub : "{$Mods.MythMod.Common.ClubGT}"
-			ColdWoodenClub : "{$Mods.MythMod.Common.ClubGT}"
-			CopperClub : "{$Mods.MythMod.Common.ClubGT}"
-			CorruptClub : "{$Mods.MythMod.Common.ClubGT}"
-			CrystalClub : "{$Mods.MythMod.Common.ClubGT}"
-			CurseClub : "{$Mods.MythMod.Common.ClubGT}"
-			DarkWoodenClub : "{$Mods.MythMod.Common.ClubGT}"
-			GoldClub : "{$Mods.MythMod.Common.ClubGT}"
-			IronClub : "{$Mods.MythMod.Common.ClubGT}"
-			LeadClub : "{$Mods.MythMod.Common.ClubGT}"
-			LeafClub : "{$Mods.MythMod.Common.ClubGT}"
-			MeteorClub : "{$Mods.MythMod.Common.ClubGT}"
-			MithrilClub : "{$Mods.MythMod.Common.ClubGT}"
-			MountainCuClub : "{$Mods.MythMod.Common.ClubGT}"
-			PalladiumClub : "{$Mods.MythMod.Common.ClubGT}"
-			PalmWoodenClub : "{$Mods.MythMod.Common.ClubGT}"
-			PearlWoodenClub : "{$Mods.MythMod.Common.ClubGT}"
-			PlatinumClub : "{$Mods.MythMod.Common.ClubGT}"
-			RedWoodenClub : "{$Mods.MythMod.Common.ClubGT}"
-			RefinedClub : "{$Mods.MythMod.Common.ClubGT}"
-			SilverClub : "{$Mods.MythMod.Common.ClubGT}"
-			SpikeClub : "{$Mods.MythMod.Common.ClubGT}"
+			BlackWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
+			BloodClub : "{$Mods.Everglow.Common.ClubGT}"
+			BloodLiquidClub : "{$Mods.Everglow.Common.ClubGT}"
+			CactusClub : "{$Mods.Everglow.Common.ClubGT}"
+			CobaltClub : "{$Mods.Everglow.Common.ClubGT}"
+			ColdWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
+			CopperClub : "{$Mods.Everglow.Common.ClubGT}"
+			CorruptClub : "{$Mods.Everglow.Common.ClubGT}"
+			CrystalClub : "{$Mods.Everglow.Common.ClubGT}"
+			CurseClub : "{$Mods.Everglow.Common.ClubGT}"
+			DarkWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
+			GoldClub : "{$Mods.Everglow.Common.ClubGT}"
+			IronClub : "{$Mods.Everglow.Common.ClubGT}"
+			LeadClub : "{$Mods.Everglow.Common.ClubGT}"
+			LeafClub : "{$Mods.Everglow.Common.ClubGT}"
+			MeteorClub : "{$Mods.Everglow.Common.ClubGT}"
+			MithrilClub : "{$Mods.Everglow.Common.ClubGT}"
+			MountainCuClub : "{$Mods.Everglow.Common.ClubGT}"
+			PalladiumClub : "{$Mods.Everglow.Common.ClubGT}"
+			PalmWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
+			PearlWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
+			PlatinumClub : "{$Mods.Everglow.Common.ClubGT}"
+			RedWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
+			RefinedClub : "{$Mods.Everglow.Common.ClubGT}"
+			SilverClub : "{$Mods.Everglow.Common.ClubGT}"
+			SpikeClub : "{$Mods.Everglow.Common.ClubGT}"
 			StarDancer : 
 				'''
-				{$Mods.MythMod.Common.ClubGT}
+				{$Mods.Everglow.Common.ClubGT}
 				降下坠星打击附近敌人
 				'''
-			TinClub : "{$Mods.MythMod.Common.ClubGT}"
-			TitaniumClub : "{$Mods.MythMod.Common.ClubGT}"
-			TungstenClub : "{$Mods.MythMod.Common.ClubGT}"
-			WoodenClub : "{$Mods.MythMod.Common.ClubGT}"
+			TinClub : "{$Mods.Everglow.Common.ClubGT}"
+			TitaniumClub : "{$Mods.Everglow.Common.ClubGT}"
+			TungstenClub : "{$Mods.Everglow.Common.ClubGT}"
+			WoodenClub : "{$Mods.Everglow.Common.ClubGT}"
 			LiftLamp : ""
 			TestItem : ""
 			EkandaBrick : ""
@@ -513,18 +519,22 @@ Mods: {
 			DurableAxe : ""
 			ElectricHeatingPlate : ""
 			BrokenPick : ""
-			BloodGoldBayonet : "{$Mods.MythMod.Common.RapierGT}"
-			DreamStar : "{$Mods.MythMod.Common.RapierGT}"
-			EternalNight : "{$Mods.MythMod.Common.RapierGT}"
-			GoldenStabbingSword : "{$Mods.MythMod.Common.RapierGT}"
-			IronStabbingSword : "{$Mods.MythMod.Common.RapierGT}"
-			LeadStabbingSword : "{$Mods.MythMod.Common.RapierGT}"
-			PlatinumStabbingSword : "{$Mods.MythMod.Common.RapierGT}"
-			PrisonFireBayonet : "{$Mods.MythMod.Common.RapierGT}"
-			RottenGoldBayonet : "{$Mods.MythMod.Common.RapierGT}"
-			SilverStabbingSword : "{$Mods.MythMod.Common.RapierGT}"
-			VegetationBayonet : "{$Mods.MythMod.Common.RapierGT}"
-			TDMT : "{$Mods.MythMod.Common.RapierGT}"
+			BloodGoldBayonet : "{$Mods.Everglow.Common.RapierGT}"
+			DreamStar : "{$Mods.Everglow.Common.RapierGT}"
+			EternalNight : "{$Mods.Everglow.Common.RapierGT}"
+			GoldenStabbingSword : "{$Mods.Everglow.Common.RapierGT}"
+			IronStabbingSword : "{$Mods.Everglow.Common.RapierGT}"
+			LeadStabbingSword : "{$Mods.Everglow.Common.RapierGT}"
+			PlatinumStabbingSword : "{$Mods.Everglow.Common.RapierGT}"
+			PrisonFireBayonet : "{$Mods.Everglow.Common.RapierGT}"
+			RottenGoldBayonet : "{$Mods.Everglow.Common.RapierGT}"
+			SilverStabbingSword : "{$Mods.Everglow.Common.RapierGT}"
+			VegetationBayonet : "{$Mods.Everglow.Common.RapierGT}"
+			TDMT : "{$Mods.Everglow.Common.RapierGT}"
+			
+			#食物系统物品
+			BloodGlucoseMonitor : "显示当前饱食度"
+			OsmoticPressureMonitor : "显示渴觉状态"
 		}
 
 		BuffName : 
@@ -546,6 +556,8 @@ Mods: {
 			RedImmune : "红色火焰免疫"
 			WhiteImmune : "白色火焰免疫"
 			YellowImmune : "黄色火焰免疫"
+
+			#食物系统buff
 			AleBuff : "踉跄"
 			AppleBuff : "苹果"
 			AppleJuiceBuff : "苹果汁"
@@ -646,6 +658,9 @@ Mods: {
 			RedImmune : "花火幻魂心的红色火焰无法伤害到你"
 			WhiteImmune : "花火幻魂心的白色火焰无法伤害到你"
 			YellowImmune : "花火幻魂心的黄色火焰无法伤害到你"
+
+			#食物系统buff
+			AleBuff : "短时间内鞭子的范围和速度提升至2.5倍\n“耍酒疯”"
 			AppleBuff : "增加8%减伤\n“一天一苹果，医生远离我”"
 			AppleJuiceBuff : " 短时间内增加80%减伤\n“一天一苹果，医生远离我”"
 			ApplePieBuff : "加8%减伤,1生命回复\n“一天一苹果，医生远离我”"
