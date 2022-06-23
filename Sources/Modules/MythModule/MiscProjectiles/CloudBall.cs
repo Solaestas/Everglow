@@ -36,14 +36,14 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles
         /// <summary>
         /// 粒子最后生成后额外距离
         /// </summary>
-        private float ExtraDistance
+        private float DistanceCompletion
         {
             get { return Projectile.ai[0]; }
             set { Projectile.ai[0] = value; }
         }
 
         /// <summary>
-        /// 粒子释放间距
+        /// 粒子释放间距，也就是说不管速度多快，都是每隔8帧释放一次粒子
         /// </summary>
         private static int DustSpacing = 8;
 
@@ -56,18 +56,23 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles
             Projectile.alpha = 100;
             Vector2 normalize = Projectile.velocity.SafeNormalize(Vector2.Zero);
             float speed = MathF.Round(Projectile.velocity.Length(), 0);
-            if (ExtraDistance >= speed)
+            if (DistanceCompletion >= speed)
             {
-                ExtraDistance -= speed;
+                DistanceCompletion -= speed;
             }
             else
             {
-                for (float i = ExtraDistance; i < speed; i += DustSpacing)
+                for (float i = DistanceCompletion; i < speed; i += DustSpacing)
                 {
                     // Main.NewText($"time:{Main.time} speed:{speed} i:{i}");
-                    ExtraDistance = DustSpacing - speed + i;
+                    DistanceCompletion = DustSpacing - speed + i;
                     Vector2 pos = Projectile.Center + new Vector2(-4, -4);
                     pos += normalize * i;
+
+                    int r = Dust.NewDust(pos, 0, 0, DustID.Cloud, 0, 0, 0, default, 2f);
+                    Main.dust[r].noGravity = true;
+                    Main.dust[r].velocity *= 0.3f;
+                    // 这是另一个粒子效果
                     /*for (float j = 0; j < MathHelper.TwoPi; j += MathHelper.PiOver4)
                     {
                         Vector2 pos2 = pos + j.ToRotationVector2() * 10f;
@@ -76,24 +81,9 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles
                         Main.dust[r].noGravity = true;
                         Main.dust[r].velocity = vel * 2.5f;
                     }*/
-                    int r = Dust.NewDust(pos, 0, 0, DustID.Cloud, 0, 0, 0, default, 2f);
-                    Main.dust[r].noGravity = true;
-                    Main.dust[r].velocity *= 0.3f;
                 }
             }
         }
-
-        /*public override void PostDraw(Color lightColor)
-        {
-            SpriteBatch sb = Main.spriteBatch;
-            for (int i = 0; i < 10; i++)
-            {
-                float scale = 1f;
-                Texture2D t2d = ModAssets.YuHua.Value;
-                Vector2 pos = Projectile.oldPos[i] - Main.screenPosition + Projectile.Size / 2f;
-                sb.Draw(t2d, pos, null, new Color(0, 0, 0, 150) * ((10 - i) / (float)i), 0, t2d.Size() / 2f, scale, 0, 0f);
-            }
-        }*/
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
@@ -104,6 +94,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles
 
         public override void Kill(int timeLeft)
         {
+            // 这是原来的粒子效果
             /*for (int i = 0; i < 30; i++)
             {
                 Vector2 pos = new(Projectile.position.X, Projectile.position.Y);
