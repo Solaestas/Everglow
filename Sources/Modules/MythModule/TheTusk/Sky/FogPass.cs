@@ -45,7 +45,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
 
         //private Effect _bloomThreasholdFilter;
         //private Effect _luminanceFilter;
-        // private float _bloomIntensity, _luminTheashold;
+        private float m_bloomIntensity, m_luminTheashold;
 
         // private int _adaptiveLuminanceBlockSize;
 
@@ -67,7 +67,14 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
         /// </summary>
         public float BloomIntensity
         {
-            get; set;
+            get
+            {
+                return m_bloomIntensity;
+            }
+            set
+            {
+                m_bloomIntensity = value;
+            }
         }
 
         /// <summary>
@@ -135,6 +142,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
             var fogConfig = ModContent.GetInstance<FogConfigs>();
 
             BloomRadius = fogConfig.MaxBloomRadius;
+            BloomIntensity = fogConfig.BloomIntensity;
 
             m_shouldResetRenderTargets |= (m_offscreenTilesSize != fogConfig.OffscreenTiles);
             m_offscreenTilesSize = fogConfig.OffscreenTiles;
@@ -248,7 +256,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
 
             ExtractLightMap();
 
-            Generate(2, 4);
+            Generate(BloomRadius, 4);
 
             var spriteBatch = Main.spriteBatch;
             var graphicsDevice = Main.graphics.GraphicsDevice;
@@ -346,10 +354,10 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
             ApplyGaussian(downLevels + 4);
 
             // Upsampling
-            for (int i = 4 + downLevels; i > 0; i--)
+            for (int i = 4 + downLevels - 1; i >= 0; i--)
             {
-                int curWidth = m_frameWidth >> (i - 1);
-                int curHeight = m_frameHeight >> (i - 1);
+                int curWidth = m_frameWidth >> (i);
+                int curHeight = m_frameHeight >> (i);
                 Main.graphics.GraphicsDevice.SetRenderTarget(m_blurRenderTargets[i]);
                 Main.graphics.GraphicsDevice.Clear(Color.Transparent);
                 spriteBatch.Begin(SpriteSortMode.Immediate,
@@ -357,10 +365,10 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
                     SamplerState.AnisotropicClamp,
                     DepthStencilState.Default,
                     RasterizerState.CullNone, null);
-                filterBox.Parameters["uImageSize0"].SetValue(m_blurRenderTargets[i].Size());
+                filterBox.Parameters["uImageSize0"].SetValue(m_blurRenderTargets[i + 1].Size());
                 filterBox.Parameters["uDelta"].SetValue(1.0f);
                 filterBox.CurrentTechnique.Passes[0].Apply();
-                spriteBatch.Draw(m_blurRenderTargets[i], new Rectangle(0, 0, curWidth, curHeight),
+                spriteBatch.Draw(m_blurRenderTargets[i + 1], new Rectangle(0, 0, curWidth, curHeight),
                     Color.White);
                 spriteBatch.End();
             }
