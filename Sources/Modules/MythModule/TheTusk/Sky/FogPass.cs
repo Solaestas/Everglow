@@ -36,22 +36,14 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
         private int m_screenWidth, m_screenHeight;
         private int m_tileWidth, m_tileHeight;
         private bool m_shouldResetRenderTargets;
-        private bool m_enableGaussian, m_enableProgressiveUpSampling;
+        private bool m_enableGaussian;
 
         private readonly int MAX_BLUR_LEVELS = 10;
 
         private int m_maxBlurLevel;
 
-
-        //private Effect _bloomThreasholdFilter;
-        //private Effect _luminanceFilter;
-        private float m_bloomIntensity, m_luminTheashold;
+        private float m_bloomIntensity;
         private int m_startTileX, m_startTileY;
-
-        // private int _adaptiveLuminanceBlockSize;
-        // private bool _enableAdaptiveBrightness;
-
-        // private bool _enable;
 
         /// <summary>
         /// 是否开启大雾效果
@@ -147,9 +139,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
 
             m_shouldResetRenderTargets |= (m_offscreenTilesSize != fogConfig.OffscreenTiles);
             m_offscreenTilesSize = fogConfig.OffscreenTiles;
+            m_enableGaussian = fogConfig.GaussianKernel;
 
             Enable = fogConfig.EnableScattering;
-            m_enableProgressiveUpSampling = fogConfig.EnableProgressiveUpSampling;
         }
 
         private void ResetLightMap()
@@ -252,9 +244,8 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
                             SurfaceFormat.Rgba1010102, DepthFormat.None);
                 }
 
-                int maxKernel = m_maxBlurLevel - 1;
                 m_renderTargetSwap = new RenderTarget2D(Main.graphics.GraphicsDevice,
-                        m_frameWidth >> maxKernel, m_frameHeight >> maxKernel,
+                        m_frameWidth >> (4 + BloomRadius), m_frameHeight >> (4 + BloomRadius),
                         false, SurfaceFormat.Rgba1010102, DepthFormat.None);
                 m_filteredScreenTarget = new RenderTarget2D(Main.graphics.GraphicsDevice,
                         Main.screenWidth, Main.screenHeight,
@@ -307,7 +298,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
             absorption *= absorption;
             fogEffect.Parameters["uAbsorption"].SetValue(absorption);
             fogEffect.Parameters["uBloomIntensity"].SetValue(BloomIntensity);
-            fogEffect.Parameters["uBloomAbsorption"].SetValue(BloomAbsorptionRate * BloomAbsorptionRate);
+            fogEffect.Parameters["uBloomAbsorption"].SetValue(BloomAbsorptionRate * BloomAbsorptionRate * 2);
             spriteBatch.Begin(SpriteSortMode.Immediate,
                 BlendState.Opaque,
                 SamplerState.PointClamp,
