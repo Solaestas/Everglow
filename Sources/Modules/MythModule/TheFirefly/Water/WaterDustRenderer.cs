@@ -6,6 +6,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
 {
     public class FireFlyWaterSystem : ModSystem
     {
+        /*
         private WaterDustRenderer m_waterDustRenderer;
 
         public override void OnModLoad()
@@ -176,5 +177,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
             Main.OnPreDraw -= Main_OnPreDraw;
             Main.OnResolutionChanged -= Main_OnResolutionChanged;
         }
-    }
+    */}
+        
 }
