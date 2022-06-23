@@ -13,9 +13,9 @@ float4 PixelShaderFunction(float2 coords : TEXCOORD0) : COLOR0
 	float2 actual = coords - float2(0.5, 0.5);
 	actual = actual * uImageSize0;
 	float3 t = exp(-length(actual) * uAbsorption);
-	float3 tb = exp(-length(actual) * uAbsorption * uBloomAbsorption);
+	float tb = exp(-uBloomAbsorption);
 	
-	return float4(lerp(origin, bloom, t), 1);
+	return float4(lerp(bloom, origin, tb) * t, 1);
 }
 
 technique Technique1

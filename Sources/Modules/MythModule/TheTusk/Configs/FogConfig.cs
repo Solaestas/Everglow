@@ -85,8 +85,8 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Configs
 
         [DefaultValue(0.28f)]
         [Range(0.0f, 1.0f)]
-        [Label("雾散射吸收率")]
-        [Tooltip("散射光的吸收比率")]
-        public float FogBloomAbsorption;
+        [Label("雾散射扩散率")]
+        [Tooltip("散射光的扩散比率")]
+        public float FogBloomSpread;
     }
 }

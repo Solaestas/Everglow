@@ -46,10 +46,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
         //private Effect _bloomThreasholdFilter;
         //private Effect _luminanceFilter;
         private float m_bloomIntensity, m_luminTheashold;
+        private int m_startTileX, m_startTileY;
 
         // private int _adaptiveLuminanceBlockSize;
-
-        // private float _bloomAbsorption;
         // private bool _enableAdaptiveBrightness;
 
         // private bool _enable;
@@ -143,6 +142,8 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
 
             BloomRadius = fogConfig.MaxBloomRadius;
             BloomIntensity = fogConfig.BloomIntensity;
+            LuminanceThreashold = fogConfig.LightLuminanceThreashold;
+            BloomAbsorptionRate = fogConfig.FogBloomSpread;
 
             m_shouldResetRenderTargets |= (m_offscreenTilesSize != fogConfig.OffscreenTiles);
             m_offscreenTilesSize = fogConfig.OffscreenTiles;
@@ -173,23 +174,33 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
                 }
             });
 
-            int startTileX = Math.Max(0, (int)(Main.screenPosition.X / 16) - m_offscreenTilesSize);
+            m_startTileX = Math.Max(0, (int)(Main.screenPosition.X / 16) - m_offscreenTilesSize);
             int endTileX = Math.Min(Main.maxTilesX - 1,
                 (int)((Main.screenPosition.X + Main.screenWidth) / 16) + m_offscreenTilesSize);
-            int startTileY = Math.Max(0, (int)(Main.screenPosition.Y / 16) - m_offscreenTilesSize);
+
+            if (endTileX - m_startTileX < cols)
+            {
+                endTileX += cols - (endTileX - m_startTileX);
+            }
+
+            m_startTileY = Math.Max(0, (int)(Main.screenPosition.Y / 16) - m_offscreenTilesSize);
             int endTileY = Math.Min(Main.maxTilesY - 1,
                 (int)((Main.screenPosition.Y + Main.screenHeight) / 16) + m_offscreenTilesSize);
 
+            if (endTileY - m_startTileY < rows)
+            {
+                endTileY += rows - (endTileY - m_startTileY);
+            }
 
             int offX = (int)(Main.screenPosition.X / 16);
             int offY = (int)(Main.screenPosition.Y / 16);
 
-            Parallel.For(startTileY, endTileY, i =>
+            Parallel.For(m_startTileY, endTileY, i =>
             {
-                for (int j = startTileX; j <= endTileX; j++)
+                for (int j = m_startTileX; j < endTileX; j++)
                 {
-                    int x = j - offX + m_offscreenTilesSize + 1;
-                    int y = i - offY + m_offscreenTilesSize + 1;
+                    int x = j - m_startTileX;
+                    int y = i - m_startTileY;
                     var color = Lighting.GetColor(j, i);
 
                     var s = color.ToVector3();
@@ -260,10 +271,8 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
 
             var spriteBatch = Main.spriteBatch;
             var graphicsDevice = Main.graphics.GraphicsDevice;
-            int x = (int)(Main.screenPosition.X / 16) - m_offscreenTilesSize - 2;
-            x *= 16;
-            int y = (int)(Main.screenPosition.Y / 16) - m_offscreenTilesSize - 2;
-            y *= 16;
+            int x = m_startTileX * 16;
+            int y = m_startTileY * 16;
             graphicsDevice.SetRenderTarget(m_filteredScreenTarget);
             graphicsDevice.Clear(Color.Transparent);
             spriteBatch.Begin(SpriteSortMode.Immediate,
@@ -295,9 +304,10 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
             var config = ModContent.GetInstance<FogConfigs>();
             var absorption = new Vector3(config.FogAbsorptionR, config.FogAbsorptionG, config.FogAbsorptionB);
             absorption *= absorption;
+            absorption *= absorption;
             fogEffect.Parameters["uAbsorption"].SetValue(absorption);
             fogEffect.Parameters["uBloomIntensity"].SetValue(BloomIntensity);
-            fogEffect.Parameters["uBloomAbsorption"].SetValue(BloomAbsorptionRate);
+            fogEffect.Parameters["uBloomAbsorption"].SetValue(BloomAbsorptionRate * BloomAbsorptionRate);
             spriteBatch.Begin(SpriteSortMode.Immediate,
                 BlendState.Opaque,
                 SamplerState.PointClamp,
