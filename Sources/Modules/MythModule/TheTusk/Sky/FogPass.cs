@@ -48,6 +48,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
         private bool m_enableLightUpload;
         private bool m_resetedLightmaps;
         private Vector2 m_screenPosition;
+        private const SurfaceFormat m_surfaceFormat = SurfaceFormat.Color;
 
         /// <summary>
         /// 是否开启大雾效果
@@ -262,36 +263,26 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
                 }
                 m_blurRenderTargets[l] = new RenderTarget2D(Main.graphics.GraphicsDevice,
                         m_frameWidth >> l, m_frameWidth >> l, false,
-                        SurfaceFormat.Rgba1010102, DepthFormat.None);
+                        m_surfaceFormat, DepthFormat.None);
             }
-            m_maxBlurLevel = Math.Min(l, 10);
+            m_maxBlurLevel = Math.Min(l, 8);
 
             for (int i = 0; i < m_maxBlurLevel; i++)
             {
                 m_blurRenderTargets[i] = new RenderTarget2D(Main.graphics.GraphicsDevice,
                         m_frameWidth >> i, m_frameHeight >> i, false,
-                        SurfaceFormat.Rgba1010102, DepthFormat.None);
+                        m_surfaceFormat, DepthFormat.None);
             }
 
             m_renderTargetSwap = new RenderTarget2D(Main.graphics.GraphicsDevice,
                     m_frameWidth >> Math.Min(m_maxBlurLevel - 1, (4 + BloomRadius)), m_frameHeight >> Math.Min(m_maxBlurLevel - 1, (4 + BloomRadius)),
-                    false, SurfaceFormat.Rgba1010102, DepthFormat.None);
+                    false, m_surfaceFormat, DepthFormat.None);
             m_filteredScreenTarget = new RenderTarget2D(Main.graphics.GraphicsDevice,
                     m_screenWidth, m_screenHeight,
-                    false, SurfaceFormat.Rgba1010102, DepthFormat.None);
+                    false, m_surfaceFormat, DepthFormat.None);
 
             m_shouldResetRenderTargets = false;
         }
-
-
-        private int _counter = 0;
-        private static Color[] colors =
-        {
-           Color.Red,
-           Color.Green,
-           Color.Blue,
-           Color.Yellow
-        };
 
         public void Apply( RenderTarget2D screenTarget1, RenderTarget2D screenTarget2)
         {
@@ -330,7 +321,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
                     BlendState.Opaque,
                     SamplerState.PointClamp,
                     DepthStencilState.Default,
-                    RasterizerState.CullNone, null);
+                    RasterizerState.CullNone, null, Main.Transform);
             spriteBatch.Draw(m_blurRenderTargets[0], new Rectangle((int)(x - m_screenPosition.X),
                 (int)(y - m_screenPosition.Y), m_blurRenderTargets[0].Width, m_blurRenderTargets[0].Height),
                 Color.White);
@@ -357,7 +348,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
             absorption *= absorption;
             fogEffect.Parameters["uAbsorption"].SetValue(absorption);
             fogEffect.Parameters["uBloomIntensity"].SetValue(BloomIntensity);
-            fogEffect.Parameters["uBloomAbsorption"].SetValue(BloomAbsorptionRate * BloomAbsorptionRate * 2);
+            fogEffect.Parameters["uBloomAbsorption"].SetValue(BloomAbsorptionRate * BloomAbsorptionRate * 10);
             //fogEffect.Parameters["uTargetArea"].SetValue(BloomAbsorptionRate * BloomAbsorptionRate * 2);
             spriteBatch.Begin(SpriteSortMode.Immediate,
                 BlendState.Opaque,
@@ -377,6 +368,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
 
         private void Generate(int down, int up)
         {
+
             var spriteBatch = Main.spriteBatch;
             var graphicsDevice = Main.graphics.GraphicsDevice;
 
@@ -420,8 +412,8 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
             {
                 int curWidth = m_frameWidth >> (i);
                 int curHeight = m_frameHeight >> (i);
-                Main.graphics.GraphicsDevice.SetRenderTarget(m_blurRenderTargets[i]);
-                Main.graphics.GraphicsDevice.Clear(Color.Transparent);
+                graphicsDevice.SetRenderTarget(m_blurRenderTargets[i]);
+                graphicsDevice.Clear(Color.Transparent);
                 spriteBatch.Begin(SpriteSortMode.Immediate,
                     BlendState.Opaque,
                     SamplerState.AnisotropicClamp,
