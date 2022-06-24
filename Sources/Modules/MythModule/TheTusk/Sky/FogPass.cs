@@ -264,7 +264,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
                         m_frameWidth >> l, m_frameWidth >> l, false,
                         SurfaceFormat.Rgba1010102, DepthFormat.None);
             }
-            m_maxBlurLevel = l;
+            m_maxBlurLevel = Math.Min(l, 10);
 
             for (int i = 0; i < m_maxBlurLevel; i++)
             {
@@ -355,7 +355,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
             var config = ModContent.GetInstance<FogConfigs>();
             var absorption = new Vector3(config.FogAbsorptionR, config.FogAbsorptionG, config.FogAbsorptionB);
             absorption *= absorption;
-            absorption *= absorption;
             fogEffect.Parameters["uAbsorption"].SetValue(absorption);
             fogEffect.Parameters["uBloomIntensity"].SetValue(BloomIntensity);
             fogEffect.Parameters["uBloomAbsorption"].SetValue(BloomAbsorptionRate * BloomAbsorptionRate * 2);
@@ -370,12 +369,10 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
                 graphicsDevice.SamplerStates[1] = SamplerState.PointClamp;
                 fogEffect.CurrentTechnique.Passes[0].Apply();
 
-                var color = colors[_counter % 4];
                 spriteBatch.Draw(screenTarget2, Vector2.Zero,
-                    color);
+                    Color.White);
             }
             spriteBatch.End();
-            _counter++;
         }
 
         private void Generate(int down, int up)

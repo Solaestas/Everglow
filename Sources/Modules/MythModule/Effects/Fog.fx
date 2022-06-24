@@ -12,7 +12,7 @@ float4 PixelShaderFunction(float2 coords : TEXCOORD0) : COLOR0
 	float3 bloom = tex2D(bloomImage, coords).rgb * uBloomIntensity;
 	float2 actual = coords - float2(0.5, 0.5);
 	actual = actual * uImageSize0;
-	float3 t = exp(-length(actual) * uAbsorption);
+	float3 t = exp(-length(actual) * 0.01 * uAbsorption);
 	float tb = exp(-uBloomAbsorption);
 	
 	return float4(lerp(bloom, origin, tb) * t, 1);
