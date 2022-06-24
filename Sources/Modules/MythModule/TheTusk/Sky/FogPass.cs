@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terraria.Audio;
 using Terraria.GameContent.Shaders;
 using Terraria.Graphics.Shaders;
 
@@ -144,10 +145,10 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
             Enable = fogConfig.EnableScattering;
         }
 
-        private void ResetLightMap()
+        private void ResetLightMap(int width, int height)
         {
-            m_tileWidth = Main.screenWidth / 16 + m_offscreenTilesSize * 2 + 2;
-            m_tileHeight = Main.screenHeight / 16 + m_offscreenTilesSize * 2 + 2;
+            m_tileWidth = width / 16 + m_offscreenTilesSize * 2 + 2;
+            m_tileHeight = height / 16 + m_offscreenTilesSize * 2 + 2;
             m_lightMap = new Color[m_tileWidth * m_tileHeight];
             m_lightTexture = new Texture2D(Main.graphics.GraphicsDevice, m_tileWidth, m_tileHeight, false,
                 SurfaceFormat.Color);
@@ -168,7 +169,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
 
             m_startTileX = Math.Max(0, (int)(Main.screenPosition.X / 16) - m_offscreenTilesSize);
             int endTileX = Math.Min(Main.maxTilesX - 1,
-                (int)((Main.screenPosition.X + Main.screenWidth) / 16) + m_offscreenTilesSize);
+                (int)((Main.screenPosition.X + m_screenWidth) / 16) + m_offscreenTilesSize);
 
             if (endTileX - m_startTileX < cols)
             {
@@ -177,7 +178,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
 
             m_startTileY = Math.Max(0, (int)(Main.screenPosition.Y / 16) - m_offscreenTilesSize);
             int endTileY = Math.Min(Main.maxTilesY - 1,
-                (int)((Main.screenPosition.Y + Main.screenHeight) / 16) + m_offscreenTilesSize);
+                (int)((Main.screenPosition.Y + m_screenHeight) / 16) + m_offscreenTilesSize);
 
             if (endTileY - m_startTileY < rows)
             {
@@ -206,13 +207,13 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
             m_lightTexture.SetData(m_lightMap);
         }
 
-        public void Apply()
+        public void Apply(RenderTarget2D screenTarget1, RenderTarget2D screenTarget2)
         {
             UpdateParameters();
             if (!Enable)
                 return;
 
-            if (m_screenWidth != Main.screenWidth || m_screenHeight != Main.screenHeight
+            if (m_screenWidth != screenTarget1.Width || m_screenHeight != screenTarget1.Height
                 || m_shouldResetRenderTargets)
             {
                 //int sz = 256;
@@ -220,7 +221,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
                 //{
                 //    sz *= 2;
                 //}
-                ResetLightMap();
+                ResetLightMap(screenTarget1.Width, screenTarget1.Height);
                 m_frameWidth = m_tileWidth * 16;
                 m_frameHeight = m_tileHeight * 16;
 
@@ -243,15 +244,15 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
                             m_frameWidth >> i, m_frameHeight >> i, false,
                             SurfaceFormat.Rgba1010102, DepthFormat.None);
                 }
+                m_screenWidth = screenTarget1.Width;
+                m_screenHeight = screenTarget1.Height;
 
                 m_renderTargetSwap = new RenderTarget2D(Main.graphics.GraphicsDevice,
                         m_frameWidth >> (4 + BloomRadius), m_frameHeight >> (4 + BloomRadius),
                         false, SurfaceFormat.Rgba1010102, DepthFormat.None);
                 m_filteredScreenTarget = new RenderTarget2D(Main.graphics.GraphicsDevice,
-                        Main.screenWidth, Main.screenHeight,
+                        m_screenWidth, m_screenHeight,
                         false, SurfaceFormat.Rgba1010102, DepthFormat.None);
-                m_screenWidth = Main.screenWidth;
-                m_screenHeight = Main.screenHeight;
 
                 m_shouldResetRenderTargets = false;
             }
@@ -276,21 +277,21 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
                 Color.White);
             spriteBatch.End();
 
-            graphicsDevice.SetRenderTarget(Main.screenTargetSwap);
+            graphicsDevice.SetRenderTarget(screenTarget2);
             graphicsDevice.Clear(Color.Transparent);
             spriteBatch.Begin(SpriteSortMode.Immediate,
                     BlendState.Opaque,
                     SamplerState.PointClamp,
                     DepthStencilState.Default,
                     RasterizerState.CullNone, null);
-            spriteBatch.Draw(Main.screenTarget, Vector2.Zero,
+            spriteBatch.Draw(screenTarget1, Vector2.Zero,
                 Color.White);
             spriteBatch.End();
 
             var fogEffect = m_fogScreenEffect.Value;
-            graphicsDevice.SetRenderTarget(Main.screenTarget);
+            graphicsDevice.SetRenderTarget(screenTarget1);
             graphicsDevice.Clear(Color.Transparent);
-            fogEffect.Parameters["uImageSize0"].SetValue(new Vector2(Main.screenWidth, Main.screenHeight));
+            fogEffect.Parameters["uImageSize0"].SetValue(new Vector2(m_screenWidth, m_screenHeight));
 
             var config = ModContent.GetInstance<FogConfigs>();
             var absorption = new Vector3(config.FogAbsorptionR, config.FogAbsorptionG, config.FogAbsorptionB);
@@ -308,7 +309,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
                 graphicsDevice.Textures[1] = m_filteredScreenTarget;
                 graphicsDevice.SamplerStates[1] = SamplerState.PointClamp;
                 fogEffect.CurrentTechnique.Passes[0].Apply();
-                spriteBatch.Draw(Main.screenTargetSwap, Vector2.Zero,
+                spriteBatch.Draw(screenTarget2, Vector2.Zero,
                     Color.White);
             }
             spriteBatch.End();
