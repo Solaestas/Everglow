@@ -30,8 +30,8 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
         private Color[] m_lightMap;
         private Texture2D m_lightTexture;
 
-        private int m_bloomRadius;
-        private int m_offscreenTilesSize;
+        private int m_bloomRadius = 2;
+        private int m_offscreenTilesSize = 4;
 
         private int m_frameWidth, m_frameHeight;
         private int m_screenWidth, m_screenHeight;
@@ -45,6 +45,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
 
         private float m_bloomIntensity;
         private int m_startTileX, m_startTileY;
+        private bool m_enableLightUpload;
+        private bool m_resetedLightmaps;
+        private Vector2 m_screenPosition;
 
         /// <summary>
         /// 是否开启大雾效果
@@ -121,6 +124,8 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
 
             m_blurRenderTargets = new RenderTarget2D[MAX_BLUR_LEVELS];
             m_shouldResetRenderTargets = true;
+            m_resetedLightmaps = true;
+            m_screenPosition = Vector2.Zero;
         }
 
         public void Preprocess()
@@ -141,23 +146,37 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
             m_shouldResetRenderTargets |= (m_offscreenTilesSize != fogConfig.OffscreenTiles);
             m_offscreenTilesSize = fogConfig.OffscreenTiles;
             m_enableGaussian = fogConfig.GaussianKernel;
+            m_enableLightUpload = fogConfig.EnableLightUpload;
 
             Enable = fogConfig.EnableScattering;
         }
 
-        private void ResetLightMap(int width, int height)
+        private void ResetLightMap()
         {
-            m_tileWidth = width / 16 + m_offscreenTilesSize * 2 + 2;
-            m_tileHeight = height / 16 + m_offscreenTilesSize * 2 + 2;
+            m_tileWidth = m_screenWidth / 16 + m_offscreenTilesSize * 2 + 2;
+            m_tileHeight = m_screenHeight / 16 + m_offscreenTilesSize * 2 + 2;
             m_lightMap = new Color[m_tileWidth * m_tileHeight];
             m_lightTexture = new Texture2D(Main.graphics.GraphicsDevice, m_tileWidth, m_tileHeight, false,
                 SurfaceFormat.Color);
+            m_resetedLightmaps = true;
         }
 
-        private void ExtractLightMap()
+
+        public void ExtractLightMap()
         {
+            m_screenPosition = Main.screenPosition;
+            m_resetedLightmaps = false;
+
             int rows = m_lightTexture.Height;
             int cols = m_lightTexture.Width;
+
+            //for (int i = 0; i < rows; i++)
+            //{
+            //    for (int j = 0; j < cols; j++)
+            //    {
+            //        m_lightMap[i * cols + j] = Color.Transparent;
+            //    }
+            //}
 
             Parallel.For(0, rows, i =>
             {
@@ -167,26 +186,39 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
                 }
             });
 
-            m_startTileX = Math.Max(0, (int)(Main.screenPosition.X / 16) - m_offscreenTilesSize);
+            m_startTileX = Math.Max(0, (int)(m_screenPosition.X / 16) - m_offscreenTilesSize);
             int endTileX = Math.Min(Main.maxTilesX - 1,
-                (int)((Main.screenPosition.X + m_screenWidth) / 16) + m_offscreenTilesSize);
+                (int)((m_screenPosition.X + m_screenWidth) / 16) + m_offscreenTilesSize);
 
             if (endTileX - m_startTileX < cols)
             {
                 endTileX += cols - (endTileX - m_startTileX);
             }
 
-            m_startTileY = Math.Max(0, (int)(Main.screenPosition.Y / 16) - m_offscreenTilesSize);
+            m_startTileY = Math.Max(0, (int)(m_screenPosition.Y / 16) - m_offscreenTilesSize);
             int endTileY = Math.Min(Main.maxTilesY - 1,
-                (int)((Main.screenPosition.Y + m_screenHeight) / 16) + m_offscreenTilesSize);
+                (int)((m_screenPosition.Y + m_screenHeight) / 16) + m_offscreenTilesSize);
 
             if (endTileY - m_startTileY < rows)
             {
                 endTileY += rows - (endTileY - m_startTileY);
             }
 
-            int offX = (int)(Main.screenPosition.X / 16);
-            int offY = (int)(Main.screenPosition.Y / 16);
+            //for (int i = m_startTileY; i < endTileY; i++)
+            //{
+            //    for (int j = m_startTileX; j < endTileX; j++)
+            //    {
+            //        int x = j - m_startTileX;
+            //        int y = i - m_startTileY;
+            //        var color = Lighting.GetColor(j, i);
+
+            //        var s = color.ToVector3();
+            //        if ((s.X + s.Y + s.Z) * 0.333f > LuminanceThreashold)
+            //        {
+            //            m_lightMap[y * cols + x] = color;
+            //        }
+            //    }
+            //}
 
             Parallel.For(m_startTileY, endTileY, i =>
             {
@@ -204,59 +236,86 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
                 }
             });
 
-            m_lightTexture.SetData(m_lightMap);
+            // CPU bound 性能大头
+            if (m_enableLightUpload)
+            {
+                m_lightTexture.SetData(m_lightMap);
+            }
         }
 
-        public void Apply(RenderTarget2D screenTarget1, RenderTarget2D screenTarget2)
+        private void ResetRenderTargets()
+        {
+            //int sz = 256;
+            //while (sz < Math.Max(Main.screenWidth, Main.screenHeight))
+            //{
+            //    sz *= 2;
+            //}
+            m_frameWidth = m_tileWidth * 16;
+            m_frameHeight = m_tileHeight * 16;
+
+            int l = 0;
+            for (; l < MAX_BLUR_LEVELS; l++)
+            {
+                if ((m_frameWidth >> l) == 0 || (m_frameHeight >> l) == 0)
+                {
+                    break;
+                }
+                m_blurRenderTargets[l] = new RenderTarget2D(Main.graphics.GraphicsDevice,
+                        m_frameWidth >> l, m_frameWidth >> l, false,
+                        SurfaceFormat.Rgba1010102, DepthFormat.None);
+            }
+            m_maxBlurLevel = l;
+
+            for (int i = 0; i < m_maxBlurLevel; i++)
+            {
+                m_blurRenderTargets[i] = new RenderTarget2D(Main.graphics.GraphicsDevice,
+                        m_frameWidth >> i, m_frameHeight >> i, false,
+                        SurfaceFormat.Rgba1010102, DepthFormat.None);
+            }
+
+            m_renderTargetSwap = new RenderTarget2D(Main.graphics.GraphicsDevice,
+                    m_frameWidth >> Math.Min(m_maxBlurLevel - 1, (4 + BloomRadius)), m_frameHeight >> Math.Min(m_maxBlurLevel - 1, (4 + BloomRadius)),
+                    false, SurfaceFormat.Rgba1010102, DepthFormat.None);
+            m_filteredScreenTarget = new RenderTarget2D(Main.graphics.GraphicsDevice,
+                    m_screenWidth, m_screenHeight,
+                    false, SurfaceFormat.Rgba1010102, DepthFormat.None);
+
+            m_shouldResetRenderTargets = false;
+        }
+
+
+        private int _counter = 0;
+        private static Color[] colors =
+        {
+           Color.Red,
+           Color.Green,
+           Color.Blue,
+           Color.Yellow
+        };
+
+        public void Apply( RenderTarget2D screenTarget1, RenderTarget2D screenTarget2)
         {
             UpdateParameters();
             if (!Enable)
                 return;
 
-            if (m_screenWidth != screenTarget1.Width || m_screenHeight != screenTarget1.Height
+            if (screenTarget1 != Main.screenTarget)
+            {
+                return;
+            }
+            //else
+            //{
+
+            //}
+
+            if (m_screenWidth != Main.screenWidth || m_screenHeight != Main.screenHeight
                 || m_shouldResetRenderTargets)
             {
-                //int sz = 256;
-                //while (sz < Math.Max(Main.screenWidth, Main.screenHeight))
-                //{
-                //    sz *= 2;
-                //}
-                ResetLightMap(screenTarget1.Width, screenTarget1.Height);
-                m_frameWidth = m_tileWidth * 16;
-                m_frameHeight = m_tileHeight * 16;
-
-                int l = 0;
-                for (; l < MAX_BLUR_LEVELS; l++)
-                {
-                    if ((m_frameWidth >> l) == 0 || (m_frameHeight >> l) == 0)
-                    {
-                        break;
-                    }
-                    m_blurRenderTargets[l] = new RenderTarget2D(Main.graphics.GraphicsDevice,
-                            m_frameWidth >> l, m_frameWidth >> l, false,
-                            SurfaceFormat.Rgba1010102, DepthFormat.None);
-                }
-                m_maxBlurLevel = l;
-
-                for (int i = 0; i < m_maxBlurLevel; i++)
-                {
-                    m_blurRenderTargets[i] = new RenderTarget2D(Main.graphics.GraphicsDevice,
-                            m_frameWidth >> i, m_frameHeight >> i, false,
-                            SurfaceFormat.Rgba1010102, DepthFormat.None);
-                }
-                m_screenWidth = screenTarget1.Width;
-                m_screenHeight = screenTarget1.Height;
-
-                m_renderTargetSwap = new RenderTarget2D(Main.graphics.GraphicsDevice,
-                        m_frameWidth >> (4 + BloomRadius), m_frameHeight >> (4 + BloomRadius),
-                        false, SurfaceFormat.Rgba1010102, DepthFormat.None);
-                m_filteredScreenTarget = new RenderTarget2D(Main.graphics.GraphicsDevice,
-                        m_screenWidth, m_screenHeight,
-                        false, SurfaceFormat.Rgba1010102, DepthFormat.None);
-
-                m_shouldResetRenderTargets = false;
+                m_screenWidth = Main.screenWidth;
+                m_screenHeight = Main.screenHeight;
+                ResetLightMap();
+                ResetRenderTargets();
             }
-
             ExtractLightMap();
 
             Generate(BloomRadius, 4);
@@ -272,8 +331,8 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
                     SamplerState.PointClamp,
                     DepthStencilState.Default,
                     RasterizerState.CullNone, null);
-            spriteBatch.Draw(m_blurRenderTargets[0], new Rectangle((int)(x - Main.screenPosition.X),
-                (int)(y - Main.screenPosition.Y), m_blurRenderTargets[0].Width, m_blurRenderTargets[0].Height),
+            spriteBatch.Draw(m_blurRenderTargets[0], new Rectangle((int)(x - m_screenPosition.X),
+                (int)(y - m_screenPosition.Y), m_blurRenderTargets[0].Width, m_blurRenderTargets[0].Height),
                 Color.White);
             spriteBatch.End();
 
@@ -300,6 +359,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
             fogEffect.Parameters["uAbsorption"].SetValue(absorption);
             fogEffect.Parameters["uBloomIntensity"].SetValue(BloomIntensity);
             fogEffect.Parameters["uBloomAbsorption"].SetValue(BloomAbsorptionRate * BloomAbsorptionRate * 2);
+            //fogEffect.Parameters["uTargetArea"].SetValue(BloomAbsorptionRate * BloomAbsorptionRate * 2);
             spriteBatch.Begin(SpriteSortMode.Immediate,
                 BlendState.Opaque,
                 SamplerState.PointClamp,
@@ -309,10 +369,13 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
                 graphicsDevice.Textures[1] = m_filteredScreenTarget;
                 graphicsDevice.SamplerStates[1] = SamplerState.PointClamp;
                 fogEffect.CurrentTechnique.Passes[0].Apply();
+
+                var color = colors[_counter % 4];
                 spriteBatch.Draw(screenTarget2, Vector2.Zero,
-                    Color.White);
+                    color);
             }
             spriteBatch.End();
+            _counter++;
         }
 
         private void Generate(int down, int up)

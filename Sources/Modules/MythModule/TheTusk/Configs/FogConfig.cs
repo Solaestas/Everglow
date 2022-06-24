@@ -20,8 +20,13 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Configs
         [Tooltip("是否开启参与介质散射")]
         public bool EnableScattering;
 
-        [DefaultValue(5)]
-        [Range(0, 10)]
+        [DefaultValue(true)]
+        [Label("【性能测试】开启光源数据")]
+        [Tooltip("是否启用发光体数据上传（CPU到GPU）")]
+        public bool EnableLightUpload;
+
+        [DefaultValue(2)]
+        [Range(0, 4)]
         [Label("Bloom Radius")]
         [Tooltip("光效的最大溢出半径，最终半径是以2为底的指数，越大越影响性能")]
         public int MaxBloomRadius;
