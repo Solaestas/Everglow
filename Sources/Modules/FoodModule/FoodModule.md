@@ -33,12 +33,15 @@
 最大饱食度（int）初始值设置为50，暂时没有能够提升或减少它的消耗品或饰品，也许后续会加入。
 
 饱食度（int）设定为每30秒减1，暂时没有能够提升或减少其削减速率的消耗品或饰品，也许后续会加入。饱食度可以通过血糖检测仪显示.
+
 ![血糖检测仪](Images/BloodGlucoseMonitor.png) ![饱食度](Images/FoodSatietyInfoDisplay.png) 
 
 渴觉状态（bool）设定为每5分钟从不渴变为渴，暂时没有能够提升或减少其变化速率的消耗品或饰品，也许后续会加入。渴觉状态可以通过渗透压检测仪显示。
+
 ![渗透压检测仪](Images/OsmoticPressureMonitor.png) ![渴觉状态](Images/ThirstystateInfoDisplay.png) 
 
 两者能够与个人数字助手和魔镜进一步合成手机（这一配方可能后续会改），手机继承两者能力。
+
 ![手机](Images/Phone.png) ![手机信息](Images/PhoneInfoDisplay.png) 
 
 ## 食物buff重置
