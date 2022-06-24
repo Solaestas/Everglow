@@ -389,7 +389,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
 
             if (ropeManager is null)
             {
-                ropeManager = new RopeManager();
+                ropeManager = new RopeManager(1, 1, Color.Black);
                 var mothLand = ModContent.GetInstance<MothLand>();
                 ropes = ropeManager.LoadRope("Everglow/Sources/Modules/MythModule/TheFirefly/Backgrounds/TreeRope",
                     null,
@@ -428,6 +428,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             Main.spriteBatch.Draw(texClose, Vector2.Zero, rvc, GetLuminace(color0));
 
             Main.spriteBatch.End();
+            ropeManager.luminance = luminance;
             ropeManager.Draw();
 
             Vector2 offset = ropes[0].GetOffset();

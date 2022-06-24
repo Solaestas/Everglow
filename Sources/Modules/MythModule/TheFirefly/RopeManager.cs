@@ -57,9 +57,27 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
     internal class RopeManager
     {
 
-        private float luminance = 1;
-        private float gravity = 1;
-        private List<Rope> ropes = new List<Rope>(100);
+        private float gravity;
+        private List<Rope> ropes;
+        public Color drawColor;
+        public float luminance;
+
+        public RopeManager(float luminance, float gravity, Color drawColor)
+        {
+            this.luminance = luminance;
+            this.gravity = gravity;
+            this.drawColor = drawColor;
+            ropes = new List<Rope>(100);
+        }
+
+        public RopeManager()
+        {
+            luminance = 1;
+            gravity = 1;
+            drawColor = Color.White;
+            ropes = new List<Rope>(100);
+        }
+
         /// <summary>
         /// 根据图片加载Rope，并返回由本次Load所增加的Rope组成List
         /// </summary>
@@ -173,8 +191,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
                 (normal.X, normal.Y) = (-normal.Y, normal.X);
                 float width = baseWidth * (1 - (float)i / (count - 1));
                 float factor = (i - 1f) / (count - 2);
-                vertices.Add(new Vertex2D(path[i] - normal * width, GetLuminace(Color.White), new Vector3(0, factor, 0)));
-                vertices.Add(new Vertex2D(path[i] + normal * width, GetLuminace(Color.White), new Vector3(1, factor, 0)));
+                vertices.Add(new Vertex2D(path[i] - normal * width, GetLuminace(drawColor), new Vector3(0, factor, 0)));
+                vertices.Add(new Vertex2D(path[i] + normal * width, GetLuminace(drawColor), new Vector3(1, factor, 0)));
             }
             for (int i = 0; i < count * 2 - 5; i++)
             {
