@@ -50,23 +50,22 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         internal float disFromPlayer = 6;
         internal string shadertype = "Trail0";
         public bool isRightClick = false;
-        private Player Player => Main.player[Projectile.owner];
+        public Player Player => Main.player[Projectile.owner];
         public override void SendExtraAI(BinaryWriter writer)
         {
             writer.WriteVector2(mainVec);
             writer.Write(disFromPlayer);
-            writer.Write(Projectile.spriteDirection);
+            //writer.Write(Projectile.spriteDirection);
         }
         public override void ReceiveExtraAI(BinaryReader reader)
         {
             mainVec = reader.ReadVector2();
             disFromPlayer = reader.ReadSingle();
-            Projectile.spriteDirection = reader.ReadInt32();
+            //Projectile.spriteDirection = reader.ReadInt32();
         }
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
             hitDirection = target.Center.X > Main.player[Projectile.owner].Center.X ? 1 : -1;
-            base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
         }
         public float GetMeleeSpeed(Player player, float max = 100)
         {
@@ -87,14 +86,14 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             {
                 if (!isRightClick)
                 {
-                    if (!Player.controlUseItem)
+                    if (!Player.controlUseItem || Player.dead)
                     {
                         End();
                     }
                 }
                 else
                 {
-                    if (!Player.controlUseTile)
+                    if (!Player.controlUseTile || Player.dead)
                     {
                         End();
                     }
@@ -111,9 +110,6 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                 {
                     trailVecs.Dequeue();
                 }
-                //for (int i = TrailVec.Length - 1; i > 0; --i)
-                //    TrailVec[i] = TrailVec[i - 1];
-                //TrailVec[0] = mainVec;
             }
             else//清空！
             {
@@ -141,7 +137,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             Terraria.Utils.TileActionAttempt cut = new Terraria.Utils.TileActionAttempt(DelegateMethods.CutTiles);
             Vector2 beamStartPos = Projectile.Center;
             Vector2 beamEndPos = beamStartPos + mainVec;
-            Terraria.Utils.PlotTileLine(beamStartPos, beamEndPos, Projectile.width * Projectile.scale, cut);
+            Utils.PlotTileLine(beamStartPos, beamEndPos, Projectile.width * Projectile.scale, cut);
         }
         public void ScreenShake(int time)
         {
@@ -188,11 +184,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
             Texture2D tex = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
-            float exScale = 1;
-            if (longHandle)
-            {
-                ++exScale;
-            }
+            float exScale = longHandle ? 2 : 1;
             Vector2 origin = new Vector2(longHandle ? tex.Width / 2 : 5, tex.Height / 2);
             Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, null, Projectile.GetAlpha(lightColor), mainVec.ToRotation(), origin, new Vector2(exScale * mainVec.Length() / tex.Width, 1.2f) * Projectile.scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipVertically, 0);
             Main.spriteBatch.End();
@@ -235,7 +227,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             List<Vertex2D> bars = new List<Vertex2D>();
             for (int i = 0; i < length; i++)
             {
-                float factor = 1 - (float)i / length;
+                float factor = 1 - i / (length - 1f);
                 float w = TrailAlpha(factor);
                 if (!longHandle)
                 {
@@ -276,15 +268,16 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             List<Vertex2D> bars = new List<Vertex2D>();
             for (int i = 0; i < length; i++)
             {
-                float factor = 1 - (float)i / length;
+                float factor = 1 - i / (length - 1f);
                 float w = 1f;
-                float d = (trail[i]).ToRotation() + 1.57f;
+                float d = trail[i].ToRotation() + 1.57f;
                 float dir = d / MathHelper.TwoPi;
                 bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(dir, w, 0, 1), new Vector3(factor, 1, w)));
                 bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + trail[i] * Projectile.scale * 1.1f, new Color(dir, w, 0, 1), new Vector3(factor, 0, w)));
             }
             Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);            Effect KEx= ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp",ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix); 
+            Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
             Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/Images/Warp").Value;//扭曲用贴图
             KEx.CurrentTechnique.Passes[0].Apply();
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
@@ -297,11 +290,8 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         /// <param name="player"></param>
         public void LockPlayerDir(Player player)
         {
-            //if (Projectile.owner == Main.myPlayer)
-            //{
             Projectile.spriteDirection = Main.MouseWorld.X > player.Center.X ? 1 : -1;
             player.direction = Projectile.spriteDirection;
-            //}
         }
         /// <summary>
         /// 圆的透视投影
@@ -315,7 +305,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         public static Vector2 Vector2Elipse(float radius, float rot0, float rot1, float rot2 = 0, float viewZ = 1000)
         {
             Vector3 v = Vector3.Transform(Vector3.UnitX, Matrix.CreateRotationZ(rot0)) * radius;
-            v = Vector3.Transform(v,Matrix.CreateRotationX(-rot1));
+            v = Vector3.Transform(v, Matrix.CreateRotationX(-rot1));
             if (rot2 != 0)
             {
                 v = Vector3.Transform(v, Matrix.CreateRotationZ(rot2));
