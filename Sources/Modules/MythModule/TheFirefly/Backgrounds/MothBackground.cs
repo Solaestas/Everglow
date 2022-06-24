@@ -397,6 +397,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                     () => GetRopeMove(new Vector2(800, 600), 0.33f * 2));//我也不知道为什么要 * 2反正 * 2就对了
             }
 
+
             var texSky = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflySky");
             var texFar = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyFar");
             var texMiddle = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyMiddle");

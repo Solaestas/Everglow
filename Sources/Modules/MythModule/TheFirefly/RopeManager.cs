@@ -6,6 +6,8 @@ using Everglow.Sources.Modules.MythModule.TheFirefly.Physics;
 
 using SixLabors.ImageSharp.PixelFormats;
 
+using Terraria.GameContent;
+
 namespace Everglow.Sources.Modules.MythModule.TheFirefly
 {
     internal class Rope
@@ -13,6 +15,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
         public Mass[] mass;
         public Spring[] spring;
         public Func<Vector2> GetOffset;
+        private Rope() { }
         public Rope(Vector2 position, float scale, int count, Func<Vector2> offset)
         {
             mass = new Mass[count];
@@ -31,6 +34,24 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
             }
 
             GetOffset = offset;
+        }
+        public Rope Clone(Vector2 deltaPosition)
+        {
+            Rope clone = new Rope
+            {
+                mass = new Mass[mass.Length],
+                spring = new Spring[mass.Length - 1]
+            };
+            for (int i = 0; i < mass.Length; i++)
+            {
+                clone.mass[i] = new Mass(mass[i].mass, mass[i].position + deltaPosition, mass[i].isStatic);
+            }
+            for (int i = 0; i < spring.Length; i++)
+            {
+                clone.spring[i] = new Spring(0.3f, 20, 0.05f, clone.mass[i], clone.mass[i + 1]);
+            }
+            clone.GetOffset = GetOffset;
+            return clone;
         }
     }
     internal class RopeManager
@@ -72,6 +93,26 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
             });
             return result;
         }
+        public void LoadRope(IEnumerable<Rope> ropes)
+        {
+            this.ropes.AddRange(ropes);
+        }
+        /// <summary>
+        /// 清除屏幕外的Rope
+        /// </summary>
+        /// <param name="outRange"></param>
+        public void Clear(int outRange)
+        {
+            Rectangle validRange = new Rectangle((int)Main.screenPosition.X - outRange, (int)Main.screenPosition.Y - outRange,
+                Main.screenWidth + outRange * 2, Main.screenHeight + outRange * 2);
+            for (int i = 0; i < ropes.Count; i++)
+            {
+                if (!validRange.Contains((ropes[i].mass[0].position + ropes[i].GetOffset()).ToPoint()))
+                {
+                    ropes.RemoveAt(i--);
+                }
+            }
+        }
         public void Update(float deltaTime)
         {
             for (int i = 0; i < ropes.Count; i++)
@@ -96,15 +137,27 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
             var sb = Main.spriteBatch;
             List<Vertex2D> vertices = new List<Vertex2D>(100);
             List<int> indices = new List<int>(100);
+            const int extraRange = 500;
+            Rectangle drawRange = new Rectangle((int)Main.screenPosition.X - extraRange, (int)Main.screenPosition.Y - extraRange,
+                Main.screenWidth + extraRange * 2, Main.screenHeight + extraRange * 2);
             foreach (var rope in ropes)
             {
                 Vector2 offset = rope.GetOffset();
+                if(!drawRange.Contains((offset + rope.mass[0].position).ToPoint()))
+                {
+                    continue;
+                }
                 List<Vector2> massPositionsSmooth = Commons.Function.Curves.CatmullRom.SmoothPath(rope.mass.Select(m => m.position + offset), 4);
                 DrawRope(massPositionsSmooth, vertices, indices);
+            }
+            if(vertices.Count < 3)
+            {
+                return;
             }
             sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null,
                 Matrix.CreateTranslation(-Main.screenPosition.X, -Main.screenPosition.Y, 0) * Main.GameViewMatrix.TransformationMatrix);
             gd.Textures[0] = MythContent.QuickTexture("TheFirefly/Tiles/Branch");
+            //gd.Textures[0] = TextureAssets.MagicPixel.Value;
             gd.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, vertices.ToArray(), 0, vertices.Count, indices.ToArray(), 0, indices.Count / 3);
             sb.End();
         }
