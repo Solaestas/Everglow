@@ -1,6 +1,6 @@
 ﻿using Everglow.Sources.Modules.MEACModule.Projectiles;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
-using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
+
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 {
     public class ScaleWingBlade : ModItem
