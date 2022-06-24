@@ -284,11 +284,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                 bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + trail[i] * Projectile.scale * 1.1f, new Color(dir, w, 0, 1), new Vector3(factor, 0, w)));
             }
             Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-            var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
-            Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);            Effect KEx= ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp",ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
             Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/Images/Warp").Value;//扭曲用贴图
             KEx.CurrentTechnique.Passes[0].Apply();
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
@@ -319,7 +315,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         public static Vector2 Vector2Elipse(float radius, float rot0, float rot1, float rot2 = 0, float viewZ = 1000)
         {
             Vector3 v = Vector3.Transform(Vector3.UnitX, Matrix.CreateRotationZ(rot0)) * radius;
-            v = Vector3.Transform(v, Matrix.CreateRotationX(rot1));
+            v = Vector3.Transform(v,Matrix.CreateRotationX(-rot1));
             if (rot2 != 0)
             {
                 v = Vector3.Transform(v, Matrix.CreateRotationZ(rot2));
