@@ -227,7 +227,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             List<Vertex2D> bars = new List<Vertex2D>();
             for (int i = 0; i < length; i++)
             {
-                float factor = 1 - i / (length - 1f);
+                float factor = i / (length - 1f);
                 float w = TrailAlpha(factor);
                 if (!longHandle)
                 {
@@ -268,7 +268,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             List<Vertex2D> bars = new List<Vertex2D>();
             for (int i = 0; i < length; i++)
             {
-                float factor = 1 - i / (length - 1f);
+                float factor = i / (length - 1f);
                 float w = 1f;
                 float d = trail[i].ToRotation() + 1.57f;
                 float dir = d / MathHelper.TwoPi;
