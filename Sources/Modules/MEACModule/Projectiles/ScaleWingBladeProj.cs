@@ -106,12 +106,6 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         }
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
-            base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
-        }
-            base.DrawSelf(spriteBatch,lightColor);
-        }
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
-        {
             if (attackType == 100)
             {
                 damage *= 3;
@@ -279,7 +273,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                 {
                     useTrail = false;
                     LockPlayerDir(player);
-                    Projectile.ai[0] = GetAngToMouse();
+                    //Projectile.ai[0] = GetAngToMouse();
                     float targetRot = -MathHelper.PiOver2 - player.direction * 0.8f;
                     mainVec = Vector2.Lerp(mainVec, Vector2Elipse(110, targetRot, -1.2f, Projectile.ai[0], 1000), 0.1f);
                     Projectile.rotation = mainVec.ToRotation();
