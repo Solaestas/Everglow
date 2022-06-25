@@ -17,8 +17,61 @@ using Terraria.Graphics.Shaders;
 
 namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
 {
+    public struct FogState
+    {
+        /// <summary>
+        /// 是否开启大雾效果
+        /// </summary>
+        public bool Enabled;
+        /// <summary>
+        /// 雾散射随着距离增大而增加的速率
+        /// </summary>
+        public float BloomScatteringRatio;
+        /// <summary>
+        /// 单位距离的雾会吸收多少亮度，该值越大则雾浓度越高，可见性越差
+        /// </summary>
+        public Vector3 ViewAbsorptionRatio;
+        /// <summary>
+        /// 原版光照物块光强的阈值，阈值越大那么亮度比较暗的光照环境不会加入光晕计算
+        /// </summary>
+        public float LuminanceThreashold;
+        /// <summary>
+        /// 超出屏幕计算光照的物块格子数
+        /// </summary>
+        public int OffscreenTileCount;
+        /// <summary>
+        /// 光晕效果的强度，越强光晕越亮
+        /// </summary>
+        public float BloomIntensity;
+        /// <summary>
+        /// 散射效果的模糊半径
+        /// </summary>
+        public int BloomRadius;
+    };
     public class FogPass
     {
+        public static FogState DayThickFog = new FogState
+        {
+            Enabled = true,
+            BloomScatteringRatio = 0.16f,
+            ViewAbsorptionRatio = new Vector3(0.05f),
+            LuminanceThreashold = 0.2f,
+            OffscreenTileCount = 8,
+            BloomIntensity = 0.5f,
+            BloomRadius = 2
+        };
+
+        public static FogState Default = new FogState
+        {
+            Enabled = false,
+            BloomScatteringRatio = 0f,
+            ViewAbsorptionRatio = new Vector3(0f),
+            LuminanceThreashold = 0f,
+            OffscreenTileCount = 0,
+            BloomIntensity = 0f,
+            BloomRadius = 0
+        };
+
         private Asset<Effect> m_boxKernelEffect;
         private Asset<Effect> m_gaussianKernelEffect;
         private Asset<Effect> m_fogScreenEffect;
@@ -41,13 +94,11 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
         private int m_screenWidth, m_screenHeight;
         private int m_tileWidth, m_tileHeight;
         private bool m_shouldResetRenderTargets;
-        private bool m_enableGaussian;
 
         private readonly int MAX_BLUR_LEVELS = 10;
 
         private int m_maxBlurLevel;
 
-        private float m_bloomIntensity;
         private int m_startTileX, m_startTileY;
         private int m_oldStartTileX, m_oldStartTileY;
 
@@ -56,68 +107,8 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
         private Vector2 m_screenPosition;
         private const SurfaceFormat m_surfaceFormat = SurfaceFormat.Rgba1010102;
 
-        /// <summary>
-        /// 是否开启大雾效果
-        /// </summary>
-        public bool Enable
-        {
-            get; set;
-        }
-
-        /// <summary>
-        /// 光晕效果的强度，越强光晕越亮
-        /// </summary>
-        public float BloomIntensity
-        {
-            get
-            {
-                return m_bloomIntensity;
-            }
-            set
-            {
-                m_bloomIntensity = value;
-            }
-        }
-
-        /// <summary>
-        /// 原版光照物块光强的阈值，阈值越大那么亮度比较暗的光照环境不会加入光晕计算
-        /// </summary>
-        public float LuminanceThreashold
-        {
-            get; set;
-        }
-
-        /// <summary>
-        /// 单位距离的雾会吸收多少亮度，该值越大则雾浓度越高，可见性越差
-        /// </summary>
-        public float FogAbsorptionRate
-        {
-            get; set;
-        }
-
-        /// <summary>
-        /// 光晕效果收到雾的浓度的影响因子，越大则能见度越低
-        /// </summary>
-        public float BloomAbsorptionRate
-        {
-            get; set;
-        }
-
-        /// <summary>
-        /// 是否让散射效果随着距离增大而增大
-        /// </summary>
-        public bool FogScatterWithDistance
-        {
-            get; set;
-        }
-
-        /// <summary>
-        /// 光晕效果开启的比例
-        /// </summary>
-        public float BloomFactor
-        {
-            get; set;
-        }
+        private int m_switchCounter = 0;
+        private FogState m_currentState, m_targetState;
 
         /// <summary>
         /// 光晕效果的模糊卷积核半径，该值为2^k
@@ -126,13 +117,12 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
         {
             get
             {
-                return m_bloomRadius;
+                return m_currentState.BloomRadius;
             }
             set
             {
 
-                m_shouldResetRenderTargets |= (m_bloomRadius != value);
-                m_bloomRadius = value;
+                m_currentState.BloomRadius = value;
             }
         }
 
@@ -149,6 +139,8 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
             m_blurRenderTargets = new RenderTarget2D[MAX_BLUR_LEVELS];
             m_shouldResetRenderTargets = true;
             m_enableTemporalFilter = false;
+            m_enableLightUpload = true;
+            m_enableTemporalFilter = true;
             m_screenPosition = Vector2.Zero;
         }
 
@@ -161,20 +153,20 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
         {
             var fogConfig = ModContent.GetInstance<FogConfigs>();
 
-            BloomRadius = fogConfig.MaxBloomRadius;
-            BloomIntensity = fogConfig.BloomIntensity;
-            LuminanceThreashold = fogConfig.LightLuminanceThreashold;
-            BloomAbsorptionRate = fogConfig.FogBloomAbsorptionFactor;
-            BloomFactor = fogConfig.FogBloomRate;
-            FogScatterWithDistance = fogConfig.FogScatterWithDistance;
+            //BloomRadius = fogConfig.MaxBloomRadius;
+            //BloomIntensity = fogConfig.BloomIntensity;
+            //LuminanceThreashold = fogConfig.LightLuminanceThreashold;
+            //BloomAbsorptionRate = fogConfig.FogBloomAbsorptionFactor;
+            //BloomFactor = fogConfig.FogBloomRate;
+            //FogScatterWithDistance = fogConfig.FogScatterWithDistance;
 
-            m_shouldResetRenderTargets |= (m_offscreenTilesSize != fogConfig.OffscreenTiles);
-            m_offscreenTilesSize = fogConfig.OffscreenTiles;
-            m_enableGaussian = fogConfig.GaussianKernel;
-            m_enableLightUpload = fogConfig.EnableLightUpload;
-            m_enableTemporalFilter = fogConfig.EnableTemporalInterp;
+            //m_shouldResetRenderTargets |= (m_offscreenTilesSize != fogConfig.OffscreenTiles);
+            //m_offscreenTilesSize = fogConfig.OffscreenTiles;
+            //m_enableGaussian = fogConfig.GaussianKernel;
+            //m_enableLightUpload = fogConfig.EnableLightUpload;
+            //m_enableTemporalFilter = fogConfig.EnableTemporalInterp;
 
-            Enable = fogConfig.EnableScattering;
+            //Enable = fogConfig.EnableScattering;
         }
 
         private void ResetLightMap()
@@ -194,6 +186,66 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
             }
             m_renderTargetSwap?.Dispose();
             m_filteredScreenTarget?.Dispose();
+        }
+
+        public void SwitchState(in FogState state)
+        {
+            m_switchCounter = 150;
+            m_targetState = state;
+        }
+
+        public void Update()
+        {
+            if (m_switchCounter > 0)
+            {
+                if (m_switchCounter == 150)
+                {
+                    if (m_targetState.Enabled)
+                    {
+                        m_currentState.Enabled = true;
+                        m_currentState.BloomRadius = m_targetState.BloomRadius;
+                        m_currentState.OffscreenTileCount = m_targetState.OffscreenTileCount;
+                        m_shouldResetRenderTargets = true;
+                    }
+                }
+                m_switchCounter--;
+
+                if (m_switchCounter == 0 && !m_targetState.Enabled)
+                {
+                    m_currentState.Enabled = false;
+                    m_currentState.BloomRadius = m_targetState.BloomRadius;
+                    m_currentState.OffscreenTileCount = m_targetState.OffscreenTileCount;
+                    m_shouldResetRenderTargets = true;
+                }
+
+                if (m_switchCounter == 0)
+                {
+
+                }
+
+                float progress = 1f -  m_switchCounter / 150f;
+
+                m_currentState.BloomIntensity = MathHelper.SmoothStep(m_currentState.BloomIntensity,
+                    m_targetState.BloomIntensity, progress);
+                m_currentState.BloomScatteringRatio = MathHelper.SmoothStep(m_currentState.BloomScatteringRatio,
+                    m_targetState.BloomScatteringRatio, progress);
+                m_currentState.LuminanceThreashold = MathHelper.SmoothStep(m_currentState.LuminanceThreashold,
+                    m_targetState.LuminanceThreashold, progress);
+                m_currentState.ViewAbsorptionRatio = Vector3.Lerp(m_currentState.ViewAbsorptionRatio,
+                    m_targetState.ViewAbsorptionRatio, progress);
+            }
+
+            if (Main.time % 300 < 1)
+            {
+                if ((int)(Main.time / 300) % 2 == 0)
+                {
+                    SwitchState(Default);
+                }
+                else
+                {
+                    SwitchState(DayThickFog);
+                }
+            }
         }
 
         private void ResetRenderTargets()
@@ -311,7 +363,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
                     var color = Lighting.GetColor(j, i);
 
                     var s = color.ToVector3();
-                    if ((s.X + s.Y + s.Z) * 0.333f > LuminanceThreashold)
+                    if ((s.X + s.Y + s.Z) * 0.333f > m_currentState.LuminanceThreashold)
                     {
                         m_lightMap[y * cols + x] = color;
                     }
@@ -367,7 +419,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
         public void Apply( RenderTarget2D screenTarget1, RenderTarget2D screenTarget2)
         {
             UpdateParameters();
-            if (!Enable)
+            if (!m_currentState.Enabled)
                 return;
 
             // 因为涉及光照数据获取，这里暂时不支持截屏，原版会在截屏结束后把光照信息抹除
@@ -420,14 +472,12 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
             graphicsDevice.Clear(Color.Transparent);
             fogEffect.Parameters["uImageSize0"].SetValue(new Vector2(m_screenWidth, m_screenHeight));
 
-            var config = ModContent.GetInstance<FogConfigs>();
-            var absorption = new Vector3(config.FogAbsorptionR, config.FogAbsorptionG, config.FogAbsorptionB);
-            absorption *= absorption;
-            fogEffect.Parameters["uAbsorption"].SetValue(absorption);
-            fogEffect.Parameters["uBloomIntensity"].SetValue(BloomIntensity);
-            fogEffect.Parameters["uBloomFactor"].SetValue(BloomFactor);
-            fogEffect.Parameters["uBloomAbsorptionRate"].SetValue(BloomAbsorptionRate);
-            fogEffect.Parameters["uFogScatterWithDistance"].SetValue(FogScatterWithDistance);
+            //fogEffect.Parameters["uAbsorption"].SetValue(absorption);
+            fogEffect.Parameters["uViewAbsorptionRatio"].SetValue(m_currentState.ViewAbsorptionRatio * m_currentState.ViewAbsorptionRatio);
+            fogEffect.Parameters["uBloomIntensity"].SetValue(m_currentState.BloomIntensity);
+            fogEffect.Parameters["uBloomScatteringRatio"].SetValue(m_currentState.BloomScatteringRatio);
+            fogEffect.Parameters["uBloomAbsorptionRate"].SetValue(0f);
+            fogEffect.Parameters["uFogScatterWithDistance"].SetValue(false);
 
             spriteBatch.Begin(SpriteSortMode.Immediate,
                 BlendState.Opaque,
@@ -509,45 +559,43 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
 
         private void ApplyGaussian(int level)
         {
-            if (m_enableGaussian)
-            {
-                var gaussianFilter = m_gaussianKernelEffect.Value;
-                var spriteBatch = Main.spriteBatch;
-                var graphicsDevice = Main.graphics.GraphicsDevice;
+            var gaussianFilter = m_gaussianKernelEffect.Value;
+            var spriteBatch = Main.spriteBatch;
+            var graphicsDevice = Main.graphics.GraphicsDevice;
 
-                var target = m_blurRenderTargets[level];
+            var target = m_blurRenderTargets[level];
 
-                gaussianFilter.Parameters["uImageSize0"].SetValue(target.Size());
-                gaussianFilter.Parameters["uDelta"].SetValue(1.0f);
+            gaussianFilter.Parameters["uImageSize0"].SetValue(target.Size());
+            gaussianFilter.Parameters["uDelta"].SetValue(1.0f);
 
-                // Blur
-                graphicsDevice.SetRenderTarget(m_renderTargetSwap);
-                graphicsDevice.Clear(Color.Transparent);
-                spriteBatch.Begin(SpriteSortMode.Immediate,
-                    BlendState.Opaque,
-                    SamplerState.AnisotropicClamp,
-                    DepthStencilState.Default,
-                    RasterizerState.CullNone, null);
-                gaussianFilter.Parameters["uHorizontal"].SetValue(true);
-                gaussianFilter.CurrentTechnique.Passes[0].Apply();
-                spriteBatch.Draw(target, Vector2.Zero,
-                    Color.White);
-                spriteBatch.End();
+            // Blur
+            graphicsDevice.SetRenderTarget(m_renderTargetSwap);
+            graphicsDevice.Clear(Color.Transparent);
+            spriteBatch.Begin(SpriteSortMode.Immediate,
+                BlendState.Opaque,
+                SamplerState.AnisotropicClamp,
+                DepthStencilState.Default,
+                RasterizerState.CullNone, null);
+            gaussianFilter.Parameters["uHorizontal"].SetValue(true);
+            gaussianFilter.CurrentTechnique.Passes[0].Apply();
+            spriteBatch.Draw(target, Vector2.Zero,
+                Color.White);
+            spriteBatch.End();
 
 
-                graphicsDevice.SetRenderTarget(target);
-                graphicsDevice.Clear(Color.Transparent);
-                spriteBatch.Begin(SpriteSortMode.Immediate,
-                    BlendState.Opaque,
-                    SamplerState.AnisotropicClamp,
-                    DepthStencilState.Default,
-                    RasterizerState.CullNone, null);
-                gaussianFilter.Parameters["uHorizontal"].SetValue(false);
-                gaussianFilter.CurrentTechnique.Passes[0].Apply();
-                spriteBatch.Draw(m_renderTargetSwap, Vector2.Zero,
-                    Color.White);
-                spriteBatch.End();
-            }
+            graphicsDevice.SetRenderTarget(target);
+            graphicsDevice.Clear(Color.Transparent);
+            spriteBatch.Begin(SpriteSortMode.Immediate,
+                BlendState.Opaque,
+                SamplerState.AnisotropicClamp,
+                DepthStencilState.Default,
+                RasterizerState.CullNone, null);
+            gaussianFilter.Parameters["uHorizontal"].SetValue(false);
+            gaussianFilter.CurrentTechnique.Passes[0].Apply();
+            spriteBatch.Draw(m_renderTargetSwap, Vector2.Zero,
+                Color.White);
+            spriteBatch.End();
+
         }
 
 
