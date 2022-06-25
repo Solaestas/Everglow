@@ -205,7 +205,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                 {
                     useTrail = false;
                     LockPlayerDir(player);
-                    //Projectile.ai[0] = GetAngToMouse();
+                    Projectile.ai[0] = GetAngToMouse();
                     float targetRot = -MathHelper.PiOver2 - player.direction * 0.8f;
                     mainVec = Vector2.Lerp(mainVec, Vector2Elipse(110, targetRot, -1.2f, Projectile.ai[0], 1000), 0.1f);
                     Projectile.rotation = mainVec.ToRotation();

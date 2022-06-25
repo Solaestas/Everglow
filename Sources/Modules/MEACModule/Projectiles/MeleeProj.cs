@@ -249,11 +249,11 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
 
             Vector2 Zoom = new Vector2(exScale * mainVec.Length() / tex.Width, 1.2f) * Projectile.scale;
 
-            double ProjRotation = mainVec.ToRotation() + Math.PI / 4;
+            double ProjRotation = MainVec_WithoutGravDir.ToRotation() + Math.PI / 4;
 
             float QuarterSqrtTwo = 0.35355f;
 
-            Vector2 drawCenter = Projectile.Center - Main.screenPosition;
+            Vector2 drawCenter = ProjCenter_WithoutGravDir - Main.screenPosition;
             Vector2 INormal = new Vector2(texHeight * QuarterSqrtTwo).RotatedBy(ProjRotation - (baseRotation - Math.PI / 4)) * Zoom.Y * Size;
             Vector2 JNormal = new Vector2(texWidth * QuarterSqrtTwo).RotatedBy(ProjRotation - (baseRotation + Math.PI / 4)) * Zoom.X * Size;
 
@@ -275,7 +275,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             Vector2 sourceBottomLeft = new Vector2(0.5f) - ITexNormal - JTexNormal;
             Vector2 sourceBottomRight = new Vector2(0.5f) - ITexNormal + JTexNormal;
 
-            if (Main.player[Projectile.owner].direction == -1)
+            if (Player.direction * Player.gravDir == -1)
             {
                 sourceTopLeft = sourceBottomLeft;
                 sourceTopRight = sourceBottomRight;
@@ -295,7 +295,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                 };
 
             Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
             Main.graphics.GraphicsDevice.Textures[0] = tex;
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertex2Ds.ToArray(), 0, vertex2Ds.Count - 2);
