@@ -28,11 +28,17 @@ Mods: {
 			LegendWeapon : 传说武器
 			#{$Mods.Everglow.Common.LegendWeapon}
 
+			#世界生成WorldGen
 			WorldSystem:{
 				WorldCreate_Def : 开始创建世界
 				WorldEnter_Def : 正在进入世界
 				BuildMothCave : "正在生成流萤之茧"
+			}
 
+			#食物系统FoodSystem
+			FoodSystem:{
+				CannotEat : "你吃饱了"
+				CannotDrink : "你不想再喝了"
 			}
 		}
 

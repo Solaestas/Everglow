@@ -37,6 +37,19 @@ Mods: {
 			LegendWeapon : Legendary weapon
 			#{$Mods.Everglow.Common.LegendWeapon}
 
+			#世界生成WorldGen
+			WorldSystem:{
+				WorldCreate_Def : "Generating World""
+				WorldEnter_Def : "Entering World""
+				BuildMothCave : "Generating The Cocoon"
+			}
+
+			#食物系统FoodSystem
+			FoodSystem:{
+				CannotEat : "You're full"
+				CannotDrink : "You don't feel like to drink"
+			}
+
 		}
 
 		ItemName: 

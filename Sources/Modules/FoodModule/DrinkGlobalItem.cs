@@ -277,7 +277,7 @@ namespace Everglow.Sources.Modules.FoodModule
                 var drinkInfo = m_vanillaDrinkInfos[item.type];
                 if (!foodPlayer.CanDrink(drinkInfo))
                 {
-                    Main.NewText($"Cannot drink this!");
+                    Main.NewText(Language.GetTextValue("Mods.Everglow.Common.FoodSystem.CannotDrink"));
                     return false;
                 }
             }
@@ -287,7 +287,7 @@ namespace Everglow.Sources.Modules.FoodModule
                 var drinkInfo = foodItem.DrinkInfo;
                 if (!foodPlayer.CanDrink(drinkInfo))
                 {
-                    Main.NewText($"Cannot drink this!");
+                    Main.NewText(Language.GetTextValue("Mods.Everglow.Common.FoodSystem.CannotDrink"));
                     return false;
                 }
             }
@@ -304,7 +304,7 @@ namespace Everglow.Sources.Modules.FoodModule
                 var drinkInfo = m_vanillaDrinkInfos[item.type];
                 if (!foodPlayer.CanDrink(drinkInfo))
                 {
-                    Main.NewText($"Cannot drink this!");
+                    Main.NewText(Language.GetTextValue("Mods.Everglow.Common.FoodSystem.CannotDrink"));
                     return false;
                 }
             }
@@ -314,7 +314,7 @@ namespace Everglow.Sources.Modules.FoodModule
                 var drinkInfo = foodItem.DrinkInfo;
                 if (!foodPlayer.CanDrink(drinkInfo))
                 {
-                    Main.NewText($"Cannot drink this!");
+                    Main.NewText(Language.GetTextValue("Mods.Everglow.Common.FoodSystem.CannotDrink"));
                     return false;
                 }
             }
