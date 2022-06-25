@@ -27,7 +27,12 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         {
             return BlendState.Additive;
         }
-
+        public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor)
+        {
+            base.DrawSelf(spriteBatch, lightColor);
+            Color c = new Color(1f,1f,1f,0.5f);
+            base.DrawSelf(spriteBatch, c);
+        }
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
             //伤害倍率
@@ -52,7 +57,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                     useTrail = false;
                     LockPlayerDir(Player);
                     float targetRot = -MathHelper.PiOver2 - Player.direction * 0.8f;
-                    mainVec = Vector2.Lerp(mainVec, Player.DirectionTo(Main.MouseWorld) * 150, 0.2f);
+                    mainVec = Vector2.Lerp(mainVec, Player.DirectionTo(MouseWorld_WithoutGravDir) * 150, 0.2f);
                     disFromPlayer = MathHelper.Lerp(disFromPlayer, -30, 0.2f);
                     Projectile.rotation = mainVec.ToRotation();
                 }
@@ -131,7 +136,9 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                     Projectile.Center += new Vector2(Projectile.spriteDirection * 120, 0);
                     if (Main.myPlayer == Projectile.owner)
                     {
-                        Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center - Vector2.Normalize(mainVec) * 300, Vector2.Normalize(mainVec) * 15, ModContent.ProjectileType<DashingLightEff>(), Projectile.damage, 0, Projectile.owner, 1).CritChance = Projectile.CritChance;
+                        Vector2 mVec = MainVec_WithoutGravDir;
+                        Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center - Vector2.Normalize(mVec) * 300, Vector2.Normalize(mVec) * 15, ModContent.ProjectileType<DashingLightEff>(), Projectile.damage, 0, Projectile.owner, 1).CritChance = Projectile.CritChance;
+                        Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center - Vector2.Normalize(mVec) * 150, Vector2.Normalize(mVec) * 20, ModContent.ProjectileType<VortexVanquisher2>(), 0, 0, Projectile.owner, 1).scale=Projectile.scale*1.2f;
                     }
                 }
                 if (timer > 50)
@@ -157,7 +164,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                     isAttacking = true;
                     Projectile.extraUpdates = 2;
                     Projectile.Center += Projectile.velocity;
-                    Projectile.velocity = Vector2.Lerp(Projectile.velocity, Vector2.Normalize(Main.MouseWorld - Player.Center) * 180, 0.06f);
+                    Projectile.velocity = Vector2.Lerp(Projectile.velocity, Vector2.Normalize(MouseWorld_WithoutGravDir - Player.Center) * 180, 0.06f);
                     Projectile.rotation += 0.3f * Projectile.spriteDirection;
                     mainVec = Projectile.rotation.ToRotationVector2() * 160;
                 }
@@ -173,10 +180,11 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                 if (timer == 0)
                 {
                     useTrail = false;
-                    Vector2 vec = Vector2.Normalize(Main.MouseWorld - Player.Center);
+                   
+                    Vector2 vec = Vector2.Normalize(MouseWorld_WithoutGravDir - Player.Center);
                     Projectile.rotation = vec.ToRotation();
                     mainVec = vec * 160;
-                    Player.velocity += vec * 20;
+                    Player.velocity += Vector2.Normalize(Main.MouseWorld - Player.Center) * 20;
                     LockPlayerDir(Player);
                     if (Main.myPlayer == Projectile.owner)
                     {
@@ -189,7 +197,6 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                     {
                         Player.velocity *= 0.9f;
                     }
-
                     if (timer < 10)
                     {
                         disFromPlayer += 30;

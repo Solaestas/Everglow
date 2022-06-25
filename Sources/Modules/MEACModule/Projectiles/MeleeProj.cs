@@ -51,6 +51,48 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         internal string shadertype = "Trail0";
         public bool isRightClick = false;
         public Player Player => Main.player[Projectile.owner];
+        public Vector2 MainVec_WithoutGravDir
+        {
+            get
+            {
+                Vector2 vec = mainVec;
+                if(Player.gravDir==-1)
+                    vec.Y *= -1;
+                return vec;
+            }
+        }
+        public Vector2 MouseWorld_WithoutGravDir
+        {
+            get
+            {
+                Vector2 vec = Main.MouseWorld;
+                if (Player.gravDir == -1)
+                {
+                    vec = WrapY(vec);
+                }
+                return vec;
+            }
+        }
+        public Vector2 ProjCenter_WithoutGravDir
+        {
+            get
+            {
+                Vector2 vec = Projectile.Center;
+                if (Player.gravDir == -1)
+                {
+                    vec = WrapY(vec);
+                }
+                return vec;
+            }
+        }
+        private Vector2 WrapY(Vector2 vec)
+        {
+            vec.Y -= Main.screenPosition.Y;
+            float d = vec.Y - Main.screenHeight / 2;
+            vec.Y -= 2 * d;
+            vec.Y += Main.screenPosition.Y;
+            return vec;
+        }
         public override void SendExtraAI(BinaryWriter writer)
         {
             writer.WriteVector2(mainVec);
@@ -162,7 +204,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
             float point = 0;
-            if (isAttacking && Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center + mainVec * Projectile.scale * (longHandle ? 0.2f : 0.1f), Projectile.Center + mainVec * Projectile.scale, Projectile.height, ref point))
+            if (isAttacking && Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), ProjCenter_WithoutGravDir + MainVec_WithoutGravDir * Projectile.scale * (longHandle ? 0.2f : 0.1f), ProjCenter_WithoutGravDir + MainVec_WithoutGravDir * Projectile.scale, Projectile.height, ref point))
             {
                 if (Collision.CanHitLine(Projectile.Center, 1, 1, targetHitbox.TopLeft(), targetHitbox.Width, targetHitbox.Height) || CanIgnoreTile)
                 {
@@ -182,11 +224,11 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         public virtual void DrawSelf(SpriteBatch spriteBatch, Color lightColor)
         {
             Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             Texture2D tex = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
             float exScale = longHandle ? 2 : 1;
             Vector2 origin = new Vector2(longHandle ? tex.Width / 2 : 5, tex.Height / 2);
-            Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, null, Projectile.GetAlpha(lightColor), mainVec.ToRotation(), origin, new Vector2(exScale * mainVec.Length() / tex.Width, 1.2f) * Projectile.scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipVertically, 0);
+            Main.spriteBatch.Draw(tex, ProjCenter_WithoutGravDir - Main.screenPosition, null, Projectile.GetAlpha(lightColor), MainVec_WithoutGravDir.ToRotation(), origin, new Vector2(exScale * mainVec.Length() / tex.Width, 1.2f) * Projectile.scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipVertically, 0);
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
         }
@@ -276,7 +318,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                 bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + trail[i] * Projectile.scale * 1.1f, new Color(dir, w, 0, 1), new Vector3(factor, 0, w)));
             }
             Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix); 
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix); 
             Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
             Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/Images/Warp").Value;//扭曲用贴图
             KEx.CurrentTechnique.Passes[0].Apply();
@@ -308,13 +350,18 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             v = Vector3.Transform(v, Matrix.CreateRotationX(-rot1));
             if (rot2 != 0)
             {
-                v = Vector3.Transform(v, Matrix.CreateRotationZ(rot2));
+                v = Vector3.Transform(v, Matrix.CreateRotationZ(-rot2));
             }
-
             float k = -viewZ / (v.Z - viewZ);
             return k * new Vector2(v.X, v.Y);
         }
-
+        public float GetAngToMouse()
+        {
+            Vector2 vec = (MouseWorld_WithoutGravDir - Main.player[Projectile.owner].Center);
+            if (vec.X < 0)
+                vec = -vec;
+            return -vec.ToRotation();
+        }
         public void AttSound(SoundStyle sound)
         {
             SoundEngine.PlaySound(sound, Projectile.Center);
