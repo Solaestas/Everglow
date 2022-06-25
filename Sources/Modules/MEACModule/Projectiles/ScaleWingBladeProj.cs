@@ -32,9 +32,9 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         {
             return BlendState.NonPremultiplied;
         }
-        public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, float HorizontalWidth, float HorizontalHeight, float DrawScale, double DrawRotation)
+        public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, float HorizontalWidth, float HorizontalHeight, float DrawScale, string GlowPath, double DrawRotation)
         {
-            base.DrawSelf(spriteBatch, lightColor, 85, 30);
+            base.DrawSelf(spriteBatch, lightColor, 85, 30, 0.9f, "Projectiles/ScaleWingBladeProjGlow");
         }
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {

@@ -30,7 +30,8 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
-            Main.spriteBatch.Draw(tex,Projectile.Center-Main.screenPosition,null,Color.White,Projectile.velocity.ToRotation() + 0.7854f,tex.Size()/2,Projectile.scale,0,0);
+            Main.spriteBatch.Draw(tex,Projectile.Center-Main.screenPosition,null, lightColor, Projectile.velocity.ToRotation() + 0.7854f,tex.Size()/2,Projectile.scale,0,0);
+            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/Projectiles/VortexVanquisherGlow").Value, Projectile.Center - Main.screenPosition, null, new Color(255,255,255,0), Projectile.velocity.ToRotation() + 0.7854f, tex.Size() / 2, Projectile.scale, 0, 0);
             return false;
         }
     }

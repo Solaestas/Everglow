@@ -221,7 +221,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             return false;
         }
 
-        public virtual void DrawSelf(SpriteBatch spriteBatch, Color lightColor, float HorizontalWidth = 10, float HorizontalHeight = 10, float DrawScale = 0.9f, double DrawRotation = 0.7854)
+        public virtual void DrawSelf(SpriteBatch spriteBatch, Color lightColor, float HorizontalWidth = 10, float HorizontalHeight = 10, float DrawScale = 0.9f, string GlowPath = "", double DrawRotation = 0.7854)
         {
             //Main.spriteBatch.End();
             //Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
@@ -300,6 +300,22 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             Main.graphics.GraphicsDevice.Textures[0] = tex;
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertex2Ds.ToArray(), 0, vertex2Ds.Count - 2);
 
+            if(GlowPath != "")
+            {
+                vertex2Ds = new List<Vertex2D>
+                {
+                    new Vertex2D(drawCenter + TopLeft, new Color(255,255,255,0), new Vector3(sourceTopLeft.X, sourceTopLeft.Y, 0)),
+                    new Vertex2D(drawCenter + BottomLeft, new Color(255,255,255,0), new Vector3(sourceBottomLeft.X, sourceBottomLeft.Y, 0)),
+                    new Vertex2D(drawCenter + TopRight, new Color(255,255,255,0), new Vector3(sourceTopRight.X, sourceTopRight.Y, 0)),
+
+                    new Vertex2D(drawCenter + BottomRight, new Color(255,255,255,0), new Vector3(sourceBottomRight.X, sourceBottomRight.Y, 0)),
+                    new Vertex2D(drawCenter + BottomLeft, new Color(255,255,255,0), new Vector3(sourceBottomLeft.X, sourceBottomLeft.Y, 0)),
+                    new Vertex2D(drawCenter + TopRight, new Color(255,255,255,0), new Vector3(sourceTopRight.X, sourceTopRight.Y, 0))
+                };
+                Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/" + GlowPath).Value; ;
+                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertex2Ds.ToArray(), 0, vertex2Ds.Count - 2);
+            }
+
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
         }
@@ -331,7 +347,16 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         }
         public virtual void DrawTrail(Color color)
         {
-            List<Vector2> SmoothTrail = Bezier.SmoothPath(trailVecs.ToList());//平滑
+            List<Vector2> SmoothTrailX = Bezier.SmoothPath(trailVecs.ToList());//平滑
+            List<Vector2> SmoothTrail = new List<Vector2>();
+            for(int x = 0;x < SmoothTrailX.Count - 1;x++)
+            {
+                SmoothTrail.Add(SmoothTrailX[x]);
+            }
+            if(trailVecs.Count != 0)
+            {
+                SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
+            }
 
             int length = SmoothTrail.Count;
             if (length <= 3)
@@ -375,8 +400,16 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         }
         public void DrawWarp()
         {
-            List<Vector2> SmoothTrail = Bezier.SmoothPath(trailVecs.ToList());//平滑
-
+            List<Vector2> SmoothTrailX = Bezier.SmoothPath(trailVecs.ToList());//平滑
+            List<Vector2> SmoothTrail = new List<Vector2>();
+            for (int x = 0; x < SmoothTrailX.Count - 1; x++)
+            {
+                SmoothTrail.Add(SmoothTrailX[x]);
+            }
+            if (trailVecs.Count != 0)
+            {
+                SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
+            }
             int length = SmoothTrail.Count;
             if (length <= 3)
             {
