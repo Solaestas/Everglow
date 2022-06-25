@@ -27,11 +27,11 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         {
             return BlendState.Additive;
         }
-        public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor)
+        public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, float HorizontalWidth, float HorizontalHeight, float DrawScale, double DrawRotation)
         {
-            base.DrawSelf(spriteBatch, lightColor);
+            base.DrawSelf(spriteBatch, lightColor, 240, 40, 0.75f);
             Color c = new Color(1f,1f,1f,0.5f);
-            base.DrawSelf(spriteBatch, c);
+            base.DrawSelf(spriteBatch, c, 240, 40, 0.75f);
         }
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
@@ -104,7 +104,6 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                 }
                 if (timer > 20 && timer < 35)
                 {
-
                     isAttacking = true;
                     Projectile.rotation += Projectile.spriteDirection * 0.4f;
                     mainVec = Vector2Elipse(180, Projectile.rotation, -1.2f);

@@ -32,77 +32,9 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         {
             return BlendState.NonPremultiplied;
         }
-        public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor)
+        public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, float HorizontalWidth, float HorizontalHeight, float DrawScale, double DrawRotation)
         {
-            Texture2D tex = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
-
-            float texWidth = 85;//转换成水平贴图时候的宽度
-            float texHeight = 30;//转换成水平贴图时候的高度
-            float Size = 0.9f;//放大的几何倍数
-            double baseRotation = 0.79;//这个是刀刃倾斜度与水平的夹角
-
-            float exScale = 1;
-            if (longHandle)
-            {
-                exScale += 1f;
-            }
-            Vector2 origin = new Vector2(longHandle ? texWidth / 2 : 5, texHeight / 2);
-
-            Vector2 Zoom = new Vector2(exScale * mainVec.Length() / tex.Width, 1.2f) * Projectile.scale;
-
-            double ProjRotation = mainVec.ToRotation() + Math.PI / 4;
-
-            float QuarterSqrtTwo = 0.35355f;
-
-            Vector2 drawCenter = Projectile.Center - Main.screenPosition;
-            Vector2 INormal = new Vector2(texHeight * QuarterSqrtTwo).RotatedBy(ProjRotation - (baseRotation - Math.PI / 4)) * Zoom.Y * Size;
-            Vector2 JNormal = new Vector2(texWidth * QuarterSqrtTwo).RotatedBy(ProjRotation - (baseRotation + Math.PI / 4)) * Zoom.X * Size;
-
-            Vector2 ITexNormal = new Vector2(texHeight * QuarterSqrtTwo).RotatedBy(-(baseRotation - Math.PI / 4));
-            ITexNormal.X /= tex.Width;
-            ITexNormal.Y /= tex.Height;
-            Vector2 JTexNormal = new Vector2(texWidth * QuarterSqrtTwo).RotatedBy(-(baseRotation + Math.PI / 4));
-            JTexNormal.X /= tex.Width;
-            JTexNormal.Y /= tex.Height;
-
-            Vector2 TopLeft/*原水平贴图的左上角,以此类推*/ = Vector2.Normalize(INormal) * origin.Y - Vector2.Normalize(JNormal) * origin.X;
-            Vector2 TopRight = Vector2.Normalize(JNormal) * (JNormal.Length() * 2 - origin.X) + Vector2.Normalize(INormal) * origin.Y;
-            Vector2 BottomLeft = -Vector2.Normalize(INormal) * (INormal.Length() * 2 - origin.Y) - Vector2.Normalize(JNormal) * origin.X;
-            Vector2 BottomRight = Vector2.Normalize(JNormal) * (JNormal.Length() * 2 - origin.X) - Vector2.Normalize(INormal) * (INormal.Length() * 2 - origin.Y);
-
-
-            Vector2 sourceTopLeft = new Vector2(0.5f) + ITexNormal - JTexNormal;
-            Vector2 sourceTopRight = new Vector2(0.5f) + ITexNormal + JTexNormal;
-            Vector2 sourceBottomLeft = new Vector2(0.5f) - ITexNormal - JTexNormal;
-            Vector2 sourceBottomRight = new Vector2(0.5f) - ITexNormal + JTexNormal;
-
-            if (Main.player[Projectile.owner].direction == -1)
-            {
-                sourceTopLeft = sourceBottomLeft;
-                sourceTopRight = sourceBottomRight;
-                sourceBottomLeft = new Vector2(0.5f) + ITexNormal - JTexNormal;
-                sourceBottomRight = new Vector2(0.5f) + ITexNormal + JTexNormal;
-            }
-
-            List<Vertex2D> vertex2Ds = new List<Vertex2D>
-                {
-                    new Vertex2D(drawCenter + TopLeft, Projectile.GetAlpha(lightColor), new Vector3(sourceTopLeft.X, sourceTopLeft.Y, 0)),
-                    new Vertex2D(drawCenter + BottomLeft, Projectile.GetAlpha(lightColor), new Vector3(sourceBottomLeft.X, sourceBottomLeft.Y, 0)),
-                    new Vertex2D(drawCenter + TopRight, Projectile.GetAlpha(lightColor), new Vector3(sourceTopRight.X, sourceTopRight.Y, 0)),
-
-                    new Vertex2D(drawCenter + BottomRight, Projectile.GetAlpha(lightColor), new Vector3(sourceBottomRight.X, sourceBottomRight.Y, 0)),
-                    new Vertex2D(drawCenter + BottomLeft, Projectile.GetAlpha(lightColor), new Vector3(sourceBottomLeft.X, sourceBottomLeft.Y, 0)),
-                    new Vertex2D(drawCenter + TopRight, Projectile.GetAlpha(lightColor), new Vector3(sourceTopRight.X, sourceTopRight.Y, 0))
-                };
-
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-
-            Main.graphics.GraphicsDevice.Textures[0] = tex;
-            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertex2Ds.ToArray(), 0, vertex2Ds.Count - 2);
-
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            base.DrawSelf(spriteBatch, lightColor, 85, 30);
         }
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
