@@ -7,7 +7,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         public override void SetDef()
         {
             maxAttackType = 3;
-            TrailLength = 20;
+            trailLength = 20;
             shadertype = "Trail";
         }
         public override string TrailColorTex()
@@ -100,110 +100,110 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         }
         public override void Attack()
         {
-            Player player = Main.player[projectile.owner];
-            UseTrail = true;
+            Player player = Main.player[Projectile.owner];
+            useTrail = true;
             if (attackType == 0)
             {
-                if (Timer < 30)//前摇
+                if (timer < 30)//前摇
                 {
-                    UseTrail = false;
+                    useTrail = false;
                     LockPlayerDir(player);
                     float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
                     mainVec = Vector2.Lerp(mainVec, Vector2Elipse(80, targetRot, -1.2f), 0.08f);
-                    mainVec += projectile.DirectionFrom(player.Center) * 3;
-                    projectile.rotation = mainVec.ToRotation();
+                    mainVec += Projectile.DirectionFrom(player.Center) * 3;
+                    Projectile.rotation = mainVec.ToRotation();
                 }
-                if (Timer == 30)
+                if (timer == 30)
                     AttSound(SoundID.Item1);
-                if (Timer > 30 && Timer < 50)
+                if (timer >30&&timer< 50)
                 {
                     isAttacking = true;
-                    projectile.rotation += projectile.spriteDirection * 0.25f;
-                    mainVec = Vector2Elipse(120, projectile.rotation, 0.6f);
+                    Projectile.rotation += Projectile.spriteDirection * 0.25f;
+                    mainVec = Vector2Elipse(120, Projectile.rotation, 0.6f);
                 }
-                if (Timer > 70)
+                if (timer > 70)
                 {
                     NextAttackType();
                 }
             }
             if (attackType == 1)
             {
-                if (Timer == 0)
+                if (timer == 0)
                 {
                     LockPlayerDir(player);
-                    UseTrail = false;
-                    projectile.rotation = -MathHelper.PiOver2 - player.direction * 0.6f;
+                    useTrail = false;
+                    Projectile.rotation = -MathHelper.PiOver2 - player.direction * 0.6f;
                 }
-                if (Timer == 1)
+                if (timer == 1)
                     AttSound(SoundID.Item1);
-                if (Timer < 20)
+                if (timer < 20)
                 {
                     isAttacking = true;
-                    projectile.rotation += projectile.spriteDirection * 0.22f;
-                    mainVec = Vector2Elipse(120, projectile.rotation, -0.6f);
+                    Projectile.rotation += Projectile.spriteDirection * 0.22f;
+                    mainVec = Vector2Elipse(120, Projectile.rotation, -0.6f);
                 }
-                if (Timer > 40)
+                if (timer > 40)
                 {
                     NextAttackType();
                 }
             }
             if (attackType == 2)
             {
-                if (Timer == 0)
+                if (timer == 0 )
                 {
                     LockPlayerDir(player);
-                    UseTrail = false;
-                    projectile.rotation = -MathHelper.PiOver2 - player.direction * 0.1f;
+                    useTrail = false;
+                    Projectile.rotation = -MathHelper.PiOver2 - player.direction * 0.1f;
                 }
-                if (Timer < 60)
+                if (timer < 60)
                 {
                     isAttacking = true;
-                    if (Timer % 15 == 0)
+                    if (timer % 15 == 0)
                     {
                         AttSound(SoundID.Item1);
-                        UseTrail = false;
+                        useTrail = false;
                     }
-                    if (Timer % 30 < 15)
+                    if (timer % 30 < 15)
                     {
-                        projectile.rotation += projectile.spriteDirection * 0.3f;
-                        mainVec = Vector2Elipse(120, projectile.rotation, 1f);
+                        Projectile.rotation += Projectile.spriteDirection * 0.3f;
+                        mainVec = Vector2Elipse(120, Projectile.rotation, 1f);
                     }
                     else
                     {
-                        projectile.rotation -= projectile.spriteDirection * 0.3f;
-                        mainVec = Vector2Elipse(120, projectile.rotation, -1f);
+                        Projectile.rotation -= Projectile.spriteDirection * 0.3f;
+                        mainVec = Vector2Elipse(120, Projectile.rotation, -1f);
                     }
 
                 }
-                if (Timer > 70)
+                if (timer > 70)
                 {
                     NextAttackType();
                 }
             }
             if (attackType == 3)
             {
-                if (Timer < 30)//前摇
+                if (timer < 30)//前摇
                 {
-                    UseTrail = false;
+                    useTrail = false;
                     LockPlayerDir(player);
                     float targetRot = -MathHelper.PiOver2 - player.direction * 0.7f;
                     mainVec = Vector2.Lerp(mainVec, Vector2Elipse(80, targetRot, -1.2f), 0.08f);
-                    mainVec += projectile.DirectionFrom(player.Center) * 3;
-                    projectile.rotation = mainVec.ToRotation();
+                    mainVec += Projectile.DirectionFrom(player.Center) * 3;
+                    Projectile.rotation = mainVec.ToRotation();
                 }
-                if (Timer > 30 && Timer < 40)
+                if (timer > 30 && timer < 40)
                 {
                     isAttacking = true;
-                    projectile.rotation += projectile.spriteDirection * 0.55f;
-                    mainVec = Vector2Elipse(120, projectile.rotation, -1.2f);
+                    Projectile.rotation += Projectile.spriteDirection * 0.55f;
+                    mainVec = Vector2Elipse(120, Projectile.rotation, -1.2f);
                 }
-                if (Timer == 30)
+                if (timer == 30)
                     AttSound(SoundID.Item1);
-                if (Timer > 30 && Timer < 50)
+                if (timer > 30 && timer < 50)
                 {
 
                 }
-                if (Timer > 100)
+                if (timer > 100)
                 {
                     NextAttackType();
                 }
@@ -211,7 +211,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             if (isAttacking)
                 for (int i = 1; i < 4; i++)
                 {
-                    Dust d = Dust.NewDustDirect(projectile.Center + i * mainVec / 3, 20, 20, 172, 0, 0, 0, default, 1.5f);
+                    Dust d = Dust.NewDustDirect(Projectile.Center + i * mainVec / 3, 20, 20, 172, 0, 0, 0, default, 1.5f);
                     d.velocity *= 0;
                     d.noGravity = true;
                 }
