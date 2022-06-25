@@ -48,7 +48,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
         private bool m_enableLightUpload;
         private bool m_resetedLightmaps;
         private Vector2 m_screenPosition;
-        private const SurfaceFormat m_surfaceFormat = SurfaceFormat.Color;
+        private const SurfaceFormat m_surfaceFormat = SurfaceFormat.Rgba1010102;
 
         /// <summary>
         /// 是否开启大雾效果
@@ -98,6 +98,22 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
         }
 
         /// <summary>
+        /// 是否让散射效果随着距离增大而增大
+        /// </summary>
+        public bool FogScatterWithDistance
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// 光晕效果开启的比例
+        /// </summary>
+        public float BloomFactor
+        {
+            get; set;
+        }
+
+        /// <summary>
         /// 光晕效果的模糊卷积核半径，该值为2^k
         /// </summary>
         public int BloomRadius
@@ -142,7 +158,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
             BloomRadius = fogConfig.MaxBloomRadius;
             BloomIntensity = fogConfig.BloomIntensity;
             LuminanceThreashold = fogConfig.LightLuminanceThreashold;
-            BloomAbsorptionRate = fogConfig.FogBloomSpread;
+            BloomAbsorptionRate = fogConfig.FogBloomAbsorptionFactor;
+            BloomFactor = fogConfig.FogBloomRate;
+            FogScatterWithDistance = fogConfig.FogScatterWithDistance;
 
             m_shouldResetRenderTargets |= (m_offscreenTilesSize != fogConfig.OffscreenTiles);
             m_offscreenTilesSize = fogConfig.OffscreenTiles;
@@ -348,8 +366,10 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
             absorption *= absorption;
             fogEffect.Parameters["uAbsorption"].SetValue(absorption);
             fogEffect.Parameters["uBloomIntensity"].SetValue(BloomIntensity);
-            fogEffect.Parameters["uBloomAbsorption"].SetValue(BloomAbsorptionRate * BloomAbsorptionRate * 10);
-            //fogEffect.Parameters["uTargetArea"].SetValue(BloomAbsorptionRate * BloomAbsorptionRate * 2);
+            fogEffect.Parameters["uBloomFactor"].SetValue(BloomFactor);
+            fogEffect.Parameters["uBloomAbsorptionRate"].SetValue(BloomAbsorptionRate);
+            fogEffect.Parameters["uFogScatterWithDistance"].SetValue(FogScatterWithDistance);
+
             spriteBatch.Begin(SpriteSortMode.Immediate,
                 BlendState.Opaque,
                 SamplerState.PointClamp,
@@ -454,6 +474,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
                 spriteBatch.Draw(target, Vector2.Zero,
                     Color.White);
                 spriteBatch.End();
+
 
                 graphicsDevice.SetRenderTarget(target);
                 graphicsDevice.Clear(Color.Transparent);
