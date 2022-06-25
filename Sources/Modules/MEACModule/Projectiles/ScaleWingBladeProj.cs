@@ -24,11 +24,11 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         }
         public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor)
         {
-            Texture2D tex = Terraria.GameContent.TextureAssets.Projectile[projectile.type].Value;
+            Texture2D tex = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 
             float texWidth = 85;//转换成水平贴图时候的宽度
             float texHeight = 30;//转换成水平贴图时候的高度
-            float Size = 0.95f;//放大的几何倍数
+            float Size = 0.9f;//放大的几何倍数
             double baseRotation = 0.79;//这个是刀刃倾斜度与水平的夹角
 
             float exScale = 1;
@@ -38,13 +38,13 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             }
             Vector2 origin = new Vector2(longHandle ? texWidth / 2 : 5, texHeight / 2);
 
-            Vector2 Zoom = new Vector2(exScale * mainVec.Length() / tex.Width, 1.2f) * projectile.scale;
+            Vector2 Zoom = new Vector2(exScale * mainVec.Length() / tex.Width, 1.2f) * Projectile.scale;
 
             double ProjRotation = mainVec.ToRotation() + Math.PI / 4;
 
             float QuarterSqrtTwo = 0.35355f;
 
-            Vector2 drawCenter = projectile.Center - Main.screenPosition;
+            Vector2 drawCenter = Projectile.Center - Main.screenPosition;
             Vector2 INormal = new Vector2(texHeight * QuarterSqrtTwo).RotatedBy(ProjRotation - (baseRotation - Math.PI / 4)) * Zoom.Y * Size;
             Vector2 JNormal = new Vector2(texWidth * QuarterSqrtTwo).RotatedBy(ProjRotation - (baseRotation + Math.PI / 4)) * Zoom.X * Size;
 
@@ -76,13 +76,13 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
 
             List<Vertex2D> vertex2Ds = new List<Vertex2D>
                 {
-                    new Vertex2D(drawCenter + TopLeft, projectile.GetAlpha(lightColor), new Vector3(sourceTopLeft.X, sourceTopLeft.Y, 0)),
-                    new Vertex2D(drawCenter + TopRight, projectile.GetAlpha(lightColor), new Vector3(sourceTopRight.X, sourceTopRight.Y, 0)),
-                    new Vertex2D(drawCenter + BottomLeft, projectile.GetAlpha(lightColor), new Vector3(sourceBottomLeft.X, sourceBottomLeft.Y, 0)),
+                    new Vertex2D(drawCenter + TopLeft, Projectile.GetAlpha(lightColor), new Vector3(sourceTopLeft.X, sourceTopLeft.Y, 0)),
+                    new Vertex2D(drawCenter + BottomLeft, Projectile.GetAlpha(lightColor), new Vector3(sourceBottomLeft.X, sourceBottomLeft.Y, 0)),
+                    new Vertex2D(drawCenter + TopRight, Projectile.GetAlpha(lightColor), new Vector3(sourceTopRight.X, sourceTopRight.Y, 0)),
 
-                    new Vertex2D(drawCenter + BottomRight, projectile.GetAlpha(lightColor), new Vector3(sourceBottomRight.X, sourceBottomRight.Y, 0)),
-                    new Vertex2D(drawCenter + BottomLeft, projectile.GetAlpha(lightColor), new Vector3(sourceBottomLeft.X, sourceBottomLeft.Y, 0)),
-                    new Vertex2D(drawCenter + TopRight, projectile.GetAlpha(lightColor), new Vector3(sourceTopRight.X, sourceTopRight.Y, 0))
+                    new Vertex2D(drawCenter + BottomRight, Projectile.GetAlpha(lightColor), new Vector3(sourceBottomRight.X, sourceBottomRight.Y, 0)),
+                    new Vertex2D(drawCenter + BottomLeft, Projectile.GetAlpha(lightColor), new Vector3(sourceBottomLeft.X, sourceBottomLeft.Y, 0)),
+                    new Vertex2D(drawCenter + TopRight, Projectile.GetAlpha(lightColor), new Vector3(sourceTopRight.X, sourceTopRight.Y, 0))
                 };
 
             Main.spriteBatch.End();
