@@ -87,9 +87,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
         private RenderTarget2D m_prevLightTexture;
         private RenderTarget2D m_lightSwapTarget;
 
-        private int m_bloomRadius = 2;
-        private int m_offscreenTilesSize = 4;
-
         private int m_frameWidth, m_frameHeight;
         private int m_screenWidth, m_screenHeight;
         private int m_tileWidth, m_tileHeight;
@@ -108,7 +105,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
         private const SurfaceFormat m_surfaceFormat = SurfaceFormat.Rgba1010102;
 
         private int m_switchCounter = 0;
-        private FogState m_currentState, m_targetState;
+        private int m_totalSwitchCounter = 0;
+        private FogState m_beginState, m_currentState, m_targetState;
+
 
         /// <summary>
         /// 光晕效果的模糊卷积核半径，该值为2^k
@@ -171,8 +170,8 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
 
         private void ResetLightMap()
         {
-            m_tileWidth = (m_screenWidth + 15) / 16 + m_offscreenTilesSize * 2 + 2;
-            m_tileHeight = (m_screenHeight + 15) / 16 + m_offscreenTilesSize * 2 + 2;
+            m_tileWidth = (m_screenWidth + 15) / 16 + m_currentState.OffscreenTileCount * 2 + 2;
+            m_tileHeight = (m_screenHeight + 15) / 16 + m_currentState.OffscreenTileCount * 2 + 2;
             m_lightMap = new Color[m_tileWidth * m_tileHeight];
             m_lightTexture = new RenderTarget2D(Main.graphics.GraphicsDevice, m_tileWidth, m_tileHeight, false,
                 SurfaceFormat.Color, DepthFormat.None);
@@ -188,17 +187,21 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
             m_filteredScreenTarget?.Dispose();
         }
 
-        public void SwitchState(in FogState state)
+        public void SwitchState(in FogState state, int interpTime)
         {
-            m_switchCounter = 150;
+            m_beginState = m_currentState;
             m_targetState = state;
+            m_totalSwitchCounter = interpTime;
+            m_switchCounter = interpTime;
+
         }
 
         public void Update()
         {
             if (m_switchCounter > 0)
             {
-                if (m_switchCounter == 150)
+                // 渐变开始
+                if (m_switchCounter == m_totalSwitchCounter)
                 {
                     if (m_targetState.Enabled)
                     {
@@ -210,6 +213,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
                 }
                 m_switchCounter--;
 
+                // 渐变结束
                 if (m_switchCounter == 0 && !m_targetState.Enabled)
                 {
                     m_currentState.Enabled = false;
@@ -218,32 +222,27 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
                     m_shouldResetRenderTargets = true;
                 }
 
-                if (m_switchCounter == 0)
-                {
+                float progress = 1f -  m_switchCounter / (float)m_totalSwitchCounter;
 
-                }
-
-                float progress = 1f -  m_switchCounter / 150f;
-
-                m_currentState.BloomIntensity = MathHelper.SmoothStep(m_currentState.BloomIntensity,
+                m_currentState.BloomIntensity = MathHelper.Lerp(m_beginState.BloomIntensity,
                     m_targetState.BloomIntensity, progress);
-                m_currentState.BloomScatteringRatio = MathHelper.SmoothStep(m_currentState.BloomScatteringRatio,
+                m_currentState.BloomScatteringRatio = MathHelper.Lerp(m_beginState.BloomScatteringRatio,
                     m_targetState.BloomScatteringRatio, progress);
-                m_currentState.LuminanceThreashold = MathHelper.SmoothStep(m_currentState.LuminanceThreashold,
+                m_currentState.LuminanceThreashold = MathHelper.Lerp(m_beginState.LuminanceThreashold,
                     m_targetState.LuminanceThreashold, progress);
-                m_currentState.ViewAbsorptionRatio = Vector3.Lerp(m_currentState.ViewAbsorptionRatio,
-                    m_targetState.ViewAbsorptionRatio, progress);
+                m_currentState.ViewAbsorptionRatio = Vector3.Lerp(m_beginState.ViewAbsorptionRatio,
+                    m_targetState.ViewAbsorptionRatio, progress * progress);
             }
 
-            if (Main.time % 300 < 1)
+            if (Main.time % 400 < 1)
             {
-                if ((int)(Main.time / 300) % 2 == 0)
+                if ((int)(Main.time / 400) % 2 == 0)
                 {
-                    SwitchState(Default);
+                    SwitchState(Default, 150);
                 }
                 else
                 {
-                    SwitchState(DayThickFog);
+                    SwitchState(DayThickFog, 150);
                 }
             }
         }
@@ -307,9 +306,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
                 }
             });
 
-            m_startTileX = Math.Max(0, (int)(m_screenPosition.X / 16) - m_offscreenTilesSize);
+            m_startTileX = Math.Max(0, (int)(m_screenPosition.X / 16) - m_currentState.OffscreenTileCount);
             int endTileX = Math.Min(Main.maxTilesX - 1,
-                (int)((m_screenPosition.X + m_screenWidth) / 16) + m_offscreenTilesSize);
+                (int)((m_screenPosition.X + m_screenWidth) / 16) + m_currentState.OffscreenTileCount);
 
             int i = 0;
             while (endTileX - m_startTileX < cols)
@@ -331,9 +330,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
                 i++;
             }
 
-            m_startTileY = Math.Max(0, (int)(m_screenPosition.Y / 16) - m_offscreenTilesSize);
+            m_startTileY = Math.Max(0, (int)(m_screenPosition.Y / 16) - m_currentState.OffscreenTileCount);
             int endTileY = Math.Min(Main.maxTilesY - 1,
-                (int)((m_screenPosition.Y + m_screenHeight) / 16) + m_offscreenTilesSize);
+                (int)((m_screenPosition.Y + m_screenHeight) / 16) + m_currentState.OffscreenTileCount);
 
             while (endTileY - m_startTileY < rows)
             {
