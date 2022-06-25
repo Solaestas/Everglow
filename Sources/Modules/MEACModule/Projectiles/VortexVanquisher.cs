@@ -29,10 +29,6 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         }
         public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, float HorizontalWidth, float HorizontalHeight, float DrawScale, string GlowPath, double DrawRotation)
         {
-            if (Main.mouseRightRelease && Main.mouseRight)
-            {
-                Projectile.NewProjectile(Player.GetSource_FromAI(), Main.MouseWorld, Vector2.Zero, ModContent.ProjectileType<NonTrueMeleeProj.StonePost>(), 1, 0, Projectile.owner);
-            }
             base.DrawSelf(spriteBatch, lightColor, 240, 40, 0.75f, "Projectiles/VortexVanquisherGlow");
         }
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
