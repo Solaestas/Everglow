@@ -34,6 +34,7 @@ namespace Everglow.Sources.Modules.MythModule
 
                 On.Terraria.Graphics.Effects.FilterManager.EndCapture += FilterManager_EndCapture;
 
+
                 m_fogPass = new FogPass();
             }
         }
