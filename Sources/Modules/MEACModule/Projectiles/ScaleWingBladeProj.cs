@@ -6,6 +6,7 @@ using Terraria.ModLoader;
 using System;
 using System.Collections.Generic;
 using Terraria.Audio;
+using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
 
 namespace Everglow.Sources.Modules.MEACModule.Projectiles
 {
@@ -13,9 +14,10 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
     {
         public override void SetDef()
         {
-            maxAttackType = 3;
+            maxAttackType = 2;
             trailLength = 20;
             shadertype = "Trail";
+            Projectile.scale *= 1.1f;
         }
         public override string TrailColorTex()
         {
@@ -23,7 +25,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         }
         public override float TrailAlpha(float factor)
         {
-            return base.TrailAlpha(factor) * 1.5f;
+            return base.TrailAlpha(factor) * 1.35f;
         }
         public override BlendState TrailBlendState()
         {
@@ -31,23 +33,45 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         }
         public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor)
         {
-            if (attackType != 114514)
-                base.DrawSelf(Main.spriteBatch, lightColor);
-            else
-            {
-                Vector2 mVec = mainVec / 2;
-                Texture2D tex = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
-                Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, null, Projectile.GetAlpha(lightColor), mVec.ToRotation(), new Vector2(0, tex.Height / 2), new Vector2(mVec.Length() / tex.Width, 1.2f) * Projectile.scale, SpriteEffects.None, 0);
-            }
+            base.DrawSelf(spriteBatch,lightColor);
         }
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
-            base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
+            if (attackType == 100)
+            {
+                damage *= 3;
+                if(Projectile.owner==Player.whoAmI)
+                {
+                    int counts = Main.rand.Next(4,9);
+                    for(int i=0;i<counts;i++)
+                    {
+                        Projectile proj=Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(),target.Center,Main.rand.NextVector2Unit()*Main.rand.Next(6,13),ModContent.ProjectileType<ButterflyDreamFriendly>(),damage/4,0,Main.myPlayer,target.whoAmI);
+                        proj.netUpdate2 = true;
+                        proj.CritChance = Projectile.CritChance;
+                        
+                    }
+                }
+            }
+            else
+            {
+                if (Projectile.owner == Player.whoAmI)
+                {
+                    int counts = Main.rand.Next(1, 3);
+                    for (int i = 0; i < counts; i++)
+                    {
+                        Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center, Main.rand.NextVector2Unit() * Main.rand.Next(6, 13), ModContent.ProjectileType<ButterflyDreamFriendly>(), damage / 4, 0, Main.myPlayer, target.whoAmI);
+                        proj.netUpdate2 = true;
+                        proj.CritChance = Projectile.CritChance;
+
+                    }
+                }
+            }
         }
         public override void Attack()
         {
             Player player = Main.player[Projectile.owner];
             useTrail = true;
+            float timeMul = 1f-GetMeleeSpeed(player)/100f;
             if (attackType == 0)
             {
                 if (timer < 30)//前摇
@@ -55,7 +79,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                     useTrail = false;
                     LockPlayerDir(player);
                     float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
-                    mainVec = Vector2.Lerp(mainVec, Vector2Elipse(80, targetRot, -1.2f), 0.08f);
+                    mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, -1.2f), 0.1f);
                     mainVec += Projectile.DirectionFrom(player.Center) * 3;
                     Projectile.rotation = mainVec.ToRotation();
                 }
@@ -67,100 +91,163 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                     Projectile.rotation += Projectile.spriteDirection * 0.25f;
                     mainVec = Vector2Elipse(120, Projectile.rotation, 0.6f);
                 }
-                if (timer > 70)
+                if (timer > 50+20*timeMul)
                 {
                     NextAttackType();
                 }
             }
             if (attackType == 1)
             {
-                if (timer == 0)
+                if (timer < 30)//前摇
                 {
-                    LockPlayerDir(player);
                     useTrail = false;
-                    Projectile.rotation = -MathHelper.PiOver2 - player.direction * 0.6f;
+                    LockPlayerDir(player);
+                    float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
+                    mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, +1.2f), 0.1f);
+                    mainVec += Projectile.DirectionFrom(player.Center) * 3;
+                    Projectile.rotation = mainVec.ToRotation();
                 }
-                if (timer == 1)
+                if (timer == 30)
                     AttSound(SoundID.Item1);
-                if (timer < 20)
+                if (timer > 30 && timer < 50)
                 {
                     isAttacking = true;
-                    Projectile.rotation += Projectile.spriteDirection * 0.22f;
-                    mainVec = Vector2Elipse(120, Projectile.rotation, -0.6f);
+                    Projectile.rotation += Projectile.spriteDirection * 0.25f;
+                    mainVec = Vector2Elipse(120, Projectile.rotation, 0.6f);
                 }
-                if (timer > 40)
+                if (timer > 50)
                 {
                     NextAttackType();
                 }
             }
             if (attackType == 2)
             {
-                if (timer == 0 )
-                {
-                    LockPlayerDir(player);
-                    useTrail = false;
-                    Projectile.rotation = -MathHelper.PiOver2 - player.direction * 0.1f;
-                }
-                if (timer < 60)
-                {
-                    isAttacking = true;
-                    if (timer % 15 == 0)
-                    {
-                        AttSound(SoundID.Item1);
-                        useTrail = false;
-                    }
-                    if (timer % 30 < 15)
-                    {
-                        Projectile.rotation += Projectile.spriteDirection * 0.3f;
-                        mainVec = Vector2Elipse(120, Projectile.rotation, 1f);
-                    }
-                    else
-                    {
-                        Projectile.rotation -= Projectile.spriteDirection * 0.3f;
-                        mainVec = Vector2Elipse(120, Projectile.rotation, -1f);
-                    }
-
-                }
-                if (timer > 70)
-                {
-                    NextAttackType();
-                }
-            }
-            if (attackType == 3)
-            {
-                if (timer < 30)//前摇
+                if (timer < 10)//前摇
                 {
                     useTrail = false;
                     LockPlayerDir(player);
-                    float targetRot = -MathHelper.PiOver2 - player.direction * 0.7f;
-                    mainVec = Vector2.Lerp(mainVec, Vector2Elipse(80, targetRot, -1.2f), 0.08f);
+                    float targetRot = +MathHelper.PiOver2 + player.direction * 0.7f;
+                    mainVec = Vector2.Lerp(mainVec, targetRot.ToRotationVector2()*100, 0.15f);
                     mainVec += Projectile.DirectionFrom(player.Center) * 3;
                     Projectile.rotation = mainVec.ToRotation();
                 }
-                if (timer > 30 && timer < 40)
+                if (timer > 10 && timer < 30)
                 {
                     isAttacking = true;
-                    Projectile.rotation += Projectile.spriteDirection * 0.55f;
-                    mainVec = Vector2Elipse(120, Projectile.rotation, -1.2f);
+                    Projectile.rotation -= Projectile.spriteDirection * 0.26f;
+                    mainVec = Projectile.rotation.ToRotationVector2() * 90;
                 }
-                if (timer == 30)
-                    AttSound(SoundID.Item1);
-                if (timer > 30 && timer < 50)
+                if(timer>30&&timer<50)
                 {
-                    
+                    isAttacking = true;
+                    Projectile.rotation += Projectile.spriteDirection * 0.25f;
+                    mainVec = Projectile.rotation.ToRotationVector2() * 130;
                 }
-                if (timer > 100)
+                if (timer == 10 || timer == 30)
+                {
+                    useTrail = false;
+                    AttSound(SoundID.Item1);
+                    if (Projectile.owner == Main.myPlayer)
+                    {
+                        //寻敌
+                        NPC target = null;
+                        float maxdis = 1000;
+                        foreach (NPC npc in Main.npc)
+                        {
+                            if (npc.CanBeChasedBy())
+                            {
+                                float dis = Vector2.Distance(Projectile.Center, npc.Center);
+                                if (dis < maxdis)
+                                {
+                                    maxdis = dis;
+                                    target = npc;
+                                }
+                            }
+                        }
+                        if (target != null)
+                        {
+                            for (int i = Main.rand.Next(2); i < 2; i++)
+                            {
+                                Vector2 vel = new Vector2(Projectile.spriteDirection * 10, 0);
+                                Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center+vel, vel + Main.rand.NextVector2Unit() * 5, ModContent.ProjectileType<ButterflyDreamFriendly>(), Projectile.damage / 2, 0, Main.myPlayer, target.whoAmI);
+                                proj.netUpdate2 = true;
+                                proj.CritChance = Projectile.CritChance;
+                            }
+                        }
+                    }
+                }
+                
+                if (timer > 55+25*timeMul)
                 {
                     NextAttackType();
                 }
             }
-            if (isAttacking)
-                for (int i = 1; i < 4; i++)
+            if(attackType==100)//右键攻击
+            {
+                if(timer<60)
                 {
-                    Dust d = Dust.NewDustDirect(Projectile.Center + i * mainVec / 3, 20, 20, 172, 0, 0, 0, default, 1.5f);
-                    d.velocity *= 0;
+                    useTrail = false;
+                    LockPlayerDir(player);
+                    float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
+                    mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, -1.2f), 0.1f);
+                    mainVec += Projectile.DirectionFrom(player.Center) * 3;
+                    Projectile.rotation = mainVec.ToRotation();
+
+                    Vector2 r = Main.rand.NextVector2Unit();
+                    float dis = MathHelper.Clamp(60- timer, 0, 60) *2;
+                    Dust d = Dust.NewDustDirect(Projectile.Center + r * dis, 10, 10, ModContent.DustType<BlueGlow>(), 0, 0, 0, default, 1.2f);
+                    d.velocity = -r * 4;
+                    d.position += Main.rand.NextVector2Unit() * 5;
                     d.noGravity = true;
                 }
+                else if(timer<100)
+                {
+                    useTrail = false;
+                    LockPlayerDir(player);
+                    Projectile.ai[0] = GetAngToMouse();
+                    float targetRot = -MathHelper.PiOver2 - player.direction * 0.8f;
+                    mainVec = Vector2.Lerp(mainVec, Vector2Elipse(110, targetRot, -1.2f, Projectile.ai[0], 1000), 0.1f);
+                    Projectile.rotation = mainVec.ToRotation();
+
+                    Vector2 r = Main.rand.NextVector2Unit();
+                    float dis = 0;
+                    Dust d = Dust.NewDustDirect(Projectile.Center + r * dis, 10, 10, ModContent.DustType<BlueGlow>(), 0, 0, 0, default, 1.2f);
+                    d.velocity = -r * 4;
+                    d.position += Main.rand.NextVector2Unit() * 5;
+                    d.noGravity = true;
+                }
+                if(timer==100)
+                {
+                    AttSound(SoundID.Item1);
+                }
+                if(timer>100)
+                {
+                    isAttacking = true;
+                    if (timer < 115)
+                    {
+                        isAttacking = true;
+                        mainVec = Vector2Elipse(220, Projectile.rotation, -1.2f, Projectile.ai[0], 1000);
+                        Projectile.rotation += Projectile.spriteDirection * 0.42f;
+                    }
+                    if (timer == 115)
+                    {
+                        Projectile.friendly = false;
+                    }
+                    if (timer > 130)
+                    {
+                        End();
+                    }
+                }
+            }
+            if (isAttacking)
+            {
+                for (int i = 0; i < 2; i++)
+                {
+                    Dust d = Dust.NewDustDirect(Projectile.Center - new Vector2(20, 20) + mainVec * Main.rand.NextFloat(0.3f, 1f), 40, 40, ModContent.DustType<BlueGlow>(), 0, 0, 0, default, Main.rand.NextFloat(0.5f, 1.3f));
+                    d.velocity += player.velocity * 0.4f + Main.rand.NextVector2Unit() * 3;
+                    d.noGravity = true;
+                }
+            }
         }
     }
 }

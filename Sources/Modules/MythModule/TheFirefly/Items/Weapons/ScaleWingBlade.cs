@@ -34,11 +34,25 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             {
                 if(Main.myPlayer==player.whoAmI)
                 {
-                    Projectile.NewProjectile(player.GetSource_ItemUse(Item),player.Center,Vector2.Zero,ModContent.ProjectileType<ScaleWingBladeProj>(),player.GetWeaponDamage(Item),Item.knockBack,player.whoAmI);
+                    if (player.altFunctionUse != 2)
+                    {
+                        Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<ScaleWingBladeProj>(), player.GetWeaponDamage(Item), Item.knockBack, player.whoAmI);
+                    }
+                    else//右键
+                    {
+                        Projectile proj=Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<ScaleWingBladeProj>(), player.GetWeaponDamage(Item), Item.knockBack, player.whoAmI);
+                        (proj.ModProjectile as MeleeProj).attackType = 100;
+                        (proj.ModProjectile as MeleeProj).isRightClick = true;
+                        proj.netUpdate2 = true;
+                    }
                 }
                 return false;
             }
             return base.CanUseItem(player);
+        }
+        public override bool AltFunctionUse(Player player)
+        {
+            return true;
         }
         public override void AddRecipes()
         {
