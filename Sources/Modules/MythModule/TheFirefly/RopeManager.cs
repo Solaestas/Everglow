@@ -21,11 +21,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
             mass = new Mass[count];
             spring = new Spring[count - 1];
 
-            mass[0] = new Mass(scale * Main.rand.NextFloat(0.25f, 0.37f), position, true);
-            mass[^1] = new Mass(scale * Main.rand.NextFloat(0.25f, 0.37f) * 1.3f, position + new Vector2(0, 6 * count - 6), false);
+            mass[0] = new Mass(scale * Main.rand.NextFloat(1f, 1.68f), position, true);
+            mass[^1] = new Mass(scale * Main.rand.NextFloat(1f, 1.68f) * 1.3f, position + new Vector2(0, 6 * count - 6), false);
             for (int i = 1; i < count - 1; i++)
             {
-                mass[i] = new Mass(scale * Main.rand.NextFloat(0.25f, 0.37f), position + new Vector2(0, 6 * i), false);
+                mass[i] = new Mass(scale * Main.rand.NextFloat(1f, 1.68f), position + new Vector2(0, 6 * i), false);
             }
 
             for (int i = 0; i < count - 1; i++)

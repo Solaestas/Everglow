@@ -440,7 +440,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 for (int j = 1; j < ropes[i].mass.Length; j++)
                 {
                     var mass = ropes[i].mass[j];
-                    float scale = mass.mass * 2;
+                    float scale = mass.mass;
                     Vector2 vector = mass.position - ropes[i].mass[j - 1].position;
                     float rotation = vector.ToRotation() - MathHelper.PiOver2;
                     Color color = GetLuminace(new Color(0, 0.15f * j, 1f / 5f * j, 0) * alpha * 5);
@@ -514,7 +514,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             Vector2 deltaPos = ScreenCenter - new Vector2(mothLand.fireflyCenterX * 16f, mothLand.fireflyCenterY * 16f);
             deltaPos *= move;
             Vector2 TexLT = sampleCenter - screenSize / 2f + deltaPos;
-            return TexLT + new Vector2(-422 + 10, 252 + 55);
+            return TexLT + new Vector2(-680, 178);
         }
 
         ///// <summary>
