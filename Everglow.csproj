@@ -51,6 +51,7 @@
     <Folder Include="Resources\Tools\" />
     <Folder Include="lib\" />
     <Folder Include="Sources\Modules\MythModule\Bosses\CorruptMoth\Dusts\" />
+    <Folder Include="Sources\Modules\MythModule\TheFirefly\Tiles\Furniture\" />
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="xcopy /y /d  &quot;$(OutDir)Everglow.dll&quot; &quot;$(ProjectDir)&quot;" />
