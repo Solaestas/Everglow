@@ -1,55 +1,42 @@
-Mods: {
-	Everglow: {
-		Common: {
+Mods:
+{
+	Everglow:
+	{
+		Common:
+		{
 			WarWhipGT :
 				'''
 				无召唤标记伤害
 				你的召唤物将集中攻击被击中的敌人
 				'''
-				#{$Mods.Everglow.Common.WarWhipGT}
 			WhipGT :
 				'''
 				召唤标记伤害
 				你的召唤物将集中攻击被击中的敌人
 				'''
-				#{$Mods.Everglow.Common.WhipGT}
 			ClubGT : 旋转挥舞以攻击敌人
-			#{$Mods.Everglow.Common.ClubGT}
 			RapierGT : Right click and hold to charge an invincibility dash with high damage
-			#{$Mods.Everglow.Common.RapierGT}
 			NoAmmoConsum : 不消耗弹药
-			#{$Mods.Everglow.Common.NoAmmoConsum}
 			Acytaea : 雅思塔亚
-			#{$Mods.Everglow.Common.Acytaea}
 			ExcluWeapon : 专属武器
-			#{$Mods.Everglow.Common.ExcluWeapon}
 			MythWeapon : 神话武器
-			#{$Mods.Everglow.Common.MythWeapon}
 			LegendWeapon : 传说武器
-			#{$Mods.Everglow.Common.LegendWeapon}
 
-			#世界生成WorldGen
-			WorldSystem:{
+			#世界系统WorldSystem
+			WorldSystem:
+			{
 				WorldCreate_Def : 开始创建世界
 				WorldEnter_Def : 正在进入世界
 				BuildMothCave : "正在生成流萤之茧"
 			}
 
 			#食物系统FoodSystem
-			FoodSystem:{
+			FoodSystem:
+			{
 				CannotEat : "你吃饱了"
 				CannotDrink : "你不想再喝了"
 			}
 		}
-
-		NPCName: {
-
-		}
-
-		RecipeConditions: {
-
-		}
-
 		ItemName:
 		{
 			#神话传说武器，常规武器，棍棒，弹弓，饰品，附魔币，boss宝藏袋圣物召唤物，金秋武器
@@ -273,7 +260,6 @@ Mods: {
 			BloodGlucoseMonitor : "血糖检测仪"
 			OsmoticPressureMonitor : "渗透压检测仪"
 		}
-		
 		ItemTooltip:
 		{
 			AshBone :
@@ -542,7 +528,6 @@ Mods: {
 			BloodGlucoseMonitor : "显示当前饱食度"
 			OsmoticPressureMonitor : "显示渴觉状态"
 		}
-
 		BuffName : 
 		{
 			BanTransport : "现实之锁"
@@ -644,13 +629,12 @@ Mods: {
 			TeacupBuff : "茶"
 			TropicalSmoothieBuff : "热带奶昔"
 		}
-
 		BuffDescription : 
 		{
 			BanTransport : "你不能传送！"
 			CorruptMothBuff : "小黑蛾将为你而战"
-			Freeze : ""
-			Freeze2 : ""
+			Freeze : "1 Freeze!"
+			Freeze2 : "2 Freeze!"
 			LaserWormBuff : "激光虫将为你而战"
 			MoonAndFragrans : "有花又月,等你归来\n伤害提升25%, 暴击提升15%, 总伤害乘数生效两次"
 			MoonAndFragransII : "有花又月,等你归来\n伤害提升50%, 暴击提升30%, 总伤害乘数生效三次"
