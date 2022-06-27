@@ -10,14 +10,14 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("蓝蝶幻梦");
-            Main.projFrames[Projectile.type] = 3;
+            Main.projFrames[Projectile.type] = 4;
             //ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10;
             //ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
         }
         public override void SetDefaults()
         {
-            Projectile.width = 24;
-            Projectile.height = 24;
+            Projectile.width = 36;
+            Projectile.height = 34;
             Projectile.netImportant = true;
             Projectile.friendly = false;
             Projectile.hostile = false;
@@ -56,7 +56,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             }
             if (Projectile.timeLeft < 10)
                 Projectile.scale -= 0.1f;
-            if (Projectile.frame > 2)
+            if (Projectile.frame > 3)
             {
                 Projectile.frame = 0;
             }
@@ -92,7 +92,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         }
         public override Color? GetAlpha(Color lightColor)
         {
-            return new Color(1f, 1f, 1f, 0) * (1 - Projectile.alpha / 255f);
+            return new Color(0.2f, 0.5f, 1f, 0) * (1 - Projectile.alpha / 255f);
         }
 
     }

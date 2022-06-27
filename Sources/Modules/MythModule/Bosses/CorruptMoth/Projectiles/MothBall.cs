@@ -59,7 +59,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
                 {
                     vB[g] = new Vector2(0, Main.rand.Next(0, 35)).RotatedByRandom(6.283);
                     vloB[g] = new Vector2(0, Main.rand.NextFloat(0.4f, 2.8f)).RotatedByRandom(6.283);
-                    yB[g] = Main.rand.Next(3) * 24;
+                    yB[g] = Main.rand.Next(4) * 36;
                 }
             }
             if (Projectile.timeLeft > 240)
@@ -88,13 +88,13 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
             Projectile.height = Dy;
             for (int g = 0; g < 15; g++)
             {
-                if (yB[g] > 48)
+                if (yB[g] > 102)
                 {
                     yB[g] = 0;
                 }
                 if (Projectile.timeLeft % 10 == 0)
                 {
-                    yB[g] += 24;
+                    yB[g] += 36;
                 }
                 vB[g] += vloB[g];
                 if (vB[g].Length() > 80)
@@ -194,7 +194,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
                 {
                     eff = SpriteEffects.FlipHorizontally;
                 }
-                Main.spriteBatch.Draw(Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/ButterflyDream"), Projectile.Center + vB[g] * r / 60f - Main.screenPosition, new Rectangle(0, yB[g], 24, 24), new Color(1f, 1f, 1f, 0), Projectile.rotation, new Vector2(12f, 12f), r / 60f, eff, 0f);
+                Main.spriteBatch.Draw(Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/ButterflyDream"), Projectile.Center + vB[g] * r / 60f - Main.screenPosition, new Rectangle(0, yB[g], 36, 34), new Color(0.2f, 0.5f, 1f, 0), Projectile.rotation, new Vector2(18f, 17f), r / 60f, eff, 0f);
             }
             Texture2D Light = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/CorruptLight");
             Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color((int)(255 * Stre2), (int)(255 * Stre2), (int)(255 * Stre2), 0), Projectile.rotation, new Vector2(168f, 168f), Projectile.scale * 2 * r / 60f, SpriteEffects.None, 0);

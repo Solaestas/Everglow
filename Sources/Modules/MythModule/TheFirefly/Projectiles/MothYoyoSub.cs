@@ -9,7 +9,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         {
             DisplayName.SetDefault("Dream Butterfly");
             DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "蓝蝶幻梦");
-            Main.projFrames[Projectile.type] = 3;
+            Main.projFrames[Projectile.type] = 4;
         }
         public override void SetDefaults()
         {
@@ -78,11 +78,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Texture2D Light = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/FixCoinLight3");
             Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
             Vector2 origin = new Vector2(tex.Width / 2, tex.Height / 6);
-            Rectangle sourceRec = tex.Frame(1, 3, 0, Projectile.frame % 3);
+            Rectangle sourceRec = tex.Frame(1, 4, 0, Projectile.frame % 4);
 
             Projectile owner = Main.projectile[(int)Projectile.ai[0]];
             Vector2 pos = Projection(v3Position + new Vector3(owner.Center.X,owner.Center.Y,0), Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2, out float scale, 1000); ;
-            Color c = new Color(255, 255, 255, 0);
+            Color c = new Color(55, 125, 255, 0);
             Main.spriteBatch.Draw(Light, pos - Main.screenPosition, null, c * 0.2f, Projectile.rotation, Light.Size() / 2, Projectile.scale * scale, SpriteEffects.None, 0);
             Main.spriteBatch.Draw(tex, pos - Main.screenPosition, sourceRec, c, Projectile.rotation, origin, Projectile.scale * scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
             return false;
