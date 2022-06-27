@@ -66,7 +66,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             const float increase = 0.02f;
             if (BiomeActive() && Main.BackgroundEnabled)
             {
-                ropeManager?.Update(0.05f);
+                ropeManager?.Update(0.5f);
                 if (alpha < 1)
                 {
                     alpha += increase;
@@ -389,7 +389,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
 
             if (ropeManager is null)
             {
-                ropeManager = new RopeManager(1, 1, Color.Black);
+                ropeManager = new RopeManager(1, 1, new Color(11, 9, 25));
                 var mothLand = ModContent.GetInstance<MothLand>();
                 ropes = ropeManager.LoadRope("Everglow/Sources/Modules/MythModule/TheFirefly/Backgrounds/TreeRope",
                     null,
@@ -440,7 +440,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 for (int j = 1; j < ropes[i].mass.Length; j++)
                 {
                     var mass = ropes[i].mass[j];
-                    float scale = mass.mass;
+                    float scale = mass.mass * 1.3f;
                     Vector2 vector = mass.position - ropes[i].mass[j - 1].position;
                     float rotation = vector.ToRotation() - MathHelper.PiOver2;
                     Color color = GetLuminace(new Color(0, 0.15f * j, 1f / 5f * j, 0) * alpha * 5);
@@ -514,7 +514,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             Vector2 deltaPos = ScreenCenter - new Vector2(mothLand.fireflyCenterX * 16f, mothLand.fireflyCenterY * 16f);
             deltaPos *= move;
             Vector2 TexLT = sampleCenter - screenSize / 2f + deltaPos;
-            return TexLT + new Vector2(-680, 178);
+            return TexLT + new Vector2(-680, 180);
         }
 
         ///// <summary>

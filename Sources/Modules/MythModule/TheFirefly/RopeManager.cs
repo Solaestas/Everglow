@@ -74,7 +74,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
         {
             luminance = 1;
             gravity = 1;
-            drawColor = Color.White;
+            drawColor = new Color(11, 9, 25);
             ropes = new List<Rope>(100);
         }
 
@@ -142,7 +142,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
                 }
                 foreach (var m in rope.mass)
                 {
-                    m.force += new Vector2(0.02f + 0.1f * (float)(Math.Sin(Main.timeForVisualEffects / 72f + m.position.X / 13d + m.position.Y / 4d)), 0)
+                    m.force += new Vector2(0.04f + 0.06f * (float)(Math.Sin(Main.timeForVisualEffects / 72f + m.position.X / 13d + m.position.Y / 4d)), 0)
                         * (Main.windSpeedCurrent + 1f) * 2f
                         + new Vector2(0, gravity * m.mass);
                     m.Update(deltaTime);
@@ -166,6 +166,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
                     continue;
                 }
                 List<Vector2> massPositionsSmooth = Commons.Function.Curves.CatmullRom.SmoothPath(rope.mass.Select(m => m.position + offset), 4);
+
                 DrawRope(massPositionsSmooth, vertices, indices);
             }
             if(vertices.Count < 3)
@@ -174,9 +175,27 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
             }
             sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null,
                 Matrix.CreateTranslation(-Main.screenPosition.X, -Main.screenPosition.Y, 0) * Main.GameViewMatrix.TransformationMatrix);
-            gd.Textures[0] = MythContent.QuickTexture("TheFirefly/Tiles/Branch");
-            //gd.Textures[0] = TextureAssets.MagicPixel.Value;
+            //gd.Textures[0] = MythContent.QuickTexture("TheFirefly/Tiles/Branch");
+            gd.Textures[0] = TextureAssets.MagicPixel.Value;
             gd.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, vertices.ToArray(), 0, vertices.Count, indices.ToArray(), 0, indices.Count / 3);
+
+
+            sb.End();
+            sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null,
+    Matrix.CreateTranslation(-Main.screenPosition.X, -Main.screenPosition.Y, 0) * Main.GameViewMatrix.TransformationMatrix);
+            Texture2D dropTexture = MythContent.QuickTexture("TheFirefly/Tiles/Branch");
+            for (int i = 0; i < ropes.Count; i++)
+            {
+                for (int j = 1; j < ropes[i].mass.Length; j++)
+                {
+                    var mass = ropes[i].mass[j];
+                    float scale = mass.mass;
+                    Vector2 vector = mass.position - ropes[i].mass[j - 1].position;
+                    float rotation = vector.ToRotation() - MathHelper.PiOver2;
+                    Color color = GetLuminace(new Color(0, 0.15f * j, 1f / 5f * j, 0.1f) * 5);
+                    Main.spriteBatch.Draw(dropTexture, mass.position + new Vector2(0, -20), null, color, rotation, dropTexture.Size() / 2f, scale, SpriteEffects.None, 0);
+                }
+            }
             sb.End();
         }
 
@@ -191,6 +210,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
                 (normal.X, normal.Y) = (-normal.Y, normal.X);
                 float width = baseWidth * (1 - (float)i / (count - 1));
                 float factor = (i - 1f) / (count - 2);
+
                 vertices.Add(new Vertex2D(path[i] - normal * width, GetLuminace(drawColor), new Vector3(0, factor, 0)));
                 vertices.Add(new Vertex2D(path[i] + normal * width, GetLuminace(drawColor), new Vector3(1, factor, 0)));
             }
