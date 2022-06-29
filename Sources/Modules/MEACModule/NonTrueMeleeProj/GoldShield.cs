@@ -284,7 +284,6 @@ namespace Everglow.Sources.Modules.MEACModule.NonTrueMeleeProj
                         {
                             Main.projectile[x].ai[1] -= damage;
                             Main.projectile[x].ai[0] = 10;
-                            Main.NewText(Main.projectile[x].ai[1]);
                             return false;
                         }
                         else
@@ -292,7 +291,6 @@ namespace Everglow.Sources.Modules.MEACModule.NonTrueMeleeProj
                             damage -= (int)Main.projectile[x].ai[1];
                             Main.projectile[x].ai[1] = 0;
                             Main.projectile[x].timeLeft = 14;
-                            Main.NewText(Main.projectile[x].ai[1]);
                         }
                     }
                 }
