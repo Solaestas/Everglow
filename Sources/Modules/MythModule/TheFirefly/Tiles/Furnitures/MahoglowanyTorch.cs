@@ -53,7 +53,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 
 			name.SetDefault("Mahoglowany Torch");
 
-			AddMapEntry(new Color(200, 200, 200), name);
+			AddMapEntry(new Color(0, 14, 175), name);
 
 			// Assets
 			if (!Main.dedServ) {

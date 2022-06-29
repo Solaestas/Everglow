@@ -39,7 +39,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 			// Etc
 			ModTranslation name = CreateMapEntryName();
 			name.SetDefault("Mahoglowany Candelabra");
-			AddMapEntry(new Color(200, 200, 200), name);
+			AddMapEntry(new Color(0, 14, 175), name);
 			if (!Main.dedServ)
 			{
 				flameTexture = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheFirefly/Tiles/Furnitures/MahoglowanyCandelabra_Flame");

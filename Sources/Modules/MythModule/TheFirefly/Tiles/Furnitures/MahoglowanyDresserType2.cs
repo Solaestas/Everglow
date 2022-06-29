@@ -36,7 +36,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 			TileObjectData.addTile(Type);
 			AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
 			ModTranslation name = CreateMapEntryName();
-			AddMapEntry(new Color(100, 122, 111), name);
+			AddMapEntry(new Color(0, 14, 175), name);
 			TileID.Sets.DisableSmartCursor[Type] = true;
 			AdjTiles = new int[] { TileID.Dressers };
 			name.SetDefault("Mahoglowany Dresser");

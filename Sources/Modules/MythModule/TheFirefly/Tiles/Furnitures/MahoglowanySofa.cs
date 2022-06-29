@@ -34,7 +34,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 			// Names
 			ModTranslation name = CreateMapEntryName();
 			name.SetDefault("Mahoglowany Sofa");
-			AddMapEntry(new Color(200, 200, 200), name);
+			AddMapEntry(new Color(0, 14, 175), name);
 
 			// Placement
 			TileObjectData.newTile.CopyFrom(TileObjectData.Style3x2);

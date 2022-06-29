@@ -23,14 +23,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 			TileObjectData.newTile.CoordinateHeights = new[] { 16, 18 };
 			TileObjectData.addTile(Type);
 
-			AddMapEntry(new Color(100, 100, 100));
 
 			DustType = 84;
 			AdjTiles = new int[] { Type };
 
 			ModTranslation name = CreateMapEntryName();
 			name.SetDefault("Mahoglowany Sink");
-			AddMapEntry(new Color(200, 200, 200), name);
+			AddMapEntry(new Color(0, 14, 175), name);
 		}
 
 		public override void NumDust(int i, int j, bool fail, ref int num) {

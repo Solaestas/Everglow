@@ -42,7 +42,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             // Etc
             ModTranslation name = CreateMapEntryName();
             name.SetDefault("Mahoglowany Lantern");
-            AddMapEntry(new Color(200, 200, 200), name);
+            AddMapEntry(new Color(0, 14, 175), name);
 
 
         }
