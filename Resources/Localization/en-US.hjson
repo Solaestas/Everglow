@@ -650,12 +650,12 @@ Mods:
 			YellowImmune : "Spiritual Fiery Core's yellow flame cannot hurt you"
 
 			#食物系统buff
-			AleBuff : "短时间内鞭子的范围和速度提升至2.5倍\n“耍酒疯”"
-			AppleBuff : "增加8%减伤\n“一天一苹果，医生远离我”"
-			AppleJuiceBuff : " 短时间内增加80%减伤\n“一天一苹果，医生远离我”"
-			ApplePieBuff : "加8%减伤,1生命回复\n“一天一苹果，医生远离我”"
-			ApricotBuff : "增加加4魔力再生\n“止渴润肺”"
-			BaconBuff : "加2生命回复，所受冷系伤害降低\n“开胃祛寒”"
+			AleBuff : "250% increased whip range and speed\n\"Drunk\""
+			AppleBuff : "8% increased damage reduction\n\"An apple a day, doctors away\""
+			AppleJuiceBuff : "80% increased damage reduction\n\"An apple a day, doctors away\""
+			ApplePieBuff : "8% increased damage reduction and 1 increased life regen\n\"An apple a day, doctors away\""
+			ApricotBuff : "4 increased mana regen\n\"Quenching\""
+			BaconBuff : "2 increased life regen, take less damage from cold sources\n\"\"加2生命回复，所受冷系伤害降低\n“开胃祛寒”"
 			BananaBuff : "20%不消耗弹药，加5%远程伤害\n“低血压”"
 			BananaDaiquiriBuff : "短时间内不消耗子弹，大幅增加远程伤害与暴击\n“低体温血压”"
 			BananaSplitBuff : "33%不消耗弹药，增加8%远程暴击\n“低血压”"
