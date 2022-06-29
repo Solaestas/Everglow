@@ -45,7 +45,10 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         }
         public override void Attack()
         {
-
+            if (Main.myPlayer == Projectile.owner && Main.mouseRight && Main.mouseRightRelease)
+            {
+                
+            }
 
             useTrail = true;
 
