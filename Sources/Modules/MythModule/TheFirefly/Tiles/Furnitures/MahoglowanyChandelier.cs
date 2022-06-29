@@ -53,7 +53,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 
         public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
         {
-            r = 0.8f;
+            r = 0.1f;
             g = 0.9f;
             b = 1f;
         }

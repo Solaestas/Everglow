@@ -50,7 +50,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             Tile tile = Main.tile[i, j];
             if (tile.TileFrameX < 18)
             {
-                r = 0.8f;
+                r = 0.1f;
                 g = 0.9f;
                 b = 1f;
             }

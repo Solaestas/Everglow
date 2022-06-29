@@ -72,10 +72,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 		public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) {
 			Tile tile = Main.tile[i, j];
 
-			// If the torch is on
 			if (tile.TileFrameX < 66) {
-				// Make it emit the following light.
-				r = 0.9f;
+				r = 0.1f;
 				g = 0.9f;
 				b = 1f;
 			}
