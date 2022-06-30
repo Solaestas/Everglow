@@ -30,7 +30,7 @@
 
 			#世界系统WorldGen
 			WorldSystem:{
-				WorldCreate_Def : "Generating World""
+				WorldCreate_Def : "Generating World"
 				WorldEnter_Def : "Entering World"
 				BuildMothCave : "Generating The Cocoon"
 			}
