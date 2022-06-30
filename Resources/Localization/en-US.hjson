@@ -25,8 +25,8 @@ Mods:
 			#世界系统WorldSystem
 			WorldSystem:
 			{
-				WorldCreate_Def : "Generating World""
-				WorldEnter_Def : "Entering World""
+				WorldCreate_Def : "Generating World"
+				WorldEnter_Def : "Entering World"
 				BuildMothCave : "Generating The Cocoon"
 			}
 
