@@ -469,7 +469,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             if (CloseII.Count > 2)
             {
                 Main.graphics.GraphicsDevice.Textures[0] = texCloseII;
-                //Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, CloseII.ToArray(), 0, CloseII.Count - 2);
+                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, CloseII.ToArray(), 0, CloseII.Count - 2);
             }
 
             Main.spriteBatch.End();
