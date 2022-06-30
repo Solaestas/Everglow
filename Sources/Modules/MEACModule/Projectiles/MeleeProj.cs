@@ -1,5 +1,5 @@
 ﻿using Everglow.Sources.Commons.Function.Vertex;
-using Everglow.Sources.Commons.Function.BezierCurve;
+using Everglow.Sources.Commons.Function.Curves;
 using Terraria.Audio;
 using Terraria.Enums;
 using Terraria.GameContent.Shaders;
@@ -56,7 +56,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             get
             {
                 Vector2 vec = mainVec;
-                if(Player.gravDir==-1)
+                if (Player.gravDir == -1)
                     vec.Y *= -1;
                 return vec;
             }
@@ -300,7 +300,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             Main.graphics.GraphicsDevice.Textures[0] = tex;
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertex2Ds.ToArray(), 0, vertex2Ds.Count - 2);
 
-            if(GlowPath != "")
+            if (GlowPath != "")
             {
                 vertex2Ds = new List<Vertex2D>
                 {
@@ -347,13 +347,13 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         }
         public virtual void DrawTrail(Color color)
         {
-            List<Vector2> SmoothTrailX = Bezier.SmoothPath(trailVecs.ToList());//平滑
+            List<Vector2> SmoothTrailX = CatmullRom.SmoothPath(trailVecs.ToList());//平滑
             List<Vector2> SmoothTrail = new List<Vector2>();
-            for(int x = 0;x < SmoothTrailX.Count - 1;x++)
+            for (int x = 0; x < SmoothTrailX.Count - 1; x++)
             {
                 SmoothTrail.Add(SmoothTrailX[x]);
             }
-            if(trailVecs.Count != 0)
+            if (trailVecs.Count != 0)
             {
                 SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
             }
@@ -400,7 +400,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         }
         public void DrawWarp()
         {
-            List<Vector2> SmoothTrailX = Bezier.SmoothPath(trailVecs.ToList());//平滑
+            List<Vector2> SmoothTrailX = CatmullRom.SmoothPath(trailVecs.ToList());//平滑
             List<Vector2> SmoothTrail = new List<Vector2>();
             for (int x = 0; x < SmoothTrailX.Count - 1; x++)
             {
@@ -427,7 +427,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                 bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + trail[i] * Projectile.scale * 1.1f, new Color(dir, w, 0, 1), new Vector3(factor, 0, w)));
             }
             Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix); 
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
             Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
             Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/Images/Warp").Value;//扭曲用贴图
             KEx.CurrentTechnique.Passes[0].Apply();

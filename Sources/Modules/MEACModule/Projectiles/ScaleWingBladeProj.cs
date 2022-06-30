@@ -41,15 +41,15 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             if (attackType == 100)
             {
                 damage *= 3;
-                if(Projectile.owner==Player.whoAmI)
+                if (Projectile.owner == Player.whoAmI)
                 {
-                    int counts = Main.rand.Next(4,9);
-                    for(int i=0;i<counts;i++)
+                    int counts = Main.rand.Next(4, 9);
+                    for (int i = 0; i < counts; i++)
                     {
-                        Projectile proj=Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(),target.Center,Main.rand.NextVector2Unit()*Main.rand.Next(6,13),ModContent.ProjectileType<ButterflyDreamFriendly>(),damage/4,0,Main.myPlayer,target.whoAmI);
+                        Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center, Main.rand.NextVector2Unit() * Main.rand.Next(6, 13), ModContent.ProjectileType<ButterflyDreamFriendly>(), damage / 4, 0, Main.myPlayer, target.whoAmI);
                         proj.netUpdate2 = true;
                         proj.CritChance = Projectile.CritChance;
-                        
+
                     }
                 }
             }
@@ -72,7 +72,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         {
             Player player = Main.player[Projectile.owner];
             useTrail = true;
-            float timeMul = 1f-GetMeleeSpeed(player)/100f;
+            float timeMul = 1f - GetMeleeSpeed(player) / 100f;
             if (attackType == 0)
             {
                 if (timer < 30)//前摇
@@ -86,13 +86,13 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                 }
                 if (timer == 30)
                     AttSound(SoundID.Item1);
-                if (timer >30&&timer< 50)
+                if (timer > 30 && timer < 50)
                 {
                     isAttacking = true;
                     Projectile.rotation += Projectile.spriteDirection * 0.25f;
                     mainVec = Vector2Elipse(120, Projectile.rotation, 0.6f);
                 }
-                if (timer > 50+20*timeMul)
+                if (timer > 50 + 20 * timeMul)
                 {
                     NextAttackType();
                 }
@@ -128,7 +128,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                     useTrail = false;
                     LockPlayerDir(player);
                     float targetRot = +MathHelper.PiOver2 + player.direction * 0.7f;
-                    mainVec = Vector2.Lerp(mainVec, targetRot.ToRotationVector2()*100, 0.15f);
+                    mainVec = Vector2.Lerp(mainVec, targetRot.ToRotationVector2() * 100, 0.15f);
                     mainVec += Projectile.DirectionFrom(player.Center) * 3;
                     Projectile.rotation = mainVec.ToRotation();
                 }
@@ -138,7 +138,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                     Projectile.rotation -= Projectile.spriteDirection * 0.26f;
                     mainVec = Projectile.rotation.ToRotationVector2() * 90;
                 }
-                if(timer>30&&timer<50)
+                if (timer > 30 && timer < 50)
                 {
                     isAttacking = true;
                     Projectile.rotation += Projectile.spriteDirection * 0.25f;
@@ -170,22 +170,22 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                             for (int i = Main.rand.Next(2); i < 2; i++)
                             {
                                 Vector2 vel = new Vector2(Projectile.spriteDirection * 10, 0);
-                                Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center+vel, vel + Main.rand.NextVector2Unit() * 5, ModContent.ProjectileType<ButterflyDreamFriendly>(), Projectile.damage / 2, 0, Main.myPlayer, target.whoAmI);
+                                Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + vel, vel + Main.rand.NextVector2Unit() * 5, ModContent.ProjectileType<ButterflyDreamFriendly>(), Projectile.damage / 2, 0, Main.myPlayer, target.whoAmI);
                                 proj.netUpdate2 = true;
                                 proj.CritChance = Projectile.CritChance;
                             }
                         }
                     }
                 }
-                
-                if (timer > 55+25*timeMul)
+
+                if (timer > 55 + 25 * timeMul)
                 {
                     NextAttackType();
                 }
             }
-            if(attackType==100)//右键攻击
+            if (attackType == 100)//右键攻击
             {
-                if(timer<60)
+                if (timer < 60)
                 {
                     useTrail = false;
                     LockPlayerDir(player);
@@ -195,13 +195,13 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                     Projectile.rotation = mainVec.ToRotation();
 
                     Vector2 r = Main.rand.NextVector2Unit();
-                    float dis = MathHelper.Clamp(60- timer, 0, 60) *2;
+                    float dis = MathHelper.Clamp(60 - timer, 0, 60) * 2;
                     Dust d = Dust.NewDustDirect(Projectile.Center + r * dis, 10, 10, ModContent.DustType<BlueGlow>(), 0, 0, 0, default, 1.2f);
                     d.velocity = -r * 4;
                     d.position += Main.rand.NextVector2Unit() * 5;
                     d.noGravity = true;
                 }
-                else if(timer<100)
+                else if (timer < 100)
                 {
                     useTrail = false;
                     LockPlayerDir(player);
@@ -217,11 +217,11 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                     d.position += Main.rand.NextVector2Unit() * 5;
                     d.noGravity = true;
                 }
-                if(timer==100)
+                if (timer == 100)
                 {
                     AttSound(SoundID.Item1);
                 }
-                if(timer>100)
+                if (timer > 100)
                 {
                     isAttacking = true;
                     if (timer < 115)
@@ -252,4 +252,3 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         }
     }
 }
-

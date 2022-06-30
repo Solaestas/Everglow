@@ -32,7 +32,7 @@ namespace Everglow.Sources.Modules.MEACModule.NonTrueMeleeProj
 
 
                 Main.spriteBatch.End();
-                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
                 Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
                 KEx.CurrentTechnique.Passes[0].Apply();
 
@@ -86,10 +86,7 @@ namespace Everglow.Sources.Modules.MEACModule.NonTrueMeleeProj
             {
                 DrawCen = Main.player[Projectile.owner].Center - Main.screenPosition;
             }
-            if(Main.player[Projectile.owner].gravDir == -1)
-            {
-                DrawCen.Y += Main.screenHeight / 2f - DrawCen.Y;
-            }
+
             float SPos = StarPos;
             float R = Width;
             for (int x = -Width; x < Width; x++)
@@ -193,7 +190,7 @@ namespace Everglow.Sources.Modules.MEACModule.NonTrueMeleeProj
 
 
             Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             Effect Post = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/Post", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
             Post.Parameters["uTime"].SetValue((float)(Main.timeForVisualEffects * 0.005));
             Post.CurrentTechnique.Passes[0].Apply();
@@ -202,7 +199,7 @@ namespace Everglow.Sources.Modules.MEACModule.NonTrueMeleeProj
             DrawPost(new Color(255, 255, 255, 0), 200, 50, 1, StoneSquire);
 
             Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             Post.CurrentTechnique.Passes[0].Apply();
             Texture2D StoneSquireD = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/NonTrueMeleeProj/GoldShieldDarkMap").Value;
             DrawPost(new Color(255, 255, 255, 255), 200, 50, 1, StoneSquireD);
@@ -225,7 +222,7 @@ namespace Everglow.Sources.Modules.MEACModule.NonTrueMeleeProj
 
 
                 Main.spriteBatch.End();
-                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
                 Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
                 KEx.CurrentTechnique.Passes[0].Apply();
 
@@ -240,8 +237,8 @@ namespace Everglow.Sources.Modules.MEACModule.NonTrueMeleeProj
                 DrawDoubleLine(DrawCen + new Vector2(-k0 * 75, k0 * 75) * WaveRange, DrawCen + new Vector2(-k0 * 150, 0) * WaveRange, new Color(1f * k2, 0.7f * k2, 0f, 0f), new Color(1f * k3, 0.6f * k3, 0f, 0f));
 
                 Main.spriteBatch.End();
-                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-                //Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
                 KEx.CurrentTechnique.Passes[0].Apply();
 
                 DrawDoubleLine(DrawCen + new Vector2(0, -k0 * 120) * WaveRange, DrawCen + new Vector2(k0 * 60, -k0 * 60) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));
