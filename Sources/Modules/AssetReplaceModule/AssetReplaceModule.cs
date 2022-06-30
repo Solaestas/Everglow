@@ -20,14 +20,12 @@ namespace Everglow.Sources.Modules.AssetReplaceModule
 
         public static bool IsLoaded = false;
 
-        public void Load() => IsLoaded = false;
-
         public static Asset<Texture2D> GetTexture(string path) =>
             ModContent.Request<Texture2D>("Everglow/Resources/" + path, AssetRequestMode.ImmediateLoad);
 
         public static Asset<T> LoadVanillaAsset<T>(string assetName) where T : class => Main.Assets.Request<T>(assetName, AssetRequestMode.ImmediateLoad);
 
-        public void SetupContent() {
+        public void Load() {
             if (Main.netMode != NetmodeID.Server) {
                 TerrariaAssets.LoadTextures();
                 EternalAssets.LoadTextures();

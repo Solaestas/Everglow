@@ -107,11 +107,8 @@ namespace Everglow
             m_moduleManager.LoadAllModules();
         }
 
-		public override void PostSetupContent() {
-            m_moduleManager.SetupAllModulesContent();
-        }
 
-		public override void AddRecipes()
+        public override void AddRecipes()
         {
             base.AddRecipes();
         }

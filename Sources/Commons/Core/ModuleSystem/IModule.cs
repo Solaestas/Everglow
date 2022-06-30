@@ -9,7 +9,6 @@
         public string Description => Name;
         public void Load();
         public void Unload();
-        public virtual void SetupContent() { }
     }
 
     [AttributeUsage(AttributeTargets.Class)]
