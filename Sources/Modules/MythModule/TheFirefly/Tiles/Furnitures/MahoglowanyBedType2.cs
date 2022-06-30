@@ -63,7 +63,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 		}
 
 		public override void KillMultiTile(int i, int j, int frameX, int frameY) {
-			Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 64, 32, ModContent.ItemType<Items.Furnitures.MahoglowanyBed>());
+			Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 64, 32, ModContent.ItemType<Items.Furnitures.MahoglowanyBedType2>());
 		}
 
 		public override bool RightClick(int i, int j) {
