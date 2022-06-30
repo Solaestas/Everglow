@@ -21,14 +21,9 @@ namespace Everglow.Sources.Commons.Core.UI.Preforms
         protected override void DrawSelf()
         {
             if (Image == null)
-            {
                 Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, BaseRectangle, ContainerElement.Color);
-            }
             else
-            {
                 Main.spriteBatch.Draw(Image, BaseRectangle, ContainerElement.Color);
-            }
-
             base.DrawSelf();
         }
     }

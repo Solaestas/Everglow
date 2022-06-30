@@ -22,15 +22,10 @@
         {
             Count--;
             if (Count < 0)
-            {
-                Count = Container.GetActiveContainerTree().Count - 1;
-            }
-
-            Container = Container.GetActiveContainerTree()[Count];
+                Count = Container.GetActiveContainerElements().Count - 1;
+            Container = Container.GetActiveContainerElements()[Count];
             if (!Container.Events.CanGetForPointer)
-            {
                 LastControl();
-            }
         }
 
         /// <summary>
@@ -39,16 +34,11 @@
         public void NextControl()
         {
             Count++;
-            if (Count > Container.GetActiveContainerTree().Count - 1)
-            {
+            if (Count > Container.GetActiveContainerElements().Count - 1)
                 Count = 0;
-            }
-
-            Container = Container.GetActiveContainerTree()[Count];
+            Container = Container.GetActiveContainerElements()[Count];
             if (!Container.Events.CanGetForPointer)
-            {
                 NextControl();
-            }
         }
 
         public ContainerPointer(Container container)

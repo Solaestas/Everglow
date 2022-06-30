@@ -5,7 +5,7 @@
     /// </summary>
     public class ContainerPage : Container
     {
-        public sealed override bool GetInterviewState()
+        public override sealed bool GetInterviewState()
         {
             return false;
         }
@@ -14,7 +14,7 @@
             containerPage.DoInitialize();
             ContainerSystem.Page.Register(containerPage);
         }
-        protected sealed override void SetLayerout(ref ContainerElement containerElement)
+        protected override sealed void SetLayerout(ref ContainerElement containerElement)
         {
             containerElement.SetLayerout(0, 0, Main.screenWidth, Main.screenHeight);
             base.SetLayerout(ref containerElement);
