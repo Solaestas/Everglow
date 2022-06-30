@@ -12,12 +12,12 @@
         public override void SetStaticDefaults()
         {
             base.DisplayName.SetDefault("幻蝶");
-            Main.npcFrameCount[NPC.type] = 3;
+            Main.npcFrameCount[NPC.type] = 4;
         }
         public override void SetDefaults()
         {
-            NPC.width = 24;
-            NPC.height = 24;
+            NPC.width = 36;
+            NPC.height = 34;
             NPC.friendly = false;
             NPC.noGravity = true;
             NPC.noTileCollide = true;
@@ -102,7 +102,7 @@
                 if (Timer == 0)
                 {
                     NPC.ai[2] = Main.rand.Next(60, 200);
-                    NPC.frame.Y = Main.rand.Next(2) * 24;
+                    NPC.frame.Y = Main.rand.Next(3) * 34;
                     NPC.netUpdate2 = true;
                 }
                 if (++Timer > NPC.ai[2] && Timer < NPC.ai[2] + 350)//追踪玩家
@@ -308,17 +308,17 @@
         }
         public override void FindFrame(int frameHeight)
         {
-            if (NPC.frame.Y > 48)
+            if (NPC.frame.Y > 102)
             {
                 NPC.frame.Y = 0;
             }
 
             if (Timer % 10 == 0)
             {
-                NPC.frame.Y += 24;
+                NPC.frame.Y += 34;
             }
 
-            if (Timer % 3 == 0 && NPC.alpha < 20)
+            if (Timer % 16 == 0 && NPC.alpha < 20)
             {
                 int index = Dust.NewDust(NPC.position - new Vector2(8), NPC.width, NPC.height, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.7f, 1.9f));
                 Main.dust[index].velocity = NPC.velocity * 0.5f;
@@ -337,7 +337,7 @@
         }
         public override Color? GetAlpha(Color lightColor)
         {
-            return new Color(1f, 1f, 1f, 0) * (1 - NPC.alpha / 255f);
+            return new Color(0.2f, 0.5f, 1f, 0) * (1 - NPC.alpha / 255f);
         }
     }
 }

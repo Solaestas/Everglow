@@ -7,14 +7,14 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
         public override void SetStaticDefaults()
         {
             base.DisplayName.SetDefault("蓝蝶幻梦");
-            Main.projFrames[Projectile.type] = 3;
+            Main.projFrames[Projectile.type] = 4;
             //ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10;
             //ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
         }
         public override void SetDefaults()
         {
-            Projectile.width = 24;
-            Projectile.height = 24;
+            Projectile.width = 36;
+            Projectile.height = 34;
             Projectile.netImportant = true;
             Projectile.friendly = false;
             Projectile.hostile = true;
@@ -39,7 +39,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
                 Projectile.velocity += new Vector2(0, 0.2f * Projectile.ai[0]);
                 if (Projectile.timeLeft == 600)
                 {
-                    Projectile.frame = Main.rand.Next(2);
+                    Projectile.frame = Main.rand.Next(4);
                 }
 
                 Projectile.velocity.Y *= 0.98f;
@@ -85,7 +85,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
                 }
             }
 
-            if (Projectile.frame > 2)
+            if (Projectile.frame > 3)
             {
                 Projectile.frame = 0;
             }

@@ -38,7 +38,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
         {
             if (initialization)
             {
-                X = (float)Math.Sqrt((double)Projectile.velocity.X * (double)Projectile.velocity.X + (double)Projectile.velocity.Y * (double)Projectile.velocity.Y);
+                X = Projectile.velocity.Length();
                 b = Main.rand.Next(-50, 50);
                 initialization = false;
                 if (Main.rand.Next(0, 2) == 1)
