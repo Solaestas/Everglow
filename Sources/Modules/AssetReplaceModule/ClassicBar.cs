@@ -1,9 +1,4 @@
 ﻿using ReLogic.Content;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria.GameContent;
 
 namespace Everglow.Sources.Modules.AssetReplaceModule
@@ -30,7 +25,7 @@ namespace Everglow.Sources.Modules.AssetReplaceModule
 			TextureAssets.Heart2 = GoldHeart;
 		}
 
-		// 非static“似乎”不需要Unload
+		// 非static不需要Unload
 		//public void UnloadTextures() {
 		//	BlueStar = null;
 		//	RedHeart = null;

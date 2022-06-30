@@ -37,12 +37,15 @@ namespace Everglow.Sources.Commons.Function.FeatureFlags
         public override ConfigScope Mode => ConfigScope.ClientSide;
 
         [DefaultValue(TextureReplaceMode.Terraria)]
-        [Label("贴图更换模式")]
-        [Tooltip("选择你想要的贴图组进行更换")]
+        [Label("Mods.Everglow.Config.TextureReplace.Label")]
+        [Tooltip("Mods.Everglow.Config.TextureReplace.Tooltip")]
         [DrawTicks]
         public TextureReplaceMode TextureReplace;
 
 		public override void OnChanged() {
+            if ((int)TextureReplace >= 3) {
+                TextureReplace = TextureReplaceMode.Terraria;
+            }
             if (AssetReplaceModule.IsLoaded)
                 AssetReplaceModule.ReplaceTextures(TextureReplace);
             base.OnChanged();
@@ -53,6 +56,6 @@ namespace Everglow.Sources.Commons.Function.FeatureFlags
     {
         Terraria,
         EternalReslove,
-        MythMod
+        Myth
     }
 }
