@@ -53,10 +53,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 			if (Main.tile[Player.tileTargetX, Player.tileTargetY].TileFrameY == 0)
 			{
 				Main.CancelClothesWindow(true);
+				Main.mouseRightRelease = false;
 				int left = (int)(Main.tile[Player.tileTargetX, Player.tileTargetY].TileFrameX / 18);
 				left %= 3;
 				left = Player.tileTargetX - left;
-				int tileTargetY = Player.tileTargetY;
 				int top = Player.tileTargetY - (int)(Main.tile[Player.tileTargetX, Player.tileTargetY].TileFrameY / 18);
 				if (player.sign > -1)
 				{
@@ -73,65 +73,68 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 				}
 				if (player.editedChestName)
 				{
-					NetMessage.SendData(33, -1, -1, NetworkText.FromLiteral(Main.chest[player.chest].name), player.chest, 1f, 0f, 0f, 0, 0, 0);
+					NetMessage.SendData(MessageID.SyncPlayerChest, -1, -1, NetworkText.FromLiteral(Main.chest[player.chest].name), player.chest, 1f, 0f, 0f, 0, 0, 0);
 					player.editedChestName = false;
 				}
-				if (Main.netMode == 1)
+				if (Main.netMode == NetmodeID.Server)
 				{
 					if (left == player.chestX && top == player.chestY && player.chest != -1)
 					{
 						player.chest = -1;
-						Recipe.FindRecipes(false);
+						Recipe.FindRecipes();
 						SoundEngine.PlaySound(SoundID.MenuClose);
 					}
 					else
 					{
-						NetMessage.SendData(31, -1, -1, (NetworkText)null, left, (float)top, 0f, 0f, 0, 0, 0);
+						NetMessage.SendData(MessageID.RequestChestOpen, -1, -1, null, left, (float)top, 0f, 0f, 0, 0, 0);
 						Main.stackSplit = 600;
 					}
-					return true;
 				}
-				player.piggyBankProjTracker.Clear();
-				player.voidLensChest.Clear();
-				int num213 = Chest.FindChest(left, top);
-				if (num213 != -1)
+				else
 				{
-					Main.stackSplit = 600;
-					if (num213 == player.chest)
+					player.piggyBankProjTracker.Clear(); 
+					int num213 = Chest.FindChest(left, top);
+					if (num213 != -1)
 					{
-						player.chest = -1;
-						Recipe.FindRecipes(false);
-						SoundEngine.PlaySound(SoundID.MenuClose);
+						Main.stackSplit = 600;
+						if (num213 == player.chest)
+						{
+							player.chest = -1;
+							Recipe.FindRecipes();
+							SoundEngine.PlaySound(SoundID.MenuClose);
+						}
+						else if (num213 != player.chest && player.chest == -1)
+						{
+							player.chest = num213;
+							Main.playerInventory = true;
+							Main.recBigList = false;
+							SoundEngine.PlaySound(SoundID.MenuOpen);
+							player.chestX = left;
+							player.chestY = top;
+						}
+						else
+						{
+							player.chest = num213;
+							Main.playerInventory = true;
+							Main.recBigList = false;
+							SoundEngine.PlaySound(SoundID.MenuTick);
+							player.chestX = left;
+							player.chestY = top;
+						}
+						Recipe.FindRecipes();
 					}
-					else if (num213 != player.chest && player.chest == -1)
-					{
-						player.chest = num213;
-						Main.playerInventory = true;
-						Main.recBigList = false;
-						SoundEngine.PlaySound(SoundID.MenuOpen);
-						player.chestX = left;
-						player.chestY = top;
-					}
-					else
-					{
-						player.chest = num213;
-						Main.playerInventory = true;
-						Main.recBigList = false;
-						SoundEngine.PlaySound(SoundID.MenuTick);
-						player.chestX = left;
-						player.chestY = top;
-					}
-					Recipe.FindRecipes(false);
-					return true;
 				}
-				return false;
 			}
-			Main.playerInventory = false;
-			player.chest = -1;
-			Recipe.FindRecipes(false);
-			Main.interactedDresserTopLeftX = Player.tileTargetX;
-			Main.interactedDresserTopLeftY = Player.tileTargetY;
-			Main.OpenClothesWindow();
+			else
+			{
+				Main.playerInventory = false;
+				player.chest = -1;
+				Recipe.FindRecipes();
+				Main.interactedDresserTopLeftX = Player.tileTargetX;
+				Main.interactedDresserTopLeftY = Player.tileTargetY;
+				Main.OpenClothesWindow();
+			}
+
 			return true;
 		}
 
