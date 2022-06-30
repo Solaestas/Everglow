@@ -551,83 +551,83 @@ Mods:
 			#食物系统buff
 			AleBuff : "Tipsy"
 			AppleBuff : Apple
-			AppleJuiceBuff : AppleJuiceBuff
-			ApplePieBuff : ApplePie
+			AppleJuiceBuff : Apple Juice
+			ApplePieBuff : Apple Pie
 			ApricotBuff : Apricot
 			BaconBuff : Bacon
 			BananaBuff : Banana
-			BananaDaiquiriBuff : BananaDaiquiri
-			BananaSplitBuff : BananaSplit
-			BBQRibsBuff : BBQRibs
-			BlackCurrantBuff : BlackCurrant
-			BloodOrangeBuff : BloodOrange
-			BloodyMoscatoBuff : BloodyMoscato
-			BowlofSoupBuff : BowlofSoup
-			BunnyStewBuff : BunnyStew
+			BananaDaiquiriBuff : Banana Daiquiri
+			BananaSplitBuff : Banana Split
+			BBQRibsBuff : BBQ Ribs
+			BlackCurrantBuff : Black Currant
+			BloodOrangeBuff : Blood Orange
+			BloodyMoscatoBuff : Bloody Moscato
+			BowlofSoupBuff : Bowl of Soup
+			BunnyStewBuff : Bunny Stew
 			BurgerBuff : Burger
 			CherryBuff : Cherry
-			ChickenNuggetBuff : ChickenNugget
-			ChocolateChipCookieBuff : ChocolateChipCookie
-			ChristmasPuddingBuff : ChristmasPudding
+			ChickenNuggetBuff : Chicken Nugget
+			ChocolateChipCookieBuff : Chocolate Chip Cookie
+			ChristmasPuddingBuff : Christmas Pudding
 			CoconutBuff : Coconut
-			CoffeeCupBuff : CoffeeCup
-			CookedFishBuff : CookedFish
-			CookedMarshmallowBuff : CookedMarshmallow
-			CookedShrimpBuff : CookedShrimp
-			CreamSodaBuff : CreamSoda
-			DragonfruitBuff : MilkCarton
+			CoffeeCupBuff : Coffee Cup
+			CookedFishBuff : Cooked Fish
+			CookedMarshmallowBuff : Cooked Marshmallow
+			CookedShrimpBuff : Cooked Shrimp
+			CreamSodaBuff : Cream Soda
+			DragonfruitBuff : Milk Carton
 			ElderberryBuff : Elderberry
 			EscargotBuff : Escargo
-			FriedEggBuff : FriedEgg
+			FriedEggBuff : Fried Egg
 			FriesBuff : Fries
-			FroggleBunwichBuff : FroggleBunwich
-			FruitJuiceBuff : FruitJuice
-			FruitSaladBuff : FruitSalad
-			GingerbreadCookieBuff : GingerbreadCookie
-			GoldenDelightBuff : GoldenDelight
+			FroggleBunwichBuff : Froggle Bunwich
+			FruitJuiceBuff : Fruit Juice
+			FruitSaladBuff : Fruit Salad
+			GingerbreadCookieBuff : Gingerbread Cookie
+			GoldenDelightBuff : Golden Delight
 			GrapefruitBuff : Grapefruit
-			GrapeJuiceBuff : GrapeJuice
+			GrapeJuiceBuff : Grape Juice
 			GrapesBuff : Grapes
-			GrilledSquirrelBuff : GrilledSquirrel
-			GrubSoupBuff : GrubSoup
+			GrilledSquirrelBuff : Grilled Squirrel
+			GrubSoupBuff : Grub Soup
 			HotdogBuff : Hotdog
-			IceCreamBuff : IceCream
+			IceCreamBuff : Ice Cream
 			LemonadeBuff : Lemonade
 			LemonBuff : Lemon
-			LobsterTailBuff : LobsterTail
+			LobsterTailBuff : Lobster Tail
 			MangoBuff : Mango
 			MarshmallowBuff : Marshmallow
-			MilkCartonBuff : MilkCarton
+			MilkCartonBuff : Milk Carton
 			MilkshakeBuff : Milkshake
-			MonsterLasagnaBuff : MonsterLasagna
+			MonsterLasagnaBuff : Monster Lasagna
 			NachosBuff : Nachos
-			PadThaiBuff : PadThai
+			PadThaiBuff : Pad Thai
 			PeachBuff : Peach
-			PeachSangriaBuff : MilkCarton
+			PeachSangriaBuff : Milk Carton
 			PhoBuff : Pho
-			PinaColadaBuff : PinaColada
+			PinaColadaBuff : Pina Colada
 			PineappleBuff : Pineapple
 			PizzaBuff : Pizza
 			PlumBuff : Plum
-			PotatoChipsBuff : PotatoChips
-			PrismaticPunchBuff : PrismaticPunch
-			PumpkinPieBuff : PumpkinPie
+			PotatoChipsBuff : Potato Chips
+			PrismaticPunchBuff : Prismatic Punch
+			PumpkinPieBuff : Pumpkin Pie
 			RambutanBuff : Rambutan
-			RoastedBirdBuff : RoastedBird
-			RoastedDuckBuff : RoastedDuck
+			RoastedBirdBuff : Roasted Bird
+			RoastedDuckBuff : Roasted Duck
 			SakeBuff : Sake
 			SashimiBuff : Sashimi
-			SauteedFrogLegsBuff : SauteedFrogLegs
-			SeafoodDinnerBuff : SeafoodDinner
-			ShrimpPoBoyBuff : ShrimpPoBoy
-			ShuckedOysterBuff : ShuckedOyster
-			SmoothieofDarknessBuff : SmoothieofDarkness
+			SauteedFrogLegsBuff : Sauteed FrogLegs
+			SeafoodDinnerBuff : Seafood Dinner
+			ShrimpPoBoyBuff : Shrimp-Po-Boy
+			ShuckedOysterBuff : Shucked Oyster
+			SmoothieofDarknessBuff : Smoothie of Darkness
 			SpaghettiBuff : Spaghetti
 			StarfruitBuff : Starfruit
 			SteakBuff : Steak
-			SugarCookieBuff : SugarCookie
+			SugarCookieBuff : Sugar Cookie
 			TeacupBuff : Teacup
-			TropicalSmoothieBuff : TropicalSmoothie
+			TropicalSmoothieBuff : Tropical Smoothie
 		}
 		BuffDescription : 
 		{
