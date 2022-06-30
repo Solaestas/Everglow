@@ -49,6 +49,22 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                 vF = new Vector2(0, Main.rand.NextFloat(0, 4f)).RotatedByRandom(6.28d);
                 Dust.NewDust(new Vector2(i * 16, j * 16) + vF, 0, 0, DustID.WoodFurniture, vF.X, vF.Y);
             }*/
+            ropeManager.RemoveRope(hasRope[(i, j)]);
+            hasRope.Remove((i, j));
+        }
+        public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
+        {
+            var tile = Main.tile[i, j];
+            var ropes = hasRope[(i, j - tile.TileFrameY / 16)];
+            foreach(var r in ropes)
+            {
+                Vector2 acc = new Vector2(Main.rand.NextFloat(-1, 1), 0);
+                foreach(var m in r.mass)
+                {
+                    m.force += acc;
+                    //被砍时对mass操纵写这里
+                }
+            }
         }
         public override void NumDust(int i, int j, bool fail, ref int num)
         {

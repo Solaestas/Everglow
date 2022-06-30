@@ -116,6 +116,16 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
             this.ropes.AddRange(ropes);
         }
         /// <summary>
+        /// 移除Ropes
+        /// </summary>
+        /// <param name="ropes"></param>
+        public void RemoveRope(IEnumerable<Rope> ropes)
+        {
+            var first = ropes.First();
+            int index = this.ropes.IndexOf(first);
+            this.ropes.RemoveRange(index, ropes.Count());
+        }
+        /// <summary>
         /// 清除屏幕外的Rope
         /// </summary>
         /// <param name="outRange"></param>
@@ -161,7 +171,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
             foreach (var rope in ropes)
             {
                 Vector2 offset = rope.GetOffset();
-                if(!drawRange.Contains((offset + rope.mass[0].position).ToPoint()))
+                if (!drawRange.Contains((offset + rope.mass[0].position).ToPoint()))
                 {
                     continue;
                 }
@@ -169,7 +179,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
 
                 DrawRope(massPositionsSmooth, vertices, indices);
             }
-            if(vertices.Count < 3)
+            if (vertices.Count < 3)
             {
                 return;
             }
@@ -182,10 +192,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
 
             sb.End();
             sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null,
-    Matrix.CreateTranslation(-Main.screenPosition.X, -Main.screenPosition.Y, 0) * Main.GameViewMatrix.TransformationMatrix);
+                    Matrix.CreateTranslation(-Main.screenPosition.X, -Main.screenPosition.Y, 0) * Main.GameViewMatrix.TransformationMatrix);
             Texture2D dropTexture = MythContent.QuickTexture("TheFirefly/Tiles/Branch");
             for (int i = 0; i < ropes.Count; i++)
             {
+                Vector2 offset = ropes[i].GetOffset();
                 for (int j = 1; j < ropes[i].mass.Length; j++)
                 {
                     var mass = ropes[i].mass[j];
@@ -193,7 +204,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
                     Vector2 vector = mass.position - ropes[i].mass[j - 1].position;
                     float rotation = vector.ToRotation() - MathHelper.PiOver2;
                     Color color = GetLuminace(new Color(0, 0.15f * j, 1f / 5f * j, 0.1f) * 5);
-                    Main.spriteBatch.Draw(dropTexture, mass.position + new Vector2(0, -20), null, color, rotation, dropTexture.Size() / 2f, scale, SpriteEffects.None, 0);
+                    Main.spriteBatch.Draw(dropTexture, mass.position + new Vector2(0, -20) + offset, null, color, rotation, dropTexture.Size() / 2f, scale, SpriteEffects.None, 0);
                 }
             }
             sb.End();
