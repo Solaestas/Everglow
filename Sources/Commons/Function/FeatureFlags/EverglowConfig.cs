@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Everglow.Sources.Modules.AssetReplaceModule;
+using System.ComponentModel;
 
 using Terraria.ModLoader.Config;
 
@@ -26,5 +27,32 @@ namespace Everglow.Sources.Commons.Function.FeatureFlags
                 return ModContent.GetInstance<EverglowConfig>().debugMode;
             }
         }
+    }
+
+    public class EverglowClientConfig : ModConfig
+    {
+        /// <summary>
+        /// 用于各个客户端的个性化设置
+        /// </summary>
+        public override ConfigScope Mode => ConfigScope.ClientSide;
+
+        [DefaultValue(TextureReplaceMode.Terraria)]
+        [Label("贴图更换模式")]
+        [Tooltip("选择你想要的贴图组进行更换")]
+        [DrawTicks]
+        public TextureReplaceMode TextureReplace;
+
+		public override void OnChanged() {
+            if (AssetReplaceModule.IsLoaded)
+                AssetReplaceModule.ReplaceTextures(TextureReplace);
+            base.OnChanged();
+		}
+	}
+
+    public enum TextureReplaceMode
+    {
+        Terraria,
+        EternalReslove,
+        MythMod
     }
 }

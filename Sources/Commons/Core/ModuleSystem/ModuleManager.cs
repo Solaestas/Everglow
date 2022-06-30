@@ -52,7 +52,15 @@ namespace Everglow.Sources.Commons.Core.ModuleSystem
             {
                 module.Load();
             }
+        }
 
+        /// <summary>
+        /// 逐一执行Module列表中所有的SetupContent
+        /// </summary>
+        public void SetupAllModulesContent() {
+            foreach (var module in modules) {
+                module.SetupContent();
+            }
         }
 
         /// <summary>
