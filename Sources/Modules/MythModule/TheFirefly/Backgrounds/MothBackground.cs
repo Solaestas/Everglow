@@ -448,34 +448,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 }
             }
             Main.spriteBatch.End();
-
-            for (int i = 0; i < RopPosFir.Count; i++)
-            {
-                Vector2 TexLT = GetRopeMove(new Vector2(800, 400), 0.33f);
-                foreach (var massJ in masses[i])
-                {
-                    Vector2 DrawP = massJ.position + RopPosFir[i] + RopOffset;
-                    massJ.force += new Vector2(0.02f + 0.02f * (float)(Math.Sin(Main.timeForVisualEffects / 72f + DrawP.X / 13d + DrawP.Y / 4d)), 0) * (Main.windSpeedCurrent + 1f) * 2f;
-                    //mass.force -= mass.velocity * 0.1f;
-                    // 重力加速度（可调
-                    massJ.force += new Vector2(0, gravity) * massJ.mass;
-                    Texture2D t0 = MythContent.QuickTexture("TheFirefly/Backgrounds/Drop");
-                    int FiIdx = masses[i].FindIndex(mass => mass.position == massJ.position);
-                    Vector2 FinalDrawP = PointCorrection(DrawP - TexLT);
-                    float Scale = massJ.mass * 2f;
-                    if (FiIdx > 0)
-                    {
-                        Vector2 v0 = massJ.position - masses[i][FiIdx - 1].position;
-                        float Rot = (float)(Math.Atan2(v0.Y, v0.X)) - (float)(Math.PI / 2d);
-                        Color color = GetLuminace( new Color(0, 0.15f * FiIdx, 1f / 5f * FiIdx, 0) * alpha);
-                        for (int z = 0; z < FiIdx; z++)
-                        {
-                            Main.spriteBatch.Draw(t0, DrawP - TexLT, null, color, Rot, t0.Size() / 2f, Scale, SpriteEffects.None, 0);
-                        }
-                    }
-                }
-            }
-            Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             Rectangle rvcII = GetDrawRec(texCloseII.Size(), 0.57f, false);
             rvcII.Y -= 300;
