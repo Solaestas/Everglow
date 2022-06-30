@@ -35,18 +35,36 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)//被砍爆的时候更新
         {
-            //Main.NewText(1);
-            base.KillMultiTile(i, j, frameX, frameY);
+            int Times = Main.rand.Next(5, 9);
+            for (int d = 0; d < Times; d++)
+            {
+                Item.NewItem(null, i * 16 + Main.rand.Next(72), j * 16 + Main.rand.Next(64), 16, 16, ModContent.ItemType<Items.GlowWood>());
+            }
+            /*for (int f = 0; f < 13; f++)
+            {
+                Vector2 vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28d);
+                Gore.NewGore(null, new Vector2(i * 16, j * 16) + vF, vF, ModContent.Find<ModGore>("MythMod/CyanVineOre" + f.ToString()).Type, 1f);
+                vF = new Vector2(0, Main.rand.NextFloat(0, 4f)).RotatedByRandom(6.28d);
+                Dust.NewDust(new Vector2(i * 16, j * 16) + vF, 0, 0, DustID.Silver, vF.X, vF.Y);
+                vF = new Vector2(0, Main.rand.NextFloat(0, 4f)).RotatedByRandom(6.28d);
+                Dust.NewDust(new Vector2(i * 16, j * 16) + vF, 0, 0, DustID.WoodFurniture, vF.X, vF.Y);
+            }*/
+            ropeManager.RemoveRope(hasRope[(i, j)]);
+            hasRope.Remove((i, j));
         }
-        public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)//被砍,但没爆的时候更新
+        public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
         {
-            //Main.NewText(2);
-            base.KillTile(i, j, ref fail, ref effectOnly, ref noItem);
-        }
-        public override bool CreateDust(int i, int j, ref int type)//被砍就更新，不管爆没爆
-        {
-            //Main.NewText(3);
-            return base.CreateDust(i, j, ref type);
+            var tile = Main.tile[i, j];
+            var ropes = hasRope[(i, j - tile.TileFrameY / 16)];
+            foreach(var r in ropes)
+            {
+                Vector2 acc = new Vector2(Main.rand.NextFloat(-1, 1), 0);
+                foreach(var m in r.mass)
+                {
+                    m.force += acc;
+                    //被砍时对mass操纵写这里
+                }
+            }
         }
         public override void NumDust(int i, int j, bool fail, ref int num)
         {
