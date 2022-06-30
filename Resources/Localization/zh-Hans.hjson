@@ -728,7 +728,15 @@ Mods:
 			SteakBuff : "减少33%魔力消耗\n“上流 ”"
 			SugarCookieBuff : "加5%远程伤害\n“养胃滋润”"
 			TeacupBuff : "短时间内大幅增加魔力回复，魔法攻击，暴击\n“醇香四溢”"
-			TropicalSmoothieBuff : "短时间内魔法攻击仅消耗一点魔力，大幅增加5%魔法攻击，暴击\n“热带风暴”"
+			TropicalSmoothieBuff : "短时间内魔法攻击仅消耗一点魔力，大幅增加魔法攻击，暴击\n“热带风暴”"
+		}
+		Config:
+		{
+			TextureReplace:
+			{
+				Label: "贴图更换模式"
+				Tooltip: "选择你想要的贴图组进行更换"
+			}
 		}
 	}
 }
