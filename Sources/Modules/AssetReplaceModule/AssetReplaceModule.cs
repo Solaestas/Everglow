@@ -51,7 +51,7 @@ namespace Everglow.Sources.Modules.AssetReplaceModule
                     TerrariaAssets.Apply();
                     break;
             }
-		}
+        }
 
         public void Unload() {
             if (Main.netMode != NetmodeID.Server) {

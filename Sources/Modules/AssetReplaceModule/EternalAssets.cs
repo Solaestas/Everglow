@@ -3,17 +3,17 @@ using Terraria.GameContent;
 
 namespace Everglow.Sources.Modules.AssetReplaceModule
 {
-	internal class EternalAssets
-	{
-		public Asset<Texture2D>[] InventoryBacks = new Asset<Texture2D>[5];
+    internal class EternalAssets
+    {
+        public Asset<Texture2D>[] InventoryBacks = new Asset<Texture2D>[5];
 
-		// 这里自己再写一遍了，毕竟除了这里也没其他地方会读取原版贴图
-		public void LoadTextures() {
-			for (int i = 0; i <= 4; i++)
-				InventoryBacks[i] = AssetReplaceModule.GetTexture($"UISkinEternal/Inventory/ItemSlot_{i}");
-		}
+        // 这里自己再写一遍了，毕竟除了这里也没其他地方会读取原版贴图
+        public void LoadTextures() {
+            for (int i = 0; i <= 4; i++)
+                InventoryBacks[i] = AssetReplaceModule.GetTexture($"UISkinEternal/Inventory/ItemSlot_{i}");
+        }
 
-		public void Apply() {
+        public void Apply() {
             // 永恒意志还没有自己的HP, MP槽样式，所以这里用原版的把它覆盖了
             AssetReplaceModule.TerrariaAssets.ClassicBar.ReplaceTextures(); 
             AssetReplaceModule.TerrariaAssets.FancyBar.ReplaceTextures(); 
@@ -37,5 +37,5 @@ namespace Everglow.Sources.Modules.AssetReplaceModule
             TextureAssets.InventoryBack17 = InventoryBacks[0];
             TextureAssets.InventoryBack18 = InventoryBacks[0];
         }
-	}
+    }
 }
