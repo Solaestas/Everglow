@@ -447,7 +447,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                     Main.spriteBatch.Draw(dropTexture, mass.position, null, color, rotation, dropTexture.Size() / 2f, scale, SpriteEffects.None, 0);
                 }
             }
-            Main.spriteBatch.End();
 
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
             Rectangle rvcII = GetDrawRec(texCloseII.Size(), 0.57f, false);
@@ -470,7 +469,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             if (CloseII.Count > 2)
             {
                 Main.graphics.GraphicsDevice.Textures[0] = texCloseII;
-                //Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, CloseII.ToArray(), 0, CloseII.Count - 2);
+                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, CloseII.ToArray(), 0, CloseII.Count - 2);
             }
 
             Main.spriteBatch.End();
