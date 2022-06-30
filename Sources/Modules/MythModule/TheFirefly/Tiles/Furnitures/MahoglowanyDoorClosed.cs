@@ -1,4 +1,4 @@
-//using ExampleMod.Content.Dusts;
+using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -28,7 +28,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 
 			AddToArray(ref TileID.Sets.RoomNeeds.CountsAsDoor);
 
-			//DustType = ModContent.DustType<Sparkle>();
+			DustType = ModContent.DustType<BlueGlow>();
 			AdjTiles = new int[] { TileID.ClosedDoor };
 			OpenDoorID = ModContent.TileType<MahoglowanyDoorOpened>();
 

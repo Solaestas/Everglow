@@ -4,6 +4,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
+using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 {
@@ -19,7 +20,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 			TileID.Sets.DisableSmartCursor[Type] = true;
 			TileID.Sets.IgnoredByNpcStepUp[Type] = true; // This line makes NPCs not try to step up this tile during their movement. Only use this for furniture with solid tops.
 
-			//DustType = ModContent.DustType<Dusts.Sparkle>();
+			DustType = ModContent.DustType<BlueGlow>();
 			AdjTiles = new int[] { TileID.Bookcases};
 
 			// Placement

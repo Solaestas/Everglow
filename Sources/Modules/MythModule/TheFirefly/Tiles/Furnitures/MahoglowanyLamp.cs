@@ -1,4 +1,4 @@
-//using ExampleMod.Content.Dusts;
+using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -8,6 +8,7 @@ using Terraria.Enums;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
+
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 {
@@ -29,7 +30,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
 
-            //DustType = ModContent.DustType<Sparkle>();
+            DustType = ModContent.DustType<BlueGlow>();
             AdjTiles = new int[] { TileID.Lamps };
 
             // Placement

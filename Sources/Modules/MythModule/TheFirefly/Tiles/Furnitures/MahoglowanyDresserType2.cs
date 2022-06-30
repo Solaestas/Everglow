@@ -10,6 +10,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
+using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 {
@@ -40,7 +41,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 			TileID.Sets.DisableSmartCursor[Type] = true;
 			AdjTiles = new int[] { TileID.Dressers };
 			name.SetDefault("Mahoglowany Dresser");
-			DustType = -1;
+			DustType = ModContent.DustType<BlueGlow>();
 			DresserDrop = ModContent.ItemType<Items.Furnitures.MahoglowanyDresserType2>();
 			TileID.Sets.HasOutlines[Type] = true;
 		}

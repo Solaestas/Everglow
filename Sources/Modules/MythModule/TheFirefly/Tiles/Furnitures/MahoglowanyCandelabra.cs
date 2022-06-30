@@ -1,4 +1,4 @@
-//using ExampleMod.Content.Dusts;
+using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -26,9 +26,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 			TileID.Sets.InteractibleByNPCs[Type] = true; // Town NPCs will palm their hand at this tile
 			TileID.Sets.IsValidSpawnPoint[Type] = true;
 
-			AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch); 
+			AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
 
-			//DustType = ModContent.DustType<Sparkle>();
+			DustType = ModContent.DustType<BlueGlow>();
 			AdjTiles = new int[] { TileID.Candelabras};
 
 			// Placement

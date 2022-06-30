@@ -7,6 +7,7 @@ using Terraria.Enums;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
+using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 {
@@ -27,7 +28,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 			TileID.Sets.Torch[Type] = true;
 
 			ItemDrop = ModContent.ItemType<Items.Furnitures.MahoglowanyTorch>();
-			//DustType = ModContent.DustType<Sparkle>();
+			DustType = ModContent.DustType<BlueGlow>();
 			AdjTiles = new int[] { TileID.Torches };
 
 			AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);

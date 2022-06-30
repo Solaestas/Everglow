@@ -1,4 +1,4 @@
-//using ExampleMod.Content.Dusts;
+using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -24,7 +24,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 			AddToArray(ref TileID.Sets.RoomNeeds.CountsAsDoor);
 			AddMapEntry(new Color(200, 200, 200));
 
-			//DustType = ModContent.DustType<Sparkle>();
+			DustType = ModContent.DustType<BlueGlow>();
 			ItemDrop = ModContent.ItemType<Items.Furnitures.MahoglowanyPlatform>();
 			AdjTiles = new int[] { TileID.Platforms };
 

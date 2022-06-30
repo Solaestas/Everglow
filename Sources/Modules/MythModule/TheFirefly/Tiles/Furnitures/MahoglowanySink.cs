@@ -4,6 +4,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
+using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 {
@@ -23,7 +24,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 			TileObjectData.newTile.CoordinateHeights = new[] { 16, 18 };
 			TileObjectData.addTile(Type);
 
-			DustType = 84;
+			DustType = ModContent.DustType<BlueGlow>();
 			AdjTiles = new int[] { Type };
 
 			ModTranslation name = CreateMapEntryName();

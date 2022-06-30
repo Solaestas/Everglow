@@ -4,6 +4,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
+using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 {
@@ -17,7 +18,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 			Main.tileLavaDeath[Type] = true;
 			TileID.Sets.Clock[Type] = true;
 
-			//DustType = ModContent.DustType<Sparkle>();
+			DustType = ModContent.DustType<BlueGlow>();
 			AdjTiles = new int[] { TileID.GrandfatherClocks };
 
 			// Placement

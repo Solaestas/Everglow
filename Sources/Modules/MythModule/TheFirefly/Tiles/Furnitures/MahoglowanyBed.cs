@@ -1,4 +1,4 @@
-//using ExampleMod.Content.Dusts;
+using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -27,7 +27,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsChair); // Beds count as chairs for the purpose of suitable room creation
 
-            //DustType = ModContent.DustType<Sparkle>();
+            DustType = ModContent.DustType<BlueGlow>();
             AdjTiles = new int[] { TileID.Beds };
 
             // Placement
