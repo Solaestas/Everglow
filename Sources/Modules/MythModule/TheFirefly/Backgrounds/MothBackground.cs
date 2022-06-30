@@ -427,6 +427,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             rvc.X += 150;
             Main.spriteBatch.Draw(texClose, Vector2.Zero, rvc, GetLuminace(color0));
 
+            Main.spriteBatch.End();
+
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
             Rectangle rvcII = GetDrawRec(texCloseII.Size(), 0.57f, false);
             rvcII.Y -= 300;
