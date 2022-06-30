@@ -524,84 +524,84 @@
 
 			#食物系统buff
 			AleBuff : "Tipsy"
-			AppleBuff : MilkCarton Buff
-			AppleJuiceBuff : MilkCarton Buff
-			ApplePieBuff : MilkCarton Buff
-			ApricotBuff : ApricotBuff
-			BaconBuff : BaconBuff
-			BananaBuff : MilkCarton Buff
-			BananaDaiquiriBuff : MilkCarton Buff
-			BananaSplitBuff : MilkCarton Buff
-			BBQRibsBuff : BBQRibsBuff
-			BlackCurrantBuff : BlackCurrantBuff
-			BloodOrangeBuff : BloodOrangeBuff
-			BloodyMoscatoBuff : BloodyMoscatoBuff
-			BowlofSoupBuff : BowlofSoupBuff
-			BunnyStewBuff : BunnyStewBuff
-			BurgerBuff : BurgerBuff
-			CherryBuff : CherryBuff
-			ChickenNuggetBuff : ChickenNuggetBuff
-			ChocolateChipCookieBuff : ChocolateChipCookieBuff
-			ChristmasPuddingBuff : ChristmasPuddingBuff
-			CoconutBuff : CoconutBuff
-			CoffeeCupBuff : CoffeeCupBuff
-			CookedFishBuff : CookedFishBuff
-			CookedMarshmallowBuff : MilkCarton Buff
-			CookedShrimpBuff : CookedShrimpBuff
-			CreamSodaBuff : CreamSodaBuff
-			DragonfruitBuff : MilkCarton Buff
-			ElderberryBuff : ElderberryBuff
-			EscargotBuff : EscargotBuf
-			FriedEggBuff : FriedEggBuff
-			FriesBuff : FriesBuff
-			FroggleBunwichBuff : FroggleBunwichBuff
-			FruitJuiceBuff : FruitJuiceBuff
-			FruitSaladBuff : FruitSaladBuff
-			GingerbreadCookieBuff : GingerbreadCookieBuff
-			GoldenDelightBuff : MilkCarton Buff
-			GrapefruitBuff : MilkCarton Buff
-			GrapeJuiceBuff : GrapeJuiceBuff
-			GrapesBuff : MilkCarton Buff
-			GrilledSquirrelBuff : GrilledSquirrelBuff
-			GrubSoupBuff : MilkCarton Buff
-			HotdogBuff : GrubSoupBuff
-			IceCreamBuff : MilkCarton Buff
-			LemonadeBuff : LemonadeBuff
-			LemonBuff : LemonBuff
-			LobsterTailBuff : LobsterTailBuff
-			MangoBuff : MangoBuff
-			MarshmallowBuff : MarshmallowBuff
-			MilkCartonBuff : MilkCarton Buff
-			MilkshakeBuff : MilkshakeBuff
-			MonsterLasagnaBuff : MonsterLasagnaBuff
-			NachosBuff : NachosBuff
-			PadThaiBuff : PadThaiBuff
-			PeachBuff : PeachBuff
-			PeachSangriaBuff : MilkCarton Buff
-			PhoBuff : PhoBuff
-			PinaColadaBuff : PinaColadaBuff
-			PineappleBuff : PineappleBuff
-			PizzaBuff : PizzaBuff
-			PlumBuff : PlumBuff
-			PotatoChipsBuff : PotatoChipsBuff
-			PrismaticPunchBuff : PrismaticPunchBuff
-			PumpkinPieBuff : PumpkinPieBuff
-			RambutanBuff : RambutanBuff
-			RoastedBirdBuff : MilkCarton Buff
-			RoastedDuckBuff : MilkCarton Buff
-			SakeBuff : SakeBuff
-			SashimiBuff : SashimiBuff
-			SauteedFrogLegsBuff : SauteedFrogLegsBuff
-			SeafoodDinnerBuff : SeafoodDinnerBuff
-			ShrimpPoBoyBuff : ShrimpPoBoyBuff
-			ShuckedOysterBuff : ShuckedOysterBuff
-			SmoothieofDarknessBuff : SmoothieofDarknessBuff
-			SpaghettiBuff : SpaghettiBuff
-			StarfruitBuff : StarfruitBuff
-			SteakBuff : SteakBuff
-			SugarCookieBuff : SugarCookieBuff
-			TeacupBuff : TeacupBuff
-			TropicalSmoothieBuff : TropicalSmoothieBuff
+			AppleBuff : Apple
+			AppleJuiceBuff : AppleJuiceBuff
+			ApplePieBuff : ApplePie
+			ApricotBuff : Apricot
+			BaconBuff : Bacon
+			BananaBuff : Banana
+			BananaDaiquiriBuff : BananaDaiquiri
+			BananaSplitBuff : BananaSplit
+			BBQRibsBuff : BBQRibs
+			BlackCurrantBuff : BlackCurrant
+			BloodOrangeBuff : BloodOrange
+			BloodyMoscatoBuff : BloodyMoscato
+			BowlofSoupBuff : BowlofSoup
+			BunnyStewBuff : BunnyStew
+			BurgerBuff : Burger
+			CherryBuff : Cherry
+			ChickenNuggetBuff : ChickenNugget
+			ChocolateChipCookieBuff : ChocolateChipCookie
+			ChristmasPuddingBuff : ChristmasPudding
+			CoconutBuff : Coconut
+			CoffeeCupBuff : CoffeeCup
+			CookedFishBuff : CookedFish
+			CookedMarshmallowBuff : CookedMarshmallow
+			CookedShrimpBuff : CookedShrimp
+			CreamSodaBuff : CreamSoda
+			DragonfruitBuff : MilkCarton
+			ElderberryBuff : Elderberry
+			EscargotBuff : Escargo
+			FriedEggBuff : FriedEgg
+			FriesBuff : Fries
+			FroggleBunwichBuff : FroggleBunwich
+			FruitJuiceBuff : FruitJuice
+			FruitSaladBuff : FruitSalad
+			GingerbreadCookieBuff : GingerbreadCookie
+			GoldenDelightBuff : GoldenDelight
+			GrapefruitBuff : Grapefruit
+			GrapeJuiceBuff : GrapeJuice
+			GrapesBuff : Grapes
+			GrilledSquirrelBuff : GrilledSquirrel
+			GrubSoupBuff : GrubSoup
+			HotdogBuff : Hotdog
+			IceCreamBuff : IceCream
+			LemonadeBuff : Lemonade
+			LemonBuff : Lemon
+			LobsterTailBuff : LobsterTail
+			MangoBuff : Mango
+			MarshmallowBuff : Marshmallow
+			MilkCartonBuff : MilkCarton
+			MilkshakeBuff : Milkshake
+			MonsterLasagnaBuff : MonsterLasagna
+			NachosBuff : Nachos
+			PadThaiBuff : PadThai
+			PeachBuff : Peach
+			PeachSangriaBuff : MilkCarton
+			PhoBuff : Pho
+			PinaColadaBuff : PinaColada
+			PineappleBuff : Pineapple
+			PizzaBuff : Pizza
+			PlumBuff : Plum
+			PotatoChipsBuff : PotatoChips
+			PrismaticPunchBuff : PrismaticPunch
+			PumpkinPieBuff : PumpkinPie
+			RambutanBuff : Rambutan
+			RoastedBirdBuff : RoastedBird
+			RoastedDuckBuff : RoastedDuck
+			SakeBuff : Sake
+			SashimiBuff : Sashimi
+			SauteedFrogLegsBuff : SauteedFrogLegs
+			SeafoodDinnerBuff : SeafoodDinner
+			ShrimpPoBoyBuff : ShrimpPoBoy
+			ShuckedOysterBuff : ShuckedOyster
+			SmoothieofDarknessBuff : SmoothieofDarkness
+			SpaghettiBuff : Spaghetti
+			StarfruitBuff : Starfruit
+			SteakBuff : Steak
+			SugarCookieBuff : SugarCookie
+			TeacupBuff : Teacup
+			TropicalSmoothieBuff : TropicalSmoothie
 		}
 		BuffDescription : 
 		{
