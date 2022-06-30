@@ -33,7 +33,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 
             Everglow.HookSystem.AddMethod(DrawRopes, Commons.Core.CallOpportunity.PostDrawTiles);
         }
-        public override void KillMultiTile(int i, int j, int frameX, int frameY)
+        public override void KillMultiTile(int i, int j, int frameX, int frameY)//被砍爆的时候更新
         {
             int Times = Main.rand.Next(5, 9);
             for (int d = 0; d < Times; d++)
@@ -129,7 +129,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                 ropeManager.LoadRope(rs);
                 hasRope.Add((i, j), rs);
             }
-
             return false;
         }
     }

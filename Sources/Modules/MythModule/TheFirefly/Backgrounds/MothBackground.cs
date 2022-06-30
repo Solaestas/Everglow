@@ -447,8 +447,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                     Main.spriteBatch.Draw(dropTexture, mass.position, null, color, rotation, dropTexture.Size() / 2f, scale, SpriteEffects.None, 0);
                 }
             }
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
             Rectangle rvcII = GetDrawRec(texCloseII.Size(), 0.57f, false);
             rvcII.Y -= 300;
             rvcII.X += 300;
