@@ -35,11 +35,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)//被砍爆的时候更新
         {
-            int Times = Main.rand.Next(5, 9);
-            for (int d = 0; d < Times; d++)
-            {
-                Item.NewItem(null, i * 16 + Main.rand.Next(72), j * 16 + Main.rand.Next(64), 16, 16, ModContent.ItemType<Items.GlowWood>());
-            }
             var tile = Main.tile[i, j];
             try
             {
@@ -55,9 +50,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                             Dust d = Dust.NewDustDirect(m.position, 0, 0, ModContent.DustType<Dusts.GlowBluePedal>());
                             d.velocity = m.velocity * 0.01f;
                         }
-                        if (Main.rand.NextBool(18))
+                        if (Main.rand.NextBool(10))
                         {
-                            Gore g = Gore.NewGoreDirect(null, m.position, m.velocity, ModContent.GoreType<Gores.Branch>());
+                            Gore g = Gore.NewGoreDirect(null, m.position, m.velocity * 0.1f, ModContent.GoreType<Gores.Branch>());
+                        }
+                        if (Main.rand.NextBool(3))
+                        {
+                            Item.NewItem(null, m.position, 16, 16, ModContent.ItemType<Items.GlowWood>());
                         }
                         //被砍时对mass操纵写这里
                     }
@@ -89,7 +88,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                         }
                         if (Main.rand.NextBool(48))
                         {
-                            Gore g = Gore.NewGoreDirect(null, m.position, m.velocity, ModContent.GoreType<Gores.Branch>());
+                            Gore g = Gore.NewGoreDirect(null, m.position, m.velocity * 0.1f, ModContent.GoreType<Gores.Branch>());
                         }
                         //被砍时对mass操纵写这里
                     }
