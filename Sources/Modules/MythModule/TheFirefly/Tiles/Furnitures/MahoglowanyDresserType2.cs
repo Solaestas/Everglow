@@ -18,32 +18,37 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 	{
 		public override void SetStaticDefaults()
 		{
-			Main.tileSolidTop[Type] = true;
+			// Properties
+			Main.tileContainer[Type] = true;
 			Main.tileFrameImportant[Type] = true;
 			Main.tileNoAttach[Type] = true;
 			Main.tileTable[Type] = true;
-			Main.tileContainer[Type] = true;
-			Main.tileLavaDeath[Type] = true;
+			TileID.Sets.HasOutlines[Type] = true;
+			TileID.Sets.BasicDresser[Type] = true;
+			TileID.Sets.DisableSmartCursor[Type] = true;
+
+			DustType = ModContent.DustType<BlueGlow>();
+			AdjTiles = new int[] { TileID.Dressers };
+			DresserDrop = ModContent.ItemType<Items.Furnitures.MahoglowanyDresserType2>();
+
+			// Names
+			ContainerName.SetDefault("Mahoglowany Dresser");
+			ModTranslation name = CreateMapEntryName();
+			name.SetDefault("Mahoglowany Dresser");
+			AddMapEntry(new Color(0, 14, 175), name);
+
+			// Placement
 			TileObjectData.newTile.CopyFrom(TileObjectData.Style3x2);
-			TileObjectData.newTile.Origin = new Point16(1, 1);
 			TileObjectData.newTile.Height = 2;
-			TileObjectData.newTile.CoordinateHeights = new int[] { 16, 16 };
+			TileObjectData.newTile.Origin = new Point16(0, 1);
+			TileObjectData.newTile.CoordinateHeights = new[] { 16, 18 };
 			TileObjectData.newTile.HookCheckIfCanPlace = new PlacementHook(Chest.FindEmptyChest, -1, 0, true);
 			TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(Chest.AfterPlacement_Hook, -1, 0, false);
-			TileObjectData.newTile.AnchorInvalidTiles = new int[] { 127 };
+			TileObjectData.newTile.AnchorInvalidTiles = new int[] { TileID.MagicalIceBlock };
 			TileObjectData.newTile.StyleHorizontal = true;
 			TileObjectData.newTile.LavaDeath = false;
 			TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
 			TileObjectData.addTile(Type);
-			AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
-			ModTranslation name = CreateMapEntryName();
-			AddMapEntry(new Color(0, 14, 175), name);
-			TileID.Sets.DisableSmartCursor[Type] = true;
-			AdjTiles = new int[] { TileID.Dressers };
-			name.SetDefault("Mahoglowany Dresser");
-			DustType = ModContent.DustType<BlueGlow>();
-			DresserDrop = ModContent.ItemType<Items.Furnitures.MahoglowanyDresserType2>();
-			TileID.Sets.HasOutlines[Type] = true;
 		}
 		public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
 
@@ -92,7 +97,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 				}
 				else
 				{
-					player.piggyBankProjTracker.Clear(); 
+					player.piggyBankProjTracker.Clear();
 					int num213 = Chest.FindChest(left, top);
 					if (num213 != -1)
 					{
@@ -122,113 +127,113 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 							player.chestY = top;
 						}
 						Recipe.FindRecipes();
+						return true;
 					}
 				}
+				return false;
 			}
-			else
-			{
-				Main.playerInventory = false;
-				player.chest = -1;
-				Recipe.FindRecipes();
-				Main.interactedDresserTopLeftX = Player.tileTargetX;
-				Main.interactedDresserTopLeftY = Player.tileTargetY;
-				Main.OpenClothesWindow();
-			}
-
+			Main.playerInventory = false;
+			player.chest = -1;
+			Recipe.FindRecipes(false);
+			Main.interactedDresserTopLeftX = Player.tileTargetX;
+			Main.interactedDresserTopLeftY = Player.tileTargetY;
+			Main.OpenClothesWindow();
 			return true;
 		}
 
-		public override void MouseOverFar(int i, int j)
+	public override void MouseOverFar(int i, int j)
+	{
+		string chestName = this.ContainerName.GetDefault();
+		Player player = Main.LocalPlayer;
+		Tile tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
+		int left = Player.tileTargetX;
+		int top = Player.tileTargetY;
+		left -= (int)(tile.TileFrameX % 54 / 18);
+		if (tile.TileFrameY % 36 != 0)
 		{
-			string chestName = this.ContainerName.GetDefault();
-			Player player = Main.LocalPlayer;
-			Tile tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
-			int left = Player.tileTargetX;
-			int top = Player.tileTargetY;
-			left -= (int)(tile.TileFrameX % 54 / 18);
-			if (tile.TileFrameY % 36 != 0)
+			top--;
+		}
+		int chestIndex = Chest.FindChest(left, top);
+		player.cursorItemIconID = -1;
+		if (chestIndex < 0)
+		{
+			player.cursorItemIconText = Language.GetTextValue("LegacyDresserType.0");
+		}
+		else
+		{
+			string defaultName = TileLoader.ContainerName(tile.TileType); // This gets the ContainerName text for the currently selected language
+			if (player.cursorItemIconText == defaultName)
 			{
-				top--;
-			}
-			int chestIndex = Chest.FindChest(left, top);
-			player.cursorItemIconID = -1;
-			if (chestIndex < 0)
-			{
-				player.cursorItemIconText = Language.GetTextValue("LegacyDresserType.0");
+				player.cursorItemIconText = Main.chest[chestIndex].name;
 			}
 			else
 			{
-				if (Main.chest[chestIndex].name != "")
-				{
-					player.cursorItemIconText = Main.chest[chestIndex].name;
-				}
-				else
-				{
-					player.cursorItemIconText = chestName;
-				}
-				if (player.cursorItemIconText == chestName)
-				{
-					player.cursorItemIconID = ModContent.ItemType<Items.Furnitures.MahoglowanyDresserType2>();
-					player.cursorItemIconText = "";
-				}
+				player.cursorItemIconText = chestName;
 			}
-			player.noThrow = 2;
-			player.cursorItemIconEnabled = true;
-			if (player.cursorItemIconText == "")
+			if (player.cursorItemIconText == chestName)
 			{
-				player.cursorItemIconEnabled = false;
-				player.cursorItemIconID = 0;
+				player.cursorItemIconID = ModContent.ItemType<Items.Furnitures.MahoglowanyBedType2>();
+				player.cursorItemIconText = "";
 			}
 		}
-
-		public override void MouseOver(int i, int j)
+		player.noThrow = 2;
+		player.cursorItemIconEnabled = true;
+		if (player.cursorItemIconText == "")
 		{
-			string chestName = this.ContainerName.GetDefault();
-			Player player = Main.LocalPlayer;
-			Tile tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
-			int left = Player.tileTargetX;
-			int top = Player.tileTargetY;
-			left -= (int)(tile.TileFrameX % 54 / 18);
-			if (tile.TileFrameY % 36 != 0)
+			player.cursorItemIconEnabled = false;
+			player.cursorItemIconID = 0;
+		}
+	}
+
+	public override void MouseOver(int i, int j)
+	{
+		string chestName = this.ContainerName.GetDefault();
+		Player player = Main.LocalPlayer;
+		Tile tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
+		int left = Player.tileTargetX;
+		int top = Player.tileTargetY;
+		left -= (int)(tile.TileFrameX % 54 / 18);
+		if (tile.TileFrameY % 36 != 0)
+		{
+			top--;
+		}
+		int chest = Chest.FindChest(left, top);
+		player.cursorItemIconID = -1;
+		if (chest < 0)
+		{
+			player.cursorItemIconText = Language.GetTextValue("LegacyChestType.0");
+		}
+		else
+		{
+			if (Main.chest[chest].name != "")
 			{
-				top--;
-			}
-			int num138 = Chest.FindChest(left, top);
-			player.cursorItemIconID = -1;
-			if (num138 < 0)
-			{
-				player.cursorItemIconText = Language.GetTextValue("LegacyDresserType.0");
+				player.cursorItemIconText = Main.chest[chest].name;
 			}
 			else
 			{
-				if (Main.chest[num138].name != "")
-				{
-					player.cursorItemIconText = Main.chest[num138].name;
-				}
-				else
-				{
-					player.cursorItemIconText = chestName;
-				}
-				if (player.cursorItemIconText == chestName)
-				{
-					player.cursorItemIconID = ModContent.ItemType<Items.Furnitures.MahoglowanyDresserType2>();
-					player.cursorItemIconText = "";
-				}
+				player.cursorItemIconText = chestName;
 			}
-			player.noThrow = 2;
-			player.cursorItemIconEnabled = true;
-			if (Main.tile[Player.tileTargetX, Player.tileTargetY].TileFrameY > 0)
+			if (player.cursorItemIconText == chestName)
 			{
-				player.cursorItemIconID = ItemID.FamiliarShirt;
+				player.cursorItemIconID = ModContent.ItemType<Items.Furnitures.MahoglowanyBedType2>();
+				player.cursorItemIconText = "";
 			}
 		}
-
-		public override void NumDust(int i, int j, bool fail, ref int num)
+		player.noThrow = 2;
+		player.cursorItemIconEnabled = true;
+		if (Main.tile[Player.tileTargetX, Player.tileTargetY].TileFrameY > 0)
 		{
-			num = fail ? 1 : 3;
+			player.cursorItemIconID = ItemID.FamiliarShirt;
+			player.cursorItemIconText = "  ";
 		}
 
-		public override void KillMultiTile(int x, int y, int frameX, int frameY)
+	}
+
+	public override void NumDust(int i, int j, bool fail, ref int num)
+	{
+		num = fail ? 1 : 3;
+	}
+	public override void KillMultiTile(int x, int y, int frameX, int frameY)
 		{
 			Item.NewItem(new EntitySource_TileBreak(x, y), x * 16, y * 16, 16, 32, ModContent.ItemType<Items.Furnitures.MahoglowanyBedType2>());
 			Chest.DestroyChest(x, y);

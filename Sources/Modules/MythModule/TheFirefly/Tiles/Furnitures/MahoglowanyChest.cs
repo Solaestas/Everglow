@@ -137,8 +137,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 				player.editedChestName = false;
 			}
 
-			bool isLocked = Chest.IsLocked(left, top);
-			if (Main.netMode == NetmodeID.MultiplayerClient && !isLocked)
+			if (Main.netMode == NetmodeID.MultiplayerClient)
 			{
 				if (left == player.chestX && top == player.chestY && player.chest >= 0)
 				{
