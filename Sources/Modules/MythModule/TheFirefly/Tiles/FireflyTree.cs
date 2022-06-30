@@ -35,40 +35,73 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)//被砍爆的时候更新
         {
-            int Times = Main.rand.Next(5, 9);
-            for (int d = 0; d < Times; d++)
+            var tile = Main.tile[i, j];
+            try
             {
-                Item.NewItem(null, i * 16 + Main.rand.Next(72), j * 16 + Main.rand.Next(64), 16, 16, ModContent.ItemType<Items.GlowWood>());
+                var ropes = hasRope[(i, j - tile.TileFrameY / 16)];
+                foreach (var r in ropes)
+                {
+                    Vector2 acc = new Vector2(Main.rand.NextFloat(-1, 1), 0);
+                    foreach (var m in r.mass)
+                    {
+                        m.force += acc;
+                        if (Main.rand.NextBool(7))
+                        {
+                            Dust d = Dust.NewDustDirect(m.position, 0, 0, ModContent.DustType<Dusts.GlowBluePedal>());
+                            d.velocity = m.velocity * 0.01f;
+                        }
+                        if (Main.rand.NextBool(10))
+                        {
+                            Gore g = Gore.NewGoreDirect(null, m.position, m.velocity * 0.1f, ModContent.GoreType<Gores.Branch>());
+                        }
+                        if (Main.rand.NextBool(3))
+                        {
+                            Item.NewItem(null, m.position, 16, 16, ModContent.ItemType<Items.GlowWood>());
+                        }
+                        //被砍时对mass操纵写这里
+                    }
+                }
             }
-            /*for (int f = 0; f < 13; f++)
+            catch
             {
-                Vector2 vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28d);
-                Gore.NewGore(null, new Vector2(i * 16, j * 16) + vF, vF, ModContent.Find<ModGore>("MythMod/CyanVineOre" + f.ToString()).Type, 1f);
-                vF = new Vector2(0, Main.rand.NextFloat(0, 4f)).RotatedByRandom(6.28d);
-                Dust.NewDust(new Vector2(i * 16, j * 16) + vF, 0, 0, DustID.Silver, vF.X, vF.Y);
-                vF = new Vector2(0, Main.rand.NextFloat(0, 4f)).RotatedByRandom(6.28d);
-                Dust.NewDust(new Vector2(i * 16, j * 16) + vF, 0, 0, DustID.WoodFurniture, vF.X, vF.Y);
-            }*/
+                return;
+            }
             ropeManager.RemoveRope(hasRope[(i, j)]);
             hasRope.Remove((i, j));
         }
         public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
         {
             var tile = Main.tile[i, j];
-            var ropes = hasRope[(i, j - tile.TileFrameY / 16)];
-            foreach(var r in ropes)
+            try
             {
-                Vector2 acc = new Vector2(Main.rand.NextFloat(-1, 1), 0);
-                foreach(var m in r.mass)
+                var ropes = hasRope[(i, j - tile.TileFrameY / 16)];
+                foreach (var r in ropes)
                 {
-                    m.force += acc;
-                    //被砍时对mass操纵写这里
+                    Vector2 acc = new Vector2(Main.rand.NextFloat(-1, 1), 0);
+                    foreach (var m in r.mass)
+                    {
+                        m.force += acc;
+                        if (Main.rand.NextBool(17))
+                        {
+                            Dust d = Dust.NewDustDirect(m.position, 0, 0, ModContent.DustType<Dusts.GlowBluePedal>());
+                            d.velocity = m.velocity * 0.01f;
+                        }
+                        if (Main.rand.NextBool(48))
+                        {
+                            Gore g = Gore.NewGoreDirect(null, m.position, m.velocity * 0.1f, ModContent.GoreType<Gores.Branch>());
+                        }
+                        //被砍时对mass操纵写这里
+                    }
                 }
+            }
+            catch
+            {
+                return;
             }
         }
         public override void NumDust(int i, int j, bool fail, ref int num)
         {
-            num = (fail ? 1 : 3);
+            num = 0;
         }
 
         private RopeManager ropeManager = new RopeManager();
