@@ -5,6 +5,7 @@ using ReLogic.Content;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
+using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
@@ -28,7 +29,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             TileID.Sets.InteractibleByNPCs[Type] = true; // Town NPCs will palm their hand at this tile
             TileID.Sets.IsValidSpawnPoint[Type] = true;
 
-
+            
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
 
             DustType = ModContent.DustType<BlueGlow>();
