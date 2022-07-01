@@ -47,5 +47,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures
 		{
 			wetTorch = true;
 		}
+		public override void AddRecipes()
+		{
+			Recipe recipe = CreateRecipe(3);
+			recipe.AddIngredient(ModContent.ItemType<GlowWood>(), 1);
+			recipe.AddIngredient(ItemID.Gel, 1);
+			recipe.Register();
+		}
 	}
 }

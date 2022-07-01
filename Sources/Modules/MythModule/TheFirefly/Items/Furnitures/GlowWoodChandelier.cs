@@ -25,5 +25,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures
             Item.value = 2000;
             Item.createTile = ModContent.TileType<Tiles.Furnitures.GlowWoodChandelier>();
         }
+        public override void AddRecipes()
+        {
+            Recipe recipe = CreateRecipe();
+            recipe.AddIngredient(ModContent.ItemType<GlowWood>(), 4);
+            recipe.AddIngredient(ItemID.Torch, 4);
+            recipe.AddIngredient(ItemID.Chain, 1);
+            recipe.AddTile(TileID.WorkBenches);
+            recipe.Register();
+        }
     }
 }

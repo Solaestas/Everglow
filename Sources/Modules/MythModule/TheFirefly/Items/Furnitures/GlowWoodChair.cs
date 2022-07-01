@@ -16,6 +16,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures
 			Item.width = 12;
 			Item.height = 30;
 		}
-
+		public override void AddRecipes()
+		{
+			Recipe recipe = CreateRecipe();
+			recipe.AddIngredient(ModContent.ItemType<GlowWood>(), 4);
+			recipe.AddTile(TileID.WorkBenches);
+			recipe.Register();
+		}
 	}
 }

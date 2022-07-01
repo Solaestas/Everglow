@@ -26,5 +26,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures
 			Item.height = 30;
 			Item.value = 3000;
 		}
+		public override void AddRecipes()
+		{
+			Recipe recipe = CreateRecipe();
+			recipe.AddIngredient(ModContent.ItemType<GlowWood>(), 6);
+			recipe.AddIngredient(ItemID.WaterBucket);
+			recipe.AddTile(TileID.WorkBenches);
+			recipe.Register();
+		}
 	}
 }
