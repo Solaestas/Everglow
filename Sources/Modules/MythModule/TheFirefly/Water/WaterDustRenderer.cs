@@ -33,7 +33,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
         private RenderTarget2D[] m_dustTargetSwap = null;
         private int m_currentDustTarget;
         private Vector2 m_lastDrawPosition;
-        private Asset<Effect> m_dustLogicEffect; 
+        private Asset<Effect> m_dustLogicEffect;
         private Asset<Effect> m_dustDrawEffect;
         private Asset<Effect> m_dustSpawnEffect;
 
@@ -64,13 +64,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
             Everglow.MainThreadContext.AddTask(() =>
             {
                 m_dustTargetSwap[0] = new RenderTarget2D(Main.graphics.GraphicsDevice,
-                    Main.screenWidth, 
+                    Main.screenWidth,
                     Main.screenHeight,
                     false, SurfaceFormat.Color,
                     DepthFormat.None);
                 m_dustTargetSwap[1] = new RenderTarget2D(Main.graphics.GraphicsDevice,
                     Main.screenWidth,
-                    Main.screenHeight, 
+                    Main.screenHeight,
                     false, SurfaceFormat.Color,
                     DepthFormat.None);
             });
