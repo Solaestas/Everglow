@@ -26,9 +26,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             DresserDrop = ModContent.ItemType<Items.Furnitures.GlowWoodDresser>();
 
             // Names
-            ContainerName.SetDefault("Mahoglowany Dresser");
+            ContainerName.SetDefault("GlowWood Dresser");
             ModTranslation name = CreateMapEntryName();
-            name.SetDefault("Mahoglowany Dresser");
+            name.SetDefault("GlowWood Dresser");
             AddMapEntry(new Color(0, 14, 175), name);
 
             // Placement

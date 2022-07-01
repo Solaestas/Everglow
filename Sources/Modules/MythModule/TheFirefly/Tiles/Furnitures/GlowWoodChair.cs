@@ -33,7 +33,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 
 			// Names
 			ModTranslation name = CreateMapEntryName();
-			name.SetDefault("Mahoglowany Chair");
+			name.SetDefault("GlowWood Chair");
 			AddMapEntry(new Color(0, 14, 175), name);
 
 			// Placement

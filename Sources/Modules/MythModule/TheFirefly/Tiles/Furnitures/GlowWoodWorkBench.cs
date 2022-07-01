@@ -32,7 +32,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 
 			// Etc
 			ModTranslation name = CreateMapEntryName();
-			name.SetDefault("Mahoglowany Work Bench");
+			name.SetDefault("GlowWood Work Bench");
 			AddMapEntry(new Color(0, 14, 175), name);
 		}
 

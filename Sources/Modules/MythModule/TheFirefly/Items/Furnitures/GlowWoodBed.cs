@@ -22,7 +22,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures
 			Item.useStyle = ItemUseStyleID.Swing;
 			Item.consumable = true;
 			Item.value = 2000;
-			Item.createTile = ModContent.TileType<Tiles.Furnitures.MahoglowanyBed>();
+			Item.createTile = ModContent.TileType<Tiles.Furnitures.GlowWoodBed>();
 		}
 	}
 }

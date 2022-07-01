@@ -43,12 +43,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 
             // Etc
             ModTranslation name = CreateMapEntryName();
-            name.SetDefault("Mahoglowany Chandelier");
+            name.SetDefault("GlowWood Chandelier");
             AddMapEntry(new Color(0, 14, 175), name);
 
             if (!Main.dedServ)
             {
-                flameTexture = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheFirefly/Tiles/Furnitures/MahoglowanyChandelier_Flame");
+                flameTexture = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheFirefly/Tiles/Furnitures/GlowWoodChandelier_Flame");
             }
         }
 

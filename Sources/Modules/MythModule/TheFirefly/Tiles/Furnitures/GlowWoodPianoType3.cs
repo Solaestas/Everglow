@@ -34,7 +34,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 
             // Etc
             ModTranslation name = CreateMapEntryName();
-            name.SetDefault("Mahoglowany Piano");
+            name.SetDefault("GlowWood Piano");
             AddMapEntry(new Color(0, 14, 175), name);
         }
 

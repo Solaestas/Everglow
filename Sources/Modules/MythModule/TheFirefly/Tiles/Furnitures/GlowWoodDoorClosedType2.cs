@@ -34,7 +34,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 
 			// Names
 			ModTranslation name = CreateMapEntryName();
-			name.SetDefault("Mahoglowany Door");
+			name.SetDefault("GlowWood Door");
 			AddMapEntry(new Color(0, 14, 175), name);
 
 			// Placement

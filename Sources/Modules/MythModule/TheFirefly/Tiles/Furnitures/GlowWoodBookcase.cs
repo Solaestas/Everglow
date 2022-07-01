@@ -34,7 +34,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 
             // Etc
             ModTranslation name = CreateMapEntryName();
-            name.SetDefault("Mahoglowany Bookcase");
+            name.SetDefault("GlowWood Bookcase");
             AddMapEntry(new Color(0, 14, 175), name);
         }
 
