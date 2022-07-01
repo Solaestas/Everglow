@@ -195,7 +195,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 			{
 				top--;
 			}
-
 			int chest = Chest.FindChest(left, top);
 			player.cursorItemIconID = -1;
 			if (chest < 0)

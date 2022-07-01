@@ -28,6 +28,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             TileID.Sets.InteractibleByNPCs[Type] = true; // Town NPCs will palm their hand at this tile
             TileID.Sets.IsValidSpawnPoint[Type] = true;
 
+
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
 
             DustType = ModContent.DustType<BlueGlow>();
@@ -57,6 +58,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             g = 0.9f;
             b = 1f;
         }
+        
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
             // The following code draws multiple flames on top our placed torch.
@@ -96,7 +98,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
                 spriteBatch.Draw(flameTexture.Value, new Vector2(i * 16 - (int)Main.screenPosition.X - (width - 16f) / 2f + xx, j * 16 - (int)Main.screenPosition.Y + offsetY + yy) + zero, new Rectangle(frameX, frameY, width, height), color, 0f, default, 1f, SpriteEffects.None, 0f);
             }
         }
-
+        
         public override void KillMultiTile(int x, int y, int frameX, int frameY)
         {
             Item.NewItem(new EntitySource_TileBreak(x, y), x * 16, y * 16, 48, 32, ModContent.ItemType<Items.Furnitures.MahoglowanyChandelier>());
