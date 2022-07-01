@@ -24,5 +24,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures
 			Item.value = 2000;
 			Item.createTile = ModContent.TileType<Tiles.Furnitures.GlowWoodSofa>();
 		}
+		public override void AddRecipes()
+		{
+			Recipe recipe = CreateRecipe();
+			recipe.AddIngredient(ModContent.ItemType<GlowWood>(), 5);
+			recipe.AddIngredient(ItemID.Silk, 2);
+			recipe.AddTile(TileID.WorkBenches);
+			recipe.Register();
+		}
 	}
 }

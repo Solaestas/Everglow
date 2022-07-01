@@ -22,6 +22,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures
 			Item.consumable = true;
 			Item.createTile = ModContent.TileType<Tiles.Furnitures.GlowWoodPlatform>();
 		}
+		public override void AddRecipes()
+		{
+			Recipe recipe = CreateRecipe(2);
+			recipe.AddIngredient(ModContent.ItemType<GlowWood>(), 1);
+			recipe.Register();
+		}
 
 	}
 }
