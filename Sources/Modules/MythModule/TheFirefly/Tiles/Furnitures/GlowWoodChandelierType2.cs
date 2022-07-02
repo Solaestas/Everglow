@@ -7,9 +7,8 @@ using Terraria.ObjectData;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 {
-    public class GlowWoodChandelier : ModTile
+    public class GlowWoodChandelierType2 : ModTile
     {
-        private Asset<Texture2D> flameTexture;
         public override void SetStaticDefaults()
         {
             Main.tileFrameImportant[Type] = true;
@@ -39,11 +38,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             ModTranslation name = CreateMapEntryName();
             name.SetDefault("Chandelier");
             AddMapEntry(new Color(0, 14, 175), name);
-
-            if (!Main.dedServ)
-            {
-                flameTexture = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheFirefly/Tiles/Furnitures/GlowWoodChandelier_Flame");
-            }
         }
         public override void HitWire(int i, int j)
         {
@@ -131,27 +125,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             {
                 TileSpin tileSpin = new TileSpin();
                 tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18);
-                Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodChandelier");
+                Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodChandelierType2");
                 tileSpin.DrawRotatedTile(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, tex, 8, -2);
-
-
-                ulong randSeed = Main.TileFrameSeed ^ (ulong)((long)j << 32 | (long)(uint)i); // Don't remove any casts.
-                Color color = new Color(30, 30, 30, 0);
-                if (tile.TileFrameX < 54)
-                {
-                    for (int k = 0; k < 7; k++)
-                    {
-                        float xx = Utils.RandomInt(ref randSeed, -10, 11) * 0.15f;
-                        float yy = Utils.RandomInt(ref randSeed, -10, 1) * 0.35f;
-                        tileSpin.DrawRotatedTile(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, flameTexture.Value, xx + 8, yy * 0.6f - 2, true, color);
-                    }
-                }
             }
             return false;
         }
         public override void KillMultiTile(int x, int y, int frameX, int frameY)
         {
-            Item.NewItem(new EntitySource_TileBreak(x, y), x * 16, y * 16, 48, 32, ModContent.ItemType<Items.Furnitures.GlowWoodChandelier>());
+            Item.NewItem(new EntitySource_TileBreak(x, y), x * 16, y * 16, 48, 32, ModContent.ItemType<Items.Furnitures.GlowWoodChandelierType2>());
         }
     }
 }
