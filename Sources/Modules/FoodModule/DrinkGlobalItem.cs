@@ -1,8 +1,8 @@
-﻿using Everglow.Sources.Modules.FoodModule.Buffs;
+using Everglow.Sources.Modules.FoodModule.Buffs;
 using Everglow.Sources.Modules.FoodModule.DataStructures;
 using Everglow.Sources.Modules.FoodModule.Items;
+using Everglow.Sources.Modules.FoodModule.Buffs.VanillaDrinkBuffs;
 using Terraria.Localization;
-
 
 namespace Everglow.Sources.Modules.FoodModule
 {
@@ -246,10 +246,6 @@ namespace Everglow.Sources.Modules.FoodModule
             {
                 var drinkInfo = m_vanillaDrinkInfos[item.type];
 
-                // 替换掉原版的 buff 类型
-                item.buffType = drinkInfo.BuffType;
-                item.buffTime = drinkInfo.BuffTime.TotalFrames;
-
             }
             base.SetDefaults(item);
         }
@@ -264,7 +260,8 @@ namespace Everglow.Sources.Modules.FoodModule
 
                 // 变得不渴
                 foodPlayer.Thirstystate = drinkInfo.Thirsty;
-
+                //加上Buff
+                player.AddBuff(drinkInfo.BuffType, drinkInfo.BuffTime.TotalFrames);
             }
         }
 
