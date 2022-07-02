@@ -10,7 +10,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             Main.tileBlockLight[Type] = true;
             MinPick = 175;
             DustType = 191;
-            ItemDrop = ModContent.DustType<Bosses.CorruptMoth.Dusts.MothBlue2>();
+            ItemDrop = ModContent.ItemType<Items.GlowWood>();
             AddMapEntry(new Color(37, 46, 47));
         }
         public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
