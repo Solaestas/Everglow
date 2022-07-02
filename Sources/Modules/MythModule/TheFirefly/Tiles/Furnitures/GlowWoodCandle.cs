@@ -22,7 +22,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 			Main.tileNoAttach[Type] = true;
 			Main.tileLavaDeath[Type] = true;
 			TileID.Sets.HasOutlines[Type] = true;
-			TileID.Sets.CanBeSleptIn[Type] = true; // Facilitates calling ModifySleepingTargetInfo
 			TileID.Sets.InteractibleByNPCs[Type] = true; // Town NPCs will palm their hand at this tile
 			TileID.Sets.IsValidSpawnPoint[Type] = true;
 
@@ -30,7 +29,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 
 			DustType = ModContent.DustType<BlueGlow>();
 			AdjTiles = new int[] { TileID.Candles };
-
+			ItemDrop = ModContent.ItemType<Items.Furnitures.GlowWoodCandle>();
 			// Placement
 			TileObjectData.newTile.CopyFrom(TileObjectData.StyleOnTable1x1); // this style already takes care of direction for us
 			TileObjectData.addTile(Type);
@@ -38,6 +37,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 			// Etc
 			ModTranslation name = CreateMapEntryName();
 			name.SetDefault("GlowWood Candle");
+
 			AddMapEntry(new Color(0, 14, 175), name);
 			if (!Main.dedServ)
 

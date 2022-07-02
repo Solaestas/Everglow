@@ -45,7 +45,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             int DeltaX = tile.TileFrameX % 54 / 18;
             int DeltaY = tile.TileFrameY / 18;
             int AddX = 0;
-            
+
             
 
             while (Main.tile[i - DeltaX + AddX, j - DeltaY].TileFrameX % 54 == AddX * 18 && Main.tile[i - DeltaX + AddX, j - DeltaY].HasTile && Main.tile[i - DeltaX + AddX, j - DeltaY ].TileType == Type)
@@ -75,10 +75,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             var tile = Main.tile[i, j];
             if (tile.TileFrameX < 54)
             {
-                r = 0.1f;
-                g = 0.9f;
-                b = 1f;
-            }
+            r = 0.1f;
+            g = 0.9f;
+            b = 1f;
+        }
             else
             {
                 r = 0f;
