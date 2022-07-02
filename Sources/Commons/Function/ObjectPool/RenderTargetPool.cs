@@ -46,9 +46,9 @@ namespace Everglow.Sources.Commons.Function.ObjectPool
         {
             int index = GetNextFreeIndexAndOccupy();
             return new ResourceLocker<RenderTarget2D>(m_renderTargetsPool[index], () =>
-            {
-                ReleaseResourceAt(index);
-            });
+           {
+               ReleaseResourceAt(index);
+           });
         }
 
         /// <summary>

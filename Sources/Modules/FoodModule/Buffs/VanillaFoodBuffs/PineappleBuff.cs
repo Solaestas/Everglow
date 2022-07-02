@@ -4,8 +4,8 @@
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("PineappleBuff");
-            Description.SetDefault("增加6防御，50%反伤\n“菠萝碱”");
+            //DisplayName.SetDefault("PineappleBuff");
+            //Description.SetDefault("增加6防御，50%反伤\n“菠萝碱”");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
         }

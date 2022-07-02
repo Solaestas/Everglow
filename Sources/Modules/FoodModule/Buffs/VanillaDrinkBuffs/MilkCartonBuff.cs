@@ -4,8 +4,8 @@
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("MilkCarton Buff");
-            Description.SetDefault("短时间内免疫几乎所有debuff\n“一奶解百毒 ”");
+            //DisplayName.SetDefault("MilkCarton Buff");
+            //Description.SetDefault("短时间内免疫几乎所有debuff\n“一奶解百毒 ”");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
         }
@@ -16,7 +16,7 @@
             player.buffImmune[20] = true;
             player.buffImmune[24] = true;
             player.buffImmune[70] = true;
-            player.buffImmune[22] = true; 
+            player.buffImmune[22] = true;
             player.buffImmune[80] = true;
             player.buffImmune[35] = true;
             player.buffImmune[23] = true;

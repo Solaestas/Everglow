@@ -1,4 +1,4 @@
-﻿using Everglow.Sources.Modules.FoodModule.Buffs;
+using Everglow.Sources.Modules.FoodModule.Buffs;
 using Everglow.Sources.Modules.FoodModule.DataStructures;
 using Everglow.Sources.Modules.FoodModule.Items;
 using Everglow.Sources.Modules.FoodModule.Buffs.VanillaDrinkBuffs;
@@ -10,6 +10,10 @@ namespace Everglow.Sources.Modules.FoodModule
 
         // 对于原版的饮料进行类型Id到 DrinkInfo 的映射，直接获取DrinkInfo实例
         private static Dictionary<int, DrinkInfo> m_vanillaDrinkInfos;
+        public override void Unload()
+        {
+            m_vanillaDrinkInfos = null;
+        }
         public DrinkGlobalItem()
         {
             m_vanillaDrinkInfos = new Dictionary<int, DrinkInfo>
@@ -230,7 +234,7 @@ namespace Everglow.Sources.Modules.FoodModule
 
         public override void SetStaticDefaults()
         {
-            
+
         }
 
         public override void SetDefaults(Item item)
