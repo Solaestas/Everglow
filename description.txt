@@ -3,7 +3,7 @@ Everglow is a comprehensive content mod
 Developed by Dream Chaser Group
 
 Developers(in no particular order):
-Programmers: Colin Weiss, Mr.Skirt, Omnielement, yiyang233, Ye_you, Plantare, Uin, Felixyang
+Programmers: Colin Weiss, Mr.Skirt, Omnielement, yiyang233, Ye_you, Plantare, Uin, Felixyang, Cyril, 局长
 Artist: Jelly, Omnielement, Vedotek Lily, 仙阁, 凝胶, Doggo-go!!, 吞某, Nomis, 红茶, Redusty
 Musician：Dirty Octopus, Setnour6, Uni
 Localization：Lacewing(en-US), NooN iS oN(ru-RU)
@@ -24,7 +24,7 @@ Translations: Zero Project
 由【孤舟逐梦团队】开发
 
 制作人员名单(无先后顺序)：
-程序：科林维斯，小裙子，万象元素，夜谷紫幽，yiyang233，世纪小花，幽银，菲利克斯·杨
+程序：科林维斯，小裙子，万象元素，夜谷紫幽，yiyang233，世纪小花，幽银，菲利克斯·杨，Cyril，局长
 画师：果冻，万象元素, 维多泰克莉莉，仙阁，凝胶，杜格，吞某，Nomis，红茶，红尘
 乐师：脏渔歌，Setnour6, Uni
 翻译：Lacewing[英]，NooN iS oN[俄]

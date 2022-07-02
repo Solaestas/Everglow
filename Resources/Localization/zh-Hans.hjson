@@ -650,6 +650,9 @@ Mods:
 			YellowImmune : "花火幻魂心的黄色火焰无法伤害到你"
 
 			#食物系统buff
+			FoodBuff : "你刚吃完东西"
+
+			#原版食物的新buff
 			AleBuff : "短时间内鞭子的范围和速度提升至2.5倍\n“耍酒疯”"
 			AppleBuff : "增加8%减伤\n“一天一苹果，医生远离我”"
 			AppleJuiceBuff : " 短时间内增加80%减伤\n“一天一苹果，医生远离我”"
@@ -737,6 +740,13 @@ Mods:
 				Label: "贴图更换模式"
 				Tooltip: "选择你想要的贴图组进行更换"
 			}
+		}
+		InfoDisplay:
+		{
+			Satiety : "饱食度"
+			StateOfThirst : "口渴程度"
+			Thirsty : "你最好喝点什么"
+			NotThirsty : "你不想喝东西"
 		}
 	}
 }

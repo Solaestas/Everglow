@@ -650,6 +650,9 @@ Mods:
 			YellowImmune : "Spiritual Fiery Core's yellow flame cannot hurt you"
 
 			#食物系统buff
+			FoodBuff : "Food Buff"
+
+			#原版食物的新buff
 			AleBuff : "250% increased whip range and speed\n'Drunk'"
 			AppleBuff : "8% increased damage reduction\n'An apple a day, doctors away'"
 			AppleJuiceBuff : "80% increased damage reduction\n'An apple a day, doctors away'"
@@ -737,6 +740,13 @@ Mods:
 				Label: "Texture-replacing mode"
 				Tooltip: "Choose your preferred texture group to replace"
 			}
+		}
+		InfoDisplay:
+		{
+			Satiety : "Satiety"
+			StateOfThirst : "State of Thirst"
+			Thirsty : "You are thirsty"
+			NotThirsty : "You don't want to drink"
 		}
 	}
 }
