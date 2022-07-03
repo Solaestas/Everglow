@@ -106,6 +106,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
 
         private int m_switchCounter = 0;
         private int m_totalSwitchCounter = 0;
+        private bool m_useGaussian = true;
         private FogState m_beginState, m_currentState, m_targetState;
 
 
@@ -152,20 +153,22 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
         {
             var fogConfig = ModContent.GetInstance<FogConfigs>();
 
-            //BloomRadius = fogConfig.MaxBloomRadius;
-            //BloomIntensity = fogConfig.BloomIntensity;
-            //LuminanceThreashold = fogConfig.LightLuminanceThreashold;
-            //BloomAbsorptionRate = fogConfig.FogBloomAbsorptionFactor;
-            //BloomFactor = fogConfig.FogBloomRate;
-            //FogScatterWithDistance = fogConfig.FogScatterWithDistance;
+            BloomRadius = fogConfig.MaxBloomRadius;
+            m_currentState.BloomIntensity = fogConfig.BloomIntensity;
+            m_currentState.LuminanceThreashold = fogConfig.LightLuminanceThreashold;
+            m_currentState.ViewAbsorptionRatio = new Vector3(fogConfig.FogAbsorptionR, 
+                fogConfig.FogAbsorptionG, 
+                fogConfig.FogAbsorptionB);
+            m_currentState.BloomScatteringRatio = fogConfig.FogBloomRate;
+            //m_currentState.FogScatterWithDistance = fogConfig.FogScatterWithDistance;
 
-            //m_shouldResetRenderTargets |= (m_offscreenTilesSize != fogConfig.OffscreenTiles);
-            //m_offscreenTilesSize = fogConfig.OffscreenTiles;
-            //m_enableGaussian = fogConfig.GaussianKernel;
-            //m_enableLightUpload = fogConfig.EnableLightUpload;
-            //m_enableTemporalFilter = fogConfig.EnableTemporalInterp;
+            m_shouldResetRenderTargets |= (m_currentState.OffscreenTileCount != fogConfig.OffscreenTiles);
+            m_currentState.OffscreenTileCount = fogConfig.OffscreenTiles;
+            m_useGaussian = fogConfig.GaussianKernel;
+            m_enableLightUpload = fogConfig.EnableLightUpload;
+            m_enableTemporalFilter = fogConfig.EnableTemporalInterp;
 
-            //Enable = fogConfig.EnableScattering;
+            m_currentState.Enabled = fogConfig.EnableScattering;
         }
 
         private void ResetLightMap()
@@ -558,6 +561,8 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
 
         private void ApplyGaussian(int level)
         {
+            if (!m_useGaussian)
+                return;
             var gaussianFilter = m_gaussianKernelEffect.Value;
             var spriteBatch = Main.spriteBatch;
             var graphicsDevice = Main.graphics.GraphicsDevice;
@@ -572,7 +577,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
             graphicsDevice.Clear(Color.Transparent);
             spriteBatch.Begin(SpriteSortMode.Immediate,
                 BlendState.Opaque,
-                SamplerState.AnisotropicClamp,
+                SamplerState.LinearClamp,
                 DepthStencilState.Default,
                 RasterizerState.CullNone, null);
             gaussianFilter.Parameters["uHorizontal"].SetValue(true);
@@ -586,7 +591,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
             graphicsDevice.Clear(Color.Transparent);
             spriteBatch.Begin(SpriteSortMode.Immediate,
                 BlendState.Opaque,
-                SamplerState.AnisotropicClamp,
+                SamplerState.LinearClamp,
                 DepthStencilState.Default,
                 RasterizerState.CullNone, null);
             gaussianFilter.Parameters["uHorizontal"].SetValue(false);
