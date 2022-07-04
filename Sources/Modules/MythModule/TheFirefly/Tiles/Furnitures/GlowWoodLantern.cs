@@ -1,12 +1,7 @@
 using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using Terraria;
+using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.DataStructures;
 using Terraria.Enums;
-using Terraria.ID;
-using Terraria.ModLoader;
 using Terraria.ObjectData;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
@@ -46,7 +41,39 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 
 
         }
+        public override void HitWire(int i, int j)
+        {
+            var tile = Main.tile[i, j];
+            int width = 18;
+            int DeltaX = tile.TileFrameX % width / 18;
+            int DeltaY = tile.TileFrameY / 18;
+            int AddX = 0;
 
+
+
+            while (Main.tile[i - DeltaX + AddX, j - DeltaY].TileFrameX % width == AddX * 18 && Main.tile[i - DeltaX + AddX, j - DeltaY].HasTile && Main.tile[i - DeltaX + AddX, j - DeltaY].TileType == Type)
+            {
+                int AddY = 0;
+                while (Main.tile[i - DeltaX + AddX, j - DeltaY + AddY].TileFrameY == AddY * 18 && Main.tile[i - DeltaX + AddX, j - DeltaY + AddY].HasTile && Main.tile[i - DeltaX + AddX, j - DeltaY + AddY].TileType == Type)
+                {
+                    ;
+                    if (Main.tile[i - DeltaX + AddX, j - DeltaY + AddY].TileFrameX < width)
+                    {
+                        Main.tile[i - DeltaX + AddX, j - DeltaY + AddY].TileFrameX += (short)width;
+                    }
+                    else
+                    {
+                        Main.tile[i - DeltaX + AddX, j - DeltaY + AddY].TileFrameX -= (short)width;
+                    }
+                    if (Wiring.running)
+                    {
+                        Wiring.SkipWire(i - DeltaX + AddX, j - DeltaY + AddY);
+                    }
+                    AddY++;
+                }
+                AddX++;
+            }
+        }
         public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
         {
             Tile tile = Main.tile[i, j];
@@ -62,6 +89,50 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
                 g = 0f;
                 b = 0f;
             }
+        }
+        public override void NearbyEffects(int i, int j, bool closer)
+        {
+            if (closer)
+            {
+                var tile = Main.tile[i, j];
+                foreach (Player player in Main.player)
+                {
+                    if (player.Hitbox.Intersects(new Rectangle(i * 16 - 8, j * 16 - 8, 18, 18)))
+                    {
+                        if (!TileSpin.TileRotation.ContainsKey((i, j - tile.TileFrameY / 18)))
+                        {
+                            TileSpin.TileRotation.Add((i, j - tile.TileFrameY / 18), new Vector2(-Math.Clamp(player.velocity.X, -1, 1) * 0.2f));
+                        }
+                        else
+                        {
+                            float rot;
+                            float Omega;
+                            Omega = TileSpin.TileRotation[(i, j - tile.TileFrameY / 18)].X;
+                            rot = TileSpin.TileRotation[(i, j - tile.TileFrameY / 18)].Y;
+                            if (Math.Abs(Omega) < 0.04f && Math.Abs(rot) < 0.04f)
+                            {
+                                TileSpin.TileRotation[(i, j - tile.TileFrameY / 18)] = new Vector2(Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
+                            }
+                            if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
+                            {
+                                TileSpin.TileRotation.Remove((i, j - tile.TileFrameY / 18));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
+        {
+            var tile = Main.tile[i, j];
+            if (tile.TileFrameY == 0)
+            {
+                TileSpin tileSpin = new TileSpin();
+                tileSpin.Update(i, j - tile.TileFrameY / 18);
+                Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodLanternDraw");
+                tileSpin.DrawRotatedLamp(i, j - tile.TileFrameY / 18, tex, 8, -2);
+            }
+            return false;
         }
 
         public override void KillMultiTile(int x, int y, int frameX, int frameY)

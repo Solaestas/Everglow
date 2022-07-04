@@ -5,6 +5,7 @@ using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.Localization;
 using Terraria.ObjectData;
+using Everglow.Sources.Modules.MythModule.Common;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 {
@@ -231,6 +232,19 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
         {
             Item.NewItem(new EntitySource_TileBreak(x, y), x * 16, y * 16, 16, 32, DresserDrop);
             Chest.DestroyChest(x, y);
+        }
+        public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
+        {
+            var tile = Main.tile[i, j];
+            Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+            if (Main.drawToScreen)
+            {
+                zero = Vector2.Zero;
+            }
+            Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodDresserType2Glow");
+            spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(0.8f, 0.8f, 0.8f, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
+
+            base.PostDraw(i, j, spriteBatch);
         }
     }
 }

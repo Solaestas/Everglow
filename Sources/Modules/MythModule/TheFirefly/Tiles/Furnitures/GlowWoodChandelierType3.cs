@@ -1,6 +1,5 @@
 using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
 using Everglow.Sources.Modules.MythModule.Common;
-using ReLogic.Content;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ObjectData;
@@ -127,7 +126,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
                 TileSpin tileSpin = new TileSpin();
                 tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18);
                 Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodChandelierType3");
-                tileSpin.DrawRotatedTile(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, tex, 8, -2);
+                tileSpin.DrawRotatedChandelier(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, tex, 8, -2);
             }
             return false;
         }

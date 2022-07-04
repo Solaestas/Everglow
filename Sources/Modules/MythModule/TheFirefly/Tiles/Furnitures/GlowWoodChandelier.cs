@@ -132,7 +132,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
                 TileSpin tileSpin = new TileSpin();
                 tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18);
                 Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodChandelier");
-                tileSpin.DrawRotatedTile(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, tex, 8, -2);
+                tileSpin.DrawRotatedChandelier(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, tex, 8, -2);
 
 
                 ulong randSeed = Main.TileFrameSeed ^ (ulong)((long)j << 32 | (long)(uint)i); // Don't remove any casts.
@@ -143,7 +143,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
                     {
                         float xx = Utils.RandomInt(ref randSeed, -10, 11) * 0.15f;
                         float yy = Utils.RandomInt(ref randSeed, -10, 1) * 0.35f;
-                        tileSpin.DrawRotatedTile(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, flameTexture.Value, xx + 8, yy * 0.6f - 2, true, color);
+                        tileSpin.DrawRotatedChandelier(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, flameTexture.Value, xx + 8, yy * 0.6f - 2, true, color);
                     }
                 }
             }

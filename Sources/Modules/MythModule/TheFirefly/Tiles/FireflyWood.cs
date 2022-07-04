@@ -28,7 +28,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                 {
                     Texture2D valueG = MythContent.QuickTexture("TheFirefly/Tiles/FireflyTreeGlow");
                     Vector2 value2 = point.ToWorldCoordinates();
-                    Color color = Lighting.GetColor(point.X, point.Y);
                     SpriteEffects effects = SpriteEffects.None;
                     Vector2 HalfSize = new Vector2(8);
                     Main.spriteBatch.Draw(valueG, value2 - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(1f, 1f, 1f, 0), 0f, HalfSize, 1f, effects, 0f);

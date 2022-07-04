@@ -5,7 +5,7 @@ using Terraria.GameContent.Creative;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures
 {
-	public class GlowWoodPianoType3 : ModItem
+	public class GlowWoodSofaType2 : ModItem
 	{
 		public override void SetStaticDefaults() {
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
@@ -22,7 +22,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures
 			Item.useStyle = ItemUseStyleID.Swing;
 			Item.consumable = true;
 			Item.value = 2000;
-			Item.createTile = ModContent.TileType<Tiles.Furnitures.GlowWoodPianoType3>();
+			Item.createTile = ModContent.TileType<Tiles.Furnitures.GlowWoodSofaType2>();
 		}
 		public override void AddRecipes()
 		{

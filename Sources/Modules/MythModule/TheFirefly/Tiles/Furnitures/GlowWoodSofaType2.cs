@@ -8,11 +8,12 @@ using Everglow.Sources.Modules.MythModule.Common;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 {
-	public class GlowWoodSofa : ModTile
+	public class GlowWoodSofaType2 : ModTile
 	{
 		public const int NextStyleHeight = 40; // Calculated by adding all CoordinateHeights + CoordinatePaddingFix.Y applied to all of them + 2
 
-		public override void SetStaticDefaults() {
+		public override void SetStaticDefaults()
+		{
 			// Properties
 			Main.tileFrameImportant[Type] = true;
 			Main.tileNoAttach[Type] = true;
@@ -25,7 +26,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 			AddToArray(ref TileID.Sets.RoomNeeds.CountsAsChair);
 
 			DustType = ModContent.DustType<BlueGlow>();
-			AdjTiles = new int[] { TileID.Benches};
+			AdjTiles = new int[] { TileID.Benches };
 
 			// Names
 			ModTranslation name = CreateMapEntryName();
@@ -47,34 +48,41 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 			TileObjectData.addTile(Type);
 		}
 
-		public override void NumDust(int i, int j, bool fail, ref int num) {
+		public override void NumDust(int i, int j, bool fail, ref int num)
+		{
 			num = fail ? 1 : 3;
 		}
 
-		public override void KillMultiTile(int i, int j, int frameX, int frameY) {
+		public override void KillMultiTile(int i, int j, int frameX, int frameY)
+		{
 			Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 32, ModContent.ItemType<Items.Furnitures.GlowWoodSofa>());
 		}
 
-		public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) {
+		public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
+		{
 			return settings.player.IsWithinSnappngRangeToTile(i, j, PlayerSittingHelper.ChairSittingMaxDistance); // Avoid being able to trigger it from long range
 		}
 
-		public override void ModifySittingTargetInfo(int i, int j, ref TileRestingInfo info) {
+		public override void ModifySittingTargetInfo(int i, int j, ref TileRestingInfo info)
+		{
 			// It is very important to know that this is called on both players and NPCs, so do not use Main.LocalPlayer for example, use info.restingEntity
 			Tile tile = Framing.GetTileSafely(i, j);
 
-			info.AnchorTilePosition.X = i; 
+			info.AnchorTilePosition.X = i;
 			info.AnchorTilePosition.Y = j;
 
-			if (tile.TileFrameY % NextStyleHeight == 0) {
-				info.AnchorTilePosition.Y++; 
+			if (tile.TileFrameY % NextStyleHeight == 0)
+			{
+				info.AnchorTilePosition.Y++;
 			}
 		}
 
-		public override bool RightClick(int i, int j) {
+		public override bool RightClick(int i, int j)
+		{
 			Player player = Main.LocalPlayer;
 
-			if (player.IsWithinSnappngRangeToTile(i, j, PlayerSittingHelper.ChairSittingMaxDistance)) { // Avoid being able to trigger it from long range
+			if (player.IsWithinSnappngRangeToTile(i, j, PlayerSittingHelper.ChairSittingMaxDistance))
+			{ // Avoid being able to trigger it from long range
 				player.GamepadEnableGrappleCooldown();
 				player.sitting.SitDown(player, i, j);
 			}
@@ -82,18 +90,21 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 			return true;
 		}
 
-		public override void MouseOver(int i, int j) {
+		public override void MouseOver(int i, int j)
+		{
 			Player player = Main.LocalPlayer;
 
-			if (!player.IsWithinSnappngRangeToTile(i, j, PlayerSittingHelper.ChairSittingMaxDistance)) { // Match condition in RightClick. Interaction should only show if clicking it does something
+			if (!player.IsWithinSnappngRangeToTile(i, j, PlayerSittingHelper.ChairSittingMaxDistance))
+			{ // Match condition in RightClick. Interaction should only show if clicking it does something
 				return;
 			}
 
 			player.noThrow = 2;
 			player.cursorItemIconEnabled = true;
-			player.cursorItemIconID = ModContent.ItemType<Items.Furnitures.GlowWoodSofa>();
+			player.cursorItemIconID = ModContent.ItemType<Items.Furnitures.GlowWoodSofaType2>();
 
-			if (Main.tile[i, j].TileFrameX / 18 < 1) {
+			if (Main.tile[i, j].TileFrameX / 18 < 1)
+			{
 				player.cursorItemIconReversed = true;
 			}
 		}
@@ -105,7 +116,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 			{
 				zero = Vector2.Zero;
 			}
-			Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodSofaGlow");
+			Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodSofaType2Glow");
 			spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(0.8f, 0.8f, 0.8f, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
 
 			base.PostDraw(i, j, spriteBatch);

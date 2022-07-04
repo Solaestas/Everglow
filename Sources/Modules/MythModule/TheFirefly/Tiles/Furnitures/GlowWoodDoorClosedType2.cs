@@ -1,12 +1,9 @@
 using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures;
-using Microsoft.Xna.Framework;
-using Terraria;
+using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.DataStructures;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.Enums;
-using Terraria.ID;
-using Terraria.ModLoader;
 using Terraria.ObjectData;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures

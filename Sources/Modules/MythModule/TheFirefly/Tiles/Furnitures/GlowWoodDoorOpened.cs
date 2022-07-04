@@ -1,12 +1,9 @@
 using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures;
-using Microsoft.Xna.Framework;
-using Terraria;
+using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.DataStructures;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.Enums;
-using Terraria.ID;
-using Terraria.ModLoader;
 using Terraria.ObjectData;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
@@ -93,6 +90,19 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 			player.noThrow = 2;
 			player.cursorItemIconEnabled = true;
 			player.cursorItemIconID = ModContent.ItemType<GlowWoodDoor>();
+		}
+		public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
+		{
+			var tile = Main.tile[i, j];
+			Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+			if (Main.drawToScreen)
+			{
+				zero = Vector2.Zero;
+			}
+			Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodDoorOpenedGlow");
+			spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(0.8f, 0.8f, 0.8f, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
+
+			base.PostDraw(i, j, spriteBatch);
 		}
 	}
 }
