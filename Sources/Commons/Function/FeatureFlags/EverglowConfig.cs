@@ -42,7 +42,11 @@ namespace Everglow.Sources.Commons.Function.FeatureFlags
         [DrawTicks]
         public TextureReplaceMode TextureReplace;
 
-		public override void OnChanged() {
+        [DefaultValue(true)]
+        [Label("Mods.Everglow.Config.ItemPickSoundReplace.Label")]
+        public bool ItemPickSoundReplace;
+
+        public override void OnChanged() {
             if ((int)TextureReplace >= 3) {
                 TextureReplace = TextureReplaceMode.Terraria;
             }

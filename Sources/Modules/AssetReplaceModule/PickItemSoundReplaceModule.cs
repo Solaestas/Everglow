@@ -1,5 +1,6 @@
 ﻿using Everglow.Sources.Commons.Core.ModHooks;
 using Everglow.Sources.Commons.Core.ModuleSystem;
+using Everglow.Sources.Commons.Function.FeatureFlags;
 using Microsoft.Xna.Framework.Audio;
 using Terraria.Audio;
 
@@ -10,16 +11,15 @@ namespace Everglow.Sources.Modules.AssetReplaceModule
 		public string Name => "Pick Item Sound Modify";
 
 		public void Load() {
-            _playOriginalSound = false;
+            _playOriginalSound = true;
             On.Terraria.UI.ItemSlot.LeftClick_ItemArray_int_int += PatchLeftClick;
             On.Terraria.UI.ItemSlot.RightClick_ItemArray_int_int += PatchRightClick;
             On.Terraria.Audio.SoundEngine.PlaySound_int_int_int_int_float_float += PatchLegacyIDPlaySound;
 		}
 
         private void PatchRightClick(On.Terraria.UI.ItemSlot.orig_RightClick_ItemArray_int_int orig, Item[] inv, int context, int slot) {
-            if (Main.mouseRight && Main.stackSplit <= 1) {
-                _playOriginalSound = true;
-
+            _playOriginalSound = true;
+            if (ModContent.GetInstance<EverglowClientConfig>().ItemPickSoundReplace && Main.mouseRight && Main.stackSplit <= 1) {
                 SoundStyle? customSoundStyle = null;
 
                 IModifyItemPickSound.Invoke(inv[slot], context, false, ref customSoundStyle, ref _playOriginalSound);
@@ -29,17 +29,14 @@ namespace Everglow.Sources.Modules.AssetReplaceModule
                 }
 
                 orig.Invoke(inv, context, slot);
-
-                _playOriginalSound = false;
                 return;
             }
             orig.Invoke(inv, context, slot);
         }
 
         private void PatchLeftClick(On.Terraria.UI.ItemSlot.orig_LeftClick_ItemArray_int_int orig, Item[] inv, int context, int slot) {
-            if (Main.mouseLeft && Main.mouseLeftRelease) {
-                _playOriginalSound = true;
-
+            _playOriginalSound = true;
+            if (ModContent.GetInstance<EverglowClientConfig>().ItemPickSoundReplace && Main.mouseLeft && Main.mouseLeftRelease) {
                 SoundStyle? customSoundStyle = null;
 
                 if (!Main.mouseItem.IsAir)
@@ -52,8 +49,6 @@ namespace Everglow.Sources.Modules.AssetReplaceModule
                 }
 
                 orig.Invoke(inv, context, slot);
-
-                _playOriginalSound = false;
                 return;
             }
             orig.Invoke(inv, context, slot);
