@@ -4,18 +4,18 @@ using Everglow.Sources.Commons.Function.FeatureFlags;
 using Microsoft.Xna.Framework.Audio;
 using Terraria.Audio;
 
-namespace Everglow.Sources.Modules.AssetReplaceModule
+namespace Everglow.Sources.Modules.AssetReplaceModule.SoundReplace
 {
     internal class PickItemSoundReplaceModule : IModule
-	{
-		public string Name => "Pick Item Sound Modify";
+    {
+        public string Name => "Pick Item Sound Modify";
 
-		public void Load() {
+        public void Load() {
             _playOriginalSound = true;
             On.Terraria.UI.ItemSlot.LeftClick_ItemArray_int_int += PatchLeftClick;
             On.Terraria.UI.ItemSlot.RightClick_ItemArray_int_int += PatchRightClick;
             On.Terraria.Audio.SoundEngine.PlaySound_int_int_int_int_float_float += PatchLegacyIDPlaySound;
-		}
+        }
 
         private void PatchRightClick(On.Terraria.UI.ItemSlot.orig_RightClick_ItemArray_int_int orig, Item[] inv, int context, int slot) {
             _playOriginalSound = true;
@@ -65,5 +65,5 @@ namespace Everglow.Sources.Modules.AssetReplaceModule
 
         public void Unload() {
         }
-	}
+    }
 }
