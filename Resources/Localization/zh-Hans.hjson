@@ -4,6 +4,10 @@ Mods:
 	{
 		Common:
 		{
+			Hour : "小时"
+			Minute : "分钟"
+			Second : "秒"
+			Duration : "持续时间"
 			WarWhipGT :
 				'''
 				无召唤标记伤害
@@ -33,6 +37,7 @@ Mods:
 			#食物系统FoodSystem
 			FoodSystem:
 			{
+				Satiety : "饱食度"
 				CannotEat : "你吃饱了"
 				CannotDrink : "你不想再喝了"
 			}

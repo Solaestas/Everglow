@@ -17,7 +17,7 @@
         {
 
             int CurrentSatiety = Main.LocalPlayer.GetModPlayer<FoodModPlayer>().CurrentSatiety;
-            return $"{CurrentSatiety}";
+            return $"{CurrentSatiety} Satiety";
         }
     }
 

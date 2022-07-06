@@ -1,46 +1,52 @@
-﻿Mods: {
-	Everglow: {
-		Common: {
+﻿Mods:
+{
+	Everglow:
+	{
+		Common:
+		{
+			Hour : "hour"
+			Minute : "minute"
+			Second : "second"
+			Duration : "duration"
 			WarWhipGT :
 				'''
-				No summon tag damage
-				Your summons will focus struck enemies
+				Нет повреждений от метки призыва
+				Ваши призываемые существа будут сосредоточены на пораженных врагах
 				'''
 				#{$Mods.Everglow.Common.WarWhipGT}
 			WhipGT :
 				'''
-				 summon tag damage
-				Your summons will focus struck enemies
+				 урон от метки призыва
+				Ваши призываемые существа будут сосредоточены на пораженных врагах
 				'''
 				#{$Mods.Everglow.Common.WhipGT}
-			ClubGT : Spin to strike enemies
+			ClubGT : Вращайте, чтобы поразить врагов
 			#{$Mods.Everglow.Common.ClubGT}
-			RapierGT : Right click and hold to charge an invincibility dash with high damage
+			RapierGT : Щелкните правой кнопкой мыши и удерживайте, чтобы зарядить рывок непобедимости с высоким уроном
 			#{$Mods.Everglow.Common.RapierGT}
-			NoAmmoConsum : Does not consum ammo
+			NoAmmoConsum : Не расходует боеприпасы
 			#{$Mods.Everglow.Common.NoAmmoConsum}
-			Acytaea : Acytaea
+			Acytaea : Ацитея
 			#{$Mods.Everglow.Common.Acytaea}
-			ExcluWeapon : Exclusive weapon
+			ExcluWeapon : Эксклюзивное оружие
 			#{$Mods.Everglow.Common.ExcluWeapon}
-			MythWeapon : Mythical weapon
+			MythWeapon : Мифическое оружие
 			#{$Mods.Everglow.Common.MythWeapon}
-			LegendWeapon : Legendary weapon
+			LegendWeapon : Легендарное оружие
 			#{$Mods.Everglow.Common.LegendWeapon}
 
 			#世界系统WorldGen
 			WorldSystem:{
-				WorldCreate_Def : "Generating World"
-				WorldEnter_Def : "Entering World"
-				BuildMothCave : "Generating The Cocoon"
+				WorldCreate_Def : "Генерация Мира""
+				WorldEnter_Def : "Вхождение в Мир""
+				BuildMothCave : "Генерация Кокона"
 			}
 
 			#食物系统FoodSystem
 			FoodSystem:{
-				CannotEat : "You're full"
-				CannotDrink : "You don't feel like to drink"
+				CannotEat : "Ты сыт"
+				CannotDrink : "Тебе не хочется пить"
 			}
-
 		}
 		ItemName:
 		{
@@ -96,35 +102,35 @@
 			WhiteWoodFlower : "Снежный Цветок Уха"
 			WindMoveSeed : "Aeolus' Seed"
 			YellowBellFlower : "Банан долины"
-			FixCoinCrit1 : "Enchanted Coin Crit ChanceⅠ"
-			FixCoinCrit2 : "Enchanted Coin Crit ChanceⅡ"
-			FixCoinCrit3 : "Enchanted Coin Crit ChanceⅢ"
-			FixCoinCrit4 : "Enchanted Coin Crit ChanceⅣ"
-			FixCoinCrit5 : "Enchanted Coin Crit ChanceⅤ"
-			FixCoinDamage1 : "Enchanted Coin DamageⅠ"
-			FixCoinDamage2 : "Enchanted Coin DamageⅡ"
-			FixCoinDamage3 : "Enchanted Coin DamageⅢ"
-			FixCoinDamage4 : "Enchanted Coin DamageⅣ"
-			FixCoinDamage5 : "Enchanted Coin DamageⅤ"
-			FixCoinDefense1 : "Enchanted Coin DefenseⅠ"
-			FixCoinDefense2 : "Enchanted Coin DefenseⅡ"
-			FixCoinDefense3 : "Enchanted Coin DefenseⅢ"
-			FixCoinDefense4 : "Enchanted Coin DefenseⅣ"
-			FixCoinDefense5 : "Enchanted Coin DefenseⅤ"
-			FixCoinMelee1 : "Enchanted Coin Melee SpeedⅠ"
-			FixCoinMelee2 : "Enchanted Coin Melee SpeedⅡ"
-			FixCoinMelee3 : "Enchanted Coin Melee SpeedⅢ"
-			FixCoinSpeed1 : "Enchanted Coin Movement SpeedⅠ"
-			FixCoinSpeed2 : "Enchanted Coin Movement SpeedⅡ"
-			FixCoinSpeed3 : "Enchanted Coin Movement SpeedⅢ"
-			BloodyTuskTrophy : "The Tusk Trophy"
-			CorruptMothTrophy : "Corrupted Moth Trophy"
-			MothRelic : "Corrupted Moth Relic"
-			TuskRelic : "The Tusk Relic"
-			CorruptMothTreasureBag : "Treasure Bag (Corrupted Moth)"
-			CursedJawbone : "Cursed Jawbone"
-			EvilCocoon : "Magical Cocoon"
-			TuskTreasureBag : "Treasure Bag (The Tusk)"
+			FixCoinCrit1 : "Критический шанс Зачарованной монетыⅠ"
+			FixCoinCrit2 : "Критический шанс Зачарованной монетыⅡ"
+			FixCoinCrit3 : "Критический шанс Зачарованной монетыⅢ"
+			FixCoinCrit4 : "Критический шанс Зачарованной монетыⅣ"
+			FixCoinCrit5 : "Критический шанс Зачарованной монетыⅤ"
+			FixCoinDamage1 : "Урон Зачарованной монетыⅠ"
+			FixCoinDamage2 : "Урон Зачарованной монетыⅡ"
+			FixCoinDamage3 : "Урон Зачарованной монетыⅢ"
+			FixCoinDamage4 : "Урон Зачарованной монетыⅣ"
+			FixCoinDamage5 : "Урон Зачарованной монетыⅤ"
+			FixCoinDefense1 : "Защита Зачарованной монетыⅠ"
+			FixCoinDefense2 : "Защита Зачарованной монетыⅡ"
+			FixCoinDefense3 : "Защита Зачарованной монетыⅢ"
+			FixCoinDefense4 : "Защита Зачарованной монетыⅣ"
+			FixCoinDefense5 : "Защита Зачарованной монетыⅤ"
+			FixCoinMelee1 : "Скорость ближнего боя Зачарованной монетыⅠ"
+			FixCoinMelee2 : "Скорость ближнего боя Зачарованной монетыⅡ"
+			FixCoinMelee3 : "Скорость ближнего боя Зачарованной монетыⅢ"
+			FixCoinSpeed1 : "Скорость передвижения Зачарованной монетыⅠ"
+			FixCoinSpeed2 : "Скорость передвижения Зачарованной монетыⅡ"
+			FixCoinSpeed3 : "Скорость передвижения Зачарованной монетыⅢ"
+			BloodyTuskTrophy : "Трофей Бивня"
+			CorruptMothTrophy : "Трофей Испорченного Мотылька"
+			MothRelic : "Реликвия Испорченного Мотылька"
+			TuskRelic : "Реликвия Бивня"
+			CorruptMothTreasureBag : "Мешок с Сокровищами (Испорченный Мотылька)"
+			CursedJawbone : "Проклятая Челюстная кость"
+			EvilCocoon : "Магический Кокон"
+			TuskTreasureBag : "Мешок с Сокровищами (Бивень)"
 			FragransBlade : 金秋爽夜
 			FragransBoomerang : Swirl Cloud At Night
 			FragransBow : Fragrans Branch

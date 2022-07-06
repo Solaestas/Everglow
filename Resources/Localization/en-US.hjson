@@ -4,6 +4,10 @@ Mods:
 	{
 		Common:
 		{
+			Hour : "hour"
+			Minute : "minute"
+			Second : "second"
+			Duration : "duration"
 			WarWhipGT :
 				'''
 				No summon tag damage
@@ -33,6 +37,7 @@ Mods:
 			#食物系统FoodSystem
 			FoodSystem:
 			{
+				Satiety : "Satiety"
 				CannotEat : "You're full"
 				CannotDrink : "You don't feel like to drink"
 			}
