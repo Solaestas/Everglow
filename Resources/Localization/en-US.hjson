@@ -37,8 +37,7 @@ Mods:
 			#食物系统FoodSystem
 			FoodSystem:
 			{
-				Satiety : "Satiety"
-				CannotEat : "You're full"
+				CannotEat : "You are full"
 				CannotDrink : "You don't feel like to drink"
 			}
 		}
@@ -555,7 +554,7 @@ Mods:
 
 			#食物系统buff
 			AleBuff : "Tipsy"
-			AppleBuff : Apple
+			AppleBuff : "Apple"
 			AppleJuiceBuff : Apple Juice
 			ApplePieBuff : Apple Pie
 			ApricotBuff : Apricot

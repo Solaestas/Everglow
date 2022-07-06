@@ -37,8 +37,8 @@
 
 			#世界系统WorldGen
 			WorldSystem:{
-				WorldCreate_Def : "Генерация Мира""
-				WorldEnter_Def : "Вхождение в Мир""
+				WorldCreate_Def : "Генерация Мира"
+				WorldEnter_Def : "Вхождение в Мир"
 				BuildMothCave : "Генерация Кокона"
 			}
 

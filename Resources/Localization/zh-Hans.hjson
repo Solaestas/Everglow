@@ -37,7 +37,6 @@ Mods:
 			#食物系统FoodSystem
 			FoodSystem:
 			{
-				Satiety : "饱食度"
 				CannotEat : "你吃饱了"
 				CannotDrink : "你不想再喝了"
 			}

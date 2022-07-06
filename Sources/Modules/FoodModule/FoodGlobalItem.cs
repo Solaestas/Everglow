@@ -647,13 +647,13 @@ namespace Everglow.Sources.Modules.FoodModule
                 {
                     tooltips.RemoveAll((tp) => tp.Name.Contains("Tooltip"));
                     tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, FoodInfo.Description));
-                    tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, $"{FoodInfo.Satiety}" + Language.GetTextValue("Mods.Everglow.Common.FoodSystem.Satiety")));
+                    tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, $"{FoodInfo.Satiety} " + Language.GetTextValue("Mods.Everglow.InfoDisplay.Satiety")));
                 }
                 else
                 {
                     // 否则加到最后面
                     tooltips.Add(new TooltipLine(Mod, item.Name, FoodInfo.Description));
-                    tooltips.Add(new TooltipLine(Mod, item.Name, $"{FoodInfo.Satiety}" + Language.GetTextValue("Mods.Everglow.Common.FoodSystem.Satiety")));
+                    tooltips.Add(new TooltipLine(Mod, item.Name, $"{FoodInfo.Satiety} " + Language.GetTextValue("Mods.Everglow.InfoDisplay.Satiety")));
                 }
 
                 int buffTimeIndex = tooltips.FindIndex((tp) => tp.Name.Contains("BuffTime"));
