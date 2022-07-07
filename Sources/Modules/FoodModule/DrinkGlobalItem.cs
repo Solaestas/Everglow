@@ -26,7 +26,7 @@ namespace Everglow.Sources.Modules.FoodModule
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<AleBuff> (),
                         BuffTime = new FoodDuration(0, 7, 30),
-                        Description =  Language.GetTextValue("Mods.Everglow.BuffDescription.SakeBuff")
+                        Name =  Language.GetTextValue("Mods.Everglow.BuffDescription.SakeBuff")
                     }
                 },
                 //苹果汁
@@ -36,7 +36,7 @@ namespace Everglow.Sources.Modules.FoodModule
                        Thirsty = false ,
                        BuffType = ModContent.BuffType<AppleJuiceBuff>(),
                        BuffTime = new FoodDuration(0, 7, 30),
-                       Description =  Language.GetTextValue("Mods.Everglow.BuffDescription.AppleJuiceBuff")
+                       Name =  Language.GetTextValue("Mods.Everglow.BuffDescription.AppleJuiceBuff")
                     }
                 },
                  //冰冻香蕉代基里
@@ -46,7 +46,7 @@ namespace Everglow.Sources.Modules.FoodModule
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<BananaDaiquiriBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30),
-                        Description = Language.GetTextValue("Mods.Everglow.BuffDescription.BananaDaiquiriBuff")
+                        Name = Language.GetTextValue("Mods.Everglow.BuffDescription.BananaDaiquiriBuff")
                     }
                 },
                  //血腥麝香葡萄
@@ -56,7 +56,7 @@ namespace Everglow.Sources.Modules.FoodModule
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<BloodyMoscatoBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30),
-                        Description = Language.GetTextValue("Mods.Everglow.BuffDescription.BloodyMoscatoBuff")
+                        Name = Language.GetTextValue("Mods.Everglow.BuffDescription.BloodyMoscatoBuff")
                     }
                 },
                 //奶油苏打水
@@ -66,7 +66,7 @@ namespace Everglow.Sources.Modules.FoodModule
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<CreamSodaBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30),
-                        Description = Language.GetTextValue("Mods.Everglow.BuffDescription.CreamSodaBuff")
+                        Name = Language.GetTextValue("Mods.Everglow.BuffDescription.CreamSodaBuff")
                     }
                 },
                 //咖啡
@@ -76,7 +76,7 @@ namespace Everglow.Sources.Modules.FoodModule
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<CoffeeCupBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30),
-                        Description = Language.GetTextValue("Mods.Everglow.BuffDescription.CoffeeCupBuff")
+                        Name = Language.GetTextValue("Mods.Everglow.BuffDescription.CoffeeCupBuff")
                     }
                 },
                 //果汁
@@ -86,7 +86,7 @@ namespace Everglow.Sources.Modules.FoodModule
                        Thirsty = false ,
                        BuffType = ModContent.BuffType<FruitJuiceBuff>(),
                        BuffTime = new FoodDuration(0, 7, 30),
-                        Description = Language.GetTextValue("Mods.Everglow.BuffDescription.FruitJuiceBuff")
+                        Name = Language.GetTextValue("Mods.Everglow.BuffDescription.FruitJuiceBuff")
                     }
                 },
                 //葡萄汁
@@ -96,7 +96,7 @@ namespace Everglow.Sources.Modules.FoodModule
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<GrapeJuiceBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30),
-                        Description = Language.GetTextValue("Mods.Everglow.BuffDescription.GrapeJuiceBuff")
+                        Name = Language.GetTextValue("Mods.Everglow.BuffDescription.GrapeJuiceBuff")
                     }
                 },                
                 //柠檬水
@@ -106,7 +106,7 @@ namespace Everglow.Sources.Modules.FoodModule
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<LemonadeBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30),
-                        Description = Language.GetTextValue("Mods.Everglow.BuffDescription.LemonadeBuff")
+                        Name = Language.GetTextValue("Mods.Everglow.BuffDescription.LemonadeBuff")
                     }
                 },     
                 //盒装牛奶
@@ -116,7 +116,7 @@ namespace Everglow.Sources.Modules.FoodModule
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<MilkCartonBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30),
-                        Description = Language.GetTextValue("Mods.Everglow.BuffDescription.MilkCartonBuff")
+                        Name = Language.GetTextValue("Mods.Everglow.BuffDescription.MilkCartonBuff")
                     }
                 },
                 //奶昔
@@ -126,7 +126,7 @@ namespace Everglow.Sources.Modules.FoodModule
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<MilkshakeBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30),
-                        Description = Language.GetTextValue("Mods.Everglow.BuffDescription.MilkshakeBuff")
+                        Name = Language.GetTextValue("Mods.Everglow.BuffDescription.MilkshakeBuff")
                     }
                 },
                 //桃子果酒
@@ -136,7 +136,7 @@ namespace Everglow.Sources.Modules.FoodModule
                         Thirsty = false,
                         BuffType = ModContent.BuffType<PeachSangriaBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30),
-                        Description = Language.GetTextValue("Mods.Everglow.BuffDescription.PeachSangriaBuff")
+                        Name = Language.GetTextValue("Mods.Everglow.BuffDescription.PeachSangriaBuff")
                     }
                 },
                 //椰林飘香
@@ -146,7 +146,7 @@ namespace Everglow.Sources.Modules.FoodModule
                         Thirsty = false,
                         BuffType = ModContent.BuffType<PinaColadaBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30),
-                        Description = Language.GetTextValue("Mods.Everglow.BuffDescription.PinaColadaBuff")
+                        Name = Language.GetTextValue("Mods.Everglow.BuffDescription.PinaColadaBuff")
                     }
                 },
                 //七彩潘趣酒
@@ -156,7 +156,7 @@ namespace Everglow.Sources.Modules.FoodModule
                         Thirsty = false,
                         BuffType = ModContent.BuffType<PrismaticPunchBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30),
-                        Description = Language.GetTextValue("Mods.Everglow.BuffDescription.PrismaticPunchBuff")
+                        Name = Language.GetTextValue("Mods.Everglow.BuffDescription.PrismaticPunchBuff")
                     }
                 },                
                 //清酒
@@ -166,7 +166,7 @@ namespace Everglow.Sources.Modules.FoodModule
                         Thirsty = false,
                         BuffType = ModContent.BuffType<SakeBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30),
-                        Description = Language.GetTextValue("Mods.Everglow.BuffDescription.SakeBuff")
+                        Name = Language.GetTextValue("Mods.Everglow.BuffDescription.SakeBuff")
                     }
                 },
                 //暗黑奶昔
@@ -177,7 +177,7 @@ namespace Everglow.Sources.Modules.FoodModule
                         BuffType = ModContent.
                         BuffType<SmoothieofDarknessBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30),
-                        Description = Language.GetTextValue("Mods.Everglow.BuffDescription.SmoothieofDarknessBuff")
+                        Name = Language.GetTextValue("Mods.Everglow.BuffDescription.SmoothieofDarknessBuff")
                     }
                 }, 
                 //一杯茶
@@ -187,7 +187,7 @@ namespace Everglow.Sources.Modules.FoodModule
                         Thirsty = false,
                         BuffType = ModContent.BuffType<TeacupBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30),
-                        Description = Language.GetTextValue("Mods.Everglow.BuffDescription.TeacupBuff")
+                        Name = Language.GetTextValue("Mods.Everglow.BuffDescription.TeacupBuff")
                     }
                 },
                 //热带奶昔
@@ -197,7 +197,7 @@ namespace Everglow.Sources.Modules.FoodModule
                         Thirsty = false,
                         BuffType = ModContent.BuffType<TropicalSmoothieBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30),
-                        Description = Language.GetTextValue("Mods.Everglow.BuffDescription.TropicalSmoothieBuff")
+                        Name = Language.GetTextValue("Mods.Everglow.BuffDescription.TropicalSmoothieBuff")
                     }
                 }
             };
@@ -217,12 +217,12 @@ namespace Everglow.Sources.Modules.FoodModule
                 if (firstIndex >= 0)
                 {
                     tooltips.RemoveAll((tp) => tp.Name.Contains("Tooltip"));
-                    tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, DrinkInfo.Description));
+                    tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.BuffDescription." + DrinkInfo.Name)));
                 }
                 else
                 {
                     // 否则加到最后面
-                    tooltips.Add(new TooltipLine(Mod, item.Name, DrinkInfo.Description));
+                    tooltips.Add(new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.BuffDescription."+ DrinkInfo.Name)));
                 }
 
                 int buffTimeIndex = tooltips.FindIndex((tp) => tp.Name.Contains("BuffTime"));
