@@ -17,7 +17,7 @@
         {
 
             int CurrentSatiety = Main.LocalPlayer.GetModPlayer<FoodModPlayer>().CurrentSatiety;
-            return $"{CurrentSatiety} Satiety";
+            return $"{CurrentSatiety}"+ Terraria.Localization.Language.GetTextValue("Mods.Everglow.InfoDisplay.Satiety");
         }
     }
 
