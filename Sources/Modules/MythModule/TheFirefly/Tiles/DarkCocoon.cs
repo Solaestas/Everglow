@@ -41,7 +41,35 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                         }
                     }
                 }
-            }           
+            }
+            if (!Main.tile[i, j - 1].HasTile && !Main.tile[i + 1, j - 1].HasTile && !Main.tile[i - 1, j - 1].HasTile)
+            {
+                if (Main.rand.NextBool(8))
+                {
+                    switch (Main.rand.Next(1, 4))
+                    {
+                        case 1:
+                            WorldGen.PlaceTile(i, j - 2, (ushort)ModContent.TileType<Tiles.BlackStarShrubSmall>());
+                            short numa = (short)(Main.rand.Next(0, 6) * 48);
+                            Main.tile[i, j - 2].TileFrameX = numa;
+                            Main.tile[i, j - 1].TileFrameX = numa;
+                            break;
+                        case 2:
+                            WorldGen.PlaceTile(i, j - 2, (ushort)ModContent.TileType<Tiles.BlackStarShrubSmall>());
+                            short num = (short)(Main.rand.Next(0, 6) * 48);
+                            Main.tile[i, j - 2].TileFrameX = num;
+                            Main.tile[i, j - 1].TileFrameX = num;
+                            break;
+                        case 3:
+                            WorldGen.PlaceTile(i, j - 3, (ushort)ModContent.TileType<Tiles.BlackStarShrub>());
+                            short num1 = (short)(Main.rand.Next(0, 6) * 72);
+                            Main.tile[i, j - 3].TileFrameX = num1;
+                            Main.tile[i, j - 2].TileFrameX = num1;
+                            Main.tile[i, j - 1].TileFrameX = num1;
+                            break;
+                    }
+                }
+            }
         }
         public override bool CanExplode(int i, int j)
         {

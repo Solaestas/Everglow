@@ -202,22 +202,22 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
                 TileSpin tileSpin = new TileSpin();
                 tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18);
                 Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodChandelierType5");
-                tileSpin.DrawRotatedTile(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, tex,new Rectangle(30 + Adx, 0, 10, 48), new Vector2(5, 0), 16, -2);
+                tileSpin.DrawRotatedTile(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, tex,new Rectangle(30 + Adx, 0, 10, 48), new Vector2(5, 0), 16, -2, 1);
 
 
 
                 tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18);
-                tileSpin.DrawRotatedTile(i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18, tex, new Rectangle(40 + Adx, 0, 10, 48), new Vector2(5, 0), 10, -2);
+                tileSpin.DrawRotatedTile(i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18, tex, new Rectangle(40 + Adx, 0, 10, 48), new Vector2(5, 0), 10, -2, 1);
 
 
 
                 tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1);
-                tileSpin.DrawRotatedTile(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1, tex, new Rectangle(18 + Adx, 0, 10, 48), new Vector2(5, 0), 4, -18);
+                tileSpin.DrawRotatedTile(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1, tex, new Rectangle(18 + Adx, 0, 10, 48), new Vector2(5, 0), 4, -18, 1);
 
 
 
                 tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18);
-                tileSpin.DrawRotatedTile(i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18, tex, new Rectangle(6 + Adx, 0, 10, 48), new Vector2(5, 0), 8, -2);
+                tileSpin.DrawRotatedTile(i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18, tex, new Rectangle(6 + Adx, 0, 10, 48), new Vector2(5, 0), 8, -2, 1);
 
             }
             return false;
