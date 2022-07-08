@@ -1,4 +1,5 @@
 ﻿using Everglow.Sources.Modules.FoodModule.Buffs.VanillaFoodBuffs;
+using Everglow.Sources.Modules.FoodModule.Utils;
 using Everglow.Sources.Modules.FoodModule.DataStructures;
 using Everglow.Sources.Modules.FoodModule.Buffs;
 using Everglow.Sources.Modules.FoodModule.Items;
@@ -695,6 +696,8 @@ namespace Everglow.Sources.Modules.FoodModule
             }
         }
 
+       
+   
         public override bool CanUseItem(Item item, Player player)
         {
             var foodPlayer = player.GetModPlayer<FoodModPlayer>();
@@ -702,9 +705,14 @@ namespace Everglow.Sources.Modules.FoodModule
             if (m_vanillaFoodInfos.ContainsKey(item.type))
             {
                 var FoodInfo = m_vanillaFoodInfos[item.type];
-                if (!foodPlayer.CanEat(FoodInfo))
+                if (!foodPlayer.CanEat(FoodInfo) && foodPlayer.CanText())
                 {
-                    Main.NewText(Language.GetTextValue("Mods.Everglow.Common.FoodSystem.CannotEat"));
+                   CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height),
+                   new Color(255, 0, 0),
+                   Language.GetTextValue("Mods.Everglow.Common.FoodSystem.CannotEat"),
+                   true,false);
+
+                    foodPlayer.TextTimer = FoodUtils.GetFrames(0, 0, 5, 0);
                     return false;
                 }
             }
@@ -712,10 +720,15 @@ namespace Everglow.Sources.Modules.FoodModule
             {
                 var foodItem = item.ModItem as FoodBase;
                 var FoodInfo = foodItem.FoodInfo;
-                if (!foodPlayer.CanEat(FoodInfo))
+                if (!foodPlayer.CanEat(FoodInfo) && foodPlayer.CanText())
                 {
-                    Main.NewText(Language.GetTextValue("Mods.Everglow.Common.FoodSystem.CannotEat"));
-                    return false;
+                   CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height),
+                   new Color(255, 0, 0),
+                   Language.GetTextValue("Mods.Everglow.Common.FoodSystem.CannotEat"),
+                   true,false);
+
+                   foodPlayer.TextTimer = FoodUtils.GetFrames(0, 0, 5, 0);
+                   return false;
                 }
             }
             return base.CanUseItem(item, player);

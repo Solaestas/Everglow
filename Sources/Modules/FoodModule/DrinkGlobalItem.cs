@@ -1,5 +1,6 @@
 using Everglow.Sources.Modules.FoodModule.Buffs;
 using Everglow.Sources.Modules.FoodModule.DataStructures;
+using Everglow.Sources.Modules.FoodModule.Utils;
 using Everglow.Sources.Modules.FoodModule.Items;
 using Everglow.Sources.Modules.FoodModule.Buffs.VanillaDrinkBuffs;
 using Terraria.Localization;
@@ -187,7 +188,7 @@ namespace Everglow.Sources.Modules.FoodModule
                         Thirsty = false,
                         BuffType = ModContent.BuffType<TeacupBuff>(),
                         BuffTime = new FoodDuration(0, 7, 30),
-                        Name = "TeacupBuff")
+                        Name = "TeacupBuff"
                     }
                 },
                 //热带奶昔
@@ -267,24 +268,35 @@ namespace Everglow.Sources.Modules.FoodModule
 
         public override bool CanUseItem(Item item, Player player)
         {
+            bool CanText = true;
             var foodPlayer = player.GetModPlayer<FoodModPlayer>();
             // 判断能否喝下物品
-            if (m_vanillaDrinkInfos.ContainsKey(item.type))
+            if (m_vanillaDrinkInfos.ContainsKey(item.type) && CanText == true)
             {
                 var drinkInfo = m_vanillaDrinkInfos[item.type];
-                if (!foodPlayer.CanDrink(drinkInfo))
+                if (!foodPlayer.CanDrink(drinkInfo) && foodPlayer.CanText())
                 {
-                    Main.NewText(Language.GetTextValue("Mods.Everglow.Common.FoodSystem.CannotDrink"));
+                    CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height),
+                    new Color(255, 0, 0), 
+                    Language.GetTextValue("Mods.Everglow.Common.FoodSystem.CannotDrink"),
+                    true, false);
+
+                    foodPlayer.TextTimer = FoodUtils.GetFrames(0, 0, 5, 0);
                     return false;
                 }
             }
-            else if (item.ModItem is FoodBase)
+            else if (item.ModItem is FoodBase && CanText == true)
             {
                 var foodItem = item.ModItem as DrinkBase;
                 var drinkInfo = foodItem.DrinkInfo;
-                if (!foodPlayer.CanDrink(drinkInfo))
+                if (!foodPlayer.CanDrink(drinkInfo) && foodPlayer.CanText())
                 {
-                    Main.NewText(Language.GetTextValue("Mods.Everglow.Common.FoodSystem.CannotDrink"));
+                    CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height),
+                    new Color(255, 0, 0),
+                    Language.GetTextValue("Mods.Everglow.Common.FoodSystem.CannotDrink"),
+                    true,false);
+
+                    foodPlayer.TextTimer = FoodUtils.GetFrames(0, 0, 5, 0);
                     return false;
                 }
             }
@@ -294,6 +306,7 @@ namespace Everglow.Sources.Modules.FoodModule
 
         public override bool ConsumeItem(Item item, Player player)
         {
+            
             var foodPlayer = player.GetModPlayer<FoodModPlayer>();
             // 判断能否喝下物品
             if (m_vanillaDrinkInfos.ContainsKey(item.type))
@@ -301,7 +314,8 @@ namespace Everglow.Sources.Modules.FoodModule
                 var drinkInfo = m_vanillaDrinkInfos[item.type];
                 if (!foodPlayer.CanDrink(drinkInfo))
                 {
-                    Main.NewText(Language.GetTextValue("Mods.Everglow.Common.FoodSystem.CannotDrink"));
+                    //Main.NewText(Language.GetTextValue("Mods.Everglow.Common.FoodSystem.CannotDrink"));
+
                     return false;
                 }
             }
@@ -311,7 +325,7 @@ namespace Everglow.Sources.Modules.FoodModule
                 var drinkInfo = foodItem.DrinkInfo;
                 if (!foodPlayer.CanDrink(drinkInfo))
                 {
-                    Main.NewText(Language.GetTextValue("Mods.Everglow.Common.FoodSystem.CannotDrink"));
+                    //Main.NewText(Language.GetTextValue("Mods.Everglow.Common.FoodSystem.CannotDrink"));
                     return false;
                 }
             }
