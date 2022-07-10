@@ -1,13 +1,5 @@
 ﻿sampler uImage0 : register(s0);
-texture2D tex0; 
-sampler2D uImage1 = sampler_state //对tex0的纹理采样
-{
-    Texture = <tex0>; 
-    MinFilter = Linear; 
-    MagFilter = Linear;
-    AddressU = Wrap; 
-    AddressV = Wrap;
-};
+sampler uImage1 : register(s1);
 float i;
 float4 PSFunction(float2 coords : TEXCOORD0) : COLOR0//用一张图片（uImage1）去扭曲uImage0，r代表方向，g代表大小。
 {

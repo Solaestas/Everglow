@@ -42,9 +42,10 @@ namespace Everglow.Sources.Modules.MEACModule
             {
                 graphicsDevice.SetRenderTarget(Main.screenTarget);
                 graphicsDevice.Clear(Color.Transparent);
+                graphicsDevice.Textures[1] = Main.screenTargetSwap;
+                graphicsDevice.SamplerStates[1] = SamplerState.LinearClamp;
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
                 ScreenWarp.CurrentTechnique.Passes[0].Apply();
-                ScreenWarp.Parameters["tex0"].SetValue(Main.screenTargetSwap);
                 ScreenWarp.Parameters["i"].SetValue(0.02f);//扭曲程度
                 Main.spriteBatch.Draw(screen, Vector2.Zero, Color.White);
                 Main.spriteBatch.End();
