@@ -12,43 +12,32 @@ namespace Everglow.Sources.Modules.MEACModule
     internal class MEACModule : IModule
     {
         string IModule.Name => "MEAC";
-        private RenderTarget2D screen,render;
+        private RenderTarget2D screen = null, render = null;
         private Effect ScreenWarp;
         void IModule.Load()
         {
             if (!Main.dedServ)
             {
-                On.Terraria.Main.LoadWorlds += Main_LoadWorlds;
                 On.Terraria.Graphics.Effects.FilterManager.EndCapture += FilterManager_EndCapture;
-                Main.OnResolutionChanged += Main_OnResolutionChanged;
                 ScreenWarp = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/ScreenWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
             }
         }
 
-        private void Main_LoadWorlds(On.Terraria.Main.orig_LoadWorlds orig)
-        {
-            if(screen==null)
-            {
-                GraphicsDevice gd = Main.instance.GraphicsDevice;
-                screen = new RenderTarget2D(gd, gd.PresentationParameters.BackBufferWidth, gd.PresentationParameters.BackBufferHeight, false, gd.PresentationParameters.BackBufferFormat, DepthFormat.None);
-                render = new RenderTarget2D(gd, gd.PresentationParameters.BackBufferWidth, gd.PresentationParameters.BackBufferHeight, false, gd.PresentationParameters.BackBufferFormat, DepthFormat.None);
-            }
-            orig();
-        }
-
-        private void Main_OnResolutionChanged(Vector2 obj)
-        {
-            GraphicsDevice gd = Main.instance.GraphicsDevice;
-            screen = new RenderTarget2D(gd, (int)obj.X, (int)obj.Y);
-            render = new RenderTarget2D(gd, (int)obj.X, (int)obj.Y);
-        }
         private void FilterManager_EndCapture(On.Terraria.Graphics.Effects.FilterManager.orig_EndCapture orig, FilterManager self, RenderTarget2D finalTexture, RenderTarget2D screenTarget1, RenderTarget2D screenTarget2, Color clearColor)
         {
             GraphicsDevice graphicsDevice = Main.instance.GraphicsDevice;
             GetOrig(graphicsDevice);
+
+            // 直接从RT池子里取
+            var renderTargets = Everglow.RenderTargetPool.GetRenderTarget2DArray(2);
+            screen = renderTargets.Resource[0];
+            render = renderTargets.Resource[1];
+            
             graphicsDevice.SetRenderTarget(Main.screenTargetSwap);
             graphicsDevice.Clear(Color.Transparent);
             bool flag = DrawWarp(Main.spriteBatch);
+
+
             if (flag)
             {
                 graphicsDevice.SetRenderTarget(Main.screenTarget);
@@ -60,6 +49,8 @@ namespace Everglow.Sources.Modules.MEACModule
                 Main.spriteBatch.Draw(screen, Vector2.Zero, Color.White);
                 Main.spriteBatch.End();
             }
+
+            renderTargets.Release();
             orig(self, finalTexture, screenTarget1, screenTarget2, clearColor);
         }
         private bool DrawWarp(SpriteBatch sb)//扭曲层
@@ -88,13 +79,9 @@ namespace Everglow.Sources.Modules.MEACModule
             Main.spriteBatch.Draw(Main.screenTarget, Vector2.Zero, Color.White);
             Main.spriteBatch.End();
         }
+
         void IModule.Unload()
         {
-            screen.Dispose();
-            screen = null;
-
-            render.Dispose();
-            render = null;
         }
     }
 }

@@ -35,68 +35,67 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)//被砍爆的时候更新
         {
-            var tile = Main.tile[i, j];
-            try
+            int tileX = i;
+            int tileY = j - frameY / 16;
+            if (!hasRope.ContainsKey((tileX, tileY)))
             {
-                var ropes = hasRope[(i, j - tile.TileFrameY / 16)];
-                foreach (var r in ropes)
-                {
-                    Vector2 acc = new Vector2(Main.rand.NextFloat(-1, 1), 0);
-                    foreach (var m in r.mass)
-                    {
-                        m.force += acc;
-                        if (Main.rand.NextBool(7))
-                        {
-                            Dust d = Dust.NewDustDirect(m.position, 0, 0, ModContent.DustType<Dusts.GlowBluePedal>());
-                            d.velocity = m.velocity * 0.01f;
-                        }
-                        if (Main.rand.NextBool(10))
-                        {
-                            Gore g = Gore.NewGoreDirect(null, m.position, m.velocity * 0.1f, ModContent.GoreType<Gores.Branch>());
-                        }
-                        if (Main.rand.NextBool(3))
-                        {
-                            Item.NewItem(null, m.position, 16, 16, ModContent.ItemType<Items.GlowWood>());
-                        }
-                        //被砍时对mass操纵写这里
-                    }
-                }
-            }
-            catch
-            {
+                Everglow.Instance.Logger.Warn("KillMultiTile: Trying to access an non-existent FireflyTree rope");
                 return;
             }
-            ropeManager.RemoveRope(hasRope[(i, j)]);
-            hasRope.Remove((i, j));
+            var ropes = hasRope[(tileX, tileY)];
+            foreach (var r in ropes)
+            {
+                Vector2 acc = new Vector2(Main.rand.NextFloat(-1, 1), 0);
+                foreach (var m in r.mass)
+                {
+                    m.force += acc;
+                    if (Main.rand.NextBool(7))
+                    {
+                        Dust d = Dust.NewDustDirect(m.position, 0, 0, ModContent.DustType<Dusts.GlowBluePedal>());
+                        d.velocity = m.velocity * 0.01f;
+                    }
+                    if (Main.rand.NextBool(10))
+                    {
+                        Gore g = Gore.NewGoreDirect(null, m.position, m.velocity * 0.1f, ModContent.GoreType<Gores.Branch>());
+                    }
+                    if (Main.rand.NextBool(3))
+                    {
+                        Item.NewItem(null, m.position, 16, 16, ModContent.ItemType<Items.GlowWood>());
+                    }
+                    //被砍时对mass操纵写这里
+                }
+            }
+            ropeManager.RemoveRope(hasRope[(tileX, tileY)]);
+            hasRope.Remove((tileX, tileY));
         }
+
         public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
         {
             var tile = Main.tile[i, j];
-            try
+            int tileY = j - tile.TileFrameY / 16;
+            if (!hasRope.ContainsKey((i, tileY)))
             {
-                var ropes = hasRope[(i, j - tile.TileFrameY / 16)];
-                foreach (var r in ropes)
-                {
-                    Vector2 acc = new Vector2(Main.rand.NextFloat(-1, 1), 0);
-                    foreach (var m in r.mass)
-                    {
-                        m.force += acc;
-                        if (Main.rand.NextBool(17))
-                        {
-                            Dust d = Dust.NewDustDirect(m.position, 0, 0, ModContent.DustType<Dusts.GlowBluePedal>());
-                            d.velocity = m.velocity * 0.01f;
-                        }
-                        if (Main.rand.NextBool(48))
-                        {
-                            Gore g = Gore.NewGoreDirect(null, m.position, m.velocity * 0.1f, ModContent.GoreType<Gores.Branch>());
-                        }
-                        //被砍时对mass操纵写这里
-                    }
-                }
-            }
-            catch
-            {
+                Everglow.Instance.Logger.Warn("KillMultiTile: Trying to access an non-existent FireflyTree rope");
                 return;
+            }
+            var ropes = hasRope[(i, tileY)];
+            foreach (var r in ropes)
+            {
+                Vector2 acc = new Vector2(Main.rand.NextFloat(-1, 1), 0);
+                foreach (var m in r.mass)
+                {
+                    m.force += acc;
+                    if (Main.rand.NextBool(17))
+                    {
+                        Dust d = Dust.NewDustDirect(m.position, 0, 0, ModContent.DustType<Dusts.GlowBluePedal>());
+                        d.velocity = m.velocity * 0.01f;
+                    }
+                    if (Main.rand.NextBool(48))
+                    {
+                        Gore g = Gore.NewGoreDirect(null, m.position, m.velocity * 0.1f, ModContent.GoreType<Gores.Branch>());
+                    }
+                    //被砍时对mass操纵写这里
+                }
             }
         }
         public override void NumDust(int i, int j, bool fail, ref int num)
@@ -108,6 +107,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
         private List<Rope>[] ropes = new List<Rope>[16];
         private Vector2[] basePositions = new Vector2[16];
         private Dictionary<(int x, int y), List<Rope>> hasRope = new Dictionary<(int x, int y), List<Rope>>();
+
+        public void PrepareForNewWorld()
+        {
+            hasRope.Clear();
+            ropeManager.Clear(114);
+        }
+
         public void DrawRopes()
         {
             if (!Main.gamePaused)

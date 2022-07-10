@@ -31,7 +31,6 @@ namespace Everglow.Sources.Modules.MythModule
             }
         }
 
-
         private void WaterShaderData_StepLiquids(On.Terraria.GameContent.Shaders.WaterShaderData.orig_StepLiquids orig, WaterShaderData self)
         {
             orig(self);
