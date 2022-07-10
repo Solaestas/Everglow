@@ -16,8 +16,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
         {
             if (Main.rand.NextBool(6))
             {
-
-                if (!Main.tile[i, j].IsHalfBlock && !Main.tile[i + 1, j].IsHalfBlock && !Main.tile[i - 1, j].IsHalfBlock && !Main.tile[i + 2, j].IsHalfBlock && !Main.tile[i - 2, j].IsHalfBlock)
+                if (Main.tile[i, j].IsHalfBlock && Main.tile[i + 1, j].IsHalfBlock && Main.tile[i - 1, j].IsHalfBlock && !Main.tile[i + 2, j].IsHalfBlock && !Main.tile[i - 2, j].IsHalfBlock)
                 {
                     for (int x = -2; x < 3; x++)
                     {
