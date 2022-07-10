@@ -42,8 +42,18 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                     }
                 }
             }
-            if (!Main.tile[i, j - 1].HasTile && !Main.tile[i + 1, j - 1].HasTile && !Main.tile[i - 1, j - 1].HasTile)
+            if (!Main.tile[i, j - 1].HasTile && !Main.tile[i + 1, j - 1].HasTile && !Main.tile[i - 1, j - 1].HasTile && !Main.tile[i, j].IsHalfBlock && !Main.tile[i - 1, j].IsHalfBlock && !Main.tile[i + 1, j].IsHalfBlock)
             {
+                for (int x = -1; x < 2; x++)
+                {
+                    for (int y = -3; y < 4; y++)
+                    {
+                        if (Main.tile[i + x, j + y].LiquidAmount > 3)
+                        {
+                            return;
+                        }
+                    }
+                }
                 if (Main.rand.NextBool(8))
                 {
                     Tile t1 = Main.tile[i, j - 1];

@@ -53,7 +53,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                     {
                         if (!TileSpin.TileRotation.ContainsKey((i, j - tile.TileFrameY / 16 + 1)))
                         {
-                            TileSpin.TileRotation.Add((i, j - tile.TileFrameY / 16 + 1), new Vector2(-Math.Clamp(player.velocity.X, -1, 1) * 0.2f));
+                            TileSpin.TileRotation.Add((i, j - tile.TileFrameY / 16 + 1), new Vector2(Math.Clamp(player.velocity.X, -1, 1) * 0.2f));
                         }
                         else
                         {
@@ -63,7 +63,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                             rot = TileSpin.TileRotation[(i, j - tile.TileFrameY / 16 + 1)].Y;
                             if (Math.Abs(Omega) < 0.04f && Math.Abs(rot) < 0.04f)
                             {
-                                TileSpin.TileRotation[(i, j - tile.TileFrameY / 16 + 1)] = new Vector2(Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
+                                TileSpin.TileRotation[(i, j - tile.TileFrameY / 16 + 1)] = new Vector2(Omega + Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + Omega + Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
                             }
                             if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
                             {
@@ -74,7 +74,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 
                         if (!TileSpin.TileRotation.ContainsKey((i, j - tile.TileFrameY / 16)))
                         {
-                            TileSpin.TileRotation.Add((i, j - tile.TileFrameY / 16), new Vector2(-Math.Clamp(player.velocity.X, -1, 1) * 0.2f));
+                            TileSpin.TileRotation.Add((i, j - tile.TileFrameY / 16), new Vector2(Math.Clamp(player.velocity.X, -1, 1) * 0.2f));
                         }
                         else
                         {
@@ -84,7 +84,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                             rot = TileSpin.TileRotation[(i, j - tile.TileFrameY / 16)].Y;
                             if (Math.Abs(Omega) < 0.04f && Math.Abs(rot) < 0.04f)
                             {
-                                TileSpin.TileRotation[(i, j - tile.TileFrameY / 16)] = new Vector2(Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
+                                TileSpin.TileRotation[(i, j - tile.TileFrameY / 16)] = new Vector2(Omega + Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + Omega + Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
                             }
                             if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
                             {
@@ -101,15 +101,16 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             if (tile.TileFrameY == 16)
             {
                 TileSpin tileSpin = new TileSpin();
-                tileSpin.Update(i, j - tile.TileFrameY / 16);
+                tileSpin.UpdateBlackShrub(i, j - tile.TileFrameY / 16, 0.25f, 0.13f, new Vector2(0, -20), 0, 24);
                 tileSpin.Update(i, j - tile.TileFrameY / 16 + 1);
                 Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/BlackStarShrubSmallDraw");
-                tileSpin.DrawRotatedTile(i, j - tile.TileFrameY / 16, tex, new Rectangle(tile.TileFrameX, 2, 48, 36),new Vector2(24, 36), 8, 36, 0.25f);
-                tileSpin.DrawRotatedTile(i, j - tile.TileFrameY / 16 + 1, tex, new Rectangle(tile.TileFrameX, 38, 48, 36), new Vector2(24, 36), 8, 20, 1.0f);
-                tileSpin.DrawRotatedTile(i, j - tile.TileFrameY / 16, tex, new Rectangle(tile.TileFrameX, 72, 48, 36), new Vector2(24, 36), 8, 36, 0.3f);
-                tileSpin.DrawRotatedTile(i, j - tile.TileFrameY / 16, tex, new Rectangle(tile.TileFrameX, 110, 48, 36), new Vector2(24, 36), 8, 36, 0.24f);
-                tileSpin.DrawRotatedTile(i, j - tile.TileFrameY / 16, tex, new Rectangle(tile.TileFrameX, 146, 48, 36), new Vector2(24, 36), 8, 36, 0.19f);
-                tileSpin.DrawRotatedTile(i, j - tile.TileFrameY / 16, tex, new Rectangle(tile.TileFrameX, 182, 48, 36), new Vector2(24, 36), 8, 36, 0.27f);
+                tileSpin.DrawRotatedTile(i, j - tile.TileFrameY / 16, tex, new Rectangle(tile.TileFrameX, 2, 48, 36),new Vector2(24, 36), 8, 40, 0.25f);
+                tileSpin.DrawRotatedTile(i, j - tile.TileFrameY / 16 + 1, tex, new Rectangle(tile.TileFrameX, 38, 48, 36), new Vector2(24, 36), 8, 24, 1.0f);
+                tileSpin.DrawRotatedTile(i, j - tile.TileFrameY / 16 + 1, tex, new Rectangle(tile.TileFrameX, 218, 48, 36), new Vector2(24, 36), 8, 24, 1.0f, true, new Color(0.57f, 0.57f, 0.57f, 0));
+                tileSpin.DrawRotatedTile(i, j - tile.TileFrameY / 16, tex, new Rectangle(tile.TileFrameX, 72, 48, 36), new Vector2(24, 36), 8, 40, 0.3f);
+                tileSpin.DrawRotatedTile(i, j - tile.TileFrameY / 16, tex, new Rectangle(tile.TileFrameX, 110, 48, 36), new Vector2(24, 36), 8, 40, 0.24f);
+                tileSpin.DrawRotatedTile(i, j - tile.TileFrameY / 16, tex, new Rectangle(tile.TileFrameX, 146, 48, 36), new Vector2(24, 36), 8, 40, 0.19f);
+                tileSpin.DrawRotatedTile(i, j - tile.TileFrameY / 16, tex, new Rectangle(tile.TileFrameX, 182, 48, 36), new Vector2(24, 36), 8, 40, 0.27f);
             }
             return false;
         }
