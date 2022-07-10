@@ -25,14 +25,14 @@ namespace Everglow.Sources.Modules.MEACModule
 
         private void FilterManager_EndCapture(On.Terraria.Graphics.Effects.FilterManager.orig_EndCapture orig, FilterManager self, RenderTarget2D finalTexture, RenderTarget2D screenTarget1, RenderTarget2D screenTarget2, Color clearColor)
         {
-            GraphicsDevice graphicsDevice = Main.instance.GraphicsDevice;
-            GetOrig(graphicsDevice);
-
             // 直接从RT池子里取
             var renderTargets = Everglow.RenderTargetPool.GetRenderTarget2DArray(2);
             screen = renderTargets.Resource[0];
             render = renderTargets.Resource[1];
-            
+
+            GraphicsDevice graphicsDevice = Main.instance.GraphicsDevice;
+            GetOrig(graphicsDevice);
+
             graphicsDevice.SetRenderTarget(Main.screenTargetSwap);
             graphicsDevice.Clear(Color.Transparent);
             bool flag = DrawWarp(Main.spriteBatch);
@@ -50,6 +50,7 @@ namespace Everglow.Sources.Modules.MEACModule
                 Main.spriteBatch.End();
             }
 
+            screen = null;
             renderTargets.Release();
             orig(self, finalTexture, screenTarget1, screenTarget2, clearColor);
         }
