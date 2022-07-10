@@ -138,16 +138,16 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                 return false;
             }
             Point point = new Point(i, j);
-            Vector2 worldCoord = point.ToWorldCoordinates(8f, 8f);
+            Vector2 tileCenterWS = point.ToWorldCoordinates(8f, 8f);
             Color color = Lighting.GetColor(i, j);
             SpriteEffects effects = SpriteEffects.None;
             const int Count = 16;
             Vector2 HalfSize = treeTexture.Size() / 2f;
             HalfSize.X /= Count;
-            spriteBatch.Draw(treeTexture, worldCoord - Main.screenPosition + zero,
+            spriteBatch.Draw(treeTexture, tileCenterWS - Main.screenPosition + zero,
                 new Rectangle(tile.TileFrameX, 0, treeTexture.Width / Count, treeTexture.Height),
                 color, 0f, HalfSize, 1f, effects, 0f);
-            spriteBatch.Draw(glowTexture, worldCoord - Main.screenPosition + zero,
+            spriteBatch.Draw(glowTexture, tileCenterWS - Main.screenPosition + zero,
                 new Rectangle(tile.TileFrameX, 0, treeTexture.Width / Count, treeTexture.Height),
                 new Color(1f, 1f, 1f, 0), 0f, HalfSize, 1f, effects, 0f);
 
@@ -157,13 +157,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             if (ropes[frameX] is null)
             {
                 ropes[frameX] = ropeManager.LoadRope("Everglow/Sources/Modules/MythModule/TheFirefly/Tiles/FireflyTreeRope",
-                    new Rectangle(frameX * 51, 0, 51, 51), worldCoord - HalfSize, () => Vector2.Zero);
+                    new Rectangle(frameX * 51, 0, 51, 51), tileCenterWS - HalfSize, () => Vector2.Zero);
                 hasRope.Add((i, j), ropes[frameX]);
-                basePositions[frameX] = worldCoord;
+                basePositions[frameX] = tileCenterWS;
             }
             else if (!hasRope.ContainsKey((i, j)))
             {
-                Vector2 deltaPosition = worldCoord - basePositions[frameX];
+                Vector2 deltaPosition = tileCenterWS - basePositions[frameX];
                 List<Rope> rs = ropes[frameX].Select(r => r.Clone(deltaPosition)).ToList();
                 ropeManager.LoadRope(rs);
                 hasRope.Add((i, j), rs);

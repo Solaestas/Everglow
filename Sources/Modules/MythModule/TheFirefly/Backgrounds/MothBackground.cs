@@ -334,7 +334,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         /// <param name="texSize"></param>
         /// <param name="MoveStep"></param>
         /// <returns></returns>
-        public Rectangle GetDrawRec(Vector2 texSize, float MoveStep, bool Correction)
+        public Rectangle GetDrawRect(Vector2 texSize, float MoveStep, bool Correction)
         {
             MothLand mothLand = ModContent.GetInstance<MothLand>();
             Vector2 sampleTopleft = Vector2.Zero;
@@ -377,6 +377,18 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             Vector2 v0 = screenSize / 2f - screenSize / 2f / Cor;
             return v0;
         }
+
+
+        /// <summary>
+        /// 绳子的图片坐标转到近景纹理下的坐标
+        /// </summary>
+        /// <returns></returns>
+        private Vector2 ImageSpaceToCloseTextureSpace(Vector2 posIS, Vector2 texSize)
+        {
+            Vector2 mappedIS = posIS + new Vector2(0, 450);
+            return mappedIS / texSize;
+        }
+
         /// <summary>
         /// 当然是绘制主体啦
         /// </summary>
@@ -391,10 +403,15 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             {
                 ropeManager = new RopeManager(1, 1, new Color(11, 9, 25));
                 var mothLand = ModContent.GetInstance<MothLand>();
+                //ropes = ropeManager.LoadRope("Everglow/Sources/Modules/MythModule/TheFirefly/Backgrounds/TreeRope",
+                //    null,
+                //    new Vector2(mothLand.fireflyCenterX * 16, mothLand.fireflyCenterY * 16),
+                //    () => GetRopeMove(new Vector2(800, 600), 0.33f * 2));//我也不知道为什么要 * 2反正 * 2就对了
+
                 ropes = ropeManager.LoadRope("Everglow/Sources/Modules/MythModule/TheFirefly/Backgrounds/TreeRope",
                     null,
-                    new Vector2(mothLand.fireflyCenterX * 16, mothLand.fireflyCenterY * 16),
-                    () => GetRopeMove(new Vector2(800, 600), 0.33f * 2));//我也不知道为什么要 * 2反正 * 2就对了
+                    Vector2.Zero,
+                    () => Vector2.Zero);//我也不知道为什么要 * 2反正 * 2就对了
             }
 
 
@@ -412,17 +429,17 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             Vector2 ZoomDelta = GetZoomDelta();
             Vector2 DrawPos = ScreenCen;
             Color color0 = Color.White * alpha;
-            Main.spriteBatch.Draw(texSky, DrawPos, GetDrawRec(texSky.Size(), 0, true), color0, 0,
+            Main.spriteBatch.Draw(texSky, DrawPos, GetDrawRect(texSky.Size(), 0, true), color0, 0,
                  ScreenCen, DSize, SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(texFar, DrawPos, GetDrawRec(texSky.Size(), 0.03f, true), color0, 0,
+            Main.spriteBatch.Draw(texFar, DrawPos, GetDrawRect(texSky.Size(), 0.03f, true), color0, 0,
                  ScreenCen, DSize, SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(texMiddle, DrawPos, GetDrawRec(texSky.Size(), 0.17f, true), color0, 0,
+            Main.spriteBatch.Draw(texMiddle, DrawPos, GetDrawRect(texSky.Size(), 0.17f, true), color0, 0,
                  ScreenCen, DSize, SpriteEffects.None, 0);
             DrawGlowSec(texClose.Size(), 0.17f);
-            Main.spriteBatch.Draw(texMidClose, DrawPos, GetDrawRec(texSky.Size(), 0.25f, false), GetLuminace(color0), 0,
+            Main.spriteBatch.Draw(texMidClose, DrawPos, GetDrawRect(texSky.Size(), 0.25f, false), GetLuminace(color0), 0,
                  ScreenCen, DSize, SpriteEffects.None, 0);
             DrawGlow(texClose.Size(), 0.25f);
-            Rectangle rvc = GetDrawRec(texClose.Size(), 0.33f, false);
+            Rectangle rvc = GetDrawRect(texClose.Size(), 0.33f, false);
             rvc.Y -= 120;
             rvc.X += 150;
             Main.spriteBatch.Draw(texClose, Vector2.Zero, rvc, GetLuminace(color0));
@@ -430,25 +447,45 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             ropeManager.luminance = luminance;
             ropeManager.Draw();
 
-            Vector2 offset = ropes[0].GetOffset();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null,
-                Matrix.CreateTranslation(offset.X - Main.screenPosition.X, offset.Y - Main.screenPosition.Y, 0) * Main.GameViewMatrix.TransformationMatrix);
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             Texture2D dropTexture = MythContent.QuickTexture("TheFirefly/Backgrounds/Drop");
             for (int i = 0; i < ropes.Count; i++)
             {
                 for (int j = 1; j < ropes[i].mass.Length; j++)
                 {
                     var mass = ropes[i].mass[j];
-                    float scale = mass.mass * 1.3f;
+                    float scale = 1.3f;
                     Vector2 vector = mass.position - ropes[i].mass[j - 1].position;
                     float rotation = vector.ToRotation() - MathHelper.PiOver2;
                     Color color = GetLuminace(new Color(0, 0.15f * j, 1f / 5f * j, 0) * alpha * 5);
-                    Main.spriteBatch.Draw(dropTexture, mass.position, null, color, rotation, dropTexture.Size() / 2f, scale, SpriteEffects.None, 0);
+
+                    var pos = ImageSpaceToCloseTextureSpace(mass.position, texClose.Size());
+                    Vector2 posSS = -rvc.TopLeft() + texClose.Size() * pos;
+                    Main.spriteBatch.Draw(dropTexture, posSS, null, color, rotation, dropTexture.Size() / 2f, scale, SpriteEffects.None, 0);
                 }
             }
             Main.spriteBatch.End();
+
+
+            //Vector2 offset = ropes[0].GetOffset();
+            //Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null,
+            //    Matrix.CreateTranslation(offset.X - Main.screenPosition.X, offset.Y - Main.screenPosition.Y, 0) * Main.GameViewMatrix.TransformationMatrix);
+            //Texture2D dropTexture = MythContent.QuickTexture("TheFirefly/Backgrounds/Drop");
+            //for (int i = 0; i < ropes.Count; i++)
+            //{
+            //    for (int j = 1; j < ropes[i].mass.Length; j++)
+            //    {
+            //        var mass = ropes[i].mass[j];
+            //        float scale = 1.3f;
+            //        Vector2 vector = mass.position - ropes[i].mass[j - 1].position;
+            //        float rotation = vector.ToRotation() - MathHelper.PiOver2;
+            //        Color color = GetLuminace(new Color(0, 0.15f * j, 1f / 5f * j, 0) * alpha * 5);
+            //        Main.spriteBatch.Draw(dropTexture, mass.position, null, color, rotation, dropTexture.Size() / 2f, scale, SpriteEffects.None, 0);
+            //    }
+            //}
+            //Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            Rectangle rvcII = GetDrawRec(texCloseII.Size(), 0.57f, false);
+            Rectangle rvcII = GetDrawRect(texCloseII.Size(), 0.57f, false);
             rvcII.Y -= 300;
             rvcII.X += 300;
             Color colorCloseII = GetLuminace(Color.White * alpha);
@@ -463,12 +500,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 new Vertex2D(new Vector2(Main.screenWidth, Main.screenHeight), colorCloseII, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, (rvcII.Y + rvcII.Height) / (float)texCloseII.Height, 0))
             };
             Effect bgW = MythContent.QuickEffect("Effects/BackgroundWrap");
+            bgW.Parameters["uTime"].SetValue(0f);
             bgW.CurrentTechnique.Passes[0].Apply();
 
             if (CloseII.Count > 2)
             {
                 Main.graphics.GraphicsDevice.Textures[0] = texCloseII;
-                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, CloseII.ToArray(), 0, CloseII.Count - 2);
+                Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, CloseII.ToArray(), 0, 2);
             }
 
             Main.spriteBatch.End();
