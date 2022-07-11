@@ -1,4 +1,5 @@
 using Everglow.Sources.Commons.Function.ImageReader;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Tiles;
 using Terraria.DataStructures;
 using Terraria.IO;
 using Terraria.ModLoader.IO;
@@ -6,19 +7,6 @@ using Terraria.WorldBuilding;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
 {
-    //TODO 这种小东西可以合起来丢到一个ModPlayer里面
-    public class MothLandSyncPlayer : ModPlayer
-    {
-        public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
-        {
-            if (newPlayer)
-            {
-                //新玩家进入世界是发送请求
-                Everglow.PacketResolver.Send(new MothPositionPacket());
-            }
-        }
-    }
-
     public class MothLand : ModSystem
     {
         private class MothLandGenPass : GenPass
@@ -44,12 +32,40 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         {
             tag["FIREFLYcenterX"] = fireflyCenterX;
             tag["FIREFLYcenterY"] = fireflyCenterY;
+
+            var fireFlyTree = ModContent.GetInstance<FireflyTree>();
+            var list = new List<TagCompound>();
+            foreach (var (x, y, style) in fireFlyTree.GetRopeStyleList())
+            {
+                list.Add(new TagCompound() {
+                    { "x", x },
+                    { "y", y },
+                    { "style", style },
+                });
+            }
+            tag.Set("FIREFLY_FireflyTree", list);
         }
 
         public override void LoadWorldData(TagCompound tag)
         {
             fireflyCenterX = tag.GetAsInt("FIREFLYcenterX");
             fireflyCenterY = tag.GetAsInt("FIREFLYcenterY");
+
+
+            if (tag.ContainsKey("FIREFLY_FireflyTree"))
+            {
+                var fireFlyTree = ModContent.GetInstance<FireflyTree>();
+                var listTag = tag.GetList<TagCompound>("FIREFLY_FireflyTree");
+                List<(int x, int y, int style)> ropeData = new List<(int x, int y, int style)>();
+                foreach (var item in listTag)
+                {
+                    int x = item.Get<int>("x");
+                    int y = item.Get<int>("y");
+                    int style = item.GetInt("style");
+                    ropeData.Add((x, y, style));
+                }
+                fireFlyTree.InitTreeRopes(ropeData);
+            }
         }
 
         /// <summary>

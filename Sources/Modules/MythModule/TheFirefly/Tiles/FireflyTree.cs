@@ -42,7 +42,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                 Everglow.Instance.Logger.Warn("KillMultiTile: Trying to access an non-existent FireflyTree rope");
                 return;
             }
-            var ropes = hasRope[(tileX, tileY)];
+            var ropes = hasRope[(tileX, tileY)].ropes;
             foreach (var r in ropes)
             {
                 Vector2 acc = new Vector2(Main.rand.NextFloat(-1, 1), 0);
@@ -65,7 +65,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                     //被砍时对mass操纵写这里
                 }
             }
-            ropeManager.RemoveRope(hasRope[(tileX, tileY)]);
+            ropeManager.RemoveRope(hasRope[(tileX, tileY)].ropes);
             hasRope.Remove((tileX, tileY));
         }
 
@@ -78,7 +78,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                 Everglow.Instance.Logger.Warn("KillMultiTile: Trying to access an non-existent FireflyTree rope");
                 return;
             }
-            var ropes = hasRope[(i, tileY)];
+            var ropes = hasRope[(i, tileY)].ropes;
             foreach (var r in ropes)
             {
                 Vector2 acc = new Vector2(Main.rand.NextFloat(-1, 1), 0);
@@ -106,12 +106,60 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
         private RopeManager ropeManager = new RopeManager();
         private List<Rope>[] ropes = new List<Rope>[16];
         private Vector2[] basePositions = new Vector2[16];
-        private Dictionary<(int x, int y), List<Rope>> hasRope = new Dictionary<(int x, int y), List<Rope>>();
+        private Dictionary<(int x, int y), (int style, List<Rope> ropes)> hasRope = new Dictionary<(int x, int y), (int style, List<Rope>)>();
 
-        public void PrepareForNewWorld()
+        /// <summary>
+        /// 记录当前每个有树枝的节点的绳子Style（即TileFrameX / 256）
+        /// </summary>
+        public List<(int x, int y, int style)> GetRopeStyleList()
+        {
+            List<(int x, int y, int style)> result = new List<(int x, int y, int style)>();
+            foreach (var keyvaluepair in hasRope)
+            {
+                result.Add((keyvaluepair.Key.x, keyvaluepair.Key.y, keyvaluepair.Value.style));
+            }
+            return result;
+        }
+
+        public void InitTreeRopes(List<(int x, int y, int style)> ropesData)
         {
             hasRope.Clear();
-            ropeManager.Clear(114);
+            ropeManager.Clear();
+            for (int i = 0; i < ropes.Length; i++)
+            {
+                ropes[i] = null;
+            }
+
+            foreach (var (x, y, style) in ropesData)
+            {
+                InsertOneTreeRope(x, y, style);
+            }
+        }
+
+        public void InsertOneTreeRope(int xTS, int yTS, int style)
+        {
+            const int Count = 16;
+            Texture2D treeTexture = MythContent.QuickTexture("TheFirefly/Tiles/FireflyTree");
+            Vector2 HalfSize = treeTexture.Size() / 2f;
+            HalfSize.X /= Count;
+
+            Point point = new Point(xTS, yTS);
+            Vector2 tileCenterWS = point.ToWorldCoordinates(8f, 8f);
+
+            if (ropes[style] is null)
+            {
+                ropes[style] = ropeManager.LoadRope("Everglow/Sources/Modules/MythModule/TheFirefly/Tiles/FireflyTreeRope",
+                    new Rectangle(style * 51, 0, 51, 51), tileCenterWS - HalfSize, () => Vector2.Zero);
+                hasRope.Add((xTS, yTS), (style, ropes[style]));
+                basePositions[style] = tileCenterWS;
+            }
+            else if (!hasRope.ContainsKey((xTS, yTS)))
+            {
+                Vector2 deltaPosition = tileCenterWS - basePositions[style];
+                List<Rope> rs = ropes[style].Select(r => r.Clone(deltaPosition)).ToList();
+                ropeManager.LoadRope(rs);
+                hasRope.Add((xTS, yTS), (style, rs));
+            }
         }
 
         public void DrawRopes()
@@ -137,6 +185,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             {
                 return false;
             }
+            if (!hasRope.ContainsKey((i, j)))
+            {
+                InsertOneTreeRope(i, j, tile.TileFrameX / 256);
+            }
             Point point = new Point(i, j);
             Vector2 tileCenterWS = point.ToWorldCoordinates(8f, 8f);
             Color color = Lighting.GetColor(i, j);
@@ -151,23 +203,23 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                 new Rectangle(tile.TileFrameX, 0, treeTexture.Width / Count, treeTexture.Height),
                 new Color(1f, 1f, 1f, 0), 0f, HalfSize, 1f, effects, 0f);
 
-            Vector2 RopOffset = new Vector2(i * 16 - tile.TileFrameX - 128, j * 16 - 128) - Main.screenPosition;
+            //Vector2 RopOffset = new Vector2(i * 16 - tile.TileFrameX - 128, j * 16 - 128) - Main.screenPosition;
 
-            int frameX = tile.TileFrameX / 256;
-            if (ropes[frameX] is null)
-            {
-                ropes[frameX] = ropeManager.LoadRope("Everglow/Sources/Modules/MythModule/TheFirefly/Tiles/FireflyTreeRope",
-                    new Rectangle(frameX * 51, 0, 51, 51), tileCenterWS - HalfSize, () => Vector2.Zero);
-                hasRope.Add((i, j), ropes[frameX]);
-                basePositions[frameX] = tileCenterWS;
-            }
-            else if (!hasRope.ContainsKey((i, j)))
-            {
-                Vector2 deltaPosition = tileCenterWS - basePositions[frameX];
-                List<Rope> rs = ropes[frameX].Select(r => r.Clone(deltaPosition)).ToList();
-                ropeManager.LoadRope(rs);
-                hasRope.Add((i, j), rs);
-            }
+            //int frameX = tile.TileFrameX / 256;
+            //if (ropes[frameX] is null)
+            //{
+            //    ropes[frameX] = ropeManager.LoadRope("Everglow/Sources/Modules/MythModule/TheFirefly/Tiles/FireflyTreeRope",
+            //        new Rectangle(frameX * 51, 0, 51, 51), tileCenterWS - HalfSize, () => Vector2.Zero);
+            //    hasRope.Add((i, j), (frameX, ropes[frameX]));
+            //    basePositions[frameX] = tileCenterWS;
+            //}
+            //else if (!hasRope.ContainsKey((i, j)))
+            //{
+            //    Vector2 deltaPosition = tileCenterWS - basePositions[frameX];
+            //    List<Rope> rs = ropes[frameX].Select(r => r.Clone(deltaPosition)).ToList();
+            //    ropeManager.LoadRope(rs);
+            //    hasRope.Add((i, j), (frameX, rs));
+            //}
             return false;
         }
     }

@@ -12,6 +12,21 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             ItemDrop = ModContent.ItemType<Items.DarkCocoon>();
             AddMapEntry(new Color(17, 16, 17));
         }
+
+        private void PlantTree(int i, int j, int style)
+        {
+            for (int y = -8; y < 0; y++)
+            {
+                Tile tile = Main.tile[i, j + y];
+                tile.TileType = (ushort)ModContent.TileType<Tiles.FireflyTree>();
+                tile.HasTile = true;
+                tile.TileFrameX = (short)(style * 256);
+                tile.TileFrameY = (short)((y + 8) * 16);
+            }
+            var fireFlyTree = ModContent.GetInstance<FireflyTree>();
+            fireFlyTree.InsertOneTreeRope(i, j - 8, style);
+        }
+
         public override void RandomUpdate(int i, int j)
         {
             if (Main.rand.NextBool(6))
@@ -29,14 +44,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                         }
                     }
                     short FrX = (short)(Main.rand.Next(0, 16));
-                    for (int y = -8; y < 0; y++)
-                    {
-                        Tile tile = Main.tile[i, j + y];
-                        tile.TileType = (ushort)ModContent.TileType<Tiles.FireflyTree>();
-                        tile.HasTile = true;
-                        tile.TileFrameX = (short)(FrX * 256);
-                        tile.TileFrameY = (short)((y + 8) * 16);
-                    }
+                    PlantTree(i, j, FrX);
                 }
 
             }

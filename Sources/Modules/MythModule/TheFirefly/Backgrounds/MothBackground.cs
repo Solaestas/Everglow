@@ -389,6 +389,96 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             return mappedIS / texSize;
         }
 
+        private void DrawFarBG(Color baseColor)
+        {
+            var texSky = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflySky");
+            var texFar = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyFar");
+            var texMiddle = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyMiddle");
+            var texMidClose = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyMidClose");
+            var texClose = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyClose");
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            Vector2 ScreenCen = new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
+            Vector2 DSize = GetZoomByScreenSize();
+            Vector2 DrawPos = ScreenCen;
+            Main.spriteBatch.Draw(texSky, DrawPos, GetDrawRect(texSky.Size(), 0, true), baseColor, 0,
+                 ScreenCen, DSize, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(texFar, DrawPos, GetDrawRect(texSky.Size(), 0.03f, true), baseColor, 0,
+                 ScreenCen, DSize, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(texMiddle, DrawPos, GetDrawRect(texSky.Size(), 0.17f, true), baseColor, 0,
+                 ScreenCen, DSize, SpriteEffects.None, 0);
+            DrawGlowSec(texClose.Size(), 0.17f);
+            Main.spriteBatch.Draw(texMidClose, DrawPos, GetDrawRect(texSky.Size(), 0.25f, false), GetLuminace(baseColor), 0,
+                 ScreenCen, DSize, SpriteEffects.None, 0);
+            DrawGlow(texClose.Size(), 0.25f);
+        }
+
+        private void DrawCloseBG(Color baseColor)
+        {
+            var texClose = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyClose");
+            Rectangle targetSourceRect = GetDrawRect(texClose.Size(), 0.33f, false);
+            targetSourceRect.Y -= 120;
+            targetSourceRect.X += 150;
+            Main.spriteBatch.Draw(texClose, Vector2.Zero, targetSourceRect, GetLuminace(baseColor));
+            Main.spriteBatch.End();
+            ropeManager.luminance = luminance;
+            ropeManager.Draw();
+
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            Texture2D dropTexture = MythContent.QuickTexture("TheFirefly/Backgrounds/Drop");
+            for (int i = 0; i < ropes.Count; i++)
+            {
+                for (int j = 1; j < ropes[i].mass.Length; j++)
+                {
+                    var mass = ropes[i].mass[j];
+                    float scale = 1.3f;
+                    Vector2 vector = mass.position - ropes[i].mass[j - 1].position;
+                    float rotation = vector.ToRotation() - MathHelper.PiOver2;
+                    Color color = GetLuminace(new Color(0, 0.15f * j, 1f / 5f * j, 0) * alpha * 5);
+
+                    var pos = ImageSpaceToCloseTextureSpace(mass.position, texClose.Size());
+
+                    // 直接绘制在相对于近景贴图的坐标，只要近景位置正确，悬挂位置就正确
+                    Vector2 posSS = -targetSourceRect.TopLeft() + texClose.Size() * pos;
+                    Main.spriteBatch.Draw(dropTexture, posSS, null, color, rotation, dropTexture.Size() / 2f, scale, SpriteEffects.None, 0);
+                }
+            }
+            Main.spriteBatch.End();
+
+            var texCloseII = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyClose2");
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            Rectangle rvcII = GetDrawRect(texCloseII.Size(), 0.57f, false);
+            rvcII.Y -= 300;
+            rvcII.X += 300;
+            Color colorCloseII = GetLuminace(Color.White * alpha);
+            List<Vertex2D> CloseII = new List<Vertex2D>
+            {
+                new Vertex2D(new Vector2(0, 0), colorCloseII, new Vector3(rvcII.X / (float)texCloseII.Width, rvcII.Y / (float)texCloseII.Height, 0)),
+                new Vertex2D(new Vector2(Main.screenWidth, 0), colorCloseII, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, rvcII.Y / (float)texCloseII.Height, 0)),
+                new Vertex2D(new Vector2(0, Main.screenHeight), colorCloseII, new Vector3(rvcII.X / (float)texCloseII.Width, (rvcII.Y + rvcII.Height) / (float)texCloseII.Height, 0)),
+
+                new Vertex2D(new Vector2(0, Main.screenHeight), colorCloseII, new Vector3(rvcII.X / (float)texCloseII.Width, (rvcII.Y + rvcII.Height) / (float)texCloseII.Height, 0)),
+                new Vertex2D(new Vector2(Main.screenWidth, 0), colorCloseII, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, rvcII.Y / (float)texCloseII.Height, 0)),
+                new Vertex2D(new Vector2(Main.screenWidth, Main.screenHeight), colorCloseII, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, (rvcII.Y + rvcII.Height) / (float)texCloseII.Height, 0))
+            };
+            Effect bgW = MythContent.QuickEffect("Effects/BackgroundWrap");
+            var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+            var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
+            bgW.Parameters["uTransform"].SetValue(projection);
+            bgW.Parameters["uTime"].SetValue(0f);
+            bgW.CurrentTechnique.Passes[0].Apply();
+
+            if (CloseII.Count > 2)
+            {
+                Main.graphics.GraphicsDevice.Textures[0] = texCloseII;
+                Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, CloseII.ToArray(), 0, 2);
+            }
+
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+        }
+
         /// <summary>
         /// 当然是绘制主体啦
         /// </summary>
@@ -415,103 +505,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             }
 
 
-            var texSky = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflySky");
-            var texFar = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyFar");
-            var texMiddle = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyMiddle");
-            var texMidClose = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyMidClose");
-            var texClose = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyClose");
-            var texCloseII = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyClose2");
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            Rectangle screen = new Rectangle(0, 0, Main.screenWidth, Main.screenHeight);
-            Vector2 ScreenCen = new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
-            Vector2 DSize = GetZoomByScreenSize();
-            Vector2 ZoomDelta = GetZoomDelta();
-            Vector2 DrawPos = ScreenCen;
-            Color color0 = Color.White * alpha;
-            Main.spriteBatch.Draw(texSky, DrawPos, GetDrawRect(texSky.Size(), 0, true), color0, 0,
-                 ScreenCen, DSize, SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(texFar, DrawPos, GetDrawRect(texSky.Size(), 0.03f, true), color0, 0,
-                 ScreenCen, DSize, SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(texMiddle, DrawPos, GetDrawRect(texSky.Size(), 0.17f, true), color0, 0,
-                 ScreenCen, DSize, SpriteEffects.None, 0);
-            DrawGlowSec(texClose.Size(), 0.17f);
-            Main.spriteBatch.Draw(texMidClose, DrawPos, GetDrawRect(texSky.Size(), 0.25f, false), GetLuminace(color0), 0,
-                 ScreenCen, DSize, SpriteEffects.None, 0);
-            DrawGlow(texClose.Size(), 0.25f);
-            Rectangle rvc = GetDrawRect(texClose.Size(), 0.33f, false);
-            rvc.Y -= 120;
-            rvc.X += 150;
-            Main.spriteBatch.Draw(texClose, Vector2.Zero, rvc, GetLuminace(color0));
-            Main.spriteBatch.End();
-            ropeManager.luminance = luminance;
-            ropeManager.Draw();
-
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            Texture2D dropTexture = MythContent.QuickTexture("TheFirefly/Backgrounds/Drop");
-            for (int i = 0; i < ropes.Count; i++)
-            {
-                for (int j = 1; j < ropes[i].mass.Length; j++)
-                {
-                    var mass = ropes[i].mass[j];
-                    float scale = 1.3f;
-                    Vector2 vector = mass.position - ropes[i].mass[j - 1].position;
-                    float rotation = vector.ToRotation() - MathHelper.PiOver2;
-                    Color color = GetLuminace(new Color(0, 0.15f * j, 1f / 5f * j, 0) * alpha * 5);
-
-                    var pos = ImageSpaceToCloseTextureSpace(mass.position, texClose.Size());
-                    Vector2 posSS = -rvc.TopLeft() + texClose.Size() * pos;
-                    Main.spriteBatch.Draw(dropTexture, posSS, null, color, rotation, dropTexture.Size() / 2f, scale, SpriteEffects.None, 0);
-                }
-            }
-            Main.spriteBatch.End();
-
-
-            //Vector2 offset = ropes[0].GetOffset();
-            //Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null,
-            //    Matrix.CreateTranslation(offset.X - Main.screenPosition.X, offset.Y - Main.screenPosition.Y, 0) * Main.GameViewMatrix.TransformationMatrix);
-            //Texture2D dropTexture = MythContent.QuickTexture("TheFirefly/Backgrounds/Drop");
-            //for (int i = 0; i < ropes.Count; i++)
-            //{
-            //    for (int j = 1; j < ropes[i].mass.Length; j++)
-            //    {
-            //        var mass = ropes[i].mass[j];
-            //        float scale = 1.3f;
-            //        Vector2 vector = mass.position - ropes[i].mass[j - 1].position;
-            //        float rotation = vector.ToRotation() - MathHelper.PiOver2;
-            //        Color color = GetLuminace(new Color(0, 0.15f * j, 1f / 5f * j, 0) * alpha * 5);
-            //        Main.spriteBatch.Draw(dropTexture, mass.position, null, color, rotation, dropTexture.Size() / 2f, scale, SpriteEffects.None, 0);
-            //    }
-            //}
-            //Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            Rectangle rvcII = GetDrawRect(texCloseII.Size(), 0.57f, false);
-            rvcII.Y -= 300;
-            rvcII.X += 300;
-            Color colorCloseII = GetLuminace(Color.White * alpha);
-            List<Vertex2D> CloseII = new List<Vertex2D>
-            {
-                new Vertex2D(new Vector2(0, 0), colorCloseII, new Vector3(rvcII.X / (float)texCloseII.Width, rvcII.Y / (float)texCloseII.Height, 0)),
-                new Vertex2D(new Vector2(Main.screenWidth, 0), colorCloseII, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, rvcII.Y / (float)texCloseII.Height, 0)),
-                new Vertex2D(new Vector2(0, Main.screenHeight), colorCloseII, new Vector3(rvcII.X / (float)texCloseII.Width, (rvcII.Y + rvcII.Height) / (float)texCloseII.Height, 0)),
-
-                new Vertex2D(new Vector2(0, Main.screenHeight), colorCloseII, new Vector3(rvcII.X / (float)texCloseII.Width, (rvcII.Y + rvcII.Height) / (float)texCloseII.Height, 0)),
-                new Vertex2D(new Vector2(Main.screenWidth, 0), colorCloseII, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, rvcII.Y / (float)texCloseII.Height, 0)),
-                new Vertex2D(new Vector2(Main.screenWidth, Main.screenHeight), colorCloseII, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, (rvcII.Y + rvcII.Height) / (float)texCloseII.Height, 0))
-            };
-            Effect bgW = MythContent.QuickEffect("Effects/BackgroundWrap");
-            bgW.Parameters["uTime"].SetValue(0f);
-            bgW.CurrentTechnique.Passes[0].Apply();
-
-            if (CloseII.Count > 2)
-            {
-                Main.graphics.GraphicsDevice.Textures[0] = texCloseII;
-                Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
-                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, CloseII.ToArray(), 0, 2);
-            }
-
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            Color baseColor = Color.White * alpha;
+            DrawFarBG(baseColor);
+            DrawCloseBG(baseColor);
         }
         ///// <summary>
         ///// 初始化

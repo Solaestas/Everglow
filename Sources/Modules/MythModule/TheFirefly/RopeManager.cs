@@ -141,6 +141,15 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
                 }
             }
         }
+
+        /// <summary>
+        /// 清除所有Rope
+        /// </summary>
+        /// <param name="outRange"></param>
+        public void Clear()
+        {
+            ropes.Clear();
+        }
         public void Update(float deltaTime)
         {
             for (int i = 0; i < ropes.Count; i++)
