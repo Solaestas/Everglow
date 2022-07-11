@@ -1,14 +1,5 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using System;
-using System.Collections.Generic;
-using Terraria.Audio;
-using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
-using Everglow.Sources.Commons.Function.Vertex;
-
+﻿using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 namespace Everglow.Sources.Modules.MEACModule.Projectiles
 {
     public class ScaleWingBladeProj : MeleeProj
@@ -196,10 +187,15 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
 
                     Vector2 r = Main.rand.NextVector2Unit();
                     float dis = MathHelper.Clamp(60 - timer, 0, 60) * 2;
-                    Dust d = Dust.NewDustDirect(Projectile.Center + r * dis, 10, 10, ModContent.DustType<BlueGlow>(), 0, 0, 0, default, 1.2f);
+                    Dust d = Dust.NewDustDirect(Projectile.Center + r * dis, 10, 10, ModContent.DustType<BlueGlowAppear>(), 0, 0, 0, default, Main.rand.NextFloat(0.7f, 1.7f));
                     d.velocity = -r * 4;
                     d.position += Main.rand.NextVector2Unit() * 5;
                     d.noGravity = true;
+
+                    Dust d2 = Dust.NewDustDirect(Projectile.Center + r * dis, 10, 10, ModContent.DustType<BlueParticleDark2>(), 0, 0, 0, default, Main.rand.NextFloat(3.7f, 5.1f));
+                    d2.velocity = -r * 4;
+                    d2.position += Main.rand.NextVector2Unit() * 5;
+                    d2.alpha = (int)(d2.scale * 50);
                 }
                 else if (timer < 100)
                 {
@@ -212,10 +208,15 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
 
                     Vector2 r = Main.rand.NextVector2Unit();
                     float dis = 0;
-                    Dust d = Dust.NewDustDirect(Projectile.Center + r * dis, 10, 10, ModContent.DustType<BlueGlow>(), 0, 0, 0, default, 1.2f);
+                    Dust d = Dust.NewDustDirect(Projectile.Center + r * dis, 10, 10, ModContent.DustType<BlueGlowAppear>(), 0, 0, 0, default, Main.rand.NextFloat(0.7f, 1.7f));
                     d.velocity = -r * 4;
                     d.position += Main.rand.NextVector2Unit() * 5;
                     d.noGravity = true;
+
+                    Dust d2 = Dust.NewDustDirect(Projectile.Center + r * dis, 10, 10, ModContent.DustType<BlueParticleDark2>(), 0, 0, 0, default, Main.rand.NextFloat(3.7f, 5.1f));
+                    d2.velocity = -r * 4;
+                    d2.position += Main.rand.NextVector2Unit() * 5;
+                    d2.alpha = (int)(d2.scale * 50);
                 }
                 if (timer == 100)
                 {
@@ -244,10 +245,16 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             {
                 for (int i = 0; i < 2; i++)
                 {
-                    Dust d = Dust.NewDustDirect(Projectile.Center - new Vector2(20, 20) + mainVec * Main.rand.NextFloat(0.3f, 1f), 40, 40, ModContent.DustType<BlueGlow>(), 0, 0, 0, default, Main.rand.NextFloat(0.5f, 1.3f));
+                    Dust d = Dust.NewDustDirect(Projectile.Center - new Vector2(20, 20) + mainVec * Main.rand.NextFloat(0.3f, 1f), 40, 40, ModContent.DustType<BlueGlowAppear>(), 0, 0, 0, default, Main.rand.NextFloat(0.5f, 2f));
                     d.velocity += player.velocity * 0.4f + Main.rand.NextVector2Unit() * 3;
                     d.noGravity = true;
                 }
+                /*for (int i = 0; i < 8; i++)//加上这个有点奇怪，特效过多，光污染了
+                {
+                    Dust d2 = Dust.NewDustDirect(Projectile.Center - new Vector2(20, 20) + mainVec * Main.rand.NextFloat(0.3f, 1f), 40, 40, ModContent.DustType<BlueParticleDark2>(), 0, 0, 0, default, Main.rand.NextFloat(3.7f, 5.1f));
+                    d2.velocity += player.velocity * 0.4f + Main.rand.NextVector2Unit() * 0.3f;
+                    d2.alpha = (int)(d2.scale * 50);
+                }*/
             }
         }
     }

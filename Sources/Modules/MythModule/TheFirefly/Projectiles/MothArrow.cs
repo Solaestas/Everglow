@@ -1,4 +1,5 @@
 ﻿using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
@@ -26,7 +27,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             addi++;
             if (addi % 3 == 0)
             {
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<MothBlue2>(), Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default(Color), Main.rand.NextFloat(0.6f, 1.8f));
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<BlueGlowAppear>(), Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default(Color), Main.rand.NextFloat(0.6f, 1.8f));
             }
             if (Collision.SolidCollision(Projectile.Center, 1, 1))
             {
@@ -39,16 +40,17 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         }
         public override void Kill(int timeLeft)
         {
-            /*for (int j = 0; j < 20; j++)
-            {
-                Vector2 v = new Vector2(0, Main.rand.NextFloat(0, 7f)).RotatedByRandom(6.28);
-                Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center + v * 2f, v, ModContent.ProjectileType<Projectiles.Typeless.BlueTriangle>(), 0, 1, Main.myPlayer, Projectile.ai[0], 0f);
-            }*/
             for (int j = 0; j < 16; j++)
             {
                 Vector2 v0 = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283);
-                int num20 = Dust.NewDust(Projectile.Center + Vector2.Normalize(Projectile.velocity) * 16f, 0, 0, ModContent.DustType<MothBlue2>(), v0.X, v0.Y, 100, default(Color), 1f);
+                int num20 = Dust.NewDust(Projectile.Center + Vector2.Normalize(Projectile.velocity) * 16f, 0, 0, ModContent.DustType<BlueGlowAppear>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(0.6f, 1.8f));
                 Main.dust[num20].noGravity = true;
+            }
+            for (int j = 0; j < 32; j++)
+            {
+                Vector2 v0 = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283);
+                int num21 = Dust.NewDust(Projectile.Center + Vector2.Normalize(Projectile.velocity) * 16f, 0, 0, ModContent.DustType<BlueParticleDark2>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(3.7f, 5.1f));
+                Main.dust[num21].alpha = (int)(Main.dust[num21].scale * 50);
             }
             for (int j = 0; j < 200; j++)
             {

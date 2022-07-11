@@ -1,5 +1,5 @@
 ﻿using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
-using Terraria.ID;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 
 namespace Everglow.Sources.Modules.MEACModule.Projectiles
 {
@@ -56,19 +56,26 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             }
             if (Projectile.timeLeft < 10)
                 Projectile.scale -= 0.1f;
+            if(Projectile.timeLeft == 300)
+            {
+                Projectile.frame = Main.rand.Next(3);
+            }
             if (Projectile.frame > 3)
             {
                 Projectile.frame = 0;
             }
-            if (Projectile.timeLeft % 10 == 0)
+            if (Projectile.timeLeft % 6 == 0)
             {
                 Projectile.frame++;
             }
             if (Projectile.timeLeft % 3 == 0 )
             {
-                int index = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.7f, 1.9f));
+                int index = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<BlueGlowAppear>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.7f, 1.9f));
                 Main.dust[index].velocity = Projectile.velocity * 0.5f;
             }
+            int index2 = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<BlueParticleDark2>(), 0f, 0f, 0, default, Main.rand.NextFloat(3.7f, 5.1f));
+            Main.dust[index2].velocity = Projectile.velocity * 0.5f;
+            Main.dust[index2].alpha = (int)(Main.dust[index2].scale * 50);
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
@@ -92,7 +99,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         }
         public override Color? GetAlpha(Color lightColor)
         {
-            return new Color(0.2f, 0.5f, 1f, 0) * (1 - Projectile.alpha / 255f);
+            return new Color(0.9f, 0.9f, 1f, 0) * (1 - Projectile.alpha / 255f);
         }
 
     }

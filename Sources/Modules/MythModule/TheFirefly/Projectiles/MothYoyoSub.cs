@@ -1,3 +1,5 @@
+using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
@@ -70,6 +72,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 v3Position = Vector3.Transform(v3Position, Matrix.CreateRotationY(owner.velocity.X * 0.01f + 0.02f));
                 v3Position = Vector3.Transform(v3Position, Matrix.CreateRotationX(owner.velocity.Y * 0.01f));
             }
+            if (Projectile.timeLeft % 3 == 0)
+            {
+                int index = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<BlueGlowAppear>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.2f, 1.3f));
+                Main.dust[index].velocity = Projectile.velocity * 0.5f;
+            }
+            int index2 = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<BlueParticleDark2>(), 0f, 0f, 0, default, Main.rand.NextFloat(4.5f, 5.1f));
+            Main.dust[index2].velocity = Projectile.velocity * 0.5f;
+            Main.dust[index2].alpha = (int)(Main.dust[index2].scale * 50);
             Projectile.Center = owner.Center +new Vector2(v3Position.X,v3Position.Y);
         }
 
@@ -82,7 +92,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 
             Projectile owner = Main.projectile[(int)Projectile.ai[0]];
             Vector2 pos = Projection(v3Position + new Vector3(owner.Center.X,owner.Center.Y,0), Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2, out float scale, 1000); ;
-            Color c = new Color(55, 125, 255, 0);
+            Color c = new Color(185, 185, 255, 0);
             Main.spriteBatch.Draw(Light, pos - Main.screenPosition, null, c * 0.2f, Projectile.rotation, Light.Size() / 2, Projectile.scale * scale, SpriteEffects.None, 0);
             Main.spriteBatch.Draw(tex, pos - Main.screenPosition, sourceRec, c, Projectile.rotation, origin, Projectile.scale * scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
             return false;

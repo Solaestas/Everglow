@@ -1,6 +1,6 @@
 ﻿namespace Everglow.Sources.Modules.MythModule.TheFirefly.Dusts
 {
-    public class BlueParticleDark : ModDust
+    public class BlueParticleDark2 : ModDust
     {
         public override void OnSpawn(Dust dust)
         {
@@ -25,13 +25,14 @@
         public override Color? GetAlpha(Dust dust, Color lightColor)
         {
             float k = (255 - dust.alpha) / 255f;
+            float k2 = (float)(Math.Sqrt(k));
             if (dust.scale > 0.6f)
             {
-                return new Color?(new Color(0f, 0.6f * k, 0.9f * k, 0f));
+                return new Color?(new Color(0.4f * k * k, 0.1f * k2, 0.9f * k, 0f));
             }
             else
             {
-                return new Color?(new Color(0, 0.6f * k, 0.9f * k, 0));
+                return new Color?(new Color(0.4f * k * k, 0.1f * k2, 0.9f * k, 0));
             }
         }
     }
