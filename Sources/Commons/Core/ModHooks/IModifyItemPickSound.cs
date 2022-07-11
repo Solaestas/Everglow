@@ -20,10 +20,22 @@ namespace Everglow.Sources.Commons.Core.ModHooks
 		/// </param>
 		/// <param name="customSound"> <seealso cref="SoundStyle"/> 音效实例</param>
 		/// <param name="playOriginalSound">是否播放原版音效</param>
-		void ModifyItemPickSound(Item item, int context, bool putIn, ref SoundStyle? customSound, ref bool playOriginalSound);
+		virtual void ModifyItemPickSound(Item item, int context, bool putIn, ref SoundStyle? customSound, ref bool playOriginalSound) { }
+
+		/// <summary>
+		/// 给 <seealso cref="ModItem"/> 添加自定义音效的快捷方法
+		/// </summary>
+		virtual SoundStyle? ModItemCustomPickSound() => null;
 
 		public static void Invoke(Item item, int context, bool putIn, ref SoundStyle? customSound, ref bool playOriginalSound) {
-			(item.ModItem as Hook)?.ModifyItemPickSound(item, context, putIn, ref customSound, ref playOriginalSound);
+			if (item.ModItem is Hook) {
+				(item.ModItem as Hook).ModifyItemPickSound(item, context, putIn, ref customSound, ref playOriginalSound);
+				var pickSound = (item.ModItem as Hook).ModItemCustomPickSound();
+				if (pickSound.HasValue) {
+					playOriginalSound = false;
+					SoundEngine.PlaySound(pickSound.Value);
+				}
+			}
 
 			foreach (Hook g in Hook.Enumerate(item)) {
 				g.ModifyItemPickSound(item, context, putIn, ref customSound, ref playOriginalSound);
