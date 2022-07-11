@@ -52,6 +52,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 int num21 = Dust.NewDust(Projectile.Center + Vector2.Normalize(Projectile.velocity) * 16f, 0, 0, ModContent.DustType<BlueParticleDark2>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(3.7f, 5.1f));
                 Main.dust[num21].alpha = (int)(Main.dust[num21].scale * 50);
             }
+            //写得不是很好的范围杀伤
             for (int j = 0; j < 200; j++)
             {
                 if ((Main.npc[j].Center - Projectile.Center).Length() < 100 && !Main.npc[j].dontTakeDamage && !Main.npc[j].friendly && Main.npc[j].active)

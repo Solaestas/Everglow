@@ -1,20 +1,12 @@
 ﻿using Terraria.DataStructures;
 using Terraria.Localization;
 using Everglow.Sources.Modules.MythModule.Common;
-using Terraria.ID;
-
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 {
     public class ShadowWingBow : ModItem
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Occulting Wings");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "影翼巨弓");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Russian, "Крылья затмения");
-            Tooltip.SetDefault("Hold to charge to  increase damage, capped at +200%, and additionally fires Blue Butterfly Arrows.\nNeeds 1.5s to be fully charged");
-            Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "长按可以蓄力,使伤害提升最大倍率200%并释放蓝蝶箭\n满蓄时间1.50秒");
-            Tooltip.AddTranslation((int)GameCulture.CultureName.Russian, "Удерживайте, чтобы зарядить и увеличить урон, ограниченный на + 200%, и дополнительно стреляет синими стрелами-бабочками.\nТребуется 1,5 секунды для полной зарядки");
             GetGlowMask = MythContent.SetStaticDefaultsGlowMask(this);
         }
 
