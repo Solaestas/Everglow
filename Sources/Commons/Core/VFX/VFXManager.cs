@@ -1,4 +1,5 @@
 ﻿using Everglow.Sources.Commons.Core.ModuleSystem;
+using Everglow.Sources.Commons.Core.VFX.Base;
 using Everglow.Sources.Commons.Core.VFX.Interfaces;
 using Everglow.Sources.Commons.Function.ObjectPool;
 
@@ -17,51 +18,50 @@ public class VFXManager : IModule
     /// <summary>
     /// 用绘制层 + 第一个调用的绘制层作为Key来储存List<IVisual>
     /// </summary>
-    private Dictionary<CallOpportunity, Dictionary<int, List<IVisual>>> visuals =
-        new Dictionary<CallOpportunity, Dictionary<int, List<IVisual>>>();
+    private Dictionary<CallOpportunity, Dictionary<PipelineIndex, List<IVisual>>> visuals =
+        new Dictionary<CallOpportunity, Dictionary<PipelineIndex, List<IVisual>>>();
     /// <summary>
     /// 保存每一种Visual所需的Pipeline
     /// </summary>
-    private Dictionary<Type, List<int>> visualToPipeline = new Dictionary<Type, List<int>>();
+    private Dictionary<Type, PipelineIndex> visualToPipeline = new Dictionary<Type, PipelineIndex>();
     /// <summary>
     /// RenderTarget池子
     /// </summary>
     private RenderTargetPool renderTargetPool = new RenderTargetPool();
     public string Name => "VFXManager";
+    /// <summary>
+    /// 获得一种Pipeline的下标，若没有此Pipeline便创建此Pipeline
+    /// </summary>
+    /// <param name="pipelineType"></param>
+    /// <returns></returns>
+    public int GetOrCreatePipeline(Type pipelineType)
+    {
+        if (pipelineTypes.Contains(pipelineType))
+        {
+            return pipelineTypes.IndexOf(pipelineType);
+        }
+        pipelineTypes.Add(pipelineType);
+        pipelineInstances.Add((IVisualPipeline)Activator.CreateInstance(pipelineType));
+        return pipelineTypes.Count - 1;
+    }
     public void Register(IVisual visual)
     {
         Type type = visual.GetType();
-        var list = visualToPipeline[type] = new List<int>();
-        foreach (var pipelineType in type.GetCustomAttribute<PipelineAttribute>().types)
+        var pipelines = type.GetCustomAttribute<PipelineAttribute>().types;
+        if (pipelines.Length == 0)
         {
-            if (!pipelineTypes.Contains(pipelineType))
-            {
-                var pipeline = (IVisualPipeline)Activator.CreateInstance(pipelineType);
-                list.Add(pipelineInstances.Count);
-                pipelineInstances.Add(pipeline);
-                pipelineTypes.Add(pipelineType);
-            }
-            else
-            {
-                list.Add(pipelineTypes.IndexOf(pipelineType));
-            }
+            Debug.Fail("Not bind any pipeline");
+            throw new Exception("Not bind any pipeline");
         }
+        visualToPipeline.Add(type, new PipelineIndex(pipelineTypes.Select(i => GetOrCreatePipeline(i))));
+
     }
     public void Draw(CallOpportunity layer)
     {
         var visuals = this.visuals[layer];
-        foreach (var (pipelineIndex, list) in visuals)
+        foreach(var (pipelineIndex, innerVisuals) in visuals)
         {
-            var pipeline = pipelineInstances[pipelineIndex];
-
-            foreach(var visual in list)
-            {
-                if(!visual.Active)
-                {
-                    continue;
-                }
-
-            }
+            
         }
     }
     /// <summary>
@@ -73,10 +73,9 @@ public class VFXManager : IModule
         //将Visual实例加到对应绘制层与第一个Pipeline的位置
         if (!visuals.TryGetValue(visual.DrawLayer, out var value))
         {
-            visuals[visual.DrawLayer] = value = new Dictionary<int, List<IVisual>>();
+            visuals[visual.DrawLayer] = value = new Dictionary<PipelineIndex, List<IVisual>>();
         }
-        //第一个所需Pipeline的Index
-        int index = visualToPipeline[visual.GetType()][0];
+        PipelineIndex index = visualToPipeline[visual.GetType()];
         if (!value.TryGetValue(index, out var list))
         {
             value[index] = list = new List<IVisual>();
@@ -101,5 +100,18 @@ public class VFXManager : IModule
     public void Unload()
     {
 
+    }
+
+
+    private class Rt2DVisual : Visual
+    {
+        public override CallOpportunity DrawLayer => throw new InvalidOperationException("Don't use this manually!");
+
+        public ResourceLocker<RenderTarget2D> locker;
+
+        public override void Draw()
+        {
+
+        }
     }
 }

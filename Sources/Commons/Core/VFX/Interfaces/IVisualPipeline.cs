@@ -13,5 +13,13 @@ namespace Everglow.Sources.Commons.Core.VFX.Interfaces
         /// </summary>
         /// <param name="visuals"></param>
         public void Render(IEnumerable<IVisual> visuals);
+        /// <summary>
+        /// 准备开始渲染
+        /// </summary>
+        public void BeginRender();
+        /// <summary>
+        /// 结束渲染，刷新VFXBatch
+        /// </summary>
+        public void EndRender();
     }
 }
