@@ -150,16 +150,16 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         public override void PostDraw(Color lightColor)
         {
             Player player = Main.player[Projectile.owner];
-            //Texture2D TexString = MythContent.QuickTexture("TheFirefly/Items/Weapons/ShadowWingBowString0");
-            Texture2D TexMainU0 = MythContent.QuickTexture("TheFirefly/Items/Weapons/ShadowWingBowU0");
-            Texture2D TexMainU1 = MythContent.QuickTexture("TheFirefly/Items/Weapons/ShadowWingBowU1");
-            Texture2D TexMainU0G = MythContent.QuickTexture("TheFirefly/Items/Weapons/ShadowWingBowU0Glow");
-            Texture2D TexMainU1G = MythContent.QuickTexture("TheFirefly/Items/Weapons/ShadowWingBowU1Glow");
-            Texture2D TexMainU2 = MythContent.QuickTexture("TheFirefly/Items/Weapons/ShadowWingBowU2");
-            Texture2D TexMainD0 = MythContent.QuickTexture("TheFirefly/Items/Weapons/ShadowWingBowD0");
-            Texture2D TexMainD1 = MythContent.QuickTexture("TheFirefly/Items/Weapons/ShadowWingBowD1");
-            Texture2D TexMain = MythContent.QuickTexture("TheFirefly/Items/Weapons/ShadowWingBowMain");
-            Texture2D TexMainG = MythContent.QuickTexture("TheFirefly/Items/Weapons/ShadowWingBowMainGlow");
+            //Texture2D TexString = MythContent.QuickTexture("TheFirefly/Projectiles/ShadowWingBowTex/ShadowWingBowString0");
+            Texture2D TexMainU0 = MythContent.QuickTexture("TheFirefly/Projectiles/ShadowWingBowTex/ShadowWingBowU0");
+            Texture2D TexMainU1 = MythContent.QuickTexture("TheFirefly/Projectiles/ShadowWingBowTex/ShadowWingBowU1");
+            Texture2D TexMainU0G = MythContent.QuickTexture("TheFirefly/Projectiles/ShadowWingBowTex/ShadowWingBowU0Glow");
+            Texture2D TexMainU1G = MythContent.QuickTexture("TheFirefly/Projectiles/ShadowWingBowTex/ShadowWingBowU1Glow");
+            Texture2D TexMainU2 = MythContent.QuickTexture("TheFirefly/Projectiles/ShadowWingBowTex/ShadowWingBowU2");
+            Texture2D TexMainD0 = MythContent.QuickTexture("TheFirefly/Projectiles/ShadowWingBowTex/ShadowWingBowD0");
+            Texture2D TexMainD1 = MythContent.QuickTexture("TheFirefly/Projectiles/ShadowWingBowTex/ShadowWingBowD1");
+            Texture2D TexMain = MythContent.QuickTexture("TheFirefly/Projectiles/ShadowWingBowTex/ShadowWingBowMain");
+            Texture2D TexMainG = MythContent.QuickTexture("TheFirefly/Projectiles/ShadowWingBowTex/ShadowWingBowMainGlow");
             Texture2D TexArrow = TextureAssets.Projectile[(int)(Projectile.ai[0])].Value;
             Texture2D TexMothArrow = MythContent.QuickTexture("TheFirefly/Projectiles/MothArrow");
             //float a0 = Energy % 60f;
@@ -183,7 +183,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             }
             //int StringFrame = 0;
             //StringFrame = Math.Clamp((int)(Energy / 20f), 0, 5);
-            //TexString = MythContent.QuickTexture("TheFirefly/Items/Weapons/ShadowWingBowString" + StringFrame.ToString());
+            //TexString = MythContent.QuickTexture("TheFirefly/Projectiles/ShadowWingBowTex/ShadowWingBowString" + StringFrame.ToString());
             Vector2 v0 = Main.MouseWorld - player.Center;
             if (Main.mouseLeft)
             {

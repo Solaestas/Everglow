@@ -88,37 +88,37 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(v0.Y, v0.X) - Math.PI / 2d));
             }
 
-            Texture2D TexMain = MythContent.QuickTexture("TheFirefly/Items/Weapons/PhosphorescenceGun0");
-            Texture2D TexMainG = MythContent.QuickTexture("TheFirefly/Items/Weapons/PhosphorescenceGun0G");
+            Texture2D TexMain = MythContent.QuickTexture("TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGun0");
+            Texture2D TexMainG = MythContent.QuickTexture("TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGun0G");
             if (addi % 48 < 8)
             {
-                TexMain = MythContent.QuickTexture("TheFirefly/Items/Weapons/PhosphorescenceGun2");
-                TexMainG = MythContent.QuickTexture("TheFirefly/Items/Weapons/PhosphorescenceGun2G");
+                TexMain = MythContent.QuickTexture("TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGun2");
+                TexMainG = MythContent.QuickTexture("TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGun2G");
             }
             else if (addi % 48 < 16)
             {
-                TexMain = MythContent.QuickTexture("TheFirefly/Items/Weapons/PhosphorescenceGun3");
-                TexMainG = MythContent.QuickTexture("TheFirefly/Items/Weapons/PhosphorescenceGun3G");
+                TexMain = MythContent.QuickTexture("TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGun3");
+                TexMainG = MythContent.QuickTexture("TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGun3G");
             }
             else if (addi % 48 < 24)
             {
-                TexMain = MythContent.QuickTexture("TheFirefly/Items/Weapons/PhosphorescenceGun2");
-                TexMainG = MythContent.QuickTexture("TheFirefly/Items/Weapons/PhosphorescenceGun2G");
+                TexMain = MythContent.QuickTexture("TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGun2");
+                TexMainG = MythContent.QuickTexture("TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGun2G");
             }
             else if (addi % 48 < 32)
             {
-                TexMain = MythContent.QuickTexture("TheFirefly/Items/Weapons/PhosphorescenceGun0");
-                TexMainG = MythContent.QuickTexture("TheFirefly/Items/Weapons/PhosphorescenceGun0G");
+                TexMain = MythContent.QuickTexture("TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGun0");
+                TexMainG = MythContent.QuickTexture("TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGun0G");
             }
             else if (addi % 48 < 40)
             {
-                TexMain = MythContent.QuickTexture("TheFirefly/Items/Weapons/PhosphorescenceGun1");
-                TexMainG = MythContent.QuickTexture("TheFirefly/Items/Weapons/PhosphorescenceGun1G");
+                TexMain = MythContent.QuickTexture("TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGun1");
+                TexMainG = MythContent.QuickTexture("TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGun1G");
             }
             else
             {
-                TexMain = MythContent.QuickTexture("TheFirefly/Items/Weapons/PhosphorescenceGun0");
-                TexMainG = MythContent.QuickTexture("TheFirefly/Items/Weapons/PhosphorescenceGun0G");
+                TexMain = MythContent.QuickTexture("TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGun0");
+                TexMainG = MythContent.QuickTexture("TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGun0G");
             }
             Color drawColor = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
             SpriteEffects se = SpriteEffects.None;

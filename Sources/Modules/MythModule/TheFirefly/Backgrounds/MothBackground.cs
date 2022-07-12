@@ -385,7 +385,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         /// <returns></returns>
         private Vector2 ImageSpaceToCloseTextureSpace(Vector2 posIS, Vector2 texSize)
         {
-            Vector2 mappedIS = posIS + new Vector2(0, 450);
+            Vector2 mappedIS = posIS + new Vector2(0, 465);
             return mappedIS / texSize;
         }
 
@@ -424,6 +424,37 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             ropeManager.luminance = luminance;
             ropeManager.Draw();
 
+            //便于合批，顶点绘制分开处置
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            Texture2D VineTexture = MythContent.QuickTexture("TheFirefly/Backgrounds/Dark");
+            for (int i = 0; i < ropes.Count; i++)
+            {
+                List<Vertex2D> branch = new List<Vertex2D>();
+
+                for (int j = 0; j < ropes[i].mass.Length; j++)
+                {
+                    var mass = ropes[i].mass[j];
+                    Vector2 vector = new Vector2(0, 1);
+                    if(j > 0)
+                    {
+                        vector = mass.position - ropes[i].mass[j - 1].position;
+                    }
+                    vector = Vector2.Normalize(vector);
+                    var pos = ImageSpaceToCloseTextureSpace(mass.position, texClose.Size());
+                    Vector2 posSS = -targetSourceRect.TopLeft() + texClose.Size() * pos;
+
+                    float width = (ropes[i].mass.Length - j);
+                    //通过顶点绘制枝条
+                    branch.Add(new Vertex2D(posSS + vector.RotatedBy(Math.PI / 2d) * width, Color.White, Vector3.Zero));
+                    branch.Add(new Vertex2D(posSS - vector.RotatedBy(Math.PI / 2d) * width, Color.White, Vector3.Zero));
+
+                }
+                Main.graphics.GraphicsDevice.Textures[0] = VineTexture;
+                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, branch.ToArray(), 0, branch.Count - 2);
+            }
+            Main.spriteBatch.End();
+
+
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             Texture2D dropTexture = MythContent.QuickTexture("TheFirefly/Backgrounds/Drop");
             for (int i = 0; i < ropes.Count; i++)
@@ -431,10 +462,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 for (int j = 1; j < ropes[i].mass.Length; j++)
                 {
                     var mass = ropes[i].mass[j];
-                    float scale = 1.3f;
+                    float scale = 1f + j / 7f;
                     Vector2 vector = mass.position - ropes[i].mass[j - 1].position;
                     float rotation = vector.ToRotation() - MathHelper.PiOver2;
-                    Color color = GetLuminace(new Color(0, 0.15f * j, 1f / 5f * j, 0) * alpha * 5);
+                    Color color = GetLuminace(new Color(0, 0.15f * j, 0.2f * j, 0.1f * j) * alpha * 5);
 
                     var pos = ImageSpaceToCloseTextureSpace(mass.position, texClose.Size());
 
@@ -444,6 +475,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 }
             }
             Main.spriteBatch.End();
+
 
             var texCloseII = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyClose2");
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
@@ -501,7 +533,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 ropes = ropeManager.LoadRope("Everglow/Sources/Modules/MythModule/TheFirefly/Backgrounds/TreeRope",
                     null,
                     Vector2.Zero,
-                    () => Vector2.Zero);//我也不知道为什么要 * 2反正 * 2就对了
+                    () => Vector2.Zero);
             }
 
 

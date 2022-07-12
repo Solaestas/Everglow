@@ -21,7 +21,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         }
 
         private bool aTm = false;
-        private bool Kiie;
         public override void AI()
         {
             if (Projectile.timeLeft == 119 && !aTm)
