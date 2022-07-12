@@ -2,7 +2,7 @@
 using Everglow.Sources.Modules.ZYModule.ZYPacket;
 using Terraria.Audio;
 
-namespace Everglow.Sources.Modules.ZYModule.Commons.Function;
+namespace Everglow.Sources.Commons.Function.Player;
 
 
 internal class PlayerManager : ModPlayer
@@ -27,17 +27,17 @@ internal class PlayerManager : ModPlayer
     public Vector2 MouseWorld { get; internal set; }
     public override void PostUpdate()
     {
-        ControlLeft.Update(Player.controlLeft);
-        ControlRight.Update(Player.controlRight);
-        ControlUp.Update(Player.controlUp);
-        ControlDown.Update(Player.controlDown);
-        ControlJump.Update(Player.controlJump);
-        ControlUseItem.Update(Player.controlUseItem);
+        ControlLeft.LocalUpdate(Player.controlLeft);
+        ControlRight.LocalUpdate(Player.controlRight);
+        ControlUp.LocalUpdate(Player.controlUp);
+        ControlDown.LocalUpdate(Player.controlDown);
+        ControlJump.LocalUpdate(Player.controlJump);
+        ControlUseItem.LocalUpdate(Player.controlUseItem);
         if (Main.myPlayer == Player.whoAmI)
         {
-            MouseLeft.Update(Main.mouseLeft);
-            MouseRight.Update(Main.mouseRight);
-            ControlUseTile.Update(Player.controlUseTile);
+            MouseLeft.LocalUpdate(Main.mouseLeft);
+            MouseRight.LocalUpdate(Main.mouseRight);
+            ControlUseTile.LocalUpdate(Player.controlUseTile);
             MouseWorld = Main.MouseWorld;
             Everglow.PacketResolver.Send<InputPacketToServer>();
         }

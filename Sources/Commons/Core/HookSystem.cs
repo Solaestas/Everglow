@@ -131,14 +131,21 @@ namespace Everglow.Sources.Commons.Core
         /// </summary>
         public static int UpdateTimer
         {
-            get; internal set;
+            get; private set;
         }
         /// <summary>
         /// 绘制的计时器，PostDrawEverything后加一
         /// </summary>
         public static int DrawTimer
         {
-            get; internal set;
+            get; private set;
+        }
+        /// <summary>
+        /// 针对UI的计时器，暂停时也会加一
+        /// </summary>
+        public static int UITimer
+        {
+            get; private set;
         }
         /// <summary>
         /// 在<paramref name="op"/>时执行<paramref name="action"/>
@@ -247,8 +254,6 @@ namespace Everglow.Sources.Commons.Core
             On.Terraria.Main.DoDraw_WallsTilesNPCs += Main_DoDraw_WallsTilesNPCs;
             Main.OnResolutionChanged += Main_OnResolutionChanged;
         }
-
-
         public void HookUnload()
         {
             Main.OnResolutionChanged -= Main_OnResolutionChanged;
@@ -286,6 +291,10 @@ namespace Everglow.Sources.Commons.Core
             }
         }
 
+        public override void UpdateUI(GameTime gameTime)
+        {
+            UITimer++;
+        }
         public override void PostUpdateNPCs()
         {
             Invoke(CallOpportunity.PostUpdateNPCs);

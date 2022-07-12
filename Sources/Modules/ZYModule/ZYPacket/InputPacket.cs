@@ -1,5 +1,5 @@
 ﻿using Everglow.Sources.Commons.Core.Network.PacketHandle;
-using Everglow.Sources.Modules.ZYModule.Commons.Function;
+using Everglow.Sources.Commons.Function.Player;
 
 namespace Everglow.Sources.Modules.ZYModule.ZYPacket;
 
