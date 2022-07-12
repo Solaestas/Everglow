@@ -57,7 +57,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             {
                 if ((Main.npc[j].Center - Projectile.Center).Length() < 100 && !Main.npc[j].dontTakeDamage && !Main.npc[j].friendly && Main.npc[j].active)
                 {
-                    Main.npc[j].StrikeNPC((int)(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f)), 2, Math.Sign(Projectile.velocity.X), Main.rand.Next(100) < Projectile.ai[1]);
+                    Main.npc[j].StrikeNPC((int)(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f)), 2, Math.Sign(Projectile.velocity.X), Main.rand.Next(100) < Projectile.CritChance);
                     Player player = Main.player[Projectile.owner];
                     player.addDPS((int)(Projectile.damage * (1 + Projectile.ai[1] / 100f) * 1.0f));
                 }

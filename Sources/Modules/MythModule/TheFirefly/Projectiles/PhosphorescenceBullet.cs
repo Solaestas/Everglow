@@ -39,13 +39,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         }
         public override void Kill(int timeLeft)
         {
-            for (int j = 0; j < 8; j++)
+            for (int j = 0; j < timeLeft / 8; j++)
             {
                 Vector2 v0 = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) * Projectile.scale * 0.3f;
                 int num20 = Dust.NewDust(Projectile.Center + Vector2.Normalize(Projectile.velocity) * 16f, 0, 0, ModContent.DustType<BlueGlowAppear>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(0.6f, 1.8f) * Projectile.scale * 0.4f);
                 Main.dust[num20].noGravity = true;
             }
-            for (int j = 0; j < 16; j++)
+            for (int j = 0; j < timeLeft / 4; j++)
             {
                 Vector2 v0 = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) * Projectile.scale * 0.3f;
                 int num21 = Dust.NewDust(Projectile.Center + Vector2.Normalize(Projectile.velocity) * 16f, 0, 0, ModContent.DustType<BlueParticleDark2>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(3.7f, 5.1f));

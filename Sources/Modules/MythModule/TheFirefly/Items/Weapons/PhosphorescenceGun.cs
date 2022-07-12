@@ -63,6 +63,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
                             {
                                 Main.projectile[x].ai[0] = 1f;
                                 Main.projectile[x].ai[1] = Item.useAnimation;
+                                player.velocity -= velocity * 0.2f;
                             }
                         }
                     }
@@ -79,12 +80,27 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
                 Vector2 newVelocity = velocity.RotatedByRandom(MathHelper.ToRadians(15));
                 newVelocity *= 1f - Main.rand.NextFloat(0.3f);
                 Projectile.NewProjectileDirect(source, position + velocity * 2.0f - new Vector2(0, 4), newVelocity, ModContent.ProjectileType<PhosphorescenceBullet>(), (int)(damage * 0.26f), knockback, player.whoAmI);
+                Vector2 basePos = position + newVelocity * 3.7f - new Vector2(0, 4);
                 for (int z = 0; z < 3; z++)
                 {
                     Vector2 v = newVelocity * z / 3f;
-                    Dust.NewDust(position + newVelocity * 3f - new Vector2(0, 4), 0, 0, ModContent.DustType<MothBlue>(), v.X, v.Y, 0, default(Color), Main.rand.NextFloat(0.8f, 1.7f));
+                    Dust.NewDust(basePos, 0, 0, ModContent.DustType<MothBlue>(), v.X, v.Y, 0, default(Color), Main.rand.NextFloat(0.8f, 1.7f));
                     v = newVelocity * (z + 0.5f) / 3f;
-                    Dust.NewDust(position + newVelocity * 3f - new Vector2(0, 4), 0, 0, ModContent.DustType<MothBlue2>(), v.X, v.Y, 0, default(Color), Main.rand.NextFloat(0.8f, 1.7f));
+                    Dust.NewDust(basePos, 0, 0, ModContent.DustType<MothBlue2>(), v.X, v.Y, 0, default(Color), Main.rand.NextFloat(0.8f, 1.7f));
+                }
+                for (int j = 0; j < 9; j++)
+                {
+                    Vector2 v = newVelocity / 27f * j;
+                    Vector2 v0 = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) * 0.3f + v;
+                    int num20 = Dust.NewDust(basePos - new Vector2(8), 0, 0, ModContent.DustType<BlueGlowAppear>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(0.6f, 1.8f) * 0.4f);
+                    Main.dust[num20].noGravity = true;
+                }
+                for (int j = 0; j < 18; j++)
+                {
+                    Vector2 v = newVelocity / 54f * j;
+                    Vector2 v0 = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) * 0.3f + v;
+                    int num21 = Dust.NewDust(basePos - new Vector2(8), 0, 0, ModContent.DustType<BlueParticleDark2>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(3.7f, 5.1f));
+                    Main.dust[num21].alpha = (int)(Main.dust[num21].scale * 50);
                 }
             }
             return false;
