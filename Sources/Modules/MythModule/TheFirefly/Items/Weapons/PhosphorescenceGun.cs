@@ -45,7 +45,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             ScreenShaker Gsplayer = player.GetModPlayer<ScreenShaker>();
-            Gsplayer.FlyCamPosition = new Vector2(0, 32).RotatedByRandom(6.283);
+            Gsplayer.FlyCamPosition = new Vector2(0, 100).RotatedByRandom(6.283);
             const int NumProjectiles = 4;
             if (player.ownedProjectileCounts[ModContent.ProjectileType<Projectiles.PhosphorescenceGun>()] < 1)
             {

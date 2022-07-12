@@ -1,4 +1,5 @@
 ﻿using Terraria.Audio;
+using Everglow.Sources.Modules.MythModule;
 
 namespace Everglow.Sources.Modules.MEACModule.Projectiles
 {
@@ -10,6 +11,8 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             trailLength = 20;
             longHandle = true;
             shadertype = "Trail";
+            AutoEnd = false;
+            CanLongLeftClick = true;
         }
         public override string TrailColorTex()
         {
@@ -34,14 +37,19 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
             //伤害倍率
+            ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
+            float ShakeStrength = 0.2f;
             if (attackType == 0)
             {
                 damage *= 2;
+                ShakeStrength = 1f;
             }
             if (attackType == 4)
             {
                 damage *= 4;
+                ShakeStrength = 2f;
             }
+            Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 12f * ShakeStrength, 100)).RotatedByRandom(6.283);
         }
         public override void Attack()
         {
@@ -101,9 +109,10 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                     mainVec += Projectile.DirectionFrom(Player.Center) * 3;
                     Projectile.rotation = mainVec.ToRotation();
                 }
-                if (timer == 20)
+                if (timer == 8)
                 {
-                    AttSound(SoundID.Item1);
+                    AttSound(new SoundStyle(
+                "Everglow/Sources/Modules/MEACModule/Sounds/TrueMeleeSwing"));
                 }
                 if (timer > 20 && timer < 35)
                 {
@@ -143,14 +152,14 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                         Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center - Vector2.Normalize(mVec) * 150, Vector2.Normalize(mVec) * 20, ModContent.ProjectileType<VortexVanquisher2>(), 0, 0, Projectile.owner, 1).scale=Projectile.scale*1.2f;
                     }
                 }
-                if (timer > 50)
+                if (timer >= 50)
                 {
                     NextAttackType();
                 }
             }
             if (attackType == 3)
             {
-                if (timer == 0)
+                if (timer == 1)
                 {
                     AttSound(SoundID.NPCHit4);
                     Projectile.velocity = Vector2.Zero;
@@ -173,13 +182,13 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                 if (timer > 120)
                 {
                     CanIgnoreTile = false;
-                    Projectile.extraUpdates = 1;
                     NextAttackType();
+                    Projectile.extraUpdates = 1;
                 }
             }
             if (attackType == 4)
             {
-                if (timer == 0)
+                if (timer == 1)
                 {
                     useTrail = false;
                    
@@ -209,11 +218,20 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                         disFromPlayer -= 30;
                     }
                 }
+                if (timer > 30)
+                {
+                    Player.velocity *= 0.9f;
+                }
                 if (timer > 40)
                 {
                     NextAttackType();
                 }
             }
+        }
+        public override void LeftLongThump()
+        {
+            LockPlayerDir(Player);
+            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(Math.Sign(Main.MouseWorld.X - Projectile.Center.X), 0), ModContent.ProjectileType<VortexVanquisherThump>(), Projectile.damage * 6, 0, Projectile.owner);
         }
     }
 }

@@ -50,39 +50,54 @@ namespace Everglow.Sources.Modules.MEACModule.Items
 
         public override bool CanUseItem(Player player)
         {
+            
             if (base.CanUseItem(player))
             {
+                
+                return false;
+            }
+            return base.CanUseItem(player);
+        }
+        internal bool LeftClick = false;
+        public override void HoldItem(Player player)
+        {
+            if (player.ownedProjectileCounts[ModContent.ProjectileType<VortexVanquisher>()] + player.ownedProjectileCounts[ModContent.ProjectileType<VortexVanquisherThump>()] < 1)
+            {
+
                 if (Main.myPlayer == player.whoAmI)
                 {
                     if (player.altFunctionUse != 2)
                     {
-                        Projectile proj = Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<VortexVanquisher>(), player.GetWeaponDamage(Item), Item.knockBack, player.whoAmI);
-                        proj.scale *= Item.scale;
+                        if (LeftClick && !Main.mouseLeft)
+                        {
+                            Projectile proj = Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<VortexVanquisher>(), player.GetWeaponDamage(Item), Item.knockBack, player.whoAmI);
+                            proj.scale *= Item.scale;
+                        }
                     }
                     else
                     {
-                        if(CoolTimeForE > 0)
+                        if (CoolTimeForE > 0)
                         {
-                            return false;
+                            return;
                         }
                         CoolTimeForE = 720;
                         bool HasProj = false;
                         foreach (Projectile proj in Main.projectile)
                         {
-                            if(proj.owner == player.whoAmI && proj.type == ModContent.ProjectileType<NonTrueMeleeProj.GoldShield>() && proj.active)
+                            if (proj.owner == player.whoAmI && proj.type == ModContent.ProjectileType<NonTrueMeleeProj.GoldShield>() && proj.active)
                             {
                                 proj.timeLeft = 1200;
                                 proj.ai[1] = 150;//盾量
                                 HasProj = true;
                             }
                         }
-                        if(!HasProj)
+                        if (!HasProj)
                         {
                             Projectile proj2 = Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<NonTrueMeleeProj.GoldShield>(), player.GetWeaponDamage(Item), Item.knockBack, player.whoAmI);
                             proj2.ai[1] = 150;//盾量
                         }
                         Vector2 CheckPoint = Main.MouseWorld;
-                        for (int y = 0;y < 60;y++)
+                        for (int y = 0; y < 60; y++)
                         {
                             if (Collision.SolidCollision(CheckPoint, 1, 1))
                             {
@@ -95,11 +110,11 @@ namespace Everglow.Sources.Modules.MEACModule.Items
                         }
                         if (!Collision.SolidCollision(CheckPoint, 1, 1))
                         {
-                            return false;
+                            return;
                         }
 
 
-                        Vector2 TotalVector = Vector2.Zero;
+                        Vector2 TotalVector = Vector2.Zero;//合向量
                         int TCount = 0;
                         for (int a = 0; a < 12; a++)
                         {
@@ -127,9 +142,9 @@ namespace Everglow.Sources.Modules.MEACModule.Items
                                 TotalVector += v0 * 0.5f;
                             }
                         }
-                        if(TotalVector == Vector2.Zero || TCount > 30)
+                        if (TotalVector == Vector2.Zero || TCount > 30)
                         {
-                            return false;
+                            return;
                         }
 
                         int f = Projectile.NewProjectile(player.GetSource_ItemUse(Item), CheckPoint, Vector2.Zero, ModContent.ProjectileType<NonTrueMeleeProj.StonePost>(), Item.damage, 0, player.whoAmI, 1);
@@ -137,12 +152,26 @@ namespace Everglow.Sources.Modules.MEACModule.Items
                         Main.projectile[f].rotation = (float)(Angle - Math.PI * 1.5);
                     }
                 }
-                return false;
+                if (LeftClick)
+                {
+                    ClickTime++;
+                    if (ClickTime > 90)
+                    {
+                        int playerdir = Main.MouseWorld.X > player.Center.X ? 1 : -1;
+                        player.direction = playerdir;
+                        Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center, new Vector2(Math.Sign(Main.MouseWorld.X - player.Center.X), 0), ModContent.ProjectileType<VortexVanquisherThump>(), Item.damage * 6, 0, player.whoAmI);
+                        ClickTime = 0;
+                    }
+                }
             }
-            return base.CanUseItem(player);
+            
+            LeftClick = Main.mouseLeft;
+            base.HoldItem(player);
         }
+        int ClickTime = 0;
         public override bool AltFunctionUse(Player player)
         {
+
             return true;
         }
         public override void AddRecipes()

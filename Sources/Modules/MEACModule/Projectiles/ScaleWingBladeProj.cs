@@ -1,5 +1,7 @@
 ﻿using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Everglow.Sources.Modules.MythModule;
+using Terraria.Audio;
 namespace Everglow.Sources.Modules.MEACModule.Projectiles
 {
     public class ScaleWingBladeProj : MeleeProj
@@ -29,9 +31,12 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         }
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
+            ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
+
             if (attackType == 100)
             {
                 damage *= 3;
+                knockback *= 3;
                 if (Projectile.owner == Player.whoAmI)
                 {
                     int counts = Main.rand.Next(4, 9);
@@ -40,9 +45,9 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                         Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center, Main.rand.NextVector2Unit() * Main.rand.Next(6, 13), ModContent.ProjectileType<ButterflyDreamFriendly>(), damage / 4, 0, Main.myPlayer, target.whoAmI);
                         proj.netUpdate2 = true;
                         proj.CritChance = Projectile.CritChance;
-
                     }
                 }
+                Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 12, 150)).RotatedByRandom(6.283);
             }
             else
             {
@@ -57,6 +62,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
 
                     }
                 }
+                Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 50, 50)).RotatedByRandom(6.283);
             }
         }
         public override void Attack()
@@ -75,8 +81,8 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                     mainVec += Projectile.DirectionFrom(player.Center) * 3;
                     Projectile.rotation = mainVec.ToRotation();
                 }
-                if (timer == 30)
-                    AttSound(SoundID.Item1);
+                if (timer == 20)
+                    AttSound(new SoundStyle("Everglow/Sources/Modules/MEACModule/Sounds/TrueMeleeSwing"));
                 if (timer > 30 && timer < 50)
                 {
                     isAttacking = true;
@@ -99,8 +105,8 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                     mainVec += Projectile.DirectionFrom(player.Center) * 3;
                     Projectile.rotation = mainVec.ToRotation();
                 }
-                if (timer == 30)
-                    AttSound(SoundID.Item1);
+                if (timer == 20)
+                    AttSound(new SoundStyle("Everglow/Sources/Modules/MEACModule/Sounds/TrueMeleeSwing"));
                 if (timer > 30 && timer < 50)
                 {
                     isAttacking = true;
@@ -135,10 +141,10 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                     Projectile.rotation += Projectile.spriteDirection * 0.25f;
                     mainVec = Projectile.rotation.ToRotationVector2() * 130;
                 }
-                if (timer == 10 || timer == 30)
+                if (timer == 1 || timer == 20)
                 {
                     useTrail = false;
-                    AttSound(SoundID.Item1);
+                    AttSound(new SoundStyle("Everglow/Sources/Modules/MEACModule/Sounds/TrueMeleeSwing"));
                     if (Projectile.owner == Main.myPlayer)
                     {
                         //寻敌
@@ -218,9 +224,9 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                     d2.position += Main.rand.NextVector2Unit() * 5;
                     d2.alpha = (int)(d2.scale * 50);
                 }
-                if (timer == 100)
+                if (timer == 80)
                 {
-                    AttSound(SoundID.Item1);
+                    AttSound(new SoundStyle("Everglow/Sources/Modules/MEACModule/Sounds/TrueMeleeSwing"));
                 }
                 if (timer > 100)
                 {

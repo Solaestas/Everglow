@@ -37,8 +37,29 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         internal Queue<Vector2> trailVecs;
         internal int trailLength = 40;
         internal int timer = 0;
+
         internal bool isAttacking = false;
         internal bool useTrail = true;
+        /// <summary>
+        /// 断开左键是否自动结束攻击
+        /// </summary>
+        internal bool AutoEnd = true;
+        /// <summary>
+        /// 绑定AutoEnd参数,用于判定上次攻击结束前是否按下鼠标左键从而实现连击
+        /// </summary>
+        internal bool HasContinueLeftClick = false;
+        /// <summary>
+        /// 允许长按左键?(一般情况用来做重击)
+        /// </summary>
+        internal bool CanLongLeftClick = false;
+        /// <summary>
+        /// 绑定CanLongLeftClick,用于判定重击
+        /// </summary>
+        internal int Clicktimer = 0;
+        /// <summary>
+        /// 绑定CanLongLeftClick,用于判定重击所需要的蓄力时长
+        /// </summary>
+        internal int ClickMaxtimer = 90;
         /// <summary>
         /// 能否穿墙攻击敌人
         /// </summary>
@@ -128,17 +149,26 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             {
                 if (!isRightClick)
                 {
-                    if (!Player.controlUseItem || Player.dead)
+                    bool IsEnd = AutoEnd ? (!Player.controlUseItem || Player.dead) : Player.dead;
+                    if (IsEnd)
                     {
                         End();
                     }
                 }
                 else
                 {
-                    if (!Player.controlUseTile || Player.dead)
+                    bool IsEnd = AutoEnd ? (!Player.controlUseTile || Player.dead) : Player.dead;
+                    if (IsEnd)
                     {
                         End();
                     }
+                }
+            }
+            if (!HasContinueLeftClick && timer > 15)//大于1/60s即判定为下一击继续
+            {
+                if (Main.mouseLeft)
+                {
+                    HasContinueLeftClick = true;
                 }
             }
             if (isAttacking)
@@ -156,6 +186,17 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             else//清空！
             {
                 trailVecs.Clear();
+            }
+            if(CanLongLeftClick)
+            {
+                if(Main.mouseLeft)
+                {
+                    Clicktimer++;
+                }
+                else
+                {
+                    Clicktimer = 0;
+                }
             }
             ProduceWaterRipples(new Vector2(mainVec.Length(), 30));
         }
@@ -188,12 +229,44 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         }
         public void NextAttackType()
         {
+            if (!isAttacking && !AutoEnd)
+            {
+                if (Clicktimer >= ClickMaxtimer)
+                {
+                    LeftLongThump();
+                    End();
+                }
+                if (!isRightClick)
+                {
+                    if (!HasContinueLeftClick || Player.dead)
+                    {
+                        Player player = Main.player[Projectile.owner];
+                        Projectile.Kill();
+                        player.GetModPlayer<MEACPlayer>().isUsingMeleeProj = false;
+                    }
+                }
+                else
+                {
+                    if (!Player.controlUseTile || Player.dead)
+                    {
+                        Player player = Main.player[Projectile.owner];
+                        Projectile.Kill();
+                        player.GetModPlayer<MEACPlayer>().isUsingMeleeProj = false;
+                    }
+                }
+            }
+            HasContinueLeftClick = false;
             timer = 0;
             attackType++;
             if (attackType > maxAttackType)
             {
                 attackType = 0;
             }
+            
+        }
+        public virtual void LeftLongThump()
+        {
+
         }
         public virtual void End()
         {
