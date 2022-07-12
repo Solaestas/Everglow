@@ -4,6 +4,7 @@ using Everglow.Sources.Commons.Function.FeatureFlags;
 
 namespace Everglow.Sources.Modules.ExampleModule.UI
 {
+    [DontAutoLoad]
     public class UIModule : IModule
     {
         public string Name { get; } = "测试用用户交互界面";
