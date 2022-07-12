@@ -1,4 +1,5 @@
 using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Commons.Core.EverglowUtils;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.ObjectInteractions;
@@ -101,127 +102,19 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 
 		public override bool RightClick(int i, int j)
 		{
-			Player player = Main.LocalPlayer;
-			Tile tile = Main.tile[i, j];
-			Main.mouseRightRelease = false;
-			int left = i;
-			int top = j;
-			if (tile.TileFrameX % 36 != 0)
-			{
-				left--;
-			}
-
-			if (tile.TileFrameY != 0)
-			{
-				top--;
-			}
-
-			player.CloseSign();
-			player.SetTalkNPC(-1);
-			Main.npcChatCornerItem = 0;
-			Main.npcChatText = "";
-			if (Main.editChest)
-			{
-				SoundEngine.PlaySound(SoundID.MenuTick);
-				Main.editChest = false;
-				Main.npcChatText = string.Empty;
-			}
-
-			if (player.editedChestName)
-			{
-				NetMessage.SendData(MessageID.SyncPlayerChest, -1, -1, NetworkText.FromLiteral(Main.chest[player.chest].name), player.chest, 1f);
-				player.editedChestName = false;
-			}
-
-			if (Main.netMode == NetmodeID.MultiplayerClient)
-			{
-				if (left == player.chestX && top == player.chestY && player.chest >= 0)
-				{
-					player.chest = -1;
-					Recipe.FindRecipes();
-					SoundEngine.PlaySound(SoundID.MenuClose);
-				}
-				else
-				{
-					NetMessage.SendData(MessageID.RequestChestOpen, -1, -1, null, left, top);
-					Main.stackSplit = 600;
-				}
-			}
-			else
-			{
-					int chest = Chest.FindChest(left, top);
-					if (chest >= 0)
-					{
-						Main.stackSplit = 600;
-						if (chest == player.chest)
-						{
-							player.chest = -1;
-							SoundEngine.PlaySound(SoundID.MenuClose);
-						}
-					    else
-					    {
-						player.chest = chest;
-						Main.playerInventory = true;
-						Main.recBigList = false;
-						player.chestX = left;
-						player.chestY = top;
-						SoundEngine.PlaySound(SoundID.MenuOpen);
-					}
-
-					Recipe.FindRecipes();
-					}
-				
-			}
-
-			return true;
+			return FurnitureUtils.ChestRightClick(i, j);
 		}
 
 		public override void MouseOver(int i, int j)
 		{
-			Player player = Main.LocalPlayer;
-			Tile tile = Main.tile[i, j];
-			int left = i;
-			int top = j;
-			if (tile.TileFrameX % 36 != 0)
-			{
-				left--;
-			}
-
-			if (tile.TileFrameY != 0)
-			{
-				top--;
-			}
-			int chest = Chest.FindChest(left, top);
-			player.cursorItemIconID = -1;
-			if (chest < 0)
-			{
-				player.cursorItemIconText = Language.GetTextValue("LegacyChestType.0");
-			}
-			else
-			{
-				string defaultName = TileLoader.ContainerName(tile.TileType); // This gets the ContainerName text for the currently selected language
-				player.cursorItemIconText = Main.chest[chest].name.Length > 0 ? Main.chest[chest].name : defaultName;
-				if (player.cursorItemIconText == defaultName)
-				{
-					player.cursorItemIconID = ModContent.ItemType<Items.Furnitures.GlowWoodChest>();
-				
-					player.cursorItemIconText = "";
-				}
-			}
-
-			player.noThrow = 2;
-			player.cursorItemIconEnabled = true;
+			string chestName = this.ContainerName.GetDefault();
+			FurnitureUtils.ChestMouseOver<Items.Furnitures.GlowWoodChest> (chestName, i, j);
 		}
 
 		public override void MouseOverFar(int i, int j)
 		{
-			MouseOver(i, j);
-			Player player = Main.LocalPlayer;
-			if (player.cursorItemIconText == "")
-			{
-				player.cursorItemIconEnabled = false;
-				player.cursorItemIconID = 0;
-			}
+			string chestName = this.ContainerName.GetDefault();
+			FurnitureUtils.ChestMouseFar<Items.Furnitures.GlowWoodChest>(chestName, i, j);
 		}
 		public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 		{
