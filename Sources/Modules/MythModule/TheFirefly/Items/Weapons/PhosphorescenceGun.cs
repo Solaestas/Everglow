@@ -44,7 +44,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            GunShakePlayer Gsplayer = player.GetModPlayer<GunShakePlayer>();
+            ScreenShaker Gsplayer = player.GetModPlayer<ScreenShaker>();
             Gsplayer.FlyCamPosition = new Vector2(0, 32).RotatedByRandom(6.283);
             const int NumProjectiles = 4;
             if (player.ownedProjectileCounts[ModContent.ProjectileType<Projectiles.PhosphorescenceGun>()] < 1)
@@ -104,15 +104,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
                 }
             }
             return false;
-        }
-    }
-    class GunShakePlayer : ModPlayer
-    {
-        public Vector2 FlyCamPosition = Vector2.Zero;
-        public override void ModifyScreenPosition()
-        {
-            FlyCamPosition *= 0.25f;
-            Main.screenPosition += FlyCamPosition;
         }
     }
 }
