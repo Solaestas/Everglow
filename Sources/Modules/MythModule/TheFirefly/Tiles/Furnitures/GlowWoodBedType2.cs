@@ -1,5 +1,6 @@
 using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
 using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Commons.Core.EverglowUtils;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.ObjectInteractions;
@@ -62,36 +63,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 			Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 64, 32, ModContent.ItemType<Items.Furnitures.GlowWoodBedType2>());
 		}
 
-		public override bool RightClick(int i, int j) {
-			Player player = Main.LocalPlayer;
-			Tile tile = Main.tile[i, j];
-			int spawnX = (i - (tile.TileFrameX / 18)) + (tile.TileFrameX >= 72 ? 5 : 2);
-			int spawnY = j + 2;
-
-			if (tile.TileFrameY % 38 != 0) {
-				spawnY--;
-			}
-
-			if (!Player.IsHoveringOverABottomSideOfABed(i, j)) { // This assumes your bed is 4x2 with 2x2 sections. You have to write your own code here otherwise
-				if (player.IsWithinSnappngRangeToTile(i, j, PlayerSleepingHelper.BedSleepingMaxDistance)) {
-					player.GamepadEnableGrappleCooldown();
-					player.sleeping.StartSleeping(player, i, j);
-				}
-			}
-			else {
-				player.FindSpawn();
-
-				if (player.SpawnX == spawnX && player.SpawnY == spawnY) {
-					player.RemoveSpawn();
-					Main.NewText(Language.GetTextValue("Game.SpawnPointRemoved"), byte.MaxValue, 240, 20);
-				}
-				else if (Player.CheckSpawn(spawnX, spawnY)) {
-					player.ChangeSpawn(spawnX, spawnY);
-					Main.NewText(Language.GetTextValue("Game.SpawnPointSet"), byte.MaxValue, 240, 20);
-				}
-			}
-
-			return true;
+		public override bool RightClick(int i, int j) 
+		{
+			return FurnitureUtils.BedRightClick(i, j);
 		}
 
 		public override void MouseOver(int i, int j) {

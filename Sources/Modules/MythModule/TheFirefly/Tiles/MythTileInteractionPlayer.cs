@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,13 +9,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 {
     internal class MythTileInteractionPlayer : ModPlayer
     {
-        public override void OnEnterWorld(Player player)
+        public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
         {
-            if (Main.myPlayer == player.whoAmI)
+            if (newPlayer)
             {
-                ModContent.GetInstance<FireflyTree>().PrepareForNewWorld();
+                //新玩家进入世界是发送请求
+                Everglow.PacketResolver.Send(new MothPositionPacket());
             }
-            base.OnEnterWorld(player);
         }
     }
 }
