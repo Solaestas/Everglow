@@ -70,10 +70,15 @@ internal abstract class DPlatform : DynamicTile, IHookable
     /// </summary>
     private Vector2 cache;
     public Edge Edge => new Edge(position - rotation.YAxis * width / 2, position + rotation.YAxis * width / 2);
+    public override bool IsGrabbable => false;
+    /// <summary>
+    /// 能否通过按住上下键来下平台
+    /// </summary>
+    public virtual bool IsControllable => true;
     public override Collider Collider => new CEdge(Edge);
     public override Direction MoveCollision(AABB aabb, ref Vector2 velocity, ref Vector2 move, bool ignorePlats = false)
     {
-        if (ignorePlats)
+        if (ignorePlats && IsControllable && rotation < 0)
         {
             return Direction.None;
         }
@@ -96,7 +101,6 @@ internal abstract class DPlatform : DynamicTile, IHookable
             return Direction.None;
         }
         aabb.position.Y = MathUtils.Approach(aabb.position.Y, target.Y, 1);
-        Test.TestLog(velocity.Y);
 
         do
         {
@@ -144,9 +148,6 @@ internal abstract class DPlatform : DynamicTile, IHookable
                         aabb.position.X = target.X;
                         cache = angularVelocity.YAxis * w * Math.Abs(angularVelocity.Angle) * Vector2.UnitY;
                         velocity.Y = this.velocity.Y + cache.Y;
-                        velocity.Y = onGround && velocity.Y == 0 ?
-                            Quick.AirSpeed :
-                            velocity.Y;
                     }
                     else
                     {
@@ -177,9 +178,6 @@ internal abstract class DPlatform : DynamicTile, IHookable
                     aabb.position.X = target.X;
                     cache = angularVelocity.YAxis * width * Math.Abs(angularVelocity.Angle) * Vector2.UnitY;
                     velocity.Y = this.velocity.Y + cache.Y;
-                    velocity.Y = onGround && velocity.Y == 0 ?
-                        0 :
-                        Quick.AirSpeed;
                 }
                 else if (result == Direction.Top)
                 {
@@ -188,9 +186,6 @@ internal abstract class DPlatform : DynamicTile, IHookable
                     aabb.position.X = target.X;
                     cache = angularVelocity.YAxis * width * Math.Abs(angularVelocity.Angle) * Vector2.UnitY;
                     velocity.Y = this.velocity.Y + cache.Y;
-                    velocity.Y = onGround && velocity.Y == 0 ?
-                        0 :
-                        Quick.AirSpeed;
                 }
                 else if (result == Direction.Right)
                 {
@@ -225,10 +220,35 @@ internal abstract class DPlatform : DynamicTile, IHookable
                 }
                 else
                 {
-                    float w = Vector2.Dot((result.ToVector2() * aabb.size / 2 + aabb.Center) - position, rotation.YAxis);
+                    float w = 0;
+                    Vector2 offset = Vector2.Zero;
+                    switch(result)
+                    {
+                        case Direction.TopLeft:
+                            w = Vector2.Dot(aabb.TopLeft - position, rotation.YAxis);
+                            offset = position + w * rotation.YAxis - aabb.TopLeft;
+                            break;
+                        case Direction.TopRight:
+                            w = Vector2.Dot(aabb.TopRight - position, rotation.YAxis);
+                            offset = position + w * rotation.YAxis - aabb.TopRight;
+                            break;
+                        case Direction.BottomLeft:
+                            w = Vector2.Dot(aabb.BottomLeft - position, rotation.YAxis);
+                            offset = position + w * rotation.YAxis - aabb.BottomLeft;
+                            break;
+                        case Direction.BottomRight:
+                            w = Vector2.Dot(aabb.BottomRight - position, rotation.YAxis);
+                            offset = position + w * rotation.YAxis - aabb.BottomRight;
+                            break;
+                    }
+                    aabb.position += offset + Vector2.Dot(target - aabb.position, rotation.YAxis) * rotation.YAxis;
                     velocity = Vector2.Dot(velocity, rotation.YAxis) * rotation.YAxis + this.velocity + angularVelocity.YAxis * w * Math.Abs(angularVelocity.Angle);
                 }
                 move = aabb.position - pos0 + this.velocity;
+                if(velocity.Y == 0)
+                {
+                    velocity.Y = onGround ? 0 : Quick.AirSpeed;
+                }
                 break;
             }
         } while (aabb.position != target);

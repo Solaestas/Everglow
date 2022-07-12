@@ -10,6 +10,7 @@ namespace Everglow.Sources.Modules.ZYModule.TileModule.Tiles;
 internal abstract class DBlock : DynamicTile, IGrabbable, IHookable
 {
     public Vector2 size;
+    public override bool IsGrabbable => true;
     public DBlock()
     {
         oldVelocity = Vector2.Zero;
@@ -189,9 +190,9 @@ internal abstract class DBlock : DynamicTile, IGrabbable, IHookable
     public override void Move()
     {
         Vector2 target = position + oldVelocity;
-        TileSystem.EnableDTCollision = false;
+        TileSystem.EnableCollisionHook = false;
         position += Terraria.Collision.TileCollision(position, oldVelocity, (int)size.X, (int)size.Y);
-        TileSystem.EnableDTCollision = true;
+        TileSystem.EnableCollisionHook = true;
         if (target != position)
         {
             velocity *= 0;

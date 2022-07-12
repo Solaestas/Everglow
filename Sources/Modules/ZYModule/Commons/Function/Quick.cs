@@ -2,7 +2,7 @@
 using Everglow.Sources.Modules.ZYModule.Commons.Core.Collide;
 using Everglow.Sources.Modules.ZYModule.Commons.Core.DataStructures;
 using ReLogic.Content;
-
+using System.Diagnostics.CodeAnalysis;
 
 namespace Everglow.Sources.Modules.ZYModule.Commons.Function;
 
@@ -11,11 +11,13 @@ internal enum TextureType
 {
     Noise,
     WhitePixel,
-    Circle
+    Circle,
+    WhiteGreenBar
 }
 internal enum EffectType
 {
-
+    Default,
+    Test
 }
 internal static class Quick
 {
@@ -24,11 +26,11 @@ internal static class Quick
     public static GraphicsDevice GD => Main.instance.GraphicsDevice;
     public static SpriteBatch SB => Main.spriteBatch;
     public static float AirSpeed => 0.001f;
-    public static string ModulePath => "Everglow/Sources/Modules/ZYModule/";
-    public static string ResourcePath => ModulePath + "Commons/Resource/";
-    public static Texture2D GetValue(this TextureType type, bool async = false)
+    public const string ModulePath = "Everglow/Sources/Modules/ZYModule/";
+    public const string ResourcePath = ModulePath + "Commons/Resource/";
+    public static Texture2D GetValue(this TextureType type, bool async = true)
     {
-        string path = ResourcePath + type.ToString().Replace('_', '/');
+        string path = ResourcePath + "Images/" + type.ToString().Replace('_', '/');
         if (textures.TryGetValue(type, out var texture))
         {
             if (!async && !texture.IsLoaded)
@@ -45,7 +47,7 @@ internal static class Quick
     }
     public static Effect GetValue(this EffectType type, bool async = false)
     {
-        string path = ResourcePath + type.ToString().Replace('_', '/');
+        string path = ResourcePath + "Effects/" + type.ToString().Replace('_', '/');
         if (effects.TryGetValue(type, out var effect))
         {
             if (!async && !effect.IsLoaded)
@@ -73,6 +75,7 @@ internal static class Quick
         Main.NewText(obj, Color.Green);
         Console.WriteLine(obj);
     }
+    [DoesNotReturn]
     public static void Throw(Exception ex)
     {
         Everglow.Instance.Logger.Error($"{ex.Source} : {ex.Message}");
@@ -116,6 +119,9 @@ internal static class Quick
     public static Direction GetControlDirectionV(this Player player) =>
         player.controlUp ^ player.controlDown ? player.controlDown ? Direction.Bottom : Direction.Top : Direction.None;
     public static CAABB GetCollider(this Entity entity) => new CAABB(new AABB(entity.position.X, entity.position.Y, entity.width, entity.height));
+
+    public static Vector2 ToInteger(this Vector2 vector2) => new Vector2((int)vector2.X, (int)vector2.Y);
+    public static Vector2 ToMouse(this Player player) => player.GetModPlayer<PlayerManager>().MouseWorld - player.Center;
 
 
 }
