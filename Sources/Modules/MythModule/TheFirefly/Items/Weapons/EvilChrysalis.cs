@@ -24,8 +24,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             Item.useStyle = 1;
             Item.noMelee = true;
             Item.knockBack = 2.25f;
-            Item.value = 2000;
-            Item.rare = 3;
+            Item.value = 2100;
+            Item.rare = 2;
             Item.UseSound = SoundID.Item44;
             Item.shoot = ModContent.ProjectileType<Projectiles.EvilChrysalis>();
             Item.autoReuse = true;

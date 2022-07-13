@@ -24,7 +24,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             Item.shootSpeed = 16f;
             Item.knockBack = 2.5f;
             Item.damage = 30;
-            Item.rare = ItemRarityID.Lime;
+            Item.rare = 2;
 
             Item.DamageType = DamageClass.Melee;
             Item.channel = true;
@@ -32,7 +32,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             Item.noUseGraphic = true;
 
             Item.UseSound = SoundID.Item1;
-            Item.value = Item.sellPrice(gold: 1);
+            Item.value = 2300;
             Item.shoot = ModContent.ProjectileType<MothYoyoProjectile>();
         }
         private static readonly int[] unwantedPrefixes = new int[] { PrefixID.Terrible, PrefixID.Dull, PrefixID.Shameful, PrefixID.Annoying, PrefixID.Broken, PrefixID.Damaged, PrefixID.Shoddy };

@@ -17,8 +17,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 40;
         }
-
-        private int Ran = -1;
         public override Color? GetAlpha(Color lightColor)
         {
             return new Color(255 - Projectile.alpha, 255 - Projectile.alpha, 255 - Projectile.alpha, 0);
@@ -63,10 +61,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                     Projectile.Kill();
                 }
             }
-            if (Ran == -1)
-            {
-                Ran = Main.rand.Next(9);
-            }
         }
         public override bool PreDraw(ref Color lightColor)
         {
@@ -88,38 +82,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(v0.Y, v0.X) - Math.PI / 2d));
             }
 
-            Texture2D TexMain = MythContent.QuickTexture("TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGun0");
-            Texture2D TexMainG = MythContent.QuickTexture("TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGun0G");
-            if (addi % 48 < 8)
-            {
-                TexMain = MythContent.QuickTexture("TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGun2");
-                TexMainG = MythContent.QuickTexture("TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGun2G");
-            }
-            else if (addi % 48 < 16)
-            {
-                TexMain = MythContent.QuickTexture("TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGun3");
-                TexMainG = MythContent.QuickTexture("TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGun3G");
-            }
-            else if (addi % 48 < 24)
-            {
-                TexMain = MythContent.QuickTexture("TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGun2");
-                TexMainG = MythContent.QuickTexture("TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGun2G");
-            }
-            else if (addi % 48 < 32)
-            {
-                TexMain = MythContent.QuickTexture("TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGun0");
-                TexMainG = MythContent.QuickTexture("TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGun0G");
-            }
-            else if (addi % 48 < 40)
-            {
-                TexMain = MythContent.QuickTexture("TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGun1");
-                TexMainG = MythContent.QuickTexture("TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGun1G");
-            }
-            else
-            {
-                TexMain = MythContent.QuickTexture("TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGun0");
-                TexMainG = MythContent.QuickTexture("TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGun0G");
-            }
+            Texture2D TexMain = MythContent.QuickTexture("TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGun");
+            Texture2D TexMainG = MythContent.QuickTexture("TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGunGlow");
+
+            Projectile.frame = (int)((addi % 45) / 5f);
+            Rectangle DrawRect = new Rectangle(0, Projectile.frame * 44, 70, 40);
+            
+           
             Color drawColor = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
             SpriteEffects se = SpriteEffects.None;
             if (Projectile.Center.X < player.Center.X)
@@ -131,8 +100,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             {
                 player.direction = 1;
             }
-            Main.spriteBatch.Draw(TexMain, Projectile.Center - Main.screenPosition - new Vector2(0, 6), null, drawColor, Projectile.rotation - (float)(Math.PI * 0.25) + (float)(Projectile.ai[0] / -3d) * player.direction, new Vector2(TexMain.Width / 2f, TexMain.Height / 2f), 1f, se, 0);
-            Main.spriteBatch.Draw(TexMainG, Projectile.Center - Main.screenPosition - new Vector2(0, 6), null, new Color(255, 255, 255, 0), Projectile.rotation - (float)(Math.PI * 0.25) + (float)(Projectile.ai[0] / -3d) * player.direction, new Vector2(TexMain.Width / 2f, TexMain.Height / 2f), 1f, se, 0);
+            Main.spriteBatch.Draw(TexMain, Projectile.Center - Main.screenPosition - new Vector2(0, 6), DrawRect, drawColor, Projectile.rotation - (float)(Math.PI * 0.25) + (float)(Projectile.ai[0] / -3d) * player.direction, new Vector2(35, 22), 1f, se, 0);
+            Main.spriteBatch.Draw(TexMainG, Projectile.Center - Main.screenPosition - new Vector2(0, 6), DrawRect, new Color(255, 255, 255, 0), Projectile.rotation - (float)(Math.PI * 0.25) + (float)(Projectile.ai[0] / -3d) * player.direction, new Vector2(35, 22), 1f, se, 0);
         }
     }
 }

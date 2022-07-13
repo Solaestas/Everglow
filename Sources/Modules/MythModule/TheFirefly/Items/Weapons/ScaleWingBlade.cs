@@ -21,13 +21,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             Item.shootSpeed = 5f;
             Item.knockBack = 2.5f;
             Item.damage = 30;
-            Item.rare = ItemRarityID.Green;
+            Item.rare = 2;
 
             Item.DamageType = DamageClass.Melee;
             Item.noMelee = true;
             Item.noUseGraphic = true;
 
-            Item.value = Item.sellPrice(gold: 1);
+            Item.value = 2400;
         }
         public override bool CanUseItem(Player player)
         {

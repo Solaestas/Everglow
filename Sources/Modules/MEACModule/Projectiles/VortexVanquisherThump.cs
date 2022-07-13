@@ -22,7 +22,6 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             Projectile.timeLeft = 45;
             Projectile.tileCollide = false;
         }
-        bool Crash = false;
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
@@ -45,7 +44,8 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         public void StrikeDown()
         {
             Player player = Main.player[Projectile.owner];
-            Vector2 CheckPoint = Projectile.Center + new Vector2(0, -100);
+            Vector2 CheckPoint = Projectile.Center + new Vector2(0, -100) * player.gravDir;
+
             for (int y = 0; y < 60; y++)
             {
                 if (Collision.SolidCollision(CheckPoint, 1, 1))
@@ -102,7 +102,29 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             {
                 TotalVector = Utils.SafeNormalize(TotalVector, new Vector2(0, -player.gravDir));
             }
-            Projectile.NewProjectile(Projectile.GetSource_FromAI(), CheckPoint + TotalVector * 180, -TotalVector * 0.9f, ModContent.ProjectileType<VortexVanquisher3>(), Projectile.damage, 0, player.whoAmI, 1);
+            float FallVelocity = 0;
+            if ((Projectile.Center + new Vector2(0, -100)).Y < CheckPoint.Y)
+            {
+                Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), CheckPoint + TotalVector * 480, -TotalVector * 15, ModContent.ProjectileType<DashingLightEff>(), 0, 0, Projectile.owner, 1).CritChance = Projectile.CritChance;
+            }
+            else
+            {
+                Vector2 CheckPointII = Projectile.Center + new Vector2(0, 200) * player.gravDir;
+                for (int y = 0; y < 600; y++)
+                {
+                    if (Collision.SolidCollision(CheckPointII, 1, 1))
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        CheckPointII += new Vector2(0, 5) * player.gravDir;
+                        FallVelocity += 0.2f;
+                    }
+                }
+                Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), CheckPoint + TotalVector * 480, -TotalVector * (15 + FallVelocity), ModContent.ProjectileType<DashingLightEff>(), 0, 0, Projectile.owner, 1).CritChance = Projectile.CritChance;
+            }
+            Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), CheckPoint + TotalVector * 180, -TotalVector * (0.9f + FallVelocity * 0.06f), ModContent.ProjectileType<VortexVanquisher3>(), (int)(Projectile.damage * (1 + FallVelocity * 0.02f)), 0, player.whoAmI, 1).CritChance = Projectile.CritChance;
         }
         public override bool PreDraw(ref Color lightColor)
         {

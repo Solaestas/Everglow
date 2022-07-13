@@ -27,7 +27,6 @@ namespace Everglow.Sources.Modules.MEACModule.NonTrueMeleeProj
                     Vector2 v0 = RotByPro(new Vector2(X * Math.Sign(Main.rand.NextFloat(-1, 1)) * 27, -Y * 153));
                     int k = Dust.NewDust(Projectile.Center + v0 - new Vector2(4), 0, 0, DustID.GoldFlame, 0, 0, 0, default, Main.rand.NextFloat(0.8f, 2f));
                     Main.dust[k].noGravity = true;
-
                 }
             }
         }

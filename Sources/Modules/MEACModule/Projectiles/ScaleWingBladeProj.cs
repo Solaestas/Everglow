@@ -224,9 +224,9 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                     d2.position += Main.rand.NextVector2Unit() * 5;
                     d2.alpha = (int)(d2.scale * 50);
                 }
-                if (timer == 80)
+                if (timer == 105)
                 {
-                    AttSound(new SoundStyle("Everglow/Sources/Modules/MEACModule/Sounds/TrueMeleeSwing"));
+                    AttSound(new SoundStyle("Everglow/Sources/Modules/MEACModule/Sounds/TrueMeleePowerSwing"));
                 }
                 if (timer > 100)
                 {

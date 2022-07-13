@@ -29,6 +29,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.PI / 2d));
             if (Projectile.timeLeft == 75)
             {
+                player.AddBuff(ModContent.BuffType<Buffs.GlowMothBuff>(), 18000);
+                Projectile.NewProjectile(Projectile.InheritSource(Projectile), player.Bottom + new Vector2(Main.rand.NextFloat(-60, 60), -5), new Vector2(0, Main.rand.NextFloat(-8, -2)), ModContent.ProjectileType<Projectiles.GlowMoth>(), Projectile.damage, Projectile.knockBack, player.whoAmI, Projectile.damage, Main.rand.NextFloat(0, 200f));
                 for (int f = 0; f < 12; f++)
                 {
                     Projectile.NewProjectile(Projectile.InheritSource(Projectile), player.Bottom + new Vector2(Main.rand.NextFloat((f - 5.5f) * 10, (f - 4.5f) * 10), Main.rand.NextFloat(-5, 15)), new Vector2(0, Main.rand.NextFloat(-12, -4)), ModContent.ProjectileType<DarkEffect>(), Projectile.damage, Projectile.knockBack, player.whoAmI, Main.rand.NextFloat(7f, 15f), 0);
@@ -151,7 +153,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         private Vector3[] CirclePoint = new Vector3[120];
         private float Rad = 0;
         private Vector2[] Circle2D = new Vector2[120];
-        private float Cy = -37.5f;
         private float Cy2 = -37.5f;
         private float cirpro = 0;
         public override void PostDraw(Color lightColor)
@@ -159,7 +160,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Player player = Main.player[Projectile.owner];
             if (Projectile.timeLeft < 75)
             {
-                Cy = -15 - Projectile.timeLeft / 4f;
                 Cy2 = 27.5f - Projectile.timeLeft;
                 Rad = (float)Math.Sin(Projectile.timeLeft / 75d * Math.PI) * 90f;
             }

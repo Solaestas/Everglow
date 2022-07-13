@@ -140,7 +140,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             Player.GetModPlayer<MEACPlayer>().isUsingMeleeProj = true;
             Projectile.Center = Player.Center + Utils.SafeNormalize(mainVec, Vector2.One) * disFromPlayer;
             isAttacking = false;
-            Player.headRotation += 1.57f;
+
             Projectile.timeLeft++;
             Player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, mainVec.ToRotation() - 1.57f);
             Attack();
@@ -279,7 +279,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             float point = 0;
             if (isAttacking && Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), ProjCenter_WithoutGravDir + MainVec_WithoutGravDir * Projectile.scale * (longHandle ? 0.2f : 0.1f), ProjCenter_WithoutGravDir + MainVec_WithoutGravDir * Projectile.scale, Projectile.height, ref point))
             {
-                if (Collision.CanHitLine(Projectile.Center, 1, 1, targetHitbox.TopLeft(), targetHitbox.Width, targetHitbox.Height) || CanIgnoreTile)
+                if (Collision.CanHitLine(Projectile.position, Projectile.width, Projectile.height, targetHitbox.TopLeft(), targetHitbox.Width, targetHitbox.Height) || CanIgnoreTile)
                 {
                     return true;
                 }

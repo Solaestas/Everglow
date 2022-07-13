@@ -48,6 +48,8 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             {
                 damage *= 4;
                 ShakeStrength = 2f;
+                Player player = Main.player[Projectile.owner];
+                player.velocity *= -0.05f;
             }
             Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 12f * ShakeStrength, 100)).RotatedByRandom(6.283);
         }

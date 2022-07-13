@@ -55,6 +55,21 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             {
                 Projectile.velocity *= 0.4f;
             }
+            if (Projectile.timeLeft <= 9 && Projectile.timeLeft >= 0 && Projectile.timeLeft % 3 == 0)
+            {
+                for (int x = 0; x < 12; x++)
+                {
+                    float X = (float)(Math.Sqrt(Main.rand.NextFloat(0, 0.5f)));
+                    float Y = Main.rand.NextFloat(-2, 0.3f);
+                    Vector2 v0 = RotByPro(new Vector2(X * Math.Sign(Main.rand.NextFloat(-1, 1)) * 1, Y * 103));
+                    int k = Dust.NewDust(Projectile.Center + v0 - new Vector2(4), 0, 0, DustID.GoldFlame, 0, 0, 0, default, Main.rand.NextFloat(0.4f, 1.2f));
+                    Main.dust[k].noGravity = true;
+                }
+            }
+        }
+        public Vector2 RotByPro(Vector2 orig)
+        {
+            return orig.RotatedBy(Projectile.rotation);
         }
         public override bool PreDraw(ref Color lightColor)
         {

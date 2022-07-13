@@ -17,14 +17,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
         {
             Item.glowMask = GetGlowMask;
 
-            Item.width = 64;
+            Item.width = 70;
             Item.height = 40;
             Item.rare = 2;
             Item.value = 2000;
 
 
-            Item.useTime = 48;
-            Item.useAnimation = 48;
+            Item.useTime = 45;
+            Item.useAnimation = 45;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.autoReuse = true;
             Item.UseSound = SoundID.Item36;
