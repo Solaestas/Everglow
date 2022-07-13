@@ -49,8 +49,56 @@ namespace Everglow.Sources.Commons.Core.EverglowUtils
 
             return true;
         }
+		public static void BedMouseOver<T>(int i, int j) where T : ModItem
+		{
+			Player player = Main.LocalPlayer;
 
-        public static bool ChestRightClick(int i, int j) 
+			if (!Player.IsHoveringOverABottomSideOfABed(i, j))
+			{
+				if (player.IsWithinSnappngRangeToTile(i, j, PlayerSleepingHelper.BedSleepingMaxDistance))
+				{ // Match condition in RightClick. Interaction should only show if clicking it does something
+					player.noThrow = 2;
+					player.cursorItemIconEnabled = true;
+					player.cursorItemIconID = ItemID.SleepingIcon;
+				}
+			}
+			else
+			{
+				player.noThrow = 2;
+				player.cursorItemIconEnabled = true;
+				player.cursorItemIconID = ModContent.ItemType<T>();
+			}
+		}
+		public static bool ChairRightClick(int i, int j) 
+		{
+			Player player = Main.LocalPlayer;
+
+			if (player.IsWithinSnappngRangeToTile(i, j, PlayerSittingHelper.ChairSittingMaxDistance))
+			{ // Avoid being able to trigger it from long range
+				player.GamepadEnableGrappleCooldown();
+				player.sitting.SitDown(player, i, j);
+			}
+			return true;
+		}
+		public static void ChairMouseOver<T>(int i, int j) where T : ModItem
+		{
+			Player player = Main.LocalPlayer;
+
+			if (!player.IsWithinSnappngRangeToTile(i, j, PlayerSittingHelper.ChairSittingMaxDistance))
+			{ // Match condition in RightClick. Interaction should only show if clicking it does something
+				return;
+			}
+
+			player.noThrow = 2;
+			player.cursorItemIconEnabled = true;
+			player.cursorItemIconID = ModContent.ItemType<T>();
+
+			if (Main.tile[i, j].TileFrameX / 18 < 1)
+			{
+				player.cursorItemIconReversed = true;
+			}
+		}
+		public static bool ChestRightClick(int i, int j) 
         {
 			Player player = Main.LocalPlayer;
 			Tile tile = Main.tile[i, j];
@@ -212,7 +260,6 @@ namespace Everglow.Sources.Commons.Core.EverglowUtils
 			Main.NewText($"Time: {intTime}:{text2} {text}", 255, 240, 20);
 			return true;
 		}
-
 		public static bool DresserRightClick() 
 		{
 			Player player = Main.LocalPlayer;
@@ -301,7 +348,6 @@ namespace Everglow.Sources.Commons.Core.EverglowUtils
 			Main.OpenClothesWindow();
 			return true;
 		}
-
 		public static void DresserMouseFar<T>(string chestName) where T : ModItem
 		{
 			Player player = Main.LocalPlayer;
@@ -383,6 +429,36 @@ namespace Everglow.Sources.Commons.Core.EverglowUtils
 			{
 				player.cursorItemIconID = ItemID.FamiliarShirt;
 				player.cursorItemIconText = "  ";
+			}
+		}
+		public static bool SofaRightClick(int i, int j) 
+		{
+			Player player = Main.LocalPlayer;
+
+			if (player.IsWithinSnappngRangeToTile(i, j, PlayerSittingHelper.ChairSittingMaxDistance))
+			{ // Avoid being able to trigger it from long range
+				player.GamepadEnableGrappleCooldown();
+				player.sitting.SitDown(player, i, j);
+			}
+
+			return true;
+		}
+		public static void SofaMouseOver<T>(int i, int j) where T : ModItem
+		{
+			Player player = Main.LocalPlayer;
+
+			if (!player.IsWithinSnappngRangeToTile(i, j, PlayerSittingHelper.ChairSittingMaxDistance))
+			{ // Match condition in RightClick. Interaction should only show if clicking it does something
+				return;
+			}
+
+			player.noThrow = 2;
+			player.cursorItemIconEnabled = true;
+			player.cursorItemIconID = ModContent.ItemType<T>();
+
+			if (Main.tile[i, j].TileFrameX / 18 < 1)
+			{
+				player.cursorItemIconReversed = true;
 			}
 		}
 	}

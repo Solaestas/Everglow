@@ -1,5 +1,6 @@
 using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
 using Terraria.DataStructures;
+using Everglow.Sources.Commons.Core.EverglowUtils;
 using Terraria.Enums;
 using Terraria.GameContent;
 using Terraria.GameContent.ObjectInteractions;
@@ -71,31 +72,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 			}
 		}
 
-		public override bool RightClick(int i, int j) {
-			Player player = Main.LocalPlayer;
-
-			if (player.IsWithinSnappngRangeToTile(i, j, PlayerSittingHelper.ChairSittingMaxDistance)) { // Avoid being able to trigger it from long range
-				player.GamepadEnableGrappleCooldown();
-				player.sitting.SitDown(player, i, j);
-			}
-
-			return true;
+		public override bool RightClick(int i, int j) 
+		{
+			return FurnitureUtils.SofaRightClick(i, j);
 		}
 
-		public override void MouseOver(int i, int j) {
-			Player player = Main.LocalPlayer;
-
-			if (!player.IsWithinSnappngRangeToTile(i, j, PlayerSittingHelper.ChairSittingMaxDistance)) { // Match condition in RightClick. Interaction should only show if clicking it does something
-				return;
-			}
-
-			player.noThrow = 2;
-			player.cursorItemIconEnabled = true;
-			player.cursorItemIconID = ModContent.ItemType<Items.Furnitures.GlowWoodSofa>();
-
-			if (Main.tile[i, j].TileFrameX / 18 < 1) {
-				player.cursorItemIconReversed = true;
-			}
+		public override void MouseOver(int i, int j) 
+		{
+			FurnitureUtils.SofaMouseOver<Items.Furnitures.GlowWoodSofa>(i, j);
 		}
 		public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 		{
