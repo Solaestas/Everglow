@@ -58,6 +58,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 				frameCounter = 0;
 			}
 		}
+		public override void NearbyEffects(int i, int j, bool closer)
+		{
+			Player player = Main.LocalPlayer;
+			if (player != null && !player.dead && player.active)
+			{
+				player.AddBuff(BuffID.Campfire, 20, true, false);
+			}
+		}
 		public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
 		{
 			Tile tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
@@ -166,6 +174,19 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 		public override void KillMultiTile(int x, int y, int frameX, int frameY)
 		{
 			Item.NewItem(new EntitySource_TileBreak(x, y), x * 16, y * 16, 48, 32, ModContent.ItemType<Items.Furnitures.GlowWoodCamfire>());
+		}
+		public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
+		{
+			var tile = Main.tile[i, j];
+			Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+			if (Main.drawToScreen)
+			{
+				zero = Vector2.Zero;
+			}
+			Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodCampfireGlow");
+			spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(0.8f, 0.8f, 0.8f, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
+
+			base.PostDraw(i, j, spriteBatch);
 		}
 	}
 }
