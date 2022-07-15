@@ -18,12 +18,16 @@ public class VFXManager : IModule
     /// <summary>
     /// 用绘制层 + 第一个调用的绘制层作为Key来储存List<IVisual>
     /// </summary>
-    private Dictionary<CallOpportunity, Dictionary<PipelineIndex, List<IVisual>>> visuals =
-        new Dictionary<CallOpportunity, Dictionary<PipelineIndex, List<IVisual>>>();
+    private Dictionary<CallOpportunity, Dictionary<PipelineIndex, SortedList<int ,IVisual>>> visuals =
+        new Dictionary<CallOpportunity, Dictionary<PipelineIndex, SortedList<int, IVisual>>>();
     /// <summary>
     /// 保存每一种Visual所需的Pipeline
     /// </summary>
-    private Dictionary<Type, PipelineIndex> visualToPipeline = new Dictionary<Type, PipelineIndex>();
+    private List<PipelineIndex> requiredPipeline = new List<PipelineIndex>();
+    /// <summary>
+    /// 保存每一种Visual的Type
+    /// </summary>
+    private Dictionary<Type, int> visualTypes = new Dictionary<Type, int>();
     /// <summary>
     /// RenderTarget池子
     /// </summary>
@@ -44,17 +48,28 @@ public class VFXManager : IModule
         pipelineInstances.Add((IVisualPipeline)Activator.CreateInstance(pipelineType));
         return pipelineTypes.Count - 1;
     }
+    public int GetVisualType(IVisual visual)
+    {
+        return visualTypes[visual.GetType()];
+    }
     public void Register(IVisual visual)
     {
         Type type = visual.GetType();
-        var pipelines = type.GetCustomAttribute<PipelineAttribute>().types;
-        if (pipelines.Length == 0)
+        visualTypes.Add(type, requiredPipeline.Count);
+        if (type.IsDefined(typeof(PipelineAttribute)))
         {
-            Debug.Fail("Not bind any pipeline");
-            throw new Exception("Not bind any pipeline");
+            var pipelines = type.GetCustomAttribute<PipelineAttribute>().types;
+            if (pipelines.Length == 0)
+            {
+                Debug.Fail("Not bind any pipeline");
+                throw new Exception("Not bind any pipeline");
+            }
+            requiredPipeline.Add(new PipelineIndex(pipelines.Select(i => GetOrCreatePipeline(i))));
         }
-        visualToPipeline.Add(type, new PipelineIndex(pipelineTypes.Select(i => GetOrCreatePipeline(i))));
-
+        else
+        {
+            requiredPipeline.Add(null);
+        }
     }
     public void Draw(CallOpportunity layer)
     {
@@ -73,12 +88,12 @@ public class VFXManager : IModule
         //将Visual实例加到对应绘制层与第一个Pipeline的位置
         if (!visuals.TryGetValue(visual.DrawLayer, out var value))
         {
-            visuals[visual.DrawLayer] = value = new Dictionary<PipelineIndex, List<IVisual>>();
+            visuals[visual.DrawLayer] = value = new Dictionary<PipelineIndex, SortedList<int, IVisual>>();
         }
-        PipelineIndex index = visualToPipeline[visual.GetType()];
+        PipelineIndex index = requiredPipeline[visual.Type] ?? throw new InvalidOperationException("Not bind any pipeline");
         if (!value.TryGetValue(index, out var list))
         {
-            value[index] = list = new List<IVisual>();
+            value[index] = list = new SortedList<int, IVisual>();
         }
 
         int count = list.Count;
@@ -90,7 +105,7 @@ public class VFXManager : IModule
                 return;
             }
         }
-        list.Add(visual);
+        list.Add(visual.Type, visual);
     }
     public void Load()
     {
@@ -109,9 +124,18 @@ public class VFXManager : IModule
 
         public ResourceLocker<RenderTarget2D> locker;
 
+        public Rt2DVisual(ResourceLocker<RenderTarget2D> locker)
+        {
+            this.locker = locker;
+        }
+
         public override void Draw()
         {
 
+        }
+        public override void Load()
+        {
+            //不要Register
         }
     }
 }
