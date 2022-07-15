@@ -8,7 +8,7 @@ using Terraria.ObjectData;
 using Terraria.Audio;
 using Terraria.Enums;
 
-namespace Everglow.Sources.Commons.Core.EverglowUtils
+namespace Everglow.Sources.Commons.Core.Utils
 {
     public static class FurnitureUtils
     {

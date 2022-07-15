@@ -1,5 +1,5 @@
 using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
-using Everglow.Sources.Commons.Core.EverglowUtils;
+using Everglow.Sources.Commons.Core.Utils;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Enums;
@@ -45,6 +45,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             TileObjectData.newTile.LavaDeath = false;
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
             TileObjectData.addTile(Type);
+
         }
         public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
 

@@ -1,5 +1,5 @@
 using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
-using Everglow.Sources.Commons.Core.EverglowUtils;
+using Everglow.Sources.Commons.Core.Utils;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent;
