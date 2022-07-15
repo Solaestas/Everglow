@@ -4,10 +4,10 @@
 	{
 		Common:
 		{
-			Hour : "hour"
-			Minute : "minute"
-			Second : "second"
-			Duration : "duration"
+			Hour : "Час"
+			Minute : "Минута"
+			Second : "Секунда"
+			Duration : "продолжительность"
 			WarWhipGT :
 				'''
 				Нет повреждений от метки призыва
@@ -132,52 +132,52 @@
 			EvilCocoon : "Магический Кокон"
 			TuskTreasureBag : "Мешок с Сокровищами (Бивень)"
 			FragransBlade : 金秋爽夜
-			FragransBoomerang : Swirl Cloud At Night
-			FragransBow : Fragrans Branch
-			FragransGun : Fragrans Flame
-			FragransMagic : Moon & Fragrans Magic
-			FragransSpear : Moon Dosn't Shine
-			FragransStaff : Fragrans Bomb Staff
-			BlackWoodenClub : Ebonwood Club
-			BloodClub : Crimson Club
-			BloodLiquidClub : Ichor Club
-			CactusClub : Cactus Club
-			CobaltClub : Cobalt Club
+			FragransBoomerang : Вихревое Облако Ночи
+			FragransBow : Филиал Драцены 
+			FragransGun : Пламя Драцены 
+			FragransMagic : Магия Луны и Драцены
+			FragransSpear : Луна Не Светит
+			FragransStaff : Посох бомб Драцены
+			BlackWoodenClub : Эбеновая дубинка
+			BloodClub : Багряновая дубинка
+			BloodLiquidClub : Ихоровая дубинка
+			CactusClub : Кактусовая дубинка
+			CobaltClub : Кобальтовая дубинка
 			ColdWoodenClub : Boreal Wood Club
-			CopperClub : Copper Club
+			CopperClub : Медная дубинка
 			CorruptClub : Corruption Club
-			CrystalClub : Crystal Club
+			CrystalClub : Кристальная дубинка
 			CurseClub : Cursed Flame Club
 			DarkWoodenClub : Shadewood Club
-			GoldClub : Gold Club
-			IronClub : Iron Club
-			LeadClub : Lead Club
-			LeafClub : Chlorophyte Club
-			MeteorClub : Meteor Club
-			MithrilClub : Mythril Club
-			MountainCuClub : Orichalcum Club
-			PalladiumClub : Palladium Club
-			PalmWoodenClub : Palm Wood Club
-			PearlWoodenClub : Pearlwood Club
-			PlatinumClub : Platinum Club
+			GoldClub : Золотая дубинка
+			IronClub : Железная дубинка
+			LeadClub : Свинцовая дубинка
+			LeafClub : Хлорофитовая дубинка
+			MeteorClub : Метеоритовая дубинка
+			MithrilClub : Мифриловая дубинка
+			MountainCuClub : Орихалковая дубинка
+			PalladiumClub : Паладиевая дубинка
+			PalmWoodenClub : Дубинка из пальмового дерева
+			PearlWoodenClub : Перламутровая дубинка
+			PlatinumClub : Платиновая дубинка
 			RedWoodenClub : Mahogany Club
-			RefinedClub : Adamantite Club
-			SilverClub : Silver Club
-			SpikeClub : Spike Club
-			StarDancer : Star Dancer
-			TinClub : Tin Club
-			TitaniumClub : Titanium Club
-			TungstenClub : Tungsten Club
-			WoodenClub : Wooden Club
+			RefinedClub : Адамантитовая Club
+			SilverClub : Серебряная дубинка
+			SpikeClub : Шипастая дубинка
+			StarDancer : Звёздный Танцор
+			TinClub : Оловянная дубинка
+			TitaniumClub : Титановая дубинка
+			TungstenClub : Вольфрамовая дубинка
+			WoodenClub : Деревянная дубинка
 			DustOfCorrupt : Corrupted Scales
-			EvilChrysalis : Cocoon Staff
+			EvilChrysalis : Посох-кокон
 			PhosphorescenceGun : Scale Shotgun
 			ScaleWingBlade : Lepidoptera Blade
 			ShadowWingBow : Occulting Wings
 			AmbiguousNight : Ambiguous Night
-			BlackWoodSlingshot : Ebonwood Slingshot
-			BlueGemSlingshot : Sapphire Slingshot
-			CactusSlingShot : Cactus SlingShot
+			BlackWoodSlingshot : Эбеновая рогатка
+			BlueGemSlingshot : Сапфировая рогатка
+			CactusSlingShot : Кактусовая рогатка
 			ColdWoodSlingshot : Borealwood Slingshot
 			DarkWoodSlingShot : Shadewood SlingShot
 			GreenGemSlingshot : Emerald Slingshot
