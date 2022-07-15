@@ -32,6 +32,18 @@ public class VFXManager : IModule
     /// RenderTarget池子
     /// </summary>
     private RenderTargetPool renderTargetPool = new RenderTargetPool();
+    /// <summary>
+    /// GraphicsDevice引用
+    /// </summary>
+    private GraphicsDevice graphicsDevice = Main.instance.GraphicsDevice;
+    private bool rt2DIndex = false;
+    private RenderTarget2D CurrentRenderTarget => rt2DIndex ? Main.screenTarget : Main.screenTargetSwap;
+    private RenderTarget2D NextRenderTarget => rt2DIndex ? Main.screenTarget : Main.screenTargetSwap;
+    
+    public static VFXBatch spriteBatch;
+    /// <summary>
+    /// 名称
+    /// </summary>
     public string Name => "VFXManager";
     /// <summary>
     /// 获得一种Pipeline的下标，若没有此Pipeline便创建此Pipeline
@@ -48,10 +60,21 @@ public class VFXManager : IModule
         pipelineInstances.Add((IVisualPipeline)Activator.CreateInstance(pipelineType));
         return pipelineTypes.Count - 1;
     }
+    private void SwitchRenderTarget()
+    {
+        graphicsDevice.SetRenderTarget(NextRenderTarget);
+        graphicsDevice.Clear(Color.Transparent);
+        rt2DIndex = !rt2DIndex;
+    }
     public int GetVisualType(IVisual visual)
     {
         return visualTypes[visual.GetType()];
     }
+    /// <summary>
+    /// 注册一个Visual
+    /// </summary>
+    /// <param name="visual"></param>
+    /// <exception cref="Exception">该Visual未绑定任何Pipeline</exception>
     public void Register(IVisual visual)
     {
         Type type = visual.GetType();
@@ -76,7 +99,28 @@ public class VFXManager : IModule
         var visuals = this.visuals[layer];
         foreach(var (pipelineIndex, innerVisuals) in visuals)
         {
-            
+            if(pipelineIndex.next != null)
+            {
+                var rt2D = new Rt2DVisual(renderTargetPool.GetRenderTarget2D());
+                graphicsDevice.SetRenderTarget(rt2D.locker.Resource);
+                graphicsDevice.Clear(Color.Transparent);
+                if(!visuals.TryGetValue(pipelineIndex.next, out var list))
+                {
+                    visuals[pipelineIndex.next] = list = new SortedList<int, IVisual>();
+                }
+                list.Add(rt2D.Type, rt2D);
+            }
+
+            var pipeline = pipelineInstances[pipelineIndex.index];
+            pipeline.BeginRender();
+            pipeline.Render(innerVisuals.Values);
+            pipeline.EndRender();
+
+            if (pipelineIndex.next != null)
+            {
+                SwitchRenderTarget();
+                //TODO Draw
+            }
         }
     }
     /// <summary>
@@ -109,9 +153,8 @@ public class VFXManager : IModule
     }
     public void Load()
     {
-
+        spriteBatch = new VFXBatch(graphicsDevice);
     }
-
     public void Unload()
     {
 
