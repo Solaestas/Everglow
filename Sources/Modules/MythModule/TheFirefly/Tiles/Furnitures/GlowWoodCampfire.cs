@@ -15,7 +15,7 @@ using Everglow.Sources.Modules.MythModule.Common;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 {
-	public class GlowWoodCamfire : ModTile
+	public class GlowWoodCampfire : ModTile
 	{
 		private Asset<Texture2D> flameTexture;
 
@@ -58,7 +58,24 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 				frameCounter = 0;
 			}
 		}
-		public override void NearbyEffects(int i, int j, bool closer)
+        public override void NumDust(int i, int j, bool fail, ref int num)
+        {
+			num = (fail ? 1 : 3);
+		}
+        public override bool CreateDust(int i, int j, ref int type)
+        {
+			Tile tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
+			if (tile.TileFrameX < 54)
+			{
+				type = DustID.Smoke;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+        public override void NearbyEffects(int i, int j, bool closer)
 		{
 			Player player = Main.LocalPlayer;
 			if (player != null && !player.dead && player.active)
@@ -169,11 +186,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 			Player player = Main.LocalPlayer;
 			player.noThrow = 2;
 			player.cursorItemIconEnabled = true;
-			player.cursorItemIconID = ModContent.ItemType<Items.Furnitures.GlowWoodCamfire>();
+			player.cursorItemIconID = ModContent.ItemType<Items.Furnitures.GlowWoodCampfire>();
 		}
 		public override void KillMultiTile(int x, int y, int frameX, int frameY)
 		{
-			Item.NewItem(new EntitySource_TileBreak(x, y), x * 16, y * 16, 48, 32, ModContent.ItemType<Items.Furnitures.GlowWoodCamfire>());
+			Item.NewItem(new EntitySource_TileBreak(x, y), x * 16, y * 16, 48, 32, ModContent.ItemType<Items.Furnitures.GlowWoodCampfire>());
 		}
 		public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 		{

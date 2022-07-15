@@ -4,7 +4,7 @@ using Terraria.GameContent.Creative;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures
 {
-    public class GlowWoodCamfire : ModItem
+    public class GlowWoodCampfire : ModItem
     {
         public override void SetStaticDefaults()
         {
@@ -23,7 +23,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures
             Item.useStyle = ItemUseStyleID.Swing;
             Item.consumable = true;
             Item.value = 2000;
-            Item.createTile = ModContent.TileType<Tiles.Furnitures.GlowWoodCamfire>();
+            Item.createTile = ModContent.TileType<Tiles.Furnitures.GlowWoodCampfire>();
         }
         public override void AddRecipes()
         {
