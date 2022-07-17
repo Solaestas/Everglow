@@ -48,7 +48,6 @@ public class VFXBatch : IDisposable
                 indexBuffer.Dispose();
                 GC.SuppressFinalize(this);
             }
-
             public void DrawPrimitive()
             {
                 Debug.Assert(VertexPosition != 0 && indexPosition != 0);
@@ -78,7 +77,6 @@ public class VFXBatch : IDisposable
                     (currentIndex, currentVertex) = (nextIndex, nextVertex);
                 }
             }
-
             public void Clear()
             {
                 vertexPosition = indexPosition = 0;
@@ -149,6 +147,10 @@ public class VFXBatch : IDisposable
                     throw new Exception("Unsupported PrimitiveType");
             }
             instance.vertexPosition = pos;
+        }
+        public static bool CheckSize(int vertexSize)
+        {
+            return instance.vertexPosition + vertexSize < instance.vertices.Length;
         }
     }
 
@@ -227,6 +229,10 @@ public class VFXBatch : IDisposable
     public void Draw(Vector2 position, Color color)
     {
         Debug.Assert(hasBegun);
+        if(!Buffer<VFX2D>.CheckSize(4))
+        {
+            Flush();
+        }
         needFlush[0] = true;
         var tex = Buffer<VFX2D>.CurrentTexture;
         Buffer<VFX2D>.AddVertex(new VFX2D[]
@@ -240,6 +246,10 @@ public class VFXBatch : IDisposable
     public void Draw(Vector2 position, Rectangle? sourceRectangle, Color color)
     {
         Debug.Assert(hasBegun);
+        if (!Buffer<VFX2D>.CheckSize(4))
+        {
+            Flush();
+        }
         needFlush[0] = true;
         var tex = Buffer<VFX2D>.CurrentTexture;
         Rectangle sourceRect = sourceRectangle ?? new Rectangle(0, 0, tex.Width, tex.Height);
@@ -264,6 +274,10 @@ public class VFXBatch : IDisposable
     public void Draw(Vector2 position, Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects)
     {
         Debug.Assert(hasBegun);
+        if (!Buffer<VFX2D>.CheckSize(4))
+        {
+            Flush();
+        }
         needFlush[0] = true;
         var tex = Buffer<VFX2D>.CurrentTexture;
         Rectangle sourceRect = sourceRectangle ?? new Rectangle(0, 0, tex.Width, tex.Height);
@@ -302,6 +316,10 @@ public class VFXBatch : IDisposable
     public void Draw(Vector2 position, Rectangle? sourceRectangle, Color color, Matrix matrix)
     {
         Debug.Assert(hasBegun);
+        if (!Buffer<VFX2D>.CheckSize(4))
+        {
+            Flush();
+        }
         needFlush[0] = true;
         var tex = Buffer<VFX2D>.CurrentTexture;
         Rectangle sourceRect = sourceRectangle ?? new Rectangle(0, 0, tex.Width, tex.Height);
@@ -321,6 +339,10 @@ public class VFXBatch : IDisposable
     public void Draw(Rectangle destinationRectangle, Color color)
     {
         Debug.Assert(hasBegun);
+        if (!Buffer<VFX2D>.CheckSize(4))
+        {
+            Flush();
+        }
         needFlush[0] = true;
         Buffer<VFX2D>.AddVertex(new VFX2D[]
         {
@@ -333,6 +355,10 @@ public class VFXBatch : IDisposable
     public void Draw(Rectangle destinationRectangle, Rectangle? sourceRectangle, Color color)
     {
         Debug.Assert(hasBegun);
+        if (!Buffer<VFX2D>.CheckSize(4))
+        {
+            Flush();
+        }
         needFlush[0] = true;
         var tex = Buffer<VFX2D>.CurrentTexture;
         Rectangle sourceRect = sourceRectangle ?? new Rectangle(0, 0, tex.Width, tex.Height);
@@ -351,6 +377,10 @@ public class VFXBatch : IDisposable
     public void Draw(Rectangle destinationRectangle, Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin, SpriteEffects effects)
     {
         Debug.Assert(hasBegun);
+        if (!Buffer<VFX2D>.CheckSize(4))
+        {
+            Flush();
+        }
         needFlush[0] = true;
         var tex = Buffer<VFX2D>.CurrentTexture;
         Rectangle sourceRect = sourceRectangle ?? new Rectangle(0, 0, tex.Width, tex.Height);
@@ -391,6 +421,10 @@ public class VFXBatch : IDisposable
     public void Draw<T>(IEnumerable<T> vertices, PrimitiveType type) where T : struct, IVertexType
     {
         Debug.Assert(hasBegun);
+        if (!Buffer<VFX2D>.CheckSize(vertices.Count()))
+        {
+            Flush();
+        }
         needFlush[GetBufferIndex<T>()] = true;
         Buffer<T>.AddVertex(vertices, type);
     }

@@ -62,15 +62,6 @@ public class VFXManager : IModule
         return pipelineTypes.Count - 1;
     }
     /// <summary>
-    /// 切换当前RenderTarget
-    /// </summary>
-    private void SwitchRenderTarget()
-    {
-        graphicsDevice.SetRenderTarget(NextRenderTarget);
-        graphicsDevice.Clear(Color.Transparent);
-        rt2DIndex = !rt2DIndex;
-    }
-    /// <summary>
     /// 获得Visual的Type
     /// </summary>
     /// <param name="visual"></param>
@@ -127,9 +118,21 @@ public class VFXManager : IModule
 
             if (pipelineIndex.next != null)
             {
-                SwitchRenderTarget();
-                //TODO Draw
+                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
+                graphicsDevice.SetRenderTarget(NextRenderTarget);
+                Main.spriteBatch.Draw(CurrentRenderTarget, Vector2.Zero, Color.White);
+                rt2DIndex = !rt2DIndex;
+                Main.spriteBatch.End();
             }
+        }
+
+        if(CurrentRenderTarget != Main.screenTarget)
+        {
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
+            graphicsDevice.SetRenderTarget(NextRenderTarget);
+            Main.spriteBatch.Draw(CurrentRenderTarget, Vector2.Zero, Color.White);
+            rt2DIndex = !rt2DIndex;
+            Main.spriteBatch.End();
         }
     }
     /// <summary>
