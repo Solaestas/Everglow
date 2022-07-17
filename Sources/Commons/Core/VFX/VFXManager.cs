@@ -1,10 +1,11 @@
 ﻿using Everglow.Sources.Commons.Core.ModuleSystem;
+using Everglow.Sources.Commons.Core.Profiler.Fody;
 using Everglow.Sources.Commons.Core.VFX.Base;
 using Everglow.Sources.Commons.Core.VFX.Interfaces;
 using Everglow.Sources.Commons.Function.ObjectPool;
 
 namespace Everglow.Sources.Commons.Core.VFX;
-
+[ProfilerMeasure]
 public class VFXManager : IModule
 {
     /// <summary>
@@ -60,12 +61,20 @@ public class VFXManager : IModule
         pipelineInstances.Add((IVisualPipeline)Activator.CreateInstance(pipelineType));
         return pipelineTypes.Count - 1;
     }
+    /// <summary>
+    /// 切换当前RenderTarget
+    /// </summary>
     private void SwitchRenderTarget()
     {
         graphicsDevice.SetRenderTarget(NextRenderTarget);
         graphicsDevice.Clear(Color.Transparent);
         rt2DIndex = !rt2DIndex;
     }
+    /// <summary>
+    /// 获得Visual的Type
+    /// </summary>
+    /// <param name="visual"></param>
+    /// <returns></returns>
     public int GetVisualType(IVisual visual)
     {
         return visualTypes[visual.GetType()];
@@ -160,7 +169,7 @@ public class VFXManager : IModule
 
     }
 
-
+    [DontAutoLoad]
     private class Rt2DVisual : Visual
     {
         public override CallOpportunity DrawLayer => throw new InvalidOperationException("Don't use this manually!");
@@ -175,10 +184,6 @@ public class VFXManager : IModule
         public override void Draw()
         {
 
-        }
-        public override void Load()
-        {
-            //不要Register
         }
     }
 }
