@@ -19,7 +19,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 			TileID.Sets.DisableSmartCursor[Type] = true;
 
 			AddToArray(ref TileID.Sets.RoomNeeds.CountsAsDoor);
-			AddMapEntry(new Color(200, 200, 200));
+			AddMapEntry(new Color(0, 14, 175));
 
 			DustType = ModContent.DustType<BlueGlow>();
 			ItemDrop = ModContent.ItemType<Items.Furnitures.GlowWoodPlatform>();
