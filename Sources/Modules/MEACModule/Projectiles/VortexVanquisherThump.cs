@@ -19,22 +19,23 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             Projectile.friendly = false;
             Projectile.hostile = false;
             Projectile.penetrate = 1;
-            Projectile.timeLeft = 45;
+            Projectile.timeLeft = 30;
             Projectile.tileCollide = false;
+            Projectile.ignoreWater = true;
         }
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            if (Projectile.timeLeft % 6 == 0)
+            if (Projectile.timeLeft % 4 == 0)
             {
                 StrikeDown();
             }
             player.immune = true;
             player.immuneTime = 8;
-            Projectile.position += new Vector2(12 * Math.Sign(Projectile.velocity.X), 0);
+            Projectile.position += new Vector2(18 * Math.Sign(Projectile.velocity.X), 0);
             if(Projectile.timeLeft > 20)
             {
-                player.velocity = Projectile.velocity * 16f;
+                player.velocity = Projectile.velocity * 24f;
             }
             else
             {

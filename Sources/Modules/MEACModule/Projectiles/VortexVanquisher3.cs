@@ -30,6 +30,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         public override void AI()
         {
             Projectile.friendly = true;
+            Projectile.rotation = Projectile.velocity.ToRotation() + 0.7854f;
             if (StartVelocity == Vector2.Zero)
             {
                 StartVelocity = Vector2.Normalize(Projectile.velocity);
@@ -69,18 +70,18 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         }
         public Vector2 RotByPro(Vector2 orig)
         {
-            return orig.RotatedBy(Projectile.rotation);
+            return orig.RotatedBy(Projectile.rotation - Math.PI * 0.75);
         }
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
-            Main.spriteBatch.Draw(tex,Projectile.Center - StartVelocity * 90 - Main.screenPosition,null, lightColor, Projectile.velocity.ToRotation() + 0.7854f,tex.Size()/2,Projectile.scale,0,0);
-            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/Projectiles/VortexVanquisherGlow").Value, Projectile.Center - StartVelocity * 90 - Main.screenPosition, null, new Color(255,255,255,0), Projectile.velocity.ToRotation() + 0.7854f, tex.Size() / 2, Projectile.scale, 0, 0);
+            Main.spriteBatch.Draw(tex,Projectile.Center - StartVelocity * 90 - Main.screenPosition,null, lightColor, Projectile.rotation, tex.Size()/2,Projectile.scale,0,0);
+            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/Projectiles/VortexVanquisherGlow").Value, Projectile.Center - StartVelocity * 90 - Main.screenPosition, null, new Color(255,255,255,0), Projectile.rotation, tex.Size() / 2, Projectile.scale, 0, 0);
             if(Projectile.timeLeft < 10)
             {
                 for(int x = 0; x< 10 - Projectile.timeLeft;x++)
                 {
-                    Main.spriteBatch.Draw(tex, Projectile.Center - StartVelocity * 90 - Main.screenPosition, null, new Color(1f, 1f, 1f, 0f), Projectile.velocity.ToRotation() + 0.7854f, tex.Size() / 2, Projectile.scale, 0, 0);
+                    Main.spriteBatch.Draw(tex, Projectile.Center - StartVelocity * 90 - Main.screenPosition, null, new Color(1f, 1f, 1f, 0f), Projectile.rotation, tex.Size() / 2, Projectile.scale, 0, 0);
                 }
             }
             return false;

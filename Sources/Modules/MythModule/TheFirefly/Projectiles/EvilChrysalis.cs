@@ -30,7 +30,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             if (Projectile.timeLeft == 75)
             {
                 player.AddBuff(ModContent.BuffType<Buffs.GlowMothBuff>(), 18000);
-                Projectile.NewProjectile(Projectile.InheritSource(Projectile), player.Bottom + new Vector2(Main.rand.NextFloat(-60, 60), -5), new Vector2(0, Main.rand.NextFloat(-8, -2)), ModContent.ProjectileType<Projectiles.GlowMoth>(), Projectile.damage, Projectile.knockBack, player.whoAmI, Projectile.damage, Main.rand.NextFloat(0, 200f));
+                Projectile.NewProjectile(Projectile.InheritSource(Projectile), player.Bottom + new Vector2(Main.rand.NextFloat(-60, 60), -5), new Vector2(0, Main.rand.NextFloat(-8, -2)), ModContent.ProjectileType<Projectiles.GlowMoth>(), Projectile.damage, Projectile.knockBack, player.whoAmI, Main.rand.NextFloat(0, 200f), Main.rand.NextFloat(0, 200f));
                 for (int f = 0; f < 12; f++)
                 {
                     Projectile.NewProjectile(Projectile.InheritSource(Projectile), player.Bottom + new Vector2(Main.rand.NextFloat((f - 5.5f) * 10, (f - 4.5f) * 10), Main.rand.NextFloat(-5, 15)), new Vector2(0, Main.rand.NextFloat(-12, -4)), ModContent.ProjectileType<DarkEffect>(), Projectile.damage, Projectile.knockBack, player.whoAmI, Main.rand.NextFloat(7f, 15f), 0);

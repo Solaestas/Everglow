@@ -1,9 +1,9 @@
 using Terraria.Localization;
-using Terraria.ID;
-
-namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
+using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
+namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
-    public class BlackCorruptRain : ModProjectile
+    public class BlackCorruptRainFriendly : ModProjectile
     {
         public override void SetStaticDefaults()
         {
@@ -22,7 +22,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
             Projectile.extraUpdates = 3;
             Projectile.timeLeft = 1000;
             Projectile.alpha = 0;
-            Projectile.penetrate = -1;
+            Projectile.penetrate = 1;
             Projectile.scale = 1f;
         }
         public override Color? GetAlpha(Color lightColor)
@@ -43,11 +43,11 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
                 initialization = false;
                 if (Main.rand.Next(0, 2) == 1)
                 {
-                    Y = (float)Math.Sin(X / 5 * Math.PI) / 1000f + 1;
+                    Y = (float)Math.Sin(X / 5d * Math.PI) / 1000f + 1;
                 }
                 else
                 {
-                    Y = (float)Math.Sin(-X / 5 * Math.PI) / 1000f + 1;
+                    Y = (float)Math.Sin(-X / 5d * Math.PI) / 1000f + 1;
                 }
             }
             if (Stre2 > 0.2)
@@ -83,14 +83,31 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
             {
                 Projectile.scale *= 0.95f;
             }
-            Projectile.velocity.Y += 0.01f;
-            Lighting.AddLight(base.Projectile.Center, (255 - base.Projectile.alpha) * 0f / 255f * Projectile.scale, (255 - base.Projectile.alpha) * 0.01f / 255f, (255 - base.Projectile.alpha) * 0.6f / 255f * Projectile.scale);
+            Projectile.velocity.Y += 0.001f;
+            float kColor = (255 - Projectile.alpha) / 255f;
+            Lighting.AddLight(Projectile.Center, 0, kColor * 0.01f, kColor * 0.6f * Projectile.scale);
         }
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D Light = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/FixCoinLight3");
-            Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color((int)(255 * Stre2), (int)(255 * Stre2), (int)(255 * Stre2), 0), Projectile.rotation, new Vector2(56f, 56f), Projectile.scale, SpriteEffects.None, 0);
+            int C = (int)(255 * Stre2);
+            Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(C, C, C, 0), Projectile.rotation, new Vector2(56f, 56f), Projectile.scale, SpriteEffects.None, 0);
             return true;
+        }
+        public override void Kill(int timeLeft)
+        {
+            for (int j = 0; j < timeLeft / 24; j++)
+            {
+                Vector2 v0 = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) * Projectile.scale * 0.3f;
+                int dust0 = Dust.NewDust(Projectile.Center + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<BlueGlowAppear>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(0.6f, 1.8f) * Projectile.scale * 0.4f);
+                Main.dust[dust0].noGravity = true;
+            }
+            for (int j = 0; j < timeLeft / 12; j++)
+            {
+                Vector2 v0 = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) * Projectile.scale * 0.3f;
+                int dust1 = Dust.NewDust(Projectile.Center + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<BlueParticleDark2>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(3.7f, 5.1f));
+                Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 50);
+            }
         }
     }
 }

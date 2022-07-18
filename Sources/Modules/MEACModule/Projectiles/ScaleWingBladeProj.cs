@@ -184,6 +184,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             {
                 if (timer < 60)
                 {
+                    CanIgnoreTile = true;
                     useTrail = false;
                     LockPlayerDir(player);
                     float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
@@ -243,6 +244,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                     }
                     if (timer > 130)
                     {
+                        CanIgnoreTile = false;
                         End();
                     }
                 }

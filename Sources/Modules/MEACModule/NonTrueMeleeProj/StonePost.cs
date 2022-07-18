@@ -37,11 +37,9 @@ namespace Everglow.Sources.Modules.MEACModule.NonTrueMeleeProj
         }
         public void DrawDoubleLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2)
         {
-            Vector2 DrawCen = Projectile.Center - Main.screenPosition;
             float Wid = 1.5f;
             Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
-            Vector2 WidthS = Vector2.Normalize(StartPos - DrawCen).RotatedBy(Math.PI / 2d) * Wid;
-            Vector2 WidthE = Vector2.Normalize(EndPos - DrawCen).RotatedBy(Math.PI / 2d) * Wid;
+
             List<Vertex2D> vertex2Ds = new List<Vertex2D>();
 
             for(int x = 0;x < 3;x++)

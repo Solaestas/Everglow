@@ -155,7 +155,7 @@ namespace Everglow.Sources.Modules.MEACModule.Items
                 if (LeftClick)
                 {
                     ClickTime++;
-                    if (ClickTime > 90)
+                    if (ClickTime > 30)
                     {
                         int playerdir = Main.MouseWorld.X > player.Center.X ? 1 : -1;
                         player.direction = playerdir;
@@ -164,7 +164,10 @@ namespace Everglow.Sources.Modules.MEACModule.Items
                     }
                 }
             }
-            
+            else
+            {
+                ClickTime = 0;
+            }
             LeftClick = Main.mouseLeft;
             base.HoldItem(player);
         }
