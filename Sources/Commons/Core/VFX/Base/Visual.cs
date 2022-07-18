@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Everglow.Sources.Commons.Core.ModuleSystem;
 using Everglow.Sources.Commons.Core.VFX.Interfaces;
 
 namespace Everglow.Sources.Commons.Core.VFX.Base;

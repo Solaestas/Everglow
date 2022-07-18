@@ -44,7 +44,8 @@ public class VFXManager : IModule
     /// GraphicsDevice引用
     /// </summary>
     private GraphicsDevice graphicsDevice = Main.instance.GraphicsDevice;
-    private bool rt2DIndex = false;
+    private VisualCompare compare = new VisualCompare();
+    private bool rt2DIndex = true;
     /// <summary>
     /// 当前的RenderTarget，取值为screenTarget或者screenTargetSwap
     /// </summary>
@@ -118,7 +119,7 @@ public class VFXManager : IModule
         var visuals = this.visuals[layer];
         foreach (var (pipelineIndex, innerVisuals) in visuals)
         {
-        Main.NewText(innerVisuals.Count);
+            Main.NewText(innerVisuals.Count);
             if (pipelineIndex.next != null)
             {
                 var rt2D = new Rt2DVisual(renderTargetPool.GetRenderTarget2D());
@@ -182,7 +183,7 @@ public class VFXManager : IModule
             }
         }
         list.Add(visual);
-        list.Sort(new VisualCompare());
+        list.Sort(compare);
     }
     public void Update()
     {
@@ -205,20 +206,16 @@ public class VFXManager : IModule
         foreach (var visuals in visuals.Values)
         {
             foreach (var (key, list) in visuals)
-            { 
-                for(int i = 0; i < list.Count; i++)
+            {
+                for (int i = 0; i < list.Count; i++)
                 {
                     if (!list[i].Active)
                     {
                         list.RemoveAt(i--);
                     }
                 }
-                if(list.Count == 0)
-                {
-                    visuals.Remove(key);
-                }
             }
-            
+
         }
     }
     public void Clear()
@@ -282,6 +279,7 @@ public class VFXManager : IModule
         {
             //绘制一次后变移除
             Active = false;
+            locker.Release();
         }
     }
 }

@@ -58,7 +58,7 @@ public class VFXBatch : IDisposable
 
                 if (sameTexture.Count == 0)
                 {
-                    if(textures.Count != 0)
+                    if (textures.Count != 0)
                     {
                         graphicsDevice.Textures[0] = textures[0];
                     }
@@ -90,6 +90,7 @@ public class VFXBatch : IDisposable
 
         }
         private static Buffers instance;
+        public static IBuffers Instance => instance;
         public static DynamicVertexBuffer VertexBuffer => instance.vertexBuffer;
         public static DynamicIndexBuffer IndexBuffer => instance.indexBuffer;
         public static T[] Vertices => instance.vertices;
@@ -131,10 +132,6 @@ public class VFXBatch : IDisposable
                 instance.vertices[pos++] = vertex;
             }
 
-            //if(!SameTexture.TryPeek(out var index))
-            //{
-            //    index = (0, 0);
-            //}
             switch (type)
             {
                 case PrimitiveType.TriangleList:
@@ -173,7 +170,7 @@ public class VFXBatch : IDisposable
     public BlendState blendState;
     public RasterizerState rasterizerState;
     public DepthStencilState depthStencilState;
-    public SamplerState[] samplerStates;
+    public SamplerState samplerState;
     public Effect effect;
     public GraphicsDevice GraphicsDevice => graphicsDevice;
     public VFXBatch(GraphicsDevice gd)
@@ -191,18 +188,18 @@ public class VFXBatch : IDisposable
     }
     public void Begin()
     {
-        Begin(BlendState.AlphaBlend, DepthStencilState.None, RasterizerState.CullNone, SamplerState.AnisotropicClamp);
+        Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicClamp, RasterizerState.CullNone);
     }
     public void Begin(BlendState blendState)
     {
-        Begin(blendState, DepthStencilState.None, RasterizerState.CullNone, SamplerState.AnisotropicClamp);
+        Begin(blendState, DepthStencilState.None, SamplerState.AnisotropicClamp, RasterizerState.CullNone);
     }
-    public void Begin(BlendState blendState, DepthStencilState depthStencilState, RasterizerState rasterizerState, params SamplerState[] samplerStates)
+    public void Begin(BlendState blendState, DepthStencilState depthStencilState, SamplerState samplerState, RasterizerState rasterizerState)
     {
         Debug.Assert(!hasBegun);
         this.rasterizerState = rasterizerState;
         this.depthStencilState = depthStencilState;
-        this.samplerStates = samplerStates;
+        this.samplerState = samplerState;
         this.blendState = blendState;
         hasBegun = true;
     }
@@ -241,7 +238,7 @@ public class VFXBatch : IDisposable
         var tex = Buffer<VFX2D>.CurrentTexture;
         if (!Buffer<VFX2D>.CheckSize(4))
         {
-            Flush();
+            Flush<VFX2D>();
             Buffer<VFX2D>.Textures.Add(tex);
         }
         needFlush[0] = true;
@@ -259,7 +256,7 @@ public class VFXBatch : IDisposable
         var tex = Buffer<VFX2D>.CurrentTexture;
         if (!Buffer<VFX2D>.CheckSize(4))
         {
-            Flush();
+            Flush<VFX2D>();
             Buffer<VFX2D>.Textures.Add(tex);
         }
         needFlush[0] = true;
@@ -288,7 +285,7 @@ public class VFXBatch : IDisposable
         var tex = Buffer<VFX2D>.CurrentTexture;
         if (!Buffer<VFX2D>.CheckSize(4))
         {
-            Flush();
+            Flush<VFX2D>();
             Buffer<VFX2D>.Textures.Add(tex);
         }
         needFlush[0] = true;
@@ -331,7 +328,7 @@ public class VFXBatch : IDisposable
         var tex = Buffer<VFX2D>.CurrentTexture;
         if (!Buffer<VFX2D>.CheckSize(4))
         {
-            Flush();
+            Flush<VFX2D>();
             Buffer<VFX2D>.Textures.Add(tex);
         }
         needFlush[0] = true;
@@ -355,7 +352,7 @@ public class VFXBatch : IDisposable
         if (!Buffer<VFX2D>.CheckSize(4))
         {
             var tex = Buffer<VFX2D>.CurrentTexture;
-            Flush();
+            Flush<VFX2D>();
             Buffer<VFX2D>.Textures.Add(tex);
         }
         needFlush[0] = true;
@@ -373,7 +370,7 @@ public class VFXBatch : IDisposable
         var tex = Buffer<VFX2D>.CurrentTexture;
         if (!Buffer<VFX2D>.CheckSize(4))
         {
-            Flush();
+            Flush<VFX2D>();
             Buffer<VFX2D>.Textures.Add(tex);
         }
         needFlush[0] = true;
@@ -396,7 +393,7 @@ public class VFXBatch : IDisposable
         var tex = Buffer<VFX2D>.CurrentTexture;
         if (!Buffer<VFX2D>.CheckSize(4))
         {
-            Flush();
+            Flush<VFX2D>();
             Buffer<VFX2D>.Textures.Add(tex);
         }
         needFlush[0] = true;
@@ -438,18 +435,22 @@ public class VFXBatch : IDisposable
     public void Draw<T>(IEnumerable<T> vertices, PrimitiveType type) where T : struct, IVertexType
     {
         Debug.Assert(hasBegun);
-        if (!Buffer<VFX2D>.CheckSize(vertices.Count()))
+        if (!Buffer<T>.CheckSize(vertices.Count()))
         {
             var tex = Buffer<VFX2D>.CurrentTexture;
-            Flush();
+            Flush<T>();
             Buffer<VFX2D>.Textures.Add(tex);
         }
         needFlush[GetBufferIndex<T>()] = true;
         Buffer<T>.AddVertex(vertices, type);
     }
-    private int GetBufferIndex<T>() => buffers.FindIndex(b => b.VertexType == typeof(T));
+    private int GetBufferIndex<T>() where T : struct, IVertexType => buffers.IndexOf(Buffer<T>.Instance);
     public void Flush()
     {
+        graphicsDevice.SamplerStates[0] = samplerState;
+        graphicsDevice.BlendState = blendState;
+        graphicsDevice.DepthStencilState = depthStencilState;
+        graphicsDevice.RasterizerState = rasterizerState;
         for (int i = 0; i < buffers.Count; i++)
         {
             if (needFlush[i])
@@ -460,12 +461,17 @@ public class VFXBatch : IDisposable
             }
         }
     }
-    public void End()
+    public void Flush<T>() where T : struct, IVertexType
     {
-        graphicsDevice.SamplerStates[0] = this.samplerStates[0];
+        graphicsDevice.SamplerStates[0] = samplerState;
         graphicsDevice.BlendState = blendState;
         graphicsDevice.DepthStencilState = depthStencilState;
         graphicsDevice.RasterizerState = rasterizerState;
+        Buffer<T>.Instance.DrawPrimitive();
+        Buffer<T>.Instance.Clear();
+    }
+    public void End()
+    {
         Flush();
         hasBegun = false;
     }
