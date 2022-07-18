@@ -15,10 +15,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
         public override void SetStaticDefaults()
         {
             // Properties
+            Main.tileSolidTop[Type] = true;
             Main.tileContainer[Type] = true;
             Main.tileFrameImportant[Type] = true;
             Main.tileNoAttach[Type] = true;
             Main.tileTable[Type] = true;
+            Main.tileLavaDeath[Type] = false;
             TileID.Sets.HasOutlines[Type] = true;
             TileID.Sets.BasicDresser[Type] = true;
             TileID.Sets.DisableSmartCursor[Type] = true;
@@ -26,6 +28,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             DustType = ModContent.DustType<BlueGlow>();
             AdjTiles = new int[] { TileID.Dressers };
             DresserDrop = ModContent.ItemType<Items.Furnitures.GlowWoodDresserType2>();
+            AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
 
             // Names
             ContainerName.SetDefault("GlowWood Dresser");

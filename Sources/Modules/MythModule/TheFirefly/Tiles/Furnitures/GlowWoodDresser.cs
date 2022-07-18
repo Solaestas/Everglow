@@ -14,10 +14,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
         public override void SetStaticDefaults()
         {
             // Properties
+            Main.tileSolidTop[Type] = true;
             Main.tileContainer[Type] = true;
             Main.tileFrameImportant[Type] = true;
             Main.tileNoAttach[Type] = true;
             Main.tileTable[Type] = true;
+            Main.tileLavaDeath[Type] = false;
             TileID.Sets.HasOutlines[Type] = true;
             TileID.Sets.BasicDresser[Type] = true;
             TileID.Sets.DisableSmartCursor[Type] = true;
@@ -25,6 +27,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             DustType = ModContent.DustType<BlueGlow>();
             AdjTiles = new int[] { TileID.Dressers };
             DresserDrop = ModContent.ItemType<Items.Furnitures.GlowWoodDresser>();
+            AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
 
             // Names
             ContainerName.SetDefault("GlowWood Dresser");
@@ -47,6 +50,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
         }
         public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
 
+        public override void ModifySmartInteractCoords(ref int width, ref int height, ref int frameWidth, ref int frameHeight, ref int extraY)
+        {
+            width = 3;
+            height = 1;
+        }
         public override bool RightClick(int i, int j)
         {
             return FurnitureUtils.DresserRightClick();
