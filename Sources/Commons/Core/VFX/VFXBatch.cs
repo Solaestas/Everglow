@@ -53,11 +53,15 @@ public class VFXBatch : IDisposable
                 Debug.Assert(VertexPosition != 0 && indexPosition != 0);
                 vertexBuffer.SetData(vertices, 0, vertexPosition, SetDataOptions.None);
                 graphicsDevice.SetVertexBuffer(vertexBuffer);
-                    indexBuffer.SetData(indices, 0, indexPosition, SetDataOptions.None);
-                    graphicsDevice.Indices = indexBuffer;
-                //未绑定贴图
+                indexBuffer.SetData(indices, 0, indexPosition, SetDataOptions.None);
+                graphicsDevice.Indices = indexBuffer;
+
                 if (sameTexture.Count == 0)
                 {
+                    if(textures.Count != 0)
+                    {
+                        graphicsDevice.Textures[0] = textures[0];
+                    }
                     graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, vertexPosition, 0, indexPosition / 3);
                     return;
                 }
@@ -127,20 +131,24 @@ public class VFXBatch : IDisposable
                 instance.vertices[pos++] = vertex;
             }
 
+            //if(!SameTexture.TryPeek(out var index))
+            //{
+            //    index = (0, 0);
+            //}
             switch (type)
             {
                 case PrimitiveType.TriangleList:
                     for (int i = 0; i < count; i++)
                     {
-                        instance.indices[instance.indexPosition++] = (ushort)( i);
+                        instance.indices[instance.indexPosition++] = (ushort)(i + instance.vertexPosition);
                     }
                     break;
                 case PrimitiveType.TriangleStrip:
                     for (int i = 0; i < count - 2; i++)
                     {
-                        instance.indices[instance.indexPosition++] = (ushort)( i);
-                        instance.indices[instance.indexPosition++] = (ushort)( i + 1);
-                        instance.indices[instance.indexPosition++] = (ushort)( i + 2);
+                        instance.indices[instance.indexPosition++] = (ushort)(i + instance.vertexPosition);
+                        instance.indices[instance.indexPosition++] = (ushort)(i + 1 + instance.vertexPosition);
+                        instance.indices[instance.indexPosition++] = (ushort)(i + 2 + instance.vertexPosition);
                     }
                     break;
                 default:
@@ -150,6 +158,7 @@ public class VFXBatch : IDisposable
         }
         public static bool CheckSize(int vertexSize)
         {
+            Debug.Assert(instance.vertexPosition + vertexSize < instance.vertices.Length);
             return instance.vertexPosition + vertexSize < instance.vertices.Length;
         }
     }
@@ -229,12 +238,13 @@ public class VFXBatch : IDisposable
     public void Draw(Vector2 position, Color color)
     {
         Debug.Assert(hasBegun);
-        if(!Buffer<VFX2D>.CheckSize(4))
+        var tex = Buffer<VFX2D>.CurrentTexture;
+        if (!Buffer<VFX2D>.CheckSize(4))
         {
             Flush();
+            Buffer<VFX2D>.Textures.Add(tex);
         }
         needFlush[0] = true;
-        var tex = Buffer<VFX2D>.CurrentTexture;
         Buffer<VFX2D>.AddVertex(new VFX2D[]
         {
             new VFX2D(position, color, new Vector2(0,0)),
@@ -246,12 +256,13 @@ public class VFXBatch : IDisposable
     public void Draw(Vector2 position, Rectangle? sourceRectangle, Color color)
     {
         Debug.Assert(hasBegun);
+        var tex = Buffer<VFX2D>.CurrentTexture;
         if (!Buffer<VFX2D>.CheckSize(4))
         {
             Flush();
+            Buffer<VFX2D>.Textures.Add(tex);
         }
         needFlush[0] = true;
-        var tex = Buffer<VFX2D>.CurrentTexture;
         Rectangle sourceRect = sourceRectangle ?? new Rectangle(0, 0, tex.Width, tex.Height);
 
         float x = sourceRect.X / (float)tex.Width;
@@ -274,12 +285,13 @@ public class VFXBatch : IDisposable
     public void Draw(Vector2 position, Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects)
     {
         Debug.Assert(hasBegun);
+        var tex = Buffer<VFX2D>.CurrentTexture;
         if (!Buffer<VFX2D>.CheckSize(4))
         {
             Flush();
+            Buffer<VFX2D>.Textures.Add(tex);
         }
         needFlush[0] = true;
-        var tex = Buffer<VFX2D>.CurrentTexture;
         Rectangle sourceRect = sourceRectangle ?? new Rectangle(0, 0, tex.Width, tex.Height);
         Vector2 topLeftPosition = position - origin;
         Matrix matrix = Matrix.CreateTranslation(-position.X, -position.Y, 0)
@@ -316,12 +328,13 @@ public class VFXBatch : IDisposable
     public void Draw(Vector2 position, Rectangle? sourceRectangle, Color color, Matrix matrix)
     {
         Debug.Assert(hasBegun);
+        var tex = Buffer<VFX2D>.CurrentTexture;
         if (!Buffer<VFX2D>.CheckSize(4))
         {
             Flush();
+            Buffer<VFX2D>.Textures.Add(tex);
         }
         needFlush[0] = true;
-        var tex = Buffer<VFX2D>.CurrentTexture;
         Rectangle sourceRect = sourceRectangle ?? new Rectangle(0, 0, tex.Width, tex.Height);
         float x = sourceRect.X / (float)tex.Width;
         float y = sourceRect.Y / (float)tex.Height;
@@ -341,7 +354,9 @@ public class VFXBatch : IDisposable
         Debug.Assert(hasBegun);
         if (!Buffer<VFX2D>.CheckSize(4))
         {
+            var tex = Buffer<VFX2D>.CurrentTexture;
             Flush();
+            Buffer<VFX2D>.Textures.Add(tex);
         }
         needFlush[0] = true;
         Buffer<VFX2D>.AddVertex(new VFX2D[]
@@ -355,12 +370,13 @@ public class VFXBatch : IDisposable
     public void Draw(Rectangle destinationRectangle, Rectangle? sourceRectangle, Color color)
     {
         Debug.Assert(hasBegun);
+        var tex = Buffer<VFX2D>.CurrentTexture;
         if (!Buffer<VFX2D>.CheckSize(4))
         {
             Flush();
+            Buffer<VFX2D>.Textures.Add(tex);
         }
         needFlush[0] = true;
-        var tex = Buffer<VFX2D>.CurrentTexture;
         Rectangle sourceRect = sourceRectangle ?? new Rectangle(0, 0, tex.Width, tex.Height);
         float x = sourceRect.X / (float)tex.Width;
         float y = sourceRect.Y / (float)tex.Height;
@@ -377,12 +393,13 @@ public class VFXBatch : IDisposable
     public void Draw(Rectangle destinationRectangle, Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin, SpriteEffects effects)
     {
         Debug.Assert(hasBegun);
+        var tex = Buffer<VFX2D>.CurrentTexture;
         if (!Buffer<VFX2D>.CheckSize(4))
         {
             Flush();
+            Buffer<VFX2D>.Textures.Add(tex);
         }
         needFlush[0] = true;
-        var tex = Buffer<VFX2D>.CurrentTexture;
         Rectangle sourceRect = sourceRectangle ?? new Rectangle(0, 0, tex.Width, tex.Height);
         float x = sourceRect.X / (float)tex.Width;
         float y = sourceRect.Y / (float)tex.Height;
@@ -423,7 +440,9 @@ public class VFXBatch : IDisposable
         Debug.Assert(hasBegun);
         if (!Buffer<VFX2D>.CheckSize(vertices.Count()))
         {
+            var tex = Buffer<VFX2D>.CurrentTexture;
             Flush();
+            Buffer<VFX2D>.Textures.Add(tex);
         }
         needFlush[GetBufferIndex<T>()] = true;
         Buffer<T>.AddVertex(vertices, type);
@@ -437,6 +456,7 @@ public class VFXBatch : IDisposable
             {
                 buffers[i].DrawPrimitive();
                 buffers[i].Clear();
+                needFlush[i] = false;
             }
         }
     }

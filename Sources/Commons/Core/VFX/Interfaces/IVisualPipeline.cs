@@ -21,5 +21,13 @@ namespace Everglow.Sources.Commons.Core.VFX.Interfaces
         /// 结束渲染，刷新VFXBatch
         /// </summary>
         public void EndRender();
+        /// <summary>
+        /// 用于加载Effect等资源
+        /// </summary>
+        public void Load();
+        /// <summary>
+        /// 用于释放资源
+        /// </summary>
+        public void Unload();
     }
 }

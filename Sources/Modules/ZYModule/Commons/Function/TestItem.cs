@@ -1,4 +1,6 @@
-﻿using Everglow.Sources.Modules.ZYModule.Commons.Core;
+﻿using Everglow.Sources.Commons.Core.VFX;
+using Everglow.Sources.Commons.Core.VFX.Test;
+using Everglow.Sources.Modules.ZYModule.Commons.Core;
 using Everglow.Sources.Modules.ZYModule.Commons.Core.DataStructures;
 using Everglow.Sources.Modules.ZYModule.TileModule;
 using Everglow.Sources.Modules.ZYModule.TileModule.Tiles;
@@ -13,6 +15,7 @@ internal class TestItem : ModItem
         Item.useAnimation = 10;
         Item.useTime = 10;
         Item.useStyle = ItemUseStyleID.Swing;
+        Item.autoReuse = true;
     }
     //public class TestPlat : RotatedPlat
     //{
@@ -59,15 +62,8 @@ internal class TestItem : ModItem
     }
     public override bool CanUseItem(Player player)
     {
-        //var block = new TestBlock(Main.MouseWorld, new Vector2(1000, 16));
-        //block.Velocity = Vector2.UnitX * -10;
-        //TileSystem.AddTile(block);
-        var plat = new TestPlat(Main.MouseWorld, -Vector2.UnitY, 200, -MathHelper.PiOver2, 0, 1);
-        //plat.miu = 1;
-        TileSystem.AddTile(plat);
-        //var circle = new TestCircle(new Circle(Main.MouseWorld, 256), 1);
-        //TileSystem.AddTile(circle);
-        return true;
+        VFXManager.Instance.Add(new WhiteDust() { position = Main.MouseWorld });
+        return false;
     }
     public override void AddRecipes()
     {

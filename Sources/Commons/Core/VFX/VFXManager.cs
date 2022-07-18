@@ -8,6 +8,13 @@ namespace Everglow.Sources.Commons.Core.VFX;
 [ProfilerMeasure]
 public class VFXManager : IModule
 {
+    private class VisualCompare : Comparer<IVisual>
+    {
+        public override int Compare(IVisual x, IVisual y)
+        {
+            return x.Type - y.Type;
+        }
+    }
     /// <summary>
     /// Pipeline的Type
     /// </summary>
@@ -19,8 +26,8 @@ public class VFXManager : IModule
     /// <summary>
     /// 用绘制层 + 第一个调用的绘制层作为Key来储存List<IVisual>
     /// </summary>
-    private Dictionary<CallOpportunity, Dictionary<PipelineIndex, SortedList<int ,IVisual>>> visuals =
-        new Dictionary<CallOpportunity, Dictionary<PipelineIndex, SortedList<int, IVisual>>>();
+    private Dictionary<CallOpportunity, Dictionary<PipelineIndex, List<IVisual>>> visuals =
+        new Dictionary<CallOpportunity, Dictionary<PipelineIndex, List<IVisual>>>();
     /// <summary>
     /// 保存每一种Visual所需的Pipeline
     /// </summary>
@@ -38,10 +45,19 @@ public class VFXManager : IModule
     /// </summary>
     private GraphicsDevice graphicsDevice = Main.instance.GraphicsDevice;
     private bool rt2DIndex = false;
-    private RenderTarget2D CurrentRenderTarget => rt2DIndex ? Main.screenTarget : Main.screenTargetSwap;
-    private RenderTarget2D NextRenderTarget => rt2DIndex ? Main.screenTarget : Main.screenTargetSwap;
-    
+    /// <summary>
+    /// 当前的RenderTarget，取值为screenTarget或者screenTargetSwap
+    /// </summary>
+    public RenderTarget2D CurrentRenderTarget => rt2DIndex ? Main.screenTarget : Main.screenTargetSwap;
+    /// <summary>
+    /// 不是当前的RenderTarget，取值为screenTarget或者screenTargetSwap
+    /// </summary>
+    public RenderTarget2D NextRenderTarget => rt2DIndex ? Main.screenTarget : Main.screenTargetSwap;
+    /// <summary>
+    /// 代替SpriteBatch，可以用来处理顶点绘制
+    /// </summary>
     public static VFXBatch spriteBatch;
+    public static VFXManager Instance { get; private set; }
     /// <summary>
     /// 名称
     /// </summary>
@@ -58,7 +74,9 @@ public class VFXManager : IModule
             return pipelineTypes.IndexOf(pipelineType);
         }
         pipelineTypes.Add(pipelineType);
-        pipelineInstances.Add((IVisualPipeline)Activator.CreateInstance(pipelineType));
+        IVisualPipeline pipeline = (IVisualPipeline)Activator.CreateInstance(pipelineType);
+        pipeline.Load();
+        pipelineInstances.Add(pipeline);
         return pipelineTypes.Count - 1;
     }
     /// <summary>
@@ -94,26 +112,28 @@ public class VFXManager : IModule
             requiredPipeline.Add(null);
         }
     }
+    public void SwitchRenderTarget() => rt2DIndex = !rt2DIndex;
     public void Draw(CallOpportunity layer)
     {
         var visuals = this.visuals[layer];
-        foreach(var (pipelineIndex, innerVisuals) in visuals)
+        foreach (var (pipelineIndex, innerVisuals) in visuals)
         {
-            if(pipelineIndex.next != null)
+        Main.NewText(innerVisuals.Count);
+            if (pipelineIndex.next != null)
             {
                 var rt2D = new Rt2DVisual(renderTargetPool.GetRenderTarget2D());
                 graphicsDevice.SetRenderTarget(rt2D.locker.Resource);
                 graphicsDevice.Clear(Color.Transparent);
-                if(!visuals.TryGetValue(pipelineIndex.next, out var list))
+                if (!visuals.TryGetValue(pipelineIndex.next, out var list))
                 {
-                    visuals[pipelineIndex.next] = list = new SortedList<int, IVisual>();
+                    visuals[pipelineIndex.next] = list = new List<IVisual>();
                 }
-                list.Add(rt2D.Type, rt2D);
+                list.Add(rt2D);
             }
 
             var pipeline = pipelineInstances[pipelineIndex.index];
             pipeline.BeginRender();
-            pipeline.Render(innerVisuals.Values);
+            pipeline.Render(innerVisuals);
             pipeline.EndRender();
 
             if (pipelineIndex.next != null)
@@ -126,7 +146,7 @@ public class VFXManager : IModule
             }
         }
 
-        if(CurrentRenderTarget != Main.screenTarget)
+        if (CurrentRenderTarget != Main.screenTarget)
         {
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
             graphicsDevice.SetRenderTarget(NextRenderTarget);
@@ -144,12 +164,12 @@ public class VFXManager : IModule
         //将Visual实例加到对应绘制层与第一个Pipeline的位置
         if (!visuals.TryGetValue(visual.DrawLayer, out var value))
         {
-            visuals[visual.DrawLayer] = value = new Dictionary<PipelineIndex, SortedList<int, IVisual>>();
+            visuals[visual.DrawLayer] = value = new Dictionary<PipelineIndex, List<IVisual>>();
         }
         PipelineIndex index = requiredPipeline[visual.Type] ?? throw new InvalidOperationException("Not bind any pipeline");
         if (!value.TryGetValue(index, out var list))
         {
-            value[index] = list = new SortedList<int, IVisual>();
+            value[index] = list = new List<IVisual>();
         }
 
         int count = list.Count;
@@ -161,15 +181,89 @@ public class VFXManager : IModule
                 return;
             }
         }
-        list.Add(visual.Type, visual);
+        list.Add(visual);
+        list.Sort(new VisualCompare());
+    }
+    public void Update()
+    {
+        foreach (var visuals in visuals.Values)
+        {
+            foreach (var list in visuals.Values)
+            {
+                foreach (var visual in list)
+                {
+                    if (visual.Active)
+                    {
+                        visual.Update();
+                    }
+                }
+            }
+        }
+    }
+    public void Flush()
+    {
+        foreach (var visuals in visuals.Values)
+        {
+            foreach (var (key, list) in visuals)
+            { 
+                for(int i = 0; i < list.Count; i++)
+                {
+                    if (!list[i].Active)
+                    {
+                        list.RemoveAt(i--);
+                    }
+                }
+                if(list.Count == 0)
+                {
+                    visuals.Remove(key);
+                }
+            }
+            
+        }
+    }
+    public void Clear()
+    {
+        foreach (var visuals in visuals.Values)
+        {
+            visuals.Clear();
+        }
     }
     public void Load()
     {
+        Instance = this;
         spriteBatch = new VFXBatch(graphicsDevice);
+        visuals[CallOpportunity.PostDrawEverything] = new Dictionary<PipelineIndex, List<IVisual>>();
+        visuals[CallOpportunity.PostDrawProjectiles] = new Dictionary<PipelineIndex, List<IVisual>>();
+        visuals[CallOpportunity.PostDrawTiles] = new Dictionary<PipelineIndex, List<IVisual>>();
+        visuals[CallOpportunity.PostDrawDusts] = new Dictionary<PipelineIndex, List<IVisual>>();
+        visuals[CallOpportunity.PostDrawBG] = new Dictionary<PipelineIndex, List<IVisual>>();
+        visuals[CallOpportunity.PostDrawPlayers] = new Dictionary<PipelineIndex, List<IVisual>>();
+        visuals[CallOpportunity.PostDrawNPCs] = new Dictionary<PipelineIndex, List<IVisual>>();
+        Everglow.HookSystem.AddMethod(() => Draw(CallOpportunity.PostDrawEverything), CallOpportunity.PostDrawEverything,
+            "VFX PostDrawEverything");
+        Everglow.HookSystem.AddMethod(() => Draw(CallOpportunity.PostDrawProjectiles), CallOpportunity.PostDrawProjectiles,
+            "VFX PostDrawProjectile");
+        Everglow.HookSystem.AddMethod(() => Draw(CallOpportunity.PostDrawTiles), CallOpportunity.PostDrawTiles,
+            "VFX PostDrawTile");
+        Everglow.HookSystem.AddMethod(() => Draw(CallOpportunity.PostDrawDusts), CallOpportunity.PostDrawDusts,
+            "VFX PostDrawDust");
+        Everglow.HookSystem.AddMethod(() => Draw(CallOpportunity.PostDrawBG), CallOpportunity.PostDrawBG,
+            "VFX PostDrawBG");
+        Everglow.HookSystem.AddMethod(() => Draw(CallOpportunity.PostDrawPlayers), CallOpportunity.PostDrawPlayers,
+            "VFX PostDrawPlayer");
+        Everglow.HookSystem.AddMethod(() => Draw(CallOpportunity.PostDrawNPCs), CallOpportunity.PostDrawNPCs,
+            "VFX PostDrawNPCs");
     }
     public void Unload()
     {
-
+        Everglow.MainThreadContext.AddTask(() =>
+        {
+            foreach (var pipeline in pipelineInstances)
+            {
+                pipeline.Unload();
+            }
+            spriteBatch.Dispose();
+        });
     }
 
     [DontAutoLoad]
@@ -186,7 +280,8 @@ public class VFXManager : IModule
 
         public override void Draw()
         {
-
+            //绘制一次后变移除
+            Active = false;
         }
     }
 }
