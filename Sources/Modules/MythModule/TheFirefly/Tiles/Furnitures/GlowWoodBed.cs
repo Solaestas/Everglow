@@ -46,10 +46,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 
         public override void ModifySmartInteractCoords(ref int width, ref int height, ref int frameWidth, ref int frameHeight, ref int extraY)
         {
-            // Because beds have special smart interaction, this splits up the left and right side into the necessary 2x2 sections
-            width = 2; // Default to the Width defined for TileObjectData.newTile
-            height = 2; // Default to the Height defined for TileObjectData.newTile
-                        //extraY = 0; // Depends on how you set up frameHeight and CoordinateHeights and CoordinatePaddingFix.Y
+            width = 2;
+            height = 2;
         }
 
         public override void ModifySleepingTargetInfo(int i, int j, ref TileRestingInfo info)

@@ -28,7 +28,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 			AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
 
 			DustType = ModContent.DustType<BlueGlow>();
-			AdjTiles = new int[] { TileID.Candles };
+			AdjTiles = new int[] { TileID.Candles};
 			ItemDrop = ModContent.ItemType<Items.Furnitures.GlowWoodCandle>();
 			// Placement
 			TileObjectData.newTile.CopyFrom(TileObjectData.StyleOnTable1x1); // this style already takes care of direction for us
@@ -52,6 +52,49 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 			r = 0.1f;
 			g = 0.9f;
 			b = 1f;
+		}
+		public override void HitWire(int i, int j)
+		{
+			int tileX = 1;
+			int tileY = 1;
+			Tile tile = Main.tile[i, j];
+			int x = i - tile.TileFrameX / 18 % tileX;
+			int y = j - tile.TileFrameY / 18 % tileY;
+			for (int m = x; m < x + tileX; m++)
+			{
+				for (int n = y; n < y + tileY; n++)
+				{
+					if (!tile.HasTile)
+					{
+						continue;
+					}
+					if (tile.TileType == Type)
+					{
+						tile = Main.tile[m, n];
+						if (tile.TileFrameX < 18 * tileX)
+						{
+							tile = Main.tile[m, n];
+							tile.TileFrameX += (short)(18 * tileX);
+						}
+						else
+						{
+							tile = Main.tile[m, n];
+							tile.TileFrameX -= (short)(18 * tileX);
+						}
+					}
+				}
+			}
+			if (!Wiring.running)
+			{
+				return;
+			}
+			for (int k = 0; k < tileX; k++)
+			{
+				for (int l = 0; l < tileY; l++)
+				{
+					Wiring.SkipWire(x + k, y + l);
+				}
+			}
 		}
 		public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 		{
