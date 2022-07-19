@@ -23,7 +23,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Projectile.penetrate = -1; // Needed so the minion doesn't despawn on collision with enemies or tiles
             Projectile.aiStyle = -1;
             Projectile.DamageType = DamageClass.Summon;
-            Projectile.minion = true;
+            Projectile.minion = true;//这玩意会捆绑武器Item的伤害
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5;
         }
@@ -36,6 +36,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             CheckKill();
 
             CheckPlayerDistance();
+
+            CheckRecoverMagic();
+
+            Projectile.damage = (int)(Projectile.damage * Power);
         }
         int SpecialTimeAfterSpawn = 60;
         Vector2 TargetPos = Vector2.Zero;
@@ -44,6 +48,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         int[] OldFrame = new int[12];
         int PlayerStickTime = 0;
         bool SleepOutside = false;
+        float Power = 0.25f;
         void UpdateDrawParameter()
         {
             Player player = Main.player[Projectile.owner];
@@ -179,17 +184,43 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 Vector2 v2 = v0 + v1;
                 if((AutoAddingTimer + (int)(Projectile.ai[0])) % 72 == 0)
                 {
-                    Projectile p = Projectile.NewProjectileDirect(Projectile.InheritSource(Projectile), Projectile.Center, Utils.SafeNormalize(v0, Vector2.Zero) * 3, ModContent.ProjectileType<Projectiles.BlackCorruptRainFriendly>(),Projectile.damage, Projectile.knockBack, Projectile.owner);
+                    Projectile p = Projectile.NewProjectileDirect(Projectile.InheritSource(Projectile), Projectile.Center, Utils.SafeNormalize(v0, Vector2.Zero) * 3, ModContent.ProjectileType<Projectiles.BlackCorruptRainFriendly>(),(int)(Projectile.damage * Power * 4), Projectile.knockBack, Projectile.owner);
                     p.CritChance = Projectile.CritChance;
                     p.friendly = true;
                 }
                 Projectile.velocity = (Projectile.velocity * 10f + v2 / v2.Length() * 9f) / 11f;
                 mothOwner.WhoSleepInPlayer[player.whoAmI] = -1;
-
+                if(Power >= 0.0125f)
+                {
+                    Power -= 0.0003f;
+                }
             }
             if (!flag)
             {
                 NoFindAnyEmeny();
+                if (Power <= 0.25f)
+                {
+                    Power += 0.002f;
+                }
+            }
+        }
+        void CheckRecoverMagic()
+        {
+            foreach(Projectile p in Main.projectile)
+            {
+                if(p.active)
+                {
+                    if(p.type == ModContent.ProjectileType<MothMagicArray>())
+                    {
+                        if((p.Center - Projectile.Center).Length() < 300)
+                        {
+                            if (Power <= 0.25f)
+                            {
+                                Power += 0.001f;
+                            }
+                        }
+                    }
+                }
             }
         }
         void NoFindAnyEmeny()
@@ -254,6 +285,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 Vector2 v = player.MountedCenter + ProduceFlyTrace(Projectile.ai[0]) - Projectile.Center;
 
                 Projectile.velocity = (Projectile.velocity * 10f + v / v.Length() * 5f) / 11f;
+                if(!Main.projectile[mothOwner.WhoSleepInPlayer[player.whoAmI]].active || Main.projectile[mothOwner.WhoSleepInPlayer[player.whoAmI]].type != Projectile.type)
+                {
+                    mothOwner.WhoSleepInPlayer[player.whoAmI] = -1;
+                }
             }
 
             //CheckSleepInPlayer
@@ -342,7 +377,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                     sf = SpriteEffects.FlipHorizontally;
                 }
                 Rectangle DrawRect = new Rectangle(0, OldFrame[i] * Projectile.height, Projectile.width, Projectile.height);
-                float kColor = (Length - i + 1) / 10f;
+                float kColor = (Length - i + 1) / 2.5f * Power;
                 Vector2 Draworigin = new Vector2(texture.Width / 2f, texture.Height / 8f);
 
                 //Main.spriteBatch.Draw(texture, DrawPos, DrawRect, new Color(c0.R * kColor / 255f, c0.G * kColor / 255f, c0.B * kColor / 255f, kColor), OldRotation[i], Draworigin, Projectile.scale, sf, 0);

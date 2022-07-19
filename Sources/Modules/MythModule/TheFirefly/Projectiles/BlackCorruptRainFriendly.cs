@@ -15,8 +15,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Projectile.width = 10;
             Projectile.height = 10;
             Projectile.aiStyle = -1;
-            Projectile.friendly = false;
-            Projectile.hostile = true;
+            Projectile.friendly = true;
+            Projectile.hostile = false;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = true;
             Projectile.extraUpdates = 3;
@@ -58,7 +58,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             if (Projectile.timeLeft < 995)
             {
                 Vector2 vector = Projectile.Center - new Vector2(4) - Utils.SafeNormalize(Projectile.velocity, Vector2.Zero) * 5;
-                int index = Dust.NewDust(vector, 0, 0, DustID.SpookyWood, 0f, 0f, 0, default, Projectile.scale * 0.8f);
+                int index = Dust.NewDust(vector, 0, 0, DustID.SpookyWood, 0f, 0f, 0, default, Projectile.scale * 0.6f * Projectile.velocity.Length());
                 Main.dust[index].velocity *= 0.0f;
                 Main.dust[index].noGravity = true;
                 Main.dust[index].scale *= 1.2f;

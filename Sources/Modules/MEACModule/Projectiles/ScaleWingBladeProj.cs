@@ -203,6 +203,10 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                     d2.velocity = -r * 4;
                     d2.position += Main.rand.NextVector2Unit() * 5;
                     d2.alpha = (int)(d2.scale * 50);
+
+                    Dust d3 = Dust.NewDustDirect(Projectile.Center - new Vector2(20, 20) + mainVec * Main.rand.NextFloat(0.3f, 1f), 40, 40, ModContent.DustType<MothBlue2>(), 0, 0, 0, default, Main.rand.NextFloat(0.5f, 2f));
+                    d3.velocity = -r * 4;
+                    d3.noGravity = true;
                 }
                 else if (timer < 100)
                 {
@@ -224,6 +228,10 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                     d2.velocity = -r * 4;
                     d2.position += Main.rand.NextVector2Unit() * 5;
                     d2.alpha = (int)(d2.scale * 50);
+
+                    Dust d3 = Dust.NewDustDirect(Projectile.Center - new Vector2(20, 20) + mainVec * Main.rand.NextFloat(0.3f, 1f), 40, 40, ModContent.DustType<MothBlue2>(), 0, 0, 0, default, Main.rand.NextFloat(0.5f, 2f));
+                    d3.velocity = -r * 4;
+                    d3.noGravity = true;
                 }
                 if (timer == 105)
                 {
@@ -256,6 +264,9 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                     Dust d = Dust.NewDustDirect(Projectile.Center - new Vector2(20, 20) + mainVec * Main.rand.NextFloat(0.3f, 1f), 40, 40, ModContent.DustType<BlueGlowAppear>(), 0, 0, 0, default, Main.rand.NextFloat(0.5f, 2f));
                     d.velocity += player.velocity * 0.4f + Main.rand.NextVector2Unit() * 3;
                     d.noGravity = true;
+                    Dust d2 = Dust.NewDustDirect(Projectile.Center - new Vector2(20, 20) + mainVec * Main.rand.NextFloat(0.3f, 1f), 40, 40, ModContent.DustType<MothBlue2>(), 0, 0, 0, default, Main.rand.NextFloat(0.5f, 2f));
+                    d2.velocity += player.velocity * 0.4f + Main.rand.NextVector2Unit() * 3;
+                    d2.noGravity = true;
                 }
                 /*for (int i = 0; i < 8; i++)//加上这个有点奇怪，特效过多，光污染了
                 {
