@@ -55,6 +55,9 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         }
         public override void Attack()
         {
+            Player player = Main.player[Projectile.owner];
+            TestPlayerDrawer Tplayer = player.GetModPlayer<TestPlayerDrawer>();
+            Tplayer.HideLeg = true;
             if (Main.myPlayer == Projectile.owner && Main.mouseRight && Main.mouseRightRelease)
             {
                 
@@ -99,6 +102,15 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                     disFromPlayer = 6;
                     NextAttackType();
                 }
+                else if (timer > 1)
+                {
+                    float BodyRotation = (float)(Math.Sin((timer - 10) / 30d * Math.PI)) * 0.3f * player.direction * player.gravDir;
+                    player.fullRotation = BodyRotation;
+                    player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
+                    player.legRotation = -BodyRotation;
+                    player.legPosition = (new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height) - player.fullRotationOrigin).RotatedBy(-BodyRotation);
+                    Tplayer.HeadRotation = -BodyRotation;
+                }
             }
             if (attackType == 1)
             {
@@ -125,6 +137,15 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                 if (timer > 40)
                 {
                     NextAttackType();
+                }
+                else if (timer > 1)
+                {
+                    float BodyRotation = (float)(Math.Sin((timer - 10) / 30d * Math.PI)) * 0.2f * player.direction * player.gravDir;
+                    player.fullRotation = BodyRotation;
+                    player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
+                    player.legRotation = -BodyRotation;
+                    player.legPosition = (new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height) - player.fullRotationOrigin).RotatedBy(-BodyRotation);
+                    Tplayer.HeadRotation = -BodyRotation;
                 }
             }
             if (attackType == 2)
@@ -154,9 +175,19 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                         Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center - Vector2.Normalize(mVec) * 150, Vector2.Normalize(mVec) * 20, ModContent.ProjectileType<VortexVanquisher2>(), 0, 0, Projectile.owner, 1).scale=Projectile.scale*1.2f;
                     }
                 }
+
                 if (timer >= 50)
                 {
                     NextAttackType();
+                }
+                else if (timer > 1)
+                {
+                    float BodyRotation = (float)(Math.Sin((timer - 10) / 30d * Math.PI)) * 0.3f * player.direction * player.gravDir;
+                    player.fullRotation = BodyRotation;
+                    player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
+                    player.legRotation = -BodyRotation;
+                    player.legPosition = (new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height) - player.fullRotationOrigin).RotatedBy(-BodyRotation);
+                    Tplayer.HeadRotation = -BodyRotation;
                 }
             }
             if (attackType == 3)
@@ -181,6 +212,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                     Projectile.rotation += 0.3f * Projectile.spriteDirection;
                     mainVec = Projectile.rotation.ToRotationVector2() * 160;
                 }
+
                 if (timer > 120)
                 {
                     CanIgnoreTile = false;
@@ -228,12 +260,34 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                 {
                     NextAttackType();
                 }
+                else if(timer > 1)
+                {
+                    float BodyRotation = (float)(Math.Sin((timer - 10) / 30d * Math.PI)) * 0.3f * player.direction * player.gravDir;
+                    player.fullRotation = BodyRotation;
+                    player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
+                    player.legRotation = -BodyRotation;
+                    player.legPosition = (new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height) - player.fullRotationOrigin).RotatedBy(-BodyRotation);
+                    Tplayer.HeadRotation = -BodyRotation;
+                }
             }
         }
         public override void LeftLongThump()
         {
             LockPlayerDir(Player);
             Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(Math.Sign(Main.MouseWorld.X - Projectile.Center.X), 0), ModContent.ProjectileType<VortexVanquisherThump>(), Projectile.damage * 6, 0, Projectile.owner);
+        }
+        public override void End()
+        {
+            Player player = Main.player[Projectile.owner];
+            TestPlayerDrawer Tplayer = player.GetModPlayer<TestPlayerDrawer>();
+            player.legFrame = new Rectangle(0, 0, player.legFrame.Width, player.legFrame.Height);
+            player.fullRotation = 0;
+            player.legRotation = 0;
+            Tplayer.HeadRotation = 0;
+            Tplayer.HideLeg = false;
+            player.legPosition = Vector2.Zero;
+            Projectile.Kill();
+            player.GetModPlayer<MEACPlayer>().isUsingMeleeProj = false;
         }
     }
 }

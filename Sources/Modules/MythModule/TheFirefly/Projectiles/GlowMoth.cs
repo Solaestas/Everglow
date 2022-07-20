@@ -52,7 +52,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         void UpdateDrawParameter()
         {
             Player player = Main.player[Projectile.owner];
-            MothOwner mothOwner = ModContent.GetInstance<MothOwner>();
+            MothOwner mothOwner = player.GetModPlayer<MothOwner>();
 
             if (mothOwner.WhoSleepInPlayer[player.whoAmI] == Projectile.whoAmI)
             {
@@ -150,7 +150,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         void FindEnemies()
         {
             Player player = Main.player[Projectile.owner];
-            MothOwner mothOwner = ModContent.GetInstance<MothOwner>();
+            MothOwner mothOwner = player.GetModPlayer<MothOwner>();
             bool flag = false;
             for (int j = 0; j < 200; j++)
             {
@@ -226,15 +226,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         void NoFindAnyEmeny()
         {
             Player player = Main.player[Projectile.owner];
-            MothOwner mothOwner = ModContent.GetInstance<MothOwner>();
-
+            MothOwner mothOwner = player.GetModPlayer<MothOwner>();
             //SleepInPlayer
             Vector2 PlayerBody = player.TopLeft + player.fullRotationOrigin + new Vector2(-20 * player.direction, -32).RotatedBy(player.fullRotation);
             if(player.mount._type == -1)
             {
                 PlayerBody = player.Hitbox.Center() + new Vector2(-16 * player.direction, -0);
             }
-            if (mothOwner.WhoSleepInPlayer[player.whoAmI] <= 0/*此时没有飞停留在玩家身上*/)
+            if (mothOwner.WhoSleepInPlayer[player.whoAmI] < 0/*此时没有飞停留在玩家身上*/)
             {
                 Vector2 v = player.MountedCenter + ProduceFlyTrace(Projectile.ai[0]) - Projectile.Center;
                 Vector2 v1 = PlayerBody - Projectile.Center;
@@ -331,7 +330,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         public override void Kill(int timeLeft)
         {
             Player player = Main.player[Projectile.owner];
-            MothOwner mothOwner = ModContent.GetInstance<MothOwner>();
+            MothOwner mothOwner = player.GetModPlayer<MothOwner>();
             if (player.ownedProjectileCounts[ModContent.ProjectileType<GlowMoth>()] == 1)
             {
                 mothOwner.WhoSleepInPlayer[player.whoAmI] = -1;
@@ -352,7 +351,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         public override void PostDraw(Color lightColor)
         {
             Player player = Main.player[Projectile.owner];
-            MothOwner mothOwner = ModContent.GetInstance<MothOwner>();
+            MothOwner mothOwner = player.GetModPlayer<MothOwner>();
             int Length = Projectile.oldPos.Length;
             int iStart = 1;
             if (mothOwner.WhoSleepInPlayer[player.whoAmI] == Projectile.whoAmI)
@@ -372,10 +371,21 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 Vector2 DrawPos = Projectile.oldPos[i] + new Vector2(Projectile.width / 2f, Projectile.height / 2f) - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY);
                 Color c0 = Lighting.GetColor((int)(DrawPos.X / 16f), (int)(DrawPos.Y / 16f));
                 SpriteEffects sf = SpriteEffects.None;
+                float AddRotation = 0;
                 if (Projectile.spriteDirection == -1)
                 {
                     sf = SpriteEffects.FlipHorizontally;
                 }
+                if(player.gravDir == -1)
+                {
+                    sf = SpriteEffects.FlipVertically;
+                }
+                if(Projectile.spriteDirection == -1 && player.gravDir == -1)
+                {
+                    sf = SpriteEffects.None;
+                    AddRotation = (float)(Math.PI);
+                }
+
                 Rectangle DrawRect = new Rectangle(0, OldFrame[i] * Projectile.height, Projectile.width, Projectile.height);
                 float kColor = (Length - i + 1) / 2.5f * Power;
                 Vector2 Draworigin = new Vector2(texture.Width / 2f, texture.Height / 8f);
@@ -383,12 +393,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 //Main.spriteBatch.Draw(texture, DrawPos, DrawRect, new Color(c0.R * kColor / 255f, c0.G * kColor / 255f, c0.B * kColor / 255f, kColor), OldRotation[i], Draworigin, Projectile.scale, sf, 0);
                 if (mothOwner.WhoSleepInPlayer[player.whoAmI] != Projectile.whoAmI)
                 {
-                    Main.spriteBatch.Draw(Gtexture, DrawPos, DrawRect, new Color(kColor, kColor, kColor, 0), OldRotation[i], Draworigin, Projectile.scale, sf, 0);
+                    Main.spriteBatch.Draw(Gtexture, DrawPos, DrawRect, new Color(kColor, kColor, kColor, 0), OldRotation[i] + AddRotation, Draworigin, Projectile.scale, sf, 0);
                 }
                 if(i == 0)
                 {
                     DrawRect = new Rectangle(0, Projectile.frame * Projectile.height, Projectile.width, Projectile.height);
-                    Main.spriteBatch.Draw(Gtexture, Projectile.Center - Main.screenPosition, DrawRect, new Color(1f, 1f, 1f, 0), Projectile.rotation, Draworigin, Projectile.scale, sf, 0);
+                    Main.spriteBatch.Draw(Gtexture, Projectile.Center - Main.screenPosition, DrawRect, new Color(1f, 1f, 1f, 0), Projectile.rotation + AddRotation, Draworigin, Projectile.scale, sf, 0);
                 }
             }
         }

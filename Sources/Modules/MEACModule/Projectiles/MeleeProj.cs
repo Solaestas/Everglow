@@ -241,7 +241,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                     if (!HasContinueLeftClick || Player.dead)
                     {
                         Player player = Main.player[Projectile.owner];
-                        Projectile.Kill();
+                        End();
                         player.GetModPlayer<MEACPlayer>().isUsingMeleeProj = false;
                     }
                 }
@@ -250,7 +250,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                     if (!Player.controlUseTile || Player.dead)
                     {
                         Player player = Main.player[Projectile.owner];
-                        Projectile.Kill();
+                        End();
                         player.GetModPlayer<MEACPlayer>().isUsingMeleeProj = false;
                     }
                 }
@@ -271,6 +271,13 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         public virtual void End()
         {
             Player player = Main.player[Projectile.owner];
+            TestPlayerDrawer Tplayer = player.GetModPlayer<TestPlayerDrawer>();
+            player.legFrame = new Rectangle(0, 0, player.legFrame.Width, player.legFrame.Height);
+            player.fullRotation = 0;
+            player.legRotation = 0;
+            Tplayer.HeadRotation = 0;
+            Tplayer.HideLeg = false;
+            player.legPosition = Vector2.Zero;
             Projectile.Kill();
             player.GetModPlayer<MEACPlayer>().isUsingMeleeProj = false;
         }
@@ -296,6 +303,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
 
         public virtual void DrawSelf(SpriteBatch spriteBatch, Color lightColor, float HorizontalWidth = 10, float HorizontalHeight = 10, float DrawScale = 0.9f, string GlowPath = "", double DrawRotation = 0.7854)
         {
+            Player player = Main.player[Projectile.owner];
             //Main.spriteBatch.End();
             //Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             //Texture2D tex = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
@@ -327,6 +335,9 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             float QuarterSqrtTwo = 0.35355f;
 
             Vector2 drawCenter = ProjCenter_WithoutGravDir - Main.screenPosition;
+            Vector2 CenterMoveByPlayerRotation = new Vector2(6 * player.direction, -player.height) - new Vector2(0, -player.height).RotatedBy(player.fullRotation);
+            Vector2 drawCenter2 = drawCenter - CenterMoveByPlayerRotation;
+
             Vector2 INormal = new Vector2(texHeight * QuarterSqrtTwo).RotatedBy(ProjRotation - (baseRotation - Math.PI / 4)) * Zoom.Y * Size;
             Vector2 JNormal = new Vector2(texWidth * QuarterSqrtTwo).RotatedBy(ProjRotation - (baseRotation + Math.PI / 4)) * Zoom.X * Size;
 
@@ -357,36 +368,36 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             }
 
             List<Vertex2D> vertex2Ds = new List<Vertex2D>
-                {
-                    new Vertex2D(drawCenter + TopLeft, lightColor, new Vector3(sourceTopLeft.X, sourceTopLeft.Y, 0)),
-                    new Vertex2D(drawCenter + BottomLeft, lightColor, new Vector3(sourceBottomLeft.X, sourceBottomLeft.Y, 0)),
+            {
+                    new Vertex2D(drawCenter2 + TopLeft, lightColor, new Vector3(sourceTopLeft.X, sourceTopLeft.Y, 0)),
+                    new Vertex2D(drawCenter2 + BottomLeft, lightColor, new Vector3(sourceBottomLeft.X, sourceBottomLeft.Y, 0)),
                     new Vertex2D(drawCenter + TopRight, lightColor, new Vector3(sourceTopRight.X, sourceTopRight.Y, 0)),
 
+                    new Vertex2D(drawCenter2 + BottomLeft, lightColor, new Vector3(sourceBottomLeft.X, sourceBottomLeft.Y, 0)),
                     new Vertex2D(drawCenter + BottomRight, lightColor, new Vector3(sourceBottomRight.X, sourceBottomRight.Y, 0)),
-                    new Vertex2D(drawCenter + BottomLeft, lightColor, new Vector3(sourceBottomLeft.X, sourceBottomLeft.Y, 0)),
                     new Vertex2D(drawCenter + TopRight, lightColor, new Vector3(sourceTopRight.X, sourceTopRight.Y, 0))
-                };
+            };
 
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
             Main.graphics.GraphicsDevice.Textures[0] = tex;
-            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertex2Ds.ToArray(), 0, vertex2Ds.Count - 2);
+            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
 
             if (GlowPath != "")
             {
                 vertex2Ds = new List<Vertex2D>
                 {
-                    new Vertex2D(drawCenter + TopLeft, new Color(255,255,255,0), new Vector3(sourceTopLeft.X, sourceTopLeft.Y, 0)),
-                    new Vertex2D(drawCenter + BottomLeft, new Color(255,255,255,0), new Vector3(sourceBottomLeft.X, sourceBottomLeft.Y, 0)),
+                    new Vertex2D(drawCenter2 + TopLeft, new Color(255,255,255,0), new Vector3(sourceTopLeft.X, sourceTopLeft.Y, 0)),
+                    new Vertex2D(drawCenter2 + BottomLeft, new Color(255,255,255,0), new Vector3(sourceBottomLeft.X, sourceBottomLeft.Y, 0)),
                     new Vertex2D(drawCenter + TopRight, new Color(255,255,255,0), new Vector3(sourceTopRight.X, sourceTopRight.Y, 0)),
 
+                    new Vertex2D(drawCenter2 + BottomLeft, new Color(255,255,255,0), new Vector3(sourceBottomLeft.X, sourceBottomLeft.Y, 0)),
                     new Vertex2D(drawCenter + BottomRight, new Color(255,255,255,0), new Vector3(sourceBottomRight.X, sourceBottomRight.Y, 0)),
-                    new Vertex2D(drawCenter + BottomLeft, new Color(255,255,255,0), new Vector3(sourceBottomLeft.X, sourceBottomLeft.Y, 0)),
                     new Vertex2D(drawCenter + TopRight, new Color(255,255,255,0), new Vector3(sourceTopRight.X, sourceTopRight.Y, 0))
                 };
                 Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/" + GlowPath).Value; ;
-                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertex2Ds.ToArray(), 0, vertex2Ds.Count - 2);
+                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
             }
 
             Main.spriteBatch.End();
