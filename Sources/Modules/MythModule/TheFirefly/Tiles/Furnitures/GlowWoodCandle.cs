@@ -2,6 +2,7 @@ using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
+using Everglow.Sources.Commons.Core.Utils;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
@@ -55,46 +56,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 		}
 		public override void HitWire(int i, int j)
 		{
-			int tileX = 1;
-			int tileY = 1;
-			Tile tile = Main.tile[i, j];
-			int x = i - tile.TileFrameX / 18 % tileX;
-			int y = j - tile.TileFrameY / 18 % tileY;
-			for (int m = x; m < x + tileX; m++)
-			{
-				for (int n = y; n < y + tileY; n++)
-				{
-					if (!tile.HasTile)
-					{
-						continue;
-					}
-					if (tile.TileType == Type)
-					{
-						tile = Main.tile[m, n];
-						if (tile.TileFrameX < 18 * tileX)
-						{
-							tile = Main.tile[m, n];
-							tile.TileFrameX += (short)(18 * tileX);
-						}
-						else
-						{
-							tile = Main.tile[m, n];
-							tile.TileFrameX -= (short)(18 * tileX);
-						}
-					}
-				}
-			}
-			if (!Wiring.running)
-			{
-				return;
-			}
-			for (int k = 0; k < tileX; k++)
-			{
-				for (int l = 0; l < tileY; l++)
-				{
-					Wiring.SkipWire(x + k, y + l);
-				}
-			}
+			FurnitureUtils.LightHitwire(i, j, Type, 1, 1);
 		}
 		public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 		{

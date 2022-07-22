@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
 using Terraria.DataStructures;
+using Everglow.Sources.Commons.Core.Utils;
 using Terraria.Enums;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -62,7 +63,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
                 b = 0f;
             }
         }
-
+        public override void HitWire(int i, int j)
+        {
+            FurnitureUtils.LightHitwire(i, j, Type, 1, 3);
+        }
 
         public override void KillMultiTile(int x, int y, int frameX, int frameY)
         {
