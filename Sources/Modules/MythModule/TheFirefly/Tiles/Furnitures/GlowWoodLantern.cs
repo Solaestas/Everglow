@@ -2,6 +2,7 @@ using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
 using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.DataStructures;
 using Terraria.Enums;
+using Everglow.Sources.Commons.Core.Utils;
 using Terraria.ObjectData;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
@@ -43,36 +44,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
         }
         public override void HitWire(int i, int j)
         {
-            var tile = Main.tile[i, j];
-            int width = 18;
-            int DeltaX = tile.TileFrameX % width / 18;
-            int DeltaY = tile.TileFrameY / 18;
-            int AddX = 0;
-
-
-
-            while (Main.tile[i - DeltaX + AddX, j - DeltaY].TileFrameX % width == AddX * 18 && Main.tile[i - DeltaX + AddX, j - DeltaY].HasTile && Main.tile[i - DeltaX + AddX, j - DeltaY].TileType == Type)
-            {
-                int AddY = 0;
-                while (Main.tile[i - DeltaX + AddX, j - DeltaY + AddY].TileFrameY == AddY * 18 && Main.tile[i - DeltaX + AddX, j - DeltaY + AddY].HasTile && Main.tile[i - DeltaX + AddX, j - DeltaY + AddY].TileType == Type)
-                {
-                    ;
-                    if (Main.tile[i - DeltaX + AddX, j - DeltaY + AddY].TileFrameX < width)
-                    {
-                        Main.tile[i - DeltaX + AddX, j - DeltaY + AddY].TileFrameX += (short)width;
-                    }
-                    else
-                    {
-                        Main.tile[i - DeltaX + AddX, j - DeltaY + AddY].TileFrameX -= (short)width;
-                    }
-                    if (Wiring.running)
-                    {
-                        Wiring.SkipWire(i - DeltaX + AddX, j - DeltaY + AddY);
-                    }
-                    AddY++;
-                }
-                AddX++;
-            }
+            FurnitureUtils.LightHitwire(i, j, Type, 1, 2);
         }
         public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
         {
