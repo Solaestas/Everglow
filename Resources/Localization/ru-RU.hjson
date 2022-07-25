@@ -181,38 +181,38 @@
 			ColdWoodSlingshot : Borealwood Slingshot
 			DarkWoodSlingShot : Shadewood SlingShot
 			GreenGemSlingshot : Emerald Slingshot
-			JellySlingshot : Jelly Slingshot
-			JungleSlingshot : JungleSlingshot
-			PalmWoodSlingshot : Palm Wood Slingshot
-			PearlWoodSlingshot : Pearlwood Slingshot
-			PurpleGemSlingshot : Amethyst Purple Gem Slingshot
-			RedGemSlingshot : Ruby Slingshot
-			RedWoodSlingshot : Rich Mahogany Slingshot
-			StarSlingshot : Star Slingshot
-			WhiteGemSlingshot : Diamond Slingshot
-			WoodSlingshot : Wood Slingshot
-			YellowGemSlingshot : Topaz Slingshot
-			BloodyBoneYoyo : Bloody Bone Yoyo
-			SpineGun : Spine Musket
-			ToothKnfe : Tusk Blade
-			ToothMagicBall : Sanguine Orb
-			ToothStaff : Tusk Staff
+			JellySlingshot : Желейная рогатка
+			JungleSlingshot : Jungle Slingshot
+			PalmWoodSlingshot : Рогатка из пальмового дерева
+			PearlWoodSlingshot : Жемчужная рогатка
+			PurpleGemSlingshot : Аметистовая рогатка
+			RedGemSlingshot : Рубиновая рогатка
+			RedWoodSlingshot : Драгоценная Рогатка из Красного дерева
+			StarSlingshot : Звёздная рогатка
+			WhiteGemSlingshot : Алмазная рогатка
+			WoodSlingshot : Деревянная рогатка
+			YellowGemSlingshot : Топазовая рогатка
+			BloodyBoneYoyo : Кровавая кость
+			SpineGun : Позвоночный мушкет
+			ToothKnfe : Клинок-бивень
+			ToothMagicBall : Сангвинический Шар
+			ToothStaff : Посох бивня
 			Acropora : Acropora
 			Alcyonarian : Alcyonarian
 			Barnacle : Barnacle
 			BarrelSponge : Barrel Sponge
-			Basalt : Basalt
+			Basalt : Базальт
 			BlueAcropora : Blue Acropora
 			BlueTreeCoral : BlueTree Coral
 			BubbleCoral : Bubble Coral
 			DragonScaleWood : Dragon Scale Wood
 			GoldGorgonianBranch : GoldGorgonianBranch
 			GorgonianPiece : Gorgonian Piece
-			LargeBlueStarfish : Large Blue Starfish
-			LargeOrangeStarfish : Large Orange Starfish
+			LargeBlueStarfish : Большая синяя морская звезда
+			LargeOrangeStarfish : Большая оранжевая морская звезда
 			MarbleCono : MarbleCono
-			OceanWorld : Ocean World(Not working)
-			OldMoss : Moss
+			OceanWorld : Океанский мир(Не работает)
+			OldMoss : Мох
 			ReefSharkSpecimen : Reefshark Specimen
 			StoneDragonScaleWood : Fossilized Dragon Scale Wood
 			TerrariaContinent : Terraria Continent(Not working)
@@ -235,21 +235,21 @@
 			Guding : Ekanda Alloy
 			NoFlawsDream : Flawless Dream
 			Origin : Pure Sapphire
-			DurableAxe : Durable Axe
+			DurableAxe : Прочный Топор
 			ElectricHeatingPlate : Electric Heating Axe
-			BrokenPick : Broken Pickaxe
-			BloodGoldBayonet : Crimson Rapier
-			DreamStar : Star of Dream
+			BrokenPick : Сломанная кирка
+			BloodGoldBayonet : Багряная рапира
+			DreamStar : Звезда мечты
 			EternalNight : Eternal Night Rapier
-			GoldenStabbingSword : Gold Rapier
-			IronStabbingSword : Iran Rapier
-			LeadStabbingSword : Lead Rapier
-			PlatinumStabbingSword : Platinum Rapier
-			PrisonFireBayonet : Molten Rapier
+			GoldenStabbingSword : Золотая рапира
+			IronStabbingSword : Железная рапира
+			LeadStabbingSword : Свинцовая рапира
+			PlatinumStabbingSword : Платиновая рапира
+			PrisonFireBayonet : Литая рапира
 			RottenGoldBayonet : Corrupted Rapier
-			SilverStabbingSword : Silver Rapier
-			VegetationBayonet : Rapier of Grass
-			TDMT : Catastrophic Lightning
+			SilverStabbingSword : Серебряная рапира
+			VegetationBayonet : Травинистая рапира
+			TDMT : Катастрофическая молния
 
 			#食物系统物品
 			BloodGlucoseMonitor : "Blood Glucose Monitor"
