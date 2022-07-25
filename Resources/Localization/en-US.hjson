@@ -271,20 +271,20 @@ Mods:
 				{$Mods.Everglow.Common.WarWhipGT}
 				Brusts out several damaging bones and olden enemies struck, weaken their attack and defense
 				'''
-			BoneFeatherMagic : Shoots piercing bone feathers, olden enemies struck, weaken their attack and defense
+			BoneFeatherMagic : Shoots piercing bone feathers, aging enemy on struck and weakening their attack damage/defense
 			CloudGun : Launches cloud clusters
-			ComingGhost : Randomly 'surprises' a 'lucky' enemy nearby
+			ComingGhost : Randomly surprises a lucky enemy nearby
 			FeatherMagic : "'I love harpies♥'"
 			FireFeatherMagic : Shoots explosive feathers
-			FreezeFeatherMagic : Shoots icebounding feathers
+			FreezeFeatherMagic : Shoots ice-bound feathers
 			GoldRoundYoyo : "Leaves a track of homing golden rings"
 			Hepuyuan : "#{$Mods.Everglow.Common.ExcluWeapon}\nLeft click to dash, right click to smash\n'You should't be getting it'\nHomaging to Genshin Impact"
 			SilveralGun : "5% increased movement speed and damage after hitting enemies"
 			SilveralRifle : "5% increased movement speed and damage after hitting enemies"
 			Sunflower : "'A weapon made of sunflowers, has a color of hope'"
 			ThunderFlower : "Fires thunderstrom orbs\n'Too many projectiles!'"
-			World : "Summons 'World' at the curser, right click when it is summoned to switch between following mode and slashing mode\n'Power of the entire land is gathered here...'"
-			XmaxWhip : "{$Mods.Everglow.Common.WarWhipGT}\nBrusts out damaging Christmas lights on hitting enemies\n'Much better than the Christmas Tree Sword'"
+			World : "Summons 'World' at the curser, right click to switch between following mode and slashing mode when it is summoned\n'Power of the entire land is accumulated here...'"
+			XmaxWhip : "{$Mods.Everglow.Common.WarWhipGT}\nBursts out damaging Christmas lights on hit\n'Much better than the Christmas Tree Sword'"
 			BloodGoldBlade : "{$Mods.Everglow.Common.MythWeapon}\nEmits ichor blades to surrounding\nA god-slaying blade, contaminated by blood of gods"
 			BloodLightCyanFlame : "{$Mods.Everglow.Common.LegendWeapon}\nAlternately throws boomerblades of laser or cursed flame\n'They should be weapons of the Twins, fortunately you have saved the Mechanic'"
 			BlueRain : "{$Mods.Everglow.Common.LegendWeapon}\nRight click and hold to make a charged attack\n'Rain drops refused to be blend with sea water to maintain their purity, finally converged to this form in chaotic currents'"
