@@ -1,4 +1,5 @@
-﻿using Terraria.Audio;
+﻿using System.Text;
+using Terraria.Audio;
 using Terraria.ModLoader.Core;
 using Hook = Everglow.Sources.Commons.Core.ModHooks.IModifyItemPickSound;
 
@@ -40,6 +41,43 @@ namespace Everglow.Sources.Commons.Core.ModHooks
 			foreach (Hook g in Hook.Enumerate(item)) {
 				g.ModifyItemPickSound(item, context, putIn, ref customSound, ref playOriginalSound);
 			}
+		}
+	}
+
+	public static class PickSoundHelper
+	{
+		public static void ReadFromTxtFile(this Hook modifier, string fileName, out int[] itemIDs) {
+			int everglowLength = nameof(Everglow).Length;
+			string path = $"{modifier.GetType().Namespace.Replace('.', '/').Remove(0, everglowLength + 1)}/{fileName}.txt";
+			List<int> ids = new();
+			if (Everglow.Instance.FileExists(path)) {
+				using var stream = Everglow.Instance.GetFileStream(path);
+				using var streamReader = new StreamReader(stream, Encoding.UTF8);
+
+				string lastLine = "";
+				string fileContents = streamReader.ReadLine();
+
+				while (fileContents is not null) {
+					if (int.TryParse(fileContents, out int id)) {
+						ids.Add(id);
+					}
+					// 星号表示从A到B的范围
+					else if (int.TryParse(lastLine, out int lastID) && fileContents == "*") {
+						fileContents = streamReader.ReadLine(); // 读取到下一行
+						id = int.Parse(fileContents);
+						for (int i = lastID + 1; i <= id; i++) {
+							ids.Add(i);
+						}
+					}
+					lastLine = fileContents;
+					fileContents = streamReader.ReadLine();
+				}
+				itemIDs = ids.ToArray();
+
+				stream.Close();
+				return;
+			}
+			itemIDs = new int[1] { 0 };
 		}
 	}
 }
