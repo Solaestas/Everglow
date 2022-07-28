@@ -54,6 +54,10 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems
             {
                 SoundStyle = 0;
             }
+            if(player.ownedProjectileCounts[Item.shoot] > 0)
+            {
+                return false;
+            }
             return true;
         }
         public override bool CanUseItem(Player player)

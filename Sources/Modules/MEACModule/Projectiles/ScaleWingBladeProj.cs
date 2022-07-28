@@ -74,6 +74,45 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             Tplayer.HideLeg = true;
             useTrail = true;
             float timeMul = 1f - GetMeleeSpeed(player) / 100f;
+
+            Vector2 vToMouse = Main.MouseWorld - player.Top;
+            float AddHeadRotation = (float)Math.Atan2(vToMouse.Y, vToMouse.X) + (1 - player.direction) * 1.57f;
+            if(player.gravDir == -1)
+            {
+                if (player.direction == -1)
+                {
+                    if (AddHeadRotation >= 0.57f && AddHeadRotation < 2)
+                    {
+                        AddHeadRotation = 0.57f;
+                    }
+                }
+                else
+                {
+                    if (AddHeadRotation <= -0.57f)
+                    {
+                        AddHeadRotation = -0.57f;
+                    }
+                }
+            }
+            else
+            {
+                if (player.direction == -1)
+                {
+                    if (AddHeadRotation >= 2 && AddHeadRotation < 5.71f)
+                    {
+                        AddHeadRotation = 5.71f;
+                    }
+                }
+                else
+                {
+                    if (AddHeadRotation >= 0.57f)
+                    {
+                        AddHeadRotation = 0.57f;
+                    }
+                }
+            }
+            Main.NewText(AddHeadRotation);
+
             if (attackType == 0)
             {
                 if (timer < 30)//前摇
@@ -310,7 +349,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                 player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
                 player.legRotation = -BodyRotation;
                 player.legPosition = (new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height) - player.fullRotationOrigin).RotatedBy(-BodyRotation);
-                Tplayer.HeadRotation = -BodyRotation;
+                Tplayer.HeadRotation = -BodyRotation + AddHeadRotation;
             }
             if(timer == 131)
             {

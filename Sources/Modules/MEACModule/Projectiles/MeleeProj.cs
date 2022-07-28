@@ -335,7 +335,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             float QuarterSqrtTwo = 0.35355f;
 
             Vector2 drawCenter = ProjCenter_WithoutGravDir - Main.screenPosition;
-            Vector2 CenterMoveByPlayerRotation = new Vector2(6 * player.direction, -player.height) - new Vector2(0, -player.height).RotatedBy(player.fullRotation);
+            Vector2 CenterMoveByPlayerRotation = new Vector2(6 * player.direction, -player.height * player.gravDir) - new Vector2(0, -player.height * player.gravDir).RotatedBy(player.fullRotation);
             Vector2 drawCenter2 = drawCenter - CenterMoveByPlayerRotation;
 
             Vector2 INormal = new Vector2(texHeight * QuarterSqrtTwo).RotatedBy(ProjRotation - (baseRotation - Math.PI / 4)) * Zoom.Y * Size;

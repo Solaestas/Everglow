@@ -78,7 +78,12 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         public override void PostDraw(Color lightColor)
         {
             List<VertexInfo> bars = new List<VertexInfo>();
-
+            int TrueLength = 1;
+            for (int i = 1; i < oldPos.Length; ++i)
+            {
+                TrueLength++;
+                if (oldPos[i] == Vector2.Zero) break;
+            }
             for (int i = 1; i < oldPos.Length; ++i)
             {
                 if (oldPos[i] == Vector2.Zero) break;
@@ -86,7 +91,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                 var normalDir = oldPos[i - 1] - oldPos[i];
                 normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
 
-                var factor = i / (float)oldPos.Length;
+                var factor = i / (float)TrueLength;
                 var w = MathHelper.SmoothStep(1.5f, 0.1f, factor);
                 float width = MathHelper.SmoothStep(0, 50, Math.Min(1, 3 * factor)) * projectile.scale;
                 if (i > 15)

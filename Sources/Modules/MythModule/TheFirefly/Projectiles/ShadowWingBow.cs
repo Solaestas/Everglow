@@ -1,5 +1,6 @@
 ﻿using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.GameContent;
+using Everglow.Sources.Modules.MEACModule.Projectiles;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
@@ -40,6 +41,48 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         {
             addi++;
             Player player = Main.player[Projectile.owner];
+            TestPlayerDrawer Tplayer = player.GetModPlayer<TestPlayerDrawer>();
+            //玩家动作
+            Vector2 vToMouse = Main.MouseWorld - player.Top;
+            float AddHeadRotation = (float)Math.Atan2(vToMouse.Y, vToMouse.X) + (1 - player.direction) * 1.57f;
+            if (player.gravDir == -1)
+            {
+                if (player.direction == -1)
+                {
+                    if (AddHeadRotation >= 0.57f && AddHeadRotation < 2)
+                    {
+                        AddHeadRotation = 0.57f;
+                    }
+                }
+                else
+                {
+                    if (AddHeadRotation <= -0.57f)
+                    {
+                        AddHeadRotation = -0.57f;
+                    }
+                }
+            }
+            else
+            {
+                if (player.direction == -1)
+                {
+                    if (AddHeadRotation >= 2 && AddHeadRotation < 5.71f)
+                    {
+                        AddHeadRotation = 5.71f;
+                    }
+                }
+                else
+                {
+                    if (AddHeadRotation >= 0.57f)
+                    {
+                        AddHeadRotation = 0.57f;
+                    }
+                }
+            }
+            Tplayer.HeadRotation = AddHeadRotation;
+           
+
+
             if (ArRot[0] == 0)
             {
                 ArRot[0] = Main.rand.NextFloat(-0.7f, -0.5f);
@@ -133,6 +176,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 }
                 else
                 {
+                    Tplayer.HeadRotation = 0;
                     Projectile.Kill();
                 }
             }
@@ -174,12 +218,24 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             SpriteEffects se = SpriteEffects.None;
             if (Projectile.Center.X < player.Center.X)
             {
-                se = SpriteEffects.FlipVertically;
+                
                 player.direction = -1;
             }
             else
             {
                 player.direction = 1;
+            }
+            if(player.direction == -1)
+            {
+                se = SpriteEffects.FlipVertically;
+            }
+            if (player.gravDir == -1)
+            {
+                se = SpriteEffects.FlipVertically;
+            }
+            if(player.gravDir == -1 && player.direction == -1)
+            {
+                se = SpriteEffects.None;
             }
             //int StringFrame = 0;
             //StringFrame = Math.Clamp((int)(Energy / 20f), 0, 5);
@@ -187,7 +243,20 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Vector2 v0 = Main.MouseWorld - player.Center;
             if (Main.mouseLeft)
             {
-                player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(v0.Y, v0.X) - Math.PI / 2d));
+                Player.CompositeArmStretchAmount PCAS = Player.CompositeArmStretchAmount.Full;
+                if (Energy > 30)
+                {
+                    PCAS = Player.CompositeArmStretchAmount.ThreeQuarters;
+                }
+                if (Energy > 60)
+                {
+                    PCAS = Player.CompositeArmStretchAmount.Quarter;
+                }
+                if (Energy > 90)
+                {
+                    PCAS = Player.CompositeArmStretchAmount.None;
+                }
+                player.SetCompositeArmFront(true, PCAS, (float)(Math.Atan2(v0.Y, v0.X) * player.gravDir - Math.PI / 2d));
             }
             Vector2 vProA = Main.player[Projectile.owner].Center + Vector2.Normalize(v0) * (28f - 12f * b3);
             for (int s = 0; s < 5; s++)
