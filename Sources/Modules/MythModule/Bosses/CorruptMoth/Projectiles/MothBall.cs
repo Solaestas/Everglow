@@ -40,8 +40,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
             {
                 float speed = MathHelper.Clamp((300 - Projectile.timeLeft) * 0.1f, 0, 30);
                 speed *= MathHelper.Clamp(Vector2.Distance(Projectile.Center, Main.player[p].Center) / 300, 1, 2f);
-
-                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.player[p].Center + new Vector2(1)) * speed, 0.012f);
+                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.player[p].Center) * speed, 0.015f);
             }
             if (Projectile.timeLeft < 50)
             {

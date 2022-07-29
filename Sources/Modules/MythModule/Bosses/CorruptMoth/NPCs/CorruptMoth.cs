@@ -7,6 +7,8 @@ using Terraria.GameContent.Bestiary;
 using Terraria.Localization;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 using Color = Microsoft.Xna.Framework.Color;
+using Terraria.Audio;
+using Everglow.Sources.Commons.Function.Vertex;
 
 namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
 {
@@ -69,7 +71,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
         {
             DisplayName.SetDefault("Corrupted Moth");
             DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "腐檀巨蛾");
-            Main.npcFrameCount[NPC.type] = 4;
+            Main.npcFrameCount[NPC.type] = 10;
             var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
             {
                 CustomTexturePath = "Everglow/Sources/Modules/MythModule/Bosses/CorruptMoth/NPCs/CorruptMothBoss",
@@ -110,6 +112,8 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
         }
         public override void SetDefaults()
         {
+            Main.npcFrameCount[NPC.type] = 10;
+
             NPC.behindTiles = true;
             NPC.damage = 40;
             NPC.width = 80;
@@ -117,6 +121,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             NPC.defense = 0;
             NPC.lifeMax = 12000;
             NPC.npcSlots = 80;
+            NPC.scale = 0.8f;
             if (Main.expertMode)
             {
                 NPC.lifeMax = 4000;
@@ -200,6 +205,21 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                 }
             }
         }
+
+        public override void ModifyHitByProjectile(Projectile projectile, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        {
+            if (NPC.ai[0]==6&&Timer>260)
+            {
+                damage = 1;
+                SoundEngine.PlaySound(SoundID.NPCHit4,NPC.Center);
+                if(lightVisual<0.6f)
+                    lightVisual += 0.5f;
+                if(Main.rand.NextBool()&&Main.netMode!=1)
+                {
+                    Projectile.NewProjectile(NPC.GetSource_OnHurt(projectile),projectile.Center,Utils.SafeNormalize(projectile.Center-NPC.Center,Vector2.One)*12,ModContent.ProjectileType<BlueMissil>(),NPC.damage/4,0,Main.myPlayer);
+                }
+            }
+        }
         public override void AI()
         {
             if (!startLoading)
@@ -213,7 +233,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                     BFistColors = ImageReader.ReadImageKeyPoints("Everglow/Sources/Modules/MythModule/Bosses/CorruptMoth/Projectiles/BFist", IdentifierValue);
                 });
             }
-            
             bool phase2 = NPC.life < NPC.lifeMax * 0.6f;
             Lighting.AddLight(NPC.Center, 0f, 0f, 0.8f * (1 - NPC.alpha / 255f));
             NPC.friendly = NPC.dontTakeDamage;
@@ -232,13 +251,12 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             //贴图旋转
             if (NPC.spriteDirection > 0)
             {
-                NPC.rotation = NPC.velocity.Y / 15;
+                NPC.rotation = NPC.velocity.Y / 20;
             }
             else
             {
-                NPC.rotation = -NPC.velocity.Y / 15;
+                NPC.rotation = -NPC.velocity.Y / 20;
             }
-
             if (Math.Abs(NPC.rotation) > 1.2f)
             {
                 NPC.rotation = Math.Sign(NPC.rotation) * 1.2f;
@@ -287,7 +305,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                 }
             }
             #endregion
-
             if (NPC.ai[0] == 0)
             {
                 NPC.dontTakeDamage = true;
@@ -336,12 +353,10 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                     {
                         PhamtomDis += (50 - tt) * 0.5f;
                     }
-
                     if (tt == 70)
                     {
                         lightVisual = 2;
                     }
-
                     if (tt > 70 && tt < 120)//冲刺
                     {
                         if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -352,7 +367,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, -2), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 6, 0f, Main.myPlayer);
                             }
                         }
-
                         Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
                         if (Timer > 500)
                         {
@@ -396,23 +410,20 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                     {
                         PhamtomDis += (20 - tt) * 0.5f;
                     }
-
                     if (tt == 40)
                     {
                         lightVisual = 2;
                     }
-
                     if (tt > 40 && tt < 80)//冲刺
                     {
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
                             GreyVFx();
-                            if (Timer % 6 == 0)
+                            if (Timer>400 &&Timer % 6 == 0)
                             {
                                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, -2), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 6, 0f, Main.myPlayer);
                             }
                         }
-
                         Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
                         if (Timer > 500)
                         {
@@ -469,12 +480,10 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                         {
                             Freq = 20;
                         }
-
                         if (Main.masterMode)
                         {
                             Freq = 16;
                         }
-
                         GetDir_ByVel();
                         if (!phase2)
                         {
@@ -482,12 +491,10 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                         }
                         else
                         {
-                            MoveTo(player.Center + new Vector2(0, -200), Timer > 400 ? 22 : 15, 30);
+                            MoveTo(player.Center + new Vector2(0, -200), Timer > 400 ? 22 : 13, 30);
                         }
-
                         Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.MothBlue>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
                         Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.MothBlue2>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
-
                         if (Timer % Freq == 0 && Main.netMode != NetmodeID.MultiplayerClient)
                         {
                             Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, 1), ModContent.ProjectileType<Projectiles.BlackCorruptRain>(), NPC.damage / 4, 0f, Main.myPlayer, 1);
@@ -506,7 +513,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                     {
                         MoveTo(player.Center + NPC.DirectionFrom(player.Center) * 150, 10, 20);
                     }
-
+                    /*
                     if (Timer == 220 && phase2 && Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         for (int i = 0; i < 20; i++)
@@ -514,7 +521,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                             Vector2 v = new Vector2(0.1f + (i % 4) / 16f, 0).RotatedBy(i * MathHelper.TwoPi / 20);
                             Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v, ModContent.ProjectileType<Projectiles.BlackCorruptRain3>(), NPC.damage / 5, 0f, Main.myPlayer, 0);
                         }
-                    }
+                    }*/
                 }
                 if (Timer > 550)
                 {
@@ -572,11 +579,12 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                     lightVisual = 2;
                 }
 
-                if (Timer > 90 && Timer < 130)
+                if (Timer > 90 && Timer < 130)//冲刺中
                 {
                     GreyVFx();
+                    GetDir_ByVel();
                     Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
-                    if (Timer % 8 == 0 && NPC.ai[2] == 2 && Main.netMode != NetmodeID.MultiplayerClient)
+                    if (Timer % 8 == 0 && (NPC.ai[2] == 2||phase2) && Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, -2), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 6, 0f, Main.myPlayer);
                     }
@@ -649,11 +657,21 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                             }
                             if (style == 1)
                             {
-                                for (int i = 0; i < 40; i++)
+                                if (phase2)
                                 {
-                                    Vector2 v = new Vector2(0.1f + (i % 5) / 16f, 0).RotatedBy(i * MathHelper.TwoPi / 40 + r);
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v, ModContent.ProjectileType<Projectiles.BlackCorruptRain3>(), NPC.damage / 5, 0f, Main.myPlayer, 0);
-
+                                    for (int i = 0; i < 40; i++)
+                                    {
+                                        Vector2 v = new Vector2(0.1f + (i % 5) / 16f, 0).RotatedBy(i * MathHelper.TwoPi / 40 + r);
+                                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v, ModContent.ProjectileType<Projectiles.BlackCorruptRain3>(), NPC.damage / 5, 0f, Main.myPlayer, 0);
+                                    }
+                                }
+                                else
+                                {
+                                    for (int i = 0; i < 30; i++)
+                                    {
+                                        Vector2 v = new Vector2(0.1f + (i % 5) / 16f, 0).RotatedBy(i * MathHelper.TwoPi / 30 + r);
+                                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v, ModContent.ProjectileType<Projectiles.BlackCorruptRain3>(), NPC.damage / 5, 0f, Main.myPlayer, 0);
+                                    }
                                 }
                             }
                             if (style == 2)
@@ -682,7 +700,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                     }
                     else
                     {
-                        NPC.ai[0] = 0;
+                        NPC.ai[0] = 1;
                     }
                 }
             }//弹幕
@@ -707,12 +725,11 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                 {
                     PhamtomDis = MathHelper.Lerp(PhamtomDis, 0, 0.1f);
                 }
-
                 if (Timer > 80 && Timer < 90)
                 {
                     NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(player.Center).RotatedBy(NPC.spriteDirection * 1.57f) * 20f, 0.1f);
                 }
-                if (Timer > 90 && Timer < 130)
+                if (Timer > 90 && Timer < 140)
                 {
                     lightVisual = 1;
                     SpinAI(NPC, player.Center, NPC.spriteDirection * MathHelper.TwoPi / 30, true);
@@ -725,7 +742,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                     }
                     //GetDir_ByVel();
                 }
-                if (Timer > 130)
+                if (Timer > 140)
                 {
                     NPC.velocity *= 0.5f;
                     NPC.ai[0]++;
@@ -783,7 +800,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                 if (Timer > 960)
                 {
                     Timer = 0;
-                    if (NPC.life < NPC.lifeMax * 0.4f)
+                    if (NPC.life < NPC.lifeMax * 0.5f)
                     {
                         NPC.ai[0]++;
                     }
@@ -825,9 +842,10 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                         }
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
+                            float r = Main.rand.NextFloat(0,1f);
                             for (int i = 0; i < NPC.ai[2]; i++)
                             {
-                                Vector2 vel = (i * MathHelper.TwoPi / NPC.ai[2]).ToRotationVector2();
+                                Vector2 vel = (r+i * MathHelper.TwoPi / NPC.ai[2]).ToRotationVector2();
                                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vel * NPC.ai[2] / 2, ModContent.ProjectileType<ButterflyDream>(), 1, 0, Main.myPlayer, -vel.Y);
                             }
                         }
@@ -846,6 +864,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             }//下冲+蝶弹
             if (NPC.ai[0] == 9)
             {
+                
                 if (++Timer < 60)
                 {
                     MoveTo(player.Center + new Vector2(0, -200), 10, 20);
@@ -1061,6 +1080,14 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                         butterfly.ai[1] = 0;//清空计时器
                         butterfly.ai[3] = NPC.whoAmI;
                     }
+                }
+                if(Timer==150&&Main.netMode!=NetmodeID.MultiplayerClient)
+                {
+                    for (int i = -10; i < 10; i++)
+                    {
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, new Vector2(Main.rand.NextFloat(-0.3f, 0.3f), i * 10), ModContent.ProjectileType<ButterflyDream>(), 1, 0, Main.myPlayer, -i * 0.1f);
+                    }
+
                 }
                 Timer++;
                 if (Timer > 240)
@@ -1308,20 +1335,66 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
         }
         public override void FindFrame(int frameHeight)
         {
-            NPC.frameCounter += 0.2f;
+            NPC.frameCounter += NPC.velocity.Length()/50f + 0.1f;
             int num = (int)NPC.frameCounter % Main.npcFrameCount[NPC.type];
             NPC.frame.Y = num * frameHeight;
         }
-        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        public void DrawCube()
         {
+            int[][] array = new int[][]
+            {
+                 new int[] { 1,2,4,3},
+                 new int[] { 5,6,8,7},
+                 new int[] {1,4,5,8},
+                 new int[] { 2,3,6,7},
+                 new int[] { 4,3,8,7},
+                 new int[] { 1,2,5,6}
+            };
+            List<Vertex2D> vertices=new();
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.AnisotropicClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
+            Main.graphics.GraphicsDevice.Textures[0] = Terraria.GameContent.TextureAssets.MagicPixel.Value;
+           Color color =new Color(0f,0.3f,1f) * lightVisual*0.8f;
+            for(int i=0;i<6;i++)
+            {
+                for(int j=0;j<4;j++)
+                {
+                    Vector3 pos = cubeVec[array[i][j]-1]*80;
+                    pos.X += NPC.Center.X - Main.screenPosition.X;
+                    pos.Y += NPC.Center.Y - Main.screenPosition.Y;
+                    Vector2 v2Pos = Projection2(pos, new Vector2(Main.screenWidth, Main.screenHeight) / 2, out float scale, 1000);
+                    float alpha = 1;
+                    if (i == 2||i==3)
+                        alpha *= 0.5f;
+                    vertices.Add(new(v2Pos, color* alpha, Vector3.Zero)); ;
+                }
+                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip,vertices.ToArray(),0,2);
+                vertices.Clear();
+            }
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
+        }
+        private static Vector2 Projection2(Vector3 v3, Vector2 center, out float scale, float viewZ)
+        {
+            float k2 = -viewZ / (v3.Z - viewZ);
+            scale = k2;
+            Vector2 v = new Vector2(v3.X, v3.Y);
+            return v + (k2 - 1) * (v - center);
+        }
+        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        { 
             SpriteEffects effects = SpriteEffects.None;
             if (NPC.spriteDirection == 1)
             {
                 effects = SpriteEffects.FlipHorizontally;
             }
-
+            if (NPC.ai[0] == 6 && Timer > 260)
+                DrawCube();
             Texture2D tx = ModContent.Request<Texture2D>(Texture).Value;
-            Vector2 origin = new Vector2(tx.Width, tx.Height / 4) / 2;
+            Texture2D GlowTexture= ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/CorruptMoth/NPCs/CorruptMoth_Glow").Value;
+            Vector2 origin = new Vector2(tx.Width, tx.Height / 11) / 2;
             Color origColor = NPC.GetAlpha(drawColor);
             for (int k = 0; k < NPC.oldPos.Length; k++)
             {
@@ -1329,28 +1402,28 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                 spriteBatch.Draw(tx, NPC.oldPos[k] - Main.screenPosition, NPC.frame, color, NPC.rotation, origin, NPC.scale, effects, 0f);
             }
             spriteBatch.Draw(tx, NPC.Center - Main.screenPosition, NPC.frame, origColor, NPC.rotation, origin, NPC.scale, effects, 0f);
-            origColor.A = 0;
-            spriteBatch.Draw(tx, NPC.Center - Main.screenPosition, NPC.frame, origColor * 0.6f, NPC.rotation, origin, NPC.scale * 1.05f, effects, 0f);
+            //origColor.A = 0;
+            //spriteBatch.Draw(tx, NPC.Center - Main.screenPosition, NPC.frame, origColor * 0.6f, NPC.rotation, origin, NPC.scale * 1.05f, effects, 0f);
 
-            Texture2D tg = Common.MythContent.QuickTexture("Bosses/CorruptMoth/NPCs/CorruptMothGlow");
+            
 
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             float t = (float)Main.timeForVisualEffects * 0.2f;
             for (int i = 0; i < 6; i++)//周围的幻影
             {
-                Color color = NPC.GetAlpha(Color.White) * (PhamtomDis / 120f);
-                spriteBatch.Draw(tx, NPC.Center + (t * 0.1f + i * t / 6).ToRotationVector2() * PhamtomDis - Main.screenPosition, NPC.frame, color, NPC.rotation, origin, NPC.scale, effects, 0f);
+                Color color = NPC.GetAlpha(Color.White) * (PhamtomDis / 120f)*0.6f;
+                spriteBatch.Draw(GlowTexture, NPC.Center + (t * 0.1f + i * t / 6).ToRotationVector2() * PhamtomDis*0.8f - Main.screenPosition, NPC.frame, color, NPC.rotation, origin, NPC.scale, effects, 0f);
             }
             if (lightVisual > 0)//发光特效
             {
                 for (int k = 0; k < NPC.oldPos.Length; k++)
                 {
                     Color color = Color.White * ((1 + NPC.oldPos.Length - k) / (float)NPC.oldPos.Length) * lightVisual;
-                    spriteBatch.Draw(tx, NPC.oldPos[k] - Main.screenPosition, NPC.frame, color, NPC.rotation, origin, NPC.scale, effects, 0f);
+                    spriteBatch.Draw(GlowTexture, NPC.oldPos[k] - Main.screenPosition, NPC.frame, color, NPC.rotation, origin, NPC.scale, effects, 0f);
                 }
             }
-            Main.spriteBatch.Draw(tg, NPC.Center - Main.screenPosition, new Rectangle?(NPC.frame), NPC.GetAlpha(Color.White) * 0.5f, NPC.rotation, origin, 1f, effects, 0f);
+            Main.spriteBatch.Draw(GlowTexture, NPC.Center - Main.screenPosition, new Rectangle?(NPC.frame), NPC.GetAlpha(new Color(0,0.5f,1,0f)) * 0.5f, NPC.rotation, origin, 1f, effects, 0f);
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
