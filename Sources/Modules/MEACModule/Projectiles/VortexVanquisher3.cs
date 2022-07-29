@@ -1,7 +1,7 @@
 ﻿using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
 using Everglow.Sources.Modules.MythModule;
 using Terraria.Audio;
-using Terraria.ID;
+using Terraria.GameContent.Shaders;
 
 namespace Everglow.Sources.Modules.MEACModule.Projectiles
 {
@@ -67,6 +67,20 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                     Main.dust[k].noGravity = true;
                 }
             }
+
+            mainVec = Projectile.velocity;
+            ProduceWaterRipples(new Vector2(mainVec.Length(), 30));
+        }
+        Vector2 mainVec = Vector2.One;
+
+        private void ProduceWaterRipples(Vector2 beamDims)
+        {
+            mainVec = Projectile.velocity;
+            WaterShaderData shaderData = (WaterShaderData)Terraria.Graphics.Effects.Filters.Scene["WaterDistortion"].GetShader();
+            float waveSine = 1f * (float)Math.Sin(Main.GlobalTimeWrappedHourly * 20f);
+            Vector2 ripplePos = Projectile.Center + new Vector2(beamDims.X * 0.5f, 0f).RotatedBy(mainVec.ToRotation());
+            Color waveData = new Color(0.5f, 0.1f * Math.Sign(waveSine) + 0.5f, 0f, 1f) * Math.Abs(waveSine);
+            shaderData.QueueRipple(ripplePos, waveData, beamDims, RippleShape.Square, mainVec.ToRotation());
         }
         public Vector2 RotByPro(Vector2 orig)
         {

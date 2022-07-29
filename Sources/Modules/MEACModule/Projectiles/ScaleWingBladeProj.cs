@@ -111,7 +111,6 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                     }
                 }
             }
-            Main.NewText(AddHeadRotation);
 
             if (attackType == 0)
             {

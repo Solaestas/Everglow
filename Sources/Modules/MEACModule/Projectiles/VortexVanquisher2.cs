@@ -1,5 +1,4 @@
-﻿using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
-using Terraria.ID;
+﻿using Terraria.GameContent.Shaders;
 
 namespace Everglow.Sources.Modules.MEACModule.Projectiles
 {
@@ -23,9 +22,21 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             Projectile.timeLeft = 15;
             Projectile.tileCollide = false;
         }
+        Vector2 mainVec = Vector2.One;
         public override void AI()
         {
             Projectile.velocity *= 0.94f;
+            mainVec = Projectile.velocity;
+            ProduceWaterRipples(new Vector2(mainVec.Length(), 30));
+        }
+        private void ProduceWaterRipples(Vector2 beamDims)
+        {
+            mainVec = Projectile.velocity;
+            WaterShaderData shaderData = (WaterShaderData)Terraria.Graphics.Effects.Filters.Scene["WaterDistortion"].GetShader();
+            float waveSine = 1f * (float)Math.Sin(Main.GlobalTimeWrappedHourly * 20f);
+            Vector2 ripplePos = Projectile.Center + new Vector2(beamDims.X * 0.5f, 0f).RotatedBy(mainVec.ToRotation());
+            Color waveData = new Color(0.5f, 0.1f * Math.Sign(waveSine) + 0.5f, 0f, 1f) * Math.Abs(waveSine);
+            shaderData.QueueRipple(ripplePos, waveData, beamDims, RippleShape.Square, mainVec.ToRotation());
         }
         public override bool PreDraw(ref Color lightColor)
         {
