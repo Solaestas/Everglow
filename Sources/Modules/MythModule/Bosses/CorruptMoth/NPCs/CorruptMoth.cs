@@ -9,6 +9,7 @@ using Rectangle = Microsoft.Xna.Framework.Rectangle;
 using Color = Microsoft.Xna.Framework.Color;
 using Terraria.Audio;
 using Everglow.Sources.Commons.Function.Vertex;
+using Terraria.GameContent.ItemDropRules;
 
 namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
 {
@@ -1310,8 +1311,8 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
         }
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-
-
+            npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<TheFirefly.Items.BossDrop.CorruptMothTreasureBag>()));
+            npcLoot.Add(ItemDropRule.MasterModeCommonDrop(ModContent.ItemType<TheFirefly.Items.BossDrop.MothRelic>()));
             //npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsMasterMode(), ModContent.ItemType<Items.Weapons.Legendary.ToothSpear>(), 40/*概率分母*/, 1/*最小*/, 1/*最大*/, 1/*概率分子*/));
             /*
             npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsMasterMode(), ModContent.ItemType<Items.Weapons.Legendary.DarknessFan>(), 8, 1, 1, 1));

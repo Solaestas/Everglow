@@ -29,7 +29,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures
         {
             Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ModContent.ItemType<GlowWood>(), 10);
-            recipe.AddIngredient(ModContent.ItemType<GlowWoodTorch>(), 5);
+            recipe.AddIngredient(ModContent.ItemType<MahoglowanyTorch>(), 5);
             recipe.AddTile(TileID.WorkBenches);
             recipe.Register();
         }

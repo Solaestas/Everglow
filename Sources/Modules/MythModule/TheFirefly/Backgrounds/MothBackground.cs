@@ -435,7 +435,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 {
                     var mass = ropes[i].mass[j];
                     Vector2 vector = new Vector2(0, 1);
-                    if(j > 0)
+                    if (j > 0)
                     {
                         vector = mass.position - ropes[i].mass[j - 1].position;
                     }
@@ -475,28 +475,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 }
             }
             Main.spriteBatch.End();
-            ropeManager.luminance = luminance;
-            ropeManager.Draw();
 
-            Vector2 offset = ropes[0].GetOffset();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null,
-                Matrix.CreateTranslation(offset.X - Main.screenPosition.X, offset.Y - Main.screenPosition.Y, 0) * Main.GameViewMatrix.TransformationMatrix);
-            Texture2D dropTexture = MythContent.QuickTexture("TheFirefly/Backgrounds/Drop");
-            for (int i = 0; i < ropes.Count; i++)
-            {
-                for (int j = 1; j < ropes[i].mass.Length; j++)
-                {
-                    var mass = ropes[i].mass[j];
-                    float scale = mass.mass * 1.3f;
-                    Vector2 vector = mass.position - ropes[i].mass[j - 1].position;
-                    float rotation = vector.ToRotation() - MathHelper.PiOver2;
-                    Color color = GetLuminace(new Color(0, 0.15f * j, 1f / 5f * j, 0) * alpha * 5);
-                    Main.spriteBatch.Draw(dropTexture, mass.position, null, color, rotation, dropTexture.Size() / 2f, scale, SpriteEffects.None, 0);
-                }
-            }
-            Main.spriteBatch.End();
+
+            var texCloseII = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyClose2");
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            Rectangle rvcII = GetDrawRec(texCloseII.Size(), 0.57f, false);
+            Rectangle rvcII = GetDrawRect(texCloseII.Size(), 0.57f, false);
             rvcII.Y -= 300;
             rvcII.X += 300;
             Color colorCloseII = GetLuminace(Color.White * alpha);
@@ -654,4 +637,3 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         }
     }
 }
-

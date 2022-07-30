@@ -9,6 +9,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
     {
         public override void SetStaticDefaults()
         {
+            GetGlowMask = MythContent.SetStaticDefaultsGlowMask(this);
         }
         public static short GetGlowMask = 0;
         public override void SetDefaults()

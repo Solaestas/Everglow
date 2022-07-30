@@ -57,7 +57,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 			AddMapEntry(new Color(0, 14, 175), name);
 
 			// Assets
-			if (!Main.dedServ) {
+			if (!Main.dedServ) 
+			{
 				flameTexture = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheFirefly/Tiles/Furnitures/MahoglowanyTorch_Flame");
 			}
 		}
