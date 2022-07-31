@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria.ObjectData;
 
-namespace I.MapIO
+namespace Everglow.Sources.Modules.ZYModule.Commons.Function.MapIO
 {
     internal class AirTile : ModTile
     {

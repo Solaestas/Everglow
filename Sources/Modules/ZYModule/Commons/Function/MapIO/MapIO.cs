@@ -3,8 +3,9 @@ using System.IO;
 using System.IO.Compression;
 using Terraria.ModLoader.IO;
 using Terraria.ID;
+using Terraria.DataStructures;
 
-namespace I.MapIO
+namespace Everglow.Sources.Modules.ZYModule.Commons.Function.MapIO
 {
     internal class ModEntry
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace I.MapIO
+namespace Everglow.Sources.Modules.ZYModule.Commons.Function.MapIO
 {
     internal class AirWall : ModWall
     {

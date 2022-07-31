@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace I.MapIO
+namespace Everglow.Sources.Modules.ZYModule.Commons.Function.MapIO
 {
     internal interface ITileAccessor : IEnumerator<Tile>
     {
