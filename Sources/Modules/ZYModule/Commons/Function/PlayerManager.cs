@@ -9,10 +9,6 @@ internal class PlayerManager : ModPlayer
 {
     public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
     {
-        if (newPlayer)
-        {
-            Everglow.PacketResolver.Send<WorldVersionPacket>();
-        }
     }
 
     public VirtualKey ControlLeft { get; private set; } = new VirtualKey();
