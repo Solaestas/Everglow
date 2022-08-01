@@ -59,12 +59,13 @@ namespace Everglow.Sources.Modules.ZYModule.Items
         }
         public override void Kill(int timeLeft)
         {
-            MapIO mapIO = new MapIO((int)(Main.MouseWorld.X / 16), (int)(Main.MouseWorld.Y / 16));
+            MapIO mapIO = new MapIO((int)(Main.MouseWorld.X / 16), (int)(Main.MouseWorld.Y / 16),1,1);
             int Count = 0;
             while (File.Exists("MapTiles" + Count.ToString() + ".mapio"))
             {
                 Count++;
             }
+            Count -= 1;
             mapIO.Read("MapTiles" + Count.ToString() + ".mapio");
             base.Kill(timeLeft);
         }

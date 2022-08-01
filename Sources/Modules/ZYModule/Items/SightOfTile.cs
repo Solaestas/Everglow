@@ -56,15 +56,23 @@ namespace Everglow.Sources.Modules.ZYModule.Items
     }
     class SightOfTileUI : ModSystem
     {
-        public struct UICircle
+        public class UICircle
         {
             public float Size;
             public Vector2 AddCenter;
             public Texture2D texcoord;
             public Texture2D contain;
+
+            public UICircle(float size, Vector2 addCenter, Texture2D texcoord, Texture2D contain)
+            {
+                Size = 0f;
+                AddCenter = Vector2.Zero;
+                this.texcoord = ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZYModule/Items/Wires_0").Value;
+                this.contain = ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZYModule/Items/InTile").Value;
+            }
         }
-        UICircle circle0 = new UICircle();
-        UICircle circle1 = new UICircle();
+        UICircle circle0 = new UICircle(0f, Vector2.Zero, ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZYModule/Items/Wires_0").Value, ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZYModule/Items/InTile").Value);
+        UICircle circle1 = new UICircle(0f, Vector2.Zero, ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZYModule/Items/Wires_0").Value, ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZYModule/Items/OutTile").Value);
         public Vector2 DrawCenter;
         int AnimationTimer = 0;
         public bool EnableMapIOUI = false;
@@ -104,8 +112,11 @@ namespace Everglow.Sources.Modules.ZYModule.Items
         }
         public void UpdateAndDraw(UICircle c0, int Count)
         {
-            c0.AddCenter = new Vector2(0, AnimationTimer * 2).RotatedBy(AnimationTimer / 60d * Math.PI + Count * Math.PI);
-            c0.Size = AnimationTimer / 30f;
+            c0.AddCenter = new Vector2(0, AnimationTimer * 1.0f).RotatedBy(AnimationTimer / 60d * Math.PI + Count * Math.PI);
+            if(AnimationTimer < 30)
+            {
+                c0.Size = AnimationTimer / 30f;
+            }
             CheckMouseOver(c0);
             DrawUICircle(c0);
             CheckMouseCLick(c0, Count);
@@ -135,7 +146,6 @@ namespace Everglow.Sources.Modules.ZYModule.Items
                 SoundEngine.PlaySound(SoundID.MenuClose);
                 c0.Size = 1.2f;
                 c0.texcoord = ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZYModule/Items/Wires_1").Value;
-                Main.NewText(c0.Size);
             }
             if ((Main.MouseScreen - DrawCenter - c0.AddCenter).Length() >= 20 && c0.texcoord != ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZYModule/Items/Wires_0").Value)
             {
