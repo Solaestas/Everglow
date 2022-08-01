@@ -67,6 +67,12 @@ namespace Everglow.Sources.Modules.ZYModule.Items
             }
             Count -= 1;
             mapIO.Read("MapTiles" + Count.ToString() + ".mapio");
+            var it = mapIO.GetEnumerator();
+            while (it.MoveNext())
+            {
+                WorldGen.SquareTileFrame(it.CurrentCoord.X, it.CurrentCoord.Y);
+                WorldGen.SquareWallFrame(it.CurrentCoord.X, it.CurrentCoord.Y);
+            }
             base.Kill(timeLeft);
         }
     }

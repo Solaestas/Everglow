@@ -20,20 +20,6 @@ namespace Everglow.Sources.Modules.ZYModule.Commons.Function.MapIO
             entries.Add(fullName, (ushort)entries.Count);
             return entries.Count - 1;
         }
-        public virtual void SetupMaping()
-        {
-            foreach (var (name, type) in entries)
-            {
-                if (ModContent.TryFind<ModBlockType>(name, out var block))
-                {
-                    typeMaping[type] = block.Type;
-                }
-                else
-                {
-                    Debug.Fail("Fail to find block");
-                }
-            }
-        }
         public void Write(BinaryWriter writer)
         {
             writer.Write(entries.Count);
@@ -51,7 +37,17 @@ namespace Everglow.Sources.Modules.ZYModule.Commons.Function.MapIO
                 var name = reader.ReadString();
                 var type = reader.ReadUInt16();
                 entries.Add(name, type);
-                typeMaping.Add(type, ModContent.Find<ModBlockType>(name).Type);
+                //typeMaping.Add(type, ModContent.Find<Modwal>(name).Type);
+                if(ModContent.TryFind<ModWall>(name, out var wall))
+                {
+                    typeMaping.Add(type, wall.Type);
+                }else if(ModContent.TryFind<ModTile>(name, out var tile))
+                {
+                    typeMaping.Add(type, tile.Type);
+                }else
+                {
+                    Debug.Fail("Fail to find a modblock");
+                }
             }
         }
     }
@@ -131,7 +127,9 @@ namespace Everglow.Sources.Modules.ZYModule.Commons.Function.MapIO
             using var zip = new GZipStream(stream, CompressionMode.Decompress);
             using var reader = new BinaryReader(zip);
             entry.Read(reader);
-            ReadTile(reader, new TileAccessor(x, y, x + reader.ReadInt32(), y + reader.ReadInt32()), entry);
+            width = reader.ReadInt32();
+            height = reader.ReadInt32();
+            ReadTile(reader, new TileAccessor(x, y, x + width, y + height), entry);
             ReadChest(reader, new Point(x, y));
             ReadSign(reader, new Point(x, y));
         }
