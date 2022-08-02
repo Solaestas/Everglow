@@ -40,15 +40,18 @@ namespace Everglow.Sources.Modules.ZYModule.Items
         }
         public override void HoldItem(Player player)
         {
-            if(Main.mouseRight && Main.mouseRightRelease)
+            if(player.ownedProjectileCounts[ModContent.ProjectileType<SightOfTileProj>()] + player.ownedProjectileCounts[ModContent.ProjectileType<SightOfTileProjRead>()] == 0)
             {
-                if(ModContent.GetInstance<SightOfTileUI>().EnableMapIOUI)
+                if (Main.mouseRight && Main.mouseRightRelease)
                 {
-                    ModContent.GetInstance<SightOfTileUI>().CloseUI();
-                }
-                else
-                {
-                    ModContent.GetInstance<SightOfTileUI>().OpenUI();
+                    if (ModContent.GetInstance<SightOfTileUI>().EnableMapIOUI)
+                    {
+                        ModContent.GetInstance<SightOfTileUI>().CloseUI();
+                    }
+                    else
+                    {
+                        ModContent.GetInstance<SightOfTileUI>().OpenUI();
+                    }
                 }
             }
             base.HoldItem(player);
@@ -117,7 +120,10 @@ namespace Everglow.Sources.Modules.ZYModule.Items
             {
                 c0.Size = AnimationTimer / 30f;
             }
-            CheckMouseOver(c0);
+            else
+            {
+                CheckMouseOver(c0);
+            }
             DrawUICircle(c0);
             CheckMouseCLick(c0, Count);
         }
@@ -149,7 +155,6 @@ namespace Everglow.Sources.Modules.ZYModule.Items
             }
             if ((Main.MouseScreen - DrawCenter - c0.AddCenter).Length() >= 20 && c0.texcoord != ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZYModule/Items/Wires_0").Value)
             {
-                SoundEngine.PlaySound(SoundID.MenuClose);
                 c0.Size = 1f;
                 c0.texcoord = ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZYModule/Items/Wires_0").Value;
             }

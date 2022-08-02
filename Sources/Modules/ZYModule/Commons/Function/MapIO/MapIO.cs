@@ -121,6 +121,28 @@ namespace Everglow.Sources.Modules.ZYModule.Commons.Function.MapIO
             using var stream = File.OpenRead(path);
             Read(stream);
         }
+        public int ReadWidth(string path)
+        {
+            using var stream = File.OpenRead(path);
+            var entry = new ModEntry();
+            using var zip = new GZipStream(stream, CompressionMode.Decompress);
+            using var reader = new BinaryReader(zip);
+            entry.Read(reader);
+            width = reader.ReadInt32();
+            height = reader.ReadInt32(); ;
+            return width;
+        }
+        public int ReadHeight(string path)
+        {
+            using var stream = File.OpenRead(path);
+            var entry = new ModEntry();
+            using var zip = new GZipStream(stream, CompressionMode.Decompress);
+            using var reader = new BinaryReader(zip);
+            entry.Read(reader);
+            width = reader.ReadInt32();
+            height = reader.ReadInt32();
+            return height;
+        }
         public void Read(Stream stream)
         {
             var entry = new ModEntry();
@@ -496,7 +518,6 @@ namespace Everglow.Sources.Modules.ZYModule.Commons.Function.MapIO
                         accessor.Current.CopyFrom(tile);
                     }
                 }
-
             }
         }
         public static void WriteChest(BinaryWriter writer, Rectangle range)

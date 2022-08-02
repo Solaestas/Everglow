@@ -22,29 +22,84 @@ namespace Everglow.Sources.Modules.ZYModule.Items
             Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
         }
+        int Left = 0;
+        int Up = 0;
+        int Down = 0;
+        int Right = 0;
+        private void UpdateFourCoord()
+        {
+            int X1 = (int)(StartPoint.X / 16f);
+            int X2 = (int)(Main.MouseWorld.X / 16f);
+            int Y1 = (int)(StartPoint.Y / 16f);
+            int Y2 = (int)(Main.MouseWorld.Y / 16f);
+            if (X1 > X2)
+            {
+                int exchange = X2;
+                X2 = X1;
+                X1 = exchange;
+            }
+            if (Y1 > Y2)
+            {
+                int exchange = Y2;
+                Y2 = Y1;
+                Y1 = exchange;
+            }
+            Left = X1;
+            Right = X2;
+            Up = Y1;
+            Down = Y2;
+        }
+
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
             player.itemTime = 5;
             player.itemAnimation = 5;
             Projectile.position = player.MountedCenter - new Vector2(17);
+            player.heldProj = Projectile.whoAmI;
             if (Projectile.timeLeft > 6)
             {
                 StartPoint = Main.MouseWorld;
             }
+            UpdateFourCoord();
             if (Main.mouseLeft)
             {
                 Projectile.timeLeft = 5;
             }
-
-
+            if (Main.mouseRight)
+            {
+                Projectile.Kill();
+            }
         }
         private Vector2 StartPoint = Vector2.Zero;
+        public void DrawDoubleLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2)
+        {
+            float Wid = 1f;
+            Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
+
+            List<Vertex2D> vertex2Ds = new List<Vertex2D>();
+
+            for (int x = 0; x < 3; x++)
+            {
+                vertex2Ds.Add(new Vertex2D(StartPos + Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(0, 0, 0)));
+                vertex2Ds.Add(new Vertex2D(EndPos + Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(0, 0, 0)));
+                vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(0, 0, 0)));
+
+                vertex2Ds.Add(new Vertex2D(EndPos + Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(0, 0, 0)));
+                vertex2Ds.Add(new Vertex2D(EndPos - Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(0, 0, 0)));
+                vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(0, 0, 0)));
+            }
+
+
+            Main.graphics.GraphicsDevice.Textures[0] = TextureAssets.MagicPixel.Value;
+            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
+        }
+        
         public override bool PreDraw(ref Color lightColor)
         {
             Player player = Main.player[Projectile.owner];
 
-            Vector2 Vdr = Main.MouseWorld - Projectile.Center;
+            Vector2 Vdr = (Main.MouseWorld + StartPoint) * 0.5f - Projectile.Center;
             
             Vdr = Vdr / Vdr.Length() * 7;
 
@@ -60,30 +115,34 @@ namespace Everglow.Sources.Modules.ZYModule.Items
             {
                 player.direction = 1;
             }
+            Projectile.rotation = (float)(Math.Atan2(Vdr.Y, Vdr.X) + Math.PI / 4d);
+            Main.spriteBatch.Draw(t, player.MountedCenter - Main.screenPosition + Vdr * 5f, null, color, Projectile.rotation, t.Size() / 2f, Projectile.scale, S, 0f);
 
-            Main.spriteBatch.Draw(t, player.MountedCenter - Main.screenPosition + Vdr * 5f, null, color, (float)(Math.Atan2(Vdr.Y, Vdr.X) + Math.PI / 4d), t.Size() / 2f, Projectile.scale, S, 0f);
-            int X1 = (int)(StartPoint.X / 16f);
-            int X2 = (int)(Main.MouseWorld.X / 16f);
-            int Y1 = (int)(StartPoint.Y / 16f);
-            int Y2 = (int)(Main.MouseWorld.Y / 16f);
-            DrawNinePiecesForTiles(X1, X2, Y1, Y2);
+            Vector2 ULInt = new Vector2(Left, Up) * 16 + new Vector2(0);
+            Vector2 DRInt = new Vector2(Right, Down) * 16 + new Vector2(0);
+            Vector2 DLInt = new Vector2(Left, Down) * 16 + new Vector2(0);
+            Vector2 URInt = new Vector2(Right, Up) * 16 + new Vector2(0);
+         
+            URInt.X += 16;
+            DLInt.Y += 16;
+            DRInt.X += 16;
+            DRInt.Y += 16;
+            ULInt += new Vector2(1, 1);
+            URInt += new Vector2(-1, 1);
+            DLInt += new Vector2(1, -1);
+            DRInt += new Vector2(-1, -1);
+            DrawDoubleLine(player.MountedCenter - Main.screenPosition + Vdr * 8f, ULInt - Main.screenPosition, new Color(40, 240, 255, 100), new Color(0, 0, 65, 30));
+            DrawDoubleLine(player.MountedCenter - Main.screenPosition + Vdr * 8f, URInt - Main.screenPosition, new Color(40, 240, 255, 100), new Color(0, 0, 65, 30));
+            DrawDoubleLine(player.MountedCenter - Main.screenPosition + Vdr * 8f, DLInt - Main.screenPosition, new Color(40, 240, 255, 100), new Color(0, 0, 65, 30));
+            DrawDoubleLine(player.MountedCenter - Main.screenPosition + Vdr * 8f, DRInt - Main.screenPosition, new Color(40, 240, 255, 100), new Color(0, 0, 65, 30));
+
+            DrawNinePiecesForTiles(Left, Right, Up, Down);
+
+
             return false;
         }
         private void DrawNinePiecesForTiles(int LeftX, int RightX, int UpY, int DownY)
         {
-            if (LeftX > RightX)
-            {
-                int exchange = RightX;
-                RightX = LeftX;
-                LeftX = exchange;
-            }
-            if (UpY > DownY)
-            {
-                int exchange = DownY;
-                DownY = UpY;
-                UpY = exchange;
-            }
-
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZYModule/Items/Rectangle").Value;
@@ -204,23 +263,11 @@ namespace Everglow.Sources.Modules.ZYModule.Items
         }
         public override void Kill(int timeLeft)
         {
-            int LeftX = (int)(StartPoint.X / 16f);
-            int RightX = (int)(Main.MouseWorld.X / 16f);
-            int UpY = (int)(StartPoint.Y / 16f);
-            int DownY = (int)(Main.MouseWorld.Y / 16f);
-            if (LeftX > RightX)
+            if (timeLeft > 0)
             {
-                int exchange = RightX;
-                RightX = LeftX;
-                LeftX = exchange;
+                return;
             }
-            if (UpY > DownY)
-            {
-                int exchange = DownY;
-                DownY = UpY;
-                UpY = exchange;
-            }
-            MapIO mapIO = new MapIO(LeftX, UpY, RightX - LeftX + 1, DownY - UpY + 1);
+            MapIO mapIO = new MapIO(Left, Up, Right - Left + 1, Down - Up + 1);
             int Count = 0;
             while (File.Exists("MapTiles" + Count.ToString() + ".mapio"))
             {
