@@ -65,6 +65,10 @@ namespace Everglow.Sources.Modules.ZYModule.Items
             {
                 Count++;
             }
+            if(Count == 0)
+            {
+                return;
+            }
             Count -= 1;
             mapIO.Read("MapTiles" + Count.ToString() + ".mapio");
             var it = mapIO.GetEnumerator();
