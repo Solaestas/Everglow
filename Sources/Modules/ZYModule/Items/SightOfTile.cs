@@ -16,10 +16,10 @@ namespace Everglow.Sources.Modules.ZYModule.Items
             Item.height = 34;
             Item.useTime = 2;
             Item.useAnimation = 2;
-            Item.useStyle = 1;
+            Item.useStyle = ItemUseStyleID.Swing;
             Item.noMelee = true;
             Item.value = 0;
-            Item.rare = 0;
+            Item.rare = ItemRarityID.White;
             Item.UseSound = SoundID.Item44;
             Item.shoot = ModContent.ProjectileType<SightOfTileProj>();
             Item.noUseGraphic = true;

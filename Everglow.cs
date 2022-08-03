@@ -118,11 +118,6 @@ namespace Everglow
         }
 
 
-        public override void AddRecipes()
-        {
-            base.AddRecipes();
-        }
-
         public override void Unload()
         {
             m_moduleManager.UnloadAllModules();

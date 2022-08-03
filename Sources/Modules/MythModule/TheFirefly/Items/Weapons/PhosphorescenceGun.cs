@@ -3,6 +3,7 @@ using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
 using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.DataStructures;
+using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 {
@@ -19,7 +20,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 
             Item.width = 70;
             Item.height = 40;
-            Item.rare = 2;
+            Item.rare = ItemRarityID.Green;
             Item.value = 2000;
 
 
