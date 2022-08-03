@@ -740,18 +740,14 @@ Mods: {
 		ItemTooltip:
 		{
 		DustOfCorrupt : 散播鳞粉
-			EvilChrysalis : 
-				'''
-				召唤小黑蛾为你而战
-				召唤过程会对附近敌怪造成400%攻击倍率的伤害
-				'''
-			PhosphorescenceGun : 喷射出散弹和36%伤害的蓝鳞光弹
-			ScaleWingBlade :
-			ShadowWingBow : 
-				'''
-				长按可以蓄力,使伤害提升最大倍率200%并释放蓝蝶箭
-				满蓄时间1.50秒
-				'''
+		EvilChrysalis : 
+			'''
+			召唤小黑蛾为你而战
+			召唤过程会对附近敌怪造成400%攻击倍率的伤害
+			'''
+		PhosphorescenceGun : 喷射出散弹和36%伤害的蓝鳞光弹
+		ScaleWingBlade : 
+		ShadowWingBow : "长按可以蓄力,使伤害提升最大倍率200%并释放蓝蝶箭\n满蓄时间1.50秒"
 		}
 	}
 }
