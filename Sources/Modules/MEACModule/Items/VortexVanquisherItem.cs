@@ -15,7 +15,7 @@ namespace Everglow.Sources.Modules.MEACModule.Items
             Item.useTime = 5;
             Item.shootSpeed = 5f;
             Item.knockBack = 2.5f;
-            Item.damage = 30;
+            Item.damage = 90;
             Item.rare = ItemRarityID.Green;
 
             Item.DamageType = DamageClass.Melee;
@@ -159,7 +159,7 @@ namespace Everglow.Sources.Modules.MEACModule.Items
                     {
                         int playerdir = Main.MouseWorld.X > player.Center.X ? 1 : -1;
                         player.direction = playerdir;
-                        Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center, new Vector2(Math.Sign(Main.MouseWorld.X - player.Center.X), 0), ModContent.ProjectileType<VortexVanquisherThump>(), Item.damage * 6, 0, player.whoAmI);
+                        Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center, new Vector2(Math.Sign(Main.MouseWorld.X - player.Center.X), 0), ModContent.ProjectileType<VortexVanquisherThump>(), Item.damage * 2, 0, player.whoAmI); //Original: Item.damage * 6
                         ClickTime = 0;
                     }
                 }
