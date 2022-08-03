@@ -367,3 +367,5 @@ FodyWeavers.xsd
 Effects/Compiler/logfile.txt
 logfile.txt
 Everglow.dll
+/Resources/Localization/zh-Hans.hjson.bak
+/Resources/Localization/en-US.hjson.bak
