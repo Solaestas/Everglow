@@ -144,7 +144,8 @@ namespace Everglow.Sources.Modules.ZYModule.Items
         private void DrawNinePiecesForTiles(int LeftX, int RightX, int UpY, int DownY)
         {
             Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend,SamplerState.AnisotropicClamp,DepthStencilState.None,RasterizerState.CullNone,null,Main.GameViewMatrix.TransformationMatrix);
+
             Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZYModule/Items/Rectangle").Value;
             Color baseColor = new Color(0, 30, 120, 180);
             if (LeftX == RightX)
