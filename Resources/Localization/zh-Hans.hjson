@@ -726,4 +726,32 @@ Mods: {
 			TropicalSmoothieBuff : "短时间内魔法攻击仅消耗一点魔力，大幅增加5%魔法攻击，暴击\n“热带风暴”"
 		}
 	}
+	Everglow: {
+		ItemName:
+		{
+		VortexVanquisherItem : "贯虹之槊"
+		DustOfCorrupt : 腐化粉尘
+		EvilChrysalis : 邪茧法杖
+		PhosphorescenceGun : 光鳞霰弹枪
+		ScaleWingBlade : 鳞翅之刃
+		ShadowWingBow : 影翼巨弓
+		}
+		
+		ItemTooltip:
+		{
+		DustOfCorrupt : 散播鳞粉
+			EvilChrysalis : 
+				'''
+				召唤小黑蛾为你而战
+				召唤过程会对附近敌怪造成400%攻击倍率的伤害
+				'''
+			PhosphorescenceGun : 喷射出散弹和36%伤害的蓝鳞光弹
+			ScaleWingBlade :
+			ShadowWingBow : 
+				'''
+				长按可以蓄力,使伤害提升最大倍率200%并释放蓝蝶箭
+				满蓄时间1.50秒
+				'''
+		}
+	}
 }

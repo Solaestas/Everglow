@@ -966,4 +966,42 @@ Mods: {
 
 		}
 	}
+	Everglow: {
+		ItemName:
+		{
+		VortexVanquisherItem : "Vortex Vanquisher"
+		DustOfCorrupt : Corrupted Scales
+		EvilChrysalis : Cocoon Staff
+		PhosphorescenceGun : Scale Shotgun
+		ScaleWingBlade : Lepidoptera Blade
+		ShadowWingBow : Occulting Wings
+		MothYoyo : Glow-yo
+		}
+		
+		ItemTooltip:
+		{
+		VortexVanquisherItem : "[c/B4B16E:'This is Order']\nLeft click multiple times for different attacks\nThe last attack propels you to the cursor\nHold left click to dash and summon falling spears\nRight click summons a pillar and gives you a damage-reducing shield"
+		LilyHarp : "Music notes fly in a beautiful succession\nHold the attack button to make the notes follow the cursor\n[c/856Eb5:Developer Item, Belonging to Omnielement]"
+		DustOfCorrupt : Scatter moth scales
+		EvilChrysalis : 
+				'''
+				Summoms little black moths to fight for you
+				Deal 400% damage to nearby enemies while summoning 
+				Holding right click summons a portal where moths appear, aiming with your cursor to direct the moths
+				The moths will automatically home in on enemies
+				'''
+		PhosphorescenceGun : Shoots out shots and blue scale bullets which deal 36% damage
+		ScaleWingBlade : 
+				'''
+				Striking enemies with this blade or swinging this blade while near enemies will spawn moths that home in on said enemies
+				Right click to charge a more powerful swing and to spawn more moths on impact
+				'''
+		ShadowWingBow : 
+				'''
+				Hold to charge to  increase damage, capped at +200%, and additionally fires Blue Butterfly Arrows.
+				Needs 1.5s to be fully charged
+				'''
+		MothYoyo : Moths will appear around this Yo-yo, allowing you to deal more damage to enemies
+		}
+	}
 }
