@@ -970,7 +970,7 @@ Mods: {
 		ItemName:
 		{
 		VortexVanquisherItem : "Vortex Vanquisher"
-		DustOfCorrupt : Corrupted Scales
+		DustOfCorrupt : Corrupted Dust Staff
 		EvilChrysalis : Cocoon Staff
 		PhosphorescenceGun : Scale Shotgun
 		ScaleWingBlade : Lepidoptera Blade
@@ -982,7 +982,7 @@ Mods: {
 		{
 		VortexVanquisherItem : "[c/B4B16E:'This is Order']\nLeft click multiple times for different attacks\nThe last attack propels you to the cursor\nHold left click to dash and summon falling spears\nRight click summons a pillar and gives you a damage-reducing shield"
 		LilyHarp : "Music notes fly in a beautiful succession\nHold the attack button to make the notes follow the cursor\n[c/856Eb5:Developer Item, Belonging to Omnielement]"
-		DustOfCorrupt : Scatter moth scales
+		DustOfCorrupt : Scatter moth dust
 		EvilChrysalis : 
 				'''
 				Summoms little black moths to fight for you
