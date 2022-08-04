@@ -1001,7 +1001,15 @@ Mods: {
 				Hold to charge to  increase damage, capped at +200%, and additionally fires Blue Butterfly Arrows.
 				Needs 1.5s to be fully charged
 				'''
-		MothYoyo : Moths will appear around this Yo-yo, allowing you to deal more damage to enemies
+		MothYoyo : "Moths will appear around this Yo-yo, allowing you to deal more damage to enemies"
+		
+		}
+		RecipeConditions: {
+
+		}
+
+		Bestiary: {
+
 		}
 	}
 }
