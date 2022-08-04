@@ -1,6 +1,10 @@
 ﻿using Terraria.Localization;
 using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Terraria.Audio;
+
 namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
 {
     public class EvilPack : ModNPC
@@ -48,56 +52,88 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                     NPC.frame = new Rectangle(0, 0, 80, 150);
                     if(NPC.ai[2] == 0)
                     {
-                        NPC.NewNPC(NPC.GetSource_FromAI(),(int)NPC.position.X + 26, (int)NPC.position.Y + 106,ModContent.NPCType<CorruptMoth>());
+                        for (int i = 0; i < 2; i++)
+                        {
+                            for (int x = 0; x < 8; x++)
+                            {
+                                Gore.NewGore(NPC.GetSource_FromAI(), NPC.position + new Vector2(26, 106) + new Vector2(0, Main.rand.Next(40)).RotatedByRandom(6.283), new Vector2(0, Main.rand.Next(8)).RotatedByRandom(6.283) + new Vector2(-2, 2), ModContent.Find<ModGore>("Everglow/Cocoon" + x.ToString()).Type);
+                            }
+                        }
+                        for (int x = 0; x < 72; x++)
+                        {
+                            Dust d = Dust.NewDustDirect(NPC.position + new Vector2(26 - 20, 106 - 30), 40, 60, ModContent.DustType<BlueGlowAppear>(), 0, 0, 0, default, Main.rand.NextFloat(0.7f, 1.7f));
+                            d.velocity = new Vector2(0, Main.rand.Next(16)).RotatedByRandom(6.283) + new Vector2(-4, 4);
+
+                            for(int k = 0;k < 3;k++)
+                            {
+                                Dust d2 = Dust.NewDustDirect(NPC.position + new Vector2(26 - 20, 106 - 30), 40, 60, ModContent.DustType<BlueParticleDark2>(), 0, 0, 0, default, Main.rand.NextFloat(3.7f, 5.1f));
+                                d2.velocity = new Vector2(0, Main.rand.Next(12)).RotatedByRandom(6.283) + new Vector2(-4, 4);
+                                d2.alpha = (int)(d2.scale * 50);
+                            }
+
+                            Dust d3 = Dust.NewDustDirect(NPC.position + new Vector2(26 - 20, 106 - 30), 40, 60, 191, 0, 0, 0, default, Main.rand.NextFloat(0.7f, 1.7f));
+                            d3.velocity = new Vector2(0, Main.rand.Next(16)).RotatedByRandom(6.283) + new Vector2(-4, 4);
+                        }
+                        //NPC.NewNPC(NPC.GetSource_FromAI(),(int)NPC.position.X + 26, (int)NPC.position.Y + 106,ModContent.NPCType<CorruptMoth>());
                         NPC.ai[2] += 1;
                     }
                 }
                 else
                 {
                     omega *= 0.9f;
-                    float step = 0.05f;
+                    float step = 0.15f;
                     NPC.ai[1] += step;
                     if(NPC.ai[1] >= 20f && NPC.ai[1] - step < 20f)
                     {
                         omega += 0.02f;
+                        SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/MothHitCocoon"), NPC.Center);
                     }
                     if (NPC.ai[1] >= 40f && NPC.ai[1] - step < 40f)
                     {
                         omega -= 0.03f;
+                        SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/MothHitCocoon"), NPC.Center);
                     }
                     if (NPC.ai[1] >= 60f && NPC.ai[1] - step < 60f)
                     {
                         omega += 0.04f;
+                        SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/MothHitCocoon"), NPC.Center);
                     }
                     if (NPC.ai[1] >= 70f && NPC.ai[1] - step < 70f)
                     {
                         omega -= 0.05f;
+                        SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/MothHitCocoon"), NPC.Center);
                     }
                     if (NPC.ai[1] >= 76f && NPC.ai[1] - step < 76f)
                     {
                         omega += 0.02f;
+                        SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/MothHitCocoon"), NPC.Center);
                     }
                     if (NPC.ai[1] >= 80f && NPC.ai[1] - step < 80f)
                     {
                         omega += 0.05f;
+                        SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/MothHitCocoon"), NPC.Center);
                     }
                     if (NPC.ai[1] >= 82f && NPC.ai[1] - step < 82f)
                     {
                         omega -= 0.06f;
+                        SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/MothHitCocoon"), NPC.Center);
                     }
                     if (NPC.ai[1] >= 86f && NPC.ai[1] - step < 86f)
                     {
                         omega -= 0.03f;
+                        SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/MothHitCocoon"), NPC.Center);
                     }
                     if (NPC.ai[1] >= 89f && NPC.ai[1] - step < 89f)
                     {
                         omega += 0.1f;
+                        SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/MothBreakCocoon"), NPC.Center);
                     }
                 }
             }
         }
         public override void HitEffect(int hitDirection, double damage)
         {
+            //SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/MothHitCocoon"), NPC.Center);
             if (NPC.ai[0] < 10)
             {
                 NPC.ai[0] += 1;
@@ -139,7 +175,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                 effects = SpriteEffects.FlipHorizontally;
             }
             Texture2D tg = MythContent.QuickTexture("Bosses/CorruptMoth/NPCs/EvilPackGlow");
-            float C = (float)Math.Sqrt(Math.Max((90 - NPC.ai[1]) / 90f, 0));
+            float C = (float)Math.Sqrt(Math.Max((90 - NPC.ai[1]) / 90f, 0)) * 0.6f + Math.Abs(omega * 15);
             Color color = new Color(C, C, C, 0);
             Main.spriteBatch.Draw(tg, NPC.position + new Vector2(tg.Width / 2f, 0) - Main.screenPosition, new Rectangle?(NPC.frame), color, NPC.rotation, new Vector2(tg.Width / 2f, 0), 1f, effects, 0f);
             Main.spriteBatch.End();
