@@ -76,6 +76,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                         }
                         NPC.NewNPC(NPC.GetSource_FromAI(),(int)NPC.position.X + 26, (int)NPC.position.Y + 106,ModContent.NPCType<CorruptMoth>());
                         NPC.ai[2] += 1;
+                        Main.NewText("Corrupted Moth has awoken!", 175, 75, 255);
                     }
                 }
                 else
