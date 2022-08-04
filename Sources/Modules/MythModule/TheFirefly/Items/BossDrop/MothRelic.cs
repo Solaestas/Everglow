@@ -1,4 +1,5 @@
 ﻿using Terraria.Localization;
+using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.BossDrop
 {
@@ -15,11 +16,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.BossDrop
             Item.master = true;
             Item.useTime = 20;
             Item.maxStack = 99;
-            Item.rare = 0;
+            Item.rare = ItemRarityID.White;
             Item.value = Item.sellPrice(0, 1, 0, 0);
             Item.useAnimation = 15;
             Item.useTime = 10;
-            Item.useStyle = 1;
+            Item.useStyle = ItemUseStyleID.Swing;
             Item.consumable = true;
             Item.useTurn = true;
             Item.autoReuse = true;
