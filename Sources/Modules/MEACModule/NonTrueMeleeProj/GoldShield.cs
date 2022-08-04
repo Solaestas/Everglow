@@ -259,7 +259,7 @@ namespace Everglow.Sources.Modules.MEACModule.NonTrueMeleeProj
     public class GlodShieldPlayer : ModPlayer
     {
         public int immuneTime = 0;
-        public override bool PreHurt(bool pvp, bool quiet, ref int damage, ref int hitDirection, ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
+        public override bool PreHurt(bool pvp, bool quiet, ref int damage, ref int hitDirection, ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource, ref int cooldownCounter)
         {
             if (immuneTime > 0)
             {

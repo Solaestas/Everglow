@@ -1,6 +1,4 @@
-﻿using Everglow.Sources.Modules.ZYModule.Commons.Function;
-
-using MonoMod.Cil;
+﻿using MonoMod.Cil;
 
 namespace Everglow.Sources.Commons.Core
 {
@@ -395,7 +393,7 @@ namespace Everglow.Sources.Commons.Core
             var cursor = new ILCursor(il);
             if (!cursor.TryGotoNext(MoveType.Before, ins => ins.MatchLdcI4(36)))
             {
-                HookException.Throw("Main_DoDraw_NotFound_1");
+
             }
             cursor.EmitDelegate(() => Invoke(CallOpportunity.PostDrawFilter));
         }
