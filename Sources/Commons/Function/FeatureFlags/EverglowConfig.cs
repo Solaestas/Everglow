@@ -37,8 +37,8 @@ namespace Everglow.Sources.Commons.Function.FeatureFlags
         public override ConfigScope Mode => ConfigScope.ClientSide;
 
         [DefaultValue(TextureReplaceMode.Terraria)]
-        [Label("Mods.Everglow.Config.TextureReplace.Label")]
-        [Tooltip("Mods.Everglow.Config.TextureReplace.Tooltip")]
+        [Label("In-game UI Texture")] //Mods.Everglow.Config.TextureReplace.Label
+        [Tooltip("You can choose to replace the Terraria UI texture with other textures\nOptions: Terraria, EternalResolve, Myth")] //Mods.Everglow.Config.TextureReplace.Tooltip
         [DrawTicks]
         public TextureReplaceMode TextureReplace;
 
@@ -55,7 +55,7 @@ namespace Everglow.Sources.Commons.Function.FeatureFlags
     public enum TextureReplaceMode
     {
         Terraria,
-        EternalReslove,
+        EternalResolve,
         Myth
     }
 }
