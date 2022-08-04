@@ -2,6 +2,7 @@
 using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
 using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.DataStructures;
+using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 {
@@ -21,11 +22,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             Item.height = 50;
             Item.useTime = 36;
             Item.useAnimation = 36;
-            Item.useStyle = 1;
+            Item.useStyle = ItemUseStyleID.Swing;
             Item.noMelee = true;
             Item.knockBack = 2.25f;
             Item.value = 2100;
-            Item.rare = 2;
+            Item.rare = ItemRarityID.Green;
             Item.UseSound = SoundID.Item44;
             Item.shoot = ModContent.ProjectileType<Projectiles.EvilChrysalis>();
             Item.autoReuse = true;

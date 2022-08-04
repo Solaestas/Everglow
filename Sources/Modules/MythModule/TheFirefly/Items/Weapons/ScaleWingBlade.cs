@@ -1,5 +1,6 @@
 ﻿using Everglow.Sources.Modules.MEACModule.Projectiles;
 using Everglow.Sources.Modules.MythModule.Common;
+using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 {
@@ -13,7 +14,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
         public override void SetDefaults()
         {
             Item.glowMask = GetGlowMask;
-            Item.useStyle = 1;
+            Item.useStyle = ItemUseStyleID.Swing;
             Item.width = 1;
             Item.height = 1;
             Item.useAnimation = 5;
@@ -21,7 +22,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             Item.shootSpeed = 5f;
             Item.knockBack = 2.5f;
             Item.damage = 30;
-            Item.rare = 2;
+            Item.rare = ItemRarityID.Green;
 
             Item.DamageType = DamageClass.Melee;
             Item.noMelee = true;

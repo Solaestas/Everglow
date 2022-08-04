@@ -1,4 +1,5 @@
 ﻿using Everglow.Sources.Modules.MythModule.Common;
+using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items
 {
@@ -17,7 +18,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items
             Item.height = 24;
             Item.maxStack = 999;
             Item.value = 100;
-            Item.rare = 0;
+            Item.rare = ItemRarityID.White;
         }
     }
 }

@@ -2,6 +2,7 @@
 using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
@@ -41,7 +42,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                     {
                         int ds = Dust.NewDust(player.Bottom + new Vector2(Main.rand.NextFloat(-60, 60), Main.rand.NextFloat(-5, 15)), 0, 0, ModContent.DustType<MothBlue2>(), 0, Main.rand.NextFloat(-8, -4), 0, default(Color), Main.rand.NextFloat(0.6f, 1.8f));
                         Main.dust[ds].velocity = new Vector2(0, Main.rand.NextFloat(-8, -4));
-                        int es = Dust.NewDust(player.Bottom + new Vector2(Main.rand.NextFloat(-60, 60), Main.rand.NextFloat(-5, 15)), 0, 0, 191, 0, Main.rand.NextFloat(-8, -4), 0, default(Color), Main.rand.NextFloat(0.3f, 1.0f));
+                        int es = Dust.NewDust(player.Bottom + new Vector2(Main.rand.NextFloat(-60, 60), Main.rand.NextFloat(-5, 15)), 0, 0, DustID.SpookyWood, 0, Main.rand.NextFloat(-8, -4), 0, default(Color), Main.rand.NextFloat(0.3f, 1.0f));
                         Main.dust[es].velocity = new Vector2(0, Main.rand.NextFloat(-8, -4));
                     }
                 }

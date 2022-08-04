@@ -1,6 +1,7 @@
 ﻿using Everglow.Sources.Modules.MEACModule.Projectiles;
 using ReLogic.Graphics;
 using Terraria.GameContent;
+using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MEACModule.Items
 {
@@ -8,7 +9,7 @@ namespace Everglow.Sources.Modules.MEACModule.Items
     {
         public override void SetDefaults()
         {
-            Item.useStyle = 1;
+            Item.useStyle = ItemUseStyleID.Swing;
             Item.width = 1;
             Item.height = 1;
             Item.useAnimation = 5;

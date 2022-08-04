@@ -276,7 +276,7 @@ namespace Everglow.Sources.Modules.MEACModule.NonTrueMeleeProj
                 {
                     if (Main.projectile[x].type == ModContent.ProjectileType<GoldShield>() && Main.projectile[x].active)
                     {
-                        
+
                         if (Main.projectile[x].ai[1] >= damage)
                         {
                             Main.projectile[x].ai[1] -= damage;
