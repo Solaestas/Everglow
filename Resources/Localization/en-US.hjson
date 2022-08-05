@@ -967,6 +967,9 @@ Mods: {
 		}
 	}
 	Everglow: {
+		NPCName: {
+			Butterfly : Phantom Moth
+		}
 		ItemName: {
 			VortexVanquisherItem : "Vortex Vanquisher"
 			DustOfCorrupt : Corrupted Dust Staff

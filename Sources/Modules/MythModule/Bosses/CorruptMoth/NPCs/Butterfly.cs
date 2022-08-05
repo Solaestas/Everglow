@@ -11,7 +11,7 @@
         private NPC Owner => Main.npc[(int)NPC.ai[3]];
         public override void SetStaticDefaults()
         {
-            base.DisplayName.SetDefault("幻蝶");
+        //    base.DisplayName.SetDefault("幻蝶");
             Main.npcFrameCount[NPC.type] = 4;
         }
         public override void SetDefaults()
