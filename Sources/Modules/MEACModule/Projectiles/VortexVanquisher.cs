@@ -311,7 +311,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         public override void LeftLongThump()
         {
             LockPlayerDir(Player);
-            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(Math.Sign(Main.MouseWorld.X - Projectile.Center.X), 0), ModContent.ProjectileType<VortexVanquisherThump>(), Projectile.damage * 2, 0, Projectile.owner);
+            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(Math.Sign(Main.MouseWorld.X - Projectile.Center.X), 0), ModContent.ProjectileType<VortexVanquisherThump>(), Projectile.damage * 2, 0, Projectile.owner); //Original: Projectile.damage * 6
         }
         public override void End()
         {
