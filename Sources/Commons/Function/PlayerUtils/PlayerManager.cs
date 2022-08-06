@@ -1,10 +1,4 @@
-﻿using Everglow.Sources.Modules.ZYModule.Items;
-using Everglow.Sources.Modules.ZYModule.ZYPacket;
-using Terraria.Audio;
-using Terraria.DataStructures;
-using Terraria.GameContent.Creative;
-
-namespace Everglow.Sources.Commons.Function.PlayerUtils;
+﻿namespace Everglow.Sources.Commons.Function.PlayerUtils;
 
 
 internal class PlayerManager : ModPlayer
@@ -33,7 +27,10 @@ internal class PlayerManager : ModPlayer
             MouseRight.LocalUpdate(Main.mouseRight);
             ControlUseTile.LocalUpdate(Player.controlUseTile);
             MouseWorld.LocalUpdate(Main.MouseWorld);
-            Everglow.PacketResolver.Send<InputPacketToServer>();
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+            {
+                Everglow.PacketResolver.Send(new InputPacketToServer());
+            }
         }
         else
         {
