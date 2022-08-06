@@ -3,23 +3,14 @@ using Everglow.Sources.Modules.ZYModule.ZYPacket;
 
 namespace Everglow.Sources.Commons.Function.PlayerUtils;
 
-internal class InputPacketToServer : IZYPacket
+internal class InputPacketToServer : IPacket
 {
+    public BitsByte bits;
+    public Vector2 mouseWorld;
     public void Receive(BinaryReader reader, int whoAmI)
     {
-        BitsByte bits = reader.ReadByte();
-        var packet = new InputPacketToClient()
-        {
-            whoAmI = whoAmI,
-            bits = bits,
-            mouseWorld = reader.ReadVector2(),
-        };
-        var player = Main.player[whoAmI].GetModPlayer<PlayerManager>();
-        player.MouseLeft.NetUpdate(bits[0]);
-        player.MouseRight.NetUpdate(bits[1]);
-        player.ControlUseTile.NetUpdate(bits[2]);
-        player.MouseWorld.NetUpdate(packet.mouseWorld);
-        Everglow.PacketResolver.Send(packet, -1, whoAmI);
+        bits = reader.ReadByte();
+        mouseWorld = reader.ReadVector2();
     }
 
     public void Send(BinaryWriter writer)
@@ -29,19 +20,16 @@ internal class InputPacketToServer : IZYPacket
         writer.WriteVector2(Main.MouseWorld);
     }
 }
-internal class InputPacketToClient : IZYPacket
+internal class InputPacketToClient : IPacket
 {
     public int whoAmI;
     public BitsByte bits;
     public Vector2 mouseWorld;
     public void Receive(BinaryReader reader, int whoAmI)
     {
-        var player = Main.player[reader.ReadInt32()].GetModPlayer<PlayerManager>();
-        BitsByte bits = reader.ReadByte();
-        player.MouseLeft.NetUpdate(bits[0]);
-        player.MouseRight.NetUpdate(bits[1]);
-        player.ControlUseTile.NetUpdate(bits[2]);
-        player.MouseWorld.NetUpdate(reader.ReadVector2());
+        this.whoAmI = reader.ReadInt32();
+        bits = reader.ReadByte();
+        mouseWorld = reader.ReadVector2();
     }
 
     public void Send(BinaryWriter writer)
@@ -57,7 +45,19 @@ internal class MousePacketToServerHandler : IPacketHandler
 {
     public void Handle(IPacket packet, int whoAmI)
     {
-
+        var p = packet as InputPacketToServer;
+        var toClient = new InputPacketToClient()
+        {
+            whoAmI = whoAmI,
+            bits = p.bits,
+            mouseWorld = p.mouseWorld,
+        };
+        var player = Main.player[whoAmI].GetModPlayer<PlayerManager>();
+        player.MouseLeft.NetUpdate(p.bits[0]);
+        player.MouseRight.NetUpdate(p.bits[1]);
+        player.ControlUseTile.NetUpdate(p.bits[2]);
+        player.MouseWorld.NetUpdate(p.mouseWorld);
+        Everglow.PacketResolver.Send(toClient, -1, whoAmI);
     }
 }
 
@@ -66,6 +66,11 @@ internal class MousePacketToClientHandler : IPacketHandler
 {
     public void Handle(IPacket packet, int whoAmI)
     {
-
+        var p = packet as InputPacketToClient;
+        var player = Main.player[p.whoAmI].GetModPlayer<PlayerManager>();
+        player.MouseLeft.NetUpdate(p.bits[0]);
+        player.MouseRight.NetUpdate(p.bits[1]);
+        player.ControlUseTile.NetUpdate(p.bits[2]);
+        player.MouseWorld.NetUpdate(p.mouseWorld);
     }
 }
