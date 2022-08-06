@@ -1,4 +1,5 @@
-﻿using Everglow.Sources.Commons.Core.VFX.Interfaces;
+﻿using Everglow.Sources.Commons.Core.VFX.Base;
+using Everglow.Sources.Commons.Core.VFX.Interfaces;
 using ReLogic.Content;
 
 namespace Everglow.Sources.Commons.Core.VFX.Pipelines
@@ -6,10 +7,9 @@ namespace Everglow.Sources.Commons.Core.VFX.Pipelines
     /// <summary>
     /// 世界坐标系Pipeline，会自动剪去Main.screenPosition
     /// </summary>
-    public class WCSPipeline : IVisualPipeline
+    internal class WCSPipeline : Pipeline
     {
-        private Asset<Effect> effect;
-        public void BeginRender()
+        public override void BeginRender()
         {
             VFXManager.spriteBatch.Begin();
             effect.Value.Parameters["uTransform"].SetValue(
@@ -20,27 +20,22 @@ namespace Everglow.Sources.Commons.Core.VFX.Pipelines
             effect.Value.CurrentTechnique.Passes[0].Apply();
         }
 
-        public void EndRender()
+        public override void EndRender()
         {
             VFXManager.spriteBatch.End();
         }
 
-        public void Load()
+        public override void Load()
         {
             effect = ModContent.Request<Effect>("Everglow/Sources/Commons/Core/VFX/Effect/Shader2D");
         }
 
-        public void Render(IEnumerable<IVisual> visuals)
+        public override void Render(IEnumerable<IVisual> visuals)
         {
             foreach (var visual in visuals)
             {
                 visual.Draw();
             }
-        }
-
-        public void Unload()
-        {
-
         }
     }
 }

@@ -9,7 +9,7 @@ using Terraria.GameContent;
 
 namespace Everglow.Sources.Commons.Core.VFX.Test
 {
-    [Pipeline(typeof(WCSPipeline))]
+    [Pipeline(typeof(WCSPipeline), typeof(RedPipeline))]
     internal class WhiteDust : Particle
     {
 
