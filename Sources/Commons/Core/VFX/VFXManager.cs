@@ -134,7 +134,7 @@ public class VFXManager : IModule
 
             var pipeline = pipelineInstances[pipelineIndex.index];
             pipeline.BeginRender();
-            pipeline.Render(innerVisuals);
+            pipeline.Render(innerVisuals.Where(v => v.Visible));
             pipeline.EndRender();
 
             if (pipelineIndex.next != null)
@@ -182,6 +182,8 @@ public class VFXManager : IModule
                 return;
             }
         }
+
+        //红黑树好难……暂时就先这样了
         list.Add(visual);
         list.Sort(compare);
     }

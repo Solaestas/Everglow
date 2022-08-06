@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Everglow.Sources.Commons.Core.VFX.Interfaces;
+﻿using Everglow.Sources.Commons.Core.VFX.Interfaces;
 using ReLogic.Content;
 
 namespace Everglow.Sources.Commons.Core.VFX.Pipelines
@@ -11,7 +6,7 @@ namespace Everglow.Sources.Commons.Core.VFX.Pipelines
     /// <summary>
     /// 世界坐标系Pipeline，会自动剪去Main.screenPosition
     /// </summary>
-    public class  WCSPipeline : IVisualPipeline
+    public class WCSPipeline : IVisualPipeline
     {
         private Asset<Effect> effect;
         public void BeginRender()
@@ -27,7 +22,6 @@ namespace Everglow.Sources.Commons.Core.VFX.Pipelines
 
         public void EndRender()
         {
-
             VFXManager.spriteBatch.End();
         }
 
@@ -38,7 +32,7 @@ namespace Everglow.Sources.Commons.Core.VFX.Pipelines
 
         public void Render(IEnumerable<IVisual> visuals)
         {
-            foreach(var visual in visuals)
+            foreach (var visual in visuals)
             {
                 visual.Draw();
             }
@@ -46,7 +40,7 @@ namespace Everglow.Sources.Commons.Core.VFX.Pipelines
 
         public void Unload()
         {
-            
+
         }
     }
 }

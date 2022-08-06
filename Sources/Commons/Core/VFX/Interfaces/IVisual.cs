@@ -9,6 +9,10 @@ namespace Everglow.Sources.Commons.Core.VFX.Interfaces
         /// 判断这个视觉特效是否还处于激活状态。我们需要保证如果它不是激活状态那么以后不会再用到它
         /// </summary>
         public bool Active { get; set; }
+        /// <summary>
+        /// 判断这个视觉特效是否需要绘制
+        /// </summary>
+        public bool Visible { get; set; }
         public int Type { get; }
         public CallOpportunity DrawLayer { get; }
         public void Update();

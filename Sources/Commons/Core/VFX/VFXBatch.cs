@@ -162,15 +162,12 @@ public class VFXBatch : IDisposable
 
     //numbers Copy from SpriteBatch
     private const int MAX_VERTICES = 8192;
-    private const int MAX_INDICES = 12288;
+    //如果所有网格都是Strip形式
+    private const int MAX_INDICES = MAX_VERTICES * 3;
     private GraphicsDevice graphicsDevice;
     private List<IBuffers> buffers = new List<IBuffers>();
     private List<bool> needFlush = new List<bool>();
     private bool hasBegun = false;
-    public BlendState blendState;
-    public RasterizerState rasterizerState;
-    public DepthStencilState depthStencilState;
-    public SamplerState samplerState;
     public Effect effect;
     public GraphicsDevice GraphicsDevice => graphicsDevice;
     public VFXBatch(GraphicsDevice gd)
@@ -197,10 +194,10 @@ public class VFXBatch : IDisposable
     public void Begin(BlendState blendState, DepthStencilState depthStencilState, SamplerState samplerState, RasterizerState rasterizerState)
     {
         Debug.Assert(!hasBegun);
-        this.rasterizerState = rasterizerState;
-        this.depthStencilState = depthStencilState;
-        this.samplerState = samplerState;
-        this.blendState = blendState;
+        graphicsDevice.RasterizerState = rasterizerState;
+        graphicsDevice.DepthStencilState = depthStencilState;
+        graphicsDevice.SamplerStates[0] = samplerState;
+        graphicsDevice.BlendState = blendState;
         hasBegun = true;
     }
     /// <summary>
@@ -447,10 +444,6 @@ public class VFXBatch : IDisposable
     private int GetBufferIndex<T>() where T : struct, IVertexType => buffers.IndexOf(Buffer<T>.Instance);
     public void Flush()
     {
-        graphicsDevice.SamplerStates[0] = samplerState;
-        graphicsDevice.BlendState = blendState;
-        graphicsDevice.DepthStencilState = depthStencilState;
-        graphicsDevice.RasterizerState = rasterizerState;
         for (int i = 0; i < buffers.Count; i++)
         {
             if (needFlush[i])
@@ -463,10 +456,6 @@ public class VFXBatch : IDisposable
     }
     public void Flush<T>() where T : struct, IVertexType
     {
-        graphicsDevice.SamplerStates[0] = samplerState;
-        graphicsDevice.BlendState = blendState;
-        graphicsDevice.DepthStencilState = depthStencilState;
-        graphicsDevice.RasterizerState = rasterizerState;
         Buffer<T>.Instance.DrawPrimitive();
         Buffer<T>.Instance.Clear();
     }
