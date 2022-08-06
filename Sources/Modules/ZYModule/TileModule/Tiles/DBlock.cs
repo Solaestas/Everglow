@@ -158,7 +158,7 @@ internal abstract class DBlock : DynamicTile, IGrabbable, IHookable
     public virtual void EndGrab(Player player)
     {
         player.velocity.X += velocity.X * 2;
-        player.GetModPlayer<PlayerManager>().Jump(player.jump, player.velocity.Y + velocity.Y);
+        player.GetModPlayer<PlayerColliding>().Jump(player.jump, player.velocity.Y + velocity.Y);
     }
     public override void DrawToMap(Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale)
     {

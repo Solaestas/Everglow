@@ -1,5 +1,4 @@
-﻿using Everglow.Sources.Modules.ZYModule.Commons.Function;
-
+﻿
 using MonoMod.Cil;
 
 namespace Everglow.Sources.Commons.Core
@@ -213,12 +212,12 @@ namespace Everglow.Sources.Commons.Core
         /// <returns>是否成功移除</returns>
         public bool Remove(ActionHandler handler)
         {
-            foreach(var op in validOpportunity)
+            foreach (var op in validOpportunity)
             {
                 var handlers = methods[op];
                 for (int i = 0; i < handlers.Count; i++)
                 {
-                    if(handler == handlers[i])
+                    if (handler == handlers[i])
                     {
                         waitToRemove.Add((op, handler));
                         handler.Enable = false;
@@ -233,7 +232,7 @@ namespace Everglow.Sources.Commons.Core
         /// </summary>
         public void RemoveDisabledAction()
         {
-            foreach(var op in validOpportunity)
+            foreach (var op in validOpportunity)
             {
                 methods[op].RemoveAll(handler => !handler.Enable);
             }
@@ -285,7 +284,7 @@ namespace Everglow.Sources.Commons.Core
         {
             Invoke(CallOpportunity.PostUpdateEverything);
             UpdateTimer++;
-            foreach(var (op, handler) in waitToRemove)
+            foreach (var (op, handler) in waitToRemove)
             {
                 methods[op].Remove(handler);
             }
@@ -404,7 +403,7 @@ namespace Everglow.Sources.Commons.Core
             var cursor = new ILCursor(il);
             if (!cursor.TryGotoNext(MoveType.Before, ins => ins.MatchLdcI4(36)))
             {
-                HookException.Throw("Main_DoDraw_NotFound_1");
+                throw new Exception("Main_DoDraw_NotFound_1");
             }
             cursor.EmitDelegate(() => Invoke(CallOpportunity.PostDrawFilter));
         }

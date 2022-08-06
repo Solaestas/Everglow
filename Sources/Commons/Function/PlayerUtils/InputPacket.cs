@@ -1,7 +1,7 @@
 ﻿using Everglow.Sources.Commons.Core.Network.PacketHandle;
-using Everglow.Sources.Commons.Function.PlayerUtils;
+using Everglow.Sources.Modules.ZYModule.ZYPacket;
 
-namespace Everglow.Sources.Modules.ZYModule.ZYPacket;
+namespace Everglow.Sources.Commons.Function.PlayerUtils;
 
 internal class InputPacketToServer : IZYPacket
 {
@@ -15,10 +15,10 @@ internal class InputPacketToServer : IZYPacket
             mouseWorld = reader.ReadVector2(),
         };
         var player = Main.player[whoAmI].GetModPlayer<PlayerManager>();
-        player.MouseLeft.Update(bits[0]);
-        player.MouseRight.Update(bits[1]);
-        player.ControlUseTile.Update(bits[2]);
-        player.MouseWorld = packet.mouseWorld;
+        player.MouseLeft.NetUpdate(bits[0]);
+        player.MouseRight.NetUpdate(bits[1]);
+        player.ControlUseTile.NetUpdate(bits[2]);
+        player.MouseWorld.NetUpdate(packet.mouseWorld);
         Everglow.PacketResolver.Send(packet, -1, whoAmI);
     }
 
@@ -38,10 +38,10 @@ internal class InputPacketToClient : IZYPacket
     {
         var player = Main.player[reader.ReadInt32()].GetModPlayer<PlayerManager>();
         BitsByte bits = reader.ReadByte();
-        player.MouseLeft.Update(bits[0]);
-        player.MouseRight.Update(bits[1]);
-        player.ControlUseTile.Update(bits[2]);
-        player.MouseWorld = reader.ReadVector2();
+        player.MouseLeft.NetUpdate(bits[0]);
+        player.MouseRight.NetUpdate(bits[1]);
+        player.ControlUseTile.NetUpdate(bits[2]);
+        player.MouseWorld.NetUpdate(reader.ReadVector2());
     }
 
     public void Send(BinaryWriter writer)
@@ -57,7 +57,7 @@ internal class MousePacketToServerHandler : IPacketHandler
 {
     public void Handle(IPacket packet, int whoAmI)
     {
-        
+
     }
 }
 

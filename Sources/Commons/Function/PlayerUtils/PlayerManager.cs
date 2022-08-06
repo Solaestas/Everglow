@@ -1,20 +1,13 @@
 ﻿using Everglow.Sources.Modules.ZYModule.Items;
 using Everglow.Sources.Modules.ZYModule.ZYPacket;
 using Terraria.Audio;
+using Terraria.DataStructures;
 
 namespace Everglow.Sources.Commons.Function.PlayerUtils;
 
 
 internal class PlayerManager : ModPlayer
 {
-    public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
-    {
-        if (newPlayer)
-        {
-            Everglow.PacketResolver.Send<WorldVersionPacket>();
-        }
-    }
-
     public VirtualKey ControlLeft { get; private set; } = new VirtualKey();
     public VirtualKey ControlRight { get; private set; } = new VirtualKey();
     public VirtualKey ControlUp { get; private set; } = new VirtualKey();
@@ -24,7 +17,7 @@ internal class PlayerManager : ModPlayer
     public VirtualKey ControlUseTile { get; private set; } = new VirtualKey();
     public VirtualKey MouseLeft { get; private set; } = new VirtualKey();
     public VirtualKey MouseRight { get; private set; } = new VirtualKey();
-    public Vector2 MouseWorld { get; internal set; }
+    public MouseTrail MouseWorld { get; internal set; }
     public override void PostUpdate()
     {
         ControlLeft.LocalUpdate(Player.controlLeft);
@@ -38,75 +31,110 @@ internal class PlayerManager : ModPlayer
             MouseLeft.LocalUpdate(Main.mouseLeft);
             MouseRight.LocalUpdate(Main.mouseRight);
             ControlUseTile.LocalUpdate(Player.controlUseTile);
-            MouseWorld = Main.MouseWorld;
+            MouseWorld.LocalUpdate(Main.MouseWorld);
             Everglow.PacketResolver.Send<InputPacketToServer>();
         }
-    }
-    private float jumpSpeed;
-    private int jumpTime;
-    public void Jump() => Jump(Player.jump, Player.velocity.Y);
-    public void Jump(int time, float speed)
-    {
-        jumpTime = time;
-        jumpSpeed = speed;
-    }
-    public override void Load()
-    {
-        On.Terraria.Player.JumpMovement += Player_JumpMovement;
-    }
-    internal static void Player_JumpMovement(On.Terraria.Player.orig_JumpMovement orig, Player self)
-    {
-        var player = self.GetModPlayer<PlayerManager>();
-        if (player.jumpTime > 0)
+        else
         {
-            if (self.jump != 0)
-            {
-                self.jump = 0;
-            }
-            if (!self.controlJump)
-            {
-                player.jumpTime = 1;
-            }
-            self.velocity.Y = player.jumpSpeed;
-            player.jumpTime--;
+            MouseLeft.Forcast();
+            MouseRight.Forcast();
+            ControlUseTile.Forcast();
+            MouseWorld.Forcast();
         }
-        orig(self);
     }
 
+    /// <summary>
+    /// 造成一次无法被闪避的伤害
+    /// </summary>
+    /// <param name="player">受到伤害的玩家</param>
+    /// <param name="from">伤害的直接来源，可能是NPC或者Projectile</param>
+    /// <param name="damage">基础伤害</param>
+    /// <param name="pvp">是否为PVP造成的伤害</param>
+    public static void ApplyDamage(this Player player, Entity from, int damage, bool pvp)
+    {
+        int direction = player.Center.X > from.Center.X ? -1 : 1;
+        bool crit = false;
+        int realDamage;
 
-    public WoodShieldProj shield;
-    public override void ModifyHitByNPC(NPC npc, ref int damage, ref bool crit)
-    {
-        if (shield is null)
+        damage = Main.DamageVar(damage, -player.luck);
+
+        int banner;
+        if (from is NPC npc)
         {
-            return;
+            banner = Item.NPCtoBanner(npc.BannerID());
+            if (banner > 0 && player.HasNPCBannerBuff(banner))
+            {
+                var bannerEffect = ItemID.Sets.BannerStrength[Item.BannerToItem(banner)];
+                damage = (!Main.expertMode) ?
+                    ((int)(damage * bannerEffect.NormalDamageReceived)) :
+                    ((int)(damage * bannerEffect.ExpertDamageReceived));
+            }
+
+            if (Main.myPlayer == player.whoAmI && !npc.dontTakeDamage)
+            {
+                float thorns = player.turtleThorns ? 2 : player.thorns;
+                if (thorns > 0)
+                {
+                    int thornsDamage = (int)(damage * thorns);
+                    player.ApplyDamageToNPC(npc, Math.Min(thornsDamage, 1000), 10, -direction, false);
+                }
+                if (player.cactusThorns)
+                {
+                    player.ApplyDamageToNPC(npc, Main.masterMode ? 45 : (Main.expertMode ? 30 : 15), 10, -direction, false);
+                }
+            }
+
+            if (player.resistCold && npc.coldDamage)
+            {
+                damage = (int)(damage * 0.7f);
+            }
+
+            NPCLoader.ModifyHitPlayer(npc, player, ref damage, ref crit);
+            PlayerLoader.ModifyHitByNPC(player, npc, ref damage, ref crit);
+            realDamage = (int)player.Hurt(PlayerDeathReason.ByNPC(npc.whoAmI), damage, direction, false, false, crit);
+            if (realDamage > 0 && !player.dead)
+            {
+                player.StatusFromNPC(npc);
+            }
+            NPCLoader.OnHitPlayer(npc, player, damage, crit);
+            PlayerLoader.OnHitByNPC(player, npc, damage, crit);
         }
-        if (!shield.Projectile.active)
+        else if (from is Projectile proj)
         {
-            shield = null;
-            return;
+            banner = proj.bannerIdToRespondTo;
+            if (banner > 0 && player.HasNPCBannerBuff(banner))
+            {
+                var bannerEffect = ItemID.Sets.BannerStrength[Item.BannerToItem(banner)];
+                damage = (!Main.expertMode) ?
+                    ((int)(damage * bannerEffect.NormalDamageReceived)) :
+                    ((int)(damage * bannerEffect.ExpertDamageReceived));
+            }
+
+            if (player.resistCold && proj.coldDamage)
+            {
+                damage = (int)(damage * 0.7f);
+            }
+
+            float multiple = Main.GameModeInfo.EnemyDamageMultiplier;
+            if (Main.GameModeInfo.IsJourneyMode)
+            {
+                CreativePowers.DifficultySliderPower power = CreativePowerManager.Instance.GetPower<CreativePowers.DifficultySliderPower>();
+                if (power.GetIsUnlocked())
+                {
+                    multiple = power.StrengthMultiplierToGiveNPCs;
+                }
+            }
+            damage = (int)(damage * multiple);
+            ProjectileLoader.ModifyHitPlayer(proj, player, ref damage, ref crit);
+            PlayerLoader.ModifyHitByProjectile(player, proj, ref damage, ref crit);
+            realDamage = (int)player.Hurt(PlayerDeathReason.ByProjectile(pvp ? proj.owner : -1, proj.whoAmI), damage, direction, pvp, false, crit);
+            if (realDamage > 0)
+            {
+                proj.StatusPlayer(player.whoAmI);
+            }
+            ProjectileLoader.OnHitPlayer(proj, player, realDamage, crit);
+            PlayerLoader.OnHitByProjectile(player, proj, realDamage, crit);
         }
-        if (shield.IsDefending && npc.Hitbox.Intersects(shield.Projectile.Hitbox))
-        {
-            crit = false;
-            shield.DefendDamage(npc, ref damage);
-        }
-    }
-    public override void ModifyHitByProjectile(Projectile proj, ref int damage, ref bool crit)
-    {
-        if (shield is null)
-        {
-            return;
-        }
-        if (!shield.Projectile.active)
-        {
-            shield = null;
-            return;
-        }
-        if (shield.IsDefending && proj.Colliding(proj.Hitbox, shield.Projectile.Hitbox))
-        {
-            crit = false;
-            shield.DefendDamage(proj, ref damage);
-        }
+
     }
 }

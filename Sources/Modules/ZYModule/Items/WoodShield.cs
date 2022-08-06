@@ -417,7 +417,7 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
     }
     public void DefendBegin()
     {
-        Owner.GetModPlayer<PlayerManager>().shield = this;
+        Owner.GetModPlayer<ShieldPlayer>().shield = this;
         ref float defendBoss = ref Projectile.localAI[1];
         Projectile.damage = item.Item.damage;
         rotRecord = 0;
