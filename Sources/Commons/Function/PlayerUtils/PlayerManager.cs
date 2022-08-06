@@ -2,7 +2,7 @@
 using Everglow.Sources.Modules.ZYModule.ZYPacket;
 using Terraria.Audio;
 
-namespace Everglow.Sources.Commons.Function.Player;
+namespace Everglow.Sources.Commons.Function.PlayerUtils;
 
 
 internal class PlayerManager : ModPlayer

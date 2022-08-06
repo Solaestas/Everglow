@@ -1,6 +1,6 @@
 ﻿using Everglow.Sources.Commons.Core;
 
-namespace Everglow.Sources.Commons.Function.Player;
+namespace Everglow.Sources.Commons.Function.PlayerUtils;
 
 internal class VirtualKey : INetUpdate<bool>
 {

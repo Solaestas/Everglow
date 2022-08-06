@@ -1,6 +1,6 @@
 ﻿using Everglow.Sources.Commons.Core;
 
-namespace Everglow.Sources.Commons.Function.Player
+namespace Everglow.Sources.Commons.Function.PlayerUtils
 {
     internal class MouseTrail : INetUpdate<Vector2>
     {
@@ -9,7 +9,7 @@ namespace Everglow.Sources.Commons.Function.Player
         public LinkedList<Vector2> position = new LinkedList<Vector2>();
         public void Forcast()
         {
-            if(updateTime != HookSystem.UITimer)
+            if (updateTime != HookSystem.UITimer)
             {
                 var last = position.Last;
                 var lastlast = last.Previous;

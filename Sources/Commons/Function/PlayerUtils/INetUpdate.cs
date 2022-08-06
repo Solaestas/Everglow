@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Everglow.Sources.Commons.Function.Player
+namespace Everglow.Sources.Commons.Function.PlayerUtils
 {
     public interface INetUpdate<T>
     {
