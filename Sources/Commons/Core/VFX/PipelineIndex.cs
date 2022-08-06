@@ -15,16 +15,16 @@
         public PipelineIndex(IEnumerable<int> indices)
         {
             var current = this;
-            foreach (var i in indices)
+            var it = indices.GetEnumerator();
+            if(!it.MoveNext())
             {
-                if (current == null)
-                {
-                    current = new PipelineIndex(i);
-                }
-                else
-                {
-                    current.index = i;
-                }
+                throw new ArgumentException("Indices count shoud > 0");
+            }
+
+            current.index = it.Current;
+            while(it.MoveNext())
+            {
+                current.next = new PipelineIndex(it.Current);
                 current = current.next;
             }
         }
