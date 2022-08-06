@@ -383,7 +383,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                     massPositions.Add(massJ.position);
                 }
                 List<Vector2> massPositionsSmooth = new List<Vector2>();
-                massPositionsSmooth = Commons.Function.BezierCurve.Bezier.SmoothPath(massPositions);
+                massPositionsSmooth = Commons.Function.Curves.CatmullRom.SmoothPath(massPositions);
                 if (massPositionsSmooth.Count > 0)
                 {
                     DrawRope(massPositionsSmooth, RopPosFir[i] + RopOffset, Vertices);

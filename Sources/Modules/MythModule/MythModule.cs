@@ -4,35 +4,31 @@ using Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds;
 using Everglow.Sources.Modules.MythModule.TheFirefly.UI;
 using MonoMod.Cil;
 using ReLogic.Content;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria.GameContent.Shaders;
 using Terraria.Graphics.Shaders;
 
 namespace Everglow.Sources.Modules.MythModule
 {
-    public class MythModule: IModule
+    public class MythModule : IModule
     {
         public string Name { get; } = "神话";
 
         private Asset<Effect> m_waveDisortionScreen = null;
 
-        public void Load( )
+        public void Load()
         {
             ContainerPage.RegisterContainerPage(new FireflyContainerPage()); //在IModule类内手动注册容器页.
 
-            // 水波扰动Shader
-            m_waveDisortionScreen = ModContent.Request<Effect>("Everglow/Sources/Modules/ExampleModule/Effects/WaterDisortion", AssetRequestMode.ImmediateLoad);
-            ReplaceEffectPass = m_waveDisortionScreen.Value.CurrentTechnique.Passes[0];
+            if (Main.netMode != NetmodeID.Server)
+            {
+                // 水波扰动Shader
+                m_waveDisortionScreen = ModContent.Request<Effect>("Everglow/Sources/Modules/ExampleModule/Effects/WaterDisortion", AssetRequestMode.ImmediateLoad);
+                ReplaceEffectPass = m_waveDisortionScreen.Value.CurrentTechnique.Passes[0];
 
-            On.Terraria.GameContent.Shaders.WaterShaderData.Update += WaterShaderData_Update;
-            IL.Terraria.GameContent.Shaders.WaterShaderData.Apply += WaterShaderData_Apply;
-
-
-            On.Terraria.GameContent.Shaders.WaterShaderData.StepLiquids += WaterShaderData_StepLiquids;
+                On.Terraria.GameContent.Shaders.WaterShaderData.Update += WaterShaderData_Update;
+                IL.Terraria.GameContent.Shaders.WaterShaderData.Apply += WaterShaderData_Apply;
+                On.Terraria.GameContent.Shaders.WaterShaderData.StepLiquids += WaterShaderData_StepLiquids;
+            }
         }
 
         private void WaterShaderData_StepLiquids(On.Terraria.GameContent.Shaders.WaterShaderData.orig_StepLiquids orig, WaterShaderData self)
@@ -140,7 +136,7 @@ namespace Everglow.Sources.Modules.MythModule
 
 
 
-        public void Unload( )
+        public void Unload()
         {
             ReplaceEffectPass = null;
         }

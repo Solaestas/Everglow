@@ -105,18 +105,14 @@ namespace Everglow
             HookSystem.HookLoad();
             m_moduleManager.LoadAllModules();
         }
-        public override void AddRecipes()
-        {
-            base.AddRecipes();
-        }
 
         public override void Unload()
         {
-            m_moduleManager?.UnloadAllModules();
-            HookSystem?.HookUnload();
-            m_mainThreadContext?.Unload();
+            m_moduleManager.UnloadAllModules();
+            HookSystem.HookUnload();
+            m_mainThreadContext.Unload();
 
-            m_profilerManager?.Clear();
+            m_profilerManager.Clear();
 
             m_packetResolver = null;
             m_moduleManager = null;

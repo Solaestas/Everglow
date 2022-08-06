@@ -1,69 +1,69 @@
-﻿using Everglow.Sources.Commons.Core.VFX;
-using Everglow.Sources.Commons.Core.VFX.Test;
-using Everglow.Sources.Modules.ZYModule.Commons.Core;
-using Everglow.Sources.Modules.ZYModule.Commons.Core.DataStructures;
-using Everglow.Sources.Modules.ZYModule.TileModule;
-using Everglow.Sources.Modules.ZYModule.TileModule.Tiles;
+﻿using Everglow.Sources.Modules.ZYModule.Visuals.ScreenShaders;
+
+using Terraria.Audio;
 
 namespace Everglow.Sources.Modules.ZYModule.Commons.Function;
 
 internal class TestItem : ModItem
 {
+    private class TestShader : ScreenShader
+    {
+        public TestShader() : base(EffectType.Test, ScreenParameter.uTime | ScreenParameter.uOpacity | ScreenParameter.uResolution | ScreenParameter.uNoise)
+        {
+        }
+        public override void Update()
+        {
+            if(time >= 120)
+            {
+                active = false;
+            }
+        }
+    }
+    protected override bool CloneNewInstances => true;
     public override string Texture => "Terraria/Images/UI/Wires_0";
+    public override void SetStaticDefaults()
+    {
+        soundStyles = typeof(SoundID).GetFields(BindingFlags.Static | BindingFlags.Public)
+            .Where(f => f.GetValue(null) is SoundStyle)
+            .Select(f => (SoundStyle)f.GetValue(null))
+            .ToList();
+        enumerator = soundStyles.GetEnumerator();
+        var shader = new TestShader();
+        ScreenShaderManager.Add("Test", shader);
+        shader.effectParameters["uColorBar"].SetValue(TextureType.WhiteGreenBar.GetValue(false));
+    }
     public override void SetDefaults()
     {
         Item.useAnimation = 10;
         Item.useTime = 10;
         Item.useStyle = ItemUseStyleID.Swing;
-        Item.autoReuse = true;
     }
-    //public class TestPlat : RotatedPlat
-    //{
-    //    public TestPlat(Vector2 position)
-    //    {
-    //        rotation = MathHelper.PiOver2;
-    //        this.position = position;
-    //        width = 300;
-    //    }
-    //}
-    public class TestBlock : DBlock
-    {
-        public TestBlock(Vector2 position, Vector2 size) : base(position, size)
-        {
-        }
-        public override void OnCollision(AABB aabb, Direction dir)
-        {
-            this.velocity = Vector2.UnitX * 15;
-        }
-    }
-    public class TestPlat : DPlatform
-    {
-        public TestPlat(Vector2 position, Vector2 velocity, float width, Rotation rotation, float miu) : base(position, velocity, width, rotation, miu)
-        {
-        }
-
-        public TestPlat(Vector2 position, Vector2 velocity, float width, Rotation rotation, Rotation angularVelocity, float miu) : base(position, velocity, width, rotation, angularVelocity, miu)
-        {
-        }
-
-        int timer = 30;
-        public override void AI()
-        {
-            //timer++;
-            //if ((timer % 240) < 120)
-            //{
-            //    angularVelocity = 0;
-            //}
-            //else
-            //{
-            //    angularVelocity = -0;
-            //}
-        }
-    }
+    [CloneByReference]
+    private List<SoundStyle> soundStyles = new List<SoundStyle>();
+    [CloneByReference]
+    private IEnumerator<SoundStyle> enumerator;
     public override bool CanUseItem(Player player)
     {
-        VFXManager.Instance.Add(new WhiteDust() { position = Main.MouseWorld });
-        return false;
+        //if (enumerator.MoveNext())
+        //{
+        //    SoundEngine.PlaySound(enumerator.Current, player.Center);
+        //    Main.NewText(enumerator.Current.SoundPath);
+        //}
+        //else
+        //{
+        //    enumerator.Reset();
+        //    Main.NewText("Over!");
+        //}
+        if (!ScreenShaderManager.Instance["Test"].active)
+        {
+            ScreenShaderManager.Activate("Test");
+        }
+        else
+        {
+            ScreenShaderManager.Deactivate("Test");
+        }
+
+        return true;
     }
     public override void AddRecipes()
     {
