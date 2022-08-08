@@ -21,7 +21,7 @@ namespace Everglow.Sources.Modules.FoodModule
             get;
             set;
         }
-        public string Description
+        public string Name
         {
             get;
             set;
@@ -47,7 +47,7 @@ namespace Everglow.Sources.Modules.FoodModule
             get;
             set;
         }
-        public string Description
+        public string Name
         {
             get;
             set;
