@@ -74,9 +74,12 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                             Dust d3 = Dust.NewDustDirect(NPC.position + new Vector2(26 - 20, 106 - 30), 40, 60, 191, 0, 0, 0, default, Main.rand.NextFloat(0.7f, 1.7f));
                             d3.velocity = new Vector2(0, Main.rand.Next(16)).RotatedByRandom(6.283) + new Vector2(-4, 4);
                         }
+                        if (!NPC.AnyNPCs(ModContent.NPCType<CorruptMoth>()))
+                        {
+                            Main.NewText("Corrupted Moth has awoken!", 175, 75, 255);
+                        }
                         NPC.NewNPC(NPC.GetSource_FromAI(),(int)NPC.position.X + 26, (int)NPC.position.Y + 106,ModContent.NPCType<CorruptMoth>());
                         NPC.ai[2] += 1;
-                        Main.NewText("Corrupted Moth has awoken!", 175, 75, 255);
                     }
                 }
                 else
