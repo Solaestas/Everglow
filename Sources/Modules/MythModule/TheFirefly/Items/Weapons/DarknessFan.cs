@@ -31,7 +31,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             Item.knockBack = 5f;
             Item.value = Item.sellPrice(0, 5, 0, 0);
             Item.rare = 4;
-            Item.UseSound = SoundID.Item43;
+            Item.UseSound = SoundID.DD2_GhastlyGlaivePierce;
             Item.autoReuse = true;
             Item.shoot = ModContent.ProjectileType<Projectiles.GlowingButterfly>();
             Item.shootSpeed = 8;
@@ -45,6 +45,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
                 Projectile.NewProjectile(source, position + new Vector2(0, -24), velocity * 3.4f, ModContent.ProjectileType<Projectiles.DarkFanFly>(), damage * 2, knockback, player.whoAmI, 0f, 0f);
                 Item.useTime = 2;
                 Item.useAnimation = 2;
+                //Item.UseSound = SoundID.DD2_JavelinThrowersAttack;
                 return false;
             }
             if (l % 4 == 0)
