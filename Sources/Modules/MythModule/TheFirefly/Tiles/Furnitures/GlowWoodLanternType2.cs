@@ -3,6 +3,7 @@ using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Everglow.Sources.Commons.Core.Utils;
+using Everglow.Sources.Commons.Core.Utils;
 using Terraria.ObjectData;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
