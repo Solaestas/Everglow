@@ -1,6 +1,7 @@
-﻿using Everglow.Sources.Modules.MythModule.Common.Coroutines;
+﻿using Everglow.Sources.Commons.Core.Coroutines;
+using Everglow.Sources.Commons.Core.DataStructures;
+using Everglow.Sources.Commons.Function.PlayerUtils;
 using Everglow.Sources.Modules.ZYModule.Commons.Core;
-using Everglow.Sources.Modules.ZYModule.Commons.Core.DataStructures;
 using Everglow.Sources.Modules.ZYModule.Commons.Function;
 using Everglow.Sources.Modules.ZYModule.Commons.Function.Base;
 
@@ -416,7 +417,7 @@ internal class WoodShieldProj : BaseHeldProj<WoodShield>
     }
     public void DefendBegin()
     {
-        Owner.GetModPlayer<PlayerManager>().shield = this;
+        Owner.GetModPlayer<ShieldPlayer>().shield = this;
         ref float defendBoss = ref Projectile.localAI[1];
         Projectile.damage = item.Item.damage;
         rotRecord = 0;
