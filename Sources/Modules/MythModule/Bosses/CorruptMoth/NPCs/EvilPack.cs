@@ -74,56 +74,47 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                             Dust d3 = Dust.NewDustDirect(NPC.position + new Vector2(26 - 20, 106 - 30), 40, 60, 191, 0, 0, 0, default, Main.rand.NextFloat(0.7f, 1.7f));
                             d3.velocity = new Vector2(0, Main.rand.Next(16)).RotatedByRandom(6.283) + new Vector2(-4, 4);
                         }
-                        NPC.NewNPC(NPC.GetSource_FromAI(),(int)NPC.position.X + 26, (int)NPC.position.Y + 106,ModContent.NPCType<CorruptMoth>());
+                        int n = NPC.NewNPC(NPC.GetSource_FromAI(),(int)NPC.position.X + 26, (int)NPC.position.Y + 106,ModContent.NPCType<CorruptMoth>());
+                        Main.npc[n].velocity = new Vector2(-1, 1);
                         NPC.ai[2] += 1;
                     }
                 }
                 else
                 {
                     omega *= 0.9f;
-                    float step = 0.15f;
+                    float step = 0.05f;
                     NPC.ai[1] += step;
-                    if(NPC.ai[1] >= 20f && NPC.ai[1] - step < 20f)
+                    if(NPC.ai[1] >= 4f && NPC.ai[1] - step < 4f)
                     {
                         omega += 0.02f;
+                        NPC.ai[1] += 12;
                         SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/MothHitCocoon"), NPC.Center);
                     }
-                    if (NPC.ai[1] >= 40f && NPC.ai[1] - step < 40f)
+                    if (NPC.ai[1] >= 19f && NPC.ai[1] - step < 19f)
                     {
+                        NPC.ai[1] += 24;
                         omega -= 0.03f;
                         SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/MothHitCocoon"), NPC.Center);
                     }
-                    if (NPC.ai[1] >= 60f && NPC.ai[1] - step < 60f)
+                    if (NPC.ai[1] >= 45f && NPC.ai[1] - step < 45f)
                     {
+                        NPC.ai[1] += 22;
                         omega += 0.04f;
                         SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/MothHitCocoon"), NPC.Center);
                     }
                     if (NPC.ai[1] >= 70f && NPC.ai[1] - step < 70f)
                     {
+                        NPC.ai[1] += 4;
                         omega -= 0.05f;
                         SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/MothHitCocoon"), NPC.Center);
                     }
                     if (NPC.ai[1] >= 76f && NPC.ai[1] - step < 76f)
                     {
+                        NPC.ai[1] += 13;
                         omega += 0.02f;
                         SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/MothHitCocoon"), NPC.Center);
                     }
-                    if (NPC.ai[1] >= 80f && NPC.ai[1] - step < 80f)
-                    {
-                        omega += 0.05f;
-                        SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/MothHitCocoon"), NPC.Center);
-                    }
-                    if (NPC.ai[1] >= 82f && NPC.ai[1] - step < 82f)
-                    {
-                        omega -= 0.06f;
-                        SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/MothHitCocoon"), NPC.Center);
-                    }
-                    if (NPC.ai[1] >= 86f && NPC.ai[1] - step < 86f)
-                    {
-                        omega -= 0.03f;
-                        SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/MothHitCocoon"), NPC.Center);
-                    }
-                    if (NPC.ai[1] >= 89f && NPC.ai[1] - step < 89f)
+                    if (NPC.ai[1] >= 89.7f && NPC.ai[1] - step < 89.7f)
                     {
                         omega += 0.1f;
                         SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/MothBreakCocoon"), NPC.Center);
@@ -142,7 +133,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             {
                 if(NPC.ai[1] < 90f)
                 {
-                    NPC.ai[1] += 1f;
+                    NPC.ai[1] += 0.01f;
                 }
                 else
                 {

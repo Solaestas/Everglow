@@ -50,6 +50,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             }
             if (!Main.tile[i, j - 1].HasTile && !Main.tile[i + 1, j - 1].HasTile && !Main.tile[i - 1, j - 1].HasTile && !Main.tile[i, j].IsHalfBlock && !Main.tile[i - 1, j].IsHalfBlock && !Main.tile[i + 1, j].IsHalfBlock)
             {
+                Tile t1 = Main.tile[i, j - 1];
+                Tile t2 = Main.tile[i, j - 2];
+                Tile t3 = Main.tile[i, j - 3];
                 for (int x = -1; x < 2; x++)
                 {
                     for (int y = -3; y < 4; y++)
@@ -60,12 +63,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                         }
                     }
                 }
-                if (Main.rand.NextBool(8))
+                if (Main.rand.NextBool(2))
                 {
-                    Tile t1 = Main.tile[i, j - 1];
-                    Tile t2 = Main.tile[i, j - 2];
-                    Tile t3 = Main.tile[i, j - 3];
-                    switch (Main.rand.Next(1, 4))
+                    switch (Main.rand.Next(1, 5))
                     {
                         case 1:
                             t1.TileType = (ushort)ModContent.TileType<Tiles.BlackStarShrubSmall>();
@@ -76,7 +76,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                             t1.TileFrameX = numa;
                             t2.TileFrameX = numa;
                             t1.TileFrameY = 16;
-                            t2.TileFrameX = 0;
+                            t2.TileFrameY = 0;
                             break;
                         case 2:
                             t1.TileType = (ushort)ModContent.TileType<Tiles.BlackStarShrubSmall>();
@@ -87,7 +87,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                             t2.TileFrameX = num;
                             t1.TileFrameX = num;
                             t1.TileFrameY = 16;
-                            t2.TileFrameX = 0;
+                            t2.TileFrameY = 0;
                             break;
                         case 3:
                             t1.TileType = (ushort)ModContent.TileType<Tiles.BlackStarShrub>();
@@ -101,8 +101,23 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                             t2.TileFrameX = num1;
                             t1.TileFrameX = num1;
                             t1.TileFrameY = 32;
-                            t2.TileFrameX = 16;
-                            t3.TileFrameX = 0;
+                            t2.TileFrameY = 16;
+                            t3.TileFrameY = 0;
+                            break;
+                        case 4:
+                            t1.TileType = (ushort)ModContent.TileType<Tiles.BlueBlossom>();
+                            t2.TileType = (ushort)ModContent.TileType<Tiles.BlueBlossom>();
+                            t3.TileType = (ushort)ModContent.TileType<Tiles.BlueBlossom>();
+                            t1.HasTile = true;
+                            t2.HasTile = true;
+                            t3.HasTile = true;
+                            short num2 = (short)(Main.rand.Next(0, 10) * 120);
+                            t3.TileFrameX = num2;
+                            t2.TileFrameX = num2;
+                            t1.TileFrameX = num2;
+                            t1.TileFrameY = 32;
+                            t2.TileFrameY = 16;
+                            t3.TileFrameY = 0;
                             break;
                     }
                 }
