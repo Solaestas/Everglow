@@ -127,7 +127,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         public override bool PreDraw(ref Color lightColor)
         {
             Player player = Main.player[Projectile.owner];
-            Texture2D t = MythContent.QuickTexture("TheFirefly/Items/Weapons/DarknessFan");
+            Texture2D t = MythContent.QuickTexture("TheFirefly/Projectiles/DarkFan");
             int frameHeight = t.Height;
             Vector2 drawOrigin = new Vector2(t.Width * 0.5f, t.Height * 0.5f);
             if (ExtraKnife)
