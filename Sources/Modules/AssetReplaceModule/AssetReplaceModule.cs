@@ -40,7 +40,7 @@ namespace Everglow.Sources.Modules.AssetReplaceModule
                 case TextureReplaceMode.Terraria:
                     TerrariaAssets.Apply();
                     break;
-                case TextureReplaceMode.EternalReslove:
+                case TextureReplaceMode.EternalResolve:
                     EternalAssets.Apply();
                     break;
                 case TextureReplaceMode.Myth:
