@@ -67,7 +67,7 @@ internal class TestItem : ModItem
         //}
         VFXManager.Instance.Add(new WhiteDust() { position = Main.MouseWorld});
 
-        return true;
+        return false;
     }
     public override void AddRecipes()
     {

@@ -155,7 +155,6 @@ public class VFXBatch : IDisposable
         }
         public static bool CheckSize(int vertexSize)
         {
-            Debug.Assert(instance.vertexPosition + vertexSize < instance.vertices.Length);
             return instance.vertexPosition + vertexSize < instance.vertices.Length;
         }
     }

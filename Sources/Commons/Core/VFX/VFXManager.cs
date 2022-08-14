@@ -1,4 +1,5 @@
-﻿using Everglow.Sources.Commons.Core.ModuleSystem;
+﻿using System.Collections;
+using Everglow.Sources.Commons.Core.ModuleSystem;
 using Everglow.Sources.Commons.Core.Profiler.Fody;
 using Everglow.Sources.Commons.Core.VFX.Base;
 using Everglow.Sources.Commons.Core.VFX.Interfaces;
@@ -8,11 +9,42 @@ namespace Everglow.Sources.Commons.Core.VFX;
 [ProfilerMeasure]
 public class VFXManager : IModule
 {
-    private class VisualCompare : Comparer<IVisual>
+    private class VisualCollection : IEnumerable<IVisual>
     {
-        public override int Compare(IVisual x, IVisual y)
+        private const int FLUSH_COUNT = 500;
+        private SortedSet<IVisual> visuals = new SortedSet<IVisual>(compare);
+        /// <summary>
+        /// 比较器
+        /// </summary>
+        private static VisualCompare compare = new VisualCompare();
+        public IEnumerator<IVisual> GetEnumerator()
         {
-            return x.Type - y.Type;
+            return visuals.GetEnumerator();
+        }
+        public void Add(IVisual visual)
+        {
+            if (visuals.Count % FLUSH_COUNT == 0)
+            {
+                Flush();
+            }
+            visuals.Add(visual);
+        }
+        public void Flush()
+        {
+            visuals.RemoveWhere(vis => !vis.Active);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+        private class VisualCompare : Comparer<IVisual>
+        {
+            public override int Compare(IVisual x, IVisual y)
+            {
+                var diff = x.Type - y.Type;
+                return diff == 0 ? x.GetHashCode() - y.GetHashCode() : diff;
+            }
         }
     }
     /// <summary>
@@ -26,8 +58,8 @@ public class VFXManager : IModule
     /// <summary>
     /// 用绘制层 + 第一个调用的绘制层作为Key来储存List<IVisual>
     /// </summary>
-    private Dictionary<CallOpportunity, Dictionary<PipelineIndex, List<IVisual>>> visuals =
-        new Dictionary<CallOpportunity, Dictionary<PipelineIndex, List<IVisual>>>();
+    private Dictionary<CallOpportunity, Dictionary<PipelineIndex, VisualCollection>> visuals =
+        new Dictionary<CallOpportunity, Dictionary<PipelineIndex, VisualCollection>>();
     /// <summary>
     /// 保存每一种Visual所需的Pipeline
     /// </summary>
@@ -35,7 +67,10 @@ public class VFXManager : IModule
     /// <summary>
     /// 保存每一种Visual的Type
     /// </summary>
-    private Dictionary<Type, int> visualTypes = new Dictionary<Type, int>();
+    private Dictionary<Type, int> visualTypes = new Dictionary<Type, int>()
+    {
+        [typeof(Rt2DVisual)] = int.MaxValue
+    };
     /// <summary>
     /// RenderTarget池子
     /// </summary>
@@ -45,18 +80,18 @@ public class VFXManager : IModule
     /// </summary>
     private GraphicsDevice graphicsDevice = Main.instance.GraphicsDevice;
     /// <summary>
-    /// 比较器
+    /// 当前使用RenderTarget的Index
     /// </summary>
-    private VisualCompare compare = new VisualCompare();
     private bool rt2DIndex = true;
+    private const bool DefaultRt2DIndex = true;
     /// <summary>
-    /// 当前的RenderTarget，取值为screenTarget或者screenTargetSwap
+    /// 当前的RenderTarget
     /// </summary>
     public RenderTarget2D CurrentRenderTarget => rt2DIndex ? Main.screenTarget : Main.screenTargetSwap;
     /// <summary>
-    /// 不是当前的RenderTarget，取值为screenTarget或者screenTargetSwap
+    /// 下一个RenderTarget
     /// </summary>
-    public RenderTarget2D NextRenderTarget => !rt2DIndex ? Main.screenTarget : Main.screenTargetSwap;
+    public RenderTarget2D NextRenderTarget => rt2DIndex ? Main.screenTargetSwap : Main.screenTarget;
     /// <summary>
     /// 代替SpriteBatch，可以用来处理顶点绘制
     /// </summary>
@@ -122,7 +157,7 @@ public class VFXManager : IModule
         var visuals = this.visuals[layer];
         foreach (var (pipelineIndex, innerVisuals) in visuals)
         {
-            if (pipelineIndex.next != null)
+            if (pipelineIndex.next != null && Main.targetSet)
             {
                 var rt2D = new Rt2DVisual(renderTargetPool.GetRenderTarget2D());
                 graphicsDevice.SetRenderTarget(rt2D.locker.Resource);
@@ -135,7 +170,7 @@ public class VFXManager : IModule
             pipeline.Render(innerVisuals.Where(v => v.Visible && v.Active));
             pipeline.EndRender();
 
-            if (pipelineIndex.next != null)
+            if (pipelineIndex.next != null && Main.targetSet)
             {
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
                 graphicsDevice.SetRenderTarget(NextRenderTarget);
@@ -145,12 +180,12 @@ public class VFXManager : IModule
             }
         }
 
-        if (NextRenderTarget == Main.screenTarget)
+        if (CurrentRenderTarget != Main.screenTarget)
         {
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
-            graphicsDevice.SetRenderTarget(NextRenderTarget);
+            graphicsDevice.SetRenderTarget(Main.screenTarget);
             Main.spriteBatch.Draw(CurrentRenderTarget, Vector2.Zero, Color.White);
-            SwitchRenderTarget();
+            rt2DIndex = DefaultRt2DIndex;
             Main.spriteBatch.End();
         }
     }
@@ -163,12 +198,12 @@ public class VFXManager : IModule
         //将Visual实例加到对应绘制层与第一个Pipeline的位置
         if (!visuals.TryGetValue(visual.DrawLayer, out var value))
         {
-            visuals[visual.DrawLayer] = value = new Dictionary<PipelineIndex, List<IVisual>>();
+            visuals[visual.DrawLayer] = value = new Dictionary<PipelineIndex, VisualCollection>();
         }
         PipelineIndex index = requiredPipeline[visual.Type];
         if (!value.TryGetValue(index, out var list))
         {
-            value[index] = list = new List<IVisual>();
+            value[index] = list = new VisualCollection();
 
             //将后续Index的List也初始化
             var next = index.next;
@@ -176,25 +211,13 @@ public class VFXManager : IModule
             {
                 if (!value.ContainsKey(next))
                 {
-                    value[next] = new List<IVisual>();
+                    value[next] = new VisualCollection();
                 }
                 next = next.next;
             }
         }
 
-        int count = list.Count;
-        for (int i = 0; i < count; i++)
-        {
-            if (!list[i].Active)
-            {
-                list[i] = visual;
-                return;
-            }
-        }
-
-        //红黑树好难……暂时就先这样了
         list.Add(visual);
-        list.Sort(compare);
     }
     public void Update()
     {
@@ -219,15 +242,9 @@ public class VFXManager : IModule
             List<PipelineIndex> waitToDelete = new List<PipelineIndex>();
             foreach (var (key, list) in visuals)
             {
-                for (int i = 0; i < list.Count; i++)
-                {
-                    if (!list[i].Active)
-                    {
-                        list.RemoveAt(i--);
-                    }
-                }
+                list.Flush();
 
-                if (list.Count == 0)
+                if (!list.Any())
                 {
                     waitToDelete.Add(key);
                 }
@@ -240,21 +257,21 @@ public class VFXManager : IModule
 
             //重新添加有Next的List
             List<PipelineIndex> waitToAdd = new List<PipelineIndex>();
-            foreach(var (key, _) in visuals)
+            foreach (var (key, _) in visuals)
             {
                 var next = key.next;
-                while(next != null)
+                while (next != null)
                 {
                     waitToAdd.Add(next);
                     next = next.next;
                 }
             }
 
-            foreach(var key in waitToAdd)
+            foreach (var key in waitToAdd)
             {
-                if(!visuals.ContainsKey(key))
+                if (!visuals.ContainsKey(key))
                 {
-                    visuals[key] = new List<IVisual>();
+                    visuals[key] = new VisualCollection();
                 }
             }
         }
@@ -266,31 +283,38 @@ public class VFXManager : IModule
             visuals.Clear();
         }
     }
+    public static readonly CallOpportunity[] drawLayers = new CallOpportunity[]
+    {
+        CallOpportunity.PostDrawFilter,
+        CallOpportunity.PostDrawProjectiles,
+        CallOpportunity.PostDrawTiles,
+        CallOpportunity.PostDrawDusts,
+        CallOpportunity.PostDrawBG,
+        CallOpportunity.PostDrawPlayers,
+        CallOpportunity.PostDrawNPCs
+    };
+
     public void Load()
     {
         Instance = this;
         spriteBatch = new VFXBatch(graphicsDevice);
-        visuals[CallOpportunity.PostDrawFilter] = new Dictionary<PipelineIndex, List<IVisual>>();
-        visuals[CallOpportunity.PostDrawProjectiles] = new Dictionary<PipelineIndex, List<IVisual>>();
-        visuals[CallOpportunity.PostDrawTiles] = new Dictionary<PipelineIndex, List<IVisual>>();
-        visuals[CallOpportunity.PostDrawDusts] = new Dictionary<PipelineIndex, List<IVisual>>();
-        visuals[CallOpportunity.PostDrawBG] = new Dictionary<PipelineIndex, List<IVisual>>();
-        visuals[CallOpportunity.PostDrawPlayers] = new Dictionary<PipelineIndex, List<IVisual>>();
-        visuals[CallOpportunity.PostDrawNPCs] = new Dictionary<PipelineIndex, List<IVisual>>();
-        Everglow.HookSystem.AddMethod(() => Draw(CallOpportunity.PostDrawFilter), CallOpportunity.PostDrawFilter,
-            "VFX PostDrawFilter");
-        Everglow.HookSystem.AddMethod(() => Draw(CallOpportunity.PostDrawProjectiles), CallOpportunity.PostDrawProjectiles,
-            "VFX PostDrawProjectile");
-        Everglow.HookSystem.AddMethod(() => Draw(CallOpportunity.PostDrawTiles), CallOpportunity.PostDrawTiles,
-            "VFX PostDrawTile");
-        Everglow.HookSystem.AddMethod(() => Draw(CallOpportunity.PostDrawDusts), CallOpportunity.PostDrawDusts,
-            "VFX PostDrawDust");
-        Everglow.HookSystem.AddMethod(() => Draw(CallOpportunity.PostDrawBG), CallOpportunity.PostDrawBG,
-            "VFX PostDrawBG");
-        Everglow.HookSystem.AddMethod(() => Draw(CallOpportunity.PostDrawPlayers), CallOpportunity.PostDrawPlayers,
-            "VFX PostDrawPlayer");
-        Everglow.HookSystem.AddMethod(() => Draw(CallOpportunity.PostDrawNPCs), CallOpportunity.PostDrawNPCs,
-            "VFX PostDrawNPCs");
+        foreach (var layer in drawLayers)
+        {
+            visuals[layer] = new Dictionary<PipelineIndex, VisualCollection>();
+            if (layer is CallOpportunity.PostDrawNPCs or CallOpportunity.PostDrawBG)
+            {
+                Everglow.HookSystem.AddMethod(() =>
+                {
+                    Main.spriteBatch.End();
+                    Draw(layer);
+                    Main.spriteBatch.Begin();
+                }, layer, $"VFX {layer}");
+            }
+            else
+            {
+                Everglow.HookSystem.AddMethod(() => Draw(layer), layer, $"VFX {layer}");
+            }
+        }
     }
     public void Unload()
     {
