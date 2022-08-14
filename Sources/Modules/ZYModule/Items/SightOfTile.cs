@@ -80,6 +80,7 @@ namespace Everglow.Sources.Modules.ZYModule.Items
         int AnimationTimer = 0;
         public bool EnableMapIOUI = false;
         public bool InTile = true;
+        public List<string> fileName;
         public override void PostDrawInterface(SpriteBatch spriteBatch)
         {
             if(EnableMapIOUI)
@@ -125,9 +126,13 @@ namespace Everglow.Sources.Modules.ZYModule.Items
                 CheckMouseOver(c0);
             }
             DrawUICircle(c0);
-            CheckMouseCLick(c0, Count);
+            CheckMouseClick(c0, Count);
+            if(Count == 1)
+            {
+                DrawSquireUI(c0);
+            }
         }
-        public void CheckMouseCLick(UICircle c0, int Count)
+        public void CheckMouseClick(UICircle c0, int Count)
         {
             if ((Main.MouseScreen - DrawCenter - c0.AddCenter).Length() < 20)
             {
@@ -136,12 +141,37 @@ namespace Everglow.Sources.Modules.ZYModule.Items
                     if(Count == 0)
                     {
                         InTile = true;
+                        CloseUI();
                     }
                     if (Count == 1)
                     {
                         InTile = false;
+                        if(fileName != null)
+                        {
+                            fileName.Clear();
+                        }
+                        DirectoryInfo TheFolder = new DirectoryInfo("");
+                        foreach (FileInfo NextFile in TheFolder.GetFiles())
+                        {
+                            if(NextFile.Extension == "mapio")
+                            {
+                                fileName.Add(NextFile.Name);
+                            }
+                        }
                     }
-                    CloseUI();
+                }
+            }
+        }
+        public void DrawSquireUI(UICircle c0)
+        {
+            if(!InTile)
+            {
+                int count = 0;
+                foreach(string name in fileName)
+                {
+                    count++;
+                    Texture2D sqrt = ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZYModule/Items/OutTile").Value;
+                    Main.spriteBatch.Draw(sqrt, DrawCenter + c0.AddCenter + new Vector2(count * 30), null, Color.White, 0, c0.contain.Size() / 2f, c0.Size, SpriteEffects.None, 0);
                 }
             }
         }
