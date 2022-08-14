@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Everglow.Sources.Modules.MythModule.Common.Coroutines
+namespace Everglow.Sources.Commons.Core.Coroutines
 {
     /// <summary>
     /// 管理所有协程运行器的类，支持异步地发起新的协程
@@ -29,7 +29,7 @@ namespace Everglow.Sources.Modules.MythModule.Common.Coroutines
         {
             var node = m_coroutines.First;
 
-            while(node != null)
+            while (node != null)
             {
                 var nextNode = node.Next;
 

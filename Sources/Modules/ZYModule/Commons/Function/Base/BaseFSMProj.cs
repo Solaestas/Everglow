@@ -1,6 +1,6 @@
 ﻿
 
-using Everglow.Sources.Modules.MythModule.Common.Coroutines;
+using Everglow.Sources.Commons.Core.Coroutines;
 using System.Diagnostics.CodeAnalysis;
 using Terraria.DataStructures;
 
