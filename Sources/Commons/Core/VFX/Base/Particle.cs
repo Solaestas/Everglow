@@ -13,7 +13,6 @@ public abstract class Particle : Visual
     public Vector2 velocity;
     public float scale;
     public float alpha;
-    public Queue<Vector2> oldPos = new Queue<Vector2>();
     public override void Update()
     {
         position += velocity;

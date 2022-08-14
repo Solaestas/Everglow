@@ -15,7 +15,7 @@ public abstract class Visual : IVisual
     public virtual bool Visible { get; set; } = true;
     public int Type => Everglow.ModuleManager.GetModule<VFXManager>().GetVisualType(this);
 
-    public virtual string Name => "Visual";
+    public virtual string Name => GetType().Name;
 
     public abstract void Draw();
 
