@@ -1,5 +1,6 @@
 ﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
 using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
+using Everglow.Sources.Modules.ZYModule.Commons.Function.MapIO;
 using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.DataStructures;
 using Terraria.Audio;
@@ -31,7 +32,11 @@ namespace Everglow.Sources.Modules.ZYModule.Items
                 Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, Main.rand.NextFloat(0, 200f), Main.rand.NextFloat(0, 200f));
                 return false;
             }
-            Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<SightOfTileProjRead>(), damage, knockback, player.whoAmI, Main.rand.NextFloat(0, 200f), Main.rand.NextFloat(0, 200f));
+            if (ModContent.GetInstance<SightOfTileUI>().OutTile)
+            {
+                Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<SightOfTileProjRead>(), damage, knockback, player.whoAmI, Main.rand.NextFloat(0, 200f), Main.rand.NextFloat(0, 200f));
+                return false;
+            }
             return false;
         }
         public override bool CanUseItem(Player player)
@@ -80,7 +85,9 @@ namespace Everglow.Sources.Modules.ZYModule.Items
         int AnimationTimer = 0;
         public bool EnableMapIOUI = false;
         public bool InTile = true;
-        public List<string> fileName;
+        public bool OutTile = true;
+        public List<string> fileName = new();
+        public string OutFileName;
         public override void PostDrawInterface(SpriteBatch spriteBatch)
         {
             if(EnableMapIOUI)
@@ -127,51 +134,109 @@ namespace Everglow.Sources.Modules.ZYModule.Items
             }
             DrawUICircle(c0);
             CheckMouseClick(c0, Count);
-            if(Count == 1)
+            if(Count == 1 && fileName != null && OutTile)
             {
-                DrawSquireUI(c0);
+                DrawSquireUI(c0, fileName);
             }
         }
+
         public void CheckMouseClick(UICircle c0, int Count)
         {
             if ((Main.MouseScreen - DrawCenter - c0.AddCenter).Length() < 20)
             {
-                if(Main.mouseLeft && Main.mouseLeftRelease)
+                if (Main.mouseLeft && Main.mouseLeftRelease)
                 {
-                    if(Count == 0)
+                    if (Count == 0)
                     {
                         InTile = true;
+                        OutTile = false;
                         CloseUI();
                     }
                     if (Count == 1)
                     {
-                        InTile = false;
-                        if(fileName != null)
+                        OutTile = !OutTile;
+                        string rootpath = Path.Combine(Main.SavePath, "Mods", "ModDatas", Mod.Name);
+                        if (Directory.Exists(rootpath))
                         {
-                            fileName.Clear();
+                            List<string> result = new();
+                            //查找根目录下全部以.mapio为结尾的文件
+                            FindFiles(rootpath, ".mapio", ref result);
+                            fileName = result;
+                            //获取根目录下当前层级全部与*.mapio匹配的文件(仅文件)
+                            string[] files = Directory.GetFiles(rootpath, "*.mapio");
                         }
-                        DirectoryInfo TheFolder = new DirectoryInfo("");
-                        foreach (FileInfo NextFile in TheFolder.GetFiles())
+                        else
                         {
-                            if(NextFile.Extension == "mapio")
-                            {
-                                fileName.Add(NextFile.Name);
-                            }
+                            Directory.CreateDirectory(rootpath);
                         }
                     }
                 }
             }
         }
-        public void DrawSquireUI(UICircle c0)
+        public void FindFiles(string rootpath, string extension, ref List<string> filepaths)
+        {
+            //获取根目录下所有的文件和文件夹路径
+            string[] paths = Directory.GetFileSystemEntries(rootpath);
+            foreach (string path in paths)
+            {
+                //判断是不是文件
+                if (File.Exists(path))
+                {
+                    //查询文件名是否以目标结尾
+                    if (path.EndsWith(extension))
+                    {
+                        filepaths.Add(path);
+                    }
+                }
+                else
+                {
+                    //查询这个文件夹下以目标结尾的文件
+                    FindFiles(path, extension, ref filepaths);
+                }
+            }
+        }
+
+        public void DrawSquireUI(UICircle c0,List<string> path)
         {
             if(!InTile)
             {
                 int count = 0;
-                foreach(string name in fileName)
+                int Dx = 18;
+                int Dy = 0;
+                foreach (string name in path)
                 {
                     count++;
-                    Texture2D sqrt = ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZYModule/Items/OutTile").Value;
-                    Main.spriteBatch.Draw(sqrt, DrawCenter + c0.AddCenter + new Vector2(count * 30), null, Color.White, 0, c0.contain.Size() / 2f, c0.Size, SpriteEffects.None, 0);
+                    Dx += 18;
+                    Texture2D sqrt = ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZYModule/Items/RectangleSmall").Value;
+                    Vector2 DrawPos = DrawCenter + c0.AddCenter + new Vector2(Dx, Dy);
+                    if(!new Rectangle(0,0,Main.screenWidth,Main.screenHeight).Contains(new Rectangle((int)DrawPos.X - 9, (int)DrawPos.Y - 9,18,18)))
+                    {
+                        Dx = 36;
+                        Dy += 18;
+                    }
+                    DrawPos = DrawCenter + c0.AddCenter + new Vector2(Dx, Dy);
+                    Color DrawColor = Color.White;
+                    float DrawScale = 1f;
+                    if (Math.Abs((Main.MouseScreen - DrawPos).X) < 9 && Math.Abs((Main.MouseScreen - DrawPos).Y) < 9)
+                    {
+                        DrawScale = 1.2f;
+                        DrawColor = Color.Yellow;
+                        int index = name.LastIndexOf("\\");
+                        MapIO mapIO = new MapIO((int)(Main.MouseWorld.X / 16), (int)(Main.MouseWorld.Y / 16));
+                        int TWidth = mapIO.ReadWidth(name);
+                        int THeight = mapIO.ReadHeight(name);
+                        string LastTime = "Creat at: "+ File.GetCreationTime(name).ToString("");
+                        string TSize = TWidth.ToString() + "x" + THeight.ToString();
+                        Main.instance.MouseText(name.Substring(index + 1)+"\n" + TSize + "\n" + LastTime);
+                        if(Main.mouseLeft && Main.mouseLeftRelease)
+                        {
+                            OutFileName = name;
+                            InTile = false;
+                            OutTile = true;
+                            CloseUI();
+                        }
+                    }
+                    Main.spriteBatch.Draw(sqrt, DrawPos, null, DrawColor, 0, sqrt.Size() / 2f, DrawScale, SpriteEffects.None, 0);
                 }
             }
         }
@@ -199,6 +264,8 @@ namespace Everglow.Sources.Modules.ZYModule.Items
             DrawCenter = Main.MouseScreen / Main.UIScale;
             circle0.texcoord = ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZYModule/Items/Wires_0").Value;
             circle1.texcoord = ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZYModule/Items/Wires_0").Value;
+            InTile = false;
+            OutTile = false;
             EnableMapIOUI = true;
         }
         public void CloseUI()

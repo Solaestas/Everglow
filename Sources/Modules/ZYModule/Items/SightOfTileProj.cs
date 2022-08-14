@@ -138,7 +138,7 @@ namespace Everglow.Sources.Modules.ZYModule.Items
 
             DrawNinePiecesForTiles(Left, Right, Up, Down);
 
-
+            Main.instance.MouseText((Right - Left).ToString() + "x" + (Down - Up).ToString() + "\nRight Click to Cancel", 9);
             return false;
         }
         private void DrawNinePiecesForTiles(int LeftX, int RightX, int UpY, int DownY)
@@ -270,11 +270,18 @@ namespace Everglow.Sources.Modules.ZYModule.Items
             }
             MapIO mapIO = new MapIO(Left, Up, Right - Left + 1, Down - Up + 1);
             int Count = 0;
-            while (File.Exists("MapTiles" + Count.ToString() + ".mapio"))
+            string path = Path.Combine(Main.SavePath, "Mods", "ModDatas", Mod.Name);
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            while (File.Exists(path + "\\MapTiles" + Count.ToString() + ".mapio"))
             {
                 Count++;
             }
-            mapIO.Write("MapTiles" + Count.ToString() + ".mapio");
+            string writePath = path + "\\MapTiles" + Count.ToString() + ".mapio";
+            mapIO.Write(writePath);
+            CombatText.NewText(new Rectangle((int)Projectile.Center.X, (int)Projectile.Center.Y, 0, 0),Color.Cyan,"Success saving at: " + writePath);
         }
     }
 }
