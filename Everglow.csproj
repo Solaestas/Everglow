@@ -53,6 +53,6 @@
     <Exec Command="xcopy /y /d  &quot;$(OutDir)Everglow.dll&quot; &quot;$(ProjectDir)&quot;" />
   </Target>
 	<Target Name="BuildEffect" BeforeTargets="Build">
-		<Exec Command="&quot;$(ProjectDir)Resources\Tools\_XNBCompiler.exe&quot; &quot;$(ProjectDir)Sources&quot;"/>
+		<Exec Command="&quot;$(ProjectDir)Resources\Tools\_XNBCompiler.exe&quot; &quot;$(ProjectDir)Sources&quot;" />
 	</Target>
 </Project>
