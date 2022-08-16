@@ -41,6 +41,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
                     NPC.ai[0] = 4f;
                 }
                 NPC.velocity.Y = 0f;
+                UpdateMove();
             }
             else
             {
@@ -57,11 +58,30 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
                             if(same.ai[1] > 0)
                             {
                                 NPC.ai[1] = 1;
+                                NPC.ai[2] = Main.rand.Next(100);
+                                AimPos = new Vector2(0, Main.rand.NextFloat(12f, 220f)).RotatedByRandom(6.283) + NPC.Center;
                                 break;
                             }
                         }
                     }
                 }
+            }
+        }
+        Vector2 AimPos = Vector2.Zero;
+        private void UpdateMove()
+        {
+            NPC.ai[2] += 1;
+            if(NPC.ai[2] % 120 == 0)
+            {
+                AimPos = new Vector2(0, Main.rand.NextFloat(12f, 220f)).RotatedByRandom(6.283) + NPC.Center;
+            }
+            if((NPC.Center - AimPos).Length() >= 20)
+            {
+                NPC.velocity = Vector2.Normalize(AimPos - NPC.Center) * 6f;
+            }
+            else
+            {
+                NPC.velocity *= 0;
             }
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
