@@ -1,5 +1,5 @@
 ﻿using Everglow.Sources.Commons.Core.VFX;
-using Everglow.Sources.Commons.Core.VFX.Test;
+using Everglow.Sources.Modules.ExampleModule.VFX;
 using Everglow.Sources.Modules.ZYModule.Visuals.ScreenShaders;
 
 using Terraria.Audio;
@@ -15,7 +15,7 @@ internal class TestItem : ModItem
         }
         public override void Update()
         {
-            if(time >= 120)
+            if (time >= 120)
             {
                 active = false;
             }
@@ -39,7 +39,7 @@ internal class TestItem : ModItem
         Item.useAnimation = 10;
         Item.useTime = 10;
         Item.useStyle = ItemUseStyleID.Swing;
-        Item.autoReuse = true;
+        Item.autoReuse = false;
     }
     [CloneByReference]
     private List<SoundStyle> soundStyles = new List<SoundStyle>();
@@ -65,7 +65,7 @@ internal class TestItem : ModItem
         //{
         //    ScreenShaderManager.Deactivate("Test");
         //}
-        VFXManager.Instance.Add(new WhiteDust() { position = Main.MouseWorld});
+        VFXManager.Instance.Add(new WhiteDust() { position = Main.MouseWorld });
 
         return false;
     }

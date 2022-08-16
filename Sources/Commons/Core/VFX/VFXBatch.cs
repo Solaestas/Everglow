@@ -1,4 +1,5 @@
 ﻿using Everglow.Sources.Commons.Core.Profiler.Fody;
+using Everglow.Sources.Commons.Function.Vertex;
 
 namespace Everglow.Sources.Commons.Core.VFX;
 
@@ -167,14 +168,14 @@ public class VFXBatch : IDisposable
     private List<IBuffers> buffers = new List<IBuffers>();
     private List<bool> needFlush = new List<bool>();
     private bool hasBegun = false;
-    public Effect effect;
     public GraphicsDevice GraphicsDevice => graphicsDevice;
     public VFXBatch(GraphicsDevice gd)
     {
         graphicsDevice = gd;
         Everglow.MainThreadContext.AddTask(() =>
         {
-            RegisterVertex<VFX2D>();
+            RegisterVertex<VFX2D>(MAX_VERTICES, MAX_VERTICES * 6 / 4);//四个顶点两个三角形六个下标
+            VFXManager.spriteBatch.RegisterVertex<Vertex2D>();
         });
     }
     public void RegisterVertex<T>(int maxVertices = MAX_VERTICES, int maxIndices = MAX_INDICES) where T : struct, IVertexType

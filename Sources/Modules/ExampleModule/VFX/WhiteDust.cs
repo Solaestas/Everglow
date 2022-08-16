@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Everglow.Sources.Commons.Core.VFX;
 using Everglow.Sources.Commons.Core.VFX.Base;
 using Everglow.Sources.Commons.Core.VFX.Pipelines;
 using Terraria.GameContent;
 
-namespace Everglow.Sources.Commons.Core.VFX.Test
+namespace Everglow.Sources.Modules.ExampleModule.VFX
 {
-    [Pipeline(typeof(WCSPipeline), typeof(RedPipeline))]
+    [Pipeline(typeof(WCSPipeline), typeof(BloomPipeline))]
     internal class WhiteDust : Particle
     {
 

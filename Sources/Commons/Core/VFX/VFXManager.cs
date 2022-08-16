@@ -11,12 +11,12 @@ public class VFXManager : IModule
 {
     private class VisualCollection : IEnumerable<IVisual>
     {
-        private const int FLUSH_COUNT = 500;
+        private const int FLUSH_COUNT = 50;
         private SortedSet<IVisual> visuals = new SortedSet<IVisual>(compare);
         /// <summary>
         /// 比较器
         /// </summary>
-        private static VisualCompare compare = new VisualCompare();
+        private static VisualComparer compare = new VisualComparer();
         public IEnumerator<IVisual> GetEnumerator()
         {
             return visuals.GetEnumerator();
@@ -31,22 +31,51 @@ public class VFXManager : IModule
         }
         public void Flush()
         {
-            visuals.RemoveWhere(vis => !vis.Active);
+            int b = visuals.RemoveWhere(visual => !visual.Active);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
         }
-        private class VisualCompare : Comparer<IVisual>
+        private class VisualComparer : Comparer<IVisual>
         {
+            /// <summary>
+            /// 按照Type从小到大排序，允许重复
+            /// </summary>
+            /// <param name="x"></param>
+            /// <param name="y"></param>
+            /// <returns></returns>
             public override int Compare(IVisual x, IVisual y)
             {
+                if(x == y)
+                {
+                    return 0;
+                }
                 var diff = x.Type - y.Type;
                 return diff == 0 ? x.GetHashCode() - y.GetHashCode() : diff;
             }
         }
     }
+    private class PipelineIndexComparer : Comparer<PipelineIndex>
+    {
+        /// <summary>
+        /// 按照Depth从大到小排序，允许Depth相同，保证Rt2DVisual不会被添加到已经遍历过的Collection里面
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public override int Compare(PipelineIndex x, PipelineIndex y)
+        {
+            if (x.Equals(y))
+            {
+                return 0;
+            }
+            int diff = y.GetDepth() - x.GetDepth();
+            return diff == 0 ? x.GetHashCode() - y.GetHashCode() : diff;
+        }
+    }
+    private PipelineIndexComparer pipelineIndexComparer = new PipelineIndexComparer();
     /// <summary>
     /// Pipeline的Type
     /// </summary>
@@ -58,8 +87,8 @@ public class VFXManager : IModule
     /// <summary>
     /// 用绘制层 + 第一个调用的绘制层作为Key来储存List<IVisual>
     /// </summary>
-    private Dictionary<CallOpportunity, Dictionary<PipelineIndex, VisualCollection>> visuals =
-        new Dictionary<CallOpportunity, Dictionary<PipelineIndex, VisualCollection>>();
+    private Dictionary<CallOpportunity, SortedList<PipelineIndex, VisualCollection>> visuals =
+        new Dictionary<CallOpportunity, SortedList<PipelineIndex, VisualCollection>>();
     /// <summary>
     /// 保存每一种Visual所需的Pipeline
     /// </summary>
@@ -74,7 +103,7 @@ public class VFXManager : IModule
     /// <summary>
     /// RenderTarget池子
     /// </summary>
-    private RenderTargetPool renderTargetPool = new RenderTargetPool();
+    public RenderTargetPool renderTargetPool = new RenderTargetPool();
     /// <summary>
     /// GraphicsDevice引用
     /// </summary>
@@ -155,29 +184,39 @@ public class VFXManager : IModule
     public void Draw(CallOpportunity layer)
     {
         var visuals = this.visuals[layer];
+        bool needToSwitch = false;
         foreach (var (pipelineIndex, innerVisuals) in visuals)
         {
+            var visibles = innerVisuals.Where(v => v.Visible && v.Active);
+            if (!visibles.Any())
+            {
+                continue;
+            }
+
+            if (pipelineIndex.next == null && needToSwitch)
+            {
+                graphicsDevice.SetRenderTarget(NextRenderTarget);
+                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
+                Main.spriteBatch.Draw(CurrentRenderTarget, Vector2.Zero, Color.White);
+                Main.spriteBatch.End();
+                SwitchRenderTarget();
+                needToSwitch = false;
+            }
+
             if (pipelineIndex.next != null && Main.targetSet)
             {
                 var rt2D = new Rt2DVisual(renderTargetPool.GetRenderTarget2D());
                 graphicsDevice.SetRenderTarget(rt2D.locker.Resource);
                 graphicsDevice.Clear(Color.Transparent);
                 visuals[pipelineIndex.next].Add(rt2D);
+                needToSwitch = true;
             }
+
 
             var pipeline = pipelineInstances[pipelineIndex.index];
             pipeline.BeginRender();
-            pipeline.Render(innerVisuals.Where(v => v.Visible && v.Active));
+            pipeline.Render(visibles);
             pipeline.EndRender();
-
-            if (pipelineIndex.next != null && Main.targetSet)
-            {
-                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
-                graphicsDevice.SetRenderTarget(NextRenderTarget);
-                Main.spriteBatch.Draw(CurrentRenderTarget, Vector2.Zero, Color.White);
-                SwitchRenderTarget();
-                Main.spriteBatch.End();
-            }
         }
 
         if (CurrentRenderTarget != Main.screenTarget)
@@ -198,7 +237,7 @@ public class VFXManager : IModule
         //将Visual实例加到对应绘制层与第一个Pipeline的位置
         if (!visuals.TryGetValue(visual.DrawLayer, out var value))
         {
-            visuals[visual.DrawLayer] = value = new Dictionary<PipelineIndex, VisualCollection>();
+            visuals[visual.DrawLayer] = value = new SortedList<PipelineIndex, VisualCollection>(pipelineIndexComparer);
         }
         PipelineIndex index = requiredPipeline[visual.Type];
         if (!value.TryGetValue(index, out var list))
@@ -209,10 +248,11 @@ public class VFXManager : IModule
             var next = index.next;
             while (next != null)
             {
-                if (!value.ContainsKey(next))
+                if (value.ContainsKey(next))
                 {
-                    value[next] = new VisualCollection();
+                    break;
                 }
+                value[next] = new VisualCollection();
                 next = next.next;
             }
         }
@@ -300,14 +340,16 @@ public class VFXManager : IModule
         spriteBatch = new VFXBatch(graphicsDevice);
         foreach (var layer in drawLayers)
         {
-            visuals[layer] = new Dictionary<PipelineIndex, VisualCollection>();
+            visuals[layer] = new SortedList<PipelineIndex, VisualCollection>(pipelineIndexComparer);
             if (layer is CallOpportunity.PostDrawNPCs or CallOpportunity.PostDrawBG)
             {
                 Everglow.HookSystem.AddMethod(() =>
                 {
                     Main.spriteBatch.End();
                     Draw(layer);
-                    Main.spriteBatch.Begin();
+                    Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend,
+                        SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullNone,
+                        null, Main.GameViewMatrix.TransformationMatrix);
                 }, layer, $"VFX {layer}");
             }
             else
@@ -315,6 +357,7 @@ public class VFXManager : IModule
                 Everglow.HookSystem.AddMethod(() => Draw(layer), layer, $"VFX {layer}");
             }
         }
+        Everglow.HookSystem.AddMethod(Update, CallOpportunity.PostUpdateEverything, "VFX Update");
     }
     public void Unload()
     {
@@ -345,6 +388,7 @@ public class VFXManager : IModule
             //绘制一次后变移除
             Active = false;
             spriteBatch.BindTexture(locker.Resource).Draw(Vector2.Zero, Color.White);
+            //虽然这个Rt2D会被延迟绘制，但是目前假设在Render到EndRender期间不会再次申请Rt2D，所以直接释放了
             locker.Release();
         }
     }
