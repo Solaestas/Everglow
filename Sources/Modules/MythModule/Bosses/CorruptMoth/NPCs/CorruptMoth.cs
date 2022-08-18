@@ -87,7 +87,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
         }
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            string tex = "Some worm may have cocoon breaking...";
+            string tex = "There are times when a corrupted worm can break out of its cocoon...";
             if (Language.ActiveCulture.Name == "zh-Hans")
             {
                 tex = "有些时候,腐化蠕虫也能破茧...";
@@ -218,7 +218,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                     lightVisual += 0.5f;
                 if(Main.rand.NextBool()&&Main.netMode!=NetmodeID.MultiplayerClient)
                 {
-                    Projectile.NewProjectile(NPC.GetSource_OnHurt(projectile),projectile.Center,Utils.SafeNormalize(projectile.Center-NPC.Center,Vector2.One)*12,ModContent.ProjectileType<BlueMissil>(),NPC.damage/4,0,Main.myPlayer);
+                    Projectile.NewProjectile(NPC.GetSource_OnHurt(projectile),projectile.Center,Utils.SafeNormalize(projectile.Center-NPC.Center,Vector2.One)*12,ModContent.ProjectileType<BlueMissil>(),NPC.damage / 4, 0, Main.myPlayer);
                 }
             }
         }
