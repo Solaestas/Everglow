@@ -12,17 +12,17 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Pylon
     {
         public override void SaveWorldData(TagCompound tag)
         {
-            tag.Set("P_A_T", ModContent.GetInstance<Pylon_A_TileEntity>().IsDestoryed);
+            tag.Set("P_A_T", ModContent.GetInstance<FireflyPylon_TileEntity>().IsDestoryed);
         }
         public override void LoadWorldData(TagCompound tag)
         {
             if(tag.TryGet("P_A_T",out bool flag))
             {
-                ModContent.GetInstance<Pylon_A_TileEntity>().IsDestoryed = flag;
+                ModContent.GetInstance<FireflyPylon_TileEntity>().IsDestoryed = flag;
             }
             else
             {
-                ModContent.GetInstance<Pylon_A_TileEntity>().IsDestoryed = false;
+                ModContent.GetInstance<FireflyPylon_TileEntity>().IsDestoryed = false;
             }
         }
     }
@@ -30,7 +30,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Pylon
     {
         public override void PostValidTeleportCheck(TeleportPylonInfo destinationPylonInfo, TeleportPylonInfo nearbyPylonInfo, ref bool destinationPylonValid, ref bool validNearbyPylonFound, ref string errorKey)
         {
-            if (destinationPylonInfo.ModPylon is Pylon_A or Pylon_B)
+            if (destinationPylonInfo.ModPylon is FireflyPylon or ShabbyPylon)
             {
                 errorKey = "";
             }

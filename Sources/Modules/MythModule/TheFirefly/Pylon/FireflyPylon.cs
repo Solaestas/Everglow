@@ -12,11 +12,19 @@ using Terraria.ObjectData;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Pylon
 {
-	internal class Pylon_B_TileEntity:TEModdedPylon
+	internal class FireflyPylon_TileEntity:TEModdedPylon
     {
-
+		internal bool IsDestoryed = true;
+        public override void NetSend(BinaryWriter writer)
+        {
+            writer.Write(IsDestoryed);
+        }
+        public override void NetReceive(BinaryReader reader)
+        {
+			IsDestoryed = reader.ReadBoolean();
+        }
     }
-    internal class Pylon_B:ModPylon
+    internal class FireflyPylon:ModPylon
     {
 		public const int CrystalHorizontalFrameCount = 2;
 		public const int CrystalVerticalFrameCount = 8;
@@ -36,7 +44,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Pylon
 			TileObjectData.newTile.LavaDeath = false;
 			TileObjectData.newTile.DrawYOffset = 2;
 			TileObjectData.newTile.StyleHorizontal = true;
-			TEModdedPylon moddedPylon = ModContent.GetInstance<Pylon_B_TileEntity>();
+			TEModdedPylon moddedPylon = ModContent.GetInstance<FireflyPylon_TileEntity>();
 			TileObjectData.newTile.HookCheckIfCanPlace = new PlacementHook(moddedPylon.PlacementPreviewHook_CheckIfCanPlace, 1, 0, true);
 			TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(moddedPylon.Hook_AfterPlacement, -1, 0, false);
 			TileObjectData.addTile(Type);
@@ -54,50 +62,56 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Pylon
 		public override void MouseOver(int i, int j)
 		{
 			Main.LocalPlayer.cursorItemIconEnabled = true;
-			Main.LocalPlayer.cursorItemIconID = ModContent.ItemType<Pylon_B_Item>();
+			Main.LocalPlayer.cursorItemIconID = ModContent.ItemType<FireflyPylon_Item>();
 		}
 		public override void KillMultiTile(int i, int j, int frameX, int frameY)
 		{
-			ModContent.GetInstance<Pylon_B_TileEntity>().Kill(i, j);
-			Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 2, 3, ModContent.ItemType<Pylon_B_Item>());
+			ModContent.GetInstance<FireflyPylon_TileEntity>().Kill(i, j);
+			Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 2, 3, ModContent.ItemType<FireflyPylon_Item>());
 		}
 		public override bool ValidTeleportCheck_BiomeRequirements(TeleportPylonInfo pylonInfo, SceneMetrics sceneData)
 		{
-			return Vector2.Distance(Main.LocalPlayer.Center, ModContent.GetInstance<Pylon_B_TileEntity>().Position.ToVector2() + new Vector2(24, 32)) <= 80;
+			if(ModContent.GetInstance<FireflyPylon_TileEntity>().IsDestoryed)
+            {
+				return false;
+            }
+			return Vector2.Distance(Main.LocalPlayer.Center, ModContent.GetInstance<FireflyPylon_TileEntity>().Position.ToVector2() + new Vector2(24, 32)) <= 80;
 		}
+
 		public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch)
 		{
-			DefaultDrawPylonCrystal(spriteBatch, i, j, crystalTexture, Color.White, CrystalFrameHeight, CrystalHorizontalFrameCount, CrystalVerticalFrameCount);
-		}
-		public override void DrawMapIcon(ref MapOverlayDrawContext context, ref string mouseOverText, TeleportPylonInfo pylonInfo, bool isNearPylon, Color drawColor, float deselectedScale, float selectedScale)
-		{
-			var pylon_a = ModContent.GetInstance<Pylon_A_TileEntity>();
-			if (pylon_a.IsDestoryed)
+			if (ModContent.GetInstance<FireflyPylon_TileEntity>().IsDestoryed)
 			{
 				return;
 			}
-			else
+			DefaultDrawPylonCrystal(spriteBatch, i, j, crystalTexture, Color.White, CrystalFrameHeight, CrystalHorizontalFrameCount, CrystalVerticalFrameCount);
+		}
+
+		public override void DrawMapIcon(ref MapOverlayDrawContext context, ref string mouseOverText, TeleportPylonInfo pylonInfo, bool isNearPylon, Color drawColor, float deselectedScale, float selectedScale)
+		{
+			if (ModContent.GetInstance<FireflyPylon_TileEntity>().IsDestoryed ||
+				Vector2.Distance(pylonInfo.PositionInTiles.ToVector2() * 16 + new Vector2(32, 40), Main.LocalPlayer.Center) > 80)
 			{
-				Vector2 va = TileEntity.ByID[pylon_a.ID].Position.ToVector2() * 16 + new Vector2(32, 40);
-				if (Vector2.Distance(va, Main.LocalPlayer.Center) > 80)
-				{
-					return;
-				}
-				Vector2 vb = pylonInfo.PositionInTiles.ToVector2() * 16 + new Vector2(32, 40);
-				if (Vector2.Distance(vb, Main.LocalPlayer.Center) > 80)
-				{
-					return;
-				}
+				return;
 			}
 			bool mouseOver = DefaultDrawMapIcon(ref context, mapIcon, pylonInfo.PositionInTiles.ToVector2() + new Vector2(1.5f, 2f), drawColor, deselectedScale, selectedScale);
-			DefaultMapClickHandle(mouseOver, pylonInfo, "Mods.MythMod.ItemName.Pylon_B_Item", ref mouseOverText);
+			DefaultMapClickHandle(mouseOver, pylonInfo, "Mods.MythMod.ItemName.FireflyPylon_Item", ref mouseOverText);
 		}
 	}
-	internal class Pylon_B_Item:ModItem
+	internal class FireflyPylon_Item:ModItem
     {
         public override void SetDefaults()
 		{
-			Item.DefaultToPlaceableTile(ModContent.TileType<Pylon_B>());
+			Item.DefaultToPlaceableTile(ModContent.TileType<FireflyPylon>());
 		}
+        public override bool? UseItem(Player player)
+        {
+			if (player.itemAnimationMax == player.itemAnimation && Item.favorited)
+			{
+				ModContent.GetInstance<FireflyPylon_TileEntity>().IsDestoryed = false;
+				Main.NewText("晶塔已修复");
+			}
+            return base.UseItem(player);
+        }
     }
 }
