@@ -26,21 +26,16 @@ namespace Everglow.Sources.Modules.ZYModule.Items
         int Up = 0;
         int Down = 0;
         int Right = 0;
+        string pathName = "";
         private void UpdateFourCoord()
         {
             MapIO mapIO = new MapIO((int)(Main.MouseWorld.X / 16), (int)(Main.MouseWorld.Y / 16));
-            int Count = 0;
-            while (File.Exists("MapTiles" + Count.ToString() + ".mapio"))
-            {
-                Count++;
-            }
-            if (Count == 0)
+            if (!File.Exists(pathName))
             {
                 return;
             }
-            Count -= 1;
-            int MapWidth = mapIO.ReadWidth("MapTiles" + Count.ToString() + ".mapio");
-            int MapHeight = mapIO.ReadHeight("MapTiles" + Count.ToString() + ".mapio");
+            int MapWidth = mapIO.ReadWidth(pathName);
+            int MapHeight = mapIO.ReadHeight(pathName);
             int HalfMapWidth = MapWidth / 2;
             int HalfMapHeight = MapHeight / 2;
             int MouseWX = (int)(Main.MouseWorld.X / 16f);
@@ -63,6 +58,8 @@ namespace Everglow.Sources.Modules.ZYModule.Items
             Projectile.position = player.MountedCenter - new Vector2(17);
             player.heldProj = Projectile.whoAmI;
             UpdateFourCoord();
+            SightOfTileUI sightOfTileUI = ModContent.GetInstance<SightOfTileUI>();
+            pathName = sightOfTileUI.OutFileName;
             if (Main.mouseLeft)
             {
                 Projectile.timeLeft = 5;
@@ -135,6 +132,16 @@ namespace Everglow.Sources.Modules.ZYModule.Items
             DrawDoubleLine(player.MountedCenter - Main.screenPosition + Vdr * 8f, DRInt - Main.screenPosition, new Color(40, 240, 255, 100), new Color(0, 0, 65, 0));
 
             DrawNinePiecesForTiles(Left, Right, Up, Down);
+
+            MapIO mapIO = new MapIO((int)(Main.MouseWorld.X / 16), (int)(Main.MouseWorld.Y / 16));
+            if(File.Exists(pathName))
+            {
+                int TWidth = mapIO.ReadWidth(pathName);
+                int THeight = mapIO.ReadHeight(pathName);
+                string TSize = TWidth.ToString() + "x" + THeight.ToString();
+                Main.instance.MouseText(TSize + "\nRight Click to Cancel", 9);
+            }
+
             return false;
         }
         private void DrawNinePiecesForTiles(int LeftX, int RightX, int UpY, int DownY)
@@ -264,18 +271,13 @@ namespace Everglow.Sources.Modules.ZYModule.Items
                 return;
             }
             MapIO mapIO = new MapIO(Left, Up);
-            int Count = 0;
-            while (File.Exists("MapTiles" + Count.ToString() + ".mapio"))
-            {
-                Count++;
-            }
-            if(Count == 0)
+
+            if (!File.Exists(pathName))
             {
                 return;
             }
-            Count -= 1;
+            mapIO.Read(pathName);
 
-            mapIO.Read("MapTiles" + Count.ToString() + ".mapio");
             var it = mapIO.GetEnumerator();
             while (it.MoveNext())
             {
