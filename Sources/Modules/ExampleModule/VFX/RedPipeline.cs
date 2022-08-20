@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Everglow.Sources.Commons.Core.VFX.Base;
 
-namespace Everglow.Sources.Commons.Core.VFX.Pipelines
+namespace Everglow.Sources.Modules.ExampleModule.VFX
 {
     internal class RedPipeline : PostPipeline
     {
@@ -25,7 +25,7 @@ namespace Everglow.Sources.Commons.Core.VFX.Pipelines
 
         public override void Load()
         {
-            effect = ModContent.Request<Effect>("Everglow/Sources/Commons/Core/VFX/Effect/PureColor");
+            effect = ModContent.Request<Effect>("Everglow/Sources/Modules/ExampleModule/VFX/PureColor");
         }
     }
 }
