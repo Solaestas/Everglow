@@ -28,6 +28,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         private int Energy = 0;
         public override void AI()
         {
+            Player player = Main.player[Projectile.owner];
+            if(Projectile.timeLeft % 5 == 0)
+            {
+                player.statMana--;
+            }
             Energy++;
             Vector2 v0 = Main.MouseWorld - Main.player[Projectile.owner].MountedCenter;
             v0 = Vector2.Normalize(v0);
@@ -54,14 +59,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                     Shoot();
                 }
             }
-            if(Energy == 180)
+            if(Energy == 180 || player.statMana <= 0)
             {
-                SoundEngine.PlaySound(SoundID.Item36, Projectile.Center);
                 Shoot();
             }
         }
         private void Shoot()
         {
+            SoundEngine.PlaySound(SoundID.Item36, Projectile.Center);
             Vector2 v0 = Main.MouseWorld - Main.player[Projectile.owner].MountedCenter;
             v0 = Vector2.Normalize(v0);
             Player player = Main.player[Projectile.owner];
@@ -70,36 +75,40 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             int NumProjectiles = (int)(Energy / 20f) + 1;
             for (int i = 0; i < NumProjectiles; i++)
             {
-                Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + v0 * 62, v0 * (12 - i) * (Energy + 20) / 180f, ModContent.ProjectileType<Projectiles.GlowStar>(), (int)(Projectile.damage / (i + 19f) * 19f), Projectile.knockBack, player.whoAmI, i * (Energy + 20) / 180f, 0);
+                Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + v0 * 62, v0 * (12 - i) * (Energy + 20) / 240f, ModContent.ProjectileType<Projectiles.GlowStar>(), (int)(Projectile.damage / (i + 19f) * 19f * (Energy + 120) / 180f), Projectile.knockBack, player.whoAmI, i * (Energy + 20) / 180f, 0);
             }
-            for (int i = 0; i < 2; i++)
+
+            Vector2 newVelocity = v0;
+            newVelocity *= 1f - Main.rand.NextFloat(0.3f);
+            newVelocity *= Math.Clamp(Energy / 18f, 0.2f, 10f);
+            Vector2 basePos = Projectile.Center + newVelocity * 3.7f + v0 * 62;
+
+            for (int j = 0; j < Energy * 2; j++)
             {
-                Vector2 newVelocity = v0.RotatedByRandom(MathHelper.ToRadians(15));
-                newVelocity *= 1f - Main.rand.NextFloat(0.3f);
-                Vector2 basePos = Projectile.Center + newVelocity * 3.7f + v0 * 62;
-                for (int z = 0; z < 3; z++)
-                {
-                    Vector2 v = newVelocity * z / 3f;
-                    Dust.NewDust(basePos, 0, 0, ModContent.DustType<MothBlue>(), v.X, v.Y, 0, default(Color), Main.rand.NextFloat(0.8f, 1.7f));
-                    v = newVelocity * (z + 0.5f) / 3f;
-                    Dust.NewDust(basePos, 0, 0, ModContent.DustType<MothBlue2>(), v.X, v.Y, 0, default(Color), Main.rand.NextFloat(0.8f, 1.7f));
-                }
-                for (int j = 0; j < 9; j++)
-                {
-                    Vector2 v = newVelocity / 27f * j;
-                    Vector2 v1 = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) * 0.3f + v;
-                    int num20 = Dust.NewDust(basePos - new Vector2(8), 0, 0, ModContent.DustType<BlueGlowAppear>(), v1.X, v1.Y, 100, default(Color), Main.rand.NextFloat(0.6f, 1.8f) * 0.4f);
-                    Main.dust[num20].noGravity = true;
-                }
-                for (int j = 0; j < 18; j++)
-                {
-                    Vector2 v = newVelocity / 54f * j;
-                    Vector2 v1 = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) * 0.3f + v;
-                    int num21 = Dust.NewDust(basePos - new Vector2(8), 0, 0, ModContent.DustType<BlueParticleDark2>(), v1.X, v1.Y, 100, default(Color), Main.rand.NextFloat(3.7f, 5.1f));
-                    Main.dust[num21].alpha = (int)(Main.dust[num21].scale * 50);
-                }
+                Vector2 v = newVelocity / 27f * j;
+                Vector2 v1 = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) * 0.3f + v;
+                int num20 = Dust.NewDust(basePos, 0, 0, ModContent.DustType<BlueGlowAppearStoppedByTile>(), v1.X, v1.Y, 100, default(Color), Main.rand.NextFloat(0.6f, 1.8f) * 0.4f);
+                Main.dust[num20].noGravity = true;
             }
-            
+            for (int j = 0; j < Energy * 2; j++)
+            {
+                Vector2 v = newVelocity / 54f * j;
+                Vector2 v1 = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) * 0.3f + v;
+                float Scale = Main.rand.NextFloat(3.7f, 5.1f);
+                int num21 = Dust.NewDust(basePos + new Vector2(4, 4.5f), 0, 0, ModContent.DustType<BlueParticleDark2StoppedByTile>(), v1.X, v1.Y, 100, default(Color), Scale);
+                Main.dust[num21].alpha = (int)(Main.dust[num21].scale * 50);
+            }
+            for (int j = 0; j < 16; j++)
+            {
+                Vector2 v = newVelocity / 54f * j;
+                Vector2 v1 = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) * 0.3f + v;
+                v1 *= 0.2f;
+                float Scale = Main.rand.NextFloat(3.7f, 5.1f);
+                int num21 = Dust.NewDust(basePos + new Vector2(4, 4.5f), 0, 0, ModContent.DustType<MothSmog>(), v1.X, v1.Y, 100, default(Color), Scale);
+                Main.dust[num21].alpha = (int)(Main.dust[num21].scale * 50);
+            }
+            player.velocity -= newVelocity;
+
             Projectile.Kill();
         }
         public override bool PreDraw(ref Color lightColor)
@@ -120,7 +129,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(v0.Y, v0.X) - Math.PI / 2d));
             }
 
-            Texture2D TexMain = MythContent.QuickTexture("TheFirefly/Projectiles/GlowBeadGunTex/GlowBeadGun");
+            Texture2D TexMain = MythContent.QuickTexture("TheFirefly/Projectiles/GlowBeadGunTex/GlowBeadGunOff");
             Texture2D TexMainG = MythContent.QuickTexture("TheFirefly/Projectiles/GlowBeadGunTex/GlowBeadGunGlow");
 
             Projectile.frame = (int)((Energy % 45) / 5f);

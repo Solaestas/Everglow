@@ -32,7 +32,17 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                     Main.player[Projectile.owner].MinionAttackTargetNPC = target.whoAmI;
                 }
             }
-            for (int g = 0; g < 10; g++)
+            int Count = (int)Projectile.ai[0];
+            if(Projectile.ai[0] > 3 + player.maxMinions / 5)
+            {
+                Count = 3 + player.maxMinions / 5;
+                Projectile.ai[0] -= 3 + player.maxMinions / 5;
+            }
+            else
+            {
+                Count = (int)Projectile.ai[0];
+            }
+            for (int g = 0; g < Count; g++)
             {
                 Vector2 va = new Vector2(0, Main.rand.NextFloat(9f, 11f)).RotatedByRandom(Math.PI * 2);
                 Projectile.NewProjectile(Projectile.InheritSource(Projectile), target.Center + va, va, ModContent.ProjectileType<Projectiles.GlowingButterfly>(), Projectile.damage / 3, Projectile.knockBack, player.whoAmI, player.GetCritChance(DamageClass.Summon) + 8, 0f);

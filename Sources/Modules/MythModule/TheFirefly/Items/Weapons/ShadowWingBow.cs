@@ -25,7 +25,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             Item.UseSound = SoundID.Item5;
 
             Item.DamageType = DamageClass.Ranged;
-            Item.damage = 20;
+            Item.damage = 38;
             Item.knockBack = 5f;
             Item.noMelee = true;
             Item.noUseGraphic = true;

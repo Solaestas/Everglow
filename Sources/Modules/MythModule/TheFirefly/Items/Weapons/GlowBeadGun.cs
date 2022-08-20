@@ -18,7 +18,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
         public override void SetDefaults()
         {
             Item.glowMask = GetGlowMask;
-            Item.damage = 40;
+            Item.damage = 22;
             Item.DamageType = DamageClass.Magic;
             Item.mana = 9;
             Item.width = 104;

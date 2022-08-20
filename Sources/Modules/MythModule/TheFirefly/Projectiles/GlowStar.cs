@@ -53,7 +53,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             {
                 k2 = Projectile.timeLeft / 200f;
             }
-            Color c0 = new Color(k0 * k0 * 0.3f, k0 * k0 * 0.8f, k0 * 0.8f + 0.2f, 0);
+            Color c0 = new Color(k0 * k0 * 0.3f, k0 * k0 * 0.8f, k0 * 0.8f + 0.2f, 1 - k0);
             List<Vertex2D> bars = new List<Vertex2D>();
             float width = 12;
             float k3 = Projectile.ai[1] / 60f;
@@ -101,19 +101,38 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         }
         public override void Kill(int timeLeft)
         {
+            if(timeLeft <= 0)
+            {
+                return;
+            }
             SoundEngine.PlaySound(SoundID.Item36,Projectile.Center);
-            float k0 = 1f / (Projectile.ai[0] + 2) * 2;
+            float k1 = Math.Clamp(Projectile.velocity.Length(), 1, 3);
+            float k2 = Math.Clamp(Projectile.velocity.Length(), 6, 10);
+            float k0 = 1f / (Projectile.ai[0] + 2) * 2 * k2;
             for (int j = 0; j < 8 * k0; j++)
             {
-                Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * Projectile.scale * 0.3f;
-                int dust0 = Dust.NewDust(Projectile.Center + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<BlueGlowAppear>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(0.6f, 1.8f) * Projectile.scale * 0.4f * k0);
+                Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * Projectile.scale * k1;
+                int dust0 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<BlueGlowAppearStoppedByTile>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(0.6f, 1.8f) * Projectile.scale * 0.4f * k0);
                 Main.dust[dust0].noGravity = true;
             }
             for (int j = 0; j < 16 * k0; j++)
             {
-                Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * Projectile.scale * 0.3f;
-                int dust1 = Dust.NewDust(Projectile.Center + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<BlueParticleDark2>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(3.7f, 5.1f) * k0);
+                Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * Projectile.scale * k1;
+                int dust1 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<BlueParticleDark2StoppedByTile>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(3.7f, 5.1f) * k0);
                 Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 50 / k0);
+                Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
+            }
+            foreach(NPC target in Main.npc)
+            {
+                float Dis = (target.Center - Projectile.Center).Length();
+
+                if(Dis < k0 * 50)
+                {
+                    if (!target.dontTakeDamage && !target.friendly && target.active)
+                    {
+                        target.StrikeNPC((int)(Projectile.damage / (Dis + 35f) * 35f), 0.2f, 1);
+                    }
+                }
             }
         }
     }

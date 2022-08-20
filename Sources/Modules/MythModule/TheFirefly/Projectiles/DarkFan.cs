@@ -119,7 +119,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 ExtraKnife = true;
                 Projectile.timeLeft = 70;
             }
-            if (Projectile.timeLeft % 12 == 0)
+            int Freq = 270 / (2 + player.maxMinions);
+            if (Projectile.timeLeft % Freq == 0)
             {
                 Projectile.NewProjectile(Projectile.InheritSource(Projectile), player.Center, (v1 + new Vector2(29, 29)) / 8f, ModContent.ProjectileType<Projectiles.GlowingButterfly>(), Projectile.damage / 3 * 2, Projectile.knockBack, player.whoAmI, player.GetCritChance(DamageClass.Summon) + 8, 0f);
             }
