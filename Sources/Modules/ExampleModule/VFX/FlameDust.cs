@@ -54,7 +54,7 @@ internal class CurseFlamePipeline : Pipeline
         VFXManager.spriteBatch.End();
     }
 }
-[Pipeline(typeof(CurseFlamePipeline), typeof(BloomPipeline))]
+[Pipeline(typeof(CurseFlamePipeline), typeof(RedPipeline), typeof(BloomPipeline))]
 internal class CurseFlameDust : ShaderDraw 
 {
     private Vector2 vsadd = Vector2.Zero;

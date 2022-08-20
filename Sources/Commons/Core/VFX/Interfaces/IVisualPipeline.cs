@@ -6,21 +6,13 @@ using System.Threading.Tasks;
 
 namespace Everglow.Sources.Commons.Core.VFX.Interfaces
 {
-    public interface IVisualPipeline
+    public interface IPipeline
     {
         /// <summary>
         /// 批量渲染同一种，或者同一类 VFX
         /// </summary>
         /// <param name="visuals"></param>
         public void Render(IEnumerable<IVisual> visuals);
-        /// <summary>
-        /// 准备开始渲染
-        /// </summary>
-        public void BeginRender();
-        /// <summary>
-        /// 结束渲染，刷新VFXBatch
-        /// </summary>
-        public void EndRender();
         /// <summary>
         /// 用于加载Effect等资源
         /// </summary>

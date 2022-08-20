@@ -30,12 +30,5 @@ namespace Everglow.Sources.Commons.Core.VFX.Pipelines
             effect = ModContent.Request<Effect>("Everglow/Sources/Commons/Core/VFX/Effect/Shader2D");
         }
 
-        public override void Render(IEnumerable<IVisual> visuals)
-        {
-            foreach (var visual in visuals)
-            {
-                visual.Draw();
-            }
-        }
     }
 }
