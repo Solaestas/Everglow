@@ -66,7 +66,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         }
         private void Shoot()
         {
-            SoundEngine.PlaySound(SoundID.Item36, Projectile.Center);
+            SoundEngine.PlaySound(SoundID.Item72, Projectile.Center);
             Vector2 v0 = Main.MouseWorld - Main.player[Projectile.owner].MountedCenter;
             v0 = Vector2.Normalize(v0);
             Player player = Main.player[Projectile.owner];
