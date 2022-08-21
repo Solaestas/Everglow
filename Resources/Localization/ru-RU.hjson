@@ -37,8 +37,8 @@
 
 			#世界系统WorldGen
 			WorldSystem:{
-				WorldCreate_Def : "Генерация Мира"
-				WorldEnter_Def : "Вхождение в Мир"
+				WorldCreate_Def : "Генерация Мира""
+				WorldEnter_Def : "Вхождение в Мир""
 				BuildMothCave : "Генерация Кокона"
 			}
 
@@ -171,18 +171,18 @@
 			WoodenClub : Деревянная дубинка
 			DustOfCorrupt : Corrupted Scales
 			EvilChrysalis : Посох-кокон
-			PhosphorescenceGun : Scale Shotgun
-			ScaleWingBlade : Lepidoptera Blade
-			ShadowWingBow : Occulting Wings
-			AmbiguousNight : Ambiguous Night
+			PhosphorescenceGun : Чешуйчатый дробовик
+			ScaleWingBlade : Чешуекрылый Клинок
+			ShadowWingBow : Закрывающие крылья
+			AmbiguousNight : Неоднозначная Ночь
 			BlackWoodSlingshot : Эбеновая рогатка
 			BlueGemSlingshot : Сапфировая рогатка
 			CactusSlingShot : Кактусовая рогатка
-			ColdWoodSlingshot : Borealwood Slingshot
-			DarkWoodSlingShot : Shadewood SlingShot
-			GreenGemSlingshot : Emerald Slingshot
+			ColdWoodSlingshot : Рогатка из бореального дерева
+			DarkWoodSlingShot : Рогатка из тенистого дерева
+			GreenGemSlingshot : Изумрудная рогатка
 			JellySlingshot : Желейная рогатка
-			JungleSlingshot : Jungle Slingshot
+			JungleSlingshot : Рогатка джунглей
 			PalmWoodSlingshot : Рогатка из пальмового дерева
 			PearlWoodSlingshot : Жемчужная рогатка
 			PurpleGemSlingshot : Аметистовая рогатка
@@ -197,17 +197,17 @@
 			ToothKnfe : Клинок-бивень
 			ToothMagicBall : Сангвинический Шар
 			ToothStaff : Посох бивня
-			Acropora : Acropora
-			Alcyonarian : Alcyonarian
-			Barnacle : Barnacle
-			BarrelSponge : Barrel Sponge
+			Acropora : Акропора
+			Alcyonarian : Альционариец
+			Barnacle : Ракушка
+			BarrelSponge : Бочкообразная губка
 			Basalt : Базальт
-			BlueAcropora : Blue Acropora
-			BlueTreeCoral : BlueTree Coral
-			BubbleCoral : Bubble Coral
-			DragonScaleWood : Dragon Scale Wood
-			GoldGorgonianBranch : GoldGorgonianBranch
-			GorgonianPiece : Gorgonian Piece
+			BlueAcropora : Синяя Акропора
+			BlueTreeCoral : Голубой Древесный Коралл
+			BubbleCoral : Пузырчатый коралл
+			DragonScaleWood : Дерево из драконьей чешуи
+			GoldGorgonianBranch : Золотая Ветвь Горгоны
+			GorgonianPiece : Кусочек Горгоны
 			LargeBlueStarfish : Большая синяя морская звезда
 			LargeOrangeStarfish : Большая оранжевая морская звезда
 			MarbleCono : MarbleCono
@@ -216,21 +216,21 @@
 			ReefSharkSpecimen : Reefshark Specimen
 			StoneDragonScaleWood : Fossilized Dragon Scale Wood
 			TerrariaContinent : Terraria Continent(Not working)
-			CyanVineBar : Cyan Bar
-			CyanVineOre : Cyan Ore
-			DarkSeaBar : Abyssal Bar
-			DarkSeaOre : Abyssal Ore
+			CyanVineBar : Циановый слиток
+			CyanVineOre : Циановая руда
+			DarkSeaBar : Слиток бездный
+			DarkSeaOre : Руда бездный
 			OceanBlueBar : Current Bar
 			OceanBlueOre : Current Ore
-			Chinalamp1 : Traditional Lamp
-			Chinalamp2 : Traditional Lamp
-			LanternCrystal : Royal City Pylon
-			LanternPost1 : Lantern Post
-			LanternPost2 : Lantern Post
-			YellowDynastyShingles : Yellow Dynasty Shingles
+			Chinalamp1 : Традиционная лампа
+			Chinalamp2 : Традиционная лампа
+			LanternCrystal : Пилон Королевского города
+			LanternPost1 : Фонарный столб
+			LanternPost2 : Фонарный столб
+			YellowDynastyShingles : Черепица Желтой Династии
 			DiscordBallF1 : Discord Crystal Ball · The Ancient Path
 			LiftLamp : Lift Indicator
-			TestItem : Wooden Lift
+			TestItem : Деревянный Подъемник
 			EkandaBrick : Ekanda Brick
 			Guding : Ekanda Alloy
 			NoFlawsDream : Flawless Dream
