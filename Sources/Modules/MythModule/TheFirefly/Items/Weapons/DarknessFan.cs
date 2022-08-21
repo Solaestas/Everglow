@@ -42,7 +42,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             if (player.altFunctionUse == 2 && CoolRarr == 0)
             {
                 CoolRarr = 120;
-                Projectile.NewProjectile(source, position + new Vector2(0, -24), velocity * 3.4f, ModContent.ProjectileType<Projectiles.DarkFanFly>(), damage * 2, knockback, player.whoAmI, 0f, 0f);
+                Projectile.NewProjectile(source, position + new Vector2(0, -24), velocity * 3.4f, ModContent.ProjectileType<Projectiles.DarkFanFly>(), damage * 2, knockback, player.whoAmI, 6 + player.maxMinions * 1.5f, 0f);
                 Item.useTime = 2;
                 Item.useAnimation = 2;
                 //Item.UseSound = SoundID.DD2_JavelinThrowersAttack;
