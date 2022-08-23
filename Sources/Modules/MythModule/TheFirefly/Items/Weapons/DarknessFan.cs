@@ -25,12 +25,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             Item.height = 90;
             Item.useTime = 40;
             Item.useAnimation = 40;
-            Item.useStyle = 5;
+            Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
             Item.noUseGraphic = true;
             Item.knockBack = 5f;
             Item.value = Item.sellPrice(0, 5, 0, 0);
-            Item.rare = 4;
+            Item.rare = ItemRarityID.LightRed;
             Item.UseSound = SoundID.DD2_GhastlyGlaivePierce;
             Item.autoReuse = true;
             Item.shoot = ModContent.ProjectileType<Projectiles.GlowingButterfly>();
