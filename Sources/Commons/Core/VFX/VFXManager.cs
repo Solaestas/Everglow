@@ -458,4 +458,10 @@ public class VFXManager : IModule
             throw new NotImplementedException();
         }
     }
+
+    public static bool InScreen(Vector2 position, float exRange)
+    {
+        return Main.screenPosition.X - exRange < position.X && position.X < Main.screenPosition.X + Main.screenWidth + exRange
+            && Main.screenPosition.Y - exRange < position.Y && position.Y < Main.screenPosition.Y + Main.screenHeight + exRange;
+    }
 }
