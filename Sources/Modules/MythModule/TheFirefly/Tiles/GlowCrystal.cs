@@ -1,22 +1,19 @@
 using Everglow.Sources.Modules.MythModule.Common;
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 {
-    public class FireflyWood : ModTile
+    public class GlowCrystal : ModTile
     {
         public override void SetStaticDefaults()
         {
             Main.tileSolid[Type] = true;
             Main.tileMergeDirt[Type] = true;
             Main.tileBlockLight[Type] = true;
+            Main.tileBlendAll[Type] = true;
+            Main.tileBouncy[Type] = true;
             MinPick = 175;
             DustType = 191;
-            ItemDrop = ModContent.ItemType<Items.GlowWood>();
-            AddMapEntry(new Color(37, 46, 47));
-        }
-        public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
-        {
-
-            return true;
+            ItemDrop = ModContent.ItemType<Items.GlowCrystal>();
+            AddMapEntry(new Color(67, 239, 231));
         }
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
@@ -27,7 +24,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             {
                 zero = Vector2.Zero;
             }
-            Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/FireflyWoodGlow");
+            Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/GlowCrystalGlow");
             Player player = Main.player[Player.FindClosest(new Vector2(i * 16, j * 16), 16, 16)];
             float dis = Math.Clamp((player.Center - new Vector2(i * 16, j * 16)).Length() / 480f, 0f, 10f);
             dis = Math.Clamp(dis + (float)Math.Sin(dis * 14d - Main.timeForVisualEffects / 25f) / 2f, 0f, 1f);
