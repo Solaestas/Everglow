@@ -265,6 +265,11 @@ Mods:
 			SilverStabbingSword : Silver Rapier
 			VegetationBayonet : Rapier of Grass
 			TDMT : Catastrophic Lightning
+			
+			#Glow Wood Furniture
+			
+			#Music Boxes
+			GlowWoodMusicBox : Glow Wood Music Box (The Firefly)
 
 			#食物系统物品
 			BloodGlucoseMonitor : "Blood Glucose Monitor"
@@ -540,6 +545,9 @@ Mods:
 			SilverStabbingSword : "{$Mods.Everglow.Common.RapierGT}"
 			VegetationBayonet : "{$Mods.Everglow.Common.RapierGT}"
 			TDMT : "{$Mods.Everglow.Common.RapierGT}"
+			
+			#Music Boxes
+			GlowWoodMusicBox : "Plays 'Setnour6 - Within the Giant Cocoon'"
 
 			#食物系统物品
 			BloodGlucoseMonitor : "Display hunger information"
