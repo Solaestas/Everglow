@@ -1,4 +1,4 @@
-﻿using Everglow.Sources.Modules.ZYModule.Commons.Core.DataStructures;
+﻿using Everglow.Sources.Commons.Core.DataStructures;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xna.Framework;
 using System;

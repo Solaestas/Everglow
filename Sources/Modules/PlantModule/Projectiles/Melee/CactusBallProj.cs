@@ -129,6 +129,8 @@ namespace Everglow.Sources.Modules.PlantModule.Projectiles.Melee
 				Vector2 vector = Utils.ToRotationVector2(MathHelper.ToRadians(Projectile.ai[0]));
 				vector.Y /= 3f;
 				Projectile.Center = player.Center + vector * 72f;
+				player.fullRotationOrigin = new Vector2(0, 60f);
+				player.fullRotation = -vector.X * 0.01f * SpinAcc;
 				if (vector.Y > 0f)player.heldProj = Projectile.whoAmI;
 				Projectile.velocity = Projectile.DirectionFromSafe(player.Center);
 				if(Main.mouseRightRelease)
@@ -136,6 +138,11 @@ namespace Everglow.Sources.Modules.PlantModule.Projectiles.Melee
 					player.velocity.X += SpinAcc * Math.Clamp((Main.MouseWorld.X - player.Center.X) / 300f, -1f, 1f) * 0.04f / (player.velocity.Length() + 3);
 				}
 				Projectile.knockBack = SpinAcc * 0.4f + 1;
+			}
+            else
+            {
+				player.fullRotation = 0;
+
 			}
 
             Projectile.penetrate = 60;
@@ -199,6 +206,7 @@ namespace Everglow.Sources.Modules.PlantModule.Projectiles.Melee
 						ModContent.ProjectileType<CactusBallSpike>(), Projectile.damage / 3, 0f, Projectile.owner, 0f, 0f);
 				}
 			}
+			Main.player[Projectile.owner].fullRotation = 0;
 		}
 		public override bool PreDraw(ref Color lightColor)
 		{

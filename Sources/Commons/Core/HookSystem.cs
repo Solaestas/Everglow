@@ -129,14 +129,21 @@ namespace Everglow.Sources.Commons.Core
         /// </summary>
         public static int UpdateTimer
         {
-            get; internal set;
+            get; private set;
         }
         /// <summary>
         /// 绘制的计时器，PostDrawEverything后加一
         /// </summary>
         public static int DrawTimer
         {
-            get; internal set;
+            get; private set;
+        }
+        /// <summary>
+        /// 针对UI的计时器，暂停时也会加一
+        /// </summary>
+        public static int UITimer
+        {
+            get; private set;
         }
         /// <summary>
         /// 在<paramref name="op"/>时执行<paramref name="action"/>
@@ -204,12 +211,12 @@ namespace Everglow.Sources.Commons.Core
         /// <returns>是否成功移除</returns>
         public bool Remove(ActionHandler handler)
         {
-            foreach(var op in validOpportunity)
+            foreach (var op in validOpportunity)
             {
                 var handlers = methods[op];
                 for (int i = 0; i < handlers.Count; i++)
                 {
-                    if(handler == handlers[i])
+                    if (handler == handlers[i])
                     {
                         waitToRemove.Add((op, handler));
                         handler.Enable = false;
@@ -224,7 +231,7 @@ namespace Everglow.Sources.Commons.Core
         /// </summary>
         public void RemoveDisabledAction()
         {
-            foreach(var op in validOpportunity)
+            foreach (var op in validOpportunity)
             {
                 methods[op].RemoveAll(handler => !handler.Enable);
             }
@@ -245,8 +252,6 @@ namespace Everglow.Sources.Commons.Core
             On.Terraria.Main.DoDraw_WallsTilesNPCs += Main_DoDraw_WallsTilesNPCs;
             Main.OnResolutionChanged += Main_OnResolutionChanged;
         }
-
-
         public void HookUnload()
         {
             Main.OnResolutionChanged -= Main_OnResolutionChanged;
@@ -278,12 +283,16 @@ namespace Everglow.Sources.Commons.Core
         {
             Invoke(CallOpportunity.PostUpdateEverything);
             UpdateTimer++;
-            foreach(var (op, handler) in waitToRemove)
+            foreach (var (op, handler) in waitToRemove)
             {
                 methods[op].Remove(handler);
             }
         }
 
+        public override void UpdateUI(GameTime gameTime)
+        {
+            UITimer++;
+        }
         public override void PostUpdateNPCs()
         {
             Invoke(CallOpportunity.PostUpdateNPCs);
@@ -393,7 +402,7 @@ namespace Everglow.Sources.Commons.Core
             var cursor = new ILCursor(il);
             if (!cursor.TryGotoNext(MoveType.Before, ins => ins.MatchLdcI4(36)))
             {
-                //HookException.Throw("Main_DoDraw_NotFound_1");
+                throw new Exception("Main_DoDraw_NotFound_1");
             }
             cursor.EmitDelegate(() => Invoke(CallOpportunity.PostDrawFilter));
         }

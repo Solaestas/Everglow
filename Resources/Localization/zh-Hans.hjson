@@ -2,6 +2,10 @@ Mods:
 {
 	Everglow:
 	{
+		NPCName:
+		{
+			Butterfly : 幻蝶
+		}
 		Common:
 		{
 			Hour : "小时"

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Everglow.Sources.Modules.MythModule.Common.Coroutines
+namespace Everglow.Sources.Commons.Core.Coroutines
 {
     /// <summary>
     /// 表示一个标准的协程运行器
