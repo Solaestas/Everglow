@@ -13,7 +13,7 @@ internal class PlayerColliding : ModPlayer
         On.Terraria.Player.CanFitSpace += Player_CanFitSpace;
         On.Terraria.Player.DryCollision += Player_DryCollision;
         On.Terraria.Player.WaterCollision += Player_WaterCollision;
-        //On.Terraria.Player.ItemCheck_UseMiningTools_ActuallyUseMiningTool += Player_ItemCheck_UseMiningTools_ActuallyUseMiningTool;
+        On.Terraria.Player.JumpMovement += Player_JumpMovement;
         On.Terraria.Player.HoneyCollision += Player_HoneyCollision;
         On.Terraria.Player.WallslideMovement += Player_WallslideMovement_On;
         try
@@ -32,6 +32,32 @@ internal class PlayerColliding : ModPlayer
         var clone = base.Clone(newEntity) as PlayerColliding;
         clone.handler = new PlayerHandler(newEntity);
         return clone;
+    }
+    private float jumpSpeed;
+    private int jumpTime;
+    public void Jump() => Jump(Player.jump, Player.velocity.Y);
+    public void Jump(int time, float speed)
+    {
+        jumpTime = time;
+        jumpSpeed = speed;
+    }
+    internal static void Player_JumpMovement(On.Terraria.Player.orig_JumpMovement orig, Player self)
+    {
+        var player = self.GetModPlayer<PlayerColliding>();
+        if (player.jumpTime > 0)
+        {
+            if (self.jump != 0)
+            {
+                self.jump = 0;
+            }
+            if (!self.controlJump)
+            {
+                player.jumpTime = 1;
+            }
+            self.velocity.Y = player.jumpSpeed;
+            player.jumpTime--;
+        }
+        orig(self);
     }
     private static void Player_DryCollision(On.Terraria.Player.orig_DryCollision orig, Player self, bool fallThrough, bool ignorePlats)
     {

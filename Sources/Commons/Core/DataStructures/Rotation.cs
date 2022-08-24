@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.ZYModule.Commons.Core.DataStructures;
+﻿namespace Everglow.Sources.Commons.Core.DataStructures;
 
 [DebuggerDisplay("Angle = {angle}")]
 public struct Rotation : IComparable, IComparable<Rotation>, IConvertible, IEquatable<Rotation>, ISpanFormattable, IFormattable
@@ -75,41 +75,38 @@ public struct Rotation : IComparable, IComparable<Rotation>, IConvertible, IEqua
     /// </summary>
     /// <param name="from"></param>
     /// <param name="to"></param>
-    /// <param name="t"></param>
+    /// <param name="value"></param>
     /// <returns></returns>
-    public static Rotation Lerp(Rotation from, Rotation to, float t) => from.Lerp(to, t);
-    public Rotation Lerp(Rotation to, float t)
+    public Rotation Lerp(Rotation to, float value)
     {
         if (Math.Abs(angle - to.angle) > MathHelper.Pi)
         {
             to.angle -= Math.Sign(to.angle) * MathHelper.TwoPi;
         }
-        return angle * (1 - t) + to * t;
+        return angle * (1 - value) + to * value;
     }
     /// <summary>
     /// 角度线性插值，指定方向与圈数
     /// </summary>
     /// <param name="from"></param>
     /// <param name="to"></param>
-    /// <param name="t"></param>
-    /// <param name="dir">顺时针 ： 1， 逆时针 ： -1</param>
+    /// <param name="value"></param>
+    /// <param name="direction">顺时针 ： 1， 逆时针 ： -1</param>
     /// <param name="turns">圈数</param>
     /// <returns></returns>
-    public static Rotation Lerp(Rotation from, Rotation to, float t, int dir = 1, int turns = 0) => from.Lerp(to, t, dir, turns);
-    public Rotation Lerp(Rotation to, float t, int dir = 1, int turns = 0)
+    public Rotation Lerp(Rotation to, float value, int direction = 1, int turns = 0)
     {
-        while (dir * (to - angle) < MathHelper.TwoPi * turns)
+        while (direction * (to - angle) < MathHelper.TwoPi * turns)
         {
-            to += MathHelper.TwoPi * dir;
+            to += MathHelper.TwoPi * direction;
         }
 
-        return angle * (1 - t) + to * t;
+        return angle * (1 - value) + to * value;
     }
     #endregion
-    public static float Distance(Rotation a, Rotation b) => a.Distance(b);
-    public float Distance(Rotation rot)
+    public float Distance(Rotation rotation)
     {
-        float dis = Math.Abs(angle - rot.angle);
+        float dis = Math.Abs(angle - rotation.angle);
         return dis >= MathHelper.Pi ? MathHelper.TwoPi - dis : dis;
     }
     /// <summary>
@@ -122,11 +119,11 @@ public struct Rotation : IComparable, IComparable<Rotation>, IConvertible, IEqua
     {
         float dis = Math.Abs(angle - target.angle);
         bool clockwise = dis < MathHelper.Pi;
-        if((clockwise ? dis : MathHelper.TwoPi - dis) <= value)
+        if ((clockwise ? dis : MathHelper.TwoPi - dis) <= value)
         {
             return target;
         }
-        return new Rotation(angle + value * (clockwise ^ (angle > target.angle) ? 1 : -1));
+        return new Rotation(angle + value * (clockwise ^ angle > target.angle ? 1 : -1));
     }
     #region Operator
     public static Rotation operator *(Rotation rot, float angle) => new Rotation(rot.angle * angle);

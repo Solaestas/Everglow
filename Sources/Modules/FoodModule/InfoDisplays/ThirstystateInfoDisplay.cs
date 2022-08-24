@@ -4,7 +4,7 @@
     {
         public override void SetStaticDefaults()
         {
-            InfoName.SetDefault("Thirsty State");
+            InfoName.SetDefault(Terraria.Localization.Language.GetTextValue("Mods.Everglow.InfoDisplay.StateOfThirst"));
         }
 
 
@@ -19,11 +19,11 @@
             bool Thirstystate = Main.LocalPlayer.GetModPlayer<FoodModPlayer>().Thirstystate;
             if (Thirstystate)
             {
-                return $"You want to drink.";
+                return Terraria.Localization.Language.GetTextValue("Mods.Everglow.InfoDisplay.Thirsty");
             }
             else
             {
-                return $"You do not want to drink.";
+                return Terraria.Localization.Language.GetTextValue("Mods.Everglow.InfoDisplay.NotThirsty");
             }
         }
     }
