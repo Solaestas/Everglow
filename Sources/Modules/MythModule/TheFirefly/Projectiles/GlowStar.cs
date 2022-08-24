@@ -106,7 +106,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             {
                 return;
             }
-            SoundEngine.PlaySound(SoundID.Item36,Projectile.Center);
+            SoundEngine.PlaySound(SoundID.Item38,Projectile.Center);
             float k1 = Math.Clamp(Projectile.velocity.Length(), 1, 3);
             float k2 = Math.Clamp(Projectile.velocity.Length(), 6, 10);
             float k0 = 1f / (Projectile.ai[0] + 2) * 2 * k2;

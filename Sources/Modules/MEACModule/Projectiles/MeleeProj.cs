@@ -68,6 +68,9 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         /// 是否为长柄武器
         /// </summary>
         internal bool longHandle = false;
+
+        internal float drawScaleFactor = 1f;
+
         internal float disFromPlayer = 6;
         internal string shadertype = "Trail0";
         public bool isRightClick = false;
@@ -313,7 +316,6 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
 
             //Main.spriteBatch.End();
             //Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-
             Texture2D tex = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 
             float texWidth = HorizontalWidth;//转换成水平贴图时候的宽度
@@ -328,7 +330,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             }
             Vector2 origin = new Vector2(longHandle ? texWidth / 2 : 5, texHeight / 2);
 
-            Vector2 Zoom = new Vector2(exScale * mainVec.Length() / tex.Width, 1.2f) * Projectile.scale;
+            Vector2 Zoom = new Vector2(exScale * drawScaleFactor* mainVec.Length() / tex.Width, 1.2f) * Projectile.scale;
 
             double ProjRotation = MainVec_WithoutGravDir.ToRotation() + Math.PI / 4;
 

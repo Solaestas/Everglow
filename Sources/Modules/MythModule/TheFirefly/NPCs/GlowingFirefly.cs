@@ -51,7 +51,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             }
             else
             {
-                if ((player.Center - NPC.Center).Length() < 80f)
+                if ((player.Center - NPC.Center).Length() < 80f || NPC.life != NPC.lifeMax) 
                 {
                     NPC.ai[1] = 1f;
                 }
