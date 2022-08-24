@@ -29,7 +29,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            if(Projectile.timeLeft % 5 == 0)
+            if (Projectile.timeLeft % 5 == 0)
             {
                 player.statMana--;
             }
@@ -59,7 +59,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                     Shoot();
                 }
             }
-            if(Energy == 180 || player.statMana <= 0)
+            if (Energy == 180 || player.statMana <= 0)
             {
                 Shoot();
             }
