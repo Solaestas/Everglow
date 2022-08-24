@@ -2,15 +2,16 @@ Everglow is a comprehensive content mod
 
 Developed by Dream Chaser Group
 
-Developers(in no particular order):
-Programmers: Colin Weiss, Mr.Skirt, Omnielement, yiyang233, Ye_you, Plantare, Uin, Felixyang
+Developers (in no particular order):
+Programmers: Colin Weiss, Mr.Skirt, Omnielement, yiyang233, Ye_you, Plantare, Uin, Felixyang，Cyril，局长
 Artist: Jelly, Omnielement, Vedotek Lily, 仙阁, 凝胶, Doggo-go!!, 吞某, Nomis, 红茶, Redusty
-Musician：Dirty Octopus, Setnour6, Uni
-Localization：Lacewing(en-US), NooN iS oN(ru-RU)
+Musician： Dirty Octopus, Setnour6, Uni
+Sound Effects: Setnour6, Omnielement, 绮逾依
+Localization： Lacewing (en-US), NooN iS oN (ru-RU)
 Publicists: 承影，绮逾依, Colin Weiss
 Moderators: Dirty Octopus, 绮逾依，Lacewing，夜鸽，Redusty
 
-Special thanks to(in no particular order): 
+Special thanks to (in no particular order): 
 Publicity: Starlight River, Endless Escape, Blood Soul, Ryuusei (BabeElena), Lastprismer
 Sprites: flowey, Verycd, 余墨, and some anonymous spriters
 Codes: SilverMoon
@@ -24,9 +25,10 @@ Translations: Zero Project
 由【孤舟逐梦团队】开发
 
 制作人员名单(无先后顺序)：
-程序：科林维斯，小裙子，万象元素，夜谷紫幽，yiyang233，世纪小花，幽银，菲利克斯·杨
+程序：科林维斯，小裙子，万象元素，夜谷紫幽，yiyang233，世纪小花，幽银，菲利克斯·杨，Cyril，局长
 画师：果冻，万象元素, 维多泰克莉莉，仙阁，凝胶，杜格，吞某，Nomis，红茶，红尘
 乐师：脏渔歌，Setnour6, Uni
+音效: Setnour6, 万象元素, 绮逾依
 翻译：Lacewing[英]，NooN iS oN[俄]
 宣传：承影，绮逾依，科林维斯
 社区管理：脏渔歌，绮逾依，Lacewing，夜鸽，红尘
