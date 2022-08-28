@@ -4,9 +4,10 @@ using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.Bosses;
 using Everglow.Sources.Commons.Function.Vertex;
 using Terraria.GameContent;
+using Everglow.Sources.Modules.MEACModule;
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
-    public class MothMagicArray : ModProjectile
+    public class MothMagicArray : ModProjectile, IWarpProjectile
     {
         public override void SetDefaults()
         {
@@ -276,10 +277,50 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                     }
                 }
             }
+            //DrawCircle(Rad * 0.8f, 25 * Rad / 90f + 12, new Color(0f, 0f, 1f, 0f), Projectile.Center - Main.screenPosition);
         }
         public override bool PreDraw(ref Color lightColor)
         {
             return true;
+        }
+        public void DrawWarp()
+        {
+            float Rad;
+            if (Projectile.timeLeft >= 20)
+            {
+                Rad = Math.Min(Projectile.localAI[0] * 3, 90);
+            }
+            else
+            {
+                Rad = Math.Min(Projectile.localAI[0] * 3, 90) * Projectile.timeLeft / 20f;
+            }
+            Rad = Rad * Rad / 90f;
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+            KEx.CurrentTechnique.Passes[0].Apply();
+            DrawCircle(Rad * 0.6f, 45 * Rad / 90f + 18, new Color(1f, 0.24f, 0, 0f), Projectile.Center - Main.screenPosition);
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+        }
+        private void DrawCircle(float radious, float width, Color color, Vector2 center, float value0 = 0, float valu1 = 0)
+        {
+            List<Vertex2D> circle = new List<Vertex2D>();
+            for (int h = 0; h < radious / 2; h++)
+            {
+
+
+                circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4), color, new Vector3((h / (float)radious * 6 + (float)Main.timeForVisualEffects / 200f) % 1, 1, 0)));
+                circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(h / radious * Math.PI * 4), color, new Vector3((h / (float)radious * 6 + (float)Main.timeForVisualEffects / 200f) % 1, 0, 0)));
+            }
+            circle.Add(new Vertex2D(center + new Vector2(0, radious), color, new Vector3(0.5f, 1, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, radious + width), color, new Vector3(0.5f, 0, 0)));
+            if (circle.Count > 0)
+            {
+                Texture2D t = MythContent.QuickTexture("TheFirefly/Projectiles/FireLight");
+                Main.graphics.GraphicsDevice.Textures[0] = t;
+                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
+            }
         }
     }
 }

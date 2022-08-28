@@ -31,6 +31,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             Player player = Main.player[Projectile.owner];
+            Projectile.NewProjectile(Projectile.GetSource_FromAI(),Projectile.Center,Vector2.Zero,ModContent.ProjectileType<FanHit>(),0,0,player.whoAmI,0.75f);
             int[] array = Projectile.localNPCImmunity;
             bool flag = (!Projectile.usesLocalNPCImmunity && !Projectile.usesIDStaticNPCImmunity) || (Projectile.usesLocalNPCImmunity && array[target.whoAmI] == 0) || (Projectile.usesIDStaticNPCImmunity && Projectile.IsNPCIndexImmuneToProjectileType(Projectile.type, target.whoAmI));
             if (target.active && !target.dontTakeDamage && flag && (target.aiStyle != 112 || target.ai[2] <= 1f))
@@ -85,6 +86,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 v0 = v_1.RotatedBy(1.6 * Math.PI);
             }
             Projectile.spriteDirection = Pdir;
+
+
             v0.X *= Pdir;
             Vector2 v1 = new Vector2(v0.X, v0.Y * 0.5f).RotatedBy(Prot) - new Vector2(29, 29);
             Projectile.position = player.Center + v1;
@@ -129,7 +132,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         {
             Player player = Main.player[Projectile.owner];
             Texture2D t = MythContent.QuickTexture("TheFirefly/Projectiles/DarkFan");
-            int frameHeight = t.Height;
             Vector2 drawOrigin = new Vector2(t.Width * 0.5f, t.Height * 0.5f);
             if (ExtraKnife)
             {
@@ -141,6 +143,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                         Vector2 v3 = v_1.RotatedBy(1.6 / 170d * Math.PI * (200 - k - Projectile.timeLeft * (Projectile.timeLeft - 30) / 40f)) * 1.5f;
                         v3.X *= Pdir;
                         Vector2 v4 = new Vector2(v3.X, v3.Y * 0.5f).RotatedBy(Prot);
+                        player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, v4.ToRotation() - 1.57f);
                         Vector2 v5 = new Vector2(v3.X, v3.Y).RotatedBy(Prot);
                         Vector2 drawPos = player.Center + v4 - Main.screenPosition + drawOrigin + new Vector2(1f, Projectile.gfxOffY) - new Vector2(29);
                         Color color = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
@@ -208,6 +211,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                         Vector2 v3 = v_1.RotatedBy(1.6 / 170d * Math.PI * (200 - Projectile.timeLeft - k)) * 1.5f;
                         v3.X *= Pdir;
                         Vector2 v4 = new Vector2(v3.X, v3.Y * 0.5f).RotatedBy(Prot);
+                        player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, v4.ToRotation() - 1.57f);
                         Vector2 v5 = new Vector2(v3.X, v3.Y).RotatedBy(Prot);
                         Vector2 drawPos = player.Center + v4 - Main.screenPosition + drawOrigin + new Vector2(1f, Projectile.gfxOffY) - new Vector2(29);
                         Color color = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
