@@ -102,7 +102,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         }
         public override void Kill(int timeLeft)
         {
-            if(timeLeft <= 0)
+            if(timeLeft > 0)
+            {
+                float value = Math.Min(Projectile.damage / 30f, 1f);
+                Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BeadShakeWave>(), 0, 0, Projectile.owner, 1f / (Projectile.ai[0] + 2) * 2 * value);
+            }
+            if (timeLeft <= 0)
             {
                 return;
             }

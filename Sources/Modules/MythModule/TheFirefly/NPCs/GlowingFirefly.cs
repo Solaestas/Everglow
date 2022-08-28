@@ -26,6 +26,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
         }
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
+            FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
+            if(!fireflyBiome.IsBiomeActive(Main.LocalPlayer))
+            {
+                return 0f;
+            }
             return 0.3f;
         }
         public override void AI()
@@ -77,19 +82,19 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
         private void UpdateMove()
         {
             NPC.ai[2] += 1;
-            if(NPC.ai[2] % 12 == 0)
+            if(NPC.ai[2] % 40 == 0)
             {
-                Vector2 vNext = new Vector2(0, Main.rand.NextFloat(12f, 220f)).RotatedByRandom(6.283) + NPC.Center + Vector2.Normalize(NPC.Center - Main.player[Player.FindClosest(NPC.Center, 0, 0)].Center) * 6;
+                Vector2 vNext = new Vector2(0, Main.rand.NextFloat(12f, 220f)).RotatedByRandom(6.283) + NPC.Center + Vector2.Normalize(NPC.Center - Main.player[Player.FindClosest(NPC.Center, 0, 0)].Center) * 6 + new Vector2(0, -6);
                 while(!Collision.CanHit(NPC.Center,0,0, vNext,0,0) || Main.tile[(int)(vNext.X / 16), (int)(vNext.Y / 16)].LiquidAmount != 0)
                 {
-                    vNext = new Vector2(0, Main.rand.NextFloat(12f, 220f)).RotatedByRandom(6.283) + NPC.Center + Vector2.Normalize(NPC.Center - Main.player[Player.FindClosest(NPC.Center, 0, 0)].Center) * 6;
+                    vNext = new Vector2(0, Main.rand.NextFloat(12f, 220f)).RotatedByRandom(6.283) + NPC.Center + Vector2.Normalize(NPC.Center - Main.player[Player.FindClosest(NPC.Center, 0, 0)].Center) * 6 + new Vector2(0, -6);
                 }
                 AimPos = vNext;
 
             }
             if((NPC.Center - AimPos).Length() >= 20)
             {
-                NPC.velocity = Vector2.Normalize(AimPos - NPC.Center) * 6f;
+                NPC.velocity = Vector2.Normalize(AimPos - NPC.Center) * 1f;
             }
             else
             {
