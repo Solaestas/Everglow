@@ -3,6 +3,7 @@ using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
 using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.DataStructures;
 using Terraria.Audio;
+using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.OmniElementItems
 {
@@ -19,11 +20,11 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems
             Item.height = 50;
             Item.useTime = 72;
             Item.useAnimation = 72;
-            Item.useStyle = 1;
+            Item.useStyle = ItemUseStyleID.Swing;
             Item.noMelee = true;
             Item.knockBack = 2.25f;
             Item.value = 2100;
-            Item.rare = 7;
+            Item.rare = ItemRarityID.Lime;
             Item.autoReuse = true;
             Item.DamageType = DamageClass.Magic;
             Item.noUseGraphic = true;

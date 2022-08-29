@@ -1,6 +1,7 @@
 ﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
 using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
 using Everglow.Sources.Modules.MythModule.Common;
+using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 {
@@ -8,7 +9,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("");
+            
 
             // These are all related to gamepad controls and don't seem to affect anything else
             ItemID.Sets.Yoyo[Item.type] = true;
@@ -27,8 +28,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             Item.useTime = 25;
             Item.shootSpeed = 16f;
             Item.knockBack = 2.5f;
-            Item.damage = 30;
-            Item.rare = 2;
+            Item.damage = 25;
+            Item.rare = ItemRarityID.Green;
 
             Item.DamageType = DamageClass.Melee;
             Item.channel = true;

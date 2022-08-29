@@ -11,7 +11,7 @@
         private NPC Owner => Main.npc[(int)NPC.ai[3]];
         public override void SetStaticDefaults()
         {
-            base.DisplayName.SetDefault("幻蝶");
+        //    base.DisplayName.SetDefault("幻蝶");
             Main.npcFrameCount[NPC.type] = 4;
         }
         public override void SetDefaults()
@@ -23,7 +23,16 @@
             NPC.noTileCollide = true;
             NPC.lifeMax = 1;
             NPC.aiStyle = -1;
-            NPC.damage = 80;
+            NPC.damage = 20;
+            if (Main.expertMode)
+            {
+                NPC.damage = 40;
+            }
+            if (Main.masterMode)
+            {
+                NPC.damage = 60;
+            }
+            
             NPC.dontTakeDamageFromHostiles = true;
         }
         public override bool? CanFallThroughPlatforms()

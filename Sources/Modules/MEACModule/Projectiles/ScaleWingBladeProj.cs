@@ -15,6 +15,10 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             shadertype = "Trail";
             Projectile.scale *= 1.1f;
         }
+        public override string TrailShapeTex()
+        {
+            return "Everglow/Sources/Modules/MEACModule/Images/Melee";
+        }
         public override string TrailColorTex()
         {
             return "Everglow/Sources/Modules/MEACModule/Images/TestColor";
@@ -320,6 +324,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                 if (timer > 100)
                 {
                     isAttacking = true;
+                    drawScaleFactor = 0.6f;
                     if (timer < 115)
                     {
                         isAttacking = true;
@@ -330,7 +335,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                     {
                         Projectile.friendly = false;
                     }
-                    if (timer > 130)
+                    if (timer > 125)
                     {
                         CanIgnoreTile = false;
                         End();

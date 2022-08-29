@@ -1,5 +1,7 @@
 ﻿using Everglow.Sources.Modules.FoodModule.Utils;
 using Terraria.ModLoader.IO;
+using Terraria;
+using Everglow.Sources.Modules.FoodModule.Buffs;
 
 namespace Everglow.Sources.Modules.FoodModule
 {
@@ -45,12 +47,22 @@ namespace Everglow.Sources.Modules.FoodModule
             }
             return false;
         }
+       
         /// <summary>
         /// 如果能喝下，返回true，否则为false
         /// </summary>
         public bool CanDrink(DrinkInfo drinkInfo)
         {
             if (Thirstystate)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool CanText()
+        {
+            if (TextTimer <= 0)
             {
                 return true;
             }
@@ -71,6 +83,17 @@ namespace Everglow.Sources.Modules.FoodModule
         {
             get; private set;
         }//口渴变化计时器
+        public int TextTimer
+        {
+            get; set;
+        }
+        public override void PostUpdateMiscEffects()
+        {
+            Player.buffImmune[BuffID.WellFed] = true ;
+            Player.buffImmune[BuffID.WellFed2] = true;
+            Player.buffImmune[BuffID.WellFed3] = true;
+            Player.buffImmune[BuffID.Tipsy] = true;
+        }
         public override void PostUpdate()
         {
             FoodState();
@@ -88,6 +111,9 @@ namespace Everglow.Sources.Modules.FoodModule
 
             Thirstystate = true;
             ThirstyChangeTimer = 0;
+
+            TextTimer = 0;
+
             base.Initialize();
         }
         public override void SaveData(TagCompound tag)
@@ -121,6 +147,11 @@ namespace Everglow.Sources.Modules.FoodModule
             if (!Thirstystate)
             {
                 ThirstyChangeTimer++;
+            }
+
+            if(!CanText())
+            {
+                TextTimer--;
             }
 
             //每三十秒减少一饱食度

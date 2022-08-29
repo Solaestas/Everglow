@@ -1,12 +1,11 @@
 ﻿using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Commons.Function.Vertex;
-using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Everglow.Sources.Modules.MEACModule;
 using Terraria.DataStructures;
 
 namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles
 {
-    internal class LilyHarpProj : ModProjectile
+    internal class LilyHarpProj : ModProjectile, IWarpProjectile
     {
         public override void SetDefaults()
         {
@@ -38,9 +37,9 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles
             Projectile.velocity *= 0;
             if (player.itemTime % 30 == 1 && player.HeldItem.type == ModContent.ItemType<LilyHarp>())
             {
-                for (int i = 0; i < 60; i++)
+                for (int i = 0; i < 6; i++)
                 {
-                    Vector2 v = new Vector2(0, -1.4f).RotatedBy((i - 29.5) / 18d);
+                    Vector2 v = new Vector2(0, -1.4f).RotatedBy((i - 2.5) / 1.8d);
                     v.Y *= player.gravDir;
                     ActivateVine(i, player.Center, v, 300, Main.rand.Next(100), Main.rand.NextFloat(0, 2f));
                 }
@@ -231,10 +230,10 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles
                     var w = MathHelper.Lerp(1f, 0.05f, factor);
                     Lighting.AddLight(OldPosition[i, j], colorLight * 0f * (1 - factor), colorLight * 0.3f * (1 - factor), 0);
                     Vector2 DrawPos = player.Center + OldPosition[i, j] - StartPosition[i] + new Vector2(4) - Main.screenPosition;
-                    Color color = new Color(0.01f, 0.1f, 0.05f, 0f);
+                    Color color = new Color(0.01f, 1f, 0.5f, 0f);
                     if(Smaller[i])
                     {
-                        color = new Color(0f, 0.04f, 0.05f, 0);
+                        color = new Color(0f, 0.4f, 0.5f, 0);
                     }
                     bars.Add(new Vertex2D(DrawPos + normalDir * width, color, new Vector3(factor + 0.008f, 1, w)));
                     bars.Add(new Vertex2D(DrawPos - normalDir * width, color, new Vector3(factor + 0.008f, 0, w)));
@@ -263,6 +262,17 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles
                     Main.graphics.GraphicsDevice.Textures[0] = t;
                     Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
                 }
+                float value = (player.itemTimeMax - player.itemTime) / (float)player.itemTimeMax * 1.4f;
+                
+                if(value < 1)
+                {
+                    DrawCircle(value * 160, 15 * (1 - value) + 3, new Color(0, 0.15f * (1 - value), 0.03f * (1 - value), 0f), player.Center + new Vector2(player.direction * 15,0) - Main.screenPosition);
+                }
+                value -= 0.2f;
+                if (value < 1 && value > 0)
+                {
+                    DrawCircle(value * 133, 8 * (1 - value) + 3, new Color(0, 0.10f * (1 - value), 0.06f * (1 - value), 0f), player.Center + new Vector2(player.direction * 15, 0) - Main.screenPosition);
+                }
             }
             Texture2D tx = MythContent.QuickTexture("OmniElementItems/Projectiles/LilyHarpProj");
             float AddRot = player.fullRotation;
@@ -282,6 +292,46 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles
             }
             Main.spriteBatch.Draw(tx, Projectile.Center - Main.screenPosition, null, Lighting.GetColor((int)Projectile.Center.X / 16, (int)Projectile.Center.Y / 16), AddRot, tx.Size() / 2f, 1, se, 0); ;
             return false;
+        }
+        private void DrawCircle(float radious, float width, Color color,Vector2 center)
+        {
+            List<Vertex2D> circle = new List<Vertex2D>();
+            for(int h = 0;h < radious / 2;h++)
+            {
+                circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4), color, new Vector3(0.5f, 1, 0)));
+                circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(h / radious * Math.PI * 4), color, new Vector3(0.5f, 0, 0)));
+            }
+            circle.Add(new Vertex2D(center + new Vector2(0, radious), color, new Vector3(0.5f, 1, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, radious + width), color, new Vector3(0.5f, 0, 0)));
+            if(circle.Count > 0)
+            {
+                Texture2D t = MythContent.QuickTexture("OmniElementItems/Projectiles/Wave");
+                Main.graphics.GraphicsDevice.Textures[0] = t;
+                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
+            }
+        }
+        public void DrawWarp()
+        {
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+            KEx.CurrentTechnique.Passes[0].Apply();
+            Player player = Main.player[Projectile.owner];
+            float value = (player.itemTimeMax - player.itemTime) / (float)player.itemTimeMax * 1.4f;
+            value -= 0.02f;
+            if (value < 1)
+            {
+                float c0 = 0.3f * (float)Math.Sqrt(1 - value);
+                DrawCircle(value * 160, 30 * (1 - value) + 6, new Color(c0, c0, c0, 0f), player.Center + new Vector2(player.direction * 15, 0) - Main.screenPosition);
+            }
+            value -= 0.22f;
+            if (value < 1 && value > 0)
+            {
+                float c0 = 0.2f * (float)Math.Sqrt(1 - value);
+                DrawCircle(value * 133, 16 * (1 - value) + 6, new Color(c0, c0, c0, 0f), player.Center + new Vector2(player.direction * 15, 0) - Main.screenPosition);
+            }
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
         }
     }
     class LilyHarpOwner : ModPlayer

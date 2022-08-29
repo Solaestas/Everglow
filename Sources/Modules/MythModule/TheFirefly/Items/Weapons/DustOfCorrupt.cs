@@ -2,6 +2,7 @@
 using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
 using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.DataStructures;
+using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 {
@@ -15,20 +16,20 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
         public override void SetDefaults()
         {
             Item.glowMask = GetGlowMask;
-            Item.damage = 22;
+            Item.damage = 13;
             Item.DamageType = DamageClass.Magic;
             Item.mana = 10;
             Item.width = 60;
             Item.height = 60;
-            Item.useTime = 26;
-            Item.useAnimation = 26;
-            Item.useStyle = 5;
+            Item.useTime = 7;
+            Item.useAnimation = 7;
+            Item.useStyle = ItemUseStyleID.Shoot;
             Item.staff[Item.type] = true;
             Item.noMelee = true;
             Item.knockBack = 5f;
             Item.value = Item.sellPrice(0, 0, 20, 0);
-            Item.rare = 2;
-            Item.UseSound = SoundID.Item43;
+            Item.rare = ItemRarityID.Green;
+            Item.UseSound = SoundID.Item20;
             Item.autoReuse = true;
             Item.shoot = ModContent.ProjectileType<Projectiles.CorruptDust>();
             Item.shootSpeed = 12f;

@@ -106,7 +106,12 @@ namespace Everglow
             m_profilerManager = new ProfilerManager();
             m_mainThreadContext = new MainThreadContext();
             m_moduleManager = new ModuleManager();
-            m_renderTargetPool = new RenderTargetPool();
+
+            if (Main.netMode != NetmodeID.Server)
+            {
+                m_renderTargetPool = new RenderTargetPool();
+            }
+
             m_packetResolver = new PacketResolver();
         }
 
@@ -115,12 +120,6 @@ namespace Everglow
             m_mainThreadContext.Load();
             HookSystem.HookLoad();
             m_moduleManager.LoadAllModules();
-        }
-
-
-        public override void AddRecipes()
-        {
-            base.AddRecipes();
         }
 
         public override void Unload()

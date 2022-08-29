@@ -3,23 +3,16 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
     internal class PhosphorescenceGun : ModProjectile
     {
+        public override string Texture => "Everglow/Sources/Modules/MythModule/TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGun";
         public override void SetDefaults()
         {
             Projectile.width = 36;
             Projectile.height = 36;
             Projectile.friendly = false;
             Projectile.hostile = false;
-            Projectile.penetrate = 2;
-            Projectile.timeLeft = 90;
-            Projectile.alpha = 255;
+            Projectile.timeLeft = 90000;
             Projectile.tileCollide = false;
             Projectile.DamageType = DamageClass.Ranged;
-            ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 40;
-        }
-        public override Color? GetAlpha(Color lightColor)
-        {
-            return new Color(255 - Projectile.alpha, 255 - Projectile.alpha, 255 - Projectile.alpha, 0);
         }
 
         private bool Release = true;
@@ -38,15 +31,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 oldPo = Projectile.Center;
                 Projectile.Center = oldPo;
                 Projectile.velocity *= 0;
-                Projectile.timeLeft = 5 + Energy;
-                if (Energy <= 120)
-                {
-                    Energy++;
-                }
-                else
-                {
-                    Energy = 120;
-                }
             }
             if (!Main.mouseLeft && Release)
             {
@@ -66,8 +50,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         {
             return false;
         }
-
-        private int Energy = 0;
         public override void PostDraw(Color lightColor)
         {
             if (!Release)

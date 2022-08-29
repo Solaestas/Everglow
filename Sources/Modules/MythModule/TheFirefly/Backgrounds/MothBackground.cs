@@ -394,6 +394,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             var texSky = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflySky");
             var texFar = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyFar");
             var texMiddle = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyMiddle");
+            var texMiddleGlow = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyMiddleGlow");
             var texMidClose = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyMidClose");
             var texClose = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyClose");
             Main.spriteBatch.End();
@@ -407,8 +408,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                  ScreenCen, DSize, SpriteEffects.None, 0);
             Main.spriteBatch.Draw(texMiddle, DrawPos, GetDrawRect(texSky.Size(), 0.17f, true), baseColor, 0,
                  ScreenCen, DSize, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(texMiddleGlow, DrawPos, GetDrawRect(texSky.Size(), 0.17f, true), GetLuminace(baseColor), 0,
+                 ScreenCen, DSize, SpriteEffects.None, 0);
             DrawGlowSec(texClose.Size(), 0.17f);
-            Main.spriteBatch.Draw(texMidClose, DrawPos, GetDrawRect(texSky.Size(), 0.25f, false), GetLuminace(baseColor), 0,
+            Main.spriteBatch.Draw(texMidClose, DrawPos, GetDrawRect(texSky.Size(), 0.25f, false), baseColor, 0,
                  ScreenCen, DSize, SpriteEffects.None, 0);
             DrawGlow(texClose.Size(), 0.25f);
         }
@@ -419,7 +422,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             Rectangle targetSourceRect = GetDrawRect(texClose.Size(), 0.33f, false);
             targetSourceRect.Y -= 120;
             targetSourceRect.X += 150;
-            Main.spriteBatch.Draw(texClose, Vector2.Zero, targetSourceRect, GetLuminace(baseColor));
+            Main.spriteBatch.Draw(texClose, Vector2.Zero, targetSourceRect, baseColor);
             Main.spriteBatch.End();
             ropeManager.luminance = luminance;
             ropeManager.Draw();
@@ -497,7 +500,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
             var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
             bgW.Parameters["uTransform"].SetValue(projection);
-            bgW.Parameters["uTime"].SetValue(0f);
+            bgW.Parameters["uTime"].SetValue(0.34f);
             bgW.CurrentTechnique.Passes[0].Apply();
 
             if (CloseII.Count > 2)
