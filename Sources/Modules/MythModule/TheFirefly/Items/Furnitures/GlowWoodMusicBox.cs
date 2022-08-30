@@ -31,7 +31,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures
 			Item.createTile = ModContent.TileType<Tiles.Furnitures.GlowWoodMusicBox>();
 			Item.width = 24;
 			Item.height = 24;
-			Item.rare = 2;
+			Item.rare = ItemRarityID.Green;
 			Item.value = 100000;
 			Item.accessory = true;
 		}

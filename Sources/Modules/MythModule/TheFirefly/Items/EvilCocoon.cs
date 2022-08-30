@@ -1,4 +1,6 @@
 using Everglow.Sources.Modules.MythModule.Common;
+using Terraria.ID;
+
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items
 {
     public class EvilCocoon : ModItem
@@ -17,7 +19,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items
             Item.height = 32;
             Item.useAnimation = 45;
             Item.useTime = 60;
-            Item.useStyle = 4;
+            Item.useStyle = ItemUseStyleID.HoldUp;
             Item.maxStack = 999;
             Item.consumable = true;
         }
