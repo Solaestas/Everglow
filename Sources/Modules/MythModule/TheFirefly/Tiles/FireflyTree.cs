@@ -203,23 +203,22 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                 new Rectangle(tile.TileFrameX, 0, treeTexture.Width / Count, treeTexture.Height),
                 new Color(1f, 1f, 1f, 0), 0f, HalfSize, 1f, effects, 0f);
 
-            //Vector2 RopOffset = new Vector2(i * 16 - tile.TileFrameX - 128, j * 16 - 128) - Main.screenPosition;
 
-            //int frameX = tile.TileFrameX / 256;
-            //if (ropes[frameX] is null)
-            //{
-            //    ropes[frameX] = ropeManager.LoadRope("Everglow/Sources/Modules/MythModule/TheFirefly/Tiles/FireflyTreeRope",
-            //        new Rectangle(frameX * 51, 0, 51, 51), tileCenterWS - HalfSize, () => Vector2.Zero);
-            //    hasRope.Add((i, j), (frameX, ropes[frameX]));
-            //    basePositions[frameX] = tileCenterWS;
-            //}
-            //else if (!hasRope.ContainsKey((i, j)))
-            //{
-            //    Vector2 deltaPosition = tileCenterWS - basePositions[frameX];
-            //    List<Rope> rs = ropes[frameX].Select(r => r.Clone(deltaPosition)).ToList();
-            //    ropeManager.LoadRope(rs);
-            //    hasRope.Add((i, j), (frameX, rs));
-            //}
+            if (tileCenterWS.Distance(Main.LocalPlayer.position) < 200)
+            {
+                var playerRect = Main.LocalPlayer.Hitbox;
+                var (_, ropes) = hasRope[(i, j)];
+                foreach (var rope in ropes)
+                {
+                    foreach (var m in rope.mass)
+                    {
+                        if (playerRect.Contains(m.position.ToPoint()))
+                        {
+                            m.force += Main.LocalPlayer.velocity / 3;
+                        }
+                    }
+                }
+            }
             return false;
         }
     }
