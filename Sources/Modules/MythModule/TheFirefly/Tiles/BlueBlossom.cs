@@ -32,10 +32,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            //for (int x = 0; x < 2; x++)
-            //{
-            //    Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Items.BlackStarShrub>());
-            //}
+            for (int x = 0; x < 5; x++)
+            {
+                Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Items.GlowingPedal>());
+            }
         }
         public override void PlaceInWorld(int i, int j, Item item)
         {

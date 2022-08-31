@@ -1,5 +1,6 @@
 ﻿using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.DataStructures;
+using Terraria.GameContent.ItemDropRules;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 {
@@ -23,6 +24,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             NPC.alpha = 0;
             NPC.aiStyle = -1;
             NPC.noGravity = true;
+            NPC.catchItem = ModContent.ItemType<Items.GlowingFirefly>();
         }
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
@@ -133,10 +135,26 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             }
             base.OnKill();
         }
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.GlowingFirefly>(), 1, 1, 1));
+
+            base.ModifyNPCLoot(npcLoot);
+        }
         public override void OnSpawn(IEntitySource source)
         {
             NPC.scale = Main.rand.NextFloat(0.83f, 1.17f);
             base.OnSpawn(source);
+        }
+        public override bool? CanBeCaughtBy(Item item, Player player)
+        {
+            return true;
+        }
+        public override void OnCaughtBy(Player player, Item item, bool failed)
+        {
+            Item.NewItem(NPC.GetSource_FromThis(), NPC.Center,0,0, ModContent.ItemType<Items.GlowingFirefly>(),1);
+            NPC.active = false;
+            base.OnCaughtBy(player, item, failed);
         }
     }
 }
