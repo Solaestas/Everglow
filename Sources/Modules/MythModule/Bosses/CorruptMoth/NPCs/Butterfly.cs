@@ -23,7 +23,16 @@
             NPC.noTileCollide = true;
             NPC.lifeMax = 1;
             NPC.aiStyle = -1;
-            NPC.damage = 80;
+            NPC.damage = 20;
+            if (Main.expertMode)
+            {
+                NPC.damage = 40;
+            }
+            if (Main.masterMode)
+            {
+                NPC.damage = 60;
+            }
+            
             NPC.dontTakeDamageFromHostiles = true;
         }
         public override bool? CanFallThroughPlatforms()

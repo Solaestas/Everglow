@@ -25,7 +25,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             Item.UseSound =SoundID.Item1;
 
             Item.DamageType = DamageClass.Ranged;
-            Item.damage = 38;
+            Item.damage = 22;
             Item.knockBack = 5f;
             Item.noMelee = true;
             Item.noUseGraphic = true;
@@ -45,7 +45,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
         {
             if (player.ownedProjectileCounts[ModContent.ProjectileType<Projectiles.ShadowWingBow>()] <= 0)
             {
-                Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.ShadowWingBow>(), (int)(damage * 0.75f), knockback, player.whoAmI, type, Item.useAnimation);
+                Projectile.NewProjectile(source, position, Vector2.Zero, ModContent.ProjectileType<Projectiles.ShadowWingBow>(), (int)(damage * 0.65f), knockback, player.whoAmI, type, Item.useAnimation);
             }
             return false;
         }

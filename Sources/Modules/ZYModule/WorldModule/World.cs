@@ -135,14 +135,14 @@ internal abstract class World : IModule
                     Main.MenuUI.SetState(new UIWorldLoad());
                     WorldGen.clearWorld();
                     //TODO MythMod
-                    Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.MythMod.Common.WorldSystem.WorldCreate_Def");
+                    Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everglow.Common.WorldSystem.WorldCreate_Def");
                     Main.spawnTileX = DefaultSpawnPoint.X;
                     Main.spawnTileY = DefaultSpawnPoint.Y;
                     GenerateWorld();
                     WorldFile.SaveWorld();
                 }
                 Main.menuMode = 10;
-                Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.MythMod.Common.WorldSystem.WorldEnter_Def");
+                Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everglow.Common.WorldSystem.WorldEnter_Def");
                 WorldGen.playWorld();
             }
             else//多人游戏-开服

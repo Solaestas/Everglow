@@ -14,13 +14,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Projectile.aiStyle = -1;
             Projectile.friendly = true;
             Projectile.hostile = false;
-            Projectile.ignoreWater = true;
+            Projectile.ignoreWater = false;
             Projectile.tileCollide = true;
             Projectile.extraUpdates = 3;
             Projectile.timeLeft = 1000;
             Projectile.alpha = 0;
-            Projectile.penetrate = 1;
+            Projectile.penetrate = 1; 
             Projectile.scale = 1f;
+
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 60;
         }
@@ -101,7 +102,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         }
         public override void Kill(int timeLeft)
         {
-            if(timeLeft <= 0)
+            if(timeLeft > 0)
+            {
+                float value = Math.Min(Projectile.damage / 30f, 1f);
+                Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BeadShakeWave>(), 0, 0, Projectile.owner, 1f / (Projectile.ai[0] + 2) * 2 * value);
+            }
+            if (timeLeft <= 0)
             {
                 return;
             }

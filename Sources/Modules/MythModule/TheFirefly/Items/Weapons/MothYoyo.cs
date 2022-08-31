@@ -28,7 +28,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             Item.useTime = 25;
             Item.shootSpeed = 16f;
             Item.knockBack = 2.5f;
-            Item.damage = 30;
+            Item.damage = 25;
             Item.rare = ItemRarityID.Green;
 
             Item.DamageType = DamageClass.Melee;
