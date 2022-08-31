@@ -198,7 +198,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
 
 
             sb.End();
-            sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null,
+            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null,
                     Matrix.CreateTranslation(-Main.screenPosition.X, -Main.screenPosition.Y, 0) * Main.GameViewMatrix.TransformationMatrix);
             Texture2D dropTexture = MythContent.QuickTexture("TheFirefly/Tiles/Branch");
             for (int i = 0; i < ropes.Count; i++)

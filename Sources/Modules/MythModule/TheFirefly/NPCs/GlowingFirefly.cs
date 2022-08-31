@@ -137,9 +137,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
         }
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.GlowingFirefly>(), 1, 1, 1));
-
-            base.ModifyNPCLoot(npcLoot);
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.MothScaleDust>(), 1, 1, 1));
         }
         public override void OnSpawn(IEntitySource source)
         {
