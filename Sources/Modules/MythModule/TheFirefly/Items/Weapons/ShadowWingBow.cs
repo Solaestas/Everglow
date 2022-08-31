@@ -22,7 +22,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             Item.useAnimation = 18;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.autoReuse = false;
-            Item.UseSound = SoundID.Item5;
+            Item.UseSound =SoundID.Item1;
 
             Item.DamageType = DamageClass.Ranged;
             Item.damage = 22;
@@ -32,6 +32,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             Item.shoot = ProjectileID.WoodenArrowFriendly;
             Item.shootSpeed = 12f;
             Item.useAmmo = AmmoID.Arrow;
+        }
+        public override bool CanUseItem(Player player)
+        {
+            if(base.CanUseItem(player))
+            {
+                
+            }
+            return base.CanUseItem(player);
         }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
