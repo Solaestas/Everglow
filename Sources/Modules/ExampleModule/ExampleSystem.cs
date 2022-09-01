@@ -12,6 +12,13 @@ namespace Everglow.Sources.Modules.ExampleModule
     [ProfilerMeasure]
     internal class ExampleSystem : ModSystem
     {
+        class Entity
+        {
+            public Vector2 Position;
+            public Vector2 Velocity;
+            public float Mass;
+        }
+        private List<Entity> entities = new List<Entity>();
         public override void OnModLoad()
         {
             base.OnModLoad();
