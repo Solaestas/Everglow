@@ -147,7 +147,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             if (!Main.mouseLeft && Release)//发射
             {
                 SoundEngine.PlaySound(SoundID.Item5,Projectile.Center);
-                Energy = 0;
                 Projectile.NewProjectileDirect(Projectile.InheritSource(Projectile), Projectile.Center, Vector2.Normalize(v0) * 20f, (int)(Projectile.ai[0]), Projectile.damage + Energy / 5, Projectile.knockBack, player.whoAmI).extraUpdates++;
                 for (int s = 0; s < 5; s++)
                 {
@@ -156,6 +155,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                         Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center, Vector2.Normalize(v0).RotatedBy(ArRot[s]) * ArVel[s] * 1f, ModContent.ProjectileType<MothArrow>(), (int)((Projectile.damage + Energy / 5) * 0.47), Projectile.knockBack, player.whoAmI, 0, player.HeldItem.crit + player.GetCritChance(DamageClass.Ranged) + player.GetCritChance(DamageClass.Generic));
                     }
                 }
+                Energy = 0;
                 Release = false;
             }
             if (Projectile.ai[1] > 0)
