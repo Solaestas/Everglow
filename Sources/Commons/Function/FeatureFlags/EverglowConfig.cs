@@ -42,7 +42,13 @@ namespace Everglow.Sources.Commons.Function.FeatureFlags
         [DrawTicks]
         public TextureReplaceMode TextureReplace;
 
-		public override void OnChanged() {
+        [DefaultValue(AudioReplaceMode.MothFighting)]
+        [Label("Change Corrupted Moth's Theme Song")] //Mods.Everglow.Config.TextureReplace.Label
+        [Tooltip("You can choose to replace the Corrupted Moth's Theme with other themes\nOptions: MothFighting, AltMothFighting, OldMothFighting")] //Mods.Everglow.Config.TextureReplace.Tooltip
+        [DrawTicks]
+        public AudioReplaceMode AudioReplace;
+
+        public override void OnChanged() {
             if ((int)TextureReplace >= 3) {
                 TextureReplace = TextureReplaceMode.Terraria;
             }
@@ -57,5 +63,11 @@ namespace Everglow.Sources.Commons.Function.FeatureFlags
         Terraria,
         EternalResolve,
         Myth
+    }
+    public enum AudioReplaceMode
+    {
+        MothFighting,
+        AltMothFighting,
+        OldMothFighting
     }
 }
