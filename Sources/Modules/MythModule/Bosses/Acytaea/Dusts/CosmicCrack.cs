@@ -1,36 +1,36 @@
-﻿namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Dusts;
+﻿using Everglow.Sources.Commons.Core.VFX;
+using Everglow.Sources.Commons.Core.VFX.Base;
+using Everglow.Sources.Commons.Core.VFX.Pipelines;
+using ReLogic.Content;
 
-public class CosmicCrack : ModDust
+namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Dusts;
+
+[Pipeline(typeof(WCSPipeline))]
+public class CosmicCrack : Particle
 {
-    public override void OnSpawn(Dust dust)
+    public static Asset<Texture2D> texture;
+    public float rotation;
+    public override void Load()
     {
-        dust.alpha = 255;
-        dust.noLight = true;
-        dust.noGravity = true;
-        base.OnSpawn(dust);
+        base.Load();
+        texture = ModContent.Request<Texture2D>((GetType().Namespace + "." + Name).Replace('.', '/'));
     }
-    public override bool Update(Dust dust)
+    public override void OnSpawn()
     {
-        dust.position += dust.velocity;
-        dust.scale -= 0.03f;
-        dust.velocity *= 0.99f;
-        if (dust.scale <= 0)
-            dust.active = false;
-
-        return false;
+        scale = 1;
+        rotation = Main.rand.NextFloat() * MathHelper.TwoPi;
     }
-    public static void DrawAll(SpriteBatch sb)
+    public override void Update()
     {
-        for (int g = 0; g < Main.dust.Length; g++)
+        scale -= 0.03f;
+        velocity *= 0.99f;
+        if (scale <= 0)
         {
-            Dust d = Main.dust[g];
-            if (d.type == ModContent.DustType<CosmicCrack>() && d.active)
-            {
-                //Texture2D tex = ModContent.Request<Texture2D>("MythMod/Dusts/CosmicFlame").Value;
-                //sb.Draw(tex,d.position-Main.screenPosition,null,Color.White,0,tex.Size()/2,d.scale,SpriteEffects.None,0);
-                Texture2D tex2 = ModContent.Request<Texture2D>("MythMod/Dusts/CosmicCrack").Value;
-                sb.Draw(tex2, d.position - Main.screenPosition, null, Color.White, g * 2, tex2.Size() / 2, d.scale, SpriteEffects.None, 0);
-            }
+            Active = false;
         }
+    }
+    public override void Draw()
+    {
+        VFXManager.spriteBatch.BindTexture(texture.Value).Draw(position, null, Color.White, rotation, texture.Value.Size() / 2, scale, SpriteEffects.None);
     }
 }

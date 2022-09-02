@@ -1,43 +1,31 @@
-﻿namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Dusts
-{
-    public class CosmicFlame : ModDust
-    {
-        public override void SetStaticDefaults()
-        {
-            Everglow.HookSystem.AddMethod(DrawAll, Commons.Core.CallOpportunity.PostDrawDusts);
-        }
-        public override void OnSpawn(Dust dust)
-        {
-            dust.alpha = 255;
-            dust.noLight = true;
-            dust.noGravity = true;
-        }
-        public override bool Update(Dust dust)
-        {
-            dust.position += dust.velocity;
-            dust.scale *= 0.99f;
-            dust.velocity *= 1.05f;
-            if (dust.scale <= 0.1f)
-                dust.active = false;
+﻿using Everglow.Sources.Commons.Core.VFX;
+using Everglow.Sources.Commons.Core.VFX.Base;
+using Everglow.Sources.Commons.Core.VFX.Pipelines;
+using ReLogic.Content;
 
-            return false;
-        }
-        public void DrawAll()
+namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Dusts;
+
+[Pipeline(typeof(WCSPipeline))]
+public class CosmicFlame : Particle
+{
+    public static Asset<Texture2D> texture;
+    public override void Load()
+    {
+        base.Load();
+        texture = ModContent.Request<Texture2D>((GetType().Namespace + "." + Name).Replace('.', '/'));
+    }
+    public override void Update()
+    {
+        scale *= 0.99f;
+        velocity *= 1.05f;
+        if (scale <= 0.1f)
         {
-            var tex = ModContent.Request<Texture2D>(Texture).Value;
-            var type = Type;
-            var sb = Main.spriteBatch;
-            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone,
-                null, Matrix.CreateTranslation(Main.screenPosition.X, Main.screenPosition.Y, 0));
-            for (int i = 0; i < Main.dust.Length; i++)
-            {
-                Dust d = Main.dust[i];
-                if (d.type == type && d.active)
-                {
-                    sb.Draw(tex, d.position - Main.screenPosition, null, Color.White, 0, tex.Size() / 2, d.scale, SpriteEffects.None, 0);
-                }
-            }
-            sb.End();
+            Active = false;
         }
+    }
+
+    public override void Draw()
+    {
+        VFXManager.spriteBatch.BindTexture(texture.Value).Draw(position, null, Color.White, 0, texture.Value.Size() / 2, scale, SpriteEffects.None);
     }
 }
