@@ -46,13 +46,13 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
     <PackageReference Include="MethodBoundaryAspect.Fody" Version="2.0.145" />
     <PackageReference Include="SixLabors.ImageSharp" Version="2.1.2" />
     <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\Tools\" />
-    <Folder Include="lib\" />
     <Folder Include="Sources\Modules\FoodModule\Buffs\ModDrinkBuffs\" />
     <Folder Include="Sources\Modules\FoodModule\Buffs\ModFoodBuffs\" />
   </ItemGroup>
