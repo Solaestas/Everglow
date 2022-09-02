@@ -7,26 +7,32 @@ using Everglow.Sources.Commons.Core.VFX.Base;
 using Everglow.Sources.Commons.Core.VFX.Interfaces;
 using Everglow.Sources.Commons.Function.ObjectPool;
 using Everglow.Sources.Modules.ZYModule.Commons.Function;
+using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 namespace Everglow.Sources.Commons.Core.VFX.Pipelines
 {
     internal class BloomPipeline : PostPipeline
     {
-        private RenderTarget2D bloomScreen;
-        private RenderTarget2D bloomTempScreen;
-        //拉伸模糊的倍率
-        private const int ReverseScale = 2;
+        private RenderTarget2D[] blurScreens;
+        private RenderTarget2D blurScreenSwap;
+        private const int MAX_BLUR_LEVELS = 4;
+        private static int MaxBlurWidth => Main.screenWidth;
+        private static int MaxBlurHeight => Main.screenHeight;
         public override void Load()
         {
             Everglow.MainThreadContext.AddTask(() =>
             {
                 AllocateRenderTarget();
             });
+            blurScreens = new RenderTarget2D[MAX_BLUR_LEVELS];
             Everglow.HookSystem.AddMethod(() =>
             {
-                bloomScreen.Dispose();
-                bloomTempScreen.Dispose();
+                for (int i = 0; i < blurScreens.Length; i++)
+                {
+                    blurScreens[i]?.Dispose();
+                }
+                blurScreenSwap?.Dispose();
                 AllocateRenderTarget();
             }, CallOpportunity.ResolutionChanged, "Realloc RenderTarget");
             effect = ModContent.Request<Effect>("Everglow/Sources/Commons/Core/VFX/Effect/Bloom");
@@ -34,9 +40,13 @@ namespace Everglow.Sources.Commons.Core.VFX.Pipelines
         private void AllocateRenderTarget()
         {
             var gd = Main.instance.GraphicsDevice;
-            bloomScreen = new RenderTarget2D(gd, gd.PresentationParameters.BackBufferWidth / ReverseScale, gd.PresentationParameters.BackBufferHeight / ReverseScale,
-                false, gd.PresentationParameters.BackBufferFormat, DepthFormat.None);
-            bloomTempScreen = new RenderTarget2D(gd, gd.PresentationParameters.BackBufferWidth / ReverseScale, gd.PresentationParameters.BackBufferHeight / ReverseScale,
+            for (int i = 0; i < MAX_BLUR_LEVELS; i++)
+            {
+                blurScreens[i] = new RenderTarget2D(Main.graphics.GraphicsDevice,
+                        MaxBlurWidth >> i, MaxBlurHeight >> i, false,
+                        SurfaceFormat.Color, DepthFormat.None);
+            }
+            blurScreenSwap = new RenderTarget2D(gd, MaxBlurWidth >> MAX_BLUR_LEVELS, MaxBlurHeight >> MAX_BLUR_LEVELS,
                 false, gd.PresentationParameters.BackBufferFormat, DepthFormat.None);
         }
         public override void Render(RenderTarget2D rt2D)
@@ -44,47 +54,72 @@ namespace Everglow.Sources.Commons.Core.VFX.Pipelines
             var sb = Main.spriteBatch;
             var gd = Main.instance.GraphicsDevice;
             var effect = this.effect.Value;
-            //将当前rt2D的亮部画到大小为原来1/ReverseScale大小的bloomScreen上 
-            //先拉伸模糊一遍貌似会导致一像素的光点不会被采样到？？
-            gd.SetRenderTarget(bloomScreen);
-            gd.Clear(Color.Transparent);
+            Rectangle rectangle = new Rectangle(0, 0, 1, 1);
 
-            sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone);
-            effect.Parameters["uIntensity"].SetValue(1);
+
+            sb.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone);
+
             effect.Parameters["uTransform"].SetValue(
-                Matrix.CreateOrthographicOffCenter(0, bloomScreen.Width, bloomScreen.Height, 0, 0, 1)
+                Matrix.CreateOrthographicOffCenter(0, 1, 1, 0, 0, 1)
                 );
-            effect.Parameters["uLightLimit"].SetValue(0.3f);
-            effect.Parameters["uSize"].SetValue(bloomScreen.Size());
+            effect.Parameters["uLimit"].SetValue(0);   
             effect.CurrentTechnique.Passes["GetLight"].Apply();
-            sb.Draw(rt2D, new Rectangle(0, 0, bloomScreen.Width, bloomScreen.Height), Color.White);
 
-            //反复模糊三次
-            for (int i = 0; i < 3; i++)
+            gd.SetRenderTarget(blurScreens[0]);
+            sb.Draw(rt2D, rectangle, Color.White);
+
+            effect.Parameters["uDelta"].SetValue(1);
+            //Downsampling
+            for (int i = 1; i < MAX_BLUR_LEVELS; i++)
             {
-                gd.SetRenderTarget(bloomTempScreen);
-                gd.Clear(Color.Transparent);
-                effect.CurrentTechnique.Passes["BloomH"].Apply();
-                sb.Draw(bloomScreen, Vector2.Zero, Color.White);
-
-                gd.SetRenderTarget(bloomScreen);
-                gd.Clear(Color.Transparent);
-                effect.CurrentTechnique.Passes["BloomV"].Apply();
-                sb.Draw(bloomTempScreen, Vector2.Zero, Color.White);
+                gd.SetRenderTarget(blurScreens[i]);
+                effect.Parameters["uSize"].SetValue(blurScreens[i].Size());
+                effect.CurrentTechnique.Passes["Blur"].Apply();
+                sb.Draw(blurScreens[i - 1], rectangle, Color.White);
             }
+
+
+            //GaussianBlur
+            effect.Parameters["uIntensity"].SetValue(1);
+
+            gd.SetRenderTarget(blurScreenSwap);
+            gd.Clear(Color.Transparent);
+            effect.Parameters["uSize"].SetValue(blurScreenSwap.Size());
+            effect.CurrentTechnique.Passes["BloomH"].Apply();
+            sb.Draw(blurScreens[^1], rectangle, Color.White);
+
+            gd.SetRenderTarget(blurScreens[^1]);
+            gd.Clear(Color.Transparent);
+            effect.Parameters["uSize"].SetValue(blurScreens[^1].Size());
+            effect.CurrentTechnique.Passes["BloomV"].Apply();
+            sb.Draw(blurScreenSwap, rectangle, Color.White);
+
+
+            //Upsampling
+            for (int i = MAX_BLUR_LEVELS - 1; i > 0; i--)
+            {
+                gd.SetRenderTarget(blurScreens[i - 1]);
+                effect.Parameters["uSize"].SetValue(blurScreens[i - 1].Size());
+                effect.CurrentTechnique.Passes["Blur"].Apply();
+                sb.Draw(blurScreens[i], rectangle, Color.White);
+            }
+
             sb.End();
 
+            var cur = VFXManager.Instance.CurrentRenderTarget;
+            VFXManager.Instance.SwapRenderTarget();
+            gd.SetRenderTarget(VFXManager.Instance.CurrentRenderTarget);
+            sb.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone);
+            sb.Draw(cur, Vector2.Zero, Color.White);
 
-            //叠加
-            RenderTarget2D oldRt2D = VFXManager.Instance.CurrentRenderTarget;//先获得旧的Rt2D
-            VFXManager.Instance.SwapRenderTarget();//交换Rt2D
-            sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullNone);
-            sb.Draw(oldRt2D, Vector2.Zero, Color.White);//先把旧的画上去
-            sb.Draw(rt2D, Vector2.Zero, Color.White);//绘制特效
-            //绘制发光
+            gd.BlendState = BlendState.AlphaBlend;
+            sb.Draw(rt2D, Vector2.Zero, Color.White);
+
             gd.BlendState = BlendState.Additive;
-            sb.Draw(bloomScreen, new Rectangle(0, 0, oldRt2D.Width, oldRt2D.Height), Color.White);
+            sb.Draw(blurScreens[0], cur.Bounds, Color.White);
             sb.End();
+
         }
+
     }
 }

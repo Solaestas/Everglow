@@ -2,7 +2,8 @@ sampler uImage0 : register(s0);
 float2 uSize;
 float4x4 uTransform;
 float uIntensity;
-float uLightLimit;
+float uDelta;
+float uLimit;
 float weight[5] = { 0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216 };
 
 struct VSInput
@@ -53,14 +54,25 @@ float4 BloomV(float2 coord : TEXCOORD0) : COLOR0
     return float4(color, 1);
 }
 
+float4 Blur(float2 coord : TEXCOORD0) : COLOR0
+{
+    float dx = 1.0 / uSize.x;
+    float dy = 1.0 / uSize.y;
+    float3 color1 = tex2D(uImage0, coord + float2(dx, dy) * uDelta).rgb;
+    float3 color2 = tex2D(uImage0, coord + float2(-dx, dy) * uDelta).rgb;
+    float3 color3 = tex2D(uImage0, coord + float2(dx, -dy) * uDelta).rgb;
+    float3 color4 = tex2D(uImage0, coord + float2(-dx, -dy) * uDelta).rgb;
+    float3 c = (color1 + color2 + color3 + color4) * 0.25;
+    return float4(c, 1);
+}
+
 float4 GetLight(float2 coord : TEXCOORD0) : COLOR0
 {
     float4 color = tex2D(uImage0, coord);
-    if (color.r * 0.4 + color.g * 0.4 + color.b * 0.2 < uLightLimit)
-        return float4(0, 0, 0, 0);
+    if (color.r * 0.4 + color.g * 0.4 + color.b * 0.2 < uLimit)
+        return float4(1, 1, 1, 1);
     else
         return color;
-    return color;
 
 }
 technique Technique1
@@ -78,6 +90,11 @@ technique Technique1
     pass GetLight
     {
         PixelShader = compile ps_3_0 GetLight();
+        VertexShader = compile vs_3_0 VertexShaderFunction();
+    }
+    pass Blur
+    {
+        PixelShader = compile ps_3_0 Blur();
         VertexShader = compile vs_3_0 VertexShaderFunction();
     }
 }
