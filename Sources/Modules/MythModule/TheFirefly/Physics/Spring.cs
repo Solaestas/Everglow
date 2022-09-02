@@ -48,7 +48,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
             var length = (float)offset.L2Norm();
             var unit = offset / length;
 
-            return -elasticity * (length - restLength) * unit + A.mass * Vector<float>.Build.DenseOfArray(new float[] { 0f, 4f });
+            return -elasticity * (length - restLength) * unit + A.force.ToMathNetVector();
         }
 
         private Vector<float> G_prime(Vector<float> x, float dt, Mass A, Mass B, float elasticity, float restLength)
@@ -132,8 +132,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
 
         public void FEM_CalculateG(float deltaTime)
         {
-            mass1.G -= Force(mass1, mass2, elasticity, 100f);
-            mass2.G -= Force(mass2, mass1, elasticity, 100f);
+            mass1.G -= Force(mass1, mass2, elasticity, restLength);
+            mass2.G -= Force(mass2, mass1, elasticity, restLength);
+            mass1.K = elasticity;
+            mass2.K = elasticity;
         }
     }
 }

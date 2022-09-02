@@ -28,7 +28,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
 
             for (int i = 0; i < count - 1; i++)
             {
-                spring[i] = new Spring(0.3f, 20, 0.05f, mass[i], mass[i + 1]);
+                spring[i] = new Spring(0.5f, 20, 0.05f, mass[i], mass[i + 1]);
             }
 
             GetOffset = offset;
@@ -46,7 +46,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
             }
             for (int i = 0; i < spring.Length; i++)
             {
-                clone.spring[i] = new Spring(0.3f, 20, 0.05f, clone.mass[i], clone.mass[i + 1]);
+                clone.spring[i] = new Spring(0.5f, 20, 0.05f, clone.mass[i], clone.mass[i + 1]);
             }
             clone.GetOffset = GetOffset;
             return clone;
@@ -151,38 +151,50 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
 
         private void FEM_Update(float deltaTime)
         {
-            for (int i = 0; i < ropes.Count; i++)
+            foreach (var rope in ropes)
             {
-                var rope = ropes[i];
-                foreach (var s in rope.spring)
-                {
-                    s.ApplyForce(deltaTime);
-                }
                 foreach (var m in rope.mass)
                 {
                     m.force += new Vector2(0.04f + 0.06f * (float)(Math.Sin(Main.timeForVisualEffects / 72f + m.position.X / 13d + m.position.Y / 4d)), 0)
                         * (Main.windSpeedCurrent + 1f) * 2f
                         + new Vector2(0, gravity * m.mass);
-                    m.Update(deltaTime);
+                    m.FEM_Prepare(deltaTime);
                 }
             }
-            foreach(var )
-            for (int iters = 0; iters < 40; iters++)
+            for (int iters = 0; iters < 1; iters++)
             {
-                
-            }
-            for (int i = 0; i < ropes.Count; i++)
-            {
-                var rope = ropes[i];
-                foreach (var s in rope.spring)
+                foreach (var rope in ropes)
                 {
-                    s.ApplyForce(deltaTime);
+                    foreach (var m in rope.mass)
+                    {
+                        m.FEM_UpdateG(deltaTime);
+                    }
                 }
+
+                foreach (var rope in ropes)
+                {
+                    foreach (var spr in rope.spring)
+                    {
+                        spr.FEM_CalculateG(deltaTime);
+                    }
+                }
+                foreach (var rope in ropes)
+                {
+                    foreach (var m in rope.mass)
+                    {
+                        if (m.isStatic)
+                            continue;
+                        float alpha = 1f / (m.mass / (deltaTime * deltaTime) + 4 * m.K);
+                        var dx = alpha * m.G;
+                        m.X -= dx;
+                    }
+                }
+            }
+
+            foreach (var rope in ropes)
+            {
                 foreach (var m in rope.mass)
                 {
-                    m.force += new Vector2(0.04f + 0.06f * (float)(Math.Sin(Main.timeForVisualEffects / 72f + m.position.X / 13d + m.position.Y / 4d)), 0)
-                        * (Main.windSpeedCurrent + 1f) * 2f
-                        + new Vector2(0, gravity * m.mass);
                     m.Update(deltaTime);
                 }
             }
@@ -190,21 +202,22 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
 
         public void Update(float deltaTime)
         {
-            for (int i = 0; i < ropes.Count; i++)
-            {
-                var rope = ropes[i];
-                foreach (var s in rope.spring)
-                {
-                    s.ApplyForce(deltaTime);
-                }
-                foreach (var m in rope.mass)
-                {
-                    m.force += new Vector2(0.04f + 0.06f * (float)(Math.Sin(Main.timeForVisualEffects / 72f + m.position.X / 13d + m.position.Y / 4d)), 0)
-                        * (Main.windSpeedCurrent + 1f) * 2f
-                        + new Vector2(0, gravity * m.mass);
-                    m.Update(deltaTime);
-                }
-            }
+            FEM_Update(deltaTime);
+            //for (int i = 0; i < ropes.Count; i++)
+            //{
+            //    var rope = ropes[i];
+            //    foreach (var s in rope.spring)
+            //    {
+            //        s.ApplyForce(deltaTime);
+            //    }
+            //    foreach (var m in rope.mass)
+            //    {
+            //        m.force += new Vector2(0.04f + 0.06f * (float)(Math.Sin(Main.timeForVisualEffects / 72f + m.position.X / 13d + m.position.Y / 4d)), 0)
+            //            * (Main.windSpeedCurrent + 1f) * 2f
+            //            + new Vector2(0, gravity * m.mass);
+            //        m.Update(deltaTime);
+            //    }
+            //}
         }
         public void Draw()
         {

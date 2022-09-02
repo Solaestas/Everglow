@@ -6,83 +6,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 {
     public class GlowingFirefly : ModNPC
     {
-        private Matrix outerProduct(Vector4 v1, Vector4 v2)
-        {
-            Matrix matrix;
-            matrix.M11 = v1.X * v2.X;
-            matrix.M12 = v1.X * v2.Y;
-            matrix.M13 = v1.X * v2.Z;
-            matrix.M14 = v1.X * v2.W;
-
-            matrix.M21 = v1.Y * v2.X;
-            matrix.M22 = v1.Y * v2.Y;
-            matrix.M23 = v1.Y * v2.Z;
-            matrix.M24 = v1.Y * v2.W;
-
-            matrix.M31 = v1.Z * v2.X;
-            matrix.M32 = v1.Z * v2.Y;
-            matrix.M33 = v1.Z * v2.Z;
-            matrix.M34 = v1.Z * v2.W;
-
-            matrix.M41 = v1.W * v2.X;
-            matrix.M42 = v1.W * v2.Y;
-            matrix.M43 = v1.W * v2.Z;
-            matrix.M44 = v1.W * v2.W;
-            return matrix;
-        }
-
-        private Vector3 V4ToV3(Vector4 v)
-        {
-            return new Vector3(v.X, v.Y, v.Z);
-        }
-
-        private Vector3 G_prime(Vector3 x, float dt, Vector3 fixedPoint, float elasticity, float restLength)
-        {
-            var pos = new Vector3(NPC.Center, 0f);
-            var vel = new Vector3(NPC.velocity, 0f);
-
-            var offset = (x - fixedPoint);
-            var length = offset.Length();
-            var unit = offset / length;
-            Vector3 force = -elasticity * (length - restLength) * unit + new Vector3(0, 1, 0);
-            Vector4 term2 = Vector4.Transform(new Vector4(x - pos - dt * vel, 0), Matrix.Identity * 1f / (dt * dt));
-            return V4ToV3(term2) - force;
-        }
-
-        private Matrix G_Hessian(Vector3 x, float dt, Vector3 fixedPoint, float elasticity, float restLength)
-        {
-            var offset = (x - fixedPoint);
-            var length = (x - fixedPoint).Length();
-            var length2 = (x - fixedPoint).LengthSquared();
-
-            var span = outerProduct(new Vector4(offset, 0), new Vector4(offset, 0));
-            var term1 = span * elasticity / length2;
-            var term2 = (Matrix.Identity - span / length2) * elasticity * (1 - restLength / length);
-            return Matrix.Identity * 1f / (dt * dt) + term1 + term2;
-        }
-
-        private static Vector4 SolveAxB(in Matrix A, Vector4 b)
-        {
-            Matrix AInv = Matrix.Invert(A);
-            return Vector4.Transform(b, AInv);
-        }
-
-        private Vector3 NewtonsMethod(float dt, Vector3 fixedPoint, float elasticity, float restLength)
-        {
-            Vector3 x = new Vector3(NPC.Center, 0);
-            for (int i = 0; i < 10; i++)
-            {
-                var gp = new Vector4(G_prime(x, dt, fixedPoint, elasticity, restLength), 0);
-                var deltaX = V4ToV3(SolveAxB(G_Hessian(x, dt, fixedPoint, elasticity, restLength), -gp));
-                x += deltaX;
-                if (deltaX.LengthSquared() < 1e-3)
-                {
-                    break;
-                }
-            }
-            return x;
-        }
-
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 8;
@@ -114,12 +37,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
         }
         public override void AI()
         {
-            float deltaTime = 1f;
-            Vector3 xx = NewtonsMethod(deltaTime, new Vector3(Main.LocalPlayer.Center, 0), 0.3f, 100 );
-            var oldPos = NPC.Center;
-            NPC.velocity = (new Vector2(xx.X, xx.Y) - oldPos) / deltaTime;
-            return;
-
             Player player = Main.player[NPC.FindClosestPlayer()];
             if(NPC.ai[1] > 0)
             {

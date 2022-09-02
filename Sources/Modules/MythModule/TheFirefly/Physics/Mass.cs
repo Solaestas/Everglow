@@ -34,8 +34,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
         public bool isStatic;
 
 
-        internal Vector<float> X;
-        internal Vector<float> G;
+        internal Vector2 X;
+        internal Vector2 G;
+        internal float K;
 
         public Mass(float mass, Vector2 position, bool isStatic)
         {
@@ -53,19 +54,21 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
                 return;
             }
             var oldPos = position;
-            position = X.ToVector2();
-            var offset = position - oldPos;
-            velocity = offset / deltaTime;
+            position = X;
+            var offset = position - (oldPos + deltaTime * velocity);
+            velocity += offset / deltaTime;
+            force = Vector2.Zero;
         }
 
-        private Vector<float> G_1(float dt)
+        private Vector2 G_1(float dt)
         {
-            Vector<float> x_hat = (position + dt * velocity).ToMathNetVector();
-            return Matrix<float>.Build.DenseIdentity(2) * mass / (dt * dt) * (X - x_hat);
+            Vector2 x_hat = (position + dt * velocity);
+            return mass / (dt * dt) * (X - x_hat);
         }
 
         public void FEM_Prepare(float dt)
         {
+            velocity *= 0.95f;
             X = (position + velocity * dt).ToMathNetVector();
         }
 
