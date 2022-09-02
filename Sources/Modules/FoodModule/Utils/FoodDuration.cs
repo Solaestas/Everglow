@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Text;
+using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.FoodModule.DataStructures
 {
@@ -99,21 +100,21 @@ namespace Everglow.Sources.Modules.FoodModule.DataStructures
             StringBuilder sb = new StringBuilder();
             if (m_hours != 0)
             {
-                sb.Append($"{m_hours}小时");
+                sb.Append($"{m_hours} " + Language.GetTextValue("Mods.Everglow.Common.Hour"));
             }
             if (m_minutes != 0)
             {
-                sb.Append($"{m_minutes}分钟");
+                sb.Append($"{m_minutes} " + Language.GetTextValue("Mods.Everglow.Common.Minute"));
             }
             if (m_seconds != 0 && m_frames == 0)
             {
-                sb.Append($"{m_seconds}秒");
+                sb.Append($"{m_seconds} " + Language.GetTextValue("Mods.Everglow.Common.Second"));
             }
             else if (m_seconds != 0 && m_frames != 0)
             {
-                sb.Append($"{(m_seconds + (m_frames / 60.0)).ToString("0.##")}秒");
+                sb.Append($"{(m_seconds + (m_frames / 60.0)).ToString("0.##")} " + Language.GetTextValue("Mods.Everglow.Common.Second"));
             }
-            sb.Append("持续时间");
+            sb.Append(" " + Language.GetTextValue("Mods.Everglow.Common.Duration"));
             return sb.ToString();
         }
     }

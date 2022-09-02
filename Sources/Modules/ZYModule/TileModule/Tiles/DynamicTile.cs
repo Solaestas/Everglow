@@ -91,6 +91,7 @@ namespace Everglow.Sources.Modules.ZYModule.TileModule.Tiles
         /// 位移
         /// </summary>
         public virtual Vector2 Velocity { get => velocity; set => velocity = value; }
+        public virtual bool IsGrabbable => false;
         /// <summary>
         /// 更新顺序不固定，可以自己重写
         /// </summary>

@@ -88,7 +88,6 @@ namespace Everglow
         private PacketResolver m_packetResolver;
         private ProfilerManager m_profilerManager;
         private MainThreadContext m_mainThreadContext;
-
         public Everglow()
         {
             m_instance = this;
@@ -105,12 +104,6 @@ namespace Everglow
             m_mainThreadContext.Load();
             HookSystem.HookLoad();
             m_moduleManager.LoadAllModules();
-        }
-
-
-        public override void AddRecipes()
-        {
-            base.AddRecipes();
         }
 
         public override void Unload()

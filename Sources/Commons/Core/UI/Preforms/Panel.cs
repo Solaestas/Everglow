@@ -21,7 +21,7 @@ namespace Everglow.Sources.Commons.Core.UI.Preforms
 
         protected override void InitializeContainer()
         {
-            Events.Drop = true;
+            Events.Drag = true;
             Events.CanGetForPointer = false;
             base.InitializeContainer();
         }
@@ -39,14 +39,9 @@ namespace Everglow.Sources.Commons.Core.UI.Preforms
             Main.spriteBatch.GraphicsDevice.RasterizerState = OverflowHiddenRasterizerState;
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, OverflowHiddenRasterizerState, null);
             if (Image != null)
-            {
                 Main.spriteBatch.Draw(Image, BaseRectangle, ContainerElement.Color);
-            }
             else
-            {
                 Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, BaseRectangle, ContainerElement.Color);
-            }
-
             base.DrawSelf();
         }
         protected override void PostDraw()

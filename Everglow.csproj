@@ -9,6 +9,7 @@
     <BaseOutputPath></BaseOutputPath>
 	<DisableFody Condition="'$(Configuration)' != 'Debug'">true</DisableFody>
 	<Configurations>Debug;Release;DebugWithoutFody;ReleaseWithoutFody</Configurations>
+	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>$(DefineConstants);TML_2022_05</DefineConstants>
@@ -17,7 +18,8 @@
     <DefineConstants>$(DefineConstants);TML_2022_05</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugWithoutFody|AnyCPU'">
-    <DefineConstants>$(DefineConstants);TML_2022_05</DefineConstants>
+	  <DefineConstants>DEBUG</DefineConstants>
+	  <DefineConstants>$(DefineConstants);TML_2022_05</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseWithoutFody|AnyCPU'">
     <DefineConstants>$(DefineConstants);TML_2022_05</DefineConstants>
@@ -45,9 +47,13 @@
   <ItemGroup>
     <Folder Include="Resources\Tools\" />
     <Folder Include="lib\" />
-    <Folder Include="Sources\Modules\MythModule\Bosses\CorruptMoth\Dusts\" />
+    <Folder Include="Sources\Modules\FoodModule\Buffs\ModDrinkBuffs\" />
+    <Folder Include="Sources\Modules\FoodModule\Buffs\ModFoodBuffs\" />
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="xcopy /y /d  &quot;$(OutDir)Everglow.dll&quot; &quot;$(ProjectDir)&quot;" />
   </Target>
+	<Target Name="BuildEffect" BeforeTargets="Build">
+		<Exec Command="&quot;$(ProjectDir)Resources\Tools\_XNBCompiler.exe&quot; &quot;$(ProjectDir)Sources&quot;" />
+	</Target>
 </Project>

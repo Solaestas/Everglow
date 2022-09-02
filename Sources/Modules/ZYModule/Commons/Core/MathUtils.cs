@@ -1,5 +1,5 @@
-﻿using Everglow.Sources.Modules.ZYModule.Commons.Core.Collide;
-using Everglow.Sources.Modules.ZYModule.Commons.Core.DataStructures;
+﻿using Everglow.Sources.Commons.Core.DataStructures;
+using Everglow.Sources.Modules.ZYModule.Commons.Core.Collide;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,13 +48,14 @@ namespace Everglow.Sources.Modules.ZYModule.Commons.Core
             return t;
         }
         /// <summary>
-        /// [-π，π)
+        /// 将<paramref name="vector"/>投影到<paramref name="axis"/>上的长度
         /// </summary>
-        /// <param name="angle"></param>
+        /// <param name="axis"></param>
+        /// <param name="vector"></param>
         /// <returns></returns>
-        public static float AngleWrap(float angle)
+        public static float Projection(Vector2 axis, Vector2 vector)
         {
-            return Wrap(-MathHelper.Pi, MathHelper.Pi, angle);
+            return Vector2.Dot(axis, vector) / axis.Length();
         }
         public static float Clamp(float from, float to, float t)
         {
@@ -160,10 +161,9 @@ namespace Everglow.Sources.Modules.ZYModule.Commons.Core
                 return (float)Math.Atan2(vector.Y, vector.X);
             }
         }
-        public static Rotation ToRot(this Vector2 vector) => new Rotation(vector.ToRotation());
-        public static Rotation ToRotSafe(this Vector2 vector) => new Rotation(vector.ToRotationSafe());
         public static float Sqrt(float num) => (float)Math.Sqrt(num);
         public static float Cos(float num) => (float)Math.Cos(num);
         public static float Sin(float num) => (float)Math.Sin(num);
+        public static float Lerp(float from, float to, float t) => (1 - t) * from + to * t;
     }
 }
