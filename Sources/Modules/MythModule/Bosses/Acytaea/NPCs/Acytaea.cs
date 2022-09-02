@@ -95,7 +95,7 @@ public class Acytaea : ModNPC
         NPCID.Sets.TrailingMode[NPC.type] = 0;
         NPCID.Sets.TrailCacheLength[NPC.type] = 8;
         NPC.knockBackResist = 0;
-        Music = MusicLoader.GetMusicSlot(Mod, "Musics/Acytaea");
+        Music = Common.MythContent.QuickMusic("AcytaeaFighting");
     }
     public override bool CheckActive()
     {
