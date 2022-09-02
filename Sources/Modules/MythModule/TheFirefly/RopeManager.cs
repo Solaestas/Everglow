@@ -199,21 +199,22 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
                 ref _Mass m = ref m_massShadows[i];
                 m.force = m.originalMass.force;
                 m.force += new Vector2(0.04f + 0.06f * 
-                    (float)(Math.Sin(Main.timeForVisualEffects / 72f + m_massShadows[i].position.X / 13d + m_massShadows[i].position.Y / 4d)), 0)
+                    (float)(Math.Sin(Main.timeForVisualEffects / 72f + m.position.X / 13d + m.position.Y / 4d)), 0)
                     * (Main.windSpeedCurrent + 1f) * 2f
-                    + new Vector2(0, gravity * m_massShadows[i].mass);
+                    + new Vector2(0, gravity * m.mass);
 
-                m.velocity *= 0.95f;
-                m.X = (m_massShadows[i].position + m_massShadows[i].velocity * deltaTime);
+                m.velocity *= 0.99f;
+                m.X = (m.position + m.velocity * deltaTime);
             });
 
 
-            for (int iters = 0; iters < 8; iters++)
+            for (int iters = 0; iters < 16; iters++)
             {
                 Parallel.For(0, m_massShadows.Length, i =>
                 {
-                    Vector2 x_hat = (m_massShadows[i].position + deltaTime * m_massShadows[i].velocity);
-                    m_massShadows[i].G = m_massShadows[i].mass / (deltaTime * deltaTime) * (m_massShadows[i].X - x_hat);
+                    ref _Mass m = ref m_massShadows[i];
+                    Vector2 x_hat = (m.position + deltaTime * m.velocity);
+                    m.G = m.mass / (deltaTime * deltaTime) * (m.X - x_hat);
                 });
 
                 Parallel.For(0, m_springShadows.Length, i =>
@@ -222,7 +223,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
                     ref _Mass A = ref m_massShadows[spr.A];
                     ref _Mass B = ref m_massShadows[spr.B];
 
-                    var offset = (A.X - B.X);
+                    var offset = A.X - B.X;
                     var length = (float)offset.Length();
                     var unit = offset / length;
 
@@ -247,15 +248,15 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
             Parallel.For(0, m_massShadows.Length, i =>
             {
                 ref _Mass m = ref m_massShadows[i];
-                if (m.isStatic)
+                if (!m.isStatic)
                 {
-                    return;
+                    var oldPos = m.position;
+                    m.position = m.X;
+                    var offset = m.position - (oldPos + deltaTime * m.velocity);
+                    m.velocity += offset / deltaTime;
+                    m.force = Vector2.Zero;
                 }
-                var oldPos = m.position;
-                m.position = m.X;
-                var offset = m.position - (oldPos + deltaTime * m.velocity);
-                m.velocity += offset / deltaTime;
-                m.force = Vector2.Zero;
+
 
                 m.originalMass.position = m.position;
                 m.originalMass.force = Vector2.Zero;

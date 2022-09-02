@@ -66,7 +66,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             const float increase = 0.02f;
             if (BiomeActive() && Main.BackgroundEnabled)
             {
-                ropeManager?.Update(0.5f);
+                ropeManager?.Update(0.2f);
                 if (alpha < 1)
                 {
                     alpha += increase;
