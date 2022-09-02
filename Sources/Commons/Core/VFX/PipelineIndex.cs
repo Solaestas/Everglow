@@ -15,29 +15,18 @@
         public PipelineIndex(IEnumerable<int> indices)
         {
             var current = this;
-            var it = indices.GetEnumerator();
-            if(!it.MoveNext())
+            using var it = indices.GetEnumerator();
+            if (!it.MoveNext())
             {
-                throw new ArgumentException("Indices count shoud > 0");
+                throw new ArgumentException("Indices count should > 0");
             }
 
             current.index = it.Current;
-            while(it.MoveNext())
+            while (it.MoveNext())
             {
                 current.next = new PipelineIndex(it.Current);
                 current = current.next;
             }
-        }
-        public int GetDepth()
-        {
-            int count = 1;
-            var next = this.next;
-            while(next != null)
-            {
-                next = next.next;
-                count++;
-            }
-            return count;
         }
         public bool Equals(PipelineIndex other)
         {

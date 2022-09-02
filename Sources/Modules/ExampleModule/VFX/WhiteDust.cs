@@ -16,7 +16,7 @@ namespace Everglow.Sources.Modules.ExampleModule.VFX
 
         public override void Draw()
         {
-            VFXManager.spriteBatch.BindTexture(TextureAssets.MagicPixel.Value).Draw(position, new Rectangle(0, 0, 2, 2), Color.White);
+            VFXManager.spriteBatch.BindTexture(TextureAssets.MagicPixel.Value).Draw(position, new Rectangle(0, 0, 4, 4), Color.White);
         }
     }
 }
