@@ -148,6 +148,46 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
         {
             ropes.Clear();
         }
+
+        private void FEM_Update(float deltaTime)
+        {
+            for (int i = 0; i < ropes.Count; i++)
+            {
+                var rope = ropes[i];
+                foreach (var s in rope.spring)
+                {
+                    s.ApplyForce(deltaTime);
+                }
+                foreach (var m in rope.mass)
+                {
+                    m.force += new Vector2(0.04f + 0.06f * (float)(Math.Sin(Main.timeForVisualEffects / 72f + m.position.X / 13d + m.position.Y / 4d)), 0)
+                        * (Main.windSpeedCurrent + 1f) * 2f
+                        + new Vector2(0, gravity * m.mass);
+                    m.Update(deltaTime);
+                }
+            }
+            foreach(var )
+            for (int iters = 0; iters < 40; iters++)
+            {
+                
+            }
+            for (int i = 0; i < ropes.Count; i++)
+            {
+                var rope = ropes[i];
+                foreach (var s in rope.spring)
+                {
+                    s.ApplyForce(deltaTime);
+                }
+                foreach (var m in rope.mass)
+                {
+                    m.force += new Vector2(0.04f + 0.06f * (float)(Math.Sin(Main.timeForVisualEffects / 72f + m.position.X / 13d + m.position.Y / 4d)), 0)
+                        * (Main.windSpeedCurrent + 1f) * 2f
+                        + new Vector2(0, gravity * m.mass);
+                    m.Update(deltaTime);
+                }
+            }
+        }
+
         public void Update(float deltaTime)
         {
             for (int i = 0; i < ropes.Count; i++)

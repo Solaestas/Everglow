@@ -4,6 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using MathNet.Numerics.LinearAlgebra.Single;
+using MathNet.Numerics.LinearAlgebra;
+using Everglow.Sources.Commons.Function.Numerics;
+
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
 {
     internal class Spring
@@ -38,77 +42,56 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
             this.damping = damping;
         }
 
-        private Matrix outerProduct(Vector4 v1, Vector4 v2)
+        private Vector<float> Force(Mass A, Mass B, float elasticity, float restLength)
         {
-            Matrix matrix;
-            matrix.M11 = v1.X * v2.X;
-            matrix.M12 = v1.X * v2.Y;
-            matrix.M13 = v1.X * v2.Z;
-            matrix.M14 = v1.X * v2.W;
+            var offset = (A.X - B.X);
+            var length = (float)offset.L2Norm();
+            var unit = offset / length;
 
-            matrix.M21 = v1.Y * v2.X;
-            matrix.M22 = v1.Y * v2.Y;
-            matrix.M23 = v1.Y * v2.Z;
-            matrix.M24 = v1.Y * v2.W;
-
-            matrix.M31 = v1.Z * v2.X;
-            matrix.M32 = v1.Z * v2.Y;
-            matrix.M33 = v1.Z * v2.Z;
-            matrix.M34 = v1.Z * v2.W;
-
-            matrix.M41 = v1.W * v2.X;
-            matrix.M42 = v1.W * v2.Y;
-            matrix.M43 = v1.W * v2.Z;
-            matrix.M44 = v1.W * v2.W;
-            return matrix;
+            return -elasticity * (length - restLength) * unit + A.mass * Vector<float>.Build.DenseOfArray(new float[] { 0f, 4f });
         }
 
-        private Vector3 V4ToV3(Vector4 v)
+        private Vector<float> G_prime(Vector<float> x, float dt, Mass A, Mass B, float elasticity, float restLength)
         {
-            return new Vector3(v.X, v.Y, v.Z);
+            var pos = B.position.ToMathNetVector();
+            var vel = B.velocity.ToMathNetVector();
+
+            Vector<float> fixedPos = A.position.ToMathNetVector();
+            var offset = (x - fixedPos);
+            var length = (float)offset.L2Norm();
+
+            var unit = offset / length;
+            Vector<float> force = -elasticity * (length - restLength) * unit + Vector<float>.Build.DenseOfArray(new float[] { 0, 9.8f });
+            Vector<float> term2 = Matrix<float>.Build.DenseIdentity(2) * B.mass / (dt * dt) * (x - pos - dt * vel);
+            return term2 - force;
         }
 
-        private Vector3 G_prime(Vector3 x, float dt, Vector3 fixedPoint, Mass mass, float elasticity, float restLength)
+        private Matrix<float> G_Hessian(Vector<float> x, float dt, Mass A, Mass B, float elasticity, float restLength)
         {
-            var pos = new Vector3(mass.position, 0f);
-            var vel = new Vector3(mass.velocity, 0f);
+            Vector<float> fixedPos = A.position.ToMathNetVector();
+            var offset = (x - fixedPos);
+            var length = (float)offset.L2Norm();
+            var length2 = offset.DotProduct(offset);
 
-            var length = (x - fixedPoint).Length();
-            var unit = (x - fixedPoint) / length;
-            Vector3 force = -elasticity * (length - restLength) * unit;
-            Vector4 term2 = Vector4.Transform(new Vector4(x - pos - dt * vel, 0), Matrix.Identity * mass.mass / (dt * dt) ); 
-            return V4ToV3(term2) - force;
-        }
-
-        private Matrix G_Hessian(Vector3 x, float dt, Vector3 fixedPoint, Mass mass, float elasticity, float restLength)
-        {
-            var length = (x - fixedPoint).Length();
-            var length2 = (x - fixedPoint).LengthSquared();
-
-            var span = outerProduct(new Vector4(x, 0), new Vector4(x, 0));
+            var span = offset.OuterProduct(offset);
             var term1 = span * elasticity / length2;
-            var term2 = (Matrix.Identity - span / length2) * elasticity * (1 - restLength / length);
-            return Matrix.Identity * mass.mass / (dt * dt) + term1 + term2;
+            var term2 = (Matrix<float>.Build.DenseIdentity(2) - span / length2) * elasticity * (1 - restLength / length);
+            return Matrix<float>.Build.DenseIdentity(2) * B.mass / (dt * dt) + term1 + term2;
         }
 
-        private static Vector4 SolveAxB(in Matrix A, Vector4 b)
+        private Vector<float> NewtonsMethod(float dt, Mass A, Mass B, float elasticity, float restLength)
         {
-            Matrix AInv = Matrix.Invert(A);
-            return Vector4.Transform(b, AInv);
-        }
-
-        private Vector3 NewtonsMethod(float dt, Vector3 fixedPoint, Mass mass, float elasticity, float restLength)
-        {
-            Vector3 x = new Vector3(mass.position, 0);
+            Vector<float> x = B.position.ToMathNetVector();
             for (int i = 0; i < 10; i++)
             {
-                var gp = new Vector4(G_prime(x, dt, fixedPoint, mass, elasticity, restLength), 0);
-                var deltaX = V4ToV3(SolveAxB(G_Hessian(x, dt, fixedPoint, mass, elasticity, restLength), -gp));
-                if (deltaX.LengthSquared() < 1e-3)
+                var gPrime = G_prime(x, dt, A, B, elasticity, restLength);
+                var H = G_Hessian(x, dt, A, B, elasticity, restLength);
+                var deltaX = H.Solve(-gPrime);
+                x += deltaX;
+                if (deltaX.DotProduct(deltaX) < 1e-3)
                 {
                     break;
                 }
-                x += deltaX;
             }
             return x;
         }
@@ -147,10 +130,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
             //m1.force += acc * m1.mass;
         }
 
-        public void ApplyForce(float deltaTime)
+        public void FEM_CalculateG(float deltaTime)
         {
-            ForceSingleDirection(mass1, mass2, deltaTime);
-            // ForceSingleDirection(mass2, mass1, deltaTime);
+            mass1.G -= Force(mass1, mass2, elasticity, 100f);
+            mass2.G -= Force(mass2, mass1, elasticity, 100f);
         }
     }
 }

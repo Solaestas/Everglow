@@ -4,6 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using MathNet.Numerics.LinearAlgebra.Single;
+using MathNet.Numerics.LinearAlgebra;
+using Everglow.Sources.Commons.Function.Numerics;
+
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
 {
     internal class Mass
@@ -29,6 +33,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
         /// </summary>
         public bool isStatic;
 
+
+        internal Vector<float> X;
+        internal Vector<float> G;
+
         public Mass(float mass, Vector2 position, bool isStatic)
         {
             this.mass = mass;
@@ -44,9 +52,26 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
             {
                 return;
             }
-            //velocity += force / mass * deltaTime;
-            //position += velocity * deltaTime;
-            //force = Vector2.Zero;
+            var oldPos = position;
+            position = X.ToVector2();
+            var offset = position - oldPos;
+            velocity = offset / deltaTime;
+        }
+
+        private Vector<float> G_1(float dt)
+        {
+            Vector<float> x_hat = (position + dt * velocity).ToMathNetVector();
+            return Matrix<float>.Build.DenseIdentity(2) * mass / (dt * dt) * (X - x_hat);
+        }
+
+        public void FEM_Prepare(float dt)
+        {
+            X = (position + velocity * dt).ToMathNetVector();
+        }
+
+        public void FEM_UpdateG(float dt)
+        {
+            G = G_1(dt);
         }
     }
 }

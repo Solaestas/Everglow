@@ -16,59 +16,6 @@ namespace Everglow.Sources.Modules.ExampleModule
     [ProfilerMeasure]
     internal class ExampleSystem : ModSystem
     {
-        class Entity
-        {
-            public Vector2 Position;
-            public Vector2 Velocity;
-            public float Mass;
-        }
-        private List<Entity> entities = new List<Entity>();
-
-        private Vector<float> G_prime(Vector<float> x, float dt, Entity A, Entity B, float elasticity, float restLength)
-        {
-            var pos = B.Position.ToMathNetVector();
-            var vel = B.Velocity.ToMathNetVector();
-
-            Vector<float> fixedPos = Vector<float>.Build.DenseOfArray(new float[] { A.Position.X, A.Position.Y });
-            var offset = (x - fixedPos);
-            var length = (float)offset.L2Norm();
-
-            var unit = offset / length;
-            Vector<float> force = -elasticity * (length - restLength) * unit + Vector<float>.Build.DenseOfArray(new float[] {0, 9.8f});
-            Vector<float> term2 = Matrix<float>.Build.DenseIdentity(2) * B.Mass / (dt * dt) * (x - pos - dt * vel);
-            return term2 - force;
-        }
-
-        private Matrix<float> G_Hessian(Vector<float> x, float dt, Entity A, Entity B, float elasticity, float restLength)
-        {
-            Vector<float> fixedPos = A.Position.ToMathNetVector();
-            var offset = (x - fixedPos);
-            var length = (float)offset.L2Norm();
-            var length2 = offset.DotProduct(offset);
-
-            var span = offset.OuterProduct(offset);
-            var term1 = span * elasticity / length2;
-            var term2 = (Matrix<float>.Build.DenseIdentity(2) - span / length2) * elasticity * (1 - restLength / length);
-            return Matrix<float>.Build.DenseIdentity(2) * B.Mass / (dt * dt) + term1 + term2;
-        }
-
-        private Vector<float> NewtonsMethod(float dt, Entity A, Entity B, float elasticity, float restLength)
-        {
-            Vector<float> x = B.Position.ToMathNetVector();
-            for (int i = 0; i < 10; i++)
-            {
-                var gPrime = G_prime(x, dt, A, B, elasticity, restLength);
-                var H = G_Hessian(x, dt, A, B, elasticity, restLength);
-                var deltaX = H.Solve(-gPrime);
-                x += deltaX;
-                if (deltaX.DotProduct(deltaX) < 1e-3)
-                {
-                    break;
-                }
-            }
-            return x;
-        }
-
         public override void OnModLoad()
         {
             base.OnModLoad();
@@ -80,39 +27,82 @@ namespace Everglow.Sources.Modules.ExampleModule
             //{
             //    Everglow.ProfilerManager.PrintSummary();
             //}
-            if (Main.mouseRight && Main.mouseRightRelease)
-            {
-                entities.Add(new Entity()
-                {
-                    Position = Main.LocalPlayer.Center + new Vector2(-300, 0),
-                    Velocity = Vector2.Zero,
-                    Mass = 1f
-                });
-                entities.Add(new Entity()
-                {
-                    Position = Main.LocalPlayer.Center + new Vector2(300, 0),
-                    Velocity = Vector2.Zero,
-                    Mass = 1f
-                });
-            }
+            //if (Main.mouseRight && Main.mouseRightRelease)
+            //{
+            //    entities.Add(new Entity()
+            //    {
+            //        Position = Main.LocalPlayer.Center + new Vector2(-300, 0),
+            //        Velocity = Vector2.Zero,
+            //        Mass = 1f
+            //    });
+            //    entities.Add(new Entity()
+            //    {
+            //        Position = Main.LocalPlayer.Center + new Vector2(300, 0),
+            //        Velocity = Vector2.Zero,
+            //        Mass = 1f
+            //    });
+            //}
 
-            float deltaTime = 1f;
-            for (int i = 0; i < entities.Count; i += 2)
-            {
-                var pos = NewtonsMethod(deltaTime, entities[i], entities[i + 1], 0.3f, 100f).ToVector2();
-                var offset = pos - entities[i + 1].Position;
-                entities[i + 1].Position = pos;
-                entities[i + 1].Velocity = offset / deltaTime;
-            }
+            //float deltaTime = 1f;
+            //float elasticity = 0.3f;
+
+            //for (int i = 0; i < entities.Count; i++)
+            //{
+            //    var E = entities[i];
+            //    E.X = (E.Position + E.Velocity * deltaTime).ToMathNetVector();
+            //}
+
+            //int iters = 0;
+            //for (int j = 0; j < 100; j++)
+            //{
+            //    bool canEnd = true;
+            //    for (int i = 0; i < entities.Count; i++)
+            //    {
+            //        entities[i].G = G_1(entities[i], deltaTime);
+            //    }
+            //    for (int i = 0; i < entities.Count; i += 2)
+            //    {
+            //        entities[i].G -= Force(deltaTime, entities[i], entities[i + 1], elasticity, 100f);
+            //        entities[i + 1].G -= Force(deltaTime, entities[i + 1], entities[i], elasticity, 100f);
+            //    }
+            //    for (int i = 0; i < entities.Count; i++)
+            //    {
+            //        float alpha = 1f / (entities[i].Mass / (deltaTime * deltaTime) + 4 * elasticity);
+            //        var dx = alpha * entities[i].G;
+            //        entities[i].X -= dx;
+
+            //        if (i % 2 == 0 && dx.L2Norm() > 1e-3)
+            //        {
+            //            canEnd = false;
+            //        }
+            //    }
+            //    iters++;
+            //    if (canEnd)
+            //    {
+            //        break;
+            //    }
+            //}
+
+            //Main.NewText(iters);
+
+            //for (int i = 0; i < entities.Count; i += 2)
+            //{
+            //    var E = entities[i];
+            //    var oldPos = E.Position;
+            //    E.Position = E.X.ToVector2();
+
+            //    var offset = E.Position - oldPos;
+            //    E.Velocity = offset / deltaTime;
+            //}
         }
 
         public override void PostDrawInterface(SpriteBatch spriteBatch)
         {
-            foreach (var entity in entities)
-            {
-                spriteBatch.Draw(TextureAssets.MagicPixel.Value, entity.Position - Main.screenPosition, new Rectangle(0, 0, 8, 8),
-                    Color.White, 0, Vector2.One * 0.5f, 1f, SpriteEffects.None, 0f);
-            }
+            //foreach (var entity in entities)
+            //{
+            //    spriteBatch.Draw(TextureAssets.MagicPixel.Value, entity.Position - Main.screenPosition, new Rectangle(0, 0, 8, 8),
+            //        Color.White, 0, Vector2.One * 0.5f, 1f, SpriteEffects.None, 0f);
+            //}
             base.PostDrawInterface(spriteBatch);
         }
     }
