@@ -17,11 +17,11 @@ internal abstract class VisualProjectile : ModProjectile, IVisual
 
     public virtual void Draw()
     {
-        
+
     }
     public override void SetDefaults()
     {
-        if(!Main.gameMenu)
+        if (!Main.gameMenu)
         {
             VFXManager.Instance.Add(this);
         }
@@ -33,6 +33,6 @@ internal abstract class VisualProjectile : ModProjectile, IVisual
 
     public void Update()
     {
-        
+
     }
 }
