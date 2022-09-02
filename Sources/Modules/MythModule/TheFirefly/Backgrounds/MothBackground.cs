@@ -425,15 +425,15 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             Main.spriteBatch.Draw(texClose, Vector2.Zero, targetSourceRect, baseColor);
             Main.spriteBatch.End();
             ropeManager.luminance = luminance;
-            ropeManager.Draw();
 
+            // 单独绘制背景树枝
             //便于合批，顶点绘制分开处置
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             Texture2D VineTexture = MythContent.QuickTexture("TheFirefly/Backgrounds/Dark");
+            List<Vertex2D> branch = new List<Vertex2D>();
             for (int i = 0; i < ropes.Count; i++)
             {
-                List<Vertex2D> branch = new List<Vertex2D>();
-
+                bool first = true;
                 for (int j = 0; j < ropes[i].mass.Length; j++)
                 {
                     var mass = ropes[i].mass[j];
@@ -449,12 +449,17 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                     float width = (ropes[i].mass.Length - j);
                     //通过顶点绘制枝条
                     branch.Add(new Vertex2D(posSS + vector.RotatedBy(Math.PI / 2d) * width, Color.White, Vector3.Zero));
+                    if (first)
+                    {
+                        branch.Add(branch.Last());
+                        first = false;
+                    }
                     branch.Add(new Vertex2D(posSS - vector.RotatedBy(Math.PI / 2d) * width, Color.White, Vector3.Zero));
-
                 }
-                Main.graphics.GraphicsDevice.Textures[0] = VineTexture;
-                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, branch.ToArray(), 0, branch.Count - 2);
+                branch.Add(branch.Last());
             }
+            Main.graphics.GraphicsDevice.Textures[0] = VineTexture;
+            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, branch.ToArray(), 0, branch.Count - 2);
             Main.spriteBatch.End();
 
 
