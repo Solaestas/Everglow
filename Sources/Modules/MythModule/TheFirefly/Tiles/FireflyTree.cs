@@ -214,7 +214,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                     {
                         if (playerRect.Contains(m.position.ToPoint()))
                         {
-                            m.force += Main.LocalPlayer.velocity / 3;
+                            m.force += Main.LocalPlayer.velocity / 1.5f;
                         }
                     }
                 }
