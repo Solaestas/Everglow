@@ -126,7 +126,10 @@ internal static class Quick
     public static CAABB GetCollider(this Entity entity) => new CAABB(new AABB(entity.position.X, entity.position.Y, entity.width, entity.height));
 
 
-
+    public static Vector2 ToMouse(this Player player)
+    {
+        return player.GetModPlayer<PlayerManager>().MouseWorld.Current - player.Center;
+    }
 
 
 
