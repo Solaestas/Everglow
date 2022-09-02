@@ -11,8 +11,14 @@ public class VFXManager : IModule
 {
     private interface IVisualCollection : IEnumerable<IVisual>
     {
-        PipelineIndex Index { get; }
-        int Count { get; }
+        PipelineIndex Index
+        {
+            get;
+        }
+        int Count
+        {
+            get;
+        }
         void Add(IVisual visual);
         void Flush();
     }
@@ -163,7 +169,10 @@ public class VFXManager : IModule
     /// <summary>
     /// 当前RenderTarget
     /// </summary>
-    public RenderTarget2D CurrentRenderTarget { get; private set; }
+    public RenderTarget2D CurrentRenderTarget
+    {
+        get; private set;
+    }
     /// <summary>
     /// 用于Swap的RenderTarget
     /// </summary>
@@ -173,7 +182,10 @@ public class VFXManager : IModule
     /// 代替SpriteBatch，可以用来处理顶点绘制
     /// </summary>
     public static VFXBatch spriteBatch;
-    public static VFXManager Instance { get; private set; }
+    public static VFXManager Instance
+    {
+        get; private set;
+    }
     /// <summary>
     /// 名称
     /// </summary>
@@ -230,7 +242,7 @@ public class VFXManager : IModule
     }
     public void SwapRenderTarget()
     {
-        if(CurrentRenderTarget == TrCurrentTarget)
+        if (CurrentRenderTarget == TrCurrentTarget)
         {
             graphicsDevice.SetRenderTarget(TrNextTarget);
             graphicsDevice.Clear(Color.Transparent);
@@ -307,6 +319,7 @@ public class VFXManager : IModule
 
         GetOrAddCollection(visual.DrawLayer, requiredPipeline[visual.Type]).Add(visual);
     }
+    public int VisualType<T>() => visualTypes[typeof(T)];
     public void SetRenderTarget(RenderTarget2D rt2D)
     {
         graphicsDevice.SetRenderTarget(rt2D);

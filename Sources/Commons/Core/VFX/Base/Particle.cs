@@ -15,6 +15,11 @@ public abstract class Particle : Visual
     public float alpha;
     public override void Update()
     {
+        AI();
         position += velocity;
+    }
+    public virtual void AI()
+    {
+
     }
 }
