@@ -2,13 +2,13 @@
 
 namespace Everglow.Sources.Commons.Core.VFX.Base;
 
-internal abstract class VisualProjectile : ModProjectile, IVisual
+public class VisualNPC : ModNPC, IVisual
 {
-    public bool Active => Projectile.active && Main.projectile[Projectile.whoAmI] == Projectile;
+    public bool Active => NPC.active && Main.npc[NPC.whoAmI] == NPC;
 
     public virtual CallOpportunity DrawLayer => CallOpportunity.PostDrawProjectiles;
 
-    public bool Visible => !Projectile.hide && VFXManager.InScreen(Projectile.position, ProjectileID.Sets.DrawScreenCheckFluff[Type]);
+    public bool Visible => !NPC.hide && VFXManager.InScreen(NPC.position, 100);
 
     public virtual void Draw()
     {
@@ -24,7 +24,6 @@ internal abstract class VisualProjectile : ModProjectile, IVisual
 
     public void Kill()
     {
-        Projectile.Kill();
     }
 
     public void Update()

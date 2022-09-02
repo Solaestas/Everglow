@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Everglow.Sources.Commons.Core.VFX.Interfaces;
-using Everglow.Sources.Commons.Function.ObjectPool;
+﻿using Everglow.Sources.Commons.Core.VFX.Interfaces;
 using ReLogic.Content;
 
 namespace Everglow.Sources.Commons.Core.VFX.Base;
@@ -12,7 +6,10 @@ namespace Everglow.Sources.Commons.Core.VFX.Base;
 internal abstract class PostPipeline : IPipeline
 {
     protected Asset<Effect> effect;
-    public virtual void Load() { }
+
+    public virtual void Load()
+    {
+    }
 
     public void Render(IEnumerable<IVisual> visuals)
     {
@@ -26,5 +23,7 @@ internal abstract class PostPipeline : IPipeline
 
     public abstract void Render(RenderTarget2D rt2D);
 
-    public virtual void Unload() { }
+    public virtual void Unload()
+    {
+    }
 }

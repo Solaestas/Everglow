@@ -7,6 +7,7 @@
     {
         public int index;
         public PipelineIndex next;
+
         public PipelineIndex(int index)
         {
             this.index = index;
@@ -28,6 +29,7 @@
                 current = current.next;
             }
         }
+
         public bool Equals(PipelineIndex other)
         {
             return other != null && index == other.index && next == other.next;
@@ -40,11 +42,7 @@
 
         public override int GetHashCode()
         {
-            if (next == null)
-            {
-                return index.GetHashCode();
-            }
-            return index.GetHashCode() + next.GetHashCode();
+            return next == null ? index.GetHashCode() : index.GetHashCode() + next.GetHashCode();
         }
     }
 }
