@@ -54,26 +54,62 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
     }
     internal class RopeManager
     {
+        private struct _Mass
+        {
+            internal bool isStatic;
+            internal float mass;
+            internal float K;
+            internal Vector2 position;
+            internal Vector2 velocity;
+            internal Vector2 force;
+            internal Vector2 X;
+            internal Vector2 G;
+        }
+
+        private struct _Spring
+        {
+            internal float elasticity;
+            internal float restLength;
+            internal int A;
+            internal int B;
+        }
 
         private float gravity;
         private List<Rope> ropes;
         public Color drawColor;
         public float luminance;
 
+        private bool m_isDirty;
+        private _Mass[] m_massShadows;
+        private _Spring[] m_springShadows;
+
+        private _Mass ConvertMass(Mass mass)
+        {
+            var m = new _Mass();
+            m.mass = mass.mass;
+            m.isStatic = mass.isStatic;
+            m.position = mass.position;
+            m.velocity = mass.velocity;
+            m.force = mass.force;
+            return m;
+        }
+
         public RopeManager(float luminance, float gravity, Color drawColor)
         {
             this.luminance = luminance;
             this.gravity = gravity;
             this.drawColor = drawColor;
-            ropes = new List<Rope>(100);
+            this.m_isDirty = true;
+            this.ropes = new List<Rope>(100);
         }
 
         public RopeManager()
         {
-            luminance = 1;
-            gravity = 1;
-            drawColor = new Color(11, 9, 25);
-            ropes = new List<Rope>(100);
+            this.luminance = 1;
+            this.gravity = 1;
+            this.drawColor = new Color(11, 9, 25);
+            this.m_isDirty = true;
+            this.ropes = new List<Rope>(100);
         }
 
         /// <summary>
@@ -107,11 +143,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
                     }
                 }
             });
+            m_isDirty = true;
             return result;
         }
         public void LoadRope(IEnumerable<Rope> ropes)
         {
             this.ropes.AddRange(ropes);
+            m_isDirty = true;
         }
         /// <summary>
         /// 移除Ropes
@@ -122,6 +160,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
             var first = ropes.First();
             int index = this.ropes.IndexOf(first);
             this.ropes.RemoveRange(index, ropes.Count());
+            m_isDirty = true;
         }
         /// <summary>
         /// 清除屏幕外的Rope
@@ -151,6 +190,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
 
         private void FEM_Update(float deltaTime)
         {
+            Para
+
+            int x = 0;
             foreach (var rope in ropes)
             {
                 foreach (var m in rope.mass)
@@ -159,8 +201,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
                         * (Main.windSpeedCurrent + 1f) * 3f
                         + new Vector2(0, gravity * m.mass);
                     m.FEM_Prepare(deltaTime);
+                    x++;
                 }
             }
+
             for (int iters = 0; iters < 16; iters++)
             {
                 foreach (var rope in ropes)
@@ -168,6 +212,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
                     foreach (var m in rope.mass)
                     {
                         m.FEM_UpdateG(deltaTime);
+                        x++;
                     }
                 }
 
@@ -176,12 +221,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
                     foreach (var spr in rope.spring)
                     {
                         spr.FEM_CalculateG(deltaTime);
+                        x++;
                     }
                 }
                 foreach (var rope in ropes)
                 {
                     foreach (var m in rope.mass)
                     {
+                        x++;
                         if (m.isStatic)
                             continue;
                         float alpha = 1f / (m.mass / (deltaTime * deltaTime) + 4 * m.K);
@@ -195,13 +242,20 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
             {
                 foreach (var m in rope.mass)
                 {
+                    x++;
                     m.Update(deltaTime);
                 }
             }
+            Main.NewText(x);
         }
 
         public void Update(float deltaTime)
         {
+            if (m_isDirty)
+            {
+                RegenerateMasses();
+                m_isDirty = false;
+            }
             FEM_Update(deltaTime);
             //for (int i = 0; i < ropes.Count; i++)
             //{
@@ -302,6 +356,50 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
                 color.A = a;
             }
             return color;
+        }
+
+        private void RegenerateMasses()
+        {
+            int numMasses = 0;
+            int numSprings = 0;
+            foreach (var rope in ropes)
+            {
+                numMasses += rope.mass.Length;
+                numSprings += rope.spring.Length;
+            }
+            m_massShadows = new _Mass[numMasses];
+            m_springShadows = new _Spring[numSprings];
+
+            numMasses = 0;
+            foreach (var rope in ropes)
+            {
+                foreach (var m in rope.mass)
+                {
+                    m_massShadows[numMasses++] = ConvertMass(m);
+                }
+
+                foreach (var spr in rope.spring)
+                {
+                    int index = 0;
+                    
+                    foreach (var m in rope.mass)
+                    {
+                        index--;
+                        if (Mass.ReferenceEquals(spr.mass1, m))
+                        {
+                            m_springShadows[numSprings].A = numMasses + index;
+                        }
+                        else if (Mass.ReferenceEquals(spr.mass2, m))
+                        {
+                            m_springShadows[numSprings].B = numMasses + index;
+                        }
+                    }
+
+                    m_springShadows[numSprings].elasticity = spr.elasticity;
+                    m_springShadows[numSprings].restLength = spr.restLength;
+                    numSprings++;
+                }
+            }
         }
     }
 }

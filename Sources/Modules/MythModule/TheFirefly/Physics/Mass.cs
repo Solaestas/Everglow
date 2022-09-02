@@ -33,11 +33,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
         /// </summary>
         public bool isStatic;
 
-
-        internal Vector2 X;
-        internal Vector2 G;
-        internal float K;
-
         public Mass(float mass, Vector2 position, bool isStatic)
         {
             this.mass = mass;
