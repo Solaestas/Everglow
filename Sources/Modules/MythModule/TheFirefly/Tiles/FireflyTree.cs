@@ -167,7 +167,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             if (!Main.gamePaused)
             {
                 ropeManager.drawColor = new Color(0, 0, 0, 0);
-                ropeManager.Update(1f);
+                ropeManager.Update(0.5f);
             }
             ropeManager.Draw();
         }

@@ -156,12 +156,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
                 foreach (var m in rope.mass)
                 {
                     m.force += new Vector2(0.04f + 0.06f * (float)(Math.Sin(Main.timeForVisualEffects / 72f + m.position.X / 13d + m.position.Y / 4d)), 0)
-                        * (Main.windSpeedCurrent + 1f) * 2f
+                        * (Main.windSpeedCurrent + 1f) * 3f
                         + new Vector2(0, gravity * m.mass);
                     m.FEM_Prepare(deltaTime);
                 }
             }
-            for (int iters = 0; iters < 1; iters++)
+            for (int iters = 0; iters < 16; iters++)
             {
                 foreach (var rope in ropes)
                 {

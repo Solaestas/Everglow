@@ -42,13 +42,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
             this.damping = damping;
         }
 
-        private Vector<float> Force(Mass A, Mass B, float elasticity, float restLength)
+        private Vector2 Force(Mass A, Mass B, float elasticity, float restLength)
         {
             var offset = (A.X - B.X);
-            var length = (float)offset.L2Norm();
+            var length = (float)offset.Length();
             var unit = offset / length;
 
-            return -elasticity * (length - restLength) * unit + A.force.ToMathNetVector();
+            return -elasticity * (length - restLength) * unit + A.force;
         }
 
         private Vector<float> G_prime(Vector<float> x, float dt, Mass A, Mass B, float elasticity, float restLength)

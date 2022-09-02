@@ -68,8 +68,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
 
         public void FEM_Prepare(float dt)
         {
-            velocity *= 0.95f;
-            X = (position + velocity * dt).ToMathNetVector();
+            velocity *= 0.99f;
+            X = (position + velocity * dt);
         }
 
         public void FEM_UpdateG(float dt)
