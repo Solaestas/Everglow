@@ -48,28 +48,28 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
             {
                 return;
             }
-            var oldPos = position;
-            position = X;
-            var offset = position - (oldPos + deltaTime * velocity);
-            velocity += offset / deltaTime;
-            force = Vector2.Zero;
+            //var oldPos = position;
+            //position = X;
+            //var offset = position - (oldPos + deltaTime * velocity);
+            //velocity += offset / deltaTime;
+            //force = Vector2.Zero;
         }
 
-        private Vector2 G_1(float dt)
-        {
-            Vector2 x_hat = (position + dt * velocity);
-            return mass / (dt * dt) * (X - x_hat);
-        }
+        //private Vector2 G_1(float dt)
+        //{
+        //    Vector2 x_hat = (position + dt * velocity);
+        //    return mass / (dt * dt) * (X - x_hat);
+        //}
 
-        public void FEM_Prepare(float dt)
-        {
-            velocity *= 0.99f;
-            X = (position + velocity * dt);
-        }
+        //public void FEM_Prepare(float dt)
+        //{
+        //    velocity *= 0.99f;
+        //    X = (position + velocity * dt);
+        //}
 
-        public void FEM_UpdateG(float dt)
-        {
-            G = G_1(dt);
-        }
+        //public void FEM_UpdateG(float dt)
+        //{
+        //    G = G_1(dt);
+        //}
     }
 }

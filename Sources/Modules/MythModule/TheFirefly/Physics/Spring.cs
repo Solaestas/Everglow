@@ -42,14 +42,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
             this.damping = damping;
         }
 
-        private Vector2 Force(Mass A, Mass B, float elasticity, float restLength)
-        {
-            var offset = (A.X - B.X);
-            var length = (float)offset.Length();
-            var unit = offset / length;
+        //private Vector2 Force(Mass A, Mass B, float elasticity, float restLength)
+        //{
+        //    var offset = (A.X - B.X);
+        //    var length = (float)offset.Length();
+        //    var unit = offset / length;
 
-            return -elasticity * (length - restLength) * unit + A.force;
-        }
+        //    return -elasticity * (length - restLength) * unit + A.force;
+        //}
 
         private Vector<float> G_prime(Vector<float> x, float dt, Mass A, Mass B, float elasticity, float restLength)
         {
@@ -132,10 +132,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
 
         public void FEM_CalculateG(float deltaTime)
         {
-            mass1.G -= Force(mass1, mass2, elasticity, restLength);
-            mass2.G -= Force(mass2, mass1, elasticity, restLength);
-            mass1.K = elasticity;
-            mass2.K = elasticity;
+            //mass1.G -= Force(mass1, mass2, elasticity, restLength);
+            //mass2.G -= Force(mass2, mass1, elasticity, restLength);
+            //mass1.K = elasticity;
+            //mass2.K = elasticity;
         }
     }
 }

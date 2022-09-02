@@ -3,7 +3,7 @@ using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Physics;
 using SixLabors.ImageSharp.PixelFormats;
-
+using System.Threading.Tasks;
 using Terraria.GameContent;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly
@@ -64,6 +64,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
             internal Vector2 force;
             internal Vector2 X;
             internal Vector2 G;
+
+            internal Mass originalMass;
         }
 
         private struct _Spring
@@ -91,6 +93,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
             m.position = mass.position;
             m.velocity = mass.velocity;
             m.force = mass.force;
+            m.originalMass = mass;
             return m;
         }
 
@@ -190,63 +193,74 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
 
         private void FEM_Update(float deltaTime)
         {
-            Para
-
-            int x = 0;
-            foreach (var rope in ropes)
+            // Prepare
+            Parallel.For(0, m_massShadows.Length, i =>
             {
-                foreach (var m in rope.mass)
+                ref _Mass m = ref m_massShadows[i];
+                m.force = m.originalMass.force;
+                m.force += new Vector2(0.04f + 0.06f * 
+                    (float)(Math.Sin(Main.timeForVisualEffects / 72f + m_massShadows[i].position.X / 13d + m_massShadows[i].position.Y / 4d)), 0)
+                    * (Main.windSpeedCurrent + 1f) * 2f
+                    + new Vector2(0, gravity * m_massShadows[i].mass);
+
+                m.velocity *= 0.95f;
+                m.X = (m_massShadows[i].position + m_massShadows[i].velocity * deltaTime);
+            });
+
+
+            for (int iters = 0; iters < 8; iters++)
+            {
+                Parallel.For(0, m_massShadows.Length, i =>
                 {
-                    m.force += new Vector2(0.04f + 0.06f * (float)(Math.Sin(Main.timeForVisualEffects / 72f + m.position.X / 13d + m.position.Y / 4d)), 0)
-                        * (Main.windSpeedCurrent + 1f) * 3f
-                        + new Vector2(0, gravity * m.mass);
-                    m.FEM_Prepare(deltaTime);
-                    x++;
-                }
+                    Vector2 x_hat = (m_massShadows[i].position + deltaTime * m_massShadows[i].velocity);
+                    m_massShadows[i].G = m_massShadows[i].mass / (deltaTime * deltaTime) * (m_massShadows[i].X - x_hat);
+                });
+
+                Parallel.For(0, m_springShadows.Length, i =>
+                {
+                    ref _Spring spr = ref m_springShadows[i];
+                    ref _Mass A = ref m_massShadows[spr.A];
+                    ref _Mass B = ref m_massShadows[spr.B];
+
+                    var offset = (A.X - B.X);
+                    var length = (float)offset.Length();
+                    var unit = offset / length;
+
+                    A.G -= -spr.elasticity * (length - spr.restLength) * unit + A.force;
+                    B.G -= spr.elasticity * (length - spr.restLength) * unit + B.force;
+                    A.K = B.K = spr.elasticity;
+                });
+
+                Parallel.For(0, m_massShadows.Length, i =>
+                {
+                    ref _Mass m = ref m_massShadows[i];
+                    if (m.isStatic)
+                    {
+                        return;
+                    }
+                    float alpha = 1f / (m.mass / (deltaTime * deltaTime) + 4 * m.K);
+                    var dx = alpha * m.G;
+                    m.X -= dx;
+                });
             }
 
-            for (int iters = 0; iters < 16; iters++)
+            Parallel.For(0, m_massShadows.Length, i =>
             {
-                foreach (var rope in ropes)
+                ref _Mass m = ref m_massShadows[i];
+                if (m.isStatic)
                 {
-                    foreach (var m in rope.mass)
-                    {
-                        m.FEM_UpdateG(deltaTime);
-                        x++;
-                    }
+                    return;
                 }
+                var oldPos = m.position;
+                m.position = m.X;
+                var offset = m.position - (oldPos + deltaTime * m.velocity);
+                m.velocity += offset / deltaTime;
+                m.force = Vector2.Zero;
 
-                foreach (var rope in ropes)
-                {
-                    foreach (var spr in rope.spring)
-                    {
-                        spr.FEM_CalculateG(deltaTime);
-                        x++;
-                    }
-                }
-                foreach (var rope in ropes)
-                {
-                    foreach (var m in rope.mass)
-                    {
-                        x++;
-                        if (m.isStatic)
-                            continue;
-                        float alpha = 1f / (m.mass / (deltaTime * deltaTime) + 4 * m.K);
-                        var dx = alpha * m.G;
-                        m.X -= dx;
-                    }
-                }
-            }
-
-            foreach (var rope in ropes)
-            {
-                foreach (var m in rope.mass)
-                {
-                    x++;
-                    m.Update(deltaTime);
-                }
-            }
-            Main.NewText(x);
+                m.originalMass.position = m.position;
+                m.originalMass.force = Vector2.Zero;
+                m.originalMass.velocity = m.velocity;
+            });
         }
 
         public void Update(float deltaTime)
@@ -371,6 +385,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
             m_springShadows = new _Spring[numSprings];
 
             numMasses = 0;
+            numSprings = 0;
             foreach (var rope in ropes)
             {
                 foreach (var m in rope.mass)
