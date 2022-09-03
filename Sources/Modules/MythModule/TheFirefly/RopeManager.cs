@@ -264,6 +264,78 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
             });
         }
 
+        private void PBD_Update(float deltaTime)
+        {
+            // Prepare
+            Parallel.For(0, m_massShadows.Length, i =>
+            {
+                ref _Mass m = ref m_massShadows[i];
+                m.force = m.originalMass.force;
+                m.force += new Vector2(0.04f + 0.06f *
+                    (float)(Math.Sin(Main.timeForVisualEffects / 72f + m.position.X / 13d + m.position.Y / 4d)), 0)
+                    * (Main.windSpeedCurrent + 1f) * 2f
+                    + new Vector2(0, gravity * m.mass);
+
+                m.velocity += m.force / m.mass * deltaTime;
+                m.velocity *= 0.99f;
+                if (!m.isStatic)
+                {
+                    m.position += m.velocity * deltaTime;
+                }
+                m.X = m.position;
+            });
+
+            for (int iters = 0; iters < 16; iters++)
+            {
+                Parallel.For(0, m_massShadows.Length, i =>
+                {
+                    ref _Mass m = ref m_massShadows[i];
+                    m.K = 0;
+                    m.G = Vector2.Zero;
+                });
+
+                for (int i = 0; i < m_springShadows.Length; i++)
+                {
+                    ref _Spring spr = ref m_springShadows[i];
+                    ref _Mass A = ref m_massShadows[spr.A];
+                    ref _Mass B = ref m_massShadows[spr.B];
+
+                    Vector2 unit = Vector2.Normalize(A.X - B.X);
+                    A.G += 0.5f * (A.X + B.X + spr.restLength * unit);
+                    B.G += 0.5f * (A.X + B.X - spr.restLength * unit);
+
+                    A.K++;
+                    B.K++;
+                }
+
+                Parallel.For(0, m_massShadows.Length, i =>
+                {
+                    ref _Mass m = ref m_massShadows[i];
+
+                    var oldPos = m.X;
+                    m.X = ((m.X * 0.2f + m.G) / (0.2f + m.K));
+
+                });
+            }
+
+            Parallel.For(0, m_massShadows.Length, i =>
+            {
+                ref _Mass m = ref m_massShadows[i];
+                if (!m.isStatic)
+                {
+                    var oldPos = m.position;
+                    m.position = m.X;
+                    m.velocity += (m.position - oldPos) / deltaTime;
+                    m.force = Vector2.Zero;
+                }
+
+                m.originalMass.position = m.position;
+                m.originalMass.force = Vector2.Zero;
+                m.originalMass.velocity = m.velocity;
+            });
+
+        }
+
         public void Update(float deltaTime)
         {
             if (m_isDirty)
@@ -271,7 +343,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
                 RegenerateMasses();
                 m_isDirty = false;
             }
-            FEM_Update(deltaTime);
+            // FEM_Update(deltaTime);
+            PBD_Update(deltaTime);
             //for (int i = 0; i < ropes.Count; i++)
             //{
             //    var rope = ropes[i];
