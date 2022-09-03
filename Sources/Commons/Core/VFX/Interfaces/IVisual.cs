@@ -12,6 +12,7 @@ namespace Everglow.Sources.Commons.Core.VFX.Interfaces
         {
             get;
         }
+
         /// <summary>
         /// 判断这个视觉特效是否需要绘制
         /// </summary>
@@ -19,16 +20,21 @@ namespace Everglow.Sources.Commons.Core.VFX.Interfaces
         {
             get;
         }
+
         public int Type
         {
             get;
         }
+
         public CallOpportunity DrawLayer
         {
             get;
         }
+
         public void Update();
+
         public void Draw();
+
         public void Kill();
     }
 }

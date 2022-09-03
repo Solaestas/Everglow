@@ -6,6 +6,7 @@ using Everglow.Sources.Commons.Core.VFX.Interfaces;
 using Everglow.Sources.Commons.Function.ObjectPool;
 
 namespace Everglow.Sources.Commons.Core.VFX;
+
 [ProfilerMeasure]
 public class VFXManager : IModule
 {
@@ -15,17 +16,22 @@ public class VFXManager : IModule
         {
             get;
         }
+
         int Count
         {
             get;
         }
+
         void Add(IVisual visual);
+
         void Flush();
     }
+
     private class SingleVisual : IVisualCollection
     {
         public PipelineIndex index;
         public IVisual visual;
+
         public SingleVisual(PipelineIndex index)
         {
             this.index = index;
@@ -63,26 +69,32 @@ public class VFXManager : IModule
             return GetEnumerator();
         }
     }
+
     private class VisualCollection : IVisualCollection
     {
         private const int FLUSH_COUNT = 50;
         private SortedSet<IVisual> visuals;
         private PipelineIndex index;
+
         /// <summary>
         /// 比较器
         /// </summary>
         private static VisualComparer compare = new VisualComparer();
+
         public PipelineIndex Index => index;
         public int Count => visuals.Count;
+
         public VisualCollection(PipelineIndex index)
         {
-            this.visuals = new SortedSet<IVisual>(compare);
+            visuals = new SortedSet<IVisual>(compare);
             this.index = index;
         }
+
         public IEnumerator<IVisual> GetEnumerator()
         {
             return visuals.GetEnumerator();
         }
+
         public void Add(IVisual visual)
         {
             if (visuals.Count % FLUSH_COUNT == 0)
@@ -91,6 +103,7 @@ public class VFXManager : IModule
             }
             visuals.Add(visual);
         }
+
         public void Flush()
         {
             int b = visuals.RemoveWhere(visual => !visual.Active);
@@ -100,6 +113,7 @@ public class VFXManager : IModule
         {
             return GetEnumerator();
         }
+
         private class VisualComparer : Comparer<IVisual>
         {
             /// <summary>
@@ -119,25 +133,31 @@ public class VFXManager : IModule
             }
         }
     }
+
     /// <summary>
     /// Pipeline的Type
     /// </summary>
     private List<Type> pipelineTypes = new List<Type>();
+
     /// <summary>
     /// Pipeline的实例
     /// </summary>
     private List<IPipeline> pipelineInstances = new List<IPipeline>();
+
     /// <summary>
     /// 用绘制层 + 第一个调用的绘制层作为Key来储存List<IVisual>
     /// </summary>
     private Dictionary<CallOpportunity, List<IVisualCollection>> visuals =
         new Dictionary<CallOpportunity, List<IVisualCollection>>();
+
     private Dictionary<(CallOpportunity, PipelineIndex), IVisualCollection> lookup =
         new Dictionary<(CallOpportunity, PipelineIndex), IVisualCollection>();
+
     /// <summary>
     /// 保存每一种Visual所需的Pipeline
     /// </summary>
     private List<PipelineIndex> requiredPipeline = new List<PipelineIndex>();
+
     /// <summary>
     /// 保存每一种Visual的Type
     /// </summary>
@@ -145,27 +165,34 @@ public class VFXManager : IModule
     {
         [typeof(Rt2DVisual)] = int.MaxValue
     };
+
     /// <summary>
     /// RenderTarget池子
     /// </summary>
     public RenderTargetPool renderTargetPool = new RenderTargetPool();
+
     /// <summary>
     /// GraphicsDevice引用
     /// </summary>
     private GraphicsDevice graphicsDevice = Main.instance.GraphicsDevice;
+
     /// <summary>
     /// 当前使用RenderTarget的Index
     /// </summary>
     private bool rt2DIndex = true;
+
     private const bool DefaultRt2DIndex = true;
+
     /// <summary>
     /// 当前的RenderTarget
     /// </summary>
     private RenderTarget2D TrCurrentTarget => rt2DIndex ? Main.screenTarget : Main.screenTargetSwap;
+
     /// <summary>
     /// 下一个RenderTarget
     /// </summary>
     private RenderTarget2D TrNextTarget => rt2DIndex ? Main.screenTargetSwap : Main.screenTarget;
+
     /// <summary>
     /// 当前RenderTarget
     /// </summary>
@@ -173,23 +200,29 @@ public class VFXManager : IModule
     {
         get; private set;
     }
+
     /// <summary>
     /// 用于Swap的RenderTarget
     /// </summary>
     private ResourceLocker<RenderTarget2D> tempRenderTarget;
+
     private Rt2DVisual renderingRt2D;
+
     /// <summary>
     /// 代替SpriteBatch，可以用来处理顶点绘制
     /// </summary>
     public static VFXBatch spriteBatch;
+
     public static VFXManager Instance
     {
         get; private set;
     }
+
     /// <summary>
     /// 名称
     /// </summary>
     public string Name => "VFXManager";
+
     /// <summary>
     /// 获得一种Pipeline的下标，若没有此Pipeline便创建此Pipeline
     /// </summary>
@@ -207,6 +240,7 @@ public class VFXManager : IModule
         pipelineInstances.Add(pipeline);
         return pipelineTypes.Count - 1;
     }
+
     /// <summary>
     /// 获得Visual的Type
     /// </summary>
@@ -216,6 +250,7 @@ public class VFXManager : IModule
     {
         return visualTypes[visual.GetType()];
     }
+
     /// <summary>
     /// 注册一个Visual
     /// </summary>
@@ -240,6 +275,7 @@ public class VFXManager : IModule
             requiredPipeline.Add(null);
         }
     }
+
     public void SwapRenderTarget()
     {
         if (CurrentRenderTarget == TrCurrentTarget)
@@ -257,6 +293,7 @@ public class VFXManager : IModule
             (renderingRt2D.locker, tempRenderTarget) = (tempRenderTarget, renderingRt2D.locker);
         }
     }
+
     public void Draw(CallOpportunity layer)
     {
         var visuals = this.visuals[layer];
@@ -303,6 +340,7 @@ public class VFXManager : IModule
             Main.spriteBatch.End();
         }
     }
+
     /// <summary>
     /// 添加一个Visual实例
     /// </summary>
@@ -319,13 +357,16 @@ public class VFXManager : IModule
 
         GetOrAddCollection(visual.DrawLayer, requiredPipeline[visual.Type]).Add(visual);
     }
+
     public int VisualType<T>() => visualTypes[typeof(T)];
+
     public void SetRenderTarget(RenderTarget2D rt2D)
     {
         graphicsDevice.SetRenderTarget(rt2D);
         graphicsDevice.Clear(Color.Transparent);
         CurrentRenderTarget = rt2D;
     }
+
     private IVisualCollection GetOrAddCollection(CallOpportunity layer, PipelineIndex index, bool first = true)
     {
         if (lookup.TryGetValue((layer, index), out var collection))
@@ -344,11 +385,13 @@ public class VFXManager : IModule
         visuals[layer].Insert(visuals[layer].IndexOf(GetOrAddCollection(layer, index.next, false)), collection);
         return collection;
     }
+
     public void ModifyPipeline<T>(params Type[] pipelines) where T : IVisual
     {
         //TODO 未进行测试
         requiredPipeline[visualTypes[typeof(T)]] = new PipelineIndex(pipelines.Select(i => GetOrCreatePipeline(i)));
     }
+
     public void Update()
     {
         foreach (var visuals in visuals.Values)
@@ -365,6 +408,7 @@ public class VFXManager : IModule
             }
         }
     }
+
     public void Flush()
     {
         foreach (var (layer, visuals) in visuals)
@@ -397,6 +441,7 @@ public class VFXManager : IModule
             }
         }
     }
+
     public void Clear()
     {
         foreach (var visuals in visuals.Values)
@@ -404,6 +449,7 @@ public class VFXManager : IModule
             visuals.Clear();
         }
     }
+
     public static readonly CallOpportunity[] drawLayers = new CallOpportunity[]
     {
         CallOpportunity.PostDrawFilter,
@@ -441,6 +487,7 @@ public class VFXManager : IModule
         Everglow.HookSystem.AddMethod(Update, CallOpportunity.PostUpdateEverything, "VFX Update");
         Everglow.MainThreadContext.AddTask(() => tempRenderTarget = renderTargetPool.GetRenderTarget2D());
     }
+
     public void Unload()
     {
         Everglow.MainThreadContext.AddTask(() =>

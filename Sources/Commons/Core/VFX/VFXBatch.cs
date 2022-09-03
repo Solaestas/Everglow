@@ -12,6 +12,7 @@ public class VFXBatch : IDisposable
             new VertexElement(0, VertexElementFormat.Vector2, VertexElementUsage.Position, 0),
             new VertexElement(8, VertexElementFormat.Color, VertexElementUsage.Color, 0),
             new VertexElement(12, VertexElementFormat.Vector2, VertexElementUsage.TextureCoordinate, 0));
+
         public Vector2 position;
         public Color color;
         public Vector2 texCoord;
@@ -23,12 +24,19 @@ public class VFXBatch : IDisposable
             this.texCoord = texCoord;
         }
     }
+
     private interface IBuffers : IDisposable
     {
-        Type VertexType { get; }
+        Type VertexType
+        {
+            get;
+        }
+
         void Clear();
+
         void DrawPrimitive();
     }
+
     private static class Buffer<T> where T : struct, IVertexType
     {
         private class Buffers : IBuffers
@@ -43,12 +51,14 @@ public class VFXBatch : IDisposable
             public ushort vertexPosition;
             public ushort indexPosition;
             public Type VertexType => typeof(T);
+
             public void Dispose()
             {
                 vertexBuffer.Dispose();
                 indexBuffer.Dispose();
                 GC.SuppressFinalize(this);
             }
+
             public void DrawPrimitive()
             {
                 Debug.Assert(VertexPosition != 0 && indexPosition != 0);
@@ -82,14 +92,15 @@ public class VFXBatch : IDisposable
                     (currentIndex, currentVertex) = (nextIndex, nextVertex);
                 }
             }
+
             public void Clear()
             {
                 vertexPosition = indexPosition = 0;
                 sameTexture.Clear();
                 textures.Clear();
             }
-
         }
+
         private static Buffers instance;
         public static IBuffers Instance => instance;
         public static DynamicVertexBuffer VertexBuffer => instance.vertexBuffer;
@@ -97,6 +108,7 @@ public class VFXBatch : IDisposable
         public static T[] Vertices => instance.vertices;
         public static ushort[] Indices => instance.indices;
         public static List<Texture2D> Textures => instance.textures;
+
         public static Texture2D CurrentTexture
         {
             get
@@ -105,9 +117,11 @@ public class VFXBatch : IDisposable
                 return instance.textures[^1];
             }
         }
+
         public static Queue<(ushort index, ushort vertex)> SameTexture => instance.sameTexture;
         public static ref ushort VertexPosition => ref instance.vertexPosition;
         public static ref ushort IndexPosition => ref instance.indexPosition;
+
         public static IBuffers Create(GraphicsDevice graphicsDevice, int maxVertices, int maxIndices)
         {
             Debug.Assert(instance == null, "Can't Create Twice");
@@ -123,6 +137,7 @@ public class VFXBatch : IDisposable
             };
             return instance;
         }
+
         public static void AddVertex(IEnumerable<T> vertices, PrimitiveType type)
         {
             ushort pos = instance.vertexPosition;
@@ -141,6 +156,7 @@ public class VFXBatch : IDisposable
                         instance.indices[instance.indexPosition++] = (ushort)(i + instance.vertexPosition);
                     }
                     break;
+
                 case PrimitiveType.TriangleStrip:
                     for (int i = 0; i < count - 2; i++)
                     {
@@ -149,11 +165,13 @@ public class VFXBatch : IDisposable
                         instance.indices[instance.indexPosition++] = (ushort)(i + 2 + instance.vertexPosition);
                     }
                     break;
+
                 default:
                     throw new Exception("Unsupported PrimitiveType");
             }
             instance.vertexPosition = pos;
         }
+
         public static bool CheckSize(int vertexSize)
         {
             return instance.vertexPosition + vertexSize < instance.vertices.Length;
@@ -162,13 +180,16 @@ public class VFXBatch : IDisposable
 
     //numbers Copy from SpriteBatch
     private const int MAX_VERTICES = 8192;
+
     //如果所有网格都是Strip形式
     private const int MAX_INDICES = MAX_VERTICES * 3;
+
     private GraphicsDevice graphicsDevice;
     private List<IBuffers> buffers = new List<IBuffers>();
     private List<bool> needFlush = new List<bool>();
     private bool hasBegun = false;
     public GraphicsDevice GraphicsDevice => graphicsDevice;
+
     public VFXBatch(GraphicsDevice gd)
     {
         graphicsDevice = gd;
@@ -178,19 +199,23 @@ public class VFXBatch : IDisposable
             VFXManager.spriteBatch.RegisterVertex<Vertex2D>();
         });
     }
+
     public void RegisterVertex<T>(int maxVertices = MAX_VERTICES, int maxIndices = MAX_INDICES) where T : struct, IVertexType
     {
         buffers.Add(Buffer<T>.Create(GraphicsDevice, maxVertices, maxIndices));
         needFlush.Add(false);
     }
+
     public void Begin()
     {
         Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicClamp, RasterizerState.CullNone);
     }
+
     public void Begin(BlendState blendState)
     {
         Begin(blendState, DepthStencilState.None, SamplerState.AnisotropicClamp, RasterizerState.CullNone);
     }
+
     public void Begin(BlendState blendState, DepthStencilState depthStencilState, SamplerState samplerState, RasterizerState rasterizerState)
     {
         Debug.Assert(!hasBegun);
@@ -200,12 +225,14 @@ public class VFXBatch : IDisposable
         graphicsDevice.BlendState = blendState;
         hasBegun = true;
     }
+
     /// <summary>
     /// 绑定Texture2D用于接下来的Draw
     /// </summary>
     /// <param name="texture"></param>
     /// <returns>this</returns>
     public VFXBatch BindTexture(Texture2D texture) => BindTexture<VFX2D>(texture);
+
     /// <summary>
     /// 绑定Texture2D用于该顶点类型下一次的Draw
     /// </summary>
@@ -229,6 +256,7 @@ public class VFXBatch : IDisposable
         Buffer<T>.SameTexture.Enqueue((Buffer<T>.IndexPosition, Buffer<T>.VertexPosition));
         return this;
     }
+
     public void Draw(Vector2 position, Color color)
     {
         Debug.Assert(hasBegun);
@@ -247,6 +275,7 @@ public class VFXBatch : IDisposable
             new VFX2D(position + new Vector2(tex.Width, tex.Height), color, new Vector2(1,1))
         }, PrimitiveType.TriangleStrip);
     }
+
     public void Draw(Vector2 position, Rectangle? sourceRectangle, Color color)
     {
         Debug.Assert(hasBegun);
@@ -270,12 +299,13 @@ public class VFXBatch : IDisposable
             new VFX2D(position + new Vector2(0, sourceRect.Height), color, new Vector2(x, y + height)),
             new VFX2D(position + new Vector2(sourceRect.Width, sourceRect.Height), color, new Vector2(x + width, y + height))
         }, PrimitiveType.TriangleStrip);
-
     }
+
     public void Draw(Vector2 position, Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin, float scale, SpriteEffects effects)
     {
         Draw(position, sourceRectangle, color, rotation, origin, new Vector2(scale), effects);
     }
+
     public void Draw(Vector2 position, Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects)
     {
         Debug.Assert(hasBegun);
@@ -319,6 +349,7 @@ public class VFXBatch : IDisposable
             new VFX2D(Vector2.Transform(topLeftPosition + new Vector2(sourceRect.Width, sourceRect.Height), matrix), color, bottomRight)
         }, PrimitiveType.TriangleStrip);
     }
+
     public void Draw(Vector2 position, Rectangle? sourceRectangle, Color color, Matrix matrix)
     {
         Debug.Assert(hasBegun);
@@ -343,6 +374,7 @@ public class VFXBatch : IDisposable
             new VFX2D(Vector2.Transform(position + new Vector2(sourceRect.Width, sourceRect.Height), matrix), color, new Vector2(x + width, y + height))
         }, PrimitiveType.TriangleStrip);
     }
+
     public void Draw(Rectangle destinationRectangle, Color color)
     {
         Debug.Assert(hasBegun);
@@ -361,6 +393,7 @@ public class VFXBatch : IDisposable
             new VFX2D(new Vector2(destinationRectangle.X + destinationRectangle.Width, destinationRectangle.Y + destinationRectangle.Height), color, Vector2.One)
         }, PrimitiveType.TriangleStrip);
     }
+
     public void Draw(Rectangle destinationRectangle, Rectangle? sourceRectangle, Color color)
     {
         Debug.Assert(hasBegun);
@@ -384,6 +417,7 @@ public class VFXBatch : IDisposable
             new VFX2D(new Vector2(destinationRectangle.X + destinationRectangle.Width, destinationRectangle.Y + destinationRectangle.Height), color, new Vector2(x + width, y + height))
         }, PrimitiveType.TriangleStrip);
     }
+
     public void Draw(Rectangle destinationRectangle, Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin, SpriteEffects effects)
     {
         Debug.Assert(hasBegun);
@@ -399,7 +433,6 @@ public class VFXBatch : IDisposable
         float y = sourceRect.Y / (float)tex.Height;
         float width = sourceRect.Width / (float)tex.Width;
         float height = sourceRect.Height / (float)tex.Height;
-
 
         Vector2 position = new Vector2(destinationRectangle.X, destinationRectangle.Y);
         Vector2 topLeftPosition = position - origin;
@@ -429,6 +462,7 @@ public class VFXBatch : IDisposable
             new VFX2D(Vector2.Transform(topLeftPosition + new Vector2(sourceRect.Width, sourceRect.Height), matrix), color, bottomRight)
         }, PrimitiveType.TriangleStrip);
     }
+
     public void Draw<T>(IEnumerable<T> vertices, PrimitiveType type) where T : struct, IVertexType
     {
         Debug.Assert(hasBegun);
@@ -441,7 +475,9 @@ public class VFXBatch : IDisposable
         needFlush[GetBufferIndex<T>()] = true;
         Buffer<T>.AddVertex(vertices, type);
     }
+
     private int GetBufferIndex<T>() where T : struct, IVertexType => buffers.IndexOf(Buffer<T>.Instance);
+
     public void Flush()
     {
         for (int i = 0; i < buffers.Count; i++)
@@ -454,11 +490,13 @@ public class VFXBatch : IDisposable
             }
         }
     }
+
     public void Flush<T>() where T : struct, IVertexType
     {
         Buffer<T>.Instance.DrawPrimitive();
         Buffer<T>.Instance.Clear();
     }
+
     public void End()
     {
         Flush();

@@ -1,6 +1,4 @@
 ﻿using Everglow.Sources.Commons.Core.VFX.Base;
-using Everglow.Sources.Commons.Core.VFX.Interfaces;
-using ReLogic.Content;
 
 namespace Everglow.Sources.Commons.Core.VFX.Pipelines
 {
@@ -29,6 +27,5 @@ namespace Everglow.Sources.Commons.Core.VFX.Pipelines
         {
             effect = ModContent.Request<Effect>("Everglow/Sources/Commons/Core/VFX/Effect/Shader2D");
         }
-
     }
 }
