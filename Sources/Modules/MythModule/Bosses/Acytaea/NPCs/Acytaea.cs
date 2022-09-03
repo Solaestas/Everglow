@@ -12,6 +12,7 @@ using Terraria.Localization;
 namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs;
 
 [AutoloadHead]
+[Pipeline(typeof(NPPipeline), typeof(AcytaeaPipeline))]
 public class Acytaea : VisualNPC
 {
     private bool canDespawn = false;

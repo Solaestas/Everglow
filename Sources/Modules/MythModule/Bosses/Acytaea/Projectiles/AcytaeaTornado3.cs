@@ -1,11 +1,10 @@
 ﻿using Everglow.Sources.Commons.Core.VFX;
 using Everglow.Sources.Commons.Core.VFX.Base;
-using Everglow.Sources.Commons.Core.VFX.Pipelines;
 using Everglow.Sources.Commons.Function.Vertex;
 
 namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles;
 
-[Pipeline(typeof(WCSPipeline))]
+[Pipeline(typeof(NPPipeline), typeof(AcytaeaPipeline))]
 internal class AcytaeaTornado3 : VisualProjectile
 {
     public override void SetDefaults()
@@ -96,7 +95,7 @@ internal class AcytaeaTornado3 : VisualProjectile
             }
             Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Projectiles/AcytaeaTornado3").Value;
             //Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
-            VFXManager.spriteBatch.BindTexture(t).Draw(Vx, PrimitiveType.TriangleList);
+            VFXManager.spriteBatch.Draw(t, Vx, PrimitiveType.TriangleList);
             //Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
         }
     }

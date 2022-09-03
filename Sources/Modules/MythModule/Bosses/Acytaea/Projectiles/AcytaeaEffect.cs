@@ -1,12 +1,11 @@
 ﻿using Everglow.Sources.Commons.Core.VFX;
 using Everglow.Sources.Commons.Core.VFX.Base;
-using Everglow.Sources.Commons.Core.VFX.Pipelines;
 using Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Dusts;
 using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles;
 
-[Pipeline(typeof(WCSPipeline))]
+[Pipeline(typeof(NPPipeline), typeof(AcytaeaPipeline))]
 internal class AcytaeaEffect : VisualProjectile
 {
     public override void SetStaticDefaults()

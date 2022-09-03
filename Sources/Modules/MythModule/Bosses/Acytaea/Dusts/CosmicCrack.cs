@@ -1,11 +1,10 @@
 ﻿using Everglow.Sources.Commons.Core.VFX;
 using Everglow.Sources.Commons.Core.VFX.Base;
-using Everglow.Sources.Commons.Core.VFX.Pipelines;
 using ReLogic.Content;
 
 namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Dusts;
 
-[Pipeline(typeof(WCSPipeline))]
+[Pipeline(typeof(NPPipeline), typeof(AcytaeaPipeline))]
 public class CosmicCrack : Particle
 {
     public static Asset<Texture2D> texture;
