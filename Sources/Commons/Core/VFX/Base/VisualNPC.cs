@@ -2,7 +2,7 @@
 
 namespace Everglow.Sources.Commons.Core.VFX.Base;
 
-public class VisualNPC : ModNPC, IVisual
+public abstract class VisualNPC : ModNPC, IVisual
 {
     public bool Active => NPC.active && Main.npc[NPC.whoAmI] == NPC;
 
