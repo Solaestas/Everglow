@@ -1,4 +1,3 @@
-
 using Everglow.Sources.Commons.Function.Vertex;
 
 using Terraria.Audio;
@@ -11,6 +10,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
         {
             DisplayName.SetDefault("BloodBlade");
         }
+
         public override void SetDefaults()
         {
             Projectile.width = 60;
@@ -26,16 +26,14 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 30;
         }
-        private bool initialization = true;
-        private double X;
-        private float Omega;
-        private float b;
+
         private float K = 10;
 
         public override Color? GetAlpha(Color lightColor)
         {
             return new Color?(new Color(1f - 1f / Projectile.velocity.Length(), 1f - 1f / Projectile.velocity.Length(), 1f - 1f / Projectile.velocity.Length(), 0));
         }
+
         public override void AI()
         {
             Lighting.AddLight(Projectile.Center, (255 - Projectile.alpha) * 0.12f / 51f, (255 - Projectile.alpha) * 0f / 255f, (255 - Projectile.alpha) * 0f / 255f);
@@ -69,6 +67,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                 Projectile.tileCollide = true;
             }
         }
+
         public override void Kill(int timeLeft)
         {
             SoundEngine.PlaySound(SoundID.DD2_WitherBeastCrystalImpact, Projectile.Center);
@@ -83,13 +82,16 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                 int num22 = Dust.NewDust(Projectile.Center - new Vector2(4, 4) + new Vector2(0, Main.rand.NextFloat(0, 8f)).RotatedByRandom(Math.PI * 2), 2, 2, ModContent.DustType<Dusts.RedEffect2>(), v0.X, v0.Y, 0, default, 1.5f);
             }
         }
+
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture2D = (Texture2D)ModContent.Request<Texture2D>(Texture);
             Main.spriteBatch.Draw(texture2D, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, Projectile.GetAlpha(lightColor), Projectile.rotation, new Vector2(61, 61), Projectile.scale, SpriteEffects.None, 0f);
             return false;
         }
+
         private Effect ef;
+
         public override void PostDraw(Color lightColor)
         {
             Main.spriteBatch.End();
@@ -107,15 +109,12 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                 //spriteBatch.Draw(Main.magicPixel, Projectile.oldPos[i] - Main.screenPosition,
                 //    new Rectangle(0, 0, 1, 1), Color.White, 0f, new Vector2(0.5f, 0.5f), 5f, SpriteEffects.None, 0f);
 
-
                 var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
                 normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
 
                 var factor = i / (float)Projectile.oldPos.Length;
                 var color = Color.Lerp(Color.White, Color.Red, factor);
                 var w = MathHelper.Lerp(1f, 0.05f, factor);
-
-
 
                 bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(30, 30), color, new Vector3((float)Math.Sqrt(factor), 1, w)));
                 bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(30, 30), color, new Vector3((float)Math.Sqrt(factor), 0, w)));
@@ -125,7 +124,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 
             if (bars.Count > 2)
             {
-
                 // 按照顺序连接三角形
                 triangleList.Add(bars[0]);
                 var vertex = new Vertex2D((bars[0].position + bars[1].position) * 0.5f + Vector2.Normalize(Projectile.velocity) * 30, Color.White, new Vector3(0, 0.5f, 1));
@@ -165,7 +163,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                 //Main.graphics.GraphicsDevice.Textures[2] = Main.magicPixel;
 
                 ef.CurrentTechnique.Passes[0].Apply();
-
 
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList.ToArray(), 0, triangleList.Count / 3);
 

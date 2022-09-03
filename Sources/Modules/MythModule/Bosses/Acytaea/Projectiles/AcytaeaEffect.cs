@@ -14,6 +14,7 @@ internal class AcytaeaEffect : VisualProjectile
         DisplayName.SetDefault("AcytaeaEffect");
         DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "AcytaeaEffect");
     }
+
     public override void SetDefaults()
     {
         Projectile.width = 20;
@@ -26,6 +27,7 @@ internal class AcytaeaEffect : VisualProjectile
         Projectile.tileCollide = false;
         Projectile.scale = 5;
     }
+
     public override void AI()
     {
         Projectile.velocity *= 0;
@@ -80,16 +82,19 @@ internal class AcytaeaEffect : VisualProjectile
         }
         AI0 = Projectile.ai[0];
     }
+
     public static Vector2 v0;
     public static float Scale = 1;
     public static int Pro = 0;
     public static float AI0 = 0;
+
     public override void Draw()
     {
         //TODO Op
         Texture2D tex2 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Dusts/CosmicCrack").Value;
         VFXManager.spriteBatch.BindTexture(tex2).Draw(v0 - Main.screenPosition, new Rectangle(0, 0, Pro, 50), Color.White, 0.4f * AI0, tex2.Size() / 2, Scale * 2, SpriteEffects.None);
     }
+
     public override bool PreDraw(ref Color lightColor)
     {
         float Col = 0;

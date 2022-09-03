@@ -22,11 +22,13 @@ internal class AcytaeaTornado2 : VisualProjectile
         ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
         ProjectileID.Sets.TrailCacheLength[Projectile.type] = 70;
     }
+
     public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
     {
     }
 
     private int AIMNpc = -1;
+
     public override void AI()
     {
         if (AIMNpc < 0)
@@ -48,13 +50,16 @@ internal class AcytaeaTornado2 : VisualProjectile
         WHOAMI = Projectile.whoAmI;
         Typ2 = Projectile.type;
     }
+
     public override bool PreDraw(ref Color lightColor)
     {
         return false;
     }
+
     public static float Timer = 0;
     public static int WHOAMI = -1;
     public static int Typ2 = -1;
+
     public override void Draw()
     {
         for (int z = -3; z < 4; z++)

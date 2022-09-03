@@ -2,7 +2,7 @@
 
 namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 {
-    class AcytaeaLaser : ModProjectile
+    internal class AcytaeaLaser : ModProjectile
     {
         public override void SetDefaults()
         {
@@ -15,11 +15,14 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             Projectile.tileCollide = false;
             Projectile.DamageType = DamageClass.Melee;
         }
+
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
         }
-        int AIMNpc = -1;
-        Vector2 AIMpos;
+
+        private int AIMNpc = -1;
+        private Vector2 AIMpos;
+
         public override void AI()
         {
             Player player = Main.player[Player.FindClosest(Projectile.position, Projectile.width, Projectile.height)];
@@ -54,18 +57,21 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             CirR0 += 0.001f;
             CirPro0 += 0.3f;
         }
+
         public override bool PreDraw(ref Color lightColor)
         {
             return false;
         }
+
         public static float Timer = 0;
         public static int WHOAMI = -1;
         public static int Typ = -1;
-        int TrueL = 1;
-        float CirR0 = 0;
-        float CirPro0 = 0;
-        float yd = 1;
-        Vector2[] Vlaser = new Vector2[501];
+        private int TrueL = 1;
+        private float CirR0 = 0;
+        private float CirPro0 = 0;
+        private float yd = 1;
+        private Vector2[] Vlaser = new Vector2[501];
+
         public override void PostDraw(Color lightColor)
         {
             Main.spriteBatch.End();
@@ -86,7 +92,10 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             for (int i = 1; i < Count; ++i)
             {
                 if (Vlaser[i] == Vector2.Zero)
+                {
                     break;
+                }
+
                 var normalDir = Vlaser[i - 1] - Vlaser[i];
                 normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
 

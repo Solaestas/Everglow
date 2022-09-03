@@ -2,7 +2,7 @@
 
 namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 {
-    class AcytaeaTornado5 : ModProjectile
+    internal class AcytaeaTornado5 : ModProjectile
     {
         public override void SetDefaults()
         {
@@ -18,11 +18,14 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 70;
         }
+
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
         }
-        float ka = 0;
-        int AIMNpc = -1;
+
+        private float ka = 0;
+        private int AIMNpc = -1;
+
         public override void AI()
         {
             if (AIMNpc < 0)
@@ -43,12 +46,15 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             Timer = Projectile.timeLeft / 15f + 6;
             WHOAMI = Projectile.whoAmI;
         }
+
         public override bool PreDraw(ref Color lightColor)
         {
             return false;
         }
+
         public static float Timer = 0;
         public static int WHOAMI = -1;
+
         public override void PostDraw(Color lightColor)
         {
             if (WHOAMI >= 0 && Main.projectile[WHOAMI].active)

@@ -1,6 +1,6 @@
 ﻿namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 {
-    class AcytaeaWarningArrow : ModProjectile
+    internal class AcytaeaWarningArrow : ModProjectile
     {
         public override void SetDefaults()
         {
@@ -14,14 +14,17 @@
             Projectile.tileCollide = true;
             Projectile.DamageType = DamageClass.Ranged;
         }
+
         public override void Kill(int timeLeft)
         {
             Projectile.NewProjectile(null, Projectile.Center + new Vector2(0, -800), new Vector2(0, 34), ModContent.ProjectileType<AcytaeaArrow>(), 0, 1, Main.myPlayer);
         }
+
         public override Color? GetAlpha(Color lightColor)
         {
             return new Color?(new Color(0, 0, 0, 0));
         }
+
         public override void AI()
         {
             if (Projectile.timeLeft == 58)
@@ -31,6 +34,7 @@
                 Projectile.rotation = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + Math.PI * 0.25);
             }
         }
+
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Projectiles/AcytaeaWarningArrow2").Value;

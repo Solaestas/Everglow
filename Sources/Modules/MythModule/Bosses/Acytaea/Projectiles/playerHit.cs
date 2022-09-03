@@ -1,4 +1,3 @@
-
 using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles;
@@ -10,6 +9,7 @@ public class playerHit : ModProjectile
         DisplayName.SetDefault("");
         DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "");
     }
+
     public override void SetDefaults()
     {
         Projectile.width = 50;
@@ -24,6 +24,7 @@ public class playerHit : ModProjectile
         Projectile.penetrate = -1;
         Projectile.scale = 1;
     }
+
     public override void AI()
     {
     }

@@ -9,17 +9,12 @@
             dust.noLight = true;
             dust.alpha = 0;
         }
+
         public override Color? GetAlpha(Dust dust, Color lightColor)
         {
-            if (Main.rand.NextBool(50))
-            {
-                return new Color?(new Color(dust.scale / 0.7f, 0, 0, 1 - dust.scale));
-            }
-            else
-            {
-                return new Color?(new Color(1f, 1f, 1f, 0));
-            }
+            return Main.rand.NextBool(50) ? new Color?(new Color(dust.scale / 0.7f, 0, 0, 1 - dust.scale)) : new Color?(new Color(1f, 1f, 1f, 0));
         }
+
         public override bool Update(Dust dust)
         {
             dust.position += dust.velocity;

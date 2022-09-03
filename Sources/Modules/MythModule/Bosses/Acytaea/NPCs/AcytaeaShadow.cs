@@ -1,4 +1,3 @@
-
 using Everglow.Sources.Commons.Function.Vertex;
 
 using Terraria.Localization;
@@ -22,6 +21,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
         }
 
         private int Dam = 12;
+
         public override void SetDefaults()
         {
             NPC.friendly = true;
@@ -45,12 +45,14 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
             NPCID.Sets.TrailingMode[NPC.type] = 0;
             NPCID.Sets.TrailCacheLength[NPC.type] = 8;
         }
+
         public bool Fly = false;
         public bool Battle = false;
         public bool CanUseWing = false;
         private Vector2 AIMpos = new Vector2(200, 0);
         private int FirstDir = -1;
         private int MinorDir = -1;
+
         public override void AI()
         {
             if (Main.expertMode)
@@ -96,7 +98,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
             RightWingPos = new Vector2(-18, 0) * NPC.spriteDirection;
             LeftWingPos = new Vector2(-18, 0) * NPC.spriteDirection;
             RightArmPos = new Vector2(-10, 0) * NPC.spriteDirection;
-            if (NPC.localAI[0] > 0 && NPC.localAI[0] <= 400)
+            if (NPC.localAI[0] is > 0 and <= 400)
             {
                 AIMpos = new Vector2(500, 0).RotatedBy(NPC.ai[0] * Math.PI / 7d * 2);
                 if ((AIMpos + player.Center - NPC.Center).Length() < 240)
@@ -121,13 +123,13 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
                 }
                 CanUseWing = (AIMpos + player.Center - NPC.Center).Length() > 1 && (AIMpos + player.Center - NPC.Center).Y < 0;
             }
-            if (NPC.localAI[0] > 400 && NPC.localAI[0] <= 500)
+            if (NPC.localAI[0] is > 400 and <= 500)
             {
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
                 NPC.velocity *= 0.9f;
                 CanUseWing = false;
             }
-            if (NPC.localAI[0] > 500 && NPC.localAI[0] <= 530)
+            if (NPC.localAI[0] is > 500 and <= 530)
             {
                 MinorDir = NPC.spriteDirection * -1;
                 NPC.rotation = Math.Clamp(NPC.velocity.X / 10f * (NPC.velocity.X / 10f), 0, 0.8f) * NPC.spriteDirection;
@@ -135,7 +137,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
                 CanUseWing = false;
                 RightArmRot += (float)(Math.PI * 1.1 / 30f) * MinorDir;
             }
-            if (NPC.localAI[0] > 530 && NPC.localAI[0] <= 550)
+            if (NPC.localAI[0] is > 530 and <= 550)
             {
                 MinorDir = NPC.spriteDirection * -1;
                 HasBlade = true;
@@ -146,7 +148,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
                 BladePro = a0 * a0;
                 CanUseWing = false;
             }
-            if (NPC.localAI[0] > 650 && NPC.localAI[0] <= 680)
+            if (NPC.localAI[0] is > 650 and <= 680)
             {
                 float CosA0 = (float)(Math.Cos((NPC.localAI[0] - 650) / 30d * Math.PI) + 1) / 2f;//构造辅助函数
                 RightArmRot = CosA0 * (float)(Math.PI * 1.1) * MinorDir;//旋转角度撕裂感
@@ -165,7 +167,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
                     }
                 }
             }
-            if (NPC.localAI[0] > 690 && NPC.localAI[0] <= 720)
+            if (NPC.localAI[0] is > 690 and <= 720)
             {
                 //NPC.active = false;
                 if (NPC.localAI[0] < 692)
@@ -226,13 +228,10 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
                 NPC.velocity.Y *= (float)(2 - Math.Pow(1.01, NPC.velocity.Length()));//空气阻力于速度指数相关
             }
         }
+
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (NPC.AnyNPCs(NPC.type))
-            {
-                return 0f;
-            }
-            return 0f;
+            return NPC.AnyNPCs(NPC.type) ? 0f : 0f;
         }
 
         /*String Ta = "挑战";*/
@@ -258,6 +257,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
         private bool HasBlade = false;
         private int DrawAI = 0;
         private Vector2[] OldBladePos = new Vector2[70];
+
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             if (!Main.gamePaused)
@@ -370,7 +370,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
                         Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
                     }
                 }
-
             }
             if (HasBlade)
             {

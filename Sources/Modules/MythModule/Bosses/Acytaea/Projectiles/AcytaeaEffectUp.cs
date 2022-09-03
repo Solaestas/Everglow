@@ -2,7 +2,7 @@
 
 namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 {
-    class AcytaeaEffectUp : ModProjectile
+    internal class AcytaeaEffectUp : ModProjectile
     {
         public override void SetDefaults()
         {
@@ -16,9 +16,11 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             Projectile.DamageType = DamageClass.Melee;
             Projectile.extraUpdates = 6;
         }
+
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
         }
+
         //bool shake;
         public override void AI()
         {
@@ -31,18 +33,21 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             //    shake = true;
             //}
         }
+
         public override bool PreDraw(ref Color lightColor)
         {
             return false;
         }
+
         public static float Timer = 0;
         public static int WHOAMI = -1;
         public static int Typ = -1;
-        int TrueL = 1;
-        float CirR0 = 0;
-        float CirPro0 = 0;
-        float yd = 1;
-        Vector2[,] Vlaser = new Vector2[30, 200];
+        private int TrueL = 1;
+        private float CirR0 = 0;
+        private float CirPro0 = 0;
+        private float yd = 1;
+        private Vector2[,] Vlaser = new Vector2[30, 200];
+
         public override void PostDraw(Color lightColor)
         {
             for (int k = 0; k < 15; ++k)
@@ -61,7 +66,10 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                 for (int i = 1; i < Count; ++i)
                 {
                     if (Vlaser[k, i] == Vector2.Zero)
+                    {
                         break;
+                    }
+
                     var normalDir = Vlaser[k, i - 1] - Vlaser[k, i];
                     normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
 

@@ -1,6 +1,6 @@
 ﻿namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 {
-    class AcytaeaBow : ModProjectile
+    internal class AcytaeaBow : ModProjectile
     {
         public override void SetDefaults()
         {
@@ -14,20 +14,23 @@
             Projectile.tileCollide = true;
             Projectile.DamageType = DamageClass.Ranged;
         }
+
         private float K = 10;
+
         public override void Kill(int timeLeft)
         {
             Projectile.NewProjectile(null, Projectile.Center, new Vector2(34, 0).RotatedBy(Projectile.ai[0]), ModContent.ProjectileType<AcytaeaArrow>(), Projectile.damage, 3, Main.LocalPlayer.whoAmI);
         }
+
         public override Color? GetAlpha(Color lightColor)
         {
-            if (Projectile.timeLeft > 700)
-            {
-                return new Color?(new Color((int)(255 * (720 - Projectile.timeLeft) / 20f), (int)(255 * (720 - Projectile.timeLeft) / 20f), (int)(255 * (720 - Projectile.timeLeft) / 20f), 0));
-            }
-            return new Color?(new Color(255, 255, 255, 0));
+            return Projectile.timeLeft > 700
+                ? new Color?(new Color((int)(255 * (720 - Projectile.timeLeft) / 20f), (int)(255 * (720 - Projectile.timeLeft) / 20f), (int)(255 * (720 - Projectile.timeLeft) / 20f), 0))
+                : new Color?(new Color(255, 255, 255, 0));
         }
-        float ka = 1;
+
+        private float ka = 1;
+
         public override void AI()
         {
             ka = 1;
@@ -38,6 +41,7 @@
             Lighting.AddLight(Projectile.Center, (255 - Projectile.alpha) * 1.2f / 250f * ka, 0, 0);
             Projectile.rotation = Projectile.ai[0];
         }
+
         public override bool PreDraw(ref Color lightColor)
         {
             if (Projectile.timeLeft < 30f)

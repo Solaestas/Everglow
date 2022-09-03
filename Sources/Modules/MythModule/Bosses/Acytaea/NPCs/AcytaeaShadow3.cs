@@ -1,4 +1,3 @@
-
 using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles;
 
@@ -21,11 +20,14 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
             NPCID.Sets.AttackAverageChance[NPC.type] = 15;
             DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "雅斯塔亚");
         }
+
         private bool canDespawn = false;
+
         public override bool CheckActive()
         {
             return canDespawn;
         }
+
         public override void SetDefaults()
         {
             NPC.friendly = true;
@@ -49,6 +51,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
             NPCID.Sets.TrailingMode[NPC.type] = 0;
             NPCID.Sets.TrailCacheLength[NPC.type] = 8;
         }
+
         public bool Fly = false;
         public bool Battle = false;
         public bool CanUseWing = false;
@@ -56,6 +59,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
         private int FirstDir = -1;
         private int MinorDir = -1;
         private int AIMNPC = -1;
+
         public override void AI()
         {
             if (NPC.CountNPCS(ModContent.NPCType<Acytaea>()) <= 0 || Acytaea.BossIndex == 0)
@@ -109,7 +113,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
                 }
                 canDespawn = false;
             }
-            if (NPC.localAI[0] > 0 && NPC.localAI[0] <= 400)
+            if (NPC.localAI[0] is > 0 and <= 400)
             {
                 BowRot = (float)(Math.PI * 0.75) * NPC.ai[2];
                 AIMpos = new Vector2(NPC.ai[0], NPC.ai[1]) * 2;
@@ -153,7 +157,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
                     CanUseWing = (AIMpos + player.Center - NPC.Center).Length() > 1 && (AIMpos + player.Center - NPC.Center).Y < 0;
                 }
             }
-            if (NPC.localAI[0] > 400 && NPC.localAI[0] <= 500)
+            if (NPC.localAI[0] is > 400 and <= 500)
             {
                 if (NPC.active)
                 {
@@ -190,13 +194,10 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
                 }
             }
         }
+
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (NPC.AnyNPCs(NPC.type))
-            {
-                return 0f;
-            }
-            return 0f;
+            return NPC.AnyNPCs(NPC.type) ? 0f : 0f;
         }
 
         /*String Ta = "挑战";*/
@@ -226,6 +227,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
         private int DrawAI = 0;
         private int NPCWHOAMI = -1;
         private Vector2[] OldBladePos = new Vector2[70];
+
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             if (!Main.gamePaused)
@@ -338,7 +340,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
                         Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
                     }
                 }
-
             }
             if (HasBlade)
             {
@@ -406,6 +407,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
                 Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaBow").Value, NPC.Center + BowPos - Main.screenPosition, null, color, NPC.rotation + BowRot, new Vector2(30, 28), 1f, SpriteEffects.None, 0f);
             }
         }
+
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             return false;

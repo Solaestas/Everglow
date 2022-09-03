@@ -9,11 +9,13 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Dusts;
 public class CosmicFlame2 : Particle
 {
     public static Asset<Texture2D> texture;
+
     public override void Load()
     {
         base.Load();
         texture = ModContent.Request<Texture2D>((GetType().Namespace + "." + Name).Replace('.', '/'));
     }
+
     public override void Update()
     {
         scale *= 0.99f;

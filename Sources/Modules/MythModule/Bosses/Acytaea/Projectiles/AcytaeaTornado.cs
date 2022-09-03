@@ -24,6 +24,7 @@ internal class AcytaeaTornado : VisualProjectile
     }
 
     private int AIMNpc = -1;
+
     public override void AI()
     {
         if (AIMNpc < 0)
@@ -45,13 +46,16 @@ internal class AcytaeaTornado : VisualProjectile
         WHOAMI = Projectile.whoAmI;
         Typ = Projectile.type;
     }
+
     public override bool PreDraw(ref Color lightColor)
     {
         return false;
     }
+
     public static float Timer = 0;
     public static int WHOAMI = -1;
     public static int Typ = -1;
+
     public override void Draw()
     {
         for (int z = -15; z < 16; z++)

@@ -1,5 +1,4 @@
-﻿
-using Terraria.GameContent;
+﻿using Terraria.GameContent;
 using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
@@ -11,8 +10,10 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             DisplayName.SetDefault("Broken Acytaea");
             DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "碎雅斯塔亚");
         }
-        float RamdomC = -1;
-        float RamdomC2 = -1;
+
+        private float RamdomC = -1;
+        private float RamdomC2 = -1;
+
         public override void SetDefaults()
         {
             Projectile.width = 20;
@@ -26,20 +27,23 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 3;
         }
+
         public override Color? GetAlpha(Color lightColor)
         {
             return new Color?(new Color((float)(fade * fade), (float)(fade * fade), (float)(fade * fade), 0));
         }
-        float Ome = 0;
-        float Ros = 0;
-        float Theta = 0;
-        bool Ang = false;
-        Vector2 p1;
-        Vector2 p2;
-        Vector2 p3;
-        Vector2 po1;
-        Vector2 po2;
-        Vector2 po3;
+
+        private float Ome = 0;
+        private float Ros = 0;
+        private float Theta = 0;
+        private bool Ang = false;
+        private Vector2 p1;
+        private Vector2 p2;
+        private Vector2 p3;
+        private Vector2 po1;
+        private Vector2 po2;
+        private Vector2 po3;
+
         public override void AI()
         {
             if (Projectile.timeLeft == 399999)
@@ -52,7 +56,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                 }
             }
             RamdomC += RamdomC2;
-            Player player = Main.player[Projectile.owner];
             if (!Ang)
             {
                 Ang = true;
@@ -75,22 +78,23 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                 Projectile.Kill();
             }
         }
-        float fade = 0;
 
+        private float fade;
 
-
-        private Effect ef;
         public override void PostDraw(Color lightColor)
         {
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-            List<VertexInfo2> Vx = new List<VertexInfo2>();
-            Vx.Add(new VertexInfo2(po1 + Projectile.Center - Main.screenPosition, new Color(255, (int)(122.5 + Math.Sin(RamdomC) * 122.5) / 3, (int)(122.5 + Math.Sin(RamdomC) * 122.5) / 3, 0), new Vector3(0, 0, 0)));
-            Vx.Add(new VertexInfo2(po2 + Projectile.Center - Main.screenPosition, new Color(255, (int)(122.5 + Math.Sin(RamdomC) * 122.5) / 3, (int)(122.5 + Math.Sin(RamdomC) * 122.5) / 3, 0), new Vector3(0, 0, 0)));
-            Vx.Add(new VertexInfo2(po3 + Projectile.Center - Main.screenPosition, new Color(255, (int)(122.5 + Math.Sin(RamdomC) * 122.5) / 3, (int)(122.5 + Math.Sin(RamdomC) * 122.5) / 3, 0), new Vector3(0, 0, 0)));
+            List<VertexInfo2> Vx = new List<VertexInfo2>
+            {
+                new VertexInfo2(po1 + Projectile.Center - Main.screenPosition, new Color(255, (int)(122.5 + Math.Sin(RamdomC) * 122.5) / 3, (int)(122.5 + Math.Sin(RamdomC) * 122.5) / 3, 0), new Vector3(0, 0, 0)),
+                new VertexInfo2(po2 + Projectile.Center - Main.screenPosition, new Color(255, (int)(122.5 + Math.Sin(RamdomC) * 122.5) / 3, (int)(122.5 + Math.Sin(RamdomC) * 122.5) / 3, 0), new Vector3(0, 0, 0)),
+                new VertexInfo2(po3 + Projectile.Center - Main.screenPosition, new Color(255, (int)(122.5 + Math.Sin(RamdomC) * 122.5) / 3, (int)(122.5 + Math.Sin(RamdomC) * 122.5) / 3, 0), new Vector3(0, 0, 0))
+            };
             Main.graphics.GraphicsDevice.Textures[0] = TextureAssets.MagicPixel.Value;
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count - 2);
         }
+
         private struct VertexInfo2 : IVertexType
         {
             private static VertexDeclaration _vertexDeclaration = new VertexDeclaration(new VertexElement[3]
@@ -99,15 +103,18 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                 new VertexElement(8, VertexElementFormat.Color, VertexElementUsage.Color, 0),
                 new VertexElement(12, VertexElementFormat.Vector3, VertexElementUsage.TextureCoordinate, 0)
             });
+
             public Vector2 Position;
             public Color Color;
             public Vector3 TexCoord;
+
             public VertexInfo2(Vector2 position, Color color, Vector3 texCoord)
             {
                 Position = position;
                 Color = color;
                 TexCoord = texCoord;
             }
+
             public VertexDeclaration VertexDeclaration
             {
                 get
@@ -115,7 +122,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                     return _vertexDeclaration;
                 }
             }
-            public CullMode cull => CullMode.None;
+
         }
     }
 }

@@ -1,9 +1,8 @@
-﻿
-using Terraria.Audio;
+﻿using Terraria.Audio;
 
 namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 {
-    class AcytaeaArrowGra : ModProjectile
+    internal class AcytaeaArrowGra : ModProjectile
     {
         public override void SetDefaults()
         {
@@ -19,7 +18,9 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 8;
         }
+
         private float K = 10;
+
         public override void Kill(int timeLeft)
         {
             SoundEngine.PlaySound(SoundID.DD2_WitherBeastCrystalImpact, Projectile.Center);
@@ -34,11 +35,14 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                 int num22 = Dust.NewDust(Projectile.Center - new Vector2(4, 4) + new Vector2(0, Main.rand.NextFloat(0, 8f)).RotatedByRandom(Math.PI * 2), 2, 2, ModContent.DustType<Dusts.RedEffect2>(), v0.X, v0.Y, 0, default, 1.5f);
             }
         }
+
         public override Color? GetAlpha(Color lightColor)
         {
             return new Color?(new Color(255, 255, 255, 0));
         }
-        float ka = 1;
+
+        private float ka = 1;
+
         public override void AI()
         {
             ka = 1;
@@ -56,6 +60,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             int num22 = Dust.NewDust(Projectile.Center - new Vector2(4, 4) + new Vector2(0, Main.rand.NextFloat(0, 8f)).RotatedByRandom(Math.PI * 2), 2, 2, ModContent.DustType<Dusts.RedEffect2>(), 0, 0, 0, default, 1.5f);
             Main.dust[num22].velocity *= 0.2f;
         }
+
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Projectiles/AcytaeaArrow").Value;

@@ -18,11 +18,13 @@ internal class AcytaeaLight : ModProjectile
         ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
         ProjectileID.Sets.TrailCacheLength[Projectile.type] = 70;
     }
+
     public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
     {
     }
 
     private float ka = 0;
+
     public override void AI()
     {
         Player player = Main.player[Projectile.owner];
@@ -40,6 +42,7 @@ internal class AcytaeaLight : ModProjectile
     private float dx = 0;
     private float fx = 40;
     private bool[] haihit = new bool[240];
+
     public override void PostDraw(Color lightColor)
     {
         double o1 = Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
@@ -48,8 +51,6 @@ internal class AcytaeaLight : ModProjectile
         Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
         List<Vertex2D> bars = new List<Vertex2D>();
         Effect ef = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/Trail", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-
-
 
         for (int i = 0; i < Range; ++i)
         {

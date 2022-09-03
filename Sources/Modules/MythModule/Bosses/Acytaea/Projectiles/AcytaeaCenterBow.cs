@@ -1,6 +1,6 @@
 ﻿namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 {
-    class AcytaeaCenterBow : ModProjectile
+    internal class AcytaeaCenterBow : ModProjectile
     {
         public override void SetDefaults()
         {
@@ -13,10 +13,12 @@
             Projectile.tileCollide = false;
             Projectile.DamageType = DamageClass.Ranged;
         }
+
         public override Color? GetAlpha(Color lightColor)
         {
             return new Color?(new Color(0, 0, 0, 0));
         }
+
         public override void AI()
         {
             if (Projectile.timeLeft % 5 == 2)

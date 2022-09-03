@@ -1,5 +1,4 @@
-﻿
-using Terraria.Localization;
+﻿using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
 {
@@ -14,11 +13,14 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
             NPCID.Sets.AttackFrameCount[NPC.type] = 4;*/
             DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "雅斯塔亚");
         }
+
         private bool canDespawn = false;
+
         public override bool CheckActive()
         {
             return canDespawn;
         }
+
         public override void SetDefaults()
         {
             NPC.friendly = false;
@@ -35,10 +37,10 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
             NPC.dontTakeDamage = true;
             NPC.noTileCollide = true;
             NPC.boss = true;
-
         }
 
         private int AIMNPC = -1;
+
         public override void AI()
         {
             if (AIMNPC == -1)
@@ -66,14 +68,12 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
                 }
             }
         }
+
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (NPC.AnyNPCs(NPC.type))
-            {
-                return 0f;
-            }
-            return 0f;
+            return NPC.AnyNPCs(NPC.type) ? 0f : 0f;
         }
+
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             return false;

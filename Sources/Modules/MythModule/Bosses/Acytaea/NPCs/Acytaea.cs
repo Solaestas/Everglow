@@ -1,4 +1,5 @@
 using Everglow.Sources.Commons.Core.VFX;
+using Everglow.Sources.Commons.Core.VFX.Base;
 using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Dusts;
 using Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles;
@@ -11,7 +12,7 @@ using Terraria.Localization;
 namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs;
 
 [AutoloadHead]
-public class Acytaea : ModNPC
+public class Acytaea : VisualNPC
 {
     private bool canDespawn = false;
     private int kill = -5;
@@ -52,13 +53,12 @@ public class Acytaea : ModNPC
     private bool CloseBook = true;
     public static int BossIndex = 0;
     public static Vector2[] OldBladePos = new Vector2[70];
-    private Vector2[] Skirt1 = new Vector2[10];
     private Vector2[] Skirt2 = new Vector2[11];
-    private Vector2[] AIMSkirt2 = new Vector2[11];
-    private Vector2[] vSkirt2 = new Vector2[11];
+
     public override string HeadTexture => NPC.boss ?
         "Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea_Head_Boss" :
         "Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/Acytaea_Head";
+
     public override void SetStaticDefaults()
     {
         DisplayName.SetDefault("Acytaea");
@@ -72,6 +72,7 @@ public class Acytaea : ModNPC
         NPCID.Sets.ActsLikeTownNPC[Type] = true;
         DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "雅斯塔亚");
     }
+
     public override void SetDefaults()
     {
         NPC.townNPC = true;
@@ -97,10 +98,12 @@ public class Acytaea : ModNPC
         NPC.knockBackResist = 0;
         Music = Common.MythContent.QuickMusic("AcytaeaFighting");
     }
+
     public override bool CheckActive()
     {
         return canDespawn;
     }
+
     public void UseBlade(int timerBegin, int add, int mul)
     {
         ref float Timer = ref NPC.localAI[0];
@@ -113,6 +116,7 @@ public class Acytaea : ModNPC
         BladePro = 1;//进程打满
         canUseWing = false;//不准飞
     }
+
     public void Fly()
     {
         Vector2 v0 = aiMpos + Main.player[NPC.target].Center;
@@ -122,6 +126,7 @@ public class Acytaea : ModNPC
         NPC.velocity += v1;
         NPC.velocity *= 0.96f;
     }
+
     public override void AI()
     {
         if (NPC.aiStyle != -1)
@@ -136,7 +141,9 @@ public class Acytaea : ModNPC
             NPC.active = false;
             NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, NPC.type);
             //TODO 改用HJson
+
             #region 对话
+
             //if (Language.ActiveCulture.Name == "zh-Hans")
             //{
             //    int h = Main.rand.Next(6);
@@ -249,7 +256,8 @@ public class Acytaea : ModNPC
             //        Main.NewText("What, died already?", new Color(193, 0, 29));
             //    }
             //}
-            #endregion
+
+            #endregion 对话
         }
         else
         {
@@ -578,7 +586,6 @@ public class Acytaea : ModNPC
                 if (Timer % 70 < 2)
                 {
                     AimBladeSquz = Main.rand.NextFloat(0.65f, 1f);
-                    Vector2 v0a = Vector2.Normalize(player.Center - NPC.Center);
                     ToPlayerRot = 0;//记录玩家方向
                     //TODO ????
                 }
@@ -610,7 +617,6 @@ public class Acytaea : ModNPC
                 if (Timer % 70 < 42)
                 {
                     AimBladeSquz = Main.rand.NextFloat(0.65f, 1f);
-                    Vector2 v0a = Vector2.Normalize(player.Center - NPC.Center);
                     ToPlayerRot = 0;//记录玩家方向
                     //TODO ??? * 2
                 }
@@ -639,7 +645,6 @@ public class Acytaea : ModNPC
         }//环绕,砍击
         if (Timer is > 1920 and <= 1954)//打爆幻影
         {
-
             if (Timer % 2 == 1)
             {
                 //TODO 震屏
@@ -1063,8 +1068,7 @@ public class Acytaea : ModNPC
             if (Timer % 20 == 0 && Timer > 3300 && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 //TODO ?
-                Vector2 vf = Vector2.Normalize(player.Center - NPC.Center);
-                vf = new Vector2(-1, 0);
+                Vector2 vf = new Vector2(-1, 0);
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 34, ModContent.ProjectileType<AcytaeaArrow>(), NPC.damage, 3, player.whoAmI);
             }
         }//←
@@ -1095,8 +1099,7 @@ public class Acytaea : ModNPC
             }
             if (Timer % 18 == 0 && Timer > 3550 && Main.netMode != NetmodeID.MultiplayerClient)
             {
-                Vector2 vf = Vector2.Normalize(player.Center - NPC.Center);
-                vf = new Vector2(0, 1);
+                Vector2 vf = new Vector2(0, 1);
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 34, ModContent.ProjectileType<AcytaeaArrow>(), NPC.damage, 3, player.whoAmI);
             }
         }//↓
@@ -1126,8 +1129,7 @@ public class Acytaea : ModNPC
             }
             if (Timer % 16 == 0 && Timer > 3800 && Main.netMode != NetmodeID.MultiplayerClient)
             {
-                Vector2 vf = Vector2.Normalize(player.Center - NPC.Center);
-                vf = new Vector2(1, 0);
+                Vector2 vf = new Vector2(1, 0);
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 34, ModContent.ProjectileType<AcytaeaArrow>(), NPC.damage, 3, player.whoAmI);
             }
         }//→
@@ -1157,8 +1159,7 @@ public class Acytaea : ModNPC
             }
             if (Timer % 10 == 0 && Timer > 4050 && Main.netMode != NetmodeID.MultiplayerClient)
             {
-                Vector2 vf = Vector2.Normalize(player.Center - NPC.Center);
-                vf = new Vector2(0, -1);
+                Vector2 vf = new Vector2(0, -1);
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 34, ModContent.ProjectileType<AcytaeaArrow>(), NPC.damage, 3, player.whoAmI);
             }
         }//↑
@@ -1248,8 +1249,7 @@ public class Acytaea : ModNPC
             }
             if (Timer % 200 == 30 && Timer > 4800 && Main.netMode != NetmodeID.MultiplayerClient)
             {
-                Vector2 vf = Vector2.Normalize(player.Center - NPC.Center);
-                vf = new Vector2(-1, 0);
+                Vector2 vf = new Vector2(-1, 0);
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 34, ModContent.ProjectileType<AcytaeaArrow2>(), NPC.damage, 3, player.whoAmI, 1);
             }
         }//分裂箭
@@ -1354,9 +1354,8 @@ public class Acytaea : ModNPC
             if (Timer is >= 5905 and < 5950)
             {
                 float PoX = Timer - 5905;
-                Vector2 vf = new Vector2(0, -1);
-                int f = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(PoX * 72, -300), Vector2.Zero, ModContent.ProjectileType<AcytaeaWarningArrow>(), NPC.damage, 3, player.whoAmI);
-                int g = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-PoX * 72, -300), Vector2.Zero, ModContent.ProjectileType<AcytaeaWarningArrow>(), NPC.damage, 3, player.whoAmI);
+                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(PoX * 72, -300), Vector2.Zero, ModContent.ProjectileType<AcytaeaWarningArrow>(), NPC.damage, 3, player.whoAmI);
+                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-PoX * 72, -300), Vector2.Zero, ModContent.ProjectileType<AcytaeaWarningArrow>(), NPC.damage, 3, player.whoAmI);
             }
         }//↓↓↓
         if (Timer is > 6000 and <= 6200)
@@ -1599,8 +1598,6 @@ public class Acytaea : ModNPC
             }
             if (Timer == 7205 && Main.netMode != NetmodeID.MultiplayerClient)
             {
-                //TODO Meaningless
-                float Dx = NPC.Center.X - player.Center.X;
                 for (int f = 0; f < 7; f++)
                 {
                     NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<AcytaeaShadow3>(), 0, 0, (float)Math.Sqrt(f + 1) * 72, 0, -1);
@@ -1776,9 +1773,9 @@ public class Acytaea : ModNPC
             if (Timer % 15 == 0 && Timer > 8560 && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 Vector2 vf = new Vector2(1, 0).RotatedBy(Math.Sin(Timer / 15d) * 0.75);
-                int f = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 20, ModContent.ProjectileType<Metero>(), NPC.damage, 3, player.whoAmI, -1);
+                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 20, ModContent.ProjectileType<Metero>(), NPC.damage, 3, player.whoAmI, -1);
                 vf = new Vector2(1, 0).RotatedBy(-Math.Sin(Timer / 15d) * 0.75);
-                f = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 20, ModContent.ProjectileType<Metero>(), NPC.damage, 3, player.whoAmI, 1);
+                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 20, ModContent.ProjectileType<Metero>(), NPC.damage, 3, player.whoAmI, 1);
             }
         }//散漫法术
         if (Timer is > 9000 and <= 9600)
@@ -2022,9 +2019,9 @@ public class Acytaea : ModNPC
             NH.SetBiomeAffection<DungeonBiome>((AffectionLevel)(-50));
             NH.SetBiomeAffection<OceanBiome>((AffectionLevel)50);
             NH.SetBiomeAffection<JungleBiome>((AffectionLevel)30);
-
         }
     }
+
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
     {
         //TODO hjson
@@ -2052,12 +2049,13 @@ public class Acytaea : ModNPC
 				BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
 
 				// Sets your NPC's flavor text in the bestiary.
-            
+
 				new FlavorTextBestiaryInfoElement(tx1),
             new FlavorTextBestiaryInfoElement(tx2),
             new FlavorTextBestiaryInfoElement("Mods.MythMod.Bestiary.Acytaea")
         });
     }
+
     public override void HitEffect(int hitDirection, double damage)
     {
         if (NPC.life <= 0)
@@ -2068,19 +2066,24 @@ public class Acytaea : ModNPC
             kill = 60;
         }
     }
+
     public override bool PreKill()
     {
         return base.PreKill();
     }
+
     #region TownNPC
+
     public override float SpawnChance(NPCSpawnInfo spawnInfo)
     {
         return NPC.AnyNPCs(NPC.type) ? 0f : 2f;
     }
+
     public override bool CanChat()
     {
         return !NPC.boss;
     }
+
     public override string GetChat()
     {
         //TODO Hjson 重写
@@ -2255,6 +2258,7 @@ public class Acytaea : ModNPC
         }
         return list[Main.rand.Next(list.Count)];
     }
+
     public override void SetChatButtons(ref string button, ref string button2)
     {
         //TODO Hjson
@@ -2269,6 +2273,7 @@ public class Acytaea : ModNPC
             button2 = Language.GetTextValue("Help");
         }
     }
+
     public override void OnChatButtonClicked(bool firstButton, ref bool shop)
     {
         shop = false;
@@ -2365,16 +2370,19 @@ public class Acytaea : ModNPC
             //}
         }
     }
+
     public override void TownNPCAttackStrength(ref int damage, ref float knockback)
     {
         damage = 30;
         knockback = 2f;
     }
+
     public override void TownNPCAttackCooldown(ref int cooldown, ref int randExtraCooldown)
     {
         cooldown = 60;
         randExtraCooldown = 60;
     }
+
     public override void TownNPCAttackMagic(ref float auraLightMultiplier)
     {
         for (int d = 0; d < Main.projectile.Length; d++)
@@ -2386,17 +2394,21 @@ public class Acytaea : ModNPC
         }
         Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<AcytaeaMagicBook>(), 0, 1, Main.myPlayer);
     }
+
     public override void TownNPCAttackProj(ref int projType, ref int attackDelay)
     {
         projType = ModContent.ProjectileType<AcytaeaMagicBook>();
         attackDelay = 60;
     }
+
     public override void TownNPCAttackProjSpeed(ref float multiplier, ref float gravityCorrection, ref float randomOffset)
     {
         multiplier = 2f;
     }
-    #endregion
-    public static void DrawAll(SpriteBatch sb)
+
+    #endregion TownNPC
+
+    public override void Draw()
     {
         Main.spriteBatch.End();
         Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
@@ -2439,8 +2451,6 @@ public class Acytaea : ModNPC
                 {
                     break;
                 }
-                Vector2 v1 = OldBladePos[h + 1] - vf;
-                Vector2 v0 = OldBladePos[h] - vf;
                 if (BladeRot < OldBladeRot)
                 {
                     Vx.Add(new Vertex2D(OldBladePos[h] - Main.screenPosition, color3, new Vector3(h / 60f, 0, 0)));
@@ -2476,8 +2486,8 @@ public class Acytaea : ModNPC
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
         }
-
     }
+
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
     {
         if (NPC.aiStyle != -1)
@@ -2486,7 +2496,6 @@ public class Acytaea : ModNPC
         }
         Main.spriteBatch.End();
         Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-        Player player = Main.player[NPC.target];
         CirR0 += 0.001f + COmega;
         CirPro0 += 0.1f;
         if (!Main.gamePaused)
@@ -2581,8 +2590,6 @@ public class Acytaea : ModNPC
                         {
                             break;
                         }
-                        Vector2 v1 = OldBladePos[h + 1] - vf;
-                        Vector2 v0 = OldBladePos[h] - vf;
                         if (BladeRot < OldBladeRot)
                         {
                             Vx.Add(new Vertex2D(OldBladePos[h] - Main.screenPosition, color3, new Vector3(h / 60f, 0, 0)));
@@ -2617,7 +2624,6 @@ public class Acytaea : ModNPC
                     Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
                 }
             }
-
         }
         if (HasBlade)
         {
@@ -2751,7 +2757,6 @@ public class Acytaea : ModNPC
             Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 
-
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             List<Vertex2D> Vx9 = new List<Vertex2D>();
@@ -2883,7 +2888,6 @@ public class Acytaea : ModNPC
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx3.ToArray(), 0, Vx3.Count / 3);
             }
 
-
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             List<Vertex2D> Vx5 = new List<Vertex2D>();
@@ -2972,7 +2976,6 @@ public class Acytaea : ModNPC
             t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaCircle4").Value;
             Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx8.ToArray(), 0, Vx8.Count / 3);
-
         }
         if (minorDir == 1)
         {

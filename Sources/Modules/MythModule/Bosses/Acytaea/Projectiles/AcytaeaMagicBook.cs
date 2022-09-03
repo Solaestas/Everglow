@@ -1,12 +1,13 @@
 ﻿namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 {
-    class AcytaeaMagicBook : ModProjectile
+    internal class AcytaeaMagicBook : ModProjectile
     {
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("魔法书");
             Main.projFrames[Projectile.type] = 4;
         }
+
         public override void SetDefaults()
         {
             Projectile.width = 40;
@@ -19,9 +20,11 @@
             Projectile.tileCollide = false;
             Projectile.DamageType = DamageClass.Magic;
         }
+
         private float K = 10;
-        int AIMNpc = -1;
-        float ka = 1;
+        private int AIMNpc = -1;
+        private float ka = 1;
+
         public override void AI()
         {
             if (Projectile.timeLeft % 5 == 0)

@@ -1,8 +1,6 @@
-﻿
-using Everglow.Sources.Commons.Function.Vertex;
+﻿using Everglow.Sources.Commons.Function.Vertex;
 
 using Terraria.Localization;
-
 
 namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 {
@@ -13,6 +11,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             DisplayName.SetDefault("Red Laser");
             DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "红光束");
         }
+
         public override void SetDefaults()
         {
             Projectile.width = 32;
@@ -27,10 +26,12 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
         }
-        int ControlP = -1;
+
+        private int ControlP = -1;
         private float St = 0;
-        int AIMNpc = -1;
-        float Radius = 0;
+        private int AIMNpc = -1;
+        private float Radius = 0;
+
         public override void AI()
         {
             if (Projectile.timeLeft < 60)
@@ -89,13 +90,13 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             }
             St *= 0.99f;
         }
+
         public override void Kill(int timeLeft)
         {
         }
+
         private Effect ef2;
-        float[] Rota = new float[7];
-        float[] Sca = new float[7];
-        float[] ARota = new float[7];
+
         public override void PostDraw(Color lightColor)
         {
             /*for (int z = 0; z < 7; z++)

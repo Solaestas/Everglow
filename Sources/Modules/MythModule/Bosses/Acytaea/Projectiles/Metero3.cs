@@ -2,7 +2,7 @@
 
 namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 {
-    class Metero3 : ModProjectile
+    internal class Metero3 : ModProjectile
     {
         public override void SetDefaults()
         {
@@ -17,12 +17,15 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 30;
         }
+
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
         }
-        float ka = 0;
-        int AIMNpc = -1;
-        Vector2 AIMpos;
+
+        private float ka = 0;
+        private int AIMNpc = -1;
+        private Vector2 AIMpos;
+
         public override void AI()
         {
             Player player = Main.player[Player.FindClosest(Projectile.position, Projectile.width, Projectile.height)];
@@ -34,11 +37,14 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             Lighting.AddLight(Projectile.Center, (255 - Projectile.alpha) * 1.2f / 50f * ka, 0, 0);
             Projectile.velocity *= 1.03f;
         }
+
         public override bool PreDraw(ref Color lightColor)
         {
             return false;
         }
-        int TrueL = 1;
+
+        private int TrueL = 1;
+
         public override void PostDraw(Color lightColor)
         {
             Main.spriteBatch.End();
@@ -53,13 +59,19 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             for (int i = 1; i < Projectile.oldPos.Length; ++i)
             {
                 if (Projectile.oldPos[i] == Vector2.Zero)
+                {
                     break;
+                }
+
                 TrueL++;
             }
             for (int i = 1; i < Projectile.oldPos.Length; ++i)
             {
                 if (Projectile.oldPos[i] == Vector2.Zero)
+                {
                     break;
+                }
+
                 var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
                 normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
 
