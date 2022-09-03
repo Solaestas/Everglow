@@ -345,9 +345,9 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
                 double rot = 0;
                 rot += Projectile.rotation;
                 Vector2 BasePos = Projectile.Center + X0 - X0.RotatedBy(rot) * i / 4.5f;
-                Dust d0 = Dust.NewDustDirect(BasePos - Y0, 0, 0, DustID.BlueTorch);
+                Dust d0 = Dust.NewDustDirect(BasePos - Y0, 0, 0, DustID.Bone);
                 d0.noGravity = true;
-                Dust d1 = Dust.NewDustDirect(BasePos + Y0, 0, 0, DustID.BlueTorch);
+                Dust d1 = Dust.NewDustDirect(BasePos + Y0, 0, 0, DustID.Bone);
                 d1.noGravity = true;
             }
             for (int i = 0; i < 14; ++i)
@@ -355,9 +355,9 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
                 double rot = 0;
                 rot += Projectile.rotation;
                 Vector2 BasePos = Projectile.Center + Y0 - Y0.RotatedBy(rot) * i / 4.5f;
-                Dust d0 = Dust.NewDustDirect(BasePos - X0, 0, 0, DustID.GemSapphire);
+                Dust d0 = Dust.NewDustDirect(BasePos - X0, 0, 0, DustID.Bone);
                 d0.noGravity = true;
-                Dust d1 = Dust.NewDustDirect(BasePos + X0, 0, 0, DustID.GemSapphire);
+                Dust d1 = Dust.NewDustDirect(BasePos + X0, 0, 0, DustID.Bone);
                 d1.noGravity = true;
             }
         }

@@ -50,7 +50,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Go
             if (player.itemTime == 2)
             {
                 Vector2 velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero) * player.HeldItem.shootSpeed;
-                Projectile.NewProjectile(Projectile.GetSource_FromAI(),Projectile.Center + velocity * 6, velocity, ProjectileID.GoldenShowerFriendly, player.HeldItem.damage, player.HeldItem.knockBack, player.whoAmI);
+                Projectile.NewProjectile(Projectile.GetSource_FromAI(),Projectile.Center + velocity * -2, velocity, ProjectileID.GoldenShowerFriendly, player.HeldItem.damage, player.HeldItem.knockBack, player.whoAmI);
             }
         }
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
@@ -235,7 +235,12 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Go
             Player player = Main.player[Projectile.owner];
             Vector2 X0 = new Vector2(BookScale * player.direction, BookScale * player.gravDir) * 0.5f;
             Vector2 Y0 = new Vector2(BookScale * player.direction, -BookScale * player.gravDir) * 0.707f;
-            Color c0 = Lighting.GetColor((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f));
+            Color c0 = new Color(255, 255, 255, 0);
+            if (!Glowing)
+            {
+                c0 = Lighting.GetColor((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f));
+            }
+
 
             List<Vertex2D> bars = new List<Vertex2D>();
             for (int i = 0; i < 10; ++i)
@@ -288,7 +293,12 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Go
             Player player = Main.player[Projectile.owner];
             Vector2 X0 = new Vector2(BookScale * player.direction, BookScale * player.gravDir) * 0.5f;
             Vector2 Y0 = new Vector2(BookScale * player.direction, -BookScale * player.gravDir) * 0.707f;
-            Color c0 = Lighting.GetColor((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f));
+            Color c0 = new Color(255, 255, 255, 0);
+            if (!Glowing)
+            {
+                c0 = Lighting.GetColor((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f));
+            }
+
 
             List<Vertex2D> bars = new List<Vertex2D>();
             for (int i = 0; i < 10; ++i)
@@ -345,9 +355,9 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Go
                 double rot = 0;
                 rot += Projectile.rotation;
                 Vector2 BasePos = Projectile.Center + X0 - X0.RotatedBy(rot) * i / 4.5f;
-                Dust d0 = Dust.NewDustDirect(BasePos - Y0, 0, 0, DustID.BlueTorch);
+                Dust d0 = Dust.NewDustDirect(BasePos - Y0, 0, 0, DustID.Ichor);
                 d0.noGravity = true;
-                Dust d1 = Dust.NewDustDirect(BasePos + Y0, 0, 0, DustID.BlueTorch);
+                Dust d1 = Dust.NewDustDirect(BasePos + Y0, 0, 0, DustID.Ichor);
                 d1.noGravity = true;
             }
             for (int i = 0; i < 14; ++i)
@@ -355,9 +365,9 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Go
                 double rot = 0;
                 rot += Projectile.rotation;
                 Vector2 BasePos = Projectile.Center + Y0 - Y0.RotatedBy(rot) * i / 4.5f;
-                Dust d0 = Dust.NewDustDirect(BasePos - X0, 0, 0, DustID.GemSapphire);
+                Dust d0 = Dust.NewDustDirect(BasePos - X0, 0, 0, DustID.Ichor);
                 d0.noGravity = true;
-                Dust d1 = Dust.NewDustDirect(BasePos + X0, 0, 0, DustID.GemSapphire);
+                Dust d1 = Dust.NewDustDirect(BasePos + X0, 0, 0, DustID.Ichor);
                 d1.noGravity = true;
             }
         }

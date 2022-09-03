@@ -50,7 +50,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
             if (player.itemTime == 2)
             {
                 Vector2 velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero) * player.HeldItem.shootSpeed;
-                Projectile.NewProjectile(Projectile.GetSource_FromAI(),Projectile.Center + velocity * 6, velocity, ProjectileID.WaterBolt, player.HeldItem.damage, player.HeldItem.knockBack, player.whoAmI);
+                Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(),Projectile.Center + velocity * 6, velocity, ProjectileID.WaterBolt, player.HeldItem.damage, player.HeldItem.knockBack, player.whoAmI);
+                p.penetrate = 2;
             }
         }
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
