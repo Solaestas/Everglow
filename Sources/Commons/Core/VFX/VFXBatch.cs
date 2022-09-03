@@ -468,7 +468,7 @@ public class VFXBatch : IDisposable
         Debug.Assert(hasBegun);
         if (!Buffer<T>.CheckSize(vertices.Count()))
         {
-            var tex = Buffer<VFX2D>.CurrentTexture;
+            var tex = Buffer<T>.CurrentTexture;
             Flush<T>();
             Buffer<T>.Textures.Add(tex);
         }
