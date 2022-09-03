@@ -382,7 +382,11 @@ public class VFXManager : IModule
         }
         lookup[(layer, index)] = collection;
         //保证next在index后面
-        visuals[layer].Insert(visuals[layer].IndexOf(GetOrAddCollection(layer, index.next, false)), collection);
+        visuals[layer].Insert(
+            Math.Min(
+                visuals[layer].IndexOf(GetOrAddCollection(layer, index.next, false)),
+                visuals[layer].FindIndex(v => v.Index.GetDepth() > index.GetDepth()) + 1
+                ), collection);
         return collection;
     }
 

@@ -29,6 +29,17 @@
                 current = current.next;
             }
         }
+        public int GetDepth()
+        {
+            int depth = 1;
+            var next = this.next;
+            while (next != null)
+            {
+                depth++;
+                next = next.next;
+            }
+            return depth;
+        }
 
         public bool Equals(PipelineIndex other)
         {
@@ -43,6 +54,11 @@
         public override int GetHashCode()
         {
             return next == null ? index.GetHashCode() : index.GetHashCode() + next.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return $"{index}{(next is null ? "" : $" - {next}")}";
         }
     }
 }
