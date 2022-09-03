@@ -70,7 +70,7 @@ float4 GetLight(float2 coord : TEXCOORD0) : COLOR0
 {
     float4 color = tex2D(uImage0, coord);
     if (color.r * 0.4 + color.g * 0.4 + color.b * 0.2 < uLimit)
-        return float4(1, 1, 1, 1);
+        return float4(0, 0, 0, 0);
     else
         return color;
 

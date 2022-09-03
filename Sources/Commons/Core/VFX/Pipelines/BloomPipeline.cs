@@ -54,7 +54,7 @@ namespace Everglow.Sources.Commons.Core.VFX.Pipelines
             effect.Parameters["uTransform"].SetValue(
                 Matrix.CreateOrthographicOffCenter(0, 1, 1, 0, 0, 1)
                 );
-            effect.Parameters["uLimit"].SetValue(0);
+            effect.Parameters["uLimit"].SetValue(0.5f);
             effect.CurrentTechnique.Passes["GetLight"].Apply();
 
             gd.SetRenderTarget(blurScreens[0]);
