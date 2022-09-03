@@ -470,7 +470,7 @@ public class VFXBatch : IDisposable
         {
             var tex = Buffer<VFX2D>.CurrentTexture;
             Flush<T>();
-            Buffer<VFX2D>.Textures.Add(tex);
+            Buffer<T>.Textures.Add(tex);
         }
         needFlush[GetBufferIndex<T>()] = true;
         Buffer<T>.AddVertex(vertices, type);
