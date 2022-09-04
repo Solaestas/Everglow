@@ -440,7 +440,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
                     Vector2 vector = mass.position - ropes[i].mass[j - 1].position;
                     float rotation = vector.ToRotation() - MathHelper.PiOver2;
                     Color color = GetLuminace(new Color(0, 0.15f * j, 1f / 5f * j, 0.1f) * 5);
-                    Main.spriteBatch.Draw(dropTexture, mass.position + new Vector2(0, -20) + offset, null, color, rotation, dropTexture.Size() / 2f, scale, SpriteEffects.None, 0);
+                    Main.spriteBatch.Draw(dropTexture, mass.position + offset, null, color, rotation, dropTexture.Size() / 2f, scale, SpriteEffects.None, 0);
                 }
             }
             sb.End();
