@@ -772,8 +772,13 @@ Mods:
 		{
 			TextureReplace:
 			{
-				Label: "Texture-replacing mode"
-				Tooltip: "Choose your preferred texture group to replace"
+				Label : "Texture-replacing mode"
+				Tooltip : "Choose your preferred texture group to replace\nOptions: Terraria, Eternal Resolve, Myth"
+			}
+			AudioReplace:
+			{
+				Label : "Corrupted Moth's Theme Song"
+				Tooltip : "Choose your preferred Corrupted Moth theme music to replace\nOptions: Original Theme, Alternate Theme, Old Theme"
 			}
 		}
 		InfoDisplay:

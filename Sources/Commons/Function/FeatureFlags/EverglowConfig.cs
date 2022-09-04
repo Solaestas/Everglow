@@ -37,14 +37,24 @@ namespace Everglow.Sources.Commons.Function.FeatureFlags
         public override ConfigScope Mode => ConfigScope.ClientSide;
 
         [DefaultValue(TextureReplaceMode.Terraria)]
-        [Label("In-game UI Texture")] //Mods.Everglow.Config.TextureReplace.Label
-        [Tooltip("You can choose to replace the Terraria UI texture with other textures\nOptions: Terraria, Eternal Resolve, Myth")] //Mods.Everglow.Config.TextureReplace.Tooltip
+        [Label("$Mods.Everglow.Config.TextureReplace.Label")] //Mods.Everglow.Config.TextureReplace.Label
+        [Tooltip("$Mods.Everglow.Config.TextureReplace.Tooltip")] //Mods.Everglow.Config.TextureReplace.Tooltip
         [DrawTicks]
         public TextureReplaceMode TextureReplace;
 
-		public override void OnChanged() {
+        [DefaultValue(AudioReplaceMode.MothFighting)]
+        [Label("$Mods.Everglow.Config.AudioReplace.Label")] //Mods.Everglow.Config.TextureReplace.Label
+        [Tooltip("$Mods.Everglow.Config.AudioReplace.Tooltip")] //Mods.Everglow.Config.TextureReplace.Tooltip
+        [DrawTicks]
+        public AudioReplaceMode AudioReplace;
+
+        public override void OnChanged() {
             if ((int)TextureReplace >= 3) {
                 TextureReplace = TextureReplaceMode.Terraria;
+            }
+            if ((int)AudioReplace >= 3)
+            {
+                AudioReplace = AudioReplaceMode.MothFighting;
             }
             if (AssetReplaceModule.IsLoaded)
                 AssetReplaceModule.ReplaceTextures(TextureReplace);
@@ -55,7 +65,17 @@ namespace Everglow.Sources.Commons.Function.FeatureFlags
     public enum TextureReplaceMode
     {
         Terraria,
+        [Label("Eternal Resolve")]
         EternalResolve,
         Myth
+    }
+    public enum AudioReplaceMode
+    {
+        [Label("Original")]
+        MothFighting,
+        [Label("Alternate")]
+        AltMothFighting,
+        [Label("Old")]
+        OldMothFighting
     }
 }
