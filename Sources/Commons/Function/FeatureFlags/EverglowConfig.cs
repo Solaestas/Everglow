@@ -35,26 +35,38 @@ namespace Everglow.Sources.Commons.Function.FeatureFlags
         /// 用于各个客户端的个性化设置
         /// </summary>
         public override ConfigScope Mode => ConfigScope.ClientSide;
-
+        [Header("$Mods.Everglow.Config.Header.TextureReplace")]
         [DefaultValue(TextureReplaceMode.Terraria)]
         [Label("$Mods.Everglow.Config.TextureReplace.Label")]
         [Tooltip("$Mods.Everglow.Config.TextureReplace.Tooltip")]
         [DrawTicks]
         public TextureReplaceMode TextureReplace;
 
-        [DefaultValue(AudioReplaceMode.MothFighting)]
-        [Label("$Mods.Everglow.Config.AudioReplace.Label")]
-        [Tooltip("$Mods.Everglow.Config.AudioReplace.Tooltip")]
+        [Header("$Mods.Everglow.Config.Header.AudioReplace")]
+
+        [DefaultValue(MothAudioReplaceMode.MothFighting)]
+        [Label("$Mods.Everglow.Config.MothAudioReplace.Label")]
+        [Tooltip("$Mods.Everglow.Config.MothAudioReplace.Tooltip")]
         [DrawTicks]
-        public AudioReplaceMode AudioReplace;
+        public MothAudioReplaceMode MothAudioReplace;
+
+        [DefaultValue(TuskAudioReplaceMode.TuskFighting)]
+        [Label("$Mods.Everglow.Config.TuskAudioReplace.Label")]
+        [Tooltip("$Mods.Everglow.Config.TuskAudioReplace.Tooltip")]
+        [DrawTicks]
+        public TuskAudioReplaceMode TuskAudioReplace;
 
         public override void OnChanged() {
             if ((int)TextureReplace >= 3) {
                 TextureReplace = TextureReplaceMode.Terraria;
             }
-            if ((int)AudioReplace >= 3)
+            if ((int)MothAudioReplace >= 3)
             {
-                AudioReplace = AudioReplaceMode.MothFighting;
+                MothAudioReplace = MothAudioReplaceMode.MothFighting;
+            }
+            if ((int)MothAudioReplace >= 2)
+            {
+                TuskAudioReplace = TuskAudioReplaceMode.TuskFighting;
             }
             if (AssetReplaceModule.IsLoaded)
                 AssetReplaceModule.ReplaceTextures(TextureReplace);
@@ -69,7 +81,7 @@ namespace Everglow.Sources.Commons.Function.FeatureFlags
         EternalResolve,
         Myth
     }
-    public enum AudioReplaceMode
+    public enum MothAudioReplaceMode
     {
         [Label("Original")]
         MothFighting,
@@ -77,5 +89,12 @@ namespace Everglow.Sources.Commons.Function.FeatureFlags
         AltMothFighting,
         [Label("Old")]
         OldMothFighting
+    }
+    public enum TuskAudioReplaceMode
+    {
+        [Label("Original")]
+        TuskFighting,
+        [Label("Old")]
+        OldTuskFighting
     }
 }

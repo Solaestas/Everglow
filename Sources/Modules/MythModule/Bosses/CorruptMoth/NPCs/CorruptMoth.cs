@@ -152,15 +152,15 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             //NPCID.Sets.TrailingMode[NPC.type] = 0;
             if (!Main.dedServ)
             {
-                if (ModContent.GetInstance<EverglowClientConfig>().AudioReplace == AudioReplaceMode.MothFighting)
+                if (ModContent.GetInstance<EverglowClientConfig>().MothAudioReplace == MothAudioReplaceMode.MothFighting)
                 {
                     Music = Common.MythContent.QuickMusic("MothFighting");
                 }
-                else if (ModContent.GetInstance<EverglowClientConfig>().AudioReplace == AudioReplaceMode.AltMothFighting)
+                else if (ModContent.GetInstance<EverglowClientConfig>().MothAudioReplace == MothAudioReplaceMode.AltMothFighting)
                 {
                     Music = Common.MythContent.QuickMusic("MothFightingAlt");
                 }
-                else if (ModContent.GetInstance<EverglowClientConfig>().AudioReplace == AudioReplaceMode.OldMothFighting)
+                else if (ModContent.GetInstance<EverglowClientConfig>().MothAudioReplace == MothAudioReplaceMode.OldMothFighting)
                 {
                     Music = Common.MythContent.QuickMusic("MothFightingOld2");
                 }
