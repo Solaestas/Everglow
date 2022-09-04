@@ -1,4 +1,5 @@
-﻿using Everglow.Sources.Commons.Function.ImageReader;
+﻿using Everglow.Sources.Commons.Core;
+using Everglow.Sources.Commons.Function.ImageReader;
 using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Physics;
@@ -28,7 +29,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
 
             for (int i = 0; i < count - 1; i++)
             {
-                spring[i] = new Spring(0.5f, 20, 0.05f, mass[i], mass[i + 1]);
+                spring[i] = new Spring(5f, 20, 0.05f, mass[i], mass[i + 1]);
             }
 
             GetOffset = offset;
@@ -46,7 +47,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
             }
             for (int i = 0; i < spring.Length; i++)
             {
-                clone.spring[i] = new Spring(0.5f, 20, 0.05f, clone.mass[i], clone.mass[i + 1]);
+                clone.spring[i] = new Spring(5f, 20, 0.05f, clone.mass[i], clone.mass[i + 1]);
             }
             clone.GetOffset = GetOffset;
             return clone;
@@ -83,7 +84,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
 
         private bool m_isDirty;
         private _Mass[] m_massShadows;
+        private int m_massShadowsLength;
         private _Spring[] m_springShadows;
+        private int m_springShadowsLength;
+
+        private _Mass[] m_massShadowsSlow;
+        private int m_massShadowsSlowLength;
+        private _Spring[] m_springShadowsSlow;
+        private int m_springShadowsSlowLength;
 
         private _Mass ConvertMass(Mass mass)
         {
@@ -191,12 +199,28 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
             ropes.Clear();
         }
 
-        private void FEM_Update(float deltaTime)
+        private void ResizeMasses()
+        {
+            int numMasses = 0;
+            int numSprings = 0;
+            foreach (var rope in ropes)
+            {
+                numMasses += rope.mass.Length;
+                numSprings += rope.spring.Length;
+            }
+            m_massShadows = new _Mass[numMasses];
+            m_springShadows = new _Spring[numSprings];
+            m_massShadowsSlow = new _Mass[numMasses];
+            m_springShadowsSlow = new _Spring[numSprings];
+        }
+
+        private void FEM_Update(float deltaTime, int offset, int stride, _Mass[] massArray, _Spring[] springArray,
+            int massLength, int springLength)
         {
             // Prepare
-            Parallel.For(0, m_massShadows.Length, i =>
+            Parallel.For(0, massLength, i =>
             {
-                ref _Mass m = ref m_massShadows[i];
+                ref _Mass m = ref massArray[i];
                 m.force = m.originalMass.force;
                 m.force += new Vector2(0.04f + 0.06f * 
                     (float)(Math.Sin(Main.timeForVisualEffects / 72f + m.position.X / 13d + m.position.Y / 4d)), 0)
@@ -210,18 +234,18 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
 
             for (int iters = 0; iters < 16; iters++)
             {
-                Parallel.For(0, m_massShadows.Length, i =>
+                Parallel.For(0, massLength, i =>
                 {
-                    ref _Mass m = ref m_massShadows[i];
+                    ref _Mass m = ref massArray[i];
                     Vector2 x_hat = (m.position + deltaTime * m.velocity);
                     m.G = m.mass / (deltaTime * deltaTime) * (m.X - x_hat);
                 });
 
-                Parallel.For(0, m_springShadows.Length, i =>
+                Parallel.For(0, springLength, i =>
                 {
-                    ref _Spring spr = ref m_springShadows[i];
-                    ref _Mass A = ref m_massShadows[spr.A];
-                    ref _Mass B = ref m_massShadows[spr.B];
+                    ref _Spring spr = ref springArray[i];
+                    ref _Mass A = ref massArray[spr.A];
+                    ref _Mass B = ref massArray[spr.B];
 
                     var offset = A.X - B.X;
                     var length = (float)offset.Length();
@@ -232,9 +256,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
                     A.K = B.K = spr.elasticity;
                 });
 
-                Parallel.For(0, m_massShadows.Length, i =>
+                Parallel.For(0, massLength, i =>
                 {
-                    ref _Mass m = ref m_massShadows[i];
+                    ref _Mass m = ref massArray[i];
                     if (m.isStatic)
                     {
                         return;
@@ -245,15 +269,15 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
                 });
             }
 
-            Parallel.For(0, m_massShadows.Length, i =>
+            Parallel.For(0, massLength, i =>
             {
-                ref _Mass m = ref m_massShadows[i];
+                ref _Mass m = ref massArray[i];
                 if (!m.isStatic)
                 {
                     var oldPos = m.position;
                     m.position = m.X;
                     var offset = m.position - (oldPos + deltaTime * m.velocity);
-                    m.velocity += offset / deltaTime;
+                    m.velocity = (m.position - oldPos) / deltaTime;
                     m.force = Vector2.Zero;
                 }
 
@@ -264,12 +288,18 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
             });
         }
 
-        private void PBD_Update(float deltaTime)
+        private void PBD_Update(float deltaTime, int offset, int stride, _Mass[] massArray, _Spring[] springArray,
+            int massLength, int springLength)
         {
             // Prepare
-            Parallel.For(0, m_massShadows.Length, i =>
+            Parallel.For(0, massLength, i =>
             {
-                ref _Mass m = ref m_massShadows[i];
+                ref _Mass m = ref massArray[i];
+                if (m.isStatic)
+                {
+                    m.X = m.position;
+                    return;
+                }
                 m.force = m.originalMass.force;
                 m.force += new Vector2(0.04f + 0.06f *
                     (float)(Math.Sin(Main.timeForVisualEffects / 72f + m.position.X / 13d + m.position.Y / 4d)), 0)
@@ -278,27 +308,24 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
 
                 m.velocity += m.force / m.mass * deltaTime;
                 m.velocity *= 0.99f;
-                if (!m.isStatic)
-                {
-                    m.position += m.velocity * deltaTime;
-                }
+                m.position += m.velocity * deltaTime;
                 m.X = m.position;
             });
 
-            for (int iters = 0; iters < 16; iters++)
+            for (int iters = 0; iters < 8; iters++)
             {
-                Parallel.For(0, m_massShadows.Length, i =>
+                Parallel.For(0, massLength, i =>
                 {
-                    ref _Mass m = ref m_massShadows[i];
+                    ref _Mass m = ref massArray[i];
                     m.K = 0;
                     m.G = Vector2.Zero;
                 });
 
-                for (int i = 0; i < m_springShadows.Length; i++)
+                for (int i = 0; i < springLength; i++)
                 {
-                    ref _Spring spr = ref m_springShadows[i];
-                    ref _Mass A = ref m_massShadows[spr.A];
-                    ref _Mass B = ref m_massShadows[spr.B];
+                    ref _Spring spr = ref springArray[i];
+                    ref _Mass A = ref massArray[spr.A];
+                    ref _Mass B = ref massArray[spr.B];
 
                     Vector2 unit = Vector2.Normalize(A.X - B.X);
                     A.G += 0.5f * (A.X + B.X + spr.restLength * unit);
@@ -308,27 +335,26 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
                     B.K++;
                 }
 
-                Parallel.For(0, m_massShadows.Length, i =>
+                Parallel.For(0, massLength, i =>
                 {
-                    ref _Mass m = ref m_massShadows[i];
+                    ref _Mass m = ref massArray[i];
 
                     var oldPos = m.X;
                     m.X = ((m.X * 0.2f + m.G) / (0.2f + m.K));
-
                 });
             }
 
-            Parallel.For(0, m_massShadows.Length, i =>
+            Parallel.For(0, massLength, i =>
             {
-                ref _Mass m = ref m_massShadows[i];
+                ref _Mass m = ref massArray[i];
                 if (!m.isStatic)
                 {
                     var oldPos = m.position;
                     m.position = m.X;
                     m.velocity += (m.position - oldPos) / deltaTime;
-                    m.force = Vector2.Zero;
                 }
 
+                m.force = Vector2.Zero;
                 m.originalMass.position = m.position;
                 m.originalMass.force = Vector2.Zero;
                 m.originalMass.velocity = m.velocity;
@@ -340,11 +366,19 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
         {
             if (m_isDirty)
             {
-                RegenerateMasses();
+                ResizeMasses();
                 m_isDirty = false;
             }
+            RegenerateMasses();
             // FEM_Update(deltaTime);
-            PBD_Update(deltaTime);
+
+            FEM_Update(deltaTime, 0, 1, m_massShadows, m_springShadows, m_massShadowsLength, m_springShadowsLength);
+            // PBD_Update(deltaTime, 0, 1, m_massShadows, m_springShadows, m_massShadowsLength, m_springShadowsLength);
+
+            FEM_Update(deltaTime * 30, 0, 1, 
+                m_massShadowsSlow, m_springShadowsSlow, m_massShadowsSlowLength, m_springShadowsSlowLength);
+            //PBD_Update(deltaTime * 10, 0, 1, 
+            //    m_massShadowsSlow, m_springShadowsSlow, m_massShadowsSlowLength, m_springShadowsSlowLength);
             //for (int i = 0; i < ropes.Count; i++)
             //{
             //    var rope = ropes[i];
@@ -446,48 +480,81 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
             return color;
         }
 
-        private void RegenerateMasses()
+        private bool IsRopePresentInScreen(Rope rope)
         {
-            int numMasses = 0;
-            int numSprings = 0;
-            foreach (var rope in ropes)
-            {
-                numMasses += rope.mass.Length;
-                numSprings += rope.spring.Length;
-            }
-            m_massShadows = new _Mass[numMasses];
-            m_springShadows = new _Spring[numSprings];
+            Rectangle screenRect = new Rectangle((int)Main.screenPosition.X - Main.offScreenRange,
+                (int)Main.screenPosition.Y - Main.offScreenRange,
+                Main.screenWidth + 2 * Main.offScreenRange,
+                Main.screenHeight + 2 * Main.offScreenRange);
 
-            numMasses = 0;
-            numSprings = 0;
-            foreach (var rope in ropes)
+            foreach (var m in rope.mass)
             {
+                if (screenRect.Contains(m.position.ToPoint()))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void PushRopeToTargetArary(Rope rope, _Mass[] massArray, _Spring[] springArray,
+            ref int massLength, ref int springLength)
+        {
+            foreach (var m in rope.mass)
+            {
+                massArray[massLength++] = ConvertMass(m);
+            }
+            foreach (var spr in rope.spring)
+            {
+                int index = 0;
+
                 foreach (var m in rope.mass)
                 {
-                    m_massShadows[numMasses++] = ConvertMass(m);
-                }
-
-                foreach (var spr in rope.spring)
-                {
-                    int index = 0;
-                    
-                    foreach (var m in rope.mass)
+                    index--;
+                    if (Mass.ReferenceEquals(spr.mass1, m))
                     {
-                        index--;
-                        if (Mass.ReferenceEquals(spr.mass1, m))
-                        {
-                            m_springShadows[numSprings].A = numMasses + index;
-                        }
-                        else if (Mass.ReferenceEquals(spr.mass2, m))
-                        {
-                            m_springShadows[numSprings].B = numMasses + index;
-                        }
+                        springArray[springLength].A = massLength + index;
                     }
-
-                    m_springShadows[numSprings].elasticity = spr.elasticity;
-                    m_springShadows[numSprings].restLength = spr.restLength;
-                    numSprings++;
+                    else if (Mass.ReferenceEquals(spr.mass2, m))
+                    {
+                        springArray[springLength].B = massLength + index;
+                    }
                 }
+
+                springArray[springLength].elasticity = spr.elasticity;
+                springArray[springLength].restLength = spr.restLength;
+                springLength++;
+            }
+        }
+
+        private void RegenerateMasses()
+        {
+            m_massShadowsLength = 0;
+            m_springShadowsLength = 0;
+
+            m_massShadowsSlowLength = 0;
+            m_springShadowsSlowLength = 0;
+
+            // 根据在不在屏幕里分为fast和slow两个集合，做不同尺度的模拟
+            int index = 0;
+            foreach (var rope in ropes)
+            {
+                if (IsRopePresentInScreen(rope))
+                {
+                    PushRopeToTargetArary(rope, m_massShadows, m_springShadows, 
+                        ref m_massShadowsLength, ref m_springShadowsLength);
+                }
+                else
+                {
+                    // 按照序号模30分摊计算量
+                    if (HookSystem.UpdateTimer % 30 == index % 30)
+                    {
+                        PushRopeToTargetArary(rope, m_massShadowsSlow, m_springShadowsSlow,
+                            ref m_massShadowsSlowLength, ref m_springShadowsSlowLength);
+                    }
+                    index++;
+                }
+
             }
         }
     }
