@@ -1,6 +1,7 @@
 ﻿using Everglow.Sources.Commons.Core;
 using Everglow.Sources.Commons.Function.ImageReader;
 using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles;
+using Everglow.Sources.Commons.Function.FeatureFlags;
 using System.Threading.Tasks;
 using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
@@ -11,7 +12,6 @@ using Terraria.Audio;
 using Everglow.Sources.Commons.Function.Vertex;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
-using Everglow.Sources.Commons.Function.FeatureFlags;
 
 namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
 {
