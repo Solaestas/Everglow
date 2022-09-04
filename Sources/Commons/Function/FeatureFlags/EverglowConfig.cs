@@ -64,7 +64,7 @@ namespace Everglow.Sources.Commons.Function.FeatureFlags
             {
                 MothAudioReplace = MothAudioReplaceMode.MothFighting;
             }
-            if ((int)MothAudioReplace >= 2)
+            if ((int)TuskAudioReplace >= 2)
             {
                 TuskAudioReplace = TuskAudioReplaceMode.TuskFighting;
             }
