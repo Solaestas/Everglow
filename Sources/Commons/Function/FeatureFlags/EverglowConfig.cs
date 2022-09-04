@@ -37,14 +37,14 @@ namespace Everglow.Sources.Commons.Function.FeatureFlags
         public override ConfigScope Mode => ConfigScope.ClientSide;
 
         [DefaultValue(TextureReplaceMode.Terraria)]
-        [Label("$Mods.Everglow.Config.TextureReplace.Label")] //Mods.Everglow.Config.TextureReplace.Label
-        [Tooltip("$Mods.Everglow.Config.TextureReplace.Tooltip")] //Mods.Everglow.Config.TextureReplace.Tooltip
+        [Label("$Mods.Everglow.Config.TextureReplace.Label")]
+        [Tooltip("$Mods.Everglow.Config.TextureReplace.Tooltip")]
         [DrawTicks]
         public TextureReplaceMode TextureReplace;
 
         [DefaultValue(AudioReplaceMode.MothFighting)]
-        [Label("$Mods.Everglow.Config.AudioReplace.Label")] //Mods.Everglow.Config.TextureReplace.Label
-        [Tooltip("$Mods.Everglow.Config.AudioReplace.Tooltip")] //Mods.Everglow.Config.TextureReplace.Tooltip
+        [Label("$Mods.Everglow.Config.AudioReplace.Label")]
+        [Tooltip("$Mods.Everglow.Config.AudioReplace.Tooltip")]
         [DrawTicks]
         public AudioReplaceMode AudioReplace;
 
