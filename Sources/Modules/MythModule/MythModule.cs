@@ -28,7 +28,14 @@ namespace Everglow.Sources.Modules.MythModule
                 On.Terraria.GameContent.Shaders.WaterShaderData.Update += WaterShaderData_Update;
                 IL.Terraria.GameContent.Shaders.WaterShaderData.Apply += WaterShaderData_Apply;
                 On.Terraria.GameContent.Shaders.WaterShaderData.StepLiquids += WaterShaderData_StepLiquids;
+                On.Terraria.Main.DrawToMap += Main_DrawToMap;
             }
+        }
+
+        private void Main_DrawToMap(On.Terraria.Main.orig_DrawToMap orig, Main self)
+        {
+
+            orig(self);
         }
 
         private void WaterShaderData_StepLiquids(On.Terraria.GameContent.Shaders.WaterShaderData.orig_StepLiquids orig, WaterShaderData self)
