@@ -6,6 +6,70 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
     {
         public override void SetDefaults(Item item)
         {
+            
+            base.SetDefaults(item);
+        }
+        public override bool PreDrawTooltipLine(Item item, DrawableTooltipLine line, ref int yOffset)
+        {
+            if (Main.LocalPlayer.GetModPlayer<MagicBookPlayer>().MagicBookLevel == 1)
+            {
+                if (item.type == ItemID.WaterBolt)
+                {
+
+                }
+            }
+            return base.PreDrawTooltipLine(item, line, ref yOffset);
+        }
+        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
+        {
+            if (Main.LocalPlayer.GetModPlayer<MagicBookPlayer>().MagicBookLevel == 1)
+            {
+                if (item.type == ItemID.WaterBolt)
+                {
+                    tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "Text1", "累计命中敌人5次后获得一个水之球,右键消耗并传送至老鼠\n水之球最多叠加6个,水之球达到6个时,中键消耗全部水之球获得5秒高强度攻击\n切换武器清除全部水之球"));
+                }
+            }
+            base.ModifyTooltips(item, tooltips);
+        }
+        public override bool? UseItem(Item item, Player player)
+        {
+            if (player.GetModPlayer<MagicBookPlayer>().MagicBookLevel == 0)
+            {
+                if (item.type == ItemID.WaterBolt)
+                {
+                    item.noUseGraphic = false;
+                }
+                if (item.type == ItemID.BookofSkulls)
+                {
+                    item.noUseGraphic = false;
+                }
+                if (item.type == ItemID.DemonScythe)
+                {
+                    item.autoReuse = false;
+                    item.noUseGraphic = false;
+                }
+                if (item.type == ItemID.CursedFlames)
+                {
+                    item.noUseGraphic = false;
+                }
+                if (item.type == ItemID.GoldenShower)
+                {
+                    item.noUseGraphic = false;
+                }
+                if (item.type == ItemID.CrystalStorm)
+                {
+                    item.noUseGraphic = false;
+                }
+                if (item.type == ItemID.MagnetSphere)
+                {
+                    item.noUseGraphic = false;
+                }
+                if (item.type == ItemID.RazorbladeTyphoon)
+                {
+                    item.noUseGraphic = false;
+                }
+                return base.UseItem(item, player);
+            }
             if (item.type == ItemID.WaterBolt)
             {
                 item.noUseGraphic = true;
@@ -39,11 +103,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
             {
                 item.noUseGraphic = true;
             }
-            base.SetDefaults(item);
-        }
-        public override bool? UseItem(Item item, Player player)
-        {
-            if(item.type == ItemID.WaterBolt)
+            if (item.type == ItemID.WaterBolt)
             {
                 int aimType = ModContent.ProjectileType<Projectiles.WaterBolt.WaterBoltBook>();
                 if (player.ownedProjectileCounts[aimType] < 1)
@@ -151,6 +211,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
         }
         public override bool Shoot(Item item, Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
+            if(player.GetModPlayer<MagicBookPlayer>().MagicBookLevel == 0)
+            {
+                return base.Shoot(item, player, source, position, velocity, type, damage, knockback);
+            }
             if (item.type == ItemID.WaterBolt)
             {
                 return false;
@@ -184,6 +248,35 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
                 return false;
             }
             return base.Shoot(item, player, source, position, velocity, type, damage, knockback);
+        }
+    }
+    class MagicBookPlayer : ModPlayer
+    {
+        public int MagicBookLevel = 0;
+        public int WaterBoltHasHit = 0;
+        public override void PreUpdate()
+        {
+            MagicBookLevel = 0;
+            base.PreUpdate();
+        }
+        public override bool PreItemCheck()
+        {
+            //MagicBookLevel = 0;
+            if(WaterBoltHasHit > 0)
+            {
+                if (Player.HeldItem.type != ItemID.WaterBolt || MagicBookLevel == 0)
+                {
+                    WaterBoltHasHit = 0;
+                    /*foreach(Projectile p in Main.projectile)
+                    {
+                        if(p.owner == Player.whoAmI && p.type == ModContent.ProjectileType<Projectiles.WaterBolt.WaterTeleport>())
+                        {
+                            p.Kill();
+                        }
+                    }*/
+                }
+            }
+            return base.PreItemCheck();
         }
     }
 }

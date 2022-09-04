@@ -47,10 +47,17 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
             Vector2 vTOMouse = Main.MouseWorld - player.Center;
             player.SetCompositeArmBack(true, PCAS, (float)(Math.Atan2(vTOMouse.Y, vTOMouse.X) - Math.PI / 2d));
             Projectile.rotation = player.fullRotation;
+            int damage = player.HeldItem.damage;
             if (player.itemTime == 2)
             {
                 Vector2 velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero) * player.HeldItem.shootSpeed;
-                Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(),Projectile.Center + velocity * 6, velocity, ProjectileID.WaterBolt, player.HeldItem.damage, player.HeldItem.knockBack, player.whoAmI);
+                int T = ProjectileID.WaterBolt;
+                if (player.HasBuff(ModContent.BuffType<MagicWeaponsReplace.Buffs.WaterBoltII>()))
+                {
+                    damage = (int)(damage * 1.85);
+                    T = ModContent.ProjectileType<Projectiles.WaterBolt.NewWaterBolt>();
+                }
+                Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(),Projectile.Center + velocity * 6, velocity, T, damage, player.HeldItem.knockBack, player.whoAmI);
                 p.penetrate = 2;
             }
         }
@@ -241,7 +248,6 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
             {
                 c0 = Lighting.GetColor((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f));
             }
-
             List<Vertex2D> bars = new List<Vertex2D>();
             for (int i = 0; i < 10; ++i)
             {

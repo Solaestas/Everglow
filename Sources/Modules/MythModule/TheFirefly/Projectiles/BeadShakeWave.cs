@@ -65,14 +65,21 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             KEx.CurrentTechnique.Passes[0].Apply();
             float value = (200 - Projectile.timeLeft) / (float)Projectile.timeLeft * 1.4f;
             float colorV = 0.6f * (1 - value) * Projectile.ai[0];
+            float x0 = Projectile.ai[0];
+            if (Projectile.ai[1] != 0)
+            {
+                colorV = 0.6f * (1 - value) * Projectile.ai[1];
+                x0 = Projectile.ai[1] * 0.3f;
+            }
+
             if (value < 1)
             {
-                DrawCircle(value * 1100 * Projectile.ai[0], 150 * Projectile.ai[0] * (1 - value) + 30 * Projectile.ai[0], new Color(colorV, colorV, colorV, 0f), Projectile.Center - Main.screenPosition);
+                DrawCircle(value * 1100 * Projectile.ai[0], 150 * x0 * (1 - value) + 30 * Projectile.ai[0], new Color(colorV, colorV, colorV, 0f), Projectile.Center - Main.screenPosition);
             }
             value -= 0.2f;
             if (value < 1 && value > 0)
             {
-                DrawCircle(value * 900 * Projectile.ai[0], 80 * Projectile.ai[0] * (1 - value) + 30 * Projectile.ai[0], new Color(colorV, colorV, colorV, 0f), Projectile.Center - Main.screenPosition);
+                DrawCircle(value * 900 * Projectile.ai[0], 80 * x0 * (1 - value) + 30 * Projectile.ai[0], new Color(colorV, colorV, colorV, 0f), Projectile.Center - Main.screenPosition);
             }
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);

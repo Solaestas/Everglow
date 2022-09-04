@@ -3,6 +3,8 @@ using Everglow.Sources.Commons.Function.Vertex;
 using Terraria.Audio;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
+
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.WaterBolt
 {
     public class NewWaterBolt : ModProjectile
@@ -27,7 +29,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
         }
         public override void AI()
         {
-            Projectile.velocity *= 0.993f;
+            Projectile.velocity *= 0.9993f;
+            Projectile.velocity.Y += 0.02f;
             float k0 = 1f / (Projectile.ai[0] + 2) * 2;
             Vector2 v0 = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) * Projectile.scale * 0.3f;
             Dust.NewDust(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<BlueGlowAppear>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(0.6f, 1.8f) * Projectile.scale * 0.4f * k0);
@@ -54,15 +57,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
             {
                 k2 = Projectile.timeLeft / 200f;
             }
-            Color c0 = new Color(k0 * k0 * 0.3f, k0 * k0 * 0.8f, k0 * 0.8f + 0.2f, 1 - k0);
+            Color c0 = new Color(0, k0 * k0 * 0.2f, k0 * 0.8f + 0.2f, 1 - k0);
             List<Vertex2D> bars = new List<Vertex2D>();
-            float width = 12;
-            float k3 = Projectile.ai[1] / 60f;
-            if(Projectile.ai[1] > 0)
-            {
-                width *= k3;
-            }
-            width *= (k0 / 1.8f + 0.2f) / (Projectile.ai[0] + 3) * 3.5f * k2;
+            float width = 24;
+
             int TrueL = 0;
             for (int i = 1; i < Projectile.oldPos.Length; ++i)
             {
@@ -84,10 +82,12 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
                 normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
                 var factor = i / (float)TrueL;
                 var w = MathHelper.Lerp(1f, 0.05f, factor);
-                bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(factor, 1, w)));
-                bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(factor, 0, w)));
+                float x0 = factor * 0.6f - (float)(Main.time / 35d) + 10000;
+                x0 %= 1f;
+                bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 1, w)));
+                bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 0, w)));
             }
-            Texture2D t = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/MothGreyLine");
+            Texture2D t = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine");
             Main.graphics.GraphicsDevice.Textures[0] = t;
             if (bars.Count > 3)
             {
@@ -105,16 +105,15 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
             if(timeLeft > 0)
             {
                 float value = Math.Min(Projectile.damage / 30f, 1f);
-                //Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BeadShakeWave>(), 0, 0, Projectile.owner, 1f / (Projectile.ai[0] + 2) * 2 * value);
+                Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BeadShakeWave>(), 0, 0, Projectile.owner, 0.2f, 3f);
             }
             if (timeLeft <= 0)
             {
                 return;
             }
             SoundEngine.PlaySound(SoundID.Item38,Projectile.Center);
-            float k1 = Math.Clamp(Projectile.velocity.Length(), 1, 3);
-            float k2 = Math.Clamp(Projectile.velocity.Length(), 6, 10);
-            float k0 = 1f / (Projectile.ai[0] + 2) * 2 * k2;
+            float k1 = 1;
+            float k0 = 5;
             for (int j = 0; j < 8 * k0; j++)
             {
                 Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * Projectile.scale * k1;

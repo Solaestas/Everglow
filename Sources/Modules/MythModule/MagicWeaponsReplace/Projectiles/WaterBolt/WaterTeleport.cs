@@ -1,0 +1,230 @@
+﻿using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Sources.Modules.MEACModule;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
+
+namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.WaterBolt
+{
+    internal class WaterTeleport : ModProjectile, IWarpProjectile
+    {
+        public override void SetDefaults()
+        {
+            Projectile.width = 28;
+            Projectile.height = 28;
+            Projectile.friendly = true;
+            Projectile.hostile = false;
+            Projectile.penetrate = -1;
+            Projectile.timeLeft = 10000;
+            Projectile.DamageType = DamageClass.Summon;
+            Projectile.tileCollide = false;
+        }
+        public override void AI()
+        {
+            Player player = Main.player[Projectile.owner];
+            Vector2 AIM0 = (player.Center + new Vector2(0, 12 * player.gravDir * (float)(0.2 + Math.Sin(Main.time / 18d) / 2d)) + new Vector2(-60 * player.direction, 30).RotatedBy((Projectile.ai[0] - 1) / 4.5 * Math.PI * player.direction));
+            if(player.itemTime > 0 && player.active)
+            {
+                AIM0 = (player.Center + new Vector2(player.direction * -12, -24 * player.gravDir * (float)(0.2 + Math.Sin(Main.time / 18d) / 2d)) + new Vector2(-120 * player.direction, 60).RotatedBy((Projectile.ai[0] - 1) / 4.5 * Math.PI * player.direction));
+            }
+            Projectile.Center = Projectile.Center * (-Projectile.ai[0] / 50f + 0.97f) + AIM0 * (Projectile.ai[0] / 50f + 0.03f);
+            Projectile.spriteDirection = player.direction;
+            Projectile.velocity *= 0;
+            if (player.HeldItem.type == ItemID.WaterBolt)
+            {
+                Projectile.timeLeft = player.itemTime + 60;
+                if(Timer < 30)
+                {
+                    Timer++;
+                }
+            }
+            else
+            {
+                Timer--;
+                if(Timer < 0)
+                {
+                    Projectile.Kill();
+                }
+            }
+            Player.CompositeArmStretchAmount PCAS = Player.CompositeArmStretchAmount.Full;
+
+            player.SetCompositeArmFront(true, PCAS, (float)(-Math.Sin(Main.time / 18d) * 0.6 + 1.2) * -player.direction);
+            Vector2 vTOMouse = Main.MouseWorld - player.Center;
+            player.SetCompositeArmBack(true, PCAS, (float)(Math.Atan2(vTOMouse.Y, vTOMouse.X) - Math.PI / 2d));
+            Projectile.rotation = player.fullRotation;
+
+            RingPos = RingPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
+
+            if (Main.mouseRight && Main.mouseRightRelease)
+            {
+                int AimAi0 = player.ownedProjectileCounts[Projectile.type];
+
+                while (AimAi0 > 0)
+                {
+                    foreach (Projectile p in Main.projectile)
+                    {
+                        if (p.owner == player.whoAmI && p.type == Projectile.type)
+                        {
+                            if(p.ai[0] == AimAi0)
+                            {
+                                player.Center = Main.MouseWorld;
+                                Projectile.NewProjectile(Projectile.GetSource_FromAI(), player.Center, Vector2.Zero, ModContent.ProjectileType<BeadShakeWave>(), 0, 0, Projectile.owner, 1);
+
+                                float k1 = 0.3f;
+                                float k2 = 8;
+                                float k0 = 1f / (4 + 2) * 2 * k2;
+                                for (int j = 0; j < 80; j++)
+                                {
+                                    Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * k1;
+                                    int dust0 = Dust.NewDust(player.Center - new Vector2(4), 0, 0, ModContent.DustType<BlueGlowAppearStoppedByTile>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(0.6f, 1.8f) * 0.4f * k0);
+                                    Main.dust[dust0].noGravity = true;
+                                }
+                                for (int j = 0; j < 160; j++)
+                                {
+                                    Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * k1;
+                                    int dust1 = Dust.NewDust(player.Center - new Vector2(4), 0, 0, ModContent.DustType<BlueParticleDark2StoppedByTile>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(3.7f, 5.1f) * k0);
+                                    Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 50 / k0);
+                                    Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
+                                }
+                                AimAi0 = -1;
+
+                                p.Kill();
+                            }
+                        }
+                    }
+                    AimAi0--;
+                }
+            }
+
+            if (Main.mouseMiddle && Main.mouseMiddleRelease)
+            {
+                if(player.ownedProjectileCounts[Projectile.type] == 6)
+                {
+                    foreach (Projectile p in Main.projectile)
+                    {
+                        if (p.owner == player.whoAmI && p.type == Projectile.type)
+                        {
+                            p.Kill();
+                            player.AddBuff(ModContent.BuffType<Buffs.WaterBoltII>(), 300);
+                            foreach (Projectile p0 in Main.projectile)
+                            {
+                                if (p0.owner == player.whoAmI && p0.type == Projectile.type)
+                                {
+                                    p0.Kill();
+                                    p0.active = false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
+        {
+           behindNPCs.Add(index);
+        }
+        public override bool PreDraw(ref Color lightColor)
+        {
+            Projectile.hide = false;
+            DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLineBlackShade"), new Color(1f, 1f, 1f, 1f));
+            //DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLineBlackShade"), new Color(1f, 1f, 1f, 1f));
+            DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), new Color(0, 0.45f, 1f, 0));
+            Main.spriteBatch.Draw(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterBolt/WaterTeleport"), Projectile.Center - Main.screenPosition,null,new Color(0,30,255,0),0,new Vector2(34),Timer / 30f,SpriteEffects.None,0);
+            if((Main.MouseWorld - Projectile.Center).Length() < 30)
+            {
+                Utils.DrawBorderString(Main.spriteBatch, Projectile.ai[0].ToString(),Projectile.Center - Main.screenPosition, Color.AliceBlue);
+            }
+            return false;
+        }
+        internal int Timer = 0;
+        internal Vector2 RingPos = Vector2.Zero;
+        public void DrawMagicArray(Texture2D tex, Color c0)
+        {
+            float Size = (float)((Main.time / 2d + Projectile.ai[0] * 4) % 40d);
+            float SizeII = (float)((Main.time / 2d + 20 + Projectile.ai[0] * 4) % 40d);
+            DrawTexCircle(Size, (40 - Size) * Timer / 30f, c0, Projectile.Center - Main.screenPosition, tex, Main.time / 17);
+            DrawTexCircle(SizeII, (40 - SizeII) * Timer / 30f, c0, Projectile.Center - Main.screenPosition, tex, Main.time / 17);
+        }
+        private void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
+        {
+            List<Vertex2D> circle = new List<Vertex2D>();
+            for (int h = 0; h < radious * 2; h++)
+            {
+                circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 1f + addRot), color, new Vector3(h / 2f / radious, 1, 0)));
+                circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(h / radious * Math.PI * 1f + addRot), color, new Vector3(h / 2f / radious, 0, 0)));
+            }
+            circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0.5f, 1, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(addRot), color, new Vector3(0.5f, 0, 0)));
+            if (circle.Count > 0)
+            {
+                Main.graphics.GraphicsDevice.Textures[0] = tex;
+                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
+            }
+        }
+        public void DrawTexLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2, Texture2D tex)
+        {
+            float Wid = 6f;
+            Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
+
+            List<Vertex2D> vertex2Ds = new List<Vertex2D>();
+
+            for (int x = 0; x < 3; x++)
+            {
+                float Value0 = (float)(Main.time / 291d + 20) % 1f;
+                float Value1 = (float)(Main.time / 291d + 20.03) % 1f;
+                vertex2Ds.Add(new Vertex2D(StartPos + Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(Value0, 0, 0)));
+                vertex2Ds.Add(new Vertex2D(EndPos + Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(Value1, 0, 0)));
+                vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(Value0, 1, 0)));
+
+                vertex2Ds.Add(new Vertex2D(EndPos + Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(Value1, 0, 0)));
+                vertex2Ds.Add(new Vertex2D(EndPos - Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(Value1, 1, 0)));
+                vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(Value0, 1, 0)));
+            }
+
+
+            Main.graphics.GraphicsDevice.Textures[0] = tex;
+            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
+        }
+        public void DrawWarp()
+        {
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+            KEx.CurrentTechnique.Passes[0].Apply();
+            Player player = Main.player[Projectile.owner];
+            float Size = (float)((Main.time / 2d + Projectile.ai[0] * 4) % 40d);
+            float SizeII = (float)((Main.time / 2d + 20 + Projectile.ai[0] * 4) % 40d);
+            DrawTexCircle(Size, (40 - Size) * Timer / 30f, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), Main.time / 17);
+            DrawTexCircle(SizeII, (40 - SizeII) * Timer / 30f, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), Main.time / 17);
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+        }
+        public override void Kill(int timeLeft)
+        {
+            if(Timer < 1)
+            {
+                return;
+            }
+            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BeadShakeWave>(), 0, 0, Projectile.owner,1);
+
+            float k1 = 0.3f;
+            float k2 = 8;
+            float k0 = 1f / (4 + 2) * 2 * k2;
+            for (int j = 0; j < 80; j++)
+            {
+                Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * k1;
+                int dust0 = Dust.NewDust(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<BlueGlowAppearStoppedByTile>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(0.6f, 1.8f) * 0.4f * k0);
+                Main.dust[dust0].noGravity = true;
+            }
+            for (int j = 0; j < 160; j++)
+            {
+                Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * k1;
+                int dust1 = Dust.NewDust(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<BlueParticleDark2StoppedByTile>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(3.7f, 5.1f) * k0);
+                Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 50 / k0);
+                Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
+            }
+            base.Kill(timeLeft);
+        }
+    }
+}
