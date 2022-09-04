@@ -11,6 +11,7 @@ using Terraria.Audio;
 using Everglow.Sources.Commons.Function.Vertex;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
+using Everglow.Sources.Commons.Function.FeatureFlags;
 
 namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
 {
@@ -151,7 +152,18 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             //NPCID.Sets.TrailingMode[NPC.type] = 0;
             if (!Main.dedServ)
             {
-                Music = Common.MythContent.QuickMusic("MothFighting");
+                if (ModContent.GetInstance<EverglowClientConfig>().AudioReplace == AudioReplaceMode.MothFighting)
+                {
+                    Music = Common.MythContent.QuickMusic("MothFighting");
+                }
+                else if (ModContent.GetInstance<EverglowClientConfig>().AudioReplace == AudioReplaceMode.AltMothFighting)
+                {
+                    Music = Common.MythContent.QuickMusic("MothFightingAlt");
+                }
+                else if (ModContent.GetInstance<EverglowClientConfig>().AudioReplace == AudioReplaceMode.OldMothFighting)
+                {
+                    Music = Common.MythContent.QuickMusic("MothFightingOld2");
+                }
             }
         }
         public override bool CheckActive()

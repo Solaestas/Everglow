@@ -20,8 +20,6 @@ namespace Everglow.Sources.Modules.AssetReplaceModule
         internal static EternalAssets EternalAssets = new();
         internal static MythAssets MythAssets = new();
 
-        internal static AudioAssets AudioAssets = new();
-
         public static bool IsLoaded = false;
 
         public static Asset<Texture2D> GetTexture(string path) =>
@@ -37,7 +35,6 @@ namespace Everglow.Sources.Modules.AssetReplaceModule
                 EternalAssets.LoadTextures();
                 MythAssets.LoadTextures();
                 ReplaceTextures(ModContent.GetInstance<EverglowClientConfig>().TextureReplace);
-                AudioAssets.LoadMusic();
                 ReplaceAudio(ModContent.GetInstance<EverglowClientConfig>().AudioReplace);
                 IsLoaded = true;
             }
@@ -62,22 +59,6 @@ namespace Everglow.Sources.Modules.AssetReplaceModule
         }
         public static void ReplaceAudio(AudioReplaceMode mode)
         {
-            switch (mode)
-            {
-                case AudioReplaceMode.MothFighting:
-                    TerrariaAssets.Apply();
-                    break;
-                case AudioReplaceMode.AltMothFighting:
-                    EternalAssets.Apply();
-                    break;
-                case AudioReplaceMode.OldMothFighting:
-                    MythAssets.Apply();
-                    break;
-                // 有人直接改config配置文件？
-                default:
-                    TerrariaAssets.Apply();
-                    break;
-            }
         }
 
         public void Unload() {
