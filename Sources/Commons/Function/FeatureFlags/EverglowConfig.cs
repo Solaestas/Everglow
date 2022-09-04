@@ -38,7 +38,7 @@ namespace Everglow.Sources.Commons.Function.FeatureFlags
 
         [DefaultValue(TextureReplaceMode.Terraria)]
         [Label("In-game UI Texture")] //Mods.Everglow.Config.TextureReplace.Label
-        [Tooltip("You can choose to replace the Terraria UI texture with other textures\nOptions: Terraria, EternalResolve, Myth")] //Mods.Everglow.Config.TextureReplace.Tooltip
+        [Tooltip("You can choose to replace the Terraria UI texture with other textures\nOptions: Terraria, Eternal Resolve, Myth")] //Mods.Everglow.Config.TextureReplace.Tooltip
         [DrawTicks]
         public TextureReplaceMode TextureReplace;
 

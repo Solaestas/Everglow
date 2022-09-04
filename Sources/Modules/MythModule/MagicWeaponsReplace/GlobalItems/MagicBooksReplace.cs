@@ -1,4 +1,5 @@
 ﻿using Terraria.DataStructures;
+using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
 {
@@ -26,7 +27,11 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
             {
                 if (item.type == ItemID.WaterBolt)
                 {
-                    tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "Text1", "累计命中敌人5次后获得一个水之球,右键消耗并传送至老鼠\n水之球最多叠加6个,水之球达到6个时,中键消耗全部水之球获得5秒高强度攻击\n切换武器清除全部水之球"));
+                    tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "Text1", "After hitting the enemy 5 times, you will get a Water Orb. right click to consume it and teleport to the cursor. The maximum number of Water Orbs you can have is 6. \nWhen the number of Water Orbs reaches 6, you can consume all of the Water Orbs with the middle mouse button to get 5 seconds of high intensity attacks. \nSwitch weapons to clear all the water orbs."));
+                    if (Language.ActiveCulture.Name == "zh-Hans")
+                    {
+                        tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "Text1", "累计命中敌人5次后获得一个水之球,右键消耗并传送至老鼠\n水之球最多叠加6个,水之球达到6个时,中键消耗全部水之球获得5秒高强度攻击\n切换武器清除全部水之球"));
+                    }
                 }
             }
             base.ModifyTooltips(item, tooltips);
@@ -103,6 +108,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
             {
                 item.noUseGraphic = true;
             }
+            // Aim Types
             if (item.type == ItemID.WaterBolt)
             {
                 int aimType = ModContent.ProjectileType<Projectiles.WaterBolt.WaterBoltBook>();
