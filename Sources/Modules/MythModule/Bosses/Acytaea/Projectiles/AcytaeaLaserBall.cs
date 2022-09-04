@@ -148,7 +148,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                 Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
             }*/
-            ef2 = ModContent.Request<Effect>("MythMod/Effects/ef3/SpherePerspective3").Value;
+            ef2 = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/SpherePerspective3", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
             List<Vertex2D> triangleList2 = new List<Vertex2D>();
             int radius = (int)(St / 80f);//sss
             triangleList2.Add(new Vertex2D(Projectile.Center - new Vector2(radius, radius), Color.White, new Vector3(-1, 1, 0)));
@@ -181,7 +181,9 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList2.ToArray(), 0, triangleList2.Count / 3);
             Main.graphics.GraphicsDevice.RasterizerState = originalState2;
             Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            //TODO 万象你到底有多少Immediate啊！
+            //Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
         }
     }
 }
