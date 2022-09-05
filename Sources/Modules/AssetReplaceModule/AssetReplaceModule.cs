@@ -1,5 +1,6 @@
 ﻿using Everglow.Sources.Commons.Core.ModuleSystem;
 using Everglow.Sources.Commons.Function.FeatureFlags;
+using Everglow.Sources.Modules.MythModule.Common;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria.GameContent;
@@ -22,6 +23,8 @@ namespace Everglow.Sources.Modules.AssetReplaceModule
 
         public static Asset<Texture2D> GetTexture(string path) =>
             ModContent.Request<Texture2D>("Everglow/Resources/" + path, AssetRequestMode.ImmediateLoad);
+        public static Asset<ManualMusicRegistrationExample> GetAsset(string path) =>
+            ModContent.Request<ManualMusicRegistrationExample>("Everglow/Sources/Modules/MythModule/" + path, AssetRequestMode.ImmediateLoad);
 
         public static Asset<T> LoadVanillaAsset<T>(string assetName) where T : class => Main.Assets.Request<T>(assetName, AssetRequestMode.ImmediateLoad);
 
