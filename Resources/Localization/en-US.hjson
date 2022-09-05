@@ -1,46 +1,53 @@
-Mods: {
-	MythMod: {
-		NPCName: {
-
+Mods:
+{
+	Everglow:
+	{
+		NPCName:
+		{
+			Butterfly : Phantom Moth
 		}
-
-		MapObject: {
-
-		}
-
-
-		Common: {
+		Common:
+		{
+			Hour : "hour"
+			Minute : "minute"
+			Second : "second"
+			Duration : "duration"
 			WarWhipGT :
 				'''
 				No summon tag damage
 				Your summons will focus struck enemies
 				'''
-				#{$Mods.MythMod.Common.WarWhipGT}
 			WhipGT :
 				'''
 				 summon tag damage
 				Your summons will focus struck enemies
 				'''
-				#{$Mods.MythMod.Common.WhipGT}
 			ClubGT : Spin to strike enemies
-			#{$Mods.MythMod.Common.ClubGT}
 			RapierGT : Right click and hold to charge an invincibility dash with high damage
-			#{$Mods.MythMod.Common.RapierGT}
-			NoAmmoConsum : Does not consum ammo
-			#{$Mods.MythMod.Common.NoAmmoConsum}
+			NoAmmoConsum : Does not consume ammo
 			Acytaea : Acytaea
-			#{$Mods.MythMod.Common.Acytaea}
-			ExcluWeapon : Exclusive weapon
-			#{$Mods.MythMod.Common.ExcluWeapon}
-			MythWeapon : Mythical weapon
-			#{$Mods.MythMod.Common.MythWeapon}
-			LegendWeapon : Legendary weapon
-			#{$Mods.MythMod.Common.LegendWeapon}
+			ExcluWeapon : Exclusive Weapon
+			MythWeapon : Mythical Weapon
+			LegendWeapon : Legendary Weapon
 
+			#世界系统WorldSystem
+			WorldSystem:
+			{
+				WorldCreate_Def : "Generating World"
+				WorldEnter_Def : "Entering World"
+				BuildMothCave : "Generating The Cocoon"
+			}
+
+			#食物系统FoodSystem
+			FoodSystem:
+			{
+				CannotEat : "You are full"
+				CannotDrink : "You don't feel like to drink"
+			}
 		}
-
 		ItemName: 
 		{
+			#神话传说武器，常规武器，棍棒，弹弓，饰品，附魔币，boss宝藏袋圣物召唤物，金秋武器
 			AshBone : Stashed Bones
 			BoneFeatherMagic : Book of Bone Feather
 			CloudBall : Cloud Cluster
@@ -52,6 +59,7 @@ Mods: {
 			FreezeFeatherMagic : Book of Ice Feather
 			GoldRoundYoyo : "Golden Round"
 			Hepuyuan : "Prinomial Jade Winged Spear"
+			VortexVanquisherItem : "Vortex Vanquisher"
 			SilveralGun : "Fox Hunter Fx01"
 			SilveralRifle : "Silver Shadow Ct01"
 			Sunflower : "Sunflower Disc"
@@ -137,6 +145,7 @@ Mods: {
 			CursedJawbone : "Cursed Jawbone"
 			EvilCocoon : "Magical Cocoon"
 			TuskTreasureBag : "Treasure Bag (The Tusk)"
+			FragransBlade : 金秋爽夜
 			FragransBoomerang : Swirl Cloud At Night
 			FragransBow : Fragrans Branch
 			FragransGun : Fragrans Flame
@@ -179,6 +188,7 @@ Mods: {
 			PhosphorescenceGun : Scale Shotgun
 			ScaleWingBlade : Lepidoptera Blade
 			ShadowWingBow : Occulting Wings
+			MothYoyo : Glow-yo
 			AmbiguousNight : Ambiguous Night
 			BlackWoodSlingshot : Ebonwood Slingshot
 			BlueGemSlingshot : Sapphire Slingshot
@@ -255,44 +265,54 @@ Mods: {
 			SilverStabbingSword : Silver Rapier
 			VegetationBayonet : Rapier of Grass
 			TDMT : Catastrophic Lightning
-		}
+			CrystalSkull : Crystal Skull
+			#Glow Wood Furniture
+			
+			#Music Boxes
+			GlowWoodMusicBox : Glow Wood Music Box (The Firefly)
 
+			#食物系统物品
+			BloodGlucoseMonitor : "Blood Glucose Monitor"
+			OsmoticPressureMonitor : "Osmotic Pressure Monitor"
+		}
 		ItemTooltip :
 		{
 			AshBone : 
 				'''
-				{$Mods.MythMod.Common.WarWhipGT}
+				{$Mods.Everglow.Common.WarWhipGT}
 				Brusts out several damaging bones and olden enemies struck, weaken their attack and defense
 				'''
-			BoneFeatherMagic : Shoots piercing bone feathers, olden enemies struck, weaken their attack and defense
+			BoneFeatherMagic : Shoots piercing bone feathers, aging enemy on struck and weakening their attack damage/defense
 			CloudGun : Launches cloud clusters
-			ComingGhost : Randomly 'surprises' a 'lucky' enemy nearby
+			ComingGhost : Randomly surprises a lucky enemy nearby
 			FeatherMagic : "'I love harpies♥'"
 			FireFeatherMagic : Shoots explosive feathers
-			FreezeFeatherMagic : Shoots icebounding feathers
+			FreezeFeatherMagic : Shoots ice-bound feathers
 			GoldRoundYoyo : "Leaves a track of homing golden rings"
-			Hepuyuan : "#{$Mods.MythMod.Common.ExcluWeapon}\nLeft click to dash, right click to smash\n'You should't be getting it'\nHomaging to Genshin Impact"
+			Hepuyuan : "{$Mods.Everglow.Common.ExcluWeapon}\nLeft click to dash, right click to smash\n'You should't be getting it'\nHomaging to Genshin Impact"
+			LilyHarp : "Music notes fly in a beautiful succession\nHold the attack button to make the notes follow the cursor\n[c/856Eb5:Developer Item, Belonging to Omnielement]"
+			VortexVanquisherItem : "[c/B4B16E:'This is Order']\nLeft click multiple times for different attacks\nThe last attack propels you to the cursor\nHold left click to dash and summon falling spears\nRight click summons a pillar and gives you a damage-reducing shield"
 			SilveralGun : "5% increased movement speed and damage after hitting enemies"
 			SilveralRifle : "5% increased movement speed and damage after hitting enemies"
 			Sunflower : "'A weapon made of sunflowers, has a color of hope'"
 			ThunderFlower : "Fires thunderstrom orbs\n'Too many projectiles!'"
-			World : "Summons 'World' at the curser, right click when it is summoned to switch between following mode and slashing mode\n'Power of the entire land is gathered here...'"
-			XmaxWhip : "{$Mods.MythMod.Common.WarWhipGT}\nBrusts out damaging Christmas lights on hitting enemies\n'Much better than the Christmas Tree Sword'"
-			BloodGoldBlade : "{$Mods.MythMod.Common.MythWeapon}\nEmits ichor blades to surrounding\nA god-slaying blade, contaminated by blood of gods"
-			BloodLightCyanFlame : "{$Mods.MythMod.Common.LegendWeapon}\nAlternately throws boomerblades of laser or cursed flame\n'They should be weapons of the Twins, fortunately you have saved the Mechanic'"
-			BlueRain : "{$Mods.MythMod.Common.LegendWeapon}\nRight click and hold to make a charged attack\n'Rain drops refused to be blend with sea water to maintain their purity, finally converged to this form in chaotic currents'"
-			ChaosCurrent : "{$Mods.MythMod.Common.LegendWeapon}\nLauches chaotic currents that disturb nerves\nIgnore immunity frames\n'Cause massive nerve injury!'"
-			DarknessFan : "{$Mods.MythMod.Common.LegendWeapon}{$Mods.MythMod.Common.WarWhipGT}Strike enemies with the fan and Phantom Butterflies(PBs), right click to throw out the fan\nThe fan itself inflicts Mark of PB(stackable), each level incraeses damage dealt by PBs by 10%\nMax stack increases with Sync level"
-			GelPowerGun : "{$Mods.MythMod.Common.LegendWeapon}\nUses gel for ammo\nShoots bouncy gelatin balls\nRelease small bouncy gelatin balls on the first three bounces\n'Bouncing bouncy, bounce the Destroyer away'"
-			LaserWhip : "{$Mods.MythMod.Common.LegendWeapon}{$Mods.MythMod.Common.WarWhipGT}Hitting enemies has a chance to generate Laser Worms as temporary summons and mark enemies\nMarked enemies take 50% more damage and 25% more crit damage\n'According to a legend some worms can align their lasers into a line'"
-			MachineFit : "{$Mods.MythMod.Common.LegendWeapon}\nA ruthless killing fist\nSplits into 5 homing missiles upon hitting enemies\n'Make good use of its hand, not head'"
-			MachineSkeGun : "{$Mods.MythMod.Common.MythWeapon}\nShoot continueously to fire additional bullets\n'The ultimate weapon that the Skeletron would obtain in the future'"
-			RainbowLight : "{$Mods.MythMod.Common.LegendWeapon}\nChargable, does not deal damage\nChoose and create one aurora realm out of seven, doesn't consume buff slot\n[c/FF0000:Red]:Increases crit chance\n[c/FF8E00:Orange]:Increases defense\n[c/FFFF00:Yellow]:Increase damage\n[c/00FF00:Green]:Increases life regen\n[c/00FFFF:Cyan]:Increases evade\n[c/0000FF:Blue]:Increases mana regen\n[c/B600FF:Purple]:Increases mobility\nStrength depends on damage, doubles if crit\n'You should take the responsibility!'"
-			SilenceMirror : "{$Mods.MythMod.Common.MythWeapon}\nRight click to swith between two swords\nCombo to increase damage\n'Detached from the worldliness and has no conflict'"
-			ThornBomb : "{$Mods.MythMod.Common.LegendWeapon}\nAlternately throws pink and green bombs\n'Boom boom bomb!'"
-			ToothBow : "{$Mods.MythMod.Common.LegendWeapon}\nGenerates tusk arrows when firing\nRight click to gather the tusk arrows\n'It can manipulate other tusks'"
-			ToothSpear : "{$Mods.MythMod.Common.MythWeapon}\nRight click to dash\nHas a 8s CD\nSync reduces the CD\n'Go, follow the ancient heros to slay dragons'"
-			TrapYoyo : "{$Mods.MythMod.Common.LegendWeapon}\nGenerates an unreal yoyo every 1.5s\nRight click to release solar rays when there're 5 unreal yoyos\n'A sophisticated masterpiece of ancient lizards'"
+			World : "Summons 'World' at the curser, right click to switch between following mode and slashing mode when it is summoned\n'Power of the entire land is accumulated here...'"
+			XmaxWhip : "{$Mods.Everglow.Common.WarWhipGT}\nBursts out damaging Christmas lights on hit\n'Much better than the Christmas Tree Sword'"
+			BloodGoldBlade : "{$Mods.Everglow.Common.MythWeapon}\nEmits ichor blades to surrounding\nA god-slaying blade, contaminated by blood of gods"
+			BloodLightCyanFlame : "{$Mods.Everglow.Common.LegendWeapon}\nAlternately throws boomerblades of laser or cursed flame\n'They should be weapons of the Twins, fortunately you have saved the Mechanic'"
+			BlueRain : "{$Mods.Everglow.Common.LegendWeapon}\nRight click and hold to make a charged attack\n'Rain drops refused to be blend with sea water to maintain their purity, finally converged to this form in chaotic currents'"
+			ChaosCurrent : "{$Mods.Everglow.Common.LegendWeapon}\nLauches chaotic currents that disturb nerves\nIgnore immunity frames\n'Cause massive nerve injury!'"
+			DarknessFan : "{$Mods.Everglow.Common.LegendWeapon}\n{$Mods.Everglow.Common.WarWhipGT}\nStrike enemies with the fan and Phantom Butterflies(PBs)\nRight click to throw out the fan\nThe fan itself inflicts Mark of PB(stackable), each level incraeses damage dealt by PBs by 10%\nMax stack increases with Sync level"
+			GelPowerGun : "{$Mods.Everglow.Common.LegendWeapon}\nUses gel for ammo\nShoots bouncy gelatin balls\nRelease small bouncy gelatin balls on the first three bounces\n'Bouncing bouncy, bounce the Destroyer away'"
+			LaserWhip : "{$Mods.Everglow.Common.LegendWeapon}{$Mods.Everglow.Common.WarWhipGT}Hitting enemies has a chance to generate Laser Worms as temporary summons and mark enemies\nMarked enemies take 50% more damage and 25% more crit damage\n'According to a legend some worms can align their lasers into a line'"
+			MachineFit : "{$Mods.Everglow.Common.LegendWeapon}\nA ruthless killing fist\nSplits into 5 homing missiles upon hitting enemies\n'Make good use of its hand, not head'"
+			MachineSkeGun : "{$Mods.Everglow.Common.MythWeapon}\nShoot continueously to fire additional bullets\n'The ultimate weapon that the Skeletron would obtain in the future'"
+			RainbowLight : "{$Mods.Everglow.Common.LegendWeapon}\nChargable, does not deal damage\nChoose and create one aurora realm out of seven, doesn't consume buff slot\n[c/FF0000:Red]:Increases crit chance\n[c/FF8E00:Orange]:Increases defense\n[c/FFFF00:Yellow]:Increase damage\n[c/00FF00:Green]:Increases life regen\n[c/00FFFF:Cyan]:Increases evade\n[c/0000FF:Blue]:Increases mana regen\n[c/B600FF:Purple]:Increases mobility\nStrength depends on damage, doubles if crit\n'You should take the responsibility!'"
+			SilenceMirror : "{$Mods.Everglow.Common.MythWeapon}\nRight click to swith between two swords\nCombo to increase damage\n'Detached from the worldliness and has no conflict'"
+			ThornBomb : "{$Mods.Everglow.Common.LegendWeapon}\nAlternately throws pink and green bombs\n'Boom boom bomb!'"
+			ToothBow : "{$Mods.Everglow.Common.LegendWeapon}\nGenerates tusk arrows when firing\nRight click to gather the tusk arrows\n'It can manipulate other tusks'"
+			ToothSpear : "{$Mods.Everglow.Common.MythWeapon}\nRight click to dash\nHas a 8s CD\nSync reduces the CD\n'Go, follow the ancient heros to slay dragons'"
+			TrapYoyo : "{$Mods.Everglow.Common.LegendWeapon}\nGenerates an unreal yoyo every 1.5s\nRight click to release solar rays when there're 5 unreal yoyos\n'A sophisticated masterpiece of ancient lizards'"
 			BlueGel : "Increases max mana by 30 and mana regen by 4"
 			BlueTorchFlower : "Increases max mana by 20\nstrike an enemy recovers 2 mana, this effect has a 0.2s CD\n'A varietas of red hot poker'"
 			CorruptEye : "5 defence\nincreases crit chance by 4%\nGrants immunity to Cursed Inferno\nRelease cursed flame when struck\nTough its owner has gone, it's still filled with curse to enemies'"
@@ -354,8 +374,13 @@ Mods: {
 				Summoms little black moths to fight for you
 				Deal 400% damage to nearby enemies while summoning
 				'''
+			MothYoyo : Moths will appear around this Yo-yo, allowing you to deal more damage
 			PhosphorescenceGun : Shoots out shots and blue scale bullets which deal 36% damage
-			ScaleWingBlade : TODO
+			ScaleWingBlade :
+				'''
+				Striking enemies with this blade or swinging this blade while near enemies will spawn moths that home in on said enemies
+				Right click to charge a more powerful swing and to spawn more moths on impact
+				'''
 			ShadowWingBow : 
 				'''
 				Hold to charge to  increase damage, capped at +200%, and additionally fires Blue Butterfly Arrows.
@@ -364,93 +389,93 @@ Mods: {
 			AmbiguousNight : 
 				'''
 				Shoots phantom pebbles
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			BlackWoodSlingshot : 
 				'''
 				Shoots little pebbles
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			BlueGemSlingshot : 
 				'''
 				Shoots energized gems
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			CactusSlingShot : 
 				'''
 				Shoots little pebbles
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			ColdWoodSlingshot : 
 				'''
 				Shoots little pebbles
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			DarkWoodSlingShot : 
 				'''
 				Shoots little pebbles
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			GreenGemSlingshot : 
 				'''
 				Shoots energized gems
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			JellySlingshot : 
 				'''
-				{Mods.MythMod.Common.LegendWeapon}
+				{Mods.Everglow.Common.LegendWeapon}
 				Shoots super bouncy jelly balls
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			JungleSlingshot : 
 				'''
 				Shoots flouroscent poisonous balls
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			PalmWoodSlingshot : 
 				'''
 				Shoots little pebbles
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			PearlWoodSlingshot : 
 				'''
 				Shoots little pebbles
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			PurpleGemSlingshot : 
 				'''
 				Shoots energized gems
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			RedGemSlingshot : 
 				'''
 				Shoots energized gems
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			RedWoodSlingshot : 
 				'''
 				Shoots little pebbles
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			StarSlingshot : 
 				'''
 				Shoots little pebbles
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			WhiteGemSlingshot : 
 				'''
 				Shoots energized gems
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			WoodSlingshot : 
 				'''
 				Shoots little pebbles
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			YellowGemSlingshot : 
 				'''
 				Shoots energized gem
-				{$Mods.MythMod.Common.NoAmmoConsum}
+				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			BloodyBoneYoyo : Releases tusk nails on every 5 hits
 			SpineGun : Fires bullets which split upon detecting enemies
@@ -464,41 +489,41 @@ Mods: {
 			FragransMagic : Don't be lonely when moon and fragrans bright, breeze and moon still.
 			FragransSpear : Don't be lonely when moon and fragrans bright, breeze and moon still.
 			FragransStaff : Don't be lonely when moon and fragrans bright, breeze and moon still.
-			BlackWoodenClub : "{$Mods.MythMod.Common.ClubGT}"
-			BloodClub : "{$Mods.MythMod.Common.ClubGT}"
-			BloodLiquidClub : "{$Mods.MythMod.Common.ClubGT}"
-			CactusClub : "{$Mods.MythMod.Common.ClubGT}"
-			CobaltClub : "{$Mods.MythMod.Common.ClubGT}"
-			ColdWoodenClub : "{$Mods.MythMod.Common.ClubGT}"
-			CopperClub : "{$Mods.MythMod.Common.ClubGT}"
-			CorruptClub : "{$Mods.MythMod.Common.ClubGT}"
-			CrystalClub : "{$Mods.MythMod.Common.ClubGT}"
-			CurseClub : "{$Mods.MythMod.Common.ClubGT}"
-			DarkWoodenClub : "{$Mods.MythMod.Common.ClubGT}"
-			GoldClub : "{$Mods.MythMod.Common.ClubGT}"
-			IronClub : "{$Mods.MythMod.Common.ClubGT}"
-			LeadClub : "{$Mods.MythMod.Common.ClubGT}"
-			LeafClub : "{$Mods.MythMod.Common.ClubGT}"
-			MeteorClub : "{$Mods.MythMod.Common.ClubGT}"
-			MithrilClub : "{$Mods.MythMod.Common.ClubGT}"
-			MountainCuClub : "{$Mods.MythMod.Common.ClubGT}"
-			PalladiumClub : "{$Mods.MythMod.Common.ClubGT}"
-			PalmWoodenClub : "{$Mods.MythMod.Common.ClubGT}"
-			PearlWoodenClub : "{$Mods.MythMod.Common.ClubGT}"
-			PlatinumClub : "{$Mods.MythMod.Common.ClubGT}"
-			RedWoodenClub : "{$Mods.MythMod.Common.ClubGT}"
-			RefinedClub : "{$Mods.MythMod.Common.ClubGT}"
-			SilverClub : "{$Mods.MythMod.Common.ClubGT}"
-			SpikeClub : "{$Mods.MythMod.Common.ClubGT}"
+			BlackWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
+			BloodClub : "{$Mods.Everglow.Common.ClubGT}"
+			BloodLiquidClub : "{$Mods.Everglow.Common.ClubGT}"
+			CactusClub : "{$Mods.Everglow.Common.ClubGT}"
+			CobaltClub : "{$Mods.Everglow.Common.ClubGT}"
+			ColdWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
+			CopperClub : "{$Mods.Everglow.Common.ClubGT}"
+			CorruptClub : "{$Mods.Everglow.Common.ClubGT}"
+			CrystalClub : "{$Mods.Everglow.Common.ClubGT}"
+			CurseClub : "{$Mods.Everglow.Common.ClubGT}"
+			DarkWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
+			GoldClub : "{$Mods.Everglow.Common.ClubGT}"
+			IronClub : "{$Mods.Everglow.Common.ClubGT}"
+			LeadClub : "{$Mods.Everglow.Common.ClubGT}"
+			LeafClub : "{$Mods.Everglow.Common.ClubGT}"
+			MeteorClub : "{$Mods.Everglow.Common.ClubGT}"
+			MithrilClub : "{$Mods.Everglow.Common.ClubGT}"
+			MountainCuClub : "{$Mods.Everglow.Common.ClubGT}"
+			PalladiumClub : "{$Mods.Everglow.Common.ClubGT}"
+			PalmWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
+			PearlWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
+			PlatinumClub : "{$Mods.Everglow.Common.ClubGT}"
+			RedWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
+			RefinedClub : "{$Mods.Everglow.Common.ClubGT}"
+			SilverClub : "{$Mods.Everglow.Common.ClubGT}"
+			SpikeClub : "{$Mods.Everglow.Common.ClubGT}"
 			StarDancer : 
 				'''
-				{$Mods.MythMod.Common.ClubGT}
+				{$Mods.Everglow.Common.ClubGT}
 				Launches falling stars to strike nearby enemies
 				'''
-			TinClub : "{$Mods.MythMod.Common.ClubGT}"
-			TitaniumClub : "{$Mods.MythMod.Common.ClubGT}"
-			TungstenClub : "{$Mods.MythMod.Common.ClubGT}"
-			WoodenClub : "{$Mods.MythMod.Common.ClubGT}"
+			TinClub : "{$Mods.Everglow.Common.ClubGT}"
+			TitaniumClub : "{$Mods.Everglow.Common.ClubGT}"
+			TungstenClub : "{$Mods.Everglow.Common.ClubGT}"
+			WoodenClub : "{$Mods.Everglow.Common.ClubGT}"
 			LiftLamp : ""
 			TestItem : ""
 			EkandaBrick : ""
@@ -508,23 +533,27 @@ Mods: {
 			DurableAxe : ""
 			ElectricHeatingPlate : ""
 			BrokenPick : ""
-			BloodGoldBayonet : "{$Mods.MythMod.Common.RapierGT}"
-			DreamStar : "{$Mods.MythMod.Common.RapierGT}"
-			EternalNight : "{$Mods.MythMod.Common.RapierGT}"
-			GoldenStabbingSword : "{$Mods.MythMod.Common.RapierGT}"
-			IronStabbingSword : "{$Mods.MythMod.Common.RapierGT}"
-			LeadStabbingSword : "{$Mods.MythMod.Common.RapierGT}"
-			PlatinumStabbingSword : "{$Mods.MythMod.Common.RapierGT}"
-			PrisonFireBayonet : "{$Mods.MythMod.Common.RapierGT}"
-			RottenGoldBayonet : "{$Mods.MythMod.Common.RapierGT}"
-			SilverStabbingSword : "{$Mods.MythMod.Common.RapierGT}"
-			VegetationBayonet : "{$Mods.MythMod.Common.RapierGT}"
-			TDMT : "{$Mods.MythMod.Common.RapierGT}"
-		}
-		ProjectileName: {
+			BloodGoldBayonet : "{$Mods.Everglow.Common.RapierGT}"
+			DreamStar : "{$Mods.Everglow.Common.RapierGT}"
+			EternalNight : "{$Mods.Everglow.Common.RapierGT}"
+			GoldenStabbingSword : "{$Mods.Everglow.Common.RapierGT}"
+			IronStabbingSword : "{$Mods.Everglow.Common.RapierGT}"
+			LeadStabbingSword : "{$Mods.Everglow.Common.RapierGT}"
+			PlatinumStabbingSword : "{$Mods.Everglow.Common.RapierGT}"
+			PrisonFireBayonet : "{$Mods.Everglow.Common.RapierGT}"
+			RottenGoldBayonet : "{$Mods.Everglow.Common.RapierGT}"
+			SilverStabbingSword : "{$Mods.Everglow.Common.RapierGT}"
+			VegetationBayonet : "{$Mods.Everglow.Common.RapierGT}"
+			TDMT : "{$Mods.Everglow.Common.RapierGT}"
+			CrystalSkull : "Activates the new magic book system"
+			
+			#Music Boxes
+			GlowWoodMusicBox : "Plays 'Setnour6 - Within the Giant Cocoon (身陷巨茧)'"
 
+			#食物系统物品
+			BloodGlucoseMonitor : "Display hunger information"
+			OsmoticPressureMonitor : "Display thrist information"
 		}
-
 		BuffName : 
 		{
 			BanTransport : "Lock of Reality"
@@ -544,92 +573,100 @@ Mods: {
 			RedImmune : "Red Flame Immunity"
 			WhiteImmune : "White Flame Immunity"
 			YellowImmune : "Yellow Flame Immuniy"
+			
+			#Magic books buff
+			WaterBoltII : "Empowered Water Bolts"
+			
+			#Food system buff
+			FoodBuff : "You just finished eating"
+
+			#New buffs to the original food
 			AleBuff : "Tipsy"
-			AppleBuff : MilkCarton Buff
-			AppleJuiceBuff : MilkCarton Buff
-			ApplePieBuff : MilkCarton Buff
-			ApricotBuff : ApricotBuff
-			BaconBuff : BaconBuff
-			BananaBuff : MilkCarton Buff
-			BananaDaiquiriBuff : MilkCarton Buff
-			BananaSplitBuff : MilkCarton Buff
-			BBQRibsBuff : BBQRibsBuff
-			BlackCurrantBuff : BlackCurrantBuff
-			BloodOrangeBuff : BloodOrangeBuff
-			BloodyMoscatoBuff : BloodyMoscatoBuff
-			BowlofSoupBuff : BowlofSoupBuff
-			BunnyStewBuff : BunnyStewBuff
-			BurgerBuff : BurgerBuff
-			CherryBuff : CherryBuff
-			ChickenNuggetBuff : ChickenNuggetBuff
-			ChocolateChipCookieBuff : ChocolateChipCookieBuff
-			ChristmasPuddingBuff : ChristmasPuddingBuff
-			CoconutBuff : CoconutBuff
-			CoffeeCupBuff : CoffeeCupBuff
-			CookedFishBuff : CookedFishBuff
-			CookedMarshmallowBuff : MilkCarton Buff
-			CookedShrimpBuff : CookedShrimpBuff
-			CreamSodaBuff : CreamSodaBuff
-			DragonfruitBuff : MilkCarton Buff
-			ElderberryBuff : ElderberryBuff
-			EscargotBuff : EscargotBuf
-			FriedEggBuff : FriedEggBuff
-			FriesBuff : FriesBuff
-			FroggleBunwichBuff : FroggleBunwichBuff
-			FruitJuiceBuff : FruitJuiceBuff
-			FruitSaladBuff : FruitSaladBuff
-			GingerbreadCookieBuff : GingerbreadCookieBuff
-			GoldenDelightBuff : MilkCarton Buff
-			GrapefruitBuff : MilkCarton Buff
-			GrapeJuiceBuff : GrapeJuiceBuff
-			GrapesBuff : MilkCarton Buff
-			GrilledSquirrelBuff : GrilledSquirrelBuff
-			GrubSoupBuff : MilkCarton Buff
-			HotdogBuff : GrubSoupBuff
-			IceCreamBuff : MilkCarton Buff
-			LemonadeBuff : LemonadeBuff
-			LemonBuff : LemonBuff
-			LobsterTailBuff : LobsterTailBuff
-			MangoBuff : MangoBuff
-			MarshmallowBuff : MarshmallowBuff
-			MilkCartonBuff : MilkCarton Buff
-			MilkshakeBuff : MilkshakeBuff
-			MonsterLasagnaBuff : MonsterLasagnaBuff
-			NachosBuff : NachosBuff
-			PadThaiBuff : PadThaiBuff
-			PeachBuff : PeachBuff
-			PeachSangriaBuff : MilkCarton Buff
-			PhoBuff : PhoBuff
-			PinaColadaBuff : PinaColadaBuff
-			PineappleBuff : PineappleBuff
-			PizzaBuff : PizzaBuff
-			PlumBuff : PlumBuff
-			PotatoChipsBuff : PotatoChipsBuff
-			PrismaticPunchBuff : PrismaticPunchBuff
-			PumpkinPieBuff : PumpkinPieBuff
-			RambutanBuff : RambutanBuff
-			RoastedBirdBuff : MilkCarton Buff
-			RoastedDuckBuff : MilkCarton Buff
-			SakeBuff : SakeBuff
-			SashimiBuff : SashimiBuff
-			SauteedFrogLegsBuff : SauteedFrogLegsBuff
-			SeafoodDinnerBuff : SeafoodDinnerBuff
-			ShrimpPoBoyBuff : ShrimpPoBoyBuff
-			ShuckedOysterBuff : ShuckedOysterBuff
-			SmoothieofDarknessBuff : SmoothieofDarknessBuff
-			SpaghettiBuff : SpaghettiBuff
-			StarfruitBuff : StarfruitBuff
-			SteakBuff : SteakBuff
-			SugarCookieBuff : SugarCookieBuff
-			TeacupBuff : TeacupBuff
-			TropicalSmoothieBuff : TropicalSmoothieBuff
+			AppleBuff : "Apple"
+			AppleJuiceBuff : Apple Juice
+			ApplePieBuff : Apple Pie
+			ApricotBuff : Apricot
+			BaconBuff : Bacon
+			BananaBuff : Banana
+			BananaDaiquiriBuff : Banana Daiquiri
+			BananaSplitBuff : Banana Split
+			BBQRibsBuff : BBQ Ribs
+			BlackCurrantBuff : Black Currant
+			BloodOrangeBuff : Blood Orange
+			BloodyMoscatoBuff : Bloody Moscato
+			BowlofSoupBuff : Bowl of Soup
+			BunnyStewBuff : Bunny Stew
+			BurgerBuff : Burger
+			CherryBuff : Cherry
+			ChickenNuggetBuff : Chicken Nugget
+			ChocolateChipCookieBuff : Chocolate Chip Cookie
+			ChristmasPuddingBuff : Christmas Pudding
+			CoconutBuff : Coconut
+			CoffeeCupBuff : Coffee Cup
+			CookedFishBuff : Cooked Fish
+			CookedMarshmallowBuff : Cooked Marshmallow
+			CookedShrimpBuff : Cooked Shrimp
+			CreamSodaBuff : Cream Soda
+			DragonfruitBuff : Milk Carton
+			ElderberryBuff : Elderberry
+			EscargotBuff : Escargo
+			FriedEggBuff : Fried Egg
+			FriesBuff : Fries
+			FroggleBunwichBuff : Froggle Bunwich
+			FruitJuiceBuff : Fruit Juice
+			FruitSaladBuff : Fruit Salad
+			GingerbreadCookieBuff : Gingerbread Cookie
+			GoldenDelightBuff : Golden Delight
+			GrapefruitBuff : Grapefruit
+			GrapeJuiceBuff : Grape Juice
+			GrapesBuff : Grapes
+			GrilledSquirrelBuff : Grilled Squirrel
+			GrubSoupBuff : Grub Soup
+			HotdogBuff : Hotdog
+			IceCreamBuff : Ice Cream
+			LemonadeBuff : Lemonade
+			LemonBuff : Lemon
+			LobsterTailBuff : Lobster Tail
+			MangoBuff : Mango
+			MarshmallowBuff : Marshmallow
+			MilkCartonBuff : Milk Carton
+			MilkshakeBuff : Milkshake
+			MonsterLasagnaBuff : Monster Lasagna
+			NachosBuff : Nachos
+			PadThaiBuff : Pad Thai
+			PeachBuff : Peach
+			PeachSangriaBuff : Milk Carton
+			PhoBuff : Pho
+			PinaColadaBuff : Pina Colada
+			PineappleBuff : Pineapple
+			PizzaBuff : Pizza
+			PlumBuff : Plum
+			PotatoChipsBuff : Potato Chips
+			PrismaticPunchBuff : Prismatic Punch
+			PumpkinPieBuff : Pumpkin Pie
+			RambutanBuff : Rambutan
+			RoastedBirdBuff : Roasted Bird
+			RoastedDuckBuff : Roasted Duck
+			SakeBuff : Sake
+			SashimiBuff : Sashimi
+			SauteedFrogLegsBuff : Sauteed FrogLegs
+			SeafoodDinnerBuff : Seafood Dinner
+			ShrimpPoBoyBuff : Shrimp-Po-Boy
+			ShuckedOysterBuff : Shucked Oyster
+			SmoothieofDarknessBuff : Smoothie of Darkness
+			SpaghettiBuff : Spaghetti
+			StarfruitBuff : Starfruit
+			SteakBuff : Steak
+			SugarCookieBuff : Sugar Cookie
+			TeacupBuff : Teacup
+			TropicalSmoothieBuff : Tropical Smoothie
 		}
 		BuffDescription : 
 		{
 			BanTransport : "You shall not teleport!"
 			CorruptMothBuff : "The Little Corrupted Moth will fight for you"
-			Freeze : ""
-			Freeze2 : ""
+			Freeze : "1 Freeze!"
+			Freeze2 : "2 Freeze!"
 			LaserWormBuff : "Laser worms fight for you"
 			MoonAndFragrans : "Blooms and moon, await for you\n25% increased damage, 15% increased crit chance and overall damage multiplier takes effect twice"
 			MoonAndFragransII : "Blooms and moon, await for you\n50% increased damage, 30% increased crit chance and overall damage multiplier takes effect three times"
@@ -643,327 +680,123 @@ Mods: {
 			RedImmune : "Spiritual Fiery Core's red flame cannot hurt you"
 			WhiteImmune : "Spiritual Fiery Core's white flame cannot hurt you"
 			YellowImmune : "Spiritual Fiery Core's yellow flame cannot hurt you"
-			AleBuff : 
-				'''
-				 防御减8，伤害、暴击率和近战攻速各增加8%
-				'''
-			AppleBuff : 8%伤害减免
-			AppleJuiceBuff : 8%伤害减免
-			ApplePieBuff : 8%伤害减免
-			ApricotBuff : 
-				'''
-				魔力再生加4
-				止渴润肺
-				'''
-			BaconBuff : 
-				'''
-				加2生命回复，所受冷系伤害降低
-				开胃祛寒
-				'''
-			BananaBuff : 防御+4
-			BananaDaiquiriBuff : 防御+4
-			BananaSplitBuff : 防御+4
-			BBQRibsBuff : 
-				'''
-				加50血量上限
-				滋阴补血
-				'''
-			BlackCurrantBuff : 
-				'''
-				获得夜视、危险感知能力
-				改善視力
-				'''
-			BloodOrangeBuff : 
-				'''
-				加25血量上限
-				这里不是崽饿
-				'''
-			BloodyMoscatoBuff : 
-				'''
-				迅速回血
-				血色
-				'''
-			BowlofSoupBuff : 
-				'''
-				加20魔力上限,5%魔法伤害
-				补脑
-				'''
-			BunnyStewBuff : 
-				'''
-				自动跳跃，增加跳跃能力
-				没有任何兔子在制作过程中受到伤害
-				'''
-			BurgerBuff : 
-				'''
-				减少移速，增加防御
-				热量炸弹
-				'''
-			CherryBuff : 
-				'''
-				增加移速与跳跃高度
-				cr,nmsl
-				'''
-			ChickenNuggetBuff : 
-				'''
-				增加1生命回复、4%攻速
-				数一数二的鸡块！
-				'''
-			ChocolateChipCookieBuff : 
-				'''
-				快速恢复生命与魔力
-				补充能量
-				'''
-			ChristmasPuddingBuff : 
-				'''
-				仇恨值减400
-				美容养颜
-				'''
-			CoconutBuff : 
-				'''
-				加4防御，5%减伤
-				我从小啃到大
-				'''
-			CoffeeCupBuff : 
-				''' 
-				加25%铺墙铺砖速度，5%攻速
-				神清气爽
-				'''
-			CookedFishBuff : 
-				'''
-				加0魔力上限,5%魔法暴击率
-				益气健脾
-				'''
-			CookedMarshmallowBuff : 防御+4
-			CookedShrimpBuff : 
-				'''
-				加8防御
-				补钙
-				'''
-			CreamSodaBuff : 
-				'''
-				清凉一下
-				
-				'''
-			DragonfruitBuff : 防御+4
-			ElderberryBuff : 
-				'''
-				你可以短距离冲刺
-				抗氧化
-				'''
-			EscargotBuff : 
-				'''
-				大大减速，加80%减伤
-				这不是神龟药水
-				'''
-			FriedEggBuff : 
-				'''
-				蛋白质
-				
-				'''
-			FriesBuff : 
-				'''
-				加4防御，4%暴击
-				高油高盐
-				'''
-			FroggleBunwichBuff : 
-				'''
-				自动跳跃，增加伤害和跳跃能力
-				你能真正尝到沼泽的味道
-				'''
-			FruitJuiceBuff : 
-				'''
-				小幅提升大部分属性
-				维生素！
-				'''
-			FruitSaladBuff : 
-				'''
-				中幅提升大部分属性
-				更多维生素！
-				'''
-			GingerbreadCookieBuff : 
-				'''
-				加1生命回复,保暖
-				驱寒排毒
-				'''
-			GoldenDelightBuff : 防御+4
-			GrapefruitBuff : 防御+4
-			GrapeJuiceBuff : 
-				'''
-				加1召唤栏，减6防御
-				多子多福
-				'''
-			GrapesBuff : 
-				'''
-				加1召唤栏，减5防御
-				多子多福
-				'''
-			GrilledSquirrelBuff : 欢跃
-			GrubSoupBuff : 防御+4
-			HotdogBuff : 
-				'''
-				减少移速，增加防御
-				热量炸弹
-				'''
-			IceCreamBuff : 防御+4
-			LemonadeBuff : 
-				'''
-				加4%远程暴击,仇恨值减200
-				消炎美容
-				'''
-			LemonBuff : 
-				'''
-				加5%远程暴击,仇恨值减300
-				消炎美容 
-				'''
-			LobsterTailBuff : 
-				'''
-				加6防御,25%挖矿速度
-				抗氧化
-				'''
-			MangoBuff : 清肺
-			MarshmallowBuff : 
-				'''
-				减20%最大掉落速度
-				轻飘飘
-				'''
-			MilkCartonBuff : 防御+4
-			MilkshakeBuff : 
-				'''
-				加10%移速
-				节食减肥
-				'''
-			MonsterLasagnaBuff : 
-				'''
-				弄熟的恶魔还是恶魔，在千层饼中也不会改变
-				
-				'''
-			NachosBuff : 防御+4
-			PadThaiBuff : 
-				'''
-				加50%召唤物击退
-				异域风情
-				'''
-			PeachBuff : 
-				'''
-				增加心的拾取范围，1生命回复
-				我也是桃饱用户
-				'''
-			PeachSangriaBuff : 
-				'''
-				增加心的拾取范围，1生命回复，减4防御
-				我也是桃饱用户
-				'''
-			PhoBuff : 
-				'''
-				加10%召唤物伤害
-				异域风情
-				'''
-			PinaColadaBuff : 
-				'''
-				加4防御，33%反伤
-				从不添加香精当生榨
-				'''
-			PineappleBuff : 
-				'''
-				加6防御，50%反伤
-				菠萝碱
-				'''
-			PizzaBuff : 
-				'''
-				加5穿甲
-				会让意大利人破防的菠萝披萨
-				'''
-			PlumBuff : 
-				'''
-				加600仇恨值，8%攻速
-				至于我的意见，那还是再等等吧
-				'''
-			PotatoChipsBuff : 
-				'''
-				加4防御，4%伤害
-				高油高盐
-				'''
-			PrismaticPunchBuff : 
-				'''
-				加400仇恨值,1召唤栏,减4防御
-				高雅兴致
-				'''
-			PumpkinPieBuff : 
-				'''
-				最大生命值加50
-				丰收的喜悦
-				'''
-			RambutanBuff : 防御+4
-			RoastedBirdBuff : 防御+4
-			RoastedDuckBuff : 防御+4
-			SakeBuff : 
-				'''
-				防御减8，伤害、暴击率和近战攻速各增加8%
-				'''
-			SashimiBuff : 
-				'''
-				寄生虫！
-				
-				'''
-			SauteedFrogLegsBuff : 
-				'''
-				自动跳跃，增加跳跃能力
-				钓不到蛙腿？那就吃吧
-				'''
-			SeafoodDinnerBuff : 
-				'''
-				够生猛！
-				
-				'''
-			ShrimpPoBoyBuff : 
-				'''
-				抗氧化
-				加6防御,25%挖矿速度
-				'''
-			ShuckedOysterBuff : 
-				'''
-				寄生虫！
-				
-				'''
-			SmoothieofDarknessBuff : 
-				'''
-				腹黑（字面意义上）
-				
-				'''
-			SpaghettiBuff : 
-				'''
-				加1召唤栏
-				异域风情
-				'''
-			StarfruitBuff : 1437大帝的淫威
-			SteakBuff : 
-				'''
-				减25%魔力消耗
-				异域风情
-				'''
-			SugarCookieBuff : 
-				'''
-				加10%远程伤害
-				养胃滋润
-				'''
-			TeacupBuff : 
-				'''
-				加2魔力回复，20魔力上限
-				醇香四溢
-				'''
-			TropicalSmoothieBuff : 
-				'''
-				加5%暴击
-				热带风暴
-				'''
+
+			#Magic books buff
+			WaterBoltII : "Your Water Bolts are more powerful"
+			
+			#食物系统buff
+			FoodBuff : "Food Buff"
+
+			#原版食物的新buff
+			AleBuff : "250% increased whip range and speed\n'Drunk'"
+			AppleBuff : "8% increased damage reduction\n'An apple a day, doctors away'"
+			AppleJuiceBuff : "80% increased damage reduction\n'An apple a day, doctors away'"
+			ApplePieBuff : "8% increased damage reduction and 1 increased life regen\n'An apple a day, doctors away'"
+			ApricotBuff : "4 increased mana regen\n'Quenching'"
+			BaconBuff : "2 increased life regen, take less damage from cold sources\n'Warmth'"
+			BananaBuff : "20% chance to not consume ammo, 5% increased ranged damage\n'Low blood preasure'"
+			BananaDaiquiriBuff : "No ammo consumption, greatly increased ranged damage and crit change\n'Low body temperature and blood pressure'"
+			BananaSplitBuff : "33% to not consume ammo, 8% increased ranged crit chance\n'Low blood preasure'"
+			BBQRibsBuff : "50 increased max life\n'Hematinic'"
+			BlackCurrantBuff : "You get increased night vision and can see nearby harzards\n'Improves vision'"
+			BloodOrangeBuff : "25 increased max life\n'Not Calamity'"
+			BloodyMoscatoBuff : "Each of your attacks heals you by 5\n'Sanguine'"
+			BowlofSoupBuff : "20 increased max mana and 5% increased magic damage\n'Brain food'"
+			BunnyStewBuff : "Enabled auto jump and increased jumping ability\n'No rabit was hurt during production process'"
+			BurgerBuff : "Reduced movement speed but increased defense\n'Calorie bomb'"
+			CherryBuff : "Increased movement speed and jumping height\n'Your love, is your life'"
+			ChickenNuggetBuff : "1 increased life regen and 8% increased attack speed\n'Finger-licking good!'"
+			ChocolateChipCookieBuff : "2 increased life and mana regen\n'Restoring energy'"
+			ChristmasPuddingBuff : "800 decreased aggro\n'Beauty'"
+			CoconutBuff : "4 increased defense and 5% increased damage reduction\n'From bra to BRA(Not true)'"
+			CoffeeCupBuff : "Greatly increased wall-placing speed, highlights enemies, traps, chests and you emit light\n'Treasure of corporate slaves'"
+			CookedFishBuff : "40 increased max mana and 8% increased magic crit chance\n'Benifits spleen'"
+			CookedMarshmallowBuff : "75% decreased max falling speed\n'Pily'"
+			CookedShrimpBuff : "10 increased defense and 4 increased armor penetration\n'Calcium supplement'"
+			CreamSodaBuff : "Greatly increased melee ability and aggro\n'Diarrhea!'"
+			DragonfruitBuff : "Attacks inflict On Fire! and Oiled\n'Redot-rehot'"
+			ElderberryBuff : "You may dash slightly\n'Antioxidation'"
+			EscargotBuff : "You can hardly move but 50% increased damage reduction\n'Potion of the Turtle Master?'"
+			FriedEggBuff : "8% increased damage\n'Protein'"
+			FriesBuff : "4 increased defense and 8% increased crit chance\n'High oil and salt'"
+			FroggleBunwichBuff : "Enabled auto jump, increased damage and jumping ability\n'You can really taste the narsh'"
+			FruitJuiceBuff : "Greatly increased certain stats\n'Vitamin!'"
+			FruitSaladBuff : "Increased most stats\n'Long-lasting vitamin!'"
+			GingerbreadCookieBuff : "1 increased life regen and reduced damage from cold sources\n'Warmth'"
+			GoldenDelightBuff : "Your attacks inflict Midas, increased most stats\n'Golden!'"
+			GrapefruitBuff : "50% increased minion knockback\n'Avoid renal failure'"
+			GrapeJuiceBuff : "You are feeling extremely lucky\n'Concentrated happiness'"
+			GrapesBuff : "1 increased max minion, 10% increased luck but 8 decreased defense\n'Fruitful'"
+			GrilledSquirrelBuff : "Increased jumping ability\n'Delight'"
+			GrubSoupBuff : "25 increased fishing power but you lose 2 life per second\n'You get what you eat, but a bit disgusting'"
+			HotdogBuff : "Reduced movement speed but increased melee damage\n'Calorie bomb'"
+			IceCreamBuff : "Immune to On Fire! and fire blocks\n'Eat snow(Nope'"
+			LemonadeBuff : "Doubled ranged knockback and 2400 reduced aggro\n'Beauty'"
+			LemonBuff : "5% increased ranged crit chance and 300 reduced aggro\n'Beauty'"
+			LobsterTailBuff : "6 increased defense and 25% increased mining speed\n'Life force'"
+			MangoBuff : "Reduced continuous life loss caused by food buff\n“Detoxifying”"
+			MarshmallowBuff : "Allows you to double jump\n'Like the cloud'"
+			MilkCartonBuff : "Immune to most debuffs\n'Milk removes every debuff'"
+			MilkshakeBuff : "Greatly increased movement speed\n'Diet'"
+			MonsterLasagnaBuff : "25% increased crit chance but you lose 4 life per second\n'Cooked devil is still a devil, it won't change even in lasagna'"
+			NachosBuff : "Attacks inflict Oiled and all fire debuffs\n'Popcorn'"
+			PadThaiBuff : "50% increased minion knockback\n'Exotic flavour'"
+			PeachBuff : "Increased heart pickup range and 1 increased life regen\n'I'm thinking of peach'"
+			PeachSangriaBuff : "Greatly increased life regen and increased heart pickup range\n'I' a Peachisfied user too'"
+			PhoBuff : "10% increased summon damage\n'Exotic flavour'"
+			PinaColadaBuff : "20 increased defense, attackers take 1000% damage(maximum 1000)\n'Never add flavour to pretend fresh pina juice'"
+			PineappleBuff : "6 increased defense, attackers take 50% damage\n'Promelain'"
+			PizzaBuff : "10 increased armor penetration\n'Pineapple pizza which ingrones Italians' defense'"
+			PlumBuff : "600 increased aggro and 8% increased attack speed\n'As to my suggestion, is to wait!'"
+			PotatoChipsBuff : "4 increased defense amd 8% increased damage\n'High oil and salt'"
+			PrismaticPunchBuff : "10 increased max minion, 50% increased summon damage and minion knockback\n'Elegant interest'"
+			PumpkinPieBuff : "50 increased max life\n'The happiness of harvest'"
+			RambutanBuff : "Immune to Poisoned, Acid Venom and debuffs which the Ankh Shield is immune to\n'Improves immunity'"
+			RoastedBirdBuff : "Increased flying ability\n'I am a little-little-little-little bird'"
+			RoastedDuckBuff : "Increased flying ability, you can walk on water, press DOWN to enter water\n'This is roasted duck'"
+			SakeBuff : "18 decreased defense but greatly increased melee ability\n'The Purity, so high'"
+			SashimiBuff : "Move like normal in water, you can breathe in water\n10% increased damage and 20% increased movement speed but you lose 3 life per second\n'Parasites!'"
+			SauteedFrogLegsBuff : "Enabled auto jump and increased jumping ability\n'Haven't fish the Frog Leg? Then eat it!'"
+			SeafoodDinnerBuff : "12% increased damage, crit chance and attack speed\n'Raw enough!'"
+			ShrimpPoBoyBuff : "6 increased defense and 25% increased mining speed\n'Life force'"
+			ShuckedOysterBuff : "10 increased armor penetration but 5 decreased defense, you lose 3 life per second\n'Parasites!'"
+			SmoothieofDarknessBuff : "80% increased dodge chance\n'Dark(literally)'"
+			SpaghettiBuff : "1 increased max minion\n'Exotic flavour'"
+			StarfruitBuff : "Spawns additional projectiles towards opposite direction while using ranged weapons\n'Despotic power of The Emperor 1437'"
+			SteakBuff : "33% reduced mana consumption\n'Upper class'"
+			SugarCookieBuff : "5% increased ranged damage\n'Nourishing'"
+			TeacupBuff : "Greatly increased mana regen, magic damage and magic crit chance\n'Fragrant'"
+			TropicalSmoothieBuff : "Greatly increased magic damage and magic crit chance, your mana cost is reduced to 1\n'Tropical storm'"
 		}
-
-		RecipeConditions: {
-
+		Config:
+		{
+			Header:
+			{
+				TextureReplace : "Texture Configurations"
+				AudioReplace : "Audio Configurations"
+			}
+			TextureReplace:
+			{
+				Label : "Texture-replacing mode"
+				Tooltip : "Choose your preferred texture group to replace\nOptions: Terraria, Eternal Resolve, Myth"
+			}
+			MothAudioReplace:
+			{
+				Label : "Corrupted Moth's Theme Song"
+				Tooltip : "Choose your preferred Corrupted Moth theme music to replace\nOptions: Original Theme, Alternate Theme, Old Theme\nThis setting won't take effect if the Corrupted Moth is currently alive"
+			}
+			TuskAudioReplace:
+			{
+				Label : "(NOT IMPLEMENTED) The Tusk's Theme Song"
+				Tooltip : "Choose your preferred Bloody Tusk theme music to replace\nOptions: Original Theme, Old Theme\nThis setting won't take effect if The Tusk is currently alive\nNOTE: This config is not fully set up yet and therefore does not work at the moment"
+			}
 		}
-
-		Bestiary: {
-
+		InfoDisplay:
+		{
+			Satiety : "Satiety"
+			StateOfThirst : "State of Thirst"
+			Thirsty : "You are thirsty"
+			NotThirsty : "You don't want to drink"
 		}
 	}
 }

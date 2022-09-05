@@ -32,5 +32,24 @@ namespace Everglow.Sources.Modules.ZYModule.Commons.Core.Enumerator
                 it.Current = default;
             }
         }
+
+        public static string BuildString(this IEnumerable<char> chars)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            foreach(var ch in chars)
+            {
+                stringBuilder.Append(ch);
+            }
+            return stringBuilder.ToString();
+        }
+        public static string BuildString(this IEnumerable<string> chars)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            foreach (var ch in chars)
+            {
+                stringBuilder.Append(ch);
+            }
+            return stringBuilder.ToString();
+        }
     }
 }

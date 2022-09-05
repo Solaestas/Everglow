@@ -17,7 +17,8 @@
     <DefineConstants>$(DefineConstants);TML_2022_05</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugWithoutFody|AnyCPU'">
-    <DefineConstants>$(DefineConstants);TML_2022_05</DefineConstants>
+	  <DefineConstants>DEBUG</DefineConstants>
+	  <DefineConstants>$(DefineConstants);TML_2022_05</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseWithoutFody|AnyCPU'">
     <DefineConstants>$(DefineConstants);TML_2022_05</DefineConstants>
@@ -25,13 +26,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Everglow-UnitTest\**" />
+    <Compile Remove="Resources\Tools\ImageToBinary\**" />
     <Compile Remove="Sources\Modules\DeltaMachine\**" />
+    <Compile Remove="Sources\Modules\MythModule\TheFirefly\Tiles\Furniture\**" />
     <Compile Remove="Sources\Tools\**" />
     <EmbeddedResource Remove="Everglow-UnitTest\**" />
+    <EmbeddedResource Remove="Resources\Tools\ImageToBinary\**" />
     <EmbeddedResource Remove="Sources\Modules\DeltaMachine\**" />
+    <EmbeddedResource Remove="Sources\Modules\MythModule\TheFirefly\Tiles\Furniture\**" />
     <EmbeddedResource Remove="Sources\Tools\**" />
     <None Remove="Everglow-UnitTest\**" />
+    <None Remove="Resources\Tools\ImageToBinary\**" />
     <None Remove="Sources\Modules\DeltaMachine\**" />
+    <None Remove="Sources\Modules\MythModule\TheFirefly\Tiles\Furniture\**" />
     <None Remove="Sources\Tools\**" />
   </ItemGroup>
   <ItemGroup>
@@ -40,6 +47,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="MethodBoundaryAspect.Fody" Version="2.0.145" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.2" />
     <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
   </ItemGroup>
   <ItemGroup>
@@ -51,4 +59,7 @@
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="xcopy /y /d  &quot;$(OutDir)Everglow.dll&quot; &quot;$(ProjectDir)&quot;" />
   </Target>
+	<Target Name="BuildEffect" BeforeTargets="Build">
+		<Exec Command="&quot;$(ProjectDir)Resources\Tools\_XNBCompiler.exe&quot; &quot;$(ProjectDir)Sources&quot;" />
+	</Target>
 </Project>

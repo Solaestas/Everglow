@@ -35,7 +35,7 @@ namespace Everglow.Sources.Commons.Function.FeatureFlags
         /// 用于各个客户端的个性化设置
         /// </summary>
         public override ConfigScope Mode => ConfigScope.ClientSide;
-
+        [Header("$Mods.Everglow.Config.Header.TextureReplace")]
         [DefaultValue(TextureReplaceMode.Terraria)]
         [Label("$Mods.Everglow.Config.TextureReplace.Label")]
         [Tooltip("$Mods.Everglow.Config.TextureReplace.Tooltip")]
@@ -47,8 +47,31 @@ namespace Everglow.Sources.Commons.Function.FeatureFlags
         public bool ItemPickSoundReplace;
 
         public override void OnChanged() {
+        [Header("$Mods.Everglow.Config.Header.AudioReplace")]
+
+        [DefaultValue(MothAudioReplaceMode.MothFighting)]
+        [Label("$Mods.Everglow.Config.MothAudioReplace.Label")]
+        [Tooltip("$Mods.Everglow.Config.MothAudioReplace.Tooltip")]
+        [DrawTicks]
+        public MothAudioReplaceMode MothAudioReplace;
+
+        [DefaultValue(TuskAudioReplaceMode.TuskFighting)]
+        [Label("$Mods.Everglow.Config.TuskAudioReplace.Label")]
+        [Tooltip("$Mods.Everglow.Config.TuskAudioReplace.Tooltip")]
+        [DrawTicks]
+        public TuskAudioReplaceMode TuskAudioReplace;
+
+        public override void OnChanged() {
             if ((int)TextureReplace >= 3) {
                 TextureReplace = TextureReplaceMode.Terraria;
+            }
+            if ((int)MothAudioReplace >= 3)
+            {
+                MothAudioReplace = MothAudioReplaceMode.MothFighting;
+            }
+            if ((int)TuskAudioReplace >= 2)
+            {
+                TuskAudioReplace = TuskAudioReplaceMode.TuskFighting;
             }
             if (AssetReplaceModule.IsLoaded)
                 AssetReplaceModule.ReplaceTextures(TextureReplace);
@@ -59,7 +82,24 @@ namespace Everglow.Sources.Commons.Function.FeatureFlags
     public enum TextureReplaceMode
     {
         Terraria,
-        EternalReslove,
+        [Label("Eternal Resolve")]
+        EternalResolve,
         Myth
+    }
+    public enum MothAudioReplaceMode
+    {
+        [Label("Original")]
+        MothFighting,
+        [Label("Alternate")]
+        AltMothFighting,
+        [Label("Old")]
+        OldMothFighting
+    }
+    public enum TuskAudioReplaceMode
+    {
+        [Label("Original")]
+        TuskFighting,
+        [Label("Old")]
+        OldTuskFighting
     }
 }

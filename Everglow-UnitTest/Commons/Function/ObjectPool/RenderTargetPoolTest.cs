@@ -1,6 +1,7 @@
+using Everglow.Sources.Commons.Function.ObjectPool;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Everglow.Sources.Commons.Function.ObjectPool
+namespace Everglow_UnitTest.Commons.Function.ObjectPool
 {
     [TestClass]
     public class RenderTargetPoolTest

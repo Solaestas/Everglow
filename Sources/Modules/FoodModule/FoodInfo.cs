@@ -1,4 +1,4 @@
-﻿using Everglow.Sources.Modules.FoodModule.DataStructures;
+﻿using Everglow.Sources.Modules.FoodModule.Utils;
 
 namespace Everglow.Sources.Modules.FoodModule
 {
@@ -21,7 +21,7 @@ namespace Everglow.Sources.Modules.FoodModule
             get;
             set;
         }
-        public string Description
+        public string Name
         {
             get;
             set;
@@ -47,7 +47,7 @@ namespace Everglow.Sources.Modules.FoodModule
             get;
             set;
         }
-        public string Description
+        public string Name
         {
             get;
             set;
