@@ -780,6 +780,10 @@ Mods:
 				Label : "Texture-replacing mode"
 				Tooltip : "Choose your preferred texture group to replace\nOptions: Terraria, Eternal Resolve, Myth"
 			}
+			ItemPickSoundReplace:
+			{
+				Label : "New pickup and inventory sounds"
+			}
 			MothAudioReplace:
 			{
 				Label : "Corrupted Moth's Theme Song"
