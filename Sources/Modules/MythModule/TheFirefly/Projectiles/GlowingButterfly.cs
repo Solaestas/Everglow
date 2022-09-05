@@ -1,8 +1,6 @@
 ﻿using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Commons.Function.Vertex;
-using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
-using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {

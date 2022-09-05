@@ -1,6 +1,6 @@
 ﻿using Terraria.ID;
 
-namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
+namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
     public class ButterflyDream : ModProjectile
     {

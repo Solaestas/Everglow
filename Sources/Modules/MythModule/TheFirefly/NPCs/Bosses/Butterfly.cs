@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
+﻿namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 {
     public class Butterfly : ModNPC
     {

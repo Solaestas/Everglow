@@ -1,6 +1,6 @@
 using Everglow.Sources.Commons.Function.Vertex;
 using Terraria.Localization;
-namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
+namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
     public class MothGrey : ModProjectile
     {
@@ -87,7 +87,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
                     Vx.Add(bars[i + 3]);
                 }
             }
-            Texture2D t = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/MothGreyLine");
+            Texture2D t = Common.MythContent.QuickTexture("TheFirefly/Projectiles/MothGreyLine");
             Main.graphics.GraphicsDevice.Textures[0] = t;
             if (Vx.Count > 3)
             {

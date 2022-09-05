@@ -1,5 +1,4 @@
-﻿using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
-using Terraria.GameContent;
+﻿using Terraria.GameContent;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {

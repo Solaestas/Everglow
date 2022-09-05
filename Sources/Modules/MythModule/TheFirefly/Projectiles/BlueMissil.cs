@@ -1,6 +1,6 @@
 ﻿using Terraria.ID;
 
-namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
+namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
     public class BlueMissil : ModProjectile
     {
@@ -69,9 +69,9 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
         }
         public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D Light = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/FixCoinLight3");
+            Texture2D Light = Common.MythContent.QuickTexture("TheFirefly/Projectiles/FixCoinLight3");
             Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color((int)(255 * Stre2), (int)(255 * Stre2), (int)(255 * Stre2), 0), Projectile.rotation, new Vector2(56f, 56f), Projectile.scale * 2, SpriteEffects.None, 0);
-            Texture2D Star = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/BlueMissil");
+            Texture2D Star = Common.MythContent.QuickTexture("TheFirefly/Projectiles/BlueMissil");
             Main.spriteBatch.Draw(Star, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color((int)(255), (int)(255), (int)(255), 0), 0, new Vector2(17f, 17f), Projectile.scale * 2, SpriteEffects.None, 0);
             return true;
         }

@@ -1,6 +1,6 @@
 ﻿using Everglow.Sources.Commons.Core;
 using Everglow.Sources.Commons.Function.ImageReader;
-using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
 using Everglow.Sources.Commons.Function.FeatureFlags;
 using System.Threading.Tasks;
 using Terraria.DataStructures;
@@ -11,9 +11,12 @@ using Color = Microsoft.Xna.Framework.Color;
 using Terraria.Audio;
 using Everglow.Sources.Commons.Function.Vertex;
 using Terraria.GameContent.ItemDropRules;
+using Everglow.Sources.Modules.MythModule.TheFirefly;
+using Everglow.Sources.Modules.MythModule;
 using Terraria.ID;
+using Everglow.Sources.Modules.MythModule.Common;
 
-namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
+namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 {
     [AutoloadBossHead]
     public class CorruptMoth : ModNPC
@@ -77,7 +80,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             Main.npcFrameCount[NPC.type] = 10;
             var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
             {
-                CustomTexturePath = "Everglow/Sources/Modules/MythModule/Bosses/CorruptMoth/NPCs/CorruptMothBoss",
+                CustomTexturePath = "Everglow/Sources/Modules/MythModule/TheFirefly/NPCs/Bosses//CorruptMothBoss",
                 Position = new Vector2(40f, 24f),
                 PortraitPositionXOverride = 0f,
                 PortraitPositionYOverride = 12f
@@ -241,10 +244,10 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                 startLoading = true;
                 Task.Factory.StartNew(() =>
                 {
-                    BBowColors = ImageReader.ReadImageKeyPoints("Everglow/Sources/Modules/MythModule/Bosses/CorruptMoth/Projectiles/BBow", IdentifierValue);
-                    BArrowColors = ImageReader.ReadImageKeyPoints("Everglow/Sources/Modules/MythModule/Bosses/CorruptMoth/Projectiles/BArrow", IdentifierValue);
-                    BSwordColors = ImageReader.ReadImageKeyPoints("Everglow/Sources/Modules/MythModule/Bosses/CorruptMoth/Projectiles/BSword", IdentifierValue);
-                    BFistColors = ImageReader.ReadImageKeyPoints("Everglow/Sources/Modules/MythModule/Bosses/CorruptMoth/Projectiles/BFist", IdentifierValue);
+                    BBowColors = ImageReader.ReadImageKeyPoints("Everglow/Sources/Modules/MythModule/TheFirefly/Projectiles/BBow", IdentifierValue);
+                    BArrowColors = ImageReader.ReadImageKeyPoints("Everglow/Sources/Modules/MythModule/TheFirefly/Projectiles/BArrow", IdentifierValue);
+                    BSwordColors = ImageReader.ReadImageKeyPoints("Everglow/Sources/Modules/MythModule/TheFirefly/Projectiles/BSword", IdentifierValue);
+                    BFistColors = ImageReader.ReadImageKeyPoints("Everglow/Sources/Modules/MythModule/TheFirefly/Projectiles/BFist", IdentifierValue);
                 });
             }
             bool phase2 = NPC.life < NPC.lifeMax * 0.6f;
@@ -381,7 +384,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, -2), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 6, 0f, Main.myPlayer);
                             }
                         }
-                        Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
+                        Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<TheFirefly.Dusts.BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
                         if (Timer > 500)
                         {
                             NPC.velocity = Vector2.Lerp(NPC.velocity, getVec * 20, 0.15f);
@@ -438,7 +441,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, -2), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 6, 0f, Main.myPlayer);
                             }
                         }
-                        Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
+                        Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<TheFirefly.Dusts.BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
                         if (Timer > 500)
                         {
                             NPC.velocity = Vector2.Lerp(NPC.velocity, getVec * 20, 0.15f);
@@ -507,19 +510,19 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                         {
                             MoveTo(player.Center + new Vector2(0, -200), Timer > 400 ? 22 : 13, 30);
                         }
-                        Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.MothBlue>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
-                        Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.MothBlue2>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
+                        Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<TheFirefly.Dusts.MothBlue>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
+                        Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<TheFirefly.Dusts.MothBlue2>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
                         if (Timer % Freq == 0 && Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, 1), ModContent.ProjectileType<Projectiles.BlackCorruptRain>(), NPC.damage / 4, 0f, Main.myPlayer, 1);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, 1), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 4, 0f, Main.myPlayer, 1);
                             if (Main.expertMode && !Main.masterMode)
                             {
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, -2), ModContent.ProjectileType<Projectiles.BlackCorruptRain>(), NPC.damage / 4, 0f, Main.myPlayer, 1);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, -2), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 4, 0f, Main.myPlayer, 1);
                             }
                             if (Main.masterMode)
                             {
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(-1.4f, -2), ModContent.ProjectileType<Projectiles.BlackCorruptRain>(), NPC.damage / 4, 0f, Main.myPlayer, 1);
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(1.4f, -2), ModContent.ProjectileType<Projectiles.BlackCorruptRain>(), NPC.damage / 4, 0f, Main.myPlayer, 1);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(-1.4f, -2), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 4, 0f, Main.myPlayer, 1);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(1.4f, -2), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 4, 0f, Main.myPlayer, 1);
                             }
                         }
                     }
@@ -533,7 +536,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                         for (int i = 0; i < 20; i++)
                         {
                             Vector2 v = new Vector2(0.1f + (i % 4) / 16f, 0).RotatedBy(i * MathHelper.TwoPi / 20);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v, ModContent.ProjectileType<Projectiles.BlackCorruptRain3>(), NPC.damage / 5, 0f, Main.myPlayer, 0);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v, ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain3>(), NPC.damage / 5, 0f, Main.myPlayer, 0);
                         }
                     }*/
                 }
@@ -597,7 +600,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                 {
                     GreyVFx();
                     GetDir_ByVel();
-                    Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
+                    Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<TheFirefly.Dusts.BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
                     if (Timer % 8 == 0 && (NPC.ai[2] == 2||phase2) && Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, -2), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 6, 0f, Main.myPlayer);
@@ -647,7 +650,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                         //NPC.Center += NPC.DirectionTo(player.Center)*Main.rand.Next(100,150);
                         for (int y = 0; y < 60; y++)
                         {
-                            int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(1.3f, 4.2f));
+                            int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<TheFirefly.Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(1.3f, 4.2f));
                             Main.dust[index].noGravity = true;
                             Main.dust[index].velocity = new Vector2(Main.rand.NextFloat(0.0f, 2.5f), Main.rand.NextFloat(1.8f, 5.5f)).RotatedByRandom(Math.PI * 2d);
                         }
@@ -665,7 +668,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                                     for (int j = -3; j <= 3; j++)
                                     {
                                         Vector2 v = new Vector2(0.1f + j * 0.11f, 0).RotatedBy(j * 0.15f + i * MathHelper.TwoPi / c + r);
-                                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v, ModContent.ProjectileType<Projectiles.BlackCorruptRain3>(), NPC.damage / 5, 0f, Main.myPlayer, 0);
+                                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v, ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain3>(), NPC.damage / 5, 0f, Main.myPlayer, 0);
                                     }
                                 }
                             }
@@ -676,7 +679,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                                     for (int i = 0; i < 40; i++)
                                     {
                                         Vector2 v = new Vector2(0.1f + (i % 5) / 16f, 0).RotatedBy(i * MathHelper.TwoPi / 40 + r);
-                                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v, ModContent.ProjectileType<Projectiles.BlackCorruptRain3>(), NPC.damage / 5, 0f, Main.myPlayer, 0);
+                                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v, ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain3>(), NPC.damage / 5, 0f, Main.myPlayer, 0);
                                     }
                                 }
                                 else
@@ -684,7 +687,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                                     for (int i = 0; i < 30; i++)
                                     {
                                         Vector2 v = new Vector2(0.1f + (i % 5) / 16f, 0).RotatedBy(i * MathHelper.TwoPi / 30 + r);
-                                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v, ModContent.ProjectileType<Projectiles.BlackCorruptRain3>(), NPC.damage / 5, 0f, Main.myPlayer, 0);
+                                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v, ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain3>(), NPC.damage / 5, 0f, Main.myPlayer, 0);
                                     }
                                 }
                             }
@@ -694,7 +697,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                                 for (int i = 0; i < c; i++)
                                 {
                                     Vector2 v = new Vector2(0.18f + (float)Math.Sin(i * MathHelper.TwoPi / 10) * 0.17f, 0).RotatedBy(i * MathHelper.TwoPi / c + r);
-                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v, ModContent.ProjectileType<Projectiles.BlackCorruptRain3>(), NPC.damage / 5, 0f, Main.myPlayer, 0);
+                                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v, ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain3>(), NPC.damage / 5, 0f, Main.myPlayer, 0);
 
                                 }
                             }
@@ -747,12 +750,12 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                 {
                     lightVisual = 1;
                     SpinAI(NPC, player.Center, NPC.spriteDirection * MathHelper.TwoPi / 30, true);
-                    int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(1.3f, 4.2f));
+                    int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<TheFirefly.Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(1.3f, 4.2f));
                     Main.dust[index].noGravity = true;
                     Main.dust[index].velocity = new Vector2(Main.rand.NextFloat(0.0f, 2.5f), Main.rand.NextFloat(1.8f, 5.5f)).RotatedByRandom(Math.PI * 2d);
                     if (Timer % 2 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.05f + new Vector2(0, -2), ModContent.ProjectileType<Projectiles.BlackCorruptRain>(), NPC.damage / 4, 0f, Main.myPlayer, 1);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.05f + new Vector2(0, -2), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 4, 0f, Main.myPlayer, 1);
                     }
                     //GetDir_ByVel();
                 }
@@ -784,7 +787,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                     int counts = Timer / 10;
                     for (int y = 0; y < counts; y++)
                     {
-                        int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(1.3f, 4.2f));
+                        int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<TheFirefly.Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(1.3f, 4.2f));
                         Main.dust[index].noGravity = true;
                         Main.dust[index].velocity = new Vector2(Main.rand.NextFloat(0.0f, 2.5f), Main.rand.NextFloat(1.8f, 5.5f)).RotatedByRandom(Math.PI * 2d);
                     }
@@ -1212,15 +1215,15 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                 {
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, 1), ModContent.ProjectileType<Projectiles.BlackCorruptRain>(), NPC.damage / 4, 0f, Main.myPlayer, 1);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, 1), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 4, 0f, Main.myPlayer, 1);
                         if (Main.expertMode && !Main.masterMode)
                         {
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, -2), ModContent.ProjectileType<Projectiles.BlackCorruptRain>(), NPC.damage / 4, 0f, Main.myPlayer, 1);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, -2), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 4, 0f, Main.myPlayer, 1);
                         }
                         if (Main.masterMode)
                         {
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(-1.4f, -2), ModContent.ProjectileType<Projectiles.BlackCorruptRain>(), NPC.damage / 4, 0f, Main.myPlayer, 1);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(1.4f, -2), ModContent.ProjectileType<Projectiles.BlackCorruptRain>(), NPC.damage / 4, 0f, Main.myPlayer, 1);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(-1.4f, -2), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 4, 0f, Main.myPlayer, 1);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(1.4f, -2), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 4, 0f, Main.myPlayer, 1);
                         }
                     }
                 }
@@ -1294,11 +1297,11 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             {
                 if (Timer % 12 == 0)
                 {
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, Main.rand.NextFloat(0, 50f)).RotatedByRandom(3.14), NPC.velocity, ModContent.ProjectileType<Projectiles.MothGrey>(), 0, 0f, Main.myPlayer, 1);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, Main.rand.NextFloat(0, 50f)).RotatedByRandom(3.14), NPC.velocity, ModContent.ProjectileType<TheFirefly.Projectiles.MothGrey>(), 0, 0f, Main.myPlayer, 1);
                 }
                 if (Timer % 12 == 6)
                 {
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, Main.rand.NextFloat(0, 50f)).RotatedByRandom(3.14), NPC.velocity, ModContent.ProjectileType<Projectiles.MothGrey>(), 0, 0f, Main.myPlayer, -1);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, Main.rand.NextFloat(0, 50f)).RotatedByRandom(3.14), NPC.velocity, ModContent.ProjectileType<TheFirefly.Projectiles.MothGrey>(), 0, 0f, Main.myPlayer, -1);
                 }
             }
         }
@@ -1407,7 +1410,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             if (NPC.ai[0] == 6 && Timer > 260)
                 DrawCube();
             Texture2D tx = ModContent.Request<Texture2D>(Texture).Value;
-            Texture2D GlowTexture= ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/CorruptMoth/NPCs/CorruptMoth_Glow").Value;
+            Texture2D GlowTexture= MythContent.QuickTexture("TheFirefly/NPCs/Bosses/CorruptMoth_Glow");
             Vector2 origin = new Vector2(tx.Width, tx.Height / 11) / 2;
             Color origColor = NPC.GetAlpha(drawColor);
             for (int k = 0; k < NPC.oldPos.Length; k++)

@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts
+﻿namespace Everglow.Sources.Modules.MythModule.TheFirefly.Dusts
 {
     public class BlueGlowAppearStoppedByTile : ModDust
     {

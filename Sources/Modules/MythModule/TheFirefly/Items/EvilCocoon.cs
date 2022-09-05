@@ -1,6 +1,6 @@
 using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.ID;
-
+using Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses;
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items
 {
     public class EvilCocoon : ModItem
@@ -31,9 +31,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items
         }
         public override bool CanUseItem(Player player)
         {
-            if (NPC.CountNPCS(ModContent.NPCType<Bosses.CorruptMoth.NPCs.CorruptMoth>()) < 1)
+            if (NPC.CountNPCS(ModContent.NPCType<CorruptMoth>()) < 1)
             {
-                NPC.NewNPC(null, (int)Main.MouseWorld.X, (int)Main.MouseWorld.Y + 50, ModContent.NPCType<Bosses.CorruptMoth.NPCs.EvilPack>(), 0, 0f, 0f, 0f, 0f, 255);
+                NPC.NewNPC(null, (int)Main.MouseWorld.X, (int)Main.MouseWorld.Y + 50, ModContent.NPCType<EvilPack>(), 0, 0f, 0f, 0f, 0f, 255);
                 Item.stack--;
                 return true;
             }
