@@ -1,3 +1,4 @@
+using Terraria.DataStructures;
 using Terraria.ObjectData;
 namespace Everglow.Sources.Modules.CagedDomainModule.Tiles
 {
@@ -28,6 +29,7 @@ namespace Everglow.Sources.Modules.CagedDomainModule.Tiles
                 16
             };
             TileObjectData.newTile.CoordinateWidth =16;
+            TileObjectData.newTile.Origin = new Point16(3, 10);
             TileObjectData.addTile(Type);
             DustType = 1;
             ModTranslation modTranslation = base.CreateMapEntryName(null);

@@ -1,0 +1,13 @@
+*en-US*:
+
+*zh-Hans*:
+ScaleWingBlade Tooltip
+
+*ru-RU*:
+DustOfCorrupt Item Name & Tooltip
+EvilChrysalis Tooltip
+ScaleWingBlade Item Name & Tooltip
+ShadowWingBow Item Name & Tooltip
+
+*All*:
+GlowBeadGun Item Name & Tooltip

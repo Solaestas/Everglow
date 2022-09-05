@@ -16,7 +16,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
     {
 		public override int Music => Common.MythContent.QuickMusic("MothBiome");
 
-		public override SceneEffectPriority Priority => SceneEffectPriority.BiomeHigh;
+		public override SceneEffectPriority Priority => SceneEffectPriority.Environment;
 		public override string BestiaryIcon => "Everglow/Sources/Modules/MythModule/TheFirefly/FireflyIcon";
 		public override string BackgroundPath => base.BackgroundPath;
         public override ModWaterStyle WaterStyle => ModContent.GetInstance<Water.FireflyWaterStyle>();
@@ -90,8 +90,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
 
         public override bool IsBiomeActive(Player player)
 		{
-			MothBackground mothBackground = ModContent.GetInstance<MothBackground>();
-			return mothBackground.BiomeActive();
+			return MothBackground.BiomeActive();
 		}
 
         public override void OnInBiome(Player player)

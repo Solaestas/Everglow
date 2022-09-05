@@ -1,5 +1,4 @@
 using Everglow.Sources.Modules.FoodModule.Buffs;
-using Everglow.Sources.Modules.FoodModule.DataStructures;
 using Everglow.Sources.Modules.FoodModule.Utils;
 using Everglow.Sources.Modules.FoodModule.Items;
 using Everglow.Sources.Modules.FoodModule.Buffs.VanillaDrinkBuffs;
