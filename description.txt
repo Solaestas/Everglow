@@ -3,9 +3,10 @@ Everglow is a comprehensive content mod
 Developed by Dream Chaser Group
 
 Developers (in no particular order):
-Programme: Colin Weiss, Mr.Skirt, Omnielement, yiyang233, Ye_you, Plantare, Uin, Felixyang, Cyril, 局长
+Programmers: Colin Weiss, Mr.Skirt, Omnielement, yiyang233, Ye_you, Plantare, Uin, Felixyang, Cyril, 局长, JDSALing，月霞玉桥听红雨
 Art: Jelly, Omnielement, Vedotek Lily, 仙阁, 凝胶, Doggo-go!!, 吞某, Nomis, 红茶, Redusty, Felixyang, 青枫
-Music & Sound Effect：Dirty Octopus, Setnour6, Uni, 短毛猫, Vedotek Lily, Omnielement
+Music: Dirty Octopus, Setnour6, Uni
+Sound Effects：Setnour6, 短毛猫, Vedotek Lily, Omnielement
 Copywriting: 荔枝, Lacewing
 Localization: Lacewing(en-US), NooN iS oN(ru-RU), Zero Project(ru-RU)
 Publicity & Moderation: 绮逾依, Colin Weiss, Lacewing, 夜鸽, Redusty, Dirty Octopus, 笙箫
@@ -25,7 +26,8 @@ Wiki: Moonseer
 制作人员名单(无先后顺序)：
 程序：科林维斯，小裙子，万象元素，夜谷紫幽，yiyang233，世纪小花，幽银，菲利克斯·杨，Cyril，局长，JDSALing，月霞玉桥听红雨
 美术：果冻，万象元素, 维多泰克莉莉，仙阁，凝胶，杜格，吞某，Nomis，红茶，红尘，菲利克斯·杨，青枫
-音乐音效：脏渔歌，Setnour6, Uni，短毛猫，维多泰克莉莉，万象元素
+音乐：脏渔歌，Setnour6, Uni
+音效：Setnour6，短毛猫，维多泰克莉莉，万象元素
 文案：荔枝，Lacewing
 翻译：Lacewing[英]，荔枝[英]，NooN iS oN[俄]，Zero Project[俄]
 宣传与社区管理：绮逾依，科林维斯，Lacewing，夜鸽，红尘，脏渔歌，笙箫
