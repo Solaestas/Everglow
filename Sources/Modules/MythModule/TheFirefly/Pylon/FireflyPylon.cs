@@ -84,7 +84,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Pylon
 			{
 				return;
 			}
-			DefaultDrawPylonCrystal(spriteBatch, i, j, crystalTexture, Color.White, CrystalFrameHeight, CrystalHorizontalFrameCount, CrystalVerticalFrameCount);
+			DefaultDrawPylonCrystal(spriteBatch, i, j, crystalTexture, ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheFirefly/Pylon/CommonPylon_CrystalHighlight"), Vector2.Zero, Color.White, Color.Gray, 4, CrystalVerticalFrameCount);
 		}
 
 		public override void DrawMapIcon(ref MapOverlayDrawContext context, ref string mouseOverText, TeleportPylonInfo pylonInfo, bool isNearPylon, Color drawColor, float deselectedScale, float selectedScale)
