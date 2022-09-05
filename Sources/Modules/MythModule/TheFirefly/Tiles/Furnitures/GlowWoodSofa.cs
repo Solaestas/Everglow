@@ -1,4 +1,4 @@
-using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Terraria.DataStructures;
 using Everglow.Sources.Commons.Core.Utils;
 using Terraria.Enums;

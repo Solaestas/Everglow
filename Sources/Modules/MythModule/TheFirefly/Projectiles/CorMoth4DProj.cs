@@ -1,9 +1,9 @@
 using Terraria.Localization;
-namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
+namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
     public class CorMoth4DProj : ModProjectile
     {
-        public override string Texture => "Everglow/Sources/Modules/MythModule/Bosses/CorruptMoth/Projectiles/ButterflyDream";
+        public override string Texture => "Everglow/Sources/Modules/MythModule/TheFirefly/Projectiles/ButterflyDream";
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Dream Butterfly");
@@ -111,7 +111,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
         }
         public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D Light = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/FixCoinLight3");
+            Texture2D Light = Common.MythContent.QuickTexture("TheFirefly/Projectiles/FixCoinLight3");
             Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
             Vector2 origin = new Vector2(tex.Width / 2, tex.Height / 6);
             Rectangle sourceRec = tex.Frame(1, 4, 0, Projectile.frame % 4);

@@ -1,7 +1,5 @@
-﻿using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Modules.MythModule.Bosses;
 using Everglow.Sources.Commons.Function.Vertex;
 using Terraria.GameContent;
 using Everglow.Sources.Modules.MEACModule;

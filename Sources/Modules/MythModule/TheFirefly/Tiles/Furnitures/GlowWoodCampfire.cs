@@ -1,4 +1,4 @@
-using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;

@@ -1,5 +1,5 @@
 using Terraria.Localization;
-namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
+namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
     public class BlackCorruptRain3 : ModProjectile
     {
@@ -99,12 +99,12 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
         }
         public override void PostDraw(Color lightColor)
         {
-            Texture2D texture = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/Lightball");
+            Texture2D texture = Common.MythContent.QuickTexture("TheFirefly/Projectiles/Lightball");
             Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(10, 83, 110, 0), Projectile.rotation, new Vector2(250f, 250f), Projectile.scale * 0.25f * (float)(1.4 + Math.Sin(Projectile.timeLeft / 15d + Projectile.position.X / 36d)) / 5f * E, SpriteEffects.None, 0);
         }
         public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D Light = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/FixCoinLight3");
+            Texture2D Light = Common.MythContent.QuickTexture("TheFirefly/Projectiles/FixCoinLight3");
             Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color((int)(255 * Stre2), (int)(255 * Stre2), (int)(255 * Stre2), 0), Projectile.rotation, new Vector2(56f, 56f), Projectile.scale, SpriteEffects.None, 0);
             return true;
         }

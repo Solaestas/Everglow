@@ -2,7 +2,7 @@ using Terraria.DataStructures;
 using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Commons.Core.Utils;
 using Terraria.ObjectData;
-using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Terraria.GameContent.ObjectInteractions;
 
 

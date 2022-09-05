@@ -1,7 +1,7 @@
-﻿
+﻿using Everglow.Sources.Modules.MythModule.TheFirefly;
 using Terraria.Audio;
 
-namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
+namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
     public class MothBall : ModProjectile
     {
@@ -147,13 +147,13 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
                 {
                     for (int i = 0; i < 5; i++)
                     {
-                        var npc = NPC.NewNPCDirect(Projectile.GetSource_FromAI(), (int)(Projectile.Center.X + vB[y].X), (int)(Projectile.Center.Y + vB[y].Y), ModContent.NPCType<NPCs.Butterfly>());
+                        var npc = NPC.NewNPCDirect(Projectile.GetSource_FromAI(), (int)(Projectile.Center.X + vB[y].X), (int)(Projectile.Center.Y + vB[y].Y), ModContent.NPCType<NPCs.Bosses.Butterfly>());
                         npc.velocity = Main.rand.NextVector2Unit() * Main.rand.Next(4, 12);
                         npc.netUpdate2 = true;
                     }
                     for (int i = 0; i < 4; i++)
                     {
-                        var npc = NPC.NewNPCDirect(Projectile.GetSource_FromAI(), (int)Projectile.Center.X, (int)Projectile.Center.Y, ModContent.NPCType<NPCs.Butterfly>());
+                        var npc = NPC.NewNPCDirect(Projectile.GetSource_FromAI(), (int)Projectile.Center.X, (int)Projectile.Center.Y, ModContent.NPCType<NPCs.Bosses.Butterfly>());
                         npc.velocity = Main.rand.NextVector2Unit() * Main.rand.Next(2, 5);
                         npc.netUpdate2 = true;
                     }
@@ -193,9 +193,9 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Projectiles
                 {
                     eff = SpriteEffects.FlipHorizontally;
                 }
-                Main.spriteBatch.Draw(Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/ButterflyDream"), Projectile.Center + vB[g] * r / 60f - Main.screenPosition, new Rectangle(0, yB[g], 36, 34), new Color(0.2f, 0.5f, 1f, 0), Projectile.rotation, new Vector2(18f, 17f), r / 60f, eff, 0f);
+                Main.spriteBatch.Draw(Common.MythContent.QuickTexture("TheFirefly/Projectiles/ButterflyDream"), Projectile.Center + vB[g] * r / 60f - Main.screenPosition, new Rectangle(0, yB[g], 36, 34), new Color(0.2f, 0.5f, 1f, 0), Projectile.rotation, new Vector2(18f, 17f), r / 60f, eff, 0f);
             }
-            Texture2D Light = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/CorruptLight");
+            Texture2D Light = Common.MythContent.QuickTexture("TheFirefly/Projectiles/CorruptLight");
             Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color((int)(255 * Stre2), (int)(255 * Stre2), (int)(255 * Stre2), 0), Projectile.rotation, new Vector2(168f, 168f), Projectile.scale * 2 * r / 60f, SpriteEffects.None, 0);
             return false;
         }

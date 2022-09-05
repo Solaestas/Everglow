@@ -1,6 +1,6 @@
 using Everglow.Sources.Commons.Function.Vertex;
 using Terraria.Localization;
-namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
+namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 {
     public class MothSummonEffect : ModNPC
     {
@@ -53,7 +53,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                 Ome = Main.rand.NextFloat(-0.16f, 0.16f);
                 for (int i = 0; i < 200; i++)
                 {
-                    if (Main.npc[i].type == ModContent.NPCType<NPCs.CorruptMoth>())
+                    if (Main.npc[i].type == ModContent.NPCType<CorruptMoth>())
                     {
                         if (i > NPC.whoAmI)
                         {
@@ -72,7 +72,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                 {
                     for (int f = 0; f < 200; f++)
                     {
-                        if (Main.npc[f].type == ModContent.NPCType<NPCs.CorruptMoth>())
+                        if (Main.npc[f].type == ModContent.NPCType<CorruptMoth>())
                         {
                             AimN = f;
                             break;
@@ -159,7 +159,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
                     triangleList.Add(bars[i + 2]);
                     triangleList.Add(bars[i + 3]);
                 }
-                Texture2D t = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Images/MeteroD");
+                Texture2D t = Common.MythContent.QuickTexture("TheFirefly/NPCs/Bosses/MeteroD");
                 Main.graphics.GraphicsDevice.Textures[0] = t;
                 if (triangleList.Count > 3)
                 {

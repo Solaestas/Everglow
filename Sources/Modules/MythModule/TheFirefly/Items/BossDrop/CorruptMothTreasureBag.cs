@@ -8,7 +8,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.BossDrop
 	public class CorruptMothTreasureBag : ModItem
 	{
 		// Sets the associated NPC this treasure bag is dropped from
-		public override int BossBagNPC => ModContent.NPCType<Bosses.CorruptMoth.NPCs.CorruptMoth>();
+		public override int BossBagNPC => ModContent.NPCType<TheFirefly.NPCs.Bosses.CorruptMoth>();
 
 		public override void SetStaticDefaults()
 		{

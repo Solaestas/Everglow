@@ -1,11 +1,10 @@
 ﻿using Terraria.Localization;
 using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Terraria.Audio;
 
-namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
+namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 {
     public class EvilPack : ModNPC
     {
@@ -157,7 +156,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             {
                 effects = SpriteEffects.FlipHorizontally;
             }
-            Texture2D tg = MythContent.QuickTexture("Bosses/CorruptMoth/NPCs/EvilPack");
+            Texture2D tg = MythContent.QuickTexture("TheFirefly/NPCs/Bosses/EvilPack");
             Color color = drawColor;
             Main.spriteBatch.Draw(tg, NPC.position + new Vector2(tg.Width / 2f, 0) - Main.screenPosition, new Rectangle?(NPC.frame), color, NPC.rotation, new Vector2(tg.Width / 2f, 0), 1f, effects, 0f);
             return false;
@@ -169,7 +168,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
             {
                 effects = SpriteEffects.FlipHorizontally;
             }
-            Texture2D tg = MythContent.QuickTexture("Bosses/CorruptMoth/NPCs/EvilPackGlow");
+            Texture2D tg = MythContent.QuickTexture("TheFirefly/NPCs/Bosses/EvilPackGlow");
             float C = (float)Math.Sqrt(Math.Max((90 - NPC.ai[1]) / 90f, 0)) * 0.6f + Math.Abs(omega * 15);
             Color color = new Color(C, C, C, 0);
             Main.spriteBatch.Draw(tg, NPC.position + new Vector2(tg.Width / 2f, 0) - Main.screenPosition, new Rectangle?(NPC.frame), color, NPC.rotation, new Vector2(tg.Width / 2f, 0), 1f, effects, 0f);
@@ -189,7 +188,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs
         }
         public void DrawCrack(Vector2 DrawCenter, float Radius, int type, int Power = 1)
         {
-            Texture2D t0 = MythContent.QuickTexture("Bosses/CorruptMoth/NPCs/Crack" + type.ToString());
+            Texture2D t0 = MythContent.QuickTexture("TheFirefly/NPCs/Bosses/Crack" + type.ToString());
             
             List<Vertex2D> vertex2Ds = new List<Vertex2D>();
             for(int a = 1;a < Power + 1;a++)

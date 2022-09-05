@@ -1,7 +1,7 @@
 using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.DataStructures;
 using Terraria.ObjectData;
-using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 {
@@ -10,8 +10,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 		public override void SetStaticDefaults() {
 
 			TileID.Sets.CountsAsWaterSource[Type] = true;
-
-
 
 			Main.tileSolid[Type] = false;
 			Main.tileLavaDeath[Type] = false;

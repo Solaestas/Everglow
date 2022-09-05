@@ -2,7 +2,7 @@ using Terraria.Localization;
 using Everglow.Sources.Commons.Function.Vertex;
 using Terraria.Audio;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
-using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
     public class GlowStar : ModProjectile
@@ -87,7 +87,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(factor, 1, w)));
                 bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(factor, 0, w)));
             }
-            Texture2D t = Common.MythContent.QuickTexture("Bosses/CorruptMoth/Projectiles/MothGreyLine");
+            Texture2D t = Common.MythContent.QuickTexture("TheFirefly/Projectiles/MothGreyLine");
             Main.graphics.GraphicsDevice.Textures[0] = t;
             if (bars.Count > 3)
             {

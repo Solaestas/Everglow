@@ -23,7 +23,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             TileObjectData.addTile(Type);
 
             AddMapEntry(new Color(51, 26, 58));
-            DustType = ModContent.DustType<Bosses.CorruptMoth.Dusts.MothBlue2>();
+            DustType = ModContent.DustType<TheFirefly.Dusts.MothBlue2>();
             AdjTiles = new int[] { Type };
             //TODO Hjson
             ModTranslation modTranslation = CreateMapEntryName(null);
