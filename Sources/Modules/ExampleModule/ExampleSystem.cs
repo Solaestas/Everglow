@@ -43,7 +43,7 @@ namespace Everglow.Sources.Modules.ExampleModule
                 {
                     posList.Add(start + new Vector2(400 / (float)slices, 0) * i);
                 }
-                Rope rope = new Rope(posList, 3, totalMass / slices, (x) => x);
+                Rope rope = new Rope(posList, 3, totalMass / slices, (x) => x, true);
                 m_ropeManager.LoadRope(rope);
             }
             m_ropeManager.Ropes[0].GetMassList[^1].Position = Main.LocalPlayer.Center;
@@ -58,7 +58,7 @@ namespace Everglow.Sources.Modules.ExampleModule
             {
                 force.Y = 0;
             }
-            // Main.LocalPlayer.velocity += force * 0.01f;
+            Main.LocalPlayer.velocity += force * 0.01f;
         }
         public override void PostUpdateEverything()
         {
