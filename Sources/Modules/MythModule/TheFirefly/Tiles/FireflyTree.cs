@@ -217,7 +217,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                         ref Rope._Mass m = ref rope.GetMassList[k];
                         if (playerRect.Contains(m.Position.ToPoint()))
                         {
-                            m.force += Main.LocalPlayer.velocity / 3;
+                            m.Force += Main.LocalPlayer.velocity / 3;
                         }
                     }
                 }
