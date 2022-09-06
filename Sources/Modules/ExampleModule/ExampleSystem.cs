@@ -58,7 +58,7 @@ namespace Everglow.Sources.Modules.ExampleModule
             {
                 force.Y = 0;
             }
-            Main.LocalPlayer.velocity += force * 0.01f;
+            // Main.LocalPlayer.velocity += force * 0.01f;
         }
         public override void PostUpdateEverything()
         {

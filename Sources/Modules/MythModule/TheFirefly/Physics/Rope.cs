@@ -53,6 +53,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
 
         private float m_damping;
         private float m_elasticity;
+        private bool m_hasCollision;
 
         public _Mass[] GetMassList
         {
@@ -177,13 +178,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
         private Rope()
         {
             m_damping = 0.99f;
+            m_hasCollision = false;
         }
 
         private Vector2 G_prime(int A, int B, float elasticity, float restLength)
         {
-            ref _Mass mA = ref m_masses[A];
-            ref _Mass mB = ref m_masses[B];
-
             var offset = m_dummyPos[A] - m_dummyPos[B];
             var length = offset.Length();
             var unit = offset / length;
@@ -231,6 +230,15 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
 
         }
 
+        public void ClearForce()
+        {
+            for (int i = 0; i < m_masses.Length; i++)
+            {
+                ref _Mass m = ref m_masses[i];
+                m.Force = Vector2.Zero;
+            }
+        }
+
         public void Update(float deltaTime)
         {
             ApplyForce();
@@ -238,7 +246,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
             {
                 ref _Mass m = ref m_masses[i];
 
-                m.Velocity *= 0.99f;
+                m.Velocity *= (float)Math.Pow(m_damping, deltaTime);
                 m_dummyPos[i] = (m.Position + m.Velocity * deltaTime);
             }
 
@@ -246,10 +254,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
             {
                 for (int i = 0; i < m_masses.Length; i++)
                 {
-                    ref _Mass mA = ref m_masses[i];
-                    Vector2 x_hat = mA.Position + deltaTime * mA.Velocity;
-                    m_gradiants[i] = mA.Mass / (deltaTime * deltaTime) * (m_dummyPos[i] - x_hat);
-                    m_gradiants[i] -= mA.Force;
+                    ref _Mass m = ref m_masses[i];
+                    Vector2 x_hat = m.Position + deltaTime * m.Velocity;
+                    m_gradiants[i] = m.Mass / (deltaTime * deltaTime) * (m_dummyPos[i] - x_hat);
+                    m_gradiants[i] -= m.Force;
                 }
 
                 for (int i = 0; i < m_springs.Length; i++)
@@ -285,37 +293,40 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
                 ref _Mass m = ref m_masses[i];
                 if (m.IsStatic)
                 {
-                    CheckCollision(i);
-                    m.Force = Vector2.Zero;
                     continue;
                 }
-                var oldPos = m.Position;
+                Vector2 x_hat = m.Position + deltaTime * m.Velocity;
                 m.Position = m_dummyPos[i];
-                CheckCollision(i);
-                m.Velocity = (m.Position - oldPos) / deltaTime;
-                m.Force = Vector2.Zero;
+                if (m_hasCollision)
+                {
+                    CheckCollision(i);
+                }
+
+                m.Velocity += (m.Position - x_hat) / deltaTime;
             }
 
         }
 
-        private void InitRopes(int count, float elasticity, RenderingTransformFunction renderingTransform)
+        private void InitRopes(int count, float elasticity, RenderingTransformFunction renderingTransform, bool hasCollision)
         {
             m_masses = new _Mass[count];
             m_dummyPos = new Vector2[count];
             m_gradiants = new Vector2[count];
             m_springs = new _Spring[count - 1];
+            m_damping = 0.99f;
 
             m_elasticity = elasticity;
             m_renderingTransform = renderingTransform;
+            m_hasCollision = hasCollision;
         }
 
         /// <summary>
         /// 自动生成一串由位置决定的绳子链
         /// </summary>
         /// <param name="positions"></param>
-        public Rope(List<Vector2> positions, float elasticity, float mass, RenderingTransformFunction renderingTransform)
+        public Rope(List<Vector2> positions, float elasticity, float mass, RenderingTransformFunction renderingTransform, bool hasCollision = false)
         {
-            InitRopes(positions.Count, elasticity, renderingTransform);
+            InitRopes(positions.Count, elasticity, renderingTransform, hasCollision);
 
             for (int i = 0; i < positions.Count; i++)
             {
@@ -346,9 +357,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
         /// <param name="elasticity"></param>
         /// <param name="scale"></param>
         /// <param name="count"></param>
-        public Rope(Vector2 position, float elasticity, float scale, int count, RenderingTransformFunction renderingTransform)
+        public Rope(Vector2 position, float elasticity, float scale, int count, RenderingTransformFunction renderingTransform, bool hasCollision = false)
         {
-            InitRopes(count, elasticity, renderingTransform);
+            InitRopes(count, elasticity, renderingTransform, hasCollision);
 
             m_masses[0] = new _Mass
             {

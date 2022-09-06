@@ -372,24 +372,37 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
 
         public void Update(float deltaTime)
         {
-            int index = 0;
-            foreach (var rope in ropes)
+            int[] dummyIndex = new int[ropes.Count];
+            int count = 0;
+            for (int i = 0; i < ropes.Count; i++)
             {
-                if (IsRopePresentInScreen(rope))
+                // dummyIndex[i] = count++;
+                if (IsRopePresentInScreen(ropes[i]))
+                {
+                    dummyIndex[i] = -1;
+                }
+                else
+                {
+                    dummyIndex[i] = count++;
+                }
+            }
+            Parallel.For(0, ropes.Count, (i) =>
+            {
+                Rope rope = ropes[i];
+                if (dummyIndex[i] == -1)
                 {
                     rope.Update(deltaTime);
                 }
                 else
                 {
                     // 按照序号模30分摊计算量
-                    if (HookSystem.UpdateTimer % 30 == index % 30)
+                    if (HookSystem.UpdateTimer % 30 == dummyIndex[i] % 30)
                     {
                         rope.Update(deltaTime * 30);
                     }
-                    index++;
                 }
-            }
-
+                rope.ClearForce();
+            });
             //if (m_isDirty)
             //{
             //    ResizeMasses();
