@@ -42,11 +42,11 @@ namespace Everglow.Sources.Commons.Function.FeatureFlags
         [DrawTicks]
         public TextureReplaceMode TextureReplace;
 
+        [Header("$Mods.Everglow.Config.Header.AudioReplace")]
+
         [DefaultValue(true)]
         [Label("$Mods.Everglow.Config.ItemPickSoundReplace.Label")]
         public bool ItemPickSoundReplace;
-
-        [Header("$Mods.Everglow.Config.Header.AudioReplace")]
 
         [DefaultValue(MothAudioReplaceMode.MothFighting)]
         [Label("$Mods.Everglow.Config.MothAudioReplace.Label")]
