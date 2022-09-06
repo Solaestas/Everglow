@@ -28,8 +28,7 @@ namespace Everglow.Sources.Modules.ExampleModule
             m_defualtDrawEffect = MythContent.QuickEffect("Effects/DefaultDraw");
             base.OnModLoad();
         }
-
-        public override void PostUpdateEverything()
+        public override void PreUpdatePlayers()
         {
             // m_ropeManager = null;
             if (m_ropeManager == null)
@@ -55,7 +54,15 @@ namespace Everglow.Sources.Modules.ExampleModule
             var len = (last - last2).Length();
             var unit = Vector2.Normalize(last - last2);
             var force = -3 * (len - 400 / 60f) * unit;
+            if (Main.LocalPlayer.velocity.Y == 0)
+            {
+                force.Y = 0;
+            }
             Main.LocalPlayer.velocity += force * 0.01f;
+        }
+        public override void PostUpdateEverything()
+        {
+            
 
 
             //if (Main.time % 600 < 1)
@@ -171,6 +178,8 @@ namespace Everglow.Sources.Modules.ExampleModule
         {
             if (m_ropeManager == null)
                 return;
+
+            m_ropeManager.Ropes[0].GetMassList[^1].Position = Main.LocalPlayer.Center;
             List<Vertex2D> vertices = new List<Vertex2D>(100);
             List<int> indices = new List<int>(100);
             foreach (var rope in m_ropeManager.Ropes)

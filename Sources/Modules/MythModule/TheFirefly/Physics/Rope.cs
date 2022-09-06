@@ -213,7 +213,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
             float EPS = 1e-2f;
             if (sdf.X < EPS)
             {
-                m.Force += (EPS - sdf.X) * new Vector2(sdf.Y, sdf.Z);
+                m.Position -= (EPS - sdf.X) * new Vector2(sdf.Y, sdf.Z);
             }
         }
 
@@ -227,8 +227,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
                     (float)(Math.Sin(Main.timeForVisualEffects / 72f + m.Position.X / 13d + m.Position.Y / 4d)), 0)
                     * (Main.windSpeedCurrent + 1f) * 2f
                     + new Vector2(0, gravity * m.Mass);
-
-                CheckCollision(i);
             }
 
         }
@@ -287,11 +285,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
                 ref _Mass m = ref m_masses[i];
                 if (m.IsStatic)
                 {
+                    CheckCollision(i);
                     m.Force = Vector2.Zero;
                     continue;
                 }
                 var oldPos = m.Position;
                 m.Position = m_dummyPos[i];
+                CheckCollision(i);
                 m.Velocity = (m.Position - oldPos) / deltaTime;
                 m.Force = Vector2.Zero;
             }
