@@ -18,7 +18,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             Item.glowMask = GetGlowMask;
             Item.damage = 13;
             Item.DamageType = DamageClass.Magic;
-            Item.mana = 10;
+            Item.mana = 4;
             Item.width = 60;
             Item.height = 60;
             Item.useTime = 7;

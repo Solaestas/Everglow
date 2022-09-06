@@ -13,7 +13,7 @@ internal class TestItem : ModItem
         }
         public override void Update()
         {
-            if(time >= 120)
+            if (time >= 120)
             {
                 active = false;
             }

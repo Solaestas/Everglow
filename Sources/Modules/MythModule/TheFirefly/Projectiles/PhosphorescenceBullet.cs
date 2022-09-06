@@ -1,4 +1,3 @@
-using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {

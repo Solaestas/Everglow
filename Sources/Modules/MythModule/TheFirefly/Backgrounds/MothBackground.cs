@@ -1,6 +1,6 @@
 using Everglow.Sources.Commons.Function.ImageReader;
 using Everglow.Sources.Commons.Function.Vertex;
-using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs;
+using Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses;
 using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Physics;
 using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;

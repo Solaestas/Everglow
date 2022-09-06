@@ -147,7 +147,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             if (!Main.mouseLeft && Release)//发射
             {
                 SoundEngine.PlaySound(SoundID.Item5,Projectile.Center);
-                Energy = 0;
                 Projectile.NewProjectileDirect(Projectile.InheritSource(Projectile), Projectile.Center, Vector2.Normalize(v0) * 20f, (int)(Projectile.ai[0]), Projectile.damage + Energy / 5, Projectile.knockBack, player.whoAmI).extraUpdates++;
                 for (int s = 0; s < 5; s++)
                 {
@@ -156,6 +155,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                         Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center, Vector2.Normalize(v0).RotatedBy(ArRot[s]) * ArVel[s] * 1f, ModContent.ProjectileType<MothArrow>(), (int)((Projectile.damage + Energy / 5) * 0.47), Projectile.knockBack, player.whoAmI, 0, player.HeldItem.crit + player.GetCritChance(DamageClass.Ranged) + player.GetCritChance(DamageClass.Generic));
                     }
                 }
+                Energy = 0;
                 Release = false;
             }
             if (Projectile.ai[1] > 0)
@@ -193,7 +193,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Vector2 vec = player.DirectionTo(Main.MouseWorld);
             Vector2 v = vec.RotatedBy(1.57f);
 
-            Vector2 basePos = player.Center + vec * 7;
+            Vector2 basePos = player.MountedCenter + vec * 7;
             float b0 = Math.Clamp(Energy / 2f, 0, 60);
             float b3 = (b0 / 60f) * (b0 / 60f);
 
@@ -250,7 +250,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             float b3 = b2 * b2;
             Color drawColor =lightColor;
             SpriteEffects se = SpriteEffects.None;
-            if (Projectile.Center.X < player.Center.X)
+            if (Projectile.Center.X < player.MountedCenter.X)
             {
                 player.direction = -1;
             }
@@ -273,7 +273,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             //int StringFrame = 0;
             //StringFrame = Math.Clamp((int)(Energy / 20f), 0, 5);
             //TexString = MythContent.QuickTexture("TheFirefly/Projectiles/ShadowWingBowTex/ShadowWingBowString" + StringFrame.ToString());
-            Vector2 v0 = Main.MouseWorld - player.Center;
+            Vector2 v0 = Main.MouseWorld - player.MountedCenter;
             if (player.controlUseItem)
             {
                 Player.CompositeArmStretchAmount PCAS = Player.CompositeArmStretchAmount.Full;

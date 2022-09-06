@@ -265,7 +265,7 @@ Mods:
 			SilverStabbingSword : Silver Rapier
 			VegetationBayonet : Rapier of Grass
 			TDMT : Catastrophic Lightning
-			
+			CrystalSkull : Crystal Skull
 			#Glow Wood Furniture
 			
 			#Music Boxes
@@ -545,9 +545,10 @@ Mods:
 			SilverStabbingSword : "{$Mods.Everglow.Common.RapierGT}"
 			VegetationBayonet : "{$Mods.Everglow.Common.RapierGT}"
 			TDMT : "{$Mods.Everglow.Common.RapierGT}"
+			CrystalSkull : "Activates the new magic book system"
 			
 			#Music Boxes
-			GlowWoodMusicBox : "Plays 'Setnour6 - Within the Giant Cocoon'"
+			GlowWoodMusicBox : "Plays 'Setnour6 - Within the Giant Cocoon (身陷巨茧)'"
 
 			#食物系统物品
 			BloodGlucoseMonitor : "Display hunger information"
@@ -572,8 +573,14 @@ Mods:
 			RedImmune : "Red Flame Immunity"
 			WhiteImmune : "White Flame Immunity"
 			YellowImmune : "Yellow Flame Immuniy"
+			
+			#Magic books buff
+			WaterBoltII : "Empowered Water Bolts"
+			
+			#Food system buff
+			FoodBuff : "You just finished eating"
 
-			#食物系统buff
+			#New buffs to the original food
 			AleBuff : "Tipsy"
 			AppleBuff : "Apple"
 			AppleJuiceBuff : Apple Juice
@@ -674,6 +681,9 @@ Mods:
 			WhiteImmune : "Spiritual Fiery Core's white flame cannot hurt you"
 			YellowImmune : "Spiritual Fiery Core's yellow flame cannot hurt you"
 
+			#Magic books buff
+			WaterBoltII : "Your Water Bolts are more powerful"
+			
 			#食物系统buff
 			FoodBuff : "Food Buff"
 
@@ -760,10 +770,29 @@ Mods:
 		}
 		Config:
 		{
+			Header:
+			{
+				TextureReplace : "Texture Configurations"
+				AudioReplace : "Audio Configurations"
+			}
 			TextureReplace:
 			{
-				Label: "Texture-replacing mode"
-				Tooltip: "Choose your preferred texture group to replace"
+				Label : "Texture-replacing mode"
+				Tooltip : "Choose your preferred texture group to replace\nOptions: Terraria, Eternal Resolve, Myth"
+			}
+			ItemPickSoundReplace:
+			{
+				Label : "New pickup and inventory sounds"
+			}
+			MothAudioReplace:
+			{
+				Label : "Corrupted Moth's Theme Song"
+				Tooltip : "Choose your preferred Corrupted Moth theme music to replace\nOptions: Original Theme, Alternate Theme, Old Theme\nThis setting won't take effect if the Corrupted Moth is currently alive"
+			}
+			TuskAudioReplace:
+			{
+				Label : "(NOT IMPLEMENTED) The Tusk's Theme Song"
+				Tooltip : "Choose your preferred Bloody Tusk theme music to replace\nOptions: Original Theme, Old Theme\nThis setting won't take effect if The Tusk is currently alive\nNOTE: This config is not fully set up yet and therefore does not work at the moment"
 			}
 		}
 		InfoDisplay:

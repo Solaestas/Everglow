@@ -1,12 +1,11 @@
-﻿using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
    
     public class PhantomMoth : ModProjectile
     {
-        public override string Texture => "Everglow/Sources/Modules/MythModule/Bosses/CorruptMoth/Projectiles/ButterflyDream";
+        public override string Texture => "Everglow/Sources/Modules/MythModule/TheFirefly/Projectiles/ButterflyDream";
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 4;
