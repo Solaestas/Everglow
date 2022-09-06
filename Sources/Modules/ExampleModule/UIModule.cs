@@ -1,7 +1,8 @@
 ﻿using Everglow.Sources.Commons.Core.ModuleSystem;
 using Everglow.Sources.Commons.Core.UI;
+using Everglow.Sources.Modules.ExampleModule.UI;
 
-namespace Everglow.Sources.Modules.ExampleModule.UI
+namespace Everglow.Sources.Modules.ExampleModule
 {
     public class UIModule : IModule
     {
@@ -9,7 +10,7 @@ namespace Everglow.Sources.Modules.ExampleModule.UI
 
         public void Load()
         {
-            ContainerPage.RegisterContainerPage(new UIModuleContainerPage()); //在IModule类内手动注册容器页.
+            
         }
 
         public void Unload()
