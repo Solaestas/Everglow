@@ -2,6 +2,7 @@ using Everglow.Sources.Commons.Function.ImageReader;
 using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.NPCs;
 using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Physics;
 using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
@@ -434,19 +435,19 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             for (int i = 0; i < ropes.Count; i++)
             {
                 bool first = true;
-                for (int j = 0; j < ropes[i].mass.Length; j++)
+                for (int j = 0; j < ropes[i].GetMassList.Length; j++)
                 {
-                    var mass = ropes[i].mass[j];
+                    var mass = ropes[i].GetMassList[j];
                     Vector2 vector = new Vector2(0, 1);
                     if (j > 0)
                     {
-                        vector = mass.position - ropes[i].mass[j - 1].position;
+                        vector = mass.Position - ropes[i].GetMassList[j - 1].Position;
                     }
                     vector = Vector2.Normalize(vector);
-                    var pos = ImageSpaceToCloseTextureSpace(mass.position, texClose.Size());
+                    var pos = ImageSpaceToCloseTextureSpace(mass.Position, texClose.Size());
                     Vector2 posSS = -targetSourceRect.TopLeft() + texClose.Size() * pos;
 
-                    float width = (ropes[i].mass.Length - j);
+                    float width = (ropes[i].GetMassList.Length - j);
                     //通过顶点绘制枝条
                     branch.Add(new Vertex2D(posSS + vector.RotatedBy(Math.PI / 2d) * width, Color.White, Vector3.Zero));
                     if (first)
@@ -467,15 +468,15 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             Texture2D dropTexture = MythContent.QuickTexture("TheFirefly/Backgrounds/Drop");
             for (int i = 0; i < ropes.Count; i++)
             {
-                for (int j = 1; j < ropes[i].mass.Length; j++)
+                for (int j = 1; j < ropes[i].GetMassList.Length; j++)
                 {
-                    var mass = ropes[i].mass[j];
+                    var mass = ropes[i].GetMassList[j];
                     float scale = 1f + j / 7f;
-                    Vector2 vector = mass.position - ropes[i].mass[j - 1].position;
+                    Vector2 vector = mass.Position - ropes[i].GetMassList[j - 1].Position;
                     float rotation = vector.ToRotation() - MathHelper.PiOver2;
                     Color color = GetLuminace(new Color(0, 0.15f * j, 0.2f * j, 0.1f * j) * alpha * 5);
 
-                    var pos = ImageSpaceToCloseTextureSpace(mass.position, texClose.Size());
+                    var pos = ImageSpaceToCloseTextureSpace(mass.Position, texClose.Size());
 
                     // 直接绘制在相对于近景贴图的坐标，只要近景位置正确，悬挂位置就正确
                     Vector2 posSS = -targetSourceRect.TopLeft() + texClose.Size() * pos;
@@ -541,7 +542,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 ropes = ropeManager.LoadRope("Everglow/Sources/Modules/MythModule/TheFirefly/Backgrounds/TreeRope",
                     null,
                     Vector2.Zero,
-                    () => Vector2.Zero);
+                    (x) => x);
             }
 
 

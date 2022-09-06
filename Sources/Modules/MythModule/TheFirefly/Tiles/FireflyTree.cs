@@ -1,6 +1,6 @@
 
 using Everglow.Sources.Modules.MythModule.Common;
-
+using Everglow.Sources.Modules.MythModule.TheFirefly.Physics;
 using Terraria.Localization;
 using Terraria.ObjectData;
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
@@ -46,21 +46,22 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             foreach (var r in ropes)
             {
                 Vector2 acc = new Vector2(Main.rand.NextFloat(-1, 1), 0);
-                foreach (var m in r.mass)
+                for (int i1 = 0; i1 < r.GetMassList.Length; i1++)
                 {
-                    m.force += acc;
+                    ref Rope._Mass m = ref r.GetMassList[i1];
+                    m.Force += acc;
                     if (Main.rand.NextBool(7))
                     {
-                        Dust d = Dust.NewDustDirect(m.position, 0, 0, ModContent.DustType<Dusts.GlowBluePedal>());
-                        d.velocity = m.velocity * 0.01f;
+                        Dust d = Dust.NewDustDirect(m.Position, 0, 0, ModContent.DustType<Dusts.GlowBluePedal>());
+                        d.velocity = m.Velocity * 0.01f;
                     }
                     if (Main.rand.NextBool(10))
                     {
-                        Gore g = Gore.NewGoreDirect(null, m.position, m.velocity * 0.1f, ModContent.GoreType<Gores.Branch>());
+                        Gore g = Gore.NewGoreDirect(null, m.Position, m.Velocity * 0.1f, ModContent.GoreType<Gores.Branch>());
                     }
                     if (Main.rand.NextBool(3))
                     {
-                        Item.NewItem(null, m.position, 16, 16, ModContent.ItemType<Items.GlowWood>());
+                        Item.NewItem(null, m.Position, 16, 16, ModContent.ItemType<Items.GlowWood>());
                     }
                     //被砍时对mass操纵写这里
                 }
@@ -82,17 +83,18 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             foreach (var r in ropes)
             {
                 Vector2 acc = new Vector2(Main.rand.NextFloat(-1, 1), 0);
-                foreach (var m in r.mass)
+                for (int i1 = 0; i1 < r.GetMassList.Length; i1++)
                 {
-                    m.force += acc;
+                    ref Rope._Mass m = ref r.GetMassList[i1];
+                    m.Force += acc;
                     if (Main.rand.NextBool(17))
                     {
-                        Dust d = Dust.NewDustDirect(m.position, 0, 0, ModContent.DustType<Dusts.GlowBluePedal>());
-                        d.velocity = m.velocity * 0.01f;
+                        Dust d = Dust.NewDustDirect(m.Position, 0, 0, ModContent.DustType<Dusts.GlowBluePedal>());
+                        d.velocity = m.Velocity * 0.01f;
                     }
                     if (Main.rand.NextBool(48))
                     {
-                        Gore g = Gore.NewGoreDirect(null, m.position, m.velocity * 0.1f, ModContent.GoreType<Gores.Branch>());
+                        Gore g = Gore.NewGoreDirect(null, m.Position, m.Velocity * 0.1f, ModContent.GoreType<Gores.Branch>());
                     }
                     //被砍时对mass操纵写这里
                 }
@@ -149,7 +151,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             if (ropes[style] is null)
             {
                 ropes[style] = ropeManager.LoadRope("Everglow/Sources/Modules/MythModule/TheFirefly/Tiles/FireflyTreeRope",
-                    new Rectangle(style * 51, 0, 51, 51), tileCenterWS - HalfSize, () => Vector2.Zero);
+                    new Rectangle(style * 51, 0, 51, 51), tileCenterWS - HalfSize, (x) => x);
                 hasRope.Add((xTS, yTS), (style, ropes[style]));
                 basePositions[style] = tileCenterWS;
             }
@@ -210,11 +212,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                 var (_, ropes) = hasRope[(i, j)];
                 foreach (var rope in ropes)
                 {
-                    foreach (var m in rope.mass)
+                    for (int k = 0; k < rope.GetMassList.Length; k++)
                     {
-                        if (playerRect.Contains(m.position.ToPoint()))
+                        ref Rope._Mass m = ref rope.GetMassList[k];
+                        if (playerRect.Contains(m.Position.ToPoint()))
                         {
-                            m.force += Main.LocalPlayer.velocity / 3;
+                            m.Force += Main.LocalPlayer.velocity / 3;
                         }
                     }
                 }
