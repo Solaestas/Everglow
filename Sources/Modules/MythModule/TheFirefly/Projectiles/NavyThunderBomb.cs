@@ -1,9 +1,12 @@
 ﻿using Everglow.Sources.Modules.MythModule.TheFirefly;
 using Terraria.Audio;
+using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Modules.MEACModule;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
-    public class NavyThunderBomb : ModProjectile
+    public class NavyThunderBomb : ModProjectile, IWarpProjectile
     {
         private float r = 0;
         private Vector2 v0;
@@ -100,20 +103,74 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Projectile.Kill();
             return false;
         }
+        private void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
+        {
+            List<Vertex2D> circle = new List<Vertex2D>();
+            for (int h = 0; h < radious / 2; h++)
+            {
+                circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 1, 0)));
+                circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0, 0)));
+            }
+            circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0.5f, 1, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(addRot), color, new Vector3(0.5f, 0, 0)));
+            if (circle.Count > 0)
+            {
+                Main.graphics.GraphicsDevice.Textures[0] = tex;
+                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
+            }
+        }
+        public void DrawTexLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2, Texture2D tex)
+        {
+            float Wid = 6f;
+            Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
+
+            List<Vertex2D> vertex2Ds = new List<Vertex2D>();
+
+            for (int x = 0; x < 3; x++)
+            {
+                float Value0 = (float)(Main.time / 291d + 20) % 1f;
+                float Value1 = (float)(Main.time / 291d + 20.03) % 1f;
+                vertex2Ds.Add(new Vertex2D(StartPos + Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(Value0, 0, 0)));
+                vertex2Ds.Add(new Vertex2D(EndPos + Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(Value1, 0, 0)));
+                vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(Value0, 1, 0)));
+
+                vertex2Ds.Add(new Vertex2D(EndPos + Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(Value1, 0, 0)));
+                vertex2Ds.Add(new Vertex2D(EndPos - Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(Value1, 1, 0)));
+                vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(Value0, 1, 0)));
+            }
+
+
+            Main.graphics.GraphicsDevice.Textures[0] = tex;
+            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
+        }
         public override bool PreDraw(ref Color lightColor)
         {
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone);
-            Effect hdrDark = Common.MythContent.QuickEffect("Effects/hdrDark");
-            hdrDark.CurrentTechnique.Passes[0].Apply();
-            Main.spriteBatch.Draw(ModContent.Request<Texture2D>(Texture).Value, Projectile.Center - Main.screenPosition, new Rectangle(FraX, FraY + 10, 270, 270), new Color(1f, 1f, 1f, 1f), Projectile.rotation, new Vector2(135f, 135f), r / 420f, SpriteEffects.None, 0f);
 
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone);
-            //Main.spriteBatch.Draw(ModContent.Request<Texture2D>(Texture).Value, Projectile.Center - Main.screenPosition, new Rectangle(FraX, FraY + 10, 270, 270), new Color(1f, 1f, 1f, 0), Projectile.rotation, new Vector2(135f, 135f), r / 420f, SpriteEffects.None, 0f);
+            Texture2D Water = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/ElecLine");
+            Texture2D WaterS = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLineBlackShade");
+            float value0 = (float)(Math.Sin(800d / (double)(Projectile.timeLeft + 35)) * 0.75f + 0.25f) * (300 - Projectile.timeLeft) / 300f;
+            value0 = Math.Max(0, value0);
+            //DrawTexCircle(132, 22, new Color(value0, value0, value0, value0), Projectile.Center - Main.screenPosition, WaterS, Main.time / 17);
+            DrawTexCircle(122, 42, new Color(0.33f * value0, 0.33f * value0, 0.33f * value0, 0.33f * value0), Projectile.Center - Main.screenPosition, WaterS, -Main.time / 17);
+            DrawTexCircle(132, 32, new Color(0, 0.45f * value0, 1f * value0, 0), Projectile.Center - Main.screenPosition, Water, Main.time / 17);
+            DrawTexCircle(122, 42, new Color(0, 0.15f * value0, 0.33f * value0, 0), Projectile.Center - Main.screenPosition, Water, -Main.time / 17);
+
+            Main.spriteBatch.Draw(ModContent.Request<Texture2D>(Texture).Value, Projectile.Center - Main.screenPosition, new Rectangle(FraX, FraY + 10, 270, 270), new Color(1f, 1f, 1f, 0), Projectile.rotation, new Vector2(135f, 135f), r / 420f, SpriteEffects.None, 0f);
             Texture2D Light = Common.MythContent.QuickTexture("TheFirefly/Projectiles/CorruptLight");
             Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(Stre2, Stre2, Stre2, 0), Projectile.rotation, new Vector2(168f, 168f), Projectile.scale * r / 210f, SpriteEffects.None, 0);
             return false;
+        }
+        public void DrawWarp()
+        {
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+            KEx.CurrentTechnique.Passes[0].Apply();
+            float value0 = (float)(Math.Sin(800d / (double)(Projectile.timeLeft + 35)) * 0.75f + 0.25f) * (300 - Projectile.timeLeft) / 300f;
+            value0 = Math.Max(0, value0);
+            DrawTexCircle(122, 52, new Color(0.4f * value0, 0.42f * value0, 1f * value0, 0), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/ElecLine"), Main.time / 17);
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
         }
     }
 }

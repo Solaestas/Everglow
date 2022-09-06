@@ -185,7 +185,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             {
                 se = SpriteEffects.FlipHorizontally;
             }
-            //Main.spriteBatch.Draw(TexMainG, Projectile.Center - Main.screenPosition, DrawRect, new Color(0.3f, 0.3f, 0.2f, 0), Projectile.rotation, new Vector2(27, 42), 1f, se, 0);
+            Main.spriteBatch.Draw(TexMainG, Projectile.Center - Main.screenPosition, DrawRect, new Color(0.3f, 0.3f, 0.2f, 0), Projectile.rotation, new Vector2(27, 42), 1f, se, 0);
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
         }
