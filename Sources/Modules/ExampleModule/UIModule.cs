@@ -1,6 +1,7 @@
 ﻿using Everglow.Sources.Commons.Core.ModuleSystem;
 using Everglow.Sources.Commons.Core.UI;
 using Everglow.Sources.Modules.ExampleModule.UI;
+using Everglow.Sources.Commons.Function.FeatureFlags;
 
 namespace Everglow.Sources.Modules.ExampleModule
 {

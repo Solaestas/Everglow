@@ -546,6 +546,85 @@ Mods: {
 			RedImmune : "红色火焰免疫"
 			WhiteImmune : "白色火焰免疫"
 			YellowImmune : "黄色火焰免疫"
+			AleBuff : "踉跄"
+			AppleBuff : "苹果"
+			AppleJuiceBuff : "苹果汁"
+			ApplePieBuff : "苹果派"
+			ApricotBuff : "杏"
+			BaconBuff : "培根"
+			BananaBuff : "香蕉"
+			BananaDaiquiriBuff : "香蕉鸡尾酒"
+			BananaSplitBuff : "香蕉船"
+			BBQRibsBuff : "烤肋排"
+			BlackCurrantBuff : "黑莓"
+			BloodOrangeBuff : "血橙"
+			BloodyMoscatoBuff : "血腥麝香葡萄"
+			BowlofSoupBuff : "鱼菇汤"
+			BunnyStewBuff : "炖兔兔"
+			BurgerBuff : "汉堡包"
+			CherryBuff : "樱桃"
+			ChickenNuggetBuff : "鸡块"
+			ChocolateChipCookieBuff : "巧克力曲奇"
+			ChristmasPuddingBuff : "圣诞布丁"
+			CoconutBuff : "椰子"
+			CoffeeCupBuff : "咖啡"
+			CookedFishBuff : "熟鱼"
+			CookedMarshmallowBuff : "烤棉花糖"
+			CookedShrimpBuff : "熟虾"
+			CreamSodaBuff : "奶油苏打"
+			DragonfruitBuff : "火龙果"
+			ElderberryBuff : "接骨木果"
+			EscargotBuff : "食用蜗牛"
+			FriedEggBuff : "炒蛋"
+			FriesBuff : "薯条"
+			FroggleBunwichBuff : "蛙腿三明治"
+			FruitJuiceBuff : "果汁"
+			FruitSaladBuff : "水果沙拉"
+			GingerbreadCookieBuff : "姜饼"
+			GoldenDelightBuff : "金美味"
+			GrapefruitBuff : "葡萄柚"
+			GrapeJuiceBuff : "葡萄汁"
+			GrapesBuff : "葡萄"
+			GrilledSquirrelBuff : "烤松鼠"
+			GrubSoupBuff : "蛆虫汤"
+			HotdogBuff : "热狗"
+			IceCreamBuff : "冰淇淋"
+			LemonadeBuff : "柠檬汁"
+			LemonBuff : "柠檬"
+			LobsterTailBuff : "龙虾尾"
+			MangoBuff : "芒果"
+			MarshmallowBuff : "棉花糖"
+			MilkCartonBuff : "牛奶"
+			MilkshakeBuff : "奶昔"
+			MonsterLasagnaBuff : "怪物千层面"
+			NachosBuff : "玉米片"
+			PadThaiBuff : "泰式炒面"
+			PeachBuff : "桃"
+			PeachSangriaBuff : "桃子果酒"
+			PhoBuff : "越南河粉"
+			PinaColadaBuff : "椰林飘香"
+			PineappleBuff : "菠萝"
+			PizzaBuff : "披萨"
+			PlumBuff : "李子"
+			PotatoChipsBuff : "薯片"
+			PrismaticPunchBuff : "七彩潘趣酒"
+			PumpkinPieBuff : "南瓜派"
+			RambutanBuff : "红毛丹"
+			RoastedBirdBuff : "烤鸟"
+			RoastedDuckBuff : "烤鸭"
+			SakeBuff : "清酒"
+			SashimiBuff : "生鱼片"
+			SauteedFrogLegsBuff : "炒蛙腿"
+			SeafoodDinnerBuff : "海鲜大餐"
+			ShrimpPoBoyBuff : "鲜虾三明治"
+			ShuckedOysterBuff : "去壳牡蛎"
+			SmoothieofDarknessBuff : "暗黑奶昔"
+			SpaghettiBuff : "意大利面"
+			StarfruitBuff : "杨桃"
+			SteakBuff : "牛排"
+			SugarCookieBuff : "蜜糖饼干"
+			TeacupBuff : "茶"
+			TropicalSmoothieBuff : "热带奶昔"
 		}
 
 		BuffDescription : 
@@ -567,6 +646,319 @@ Mods: {
 			RedImmune : "花火幻魂心的红色火焰无法伤害到你"
 			WhiteImmune : "花火幻魂心的白色火焰无法伤害到你"
 			YellowImmune : "花火幻魂心的黄色火焰无法伤害到你"
+			AleBuff : 
+				'''
+				 防御减8，伤害、暴击率和近战攻速各增加8%
+				'''
+			AppleBuff : 8%伤害减免
+			AppleJuiceBuff : 8%伤害减免
+			ApplePieBuff : 8%伤害减免
+			ApricotBuff : 
+				'''
+				魔力再生加4
+				止渴润肺
+				'''
+			BaconBuff : 
+				'''
+				加2生命回复，所受冷系伤害降低
+				开胃祛寒
+				'''
+			BananaBuff : 防御+4
+			BananaDaiquiriBuff : 防御+4
+			BananaSplitBuff : 防御+4
+			BBQRibsBuff : 
+				'''
+				加50血量上限
+				滋阴补血
+				'''
+			BlackCurrantBuff : 
+				'''
+				获得夜视、危险感知能力
+				改善視力
+				'''
+			BloodOrangeBuff : 
+				'''
+				加25血量上限
+				这里不是崽饿
+				'''
+			BloodyMoscatoBuff : 
+				'''
+				迅速回血
+				血色
+				'''
+			BowlofSoupBuff : 
+				'''
+				加20魔力上限,5%魔法伤害
+				补脑
+				'''
+			BunnyStewBuff : 
+				'''
+				自动跳跃，增加跳跃能力
+				没有任何兔子在制作过程中受到伤害
+				'''
+			BurgerBuff : 
+				'''
+				减少移速，增加防御
+				热量炸弹
+				'''
+			CherryBuff : 
+				'''
+				增加移速与跳跃高度
+				cr,nmsl
+				'''
+			ChickenNuggetBuff : 
+				'''
+				增加1生命回复、4%攻速
+				数一数二的鸡块！
+				'''
+			ChocolateChipCookieBuff : 
+				'''
+				快速恢复生命与魔力
+				补充能量
+				'''
+			ChristmasPuddingBuff : 
+				'''
+				仇恨值减400
+				美容养颜
+				'''
+			CoconutBuff : 
+				'''
+				加4防御，5%减伤
+				我从小啃到大
+				'''
+			CoffeeCupBuff : 
+				''' 
+				加25%铺墙铺砖速度，5%攻速
+				神清气爽
+				'''
+			CookedFishBuff : 
+				'''
+				加0魔力上限,5%魔法暴击率
+				益气健脾
+				'''
+			CookedMarshmallowBuff : 防御+4
+			CookedShrimpBuff : 
+				'''
+				加8防御
+				补钙
+				'''
+			CreamSodaBuff : 
+				'''
+				清凉一下
+				
+				'''
+			DragonfruitBuff : 防御+4
+			ElderberryBuff : 
+				'''
+				你可以短距离冲刺
+				抗氧化
+				'''
+			EscargotBuff : 
+				'''
+				大大减速，加80%减伤
+				这不是神龟药水
+				'''
+			FriedEggBuff : 
+				'''
+				蛋白质
+				
+				'''
+			FriesBuff : 
+				'''
+				加4防御，4%暴击
+				高油高盐
+				'''
+			FroggleBunwichBuff : 
+				'''
+				自动跳跃，增加伤害和跳跃能力
+				你能真正尝到沼泽的味道
+				'''
+			FruitJuiceBuff : 
+				'''
+				小幅提升大部分属性
+				维生素！
+				'''
+			FruitSaladBuff : 
+				'''
+				中幅提升大部分属性
+				更多维生素！
+				'''
+			GingerbreadCookieBuff : 
+				'''
+				加1生命回复,保暖
+				驱寒排毒
+				'''
+			GoldenDelightBuff : 防御+4
+			GrapefruitBuff : 防御+4
+			GrapeJuiceBuff : 
+				'''
+				加1召唤栏，减6防御
+				多子多福
+				'''
+			GrapesBuff : 
+				'''
+				加1召唤栏，减5防御
+				多子多福
+				'''
+			GrilledSquirrelBuff : 欢跃
+			GrubSoupBuff : 防御+4
+			HotdogBuff : 
+				'''
+				减少移速，增加防御
+				热量炸弹
+				'''
+			IceCreamBuff : 防御+4
+			LemonadeBuff : 
+				'''
+				加4%远程暴击,仇恨值减200
+				消炎美容
+				'''
+			LemonBuff : 
+				'''
+				加5%远程暴击,仇恨值减300
+				消炎美容 
+				'''
+			LobsterTailBuff : 
+				'''
+				加6防御,25%挖矿速度
+				抗氧化
+				'''
+			MangoBuff : 清肺
+			MarshmallowBuff : 
+				'''
+				减20%最大掉落速度
+				轻飘飘
+				'''
+			MilkCartonBuff : 防御+4
+			MilkshakeBuff : 
+				'''
+				加10%移速
+				节食减肥
+				'''
+			MonsterLasagnaBuff : 
+				'''
+				弄熟的恶魔还是恶魔，在千层饼中也不会改变
+				
+				'''
+			NachosBuff : 防御+4
+			PadThaiBuff : 
+				'''
+				加50%召唤物击退
+				异域风情
+				'''
+			PeachBuff : 
+				'''
+				增加心的拾取范围，1生命回复
+				我也是桃饱用户
+				'''
+			PeachSangriaBuff : 
+				'''
+				增加心的拾取范围，1生命回复，减4防御
+				我也是桃饱用户
+				'''
+			PhoBuff : 
+				'''
+				加10%召唤物伤害
+				异域风情
+				'''
+			PinaColadaBuff : 
+				'''
+				加4防御，33%反伤
+				从不添加香精当生榨
+				'''
+			PineappleBuff : 
+				'''
+				加6防御，50%反伤
+				菠萝碱
+				'''
+			PizzaBuff : 
+				'''
+				加5穿甲
+				会让意大利人破防的菠萝披萨
+				'''
+			PlumBuff : 
+				'''
+				加600仇恨值，8%攻速
+				至于我的意见，那还是再等等吧
+				'''
+			PotatoChipsBuff : 
+				'''
+				加4防御，4%伤害
+				高油高盐
+				'''
+			PrismaticPunchBuff : 
+				'''
+				加400仇恨值,1召唤栏,减4防御
+				高雅兴致
+				'''
+			PumpkinPieBuff : 
+				'''
+				最大生命值加50
+				丰收的喜悦
+				'''
+			RambutanBuff : 防御+4
+			RoastedBirdBuff : 防御+4
+			RoastedDuckBuff : 防御+4
+			SakeBuff : 
+				'''
+				防御减8，伤害、暴击率和近战攻速各增加8%
+				'''
+			SashimiBuff : 
+				'''
+				寄生虫！
+				
+				'''
+			SauteedFrogLegsBuff : 
+				'''
+				自动跳跃，增加跳跃能力
+				钓不到蛙腿？那就吃吧
+				'''
+			SeafoodDinnerBuff : 
+				'''
+				够生猛！
+				
+				'''
+			ShrimpPoBoyBuff : 
+				'''
+				抗氧化
+				加6防御,25%挖矿速度
+				'''
+			ShuckedOysterBuff : 
+				'''
+				寄生虫！
+				
+				'''
+			SmoothieofDarknessBuff : 
+				'''
+				腹黑（字面意义上）
+				
+				'''
+			SpaghettiBuff : 
+				'''
+				加1召唤栏
+				异域风情
+				'''
+			StarfruitBuff : 1437大帝的淫威
+			SteakBuff : 
+				'''
+				减25%魔力消耗
+				异域风情
+				'''
+			SugarCookieBuff : 
+				'''
+				加10%远程伤害
+				养胃滋润
+				'''
+			TeacupBuff : 
+				'''
+				加2魔力回复，20魔力上限
+				醇香四溢
+				'''
+			TropicalSmoothieBuff : 
+				'''
+				加5%暴击
+				热带风暴
+				'''
 		}
 	}
 }
