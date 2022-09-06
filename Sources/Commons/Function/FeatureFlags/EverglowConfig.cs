@@ -46,7 +46,6 @@ namespace Everglow.Sources.Commons.Function.FeatureFlags
         [Label("$Mods.Everglow.Config.ItemPickSoundReplace.Label")]
         public bool ItemPickSoundReplace;
 
-        public override void OnChanged() {
         [Header("$Mods.Everglow.Config.Header.AudioReplace")]
 
         [DefaultValue(MothAudioReplaceMode.MothFighting)]
