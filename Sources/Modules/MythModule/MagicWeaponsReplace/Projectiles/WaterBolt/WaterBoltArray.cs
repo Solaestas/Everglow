@@ -122,8 +122,6 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
                 vertex2Ds.Add(new Vertex2D(EndPos - Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(Value1, 1, 0)));
                 vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(Value0, 1, 0)));
             }
-
-
             Main.graphics.GraphicsDevice.Textures[0] = tex;
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
         }
