@@ -8,6 +8,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
     internal class ShadowWingBow : ModProjectile
     {
+        public override string Texture => "Everglow/Sources/Modules/MythModule/TheFirefly/Projectiles/ShadowWingBowTex/ShadowWingBowMain";
         public override void SetDefaults()
         {
             Projectile.width = 36;
@@ -315,12 +316,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Main.spriteBatch.Draw(TexMainD1, Projectile.Center - Main.screenPosition, null, drawColor, Projectile.rotation - (float)(Math.PI * 0.25) + rotd1 * player.direction, new Vector2(TexMain.Width / 2f, TexMain.Height / 2f), 1f, se, 0);
             Main.spriteBatch.Draw(TexMain, Projectile.Center - Main.screenPosition, null, drawColor, Projectile.rotation - (float)(Math.PI * 0.25), new Vector2(TexMain.Width / 2f, TexMain.Height / 2f), 1f, se, 0);
             Main.spriteBatch.Draw(TexMainG, Projectile.Center - Main.screenPosition, null, new Color(ColS, ColS, ColS, 0), Projectile.rotation - (float)(Math.PI * 0.25), new Vector2(TexMain.Width / 2f, TexMain.Height / 2f), 1f, se, 0);
-
-            
-
         }
-
-        //private bool[] HasHit = new bool[200];
-        //private float x = 0;
     }
 }
