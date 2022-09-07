@@ -111,7 +111,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
         {
             var offset = m_dummyPos[A] - m_dummyPos[B];
             var length = offset.Length();
-            var unit = offset / length;
+            var unit = offset.SafeNormalize(Vector2.UnitX);
 
             return -elasticity * (length - restLength) * unit;
         }
@@ -171,6 +171,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
             for (int i = 0; i < m_masses.Length; i++)
             {
                 ref _Mass m = ref m_masses[i];
+                if (m.Position.HasNaNs())
+                {
+                    Main.NewText("!!");
+                }
 
                 m.Velocity *= (float)Math.Pow(m_damping, deltaTime);
                 m_dummyPos[i] = (m.Position + m.Velocity * deltaTime);

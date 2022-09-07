@@ -26,7 +26,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
             get;
             set;
         }
-        private Vector3 sdgBox(in Vector2 p, in Vector2 b)
+        private Vector3 sdgBox(Vector2 p, Vector2 b)
         {
             Vector2 w = new Vector2(Math.Abs(p.X), Math.Abs(p.Y)) - b;
             Vector2 s = new Vector2(p.X < 0.0 ? -1 : 1, p.Y < 0.0 ? -1 : 1);
@@ -38,6 +38,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
         }
         public Vector3 GetSDFWithGradient(Vector2 pos)
         {
+            sdgBox(new Vector2(0, -2), new Vector2(3, 3));
             return sdgBox(pos - Center, Size);
         }
 
@@ -67,7 +68,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
         }
 
         public Vector2 LineDir;
-        private Vector3 sdgBox(in Vector2 p, in Vector2 b)
+        private Vector3 sdgBox(Vector2 p, Vector2 b)
         {
             Vector2 w = new Vector2(Math.Abs(p.X), Math.Abs(p.Y)) - b;
             Vector2 s = new Vector2(p.X < 0.0 ? -1 : 1, p.Y < 0.0 ? -1 : 1);
@@ -78,7 +79,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
             return new Vector3((g > 0.0) ? l : g, v.X, v.Y);
         }
 
-        private Vector3 sdgSmoothMin(in Vector3 a, in Vector3 b, in float k)
+        private Vector3 sdgSmoothMin(Vector3 a, Vector3 b, float k)
         {
             float h = Math.Max(k - Math.Abs(a.X - b.X), 0.0f);
             float m = 0.25f * h * h / k;
@@ -92,7 +93,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
             return a.X * b.Y - a.Y * b.X;
         }
 
-        private Vector3 sdgLine(in Vector2 p, in Vector2 d)
+        private Vector3 sdgLine(Vector2 p, Vector2 d)
         {
             // 直线的SDF
             d.Normalize();

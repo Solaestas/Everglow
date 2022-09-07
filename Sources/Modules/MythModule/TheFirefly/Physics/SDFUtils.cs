@@ -85,8 +85,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
                 {
                     return new AABBCollider2D()
                     {
-                        Center = new Vector2(i * 16 + 8, j * 16 + 12),
-                        Size = new Vector2(8, 4)
+                        Center = new Vector2(i * 16 + 8, j * 16 + 8),
+                        Size = new Vector2(8, 8)
                     };
                 }
                 return null;

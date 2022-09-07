@@ -45,13 +45,13 @@ namespace Everglow.Sources.Modules.ExampleModule
 
                 List<Vector2> posList = new List<Vector2>();
                 Vector2 start = new Vector2(Main.spawnTileX * 16 - 200, Main.spawnTileY * 16 - 200);
-                int slices = 50;
+                int slices = 100;
                 float totalMass = 10f;
                 for (int i = 0; i < slices; i++)
                 {
                     posList.Add(start + new Vector2(400 / (float)slices, 0) * i);
                 }
-                Rope rope = new Rope(posList, 1, totalMass / slices, (x) => x, true);
+                Rope rope = new Rope(posList, 5, totalMass / slices, (x) => x, true);
                 m_ropeManager.LoadRope(rope);
             }
             m_ropeManager.Ropes[0].GetMassList[^1].Position = Main.LocalPlayer.Center;
