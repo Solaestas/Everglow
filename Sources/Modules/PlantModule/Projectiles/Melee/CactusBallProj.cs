@@ -23,7 +23,7 @@ namespace Everglow.Sources.Modules.PlantModule.Projectiles.Melee
 			Projectile.width = Projectile.height = 32;
 			Projectile.friendly = true;
 			Projectile.DamageType = DamageClass.Melee;
-			Projectile.penetrate = 60;
+			Projectile.penetrate = -1;
 			Projectile.usesLocalNPCImmunity = true;
 			Projectile.localNPCHitCooldown = 20;
 			Projectile.extraUpdates = 1;
@@ -101,7 +101,7 @@ namespace Everglow.Sources.Modules.PlantModule.Projectiles.Melee
 						}
 						return;
 					}
-					Projectile.penetrate = 5;
+					Projectile.penetrate = 15;
 				}
 			}
 			player.direction = Math.Sign(player.DirectionToSafe(Projectile.Center).X);
@@ -154,10 +154,9 @@ namespace Everglow.Sources.Modules.PlantModule.Projectiles.Melee
 		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
 		{
 			int size = target.width * target.height;
-
 			if (Projectile.ai[1] <= 10f) damage = (int)(damage / 5d * 0.45f * SpinAcc);
 			else damage = (int)(Projectile.damage * 0.45f * SpinAcc);
-			if (size > 1000)
+			if (size > 1000 && Projectile.ai[1] != 0)
 			{
 				Projectile.penetrate = 0;
 				Projectile.Kill();
