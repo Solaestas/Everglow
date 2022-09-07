@@ -1,6 +1,4 @@
-﻿using Everglow.Sources.Commons.Core.VFX.Interfaces;
-
-namespace Everglow.Sources.Commons.Core.VFX.Base;
+﻿namespace Everglow.Sources.Commons.Core.VFX.Visuals;
 
 /// <summary>
 /// 一个非抽象的Visual子类必须具有一个无参构造函数

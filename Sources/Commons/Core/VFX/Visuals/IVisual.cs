@@ -1,6 +1,6 @@
 ﻿using Everglow.Sources.Commons.Core.ModuleSystem;
 
-namespace Everglow.Sources.Commons.Core.VFX.Interfaces
+namespace Everglow.Sources.Commons.Core.VFX.Visuals
 {
     [ModuleDependency(typeof(VFXManager))]
     public interface IVisual : IModule

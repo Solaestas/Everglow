@@ -1,7 +1,7 @@
-﻿using Everglow.Sources.Commons.Core.VFX.Interfaces;
+﻿using Everglow.Sources.Commons.Core.VFX.Visuals;
 using ReLogic.Content;
 
-namespace Everglow.Sources.Commons.Core.VFX.Base
+namespace Everglow.Sources.Commons.Core.VFX.Pipelines
 {
     internal abstract class Pipeline : IPipeline
     {

@@ -1,6 +1,4 @@
-﻿using Everglow.Sources.Commons.Core.VFX.Interfaces;
-
-namespace Everglow.Sources.Commons.Core.VFX.Base;
+﻿namespace Everglow.Sources.Commons.Core.VFX.Visuals;
 
 internal abstract class VisualProjectile : ModProjectile, IVisual
 {

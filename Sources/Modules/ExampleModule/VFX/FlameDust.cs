@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Everglow.Sources.Commons.Core;
-using Everglow.Sources.Commons.Core.ModuleSystem;
+﻿using Everglow.Sources.Commons.Core;
 using Everglow.Sources.Commons.Core.VFX;
-using Everglow.Sources.Commons.Core.VFX.Base;
-using Everglow.Sources.Commons.Core.VFX.Interfaces;
 using Everglow.Sources.Commons.Core.VFX.Pipelines;
+using Everglow.Sources.Commons.Core.VFX.Visuals;
 using Everglow.Sources.Commons.Function.Vertex;
 using ReLogic.Content;
 
@@ -55,7 +48,7 @@ internal class CurseFlamePipeline : Pipeline
     }
 }
 [Pipeline(typeof(CurseFlamePipeline), typeof(RedPipeline), typeof(BloomPipeline))]
-internal class CurseFlameDust : ShaderDraw 
+internal class CurseFlameDust : ShaderDraw
 {
     private Vector2 vsadd = Vector2.Zero;
     public List<Vector2> oldPos = new List<Vector2>();
@@ -69,8 +62,8 @@ internal class CurseFlameDust : ShaderDraw
 
     public override void Update()
     {
-        this.position += this.velocity;
-        oldPos.Add(this.position);
+        position += velocity;
+        oldPos.Add(position);
         if (oldPos.Count > 15)
         {
             oldPos.RemoveAt(0);

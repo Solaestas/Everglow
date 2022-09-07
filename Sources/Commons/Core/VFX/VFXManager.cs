@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using Everglow.Sources.Commons.Core.ModuleSystem;
 using Everglow.Sources.Commons.Core.Profiler.Fody;
-using Everglow.Sources.Commons.Core.VFX.Base;
-using Everglow.Sources.Commons.Core.VFX.Interfaces;
+using Everglow.Sources.Commons.Core.VFX.Pipelines;
+using Everglow.Sources.Commons.Core.VFX.Visuals;
 using Everglow.Sources.Commons.Function.ObjectPool;
+using ReLogic.Content;
 
 namespace Everglow.Sources.Commons.Core.VFX;
 
@@ -222,6 +223,7 @@ public class VFXManager : IModule
     /// 名称
     /// </summary>
     public string Name => "VFXManager";
+    public static Asset<Effect> DefaultEffect => ModContent.Request<Effect>("Everglow/Sources/Commons/Core/VFX/Effect/Shader2D");
 
     /// <summary>
     /// 获得一种Pipeline的下标，若没有此Pipeline便创建此Pipeline

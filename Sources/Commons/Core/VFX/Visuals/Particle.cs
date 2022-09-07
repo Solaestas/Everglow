@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Commons.Core.VFX.Base;
+﻿namespace Everglow.Sources.Commons.Core.VFX.Visuals;
 
 public abstract class Particle : Visual
 {
