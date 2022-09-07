@@ -2,7 +2,7 @@
 using System.Text;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.FoodModule.DataStructures
+namespace Everglow.Sources.Modules.FoodModule.Utils
 {
     public class FoodDuration
     {
@@ -34,7 +34,7 @@ namespace Everglow.Sources.Modules.FoodModule.DataStructures
         {
             get
             {
-                return (((m_hours * 60 + m_minutes) * 60 + m_seconds) * 60) + m_frames;
+                return ((m_hours * 60 + m_minutes) * 60 + m_seconds) * 60 + m_frames;
             }
         }
 

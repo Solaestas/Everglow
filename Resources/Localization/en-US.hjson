@@ -2,6 +2,10 @@ Mods:
 {
 	Everglow:
 	{
+		NPCName:
+		{
+			Butterfly : Phantom Moth
+		}
 		Common:
 		{
 			Hour : "hour"
@@ -20,11 +24,11 @@ Mods:
 				'''
 			ClubGT : Spin to strike enemies
 			RapierGT : Right click and hold to charge an invincibility dash with high damage
-			NoAmmoConsum : Does not consum ammo
+			NoAmmoConsum : Does not consume ammo
 			Acytaea : Acytaea
-			ExcluWeapon : Exclusive weapon
-			MythWeapon : Mythical weapon
-			LegendWeapon : Legendary weapon
+			ExcluWeapon : Exclusive Weapon
+			MythWeapon : Mythical Weapon
+			LegendWeapon : Legendary Weapon
 
 			#世界系统WorldSystem
 			WorldSystem:
@@ -55,6 +59,7 @@ Mods:
 			FreezeFeatherMagic : Book of Ice Feather
 			GoldRoundYoyo : "Golden Round"
 			Hepuyuan : "Prinomial Jade Winged Spear"
+			VortexVanquisherItem : "Vortex Vanquisher"
 			SilveralGun : "Fox Hunter Fx01"
 			SilveralRifle : "Silver Shadow Ct01"
 			Sunflower : "Sunflower Disc"
@@ -183,6 +188,7 @@ Mods:
 			PhosphorescenceGun : Scale Shotgun
 			ScaleWingBlade : Lepidoptera Blade
 			ShadowWingBow : Occulting Wings
+			MothYoyo : Glow-yo
 			AmbiguousNight : Ambiguous Night
 			BlackWoodSlingshot : Ebonwood Slingshot
 			BlueGemSlingshot : Sapphire Slingshot
@@ -259,6 +265,11 @@ Mods:
 			SilverStabbingSword : Silver Rapier
 			VegetationBayonet : Rapier of Grass
 			TDMT : Catastrophic Lightning
+			CrystalSkull : Crystal Skull
+			#Glow Wood Furniture
+			
+			#Music Boxes
+			GlowWoodMusicBox : Glow Wood Music Box (The Firefly)
 
 			#食物系统物品
 			BloodGlucoseMonitor : "Blood Glucose Monitor"
@@ -278,7 +289,9 @@ Mods:
 			FireFeatherMagic : Shoots explosive feathers
 			FreezeFeatherMagic : Shoots ice-bound feathers
 			GoldRoundYoyo : "Leaves a track of homing golden rings"
-			Hepuyuan : "#{$Mods.Everglow.Common.ExcluWeapon}\nLeft click to dash, right click to smash\n'You should't be getting it'\nHomaging to Genshin Impact"
+			Hepuyuan : "{$Mods.Everglow.Common.ExcluWeapon}\nLeft click to dash, right click to smash\n'You should't be getting it'\nHomaging to Genshin Impact"
+			LilyHarp : "Music notes fly in a beautiful succession\nHold the attack button to make the notes follow the cursor\n[c/856Eb5:Developer Item, Belonging to Omnielement]"
+			VortexVanquisherItem : "[c/B4B16E:'This is Order']\nLeft click multiple times for different attacks\nThe last attack propels you to the cursor\nHold left click to dash and summon falling spears\nRight click summons a pillar and gives you a damage-reducing shield"
 			SilveralGun : "5% increased movement speed and damage after hitting enemies"
 			SilveralRifle : "5% increased movement speed and damage after hitting enemies"
 			Sunflower : "'A weapon made of sunflowers, has a color of hope'"
@@ -289,7 +302,7 @@ Mods:
 			BloodLightCyanFlame : "{$Mods.Everglow.Common.LegendWeapon}\nAlternately throws boomerblades of laser or cursed flame\n'They should be weapons of the Twins, fortunately you have saved the Mechanic'"
 			BlueRain : "{$Mods.Everglow.Common.LegendWeapon}\nRight click and hold to make a charged attack\n'Rain drops refused to be blend with sea water to maintain their purity, finally converged to this form in chaotic currents'"
 			ChaosCurrent : "{$Mods.Everglow.Common.LegendWeapon}\nLauches chaotic currents that disturb nerves\nIgnore immunity frames\n'Cause massive nerve injury!'"
-			DarknessFan : "{$Mods.Everglow.Common.LegendWeapon}{$Mods.Everglow.Common.WarWhipGT}Strike enemies with the fan and Phantom Butterflies(PBs), right click to throw out the fan\nThe fan itself inflicts Mark of PB(stackable), each level incraeses damage dealt by PBs by 10%\nMax stack increases with Sync level"
+			DarknessFan : "{$Mods.Everglow.Common.LegendWeapon}\n{$Mods.Everglow.Common.WarWhipGT}\nStrike enemies with the fan and Phantom Butterflies(PBs)\nRight click to throw out the fan\nThe fan itself inflicts Mark of PB(stackable), each level incraeses damage dealt by PBs by 10%\nMax stack increases with Sync level"
 			GelPowerGun : "{$Mods.Everglow.Common.LegendWeapon}\nUses gel for ammo\nShoots bouncy gelatin balls\nRelease small bouncy gelatin balls on the first three bounces\n'Bouncing bouncy, bounce the Destroyer away'"
 			LaserWhip : "{$Mods.Everglow.Common.LegendWeapon}{$Mods.Everglow.Common.WarWhipGT}Hitting enemies has a chance to generate Laser Worms as temporary summons and mark enemies\nMarked enemies take 50% more damage and 25% more crit damage\n'According to a legend some worms can align their lasers into a line'"
 			MachineFit : "{$Mods.Everglow.Common.LegendWeapon}\nA ruthless killing fist\nSplits into 5 homing missiles upon hitting enemies\n'Make good use of its hand, not head'"
@@ -361,8 +374,13 @@ Mods:
 				Summoms little black moths to fight for you
 				Deal 400% damage to nearby enemies while summoning
 				'''
+			MothYoyo : Moths will appear around this Yo-yo, allowing you to deal more damage
 			PhosphorescenceGun : Shoots out shots and blue scale bullets which deal 36% damage
-			ScaleWingBlade : TODO
+			ScaleWingBlade :
+				'''
+				Striking enemies with this blade or swinging this blade while near enemies will spawn moths that home in on said enemies
+				Right click to charge a more powerful swing and to spawn more moths on impact
+				'''
 			ShadowWingBow : 
 				'''
 				Hold to charge to  increase damage, capped at +200%, and additionally fires Blue Butterfly Arrows.
@@ -527,6 +545,10 @@ Mods:
 			SilverStabbingSword : "{$Mods.Everglow.Common.RapierGT}"
 			VegetationBayonet : "{$Mods.Everglow.Common.RapierGT}"
 			TDMT : "{$Mods.Everglow.Common.RapierGT}"
+			CrystalSkull : "Activates the new magic book system"
+			
+			#Music Boxes
+			GlowWoodMusicBox : "Plays 'Setnour6 - Within the Giant Cocoon (身陷巨茧)'"
 
 			#食物系统物品
 			BloodGlucoseMonitor : "Display hunger information"
@@ -551,8 +573,14 @@ Mods:
 			RedImmune : "Red Flame Immunity"
 			WhiteImmune : "White Flame Immunity"
 			YellowImmune : "Yellow Flame Immuniy"
+			
+			#Magic books buff
+			WaterBoltII : "Empowered Water Bolts"
+			
+			#Food system buff
+			FoodBuff : "You just finished eating"
 
-			#食物系统buff
+			#New buffs to the original food
 			AleBuff : "Tipsy"
 			AppleBuff : "Apple"
 			AppleJuiceBuff : Apple Juice
@@ -653,6 +681,9 @@ Mods:
 			WhiteImmune : "Spiritual Fiery Core's white flame cannot hurt you"
 			YellowImmune : "Spiritual Fiery Core's yellow flame cannot hurt you"
 
+			#Magic books buff
+			WaterBoltII : "Your Water Bolts are more powerful"
+			
 			#食物系统buff
 			FoodBuff : "Food Buff"
 
@@ -739,10 +770,29 @@ Mods:
 		}
 		Config:
 		{
+			Header:
+			{
+				TextureReplace : "Texture Configurations"
+				AudioReplace : "Audio Configurations"
+			}
 			TextureReplace:
 			{
-				Label: "Texture-replacing mode"
-				Tooltip: "Choose your preferred texture group to replace"
+				Label : "Texture-replacing mode"
+				Tooltip : "Choose your preferred texture group to replace\nOptions: Terraria, Eternal Resolve, Myth"
+			}
+			ItemPickSoundReplace:
+			{
+				Label : "New pickup and inventory sounds"
+			}
+			MothAudioReplace:
+			{
+				Label : "Corrupted Moth's Theme Song"
+				Tooltip : "Choose your preferred Corrupted Moth theme music to replace\nOptions: Original Theme, Alternate Theme, Old Theme\nThis setting won't take effect if the Corrupted Moth is currently alive"
+			}
+			TuskAudioReplace:
+			{
+				Label : "(NOT IMPLEMENTED) The Tusk's Theme Song"
+				Tooltip : "Choose your preferred Bloody Tusk theme music to replace\nOptions: Original Theme, Old Theme\nThis setting won't take effect if The Tusk is currently alive\nNOTE: This config is not fully set up yet and therefore does not work at the moment"
 			}
 		}
 		InfoDisplay:
