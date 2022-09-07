@@ -266,6 +266,10 @@ Mods:
 			VegetationBayonet : Rapier of Grass
 			TDMT : Catastrophic Lightning
 			CrystalSkull : Crystal Skull
+
+			#流萤系列物品
+			GlowBeadGun : "Glowing Railgun"
+
 			#Glow Wood Furniture
 			
 			#Music Boxes
@@ -545,7 +549,20 @@ Mods:
 			SilverStabbingSword : "{$Mods.Everglow.Common.RapierGT}"
 			VegetationBayonet : "{$Mods.Everglow.Common.RapierGT}"
 			TDMT : "{$Mods.Everglow.Common.RapierGT}"
-			CrystalSkull : "Activates the new magic book system"
+			CrystalSkull : 
+				'''
+				Unleashes the true power of vanilla and Everglow magic books
+				As the fruit of wisdom of the Wizards, most of the runes that were written on magic tomes are complex and unreadable.
+				However, when you use this crystal skull which was designed by the Witch-king and imbued with the power of true sight,
+				even the most ignorat apprentice can easily understand the wisdom of ancient wizards.
+				'''
+
+			#流萤系列物品
+			GlowBeadGun : 
+				'''
+				Hold attack to charge
+				Shoots a series of explosive glowing beads
+				'''
 			
 			#Music Boxes
 			GlowWoodMusicBox : "Plays 'Setnour6 - Within the Giant Cocoon (身陷巨茧)'"
@@ -767,6 +784,10 @@ Mods:
 			SugarCookieBuff : "5% increased ranged damage\n'Nourishing'"
 			TeacupBuff : "Greatly increased mana regen, magic damage and magic crit chance\n'Fragrant'"
 			TropicalSmoothieBuff : "Greatly increased magic damage and magic crit chance, your mana cost is reduced to 1\n'Tropical storm'"
+		}
+		MapEntry :
+		{
+			FireflyTree : "Firefly Tree"
 		}
 		Config:
 		{

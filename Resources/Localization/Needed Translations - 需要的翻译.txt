@@ -8,6 +8,6 @@ DustOfCorrupt Item Name & Tooltip
 EvilChrysalis Tooltip
 ScaleWingBlade Item Name & Tooltip
 ShadowWingBow Item Name & Tooltip
+GlowBeadGun Item Name & Tooltip
 
 *All*:
-GlowBeadGun Item Name & Tooltip
