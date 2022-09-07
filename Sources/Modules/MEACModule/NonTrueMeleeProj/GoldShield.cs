@@ -74,11 +74,11 @@ namespace Everglow.Sources.Modules.MEACModule.NonTrueMeleeProj
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
         }
 
-        public void DrawPost(Color color, int Width, float Height,float StarPos, Texture2D tex)
+        public void DrawPost(Color color, int Width, float Height, float StarPos, Texture2D tex)
         {
             List<Vertex2D> vertex2Ds = new List<Vertex2D>();
             Vector2 DrawCen = Main.player[Projectile.owner].Center - Main.screenPosition - new Vector2(Main.screenWidth / 2f, Main.screenHeight / 2f);
-            if(DrawCen.Length() < 5f)
+            if (DrawCen.Length() < 5f)
             {
                 DrawCen = new Vector2(Main.screenWidth / 2f, Main.screenHeight / 2f);
             }
@@ -93,18 +93,31 @@ namespace Everglow.Sources.Modules.MEACModule.NonTrueMeleeProj
             {
                 float y = (float)Math.Sqrt(R * R - x * x);
                 float newy = (float)Math.Sqrt(R * R - (x + 1) * (x + 1));
+
+                float r1 = (float)(Math.Acos(Math.Clamp(x / R, -1, 1)) / Math.PI);
+                float r2 = (float)(Math.Acos(Math.Clamp((x + 1) / R, -1, 1)) / Math.PI);
+
                 float deltaY = newy - y;
                 float length = (float)Math.Sqrt(deltaY * deltaY + 1);
-                if(length < 1.02f)
-                {
-                    vertex2Ds.Add(new Vertex2D(DrawCen + new Vector2(x - 0.5f, Height), color, new Vector3(SPos, 1, 0)));
-                    vertex2Ds.Add(new Vertex2D(DrawCen + new Vector2(x + 0.5f, Height), color, new Vector3(SPos + length, 1, 0)));
-                    vertex2Ds.Add(new Vertex2D(DrawCen + new Vector2(x + 0.5f, -Height), color, new Vector3(SPos + length, 0, 0)));
 
-                    vertex2Ds.Add(new Vertex2D(DrawCen + new Vector2(x + 0.5f, -Height), color, new Vector3(SPos + length, 0, 0)));
-                    vertex2Ds.Add(new Vertex2D(DrawCen + new Vector2(x - 0.5f, Height), color, new Vector3(SPos, 1, 0)));
-                    vertex2Ds.Add(new Vertex2D(DrawCen + new Vector2(x - 0.5f, -Height), color, new Vector3(SPos, 0, 0)));
-                }
+                //vertex2Ds.Add(new Vertex2D(DrawCen + new Vector2(x - 0.5f, Height), color, new Vector3(SPos, 1, 0)));
+                //vertex2Ds.Add(new Vertex2D(DrawCen + new Vector2(x + 0.5f, Height), color, new Vector3(SPos + length, 1, 0)));
+                //vertex2Ds.Add(new Vertex2D(DrawCen + new Vector2(x + 0.5f, -Height), color, new Vector3(SPos + length, 0, 0)));
+
+                //vertex2Ds.Add(new Vertex2D(DrawCen + new Vector2(x + 0.5f, -Height), color, new Vector3(SPos + length, 0, 0)));
+                //vertex2Ds.Add(new Vertex2D(DrawCen + new Vector2(x - 0.5f, Height), color, new Vector3(SPos, 1, 0)));
+                //vertex2Ds.Add(new Vertex2D(DrawCen + new Vector2(x - 0.5f, -Height), color, new Vector3(SPos, 0, 0)));
+
+                const float scale = 0.25f;
+
+                vertex2Ds.Add(new Vertex2D(DrawCen + new Vector2(x * scale - 0.5f, Height), color, new Vector3(r1, 1, 0)));
+                vertex2Ds.Add(new Vertex2D(DrawCen + new Vector2(x * scale + 0.5f, Height), color, new Vector3(r2, 1, 0)));
+                vertex2Ds.Add(new Vertex2D(DrawCen + new Vector2(x * scale + 0.5f, -Height), color, new Vector3(r2, 0, 0)));
+
+                vertex2Ds.Add(new Vertex2D(DrawCen + new Vector2(x * scale + 0.5f, -Height), color, new Vector3(r2, 0, 0)));
+                vertex2Ds.Add(new Vertex2D(DrawCen + new Vector2(x * scale - 0.5f, Height), color, new Vector3(r1, 1, 0)));
+                vertex2Ds.Add(new Vertex2D(DrawCen + new Vector2(x * scale - 0.5f, -Height), color, new Vector3(r1, 0, 0)));
+
 
                 SPos += length;
             }
