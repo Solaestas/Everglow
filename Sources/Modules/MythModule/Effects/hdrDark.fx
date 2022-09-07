@@ -32,9 +32,9 @@ float4 PixelShaderFunction(float3 coords : TEXCOORD0) : COLOR0
 {
 	float4 BackG = tex2D(uImage0, coords);
 	BackG.a = max(max(BackG.r, BackG.g),BackG.b);
-	BackG.r = 0;
-	BackG.g = 0;
-	BackG.b = 0;
+	BackG.r = 1;
+	BackG.g = 1;
+	BackG.b = 1;
 
 	return BackG;
 }

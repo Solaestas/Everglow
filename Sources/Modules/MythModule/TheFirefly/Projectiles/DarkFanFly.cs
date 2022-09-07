@@ -18,6 +18,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Projectile.extraUpdates = 1;
             Projectile.tileCollide = true;
             Projectile.DamageType = DamageClass.Summon;
+            Projectile.scale = 1.5f;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 30;
         }
@@ -138,7 +139,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             if (Projectile.timeLeft < 60)
             {
                 width = Projectile.timeLeft / 5f;
-                Projectile.scale = Projectile.timeLeft / 60f;
+                Projectile.scale = Projectile.timeLeft / 40f;
             }
             int TrueL = 0;
             for (int i = 1; i < Projectile.oldPos.Length; ++i)

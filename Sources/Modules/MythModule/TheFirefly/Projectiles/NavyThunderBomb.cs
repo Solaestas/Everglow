@@ -1,4 +1,4 @@
-﻿using Everglow.Sources.Modules.MythModule.TheFirefly;
+﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Terraria.Audio;
 using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MythModule.Common;
@@ -8,7 +8,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
     public class NavyThunderBomb : ModProjectile, IWarpProjectile
     {
-        private float r = 0;
+        private float r = 20;
         private Vector2 v0;
         private int Fra = 0;
         private int FraX = 0;
@@ -25,7 +25,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         {
             Projectile.width = 32;
             Projectile.height = 32;
-            Projectile.friendly = true;
+            Projectile.friendly = false;
             Projectile.hostile = false;
             Projectile.aiStyle = -1;
             Projectile.penetrate = -1;
@@ -41,7 +41,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             {
                 Stre2 -= 0.005f;
             }
-            if (Projectile.timeLeft > 240)
+            if (Projectile.timeLeft > 260)
             {
                 r += 1f;
             }
@@ -60,6 +60,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             {
                 // Projectile.position = v0 - new Vector2(Dx, Dy) / 2f;
             }
+            if(Projectile.timeLeft < 10)
+            {
+                Projectile.friendly = true;
+            }
         }
         public override void Kill(int timeLeft)
         {
@@ -69,7 +73,44 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             float Str = 1;
 
             mplayer.ShakeStrength = Str;*/
-            SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, Projectile.Center);
+            SoundEngine.PlaySound(SoundID.Item38, Projectile.Center);
+            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BombShakeWave>(), 0, 0, Projectile.owner, 0.4f, 2f);
+            float k1 = Math.Clamp(Projectile.velocity.Length(), 1, 3);
+            float k2 = Math.Clamp(Projectile.velocity.Length(), 6, 10);
+            float k0 = 1f / (Projectile.ai[0] + 2) * 2 * k2;
+            for (int j = 0; j < 8 * k0; j++)
+            {
+                Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * Projectile.scale * k1;
+                int dust0 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<BlueGlowAppearStoppedByTile>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(0.6f, 1.8f) * Projectile.scale * 0.4f * k0);
+                Main.dust[dust0].noGravity = true;
+            }
+            for (int j = 0; j < 16 * k0; j++)
+            {
+                Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * Projectile.scale * k1;
+                int dust1 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<BlueParticleDark2StoppedByTile>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(3.7f, 5.1f) * k0);
+                Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 50 / k0);
+                Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
+            }
+            for (int j = 0; j < 16 * k0; j++)
+            {
+                Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * Projectile.scale * k1;
+                int dust1 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<MothSmog>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(3.7f, 5.1f) * k0);
+                Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 50 / k0);
+                Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
+            }
+            foreach (NPC target in Main.npc)
+            {
+                float Dis = (target.Center - Projectile.Center).Length();
+
+                if (Dis < 150)
+                {
+                    if (!target.dontTakeDamage && !target.friendly && target.active)
+                    {
+                        target.StrikeNPC(Projectile.damage, 2f, 1);
+                    }
+                }
+            }
+
             for (int h = 0; h < 120; h += 3)
             {
                 Vector2 v3 = new Vector2(0, (float)Math.Sin(h * Math.PI / 4d + Projectile.ai[0]) + 5).RotatedBy(h * Math.PI / 10d) * Main.rand.NextFloat(0.2f, 1.1f);
@@ -146,6 +187,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         public override bool PreDraw(ref Color lightColor)
         {
 
+
+
             Texture2D Water = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/ElecLine");
             Texture2D WaterS = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLineBlackShade");
             float value0 = (float)(Math.Sin(800d / (double)(Projectile.timeLeft + 35)) * 0.75f + 0.25f) * (300 - Projectile.timeLeft) / 300f;
@@ -155,9 +198,17 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             DrawTexCircle(132, 32, new Color(0, 0.45f * value0, 1f * value0, 0), Projectile.Center - Main.screenPosition, Water, Main.time / 17);
             DrawTexCircle(122, 42, new Color(0, 0.15f * value0, 0.33f * value0, 0), Projectile.Center - Main.screenPosition, Water, -Main.time / 17);
 
+            Texture2D Dark = Common.MythContent.QuickTexture("TheFirefly/Projectiles/BlueFlameDark");
+            Main.spriteBatch.Draw(Dark, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 1f), Projectile.rotation, new Vector2(68f, 68f), r / 60f, SpriteEffects.None, 0f);
             Main.spriteBatch.Draw(ModContent.Request<Texture2D>(Texture).Value, Projectile.Center - Main.screenPosition, new Rectangle(FraX, FraY + 10, 270, 270), new Color(1f, 1f, 1f, 0), Projectile.rotation, new Vector2(135f, 135f), r / 420f, SpriteEffects.None, 0f);
             Texture2D Light = Common.MythContent.QuickTexture("TheFirefly/Projectiles/CorruptLight");
             Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(Stre2, Stre2, Stre2, 0), Projectile.rotation, new Vector2(168f, 168f), Projectile.scale * r / 210f, SpriteEffects.None, 0);
+            if(Projectile.timeLeft <= 60)
+            {
+                float k3 = (60 - Projectile.timeLeft) / 40f;
+                k3 *= k3;
+                Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(Stre2, 1f, 1f, 0), Projectile.rotation, new Vector2(168f, 168f), k3, SpriteEffects.None, 0);
+            }
             return false;
         }
         public void DrawWarp()

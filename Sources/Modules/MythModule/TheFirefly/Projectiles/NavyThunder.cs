@@ -43,7 +43,17 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 }
                 else
                 {
-                    Projectile.Kill();
+                    if(Projectile.timeLeft > 21)
+                    {
+                        Projectile.timeLeft = 20;
+                    }
+                    for (int j = 0; j < 16; j++)
+                    {
+                        Vector2 v1 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * Projectile.scale;
+                        int dust1 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<MothSmog>(), v1.X, v1.Y, 100, default(Color), Main.rand.NextFloat(3.7f, 5.1f) * 0.13f);
+                        Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 0.3);
+                        Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
+                    }
                 }
             }
             if(Main.player[Projectile.owner].itemTime == 2)
