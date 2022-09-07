@@ -30,6 +30,14 @@ namespace Everglow.Sources.Modules.ExampleModule
         }
         public override void PreUpdatePlayers()
         {
+            if (Main.mouseRight && Main.mouseRightRelease)
+            {
+                var tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
+                Main.NewText(tile.HasTile);
+            }
+
+            var sdf = SDFUtils.CalculateTileSDF(Main.LocalPlayer.position + Main.LocalPlayer.Size);
+
             // m_ropeManager = null;
             if (m_ropeManager == null)
             {
@@ -37,13 +45,13 @@ namespace Everglow.Sources.Modules.ExampleModule
 
                 List<Vector2> posList = new List<Vector2>();
                 Vector2 start = new Vector2(Main.spawnTileX * 16 - 200, Main.spawnTileY * 16 - 200);
-                int slices = 60;
+                int slices = 50;
                 float totalMass = 10f;
                 for (int i = 0; i < slices; i++)
                 {
                     posList.Add(start + new Vector2(400 / (float)slices, 0) * i);
                 }
-                Rope rope = new Rope(posList, 3, totalMass / slices, (x) => x, true);
+                Rope rope = new Rope(posList, 1, totalMass / slices, (x) => x, true);
                 m_ropeManager.LoadRope(rope);
             }
             m_ropeManager.Ropes[0].GetMassList[^1].Position = Main.LocalPlayer.Center;
@@ -58,7 +66,7 @@ namespace Everglow.Sources.Modules.ExampleModule
             {
                 force.Y = 0;
             }
-            Main.LocalPlayer.velocity += force * 0.01f;
+            //Main.LocalPlayer.velocity += force * 0.01f;
         }
         public override void PostUpdateEverything()
         {
@@ -185,7 +193,7 @@ namespace Everglow.Sources.Modules.ExampleModule
             foreach (var rope in m_ropeManager.Ropes)
             {
                 List<Vector2> massPositionsSmooth = Commons.Function.Curves.CatmullRom.SmoothPath(rope.GetMassList.Select(m => rope.RenderingTransform(m.Position)), null);
-                DrawRope(rope.GetMassList.Select(m => rope.RenderingTransform(m.Position)).ToList(), vertices, indices);
+                DrawRope(massPositionsSmooth, vertices, indices);
             }
 
             var model = Matrix.CreateTranslation(-Main.screenPosition.X, -Main.screenPosition.Y, 0);
@@ -211,7 +219,7 @@ namespace Everglow.Sources.Modules.ExampleModule
                 foreach (var m in rope.GetMassList)
                 {
                     spriteBatch.Draw(TextureAssets.MagicPixel.Value, m.Position - Main.screenPosition, new Rectangle(0, 0, 8, 8),
-                        Color.Green, 0, Vector2.One * 4f, 1f, SpriteEffects.None, 0f);
+                        Color.Green, 0, Vector2.One * 4f, 0.5f, SpriteEffects.None, 0f);
                 }
                 //foreach (var p in massPositionsSmooth)
                 //{

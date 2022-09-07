@@ -78,80 +78,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
             }
         }
 
-        private Vector3 sdgBox(in Vector2 p, in Vector2 b)
-        {
-            Vector2 w = new Vector2(Math.Abs(p.X), Math.Abs(p.Y)) - b;
-            Vector2 s = new Vector2(p.X < 0.0 ? -1 : 1, p.Y < 0.0 ? -1 : 1);
-            float g = Math.Max(w.X, w.Y);
-            Vector2 q = new Vector2(Math.Max(w.X, 0.0f), Math.Max(w.Y, 0.0f));
-            float l = q.Length();
-            var v = s * ((g > 0.0) ? (q / l) : ((w.X > w.Y) ? new Vector2(1, 0) : new Vector2(0, 1)));
-            return new Vector3((g > 0.0) ? l : g, v.X, v.Y);
-        }
-
-        private Vector3 CalculateSDF(Vector2 pos)
-        {
-            int tileX = (int)Math.Floor(pos.X / 16);
-            int tileY = (int)Math.Floor(pos.Y / 16);
-            var posWS = new Vector2(pos.X, pos.Y);
-
-            if (tileX < 0 || tileX >= Main.maxTilesX || tileY < 0 || tileY >= Main.maxTilesY)
-            {
-                return new Vector3(16, 0, 0);
-            }
-
-            bool inner = false;
-            if (Main.tile[tileX, tileY].HasTile)
-            {
-                var tile = Main.tile[tileX, tileY];
-                if (Main.tileSolid[tile.TileType] && !Main.tileSolidTop[tile.TileType])
-                {
-                    inner = true;
-                }
-            }
-
-            Vector3 solidSDF = new Vector3(16, 0, 0);
-            Vector3 airSDF = new Vector3(16, 0, 0);
-            for (int i = -1; i <= 1; i++)
-            {
-                for (int j = -1; j <= 1; j++)
-                {
-                    if (tileX + j < 0 || tileX + j >= Main.maxTilesX || tileY + i < 0 || tileY + i >= Main.maxTilesY)
-                    {
-                        continue;
-                    }
-                    var tile = Main.tile[tileX + j, tileY + i];
-
-                    var center = new Vector2(tileX + j, tileY + i) * 16 + Vector2.One * 8;
-                    var sdf = sdgBox(posWS - center, Vector2.One * 8);
-
-                    // Is solid block
-                    if (tile.HasTile && Main.tileSolid[tile.TileType])
-                    {
-                        if (sdf.X < solidSDF.X)
-                        {
-                            solidSDF = sdf;
-                        }
-                    }
-                    else
-                    {
-                        if (sdf.X < airSDF.X)
-                        {
-                            airSDF = sdf;
-                        }
-                    }
-                }
-            }
-
-            if (inner)
-            {
-                return new Vector3(-airSDF.X, airSDF.Y, airSDF.Z);
-            }
-            else
-            {
-                return solidSDF;
-            }
-        }
 
 
         public Rope Clone(Vector2 deltaPosition)
@@ -208,11 +134,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
         private void CheckCollision(int i)
         {
             ref _Mass m = ref m_masses[i];
-            Vector3 sdf = CalculateSDF(m.Position);
+            Vector3 sdf = SDFUtils.CalculateTileSDF(m.Position);
             float EPS = 1e-2f;
             if (sdf.X < EPS)
             {
-                m.Position -= (EPS - sdf.X) * new Vector2(sdf.Y, sdf.Z);
+                m.Position -= 1f * (EPS - sdf.X) * new Vector2(sdf.Y, sdf.Z);
             }
         }
 
@@ -232,11 +158,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
 
         public void ClearForce()
         {
-            for (int i = 0; i < m_masses.Length; i++)
-            {
-                ref _Mass m = ref m_masses[i];
-                m.Force = Vector2.Zero;
-            }
+            //for (int i = 0; i < m_masses.Length; i++)
+            //{
+            //    ref _Mass m = ref m_masses[i];
+
+            //}
         }
 
         public void Update(float deltaTime)
@@ -291,6 +217,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
             for (int i = 0; i < m_masses.Length; i++)
             {
                 ref _Mass m = ref m_masses[i];
+                m.Force = Vector2.Zero;
                 if (m.IsStatic)
                 {
                     continue;
