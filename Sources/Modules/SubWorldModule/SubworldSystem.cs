@@ -48,7 +48,7 @@ namespace Everglow.Sources.Modules.SubWorldModule
         {
             return (current?.Mod) == ModContent.GetInstance<T>();
         }
-        public static string CurrentPath => current.SpecailPath ?? Path.Combine(Main.WorldPath, "Subworlds", Path.GetFileNameWithoutExtension(main.Path), current.Mod.Name + "_" + current.Name + ".wld");
+        public static string CurrentPath => Path.Combine(Main.WorldPath, "Subworlds", Path.GetFileNameWithoutExtension(main.Path), current.Mod.Name + "_" + current.Name + ".wld");
         private static void BeginEntering(int index)
         {
             if (Main.netMode == NetmodeID.SinglePlayer)
@@ -64,7 +64,10 @@ namespace Everglow.Sources.Modules.SubWorldModule
             {
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                 {
-                    new SubworldPacket(0, (ushort)index);
+                    new SubworldPacket()
+                        .Write(0)
+                        .Write((ushort)index)
+                        .Send();
                     //ModPacket packet = Everglow.Instance.GetPacket(256);
                     //packet.Write(0);
                     //packet.Write((ushort)index);
@@ -115,11 +118,12 @@ namespace Everglow.Sources.Modules.SubWorldModule
                 {
                     if (Main.netMode == NetmodeID.MultiplayerClient)
                     {
-                        new SubworldPacket(1, 0);
+                        new SubworldPacket()
+                            .Write(1)
+                            .Send();
                         //ModPacket packet = Everglow.Instance.GetPacket(256);
                         //packet.Write(1);
                         //packet.Send(-1, -1);
-                        Main.LocalPlayer.TryGetModPlayer(ModContent.Find<ModPlayer>(""), out ModPlayer modPlayer);
                     }
                 }
             }
@@ -627,7 +631,7 @@ namespace Everglow.Sources.Modules.SubWorldModule
         public static bool noReturn;
         public static bool hideUnderworld;
         private static ConstructorInfo _tileMapConstructor;
-        private static ConstructorInfo TileMapConstructor
+        internal static ConstructorInfo TileMapConstructor
         {
             get
             {

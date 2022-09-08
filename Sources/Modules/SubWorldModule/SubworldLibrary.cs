@@ -10,7 +10,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Terraria.Audio;
-using Terraria.IO;
 using Terraria.Localization;
 using Terraria.Net;
 using Terraria.Net.Sockets;
@@ -47,8 +46,8 @@ namespace Everglow.Sources.Modules.SubWorldModule
                 IL.Terraria.Main.DedServ_PostModLoad += delegate (ILContext il)
                 {
                     ConstructorInfo constructor = typeof(GameTime).GetConstructor(Type.EmptyTypes);
-                    MethodInfo method = typeof(Main).GetMethod("Update", BindingFlags.Instance | BindingFlags.NonPublic);
-                    FieldInfo field = typeof(Main).GetField("saveTime", BindingFlags.Static | BindingFlags.NonPublic);
+                    MethodInfo method = typeof(Terraria.Main).GetMethod("Update", BindingFlags.Instance | BindingFlags.NonPublic);
+                    FieldInfo field = typeof(Terraria.Main).GetField("saveTime", BindingFlags.Static | BindingFlags.NonPublic);
                     ILCursor cursor = new(il);
                     if (cursor.TryGotoNext(MoveType.After, i => i.MatchStindI1()))
                     {
@@ -63,7 +62,7 @@ namespace Everglow.Sources.Modules.SubWorldModule
                         cursor.Emit(OpCodes.Ldloc_1);
                         cursor.Emit(OpCodes.Callvirt, typeof(Stopwatch).GetMethod("Start"));
                         cursor.Emit(OpCodes.Ldc_I4_0);
-                        cursor.Emit(OpCodes.Stsfld, typeof(Main).GetField("gameMenu"));
+                        cursor.Emit(OpCodes.Stsfld, typeof(Terraria.Main).GetField("gameMenu"));
                         cursor.Emit(OpCodes.Ldc_R8, 16.666666666666668);
                         cursor.Emit(OpCodes.Stloc_2);
                         cursor.Emit(OpCodes.Ldloc_2);
@@ -127,9 +126,9 @@ namespace Everglow.Sources.Modules.SubWorldModule
                 IL.Terraria.Main.DoDraw += delegate (ILContext il)
                 {
                     ILCursor cursor = new(il);
-                    if (cursor.TryGotoNext(MoveType.After, i => i.MatchStsfld(typeof(Main), nameof(Main.HoverItem))))
+                    if (cursor.TryGotoNext(MoveType.After, i => i.MatchStsfld(typeof(Terraria.Main), nameof(Main.HoverItem))))
                     {
-                        cursor.Emit(OpCodes.Ldsfld, typeof(Main).GetField(nameof(Main.gameMenu)));
+                        cursor.Emit(OpCodes.Ldsfld, typeof(Terraria.Main).GetField(nameof(Main.gameMenu)));
                         ILLabel label1 = cursor.DefineLabel();
                         cursor.Emit(OpCodes.Brfalse, label1);
                         cursor.Emit(OpCodes.Ldsfld, current);
@@ -146,13 +145,13 @@ namespace Everglow.Sources.Modules.SubWorldModule
                         cursor.Emit(OpCodes.Ldc_R4, 1f);
                         cursor.Emit(OpCodes.Dup);
                         cursor.Emit(OpCodes.Dup);
-                        cursor.Emit(OpCodes.Stsfld, typeof(Main).GetField("_uiScaleWanted", BindingFlags.Static | BindingFlags.NonPublic));
-                        cursor.Emit(OpCodes.Stsfld, typeof(Main).GetField("_uiScaleUsed", BindingFlags.Static | BindingFlags.NonPublic));
+                        cursor.Emit(OpCodes.Stsfld, typeof(Terraria.Main).GetField("_uiScaleWanted", BindingFlags.Static | BindingFlags.NonPublic));
+                        cursor.Emit(OpCodes.Stsfld, typeof(Terraria.Main).GetField("_uiScaleUsed", BindingFlags.Static | BindingFlags.NonPublic));
                         cursor.Emit(OpCodes.Call, typeof(Matrix).GetMethod(nameof(Matrix.CreateScale), new Type[]
                         {
                             typeof(float)
                         }));
-                        cursor.Emit(OpCodes.Stsfld, typeof(Main).GetField("_uiScaleMatrix", BindingFlags.Static | BindingFlags.NonPublic));
+                        cursor.Emit(OpCodes.Stsfld, typeof(Terraria.Main).GetField("_uiScaleMatrix", BindingFlags.Static | BindingFlags.NonPublic));
                         cursor.Emit(OpCodes.Ldarg_0);
                         cursor.Emit(OpCodes.Callvirt, typeof(Subworld).GetMethod(nameof(Subworld.DrawSetup)));
                         cursor.Emit(OpCodes.Ret);
@@ -190,7 +189,7 @@ namespace Everglow.Sources.Modules.SubWorldModule
                 IL.Terraria.IngameOptions.Draw += delegate (ILContext il)
                 {
                     ILCursor cursor = new(il);
-                    if (cursor.TryGotoNext(i => i.MatchLdsfld(typeof(Lang), "inter"), i => i.MatchLdcI4(35)))
+                    if (cursor.TryGotoNext(i => i.MatchLdsfld(typeof(Terraria.Lang), "inter"), i => i.MatchLdcI4(35)))
                     {
                         cursor.Emit(OpCodes.Ldsfld, current);
                         ILLabel label1 = cursor.DefineLabel();
@@ -206,7 +205,7 @@ namespace Everglow.Sources.Modules.SubWorldModule
                         if (cursor.TryGotoNext(MoveType.After, i => i.MatchCallvirt(typeof(LocalizedText), "get_Value")))
                         {
                             cursor.MarkLabel(label2);
-                            if (cursor.TryGotoNext(i => i.MatchLdnull(), i => i.MatchCall(typeof(WorldGen), nameof(WorldGen.SaveAndQuit))))
+                            if (cursor.TryGotoNext(i => i.MatchLdnull(), i => i.MatchCall(typeof(Terraria.WorldGen), nameof(WorldGen.SaveAndQuit))))
                             {
                                 cursor.Emit(OpCodes.Ldsfld, current);
                                 label1 = cursor.DefineLabel();
@@ -215,7 +214,7 @@ namespace Everglow.Sources.Modules.SubWorldModule
                                 label2 = cursor.DefineLabel();
                                 cursor.Emit(OpCodes.Br, label2);
                                 cursor.MarkLabel(label1);
-                                if (cursor.TryGotoNext(MoveType.After, i => i.MatchCall(typeof(WorldGen), nameof(WorldGen.SaveAndQuit))))
+                                if (cursor.TryGotoNext(MoveType.After, i => i.MatchCall(typeof(Terraria.WorldGen), nameof(WorldGen.SaveAndQuit))))
                                 {
                                     cursor.MarkLabel(label2);
                                     if (cursor.TryGotoPrev(MoveType.AfterLabel, i => i.MatchLdloc(23), i => i.MatchLdcI4(1), i => i.MatchAdd(), i => i.MatchStloc(23)))
@@ -242,11 +241,11 @@ namespace Everglow.Sources.Modules.SubWorldModule
                         cursor.Emit(OpCodes.Ldarg_2);
                         cursor.Emit(OpCodes.Ldloca, 1);
                         cursor.Emit(OpCodes.Ldarg_3);
-                        cursor.Emit(OpCodes.Callvirt, typeof(Subworld).GetMethod(nameof(Subworld.GetLight)));
+                        cursor.Emit(OpCodes.Callvirt, typeof(Subworld).GetMethod("GetLight"));
                         cursor.Emit(OpCodes.Brfalse, label1);
                         cursor.Emit(OpCodes.Ret);
                         cursor.MarkLabel(label1);
-                        if (cursor.TryGotoNext(MoveType.AfterLabel, i => i.MatchLdarg(2), i => i.MatchCall(typeof(Main), "get_UnderworldLayer")))
+                        if (cursor.TryGotoNext(MoveType.AfterLabel, i => i.MatchLdarg(2), i => i.MatchCall(typeof(Terraria.Main), "get_UnderworldLayer")))
                         {
                             cursor.Emit(OpCodes.Ldsfld, hideUnderworld);
                             ILLabel label2 = cursor.DefineLabel();
@@ -303,14 +302,66 @@ namespace Everglow.Sources.Modules.SubWorldModule
             //        cursor.Emit(OpCodes.Call, typeof(SubworldSystem).GetMethod(nameof(SubworldSystem.GenerateSubworlds), BindingFlags.Static | BindingFlags.NonPublic));
             //    }
             //};
-            On.Terraria.WorldGen.GenerateWorld += WorldGen_GenerateWorld;
+            On.Terraria.WorldGen.GenerateWorld += delegate (On.Terraria.WorldGen.orig_GenerateWorld orig, int seed, GenerationProgress progress)
+            {
+                orig(seed, progress);
+                SubworldSystem.GenerateSubworlds();
+            };
             //IL.Terraria.Main.EraseWorld += delegate (ILContext il)
             //{
             //    ILCursor cursor = new(il);
             //    cursor.Emit(OpCodes.Ldarg_0);
             //    cursor.Emit(OpCodes.Call, typeof(SubworldSystem).GetMethod(nameof(SubworldSystem.EraseSubworlds), BindingFlags.Static | BindingFlags.NonPublic));
             //};
-            On.Terraria.Main.EraseWorld += Main_EraseWorld;
+            On.Terraria.Main.EraseWorld += delegate (On.Terraria.Main.orig_EraseWorld orig, int i)
+            {
+                try
+                {
+                    if (!Main.WorldList[i].IsCloudSave)
+                    {
+                        if (OperatingSystem.IsWindows())
+                        {
+                            FileOperationAPIWrapper.MoveToRecycleBin(Main.WorldList[i].Path);
+                            FileOperationAPIWrapper.MoveToRecycleBin(Main.WorldList[i].Path + ".bak");
+                            for (int j = 2; j <= 9; j++)
+                            {
+                                FileOperationAPIWrapper.MoveToRecycleBin(Main.WorldList[i].Path + ".bak" + j.ToString());
+                            }
+                        }
+                        else
+                        {
+                            File.Delete(Main.WorldList[i].Path);
+                            File.Delete(Main.WorldList[i].Path + ".bak");
+                        }
+                    }
+                    else if (SocialAPI.Cloud != null)
+                    {
+                        SocialAPI.Cloud.Delete(Main.WorldList[i].Path);
+                    }
+                    string path = Path.ChangeExtension(Main.WorldList[i].Path, ".twld");
+                    if (Main.WorldList[i].IsCloudSave)
+                    {
+                        if (SocialAPI.Cloud != null)
+                        {
+                            SocialAPI.Cloud.Delete(path);
+                        }
+                        return;
+                    }
+                    if (OperatingSystem.IsWindows())
+                    {
+                        FileOperationAPIWrapper.MoveToRecycleBin(path);
+                        FileOperationAPIWrapper.MoveToRecycleBin(path + ".bak");
+                        return;
+                    }
+                    File.Delete(path);
+                    File.Delete(path + ".bak");
+                    SubworldSystem.EraseSubworlds(i);
+                    Main.LoadWorlds();
+                }
+                catch
+                {
+                }
+            };
             //IL.Terraria.Main.DoUpdateInWorld += delegate (ILContext il)
             //{
             //    ILCursor cursor = new(il);
@@ -330,29 +381,17 @@ namespace Everglow.Sources.Modules.SubWorldModule
             //        }
             //    }
             //};
-            On.Terraria.Main.UpdateTime += Main_UpdateTime;
-            //IL.Terraria.WorldGen.UpdateWorld += delegate (ILContext il)
-            //{
-            //    ILCursor cursor = new(il);
-            //    if (cursor.TryGotoNext(i => i.MatchCall(typeof(Terraria.WorldGen), "UpdateWorld_Inner")))
-            //    {
-            //        cursor.Emit(OpCodes.Ldsfld, current);
-            //        ILLabel label1 = cursor.DefineLabel();
-            //        cursor.Emit(OpCodes.Brfalse, label1);
-            //        cursor.Emit(OpCodes.Ldsfld, current);
-            //        cursor.Emit(OpCodes.Callvirt, normalUpdates);
-            //        ILLabel label2 = cursor.DefineLabel();
-            //        cursor.Emit(OpCodes.Brfalse, label2);
-            //        cursor.MarkLabel(label1);
-            //        cursor.Index++;
-            //        cursor.MarkLabel(label2);
-            //    }
-            //};
-            On.Terraria.WorldGen.UpdateWorld_Inner += WorldGen_UpdateWorld_Inner;
-            IL.Terraria.Player.Update += delegate (ILContext il)
+            On.Terraria.Main.UpdateTime += delegate (On.Terraria.Main.orig_UpdateTime orig)
+            {
+                if (SubworldSystem.current?.NormalUpdates ?? true)
+                {
+                    orig();
+                }
+            };
+            IL.Terraria.WorldGen.UpdateWorld += delegate (ILContext il)
             {
                 ILCursor cursor = new(il);
-                if (cursor.TryGotoNext(MoveType.AfterLabel, i => i.MatchLdsfld(typeof(Main), nameof(Main.maxTilesX)), i => i.MatchLdcI4(4200)))
+                if (cursor.TryGotoNext(i => i.MatchCall(typeof(Terraria.WorldGen), "UpdateWorld_Inner")))
                 {
                     cursor.Emit(OpCodes.Ldsfld, current);
                     ILLabel label1 = cursor.DefineLabel();
@@ -362,7 +401,24 @@ namespace Everglow.Sources.Modules.SubWorldModule
                     ILLabel label2 = cursor.DefineLabel();
                     cursor.Emit(OpCodes.Brfalse, label2);
                     cursor.MarkLabel(label1);
-                    if (cursor.TryGotoNext(MoveType.After, i => i.MatchLdloc(3), i => i.MatchMul(), i => i.MatchStfld(typeof(Player), nameof(Player.gravity))))
+                    cursor.Index++;
+                    cursor.MarkLabel(label2);
+                }
+            };
+            IL.Terraria.Player.Update += delegate (ILContext il)
+            {
+                ILCursor cursor = new(il);
+                if (cursor.TryGotoNext(MoveType.AfterLabel, i => i.MatchLdsfld(typeof(Terraria.Main), nameof(Main.maxTilesX)), i => i.MatchLdcI4(4200)))
+                {
+                    cursor.Emit(OpCodes.Ldsfld, current);
+                    ILLabel label1 = cursor.DefineLabel();
+                    cursor.Emit(OpCodes.Brfalse, label1);
+                    cursor.Emit(OpCodes.Ldsfld, current);
+                    cursor.Emit(OpCodes.Callvirt, normalUpdates);
+                    ILLabel label2 = cursor.DefineLabel();
+                    cursor.Emit(OpCodes.Brfalse, label2);
+                    cursor.MarkLabel(label1);
+                    if (cursor.TryGotoNext(MoveType.After, i => i.MatchLdloc(3), i => i.MatchMul(), i => i.MatchStfld(typeof(Terraria.Player), nameof(Player.gravity))))
                     {
                         cursor.MarkLabel(label2);
                     }
@@ -371,7 +427,7 @@ namespace Everglow.Sources.Modules.SubWorldModule
             IL.Terraria.NPC.UpdateNPC_UpdateGravity += delegate (ILContext il)
             {
                 ILCursor cursor = new(il);
-                if (cursor.TryGotoNext(MoveType.AfterLabel, i => i.MatchLdsfld(typeof(Main), "maxTilesX"), i => i.MatchLdcI4(4200)))
+                if (cursor.TryGotoNext(MoveType.AfterLabel, i => i.MatchLdsfld(typeof(Terraria.Main), "maxTilesX"), i => i.MatchLdcI4(4200)))
                 {
                     cursor.Emit(OpCodes.Ldsfld, current);
                     ILLabel label1 = cursor.DefineLabel();
@@ -381,7 +437,7 @@ namespace Everglow.Sources.Modules.SubWorldModule
                     ILLabel label2 = cursor.DefineLabel();
                     cursor.Emit(OpCodes.Brfalse, label2);
                     cursor.MarkLabel(label1);
-                    if (cursor.TryGotoNext(MoveType.After, i => i.MatchLdloc(1), i => i.MatchMul(), i => i.MatchStsfld(typeof(NPC), "gravity")))
+                    if (cursor.TryGotoNext(MoveType.After, i => i.MatchLdloc(1), i => i.MatchMul(), i => i.MatchStsfld(typeof(Terraria.NPC), "gravity")))
                     {
                         cursor.MarkLabel(label2);
                     }
@@ -390,7 +446,7 @@ namespace Everglow.Sources.Modules.SubWorldModule
             IL.Terraria.Liquid.Update += delegate (ILContext il)
             {
                 ILCursor cursor = new(il);
-                if (cursor.TryGotoNext(i => i.MatchLdarg(0), i => i.MatchLdfld(typeof(Liquid), "y"), i => i.MatchCall(typeof(Main), nameof(Main.UnderworldLayer))))
+                if (cursor.TryGotoNext(i => i.MatchLdarg(0), i => i.MatchLdfld(typeof(Terraria.Liquid), "y"), i => i.MatchCall(typeof(Terraria.Main), nameof(Main.UnderworldLayer))))
                 {
                     cursor.Emit(OpCodes.Ldsfld, current);
                     ILLabel label1 = cursor.DefineLabel();
@@ -400,174 +456,81 @@ namespace Everglow.Sources.Modules.SubWorldModule
                     ILLabel label2 = cursor.DefineLabel();
                     cursor.Emit(OpCodes.Brfalse, label2);
                     cursor.MarkLabel(label1);
-                    if (cursor.TryGotoNext(MoveType.After, i => i.MatchConvU1(), i => i.MatchStfld(typeof(Tile), "liquid")))
+                    if (cursor.TryGotoNext(MoveType.After, i => i.MatchConvU1(), i => i.MatchStfld(typeof(Terraria.Tile), "liquid")))
                     {
                         cursor.MarkLabel(label2);
                     }
                 }
             };
-            //IL.Terraria.Player.SavePlayer += delegate (ILContext il)
-            //{
-            //    ILCursor cursor = new(il);
-            //    if (cursor.TryGotoNext(i => i.MatchCall(typeof(Player), "InternalSaveMap")))
-            //    {
-            //        cursor.Index -= 3;
-            //        cursor.Emit(OpCodes.Ldsfld, cache);
-            //        ILLabel label1 = cursor.DefineLabel();
-            //        cursor.Emit(OpCodes.Brfalse, label1);
-            //        cursor.Emit(OpCodes.Ldsfld, cache);
-            //        cursor.Emit(OpCodes.Callvirt, shouldSave);
-            //        ILLabel label2 = cursor.DefineLabel();
-            //        cursor.Emit(OpCodes.Brfalse, label2);
-            //        cursor.MarkLabel(label1);
-            //        if (cursor.TryGotoNext(MoveType.AfterLabel, i => i.MatchLdsfld(typeof(Main), nameof(Main.ServerSideCharacter))))
-            //        {
-            //            cursor.MarkLabel(label2);
-            //            cursor.Emit(OpCodes.Ldsfld, cache);
-            //            label1 = cursor.DefineLabel();
-            //            cursor.Emit(OpCodes.Brfalse, label1);
-            //            cursor.Emit(OpCodes.Ldsfld, cache);
-            //            cursor.Emit(OpCodes.Callvirt, typeof(Subworld).GetMethod("get_NoPlayerSaving"));
-            //            label2 = cursor.DefineLabel();
-            //            cursor.Emit(OpCodes.Brtrue, label2);
-            //            cursor.MarkLabel(label1);
-            //            if (cursor.TryGotoNext(MoveType.After, i => i.MatchCall(typeof(FileUtilities), nameof(FileUtilities.ProtectedInvoke))))
-            //            {
-            //                cursor.MarkLabel(label2);
-            //            }
-            //        }
-            //    }
-            //};
-            On.Terraria.Player.InternalSavePlayerFile += Player_InternalSavePlayerFile;
-            On.Terraria.Player.InternalSaveMap += Player_InternalSaveMap;
-            //IL.Terraria.IO.WorldFile.SaveWorld_bool_bool += delegate (ILContext il)
-            //{
-            //    ILCursor cursor = new(il);
-            //    cursor.Emit(OpCodes.Ldsfld, cache);
-            //    ILLabel label = cursor.DefineLabel();
-            //    cursor.Emit(OpCodes.Brfalse, label);
-            //    cursor.Emit(OpCodes.Ldsfld, cache);
-            //    cursor.Emit(OpCodes.Callvirt, shouldSave);
-            //    cursor.Emit(OpCodes.Brtrue, label);
-            //    cursor.Emit(OpCodes.Ret);
-            //    cursor.MarkLabel(label);
-            //};
-            On.Terraria.IO.WorldFile.SaveWorld_bool_bool += WorldFile_SaveWorld_bool_bool;
+            IL.Terraria.Player.SavePlayer += delegate (ILContext il)
+            {
+                ILCursor cursor = new(il);
+                if (cursor.TryGotoNext(i => i.MatchCall(typeof(Terraria.Player), "InternalSaveMap")))
+                {
+                    cursor.Index -= 3;
+                    cursor.Emit(OpCodes.Ldsfld, cache);
+                    ILLabel label1 = cursor.DefineLabel();
+                    cursor.Emit(OpCodes.Brfalse, label1);
+                    cursor.Emit(OpCodes.Ldsfld, cache);
+                    cursor.Emit(OpCodes.Callvirt, shouldSave);
+                    ILLabel label2 = cursor.DefineLabel();
+                    cursor.Emit(OpCodes.Brfalse, label2);
+                    cursor.MarkLabel(label1);
+                    if (cursor.TryGotoNext(MoveType.AfterLabel, i => i.MatchLdsfld(typeof(Terraria.Main), nameof(Main.ServerSideCharacter))))
+                    {
+                        cursor.MarkLabel(label2);
+                        cursor.Emit(OpCodes.Ldsfld, cache);
+                        label1 = cursor.DefineLabel();
+                        cursor.Emit(OpCodes.Brfalse, label1);
+                        cursor.Emit(OpCodes.Ldsfld, cache);
+                        cursor.Emit(OpCodes.Callvirt, typeof(Subworld).GetMethod("get_NoPlayerSaving"));
+                        label2 = cursor.DefineLabel();
+                        cursor.Emit(OpCodes.Brtrue, label2);
+                        cursor.MarkLabel(label1);
+                        if (cursor.TryGotoNext(MoveType.After, i => i.MatchCall(typeof(FileUtilities), nameof(FileUtilities.ProtectedInvoke))))
+                        {
+                            cursor.MarkLabel(label2);
+                        }
+                    }
+                }
+            };
+            IL.Terraria.IO.WorldFile.SaveWorld_bool_bool += delegate (ILContext il)
+            {
+                ILCursor cursor = new(il);
+                cursor.Emit(OpCodes.Ldsfld, cache);
+                ILLabel label = cursor.DefineLabel();
+                cursor.Emit(OpCodes.Brfalse, label);
+                cursor.Emit(OpCodes.Ldsfld, cache);
+                cursor.Emit(OpCodes.Callvirt, shouldSave);
+                cursor.Emit(OpCodes.Brtrue, label);
+                cursor.Emit(OpCodes.Ret);
+                cursor.MarkLabel(label);
+            };
             IL.Terraria.NetMessage.CheckBytes += delegate (ILContext il)
             {
                 ILCursor cursor = new(il);
                 if (cursor.TryGotoNext(MoveType.After, i => i.MatchCallvirt(typeof(Stream), "get_Position"), i => i.MatchStloc(5)))
                 {
-                    cursor.Emit(OpCodes.Ldsfld, typeof(NetMessage).GetField(nameof(NetMessage.buffer)));
+                    cursor.Emit(OpCodes.Ldsfld, typeof(Terraria.NetMessage).GetField("buffer"));
                     cursor.Emit(OpCodes.Ldarg_0);
                     cursor.Emit(OpCodes.Ldelem_Ref);
                     cursor.Emit(OpCodes.Ldloc_2);
                     cursor.Emit(OpCodes.Ldloc, 4);
                     cursor.Emit(OpCodes.Call, typeof(SubworldLibrary).GetMethod(nameof(SubworldLibrary.SendToSubservers), new Type[]
                     {
-                        typeof(MessageBuffer),
+                        typeof(Terraria.MessageBuffer),
                         typeof(int),
                         typeof(int)
                     }));
                     ILLabel label = cursor.DefineLabel();
                     cursor.Emit(OpCodes.Brtrue, label);
-                    if (cursor.TryGotoNext(i => i.MatchLdsfld(typeof(NetMessage), nameof(NetMessage.buffer)), i => i.MatchLdarg(0), i => i.MatchLdelemRef(), i => i.MatchLdfld(typeof(MessageBuffer), nameof(MessageBuffer.reader)), i => i.MatchCallvirt(typeof(BinaryReader), "get_BaseStream")))
+                    if (cursor.TryGotoNext(i => i.MatchLdsfld(typeof(Terraria.NetMessage), nameof(NetMessage.buffer)), i => i.MatchLdarg(0), i => i.MatchLdelemRef(), i => i.MatchLdfld(typeof(Terraria.MessageBuffer), nameof(MessageBuffer.reader)), i => i.MatchCallvirt(typeof(BinaryReader), "get_BaseStream")))
                     {
                         cursor.MarkLabel(label);
                     }
                 }
             };
             SubworldSystem.SetUp();
-        }
-
-        private void Player_InternalSaveMap(On.Terraria.Player.orig_InternalSaveMap orig, bool isCloudSave)
-        {
-            if (SubworldSystem.cache?.ShouldSave ?? true)
-            {
-                orig(isCloudSave);
-            }
-        }
-        private void WorldFile_SaveWorld_bool_bool(On.Terraria.IO.WorldFile.orig_SaveWorld_bool_bool orig, bool useCloudSaving, bool resetTime)
-        {
-            if(SubworldSystem.cache?.ShouldSave??true)
-            {
-                orig(useCloudSaving, resetTime);
-            }
-        }
-        private void Player_InternalSavePlayerFile(On.Terraria.Player.orig_InternalSavePlayerFile orig, PlayerFileData playerFile)
-        {
-            if (!(SubworldSystem.cache?.NoPlayerSaving ?? false))
-            {
-                orig(playerFile);
-            }
-        }
-        private void WorldGen_UpdateWorld_Inner(On.Terraria.WorldGen.orig_UpdateWorld_Inner orig)
-        {
-            if (SubworldSystem.current?.NormalUpdates ?? true)
-            {
-                orig();
-            }
-        }
-        private void Main_UpdateTime(On.Terraria.Main.orig_UpdateTime orig)
-        {
-            if (SubworldSystem.current?.NormalUpdates ?? true)
-            {
-                orig();
-            }
-        }
-        private void Main_EraseWorld(On.Terraria.Main.orig_EraseWorld orig, int i)
-        {
-            try
-            {
-                if (!Main.WorldList[i].IsCloudSave)
-                {
-                    if (OperatingSystem.IsWindows())
-                    {
-                        FileOperationAPIWrapper.MoveToRecycleBin(Main.WorldList[i].Path);
-                        FileOperationAPIWrapper.MoveToRecycleBin(Main.WorldList[i].Path + ".bak");
-                        for (int j = 2; j <= 9; j++)
-                        {
-                            FileOperationAPIWrapper.MoveToRecycleBin(Main.WorldList[i].Path + ".bak" + j.ToString());
-                        }
-                    }
-                    else
-                    {
-                        File.Delete(Main.WorldList[i].Path);
-                        File.Delete(Main.WorldList[i].Path + ".bak");
-                    }
-                }
-                else if (SocialAPI.Cloud != null)
-                {
-                    SocialAPI.Cloud.Delete(Main.WorldList[i].Path);
-                }
-                string path = Path.ChangeExtension(Main.WorldList[i].Path, ".twld");
-                if (Main.WorldList[i].IsCloudSave)
-                {
-                    if (SocialAPI.Cloud != null)
-                    {
-                        SocialAPI.Cloud.Delete(path);
-                    }
-                    return;
-                }
-                if (OperatingSystem.IsWindows())
-                {
-                    FileOperationAPIWrapper.MoveToRecycleBin(path);
-                    FileOperationAPIWrapper.MoveToRecycleBin(path + ".bak");
-                    return;
-                }
-                File.Delete(path);
-                File.Delete(path + ".bak");
-                SubworldSystem.EraseSubworlds(i);
-                Main.LoadWorlds();
-            }
-            catch
-            {
-            }
-        }
-        private void WorldGen_GenerateWorld(On.Terraria.WorldGen.orig_GenerateWorld orig, int seed, GenerationProgress customProgressObject)
-        {
-            orig(seed, customProgressObject);
-            SubworldSystem.GenerateSubworlds();
         }
         public void Unload()
         {
@@ -585,7 +548,7 @@ namespace Everglow.Sources.Modules.SubWorldModule
                 HookEndpointManager.Unmodify(typeof(TcpSocket).GetMethod("Terraria.Net.Sockets.ISocket.AsyncSend", BindingFlags.Instance | BindingFlags.NonPublic), value);
             }
         }
-        public static bool SendToSubservers(MessageBuffer buffer, int start, int length)
+        public static bool SendToSubservers(Terraria.MessageBuffer buffer, int start, int length)
         {
             if (Main.netMode == NetmodeID.MultiplayerClient)
             {
@@ -664,7 +627,10 @@ namespace Everglow.Sources.Modules.SubWorldModule
                             RemoteAddress remoteAddress = Netplay.Clients[whoAmI].Socket.GetRemoteAddress();
                             if (remoteAddress is not null)
                             {
-                                new SubworldPacket(0, num, whoAmI, -1);
+                                new SubworldPacket()
+                                    .Write(0)
+                                    .Write(num)
+                                    .Send(whoAmI, -1);
                                 //ModPacket packet = Everglow.Instance.GetPacket(256);
                                 //packet.Write(0);
                                 //packet.Write(num);
@@ -688,7 +654,6 @@ namespace Everglow.Sources.Modules.SubWorldModule
                     }
                 case 1:
                     {
-                        reader.ReadUInt16();
                         if (Main.netMode == NetmodeID.Server)
                         {
                             RemoteAddress remoteAddress2 = Netplay.Clients[whoAmI].Socket.GetRemoteAddress();
@@ -706,7 +671,9 @@ namespace Everglow.Sources.Modules.SubWorldModule
                                 });
                                 SubworldSystem.playerLocations.Remove(remoteAddress2);
                                 Netplay.Clients[whoAmI].State = 0;
-                                new SubworldPacket(1, 0, whoAmI, -1);
+                                new SubworldPacket()
+                                    .Write(1)
+                                    .Send(whoAmI, -1);
                                 //ModPacket packet2 = Everglow.Instance.GetPacket(256);
                                 //packet2.Write(1);
                                 //packet2.Send(whoAmI, -1);
