@@ -73,11 +73,23 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             float Str = 1;
 
             mplayer.ShakeStrength = Str;*/
-            SoundEngine.PlaySound(SoundID.Item38, Projectile.Center);
+            SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, Projectile.Center);
+            Player player = Main.player[Projectile.owner];
+            ScreenShaker Gsplayer = player.GetModPlayer<ScreenShaker>();
+            Gsplayer.FlyCamPosition = new Vector2(0, 150).RotatedByRandom(6.283);
             Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BombShakeWave>(), 0, 0, Projectile.owner, 0.4f, 2f);
             float k1 = Math.Clamp(Projectile.velocity.Length(), 1, 3);
             float k2 = Math.Clamp(Projectile.velocity.Length(), 6, 10);
             float k0 = 1f / (Projectile.ai[0] + 2) * 2 * k2;
+            float X = 0;
+            for (int h = 0; h < 18; h++)
+            {
+                if (h % 3 < 1)
+                {
+                    Vector2 v = new Vector2(0, 12f).RotatedBy(h * MathHelper.TwoPi / 18f + X);
+                    Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + v, v, ModContent.ProjectileType<BlueMissilFriendly>(), Projectile.damage, 0f, 2);
+                }
+            }
             for (int j = 0; j < 8 * k0; j++)
             {
                 Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * Projectile.scale * k1;
@@ -110,7 +122,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                     }
                 }
             }
-
             for (int h = 0; h < 120; h += 3)
             {
                 Vector2 v3 = new Vector2(0, (float)Math.Sin(h * Math.PI / 4d + Projectile.ai[0]) + 5).RotatedBy(h * Math.PI / 10d) * Main.rand.NextFloat(0.2f, 1.1f);
