@@ -9,6 +9,7 @@
     <BaseOutputPath></BaseOutputPath>
 	<DisableFody Condition="'$(Configuration)' != 'Debug'">true</DisableFody>
 	<Configurations>Debug;Release;DebugWithoutFody;ReleaseWithoutFody</Configurations>
+	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>$(DefineConstants);TML_2022_05</DefineConstants>

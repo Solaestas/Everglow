@@ -1,6 +1,7 @@
 ﻿using Everglow.Sources.Modules.PlantModule.Buffs;
 using Everglow.Sources.Modules.PlantModule.Common;
 using Everglow.Sources.Modules.MEACModule;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Commons.Function.Curves;
 using Terraria.Audio;
@@ -13,7 +14,7 @@ namespace Everglow.Sources.Modules.PlantModule.Projectiles.Melee
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Cactus boulder");
-			DisplayName.AddTranslation(PlantUtils.LocaizationChinese, "打你伤害400但是打怪伤害只有40的屑仙人掌球");
+			DisplayName.AddTranslation(PlantUtils.LocaizationChinese, "仙人掌球");
 			ProjectileID.Sets.TrailCacheLength[Projectile.type] = 6;
 			ProjectileID.Sets.TrailingMode[Projectile.type] = 1;
 		}
@@ -100,6 +101,7 @@ namespace Everglow.Sources.Modules.PlantModule.Projectiles.Melee
 						}
 						return;
 					}
+					Projectile.penetrate = 5;
 				}
 			}
 			player.direction = Math.Sign(player.DirectionToSafe(Projectile.Center).X);
@@ -145,14 +147,21 @@ namespace Everglow.Sources.Modules.PlantModule.Projectiles.Melee
 
 			}
 
-            Projectile.penetrate = 60;
+
 			Vector2 vector2 = player.Center - Projectile.Center;
             Projectile.rotation = (float)(Math.Atan2(vector2.Y, vector2.X) + Math.PI / 2d);
 		}
 		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
 		{
-			if (Projectile.ai[1] <= 10f) damage = (int)(damage / 5d * 0.1f * SpinAcc);
-			else damage = (int)(Projectile.damage * 0.1f * SpinAcc);
+			int size = target.width * target.height;
+
+			if (Projectile.ai[1] <= 10f) damage = (int)(damage / 5d * 0.45f * SpinAcc);
+			else damage = (int)(Projectile.damage * 0.45f * SpinAcc);
+			if (size > 1000)
+			{
+				Projectile.penetrate = 0;
+				Projectile.Kill();
+			}
 		}
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
@@ -164,7 +173,7 @@ namespace Everglow.Sources.Modules.PlantModule.Projectiles.Melee
 		}
 		public override void ModifyHitPvp(Player target, ref int damage, ref bool crit)
 		{
-			damage *= 8;
+			damage *= 1;
 		}
 		public override bool OnTileCollide(Vector2 oldVelocity)
 		{
@@ -185,6 +194,15 @@ namespace Everglow.Sources.Modules.PlantModule.Projectiles.Melee
                         }
                     }
                 }
+				float k0 = Projectile.oldVelocity.Length() * 0.5f;
+				for (int j = 0; j < 3 * k0; j++)
+				{
+					Vector2 v0 = new Vector2(Main.rand.NextFloat(0.2f, 0.6f), 0).RotatedByRandom(6.283) * Projectile.scale * k0;
+					int dust1 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<Dusts.CactusJuice>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(3.7f, 5.1f) * k0 * 0.02f);
+					Main.dust[dust1].alpha = 0;
+					Main.dust[dust1].rotation = 0;
+				}
+				Collision.HitTiles(Projectile.Center - new Vector2(36), Projectile.velocity * 0.5f, 72, 72);
 				return false;
             }
 			return true;
@@ -197,15 +215,37 @@ namespace Everglow.Sources.Modules.PlantModule.Projectiles.Melee
 		public override void Kill(int timeLeft)
 		{
 			SoundEngine.PlaySound(SoundID.Dig, Projectile.Center);
-			if (Main.myPlayer == Projectile.owner)
+			float k0 = Projectile.oldVelocity.Length();
+			for (int i = 0; i < 2 * k0; i++)
 			{
-				for (int i = 0; i < Main.rand.Next(8, 12); i++)
+				Vector2 vector = new Vector2(Main.rand.NextFloat(0.06f, 0.24f), 0).RotatedByRandom(6.283) * Projectile.scale * k0;
+				Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + vector * 5f, vector * 3f,
+					ModContent.ProjectileType<CactusBallSpike>(), Projectile.damage / 3, 0f, Projectile.owner, 0f, 0f);
+			}
+
+			for (int j = 0; j < 3 * k0; j++)
+			{
+				Vector2 v0 = new Vector2(Main.rand.NextFloat(0.2f, 0.6f), 0).RotatedByRandom(6.283) * Projectile.scale * k0;
+				int dust1 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<Dusts.CactusJuice>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(3.7f, 5.1f) * k0 * 0.02f);
+				Main.dust[dust1].alpha = 0;
+				Main.dust[dust1].rotation = 0;
+			}
+			for (int i = 0; i < 2; i++)
+			{
+				for (int x = 0; x < 8; x++)
 				{
-					Vector2 vector = Utils.ToRotationVector2(Main.rand.NextFloat(MathHelper.Pi));
-					Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + vector * 5f, vector * 3f, 
-						ModContent.ProjectileType<CactusBallSpike>(), Projectile.damage / 3, 0f, Projectile.owner, 0f, 0f);
+					Gore.NewGore(Projectile.GetSource_FromAI(), Projectile.Center + new Vector2(0, Main.rand.Next(40)).RotatedByRandom(6.283) - Projectile.velocity * 3, new Vector2(0, Main.rand.NextFloat(1f)).RotatedByRandom(6.283) * k0, ModContent.Find<ModGore>("Everglow/CactusGore" + x.ToString()).Type);
 				}
 			}
+			for (int j = 0; j < 2 * k0; j++)
+			{
+				Vector2 v0 = new Vector2(Main.rand.NextFloat(0.1f, 0.4f), 0).RotatedByRandom(6.283) * Projectile.scale * k0;
+				int dust1 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<Dusts.CactusSmog>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(0.17f, 0.31f) * k0);
+				Main.dust[dust1].alpha = 180;
+				Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
+			}
+
+			Collision.HitTiles(Projectile.Center - new Vector2(48), Projectile.velocity, 96, 96);
 			Main.player[Projectile.owner].fullRotation = 0;
 		}
 		public override bool PreDraw(ref Color lightColor)

@@ -97,7 +97,6 @@ namespace Everglow
         private ProfilerManager m_profilerManager;
         private RenderTargetPool m_renderTargetPool;
         private MainThreadContext m_mainThreadContext;
-
         public Everglow()
         {
             m_instance = this;

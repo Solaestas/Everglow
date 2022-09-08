@@ -24,8 +24,8 @@ public class RotationTest
         Rotation rot = 1;
         Rotation target = -1;
         Rotation target2 = -3;
-        Assert.IsTrue(rot.Distance(target).Angle == 2);
-        Assert.IsTrue(rot.Distance(target2).Angle == MathHelper.TwoPi - 4);
+        Assert.IsTrue(rot.Distance(target) == 2);
+        Assert.IsTrue(rot.Distance(target2) == MathHelper.TwoPi - 4);
     }
 
 }
