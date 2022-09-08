@@ -10,12 +10,13 @@ namespace Everglow.Sources.Modules.SubWorldModule
 {
     internal class SubworldPacket : IPacket
     {
-        MemoryStream stream;
-        BinaryWriter writer;
-        public SubworldPacket()
+        int packettype;
+        ushort message;
+        public SubworldPacket(int type, ushort message,int toclient = -1, int ignore = -1)
         {
-            stream = new();
-            writer = new(stream);
+            packettype = type;
+            this.message = message;
+            Everglow.PacketResolver.Send(this, toclient, ignore);
         }
         public void Receive(BinaryReader reader, int whoAmI)
         {
@@ -23,21 +24,8 @@ namespace Everglow.Sources.Modules.SubWorldModule
         }
         public void Send(BinaryWriter writer)
         {
-            writer.Write(stream.ToArray());
+            writer.Write(packettype);
+            writer.Write(message);
         }
-        public SubworldPacket Write(short value) { writer.Write(value); return this; }
-        public SubworldPacket Write(ushort value) { writer.Write(value); return this; }
-        public SubworldPacket Write(int value) { writer.Write(value); return this; }
-        public SubworldPacket Write(uint value) { writer.Write(value); return this; }
-        public SubworldPacket Write(float value) { writer.Write(value); return this; }
-        public SubworldPacket Write(double value) { writer.Write(value); return this; }
-        public SubworldPacket Write(long value) { writer.Write(value); return this; }
-        public SubworldPacket Write(ulong value) { writer.Write(value); return this; }
-        public SubworldPacket Write(string value) { writer.Write(value); return this; }
-        public SubworldPacket Write(char value) { writer.Write(value); return this; }
-        public SubworldPacket Write(char[] value) { writer.Write(value); return this; }
-        public SubworldPacket Write(byte value) { writer.Write(value); return this; }
-        public SubworldPacket Write(byte[] value) { writer.Write(value); return this; }
-        public void Send(int toclient = -1, int ignore = -1) => Everglow.PacketResolver.Send(this, toclient, ignore);
     }
 }
