@@ -285,6 +285,7 @@ namespace Everglow.Sources.Modules.SubWorldModule
                 //    cursor.MarkLabel(label);
                 //};
                 On.Terraria.Main.DrawBackground += Main_DrawBackground;
+                On.Terraria.Main.DrawUnderworldBackground += Main_DrawUnderworldBackground;
                 IL.Terraria.Netplay.AddCurrentServerToRecentList += delegate (ILContext il)
                 {
                     ILCursor cursor = new(il);
@@ -519,7 +520,7 @@ namespace Everglow.Sources.Modules.SubWorldModule
                     cursor.Emit(OpCodes.Ldloc, 4);
                     cursor.Emit(OpCodes.Call, typeof(SubworldLibrary).GetMethod(nameof(SubworldLibrary.SendToSubservers), new Type[]
                     {
-                        typeof(Terraria.MessageBuffer),
+                        typeof(MessageBuffer),
                         typeof(int),
                         typeof(int)
                     }));
@@ -533,7 +534,13 @@ namespace Everglow.Sources.Modules.SubWorldModule
             };
             SubworldSystem.SetUp();
         }
-
+        private void Main_DrawUnderworldBackground(On.Terraria.Main.orig_DrawUnderworldBackground orig, Main self, bool flat)
+        {
+            if (!SubworldSystem.hideUnderworld)
+            {
+                orig(self, flat);
+            }
+        }
         private void Main_DrawBackground(On.Terraria.Main.orig_DrawBackground orig, Main self)
         {
             if(!SubworldSystem.hideUnderworld)
@@ -541,7 +548,6 @@ namespace Everglow.Sources.Modules.SubWorldModule
                 orig(self);
             }
         }
-
         public void Unload()
         {
         }

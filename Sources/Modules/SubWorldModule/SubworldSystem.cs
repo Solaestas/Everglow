@@ -667,11 +667,5 @@ namespace Everglow.Sources.Modules.SubWorldModule
                 _tileMapConstructor = value;
             }
         }
-        public override void PostUpdateEverything()
-        {
-            Main.NewText(Main.worldSurface);
-            Main.NewText(Main.rockLayer);
-            Main.NewText(WorldGen.waterLine);
-        }
     }
 }

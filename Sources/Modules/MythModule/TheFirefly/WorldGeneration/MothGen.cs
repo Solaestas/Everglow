@@ -87,12 +87,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                     for (int x = 0; x < pixelRow.Length; x++)
                     {
                         ref var pixel = ref pixelRow[x];
-                        Main.statusText = $"Progress:{(y * pixelRow.Length + x) / (accessor.Height * pixelRow.Length):##.##%}";
                         Tile tile = Main.tile[x + a, y + b];
                         switch (type)//21ÊÇÏä×Ó
                         {
                             case 0:
-                                if (pixel == new SixLabors.ImageSharp.PixelFormats.Rgb24(255, 0, 0))
+                                if (pixel.R == 255 && pixel.G == 0 && pixel.B == 0)// == new SixLabors.ImageSharp.PixelFormats.Rgb24(255, 0, 0))
                                 {
                                     if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
                                     {
@@ -101,15 +100,15 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                                 }
                                 break;
                             case 1:
-                                if (pixel == new SixLabors.ImageSharp.PixelFormats.Rgb24(56, 48, 61))
+                                if (pixel.R == 56 && pixel.G == 48 && pixel.B == 61)// == new SixLabors.ImageSharp.PixelFormats.Rgb24(56, 48, 61))
                                 {
                                     if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
                                     {
-                                        tile.TileType = (ushort)ModContent.TileType<Tiles.DarkCocoon>();
+                                        tile.TileType = (ushort)ModContent.TileType<DarkCocoon>();
                                         tile.HasTile = true;
                                     }
                                 }
-                                if (pixel == new SixLabors.ImageSharp.PixelFormats.Rgb24(0, 0, 255))
+                                if (pixel.R == 0 && pixel.G == 0 && pixel.B == 255)//pixel == new SixLabors.ImageSharp.PixelFormats.Rgb24(0, 0, 255))
                                 {
                                     if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
                                     {
@@ -121,7 +120,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                                 }
                                 break;
                             case 2:
-                                if (pixel == new SixLabors.ImageSharp.PixelFormats.Rgb24(0, 0, 5))
+                                if (pixel.R == 0 && pixel.G == 0 && pixel.B == 5)// == new SixLabors.ImageSharp.PixelFormats.Rgb24(0, 0, 5))
                                 {
                                     if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
                                     {
@@ -133,7 +132,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                     }
                 }
             });
-
             //int width = colors.GetLength(0);
             //int height = colors.GetLength(1);
             //for (int y = 0; y < height; y += 1)
