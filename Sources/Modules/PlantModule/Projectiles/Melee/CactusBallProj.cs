@@ -27,6 +27,7 @@ namespace Everglow.Sources.Modules.PlantModule.Projectiles.Melee
 			Projectile.usesLocalNPCImmunity = true;
 			Projectile.localNPCHitCooldown = 20;
 			Projectile.extraUpdates = 1;
+			Projectile.penetrate = -1;
 			Projectile.tileCollide = false;
 			Projectile.ignoreWater = true;
 			DrawHeldProjInFrontOfHeldItemAndArms = true;
@@ -157,7 +158,7 @@ namespace Everglow.Sources.Modules.PlantModule.Projectiles.Melee
 
 			if (Projectile.ai[1] <= 10f) damage = (int)(damage / 5d * 0.45f * SpinAcc);
 			else damage = (int)(Projectile.damage * 0.45f * SpinAcc);
-			if (size > 1000)
+			if (size > 1000 && Projectile.ai[1] > 0)
 			{
 				Projectile.penetrate = 0;
 				Projectile.Kill();
