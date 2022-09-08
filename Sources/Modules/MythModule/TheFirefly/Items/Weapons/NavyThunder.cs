@@ -30,7 +30,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             Item.knockBack = 5f;
             Item.value = Item.sellPrice(0, 5, 0, 0);
             Item.rare = ItemRarityID.LightRed;
-            Item.UseSound = SoundID.Item132 with { MaxInstances = 3 };
+            Item.UseSound = SoundID.DD2_BetsyFlameBreath with { MaxInstances = 3 };
             Item.autoReuse = true;
             Item.shoot = ModContent.ProjectileType<Projectiles.NavyThunder>();
             Item.shootSpeed = 0;

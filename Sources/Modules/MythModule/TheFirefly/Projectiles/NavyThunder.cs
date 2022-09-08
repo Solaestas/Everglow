@@ -63,6 +63,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         }
         private void Shoot()
         {
+            SoundEngine.PlaySound(SoundID.DD2_FlameburstTowerShot, Projectile.Center);
             Player player = Main.player[Projectile.owner];
             Vector2 v0 = new Vector2(Math.Sign((Main.MouseWorld - Main.player[Projectile.owner].MountedCenter).X), 0.6f * player.gravDir);
             Vector2 ShootCenter = Projectile.Center + new Vector2(0, 16f * player.gravDir);
