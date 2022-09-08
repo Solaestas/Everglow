@@ -108,15 +108,16 @@ namespace Everglow.Sources.Modules.MEACModule.NonTrueMeleeProj
                 //vertex2Ds.Add(new Vertex2D(DrawCen + new Vector2(x - 0.5f, Height), color, new Vector3(SPos, 1, 0)));
                 //vertex2Ds.Add(new Vertex2D(DrawCen + new Vector2(x - 0.5f, -Height), color, new Vector3(SPos, 0, 0)));
 
-                const float scale = 0.25f;
+                const float scale = 0.19f;
+                const float frequency = 0.3f;
 
-                vertex2Ds.Add(new Vertex2D(DrawCen + new Vector2(x * scale - 0.5f, Height), color, new Vector3(r1, 1, 0)));
-                vertex2Ds.Add(new Vertex2D(DrawCen + new Vector2(x * scale + 0.5f, Height), color, new Vector3(r2, 1, 0)));
-                vertex2Ds.Add(new Vertex2D(DrawCen + new Vector2(x * scale + 0.5f, -Height), color, new Vector3(r2, 0, 0)));
+                vertex2Ds.Add(new Vertex2D(DrawCen + new Vector2(x * scale - 0.5f, Height), color, new Vector3(r1 * frequency, 1, 0)));
+                vertex2Ds.Add(new Vertex2D(DrawCen + new Vector2(x * scale + 0.5f, Height), color, new Vector3(r2 * frequency, 1, 0)));
+                vertex2Ds.Add(new Vertex2D(DrawCen + new Vector2(x * scale + 0.5f, -Height), color, new Vector3(r2 * frequency, 0, 0)));
 
-                vertex2Ds.Add(new Vertex2D(DrawCen + new Vector2(x * scale + 0.5f, -Height), color, new Vector3(r2, 0, 0)));
-                vertex2Ds.Add(new Vertex2D(DrawCen + new Vector2(x * scale - 0.5f, Height), color, new Vector3(r1, 1, 0)));
-                vertex2Ds.Add(new Vertex2D(DrawCen + new Vector2(x * scale - 0.5f, -Height), color, new Vector3(r1, 0, 0)));
+                vertex2Ds.Add(new Vertex2D(DrawCen + new Vector2(x * scale + 0.5f, -Height), color, new Vector3(r2 * frequency, 0, 0)));
+                vertex2Ds.Add(new Vertex2D(DrawCen + new Vector2(x * scale - 0.5f, Height), color, new Vector3(r1 * frequency, 1, 0)));
+                vertex2Ds.Add(new Vertex2D(DrawCen + new Vector2(x * scale - 0.5f, -Height), color, new Vector3(r1 * frequency, 0, 0)));
 
 
                 SPos += length;
@@ -205,7 +206,7 @@ namespace Everglow.Sources.Modules.MEACModule.NonTrueMeleeProj
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             Effect Post = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/Post", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-            Post.Parameters["uTime"].SetValue((float)(Main.timeForVisualEffects * 0.005));
+            Post.Parameters["uTime"].SetValue((float)(Main.timeForVisualEffects * 0.003));
             Post.CurrentTechnique.Passes[0].Apply();
 
             Texture2D StoneSquire = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/NonTrueMeleeProj/GoldShieldGlowMap").Value;
@@ -215,7 +216,7 @@ namespace Everglow.Sources.Modules.MEACModule.NonTrueMeleeProj
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             Post.CurrentTechnique.Passes[0].Apply();
             Texture2D StoneSquireD = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/NonTrueMeleeProj/GoldShieldDarkMap").Value;
-            DrawPost(new Color(255, 255, 255, 255), 200, 50, 1, StoneSquireD);
+            DrawPost(new Color(255, 255, 255, 155), 200, 50, 1, StoneSquireD);
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
