@@ -9,7 +9,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
 {
     public class MothLand : ModSystem
     {
-        private class MothLandGenPass : GenPass
+        internal class MothLandGenPass : GenPass
         {
             public MothLandGenPass() : base("MothLand", 500)
             {
@@ -87,7 +87,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                     for (int x = 0; x < pixelRow.Length; x++)
                     {
                         ref var pixel = ref pixelRow[x];
-
+                        Main.statusText = $"Progress:{(y * pixelRow.Length + x) / (accessor.Height * pixelRow.Length):##.##%}";
                         Tile tile = Main.tile[x + a, y + b];
                         switch (type)//21ÊÇÏä×Ó
                         {
@@ -190,14 +190,17 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         /// </summary>
         public static void BuildMothCave()
         {
-            Point16 AB = CocoonPos();
-            int a = AB.X;
-            int b = AB.Y;
+            //Point16 AB = CocoonPos();
+            int a = 4000;//AB.X;
+            int b = 1200;//AB.Y;
             MothLand mothLand = ModContent.GetInstance<MothLand>();
             mothLand.fireflyCenterX = a + 140;
             mothLand.fireflyCenterY = b + 140;
+            Main.statusText = "CocoonKillStart";
             ShapeTile("CocoonKill.bmp", a, b, 0);
+            Main.statusText = "CocoonStart";
             ShapeTile("Cocoon.bmp", a, b, 1);
+            Main.statusText = "CocoonWallStart";
             ShapeTile("CocoonWall.bmp", a, b, 2);
             SmoothMothTile(a, b);
         }

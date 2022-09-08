@@ -46,8 +46,8 @@ namespace Everglow.Sources.Modules.SubWorldModule
                 IL.Terraria.Main.DedServ_PostModLoad += delegate (ILContext il)
                 {
                     ConstructorInfo constructor = typeof(GameTime).GetConstructor(Type.EmptyTypes);
-                    MethodInfo method = typeof(Terraria.Main).GetMethod("Update", BindingFlags.Instance | BindingFlags.NonPublic);
-                    FieldInfo field = typeof(Terraria.Main).GetField("saveTime", BindingFlags.Static | BindingFlags.NonPublic);
+                    MethodInfo method = typeof(Main).GetMethod("Update", BindingFlags.Instance | BindingFlags.NonPublic);
+                    FieldInfo field = typeof(Main).GetField("saveTime", BindingFlags.Static | BindingFlags.NonPublic);
                     ILCursor cursor = new(il);
                     if (cursor.TryGotoNext(MoveType.After, i => i.MatchStindI1()))
                     {
@@ -62,7 +62,7 @@ namespace Everglow.Sources.Modules.SubWorldModule
                         cursor.Emit(OpCodes.Ldloc_1);
                         cursor.Emit(OpCodes.Callvirt, typeof(Stopwatch).GetMethod("Start"));
                         cursor.Emit(OpCodes.Ldc_I4_0);
-                        cursor.Emit(OpCodes.Stsfld, typeof(Terraria.Main).GetField("gameMenu"));
+                        cursor.Emit(OpCodes.Stsfld, typeof(Main).GetField("gameMenu"));
                         cursor.Emit(OpCodes.Ldc_R8, 16.666666666666668);
                         cursor.Emit(OpCodes.Stloc_2);
                         cursor.Emit(OpCodes.Ldloc_2);
@@ -71,8 +71,8 @@ namespace Everglow.Sources.Modules.SubWorldModule
                         cursor.Emit(OpCodes.Br, label2);
                         ILLabel illabel3 = cursor.DefineLabel();
                         cursor.MarkLabel(illabel3);
-                        cursor.Emit(OpCodes.Call, typeof(Terraria.Main).Assembly.GetType("Terraria.ModLoader.Engine.ServerHangWatchdog").GetMethod("Checkin", BindingFlags.Static | BindingFlags.NonPublic));
-                        cursor.Emit(OpCodes.Ldsfld, typeof(Terraria.Netplay).GetField("HasClients"));
+                        cursor.Emit(OpCodes.Call, typeof(Main).Assembly.GetType("Terraria.ModLoader.Engine.ServerHangWatchdog").GetMethod("Checkin", BindingFlags.Static | BindingFlags.NonPublic));
+                        cursor.Emit(OpCodes.Ldsfld, typeof(Netplay).GetField("HasClients"));
                         ILLabel illabel4 = cursor.DefineLabel();
                         cursor.Emit(OpCodes.Brfalse, illabel4);
                         cursor.Emit(OpCodes.Ldarg_0);
@@ -128,7 +128,7 @@ namespace Everglow.Sources.Modules.SubWorldModule
                     ILCursor cursor = new(il);
                     if (cursor.TryGotoNext(MoveType.After, i => i.MatchStsfld(typeof(Terraria.Main), nameof(Main.HoverItem))))
                     {
-                        cursor.Emit(OpCodes.Ldsfld, typeof(Terraria.Main).GetField(nameof(Main.gameMenu)));
+                        cursor.Emit(OpCodes.Ldsfld, typeof(Main).GetField(nameof(Main.gameMenu)));
                         ILLabel label1 = cursor.DefineLabel();
                         cursor.Emit(OpCodes.Brfalse, label1);
                         cursor.Emit(OpCodes.Ldsfld, current);
@@ -145,13 +145,13 @@ namespace Everglow.Sources.Modules.SubWorldModule
                         cursor.Emit(OpCodes.Ldc_R4, 1f);
                         cursor.Emit(OpCodes.Dup);
                         cursor.Emit(OpCodes.Dup);
-                        cursor.Emit(OpCodes.Stsfld, typeof(Terraria.Main).GetField("_uiScaleWanted", BindingFlags.Static | BindingFlags.NonPublic));
-                        cursor.Emit(OpCodes.Stsfld, typeof(Terraria.Main).GetField("_uiScaleUsed", BindingFlags.Static | BindingFlags.NonPublic));
+                        cursor.Emit(OpCodes.Stsfld, typeof(Main).GetField("_uiScaleWanted", BindingFlags.Static | BindingFlags.NonPublic));
+                        cursor.Emit(OpCodes.Stsfld, typeof(Main).GetField("_uiScaleUsed", BindingFlags.Static | BindingFlags.NonPublic));
                         cursor.Emit(OpCodes.Call, typeof(Matrix).GetMethod(nameof(Matrix.CreateScale), new Type[]
                         {
                             typeof(float)
                         }));
-                        cursor.Emit(OpCodes.Stsfld, typeof(Terraria.Main).GetField("_uiScaleMatrix", BindingFlags.Static | BindingFlags.NonPublic));
+                        cursor.Emit(OpCodes.Stsfld, typeof(Main).GetField("_uiScaleMatrix", BindingFlags.Static | BindingFlags.NonPublic));
                         cursor.Emit(OpCodes.Ldarg_0);
                         cursor.Emit(OpCodes.Callvirt, typeof(Subworld).GetMethod(nameof(Subworld.DrawSetup)));
                         cursor.Emit(OpCodes.Ret);
@@ -275,15 +275,16 @@ namespace Everglow.Sources.Modules.SubWorldModule
                         }
                     }
                 };
-                IL.Terraria.Main.DrawUnderworldBackground += delegate (ILContext il)
-                {
-                    ILCursor cursor = new(il);
-                    cursor.Emit(OpCodes.Ldsfld, hideUnderworld);
-                    ILLabel label = cursor.DefineLabel();
-                    cursor.Emit(OpCodes.Brtrue, label);
-                    cursor.Emit(OpCodes.Ret);
-                    cursor.MarkLabel(label);
-                };
+                //IL.Terraria.Main.DrawUnderworldBackground += delegate (ILContext il)
+                //{
+                //    ILCursor cursor = new(il);
+                //    cursor.Emit(OpCodes.Ldsfld, hideUnderworld);
+                //    ILLabel label = cursor.DefineLabel();
+                //    cursor.Emit(OpCodes.Brtrue, label);
+                //    cursor.Emit(OpCodes.Ret);
+                //    cursor.MarkLabel(label);
+                //};
+                On.Terraria.Main.DrawBackground += Main_DrawBackground;
                 IL.Terraria.Netplay.AddCurrentServerToRecentList += delegate (ILContext il)
                 {
                     ILCursor cursor = new(il);
@@ -532,6 +533,15 @@ namespace Everglow.Sources.Modules.SubWorldModule
             };
             SubworldSystem.SetUp();
         }
+
+        private void Main_DrawBackground(On.Terraria.Main.orig_DrawBackground orig, Main self)
+        {
+            if(!SubworldSystem.hideUnderworld)
+            {
+                orig(self);
+            }
+        }
+
         public void Unload()
         {
         }

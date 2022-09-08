@@ -159,6 +159,7 @@ namespace Everglow.Sources.Modules.SubWorldModule
                     Main.ActiveWorldFileData = main;
                 }
             }
+            current = null;
         }
         internal static void EraseSubworlds(int index)
         {
@@ -301,7 +302,7 @@ namespace Everglow.Sources.Modules.SubWorldModule
             bool flag = current is not null;
             bool isCloudSave = main.IsCloudSave;
             string text = flag ? CurrentPath : main.Path;
-            if (current?.ShouldSave ?? false)
+            if (current is null || current.ShouldSave)
             {
                 if (FileUtilities.Exists(text, isCloudSave))
                 {
@@ -393,9 +394,9 @@ namespace Everglow.Sources.Modules.SubWorldModule
                 Main.worldName = Language.GetTextValue("Mods." + current.Mod.Name + ".SubworldName." + current.Name);
                 if (WorldGen.loadFailed)
                 {
-                    Everglow.Instance.Logger.Warn("Failed to load \"" + Main.worldName + (WorldGen.worldBackup ? "\" from file" : "\" from file, no backup"));
+                    Everglow.Instance.Logger.Warn("Line-396:Failed to load \"" + Main.worldName + (WorldGen.worldBackup ? "\" from file" : "\" from file, no backup"));
                 }
-                if (!WorldGen.loadSuccess)
+                else
                 {
                     LoadSubworld(text, isCloudSave);
                 }
@@ -405,7 +406,7 @@ namespace Everglow.Sources.Modules.SubWorldModule
             {
                 if (!WorldGen.loadSuccess)
                 {
-                    Everglow.Instance.Logger.Error("Failed to load \"" + main.Name + (WorldGen.worldBackup ? "\" from file" : "\" from file, no backup"));
+                    Everglow.Instance.Logger.Error("Line-408:Failed to load \"" + main.Name + (WorldGen.worldBackup ? "\" from file" : "\" from file, no backup"));
                     Main.menuMode = 0;
                     if (Main.netMode == NetmodeID.Server)
                     {
@@ -665,6 +666,12 @@ namespace Everglow.Sources.Modules.SubWorldModule
             {
                 _tileMapConstructor = value;
             }
+        }
+        public override void PostUpdateEverything()
+        {
+            Main.NewText(Main.worldSurface);
+            Main.NewText(Main.rockLayer);
+            Main.NewText(WorldGen.waterLine);
         }
     }
 }

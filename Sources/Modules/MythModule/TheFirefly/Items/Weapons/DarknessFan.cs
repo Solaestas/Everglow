@@ -112,5 +112,16 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
                 }
             }
         }
+        public override bool? UseItem(Player player)
+        {
+            if (player.itemAnimation == player.itemAnimationMax)
+            {
+                if (!SubWorldModule.SubworldSystem.Enter<MothWorld>())
+                {
+                    Main.NewText("Fail!");
+                }
+            }
+            return base.UseItem(player);
+        }
     }
 }
