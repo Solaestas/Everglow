@@ -131,15 +131,16 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
             return Matrix<float>.Build.DenseIdentity(2) * mA.Mass / (dt * dt) + term1 + term2;
         }
 
-        private void CheckCollision(int i)
+        private Vector2 CheckCollision(int i, Vector2 oldPos, Vector2 newPos)
         {
             ref _Mass m = ref m_masses[i];
             Vector3 sdf = SDFUtils.CalculateTileSDF(m.Position);
             float EPS = 1e-2f;
             if (sdf.X < EPS)
             {
-                m.Position -= 1f * (EPS - sdf.X) * new Vector2(sdf.Y, sdf.Z);
+                newPos -= 1f * (EPS - sdf.X) * new Vector2(sdf.Y, sdf.Z);
             }
+            return newPos;
         }
 
         public void ApplyForce()
@@ -178,6 +179,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
 
                 m.Velocity *= (float)Math.Pow(m_damping, deltaTime);
                 m_dummyPos[i] = (m.Position + m.Velocity * deltaTime);
+
+                if (m.IsStatic)
+                {
+                    m_dummyPos[i] = m.Position;
+                }
             }
 
             for (int k = 0; k < 16; k++)
@@ -207,6 +213,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
                 for (int i = 0; i < m_masses.Length; i++)
                 {
                     ref _Mass m = ref m_masses[i];
+                    m.Force = Vector2.Zero;
                     if (m.IsStatic)
                     {
                         continue;
@@ -214,28 +221,90 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
                     float alpha = 1f / (m.Mass / (deltaTime * deltaTime) + 4 * m_elasticity);
                     var dx = alpha * m_gradiants[i];
                     m_dummyPos[i] -= dx;
+
                 }
             }
 
+            if (m_hasCollision)
+            {
+                float tTest;
+                bool res = CollisionUtils.CCD_SegmentPoint(new Vector2(0, 2), new Vector2(1, -2), new Vector2(0, 0), new Vector2(0, -1), new Vector2(0.5f, 0.5f), Vector2.Zero, out tTest);
+                for (int i = 0; i < m_springs.Length; i++)
+                {
+                    ref _Spring spr = ref m_springs[i];
+                    ref _Mass A = ref m_masses[spr.A];
+                    ref _Mass B = ref m_masses[spr.B];
+
+                    Vector2 Av = m_dummyPos[spr.A] - A.Position;
+                    Vector2 Bv = m_dummyPos[spr.B] - B.Position;
+
+                    Vector2 center = (m_dummyPos[spr.A] + m_dummyPos[spr.B]) / 2f;
+                    int tileX = (int)(center.X / 16);
+                    int tileY = (int)(center.Y / 16);
+
+                    Vector2 baseOffset = new Vector2(tileX * 16 - 16, tileY * 16 - 16);
+
+                    float minTimeToCollision = 1f;
+                    for (int a = -1; a <= 1; a++)
+                    {
+                        for (int b = -1; b <= 1; b++)
+                        {
+                            if (tileX + b < 0 || tileX + b >= Main.maxTilesX || tileY + a < 0 || tileY + a >= Main.maxTilesY)
+                            {
+                                continue;
+                            }
+                            var tile = Main.tile[tileX + b, tileY + a];
+                            ICollider2D collider = SDFUtils.ExtractColliderFromTile(tile, tileX + b, tileY + a, false);
+
+                            if (collider != null)
+                            {
+                                IPolygonalCollider2D collider2d = collider as IPolygonalCollider2D;
+                                foreach (var point in collider2d.GetPolygon().Points)
+                                {
+                                    float t;
+                                    if (CollisionUtils.CCD_SegmentPoint(A.Position - baseOffset, Av, B.Position - baseOffset, Bv, point - baseOffset, Vector2.Zero, out t))
+                                    {
+                                        if (t < 1 && t < minTimeToCollision)
+                                        {
+                                            minTimeToCollision = t;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (minTimeToCollision < 1)
+                    {
+                        minTimeToCollision *= 0.99f;
+                    }
+                    m_dummyPos[spr.A] = A.Position + Av * minTimeToCollision;
+                    m_dummyPos[spr.B] = B.Position + Bv * minTimeToCollision;
+                    A.Force -= 10 * Av * (1 - minTimeToCollision) / deltaTime;
+                    B.Force -= 10 * Bv * (1 - minTimeToCollision) / deltaTime;
+                }
+            }
 
             for (int i = 0; i < m_masses.Length; i++)
             {
                 ref _Mass m = ref m_masses[i];
-                m.Force = Vector2.Zero;
                 if (m.IsStatic)
                 {
                     continue;
                 }
                 Vector2 x_hat = m.Position + deltaTime * m.Velocity;
-                m.Position = m_dummyPos[i];
+
                 if (m_hasCollision)
                 {
-                    CheckCollision(i);
+                    m.Position = CheckCollision(i, m.Position, m_dummyPos[i]);
+                }
+                else
+                {
+                    m.Position = m_dummyPos[i];
                 }
 
                 m.Velocity += (m.Position - x_hat) / deltaTime;
             }
-
         }
 
         private void InitRopes(int count, float elasticity, RenderingTransformFunction renderingTransform, bool hasCollision)

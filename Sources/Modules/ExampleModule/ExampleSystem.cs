@@ -148,7 +148,7 @@ namespace Everglow.Sources.Modules.ExampleModule
 
         private void DrawRope(List<Vector2> path, List<Vertex2D> vertices, List<int> indices)
         {
-            const float baseWidth = 4f;
+            const float baseWidth = 0.5f;
             int count = path.Count;
             int baseIndex = vertices.Count;
             for (int i = 0; i < count; i++)
@@ -215,11 +215,13 @@ namespace Everglow.Sources.Modules.ExampleModule
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Opaque, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.Transform);
             foreach (var rope in m_ropeManager.Ropes)
             {
+                int index = 0;
                 List<Vector2> massPositionsSmooth = Commons.Function.Curves.CatmullRom.SmoothPath(rope.GetMassList.Select(m => rope.RenderingTransform(m.Position)), 4);
                 foreach (var m in rope.GetMassList)
                 {
                     spriteBatch.Draw(TextureAssets.MagicPixel.Value, m.Position - Main.screenPosition, new Rectangle(0, 0, 8, 8),
-                        Color.Green, 0, Vector2.One * 4f, 0.5f, SpriteEffects.None, 0f);
+                        index == 2 ? Color.Red : Color.Green, 0, Vector2.One * 4f, 0.5f, SpriteEffects.None, 0f);
+                    index++;
                 }
                 //foreach (var p in massPositionsSmooth)
                 //{

@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
 {
+    internal class Polygon
+    {
+        public List<Vector2> Points;
+    }
     internal interface ICollider2D
     {
         Vector3 GetSDFWithGradient(Vector2 position);
@@ -13,8 +17,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
         bool Contains(Vector2 position);
     }
 
+    internal interface IPolygonalCollider2D : ICollider2D
+    {
+        Polygon GetPolygon();
+    }
 
-    internal class AABBCollider2D : ICollider2D
+    internal class AABBCollider2D : IPolygonalCollider2D
     {
         public Vector2 Center
         {
@@ -52,9 +60,24 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
             return position.X > Center.X - Size.X && position.X < Center.X + Size.X 
                 && position.Y > Center.Y - Size.Y && position.Y < Center.Y + Size.Y;
         }
+
+        public Polygon GetPolygon()
+        {
+            return new Polygon()
+            {
+                // TR坐标系下逆时针排列
+                Points = new List<Vector2>
+                {
+                    Center - Size,
+                    Center + new Vector2(-Size.X, Size.Y),
+                    Center + Size,
+                    Center + new Vector2(Size.X, -Size.Y),
+                }
+            };
+        }
     }
 
-    internal class TileTriangleCollider2D : ICollider2D
+    internal class TileTriangleCollider2D : IPolygonalCollider2D
     {
         public Vector2 Center
         {
@@ -136,6 +159,39 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
         public bool Contains(Vector2 position)
         {
             return GetSDFWithGradient(position).X < 0;
+        }
+
+        public Polygon GetPolygon()
+        {
+            if (LineDir.X * LineDir.Y > 0)
+            {
+                int sign = Math.Sign(LineDir.X);
+                return new Polygon()
+                {
+                    // TR坐标系下逆时针排列
+                    Points = new List<Vector2>
+                    {
+                        Center + sign * Size,
+                        Center - sign * Size,
+                        Center + sign * new Vector2(-Size.X, Size.Y)
+                    }
+                };
+            }
+            else
+            {
+                int sign = Math.Sign(LineDir.X);
+                return new Polygon()
+                {
+                    // TR坐标系下逆时针排列
+                    Points = new List<Vector2>
+                    {
+                        Center + sign * new Vector2(Size.X, -Size.Y),
+                        Center - sign * Size,
+                        Center + sign * new Vector2(-Size.X, Size.Y)
+                    }
+                };
+
+            }
         }
     }
 }
