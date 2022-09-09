@@ -45,17 +45,17 @@ namespace Everglow.Sources.Modules.ExampleModule
 
                 List<Vector2> posList = new List<Vector2>();
                 Vector2 start = new Vector2(Main.spawnTileX * 16 - 200, Main.spawnTileY * 16 - 200);
-                int slices = 100;
+                int slices = 4;
                 float totalMass = 10f;
                 for (int i = 0; i < slices; i++)
                 {
                     posList.Add(start + new Vector2(400 / (float)slices, 0) * i);
                 }
-                Rope rope = new Rope(posList, 5, totalMass / slices, (x) => x, true);
+                Rope rope = new Rope(posList, 10, totalMass / slices, (x) => x, true);
                 m_ropeManager.LoadRope(rope);
             }
             m_ropeManager.Ropes[0].GetMassList[^1].Position = Main.LocalPlayer.Center;
-            m_ropeManager.Update(0.5f);
+            m_ropeManager.Update(1f);
 
             var last = m_ropeManager.Ropes[0].GetMassList[^1].Position;
             var last2 = m_ropeManager.Ropes[0].GetMassList[^2].Position;
@@ -193,7 +193,7 @@ namespace Everglow.Sources.Modules.ExampleModule
             foreach (var rope in m_ropeManager.Ropes)
             {
                 List<Vector2> massPositionsSmooth = Commons.Function.Curves.CatmullRom.SmoothPath(rope.GetMassList.Select(m => rope.RenderingTransform(m.Position)), null);
-                DrawRope(massPositionsSmooth, vertices, indices);
+                DrawRope(rope.GetMassList.Select(m => rope.RenderingTransform(m.Position)).ToList(), vertices, indices);
             }
 
             var model = Matrix.CreateTranslation(-Main.screenPosition.X, -Main.screenPosition.Y, 0);

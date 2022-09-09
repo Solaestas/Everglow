@@ -145,13 +145,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
 
         public void ApplyForce()
         {
-            float gravity = 1;
+            float gravity = 9;
             for (int i = 0; i < m_masses.Length; i++)
             {
                 ref _Mass m = ref m_masses[i];
                 m.Force += new Vector2(0.04f + 0.06f *
                     (float)(Math.Sin(Main.timeForVisualEffects / 72f + m.Position.X / 13d + m.Position.Y / 4d)), 0)
-                    * (Main.windSpeedCurrent + 1f) * 2f
+                    * (Main.windSpeedCurrent + 1f) * 0f
                     + new Vector2(0, gravity * m.Mass);
             }
 
@@ -245,9 +245,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
                     Vector2 baseOffset = new Vector2(tileX * 16 - 16, tileY * 16 - 16);
 
                     float minTimeToCollision = 1f;
-                    for (int a = -1; a <= 1; a++)
+                    Vector2 normal = Vector2.Zero;
+                    for (int a = -2; a <= 2; a++)
                     {
-                        for (int b = -1; b <= 1; b++)
+                        for (int b = -2; b <= 2; b++)
                         {
                             if (tileX + b < 0 || tileX + b >= Main.maxTilesX || tileY + a < 0 || tileY + a >= Main.maxTilesY)
                             {
@@ -267,6 +268,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
                                         if (t < 1 && t < minTimeToCollision)
                                         {
                                             minTimeToCollision = t;
+
+                                            var proj = A.Position + Vector2.Dot(B.Position - A.Position, point - A.Position) * Vector2.Normalize(B.Position - A.Position);
+                                            normal = Vector2.Normalize(point - proj);
                                         }
                                     }
                                 }
@@ -276,12 +280,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
 
                     if (minTimeToCollision < 1)
                     {
-                        minTimeToCollision *= 0.99f;
+                        minTimeToCollision *= 0.9f;
+
+                        normal.Y *= -1;
+                        m_dummyPos[spr.A] = A.Position + Av * minTimeToCollision + normal * minTimeToCollision;
+                        m_dummyPos[spr.B] = B.Position + Bv * minTimeToCollision + normal * minTimeToCollision;
                     }
-                    m_dummyPos[spr.A] = A.Position + Av * minTimeToCollision;
-                    m_dummyPos[spr.B] = B.Position + Bv * minTimeToCollision;
-                    A.Force -= 10 * Av * (1 - minTimeToCollision) / deltaTime;
-                    B.Force -= 10 * Bv * (1 - minTimeToCollision) / deltaTime;
                 }
             }
 
@@ -334,7 +338,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
                 {
                     Mass = mass,
                     Position = positions[i],
-                    IsStatic = (i == 0 || i == positions.Count - 1)
+                    IsStatic = (i == positions.Count - 1)
                 };
             }
 
