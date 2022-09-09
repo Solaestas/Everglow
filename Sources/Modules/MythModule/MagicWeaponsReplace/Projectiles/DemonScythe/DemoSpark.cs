@@ -30,6 +30,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
         public override void AI()
         {
             int MaxC = (int)(Projectile.ai[0]);
+            MaxC = Math.Min(26, MaxC);
             if (Projectile.timeLeft >= 200)
             {
                 for (int x = 0; x < MaxC; x++)
@@ -75,6 +76,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
         private void DrawSpark(Color c0, float width, Texture2D tex)
         {
             int MaxC = (int)(Projectile.ai[0]);
+            MaxC = Math.Min(26, MaxC);
             List<Vertex2D> bars = new List<Vertex2D>();
             for (int x = 0; x < MaxC; x++)
             {
