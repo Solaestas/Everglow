@@ -27,6 +27,7 @@ namespace Everglow.Sources.Modules.PlantModule.Projectiles.Melee
 			Projectile.usesLocalNPCImmunity = true;
 			Projectile.localNPCHitCooldown = 20;
 			Projectile.extraUpdates = 1;
+			Projectile.penetrate = -1;
 			Projectile.tileCollide = false;
 			Projectile.ignoreWater = true;
 			DrawHeldProjInFrontOfHeldItemAndArms = true;
