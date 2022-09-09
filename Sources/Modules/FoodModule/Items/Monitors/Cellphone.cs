@@ -22,7 +22,7 @@ namespace Everglow.Sources.Modules.FoodModule.Items
             for (int i = 0; i < Recipe.numRecipes; i++)
             {
                 Recipe recipe = Main.recipe[i];
-                if (recipe.TryGetIngredient(ItemID.PDA, out Item ingredient))
+                if (recipe.TryGetIngredient(ItemID.PDA, out _))
                 {
                     recipe.AddIngredient(ModContent.ItemType<Monitors.OsmoticPressureMonitor>());
                     recipe.AddIngredient(ModContent.ItemType<Monitors.BloodGlucoseMonitor>());
