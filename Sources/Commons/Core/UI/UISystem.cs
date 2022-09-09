@@ -32,17 +32,22 @@ namespace Everglow.Sources.Commons.Core.UI
         public override void Load()
         {
             base.Load();
-            system.Load();
+            if (Main.netMode != NetmodeID.Server)
+                system.Load();
         }
         public override void UpdateUI(GameTime gameTime)
         {
             base.UpdateUI(gameTime);
-            if (ScreenSize != Main.ScreenSize)
+
+            if (Main.netMode != NetmodeID.Server)
             {
-                ScreenSize = Main.ScreenSize;
-                system.Calculation();
+                if (ScreenSize != Main.ScreenSize)
+                {
+                    ScreenSize = Main.ScreenSize;
+                    system.Calculation();
+                }
+                system.Update(gameTime);
             }
-            system.Update(gameTime);
         }
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
@@ -54,7 +59,9 @@ namespace Everglow.Sources.Commons.Core.UI
                     "Everglow: Everglow UI System",
                     delegate
                     {
-                        system.Draw(Main.spriteBatch);
+
+                        if (Main.netMode != NetmodeID.Server)
+                            system.Draw(Main.spriteBatch);
                         return true;
                     },
                     InterfaceScaleType.UI)
