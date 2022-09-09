@@ -1,14 +1,14 @@
 ﻿using System.Collections;
 using Everglow.Sources.Commons.Core.ModuleSystem;
-using Everglow.Sources.Commons.Core.Profiler.Fody;
 using Everglow.Sources.Commons.Core.VFX.Pipelines;
 using Everglow.Sources.Commons.Core.VFX.Visuals;
+using Everglow.Sources.Commons.Function.NetUtils;
 using Everglow.Sources.Commons.Function.ObjectPool;
 using ReLogic.Content;
 
 namespace Everglow.Sources.Commons.Core.VFX;
 
-[ProfilerMeasure]
+[ClientOnlyModule]
 public class VFXManager : IModule
 {
     private interface IVisualCollection : IEnumerable<IVisual>
@@ -169,8 +169,10 @@ public class VFXManager : IModule
 
     /// <summary>
     /// RenderTarget池子
+    /// <br></br>
+    /// 直接引用的Everglow.renderTargetPool
     /// </summary>
-    public RenderTargetPool renderTargetPool = new RenderTargetPool();
+    public RenderTargetPool renderTargetPool;
 
     /// <summary>
     /// GraphicsDevice引用
@@ -347,7 +349,20 @@ public class VFXManager : IModule
     /// 添加一个Visual实例
     /// </summary>
     /// <param name="visual"></param>
-    public void Add(IVisual visual)
+    public static void Add(IVisual visual)
+    {
+        if (NetUtils.IsServer)
+        {
+            return;
+        }
+        Instance.Add(visual, 0);
+    }
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="visual"></param>
+    /// <param name="flag">为了避免重复的占位符</param>
+    private void Add(IVisual visual, byte flag)
     {
         //将Visual实例加到对应绘制层与第一个Pipeline的位置
         PipelineIndex index = requiredPipeline[visual.Type];
@@ -471,6 +486,7 @@ public class VFXManager : IModule
     {
         Instance = this;
         spriteBatch = new VFXBatch(graphicsDevice);
+        renderTargetPool = Everglow.RenderTargetPool;
         foreach (var layer in drawLayers)
         {
             visuals[layer] = new List<IVisualCollection>();

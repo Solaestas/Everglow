@@ -65,7 +65,7 @@ internal class TestItem : ModItem
         //{
         //    ScreenShaderManager.Deactivate("Test");
         //}
-        VFXManager.Instance.Add(new WhiteDust() { position = Main.MouseWorld });
+        VFXManager.Add(new WhiteDust() { position = Main.MouseWorld });
 
         return false;
     }
