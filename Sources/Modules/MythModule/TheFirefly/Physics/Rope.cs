@@ -79,7 +79,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
         }
 
 
-
+        private float CrossProduct2D(Vector2 a, Vector2 b)
+        {
+            return a.X * b.Y - a.Y * b.X;
+        }
         public Rope Clone(Vector2 deltaPosition)
         {
             Rope clone = new Rope();
@@ -245,10 +248,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
                     Vector2 baseOffset = new Vector2(tileX * 16 - 16, tileY * 16 - 16);
 
                     float minTimeToCollision = 1f;
+                    Vector2 targetPos = Vector2.Zero;
                     Vector2 normal = Vector2.Zero;
-                    for (int a = -2; a <= 2; a++)
+                    for (int a = -3; a <= 3; a++)
                     {
-                        for (int b = -2; b <= 2; b++)
+                        for (int b = -3; b <= 3; b++)
                         {
                             if (tileX + b < 0 || tileX + b >= Main.maxTilesX || tileY + a < 0 || tileY + a >= Main.maxTilesY)
                             {
@@ -271,6 +275,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
 
                                             var proj = A.Position + Vector2.Dot(B.Position - A.Position, point - A.Position) * Vector2.Normalize(B.Position - A.Position);
                                             normal = Vector2.Normalize(point - proj);
+                                            targetPos = point;
                                         }
                                     }
                                 }
@@ -280,11 +285,24 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
 
                     if (minTimeToCollision < 1)
                     {
+                        Main.NewText(minTimeToCollision);
                         minTimeToCollision *= 0.9f;
 
-                        normal.Y *= -1;
-                        m_dummyPos[spr.A] = A.Position + Av * minTimeToCollision + normal * minTimeToCollision;
-                        m_dummyPos[spr.B] = B.Position + Bv * minTimeToCollision + normal * minTimeToCollision;
+                        Vector2 contVA = Av * (1 - minTimeToCollision);
+                        Vector2 contVB = Bv * (1 - minTimeToCollision);
+
+                        var dummyA = A.Position + Av * minTimeToCollision;
+                        var dummyB = B.Position + Bv * minTimeToCollision;
+
+                        var torqueA = CrossProduct2D(dummyA - targetPos, contVA);
+                        var torqueB = CrossProduct2D(dummyB - targetPos, contVB);
+
+                        var MoI = (dummyA - targetPos).LengthSquared() * A.Mass + (dummyB - targetPos).LengthSquared() * B.Mass;
+
+                        var rot = -(torqueA + torqueB) / MoI * 10;
+                        var rr = (dummyA - targetPos).RotatedBy(rot);
+                        m_dummyPos[spr.A] = targetPos + (dummyA - targetPos).RotatedBy(rot);
+                        m_dummyPos[spr.B] = targetPos + (dummyB - targetPos).RotatedBy(-rot);
                     }
                 }
             }

@@ -56,6 +56,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
         {
             return true;
         }
+
         public override void AddRecipes()
         {
 
