@@ -266,7 +266,22 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
         /// <summary>
         /// 溢出隐藏的裁切矩形
         /// </summary>
-        public virtual Rectangle HiddenOverflowRectangle { get => Info.HitBox; }
+        public virtual Rectangle HiddenOverflowRectangle
+        {
+            get
+            {
+                Vector2 location = Vector2.Transform(Info.Location, Main.UIScaleMatrix),
+                    bottomRight = Vector2.Transform(Info.Location + Info.Size, Main.UIScaleMatrix);
+                float screenWidth = Main.screenWidth * Main.UIScale, screenHeight = Main.screenHeight * Main.UIScale;
+
+                Rectangle rectangle = new Rectangle();
+                rectangle.X = (int)Math.Clamp(location.X, 0, screenWidth);
+                rectangle.Y = (int)Math.Clamp(location.Y, 0, screenHeight);
+                rectangle.Width = (int)Math.Clamp(bottomRight.X - location.X, 0, screenWidth - rectangle.X);
+                rectangle.Height = (int)Math.Clamp(bottomRight.Y - location.Y, 0, screenHeight - rectangle.Y);
+                return rectangle;
+            }
+        }
         /// <summary>
         /// 事件管理器
         /// </summary>
@@ -510,7 +525,7 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
         {
             if (ParentElement == null)
                 return Rectangle.Intersect(new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), HitBox);
-            return Rectangle.Intersect(Rectangle.Intersect(HitBox, ParentElement.HiddenOverflowRectangle), ParentElement.GetCanHitBox());
+            return Rectangle.Intersect(Rectangle.Intersect(HitBox, ParentElement.HitBox), ParentElement.GetCanHitBox());
         }
         /// <summary>
         /// 获取此元素与父元素是否开启溢出隐藏
