@@ -275,10 +275,10 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
                 float screenWidth = Main.screenWidth * Main.UIScale, screenHeight = Main.screenHeight * Main.UIScale;
 
                 Rectangle rectangle = new Rectangle();
-                rectangle.X = (int)Math.Clamp(location.X, 0, screenWidth);
-                rectangle.Y = (int)Math.Clamp(location.Y, 0, screenHeight);
-                rectangle.Width = (int)Math.Clamp(bottomRight.X - location.X, 0, screenWidth - rectangle.X);
-                rectangle.Height = (int)Math.Clamp(bottomRight.Y - location.Y, 0, screenHeight - rectangle.Y);
+                rectangle.X = (int)location.X;
+                rectangle.Y = (int)location.Y;
+                rectangle.Width = (int)Math.Max(bottomRight.X - location.X, 0);
+                rectangle.Height = (int)Math.Max(bottomRight.Y - location.Y, 0);
                 return rectangle;
             }
         }

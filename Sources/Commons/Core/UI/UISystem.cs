@@ -17,9 +17,9 @@ namespace Everglow.Sources.Commons.Core.UI
         {
             get => Instance.system;
         }
-        public static UISystem Instance 
-        { 
-            get => instance; 
+        public static UISystem Instance
+        {
+            get => instance;
         }
         private EverglowUISystem system;
         private static UISystem instance;
