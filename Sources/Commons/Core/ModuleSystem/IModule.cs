@@ -20,7 +20,7 @@
     /// <summary>
     /// 用于指定一个IModule类型的加载前置依赖类型
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface)]
     public class ModuleDependencyAttribute : Attribute
     {
         private List<Type> m_dependTypes;

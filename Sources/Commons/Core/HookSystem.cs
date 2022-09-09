@@ -1,5 +1,4 @@
-﻿
-using MonoMod.Cil;
+﻿using MonoMod.Cil;
 
 namespace Everglow.Sources.Commons.Core
 {

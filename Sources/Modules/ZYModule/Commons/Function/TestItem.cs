@@ -1,4 +1,6 @@
-﻿using Everglow.Sources.Modules.ZYModule.Visuals.ScreenShaders;
+﻿using Everglow.Sources.Commons.Core.VFX;
+using Everglow.Sources.Modules.ExampleModule.VFX;
+using Everglow.Sources.Modules.ZYModule.Visuals.ScreenShaders;
 
 using Terraria.Audio;
 
@@ -13,7 +15,7 @@ internal class TestItem : ModItem
         }
         public override void Update()
         {
-            if(time >= 120)
+            if (time >= 120)
             {
                 active = false;
             }
@@ -37,6 +39,7 @@ internal class TestItem : ModItem
         Item.useAnimation = 10;
         Item.useTime = 10;
         Item.useStyle = ItemUseStyleID.Swing;
+        Item.autoReuse = false;
     }
     [CloneByReference]
     private List<SoundStyle> soundStyles = new List<SoundStyle>();
@@ -54,16 +57,17 @@ internal class TestItem : ModItem
         //    enumerator.Reset();
         //    Main.NewText("Over!");
         //}
-        if (!ScreenShaderManager.Instance["Test"].active)
-        {
-            ScreenShaderManager.Activate("Test");
-        }
-        else
-        {
-            ScreenShaderManager.Deactivate("Test");
-        }
+        //if (!ScreenShaderManager.Instance["Test"].active)
+        //{
+        //    ScreenShaderManager.Activate("Test");
+        //}
+        //else
+        //{
+        //    ScreenShaderManager.Deactivate("Test");
+        //}
+        VFXManager.Instance.Add(new WhiteDust() { position = Main.MouseWorld });
 
-        return true;
+        return false;
     }
     public override void AddRecipes()
     {

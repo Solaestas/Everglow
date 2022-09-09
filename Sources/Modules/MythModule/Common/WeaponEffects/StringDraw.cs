@@ -21,7 +21,7 @@ namespace Everglow.Sources.Modules.MythModule.Common.WeaponEffects
                     if (Main.projectile[d].type == ModContent.ProjectileType<ShadowWingBow>())
                     {
                         Player player = Main.player[Main.projectile[d].owner];
-                        Texture2D TexString = MythContent.QuickTexture("TheFirefly/Items/Weapons/ShadowWingBowString0");
+                        //Texture2D TexString = MythContent.QuickTexture("TheFirefly/Items/Weapons/ShadowWingBowString0");
                         Texture2D TrueString = MythContent.QuickTexture("TheFirefly/Items/Weapons/ShadowWingBowString");
                         int TotalLength = 34;//满弦长
                         int TotalWidth = 6;//弦宽
@@ -55,7 +55,7 @@ namespace Everglow.Sources.Modules.MythModule.Common.WeaponEffects
                         SpriteEffects se0 = SpriteEffects.FlipVertically;
                         SpriteEffects se2 = SpriteEffects.None;
                         Color drawColor = Lighting.GetColor((int)Main.projectile[d].Center.X / 16, (int)(Main.projectile[d].Center.Y / 16));
-                        int ColS = (int)((Main.projectile[d].timeLeft - 5) * 3 / 2f + 50f);
+                        //int ColS = (int)((Main.projectile[d].timeLeft - 5) * 3 / 2f + 50f);
                         Main.spriteBatch.Draw(TrueString, DrawPoint0 - Main.screenPosition, new Rectangle(0, 0, TotalWidth, BreakLength)/*第一段长度*/, drawColor, Rot0 + (float)(Math.PI * 0.5), new Vector2(TotalWidth / 2f, BreakLength / 2f), new Vector2(1f, Len0 / BreakLength), se0, 0);
                         Main.spriteBatch.Draw(TrueString, DrawPoint2 - Main.screenPosition, new Rectangle(0, BreakLength, TotalWidth, TotalLength - BreakLength)/*第二段长度*/, drawColor, Rot2 + (float)(Math.PI * 0.5), new Vector2(TotalWidth / 2f, (TotalLength - BreakLength) / 2f), new Vector2(1f, Len2 / (TotalLength - BreakLength)), se2, 0);
                         //Main.spriteBatch.Draw(TexString, Main.projectile[d].Center - Main.screenPosition, null, drawColor, Main.projectile[d].rotation - (float)(Math.PI * 0.25), new Vector2(TexString.Width / 2f, TexString.Height / 2f), 1f, se, 0);
