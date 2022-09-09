@@ -307,33 +307,30 @@ namespace Everglow.Sources.Modules.SubWorldModule
                 if (FileUtilities.Exists(text, isCloudSave))
                 {
                     var data = WorldFile.GetAllMetadata(text, isCloudSave);
-                    if (data.WorldSizeX > Main.tile.Width || data.WorldSizeY > Main.tile.Height)
-                    {
-                        int fixedx = (int)(Math.Floor(data.WorldSizeX / 200f) * 200);
-                        int fixedy = (int)(Math.Floor(data.WorldSizeY / 150f) * 150);
-                        Main.maxTilesX = fixedx;
-                        Main.maxTilesY = fixedy;
-                        Main.tile = (Tilemap)TileMapConstructor.Invoke(new object[] { (ushort)(fixedx + 1), (ushort)(fixedy + 1) });
-                        Main.Map = new(Main.maxTilesX, Main.maxTilesY);
-                        Main.mapMinX = 0;
-                        Main.mapMinY = 0;
-                        Main.mapMaxX = Main.maxTilesX;
-                        Main.mapMaxY = Main.maxTilesY;
-                        Main.worldSurface = Main.maxTilesY * 0.3;
-                        Main.rockLayer = Main.maxTilesY * 0.5;
-                        WorldGen.lavaLine = (int)(Main.rockLayer + Main.maxTilesY) / 2 + Main.rand.Next(50, 80);
-                        Main.instance.mapTarget = new RenderTarget2D[(Main.maxTilesX / Main.textureMaxWidth) + 1,
-                            (Main.maxTilesY / Main.textureMaxHeight) + 1];
-                        Main.mapWasContentLost = new bool[Main.instance.mapTarget.GetLength(0), Main.instance.mapTarget.GetLength(1)];
-                        Main.initMap = new bool[Main.instance.mapTarget.GetLength(0), Main.instance.mapTarget.GetLength(1)];
-                        Main.instance.TilePaintSystem = new();
-                        Main.instance.TilesRenderer = new(Main.instance.TilePaintSystem);
-                        Main.instance.WallsRenderer = new(Main.instance.TilePaintSystem);
-                        Main.bottomWorld = Main.maxTilesY * 16;
-                        Main.rightWorld = Main.maxTilesX * 16;
-                        Main.maxSectionsX = (Main.maxTilesX - 1) / 200 + 1;
-                        Main.maxSectionsY = (Main.maxTilesY - 1) / 150 + 1;
-                    }
+                    int fixedx = (int)(Math.Floor(data.WorldSizeX / 200f) * 200);
+                    int fixedy = (int)(Math.Floor(data.WorldSizeY / 150f) * 150);
+                    Main.maxTilesX = fixedx;
+                    Main.maxTilesY = fixedy;
+                    Main.tile = (Tilemap)TileMapConstructor.Invoke(new object[] { (ushort)(fixedx + 1), (ushort)(fixedy + 1) });
+                    Main.Map = new(Main.maxTilesX, Main.maxTilesY);
+                    Main.mapMinX = 0;
+                    Main.mapMinY = 0;
+                    Main.mapMaxX = Main.maxTilesX;
+                    Main.mapMaxY = Main.maxTilesY;
+                    Main.worldSurface = Main.maxTilesY * 0.3;
+                    Main.rockLayer = Main.maxTilesY * 0.5;
+                    WorldGen.lavaLine = (int)(Main.rockLayer + Main.maxTilesY) / 2 + Main.rand.Next(50, 80);
+                    Main.instance.mapTarget = new RenderTarget2D[(Main.maxTilesX / Main.textureMaxWidth) + 1,
+                        (Main.maxTilesY / Main.textureMaxHeight) + 1];
+                    Main.mapWasContentLost = new bool[Main.instance.mapTarget.GetLength(0), Main.instance.mapTarget.GetLength(1)];
+                    Main.initMap = new bool[Main.instance.mapTarget.GetLength(0), Main.instance.mapTarget.GetLength(1)];
+                    Main.instance.TilePaintSystem = new();
+                    Main.instance.TilesRenderer = new(Main.instance.TilePaintSystem);
+                    Main.instance.WallsRenderer = new(Main.instance.TilePaintSystem);
+                    Main.bottomWorld = Main.maxTilesY * 16;
+                    Main.rightWorld = Main.maxTilesX * 16;
+                    Main.maxSectionsX = (Main.maxTilesX - 1) / 200 + 1;
+                    Main.maxSectionsY = (Main.maxTilesY - 1) / 150 + 1;
                 }
                 if (current is null)
                 {
@@ -465,39 +462,36 @@ namespace Everglow.Sources.Modules.SubWorldModule
                 worldFileData.UniqueId = new Guid(md.ComputeHash(Encoding.ASCII.GetBytes(Path.GetFileNameWithoutExtension(main.Path) + current.Name)));
             }
             Main.ActiveWorldFileData = worldFileData;
-            if (current.Width > Main.tile.Width || current.Height > Main.tile.Height)
+            int fixedx = (int)(Math.Floor(current.Width / 200f) * 200);
+            int fixedy = (int)(Math.Floor(current.Height / 150f) * 150);
+            if (FileUtilities.Exists(path, fromCloud))
             {
-                int fixedx = (int)(Math.Floor(current.Width / 200f) * 200);
-                int fixedy = (int)(Math.Floor(current.Height / 150f) * 150);
-                if (FileUtilities.Exists(path, fromCloud))
-                {
-                    var data = WorldFile.GetAllMetadata(path, fromCloud);
-                    fixedx = data.WorldSizeX;
-                    fixedy = data.WorldSizeY;
-                }
-                Main.maxTilesX = fixedx;
-                Main.maxTilesY = fixedy;
-                Main.tile = (Tilemap)TileMapConstructor.Invoke(new object[] { (ushort)(fixedx + 1), (ushort)(fixedy + 1) });
-                Main.Map = new(Main.maxTilesX, Main.maxTilesY);
-                Main.mapMinX = 0;
-                Main.mapMinY = 0;
-                Main.mapMaxX = Main.maxTilesX;
-                Main.mapMaxY = Main.maxTilesY;
-                Main.worldSurface = Main.maxTilesY * 0.3;
-                Main.rockLayer = Main.maxTilesY * 0.5;
-                WorldGen.lavaLine = (int)(Main.rockLayer + Main.maxTilesY) / 2 + Main.rand.Next(50, 80);
-                Main.instance.mapTarget = new RenderTarget2D[(Main.maxTilesX / Main.textureMaxWidth) + 1,
-                    (Main.maxTilesY / Main.textureMaxHeight) + 1];
-                Main.mapWasContentLost = new bool[Main.instance.mapTarget.GetLength(0), Main.instance.mapTarget.GetLength(1)];
-                Main.initMap = new bool[Main.instance.mapTarget.GetLength(0), Main.instance.mapTarget.GetLength(1)];
-                Main.instance.TilePaintSystem = new();
-                Main.instance.TilesRenderer = new(Main.instance.TilePaintSystem);
-                Main.instance.WallsRenderer = new(Main.instance.TilePaintSystem);
-                Main.bottomWorld = Main.maxTilesY * 16;
-                Main.rightWorld = Main.maxTilesX * 16;
-                Main.maxSectionsX = (Main.maxTilesX - 1) / 200 + 1;
-                Main.maxSectionsY = (Main.maxTilesY - 1) / 150 + 1;
+                var data = WorldFile.GetAllMetadata(path, fromCloud);
+                fixedx = data.WorldSizeX;
+                fixedy = data.WorldSizeY;
             }
+            Main.maxTilesX = fixedx;
+            Main.maxTilesY = fixedy;
+            Main.tile = (Tilemap)TileMapConstructor.Invoke(new object[] { (ushort)(fixedx + 1), (ushort)(fixedy + 1) });
+            Main.Map = new(Main.maxTilesX, Main.maxTilesY);
+            Main.mapMinX = 0;
+            Main.mapMinY = 0;
+            Main.mapMaxX = Main.maxTilesX;
+            Main.mapMaxY = Main.maxTilesY;
+            Main.worldSurface = Main.maxTilesY * 0.3;
+            Main.rockLayer = Main.maxTilesY * 0.5;
+            WorldGen.lavaLine = (int)(Main.rockLayer + Main.maxTilesY) / 2 + Main.rand.Next(50, 80);
+            Main.instance.mapTarget = new RenderTarget2D[(Main.maxTilesX / Main.textureMaxWidth) + 1,
+                (Main.maxTilesY / Main.textureMaxHeight) + 1];
+            Main.mapWasContentLost = new bool[Main.instance.mapTarget.GetLength(0), Main.instance.mapTarget.GetLength(1)];
+            Main.initMap = new bool[Main.instance.mapTarget.GetLength(0), Main.instance.mapTarget.GetLength(1)];
+            Main.instance.TilePaintSystem = new();
+            Main.instance.TilesRenderer = new(Main.instance.TilePaintSystem);
+            Main.instance.WallsRenderer = new(Main.instance.TilePaintSystem);
+            Main.bottomWorld = Main.maxTilesY * 16;
+            Main.rightWorld = Main.maxTilesX * 16;
+            Main.maxSectionsX = (Main.maxTilesX - 1) / 200 + 1;
+            Main.maxSectionsY = (Main.maxTilesY - 1) / 150 + 1;
             Main.spawnTileX = Main.maxTilesX / 2;
             Main.spawnTileY = Main.maxTilesY / 2;
             WorldGen.clearWorld();

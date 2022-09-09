@@ -118,27 +118,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             {
                 if (SubWorldModule.SubworldSystem.IsActive<MothWorld>())
                 {
-                    Main.NewText("gen!");
-                    float num = 0f;
-                    for (int i = 0; i < SubWorldModule.SubworldSystem.current.Tasks.Count; i++)
-                    {
-                        num += SubWorldModule.SubworldSystem.current.Tasks[i].Weight;
-                    }
-                    Terraria.WorldBuilding.WorldGenerator.CurrentGenerationProgress = new Terraria.WorldBuilding.GenerationProgress
-                    {
-                        TotalWeight = num
-                    };
-                    Terraria.WorldBuilding.WorldGenConfiguration config = SubWorldModule.SubworldSystem.current.Config;
-                    for (int j = 0; j < SubWorldModule.SubworldSystem.current.Tasks.Count; j++)
-                    {
-                        WorldGen._genRand = new Terraria.Utilities.UnifiedRandom(Main.ActiveWorldFileData.Seed);
-                        Main.rand = new Terraria.Utilities.UnifiedRandom(Main.ActiveWorldFileData.Seed);
-                        Terraria.WorldBuilding.GenPass genPass = SubWorldModule.SubworldSystem.current.Tasks[j];
-                        Terraria.WorldBuilding.WorldGenerator.CurrentGenerationProgress.Start(genPass.Weight);
-                        genPass.Apply(Terraria.WorldBuilding.WorldGenerator.CurrentGenerationProgress, config?.GetPassConfiguration(genPass.Name));
-                        Terraria.WorldBuilding.WorldGenerator.CurrentGenerationProgress.End();
-                    }
-                    Terraria.WorldBuilding.WorldGenerator.CurrentGenerationProgress = null;
+                    SubWorldModule.SubworldSystem.Exit();
                 }
                 else
                 {
