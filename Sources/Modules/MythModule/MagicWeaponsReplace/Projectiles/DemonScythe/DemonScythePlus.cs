@@ -49,7 +49,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
             {
                 Projectile.Kill();
             }
-
+            
         }
         public override void Kill(int timeLeft)
         {
