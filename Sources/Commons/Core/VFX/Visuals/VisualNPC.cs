@@ -16,7 +16,7 @@ public abstract class VisualNPC : ModNPC, IVisual
     {
         if (!Main.gameMenu)
         {
-            VFXManager.Instance.Add(this);
+            VFXManager.Add(this);
         }
     }
 
