@@ -16,7 +16,7 @@ internal abstract class VisualProjectile : ModProjectile, IVisual
     {
         if (!Main.gameMenu)
         {
-            VFXManager.Instance.Add(this);
+            VFXManager.Add(this);
         }
     }
 

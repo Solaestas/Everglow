@@ -1,4 +1,5 @@
 ﻿using Everglow.Sources.Commons.Core.Profiler.Fody;
+using Everglow.Sources.Commons.Function.NetUtils;
 
 namespace Everglow.Sources.Commons.Core.ModuleSystem
 {
@@ -26,6 +27,12 @@ namespace Everglow.Sources.Commons.Core.ModuleSystem
                 !Attribute.IsDefined(type, typeof(DontAutoLoadAttribute))
                 ))
             {
+                bool clientOnly = type.GetCustomAttribute<ClientOnlyModuleAttribute>() != null;
+                if(clientOnly && NetUtils.IsServer)
+                {
+                    continue;
+                }
+
                 var dependency = type.GetCustomAttribute<ModuleDependencyAttribute>(true);
                 if (dependency is null)
                 {
