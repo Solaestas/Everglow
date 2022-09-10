@@ -6,7 +6,10 @@ namespace Everglow.Sources.Commons.Function.PlayerUtils;
 internal class VirtualKey : INetUpdate<bool>
 {
     internal const int DoubleClickMaxInterval = 10;
-    private int updateTime;
+    /// <summary>
+    /// 确保第一次加载时链表不为空
+    /// </summary>
+    private int updateTime = -1;
     private ulong cache;
     public ulong Cache => cache;
     public bool Press => (cache & 1) == 1;
@@ -37,8 +40,7 @@ internal class VirtualKey : INetUpdate<bool>
     {
         if (updateTime != HookSystem.UITimer)
         {
-            cache <<= 1;
-            cache |= (cache & 2) >> 1;
+            cache = (cache << 1) | (cache & 1);
             updateTime = HookSystem.UITimer;
         }
     }
