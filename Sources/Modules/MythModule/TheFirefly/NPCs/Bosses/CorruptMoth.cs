@@ -125,6 +125,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
             NPC.width = 80;
             NPC.height = 120;
             NPC.defense = 0;
+            if (Main.getGoodWorld)
+            {
+                NPC.defense += 10;
+            }
             NPC.lifeMax = 12000;
             NPC.npcSlots = 80;
             NPC.scale = 0.8f;
@@ -501,6 +505,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
                         {
                             Freq = 16;
                         }
+                        if (Main.getGoodWorld)
+                        {
+                            Freq -= 4;
+                        }
                         GetDir_ByVel();
                         if (!phase2)
                         {
@@ -523,6 +531,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
                             {
                                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(-1.4f, -2), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 4, 0f, Main.myPlayer, 1);
                                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(1.4f, -2), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 4, 0f, Main.myPlayer, 1);
+                            }
+                            if (Main.getGoodWorld)
+                            {
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(-1.4f, 1), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 4, 0f, Main.myPlayer, 1);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(1.4f, 1), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 4, 0f, Main.myPlayer, 1);
                             }
                         }
                     }
@@ -1225,6 +1238,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
                             Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(-1.4f, -2), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 4, 0f, Main.myPlayer, 1);
                             Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(1.4f, -2), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 4, 0f, Main.myPlayer, 1);
                         }
+                        if (Main.getGoodWorld)
+                        {
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(-1.4f, 1), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 4, 0f, Main.myPlayer, 1);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(1.4f, 1), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 4, 0f, Main.myPlayer, 1);
+                        }
                     }
                 }
                 Timer++;
@@ -1448,3 +1466,4 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
         }
     }
 }
+// "For The Worthy" Seed notes: Corrupted Moth's rain attacks fire two extra projectiles, and the frequency of some attacks are increased. The moth minions (butterflies) have 3 HP instead on 1 and has 9999 defense. Corrupted Moth's corrupt rain attacks go through tiles.

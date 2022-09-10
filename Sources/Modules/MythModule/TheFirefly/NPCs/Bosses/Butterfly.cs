@@ -32,7 +32,12 @@
             {
                 NPC.damage = 60;
             }
-            
+            if (Main.getGoodWorld)
+            {
+                NPC.lifeMax = 3;
+                NPC.defense = 9999;
+            }
+
             NPC.dontTakeDamageFromHostiles = true;
         }
         public override bool? CanFallThroughPlatforms()
