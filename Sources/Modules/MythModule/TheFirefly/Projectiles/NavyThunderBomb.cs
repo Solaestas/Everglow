@@ -87,7 +87,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 if (h % 3 < 1)
                 {
                     Vector2 v = new Vector2(0, 12f).RotatedBy(h * MathHelper.TwoPi / 18f + X);
-                    Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + v, v, ModContent.ProjectileType<BlueMissilFriendly>(), Projectile.damage, 0f, Projectile.owner);
+                    if (!Main.hardMode) // Until the DownedSystem is reimplemented and decided on, Main.hardMode is used. This can change
+                    {
+                        Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + v, v, ModContent.ProjectileType<BlueMissilFriendly>(), (int)(Projectile.damage * 0.35f), 0f, Projectile.owner);
+                    }
+                    else
+                    {
+                        Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + v, v, ModContent.ProjectileType<BlueMissilFriendly>(), (int)(Projectile.damage * 0.55f), 0f, Projectile.owner);
+                    }
                 }
             }
             for (int j = 0; j < 8 * k0; j++)
