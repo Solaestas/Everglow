@@ -87,7 +87,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 if (h % 3 < 1)
                 {
                     Vector2 v = new Vector2(0, 12f).RotatedBy(h * MathHelper.TwoPi / 18f + X);
-                    Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + v, v, ModContent.ProjectileType<BlueMissilFriendly>(), Projectile.damage, 0f, Projectile.owner);
+                    Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + v, v, ModContent.ProjectileType<BlueMissilFriendly>(), (int)(Projectile.damage * 0.55f), 0f, Projectile.owner);
                 }
             }
             for (int j = 0; j < 8 * k0; j++)
