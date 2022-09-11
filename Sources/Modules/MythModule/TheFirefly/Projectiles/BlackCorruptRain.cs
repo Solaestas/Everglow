@@ -18,7 +18,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Projectile.friendly = false;
             Projectile.hostile = true;
             Projectile.ignoreWater = true;
-            if (Main.getGoodWorld)
+            if (Main.masterMode || Main.getGoodWorld)
             {
                 Projectile.tileCollide = false;
             }
