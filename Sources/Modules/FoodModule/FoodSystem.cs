@@ -1,7 +1,6 @@
 ﻿using Everglow.Sources.Commons.Core.ModuleSystem;
 using Everglow.Sources.Commons.Core.UI;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds;
-using Everglow.Sources.Modules.MythModule.TheFirefly.UI;
 using MonoMod.Cil;
 using ReLogic.Content;
 using Terraria.GameContent.Shaders;
