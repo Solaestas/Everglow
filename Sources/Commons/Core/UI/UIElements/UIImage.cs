@@ -52,12 +52,14 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
             if (Style == CalculationStyle.LockAspectRatioMainWidth)
             {
                 float aspectRatio = (float)_texture.Width / (float)_texture.Height;
-                Info.Height = Info.Width / aspectRatio;
+                Info.Height.Pixel = Info.Width.Pixel / aspectRatio;
+                Info.Height.Percent = Info.Width.Percent / aspectRatio * Main.screenWidth / Main.screenHeight;
             }
-            else if(Style == CalculationStyle.LockedAspectRatioMainHeight)
+            else if (Style == CalculationStyle.LockedAspectRatioMainHeight)
             {
                 float aspectRatio = (float)_texture.Width / (float)_texture.Height;
-                Info.Width = Info.Height * aspectRatio;
+                Info.Width.Pixel = Info.Height.Pixel * aspectRatio;
+                Info.Width.Percent = Info.Height.Percent / aspectRatio / Main.screenWidth * Main.screenHeight;
             }
             base.Calculation();
         }

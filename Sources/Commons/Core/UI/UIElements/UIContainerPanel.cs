@@ -19,6 +19,18 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
                 Info.Width.Percent = 1f;
                 Info.Height.Percent = 1f;
             }
+            public override bool ContainsPoint(Point point)
+            {
+                return ParentElement.ContainsPoint(point);
+            }
+            protected override void DrawChildren(SpriteBatch sb)
+            {
+                ChildrenElements.ForEach(element =>
+                {
+                    if (element.IsVisible && !element.Info.IsHidden && element.Info.TotalHitBox.Intersects(ParentElement.Info.TotalHitBox))
+                        element.Draw(sb);
+                });
+            }
         }
         private InnerPanel _innerPanel;
         private VerticalScrollbar _verticalScrollbar;

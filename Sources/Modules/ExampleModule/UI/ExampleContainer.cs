@@ -7,7 +7,7 @@ namespace Everglow.Sources.Modules.ExampleModule.UI
         public override void OnInitialization()
         {
             base.OnInitialization();
-            Info.IsVisible = true;
+            Info.IsVisible = false;
 
             UIPanel panel = new UIPanel();
             panel.Info.Width.SetValue(0f, 0.4f);
