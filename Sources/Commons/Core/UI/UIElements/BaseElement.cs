@@ -475,8 +475,9 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
         /// </summary>
         /// <param name="point">输入的点</param>
         /// <returns>如果包含返回true，否则返回false</returns>
-        public virtual bool ContainsPoint(Point point) =>
-            (GetParentElementIsHiddenOverflow() ? GetCanHitBox() : Info.TotalHitBox).Contains(point);
+        public virtual bool ContainsPoint(Point point) => GetParentElementIsHiddenOverflow() ? (ParentElement == null ?
+            new Rectangle(0, 0, Main.screenWidth, Main.screenHeight).Contains(point) : ParentElement.ContainsPoint(point)) &&
+            Info.TotalHitBox.Contains(point) : Info.TotalHitBox.Contains(point);
         /// <summary>
         /// 此UI部件是否包含点
         /// </summary>
