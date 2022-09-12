@@ -56,6 +56,7 @@
     <Folder Include="lib\" />
     <Folder Include="Sources\Modules\FoodModule\Buffs\ModDrinkBuffs\" />
     <Folder Include="Sources\Modules\FoodModule\Buffs\ModFoodBuffs\" />
+    <Folder Include="Sources\Modules\MythModule\TheFirefly\UI\" />
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="xcopy /y /d  &quot;$(OutDir)Everglow.dll&quot; &quot;$(ProjectDir)&quot;" />
