@@ -1,6 +1,4 @@
-﻿using Everglow.Sources.Commons.Core.ModuleSystem;
-
-namespace Everglow.Sources.Modules.FoodModule
+﻿namespace Everglow.Sources.Modules.FoodModule
 {
     internal class FoodSystem : IModule
     {
