@@ -1,7 +1,15 @@
 ﻿namespace Everglow.Sources.Modules.FoodModule
 {
-    internal class FoodSystem : ModSystem
+    internal class FoodSystem : IModule
     {
+        public string Name { get; } = "食物系统";
+        public void Load()
+        {
 
+        }
+        public void Unload()
+        {
+
+        }
     }
 }
