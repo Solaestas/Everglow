@@ -145,7 +145,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             {
                 HalfSize = treeTexture.Size() / 2f;
             }
-             
+
             HalfSize.X /= Count;
 
             Point point = new Point(xTS, yTS);
