@@ -1,7 +1,6 @@
 ﻿using Everglow.Sources.Commons.Core.ModuleSystem;
 using Everglow.Sources.Commons.Core.UI;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds;
-using Everglow.Sources.Modules.MythModule.TheFirefly.UI;
 using MonoMod.Cil;
 using ReLogic.Content;
 using Terraria.GameContent.Shaders;
@@ -17,8 +16,6 @@ namespace Everglow.Sources.Modules.MythModule
 
         public void Load()
         {
-            ContainerPage.RegisterContainerPage(new FireflyContainerPage()); //在IModule类内手动注册容器页.
-
             if (Main.netMode != NetmodeID.Server)
             {
                 // 水波扰动Shader

@@ -2,7 +2,7 @@ using Terraria.Localization;
 using Everglow.Sources.Commons.Function.Vertex;
 using Terraria.Audio;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
     public class GlowStar : ModProjectile

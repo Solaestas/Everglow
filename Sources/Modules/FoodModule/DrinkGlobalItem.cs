@@ -280,7 +280,7 @@ namespace Everglow.Sources.Modules.FoodModule
                     Language.GetTextValue("Mods.Everglow.Common.FoodSystem.CannotDrink"),
                     true, false);
 
-                    foodPlayer.TextTimer = FoodUtils.GetFrames(0, 0, 3, 0);
+                    foodPlayer.TextTimer = FoodUtils.GetFrames(0, 0, 2, 30);
                     return false;
                 }
             }
@@ -295,7 +295,7 @@ namespace Everglow.Sources.Modules.FoodModule
                     Language.GetTextValue("Mods.Everglow.Common.FoodSystem.CannotDrink"),
                     true,false);
 
-                    foodPlayer.TextTimer = FoodUtils.GetFrames(0, 0, 3, 0);
+                    foodPlayer.TextTimer = FoodUtils.GetFrames(0, 0, 2, 30);
                     return false;
                 }
             }
