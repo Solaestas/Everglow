@@ -1,15 +1,8 @@
 ﻿using Everglow.Sources.Commons.Core.ModuleSystem;
-using Everglow.Sources.Commons.Core.UI;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds;
-using Everglow.Sources.Modules.MythModule.TheFirefly.UI;
-using MonoMod.Cil;
-using ReLogic.Content;
-using Terraria.GameContent.Shaders;
-using Terraria.Graphics.Shaders;
 
 namespace Everglow.Sources.Modules.FoodModule
 {
-    internal class FoodSystem : IModule 
+    internal class FoodSystem : IModule
     {
         public string Name { get; } = "食物系统";
         public void Load()
