@@ -77,6 +77,10 @@ namespace Everglow.Sources.Modules.SubWorldModule
         }
         public static bool Enter(string id)
         {
+            if (Main.netMode != NetmodeID.SinglePlayer)
+            {
+                return false;
+            }
             if (current == cache)
             {
                 for (int i = 0; i < subworlds.Count; i++)
@@ -92,6 +96,10 @@ namespace Everglow.Sources.Modules.SubWorldModule
         }
         public static bool Enter<T>() where T : Subworld
         {
+            if (Main.netMode != NetmodeID.SinglePlayer)
+            {
+                return false;
+            }
             if (current == cache)
             {
                 for (int i = 0; i < subworlds.Count; i++)
