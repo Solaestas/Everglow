@@ -36,6 +36,7 @@
             {
                 NPC.lifeMax = 3;
                 NPC.defense = 9999;
+                NPC.damage = 80;
             }
 
             NPC.dontTakeDamageFromHostiles = true;
