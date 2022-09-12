@@ -140,7 +140,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
         {
             const int Count = 16;
             Texture2D treeTexture = MythContent.QuickTexture("TheFirefly/Tiles/FireflyTree");
-            Vector2 HalfSize = treeTexture.Size() / 2f;
+            Vector2 HalfSize = Vector2.Zero;
+            if (treeTexture != null)//不知为啥这里有可能是null(可能是还没加载图片之前这个代码就跑了)
+            {
+                HalfSize = treeTexture.Size() / 2f;
+            }
+             
             HalfSize.X /= Count;
 
             Point point = new Point(xTS, yTS);
