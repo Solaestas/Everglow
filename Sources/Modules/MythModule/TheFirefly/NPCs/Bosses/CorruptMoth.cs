@@ -1485,4 +1485,4 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
         }
     }
 }
-// "For The Worthy" Seed notes: Corrupted Moth's rain attacks fire two extra projectiles, and the frequency of some attacks are increased. The moth minions (butterflies) have 3 HP instead on 1 and has 9999 defense. Corrupted Moth's corrupt rain attacks go through tiles.
+// "For The Worthy" Seed notes: Corrupted Moth's defense is increased by +10. Corrupted Moth's rain attacks fire two extra projectiles, and the frequency of some attacks are increased. The moth minions (butterflies) have 3 HP instead on 1 and has 9999 defense, meaning that you have to hit them 3 times instead of once. Corrupted Moth's corrupt rain attacks go through tiles (also applies on Master Mode).
