@@ -25,5 +25,4 @@ internal class TestItem : ModItem
     {
         CreateRecipe().Register();
     }
-
 }
