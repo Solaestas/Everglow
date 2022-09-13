@@ -12,6 +12,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
         public Vector2 velocity;
         public int timeLeft;
         public float size;
+        public float omega;
         public override void Update()
         {
             for (int y = 19; y > 0; y--)
@@ -65,6 +66,12 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             if (bars.Count > 3)
             {
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+            }
+            velocity = velocity.RotatedBy(omega);
+            omega += Main.rand.NextFloat(-0.05f, 0.05f);
+            if(Math.Abs(omega) > 0.15)
+            {
+                omega *= 0.98f;
             }
         }
         public override CallOpportunity DrawLayer => CallOpportunity.PostDrawNPCs;
