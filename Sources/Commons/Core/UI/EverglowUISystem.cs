@@ -97,7 +97,7 @@ namespace Everglow.Sources.Commons.Core.UI
                 }
             }
 
-            Main.LocalPlayer.mouseInterface = true;
+            //Main.LocalPlayer.mouseInterface = true;
 
             foreach (var ce in interact)
                 if (!interactContainerElementsBuffer.Contains(ce))
