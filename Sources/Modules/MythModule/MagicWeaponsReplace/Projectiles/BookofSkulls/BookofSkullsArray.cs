@@ -51,12 +51,18 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             Projectile.rotation = player.fullRotation;
 
             RingPos = RingPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
-            SkullSpriteColdFlame sf = new SkullSpriteColdFlame();
+            SkullSpriteColdFlame sf = new SkullSpriteColdFlame()
+            {
+                timeLeft = 70,
+                size = Main.rand.NextFloat(0.45f, 1.55f),
+                velocity = new Vector2(Main.rand.NextFloat(2.5f, 3.5f), 0).RotatedByRandom(6.283),
+                Active = true,
+                Visible = true
+            };
+            sf.positon[0] = RingPos + Projectile.Center;
+
             VFXManager.Add(sf);
-            sf.timeLeft = 180;
-            sf.positon[0] = RingPos;
-            sf.size = Main.rand.NextFloat(0.85f, 1.15f);
-            sf.velocity = new Vector2(Main.rand.NextFloat(0.45f, 3.5f), 0).RotatedByRandom(6.283);
+            
         }
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
         {
