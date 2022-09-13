@@ -895,7 +895,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
                             for (int i = 0; i < NPC.ai[2]; i++)
                             {
                                 Vector2 vel = (r+i * MathHelper.TwoPi / NPC.ai[2]).ToRotationVector2();
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vel * NPC.ai[2] / 2, ModContent.ProjectileType<ButterflyDream>(), 1, 0, Main.myPlayer, -vel.Y);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vel * NPC.ai[2] / 2, ModContent.ProjectileType<ButterflyDream>(), NPC.damage / 10, 0, Main.myPlayer, -vel.Y);
                             }
                         }
                     }
@@ -1134,7 +1134,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
                 {
                     for (int i = -10; i < 10; i++)
                     {
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, new Vector2(Main.rand.NextFloat(-0.3f, 0.3f), i * 10), ModContent.ProjectileType<ButterflyDream>(), 1, 0, Main.myPlayer, -i * 0.1f);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, new Vector2(Main.rand.NextFloat(-0.3f, 0.3f), i * 10), ModContent.ProjectileType<ButterflyDream>(), NPC.damage / 10, 0, Main.myPlayer, -i * 0.1f);
                     }
 
                 }
