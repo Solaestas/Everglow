@@ -1,4 +1,8 @@
-Everglow is a comprehensive content mod
+Everglow is a comprehensive content mod, dedicated to adding rich and interesting playable content to Terraria
+These contents will cover all aspects of the game: from the Terraria Continent to the wider world, weapons, equipment, bosses, terrain, new worlds, and new mechanics
+With a unique module system, plays can selectively load some modules to customize the mod content to a certain extent, and find their favorite way to play
+The content of the two mods, Eternal Resolve and MythMod, will each be migrated as a module, and may be linked to other mods in the future
+Mods will support multiplayer
 
 Developed by Dream Chaser Group
 
@@ -19,7 +23,11 @@ Wiki: Moonseer
 
 --------------------------------------
 
-流光无际是一个综合内容性模组
+流光无际是一个综合内容性模组, 致力于向泰拉中加入丰富有趣的可玩内容
+这些内容将会涵盖各个方面：从第一天到月后，从泰拉大陆到更广阔的世界，武器、装备、boss、地形、新世界、新机制应有尽有
+具有独特的模块系统，玩家可以选择性地加载部分模块，在一定程度上自定义mod内容，找到自己喜爱的游玩方式
+永恒意志和神话这两个mod的内容将会各作为一个模块迁移到流光无际下，未来可能与其他mod推出联动内容
+Mod将支持联机
 
 由【孤舟逐梦团队】开发
 
