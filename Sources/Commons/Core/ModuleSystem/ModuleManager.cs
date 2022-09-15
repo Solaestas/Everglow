@@ -1,4 +1,5 @@
 ﻿using Everglow.Sources.Commons.Core.Profiler.Fody;
+using Everglow.Sources.Commons.Function.NetUtils;
 
 namespace Everglow.Sources.Commons.Core.ModuleSystem
 {
@@ -19,12 +20,19 @@ namespace Everglow.Sources.Commons.Core.ModuleSystem
         {
             var dependencyGraph = new DependencyGraph();
             var assembly = Assembly.GetExecutingAssembly();
-            foreach (var type in assembly.GetTypes()
-                .Where(type =>
-                !type.IsAbstract &&
-                type.GetInterfaces().Contains(typeof(IModule)) &&
-                !Attribute.IsDefined(type, typeof(DontAutoLoadAttribute))
-                ))
+            foreach (var type in
+                from type in assembly.GetTypes()
+                where !type.IsAbstract
+                where !type.IsInterface
+                let interfaces = type.GetInterfaces()
+                where interfaces.Contains(typeof(IModule))
+                where !Attribute.IsDefined(type, typeof(DontAutoLoadAttribute), true)
+                where interfaces.All(i => !Attribute.IsDefined(i, typeof(DontAutoLoadAttribute), true))
+                let server = NetUtils.IsServer
+                where !server || !Attribute.IsDefined(type, typeof(ClientOnlyModuleAttribute))
+                where !server || interfaces.All(i => !Attribute.IsDefined(i, typeof(ClientOnlyModuleAttribute)))
+                select type
+                )
             {
                 var dependency = type.GetCustomAttribute<ModuleDependencyAttribute>(true);
                 if (dependency is null)
