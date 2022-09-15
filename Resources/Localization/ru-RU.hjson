@@ -36,14 +36,16 @@
 			#{$Mods.Everglow.Common.LegendWeapon}
 
 			#世界系统WorldGen
-			WorldSystem:{
+			WorldSystem:
+			{
 				WorldCreate_Def : "Генерация Мира"
 				WorldEnter_Def : "Вхождение в Мир"
 				BuildMothCave : "Генерация Кокона"
 			}
 
 			#食物系统FoodSystem
-			FoodSystem:{
+			FoodSystem:
+			{
 				CannotEat : "Ты сыт"
 				CannotDrink : "Тебе не хочется пить"
 			}
@@ -171,18 +173,18 @@
 			WoodenClub : Деревянная дубинка
 			DustOfCorrupt : Corrupted Scales
 			EvilChrysalis : Посох-кокон
-			PhosphorescenceGun : Scale Shotgun
-			ScaleWingBlade : Lepidoptera Blade
-			ShadowWingBow : Occulting Wings
-			AmbiguousNight : Ambiguous Night
+			PhosphorescenceGun : Чешуйчатый дробовик
+			ScaleWingBlade : Чешуекрылый Клинок
+			ShadowWingBow : Закрывающие крылья
+			AmbiguousNight : Неоднозначная Ночь
 			BlackWoodSlingshot : Эбеновая рогатка
 			BlueGemSlingshot : Сапфировая рогатка
 			CactusSlingShot : Кактусовая рогатка
-			ColdWoodSlingshot : Borealwood Slingshot
-			DarkWoodSlingShot : Shadewood SlingShot
-			GreenGemSlingshot : Emerald Slingshot
+			ColdWoodSlingshot : Рогатка из бореального дерева
+			DarkWoodSlingShot : Рогатка из тенистого дерева
+			GreenGemSlingshot : Изумрудная рогатка
 			JellySlingshot : Желейная рогатка
-			JungleSlingshot : Jungle Slingshot
+			JungleSlingshot : Рогатка джунглей
 			PalmWoodSlingshot : Рогатка из пальмового дерева
 			PearlWoodSlingshot : Жемчужная рогатка
 			PurpleGemSlingshot : Аметистовая рогатка
@@ -197,17 +199,17 @@
 			ToothKnfe : Клинок-бивень
 			ToothMagicBall : Сангвинический Шар
 			ToothStaff : Посох бивня
-			Acropora : Acropora
-			Alcyonarian : Alcyonarian
-			Barnacle : Barnacle
-			BarrelSponge : Barrel Sponge
+			Acropora : Акропора
+			Alcyonarian : Альционариец
+			Barnacle : Ракушка
+			BarrelSponge : Бочкообразная губка
 			Basalt : Базальт
-			BlueAcropora : Blue Acropora
-			BlueTreeCoral : BlueTree Coral
-			BubbleCoral : Bubble Coral
-			DragonScaleWood : Dragon Scale Wood
-			GoldGorgonianBranch : GoldGorgonianBranch
-			GorgonianPiece : Gorgonian Piece
+			BlueAcropora : Синяя Акропора
+			BlueTreeCoral : Голубой Древесный Коралл
+			BubbleCoral : Пузырчатый коралл
+			DragonScaleWood : Дерево из драконьей чешуи
+			GoldGorgonianBranch : Золотая Ветвь Горгоны
+			GorgonianPiece : Кусочек Горгоны
 			LargeBlueStarfish : Большая синяя морская звезда
 			LargeOrangeStarfish : Большая оранжевая морская звезда
 			MarbleCono : MarbleCono
@@ -216,21 +218,21 @@
 			ReefSharkSpecimen : Reefshark Specimen
 			StoneDragonScaleWood : Fossilized Dragon Scale Wood
 			TerrariaContinent : Terraria Continent(Not working)
-			CyanVineBar : Cyan Bar
-			CyanVineOre : Cyan Ore
-			DarkSeaBar : Abyssal Bar
-			DarkSeaOre : Abyssal Ore
+			CyanVineBar : Циановый слиток
+			CyanVineOre : Циановая руда
+			DarkSeaBar : Слиток бездный
+			DarkSeaOre : Руда бездный
 			OceanBlueBar : Current Bar
 			OceanBlueOre : Current Ore
-			Chinalamp1 : Traditional Lamp
-			Chinalamp2 : Traditional Lamp
-			LanternCrystal : Royal City Pylon
-			LanternPost1 : Lantern Post
-			LanternPost2 : Lantern Post
-			YellowDynastyShingles : Yellow Dynasty Shingles
+			Chinalamp1 : Традиционная лампа
+			Chinalamp2 : Традиционная лампа
+			LanternCrystal : Пилон Королевского города
+			LanternPost1 : Фонарный столб
+			LanternPost2 : Фонарный столб
+			YellowDynastyShingles : Черепица Желтой Династии
 			DiscordBallF1 : Discord Crystal Ball · The Ancient Path
 			LiftLamp : Lift Indicator
-			TestItem : Wooden Lift
+			TestItem : Деревянный Подъемник
 			EkandaBrick : Ekanda Brick
 			Guding : Ekanda Alloy
 			NoFlawsDream : Flawless Dream
@@ -250,6 +252,16 @@
 			SilverStabbingSword : Серебряная рапира
 			VegetationBayonet : Травинистая рапира
 			TDMT : Катастрофическая молния
+			CrystalSkull : Crystal Skull
+
+			#流萤系列物品
+			GlowBeadGun : "Glowing Railgun"
+
+			#Glow Wood Furniture
+			
+			#Music Boxes
+			GlowWoodMusicBox : Glow Wood Music Box (The Firefly)
+
 
 			#食物系统物品
 			BloodGlucoseMonitor : "Blood Glucose Monitor"
@@ -503,6 +515,23 @@
 			SilverStabbingSword : "{$Mods.Everglow.Common.RapierGT}"
 			VegetationBayonet : "{$Mods.Everglow.Common.RapierGT}"
 			TDMT : "{$Mods.Everglow.Common.RapierGT}"
+			CrystalSkull : 
+				'''
+				Unleashes the true power of vanilla and Everglow magic books
+				As the fruit of wisdom of the Wizards, most of the runes that were written on magic tomes are complex and unreadable.
+				However, when you use this crystal skull which was designed by the Witch-king and imbued with the power of true sight,
+				even the most ignorat apprentice can easily understand the wisdom of ancient wizards.
+				'''
+
+			#流萤系列物品
+			GlowBeadGun : 
+				'''
+				Hold attack to charge
+				Shoots a series of explosive glowing beads
+				'''
+
+			#Music Boxes
+			GlowWoodMusicBox : "Plays 'Setnour6 - Within the Giant Cocoon (身陷巨茧)'"
 
 			#食物系统物品
 			BloodGlucoseMonitor : "Display hunger information"
@@ -712,6 +741,10 @@
 			SugarCookieBuff : "5% increased ranged damage\n'Nourishing'"
 			TeacupBuff : "Greatly increased mana regen, magic damage and magic crit chance\n'Fragrant'"
 			TropicalSmoothieBuff : "Greatly increased magic damage and magic crit chance, your mana cost is reduced to 1\n'Tropical storm'"
+		}
+		MapEntry :
+		{
+			FireflyTree : "Firefly Tree"
 		}
 		Config:
 		{
