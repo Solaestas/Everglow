@@ -1,7 +1,12 @@
 *en-US*:
+CactusBall Item Name & Tooltip (provided name in file does not work)
+WoodShield Name Update & Tooltip
 
 *zh-Hans*:
 ScaleWingBlade Tooltip
+VortexVanquisherItem Item Name & Tooltip
+NavyThunder Item Name & Tooltip
+LilyHarp Item Name & Tooltip
 
 *ru-RU*:
 DustOfCorrupt Item Name & Tooltip
@@ -9,5 +14,9 @@ EvilChrysalis Tooltip
 ScaleWingBlade Item Name & Tooltip
 ShadowWingBow Item Name & Tooltip
 GlowBeadGun Item Name & Tooltip
+VortexVanquisherItem Item Name & Tooltip
+NavyThunder Item Name & Tooltip
+CactusBall Item Name & Tooltip
+LilyHarp Item Name & Tooltip
 
 *All*:
