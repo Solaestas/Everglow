@@ -11,7 +11,7 @@
         public void Unload();
     }
 
-    [AttributeUsage(AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface)]
     public class DontAutoLoadAttribute : Attribute
     {
 
