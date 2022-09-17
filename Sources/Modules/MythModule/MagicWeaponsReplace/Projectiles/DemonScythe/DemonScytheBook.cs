@@ -50,7 +50,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
             if (player.itemTime == 2)
             {
                 Vector2 velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero) * player.HeldItem.shootSpeed;
-                Projectile.NewProjectile(Projectile.GetSource_FromAI(),Projectile.Center + Utils.SafeNormalize(velocity, Vector2.Zero) * 25, velocity * 16, ModContent.ProjectileType<DemonScythePlus>()/*ProjectileID.DemonScythe*/, player.HeldItem.damage, player.HeldItem.knockBack, player.whoAmI);
+                Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(),Projectile.Center + Utils.SafeNormalize(velocity, Vector2.Zero) * 25, velocity * 16, ModContent.ProjectileType<DemonScythePlus>()/*ProjectileID.DemonScythe*/, player.HeldItem.damage, player.HeldItem.knockBack, player.whoAmI);
+                p.CritChance = (int)(player.GetCritChance(DamageClass.Generic) + player.HeldItem.crit);
             }
         }
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
