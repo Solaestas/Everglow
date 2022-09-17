@@ -277,6 +277,9 @@ Mods:
 			#食物系统物品
 			BloodGlucoseMonitor : "血糖检测仪"
 			OsmoticPressureMonitor : "渗透压检测仪"
+
+			#Plant Module Items
+			CactusBall : "仙人球棍"
 		}
 		ItemTooltip:
 		{
@@ -562,6 +565,9 @@ Mods:
 			#食物系统物品
 			BloodGlucoseMonitor : "显示当前饱食度"
 			OsmoticPressureMonitor : "显示渴觉状态"
+
+			#Plant Module Items
+			CactusBall : "旋转并掷出你的仙人掌球！\n击碎敌人护甲，并让它们流血"
 		}
 		BuffName : 
 		{

@@ -278,6 +278,9 @@ Mods:
 			#食物系统物品
 			BloodGlucoseMonitor : "Blood Glucose Monitor"
 			OsmoticPressureMonitor : "Osmotic Pressure Monitor"
+
+			#Plant Module Items
+			CactusBall : "Cactus Rod"
 		}
 		ItemTooltip :
 		{
@@ -570,6 +573,9 @@ Mods:
 			#食物系统物品
 			BloodGlucoseMonitor : "Display hunger information"
 			OsmoticPressureMonitor : "Display thrist information"
+
+			#Plant Module Items
+			CactusBall : "Spin and throw a cactus ball!\nShred victims' armour and bleed them"
 		}
 		BuffName : 
 		{
