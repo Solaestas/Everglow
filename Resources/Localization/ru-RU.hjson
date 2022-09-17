@@ -765,7 +765,7 @@
 			MothAudioReplace:
 			{
 				Label : "Corrupted Moth's Theme Song"
-				Tooltip : "Choose your preferred Corrupted Moth theme music to replace\nOptions: Original Theme, Alternate Theme, Old Theme\nThis setting won't take effect if the Corrupted Moth is currently alive"
+				Tooltip : "Choose your preferred Corrupted Moth theme music to replace\nOptions: Original Theme, Alternate Theme, Old Theme\nOriginal: Plays 'Setnour6, Shiryuu, windclimb - Moth Dance'\nAlternate: Plays 'Setnour6, Shiryuu, windclimb - Moth Dance (Alt Version)'\nOld: Plays 'Void - Sudden Romance'\nThis setting won't take effect if the Corrupted Moth is currently alive"
 			}
 			TuskAudioReplace:
 			{
