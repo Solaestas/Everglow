@@ -33,6 +33,22 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
                         tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "Text1", "累计命中敌人5次后获得一个水之球,右键消耗并传送至老鼠\n水之球最多叠加6个,水之球达到6个时,中键消耗全部水之球获得5秒高强度攻击\n切换武器清除全部水之球"));
                     }
                 }
+                if (item.type == ItemID.DemonScythe)
+                {
+                    //TODO 英语翻译
+                    if (Language.ActiveCulture.Name == "zh-Hans")
+                    {
+                        tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "Text1", "法术替换为旋转的恶魔月刃,速度会逐渐加快,伤害和击退力度也随着速度增长而加大"));
+                    }
+                }
+                if (item.type == ItemID.BookofSkulls)
+                {
+                    //TODO 英语翻译
+                    if (Language.ActiveCulture.Name == "zh-Hans")
+                    {
+                        tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "Text1", "命中敌人后释放若干骨刺,骨刺会与下一次攻击一起发射,最多拥有12个骨刺\n右键在地面召唤烈焰白骨之爪"));
+                    }
+                }
             }
             base.ModifyTooltips(item, tooltips);
         }

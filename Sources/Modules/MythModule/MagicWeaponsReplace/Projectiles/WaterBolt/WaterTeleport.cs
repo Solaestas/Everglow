@@ -16,7 +16,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
             Projectile.hostile = false;
             Projectile.penetrate = -1;
             Projectile.timeLeft = 10000;
-            Projectile.DamageType = DamageClass.Summon;
+            Projectile.DamageType = DamageClass.Magic;
             Projectile.tileCollide = false;
         }
         public override void AI()
@@ -46,14 +46,6 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
                     Projectile.Kill();
                 }
             }
-            Player.CompositeArmStretchAmount PCAS = Player.CompositeArmStretchAmount.Full;
-
-            player.SetCompositeArmFront(true, PCAS, (float)(-Math.Sin(Main.time / 18d) * 0.6 + 1.2) * -player.direction);
-            Vector2 vTOMouse = Main.MouseWorld - player.Center;
-            player.SetCompositeArmBack(true, PCAS, (float)(Math.Atan2(vTOMouse.Y, vTOMouse.X) - Math.PI / 2d));
-            Projectile.rotation = player.fullRotation;
-
-            RingPos = RingPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
 
             if (Main.mouseRight && Main.mouseRightRelease)
             {
@@ -137,7 +129,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
             return false;
         }
         internal int Timer = 0;
-        internal Vector2 RingPos = Vector2.Zero;
+
         public void DrawMagicArray(Texture2D tex, Color c0)
         {
             float Size = (float)((Main.time / 2d + Projectile.ai[0] * 4) % 40d);
