@@ -265,7 +265,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
             {
                 lightVisual = 0;
             }
-            if(Timer % 15 == 0)
+            if (Timer % 15 == 0)
             {
                 NPC.netUpdate2 = true;
             }
