@@ -87,6 +87,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             {
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
             }
+            
             Texture2D t2 = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BookofSkulls/GoldLine");
             Main.graphics.GraphicsDevice.Textures[0] = t2;
             if (barsF.Count > 3)

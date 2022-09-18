@@ -21,6 +21,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             Projectile.DamageType = DamageClass.Summon;
             Projectile.tileCollide = false;
         }
+        int HandCooling = 0;
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
@@ -43,6 +44,14 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
                     Projectile.Kill();
                 }
             }
+            if(HandCooling > 0)
+            {
+                HandCooling--;
+            }
+            else
+            {
+                HandCooling = 0;
+            }
             Player.CompositeArmStretchAmount PCAS = Player.CompositeArmStretchAmount.Full;
 
             player.SetCompositeArmFront(true, PCAS, (float)(-Math.Sin(Main.time / 18d) * 0.6 + 1.2) * -player.direction);
@@ -51,18 +60,34 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             Projectile.rotation = player.fullRotation;
 
             RingPos = RingPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
-            SkullSpriteColdFlame sf = new SkullSpriteColdFlame()
-            {
-                timeLeft = 70,
-                size = Main.rand.NextFloat(0.45f, 1.55f),
-                velocity = new Vector2(Main.rand.NextFloat(2.5f, 3.5f), 0).RotatedByRandom(6.283),
-                Active = true,
-                Visible = true
-            };
-            sf.positon[0] = RingPos + Projectile.Center;
+            //SkullSpriteColdFlame sf = new SkullSpriteColdFlame()
+            //{
+            //    timeLeft = 70,
+            //    size = Main.rand.NextFloat(0.45f, 1.55f),
+            //    velocity = new Vector2(Main.rand.NextFloat(2.5f, 3.5f), 0).RotatedByRandom(6.283),
+            //    Active = true,
+            //    Visible = true
+            //};
+            //sf.positon[0] = RingPos + Projectile.Center;
 
-            VFXManager.Add(sf);
-            
+            //VFXManager.Add(sf);
+            if(Main.mouseRight && Main.mouseRightRelease && HandCooling <= 0 && player.statMana > player.HeldItem.mana * 2)
+            {
+                Vector2 ReleasePoint = Main.MouseWorld;
+                for(int g = -5;g < 150;g++)
+                {
+                    if(Collision.SolidCollision(Main.MouseWorld + new Vector2(0, g * 5 * player.gravDir), 1, 1))
+                    {
+                        ReleasePoint = Main.MouseWorld + new Vector2(0, g * 5 * player.gravDir);
+                        Projectile p= Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), ReleasePoint, Vector2.Zero, ModContent.ProjectileType<SkullHand>(), player.HeldItem.damage * 3, player.HeldItem.knockBack * 6, Projectile.owner);
+                        p.CritChance = (int)(player.HeldItem.crit + player.GetCritChance(DamageClass.Generic));
+
+                        HandCooling = 18;
+                        player.statMana -= player.HeldItem.mana * 2;
+                        break;
+                    }
+                }               
+            }
         }
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
         {
@@ -83,6 +108,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             Player player = Main.player[Projectile.owner];
             Texture2D Water = tex;
             Color c1 = new Color(c0.R * 0.39f / 255f, c0.G * 0.39f / 255f, c0.B * 0.39f / 255f, c0.A * 0.39f / 255f);
+            float Pdark = (Math.Abs(player.itemTime - player.itemTimeMax / 2f) + 0.2f) / (float)player.itemTimeMax * Timer / 30f;
+            Color c2 = new Color(1f * Pdark, 0.45f * Pdark * Pdark, 0f, 0f);
+
+
             DrawTexCircle(Timer * 1.6f, 22, c0, player.Center + RingPos - Main.screenPosition, Water, Main.time / 17);
             DrawTexCircle(Timer * 1.3f, 32, c1, player.Center + RingPos - Main.screenPosition, Water, -Main.time / 17);
 
@@ -94,13 +123,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             Vector2 Point4 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 1 / 3d + timeRot);
             Vector2 Point5 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 3 / 3d + timeRot);
             Vector2 Point6 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 5 / 3d + timeRot);
-            DrawTexLine(Point1, Point2, c1, c1, Water);
-            DrawTexLine(Point2, Point3, c1, c1, Water);
-            DrawTexLine(Point3, Point1, c1, c1, Water);
+            DrawTexLine(Point1, Point2, c2, c2, Water);
+            DrawTexLine(Point2, Point3, c2, c2, Water);
+            DrawTexLine(Point3, Point1, c2, c2, Water);
 
-            DrawTexLine(Point4, Point5, c1, c1, Water);
-            DrawTexLine(Point5, Point6, c1, c1, Water);
-            DrawTexLine(Point6, Point4, c1, c1, Water);
+            DrawTexLine(Point4, Point5, c2, c2, Water);
+            DrawTexLine(Point5, Point6, c2, c2, Water);
+            DrawTexLine(Point6, Point4, c2, c2, Water);
         }
         private void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
         {
