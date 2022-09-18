@@ -18,18 +18,23 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
             {
                 Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everlow.Common.WorldSystem.BuildMothCave");
-                if (!SubWorldModule.SubworldSystem.Enter<MothWorld>())
-                {
-                    BuildWorldMothCave();
-                }
-                else
-                {
-                    BuildMothCave();
-                }
+                BuildMothCave();
+            }
+        }
+        internal class WorldMothLandGenPass : GenPass
+        {
+            public WorldMothLandGenPass() : base("MothLand", 500)
+            {
+            }
+
+            protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
+            {
+                Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everlow.Common.WorldSystem.BuildMothCave");
+                BuildWorldMothCave();
             }
         }
 
-        public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight) => tasks.Add(new MothLandGenPass());
+        public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight) => tasks.Add(new WorldMothLandGenPass());
         /// <summary>
         /// 地形中心坐标
         /// </summary>
