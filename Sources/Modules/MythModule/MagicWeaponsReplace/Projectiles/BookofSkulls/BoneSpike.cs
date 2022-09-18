@@ -14,7 +14,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             Projectile.height = 14;
             Projectile.friendly = false;
             Projectile.hostile = false;
-            Projectile.penetrate = 6;
+            Projectile.penetrate = 1;
             Projectile.timeLeft = 10000;
             Projectile.DamageType = DamageClass.MagicSummonHybrid;
             Projectile.tileCollide = false;
