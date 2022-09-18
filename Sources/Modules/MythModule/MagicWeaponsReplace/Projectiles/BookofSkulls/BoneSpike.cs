@@ -45,7 +45,6 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             else
             {
                 Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y,Projectile.velocity.X) - (float)(Math.PI * 0.5);
-
             }
 
         }
