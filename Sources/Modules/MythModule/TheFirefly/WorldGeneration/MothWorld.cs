@@ -9,9 +9,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
 {
     internal class MothWorld : SubWorldModule.Subworld
     {
-        public override int Width => 1000;
+        public override int Width => 800;
 
-        public override int Height => 900;
+        public override int Height => 600;
 
         public override List<GenPass> Tasks => new() { new MothLand.MothLandGenPass() };
         public override void OnLoad()

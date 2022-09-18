@@ -114,7 +114,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             Vector2 v0 = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f - BiomeCenter;//距离中心Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f
             v0.Y *= 1.35f;
             v0.X *= 0.9f;//近似于椭圆形，所以xy坐标变换
-            return (v0.Length() < 2000) && SubWorldModule.SubworldSystem.Enter<MothWorld>();
+            return (v0.Length() < 2000);
         }
         /// <summary>
         /// 获取荧光悬挂物点位
