@@ -17,8 +17,20 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items
         }
         public override bool? UseItem(Player player)
         {
-            MothLand mothLand = ModContent.GetInstance<MothLand>();
-            player.position = new Vector2(mothLand.fireflyCenterX, mothLand.fireflyCenterY) * 16;
+            if (player.itemAnimation == player.itemAnimationMax)
+            {
+                if (SubWorldModule.SubworldSystem.IsActive<MothWorld>())
+                {
+                    SubWorldModule.SubworldSystem.Exit();
+                }
+                else
+                {
+                    if (!SubWorldModule.SubworldSystem.Enter<MothWorld>())
+                    {
+                        Main.NewText("Fail!");
+                    }
+                }
+            }
             return base.UseItem(player);
         }
         public override void AddRecipes()
