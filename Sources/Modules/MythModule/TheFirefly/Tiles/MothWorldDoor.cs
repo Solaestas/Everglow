@@ -1,5 +1,6 @@
 ﻿using Terraria.ObjectData;
 using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
+using Everglow.Sources.Modules.MythModule.Common;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 {
@@ -7,10 +8,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 	{
         public override void SetStaticDefaults()
 		{
-			Main.tileFrameImportant[(int)base.Type] = true;
-			Main.tileLavaDeath[(int)base.Type] = true;
-			TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3Wall);
-            TileObjectData.newTile.Height = 5;
+			Main.tileFrameImportant[Type] = true;
+			Main.tileLavaDeath[Type] = false;
+			TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
+            TileObjectData.newTile.Height = 7;
             TileObjectData.newTile.Width = 5;
 			TileObjectData.newTile.CoordinateHeights = new int[]
 			{
@@ -18,7 +19,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 				16,
 				16,
 				16,
-				16
+                16,
+                16,
+                16
 			};
 			TileObjectData.newTile.StyleHorizontal = true;
 			TileObjectData.addTile((int)base.Type);
@@ -26,6 +29,21 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 			modTranslation.SetDefault("MothWorld");
 			base.AddMapEntry(new Color(148, 0, 255), modTranslation);
 		}
+        public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
+        {
+            var tile = Main.tile[i, j];
+            Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+
+            if (Main.drawToScreen)
+            {
+                zero = Vector2.Zero;
+            }
+            Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/MothWorldDoorGlow");
+
+            spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(1f, 1f, 1f, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
+
+            base.PostDraw(i, j, spriteBatch);
+        }
         public override bool CanExplode(int i, int j)
         {
             return false;
@@ -37,20 +55,17 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
         public override void NearbyEffects(int i, int j, bool closer)
         {
 			Player player = Main.LocalPlayer;
-			if((player.Center - new Vector2(i, j)).Length() < 64)
+			if((player.Center - new Vector2(i * 16, j * 16)).Length() < 12)
             {
-                if (player.itemAnimation == player.itemAnimationMax)
+                if (SubWorldModule.SubworldSystem.IsActive<MothWorld>())
                 {
-                    if (SubWorldModule.SubworldSystem.IsActive<MothWorld>())
+                    SubWorldModule.SubworldSystem.Exit();
+                }
+                else
+                {
+                    if (!SubWorldModule.SubworldSystem.Enter<MothWorld>())
                     {
-                        SubWorldModule.SubworldSystem.Exit();
-                    }
-                    else
-                    {
-                        if (!SubWorldModule.SubworldSystem.Enter<MothWorld>())
-                        {
-                            Main.NewText("Fail!");
-                        }
+                        Main.NewText("Fail!");
                     }
                 }
             }
