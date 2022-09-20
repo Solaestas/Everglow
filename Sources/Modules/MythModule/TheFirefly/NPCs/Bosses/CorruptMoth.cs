@@ -80,7 +80,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
             Main.npcFrameCount[NPC.type] = 10;
             var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
             {
-                CustomTexturePath = "Everglow/Sources/Modules/MythModule/TheFirefly/NPCs/Bosses//CorruptMothBoss",
+                CustomTexturePath = "Everglow/Sources/Modules/MythModule/TheFirefly/NPCs/Bosses/CorruptMothBoss",
                 Position = new Vector2(40f, 24f),
                 PortraitPositionXOverride = 0f,
                 PortraitPositionYOverride = 12f
