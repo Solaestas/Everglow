@@ -34,7 +34,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Pylon
 			Main.tileFrameImportant[Type] = true;
 			TileObjectData.newTile.CopyFrom(TileObjectData.Style3x4);
 			TileObjectData.newTile.LavaDeath = false;
-			TileObjectData.newTile.DrawYOffset = 2;
+			TileObjectData.newTile.DrawYOffset = 0;
 			TileObjectData.newTile.StyleHorizontal = true;
 			TEModdedPylon moddedPylon = ModContent.GetInstance<ShabbyPylon_TileEntity>();
 			TileObjectData.newTile.HookCheckIfCanPlace = new PlacementHook(moddedPylon.PlacementPreviewHook_CheckIfCanPlace, 1, 0, true);
@@ -43,8 +43,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Pylon
 			TileID.Sets.InteractibleByNPCs[Type] = true;
 			TileID.Sets.PreventsSandfall[Type] = true;
 			AddToArray(ref TileID.Sets.CountsAsPylon);
-			//ModTranslation pylonName = CreateMapEntryName();
-			//AddMapEntry(Color.Transparent, pylonName);
+			ModTranslation pylonName = CreateMapEntryName();
+			AddMapEntry(new Color(47, 47, 47), pylonName);
 		}
 
 		public override int? IsPylonForSale(int npcType, Player player, bool isNPCHappyEnough)
@@ -67,7 +67,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Pylon
 		}
 		public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch)
 		{
-			DefaultDrawPylonCrystal(spriteBatch, i, j, crystalTexture, ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheFirefly/Pylon/CommonPylon_CrystalHighlight"), Vector2.Zero,Color.White, Color.Gray,4, CrystalVerticalFrameCount);
+			DefaultDrawPylonCrystal(spriteBatch, i, j, crystalTexture, ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheFirefly/Pylon/CommonPylon_CrystalHighlight"), new Vector2(0, -12f),Color.White * 0.1f, Color.Gray,4, CrystalVerticalFrameCount);
 		}
 		public override void DrawMapIcon(ref MapOverlayDrawContext context, ref string mouseOverText, TeleportPylonInfo pylonInfo, bool isNearPylon, Color drawColor, float deselectedScale, float selectedScale)
 		{
