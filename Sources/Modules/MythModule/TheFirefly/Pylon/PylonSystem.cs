@@ -12,17 +12,17 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Pylon
     {
         public override void SaveWorldData(TagCompound tag)
         {
-            tag.Set("P_A_T", ModContent.GetInstance<FireflyPylon_TileEntity>().IsDestoryed);
+            tag.Set("P_A_T", ModContent.GetInstance<ShabbyPylon_TileEntity>().IsDestoryed);
         }
         public override void LoadWorldData(TagCompound tag)
         {
             if(tag.TryGet("P_A_T",out bool flag))
             {
-                ModContent.GetInstance<FireflyPylon_TileEntity>().IsDestoryed = flag;
+                ModContent.GetInstance<ShabbyPylon_TileEntity>().IsDestoryed = flag;
             }
             else
             {
-                ModContent.GetInstance<FireflyPylon_TileEntity>().IsDestoryed = false;
+                ModContent.GetInstance<ShabbyPylon_TileEntity>().IsDestoryed = false;
             }
         }
     }
