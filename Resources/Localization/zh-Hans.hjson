@@ -263,6 +263,16 @@ Mods:
 			SilverStabbingSword : 银刺剑
 			VegetationBayonet : 草木刺剑
 			TDMT : 陨雷之劫
+			CrystalSkull : "水晶头骨"
+
+			#流萤系列物品
+			GlowBeadGun : "荧光轨道炮"
+
+			#Glow Wood Furniture
+			
+			#Music Boxes
+			GlowWoodMusicBox : Glow Wood Music Box (The Firefly)
+
 
 			#食物系统物品
 			BloodGlucoseMonitor : "血糖检测仪"
@@ -531,6 +541,23 @@ Mods:
 			SilverStabbingSword : "{$Mods.Everglow.Common.RapierGT}"
 			VegetationBayonet : "{$Mods.Everglow.Common.RapierGT}"
 			TDMT : "{$Mods.Everglow.Common.RapierGT}"
+			CrystalSkull : 
+				'''
+				释放原版与流光无际的魔法书的真正力量
+				作为巫师们智慧的果实，绝大多数魔法古卷上的符文都十分复杂且晦涩难懂
+				然而，当你使用这个由巫王设计的，充盈着全视之力的水晶头骨
+				即使是最无知的菜鸟也能轻松理解古代巫师们的智慧
+				'''
+
+			#流萤系列物品
+			GlowBeadGun : 
+				'''
+				长按攻击键以充能
+				射出一系列易爆的光球
+				'''
+
+			#Music Boxes
+			GlowWoodMusicBox : "Plays 'Setnour6 - Within the Giant Cocoon (身陷巨茧)'"
 			
 			#食物系统物品
 			BloodGlucoseMonitor : "显示当前饱食度"
@@ -741,12 +768,35 @@ Mods:
 			TeacupBuff : "短时间内大幅增加魔力回复，魔法攻击，暴击\n“醇香四溢”"
 			TropicalSmoothieBuff : "短时间内魔法攻击仅消耗一点魔力，大幅增加魔法攻击，暴击\n“热带风暴”"
 		}
+		MapEntry :
+		{
+			FireflyTree : "萤火树"
+		}
 		Config:
 		{
+			Header:
+			{
+				TextureReplace : "Texture Configurations"
+				AudioReplace : "Audio Configurations"
+			}
 			TextureReplace:
 			{
 				Label: "贴图更换模式"
 				Tooltip: "选择你想要的贴图组进行更换"
+			}
+			ItemPickSoundReplace:
+			{
+				Label : "New pickup and inventory sounds"
+			}
+			MothAudioReplace:
+			{
+				Label : "Corrupted Moth's Theme Song"
+				Tooltip : "Choose your preferred Corrupted Moth theme music to replace\nOptions: Original Theme, Alternate Theme, Old Theme\nOriginal: Plays 'Setnour6, Shiryuu, windclimb - Moth Dance'\nAlternate: Plays 'Setnour6, Shiryuu, windclimb - Moth Dance (Alt Version)'\nOld: Plays 'Void - Sudden Romance'\nThis setting won't take effect if the Corrupted Moth is currently alive"
+			}
+			TuskAudioReplace:
+			{
+				Label : "(NOT IMPLEMENTED) The Tusk's Theme Song"
+				Tooltip : "Choose your preferred Bloody Tusk theme music to replace\nOptions: Original Theme, Old Theme\nThis setting won't take effect if The Tusk is currently alive\nNOTE: This config is not fully set up yet and therefore does not work at the moment"
 			}
 		}
 		InfoDisplay:

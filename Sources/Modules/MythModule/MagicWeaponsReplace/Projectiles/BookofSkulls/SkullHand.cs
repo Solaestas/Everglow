@@ -209,7 +209,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
                     Dust dust0 = Dust.NewDustDirect(Projectile.Center + Vector2.Normalize(Projectile.velocity) * 75, 0, 0, DustID.Torch, v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(0.6f, 1.8f));
                     dust0.velocity = v0;
                 }
-                SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/MothBreakCocoon"), Projectile.Center);
+                SoundEngine.PlaySound(SoundID.Item89, Projectile.Center);
             }
         }
         private float UpdateSelf(float sel, float aim, float value = 0.99f)
