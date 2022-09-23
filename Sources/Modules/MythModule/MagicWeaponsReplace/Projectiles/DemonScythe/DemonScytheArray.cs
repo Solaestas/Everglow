@@ -21,7 +21,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            Projectile.Center = Projectile.Center * 0.7f + (player.Center + new Vector2(player.direction * 22, 12 * player.gravDir * (float)(0.2 + Math.Sin(Main.time / 18d) / 2d))) * 0.3f;
+            Projectile.Center = Projectile.Center * 0.7f + (player.Center + new Vector2(player.direction * 22, 12 * player.gravDir * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d))) * 0.3f;
             Projectile.spriteDirection = player.direction;
             Projectile.velocity *= 0;
             if (player.itemTime > 0 && player.HeldItem.type == ItemID.DemonScythe)
@@ -42,7 +42,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
             }
             Player.CompositeArmStretchAmount PCAS = Player.CompositeArmStretchAmount.Full;
 
-            player.SetCompositeArmFront(true, PCAS, (float)(-Math.Sin(Main.time / 18d) * 0.6 + 1.2) * -player.direction);
+            player.SetCompositeArmFront(true, PCAS, (float)(-Math.Sin(Main.timeForVisualEffects / 18d) * 0.6 + 1.2) * -player.direction);
             Vector2 vTOMouse = Main.MouseWorld - player.Center;
             player.SetCompositeArmBack(true, PCAS, (float)(Math.Atan2(vTOMouse.Y, vTOMouse.X) - Math.PI / 2d));
             Projectile.rotation = player.fullRotation;
@@ -69,16 +69,16 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
             Texture2D Water = tex;
             Color c1 = new Color(c0.R * 0.19f / 255f, c0.G * 0.19f / 255f, c0.B * 0.19f / 255f, c0.A * 0.19f / 255f);
             Color c2 = new Color(c0.R * 0.09f / 255f, c0.G * 0.09f / 255f, c0.B * 0.09f / 255f, c0.A * 0.09f / 255f); 
-            float Size0 = (float)(Math.Sin(Main.time / 12) / 7d + 1);
-            float Size1 = (float)(Math.Sin((Main.time + 40) / 24) / 7d + 1);
-            DrawTexCircle(Timer * 1.6f * Size0, 25, c0, player.Center + RingPos - Main.screenPosition, Water, Main.time / 17);
-            DrawTexCircle(Timer * 1.5f * Size0, 15, c1, player.Center + RingPos - Main.screenPosition, Water, Main.time / 57);
-            DrawTexCircle(Timer * 1.4f * Size0, 15, c2, player.Center + RingPos - Main.screenPosition, Water, Main.time / 227);
-            DrawTexMoon(Timer * 1.6f * Size0, 25, c0, player.Center + RingPos - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BloomLight"), Main.time / 3);
-            DrawTexCircle(Timer * 0.8f, 25, c0 * Size1, player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(-Main.time / 36), Water, -Main.time / 7);
-            DrawTexCircle(Timer * 0.7f, 12, c1 * Size1, player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(-Main.time / 36), Water, -Main.time / 27);
-            DrawTexCircle(Timer * 0.63f, 12, c2 * Size1, player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(-Main.time / 36), Water, -Main.time / 127);
-            DrawTexMoon(Timer * 0.8f, 25, c0 * Size1, player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(-Main.time / 36), MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BloomLight"), -Main.time / 1.8);
+            float Size0 = (float)(Math.Sin(Main.timeForVisualEffects / 12) / 7d + 1);
+            float Size1 = (float)(Math.Sin((Main.timeForVisualEffects + 40) / 24) / 7d + 1);
+            DrawTexCircle(Timer * 1.6f * Size0, 25, c0, player.Center + RingPos - Main.screenPosition, Water, Main.timeForVisualEffects / 17);
+            DrawTexCircle(Timer * 1.5f * Size0, 15, c1, player.Center + RingPos - Main.screenPosition, Water, Main.timeForVisualEffects / 57);
+            DrawTexCircle(Timer * 1.4f * Size0, 15, c2, player.Center + RingPos - Main.screenPosition, Water, Main.timeForVisualEffects / 227);
+            DrawTexMoon(Timer * 1.6f * Size0, 25, c0, player.Center + RingPos - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BloomLight"), Main.timeForVisualEffects / 3);
+            DrawTexCircle(Timer * 0.8f, 25, c0 * Size1, player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(-Main.timeForVisualEffects / 36), Water, -Main.timeForVisualEffects / 7);
+            DrawTexCircle(Timer * 0.7f, 12, c1 * Size1, player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(-Main.timeForVisualEffects / 36), Water, -Main.timeForVisualEffects / 27);
+            DrawTexCircle(Timer * 0.63f, 12, c2 * Size1, player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(-Main.timeForVisualEffects / 36), Water, -Main.timeForVisualEffects / 127);
+            DrawTexMoon(Timer * 0.8f, 25, c0 * Size1, player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(-Main.timeForVisualEffects / 36), MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BloomLight"), -Main.timeForVisualEffects / 1.8);
 
         }
         private void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
@@ -122,8 +122,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
 
             for (int x = 0; x < 3; x++)
             {
-                float Value0 = (float)(Main.time / 291d + 20) % 1f;
-                float Value1 = (float)(Main.time / 291d + 20.03) % 1f;
+                float Value0 = (float)(Main.timeForVisualEffects / 291d + 20) % 1f;
+                float Value1 = (float)(Main.timeForVisualEffects / 291d + 20.03) % 1f;
                 vertex2Ds.Add(new Vertex2D(StartPos + Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(Value0, 0, 0)));
                 vertex2Ds.Add(new Vertex2D(EndPos + Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(Value1, 0, 0)));
                 vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(Value0, 1, 0)));
@@ -144,9 +144,9 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
             Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
             KEx.CurrentTechnique.Passes[0].Apply();
             Player player = Main.player[Projectile.owner];
-            //DrawTexCircle(Timer * 1.2f, 52, new Color(64, 70, 255, 0), player.Center + RingPos - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), Main.time / 17);
-            DrawTexMoon(Timer * 1.4f, 35, new Color(64, 70, 255, 0), player.Center + RingPos - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BloomLight"), Main.time / 3);
-            DrawTexMoon(Timer * 0.65f, 35, new Color(64, 70, 255, 0), player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(-Main.time / 36), MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BloomLight"), -Main.time / 1.8);
+            //DrawTexCircle(Timer * 1.2f, 52, new Color(64, 70, 255, 0), player.Center + RingPos - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), Main.timeForVisualEffects / 17);
+            DrawTexMoon(Timer * 1.4f, 35, new Color(64, 70, 255, 0), player.Center + RingPos - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BloomLight"), Main.timeForVisualEffects / 3);
+            DrawTexMoon(Timer * 0.65f, 35, new Color(64, 70, 255, 0), player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(-Main.timeForVisualEffects / 36), MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BloomLight"), -Main.timeForVisualEffects / 1.8);
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
         }

@@ -1,0 +1,34 @@
+﻿namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Items
+{
+    public class CyanVineBar : ModItem
+    {
+        public override void SetStaticDefaults()
+        {
+            //DisplayName.SetDefault("Cyan Bar");
+            //DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "青缎钢锭");
+        }
+        public override void SetDefaults()
+        {
+            Item.width = 30;
+            Item.height = 24;
+            Item.rare = 3;
+            Item.scale = 1f;
+            Item.createTile = 0;
+            Item.useStyle = 1;
+            Item.useTurn = true;
+            Item.useAnimation = 15;
+            Item.useTime = 15;
+            Item.autoReuse = true;
+            Item.consumable = true;
+            Item.maxStack = 999;
+            Item.value = 1600;
+        }
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+                .AddIngredient(ModContent.ItemType<Items.CyanVineOre>(), 3)
+                .AddTile(TileID.Hellforge)
+                .Register();
+        }
+    }
+}

@@ -303,8 +303,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
 
             for (int x = 0; x < 3; x++)
             {
-                float Value0 = (float)(Main.time / 291d + 200) % 1f;
-                float Value1 = (float)(Main.time / 291d + 200.05) % 1f;
+                float Value0 = (float)(Main.timeForVisualEffects / 291d + 200) % 1f;
+                float Value1 = (float)(Main.timeForVisualEffects / 291d + 200.05) % 1f;
                 vertex2Ds.Add(new Vertex2D(StartPos + Width + new Vector2(x / 3f).RotatedBy(x) - Main.screenPosition, c0, new Vector3(Value0, 0, 0)));
                 vertex2Ds.Add(new Vertex2D(EndPos + Width + new Vector2(x / 3f).RotatedBy(x) - Main.screenPosition, c0, new Vector3(Value1, 0, 0)));
                 vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x) - Main.screenPosition, c0, new Vector3(Value0, 1, 0)));

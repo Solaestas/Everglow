@@ -25,10 +25,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             Player player = Main.player[Projectile.owner];
             if(!shot)
             {
-                Vector2 AIM0 = (player.Center + new Vector2(0, 12 * player.gravDir * (float)(0.2 + Math.Sin(Main.time / 18d) / 2d)) + new Vector2(-60 * player.direction, 30).RotatedBy((Projectile.ai[0] - 1) / 4.5 * Math.PI * player.direction) * Projectile.ai[1]);
+                Vector2 AIM0 = (player.Center + new Vector2(0, 12 * player.gravDir * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d)) + new Vector2(-60 * player.direction, 30).RotatedBy((Projectile.ai[0] - 1) / 4.5 * Math.PI * player.direction) * Projectile.ai[1]);
                 if (player.itemTime > 0 && player.active)
                 {
-                    AIM0 = (player.Center + new Vector2(player.direction * -12, -24 * player.gravDir * (float)(0.2 + Math.Sin(Main.time / 18d) / 2d)) + new Vector2(-120 * player.direction, 60).RotatedBy((Projectile.ai[0] - 1) / 4.5 * Math.PI * player.direction) * Projectile.ai[1]);
+                    AIM0 = (player.Center + new Vector2(player.direction * -12, -24 * player.gravDir * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d)) + new Vector2(-120 * player.direction, 60).RotatedBy((Projectile.ai[0] - 1) / 4.5 * Math.PI * player.direction) * Projectile.ai[1]);
                 }
                 Projectile.Center = Projectile.Center * (-Projectile.ai[0] / 50f + 0.97f) + AIM0 * (Projectile.ai[0] / 50f + 0.03f);
                 Projectile.rotation = Math.Clamp(Projectile.velocity.X / 21f, -1, 1);
@@ -96,8 +96,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
 
             for (int x = 0; x < 3; x++)
             {
-                float Value0 = (float)(Main.time / 291d + 20) % 1f;
-                float Value1 = (float)(Main.time / 291d + 20.03) % 1f;
+                float Value0 = (float)(Main.timeForVisualEffects / 291d + 20) % 1f;
+                float Value1 = (float)(Main.timeForVisualEffects / 291d + 20.03) % 1f;
                 vertex2Ds.Add(new Vertex2D(StartPos + Width + new Vector2(x / 3f).RotatedBy(x) - Main.screenPosition, c0, new Vector3(Value0, 0, 0)));
                 vertex2Ds.Add(new Vertex2D(EndPos + Width + new Vector2(x / 3f).RotatedBy(x) - Main.screenPosition, c0, new Vector3(Value1, 0, 0)));
                 vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x) - Main.screenPosition, c0, new Vector3(Value0, 1, 0)));
@@ -140,8 +140,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
 
             for (int x = 0; x < 3; x++)
             {
-                float Value0 = (float)(Main.time / 291d + 20 + Projectile.ai[0]) % 1f;
-                float Value1 = (float)(Main.time / 291d + 20.03 + Projectile.ai[0]) % 1f;
+                float Value0 = (float)(Main.timeForVisualEffects / 291d + 20 + Projectile.ai[0]) % 1f;
+                float Value1 = (float)(Main.timeForVisualEffects / 291d + 20.03 + Projectile.ai[0]) % 1f;
                 vertex2Ds.Add(new Vertex2D(StartPos + Width + new Vector2(x / 3f).RotatedBy(x) - Main.screenPosition, color1, new Vector3(Value0, 0, 0)));
                 vertex2Ds.Add(new Vertex2D(EndPos + Width + new Vector2(x / 3f).RotatedBy(x) - Main.screenPosition, color2, new Vector3(Value1, 0, 0)));
                 vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x) - Main.screenPosition, color1, new Vector3(Value0, 1, 0)));
