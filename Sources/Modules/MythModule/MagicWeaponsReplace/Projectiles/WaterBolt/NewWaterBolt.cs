@@ -81,7 +81,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
                 normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
                 var factor = i / (float)TrueL;
                 var w = MathHelper.Lerp(1f, 0.05f, factor);
-                float x0 = factor * 0.6f - (float)(Main.time / 35d) + 10000;
+                float x0 = factor * 0.6f - (float)(Main.timeForVisualEffects / 35d) + 10000;
                 x0 %= 1f;
                 bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 1, w)));
                 bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 0, w)));
@@ -110,7 +110,15 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
             {
                 return;
             }
-            SoundEngine.PlaySound(SoundID.Item38,Projectile.Center);
+            switch (Main.rand.Next(2))
+            {
+                case 0:
+                    SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/MagicWeaponsReplace/Sounds/WaterBolt1"), Projectile.Center);
+                    break;
+                case 1:
+                    SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/MagicWeaponsReplace/Sounds/WaterBolt2"), Projectile.Center);
+                    break;
+            }
             float k1 = 1;
             float k0 = 5;
             for (int j = 0; j < 8 * k0; j++)
