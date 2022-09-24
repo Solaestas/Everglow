@@ -1,5 +1,6 @@
 using Everglow.Sources.Commons.Function.ImageReader;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Tiles;
+using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.DataStructures;
 using Terraria.IO;
 using Terraria.ModLoader.IO;
@@ -140,6 +141,16 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                                     }
                                 }
                                 break;
+                            case 3:
+                                if (pixel.R == 165 && pixel.G == 0 && pixel.B == 255)
+                                {
+                                    MythUtils.PlaceFrameImportantTiles(a + x, b + y, 5, 7, ModContent.TileType<Tiles.MothWorldDoor>());
+                                }
+                                if (pixel.R == 45 && pixel.G == 49 && pixel.B == 255)
+                                {
+                                    //MythUtils.PlaceFrameImportantTiles(a + x, b + y, 3, 4, ModContent.TileType<Pylon.FireflyPylon>());
+                                }
+                                break;
                         }
                     }
                 }
@@ -212,6 +223,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             ShapeTile("Cocoon.bmp", a, b, 1);
             Main.statusText = "CocoonWallStart";
             ShapeTile("CocoonWall.bmp", a, b, 2);
+            Main.statusText = "CocoonAnotherStart";
+            ShapeTile("Cocoon.bmp", a, b, 3);
             SmoothMothTile(a, b);
         }
         public static void BuildWorldMothCave()
@@ -228,6 +241,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             ShapeTile("WorldCocoon.bmp", a, b, 1);
             Main.statusText = "CocoonWallStart";
             ShapeTile("WorldCocoonWall.bmp", a, b, 2);
+            Main.statusText = "CocoonAnotherStart";
+            ShapeTile("WorldCocoon.bmp", a, b, 3);
             SmoothMothTile(a, b);
         }
         private static int GetCrash(int PoX, int PoY)

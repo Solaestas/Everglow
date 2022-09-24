@@ -17,9 +17,25 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         public override void OnLoad()
         {
             SubWorldModule.SubworldSystem.hideUnderworld = true;
-            Main.worldSurface = Main.maxTilesY - 2;
-            Main.rockLayer = Main.maxTilesY - 1;
+            Main.worldSurface = 1;
+            Main.rockLayer = 2;
             WorldGen.waterLine = Main.maxTilesY;
+        }
+        public override void OnEnter()
+        {
+            //TODO: 我希望玩家进入子世界之后能出现在传送门附近
+            //for(int x = 20;x < Width - 20;x++)
+            //{
+            //    for (int y = 20; y < Height - 20; y++)
+            //    {
+            //        if(Main.tile[x, y].TileType == (ushort)(ModContent.TileType<Tiles.MothWorldDoor>()))
+            //        {
+            //            Main.LocalPlayer.position = new Vector2(x * 16 - 120, y * 16);
+            //            break;
+            //        }
+            //    }
+            //}
+            base.OnEnter();
         }
     }
 }
