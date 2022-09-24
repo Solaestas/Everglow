@@ -56,7 +56,6 @@
 		<Folder Include="lib\" />
 		<Folder Include="Resources\VanillaItemList\Weapons\Summon\" />
 		<Folder Include="Resources\VanillaItemList\Weapons\Ranged\" />
-		<Folder Include="Resources\VanillaItemList\Weapons\Melee\" />
 		<Folder Include="Sources\Modules\FoodModule\Buffs\ModDrinkBuffs\" />
 		<Folder Include="Sources\Modules\FoodModule\Buffs\ModFoodBuffs\" />
 		<Folder Include="Sources\Modules\MythModule\TheFirefly\UI\" />

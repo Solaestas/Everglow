@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Everglow.Resources.VanillaItemList.Weapons.Magic
 {
-    internal class MagicBooks : GlobalItem
+    public class MagicBooks : GlobalItem
     {
 
         private static List<int> vanillaMagicBooks;
