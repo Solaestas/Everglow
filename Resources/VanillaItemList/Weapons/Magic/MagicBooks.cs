@@ -8,7 +8,6 @@ namespace Everglow.Resources.VanillaItemList.Weapons.Magic
 {
     public class MagicBooks : GlobalItem
     {
-
         private static List<int> vanillaMagicBooks;
         public override void Unload()
         {
