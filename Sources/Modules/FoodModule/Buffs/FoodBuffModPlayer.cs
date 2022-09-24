@@ -21,6 +21,9 @@
         public bool RoastedDuckBuff;
         public bool BloodyMoscatoBuff;
 
+        public static float CritDamage;
+        public static float AddCritDamage;
+
         public override void UpdateDead()
         {
             WingTimeModifier = 1f;
@@ -41,7 +44,10 @@
             RoastedBirdBuff = false;
             RoastedDuckBuff = false;
             BloodyMoscatoBuff = false;
-        }
+
+            CritDamage = 1f;
+            AddCritDamage = 0;
+    }
         public override void ResetEffects()
         {
             WingTimeModifier = 1f;
@@ -62,8 +68,16 @@
             RoastedBirdBuff = false;
             RoastedDuckBuff = false;
             BloodyMoscatoBuff = false;
+
+            CritDamage = 1f;
+            AddCritDamage = 0;
         }
 
+        public override void PostUpdate()
+        {
+            CritDamage += AddCritDamage;
+            base.PostUpdate();
+        }
         public override bool CanConsumeAmmo(Item weapon, Item ammo)
         {
 
