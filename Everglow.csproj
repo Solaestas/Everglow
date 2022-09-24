@@ -54,13 +54,16 @@
 	<ItemGroup>
 		<Folder Include="Resources\Tools\" />
 		<Folder Include="lib\" />
+		<Folder Include="Resources\VanillaItemList\Weapons\Summon\" />
+		<Folder Include="Resources\VanillaItemList\Weapons\Ranged\" />
+		<Folder Include="Resources\VanillaItemList\Weapons\Melee\" />
 		<Folder Include="Sources\Modules\FoodModule\Buffs\ModDrinkBuffs\" />
 		<Folder Include="Sources\Modules\FoodModule\Buffs\ModFoodBuffs\" />
 		<Folder Include="Sources\Modules\MythModule\TheFirefly\UI\" />
 	</ItemGroup>
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 		<Exec Command="xcopy /y /d  &quot;$(OutDir)Everglow.dll&quot; &quot;$(ProjectDir)&quot;" />
-		<Exec Command="xcopy /y /d &quot;$(ProjectDir)..\..\Mods\Everglow.tmod&quot; &quot;$(ProjectDir)Product\&quot;"/>
+		<Exec Command="xcopy /y /d &quot;$(ProjectDir)..\..\Mods\Everglow.tmod&quot; &quot;$(ProjectDir)Product\&quot;" />
 	</Target>
 	<Target Name="BuildEffect" BeforeTargets="Build">
 		<Exec Command="&quot;$(ProjectDir)Resources\Tools\_XNBCompiler.exe&quot; &quot;$(ProjectDir)Sources&quot;" />
