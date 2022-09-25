@@ -21,7 +21,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
     [AutoloadBossHead]
     public class CorruptMoth : ModNPC
     {
-        public static NPC CorruputMothNPC;
+        public static NPC CorruptMothNPC;
         protected override bool CloneNewInstances => true;
 
         private readonly Color IdentifierValue = new Color(58, 169, 255);
@@ -286,15 +286,15 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 
             if (!start)
             {
-                if (CorruputMothNPC != null)
+                if (CorruptMothNPC != null)
                 {
-                    if (CorruputMothNPC.active && NPC != CorruputMothNPC)
+                    if (CorruptMothNPC.active && NPC != CorruptMothNPC)
                     {
                         NPC.active = false;
                         return;
                     }
                 }
-                CorruputMothNPC = NPC;
+                CorruptMothNPC = NPC;
                 NPC.ai[0] = 0;
                 NPC.noTileCollide = true;
                 start = true;

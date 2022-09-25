@@ -41,7 +41,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
             if (fireflyBiome.IsBiomeActive(Main.LocalPlayer))
             {
                 tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "MothEyeText1", "[c/2888FE:While in the Firefly biome:\n- Increases sentry slots by 1\n- Increases flight time by 10%\n- All Firefly weapons deal 5% more damage\n- Some Firefly-related items gain bonuses]"));
-                tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "MothEyeText2", "[c/BA0022:This item is unfinished]"));
+                tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "MothEyeTextUnfinished", "[c/BA0022:This item is unfinished]"));
             }
             base.ModifyTooltips(tooltips);
         }
