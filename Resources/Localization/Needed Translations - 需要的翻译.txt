@@ -4,6 +4,7 @@ WoodShield Name Update & Tooltip
 
 *zh-Hans*:
 ScaleWingBlade Tooltip
+MothYoyo Item Name & Tooltip
 VortexVanquisherItem Item Name & Tooltip
 NavyThunder Item Name & Tooltip
 LilyHarp Item Name & Tooltip
@@ -14,6 +15,7 @@ EvilChrysalis Tooltip
 ScaleWingBlade Item Name & Tooltip
 ShadowWingBow Item Name & Tooltip
 GlowBeadGun Item Name & Tooltip
+MothYoyo Item Name & Tooltip
 VortexVanquisherItem Item Name & Tooltip
 NavyThunder Item Name & Tooltip
 CactusBall Item Name & Tooltip
