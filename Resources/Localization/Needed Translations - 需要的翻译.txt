@@ -18,5 +18,6 @@ VortexVanquisherItem Item Name & Tooltip
 NavyThunder Item Name & Tooltip
 CactusBall Item Name & Tooltip
 LilyHarp Item Name & Tooltip
+MothEye Tooltip Update
 
 *All*:
