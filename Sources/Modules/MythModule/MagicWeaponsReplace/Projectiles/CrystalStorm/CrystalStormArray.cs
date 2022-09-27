@@ -290,13 +290,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             }
 
             List<Vertex2D> vertex2Dss = new List<Vertex2D>();
-            for (int a = 0; a < 30; a++)
-            {
-                Vector2 v0 = new Vector2(0, -50);
-                vertex2Dss.Add(new Vertex2D(player.Center - Main.screenPosition, new Color(0, 0, 0, 1), new Vector3(0, 0, 0)));
-                vertex2Dss.Add(new Vertex2D(player.Center - Main.screenPosition + v0.RotatedBy(a / 15d * Math.PI), new Color(0, 0, 0, 0), new Vector3(0, 0, 0)));
-                vertex2Dss.Add(new Vertex2D(player.Center - Main.screenPosition + v0.RotatedBy((a + 1) / 15d * Math.PI), new Color(0, 0, 0, 0), new Vector3(0, 0, 0)));
-            }
+
             Main.graphics.GraphicsDevice.Textures[0] = TextureAssets.MagicPixel.Value;
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Dss.ToArray(), 0, vertex2Dss.Count / 3);
             //DrawTexCircle(Timer * 1.2f, 52, new Color(64, 70, 255, 0), player.Center + RingPos - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), Main.timeForVisualEffects / 17);

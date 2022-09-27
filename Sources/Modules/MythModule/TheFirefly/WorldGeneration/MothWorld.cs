@@ -13,6 +13,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
 
         public override int Height => 600;
 
+        public override bool NormalUpdates => true;
+
         public override List<GenPass> Tasks => new() { new MothLand.MothLandGenPass() };
         public override void OnLoad()
         {
