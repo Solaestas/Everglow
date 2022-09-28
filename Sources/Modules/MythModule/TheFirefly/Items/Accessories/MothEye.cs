@@ -1,4 +1,5 @@
 ﻿using Everglow.Sources.Modules.MythModule.Common;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
@@ -31,7 +32,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
             if (fireflyBiome.IsBiomeActive(Main.LocalPlayer))
             {
                 player.maxTurrets += 1;
-                player.wingTime *= 1.10f;
+                player.wingTime += 0.20f;
             }
         }
 
@@ -40,9 +41,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
             
             if (fireflyBiome.IsBiomeActive(Main.LocalPlayer))
             {
-                tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "MothEyeText1", "[c/2888FE:While in the Firefly biome:\n- Increases sentry slots by 1\n- Increases flight time by 10%\n- All Firefly weapons deal 5% more damage\n- Some Firefly-related items gain bonuses]"));
+                tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "MothEyeText1", "[c/7FC1FF:While in the Firefly biome:]\n[c/7FC1FF:- Increases sentry slots by 1]\n[c/7FC1FF:- Increases flight time by 20%]\n[c/7FC1FF:- All Firefly weapons deal 5% more damage]\n[c/7FC1FF:- Some Firefly-related items gain bonuses]"));
                 tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "MothEyeTextUnfinished", "[c/BA0022:This item is unfinished]"));
-            }
+        /*        if (Language.ActiveCulture.Name == "zh-Hans")
+                {
+                    tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "MothEyeText1zh", "[c/52A7FE:While in the Firefly biome:]\n[c/52A7FE:- Increases sentry slots by 1]\n[c/52A7FE:- Increases flight time by 10%]\n[c/52A7FE:- All Firefly weapons deal 5% more damage]\n[c/52A7FE:- Some Firefly-related items gain bonuses]"));
+                    tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "ItemUnfinishedzh", "[c/BA0022:This item is unfinished]"));
+                }
+        */    }
             base.ModifyTooltips(tooltips);
         }
 
