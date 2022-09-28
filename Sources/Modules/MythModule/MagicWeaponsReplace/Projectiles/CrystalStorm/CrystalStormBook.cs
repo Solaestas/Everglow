@@ -15,14 +15,15 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             Projectile.hostile = false;
             Projectile.penetrate = -1;
             Projectile.timeLeft = 10000;
-            Projectile.DamageType = DamageClass.Summon;
+            Projectile.DamageType = DamageClass.MagicSummonHybrid;
             Projectile.tileCollide = false;
             Projectile.alpha = 255;
         }
+        int times = 0;
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            Projectile.Center = Projectile.Center * 0.7f + (player.Center + new Vector2(player.direction * 22, 12 * player.gravDir * (float)(0.2 + Math.Sin(Main.time / 18d) / 2d))) * 0.3f;
+            Projectile.Center = Projectile.Center * 0.7f + (player.Center + new Vector2(player.direction * 22, 12 * player.gravDir * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d))) * 0.3f;
             Projectile.spriteDirection = player.direction;
             Projectile.velocity *= 0;
             if (player.itemTime > 0 && player.HeldItem.type == ItemID.CrystalStorm)
@@ -43,14 +44,38 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             }
             Player.CompositeArmStretchAmount PCAS = Player.CompositeArmStretchAmount.Full;
 
-            player.SetCompositeArmFront(true, PCAS, (float)(-Math.Sin(Main.time / 18d) * 0.6 + 1.2) * -player.direction);
+            player.SetCompositeArmFront(true, PCAS, (float)(-Math.Sin(Main.timeForVisualEffects / 18d) * 0.6 + 1.2) * -player.direction);
             Vector2 vTOMouse = Main.MouseWorld - player.Center;
             player.SetCompositeArmBack(true, PCAS, (float)(Math.Atan2(vTOMouse.Y, vTOMouse.X) - Math.PI / 2d));
             Projectile.rotation = player.fullRotation;
             if (player.itemTime == 2)
             {
                 Vector2 velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero) * player.HeldItem.shootSpeed;
-                Projectile.NewProjectile(Projectile.GetSource_FromAI(),Projectile.Center + velocity * -1, velocity, ProjectileID.CrystalStorm, player.HeldItem.damage, player.HeldItem.knockBack, player.whoAmI);
+                Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(),Projectile.Center + velocity * -1, velocity * 1.6f, ProjectileID.CrystalStorm, player.HeldItem.damage, player.HeldItem.knockBack, player.whoAmI);
+                p0.CritChance = (int)(player.HeldItem.crit + player.GetCritChance(DamageClass.Generic) * 100);
+                if (times % 3 == 0)
+                {
+                    Projectile p1 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -1, velocity * 0.6f, ModContent.ProjectileType<LargeCrystal>(), (int)(player.HeldItem.damage * 2.8), player.HeldItem.knockBack, player.whoAmI);
+                    p1.CritChance = (int)(player.HeldItem.crit + player.GetCritChance(DamageClass.Generic) * 100);
+                    times = 0;
+                }
+                times++;
+            }
+            if(Main.mouseRight && Main.mouseRightRelease)
+            {
+                if(player.ownedProjectileCounts[ModContent.ProjectileType<Storm>()] < 1)
+                {
+                    Vector2 AimCenter = Main.MouseWorld;
+                    for (int x = 0; x < 808; x += 8)
+                    {
+                        if (Collision.SolidCollision(AimCenter + new Vector2(0, x), 1, 1))
+                        {
+                            AimCenter += new Vector2(0, x);
+                            break;
+                        }
+                    }
+                    Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), AimCenter, Vector2.Zero, ModContent.ProjectileType<Storm>(), (int)(player.HeldItem.damage * 2.8), player.HeldItem.knockBack, player.whoAmI);
+                }
             }
         }
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
@@ -87,7 +112,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
                 List<Vertex2D> bars = new List<Vertex2D>();
                 for (int i = 0; i < 10; ++i)
                 {
-                    double rot = Timer / 270d + i * Timer / 400d * (1 + Math.Sin(Main.time / 7d) * 0.4);
+                    double rot = Timer / 270d + i * Timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d) * 0.4);
                     rot -= x / 18d / 32d * (Timer);
                     rot += Projectile.rotation;
                     Vector2 BasePos = Projectile.Center + X0 - X0.RotatedBy(rot) * i / 4.5f;
@@ -133,13 +158,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             List<Vertex2D> barsII = new List<Vertex2D>();
             for (int i = 0; i < 10; ++i)
             {
-                double rotII = -Timer / 270d - i * Timer / 400d * (1 + Math.Sin(Main.time / 7d + 1) * 0.4);
+                double rotII = -Timer / 270d - i * Timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d + 1) * 0.4);
                 rotII += 8 / 18d / 32d * (Timer);
 
-                double rotIII = Timer / 270d + i * Timer / 400d * (1 + Math.Sin(Main.time / 7d) * 0.4);
+                double rotIII = Timer / 270d + i * Timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d) * 0.4);
                 rotIII -= 8 / 18d / 32d * (Timer);
 
-                double rotIV = MathHelper.Lerp((float)rotII, (float)rotIII, (float)(Main.time / 15d + Math.Sin(Main.time / 62d) * 9) % 1f);
+                double rotIV = MathHelper.Lerp((float)rotII, (float)rotIII, (float)(Main.timeForVisualEffects / 15d + Math.Sin(Main.timeForVisualEffects / 62d) * 9) % 1f);
                 rotIV += Projectile.rotation;
                 Vector2 BasePos = Projectile.Center + X0 - X0.RotatedBy(rotIV) * i / 4.5f - Y0 * 0.05f - X0 * 0.02f;
 
@@ -186,7 +211,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
                 List<Vertex2D> bars = new List<Vertex2D>();
                 for (int i = 0; i < 10; ++i)
                 {
-                    double rot = -Timer / 270d - i * Timer / 400d * (1 + Math.Sin(Main.time / 7d + 1) * 0.4);
+                    double rot = -Timer / 270d - i * Timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d + 1) * 0.4);
                     rot += x / 18d / 32d * (Timer);
                     rot += Projectile.rotation;
                     Vector2 BasePos = Projectile.Center + X0 - X0.RotatedBy(rot) * i / 4.5f - Y0 * 0.05f - X0 * 0.02f;
@@ -244,7 +269,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             List<Vertex2D> bars = new List<Vertex2D>();
             for (int i = 0; i < 10; ++i)
             {
-                double rot = Timer / 270d + i * Timer / 400d * (1 + Math.Sin(Main.time / 7d) * 0.4);
+                double rot = Timer / 270d + i * Timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d) * 0.4);
                 Vector2 BasePos = Projectile.Center + X0 - X0.RotatedBy(rot) * i / 4.5f;
 
                 float UpX = MathHelper.Lerp(16f / 28f, 27f / 28f, i / 9f);
@@ -301,7 +326,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             List<Vertex2D> bars = new List<Vertex2D>();
             for (int i = 0; i < 10; ++i)
             {
-                double rot = -Timer / 270d - i * Timer / 400d * (1+ Math.Sin(Main.time / 7d + 1) * 0.4);
+                double rot = -Timer / 270d - i * Timer / 400d * (1+ Math.Sin(Main.timeForVisualEffects / 7d + 1) * 0.4);
                 rot += Projectile.rotation;
                 Vector2 BasePos = Projectile.Center + X0 - X0.RotatedBy(rot) * i / 4.5f - Y0 * 0.05f - X0 *0.02f;
 

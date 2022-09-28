@@ -2,6 +2,7 @@
 using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MEACModule;
 using Terraria.GameContent;
+using Terraria.Audio;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.DemonScythe
 {
@@ -22,7 +23,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            Projectile.Center = Projectile.Center * 0.7f + (player.Center + new Vector2(player.direction * 22, 12 * player.gravDir * (float)(0.2 + Math.Sin(Main.time / 18d) / 2d))) * 0.3f;
+            Projectile.Center = Projectile.Center * 0.7f + (player.Center + new Vector2(player.direction * 22, 12 * player.gravDir * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d))) * 0.3f;
             Projectile.spriteDirection = player.direction;
             Projectile.velocity *= 0;
             if (player.itemTime > 0 && player.HeldItem.type == ItemID.DemonScythe)
@@ -43,7 +44,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
             }
             Player.CompositeArmStretchAmount PCAS = Player.CompositeArmStretchAmount.Full;
 
-            player.SetCompositeArmFront(true, PCAS, (float)(-Math.Sin(Main.time / 18d) * 0.6 + 1.2) * -player.direction);
+            player.SetCompositeArmFront(true, PCAS, (float)(-Math.Sin(Main.timeForVisualEffects / 18d) * 0.6 + 1.2) * -player.direction);
             Vector2 vTOMouse = Main.MouseWorld - player.Center;
             player.SetCompositeArmBack(true, PCAS, (float)(Math.Atan2(vTOMouse.Y, vTOMouse.X) - Math.PI / 2d));
             Projectile.rotation = player.fullRotation;
@@ -51,6 +52,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
             {
                 Vector2 velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero) * player.HeldItem.shootSpeed;
                 Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(),Projectile.Center + Utils.SafeNormalize(velocity, Vector2.Zero) * 25, velocity * 16, ModContent.ProjectileType<DemonScythePlus>()/*ProjectileID.DemonScythe*/, player.HeldItem.damage, player.HeldItem.knockBack, player.whoAmI);
+                SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/MagicWeaponsReplace/Sounds/DemonScyth"), Projectile.Center);
                 p.CritChance = (int)(player.GetCritChance(DamageClass.Generic) + player.HeldItem.crit);
             }
         }
@@ -88,7 +90,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
                 List<Vertex2D> bars = new List<Vertex2D>();
                 for (int i = 0; i < 10; ++i)
                 {
-                    double rot = Timer / 270d + i * Timer / 400d * (1 + Math.Sin(Main.time / 7d) * 0.4);
+                    double rot = Timer / 270d + i * Timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d) * 0.4);
                     rot -= x / 18d / 30d * (Timer);
                     rot += Projectile.rotation;
                     Vector2 BasePos = Projectile.Center + X0 - X0.RotatedBy(rot) * i / 4.5f;
@@ -134,13 +136,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
             List<Vertex2D> barsII = new List<Vertex2D>();
             for (int i = 0; i < 10; ++i)
             {
-                double rotII = -Timer / 270d - i * Timer / 400d * (1 + Math.Sin(Main.time / 7d + 1) * 0.4);
+                double rotII = -Timer / 270d - i * Timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d + 1) * 0.4);
                 rotII += 8 / 18d / 30d * (Timer);
 
-                double rotIII = Timer / 270d + i * Timer / 400d * (1 + Math.Sin(Main.time / 7d) * 0.4);
+                double rotIII = Timer / 270d + i * Timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d) * 0.4);
                 rotIII -= 8 / 18d / 30d * (Timer);
 
-                double rotIV = MathHelper.Lerp((float)rotII, (float)rotIII, (float)(Main.time / 15d + Math.Sin(Main.time / 62d) * 9) % 1f);
+                double rotIV = MathHelper.Lerp((float)rotII, (float)rotIII, (float)(Main.timeForVisualEffects / 15d + Math.Sin(Main.timeForVisualEffects / 62d) * 9) % 1f);
                 rotIV += Projectile.rotation;
                 Vector2 BasePos = Projectile.Center + X0 - X0.RotatedBy(rotIV) * i / 4.5f - Y0 * 0.05f - X0 * 0.02f;
 
@@ -187,7 +189,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
                 List<Vertex2D> bars = new List<Vertex2D>();
                 for (int i = 0; i < 10; ++i)
                 {
-                    double rot = -Timer / 270d - i * Timer / 400d * (1 + Math.Sin(Main.time / 7d + 1) * 0.4);
+                    double rot = -Timer / 270d - i * Timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d + 1) * 0.4);
                     rot += x / 18d / 30d * (Timer);
                     rot += Projectile.rotation;
                     Vector2 BasePos = Projectile.Center + X0 - X0.RotatedBy(rot) * i / 4.5f - Y0 * 0.05f - X0 * 0.02f;
@@ -245,7 +247,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
             List<Vertex2D> bars = new List<Vertex2D>();
             for (int i = 0; i < 10; ++i)
             {
-                double rot = Timer / 270d + i * Timer / 400d * (1 + Math.Sin(Main.time / 7d) * 0.4);
+                double rot = Timer / 270d + i * Timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d) * 0.4);
                 Vector2 BasePos = Projectile.Center + X0 - X0.RotatedBy(rot) * i / 4.5f;
 
                 float UpX = MathHelper.Lerp(16f / 28f, 27f / 28f, i / 9f);
@@ -302,7 +304,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
             List<Vertex2D> bars = new List<Vertex2D>();
             for (int i = 0; i < 10; ++i)
             {
-                double rot = -Timer / 270d - i * Timer / 400d * (1+ Math.Sin(Main.time / 7d + 1) * 0.4);
+                double rot = -Timer / 270d - i * Timer / 400d * (1+ Math.Sin(Main.timeForVisualEffects / 7d + 1) * 0.4);
                 rot += Projectile.rotation;
                 Vector2 BasePos = Projectile.Center + X0 - X0.RotatedBy(rot) * i / 4.5f - Y0 * 0.05f - X0 *0.02f;
 

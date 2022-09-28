@@ -163,7 +163,7 @@ internal class FireflyPylon : BaseModPylon<FireflyPylonTileEntity>
 
 	public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		DrawModPylon(spriteBatch, i, j, crystalTexture, crystalHighlightTexture, new Vector2(0, DefaultVerticalOffset), new Color(5, 0, 55, 30), new Color(0, 0, 155, 20), 4, CrystalVerticalFrameCount, true, ModContent.DustType<Dusts.FireflyPylonDust>());
+		DrawModPylon(spriteBatch, i, j, crystalTexture, crystalHighlightTexture, new Vector2(0, DefaultVerticalOffset), new Color(5, 0, 55, 30), new Color(255, 0, 155, 20), 4, CrystalVerticalFrameCount, true, ModContent.DustType<Dusts.FireflyPylonDust>());
 	}
 
 	public override void DrawMapIcon(ref MapOverlayDrawContext context, ref string mouseOverText, TeleportPylonInfo pylonInfo, bool isNearPylon, Color drawColor, float deselectedScale, float selectedScale)

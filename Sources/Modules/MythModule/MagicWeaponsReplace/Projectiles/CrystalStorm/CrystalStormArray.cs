@@ -21,7 +21,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            Projectile.Center = Projectile.Center * 0.7f + (player.Center + new Vector2(player.direction * 22, 12 * player.gravDir * (float)(0.2 + Math.Sin(Main.time / 18d) / 2d))) * 0.3f;
+            Projectile.Center = Projectile.Center * 0.7f + (player.Center + new Vector2(player.direction * 22, 12 * player.gravDir * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d))) * 0.3f;
             Projectile.spriteDirection = player.direction;
             Projectile.velocity *= 0;
             if (player.itemTime > 0 && player.HeldItem.type == ItemID.CrystalStorm)
@@ -42,7 +42,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             }
             Player.CompositeArmStretchAmount PCAS = Player.CompositeArmStretchAmount.Full;
 
-            player.SetCompositeArmFront(true, PCAS, (float)(-Math.Sin(Main.time / 18d) * 0.6 + 1.2) * -player.direction);
+            player.SetCompositeArmFront(true, PCAS, (float)(-Math.Sin(Main.timeForVisualEffects / 18d) * 0.6 + 1.2) * -player.direction);
             Vector2 vTOMouse = Main.MouseWorld - player.Center;
             player.SetCompositeArmBack(true, PCAS, (float)(Math.Atan2(vTOMouse.Y, vTOMouse.X) - Math.PI / 2d));
             Projectile.rotation = player.fullRotation;
@@ -59,7 +59,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
        
             for(int g = 0;g < 4;g++)
             {
-                Vector2 v0 = new Vector2(0, -3).RotatedBy(g / 2d * Math.PI + Main.time * 0.05);
+                Vector2 v0 = new Vector2(0, -3).RotatedBy(g / 2d * Math.PI + Main.timeForVisualEffects * 0.05);
                 DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Darkline"), new Color(0.2f, 0.2f, 0.2f, 0.2f), v0);
             }
 
@@ -98,9 +98,9 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             Vector2 RingPosII = RingPos + delta;
 
             float Size = 30f;
-            float timeRot = (float)(Math.Sin(Main.time / 12d) * 0.05 + 0);
-            float WaveValue1 = (float)(Math.Sin(Main.time / 12d) * 0.05 + 1);
-            float WaveValue2 = (float)(Math.Cos(Main.time / 12d) * 0.08 + 1);
+            float timeRot = (float)(Math.Sin(Main.timeForVisualEffects / 12d) * 0.05 + 0);
+            float WaveValue1 = (float)(Math.Sin(Main.timeForVisualEffects / 12d) * 0.05 + 1);
+            float WaveValue2 = (float)(Math.Cos(Main.timeForVisualEffects / 12d) * 0.08 + 1);
             Vector2 Crystal1 = new Vector2((float)(1 - Math.Cos(Timer / 30d * Math.PI)) * Size * WaveValue1).RotatedBy(Math.PI * 0 + timeRot);
             Vector2 Crystal2 = new Vector2((float)(1 - Math.Cos(Timer / 30d * Math.PI)) * Size * WaveValue1).RotatedBy(Math.PI * 0.5 + timeRot);
             Vector2 Crystal3 = new Vector2((float)(1 - Math.Cos(Timer / 30d * Math.PI)) * Size * WaveValue1).RotatedBy(Math.PI * 1 + timeRot);
@@ -128,7 +128,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             Vector2 Point7 = player.Center + RingPosII - Main.screenPosition + Crystal7;
             Vector2 Point8 = player.Center + RingPosII - Main.screenPosition + Crystal8;
 
-            float timeRotII = -(float)(Main.time / 128d);
+            float timeRotII = -(float)(Main.timeForVisualEffects / 128d);
             for (int x = 0; x < 12;x++)
             {
                 Vector2 Crystal9 = new Vector2((float)(1 - Math.Cos(Timer / 30d * Math.PI)) * Size * WaveValue1 * 1.1f).RotatedBy(Math.PI * x / 6d + timeRotII);
@@ -136,7 +136,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
                 Vector2 Point9 = player.Center + RingPosII - Main.screenPosition + Crystal9;
                 DrawTexLine(Point9 - Normal9 * 10, Point9 + Normal9 * 10, c2, c2, Crystal, Math.Min(Timer, Size / 3f));
             }
-            float timeRotIII = -(float)(Main.time / 64d);
+            float timeRotIII = -(float)(Main.timeForVisualEffects / 64d);
             for (int x = 0; x < 20; x++)
             {
                 Vector2 Crystal9 = new Vector2((float)(1 - Math.Cos(Timer / 30d * Math.PI)) * Size * WaveValue2 * 0.9f).RotatedBy(Math.PI * x / 10d + timeRotIII);
@@ -144,7 +144,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
                 Vector2 Point9 = player.Center + RingPosII - Main.screenPosition + Crystal9;
                 DrawTexLine(Point9 - Normal9 * 6, Point9 + Normal9 * 6, c3, c3, Crystal, Math.Min(Timer, Size / 4f));
             }
-            float timeRotIV = -(float)(Main.time / 32d);
+            float timeRotIV = -(float)(Main.timeForVisualEffects / 32d);
             for (int x = 0; x < 16; x++)
             {
                 Vector2 Crystal9 = new Vector2((float)(1 - Math.Cos(Timer / 30d * Math.PI)) * Size * WaveValue1 * 0.7f).RotatedBy(Math.PI * x / 8d + timeRotIV);
@@ -152,7 +152,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
                 Vector2 Point9 = player.Center + RingPosII - Main.screenPosition + Crystal9;
                 DrawTexLine(Point9 - Normal9 * 5, Point9 + Normal9 * 5, c4, c4, Crystal, Math.Min(Timer, Size / 6f));
             }
-            float timeRotV = -(float)(Main.time / 16d);
+            float timeRotV = -(float)(Main.timeForVisualEffects / 16d);
             for (int x = 0; x < 12; x++)
             {
                 Vector2 Crystal9 = new Vector2((float)(1 - Math.Cos(Timer / 30d * Math.PI)) * Size * WaveValue2 * 0.5f).RotatedBy(Math.PI * x / 6d + timeRotV);
@@ -160,7 +160,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
                 Vector2 Point9 = player.Center + RingPosII - Main.screenPosition + Crystal9;
                 DrawTexLine(Point9 - Normal9 * 4, Point9 + Normal9 * 4, c5, c5, Crystal, Math.Min(Timer, Size / 8f));
             }
-            float timeRotVI = -(float)(Main.time / 8d);
+            float timeRotVI = -(float)(Main.timeForVisualEffects / 8d);
             for (int x = 0; x < 8; x++)
             {
                 Vector2 Crystal9 = new Vector2((float)(1 - Math.Cos(Timer / 30d * Math.PI)) * Size * WaveValue1 * 0.35f).RotatedBy(Math.PI * x / 4d + timeRotVI);
@@ -243,9 +243,9 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             Player player = Main.player[Projectile.owner];
 
             float Size = 30f;
-            float timeRot = (float)(Math.Sin(Main.time / 12d) * 0.05 + 0);
-            float WaveValue1 = (float)(Math.Sin(Main.time / 12d) * 0.05 + 1);
-            float WaveValue2 = (float)(Math.Cos(Main.time / 12d) * 0.08 + 1);
+            float timeRot = (float)(Math.Sin(Main.timeForVisualEffects / 12d) * 0.05 + 0);
+            float WaveValue1 = (float)(Math.Sin(Main.timeForVisualEffects / 12d) * 0.05 + 1);
+            float WaveValue2 = (float)(Math.Cos(Main.timeForVisualEffects / 12d) * 0.08 + 1);
             Vector2 Crystal1 = new Vector2((float)(1 - Math.Cos(Timer / 30d * Math.PI)) * Size * WaveValue1).RotatedBy(Math.PI * 0 + timeRot);
             Vector2 Crystal2 = new Vector2((float)(1 - Math.Cos(Timer / 30d * Math.PI)) * Size * WaveValue1).RotatedBy(Math.PI * 0.5 + timeRot);
             Vector2 Crystal3 = new Vector2((float)(1 - Math.Cos(Timer / 30d * Math.PI)) * Size * WaveValue1).RotatedBy(Math.PI * 1 + timeRot);
@@ -278,9 +278,9 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
                 int b = (a + 3) % 8;
                 int c = (a + 2) % 8;
                 List<Vertex2D> vertex2Ds = new List<Vertex2D>();
-                float x0 = (float)(Math.Sin(Main.time / 15d + Math.PI * 0 / 3d) * 0.5f + 0.5);
-                float x1 = (float)(Math.Sin(Main.time / 15d + Math.PI * 1 / 3d) * 0.5f + 0.5);
-                float x2 = (float)(Math.Sin(Main.time / 15d + Math.PI * 2 / 3d) * 0.5f + 0.5);
+                float x0 = (float)(Math.Sin(Main.timeForVisualEffects / 15d + Math.PI * 0 / 3d) * 0.5f + 0.5);
+                float x1 = (float)(Math.Sin(Main.timeForVisualEffects / 15d + Math.PI * 1 / 3d) * 0.5f + 0.5);
+                float x2 = (float)(Math.Sin(Main.timeForVisualEffects / 15d + Math.PI * 2 / 3d) * 0.5f + 0.5);
                 vertex2Ds.Add(new Vertex2D(CPoint[a], new Color(a / 8f, Timer / 30f * x0, 0, 0), new Vector3(0, 0, 0)));
                 vertex2Ds.Add(new Vertex2D(CPoint[b], new Color(a / 8f, Timer / 30f * x1, 0, 0), new Vector3(0, 0, 0)));
                 vertex2Ds.Add(new Vertex2D(CPoint[c], new Color(a / 8f, Timer / 30f * x2, 0, 0), new Vector3(0, 0, 0)));
@@ -290,16 +290,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             }
 
             List<Vertex2D> vertex2Dss = new List<Vertex2D>();
-            for (int a = 0; a < 30; a++)
-            {
-                Vector2 v0 = new Vector2(0, -50);
-                vertex2Dss.Add(new Vertex2D(player.Center - Main.screenPosition, new Color(0, 0, 0, 1), new Vector3(0, 0, 0)));
-                vertex2Dss.Add(new Vertex2D(player.Center - Main.screenPosition + v0.RotatedBy(a / 15d * Math.PI), new Color(0, 0, 0, 0), new Vector3(0, 0, 0)));
-                vertex2Dss.Add(new Vertex2D(player.Center - Main.screenPosition + v0.RotatedBy((a + 1) / 15d * Math.PI), new Color(0, 0, 0, 0), new Vector3(0, 0, 0)));
-            }
+
             Main.graphics.GraphicsDevice.Textures[0] = TextureAssets.MagicPixel.Value;
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Dss.ToArray(), 0, vertex2Dss.Count / 3);
-            //DrawTexCircle(Timer * 1.2f, 52, new Color(64, 70, 255, 0), player.Center + RingPos - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), Main.time / 17);
+            //DrawTexCircle(Timer * 1.2f, 52, new Color(64, 70, 255, 0), player.Center + RingPos - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), Main.timeForVisualEffects / 17);
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
         }

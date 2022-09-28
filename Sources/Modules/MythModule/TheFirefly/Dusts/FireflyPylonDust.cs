@@ -26,7 +26,7 @@
             {
                 dust.active = false;
             }
-            Lighting.AddLight((int)dust.position.X / 16, (int)dust.position.Y / 16,0,0,0.4f * dust.scale);
+            Lighting.AddLight((int)dust.position.X / 16, (int)dust.position.Y / 16,0,0,0.6f * dust.scale);
 			return false;
         }
         public override Color? GetAlpha(Dust dust, Color lightColor)

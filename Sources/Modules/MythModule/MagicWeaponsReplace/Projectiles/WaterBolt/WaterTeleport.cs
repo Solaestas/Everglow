@@ -22,10 +22,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            Vector2 AIM0 = (player.Center + new Vector2(0, 12 * player.gravDir * (float)(0.2 + Math.Sin(Main.time / 18d) / 2d)) + new Vector2(-60 * player.direction, 30).RotatedBy((Projectile.ai[0] - 1) / 4.5 * Math.PI * player.direction));
+            Vector2 AIM0 = (player.Center + new Vector2(0, 12 * player.gravDir * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d)) + new Vector2(-60 * player.direction, 30).RotatedBy((Projectile.ai[0] - 1) / 4.5 * Math.PI * player.direction));
             if(player.itemTime > 0 && player.active)
             {
-                AIM0 = (player.Center + new Vector2(player.direction * -12, -24 * player.gravDir * (float)(0.2 + Math.Sin(Main.time / 18d) / 2d)) + new Vector2(-120 * player.direction, 60).RotatedBy((Projectile.ai[0] - 1) / 4.5 * Math.PI * player.direction));
+                AIM0 = (player.Center + new Vector2(player.direction * -12, -24 * player.gravDir * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d)) + new Vector2(-120 * player.direction, 60).RotatedBy((Projectile.ai[0] - 1) / 4.5 * Math.PI * player.direction));
             }
             Projectile.Center = Projectile.Center * (-Projectile.ai[0] / 50f + 0.97f) + AIM0 * (Projectile.ai[0] / 50f + 0.03f);
             Projectile.spriteDirection = player.direction;
@@ -132,10 +132,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
 
         public void DrawMagicArray(Texture2D tex, Color c0)
         {
-            float Size = (float)((Main.time / 2d + Projectile.ai[0] * 4) % 40d);
-            float SizeII = (float)((Main.time / 2d + 20 + Projectile.ai[0] * 4) % 40d);
-            DrawTexCircle(Size, (40 - Size) * Timer / 30f, c0, Projectile.Center - Main.screenPosition, tex, Main.time / 17);
-            DrawTexCircle(SizeII, (40 - SizeII) * Timer / 30f, c0, Projectile.Center - Main.screenPosition, tex, Main.time / 17);
+            float Size = (float)((Main.timeForVisualEffects / 2d + Projectile.ai[0] * 4) % 40d);
+            float SizeII = (float)((Main.timeForVisualEffects / 2d + 20 + Projectile.ai[0] * 4) % 40d);
+            DrawTexCircle(Size, (40 - Size) * Timer / 30f, c0, Projectile.Center - Main.screenPosition, tex, Main.timeForVisualEffects / 17);
+            DrawTexCircle(SizeII, (40 - SizeII) * Timer / 30f, c0, Projectile.Center - Main.screenPosition, tex, Main.timeForVisualEffects / 17);
         }
         private void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
         {
@@ -162,8 +162,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
 
             for (int x = 0; x < 3; x++)
             {
-                float Value0 = (float)(Main.time / 291d + 20) % 1f;
-                float Value1 = (float)(Main.time / 291d + 20.03) % 1f;
+                float Value0 = (float)(Main.timeForVisualEffects / 291d + 20) % 1f;
+                float Value1 = (float)(Main.timeForVisualEffects / 291d + 20.03) % 1f;
                 vertex2Ds.Add(new Vertex2D(StartPos + Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(Value0, 0, 0)));
                 vertex2Ds.Add(new Vertex2D(EndPos + Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(Value1, 0, 0)));
                 vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(Value0, 1, 0)));
@@ -184,10 +184,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
             Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
             KEx.CurrentTechnique.Passes[0].Apply();
             Player player = Main.player[Projectile.owner];
-            float Size = (float)((Main.time / 2d + Projectile.ai[0] * 4) % 40d);
-            float SizeII = (float)((Main.time / 2d + 20 + Projectile.ai[0] * 4) % 40d);
-            DrawTexCircle(Size, (40 - Size) * Timer / 30f, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), Main.time / 17);
-            DrawTexCircle(SizeII, (40 - SizeII) * Timer / 30f, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), Main.time / 17);
+            float Size = (float)((Main.timeForVisualEffects / 2d + Projectile.ai[0] * 4) % 40d);
+            float SizeII = (float)((Main.timeForVisualEffects / 2d + 20 + Projectile.ai[0] * 4) % 40d);
+            DrawTexCircle(Size, (40 - Size) * Timer / 30f, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), Main.timeForVisualEffects / 17);
+            DrawTexCircle(SizeII, (40 - SizeII) * Timer / 30f, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), Main.timeForVisualEffects / 17);
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
         }

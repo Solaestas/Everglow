@@ -11,7 +11,7 @@ internal class PylonSystem : ModSystem
     public bool firstEnableAnimation = false;
     public override void SaveWorldData(TagCompound tag)
     {
-        tag[DataName] = new BitsByte(shabbyPylonEnable, firstEnableAnimation);
+        tag[DataName] = (Byte)(new BitsByte(shabbyPylonEnable, firstEnableAnimation));
     }
     public override void LoadWorldData(TagCompound tag)
     {
