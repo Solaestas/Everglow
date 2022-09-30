@@ -1,13 +1,41 @@
-using Everglow.Sources.Commons.Function.ImageReader;
+
 using Everglow.Sources.Commons.Function.Vertex;
-using Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses;
-using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
+
+using Everglow.Sources.Modules.YggdrasilModule.Common;
+using Everglow.Sources.Modules.YggdrasilModule.Common.BackgroundManager;
+using Everglow.Sources.Modules.SubWorldModule;
 
 namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Background
 {
     public class MineRoadBackground : ModSystem
     {
+        Vector2 BiomeCenter = new Vector2(6000, 187000);
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        public override void OnModLoad()
+        {
+            if (Main.netMode != NetmodeID.Server)
+            {
+                Everglow.HookSystem.AddMethod(DrawBackground, Commons.Core.CallOpportunity.PostDrawBG);
+                On.Terraria.Graphics.Light.TileLightScanner.GetTileLight += TileLightScanner_GetTileLight;
+                //GetRopePosFir("TreeRope");
+                //InitMass_Spring();
+            }
+        }
+        /// <summary>
+        /// 环境光的钩子
+        /// </summary>
+        /// <param name="orig"></param>
+        /// <param name="self"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="outputColor"></param>
+        private void TileLightScanner_GetTileLight(On.Terraria.Graphics.Light.TileLightScanner.orig_GetTileLight orig, Terraria.Graphics.Light.TileLightScanner self, int x, int y, out Vector3 outputColor)
+        {
+            orig(self, x, y, out outputColor);
+            outputColor += BiomeActive() ? new Vector3(0.001f, 0.001f, 0.05f) : Vector3.Zero;
+        }
         private float alpha = 0f;
         public override void PostUpdateEverything()//开启地下背景
         {
@@ -44,31 +72,30 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Background
         /// <returns></returns>
         public static bool BiomeActive()
         {
-            MothLand mothLand = ModContent.GetInstance<MothLand>();
-            Vector2 BiomeCenter = new Vector2(mothLand.fireflyCenterX * 16, (mothLand.fireflyCenterY - 20) * 16);//读取地形信息
-            Vector2 v0 = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f - BiomeCenter;//距离中心Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f
-            v0.Y *= 1.35f;
-            v0.X *= 0.9f;//近似于椭圆形，所以xy坐标变换
-            return (v0.Length() < 2000);
+            
+            if (Main.screenPosition.Y > 180000)
+            {
+                if (SubworldSystem.IsActive<YggdrasilWorld>())
+                {
+                    return true;
+                }
+            }
+            return false;
         }
   
         private void DrawFarBG(Color baseColor)
         {
-            var texSky = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflySky");
-            var texFar = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyFar");
-            var texMiddle = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyMiddle");
-            var texMiddleGlow = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyMiddleGlow");
-            var texMidClose = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyMidClose");
-            var texClose = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyClose");
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            Vector2 ScreenCen = new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
-            Vector2 DSize = GetZoomByScreenSize();
-            Vector2 DrawPos = ScreenCen;
+            var texSky = YggdrasilContent.QuickTexture("YggdrasilTown/Background/MineRoadBackgroundSky");
+            var texClose = YggdrasilContent.QuickTexture("YggdrasilTown/Background/MineRoadBackgroundClose");
+            var texC1 = YggdrasilContent.QuickTexture("YggdrasilTown/Background/MineRoadBackgroundC1");
+            var texC2 = YggdrasilContent.QuickTexture("YggdrasilTown/Background/MineRoadBackgroundC2");
+            var texC3 = YggdrasilContent.QuickTexture("YggdrasilTown/Background/MineRoadBackgroundC3");
 
-            Main.spriteBatch.Draw(texMidClose, DrawPos, GetDrawRect(texSky.Size(), 0.25f, false), baseColor, 0,
-                 ScreenCen, DSize, SpriteEffects.None, 0);
-
+            BackgroundManager.QuickDrawBG(texSky, GetDrawRect(texSky.Size(), 0f, true), baseColor);
+            BackgroundManager.QuickDrawBG(texC3, GetDrawRect(texClose.Size(), 0.05f, true), baseColor, false, false);
+            BackgroundManager.QuickDrawBG(texC2, GetDrawRect(texClose.Size(), 0.10f, true), baseColor, false, false);
+            BackgroundManager.QuickDrawBG(texC1, GetDrawRect(texClose.Size(), 0.15f, true), baseColor, false, true);
+            BackgroundManager.QuickDrawBG(texClose, GetDrawRect(texClose.Size(), 0.35f, true), baseColor);
         }
         /// <summary>
         /// 获取XY向缩放比例
@@ -89,12 +116,11 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Background
         /// <returns></returns>
         public Rectangle GetDrawRect(Vector2 texSize, float MoveStep, bool Correction)
         {
-            MothLand mothLand = ModContent.GetInstance<MothLand>();
             Vector2 sampleTopleft = Vector2.Zero;
             Vector2 sampleCenter = sampleTopleft + (texSize / 2);
             Vector2 screenSize = new Vector2(Main.screenWidth, Main.screenHeight);
             Vector2 DCen = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
-            Vector2 deltaPos = DCen - new Vector2((mothLand.fireflyCenterX + 34) * 16f, mothLand.fireflyCenterY * 16f);
+            Vector2 deltaPos = DCen - BiomeCenter;
             deltaPos *= MoveStep;
             Vector2 Cor = GetZoomByScreenSize();
             int RX = (int)(sampleCenter.X - screenSize.X / 2f + deltaPos.X);
@@ -126,7 +152,6 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Background
             }
             Color baseColor = Color.White * alpha;
             DrawFarBG(baseColor);
-            DrawCloseBG(baseColor);
         }
     }
 }
