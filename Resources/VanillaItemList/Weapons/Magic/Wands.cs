@@ -51,7 +51,7 @@ namespace Everglow.Resources.VanillaItemList.Weapons.Magic
                 //血雨法杖
                 ItemID.CrimsonRod,
 
-                //猩红魔杖
+                //天候棒
                 ItemID.WeatherPain,
 
                 //魔法导弹
