@@ -47,6 +47,9 @@ namespace Everglow.Resources.VanillaItemList.Weapons.Magic
 
                 //魔刺
                 ItemID.Vilethorn,
+                
+                //血雨法杖
+                ItemID.CrimsonRod,
 
                 //猩红魔杖
                 ItemID.WeatherPain,
