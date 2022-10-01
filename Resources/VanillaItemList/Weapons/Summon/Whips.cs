@@ -18,32 +18,33 @@ namespace Everglow.Resources.VanillaItemList.Weapons.Summon
         {
             vanillaWhips = new List<int>
             {
-                //水箭
-                ItemID.WaterBolt,
+                //皮鞭
+                ItemID.BlandWhip,
 
-                //骷髅头法术
-                ItemID.BookofSkulls,
+                //荆鞭
+                ItemID.ThornWhip,
 
-                //恶魔镰刀
-                ItemID.DemonScythe,
+                //骨鞭
+                ItemID.BoneWhip,
+                
+                //鞭炮
+                ItemID.FireWhip,
 
-                //咒焰
-                ItemID.CursedFlames,
+                //冷鞭
+                ItemID.CoolWhip,
 
-                //黄金尿
-                ItemID.GoldenShower,
+                //郎迪达尔
+                ItemID.SwordWhip,
 
-                //水晶风暴
-                ItemID.CrystalStorm,
+                //黑暗收割者
+                ItemID.ScytheWhip,
 
-                //磁球
-                ItemID.MagnetSphere,
+                //晨星
+                ItemID.MaceWhip,
 
-                //利刃台风
-                ItemID.RazorbladeTyphoon,
+                //万花筒
+                ItemID.RainbowWhip,
 
-                //月耀
-                ItemID.LunarFlareBook,
             };
         }
     }
