@@ -27,15 +27,6 @@ namespace Everglow.Resources.VanillaItemList.Weapons.Ranged
                 //火箭发射器
                 ItemID.RocketLauncher,
 
-                //钉枪
-                ItemID.NailGun,
-
-                //毒刺发射器
-                ItemID.Stynger,
-
-                //杰克南瓜灯发射器
-                ItemID.JackOLanternLauncher,
-
                 //雪人炮
                 ItemID.SnowmanCannon,
                 
