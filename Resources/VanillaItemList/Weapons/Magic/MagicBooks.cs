@@ -18,33 +18,32 @@ namespace Everglow.Resources.VanillaItemList.Weapons.Magic
         {
             vanillaMagicBooks = new List<int>
             {
-                //皮鞭
-                ItemID.BlandWhip,
+                //水箭
+                ItemID.WaterBolt,
 
-                //荆鞭
-                ItemID.ThornWhip,
+                //骷髅头法术
+                ItemID.BookofSkulls,
 
-                //骨鞭
-                ItemID.BoneWhip,
-                
-                //鞭炮
-                ItemID.FireWhip,
+                //恶魔镰刀
+                ItemID.DemonScythe,
 
-                //冷鞭
-                ItemID.CoolWhip,
+                //咒焰
+                ItemID.CursedFlames,
 
-                //郎迪达尔
-                ItemID.SwordWhip,
+                //黄金尿
+                ItemID.GoldenShower,
 
-                //黑暗收割者
-                ItemID.ScytheWhip,
+                //水晶风暴
+                ItemID.CrystalStorm,
 
-                //晨星
-                ItemID.MaceWhip,
+                //磁球
+                ItemID.MagnetSphere,
 
-                //万花筒
-                ItemID.RainbowWhip,
+                //利刃台风
+                ItemID.RazorbladeTyphoon,
 
+                //月耀
+                ItemID.LunarFlareBook, 
             };
         }
     }
