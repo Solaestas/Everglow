@@ -13,6 +13,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule
 
         public override int Height => 12000;
 
+        //public override bool ShouldSave => true;
         public override List<GenPass> Tasks => new() { new WorldGeneration.YggdrasilWorldGeneration.YggdrasilWorldGenPass()};
         public override void OnLoad()
         {

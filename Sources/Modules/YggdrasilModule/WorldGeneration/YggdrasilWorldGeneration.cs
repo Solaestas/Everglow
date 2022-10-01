@@ -61,7 +61,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.WorldGeneration
                                     tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
                                     tile.HasTile = true;
                                 }
-                                if (pixel.R == 44 && pixel.G == 40 && pixel.B == 37)//«‡∂–øÛ
+                                if (pixel.R == 155 && pixel.G == 173 && pixel.B == 183)//«‡∂–øÛ
                                 {
                                     tile.TileType = (ushort)ModContent.TileType<CyanVineStone>();
                                     tile.HasTile = true;
@@ -71,15 +71,12 @@ namespace Everglow.Sources.Modules.YggdrasilModule.WorldGeneration
                                     tile.TileType = (ushort)ModContent.TileType<DarkMud>();
                                     tile.HasTile = true;
                                 }
-                                /*if (pixel.R == 31 && pixel.G == 26 && pixel.B == 45)//≤‚ ‘”√∑øŒ›
+                                if (pixel.R == 255 && pixel.G == 8 && pixel.B == 0)//≤‚ ‘”√∑øŒ›
                                 {
                                     MapIO mapIO = new MapIO(x, y);
-                                    string pathName = "";
-                                    if (!File.Exists(pathName))
-                                    {
-                                        return;
-                                    }
-                                    mapIO.Read(pathName);
+                                    string pathName = "Everglow/Sources/Modules/YggdrasilModule/WorldGeneration/WoodBridge01.mapio";
+                                    using var memoryStream = new MemoryStream(ModContent.GetFileBytes(pathName));
+                                    mapIO.Read(memoryStream);
 
                                     var it = mapIO.GetEnumerator();
                                     while (it.MoveNext())
@@ -87,7 +84,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.WorldGeneration
                                         WorldGen.SquareTileFrame(it.CurrentCoord.X, it.CurrentCoord.Y);
                                         WorldGen.SquareWallFrame(it.CurrentCoord.X, it.CurrentCoord.Y);
                                     }
-                                }*/
+                                }
 
 
 

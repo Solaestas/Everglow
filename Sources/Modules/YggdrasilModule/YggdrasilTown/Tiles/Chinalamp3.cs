@@ -220,11 +220,11 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles
                 tileSpin.DrawRotatedTile(i - (tile.TileFrameX % 54 - 18) / 18, j, tex, new Rectangle(0 + Adx, 0, 36, 64), new Vector2(18, 0), 0, -2, 1);
       
             }
-            Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
-            if (Main.drawToScreen)
-            {
-                zero = Vector2.Zero;
-            }
+            //Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+            //if (Main.drawToScreen)
+            //{
+            //    zero = Vector2.Zero;
+            //}
 
             //Rectangle rc = Main.LocalPlayer.Hitbox;
             //rc.X -= (int)(Main.screenPosition.X - zero.X);
