@@ -60,7 +60,7 @@
 	</ItemGroup>
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 		<Exec Command="xcopy /y /d  &quot;$(OutDir)Everglow.dll&quot; &quot;$(ProjectDir)&quot;" />
-		<Exec Command="xcopy /y /d &quot;$(ProjectDir)..\..\Mods\Everglow.tmod&quot; &quot;$(ProjectDir)Product\&quot;"/>
+		<Exec Command="xcopy /y /d &quot;$(ProjectDir)..\..\Mods\Everglow.tmod&quot; &quot;$(ProjectDir)Product\&quot;" />
 	</Target>
 	<Target Name="BuildEffect" BeforeTargets="Build">
 		<Exec Command="&quot;$(ProjectDir)Resources\Tools\_XNBCompiler.exe&quot; &quot;$(ProjectDir)Sources&quot;" />
