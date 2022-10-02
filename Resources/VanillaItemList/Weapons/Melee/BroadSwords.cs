@@ -103,7 +103,19 @@ namespace Everglow.Resources.VanillaItemList.Weapons.Melee
                 ItemID.DyeTradersScimitar,
 
                 //陨石光剑
-                ItemID.Phaseblade,
+                ItemID.BluePhaseblade,
+
+                ItemID.GreenPhaseblade,
+
+                ItemID.OrangePhaseblade,
+
+                ItemID.PurplePhaseblade,
+
+                ItemID.RedPhaseblade,
+
+                ItemID.WhitePhaseblade,
+
+                ItemID.YellowPhaseblade,
 
                 //养蜂人
                 ItemID.BeeKeeper,
