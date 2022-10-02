@@ -3,6 +3,7 @@ using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.DataStructures;
 using Everglow.Sources.Commons.Core.Utils;
 using Terraria.Enums;
+using Terraria.GameContent;
 using Terraria.ObjectData;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
@@ -102,6 +103,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
                 Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodChandelierType3");
                 tileSpin.DrawRotatedChandelier(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, tex, 8, -2);
             }
+
             return false;
         }
         public override void KillMultiTile(int x, int y, int frameX, int frameY)

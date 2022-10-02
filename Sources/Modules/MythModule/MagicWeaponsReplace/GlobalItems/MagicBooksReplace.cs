@@ -10,17 +10,6 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
             
             base.SetDefaults(item);
         }
-        public override bool PreDrawTooltipLine(Item item, DrawableTooltipLine line, ref int yOffset)
-        {
-            if (Main.LocalPlayer.GetModPlayer<MagicBookPlayer>().MagicBookLevel == 1)
-            {
-                if (item.type == ItemID.WaterBolt)
-                {
-
-                }
-            }
-            return base.PreDrawTooltipLine(item, line, ref yOffset);
-        }
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
             if (Main.LocalPlayer.GetModPlayer<MagicBookPlayer>().MagicBookLevel == 1)
