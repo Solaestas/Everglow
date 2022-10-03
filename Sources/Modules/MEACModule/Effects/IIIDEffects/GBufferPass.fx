@@ -209,7 +209,7 @@ struct PSInput
 PSInput VertexShaderFunction(VSInput input)
 {
     PSInput output;
-    output.Texcoord = input.Texcoord;
+	output.Texcoord = float3(input.Texcoord.x, 1 - input.Texcoord.y, input.Texcoord.z);
 
 	float4 posWS = mul(float4(input.Pos, 1), uModel);
 	float4 posCS = mul(posWS, uViewProjection);
