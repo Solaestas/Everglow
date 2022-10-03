@@ -90,7 +90,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 }
                 Everglow.HookSystem.DisableDrawBackground = false;
             }
-            if (CorruptMoth.CorruputMothNPC != null && CorruptMoth.CorruputMothNPC.active)//发光物体在boss战时变暗
+            if (CorruptMoth.CorruptMothNPC != null && CorruptMoth.CorruptMothNPC.active)//发光物体在boss战时变暗
             {
                 luminance = MathHelper.Lerp(luminance, 0.1f, 0.02f);
             }
@@ -99,7 +99,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 luminance = MathHelper.Lerp(luminance, 1, 0.02f);
                 if (luminance == 1)
                 {
-                    CorruptMoth.CorruputMothNPC = null;
+                    CorruptMoth.CorruptMothNPC = null;
                 }
             }
         }

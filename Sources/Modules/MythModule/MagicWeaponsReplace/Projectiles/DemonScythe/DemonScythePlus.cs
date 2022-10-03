@@ -61,7 +61,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
         {
             knockback = Projectile.knockBack * Projectile.velocity.Length() * 0.2f;
             Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center - Projectile.velocity * 2, Vector2.One, ModContent.ProjectileType<DemoSpark>(), Projectile.damage / 2, 0, Projectile.owner, 0.5f * Projectile.velocity.Length());
-            float k = Math.Clamp(Projectile.velocity.Length() / 8f,1f, 5f);
+            float k = Math.Clamp(Projectile.velocity.Length() / 14f,1f, 5f);
             damage = (int)(damage * k);
             base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
         }

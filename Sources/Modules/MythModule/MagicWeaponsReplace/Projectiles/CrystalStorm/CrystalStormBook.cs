@@ -17,10 +17,11 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             Projectile.hostile = false;
             Projectile.penetrate = -1;
             Projectile.timeLeft = 10000;
-            Projectile.DamageType = DamageClass.Summon;
+            Projectile.DamageType = DamageClass.MagicSummonHybrid;
             Projectile.tileCollide = false;
             Projectile.alpha = 255;
         }
+        int times = 0;
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
@@ -52,7 +53,31 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             if (player.itemTime == 2)
             {
                 Vector2 velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero) * player.HeldItem.shootSpeed;
-                Projectile.NewProjectile(Projectile.GetSource_FromAI(),Projectile.Center + velocity * -1, velocity, ProjectileID.CrystalStorm, player.HeldItem.damage, player.HeldItem.knockBack, player.whoAmI);
+                Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(),Projectile.Center + velocity * -1, velocity * 1.6f, ProjectileID.CrystalStorm, player.HeldItem.damage, player.HeldItem.knockBack, player.whoAmI);
+                p0.CritChance = (int)(player.HeldItem.crit + player.GetCritChance(DamageClass.Generic) * 100);
+                if (times % 3 == 0)
+                {
+                    Projectile p1 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -1, velocity * 0.6f, ModContent.ProjectileType<LargeCrystal>(), (int)(player.HeldItem.damage * 2.8), player.HeldItem.knockBack, player.whoAmI);
+                    p1.CritChance = (int)(player.HeldItem.crit + player.GetCritChance(DamageClass.Generic) * 100);
+                    times = 0;
+                }
+                times++;
+            }
+            if(Main.mouseRight && Main.mouseRightRelease)
+            {
+                if(player.ownedProjectileCounts[ModContent.ProjectileType<Storm>()] < 1)
+                {
+                    Vector2 AimCenter = Main.MouseWorld;
+                    for (int x = 0; x < 808; x += 8)
+                    {
+                        if (Collision.SolidCollision(AimCenter + new Vector2(0, x), 1, 1))
+                        {
+                            AimCenter += new Vector2(0, x);
+                            break;
+                        }
+                    }
+                    Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), AimCenter, Vector2.Zero, ModContent.ProjectileType<Storm>(), (int)(player.HeldItem.damage * 2.8), player.HeldItem.knockBack, player.whoAmI);
+                }
             }
         }
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)

@@ -23,7 +23,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.WorldGeneration
             }
         }
 
-        public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight) => tasks.Add(new YggdrasilWorldGenPass());
+        //public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight) => tasks.Add(new YggdrasilWorldGenPass());
         /// <summary>
         /// type = 0:Kill,type = 1:place Tiles,type = 2:place Walls
         /// </summary>
