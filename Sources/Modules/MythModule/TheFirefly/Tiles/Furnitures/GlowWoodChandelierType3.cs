@@ -68,7 +68,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
                 var tile = Main.tile[i, j];
                 foreach(Player player in Main.player)
                 {
-                    if(player.Hitbox.Intersects(new Rectangle(i * 16 - 8, j * 16 - 8, 18, 18)))
+                    if(player.Hitbox.Intersects(new Rectangle(i * 16, j * 16, 16, 16)))
                     {
                         if (!TileSpin.TileRotation.ContainsKey((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18)))
                         {
@@ -103,7 +103,24 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
                 Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodChandelierType3");
                 tileSpin.DrawRotatedChandelier(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, tex, 8, -2);
             }
+            //Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+            //if (Main.drawToScreen)
+            //{
+            //    zero = Vector2.Zero;
+            //}
 
+            //Rectangle rc = Main.LocalPlayer.Hitbox;
+            //rc.X -= (int)(Main.screenPosition.X - zero.X);
+            //rc.Y -= (int)(Main.screenPosition.Y - zero.Y);
+
+
+            //Rectangle rc2 = new Rectangle(i * 16, j * 16, 16, 16);
+            //rc2.X -= (int)(Main.screenPosition.X - zero.X);
+            //rc2.Y -= (int)(Main.screenPosition.Y - zero.Y);
+            //spriteBatch.Draw(TextureAssets.MagicPixel.Value, rc2, new Color(0.5f, 0, 0, 0));
+
+
+            //spriteBatch.Draw(TextureAssets.MagicPixel.Value,rc,new Color(0.5f,0,0,0));
             return false;
         }
         public override void KillMultiTile(int x, int y, int frameX, int frameY)

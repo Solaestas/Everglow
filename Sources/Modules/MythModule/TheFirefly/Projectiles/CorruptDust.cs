@@ -36,8 +36,15 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         public override void Kill(int timeLeft)
         {
             int i = (int)(Projectile.Center.X / 16f);
-            int j = (int)(Projectile.Center.Y / 16f);
-            WorldGen.Place3x2(i, j,(ushort)ModContent.TileType<Tiles.BlackFrenLarge>(), 0);
+            int height = Main.rand.Next(2, 8);
+            for(int dj = 0;dj < height;dj++)
+            {
+                int j = (int)(Projectile.Center.Y / 16f) -dj;
+                Tile tile = Main.tile[i, j];
+                tile.TileType = (ushort)(ModContent.TileType<Tiles.LampLotus>());
+                tile.HasTile = true;
+                tile.TileFrameX = (short)(28 * Main.rand.Next(8));
+            }
         }
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
