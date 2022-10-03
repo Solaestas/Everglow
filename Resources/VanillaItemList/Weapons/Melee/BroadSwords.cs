@@ -160,7 +160,17 @@ namespace Everglow.Resources.VanillaItemList.Weapons.Melee
                 ItemID.TitaniumSword,
 
                 //晶光刃
-                ItemID.WoodenSword,
+                ItemID.BluePhasesaber,
+
+                ItemID.RedPhasesaber,
+
+                ItemID.GreenPhasesaber,
+
+                ItemID.PurplePhasesaber,
+
+                ItemID.WhitePhasesaber,
+
+                ItemID.YellowPhasesaber,
 
                 //精致手杖
                 ItemID.TaxCollectorsStickOfDoom,
