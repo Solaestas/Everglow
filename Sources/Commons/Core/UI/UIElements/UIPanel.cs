@@ -11,7 +11,7 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
     internal class UIPanel : BaseElement
     {
         public Color PanelColor = new Color(255, 255, 246);
-        public bool CanDrag = true;
+        public bool CanDrag = false;
         private bool dragging = false;
         private Vector2 startPoint = Vector2.Zero;
         public override void LoadEvents()
