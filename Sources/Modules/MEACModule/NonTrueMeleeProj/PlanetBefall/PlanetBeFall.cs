@@ -106,8 +106,8 @@ namespace Everglow.Sources.Modules.MEACModule.NonTrueMeleeProj.PlanetBefall
                 Vertices = vertices,
                 Texture = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/NonTrueMeleeProj/PlanetBefall/PlanetBeFallTexture").Value,
                 NormalTexture = NormalMap.Value,
-                MaterialTexture = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/NonTrueMeleeProj/PlanetBefall/PlanetBeFallTexture").Value,
-                EmissionTexture = TextureAssets.MagicPixel.Value,
+                MaterialTexture = TextureAssets.MagicPixel.Value,//ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/NonTrueMeleeProj/PlanetBefall/PlanetBeFallTexture").Value,
+                EmissionTexture = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/NonTrueMeleeProj/PlanetBefall/PlanetBeFallTexture").Value,
                 ModelTransform = modelMatrix,
             };
 

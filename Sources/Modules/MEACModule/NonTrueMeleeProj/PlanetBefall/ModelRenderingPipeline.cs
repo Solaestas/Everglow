@@ -223,7 +223,8 @@ namespace Everglow.Sources.Modules.MEACModule.NonTrueMeleeProj.PlanetBefall
                 RasterizerState.CullNone);
             toneMappingShader.CurrentTechnique.Passes[1].Apply();
             spriteBatch.Draw(m_fakeScreenTarget, m_fakeScreenTarget.Bounds, Color.White);
-            // spriteBatch.Draw(m_emissionTarget, m_emissionTarget.Bounds, Color.White);
+            spriteBatch.Draw(m_emissionTarget, m_emissionTarget.Bounds, Color.White);
+            spriteBatch.Draw(m_blurRenderTargets[0], m_blurRenderTargets[0].Bounds, Color.White);
             spriteBatch.End();
         }
 
@@ -309,7 +310,7 @@ namespace Everglow.Sources.Modules.MEACModule.NonTrueMeleeProj.PlanetBefall
             gBufferShader.Parameters["uModelNormal"].SetValue(Matrix.Transpose(Matrix.Invert(model.ModelTransform)));
             gBufferShader.Parameters["uCameraPosition"].SetValue(new Vector3(0, 0, 1000));
             gBufferShader.Parameters["uLightDirection"].SetValue(Vector3.Normalize(new Vector3(-1f, 1f, 1f)));
-            gBufferShader.Parameters["uLightIntensity"].SetValue(new Vector3(1f, 1f, 1f) * 4);
+            gBufferShader.Parameters["uLightIntensity"].SetValue(new Vector3(1f, 1f, 1f) * 10);
             gBufferShader.Parameters["uNormalIntensity"].SetValue(0.1f);
 
             graphicsDevice.Textures[0] = model.Texture;
