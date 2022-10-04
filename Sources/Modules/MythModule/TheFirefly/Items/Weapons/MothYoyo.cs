@@ -1,5 +1,4 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
+﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 {
@@ -11,14 +10,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             ItemID.Sets.Yoyo[Item.type] = true;
             ItemID.Sets.GamepadExtraRange[Item.type] = 15;
             ItemID.Sets.GamepadSmartQuickReach[Item.type] = true;
-            GetGlowMask = MythContent.SetStaticDefaultsGlowMask(this);
+            ItemGlowManager.AutoLoadItemGlow(this);
         }
 
-        public static short GetGlowMask = 0;
+
 
         public override void SetDefaults()
         {
-            Item.glowMask = GetGlowMask;
+            Item.glowMask = ItemGlowManager.GetItemGlow(this);
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.width = 24;
             Item.height = 24;

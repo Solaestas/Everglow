@@ -1,5 +1,4 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
+﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
 using Terraria.DataStructures;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
@@ -8,14 +7,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
     {
         public override void SetStaticDefaults()
         {
-            GetGlowMask = MythContent.SetStaticDefaultsGlowMask(this);
+            ItemGlowManager.AutoLoadItemGlow(this);
         }
 
-        public static short GetGlowMask = 0;
+
 
         public override void SetDefaults()
         {
-            Item.glowMask = GetGlowMask;
+            Item.glowMask = ItemGlowManager.GetItemGlow(this);
             Item.damage = 24;
             Item.mana = 6;
             Item.width = 50;

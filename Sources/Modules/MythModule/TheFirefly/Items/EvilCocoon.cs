@@ -1,4 +1,3 @@
-using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items
@@ -9,14 +8,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items
         {
             DisplayName.SetDefault("Magical Cocoon");
             Tooltip.SetDefault("Summons Corrupted Moth");
-            GetGlowMask = MythContent.SetStaticDefaultsGlowMask(this);
+            ItemGlowManager.AutoLoadItemGlow(this);
         }
 
-        public static short GetGlowMask = 0;
+
 
         public override void SetDefaults()
         {
-            Item.glowMask = GetGlowMask;
+            Item.glowMask = ItemGlowManager.GetItemGlow(this);
             Item.width = 20;
             Item.height = 32;
             Item.useAnimation = 45;

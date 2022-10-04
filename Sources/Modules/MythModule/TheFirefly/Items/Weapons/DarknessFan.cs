@@ -9,14 +9,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
     {
         public override void SetStaticDefaults()
         {
-            GetGlowMask = MythContent.SetStaticDefaultsGlowMask(this);
+            ItemGlowManager.AutoLoadItemGlow(this);
         }
 
-        public static short GetGlowMask = 0;
+
 
         public override void SetDefaults()
         {
-            Item.glowMask = GetGlowMask;
+            Item.glowMask = ItemGlowManager.GetItemGlow(this);
             Item.damage = 17;
             Item.DamageType = DamageClass.Summon;
             Item.mana = 7;

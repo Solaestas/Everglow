@@ -1,5 +1,4 @@
 ﻿using Everglow.Sources.Modules.MEACModule.Projectiles;
-using Everglow.Sources.Modules.MythModule.Common;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 {
@@ -7,14 +6,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
     {
         public override void SetStaticDefaults()
         {
-            GetGlowMask = MythContent.SetStaticDefaultsGlowMask(this);
+            ItemGlowManager.AutoLoadItemGlow(this);
         }
 
-        public static short GetGlowMask = 0;
+
 
         public override void SetDefaults()
         {
-            Item.glowMask = GetGlowMask;
+            Item.glowMask = ItemGlowManager.GetItemGlow(this);
             Item.useStyle = ItemUseStyleID.Swing;
             Item.width = 1;
             Item.height = 1;
