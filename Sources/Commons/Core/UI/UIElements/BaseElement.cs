@@ -45,7 +45,7 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
             {
                 return Percent * pixel + Pixel;
             }
-            public void SetValue(float pixel,float percent)
+            public void SetValue(float pixel, float percent)
             {
                 Pixel = pixel;
                 Percent = percent;
@@ -145,6 +145,10 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
             /// </summary>
             public bool InitDone = false;
             /// <summary>
+            /// UI事件遮罩，在开启时不再处理被次UI部件遮挡的UI部件的鼠标事件
+            /// </summary>
+            public bool InteractiveMask = false;
+            /// <summary>
             /// 实际坐标（被内边距裁切过）
             /// </summary>
             public Vector2 Location = Vector2.Zero;
@@ -192,6 +196,7 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
             /// 被鼠标点击的委托
             /// </summary>
             public delegate void UIMouseEvent(BaseElement baseElement);
+            public delegate void UIUpdateEvent(BaseElement baseElement, GameTime gt);
             /// <summary>
             /// 左键点击UI的事件（按下时触发）
             /// </summary>
@@ -232,6 +237,14 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
             /// 鼠标离开UI时的事件
             /// </summary>
             public event UIMouseEvent OnMouseOut;
+            /// <summary>
+            /// 鼠标在UI上时的事件
+            /// </summary>
+            public event UIMouseEvent OnMouseHover;
+            /// <summary>
+            /// 更新时的事件
+            /// </summary>
+            public event UIUpdateEvent OnUpdate;
             public void LeftClick(BaseElement element) => OnLeftClick?.Invoke(element);
             public void RightClick(BaseElement element) => OnRightClick?.Invoke(element);
             public void LeftDoubleClick(BaseElement element) => OnLeftDoubleClick?.Invoke(element);
@@ -242,6 +255,8 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
             public void RightUp(BaseElement element) => OnRightUp?.Invoke(element);
             public void MouseOver(BaseElement element) => OnMouseOver?.Invoke(element);
             public void MouseOut(BaseElement element) => OnMouseOut?.Invoke(element);
+            public void MouseHover(BaseElement element) => OnMouseHover?.Invoke(element);
+            public void Update(BaseElement element, GameTime gt) => OnUpdate?.Invoke(element, gt);
         }
         /// <summary>
         /// 事件管理
@@ -272,7 +287,6 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
             {
                 Vector2 location = Vector2.Transform(Info.Location, Main.UIScaleMatrix),
                     bottomRight = Vector2.Transform(Info.Location + Info.Size, Main.UIScaleMatrix);
-                float screenWidth = Main.screenWidth * Main.UIScale, screenHeight = Main.screenHeight * Main.UIScale;
 
                 Rectangle rectangle = new Rectangle();
                 rectangle.X = (int)location.X;
@@ -307,6 +321,7 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
         {
             //ChildrenElements.ForEach(child => child.OnInitialization());
             LoadEvents();
+            Info.InitDone = true;
         }
         /// <summary>
         /// 用于执行逻辑的更新方法（不受IsVisible限制）
@@ -314,7 +329,8 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
         /// <param name="gt"></param>
         public virtual void PreUpdate(GameTime gt)
         {
-            ChildrenElements.ForEach(child => { child?.PreUpdate(gt); });
+            for (int i = ChildrenElements.Count - 1; i >= 0; i--)
+                ChildrenElements[i]?.PreUpdate(gt);
         }
         /// <summary>
         /// 用于执行逻辑的更新方法（受IsVisible限制）
@@ -322,7 +338,15 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
         /// <param name="gt"></param>
         public virtual void Update(GameTime gt)
         {
-            ChildrenElements.ForEach(child => { if (child != null && child.IsVisible) child.Update(gt); });
+            BaseElement child;
+            for (int i = ChildrenElements.Count - 1; i >= 0; i--)
+            {
+                child = ChildrenElements[i];
+                if (child != null && child.IsVisible)
+                    child.Update(gt);
+            }
+            if (IsVisible)
+                Events.Update(this, gt);
         }
         /// <summary>
         /// 绘制
@@ -344,7 +368,7 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
                 sb.End();
                 //启用画笔，传参：延迟绘制（纹理合批优化），alpha颜色混合模式，各向异性采样，不启用深度模式，UI大小矩阵
                 sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp,
-                    DepthStencilState.None, overflowHiddenRasterizerState, null, Terraria.Main.UIScaleMatrix);
+                    DepthStencilState.None, overflowHiddenRasterizerState, null, Main.UIScaleMatrix);
                 //绘制自己
                 DrawSelf(sb);
             }
@@ -388,6 +412,7 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
         protected virtual void DrawSelf(SpriteBatch sb)
         {
         }
+        public void SetParentElement(BaseElement element) => ParentElement = element;
         /// <summary>
         /// 绘制子元素
         /// </summary>
@@ -405,7 +430,8 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
         {
             if (element == null || ChildrenElements.Contains(element) || element.ParentElement != null) return false;
             element.ParentElement = this;
-            element.OnInitialization();
+            if (!element.Info.InitDone)
+                element.OnInitialization();
             element.Calculation();
             ChildrenElements.Add(element);
             return true;
@@ -467,15 +493,16 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
             Info.HitBox = new Rectangle((int)Info.Location.X, (int)Info.Location.Y, (int)Info.Size.X, (int)Info.Size.Y);
             Info.TotalHitBox = new Rectangle((int)Info.TotalLocation.X, (int)Info.TotalLocation.Y, (int)Info.TotalSize.X, (int)Info.TotalSize.Y);
 
-            Info.InitDone = true;
-            ChildrenElements.ForEach(child => { child?.Calculation(); });
+            for (int i = ChildrenElements.Count - 1; i >= 0; i--)
+                ChildrenElements[i]?.Calculation();
         }
         /// <summary>
         /// 此UI部件是否包含点
         /// </summary>
         /// <param name="point">输入的点</param>
         /// <returns>如果包含返回true，否则返回false</returns>
-        public virtual bool ContainsPoint(Point point) => GetParentElementIsHiddenOverflow() ? (ParentElement == null ?
+        public virtual bool ContainsPoint(Point point) =>
+            GetParentElementIsHiddenOverflow() ? (ParentElement == null ?
             new Rectangle(0, 0, Main.screenWidth, Main.screenHeight).Contains(point) : ParentElement.ContainsPoint(point)) &&
             Info.TotalHitBox.Contains(point) : Info.TotalHitBox.Contains(point);
         /// <summary>
@@ -483,7 +510,7 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
         /// </summary>
         /// <param name="point">输入的点</param>
         /// <returns>如果包含返回true，否则返回false</returns>
-        public virtual bool ContainsPoint(Vector2 point) => ContainsPoint(point.ToPoint());
+        public bool ContainsPoint(Vector2 point) => ContainsPoint(point.ToPoint());
         /// <summary>
         /// 获取在点上的UI部件及上级敏感部件
         /// </summary>
@@ -499,14 +526,26 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
             }
 
             if (ChildrenElements.Count > 0)
-                ChildrenElements.ForEach(child =>
+            {
+                BaseElement child;
+                List<BaseElement> childrens = new List<BaseElement>();
+                for (int i = ChildrenElements.Count - 1; i >= 0; i--)
                 {
+                    child = ChildrenElements[i];
                     if (child != null && child.IsVisible)
-                        elements.AddRange(child.GetElementsContainsPoint(point));
-                });
+                    {
+                        childrens = child.GetElementsContainsPoint(point);
+                        elements.AddRange(childrens);
+                        if (child.Info.InteractiveMask && childrens.Count > 0)
+                            break;
+                    }
+                }
+            }
 
             if (elements.Count == 0 && contains && Info.CanBeInteract && !elements.Contains(this))
+            {
                 elements.Add(this);
+            }
             return elements;
         }
         /// <summary>
@@ -516,7 +555,8 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
         public void ForEach(Action<BaseElement> action)
         {
             action(this);
-            ChildrenElements.ForEach(child => action(child));
+            for (int i = ChildrenElements.Count - 1; i >= 0; i--)
+                ChildrenElements[i]?.ForEach(action);
         }
         /// <summary>
         /// 获取被父部件裁切过的碰撞箱
