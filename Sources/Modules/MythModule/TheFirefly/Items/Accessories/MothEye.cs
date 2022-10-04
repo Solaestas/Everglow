@@ -8,13 +8,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
     public class MothEye : ModItem
     {
         FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
-        public override void SetStaticDefaults()
-        {
-            //DisplayName.SetDefault("Ommateum of the Moth");
-            //DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "魔蛾之眼");
-            //Tooltip.SetDefault("Increases minion slots by 1\nIncreases summon damage by 6%\n'Sophisticated structures of the ommatuem have amazed you'");
-            //Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "召唤栏位增加1\n召唤伤害增加6%\n'复眼精妙的结构使你着魔'");
-        }
         public override void SetDefaults()
         {
             Item.width = 44;
@@ -56,7 +49,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
         {
     /*        Vector2 slotSize = new Vector2(1f, 1f);
             position -= slotSize * Main.inventoryScale / 1f - frame.Size() * scale / 1f;
-            Vector2 drawPos = position + slotSize * Main.inventoryScale / 1f/* - texture.Size() * Main.inventoryScale / 2f*/;
+            Vector2 drawPos = position + slotSize * Main.inventoryScale / 1f/* - texture.Size() * Main.inventoryScale / 2f;*/
     /*        Texture2D RArr = MythContent.QuickTexture("TheFirefly/Projectiles/FixCoin3AltLight");
             spriteBatch.Draw(RArr, drawPos, null, new Color(255, 255, 255, 50), 0f, new Vector2(8), scale * 1f, SpriteEffects.None, 0f);
             //ModContent.Request<Texture2D>("MythMod/UIImages/RightDFan").Value;
