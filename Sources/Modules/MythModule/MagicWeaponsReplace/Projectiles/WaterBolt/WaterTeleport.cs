@@ -69,13 +69,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
                                 for (int j = 0; j < 80; j++)
                                 {
                                     Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * k1;
-                                    int dust0 = Dust.NewDust(player.Center - new Vector2(4), 0, 0, ModContent.DustType<BlueGlowAppearStoppedByTile>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(0.6f, 1.8f) * 0.4f * k0);
+                                    int dust0 = Dust.NewDust(player.Center - new Vector2(4), 0, 0, ModContent.DustType<BlueGlowAppearStoppedByTile>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(0.6f, 1.8f) * 0.4f * k0);
                                     Main.dust[dust0].noGravity = true;
                                 }
                                 for (int j = 0; j < 160; j++)
                                 {
                                     Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * k1;
-                                    int dust1 = Dust.NewDust(player.Center - new Vector2(4), 0, 0, ModContent.DustType<BlueParticleDark2StoppedByTile>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(3.7f, 5.1f) * k0);
+                                    int dust1 = Dust.NewDust(player.Center - new Vector2(4), 0, 0, ModContent.DustType<BlueParticleDark2StoppedByTile>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(3.7f, 5.1f) * k0);
                                     Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 50 / k0);
                                     Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
                                 }
@@ -159,7 +159,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
             }
         }
 
-        public void DrawTexLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2, Texture2D tex)
+        public static void DrawTexLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2, Texture2D tex)
         {
             float Wid = 6f;
             Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
@@ -189,7 +189,6 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
             KEx.CurrentTechnique.Passes[0].Apply();
-            Player player = Main.player[Projectile.owner];
             float Size = (float)((Main.timeForVisualEffects / 2d + Projectile.ai[0] * 4) % 40d);
             float SizeII = (float)((Main.timeForVisualEffects / 2d + 20 + Projectile.ai[0] * 4) % 40d);
             DrawTexCircle(Size, (40 - Size) * Timer / 30f, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), Main.timeForVisualEffects / 17);
@@ -212,13 +211,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
             for (int j = 0; j < 80; j++)
             {
                 Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * k1;
-                int dust0 = Dust.NewDust(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<BlueGlowAppearStoppedByTile>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(0.6f, 1.8f) * 0.4f * k0);
+                int dust0 = Dust.NewDust(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<BlueGlowAppearStoppedByTile>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(0.6f, 1.8f) * 0.4f * k0);
                 Main.dust[dust0].noGravity = true;
             }
             for (int j = 0; j < 160; j++)
             {
                 Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * k1;
-                int dust1 = Dust.NewDust(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<BlueParticleDark2StoppedByTile>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(3.7f, 5.1f) * k0);
+                int dust1 = Dust.NewDust(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<BlueParticleDark2StoppedByTile>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(3.7f, 5.1f) * k0);
                 Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 50 / k0);
                 Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
             }

@@ -1,6 +1,5 @@
 using Everglow.Sources.Commons.Core.Utils;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
-using ReLogic.Content;
 using Terraria.DataStructures;
 using Terraria.ObjectData;
 
@@ -8,8 +7,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 {
     public class GlowWoodLamp : ModTile
     {
-        private Asset<Texture2D> flameTexture;
-
         public override void SetStaticDefaults()
         {
             // Properties

@@ -71,12 +71,11 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             //VFXManager.Add(sf);
             if (Main.mouseRight && Main.mouseRightRelease && HandCooling <= 0 && player.statMana > player.HeldItem.mana * 2)
             {
-                Vector2 ReleasePoint = Main.MouseWorld;
                 for (int g = -5; g < 150; g++)
                 {
                     if (Collision.SolidCollision(Main.MouseWorld + new Vector2(0, g * 5 * player.gravDir), 1, 1))
                     {
-                        ReleasePoint = Main.MouseWorld + new Vector2(0, g * 5 * player.gravDir);
+                        Vector2 ReleasePoint = Main.MouseWorld + new Vector2(0, g * 5 * player.gravDir);
                         Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), ReleasePoint, Vector2.Zero, ModContent.ProjectileType<SkullHand>(), player.HeldItem.damage * 3, player.HeldItem.knockBack * 6, Projectile.owner);
                         p.CritChance = (int)(player.HeldItem.crit + player.GetCritChance(DamageClass.Generic));
 
@@ -150,7 +149,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             }
         }
 
-        public void DrawTexLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2, Texture2D tex)
+        public static void DrawTexLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2, Texture2D tex)
         {
             float Wid = 6f;
             Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;

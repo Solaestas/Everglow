@@ -98,7 +98,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Projectile.velocity = v2.RotatedBy(Math.PI / 2d) / v2.Length();
             if (ExtraKnife)
             {
-                v0 = v_1.RotatedBy(1.6 / 170d * Math.PI * (-170));
                 if (Projectile.timeLeft % 2 == 0)
                 {
                     if (Projectile.extraUpdates > 1)
@@ -273,8 +272,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         }
 
         private Vector2[] vFanP = new Vector2[20];
-        private Effect ef;
-        private Effect ef2;
         private Color[] ADc = new Color[20];
 
         public override void PostDraw(Color lightColor)

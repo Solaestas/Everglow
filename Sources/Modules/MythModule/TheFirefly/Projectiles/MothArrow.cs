@@ -21,8 +21,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             return new Color?(new Color(255, 255, 255, 0));
         }
 
-        private int addi;
-
         public override void AI()
         {
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver4;

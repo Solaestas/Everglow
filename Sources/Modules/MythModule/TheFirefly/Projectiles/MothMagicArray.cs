@@ -50,7 +50,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             }
         }
 
-        public void DrawDoubleLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2)
+        public static void DrawDoubleLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2)
         {
             float Wid = 1f;
             Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;

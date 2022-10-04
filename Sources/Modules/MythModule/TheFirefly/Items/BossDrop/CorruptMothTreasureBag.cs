@@ -4,10 +4,12 @@ using Terraria.GameContent.Creative;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.BossDrop
 {
+
     // Basic code for a boss treasure bag
     public class CorruptMothTreasureBag : ModItem
     {
         // Sets the associated NPC this treasure bag is dropped from
+        [Obsolete]
         public override int BossBagNPC => ModContent.NPCType<TheFirefly.NPCs.Bosses.CorruptMoth>();
 
         public override void SetStaticDefaults()
@@ -35,6 +37,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.BossDrop
             return true;
         }
 
+        [Obsolete]
         public override void OpenBossBag(Player player)
         {
             var entitySource = player.GetSource_OpenItem(Type);
