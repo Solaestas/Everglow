@@ -1,6 +1,4 @@
 ﻿using Everglow.Sources.Modules.MEACModule.Projectiles;
-using Everglow.Sources.Modules.MythModule.Common;
-using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 {
@@ -8,12 +6,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
     {
         public override void SetStaticDefaults()
         {
-            GetGlowMask = MythContent.SetStaticDefaultsGlowMask(this);
+            ItemGlowManager.AutoLoadItemGlow(this);
         }
-        public static short GetGlowMask = 0;
+
+
+
         public override void SetDefaults()
         {
-            Item.glowMask = GetGlowMask;
+            Item.glowMask = ItemGlowManager.GetItemGlow(this);
             Item.useStyle = ItemUseStyleID.Swing;
             Item.width = 1;
             Item.height = 1;
@@ -30,11 +30,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 
             Item.value = 2400;
         }
+
         public override bool CanUseItem(Player player)
         {
-            if(base.CanUseItem(player))
+            if (base.CanUseItem(player))
             {
-                if(Main.myPlayer==player.whoAmI)
+                if (Main.myPlayer == player.whoAmI)
                 {
                     if (player.altFunctionUse != 2)
                     {
@@ -42,7 +43,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
                     }
                     else//右键
                     {
-                        Projectile proj=Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<ScaleWingBladeProj>(), player.GetWeaponDamage(Item), Item.knockBack, player.whoAmI);
+                        Projectile proj = Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<ScaleWingBladeProj>(), player.GetWeaponDamage(Item), Item.knockBack, player.whoAmI);
                         (proj.ModProjectile as MeleeProj).attackType = 100;
                         (proj.ModProjectile as MeleeProj).isRightClick = true;
                         proj.netUpdate2 = true;
@@ -52,13 +53,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             }
             return base.CanUseItem(player);
         }
+
         public override bool AltFunctionUse(Player player)
         {
             return true;
         }
+
         public override void AddRecipes()
         {
-
         }
     }
 }

@@ -1,15 +1,5 @@
-﻿using Humanizer;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Xna.Framework.Input;
 using ReLogic.Content;
-using Terraria;
 
 namespace Everglow.Sources.Commons.Core.UI.UIElements
 {
@@ -27,8 +17,11 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
             get { return wheelValue; }
             set
             {
-                if (value <= 1f && value >= 0f)
+                if (value is <= 1f and >= 0f)
+                {
                     wheelValue = value;
+                }
+
                 if (inner != null)
                 {
                     float height = Info.Size.Y - 26f;
@@ -46,7 +39,7 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
             Info.TopMargin.Pixel = 5f;
             Info.ButtomMargin.Pixel = 5f;
             Info.IsSensitive = true;
-            uiScrollbarTexture = ModContent.Request<Texture2D>("BingoMod/UI/Images/VerticalScrollbar", AssetRequestMode.ImmediateLoad).Value;
+            uiScrollbarTexture = ModContent.Request<Texture2D>("Everglow/Sources/Commons/Core/UI/Images/VerticalScrollbar", AssetRequestMode.ImmediateLoad).Value;
             WheelValue = wheelValue;
         }
         public override void LoadEvents()
@@ -68,7 +61,7 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
         public override void OnInitialization()
         {
             base.OnInitialization();
-            inner = new UIImage(ModContent.Request<Texture2D>("BingoMod/UI/Images/VerticalScrollbarInner", AssetRequestMode.ImmediateLoad).Value, Color.White);
+            inner = new UIImage(ModContent.Request<Texture2D>("Everglow/Sources/Commons/Core/UI/Images/VerticalScrollbarInner", AssetRequestMode.ImmediateLoad).Value, Color.White);
             inner.Info.Left.Pixel = -(inner.Info.Width.Pixel - Info.Width.Pixel) / 2f;
             Register(inner);
         }
@@ -76,48 +69,69 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
         {
             base.Update(gt);
             if (ParentElement == null)
+            {
                 return;
+            }
 
             bool needCalculation = false;
 
             bool isMouseHover = ParentElement.GetCanHitBox().Contains(Main.MouseScreen.ToPoint());
             if ((isMouseHover || isMouseDown) && alpha < 1f)
+            {
                 alpha += 0.01f;
+            }
+
             if ((!(isMouseHover || isMouseDown)) && alpha > 0f)
+            {
                 alpha -= 0.01f;
+            }
 
             inner.ChangeColor(Color.White * alpha);
 
             MouseState state = Mouse.GetState();
             float height = Info.Size.Y - 26f;
             if (!isMouseHover)
+            {
                 whell = state.ScrollWheelValue;
+            }
 
             if (isMouseHover && whell != state.ScrollWheelValue)
             {
-                inner.Info.Top.Pixel -= (float)(state.ScrollWheelValue - whell) / 30f * WhellValueMult;
+                inner.Info.Top.Pixel -= (state.ScrollWheelValue - whell) / 30f * WhellValueMult;
                 if (inner.Info.Top.Pixel > height)
+                {
                     inner.Info.Top.Pixel = height;
+                }
                 else if (inner.Info.Top.Pixel < 0)
+                {
                     inner.Info.Top.Pixel = 0;
+                }
+
                 whell = state.ScrollWheelValue;
                 WheelValue = inner.Info.Top.Pixel / height;
                 needCalculation = true;
             }
             if (isMouseDown && mouseY != Main.mouseY)
             {
-                inner.Info.Top.Pixel += (float)Main.mouseY - (float)mouseY;
+                inner.Info.Top.Pixel += Main.mouseY - mouseY;
                 if (inner.Info.Top.Pixel > height)
+                {
                     inner.Info.Top.Pixel = height;
+                }
                 else if (inner.Info.Top.Pixel < 0)
+                {
                     inner.Info.Top.Pixel = 0;
+                }
+
                 WheelValue = inner.Info.Top.Pixel / height;
                 mouseY = Main.mouseY;
                 needCalculation = true;
             }
 
             if (needCalculation)
+            {
                 Calculation();
+            }
         }
         protected override void DrawSelf(SpriteBatch sb)
         {

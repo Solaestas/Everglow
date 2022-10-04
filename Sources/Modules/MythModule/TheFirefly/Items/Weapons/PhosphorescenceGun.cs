@@ -1,8 +1,6 @@
 ﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
-using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.DataStructures;
-using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 {
@@ -10,18 +8,19 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
     {
         public override void SetStaticDefaults()
         {
-            GetGlowMask = MythContent.SetStaticDefaultsGlowMask(this);
+            ItemGlowManager.AutoLoadItemGlow(this);
         }
-        public static short GetGlowMask = 0;
+
+
+
         public override void SetDefaults()
         {
-            Item.glowMask = GetGlowMask;
+            Item.glowMask = ItemGlowManager.GetItemGlow(this);
 
             Item.width = 70;
             Item.height = 40;
             Item.rare = ItemRarityID.Green;
             Item.value = 2000;
-
 
             Item.useTime = 45;
             Item.useAnimation = 45;
@@ -29,13 +28,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             Item.autoReuse = true;
             Item.UseSound = SoundID.Item36;
 
-
             Item.DamageType = DamageClass.Ranged;
             Item.damage = 10;
             Item.knockBack = 6f;
             Item.noMelee = true;
             Item.noUseGraphic = true;
-
 
             Item.shoot = ProjectileID.PurificationPowder;
             Item.shootSpeed = 10f;

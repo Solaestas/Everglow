@@ -3,6 +3,7 @@
     internal class TileSpin
     {
         public static Dictionary<(int, int), Vector2> TileRotation = new Dictionary<(int, int), Vector2>();
+
         /// <summary>
         /// 更新旋转
         /// </summary>
@@ -26,6 +27,7 @@
                 }
             }
         }
+
         /// <summary>
         /// 更新贴图旋转，并抖落蓝色荧光花粉dust
         /// </summary>
@@ -44,7 +46,7 @@
                 Omega = Omega * 0.75f - rot * 0.13f;
                 TileRotation[(i, j)] = new Vector2(Omega, rot + Omega);
                 float Strength = Math.Abs(Omega) + Math.Abs(rot);
-                if(Main.rand.NextBool(Math.Clamp((int)(100 - Strength * 1200f * k1), 1, 900)))
+                if (Main.rand.NextBool(Math.Clamp((int)(100 - Strength * 1200f * k1), 1, 900)))
                 {
                     Dust d = Dust.NewDustDirect(new Vector2(i * 16 + Addx, j * 16 + Addy) + offset.RotatedBy(rot), width, height, ModContent.DustType<Dusts.BlueParticleDark>());
                     Dust d2 = Dust.NewDustDirect(new Vector2(i * 16 + Addx, j * 16 + Addy) + offset.RotatedBy(rot), width, height, ModContent.DustType<Dusts.BlueParticle>());
@@ -61,6 +63,7 @@
                 }
             }
         }
+
         /// <summary>
         /// 专门绘制吊灯的
         /// </summary>
@@ -81,20 +84,21 @@
                 zero = Vector2.Zero;
             }
             Color c = Lighting.GetColor(i, j);
-            if(specialColor)
+            if (specialColor)
             {
                 c = color;
             }
             if (TileRotation.ContainsKey((i, j)))
             {
                 rot = TileRotation[(i, j)].Y;
-                Main.spriteBatch.Draw(tex, new Vector2(i * 16  + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, new Rectangle(tile.TileFrameX - 18, 0, 54, 48), c, rot, new Vector2(27, 0), 1f, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, new Rectangle(tile.TileFrameX - 18, 0, 54, 48), c, rot, new Vector2(27, 0), 1f, SpriteEffects.None, 0f);
             }
             else
             {
                 Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, new Rectangle(tile.TileFrameX - 18, 0, 54, 48), c, rot, new Vector2(27, 0), 1f, SpriteEffects.None, 0f);
             }
         }
+
         /// <summary>
         /// 专门绘制吊灯的
         /// </summary>
@@ -129,6 +133,7 @@
                 Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, new Rectangle(tile.TileFrameX, 0, 18, 34), c, rot, new Vector2(9, 0), 1f, SpriteEffects.None, 0f);
             }
         }
+
         /// <summary>
         /// 画旋转物块
         /// </summary>
@@ -164,6 +169,7 @@
                 Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, sourceRectangle, c, rot, origin, 1f, SpriteEffects.None, 0f);
             }
         }
+
         /// <summary>
         /// 画旋转物块
         /// </summary>

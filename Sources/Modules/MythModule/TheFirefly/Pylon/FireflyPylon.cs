@@ -1,12 +1,4 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using ReLogic.Content;
-using Terraria.DataStructures;
-using Terraria.GameContent;
-using Terraria.Map;
-using Terraria.ModLoader.Default;
-using Terraria.ObjectData;
-
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Pylon;
+﻿namespace Everglow.Sources.Modules.MythModule.TheFirefly.Pylon;
 
 internal class FireflyPylonTileEntity : TEModdedPylon
 {
