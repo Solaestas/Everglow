@@ -7,6 +7,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             Main.tileSolid[Type] = true;
             Main.tileMergeDirt[Type] = true;
             Main.tileBlockLight[Type] = true;
+            Main.tileMerge[Type][ModContent.TileType<DarkCocoonMoss>()] = true;
+            Main.tileMerge[Type][ModContent.TileType<DarkCocoonSpecial>()] = true;
             MinPick = 175;
             DustType = 191;
             ItemDrop = ModContent.ItemType<Items.DarkCocoon>();
@@ -36,7 +38,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
         {
             if (Main.rand.NextBool(6))
             {
-                if (!Main.tile[i, j].IsHalfBlock && !Main.tile[i + 1, j].IsHalfBlock && !Main.tile[i - 1, j].IsHalfBlock && !Main.tile[i + 2, j].IsHalfBlock && !Main.tile[i - 2, j].IsHalfBlock)//Ê÷Ä¾
+                if (Main.tile[i, j].Slope == SlopeType.Solid && Main.tile[i + 1, j].Slope == SlopeType.Solid && Main.tile[i - 1, j].Slope == SlopeType.Solid && Main.tile[i + 2, j].Slope == SlopeType.Solid && Main.tile[i - 2, j].Slope == SlopeType.Solid && 
+                    Main.tile[i, j + 1].Slope == SlopeType.Solid && Main.tile[i + 1, j + 1].Slope == SlopeType.Solid && Main.tile[i - 1, j + 1].Slope == SlopeType.Solid && Main.tile[i + 2, j + 1].Slope == SlopeType.Solid && Main.tile[i - 2, j + 1].Slope == SlopeType.Solid)//Ê÷Ä¾
                 {
                     for (int x = -2; x < 3; x++)
                     {
@@ -53,7 +56,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                 }
             }
 
-            if (!Main.tile[i, j - 1].HasTile && !Main.tile[i, j].IsHalfBlock && Main.tile[i, j - 1].LiquidAmount > 0)
+            if (!Main.tile[i, j - 1].HasTile && Main.tile[i, j].Slope == SlopeType.Solid && Main.tile[i, j - 1].LiquidAmount > 0)
             {
                 Tile tile = Main.tile[i, j - 1];
                 tile.TileType = (ushort)(ModContent.TileType<Tiles.LampLotus>());
@@ -65,14 +68,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                 Tile t0 = Main.tile[i, j];
 
                 Tile t2 = Main.tile[i, j + 1];
-                if (!t0.IsHalfBlock && !t2.HasTile)
+                if (t0.Slope == SlopeType.Solid && !t2.HasTile)
                 {
                     t2.TileType = (ushort)ModContent.TileType<Tiles.BlackVine>();
                     t2.HasTile = true;
                     t2.TileFrameY = (short)(Main.rand.Next(6, 9) * 18);
                 }
             }
-            if (!Main.tile[i, j - 1].HasTile && !Main.tile[i + 1, j - 1].HasTile && !Main.tile[i - 1, j - 1].HasTile && !Main.tile[i, j].IsHalfBlock && !Main.tile[i - 1, j].IsHalfBlock && !Main.tile[i + 1, j].IsHalfBlock)//ºÚÓ©ÜÄ
+            if (!Main.tile[i, j - 1].HasTile && !Main.tile[i + 1, j - 1].HasTile && !Main.tile[i - 1, j - 1].HasTile && Main.tile[i, j].Slope == SlopeType.Solid && Main.tile[i - 1, j].Slope == SlopeType.Solid && Main.tile[i + 1, j].Slope == SlopeType.Solid)//ºÚÓ©ÜÄ
             {
                 Tile t1 = Main.tile[i, j - 1];
                 Tile t2 = Main.tile[i, j - 2];
