@@ -170,7 +170,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             return false;
         }
 
-        private void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
+        private static void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
         {
             List<Vertex2D> circle = new List<Vertex2D>();
             for (int h = 0; h < radious / 2; h++)

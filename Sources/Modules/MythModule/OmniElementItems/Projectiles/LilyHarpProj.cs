@@ -305,7 +305,7 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles
             return false;
         }
 
-        private void DrawCircle(float radious, float width, Color color, Vector2 center)
+        private static void DrawCircle(float radious, float width, Color color, Vector2 center)
         {
             List<Vertex2D> circle = new List<Vertex2D>();
             for (int h = 0; h < radious / 2; h++)

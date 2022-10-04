@@ -310,7 +310,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
         }
 
-        private void DrawCircle(float radious, float width, Color color, Vector2 center, float value0 = 0, float valu1 = 0)
+        private static void DrawCircle(float radious, float width, Color color, Vector2 center, float value0 = 0, float valu1 = 0)
         {
             List<Vertex2D> circle = new List<Vertex2D>();
             for (int h = 0; h < radious / 2; h++)

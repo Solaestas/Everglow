@@ -85,7 +85,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
             DrawTexMoon(Timer * 0.8f, 25, c0 * Size1, player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(-Main.timeForVisualEffects / 36), MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BloomLight"), -Main.timeForVisualEffects / 1.8);
         }
 
-        private void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
+        private static void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
         {
             List<Vertex2D> circle = new List<Vertex2D>();
             for (int h = 0; h < radious / 2; h++)

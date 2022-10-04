@@ -33,7 +33,7 @@ namespace Everglow.Sources.Modules.MEACModule.NonTrueMeleeProj
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
         {
             behindNPCsAndTiles.Add(index);
-            base.DrawBehind(index, behindNPCsAndTiles, behindNPCs, behindProjectiles, overPlayers, overWiresUI);
+            
         }
         public void DrawDoubleLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2)
         {

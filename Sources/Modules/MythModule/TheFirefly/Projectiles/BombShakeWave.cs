@@ -37,10 +37,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
         {
             behindProjectiles.Add(index);
-            base.DrawBehind(index, behindNPCsAndTiles, behindNPCs, behindProjectiles, overPlayers, overWiresUI);
+
         }
 
-        private void DrawCircle(float radious, float width, Color color, Vector2 center, bool Black = false)
+        private static void DrawCircle(float radious, float width, Color color, Vector2 center)
         {
             List<Vertex2D> circle = new List<Vertex2D>();
             for (int h = 0; h < radious / 2; h++)

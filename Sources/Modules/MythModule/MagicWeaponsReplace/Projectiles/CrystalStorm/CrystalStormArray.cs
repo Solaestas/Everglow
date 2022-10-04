@@ -205,27 +205,9 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             DrawTexLine(Point8 - Normal8 * 12, Point1 - Normal1 * 20, c0, c0, LineV, Math.Min(Timer / 4f, 4.5f));
         }
 
-        private void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
+        public static void DrawTexLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2, Texture2D tex, float width = 6)
         {
-            List<Vertex2D> circle = new List<Vertex2D>();
-            for (int h = 0; h < radious / 2; h++)
-            {
-                circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 1, 0)));
-                circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0, 0)));
-            }
-            circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0.5f, 1, 0)));
-            circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(addRot), color, new Vector3(0.5f, 0, 0)));
-            if (circle.Count > 0)
-            {
-                Main.graphics.GraphicsDevice.Textures[0] = tex;
-                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
-            }
-        }
-
-        public void DrawTexLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2, Texture2D tex, float width = 6)
-        {
-            float Wid = width;
-            Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
+            Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * (float)width;
 
             List<Vertex2D> vertex2Ds = new List<Vertex2D>
             {
