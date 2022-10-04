@@ -9,8 +9,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
     {
         public override void PostSetDefaults()
         {
-            Main.tileFrameImportant[Type] = true;
+            Main.tileFrameImportant[Type] = false;
             Main.tileNoAttach[Type] = true;
+            Main.tileCut[Type] = true;
+
             TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
             TileObjectData.newTile.Height = 1;
             TileObjectData.newTile.Width = 1;
@@ -21,18 +23,28 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             AddMapEntry(new Color(81, 110, 255), modTranslation);
             HitSound = SoundID.Grass;
         }
-        public override void NumDust(int i, int j, bool fail, ref int num)
-        {
-            num = (fail ? 1 : 3);
-        }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
         }
-        public override void PlaceInWorld(int i, int j, Item item)
+        public override void RandomUpdate(int i, int j)
         {
-            short num = (short)(Main.rand.Next(0, 6));
-            Main.tile[i, j].TileFrameX = (short)(num * 48);
-            Main.tile[i, j + 1].TileFrameX = (short)(num * 48);
+            var tile = Main.tile[i, j];
+            var tile2 = Main.tile[i, j - 1];
+
+            
+            if (tile2.TileType != tile.TileType)
+            {
+                int length = 0;
+                while (Main.tile[i, j + length].TileType == tile.TileType && Main.tile[i, j + length].LiquidAmount == 0)
+                {
+                    length++;
+                }
+                if (length <= 9)
+                {
+                    tile2.TileType = (ushort)(ModContent.TileType<Tiles.LampLotus>());
+                    tile2.HasTile = true;
+                }
+            }
         }
         public override void NearbyEffects(int i, int j, bool closer)
         {
@@ -52,7 +64,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                         {
                             if (!TileSpin.TileRotation.ContainsKey((i, j)))
                             {
-                                TileSpin.TileRotation.Add((i, j), new Vector2(Math.Clamp(player.velocity.X, -1, 1) * 0.2f));
+                                TileSpin.TileRotation.Add((i, j), new Vector2(Math.Clamp(player.velocity.X * 0.02f, -1, 1) * 0.2f));
                             }
                             else
                             {
@@ -62,7 +74,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                                 rot = TileSpin.TileRotation[(i, j)].Y;
                                 if (Math.Abs(Omega) < 0.4f && Math.Abs(rot) < 0.4f)
                                 {
-                                    TileSpin.TileRotation[(i, j)] = new Vector2(Omega + Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + Omega + Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
+                                    TileSpin.TileRotation[(i, j)] = new Vector2(Omega + Math.Clamp(player.velocity.X * 0.02f, -1, 1) * 2f, rot + Omega + Math.Clamp(player.velocity.X * 0.02f, -1, 1) * 2f);
                                 }
                                 if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
                                 {
@@ -84,7 +96,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                                 rot = TileSpin.TileRotation[(i, j)].Y;
                                 if (Math.Abs(Omega) < 4f && Math.Abs(rot) < 4f)
                                 {
-                                    TileSpin.TileRotation[(i, j)] = new Vector2(Omega * 0.9f + (Math.Clamp(Main.windSpeedCurrent, -1, 1) * (0.3f + MathUtils.Sin(i + (float)Main.time / 24f) * 0.1f)) * 0.2f, rot * 0.9f + (Math.Clamp(Main.windSpeedCurrent, -1, 1) * (0.3f + MathUtils.Sin(i + (float)Main.time / 24f) * 0.1f)) * 0.2f);
+                                    TileSpin.TileRotation[(i, j)] = new Vector2(Omega * 0.999f + (Math.Clamp(Main.windSpeedCurrent, -1, 1) * (0.3f + MathUtils.Sin(i + (float)Main.time / 24f) * 0.1f)) * 0.002f, rot * 0.999f + (Math.Clamp(Main.windSpeedCurrent, -1, 1) * (0.3f + MathUtils.Sin(i + (float)Main.time / 24f) * 0.1f)) * 0.002f);
                                 }
                             }
                         }

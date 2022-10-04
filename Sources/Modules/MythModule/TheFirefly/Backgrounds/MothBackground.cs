@@ -498,7 +498,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             };
             Effect bgW = MythContent.QuickEffect("Effects/BackgroundWrap");
             var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-            var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
+            var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
             bgW.Parameters["uTransform"].SetValue(projection);
             bgW.Parameters["uTime"].SetValue(0.34f);
             bgW.CurrentTechnique.Passes[0].Apply();
