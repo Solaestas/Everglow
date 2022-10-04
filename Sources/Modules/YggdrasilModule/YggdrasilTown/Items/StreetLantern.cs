@@ -1,6 +1,6 @@
 ﻿namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Items
 {
-    public class LanternPost1 : ModItem
+    public class StreetLantern : ModItem
     {
         public override void SetStaticDefaults()
         {
@@ -13,7 +13,7 @@
             Item.height = 28;
             Item.rare = 0;
             Item.scale = 1f;
-            Item.createTile = ModContent.TileType<Tiles.LargeLantern1 >();
+            Item.createTile = ModContent.TileType<Tiles.StreetLantern >();
             Item.useStyle = 1;
             Item.useTurn = true;
             Item.useAnimation = 15;

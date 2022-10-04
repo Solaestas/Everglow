@@ -3,7 +3,7 @@ using Terraria.ObjectData;
 
 namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles
 {
-    public class LargeLantern1 : ModTile
+    public class StreetLantern : ModTile
     {
         public override void PostSetDefaults()
         {
@@ -42,7 +42,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Items.LanternPost1>());
+            Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Items.StreetLantern>());
         }
         public override void PlaceInWorld(int i, int j, Item item)
         {
