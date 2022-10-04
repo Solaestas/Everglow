@@ -1,7 +1,7 @@
-using Terraria.DataStructures;
 using Everglow.Sources.Modules.MythModule.Common;
-using Terraria.ObjectData;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Terraria.DataStructures;
+using Terraria.ObjectData;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 {
@@ -44,6 +44,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
         {
             Item.NewItem(new EntitySource_TileBreak(x, y), x * 16, y * 16, 16, 32, ModContent.ItemType<Items.Furnitures.GlowWoodPianoType2>());
         }
+
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
             var tile = Main.tile[i, j];

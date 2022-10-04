@@ -12,17 +12,20 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Projectile.hostile = false;
             Projectile.penetrate = 1;
             Projectile.timeLeft = 600;
-            Projectile.tileCollide =true;
+            Projectile.tileCollide = true;
             Projectile.DamageType = DamageClass.Ranged;
         }
+
         public override Color? GetAlpha(Color lightColor)
         {
             return new Color?(new Color(255, 255, 255, 0));
         }
+
         private int addi;
+
         public override void AI()
         {
-            Projectile.rotation = Projectile.velocity.ToRotation()+MathHelper.PiOver4;
+            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver4;
             if (Projectile.timeLeft % 3 == 0)
             {
                 Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<BlueGlowAppear>(), Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default(Color), Main.rand.NextFloat(0.6f, 1.8f));
@@ -33,17 +36,18 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 Projectile.Kill();
             }*/
         }
+
         public override bool PreDraw(ref Color lightColor)
         {
             return true;
         }
+
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            
         }
+
         public override void Kill(int timeLeft)
         {
-            
             for (int j = 0; j < 16; j++)
             {
                 Vector2 v0 = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283);
@@ -59,15 +63,16 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             //写得不是很好的范围杀伤
             for (int j = 0; j < 200; j++)
             {
-                if(Main.npc[j].active)
-                if ((Main.npc[j].Center - Projectile.Center).Length() < 100 && !Main.npc[j].dontTakeDamage && !Main.npc[j].friendly )
+                if (Main.npc[j].active)
                 {
-                    Main.npc[j].StrikeNPC((int)(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f)), 2, Math.Sign(Projectile.velocity.X), true);
-                    Player player = Main.player[Projectile.owner];
-                    player.addDPS((int)(Projectile.damage * (1 + Projectile.ai[1] / 100f) * 1.0f));
+                    if ((Main.npc[j].Center - Projectile.Center).Length() < 100 && !Main.npc[j].dontTakeDamage && !Main.npc[j].friendly)
+                    {
+                        Main.npc[j].StrikeNPC((int)(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f)), 2, Math.Sign(Projectile.velocity.X), true);
+                        Player player = Main.player[Projectile.owner];
+                        player.addDPS((int)(Projectile.damage * (1 + Projectile.ai[1] / 100f) * 1.0f));
+                    }
                 }
             }
-
         }
     }
 }

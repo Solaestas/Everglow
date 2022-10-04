@@ -8,10 +8,12 @@ namespace Everglow.Sources.Modules.MythModule.Common.WeaponEffects
         {
             On.Terraria.Main.DrawGore += DrawString;
         }
+
         public static void UnLoad()
         {
             //On.Terraria.Main.DrawGore -= DrawString;
         }
+
         private static void DrawString(On.Terraria.Main.orig_DrawGore orig, Terraria.Main self)
         {
             for (int d = 0; d < Main.projectile.Length; d++)

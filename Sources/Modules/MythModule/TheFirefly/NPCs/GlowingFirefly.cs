@@ -11,6 +11,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             Main.npcFrameCount[NPC.type] = 8;
             MothLandGlobalNPC.RegisterMothLandNPC(Type);
         }
+
         public override void SetDefaults()
         {
             NPC.damage = 0;
@@ -26,21 +27,23 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             NPC.noGravity = true;
             NPC.catchItem = ModContent.ItemType<Items.GlowingFirefly>();
         }
+
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
-            if(!fireflyBiome.IsBiomeActive(Main.LocalPlayer))
+            if (!fireflyBiome.IsBiomeActive(Main.LocalPlayer))
             {
                 return 0f;
             }
             return 0.3f;
         }
+
         public override void AI()
         {
             Player player = Main.player[NPC.FindClosestPlayer()];
-            if(NPC.ai[1] > 0)
+            if (NPC.ai[1] > 0)
             {
-                if(NPC.ai[0] < 4)
+                if (NPC.ai[0] < 4)
                 {
                     NPC.ai[0] += 0.18f;
                 }
@@ -48,7 +51,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
                 {
                     NPC.ai[0] += 0.5f;
                 }
-                
+
                 if (NPC.ai[0] >= 8f)
                 {
                     NPC.ai[0] = 4f;
@@ -58,17 +61,17 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             }
             else
             {
-                if ((player.Center - NPC.Center).Length() < 80f || NPC.life != NPC.lifeMax) 
+                if ((player.Center - NPC.Center).Length() < 80f || NPC.life != NPC.lifeMax)
                 {
                     NPC.ai[1] = 1f;
                 }
-                foreach(NPC same in Main.npc)
+                foreach (NPC same in Main.npc)
                 {
-                    if(same.type == NPC.type)
+                    if (same.type == NPC.type)
                     {
-                        if((same.Center - NPC.Center).Length() < 60)
+                        if ((same.Center - NPC.Center).Length() < 60)
                         {
-                            if(same.ai[1] > 0)
+                            if (same.ai[1] > 0)
                             {
                                 NPC.ai[1] = 1;
                                 NPC.ai[2] = Main.rand.Next(100);
@@ -80,21 +83,22 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
                 }
             }
         }
-        Vector2 AimPos = Vector2.Zero;
+
+        private Vector2 AimPos = Vector2.Zero;
+
         private void UpdateMove()
         {
             NPC.ai[2] += 1;
-            if(NPC.ai[2] % 40 == 0)
+            if (NPC.ai[2] % 40 == 0)
             {
                 Vector2 vNext = new Vector2(0, Main.rand.NextFloat(12f, 220f)).RotatedByRandom(6.283) + NPC.Center + Vector2.Normalize(NPC.Center - Main.player[Player.FindClosest(NPC.Center, 0, 0)].Center) * 6 + new Vector2(0, -6);
-                while(!Collision.CanHit(NPC.Center,0,0, vNext,0,0) || Main.tile[(int)(vNext.X / 16), (int)(vNext.Y / 16)].LiquidAmount != 0)
+                while (!Collision.CanHit(NPC.Center, 0, 0, vNext, 0, 0) || Main.tile[(int)(vNext.X / 16), (int)(vNext.Y / 16)].LiquidAmount != 0)
                 {
                     vNext = new Vector2(0, Main.rand.NextFloat(12f, 220f)).RotatedByRandom(6.283) + NPC.Center + Vector2.Normalize(NPC.Center - Main.player[Player.FindClosest(NPC.Center, 0, 0)].Center) * 6 + new Vector2(0, -6);
                 }
                 AimPos = vNext;
-
             }
-            if((NPC.Center - AimPos).Length() >= 20)
+            if ((NPC.Center - AimPos).Length() >= 20)
             {
                 NPC.velocity = Vector2.Normalize(AimPos - NPC.Center) * 1f;
             }
@@ -103,6 +107,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
                 NPC.velocity *= 0;
             }
         }
+
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             SpriteEffects effects = SpriteEffects.None;
@@ -121,6 +126,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 
             return false;
         }
+
         public override void OnKill()
         {
             for (int i = 0; i < 18; i++)
@@ -135,22 +141,26 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             }
             base.OnKill();
         }
+
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.MothScaleDust>(), 1, 1, 1));
         }
+
         public override void OnSpawn(IEntitySource source)
         {
             NPC.scale = Main.rand.NextFloat(0.83f, 1.17f);
             base.OnSpawn(source);
         }
+
         public override bool? CanBeCaughtBy(Item item, Player player)
         {
             return true;
         }
+
         public override void OnCaughtBy(Player player, Item item, bool failed)
         {
-            Item.NewItem(NPC.GetSource_FromThis(), NPC.Center,0,0, ModContent.ItemType<Items.GlowingFirefly>(),1);
+            Item.NewItem(NPC.GetSource_FromThis(), NPC.Center, 0, 0, ModContent.ItemType<Items.GlowingFirefly>(), 1);
             NPC.active = false;
             base.OnCaughtBy(player, item, failed);
         }

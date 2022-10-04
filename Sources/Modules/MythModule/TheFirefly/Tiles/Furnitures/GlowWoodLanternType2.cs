@@ -1,8 +1,8 @@
-using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Everglow.Sources.Commons.Core.Utils;
 using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Terraria.DataStructures;
 using Terraria.Enums;
-using Everglow.Sources.Commons.Core.Utils;
 using Terraria.ObjectData;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
@@ -29,7 +29,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             AdjTiles = new int[] { TileID.HangingLanterns };
 
             // Placement
-            TileObjectData.newTile.CopyFrom(TileObjectData.Style1x2); 
+            TileObjectData.newTile.CopyFrom(TileObjectData.Style1x2);
             TileObjectData.newTile.AnchorTop = new AnchorData(AnchorType.SolidTile, TileObjectData.newTile.Width, 0);
             TileObjectData.newTile.AnchorBottom = default(AnchorData);
             TileObjectData.newTile.CoordinateHeights = new[] { 16, 16 };
@@ -39,13 +39,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             ModTranslation name = CreateMapEntryName();
             name.SetDefault("GlowWood Lantern");
             AddMapEntry(new Color(0, 14, 175), name);
-
-
         }
+
         public override void HitWire(int i, int j)
         {
             FurnitureUtils.LightHitwire(i, j, Type, 1, 2);
         }
+
         public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
         {
             Tile tile = Main.tile[i, j];
@@ -62,6 +62,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
                 b = 0f;
             }
         }
+
         public override void NearbyEffects(int i, int j, bool closer)
         {
             if (closer)
@@ -94,6 +95,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
                 }
             }
         }
+
         public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
         {
             var tile = Main.tile[i, j];
@@ -106,6 +108,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             }
             return false;
         }
+
         public override void KillMultiTile(int x, int y, int frameX, int frameY)
         {
             Item.NewItem(new EntitySource_TileBreak(x, y), x * 16, y * 16, 48, 32, ModContent.ItemType<Items.Furnitures.GlowWoodLanternType2>());

@@ -1,7 +1,7 @@
 using Everglow.Sources.Commons.Function.ImageReader;
 using Everglow.Sources.Commons.Function.Vertex;
-using Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses;
 using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses;
 using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
@@ -10,6 +10,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
     {
         //加了个环境光，但还要调整下不然看上去很怪
         public readonly Vector3 ambient = new Vector3(0.001f, 0.001f, 0.05f);
+
         public List<GHang> GPos = new List<GHang>();
         public List<GHang> GPosSec = new List<GHang>();
         private float alpha = 0f;
@@ -17,6 +18,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         private Vector2 RopOffset = Vector2.Zero;//树条的位置偏移量
         private List<Rope> ropes = new List<Rope>();
         private RopeManager ropeManager;
+
         /// <summary>
         /// 初始化
         /// </summary>
@@ -40,14 +42,16 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             public float Length;
             public float Size;
             public int Type;
+
             public GHang(Vector2 pos, float length, float size, int type)
             {
-                this.Pos = pos;
-                this.Length = length;
-                this.Size = size;
-                this.Type = type;
+                Pos = pos;
+                Length = length;
+                Size = size;
+                Type = type;
             }
         }
+
         /// <summary>
         /// 环境光的钩子
         /// </summary>
@@ -61,6 +65,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             orig(self, x, y, out outputColor);
             outputColor += ambient;
         }
+
         public override void PostUpdateEverything()//开启地下背景
         {
             const float increase = 0.02f;
@@ -76,7 +81,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                     alpha = 1;
                     Everglow.HookSystem.DisableDrawBackground = true;
                 }
-
             }
             else
             {
@@ -103,6 +107,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 }
             }
         }
+
         /// <summary>
         /// 判定是否开启地形
         /// </summary>
@@ -116,6 +121,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             v0.X *= 0.9f;//近似于椭圆形，所以xy坐标变换
             return (v0.Length() < 2000);
         }
+
         /// <summary>
         /// 获取荧光悬挂物点位
         /// </summary>
@@ -149,11 +155,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             //        Color temp = colors[x, y];
             //        if (temp.R == 255)
             //        {
-
             //        }
             //    }
             //}
         }
+
         /// <summary>
         /// 获取第二层荧光悬挂物点位
         /// </summary>
@@ -193,6 +199,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             //    }
             //}
         }
+
         ///// <summary>
         ///// 获取第一层树条点位
         ///// </summary>
@@ -274,6 +281,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 }
             }
         }
+
         /// <summary>
         /// 根据屏幕分辨率重置顶层和树上的荧光悬挂物点位
         /// </summary>
@@ -289,6 +297,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             OrigPoint += dPoss;
             return OrigPoint;
         }
+
         /// <summary>
         /// 绘制第二层荧光
         /// </summary>
@@ -328,6 +337,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 }
             }
         }
+
         /// <summary>
         /// 获取绘制矩形
         /// </summary>
@@ -355,6 +365,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             }
             return new Rectangle(RX, RY, (int)(screenSize.X), (int)(screenSize.Y));
         }
+
         /// <summary>
         /// 获取XY向缩放比例
         /// </summary>
@@ -366,6 +377,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             //return new Vector2(Main.screenWidth / 1366f, Main.screenHeight / 768f);
             return Vector2.One;
         }
+
         /// <summary>
         /// 获取因为不同分辨率导致点位偏移坐标
         /// </summary>
@@ -377,7 +389,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             Vector2 v0 = screenSize / 2f - screenSize / 2f / Cor;
             return v0;
         }
-
 
         /// <summary>
         /// 绳子的图片坐标转到近景纹理下的坐标
@@ -450,13 +461,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                     //通过顶点绘制枝条
                     branch.Add(new Vertex2D(posSS + vector.RotatedBy(Math.PI / 2d) * width, Color.White, Vector3.Zero));
                     branch.Add(new Vertex2D(posSS - vector.RotatedBy(Math.PI / 2d) * width, Color.White, Vector3.Zero));
-
                 }
                 Main.graphics.GraphicsDevice.Textures[0] = VineTexture;
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, branch.ToArray(), 0, branch.Count - 2);
             }
             Main.spriteBatch.End();
-
 
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             Texture2D dropTexture = MythContent.QuickTexture("TheFirefly/Backgrounds/Drop");
@@ -478,7 +487,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 }
             }
             Main.spriteBatch.End();
-
 
             var texCloseII = MythContent.QuickTexture("TheFirefly/Backgrounds/FireflyClose2");
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
@@ -539,11 +547,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                     () => Vector2.Zero);
             }
 
-
             Color baseColor = Color.White * alpha;
             DrawFarBG(baseColor);
             DrawCloseBG(baseColor);
         }
+
         ///// <summary>
         ///// 初始化
         ///// </summary>

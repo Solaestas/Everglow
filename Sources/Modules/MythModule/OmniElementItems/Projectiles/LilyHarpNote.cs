@@ -1,5 +1,6 @@
 ﻿using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.OmniElementItems.Dusts;
+
 namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles
 {
     public class LilyHarpNote : ModProjectile
@@ -7,6 +8,7 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles
         public override void SetStaticDefaults()
         {
         }
+
         public override void SetDefaults()
         {
             Projectile.extraUpdates = 1;
@@ -25,7 +27,7 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles
         {
             Projectile.hide = true;
 
-            if(Projectile.timeLeft < 220)
+            if (Projectile.timeLeft < 220)
             {
                 /*if(Projectile.ai[1] != -1)
                 {
@@ -52,7 +54,7 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles
                     CheckEmemies();
                 }*/
                 Projectile.friendly = true;
-                if(Main.mouseLeft)
+                if (Main.mouseLeft)
                 {
                     Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.MouseWorld) * 15, 0.05f);
                 }
@@ -62,6 +64,7 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles
                 Projectile.velocity *= 0.93f;
             }
         }
+
         internal void CheckEmemies()
         {
             int AimWhoAmI = -1;
@@ -84,22 +87,25 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles
             }
             Projectile.ai[1] = AimWhoAmI;
         }
+
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D t = MythContent.QuickTexture("OmniElementItems/Projectiles/LilyHarpNote" + ((int)Projectile.ai[0]).ToString());
             SpriteEffects se = SpriteEffects.None;
-            if(Main.player[Projectile.owner].gravDir == -1)
+            if (Main.player[Projectile.owner].gravDir == -1)
             {
                 se = SpriteEffects.FlipVertically;
             }
-            Main.spriteBatch.Draw(t,Projectile.Center - Main.screenLastPosition,null,new Color(255,255,255,120),Projectile.rotation,t.Size() / 2f,Projectile.scale,se,0);
+            Main.spriteBatch.Draw(t, Projectile.Center - Main.screenLastPosition, null, new Color(255, 255, 255, 120), Projectile.rotation, t.Size() / 2f, Projectile.scale, se, 0);
             return false;
         }
+
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
         {
             behindProjectiles.Add(index);
             base.DrawBehind(index, behindNPCsAndTiles, behindNPCs, behindProjectiles, overPlayers, overWiresUI);
         }
+
         public override void Kill(int timeLeft)
         {
             Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<LilyHarpNoteKill>(), 0, 0);

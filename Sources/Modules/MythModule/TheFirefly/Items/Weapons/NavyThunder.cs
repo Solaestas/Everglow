@@ -1,7 +1,4 @@
-﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
-using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
-using Everglow.Sources.Modules.MythModule.Common;
-using Terraria.ID;
+﻿using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.DataStructures;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
@@ -13,7 +10,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             GetGlowMask = MythContent.SetStaticDefaultsGlowMask(this);
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(6, 5));
         }
+
         public static short GetGlowMask = 0;
+
         public override void SetDefaults()
         {
             Item.glowMask = GetGlowMask;
@@ -35,6 +34,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             Item.shoot = ModContent.ProjectileType<Projectiles.NavyThunder>();
             Item.shootSpeed = 0;
         }
+
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             if (player.ownedProjectileCounts[type] > 0)

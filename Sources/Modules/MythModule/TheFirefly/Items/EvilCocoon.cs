@@ -1,6 +1,6 @@
 using Everglow.Sources.Modules.MythModule.Common;
-using Terraria.ID;
 using Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses;
+
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items
 {
     public class EvilCocoon : ModItem
@@ -11,7 +11,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items
             Tooltip.SetDefault("Summons Corrupted Moth");
             GetGlowMask = MythContent.SetStaticDefaultsGlowMask(this);
         }
+
         public static short GetGlowMask = 0;
+
         public override void SetDefaults()
         {
             Item.glowMask = GetGlowMask;
@@ -23,12 +25,15 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items
             Item.maxStack = 999;
             Item.consumable = true;
         }
+
         public override void ModifyTooltips(List<TooltipLine> list)
         {
         }
+
         public override void Update(ref float gravity, ref float maxFallSpeed)
         {
         }
+
         public override bool CanUseItem(Player player)
         {
             if (NPC.CountNPCS(ModContent.NPCType<CorruptMoth>()) < 1)

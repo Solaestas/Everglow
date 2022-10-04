@@ -1,6 +1,4 @@
 ﻿using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Commons.Function.Vertex;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
@@ -19,6 +17,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
         }
+
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
@@ -26,23 +25,23 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             player.itemAnimation = 5;
             Projectile.position = player.MountedCenter - new Vector2(25, 25);
             player.heldProj = Projectile.whoAmI;
-            if(Main.mouseRight && player.statMana >= player.ownedProjectileCounts[ModContent.ProjectileType<Projectiles.GlowMoth>()])
+            if (Main.mouseRight && player.statMana >= player.ownedProjectileCounts[ModContent.ProjectileType<Projectiles.GlowMoth>()])
             {
                 Projectile.timeLeft = 5;
             }
         }
-       
+
         public override bool PreDraw(ref Color lightColor)
         {
             Player player = Main.player[Projectile.owner];
 
             Vector2 Vdr = Main.MouseWorld - Projectile.Center;
-            
+
             Vdr = Vdr / Vdr.Length() * 7;
 
             player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(Vdr.Y, Vdr.X) - Math.PI / 2d));
             Texture2D t = MythContent.QuickTexture("TheFirefly/Projectiles/EvilChrysalisRightClick");
-            Color color = Lighting.GetColor((int)Projectile.Center.X / 16, (int)((double)Projectile.Center.Y / 16.0));
+            Color color = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
             SpriteEffects S = SpriteEffects.None;
             if (Math.Sign(Vdr.X) == -1)
             {
@@ -56,7 +55,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Main.spriteBatch.Draw(t, player.MountedCenter - Main.screenPosition + Vdr * 5f, null, color, (float)(Math.Atan2(Vdr.Y, Vdr.X) + Math.PI / 4d), new Vector2(25f, 25f), Projectile.scale, S, 0f);
 
             Texture2D tg = MythContent.QuickTexture("TheFirefly/Projectiles/EvilChrysalisTex/EvilChrysalisG");
-            Main.spriteBatch.Draw(tg, player.MountedCenter - Main.screenPosition + Vdr * 5f, null, new Color(255,255,255,0), (float)(Math.Atan2(Vdr.Y, Vdr.X) + Math.PI / 4d), new Vector2(25f, 25f), Projectile.scale, S, 0f);
+            Main.spriteBatch.Draw(tg, player.MountedCenter - Main.screenPosition + Vdr * 5f, null, new Color(255, 255, 255, 0), (float)(Math.Atan2(Vdr.Y, Vdr.X) + Math.PI / 4d), new Vector2(25f, 25f), Projectile.scale, S, 0f);
             return false;
         }
     }

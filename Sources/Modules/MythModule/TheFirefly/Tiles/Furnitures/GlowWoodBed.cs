@@ -1,10 +1,8 @@
-using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
-using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Commons.Core.Utils;
+using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Terraria.DataStructures;
-using Terraria.GameContent;
 using Terraria.GameContent.ObjectInteractions;
-using Terraria.Localization;
 using Terraria.ObjectData;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
@@ -76,6 +74,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
         {
             FurnitureUtils.BedMouseOver<Items.Furnitures.GlowWoodBed>(i, j);
         }
+
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
             var tile = Main.tile[i, j];

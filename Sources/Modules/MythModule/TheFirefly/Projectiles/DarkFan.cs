@@ -1,6 +1,5 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Commons.Function.Vertex;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+﻿using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Buffs;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
@@ -21,16 +20,18 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 70;
         }
+
         private Vector2 v_1 = new Vector2(-24, -14);
         private Vector2 v2 = Vector2.Zero;
         private bool Dir = false;
         private int Pdir = 1;
         private float Prot = 0;
         private bool ExtraKnife = false;
+
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             Player player = Main.player[Projectile.owner];
-            Projectile.NewProjectile(Projectile.GetSource_FromAI(),Projectile.Center,Vector2.Zero,ModContent.ProjectileType<FanHit>(),0,0,player.whoAmI,0.75f);
+            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<FanHit>(), 0, 0, player.whoAmI, 0.75f);
             int[] array = Projectile.localNPCImmunity;
             bool flag = (!Projectile.usesLocalNPCImmunity && !Projectile.usesIDStaticNPCImmunity) || (Projectile.usesLocalNPCImmunity && array[target.whoAmI] == 0) || (Projectile.usesIDStaticNPCImmunity && Projectile.IsNPCIndexImmuneToProjectileType(Projectile.type, target.whoAmI));
             if (target.active && !target.dontTakeDamage && flag && (target.aiStyle != 112 || target.ai[2] <= 1f))
@@ -53,7 +54,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             {
                 MaxS = 5;
             }
-            
+
             MothBuffTarget mothBuffTarget = target.GetGlobalNPC<MothBuffTarget>();
             if (mothBuffTarget.MothStack < 5 + MaxS * 0)
             {
@@ -64,6 +65,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 mothBuffTarget.MothStack = 5 + MaxS * 0;
             }
         }
+
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
@@ -85,7 +87,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 v0 = v_1.RotatedBy(1.6 * Math.PI);
             }
             Projectile.spriteDirection = Pdir;
-
 
             v0.X *= Pdir;
             Vector2 v1 = new Vector2(v0.X, v0.Y * 0.5f).RotatedBy(Prot) - new Vector2(29, 29);
@@ -127,6 +128,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 Projectile.NewProjectile(Projectile.InheritSource(Projectile), player.Center, (v1 + new Vector2(29, 29)) / 8f, ModContent.ProjectileType<Projectiles.GlowingButterfly>(), Projectile.damage / 3 * 2, Projectile.knockBack, player.whoAmI, player.GetCritChance(DamageClass.Summon) + 8, 0f);
             }
         }
+
         public override bool PreDraw(ref Color lightColor)
         {
             Player player = Main.player[Projectile.owner];
@@ -265,6 +267,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             }
             return false;
         }
+
         public override void Kill(int timeLeft)
         {
         }
@@ -273,6 +276,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         private Effect ef;
         private Effect ef2;
         private Color[] ADc = new Color[20];
+
         public override void PostDraw(Color lightColor)
         {
             Main.spriteBatch.End();

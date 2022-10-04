@@ -1,5 +1,5 @@
-﻿using Terraria.Localization;
-using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Sources.Modules.MythModule.Common;
+using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Vanities
 {
@@ -11,6 +11,7 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Vanities
             DisplayName.SetDefault("Blueflower Bra");
             DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "蓝花内衣");
         }
+
         public override void SetDefaults()
         {
             Item.width = 22;
@@ -20,19 +21,21 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Vanities
             Item.vanity = true;
             Item.accessory = true;
         }
+
         public static void Load()
         {
             On.Terraria.Main.DrawPlayers_AfterProjectiles += DrawHat;
             On.Terraria.Main.DrawPlayers_BehindNPCs += DrawDress;
         }
+
         public static void UnLoad()
         {
             //On.Terraria.Main.DrawPlayers_AfterProjectiles -= DrawHat;
             //On.Terraria.Main.DrawPlayers_BehindNPCs -= DrawDress;
         }
+
         private static void DrawDress(On.Terraria.Main.orig_DrawPlayers_BehindNPCs orig, Terraria.Main self)
         {
-
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             for (int d = 0; d < Main.player.Length; d++)
             {
@@ -48,6 +51,7 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Vanities
             }
             Main.spriteBatch.End();
         }
+
         private static void DrawHat(On.Terraria.Main.orig_DrawPlayers_AfterProjectiles orig, Terraria.Main self)
         {
             orig(self);

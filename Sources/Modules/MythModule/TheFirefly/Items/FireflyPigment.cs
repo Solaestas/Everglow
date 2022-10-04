@@ -1,4 +1,5 @@
 ﻿using Everglow.Sources.Modules.MythModule.Common;
+
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items
 {
     public class FireflyPigment : ModItem
@@ -7,7 +8,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items
         {
             GetGlowMask = MythContent.SetStaticDefaultsGlowMask(this);
         }
+
         public static short GetGlowMask = 0;
+
         public override void SetDefaults()
         {
             Item.glowMask = GetGlowMask;
@@ -15,6 +18,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items
             Item.height = 30;
             Item.maxStack = 999;
         }
+
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();

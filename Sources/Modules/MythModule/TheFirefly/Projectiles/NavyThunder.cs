@@ -1,13 +1,15 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using Terraria.Audio;
-using Everglow.Sources.Commons.Function.Vertex;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+﻿using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MEACModule;
+using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Terraria.Audio;
+
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
     internal class NavyThunder : ModProjectile, IWarpProjectile
     {
         public override string Texture => "Everglow/Sources/Modules/MythModule/TheFirefly/Projectiles/NavyThunderTex/FlameSkull";
+
         public override void SetDefaults()
         {
             Projectile.width = 54;
@@ -22,6 +24,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         private bool Release = true;
         private Vector2 oldPo = Vector2.Zero;
         private int addi = 0;
+
         public override void AI()
         {
             addi++;
@@ -43,7 +46,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 }
                 else
                 {
-                    if(Projectile.timeLeft > 21)
+                    if (Projectile.timeLeft > 21)
                     {
                         Projectile.timeLeft = 20;
                     }
@@ -56,11 +59,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                     }
                 }
             }
-            if(Main.player[Projectile.owner].itemTime == 2)
+            if (Main.player[Projectile.owner].itemTime == 2)
             {
                 Shoot();
             }
         }
+
         private void Shoot()
         {
             SoundEngine.PlaySound(SoundID.DD2_FlameburstTowerShot, Projectile.Center);
@@ -69,11 +73,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Vector2 ShootCenter = Projectile.Center + new Vector2(0, 16f * player.gravDir);
             ScreenShaker Gsplayer = player.GetModPlayer<ScreenShaker>();
             Gsplayer.FlyCamPosition = new Vector2(0, 2).RotatedByRandom(6.283);
-            Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), ShootCenter, v0 * 3, ModContent.ProjectileType<Projectiles.NavyThunderBomb>(), (int)(Projectile.damage), Projectile.knockBack, player.whoAmI, 0, 0);
+            Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), ShootCenter, v0 * 3, ModContent.ProjectileType<Projectiles.NavyThunderBomb>(), Projectile.damage, Projectile.knockBack, player.whoAmI, 0, 0);
             Vector2 newVelocity = v0;
             newVelocity *= 1f - Main.rand.NextFloat(0.3f);
             newVelocity *= 2f;
-
 
             for (int j = 0; j < 30; j++)
             {
@@ -91,10 +94,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 Main.dust[num21].alpha = (int)(Main.dust[num21].scale * 50);
             }
         }
+
         public override bool PreDraw(ref Color lightColor)
         {
             return false;
         }
+
         public override void PostDraw(Color lightColor)
         {
             if (!Release)
@@ -114,18 +119,18 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 
             Projectile.frame = (int)((addi % 25) / 5f);
             Rectangle DrawRect = new Rectangle(0, Projectile.frame * Projectile.height, Projectile.width, Projectile.height);
-            
-           
+
             Color drawColor = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
             SpriteEffects se = SpriteEffects.None;
             if (player.direction == 1)
             {
                 se = SpriteEffects.FlipHorizontally;
             }
-           
+
             Main.spriteBatch.Draw(TexMain, Projectile.Center - Main.screenPosition, DrawRect, drawColor, Projectile.rotation, new Vector2(27, 42), 1f, se, 0);
             Main.spriteBatch.Draw(TexMainG, Projectile.Center - Main.screenPosition, DrawRect, new Color(255, 255, 255, 0), Projectile.rotation, new Vector2(27, 42), 1f, se, 0);
         }
+
         private void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
         {
             List<Vertex2D> circle = new List<Vertex2D>();
@@ -142,6 +147,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
             }
         }
+
         public void DrawTexLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2, Texture2D tex)
         {
             float Wid = 6f;
@@ -162,10 +168,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(Value0, 1, 0)));
             }
 
-
             Main.graphics.GraphicsDevice.Textures[0] = tex;
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
         }
+
         public void DrawWarp()
         {
             Main.spriteBatch.End();
@@ -188,7 +194,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 
             Projectile.frame = (int)((addi % 25) / 5f);
             Rectangle DrawRect = new Rectangle(0, Projectile.frame * Projectile.height, Projectile.width, Projectile.height);
-
 
             Color drawColor = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
             SpriteEffects se = SpriteEffects.None;

@@ -1,8 +1,7 @@
-using Terraria.Localization;
 using Everglow.Sources.Commons.Function.Vertex;
-using Terraria.Audio;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
+using Terraria.Audio;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.WaterBolt
 {
@@ -20,12 +19,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
             Projectile.extraUpdates = 3;
             Projectile.timeLeft = 1000;
             Projectile.alpha = 0;
-            Projectile.penetrate = 1; 
+            Projectile.penetrate = 1;
             Projectile.scale = 1f;
 
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 60;
         }
+
         public override void AI()
         {
             Projectile.velocity *= 0.9993f;
@@ -33,7 +33,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
             float k0 = 1f / (Projectile.ai[0] + 2) * 2;
             Vector2 v0 = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) * Projectile.scale * 0.3f;
             Dust.NewDust(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<BlueGlowAppear>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(0.6f, 1.8f) * Projectile.scale * 0.4f * k0);
-            if(Projectile.ai[1] > 0)
+            if (Projectile.ai[1] > 0)
             {
                 Projectile.ai[1] -= 1;
                 if (Projectile.ai[1] == 1)
@@ -42,6 +42,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
                 }
             }
         }
+
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D Light = Common.MythContent.QuickTexture("TheFirefly/Projectiles/GlowStar");
@@ -52,7 +53,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
             {
                 k0 = 1;
             }
-            if(Projectile.timeLeft < 200)
+            if (Projectile.timeLeft < 200)
             {
                 k2 = Projectile.timeLeft / 200f;
             }
@@ -95,13 +96,15 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
             Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, c0, Projectile.rotation, Light.Size() / 2f, (k0 / 1.8f + 0.2f) / (Projectile.ai[0] + 3) * 3.5f * k2, SpriteEffects.None, 0);
             return false;
         }
+
         public override bool PreKill(int timeLeft)
         {
             return true;
         }
+
         public override void Kill(int timeLeft)
         {
-            if(timeLeft > 0)
+            if (timeLeft > 0)
             {
                 float value = Math.Min(Projectile.damage / 30f, 1f);
                 Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BeadShakeWave>(), 0, 0, Projectile.owner, 0.2f, 3f);
@@ -115,6 +118,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
                 case 0:
                     SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/MagicWeaponsReplace/Sounds/WaterBolt1"), Projectile.Center);
                     break;
+
                 case 1:
                     SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/MagicWeaponsReplace/Sounds/WaterBolt2"), Projectile.Center);
                     break;
@@ -134,11 +138,11 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
                 Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 50 / k0);
                 Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
             }
-            foreach(NPC target in Main.npc)
+            foreach (NPC target in Main.npc)
             {
                 float Dis = (target.Center - Projectile.Center).Length();
 
-                if(Dis < k0 * 50)
+                if (Dis < k0 * 50)
                 {
                     if (!target.dontTakeDamage && !target.friendly && target.active)
                     {

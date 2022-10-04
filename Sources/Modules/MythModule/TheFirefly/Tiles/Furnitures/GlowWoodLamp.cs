@@ -1,21 +1,15 @@
-using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using Terraria;
-using Terraria.DataStructures;
 using Everglow.Sources.Commons.Core.Utils;
-using Terraria.Enums;
-using Terraria.ID;
-using Terraria.ModLoader;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using ReLogic.Content;
+using Terraria.DataStructures;
 using Terraria.ObjectData;
-
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 {
     public class GlowWoodLamp : ModTile
     {
         private Asset<Texture2D> flameTexture;
+
         public override void SetStaticDefaults()
         {
             // Properties
@@ -44,7 +38,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             ModTranslation name = CreateMapEntryName();
             name.SetDefault("GlowWood Lamp");
             AddMapEntry(new Color(0, 14, 175), name);
-
         }
 
         public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
@@ -63,6 +56,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
                 b = 0f;
             }
         }
+
         public override void HitWire(int i, int j)
         {
             FurnitureUtils.LightHitwire(i, j, Type, 1, 3);
