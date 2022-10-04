@@ -1,6 +1,6 @@
 ﻿namespace Everglow.Sources.Modules.MythModule.Common
 {
-    public sealed class ManualMusicRegistrationExample : ILoadable
+    public sealed class MythManualMusicRegistration : ILoadable
     {
         public void Load(Mod mod)
         {
