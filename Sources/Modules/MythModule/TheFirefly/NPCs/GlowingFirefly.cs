@@ -9,7 +9,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 8;
-            MothLandGlobalNPC.RegisterMothLandNPC(Type);
         }
 
         public override void SetDefaults()
@@ -139,7 +138,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
                 Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(5f, 10f)).RotatedByRandom(6.283);
                 Main.dust[index].noGravity = true;
             }
-            base.OnKill();
         }
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
@@ -150,7 +148,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
         public override void OnSpawn(IEntitySource source)
         {
             NPC.scale = Main.rand.NextFloat(0.83f, 1.17f);
-            base.OnSpawn(source);
         }
 
         public override bool? CanBeCaughtBy(Item item, Player player)
@@ -162,7 +159,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
         {
             Item.NewItem(NPC.GetSource_FromThis(), NPC.Center, 0, 0, ModContent.ItemType<Items.GlowingFirefly>(), 1);
             NPC.active = false;
-            base.OnCaughtBy(player, item, failed);
         }
     }
 }
