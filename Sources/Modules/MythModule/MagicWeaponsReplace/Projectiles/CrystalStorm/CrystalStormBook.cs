@@ -6,9 +6,6 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
 {
     internal class CrystalStormBook : ModProjectile
     {
-        //加了个环境光，但还要调整下不然看上去很怪
-        public readonly Vector3 ambient = new Vector3(0.001f, 0.001f, 0.05f);
-
         public override void SetDefaults()
         {
             Projectile.width = 28;
