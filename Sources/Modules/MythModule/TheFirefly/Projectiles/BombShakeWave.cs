@@ -1,6 +1,7 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Commons.Function.Vertex;
+﻿using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MEACModule;
+using Everglow.Sources.Modules.MythModule.Common;
+
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
     public class BombShakeWave : ModProjectile, IWarpProjectile
@@ -8,6 +9,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         public override void SetStaticDefaults()
         {
         }
+
         public override void SetDefaults()
         {
             Projectile.extraUpdates = 1;
@@ -26,17 +28,19 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         {
             Projectile.hide = true;
         }
-       
+
         public override bool PreDraw(ref Color lightColor)
         {
             return false;
         }
+
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
         {
             behindProjectiles.Add(index);
-            base.DrawBehind(index, behindNPCsAndTiles, behindNPCs, behindProjectiles, overPlayers, overWiresUI);
+
         }
-        private void DrawCircle(float radious, float width, Color color, Vector2 center, bool Black = false)
+
+        private static void DrawCircle(float radious, float width, Color color, Vector2 center)
         {
             List<Vertex2D> circle = new List<Vertex2D>();
             for (int h = 0; h < radious / 2; h++)
@@ -54,6 +58,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
             }
         }
+
         public void DrawWarp()
         {
             Main.spriteBatch.End();
@@ -74,7 +79,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 DrawCircle(value * 1100 * Projectile.ai[0], 500 * x0 * (1 - value) + 130 * Projectile.ai[0], new Color(colorV, colorV, colorV, 0f), Projectile.Center - Main.screenPosition);
             }
             value -= 0.2f;
-            if (value < 1 && value > 0)
+            if (value is < 1 and > 0)
             {
                 DrawCircle(value * 900 * Projectile.ai[0], 300 * x0 * (1 - value) + 130 * Projectile.ai[0], new Color(colorV, colorV, colorV, 0f), Projectile.Center - Main.screenPosition);
             }

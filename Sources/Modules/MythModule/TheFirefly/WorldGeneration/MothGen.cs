@@ -1,6 +1,6 @@
 using Everglow.Sources.Commons.Function.ImageReader;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Tiles;
 using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Tiles;
 using Terraria.DataStructures;
 using Terraria.IO;
 using Terraria.ModLoader.IO;
@@ -65,7 +65,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             fireflyCenterX = tag.GetAsInt("FIREFLYcenterX");
             fireflyCenterY = tag.GetAsInt("FIREFLYcenterY");
 
-
             if (tag.ContainsKey("FIREFLY_FireflyTree"))
             {
                 var fireFlyTree = ModContent.GetInstance<FireflyTree>();
@@ -112,6 +111,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                                     }
                                 }
                                 break;
+
                             case 1:
                                 if (pixel.R == 56 && pixel.G == 48 && pixel.B == 61)// == new SixLabors.ImageSharp.PixelFormats.Rgb24(56, 48, 61))
                                 {
@@ -140,6 +140,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                                     }
                                 }
                                 break;
+
                             case 2:
                                 if (pixel.R == 0 && pixel.G == 0 && pixel.B == 5)// == new SixLabors.ImageSharp.PixelFormats.Rgb24(0, 0, 5))
                                 {
@@ -214,6 +215,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             //    }
             //}
         }
+
         /// <summary>
         /// 建造流萤之茧
         /// </summary>
@@ -253,6 +255,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             ShapeTile("WorldCocoon.bmp", a, b, 3);
             SmoothMothTile(a, b);
         }
+
         private static int GetCrash(int PoX, int PoY)
         {
             int CrashCount = 0;
@@ -308,6 +311,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             }
             return CrashCount;
         }
+
         /// <summary>
         /// 获取一个不与原版地形冲突的点
         /// </summary>
@@ -324,6 +328,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             }
             return new Point16(PoX, PoY);
         }
+
         private static void SmoothMothTile(int a, int b)
         {
             for (int y = 0; y < 256; y += 1)
@@ -345,4 +350,3 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         }
     }
 }
-

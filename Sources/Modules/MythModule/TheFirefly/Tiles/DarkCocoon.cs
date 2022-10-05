@@ -102,6 +102,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                             t1.TileFrameY = 16;
                             t2.TileFrameY = 0;
                             break;
+
                         case 2:
                             t1.TileType = (ushort)ModContent.TileType<Tiles.BlackStarShrubSmall>();
                             t2.TileType = (ushort)ModContent.TileType<Tiles.BlackStarShrubSmall>();
@@ -113,6 +114,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                             t1.TileFrameY = 16;
                             t2.TileFrameY = 0;
                             break;
+
                         case 3:
                             t1.TileType = (ushort)ModContent.TileType<Tiles.BlackStarShrub>();
                             t2.TileType = (ushort)ModContent.TileType<Tiles.BlackStarShrub>();
@@ -128,6 +130,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                             t2.TileFrameY = 16;
                             t3.TileFrameY = 0;
                             break;
+
                         case 4:
                             t1.TileType = (ushort)ModContent.TileType<Tiles.BlueBlossom>();
                             t2.TileType = (ushort)ModContent.TileType<Tiles.BlueBlossom>();
@@ -165,6 +168,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                 }
             }
         }
+
         public override bool CanExplode(int i, int j)
         {
             return false;

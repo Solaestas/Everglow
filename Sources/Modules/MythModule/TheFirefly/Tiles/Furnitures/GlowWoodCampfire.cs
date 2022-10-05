@@ -1,17 +1,11 @@
-using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using Terraria;
-using Terraria.DataStructures;
-using Terraria.Enums;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.ObjectData;
 using Everglow.Sources.Commons.Core.Utils;
+using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using ReLogic.Content;
+using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.ObjectInteractions;
-using Everglow.Sources.Modules.MythModule.Common;
+using Terraria.ObjectData;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 {
@@ -48,8 +42,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             AddMapEntry(new Color(0, 14, 175), name);
 
             AnimationFrameHeight = 36;
-
         }
+
         public override void AnimateTile(ref int frame, ref int frameCounter)
         {
             frameCounter++;
@@ -59,10 +53,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
                 frameCounter = 0;
             }
         }
+
         public override void NumDust(int i, int j, bool fail, ref int num)
         {
             num = (fail ? 1 : 3);
         }
+
         public override bool CreateDust(int i, int j, ref int type)
         {
             Tile tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
@@ -76,6 +72,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
                 return false;
             }
         }
+
         public override void NearbyEffects(int i, int j, bool closer)
         {
             Player player = Main.LocalPlayer;
@@ -84,6 +81,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
                 player.AddBuff(BuffID.Campfire, 20, true, false);
             }
         }
+
         public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
         {
             Tile tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
@@ -99,12 +97,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
                 g = 0f;
                 b = 0f;
             }
-
         }
+
         public override void HitWire(int i, int j)
         {
             FurnitureUtils.LightHitwire(i, j, Type, 3, 2);
         }
+
         public override bool RightClick(int i, int j)
         {
             int tileX = 3;
@@ -138,6 +137,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             }
             return true;
         }
+
         public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
         {
             return settings.player.IsWithinSnappngRangeToTile(i, j, PlayerSittingHelper.ChairSittingMaxDistance);
@@ -150,10 +150,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             player.cursorItemIconEnabled = true;
             player.cursorItemIconID = ModContent.ItemType<Items.Furnitures.GlowWoodCampfire>();
         }
+
         public override void KillMultiTile(int x, int y, int frameX, int frameY)
         {
             Item.NewItem(new EntitySource_TileBreak(x, y), x * 16, y * 16, 48, 32, ModContent.ItemType<Items.Furnitures.GlowWoodCampfire>());
         }
+
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
             var tile = Main.tile[i, j];

@@ -1,5 +1,4 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using Terraria.ObjectData;
+﻿using Terraria.ObjectData;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 {

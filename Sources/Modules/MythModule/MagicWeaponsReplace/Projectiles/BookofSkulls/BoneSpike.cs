@@ -1,8 +1,6 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Commons.Function.Vertex;
+﻿using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MEACModule;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
+using Everglow.Sources.Modules.MythModule.Common;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.BookofSkulls
 {
@@ -19,11 +17,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             Projectile.DamageType = DamageClass.MagicSummonHybrid;
             Projectile.tileCollide = false;
         }
-        bool shot = false;
+
+        private bool shot = false;
+
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            if(!shot)
+            if (!shot)
             {
                 Vector2 AIM0 = (player.Center + new Vector2(0, 12 * player.gravDir * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d)) + new Vector2(-60 * player.direction, 30).RotatedBy((Projectile.ai[0] - 1) / 4.5 * Math.PI * player.direction) * Projectile.ai[1]);
                 if (player.itemTime > 0 && player.active)
@@ -44,21 +44,22 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             }
             else
             {
-                Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y,Projectile.velocity.X) - (float)(Math.PI * 0.5);
+                Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) - (float)(Math.PI * 0.5);
             }
-
         }
+
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             target.AddBuff(BuffID.Burning, 180);
         }
+
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
         {
-           overPlayers.Add(index);
+            overPlayers.Add(index);
         }
+
         public override bool PreDraw(ref Color lightColor)
         {
-
             Texture2D Spice = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BookofSkulls/BoneSpike");
             if (Projectile.timeLeft <= 9980)
             {
@@ -68,6 +69,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             }
             return false;
         }
+
         public override void PostDraw(Color lightColor)
         {
             Texture2D Power = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine");
@@ -83,7 +85,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
                 Pdark = (Projectile.timeLeft - 9950) / 30f;
             }
             Color c1 = new Color(1f * Pdark, 0.45f * Pdark * Pdark, 0f, 0f);
-            DrawTexLineColor(Projectile.Center + new Vector2(0, -70).RotatedBy(Projectile.rotation), Projectile.Center,  Color.Transparent, c1, 14f * Pwidth, Power);
+            DrawTexLineColor(Projectile.Center + new Vector2(0, -70).RotatedBy(Projectile.rotation), Projectile.Center, Color.Transparent, c1, 14f * Pwidth, Power);
             DrawTexLineColor(Projectile.Center, Projectile.Center + new Vector2(0, 70).RotatedBy(Projectile.rotation), c1, Color.Transparent, 14f * Pwidth, Power);
         }
 
@@ -106,10 +108,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
                 vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x) - Main.screenPosition, c0, new Vector3(Value0, 1, 0)));
             }
 
-
             Main.graphics.GraphicsDevice.Textures[0] = tex;
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
         }
+
         public void DrawTexLine(Vector2 StartPos, Vector2 EndPos, Color c0, float Wid, Texture2D tex)
         {
             Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
@@ -127,10 +129,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
                 vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x) - Main.screenPosition, c0, new Vector3(1, 0, 0)));
             }
 
-
             Main.graphics.GraphicsDevice.Textures[0] = tex;
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
         }
+
         public void DrawTexLineColor(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2, float Wid, Texture2D tex)
         {
             Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
@@ -150,10 +152,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
                 vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x) - Main.screenPosition, color1, new Vector3(Value0, 1, 0)));
             }
 
-
             Main.graphics.GraphicsDevice.Textures[0] = tex;
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
         }
+
         public override void Kill(int timeLeft)
         {
             for (int f = 0; f < 20; f++)
@@ -169,6 +171,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
                 dust0.velocity = v0;
             }
         }
+
         public void DrawWarp()
         {
             Main.spriteBatch.End();
