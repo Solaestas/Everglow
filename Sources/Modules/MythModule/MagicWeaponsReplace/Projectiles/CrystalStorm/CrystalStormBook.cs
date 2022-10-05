@@ -1,4 +1,8 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.CrystalStorm
+﻿using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Sources.Modules.MythModule.Common;
+using Terraria.GameContent;
+
+namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.CrystalStorm
 {
     internal class CrystalStormBook : ModProjectile
     {
@@ -14,7 +18,8 @@
             Projectile.tileCollide = false;
             Projectile.alpha = 255;
         }
-        int times = 0;
+
+        private int times = 0;
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];

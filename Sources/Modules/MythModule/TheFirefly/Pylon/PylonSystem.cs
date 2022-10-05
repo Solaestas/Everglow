@@ -1,4 +1,7 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheFirefly.Pylon;
+﻿using Terraria.GameContent;
+using Terraria.ModLoader.IO;
+
+namespace Everglow.Sources.Modules.MythModule.TheFirefly.Pylon;
 
 internal class PylonSystem : ModSystem
 {

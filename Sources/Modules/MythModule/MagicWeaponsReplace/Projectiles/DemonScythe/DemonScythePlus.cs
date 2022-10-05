@@ -1,4 +1,9 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.DemonScythe
+﻿using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Sources.Modules.MEACModule;
+using Everglow.Sources.Modules.MythModule.Common;
+using Terraria.Audio;
+
+namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.DemonScythe
 {
     internal class DemonScythePlus : ModProjectile, IWarpProjectile
     {

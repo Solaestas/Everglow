@@ -1,4 +1,10 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheFirefly.Pylon;
+﻿using Everglow.Sources.Commons.Core.Utils;
+using Terraria.DataStructures;
+using Terraria.GameContent;
+using Terraria.Map;
+using Terraria.ModLoader.Default;
+
+namespace Everglow.Sources.Modules.MythModule.TheFirefly.Pylon;
 
 internal class ShabbyPylonTileEntity : TEModdedPylon
 {

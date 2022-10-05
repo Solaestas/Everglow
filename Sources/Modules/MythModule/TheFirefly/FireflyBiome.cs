@@ -1,3 +1,5 @@
+using Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds;
+
 namespace Everglow.Sources.Modules.MythModule.TheFirefly
 {
     public class FireflyBiomeBG : ModSurfaceBackgroundStyle

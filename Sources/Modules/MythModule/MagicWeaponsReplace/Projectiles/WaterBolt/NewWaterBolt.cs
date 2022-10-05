@@ -1,3 +1,9 @@
+using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Sources.Modules.MEACModule;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
+using Terraria.Audio;
+
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.WaterBolt
 {
     public class NewWaterBolt : ModProjectile, IWarpProjectile
