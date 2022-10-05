@@ -4,7 +4,6 @@ using Terraria.GameContent.Creative;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.BossDrop
 {
-
     // Basic code for a boss treasure bag
     public class CorruptMothTreasureBag : ModItem
     {
@@ -47,26 +46,35 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.BossDrop
                 case 0:
                     player.QuickSpawnItem(entitySource, ModContent.ItemType<ShadowWingBow>());
                     break;
+
                 case 1:
                     player.QuickSpawnItem(entitySource, ModContent.ItemType<PhosphorescenceGun>());
                     break;
+
                 case 2:
                     player.QuickSpawnItem(entitySource, ModContent.ItemType<EvilChrysalis>());
                     break;
+
                 case 3:
                     player.QuickSpawnItem(entitySource, ModContent.ItemType<DustOfCorrupt>());
                     break;
+
                 case 4:
                     player.QuickSpawnItem(entitySource, ModContent.ItemType<MothYoyo>());
                     break;
+
                 case 5:
                     player.QuickSpawnItem(entitySource, ModContent.ItemType<ScaleWingBlade>());
                     break;
             }
             if (Main.rand.NextBool(2))
+            {
                 player.QuickSpawnItem(entitySource, ModContent.ItemType<Items.Accessories.MothEye>());
+            }
             else if (Main.masterMode)
+            {
                 player.QuickSpawnItem(entitySource, ModContent.ItemType<Items.Accessories.MothEye>());
+            }
         }
 
         // Below is code for the visuals

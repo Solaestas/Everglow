@@ -10,8 +10,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(6, 5));
         }
 
-
-
         public override void SetDefaults()
         {
             Item.glowMask = ItemGlowManager.GetItemGlow(this);

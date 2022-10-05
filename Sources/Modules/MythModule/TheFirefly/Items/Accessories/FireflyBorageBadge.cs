@@ -1,5 +1,3 @@
-using Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses;
-
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
 {
     public class FireflyBorageBadge : ModItem
@@ -12,14 +10,16 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
             Item.accessory = true;
             Item.rare = ItemRarityID.Orange;
         }
+
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             //if (CorruptMoth.CorruptMothNPC != null && CorruptMoth.CorruptMothNPC.active)
             //{
-                player.statDefense -= 12;
-                player.GetDamage(DamageClass.Generic) *= 1.18f;
+            player.statDefense -= 12;
+            player.GetDamage(DamageClass.Generic) *= 1.18f;
             //}
         }
+
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             {
@@ -28,14 +28,15 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
             }
             base.ModifyTooltips(tooltips);
         }
-    /*    public override void AddRecipes()
-        {
-            CreateRecipe()
-                .AddIngredient(ModContent.ItemType<MiscItems.Materials.WindMoveSeed>(), 15)
-                .AddIngredient(ModContent.ItemType<BlackStarShrub>(), 24)
-                .AddTile(304)
-                .Register();
-        }
-    */   
+
+        /*    public override void AddRecipes()
+            {
+                CreateRecipe()
+                    .AddIngredient(ModContent.ItemType<MiscItems.Materials.WindMoveSeed>(), 15)
+                    .AddIngredient(ModContent.ItemType<BlackStarShrub>(), 24)
+                    .AddTile(304)
+                    .Register();
+            }
+        */
     }
 }

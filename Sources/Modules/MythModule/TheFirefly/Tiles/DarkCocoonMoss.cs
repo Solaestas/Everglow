@@ -30,12 +30,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             var fireFlyTree = ModContent.GetInstance<FireflyTree>();
             fireFlyTree.InsertOneTreeRope(i, j - 8, style);
         }
+
         public override void NearbyEffects(int i, int j, bool closer)
         {
             RandomUpdate(i, j);//TODO:为了让这玩意效果正常强行采取的暴力措施，如果sublib更新了就删掉
 
             base.NearbyEffects(i, j, closer);
         }
+
         public override void RandomUpdate(int i, int j)
         {
             if (Main.rand.NextBool(2))//黑萤苔藓
@@ -71,6 +73,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                 }
             }
         }
+
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
             var tile = Main.tile[i, j];
@@ -86,6 +89,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 
             base.PostDraw(i, j, spriteBatch);
         }
+
         public override bool CanExplode(int i, int j)
         {
             return false;

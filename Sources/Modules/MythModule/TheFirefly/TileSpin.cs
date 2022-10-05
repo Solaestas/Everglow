@@ -1,5 +1,6 @@
-﻿using Everglow.Sources.Commons.Function.Vertex;
-using Everglow.Sources.Commons.Core.Utils;
+﻿using Everglow.Sources.Commons.Core.Utils;
+using Everglow.Sources.Commons.Function.Vertex;
+
 namespace Everglow.Sources.Modules.MythModule.TheFirefly
 {
     internal class TileSpin
@@ -214,6 +215,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
                 Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, sourceRectangle, c, rot * kRot, origin, 1f, SpriteEffects.None, 0f);
             }
         }
+
         /// <summary>
         /// 芦苇类杆状绘制
         /// </summary>
@@ -230,11 +232,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
             {
                 c = color;
             }
-            
+
             if (TileRotation.ContainsKey((i, j)))//有旋转
             {
                 rot = TileRotation[(i, j)].Y;
-                
+
                 if (specialColor)
                 {
                     float maxC = color.B / 255f;
@@ -280,6 +282,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
                 }
             }
         }
+
         /// <summary>
         /// 绘制连线
         /// </summary>
@@ -299,7 +302,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
                 vertex2Ds.Add(new Vertex2D(EndPos - Width + new Vector2(x / 3f).RotatedBy(x) - Main.screenPosition, c0, new Vector3(1, 1, 0)));
                 vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x) - Main.screenPosition, c0, new Vector3(1, 0, 0)));
             }
-
 
             Main.graphics.GraphicsDevice.Textures[0] = tex;
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);

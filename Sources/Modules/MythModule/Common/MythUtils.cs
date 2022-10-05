@@ -1,6 +1,4 @@
-﻿using Terraria.GameContent;
-
-namespace Everglow.Sources.Modules.MythModule.Common
+﻿namespace Everglow.Sources.Modules.MythModule.Common
 {
     public class MythUtils
     {
@@ -11,7 +9,7 @@ namespace Everglow.Sources.Modules.MythModule.Common
         /// <returns></returns>
         public static void PlaceFrameImportantTiles(int x, int y, int width, int height, int type)
         {
-            if(x > Main.maxTilesX - width || x < 0 || y > Main.maxTilesY - height || y < 0)
+            if (x > Main.maxTilesX - width || x < 0 || y > Main.maxTilesY - height || y < 0)
             {
                 return;
             }
@@ -26,6 +24,6 @@ namespace Everglow.Sources.Modules.MythModule.Common
                     tile.HasTile = true;
                 }
             }
-        }      
+        }
     }
 }

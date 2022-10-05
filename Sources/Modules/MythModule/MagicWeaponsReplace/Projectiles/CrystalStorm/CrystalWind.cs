@@ -1,12 +1,9 @@
-using Terraria.Localization;
 using Everglow.Sources.Commons.Function.Vertex;
-using Terraria.Audio;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Everglow.Sources.Modules.MEACModule;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.CrystalStorm
 {
-    public class CrystalWind : ModProjectile,IWarpProjectile
+    public class CrystalWind : ModProjectile, IWarpProjectile
     {
         public override void SetDefaults()
         {
@@ -20,19 +17,21 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             Projectile.extraUpdates = 3;
             Projectile.timeLeft = 120;
             Projectile.alpha = 0;
-            Projectile.penetrate = 1; 
+            Projectile.penetrate = 1;
             Projectile.scale = 1f;
 
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 30;
         }
-        Vector2 AimCenter = Vector2.Zero;
-        Vector2 OldAimCenter = Vector2.Zero;
+
+        private Vector2 AimCenter = Vector2.Zero;
+        private Vector2 OldAimCenter = Vector2.Zero;
+
         public override void AI()
         {
-            if((OldAimCenter - Main.MouseWorld).Length() > 200 && OldAimCenter != Vector2.Zero)
+            if ((OldAimCenter - Main.MouseWorld).Length() > 200 && OldAimCenter != Vector2.Zero)
             {
-                if(Projectile.timeLeft > 20)
+                if (Projectile.timeLeft > 20)
                 {
                     Projectile.timeLeft -= 5;
                 }
@@ -51,22 +50,21 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             float xCoefficient = Dy * Dy / 600f - 0.4f * Dy + 50;
             Vector2 TrueAim = AimCenter + new Vector2(xCoefficient * (float)(Math.Sin(Main.timeForVisualEffects * 0.1 * Projectile.extraUpdates + Projectile.ai[0])), 0) - Projectile.Center;
 
-
-
             Projectile.alpha = (byte)(Projectile.alpha * 0.95 + xCoefficient * 0.05);
 
             if (!Main.mouseRight)
             {
-                Projectile.velocity = Projectile.velocity * 0.75f + new Vector2(Utils.SafeNormalize(TrueAim, new Vector2(0, 0.05f)).X, -Projectile.ai[1] * 0.3f) * 0.25f / (float)(Projectile.alpha) * 500f;
+                Projectile.velocity = Projectile.velocity * 0.75f + new Vector2(Utils.SafeNormalize(TrueAim, new Vector2(0, 0.05f)).X, -Projectile.ai[1] * 0.3f) * 0.25f / Projectile.alpha * 500f;
                 Projectile.velocity *= Main.rand.NextFloat(0.85f, 1.15f);
                 Projectile.extraUpdates = 1;
             }
             else
             {
-                Projectile.velocity = Projectile.velocity * 0.75f + new Vector2(Utils.SafeNormalize(TrueAim, new Vector2(0, 0.05f)).X, -Projectile.ai[1] * 0.3f) * 0.25f / (float)(Projectile.alpha) * 500f;
+                Projectile.velocity = Projectile.velocity * 0.75f + new Vector2(Utils.SafeNormalize(TrueAim, new Vector2(0, 0.05f)).X, -Projectile.ai[1] * 0.3f) * 0.25f / Projectile.alpha * 500f;
                 Projectile.velocity *= Main.rand.NextFloat(0.85f, 1.15f);
             }
         }
+
         public override bool PreDraw(ref Color lightColor)
         {
             float k1 = 30f;
@@ -80,7 +78,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             Color c0 = new Color(0, k0 * k0 * 0.2f, k0 * 0.8f + 0.2f, 0);
             List<Vertex2D> bars = new List<Vertex2D>();
             float width = 24;
-            if(Projectile.timeLeft <= 40)
+            if (Projectile.timeLeft <= 40)
             {
                 width = Projectile.timeLeft * 0.6f;
             }
@@ -119,6 +117,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             }
             return false;
         }
+
         public void DrawWarp()
         {
             Main.spriteBatch.End();

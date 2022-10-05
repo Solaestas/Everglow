@@ -9,8 +9,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             ItemGlowManager.AutoLoadItemGlow(this);
         }
 
-
-
         public override void SetDefaults()
         {
             Item.glowMask = ItemGlowManager.GetItemGlow(this);
