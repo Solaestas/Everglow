@@ -82,7 +82,9 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles
                                 float Omega;
                                 Omega = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j)].X;
                                 rot = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j)].Y;
-                                if (Math.Abs(Omega) < 0.04f && Math.Abs(rot) < 0.04f)
+                                float mass = 16f;
+                                float MaxSpeed = Math.Abs(Math.Clamp(player.velocity.X / mass, -0.5f, 0.5f));
+                                if (Math.Abs(Omega) < MaxSpeed && Math.Abs(rot) < MaxSpeed)
                                 {
                                     TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j)] = new Vector2(Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
                                 }
@@ -107,7 +109,9 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles
                                 float Omega;
                                 Omega = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18 + 1, j)].X;
                                 rot = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18 + 1, j)].Y;
-                                if (Math.Abs(Omega) < 0.04f && Math.Abs(rot) < 0.04f)
+                                float mass = 16f;
+                                float MaxSpeed = Math.Abs(Math.Clamp(player.velocity.X / mass, -0.5f, 0.5f));
+                                if (Math.Abs(Omega) < MaxSpeed && Math.Abs(rot) < MaxSpeed)
                                 {
                                     TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18 + 1, j)] = new Vector2(Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
                                 }
@@ -130,7 +134,9 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles
                                 float Omega;
                                 Omega = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j + 1)].X;
                                 rot = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j + 1)].Y;
-                                if (Math.Abs(Omega) < 0.04f && Math.Abs(rot) < 0.04f)
+                                float mass = 16f;
+                                float MaxSpeed = Math.Abs(Math.Clamp(player.velocity.X / mass, -0.5f, 0.5f));
+                                if (Math.Abs(Omega) < MaxSpeed && Math.Abs(rot) < MaxSpeed)
                                 {
                                     TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j + 1)] = new Vector2(Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
                                 }
@@ -154,7 +160,9 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles
                                 float Omega;
                                 Omega = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18 - 1, j)].X;
                                 rot = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18 - 1, j)].Y;
-                                if (Math.Abs(Omega) < 0.04f && Math.Abs(rot) < 0.04f)
+                                float mass = 16f;
+                                float MaxSpeed = Math.Abs(Math.Clamp(player.velocity.X / mass, -0.5f, 0.5f));
+                                if (Math.Abs(Omega) < MaxSpeed && Math.Abs(rot) < MaxSpeed)
                                 {
                                     TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18 - 1, j)] = new Vector2(Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
                                 }
@@ -177,7 +185,9 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles
                                 float Omega;
                                 Omega = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j + 2)].X;
                                 rot = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j + 2)].Y;
-                                if (Math.Abs(Omega) < 0.04f && Math.Abs(rot) < 0.04f)
+                                float mass = 16f;
+                                float MaxSpeed = Math.Abs(Math.Clamp(player.velocity.X / mass, -0.5f, 0.5f));
+                                if (Math.Abs(Omega) < MaxSpeed && Math.Abs(rot) < MaxSpeed)
                                 {
                                     TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j + 2)] = new Vector2(Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
                                 }
@@ -205,19 +215,19 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles
                 Texture2D tex = YggdrasilContent.QuickTexture("YggdrasilTown/Tiles/Chinalamp3_Depart");
 
                 tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18, j + 2);
-                tileSpin.DrawRotatedTile(i - (tile.TileFrameX % 54 - 18) / 18, j + 2, tex, new Rectangle(144 + Adx, 0, 36, 64), new Vector2(18, 0), 0, -34, 1);
+                tileSpin.DrawRotatedTilePrecise(i - (tile.TileFrameX % 54 - 18) / 18, j + 2, tex, new Rectangle(144 + Adx, 0, 36, 64), new Vector2(18, 0), 10, -34, 1);
 
                 tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18 - 1, j);
-                tileSpin.DrawRotatedTile(i - (tile.TileFrameX % 54 - 18) / 18 - 1, j, tex, new Rectangle(108 + Adx, 0, 36, 64), new Vector2(18, 0), 16, -2, 1);
+                tileSpin.DrawRotatedTilePrecise(i - (tile.TileFrameX % 54 - 18) / 18 - 1, j, tex, new Rectangle(108 + Adx, 0, 36, 64), new Vector2(18, 0), 26, -2, 1);
 
                 tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18, j + 1);
-                tileSpin.DrawRotatedTile(i - (tile.TileFrameX % 54 - 18) / 18, j + 1, tex, new Rectangle(72 + Adx, 0, 36, 64), new Vector2(18, 0), 0, -18, 1);
+                tileSpin.DrawRotatedTilePrecise(i - (tile.TileFrameX % 54 - 18) / 18, j + 1, tex, new Rectangle(72 + Adx, 0, 36, 64), new Vector2(18, 0), 10, -18, 1);
 
                 tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18 + 1, j);
-                tileSpin.DrawRotatedTile(i - (tile.TileFrameX % 54 - 18) / 18 + 1, j, tex, new Rectangle(36 + Adx, 0, 36, 64), new Vector2(18, 0), -16, -2, 1);
+                tileSpin.DrawRotatedTilePrecise(i - (tile.TileFrameX % 54 - 18) / 18 + 1, j, tex, new Rectangle(36 + Adx, 0, 36, 64), new Vector2(18, 0), -6, -2, 1);
 
                 tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18, j);
-                tileSpin.DrawRotatedTile(i - (tile.TileFrameX % 54 - 18) / 18, j, tex, new Rectangle(0 + Adx, 0, 36, 64), new Vector2(18, 0), 0, -2, 1);
+                tileSpin.DrawRotatedTilePrecise(i - (tile.TileFrameX % 54 - 18) / 18, j, tex, new Rectangle(0 + Adx, 0, 36, 64), new Vector2(18, 0), 10, -2, 1);
       
             }
             //Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);

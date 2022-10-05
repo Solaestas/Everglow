@@ -1,4 +1,6 @@
-﻿namespace Everglow.Sources.Modules.YggdrasilModule.Common.Utils
+﻿using Everglow.Sources.Commons.Core.Utils;
+
+namespace Everglow.Sources.Modules.YggdrasilModule.Common.Utils
 {
     internal class TileSpin
     {
@@ -19,31 +21,14 @@
                 Omega = TileRotation[(i, j)].X;
                 rot = TileRotation[(i, j)].Y;
                 Omega = Omega * k1 - rot * k2;
-                TileRotation[(i, j)] = new Vector2(Omega, rot + Omega);
-                if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
+
+                if (Main.tile[i, j].WallType == 0)
                 {
-                    TileRotation.Remove((i, j));
+
+                    Omega = Omega * 0.99f - (Math.Clamp(Main.windSpeedCurrent, -1, 1) * (0.3f + MathUtils.Sin(i + (float)Main.time / 12f) * 0.1f)) * 0.2f;
                 }
-            }
-        }
-        /// <summary>
-        /// 更新贴图旋转，并抖落蓝色荧光花粉dust
-        /// </summary>
-        /// <param name="i"></param>
-        /// <param name="j"></param>
-        /// <param name="k1"></param>
-        /// <param name="k2"></param>
-        public void UpdateBlackShrub(int i, int j, float k1 = 0.75f, float k2 = 0.13f, Vector2 offset = new Vector2(), float Addx = 0, float Addy = 0, int width = 16, int height = 16)
-        {
-            if (TileRotation.ContainsKey((i, j)) && !Main.gamePaused)
-            {
-                float rot;
-                float Omega;
-                Omega = TileRotation[(i, j)].X;
-                rot = TileRotation[(i, j)].Y;
-                Omega = Omega * 0.75f - rot * 0.13f;
                 TileRotation[(i, j)] = new Vector2(Omega, rot + Omega);
-                float Strength = Math.Abs(Omega) + Math.Abs(rot);
+
                 if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
                 {
                     TileRotation.Remove((i, j));
@@ -166,7 +151,7 @@
         /// <param name="kRot"></param>
         /// <param name="specialColor"></param>
         /// <param name="color"></param>
-        public void DrawRotatedTile(int i, int j, Texture2D tex, Rectangle sourceRectangle, Vector2 origin, float offsetX = 0, float offsetY = 0, float kRot = 1, bool specialColor = false, Color color = new Color())
+        public void DrawRotatedTilePrecise(int i, int j, Texture2D tex, Rectangle sourceRectangle, Vector2 origin, float offsetX = 0, float offsetY = 0, float kRot = 1, bool specialColor = false, Color color = new Color())
         {
             float rot = 0;
             Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);

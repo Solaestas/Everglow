@@ -11,10 +11,10 @@
         {
             Item.width = 18;
             Item.height = 26;
-            Item.rare = 0;
+            Item.rare = ItemRarityID.White;
             Item.scale = 1f;
             Item.createTile = ModContent.TileType<Tiles.Chinalamp2>();
-            Item.useStyle = 1;
+            Item.useStyle = ItemUseStyleID.Swing;
             Item.useTurn = true;
             Item.useAnimation = 15;
             Item.useTime = 15;

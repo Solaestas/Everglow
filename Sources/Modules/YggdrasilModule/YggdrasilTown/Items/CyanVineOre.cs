@@ -11,10 +11,10 @@
         {
             Item.width = 18;
             Item.height = 20;
-            Item.rare = 3;
+            Item.rare = ItemRarityID.Orange;
             Item.scale = 1f;
             Item.createTile = 0;
-            Item.useStyle = 1;
+            Item.useStyle = ItemUseStyleID.Swing;
             Item.useTurn = true;
             Item.useAnimation = 15;
             Item.useTime = 15;

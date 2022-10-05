@@ -27,10 +27,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles
             modTranslation.SetDefault("Traditional Screen Lamp");
             modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "古韵屏灯");
         }
-        public override void NumDust(int i, int j, bool fail, ref int num)
-        {
-            num = (fail ? 1 : 3);
-        }
+
         public override void NearbyEffects(int i, int j, bool closer)
         {
             if (Main.tile[i, j].TileFrameX < 40 && Main.tile[i, j].TileFrameY < 40)
@@ -40,11 +37,9 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Items.Chinalamp2>());
+            Item.NewItem(null, i * 16, j * 16, 16, 16, ModContent.ItemType<Items.Chinalamp2>());
         }
-        public override void PlaceInWorld(int i, int j, Item item)
-        {
-        }
+
         public override void HitWire(int i, int j)
         {
             int k = i;
