@@ -3,7 +3,6 @@ using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Terraria.DataStructures;
 using Terraria.Enums;
-using Terraria.GameContent;
 using Terraria.ObjectData;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
@@ -116,12 +115,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             //rc.X -= (int)(Main.screenPosition.X - zero.X);
             //rc.Y -= (int)(Main.screenPosition.Y - zero.Y);
 
-
             //Rectangle rc2 = new Rectangle(i * 16, j * 16, 16, 16);
             //rc2.X -= (int)(Main.screenPosition.X - zero.X);
             //rc2.Y -= (int)(Main.screenPosition.Y - zero.Y);
             //spriteBatch.Draw(TextureAssets.MagicPixel.Value, rc2, new Color(0.5f, 0, 0, 0));
-
 
             //spriteBatch.Draw(TextureAssets.MagicPixel.Value,rc,new Color(0.5f,0,0,0));
             return false;

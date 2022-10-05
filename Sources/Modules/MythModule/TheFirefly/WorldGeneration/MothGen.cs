@@ -22,6 +22,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                 BuildMothCave();
             }
         }
+
         internal class WorldMothLandGenPass : GenPass
         {
             public WorldMothLandGenPass() : base("MothLand", 500)
@@ -36,10 +37,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         }
 
         public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight) => tasks.Add(new WorldMothLandGenPass());
+
         /// <summary>
         /// 地形中心坐标
         /// </summary>
         public int fireflyCenterX = 400;
+
         public int fireflyCenterY = 300;
 
         public override void SaveWorldData(TagCompound tag)
@@ -150,6 +153,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                                     }
                                 }
                                 break;
+
                             case 3:
                                 if (pixel.R == 165 && pixel.G == 0 && pixel.B == 255)
                                 {
@@ -237,6 +241,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             ShapeTile("Cocoon.bmp", a, b, 3);
             SmoothMothTile(a, b);
         }
+
         public static void BuildWorldMothCave()
         {
             //Point16 AB = CocoonPos();

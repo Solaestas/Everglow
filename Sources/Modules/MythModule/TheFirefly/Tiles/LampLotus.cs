@@ -1,7 +1,7 @@
 ﻿using Everglow.Sources.Commons.Core.Utils;
 using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Modules.MythModule.TheFirefly;
 using Terraria.ObjectData;
+
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 {
     public class LampLotus : ModTile
@@ -22,14 +22,15 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             AddMapEntry(new Color(81, 110, 255), modTranslation);
             HitSound = SoundID.Grass;
         }
+
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
         }
+
         public override void RandomUpdate(int i, int j)
         {
             var tile = Main.tile[i, j];
             var tile2 = Main.tile[i, j - 1];
-
 
             if (tile2.TileType != tile.TileType)
             {
@@ -45,6 +46,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                 }
             }
         }
+
         public override void NearbyEffects(int i, int j, bool closer)
         {
             if (closer)

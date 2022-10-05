@@ -9,25 +9,30 @@ internal class PylonSystem : ModSystem
     public const string DataName = "pylon";
     public bool shabbyPylonEnable = false;
     public bool firstEnableAnimation = false;
+
     public override void SaveWorldData(TagCompound tag)
     {
         tag[DataName] = (Byte)(new BitsByte(shabbyPylonEnable, firstEnableAnimation));
     }
+
     public override void LoadWorldData(TagCompound tag)
     {
         BitsByte bits = tag.GetByte(DataName);
         shabbyPylonEnable = bits[0];
         firstEnableAnimation = bits[1];
     }
+
     public override void NetSend(BinaryWriter writer)
     {
         writer.Write(shabbyPylonEnable);
     }
+
     public override void NetReceive(BinaryReader reader)
     {
         shabbyPylonEnable = reader.ReadBoolean();
     }
 }
+
 internal class PylonValidCheck : GlobalPylon
 {
     public override void PostValidTeleportCheck(TeleportPylonInfo destinationPylonInfo, TeleportPylonInfo nearbyPylonInfo, ref bool destinationPylonValid, ref bool validNearbyPylonFound, ref string errorKey)
@@ -52,6 +57,5 @@ internal class PylonValidCheck : GlobalPylon
                 destinationPylonValid = false;
             }
         }
-
     }
 }

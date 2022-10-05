@@ -1,9 +1,6 @@
-using Terraria.Localization;
+using Everglow.Sources.Commons.Core.VFX;
 using Everglow.Sources.Commons.Function.Vertex;
 using Terraria.Audio;
-using Everglow.Sources.Commons.Core.VFX;
-using Everglow.Sources.Commons.Core.VFX.Visuals;
-using Everglow.Sources.Commons.Core.VFX.Pipelines;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.CrystalStorm
 {
@@ -21,13 +18,14 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             Projectile.extraUpdates = 3;
             Projectile.timeLeft = 1000;
             Projectile.alpha = 0;
-            Projectile.penetrate = 1; 
+            Projectile.penetrate = 1;
             Projectile.scale = 1f;
-            Projectile.DamageType =DamageClass.MagicSummonHybrid;
+            Projectile.DamageType = DamageClass.MagicSummonHybrid;
 
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 60;
         }
+
         public override void AI()
         {
             Projectile.velocity *= 0.9993f;
@@ -35,7 +33,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             float k0 = 1f / (Projectile.ai[0] + 2) * 2;
             Vector2 v0 = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) * Projectile.scale * 0.3f;
             Dust.NewDust(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<Dusts.CrystalAppearStoppedByTile>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(0.6f, 1.8f) * Projectile.scale * 0.4f * k0);
-            if(Projectile.ai[1] > 0)
+            if (Projectile.ai[1] > 0)
             {
                 Projectile.ai[1] -= 1;
                 if (Projectile.ai[1] == 1)
@@ -45,6 +43,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             }
             Projectile.rotation = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X));
         }
+
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D Light = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CrystalStorm/LargeCrystal");
@@ -55,7 +54,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             {
                 k0 = 1;
             }
-            if(Projectile.timeLeft < 200)
+            if (Projectile.timeLeft < 200)
             {
                 k2 = Projectile.timeLeft / 200f;
             }
@@ -79,7 +78,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
                 {
                     break;
                 }
-                if(i < 31)
+                if (i < 31)
                 {
                     float k3 = (i - 1) / 30f;
                     c0 = new Color(k0 * k0 * 1.6f * k3 * (1 - k3), 0, k0 * 0.4f * k3 + 0.2f * k3, 0);
@@ -109,10 +108,12 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
 
             return false;
         }
+
         public override bool PreKill(int timeLeft)
         {
             return true;
         }
+
         public override void Kill(int timeLeft)
         {
             float k1 = 1;
@@ -123,18 +124,17 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
                 int dust0 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<Dusts.CrystalAppearStoppedByTile>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(0.3f, 0.6f) * Projectile.scale * 0.4f * k0);
                 Main.dust[dust0].noGravity = true;
 
-                CrystalParticle cp = new CrystalParticle()
+                CrystalParticle cp = new CrystalParticle
                 {
                     timeLeft = 70,
                     size = Main.rand.NextFloat(0.45f, 1.55f),
-                   velocity = new Vector2(Main.rand.NextFloat(2.5f, 7.5f), 0).RotatedByRandom(6.283),
+                    velocity = new Vector2(Main.rand.NextFloat(2.5f, 7.5f), 0).RotatedByRandom(6.283),
                     Active = true,
-                    Visible = true
+                    Visible = true,
+                    position = Projectile.Center
                 };
-                cp.position = Projectile.Center;
 
                 VFXManager.Add(cp);
-
 
                 //Vector2 v = new Vector2(0, Main.rand.NextFloat(2f, 7f)).RotatedByRandom(6.28);
                 //int ds = Projectile.NewProjectile(null, Projectile.Center + v * 3f + Projectile.velocity, v, ModContent.ProjectileType<BrokenGem>(), Projectile.damage / 4, 1, Main.myPlayer, 0);
@@ -167,11 +167,11 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
                 Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 50 / k0);
                 Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
             }
-            foreach(NPC target in Main.npc)
+            foreach (NPC target in Main.npc)
             {
                 float Dis = (target.Center - Projectile.Center).Length();
 
-                if(Dis < k0 * 50)
+                if (Dis < k0 * 50)
                 {
                     if (!target.dontTakeDamage && !target.friendly && target.active)
                     {
@@ -179,7 +179,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
                     }
                 }
             }
-            SoundEngine.PlaySound(SoundID.Item27,Projectile.Center);
+            SoundEngine.PlaySound(SoundID.Item27, Projectile.Center);
         }
     }
 }

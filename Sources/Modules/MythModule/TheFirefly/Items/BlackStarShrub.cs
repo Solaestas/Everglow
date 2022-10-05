@@ -7,8 +7,6 @@
             ItemGlowManager.AutoLoadItemGlow(this);
         }
 
-
-
         public override void SetDefaults()
         {
             Item.glowMask = ItemGlowManager.GetItemGlow(this);

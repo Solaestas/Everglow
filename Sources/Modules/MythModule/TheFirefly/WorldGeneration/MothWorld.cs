@@ -19,6 +19,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             Main.rockLayer = 2;
             WorldGen.waterLine = Main.maxTilesY;
         }
+
         public override void OnEnter()
         {
             //TODO: 我希望玩家进入子世界之后能出现在传送门附近

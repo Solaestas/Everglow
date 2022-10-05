@@ -1,7 +1,7 @@
-﻿using Terraria.Localization;
-using Terraria.GameContent;
-using Everglow.Sources.Commons.Function.Vertex;
+﻿using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MEACModule;
+using Terraria.GameContent;
+using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.CrystalStorm
 {
@@ -15,6 +15,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
 
         private float RamdomC = -1;
         private float RamdomC2 = -1;
+
         public override void SetDefaults()
         {
             Projectile.width = 20;
@@ -28,6 +29,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 3;
         }
+
         public override Color? GetAlpha(Color lightColor)
         {
             return new Color?(new Color((float)(fade * fade), (float)(fade * fade), (float)(fade * fade), 0));
@@ -43,6 +45,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
         private Vector2 po1;
         private Vector2 po2;
         private Vector2 po3;
+
         public override void AI()
         {
             if (Projectile.timeLeft == 3999)
@@ -89,20 +92,22 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
         private Vector2 VS1;
         private Vector2 VS2;
         private Vector2 VS3;
+
         public override void PostDraw(Color lightColor)
         {
-
         }
+
         public void DrawWarp()
         {
-            Color colorD = new Color(0f, 0.01f,0f);
+            Color colorD = new Color(0f, 0.01f, 0f);
 
             int DrawBase = (int)(122.5 + Math.Sin(RamdomC) * 122.5);
-            List<Vertex2D> Vx = new List<Vertex2D>();
-
-            Vx.Add(new Vertex2D(po1 + Projectile.Center - Main.screenPosition, colorD, new Vector3(0, 0, 0)));
-            Vx.Add(new Vertex2D(po2 + Projectile.Center - Main.screenPosition, colorD, new Vector3(0, 0, 0)));
-            Vx.Add(new Vertex2D(po3 + Projectile.Center - Main.screenPosition, colorD, new Vector3(0, 0, 0)));
+            List<Vertex2D> Vx = new List<Vertex2D>
+            {
+                new Vertex2D(po1 + Projectile.Center - Main.screenPosition, colorD, new Vector3(0, 0, 0)),
+                new Vertex2D(po2 + Projectile.Center - Main.screenPosition, colorD, new Vector3(0, 0, 0)),
+                new Vertex2D(po3 + Projectile.Center - Main.screenPosition, colorD, new Vector3(0, 0, 0))
+            };
             Main.graphics.GraphicsDevice.Textures[0] = TextureAssets.MagicPixel.Value;
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count - 2);
         }
