@@ -7,9 +7,20 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
     {
         public override void SetDefaults(Item item)
         {
-            
             base.SetDefaults(item);
         }
+
+        public override bool PreDrawTooltipLine(Item item, DrawableTooltipLine line, ref int yOffset)
+        {
+            if (Main.LocalPlayer.GetModPlayer<MagicBookPlayer>().MagicBookLevel == 1)
+            {
+                if (item.type == ItemID.WaterBolt)
+                {
+                }
+            }
+            return base.PreDrawTooltipLine(item, line, ref yOffset);
+        }
+
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
             if (Main.LocalPlayer.GetModPlayer<MagicBookPlayer>().MagicBookLevel == 1)
@@ -41,6 +52,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
             }
             base.ModifyTooltips(item, tooltips);
         }
+
         public override bool? UseItem(Item item, Player player)
         {
             if (player.GetModPlayer<MagicBookPlayer>().MagicBookLevel == 0)
@@ -119,7 +131,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
                 int aimType = ModContent.ProjectileType<Projectiles.WaterBolt.WaterBoltBook>();
                 if (player.ownedProjectileCounts[aimType] < 1)
                 {
-                    Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero,aimType,0,0,player.whoAmI);
+                    Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
                 }
                 aimType = ModContent.ProjectileType<Projectiles.WaterBolt.WaterBoltArray>();
                 if (player.ownedProjectileCounts[aimType] < 1)
@@ -220,9 +232,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
             }
             return base.UseItem(item, player);
         }
+
         public override bool Shoot(Item item, Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            if(player.GetModPlayer<MagicBookPlayer>().MagicBookLevel == 0)
+            if (player.GetModPlayer<MagicBookPlayer>().MagicBookLevel == 0)
             {
                 return base.Shoot(item, player, source, position, velocity, type, damage, knockback);
             }
@@ -261,19 +274,22 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
             return base.Shoot(item, player, source, position, velocity, type, damage, knockback);
         }
     }
-    class MagicBookPlayer : ModPlayer
+
+    internal class MagicBookPlayer : ModPlayer
     {
         public int MagicBookLevel = 0;
         public int WaterBoltHasHit = 0;
+
         public override void PreUpdate()
         {
             MagicBookLevel = 0;
             base.PreUpdate();
         }
+
         public override bool PreItemCheck()
         {
             //MagicBookLevel = 0;
-            if(WaterBoltHasHit > 0)
+            if (WaterBoltHasHit > 0)
             {
                 if (Player.HeldItem.type != ItemID.WaterBolt || MagicBookLevel == 0)
                 {

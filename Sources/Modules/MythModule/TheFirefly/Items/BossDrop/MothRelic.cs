@@ -1,13 +1,11 @@
-﻿using Terraria.Localization;
-using Terraria.ID;
-
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.BossDrop
+﻿namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.BossDrop
 {
     public class MothRelic : ModItem
     {
         public override void SetStaticDefaults()
         {
         }
+
         public override void SetDefaults()
         {
             Item.width = 38;
@@ -26,6 +24,5 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.BossDrop
             Item.autoReuse = true;
             Item.createTile = ModContent.TileType<Tiles.BossDrop.MothRelic>();
         }
-
     }
 }

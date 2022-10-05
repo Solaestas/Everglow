@@ -1,8 +1,8 @@
-
 using Everglow.Sources.Modules.MythModule.Common;
 
 using Terraria.Localization;
 using Terraria.ObjectData;
+
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 {
     public class FireflyTree : ModTile
@@ -33,6 +33,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 
             Everglow.HookSystem.AddMethod(DrawRopes, Commons.Core.CallOpportunity.PostDrawTiles);
         }
+
         public override void KillMultiTile(int i, int j, int frameX, int frameY)//被砍爆的时候更新
         {
             int tileX = i;
@@ -98,6 +99,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                 }
             }
         }
+
         public override void NumDust(int i, int j, bool fail, ref int num)
         {
             num = 0;
@@ -176,6 +178,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             }
             ropeManager.Draw();
         }
+
         public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
         {
             Tile tile = Main.tile[i, j];
@@ -207,7 +210,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             spriteBatch.Draw(glowTexture, tileCenterWS - Main.screenPosition + zero,
                 new Rectangle(tile.TileFrameX, 0, treeTexture.Width / Count, treeTexture.Height),
                 new Color(1f, 1f, 1f, 0), 0f, HalfSize, 1f, effects, 0f);
-
 
             if (tileCenterWS.Distance(Main.LocalPlayer.position) < 200)
             {

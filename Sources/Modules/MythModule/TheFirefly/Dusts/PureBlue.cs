@@ -12,6 +12,7 @@
             dust.alpha = 0;
             //Ome = Main.rand.NextFloat(-0.3f, 0.3f);
         }
+
         public override bool Update(Dust dust)
         {
             dust.position += dust.velocity;
@@ -34,6 +35,7 @@
             //}
             return false;
         }
+
         public override Color? GetAlpha(Dust dust, Color lightColor)
         {
             return new Color?(new Color(0f, 0f, 0.5f, 0f));
