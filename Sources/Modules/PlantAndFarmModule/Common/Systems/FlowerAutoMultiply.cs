@@ -46,7 +46,7 @@ namespace Everglow.Sources.Modules.PlantAndFarmModule.Common.Systems
                         {
                             for (int y = -2; y < 3; y++)
                             {
-                                if (!((Tile)Main.tile[i + x, j + y]).HasTile && Main.tile[i + x, j + y + 1].TileType == 2 && !Main.tile[i + x, j + y + 1].IsHalfBlock && !(Main.tile[i + x, j + y].LiquidAmount > 1))
+                                if (!((Tile)Main.tile[i + x, j + y]).HasTile && Main.tile[i + x, j + y + 1].TileType == 2 && Main.tile[i + x, j + y + 1].Slope == SlopeType.Solid && !(Main.tile[i + x, j + y].LiquidAmount > 1))
                                 {
                                     int TYPE = 0;
                                     if (u >= 3)

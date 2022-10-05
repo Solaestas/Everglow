@@ -1,6 +1,6 @@
 ﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons;
-using Terraria.GameContent.Creative;
 using Terraria.GameContent;
+using Terraria.GameContent.Creative;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.BossDrop
 {
@@ -39,8 +39,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.BossDrop
 		{
 			var entitySource = player.GetSource_OpenItem(Type);
 
-            switch (Main.rand.Next(6))
-            {
+			switch (Main.rand.Next(6))
+			{
 				case 0:
 					player.QuickSpawnItem(entitySource, ModContent.ItemType<ShadowWingBow>());
 					break;
@@ -60,11 +60,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.BossDrop
 					player.QuickSpawnItem(entitySource, ModContent.ItemType<ScaleWingBlade>());
 					break;
 			}
-            if (Main.rand.NextBool(2))
-                player.QuickSpawnItem(entitySource, ModContent.ItemType<Items.Accessories.MothEye>());
+			if (Main.rand.NextBool(2))
+				player.QuickSpawnItem(entitySource, ModContent.ItemType<Items.Accessories.MothEye>());
 			else if (Main.masterMode)
-                player.QuickSpawnItem(entitySource, ModContent.ItemType<Items.Accessories.MothEye>());
-        }
+				player.QuickSpawnItem(entitySource, ModContent.ItemType<Items.Accessories.MothEye>());
+		}
 
 		// Below is code for the visuals
 

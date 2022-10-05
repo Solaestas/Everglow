@@ -5,7 +5,6 @@ using Terraria.WorldBuilding;
 using Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles;
 using Everglow.Sources.Modules.YggdrasilModule.KelpCurtain.Tiles;
 
-
 namespace Everglow.Sources.Modules.YggdrasilModule.WorldGeneration
 {
     public class YggdrasilWorldGeneration : ModSystem
@@ -71,12 +70,12 @@ namespace Everglow.Sources.Modules.YggdrasilModule.WorldGeneration
                                     tile.TileType = (ushort)ModContent.TileType<DarkMud>();
                                     tile.HasTile = true;
                                 }
-                                if (pixel.R == 255 && pixel.G == 8 && pixel.B == 0)//测试用房屋
+                                if (pixel.R == 255 && pixel.G == 8 && pixel.B == 0)//测试用建筑
                                 {
                                     MapIO mapIO = new MapIO(x, y);
-                                    string pathName = "Everglow/Sources/Modules/YggdrasilModule/WorldGeneration/WoodBridge01.mapio";
-                                    using var memoryStream = new MemoryStream(ModContent.GetFileBytes(pathName));
-                                    mapIO.Read(memoryStream);
+                                    string pathName = "Sources/Modules/YggdrasilModule/YggdrasilTown/MapIOs/WoodBridge01.mapio";
+
+                                    mapIO.Read(Everglow.Instance.GetFileStream(pathName));
 
                                     var it = mapIO.GetEnumerator();
                                     while (it.MoveNext())
