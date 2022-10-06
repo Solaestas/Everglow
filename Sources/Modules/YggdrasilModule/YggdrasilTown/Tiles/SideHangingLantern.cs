@@ -4,6 +4,7 @@ using Everglow.Sources.Modules.YggdrasilModule.Common.Utils;
 using Everglow.Sources.Modules.YggdrasilModule.Common;
 using Terraria.Enums;
 using Terraria.DataStructures;
+using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles
 {
@@ -32,7 +33,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles
 
             TileObjectData.addTile(Type);
             DustType = DustID.DynastyWood;
-            ModTranslation modTranslation = base.CreateMapEntryName(null);
+            ModTranslation modTranslation = LocalizationLoader.GetOrCreateTranslation("Mods.Everglow.MapEntry.SideHangingLantern");
             AddMapEntry(new Color(151, 31, 32), modTranslation);
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)

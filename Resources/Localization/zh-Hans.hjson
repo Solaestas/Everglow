@@ -783,6 +783,11 @@ Mods:
 		MapEntry :
 		{
 			FireflyTree : "萤火树"
+
+			#天穹树系列
+
+				#天穹树小镇
+				SideHangingLantern : "侧挂式灯笼"
 		}
 		Config:
 		{

@@ -761,6 +761,11 @@
 		MapEntry :
 		{
 			FireflyTree : "Firefly Tree"
+			
+			#Yggdrasil
+
+				#YggdrasilTown
+				SideHangingLantern : "Side Hanging Lantern"
 		}
 		Config:
 		{
