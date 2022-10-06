@@ -43,25 +43,9 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles
             AddMapEntry(new Color(151, 31, 32), modTranslation);
         }
 
-        public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
-        {
-            var tile = Main.tile[i, j];
-            if (tile.TileFrameX < 48)
-            {
-                r = 1f;
-                g = 0.15f;
-                b = 0f;
-            }
-            else
-            {
-                r = 0f;
-                g = 0f;
-                b = 0f;
-            }
-        }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Items.StreetLantern>());
+            Item.NewItem(null, i * 16, j * 16, 16, 48, ModContent.ItemType<Items.StreetLantern>());
         }
         public override void HitWire(int i, int j)
         {
@@ -124,6 +108,10 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles
             rt.Y -= (int)(Main.screenPosition.Y - zero.Y);
             Tile tile = Main.tile[i, j];
 
+            if((tile.TileFrameY % 108) == 90)
+            {
+                rt.Height = 19;
+            }
             spriteBatch.Draw(tPostTexture, rt, new Rectangle(tile.TileFrameX, tile.TileFrameY, 48, 16), Lighting.GetColor(i, j));
 
             if ((tile.TileFrameY % 108) == 0 && (tile.TileFrameX == 0 || tile.TileFrameX == 48))

@@ -24,7 +24,6 @@ namespace Everglow.Sources.Modules.YggdrasilModule.Common.Utils
 
                 if (Main.tile[i, j].WallType == 0)
                 {
-
                     Omega = Omega * 0.99f - (Math.Clamp(Main.windSpeedCurrent, -1, 1) * (0.3f + MathUtils.Sin(i + (float)Main.time / 12f) * 0.1f)) * 0.2f;
                 }
                 TileRotation[(i, j)] = new Vector2(Omega, rot + Omega);
@@ -178,6 +177,61 @@ namespace Everglow.Sources.Modules.YggdrasilModule.Common.Utils
             else
             {
                 Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, sourceRectangle, c, rot * kRot, origin, 1f, SpriteEffects.None, 0f);
+            }
+        }
+        /// <summary>
+        /// 画灯笼串
+        /// </summary>
+        /// <param name="i"></param>
+        /// <param name="j"></param>
+        /// <param name="tex"></param>
+        /// <param name="source1"></param>
+        /// <param name="source2"></param>
+        /// <param name="source3"></param>
+        /// <param name="origin1"></param>
+        /// <param name="origin2"></param>
+        /// <param name="origin3"></param>
+        /// <param name="offsetX"></param>
+        /// <param name="offsetY"></param>
+        /// <param name="kRot"></param>
+        /// <param name="specialColor"></param>
+        /// <param name="color"></param>
+        public void DrawThreeLanternsString(int i, int j, Texture2D tex, Rectangle source1, Rectangle source2, Rectangle source3, Vector2 origin1, Vector2 origin2, Vector2 origin3, float offsetX = 0, float offsetY = 0, float kRot = 1, bool specialColor = false, Color color = new Color())
+        {
+            float rot = 0;
+            Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+            if (Main.drawToScreen)
+            {
+                zero = Vector2.Zero;
+            }
+            Color c = Lighting.GetColor(i, j);
+            if (specialColor)
+            {
+                c = color;
+            }
+            Vector2 Position1 = Vector2.Zero;
+            Vector2 Position2 = Position1;
+            Vector2 Position3 = Position2;
+            if (TileRotation.ContainsKey((i, j)))
+            {
+                rot = TileRotation[(i, j)].Y;
+                if (specialColor)
+                {
+                    float maxC = Math.Max(color.R / 255f, Math.Abs(rot * 3) + Math.Abs(TileRotation[(i, j)].X * 3));
+                    maxC = Math.Clamp(maxC, 0, 1);
+                    c = new Color(maxC, maxC, maxC, 0);
+                }
+                Position2 = Position1 + new Vector2(0, 10).RotatedBy(rot * kRot * 0.6f);
+                Position3 = Position2 + new Vector2(0, 9).RotatedBy(rot * kRot * 1.0f);
+                Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition + Position1, source1, c, rot * kRot * 0.6f, origin1, 1f, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition + Position2, source2, c, rot * kRot * 1.0f, origin2, 1f, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition + Position3, source3, c, rot * kRot * 1.6f, origin3, 1f, SpriteEffects.None, 0f);
+            }
+            else
+            {
+                Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition + Position1, source1, c, 0, origin1, 1f, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition + Position2, source2, c, 0, origin2, 1f, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition + Position3, source3, c, 0, origin3, 1f, SpriteEffects.None, 0f);
             }
         }
     }
