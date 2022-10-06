@@ -19,7 +19,7 @@ public class ItemGlowManager : IModule
 
     public static short GetItemGlow(ModItem modItem)
     {
-        return glowMapping.TryGetValue(modItem.Type, out var i) ? i : (short)0;
+        return glowMapping.TryGetValue(modItem.Type, out var i) ? i : (short)-1;
     }
 
     public void Load()

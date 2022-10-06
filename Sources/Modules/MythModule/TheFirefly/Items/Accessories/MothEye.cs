@@ -1,4 +1,5 @@
 ﻿using Everglow.Sources.Modules.MythModule.Common;
+using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
 {
@@ -13,7 +14,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
             Item.height = 46;
             Item.value = 2000;
             Item.accessory = true;
-            Item.rare = 2;
+            Item.rare = ItemRarityID.Green;
             //Item.vanity = true;
         }
 
@@ -31,16 +32,18 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
-            tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "MothEyeTextUnfinished", "[c/BA0022:This item is unfinished]"));
+            tooltips.Add(new TooltipLine(Everglow.Instance, "MothEyeTextUnfinished", "[c/BA0022:This item is unfinished]"));
             if (fireflyBiome.IsBiomeActive(Main.LocalPlayer))
             {
-                tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "MothEyeText1", "[c/7FC1FF:While in the Firefly biome:]\n[c/7FC1FF:- Increases sentry slots by 1]\n[c/7FC1FF:- Increases flight time by 20%]\n[c/7FC1FF:- All Firefly weapons deal 5% more damage]\n[c/7FC1FF:- Some Firefly-related items gain bonuses]"));
-
-                //if (Language.ActiveCulture.Name == "zh-Hans")
-                //{
-                //    tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "MothEyeText1zh", "[c/52A7FE:While in the Firefly biome:]\n[c/52A7FE:- Increases sentry slots by 1]\n[c/52A7FE:- Increases flight time by 10%]\n[c/52A7FE:- All Firefly weapons deal 5% more damage]\n[c/52A7FE:- Some Firefly-related items gain bonuses]"));
-                //    tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "ItemUnfinishedzh", "[c/BA0022:This item is unfinished]"));
-                //}
+                //TODO later use Languague.GetTextValue with hjson to make translations
+                tooltips.AddRange(new TooltipLine[]
+                {
+                    new(Everglow.Instance, "MothEyeText0","[c/7FC1FF:While in the Firefly biome:]"),
+                    new(Everglow.Instance, "MothEyeText1","[c/7FC1FF:- Increases sentry slots by 1]"),
+                    new(Everglow.Instance, "MothEyeText2","[c/7FC1FF:- Increases flight time by 20%]"),
+                    new(Everglow.Instance, "MothEyeText3","[c/7FC1FF:- All Firefly weapons deal 5% more damage]"),
+                    new(Everglow.Instance, "MothEyeText4","[c/7FC1FF:- Some Firefly-related items gain bonuses]"),
+                });
             }
         }
 
