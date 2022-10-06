@@ -1,5 +1,5 @@
 ﻿using Everglow.Sources.Modules.MythModule.Common;
-using Terraria.ID;
+using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
 {
@@ -32,18 +32,17 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
-            tooltips.Add(new TooltipLine(Everglow.Instance, "MothEyeTextUnfinished", "[c/BA0022:This item is unfinished]"));
+            tooltips.Add(new TooltipLine(Everglow.Instance, "UnfinishedItem", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.UnfinishedItem")));
             if (fireflyBiome.IsBiomeActive(Main.LocalPlayer))
             {
-                //TODO later use Languague.GetTextValue with hjson to make translations
                 tooltips.AddRange(new TooltipLine[]
                 {
-                    new(Everglow.Instance, "MothEyeText0","[c/7FC1FF:While in the Firefly biome:]"),
-                    new(Everglow.Instance, "MothEyeText1","[c/7FC1FF:- Increases sentry slots by 1]"),
-                    new(Everglow.Instance, "MothEyeText2","[c/7FC1FF:- Increases flight time by 20%]"),
-                    new(Everglow.Instance, "MothEyeText3","[c/7FC1FF:- All Firefly weapons deal 5% more damage]"),
-                    new(Everglow.Instance, "MothEyeText4","[c/7FC1FF:- Some Firefly-related items gain bonuses]"),
-                });
+                    new(Everglow.Instance, "MothEyeText0", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.MothEyeText0")),
+                    new(Everglow.Instance, "MothEyeText1", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.MothEyeText1")),
+                    new(Everglow.Instance, "MothEyeText2", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.MothEyeText2")),
+                    new(Everglow.Instance, "MothEyeText3", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.MothEyeText3")),
+                    new(Everglow.Instance, "MothEyeText4", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.MothEyeText4")),
+                }); // Using \n would cause spacing problems in the tooltip section (blank space underneath all tooltips). ~Setnour6
             }
         }
 

@@ -571,6 +571,15 @@ Mods:
 			BloodGlucoseMonitor : "Display hunger information"
 			OsmoticPressureMonitor : "Display thrist information"
 		}
+		ExtraItemTooltip :
+		{
+			UnfinishedItem : "[c/BA0022:This item is unfinished]"
+			MothEyeText0 : "[c/7FC1FF:While in the Firefly biome:]"
+			MothEyeText1 : "[c/7FC1FF:- Increases sentry slots by 1]"
+			MothEyeText2 : "[c/7FC1FF:- Increases flight time by 20%]"
+			MothEyeText3 : "[c/7FC1FF:- All Firefly weapons deal 5% more damage]"
+			MothEyeText4 : "[c/7FC1FF:- Some Firefly-related items gain bonuses]"
+		}
 		BuffName : 
 		{
 			BanTransport : "Lock of Reality"
