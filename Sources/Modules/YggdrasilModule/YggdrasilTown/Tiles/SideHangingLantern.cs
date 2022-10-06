@@ -7,7 +7,7 @@ using Terraria.DataStructures;
 
 namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles
 {
-    public class SideChineseLantern : ModTile
+    public class SideHangingLantern : ModTile
     {
         public override void PostSetDefaults()
         {
@@ -26,12 +26,9 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles
 
             TileObjectData.newTile.CoordinateWidth = 16;
             TileObjectData.newAlternate.AnchorLeft = new AnchorData(AnchorType.SolidTile | AnchorType.SolidSide | AnchorType.Tree | AnchorType.AlternateTile, TileObjectData.newTile.Height, 0);
-            TileObjectData.newAlternate.AnchorAlternateTiles = new[] { 124 };
-            TileObjectData.addAlternate(1);
+            TileObjectData.addAlternate(0);
             TileObjectData.newAlternate.AnchorRight = new AnchorData(AnchorType.SolidTile | AnchorType.SolidSide | AnchorType.Tree | AnchorType.AlternateTile, TileObjectData.newTile.Height, 0);
-
-            TileObjectData.newAlternate.AnchorAlternateTiles = new[] { 124 };
-            TileObjectData.addAlternate(2);
+            TileObjectData.addAlternate(1);
 
             TileObjectData.addTile(Type);
             DustType = DustID.DynastyWood;
@@ -40,7 +37,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(null, i * 16, j * 16, 16, 16, ModContent.ItemType<Items.SideChineseLantern>());
+            Item.NewItem(null, i * 16, j * 16, 16, 16, ModContent.ItemType<Items.SideHangingLantern>());
         }
         public override void NearbyEffects(int i, int j, bool closer)
         {
@@ -89,7 +86,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles
         }
         public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
         {
-            Texture2D tPostTexture = YggdrasilContent.QuickTexture("YggdrasilTown/Tiles/SideChineseLantern_Post");
+            Texture2D tPostTexture = YggdrasilContent.QuickTexture("YggdrasilTown/Tiles/SideHangingLantern_Post");
             Rectangle rt = new Rectangle(i * 16, j * 16, 16, 16);
             Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
             if (Main.drawToScreen)
@@ -106,7 +103,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles
             {
                 TileSpin tileSpin = new TileSpin();
                 tileSpin.Update(i, j);
-                Texture2D tex = YggdrasilContent.QuickTexture("YggdrasilTown/Tiles/SideChineseLantern_Lantern");
+                Texture2D tex = YggdrasilContent.QuickTexture("YggdrasilTown/Tiles/SideHangingLantern_Lantern");
                 int FrameX = 0;
                 if(tile.TileFrameY == 54)
                 {

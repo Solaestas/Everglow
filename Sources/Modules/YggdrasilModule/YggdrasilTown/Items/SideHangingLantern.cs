@@ -1,6 +1,6 @@
 ﻿namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Items
 {
-    public class SideChineseLantern : ModItem
+    public class SideHangingLantern : ModItem
     {
         public override void SetStaticDefaults()
         {
@@ -11,7 +11,7 @@
             Item.height = 18;
             Item.rare = ItemRarityID.White;
             Item.scale = 1f;
-            Item.createTile = ModContent.TileType<Tiles.SideChineseLantern>();
+            Item.createTile = ModContent.TileType<Tiles.SideHangingLantern>();
             Item.useStyle = ItemUseStyleID.Swing;
             Item.useTurn = true;
             Item.useAnimation = 15;

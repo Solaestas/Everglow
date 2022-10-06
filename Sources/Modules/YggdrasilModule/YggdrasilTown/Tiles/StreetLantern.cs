@@ -23,11 +23,11 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles
                 16,
                 16,
                 16,
-                19
+                18
             };
             TileObjectData.newTile.CoordinateWidth = 48;
             TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
-            TileObjectData.newTile.CoordinatePaddingFix = new Point16(0, -3);
+            TileObjectData.newTile.CoordinatePaddingFix = new Point16(0, -2);
             // The following 3 lines are needed if you decide to add more styles and stack them vertically
             TileObjectData.newTile.StyleWrapLimit = 2;
             TileObjectData.newTile.StyleMultiplier = 2;
