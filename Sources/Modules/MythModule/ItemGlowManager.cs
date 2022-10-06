@@ -24,6 +24,10 @@ public class ItemGlowManager : IModule
 
     public void Load()
     {
+        Everglow.OnPostSetupContent += LoadGlowMasks;
+    }
+    public void LoadGlowMasks()
+    {
         begin = (short)TextureAssets.GlowMask.Length;
         foreach (var key in glowMapping.Keys.ToArray())
         {
@@ -31,9 +35,9 @@ public class ItemGlowManager : IModule
         }
         TextureAssets.GlowMask = TextureAssets.GlowMask.Concat(glowMasks).ToArray();
     }
-
     public void Unload()
     {
+        Everglow.OnPostSetupContent -= LoadGlowMasks;
         TextureAssets.GlowMask = TextureAssets.GlowMask[0..begin].Concat(TextureAssets.GlowMask[(begin + glowMasks.Count)..]).ToArray();
     }
 }
