@@ -227,10 +227,7 @@ Mods:
 			OceanWorld : 海洋世界(无效)
 			OldMoss : 苍苔
 			ReefSharkSpecimen : 礁鲨标本
-			StoneDragonScaleWood : 石化龙鳞木
 			TerrariaContinent : 泰拉瑞亚大陆(无效)
-			CyanVineBar : 青缎钢锭
-			CyanVineOre : 青缎矿
 			DarkSeaBar : 深焚锭
 			DarkSeaOre : 深焚石
 			OceanBlueBar : 沧流锭
@@ -240,7 +237,6 @@ Mods:
 			LanternCrystal : 皇城晶塔
 			LanternPost1 : 灯笼柱
 			LanternPost2 : 灯笼柱
-			YellowDynastyShingles : 黄王朝瓦
 			DiscordBallF1 : 混沌晶球·天穹古道
 			LiftLamp : 电梯指示灯
 			TestItem : 木制升降梯
@@ -277,6 +273,22 @@ Mods:
 			#食物系统物品
 			BloodGlucoseMonitor : "血糖检测仪"
 			OsmoticPressureMonitor : "渗透压检测仪"
+
+			#天穹树系列物品
+
+				#天穹树小镇
+				ChinesePartitionLamp : "中式屏风灯"
+				ChineseStyleFloorLamp : "中式落地灯"
+				CyanVineBar : "青缎钢锭"
+				CyanVineOre : "青缎矿"
+				DoubleArmsChineseStreetLamp : "中式双臂街灯"
+				HangingSkyLantern : "吊挂式孔明灯"
+				HexagonalCeilingLamp : "六角宫灯"
+				ShoreMud : "深色淤泥"
+				SideHangingLantern : "侧挂式灯笼"
+				StoneDragonScaleWood : "石化龙鳞木"
+				StreetLantern : "灯笼街灯"
+				YellowDynastyShingles : "黄王朝瓦"
 		}
 		ItemTooltip:
 		{
