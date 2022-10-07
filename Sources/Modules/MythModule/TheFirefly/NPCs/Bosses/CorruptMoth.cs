@@ -16,7 +16,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
     [AutoloadBossHead]
     public class CorruptMoth : ModNPC
     {
-        public static NPC CorruputMothNPC;
+        public static NPC CorruptMothNPC;
         protected override bool CloneNewInstances => true;
 
         private readonly Color IdentifierValue = new Color(58, 169, 255);
@@ -294,15 +294,15 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 
             if (!start)
             {
-                if (CorruputMothNPC != null)
+                if (CorruptMothNPC != null)
                 {
-                    if (CorruputMothNPC.active && NPC != CorruputMothNPC)
+                    if (CorruptMothNPC.active && NPC != CorruptMothNPC)
                     {
                         NPC.active = false;
                         return;
                     }
                 }
-                CorruputMothNPC = NPC;
+                CorruptMothNPC = NPC;
                 NPC.ai[0] = 0;
                 NPC.noTileCollide = true;
                 start = true;
@@ -1376,8 +1376,26 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-            npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<TheFirefly.Items.BossDrop.CorruptMothTreasureBag>()));
-            npcLoot.Add(ItemDropRule.MasterModeCommonDrop(ModContent.ItemType<TheFirefly.Items.BossDrop.MothRelic>()));
+            npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<Items.BossDrop.CorruptMothTreasureBag>()));
+            npcLoot.Add(ItemDropRule.MasterModeCommonDrop(ModContent.ItemType<Items.BossDrop.MothRelic>()));
+            npcLoot.Add(ItemDropRule.ByCondition(new Conditions.NotExpert(), ModContent.ItemType<Items.Weapons.DarknessFan>(), 100, 1, 1, 1)); //Classic Darkness Fan
+            if (Main.expertMode)
+                npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsExpert(), ModContent.ItemType<Items.Weapons.DarknessFan>(), 25, 1, 1, 1)); //Expert Darkness Fan
+            else if (Main.masterMode)
+                npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsMasterMode(), ModContent.ItemType<Items.Weapons.DarknessFan>(), 10, 1, 1, 1)); //Master Darkness Fan
+            npcLoot.Add(ItemDropRule.ByCondition(new Conditions.NotExpert(), ModContent.ItemType<Items.Weapons.GlowBeadGun>(), 80, 1, 1, 1)); //Classic Bead Gun
+            if (Main.expertMode)
+                npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsExpert(), ModContent.ItemType<Items.Weapons.GlowBeadGun>(), 20, 1, 1, 1)); //Expert Bead Gun
+            else if (Main.masterMode)
+                npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsMasterMode(), ModContent.ItemType<Items.Weapons.GlowBeadGun>(), 8, 1, 1, 1)); //Master Bead Gun
+
+            LeadingConditionRule rule = new LeadingConditionRule(new Conditions.NotExpert());
+            rule.OnSuccess(ItemDropRule.OneFromOptions(1, ModContent.ItemType<Items.Weapons.ShadowWingBow>(), ModContent.ItemType<Items.Weapons.ScaleWingBlade>(), ModContent.ItemType<Items.Weapons.PhosphorescenceGun>(), ModContent.ItemType<Items.Weapons.EvilChrysalis>(), ModContent.ItemType<Items.Weapons.DustOfCorrupt>()));
+
+            npcLoot.Add(rule);
+
+            npcLoot.Add(ItemDropRule.ByCondition(new Conditions.NotExpert(), ModContent.ItemType<Items.Accessories.MothEye>(), 3, 1, 1, 1)); //Classic Moth Eye Accessory
+
             //npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsMasterMode(), ModContent.ItemType<Items.Weapons.Legendary.ToothSpear>(), 40/*概率分母*/, 1/*最小*/, 1/*最大*/, 1/*概率分子*/));
             /*
             npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsMasterMode(), ModContent.ItemType<Items.Weapons.Legendary.DarknessFan>(), 8, 1, 1, 1));

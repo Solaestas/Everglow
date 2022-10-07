@@ -1,15 +1,13 @@
-﻿using Terraria.GameContent;
-using Everglow.Sources.Commons.Function.Vertex;
-using Everglow.Sources.Commons.Function.ObjectPool;
-using Everglow.Sources.Commons.Core.VFX.Visuals;
-using Everglow.Sources.Commons.Core.VFX.Pipelines;
+﻿using Everglow.Sources.Commons.Core;
 using Everglow.Sources.Commons.Core.VFX;
-using Everglow.Sources.Commons.Core;
+using Everglow.Sources.Commons.Core.VFX.Pipelines;
+using Everglow.Sources.Commons.Core.VFX.Visuals;
+using Everglow.Sources.Commons.Function.Vertex;
+using Terraria.GameContent;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.CrystalStorm
 {
     [Pipeline(typeof(WCSPipeline))]
-
     internal class CrystalParticle : Visual
     {
         public Vector2 position;
@@ -35,6 +33,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
         private float RamdomC;
 
         private float Ros;
+
         public override void OnSpawn()
         {
             timeLeft = Main.rand.Next(387, 399);
@@ -46,11 +45,12 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             p3 = new Vector2(Main.rand.NextFloat(-0.5f, 0.5f), Main.rand.NextFloat(-0.5f, 0.5f));
             base.OnSpawn();
         }
+
         public override void Update()
         {
             position += velocity;
             timeLeft -= 1;
-            if(timeLeft <= 0)
+            if (timeLeft <= 0)
             {
                 Kill();
             }
@@ -73,11 +73,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             velocity *= 0.99f;
             size *= 0.95f;
             if (size < 0.05f)
+            {
                 base.Update();
+            }
         }
+
         public override void Draw()
         {
-
             List<Vertex2D> Vy = new List<Vertex2D>();
             Color colorD = Color.White;
             Vector2 v1 = po1 + position;
@@ -126,6 +128,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             gd.Textures[0] = TextureAssets.MagicPixel.Value;
             gd.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count - 2);
         }
+
         public override CallOpportunity DrawLayer => CallOpportunity.PostDrawFilter;
     }
 }

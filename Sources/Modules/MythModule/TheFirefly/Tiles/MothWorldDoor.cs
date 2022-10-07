@@ -1,34 +1,35 @@
-﻿using Terraria.ObjectData;
+﻿using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
-using Everglow.Sources.Modules.MythModule.Common;
+using Terraria.ObjectData;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 {
-	public class MothWorldDoor : ModTile
-	{
+    public class MothWorldDoor : ModTile
+    {
         public override void SetStaticDefaults()
-		{
-			Main.tileFrameImportant[Type] = true;
-			Main.tileLavaDeath[Type] = false;
-			TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
+        {
+            Main.tileFrameImportant[Type] = true;
+            Main.tileLavaDeath[Type] = false;
+            TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
             TileObjectData.newTile.Height = 7;
             TileObjectData.newTile.Width = 5;
-			TileObjectData.newTile.CoordinateHeights = new int[]
-			{
-				16,
-				16,
-				16,
-				16,
+            TileObjectData.newTile.CoordinateHeights = new int[]
+            {
+                16,
+                16,
+                16,
+                16,
                 16,
                 16,
                 16
-			};
-			TileObjectData.newTile.StyleHorizontal = true;
-			TileObjectData.addTile((int)base.Type);
-			ModTranslation modTranslation = base.CreateMapEntryName(null);
-			modTranslation.SetDefault("MothWorld");
-			base.AddMapEntry(new Color(148, 0, 255), modTranslation);
-		}
+            };
+            TileObjectData.newTile.StyleHorizontal = true;
+            TileObjectData.addTile(Type);
+            ModTranslation modTranslation = base.CreateMapEntryName(null);
+            modTranslation.SetDefault("MothWorld");
+            base.AddMapEntry(new Color(148, 0, 255), modTranslation);
+        }
+
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
             var tile = Main.tile[i, j];
@@ -44,18 +45,21 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 
             base.PostDraw(i, j, spriteBatch);
         }
+
         public override bool CanExplode(int i, int j)
         {
             return false;
         }
+
         public override bool CanKillTile(int i, int j, ref bool blockDamaged)
         {
-			return false;
-		}
+            return false;
+        }
+
         public override void NearbyEffects(int i, int j, bool closer)
         {
-			Player player = Main.LocalPlayer;
-			if((player.Center - new Vector2(i * 16, j * 16)).Length() < 12)
+            Player player = Main.LocalPlayer;
+            if ((player.Center - new Vector2(i * 16, j * 16)).Length() < 12)
             {
                 if (SubWorldModule.SubworldSystem.IsActive<MothWorld>())
                 {

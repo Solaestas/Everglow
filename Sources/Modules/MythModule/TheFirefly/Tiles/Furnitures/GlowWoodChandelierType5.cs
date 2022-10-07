@@ -51,8 +51,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             if (tile.TileFrameX < 54)
             {
                 r = 0.1f;
-                g = 0.9f;
-                b = 1f;
+                g = 0.5f;
+                b = 1.2f;
             }
             else
             {
@@ -67,96 +67,99 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             if (closer)
             {
                 var tile = Main.tile[i, j];
-                foreach (Player player in Main.player)
+                if (tile.TileFrameX % 54 == 18 && tile.TileFrameY == 0)
                 {
-                    if (player.Hitbox.Intersects(new Rectangle(i * 16, j * 16 - 8, 18, 18)))
+                    foreach (Player player in Main.player)
                     {
-                        if (!TileSpin.TileRotation.ContainsKey((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18)))
+                        if (player.Hitbox.Intersects(new Rectangle(i * 16 + 11, j * 16 + 32, 10, 12)))
                         {
-                            TileSpin.TileRotation.Add((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18), new Vector2(-Math.Clamp(player.velocity.X, -1, 1) * 0.2f));
-                        }
-                        else
-                        {
-                            float rot;
-                            float Omega;
-                            Omega = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18)].X;
-                            rot = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18)].Y;
-                            if (Math.Abs(Omega) < 0.04f && Math.Abs(rot) < 0.04f)
+                            if (!TileSpin.TileRotation.ContainsKey((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18)))
                             {
-                                TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18)] = new Vector2(Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
+                                TileSpin.TileRotation.Add((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18), new Vector2(-Math.Clamp(player.velocity.X, -1, 1) * 0.2f));
                             }
-                            if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
+                            else
                             {
-                                TileSpin.TileRotation.Remove((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18));
+                                float rot;
+                                float Omega;
+                                Omega = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18)].X;
+                                rot = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18)].Y;
+                                if (Math.Abs(Omega) < 0.04f && Math.Abs(rot) < 0.04f)
+                                {
+                                    TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18)] = new Vector2(Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
+                                }
+                                if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
+                                {
+                                    TileSpin.TileRotation.Remove((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18));
+                                }
                             }
                         }
-                    }
 
-                    if (player.Hitbox.Intersects(new Rectangle(i * 16 + 11, j * 16 - 8, 18, 18)))
-                    {
-                        if (!TileSpin.TileRotation.ContainsKey((i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18)))
+                        if (player.Hitbox.Intersects(new Rectangle(i * 16 + 21, j * 16 + 12, 10, 12)))
                         {
-                            TileSpin.TileRotation.Add((i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18), new Vector2(-Math.Clamp(player.velocity.X, -1, 1) * 0.2f));
-                        }
-                        else
-                        {
-                            float rot;
-                            float Omega;
-                            Omega = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18)].X;
-                            rot = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18)].Y;
-                            if (Math.Abs(Omega) < 0.04f && Math.Abs(rot) < 0.04f)
+                            if (!TileSpin.TileRotation.ContainsKey((i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18)))
                             {
-                                TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18)] = new Vector2(Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
+                                TileSpin.TileRotation.Add((i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18), new Vector2(-Math.Clamp(player.velocity.X, -1, 1) * 0.2f));
                             }
-                            if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
+                            else
                             {
-                                TileSpin.TileRotation.Remove((i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18));
+                                float rot;
+                                float Omega;
+                                Omega = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18)].X;
+                                rot = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18)].Y;
+                                if (Math.Abs(Omega) < 0.04f && Math.Abs(rot) < 0.04f)
+                                {
+                                    TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18)] = new Vector2(Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
+                                }
+                                if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
+                                {
+                                    TileSpin.TileRotation.Remove((i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18));
+                                }
                             }
                         }
-                    }
 
-                    if (player.Hitbox.Intersects(new Rectangle(i * 16 - 3, j * 16 - 8, 18, 18)))
-                    {
-                        if (!TileSpin.TileRotation.ContainsKey((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1)))
+                        if (player.Hitbox.Intersects(new Rectangle(i * 16 - 1, j * 16 + 18, 10, 12)))
                         {
-                            TileSpin.TileRotation.Add((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1), new Vector2(-Math.Clamp(player.velocity.X, -1, 1) * 0.2f));
-                        }
-                        else
-                        {
-                            float rot;
-                            float Omega;
-                            Omega = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1)].X;
-                            rot = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1)].Y;
-                            if (Math.Abs(Omega) < 0.04f && Math.Abs(rot) < 0.04f)
+                            if (!TileSpin.TileRotation.ContainsKey((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1)))
                             {
-                                TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1)] = new Vector2(Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
+                                TileSpin.TileRotation.Add((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1), new Vector2(-Math.Clamp(player.velocity.X, -1, 1) * 0.2f));
                             }
-                            if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
+                            else
                             {
-                                TileSpin.TileRotation.Remove((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1));
+                                float rot;
+                                float Omega;
+                                Omega = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1)].X;
+                                rot = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1)].Y;
+                                if (Math.Abs(Omega) < 0.04f && Math.Abs(rot) < 0.04f)
+                                {
+                                    TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1)] = new Vector2(Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
+                                }
+                                if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
+                                {
+                                    TileSpin.TileRotation.Remove((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1));
+                                }
                             }
                         }
-                    }
 
-                    if (player.Hitbox.Intersects(new Rectangle(i * 16 - 10, j * 16 - 8, 18, 18)))
-                    {
-                        if (!TileSpin.TileRotation.ContainsKey((i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18)))
+                        if (player.Hitbox.Intersects(new Rectangle(i * 16 - 13, j * 16 + 26, 10, 12)))
                         {
-                            TileSpin.TileRotation.Add((i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18), new Vector2(-Math.Clamp(player.velocity.X, -1, 1) * 0.2f));
-                        }
-                        else
-                        {
-                            float rot;
-                            float Omega;
-                            Omega = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18)].X;
-                            rot = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18)].Y;
-                            if (Math.Abs(Omega) < 0.04f && Math.Abs(rot) < 0.04f)
+                            if (!TileSpin.TileRotation.ContainsKey((i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18)))
                             {
-                                TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18)] = new Vector2(Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
+                                TileSpin.TileRotation.Add((i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18), new Vector2(-Math.Clamp(player.velocity.X, -1, 1) * 0.2f));
                             }
-                            if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
+                            else
                             {
-                                TileSpin.TileRotation.Remove((i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18));
+                                float rot;
+                                float Omega;
+                                Omega = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18)].X;
+                                rot = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18)].Y;
+                                if (Math.Abs(Omega) < 0.04f && Math.Abs(rot) < 0.04f)
+                                {
+                                    TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18)] = new Vector2(Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
+                                }
+                                if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
+                                {
+                                    TileSpin.TileRotation.Remove((i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18));
+                                }
                             }
                         }
                     }
@@ -188,6 +191,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
                 tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18);
                 tileSpin.DrawRotatedTile(i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18, tex, new Rectangle(6 + Adx, 0, 10, 48), new Vector2(5, 0), 8, -2, 1);
             }
+
             return false;
         }
 

@@ -20,6 +20,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
         }
 
         private int times = 0;
+
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];

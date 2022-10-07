@@ -1,4 +1,7 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheFirefly
+﻿using Everglow.Sources.Commons.Core.Utils;
+using Everglow.Sources.Commons.Function.Vertex;
+
+namespace Everglow.Sources.Modules.MythModule.TheFirefly
 {
     internal class TileSpin
     {
@@ -211,6 +214,97 @@
             {
                 Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, sourceRectangle, c, rot * kRot, origin, 1f, SpriteEffects.None, 0f);
             }
+        }
+
+        /// <summary>
+        /// 芦苇类杆状绘制
+        /// </summary>
+        public void DrawReed(int i, int j, int Length, Texture2D texFlower, Texture2D texReed, Rectangle flowerRectangle, Rectangle reedRectangle, Vector2 flowerOrigin, Vector2 reedOrigin, float offsetX = 0, float offsetY = 0, float kRot = 1, bool specialColor = false, Color color = new Color())
+        {
+            float rot = 0;
+            Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+            if (Main.drawToScreen)
+            {
+                zero = Vector2.Zero;
+            }
+            Color c = Lighting.GetColor(i, j);
+            if (specialColor)
+            {
+                c = color;
+            }
+
+            if (TileRotation.ContainsKey((i, j)))//有旋转
+            {
+                rot = TileRotation[(i, j)].Y;
+
+                if (specialColor)
+                {
+                    float maxC = color.B / 255f;
+                    maxC = Math.Clamp(maxC, 0, 1);
+                    c = new Color(maxC * 0, maxC * 0.6f, maxC, 0);
+                }
+                float Totaldx = 0;
+                for (int x = 0; x < Length; x++)
+                {
+                    float value0 = Length - x;
+                    float LowerRotation = 1 / (value0) * rot * kRot;
+
+                    float dx = MathUtils.Sin(LowerRotation) * 16;
+
+                    if (x == Length - 1)
+                    {
+                        texReed = texFlower;
+                        reedRectangle = flowerRectangle;
+                        reedOrigin = flowerOrigin;
+                    }
+                    Main.spriteBatch.Draw(texReed, new Vector2(i * 16 + offsetX + Totaldx, (j - x) * 16 + offsetY) + zero - Main.screenPosition, reedRectangle, c, LowerRotation, reedOrigin, new Vector2(1f, MathUtils.Sqrt(256 + dx * dx) / 16f + 0.1f), SpriteEffects.None, 0f);
+                    Totaldx += dx;
+                }
+            }
+            else//无旋转
+            {
+                rot = 0;
+                if (specialColor)
+                {
+                    float maxC = color.B / 255f;
+                    maxC = Math.Clamp(maxC, 0, 1);
+                    c = new Color(maxC * 0, maxC * 0.6f, maxC, 0);
+                }
+                for (int x = 0; x < Length; x++)
+                {
+                    if (x == Length - 1)
+                    {
+                        texReed = texFlower;
+                        reedRectangle = flowerRectangle;
+                        reedOrigin = flowerOrigin;
+                    }
+                    Main.spriteBatch.Draw(texReed, new Vector2(i * 16 + offsetX, (j - x) * 16 + offsetY) + zero - Main.screenPosition, reedRectangle, c, rot * kRot, reedOrigin, 1f, SpriteEffects.None, 0f);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 绘制连线
+        /// </summary>
+        public void DrawTexLine(Vector2 StartPos, Vector2 EndPos, Color c0, float Wid, Texture2D tex)
+        {
+            Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
+
+            List<Vertex2D> vertex2Ds = new List<Vertex2D>();
+
+            for (int x = 0; x < 3; x++)
+            {
+                vertex2Ds.Add(new Vertex2D(StartPos + Width + new Vector2(x / 3f).RotatedBy(x) - Main.screenPosition, c0, new Vector3(0, 0, 0)));
+                vertex2Ds.Add(new Vertex2D(EndPos + Width + new Vector2(x / 3f).RotatedBy(x) - Main.screenPosition, c0, new Vector3(0, 1, 0)));
+                vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x) - Main.screenPosition, c0, new Vector3(1, 0, 0)));
+
+                vertex2Ds.Add(new Vertex2D(EndPos + Width + new Vector2(x / 3f).RotatedBy(x) - Main.screenPosition, c0, new Vector3(0, 1, 0)));
+                vertex2Ds.Add(new Vertex2D(EndPos - Width + new Vector2(x / 3f).RotatedBy(x) - Main.screenPosition, c0, new Vector3(1, 1, 0)));
+                vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x) - Main.screenPosition, c0, new Vector3(1, 0, 0)));
+            }
+
+            Main.graphics.GraphicsDevice.Textures[0] = tex;
+            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
         }
     }
 }

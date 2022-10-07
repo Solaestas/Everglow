@@ -45,7 +45,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                 var tile = Main.tile[i, j];
                 foreach (Player player in Main.player)
                 {
-                    if (player.Hitbox.Intersects(new Rectangle(i * 16 - 8, j * 16 - 8, 18, 18)))
+                    if (player.Hitbox.Intersects(new Rectangle(i * 16, j * 16, 16, 16)))
                     {
                         if (!TileSpin.TileRotation.ContainsKey((i, j - tile.TileFrameY / 16 + 1)))
                         {

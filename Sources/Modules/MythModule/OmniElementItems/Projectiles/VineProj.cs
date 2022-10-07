@@ -143,7 +143,6 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
         {
             behindProjectiles.Add(index);
-            
         }
     }
 }

@@ -94,7 +94,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 }
                 Everglow.HookSystem.DisableDrawBackground = false;
             }
-            if (CorruptMoth.CorruputMothNPC != null && CorruptMoth.CorruputMothNPC.active)//发光物体在boss战时变暗
+            if (CorruptMoth.CorruptMothNPC != null && CorruptMoth.CorruptMothNPC.active)//发光物体在boss战时变暗
             {
                 luminance = MathHelper.Lerp(luminance, 0.1f, 0.02f);
             }
@@ -103,7 +103,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
                 luminance = MathHelper.Lerp(luminance, 1, 0.02f);
                 if (luminance == 1)
                 {
-                    CorruptMoth.CorruputMothNPC = null;
+                    CorruptMoth.CorruptMothNPC = null;
                 }
             }
         }
@@ -506,7 +506,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             };
             Effect bgW = MythContent.QuickEffect("Effects/BackgroundWrap");
             var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-            var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
+            var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
             bgW.Parameters["uTransform"].SetValue(projection);
             bgW.Parameters["uTime"].SetValue(0.34f);
             bgW.CurrentTechnique.Passes[0].Apply();

@@ -15,18 +15,19 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             Projectile.DamageType = DamageClass.Summon;
             Projectile.tileCollide = false;
         }
+
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
 
             Vector2 AimCenter = Main.MouseWorld;
             bool weakening = false;
-            for(int x = -80;x < 808;x+=8)
+            for (int x = -80; x < 808; x += 8)
             {
-                if(Collision.SolidCollision(AimCenter + new Vector2(0, x), 1, 1))
+                if (Collision.SolidCollision(AimCenter + new Vector2(0, x), 1, 1))
                 {
                     AimCenter += new Vector2(0, x);
-                    if(x <= 0)
+                    if (x <= 0)
                     {
                         weakening = true;
                     }
@@ -39,15 +40,15 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             if (Main.mouseRight && player.HeldItem.type == ItemID.CrystalStorm && !weakening)
             {
                 Projectile.timeLeft = Intensity + 60;
-                if(Intensity < 450)
+                if (Intensity < 450)
                 {
-                    Intensity+=3;
+                    Intensity += 3;
                 }
             }
             else
             {
-                Intensity-=5;
-                if(Intensity <= 0)
+                Intensity -= 5;
+                if (Intensity <= 0)
                 {
                     Projectile.Kill();
                 }
@@ -83,7 +84,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
                 float k3 = k2 * k2 * k2 * k2;
                 Vector2 v2 = new Vector2(Main.rand.NextFloat(-150f, 150f) / (k3 * 10f + 1f), -k3 * 200 + 10);
 
-                CrystalParticleStorm cp = new CrystalParticleStorm()
+                CrystalParticleStorm cp = new CrystalParticleStorm
                 {
                     timeLeft = 120,
                     size = Main.rand.NextFloat(0.03f, 0.06f),
@@ -92,17 +93,19 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
                     Visible = true,
                     AI0 = Main.rand.NextFloat(6.283f),
                     AI1 = Intensity / 1400f * Main.rand.NextFloat(0.85f, 1.15f),
-                    AI2 = 1
+                    AI2 = 1,
+                    position = Projectile.Center
                 };
-                cp.position = Projectile.Center;
 
                 VFXManager.Add(cp);
             }
         }
+
         public override bool PreDraw(ref Color lightColor)
         {
             return false;
         }
+
         internal int Intensity = 0;
         internal Vector2 RingPos = Vector2.Zero;
     }

@@ -1,22 +1,20 @@
-﻿using Terraria.GameContent;
-using Everglow.Sources.Commons.Function.Vertex;
-using Everglow.Sources.Commons.Function.ObjectPool;
-using Everglow.Sources.Commons.Core.VFX.Visuals;
-using Everglow.Sources.Commons.Core.VFX.Pipelines;
+﻿using Everglow.Sources.Commons.Core;
 using Everglow.Sources.Commons.Core.VFX;
-using Everglow.Sources.Commons.Core;
+using Everglow.Sources.Commons.Core.VFX.Pipelines;
+using Everglow.Sources.Commons.Core.VFX.Visuals;
+using Everglow.Sources.Commons.Function.Vertex;
+using Terraria.GameContent;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.CrystalStorm
 {
     [Pipeline(typeof(WCSPipeline))]
-
     internal class CrystalParticleStorm : Visual
     {
         public Vector2 position;
         public Vector2 velocity;
 
-        Vector2 AimCenter;
-        Vector2 OldAimCenter;
+        private Vector2 AimCenter;
+        private Vector2 OldAimCenter;
 
         public int timeLeft;
         public float size;
@@ -42,6 +40,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
         private float RamdomC;
 
         private float Ros;
+
         public override void OnSpawn()
         {
             AimCenter = Main.MouseWorld;
@@ -55,9 +54,9 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             p3 = new Vector2(Main.rand.NextFloat(-0.5f, 0.5f), Main.rand.NextFloat(-0.5f, 0.5f));
             base.OnSpawn();
         }
+
         public override void Update()
         {
-
             if ((OldAimCenter - Main.MouseWorld).Length() > 200 && OldAimCenter != Vector2.Zero)
             {
                 if (timeLeft > 20)
@@ -79,38 +78,33 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             float xCoefficient = Dy * Dy / 600f - 0.4f * Dy + 50;
             Vector2 TrueAim = AimCenter + new Vector2(xCoefficient * (float)(Math.Sin(Main.timeForVisualEffects * 0.1 + AI0)), 0) - position;
 
-
-
             AI2 = (byte)(AI2 * 0.95 + xCoefficient * 0.05);
 
             if (!Main.mouseRight)
             {
-                velocity = velocity * 0.75f + new Vector2(Utils.SafeNormalize(TrueAim, new Vector2(0, 0.05f)).X, -AI1 * 0.3f) * 0.25f / (float)(AI2) * 500f;
+                velocity = velocity * 0.75f + new Vector2(Utils.SafeNormalize(TrueAim, new Vector2(0, 0.05f)).X, -AI1 * 0.3f) * 0.25f / AI2 * 500f;
                 velocity *= Main.rand.NextFloat(0.85f, 1.15f);
             }
             else
             {
-                velocity = velocity * 0.75f + new Vector2(Utils.SafeNormalize(TrueAim, new Vector2(0, 0.05f)).X, -AI1 * 0.3f) * 0.25f / (float)(AI2) * 500f;
+                velocity = velocity * 0.75f + new Vector2(Utils.SafeNormalize(TrueAim, new Vector2(0, 0.05f)).X, -AI1 * 0.3f) * 0.25f / AI2 * 500f;
                 velocity *= Main.rand.NextFloat(0.85f, 1.15f);
             }
 
-
-
             position += velocity;
             timeLeft -= 1;
-            if(timeLeft <= 0)
+            if (timeLeft <= 0)
             {
                 Kill();
             }
-
 
             Theta += Ros;
             po1 = new Vector2(p1.X, p1.Y * (float)Math.Sin(Theta)).RotatedBy(rotation) * 90 * size;
             po2 = new Vector2(p2.X, p2.Y * (float)Math.Sin(Theta)).RotatedBy(rotation) * 90 * size;
             po3 = new Vector2(p3.X, p3.Y * (float)Math.Sin(Theta)).RotatedBy(rotation) * 90 * size;
             rotation -= omega * 0.66f;
-            
-            if(timeLeft < 20)
+
+            if (timeLeft < 20)
             {
                 size *= 0.9f;
             }
@@ -119,9 +113,9 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
                 size *= 1.1f;
             }
         }
+
         public override void Draw()
         {
-
             List<Vertex2D> Vy = new List<Vertex2D>();
             Color colorD = Color.White;
             Vector2 v1 = po1 + position;
@@ -170,6 +164,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             gd.Textures[0] = TextureAssets.MagicPixel.Value;
             gd.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count - 2);
         }
+
         public override CallOpportunity DrawLayer => CallOpportunity.PostDrawNPCs;
     }
 }
