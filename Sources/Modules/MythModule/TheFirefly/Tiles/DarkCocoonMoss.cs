@@ -47,25 +47,25 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                 Tile t2 = Main.tile[i, j + 1];
                 Tile t3 = Main.tile[i + 1, j];
                 Tile t4 = Main.tile[i - 1, j];
-                if (!t0.IsHalfBlock && !t2.HasTile)
+                if (t0.Slope == SlopeType.Solid && !t2.HasTile)
                 {
                     t2.TileType = (ushort)ModContent.TileType<Tiles.FireflyMoss>();
                     t2.HasTile = true;
-                    t2.TileFrameY = (short)(Main.rand.Next(6, 9) * 18);
+                    t2.TileFrameY = (short)(Main.rand.Next(3, 6) * 18);
                 }
-                if (!t0.IsHalfBlock && !t4.HasTile)
+                if (t0.Slope == SlopeType.Solid && !t4.HasTile)
                 {
                     t4.TileType = (ushort)ModContent.TileType<Tiles.FireflyMoss>();
                     t4.HasTile = true;
                     t4.TileFrameY = (short)(Main.rand.Next(9, 12) * 18);
                 }
-                if (!t0.IsHalfBlock && !t3.HasTile)
+                if (t0.Slope== SlopeType.Solid && !t3.HasTile)
                 {
                     t3.TileType = (ushort)ModContent.TileType<Tiles.FireflyMoss>();
                     t3.HasTile = true;
-                    t3.TileFrameY = (short)(Main.rand.Next(3, 6) * 18);
+                    t3.TileFrameY = (short)(Main.rand.Next(6, 9) * 18);
                 }
-                if (!t0.IsHalfBlock && !t1.HasTile)
+                if (t0.Slope == SlopeType.Solid && !t1.HasTile)
                 {
                     t1.TileType = (ushort)ModContent.TileType<Tiles.FireflyMoss>();
                     t1.HasTile = true;

@@ -11,10 +11,10 @@
         {
             Item.width = 16;
             Item.height = 28;
-            Item.rare = 0;
+            Item.rare = ItemRarityID.White;
             Item.scale = 1f;
-            Item.createTile = ModContent.TileType<Tiles.StreetLantern >();
-            Item.useStyle = 1;
+            Item.createTile = ModContent.TileType<Tiles.StreetLantern>();
+            Item.useStyle = ItemUseStyleID.Swing;
             Item.useTurn = true;
             Item.useAnimation = 15;
             Item.useTime = 15;
