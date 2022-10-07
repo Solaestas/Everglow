@@ -61,7 +61,7 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
         public override void OnInitialization()
         {
             base.OnInitialization();
-            inner = new UIImage(ModContent.Request<Texture2D>("Everglow/Sources/Commons/Core/UI/Images/VerticalScrollbarInner", AssetRequestMode.ImmediateLoad).Value, Color.White);
+            inner = new UIImage(ModContent.Request<Texture2D>("Everglow/Sources/Commons/Core/UI/Images/VerticalScrollbar", AssetRequestMode.ImmediateLoad).Value, Color.White);
             inner.Info.Left.Pixel = -(inner.Info.Width.Pixel - Info.Width.Pixel) / 2f;
             Register(inner);
         }
