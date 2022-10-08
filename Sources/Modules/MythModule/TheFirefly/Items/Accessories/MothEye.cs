@@ -1,4 +1,5 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Sources.Commons.Function.FeatureFlags;
+using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
@@ -54,8 +55,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
             if (!fireflyBiome.IsBiomeActive(Main.LocalPlayer))
             {
                 Texture2D mEyeTex = MythContent.QuickTexture("TheFirefly/Items/Accessories/MothEyeOff");
-                Texture2D eyeInd = MythContent.QuickTexture("TheFirefly/Items/Accessories/MothEye_IndicationOff"); //Keep for testing purposes (Use debug in config)
-                spriteBatch.Draw(eyeInd, /*altPosition + Utils.Size(mEyeTex) / 2.6f*/drawPos + new Vector2(15f) * scale, null, new Color(255, 255, 255, 250), 0f, new Vector2(8), scale * 1.4f, SpriteEffects.None, 0f);
+                if (EverglowConfig.DebugMode == true)
+                {
+                    Texture2D eyeInd = MythContent.QuickTexture("TheFirefly/Items/Accessories/MothEye_IndicationOff"); //Keep for testing purposes (Use debug in config)
+                    spriteBatch.Draw(eyeInd, /*altPosition + Utils.Size(mEyeTex) / 2.6f*/drawPos + new Vector2(15f) * scale, null, new Color(255, 255, 255, 250), 0f, new Vector2(8), scale * 1.4f, SpriteEffects.None, 0f);
+                }
                 spriteBatch.Draw(mEyeTex, position, null, drawColor, 0f, origin, scale, 0, 0f);
                 // UNFINISHED
             }
