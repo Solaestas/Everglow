@@ -84,12 +84,12 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles
                                 }
                             }
                         }
-                        if(Main.tile[i, j].WallType == 0)
+                    }
+                    if (Main.tile[i, j].WallType == 0)
+                    {
+                        if (!TileSpin.TileRotation.ContainsKey((i, j - (tile.TileFrameY % 108) / 18)))
                         {
-                            if (!TileSpin.TileRotation.ContainsKey((i, j - (tile.TileFrameY % 108) / 18)))
-                            {
-                                TileSpin.TileRotation.Add((i, j - (tile.TileFrameY % 108) / 18), new Vector2(Main.windSpeedCurrent * 0.2f, 0));
-                            }
+                            TileSpin.TileRotation.Add((i, j - (tile.TileFrameY % 108) / 18), new Vector2(Main.windSpeedCurrent * 0.2f, 0));
                         }
                     }
                 }
