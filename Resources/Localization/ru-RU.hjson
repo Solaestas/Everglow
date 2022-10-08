@@ -266,6 +266,22 @@
 			#食物系统物品
 			BloodGlucoseMonitor : "Blood Glucose Monitor"
 			OsmoticPressureMonitor : "Osmotic Pressure Monitor"
+
+			#Yggdrasil Items
+
+				#Yggdrasil Town
+				ChinesePartitionLamp : "Chinese Partition Lamp"
+				ChineseStyleFloorLamp : "Chinese Style Floor Lamp"
+				CyanVineBar : "Cyan Bar"
+				CyanVineOre : "Cyan Ore"
+				DoubleArmsChineseStreetLamp : "Chinese Double Arms Street Lamp"
+				HangingSkyLantern : "Hanging Sky Lantern"
+				HexagonalCeilingLamp : "Hexagonal Ceiling Lamp"
+				ShoreMud : "Dark Mud"
+				SideHangingLantern : "Side Hanging Lantern"
+				StoneDragonScaleWood : "Fossilized Dragon Scale Wood"
+				StreetLantern : "Street Lantern"
+				YellowDynastyShingles : "Yellow Dynasty Shingles"
 		}
 
 		ItemTooltip:
@@ -745,6 +761,11 @@
 		MapEntry :
 		{
 			FireflyTree : "Firefly Tree"
+			
+			#Yggdrasil
+
+				#YggdrasilTown
+				SideHangingLantern : "Side Hanging Lantern"
 		}
 		Config:
 		{
