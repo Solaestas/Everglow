@@ -2,8 +2,14 @@ using Everglow.Sources.Commons.Function.ImageReader;
 using Everglow.Sources.Modules.ZYModule.Commons.Function.MapIO;
 using Terraria.IO;
 using Terraria.WorldBuilding;
+using Everglow.Sources.Modules.YggdrasilModule.Common;
 using Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles;
 using Everglow.Sources.Modules.YggdrasilModule.KelpCurtain.Tiles;
+using Everglow.Sources.Modules.YggdrasilModule.HurricaneMaze.Tiles;
+
+using Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Walls;
+using Everglow.Sources.Modules.YggdrasilModule.KelpCurtain.Walls;
+
 
 namespace Everglow.Sources.Modules.YggdrasilModule.WorldGeneration
 {
@@ -55,6 +61,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.WorldGeneration
                                 }
                                 break;
                             case 1:
+                                //Ê¯»¯¹ÅµÀ
                                 if (pixel.R == 44 && pixel.G == 40 && pixel.B == 37)//Ê¯»¯ÁúÁÛÄ¾
                                 {
                                     tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
@@ -64,6 +71,10 @@ namespace Everglow.Sources.Modules.YggdrasilModule.WorldGeneration
                                 {
                                     tile.TileType = (ushort)ModContent.TileType<CyanVineStone>();
                                     tile.HasTile = true;
+                                }
+                                if (pixel.R == 195 && pixel.G == 217 && pixel.B == 229)//´óÇà¶Ð¿ó
+                                {
+                                    YggdrasilUtils.PlaceFrameImportantTiles(x + a,y + b,5,4, ModContent.TileType<CyanVineOre>(), Main.rand.Next(4) * 90);
                                 }
                                 if (pixel.R == 31 && pixel.G == 26 && pixel.B == 45)//ºÚÓÙÄà
                                 {
@@ -86,7 +97,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.WorldGeneration
                                 }
 
 
-
+                                //²ÔÌ¦ÂûÁ±
                                 if (pixel.R == 82 && pixel.G == 62 && pixel.B == 44)//ÁúÁÛÄ¾
                                 {
                                     tile.TileType = (ushort)ModContent.TileType<DragonScaleWood>();
@@ -99,20 +110,26 @@ namespace Everglow.Sources.Modules.YggdrasilModule.WorldGeneration
                                 }
                                 if (pixel.R == 0 && pixel.G == 0 && pixel.B == 255)
                                 {
-                                    if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
-                                    {
-                                        tile.LiquidType = LiquidID.Water;
-                                        tile.LiquidAmount = 200;
-                                        tile.HasTile = false;
-                                    }
+                                    tile.LiquidType = LiquidID.Water;
+                                    tile.LiquidAmount = 200;
+                                    tile.HasTile = false;
+                                }
+
+
+
+                                //ì«·çÃÔ¹¬
+                                if (pixel.R == 65 && pixel.G == 84 && pixel.B == 63)//Çà¸ÚÑÒ
+                                {
+                                    tile.TileType = (ushort)ModContent.TileType<CyanWindGranite>();
+                                    tile.HasTile = true;
                                 }
                                 break;
                             case 2:
-                                if (pixel.R == 0 && pixel.G == 0 && pixel.B == 5)// == new SixLabors.ImageSharp.PixelFormats.Rgb24(0, 0, 5))
+                                if (pixel.R == 24 && pixel.G == 0 && pixel.B == 0)
                                 {
                                     if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
                                     {
-                                        //tile.WallType = (ushort)ModContent.WallType<Walls.DarkCocoonWall>();
+                                        tile.WallType = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
                                     }
                                 }
                                 break;
@@ -127,11 +144,10 @@ namespace Everglow.Sources.Modules.YggdrasilModule.WorldGeneration
         /// </summary>
         public static void BuildtheTreeWorld()
         {
-            //Point16 AB = CocoonPos();
-            int a = 0;//AB.X;
-            int b = 0;//AB.Y;
             Main.statusText = "YggdrasilStart";
-            ShapeTile("Tree.bmp", a, b, 1);
+            ShapeTile("Tree.bmp", 0, 0, 1);
+            Main.statusText = "YggdrasilWall";
+            ShapeTile("TreeWall.bmp", 0, 0, 2);
         }
         private static void SmoothTile(int a = 0, int b = 0, int c = 0, int d = 0)
         {

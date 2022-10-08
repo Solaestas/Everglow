@@ -9,7 +9,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Background
 {
     public class MineRoadBackground : ModSystem
     {
-        Vector2 BiomeCenter = new Vector2(6000, 187000);
+        Vector2 BiomeCenter = new Vector2(7200, 180000);
         /// <summary>
         /// ≥ı ºªØ
         /// </summary>
@@ -73,7 +73,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Background
         public static bool BiomeActive()
         {
             
-            if (Main.screenPosition.Y > 180000)
+            if (Main.screenPosition.Y > 168000)
             {
                 if (SubworldSystem.IsActive<YggdrasilWorld>())
                 {

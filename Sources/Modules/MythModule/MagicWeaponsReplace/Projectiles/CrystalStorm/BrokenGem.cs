@@ -84,11 +84,6 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
         }
 
         private float fade = 0;
-
-        private Effect ef;
-        private Vector2 VS1;
-        private Vector2 VS2;
-        private Vector2 VS3;
         public override void PostDraw(Color lightColor)
         {
 
@@ -96,8 +91,6 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
         public void DrawWarp()
         {
             Color colorD = new Color(0f, 0.01f,0f);
-
-            int DrawBase = (int)(122.5 + Math.Sin(RamdomC) * 122.5);
             List<Vertex2D> Vx = new List<Vertex2D>();
 
             Vx.Add(new Vertex2D(po1 + Projectile.Center - Main.screenPosition, colorD, new Vector3(0, 0, 0)));

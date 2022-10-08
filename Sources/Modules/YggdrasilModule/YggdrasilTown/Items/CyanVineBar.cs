@@ -25,7 +25,7 @@
         }
         public override void AddRecipes()
         {
-            CreateRecipe()
+            CreateRecipe(4)
                 .AddIngredient(ModContent.ItemType<Items.CyanVineOre>(), 3)
                 .AddTile(TileID.Hellforge)
                 .Register();

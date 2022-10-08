@@ -36,7 +36,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         Vector2 vec = Vector2.Zero;
         public override void AI()
         {
-            Lighting.AddLight(projectile.Center,0.5f,0.1f,1f);
+            Lighting.AddLight(projectile.Center,0.9f, 0.6f, 0);
             Player player = Main.player[projectile.owner];
             if (projectile.ai[0] == 0)
             {

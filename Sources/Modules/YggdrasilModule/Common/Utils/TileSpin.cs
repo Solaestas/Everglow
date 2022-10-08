@@ -24,7 +24,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.Common.Utils
 
                 if (Main.tile[i, j].WallType == 0)
                 {
-                    Omega = Omega * 0.99f - (Math.Clamp(Main.windSpeedCurrent, -1, 1) * (0.3f + MathUtils.Sin(i + (float)Main.time / 12f) * 0.1f)) * 0.2f;
+                    Omega = Omega * 0.99f - (Math.Clamp(Main.windSpeedCurrent, -1, 1) * (0.3f + MathUtils.Sin(j + i + (float)Main.time / 12f) * 0.1f)) * 0.2f;
                 }
                 TileRotation[(i, j)] = new Vector2(Omega, rot + Omega);
 
@@ -210,8 +210,8 @@ namespace Everglow.Sources.Modules.YggdrasilModule.Common.Utils
                 c = color;
             }
             Vector2 Position1 = Vector2.Zero;
-            Vector2 Position2 = Position1;
-            Vector2 Position3 = Position2;
+            Vector2 Position2 = Position1 + new Vector2(0, 10);
+            Vector2 Position3 = Position2 + new Vector2(0, 9);
             if (TileRotation.ContainsKey((i, j)))
             {
                 rot = TileRotation[(i, j)].Y;

@@ -9,7 +9,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule
 {
     internal class YggdrasilWorld : SubWorldModule.Subworld
     {
-        public override int Width => 1000;
+        public override int Width => 1200;
 
         public override int Height => 12000;
 
@@ -27,3 +27,4 @@ namespace Everglow.Sources.Modules.YggdrasilModule
         }
     }
 }
+

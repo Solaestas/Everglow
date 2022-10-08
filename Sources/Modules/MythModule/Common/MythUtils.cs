@@ -1,6 +1,4 @@
-﻿using Terraria.GameContent;
-
-namespace Everglow.Sources.Modules.MythModule.Common
+﻿namespace Everglow.Sources.Modules.MythModule.Common
 {
     public class MythUtils
     {
