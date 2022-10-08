@@ -3,11 +3,7 @@ using Terraria.ObjectData;
 
 namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles
 {
-<<<<<<<< HEAD:Sources/Modules/YggdrasilModule/YggdrasilTown/Tiles/StreetLantern.cs
-    public class StreetLantern : ModTile
-========
     public class ChineseStyleFloorLamp : ModTile
->>>>>>>> omnielement/Yggdrasil:Sources/Modules/YggdrasilModule/YggdrasilTown/Tiles/ChineseStyleFloorLamp.cs
     {
         public override void PostSetDefaults()
         {
@@ -44,11 +40,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles
         }
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-<<<<<<<< HEAD:Sources/Modules/YggdrasilModule/YggdrasilTown/Tiles/StreetLantern.cs
-            Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Items.StreetLantern>());
-========
             Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Items.ChineseStyleFloorLamp>());
->>>>>>>> omnielement/Yggdrasil:Sources/Modules/YggdrasilModule/YggdrasilTown/Tiles/ChineseStyleFloorLamp.cs
         }
         public override void PlaceInWorld(int i, int j, Item item)
         {
