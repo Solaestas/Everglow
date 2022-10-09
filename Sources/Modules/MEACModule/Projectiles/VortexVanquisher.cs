@@ -116,7 +116,6 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                 }
                 if (t >= 20 && t < 40)
                 {
-                    Lighting.AddLight(Projectile.Center, 0.9f, 0.6f, 0f);
                     if (t == 20)
                     {
                         SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
@@ -168,7 +167,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                 }
                 if (timer > 20 && timer < 35)
                 {
-                    Lighting.AddLight(Projectile.Center, 0.9f, 0.6f, 0f);
+                    Lighting.AddLight(Projectile.Center + mainVec, 0.9f, 0.6f, 0f);
                     isAttacking = true;
                     Projectile.rotation += Projectile.spriteDirection * 0.4f;
                     mainVec = Vector2Elipse(180, Projectile.rotation, -1.2f);
@@ -203,7 +202,9 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                     {
                         int r = 6;
                         Vector2 pos = Projectile.Center + Vector2.Lerp(-mainVec, mainVec, i / 30f) - new Vector2(r);
-                        Dust.NewDust(pos, r * 2, r * 2, DustID.YellowTorch);
+                        Dust s = Dust.NewDustDirect(pos, r * 2, r * 2, DustID.AmberBolt);
+                        s.noGravity = true;
+                        s.velocity *= 0.1f;
                     }
                     mainVec = Projectile.rotation.ToRotationVector2() * 0.001f;
                     Projectile.Center += new Vector2(Projectile.spriteDirection * 120, 0);
@@ -221,7 +222,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                 }
                 else if (timer > 1)
                 {
-                    Lighting.AddLight(Projectile.Center, 0.9f, 0.6f, 0f);
+                    Lighting.AddLight(Projectile.Center + mainVec, 0.9f, 0.6f, 0f);
                     float BodyRotation = (float)(Math.Sin((timer - 10) / 30d * Math.PI)) * 0.3f * player.direction * player.gravDir;
                     player.fullRotation = BodyRotation;
                     player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
@@ -240,7 +241,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                 }
                 if (timer < 120)
                 {
-                    Lighting.AddLight(Projectile.Center, 0.9f, 0.6f, 0f);
+                    Lighting.AddLight(Projectile.Center + mainVec + Projectile.velocity, 0.9f, 0.6f, 0f);
                     if (timer % 10 == 0)
                     {
                         AttSound(SoundID.Item1);
