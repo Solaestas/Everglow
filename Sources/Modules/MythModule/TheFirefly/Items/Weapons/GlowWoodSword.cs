@@ -12,12 +12,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
     {
         public override void SetStaticDefaults()
         {
-            GetGlowMask = MythContent.SetStaticDefaultsGlowMask(this);
+            ItemGlowManager.AutoLoadItemGlow(this);
         }
-        public static short GetGlowMask = 0;
         public override void SetDefaults()
         {
-            Item.glowMask = GetGlowMask;
+            Item.glowMask = ItemGlowManager.GetItemGlow(this);
             Item.damage = 13;
             Item.DamageType = DamageClass.Melee;
             Item.width = 56;
@@ -30,6 +29,22 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             Item.rare = ItemRarityID.White;
             Item.UseSound = SoundID.Item1;
             Item.autoReuse = false;
+        }
+        public override void MeleeEffects(Player player, Rectangle hitbox)
+        {
+            if (player.itemAnimation % 4 == 2)
+            {
+                Vector2 v0 = new Vector2(-3 * player.direction, -7 * player.gravDir).RotatedBy((player.itemAnimationMax - player.itemAnimation) * 0.13 * player.direction * player.gravDir + Math.Sin(Main.timeForVisualEffects / 16) * 0.3);
+                Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center + v0 * 3,v0, ModContent.ProjectileType<Projectiles.GlowWoodSword>(), (int)(Item.damage * 0.3f), Item.knockBack, player.whoAmI);
+            }
+            base.MeleeEffects(player, hitbox);
+        }
+        public override void AddRecipes()
+        {
+            Recipe recipe = CreateRecipe();
+            recipe.AddIngredient(ModContent.ItemType<GlowWood>(), 12);
+            recipe.AddTile(TileID.WorkBenches);
+            recipe.Register();
         }
     }
 }
