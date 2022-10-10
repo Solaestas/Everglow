@@ -12,6 +12,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.KelpCurtain.Tiles
             Main.tileBlendAll[Type] = false;
             Main.tileBlockLight[Type] = true;
             Main.tileShine2[Type] = false;
+            Main.tileMerge[Type][ModContent.TileType<OldMoss>()] = true;
             //Main.tileFrameImportant[(int)base.Type] = false;
             Main.ugBackTransition = 1000;
             DustType = DustID.BorealWood;

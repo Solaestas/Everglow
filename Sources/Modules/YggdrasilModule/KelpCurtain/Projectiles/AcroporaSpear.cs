@@ -218,7 +218,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.KelpCurtain.Projectiles
 
                 if (timer > 20 && timer < 35)
                 {
-                    Lighting.AddLight(Projectile.Center, 0.6f, 0.9f, 0f);
+                    Lighting.AddLight(Projectile.Center + mainVec, 0.24f, 0.36f, 0f);
                     isAttacking = true;
                     Projectile.rotation += Projectile.spriteDirection * 0.4f;
                     mainVec = Vector2Elipse(220, Projectile.rotation, -1.2f, rot);
@@ -259,7 +259,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.KelpCurtain.Projectiles
                 }
                 if (timer > 20 && timer < 75)
                 {
-                    Lighting.AddLight(Projectile.Center, 0.6f, 0.9f, 0f);
+                    Lighting.AddLight(Projectile.Center + mainVec, 0.24f, 0.36f, 0f);
                     isAttacking = true;
                     Projectile.rotation -= Projectile.spriteDirection * 0.4f;
                     mainVec = Vector2Elipse(250, Projectile.rotation, -1.2f,0,1000);

@@ -83,4 +83,4 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
         //    base.EquipFrameEffects(player, type);
         //} UNFINISHED. Please help
     }
-} //   TODO: Item Equip Effects (Displays a different equip texture when fighting a boss, See MothEye_Neck.png and MothEye_NeckOff.png
+} //   TODO: Finish Item Equip Effects (Displays a different equip texture when in the Firefly Biome, See MothEye_Neck.png and MothEye_NeckOff.png

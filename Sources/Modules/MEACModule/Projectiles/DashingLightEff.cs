@@ -27,7 +27,7 @@
         private Vector2 vec = Vector2.Zero;
         public override void AI()
         {
-            Lighting.AddLight(projectile.Center,0.9f, 0.6f, 0);
+            Lighting.AddLight(projectile.Center + projectile.velocity * (40 - Projectile.timeLeft) * 0.6f,0.9f, 0.6f, 0);
             Player player = Main.player[projectile.owner];
             if (projectile.ai[0] == 0)
             {

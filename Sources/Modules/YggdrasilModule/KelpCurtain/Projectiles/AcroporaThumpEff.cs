@@ -28,7 +28,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.KelpCurtain.Projectiles
         Vector2 vec = Vector2.Zero;
         public override void AI()
         {
-            Lighting.AddLight(projectile.Center,0.6f,0.9f,0f);
+            Lighting.AddLight(projectile.Center + projectile.velocity * (40 - Projectile.timeLeft) * 0.2f, 0.24f, 0.36f, 0f);
             Player player = Main.player[projectile.owner];
             if (projectile.ai[0] == 0)
             {
