@@ -90,10 +90,10 @@ namespace Everglow.Sources.Modules.YggdrasilModule.KelpCurtain.Background
             var texC1 = YggdrasilContent.QuickTexture("KelpCurtain/Background/KelpCurtainMiddle");
             var texC2 = YggdrasilContent.QuickTexture("KelpCurtain/Background/KelpCurtainFar");
 
-            BackgroundManager.QuickDrawBG(texSky, GetDrawRect(texSky.Size(), 0f, true), baseColor, 148000, 169975, true, true);
-            BackgroundManager.QuickDrawBG(texC2, GetDrawRect(texC2.Size(), 0.10f, true), baseColor, 148000, 169975, false, false);
-            BackgroundManager.QuickDrawBG(texC1, GetDrawRect(texC1.Size(), 0.15f, true), baseColor, 148000, 169975, false, false);
-            BackgroundManager.QuickDrawBG(texClose, GetDrawRect(texClose.Size(), 0.35f, true), baseColor, 148000, 169975, false, false);
+            BackgroundManager.QuickDrawBG(texSky, GetDrawRect(texSky.Size(), 0f, true), baseColor, 148000, 171175, true, true);
+            BackgroundManager.QuickDrawBG(texC2, GetDrawRect(texC2.Size(), 0.10f, true), baseColor, 148000, 171175, false, false);
+            BackgroundManager.QuickDrawBG(texC1, GetDrawRect(texC1.Size(), 0.15f, true), baseColor, 148000, 171175, false, false);
+            BackgroundManager.QuickDrawBG(texClose, GetDrawRect(texClose.Size(), 0.35f, true), baseColor, 148000, 171175, false, false);
         }
         /// <summary>
         /// 获取XY向缩放比例
