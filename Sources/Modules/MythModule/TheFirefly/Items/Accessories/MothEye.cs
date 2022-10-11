@@ -23,6 +23,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             player.maxMinions += 1;
+            player.maxTurrets += 1;
             player.GetDamage(DamageClass.Summon) *= 1.06f;
             int[] FireflyWeapon =
                 {
@@ -38,7 +39,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
                 };
             if (fireflyBiome.IsBiomeActive(player))
             {
-                player.maxTurrets += 1;
+                player.GetCritChance(DamageClass.Summon) += 8;
                 player.wingTime += 0.20f; // For some reason, this makes it as if the player has featherfall when they hold the jump button and their wing time ends. Hopefully we fix it. ~Setnour6
 
                 for (int f = 0; f < player.inventory.Length; f++)
@@ -195,7 +196,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
         }
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
-            tooltips.Add(new TooltipLine(Everglow.Instance, "UnfinishedItem", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.UnfinishedItem")));
             if (fireflyBiome.IsBiomeActive(Main.LocalPlayer))
             {
                 tooltips.AddRange(new TooltipLine[]
@@ -207,6 +207,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
                     new(Everglow.Instance, "MothEyeText4", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.MothEyeText4")),
                 }); // Using \n would cause spacing problems in the tooltip section (blank space underneath all tooltips). ~Setnour6
             }
+            tooltips.Add(new TooltipLine(Everglow.Instance, "UnfinishedItem", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.UnfinishedItem")));
         }
 
         public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
