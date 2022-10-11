@@ -41,32 +41,42 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
             }
             tooltips.Add(new TooltipLine(Everglow.Instance, "UnfinishedItem", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.UnfinishedItem")));
         }
-        public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
-        {
-
-            return true;
-        }
         public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
             if (!fireflyBiome.IsBiomeActive(Main.LocalPlayer))
             {
                 Texture2D mEyeTex = MythContent.QuickTexture("TheFirefly/Items/Accessories/MothEye_GlowOff");
+                for (int x = 0; x < 8; x++)
+                {
+                    Vector2 v0 = new Vector2(0, 8 + 3f * (float)Main.timeForVisualEffects).RotatedBy(x / 4d * Math.PI);
+                    spriteBatch.Draw(mEyeTex, position + v0 * 15, null, new Color(1f, 1f, 1f, 0), 0f, origin, scale, 0, 0f);
+                }
                 spriteBatch.Draw(mEyeTex, position, null, drawColor, 0f, origin, scale, 0, 0f);
             }
             else
             {
                 Texture2D mEyeTex = MythContent.QuickTexture("TheFirefly/Items/Accessories/MothEye_GlowOn");
+                for(int x = 0;x < 8;x++)
+                {
+                    Vector2 v0 = new Vector2(0, 6 + 2f * (float)(Math.Sin(Main.timeForVisualEffects * 0.1))).RotatedBy(x / 4d * Math.PI);
+                    spriteBatch.Draw(mEyeTex, position + v0, null, new Color(0.2f, 0.2f, 0.2f, 0), 0f, origin, scale, 0, 0f);
+                }
                 spriteBatch.Draw(mEyeTex, position, null, drawColor, 0f, origin, scale, 0, 0f);
             }
         }
         //public override void EquipFrameEffects(Player player, EquipType type)
         //{
-        //    if (fireflyBiome.IsBiomeActive(Main.LocalPlayer))
+        //    if (fireflyBiome.IsBiomeActive(player))
         //    {
-        //        Texture2D mEyeTex2 = MythContent.QuickTexture("TheFirefly/Items/Accessories/MothEyeOff");
+        //        Texture2D mEyeTex1 = MythContent.QuickTexture("TheFirefly/Items/Accessories/MothEye_Neck");
         //    }
-        //    base.EquipFrameEffects(player, type);
-        //} UNFINISHED. Please help
+        //    else
+        //    {
+        //        Texture2D mEyeTex2 = MythContent.QuickTexture("TheFirefly/Items/Accessories/MothEye_NeckOff");
+        //        EquipTexture.Equals(mEyeTex2, type);
+        //    }
+        //}
+        //TODO:DIDNOT FINISH Equipped Effect:Change texture in Firefly biome, fail.
     }
     class MothEyePlayer : ModPlayer
     {
@@ -100,9 +110,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
                     break;
                 }
             }
-        }
-        public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
-        {
         }
     }
 } //   TODO: Finish Item Equip Effects (Displays a different equip texture when in the Firefly Biome, See MothEye_Neck.png and MothEye_NeckOff.png
