@@ -20,7 +20,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 
             var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
             {
-                CustomTexturePath = "TheFirefly/NPCs/ExampleCentipede_Bestiary",
+                CustomTexturePath = "TheFirefly/NPCs/FireflyCentipede_Bestiary",
                 Position = new Vector2(40f, 24f),
                 PortraitPositionXOverride = 0f,
                 PortraitPositionYOverride = 12f
