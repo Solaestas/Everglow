@@ -57,8 +57,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             return true;
         }
 
-        public override void AddRecipes()
+        public override void UpdateInventory(Player player)
         {
+            base.UpdateInventory(player);
         }
     }
 }
