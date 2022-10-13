@@ -27,10 +27,6 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles
             ModTranslation modTranslation = base.CreateMapEntryName(null);
             AddMapEntry(new Color(151, 31, 32), modTranslation);
         }
-        public override void NumDust(int i, int j, bool fail, ref int num)
-        {
-            num = (fail ? 1 : 3);
-        }
         public override void NearbyEffects(int i, int j, bool closer)
         {
             if (Main.tile[i, j].TileFrameX < 40 && Main.tile[i, j].TileFrameY < 40)

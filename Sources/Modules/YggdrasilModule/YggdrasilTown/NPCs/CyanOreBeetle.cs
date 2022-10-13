@@ -29,7 +29,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.NPCs
             {
                 return 0f;
             }
-            return 0.3f;
+            return 3f;
         }
         public void Stop()
         {
@@ -52,7 +52,38 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.NPCs
                 NPC.spriteDirection = Math.Sign((player.Center - NPC.Center).X);
             }
             NPC.localAI[0] += 1;
-            if (NPC.collideY)
+            bool HasNearTile = false;
+            Vector2 Total = Vector2.Zero;
+            for(int x = 0;x < 10;x++)
+            {
+                Vector2 v0 = NPC.Center;
+                Vector2 v1 = new Vector2(0, 16).RotatedBy(x / 5d * Math.PI);
+                if (Collision.SolidCollision(v0 + v1, 1, 1))
+                {
+                    HasNearTile = true;
+                    Total += v1 / 12f;
+                }
+                else
+                {
+                    Total -= v1 / 12f;
+                }
+            }
+            for (int x = 0; x < 20; x++)
+            {
+                Vector2 v0 = NPC.Center;
+                Vector2 v1 = new Vector2(0, 32).RotatedBy(x / 10d * Math.PI);
+                if (Collision.SolidCollision(v0 + v1, 1, 1))
+                {
+                    HasNearTile = true;
+                    Total += v1 / 48f;
+                }
+                else
+
+                {
+                    Total -= v1 / 48f;
+                }
+            }
+            if (HasNearTile)
             {
                 if (NPC.localAI[0] % Math.Clamp((int)((12 - NPC.velocity.Length())), 1, 12) == 0)
                 {
@@ -69,9 +100,15 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.NPCs
                 {
                     NPC.velocity.X += NPC.spriteDirection * NPC.scale;
                 }
+                NPC.rotation = (float)(Math.Atan2(Total.Y, Total.X) + Math.PI / 2d * 3);
+                if(NPC.velocity == NPC.oldVelocity)
+                {
+                    NPC.velocity += new Vector2(0,-3).RotatedBy(NPC.rotation);
+                }
             }
             else
             {
+                NPC.rotation = 0;
                 NPC.frame.Y = 126;
             }
         }
