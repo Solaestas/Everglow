@@ -29,7 +29,15 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
                 player.GetDamage(DamageClass.Generic) *= 1.18f;
                 player.GetAttackSpeed(DamageClass.SummonMeleeSpeed) *= 1.1f;
                 player.GetAttackSpeed(DamageClass.Melee) *= 1.1f;
-                player.GetCritChance(DamageClass.Melee) *= 0;
+                if (player.GetCritChance(DamageClass.Melee) > 0)
+                    player.GetTotalCritChance(DamageClass.Melee);
+                    player.GetCritChance(DamageClass.Melee) = 0;
+                if (player.GetCritChance(DamageClass.MeleeNoSpeed) > 0)
+                    player.GetTotalCritChance(DamageClass.MeleeNoSpeed);
+                    player.GetCritChance(DamageClass.MeleeNoSpeed) = 0;
+                if (player.GetCritChance(DamageClass.SummonMeleeSpeed) > 0)
+                    player.GetTotalCritChance(DamageClass.SummonMeleeSpeed);
+                    player.GetCritChance(DamageClass.SummonMeleeSpeed) = 0;
                 player.GetCritChance(DamageClass.SummonMeleeSpeed) *= 0;
             } // Does anyone know how to set all melee weapon crit chances to 0? I can set them to negatives but it would look weird. ~Setnour6
         }
