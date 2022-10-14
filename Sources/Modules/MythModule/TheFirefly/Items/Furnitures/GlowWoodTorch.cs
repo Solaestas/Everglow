@@ -6,14 +6,16 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures
     {
         public override void SetStaticDefaults()
         {
-            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 100;
         }
 
         public override void SetDefaults()
         {
+            Item.flame = true;
             Item.width = 10;
-            Item.height = 22;
-            Item.maxStack = 99;
+            Item.height = 12;
+            Item.value = 50;
+            Item.maxStack = 999;
             Item.holdStyle = 1;
             Item.noWet = false;
             Item.useTurn = true;
@@ -21,8 +23,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures
             Item.useAnimation = 15;
             Item.useTime = 10;
             Item.useStyle = ItemUseStyleID.Swing;
+            Item.holdStyle = ItemHoldStyleID.HoldFront;
             Item.consumable = true;
-            Item.value = 500;
             Item.createTile = ModContent.TileType<Tiles.Furnitures.GlowWoodTorch>();
         }
 
@@ -33,11 +35,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures
 
         public override void HoldItem(Player player)
         {
-            if (Main.rand.Next((player.itemAnimation > 0) ? 10 : 20) == 0)
+            if (Main.rand.NextBool((player.itemAnimation > 0) ? 10 : 20))
             {
-                //Dust.NewDust(new Vector2(player.itemLocation.X + 16f * player.direction, player.itemLocation.Y - 14f * player.gravDir), 4, 4, ModContent.DustType<>());
+                Dust d = Dust.NewDustDirect(new Vector2(player.itemLocation.X + 10f * player.direction - 6, player.itemLocation.Y - 14f * player.gravDir), 4, 4, ModContent.DustType<Dusts.BlueToPurpleSpark>(),0,0,0,default(Color),Main.rand.NextFloat(0.95f,1.65f));
+                d.velocity.Y = -2;
+                d.velocity.X *= 0.05f;
             }
-            Lighting.AddLight(player.RotatedRelativePoint(new Vector2(player.itemLocation.X + 12f * player.direction + player.velocity.X, player.itemLocation.Y - 14f + player.velocity.Y), true, true), 1f, 1f, 1f);
+            Lighting.AddLight(player.RotatedRelativePoint(new Vector2(player.itemLocation.X + 12f * player.direction + player.velocity.X, player.itemLocation.Y - 14f + player.velocity.Y), true, true), 0.7f, 0.06f, 1f);
         }
 
         public override void PostUpdate()
@@ -49,7 +53,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures
         {
             wetTorch = true;
         }
-
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe(3);

@@ -27,13 +27,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
 
-            DustType = ModContent.DustType<BlueGlow>();
+            DustType = ModContent.DustType<Dusts.BlueToPurpleSpark>();
             AdjTiles = new int[] { TileID.Campfire };
 
             // Placement
             TileObjectData.newTile.CopyFrom(TileObjectData.Style3x2); // this style already takes care of direction for us
             TileObjectData.newTile.CoordinateHeights = new[] { 16, 16 };
-            //TileObjectData.newTile.DrawYOffset = 3;
+            TileObjectData.newTile.DrawYOffset = 3;
             TileObjectData.addTile(Type);
 
             // Etc
@@ -49,22 +49,16 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             frameCounter++;
             if (frameCounter >= 6)
             {
-                frame = (frame + 1) % 9;
+                frame = (frame + 1) % 8;
                 frameCounter = 0;
             }
         }
-
-        public override void NumDust(int i, int j, bool fail, ref int num)
-        {
-            num = (fail ? 1 : 3);
-        }
-
         public override bool CreateDust(int i, int j, ref int type)
         {
-            Tile tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
+            Tile tile = Main.tile[i ,j];
             if (tile.TileFrameX < 54)
             {
-                type = DustID.Smoke;
+                type = ModContent.DustType<Dusts.BlueToPurpleSpark>();
                 return true;
             }
             else
@@ -80,16 +74,42 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             {
                 player.AddBuff(BuffID.Campfire, 20, true, false);
             }
+            Tile tile = Main.tile[i, j];
+            if (tile.TileFrameX < 54 && tile.TileFrameY == 18)
+            {
+                int frequency = 24;
+                if (tile.TileFrameX == 18)
+                {
+                    frequency = 8;
+                }
+                if (!Main.gamePaused && Main.instance.IsActive && (!Lighting.UpdateEveryFrame || Main.rand.NextBool(4)) && Main.rand.NextBool(frequency))
+                {
+                    Rectangle dustBox = Utils.CenteredRectangle(new Vector2(i * 16, j * 16), new Vector2(16, 16));
+                    int numForDust = Dust.NewDust(dustBox.TopLeft(), dustBox.Width, dustBox.Height, ModContent.DustType<Dusts.BlueToPurpleSpark>(), 0f, 0f, 254, default(Color), Main.rand.NextFloat(0.95f, 1.75f));
+                    Dust obj = Main.dust[numForDust];
+                    obj.velocity *= 0.4f;
+                    Main.dust[numForDust].velocity.Y -= 0.8f;
+                }
+            }
         }
 
         public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
         {
-            Tile tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
+            Tile tile = Main.tile[i, j];
             if (tile.TileFrameX < 54)
             {
-                r = 0.1f;
-                g = 0.9f;
-                b = 1f;
+                if(tile.TileFrameY == 18)
+                {
+                    r = 0.1f;
+                    g = 0.1f;
+                    b = 1.1f;
+                }
+                if (tile.TileFrameY == 0 && tile.TileFrameX == 18)
+                {
+                    r = 0.6f;
+                    g = 0f;
+                    b = 0.3f;
+                }
             }
             else
             {
@@ -156,6 +176,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             Item.NewItem(new EntitySource_TileBreak(x, y), x * 16, y * 16, 48, 32, ModContent.ItemType<Items.Furnitures.GlowWoodCampfire>());
         }
 
+
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
             var tile = Main.tile[i, j];
@@ -165,9 +186,17 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
                 zero = Vector2.Zero;
             }
             Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodCampfireGlow");
-            spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(0.8f, 0.8f, 0.8f, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
-
-            base.PostDraw(i, j, spriteBatch);
+            int frameYOffset = Main.tileFrame[Type] * AnimationFrameHeight;
+            if (tile.TileFrameX < 54)
+            {
+                spriteBatch.Draw(tex, new Vector2(i * 16, j * 16 + 3) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY + frameYOffset, 16, 16), new Color(0.8f, 0.8f, 0.8f, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
+            }
+            if(tile.TileFrameX == 18 && tile.TileFrameY % 36 == 0)
+            {
+                Color cTile = Lighting.GetColor(i, j - 1);
+                spriteBatch.Draw(tex, new Vector2(i * 16, j * 16 - 16 + 3) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX + 54, tile.TileFrameY + frameYOffset, 16, 16), cTile, 0, new Vector2(0), 1, SpriteEffects.None, 0);
+                spriteBatch.Draw(tex, new Vector2(i * 16, j * 16 - 16 + 3) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX + 54, tile.TileFrameY + frameYOffset, 16, 16), new Color(0.8f, 0.8f, 0.8f, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
+            }
         }
     }
 }
