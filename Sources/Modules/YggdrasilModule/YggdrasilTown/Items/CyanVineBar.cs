@@ -22,12 +22,13 @@
             Item.consumable = true;
             Item.maxStack = 999;
             Item.value = 1600;
+            Item.createTile = ModContent.TileType<Tiles.CyanVineBar>();
         }
         public override void AddRecipes()
         {
             CreateRecipe(4)
                 .AddIngredient(ModContent.ItemType<Items.CyanVineOre>(), 3)
-                .AddTile(TileID.Hellforge)
+                .AddTile(TileID.Furnaces)
                 .Register();
         }
     }

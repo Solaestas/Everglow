@@ -24,9 +24,5 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles
         {
             return false;
         }
-        public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
-        {
-            //SoundEngine.PlaySound(SoundID.NPCHit4, i * 16, j * 16);
-        }
     }
 }

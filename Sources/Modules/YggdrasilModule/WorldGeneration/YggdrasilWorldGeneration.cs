@@ -25,7 +25,6 @@ namespace Everglow.Sources.Modules.YggdrasilModule.WorldGeneration
             {
                 Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everlow.Common.WorldSystem.BuildtheTreeWorld");
                 BuildtheTreeWorld();
-                SmoothTile();
             }
         }
 
@@ -61,7 +60,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.WorldGeneration
                                 }
                                 break;
                             case 1:
-                                //石化古道
+                                //天穹古道
                                 if (pixel.R == 44 && pixel.G == 40 && pixel.B == 37)//石化龙鳞木
                                 {
                                     tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
@@ -81,21 +80,6 @@ namespace Everglow.Sources.Modules.YggdrasilModule.WorldGeneration
                                     tile.TileType = (ushort)ModContent.TileType<DarkMud>();
                                     tile.HasTile = true;
                                 }
-                                if (pixel.R == 255 && pixel.G == 8 && pixel.B == 0)//测试用建筑
-                                {
-                                    MapIO mapIO = new MapIO(x, y);
-                                    string pathName = "Sources/Modules/YggdrasilModule/YggdrasilTown/MapIOs/WoodBridge01.mapio";
-
-                                    mapIO.Read(Everglow.Instance.GetFileStream(pathName));
-
-                                    var it = mapIO.GetEnumerator();
-                                    while (it.MoveNext())
-                                    {
-                                        WorldGen.SquareTileFrame(it.CurrentCoord.X, it.CurrentCoord.Y);
-                                        WorldGen.SquareWallFrame(it.CurrentCoord.X, it.CurrentCoord.Y);
-                                    }
-                                }
-
 
                                 //苍苔蔓帘
                                 if (pixel.R == 82 && pixel.G == 62 && pixel.B == 44)//龙鳞木
@@ -133,11 +117,86 @@ namespace Everglow.Sources.Modules.YggdrasilModule.WorldGeneration
                                     }
                                 }
                                 break;
+                            case 3://天穹古道建筑
+                                if (pixel.R == 121 && pixel.G == 5 && pixel.B == 255)//FolkHouseofChineseStyle TypeA  28x11
+                                {
+                                    QuickBuild(x, y, "YggdrasilTown/MapIOs/1FolkHouseofChineseStyleTypeA28x11.mapio");
+                                }
+                                if (pixel.R == 120 && pixel.G == 5 && pixel.B == 255)//FolkHouseofChineseStyle TypeB  28x11
+                                {
+                                    QuickBuild(x, y, "YggdrasilTown/MapIOs/1FolkHouseofChineseStyleTypeB28x11.mapio");
+                                }
+
+                                if (pixel.R == 122 && pixel.G == 5 && pixel.B == 255)//FolkHouseofWood＆StoneStruture TypeA  28x11
+                                {
+                                    QuickBuild(x, y, "YggdrasilTown/MapIOs/2FolkHouseofWood＆StoneStrutureTypeA28x11.mapio");
+                                }
+                                if (pixel.R == 123 && pixel.G == 5 && pixel.B == 255)//FolkHouseofWood＆StoneStruture TypeB  28x11
+                                {
+                                    QuickBuild(x, y, "YggdrasilTown/MapIOs/2FolkHouseofWood＆StoneStrutureTypeA28x11.mapio");
+                                }
+
+                                if (pixel.R == 124 && pixel.G == 5 && pixel.B == 255)//Smithy TypeA  22x8
+                                {
+                                    QuickBuild(x, y, "YggdrasilTown/MapIOs/3SmithyTypeA22x8.mapio");
+                                }
+                                if (pixel.R == 125 && pixel.G == 5 && pixel.B == 255)//Smithy TypeB  22x8
+                                {
+                                    QuickBuild(x, y, "YggdrasilTown/MapIOs/3SmithyTypeB22x8.mapio");
+                                }
+
+                                if (pixel.R == 126 && pixel.G == 5 && pixel.B == 255)//FolkHouseofWoodStruture TypeA  22x10
+                                {
+                                    QuickBuild(x, y, "YggdrasilTown/MapIOs/4FolkHouseofWoodStrutureTypeA22x10.mapio");
+                                }
+                                if (pixel.R == 127 && pixel.G == 5 && pixel.B == 255)//FolkHouseofWoodStruture TypeB  22x10
+                                {
+                                    QuickBuild(x, y, "YggdrasilTown/MapIOs/4FolkHouseofWoodStrutureTypeB22x10.mapio");
+                                }
+                                if (pixel.R == 128 && pixel.G == 5 && pixel.B == 255)//FolkHouseofWoodStruture TypeC  22x10
+                                {
+                                    QuickBuild(x, y, "YggdrasilTown/MapIOs/4FolkHouseofWoodStrutureTypeC22x10.mapio");
+                                }
+                                if (pixel.R == 129 && pixel.G == 5 && pixel.B == 255)//FolkHouseofWoodStruture TypeD  22x10
+                                {
+                                    QuickBuild(x, y, "YggdrasilTown/MapIOs/4FolkHouseofWoodStrutureTypeD22x10.mapio");
+                                }
+
+                                if (pixel.R == 130 && pixel.G == 5 && pixel.B == 255)//FolkHouseofWoodStruture TypeA  23x13
+                                {
+                                    QuickBuild(x, y, "YggdrasilTown/MapIOs/5TwoStoriedFolkHouseTypeA23x13.mapio");
+                                }
+                                if (pixel.R == 131 && pixel.G == 5 && pixel.B == 255)//FolkHouseofWoodStruture TypeB  23x13
+                                {
+                                    QuickBuild(x, y, "YggdrasilTown/MapIOs/5TwoStoriedFolkHouseTypeB23x13.mapio");
+                                }
+                                if (pixel.R == 132 && pixel.G == 5 && pixel.B == 255)//FolkHouseofWoodStruture TypeC  23x13
+                                {
+                                    QuickBuild(x, y, "YggdrasilTown/MapIOs/5TwoStoriedFolkHouseTypeC23x13.mapio");
+                                }
+
+                                if (pixel.R == 133 && pixel.G == 5 && pixel.B == 255)//Church 80x51
+                                {
+                                    QuickBuild(x, y, "YggdrasilTown/MapIOs/Church80x51.mapio");
+                                }
+                                break;
                         }
                     }
                 }
-            });
-           
+            });   
+        }
+        public static void QuickBuild(int x, int y, string Path)
+        {
+            MapIO mapIO = new MapIO(x, y);
+
+            mapIO.Read(Everglow.Instance.GetFileStream("Sources/Modules/YggdrasilModule/" + Path));
+
+            var it = mapIO.GetEnumerator();
+            while (it.MoveNext())
+            {
+                WorldGen.SquareTileFrame(it.CurrentCoord.X, it.CurrentCoord.Y);
+                WorldGen.SquareWallFrame(it.CurrentCoord.X, it.CurrentCoord.Y);
+            }
         }
         /// <summary>
         /// 建造天穹树
@@ -148,6 +207,10 @@ namespace Everglow.Sources.Modules.YggdrasilModule.WorldGeneration
             ShapeTile("Tree.bmp", 0, 0, 1);
             Main.statusText = "YggdrasilWall";
             ShapeTile("TreeWall.bmp", 0, 0, 2);
+            SmoothTile();
+
+            Main.statusText = "YggdrasilTown";
+            ShapeTile("Tree.bmp", 0, 0, 3);
         }
         private static void SmoothTile(int a = 0, int b = 0, int c = 0, int d = 0)
         {
