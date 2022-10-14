@@ -24,7 +24,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             TileID.Sets.Torch[Type] = true;
 
             ItemDrop = ModContent.ItemType<Items.Furnitures.GlowWoodTorch>();
-            DustType = ModContent.DustType<BlueGlow>();
+            DustType = ModContent.DustType<Dusts.BlueToPurpleSpark>();
             AdjTiles = new int[] { TileID.Torches };
 
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
@@ -73,12 +73,27 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 
             if (tile.TileFrameX < 66)
             {
-                r = 0.1f;
-                g = 0.9f;
+                r = 0.7f;
+                g = 0.06f;
                 b = 1f;
             }
         }
-
+        public override void NearbyEffects(int i, int j, bool closer)
+        {
+            Tile tile = Main.tile[i, j];
+            if (tile.TileFrameX < 54)
+            {
+                int frequency = 20;
+                if (!Main.gamePaused && Main.instance.IsActive && (!Lighting.UpdateEveryFrame || Main.rand.NextBool(4)) && Main.rand.NextBool(frequency))
+                {
+                    Rectangle dustBox = Utils.CenteredRectangle(new Vector2(i * 16 + 8, j * 16 + 4), new Vector2(16, 16));
+                    int numForDust = Dust.NewDust(dustBox.TopLeft(), dustBox.Width, dustBox.Height, ModContent.DustType<Dusts.BlueToPurpleSpark>(), 0f, 0f, 254, default(Color), Main.rand.NextFloat(0.95f, 1.75f));
+                    Dust obj = Main.dust[numForDust];
+                    obj.velocity *= 0.4f;
+                    Main.dust[numForDust].velocity.Y -= 0.4f;
+                }
+            }
+        }
         public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY)
         {
             offsetY = 0;
@@ -118,19 +133,27 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             }
 
             ulong randSeed = Main.TileFrameSeed ^ (ulong)((long)j << 32 | (uint)i); // Don't remove any casts.
-            Color color = new Color(100, 100, 100, 0);
+            Color color = new Color(55, 5, 255, 0);
             int width = 20;
             int height = 20;
             var tile = Main.tile[i, j];
             int frameX = tile.TileFrameX;
             int frameY = tile.TileFrameY;
-
+            color.A = 40;
             for (int k = 0; k < 7; k++)
             {
                 float xx = Utils.RandomInt(ref randSeed, -10, 11) * 0.15f;
                 float yy = Utils.RandomInt(ref randSeed, -10, 1) * 0.35f;
 
-                spriteBatch.Draw(flameTexture.Value, new Vector2(i * 16 - (int)Main.screenPosition.X - (width - 16f) / 2f + xx, j * 16 - (int)Main.screenPosition.Y + offsetY + yy) + zero, new Rectangle(frameX, frameY, width, height), color, 0f, default, 1f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(flameTexture.Value, new Vector2(i * 16 - (int)Main.screenPosition.X - (width - 16f) / 2f + xx, j * 16 - (int)Main.screenPosition.Y + offsetY + yy + k * 0.2f) + zero, new Rectangle(frameX, frameY, width, height), color, 0f, default, 1f, SpriteEffects.None, 0f);
+            }
+            color = new Color(55, 55, 55, 0);
+            for (int k = 0; k < 7; k++)
+            {
+                float xx = Utils.RandomInt(ref randSeed, -10, 11) * 0.15f;
+                float yy = Utils.RandomInt(ref randSeed, -10, 1) * 0.35f;
+
+                spriteBatch.Draw(flameTexture.Value, new Vector2(i * 16 - (int)Main.screenPosition.X - (width - 16f) / 2f + xx, j * 16 - (int)Main.screenPosition.Y + offsetY + yy + 3 - k * 0.3f) + zero, new Rectangle(frameX, frameY, width, height), color, 0f, default, 1f, SpriteEffects.None, 0f);
             }
         }
     }
