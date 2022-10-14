@@ -1,8 +1,5 @@
 using Everglow.Sources.Commons.Function.ImageReader;
 using Everglow.Sources.Commons.Function.Vertex;
-using Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses;
-using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
 
 namespace Everglow.Sources.Modules.YggdrasilModule.Common.BackgroundManager
 {
@@ -59,10 +56,11 @@ namespace Everglow.Sources.Modules.YggdrasilModule.Common.BackgroundManager
                 bgW = YggdrasilContent.QuickEffect("Common/BackgroundManager/BackgroundXYWarp");
             }
             var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-            var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
             bgW.Parameters["uTransform"].SetValue(projection);
             bgW.Parameters["uTime"].SetValue(0.34f);
             bgW.CurrentTechnique.Passes[0].Apply();
+
+            //处理掉超出地图界限的部分
             int DrawMaxY = Main.screenHeight;
             int DrawMinY = 0;
             float YSqueezeValueUp = 0f;
@@ -70,23 +68,23 @@ namespace Everglow.Sources.Modules.YggdrasilModule.Common.BackgroundManager
             if (Main.screenPosition.Y + Main.screenHeight > Ymax)
             {
                 DrawMaxY = Ymax - (int)Main.screenPosition.Y;
-                YSqueezeValueDown = (float)DrawMaxY / (float)(Main.screenHeight);
+                YSqueezeValueDown = (float)DrawMaxY / Main.screenHeight;
             }
             if (Main.screenPosition.Y < Ymin)
             {
                 DrawMinY = Ymin - (int)Main.screenPosition.Y;
-                YSqueezeValueUp = (float)DrawMinY / (float)(Main.screenHeight);
+                YSqueezeValueUp = DrawMinY / (float)Main.screenHeight;
             }
 
             List<Vertex2D> CloseII = new List<Vertex2D>
             {
-                new Vertex2D(new Vector2(0, DrawMinY), baseColor, new Vector3(drawArea.X / (float)tex.Width, (drawArea.Y + drawArea.Height * YSqueezeValueUp) / (float)tex.Height, 0)),
-                new Vertex2D(new Vector2(Main.screenWidth, DrawMinY), baseColor, new Vector3((drawArea.X + drawArea.Width) / (float)tex.Width, (drawArea.Y + drawArea.Height * YSqueezeValueUp)/ (float)tex.Height, 0)),
-                new Vertex2D(new Vector2(0, DrawMaxY), baseColor, new Vector3(drawArea.X / (float)tex.Width, (drawArea.Y + drawArea.Height * YSqueezeValueDown) / (float)tex.Height, 0)),
+                new Vertex2D(new Vector2(0, DrawMinY), baseColor, new Vector3(drawArea.X / (float)tex.Width, (drawArea.Y + (drawArea.Height * YSqueezeValueUp)) / tex.Height, 0)),
+                new Vertex2D(new Vector2(Main.screenWidth, DrawMinY), baseColor, new Vector3((drawArea.X + drawArea.Width) / (float)tex.Width, (drawArea.Y + drawArea.Height * YSqueezeValueUp)/ tex.Height, 0)),
+                new Vertex2D(new Vector2(0, DrawMaxY), baseColor, new Vector3(drawArea.X / (float)tex.Width, (drawArea.Y + drawArea.Height * YSqueezeValueDown) / tex.Height, 0)),
 
-                new Vertex2D(new Vector2(0, DrawMaxY), baseColor, new Vector3(drawArea.X / (float)tex.Width, (drawArea.Y + drawArea.Height * YSqueezeValueDown) / (float)tex.Height, 0)),
-                new Vertex2D(new Vector2(Main.screenWidth, DrawMinY), baseColor, new Vector3((drawArea.X + drawArea.Width) / (float)tex.Width, (drawArea.Y + drawArea.Height * YSqueezeValueUp) / (float)tex.Height, 0)),
-                new Vertex2D(new Vector2(Main.screenWidth, DrawMaxY), baseColor, new Vector3((drawArea.X + drawArea.Width) / (float)tex.Width, (drawArea.Y + drawArea.Height * YSqueezeValueDown) / (float)tex.Height, 0))
+                new Vertex2D(new Vector2(0, DrawMaxY), baseColor, new Vector3(drawArea.X / (float)tex.Width, (drawArea.Y + drawArea.Height * YSqueezeValueDown) / tex.Height, 0)),
+                new Vertex2D(new Vector2(Main.screenWidth, DrawMinY), baseColor, new Vector3((drawArea.X + drawArea.Width) / (float)tex.Width, (drawArea.Y + drawArea.Height * YSqueezeValueUp) / tex.Height, 0)),
+                new Vertex2D(new Vector2(Main.screenWidth, DrawMaxY), baseColor, new Vector3((drawArea.X + drawArea.Width) / (float)tex.Width, (drawArea.Y + drawArea.Height * YSqueezeValueDown) / tex.Height, 0))
             };
             if (CloseII.Count > 2)
             {
