@@ -1,8 +1,7 @@
-﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+﻿using Everglow.Sources.Commons.Core.Utils;
 using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.ObjectData;
-using Everglow.Sources.Commons.Core.Utils;
-using Everglow.Sources.Modules.MythModule.TheFirefly;
+
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 {
     public class LampLotus : ModTile
@@ -23,15 +22,16 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             AddMapEntry(new Color(81, 110, 255), modTranslation);
             HitSound = SoundID.Grass;
         }
+
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
         }
+
         public override void RandomUpdate(int i, int j)
         {
             var tile = Main.tile[i, j];
             var tile2 = Main.tile[i, j - 1];
 
-            
             if (tile2.TileType != tile.TileType)
             {
                 int length = 0;
@@ -46,6 +46,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                 }
             }
         }
+
         public override void NearbyEffects(int i, int j, bool closer)
         {
             if (closer)
@@ -82,7 +83,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                                 }
                             }
                         }
-                        if(Main.tile[i, j - length].WallType == 0)
+                        if (Main.tile[i, j - length].WallType == 0)
                         {
                             if (!TileSpin.TileRotation.ContainsKey((i, j)))
                             {
@@ -104,13 +105,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                 }
             }
         }
+
         public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
         {
             var tile = Main.tile[i, j];
             if (Main.tile[i, j + 1].TileType != tile.TileType)
             {
                 int length = 0;
-                while(Main.tile[i, j - length].TileType == tile.TileType)
+                while (Main.tile[i, j - length].TileType == tile.TileType)
                 {
                     length++;
                 }

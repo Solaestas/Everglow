@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.WorldBuilding;
+﻿using Terraria.WorldBuilding;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
 {
@@ -16,6 +11,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         public override bool NormalUpdates => true;
 
         public override List<GenPass> Tasks => new() { new MothLand.MothLandGenPass() };
+
         public override void OnLoad()
         {
             SubWorldModule.SubworldSystem.hideUnderworld = true;
@@ -23,6 +19,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             Main.rockLayer = 2;
             WorldGen.waterLine = Main.maxTilesY;
         }
+
         public override void OnEnter()
         {
             //TODO: 我希望玩家进入子世界之后能出现在传送门附近

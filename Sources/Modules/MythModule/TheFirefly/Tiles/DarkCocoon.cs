@@ -28,12 +28,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             var fireFlyTree = ModContent.GetInstance<FireflyTree>();
             fireFlyTree.InsertOneTreeRope(i, j - 8, style);
         }
+
         public override void NearbyEffects(int i, int j, bool closer)
         {
             RandomUpdate(i, j);//TODO:为了让这玩意效果正常强行采取的暴力措施，如果sublib更新了就删掉
 
             base.NearbyEffects(i, j, closer);
         }
+
         public override void RandomUpdate(int i, int j)
         {
             if (Main.rand.NextBool(6))
@@ -105,6 +107,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                             t1.TileFrameY = 16;
                             t2.TileFrameY = 0;
                             break;
+
                         case 2:
                             t1.TileType = (ushort)ModContent.TileType<Tiles.BlackStarShrubSmall>();
                             t2.TileType = (ushort)ModContent.TileType<Tiles.BlackStarShrubSmall>();
@@ -116,6 +119,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                             t1.TileFrameY = 16;
                             t2.TileFrameY = 0;
                             break;
+
                         case 3:
                             t1.TileType = (ushort)ModContent.TileType<Tiles.BlackStarShrub>();
                             t2.TileType = (ushort)ModContent.TileType<Tiles.BlackStarShrub>();
@@ -131,6 +135,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                             t2.TileFrameY = 16;
                             t3.TileFrameY = 0;
                             break;
+
                         case 4:
                             t1.TileType = (ushort)ModContent.TileType<Tiles.BlueBlossom>();
                             t2.TileType = (ushort)ModContent.TileType<Tiles.BlueBlossom>();
@@ -146,21 +151,27 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                             t2.TileFrameY = 16;
                             t3.TileFrameY = 0;
                             break;
+
                         case 5:
-                            WorldGen.Place3x2(i - 1,j - 1,(ushort)ModContent.TileType<Tiles.BlackFrenLarge>(),Main.rand.Next(3));
+                            WorldGen.Place3x2(i - 1, j - 1, (ushort)ModContent.TileType<Tiles.BlackFrenLarge>(), Main.rand.Next(3));
                             break;
+
                         case 6:
                             WorldGen.Place2x2(i - 1, j - 1, (ushort)ModContent.TileType<Tiles.BlackFren>(), Main.rand.Next(3));
                             break;
+
                         case 7:
                             WorldGen.Place3x2(i - 1, j - 1, (ushort)ModContent.TileType<Tiles.BlackFrenLarge>(), Main.rand.Next(3));
                             break;
+
                         case 8:
                             WorldGen.Place2x2(i - 1, j - 1, (ushort)ModContent.TileType<Tiles.BlackFren>(), Main.rand.Next(3));
                             break;
+
                         case 9:
                             WorldGen.Place2x1(i - 1, j - 1, (ushort)ModContent.TileType<Tiles.CocoonRock>(), Main.rand.Next(3));
                             break;
+
                         case 10:
                             WorldGen.Place2x1(i - 1, j - 1, (ushort)ModContent.TileType<Tiles.CocoonRock>(), Main.rand.Next(3));
                             break;
@@ -168,6 +179,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                 }
             }
         }
+
         public override bool CanExplode(int i, int j)
         {
             return false;

@@ -1,10 +1,10 @@
-﻿using Terraria.Localization;
-using Everglow.Sources.Commons.Function.Vertex;
+﻿using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Commons.Core.Utils;
 using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 {
@@ -16,6 +16,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
             DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "魔茧");
             Main.npcFrameCount[NPC.type] = 7;
         }
+
         public override void SetDefaults()
         {
             NPC.damage = 0;
@@ -36,7 +37,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
             NPC.aiStyle = -1;
             NPC.boss = false;
         }
+
         private float omega = 0;
+
         public override void AI()
         {
             NPC.rotation += omega;
@@ -72,7 +75,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
                             Dust d = Dust.NewDustDirect(NPC.position + new Vector2(26 - 20, 106 - 30), 40, 60, ModContent.DustType<BlueGlowAppear>(), 0, 0, 0, default, Main.rand.NextFloat(0.7f, 1.7f));
                             d.velocity = new Vector2(0, Main.rand.Next(16)).RotatedByRandom(6.283) + new Vector2(-4, 4);
 
-                            for(int k = 0;k < 3;k++)
+                            for (int k = 0; k < 3; k++)
                             {
                                 Dust d2 = Dust.NewDustDirect(NPC.position + new Vector2(26 - 20, 106 - 30), 40, 60, ModContent.DustType<BlueParticleDark2>(), 0, 0, 0, default, Main.rand.NextFloat(3.7f, 5.1f));
                                 d2.velocity = new Vector2(0, Main.rand.Next(12)).RotatedByRandom(6.283) + new Vector2(-4, 4);
@@ -86,7 +89,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
                         {
                             Main.NewText("Corrupted Moth has awoken!", 175, 75, 255);
                         }
-                        int n = NPC.NewNPC(NPC.GetSource_FromAI(),(int)NPC.position.X + 26, (int)NPC.position.Y + 106,ModContent.NPCType<CorruptMoth>());
+                        int n = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.position.X + 26, (int)NPC.position.Y + 106, ModContent.NPCType<CorruptMoth>());
                         Main.npc[n].velocity = new Vector2(-1, 1);
                         NPC.ai[2] += 1;
                     }
@@ -96,7 +99,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
                     omega *= 0.9f;
                     float step = 0.05f;
                     NPC.ai[1] += step;
-                    if(NPC.ai[1] >= 4f && NPC.ai[1] - step < 4f)
+                    if (NPC.ai[1] >= 4f && NPC.ai[1] - step < 4f)
                     {
                         omega += 0.02f;
                         NPC.ai[1] += 12;
@@ -134,6 +137,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
                 }
             }
         }
+
         public override void HitEffect(int hitDirection, double damage)
         {
             //SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/MothHitCocoon"), NPC.Center);
@@ -143,7 +147,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
             }
             else
             {
-                if(NPC.ai[1] < 90f)
+                if (NPC.ai[1] < 90f)
                 {
                     NPC.ai[1] += 0.01f;
                 }
@@ -158,6 +162,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
                 omega -= Math.Min(hitDirection * (float)damage / 10000f, 0.05f);
             }
         }
+
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             SpriteEffects effects = SpriteEffects.None;
@@ -173,6 +178,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
             Main.spriteBatch.Draw(tg, NPC.position + drawOffset - Main.screenPosition, new Rectangle?(NPC.frame), color, NPC.rotation, drawOrigin, 1f, effects, 0f);
             return false;
         }
+
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             SpriteEffects effects = SpriteEffects.None;
@@ -211,14 +217,15 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
                 DrawCrack(CrackCenter + NPC.position - Main.screenPosition, Math.Clamp(NPC.ai[1] - 24, 0, 15), 6, (int)Math.Clamp((NPC.ai[1] - 36) / 2f, 1, 50));
             }
         }
+
         public void DrawCrack(Vector2 DrawCenter, float Radius, int type, int Power = 1)
         {
             Texture2D t0 = MythContent.QuickTexture("TheFirefly/NPCs/Bosses/Crack" + type.ToString());
-            
+
             List<Vertex2D> vertex2Ds = new List<Vertex2D>();
-            for(int a = 1;a < Power + 1;a++)
+            for (int a = 1; a < Power + 1; a++)
             {
-                Color color = new Color(1f / (float)a, 1f / (float)a, 1f / (float)a, 0);
+                Color color = new Color(1f / a, 1f / a, 1f / a, 0);
                 float scale = 2 + (a - 1) / 8f;
                 Vector2 Move = new Vector2(-1, 1) * a;
                 for (int x = 0; x < 10; x++)
@@ -233,7 +240,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
                 }
             }
 
-            Main.graphics.GraphicsDevice.Textures[0] =t0;
+            Main.graphics.GraphicsDevice.Textures[0] = t0;
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
         }
     }

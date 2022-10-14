@@ -282,6 +282,9 @@
 				StoneDragonScaleWood : "Fossilized Dragon Scale Wood"
 				StreetLantern : "Street Lantern"
 				YellowDynastyShingles : "Yellow Dynasty Shingles"
+
+			#Plant Module Items
+			CactusBall : "Cactus Rod"
 		}
 
 		ItemTooltip:
@@ -552,6 +555,9 @@
 			#食物系统物品
 			BloodGlucoseMonitor : "Display hunger information"
 			OsmoticPressureMonitor : "Display thrist information"
+
+			#Plant Module Items
+			CactusBall : "Spin and throw a cactus ball!\nShred victims' armour and bleed them"
 		}
 		BuffName : 
 		{

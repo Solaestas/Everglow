@@ -1,5 +1,4 @@
-﻿using Everglow.Sources.Modules.MythModule.TheFirefly;
-using Terraria.Audio;
+﻿using Terraria.Audio;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
@@ -16,10 +15,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         private float Stre2 = 1;
         protected override bool CloneNewInstances => false;
         public override bool IsCloneable => false;
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("幻蝶泡");
         }
+
         public override void SetDefaults()
         {
             Projectile.width = 32;
@@ -36,7 +37,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         {
             int p = Player.FindClosest(Projectile.Center, 1000, 1000);
 
-            if (p >= 0 && p < 255)
+            if (p is >= 0 and < 255)
             {
                 float speed = MathHelper.Clamp((300 - Projectile.timeLeft) * 0.1f, 0, 30);
                 speed *= MathHelper.Clamp(Vector2.Distance(Projectile.Center, Main.player[p].Center) / 300, 1, 2f);
@@ -46,7 +47,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             {
                 Projectile.velocity *= 0.95f;
             }
+
             #region Origin
+
             if (Stre2 > 0)
             {
                 Stre2 -= 0.005f;
@@ -65,7 +68,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             {
                 r += 1f;
             }
-            if (Projectile.timeLeft <= 240 && Projectile.timeLeft >= 60)
+            if (Projectile.timeLeft is <= 240 and >= 60)
             {
                 r = 60 + (float)(10 * Math.Sin((Projectile.timeLeft - 60) / 60d * Math.PI));
             }
@@ -105,8 +108,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                     vB[g] += vloB[g];
                 }
             }
-            #endregion
+
+            #endregion Origin
         }
+
         public override void Kill(int timeLeft)
         {
             /*震屏
@@ -161,7 +166,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 
                 int player = Player.FindClosest(Projectile.Center, 1000, 1000);
                 float X = 0;
-                if (player >= 0 && player < 255)
+                if (player is >= 0 and < 255)
                 {
                     X = Projectile.DirectionTo(Main.player[player].Center).ToRotation();
                 }
@@ -178,11 +183,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             //Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.CorruptMoth.FruitBomb>(), 0, 0f, Main.myPlayer, 1);
             base.Kill(timeLeft);
         }
+
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             Projectile.Kill();
             return false;
         }
+
         public override bool PreDraw(ref Color lightColor)
         {
             Main.spriteBatch.Draw(ModContent.Request<Texture2D>(Texture).Value, Projectile.Center - Main.screenPosition, new Rectangle(FraX, 10 + FraY, 270, 270), new Color(1f, 1f, 1f, 0), Projectile.rotation, new Vector2(135f, 135f), r / 60f, SpriteEffects.None, 0f);

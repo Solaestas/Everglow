@@ -9,7 +9,7 @@
         /// <returns></returns>
         public static void PlaceFrameImportantTiles(int x, int y, int width, int height, int type)
         {
-            if(x > Main.maxTilesX - width || x < 0 || y > Main.maxTilesY - height || y < 0)
+            if (x > Main.maxTilesX - width || x < 0 || y > Main.maxTilesY - height || y < 0)
             {
                 return;
             }
@@ -24,6 +24,6 @@
                     tile.HasTile = true;
                 }
             }
-        }      
+        }
     }
 }

@@ -1,7 +1,6 @@
-using Everglow.Sources.Modules.MythModule.Common;
-using Terraria.GameContent.Bestiary;
-using Terraria.DataStructures;
 using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.GameContent.Bestiary;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 {
@@ -14,6 +13,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
         public float wormSpeed = 1.0f;
         public int checkHitWidth = 24;
         public Vector2 OldSpeedDirection = new Vector2(1.0f, 0.0f);
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("测试版蜈蚣");
@@ -74,6 +74,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
         }
 
         private int attackCounter;
+
         public override void SendExtraAI(BinaryWriter writer)
         {
             writer.Write(attackCounter);
@@ -94,7 +95,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
                 }
                 Player target = Main.player[NPC.target];
                 attackCounter = 2000;  // 先不让其转成蠕虫AI
-                if (attackCounter == 0){
+                if (attackCounter == 0)
+                {
                     // 如果攻击计数器为0，切换成蠕虫AI
                     bool collision = HeadAI_CheckCollisionForDustSpawns();
                     // 测量与目标的距离
@@ -106,11 +108,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
                     attackCounter = 2000;
                 }
                 // 如果靠近玩家，且头部无碰撞，且计数器大于0.就切换成爬虫AI
-                // if (attackCounter > 500 && Vector2.Distance(NPC.Center, target.Center) < 200 && !Collision.SolidCollision(NPC.Center, NPC.width / 2, NPC.height / 2))  //  && Collision.CanHit(NPC.Center, 1, 1, target.Center, 1, 1) 
-                else{
+                // if (attackCounter > 500 && Vector2.Distance(NPC.Center, target.Center) < 200 && !Collision.SolidCollision(NPC.Center, NPC.width / 2, NPC.height / 2))  //  && Collision.CanHit(NPC.Center, 1, 1, target.Center, 1, 1)
+                else
+                {
                     NPC.noTileCollide = false;
                     // 先检测下右上左四个方向的碰撞
-                    Vector2[] hitDirBase = { new Vector2(0, 1), new Vector2(1, 0), new Vector2(0, -1), new Vector2(-1, 0)};
+                    Vector2[] hitDirBase = { new Vector2(0, 1), new Vector2(1, 0), new Vector2(0, -1), new Vector2(-1, 0) };
                     int[] isHitDirList = { 0, 0, 0, 0, 0 };
                     for (int i = 0; i < hitDirBase.Length; i++)
                     {
@@ -124,9 +127,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
                     }
                     // 检测离玩家多远
                     Player playerTarget = Main.player[NPC.target];
-                    Vector2 relatPosit = playerTarget.position-NPC.position;  // 相对位置
+                    Vector2 relatPosit = playerTarget.position - NPC.position;  // 相对位置
                     bool xBigery = true;
-                    if(Math.Abs(relatPosit.X) <= Math.Abs(relatPosit.Y)){
+                    if (Math.Abs(relatPosit.X) <= Math.Abs(relatPosit.Y))
+                    {
                         xBigery = false;
                     }
 
@@ -154,27 +158,48 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
                         {
                             if (isHitDirList[i] == 1)
                             {
-                                if (hitDirBase[i - 1].X > 0) NPC.velocity.X = -wormSpeed;
-                                else if (hitDirBase[i - 1].X < 0) NPC.velocity.X = wormSpeed;
-                                if (hitDirBase[i - 1].Y > 0) NPC.velocity.Y = -wormSpeed;
-                                else if (hitDirBase[i - 1].Y < 0) NPC.velocity.Y = wormSpeed;
+                                if (hitDirBase[i - 1].X > 0)
+                                {
+                                    NPC.velocity.X = -wormSpeed;
+                                }
+                                else if (hitDirBase[i - 1].X < 0)
+                                {
+                                    NPC.velocity.X = wormSpeed;
+                                }
+
+                                if (hitDirBase[i - 1].Y > 0)
+                                {
+                                    NPC.velocity.Y = -wormSpeed;
+                                }
+                                else if (hitDirBase[i - 1].Y < 0)
+                                {
+                                    NPC.velocity.Y = wormSpeed;
+                                }
+
                                 Main.NewText("isHitDirList: " + (i - 1));
                             }
                         }
                         // 按照当前玩家方向为目标
-                        if(relatPosit.X * NPC.velocity.X >= 0){
+                        if (relatPosit.X * NPC.velocity.X >= 0)
+                        {
                             NPC.velocity.Y = 0f;
                         }
-                        else{
-                            if(relatPosit.Y * NPC.velocity.Y > 0 || xBigery) NPC.velocity.X = 0f;
-                            else{
+                        else
+                        {
+                            if (relatPosit.Y * NPC.velocity.Y > 0 || xBigery)
+                            {
+                                NPC.velocity.X = 0f;
+                            }
+                            else
+                            {
                                 NPC.velocity.Y = 0f;
                             }
                         }
                         Main.NewText("finally, NPC.velocity, (" + NPC.velocity.X + ", " + NPC.velocity.Y + ")");
                     }
-                    else if(isHitDirList[0] == 0){  // 上下左右都没发生碰撞，那检测四个角的碰撞(右下，右上，左上，左下)
-                        Vector2[] hitDirAdv = { new Vector2(1, 1), new Vector2(1, -1), new Vector2(-1, -1), new Vector2(-1, 1)};
+                    else if (isHitDirList[0] == 0)
+                    {  // 上下左右都没发生碰撞，那检测四个角的碰撞(右下，右上，左上，左下)
+                        Vector2[] hitDirAdv = { new Vector2(1, 1), new Vector2(1, -1), new Vector2(-1, -1), new Vector2(-1, 1) };
                         for (int i = 0; i < hitDirAdv.Length; i++)
                         {
                             Vector2 dirItem = hitDirAdv[i];
@@ -185,65 +210,85 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
                                 isHitDirList[0] += 1;
                             }
                         }
-                        if(isHitDirList[0] == 0){  // 真的在悬空
+                        if (isHitDirList[0] == 0)
+                        {  // 真的在悬空
                             // 切换蠕虫AI
                             // attackCounter = 0;
                             // NPC.noGravity = false;
                             NPC.velocity.Y += 0.1f;  // 向下落
-                            if(NPC.velocity.Y > 3f) NPC.velocity.Y = 3f;
+                            if (NPC.velocity.Y > 3f)
+                            {
+                                NPC.velocity.Y = 3f;
+                            }
+
                             Main.NewText("在悬空");
                         }
-                        else if(isHitDirList[0] == 1){  // 只有两个方向可选
+                        else if (isHitDirList[0] == 1)
+                        {  // 只有两个方向可选
                             Main.NewText("有一个对角碰撞");
-                            for (int i = 1; i < isHitDirList.Length; i++){
-                                if(isHitDirList[i] == 1){  // 先确定可能运动的方向
-                                    NPC.velocity.X = hitDirAdv[i-1].X * wormSpeed;
-                                    NPC.velocity.Y = hitDirAdv[i-1].Y * wormSpeed;
+                            for (int i = 1; i < isHitDirList.Length; i++)
+                            {
+                                if (isHitDirList[i] == 1)
+                                {  // 先确定可能运动的方向
+                                    NPC.velocity.X = hitDirAdv[i - 1].X * wormSpeed;
+                                    NPC.velocity.Y = hitDirAdv[i - 1].Y * wormSpeed;
                                     break;
                                 }
                             }
                             // 若Y方向速度远离玩家，则将其设置为0
-                            if((playerTarget.position.Y - NPC.position.Y) * NPC.velocity.Y < 0){
+                            if ((playerTarget.position.Y - NPC.position.Y) * NPC.velocity.Y < 0)
+                            {
                                 NPC.velocity.Y = 0;
                             }
-                            else{
+                            else
+                            {
                                 NPC.velocity.X = 0;
                             }
-                            Main.NewText("速度：("+NPC.velocity.X+" ,"+NPC.velocity.Y+")");
+                            Main.NewText("速度：(" + NPC.velocity.X + " ," + NPC.velocity.Y + ")");
                         }
-                        else if(isHitDirList[0] == 2 && !(isHitDirList[1] == 1 && isHitDirList[3] == 1) && !(isHitDirList[2] == 1 && isHitDirList[4] == 1)){
+                        else if (isHitDirList[0] == 2 && !(isHitDirList[1] == 1 && isHitDirList[3] == 1) && !(isHitDirList[2] == 1 && isHitDirList[4] == 1))
+                        {
                             Main.NewText("有两个对角碰撞");
                             // 只有两个碰撞，且两个位置不处于对角线,则有三个可能运动的方向
-                            NPC.velocity = new Vector2(0f,0f);
-                            for (int i = 1; i < isHitDirList.Length; i++){
-                                if(isHitDirList[i] == 1){  // 先确定可能运动的方向
-                                    NPC.velocity.X += hitDirAdv[i-1].X;
-                                    NPC.velocity.Y += hitDirAdv[i-1].Y;
+                            NPC.velocity = new Vector2(0f, 0f);
+                            for (int i = 1; i < isHitDirList.Length; i++)
+                            {
+                                if (isHitDirList[i] == 1)
+                                {  // 先确定可能运动的方向
+                                    NPC.velocity.X += hitDirAdv[i - 1].X;
+                                    NPC.velocity.Y += hitDirAdv[i - 1].Y;
                                 }
                             }
                             // X轴速度同向，可以接近玩家
-                            if(relatPosit.X * NPC.velocity.X >= 0){
+                            if (relatPosit.X * NPC.velocity.X >= 0)
+                            {
                                 NPC.velocity.X = relatPosit.X / Math.Abs(relatPosit.X) * wormSpeed;
                                 NPC.velocity.Y = 0f;
                             }
-                            else{  // 如果Y轴可以接近玩家，或者X轴距离玩家距离大于Y轴，则设置Y速度。
-                                if(relatPosit.Y * NPC.velocity.Y >= 0 || xBigery){
+                            else
+                            {  // 如果Y轴可以接近玩家，或者X轴距离玩家距离大于Y轴，则设置Y速度。
+                                if (relatPosit.Y * NPC.velocity.Y >= 0 || xBigery)
+                                {
                                     NPC.velocity.Y = relatPosit.Y / Math.Abs(relatPosit.Y) * wormSpeed;
                                     NPC.velocity.X = 0f;
                                 }
-                                else{
+                                else
+                                {
                                     NPC.velocity.X = relatPosit.X / Math.Abs(relatPosit.X) * wormSpeed;
                                     NPC.velocity.Y = 0f;
                                 }
                             }
                         }
-                        else{  // 剩余情况相同，有四个可能的运动方向
+                        else
+                        {  // 剩余情况相同，有四个可能的运动方向
                             Main.NewText("有多个对角碰撞");
-                            if(relatPosit.Y * NPC.velocity.Y >= 0 || xBigery){
+                            if (relatPosit.Y * NPC.velocity.Y >= 0 || xBigery)
+                            {
                                 NPC.velocity.Y = relatPosit.Y / Math.Abs(relatPosit.Y) * wormSpeed;
                                 NPC.velocity.X = 0f;
                             }
-                            else{
+                            else
+                            {
                                 NPC.velocity.X = relatPosit.X / Math.Abs(relatPosit.X) * wormSpeed;
                                 NPC.velocity.Y = 0f;
                             }
@@ -258,26 +303,44 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
                                 if (hitDirBase[i - 1].X == 0)
                                 {  // 在上或下碰撞，就将Y速度分量设置为0
                                     NPC.velocity.Y = 0;
-                                    if (playerTarget.position.X > NPC.position.X) NPC.velocity.X = wormSpeed;
-                                    else NPC.velocity.X = -wormSpeed;
+                                    if (playerTarget.position.X > NPC.position.X)
+                                    {
+                                        NPC.velocity.X = wormSpeed;
+                                    }
+                                    else
+                                    {
+                                        NPC.velocity.X = -wormSpeed;
+                                    }
                                 }
                                 else
                                 {  // 在左或右发生碰撞，就将X速度分量设置为0
                                     NPC.velocity.X = 0;
-                                    if (playerTarget.position.Y > NPC.position.Y) NPC.velocity.Y = wormSpeed;
-                                    else NPC.velocity.Y = -wormSpeed;
+                                    if (playerTarget.position.Y > NPC.position.Y)
+                                    {
+                                        NPC.velocity.Y = wormSpeed;
+                                    }
+                                    else
+                                    {
+                                        NPC.velocity.Y = -wormSpeed;
+                                    }
                                 }
                             }
                         }
                     }
                     // 调整头部方向
-                    if (NPC.velocity.X != 0) NPC.rotation = (float)Math.Atan2(NPC.velocity.Y, NPC.velocity.X) + MathHelper.PiOver2;
-                    else NPC.rotation = MathHelper.PiOver2 * (NPC.velocity.Y / Math.Abs(NPC.velocity.Y));
-                    
+                    if (NPC.velocity.X != 0)
+                    {
+                        NPC.rotation = (float)Math.Atan2(NPC.velocity.Y, NPC.velocity.X) + MathHelper.PiOver2;
+                    }
+                    else
+                    {
+                        NPC.rotation = MathHelper.PiOver2 * (NPC.velocity.Y / Math.Abs(NPC.velocity.Y));
+                    }
                 }
                 NPC.netUpdate = true;
             }
         }
+
         private bool HeadAI_CheckCollisionForDustSpawns()
         {
             int minTilePosX = (int)(NPC.Left.X / 16) - 1;
@@ -286,13 +349,24 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             int maxTilePosY = (int)(NPC.Bottom.Y / 16) + 2;
 
             if (minTilePosX < 0)
+            {
                 minTilePosX = 0;
+            }
+
             if (maxTilePosX > Main.maxTilesX)
+            {
                 maxTilePosX = Main.maxTilesX;
+            }
+
             if (minTilePosY < 0)
+            {
                 minTilePosY = 0;
+            }
+
             if (maxTilePosY > Main.maxTilesY)
+            {
                 maxTilePosY = Main.maxTilesY;
+            }
 
             bool collision = false;
 
@@ -314,7 +388,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
                             collision = true;
 
                             if (Main.rand.NextBool(100))
+                            {
                                 WorldGen.KillTile(i, j, fail: true, effectOnly: true, noItem: false);
+                            }
                         }
                     }
                 }
@@ -340,11 +416,17 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
                     Player player = Main.player[i];
 
                     if (ForcedTargetPosition is Vector2 target)
+                    {
                         areaCheck = new Rectangle((int)target.X - maxDistance, (int)target.Y - maxDistance, maxDistance * 2, maxDistance * 2);
+                    }
                     else if (player.active && !player.dead && !player.ghost)
+                    {
                         areaCheck = new Rectangle((int)player.position.X - maxDistance, (int)player.position.Y - maxDistance, maxDistance * 2, maxDistance * 2);
+                    }
                     else
+                    {
                         continue;  // Not a valid player
+                    }
 
                     if (hitbox.Intersects(areaCheck))
                     {
@@ -354,7 +436,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
                 }
 
                 if (tooFar)
+                {
                     collision = true;
+                }
             }
         }
 
@@ -376,10 +460,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             // Copy the value, since it will be clobbered later
             Vector2 npcCenter = NPC.Center;
 
-            float targetRoundedPosX = (float)((int)(targetXPos / 16f) * 16);
-            float targetRoundedPosY = (float)((int)(targetYPos / 16f) * 16);
-            npcCenter.X = (float)((int)(npcCenter.X / 16f) * 16);
-            npcCenter.Y = (float)((int)(npcCenter.Y / 16f) * 16);
+            float targetRoundedPosX = (int)(targetXPos / 16f) * 16;
+            float targetRoundedPosY = (int)(targetYPos / 16f) * 16;
+            npcCenter.X = (int)(npcCenter.X / 16f) * 16;
+            npcCenter.Y = (int)(npcCenter.Y / 16f) * 16;
             // dirX和dirY分别是当前蠕虫到目标的x和y距离
             float dirX = targetRoundedPosX - npcCenter.X;
             float dirY = targetRoundedPosY - npcCenter.Y;
@@ -388,7 +472,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 
             // 如果我们没有任何类型的碰撞，我们希望NPC向下并沿X轴减速。
             if (!collision && !CanFly)
+            {
                 HeadAI_Movement_HandleFallingFromNoCollision(dirX, speed, acceleration);
+            }
             else
             {
                 // 否则，我们要播放一些音频（soundDelay）并向我们的目标移动。
@@ -399,6 +485,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             // 设置NPC的转向
             HeadAI_Movement_SetRotation(collision);
         }
+
         private void HeadAI_Movement_HandleFallingFromNoCollision(float dirX, float speed, float acceleration)
         {
             NPC.TargetClosest(true);
@@ -407,31 +494,45 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 
             // Ensure that the NPC does not fall too quickly
             if (NPC.velocity.Y > speed)
+            {
                 NPC.velocity.Y = speed;
+            }
 
             // 以下行为模仿了香草虫的运动
             if (Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y) < speed * 0.4f)
             {
                 // 速度足够快，但不能太快
                 if (NPC.velocity.X < 0.0f)
+                {
                     NPC.velocity.X -= acceleration * 1.1f;
+                }
                 else
+                {
                     NPC.velocity.X += acceleration * 1.1f;
+                }
             }
             else if (NPC.velocity.Y == speed)
             {
                 // NPC has reached terminal velocity
                 if (NPC.velocity.X < dirX)
+                {
                     NPC.velocity.X += acceleration;
+                }
                 else if (NPC.velocity.X > dirX)
+                {
                     NPC.velocity.X -= acceleration;
+                }
             }
             else if (NPC.velocity.Y > 4)
             {
                 if (NPC.velocity.X < 0)
+                {
                     NPC.velocity.X += acceleration * 0.9f;
+                }
                 else
+                {
                     NPC.velocity.X -= acceleration * 0.9f;
+                }
             }
         }
 
@@ -443,10 +544,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
                 float num1 = length / 40f;
 
                 if (num1 < 10)
+                {
                     num1 = 10f;
+                }
 
                 if (num1 > 20)
+                {
                     num1 = 20f;
+                }
 
                 NPC.soundDelay = (int)num1;
 
@@ -466,61 +571,93 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             {
                 // 该NPC正在向目标地点移动
                 if (NPC.velocity.X < dirX)
+                {
                     NPC.velocity.X += acceleration;
+                }
                 else if (NPC.velocity.X > dirX)
+                {
                     NPC.velocity.X -= acceleration;
+                }
 
                 if (NPC.velocity.Y < dirY)
+                {
                     NPC.velocity.Y += acceleration;
+                }
                 else if (NPC.velocity.Y > dirY)
+                {
                     NPC.velocity.Y -= acceleration;
+                }
 
                 // 预定的Y-速度很小，而且NPC正在向左移动，目标在NPC的右边，反之亦然。
                 if (Math.Abs(dirY) < speed * 0.2 && ((NPC.velocity.X > 0 && dirX < 0) || (NPC.velocity.X < 0 && dirX > 0)))
                 {
                     if (NPC.velocity.Y > 0)
+                    {
                         NPC.velocity.Y += acceleration * 2f;
+                    }
                     else
+                    {
                         NPC.velocity.Y -= acceleration * 2f;
+                    }
                 }
                 // 预定的X-速度很小，而且NPC正在向上/向下移动，目标在NPC的下方/上方。
                 if (Math.Abs(dirX) < speed * 0.2 && ((NPC.velocity.Y > 0 && dirY < 0) || (NPC.velocity.Y < 0 && dirY > 0)))
                 {
                     if (NPC.velocity.X > 0)
+                    {
                         NPC.velocity.X = NPC.velocity.X + acceleration * 2f;
+                    }
                     else
+                    {
                         NPC.velocity.X = NPC.velocity.X - acceleration * 2f;
+                    }
                 }
             }
             else if (absDirX > absDirY)
             {
                 // X距离比Y距离大。 迫使沿X轴的运动更强烈
                 if (NPC.velocity.X < dirX)
+                {
                     NPC.velocity.X += acceleration * 1.1f;
+                }
                 else if (NPC.velocity.X > dirX)
+                {
                     NPC.velocity.X -= acceleration * 1.1f;
+                }
 
                 if (Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y) < speed * 0.5)
                 {
                     if (NPC.velocity.Y > 0)
+                    {
                         NPC.velocity.Y += acceleration;
+                    }
                     else
+                    {
                         NPC.velocity.Y -= acceleration;
+                    }
                 }
             }
             else
             {
                 if (NPC.velocity.Y < dirY)
+                {
                     NPC.velocity.Y += acceleration * 1.1f;
+                }
                 else if (NPC.velocity.Y > dirY)
+                {
                     NPC.velocity.Y -= acceleration * 1.1f;
+                }
 
                 if (Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y) < speed * 0.5)
                 {
                     if (NPC.velocity.X > 0)
+                    {
                         NPC.velocity.X += acceleration;
+                    }
                     else
+                    {
                         NPC.velocity.X -= acceleration;
+                    }
                 }
             }
         }
@@ -535,23 +672,28 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             if (collision)
             {
                 if (NPC.localAI[0] != 1)  // 碰撞检测同步
+                {
                     NPC.netUpdate = true;
+                }
 
                 NPC.localAI[0] = 1f;
             }
             else
             {
                 if (NPC.localAI[0] != 0)
+                {
                     NPC.netUpdate = true;
+                }
 
                 NPC.localAI[0] = 0f;
             }
 
             // 如果NPC的速度发生变化，并且没有被玩家 "击中"，则强制进行网络更新。
             if (((NPC.velocity.X > 0 && NPC.oldVelocity.X < 0) || (NPC.velocity.X < 0 && NPC.oldVelocity.X > 0) || (NPC.velocity.Y > 0 && NPC.oldVelocity.Y < 0) || (NPC.velocity.Y < 0 && NPC.oldVelocity.Y > 0)) && !NPC.justHit)
+            {
                 NPC.netUpdate = true;
+            }
         }
-
     }
 
     internal class CentipedeBody : FireWormBody

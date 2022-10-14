@@ -1,6 +1,5 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Commons.Function.Vertex;
-using Everglow.Sources.Modules.MEACModule;
+﻿using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.GameContent;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.CursedFlames
@@ -19,6 +18,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
             Projectile.tileCollide = false;
             Projectile.alpha = 255;
         }
+
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
@@ -50,20 +50,23 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
             if (player.itemTime == 2)
             {
                 Vector2 velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero) * player.HeldItem.shootSpeed;
-                Projectile.NewProjectile(Projectile.GetSource_FromAI(),Projectile.Center + velocity * 1, velocity, ProjectileID.CursedFlameFriendly, player.HeldItem.damage, player.HeldItem.knockBack, player.whoAmI);
+                Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + velocity * 1, velocity, ProjectileID.CursedFlameFriendly, player.HeldItem.damage, player.HeldItem.knockBack, player.whoAmI);
             }
         }
+
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
         {
             overPlayers.Add(index);
         }
+
         internal int Timer = 0;
         internal float BookScale = 12f;
+
         public override void PostDraw(Color lightColor)
         {
             Player player = Main.player[Projectile.owner];
             Texture2D Book = TextureAssets.Item[ItemID.CursedFlames].Value;
-            Texture2D BookGlow = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Item_"+ ItemID.CursedFlames +"_Glow");
+            Texture2D BookGlow = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Item_" + ItemID.CursedFlames + "_Glow");
             Texture2D Paper = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/CursedFlamesPaper");
             Color c0 = Lighting.GetColor((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f));
 
@@ -73,8 +76,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
             DrawPaper(Paper);
             DrawFront(Book);
             DrawFront(BookGlow, true);
-
         }
+
         public void DrawPaper(Texture2D tex)
         {
             Player player = Main.player[Projectile.owner];
@@ -150,7 +153,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
 
                 if (Math.Abs(rotIV) > Math.PI / 2d)
                 {
-                    if(player.direction == 1)
+                    if (player.direction == 1)
                     {
                         barsII.Add(new Vertex2D(BasePos - Y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
                         barsII.Add(new Vertex2D(BasePos + Y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
@@ -230,6 +233,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
                 }
             }
         }
+
         public void DrawBack(Texture2D tex, bool Glowing = false)
         {
             Player player = Main.player[Projectile.owner];
@@ -240,7 +244,6 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
             {
                 c0 = Lighting.GetColor((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f));
             }
-
 
             List<Vertex2D> bars = new List<Vertex2D>();
             for (int i = 0; i < 10; ++i)
@@ -256,31 +259,30 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
                 rot += Projectile.rotation;
                 if (Math.Abs(rot) > Math.PI / 2d)
                 {
-                        if (player.direction * player.gravDir == 1)
-                        {
-                            bars.Add(new Vertex2D(BasePos - Y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
-                            bars.Add(new Vertex2D(BasePos + Y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
-                        }
-                        else
-                        {
-                            bars.Add(new Vertex2D(BasePos + Y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
-                            bars.Add(new Vertex2D(BasePos - Y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
-                        }
+                    if (player.direction * player.gravDir == 1)
+                    {
+                        bars.Add(new Vertex2D(BasePos - Y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
+                        bars.Add(new Vertex2D(BasePos + Y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
                     }
                     else
                     {
-                        if (player.direction * player.gravDir == 1)
-                        {
-                            bars.Add(new Vertex2D(BasePos + Y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
-                            bars.Add(new Vertex2D(BasePos - Y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
-                        }
-                        else
-                        {
-                            bars.Add(new Vertex2D(BasePos - Y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
-                            bars.Add(new Vertex2D(BasePos + Y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
-                        }
+                        bars.Add(new Vertex2D(BasePos + Y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
+                        bars.Add(new Vertex2D(BasePos - Y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
+                    }
                 }
-
+                else
+                {
+                    if (player.direction * player.gravDir == 1)
+                    {
+                        bars.Add(new Vertex2D(BasePos + Y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
+                        bars.Add(new Vertex2D(BasePos - Y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
+                    }
+                    else
+                    {
+                        bars.Add(new Vertex2D(BasePos - Y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
+                        bars.Add(new Vertex2D(BasePos + Y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
+                    }
+                }
             }
             if (bars.Count > 0)
             {
@@ -288,6 +290,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
             }
         }
+
         public void DrawFront(Texture2D tex, bool Glowing = false)
         {
             Player player = Main.player[Projectile.owner];
@@ -299,13 +302,12 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
                 c0 = Lighting.GetColor((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f));
             }
 
-
             List<Vertex2D> bars = new List<Vertex2D>();
             for (int i = 0; i < 10; ++i)
             {
-                double rot = -Timer / 270d - i * Timer / 400d * (1+ Math.Sin(Main.timeForVisualEffects / 7d + 1) * 0.4);
+                double rot = -Timer / 270d - i * Timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d + 1) * 0.4);
                 rot += Projectile.rotation;
-                Vector2 BasePos = Projectile.Center + X0 - X0.RotatedBy(rot) * i / 4.5f - Y0 * 0.05f - X0 *0.02f;
+                Vector2 BasePos = Projectile.Center + X0 - X0.RotatedBy(rot) * i / 4.5f - Y0 * 0.05f - X0 * 0.02f;
 
                 float UpX = MathHelper.Lerp(16f / 28f, 27f / 28f, i / 9f);
                 float UpY = MathHelper.Lerp(0 / 32f, 11f / 32f, i / 9f);
@@ -345,6 +347,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
             }
         }
+
         public override void Kill(int timeLeft)
         {
             Player player = Main.player[Projectile.owner];
