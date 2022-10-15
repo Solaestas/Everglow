@@ -46,7 +46,7 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
             Info.TopMargin.Pixel = 5f;
             Info.ButtomMargin.Pixel = 5f;
             Info.IsSensitive = true;
-            uiScrollbarTexture = ModContent.Request<Texture2D>("BingoMod/UI/Images/VerticalScrollbar", AssetRequestMode.ImmediateLoad).Value;
+            uiScrollbarTexture = ModContent.Request<Texture2D>("Everglow/Sources/Commons/Core/UI/Images/VerticalScrollbar", AssetRequestMode.ImmediateLoad).Value;
             WheelValue = wheelValue;
         }
         public override void LoadEvents()
@@ -68,7 +68,7 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
         public override void OnInitialization()
         {
             base.OnInitialization();
-            inner = new UIImage(ModContent.Request<Texture2D>("BingoMod/UI/Images/VerticalScrollbarInner", AssetRequestMode.ImmediateLoad).Value, Color.White);
+            inner = new UIImage(ModContent.Request<Texture2D>("Everglow/Sources/Commons/Core/UI/Images/VerticalScrollbar", AssetRequestMode.ImmediateLoad).Value, Color.White);
             inner.Info.Left.Pixel = -(inner.Info.Width.Pixel - Info.Width.Pixel) / 2f;
             Register(inner);
         }
