@@ -8,7 +8,13 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles
         {
             Main.tileSolid[Type] = true;
             Main.tileMergeDirt[Type] = false;
-            Main.tileMerge[Type][(ushort)ModContent.TileType<Tiles.StoneScaleWood>()] = false;
+            Main.tileMerge[Type][(ushort)ModContent.TileType<CyanVine.CyanVineOreTile>()] = true;
+            Main.tileMerge[Type][(ushort)ModContent.TileType<CyanVine.CyanVineStone>()] = true;
+            Main.tileMerge[Type][(ushort)ModContent.TileType<CyanVine.CyanVineOreSmallUp>()] = true;
+            Main.tileMerge[Type][(ushort)ModContent.TileType<CyanVine.CyanVineOreSmall>()] = true;
+            Main.tileMerge[Type][(ushort)ModContent.TileType<CyanVine.CyanVineOreLargeUp>()] = true;
+            Main.tileMerge[Type][(ushort)ModContent.TileType<CyanVine.CyanVineOreLarge>()] = true;
+            Main.tileMerge[Type][(ushort)ModContent.TileType<CyanVine.CyanVineOreMiddle>()] = true;
             Main.tileBlendAll[Type] = false;
             Main.tileBlockLight[Type] = true;
             Main.tileShine2[Type] = false;

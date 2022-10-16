@@ -22,7 +22,7 @@
             Item.consumable = true;
             Item.maxStack = 999;
             Item.value = 400;
-            Item.createTile = ModContent.TileType<Tiles.CyanVineStone>();
+            Item.createTile = ModContent.TileType<Tiles.CyanVine.CyanVineStone>();
         }
     }
 }

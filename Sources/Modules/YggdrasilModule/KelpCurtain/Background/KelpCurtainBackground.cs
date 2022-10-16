@@ -73,7 +73,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.KelpCurtain.Background
         public static bool BiomeActive()
         {
             
-            if (Main.screenPosition.Y > 148000 && Main.screenPosition.Y < 170000)
+            if (Main.screenPosition.Y > 148000 && Main.screenPosition.Y < 172000)
             {
                 if (SubworldSystem.IsActive<YggdrasilWorld>())
                 {

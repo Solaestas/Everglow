@@ -90,11 +90,13 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Background
             var texC1 = YggdrasilContent.QuickTexture("YggdrasilTown/Background/MineRoadBackgroundC1");
             var texC2 = YggdrasilContent.QuickTexture("YggdrasilTown/Background/MineRoadBackgroundC2");
             var texC3 = YggdrasilContent.QuickTexture("YggdrasilTown/Background/MineRoadBackgroundC3");
+            var texBound = YggdrasilContent.QuickTexture("KelpCurtain/Background/KelpCurtainBound");
 
             BackgroundManager.QuickDrawBG(texSky, GetDrawRect(texSky.Size(), 0f, true), baseColor, 171200, 200000);
             BackgroundManager.QuickDrawBG(texC3, GetDrawRect(texClose.Size(), 0.05f, true), baseColor, 171200, 200000, false, false);
             BackgroundManager.QuickDrawBG(texC2, GetDrawRect(texClose.Size(), 0.10f, true), baseColor, 171200, 200000, false, false);
             BackgroundManager.QuickDrawBG(texC1, GetDrawRect(texClose.Size(), 0.15f, true), baseColor, 171200, 200000, false, true);
+
             Vector2 DCen = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
             Vector2 deltaPos = DCen - BiomeCenter;
             float MoveStep = 0.15f;
@@ -125,7 +127,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Background
                     DrawWaterFallInBackground(DrawCenter, 60f, 550f, baseColor * 0.12f);
                 }
             }
-
+            BackgroundManager.QuickDrawBG(texBound, GetDrawRect(texBound.Size(), 1f, true), baseColor, 171080, 171580, false, false, true);
         }
         public void DrawWaterFallInBackground(Vector2 Center, float Width, float Height, Color baseColor)
         {

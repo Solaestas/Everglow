@@ -16,9 +16,9 @@ namespace Everglow.Sources.Modules.YggdrasilModule.KelpCurtain.Tiles
             DustType = DustID.Dirt;
             MinPick = 50;
             HitSound = SoundID.Dig;
-            ItemDrop = ModContent.ItemType<Items.OldMoss>();
+            ItemDrop = ModContent.ItemType<Items.YggdrasilDirt>();
             ModTranslation modTranslation = base.CreateMapEntryName(null);
-            AddMapEntry(new Color(81, 107, 18), modTranslation);
+            AddMapEntry(new Color(53, 29, 26), modTranslation);
             modTranslation.SetDefault("");
             modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "");
         }
