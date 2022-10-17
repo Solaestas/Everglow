@@ -51,6 +51,13 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles.CyanVine
                             WorldGen.KillTile(X0 + x, Y0 + y);
                         }
                     }
+                    if (tile.TileFrameX % 108 == x * 18 && tile.TileFrameY == y * 18 + 18)
+                    {
+                        if (tile.TileType == ModContent.TileType<CyanVineOreLarge>())
+                        {
+                            WorldGen.KillTile(X0 + x, Y0 + y);
+                        }
+                    }
                     if (tile.TileFrameX % 72 == x * 18 && tile.TileFrameY == y * 18 + 18)
                     {
                         if (tile.TileType == ModContent.TileType<CyanVineOreMiddle>())

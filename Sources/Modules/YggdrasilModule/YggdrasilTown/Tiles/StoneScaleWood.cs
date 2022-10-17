@@ -26,10 +26,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles
             
             ItemDrop = ModContent.ItemType<Items.StoneDragonScaleWood>();
 
-            ModTranslation modTranslation = base.CreateMapEntryName(null);
-            AddMapEntry(new Color(44, 40, 37), modTranslation);
-            modTranslation.SetDefault("");
-            modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "");
+            AddMapEntry(new Color(44, 40, 37));
         }
         public override bool CanExplode(int i, int j)
         {

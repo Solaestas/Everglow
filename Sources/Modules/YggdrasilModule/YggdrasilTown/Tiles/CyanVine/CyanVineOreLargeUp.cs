@@ -51,10 +51,10 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles.CyanVine
             {
                 Item.NewItem(null, i * 16 + Main.rand.Next(90) - 45, j * 16 + Main.rand.Next(64), 16, 16, ModContent.ItemType<Items.CyanVineOre>());
             }
-            for (int f = 0; f < 13; f++)
+            for (int f = 0; f < 11; f++)
             {
                 Vector2 vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28d);
-                Gore.NewGore(null, new Vector2(i * 16 + Main.rand.Next(90) - 16, j * 16 + Main.rand.Next(64)) + vF, vF, ModContent.Find<ModGore>("Everglow/CyanVineOre" + f.ToString()).Type, 1f);
+                Gore.NewGore(null, new Vector2(i * 16 + Main.rand.Next(90) - 16, j * 16 + Main.rand.Next(64)) + vF, vF, ModContent.Find<ModGore>("Everglow/CyanVineOre" + Main.rand.Next(13).ToString()).Type, 1f);
                 vF = new Vector2(0, Main.rand.NextFloat(0, 4f)).RotatedByRandom(6.28d);
                 Dust.NewDust(new Vector2(i * 16 + Main.rand.Next(90) - 16, j * 16 + Main.rand.Next(64)) + vF, 0, 0, DustID.Silver, vF.X, vF.Y);
             }

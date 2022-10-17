@@ -47,14 +47,23 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles.CyanVine
             }
             SoundEngine.PlaySound(SoundID.NPCHit4, new Vector2(i * 16, j * 16));
             int Times = Main.rand.Next(14, 21);
+            if(ThisTile.TileFrameX > 108)
+            {
+                Times = Main.rand.Next(7, 10);
+            }    
             for (int d = 0; d < Times; d++)
             {
                 Item.NewItem(null, i * 16 + Main.rand.Next(94) - 16, j * 16 + Main.rand.Next(64) - 48, 16, 16, ModContent.ItemType<Items.CyanVineOre>());
             }
-            for (int f = 0; f < 13; f++)
+            Times = 13;
+            if (ThisTile.TileFrameX > 108)
+            {
+                Times = 9;
+            }
+            for (int f = 0; f < Times; f++)
             {
                 Vector2 vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28d);
-                Gore.NewGore(null, new Vector2(i * 16 + Main.rand.Next(94) - 16, j * 16 + Main.rand.Next(64) - 48) + vF, vF, ModContent.Find<ModGore>("Everglow/CyanVineOre" + f.ToString()).Type, 1f);
+                Gore.NewGore(null, new Vector2(i * 16 + Main.rand.Next(94) - 16, j * 16 + Main.rand.Next(64) - 48) + vF, vF, ModContent.Find<ModGore>("Everglow/CyanVineOre" + Main.rand.Next(13).ToString()).Type, 1f);
                 vF = new Vector2(0, Main.rand.NextFloat(0, 4f)).RotatedByRandom(6.28d);
                 Dust.NewDust(new Vector2(i * 16 + Main.rand.Next(94) - 16, j * 16 + Main.rand.Next(64) - 48) + vF, 0, 0, DustID.Silver, vF.X, vF.Y);
                 vF = new Vector2(0, Main.rand.NextFloat(0, 4f)).RotatedByRandom(6.28d);

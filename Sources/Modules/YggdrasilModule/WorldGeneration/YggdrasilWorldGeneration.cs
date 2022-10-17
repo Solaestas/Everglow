@@ -7,6 +7,7 @@ using Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles;
 using Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles.CyanVine;
 using Everglow.Sources.Modules.YggdrasilModule.KelpCurtain.Tiles;
 using Everglow.Sources.Modules.YggdrasilModule.HurricaneMaze.Tiles;
+using Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Tiles;
 
 using Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Walls;
 using Everglow.Sources.Modules.YggdrasilModule.KelpCurtain.Walls;
@@ -102,6 +103,14 @@ namespace Everglow.Sources.Modules.YggdrasilModule.WorldGeneration
                                 if (pixel.R == 65 && pixel.G == 84 && pixel.B == 63)//青岗岩
                                 {
                                     tile.TileType = (ushort)ModContent.TileType<CyanWindGranite>();
+                                    tile.HasTile = true;
+                                }
+
+
+                                //蛆败之穴
+                                if (pixel.R == 107 && pixel.G == 34 && pixel.B == 21)//血解光石
+                                {
+                                    tile.TileType = (ushort)ModContent.TileType<BloodLightCrystal>();
                                     tile.HasTile = true;
                                 }
 
@@ -423,6 +432,15 @@ namespace Everglow.Sources.Modules.YggdrasilModule.WorldGeneration
                             {
                                 continue;
                             }
+                            if (x == 0 && y == 2)
+                            {
+                                tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
+                                tile.Slope = SlopeType.SlopeDownRight;
+                                tile.TileFrameX = (short)(x * 18);
+                                tile.TileFrameY = (short)(y * 18);
+                                tile.HasTile = true;
+                                continue;
+                            }
                             if (x == 2 && y == 1)
                             {
                                 tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
@@ -533,15 +551,6 @@ namespace Everglow.Sources.Modules.YggdrasilModule.WorldGeneration
                             {
                                 continue;
                             }
-                            if (x == 0 && y == 1)
-                            {
-                                tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
-                                tile.Slope = SlopeType.SlopeDownRight;
-                                tile.TileFrameX = (short)(x * 18);
-                                tile.TileFrameY = (short)(y * 18);
-                                tile.HasTile = true;
-                                continue;
-                            }
                             if (x == 2 && y == 1)
                             {
                                 tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
@@ -554,6 +563,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.WorldGeneration
                             if (x == 0 && y == 1)
                             {
                                 tile.TileType = (ushort)ModContent.TileType<CyanVineOreSmall>();
+                                tile.Slope = SlopeType.SlopeDownRight;
                                 tile.TileFrameX = 108;
                                 tile.TileFrameY = 36;
                                 tile.HasTile = true;

@@ -10,6 +10,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles.CyanVine
             Main.tileSolid[Type] = true;
             Main.tileBlockLight[Type] = true;
             DustType = DustID.Silver;
+            MineResist = 4f;
             ItemDrop = ModContent.ItemType<Items.CyanVineOre>();
             Main.tileSpelunker[Type] = true;
             ModTranslation modTranslation = CreateMapEntryName(null);

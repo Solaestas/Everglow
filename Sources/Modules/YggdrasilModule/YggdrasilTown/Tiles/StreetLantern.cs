@@ -39,8 +39,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles
             TileObjectData.addTile(Type);
 
             DustType = DustID.DynastyWood;
-            ModTranslation modTranslation = base.CreateMapEntryName(null);
-            AddMapEntry(new Color(151, 31, 32), modTranslation);
+            AddMapEntry(new Color(151, 31, 32));
         }
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
