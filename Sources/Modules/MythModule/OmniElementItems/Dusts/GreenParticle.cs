@@ -9,7 +9,6 @@
             dust.scale *= 1f;
             dust.alpha = 0;
         }
-
         public override bool Update(Dust dust)
         {
             dust.position += dust.velocity;
@@ -22,12 +21,11 @@
             }
             return false;
         }
-
         public override Color? GetAlpha(Dust dust, Color lightColor)
         {
             float k = (255 - dust.alpha) / 255f;
             float k2 = (float)(Math.Sqrt(k));
-            if (dust.rotation > 3.14159)
+            if(dust.rotation > 3.14159)
             {
                 if (dust.scale > 0.6f)
                 {

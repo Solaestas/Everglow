@@ -136,7 +136,7 @@ namespace Everglow.Sources.Modules.ZYModule.Items
 
             DrawNinePiecesForTiles(Left, Right, Up, Down);
 
-            Main.instance.MouseText((Right - Left + 1).ToString() + "x" + (Down - Up + 1).ToString() + "\nRight Click to Cancel", 9);
+            Main.instance.MouseText((Right - Left).ToString() + "x" + (Down - Up).ToString() + "\nRight Click to Cancel", 9);
             return false;
         }
         private void DrawNinePiecesForTiles(int LeftX, int RightX, int UpY, int DownY)

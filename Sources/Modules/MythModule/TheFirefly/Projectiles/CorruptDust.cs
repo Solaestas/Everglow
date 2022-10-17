@@ -1,5 +1,4 @@
 using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
-
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
     public class CorruptDust : ModProjectile
@@ -7,7 +6,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         public override void SetStaticDefaults()
         {
         }
-
         public override void SetDefaults()
         {
             Projectile.width = 18;
@@ -23,7 +21,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Projectile.penetrate = 1;
             Projectile.scale = 1;
         }
-
         public override void AI()
         {
             if (Projectile.timeLeft % 3 == 0)
@@ -34,17 +31,17 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             int index2 = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<BlueParticleDark2>(), 0f, 0f, 0, default, Main.rand.NextFloat(3.7f, 5.1f));
             Main.dust[index2].velocity = Projectile.velocity * 0.5f;
             Main.dust[index2].alpha = (int)(Main.dust[index2].scale * 50);
-        }
 
+        }
         public override void Kill(int timeLeft)
         {
             int i = (int)(Projectile.Center.X / 16f);
             int j = (int)(Projectile.Center.Y / 16f);
-            WorldGen.Place3x2(i, j, (ushort)ModContent.TileType<Tiles.BlackFrenLarge>(), 0);
+            WorldGen.Place3x2(i, j,(ushort)ModContent.TileType<Tiles.BlackFrenLarge>(), 0);
         }
-
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
+
         }
 
         public override void PostDraw(Color lightColor)

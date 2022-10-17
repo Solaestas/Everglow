@@ -76,14 +76,7 @@ namespace Everglow.Sources.Commons.Function.FeatureFlags
                 AssetReplaceModule.ReplaceTextures(TextureReplace);
             base.OnChanged();
 		}
-        public static int ReplaceMothAudio
-        {
-            get
-            {
-                return (int)ModContent.GetInstance<EverglowClientConfig>().MothAudioReplace;
-            }
-        }
-    }
+	}
 
     public enum TextureReplaceMode
     {

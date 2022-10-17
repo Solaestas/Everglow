@@ -25,12 +25,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             AddMapEntry(new Color(84, 172, 255), modTranslation);
             HitSound = SoundID.Grass;
         }
-
         public override void NumDust(int i, int j, bool fail, ref int num)
         {
             num = (fail ? 1 : 3);
         }
-
         public override void NearbyEffects(int i, int j, bool closer)
         {
             if (closer)
@@ -38,7 +36,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                 var tile = Main.tile[i, j];
                 foreach (Player player in Main.player)
                 {
-                    if (player.Hitbox.Intersects(new Rectangle(i * 16, j * 16, 16, 16)))
+                    if (player.Hitbox.Intersects(new Rectangle(i * 16 - 8, j * 16 - 8, 18, 18)))
                     {
                         if (!TileSpin.TileRotation.ContainsKey((i, j - tile.TileFrameY / 16 + 2)))
                         {
@@ -60,6 +58,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                             }
                         }
 
+
                         if (!TileSpin.TileRotation.ContainsKey((i, j - tile.TileFrameY / 16 + 1)))
                         {
                             TileSpin.TileRotation.Add((i, j - tile.TileFrameY / 16 + 1), new Vector2(+Math.Clamp(player.velocity.X, -0.3f, 0.3f) * 0.2f));
@@ -79,6 +78,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                                 TileSpin.TileRotation.Remove((i, j - tile.TileFrameY / 16 + 1));
                             }
                         }
+
 
                         if (!TileSpin.TileRotation.ContainsKey((i, j - tile.TileFrameY / 16)))
                         {
@@ -103,7 +103,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                 }
             }
         }
-
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
             //for (int x = 0; x < 2; x++)
@@ -111,7 +110,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             //    Item.NewItem(null, i * 16 , j * 16, 16, 32, ModContent.ItemType<Items.BlackStarShrub>());
             //}
         }
-
         public override void PlaceInWorld(int i, int j, Item item)
         {
             short num = (short)(Main.rand.Next(0, 6));
@@ -119,7 +117,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             Main.tile[i, j + 1].TileFrameX = (short)(num * 72);
             Main.tile[i, j + 2].TileFrameX = (short)(num * 72);
         }
-
         public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
         {
             var tile = Main.tile[i, j];
@@ -140,7 +137,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                 tileSpin.DrawRotatedTile(i, j - tile.TileFrameY / 16 + 2, tex, new Rectangle(tile.TileFrameX, 562, 72, 56), new Vector2(36, 56), 8, 22, 0.49f, true, new Color(0.67f, 0.67f, 0.67f, 0));
                 tileSpin.DrawRotatedTile(i, j - tile.TileFrameY / 16 + 1, tex, new Rectangle(tile.TileFrameX, 282, 72, 56), new Vector2(36, 56), 8, 38, 0.94f);
                 tileSpin.DrawRotatedTile(i, j - tile.TileFrameY / 16 + 1, tex, new Rectangle(tile.TileFrameX, 338, 72, 56), new Vector2(36, 56), 8, 38, 0.24f);
-                tileSpin.DrawRotatedTile(i, j - tile.TileFrameY / 16 + 1, tex, new Rectangle(tile.TileFrameX, 394, 72, 56), new Vector2(36, 56), 8, 38, 0.13f);
+                tileSpin.DrawRotatedTile(i, j - tile.TileFrameY / 16 + 1, tex, new Rectangle(tile.TileFrameX, 394, 72, 56), new Vector2(36, 56), 8, 38, 0.13f);         
             }
             return false;
         }

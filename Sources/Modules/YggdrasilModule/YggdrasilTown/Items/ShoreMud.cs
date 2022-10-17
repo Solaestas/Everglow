@@ -1,6 +1,4 @@
-﻿using Terraria.ID;
-
-namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Items
+﻿namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Items
 {
     public class ShoreMud : ModItem
     {
@@ -13,9 +11,10 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Items
         {
             Item.width = 16;
             Item.height = 16;
-            Item.rare = ItemRarityID.White;
+            Item.rare = 0;
             Item.scale = 1f;
-            Item.useStyle = ItemUseStyleID.Swing;
+            Item.createTile = 0;
+            Item.useStyle = 1;
             Item.useTurn = true;
             Item.useAnimation = 15;
             Item.useTime = 15;

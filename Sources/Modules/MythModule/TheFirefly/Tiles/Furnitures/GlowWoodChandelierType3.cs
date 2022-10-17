@@ -1,7 +1,7 @@
-using Everglow.Sources.Commons.Core.Utils;
-using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.DataStructures;
+using Everglow.Sources.Commons.Core.Utils;
 using Terraria.Enums;
 using Terraria.ObjectData;
 
@@ -28,7 +28,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             AdjTiles = new int[] { TileID.Chandeliers };
 
             // Placement
-            TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3);
+            TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3); 
             TileObjectData.newTile.AnchorTop = new AnchorData(AnchorType.SolidTile, TileObjectData.newTile.Width, 0);
             TileObjectData.newTile.AnchorBottom = default(AnchorData);
             TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16 };
@@ -39,7 +39,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             name.SetDefault("Chandelier");
             AddMapEntry(new Color(0, 14, 175), name);
         }
-
         public override void HitWire(int i, int j)
         {
             FurnitureUtils.LightHitwire(i, j, Type, 3, 3);
@@ -50,10 +49,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             var tile = Main.tile[i, j];
             if (tile.TileFrameX < 54)
             {
-                r = 0.1f;
-                g = 0.9f;
-                b = 1f;
-            }
+            r = 0.1f;
+            g = 0.9f;
+            b = 1f;
+        }
             else
             {
                 r = 0f;
@@ -61,15 +60,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
                 b = 0f;
             }
         }
-
         public override void NearbyEffects(int i, int j, bool closer)
         {
-            if (closer)
+            if(closer)
             {
                 var tile = Main.tile[i, j];
-                foreach (Player player in Main.player)
+                foreach(Player player in Main.player)
                 {
-                    if (player.Hitbox.Intersects(new Rectangle(i * 16, j * 16, 16, 16)))
+                    if(player.Hitbox.Intersects(new Rectangle(i * 16 - 8, j * 16 - 8, 18, 18)))
                     {
                         if (!TileSpin.TileRotation.ContainsKey((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18)))
                         {
@@ -94,7 +92,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
                 }
             }
         }
-
         public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
         {
             var tile = Main.tile[i, j];
@@ -105,25 +102,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
                 Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodChandelierType3");
                 tileSpin.DrawRotatedChandelier(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, tex, 8, -2);
             }
-            //Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
-            //if (Main.drawToScreen)
-            //{
-            //    zero = Vector2.Zero;
-            //}
-
-            //Rectangle rc = Main.LocalPlayer.Hitbox;
-            //rc.X -= (int)(Main.screenPosition.X - zero.X);
-            //rc.Y -= (int)(Main.screenPosition.Y - zero.Y);
-
-            //Rectangle rc2 = new Rectangle(i * 16, j * 16, 16, 16);
-            //rc2.X -= (int)(Main.screenPosition.X - zero.X);
-            //rc2.Y -= (int)(Main.screenPosition.Y - zero.Y);
-            //spriteBatch.Draw(TextureAssets.MagicPixel.Value, rc2, new Color(0.5f, 0, 0, 0));
-
-            //spriteBatch.Draw(TextureAssets.MagicPixel.Value,rc,new Color(0.5f,0,0,0));
             return false;
         }
-
         public override void KillMultiTile(int x, int y, int frameX, int frameY)
         {
             Item.NewItem(new EntitySource_TileBreak(x, y), x * 16, y * 16, 48, 32, ModContent.ItemType<Items.Furnitures.GlowWoodChandelierType3>());

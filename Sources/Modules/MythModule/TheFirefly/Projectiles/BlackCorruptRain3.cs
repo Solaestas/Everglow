@@ -1,5 +1,4 @@
 using Terraria.Localization;
-
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
     public class BlackCorruptRain3 : ModProjectile
@@ -9,7 +8,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             DisplayName.SetDefault("Black Corrupt Ball");
             DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "黑萤球");
         }
-
         public override void SetDefaults()
         {
             Projectile.width = 8;
@@ -25,12 +23,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Projectile.penetrate = -1;
             Projectile.scale = 1f;
         }
-
         public override Color? GetAlpha(Color lightColor)
         {
             return new Color?(new Color(255, 255, 255, 0));
         }
-
         private bool initialization = true;
         private float X;
         private float E;
@@ -38,12 +34,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         private float b;
         private float Stre2 = 1;
         private float sc = 0;
-
         public override void AI()
         {
             if (initialization)
             {
-                X = (float)Math.Sqrt(Projectile.velocity.X * (double)Projectile.velocity.X + Projectile.velocity.Y * (double)Projectile.velocity.Y);
+                X = (float)Math.Sqrt((double)Projectile.velocity.X * (double)Projectile.velocity.X + (double)Projectile.velocity.Y * (double)Projectile.velocity.Y);
                 b = Main.rand.Next(-50, 50);
                 initialization = false;
                 if (Main.rand.Next(0, 2) == 1)
@@ -69,22 +64,22 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             {
                 sc += 0.01f;
             }
-            if (Projectile.timeLeft is < 600 and >= 585)
+            if (Projectile.timeLeft < 600 && Projectile.timeLeft >= 585)
             {
                 if (Y < 1)
                 {
-                    Projectile.scale *= Y / (Projectile.timeLeft / 585f);
+                    Projectile.scale *= (float)Y / (Projectile.timeLeft / 585f);
                 }
                 else
                 {
-                    Projectile.scale *= Y * Projectile.timeLeft / 585f;
+                    Projectile.scale *= (float)Y * Projectile.timeLeft / 585f;
                 }
             }
-            if (Projectile.timeLeft < 580 && Projectile.timeLeft >= 100 + b)
+            if (Projectile.timeLeft < 580 && Projectile.timeLeft >= 100 + (float)b)
             {
-                Projectile.scale *= Y;
+                Projectile.scale *= (float)Y;
             }
-            if (Projectile.timeLeft < 100 + b)
+            if (Projectile.timeLeft < 100 + (float)b)
             {
                 Projectile.scale *= 0.95f;
             }
@@ -100,15 +95,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             {
                 E += 0.01f;
             }
-            Lighting.AddLight(base.Projectile.Center, (255 - base.Projectile.alpha) * 0f / 255f * Projectile.scale * E, (255 - base.Projectile.alpha) * 0.01f / 255f * E, (255 - base.Projectile.alpha) * 0.6f / 255f * Projectile.scale * E);
+            Lighting.AddLight(base.Projectile.Center, (float)(255 - base.Projectile.alpha) * 0f / 255f * Projectile.scale * E, (float)(255 - base.Projectile.alpha) * 0.01f / 255f * E, (float)(255 - base.Projectile.alpha) * 0.6f / 255f * Projectile.scale * E);
         }
-
         public override void PostDraw(Color lightColor)
         {
             Texture2D texture = Common.MythContent.QuickTexture("TheFirefly/Projectiles/Lightball");
             Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(10, 83, 110, 0), Projectile.rotation, new Vector2(250f, 250f), Projectile.scale * 0.25f * (float)(1.4 + Math.Sin(Projectile.timeLeft / 15d + Projectile.position.X / 36d)) / 5f * E, SpriteEffects.None, 0);
         }
-
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D Light = Common.MythContent.QuickTexture("TheFirefly/Projectiles/FixCoinLight3");

@@ -1,6 +1,7 @@
-﻿using Everglow.Sources.Commons.Function.Vertex;
+﻿using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MEACModule;
-using Everglow.Sources.Modules.MythModule.Common;
+using Terraria.GameContent;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.MagnetSphere
 {
@@ -17,7 +18,6 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
             Projectile.DamageType = DamageClass.Summon;
             Projectile.tileCollide = false;
         }
-
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
@@ -27,7 +27,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
             if (player.itemTime > 0 && player.HeldItem.type == ItemID.MagnetSphere)
             {
                 Projectile.timeLeft = player.itemTime + 60;
-                if (Timer < 30)
+                if(Timer < 30)
                 {
                     Timer++;
                 }
@@ -35,7 +35,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
             else
             {
                 Timer--;
-                if (Timer < 0)
+                if(Timer < 0)
                 {
                     Projectile.Kill();
                 }
@@ -49,12 +49,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
 
             RingPos = RingPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
         }
-
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
         {
-            behindNPCs.Add(index);
+           behindNPCs.Add(index);
         }
-
         public override bool PreDraw(ref Color lightColor)
         {
             Projectile.hide = false;
@@ -63,10 +61,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
             DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), new Color(0, 255, 174, 0));
             return false;
         }
-
         internal int Timer = 0;
         internal Vector2 RingPos = Vector2.Zero;
-
         public void DrawMagicArray(Texture2D tex, Color c0)
         {
             Player player = Main.player[Projectile.owner];
@@ -75,7 +71,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
             DrawTexCircle(Timer * 1.6f, 22, c0, player.Center + RingPos - Main.screenPosition, Water, Main.timeForVisualEffects / 17);
             DrawTexCircle(Timer * 1.3f, 32, c1, player.Center + RingPos - Main.screenPosition, Water, -Main.timeForVisualEffects / 17);
 
-            float timeRot = (float)(Main.timeForVisualEffects / 57d);
+            float timeRot = (float)(Main.timeForVisualEffects / 57d); 
             Vector2 Point1 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 0 + timeRot);
             Vector2 Point2 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 2 / 3d + timeRot);
             Vector2 Point3 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 4 / 3d + timeRot);
@@ -91,8 +87,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
             DrawTexLine(Point5, Point6, c1, c1, Water);
             DrawTexLine(Point6, Point4, c1, c1, Water);
         }
-
-        private static void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
+        private void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
         {
             List<Vertex2D> circle = new List<Vertex2D>();
             for (int h = 0; h < radious / 2; h++)
@@ -108,8 +103,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
             }
         }
-
-        public static void DrawTexLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2, Texture2D tex)
+        public void DrawTexLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2, Texture2D tex)
         {
             float Wid = 6f;
             Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
@@ -129,10 +123,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
                 vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(Value0, 1, 0)));
             }
 
+
             Main.graphics.GraphicsDevice.Textures[0] = tex;
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
         }
-
         public void DrawWarp()
         {
             Main.spriteBatch.End();

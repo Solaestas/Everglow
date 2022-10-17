@@ -1,10 +1,11 @@
-using Everglow.Sources.Commons.Core.Utils;
-using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Commons.Core.Utils;
 using Terraria.DataStructures;
-using Terraria.GameContent.ObjectInteractions;
-using Terraria.ObjectData;
 using Terraria.GameContent;
+using Terraria.GameContent.ObjectInteractions;
+using Terraria.Localization;
+using Terraria.ObjectData;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 {
@@ -75,7 +76,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
         {
             FurnitureUtils.BedMouseOver<Items.Furnitures.GlowWoodBed>(i, j);
         }
-
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
             var tile = Main.tile[i, j];
@@ -87,36 +87,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodBedGlow");
             spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(0.8f, 0.8f, 0.8f, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
 
-            if (tile.TileFrameX == 54 && tile.TileFrameY == 0)
-            {
-                Color cTile = Lighting.GetColor(i, j);
-                tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodBedExtra");
-                spriteBatch.Draw(tex, new Vector2(i * 16, j * 16 - 4) - Main.screenPosition + zero, new Rectangle(0, 0, 20, 20), cTile, 0, new Vector2(0), 1, SpriteEffects.None, 0);
-                //var tileTarget = Main.tile[Player.tileTargetX, Player.tileTargetY];
-                //if (tileTarget.TileFrameX == tile.TileFrameX + (Player.tileTargetX - i) * 18)
-                //{
-                //    if (tileTarget.TileFrameY == tile.TileFrameY + (Player.tileTargetY - j) * 18)
-                //    {
-                //        if (Main.SmartCursorIsUsed)
-                //        {
-                //            tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodBedExtra");
-                //            Color drawC = Color.Wheat;
-                //            if (Player.tileTargetX - i <= -2)
-                //            {
-                //                drawC = Color.Gray;
-                //            }
-                //            spriteBatch.Draw(tex, new Vector2(i * 16, j * 16 - 4) - Main.screenPosition + zero, new Rectangle(0, 22, 20, 20), drawC, 0, new Vector2(0), 1, SpriteEffects.None, 0);
-                //        }
-                //    }
-                //}
-            }
-            
-            if (tile.TileFrameX == 72 && tile.TileFrameY == 0)
-            {
-                Color cTile = Lighting.GetColor(i, j);
-                tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodBedExtra");
-                spriteBatch.Draw(tex, new Vector2(i * 16 - 4, j * 16 - 4) - Main.screenPosition + zero, new Rectangle(22, 0, 20, 20), cTile, 0, new Vector2(0), 1, SpriteEffects.None, 0);
-            }
+            base.PostDraw(i, j, spriteBatch);
         }
     }
 }

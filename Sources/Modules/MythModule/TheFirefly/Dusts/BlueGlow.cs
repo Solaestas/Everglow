@@ -19,26 +19,23 @@
             dust.velocity += new Vector2(0, 0.015f).RotatedByRandom(MathHelper.Pi * 2d);
             dust.velocity *= 0.95f;
             dust.scale *= 0.96f;
-            Lighting.AddLight(dust.position, 0.0096f * dust.scale / 1.8f, 0.0955f * dust.scale / 1.8f, 0.4758f * dust.scale / 1.8f);
+            Lighting.AddLight(dust.position, 0.0096f * (float)dust.scale / 1.8f, 0.0955f * (float)dust.scale / 1.8f, 0.4758f * (float)dust.scale / 1.8f);
             if (dust.scale < 0.07f)
-            {
                 dust.active = false;
-            }
             /*if(Main.tile[(int)((dust.position.X + dust.velocity.X * 6) / 16f), (int)((dust.position.Y + dust.velocity.Y * 6) / 16f)].CollisionType == 0)
-{
-   dust.velocity *= -1;
-}
-if (Main.tile[(int)((dust.position.X + dust.velocity.X * 6) / 16f), (int)((dust.position.Y + dust.velocity.Y * 6) / 16f)].CollisionType == 1)
-{
-   dust.velocity.X *= -1;
-}
-if (Main.tile[(int)((dust.position.X + dust.velocity.X * 6) / 16f), (int)((dust.position.Y + dust.velocity.Y * 6) / 16f)].CollisionType == 2)
-{
-   dust.velocity.Y *= -1;
-}*/
+            {
+                dust.velocity *= -1;
+            }
+            if (Main.tile[(int)((dust.position.X + dust.velocity.X * 6) / 16f), (int)((dust.position.Y + dust.velocity.Y * 6) / 16f)].CollisionType == 1)
+            {
+                dust.velocity.X *= -1;
+            }
+            if (Main.tile[(int)((dust.position.X + dust.velocity.X * 6) / 16f), (int)((dust.position.Y + dust.velocity.Y * 6) / 16f)].CollisionType == 2)
+            {
+                dust.velocity.Y *= -1;
+            }*/
             return false;
         }
-
         public override Color? GetAlpha(Dust dust, Color lightColor)
         {
             return new Color?(new Color(255, 255, 255, 0f));

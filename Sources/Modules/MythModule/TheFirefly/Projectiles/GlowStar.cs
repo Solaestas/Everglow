@@ -1,6 +1,7 @@
+using Terraria.Localization;
 using Everglow.Sources.Commons.Function.Vertex;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Terraria.Audio;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
@@ -18,20 +19,19 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Projectile.extraUpdates = 3;
             Projectile.timeLeft = 1000;
             Projectile.alpha = 0;
-            Projectile.penetrate = 1;
+            Projectile.penetrate = 1; 
             Projectile.scale = 1f;
 
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 60;
         }
-
         public override void AI()
         {
             Projectile.velocity *= 0.993f;
             float k0 = 1f / (Projectile.ai[0] + 2) * 2;
             Vector2 v0 = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) * Projectile.scale * 0.3f;
             Dust.NewDust(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<BlueGlowAppear>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(0.6f, 1.8f) * Projectile.scale * 0.4f * k0);
-            if (Projectile.ai[1] > 0)
+            if(Projectile.ai[1] > 0)
             {
                 Projectile.ai[1] -= 1;
                 if (Projectile.ai[1] == 1)
@@ -40,7 +40,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 }
             }
         }
-
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D Light = Common.MythContent.QuickTexture("TheFirefly/Projectiles/GlowStar");
@@ -51,7 +50,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             {
                 k0 = 1;
             }
-            if (Projectile.timeLeft < 200)
+            if(Projectile.timeLeft < 200)
             {
                 k2 = Projectile.timeLeft / 200f;
             }
@@ -59,7 +58,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             List<Vertex2D> bars = new List<Vertex2D>();
             float width = 12;
             float k3 = Projectile.ai[1] / 60f;
-            if (Projectile.ai[1] > 0)
+            if(Projectile.ai[1] > 0)
             {
                 width *= k3;
             }
@@ -97,15 +96,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, c0, Projectile.rotation, Light.Size() / 2f, (k0 / 1.8f + 0.2f) / (Projectile.ai[0] + 3) * 3.5f * k2, SpriteEffects.None, 0);
             return false;
         }
-
         public override bool PreKill(int timeLeft)
         {
             return true;
         }
-
         public override void Kill(int timeLeft)
         {
-            if (timeLeft > 0)
+            if(timeLeft > 0)
             {
                 float value = Math.Min(Projectile.damage / 30f, 1f);
                 Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BeadShakeWave>(), 0, 0, Projectile.owner, 1f / (Projectile.ai[0] + 2) * 2 * value);
@@ -114,7 +111,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             {
                 return;
             }
-            SoundEngine.PlaySound(SoundID.Item38, Projectile.Center);
+            SoundEngine.PlaySound(SoundID.Item38,Projectile.Center);
             float k1 = Math.Clamp(Projectile.velocity.Length(), 1, 3);
             float k2 = Math.Clamp(Projectile.velocity.Length(), 6, 10);
             float k0 = 1f / (Projectile.ai[0] + 2) * 2 * k2;
@@ -131,11 +128,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 50 / k0);
                 Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
             }
-            foreach (NPC target in Main.npc)
+            foreach(NPC target in Main.npc)
             {
                 float Dis = (target.Center - Projectile.Center).Length();
 
-                if (Dis < k0 * 50)
+                if(Dis < k0 * 50)
                 {
                     if (!target.dontTakeDamage && !target.friendly && target.active)
                     {

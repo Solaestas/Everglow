@@ -11,10 +11,10 @@
         {
             Item.width = 24;
             Item.height = 22;
-            Item.rare = ItemRarityID.White;
+            Item.rare = 0;
             Item.scale = 1f;
             Item.createTile = ModContent.TileType<Tiles.StoneScaleWood>();
-            Item.useStyle = ItemUseStyleID.Swing;
+            Item.useStyle = 1;
             Item.useTurn = true;
             Item.useAnimation = 15;
             Item.useTime = 10;

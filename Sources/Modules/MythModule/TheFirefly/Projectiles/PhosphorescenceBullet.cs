@@ -1,5 +1,4 @@
 using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
-
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
     public class PhosphorescenceBullet : ModProjectile
@@ -21,7 +20,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         }
 
         private bool aTm = false;
-
         public override void AI()
         {
             if (Projectile.timeLeft == 119 && !aTm)
@@ -37,7 +35,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 Projectile.velocity.Y += 0.05f;
             }
         }
-
         public override void Kill(int timeLeft)
         {
             for (int j = 0; j < timeLeft / 8; j++)
@@ -53,11 +50,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 Main.dust[num21].alpha = (int)(Main.dust[num21].scale * 50);
             }
         }
-
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
         }
-
         public override Color? GetAlpha(Color lightColor)
         {
             return new Color?(new Color(255, 255, 255, 0));

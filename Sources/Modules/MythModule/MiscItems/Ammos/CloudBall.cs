@@ -1,4 +1,7 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Ammos
+﻿using Terraria.ID;
+using Terraria.ModLoader;
+
+namespace Everglow.Sources.Modules.MythModule.MiscItems.Ammos
 {
     public class CloudBall : ModItem
     {

@@ -45,7 +45,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             }
         }
     }
-
     [HandlePacket(typeof(MothPositionPacket))]
     internal class MothPositionPacketHandler : IPacketHandler
     {

@@ -1,4 +1,10 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
 {
     internal class Spring
     {
@@ -21,15 +27,14 @@
         /// 弹簧端点上的两个质点
         /// </summary>
         public Mass mass1;
-
         public Mass mass2;
 
         public Spring(float elasticity, float restLength, float damping, Mass m1, Mass m2)
         {
             this.elasticity = elasticity;
             this.restLength = restLength;
-            mass1 = m1;
-            mass2 = m2;
+            this.mass1 = m1;
+            this.mass2 = m2;
             this.damping = damping;
         }
 

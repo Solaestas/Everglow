@@ -1,9 +1,10 @@
-using Everglow.Sources.Commons.Core.Utils;
-using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Terraria.DataStructures;
-using Terraria.GameContent.ObjectInteractions;
+using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Commons.Core.Utils;
 using Terraria.ObjectData;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Terraria.GameContent.ObjectInteractions;
+
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 {
@@ -33,12 +34,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             name.SetDefault("GlowWood Clock");
             AddMapEntry(new Color(0, 14, 175), name);
         }
-
         public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
         {
             return true;
         }
-
         public override bool RightClick(int x, int y)
         {
             return FurnitureUtils.ClockRightClick();
@@ -53,7 +52,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
         {
             Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 48, 32, ModContent.ItemType<Items.Furnitures.GlowWoodClock>());
         }
-
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
             var tile = Main.tile[i, j];
