@@ -17,7 +17,7 @@
 
             Item.value = 1100;
 
-            Item.hammer = 35;
+            Item.pick = 65;
         }
         public override void AddRecipes()
         {

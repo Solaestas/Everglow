@@ -49,14 +49,14 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles.CyanVine
             int Times = Main.rand.Next(3, 6);
             for (int d = 0; d < Times; d++)
             {
-                Item.NewItem(null, i * 16 + Main.rand.Next(94) - 16, j * 16 + Main.rand.Next(64) - 48, 16, 16, ModContent.ItemType<Items.CyanVineOre>());
+                Item.NewItem(null, i * 16 + Main.rand.Next(24) - 16, j * 16 + Main.rand.Next(48), 16, 16, ModContent.ItemType<Items.CyanVineOre>());
             }
             for (int f = 0; f < 8; f++)
             {
                 Vector2 vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28d);
-                Gore.NewGore(null, new Vector2(i * 16 + Main.rand.Next(34) - 16, j * 16 + Main.rand.Next(38) - 32) + vF, vF, ModContent.Find<ModGore>("Everglow/CyanVineOre" + f.ToString()).Type, 1f);
+                Gore.NewGore(null, new Vector2(i * 16 + Main.rand.Next(24) - 16, j * 16 + Main.rand.Next(48)) + vF, vF, ModContent.Find<ModGore>("Everglow/CyanVineOre" + f.ToString()).Type, 1f);
                 vF = new Vector2(0, Main.rand.NextFloat(0, 4f)).RotatedByRandom(6.28d);
-                Dust.NewDust(new Vector2(i * 16 + Main.rand.Next(34) - 16, j * 16 + Main.rand.Next(38) - 32) + vF, 0, 0, DustID.Silver, vF.X, vF.Y);
+                Dust.NewDust(new Vector2(i * 16 + Main.rand.Next(24) - 16, j * 16 + Main.rand.Next(48)) + vF, 0, 0, DustID.Silver, vF.X, vF.Y);
             }
         }
         public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
