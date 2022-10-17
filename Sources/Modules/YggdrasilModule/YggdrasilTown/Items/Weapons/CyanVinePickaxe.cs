@@ -15,7 +15,7 @@
             Item.autoReuse = true;
             Item.DamageType = DamageClass.Melee;
 
-            Item.value = 1100;
+            Item.value = 4200;
 
             Item.pick = 65;
         }

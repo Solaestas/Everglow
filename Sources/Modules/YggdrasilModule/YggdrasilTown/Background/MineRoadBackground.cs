@@ -106,77 +106,20 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Background
                 Vector2 DrawCenter = new Vector2(Main.screenWidth, Main.screenHeight) / 2f - deltaPos + new Vector2(-650 + texC1.Width * x, -400);
                 if (DrawCenter.X >= -60 && DrawCenter.X <= Main.screenWidth + 60)
                 {
-                    DrawWaterFallInBackground(DrawCenter, 20f, 750f, baseColor * 0.06f);
+                    BackgroundManager.DrawWaterfallInBackground(BiomeCenter, 0.15f, DrawCenter, 20f, 750f, baseColor * 0.06f, 171200, 200000, texC1.Size());
                 }
                 DrawCenter = new Vector2(Main.screenWidth, Main.screenHeight) / 2f - deltaPos + new Vector2(-1350 + texC1.Width * x, -100);
                 if (DrawCenter.X >= -60 && DrawCenter.X <= Main.screenWidth + 60)
                 {
-                    DrawWaterFallInBackground(DrawCenter, 20f, 750f, baseColor * 0.06f);
+                    BackgroundManager.DrawWaterfallInBackground(BiomeCenter, 0.15f, DrawCenter, 20f, 750f, baseColor * 0.06f, 171200, 200000, texC1.Size());
                 }
             }
             BackgroundManager.QuickDrawBG(texClose, GetDrawRect(texClose.Size(), 0.35f, true), baseColor, 171200, 200000);
 
-            deltaPos = DCen - BiomeCenter;
-            MoveStep = 0.35f;
-            deltaPos *= MoveStep;
-            for (int x = -5; x < 6; x++)
-            {
-                Vector2 DrawCenter = new Vector2(Main.screenWidth, Main.screenHeight) / 2f - deltaPos + new Vector2(-650 + texClose.Width * x, -400);
-                if (DrawCenter.X >= -60 && DrawCenter.X <= Main.screenWidth + 60)
-                {
-                    DrawWaterFallInBackground(DrawCenter, 60f, 550f, baseColor * 0.12f);
-                }
-            }
+            BackgroundManager.DrawWaterfallInBackground(BiomeCenter, 0.35f, new Vector2(-650, -400), 60f, 550f, baseColor * 0.12f, 171200, 200000, texClose.Size());
             BackgroundManager.QuickDrawBG(texBound, GetDrawRect(texBound.Size(), 1f, true), baseColor, 171080, 171580, false, false, true);
         }
-        public void DrawWaterFallInBackground(Vector2 Center, float Width, float Height, Color baseColor)
-        {
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-            Effect bgW = YggdrasilContent.QuickEffect("Common/BackgroundManager/BackgroundYWarp");
-            bgW.Parameters["uTransform"].SetValue(projection);
-            bgW.Parameters["uTime"].SetValue(0.34f);
-            bgW.CurrentTechnique.Passes[0].Apply();
-
-            float Time = (float)-Main.timeForVisualEffects / 40f;
-            List<Vertex2D> WaterFallVertex = new List<Vertex2D>();
-            for(float x = 0;x < Height;x += 10f)
-            {
-                float ColorAlpha = Math.Min((x / 100f), 1);
-                if(Height - x < 100)
-                {
-                    ColorAlpha = Math.Max(((Height - x) / 100f), 0);
-                }
-                WaterFallVertex.Add(new Vertex2D(new Vector2(Center.X + Width / 2f, Center.Y + x), baseColor * ColorAlpha, new Vector3(0, (float)Math.Pow(x, 0.6) / 10f + Time, 0)));
-                WaterFallVertex.Add(new Vertex2D(new Vector2(Center.X - Width / 2f, Center.Y + x), baseColor * ColorAlpha, new Vector3(1, (float)Math.Pow(x, 0.6) / 10f + Time, 0)));
-            }
-            if (WaterFallVertex.Count > 2)
-            {
-                Main.graphics.GraphicsDevice.Textures[0] = YggdrasilContent.QuickTexture("YggdrasilTown/Background/WaterFall");
-                Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
-                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, WaterFallVertex.ToArray(), 0, WaterFallVertex.Count - 2);
-            }
-            List<Vertex2D> WaterFallVertexII = new List<Vertex2D>();
-            for (float x = 0; x < Height; x += 10f)
-            {
-                float ColorAlpha = Math.Min((x / 100f), 1);
-                if (Height - x < 100)
-                {
-                    ColorAlpha = Math.Max(((Height - x) / 100f), 0);
-                }
-                WaterFallVertexII.Add(new Vertex2D(new Vector2(Center.X + Width / 2f, Center.Y + x), baseColor * ColorAlpha * 1.63f, new Vector3(0, (float)Math.Pow(x, 0.4) / 10f + Time, 0)));
-                WaterFallVertexII.Add(new Vertex2D(new Vector2(Center.X - Width / 2f, Center.Y + x), baseColor * ColorAlpha * 1.63f, new Vector3(1, (float)Math.Pow(x, 0.4) / 10f + Time, 0)));
-            }
-            if (WaterFallVertexII.Count > 2)
-            {
-                Main.graphics.GraphicsDevice.Textures[0] = YggdrasilContent.QuickTexture("YggdrasilTown/Background/WaterFall");
-                Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
-                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, WaterFallVertexII.ToArray(), 0, WaterFallVertexII.Count - 2);
-            }
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-        }
+        
         /// <summary>
         /// 获取XY向缩放比例
         /// </summary>

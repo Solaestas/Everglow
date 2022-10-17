@@ -15,9 +15,9 @@
             Item.autoReuse = true;
             Item.DamageType = DamageClass.Melee;
 
-            Item.value = 1100;
+            Item.value = 3300;
 
-            Item.hammer = 35;
+            Item.hammer = 68;
         }
         public override void AddRecipes()
         {
