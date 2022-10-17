@@ -29,6 +29,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         Vector2 StartVelocity = Vector2.Zero;
         public override void AI()
         {
+            Lighting.AddLight(Projectile.Center, 0.9f, 0.6f, 0f);
             Projectile.friendly = true;
             Projectile.rotation = Projectile.velocity.ToRotation() + 0.7854f;
             if (StartVelocity == Vector2.Zero)

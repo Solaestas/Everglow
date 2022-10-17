@@ -1,10 +1,4 @@
-﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
-using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
-using Everglow.Sources.Modules.MythModule.Common;
-using Terraria.DataStructures;
-using ReLogic.Graphics;
-using Terraria.GameContent;
-using Terraria.ID;
+﻿using Terraria.DataStructures;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 {
@@ -12,12 +6,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
     {
         public override void SetStaticDefaults()
         {
-            GetGlowMask = MythContent.SetStaticDefaultsGlowMask(this);
+            ItemGlowManager.AutoLoadItemGlow(this);
         }
-        public static short GetGlowMask = 0;
+
         public override void SetDefaults()
         {
-            Item.glowMask = GetGlowMask;
+            Item.glowMask = ItemGlowManager.GetItemGlow(this);
             Item.damage = 22;
             Item.DamageType = DamageClass.Magic;
             Item.mana = 8;
@@ -31,14 +25,15 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             Item.knockBack = 5f;
             Item.value = Item.sellPrice(0, 5, 0, 0);
             Item.rare = ItemRarityID.LightRed;
-            Item.UseSound = SoundID.Item132 with {MaxInstances = 3};
+            Item.UseSound = SoundID.Item132 with { MaxInstances = 3 };
             Item.autoReuse = true;
             Item.shoot = ModContent.ProjectileType<Projectiles.GlowBeadGun>();
             Item.shootSpeed = 8;
         }
+
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            if(player.ownedProjectileCounts[type] > 0)
+            if (player.ownedProjectileCounts[type] > 0)
             {
                 return false;
             }

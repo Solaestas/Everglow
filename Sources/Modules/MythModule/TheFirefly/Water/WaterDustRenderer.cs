@@ -1,12 +1,5 @@
-﻿using Everglow.Sources.Commons.Core.ModuleSystem;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds;
+﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds;
 using ReLogic.Content;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.GameContent;
 using Terraria.GameContent.Shaders;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
@@ -28,6 +21,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
             m_waterDustRenderer.PresentDusts();
         }
     }
+
     internal class WaterDustRenderer
     {
         private RenderTarget2D[] m_dustTargetSwap = null;
@@ -97,7 +91,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
 
             var graphicsDevice = Main.graphics.GraphicsDevice;
             var spriteBatch = Main.spriteBatch;
-
 
             var motionVector = m_lastDrawPosition - Main.screenPosition;
 
