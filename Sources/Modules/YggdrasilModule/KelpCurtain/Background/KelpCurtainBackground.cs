@@ -9,7 +9,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.KelpCurtain.Background
 {
     public class KelpCurtainBackground : ModSystem
     {
-        Vector2 BiomeCenter = new Vector2(7200, 157000);
+        Vector2 BiomeCenter = new Vector2(9000, 157000);
         /// <summary>
         /// 初始化
         /// </summary>
@@ -73,7 +73,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.KelpCurtain.Background
         public static bool BiomeActive()
         {
             
-            if (Main.screenPosition.Y > 148000 && Main.screenPosition.Y < 172000)
+            if (Main.screenPosition.Y > 148000 && Main.screenPosition.Y < 175075)
             {
                 if (SubworldSystem.IsActive<YggdrasilWorld>())
                 {
@@ -90,10 +90,10 @@ namespace Everglow.Sources.Modules.YggdrasilModule.KelpCurtain.Background
             var texC1 = YggdrasilContent.QuickTexture("KelpCurtain/Background/KelpCurtainMiddle");
             var texC2 = YggdrasilContent.QuickTexture("KelpCurtain/Background/KelpCurtainFar");
 
-            BackgroundManager.QuickDrawBG(texSky, GetDrawRect(texSky.Size(), 0f, true), baseColor, 148000, 171175, true, true);
-            BackgroundManager.QuickDrawBG(texC2, GetDrawRect(texC2.Size(), 0.10f, true), baseColor, 148000, 171175, false, false);
-            BackgroundManager.QuickDrawBG(texC1, GetDrawRect(texC1.Size(), 0.15f, true), baseColor, 148000, 171175, false, false);
-            BackgroundManager.QuickDrawBG(texClose, GetDrawRect(texClose.Size(), 0.35f, true), baseColor, 148000, 171175, false, false);
+            BackgroundManager.QuickDrawBG(texSky, GetDrawRect(texSky.Size(), 0f, true), baseColor, 148000, 173375, true, true);
+            BackgroundManager.QuickDrawBG(texC2, GetDrawRect(texC2.Size(), 0.10f, true), baseColor, 148000, 173375, false, false);
+            BackgroundManager.QuickDrawBG(texC1, GetDrawRect(texC1.Size(), 0.15f, true), baseColor, 148000, 173375, false, false);
+            BackgroundManager.QuickDrawBG(texClose, GetDrawRect(texClose.Size(), 0.35f, true), baseColor, 148000, 173375, false, false);
         }
         /// <summary>
         /// 获取XY向缩放比例

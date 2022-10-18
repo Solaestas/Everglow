@@ -73,7 +73,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Background
         public static bool BiomeActive()
         {
             
-            if (Main.screenPosition.Y > 168000)
+            if (Main.screenPosition.Y > 171175)
             {
                 if (SubworldSystem.IsActive<YggdrasilWorld>())
                 {
@@ -92,10 +92,10 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Background
             var texC3 = YggdrasilContent.QuickTexture("YggdrasilTown/Background/MineRoadBackgroundC3");
             var texBound = YggdrasilContent.QuickTexture("KelpCurtain/Background/KelpCurtainBound");
 
-            BackgroundManager.QuickDrawBG(texSky, GetDrawRect(texSky.Size(), 0f, true), baseColor, 171200, 200000);
-            BackgroundManager.QuickDrawBG(texC3, GetDrawRect(texClose.Size(), 0.05f, true), baseColor, 171200, 200000, false, false);
-            BackgroundManager.QuickDrawBG(texC2, GetDrawRect(texClose.Size(), 0.10f, true), baseColor, 171200, 200000, false, false);
-            BackgroundManager.QuickDrawBG(texC1, GetDrawRect(texClose.Size(), 0.15f, true), baseColor, 171200, 200000, false, true);
+            BackgroundManager.QuickDrawBG(texSky, GetDrawRect(texSky.Size(), 0f, true), baseColor, 173400, 200000);
+            BackgroundManager.QuickDrawBG(texC3, GetDrawRect(texClose.Size(), 0.05f, true), baseColor, 173400, 200000, false, false);
+            BackgroundManager.QuickDrawBG(texC2, GetDrawRect(texClose.Size(), 0.10f, true), baseColor, 173400, 200000, false, false);
+            BackgroundManager.QuickDrawBG(texC1, GetDrawRect(texClose.Size(), 0.15f, true), baseColor, 173400, 200000, false, true);
 
             Vector2 DCen = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
             Vector2 deltaPos = DCen - BiomeCenter;
@@ -106,18 +106,18 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Background
                 Vector2 DrawCenter = new Vector2(Main.screenWidth, Main.screenHeight) / 2f - deltaPos + new Vector2(-650 + texC1.Width * x, -400);
                 if (DrawCenter.X >= -60 && DrawCenter.X <= Main.screenWidth + 60)
                 {
-                    BackgroundManager.DrawWaterfallInBackground(BiomeCenter, 0.15f, DrawCenter, 20f, 750f, baseColor * 0.06f, 171200, 200000, texC1.Size(), false, false);
+                    BackgroundManager.DrawWaterfallInBackground(BiomeCenter, 0.15f, DrawCenter, 20f, 750f, baseColor * 0.06f, 173400, 200000, texC1.Size(), false, false);
                 }
                 DrawCenter = new Vector2(Main.screenWidth, Main.screenHeight) / 2f - deltaPos + new Vector2(-1350 + texC1.Width * x, -100);
                 if (DrawCenter.X >= -60 && DrawCenter.X <= Main.screenWidth + 60)
                 {
-                    BackgroundManager.DrawWaterfallInBackground(BiomeCenter, 0.15f, DrawCenter, 20f, 750f, baseColor * 0.06f, 171200, 200000, texC1.Size(), false, false);
+                    BackgroundManager.DrawWaterfallInBackground(BiomeCenter, 0.15f, DrawCenter, 20f, 750f, baseColor * 0.06f, 173400, 200000, texC1.Size(), false, false);
                 }
             }
-            BackgroundManager.QuickDrawBG(texClose, GetDrawRect(texClose.Size(), 0.35f, true), baseColor, 171200, 200000);
+            BackgroundManager.QuickDrawBG(texClose, GetDrawRect(texClose.Size(), 0.35f, true), baseColor, 173400, 200000);
 
-            BackgroundManager.DrawWaterfallInBackground(BiomeCenter, 0.35f, new Vector2(-650, -400), 60f, 550f, baseColor * 0.12f, 171200, 200000, texClose.Size());
-            BackgroundManager.QuickDrawBG(texBound, GetDrawRect(texBound.Size(), 1f, true), baseColor, 171080, 171580, false, false);
+            BackgroundManager.DrawWaterfallInBackground(BiomeCenter, 0.35f, new Vector2(-650, -400), 60f, 550f, baseColor * 0.12f, 173400, 200000, texClose.Size());
+            BackgroundManager.QuickDrawBG(texBound, GetDrawRect(texBound.Size(), 1f, true), baseColor, 173280, 173580, false, false);
         }
         
         /// <summary>
