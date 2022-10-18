@@ -1,5 +1,5 @@
 displayName = Everglow
-author = Everglow Development Group
+author = Dream Chaser Group
 version = 0.1
 includePDB = true
 noCompile = true
