@@ -49,7 +49,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.KelpCurtain.Background
                 else
                 {
                     alpha = 1;
-                    Main.NewText(Main.screenPosition.Y, Color.Green);
+                    Everglow.HookSystem.DisableDrawBackground = true;
                 }
 
             }
