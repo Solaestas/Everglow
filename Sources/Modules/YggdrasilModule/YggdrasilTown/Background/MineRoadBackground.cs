@@ -73,7 +73,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Background
         public static bool BiomeActive()
         {
             
-            if (Main.screenPosition.Y > 171175)
+            if (Main.screenPosition.Y > 172200)
             {
                 if (SubworldSystem.IsActive<YggdrasilWorld>())
                 {

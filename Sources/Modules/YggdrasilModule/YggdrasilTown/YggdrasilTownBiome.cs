@@ -2,8 +2,8 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown
 {
     public class YggdrasilTownBiome : ModBiome
     {
-
-		public override SceneEffectPriority Priority => SceneEffectPriority.Environment;
+        public override int Music => Common.YggdrasilContent.QuickMusic("YggdrasilTownBGM");
+        public override SceneEffectPriority Priority => SceneEffectPriority.Environment;
 		public override string BestiaryIcon => "Everglow/Sources/Modules/YggdrasilModule/YggdrasilTown/YggdrasilTownIcon";
 		public override string BackgroundPath => base.BackgroundPath;
 		public override string MapBackground => "Everglow/Sources/Modules/YggdrasilModule/YggdrasilTown/Backgrounds/YggdrasilTown_MapBackground";
