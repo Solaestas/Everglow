@@ -49,7 +49,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.KelpCurtain.Background
                 else
                 {
                     alpha = 1;
-                    Everglow.HookSystem.DisableDrawBackground = true;
+                    Main.NewText(Main.screenPosition.Y, Color.Green);
                 }
 
             }
@@ -73,7 +73,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.KelpCurtain.Background
         public static bool BiomeActive()
         {
             
-            if (Main.screenPosition.Y > 148000 && Main.screenPosition.Y < 175075)
+            if (Main.screenPosition.Y > 148000 && Main.screenPosition.Y < 173200)
             {
                 if (SubworldSystem.IsActive<YggdrasilWorld>())
                 {

@@ -2,8 +2,8 @@ namespace Everglow.Sources.Modules.YggdrasilModule.KelpCurtain
 {
     public class KelpCurtainBiome : ModBiome
     {
-
-		public override SceneEffectPriority Priority => SceneEffectPriority.Environment;
+        public override int Music => Common.YggdrasilContent.QuickMusic("KelpCurtainBGM");
+        public override SceneEffectPriority Priority => SceneEffectPriority.Environment;
 		public override string BestiaryIcon => "Everglow/Sources/Modules/YggdrasilModule/KelpCurtain/KelpCurtainIcon";
 		public override string BackgroundPath => base.BackgroundPath;
 		public override string MapBackground => "Everglow/Sources/Modules/YggdrasilModule/KelpCurtain/Backgrounds/KelpCurtain_MapBackground";
@@ -12,7 +12,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.KelpCurtain
 
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Yggdrasil Town");
+			DisplayName.SetDefault("Kelp Curtain");
 		}
 
         public override void Load()
@@ -32,7 +32,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.KelpCurtain
     public class KelpCurtainSystem:ModSystem
     {
         //环境光
-        public readonly Vector3 ambient = new Vector3(0.3f, 0.3f, 0.3f);
+        public readonly Vector3 ambient = new Vector3(0f, 0f, 0f);
         /// <summary>
         /// 环境光的钩子
         /// </summary>
