@@ -1,9 +1,14 @@
 ﻿using Everglow.Sources.Modules.MEACModule.Projectiles;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 {
     public class ScaleWingBlade : ModItem
     {
+        FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
+
+        MothEye mothEye = new MothEye();
+
         public override void SetStaticDefaults()
         {
             ItemGlowManager.AutoLoadItemGlow(this);
@@ -59,6 +64,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 
         public override void UpdateInventory(Player player)
         {
+            if (mothEye.hasMothEye == true && fireflyBiome.IsBiomeActive(Main.LocalPlayer))
+            {
+                player.statDefense = 9999;
+                return;
+            }
             base.UpdateInventory(player);
         }
     }
