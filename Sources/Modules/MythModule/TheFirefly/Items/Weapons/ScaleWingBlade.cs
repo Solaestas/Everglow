@@ -6,9 +6,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
     public class ScaleWingBlade : ModItem
     {
         FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
-
-        MothEye mothEye = new MothEye();
-
+        MothEye mothEye = ModContent.GetInstance<MothEye>();
         public override void SetStaticDefaults()
         {
             ItemGlowManager.AutoLoadItemGlow(this);
@@ -64,10 +62,18 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 
         public override void UpdateInventory(Player player)
         {
-            if (mothEye.hasMothEye == true && fireflyBiome.IsBiomeActive(Main.LocalPlayer))
+            bool hasMothEye = false;
+            foreach (var item in player.armor)
             {
-                player.statDefense = 9999;
-                return;
+                if (item.type == ModContent.ItemType<Items.Accessories.MothEye>())
+                {
+                    hasMothEye = true;
+                    if (hasMothEye == true && fireflyBiome.IsBiomeActive(Main.LocalPlayer))
+                    {
+                        player.statDefense = 9999;
+                    }
+                    break;
+                }
             }
             base.UpdateInventory(player);
         }

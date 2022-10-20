@@ -10,7 +10,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
     public class MothEye : ModItem
     {
         FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
-        public bool hasMothEye = false;
+
         public override void SetDefaults()
         {
             Item.width = 44;
@@ -71,8 +71,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
             }
         }
 
-        public override void UpdateInventory(Player player)
+        /*public override void UpdateInventory(Player player) //KEEP FOR REFERENCE
         {
+            bool hasMothEye = false;
             foreach (var item in player.armor)
             {
                 if (item.type == ModContent.ItemType<Items.Accessories.MothEye>())
@@ -82,7 +83,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
                 }
             }
             base.UpdateInventory(player);
-        }
+        }*/
         //public override void EquipFrameEffects(Player player, EquipType type)
         //{
         //    if (fireflyBiome.IsBiomeActive(player))
