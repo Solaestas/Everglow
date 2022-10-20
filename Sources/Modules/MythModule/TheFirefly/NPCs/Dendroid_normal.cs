@@ -8,7 +8,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
     {
         public override void SetStaticDefaults()
         {
-            Main.npcFrameCount[NPC.type] = 8;
+            Main.npcFrameCount[NPC.type] = 20;
         }
 
         public override void SetDefaults()
@@ -20,7 +20,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             NPC.lifeMax = 160;
             NPC.knockBackResist = 0.6f;
             NPC.value = Item.buyPrice(0, 0, 16, 0);
-            NPC.aiStyle = 0;
+            NPC.aiStyle = NPCAIStyleID.Fighter;
+            
         }
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
@@ -36,90 +37,62 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
         public override void AI()
         {
             Player player = Main.player[NPC.FindClosestPlayer()];
-            if (NPC.ai[1] > 0)
+            if(NPC.velocity.X > 0)
             {
-                if (NPC.ai[0] < 4)
-                {
-                    NPC.ai[0] += 0.18f;
-                }
-                else
-                {
-                    NPC.ai[0] += 0.5f;
-                }
-
-                if (NPC.ai[0] >= 8f)
-                {
-                    NPC.ai[0] = 4f;
-                }
-                NPC.velocity.Y = 0f;
-                UpdateMove();
+                NPC.spriteDirection = 1;
             }
             else
             {
-                if ((player.Center - NPC.Center).Length() < 80f || NPC.life != NPC.lifeMax)
+                NPC.spriteDirection = -1;
+            }
+            if(NPC.collideY||NPC.collideX)
+            {
+                NPC.velocity.X += NPC.spriteDirection * NPC.scale * 0.3f;
+
+                Vector2 ToPlayer = (player.Center - NPC.Center);
+                if (ToPlayer.X * NPC.velocity.X < 0)
                 {
-                    NPC.ai[1] = 1f;
-                }
-                foreach (NPC same in Main.npc)
-                {
-                    if (same.type == NPC.type)
+                    if (ToPlayer.Length() > 1000 * NPC.scale || Main.rand.NextBool(240))
                     {
-                        if ((same.Center - NPC.Center).Length() < 60)
-                        {
-                            if (same.ai[1] > 0)
-                            {
-                                NPC.ai[1] = 1;
-                                NPC.ai[2] = Main.rand.Next(100);
-                                AimPos = new Vector2(0, Main.rand.NextFloat(12f, 220f)).RotatedByRandom(6.283) + NPC.Center;
-                                break;
-                            }
-                        }
+                        NPC.velocity.X *= -1;
+                        NPC.spriteDirection *= -1;
                     }
                 }
             }
+
         }
-
-        private Vector2 AimPos = Vector2.Zero;
-
-        private void UpdateMove()
+        public override void FindFrame(int frameHeight)
         {
-            NPC.ai[2] += 1;
-            if (NPC.ai[2] % 40 == 0)
+            frameHeight = NPC.height;
+            NPC.frameCounter++;
+            float frameChangeFrequency = Math.Max(7 - Math.Abs(NPC.velocity.X) * 5, 1);
+            if(NPC.collideY || NPC.collideX)
             {
-                Vector2 vNext = new Vector2(0, Main.rand.NextFloat(12f, 220f)).RotatedByRandom(6.283) + NPC.Center + Vector2.Normalize(NPC.Center - Main.player[Player.FindClosest(NPC.Center, 0, 0)].Center) * 6 + new Vector2(0, -6);
-                while (!Collision.CanHit(NPC.Center, 0, 0, vNext, 0, 0) || Main.tile[(int)(vNext.X / 16), (int)(vNext.Y / 16)].LiquidAmount != 0)
+                if(NPC.frame.Y < 6 * frameHeight)
                 {
-                    vNext = new Vector2(0, Main.rand.NextFloat(12f, 220f)).RotatedByRandom(6.283) + NPC.Center + Vector2.Normalize(NPC.Center - Main.player[Player.FindClosest(NPC.Center, 0, 0)].Center) * 6 + new Vector2(0, -6);
+                    NPC.frame.Y = 6 * frameHeight;
                 }
-                AimPos = vNext;
-            }
-            if ((NPC.Center - AimPos).Length() >= 20)
-            {
-                NPC.velocity = Vector2.Normalize(AimPos - NPC.Center) * 1f;
+                if (NPC.frameCounter > frameChangeFrequency)
+                {
+                    NPC.frameCounter = 0;
+                    if (NPC.frame.Y < 19 * frameHeight)
+                    {
+                        NPC.frame.Y += frameHeight;
+                    }
+                    else
+                    {
+                        NPC.frame.Y = 6 * frameHeight;
+                    }
+                }
             }
             else
             {
-                NPC.velocity *= 0;
+                NPC.frame.Y = 5 * frameHeight;
             }
         }
-
-        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            SpriteEffects effects = SpriteEffects.None;
-            if (NPC.spriteDirection == 1)
-            {
-                effects = SpriteEffects.FlipHorizontally;
-            }
-            Texture2D tx = MythContent.QuickTexture("TheFirefly/NPCs/GlowingFirefly");
-            Texture2D tg = MythContent.QuickTexture("TheFirefly/NPCs/GlowingFireflyGlow");
-            Vector2 vector = new Vector2(tx.Width / 2f, tx.Height / (float)Main.npcFrameCount[NPC.type] / 2f);
-
-            Color color0 = Lighting.GetColor((int)(NPC.Center.X / 16d), (int)(NPC.Center.Y / 16d));
-            Color color1 = new Color(255, 255, 255, 0);
-            Main.spriteBatch.Draw(tx, NPC.Center - Main.screenPosition, new Rectangle(0, 50 * (int)NPC.ai[0], 46, 50), color0, NPC.rotation, vector, NPC.scale, effects, 0f);
-            Main.spriteBatch.Draw(tg, NPC.Center - Main.screenPosition, new Rectangle(0, 50 * (int)NPC.ai[0], 46, 50), color1, NPC.rotation, vector, NPC.scale, effects, 0f);
-
-            return false;
+            spriteBatch.Draw(MythContent.QuickTexture("TheFirefly/NPCs/Dendroid_normal_glow"),NPC.Center - Main.screenPosition,NPC.frame,new Color(255,255,255,0),NPC.rotation,new Vector2(NPC.width, NPC.height) / 2f,NPC.scale,NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
         }
 
         public override void OnKill()
@@ -144,17 +117,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
         public override void OnSpawn(IEntitySource source)
         {
             NPC.scale = Main.rand.NextFloat(0.83f, 1.17f);
-        }
-
-        public override bool? CanBeCaughtBy(Item item, Player player)
-        {
-            return true;
-        }
-
-        public override void OnCaughtBy(Player player, Item item, bool failed)
-        {
-            Item.NewItem(NPC.GetSource_FromThis(), NPC.Center, 0, 0, ModContent.ItemType<Items.GlowingFirefly>(), 1);
-            NPC.active = false;
         }
     }
 }
