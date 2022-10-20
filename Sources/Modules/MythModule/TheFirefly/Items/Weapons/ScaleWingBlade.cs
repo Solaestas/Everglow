@@ -70,7 +70,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
                     hasMothEye = true;
                     if (hasMothEye == true && fireflyBiome.IsBiomeActive(Main.LocalPlayer))
                     {
-                        player.statDefense = 9999;
+                        player.statDefense = 999; //used as an example
                     }
                     break;
                 }
