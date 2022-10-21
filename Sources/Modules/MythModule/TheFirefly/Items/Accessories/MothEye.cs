@@ -1,5 +1,6 @@
 ﻿using Everglow.Sources.Commons.Function.FeatureFlags;
 using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons;
 using Terraria.DataStructures;
 using Terraria.Localization;
 
@@ -8,7 +9,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
     [AutoloadEquip(EquipType.Neck)]
     public class MothEye : ModItem
     {
-        private FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
+        FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
 
         public override void SetDefaults()
         {
@@ -25,7 +26,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
             player.maxMinions += 1;
             player.maxTurrets += 1;
             player.GetDamage(DamageClass.Summon) *= 1.06f;
-            if (fireflyBiome.IsBiomeActive(player))
+            if (fireflyBiome.IsBiomeActive(Main.LocalPlayer))
             {
                 player.manaSickReduction += 4;
                 player.manaCost -= 0.05f;
@@ -69,6 +70,20 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
                 spriteBatch.Draw(mEyeTex, position, null, drawColor, 0f, origin, scale, 0, 0f);
             }
         }
+
+        /*public override void UpdateInventory(Player player) //KEEP FOR REFERENCE
+        {
+            bool hasMothEye = false;
+            foreach (var item in player.armor)
+            {
+                if (item.type == ModContent.ItemType<Items.Accessories.MothEye>())
+                {
+                    hasMothEye = true;
+                    break;
+                }
+            }
+            base.UpdateInventory(player);
+        }*/
         //public override void EquipFrameEffects(Player player, EquipType type)
         //{
         //    if (fireflyBiome.IsBiomeActive(player))
@@ -85,10 +100,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
     }
     class MothEyePlayer : ModPlayer
     {
-        private FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
+        FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
+
         public override void ModifyWeaponDamage(Item item, ref StatModifier damage)
         {
-            if (fireflyBiome.IsBiomeActive(Player))
+            if (fireflyBiome.IsBiomeActive(Main.LocalPlayer))
             {
                 for (int f = 0; f < Player.armor.Length; f++)
                 {
