@@ -22,7 +22,7 @@
             Item.consumable = true;
             Item.maxStack = 999;
             Item.value = 1600;
-            Item.createTile = ModContent.TileType<Tiles.CyanVineBar>();
+            Item.createTile = ModContent.TileType<Tiles.CyanVine.CyanVineBar>();
         }
         public override void AddRecipes()
         {

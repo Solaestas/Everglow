@@ -57,15 +57,8 @@
 		<PackageReference Include="SixLabors.ImageSharp" Version="2.1.2" />
 		<PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
 	</ItemGroup>
-	<ItemGroup>
-		<Folder Include="Resources\Tools\" />
-		<Folder Include="lib\" />
-		<Folder Include="Sources\Modules\FoodModule\Buffs\ModDrinkBuffs\" />
-		<Folder Include="Sources\Modules\FoodModule\Buffs\ModFoodBuffs\" />
-	</ItemGroup>
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 		<Exec Command="xcopy /y /d  &quot;$(OutDir)Everglow.dll&quot; &quot;$(ProjectDir)&quot;" />
-		<Exec Command="xcopy /y /d &quot;$(ProjectDir)..\..\Mods\Everglow.tmod&quot; &quot;$(ProjectDir)Product\&quot;" />
 	</Target>
 	<Target Name="BuildEffect" BeforeTargets="Build">
 		<Exec Command="&quot;$(ProjectDir)Resources\Tools\_XNBCompiler.exe&quot; &quot;$(ProjectDir)Sources&quot;" />

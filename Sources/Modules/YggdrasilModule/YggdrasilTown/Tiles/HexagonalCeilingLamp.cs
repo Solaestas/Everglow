@@ -37,6 +37,8 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles
 
             // Etc
             ModTranslation name = CreateMapEntryName();
+            name.SetDefault("Chandelier");
+            AddMapEntry(new Color(216, 172, 125), name);
         }
         public override void HitWire(int i, int j)
         {

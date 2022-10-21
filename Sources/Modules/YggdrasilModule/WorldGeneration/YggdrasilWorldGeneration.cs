@@ -4,8 +4,10 @@ using Terraria.IO;
 using Terraria.WorldBuilding;
 using Everglow.Sources.Modules.YggdrasilModule.Common;
 using Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles;
+using Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles.CyanVine;
 using Everglow.Sources.Modules.YggdrasilModule.KelpCurtain.Tiles;
 using Everglow.Sources.Modules.YggdrasilModule.HurricaneMaze.Tiles;
+using Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Tiles;
 
 using Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Walls;
 using Everglow.Sources.Modules.YggdrasilModule.KelpCurtain.Walls;
@@ -71,10 +73,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.WorldGeneration
                                     tile.TileType = (ushort)ModContent.TileType<CyanVineStone>();
                                     tile.HasTile = true;
                                 }
-                                if (pixel.R == 195 && pixel.G == 217 && pixel.B == 229)//大青缎矿
-                                {
-                                    YggdrasilUtils.PlaceFrameImportantTiles(x + a,y + b,5,4, ModContent.TileType<CyanVineOre>(), Main.rand.Next(4) * 90);
-                                }
+
                                 if (pixel.R == 31 && pixel.G == 26 && pixel.B == 45)//黑淤泥
                                 {
                                     tile.TileType = (ushort)ModContent.TileType<DarkMud>();
@@ -92,11 +91,10 @@ namespace Everglow.Sources.Modules.YggdrasilModule.WorldGeneration
                                     tile.TileType = (ushort)ModContent.TileType<OldMoss>();
                                     tile.HasTile = true;
                                 }
-                                if (pixel.R == 0 && pixel.G == 0 && pixel.B == 255)
+                                if (pixel.R == 53 && pixel.G == 29 && pixel.B == 26)//天穹泥
                                 {
-                                    tile.LiquidType = LiquidID.Water;
-                                    tile.LiquidAmount = 200;
-                                    tile.HasTile = false;
+                                    tile.TileType = (ushort)ModContent.TileType<YggdrasilDirt>();
+                                    tile.HasTile = true;
                                 }
 
 
@@ -105,6 +103,34 @@ namespace Everglow.Sources.Modules.YggdrasilModule.WorldGeneration
                                 if (pixel.R == 65 && pixel.G == 84 && pixel.B == 63)//青岗岩
                                 {
                                     tile.TileType = (ushort)ModContent.TileType<CyanWindGranite>();
+                                    tile.HasTile = true;
+                                }
+
+
+                                //蛆败之穴
+                                if (pixel.R == 107 && pixel.G == 34 && pixel.B == 21)//血解光石
+                                {
+                                    tile.TileType = (ushort)ModContent.TileType<BloodLightCrystal>();
+                                    tile.HasTile = true;
+                                }
+
+
+
+                                //常规
+                                if (pixel.R == 0 && pixel.G == 0 && pixel.B == 255)//水
+                                {
+                                    tile.LiquidType = LiquidID.Water;
+                                    tile.LiquidAmount = 200;
+                                    tile.HasTile = false;
+                                }
+                                if (pixel.R == 128 && pixel.G == 128 && pixel.B == 128)//岩石
+                                {
+                                    tile.TileType = TileID.Stone;
+                                    tile.HasTile = true;
+                                }
+                                if (pixel.R == 186 && pixel.G == 168 && pixel.B == 84)//沙
+                                {
+                                    tile.TileType = TileID.Sand;
                                     tile.HasTile = true;
                                 }
                                 break;
@@ -180,10 +206,535 @@ namespace Everglow.Sources.Modules.YggdrasilModule.WorldGeneration
                                     QuickBuild(x, y, "YggdrasilTown/MapIOs/Church80x51.mapio");
                                 }
                                 break;
+                            case 4:
+                                if (pixel.R == 195 && pixel.G == 217 && pixel.B == 229)//大青缎矿
+                                {
+                                    PlaceLargeCyanVineOre(x, y);
+                                }
+                                if (pixel.R == 195 && pixel.G == 217 && pixel.B == 230)//中青缎矿
+                                {
+                                    PlaceMiddleCyanVineOre(x, y);
+                                }
+                                if (pixel.R == 195 && pixel.G == 217 && pixel.B == 231)//小青缎矿
+                                {
+                                    PlaceSmallCyanVineOre(x, y);
+                                }
+                                if (pixel.R == 195 && pixel.G == 217 && pixel.B == 232)//倒挂小青缎矿
+                                {
+                                    PlaceSmallUpCyanVineOre(x, y);
+                                }
+                                if (pixel.R == 195 && pixel.G == 217 && pixel.B == 233)//倒挂大青缎矿
+                                {
+                                    PlaceLargeUpCyanVineOre(x, y);
+                                }
+                                break;
                         }
                     }
                 }
             });   
+        }
+        public static void PlaceLargeCyanVineOre(int i, int j)
+        {
+            switch(Main.rand.Next(2))
+            {
+                case 0:
+                    for (int x = 0; x < 5; x++)
+                    {
+                        for (int y = 0; y < 3; y++)
+                        {
+                            var tile = Main.tile[i + x, j + y];
+                            if (x == 0 && y == 0)
+                            {
+                                continue;
+                            }
+                            if (x == 4 && y == 0)
+                            {
+                                continue;
+                            }
+                            if (x == 4 && y == 1)
+                            {
+                                continue;
+                            }
+                            if (x == 0 && y == 1)
+                            {
+                                tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
+                                tile.IsHalfBlock = true;
+                                tile.TileFrameX = (short)(x * 18);
+                                tile.TileFrameY = (short)(y * 18);
+                                tile.HasTile = true;
+                                continue;
+                            }
+                            if (x == 4 && y == 2)
+                            {
+                                tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
+                                tile.Slope = SlopeType.SlopeDownLeft;
+                                tile.TileFrameX = (short)(x * 18);
+                                tile.TileFrameY = (short)(y * 18);
+                                tile.HasTile = true;
+                                continue;
+                            }
+                            if (x == 1 && y == 2)
+                            {
+                                tile.TileType = (ushort)ModContent.TileType<CyanVineOreLarge>();
+                                tile.TileFrameX = 36;
+                                tile.TileFrameY = 54;
+                                tile.HasTile = true;
+                                continue;
+                            }
+                            tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
+                            tile.TileFrameX = (short)(x * 18);
+                            tile.TileFrameY = (short)(y * 18);
+                            tile.HasTile = true;
+                        }
+                    }
+                    break;
+                case 1:
+                    for (int x = 1; x < 4; x++)
+                    {
+                        for (int y = 1; y < 3; y++)
+                        {
+                            var tile = Main.tile[i + x, j + y];
+                            if (x == 4 && y == 1)
+                            {
+                                continue;
+                            }
+                            if (x == 2 && y == 2)
+                            {
+                                tile.TileType = (ushort)ModContent.TileType<CyanVineOreLarge>();
+                                tile.TileFrameX = 144;
+                                tile.TileFrameY = 54;
+                                tile.HasTile = true;
+                                continue;
+                            }
+                            if (x == 1 && y == 1)
+                            {
+                                tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
+                                tile.IsHalfBlock = true;
+                                tile.TileFrameX = (short)(x * 18);
+                                tile.TileFrameY = (short)(y * 18);
+                                tile.HasTile = true;
+                                continue;
+                            }
+                            tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
+                            tile.TileFrameX = (short)(x * 18);
+                            tile.TileFrameY = (short)(y * 18);
+                            tile.HasTile = true;
+                        }
+                    }
+                    break;
+            }
+        }
+        public static void PlaceMiddleCyanVineOre(int i, int j)
+        {
+            switch (Main.rand.Next(4))
+            {
+                case 0:
+                    for (int x = 0; x < 3; x++)
+                    {
+                        for (int y = 0; y < 3; y++)
+                        {
+                            var tile = Main.tile[i + x, j + y];
+                            if (x == 0 && y == 0)
+                            {
+                                continue;
+                            }
+                            if (x == 1 && y == 0)
+                            {
+                                continue;
+                            }
+                            if (x == 0 && y == 1)
+                            {
+                                continue;
+                            }
+                            if (x == 2 && y == 0)
+                            {
+                                tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
+                                tile.Slope = SlopeType.SlopeDownRight;
+                                tile.TileFrameX = (short)(x * 18);
+                                tile.TileFrameY = (short)(y * 18);
+                                tile.HasTile = true;
+                                continue;
+                            }
+                            if (x == 1 && y == 2)
+                            {
+                                tile.TileType = (ushort)ModContent.TileType<CyanVineOreMiddle>();
+                                tile.TileFrameX = 18;
+                                tile.TileFrameY = 54;
+                                tile.HasTile = true;
+                                continue;
+                            }
+                            tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
+                            tile.TileFrameX = (short)(x * 18);
+                            tile.TileFrameY = (short)(y * 18);
+                            tile.HasTile = true;
+                        }
+                    }
+                    break;
+                case 1:
+                    for (int x = 0; x < 3; x++)
+                    {
+                        for (int y = 1; y < 3; y++)
+                        {
+                            var tile = Main.tile[i + x, j + y];
+
+                            if (x == 0 && y == 1)
+                            {
+                                continue;
+                            }
+                            if (x == 2 && y == 1)
+                            {
+                                tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
+                                tile.Slope = SlopeType.SlopeDownLeft;
+                                tile.TileFrameX = (short)(x * 18);
+                                tile.TileFrameY = (short)(y * 18);
+                                tile.HasTile = true;
+                                continue;
+                            }
+                            if (x == 1 && y == 2)
+                            {
+                                tile.TileType = (ushort)ModContent.TileType<CyanVineOreMiddle>();
+                                tile.TileFrameX = 90;
+                                tile.TileFrameY = 54;
+                                tile.HasTile = true;
+                                continue;
+                            }
+                            tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
+                            tile.TileFrameX = (short)(x * 18);
+                            tile.TileFrameY = (short)(y * 18);
+                            tile.HasTile = true;
+                        }
+                    }
+                    break;
+                case 2:
+                    for (int x = 1; x < 4; x++)
+                    {
+                        for (int y = 1; y < 3; y++)
+                        {
+                            var tile = Main.tile[i + x, j + y];
+
+                            if (x == 3 && y == 1)
+                            {
+                                continue;
+                            }
+                            if (x == 1 && y == 2)
+                            {
+                                tile.TileType = (ushort)ModContent.TileType<CyanVineOreMiddle>();
+                                tile.TileFrameX = 162;
+                                tile.TileFrameY = 54;
+                                tile.HasTile = true;
+                                continue;
+                            }
+                            tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
+                            tile.TileFrameX = (short)(x * 18);
+                            tile.TileFrameY = (short)(y * 18);
+                            tile.HasTile = true;
+                        }
+                    }
+                    break;
+                case 3:
+                    for (int x = 0; x < 3; x++)
+                    {
+                        for (int y = 1; y < 3; y++)
+                        {
+                            var tile = Main.tile[i + x, j + y];
+
+                            if (x == 0 && y == 1)
+                            {
+                                continue;
+                            }
+                            if (x == 0 && y == 2)
+                            {
+                                tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
+                                tile.Slope = SlopeType.SlopeDownRight;
+                                tile.TileFrameX = (short)(x * 18);
+                                tile.TileFrameY = (short)(y * 18);
+                                tile.HasTile = true;
+                                continue;
+                            }
+                            if (x == 2 && y == 1)
+                            {
+                                tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
+                                tile.IsHalfBlock = true;
+                                tile.TileFrameX = (short)(x * 18);
+                                tile.TileFrameY = (short)(y * 18);
+                                tile.HasTile = true;
+                                continue;
+                            }
+                            if (x == 1 && y == 2)
+                            {
+                                tile.TileType = (ushort)ModContent.TileType<CyanVineOreMiddle>();
+                                tile.TileFrameX = 234;
+                                tile.TileFrameY = 54;
+                                tile.HasTile = true;
+                                continue;
+                            }
+                            tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
+                            tile.TileFrameX = (short)(x * 18);
+                            tile.TileFrameY = (short)(y * 18);
+                            tile.HasTile = true;
+                        }
+                    }
+                    break;
+            }
+        }
+        public static void PlaceSmallCyanVineOre(int i, int j)
+        {
+            switch (Main.rand.Next(3))
+            {
+                case 0:
+                    for (int x = 0; x < 2; x++)
+                    {
+                        for (int y = 0; y < 2; y++)
+                        {
+                            var tile = Main.tile[i + x, j + y];
+                            if (x == 0 && y == 0)
+                            {
+                                continue;
+                            }
+                            if (x == 0 && y == 1)
+                            {
+                                tile.TileType = (ushort)ModContent.TileType<CyanVineOreSmall>();
+                                tile.TileFrameX = 0;
+                                tile.TileFrameY = 36;
+                                tile.HasTile = true;
+                                continue;
+                            }
+                            tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
+                            tile.TileFrameX = (short)(x * 18);
+                            tile.TileFrameY = (short)(y * 18);
+                            tile.HasTile = true;
+                        }
+                    }
+                    break;
+                case 1:
+                    for (int x = 0; x < 2; x++)
+                    {
+                        for (int y = 0; y < 2; y++)
+                        {
+                            var tile = Main.tile[i + x, j + y];
+
+                            if (x == 0 && y == 0)
+                            {
+                                tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
+                                tile.Slope = SlopeType.SlopeDownRight;
+                                tile.TileFrameX = (short)(x * 18);
+                                tile.TileFrameY = (short)(y * 18);
+                                tile.HasTile = true;
+                                continue;
+                            }
+                            if (x == 1 && y == 0)
+                            {
+                                tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
+                                tile.Slope = SlopeType.SlopeDownLeft;
+                                tile.TileFrameX = (short)(x * 18);
+                                tile.TileFrameY = (short)(y * 18);
+                                tile.HasTile = true;
+                                continue;
+                            }
+                            if (x == 0 && y == 1)
+                            {
+                                tile.TileType = (ushort)ModContent.TileType<CyanVineOreSmall>();
+                                tile.TileFrameX = 54;
+                                tile.TileFrameY = 36;
+                                tile.HasTile = true;
+                                continue;
+                            }
+                            tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
+                            tile.TileFrameX = (short)(x * 18);
+                            tile.TileFrameY = (short)(y * 18);
+                            tile.HasTile = true;
+                        }
+                    }
+                    break;
+                case 2:
+                    for (int x = 0; x < 3; x++)
+                    {
+                        for (int y = 0; y < 2; y++)
+                        {
+                            var tile = Main.tile[i + x, j + y];
+
+                            if (x == 0 && y == 0)
+                            {
+                                continue;
+                            }
+                            if (x == 2 && y == 0)
+                            {
+                                continue;
+                            }
+                            if (x == 2 && y == 1)
+                            {
+                                tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
+                                tile.Slope = SlopeType.SlopeDownLeft;
+                                tile.TileFrameX = (short)(x * 18);
+                                tile.TileFrameY = (short)(y * 18);
+                                tile.HasTile = true;
+                                continue;
+                            }
+                            if (x == 0 && y == 1)
+                            {
+                                tile.TileType = (ushort)ModContent.TileType<CyanVineOreSmall>();
+                                tile.Slope = SlopeType.SlopeDownRight;
+                                tile.TileFrameX = 108;
+                                tile.TileFrameY = 36;
+                                tile.HasTile = true;
+                                continue;
+                            }
+                            tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
+                            tile.TileFrameX = (short)(x * 18);
+                            tile.TileFrameY = (short)(y * 18);
+                            tile.HasTile = true;
+                        }
+                    }
+                    break;
+            }
+        }
+        public static void PlaceSmallUpCyanVineOre(int i, int j)
+        {
+            switch (Main.rand.Next(4))
+            {
+                case 0:
+                    {
+                        var tile = Main.tile[i + 1, j];
+                        tile.TileType = (ushort)ModContent.TileType<CyanVineOreSmallUp>();
+                        tile.TileFrameX = 18;
+                        tile.TileFrameY = 0;
+                        tile.HasTile = true;
+
+                        var tileII = Main.tile[i + 1, j + 1];
+                        tileII.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
+                        tileII.TileFrameX = 18;
+                        tileII.TileFrameY = 18;
+                        tileII.Slope = SlopeType.SlopeUpRight;
+                        tileII.HasTile = true;
+                    }
+                   
+                    break;
+                case 1:
+                    {
+                        var tile = Main.tile[i + 1, j];
+                        tile.TileType = (ushort)ModContent.TileType<CyanVineOreSmallUp>();
+                        tile.TileFrameX = 72;
+                        tile.TileFrameY = 0;
+                        tile.HasTile = true;
+
+                        var tileII = Main.tile[i + 1, j + 1];
+                        tileII.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
+                        tileII.TileFrameX = 18;
+                        tileII.TileFrameY = 18;
+                        tileII.HasTile = true;
+                    }
+                    break;
+                case 2:
+                    {
+                        var tile = Main.tile[i + 1, j];
+                        tile.TileType = (ushort)ModContent.TileType<CyanVineOreSmallUp>();
+                        tile.TileFrameX = 126;
+                        tile.TileFrameY = 0;
+                        tile.HasTile = true;
+
+                        var tileII = Main.tile[i + 1, j + 1];
+                        tileII.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
+                        tileII.TileFrameX = 18;
+                        tileII.TileFrameY = 18;
+                        tileII.HasTile = true;
+
+                        var tileIII = Main.tile[i, j];
+                        tileIII.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
+                        tileIII.TileFrameX = 0;
+                        tileIII.TileFrameY = 0;
+                        tileIII.Slope = SlopeType.SlopeUpRight;
+                        tileIII.HasTile = true;
+
+                        var tileIV = Main.tile[i + 2, j];
+                        tileIV.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
+                        tileIV.TileFrameX = 36;
+                        tileIV.TileFrameY = 0;
+                        tileIV.Slope = SlopeType.SlopeUpLeft;
+                        tileIV.HasTile = true;
+                    }
+                    break;
+                case 3:
+                    {
+                        var tile = Main.tile[i + 1, j];
+                        tile.TileType = (ushort)ModContent.TileType<CyanVineOreSmallUp>();
+                        tile.TileFrameX = 180;
+                        tile.TileFrameY = 0;
+                        tile.HasTile = true;
+
+                        var tileII = Main.tile[i + 1, j + 1];
+                        tileII.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
+                        tileII.TileFrameX = 18;
+                        tileII.TileFrameY = 18;
+                        tileII.Slope = SlopeType.SlopeUpRight;
+                        tileII.HasTile = true;
+
+                        var tileIII = Main.tile[i, j];
+                        tileIII.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
+                        tileIII.TileFrameX = 0;
+                        tileIII.TileFrameY = 0;
+                        tileIII.HasTile = true;
+
+                        var tileIV = Main.tile[i + 2, j];
+                        tileIV.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
+                        tileIV.TileFrameX = 36;
+                        tileIV.TileFrameY = 0;
+                        tileIV.Slope = SlopeType.SlopeUpLeft;
+                        tileIV.HasTile = true;
+                    }
+                    break;
+            }
+        }
+        public static void PlaceLargeUpCyanVineOre(int i, int j)
+        {
+            for (int x = 1; x < 5; x++)
+            {
+                for (int y = 0; y < 3; y++)
+                {
+                    var tile = Main.tile[i + x, j + y];
+                    if (x == 1 && y == 2)
+                    {
+                        continue;
+                    }
+                    if (x == 3 && y == 2)
+                    {
+                        continue;
+                    }
+                    if (x == 4 && y == 2)
+                    {
+                        continue;
+                    }
+                    if (x == 1 && y == 1)
+                    {
+                        tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
+                        tile.Slope = SlopeType.SlopeUpRight;
+                        tile.TileFrameX = (short)(x * 18);
+                        tile.TileFrameY = (short)(y * 18);
+                        tile.HasTile = true;
+                        continue;
+                    }
+                    if (x == 4 && y == 1)
+                    {
+                        tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
+                        tile.Slope = SlopeType.SlopeUpLeft;
+                        tile.TileFrameX = (short)(x * 18);
+                        tile.TileFrameY = (short)(y * 18);
+                        tile.HasTile = true;
+                        continue;
+                    }
+                    if (x == 2 && y == 0)
+                    {
+                        tile.TileType = (ushort)ModContent.TileType<CyanVineOreLargeUp>();
+                        tile.TileFrameX = 36;
+                        tile.TileFrameY = 0;
+                        tile.HasTile = true;
+                        continue;
+                    }
+                    tile.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
+                    tile.TileFrameX = (short)(x * 18);
+                    tile.TileFrameY = (short)(y * 18);
+                    tile.HasTile = true;
+                }
+            }
         }
         public static void QuickBuild(int x, int y, string Path)
         {
@@ -211,6 +762,8 @@ namespace Everglow.Sources.Modules.YggdrasilModule.WorldGeneration
 
             Main.statusText = "YggdrasilTown";
             ShapeTile("Tree.bmp", 0, 0, 3);
+            Main.statusText = "YggdrasilOre";
+            ShapeTile("Tree.bmp", 0, 0, 4);
         }
         private static void SmoothTile(int a = 0, int b = 0, int c = 0, int d = 0)
         {
