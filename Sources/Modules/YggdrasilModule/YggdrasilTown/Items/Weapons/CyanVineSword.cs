@@ -16,8 +16,6 @@
             Item.DamageType = DamageClass.Melee;
 
             Item.value = 1100;
-
-            Item.hammer = 35;
         }
         public override void AddRecipes()
         {

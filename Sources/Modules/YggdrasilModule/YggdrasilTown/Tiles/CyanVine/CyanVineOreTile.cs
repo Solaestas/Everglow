@@ -16,7 +16,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles.CyanVine
             MineResist = 24f;
             HitSound = SoundID.NPCHit4;
             MinPick = 40;
-            DustType = DustID.Silver;
+            DustType = ModContent.DustType<Dusts.CyanVine>();
 
             ModTranslation modTranslation = base.CreateMapEntryName(null);
             AddMapEntry(new Color(80, 130, 154), modTranslation);
