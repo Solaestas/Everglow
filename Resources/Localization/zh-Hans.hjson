@@ -88,7 +88,7 @@ Mods:
 			CyanPedal : "四瓣琉璃"
 			DarkHat : "罂粟花坠饰"
 			DukeTooth : "公爵之牙"
-			FlameBorageBadge : "黑萤苣之章"
+			FireflyBorageBadge : "黑萤苣之章"
 			GoldLiquidPupil : "僭越之眼"
 			GoldRound : "金盏轮盘"
 			GreenGel : "森绿凝晶"
@@ -227,10 +227,7 @@ Mods:
 			OceanWorld : 海洋世界(无效)
 			OldMoss : 苍苔
 			ReefSharkSpecimen : 礁鲨标本
-			StoneDragonScaleWood : 石化龙鳞木
 			TerrariaContinent : 泰拉瑞亚大陆(无效)
-			CyanVineBar : 青缎钢锭
-			CyanVineOre : 青缎矿
 			DarkSeaBar : 深焚锭
 			DarkSeaOre : 深焚石
 			OceanBlueBar : 沧流锭
@@ -240,7 +237,6 @@ Mods:
 			LanternCrystal : 皇城晶塔
 			LanternPost1 : 灯笼柱
 			LanternPost2 : 灯笼柱
-			YellowDynastyShingles : 黄王朝瓦
 			DiscordBallF1 : 混沌晶球·天穹古道
 			LiftLamp : 电梯指示灯
 			TestItem : 木制升降梯
@@ -277,6 +273,25 @@ Mods:
 			#食物系统物品
 			BloodGlucoseMonitor : "血糖检测仪"
 			OsmoticPressureMonitor : "渗透压检测仪"
+
+			#天穹树系列物品
+
+				#天穹树小镇
+				ChinesePartitionLamp : "中式屏风灯"
+				ChineseStyleFloorLamp : "中式落地灯"
+				CyanVineBar : "青缎钢锭"
+				CyanVineOre : "青缎矿"
+				DoubleArmsChineseStreetLamp : "中式双臂街灯"
+				HangingSkyLantern : "吊挂式孔明灯"
+				HexagonalCeilingLamp : "六角宫灯"
+				ShoreMud : "深色淤泥"
+				SideHangingLantern : "侧挂式灯笼"
+				StoneDragonScaleWood : "石化龙鳞木"
+				StreetLantern : "灯笼街灯"
+				YellowDynastyShingles : "黄王朝瓦"
+
+			#Plant Module Items
+			CactusBall : "仙人球棍"
 		}
 		ItemTooltip:
 		{
@@ -321,7 +336,7 @@ Mods:
 			CyanPedal : "闪避能力增加4\n'少的那一瓣化作你的勇气'"
 			DarkHat : "暴击率增加4%,暴击伤害增加12%\n'除用于战斗和装饰不建议使用'"
 			DukeTooth : "增加12盔甲穿透力\n'还好猪鲨不是濒危物种...只要有松露虫'"
-			FlameBorageBadge : "-12防御\n伤害增加18%\n'受到那只巨蛾怒气的影响,你的攻击变得更加狂野'"
+		//	FireflyBorageBadge : "Increases magic damage by 6%\nIncreases movement speed by 15%\n'A badge made to remind you of how beautiful that place is'"
 			GoldLiquidPupil : "你的攻击无视敌人35%的防御\n受伤之后生成灵液之环,持续12秒,不可叠加\n灵液之环生成时造成高额伤害\n持续伤害环上的敌人\n对环内的敌人施加灵液"
 			GoldRound : "7防御\n伤害增加7%\n'传统的泰拉人通常配戴它来保持健康'"
 			GreenGel : "生命上限增加30,生命回复增加4\n'研究显示绿史莱姆通常比蓝史莱姆更具生命力'"
@@ -562,6 +577,23 @@ Mods:
 			#食物系统物品
 			BloodGlucoseMonitor : "显示当前饱食度"
 			OsmoticPressureMonitor : "显示渴觉状态"
+
+			#Plant Module Items
+			CactusBall : "旋转并掷出你的仙人掌球！\n击碎敌人护甲，并让它们流血"
+		}
+		ExtraItemTooltip :
+		{
+			UnfinishedItem : "[c/BA0022:This item is unfinished]"
+			MothEyeText0 : "[c/7FC1FF:While in the Firefly biome:]"
+			MothEyeText1 : "[c/7FC1FF:- Mana cost is reduced by 5%]"
+			MothEyeText2 : "[c/7FC1FF:- The effectiveness of mana sickness is reduced by 4]"
+			MothEyeText3 : "[c/7FC1FF:- All Firefly weapons deal 5% more damage]"
+			MothEyeText4 : "[c/7FC1FF:- Some Firefly-related items gain bonuses]"
+			FFBBadge0 : "[c/7FC1FF:'受到那只巨蛾怒气的影响,你的攻击变得更加狂野']"
+			FFBBadge1 : "[c/7FC1FF:Defense is lowered based on how much defense you currently have, up to -12]"
+			FFBBadge2 : "[c/7FC1FF:伤害增加18%]"
+			FFBBadge3 : "[c/7FC1FF:Increases melee speed by 10%]"
+			FFBBadge4 : "[c/7FC1FF:Base critical strike chance for melee weapons and whips is reduced to 0]"
 		}
 		BuffName : 
 		{
@@ -771,6 +803,11 @@ Mods:
 		MapEntry :
 		{
 			FireflyTree : "萤火树"
+
+			#天穹树系列
+
+				#天穹树小镇
+				SideHangingLantern : "侧挂式灯笼"
 		}
 		Config:
 		{

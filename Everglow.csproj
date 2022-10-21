@@ -30,17 +30,23 @@
 		<Compile Remove="Resources\Tools\ImageToBinary\**" />
 		<Compile Remove="Sources\Modules\DeltaMachine\**" />
 		<Compile Remove="Sources\Modules\MythModule\TheFirefly\Tiles\Furniture\**" />
+		<Compile Remove="Sources\Modules\MythModule\TheFirefly\UI\**" />
 		<Compile Remove="Sources\Tools\**" />
 		<EmbeddedResource Remove="Everglow-UnitTest\**" />
 		<EmbeddedResource Remove="Resources\Tools\ImageToBinary\**" />
 		<EmbeddedResource Remove="Sources\Modules\DeltaMachine\**" />
 		<EmbeddedResource Remove="Sources\Modules\MythModule\TheFirefly\Tiles\Furniture\**" />
+		<EmbeddedResource Remove="Sources\Modules\MythModule\TheFirefly\UI\**" />
 		<EmbeddedResource Remove="Sources\Tools\**" />
 		<None Remove="Everglow-UnitTest\**" />
 		<None Remove="Resources\Tools\ImageToBinary\**" />
 		<None Remove="Sources\Modules\DeltaMachine\**" />
 		<None Remove="Sources\Modules\MythModule\TheFirefly\Tiles\Furniture\**" />
+		<None Remove="Sources\Modules\MythModule\TheFirefly\UI\**" />
 		<None Remove="Sources\Tools\**" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Compile Remove="Sources\Modules\MythModule\TheFirefly\Tiles\BlackWine.cs" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Costura.Fody" Version="5.7.0">

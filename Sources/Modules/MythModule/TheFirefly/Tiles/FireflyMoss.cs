@@ -1,8 +1,5 @@
-
 using Everglow.Sources.Modules.MythModule.Common;
 
-using Terraria.Localization;
-using Terraria.ObjectData;
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 {
     public class FireflyMoss : ModTile
@@ -15,6 +12,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             Main.tileLighted[Type] = true;
             Main.tileMoss[Type] = true;
         }
+
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
             var tile = Main.tile[i, j];

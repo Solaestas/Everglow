@@ -1,14 +1,13 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Commons.Function.Vertex;
-using Everglow.Sources.Commons.Core.VFX.Visuals;
-using Everglow.Sources.Commons.Core.VFX.Pipelines;
+﻿using Everglow.Sources.Commons.Core;
 using Everglow.Sources.Commons.Core.VFX;
-using Everglow.Sources.Commons.Core;
+using Everglow.Sources.Commons.Core.VFX.Pipelines;
+using Everglow.Sources.Commons.Core.VFX.Visuals;
+using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Sources.Modules.MythModule.Common;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.BookofSkulls
 {
     [Pipeline(typeof(WCSPipeline))]
-
     internal class SkullSpriteColdFlame : Visual
     {
         public Vector2[] positon = new Vector2[20];
@@ -16,6 +15,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
         public int timeLeft;
         public float size;
         public float omega;
+
         public override void Update()
         {
             for (int y = 19; y > 0; y--)
@@ -24,7 +24,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             }
             positon[0] += velocity;
             timeLeft -= 1;
-            if(timeLeft <= 0)
+            if (timeLeft <= 0)
             {
                 Kill();
             }
@@ -40,6 +40,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             }
             base.Update();
         }
+
         public override void Draw()
         {
             List<Vertex2D> bars = new List<Vertex2D>();
@@ -70,7 +71,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
                 float c0 = 1f;
                 float c1 = 0.7f;
                 float width = (float)(Math.Sin(factor * Math.PI) * factor) * size * 19;
-                if(timeLeft < 30)
+                if (timeLeft < 30)
                 {
                     c1 *= timeLeft / 30f;
                     c0 *= timeLeft / 30f;
@@ -79,7 +80,6 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
                 bars.Add(new Vertex2D(positon[i] + normalDir * -width, new Color(c0, c0, c0, c0), new Vector3(x0, 0.4f, w)));
                 barsF.Add(new Vertex2D(positon[i] + normalDir * width, new Color(c1, c1, c1, 0), new Vector3(x1, 0.6f, w)));
                 barsF.Add(new Vertex2D(positon[i] + normalDir * -width, new Color(c1, c1, c1, 0), new Vector3(x1, 0.4f, w)));
-
             }
             Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BookofSkulls/SkullFlameLine");
             Main.graphics.GraphicsDevice.Textures[0] = t;
@@ -87,7 +87,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             {
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
             }
-            
+
             Texture2D t2 = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BookofSkulls/GoldLine");
             Main.graphics.GraphicsDevice.Textures[0] = t2;
             if (barsF.Count > 3)
@@ -97,6 +97,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
 
             //Dust.NewDust(positon[0],0,0, DustID.Torch);
         }
+
         public override CallOpportunity DrawLayer => CallOpportunity.PostDrawNPCs;
     }
 }
