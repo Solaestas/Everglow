@@ -1,7 +1,6 @@
-﻿using Everglow.Sources.Commons.Function.Vertex;
+﻿using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MEACModule;
-using Everglow.Sources.Modules.MythModule.Common;
-
 namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles
 {
     public class LilyHarpNoteKill : ModProjectile, IWarpProjectile
@@ -9,7 +8,6 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles
         public override void SetStaticDefaults()
         {
         }
-
         public override void SetDefaults()
         {
             Projectile.extraUpdates = 1;
@@ -28,7 +26,7 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles
         {
             Projectile.hide = true;
         }
-
+       
         public override bool PreDraw(ref Color lightColor)
         {
             float value = (200 - Projectile.timeLeft) / (float)Projectile.timeLeft * 1.4f;
@@ -38,19 +36,18 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles
                 DrawCircle(value * 110, 15 * (1 - value) + 3, new Color(0, 0.15f * (1 - value), 0.03f * (1 - value), 0f), Projectile.Center - Main.screenPosition);
             }
             value -= 0.2f;
-            if (value is < 1 and > 0)
+            if (value < 1 && value > 0)
             {
                 DrawCircle(value * 90, 8 * (1 - value) + 3, new Color(0, 0.10f * (1 - value), 0.06f * (1 - value), 0f), Projectile.Center - Main.screenPosition);
             }
             return false;
         }
-
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
         {
             behindProjectiles.Add(index);
+            base.DrawBehind(index, behindNPCsAndTiles, behindNPCs, behindProjectiles, overPlayers, overWiresUI);
         }
-
-        private static void DrawCircle(float radious, float width, Color color, Vector2 center)
+        private void DrawCircle(float radious, float width, Color color, Vector2 center)
         {
             List<Vertex2D> circle = new List<Vertex2D>();
             for (int h = 0; h < radious / 2; h++)
@@ -67,7 +64,6 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
             }
         }
-
         public void DrawWarp()
         {
             Main.spriteBatch.End();
@@ -81,7 +77,7 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles
                 DrawCircle(value * 110, 15 * (1 - value) + 3, new Color(0, 0.15f * (1 - value), 0.03f * (1 - value), 0f), Projectile.Center - Main.screenPosition);
             }
             value -= 0.2f;
-            if (value is < 1 and > 0)
+            if (value < 1 && value > 0)
             {
                 DrawCircle(value * 90, 8 * (1 - value) + 3, new Color(0, 0.10f * (1 - value), 0.06f * (1 - value), 0f), Projectile.Center - Main.screenPosition);
             }

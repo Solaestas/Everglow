@@ -1,5 +1,6 @@
-﻿using Everglow.Sources.Commons.Function.Vertex;
-using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
@@ -9,7 +10,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         {
             DisplayName.SetDefault("");
         }
-
         public override void SetDefaults()
         {
             Projectile.width = 1;
@@ -25,14 +25,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 60;
         }
-
         public override void AI()
         {
             Projectile.velocity *= 0.9f;
         }
 
         private int TrueL = 1;
-
         public override void PostDraw(Color lightColor)
         {
             Main.spriteBatch.End();

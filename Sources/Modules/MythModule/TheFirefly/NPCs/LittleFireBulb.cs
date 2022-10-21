@@ -1,6 +1,5 @@
 ﻿using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.Localization;
-
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 {
     public class LittleFireBulb : ModNPC
@@ -9,8 +8,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
         {
             DisplayName.SetDefault("LittleFireBulb");
             DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "萤火泡");
+            MothLandGlobalNPC.RegisterMothLandNPC(Type);
         }
-
         public override void SetDefaults()
         {
             NPC.damage = 0;
@@ -31,12 +30,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             NPC.dontTakeDamage = true;
             NPC.aiStyle = -1;
         }
-
         private bool HitT = false;
         private bool Ini = false;
         private float MaxL = 0;
         private Vector2 StaCen = Vector2.Zero;
-
         public override void AI()
         {
             if (!Ini)
@@ -110,7 +107,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
         }
 
         private Vector2[] vPos = new Vector2[200];
-
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             SpriteEffects effects = SpriteEffects.None;

@@ -9,7 +9,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Buffs
             Main.debuff[Type] = true;
             Main.buffNoSave[Type] = true;
         }
-
         public override void Update(NPC npc, ref int buffIndex)
         {
             for (int t = 0; t < 5; t++)
@@ -18,22 +17,18 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Buffs
                 {
                     if (npc.buffTime[t] < 10)
                     {
-                        MothBuffTarget mothBuffTarget = new MothBuffTarget
-                        {
-                            MothStack = 0
-                        };
+                        MothBuffTarget mothBuffTarget = new MothBuffTarget();
+                        mothBuffTarget.MothStack = 0;
                     }
                     break;
                 }
             }
         }
     }
-
     public class MothBuffTarget : GlobalNPC
     {
         public int MothStack = 0;
         public override bool InstancePerEntity => true;
-
         public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
             if (npc.HasBuff(ModContent.BuffType<OnMoth>()))
@@ -45,7 +40,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Buffs
             }
             base.ModifyHitByProjectile(npc, projectile, ref damage, ref knockback, ref crit, ref hitDirection);
         }
-
         public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             if (npc.HasBuff(ModContent.BuffType<OnMoth>()))
@@ -67,9 +61,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Buffs
                 Texture2D ButterflyD = MythContent.QuickTexture("TheFirefly/Projectiles/GlowFanTex/BlueFlyD");
                 if (4f * npc.width * npc.height / 10300f * npc.scale > 1.5f)
                 {
+
                     spriteBatch.Draw(Butterfly, npc.Center - Main.screenPosition, null, new Color(Stre, Stre, Stre, 0), 0, new Vector2(33, 33), 3f, SpriteEffects.None, 0f);
                     spriteBatch.Draw(ButterflyD, npc.Center - Main.screenPosition, null, new Color(Stre2 * 0.5f, Stre2 * 0.5f, Stre2 * 0.5f, 0), 0, new Vector2(33, 33), 3f, SpriteEffects.None, 0f);
                     spriteBatch.Draw(Number, npc.Center - Main.screenPosition, null, new Color(Stre2 * 2, Stre2 * 2, Stre2 * 2, 0), 0, new Vector2(Number.Width / 2f, Number.Height / 2f), 3f, SpriteEffects.None, 0f);
+
                 }
                 else
                 {

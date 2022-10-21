@@ -1,6 +1,7 @@
 ﻿namespace Everglow.Sources.Modules.MythModule.Common
 {
-    public sealed class MythManualMusicRegistration : ILoadable
+
+    public sealed class ManualMusicRegistrationExample : ILoadable
     {
         public void Load(Mod mod)
         {
@@ -10,10 +11,11 @@
             MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Musics/MothFightingAlt");
             MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Musics/MothFightingOld");
             MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Musics/MothFightingOld2");
-        }
 
+        }
         public void Unload()
         {
+
         }
     }
 }

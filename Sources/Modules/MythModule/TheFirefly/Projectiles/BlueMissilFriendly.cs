@@ -1,4 +1,6 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
+﻿using Terraria.ID;
+
+namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
     public class BlueMissilFriendly : ModProjectile
     {
@@ -7,7 +9,6 @@
             base.DisplayName.SetDefault("蓝鳞粉");
             Main.projFrames[Projectile.type] = 3;
         }
-
         public override void SetDefaults()
         {
             Projectile.width = 34;
@@ -19,10 +20,8 @@
             Projectile.tileCollide = true;
             Projectile.usesLocalNPCImmunity = false;
         }
-
-        private Vector2 va;
+        Vector2 va;
         private float Stre2 = 1;
-
         public override void AI()
         {
             if (Stre2 > 0)
@@ -47,11 +46,9 @@
             int num90 = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.7f, 3.9f));
             Main.dust[num90].velocity = Projectile.velocity * 0.8f;
         }
-
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
         }
-
         public override void Kill(int timeLeft)
         {
             for (int i = 0; i < 18; i++)
@@ -65,18 +62,16 @@
                 Main.dust[num90].noGravity = true;
             }
         }
-
         public override Color? GetAlpha(Color lightColor)
         {
             return new Color(1f, 1f, 1f, 0);
         }
-
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D Light = Common.MythContent.QuickTexture("TheFirefly/Projectiles/FixCoinLight3");
             Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color((int)(255 * Stre2), (int)(255 * Stre2), (int)(255 * Stre2), 0), Projectile.rotation, new Vector2(56f, 56f), Projectile.scale * 2, SpriteEffects.None, 0);
             Texture2D Star = Common.MythContent.QuickTexture("TheFirefly/Projectiles/BlueMissil");
-            Main.spriteBatch.Draw(Star, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(255, 255, 255, 0), 0, new Vector2(17f, 17f), Projectile.scale * 2, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(Star, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color((int)(255), (int)(255), (int)(255), 0), 0, new Vector2(17f, 17f), Projectile.scale * 2, SpriteEffects.None, 0);
             return true;
         }
     }

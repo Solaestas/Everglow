@@ -278,7 +278,7 @@ namespace Everglow.Sources.Modules.SubWorldModule
                 WorldFile.SaveWorld();
             }
             SystemLoader.OnWorldUnload();
-            typeof(ModLoader).Assembly.GetType("Terraria.ModLoader.IO.TileIO").GetMethod("ClearWorld", BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, null);
+            typeof(ModLoader).Assembly.GetType("Terraria.ModLoader.IO.TileIO").GetMethod("PostExitWorldCleanup", BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, null);
             Main.fastForwardTime = false;
             Main.UpdateTimeRate();
             WorldGen.noMapUpdate = true;

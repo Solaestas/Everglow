@@ -11,10 +11,10 @@
         {
             Item.width = 18;
             Item.height = 20;
-            Item.rare = ItemRarityID.Orange;
+            Item.rare = 3;
             Item.scale = 1f;
             Item.createTile = 0;
-            Item.useStyle = ItemUseStyleID.Swing;
+            Item.useStyle = 1;
             Item.useTurn = true;
             Item.useAnimation = 15;
             Item.useTime = 15;
@@ -22,7 +22,7 @@
             Item.consumable = true;
             Item.maxStack = 999;
             Item.value = 400;
-            Item.createTile = ModContent.TileType<Tiles.CyanVine.CyanVineStone>();
+            Item.createTile = ModContent.TileType<Tiles.CyanVineStone>();
         }
     }
 }

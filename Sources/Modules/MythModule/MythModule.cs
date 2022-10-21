@@ -1,4 +1,5 @@
 ﻿using Everglow.Sources.Commons.Core.ModuleSystem;
+using Everglow.Sources.Commons.Core.UI;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds;
 using MonoMod.Cil;
 using ReLogic.Content;
@@ -44,6 +45,8 @@ namespace Everglow.Sources.Modules.MythModule
 
         public static EffectPass ReplaceEffectPass = null;
 
+
+
         private void WaterShaderData_Apply(ILContext il)
         {
             var c = new ILCursor(il);
@@ -74,6 +77,8 @@ namespace Everglow.Sources.Modules.MythModule
                 var noiseSize = shaderData.Shader.Parameters["uImageSize1"].GetValueVector2();
                 var waterTargetSize = shaderData.Shader.Parameters["uImageSize3"].GetValueVector2();
 
+
+
                 var shader = m_waveDisortionScreen.Value;
                 shader.Parameters["cb0"].SetValue(new Vector4(1 / noiseSize.X, 1 / noiseSize.Y, 0, 0));
                 shader.Parameters["cb1"].SetValue(new Vector4(progress * 0.05f, 0, 0, 0));
@@ -90,9 +95,12 @@ namespace Everglow.Sources.Modules.MythModule
                 shader.Parameters["uPower"].SetValue(1.5f);
                 shader.Parameters["uColor"].SetValue(new Vector3(0, 0.5f, 1.0f));
 
+
                 effect.Apply();
             });
         }
+
+
 
         public void Unload()
         {

@@ -1,12 +1,13 @@
+
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.BookofSkulls
 {
     public class OldSkull : GlobalProjectile
     {
         public override void OnHitNPC(Projectile projectile, NPC target, int damage, float knockback, bool crit)
         {
-            if (Main.player[projectile.owner].GetModPlayer<GlobalItems.MagicBookPlayer>().MagicBookLevel == 1)
+            if(Main.player[projectile.owner].GetModPlayer<GlobalItems.MagicBookPlayer>().MagicBookLevel == 1)
             {
-                if (projectile.type == ProjectileID.BookOfSkullsSkull)
+                if(projectile.type == ProjectileID.BookOfSkullsSkull)
                 {
                     int type = ModContent.ProjectileType<BoneSpike>();
                     Player player = Main.player[projectile.owner];

@@ -1,4 +1,8 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
+﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Everglow.Sources.Modules.MythModule.Common;
+using Terraria.ObjectData;
+
+namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 {
     public class PurpleThorns : ModTile
     {
@@ -10,12 +14,10 @@
             ItemDrop = ModContent.ItemType<Items.GlowCrystal>();
             AddMapEntry(new Color(35, 9, 35));
         }
-
         public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
         {
             return true;
         }
-
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
             base.PostDraw(i, j, spriteBatch);

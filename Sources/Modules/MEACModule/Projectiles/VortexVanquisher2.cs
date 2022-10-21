@@ -25,7 +25,6 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         Vector2 mainVec = Vector2.One;
         public override void AI()
         {
-            Lighting.AddLight(Projectile.Center, 0.9f, 0.6f, 0f);
             Projectile.velocity *= 0.94f;
             mainVec = Projectile.velocity;
             ProduceWaterRipples(new Vector2(mainVec.Length(), 30));

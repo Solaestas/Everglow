@@ -1,5 +1,10 @@
-﻿using Everglow.Sources.Commons.Function.Vertex;
-using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Sources.Commons.Core.VFX;
+using Everglow.Sources.Commons.Core.VFX.Visuals;
+using Everglow.Sources.Commons.Core.VFX.Pipelines;
+using Everglow.Sources.Modules.MEACModule;
+using Terraria.GameContent;
 using Terraria.Audio;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.BookofSkulls
@@ -18,23 +23,21 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             Projectile.tileCollide = false;
             Projectile.extraUpdates = 4;
         }
-
-        private Vector2 Direction = new Vector2(0, -1);
-        private Vector2 ArmPos;
-        private Vector2[,] FingerPos = new Vector2[4, 4];
-        private Vector2[] ThumbPos = new Vector2[3];
-        private float[] finRot1 = new float[5];
-        private float[] finRot2 = new float[5];
-        private float[] finRot3 = new float[4];
-        private float[] finLength1 = new float[5];
-        private float[] finLength2 = new float[5];
-        private float[] finLength3 = new float[4];
-        private int dir = 1;
-
+        Vector2 Direction = new Vector2(0, -1);
+        Vector2 ArmPos;
+        Vector2[,] FingerPos = new Vector2[4, 4];
+        Vector2[] ThumbPos = new Vector2[3];
+        float[] finRot1 = new float[5];
+        float[] finRot2 = new float[5];
+        float[] finRot3 = new float[4];
+        float[] finLength1 = new float[5];
+        float[] finLength2 = new float[5];
+        float[] finLength3 = new float[4];
+        int dir = 1;
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            if (Projectile.timeLeft == 600)
+            if(Projectile.timeLeft == 600)
             {
                 Vector2 TotalVector = Vector2.Zero;//合向量
                 int TCount = 0;
@@ -100,14 +103,14 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
                 finRot3[1] = 0f;
                 finRot3[2] = 0.08f;
                 finRot3[3] = 0.16f;
-                if (Main.rand.NextBool(2))
+                if(Main.rand.NextBool(2))
                 {
                     dir = -1;
                 }
 
                 SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/MothHitCocoon"), Projectile.Center);
             }
-            if (Projectile.timeLeft > 300)
+            if(Projectile.timeLeft > 300)
             {
                 finRot1[0] = UpdateSelf(finRot1[0], 0.36f);
                 finRot1[1] = UpdateSelf(finRot1[1], -0.28f);
@@ -117,8 +120,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
 
                 finRot2[0] = UpdateSelf(finRot2[0], 0.26f);
                 finRot2[1] = UpdateSelf(finRot2[1], -0.18f);
-                finRot2[2] = UpdateSelf(finRot2[2], -0.8f);
-                ;
+                finRot2[2] = UpdateSelf(finRot2[2], -0.8f); ;
                 finRot2[3] = UpdateSelf(finRot2[3], -1.38f);
                 finRot2[4] = UpdateSelf(finRot2[4], 1.26f);
 
@@ -127,8 +129,9 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
                 finRot3[2] = UpdateSelf(finRot3[2], -0.6f);
                 finRot3[3] = UpdateSelf(finRot3[3], -0.9f);
             }
-            else if (Projectile.timeLeft > 200)
+            else if(Projectile.timeLeft > 200)
             {
+
                 finRot1[0] = UpdateSelf(finRot1[0], 0.26f, 0.9f);
                 finRot1[1] = UpdateSelf(finRot1[1], -0.16f, 0.9f);
                 finRot1[2] = UpdateSelf(finRot1[2], -0.54f, 0.9f);
@@ -137,7 +140,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
 
                 finRot2[0] = UpdateSelf(finRot2[0], 2.2f, 0.9f);
                 finRot2[1] = UpdateSelf(finRot2[1], 1.9f, 0.9f);
-                finRot2[2] = UpdateSelf(finRot2[2], 1.8f, 0.9f);
+                finRot2[2] = UpdateSelf(finRot2[2], 1.8f, 0.9f); 
                 finRot2[3] = UpdateSelf(finRot2[3], 1.7f, 0.9f);
                 finRot2[4] = UpdateSelf(finRot2[4], -0.7f, 0.9f);
 
@@ -162,7 +165,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             ThumbPos[1] = ThumbPos[0] + new Vector2(0, -finLength1[4]).RotatedBy(finRot1[4] * dir + Ang);
             ThumbPos[2] = ThumbPos[1] + new Vector2(0, -finLength2[4]).RotatedBy(finRot2[4] * dir + Ang);
 
-            if (Projectile.timeLeft > 535)
+            if(Projectile.timeLeft > 535)
             {
                 Projectile.velocity *= 1.04f;
             }
@@ -170,7 +173,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             {
                 Projectile.velocity *= 0.97f;
             }
-            else if (Projectile.timeLeft > 280)
+            else if(Projectile.timeLeft > 280)
             {
                 ScreenShaker Ss = player.GetModPlayer<ScreenShaker>();
                 float Strength = Projectile.timeLeft - 280;
@@ -180,15 +183,15 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
                 Projectile.friendly = true;
                 Projectile.velocity *= 1.55f;
             }
-            else if (Projectile.timeLeft > 240)
+            else if(Projectile.timeLeft > 240)
             {
                 Projectile.velocity *= 0.6f;
             }
-            else if (Projectile.timeLeft == 209)
+            else if(Projectile.timeLeft == 209)
             {
                 Projectile.velocity = Vector2.Normalize(Projectile.velocity) * -0.1f;
             }
-            else if (Projectile.timeLeft is < 209 and > 30)
+            else if (Projectile.timeLeft < 209 && Projectile.timeLeft > 30)
             {
                 Projectile.velocity *= 1.02f;
             }
@@ -197,9 +200,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
                 Projectile.Kill();
             }
 
+
             if (Projectile.timeLeft == 282)
             {
-                for (int f = 0; f < 80; f++)
+                for(int f = 0;f < 80;f++)
                 {
                     Vector2 v0 = new Vector2(Main.rand.NextFloat(3f, 5f), 0).RotatedByRandom(6.283);
                     Dust dust0 = Dust.NewDustDirect(Projectile.Center + Vector2.Normalize(Projectile.velocity) * 75, 0, 0, DustID.Torch, v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(0.6f, 1.8f));
@@ -208,23 +212,19 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
                 SoundEngine.PlaySound(SoundID.Item89, Projectile.Center);
             }
         }
-
         private float UpdateSelf(float sel, float aim, float value = 0.99f)
         {
             value = Math.Clamp(value, 0, 1);
             return sel * value + aim * (1 - value);
         }
-
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
         {
-            behindNPCsAndTiles.Add(index);
+           behindNPCsAndTiles.Add(index);
         }
-
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             target.AddBuff(BuffID.Burning, 180);
         }
-
         public override bool PreDraw(ref Color lightColor)
         {
             Projectile.hide = true;
@@ -233,15 +233,15 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             Texture2D PowerShade = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLineBlackShade");
             Vector2 v0 = Projectile.Center + Direction * 60;
             Color c0 = Lighting.GetColor((int)(v0.X / 16f), (int)(v0.Y / 16f));
-
+            
             float Pwidth = 0f;
             float Pdark = 0f;
-            if (Projectile.timeLeft is > 280 and < 330)
+            if (Projectile.timeLeft > 280 && Projectile.timeLeft < 330)
             {
                 Pwidth = (330 - Projectile.timeLeft) / 33f;
                 Pdark = (330 - Projectile.timeLeft) / 50f;
             }
-            else if (Projectile.timeLeft < 280)
+            else if(Projectile.timeLeft < 280)
             {
                 Pwidth = 1f;
                 Pdark = (Projectile.timeLeft - 20) / 260f;
@@ -265,7 +265,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             {
                 for (int y = 0; y < 3; y++)
                 {
-                    DrawTexLine(FingerPos[x, y], FingerPos[x, y + 1], c0, 6f, bone);
+                   DrawTexLine(FingerPos[x, y], FingerPos[x, y + 1], c0, 6f, bone);
                 }
             }
             for (int y = 0; y < 2; y++)
@@ -274,8 +274,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             }
             return false;
         }
-
-        public void DrawTexLine(Vector2 StartPos, Vector2 EndPos, Color c0, float Wid, Texture2D tex)
+        public void DrawTexLine(Vector2 StartPos, Vector2 EndPos,Color c0, float Wid, Texture2D tex)
         {
             Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
 
@@ -292,10 +291,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
                 vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x) - Main.screenPosition, c0, new Vector3(1, 0, 0)));
             }
 
+
             Main.graphics.GraphicsDevice.Textures[0] = tex;
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
         }
-
         public void DrawPowerLine(Vector2 StartPos, Vector2 EndPos, Color c0, float Wid, Texture2D tex)
         {
             Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
@@ -314,6 +313,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
                 vertex2Ds.Add(new Vertex2D(EndPos - Width + new Vector2(x / 3f).RotatedBy(x) - Main.screenPosition, c0, new Vector3(Value1, 1, 0)));
                 vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x) - Main.screenPosition, c0, new Vector3(Value0, 1, 0)));
             }
+
 
             Main.graphics.GraphicsDevice.Textures[0] = tex;
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);

@@ -1,3 +1,5 @@
+using Terraria.ID;
+using Terraria.ModLoader;
 using Terraria.GameContent.Creative;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures
@@ -23,7 +25,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures
             Item.value = 2000;
             Item.createTile = ModContent.TileType<Tiles.Furnitures.GlowWoodChandelierType2>();
         }
-
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();

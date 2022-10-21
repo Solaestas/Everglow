@@ -10,7 +10,6 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Vanities
             DisplayName.SetDefault("Blue flower Dress");
             DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "黑蓝色花裙");
         }
-
         public override void SetDefaults()
         {
             Item.width = 18;

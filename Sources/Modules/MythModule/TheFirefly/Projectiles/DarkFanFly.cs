@@ -1,5 +1,6 @@
-﻿using Everglow.Sources.Commons.Function.Vertex;
-using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Buffs;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
@@ -21,11 +22,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 30;
         }
-
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             Player player = Main.player[Projectile.owner];
-            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<FanHit>(), 0, 0, player.whoAmI, Math.Max(Projectile.velocity.Length() * 0.2f, 0.4f));
+            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<FanHit>(), 0, 0,player.whoAmI, Math.Max(Projectile.velocity.Length() * 0.2f, 0.4f));
             int[] array = Projectile.localNPCImmunity;
             bool flag = (!Projectile.usesLocalNPCImmunity && !Projectile.usesIDStaticNPCImmunity) || (Projectile.usesLocalNPCImmunity && array[target.whoAmI] == 0) || (Projectile.usesIDStaticNPCImmunity && Projectile.IsNPCIndexImmuneToProjectileType(Projectile.type, target.whoAmI));
             if (target.active && !target.dontTakeDamage && flag && (target.aiStyle != 112 || target.ai[2] <= 1f))
@@ -36,7 +36,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 }
             }
             int Count = (int)Projectile.ai[0];
-            if (Projectile.ai[0] > 3 + player.maxMinions / 5)
+            if(Projectile.ai[0] > 3 + player.maxMinions / 5)
             {
                 Count = 3 + player.maxMinions / 5;
                 Projectile.ai[0] -= 3 + player.maxMinions / 5;
@@ -83,7 +83,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 mothBuffTarget.MothStack = 5 + MaxS * 0;
             }
         }
-
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
@@ -92,7 +91,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Vector2 v2 = player.Center + v1 - Projectile.Center;
             Vector2 v3 = Vector2.Normalize(v2) * 0.48f;
             Projectile.velocity += v3;
-            if (Projectile.timeLeft is < 180 and > 60)
+            if (Projectile.timeLeft < 180 && Projectile.timeLeft > 60)
             {
                 if (v0.Length() < 48)
                 {
@@ -100,7 +99,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 }
             }
             Projectile.velocity *= 0.99f;
-            for (int x = 58; x >= 0; x--)
+            for(int x = 58;x >= 0;x--)
             {
                 OldVelocity[x + 1] = OldVelocity[x];
             }
@@ -115,12 +114,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             {
                 Projectile.tileCollide = false;
             }
-            if (Projectile.timeLeft < 60)
+            if(Projectile.timeLeft < 60)
             {
                 Projectile.timeLeft -= 4;
             }
-        }
 
+        }
         public override void Kill(int timeLeft)
         {
         }
@@ -128,15 +127,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         private Vector2 PosRot0 = new Vector2(-16, -100);
         private Vector2 PosRot1 = new Vector2(100, 0);
         private Vector2 PosRot2 = new Vector2(-100, 100);
-
         public override bool PreDraw(ref Color lightColor)
         {
             return false;
         }
-
-        private Vector2[] OldVelocity = new Vector2[60];
-        private float[] OldScale = new float[60];
-
+        Vector2[] OldVelocity = new Vector2[60];
+        float[] OldScale = new float[60];
         public override void PostDraw(Color lightColor)
         {
             float width = 12;
@@ -149,25 +145,19 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             for (int i = 1; i < Projectile.oldPos.Length; ++i)
             {
                 if (Projectile.oldPos[i] == Vector2.Zero)
-                {
                     break;
-                }
-
                 TrueL++;
             }
             List<Vertex2D> bars = new List<Vertex2D>();
             for (int i = 1; i < Projectile.oldPos.Length; ++i)
             {
                 if (Projectile.oldPos[i] == Vector2.Zero)
-                {
                     break;
-                }
-
                 var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
                 float NLength = normalDir.Length();
                 normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
                 float delta = 0;
-                if (i >= 2)
+                if(i >= 2)
                 {
                     var OldnormalDir = Projectile.oldPos[i - 2] - Projectile.oldPos[i - 1];
                     OldnormalDir = Vector2.Normalize(new Vector2(-OldnormalDir.Y, OldnormalDir.X));
@@ -184,18 +174,19 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 var UpValue = ((delta > 0 ? delta : 0) - 1);
                 var DownValue = ((delta < 0 ? delta : 0) + 1);
 
-                Vector2 v3 = new Vector2(0.707f, -0.707f).RotatedBy((Projectile.timeLeft + i) / 10f);
+                Vector2 v3 = new Vector2(0.707f, -0.707f).RotatedBy((Projectile.timeLeft+ i) / 10f);
                 double rot = Math.Atan2(OldVelocity[i].Y, OldVelocity[i].X);
                 v3 = new Vector2(v3.X, v3.Y / 2f).RotatedBy(rot);
-                bars.Add(new Vertex2D(Projectile.oldPos[i] + v3 * 45 * OldScale[i] + new Vector2(29) - Main.screenPosition, new Color(254, 254, 254, 255), new Vector3(factor, 0, w)));
+                bars.Add(new Vertex2D(Projectile.oldPos[i] + v3 * 45 * OldScale[i]  + new Vector2(29) - Main.screenPosition, new Color(254, 254, 254, 255), new Vector3(factor, 0, w)));
                 bars.Add(new Vertex2D(Projectile.oldPos[i] + v3 * 45 * OldScale[i] + width * normalDir * 2 + new Vector2(29) - Main.screenPosition, new Color(254, 254, 254, 255), new Vector3(factor, 1, w)));
             }
             Texture2D t = MythContent.QuickTexture("TheFirefly/Projectiles/heatmapShade");
-            if (bars.Count > 0)
+            if(bars.Count > 0)
             {
                 Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
             }
+
 
             Texture2D Tex = MythContent.QuickTexture("TheFirefly/Projectiles/DarkFanFly");
             Texture2D TexG = MythContent.QuickTexture("TheFirefly/Projectiles/DarkFanFlyGlow");
@@ -219,11 +210,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Main.graphics.GraphicsDevice.Textures[0] = TexG;//
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
         }
-
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             Player player = Main.player[Projectile.owner];
-            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + Projectile.velocity, Vector2.Zero, ModContent.ProjectileType<FanHit>(), Projectile.damage, 0, player.whoAmI, Math.Max(Projectile.velocity.Length() * 0.2f, 0.4f));
+            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + Projectile.velocity, Vector2.Zero, ModContent.ProjectileType<FanHit>(), Projectile.damage, 0,player.whoAmI, Math.Max(Projectile.velocity.Length() * 0.2f,0.4f));
             if (Projectile.velocity.X != oldVelocity.X)
             {
                 Projectile.velocity.X = -oldVelocity.X;

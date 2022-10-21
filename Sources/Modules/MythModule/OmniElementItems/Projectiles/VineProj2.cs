@@ -1,6 +1,7 @@
-﻿using Everglow.Sources.Commons.Function.Vertex;
-using Everglow.Sources.Modules.MythModule.Common;
-
+﻿using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Terraria.GameContent;
 namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles
 {
     public class VineProj2 : ModProjectile
@@ -19,9 +20,7 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 60;
         }
-
         internal Vector2 StartPos = Vector2.Zero;
-
         public override void AI()
         {
             Projectile.hide = true;
@@ -57,7 +56,6 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles
                 Lighting.AddLight(Projectile.Center, 0, colorLight * 0.9f, 0);
             }
         }
-
         public override void PostDraw(Color lightColor)
         {
             Player player = Main.player[Projectile.owner];
@@ -74,19 +72,13 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles
             for (int i = 1; i < Projectile.oldPos.Length; ++i)
             {
                 if (Projectile.oldPos[i] == Vector2.Zero)
-                {
                     break;
-                }
-
                 TrueL++;
             }
             for (int i = 1; i < Projectile.oldPos.Length; ++i)
             {
                 if (Projectile.oldPos[i] == Vector2.Zero)
-                {
                     break;
-                }
-
                 var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
                 normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
                 var factor = 1f;
@@ -130,14 +122,13 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles
             //DestR.Y -= (int)Main.screenPosition.Y;
             //Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, DestR, new Color(200, 50, 0, 0));
         }
-
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
         {
             behindProjectiles.Add(index);
+            base.DrawBehind(index, behindNPCsAndTiles, behindNPCs, behindProjectiles, overPlayers, overWiresUI);
         }
     }
-
-    internal class ProjectileHitBoxTexter : GlobalProjectile
+    class ProjectileHitBoxTexter : GlobalProjectile
     {
         public override void PostDraw(Projectile projectile, Color lightColor)
         {
@@ -147,4 +138,5 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles
             //Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, DestR, new Color(200, 50, 0, 0));
         }
     }
+
 }

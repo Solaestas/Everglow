@@ -1,5 +1,8 @@
 ﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
+using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
+using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.DataStructures;
+using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 {
@@ -7,12 +10,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
     {
         public override void SetStaticDefaults()
         {
-            ItemGlowManager.AutoLoadItemGlow(this);
+            GetGlowMask = MythContent.SetStaticDefaultsGlowMask(this);
         }
-
+        public static short GetGlowMask = 0;
         public override void SetDefaults()
         {
-            Item.glowMask = ItemGlowManager.GetItemGlow(this);
+            Item.glowMask = GetGlowMask;
             Item.damage = 24;
             Item.mana = 6;
             Item.width = 50;
@@ -31,13 +34,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             Item.DamageType = DamageClass.Summon;
             Item.noUseGraphic = true;
         }
-
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, Main.rand.NextFloat(0, 200f), Main.rand.NextFloat(0, 200f));
             return false;
         }
-
         public override bool CanUseItem(Player player)
         {
             if (base.CanUseItem(player))
@@ -54,7 +55,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             }
             return base.CanUseItem(player);
         }
-
         public override bool AltFunctionUse(Player player)
         {
             return true;

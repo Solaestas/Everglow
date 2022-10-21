@@ -1,5 +1,4 @@
 using Everglow.Sources.Modules.MythModule.Common;
-
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 {
     public class FireflyWood : ModTile
@@ -14,12 +13,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             ItemDrop = ModContent.ItemType<Items.GlowWood>();
             AddMapEntry(new Color(37, 46, 47));
         }
-
         public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
         {
+
             return true;
         }
-
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
             var tile = Main.tile[i, j];

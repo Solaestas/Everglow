@@ -1,5 +1,5 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using Terraria.Localization;
+﻿using Terraria.Localization;
+using Everglow.Sources.Modules.MythModule.Common;
 
 namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Vanities
 {
@@ -11,7 +11,6 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Vanities
             DisplayName.SetDefault("Blue Flower Hat");
             DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "蓝花阔边帽");
         }
-
         public override void SetDefaults()
         {
             Item.width = 18;
@@ -21,7 +20,6 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Vanities
             Item.vanity = true;
             Item.accessory = true;
         }
-
         public override void Load()
         {
             On.Terraria.Main.DrawPlayers_AfterProjectiles += DrawHat;
@@ -30,6 +28,7 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Vanities
 
         private static void DrawDress(On.Terraria.Main.orig_DrawPlayers_BehindNPCs orig, Terraria.Main self)
         {
+
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             /*for (int d = 0; d < Main.player.Length; d++)
             {
@@ -45,10 +44,8 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Vanities
             }*/
             Main.spriteBatch.End();
         }
-
         public static float[] PlayerShake = new float[256];
         public static int Adding = 0;
-
         private static void DrawHat(On.Terraria.Main.orig_DrawPlayers_AfterProjectiles orig, Terraria.Main self)
         {
             orig(self);
@@ -63,6 +60,7 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Vanities
                         {
                             if (Adding % 60 == 0)
                             {
+
                             }
                         }
                         PlayerShake[d] *= 0.98f;

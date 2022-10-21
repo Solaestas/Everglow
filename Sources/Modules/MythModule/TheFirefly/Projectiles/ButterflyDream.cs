@@ -1,4 +1,6 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
+﻿using Terraria.ID;
+
+namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
     public class ButterflyDream : ModProjectile
     {
@@ -9,7 +11,6 @@
             //ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10;
             //ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
         }
-
         public override void SetDefaults()
         {
             Projectile.width = 36;
@@ -22,17 +23,14 @@
             Projectile.tileCollide = false;
             Projectile.usesLocalNPCImmunity = false;
         }
-
         public override void SendExtraAI(BinaryWriter writer)
         {
             writer.Write(Projectile.timeLeft);
         }
-
         public override void ReceiveExtraAI(BinaryReader reader)
         {
             Projectile.timeLeft = reader.ReadInt32();
         }
-
         public override void AI()
         {
             if (Projectile.ai[1] == 0)
@@ -97,7 +95,6 @@
                 Projectile.frame++;
             }
         }
-
         public override bool ShouldUpdatePosition()
         {
             if (Projectile.ai[1] == 1)
@@ -107,11 +104,9 @@
 
             return true;
         }
-
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
         }
-
         public override void Kill(int timeLeft)
         {
             for (int i = 0; i < 18; i++)
@@ -125,10 +120,10 @@
                 Main.dust[index].noGravity = true;
             }
         }
-
         public override Color? GetAlpha(Color lightColor)
         {
             return new Color(1f, 1f, 1f, 0) * (1 - Projectile.alpha / 255f);
         }
+
     }
 }

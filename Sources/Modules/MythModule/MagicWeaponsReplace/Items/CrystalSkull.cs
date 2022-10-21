@@ -1,4 +1,7 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Items
+﻿using Terraria.DataStructures;
+using Terraria.ID;
+
+namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Items
 {
     public class CrystalSkull : ModItem
     {
@@ -11,7 +14,6 @@
             Item.rare = ItemRarityID.LightRed;
             //Item.vanity = true;
         }
-
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             player.GetModPlayer<GlobalItems.MagicBookPlayer>().MagicBookLevel = 1;

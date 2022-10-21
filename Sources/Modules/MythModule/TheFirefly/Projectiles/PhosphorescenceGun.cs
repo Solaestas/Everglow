@@ -1,11 +1,9 @@
 ﻿using Everglow.Sources.Modules.MythModule.Common;
-
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
     internal class PhosphorescenceGun : ModProjectile
     {
         public override string Texture => "Everglow/Sources/Modules/MythModule/TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGun";
-
         public override void SetDefaults()
         {
             Projectile.width = 36;
@@ -20,7 +18,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         private bool Release = true;
         private Vector2 oldPo = Vector2.Zero;
         private int addi = 0;
-
         public override void AI()
         {
             addi++;
@@ -49,12 +46,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 }
             }
         }
-
         public override bool PreDraw(ref Color lightColor)
         {
             return false;
         }
-
         public override void PostDraw(Color lightColor)
         {
             if (!Release)
@@ -74,7 +69,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 
             Projectile.frame = (int)((addi % 45) / 5f);
             Rectangle DrawRect = new Rectangle(0, Projectile.frame * 44, 70, 40);
-
+            
+           
             Color drawColor = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
             SpriteEffects se = SpriteEffects.None;
             if (Projectile.Center.X < player.Center.X)

@@ -11,10 +11,10 @@
         {
             Item.width = 30;
             Item.height = 24;
-            Item.rare = ItemRarityID.Orange;
+            Item.rare = 3;
             Item.scale = 1f;
             Item.createTile = 0;
-            Item.useStyle = ItemUseStyleID.Swing;
+            Item.useStyle = 1;
             Item.useTurn = true;
             Item.useAnimation = 15;
             Item.useTime = 15;
@@ -22,13 +22,12 @@
             Item.consumable = true;
             Item.maxStack = 999;
             Item.value = 1600;
-            Item.createTile = ModContent.TileType<Tiles.CyanVine.CyanVineBar>();
         }
         public override void AddRecipes()
         {
-            CreateRecipe(4)
+            CreateRecipe()
                 .AddIngredient(ModContent.ItemType<Items.CyanVineOre>(), 3)
-                .AddTile(TileID.Furnaces)
+                .AddTile(TileID.Hellforge)
                 .Register();
         }
     }
