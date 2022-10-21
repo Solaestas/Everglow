@@ -179,6 +179,17 @@ namespace Everglow.Sources.Modules.AssetReplaceModule.SoundReplace
 
         public override string TxtFileName() => "WaterBucketSoundID";
     }
+    public class LavaBucketPickSoundModify : SoundModifyGlobal
+    {
+        public override SoundStyle PickSound() => new($"Everglow/Resources/Sounds/PickSound/LavaBucket", SoundType.Sound)
+        {
+            Volume = 0.8f,
+            PitchRange = (-0.2f, 0.1f),
+            MaxInstances = 2
+        };
+
+        public override string TxtFileName() => "LavaBucketSoundID";
+    }
 
     public class WoodPickSoundModify : SoundModifyGlobal
     {
