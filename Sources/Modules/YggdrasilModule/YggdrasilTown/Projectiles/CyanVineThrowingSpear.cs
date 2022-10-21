@@ -35,7 +35,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Projectiles
             {
                 Projectile.timeLeft = 1500;
                 Projectile.velocity = Utils.SafeNormalize(Main.MouseWorld - player.Center, new Vector2(0, -1 * player.gravDir));
-                Projectile.Center = player.Center + Projectile.velocity.RotatedBy(Math.PI * -0.5) * 20 * PlayerDir - Projectile.velocity * Power / 7f;
+                Projectile.Center = player.Center + Projectile.velocity.RotatedBy(Math.PI * -0.5) * 20 * PlayerDir - Projectile.velocity * (Power / 3f - 16);
                 Projectile.rotation = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + Math.PI * 0.25);
                 if (Power < 100)
                 {
@@ -43,11 +43,11 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Projectiles
                 }
 
                 player.heldProj = Projectile.whoAmI;
-                player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, Projectile.rotation + (float)(Math.PI * 0.25 + Math.PI * 0.6 * PlayerDir - Power / 70f * PlayerDir));
+                player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, Projectile.rotation + (float)(Math.PI * 0.25 + Math.PI * 0.6 * PlayerDir - (Power / 40d - 1.0) * PlayerDir));
                 player.direction = PlayerDir;
             }
 
-            if(Main.mouseLeftRelease && !Main.mouseLeft && !Shot)
+            if(!player.controlUseItem && !Shot)
             {
                 Shot = true;
                 Projectile.velocity = Utils.SafeNormalize(Main.MouseWorld - player.Center, new Vector2(0, -1 * player.gravDir)) * (Power + 100) / 8f;
