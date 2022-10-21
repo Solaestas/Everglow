@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Everglow.Resources.VanillaItemList.Weapons.Ranged
+namespace Everglow.Resources.ItemList.Weapons.Ranged
 {
     public class Repeaters : GlobalItem
     {
-        private static List<int> vanillaRepeaters;
+        public static List<int> vanillaRepeaters;
         public override void Unload()
         {
             vanillaRepeaters = null;

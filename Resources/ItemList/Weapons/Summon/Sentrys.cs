@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Everglow.Resources.VanillaItemList.Weapons.Summon
+namespace Everglow.Resources.ItemList.Weapons.Summon
 {
     public class Sentrys : GlobalItem
     {
-        private static List<int> vanillaSentrys;
+        public static List<int> vanillaSentrys;
         public override void Unload()
         {
             vanillaSentrys = null;

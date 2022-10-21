@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Everglow.Resources.VanillaItemList.Weapons.Melee
+namespace Everglow.Resources.ItemList.Weapons.Melee
 {
     public class Spears : GlobalItem
     {
-        private static List<int> vanillaSpears;
+        public static List<int> vanillaSpears;
         public override void Unload()
         {
             vanillaSpears = null;

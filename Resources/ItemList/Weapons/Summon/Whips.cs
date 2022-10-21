@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Everglow.Resources.VanillaItemList.Weapons.Summon
+namespace Everglow.Resources.ItemList.Weapons.Summon
 {
     public class Whips : GlobalItem
     {
-        private static List<int> vanillaWhips;
+        public static List<int> vanillaWhips;
         public override void Unload()
         {
             vanillaWhips = null;

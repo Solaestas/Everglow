@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Everglow.Resources.VanillaItemList.Weapons.Magic
+namespace Everglow.Resources.ItemList.Weapons.Magic
 {
     public class MagicBooks : GlobalItem
     {
-        private static List<int> vanillaMagicBooks;
+        public static List<int> vanillaMagicBooks;
         public override void Unload()
         {
             vanillaMagicBooks = null;

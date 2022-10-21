@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Everglow.Resources.VanillaItemList.Weapons.Summon
+namespace Everglow.Resources.ItemList.Weapons.Summon
 {
     public class Minions : GlobalItem
     {
-        private static List<int> vanillaMinions;
+        public static List<int> vanillaMinions;
         public override void Unload()
         {
             vanillaMinions = null;

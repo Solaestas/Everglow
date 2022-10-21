@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Everglow.Resources.VanillaItemList.Weapons.Melee
+namespace Everglow.Resources.ItemList.Weapons.Melee
 {
     public class Boomerangs : GlobalItem
     {
-        private static List<int> vanillaBoomerangs;
+        public static List<int> vanillaBoomerangs;
         public override void Unload()
         {
             vanillaBoomerangs = null;

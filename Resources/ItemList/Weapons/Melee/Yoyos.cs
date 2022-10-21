@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Everglow.Resources.VanillaItemList.Weapons.Melee
+namespace Everglow.Resources.ItemList.Weapons.Melee
 {
     public class Yoyos : GlobalItem
     {
-        private static List<int> vanillaYoyos;
+        public static List<int> vanillaYoyos;
         public override void Unload()
         {
             vanillaYoyos = null;
