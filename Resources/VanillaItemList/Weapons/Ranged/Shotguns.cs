@@ -8,7 +8,7 @@ namespace Everglow.Resources.VanillaItemList.Weapons.Ranged
 {
     public class Shotguns : GlobalItem
     {
-        private static List<int> vanillaShotguns;
+        public static List<int> vanillaShotguns;
         public override void Unload()
         {
             vanillaShotguns = null;
