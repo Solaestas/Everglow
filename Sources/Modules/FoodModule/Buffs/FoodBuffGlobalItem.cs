@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Everglow.Sources.Modules.FoodModule.Buffs;
 using Terraria.DataStructures;
-using Everglow.Resources.VanillaItemList.Weapons.Ranged;
+using Everglow.Resources.ItemList.Weapons.Ranged;
 using Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems;
 
 namespace Everglow.Sources.Modules.FoodModule.Buffs
