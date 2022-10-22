@@ -10,8 +10,8 @@ namespace Everglow.Sources.Modules.YggdrasilModule.KelpCurtain.Items.Weapons
         public override void SetDefaults()
         {
             Item.useStyle = ItemUseStyleID.Swing;
-            Item.width = 1;
-            Item.height = 1;
+            Item.width = 116;
+            Item.height = 132;
             Item.useAnimation = 5;
             Item.useTime = 5;
             Item.shootSpeed = 5f;
