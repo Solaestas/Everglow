@@ -8,7 +8,13 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles
         {
             Main.tileSolid[Type] = true;
             Main.tileMergeDirt[Type] = false;
-            Main.tileMerge[Type][(ushort)ModContent.TileType<Tiles.StoneScaleWood>()] = false;
+            Main.tileMerge[Type][(ushort)ModContent.TileType<CyanVine.CyanVineOreTile>()] = true;
+            Main.tileMerge[Type][(ushort)ModContent.TileType<CyanVine.CyanVineStone>()] = true;
+            Main.tileMerge[Type][(ushort)ModContent.TileType<CyanVine.CyanVineOreSmallUp>()] = true;
+            Main.tileMerge[Type][(ushort)ModContent.TileType<CyanVine.CyanVineOreSmall>()] = true;
+            Main.tileMerge[Type][(ushort)ModContent.TileType<CyanVine.CyanVineOreLargeUp>()] = true;
+            Main.tileMerge[Type][(ushort)ModContent.TileType<CyanVine.CyanVineOreLarge>()] = true;
+            Main.tileMerge[Type][(ushort)ModContent.TileType<CyanVine.CyanVineOreMiddle>()] = true;
             Main.tileBlendAll[Type] = false;
             Main.tileBlockLight[Type] = true;
             Main.tileShine2[Type] = false;
@@ -20,10 +26,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles
             
             ItemDrop = ModContent.ItemType<Items.StoneDragonScaleWood>();
 
-            ModTranslation modTranslation = base.CreateMapEntryName(null);
-            AddMapEntry(new Color(44, 40, 37), modTranslation);
-            modTranslation.SetDefault("");
-            modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "");
+            AddMapEntry(new Color(44, 40, 37));
         }
         public override bool CanExplode(int i, int j)
         {

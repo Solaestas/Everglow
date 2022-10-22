@@ -77,7 +77,7 @@
 			CyanPedal : "Четырехконечный цветок огуречника"
 			DarkHat : "Декоративный мак"
 			DukeTooth : "Бивни герцога"
-			FlameBorageBadge : "Значок огуречника Светлячка"
+			FireflyBorageBadge : "Значок огуречника Светлячка"
 			GoldLiquidPupil : "Надменный Взгляд"
 			GoldRound : "Ноготки"
 			GreenGel : "Коагулированный Зеленый Гель"
@@ -266,6 +266,25 @@
 			#食物系统物品
 			BloodGlucoseMonitor : "Blood Glucose Monitor"
 			OsmoticPressureMonitor : "Osmotic Pressure Monitor"
+
+			#Yggdrasil Items
+
+				#Yggdrasil Town
+				ChinesePartitionLamp : "Chinese Partition Lamp"
+				ChineseStyleFloorLamp : "Chinese Style Floor Lamp"
+				CyanVineBar : "Cyan Bar"
+				CyanVineOre : "Cyan Ore"
+				DoubleArmsChineseStreetLamp : "Chinese Double Arms Street Lamp"
+				HangingSkyLantern : "Hanging Sky Lantern"
+				HexagonalCeilingLamp : "Hexagonal Ceiling Lamp"
+				ShoreMud : "Dark Mud"
+				SideHangingLantern : "Side Hanging Lantern"
+				StoneDragonScaleWood : "Fossilized Dragon Scale Wood"
+				StreetLantern : "Street Lantern"
+				YellowDynastyShingles : "Yellow Dynasty Shingles"
+
+			#Plant Module Items
+			CactusBall : "Cactus Rod"
 		}
 
 		ItemTooltip:
@@ -295,7 +314,7 @@
 			CyanPedal : "Увеличивает уклонение на 4\n'Недостающий лепесток был преобразован в твою храбрость'"
 			DarkHat : "Увеличивает шанс крита на 4% и крит урон 12%\n'Не рекомендуется использовать, за исключением боевых или декоративных целей'"
 			DukeTooth : "Увеличивает пробиваемость брони на 12\n'К счастью, Герцог Рыброн не является вымирающим видом...пока есть трюфельные черви'"
-			FlameBorageBadge : "-12 защиты\nУвеличивает урон на 18%\n'Под влиянием ярости этого гигантского мотылька ваши атаки становятся более дикими'"
+			FireflyBorageBadge : "-12 защиты\nУвеличивает урон на 18%\n'Под влиянием ярости этого гигантского мотылька ваши атаки становятся более дикими'"
 			GoldLiquidPupil : "Ваши атаки игнорируют 35% защиты врагов\nгенерирует кольцо ихора после удара, длится 12 секунд и не складывается\nнаносит большой урон во время генерации\nнепрерывно наносит урон врагам внутри кольца\nнакладывает Ихор врагам внутри кольца\n'Та, кто приняла кровь Бога, стала бессмертной, но ее создания не стали'"
 			GoldRound : "7 защиты\nУвеличивает урон на 7%\n'Традиционные террарианцы обычно носят это, чтобы сохранить свое здоровье'"
 			GreenGel : "Увеличивает максимальное здоровье на 30 и регенерацию на 4\n'Исследования показали, что зеленые слизни обычно обладают большей жизненной силой, чем синие слизни'"
@@ -536,6 +555,9 @@
 			#食物系统物品
 			BloodGlucoseMonitor : "Display hunger information"
 			OsmoticPressureMonitor : "Display thrist information"
+
+			#Plant Module Items
+			CactusBall : "Spin and throw a cactus ball!\nShred victims' armour and bleed them"
 		}
 		BuffName : 
 		{
@@ -745,6 +767,11 @@
 		MapEntry :
 		{
 			FireflyTree : "Firefly Tree"
+			
+			#Yggdrasil
+
+				#YggdrasilTown
+				SideHangingLantern : "Side Hanging Lantern"
 		}
 		Config:
 		{

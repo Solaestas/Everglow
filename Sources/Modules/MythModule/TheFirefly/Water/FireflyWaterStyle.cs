@@ -1,5 +1,6 @@
-using static Terraria.ModLoader.ModContent;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using static Terraria.ModLoader.ModContent;
+
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
 {
     public class FireflyWaterStyle : ModWaterStyle

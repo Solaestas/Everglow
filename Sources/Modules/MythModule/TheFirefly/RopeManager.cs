@@ -13,7 +13,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
         public Mass[] mass;
         public Spring[] spring;
         public Func<Vector2> GetOffset;
-        private Rope() { }
+
+        private Rope()
+        { }
+
         public Rope(Vector2 position, float scale, int count, Func<Vector2> offset)
         {
             mass = new Mass[count];
@@ -33,6 +36,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
 
             GetOffset = offset;
         }
+
         public Rope Clone(Vector2 deltaPosition)
         {
             Rope clone = new Rope
@@ -52,9 +56,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
             return clone;
         }
     }
+
     internal class RopeManager
     {
-
         private float gravity;
         private List<Rope> ropes;
         public Color drawColor;
@@ -109,10 +113,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
             });
             return result;
         }
+
         public void LoadRope(IEnumerable<Rope> ropes)
         {
             this.ropes.AddRange(ropes);
         }
+
         /// <summary>
         /// 移除Ropes
         /// </summary>
@@ -123,6 +129,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
             int index = this.ropes.IndexOf(first);
             this.ropes.RemoveRange(index, ropes.Count());
         }
+
         /// <summary>
         /// 清除屏幕外的Rope
         /// </summary>
@@ -148,6 +155,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
         {
             ropes.Clear();
         }
+
         public void Update(float deltaTime)
         {
             for (int i = 0; i < ropes.Count; i++)
@@ -166,6 +174,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
                 }
             }
         }
+
         public void Draw()
         {
             var gd = Main.instance.GraphicsDevice;
@@ -195,7 +204,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
             //gd.Textures[0] = MythContent.QuickTexture("TheFirefly/Tiles/Branch");
             gd.Textures[0] = TextureAssets.MagicPixel.Value;
             gd.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, vertices.ToArray(), 0, vertices.Count, indices.ToArray(), 0, indices.Count / 3);
-
 
             sb.End();
             sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null,

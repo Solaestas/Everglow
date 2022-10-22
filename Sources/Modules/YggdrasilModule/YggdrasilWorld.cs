@@ -9,9 +9,13 @@ namespace Everglow.Sources.Modules.YggdrasilModule
 {
     internal class YggdrasilWorld : SubWorldModule.Subworld
     {
-        public override int Width => 1000;
+        public override int Width => 1200;
 
         public override int Height => 12000;
+
+        //public override bool ShouldSave => true;
+
+        //public override bool NormalUpdates => true;
 
         public override List<GenPass> Tasks => new() { new WorldGeneration.YggdrasilWorldGeneration.YggdrasilWorldGenPass()};
         public override void OnLoad()
@@ -23,3 +27,4 @@ namespace Everglow.Sources.Modules.YggdrasilModule
         }
     }
 }
+

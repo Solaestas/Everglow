@@ -18,7 +18,7 @@ namespace Everglow.Sources.Modules.SubWorldModule
         void ISocket.AsyncSend(byte[] data, int offset, int size, SocketSendCallback callback, object state = null)
         {
             byte[] array = new byte[size + 1];
-            array[0] = (byte)this.index;
+            array[0] = (byte)index;
             Buffer.BlockCopy(data, offset, array, 1, size);
             Task.Factory.StartNew(new Action<object>(SendToMainServerCallBack), array);
         }

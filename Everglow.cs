@@ -1,11 +1,11 @@
-﻿global using Microsoft.Xna.Framework;
-global using Microsoft.Xna.Framework.Graphics;
-global using System;
+﻿global using System;
 global using System.Collections.Generic;
 global using System.Diagnostics;
 global using System.IO;
 global using System.Linq;
 global using System.Reflection;
+global using Microsoft.Xna.Framework;
+global using Microsoft.Xna.Framework.Graphics;
 global using Terraria;
 global using Terraria.ID;
 global using Terraria.ModLoader;
@@ -91,6 +91,7 @@ namespace Everglow
         }
 
         private static Everglow m_instance;
+        public static event Action OnPostSetupContent;
 
         private ModuleManager m_moduleManager;
         private PacketResolver m_packetResolver;
@@ -119,6 +120,14 @@ namespace Everglow
             m_mainThreadContext.Load();
             HookSystem.HookLoad();
             m_moduleManager.LoadAllModules();
+        }
+
+        public override void PostSetupContent()
+        {
+            if (OnPostSetupContent != null)
+            {
+                OnPostSetupContent.Invoke();
+            }
         }
 
         public override void Unload()
