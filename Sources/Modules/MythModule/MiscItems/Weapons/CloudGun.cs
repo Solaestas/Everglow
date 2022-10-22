@@ -1,6 +1,4 @@
-﻿using Everglow.Sources.Modules.MythModule.MiscItems.Ammos;
-using Everglow.Sources.Modules.MythModule.MiscProjectiles;
-using Terraria.Audio;
+﻿using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons

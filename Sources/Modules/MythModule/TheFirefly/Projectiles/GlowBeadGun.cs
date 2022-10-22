@@ -7,6 +7,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
     internal class GlowBeadGun : ModProjectile
     {
         public override string Texture => "Everglow/Sources/Modules/MythModule/TheFirefly/Projectiles/GlowBeadGunTex/GlowBeadGun";
+
         public override void SetDefaults()
         {
             Projectile.width = 36;
@@ -17,6 +18,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Projectile.tileCollide = false;
             Projectile.DamageType = DamageClass.Magic;
         }
+
         public override Color? GetAlpha(Color lightColor)
         {
             return new Color(255 - Projectile.alpha, 255 - Projectile.alpha, 255 - Projectile.alpha, 0);
@@ -25,6 +27,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         private bool Release = true;
         private Vector2 oldPo = Vector2.Zero;
         private int Energy = 0;
+
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
@@ -63,6 +66,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 Shoot();
             }
         }
+
         private void Shoot()
         {
             SoundEngine.PlaySound(SoundID.Item72, Projectile.Center);
@@ -110,10 +114,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 
             Projectile.Kill();
         }
+
         public override bool PreDraw(ref Color lightColor)
         {
             return false;
         }
+
         public override void PostDraw(Color lightColor)
         {
             if (!Release)
@@ -132,8 +138,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Texture2D TexMainG = MythContent.QuickTexture("TheFirefly/Projectiles/GlowBeadGunTex/GlowBeadGunGlow");
 
             Projectile.frame = (int)((Energy % 45) / 5f);
-            
-           
+
             Color drawColor = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
             SpriteEffects se = SpriteEffects.None;
             if (Projectile.Center.X < player.Center.X)
@@ -146,7 +151,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 player.direction = 1;
             }
             Main.spriteBatch.Draw(TexMain, Projectile.Center - Main.screenPosition - new Vector2(0, 6), null, drawColor, Projectile.rotation - (float)(Math.PI * 0.25) + (float)(Projectile.ai[0] / -3d) * player.direction, new Vector2(35, 22), 1f, se, 0);
-            Main.spriteBatch.Draw(TexMainG, Projectile.Center - Main.screenPosition - new Vector2(0, 6), new Rectangle(0,0,(int)(Energy / 180f * 74f) + 30,TexMainG.Height), new Color(255, 255, 255, 0), Projectile.rotation - (float)(Math.PI * 0.25) + (float)(Projectile.ai[0] / -3d) * player.direction, new Vector2(35, 22), 1f, se, 0);
+            Main.spriteBatch.Draw(TexMainG, Projectile.Center - Main.screenPosition - new Vector2(0, 6), new Rectangle(0, 0, (int)(Energy / 180f * 74f) + 30, TexMainG.Height), new Color(255, 255, 255, 0), Projectile.rotation - (float)(Math.PI * 0.25) + (float)(Projectile.ai[0] / -3d) * player.direction, new Vector2(35, 22), 1f, se, 0);
         }
     }
 }
