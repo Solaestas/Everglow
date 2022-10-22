@@ -20,7 +20,7 @@
             player.maxRunSpeed *= 1.2f;
             player.runAcceleration *= 1.2f;
             player.GetDamage(DamageClass.Generic) *= 1.1f;
-            player.wellFed = true;
+            
         }
     }
 }

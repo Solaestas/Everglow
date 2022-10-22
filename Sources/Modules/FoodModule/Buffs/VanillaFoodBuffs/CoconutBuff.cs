@@ -14,7 +14,7 @@
         {
             player.statDefense += 4; // 加4防御
             player.endurance += 0.05f;// 加5%减伤
-            player.wellFed = true;
+            
         }
     }
 }

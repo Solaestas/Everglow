@@ -14,7 +14,7 @@
         {
             FoodBuffModPlayer FoodBuffModPlayer = player.GetModPlayer<FoodBuffModPlayer>();
             FoodBuffModPlayer.NachosBuff = true;
-            player.wellFed = true;
+            
         }
     }
 }

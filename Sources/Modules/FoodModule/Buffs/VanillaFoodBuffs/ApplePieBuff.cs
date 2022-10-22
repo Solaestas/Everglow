@@ -14,7 +14,7 @@
         {
             player.endurance += 0.08f;// 加8%减伤
             player.lifeRegen += 1;
-            player.wellFed = true;
+            
         }
     }
 }

@@ -15,7 +15,7 @@
             player.maxRunSpeed *= 1.2f;
             player.runAcceleration *= 1.2f;
             player.jumpSpeedBoost += 1;
-            player.wellFed = true;
+            
         }
     }
 }

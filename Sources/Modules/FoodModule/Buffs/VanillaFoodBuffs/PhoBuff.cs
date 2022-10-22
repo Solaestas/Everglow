@@ -13,7 +13,7 @@
         public override void Update(Player player, ref int buffIndex)
         {
             player.GetDamage(DamageClass.Summon) *= 1.1f;
-            player.wellFed = true;
+            
         }
     }
 }

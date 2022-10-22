@@ -15,7 +15,7 @@
             FoodBuffModPlayer FoodBuffModPlayer = player.GetModPlayer<FoodBuffModPlayer>();
             FoodBuffModPlayer.MonsterLasagnaBuff = true;
             player.GetCritChance(DamageClass.Generic) += 25;
-            player.wellFed = true;
+            
         }
     }
 }

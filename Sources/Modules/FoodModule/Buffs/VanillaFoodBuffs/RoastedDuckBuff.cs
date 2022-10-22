@@ -18,7 +18,7 @@
             player.maxFallSpeed *= 0.5f;
             player.extraFall += 30;
             player.waterWalk = true;
-            player.wellFed = true;
+            
         }
     }
 }

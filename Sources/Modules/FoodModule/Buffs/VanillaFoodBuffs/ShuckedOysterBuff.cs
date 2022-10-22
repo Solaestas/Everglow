@@ -16,7 +16,7 @@
             FoodBuffModPlayer.ShuckedOysterBuff = true;
             player.GetArmorPenetration(DamageClass.Generic) += 10;
             player.statDefense -= 5;
-            player.wellFed = true;
+            
         }
     }
 }

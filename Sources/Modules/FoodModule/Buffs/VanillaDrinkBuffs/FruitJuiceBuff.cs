@@ -23,7 +23,7 @@
             player.maxRunSpeed *= 2f;//加速
             player.runAcceleration *= 2f;
             player.jumpSpeedBoost += 2;
-            player.wellFed = true;
+            
         }
     }
 }

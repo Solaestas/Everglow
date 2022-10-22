@@ -14,7 +14,7 @@
         {
             player.statDefense += 4; // 加4防御
             player.GetCritChance(DamageClass.Generic) += 8; // 加8%暴击
-            player.wellFed = true;
+            
         }
     }
 }

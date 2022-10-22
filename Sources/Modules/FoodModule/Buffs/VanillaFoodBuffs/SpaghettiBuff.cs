@@ -13,7 +13,7 @@
         public override void Update(Player player, ref int buffIndex)
         {
             player.maxMinions += 1;//加1召唤栏
-            player.wellFed = true;
+            
         }
     }
 }

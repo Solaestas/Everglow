@@ -14,7 +14,7 @@
         {
             player.maxFallSpeed *= 0.25f;
             player.noFallDmg = true;
-            player.wellFed = true;
+            
         }
     }
 }

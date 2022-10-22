@@ -14,7 +14,7 @@
         {
             player.GetCritChance(DamageClass.Ranged) += 5; // 加5%暴击
             player.aggro -= 300;//仇恨值减300
-            player.wellFed = true;
+            
         }
     }
 }

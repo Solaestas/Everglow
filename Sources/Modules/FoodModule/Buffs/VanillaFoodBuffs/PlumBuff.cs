@@ -14,7 +14,7 @@
         {
             player.aggro += 600;//加600仇恨值
             player.GetAttackSpeed(DamageClass.Generic) += 0.08f; // 加8%攻速
-            player.wellFed = true;
+            
         }
     }
 }

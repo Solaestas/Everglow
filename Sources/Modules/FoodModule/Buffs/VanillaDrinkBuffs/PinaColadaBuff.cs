@@ -14,7 +14,7 @@
         {
             player.thorns += 10f;//十倍反伤
             player.statDefense += 20;
-            player.wellFed = true;
+            
         }
     }
 }

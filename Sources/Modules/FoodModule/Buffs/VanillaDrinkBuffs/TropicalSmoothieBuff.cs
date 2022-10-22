@@ -15,7 +15,7 @@
             player.manaCost *= 0.1f;//不消耗魔力
             player.GetDamage(DamageClass.Magic) *= 1.5f;//加50%攻击
             player.GetCritChance(DamageClass.Magic) += 50;//加50%暴击
-            player.wellFed = true;
+            
         }
     }
 }

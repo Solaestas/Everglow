@@ -16,7 +16,7 @@
             player.GetCritChance(DamageClass.Melee) += 40; // 加40%暴击
             player.GetDamage(DamageClass.Melee) += 1.4f; // 加40%伤害
             player.GetAttackSpeed(DamageClass.Generic) += 0.4f; // 加40%攻速
-            player.wellFed = true;
+            
         }
     }
 }

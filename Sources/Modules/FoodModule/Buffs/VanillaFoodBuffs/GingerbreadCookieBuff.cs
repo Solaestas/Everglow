@@ -14,7 +14,7 @@
         {
             player.resistCold = true; // 保暖
             player.lifeRegen += 1; // 加1生命回复
-            player.wellFed = true;
+            
         }
     }
 }

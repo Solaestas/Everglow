@@ -21,7 +21,7 @@
             player.runAcceleration *= 0.2f;
             player.jumpSpeedBoost *= 0.2f;
             player.endurance += 0.5f;//加50%减伤
-            player.wellFed = true;
+            
         }
     }
 }

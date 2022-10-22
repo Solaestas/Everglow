@@ -16,7 +16,7 @@
             player.jumpSpeedBoost += 1f;
             player.maxFallSpeed += 5f;
             player.jumpBoost = true;
-            player.wellFed = true;
+            
         }
     }
 }

@@ -97,6 +97,10 @@ namespace Everglow.Sources.Modules.FoodModule
         public override void PostUpdate()
         {
             FoodState();
+            if (CurrentSatiety > 0 || !Thirstystate)
+            {
+                Player.wellFed = true;
+            }
             if (!Player.active)
             {
                 CurrentSatiety = 0;
