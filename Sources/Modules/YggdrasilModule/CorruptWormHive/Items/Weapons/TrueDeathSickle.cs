@@ -37,11 +37,16 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Items.Weapons
                     }
                     else//右键
                     {
+                        Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.TrueDeathSickle_Super>(), player.GetWeaponDamage(Item), Item.knockBack, player.whoAmI);
                     }
                 }
                 return false;
             }
             return base.CanUseItem(player);
+        }
+        public override bool AltFunctionUse(Player player)
+        {
+            return true;
         }
     }
 }

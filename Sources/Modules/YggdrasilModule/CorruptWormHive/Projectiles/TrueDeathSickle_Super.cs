@@ -10,12 +10,12 @@ using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Commons.Function.Curves;
 namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
 {
-    public class TrueDeathSickle : MeleeProj, IOcclusionProjectile,IWarpProjectile
+    public class TrueDeathSickle_Super : MeleeProj, IOcclusionProjectile,IWarpProjectile
     {
         public override void SetDef()
         {
-            maxAttackType = 2;
-            trailLength = 200;
+            maxAttackType = 1;
+            trailLength = 600;
             longHandle = true;
             shadertype = "Trail";
             AutoEnd = false;
@@ -43,10 +43,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
         {
             Player player = Main.player[Projectile.owner];
             Texture2D tex = YggdrasilContent.QuickTexture("CorruptWormHive/Projectiles/TrueDeathSickle_Handle");
-            if (attackType == 1 && timer > 18)
-            {
-                tex = YggdrasilContent.QuickTexture("CorruptWormHive/Projectiles/TrueDeathSickle_Handle_Filp");
-            }
+
             if (attackType == 2)
             {
                 tex = YggdrasilContent.QuickTexture("CorruptWormHive/Projectiles/TrueDeathSickle");
@@ -129,182 +126,62 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
         {
             //伤害倍率
             ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
-            float ShakeStrength = 3f;
-            Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 6f * ShakeStrength, 400)).RotatedByRandom(6.283);
+            float ShakeStrength = 20f;
+            Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 12f * ShakeStrength, 100)).RotatedByRandom(6.283);
             knockback *= 15f;
-            if (attackType == 2)
-            {
-                damage = (int)(damage * 2.3f);
-                knockback *=2.3f;
-            }
+            damage *= 24;
             Projectile.NewProjectile(Projectile.GetSource_FromAI(), target.Center, Vector2.One, ModContent.ProjectileType<MythModule.MagicWeaponsReplace.Projectiles.DemonScythe.DemoSpark>(), 0, 0, Projectile.owner, 15);
         }
         public override void Attack()
         {
             Player player = Main.player[Projectile.owner];
             TestPlayerDrawer Tplayer = player.GetModPlayer<TestPlayerDrawer>();
-            Tplayer.HideLeg = true;
-            if (Main.myPlayer == Projectile.owner && Main.mouseRight && Main.mouseRightRelease)
-            {
-
-            }
-
             useTrail = true;
-
-            if(Main.rand.NextBool(4))
+            if (timer < 120)
             {
+                useTrail = false;
+                LockPlayerDir(Player);
+                float targetRot = -MathHelper.PiOver2 + Player.direction * -1.6f;
+                mainVec = Vector2.Lerp(mainVec, Vector2Elipse(250 + timer * 3, targetRot, 1.2f, 4000), 0.15f);
+                mainVec += Projectile.DirectionFrom(Player.Center) * 3;
+                Projectile.rotation = mainVec.ToRotation();
+            }
+            if (timer == 160)
+            {
+                AttSound(new SoundStyle(
+            "Everglow/Sources/Modules/YggdrasilModule/CorruptWormHive/Sounds/SuperHeavySwing"));
 
             }
-            if (timer == 1)
+
+            if (timer >= 120 && timer <= 450)
             {
-                //Projectile.NewProjectile(Projectile.GetSource_FromAI(), player.Center, Vector2.Zero, ModContent.ProjectileType<TrueDeathSickle_Effect_0>(), 0, 0, player.whoAmI,attackType);
-            }
-            if (attackType == 0)
-            {
-
-                if (timer < 20)
-                {
-                    useTrail = false;
-                    LockPlayerDir(Player);
-                    float targetRot = -MathHelper.PiOver2 + Player.direction * -1.6f;
-                    mainVec = Vector2.Lerp(mainVec, Vector2Elipse(250, targetRot, 1.2f), 0.15f);
-                    mainVec += Projectile.DirectionFrom(Player.Center) * 3;
-                    Projectile.rotation = mainVec.ToRotation();
-                }
-                if (timer == 20)
-                {
-                    AttSound(new SoundStyle(
-                "Everglow/Sources/Modules/MEACModule/Sounds/TrueMeleeSwing"));
-
-                }
-
-                if (timer == 50)
-                {
-                    ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
-                    Gsplayer.FlyCamPosition = new Vector2(0, 30).RotatedByRandom(6.283);
-                }
-
-                if (timer > 20 && timer < 52)
-                {
-                    GenerateVFX(4);
-                    Lighting.AddLight(Projectile.Center + mainVec, 0.24f, 0.0f, 0.75f);
-                    isAttacking = true;
-                    Projectile.rotation += player.direction * 0.1f * (timer) / 20f;
-                    mainVec = Vector2Elipse(250, Projectile.rotation, -1.2f, 0, 1000);          
-                }
-                if (timer >= 52)
-                {
-                    Projectile.extraUpdates = 12;
-                }
-                if (timer > 320)
-                {
-                    Projectile.extraUpdates = 2;
-                    NextAttackType();
-                }
+                ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
+                Gsplayer.FlyCamPosition = new Vector2(0, timer / 10).RotatedByRandom(6.283);
             }
 
-            if (attackType == 1)
+            if (timer > 120 && timer < 482)
             {
-                if (timer < 50)
-                {
-                    useTrail = false;
-                    LockPlayerDir(Player);
-                    float targetRot = -MathHelper.PiOver2 + Player.direction * 1.2f;
-                    mainVec = Vector2.Lerp(mainVec, Vector2Elipse(180, targetRot, -1.2f), 0.09f);
-                    mainVec += Projectile.DirectionFrom(Player.Center) * 3;
-                    Projectile.rotation = mainVec.ToRotation();
-                }
-                if (timer == 50)
-                {
-                    AttSound(new SoundStyle(
-                "Everglow/Sources/Modules/MEACModule/Sounds/TrueMeleeSwing"));
-                }
-
-                if (timer == 70)
-                {
-                    ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
-                    Gsplayer.FlyCamPosition = new Vector2(0, 30).RotatedByRandom(6.283);
-                }
-
-
-                if (timer > 50 && timer < 75)
-                {
-                    GenerateVFX(4);
-                    Lighting.AddLight(Projectile.Center + mainVec, 0.24f, 0.0f, 0.75f);
-                    isAttacking = true;
-                    Projectile.rotation -= player.direction * 0.24f;
-                    mainVec = Vector2Elipse(250, Projectile.rotation, -1.2f,0,1000);
-                }
-                if (timer >= 75)
-                {
-                    Projectile.extraUpdates = 12;
-                }
-                if (timer > 400)
-                {
-                    Projectile.extraUpdates = 2;
-                    NextAttackType();
-                }
+                GenerateVFX(4);
+                Lighting.AddLight(Projectile.Center + mainVec, 0.24f, 0.0f, 0.75f);
+                isAttacking = true;
+                Projectile.rotation += player.direction * 0.016f *(float)(1 - Math.Cos((timer - 150) / 166d * Math.PI));
+                mainVec = Vector2Elipse(610, Projectile.rotation, -1.2f, 0, 4000);
             }
-            if (attackType == 2)
+            if (timer > 480)
             {
-                trailLength = 400;
-                longHandle = false;
-                drawScaleFactor = 1.6f;
-                if (timer < 20)
-                {
-                    useTrail = false;
-                    LockPlayerDir(Player);
-                    float targetRot = 0;
-                    if(player.direction == 1)
-                    {
-                        targetRot = -MathHelper.PiOver4 * 3;
-                    }
-                    mainVec = Vector2.Lerp(mainVec, Vector2Elipse(240, targetRot, 0.3f, 0.3f), 0.15f);
-                    mainVec += Projectile.DirectionFrom(Player.Center) * -3;
-                    Projectile.rotation = mainVec.ToRotation();
-                    disFromPlayer = -10;
-                }
-                if (timer == 30)
-                {
-                    AttSound(new SoundStyle(
-                "Everglow/Sources/Modules/MEACModule/Sounds/TrueMeleePowerSwing"));
-                }
-                if (timer == 50)
-                {
-                    ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
-                    Gsplayer.FlyCamPosition = new Vector2(0, 60).RotatedByRandom(6.283);
-                }
-                if (timer > 20 && timer < 55)
-                {
-                    GenerateVFX(timer / 5);
-                    Lighting.AddLight(Projectile.Center + mainVec, 0.24f, 0.0f, 0.75f);
-                    isAttacking = true;
-                    Projectile.rotation += player.direction * 0.162f * (float)(1 - Math.Cos((timer - 20) / 17.5d * Math.PI));
-                    mainVec = Vector2Elipse(240, Projectile.rotation, 0.3f, 0.3f, 10000);
-                }
-                if (timer >= 55)
-                {
-                    Projectile.extraUpdates = 4;
-                }
-                if (timer > 380)
-                {
-                    trailLength = 200;
-                    longHandle = true;
-                    drawScaleFactor = 1f;
-                    NextAttackType();
-                }
+                Projectile.extraUpdates = 10;
+            }
+            if (timer > 1000)
+            {
+                End();
+                Projectile.Kill();
             }
         }
         public void GenerateVFX(int Frequency)
         {
             Player player = Main.player[Projectile.owner];
             float dir = player.direction * ((attackType + 1) % 2 - 0.5f) * 2;
-            float mulVelocity = 1f;
-            mulVelocity *= Frequency / 5f;
-            if(attackType == 2)
-            {
-                mulVelocity = 2.4f;
-            }
+            float mulVelocity = 10f * (float)(1 - Math.Cos((timer - 150) / 166d * Math.PI));
             for (int g = 0;g < Frequency; g++)
             {
                 DevilFlameDust df = new DevilFlameDust
@@ -312,9 +189,9 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
                     velocity = (Vector2.Normalize(mainVec)).RotatedBy(1.57 * dir) * 250f / mainVec.Length() * Main.rand.NextFloat(0.65f, 8.6f) * mulVelocity,
                     Active = true,
                     Visible = true,
-                    position = Projectile.Center + mainVec * Main.rand.NextFloat(0.85f, 1.3f) + new Vector2(Main.rand.NextFloat(0.05f, 36f), 0).RotatedByRandom(6.283),
-                    maxTime = Main.rand.Next(9, 24),
-                    ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(0.01f, 0.1f) * dir, Main.rand.NextFloat(8f, 32f), Projectile.whoAmI }
+                    position = Projectile.Center + mainVec * Main.rand.NextFloat(Main.rand.NextFloat(0.85f, 1.2f), 1.2f) + new Vector2(Main.rand.NextFloat(0.05f, 36f), 0).RotatedByRandom(6.283),
+                    maxTime = Main.rand.Next(36, 72),
+                    ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(0.001f, 0.01f) * dir, Main.rand.NextFloat(0.1f, Main.rand.NextFloat(2f, 128f)) * (float)(1 - Math.Cos((timer - 150) / 166d * Math.PI)), Projectile.whoAmI }
                 };
                 VFXManager.Add(df);
             }
@@ -376,7 +253,6 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
             {
                 SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
             }
-
             int length = SmoothTrail.Count;
             if (length <= 3)
             {
@@ -393,17 +269,10 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
                 {
                     w *= 1.2f;
                 }
-                if (!longHandle)
-                {
-                    bars.Add(new Vertex2D(Projectile.Center + trail[i] * 0.15f * Projectile.scale, Color.White, new Vector3(factor * 1, 1, 0f)));
-                    bars.Add(new Vertex2D(Projectile.Center + trail[i] * Projectile.scale, Color.White, new Vector3(factor * 2, 0, w)));
-                }
-                else
-                {
-                    bars.Add(new Vertex2D(Projectile.Center + trail[i] * 0.05f * Projectile.scale, Color.White, new Vector3(factor * 1, 1, 0f)));
-                    bars.Add(new Vertex2D(Projectile.Center + trail[i] * Projectile.scale, Color.White, new Vector3(factor * 2, 0, w)));
-                }
+                bars.Add(new Vertex2D(Projectile.Center + trail[i] * 0.15f * Projectile.scale, Color.White, new Vector3(factor * 1, 1, 0f)));
+                bars.Add(new Vertex2D(Projectile.Center + trail[i] * Projectile.scale * 1.15f, Color.White, new Vector3(factor * 2, 0, w)));
             }
+
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone);
             var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
@@ -421,6 +290,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
         }
         public void DrawOcclusion()
         {

@@ -53,7 +53,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule
                 ScreenOcclusion.CurrentTechnique.Passes[0].Apply();
 
                 Main.spriteBatch.Draw(render2, Vector2.Zero, Color.White);
-                
+
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
