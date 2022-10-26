@@ -1,4 +1,6 @@
 ﻿using Everglow.Sources.Modules.MEACModule.Projectiles;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories;
+using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 {
@@ -57,8 +59,42 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             return true;
         }
 
-        public override void AddRecipes()
+        //public override void UpdateInventory(Player player) //KEEP FOR REFERENCE
+        //{
+        //    bool hasMothEye = false;
+        //    foreach (var item in player.armor)
+        //    {
+        //        if (item.type == ModContent.ItemType<Items.Accessories.MothEye>())
+        //        {
+        //            hasMothEye = true;
+        //            if (hasMothEye == true && fireflyBiome.IsBiomeActive(Main.LocalPlayer))
+        //            {
+        //                player.statDefense = 999; //used as an example
+        //            }
+        //            break;
+        //        }
+        //    }
+        //    base.UpdateInventory(player);
+        //}
+        public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
+            bool hasMothEye = false;
+            foreach (var item in Main.LocalPlayer.armor) //player.armor didn't work, and Player.armor also didn't work. ~Setnour6
+            {
+                if (item.type == ModContent.ItemType<Items.Accessories.MothEye>())
+                {
+                    hasMothEye = true;
+                    if (hasMothEye == true && fireflyBiome.IsBiomeActive(Main.LocalPlayer))
+                    {
+                        tooltips.AddRange(new TooltipLine[]
+                        {
+                            new(Everglow.Instance, "MothEyeBonusText", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.MothEyeBonusText")),
+                            new(Everglow.Instance, "MothEyeBladeBonus", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.MEyeBonusTextMothBlade")),
+                        });
+                    }
+                }
+            }
+            base.ModifyTooltips(tooltips);
         }
     }
 }
