@@ -6,6 +6,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 {
     public class ScaleWingBlade : ModItem
     {
+        FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
+        MothEye mothEye = ModContent.GetInstance<MothEye>();
         public override void SetStaticDefaults()
         {
             ItemGlowManager.AutoLoadItemGlow(this);
