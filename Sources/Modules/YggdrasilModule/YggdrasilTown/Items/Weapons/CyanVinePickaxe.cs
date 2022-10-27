@@ -13,7 +13,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Items.Weapons//
             Item.useTime = 14;
             Item.knockBack = 1.8f;
             Item.damage = 11;
-            Item.rare = ItemRarityID.Orange;
+            Item.rare = ItemRarityID.White;
             Item.UseSound = SoundID.Item1;
             Item.autoReuse = true;
             Item.useTurn = true;

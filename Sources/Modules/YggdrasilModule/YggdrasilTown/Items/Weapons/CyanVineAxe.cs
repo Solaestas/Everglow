@@ -11,7 +11,7 @@
             Item.useTime = 25;
             Item.knockBack = 3.5f;
             Item.damage = 10;
-            Item.rare = ItemRarityID.Orange;
+            Item.rare = ItemRarityID.White;
             Item.UseSound = SoundID.Item1;
             Item.autoReuse = true;
             Item.DamageType = DamageClass.Melee;
