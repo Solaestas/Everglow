@@ -1,7 +1,6 @@
 ﻿using Terraria.Audio;
 using Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.VFXs;
 using Everglow.Sources.Commons.Core.VFX;
-using Terraria.GameContent;
 using Everglow.Sources.Modules.MEACModule.Projectiles;
 using Everglow.Sources.Modules.MythModule;
 using Everglow.Sources.Modules.YggdrasilModule.Common;
@@ -10,7 +9,7 @@ using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Commons.Function.Curves;
 namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
 {
-    public class TrueDeathSickle : MeleeProj, IOcclusionProjectile,IWarpProjectile
+    public class TrueDeathSickle : MeleeProj, IOcclusionProjectile,IWarpProjectile, IBloomProjectile
     {
         public override void SetDef()
         {
@@ -115,50 +114,45 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
                     new Vertex2D(drawCenter + TopRight, lightColor, new Vector3(sourceTopRight.X, sourceTopRight.Y, 0))
             };
 
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-
             Main.graphics.GraphicsDevice.Textures[0] = tex;
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
 
-
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
         }
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
-            //伤害倍率
-            ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
+            Player player = Main.player[Projectile.owner];
+
+
+            ScreenShaker Gsplayer = player.GetModPlayer<ScreenShaker>();
             float ShakeStrength = 3f;
-            Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 6f * ShakeStrength, 400)).RotatedByRandom(6.283);
-            knockback *= 15f;
+            Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 24f * ShakeStrength, 100)).RotatedByRandom(6.283);
+            knockback *= 5f;
+            int HitType = ModContent.ProjectileType<TrueDeathSickleHit>();
             if (attackType == 2)
             {
                 damage = (int)(damage * 2.3f);
                 knockback *=2.3f;
+                GenerateVFXFromTarget(target, 36, 2.6f);
+                if(player.ownedProjectileCounts[HitType] < 5)
+                {
+                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), target.Center, Vector2.One, HitType, 0, 0, Projectile.owner, 30, Projectile.rotation);
+                }
             }
-            Projectile.NewProjectile(Projectile.GetSource_FromAI(), target.Center, Vector2.One, ModContent.ProjectileType<MythModule.MagicWeaponsReplace.Projectiles.DemonScythe.DemoSpark>(), 0, 0, Projectile.owner, 15);
+            else
+            {
+                GenerateVFXFromTarget(target, 18, 2f);
+                if (player.ownedProjectileCounts[HitType] < 5)
+                {
+                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), target.Center, Vector2.One, HitType, 0, 0, Projectile.owner, 15, Projectile.rotation);
+                }
+            }
         }
         public override void Attack()
         {
+            useTrail = true;
             Player player = Main.player[Projectile.owner];
             TestPlayerDrawer Tplayer = player.GetModPlayer<TestPlayerDrawer>();
             Tplayer.HideLeg = true;
-            if (Main.myPlayer == Projectile.owner && Main.mouseRight && Main.mouseRightRelease)
-            {
-
-            }
-
-            useTrail = true;
-
-            if(Main.rand.NextBool(4))
-            {
-
-            }
-            if (timer == 1)
-            {
-                //Projectile.NewProjectile(Projectile.GetSource_FromAI(), player.Center, Vector2.Zero, ModContent.ProjectileType<TrueDeathSickle_Effect_0>(), 0, 0, player.whoAmI,attackType);
-            }
             if (attackType == 0)
             {
 
@@ -190,11 +184,18 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
                     Lighting.AddLight(Projectile.Center + mainVec, 0.24f, 0.0f, 0.75f);
                     isAttacking = true;
                     Projectile.rotation += player.direction * 0.1f * (timer) / 20f;
-                    mainVec = Vector2Elipse(250, Projectile.rotation, -1.2f, 0, 1000);          
+                    mainVec = Vector2Elipse(250, Projectile.rotation, -1.2f, 0, 1000);
+
+                    float BodyRotation = (float)(Math.Sin((timer - 30) / 40d * Math.PI)) * 0.2f * player.direction * player.gravDir;
+                    player.fullRotation = BodyRotation;
+                    player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
+                    player.legRotation = -BodyRotation;
+                    player.legPosition = (new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height) - player.fullRotationOrigin).RotatedBy(-BodyRotation);
+                    Tplayer.HeadRotation = -BodyRotation;
                 }
                 if (timer >= 52)
                 {
-                    Projectile.extraUpdates = 12;
+                    Projectile.extraUpdates = 16;
                 }
                 if (timer > 320)
                 {
@@ -234,10 +235,17 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
                     isAttacking = true;
                     Projectile.rotation -= player.direction * 0.24f;
                     mainVec = Vector2Elipse(250, Projectile.rotation, -1.2f,0,1000);
+
+                    float BodyRotation = (float)(Math.Sin((timer - 30) / 40d * Math.PI)) * 0.2f * player.direction * player.gravDir;
+                    player.fullRotation = BodyRotation;
+                    player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
+                    player.legRotation = -BodyRotation;
+                    player.legPosition = (new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height) - player.fullRotationOrigin).RotatedBy(-BodyRotation);
+                    Tplayer.HeadRotation = -BodyRotation;
                 }
                 if (timer >= 75)
                 {
-                    Projectile.extraUpdates = 12;
+                    Projectile.extraUpdates = 16;
                 }
                 if (timer > 400)
                 {
@@ -281,10 +289,17 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
                     isAttacking = true;
                     Projectile.rotation += player.direction * 0.162f * (float)(1 - Math.Cos((timer - 20) / 17.5d * Math.PI));
                     mainVec = Vector2Elipse(240, Projectile.rotation, 0.3f, 0.3f, 10000);
+
+                    float BodyRotation = (float)(Math.Sin((timer - 30) / 40d * Math.PI)) * 0.2f * player.direction * player.gravDir;
+                    player.fullRotation = BodyRotation;
+                    player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
+                    player.legRotation = -BodyRotation;
+                    player.legPosition = (new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height) - player.fullRotationOrigin).RotatedBy(-BodyRotation);
+                    Tplayer.HeadRotation = -BodyRotation;
                 }
                 if (timer >= 55)
                 {
-                    Projectile.extraUpdates = 4;
+                    Projectile.extraUpdates = 6;
                 }
                 if (timer > 380)
                 {
@@ -314,11 +329,33 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
                     Visible = true,
                     position = Projectile.Center + mainVec * Main.rand.NextFloat(0.85f, 1.3f) + new Vector2(Main.rand.NextFloat(0.05f, 36f), 0).RotatedByRandom(6.283),
                     maxTime = Main.rand.Next(9, 24),
-                    ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(0.01f, 0.1f) * dir, Main.rand.NextFloat(8f, 32f), Projectile.whoAmI }
+                    ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(0.01f, 0.1f) * dir, Main.rand.NextFloat(8f, 32f)}
                 };
                 VFXManager.Add(df);
             }
         }
+        public void GenerateVFXFromTarget(NPC target, int Frequency, float mulVelocity = 1f)
+        {
+            for (int g = 0; g < Frequency; g++)
+            {
+                DevilFlameDust df = new DevilFlameDust
+                {
+                    velocity = new Vector2(0, Main.rand.NextFloat(4.5f, 9f)).RotatedByRandom(6.283) * mulVelocity,
+                    Active = true,
+                    Visible = true,
+                    position = target.Center,
+                    maxTime = Main.rand.Next(12, 30),
+                    ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.1f, 0.1f), Main.rand.NextFloat(8f, 32f)}
+                };
+                VFXManager.Add(df);
+            }
+        }
+        public void DrawBloom()
+        {
+            DrawEffect();
+            DrawOcclusion();
+        }
+
         public void DrawWarp()
         {
             List<Vector2> SmoothTrailX = CatmullRom.SmoothPath(trailVecs.ToList());//平滑
@@ -524,7 +561,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
         }
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            target.AddBuff(BuffID.ShadowFlame, 1800);
+            target.AddBuff(ModContent.BuffType<Buffs.DeathFlame>(), 1800);
         }
     }
 }

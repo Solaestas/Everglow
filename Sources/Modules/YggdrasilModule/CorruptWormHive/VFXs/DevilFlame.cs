@@ -76,7 +76,6 @@ internal class DevilFlameDust : ShaderDraw
             Active = false;
         }
         velocity = velocity.RotatedBy(ai[1]);
-        vsadd = vsadd * 0.75f + Main.projectile[(int)ai[3]].velocity * 0.25f;
 
         for (int f = oldPos.Count - 1; f > 0; f--)
         {
@@ -86,7 +85,7 @@ internal class DevilFlameDust : ShaderDraw
             }
         }
         float delC = ai[2] * 0.05f * (float)Math.Sin((maxTime - timer) / 40d * Math.PI);
-        Lighting.AddLight((int)(position.X / 16), (int)(position.Y / 16), 0.05f * delC, 0f, 0.19f * delC);
+        Lighting.AddLight((int)(position.X / 16), (int)(position.Y / 16), 0.25f * delC, 0f, 0.95f * delC);
 
     }
 
