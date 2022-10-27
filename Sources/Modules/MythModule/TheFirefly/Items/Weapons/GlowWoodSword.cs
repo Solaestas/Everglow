@@ -24,7 +24,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             Item.useTime = 20;
             Item.useAnimation = 20;
             Item.useStyle = ItemUseStyleID.Swing;
-            Item.knockBack = 1f;
+            Item.knockBack = 5f;
             Item.value = Item.sellPrice(0, 0, 0, 70);
             Item.rare = ItemRarityID.White;
             Item.UseSound = SoundID.Item1;

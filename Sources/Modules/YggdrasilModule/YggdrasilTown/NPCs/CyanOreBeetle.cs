@@ -19,6 +19,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.NPCs
             NPC.defense = 12;
             NPC.friendly = false;
             NPC.aiStyle = 3;
+            NPC.knockBackResist = 1f;
             NPC.HitSound = SoundID.NPCHit4;
             NPC.DeathSound = SoundID.NPCDeath4;
         }

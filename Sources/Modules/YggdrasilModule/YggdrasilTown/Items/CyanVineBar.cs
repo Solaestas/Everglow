@@ -26,7 +26,7 @@
         }
         public override void AddRecipes()
         {
-            CreateRecipe(4)
+            CreateRecipe(1)
                 .AddIngredient(ModContent.ItemType<Items.CyanVineOre>(), 3)
                 .AddTile(TileID.Furnaces)
                 .Register();
