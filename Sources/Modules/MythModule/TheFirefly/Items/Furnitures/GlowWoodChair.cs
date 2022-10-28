@@ -2,12 +2,12 @@ using Terraria.GameContent.Creative;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures
 {
-    public class GlowWoodChair : ModItem
-    {
-        public override void SetStaticDefaults()
-        {
-            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-        }
+	public class GlowWoodChair : ModItem
+	{
+		public override void SetStaticDefaults() 
+		{
+			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+		}
 
         public override void SetDefaults()
         {

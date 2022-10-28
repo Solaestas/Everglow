@@ -160,15 +160,15 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
             //NPCID.Sets.TrailingMode[NPC.type] = 0;
             if (!Main.dedServ)
             {
-                if (ModContent.GetInstance<EverglowClientConfig>().MothAudioReplace == MothAudioReplaceMode.MothFighting)
+                if (EverglowClientConfig.ReplaceMothAudio == 0) //ModContent.GetInstance<EverglowClientConfig>().MothAudioReplace == MothAudioReplaceMode.MothFighting
                 {
                     Music = Common.MythContent.QuickMusic("MothFighting");
                 }
-                else if (ModContent.GetInstance<EverglowClientConfig>().MothAudioReplace == MothAudioReplaceMode.AltMothFighting)
+                else if (EverglowClientConfig.ReplaceMothAudio == 1)
                 {
                     Music = Common.MythContent.QuickMusic("MothFightingAlt");
                 }
-                else if (ModContent.GetInstance<EverglowClientConfig>().MothAudioReplace == MothAudioReplaceMode.OldMothFighting)
+                else if (EverglowClientConfig.ReplaceMothAudio == 2)
                 {
                     Music = Common.MythContent.QuickMusic("MothFightingOld2");
                 }

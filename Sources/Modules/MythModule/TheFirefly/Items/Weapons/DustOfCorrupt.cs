@@ -6,6 +6,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
     {
         public override void SetStaticDefaults()
         {
+            Item.staff[Item.type] = true;
             ItemGlowManager.AutoLoadItemGlow(this);
         }
 
@@ -20,7 +21,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             Item.useTime = 7;
             Item.useAnimation = 7;
             Item.useStyle = ItemUseStyleID.Shoot;
-            Item.staff[Item.type] = true;
             Item.noMelee = true;
             Item.knockBack = 5f;
             Item.value = Item.sellPrice(0, 0, 20, 0);

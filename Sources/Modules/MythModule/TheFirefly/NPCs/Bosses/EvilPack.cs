@@ -1,7 +1,9 @@
 ﻿using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Sources.Commons.Core.Utils;
 using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Terraria.Audio;
+using Terraria.GameContent;
 using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
@@ -12,14 +14,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
         {
             DisplayName.SetDefault("Evil Cocoon");
             DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "魔茧");
-            Main.npcFrameCount[NPC.type] = 2;
+            Main.npcFrameCount[NPC.type] = 7;
         }
 
         public override void SetDefaults()
         {
             NPC.damage = 0;
-            NPC.width = 80;
-            NPC.height = 150;
+            NPC.width = 150;
+            NPC.height = 180;
             NPC.defense = 0;
             NPC.lifeMax = 1;
             NPC.knockBackResist = 0f;
@@ -43,16 +45,23 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
             NPC.rotation += omega;
             omega -= NPC.rotation * 0.03f;
             omega *= 0.97f;
+            int valueTime = (int)(Main.timeForVisualEffects * 0.13) % 7;
+            NPC.frame = new Rectangle(186 * valueTime, 0, 186, 278);
+            float ValueLight = MathUtils.Sin((float)(Main.timeForVisualEffects * 0.26 * Math.PI / 7d + 0.5)) * 0.6f + 0.6f;
+            if(ValueLight > 1)
+            {
+                ValueLight *= ValueLight;
+            }
+            Lighting.AddLight((int)(NPC.Center.X / 16f), (int)(NPC.Center.Y / 16f),0.2f * ValueLight + 0.2f, 0.2f * ValueLight, 0.4f * ValueLight);
             if (NPC.ai[0] < 10)
             {
-                NPC.frame = new Rectangle(0, 150, 80, 150);
+               
             }
             else
             {
                 if (NPC.ai[1] > 90)
                 {
-                    NPC.frame = new Rectangle(0, 0, 80, 150);
-                    if (NPC.ai[2] == 0)
+                    if(NPC.ai[2] == 0)
                     {
                         for (int i = 0; i < 2; i++)
                         {
@@ -150,7 +159,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
             NPC.life = NPC.lifeMax;
             if (Math.Abs(omega) < 0.2f)
             {
-                omega -= hitDirection * (float)damage / 1000f;
+                omega -= Math.Min(hitDirection * (float)damage / 10000f, 0.05f);
             }
         }
 
@@ -161,9 +170,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
             {
                 effects = SpriteEffects.FlipHorizontally;
             }
-            Texture2D tg = MythContent.QuickTexture("TheFirefly/NPCs/Bosses/EvilPack");
+            Texture2D tg = MythContent.QuickTexture("TheFirefly/NPCs/Bosses/EvilHive");
             Color color = drawColor;
-            Main.spriteBatch.Draw(tg, NPC.position + new Vector2(tg.Width / 2f, 0) - Main.screenPosition, new Rectangle?(NPC.frame), color, NPC.rotation, new Vector2(tg.Width / 2f, 0), 1f, effects, 0f);
+            Vector2 drawOrigin = new Vector2(tg.Width / 2f / Main.npcFrameCount[NPC.type], 0);
+            Vector2 drawOffset = new Vector2(67, -90);
+
+            Main.spriteBatch.Draw(tg, NPC.position + drawOffset - Main.screenPosition, new Rectangle?(NPC.frame), color, NPC.rotation, drawOrigin, 1f, effects, 0f);
             return false;
         }
 
@@ -174,14 +186,27 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
             {
                 effects = SpriteEffects.FlipHorizontally;
             }
-            Texture2D tg = MythContent.QuickTexture("TheFirefly/NPCs/Bosses/EvilPackGlow");
+            Texture2D tg = MythContent.QuickTexture("TheFirefly/NPCs/Bosses/EvilHiveGlow");
             float C = (float)Math.Sqrt(Math.Max((90 - NPC.ai[1]) / 90f, 0)) * 0.6f + Math.Abs(omega * 15);
+            C = 0.8f + C * 0.2f;
             Color color = new Color(C, C, C, 0);
-            Main.spriteBatch.Draw(tg, NPC.position + new Vector2(tg.Width / 2f, 0) - Main.screenPosition, new Rectangle?(NPC.frame), color, NPC.rotation, new Vector2(tg.Width / 2f, 0), 1f, effects, 0f);
+            Vector2 drawOrigin = new Vector2(tg.Width / 2f / Main.npcFrameCount[NPC.type], 0);
+            Vector2 drawOffset = new Vector2(67, -90);
+
+            Main.spriteBatch.Draw(tg, NPC.position + drawOffset - Main.screenPosition, new Rectangle?(NPC.frame), color, NPC.rotation, drawOrigin, 1f, effects, 0f);
+
+
+            //此段代码备用于日后调参，删掉注释之后显示HitBox
+            //Texture2D tBox = TextureAssets.MagicPixel.Value;
+            //Rectangle rt = NPC.Hitbox;
+            //rt.X -= (int)Main.screenPosition.X;
+            //rt.Y -= (int)Main.screenPosition.Y;
+            //Main.spriteBatch.Draw(tBox, rt, new Color(55, 0, 0, 0));
+
             Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            Vector2 CrackCenter = new Vector2(-14, 106).RotatedBy(NPC.rotation) + new Vector2(40, 0);
-            if (NPC.ai[1] <= 90)
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred,BlendState.AlphaBlend,SamplerState.AnisotropicWrap,DepthStencilState.None,RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix) ;
+            Vector2 CrackCenter = new Vector2(-24, 196).RotatedBy(NPC.rotation) + drawOffset;
+            if(NPC.ai[1] <= 90)
             {
                 DrawCrack(CrackCenter + NPC.position - Main.screenPosition, Math.Clamp(NPC.ai[1], 0, 15), 0);
                 DrawCrack(CrackCenter + NPC.position - Main.screenPosition, Math.Clamp(NPC.ai[1] - 8, 0, 15), 1);

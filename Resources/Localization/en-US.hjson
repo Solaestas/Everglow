@@ -229,10 +229,7 @@ Mods:
 			OceanWorld : Ocean World(Not working)
 			OldMoss : Moss
 			ReefSharkSpecimen : Reefshark Specimen
-			StoneDragonScaleWood : Fossilized Dragon Scale Wood
 			TerrariaContinent : Terraria Continent(Not working)
-			CyanVineBar : Cyan Bar
-			CyanVineOre : Cyan Ore
 			DarkSeaBar : Abyssal Bar
 			DarkSeaOre : Abyssal Ore
 			OceanBlueBar : Current Bar
@@ -242,7 +239,6 @@ Mods:
 			LanternCrystal : Royal City Pylon
 			LanternPost1 : Lantern Post
 			LanternPost2 : Lantern Post
-			YellowDynastyShingles : Yellow Dynasty Shingles
 			DiscordBallF1 : Discord Crystal Ball · The Ancient Path
 			LiftLamp : Lift Indicator
 			TestItem : Wooden Lift
@@ -278,6 +274,25 @@ Mods:
 			#食物系统物品
 			BloodGlucoseMonitor : "Blood Glucose Monitor"
 			OsmoticPressureMonitor : "Osmotic Pressure Monitor"
+
+			#Yggdrasil Items
+
+				#Yggdrasil Town
+				ChinesePartitionLamp : "Chinese Partition Lamp"
+				ChineseStyleFloorLamp : "Chinese Style Floor Lamp"
+				CyanVineBar : "Cyan Bar"
+				CyanVineOre : "Cyan Ore"
+				DoubleArmsChineseStreetLamp : "Chinese Double Arms Street Lamp"
+				HangingSkyLantern : "Hanging Sky Lantern"
+				HexagonalCeilingLamp : "Hexagonal Ceiling Lamp"
+				ShoreMud : "Dark Mud"
+				SideHangingLantern : "Side Hanging Lantern"
+				StoneDragonScaleWood : "Fossilized Dragon Scale Wood"
+				StreetLantern : "Street Lantern"
+				YellowDynastyShingles : "Yellow Dynasty Shingles"
+
+			#Plant Module Items
+			CactusBall : "Cactus Rod"
 		}
 		ItemTooltip :
 		{
@@ -324,7 +339,7 @@ Mods:
 			CyanPedal : "Increases evade by 4\n'The missing petal was converted to your braveness'"
 			DarkHat : "Increases crit chance by 4% and crit damage by 12%\n'Not recommanded to use except for combat or decoration purpose'"
 			DukeTooth : "Increases armor penetration by 12\n'Fortunately, Duke Fishron is not an endangered species...as long as there're truffle worms'"
-			FireflyBorageBadge : "-12 defense\nIncreases damage by 18%\n'Affected by rage of that giant moth, your attacks become wilder'"
+			FireflyBorageBadge : "Increases magic damage by 6%\nIncreases movement speed by 15%\n'A badge made to remind you of how beautiful that place is'"
 			GoldLiquidPupil : "Your attacks ignore 35% of enemies' defense\nGenerates a Ring of Ichor after struck, lasts 12s and unstackable\nDeals high damage while it's generating\nDamages enemies on the ring continuously\nInflicts Ichor to enemies inside the ring"
 			GoldRound : "7 defence\nIncreases damage by 7%\n'Traditional Terrarians usually wear this to keep them healthy'"
 			GreenGel : "Increases max Hp by 30 and Hp regen by 4\n'Studies have shown that green slimes generally have more vitality than blue slimes'"
@@ -570,6 +585,23 @@ Mods:
 			#食物系统物品
 			BloodGlucoseMonitor : "Display hunger information"
 			OsmoticPressureMonitor : "Display thrist information"
+
+			#Plant Module Items
+			CactusBall : "Spin and throw a cactus ball!\nShred victims' armour and bleed them"
+		}
+		ExtraItemTooltip :
+		{
+			UnfinishedItem : "[c/BA0022:This item is unfinished]"
+			MothEyeText0 : "[c/7FC1FF:While in the Firefly biome:]"
+			MothEyeText1 : "[c/7FC1FF:- Mana cost is reduced by 5%]"
+			MothEyeText2 : "[c/7FC1FF:- The effectiveness of mana sickness is reduced by 4]"
+			MothEyeText3 : "[c/7FC1FF:- All Firefly weapons deal 5% more damage]"
+			MothEyeText4 : "[c/7FC1FF:- Some Firefly-related items gain bonuses]"
+			FFBBadge0 : "[c/7FC1FF:'Affected by rage of that giant moth, your attacks become wilder']"
+			FFBBadge1 : "[c/7FC1FF:Defense is lowered based on how much defense you currently have, up to -12]"
+			FFBBadge2 : "[c/7FC1FF:Increases damage by 18%]"
+			FFBBadge3 : "[c/7FC1FF:Increases melee speed by 10%]"
+			FFBBadge4 : "[c/7FC1FF:Base critical strike chance for melee weapons and whips is reduced to 0]"
 		}
 		BuffName : 
 		{
@@ -788,6 +820,11 @@ Mods:
 		MapEntry :
 		{
 			FireflyTree : "Firefly Tree"
+			
+			#Yggdrasil
+
+				#YggdrasilTown
+				SideHangingLantern : "Side Hanging Lantern"
 		}
 		Config:
 		{

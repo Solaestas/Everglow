@@ -18,10 +18,8 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles
             
             ItemDrop = ModContent.ItemType<Items.YellowDynastyShingles>();
             Main.tileSpelunker[Type] = true;
-            ModTranslation modTranslation = base.CreateMapEntryName(null);
-            AddMapEntry(new Color(229, 128, 4), modTranslation);
-            modTranslation.SetDefault("Yellow Dynasty Shingles");
-            modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "黄王朝瓦");
+            AddMapEntry(new Color(229, 128, 4));
+
         }
         public override bool CanExplode(int i, int j)
         {

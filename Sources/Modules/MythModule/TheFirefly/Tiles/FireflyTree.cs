@@ -22,7 +22,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16, 16, 16, 16, 16, 16 };
             TileObjectData.addTile(Type);
 
-            AddMapEntry(new Color(51, 26, 58), Language.GetText("Firefly Tree")); //Mods.Everglow.MapEntry.FireflyTree //TODO: Fix Firefly Tree entry to work with localization files.
+            ModTranslation modTranslation = LocalizationLoader.GetOrCreateTranslation("Mods.Everglow.MapEntry.FireflyTree");
+            AddMapEntry(new Color(51, 26, 58), modTranslation); //Mods.Everglow.MapEntry.FireflyTree
             DustType = ModContent.DustType<TheFirefly.Dusts.MothBlue2>();
             AdjTiles = new int[] { Type };
             //TODO Hjson

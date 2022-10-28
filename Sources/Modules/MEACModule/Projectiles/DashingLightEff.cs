@@ -2,6 +2,7 @@
 {
     public class DashingLightEff : ModProjectile
     {
+        Projectile projectile { get => Projectile; }
         public override string Texture => "Terraria/Images/Projectile_0";
 
         public override void SetDefaults()
@@ -26,9 +27,9 @@
         private Vector2 vec = Vector2.Zero;
         public override void AI()
         {
-            Lighting.AddLight(Projectile.Center, 0.5f, 0.1f, 1f);
-            Player player = Main.player[Projectile.owner];
-            if (Projectile.ai[0] == 0)
+            Lighting.AddLight(projectile.Center + projectile.velocity * (40 - Projectile.timeLeft) * 0.6f,0.9f, 0.6f, 0);
+            Player player = Main.player[projectile.owner];
+            if (projectile.ai[0] == 0)
             {
                 if (Projectile.timeLeft > 20)
                 {

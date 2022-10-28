@@ -124,6 +124,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                                         tile.HasTile = true;
                                     }
                                 }
+                                if (pixel.R == 255 && pixel.G == 0 && pixel.B == 0)// == new SixLabors.ImageSharp.PixelFormats.Rgb24(56, 48, 61))
+                                {
+                                    if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+                                    {
+                                        tile.TileType = (ushort)ModContent.TileType<DarkCocoonSpecial>();
+                                        tile.HasTile = true;
+                                    }
+                                }
                                 if (pixel.R == 35 && pixel.G == 49 && pixel.B == 122)// == new SixLabors.ImageSharp.PixelFormats.Rgb24(56, 48, 61))
                                 {
                                     if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
