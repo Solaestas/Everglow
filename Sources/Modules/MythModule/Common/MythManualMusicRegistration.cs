@@ -11,13 +11,12 @@
             MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Musics/MothFightingAlt");
             MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Musics/MothFightingOld");
             MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Musics/MothFightingOld2");
+            // Acytaea
+            MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Musics/AcytaeaFighting");
         }
 
-        // Acytaea
-        MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Musics/AcytaeaFighting");
+        public void Unload()
+        {
         }
-    public void Unload()
-    {
     }
-}
 }

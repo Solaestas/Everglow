@@ -1,5 +1,5 @@
 ﻿using Everglow.Sources.Commons.Core.VFX;
-using Everglow.Sources.Commons.Core.VFX.Base;
+using Everglow.Sources.Commons.Core.VFX.Pipelines;
 using ReLogic.Content;
 
 namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea;
