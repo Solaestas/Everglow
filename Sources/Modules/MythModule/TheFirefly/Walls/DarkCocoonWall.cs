@@ -9,6 +9,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Walls
             ItemDrop = ModContent.ItemType<Items.DarkCocoonWall>();
             AddMapEntry(new Color(10, 10, 10));
         }
+
         public override void NumDust(int i, int j, bool fail, ref int num)
         {
             num = fail ? 1 : 3;

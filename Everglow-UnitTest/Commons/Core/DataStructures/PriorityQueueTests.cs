@@ -1,7 +1,8 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Everglow.Sources.Commons.Core.DataStructures;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
-namespace Everglow.Sources.Commons.Core.DataStructures.Tests
+namespace Everglow_UnitTest.Commons.Core.DataStructures
 {
     [TestClass]
     public class PriorityQueueTests

@@ -1,5 +1,4 @@
 using Everglow.Sources.Modules.FoodModule.Buffs;
-using Everglow.Sources.Modules.FoodModule.DataStructures;
 using Everglow.Sources.Modules.FoodModule.Utils;
 using Everglow.Sources.Modules.FoodModule.Items;
 using Everglow.Sources.Modules.FoodModule.Buffs.VanillaDrinkBuffs;
@@ -281,7 +280,7 @@ namespace Everglow.Sources.Modules.FoodModule
                     Language.GetTextValue("Mods.Everglow.Common.FoodSystem.CannotDrink"),
                     true, false);
 
-                    foodPlayer.TextTimer = FoodUtils.GetFrames(0, 0, 3, 0);
+                    foodPlayer.TextTimer = FoodUtils.GetFrames(0, 0, 2, 30);
                     return false;
                 }
             }
@@ -296,7 +295,7 @@ namespace Everglow.Sources.Modules.FoodModule
                     Language.GetTextValue("Mods.Everglow.Common.FoodSystem.CannotDrink"),
                     true,false);
 
-                    foodPlayer.TextTimer = FoodUtils.GetFrames(0, 0, 3, 0);
+                    foodPlayer.TextTimer = FoodUtils.GetFrames(0, 0, 2, 30);
                     return false;
                 }
             }

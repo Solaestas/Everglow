@@ -1,6 +1,4 @@
-﻿using Everglow.Sources.Commons.Core.VFX.Base;
-
-namespace Everglow.Sources.Commons.Core.VFX.Pipelines
+﻿namespace Everglow.Sources.Commons.Core.VFX.Pipelines
 {
     /// <summary>
     /// 世界坐标系Pipeline，会自动剪去Main.screenPosition
@@ -25,7 +23,7 @@ namespace Everglow.Sources.Commons.Core.VFX.Pipelines
 
         public override void Load()
         {
-            effect = ModContent.Request<Effect>("Everglow/Sources/Commons/Core/VFX/Effect/Shader2D");
+            effect = VFXManager.DefaultEffect;
         }
     }
 }
