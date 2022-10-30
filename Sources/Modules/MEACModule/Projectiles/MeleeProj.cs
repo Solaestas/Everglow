@@ -39,6 +39,10 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         internal int trailLength = 40;
         internal int timer = 0;
 
+        /// <summary>
+        /// 是否采用自己的DrawWarp
+        /// </summary>
+        internal bool selfWarp = false;
         internal bool isAttacking = false;
         internal bool useTrail = true;
         /// <summary>
@@ -480,6 +484,10 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         Vector2 r = Vector2.One;
         public void DrawWarp()
         {
+            if(selfWarp)
+            {
+                return;
+            }
             List<Vector2> SmoothTrailX = CatmullRom.SmoothPath(trailVecs.ToList());//平滑
             List<Vector2> SmoothTrail = new List<Vector2>();
             for (int x = 0; x < SmoothTrailX.Count - 1; x++)
