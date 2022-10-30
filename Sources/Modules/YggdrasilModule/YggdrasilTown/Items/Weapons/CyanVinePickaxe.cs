@@ -11,10 +11,12 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Items.Weapons//
             Item.height = 52;
             Item.useAnimation = 14;
             Item.useTime = 14;
-            Item.knockBack = 0.8f;
+            Item.knockBack = 1.8f;
             Item.damage = 11;
-            Item.rare = ItemRarityID.Orange;
+            Item.rare = ItemRarityID.White;
+            Item.UseSound = SoundID.Item1;
             Item.autoReuse = true;
+            Item.useTurn = true;
             Item.DamageType = DamageClass.Melee;
 
             Item.value = 4200;
@@ -23,7 +25,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Items.Weapons//
         }
         public override void AddRecipes()
         {
-            CreateRecipe(4)
+            CreateRecipe()
                 .AddIngredient(ModContent.ItemType<Items.CyanVineBar>(), 16)
                 .AddTile(TileID.WorkBenches)
                 .Register();
