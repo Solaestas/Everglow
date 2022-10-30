@@ -3,11 +3,12 @@ using Everglow.Sources.Commons.Core.VFX;
 using Everglow.Sources.Commons.Core.VFX.Pipelines;
 using Everglow.Sources.Commons.Core.VFX.Visuals;
 using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Sources.Modules.MythModule.Common.VFXPipelines;
 using Terraria.GameContent;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.CrystalStorm
 {
-    [Pipeline(typeof(WCSPipeline))]
+    [Pipeline(typeof(ScreenReflectPipeline))]
     internal class CrystalParticleStorm : Visual
     {
         public Vector2 position;
@@ -95,38 +96,19 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
 
         public override void Draw()
         {
-            List<Vertex2D> Vy = new List<Vertex2D>();
-            Color colorD = Color.White;
-            Vector2 v1 = po1 + position;
-            Vector2 v2 = po2 + position;
-            Vector2 v3 = po3 + position;
-            if (VS1 == Vector2.Zero)
-            {
-                VS1 = v1 - Main.screenPosition;
-            }
-            if (VS2 == Vector2.Zero)
-            {
-                VS2 = v2 - Main.screenPosition;
-            }
-            if (VS3 == Vector2.Zero)
-            {
-                VS3 = v3 - Main.screenPosition;
-            }
-            Vy.Add(new Vertex2D(v1, colorD, new Vector3(VS1.X / Main.screenTarget.Width, VS1.Y / Main.screenTarget.Height, 0)));
-            Vy.Add(new Vertex2D(v2, colorD, new Vector3(VS2.X / Main.screenTarget.Width, VS2.Y / Main.screenTarget.Height, 0)));
-            Vy.Add(new Vertex2D(v3, colorD, new Vector3(VS3.X / Main.screenTarget.Width, VS3.Y / Main.screenTarget.Height, 0)));
+            Color colorD;
 
             GraphicsDevice gd = Main.graphics.GraphicsDevice;
 
-            Color Co0 = new Color(135, 0, 255);
-            int DrawBase = (int)(122.5 + Math.Sin(RamdomC) * 122.5);
             List<Vertex2D> Vx = new List<Vertex2D>();
-            colorD = new Color((DrawBase + Co0.R) / 8, (DrawBase + Co0.G) / 8, (DrawBase + Co0.B) / 8, 0);
-            Vx.Add(new Vertex2D(po1 + position, colorD, new Vector3(0, 0, 0)));
-            Vx.Add(new Vertex2D(po2 + position, colorD, new Vector3(0, 0, 0)));
-            Vx.Add(new Vertex2D(po3 + position, colorD, new Vector3(0, 0, 0)));
+            colorD = new Color(1, 1, velocity.X / 30f, 1f);
+            Vx.Add(new Vertex2D(po1 + position, colorD, new Vector3(0.04f, 0.06f, 0.06f)));
+            Vx.Add(new Vertex2D(po2 + position, colorD, new Vector3(0.02f, 0.03f, 0.09f)));
+            Vx.Add(new Vertex2D(po3 + position, colorD, new Vector3(0.06f, 0.05f, 0.07f)));
+
             gd.Textures[0] = TextureAssets.MagicPixel.Value;
             gd.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count - 2);
+            //VFXManager.spriteBatch.Draw(Vx, PrimitiveType.TriangleList);
         }
 
         public override CallOpportunity DrawLayer => CallOpportunity.PostDrawNPCs;

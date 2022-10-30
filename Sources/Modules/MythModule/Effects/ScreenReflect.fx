@@ -1,20 +1,29 @@
 sampler2D uImage0 : register(s0);
-
-float4 uColor;
+texture2D tex1;
+sampler2D uColorTex = sampler_state
+{
+    Texture = <tex1>;
+    MinFilter = Linear;
+    MagFilter = Linear;
+    AddressU = Clamp;
+    AddressV = Clamp;
+};
 float4x4 uTransform;
+float uScreenWidth;
+float uScreenHeight;
 
 struct VSInput
 {
     float2 Pos : POSITION0;
     float4 Color : COLOR0;
-    float2 Texcoord : TEXCOORD0;
+    float3 Texcoord : TEXCOORD0;
 };
 
 struct PSInput
 {
     float4 Pos : SV_POSITION;
     float4 Color : COLOR0;
-    float2 Texcoord : TEXCOORD0;
+    float3 Texcoord : TEXCOORD0;
 };
 
 PSInput VertexShaderFunction(VSInput input)
@@ -28,9 +37,12 @@ PSInput VertexShaderFunction(VSInput input)
 
 float4 PixelShaderFunction(PSInput input) : COLOR0
 {
-    if (!any(tex2D(uImage0, input.Texcoord)))
-        return float4(0, 0, 0, 0);
-    return uColor;
+    float2 newPos = float2(input.Pos.x / uScreenWidth, input.Pos.y / uScreenHeight);
+    float2 newTexcoord = input.Texcoord.xy;
+    newTexcoord.x -= input.Color.r * input.Color.b / input.Texcoord.z * 0.001;
+    newTexcoord.y -= input.Color.g * input.Color.b / input.Texcoord.z * 0.001;
+    float4 cScreen = tex2D(uColorTex, newTexcoord + newPos);
+    return cScreen;
 }
 
 technique Technique1
