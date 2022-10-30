@@ -24,8 +24,10 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
         //bool shake;
         public override void AI()
         {
-            //TODO Shake
-            //if (!shake)
+            //TODO Shake verify and adjust if needed
+            ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
+            mplayer.FlyCamPosition = new Vector2(0, 28).RotatedByRandom(6.283);
+            //if (!shake) // KEEP FOR REFERENCE
             //{
             //    MythPlayer mplayer = Main.player[Main.myPlayer].GetModPlayer<MythPlayer>();
             //    mplayer.ShakeStrength = 7;

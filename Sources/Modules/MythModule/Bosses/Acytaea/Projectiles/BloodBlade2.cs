@@ -119,8 +119,8 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
         public override void Kill(int timeLeft)
         {
             //TODO Shake
-            //MythPlayer mplayer = Main.player[Main.myPlayer].GetModPlayer<MythPlayer>();
-            //mplayer.Shake = 3;
+            ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
+            mplayer.FlyCamPosition = new Vector2(0, 12).RotatedByRandom(6.283);
             SoundEngine.PlaySound(SoundID.DD2_WitherBeastCrystalImpact, Projectile.Center);
             for (int j = 0; j < 6; j++)
             {
