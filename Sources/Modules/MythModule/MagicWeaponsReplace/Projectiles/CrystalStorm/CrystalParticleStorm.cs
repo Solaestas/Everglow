@@ -13,8 +13,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
         public Vector2 position;
         public Vector2 velocity;
 
-        private Vector2 AimCenter;
-        private Vector2 OldAimCenter;
+        public Vector2 AimCenter;
 
         public int timeLeft;
         public float size;
@@ -43,8 +42,6 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
 
         public override void OnSpawn()
         {
-            AimCenter = Main.MouseWorld;
-            OldAimCenter = Main.MouseWorld;
             timeLeft = Main.rand.Next(387, 399);
             RamdomC = Main.rand.NextFloat(0f, 1500f);
             Theta += Main.rand.NextFloat(-3.14f, 3.14f);
@@ -52,28 +49,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             p1 = new Vector2(Main.rand.NextFloat(-0.5f, 0.5f), Main.rand.NextFloat(-0.5f, 0.5f));
             p2 = new Vector2(Main.rand.NextFloat(-0.5f, 0.5f), Main.rand.NextFloat(-0.5f, 0.5f));
             p3 = new Vector2(Main.rand.NextFloat(-0.5f, 0.5f), Main.rand.NextFloat(-0.5f, 0.5f));
-            base.OnSpawn();
         }
 
         public override void Update()
         {
-            if ((OldAimCenter - Main.MouseWorld).Length() > 200 && OldAimCenter != Vector2.Zero)
-            {
-                if (timeLeft > 20)
-                {
-                    timeLeft -= 5;
-                }
-            }
-            AimCenter = Main.MouseWorld;
-            OldAimCenter = Main.MouseWorld;
-            for (int x = -80; x < 808; x += 8)
-            {
-                if (Collision.SolidCollision(AimCenter + new Vector2(0, x), 1, 1))
-                {
-                    AimCenter += new Vector2(0, x);
-                    break;
-                }
-            }
             float Dy = AimCenter.Y - position.Y;
             float xCoefficient = Dy * Dy / 600f - 0.4f * Dy + 50;
             Vector2 TrueAim = AimCenter + new Vector2(xCoefficient * (float)(Math.Sin(Main.timeForVisualEffects * 0.1 + AI0)), 0) - position;
@@ -138,21 +117,6 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             Vy.Add(new Vertex2D(v3, colorD, new Vector3(VS3.X / Main.screenTarget.Width, VS3.Y / Main.screenTarget.Height, 0)));
 
             GraphicsDevice gd = Main.graphics.GraphicsDevice;
-            //SpriteBatch sb = Main.spriteBatch;
-
-            //var cur = VFXManager.Instance.CurrentRenderTarget;
-
-            //gd.SetRenderTarget(VFXManager.Instance.CurrentRenderTarget);
-            //sb.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone);
-            //sb.Draw(cur, Vector2.Zero, Color.White);
-
-            //gd.BlendState = BlendState.AlphaBlend;
-            //gd.DrawUserPrimitives(PrimitiveType.TriangleList, Vy.ToArray(), 0, Vy.Count - 2);
-            //gd.SetRenderTarget(VFXManager.Instance.CurrentRenderTarget);
-
-            //gd.BlendState = BlendState.Additive;
-            //sb.Draw(Main.screenTargetSwap, cur.Bounds, Color.White);
-            //sb.End();
 
             Color Co0 = new Color(135, 0, 255);
             int DrawBase = (int)(122.5 + Math.Sin(RamdomC) * 122.5);

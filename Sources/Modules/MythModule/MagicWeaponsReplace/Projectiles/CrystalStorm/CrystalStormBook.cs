@@ -90,11 +90,9 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
 
         public override void PostDraw(Color lightColor)
         {
-            Player player = Main.player[Projectile.owner];
             Texture2D Book = TextureAssets.Item[ItemID.CrystalStorm].Value;
             Texture2D BookGlow = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Item_" + ItemID.CrystalStorm + "_Glow");
             Texture2D Paper = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CrystalStorm/CrystalStormPaper");
-            Color c0 = Lighting.GetColor((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f));
 
             Projectile.hide = false;
             DrawBack(Book);

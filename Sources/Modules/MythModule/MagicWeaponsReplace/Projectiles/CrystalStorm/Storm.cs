@@ -7,43 +7,21 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
         public override void SetDefaults()
         {
             Projectile.width = 28;
-            Projectile.height = 28;
+            Projectile.height = 280;
             Projectile.friendly = true;
             Projectile.hostile = false;
             Projectile.penetrate = -1;
-            Projectile.timeLeft = 10000;
+            Projectile.timeLeft = 600;
             Projectile.DamageType = DamageClass.Summon;
             Projectile.tileCollide = false;
         }
 
         public override void AI()
         {
-            Player player = Main.player[Projectile.owner];
-
-            Vector2 AimCenter = Main.MouseWorld;
-            bool weakening = false;
-            for (int x = -80; x < 808; x += 8)
-            {
-                if (Collision.SolidCollision(AimCenter + new Vector2(0, x), 1, 1))
-                {
-                    AimCenter += new Vector2(0, x);
-                    if (x <= 0)
-                    {
-                        weakening = true;
-                    }
-                    break;
-                }
-            }
-
-            Projectile.Center = AimCenter;
             Projectile.velocity *= 0;
-            if (Main.mouseRight && player.HeldItem.type == ItemID.CrystalStorm && !weakening)
+            if (Projectile.timeLeft > 550)
             {
-                Projectile.timeLeft = Intensity + 60;
-                if (Intensity < 450)
-                {
-                    Intensity += 3;
-                }
+                Intensity += 9;
             }
             else
             {
@@ -63,10 +41,11 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
                 {
                     continue;
                 }
-                int dust0 = Dust.NewDust(Projectile.Center + v1, 0, 0, ModContent.DustType<Dusts.CrystalAppearStoppedByTileInAStorm>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(0.3f, 1.6f) * Math.Min(Intensity, 300) / 450f);
-                Main.dust[dust0].noGravity = true;
-                Main.dust[dust0].color.B = (byte)(v1.Length() / 2f);
-                Main.dust[dust0].color.A = (byte)(Intensity / 2);
+                Dust dust0 = Dust.NewDustDirect(Projectile.Center + v1, 0, 0, ModContent.DustType<Dusts.CrystalAppearStoppedByTileInAStorm>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(0.3f, 1.6f) * Math.Min(Intensity, 300) / 450f);
+                dust0.noGravity = true;
+                dust0.color.B = (byte)(v1.Length() / 2f);
+                dust0.color.A = (byte)(Intensity / 2);
+                dust0.dustIndex = Projectile.whoAmI;
             }
 
             for (int j = 0; j < 4; j++)
@@ -74,16 +53,79 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
                 float k2 = Main.rand.NextFloat(0f, 1f);
                 float k3 = k2 * k2 * k2 * k2;
                 Vector2 v2 = new Vector2(Main.rand.NextFloat(-150f, 150f) / (k3 * 10f + 1f), -k3 * 200 + 10);
-                Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + v2, Vector2.Zero, ModContent.ProjectileType<CrystalWind>(), 0, 0, Projectile.owner, Main.rand.NextFloat(6.283f), Intensity / 1400f * Main.rand.NextFloat(0.85f, 1.15f));
+                Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + v2, Vector2.Zero, ModContent.ProjectileType<CrystalWind>(), 0, 0, Projectile.owner, Projectile.whoAmI, Intensity / 1400f * Main.rand.NextFloat(0.85f, 1.15f));
                 p0.timeLeft = Math.Min(120, Intensity / 2);
+                p0.rotation = Main.rand.NextFloat(6.283f);
             }
-
+            if(Main.rand.NextBool(10))
+            {
+                foreach (var target in Main.npc)
+                {
+                    if (target.active && Main.rand.NextBool(2))
+                    {
+                        if (!target.dontTakeDamage && !target.friendly && target.knockBackResist > 0)
+                        {
+                            Vector2 ToTarget = target.Center - (Projectile.Center - new Vector2(0, 150));
+                            float dis = ToTarget.Length();
+                            if (dis < 800 && ToTarget != Vector2.Zero)
+                            {
+                                float mess = target.width * target.height;
+                                mess = (float)(Math.Sqrt(mess));
+                                Vector2 Addvel = Vector2.Normalize(ToTarget) / mess / (dis + 10) * 100f * target.knockBackResist * Intensity;
+                                if (!target.noGravity)
+                                {
+                                    Addvel.Y *= 3f;
+                                }
+                                target.velocity -= Addvel;
+                                if (target.velocity.Length() > 10)
+                                {
+                                    target.velocity *= 10 / target.velocity.Length();
+                                }
+                            }
+                        }
+                    }
+                }
+                foreach (var target in Main.item)
+                {
+                    if (target.active && Main.rand.NextBool(2))
+                    {
+                        Vector2 ToTarget = target.Center - (Projectile.Center - new Vector2(0, 50));
+                        float dis = ToTarget.Length();
+                        if (dis < 800 && ToTarget != Vector2.Zero)
+                        {
+                            float mess = target.width * target.height;
+                            mess = (float)(Math.Sqrt(mess));
+                            Vector2 Addvel = Vector2.Normalize(ToTarget) / mess / (dis + 10) * 50f * Intensity;
+                            target.velocity -= Addvel;
+                            if (target.velocity.Length() > 10)
+                            {
+                                target.velocity *= 10 / target.velocity.Length();
+                            }
+                        }
+                    }
+                }
+                foreach (var target in Main.gore)
+                {
+                    if (target.active && Main.rand.NextBool(2))
+                    {
+                        Vector2 ToTarget = target.position - (Projectile.Center - new Vector2(0, 50));
+                        float dis = ToTarget.Length();
+                        if (dis < 800 && ToTarget != Vector2.Zero)
+                        {
+                            float mess = target.Width * target.Height;
+                            mess = (float)(Math.Sqrt(mess));
+                            Vector2 Addvel = Vector2.Normalize(ToTarget) / mess / (dis + 10) * 100f * Intensity;
+                            target.velocity -= Addvel;
+                            if (target.velocity.Length() > 10)
+                            {
+                                target.velocity *= 10 / target.velocity.Length();
+                            }
+                        }
+                    }
+                }
+            }
             for (int j = 0; j < 8; j++)
             {
-                float k2 = Main.rand.NextFloat(0f, 1f);
-                float k3 = k2 * k2 * k2 * k2;
-                Vector2 v2 = new Vector2(Main.rand.NextFloat(-150f, 150f) / (k3 * 10f + 1f), -k3 * 200 + 10);
-
                 CrystalParticleStorm cp = new CrystalParticleStorm
                 {
                     timeLeft = 120,
@@ -94,7 +136,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
                     AI0 = Main.rand.NextFloat(6.283f),
                     AI1 = Intensity / 1400f * Main.rand.NextFloat(0.85f, 1.15f),
                     AI2 = 1,
-                    position = Projectile.Center
+                    position = Projectile.Center,
+                    AimCenter = Projectile.Center
                 };
 
                 VFXManager.Add(cp);

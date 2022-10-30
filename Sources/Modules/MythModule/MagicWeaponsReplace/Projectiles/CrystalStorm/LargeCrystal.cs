@@ -116,6 +116,11 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
 
         public override void Kill(int timeLeft)
         {
+            if(Main.rand.NextBool(8))
+            {
+                Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<Storm>(), (int)(Projectile.damage * 0.6f), Projectile.knockBack, Projectile.owner);
+            }
+
             float k1 = 1;
             float k0 = 5;
             for (int j = 0; j < 48 * k0; j++)
@@ -180,6 +185,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
                 }
             }
             SoundEngine.PlaySound(SoundID.Item27, Projectile.Center);
+
         }
     }
 }
