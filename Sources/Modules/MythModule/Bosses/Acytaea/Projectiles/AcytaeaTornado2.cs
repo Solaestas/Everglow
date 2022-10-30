@@ -1,5 +1,5 @@
 ﻿using Everglow.Sources.Commons.Core.VFX;
-using Everglow.Sources.Commons.Core.VFX.Base;
+using Everglow.Sources.Commons.Core.VFX.Visuals;
 using Everglow.Sources.Commons.Function.Vertex;
 
 namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles;
