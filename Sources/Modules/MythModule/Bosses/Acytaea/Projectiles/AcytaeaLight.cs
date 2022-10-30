@@ -135,9 +135,9 @@ internal class AcytaeaLight : ModProjectile
             var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
             ef.Parameters["uTransform"].SetValue(model * projection);
             ef.Parameters["uTime"].SetValue(0);
-            Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/VisualTextures/heatmapGhost").Value;
-            Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/VisualTextures/MoonLight2").Value;
-            Main.graphics.GraphicsDevice.Textures[2] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/VisualTextures/Grey").Value;
+            Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/heatmapGhost").Value;
+            Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/MoonLight2").Value;
+            Main.graphics.GraphicsDevice.Textures[2] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/Grey").Value;
             Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
             Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
             Main.graphics.GraphicsDevice.SamplerStates[2] = SamplerState.PointWrap;
