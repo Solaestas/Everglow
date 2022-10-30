@@ -25,7 +25,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
             Item.noUseGraphic = true;
-            Item.knockBack = 5f;
+            Item.knockBack = 4f;
             Item.value = Item.sellPrice(0, 5, 0, 0);
             Item.rare = ItemRarityID.LightRed;
             Item.UseSound = SoundID.DD2_GhastlyGlaivePierce;

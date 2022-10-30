@@ -19,6 +19,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.NPCs
             NPC.defense = 12;
             NPC.friendly = false;
             NPC.aiStyle = 3;
+            NPC.knockBackResist = 1f;
             NPC.HitSound = SoundID.NPCHit4;
             NPC.DeathSound = SoundID.NPCDeath4;
         }
@@ -138,7 +139,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.NPCs
             for (int f = 0; f < 13; f++)
             {
                 Vector2 DustVelocity = new Vector2(0, Main.rand.NextFloat(0, 6f)).RotatedByRandom(6.28d);
-                Dust.NewDust(NPC.position + new Vector2(Main.rand.Next(NPC.width), Main.rand.Next(NPC.height)), 0, 0, DustID.Silver, DustVelocity.X, DustVelocity.Y);
+                Dust.NewDust(NPC.position + new Vector2(Main.rand.Next(NPC.width), Main.rand.Next(NPC.height)), 0, 0, ModContent.DustType<Dusts.CyanVine>(), DustVelocity.X, DustVelocity.Y);
                 DustVelocity = new Vector2(0, Main.rand.NextFloat(0, 6f)).RotatedByRandom(6.28d);
                 Dust.NewDust(NPC.position + new Vector2(Main.rand.Next(NPC.width), Main.rand.Next(NPC.height)), 0, 0, DustID.WoodFurniture, DustVelocity.X, DustVelocity.Y);
             }
