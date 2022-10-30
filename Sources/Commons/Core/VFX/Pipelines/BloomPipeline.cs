@@ -1,6 +1,4 @@
-﻿using Everglow.Sources.Commons.Core.VFX.Base;
-
-namespace Everglow.Sources.Commons.Core.VFX.Pipelines
+﻿namespace Everglow.Sources.Commons.Core.VFX.Pipelines
 {
     internal class BloomPipeline : PostPipeline
     {

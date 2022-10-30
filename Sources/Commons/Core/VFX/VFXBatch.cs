@@ -468,9 +468,16 @@ public class VFXBatch : IDisposable
         Debug.Assert(hasBegun);
         if (!Buffer<T>.CheckSize(vertices.Count()))
         {
-            var tex = Buffer<T>.CurrentTexture;
-            Flush<T>();
-            Buffer<T>.Textures.Add(tex);
+            if (Buffer<T>.Textures.Count == 0)
+            {
+                Flush<T>();
+            }
+            else
+            {
+                var tex = Buffer<T>.CurrentTexture;
+                Flush<T>();
+                Buffer<T>.Textures.Add(tex);
+            }
         }
         needFlush[GetBufferIndex<T>()] = true;
         Buffer<T>.AddVertex(vertices, type);

@@ -1,6 +1,6 @@
 ﻿using Everglow.Sources.Commons.Core.VFX;
-using Everglow.Sources.Commons.Core.VFX.Base;
 using Everglow.Sources.Commons.Core.VFX.Pipelines;
+using Everglow.Sources.Commons.Core.VFX.Visuals;
 using Terraria.GameContent;
 
 namespace Everglow.Sources.Modules.ExampleModule.VFX
