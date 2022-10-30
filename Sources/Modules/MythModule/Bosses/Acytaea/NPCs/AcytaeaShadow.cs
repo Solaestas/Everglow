@@ -365,8 +365,8 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
                                 Vx.Add(new Vertex2D(vf, color3, new Vector3(0, 1, 0)));
                             }
                         }
-                        Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/GlodenBloodScaleShader").Value;
-                        Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
+                        Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/GoldenBloodScaleShader").Value;
+                        Main.graphics.GraphicsDevice.Textures[0] = t;//GoldenBloodScaleMirror
                         Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
                     }
                 }
@@ -394,12 +394,12 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
                 Vx.Add(new Vertex2D(ve, color3, new Vector3(Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).X + 0.68f, 0, 1), Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).Y + 0.32f, 0, 1), 0)));
                 Vx.Add(new Vertex2D(vd, color3, new Vector3(Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).X + 0.68f, 0, 1), Math.Clamp(new Vector2(11.85f / 122f, 0).RotatedBy(0.4).Y + 0.32f, 0, 1), 0)));
 
-                Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/GlodenBloodScaleMirror").Value;
+                Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/GoldenBloodScaleMirror").Value;
                 if (MinorDir == -1)
                 {
-                    t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/GlodenBloodScale").Value;
+                    t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/GoldenBloodScale").Value;
                 }
-                Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
+                Main.graphics.GraphicsDevice.Textures[0] = t;//GoldenBloodScaleMirror
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
             }
             if (MinorDir == 1)

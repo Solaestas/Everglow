@@ -155,7 +155,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                 }
             }
             Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Projectiles/AcytaeaLaser").Value;
-            Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
+            Main.graphics.GraphicsDevice.Textures[0] = t;//GoldenBloodScaleMirror
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 
             Main.spriteBatch.End();
@@ -183,7 +183,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                 }
             }
             Texture2D t1 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/LightCrack").Value;
-            Main.graphics.GraphicsDevice.Textures[0] = t1;//GlodenBloodScaleMirror
+            Main.graphics.GraphicsDevice.Textures[0] = t1;//GoldenBloodScaleMirror
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx2.ToArray(), 0, Vx2.Count / 3);
         }
     }

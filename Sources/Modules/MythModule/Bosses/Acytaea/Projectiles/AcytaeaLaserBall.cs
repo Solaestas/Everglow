@@ -145,7 +145,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                     Vx.Add(new Vertex2D(Projectile.Center - Main.screenPosition + new Vector2(0, 0) + new Vector2(0, St / 160f * Sca[z]).RotatedBy(0.4 + Rota[z]), color3, new Vector3(0.5f, 1, 0)));
                 }
                 Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Projectiles/AcytaeaTornado5").Value;
-                Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
+                Main.graphics.GraphicsDevice.Textures[0] = t;//GoldenBloodScaleMirror
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
             }*/
             ef2 = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/SpherePerspective3", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;

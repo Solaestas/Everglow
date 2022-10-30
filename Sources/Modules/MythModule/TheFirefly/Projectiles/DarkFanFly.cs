@@ -193,7 +193,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Texture2D t = MythContent.QuickTexture("TheFirefly/Projectiles/heatmapShade");
             if (bars.Count > 0)
             {
-                Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
+                Main.graphics.GraphicsDevice.Textures[0] = t;//GoldenBloodScaleMirror
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
             }
 
