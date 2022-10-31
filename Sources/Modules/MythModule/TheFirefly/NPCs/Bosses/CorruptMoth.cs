@@ -144,7 +144,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
                 NPC.damage = 24;
             }
             NPC.knockBackResist = 0f;
-            NPC.value = Item.buyPrice(0, 2, 0, 0);
+            NPC.value = Item.buyPrice(0, 5, 0, 0);
             NPC.color = new Microsoft.Xna.Framework.Color(0, 0, 0, 0);
             NPC.alpha = 0;
             NPC.aiStyle = -1;
@@ -1394,7 +1394,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 
             npcLoot.Add(rule);
 
-            npcLoot.Add(ItemDropRule.ByCondition(new Conditions.NotExpert(), ModContent.ItemType<Items.Accessories.MothEye>(), 3, 1, 1, 1)); //Classic Moth Eye Accessory
+            if (Main.hardMode == true) { npcLoot.Add(ItemDropRule.ByCondition(new Conditions.NotExpert(), ModContent.ItemType<Items.Accessories.MothEye>(), 3, 1, 1, 1)); } //Classic Moth Eye Accessory
 
             //npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsMasterMode(), ModContent.ItemType<Items.Weapons.Legendary.ToothSpear>(), 40/*概率分母*/, 1/*最小*/, 1/*最大*/, 1/*概率分子*/));
             /*
