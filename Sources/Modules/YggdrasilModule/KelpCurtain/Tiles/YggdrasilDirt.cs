@@ -7,20 +7,17 @@ namespace Everglow.Sources.Modules.YggdrasilModule.KelpCurtain.Tiles
         public override void PostSetDefaults()
         {
             Main.tileSolid[Type] = true;
-            Main.tileMergeDirt[Type] = false;
-            Main.tileBlendAll[Type] = false;
+            Main.tileMergeDirt[Type] = true;
+            Main.tileBlendAll[Type] = true;
             Main.tileBlockLight[Type] = true;
             Main.tileMerge[Type][ModContent.TileType<DragonScaleWood>()] = true;
             Main.tileMerge[Type][ModContent.TileType<OldMoss>()] = true;
-            Main.ugBackTransition = 1000;
+            Main.tileMerge[Type][TileID.Stone] = true;
             DustType = DustID.Dirt;
             MinPick = 50;
             HitSound = SoundID.Dig;
             ItemDrop = ModContent.ItemType<Items.YggdrasilDirt>();
-            ModTranslation modTranslation = base.CreateMapEntryName(null);
-            AddMapEntry(new Color(53, 29, 26), modTranslation);
-            modTranslation.SetDefault("");
-            modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "");
+            AddMapEntry(new Color(53, 29, 26));
         }
         public override bool CanExplode(int i, int j)
         {

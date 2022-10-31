@@ -47,12 +47,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
             omega *= 0.97f;
             int valueTime = (int)(Main.timeForVisualEffects * 0.13) % 7;
             NPC.frame = new Rectangle(186 * valueTime, 0, 186, 278);
-            float ValueLight = MathUtils.Sin((float)(Main.timeForVisualEffects * 0.26 * Math.PI / 7d + 0.5)) * 0.6f + 0.6f;
+            float ValueLight = MathUtils.Sin((float)(Main.timeForVisualEffects * 0.26 * Math.PI / 7d + 0.5)) * 0.2f + 0.2f;
             if(ValueLight > 1)
             {
                 ValueLight *= ValueLight;
             }
-            Lighting.AddLight((int)(NPC.Center.X / 16f), (int)(NPC.Center.Y / 16f),0.2f * ValueLight + 0.2f, 0.2f * ValueLight, 0.4f * ValueLight);
+            //Lighting.AddLight((int)(NPC.Center.X / 16f), (int)(NPC.Center.Y / 16f),0.2f * ValueLight, 0.2f * ValueLight, 0.4f * ValueLight);
             if (NPC.ai[0] < 10)
             {
                
@@ -178,25 +178,25 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
             List<Vertex2D> vertices = new();
-
+            
             float frameX = (float)NPC.frame.X / tg.Width;
-            float frameX1 = (float)NPC.frame.Width / tg.Width;
+            float frameX1= (float)NPC.frame.Width /tg.Width;
 
-            Vector2 center = NPC.position + new Vector2(67, -90);
+            Vector2 center = NPC.position+new Vector2(67,-90);
             Vector2 offset = new Vector2(-NPC.frame.Width / 2, 0).RotatedBy(NPC.rotation);
-            vertices.Add(new(center + offset - Main.screenPosition, Lighting.GetColor((center + offset).ToTileCoordinates()), new Vector3(frameX, 0, 0)));
-
-            offset = new Vector2(+NPC.frame.Width / 2, 0).RotatedBy(NPC.rotation);
-            vertices.Add(new(center + offset - Main.screenPosition, Lighting.GetColor((center + offset).ToTileCoordinates()), new Vector3(frameX + frameX1, 0, 0)));
-
+            vertices.Add(new(center+offset - Main.screenPosition, Lighting.GetColor((center + offset).ToTileCoordinates()),new Vector3(frameX,0,0)));
+            
+            offset = new Vector2(+NPC.frame.Width / 2, 0).RotatedBy(NPC.rotation) ;
+            vertices.Add(new(center + offset - Main.screenPosition, Lighting.GetColor((center + offset).ToTileCoordinates()), new Vector3(frameX+frameX1, 0, 0)));
+            
             offset = new Vector2(-NPC.frame.Width / 2, +NPC.frame.Height).RotatedBy(NPC.rotation);
             vertices.Add(new(center + offset - Main.screenPosition, Lighting.GetColor((center + offset).ToTileCoordinates()), new Vector3(frameX, 1, 0)));
-
+            
             offset = new Vector2(+NPC.frame.Width / 2, +NPC.frame.Height).RotatedBy(NPC.rotation);
             vertices.Add(new(center + offset - Main.screenPosition, Lighting.GetColor((center + offset).ToTileCoordinates()), new Vector3(frameX + frameX1, 1, 0)));
 
             Main.graphics.GraphicsDevice.Textures[0] = tg;
-            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, 2);
+            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip,vertices.ToArray(),0,2);
             //Main.spriteBatch.Draw(tg, , new Rectangle?(NPC.frame), color, NPC.rotation, drawOrigin, 1f, effects, 0f);
 
             Main.spriteBatch.End();

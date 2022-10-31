@@ -9,19 +9,20 @@
             Item.height = 42;
             Item.useAnimation = 20;
             Item.useTime = 20;
-            Item.knockBack = 3.5f;
+            Item.knockBack = 4.5f;
             Item.damage = 9;
-            Item.rare = ItemRarityID.Orange;
+            Item.rare = ItemRarityID.White;
+            Item.UseSound = SoundID.Item1;
             Item.autoReuse = true;
             Item.DamageType = DamageClass.Melee;
 
-            Item.value = 3300;
+            Item.value = 3600;
 
             Item.hammer = 68;
         }
         public override void AddRecipes()
         {
-            CreateRecipe(4)
+            CreateRecipe()
                 .AddIngredient(ModContent.ItemType<Items.CyanVineBar>(), 12)
                 .AddTile(TileID.WorkBenches)
                 .Register();
