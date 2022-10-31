@@ -657,6 +657,8 @@ public class Acytaea : VisualNPC
                 //MythPlayer mplayer = Main.player[Main.myPlayer].GetModPlayer<MythPlayer>();
                 //mplayer.ShakeStrength = 7;
                 //mplayer.Shake = 1;
+                ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
+                mplayer.FlyCamPosition = new Vector2(0, 28).RotatedByRandom(6.283);
             }
 
             HasBlade = true;//拿刀
@@ -2487,7 +2489,7 @@ public class Acytaea : VisualNPC
                 }
             }
             Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/RedBloodScaleShader").Value;
-            Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
+            Main.graphics.GraphicsDevice.Textures[0] = t;//GoldenBloodScaleMirror
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
@@ -2625,8 +2627,8 @@ public class Acytaea : VisualNPC
                             }
                         }
                     }
-                    Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/GlodenBloodScaleShader").Value;
-                    Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
+                    Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/GoldenBloodScaleShader").Value;
+                    Main.graphics.GraphicsDevice.Textures[0] = t;//GoldenBloodScaleMirror
                     Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
                 }
             }
@@ -2678,12 +2680,12 @@ public class Acytaea : VisualNPC
                 Vx.Add(new Vertex2D(vd, color3, new Vector3(Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).X + 0.68f, 0, 1), Math.Clamp(new Vector2(11.85f / 122f, 0).RotatedBy(0.4).Y + 0.32f, 0, 1), 0)));
             }
 
-            Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/GlodenBloodScaleMirror").Value;
+            Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/GoldenBloodScaleMirror").Value;
             if (minorDir == -1)
             {
-                t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/GlodenBloodScale").Value;
+                t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/GoldenBloodScale").Value;
             }
-            Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
+            Main.graphics.GraphicsDevice.Textures[0] = t;//GoldenBloodScaleMirror
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
         }
         if (HasBlade)
@@ -2713,12 +2715,12 @@ public class Acytaea : VisualNPC
             Vx.Add(new Vertex2D(ve, color3, new Vector3(Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).X + 0.68f, 0, 1), Math.Clamp(new Vector2(-11.84f / 122f, 0).RotatedBy(0.4).Y + 0.32f, 0, 1), 0)));
             Vx.Add(new Vertex2D(vd, color3, new Vector3(Math.Clamp(new Vector2(11.84f / 122f, 0).RotatedBy(0.4).X + 0.68f, 0, 1), Math.Clamp(new Vector2(11.85f / 122f, 0).RotatedBy(0.4).Y + 0.32f, 0, 1), 0)));
 
-            Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/GlodenBloodScaleGlowMirror").Value;
+            Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/GoldenBloodScaleGlowMirror").Value;
             if (minorDir == -1)
             {
-                t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/GlodenBloodScaleGlow").Value;
+                t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/GoldenBloodScaleGlow").Value;
             }
-            Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
+            Main.graphics.GraphicsDevice.Textures[0] = t;//GoldenBloodScaleMirror
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
         }
         if (HasCricle)
@@ -2760,7 +2762,7 @@ public class Acytaea : VisualNPC
             {
                 t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaCircle4").Value;
             }
-            Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
+            Main.graphics.GraphicsDevice.Textures[0] = t;//GoldenBloodScaleMirror
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 
             Main.spriteBatch.End();
@@ -2788,7 +2790,7 @@ public class Acytaea : VisualNPC
             {
                 t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaCircle12").Value;
             }
-            Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirrorsss
+            Main.graphics.GraphicsDevice.Textures[0] = t;//GoldenBloodScaleMirrorsss
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx9.ToArray(), 0, Vx9.Count / 3);
 
             Main.spriteBatch.End();
@@ -2855,7 +2857,7 @@ public class Acytaea : VisualNPC
             {
                 t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaCircle13").Value;
             }
-            Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
+            Main.graphics.GraphicsDevice.Textures[0] = t;//GoldenBloodScaleMirror
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx2.ToArray(), 0, Vx2.Count / 3);
 
             if (NPC.localAI[0] <= 3270)
@@ -2887,10 +2889,10 @@ public class Acytaea : VisualNPC
                     }
                 }
                 t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaCircle4").Value;
-                Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
+                Main.graphics.GraphicsDevice.Textures[0] = t;//GoldenBloodScaleMirror
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx4.ToArray(), 0, Vx4.Count / 3);
                 t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaCircle").Value;
-                Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
+                Main.graphics.GraphicsDevice.Textures[0] = t;//GoldenBloodScaleMirror
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx3.ToArray(), 0, Vx3.Count / 3);
             }
 
@@ -2919,7 +2921,7 @@ public class Acytaea : VisualNPC
             {
                 t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaCircle14").Value;
             }
-            Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
+            Main.graphics.GraphicsDevice.Textures[0] = t;//GoldenBloodScaleMirror
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx5.ToArray(), 0, Vx5.Count / 3);
 
             Main.spriteBatch.End();
@@ -2947,7 +2949,7 @@ public class Acytaea : VisualNPC
             {
                 t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaCircle15").Value;
             }
-            Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
+            Main.graphics.GraphicsDevice.Textures[0] = t;//GoldenBloodScaleMirror
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx6.ToArray(), 0, Vx6.Count / 3);
 
             Main.spriteBatch.End();
@@ -2977,10 +2979,10 @@ public class Acytaea : VisualNPC
                 }
             }
             t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaCircle7").Value;
-            Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
+            Main.graphics.GraphicsDevice.Textures[0] = t;//GoldenBloodScaleMirror
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx7.ToArray(), 0, Vx7.Count / 3);
             t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaCircle4").Value;
-            Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
+            Main.graphics.GraphicsDevice.Textures[0] = t;//GoldenBloodScaleMirror
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx8.ToArray(), 0, Vx8.Count / 3);
         }
         if (minorDir == 1)
