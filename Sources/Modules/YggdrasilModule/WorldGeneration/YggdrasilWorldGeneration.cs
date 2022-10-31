@@ -116,12 +116,22 @@ namespace Everglow.Sources.Modules.YggdrasilModule.WorldGeneration
 
 
 
-
+                                //常规
                                 if (pixel.R == 0 && pixel.G == 0 && pixel.B == 255)//水
                                 {
                                     tile.LiquidType = LiquidID.Water;
                                     tile.LiquidAmount = 200;
                                     tile.HasTile = false;
+                                }
+                                if (pixel.R == 128 && pixel.G == 128 && pixel.B == 128)//岩石
+                                {
+                                    tile.TileType = TileID.Stone;
+                                    tile.HasTile = true;
+                                }
+                                if (pixel.R == 186 && pixel.G == 168 && pixel.B == 84)//沙
+                                {
+                                    tile.TileType = TileID.Sand;
+                                    tile.HasTile = true;
                                 }
                                 break;
                             case 2:

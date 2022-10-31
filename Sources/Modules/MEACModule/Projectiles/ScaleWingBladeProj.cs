@@ -46,7 +46,6 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                 if (item.type == ModContent.ItemType<MythModule.TheFirefly.Items.Accessories.MothEye>())
                 {
                     hasMothEye = true;
-                    
                 }
             }
 
@@ -121,7 +120,6 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                 if (item.type == ModContent.ItemType<MythModule.TheFirefly.Items.Accessories.MothEye>())
                 {
                     hasMothEye = true;
-
                 }
             }
 

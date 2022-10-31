@@ -11,7 +11,7 @@
         {
             Item.width = 18;
             Item.height = 20;
-            Item.rare = ItemRarityID.Orange;
+            Item.rare = ItemRarityID.White;
             Item.scale = 1f;
             Item.createTile = 0;
             Item.useStyle = ItemUseStyleID.Swing;

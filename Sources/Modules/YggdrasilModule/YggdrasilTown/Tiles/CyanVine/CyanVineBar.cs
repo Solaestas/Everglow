@@ -23,7 +23,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles.CyanVine
 		}
 		public override bool CreateDust(int i, int j, ref int type)
 		{
-			type = DustID.Silver;
+			type = ModContent.DustType<Dusts.CyanVine>();
 			return true;
 		}		
 		public override void NearbyEffects(int i, int j, bool closer)

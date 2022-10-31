@@ -26,7 +26,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
             player.maxMinions += 1;
             player.maxTurrets += 1;
             player.GetDamage(DamageClass.Summon) *= 1.06f;
-            if (fireflyBiome.IsBiomeActive(player))
+            if (fireflyBiome.IsBiomeActive(Main.LocalPlayer))
             {
                 player.manaSickReduction += 4;
                 player.manaCost -= 0.05f;
