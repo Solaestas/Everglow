@@ -174,8 +174,34 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
             Color color = drawColor;
             Vector2 drawOrigin = new Vector2(tg.Width / 2f / Main.npcFrameCount[NPC.type], 0);
             Vector2 drawOffset = new Vector2(67, -90);
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-            Main.spriteBatch.Draw(tg, NPC.position + drawOffset - Main.screenPosition, new Rectangle?(NPC.frame), color, NPC.rotation, drawOrigin, 1f, effects, 0f);
+            List<Vertex2D> vertices = new();
+
+            float frameX = (float)NPC.frame.X / tg.Width;
+            float frameX1 = (float)NPC.frame.Width / tg.Width;
+
+            Vector2 center = NPC.position + new Vector2(67, -90);
+            Vector2 offset = new Vector2(-NPC.frame.Width / 2, 0).RotatedBy(NPC.rotation);
+            vertices.Add(new(center + offset - Main.screenPosition, Lighting.GetColor((center + offset).ToTileCoordinates()), new Vector3(frameX, 0, 0)));
+
+            offset = new Vector2(+NPC.frame.Width / 2, 0).RotatedBy(NPC.rotation);
+            vertices.Add(new(center + offset - Main.screenPosition, Lighting.GetColor((center + offset).ToTileCoordinates()), new Vector3(frameX + frameX1, 0, 0)));
+
+            offset = new Vector2(-NPC.frame.Width / 2, +NPC.frame.Height).RotatedBy(NPC.rotation);
+            vertices.Add(new(center + offset - Main.screenPosition, Lighting.GetColor((center + offset).ToTileCoordinates()), new Vector3(frameX, 1, 0)));
+
+            offset = new Vector2(+NPC.frame.Width / 2, +NPC.frame.Height).RotatedBy(NPC.rotation);
+            vertices.Add(new(center + offset - Main.screenPosition, Lighting.GetColor((center + offset).ToTileCoordinates()), new Vector3(frameX + frameX1, 1, 0)));
+
+            Main.graphics.GraphicsDevice.Textures[0] = tg;
+            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, 2);
+            //Main.spriteBatch.Draw(tg, , new Rectangle?(NPC.frame), color, NPC.rotation, drawOrigin, 1f, effects, 0f);
+
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
             return false;
         }
 
@@ -204,9 +230,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
             //Main.spriteBatch.Draw(tBox, rt, new Color(55, 0, 0, 0));
 
             Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred,BlendState.AlphaBlend,SamplerState.AnisotropicWrap,DepthStencilState.None,RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix) ;
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             Vector2 CrackCenter = new Vector2(-24, 196).RotatedBy(NPC.rotation) + drawOffset;
-            if(NPC.ai[1] <= 90)
+            if (NPC.ai[1] <= 90)
             {
                 DrawCrack(CrackCenter + NPC.position - Main.screenPosition, Math.Clamp(NPC.ai[1], 0, 15), 0);
                 DrawCrack(CrackCenter + NPC.position - Main.screenPosition, Math.Clamp(NPC.ai[1] - 8, 0, 15), 1);
