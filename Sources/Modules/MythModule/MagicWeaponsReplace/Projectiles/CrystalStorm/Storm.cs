@@ -48,7 +48,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
                 dust0.dustIndex = Projectile.whoAmI;
             }
 
-            /*for (int j = 0; j < 4; j++)
+            for (int j = 0; j < 4; j++)
             {
                 float k2 = Main.rand.NextFloat(0f, 1f);
                 float k3 = k2 * k2 * k2 * k2;
@@ -56,7 +56,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
                 Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + v2, Vector2.Zero, ModContent.ProjectileType<CrystalWind>(), 0, 0, Projectile.owner, Projectile.whoAmI, Intensity / 1400f * Main.rand.NextFloat(0.85f, 1.15f));
                 p0.timeLeft = Math.Min(120, Intensity / 2);
                 p0.rotation = Main.rand.NextFloat(6.283f);
-            }*/
+            }
             if(Main.rand.NextBool(10))
             {
                 foreach (var target in Main.npc)
