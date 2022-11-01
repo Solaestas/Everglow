@@ -4,7 +4,7 @@ using Terraria.Audio;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.CrystalStorm
 {
-    public class LargeCrystal : ModProjectile
+    public class LargeCrystal : ModProjectile//This proj summon storm at breaking 
     {
         public override void SetDefaults()
         {

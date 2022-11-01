@@ -50,7 +50,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
             if (player.itemTime == 2)
             {
                 Vector2 velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero) * player.HeldItem.shootSpeed;
-                Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + velocity * 1, velocity, ProjectileID.CursedFlameFriendly, player.HeldItem.damage, player.HeldItem.knockBack, player.whoAmI);
+                Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + velocity * 1, velocity * 0.3f, ModContent.ProjectileType<CursedFlamesII>(), player.HeldItem.damage, player.HeldItem.knockBack, player.whoAmI);
             }
         }
 
@@ -64,11 +64,9 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
 
         public override void PostDraw(Color lightColor)
         {
-            Player player = Main.player[Projectile.owner];
             Texture2D Book = TextureAssets.Item[ItemID.CursedFlames].Value;
             Texture2D BookGlow = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Item_" + ItemID.CursedFlames + "_Glow");
             Texture2D Paper = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/CursedFlamesPaper");
-            Color c0 = Lighting.GetColor((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f));
 
             Projectile.hide = false;
             DrawBack(Book);

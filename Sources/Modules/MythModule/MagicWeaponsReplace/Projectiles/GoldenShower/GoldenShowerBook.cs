@@ -22,9 +22,18 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Go
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
+            ConstantUsingTime++;
             Projectile.Center = Projectile.Center * 0.7f + (player.Center + new Vector2(player.direction * 22, 12 * player.gravDir * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d))) * 0.3f;
             Projectile.spriteDirection = player.direction;
             Projectile.velocity *= 0;
+            if(Projectile.timeLeft == 10000)
+            {
+                for (int d = 0; d < 16; d++)
+                {
+                    Vector2 velocity = new Vector2(0, Main.rand.NextFloat(-16f, -12f)).RotatedBy(Main.rand.NextFloat(-0.6f, 0.6f));
+                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2, velocity, ModContent.ProjectileType<GoldenShowerII>(), player.HeldItem.damage * 2, player.HeldItem.knockBack, player.whoAmI);
+                }
+            }
             if (player.itemTime > 0 && player.HeldItem.type == ItemID.GoldenShower)
             {
                 Projectile.timeLeft = player.itemTime + 60;
@@ -36,8 +45,16 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Go
             else
             {
                 Timer--;
+
                 if (Timer < 0)
                 {
+                    int Rain = Math.Min(ConstantUsingTime / 6, 120);
+                    for (int d = 0; d < Rain; d++)
+                    {
+                        Vector2 velocity = new Vector2(0, Main.rand.NextFloat(-16f, -12f)).RotatedBy(Main.rand.NextFloat(-(Rain / 120f), (Rain / 120f)));
+                        Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2, velocity, ModContent.ProjectileType<GoldenShowerII>(), player.HeldItem.damage * 2, player.HeldItem.knockBack, player.whoAmI);
+                    }
+                    ConstantUsingTime = 0;
                     Projectile.Kill();
                 }
             }
@@ -49,8 +66,20 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Go
             Projectile.rotation = player.fullRotation;
             if (player.itemTime == 2)
             {
-                Vector2 velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero) * player.HeldItem.shootSpeed;
-                Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2, velocity, ProjectileID.GoldenShowerFriendly, player.HeldItem.damage, player.HeldItem.knockBack, player.whoAmI);
+                if(Main.mouseRight)
+                {
+                    player.statMana -= 4;
+                    for (int d = 0; d < 3; d++)
+                    {
+                        Vector2 velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero).RotatedBy(Main.rand.NextFloat(-0.1f, 0.1f)) * player.HeldItem.shootSpeed * 1.6f;
+                        Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2, velocity, ModContent.ProjectileType<GoldenShowerII>(), player.HeldItem.damage * 2, player.HeldItem.knockBack, player.whoAmI);
+                    }
+                }
+                else
+                {
+                    Vector2 velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero) * player.HeldItem.shootSpeed * 1.6f;
+                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2, velocity, ModContent.ProjectileType<GoldenShowerII>(), player.HeldItem.damage * 2, player.HeldItem.knockBack, player.whoAmI);
+                }
             }
         }
 
@@ -60,6 +89,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Go
         }
 
         internal int Timer = 0;
+        internal int ConstantUsingTime = 0;
         internal float BookScale = 12f;
 
         public override void PostDraw(Color lightColor)

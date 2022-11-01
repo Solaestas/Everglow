@@ -1,6 +1,7 @@
 ﻿using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MEACModule;
 using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Commons.Core.VFX;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.CursedFlames
 {
@@ -48,8 +49,26 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
             Projectile.rotation = player.fullRotation;
 
             RingPos = RingPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
+            GenerateVFX(12, new Vector2(0, Timer * 1.45f).RotatedByRandom(6.283));
         }
-
+        public void GenerateVFX(int Frequency, Vector2 ringPos)
+        {
+            Player player = Main.player[Projectile.owner];
+            float mulVelocity = 1f;
+            for (int g = 0; g < Frequency; g++)
+            {
+                CursedFlameDust cf = new CursedFlameDust
+                {
+                    velocity = ringPos * mulVelocity * 0.1f + player.velocity,
+                    Active = true,
+                    Visible = true,
+                    position = player.Center + RingPos + ringPos,
+                    maxTime = Main.rand.Next(18, 40),
+                    ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.01f, 0.01f), Main.rand.NextFloat(4f, 12f) * ringPos.Length() / 30f }
+                };
+                VFXManager.Add(cf);
+            }
+        }
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
         {
             behindNPCs.Add(index);
