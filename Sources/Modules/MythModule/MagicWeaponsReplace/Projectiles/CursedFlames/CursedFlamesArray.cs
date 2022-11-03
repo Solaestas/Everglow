@@ -49,7 +49,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
             Projectile.rotation = player.fullRotation;
 
             RingPos = RingPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
-            GenerateVFX(12, new Vector2(0, Timer * 1.45f).RotatedByRandom(6.283));
+            //GenerateVFX(12, new Vector2(0, Timer * 1.45f).RotatedByRandom(6.283));
         }
         public void GenerateVFX(int Frequency, Vector2 ringPos)
         {
