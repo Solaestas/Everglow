@@ -16,15 +16,15 @@ namespace Everglow.Sources.Modules.FoodModule.Items.Weapons
             Item.width = 1;
             Item.height = 1;
 
-            Item.knockBack = 2.5f;
-            Item.damage = 500;
+            Item.knockBack = 5f;
+            Item.damage = 25;
             Item.rare = ItemRarityID.Green;
 
             Item.DamageType = DamageClass.Melee;
             Item.noMelee = true;
             Item.noUseGraphic = true;
 
-            Item.value = Item.sellPrice(gold: 1);
+            Item.value = Item.sellPrice(gold: 2);
         }
         public override bool CanUseItem(Player player)
         {
