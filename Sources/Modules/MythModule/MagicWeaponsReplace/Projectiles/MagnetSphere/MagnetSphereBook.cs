@@ -49,7 +49,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
             Projectile.rotation = player.fullRotation;
             if (player.itemTime == 2)
             {
-                Vector2 velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero) * player.HeldItem.shootSpeed;
+                Vector2 velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero) * player.HeldItem.shootSpeed * 2;
                 Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + velocity * 6, velocity, ModContent.ProjectileType<MagnetSphereII>(), player.HeldItem.damage, player.HeldItem.knockBack, player.whoAmI, Main.rand.NextFloat(0.3f, 1.8f));
             }
         }

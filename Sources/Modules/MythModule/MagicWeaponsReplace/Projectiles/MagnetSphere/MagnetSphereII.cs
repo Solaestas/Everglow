@@ -29,7 +29,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            Lighting.AddLight((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16), 0, 0.21f / Projectile.scale, 0.2f / Projectile.scale);
+            Lighting.AddLight((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16), 0, 0.46f * Projectile.scale, 0.4f * Projectile.scale);
             Projectile.velocity *= 0.999f;
             Projectile.scale = 0.6f + (float)(Math.Sin(Main.timeForVisualEffects / 1.8f + Projectile.ai[0])) * 0.45f;
             Projectile.timeLeft -= player.ownedProjectileCounts[Projectile.type];

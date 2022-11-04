@@ -102,7 +102,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
         }
         public override bool PreDraw(ref Color lightColor)
         {
-            DrawLightingBolt(new Color(255, 255, 255, 0));
+            DrawLightingBolt(new Color(0, 255, 240, 0));
             Texture2D Shadow = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/CursedHit");
             float Dark = Math.Max(((Projectile.timeLeft - 150) / 50f), 0);
             Main.spriteBatch.Draw(Shadow,Projectile.Center - Main.screenPosition,null,Color.White * Dark,0,Shadow.Size() / 2f,22f / 15f, SpriteEffects.None,0);
@@ -136,6 +136,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
                 return;
             }
             Vector2 AimC = Main.projectile[(int)Projectile.ai[0]].Center;
+            if((Projectile.Center - AimC).Length() > 900)
+            {
+                return;
+            }
             if (LightPos[1] == Vector2.Zero)
             {
                 BasePos[0] = Projectile.Center;
@@ -147,7 +151,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
                 for (int a = 1; a < Length - 1; a++)
                 {
                     LightPos[a] = new Vector2(0, Main.rand.NextFloat(0f, 5f)).RotatedByRandom(6.283);
-                    LightVel[a] = new Vector2(0, Main.rand.NextFloat(0f, 1.5f)).RotatedByRandom(6.283);
+                    LightVel[a] = new Vector2(0, Main.rand.NextFloat(0f, 10f)).RotatedByRandom(6.283);
                     if (a + 1 >= Length)
                     {
                         LightPos[a + 1] = Vector2.Zero;
@@ -180,7 +184,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
                         BasePos[a] += LightVel[a];
                         if (a % 4 == 0)
                         {
-                            Lighting.AddLight((int)(BasePos[a].X / 16), (int)(BasePos[a].Y / 16), 0, width / 9f, width / 10f);
+                            Lighting.AddLight((int)(BasePos[a].X / 16), (int)(BasePos[a].Y / 16), 0, width / 45f, width / 50f);
                         }
                     }
                     else
