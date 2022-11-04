@@ -9,7 +9,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles.CyanVine
         {
             Main.tileSolid[Type] = true;
             Main.tileBlockLight[Type] = true;
-            DustType = DustID.Silver;
+            DustType = ModContent.DustType<Dusts.CyanVine>();
             MineResist = 4f;
             ItemDrop = ModContent.ItemType<Items.CyanVineOre>();
             Main.tileSpelunker[Type] = true;
