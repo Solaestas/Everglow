@@ -18,7 +18,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
             Projectile.extraUpdates = 3;
             Projectile.timeLeft = 1000;
             Projectile.alpha = 0;
-            Projectile.penetrate = 5;
+            Projectile.penetrate = 3;
             Projectile.scale = 1f;
 
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
@@ -48,7 +48,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
                     Visible = true,
                     position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * 1,
                     maxTime = Main.rand.Next(27, 72),
-                    ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.01f, 0.01f), Main.rand.NextFloat(4f, 12f) }
+                    ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.01f, 0.01f), Main.rand.NextFloat(3.6f, 10f) * mulVelocity }
                 };
                 VFXManager.Add(cf);
             }
@@ -216,27 +216,16 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
 
         public override void Kill(int timeLeft)
         {
-            GenerateVFXExpolode(64, 1.2f);
-            foreach (NPC target in Main.npc)
-            {
-                float Dis = (target.Center - Projectile.Center).Length();
+            GenerateVFXExpolode(64, 2.2f);
 
-                if (Dis <150)
-                {
-                    if (!target.dontTakeDamage && !target.friendly && target.active)
-                    {
-                        target.StrikeNPC((int)(Projectile.damage / (Dis + 35f) * 35f), 0.2f, 1);
-                    }
-                }
-            }
-            for(int d = 0;d <28;d++)
+            for(int d = 0;d <70;d++)
             {
                 Vector2 BasePos = Projectile.Center - new Vector2(4) - Projectile.velocity;
                 Dust d0 = Dust.NewDustDirect(BasePos, 0, 0, DustID.CursedTorch, 0, 0, 0, default, 0.6f);
-                d0.velocity = new Vector2(0, Main.rand.NextFloat(1.65f, 5.5f)).RotatedByRandom(6.283);
+                d0.velocity = new Vector2(0, Main.rand.NextFloat(3.65f, 7.5f)).RotatedByRandom(6.283);
             }
             int HitType = ModContent.ProjectileType<CursedFlameHit>();
-            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, 0, 0, Projectile.owner, 20, Projectile.rotation + Main.rand.NextFloat(6.283f));
+            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, Projectile.damage, Projectile.knockBack, Projectile.owner, 30, Projectile.rotation + Main.rand.NextFloat(6.283f));
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
@@ -250,8 +239,9 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
             }
 
             int HitType = ModContent.ProjectileType<CursedFlameHit>();
-            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, 0, 0, Projectile.owner, 10, Projectile.rotation + Main.rand.NextFloat(6.283f));
+            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, Projectile.damage, Projectile.knockBack, Projectile.owner, 10, Projectile.rotation + Main.rand.NextFloat(6.283f));
             target.AddBuff(BuffID.CursedInferno,900);
+            Projectile.damage = (int)(Projectile.damage * 1.2);
         }
         public override void OnHitPvp(Player target, int damage, bool crit)
         {
@@ -263,8 +253,9 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
                 d0.velocity = new Vector2(0, Main.rand.NextFloat(1.65f, 5.5f)).RotatedByRandom(6.283);
             }
             int HitType = ModContent.ProjectileType<CursedFlameHit>();
-            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, 0, 0, Projectile.owner, 10, Projectile.rotation + Main.rand.NextFloat(6.283f));
+            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, Projectile.damage, Projectile.knockBack, Projectile.owner, 10, Projectile.rotation + Main.rand.NextFloat(6.283f));
             target.AddBuff(BuffID.CursedInferno, 900);
+            Projectile.damage = (int)(Projectile.damage * 1.2);
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
@@ -277,7 +268,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
                 d0.velocity = new Vector2(0, Main.rand.NextFloat(1.65f, 5.5f)).RotatedByRandom(6.283);
             }
             int HitType = ModContent.ProjectileType<CursedFlameHit>();
-            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, 0, 0, Projectile.owner, 10, Projectile.rotation + Main.rand.NextFloat(6.283f));
+            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, Projectile.damage, Projectile.knockBack, Projectile.owner, 10, Projectile.rotation + Main.rand.NextFloat(6.283f));
             if (Projectile.velocity.X != oldVelocity.X)
             {
                 Projectile.velocity.X = -oldVelocity.X;
@@ -288,6 +279,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
             }
             Projectile.velocity *= 0.98f;
             Projectile.penetrate--;
+            Projectile.damage = (int)(Projectile.damage * 1.2);
             return false;
         }
     }

@@ -50,7 +50,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
             if (player.itemTime == 2)
             {
                 Vector2 velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero) * player.HeldItem.shootSpeed;
-                Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + velocity * 6, velocity, ProjectileID.MagnetSphereBall, player.HeldItem.damage, player.HeldItem.knockBack, player.whoAmI);
+                Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + velocity * 6, velocity, ModContent.ProjectileType<MagnetSphereII>(), player.HeldItem.damage, player.HeldItem.knockBack, player.whoAmI, Main.rand.NextFloat(0.3f, 1.8f));
             }
         }
 
@@ -64,11 +64,9 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
 
         public override void PostDraw(Color lightColor)
         {
-            Player player = Main.player[Projectile.owner];
             Texture2D Book = TextureAssets.Item[ItemID.MagnetSphere].Value;
             Texture2D BookGlow = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Item_" + ItemID.MagnetSphere + "_Glow");
             Texture2D Paper = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/MagnetSphere/MagnetSpherePaper");
-            Color c0 = Lighting.GetColor((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f));
 
             Projectile.hide = false;
             DrawBack(Book);

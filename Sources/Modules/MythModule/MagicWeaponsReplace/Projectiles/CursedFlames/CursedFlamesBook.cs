@@ -50,7 +50,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
             if (player.itemTime == 2)
             {
                 Vector2 velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero) * player.HeldItem.shootSpeed;
-                Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + velocity * 1, velocity * 0.3f, ModContent.ProjectileType<CursedFlamesII>(), player.HeldItem.damage, player.HeldItem.knockBack, player.whoAmI);
+                Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + velocity * 1, velocity * 0.3f, ModContent.ProjectileType<CursedFlamesII>(), (int)(player.HeldItem.damage * 1.6f), player.HeldItem.knockBack, player.whoAmI);
             }
         }
 
