@@ -6,7 +6,7 @@
         {
             dust.noGravity = true;
             dust.frame = new Rectangle(0, Main.rand.Next(3) * 8, 8, 8);
-            dust.rotation = Main.rand.NextFloat((float)(MathHelper.TwoPi));
+            dust.rotation = Main.rand.NextFloat(MathHelper.TwoPi);
             dust.scale = Main.rand.NextFloat(0.65f, 1.0f);
         }
 
@@ -30,9 +30,14 @@
             dust.position += dust.velocity;
 
             if (dust.alpha > 245)
+            {
                 dust.active = false;
+            }
+
             if (dust.scale < 0.1f)
+            {
                 dust.active = false;
+            }
 
             if (Collision.SolidCollision(dust.position - Vector2.One * 5f, 10, 10) && dust.fadeIn == 0f)
             {
@@ -42,6 +47,7 @@
             }
             return false;
         }
+
         public override Color? GetAlpha(Dust dust, Color lightColor)
         {
             return new Color(150, 150, 255, 0);

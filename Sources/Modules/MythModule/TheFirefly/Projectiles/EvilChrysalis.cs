@@ -1,7 +1,6 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Commons.Function.Vertex;
+﻿using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
-using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
@@ -18,11 +17,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Projectile.tileCollide = false;
             Projectile.DamageType = DamageClass.Summon;
         }
+
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             Player player = Main.player[Projectile.owner];
-
         }
+
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
@@ -63,6 +63,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         }
 
         private float Dy = 0;
+
         public override bool PreDraw(ref Color lightColor)
         {
             Player player = Main.player[Projectile.owner];
@@ -148,6 +149,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Main.spriteBatch.Draw(tG, player.Center + new Vector2(20 * player.direction, -5 - Dy) - Main.screenPosition, null, new Color(255, 255, 255, 0), (float)(-0.25 * Math.PI * player.direction), drawOrigin, 1, sp, 0);
             return false;
         }
+
         public override void Kill(int timeLeft)
         {
         }
@@ -157,6 +159,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         private Vector2[] Circle2D = new Vector2[120];
         private float Cy2 = -37.5f;
         private float cirpro = 0;
+
         public override void PostDraw(Color lightColor)
         {
             Player player = Main.player[Projectile.owner];

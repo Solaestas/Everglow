@@ -335,7 +335,7 @@ namespace Everglow.Sources.Modules.PlantModule.Projectiles.Melee
 				bars.Add(new Vertex2D(trailUp[i] - Radial * 15f - Main.screenPosition, c0, new Vector3(factor, 0, w)));
 			}
 			Main.spriteBatch.End();
-			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone);
+			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
 			Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/PlantModule/Projectiles/Melee/CactusBallTrail", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 
