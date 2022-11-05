@@ -6,7 +6,7 @@ using ReLogic.Content;
 
 namespace Everglow.Sources.Icons
 {
-    internal class AutoDymanicIconHook : ILoadable
+    internal class AutoDynamicIconHook : ILoadable
     {
         MethodInfo HookTarget;
         public void Load(Mod mod)
