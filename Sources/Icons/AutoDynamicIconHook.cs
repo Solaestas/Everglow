@@ -1,15 +1,8 @@
 using Terraria.UI;
 using MonoMod.RuntimeDetour.HookGen;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria.GameContent.UI.Elements;
 using ReLogic.Content;
-using Terraria.UI.Chat;
-using Terraria.GameContent;
-using System.Numerics;
+
 
 namespace Everglow.Sources.Icons
 {
