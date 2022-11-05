@@ -41,8 +41,8 @@ namespace Everglow.Sources.Icons
             {
                 return;
             }
-            HookTarget = null;
-            HookEndpointManager.Remove(MethodBase.GetMethodFromHandle(HookTarget.MethodHandle), HookMethod);
+            //HookTarget = null;
+            //HookEndpointManager.Remove(MethodBase.GetMethodFromHandle(HookTarget.MethodHandle), HookMethod);
         }
         private void HookMethod(Action<UIElement> orig, UIElement self)
         {
@@ -51,10 +51,7 @@ namespace Everglow.Sources.Icons
             if (Name == Everglow.Instance.Name)
             {
                 self.RemoveChild((UIElement)self.GetType().GetField("_modIcon", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(self));
-                self.Append(new DynamicIconUI(ModContent.Request<Texture2D>("Everglow/Sources/Icons/EverglowIcon",
-                                                                            AssetRequestMode.ImmediateLoad).Value,
-                                                                            new Rectangle(0, 0, 80, 80),
-                                                                            3));
+                self.Append(new DynamicIconUI(ModContent.Request<Texture2D>("Everglow/Sources/Icons/EverglowIcon", AssetRequestMode.ImmediateLoad).Value, new Rectangle(0, 0, 80, 80), 3));
             }
         }
         public class DynamicIconUI : UIElement, IColorable
