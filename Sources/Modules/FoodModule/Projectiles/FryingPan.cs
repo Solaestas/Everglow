@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria.Audio;
+using Everglow.Sources.Modules.MEACModule;
 
 namespace Everglow.Sources.Modules.FoodModule.Projectiles
 {
@@ -13,7 +14,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
     {
         public override void SetDef()
         {
-            maxAttackType = 1;//循环攻击方式的总数
+            maxAttackType = 0;//循环攻击方式的总数
 
             trailLength = 20;//拖尾的长度
 
@@ -81,6 +82,62 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
         {
             useTrail = true;
  
+            if (attackType == 0)
+            {
+                Player.heldProj = -1;
+                Player.GetModPlayer<MEACPlayer>().isUsingMeleeProj = false;
+                Player.SetCompositeArmFront(false, Player.CompositeArmStretchAmount.Full, mainVec.ToRotation() - 1.57f);
+                if (timer == 1)
+                {
+                    AttSound(SoundID.NPCHit4);
+                    Projectile.velocity = Vector2.Zero;
+                    LockPlayerDir(Player);
+                }
+                if (timer < 1200)
+                {
+                    Lighting.AddLight(Projectile.Center + mainVec + Projectile.velocity, 0.9f, 0.6f, 0f);
+                    if (timer % 10 == 0)
+                    {
+                        AttSound(SoundID.Item1);
+                    }
+                    CanIgnoreTile = true;
+                    isAttacking = true;
+                    Projectile.extraUpdates = 2;
+                    Projectile.Center += Projectile.velocity;
+                    Projectile.velocity = Vector2.Lerp(Projectile.velocity, Vector2.Normalize(MouseWorld_WithoutGravDir - Player.Center) * 180, 0.06f);
+                    Projectile.rotation += 0.3f * Projectile.spriteDirection;
+                    mainVec = Projectile.rotation.ToRotationVector2() * 160;
+                }
+
+                if (timer > 1200)
+                {
+                    CanIgnoreTile = false;
+                    NextAttackType();
+                    Projectile.extraUpdates = 1;
+                }
+                /*
+                //travelling out
+                if (Projectile.ai[0] == 0)
+                {
+                    Projectile.ai[1]++;
+
+                    if (Projectile.ai[1] > 20)
+                    {
+                        Projectile.ai[0] = 1;
+                        Projectile.netUpdate = true;
+                    }
+                }
+                //travel back to player
+                else
+                {
+                    Projectile.extraUpdates = 0;
+                    Projectile.velocity = Vector2.Normalize(Main.player[Projectile.owner].Center - Projectile.Center) * 45;
+
+                    //kill when back to player
+                    if (Projectile.Distance(Main.player[Projectile.owner].Center) <= 30)
+                        Projectile.Kill();
+                }*/
+            }
             if (attackType == 100)//右键长按蓄力斩的写法。因为不在循环内，所以这个type数值可以随便写，由Item切换到这个attackType
             {
                 int chargeTime1 = 30;
