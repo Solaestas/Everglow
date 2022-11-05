@@ -15,7 +15,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
         {
             maxAttackType = 1;//循环攻击方式的总数
 
-            trailLength = 25;//拖尾的长度
+            trailLength = 20;//拖尾的长度
 
             shadertype = "Trail";
 
@@ -25,7 +25,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
 
            Projectile.height = 100;//判定区域的宽度，默认为15
 
-           Projectile.scale = 0.9f;//总大小，有需要时可以使用
+           Projectile.scale = 1f;//总大小，有需要时可以使用
 
 
             /*
@@ -55,7 +55,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
 
         public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, float HorizontalWidth, float HorizontalHeight, float DrawScale, string GlowPath, double DrawRotation)
         {
-            base.DrawSelf(spriteBatch, lightColor, 60, 60, 1.1f, "", 0.6);
+            base.DrawSelf(spriteBatch, lightColor, 60, 60, 1.1f, "", 0.5);
         }
 
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
@@ -67,7 +67,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
             if (attackType == 100)
             {
                 damage *= 5;
-                knockback *= 5;
+                knockback *= 2;
                 Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 12, 150)).RotatedByRandom(6.283);
             }
         }
@@ -83,10 +83,10 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
  
             if (attackType == 100)//右键长按蓄力斩的写法。因为不在循环内，所以这个type数值可以随便写，由Item切换到这个attackType
             {
-                int chargeTime1= 60;
-                int chargeTime2 = 120;
-                int chargeTime3 = 180;
-                
+                int chargeTime1 = 30;
+                int chargeTime2 = 60;
+                int chargeTime3 = 90;
+
                 if (timer < 10000)//蓄力中
                 {
                     useTrail = false;
@@ -100,16 +100,27 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
 
                     //向内的粒子效果
                     Vector2 r = Main.rand.NextVector2Unit();
-                    float dis = MathHelper.Clamp(chargeTime1 - timer, 0, chargeTime1) / 1;
-                    Dust d = Dust.NewDustDirect(Projectile.Center + r * dis, 10, 10, DustID.AncientLight, 0, 0, 0, Color.White, 0.8f);
-                    d.velocity = -r * 4;
-                    d.position += Main.rand.NextVector2Unit() * 5;
-                    d.noGravity = true;
+                    float dis1 = MathHelper.Clamp(chargeTime1 - timer, 0, chargeTime1) / 1;
+                    float dis2 = MathHelper.Clamp(chargeTime2 - timer, 0, chargeTime2) / 1;
+                    float dis3 = MathHelper.Clamp(chargeTime3 - timer, 0, chargeTime3) / 1;
+                    Dust d1 = Dust.NewDustDirect(Projectile.Center + r * dis1, 10, 10, DustID.AncientLight, 0, 0, 0, Color.White, 0.8f);
+                    d1.velocity = -r * 4;
+                    d1.position += Main.rand.NextVector2Unit() * 5;
+                    d1.noGravity = true;
 
-                    
+                    Dust d2 = Dust.NewDustDirect(Projectile.Center + r * dis2, 10, 10, DustID.AncientLight, 0, 0, 0, Color.White, 0.8f);
+                    d2.velocity = -r * 4;
+                    d2.position += Main.rand.NextVector2Unit() * 5;
+                    d2.noGravity = true;
+
+                    Dust d3 = Dust.NewDustDirect(Projectile.Center + r * dis3, 10, 10, DustID.AncientLight, 0, 0, 0, Color.White, 0.8f);
+                    d3.velocity = -r * 4;
+                    d3.position += Main.rand.NextVector2Unit() * 5;
+                    d3.noGravity = true;
                 }
                 SoundStyle sound = SoundID.Item4;
                 sound.Volume *= 0.4f;
+                
                 if (timer == chargeTime1)//蓄力完成时
                 {
                     //播放音效。
@@ -137,8 +148,8 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                         state3 = true;
                     }
                     timer = 10000;
-                    AttSound(SoundID.Item71);
-                    
+                    SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
+
                 }
 
                 if (timer >= 10000)//开始挥动攻击
@@ -147,15 +158,15 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
 
                     if (state1 == true)
                     {
-                        if (timer < 10020)
+                        if (timer < 10015)
                         {
                             isAttacking = true;
                             mainVec = Vector2Elipse(70, Projectile.rotation, 0f, Projectile.ai[0]);
-                            Projectile.rotation += Projectile.spriteDirection * 0.25f;
+                            Projectile.rotation += Projectile.spriteDirection * 0.35f;
                         }
                         if(!state2)
                         {
-                            if (timer >= 10030)
+                            if (timer >= 10020)
                             {
                                 Projectile.friendly = false;
                                 state1 = false;
@@ -166,24 +177,24 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
 
                     if (state2 == true)
                     {
-                        if (timer > 10020 && timer < 10030)
+                        if (timer > 10015 && timer < 10020)
                         {
                             useTrail = false;
                         }
-                        if (timer == 10030)
+                        if (timer == 10020)
                         {
-                            AttSound(SoundID.Item71);
+                            SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
                         }
-                        if (timer >= 10030 && timer < 10050)
+                        if (timer >= 10020 && timer < 10035)
                         {
                             useTrail = true;
                             isAttacking = true;
                             mainVec = Vector2Elipse(70, Projectile.rotation, 0f, Projectile.ai[0]);
-                            Projectile.rotation += Projectile.spriteDirection * -0.25f;
+                            Projectile.rotation += Projectile.spriteDirection * -0.35f;
                         }
                         if (!state3)
                         {
-                            if (timer >= 10060)
+                            if (timer >= 10040)
                             {
                                 Projectile.friendly = false;
                                 state1 = false;
@@ -195,22 +206,22 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
 
                     if (state3 == true)
                     {
-                        if (timer > 10060 && timer < 10075)
+                        if (timer > 10040 && timer < 10050)
                         {
                             useTrail = false;
                         }
-                        if (timer == 10075)
+                        if (timer == 10050)
                         {
-                           AttSound(SoundID.Item71);
+                            SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
                         }
-                        if (timer >= 10075 && timer < 10100)
+                        if (timer >= 10050 && timer < 10075)
                         {
                             useTrail = true;
                             isAttacking = true;
                             Projectile.rotation += Projectile.spriteDirection * 0.25f;
                             mainVec = Vector2Elipse(100, Projectile.rotation, -1.2f, Projectile.ai[0]);
                         }
-                        if (timer >= 10120)
+                        if (timer >= 10080)
                         {
                             Projectile.friendly = false;
                             state1 = false;
