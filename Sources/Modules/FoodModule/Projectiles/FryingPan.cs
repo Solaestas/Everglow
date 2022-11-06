@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Terraria;
 using Everglow.Sources.Modules.MEACModule;
 using System.Linq.Expressions;
+using Everglow.Sources.Modules.ZYModule.Commons.Core;
 
 namespace Everglow.Sources.Modules.FoodModule.Projectiles
 {
@@ -74,7 +75,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
             if (attackType == 100)
             {
                 damage *= 5;
-                knockback *= 2;
+                knockback *= 5;
                 Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 12, 150)).RotatedByRandom(6.283);
             }
         }
@@ -90,6 +91,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
             Player player = Main.player[Projectile.owner];
             if (attackType == 0)
             {
+                longHandle = true;
                 Player.heldProj = -1;
                 Player.GetModPlayer<MEACPlayer>().isUsingMeleeProj = false;
                 Player.SetCompositeArmFront(false, Player.CompositeArmStretchAmount.Full, mainVec.ToRotation() - 1.57f);
@@ -100,6 +102,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                 }
                 if (timer < 1200)
                 {
+                    trailLength = 20;
                     Lighting.AddLight(Projectile.Center + mainVec + Projectile.velocity, 0.9f, 0.6f, 0f);
                     if (timer % 10 == 0)
                     {
@@ -107,11 +110,12 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                     }
                     CanIgnoreTile = true;
                     isAttacking = true;
-                    Projectile.extraUpdates = 2;
+                    
+                        
                     Projectile.Center += Projectile.velocity;
                     Projectile.velocity = Vector2.Lerp(Projectile.velocity, Vector2.Normalize(MouseWorld_WithoutGravDir - Player.Center) * 180, 0.06f);
                     Projectile.rotation += 0.3f * Projectile.spriteDirection;
-                    mainVec = Projectile.rotation.ToRotationVector2() * 160;
+                    mainVec = Projectile.rotation.ToRotationVector2() *38;
                 }
 
                 if (timer > 1200)
@@ -119,6 +123,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                     CanIgnoreTile = false;
                     NextAttackType();
                     Projectile.extraUpdates = 1;
+                    longHandle = false;
                 }
                 /*
                 //travelling out
@@ -305,6 +310,32 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                 //攻击时的粒子之类的
             }
         }
-
+        int Pdirection;
+        public override void AI()
+        {
+            base.AI();
+            if (attackType == 0)
+            {
+                
+                if (Player.velocity.X < 0f) 
+                {
+                    Pdirection = -1;
+                }   
+                else if (Player.velocity.X > 0f) 
+                {
+                    Pdirection = 1;
+                }
+                Player.direction = Pdirection;
+            }
+        }
+        public void PlayerFrame(int frame)
+        {
+            Player player = Main.player[Projectile.owner];
+            if (attackType == 0)
+            {
+                player.bodyFrame.Y = 4;
+               
+            }
+        }
     }
 }

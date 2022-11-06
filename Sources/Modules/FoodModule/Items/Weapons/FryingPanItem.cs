@@ -12,7 +12,7 @@ namespace Everglow.Sources.Modules.FoodModule.Items.Weapons
     {
         public override void SetDefaults()
         {
-            Item.useStyle = 1;
+            Item.useStyle = ItemUseStyleID.Swing;
             Item.width = 1;
             Item.height = 1;
 
