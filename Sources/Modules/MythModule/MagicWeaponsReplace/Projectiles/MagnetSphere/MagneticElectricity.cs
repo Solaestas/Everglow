@@ -6,7 +6,7 @@ using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MythModule.Common;
 using ReLogic.Content;
 
-namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.CursedFlames;
+namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.MagnetSphere;
 
 internal abstract class ShaderDraw : Visual
 {
@@ -23,7 +23,7 @@ internal abstract class ShaderDraw : Visual
     }
 }
 
-internal class CursedFlamePipeline : Pipeline
+internal class MagneticElectricityPipeline : Pipeline
 {
     public override void Load()
     {
@@ -36,7 +36,7 @@ internal class CursedFlamePipeline : Pipeline
         var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
         var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
         effect.Parameters["uTransform"].SetValue(model * projection);
-        Texture2D FlameColor = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/Cursed_Color");
+        Texture2D FlameColor = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/MagnetSphere/Magnetic_Color");
         VFXManager.spriteBatch.BindTexture<Vertex2D>(FlameColor);
         Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.AnisotropicClamp;
         VFXManager.spriteBatch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearWrap, RasterizerState.CullNone);
@@ -48,47 +48,48 @@ internal class CursedFlamePipeline : Pipeline
         VFXManager.spriteBatch.End();
     }
 }
-[Pipeline(typeof(CursedFlamePipeline), typeof(BloomPipeline))]
-internal class CursedFlameDust : ShaderDraw
+[Pipeline(typeof(MagneticElectricityPipeline), typeof(BloomPipeline))]
+internal class MagneticElectricity : ShaderDraw
 {
-    private Vector2 vsadd = Vector2.Zero;
     public List<Vector2> oldPos = new List<Vector2>();
     public float timer;
     public float maxTime;
-    public CursedFlameDust() { }
-    public CursedFlameDust(int maxTime, Vector2 position, Vector2 velocity, params float[] ai) : base(position, velocity, ai)
+    public MagneticElectricity() { }
+    public MagneticElectricity(int maxTime, Vector2 position, Vector2 velocity, params float[] ai) : base(position, velocity, ai)
     {
         this.maxTime = maxTime;
     }
 
     public override void Update()
     {
-        position += velocity;
-        oldPos.Add(position);
-        if (oldPos.Count > 15)
+        for(int a = 0;a < 6;a++)
         {
-            oldPos.RemoveAt(0);
-        }
-        velocity *= 0.96f;
-        timer++;
-        if (timer > maxTime)
-        {
-            Active = false;
-        }
-        velocity = velocity.RotatedBy(ai[1]);
-
-        for (int f = oldPos.Count - 1; f > 0; f--)
-        {
-            if (oldPos[f] != Vector2.Zero)
+            position += velocity;
+            if (Main.rand.NextBool(16))
             {
-                oldPos[f] += vsadd;
+                velocity = velocity.RotatedBy(Main.rand.NextFloat(-1.2f, 1.2f));
             }
-        }
-        float delC = ai[2] * 0.05f * (float)Math.Sin((maxTime - timer) / 40d * Math.PI);
-        Lighting.AddLight((int)(position.X / 16), (int)(position.Y / 16), 0.45f * delC, 0.85f * delC, 0f);
-        if(Collision.SolidCollision(position, 0, 0))
-        {
-            Active = false;
+            oldPos.Add(position);
+            if (oldPos.Count > 60)
+            {
+                oldPos.RemoveAt(0);
+            }
+
+            velocity *= 0.99f;
+            timer++;
+            if (timer > maxTime)
+            {
+                Active = false;
+            }
+            velocity = velocity.RotatedBy(ai[1]);
+
+            float delC = ai[2] * 0.05f * (float)Math.Sin((maxTime - timer) / 40d * Math.PI);
+            Lighting.AddLight((int)(position.X / 16), (int)(position.Y / 16), 0.45f * delC, 0.85f * delC, 0f);
+            if (Collision.SolidCollision(position, 0, 0))
+            {
+                velocity *= 0.5f;
+                timer += 2;
+            }
         }
     }
 
@@ -107,11 +108,25 @@ internal class CursedFlameDust : ShaderDraw
             Vector2 normal = oldPos[i] - oldPos[i - 1];
             normal = Vector2.Normalize(normal).RotatedBy(Math.PI * 0.5);
             Color drawcRope = new Color(fx * fx * fx * 2, 0.5f, 1, 150 / 255f);
-            float width = ai[2] * (float)(Math.Sin(i / (double)(len) * Math.PI));
-            bars[2 * i - 1] = (new Vertex2D(oldPos[i] + normal * width, drawcRope, new Vector3(0 + ai[0], i / 80f, 0)));
-            bars[2 * i] = (new Vertex2D(oldPos[i] - normal * width, drawcRope, new Vector3(0.05f + ai[0], i / 80f, 0)));
+            float width = ai[2];
+            if(i > len - 10)
+            {
+                width *= (len - i) / 10f;
+            }
+            if (i < 70)
+            {
+                //width *= 10 / (float)i;
+                width *= i / 70f;
+            }
+            if(timer > maxTime - 10)
+            {
+                width *= (maxTime - timer) / 10f;
+            }
+            bars[2 * i - 1] = (new Vertex2D(oldPos[i] + normal * width, drawcRope, new Vector3(0 + ai[0], i / 320f, 0)));
+            bars[2 * i] = (new Vertex2D(oldPos[i] - normal * width, drawcRope, new Vector3(0.05f + ai[0], i / 320f, 0)));
         }
         bars[0] = new Vertex2D((bars[1].position + bars[2].position) * 0.5f, Color.White, new Vector3(0.5f, 0, 0));
         VFXManager.spriteBatch.Draw(bars, PrimitiveType.TriangleStrip);
     }
+    public override CallOpportunity DrawLayer => CallOpportunity.PostDrawDusts;
 }

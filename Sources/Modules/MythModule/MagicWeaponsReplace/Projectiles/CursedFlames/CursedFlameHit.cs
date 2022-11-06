@@ -20,6 +20,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
             Projectile.timeLeft = 200;
             Projectile.tileCollide = false;
             Projectile.extraUpdates = 2;
+            Projectile.DamageType = DamageClass.MagicSummonHybrid;
         }
 
         public override void AI()

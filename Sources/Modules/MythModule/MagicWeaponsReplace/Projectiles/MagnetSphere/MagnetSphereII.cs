@@ -22,6 +22,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
             Projectile.scale = 1f;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 24;
+            Projectile.DamageType = DamageClass.MagicSummonHybrid;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 120;
         }
@@ -47,8 +48,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
                                 if (Main.rand.NextBool(6))
                                 {
                                     int HitType = ModContent.ProjectileType<MagnetSphereLighting>();
-                                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), target.Center, Vector2.One, HitType, (int)(Projectile.damage * 0.8f), Projectile.knockBack, Projectile.owner, Projectile.whoAmI, Projectile.rotation + Main.rand.NextFloat(6.283f));
+                                    Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center, Vector2.One, HitType, (int)(Projectile.damage * 0.8f), Projectile.knockBack, Projectile.owner, Projectile.whoAmI, Projectile.rotation + Main.rand.NextFloat(6.283f));
+                                    p.CritChance = Projectile.CritChance;
                                     Projectile.penetrate--;
+                                    if(Projectile.penetrate < 0)
+                                    {
+                                        Projectile.Kill();
+                                    }
                                 }
                             }
                         }
@@ -197,7 +203,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
                 d0.velocity = new Vector2(0, Main.rand.NextFloat(1.65f, 5.5f)).RotatedByRandom(6.283) * 3;
             }
             int HitType = ModContent.ProjectileType<MagnetSphereHit>();
-            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, (int)(Projectile.damage * 0.8f), Projectile.knockBack, Projectile.owner, 30, Projectile.rotation + Main.rand.NextFloat(6.283f));
+            Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, (int)(Projectile.damage * 3f), Projectile.knockBack, Projectile.owner, 30, Projectile.rotation + Main.rand.NextFloat(6.283f));
+            p.CritChance = Projectile.CritChance;
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
@@ -214,7 +221,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
                 Projectile.Kill();
             }
             int HitType = ModContent.ProjectileType<MagnetSphereHit>();
-            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, (int)(Projectile.damage * 0.4f), Projectile.knockBack, Projectile.owner, 18, Projectile.rotation + Main.rand.NextFloat(6.283f));
+            Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, (int)(Projectile.damage * 2f), Projectile.knockBack, Projectile.owner, 18, Projectile.rotation + Main.rand.NextFloat(6.283f));
+            p.CritChance = Projectile.CritChance;
             Projectile.damage = (int)(Projectile.damage * 1.2);
         }
         public override void OnHitPvp(Player target, int damage, bool crit)
@@ -231,7 +239,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
                 Projectile.Kill();
             }
             int HitType = ModContent.ProjectileType<MagnetSphereHit>();
-            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, (int)(Projectile.damage * 0.4f), Projectile.knockBack, Projectile.owner, 18, Projectile.rotation + Main.rand.NextFloat(6.283f));
+            Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, (int)(Projectile.damage * 2f), Projectile.knockBack, Projectile.owner, 18, Projectile.rotation + Main.rand.NextFloat(6.283f));
+            p.CritChance = Projectile.CritChance;
             Projectile.damage = (int)(Projectile.damage * 1.2);
         }
 
@@ -244,7 +253,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
                 d0.velocity = new Vector2(0, Main.rand.NextFloat(1.65f, 5.5f)).RotatedByRandom(6.283);
             }
             int HitType = ModContent.ProjectileType<MagnetSphereHit>();
-            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, (int)(Projectile.damage * 0.4f), Projectile.knockBack, Projectile.owner, 18, Projectile.rotation + Main.rand.NextFloat(6.283f));
+            Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, (int)(Projectile.damage * 2f), Projectile.knockBack, Projectile.owner, 18, Projectile.rotation + Main.rand.NextFloat(6.283f));
+            p.CritChance = Projectile.CritChance;
             if (Projectile.velocity.X != oldVelocity.X)
             {
                 Projectile.velocity.X = -oldVelocity.X;

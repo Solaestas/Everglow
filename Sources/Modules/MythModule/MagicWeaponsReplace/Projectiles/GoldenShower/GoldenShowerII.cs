@@ -19,7 +19,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Go
             Projectile.alpha = 0;
             Projectile.penetrate = 1;
             Projectile.scale = 1f;
-
+            Projectile.DamageType = DamageClass.MagicSummonHybrid;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 30;
         }

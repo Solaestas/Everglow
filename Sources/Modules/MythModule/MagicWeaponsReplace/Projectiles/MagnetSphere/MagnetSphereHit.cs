@@ -1,10 +1,12 @@
 ﻿using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Sources.Commons.Core.VFX;
 using Everglow.Sources.Modules.MEACModule;
 using Everglow.Sources.Modules.MythModule.Common;
+using Terraria.DataStructures;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.MagnetSphere
 {
-    public class MagnetSphereHit : ModProjectile, IWarpProjectile, IBloomProjectile
+    public class MagnetSphereHit : ModProjectile, IWarpProjectile
     {
         protected override bool CloneNewInstances => false;
         public override bool IsCloneable => false;
@@ -22,8 +24,43 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
             Projectile.extraUpdates = 4;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 6;
+            Projectile.DamageType = DamageClass.MagicSummonHybrid;
         }
-
+        public void GenerateVFXExpolode(int Frequency, float mulVelocity = 1f)
+        {
+            for (int g = 0; g < Frequency * 3; g++)
+            {
+                Vector2 vel = new Vector2(0, Main.rand.NextFloat(4.65f, 5.5f)).RotatedByRandom(6.283) * mulVelocity;
+                MagneticElectricity me = new MagneticElectricity
+                {
+                    velocity = vel,
+                    Active = true,
+                    Visible = true,
+                    maxTime = Main.rand.Next(54, 180),
+                    ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.01f, 0.01f), Main.rand.NextFloat(1.6f, 2f) * mulVelocity },
+                    position = Projectile.Center - vel * 3
+                };
+                VFXManager.Add(me);
+            }
+            for (int g = 0; g < Frequency; g++)
+            {
+                Vector2 vel = new Vector2(0, Main.rand.NextFloat(6.65f, 10.5f)).RotatedByRandom(6.283) * mulVelocity;
+                MagneticElectricity me = new MagneticElectricity
+                {
+                    velocity = vel,
+                    Active = true,
+                    Visible = true,
+                    maxTime = Main.rand.Next(54, 180),
+                    ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.01f, 0.01f), Main.rand.NextFloat(1.6f, 2f) * mulVelocity },
+                    position = Projectile.Center - vel * 3
+                };
+                VFXManager.Add(me);
+            }
+        }
+        public override void OnSpawn(IEntitySource source)
+        {
+            GenerateVFXExpolode(12, 0.6f);
+        }
         public override void AI()
         {
             Projectile.velocity *= 0.95f;
@@ -38,42 +75,6 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
                 Lighting.AddLight((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16), 0, LightS * 0.83f, LightS * 0.8f);
             }
 
-            int MaxC = (int)(Projectile.ai[0] / 4 + 5);
-            MaxC = Math.Min(26, MaxC);
-            if (Projectile.timeLeft >= 200)
-            {
-                for (int x = 0; x < MaxC; x++)
-                {
-                    SparkVelocity[x] = new Vector2(0, Projectile.ai[0]).RotatedByRandom(6.283) * Main.rand.NextFloat(0.35f, 0.7f);
-                    SparkOldPos[x, 0] = Projectile.Center;
-                }
-            }
-
-            for (int x = 0; x < MaxC; x++)
-            {
-                for (int y = 139; y > 0; y--)
-                {
-                    SparkOldPos[x, y] = SparkOldPos[x, y - 1];
-                }
-                if (Collision.SolidCollision(SparkOldPos[x, 0] + new Vector2(SparkVelocity[x].X, 0), 0, 0))
-                {
-                    SparkVelocity[x].X *= -0.95f;
-                }
-                if (Collision.SolidCollision(SparkOldPos[x, 0] + new Vector2(0, SparkVelocity[x].Y), 0, 0))
-                {
-                    SparkVelocity[x].Y *= -0.95f;
-                }
-                SparkOldPos[x, 0] += SparkVelocity[x];
-
-                if (SparkVelocity[x].Length() > 0.3f)
-                {
-                    SparkVelocity[x] *= 0.95f;
-                }
-                if(Main.rand.NextBool(4))
-                {
-                    SparkVelocity[x] = SparkVelocity[x].RotatedBy(Main.rand.NextFloat(-0.8f,0.8f));
-                }
-            }
             Projectile.velocity *= 0;
         }
         private static void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
@@ -104,71 +105,12 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
             float Dark = Math.Max(((Projectile.timeLeft - 150) / 50f), 0);
             Main.spriteBatch.Draw(Shadow,Projectile.Center - Main.screenPosition,null,Color.White * Dark,0,Shadow.Size() / 2f,2.2f * Projectile.ai[0] / 15f, SpriteEffects.None,0);
             Texture2D light = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/CursedHitStar");
-            Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 0), 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, Dark * Dark) * Projectile.ai[0] / 20f, SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 0), 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.8f, Dark * Projectile.ai[0] / 20f), SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0, 120, 103, 0), 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, Dark * Dark) * Projectile.ai[0] / 20f, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0, 120, 103, 0), 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.8f, Dark * Projectile.ai[0] / 20f), SpriteEffects.None, 0);
 
-            float size = Math.Clamp(Projectile.timeLeft / 8f - 10, 0f, 20f);
-            if(size > 0)
-            {
-                DrawSpark(Color.White * 0.5f, size * 3, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/LineDark"));
-                DrawSpark(new Color(0, 255, 240, 0), size * 3, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/LineLight"));
-            }
-            Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 0), (float)(Math.PI / 4d) + Projectile.ai[1], light.Size() / 2f, new Vector2(0.6f, Dark * Projectile.ai[0] / 20f), SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 0), (float)(Math.PI / 4d * 3) + Projectile.ai[1], light.Size() / 2f, new Vector2(0.6f, Dark * Projectile.ai[0] / 20f), SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0, 120, 103, 0), (float)(Math.PI / 4d) + Projectile.ai[1], light.Size() / 2f, new Vector2(0.6f, Dark * Projectile.ai[0] / 20f), SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0, 120, 103, 0), (float)(Math.PI / 4d * 3) + Projectile.ai[1], light.Size() / 2f, new Vector2(0.6f, Dark * Projectile.ai[0] / 20f), SpriteEffects.None, 0);
             return false;
-        }
-
-        private Vector2[,] SparkOldPos = new Vector2[27, 140];
-        private Vector2[] SparkVelocity = new Vector2[27];
-        internal void DrawSpark(Color c0, float width, Texture2D tex)
-        {
-            int MaxC = (int)(Projectile.ai[0] / 4 + 5);
-            MaxC = Math.Min(26, MaxC);
-            List<Vertex2D> bars = new List<Vertex2D>();
-            for (int x = 0; x < MaxC; x++)
-            {
-                int TrueL = 0;
-                for (int i = 1; i < 140; ++i)
-                {
-                    if (SparkOldPos[x, i] == Vector2.Zero)
-                    {
-                        break;
-                    }
-
-                    TrueL++;
-                }
-                for (int i = 1; i < 140; ++i)
-                {
-                    if (SparkOldPos[x, i] == Vector2.Zero)
-                    {
-                        break;
-                    }
-
-                    var normalDir = SparkOldPos[x, i - 1] - SparkOldPos[x, i];
-                    normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
-                    var factor = i / (float)TrueL;
-                    var w = MathHelper.Lerp(1f, 0.05f, factor);
-                    float x0 = 1 - factor;
-                    if (i == 1)
-                    {
-                        bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * -width + new Vector2(5f, 5f) - Main.screenPosition, Color.Transparent, new Vector3(x0, 1, w)));
-                        bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * width + new Vector2(5f, 5f) - Main.screenPosition, Color.Transparent, new Vector3(x0, 0, w)));
-                    }
-                    bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * -width + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 1, w)));
-                    bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * width + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 0, w)));
-                    if (i == 139)
-                    {
-                        bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * -width + new Vector2(5f, 5f) - Main.screenPosition, Color.Transparent, new Vector3(x0, 1, w)));
-                        bars.Add(new Vertex2D(SparkOldPos[x, i] + normalDir * width + new Vector2(5f, 5f) - Main.screenPosition, Color.Transparent, new Vector3(x0, 0, w)));
-                    }
-                }
-                Texture2D t = tex;
-                Main.graphics.GraphicsDevice.Textures[0] = t;
-            }
-            if (bars.Count > 3)
-            {
-                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-            }
         }
 
         public void DrawWarp()
@@ -187,14 +129,6 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
             DrawTexCircle(value * 16 * Projectile.ai[0], 100, new Color(colorV, colorV * 0.2f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-        }
-        public void DrawBloom()
-        {
-            float size = Math.Clamp(Projectile.timeLeft / 8f - 60, 0f, 20f);
-            if (size > 0)
-            {
-                DrawSpark(new Color(255, 20, 229, 206), size, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/SparkLight"));
-            }
         }
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
