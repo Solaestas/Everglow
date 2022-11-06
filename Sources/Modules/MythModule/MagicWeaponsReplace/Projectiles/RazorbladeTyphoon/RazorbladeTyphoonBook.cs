@@ -7,7 +7,7 @@
             UseGlow = false;
             ItemType = ItemID.RazorbladeTyphoon;
             DustType = DustID.RazorbladeTyphoon;
-            ProjType = ProjectileID.Typhoon;
+            ProjType = ModContent.ProjectileType<TyphoonII>();
         }
     }
 }
