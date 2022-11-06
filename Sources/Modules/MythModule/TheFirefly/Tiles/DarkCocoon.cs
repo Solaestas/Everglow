@@ -1,3 +1,4 @@
+//using Everglow.Sources.Modules.MythModule.TheFirefly.NPCs;
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 {
     public class DarkCocoon : ModTile
@@ -38,6 +39,16 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 
         public override void RandomUpdate(int i, int j)
         {
+            //if (Main.rand.NextBool(10)) // TODO: Adjust code to prevent Little Fire Bulbs from being in one spot or spawning on top of each other
+            //{
+            //    if (NPC.CountNPCS(ModContent.NPCType<LittleFireBulb>()) < 50)
+            //    {
+            //        if (!((Tile)Main.tile[i, j + 1]).HasTile)
+            //        {
+            //            NPC.NewNPC(null, i * 16, j * 16 + 24, ModContent.NPCType<LittleFireBulb>());
+            //        }
+            //    }
+            //}
             if (Main.rand.NextBool(6))
             {
                 if (Main.tile[i, j].Slope == SlopeType.Solid && Main.tile[i + 1, j].Slope == SlopeType.Solid && Main.tile[i - 1, j].Slope == SlopeType.Solid && Main.tile[i + 2, j].Slope == SlopeType.Solid && Main.tile[i - 2, j].Slope == SlopeType.Solid && 

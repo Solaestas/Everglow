@@ -61,7 +61,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
             {
                 if (NPC.ai[1] > 90)
                 {
-                    if(NPC.ai[2] == 0)
+                    if (NPC.ai[2] == 0)
                     {
                         for (int i = 0; i < 2; i++)
                         {

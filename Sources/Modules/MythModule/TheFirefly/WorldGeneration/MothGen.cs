@@ -18,7 +18,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
 
             protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
             {
-                Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everlow.Common.WorldSystem.BuildMothCave");
+                Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everglow.Common.WorldSystem.BuildMothCave");
                 BuildMothCave();
             }
         }
@@ -31,7 +31,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
 
             protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
             {
-                Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everlow.Common.WorldSystem.BuildWorldMothCave");
+                Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everglow.Common.WorldSystem.BuildWorldMothCave");
                 BuildWorldMothCave();
             }
         }
