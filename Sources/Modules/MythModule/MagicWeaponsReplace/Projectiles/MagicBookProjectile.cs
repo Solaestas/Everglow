@@ -22,14 +22,21 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
             Projectile.alpha = 255;
             SetDef();
         }
+        public virtual void SetDef()
+        {
+        }
         /// <summary>
         /// 最好不要动计时器，计算书本的翻开程度，甚至决定了书本是否kill
         /// </summary>
         internal int Timer = 0;
         /// <summary>
-        /// 产生粒子的类型
+        /// 产生粒子的类型（主要应用于Kill的时候）
         /// </summary>
         internal int DustType = -1;
+        /// <summary>
+        /// 如果有混合粒子效果，产生粒子的第二种类型
+        /// </summary>
+        internal int DustTypeII = -1;
         /// <summary>
         /// 发射的弹幕
         /// </summary>
@@ -43,7 +50,19 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
         /// </summary>
         internal float BookScale = 12f;
         /// <summary>
-        /// 是否使用荧光效果
+        /// 伤害倍率
+        /// </summary>
+        internal float MulDamage = 1f;
+        /// <summary>
+        /// 射速倍率
+        /// </summary>
+        internal float MulVelocity = 1f;
+        /// <summary>
+        /// 弹幕初始生成位置随速度偏移倍率
+        /// </summary>
+        internal float MulStartPosByVelocity = 1f;
+        /// <summary>
+        /// 是否使用荧光效果,默认为是
         /// </summary>
         internal bool UseGlow = true;
         /// <summary>
@@ -51,9 +70,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
         /// </summary>
         internal Color glowColor = new Color(255, 255, 255, 0);
 
-        public virtual void SetDef()
-        {
-        }
+
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
@@ -82,17 +99,24 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
             Vector2 vTOMouse = Main.MouseWorld - player.Center;
             player.SetCompositeArmBack(true, PCAS, (float)(Math.Atan2(vTOMouse.Y, vTOMouse.X) - Math.PI / 2d));
             Projectile.rotation = player.fullRotation;
-
-            if(ProjType == -1)
+            SpecialAI();
+            if (ProjType == -1)
             {
                 return;
             }
             if (player.itemTime == 2)
             {
                 Vector2 velocity = Utils.SafeNormalize(vTOMouse, Vector2.Zero) * player.HeldItem.shootSpeed;
-                Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * 6, velocity, ProjType, player.HeldItem.damage, player.HeldItem.knockBack, player.whoAmI);
+                Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * MulStartPosByVelocity, velocity * MulVelocity, ProjType, (int)(player.HeldItem.damage * MulDamage), player.HeldItem.knockBack, player.whoAmI);
                 p.CritChance = (int)player.GetCritChance(DamageClass.Generic);
             }
+        }
+        public virtual void SpecialAI()
+        {
+        }
+        public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
+        {
+            overPlayers.Add(index);
         }
         public override void PostDraw(Color lightColor)
         {
@@ -104,6 +128,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
             Texture2D BookGlow = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Item_" + ItemType + "_Glow");
             Texture2D Paper = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/MagicBookPaper");
 
+            Projectile.hide = true;
             DrawBack(Book);
             DrawBack(BookGlow, UseGlow);
             DrawPaper(Paper);
@@ -417,6 +442,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
                 d0.noGravity = true;
                 Dust d1 = Dust.NewDustDirect(BasePos + Y0, 0, 0, DustType);
                 d1.noGravity = true;
+            }
+            if(DustTypeII != -1)
+            {
+                DustType = DustTypeII;
             }
             for (int i = 0; i < 14; ++i)
             {

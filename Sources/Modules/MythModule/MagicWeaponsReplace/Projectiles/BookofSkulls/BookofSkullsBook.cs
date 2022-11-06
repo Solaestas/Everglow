@@ -7,6 +7,7 @@
             ProjType = ProjectileID.BookOfSkullsSkull;
             DustType = DustID.Bone;
             ItemType = ItemID.BookofSkulls;
+            MulStartPosByVelocity = 6f;
             UseGlow = false;
         }
     }
