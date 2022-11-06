@@ -1,12 +1,18 @@
 ﻿using Everglow.Sources.Modules.MEACModule.Projectiles;
 using Everglow.Sources.Modules.MythModule;
+using Terraria.Audio;
+using Terraria.Enums;
+using Terraria.GameContent.Shaders;
+using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Sources.Commons.Function.Curves;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Terraria.Audio;
+using Terraria;
 using Everglow.Sources.Modules.MEACModule;
+using System.Linq.Expressions;
 
 namespace Everglow.Sources.Modules.FoodModule.Projectiles
 {
@@ -16,15 +22,15 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
         {
             maxAttackType = 0;//循环攻击方式的总数
 
-            trailLength = 20;//拖尾的长度
+            trailLength = 10;//拖尾的长度
 
             shadertype = "Trail";
 
             drawScaleFactor = 1f;
 
-            disFromPlayer = 2;
+            disFromPlayer = 0;
 
-           Projectile.height = 100;//判定区域的宽度，默认为15
+           Projectile.height = 20;//判定区域的宽度，默认为15
 
            Projectile.scale = 1f;//总大小，有需要时可以使用
 
@@ -56,7 +62,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
 
         public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, float HorizontalWidth, float HorizontalHeight, float DrawScale, string GlowPath, double DrawRotation)
         {
-            base.DrawSelf(spriteBatch, lightColor, 60, 60, 1.1f, "", 0.5);
+            base.DrawSelf(spriteBatch, lightColor, 70, 40 , 1f ,"",0.666667);
         }
 
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
@@ -81,7 +87,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
         public override void Attack()
         {
             useTrail = true;
- 
+            Player player = Main.player[Projectile.owner];
             if (attackType == 0)
             {
                 Player.heldProj = -1;
@@ -90,8 +96,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                 if (timer == 1)
                 {
                     AttSound(SoundID.NPCHit4);
-                    Projectile.velocity = Vector2.Zero;
-                    LockPlayerDir(Player);
+                    Projectile.velocity = Vector2.Zero; 
                 }
                 if (timer < 1200)
                 {
@@ -150,9 +155,10 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                     LockPlayerDir(Player);
 
                     Projectile.ai[0] = GetAngToMouse();//获取往鼠标的方向
+                    float targetRot = -MathHelper.PiOver2 - Player.direction * 0.5f;
+                    mainVec = Vector2.Lerp(mainVec, Vector2Elipse(77, targetRot, 0f, Projectile.ai[0], 1000), 0.2f);
+                    
 
-                    float targetRot = -MathHelper.PiOver2 - Player.direction * 0.8f;
-                    mainVec = Vector2.Lerp(mainVec, Vector2Elipse(105, targetRot, -1.2f, Projectile.ai[0], 1000), 0.2f);
                     Projectile.rotation = mainVec.ToRotation();
 
                     //向内的粒子效果
@@ -218,7 +224,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                         if (timer < 10015)
                         {
                             isAttacking = true;
-                            mainVec = Vector2Elipse(70, Projectile.rotation, 0f, Projectile.ai[0]);
+                            mainVec = Vector2Elipse(77, Projectile.rotation, 0f, Projectile.ai[0]);
                             Projectile.rotation += Projectile.spriteDirection * 0.35f;
                         }
                         if(!state2)
@@ -246,7 +252,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                         {
                             useTrail = true;
                             isAttacking = true;
-                            mainVec = Vector2Elipse(70, Projectile.rotation, 0f, Projectile.ai[0]);
+                            mainVec = Vector2Elipse(77, Projectile.rotation, 0f, Projectile.ai[0]);
                             Projectile.rotation += Projectile.spriteDirection * -0.35f;
                         }
                         if (!state3)
@@ -276,7 +282,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                             useTrail = true;
                             isAttacking = true;
                             Projectile.rotation += Projectile.spriteDirection * 0.25f;
-                            mainVec = Vector2Elipse(100, Projectile.rotation, -1.2f, Projectile.ai[0]);
+                            mainVec = Vector2Elipse(120, Projectile.rotation, -1.2f, Projectile.ai[0]);
                         }
                         if (timer >= 10080)
                         {
