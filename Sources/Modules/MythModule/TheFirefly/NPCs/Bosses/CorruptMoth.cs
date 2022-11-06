@@ -125,23 +125,24 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
             NPC.damage = 40;
             NPC.width = 80;
             NPC.height = 120;
-            NPC.defense = 0;
+            NPC.defense = 5;
+            NPC.lifeMax = 9000;
+            NPC.npcSlots = 80;
+            NPC.scale = 0.8f;
             if (Main.getGoodWorld)
             {
                 NPC.defense += 10;
+                NPC.scale = 1.2f;
             }
-            NPC.lifeMax = 12000;
-            NPC.npcSlots = 80;
-            NPC.scale = 0.8f;
             if (Main.expertMode)
             {
-                NPC.lifeMax = 4000;
-                NPC.damage = 30;
+                NPC.lifeMax = 6000;
+                NPC.damage = 42;
             }
             if (Main.masterMode)
             {
                 NPC.lifeMax = 5000;
-                NPC.damage = 24;
+                NPC.damage = 44;
             }
             NPC.knockBackResist = 0f;
             NPC.value = Item.buyPrice(0, 5, 0, 0);
@@ -162,15 +163,15 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
             {
                 if (EverglowClientConfig.ReplaceMothAudio == 0) //ModContent.GetInstance<EverglowClientConfig>().MothAudioReplace == MothAudioReplaceMode.MothFighting
                 {
-                    Music = Common.MythContent.QuickMusic("MothFighting");
+                    Music = MythContent.QuickMusic("MothFighting");
                 }
                 else if (EverglowClientConfig.ReplaceMothAudio == 1)
                 {
-                    Music = Common.MythContent.QuickMusic("MothFightingAlt");
+                    Music = MythContent.QuickMusic("MothFightingAlt");
                 }
                 else if (EverglowClientConfig.ReplaceMothAudio == 2)
                 {
-                    Music = Common.MythContent.QuickMusic("MothFightingOld2");
+                    Music = MythContent.QuickMusic("MothFightingOld2");
                 }
             }
         }
