@@ -313,20 +313,69 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
         int Pdirection;
         public override void AI()
         {
-            base.AI();
-            if (attackType == 0)
+            Player.heldProj = Projectile.whoAmI;
+            Player.GetModPlayer<MEACPlayer>().isUsingMeleeProj = true;
+            Projectile.Center = Player.Center + Terraria.Utils.SafeNormalize(mainVec, Vector2.One) * disFromPlayer;
+            isAttacking = false;
+
+            Projectile.timeLeft++;
+            Player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, mainVec.ToRotation() - 1.57f);
+            Attack();
+            timer++;
+            if (!isAttacking)
             {
-                
-                if (Player.velocity.X < 0f) 
+                if (!isRightClick)
                 {
-                    Pdirection = -1;
-                }   
-                else if (Player.velocity.X > 0f) 
-                {
-                    Pdirection = 1;
+                    bool IsEnd = AutoEnd ? (!Player.controlUseItem || Player.dead) : Player.dead;
+                    if (IsEnd)
+                    {
+                        End();
+                    }
                 }
-                Player.direction = Pdirection;
+                else
+                {
+                    bool IsEnd = AutoEnd ? (!Player.controlUseTile || Player.dead) : Player.dead;
+                    if (IsEnd)
+                    {
+                        End();
+                    }
+                }
             }
+            if (!HasContinueLeftClick && timer > 15)//大于1/60s即判定为下一击继续
+            {
+                if (Main.mouseLeft)
+                {
+                    HasContinueLeftClick = true;
+                }
+            }
+            if (isAttacking && attackType != 0)
+            {
+                Player.direction = Projectile.spriteDirection;
+            }
+            if (useTrail)
+            {
+                trailVecs.Enqueue(mainVec);
+                if (trailVecs.Count > trailLength)
+                {
+                    trailVecs.Dequeue();
+                }
+            }
+            else//清空！
+            {
+                trailVecs.Clear();
+            }
+            if (CanLongLeftClick)
+            {
+                if (Main.mouseLeft)
+                {
+                    Clicktimer++;
+                }
+                else
+                {
+                    Clicktimer = 0;
+                }
+            }
+            ProduceWaterRipples(new Vector2(mainVec.Length(), 30));
         }
         public void PlayerFrame(int frame)
         {
@@ -336,6 +385,14 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                 player.bodyFrame.Y = 4;
                
             }
+        }
+        private void ProduceWaterRipples(Vector2 beamDims)
+        {
+            WaterShaderData shaderData = (WaterShaderData)Terraria.Graphics.Effects.Filters.Scene["WaterDistortion"].GetShader();
+            float waveSine = 1f * (float)Math.Sin(Main.GlobalTimeWrappedHourly * 20f);
+            Vector2 ripplePos = Projectile.Center + new Vector2(beamDims.X * 0.5f, 0f).RotatedBy(mainVec.ToRotation());
+            Color waveData = new Color(0.5f, 0.1f * Math.Sign(waveSine) + 0.5f, 0f, 1f) * Math.Abs(waveSine);
+            shaderData.QueueRipple(ripplePos, waveData, beamDims, RippleShape.Square, mainVec.ToRotation());
         }
     }
 }
