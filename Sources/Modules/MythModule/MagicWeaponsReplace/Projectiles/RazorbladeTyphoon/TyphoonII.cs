@@ -16,27 +16,28 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ra
             Projectile.ignoreWater = false;
             Projectile.tileCollide = true;
             Projectile.extraUpdates = 3;
-            Projectile.timeLeft = 2400;
+            Projectile.timeLeft = 1500;
             Projectile.alpha = 0;
-            Projectile.penetrate = 36;
+            Projectile.penetrate = 1080;
             Projectile.scale = 1f;
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 24;
+            Projectile.localNPCHitCooldown = 30;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 120;
         }
-
+        internal int Aimnpc = -1;
         public override void AI()
         {
+            Player player = Main.player[Projectile.owner];
             Lighting.AddLight((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16), 0, 0.46f * Projectile.scale, 0.54f * Projectile.scale);
-            if(Projectile.timeLeft > 800)
+            if(Projectile.timeLeft > 500)
             {
                 Projectile.scale = 1.2f + (float)(Math.Sin(Main.timeForVisualEffects / 1.8f + Projectile.ai[0])) * 0.15f;
             }
             else
             {
                 Projectile.velocity *= 0.996f;
-                Projectile.scale = (1.2f + (float)(Math.Sin(Main.timeForVisualEffects / 1.8f + Projectile.ai[0])) * 0.15f) * Projectile.timeLeft / 800f;
+                Projectile.scale = (1.2f + (float)(Math.Sin(Main.timeForVisualEffects / 1.8f + Projectile.ai[0])) * 0.15f) * Projectile.timeLeft / 500f;
                 
                 Projectile.knockBack *= 0.9f;
                 if(Projectile.timeLeft % 10 == 1)
@@ -60,13 +61,25 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ra
                 d.noGravity = true;
             }
 
+            if (Aimnpc != -1)
+            {
+                NPC npc = Main.npc[Aimnpc];
+                if(npc.active)
+                {
+                    Vector2 v0 = npc.Center - Projectile.Center;
+                    Projectile.velocity += Vector2.Normalize(v0) * 0.5f;
+                    Projectile.velocity = Vector2.Normalize(Projectile.velocity) * player.HeldItem.shootSpeed;
+                }
+
+            }
             if (Main.rand.NextBool(2))
             {
+                float MinDis = 250;                
                 foreach (var target in Main.npc)
                 {
                     if (target.active && Main.rand.NextBool(2))
                     {
-                        if (!target.dontTakeDamage && !target.friendly && target.knockBackResist > 0)
+                        if (!target.dontTakeDamage && !target.friendly)
                         {
                             Vector2 ToTarget = target.Center - Projectile.Center;
                             float dis = ToTarget.Length();
@@ -84,6 +97,11 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ra
                                 {
                                     target.velocity *= 10 / target.velocity.Length();
                                 }
+                                if (dis < MinDis)
+                                {
+                                    MinDis = dis;
+                                    Aimnpc = target.whoAmI;
+                                }
                             }
                         }
                     }
@@ -96,6 +114,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ra
                         float dis = ToTarget.Length();
                         if (dis < 250 && ToTarget != Vector2.Zero)
                         {
+                            if(dis < 45)
+                            {
+                                if((target.type >= 71 && target.type <= 74) || target.type == ItemID.Star || target.type == ItemID.Heart)
+                                {
+                                    target.position = player.Center;
+                                }
+                            }
                             float mess = target.width * target.height;
                             mess = (float)(Math.Sqrt(mess));
                             Vector2 Addvel = Vector2.Normalize(ToTarget) / mess / (dis + 10) * 5000f * Projectile.knockBack;
@@ -123,6 +148,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ra
                             {
                                 target.velocity *= 10 / target.velocity.Length();
                             }
+                            target.timeLeft -= 24;
                         }
                     }
                 }
@@ -138,9 +164,9 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ra
 
             float width = 96;
             float MulByTimeLeft = 1f;
-            if(Projectile.timeLeft < 800)
+            if(Projectile.timeLeft < 500)
             {
-                MulByTimeLeft = Projectile.timeLeft / 800f;
+                MulByTimeLeft = Projectile.timeLeft / 500f;
             }
             width *= MulByTimeLeft;
             c0 *= MulByTimeLeft;
@@ -195,7 +221,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ra
                 {
                     var normalDirII = Projectile.oldPos[i - 2] - Projectile.oldPos[i - 1];
                     normalDirII = Vector2.Normalize(new Vector2(-normalDirII.Y, normalDirII.X));
-                    if (Vector2.Dot(normalDirII, normalDir) <= 0.98f)
+                    if (Vector2.Dot(normalDirII, normalDir) <= 0.965f)
                     {
                         MulColor = 0f;
                     }
@@ -204,7 +230,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ra
                 {
                     var normalDirII = Projectile.oldPos[i] - Projectile.oldPos[i + 1];
                     normalDirII = Vector2.Normalize(new Vector2(-normalDirII.Y, normalDirII.X));
-                    if (Vector2.Dot(normalDirII, normalDir) <= 0.98f)
+                    if (Vector2.Dot(normalDirII, normalDir) <= 0.965f)
                     {
                         MulColor = 0f;
                     }
@@ -251,9 +277,9 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ra
 
             float width = 96;
             float MulByTimeLeft = 1f;
-            if (Projectile.timeLeft < 800)
+            if (Projectile.timeLeft < 500)
             {
-                MulByTimeLeft = Projectile.timeLeft / 800f;
+                MulByTimeLeft = Projectile.timeLeft / 500f;
             }
             width *= MulByTimeLeft;
             int TrueL = 0;
@@ -283,7 +309,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ra
                 {
                     var normalDirII = Projectile.oldPos[i - 2] - Projectile.oldPos[i - 1];
                     normalDirII = Vector2.Normalize(new Vector2(-normalDirII.Y, normalDirII.X));
-                    if (Vector2.Dot(normalDirII, normalDir) <= 0.98f)
+                    if (Vector2.Dot(normalDirII, normalDir) <= 0.965f)
                     {
                         MulColor = 0f;
                     }
@@ -292,7 +318,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ra
                 {
                     var normalDirII = Projectile.oldPos[i] - Projectile.oldPos[i + 1];
                     normalDirII = Vector2.Normalize(new Vector2(-normalDirII.Y, normalDirII.X));
-                    if (Vector2.Dot(normalDirII, normalDir) <= 0.98f)
+                    if (Vector2.Dot(normalDirII, normalDir) <= 0.965f)
                     {
                         MulColor = 0f;
                     }

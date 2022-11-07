@@ -1,6 +1,7 @@
 using Everglow.Sources.Commons.Function.Vertex;
-using Everglow.Sources.Commons.Core.VFX;
+using Terraria.GameContent;
 using Everglow.Sources.Modules.MEACModule;
+using Terraria.DataStructures;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.MagnetSphere
 {
@@ -48,7 +49,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
                                 if (Main.rand.NextBool(6))
                                 {
                                     int HitType = ModContent.ProjectileType<MagnetSphereLighting>();
-                                    Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center, Vector2.One, HitType, (int)(Projectile.damage * 0.8f), Projectile.knockBack, Projectile.owner, Projectile.whoAmI, Projectile.rotation + Main.rand.NextFloat(6.283f));
+                                    Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center, Vector2.One, HitType, (int)(Projectile.damage * 0.5f), Projectile.knockBack, Projectile.owner, Projectile.whoAmI, Projectile.rotation + Main.rand.NextFloat(6.283f));
                                     p.CritChance = Projectile.CritChance;
                                     Projectile.penetrate--;
                                     if(Projectile.penetrate < 0)
@@ -62,16 +63,20 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
                 }
             }
         }
-
+        public override void OnSpawn(IEntitySource source)
+        {
+            Projectile.ai[0] = 0;
+        }
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D Light = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/MagnetSphere/MagnetSphereII");
+            Texture2D Light2 = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/MagnetSphere/Projectile_254");
             Texture2D Shade = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterBolt/NewWaterBoltShade");
-            float k0 = 1f;
-            Color c0 = new Color(0, k0 * k0 * 0.3f + 0.6f, k0 * k0 * 0.1f + 0.9f, 0);
+
+            Color c0 = new Color(0, 199, 129, 0);
 
             List<Vertex2D> bars0 = new List<Vertex2D>();
-            float width = 48;
+            float width = 64;
 
             int TrueL = 0;
             for (int i = 1; i < Projectile.oldPos.Length; ++i)
@@ -83,7 +88,15 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
 
                 TrueL++;
             }
-            for (int i = 1; i < Projectile.oldPos.Length; ++i)
+            if(Projectile.timeLeft < 2400)
+            {
+                TrueL = Projectile.timeLeft / 20;
+            }
+            if (TrueL < 1)
+            {
+                TrueL = 1;
+            }
+            for (int i = 1; i < TrueL; ++i)
             {
                 if (Projectile.oldPos[i] == Vector2.Zero)
                 {
@@ -94,10 +107,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
                 normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
                 var factor = i / (float)TrueL;
                 var w = MathHelper.Lerp(1f, 0.05f, factor);
-                float x0 = factor * 0.6f - (float)(Main.timeForVisualEffects / 35d) + 10000;
+                float x0 = factor * 0.6f - (float)(Main.timeForVisualEffects / 15d + Projectile.ai[0]) + 10000;
                 x0 %= 1f;
-                bars0.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, Color.White, new Vector3(x0, 1, w)));
-                bars0.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, Color.White, new Vector3(x0, 0, w)));
+                bars0.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, Color.White * 0.8f, new Vector3(x0, 1, w)));
+                bars0.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, Color.White * 0.8f, new Vector3(x0, 0, w)));
             }
             Texture2D t = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/SparkDark");
             Main.graphics.GraphicsDevice.Textures[0] = t;
@@ -106,10 +119,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars0.ToArray(), 0, bars0.Count - 2);
             }
 
-            Main.spriteBatch.Draw(Shade, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, Color.White, Projectile.rotation, Shade.Size() / 2f, (k0 / 1.8f + 0.2f) * 1.8f * Projectile.scale, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(Shade, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, Color.White, Projectile.rotation, Shade.Size() / 2f, 1.08f * Projectile.scale, SpriteEffects.None, 0);
 
             List<Vertex2D> bars = new List<Vertex2D>();
-            for (int i = 1; i < Projectile.oldPos.Length; ++i)
+            for (int i = 1; i < TrueL; ++i)
             {
                 if (Projectile.oldPos[i] == Vector2.Zero)
                 {
@@ -120,7 +133,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
                 normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
                 var factor = i / (float)TrueL;
                 var w = MathHelper.Lerp(1f, 0.05f, factor);
-                float x0 = factor * 1.6f - (float)(Main.timeForVisualEffects / 35d) + 10000;
+                float x0 = factor * 3.14159f / 0.9f - (float)(Main.timeForVisualEffects / 9d + Projectile.ai[0]) + 10000;
                 x0 %= 1f;
                 bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 1, w)));
                 bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 0, w)));
@@ -131,12 +144,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
             {
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
             }
-            Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, c0, Projectile.rotation, Light.Size() / 2f, (k0 / 1.8f + 0.2f) * Projectile.scale, SpriteEffects.None, 0);
-            if (bars.Count > 3)
-            {
-                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-            }
-            Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, c0, Projectile.rotation, Light.Size() / 2f, (k0 / 1.8f + 0.2f) * Projectile.scale, SpriteEffects.None, 0);
+
+            Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, c0, Projectile.rotation, Light.Size() / 2f, 0.8f * Projectile.scale, SpriteEffects.None, 0);
+            Rectangle rt = new Rectangle(0, 44 * (int)((Main.timeForVisualEffects / 6f) % 5), 38, 44);
+            Main.spriteBatch.Draw(Light2, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), rt, new Color(95,95,95,55), Projectile.rotation, rt.Size() / 2f, Projectile.scale * 0.2f + 1.5f, SpriteEffects.None, 0);
             return false;
         }
 

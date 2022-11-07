@@ -7,7 +7,7 @@
             DustType = DustID.CursedTorch;
             ItemType = ItemID.CursedFlames;
             ProjType = ModContent.ProjectileType<CursedFlamesII>();
-            MulDamage = 1.6f;
+            MulDamage = 1f;
             MulVelocity = 0.3f;
         }
     }

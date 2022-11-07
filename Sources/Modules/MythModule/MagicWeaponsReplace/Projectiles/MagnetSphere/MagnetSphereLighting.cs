@@ -98,20 +98,33 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
         {
             Texture2D Shadow = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/CursedHitLight");
             float Dark = Math.Max(((Projectile.timeLeft - 150) / 50f), 0);
-            Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, new Color(0, 229, 206,0) * Dark, 0, Shadow.Size() / 2f, 22 / 15f * Dark, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, new Color(0, 199, 129,0) * Dark, 0, Shadow.Size() / 2f, 22 / 15f * Dark, SpriteEffects.None, 0);
         }
         public override bool PreDraw(ref Color lightColor)
         {
-            DrawLightingBolt(new Color(0, 255, 240, 0));
+            DrawLightingBolt(new Color(0, 199, 129, 0));
             Texture2D Shadow = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/CursedHit");
             float Dark = Math.Max(((Projectile.timeLeft - 150) / 50f), 0);
             Main.spriteBatch.Draw(Shadow,Projectile.Center - Main.screenPosition,null,Color.White * Dark,0,Shadow.Size() / 2f,22f / 15f, SpriteEffects.None,0);
             Texture2D light = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/CursedHitStar");
-            Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0, 120, 103, 0), 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, Dark * Dark) / 2f, SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0, 120, 103, 0), 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.8f, Dark / 2f), SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0, 199, 129, 0), 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, Dark * Dark) / 2f, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0, 199, 129, 0), 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.8f, Dark / 2f), SpriteEffects.None, 0);
 
-            Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0, 120, 103, 0), (float)(Math.PI / 4d) + Projectile.ai[1], light.Size() / 2f, new Vector2(0.6f, Dark / 2f), SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0, 120, 103, 0), (float)(Math.PI / 4d * 3) + Projectile.ai[1], light.Size() / 2f, new Vector2(0.6f, Dark / 0f), SpriteEffects.None, 0);
+            float value = (480 - Projectile.timeLeft * 2.4f) / (float)Projectile.timeLeft * 1.4f;
+            if (value < 0)
+            {
+                value = 0;
+            }
+            float colorV = 0.9f * (1 - value);
+            if (Projectile.ai[0] >= 10)
+            {
+                colorV *= Projectile.ai[0] / 10f;
+            }
+            Texture2D t = MythContent.QuickTexture("OmniElementItems/Projectiles/Wave");
+            DrawTexCircle(value * 16 * Projectile.ai[0], 10 * value * value, new Color(0, colorV, colorV * 0.7f, 0f), Projectile.Center - Main.screenPosition, t);
+
+            Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0, 199, 129, 0), (float)(Math.PI / 4d) + Projectile.ai[1], light.Size() / 2f, new Vector2(0.6f, Dark / 2f), SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0, 199, 129, 0), (float)(Math.PI / 4d * 3) + Projectile.ai[1], light.Size() / 2f, new Vector2(0.6f, Dark / 0f), SpriteEffects.None, 0);
             return false;
         }
         internal Vector2[] LightPos = new Vector2[30];
