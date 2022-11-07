@@ -19,7 +19,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
             Projectile.penetrate = -1;
             Projectile.timeLeft = 200;
             Projectile.tileCollide = false;
-            Projectile.extraUpdates = 2;
+            Projectile.extraUpdates = 4;
             Projectile.DamageType = DamageClass.MagicSummonHybrid;
         }
 
@@ -39,7 +39,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
             {
                 for (int x = 0; x < MaxC; x++)
                 {
-                    SparkVelocity[x] = new Vector2(0, Projectile.ai[0]).RotatedByRandom(6.283) * Main.rand.NextFloat(0.05f, 1.2f);
+                    SparkVelocity[x] = new Vector2(0, Projectile.ai[0] * 1.6f).RotatedByRandom(6.283) * Main.rand.NextFloat(0.05f, 1.2f);
                     SparkOldPos[x, 0] = Projectile.Center;
                 }
             }
@@ -88,7 +88,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
         {
             Texture2D Shadow = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/CursedHitLight");
             float Dark = Math.Max(((Projectile.timeLeft - 150) / 50f), 0);
-            Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, new Color(255, 145, 255,0) * Dark, 0, Shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 15f * Dark, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, new Color(55, 0, 145,0) * Dark, 0, Shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 15f * Dark, SpriteEffects.None, 0);
         }
         public override bool PreDraw(ref Color lightColor)
         {
@@ -96,13 +96,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
             float Dark = Math.Max(((Projectile.timeLeft - 150) / 50f), 0);
             Main.spriteBatch.Draw(Shadow,Projectile.Center - Main.screenPosition,null,Color.White * Dark,0,Shadow.Size() / 2f,2.2f * Projectile.ai[0] / 15f, SpriteEffects.None,0);
             Texture2D light = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/CursedHitStar");
-            Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(255, 145, 255, 0), 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, Dark * Dark) * Projectile.ai[0] / 40f, SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(255, 145, 255, 0), 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f, Dark) * Projectile.ai[0] / 40f, SpriteEffects.None, 0);
-            float size = Math.Clamp(Projectile.timeLeft / 8f - 10, 0f, 20f);
+            Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(55, 0, 145, 0), 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, Dark * Dark) * Projectile.ai[0] / 20f, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(55, 0, 145, 0), 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f, Dark) * Projectile.ai[0] / 20f, SpriteEffects.None, 0);
+            float size = Math.Clamp(Projectile.timeLeft / 8f - 10, 0f, 20f) * 1.6f;
             if(size > 0)
             {
                 DrawSpark(Color.White * 0.5f, size, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/SparkDark"));
-                DrawSpark(new Color(255, 145, 255, 0), size, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/SparkLight"));
+                DrawSpark(new Color(55, 0, 145, 0), size, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/SparkLight"));
             }
             return false;
         }
@@ -187,11 +187,9 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
         }
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            target.AddBuff(BuffID.CursedInferno, 300);
         }
         public override void OnHitPvp(Player target, int damage, bool crit)
         {
-            target.AddBuff(BuffID.CursedInferno, 300);
         }
     }
 }

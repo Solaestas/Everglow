@@ -225,7 +225,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
                 d0.velocity = new Vector2(0, Main.rand.NextFloat(3.65f, 7.5f)).RotatedByRandom(6.283);
             }
             int HitType = ModContent.ProjectileType<CursedFlameHit>();
-            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, Projectile.damage, Projectile.knockBack, Projectile.owner, 30, Projectile.rotation + Main.rand.NextFloat(6.283f));
+            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, Projectile.damage, Projectile.knockBack * 6, Projectile.owner, 30, Projectile.rotation + Main.rand.NextFloat(6.283f));
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
@@ -239,7 +239,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
             }
 
             int HitType = ModContent.ProjectileType<CursedFlameHit>();
-            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, Projectile.damage, Projectile.knockBack, Projectile.owner, 10, Projectile.rotation + Main.rand.NextFloat(6.283f));
+            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, Projectile.damage, Projectile.knockBack * 2, Projectile.owner, 10, Projectile.rotation + Main.rand.NextFloat(6.283f));
             target.AddBuff(BuffID.CursedInferno,900);
             Projectile.damage = (int)(Projectile.damage * 1.2);
         }
@@ -253,7 +253,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
                 d0.velocity = new Vector2(0, Main.rand.NextFloat(1.65f, 5.5f)).RotatedByRandom(6.283);
             }
             int HitType = ModContent.ProjectileType<CursedFlameHit>();
-            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, Projectile.damage, Projectile.knockBack, Projectile.owner, 10, Projectile.rotation + Main.rand.NextFloat(6.283f));
+            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, Projectile.damage, Projectile.knockBack * 2, Projectile.owner, 10, Projectile.rotation + Main.rand.NextFloat(6.283f));
             target.AddBuff(BuffID.CursedInferno, 900);
             Projectile.damage = (int)(Projectile.damage * 1.2);
         }
@@ -268,7 +268,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
                 d0.velocity = new Vector2(0, Main.rand.NextFloat(1.65f, 5.5f)).RotatedByRandom(6.283);
             }
             int HitType = ModContent.ProjectileType<CursedFlameHit>();
-            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, Projectile.damage, Projectile.knockBack, Projectile.owner, 10, Projectile.rotation + Main.rand.NextFloat(6.283f));
+            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, Projectile.damage, Projectile.knockBack * 2, Projectile.owner, 10, Projectile.rotation + Main.rand.NextFloat(6.283f));
             if (Projectile.velocity.X != oldVelocity.X)
             {
                 Projectile.velocity.X = -oldVelocity.X;

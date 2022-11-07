@@ -147,7 +147,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
 
             Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, c0, Projectile.rotation, Light.Size() / 2f, 0.8f * Projectile.scale, SpriteEffects.None, 0);
             Rectangle rt = new Rectangle(0, 44 * (int)((Main.timeForVisualEffects / 6f) % 5), 38, 44);
-            Main.spriteBatch.Draw(Light2, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), rt, new Color(95,95,95,55), Projectile.rotation, rt.Size() / 2f, Projectile.scale * 0.2f + 1.5f, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(Light2, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), rt, new Color(95,95,95,55), Projectile.rotation, rt.Size() / 2f, Projectile.scale * 0.2f + 1.2f, SpriteEffects.None, 0);
             return false;
         }
 

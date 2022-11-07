@@ -11,8 +11,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
 
         public override void SetDefaults()
         {
-            Projectile.width = 32;
-            Projectile.height = 32;
+            Projectile.width = 120;
+            Projectile.height = 120;
             Projectile.friendly = true;
             Projectile.hostile = false;
             Projectile.aiStyle = -1;
@@ -20,6 +20,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
             Projectile.timeLeft = 200;
             Projectile.tileCollide = false;
             Projectile.extraUpdates = 2;
+            Projectile.usesLocalNPCImmunity = true;
+            Projectile.localNPCHitCooldown = 20;
             Projectile.DamageType = DamageClass.MagicSummonHybrid;
         }
 
