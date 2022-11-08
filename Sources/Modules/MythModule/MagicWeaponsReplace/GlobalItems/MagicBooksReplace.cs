@@ -114,6 +114,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
                 {
                     item.noUseGraphic = false;
                 }
+                if (item.type == ItemID.LunarFlareBook)
+                {
+                    item.noUseGraphic = false;
+                }
                 return base.UseItem(item, player);
             }
             if (item.type == ItemID.WaterBolt)
@@ -149,6 +153,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
             if (item.type == ItemID.RazorbladeTyphoon)
             {
                 item.noUseGraphic = true;
+            }
+            if (item.type == ItemID.LunarFlareBook)
+            {
+                item.noUseGraphic = true; ;
             }
             // Aim Types
             if (item.type == ItemID.WaterBolt)
@@ -250,6 +258,14 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
                     Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
                 }
                 aimType = ModContent.ProjectileType<Projectiles.GoldenShower.GoldenShowerArray>();
+                if (player.ownedProjectileCounts[aimType] < 1)
+                {
+                    Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
+                }
+            }
+            if (item.type == ItemID.LunarFlareBook)
+            {
+                int aimType = ModContent.ProjectileType<Projectiles.LunarFlare.LunarFlareBook>();
                 if (player.ownedProjectileCounts[aimType] < 1)
                 {
                     Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
