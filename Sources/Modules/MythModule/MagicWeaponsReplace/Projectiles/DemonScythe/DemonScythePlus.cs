@@ -13,9 +13,11 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
             Projectile.height = 60;
             Projectile.friendly = true;
             Projectile.hostile = false;
-            Projectile.penetrate = 6;
+            Projectile.penetrate = 16;
             Projectile.timeLeft = 10000;
             Projectile.DamageType = DamageClass.MagicSummonHybrid;
+            Projectile.usesLocalNPCImmunity = true;
+            Projectile.localNPCHitCooldown = 3;
             Projectile.tileCollide = false;
         }
 
@@ -52,15 +54,16 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
         public override void Kill(int timeLeft)
         {
             SoundEngine.PlaySound(SoundID.NPCHit4, Projectile.Center);
-            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center - Projectile.velocity * 2, Vector2.One, ModContent.ProjectileType<DemoSpark>(), Projectile.damage / 2, 0, Projectile.owner, 0.5f * Projectile.velocity.Length());
+            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center - Projectile.velocity * 2, Vector2.One, ModContent.ProjectileType<DemoHit>(), 0, 0, Projectile.owner, Projectile.velocity.Length() / 3f, Projectile.rotation + Main.rand.NextFloat(6.283f));
             base.Kill(timeLeft);
         }
 
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
-            knockback = Projectile.knockBack * Projectile.velocity.Length() * 0.2f;
-            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center - Projectile.velocity * 2, Vector2.One, ModContent.ProjectileType<DemoSpark>(), Projectile.damage / 2, 0, Projectile.owner, 0.5f * Projectile.velocity.Length());
-            float k = Math.Clamp(Projectile.velocity.Length() / 14f, 1f, 5f);
+            knockback = Projectile.knockBack * Projectile.velocity.Length() * 0.12f;
+            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center - Projectile.velocity * 2, Vector2.One, ModContent.ProjectileType<DemoHit>(), 0, 0, Projectile.owner, Projectile.velocity.Length() / 3f, Projectile.rotation + Main.rand.NextFloat(6.283f));
+
+            float k = Math.Clamp(Projectile.velocity.Length() / 48f, 1f, 5f) / 2f;
             damage = (int)(damage * k);
             base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
         }

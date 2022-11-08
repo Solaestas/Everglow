@@ -1,6 +1,7 @@
 using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Commons.Core.VFX;
 using Everglow.Sources.Modules.MEACModule;
+using Terraria.DataStructures;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.RazorbladeTyphoon
 {
@@ -26,6 +27,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ra
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 120;
         }
         internal int Aimnpc = -1;
+        public override void OnSpawn(IEntitySource source)
+        {
+            Projectile.position.Y -= 15f;
+        }
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];

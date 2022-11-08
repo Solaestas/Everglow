@@ -18,6 +18,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
 
         public override void AI()
         {
+            Player player = Main.player[Projectile.owner];
             Projectile.velocity *= 0;
             if (Projectile.timeLeft > 550)
             {
@@ -93,6 +94,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
                         float dis = ToTarget.Length();
                         if (dis < 800 && ToTarget != Vector2.Zero)
                         {
+                            if (dis < 45)
+                            {
+                                if ((target.type >= 71 && target.type <= 74) || target.type == ItemID.Star || target.type == ItemID.Heart)
+                                {
+                                    target.position = player.Center;
+                                }
+                            }
                             float mess = target.width * target.height;
                             mess = (float)(Math.Sqrt(mess));
                             Vector2 Addvel = Vector2.Normalize(ToTarget) / mess / (dis + 10) * 50f * Intensity;
@@ -120,6 +128,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
                             {
                                 target.velocity *= 10 / target.velocity.Length();
                             }
+                            target.timeLeft -= 24;
                         }
                     }
                 }
