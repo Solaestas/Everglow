@@ -58,17 +58,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             Projectile.rotation = player.fullRotation;
 
             RingPos = RingPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
-            //SkullSpriteColdFlame sf = new SkullSpriteColdFlame()
-            //{
-            //    timeLeft = 70,
-            //    size = Main.rand.NextFloat(0.45f, 1.55f),
-            //    velocity = new Vector2(Main.rand.NextFloat(2.5f, 3.5f), 0).RotatedByRandom(6.283),
-            //    Active = true,
-            //    Visible = true
-            //};
-            //sf.positon[0] = RingPos + Projectile.Center;
 
-            //VFXManager.Add(sf);
             if (Main.mouseRight && Main.mouseRightRelease && HandCooling <= 0 && player.statMana > player.HeldItem.mana * 2)
             {
                 for (int g = -5; g < 150; g++)
@@ -120,9 +110,9 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             Vector2 Point2 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 2 / 3d + timeRot);
             Vector2 Point3 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 4 / 3d + timeRot);
 
-            Vector2 Point4 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 1 / 3d + timeRot);
-            Vector2 Point5 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 3 / 3d + timeRot);
-            Vector2 Point6 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 5 / 3d + timeRot);
+            Vector2 Point4 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 1 / 3d + timeRot + 0.3f);
+            Vector2 Point5 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 3 / 3d + timeRot + 0.3f);
+            Vector2 Point6 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.8f).RotatedBy(Math.PI * 5 / 3d + timeRot + 0.3f);
             DrawTexLine(Point1, Point2, c2, c2, Water);
             DrawTexLine(Point2, Point3, c2, c2, Water);
             DrawTexLine(Point3, Point1, c2, c2, Water);
@@ -140,8 +130,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
                 circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 1, 0)));
                 circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0, 0)));
             }
-            circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0.5f, 1, 0)));
-            circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(addRot), color, new Vector3(0.5f, 0, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(1, 1, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(addRot), color, new Vector3(1, 0, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0, 1, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(addRot), color, new Vector3(0, 0, 0)));
             if (circle.Count > 0)
             {
                 Main.graphics.GraphicsDevice.Textures[0] = tex;
@@ -158,8 +150,31 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
 
             for (int x = 0; x < 3; x++)
             {
-                float Value0 = (float)(Main.timeForVisualEffects / 291d + 20) % 1f;
-                float Value1 = (float)(Main.timeForVisualEffects / 291d + 20.03) % 1f;
+                float Value0 = (float)(Main.timeForVisualEffects / 291 + 20) % 1f;
+                float Value1 = (float)(Main.timeForVisualEffects / 291 + 20.05) % 1f;
+
+                if (Value1 < Value0)
+                {
+                    float D0 = 1 - Value0;
+                    Vector2 Delta = EndPos - StartPos;
+                    vertex2Ds.Add(new Vertex2D(StartPos + Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(Value0, 0, 0)));
+                    vertex2Ds.Add(new Vertex2D(StartPos + Delta * D0 + Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(1, 0, 0)));
+                    vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(Value0, 1, 0)));
+
+                    vertex2Ds.Add(new Vertex2D(StartPos + Delta * D0 + Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(1, 0, 0)));
+                    vertex2Ds.Add(new Vertex2D(StartPos + Delta * D0 - Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(1, 1, 0)));
+                    vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(Value0, 1, 0)));
+
+                    vertex2Ds.Add(new Vertex2D(StartPos + Delta * D0 + Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(0, 0, 0)));
+                    vertex2Ds.Add(new Vertex2D(EndPos + Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(Value1, 0, 0)));
+                    vertex2Ds.Add(new Vertex2D(StartPos + Delta * D0 - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(0, 1, 0)));
+
+                    vertex2Ds.Add(new Vertex2D(EndPos + Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(Value1, 0, 0)));
+                    vertex2Ds.Add(new Vertex2D(EndPos - Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(Value1, 1, 0)));
+                    vertex2Ds.Add(new Vertex2D(StartPos + Delta * D0 - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(0, 1, 0)));
+
+                    continue;
+                }
                 vertex2Ds.Add(new Vertex2D(StartPos + Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(Value0, 0, 0)));
                 vertex2Ds.Add(new Vertex2D(EndPos + Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(Value1, 0, 0)));
                 vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(Value0, 1, 0)));

@@ -22,7 +22,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
         }
 
         public override void AI()
-        {
+        {                                                                                                                                                                                                                                                                                                                                                                
             if (Timer < 30)
             {
                 Timer += 2;
@@ -68,14 +68,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
             base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
         }
 
-        public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
-        {
-            overWiresUI.Add(index);
-        }
-
         public override bool PreDraw(ref Color lightColor)
         {
-            Projectile.hide = false;
             DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLineBlackShade"), new Color(1f, 1f, 1f, 1f));
             DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLineBlackShade"), new Color(1f, 1f, 1f, 1f));
             DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), new Color(0.4f, 0.0f, 0.8f, 0));
@@ -149,8 +143,31 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
 
             for (int x = 0; x < 3; x++)
             {
-                float Value0 = (float)(Main.timeForVisualEffects / 291d + 20) % 1f;
-                float Value1 = (float)(Main.timeForVisualEffects / 291d + 20.03) % 1f;
+                float Value0 = (float)(Main.timeForVisualEffects / 91 + 20) % 1f;
+                float Value1 = (float)(Main.timeForVisualEffects / 91d + 20.4) % 1f;
+
+                if (Value1 < Value0)
+                {
+                    float D0 = 1 - Value0;
+                    Vector2 Delta = EndPos - StartPos;
+                    vertex2Ds.Add(new Vertex2D(StartPos + Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(Value0, 0, 0)));
+                    vertex2Ds.Add(new Vertex2D(StartPos + Delta * D0 + Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(1, 0, 0)));
+                    vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(Value0, 1, 0)));
+
+                    vertex2Ds.Add(new Vertex2D(StartPos + Delta * D0 + Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(1, 0, 0)));
+                    vertex2Ds.Add(new Vertex2D(StartPos + Delta * D0 - Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(1, 1, 0)));
+                    vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(Value0, 1, 0)));
+
+                    vertex2Ds.Add(new Vertex2D(StartPos + Delta * D0 + Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(0, 0, 0)));
+                    vertex2Ds.Add(new Vertex2D(EndPos + Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(Value1, 0, 0)));
+                    vertex2Ds.Add(new Vertex2D(StartPos + Delta * D0 - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(0, 1, 0)));
+
+                    vertex2Ds.Add(new Vertex2D(EndPos + Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(Value1, 0, 0)));
+                    vertex2Ds.Add(new Vertex2D(EndPos - Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(Value1, 1, 0)));
+                    vertex2Ds.Add(new Vertex2D(StartPos + Delta * D0 - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(0, 1, 0)));
+
+                    continue;
+                }
                 vertex2Ds.Add(new Vertex2D(StartPos + Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(Value0, 0, 0)));
                 vertex2Ds.Add(new Vertex2D(EndPos + Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(Value1, 0, 0)));
                 vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(Value0, 1, 0)));

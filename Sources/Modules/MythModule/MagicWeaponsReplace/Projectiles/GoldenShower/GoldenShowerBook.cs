@@ -22,13 +22,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Go
                     for (int d = 0; d < Rain; d++)
                     {
                         Vector2 velocity = new Vector2(0, Main.rand.NextFloat(-16f, -12f)).RotatedBy(Main.rand.NextFloat(-(Rain / 120f), (Rain / 120f)));
-                        Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 + new Vector2(0, -20), velocity, ModContent.ProjectileType<GoldenShowerII>(), player.HeldItem.damage * 2, player.HeldItem.knockBack, player.whoAmI);
+                        Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 + new Vector2(0, -10), velocity, ModContent.ProjectileType<GoldenShowerII>(), player.HeldItem.damage * 2, player.HeldItem.knockBack, player.whoAmI);
                     }
                     ConstantUsingTime = 0;
                     Projectile.Kill();
                 }
             }
-            if (player.itemTime == 2)
+            if (player.itemTime == 2 && player.HeldItem.type == ItemType)
             {
                 if(Main.mouseRight)
                 {
@@ -36,13 +36,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Go
                     for (int d = 0; d < 3; d++)
                     {
                         Vector2 velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero).RotatedBy(Main.rand.NextFloat(-0.1f, 0.1f)) * player.HeldItem.shootSpeed * 1.3f;
-                        Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 + new Vector2(0, -20), velocity, ModContent.ProjectileType<GoldenShowerII>(), player.HeldItem.damage * 2, player.HeldItem.knockBack, player.whoAmI);
+                        Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 + new Vector2(0, -10), velocity, ModContent.ProjectileType<GoldenShowerII>(), player.HeldItem.damage * 2, player.HeldItem.knockBack, player.whoAmI);
                     }
                 }
                 else
                 {
                     Vector2 velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero) * player.HeldItem.shootSpeed * 1.3f;
-                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 + new Vector2(0, -20), velocity, ModContent.ProjectileType<GoldenShowerII>(), player.HeldItem.damage * 2, player.HeldItem.knockBack, player.whoAmI);
+                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 + new Vector2(0, -10), velocity, ModContent.ProjectileType<GoldenShowerII>(), player.HeldItem.damage * 2, player.HeldItem.knockBack, player.whoAmI);
                 }
             }
         }

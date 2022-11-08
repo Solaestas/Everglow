@@ -15,7 +15,7 @@
         {
             Player player = Main.player[Projectile.owner];
 
-            if (player.itemTime == 2)
+            if (player.itemTime == 2 && player.HeldItem.type == ItemType)
             {
                 Vector2 velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero) * player.HeldItem.shootSpeed;
                 for (int f = 0;f < Main.rand.Next(2, 4); f++)

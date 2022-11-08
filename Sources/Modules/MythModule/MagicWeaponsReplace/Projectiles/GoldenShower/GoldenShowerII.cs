@@ -142,12 +142,16 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Go
                 bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 1, w)));
                 bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 0, w)));
             }
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             Texture2D t = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/GoldLine");
             Main.graphics.GraphicsDevice.Textures[0] = t;
             if (bars.Count > 3)
             {
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
             }
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             return false;
         }
 
