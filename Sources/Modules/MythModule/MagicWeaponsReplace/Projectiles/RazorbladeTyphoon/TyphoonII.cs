@@ -73,7 +73,15 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ra
                 {
                     Vector2 v0 = npc.Center - Projectile.Center;
                     Projectile.velocity += Vector2.Normalize(v0) * 0.5f;
-                    Projectile.velocity = Vector2.Normalize(Projectile.velocity) * player.HeldItem.shootSpeed;
+                   
+                    if(player.HeldItem.type == ItemID.RazorbladeTyphoon)
+                    {
+                        Projectile.velocity = Vector2.Normalize(Projectile.velocity) * player.HeldItem.shootSpeed;
+                    }
+                    else
+                    {
+                        Projectile.velocity = Vector2.Normalize(Projectile.velocity) * 6f;
+                    }
                 }
 
             }
@@ -84,7 +92,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ra
                 {
                     if (target.active && Main.rand.NextBool(2))
                     {
-                        if (!target.dontTakeDamage && !target.friendly)
+                        if (!target.dontTakeDamage && !target.friendly && target.CanBeChasedBy())
                         {
                             Vector2 ToTarget = target.Center - Projectile.Center;
                             float dis = ToTarget.Length();

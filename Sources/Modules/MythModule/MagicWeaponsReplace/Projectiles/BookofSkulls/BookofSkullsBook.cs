@@ -4,10 +4,10 @@
     {
         public override void SetDef()
         {
-            ProjType = ProjectileID.BookOfSkullsSkull;
+            ProjType = ModContent.ProjectileType<SkullII>();
             DustType = DustID.Bone;
             ItemType = ItemID.BookofSkulls;
-            MulStartPosByVelocity = 6f;
+            MulStartPosByVelocity = 2f;
             UseGlow = false;
         }
     }

@@ -5,7 +5,7 @@ using Terraria.GameContent;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.CrystalStorm
 {
-    internal class CrystalStormArray : ModProjectile, IWarpProjectile
+    internal class CrystalStormArray : ModProjectile
     {
         public override void SetDefaults()
         {
@@ -15,7 +15,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             Projectile.hostile = false;
             Projectile.penetrate = -1;
             Projectile.timeLeft = 10000;
-            Projectile.DamageType = DamageClass.Summon;
+            Projectile.DamageType = DamageClass.MagicSummonHybrid;
             Projectile.tileCollide = false;
         }
 
@@ -59,233 +59,213 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
         public override bool PreDraw(ref Color lightColor)
         {
             Projectile.hide = false;
+            DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CrystalDarkline"), new Color(0.6f, 0.6f, 0.6f, 0.6f));
 
-            for (int g = 0; g < 4; g++)
-            {
-                Vector2 v0 = new Vector2(0, -3).RotatedBy(g / 2d * Math.PI + Main.timeForVisualEffects * 0.05);
-                DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Darkline"), new Color(0.2f, 0.2f, 0.2f, 0.2f), v0);
-            }
+            DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/ElecLine"), new Color(15, 100, 255, 0));
 
-            //DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLineBlackShade"), new Color(1f, 1f, 1f, 1f));
-            DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Lightline"), new Color(0.3f, 0f, 1f, 0));
+
             return false;
         }
 
         internal int Timer = 0;
         internal Vector2 RingPos = Vector2.Zero;
 
-        public void DrawMagicArray(Texture2D tex, Color c0, Vector2 delta = new Vector2())
+        public void DrawMagicArray(Texture2D tex, Color c0)
         {
             Player player = Main.player[Projectile.owner];
-            Texture2D Line = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Lightline");
-            Texture2D LineV = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/LightlineV");
-            Color c1 = new Color(c0.R * 0.39f / 255f, c0.G * 0.39f / 255f, c0.B * 0.39f / 255f, c0.A * 0.39f / 255f);
-            Color c2 = new Color(72, 221, 255, 0);
-            Color c3 = new Color(104, 142, 255, 0);
-            Color c4 = new Color(107, 58, 255, 0);
-            Color c5 = new Color(147, 40, 255, 0);
-            Color c6 = new Color(217, 2, 255, 0);
-            Color c7 = new Color(249, 96, 255, 0);
-            if (tex == MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Darkline"))
+            Texture2D Water = tex;
+            Texture2D Crystalline = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Crystalline");
+            Texture2D CrystalLight = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CrystalLight");
+            if(tex == MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CrystalDarkline"))
             {
-                Line = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/DarklineV");
-                LineV = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/DarklineV");
-                c2 = c0;
-                c3 = c0;
-                c4 = c0;
-                c5 = c0;
-                c6 = c0;
-                c7 = c1;
-                c0 = new Color(c0.R * 0.39f / 255f, c0.G * 0.39f / 255f, c0.B * 0.39f / 255f, c0.A * 0.39f / 255f);
+                Crystalline = tex;
+                CrystalLight = tex;
             }
-            Texture2D Crystal = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/GreyCrystal");
+            Color c1 = new Color(155,0,225,0);
+            DrawTexSquire(Timer * 2.88f, 11, c0, player.Center + RingPos - Main.screenPosition, Water, -Main.timeForVisualEffects / 300);
+            DrawTexSquire(Timer * 3.1f, 24, c0, player.Center + RingPos - Main.screenPosition, Crystalline, -Main.timeForVisualEffects / 300);
 
-            Vector2 RingPosII = RingPos + delta;
 
-            float Size = 30f;
-            float timeRot = (float)(Math.Sin(Main.timeForVisualEffects / 12d) * 0.05 + 0);
-            float WaveValue1 = (float)(Math.Sin(Main.timeForVisualEffects / 12d) * 0.05 + 1);
-            float WaveValue2 = (float)(Math.Cos(Main.timeForVisualEffects / 12d) * 0.08 + 1);
-            Vector2 Crystal1 = new Vector2((float)(1 - Math.Cos(Timer / 30d * Math.PI)) * Size * WaveValue1).RotatedBy(Math.PI * 0 + timeRot);
-            Vector2 Crystal2 = new Vector2((float)(1 - Math.Cos(Timer / 30d * Math.PI)) * Size * WaveValue1).RotatedBy(Math.PI * 0.5 + timeRot);
-            Vector2 Crystal3 = new Vector2((float)(1 - Math.Cos(Timer / 30d * Math.PI)) * Size * WaveValue1).RotatedBy(Math.PI * 1 + timeRot);
-            Vector2 Crystal4 = new Vector2((float)(1 - Math.Cos(Timer / 30d * Math.PI)) * Size * WaveValue1).RotatedBy(Math.PI * 1.5 + timeRot);
-            Vector2 Crystal5 = new Vector2((float)(3 + Math.Cos(Timer / 30d * Math.PI)) * Size * WaveValue2).RotatedBy(Math.PI * 0.25 - timeRot * 0.73f);
-            Vector2 Crystal6 = new Vector2((float)(3 + Math.Cos(Timer / 30d * Math.PI)) * Size * WaveValue2).RotatedBy(Math.PI * 0.75 - timeRot * 0.73f);
-            Vector2 Crystal7 = new Vector2((float)(3 + Math.Cos(Timer / 30d * Math.PI)) * Size * WaveValue2).RotatedBy(Math.PI * 1.25 - timeRot * 0.73f);
-            Vector2 Crystal8 = new Vector2((float)(3 + Math.Cos(Timer / 30d * Math.PI)) * Size * WaveValue2).RotatedBy(Math.PI * 1.75 - timeRot * 0.73f);
+            DrawTexSquire(Timer * 3.18f, 11, c0, player.Center + RingPos - Main.screenPosition, Water, -Main.timeForVisualEffects / 300 + MathHelper.PiOver4);
+            DrawTexSquire(Timer * 3.3f, 24, c0, player.Center + RingPos - Main.screenPosition, Crystalline, -Main.timeForVisualEffects / 300 + MathHelper.PiOver4);
 
-            Vector2 Normal1 = new Vector2(1).RotatedBy(Math.PI * 0 + timeRot);
-            Vector2 Normal2 = new Vector2(1).RotatedBy(Math.PI * 0.5 + timeRot);
-            Vector2 Normal3 = new Vector2(1).RotatedBy(Math.PI * 1 + timeRot);
-            Vector2 Normal4 = new Vector2(1).RotatedBy(Math.PI * 1.5 + timeRot);
-            Vector2 Normal5 = new Vector2(1).RotatedBy(Math.PI * 0.25 - timeRot * 0.73f);
-            Vector2 Normal6 = new Vector2(1).RotatedBy(Math.PI * 0.75 - timeRot * 0.73f);
-            Vector2 Normal7 = new Vector2(1).RotatedBy(Math.PI * 1.25 - timeRot * 0.73f);
-            Vector2 Normal8 = new Vector2(1).RotatedBy(Math.PI * 1.75 - timeRot * 0.73f);
+            DrawTexCircle(Timer * 2.67f, 75, c0, player.Center + RingPos - Main.screenPosition, Crystalline, Main.timeForVisualEffects / 400 + MathHelper.PiOver4);
+            DrawTexCircle(Timer * 1.3f, 30, c1, player.Center + RingPos - Main.screenPosition, Crystalline, Main.timeForVisualEffects / 400 + MathHelper.PiOver4);
 
-            Vector2 Point1 = player.Center + RingPosII - Main.screenPosition + Crystal1;
-            Vector2 Point2 = player.Center + RingPosII - Main.screenPosition + Crystal2;
-            Vector2 Point3 = player.Center + RingPosII - Main.screenPosition + Crystal3;
-            Vector2 Point4 = player.Center + RingPosII - Main.screenPosition + Crystal4;
-            Vector2 Point5 = player.Center + RingPosII - Main.screenPosition + Crystal5;
-            Vector2 Point6 = player.Center + RingPosII - Main.screenPosition + Crystal6;
-            Vector2 Point7 = player.Center + RingPosII - Main.screenPosition + Crystal7;
-            Vector2 Point8 = player.Center + RingPosII - Main.screenPosition + Crystal8;
+            float timeRot = (float)(Main.timeForVisualEffects / 240d);
+            Vector2 Point1 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 0 + timeRot);
+            Vector2 Point2 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 1 / 4d + timeRot);
+            Vector2 Point3 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 2 / 4d + timeRot);
+            Vector2 Point4 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 3 / 4d + timeRot);
+            Vector2 Point5 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 4 / 4d + timeRot);
+            Vector2 Point6 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 5 / 4d + timeRot);
+            Vector2 Point7 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 6 / 4d + timeRot);
+            Vector2 Point8 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 7 / 4d + timeRot);
 
-            float timeRotII = -(float)(Main.timeForVisualEffects / 128d);
-            for (int x = 0; x < 12; x++)
-            {
-                Vector2 Crystal9 = new Vector2((float)(1 - Math.Cos(Timer / 30d * Math.PI)) * Size * WaveValue1 * 1.1f).RotatedBy(Math.PI * x / 6d + timeRotII);
-                Vector2 Normal9 = new Vector2(1).RotatedBy(Math.PI * (x / 6d + 0.1) + timeRotII);
-                Vector2 Point9 = player.Center + RingPosII - Main.screenPosition + Crystal9;
-                DrawTexLine(Point9 - Normal9 * 10, Point9 + Normal9 * 10, c2, c2, Crystal, Math.Min(Timer, Size / 3f));
-            }
-            float timeRotIII = -(float)(Main.timeForVisualEffects / 64d);
-            for (int x = 0; x < 20; x++)
-            {
-                Vector2 Crystal9 = new Vector2((float)(1 - Math.Cos(Timer / 30d * Math.PI)) * Size * WaveValue2 * 0.9f).RotatedBy(Math.PI * x / 10d + timeRotIII);
-                Vector2 Normal9 = new Vector2(1).RotatedBy(Math.PI * (x / 10d + 0.2) + timeRotIII);
-                Vector2 Point9 = player.Center + RingPosII - Main.screenPosition + Crystal9;
-                DrawTexLine(Point9 - Normal9 * 6, Point9 + Normal9 * 6, c3, c3, Crystal, Math.Min(Timer, Size / 4f));
-            }
-            float timeRotIV = -(float)(Main.timeForVisualEffects / 32d);
-            for (int x = 0; x < 16; x++)
-            {
-                Vector2 Crystal9 = new Vector2((float)(1 - Math.Cos(Timer / 30d * Math.PI)) * Size * WaveValue1 * 0.7f).RotatedBy(Math.PI * x / 8d + timeRotIV);
-                Vector2 Normal9 = new Vector2(1).RotatedBy(Math.PI * (x / 8d + 0.3) + timeRotIV);
-                Vector2 Point9 = player.Center + RingPosII - Main.screenPosition + Crystal9;
-                DrawTexLine(Point9 - Normal9 * 5, Point9 + Normal9 * 5, c4, c4, Crystal, Math.Min(Timer, Size / 6f));
-            }
-            float timeRotV = -(float)(Main.timeForVisualEffects / 16d);
-            for (int x = 0; x < 12; x++)
-            {
-                Vector2 Crystal9 = new Vector2((float)(1 - Math.Cos(Timer / 30d * Math.PI)) * Size * WaveValue2 * 0.5f).RotatedBy(Math.PI * x / 6d + timeRotV);
-                Vector2 Normal9 = new Vector2(1).RotatedBy(Math.PI * (x / 6d + 0.4) + timeRotV);
-                Vector2 Point9 = player.Center + RingPosII - Main.screenPosition + Crystal9;
-                DrawTexLine(Point9 - Normal9 * 4, Point9 + Normal9 * 4, c5, c5, Crystal, Math.Min(Timer, Size / 8f));
-            }
-            float timeRotVI = -(float)(Main.timeForVisualEffects / 8d);
-            for (int x = 0; x < 8; x++)
-            {
-                Vector2 Crystal9 = new Vector2((float)(1 - Math.Cos(Timer / 30d * Math.PI)) * Size * WaveValue1 * 0.35f).RotatedBy(Math.PI * x / 4d + timeRotVI);
-                Vector2 Normal9 = new Vector2(1).RotatedBy(Math.PI * (x / 4d + 0.5) + timeRotVI);
-                Vector2 Point9 = player.Center + RingPosII - Main.screenPosition + Crystal9;
-                DrawTexLine(Point9 - Normal9 * 3, Point9 + Normal9 * 3, c6, c6, Crystal, Math.Min(Timer, Size / 10f));
-            }
+            Vector2 Point1_ = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 0 + timeRot + 0.2);
+            Vector2 Point2_ = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 1 / 4d + timeRot + 0.2);
+            Vector2 Point3_ = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 2 / 4d + timeRot + 0.2);
+            Vector2 Point4_ = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 3 / 4d + timeRot + 0.2);
+            Vector2 Point5_ = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 4 / 4d + timeRot + 0.2);
+            Vector2 Point6_ = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 5 / 4d + timeRot + 0.2);
+            Vector2 Point7_ = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 6 / 4d + timeRot + 0.2);
+            Vector2 Point8_ = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 7 / 4d + timeRot + 0.2);
 
-            DrawTexLine(Point1 - Normal1 * 20, Point1 + Normal1 * 20, c0, c0, Crystal, Math.Min(Timer, Size / 2f));
-            DrawTexLine(Point2 - Normal2 * 20, Point2 + Normal2 * 20, c0, c0, Crystal, Math.Min(Timer, Size / 2f));
-            DrawTexLine(Point3 - Normal3 * 20, Point3 + Normal3 * 20, c0, c0, Crystal, Math.Min(Timer, Size / 2f));
-            DrawTexLine(Point4 - Normal4 * 20, Point4 + Normal4 * 20, c0, c0, Crystal, Math.Min(Timer, Size / 2f));
+            Vector2 InnerPoint1 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(Math.PI * 0 - timeRot);
+            Vector2 InnerPoint2 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(Math.PI * 1 / 4d - timeRot);
+            Vector2 InnerPoint3 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(Math.PI * 2 / 4d - timeRot);
+            Vector2 InnerPoint4 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(Math.PI * 3 / 4d - timeRot);
+            Vector2 InnerPoint5 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(Math.PI * 4 / 4d - timeRot);
+            Vector2 InnerPoint6 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(Math.PI * 5 / 4d - timeRot);
+            Vector2 InnerPoint7 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(Math.PI * 6 / 4d - timeRot);
+            Vector2 InnerPoint8 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(Math.PI * 7 / 4d - timeRot);
 
-            DrawTexLine(Point5 - Normal5 * 12, Point5 + Normal5 * 12, c0, c0, Crystal, Math.Min(Timer / 2f, Size * 0.3f));
-            DrawTexLine(Point6 - Normal6 * 12, Point6 + Normal6 * 12, c0, c0, Crystal, Math.Min(Timer / 2f, Size * 0.3f));
-            DrawTexLine(Point7 - Normal7 * 12, Point7 + Normal7 * 12, c0, c0, Crystal, Math.Min(Timer / 2f, Size * 0.3f));
-            DrawTexLine(Point8 - Normal8 * 12, Point8 + Normal8 * 12, c0, c0, Crystal, Math.Min(Timer / 2f, Size * 0.3f));
+            Vector2 InnerPoint1_ = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(Math.PI * 0 - timeRot + 0.2);
+            Vector2 InnerPoint2_ = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(Math.PI * 1 / 4d - timeRot + 0.2);
+            Vector2 InnerPoint3_ = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(Math.PI * 2 / 4d - timeRot + 0.2);
+            Vector2 InnerPoint4_ = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(Math.PI * 3 / 4d - timeRot + 0.2);
+            Vector2 InnerPoint5_ = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(Math.PI * 4 / 4d - timeRot + 0.2);
+            Vector2 InnerPoint6_ = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(Math.PI * 5 / 4d - timeRot + 0.2);
+            Vector2 InnerPoint7_ = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(Math.PI * 6 / 4d - timeRot + 0.2);
+            Vector2 InnerPoint8_ = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(Math.PI * 7 / 4d - timeRot + 0.2);
 
-            DrawTexLine(Point5 - Normal5 * 12, Point1 - Normal1 * 20, c0, c0, LineV, Math.Min(Timer / 4f, 4.5f));
-            DrawTexLine(Point6 - Normal6 * 12, Point2 - Normal2 * 20, c0, c0, LineV, Math.Min(Timer / 4f, 4.5f));
-            DrawTexLine(Point7 - Normal7 * 12, Point3 - Normal3 * 20, c0, c0, LineV, Math.Min(Timer / 4f, 4.5f));
-            DrawTexLine(Point8 - Normal8 * 12, Point4 - Normal4 * 20, c0, c0, LineV, Math.Min(Timer / 4f, 4.5f));
+            DrawTexLine(Point1_, Point3, c0, c0, CrystalLight, 0.1f);
+            DrawTexLine(Point2_, Point4, c0, c0, CrystalLight, 0.4f);
+            DrawTexLine(Point3_, Point5, c0, c0, CrystalLight, 0.2f);
+            DrawTexLine(Point4_, Point6, c0, c0, CrystalLight, 0.8f);
+            DrawTexLine(Point5_, Point7, c0, c0, CrystalLight, 0.5f);
+            DrawTexLine(Point6_, Point8, c0, c0, CrystalLight, 0.7f);
+            DrawTexLine(Point7_, Point1, c0, c0, CrystalLight, 0.3f);
+            DrawTexLine(Point8_, Point2, c0, c0, CrystalLight, 0.1f);
 
-            DrawTexLine(Point5 - Normal5 * 12, Point3 - Normal3 * 20, c7, c7, Line, Math.Min(Timer / 4f, 1.5f));
-            DrawTexLine(Point6 - Normal6 * 12, Point4 - Normal4 * 20, c7, c7, Line, Math.Min(Timer / 4f, 1.5f));
-            DrawTexLine(Point7 - Normal7 * 12, Point1 - Normal1 * 20, c7, c7, Line, Math.Min(Timer / 4f, 1.5f));
-            DrawTexLine(Point8 - Normal8 * 12, Point2 - Normal2 * 20, c7, c7, Line, Math.Min(Timer / 4f, 1.5f));
+            DrawTexLine(Point1, Point4, c0, c0, CrystalLight, 0.6f);
+            DrawTexLine(Point8, Point5, c0, c0, CrystalLight, 0.9f);
 
-            DrawTexLine(Point5 - Normal5 * 12, Point4 - Normal4 * 20, c7, c7, Line, Math.Min(Timer / 4f, 1.5f));
-            DrawTexLine(Point6 - Normal6 * 12, Point1 - Normal1 * 20, c7, c7, Line, Math.Min(Timer / 4f, 1.5f));
-            DrawTexLine(Point7 - Normal7 * 12, Point2 - Normal2 * 20, c7, c7, Line, Math.Min(Timer / 4f, 1.5f));
-            DrawTexLine(Point8 - Normal8 * 12, Point3 - Normal3 * 20, c7, c7, Line, Math.Min(Timer / 4f, 1.5f));
+            DrawTexLine(Point2, Point7, c0, c0, CrystalLight, 0.1f);
+            DrawTexLine(Point3, Point6, c0, c0, CrystalLight, 0.4f);
 
-            DrawTexLine(Point5 - Normal5 * 12, Point2 - Normal2 * 20, c0, c0, LineV, Math.Min(Timer / 4f, 4.5f));
-            DrawTexLine(Point6 - Normal6 * 12, Point3 - Normal3 * 20, c0, c0, LineV, Math.Min(Timer / 4f, 4.5f));
-            DrawTexLine(Point7 - Normal7 * 12, Point4 - Normal4 * 20, c0, c0, LineV, Math.Min(Timer / 4f, 4.5f));
-            DrawTexLine(Point8 - Normal8 * 12, Point1 - Normal1 * 20, c0, c0, LineV, Math.Min(Timer / 4f, 4.5f));
+            DrawTexLine(Point1_, Point4, c0, c0, CrystalLight, 0.2f);
+            DrawTexLine(Point8_, Point5, c0, c0, CrystalLight, 0.8f);
+
+            DrawTexLine(Point2_, Point7, c0, c0, CrystalLight, 0.5f);
+            DrawTexLine(Point3_, Point6, c0, c0, CrystalLight, 0.7f);
+
+
+            DrawTexLine(InnerPoint1_, InnerPoint3, c1, c1, CrystalLight, 0.1f);
+            DrawTexLine(InnerPoint2_, InnerPoint4, c1, c1, CrystalLight, 0.4f);
+            DrawTexLine(InnerPoint3_, InnerPoint5, c1, c1, CrystalLight, 0.2f);
+            DrawTexLine(InnerPoint4_, InnerPoint6, c1, c1, CrystalLight, 0.8f);
+            DrawTexLine(InnerPoint5_, InnerPoint7, c1, c1, CrystalLight, 0.5f);
+            DrawTexLine(InnerPoint6_, InnerPoint8, c1, c1, CrystalLight, 0.7f);
+            DrawTexLine(InnerPoint7_, InnerPoint1, c1, c1, CrystalLight, 0.3f);
+            DrawTexLine(InnerPoint8_, InnerPoint2, c1, c1, CrystalLight, 0.1f);
+
+            DrawTexLine(InnerPoint1, InnerPoint4, c1, c1, CrystalLight, 0.6f);
+            DrawTexLine(InnerPoint8, InnerPoint5, c1, c1, CrystalLight, 0.9f);
+
+            DrawTexLine(InnerPoint2, InnerPoint7, c1, c1, CrystalLight, 0.1f);
+            DrawTexLine(InnerPoint3, InnerPoint6, c1, c1, CrystalLight, 0.4f);
+
+            DrawTexLine(InnerPoint1_, InnerPoint4, c1, c1, CrystalLight, 0.2f);
+            DrawTexLine(InnerPoint8_, InnerPoint5, c1, c1, CrystalLight, 0.8f);
+
+            DrawTexLine(InnerPoint2_, InnerPoint7, c1, c1, CrystalLight, 0.5f);
+            DrawTexLine(InnerPoint3_, InnerPoint6, c1, c1, CrystalLight, 0.7f);
+
         }
 
-        public static void DrawTexLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2, Texture2D tex, float width = 6)
+        private static void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
         {
-            Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * (float)width;
-
-            List<Vertex2D> vertex2Ds = new List<Vertex2D>
+            List<Vertex2D> circle = new List<Vertex2D>();
+            for (int h = 0; h < radious / 2; h++)
             {
-                new Vertex2D(StartPos + Width, color1, new Vector3(1, 0, 0)),
-                new Vertex2D(EndPos + Width, color2, new Vector3(1, 1, 0)),
-                new Vertex2D(StartPos - Width, color1, new Vector3(0, 0, 0)),
+                circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 1, 0)));
+                circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0, 0)));
+            }
+            circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(1, 1, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(1, 0, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(0, 1, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0, 0, 0)));
+            if (circle.Count > 0)
+            {
+                Main.graphics.GraphicsDevice.Textures[0] = tex;
+                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
+            }
+        }
+        private static void DrawTexSquire(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
+        {
+            List<Vertex2D> circle = new List<Vertex2D>();
+            for (int h = 0; h < 5; h++)
+            {
+                float Value0 = (float)(h / 4f + Main.timeForVisualEffects / 191d) % 1f;
+                float Value1 = (float)((h + 1) / 4f + Main.timeForVisualEffects / 191d) % 1f;
 
-                new Vertex2D(EndPos + Width, color2, new Vector3(1, 1, 0)),
-                new Vertex2D(EndPos - Width, color2, new Vector3(0, 1, 0)),
-                new Vertex2D(StartPos - Width, color1, new Vector3(0, 0, 0))
-            };
+                circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(Math.PI / 2 * h + addRot), color, new Vector3(Value0, 1, 0)));
+                circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(Math.PI / 2 * h + addRot), color, new Vector3(Value0, 0, 0)));
+
+                if (Value1 < Value0)
+                {
+                    float D0 = (1 - Value0) * 4;
+                    Vector2 Delta = new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(Math.PI / 2 * (h + 1) + addRot) - new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(Math.PI / 2 * h + addRot);
+                    Vector2 DeltaWidth = new Vector2(0, radious).RotatedBy(Math.PI / 2 * (h + 1) + addRot) - new Vector2(0, radious).RotatedBy(Math.PI / 2 * h + addRot);
+
+                    if(h < 4)
+                    {
+                        circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(Math.PI / 2 * h + addRot) + Delta * D0, color, new Vector3(1, 1, 0)));
+                        circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(Math.PI / 2 * h + addRot) + DeltaWidth * D0, color, new Vector3(1, 0, 0)));
+
+                        circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(Math.PI / 2 * h + addRot) + Delta * D0, color, new Vector3(0, 1, 0)));
+                        circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(Math.PI / 2 * h + addRot) + DeltaWidth * D0, color, new Vector3(0, 0, 0)));
+                    }
+
+                }
+            }
+            if (circle.Count > 0)
+            {
+                Main.graphics.GraphicsDevice.Textures[0] = tex;
+                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
+            }
+
+        }
+
+        public void DrawTexLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2, Texture2D tex, float AddValue = 0)
+        {
+            float Wid = 24f;
+            Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
+
+            List<Vertex2D> vertex2Ds = new List<Vertex2D>();
+            float Value0 = (float)(Main.timeForVisualEffects / 291d + 20 + AddValue) % 1f;
+            float Value1 = (float)(Main.timeForVisualEffects / 291d + 20.1 + AddValue) % 1f;
+            if (Value1 < Value0)
+            {
+                float D0 = 1 - Value0;
+                Vector2 Delta = EndPos - StartPos;
+
+                vertex2Ds.Add(new Vertex2D(StartPos + Delta * D0 + Width, color2, new Vector3(1, 0, 0)));
+                vertex2Ds.Add(new Vertex2D(StartPos + Delta * D0 - Width, color2, new Vector3(1, 1, 0)));
+
+                vertex2Ds.Add(new Vertex2D(StartPos + Width, color1, new Vector3(Value0, 0, 0)));
+                vertex2Ds.Add(new Vertex2D(StartPos - Width, color1, new Vector3(Value0, 1, 0)));
+
+
+
+                vertex2Ds.Add(new Vertex2D(StartPos + Delta * D0 + Width, color1, new Vector3(0, 0, 0)));
+                vertex2Ds.Add(new Vertex2D(StartPos + Delta * D0 - Width, color1, new Vector3(0, 1, 0)));
+
+                vertex2Ds.Add(new Vertex2D(EndPos + Width, color2, new Vector3(Value1, 0, 0)));
+                vertex2Ds.Add(new Vertex2D(EndPos - Width, color2, new Vector3(Value1, 1, 0)));
+            }
+            else
+            {
+                vertex2Ds.Add(new Vertex2D(StartPos + Width, color1, new Vector3(Value0, 0, 0)));
+                vertex2Ds.Add(new Vertex2D(StartPos - Width, color1, new Vector3(Value0, 1, 0)));
+
+                vertex2Ds.Add(new Vertex2D(EndPos + Width, color2, new Vector3(Value1, 0, 0)));
+                vertex2Ds.Add(new Vertex2D(EndPos - Width, color2, new Vector3(Value1, 1, 0)));
+            }
 
             Main.graphics.GraphicsDevice.Textures[0] = tex;
-            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
-        }
-
-        public void DrawWarp()
-        {
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-            KEx.CurrentTechnique.Passes[0].Apply();
-            Player player = Main.player[Projectile.owner];
-
-            float Size = 30f;
-            float timeRot = (float)(Math.Sin(Main.timeForVisualEffects / 12d) * 0.05 + 0);
-            float WaveValue1 = (float)(Math.Sin(Main.timeForVisualEffects / 12d) * 0.05 + 1);
-            float WaveValue2 = (float)(Math.Cos(Main.timeForVisualEffects / 12d) * 0.08 + 1);
-            Vector2 Crystal1 = new Vector2((float)(1 - Math.Cos(Timer / 30d * Math.PI)) * Size * WaveValue1).RotatedBy(Math.PI * 0 + timeRot);
-            Vector2 Crystal2 = new Vector2((float)(1 - Math.Cos(Timer / 30d * Math.PI)) * Size * WaveValue1).RotatedBy(Math.PI * 0.5 + timeRot);
-            Vector2 Crystal3 = new Vector2((float)(1 - Math.Cos(Timer / 30d * Math.PI)) * Size * WaveValue1).RotatedBy(Math.PI * 1 + timeRot);
-            Vector2 Crystal4 = new Vector2((float)(1 - Math.Cos(Timer / 30d * Math.PI)) * Size * WaveValue1).RotatedBy(Math.PI * 1.5 + timeRot);
-            Vector2 Crystal5 = new Vector2((float)(3 + Math.Cos(Timer / 30d * Math.PI)) * Size * WaveValue2).RotatedBy(Math.PI * 0.25 - timeRot * 0.73f);
-            Vector2 Crystal6 = new Vector2((float)(3 + Math.Cos(Timer / 30d * Math.PI)) * Size * WaveValue2).RotatedBy(Math.PI * 0.75 - timeRot * 0.73f);
-            Vector2 Crystal7 = new Vector2((float)(3 + Math.Cos(Timer / 30d * Math.PI)) * Size * WaveValue2).RotatedBy(Math.PI * 1.25 - timeRot * 0.73f);
-            Vector2 Crystal8 = new Vector2((float)(3 + Math.Cos(Timer / 30d * Math.PI)) * Size * WaveValue2).RotatedBy(Math.PI * 1.75 - timeRot * 0.73f);
-
-            Vector2 Normal1 = new Vector2(1).RotatedBy(Math.PI * 0 + timeRot);
-            Vector2 Normal2 = new Vector2(1).RotatedBy(Math.PI * 0.5 + timeRot);
-            Vector2 Normal3 = new Vector2(1).RotatedBy(Math.PI * 1 + timeRot);
-            Vector2 Normal4 = new Vector2(1).RotatedBy(Math.PI * 1.5 + timeRot);
-            Vector2 Normal5 = new Vector2(1).RotatedBy(Math.PI * 0.25 - timeRot * 0.73f);
-            Vector2 Normal6 = new Vector2(1).RotatedBy(Math.PI * 0.75 - timeRot * 0.73f);
-            Vector2 Normal7 = new Vector2(1).RotatedBy(Math.PI * 1.25 - timeRot * 0.73f);
-            Vector2 Normal8 = new Vector2(1).RotatedBy(Math.PI * 1.75 - timeRot * 0.73f);
-
-            Vector2[] CPoint = new Vector2[8];
-            CPoint[0] = player.Center + RingPos - Main.screenPosition + Crystal1 - Normal1 * 20;
-            CPoint[1] = player.Center + RingPos - Main.screenPosition + Crystal5 - Normal5 * 12;
-            CPoint[2] = player.Center + RingPos - Main.screenPosition + Crystal2 - Normal2 * 20;
-            CPoint[3] = player.Center + RingPos - Main.screenPosition + Crystal6 - Normal6 * 12;
-            CPoint[4] = player.Center + RingPos - Main.screenPosition + Crystal3 - Normal3 * 20;
-            CPoint[5] = player.Center + RingPos - Main.screenPosition + Crystal7 - Normal7 * 12;
-            CPoint[6] = player.Center + RingPos - Main.screenPosition + Crystal4 - Normal4 * 20;
-            CPoint[7] = player.Center + RingPos - Main.screenPosition + Crystal8 - Normal8 * 12;
-            for (int a = 0; a < 8; a++)
-            {
-                int b = (a + 3) % 8;
-                int c = (a + 2) % 8;
-                List<Vertex2D> vertex2Ds = new List<Vertex2D>();
-                float x0 = (float)(Math.Sin(Main.timeForVisualEffects / 15d + Math.PI * 0 / 3d) * 0.5f + 0.5);
-                float x1 = (float)(Math.Sin(Main.timeForVisualEffects / 15d + Math.PI * 1 / 3d) * 0.5f + 0.5);
-                float x2 = (float)(Math.Sin(Main.timeForVisualEffects / 15d + Math.PI * 2 / 3d) * 0.5f + 0.5);
-                vertex2Ds.Add(new Vertex2D(CPoint[a], new Color(a / 8f, Timer / 30f * x0, 0, 0), new Vector3(0, 0, 0)));
-                vertex2Ds.Add(new Vertex2D(CPoint[b], new Color(a / 8f, Timer / 30f * x1, 0, 0), new Vector3(0, 0, 0)));
-                vertex2Ds.Add(new Vertex2D(CPoint[c], new Color(a / 8f, Timer / 30f * x2, 0, 0), new Vector3(0, 0, 0)));
-
-                Main.graphics.GraphicsDevice.Textures[0] = TextureAssets.MagicPixel.Value;
-                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
-            }
-
-            List<Vertex2D> vertex2Dss = new List<Vertex2D>();
-
-            Main.graphics.GraphicsDevice.Textures[0] = TextureAssets.MagicPixel.Value;
-            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Dss.ToArray(), 0, vertex2Dss.Count / 3);
-            //DrawTexCircle(Timer * 1.2f, 52, new Color(64, 70, 255, 0), player.Center + RingPos - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), Main.timeForVisualEffects / 17);
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertex2Ds.ToArray(), 0, vertex2Ds.Count - 2);
         }
     }
 }

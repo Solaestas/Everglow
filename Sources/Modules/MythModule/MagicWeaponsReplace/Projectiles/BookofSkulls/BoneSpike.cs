@@ -13,7 +13,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             Projectile.friendly = false;
             Projectile.hostile = false;
             Projectile.penetrate = 1;
-            Projectile.timeLeft = 10000;
+            Projectile.timeLeft = 1800;
             Projectile.DamageType = DamageClass.MagicSummonHybrid;
             Projectile.tileCollide = false;
         }
@@ -33,10 +33,18 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
                 Projectile.Center = Projectile.Center * (-Projectile.ai[0] / 50f + 0.97f) + AIM0 * (Projectile.ai[0] / 50f + 0.03f);
                 Projectile.rotation = Math.Clamp(Projectile.velocity.X / 21f, -1, 1);
                 Projectile.velocity *= 0.9f;
-                if (player.itemTime == 2 && Projectile.timeLeft <= 9950)
+                if (player.itemTime == 2 && Projectile.timeLeft <= 1750)
                 {
                     Projectile.friendly = true;
                     Projectile.velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero) * 45;
+                    Projectile.tileCollide = true;
+                    shot = true;
+                }
+
+                if(player.HeldItem.type != ItemID.BookofSkulls || Projectile.timeLeft <= 100)
+                {
+                    Projectile.friendly = true;
+                    Projectile.velocity = new Vector2(0, 20);
                     Projectile.tileCollide = true;
                     shot = true;
                 }
@@ -61,7 +69,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D Spice = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BookofSkulls/BoneSpike");
-            if (Projectile.timeLeft <= 9980)
+            if (Projectile.timeLeft <= 1780)
             {
                 Vector2 v0 = Projectile.Center;
                 Color c0 = Lighting.GetColor((int)(v0.X / 16f), (int)(v0.Y / 16f));
@@ -75,14 +83,14 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             Texture2D Power = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine");
             float Pdark = 0f;
             float Pwidth = 1f;
-            if (Projectile.timeLeft > 9980)
+            if (Projectile.timeLeft > 1780)
             {
-                Pwidth = (10000 - Projectile.timeLeft) / 20f;
-                Pdark = (10000 - Projectile.timeLeft) / 20f;
+                Pwidth = (1800 - Projectile.timeLeft) / 20f;
+                Pdark = (1800 - Projectile.timeLeft) / 20f;
             }
-            else if (Projectile.timeLeft > 9950)
+            else if (Projectile.timeLeft > 1750)
             {
-                Pdark = (Projectile.timeLeft - 9950) / 30f;
+                Pdark = (Projectile.timeLeft - 1750) / 30f;
             }
             Color c1 = new Color(1f * Pdark, 0.45f * Pdark * Pdark, 0f, 0f);
             DrawTexLineColor(Projectile.Center + new Vector2(0, -70).RotatedBy(Projectile.rotation), Projectile.Center, Color.Transparent, c1, 14f * Pwidth, Power);
@@ -207,15 +215,17 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
         {
             for (int f = 0; f < 20; f++)
             {
-                Vector2 v0 = new Vector2(Main.rand.NextFloat(0f, 3f), 0).RotatedByRandom(6.283);
+                Vector2 v0 = new Vector2(Main.rand.NextFloat(0f, 8f), 0).RotatedByRandom(6.283);
                 Dust dust0 = Dust.NewDustDirect(Projectile.Center + Vector2.Normalize(Projectile.velocity) * 75, 0, 0, DustID.Torch, v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(0.6f, 1.8f));
-                dust0.velocity = v0;
+                dust0.velocity = v0 + Projectile.velocity * 0.2f;
+                dust0.noGravity = true;
             }
             for (int f = 0; f < 20; f++)
             {
-                Vector2 v0 = new Vector2(Main.rand.NextFloat(0f, 3f), 0).RotatedByRandom(6.283);
+                Vector2 v0 = new Vector2(Main.rand.NextFloat(0f, 8f), 0).RotatedByRandom(6.283);
                 Dust dust0 = Dust.NewDustDirect(Projectile.Center + Vector2.Normalize(Projectile.velocity) * 75, 0, 0, DustID.Bone, v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(0.6f, 1.8f));
-                dust0.velocity = v0;
+                dust0.velocity = v0 + Projectile.velocity * 0.2f;
+                dust0.noGravity = true;
             }
         }
 
@@ -228,14 +238,14 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             Texture2D Power = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine");
             float Pdark = 0f;
             float Pwidth = 1f;
-            if (Projectile.timeLeft > 9980)
+            if (Projectile.timeLeft > 1780)
             {
-                Pwidth = (10000 - Projectile.timeLeft) / 20f;
-                Pdark = (10000 - Projectile.timeLeft) / 20f;
+                Pwidth = (1800 - Projectile.timeLeft) / 20f;
+                Pdark = (1800 - Projectile.timeLeft) / 20f;
             }
-            else if (Projectile.timeLeft > 9950)
+            else if (Projectile.timeLeft > 1750)
             {
-                Pdark = (Projectile.timeLeft - 9950) / 30f;
+                Pdark = (Projectile.timeLeft - 1750) / 30f;
             }
             Color c1 = new Color(0.25f * Pdark, 0.11f * Pdark * Pdark, 0f, 0f);
             DrawTexLineColor(Projectile.Center + new Vector2(0, -70).RotatedBy(Projectile.rotation), Projectile.Center, Color.Transparent, c1, 14f * Pwidth, Power);

@@ -232,7 +232,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
 
                 if (Dis < k0 * 50)
                 {
-                    if (!target.dontTakeDamage && !target.friendly && target.active)
+                    if (!target.dontTakeDamage && !target.friendly && target.CanBeChasedBy() && target.active)
                     {
                         target.StrikeNPC((int)(Projectile.damage / (Dis + 35f) * 35f), 0.2f, 1);
                     }

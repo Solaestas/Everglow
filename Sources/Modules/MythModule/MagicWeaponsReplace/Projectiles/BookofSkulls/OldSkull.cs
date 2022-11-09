@@ -21,7 +21,6 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
                     }
                 }
             }
-            base.OnHitNPC(projectile, target, damage, knockback, crit);
         }
     }
 }

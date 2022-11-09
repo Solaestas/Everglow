@@ -90,7 +90,6 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
                     }
                 }
             }
-            base.ModifyTooltips(item, tooltips);
         }
 
         public override bool? UseItem(Item item, Player player)
@@ -330,16 +329,48 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
             }
             return base.Shoot(item, player, source, position, velocity, type, damage, knockback);
         }
+
+        public override void HoldItem(Item item, Player player)
+        {
+            MagicBookPlayer mplayer = player.GetModPlayer<MagicBookPlayer>();
+            if (player.GetModPlayer<MagicBookPlayer>().MagicBookLevel == 1)
+            {
+                if (item.type == ItemID.BookofSkulls)
+                {
+                    if (Main.mouseRight && Main.mouseRightRelease && mplayer.HandCooling <= 0 && player.statMana > player.HeldItem.mana * 2)
+                    {
+                        for (int g = -5; g < 150; g++)
+                        {
+                            if (Collision.SolidCollision(Main.MouseWorld + new Vector2(0, g * 5 * player.gravDir), 1, 1))
+                            {
+                                Vector2 ReleasePoint = Main.MouseWorld + new Vector2(0, g * 5 * player.gravDir);
+                                Projectile p = Projectile.NewProjectileDirect(item.GetSource_FromAI(), ReleasePoint, Vector2.Zero, ModContent.ProjectileType<Projectiles.BookofSkulls.SkullHand>(), player.HeldItem.damage * 3, player.HeldItem.knockBack * 6, player.whoAmI);
+                                p.CritChance = (int)(player.HeldItem.crit + player.GetCritChance(DamageClass.Generic));
+
+                                mplayer.HandCooling = 18;
+                                player.statMana -= player.HeldItem.mana * 2;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     internal class MagicBookPlayer : ModPlayer
     {
         public int MagicBookLevel = 0;
         public int WaterBoltHasHit = 0;
+        public int HandCooling = 0;
 
         public override void PreUpdate()
         {
             MagicBookLevel = 0;
+            if(HandCooling > 0)
+            {
+                HandCooling--;
+            }
             base.PreUpdate();
         }
 

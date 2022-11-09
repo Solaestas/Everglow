@@ -18,8 +18,6 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             Projectile.tileCollide = false;
         }
 
-        private int HandCooling = 0;
-
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
@@ -42,14 +40,6 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
                     Projectile.Kill();
                 }
             }
-            if (HandCooling > 0)
-            {
-                HandCooling--;
-            }
-            else
-            {
-                HandCooling = 0;
-            }
             Player.CompositeArmStretchAmount PCAS = Player.CompositeArmStretchAmount.Full;
 
             player.SetCompositeArmFront(true, PCAS, (float)(-Math.Sin(Main.timeForVisualEffects / 18d) * 0.6 + 1.2) * -player.direction);
@@ -59,22 +49,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
 
             RingPos = RingPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
 
-            if (Main.mouseRight && Main.mouseRightRelease && HandCooling <= 0 && player.statMana > player.HeldItem.mana * 2)
-            {
-                for (int g = -5; g < 150; g++)
-                {
-                    if (Collision.SolidCollision(Main.MouseWorld + new Vector2(0, g * 5 * player.gravDir), 1, 1))
-                    {
-                        Vector2 ReleasePoint = Main.MouseWorld + new Vector2(0, g * 5 * player.gravDir);
-                        Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), ReleasePoint, Vector2.Zero, ModContent.ProjectileType<SkullHand>(), player.HeldItem.damage * 3, player.HeldItem.knockBack * 6, Projectile.owner);
-                        p.CritChance = (int)(player.HeldItem.crit + player.GetCritChance(DamageClass.Generic));
-
-                        HandCooling = 18;
-                        player.statMana -= player.HeldItem.mana * 2;
-                        break;
-                    }
-                }
-            }
+            
         }
 
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
@@ -86,7 +61,6 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
         {
             Projectile.hide = false;
             DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLineBlackShade"), new Color(1f, 1f, 1f, 1f));
-            //DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLineBlackShade"), new Color(1f, 1f, 1f, 1f));
             DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), new Color(0.6f, 0.55f, 0.45f, 0));
             return false;
         }

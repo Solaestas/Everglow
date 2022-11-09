@@ -125,7 +125,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 
                 if (Dis < 150)
                 {
-                    if (!target.dontTakeDamage && !target.friendly && target.active)
+                    if (!target.dontTakeDamage && !target.friendly && target.CanBeChasedBy() && target.active)
                     {
                         bool crit = Main.rand.NextBool(33, 100);
                         target.StrikeNPC(Projectile.damage, 2f, 1, crit);
