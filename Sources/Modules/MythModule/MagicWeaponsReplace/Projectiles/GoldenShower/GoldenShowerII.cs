@@ -1,5 +1,6 @@
 using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MEACModule;
+using Terraria.Audio;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.GoldenShower
 {
@@ -34,35 +35,39 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Go
                 d0.velocity *= 0;
             }
             Projectile.velocity.Y += 0.15f;
-            if(Collision.SolidCollision(Projectile.Center,0,0))
+            if(Projectile.timeLeft < 239)
             {
-                Projectile.velocity *= 0.1f;
-                
-                if (Projectile.extraUpdates == 1)
+                if (Collision.SolidCollision(Projectile.Center, 0, 0))
                 {
-                    for(int x = 0;x < 15;x++)
+                    Projectile.velocity *= 0.1f;
+
+                    if (Projectile.extraUpdates == 1)
                     {
-                        Vector2 BasePos = Projectile.Center - new Vector2(4) - Projectile.velocity;
-                        Dust d0 = Dust.NewDustDirect(BasePos, 0, 0, DustID.Ichor, 0, 0, 0, default, 0.6f);
-                        d0.noGravity = true;
-                    }
-                    if (Projectile.ai[0] != 3)
-                    {
-                        for (int x = 0; x < 3; x++)
+                        for (int x = 0; x < 15; x++)
                         {
-                            Vector2 velocity = new Vector2(0, Main.rand.NextFloat(2f, 6f)).RotatedByRandom(6.283) - Projectile.velocity * 0.2f;
-                            Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 - Projectile.velocity * 2, velocity, ModContent.ProjectileType<GoldenShowerII>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 3f/*If ai[0] equal to 3, another ai will be execute*/);
-                            p.friendly = false;
+                            Vector2 BasePos = Projectile.Center - new Vector2(4) - Projectile.velocity;
+                            Dust d0 = Dust.NewDustDirect(BasePos, 0, 0, DustID.Ichor, 0, 0, 0, default, 0.6f);
+                            d0.noGravity = true;
                         }
+                        if (Projectile.ai[0] != 3)
+                        {
+                            for (int x = 0; x < 3; x++)
+                            {
+                                Vector2 velocity = new Vector2(0, Main.rand.NextFloat(2f, 6f)).RotatedByRandom(6.283) - Projectile.velocity * 0.2f;
+                                Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 - Projectile.velocity * 2, velocity, ModContent.ProjectileType<GoldenShowerII>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 3f/*If ai[0] equal to 3, another ai will be execute*/);
+                                p.friendly = false;
+                            }
+                        }
+                        Projectile.extraUpdates = 2;
+                        SoundEngine.PlaySound(SoundID.Drip, Projectile.Center);
                     }
-                    Projectile.extraUpdates = 2;
                 }
-            }
-            else
-            {
-                if (Projectile.extraUpdates == 2)
+                else
                 {
-                    Projectile.extraUpdates = 1;
+                    if (Projectile.extraUpdates == 2)
+                    {
+                        Projectile.extraUpdates = 1;
+                    }
                 }
             }
             if(Projectile.timeLeft == 210)
@@ -72,6 +77,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Go
         }
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
+            SoundEngine.PlaySound(SoundID.Drip, Projectile.Center);
             for (int x = 0; x < 15; x++)
             {
                 Vector2 BasePos = Projectile.Center - new Vector2(4) - Projectile.velocity;

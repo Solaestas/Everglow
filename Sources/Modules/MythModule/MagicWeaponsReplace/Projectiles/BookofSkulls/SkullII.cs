@@ -2,6 +2,7 @@ using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Commons.Core.VFX;
 using Everglow.Sources.Modules.MEACModule;
 using Terraria.DataStructures;
+using Terraria.Audio;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.BookofSkulls
 {
@@ -308,6 +309,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
+            SoundEngine.PlaySound(SoundID.NPCHit2, Projectile.Center);
             int type = ModContent.ProjectileType<BoneSpike>();
             Player player = Main.player[Projectile.owner];
 
@@ -343,6 +345,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
         }
         public override void OnHitPvp(Player target, int damage, bool crit)
         {
+            SoundEngine.PlaySound(SoundID.NPCHit2, Projectile.Center);
             int type = ModContent.ProjectileType<BoneSpike>();
             Player player = Main.player[Projectile.owner];
 
@@ -379,6 +382,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
+            SoundEngine.PlaySound(SoundID.NPCHit2, Projectile.Center);
             if (Projectile.velocity.X != oldVelocity.X)
             {
                 Projectile.velocity.X = -oldVelocity.X;

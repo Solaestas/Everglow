@@ -1,6 +1,7 @@
 ﻿using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MEACModule;
 using Everglow.Sources.Modules.MythModule.Common;
+using Terraria.Audio;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.BookofSkulls
 {
@@ -213,6 +214,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
 
         public override void Kill(int timeLeft)
         {
+            SoundEngine.PlaySound(SoundID.NPCHit2, Projectile.Center);
             for (int f = 0; f < 20; f++)
             {
                 Vector2 v0 = new Vector2(Main.rand.NextFloat(0f, 8f), 0).RotatedByRandom(6.283);

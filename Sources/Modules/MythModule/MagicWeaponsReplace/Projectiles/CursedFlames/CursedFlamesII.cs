@@ -1,6 +1,7 @@
 using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Commons.Core.VFX;
 using Everglow.Sources.Modules.MEACModule;
+using Terraria.Audio;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.CursedFlames
 {
@@ -226,6 +227,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
             }
             int HitType = ModContent.ProjectileType<CursedFlameHit>();
             Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, Projectile.damage, Projectile.knockBack * 6, Projectile.owner, 30, Projectile.rotation + Main.rand.NextFloat(6.283f));
+
+            SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact, Projectile.Center);
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
@@ -242,6 +245,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
             Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, Projectile.damage, Projectile.knockBack * 2, Projectile.owner, 10, Projectile.rotation + Main.rand.NextFloat(6.283f));
             target.AddBuff(BuffID.CursedInferno,900);
             Projectile.damage = (int)(Projectile.damage * 1.2);
+
+            SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot, Projectile.Center);
         }
         public override void OnHitPvp(Player target, int damage, bool crit)
         {
@@ -256,10 +261,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
             Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, Projectile.damage, Projectile.knockBack * 2, Projectile.owner, 10, Projectile.rotation + Main.rand.NextFloat(6.283f));
             target.AddBuff(BuffID.CursedInferno, 900);
             Projectile.damage = (int)(Projectile.damage * 1.2);
+
+            SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot, Projectile.Center);
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
+            SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot, Projectile.Center);
             GenerateVFXExpolode(34, 1.2f);
             for (int d = 0; d < 28; d++)
             {

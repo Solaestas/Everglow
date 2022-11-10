@@ -15,7 +15,27 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             Projectile.DamageType = DamageClass.Summon;
             Projectile.tileCollide = false;
         }
-
+        public void GenerateVFX(int Frequency)
+        {
+            float mulVelocity = 1f;
+            for (int g = 0; g < Frequency; g++)
+            {
+                float k2 = Main.rand.NextFloat(0f, 1f);
+                float k3 = k2 * k2 * k2 * k2;
+                Vector2 v2 = new Vector2(Main.rand.NextFloat(-150f, 150f) / (k3 * 10f + 1f), -k3 * 200 + 10);
+                CrystalWindVFX cw = new CrystalWindVFX
+                {
+                    velocity = Projectile.velocity * Main.rand.NextFloat(0.65f, 2.5f) * mulVelocity + Utils.SafeNormalize(Projectile.velocity, new Vector2(0, -1)),
+                    Active = true,
+                    Visible = true,
+                    position = Projectile.Center + v2,
+                    maxTime = Math.Min(120, Intensity / 2),
+                    rotation = Main.rand.NextFloat(6.283f),
+                    ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Intensity / 1400f * Main.rand.NextFloat(0.85f, 1.15f), Projectile.whoAmI, 0 }
+                };
+                VFXManager.Add(cw);
+            }
+        }
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
@@ -58,7 +78,9 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
                 p0.timeLeft = Math.Min(120, Intensity / 2);
                 p0.rotation = Main.rand.NextFloat(6.283f);
             }
-            if(Main.rand.NextBool(10))
+
+            //GenerateVFX(4);
+            if (Main.rand.NextBool(10))
             {
                 foreach (var target in Main.npc)
                 {
@@ -132,24 +154,6 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
                         }
                     }
                 }
-            }
-            for (int j = 0; j < 8; j++)
-            {
-                CrystalParticleStorm cp = new CrystalParticleStorm
-                {
-                    timeLeft = 120,
-                    size = Main.rand.NextFloat(0.03f, 0.06f),
-                    velocity = Vector2.Zero,
-                    Active = true,
-                    Visible = true,
-                    AI0 = Main.rand.NextFloat(6.283f),
-                    AI1 = Intensity / 1400f * Main.rand.NextFloat(0.85f, 1.15f),
-                    AI2 = 1,
-                    position = Projectile.Center,
-                    AimCenter = Projectile.Center
-                };
-
-                VFXManager.Add(cp);
             }
         }
 

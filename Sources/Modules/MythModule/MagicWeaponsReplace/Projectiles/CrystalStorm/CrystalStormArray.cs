@@ -61,7 +61,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             Projectile.hide = false;
             DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CrystalDarkline"), new Color(0.6f, 0.6f, 0.6f, 0.6f));
 
-            DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/ElecLine"), new Color(15, 100, 255, 0));
+            DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), new Color(0, 120, 225, 0));
 
 
             return false;
@@ -81,9 +81,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
                 Crystalline = tex;
                 CrystalLight = tex;
             }
-            Color c1 = new Color(155,0,225,0);
+            Color c1 = new Color(155, 0, 225, 0);
+            Color c2 = new Color(0, 0, 255, 0);
             DrawTexSquire(Timer * 2.88f, 11, c0, player.Center + RingPos - Main.screenPosition, Water, -Main.timeForVisualEffects / 300);
-            DrawTexSquire(Timer * 3.1f, 24, c0, player.Center + RingPos - Main.screenPosition, Crystalline, -Main.timeForVisualEffects / 300);
+            DrawTexSquire(Timer * 3.1f, 24, c2, player.Center + RingPos - Main.screenPosition, Crystalline, -Main.timeForVisualEffects / 300);
 
 
             DrawTexSquire(Timer * 3.18f, 11, c0, player.Center + RingPos - Main.screenPosition, Water, -Main.timeForVisualEffects / 300 + MathHelper.PiOver4);
@@ -111,23 +112,6 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             Vector2 Point7_ = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 6 / 4d + timeRot + 0.2);
             Vector2 Point8_ = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 1.4f).RotatedBy(Math.PI * 7 / 4d + timeRot + 0.2);
 
-            Vector2 InnerPoint1 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(Math.PI * 0 - timeRot);
-            Vector2 InnerPoint2 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(Math.PI * 1 / 4d - timeRot);
-            Vector2 InnerPoint3 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(Math.PI * 2 / 4d - timeRot);
-            Vector2 InnerPoint4 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(Math.PI * 3 / 4d - timeRot);
-            Vector2 InnerPoint5 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(Math.PI * 4 / 4d - timeRot);
-            Vector2 InnerPoint6 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(Math.PI * 5 / 4d - timeRot);
-            Vector2 InnerPoint7 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(Math.PI * 6 / 4d - timeRot);
-            Vector2 InnerPoint8 = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(Math.PI * 7 / 4d - timeRot);
-
-            Vector2 InnerPoint1_ = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(Math.PI * 0 - timeRot + 0.2);
-            Vector2 InnerPoint2_ = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(Math.PI * 1 / 4d - timeRot + 0.2);
-            Vector2 InnerPoint3_ = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(Math.PI * 2 / 4d - timeRot + 0.2);
-            Vector2 InnerPoint4_ = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(Math.PI * 3 / 4d - timeRot + 0.2);
-            Vector2 InnerPoint5_ = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(Math.PI * 4 / 4d - timeRot + 0.2);
-            Vector2 InnerPoint6_ = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(Math.PI * 5 / 4d - timeRot + 0.2);
-            Vector2 InnerPoint7_ = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(Math.PI * 6 / 4d - timeRot + 0.2);
-            Vector2 InnerPoint8_ = player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(Math.PI * 7 / 4d - timeRot + 0.2);
 
             DrawTexLine(Point1_, Point3, c0, c0, CrystalLight, 0.1f);
             DrawTexLine(Point2_, Point4, c0, c0, CrystalLight, 0.4f);
@@ -149,28 +133,6 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
 
             DrawTexLine(Point2_, Point7, c0, c0, CrystalLight, 0.5f);
             DrawTexLine(Point3_, Point6, c0, c0, CrystalLight, 0.7f);
-
-
-            DrawTexLine(InnerPoint1_, InnerPoint3, c1, c1, CrystalLight, 0.1f);
-            DrawTexLine(InnerPoint2_, InnerPoint4, c1, c1, CrystalLight, 0.4f);
-            DrawTexLine(InnerPoint3_, InnerPoint5, c1, c1, CrystalLight, 0.2f);
-            DrawTexLine(InnerPoint4_, InnerPoint6, c1, c1, CrystalLight, 0.8f);
-            DrawTexLine(InnerPoint5_, InnerPoint7, c1, c1, CrystalLight, 0.5f);
-            DrawTexLine(InnerPoint6_, InnerPoint8, c1, c1, CrystalLight, 0.7f);
-            DrawTexLine(InnerPoint7_, InnerPoint1, c1, c1, CrystalLight, 0.3f);
-            DrawTexLine(InnerPoint8_, InnerPoint2, c1, c1, CrystalLight, 0.1f);
-
-            DrawTexLine(InnerPoint1, InnerPoint4, c1, c1, CrystalLight, 0.6f);
-            DrawTexLine(InnerPoint8, InnerPoint5, c1, c1, CrystalLight, 0.9f);
-
-            DrawTexLine(InnerPoint2, InnerPoint7, c1, c1, CrystalLight, 0.1f);
-            DrawTexLine(InnerPoint3, InnerPoint6, c1, c1, CrystalLight, 0.4f);
-
-            DrawTexLine(InnerPoint1_, InnerPoint4, c1, c1, CrystalLight, 0.2f);
-            DrawTexLine(InnerPoint8_, InnerPoint5, c1, c1, CrystalLight, 0.8f);
-
-            DrawTexLine(InnerPoint2_, InnerPoint7, c1, c1, CrystalLight, 0.5f);
-            DrawTexLine(InnerPoint3_, InnerPoint6, c1, c1, CrystalLight, 0.7f);
 
         }
 

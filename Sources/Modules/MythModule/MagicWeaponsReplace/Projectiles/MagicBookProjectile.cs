@@ -134,6 +134,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
             DrawPaper(Paper);
             DrawFront(Book);
             DrawFront(BookGlow, UseGlow);
+            SpecialDraw();
+        }
+        public virtual void SpecialDraw()
+        {
         }
         /// <summary>
         /// 对于书页的绘制，包括正在被翻起的以及堆叠在前后两侧的。关于纸张的绘制，因为较小，都没有经过严格的投影，随手捏了一个近似函数，只保证视觉效果上大致正确

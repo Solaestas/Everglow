@@ -1,5 +1,5 @@
 using Everglow.Sources.Commons.Function.Vertex;
-using Terraria.GameContent;
+using Terraria.Audio;
 using Everglow.Sources.Modules.MEACModule;
 using Terraria.DataStructures;
 
@@ -51,6 +51,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
                                     int HitType = ModContent.ProjectileType<MagnetSphereLighting>();
                                     Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center, Vector2.One, HitType, (int)(Projectile.damage * 0.5f), Projectile.knockBack, Projectile.owner, Projectile.whoAmI, Projectile.rotation + Main.rand.NextFloat(6.283f));
                                     p.CritChance = Projectile.CritChance;
+                                    SoundEngine.PlaySound(SoundID.DD2_LightningBugZap, target.Center);
                                     Projectile.penetrate--;
                                     if(Projectile.penetrate < 0)
                                     {
@@ -206,8 +207,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
 
         public override void Kill(int timeLeft)
         {
-
-            for(int d = 0;d <28;d++)
+            SoundEngine.PlaySound(SoundID.DD2_LightningBugZap, Projectile.Center);
+            for (int d = 0;d <28;d++)
             {
                 Vector2 BasePos = Projectile.Center - new Vector2(4) - Projectile.velocity;
                 Dust d0 = Dust.NewDustDirect(BasePos, 0, 0, DustID.Electric, 0, 0, 0, default, 0.6f);
@@ -220,6 +221,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
+            SoundEngine.PlaySound(SoundID.DD2_LightningAuraZap, Projectile.Center);
             for (int d = 0; d < 28; d++)
             {
                 Vector2 BasePos = Projectile.Center - new Vector2(4) - Projectile.velocity;
@@ -238,6 +240,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
         }
         public override void OnHitPvp(Player target, int damage, bool crit)
         {
+            SoundEngine.PlaySound(SoundID.DD2_LightningAuraZap, Projectile.Center);
             for (int d = 0; d < 28; d++)
             {
                 Vector2 BasePos = Projectile.Center - new Vector2(4) - Projectile.velocity;
@@ -257,6 +260,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
+            SoundEngine.PlaySound(SoundID.DD2_LightningAuraZap, Projectile.Center);
             for (int d = 0; d < 28; d++)
             {
                 Vector2 BasePos = Projectile.Center - new Vector2(4) - Projectile.velocity;

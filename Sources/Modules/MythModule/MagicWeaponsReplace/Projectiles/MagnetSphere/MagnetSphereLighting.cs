@@ -116,12 +116,9 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
                 value = 0;
             }
             float colorV = 0.9f * (1 - value);
-            if (Projectile.ai[0] >= 10)
-            {
-                colorV *= Projectile.ai[0] / 10f;
-            }
+
             Texture2D t = MythContent.QuickTexture("OmniElementItems/Projectiles/Wave");
-            DrawTexCircle(value * 16 * Projectile.ai[0], 10 * value * value, new Color(0, colorV, colorV * 0.7f, 0f), Projectile.Center - Main.screenPosition, t);
+            DrawTexCircle(value * 160, 10 * value * value, new Color(0, colorV, colorV * 0.7f, 0f), Projectile.Center - Main.screenPosition, t);
 
             Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0, 199, 129, 0), (float)(Math.PI / 4d) + Projectile.ai[1], light.Size() / 2f, new Vector2(0.6f, Dark / 2f), SpriteEffects.None, 0);
             Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0, 199, 129, 0), (float)(Math.PI / 4d * 3) + Projectile.ai[1], light.Size() / 2f, new Vector2(0.6f, Dark / 0f), SpriteEffects.None, 0);
