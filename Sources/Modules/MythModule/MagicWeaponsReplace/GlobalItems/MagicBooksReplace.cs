@@ -348,7 +348,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
                                 p.CritChance = (int)(player.HeldItem.crit + player.GetCritChance(DamageClass.Generic));
 
                                 mplayer.HandCooling = 18;
-                                player.statMana -= player.HeldItem.mana * 2;
+                                player.statMana -= player.HeldItem.mana * 4;
                                 break;
                             }
                         }

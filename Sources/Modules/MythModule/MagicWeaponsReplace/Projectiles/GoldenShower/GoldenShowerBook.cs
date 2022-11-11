@@ -26,26 +26,25 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Go
                     for (int d = 0; d < Rain; d++)
                     {
                         Vector2 velocity = new Vector2(0, Main.rand.NextFloat(-16f, -12f)).RotatedBy(Main.rand.NextFloat(-(Rain / 120f), (Rain / 120f)));
-                        Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 + new Vector2(0, -10), velocity, ModContent.ProjectileType<GoldenShowerII>(), player.HeldItem.damage * 2, player.HeldItem.knockBack, player.whoAmI);
+                        Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 + new Vector2(0, -10), velocity, ModContent.ProjectileType<GoldenShowerII>(), player.HeldItem.damage * 2, player.HeldItem.knockBack, player.whoAmI);
+                        p0.CritChance = (int)player.GetCritChance(DamageClass.Generic);
+                    }
+
+                    for (int i = 0; i < 15 + ConstantUsingTime / 15; ++i)
+                    {
+                        Vector2 BasePos = Projectile.Center ;
+                        Dust d0 = Dust.NewDustDirect(BasePos, 0, 0, DustType);
+                        d0.noGravity = true;
+                        d0.velocity = ConstantUsingTime / 80f * new Vector2(0, Main.rand.NextFloat(0f, 1f)).RotatedByRandom(6.283);
+                        Dust d1 = Dust.NewDustDirect(BasePos, 0, 0, DustType);
+                        d1.noGravity = true;
+                        d1.velocity = ConstantUsingTime / 80f * new Vector2(0, Main.rand.NextFloat(0f, 1f)).RotatedByRandom(6.283);
                     }
                     ConstantUsingTime = 0;
-                    Vector2 X0 = new Vector2(BookScale * player.direction, BookScale * player.gravDir) * 0.5f;
-                    Vector2 Y0 = new Vector2(BookScale * player.direction, -BookScale * player.gravDir) * 0.707f;
-                    for (int i = 0; i < 45; ++i)
-                    {
-                        double rot = 0;
-                        rot += Projectile.rotation;
-                        Vector2 BasePos = Projectile.Center + X0 - X0.RotatedBy(rot) * i / 2.5f;
-                        Dust d0 = Dust.NewDustDirect(BasePos - Y0, 0, 0, DustType);
-                        d0.noGravity = true;
-                        d0.velocity *= 6f;
-                        Dust d1 = Dust.NewDustDirect(BasePos + Y0, 0, 0, DustType);
-                        d1.noGravity = true;
-                        d1.velocity *= 6f;
-                    }
                     SoundEngine.PlaySound(SoundID.Item20, Projectile.Center);
                     int HitType = ModContent.ProjectileType<GoldenShowerBomb>();
-                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, Projectile.damage, Projectile.knockBack * 6, Projectile.owner, Rain / 4f, Projectile.rotation + Main.rand.NextFloat(6.283f));
+                    Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, Projectile.damage, Projectile.knockBack * 6, Projectile.owner, Rain / 4f, Projectile.rotation + Main.rand.NextFloat(6.283f));
+                    p.CritChance = (int)player.GetCritChance(DamageClass.Generic);
                     Projectile.Kill();
                 }
             }
@@ -53,17 +52,20 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Go
             {
                 if(Main.mouseRight)
                 {
-                    player.statMana -= 4;
-                    for (int d = 0; d < 3; d++)
+                    ConstantUsingTime+=3;
+                    player.statMana -= 7;
+                    for (int d = 0; d < 2; d++)
                     {
                         Vector2 velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero).RotatedBy(Main.rand.NextFloat(-0.1f, 0.1f)) * player.HeldItem.shootSpeed * 1.3f;
-                        Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 + new Vector2(0, -10), velocity, ModContent.ProjectileType<GoldenShowerII>(), player.HeldItem.damage * 2, player.HeldItem.knockBack, player.whoAmI);
+                        Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 + new Vector2(0, -10), velocity, ModContent.ProjectileType<GoldenShowerII>(), player.HeldItem.damage * 2, player.HeldItem.knockBack, player.whoAmI);
+                        p.CritChance = (int)player.GetCritChance(DamageClass.Generic);
                     }
                 }
                 else
                 {
                     Vector2 velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero) * player.HeldItem.shootSpeed * 1.3f;
-                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 + new Vector2(0, -10), velocity, ModContent.ProjectileType<GoldenShowerII>(), player.HeldItem.damage * 2, player.HeldItem.knockBack, player.whoAmI);
+                    Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 + new Vector2(0, -10), velocity, ModContent.ProjectileType<GoldenShowerII>(), player.HeldItem.damage * 2, player.HeldItem.knockBack, player.whoAmI);
+                    p.CritChance = (int)player.GetCritChance(DamageClass.Generic);
                 }
             }
         }

@@ -217,6 +217,9 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
 
         public override void Kill(int timeLeft)
         {
+            ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
+            Gsplayer.FlyCamPosition = new Vector2(0, 33).RotatedByRandom(6.283);
+
             GenerateVFXExpolode(64, 2.2f);
 
             for(int d = 0;d <70;d++)
@@ -228,11 +231,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
             int HitType = ModContent.ProjectileType<CursedFlameHit>();
             Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, Projectile.damage, Projectile.knockBack * 6, Projectile.owner, 30, Projectile.rotation + Main.rand.NextFloat(6.283f));
 
-            SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact, Projectile.Center);
+            SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithVolumeScale(0.4f), Projectile.Center);
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
+            ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
+            Gsplayer.FlyCamPosition = new Vector2(0, 11).RotatedByRandom(6.283);
             GenerateVFXExpolode(34, 1.2f);
             for (int d = 0; d < 28; d++)
             {
@@ -246,10 +251,12 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
             target.AddBuff(BuffID.CursedInferno,900);
             Projectile.damage = (int)(Projectile.damage * 1.2);
 
-            SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot, Projectile.Center);
+            SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot.WithVolumeScale(0.4f), Projectile.Center);
         }
         public override void OnHitPvp(Player target, int damage, bool crit)
         {
+            ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
+            Gsplayer.FlyCamPosition = new Vector2(0, 11).RotatedByRandom(6.283);
             GenerateVFXExpolode(34, 1.2f);
             for (int d = 0; d < 28; d++)
             {
@@ -262,12 +269,14 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
             target.AddBuff(BuffID.CursedInferno, 900);
             Projectile.damage = (int)(Projectile.damage * 1.2);
 
-            SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot, Projectile.Center);
+            SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot.WithVolumeScale(0.4f), Projectile.Center);
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot, Projectile.Center);
+            ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
+            Gsplayer.FlyCamPosition = new Vector2(0, 11).RotatedByRandom(6.283);
+            SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot.WithVolumeScale(0.4f), Projectile.Center);
             GenerateVFXExpolode(34, 1.2f);
             for (int d = 0; d < 28; d++)
             {

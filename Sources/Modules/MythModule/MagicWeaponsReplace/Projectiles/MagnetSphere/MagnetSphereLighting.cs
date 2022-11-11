@@ -102,7 +102,9 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
         }
         public override bool PreDraw(ref Color lightColor)
         {
-            DrawLightingBolt(new Color(0, 199, 129, 0));
+            DrawLightingBolt(Color.White * 0.3f);
+            DrawLightingBolt(new Color(0, 255, 199, 0));
+
             Texture2D Shadow = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/CursedHit");
             float Dark = Math.Max(((Projectile.timeLeft - 150) / 50f), 0);
             Main.spriteBatch.Draw(Shadow,Projectile.Center - Main.screenPosition,null,Color.White * Dark,0,Shadow.Size() / 2f,22f / 15f, SpriteEffects.None,0);
@@ -125,11 +127,14 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
             return false;
         }
         internal Vector2[] LightPos = new Vector2[30];
-        internal Vector2[] LightVel = new Vector2[30];
         private void DrawLightingBolt(Color c0)
         {
             Vector2[] BasePos = new Vector2[30];
             float width = (Projectile.timeLeft - 170) / 1.8f;
+            if (c0 == Color.White * 0.3f)
+            {
+                width *= 0.2f;
+            }
             int LengthII = 0;
             if (width < 0)
             {
@@ -147,19 +152,31 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
             if (LightPos[1] == Vector2.Zero)
             {
                 BasePos[0] = Projectile.Center;
-                float Length = AimC.Length() / 10f;
+                float Length = AimC.Length() / 40f;
                 if (Length > 30)
                 {
                     Length = 30;
                 }
+                Vector2 VLight = new Vector2(0, Main.rand.NextFloat(3f, 5f)).RotatedByRandom(6.283);
                 for (int a = 1; a < Length - 1; a++)
-                {
-                    LightPos[a] = new Vector2(0, Main.rand.NextFloat(0f, 5f)).RotatedByRandom(6.283);
-                    LightVel[a] = new Vector2(0, Main.rand.NextFloat(0f, 10f)).RotatedByRandom(6.283);
+                {                 
+                    if(a > 1)
+                    {
+                        LightPos[a] = LightPos[a - 1] + new Vector2(0, Main.rand.NextFloat(0f, 7f)).RotatedByRandom(6.283) + VLight;
+                        VLight = VLight.RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f));
+                        if(a > Length - 10)
+                        {
+                            LightPos[a] -= LightPos[a - 1] * 0.2f;
+                            VLight -= Vector2.Normalize(LightPos[a - 1]) * 0.3f;
+                        }    
+                    }
+                    else
+                    {
+                        LightPos[a] = new Vector2(0, Main.rand.NextFloat(0f, 5f)).RotatedByRandom(6.283);
+                    }
                     if (a + 1 >= Length)
                     {
                         LightPos[a + 1] = Vector2.Zero;
-                        LightVel[a + 1] = Vector2.Zero;
                     }
                 }
             }
@@ -175,26 +192,20 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
             {
                 BasePos[a] = a / (float)LengthII * Projectile.Center + (LengthII - a) / (float)LengthII * AimC + LightPos[a];
             }
-            
 
-            if (!Main.gamePaused)
+
+            for (int a = 0; a < LengthII; a++)
             {
-
-
-                for (int a = 0; a < LengthII; a++)
+                if (BasePos[a] != Vector2.Zero)
                 {
-                    if (BasePos[a] != Vector2.Zero)
+                    if (a % 4 == 0)
                     {
-                        BasePos[a] += LightVel[a];
-                        if (a % 4 == 0)
-                        {
-                            Lighting.AddLight((int)(BasePos[a].X / 16), (int)(BasePos[a].Y / 16), 0, width / 45f, width / 50f);
-                        }
+                        Lighting.AddLight((int)(BasePos[a].X / 16), (int)(BasePos[a].Y / 16), 0, width / 45f, width / 50f);
                     }
-                    else
-                    {
-                        break;
-                    }
+                }
+                else
+                {
+                    break;
                 }
             }
             List<Vertex2D> lighting = new List<Vertex2D>();
@@ -214,7 +225,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
             }
             if (lighting.Count > 0)
             {
-                Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Lightline");
+                if (c0 == Color.White * 0.3f)
+                {
+                    Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Darkline");
+                    Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, lighting.ToArray(), 0, lighting.Count - 2);
+                    return;
+                }
+                Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/MagneticLight");          
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, lighting.ToArray(), 0, lighting.Count - 2);
             }
         }

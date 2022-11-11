@@ -116,10 +116,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
 
         public override void Kill(int timeLeft)
         {
-            if(Main.rand.NextBool(1))
-            {
-                Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<Storm>(), (int)(Projectile.damage * 0.6f), Projectile.knockBack, Projectile.owner);
-            }
+            Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<Storm>(), (int)(Projectile.damage * 0.6f), Projectile.knockBack, Projectile.owner);
 
             float k1 = 1;
             float k0 = 5;
@@ -128,7 +125,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
                 Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * Projectile.scale * k1;
                 int dust0 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<Dusts.CrystalAppearStoppedByTile>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(0.3f, 0.6f) * Projectile.scale * 0.4f * k0);
                 Main.dust[dust0].noGravity = true;
-
+                Main.dust[dust0].dustIndex = p.whoAmI;
                 CrystalParticle cp = new CrystalParticle
                 {
                     timeLeft = 70,
