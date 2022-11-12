@@ -1,6 +1,7 @@
 ﻿using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MEACModule;
 using Everglow.Sources.Modules.MythModule.Common;
+using Terraria.Audio;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.RazorbladeTyphoon
 {
@@ -24,6 +25,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ra
 
         public override void AI()
         {
+            if(Projectile.timeLeft == 19980)
+            {
+                Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BlackHole.BlackHole>(), Projectile.damage * 12, 0, Projectile.owner, Projectile.ai[0]);
+                p.CritChance = (int)Main.player[Projectile.owner].GetCritChance(DamageClass.Generic);
+                p.timeLeft = 100 + (int)(Projectile.ai[0] * 240);
+                Projectile.Kill();
+            }
         }
         public override void PostDraw(Color lightColor)
         {

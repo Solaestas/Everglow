@@ -86,7 +86,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
                     //TODO 英语翻译
                     if (Language.ActiveCulture.Name == "zh-Hans")
                     {
-                        tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "Text1", "制造会追踪并吸引敌人的台风,台风可以回收金币,魔法星,和生命心"));
+                        tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "Text1", "制造会追踪并吸引敌人的台风,台风可以回收金币,魔法星,和生命心\n如果连续使用得足够久,会引发暴风黑洞"));
                     }
                 }
             }
@@ -218,7 +218,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
                 int aimType = ModContent.ProjectileType<Projectiles.RazorbladeTyphoon.RazorbladeTyphoonBook>();
                 if (player.ownedProjectileCounts[aimType] < 1)
                 {
-                    Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
+                    Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, player.HeldItem.damage, 0, player.whoAmI);
                 }
                 aimType = ModContent.ProjectileType<Projectiles.RazorbladeTyphoon.RazorbladeTyphoonArray>();
                 if (player.ownedProjectileCounts[aimType] < 1)

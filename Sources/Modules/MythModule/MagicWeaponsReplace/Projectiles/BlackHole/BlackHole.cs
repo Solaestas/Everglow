@@ -14,12 +14,16 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bl
         public static Projectile proj;//只能存在一个
         public override void SetDefaults()
         {
-            Projectile.width = Projectile.height = 1;
+            Projectile.width = Projectile.height = 200;
             Projectile.scale = 0;
             Projectile.aiStyle = -1;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
-            Projectile.timeLeft = 900;
+            Projectile.timeLeft = 180;
+            Projectile.friendly = true;
+            Projectile.penetrate = -1;
+            Projectile.usesLocalNPCImmunity = true;
+            Projectile.localNPCHitCooldown = 30;
             ProjectileID.Sets.DrawScreenCheckFluff[Projectile.type]=5000;
         }
         public static bool ProjActive()
@@ -44,7 +48,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bl
         public override void AI()
         {
             if(Projectile.timeLeft>20)
-                proj.scale = MathHelper.Lerp(proj.scale,280,0.1f);
+                proj.scale = MathHelper.Lerp(proj.scale,280 * Projectile.ai[0],0.1f);
             else
                 proj.scale = MathHelper.Lerp(proj.scale, 0, 0.25f);
 
@@ -59,7 +63,117 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bl
                 LightDust d = new LightDust() {drawColor= c, position = Projectile.Center + Main.rand.NextVector2Unit() * 30, velocity = Main.rand.NextVector2Unit() * 6, scale = 0.2f, time_max = 30 };
                 VFXManager.Add(d);
             }
+            AbsorbMonster();
+            ScreenShake();
+        }
+        private void ScreenShake()
+        {
+            Player player = Main.player[Projectile.owner];
+            float kPlayerCenter = (player.Center - Projectile.Center).Length();
+            kPlayerCenter = 100f / (kPlayerCenter + 100f);
+            ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
+            Gsplayer.FlyCamPosition = new Vector2(0, Projectile.ai[0] * Projectile.scale * kPlayerCenter).RotatedByRandom(6.283);
+        }
+        private void AbsorbMonster()
+        {
+            float MinDis = 2550 * Projectile.ai[0];
+            float MaxSpeed = 100f * Projectile.ai[0];
+            if(Projectile.timeLeft < 20f)
+            {
+                MaxSpeed = Projectile.timeLeft * 5f;
+            }
+            foreach (var target in Main.npc)
+            {
+                if (target.active)
+                {
+                    if (!target.dontTakeDamage && !target.friendly)
+                    {
+                        if(target.type == NPCID.TargetDummy)
+                        {
+                            continue;
+                        }
+                        Vector2 ToTarget = target.Center - Projectile.Center;
+                        float dis = ToTarget.Length();
+                        if (dis < MinDis && ToTarget != Vector2.Zero)
+                        {
 
+                            float mess = target.width * target.height;
+                            mess = (float)(Math.Sqrt(mess));
+                            Vector2 Addvel = Vector2.Normalize(ToTarget) / mess / (dis + 10) * 40000f * (target.knockBackResist + 0.3f) * Projectile.ai[0];
+                            if (!target.noGravity)
+                            {
+                                Addvel.Y *= 3f;
+                            }
+                            target.velocity -= Addvel;
+                            float kSpeed = 1f;
+                            if(dis < 100)
+                            {
+                                kSpeed = (dis + 100) / 200f;
+                            }
+                            if (target.velocity.Length() > MaxSpeed * kSpeed)
+                            {
+                                target.velocity *= MaxSpeed * kSpeed / target.velocity.Length();
+                            }
+                        }
+                    }
+                }
+            }
+            foreach (var target in Main.item)
+            {
+                if (target.active)
+                {
+                    Vector2 ToTarget = target.Center - Projectile.Center;
+                    float dis = ToTarget.Length();
+                    if (dis < MinDis && ToTarget != Vector2.Zero)
+                    {
+                        if (dis < 45)
+                        {
+                            if ((target.type >= 71 && target.type <= 74) || target.type == ItemID.Star || target.type == ItemID.Heart)
+                            {
+                                target.position = Main.player[Projectile.owner].Center;
+                            }
+                        }
+                        float mess = target.width * target.height;
+                        mess = (float)(Math.Sqrt(mess));
+                        Vector2 Addvel = Vector2.Normalize(ToTarget) / mess / (dis + 10) * 20000f * Projectile.ai[0];
+                        target.velocity -= Addvel;
+                        float kSpeed = 1f;
+                        if (dis < 100)
+                        {
+                            kSpeed = (dis + 100) / 200f;
+                        }
+                        if (target.velocity.Length() > MaxSpeed * kSpeed)
+                        {
+                            target.velocity *= MaxSpeed * kSpeed / target.velocity.Length();
+                        }
+                    }
+                }
+            }
+            foreach (var target in Main.gore)
+            {
+                if (target.active)
+                {
+                    Vector2 ToTarget = target.position - Projectile.Center;
+                    float dis = ToTarget.Length();
+                    if (dis < MinDis && ToTarget != Vector2.Zero)
+                    {
+                        float mess = target.Width * target.Height;
+                        mess = (float)(Math.Sqrt(mess));
+                        Vector2 Addvel = Vector2.Normalize(ToTarget) / mess / (dis + 10) * 40000f * Projectile.ai[0];
+                        target.velocity -= Addvel;
+                        float kSpeed = 1f;
+                        if (dis < 100)
+                        {
+                            kSpeed = (dis + 100) / 200f;
+                        }
+                        if (target.velocity.Length() > MaxSpeed * kSpeed)
+                        {
+                            target.velocity *= MaxSpeed * kSpeed / target.velocity.Length();
+                        }
+                        target.timeLeft -= 24;
+                    }
+                }
+            }
         }
         public static Vector2 Projection(Vector3 vec, Vector2 center)
         {
