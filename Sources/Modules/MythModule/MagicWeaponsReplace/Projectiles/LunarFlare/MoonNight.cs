@@ -1,4 +1,6 @@
 ﻿using Everglow.Sources.Commons.Function.ObjectPool;
+using Everglow.Sources.Modules.ZYModule.Commons.Core.DataStructures;
+using Everglow.Sources.Modules.ZYModule.Commons.Core.Enumerator;
 using IL.Terraria.Graphics;
 using Microsoft.Xna.Framework.Graphics;
 using MonoMod.Cil;
@@ -15,10 +17,11 @@ using Terraria.Graphics.Effects;
 using Terraria.Graphics.Light;
 using Terraria.ModLoader;
 using Terraria.Utilities;
+using static Humanizer.On;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.LunarFlare
 {
-    internal class MoonNight:ModSystem
+    internal class MoonNight : ModSystem
     {
         internal static int Timer
         {
@@ -32,9 +35,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
         static int timer = -1;
         static bool called;
         Texture2D MoonTexture;
-        List<MoonNightStar> stars = new();
+        internal static List<MoonNightStar> stars = new();
         Effect lerpeffect;
-        Texture2D LerpTarget;
         public override void Load()
         {
             On.Terraria.Main.DrawBG += Main_DrawBG;
@@ -42,14 +44,6 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
             On.Terraria.Main.DoDraw_Tiles_NonSolid += Main_DoDraw_Tiles_NonSolid;
             On.Terraria.Main.DoDraw_WallsAndBlacks += Main_DoDraw_WallsAndBlacks;
             On.Terraria.GameContent.Drawing.TileDrawing.DrawMultiTileVines += TileDrawing_DrawMultiTileVines;
-            Main.QueueMainThreadAction(() =>
-            {
-                LerpTarget= new Texture2D(Main.graphics.GraphicsDevice, 1, 1)
-                {
-                    Name = nameof(LerpTarget)
-                };
-                LerpTarget.SetData<Color>(new Color[] { new Color(134, 255, 255) });
-            });
             lerpeffect = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/TextureLerp", AssetRequestMode.ImmediateLoad).Value;
         }
         public override void Unload()
@@ -74,22 +68,22 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
                 }
             }
             called = false;
-            if (Main.gameMenu)
-            {
-                timer = -1;
-            }
         }
-        internal void GenerateStars(int count,IEntitySource source)
+        internal static void GenerateStars(int count)
         {
             var pool = PrepareStarPoint();
             for (int i = 0; i < count; i++)
             {
-                stars.Add(new MoonNightStar(pool.Get(), source));
+                stars.Add(new MoonNightStar(pool.Get()));
             }
         }
         private void Main_DrawBG(On.Terraria.Main.orig_DrawBG orig, Main self)
         {
             orig(self);
+            if (Main.gameMenu)
+            {
+                timer = -1;
+            }
             if (timer == -1)
             {
                 return;
@@ -121,29 +115,15 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
                 1,
                 SpriteEffects.None,
                 0);
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred,
-                BlendState.Additive,
-                SamplerState.LinearClamp,
-                DepthStencilState.Default,
-                Main.Rasterizer,
-                null,
-                Main.BackgroundViewMatrix.EffectMatrix);
-            foreach(var star in stars)
+            foreach (var star in stars)
             {
                 star.Update();
                 star.Draw();
             }
             stars.RemoveAll(star => !star.active);
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred,
-                BlendState.AlphaBlend,
-                SamplerState.LinearClamp,
-                DepthStencilState.Default,
-                Main.Rasterizer,
-                null,
-                Main.BackgroundViewMatrix.EffectMatrix);
         }
+        /*
+        #region
         private void Main_DrawTileInWater(On.Terraria.Main.orig_DrawTileInWater orig, Vector2 drawOffset, int x, int y)
         {
             if (Main.tile[x, y] != null && Main.tile[x, y].HasTile && Main.tile[x, y].TileType == 518)
@@ -162,7 +142,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
                     Main.spriteBatch.End();
                     Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
                     lerpeffect.Parameters["lerp"].SetValue(timer / 750f);
-                    lerpeffect.Parameters["lerptarget"].SetValue(LerpTarget);
+                    lerpeffect.Parameters["lerptarget"].SetValue(Asset<Texture2D>.DefaultValue);
                     lerpeffect.CurrentTechnique.Passes[0].Apply();
                     Main.spriteBatch.Draw(TextureAssets.Tile[tile.TileType].Value, new Vector2((float)(x * 16), (float)(y * 16 - num)) + drawOffset, new Rectangle?(value), Lighting.GetColor(x, y), 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
                     Main.spriteBatch.End();
@@ -186,12 +166,14 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
                         Main.tileBatch.End();
                         Main.tileBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, lerpeffect, Matrix.Identity);
                         lerpeffect.Parameters["lerp"].SetValue(timer / 750f);
-                        lerpeffect.Parameters["lerptarget"].SetValue(LerpTarget);
+                        lerpeffect.Parameters["lerptarget"].SetValue(Asset<Texture2D>.DefaultValue);
                         lerpeffect.CurrentTechnique.Passes[0].Apply();
                     }
                 });
             }
         }
+        #endregion
+        */
         private void TileDrawing_DrawMultiTileVines(On.Terraria.GameContent.Drawing.TileDrawing.orig_DrawMultiTileVines orig, Terraria.GameContent.Drawing.TileDrawing self)
         {
             if (timer != -1)
@@ -199,7 +181,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
                 lerpeffect.Parameters["lerp"].SetValue(timer / 750f);
-                lerpeffect.Parameters["lerptarget"].SetValue(LerpTarget);
+                lerpeffect.Parameters["lerptarget"].SetValue(Asset<Texture2D>.DefaultValue);
                 lerpeffect.CurrentTechnique.Passes[0].Apply();
             }
             orig(self);
@@ -216,7 +198,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
                 lerpeffect.Parameters["lerp"].SetValue(timer / 750f);
-                lerpeffect.Parameters["lerptarget"].SetValue(LerpTarget);
+                lerpeffect.Parameters["lerptarget"].SetValue(Asset<Texture2D>.DefaultValue);
                 lerpeffect.CurrentTechnique.Passes[0].Apply();
                 Main.spriteBatch.Draw(self.blackTarget, Main.sceneTilePos - Main.screenPosition, Color.White);
                 TimeLogger.DetailedDrawTime(13);
@@ -245,7 +227,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
                 lerpeffect.Parameters["lerp"].SetValue(timer / 750f);
-                lerpeffect.Parameters["lerptarget"].SetValue(LerpTarget);
+                lerpeffect.Parameters["lerptarget"].SetValue(Asset<Texture2D>.DefaultValue);
                 lerpeffect.CurrentTechnique.Passes[0].Apply();
                 Main.spriteBatch.Draw(self.tile2Target, Main.sceneTile2Pos - Main.screenPosition, Color.White);
                 TimeLogger.DetailedDrawTime(15);
@@ -288,7 +270,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
                     {
                         Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
                         lerpeffect.Parameters["lerp"].SetValue(timer / 750f);
-                        lerpeffect.Parameters["lerptarget"].SetValue(LerpTarget);
+                        lerpeffect.Parameters["lerptarget"].SetValue(Asset<Texture2D>.DefaultValue);
                         lerpeffect.CurrentTechnique.Passes[0].Apply();
                         Main.spriteBatch.Draw(self.tileTarget, Main.sceneTilePos - Main.screenPosition, Color.White);
                         Main.spriteBatch.End();
@@ -346,29 +328,28 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
                         }
                         else
                         {
-                            pool.Add(new Point(i, j), Math.Pow(Math.E, (j - starty) / (endy - starty)));
+                            pool.Add(new Point(i, j), Math.Pow(1 + Math.Pow(Math.E, 1 - (j - starty) / (endy - starty)), 6));
                         }
                     }
                 }
             }
             return pool;
         }
-        class MoonNightStar
+        internal class MoonNightStar
         {
             static Texture2D Star;
             Vector2 center;
             float scale, scalemax, rotation;
             bool bigger = true;
             internal bool active = true;
-            IEntitySource source;
             int timeleft = 0;
-            public MoonNightStar(Point point,IEntitySource source)
+            int attacktimer;
+            public MoonNightStar(Point point)
             {
                 center = point.ToVector2() * 16 + Main.rand.NextVector2Circular(8, 8);
                 scalemax = Main.rand.NextFloat(0.8f, 3.2f);
-                this.source = source;
                 rotation = Main.rand.NextFloat(MathHelper.TwoPi);
-                Star??= ModContent.Request<Texture2D>((GetType().Namespace + "/Star").Replace(".", "/"), AssetRequestMode.ImmediateLoad).Value;
+                Star ??= ModContent.Request<Texture2D>((GetType().Namespace + "/Star").Replace(".", "/"), AssetRequestMode.ImmediateLoad).Value;
             }
             public void Draw()
             {
@@ -384,18 +365,26 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
             }
             public void Update()
             {
+                if (Main.gameMenu || Main.gamePaused)
+                {
+                    return;
+                }
                 timeleft++;
-                if(bigger)
+                if (attacktimer > 0)
+                {
+                    attacktimer--;
+                }
+                if (bigger)
                 {
                     scale = MathHelper.Lerp(0, scalemax, timeleft / 60f);
+                    if (timeleft == 60)
+                    {
+                        bigger = false;
+                    }
                 }
                 else
                 {
                     scale = MathHelper.Lerp(0, scalemax, (120 - timeleft) / 60f);
-                }
-                if (scale == scalemax)
-                {
-                    bigger = false;
                 }
                 if (scale == 0 && !bigger)
                 {
