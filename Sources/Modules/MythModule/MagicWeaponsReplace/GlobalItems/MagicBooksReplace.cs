@@ -89,6 +89,18 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
                         tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "Text1", "制造会追踪并吸引敌人的台风,台风可以回收金币,魔法星,和生命心\n如果连续使用得足够久,会引发暴风黑洞"));
                     }
                 }
+                if (item.type == ItemID.LunarFlareBook)
+                {
+                    //TODO 英语翻译
+                    if (Language.ActiveCulture.Name == "zh-Hans")
+                    {
+                        tooltips.Add(new TooltipLine(Mod,
+                            "Text1",
+                            "额外支付魔力使月夜浮现\n" +
+                            "逐渐降低不暴击率\n" +
+                            "逐渐提高原始暴击的伤害"));
+                    }
+                }
             }
         }
 
