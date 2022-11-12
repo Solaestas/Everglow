@@ -14,7 +14,7 @@
 
         public override bool Update(Dust dust)
         {
-            dust.alpha += 3;
+            dust.alpha += 4;
             dust.position += dust.velocity;
             dust.velocity += new Vector2(0, 0.015f).RotatedByRandom(MathHelper.Pi * 2d);
             dust.velocity.Y += 0.05f;

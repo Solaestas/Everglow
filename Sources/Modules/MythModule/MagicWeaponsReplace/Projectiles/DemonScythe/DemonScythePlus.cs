@@ -22,7 +22,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
         }
 
         public override void AI()
-        {                                                                                                                                                                                                                                                                                                                                                                
+        {
+            Lighting.AddLight((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16), 0.22f, 0f, 0.9f);
             if (Timer < 30)
             {
                 Timer += 2;
@@ -53,19 +54,29 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
 
         public override void Kill(int timeLeft)
         {
-            SoundEngine.PlaySound(SoundID.NPCHit4, Projectile.Center);
+            SoundEngine.PlaySound(SoundID.NPCHit4.WithVolumeScale(Math.Min(0.8f, Projectile.velocity.Length() / 40f)), Projectile.Center);
             Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center - Projectile.velocity * 2, Vector2.One, ModContent.ProjectileType<DemoHit>(), 0, 0, Projectile.owner, Projectile.velocity.Length() / 3f, Projectile.rotation + Main.rand.NextFloat(6.283f));
-            base.Kill(timeLeft);
+            float k = Math.Clamp(Projectile.velocity.Length() / 20f, 1f, 5f) / 1.3f;
+            for (int x = 0;x < Projectile.velocity.Length() / 4 - 2;x++)
+            {
+                Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center - Projectile.velocity * 2, Projectile.velocity.RotatedByRandom(6.283) * 0.4f, ModContent.ProjectileType<DemonScythePlusCrack>(), (int)(Projectile.damage * k * 0.1), (int)(Projectile.knockBack * k * 0.3), Projectile.owner, Projectile.velocity.Length() / 60f, Main.rand.NextFloat(8f,24f));
+                p.timeLeft = Main.rand.Next(45) + (int)Projectile.velocity.Length();
+            }
         }
 
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
+            float k = Math.Clamp(Projectile.velocity.Length() / 30f, 1f, 5f) / 1.3f;
+            for (int x = 0; x < Projectile.velocity.Length() / 12 - 2; x++)
+            {
+                Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center - Projectile.velocity * 2, Projectile.velocity.RotatedByRandom(6.283) * 0.4f, ModContent.ProjectileType<DemonScythePlusCrack>(), (int)(Projectile.damage * k * 0.1), (int)(Projectile.knockBack * k * 0.3), Projectile.owner, Projectile.velocity.Length() / 120f, Main.rand.NextFloat(8f, 24f));
+                p.timeLeft = Main.rand.Next(45) + (int)Projectile.velocity.Length();
+            }
             knockback = Projectile.knockBack * Projectile.velocity.Length() * 0.12f;
             Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center - Projectile.velocity * 2, Vector2.One, ModContent.ProjectileType<DemoHit>(), 0, 0, Projectile.owner, Projectile.velocity.Length() / 3f, Projectile.rotation + Main.rand.NextFloat(6.283f));
 
-            float k = Math.Clamp(Projectile.velocity.Length() / 48f, 1f, 5f) / 2f;
             damage = (int)(damage * k);
-            base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
+            target.AddBuff(BuffID.ShadowFlame, 60);
         }
 
         public override bool PreDraw(ref Color lightColor)

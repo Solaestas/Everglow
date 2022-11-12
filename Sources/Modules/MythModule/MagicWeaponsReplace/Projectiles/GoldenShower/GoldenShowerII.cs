@@ -27,13 +27,16 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Go
 
         public override void AI()
         {
-            if(Main.rand.NextBool(1))
+            float kTime = 1f;
+            if(Projectile.timeLeft < 90f)
             {
-                Vector2 BasePos = Projectile.Center - new Vector2(4) - Projectile.velocity;
-                Dust d0 = Dust.NewDustDirect(BasePos, 0, 0, DustID.Ichor,0,0,0,default, 0.6f / (Projectile.ai[0] + 1));
-                d0.noGravity = true;
-                d0.velocity *= 0;
+                kTime = Projectile.timeLeft / 90f;
             }
+            Lighting.AddLight((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16), 0.32f * kTime, 0.23f * kTime, 0);
+            Vector2 BasePos = Projectile.Center - new Vector2(4) - Projectile.velocity;
+            Dust d0 = Dust.NewDustDirect(BasePos, 0, 0, DustID.Ichor, 0, 0, 0, default, 0.6f / (Projectile.ai[0] + 1));
+            d0.noGravity = true;
+            d0.velocity *= 0;
             Projectile.velocity.Y += 0.15f;
             if(Projectile.timeLeft < 239)
             {
@@ -45,9 +48,9 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Go
                     {
                         for (int x = 0; x < 15; x++)
                         {
-                            Vector2 BasePos = Projectile.Center - new Vector2(4) - Projectile.velocity;
-                            Dust d0 = Dust.NewDustDirect(BasePos, 0, 0, DustID.Ichor, 0, 0, 0, default, 0.6f);
-                            d0.noGravity = true;
+                            BasePos = Projectile.Center - new Vector2(4) - Projectile.velocity;
+                            Dust d1 = Dust.NewDustDirect(BasePos, 0, 0, DustID.Ichor, 0, 0, 0, default, 0.6f);
+                            d1.noGravity = true;
                         }
                         if (Projectile.ai[0] != 3)
                         {

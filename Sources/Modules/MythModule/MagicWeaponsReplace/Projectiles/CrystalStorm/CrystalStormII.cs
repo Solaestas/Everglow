@@ -4,9 +4,9 @@ using Everglow.Sources.Modules.MEACModule;
 using Terraria.DataStructures;
 using Terraria.Audio;
 
-namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.BookofSkulls
+namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.CrystalStorm
 {
-    public class SkullII : ModProjectile, IWarpProjectile
+    public class CrystalStormII : ModProjectile, IWarpProjectile
     {
         public override void SetDefaults()
         {
@@ -17,99 +17,66 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             Projectile.hostile = false;
             Projectile.ignoreWater = false;
             Projectile.tileCollide = true;
-            Projectile.extraUpdates = 3;
-            Projectile.timeLeft = 6000;
+            Projectile.timeLeft = 120;
             Projectile.alpha = 0;
             Projectile.penetrate = 5;
             Projectile.scale = 1f;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 30;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 120;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 15;
         }
-        internal int Aimnpc = -1;
         public override void OnSpawn(IEntitySource source)
         {
+            Projectile.ai[0] = Main.rand.NextFloat(0f, 1f);
             Projectile.position.Y -= 15f;
         }
         public override void AI()
         {
-            Player player = Main.player[Projectile.owner];
+            float MulScale = 1f;
+            if (Projectile.timeLeft < 30)
+            {
+                MulScale = Projectile.timeLeft / 30f;
+            }
+            if(Main.rand.NextBool(5))
+            {
+                Vector2 BasePos = Projectile.Center - new Vector2(4) - Projectile.velocity + new Vector2(0, Main.rand.NextFloat(6f)).RotatedByRandom(6.283);
+                Dust d0 = Dust.NewDustDirect(BasePos, 0, 0, DustID.CrystalPulse2, 0, 0, 0, default, 0.8f * MulScale);
+                d0.noGravity = true;
+                d0.velocity = Projectile.velocity * 0.2f + new Vector2(0, Main.rand.NextFloat(2f)).RotatedByRandom(6.283);
+            }
+            if (Main.rand.NextBool(3))
+            {
+                Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * Projectile.scale * MulScale * 0.2f;
+                int dust0 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<Dusts.CrystalAppearStoppedByTile>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(0.1f, 1f) * Projectile.scale * MulScale);
+                Main.dust[dust0].noGravity = true;
+                Main.dust[dust0].alpha = 175;
+            }
+
+
+            Projectile.velocity *= 0.99f;
             if (Projectile.penetrate != 1 && Projectile.friendly)
             {
-                Lighting.AddLight((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16), 0.64f * Projectile.scale, 0.36f * Projectile.scale, 0.24f * Projectile.scale);
+                Lighting.AddLight((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16), 0.5f * Projectile.ai[0] + 0.1f, 0.3f, 0.7f * (1 - Projectile.ai[0]) + 0.3f);
 
                 Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
 
-
-
-                if (Aimnpc != -1)
-                {
-                    NPC npc = Main.npc[Aimnpc];
-                    if (npc.active)
-                    {
-                        Vector2 v0 = npc.Center - Projectile.Center;
-                        Projectile.velocity += Vector2.Normalize(v0) * 0.025f;
-                    }
-
-                }
-
-                if (Main.rand.NextBool(2))
-                {
-                    Dust d = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, Projectile.velocity.X * 2, Projectile.velocity.Y * 2, 100, default, Main.rand.NextFloat(0.85f, 1.45f) * Projectile.scale);
-                    d.noGravity = true;
-                    float MinDis = 250;
-                    foreach (var target in Main.npc)
-                    {
-                        if (target.active && Main.rand.NextBool(2))
-                        {
-                            if (!target.dontTakeDamage && !target.friendly && target.CanBeChasedBy())
-                            {
-                                Vector2 ToTarget = target.Center - Projectile.Center;
-                                float dis = ToTarget.Length();
-                                if (dis < MinDis)
-                                {
-                                    MinDis = dis;
-                                    Aimnpc = target.whoAmI;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-
-            if (Projectile.penetrate != 1 && Projectile.friendly)
-            {
-                if (player.HeldItem.type == ItemID.BookofSkulls)
-                {
-                    Projectile.velocity = Vector2.Normalize(Projectile.velocity) * player.HeldItem.shootSpeed / Projectile.extraUpdates;
-                }
-                else
-                {
-                    Projectile.velocity = Vector2.Normalize(Projectile.velocity) * 3.5f / 3f;
-                }
-            }
-
-            if (Projectile.penetrate <= 0)
-            {
-                Projectile.Kill();
-            }
-            if (Projectile.penetrate == 1 && Projectile.timeLeft > 120)
-            {
-                Projectile.timeLeft = 120;
-                Projectile.velocity *= 0.01f;
             }
         }
 
         public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D Light = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BookofSkulls/SkullII");
+            Texture2D Light = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CrystalStorm/CrystalStormII");
 
-            Color c0 = new Color(1f, 0.4f, 0f, 0);
-            Color c1 = new Color(1f, 1f, 1f, 0.7f);
+            Color c0 = new Color(0.5f * Projectile.ai[0] + 0.1f, 0.3f, 0.7f * (1 - Projectile.ai[0]) + 0.3f, 0);
+            Color c1 = new Color(1f, 1f, 1f, 0.2f);
+            if (Projectile.timeLeft < 30)
+            {
+                c1 *= Projectile.timeLeft / 30f;
+            }
 
-            float width = 16;
+
+            float width = 4;
            
             int TrueL = 0;
             for (int i = 1; i < Projectile.oldPos.Length; ++i)
@@ -122,11 +89,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             }
 
 
-            DrawFlameTrail(TrueL, width, true, Color.White * 0.5f);
-
-
-            Rectangle Frame = new Rectangle(0, (int)((Main.timeForVisualEffects / 10f) % 3) * 30, 26, 30);
-
+            DrawFlameTrail(TrueL, width, true, Color.White * 0.2f);
 
             DrawFlameTrail(TrueL, width, false, c0);
 
@@ -134,11 +97,11 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             {
                 if (Projectile.velocity.X < 0)
                 {
-                    Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY) + Projectile.velocity, Frame, c1, Projectile.rotation, Frame.Size() / 2f, Projectile.scale, SpriteEffects.FlipVertically, 0);
+                    Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY) - Projectile.velocity, null, c1, Projectile.rotation, Light.Size() / 2f, Projectile.scale, SpriteEffects.FlipVertically, 0);
                 }
                 else
                 {
-                    Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY) + Projectile.velocity, Frame, c1, Projectile.rotation, Frame.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
+                    Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY) - Projectile.velocity, null, c1, Projectile.rotation, Light.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
                 }
             }
             return false;
@@ -300,80 +263,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
         }
-
-
-        public override void Kill(int timeLeft)
-        {
-
-        }
-
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-        {
-            SoundEngine.PlaySound(SoundID.NPCHit2, Projectile.Center);
-            int type = ModContent.ProjectileType<BoneSpike>();
-            Player player = Main.player[Projectile.owner];
-
-            if (player.ownedProjectileCounts[type] < 12)
-            {
-                for (int x = 0; x < 3; x++)
-                {
-                    player.GetModPlayer<GlobalItems.MagicBookPlayer>().WaterBoltHasHit = 0;
-                    Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), player.Center + new Vector2(0, -30 * player.gravDir), new Vector2(0, 18 * player.gravDir), type, player.HeldItem.damage / 2, player.HeldItem.knockBack, Projectile.owner, Main.rand.NextFloat(-1.5f, 7f), Main.rand.NextFloat(0.65f, 0.95f));
-                }
-            }
-            if (Projectile.penetrate == 1)
-            {
-                GenerateDust(60);
-                Projectile.friendly = false;
-                Projectile.velocity *= 0.001f;
-                Projectile.tileCollide = false;
-                Projectile.timeLeft = 120;
-            }
-        }
-        private void GenerateDust(int Times)
-        {
-            for (int d = 0; d < Times; d++)
-            {
-                Vector2 BasePos = Projectile.Center - new Vector2(4) - Projectile.velocity;
-                Dust d0 = Dust.NewDustDirect(BasePos, 0, 0, DustID.Bone, 0, 0, 0, default, Main.rand.NextFloat(0.6f, 1.2f));
-                d0.velocity = new Vector2(0, Main.rand.NextFloat(0.6f, 7.5f)).RotatedByRandom(6.283);
-                d0.noGravity = true;
-            }
-            for (int d = 0; d < Times; d++)
-            {
-                Vector2 BasePos = Projectile.Center - new Vector2(4) - Projectile.velocity;
-                Dust d0 = Dust.NewDustDirect(BasePos, 0, 0, DustID.Torch, 0, 0, 0, default, Main.rand.NextFloat(0.8f, 1.9f));
-                d0.velocity = new Vector2(0, Main.rand.NextFloat(0.6f, 2.5f)).RotatedByRandom(6.283);
-                d0.noGravity = true;
-            }
-        }
-        public override void OnHitPvp(Player target, int damage, bool crit)
-        {
-            SoundEngine.PlaySound(SoundID.NPCHit2, Projectile.Center);
-            int type = ModContent.ProjectileType<BoneSpike>();
-            Player player = Main.player[Projectile.owner];
-
-            if (player.ownedProjectileCounts[type] < 12)
-            {
-                for (int x = 0; x < 3; x++)
-                {
-                    player.GetModPlayer<GlobalItems.MagicBookPlayer>().WaterBoltHasHit = 0;
-                    Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), player.Center + new Vector2(0, -30 * player.gravDir), new Vector2(0, 18 * player.gravDir), type, player.HeldItem.damage / 2, player.HeldItem.knockBack, Projectile.owner, Main.rand.NextFloat(-1.5f, 7f), Main.rand.NextFloat(0.65f, 0.95f));
-                }
-            }
-            if (Projectile.penetrate == 1)
-            {
-                GenerateDust(60);
-                Projectile.friendly = false;
-                Projectile.velocity *= 0.001f;
-                Projectile.tileCollide = false;
-                Projectile.timeLeft = 120;
-            }
-        }
-
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            SoundEngine.PlaySound(SoundID.NPCHit2, Projectile.Center);
+            
+            SoundEngine.PlaySound(SoundID.DD2_CrystalCartImpact.WithVolumeScale(0.2f), Projectile.Center);
             if (Projectile.velocity.X != oldVelocity.X)
             {
                 Projectile.velocity.X = -oldVelocity.X;
@@ -382,12 +275,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             {
                 Projectile.velocity.Y = -oldVelocity.Y;
             }
-            Projectile.penetrate=1;
-            GenerateDust(60);
-            Projectile.friendly = false;
-            Projectile.velocity *= 0.001f;
-            Projectile.tileCollide = false;
-            Projectile.timeLeft = 120;
+            Projectile.velocity *= 0.6f;
+            Projectile.penetrate--;
 
             return false;
         }

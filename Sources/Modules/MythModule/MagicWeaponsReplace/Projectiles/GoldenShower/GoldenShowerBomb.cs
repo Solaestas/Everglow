@@ -187,13 +187,5 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Go
                 DrawSpark(new Color(255, 2255, 225, 0), size, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/SparkLight"));
             }
         }
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-        {
-            target.AddBuff(BuffID.CursedInferno, 300);
-        }
-        public override void OnHitPvp(Player target, int damage, bool crit)
-        {
-            target.AddBuff(BuffID.CursedInferno, 300);
-        }
     }
 }
