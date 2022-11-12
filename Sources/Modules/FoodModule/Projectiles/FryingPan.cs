@@ -14,6 +14,7 @@ using Terraria;
 using Everglow.Sources.Modules.MEACModule;
 using System.Linq.Expressions;
 using Everglow.Sources.Modules.ZYModule.Commons.Core;
+using static Terraria.ModLoader.PlayerDrawLayer;
 
 namespace Everglow.Sources.Modules.FoodModule.Projectiles
 {
@@ -21,6 +22,10 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
     {
         public override void SetDef()
         {
+            Projectile.width = 60;
+
+            Projectile.height = 60;
+
             maxAttackType = 0;//循环攻击方式的总数
 
             trailLength = 10;//拖尾的长度
@@ -31,16 +36,16 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
 
             disFromPlayer = 0;
 
-           Projectile.height = 20;//判定区域的宽度，默认为15
+            Projectile.height = 20;//判定区域的宽度，默认为15
 
-           Projectile.scale = 1f;//总大小，有需要时可以使用
+            Projectile.scale = 1f;//总大小，有需要时可以使用
 
 
             /*
              * 若要增加剑的宽度，需要增大scale并在Attack()函数中降低mainVec的长度
              */
         }
- 
+
         //一定程度上决定拖尾的亮度/不透明度
         public override float TrailAlpha(float factor)
         {
@@ -63,7 +68,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
 
         public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, float HorizontalWidth, float HorizontalHeight, float DrawScale, string GlowPath, double DrawRotation)
         {
-            base.DrawSelf(spriteBatch, lightColor, 70, 40 , 1f ,"",0.666667);
+            base.DrawSelf(spriteBatch, lightColor, 70, 40, 1f, "", 0.666667);
         }
 
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
@@ -82,8 +87,8 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
 
         //攻击方式编辑
 
-        internal bool state1 = false; 
-        internal bool state2 = false; 
+        internal bool state1 = false;
+        internal bool state2 = false;
         internal bool state3 = false;
         public override void Attack()
         {
@@ -91,14 +96,33 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
             Player player = Main.player[Projectile.owner];
             if (attackType == 0)
             {
+                foreach (Projectile proj in Main.projectile)
+                {
+                    if (proj.active && proj != Projectile)
+                    {
+                        if (Projectile.Colliding(new Rectangle((int)Projectile.position.X, (int)Projectile.position.Y, Projectile.width, Projectile.height), proj.Hitbox))
+                        {
+                            Vector2 v1 = proj.velocity;
+                            Vector2 v2 = Projectile.velocity;
+
+                            float m1 = proj.width * proj.height * proj.knockBack * proj.scale;
+                            float m2 = Projectile.width * Projectile.height * Projectile.knockBack * Projectile.scale;
+
+                            Vector2 newvelocity1 = (v1 * (m1 - m2) + 2 * m2 * v2) / (m1 + m2);
+                            Vector2 newvelocity2 = (v2 * (m2 - m1) + 2 * m1 * v1) / (m1 + m2);
+
+                            proj.velocity = newvelocity1;
+                            Projectile.velocity = newvelocity2;
+                        }  
+                    }
+                }
                 longHandle = true;
                 Player.heldProj = -1;
                 Player.GetModPlayer<MEACPlayer>().isUsingMeleeProj = false;
-                Player.SetCompositeArmFront(false, Player.CompositeArmStretchAmount.Full, mainVec.ToRotation() - 1.57f);
                 if (timer == 1)
                 {
                     AttSound(SoundID.NPCHit4);
-                    Projectile.velocity = Vector2.Zero; 
+                    Projectile.velocity = Vector2.Zero;
                 }
                 if (timer < 1200)
                 {
@@ -110,12 +134,12 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                     }
                     CanIgnoreTile = true;
                     isAttacking = true;
-                    
-                        
+
+
                     Projectile.Center += Projectile.velocity;
-                    Projectile.velocity = Vector2.Lerp(Projectile.velocity, Vector2.Normalize(MouseWorld_WithoutGravDir - Player.Center) * 180, 0.06f);
+                    Projectile.velocity = Vector2.Lerp(Projectile.velocity, Vector2.Normalize(MouseWorld_WithoutGravDir - Player.Center) * 450, 0.06f);
                     Projectile.rotation += 0.3f * Projectile.spriteDirection;
-                    mainVec = Projectile.rotation.ToRotationVector2() *38;
+                    mainVec = Projectile.rotation.ToRotationVector2() * 38;
                 }
 
                 if (timer > 1200)
@@ -162,7 +186,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                     Projectile.ai[0] = GetAngToMouse();//获取往鼠标的方向
                     float targetRot = -MathHelper.PiOver2 - Player.direction * 0.5f;
                     mainVec = Vector2.Lerp(mainVec, Vector2Elipse(77, targetRot, 0f, Projectile.ai[0], 1000), 0.2f);
-                    
+
 
                     Projectile.rotation = mainVec.ToRotation();
 
@@ -188,7 +212,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                 }
                 SoundStyle sound = SoundID.Item4;
                 sound.Volume *= 0.4f;
-                
+
                 if (timer == chargeTime1)//蓄力完成时
                 {
                     //播放音效。
@@ -207,7 +231,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                 {
                     //进入攻击状态
                     state1 = true;
-                    if(timer >= chargeTime2)
+                    if (timer >= chargeTime2)
                     {
                         state2 = true;
                     }
@@ -232,7 +256,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                             mainVec = Vector2Elipse(77, Projectile.rotation, 0f, Projectile.ai[0]);
                             Projectile.rotation += Projectile.spriteDirection * 0.35f;
                         }
-                        if(!state2)
+                        if (!state2)
                         {
                             if (timer >= 10020)
                             {
@@ -268,7 +292,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                                 state1 = false;
                                 state2 = false;
                                 End();
-                            }   
+                            }
                         }
                     }
 
@@ -299,7 +323,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                         }
                     }
 
-                   
+
                 }
             }
 
@@ -310,17 +334,25 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                 //攻击时的粒子之类的
             }
         }
-        int Pdirection;
         public override void AI()
         {
             Player.heldProj = Projectile.whoAmI;
-            Player.GetModPlayer<MEACPlayer>().isUsingMeleeProj = true;
+            if (attackType != 0)
+            {
+                Player.GetModPlayer<MEACPlayer>().isUsingMeleeProj = true;
+            }
+
             Projectile.Center = Player.Center + Terraria.Utils.SafeNormalize(mainVec, Vector2.One) * disFromPlayer;
             isAttacking = false;
 
             Projectile.timeLeft++;
-            Player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, mainVec.ToRotation() - 1.57f);
+
+            if (attackType != 0)
+            {
+                Player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, mainVec.ToRotation() - 1.57f);
+            }
             Attack();
+
             timer++;
             if (!isAttacking)
             {
@@ -377,15 +409,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
             }
             ProduceWaterRipples(new Vector2(mainVec.Length(), 30));
         }
-        public void PlayerFrame(int frame)
-        {
-            Player player = Main.player[Projectile.owner];
-            if (attackType == 0)
-            {
-                player.bodyFrame.Y = 4;
-               
-            }
-        }
+
         private void ProduceWaterRipples(Vector2 beamDims)
         {
             WaterShaderData shaderData = (WaterShaderData)Terraria.Graphics.Effects.Filters.Scene["WaterDistortion"].GetShader();
