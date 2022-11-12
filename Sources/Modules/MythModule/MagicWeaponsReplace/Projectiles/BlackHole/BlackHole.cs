@@ -44,7 +44,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bl
         public override void AI()
         {
             if(Projectile.timeLeft>20)
-                proj.scale = MathHelper.Lerp(proj.scale,280,0.1f);
+                proj.scale = MathHelper.Lerp(proj.scale,200,0.1f);
             else
                 proj.scale = MathHelper.Lerp(proj.scale, 0, 0.25f);
 
@@ -143,7 +143,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bl
                 Vector2 pos = Vector2.Transform(proj.Center - Main.screenPosition, Main.Transform);
                 eff.Parameters["uPosition"].SetValue(pos/scRes);
                 eff.Parameters["uRatio"].SetValue(scRes.X/scRes.Y);
-                eff.Parameters["uRadius"].SetValue(0.001f*proj.scale*Main.Transform.M11);//乘了一个总缩放系数
+                eff.Parameters["uRadius"].SetValue(0.001f*proj.scale*Main.Transform.M11/(Main.screenWidth/1920f));//乘了一个总缩放系数
                 eff.Parameters["uIntensity"].SetValue(3f);//扭曲程度，可以调节这个值来实现不同效果
                 eff.CurrentTechnique.Passes[0].Apply();
                 sb.Draw(Main.screenTargetSwap, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White);
