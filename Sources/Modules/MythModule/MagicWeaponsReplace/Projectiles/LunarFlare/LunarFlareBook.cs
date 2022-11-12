@@ -28,9 +28,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
                 timer++;
                 if (timer % 2 == 0)
                 {
-                    int count = Math.Min(timer / 20, 9);
-                    ModContent.GetInstance<MoonNight>().GenerateStars(count, Projectile.GetSource_FromThis());
-                    ModContent.GetInstance<MoonNight>().GenerateStars(count * 4, null);
+                    int count = Math.Min(timer / 12, 15);
+                    MoonNight.GenerateStars(count * 5);
                 }
             }
         }
