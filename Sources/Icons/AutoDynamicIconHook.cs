@@ -67,11 +67,11 @@ namespace Everglow.Sources.Icons
                 //把图标做成动态UI放进去
                 self.Append(new DynamicIconUI(ModContent.Request<Texture2D>("Everglow/Sources/Icons/Icon_content", AssetRequestMode.ImmediateLoad).Value, new Rectangle(0, 0, 80, 80), 3));
                 //把边框做成动态UI放进去
-                var boader = new DynamicIconUI(ModContent.Request<Texture2D>("Everglow/Sources/Icons/Icon_framework", AssetRequestMode.ImmediateLoad).Value, new Rectangle(0, 0, 96, 96), 3);
+                var border = new DynamicIconUI(ModContent.Request<Texture2D>("Everglow/Sources/Icons/Icon_framework", AssetRequestMode.ImmediateLoad).Value, new Rectangle(0, 0, 96, 96), 3);
                 //边框比图标大16,所以需要向左上偏移(8,8)
-                boader.Left.Set(-8, 0);
-                boader.Top.Set(-8, 0);
-                self.Append(boader);
+                border.Left.Set(-8, 0);
+                border.Top.Set(-8, 0);
+                self.Append(border);
                 //防止边框超出底板
                 self.OverflowHidden = true;
             }
