@@ -102,7 +102,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bl
                             Vector2 Addvel = Vector2.Normalize(ToTarget) / mess / (dis + 10) * 40000f * (target.knockBackResist + 0.3f) * Projectile.ai[0];
                             if (!target.noGravity)
                             {
-                                Addvel.Y *= 3f;
+                                Addvel.Y *= 30f;
                             }
                             target.velocity -= Addvel;
                             float kSpeed = 1f;
@@ -132,6 +132,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bl
                             {
                                 target.position = Main.player[Projectile.owner].Center;
                             }
+                        }
+                        if((target.position - Main.player[Projectile.owner].Center).Length() < 75)
+                        {
+                            continue;
                         }
                         float mess = target.width * target.height;
                         mess = (float)(Math.Sqrt(mess));
