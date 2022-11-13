@@ -41,7 +41,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
                 {
                     if(target.active)
                     {
-                        if (!target.friendly && !target.dontTakeDamage)
+                        if (!target.friendly && !target.dontTakeDamage && target.CanBeChasedBy())
                         {
                             Vector2 v = target.Center - Projectile.Center;
                             if(v.Length() < 400)

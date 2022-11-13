@@ -104,7 +104,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
             {
                 return;
             }
-            if (player.itemTime == 2 && player.HeldItem.type == ItemType)
+            if (player.itemTime == player.itemTimeMax - 2 && player.HeldItem.type == ItemType)
             {
                 Vector2 velocity = Utils.SafeNormalize(vTOMouse, Vector2.Zero) * player.HeldItem.shootSpeed;
                 Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * MulStartPosByVelocity, velocity * MulVelocity, ProjType, (int)(player.HeldItem.damage * MulDamage), player.HeldItem.knockBack, player.whoAmI);

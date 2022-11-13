@@ -178,6 +178,30 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bl
                     }
                 }
             }
+            foreach (var target in Main.player)
+            {
+                if (target.active)
+                {
+                    Vector2 ToTarget = target.position - Projectile.Center;
+                    float dis = ToTarget.Length();
+                    if (dis < MinDis * 0.1f && ToTarget != Vector2.Zero)
+                    {
+                        float mess = 40;
+                        mess = (float)(Math.Sqrt(mess));
+                        Vector2 Addvel = Vector2.Normalize(ToTarget) / mess / (dis + 10) * 400f * Projectile.ai[0];
+                        target.velocity -= Addvel;
+                        float kSpeed = 1f;
+                        if (dis < 10)
+                        {
+                            kSpeed = (dis + 10) / 20f;
+                        }
+                        if (target.velocity.Length() > MaxSpeed * kSpeed)
+                        {
+                            target.velocity *= MaxSpeed * kSpeed / target.velocity.Length();
+                        }
+                    }
+                }
+            }
         }
         public static Vector2 Projection(Vector3 vec, Vector2 center)
         {

@@ -22,7 +22,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
             {
                 MoonNight.Timer = 0;
             }
-            MoonNight.Timer++;
+            MoonNight.Timer+= 10;
             if (player.itemTime == 2)
             {
                 timer++;

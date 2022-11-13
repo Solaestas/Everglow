@@ -31,7 +31,14 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ra
                 Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BlackHole.BlackHole>(), Projectile.damage * 12, 0, Projectile.owner, Projectile.ai[0]);
                 p.CritChance = (int)Main.player[Projectile.owner].GetCritChance(DamageClass.Generic);
                 p.timeLeft = 100 + (int)(Projectile.ai[0] * 240);
-                SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/MagicWeaponsReplace/Sounds/TyphoonBlackHole").WithVolumeScale(Projectile.ai[0]), Projectile.Center);
+                if(Projectile.ai[0] < 0.5f)
+                {
+                    SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/MagicWeaponsReplace/Sounds/TyphoonBlackHoleWeak").WithVolumeScale(Projectile.ai[0] * 2), Projectile.Center);
+                }
+                else
+                {
+                    SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/MagicWeaponsReplace/Sounds/TyphoonBlackHoleStrong").WithVolumeScale(Projectile.ai[0]), Projectile.Center);
+                }
                 Projectile.Kill();
             }
             if(Projectile.timeLeft < 150)
