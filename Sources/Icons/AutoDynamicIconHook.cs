@@ -73,7 +73,7 @@ namespace Everglow.Sources.Icons
                 border.Top.Set(-8, 0);
                 self.Append(border);
                 //·ÀÖ¹±ß¿ò³¬³öµ×°å
-                self.OverflowHidden = true;
+                //self.OverflowHidden = true;
             }
         }
         public class DynamicIconUI : UIElement, IColorable
