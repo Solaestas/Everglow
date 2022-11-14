@@ -1,0 +1,45 @@
+Parameter adjustment UI
+int ParaAdj(int parameter, int upBound = 10,int DownBound = -10)
+{
+    Draw UI, slider, and allow return value
+}
+.
+.
+.
+ParaAdj(parameter);
+
+Data type variables such as int, float, double, long
+Display bar: name+slider. There are upper and lower limit input windows at the left and right ends of the slider, default - 10, 10
+Vector2, Point and other n-dimensional data, name+n-line slider
+Special case of vector2, allowing switching to radar map. Input window setting center, maximum distance (default 10)
+Direction and distance are controlled with the mouse
+The color is the same as above, with four rows of data (rgba and hsva can be switched), but one more result effect window
+Array, use slider to group tables.
+High dimension/nested array: manual positioning is required
+
+The above is only the final effect, and the specific requirements can be reduced according to the situation.
+
+调参UI：
+需要通过方法进行调用：
+
+int ParaAdj(int parameter, int upBound = 10,int DownBound = -10)
+{
+    画出UI,滑条，并允许返回值；
+}
+.
+.
+.
+ParaAdj(parameter);
+
+
+
+int，float，double，long......等数据型变量
+显示栏：名字+滑条。滑条左右两端有上下限输入窗，默认-10，10
+Vector2，Point等n维数据，名字+n行滑条
+vector2特例，允许切换成雷达图。输入窗设定中心，最大距离（默认10）
+方向和距离用鼠标控制
+color 同上，四行数据（可切换rgba，hsva），但是多一个结果效果窗
+数组，用滑条组表。
+高维/嵌套数组：需要手动定位
+
+以上仅为最终效果，具体可以视情况而（大幅）降低要求。
