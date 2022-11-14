@@ -1,6 +1,6 @@
 ﻿using ReLogic.Content;
 
-namespace Everglow.Sources.Modules.AssetReplaceModule
+namespace Everglow.Sources.Modules.AssetReplaceModule.UIReplace
 {
     public class HorizontalBar
     {
@@ -18,25 +18,29 @@ namespace Everglow.Sources.Modules.AssetReplaceModule
         /// 根据传入的路径读取Texture2D
         /// </summary>
         /// <param name="path">贴图组在Resources文件夹内的名字，比如UISkinMyth</param>
-        public void LoadTextures(string path) {
-            HpFill = AssetReplaceModule.GetTexture($"{path}/Bars/Horizontal/HP_Fill");
-            HpFillGold = AssetReplaceModule.GetTexture($"{path}/Bars/Horizontal/HP_FillGold");
-            HpPanelMiddle = AssetReplaceModule.GetTexture($"{path}/Bars/Horizontal/HP_Panel_Middle");
-            HpPanelRight = AssetReplaceModule.GetTexture($"{path}/Bars/Horizontal/HP_Panel_Right");
-            HpPanelRightGold = AssetReplaceModule.GetTexture($"{path}/Bars/Horizontal/HP_Panel_RightGold");
-            MpFill = AssetReplaceModule.GetTexture($"{path}/Bars/Horizontal/MP_Fill");
-            MpPanelMiddle = AssetReplaceModule.GetTexture($"{path}/Bars/Horizontal/MP_Panel_Middle");
-            MpPanelRight = AssetReplaceModule.GetTexture($"{path}/Bars/Horizontal/MP_Panel_Right");
-            PanelLeft = AssetReplaceModule.GetTexture($"{path}/Bars/Horizontal/Panel_Left");
+        public void LoadTextures(string path)
+        {
+            HpFill = UIReplaceModule.GetTexture($"{path}/Bars/Horizontal/HP_Fill");
+            HpFillGold = UIReplaceModule.GetTexture($"{path}/Bars/Horizontal/HP_FillGold");
+            HpPanelMiddle = UIReplaceModule.GetTexture($"{path}/Bars/Horizontal/HP_Panel_Middle");
+            HpPanelRight = UIReplaceModule.GetTexture($"{path}/Bars/Horizontal/HP_Panel_Right");
+            HpPanelRightGold = UIReplaceModule.GetTexture($"{path}/Bars/Horizontal/HP_Panel_RightGold");
+            MpFill = UIReplaceModule.GetTexture($"{path}/Bars/Horizontal/MP_Fill");
+            MpPanelMiddle = UIReplaceModule.GetTexture($"{path}/Bars/Horizontal/MP_Panel_Middle");
+            MpPanelRight = UIReplaceModule.GetTexture($"{path}/Bars/Horizontal/MP_Panel_Right");
+            PanelLeft = UIReplaceModule.GetTexture($"{path}/Bars/Horizontal/Panel_Left");
         }
 
-        public void ReplaceTextures() {
-            if (AssetReplaceModule.PlayerResourceSets.TryGetValue("HorizontalBars", out var value)) {
+        public void ReplaceTextures()
+        {
+            if (UIReplaceModule.PlayerResourceSets.TryGetValue("HorizontalBars", out var value))
+            {
                 // 获取Fields
                 var type = value.GetType();
                 var Fields = type.GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
                 var field = new Dictionary<string, FieldInfo>();
-                foreach (var f in Fields) {
+                foreach (var f in Fields)
+                {
                     field[f.Name] = f;
                 }
                 // 设置贴图

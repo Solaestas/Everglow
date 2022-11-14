@@ -1,6 +1,6 @@
 ﻿using ReLogic.Content;
 
-namespace Everglow.Sources.Modules.AssetReplaceModule
+namespace Everglow.Sources.Modules.AssetReplaceModule.UIReplace
 {
     public class FancyBar
     {
@@ -21,28 +21,32 @@ namespace Everglow.Sources.Modules.AssetReplaceModule
         /// 根据传入的路径读取Texture2D
         /// </summary>
         /// <param name="path">贴图组在Resources文件夹内的名字，比如UISkinMyth</param>
-        public void LoadTextures(string path) {
-            HeartFillRed = AssetReplaceModule.GetTexture($"{path}/Bars/Fancy/Heart_Fill");
-            HeartFillGold = AssetReplaceModule.GetTexture($"{path}/Bars/Fancy/Heart_Fill_B");
-            HeartLeft = AssetReplaceModule.GetTexture($"{path}/Bars/Fancy/Heart_Left");
-            HeartMiddle = AssetReplaceModule.GetTexture($"{path}/Bars/Fancy/Heart_Middle");
-            HeartRight = AssetReplaceModule.GetTexture($"{path}/Bars/Fancy/Heart_Right");
-            HeartSingleFancy = AssetReplaceModule.GetTexture($"{path}/Bars/Fancy/Heart_Single_Fancy");
-            HeartRightFancy = AssetReplaceModule.GetTexture($"{path}/Bars/Fancy/Heart_Right_Fancy");
-            StarA = AssetReplaceModule.GetTexture($"{path}/Bars/Fancy/Star_A");
-            StarB = AssetReplaceModule.GetTexture($"{path}/Bars/Fancy/Star_B");
-            StarC = AssetReplaceModule.GetTexture($"{path}/Bars/Fancy/Star_C");
-            StarFill = AssetReplaceModule.GetTexture($"{path}/Bars/Fancy/Star_Fill");
-            StarSingle = AssetReplaceModule.GetTexture($"{path}/Bars/Fancy/Star_Single");
+        public void LoadTextures(string path)
+        {
+            HeartFillRed = UIReplaceModule.GetTexture($"{path}/Bars/Fancy/Heart_Fill");
+            HeartFillGold = UIReplaceModule.GetTexture($"{path}/Bars/Fancy/Heart_Fill_B");
+            HeartLeft = UIReplaceModule.GetTexture($"{path}/Bars/Fancy/Heart_Left");
+            HeartMiddle = UIReplaceModule.GetTexture($"{path}/Bars/Fancy/Heart_Middle");
+            HeartRight = UIReplaceModule.GetTexture($"{path}/Bars/Fancy/Heart_Right");
+            HeartSingleFancy = UIReplaceModule.GetTexture($"{path}/Bars/Fancy/Heart_Single_Fancy");
+            HeartRightFancy = UIReplaceModule.GetTexture($"{path}/Bars/Fancy/Heart_Right_Fancy");
+            StarA = UIReplaceModule.GetTexture($"{path}/Bars/Fancy/Star_A");
+            StarB = UIReplaceModule.GetTexture($"{path}/Bars/Fancy/Star_B");
+            StarC = UIReplaceModule.GetTexture($"{path}/Bars/Fancy/Star_C");
+            StarFill = UIReplaceModule.GetTexture($"{path}/Bars/Fancy/Star_Fill");
+            StarSingle = UIReplaceModule.GetTexture($"{path}/Bars/Fancy/Star_Single");
         }
 
-        public void ReplaceTextures() {
-            if (AssetReplaceModule.PlayerResourceSets.TryGetValue("New", out var value)) {
+        public void ReplaceTextures()
+        {
+            if (UIReplaceModule.PlayerResourceSets.TryGetValue("New", out var value))
+            {
                 // 获取Fields
                 var type = value.GetType();
                 var Fields = type.GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
                 var field = new Dictionary<string, FieldInfo>();
-                foreach (var f in Fields) {
+                foreach (var f in Fields)
+                {
                     field[f.Name] = f;
                 }
                 // 设置贴图

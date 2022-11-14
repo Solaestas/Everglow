@@ -1,7 +1,7 @@
 ﻿using ReLogic.Content;
 using Terraria.GameContent;
 
-namespace Everglow.Sources.Modules.AssetReplaceModule
+namespace Everglow.Sources.Modules.AssetReplaceModule.UIReplace
 {
     internal class MythAssets
     {
@@ -10,17 +10,19 @@ namespace Everglow.Sources.Modules.AssetReplaceModule
         public FancyBar FancyBar = new();
         public HorizontalBar HorizontalBar = new();
 
-        public void LoadTextures() {
+        public void LoadTextures()
+        {
             for (int i = 2; i <= 18; i++)
-                InventoryBacks[i - 1] = AssetReplaceModule.GetTexture($"UISkinMyth/Inventory/Inventory_Back{i}");
-            InventoryBacks[0] = AssetReplaceModule.GetTexture($"UISkinMyth/Inventory/Inventory_BackX");
-            
+                InventoryBacks[i - 1] = UIReplaceModule.GetTexture($"UISkinMyth/Inventory/Inventory_Back{i}");
+            InventoryBacks[0] = UIReplaceModule.GetTexture($"UISkinMyth/Inventory/Inventory_BackX");
+
             ClassicBar.LoadTextures("UISkinMyth");
             FancyBar.LoadTextures("UISkinMyth");
             HorizontalBar.LoadTextures("UISkinMyth");
         }
 
-        public void Apply() {
+        public void Apply()
+        {
             TextureAssets.InventoryBack = InventoryBacks[0];
             TextureAssets.InventoryBack2 = InventoryBacks[1];
             TextureAssets.InventoryBack3 = InventoryBacks[2];
