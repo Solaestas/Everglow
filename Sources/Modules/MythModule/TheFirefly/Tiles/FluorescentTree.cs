@@ -19,6 +19,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             ModTranslation modTranslation = LocalizationLoader.GetOrCreateTranslation("Mods.Everglow.MapEntry.FireflyTree");
             AddMapEntry(new Color(51, 26, 58), modTranslation);
             DustType = ModContent.DustType<TheFirefly.Dusts.MothBlue2>();
+            ItemDrop = ModContent.ItemType<Items.GlowWood>();
             AdjTiles = new int[] { Type };
         }
 
@@ -32,8 +33,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             if (!fail)
             {
                 int Dy = -1;
-
-                while(Main.tile[i, j + Dy].TileType == Type && Dy > -100)
+                while (Main.tile[i, j + Dy].TileType == Type && Dy > -100)
                 {
                     Tile tileLeft = Main.tile[i - 1, j + Dy];
                     Tile tileRight = Main.tile[i + 1, j + Dy];
@@ -46,7 +46,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                     {
                         WorldGen.KillTile(i + 1, j + Dy);
                     }
-                    if(Dy == -1)
+                    if (Dy == -1)
                     {
                         tileLeft = Main.tile[i - 1, j];
                         if (tileLeft.TileType == Type)
@@ -63,6 +63,31 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                 }
             }
         }
+        //public override void NearbyEffects(int i, int j, bool closer)
+        //{
+        //    Tile tile = Main.tile[i, j];
+        //    if (tile.TileFrameY <= 3)
+        //    {
+        //        if(!Main.tile[i, j + 1].HasTile)
+        //        {
+        //            WorldGen.KillTile(i, j);
+        //        }
+        //    }
+        //    if (tile.TileFrameY == 4)
+        //    {
+        //        if (!Main.tile[i + 1, j].HasTile || Main.tile[i + 1, j].TileType != Type)
+        //        {
+        //            WorldGen.KillTile(i, j);
+        //        }
+        //    }
+        //    if (tile.TileFrameY == 5)
+        //    {
+        //        if (!Main.tile[i - 1, j].HasTile || Main.tile[i + 1, j].TileType != Type)
+        //        {
+        //            WorldGen.KillTile(i, j);
+        //        }
+        //    }
+        //}
         public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
         {
             Texture2D treeTexture = MythContent.QuickTexture("TheFirefly/Tiles/FluorescentTree");
