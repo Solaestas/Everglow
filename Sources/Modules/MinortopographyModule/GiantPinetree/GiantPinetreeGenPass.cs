@@ -17,10 +17,50 @@ namespace Everglow.Sources.Modules.MinortopographyModule.GiantPinetree
             {
                 //Todo:翻译：建造巨大的雪松
                 Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everlow.Common.WorldSystem.BuildMothCave");
+
                 BuildGiantPinetree();
             }
         }
 
+        public static void placePineLeaves(int i, int j, int iteration, float strength, Vector2 direction)
+        {
+            if (iteration > 50)//万一发散就完了
+                return;
+            for (int x = 0; x < strength; x++)
+            {
+                int ABSXStr = Math.Min((int)((strength - x) * 0.16f), 8);
+
+                for (int y = -ABSXStr; y < ABSXStr + 1; y++)
+                {
+                    Vector2 normalizedDirection = Utils.SafeNormalize(direction, new Vector2(0, -1));
+                    Vector2 VnormalizedDirection = normalizedDirection.RotatedBy(Math.PI / 2d);
+                    int a = (int)(i + normalizedDirection.X * x + VnormalizedDirection.X * y);
+                    int b = (int)(j + normalizedDirection.Y * x + VnormalizedDirection.Y * y);
+                    if (b >= Main.maxTilesY - 10 || b <= 10 || a <= 20 || a >= Main.maxTilesX - 20)//防止超界
+                    {
+                        break;
+                    }
+                    var tile = Main.tile[a, b];
+                    tile.TileType = TileID.PineTree;
+                    tile.HasTile = true;
+                    if (strength - x > 1)
+                    {
+                        tile.WallType = (ushort)ModContent.WallType<PineLeavesWall>();
+                    }
+                    if (y == 0)
+                    {
+                        if (x % 6 == 1)
+                        {
+                            placePineLeaves(a, b, iteration + 1, (strength - x) * 0.34f, normalizedDirection.RotatedBy(Math.PI * 0.3));
+                        }
+                        if (x % 6 == 4)
+                        {
+                            placePineLeaves(a, b, iteration + 1, (strength - x) * 0.34f, normalizedDirection.RotatedBy(-Math.PI * 0.3));
+                        }
+                    }
+                }
+            }
+        }
         public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight) => tasks.Add(new GiantPinetreeGenPass());
         /// <summary>
         /// 建造巨大的雪松
@@ -29,14 +69,15 @@ namespace Everglow.Sources.Modules.MinortopographyModule.GiantPinetree
         {
             
             Point16 CenterPoint = RandomPointInSurfaceSnow();
-            int X0 = CenterPoint.X;
-            int Y0 = CenterPoint.Y - 26;//上移26格
-
+            int X0 = CenterPoint.X;//(int)(Main.MouseWorld.X / 16);
+            int Y0 = CenterPoint.Y - 26;//上移26格(int)(Main.MouseWorld.Y / 16); 
+            float Size = Main.rand.NextFloat(16f, 20f);
+            placePineLeaves(X0, Y0, 0, Size * 7.5f, new Vector2(0, -1));
             if (Main.snowBG[2] == 260)//在这种条件下，背景符合这段代码生成的松树
             {
 
             }
-            float Width = Main.rand.NextFloat(24f, 32f);//随机摇宽度
+            float Width = Size;//随机摇宽度
             int j = 0;
             for (int a = -3; a <= 3; a++)
             {
@@ -45,21 +86,16 @@ namespace Everglow.Sources.Modules.MinortopographyModule.GiantPinetree
             while (Width > 0)
             {
                 j--;
-                if (j + Y0 >= Main.maxTilesY - 10 || j + Y0 <= 10 || -10 + X0 <= 10 || 10 + X0 >= Main.maxTilesX + 10)//防止超界
+                if (j + Y0 >= Main.maxTilesY - 10 || j + Y0 <= 10 || X0 <= 20 || X0 >= Main.maxTilesX - 20)//防止超界
                 {
                     break;
                 }
                 for (int i = (int)-Width; i <= (int)Width; i++)
                 {
                     Tile tile = Main.tile[i + X0, j + Y0];
-                    if (i <= -Width + 4 || i >= Width - 4)
+                    if (i > -Width + 4 || i < Width - 4 || Width < 4)
                     {
-                        tile.TileType = TileID.PineTree;
-                        tile.HasTile = true;
-                    }
-                    if (i > -Width + 2 && i < Width - 2)
-                    {
-                        tile.WallType = (ushort)ModContent.WallType<PineLeavesWall>();
+                        tile.HasTile = false;
                     }
                 }
                 Width -= (float)(Math.Sin(j * 0.8) * 0.5 + 0.2);//制造松树一层一层的效果
