@@ -51,7 +51,6 @@ namespace Everglow.Sources.Icons
             {
                 return;
             }
-            HookTarget = null;
             HookEndpointManager.Remove(MethodBase.GetMethodFromHandle(HookTarget.MethodHandle), HookMethod);
         }
         private void HookMethod(Action<UIElement> orig, UIElement self)
