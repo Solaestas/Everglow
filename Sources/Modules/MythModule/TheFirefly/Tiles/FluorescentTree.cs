@@ -9,7 +9,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
         {
             Main.tileSolid[Type] = false;
             Main.tileLavaDeath[Type] = false;
-            Main.tileFrameImportant[Type] = false;
+            Main.tileFrameImportant[Type] = true;
             Main.tileBlockLight[Type] = false;
             Main.tileLighted[Type] = true;
             Main.tileAxe[Type] = true;
@@ -24,10 +24,44 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)//被砍爆的时候更新
         {
+
         }
 
         public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
         {
+            if (!fail)
+            {
+                int Dy = -1;
+
+                while(Main.tile[i, j + Dy].TileType == Type && Dy > -100)
+                {
+                    Tile tileLeft = Main.tile[i - 1, j + Dy];
+                    Tile tileRight = Main.tile[i + 1, j + Dy];
+                    WorldGen.KillTile(i, j + Dy);
+                    if (tileLeft.TileType == Type)
+                    {
+                        WorldGen.KillTile(i - 1, j + Dy);
+                    }
+                    if (tileRight.TileType == Type)
+                    {
+                        WorldGen.KillTile(i + 1, j + Dy);
+                    }
+                    if(Dy == -1)
+                    {
+                        tileLeft = Main.tile[i - 1, j];
+                        if (tileLeft.TileType == Type)
+                        {
+                            WorldGen.KillTile(i - 1, j);
+                        }
+                        tileRight = Main.tile[i + 1, j];
+                        if (tileRight.TileType == Type)
+                        {
+                            WorldGen.KillTile(i + 1, j);
+                        }
+                    }
+                    Dy -= 1;
+                }
+            }
         }
         public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
         {
