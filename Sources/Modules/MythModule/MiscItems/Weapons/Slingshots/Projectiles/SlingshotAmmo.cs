@@ -3,7 +3,7 @@ using Everglow.Sources.Modules.MythModule.Common;
 
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Projectiles
 {
-    public class SlingshotAmmo : ModProjectile
+    public abstract class SlingshotAmmo : ModProjectile
     {
         public override void SetStaticDefaults()
         {
@@ -21,6 +21,11 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
             Projectile.localNPCHitCooldown = 20;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 15;
+            SetDef();
+        }
+        public virtual void SetDef()
+        {
+
         }
         /// <summary>
         /// 内部变量,别动
@@ -30,6 +35,10 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
         /// 碰撞长宽,默认10
         /// </summary>
         internal int HitBoxSize = 10;
+        /// <summary>
+        /// 撞激弹幕
+        /// </summary>
+        internal int HitProjType = ModContent.ProjectileType<SlingshotHitProjectile>();
         public override void AI()
         {
             if (TimeTokill >= 0 && TimeTokill <= 2)
@@ -56,7 +65,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
         public void AmmoHit()
         {
             Projectile.velocity = Projectile.oldVelocity;
-            Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center + Projectile.velocity, Vector2.Zero, ModContent.ProjectileType<Projectiles.Ranged.Slingshots.SlingshotHit>(), (int)((double)Projectile.damage), Projectile.knockBack, Projectile.owner, DrawC * 0.5f, Projectile.whoAmI);
+            Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center + Projectile.velocity, Vector2.Zero, ModContent.ProjectileType<SlingshotHitProjectile>(), (int)((double)Projectile.damage), Projectile.knockBack, Projectile.owner, 1f, Main.rand.NextFloat(6.283f));
             for (int x = 0; x < 5; x++)
             {
                 Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 0, 0f, 0f, 0, default(Color), 0.7f);
