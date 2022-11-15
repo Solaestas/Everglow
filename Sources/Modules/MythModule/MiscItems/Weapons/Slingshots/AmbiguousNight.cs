@@ -1,15 +1,11 @@
 ﻿using Terraria.DataStructures;
 
-namespace MythMod.Items.Weapons.SlingShots
+namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots
 {
     public class AmbiguousNight : ModItem
     {
         public override void SetStaticDefaults()
         {
-            //DisplayName.SetDefault("Ambiguous Night");
-            //DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "幻夜弹弓");
-            //Tooltip.SetDefault("Shoot little stones\nDon't need ammos");
-            //Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "射出石子\n免弹药远程武器");
         }
         public override void SetDefaults()
         {
