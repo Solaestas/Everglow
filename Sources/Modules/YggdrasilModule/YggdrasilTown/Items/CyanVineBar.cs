@@ -11,7 +11,7 @@
         {
             Item.width = 30;
             Item.height = 24;
-            Item.rare = ItemRarityID.Orange;
+            Item.rare = ItemRarityID.White;
             Item.scale = 1f;
             Item.createTile = 0;
             Item.useStyle = ItemUseStyleID.Swing;
@@ -26,7 +26,7 @@
         }
         public override void AddRecipes()
         {
-            CreateRecipe(4)
+            CreateRecipe(1)
                 .AddIngredient(ModContent.ItemType<Items.CyanVineOre>(), 3)
                 .AddTile(TileID.Furnaces)
                 .Register();
