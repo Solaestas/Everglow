@@ -18,7 +18,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
         }
         internal bool Release = true;
         internal int Power = 0;
-        internal int ShootProjType = ModContent.ProjectileType<SlingshotAmmo>();
+        internal int ShootProjType = ModContent.ProjectileType<NormalAmmo>();
         internal int SlingshotLength = 14;
         public override void AI()
         {
@@ -58,7 +58,11 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
             {
                 Projectile.Center = Main.player[Projectile.owner].MountedCenter + Vector2.Normalize(MouseToPlayer) * 15f + new Vector2(0, -4);
                 SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/MiscItems/Weapons/Slingshots/Sounds/SlingshotShoot"), Projectile.Center);
-                Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center + SlingshotStringHead, -Vector2.Normalize(MinusShootDir) * (float)(Power / 5f + 8f) * (Projectile.ai[0]) / 8f, ShootProjType, (int)(Projectile.damage * (1 + Power / 40f)), Projectile.knockBack, player.whoAmI);
+
+                Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + SlingshotStringHead, -Vector2.Normalize(MinusShootDir) * (float)(Power / 5f + 8f), ShootProjType, (int)(Projectile.damage * (1 + Power / 40f)), Projectile.knockBack, player.whoAmI);
+                Main.NewText(p.damage);
+
+                Projectile.timeLeft = 5;
                 Release = false;
             }
             if (!Main.mouseLeft && !Release)

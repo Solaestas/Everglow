@@ -1,5 +1,6 @@
 ﻿using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MythModule.Common;
+using Terraria.DataStructures;
 
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Projectiles
 {
@@ -13,6 +14,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
             Projectile.width = 10;
             Projectile.height = 10;
             Projectile.friendly = true;
+            Projectile.hostile = true;
             Projectile.DamageType = DamageClass.Ranged;
             Projectile.aiStyle = -1;
             Projectile.penetrate = 3;
@@ -27,6 +29,9 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
         {
 
         }
+        public override void OnSpawn(IEntitySource source)
+        {
+        }
         /// <summary>
         /// 内部变量,别动
         /// </summary>
@@ -38,9 +43,9 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
         /// <summary>
         /// 撞激弹幕
         /// </summary>
-        internal int HitProjType = ModContent.ProjectileType<SlingshotHitProjectile>();
+        internal int HitProjType = ModContent.ProjectileType<NormalHit>();
         public override void AI()
-        {
+        {   
             if (TimeTokill >= 0 && TimeTokill <= 2)
             {
                 Projectile.Kill();
@@ -50,7 +55,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
                 Projectile.velocity = Projectile.oldVelocity;
             }
             TimeTokill--;
-            Projectile.velocity.Y += 0.07f;
+            Projectile.velocity.Y += 0.17f;
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
@@ -65,7 +70,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
         public void AmmoHit()
         {
             Projectile.velocity = Projectile.oldVelocity;
-            Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center + Projectile.velocity, Vector2.Zero, ModContent.ProjectileType<SlingshotHitProjectile>(), (int)((double)Projectile.damage), Projectile.knockBack, Projectile.owner, 1f, Main.rand.NextFloat(6.283f));
+            Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center + Projectile.velocity, Vector2.Zero, ModContent.ProjectileType<NormalHit>(), (int)((double)Projectile.damage), Projectile.knockBack, Projectile.owner, 1f, Main.rand.NextFloat(6.283f));
             for (int x = 0; x < 5; x++)
             {
                 Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 0, 0f, 0f, 0, default(Color), 0.7f);

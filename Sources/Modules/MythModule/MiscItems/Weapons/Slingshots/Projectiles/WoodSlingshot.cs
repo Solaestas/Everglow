@@ -4,7 +4,7 @@
     {
         public override void SetDef()
         {
-            ShootProjType = ModContent.ProjectileType<SlingshotAmmo>();
+            ShootProjType = ModContent.ProjectileType<NormalAmmo>();
         }
     }
 }

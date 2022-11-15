@@ -17,7 +17,6 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
             Projectile.width = 120;
             Projectile.height = 120;
             Projectile.aiStyle = -1;
-            Projectile.timeLeft = 200;
             Projectile.tileCollide = false;
             Projectile.extraUpdates = 2;
             Projectile.DamageType = DamageClass.Ranged;
@@ -53,9 +52,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
         }
         public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D Shadow =
-                
-                MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/CursedHit");
+            Texture2D Shadow = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/CursedHit");
             float Dark = Math.Max(((Projectile.timeLeft - 150) / 50f), 0);
             Main.spriteBatch.Draw(Shadow,Projectile.Center - Main.screenPosition,null,Color.White * Dark,0,Shadow.Size() / 2f,2.2f * Projectile.ai[0] / 15f, SpriteEffects.None,0);
             Texture2D light = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/CursedHitStar");
