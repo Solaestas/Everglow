@@ -1,6 +1,6 @@
 ﻿using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MythModule.Common;
-
+using Terraria.Audio;
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Projectiles
 {
     public class StarAmmo : SlingshotAmmo
@@ -67,8 +67,8 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
                 var factor = i / (float)TrueL;
                 var color = Color.Lerp(new Color(DrawC * 0.2f, DrawC * 0.2f, DrawC * 0.2f + 0.7f, 0), new Color(0, 0, 0, 0), factor);
 
-                bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(10, 10) - Main.screenPosition + Projectile.velocity, color, new Vector3(1, 0, 0)));
-                bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(10, 10) - Main.screenPosition + Projectile.velocity, color, new Vector3(1, 1, 0)));
+                bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(10, 10) - Main.screenPosition, color, new Vector3(1, 0, 0)));
+                bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(10, 10) - Main.screenPosition, color, new Vector3(1, 1, 0)));
 
             }
 
@@ -89,8 +89,8 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
             {
                 kSize = TimeTokill / 30f;
             }
-            Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition, null, Light, 0, star.Size() / 2f, new Vector2(0.06f, 0.23f + MathF.Sin((float)(Main.timeForVisualEffects * 0.1)) * 0.2f) * Power * 2f * kSize, SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition, null, Light, MathF.PI / 2, star.Size() / 2f, new Vector2(0.06f, 0.23f + MathF.Sin((float)(Main.timeForVisualEffects * 0.1)) * 0.2f) * Power * 2f * kSize, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition - Projectile.velocity, null, Light, 0, star.Size() / 2f, new Vector2(0.06f, 0.23f + MathF.Sin((float)(Main.timeForVisualEffects * 0.1)) * 0.2f) * Power * 2f * kSize, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition - Projectile.velocity, null, Light, MathF.PI / 2, star.Size() / 2f, new Vector2(0.06f, 0.23f + MathF.Sin((float)(Main.timeForVisualEffects * 0.1)) * 0.2f) * Power * 2f * kSize, SpriteEffects.None, 0);
 
             Lighting.AddLight(Projectile.Center, Light.R / 555f, Light.G / 555f, Light.B / 555f);
             return base.PreDraw(ref lightColor);
@@ -101,6 +101,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
         }
         public override void AmmoHit()
         {
+            SoundEngine.PlaySound(SoundID.Item27, Projectile.Center);
             TimeTokill = 30;
             float DrawC = Projectile.ai[0] + 0.5f;
             Projectile.velocity = Projectile.oldVelocity;

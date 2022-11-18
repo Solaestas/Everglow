@@ -3,11 +3,11 @@ using Everglow.Sources.Commons.Function.Vertex;
 
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Projectiles
 {
-    internal class JellySlingshot : SlingshotProjectile
+    internal class GelSlingshot : SlingshotProjectile
     {
         public override void SetDef()
         {
-            ShootProjType = ModContent.ProjectileType<NormalAmmo>();
+            ShootProjType = ModContent.ProjectileType<GelBall>();
         }
         public override void DrawString()
         {

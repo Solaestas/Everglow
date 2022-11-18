@@ -1,4 +1,5 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Projectiles
+﻿
+namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Projectiles
 {
     public class AmethystBead : GemAmmo
     {

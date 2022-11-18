@@ -1,12 +1,12 @@
 ﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots
 {
-    public class JellySlingshot : SlingshotItem
+    public class GelSlingshot : SlingshotItem
     {
         public override void SetDef()
         {
             Item.damage = 12;
             Item.crit = 4;
-            ProjType = ModContent.ProjectileType<Projectiles.JellySlingshot>();
+            ProjType = ModContent.ProjectileType<Projectiles.GelSlingshot>();
 
             Item.rare = ItemRarityID.Green;
             Item.value = Item.sellPrice(0, 1, 0, 0);

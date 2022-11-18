@@ -4,7 +4,7 @@
     {
         public override void SetDef()
         {
-            dustColor = Color.Green * 0.3f;
+            dustColor = Color.Green * 0.5f;
         }
     }
 }

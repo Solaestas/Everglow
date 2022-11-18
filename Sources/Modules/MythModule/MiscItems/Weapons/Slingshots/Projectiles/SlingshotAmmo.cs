@@ -103,7 +103,14 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
             }
             else
             {
-                return true;
+                Texture2D TexMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
+                if(Projectile.type == ModContent.ProjectileType<StarAmmo>())
+                {
+                    Main.spriteBatch.Draw(TexMain, Projectile.Center - Main.screenPosition - Projectile.velocity, null, new Color(255,255,120,0), Projectile.rotation, TexMain.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
+                    return false;
+                }
+                Main.spriteBatch.Draw(TexMain, Projectile.Center - Main.screenPosition - Projectile.velocity, null, lightColor, Projectile.rotation, TexMain.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
+                return false;
             }
         }
         public override void PostDraw(Color lightColor)
@@ -147,8 +154,8 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
                 var factor = i / (float)TrueL;
                 var color = Color.Lerp(new Color(DrawC, DrawC, DrawC, 0), new Color(0, 0, 0, 0), factor);
 
-                bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(10, 10) - Main.screenPosition + Projectile.velocity, color, new Vector3(1, 0, 0)));
-                bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(10, 10) - Main.screenPosition + Projectile.velocity, color, new Vector3(1, 1, 0)));
+                bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(10, 10) - Main.screenPosition, color, new Vector3(1, 0, 0)));
+                bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(10, 10) - Main.screenPosition, color, new Vector3(1, 1, 0)));
 
             }
 

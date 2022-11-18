@@ -4,7 +4,7 @@
     {
         public override void SetDef()
         {
-            ShootProjType = ModContent.ProjectileType<NormalAmmo>();
+            ShootProjType = ModContent.ProjectileType<GlowSporeBead>();
             SlingshotLength = 10;
             SplitBranchDis = 6;
         }
