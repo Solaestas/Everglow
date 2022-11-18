@@ -1,18 +1,19 @@
 ﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots
 {
-    public class WoodSlingshot : SlingshotItem
+    public class EbonwoodSlingshot : SlingshotItem
     {
         public override void SetDef()
         {
-            ProjType = ModContent.ProjectileType<Projectiles.WoodSlingshot>();
-            Item.useTime = 26;
-            Item.useAnimation = 26;
+            ProjType = ModContent.ProjectileType<Projectiles.EbonwoodSlingshot>();
+            Item.damage = 9;
+            Item.useTime = 22;
+            Item.useAnimation = 22;
         }
         public override void AddRecipes()
         {
             CreateRecipe()
                 .AddIngredient(ItemID.Cobweb, 14)
-                .AddIngredient(ItemID.Wood, 7)
+                .AddIngredient(ItemID.Ebonwood, 7)
                 .AddTile(TileID.WorkBenches)
                 .Register();
         }

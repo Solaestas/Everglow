@@ -2,6 +2,13 @@
 
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots
 {
+    /// <summary>
+    /// Default damage = 6 width*height = 36*36 useT = useA = 21 crit = 8  useStyle = ItemUseStyleID.Shoot rare = ItemRarityID.White value = Item.sellPrice(0, 0, 0, 50) 
+    /// noMelee = true noUseGraphic = true autoReuse = false
+    /// DamageType = DamageClass.Ranged UseSound = SoundID.Item5
+    /// knockBack = 2f shootSpeed = 1f
+    /// 
+    /// </summary>
     public abstract class SlingshotItem : ModItem
     {
         public override void SetStaticDefaults()

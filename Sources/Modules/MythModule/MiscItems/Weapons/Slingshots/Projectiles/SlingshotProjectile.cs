@@ -53,7 +53,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
             player.heldProj = Projectile.whoAmI;
             if (Power == 24 && Main.mouseLeft)
             {
-                SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/MiscItems/Weapons/Slingshots/Sounds/Slingshot"), Projectile.Center);
+                SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/MiscItems/Weapons/Slingshots/Sounds/Slingshot").WithVolumeScale(Power / (float)MaxPower), Projectile.Center);
             }
             Vector2 MouseToPlayer = Main.MouseWorld - player.MountedCenter;
             if (Main.mouseLeft && Release)
@@ -107,17 +107,8 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
             Texture2D TexMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
             Color drawColor = Lighting.GetColor((int)(Projectile.Center.X / 16.0), (int)(Projectile.Center.Y / 16.0));
             SpriteEffects spriteEffect = SpriteEffects.None;
-            float DrawRot;
-            if (Projectile.Center.X < player.MountedCenter.X)
-            {
-                player.direction = -1;
-                DrawRot = Projectile.rotation - MathF.PI / 4f;
-            }
-            else
-            {
-                player.direction = 1;
-                DrawRot = Projectile.rotation - MathF.PI * 0.25f;
-            }
+            float DrawRot = Projectile.rotation - MathF.PI / 4f;
+
             Vector2 MouseToPlayer = Main.MouseWorld - player.MountedCenter;
             Vector2 SlingshotStringHead = new Vector2(SlingshotLength, -SlingshotLength).RotatedBy(DrawRot) + Projectile.Center - Main.MouseWorld;
             Vector2 SlingshotStringTail = new Vector2(SlingshotLength, -SlingshotLength).RotatedBy(DrawRot) + Vector2.Normalize(SlingshotStringHead) * Power * 0.2625f;
@@ -128,43 +119,37 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
             }
 
             Vector2 SlingshotStringTailToPlayer = player.MountedCenter - (Projectile.Center + SlingshotStringTail);
+
             if (Projectile.Center.X < player.MountedCenter.X)
             {
+                player.direction = -1;
                 spriteEffect = SpriteEffects.FlipVertically;
                 if (Main.mouseLeft)
                 {
                     player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(MouseToPlayer.Y, MouseToPlayer.X) - MathF.PI * 0.75f));
                     player.SetCompositeArmBack(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(SlingshotStringTailToPlayer.Y, SlingshotStringTailToPlayer.X) - MathF.PI * 1.5f));
                 }
-                DrawRot = Projectile.rotation - MathF.PI / 4f;
             }
             else
             {
                 player.direction = 1;
-
                 if (Main.mouseLeft)
                 {
                     player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(MouseToPlayer.Y, MouseToPlayer.X) - MathF.PI * 0.25f));
                     player.SetCompositeArmBack(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(SlingshotStringTailToPlayer.Y, SlingshotStringTailToPlayer.X) + MathF.PI * 0.5f));
                 }
-                DrawRot = Projectile.rotation - MathF.PI * 0.25f;
             }
             Main.spriteBatch.Draw(TexMain, Projectile.Center - Main.screenPosition, null, drawColor, DrawRot, TexMain.Size() / 2f, 1f, spriteEffect, 0);
             DrawString();
         }
+        /// <summary>
+        /// 绘制弹弓的弦 TODO:这部分的绘制移到玩家身后
+        /// </summary>
         public virtual void DrawString()
         {
             Player player = Main.player[Projectile.owner];
             Color drawColor = Lighting.GetColor((int)(Projectile.Center.X / 16.0), (int)(Projectile.Center.Y / 16.0));
-            float DrawRot;
-            if (Projectile.Center.X < player.MountedCenter.X)
-            {
-                DrawRot = Projectile.rotation - MathF.PI / 4f;
-            }
-            else
-            {
-                DrawRot = Projectile.rotation - MathF.PI * 0.25f;
-            }
+            float DrawRot = Projectile.rotation - MathF.PI / 4f;
             Vector2 HeadCenter = new Vector2(SlingshotLength, -SlingshotLength).RotatedBy(DrawRot);
             if (player.direction == -1)
             {
@@ -193,7 +178,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
         }
-        public void DrawTexLine(Vector2 StartPos, Vector2 EndPos, float width, Color color, Texture2D tex)
+        private void DrawTexLine(Vector2 StartPos, Vector2 EndPos, float width, Color color, Texture2D tex)
         {
             Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * width;
 

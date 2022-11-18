@@ -86,7 +86,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
             Projectile.velocity *= 0.7f;
             AmmoHit();
         }
-        public void AmmoHit()
+        public virtual void AmmoHit()
         {
             Projectile.velocity = Projectile.oldVelocity;
             Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center + Projectile.velocity, Vector2.Zero, ModContent.ProjectileType<NormalHit>(), Projectile.damage, Projectile.knockBack, Projectile.owner,Projectile.velocity.Length(), Main.rand.NextFloat(6.283f));
@@ -108,6 +108,10 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
         }
         public override void PostDraw(Color lightColor)
         {
+            DrawTrail();
+        }
+        public virtual void DrawTrail()
+        {
             float DrawC = Projectile.ai[0] * Projectile.ai[0];
 
             List<Vertex2D> bars = new List<Vertex2D>();
@@ -116,7 +120,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
             {
                 if (Projectile.oldPos[i] == Vector2.Zero)
                 {
-                    if(i == 1)
+                    if (i == 1)
                     {
                         return;
                     }
@@ -138,7 +142,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
                     width *= Projectile.timeLeft / 30f;
                 }
                 var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
-                normalDir = Utils.SafeNormalize(new Vector2(-normalDir.Y, normalDir.X),Vector2.Zero);
+                normalDir = Utils.SafeNormalize(new Vector2(-normalDir.Y, normalDir.X), Vector2.Zero);
 
                 var factor = i / (float)TrueL;
                 var color = Color.Lerp(new Color(DrawC, DrawC, DrawC, 0), new Color(0, 0, 0, 0), factor);
@@ -154,7 +158,6 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
                 Main.graphics.GraphicsDevice.Textures[0] = t;
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
             }
-
         }
     }
 }
