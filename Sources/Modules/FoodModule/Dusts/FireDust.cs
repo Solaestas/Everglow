@@ -11,7 +11,7 @@ namespace Everglow.Sources.Modules.FoodModule.Dusts
             dust.noGravity = true;
             dust.frame = new Rectangle(0, 0, 64, 64);
 
-            dust.shader = new Terraria.Graphics.Shaders.ArmorShaderData(new Ref<Effect>(ModContent.Request<Effect>("Everglow/Sources/Modules/FoodModule/Effects/GlowingDust", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value), "GlowingDustPass");;
+            dust.shader = new Terraria.Graphics.Shaders.ArmorShaderData(new Ref<Effect>(ModContent.Request<Effect>("Everglow/Sources/Modules/FoodModule/Effects/GlowingDust", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value), "GlowingDustPass"); ;
         }
 
         public override Color? GetAlpha(Dust dust, Color lightColor)
@@ -32,7 +32,7 @@ namespace Everglow.Sources.Modules.FoodModule.Dusts
 
 
             dust.rotation = dust.velocity.ToRotation();
-            
+
 
             dust.shader.UseColor(dust.color);
 
@@ -41,8 +41,10 @@ namespace Everglow.Sources.Modules.FoodModule.Dusts
             if (!dust.noGravity)
                 dust.velocity.Y += 0.1f;
 
-            dust.velocity *= 0.75f;
+            dust.velocity *= 0.85f;
             dust.color *= 0.95f;
+            if (dust.velocity.Length() <= 1f)
+                dust.velocity *= 1.1f;
 
             if (!dust.noLight)
                 Lighting.AddLight(dust.position, dust.color.ToVector3());
