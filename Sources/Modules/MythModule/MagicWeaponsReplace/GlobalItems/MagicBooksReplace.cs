@@ -145,6 +145,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
                 {
                     item.noUseGraphic = false;
                 }
+                if (item.type == ModContent.ItemType<TheFirefly.Items.Weapons.DreamWeaver>())
+                {
+                    item.noUseGraphic = false;
+                }
                 return base.UseItem(item, player);
             }
             if (item.type == ItemID.WaterBolt)
@@ -183,7 +187,11 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
             }
             if (item.type == ItemID.LunarFlareBook)
             {
-                item.noUseGraphic = true; ;
+                item.noUseGraphic = true; 
+            }
+            if (item.type == ModContent.ItemType<TheFirefly.Items.Weapons.DreamWeaver>())
+            {
+                item.noUseGraphic = true;
             }
             // Aim Types
             if (item.type == ItemID.WaterBolt)
@@ -293,6 +301,14 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
             if (item.type == ItemID.LunarFlareBook)
             {
                 int aimType = ModContent.ProjectileType<Projectiles.LunarFlare.LunarFlareBook>();
+                if (player.ownedProjectileCounts[aimType] < 1)
+                {
+                    Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
+                }
+            }
+            if (item.type == ModContent.ItemType<TheFirefly.Items.Weapons.DreamWeaver>())
+            {
+                int aimType = ModContent.ProjectileType<Projectiles.DreamWeaver.DreamWeaverBook>();
                 if (player.ownedProjectileCounts[aimType] < 1)
                 {
                     Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
