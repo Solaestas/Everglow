@@ -24,18 +24,23 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
                 Projectile.velocity.Y += 0.17f;
                 int index = Dust.NewDust(Projectile.position - new Vector2(4), Projectile.width, Projectile.height, ModContent.DustType<Dusts.JungleSpore>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.6f, 1.1f));
                 Main.dust[index].velocity = Projectile.velocity * 0.5f;
-
-                int index2 = Dust.NewDust(Projectile.position - new Vector2(4), Projectile.width, Projectile.height, ModContent.DustType<Dusts.JungleSmogStoppedByTile> (), 0f, 0f, 0, default, Main.rand.NextFloat(3.7f, 5.1f));
-                Main.dust[index2].velocity = Projectile.velocity * 0.5f;
-                Main.dust[index2].alpha = (int)(Main.dust[index2].scale * 50);
-
                 for (float v = 0; v < Projectile.velocity.Length(); v += 1f)
                 {
+
+
+                    if(v % 8 == 0)
+                    {
+                        int index2 = Dust.NewDust(Projectile.position - Utils.SafeNormalize(Projectile.velocity, Vector2.Zero) * v - new Vector2(4), Projectile.width, Projectile.height, ModContent.DustType<Dusts.JungleSmogStoppedByTile>(), 0f, 0f, 0, default, Main.rand.NextFloat(3.7f, 5.1f));
+                        Main.dust[index2].velocity = Projectile.velocity * 0.5f;
+                        Main.dust[index2].alpha = (int)(Main.dust[index2].scale * 50);
+                    }
+
+
                     int type = ModContent.DustType<Dusts.LittleJungleSpore>();
                     if (Main.rand.NextBool(8))
                     {
-                        int r2 = Dust.NewDust(Projectile.Center + Projectile.velocity - Utils.SafeNormalize(Projectile.velocity, Vector2.Zero) * v - new Vector2(4), 0, 0, type, 0, 0, 200, default, Projectile.ai[0] * 2 + 0.4f);
-                        Main.dust[r2].velocity = Projectile.velocity * 0.1f;
+                        int r2 = Dust.NewDust(Projectile.Center + Projectile.velocity - Utils.SafeNormalize(Projectile.velocity, Vector2.Zero) * v - new Vector2(4), 0, 0, type, 0, 0, 200, default, Projectile.ai[0] * 2 + 0.8f);
+                        Main.dust[r2].velocity = Projectile.velocity * Main.rand.NextFloat(0.07f, 0.16f);
                         Main.dust[r2].noGravity = true;
                     }
                 }
@@ -75,7 +80,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
                     break;
                 }
 
-                float width = 4;
+                float width = 8;
                 if (Projectile.timeLeft <= 30)
                 {
                     width *= Projectile.timeLeft / 30f;
@@ -86,8 +91,8 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
                 var factor = i / (float)TrueL;
                 var color = Color.Lerp(new Color(255, 255, 255, 0) * 0.6f, new Color(0, 0, 0, 0), factor);
 
-                float fac1 = factor * 3 + (float)(-Main.timeForVisualEffects * 0.03) + 100000;
-                float fac2 = ((i + 1) / (float)TrueL) * 3 + (float)(-Main.timeForVisualEffects * 0.03) + 100000;
+                float fac1 = factor * 3 + (float)(-Main.timeForVisualEffects * 0.09) + 100000;
+                float fac2 = ((i + 1) / (float)TrueL) * 3 + (float)(-Main.timeForVisualEffects * 0.09) + 100000;
                 //TODO:925分钟之后会炸
 
                 fac1 %= 1f;
@@ -148,7 +153,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
                     break;
                 }
 
-                float width = 4;
+                float width = 8;
                 if (Projectile.timeLeft <= 30)
                 {
                     width *= Projectile.timeLeft / 30f;
@@ -159,8 +164,8 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
                 var factor = i / (float)TrueL;
                 var color = Color.Lerp(Color.White * 0.6f, new Color(0, 0, 0, 0), factor);
 
-                float fac1 = factor * 3 + (float)(-Main.timeForVisualEffects * 0.03) + 100000;
-                float fac2 = ((i + 1) / (float)TrueL) * 3 + (float)(-Main.timeForVisualEffects * 0.03) + 100000;
+                float fac1 = factor * 3 + (float)(-Main.timeForVisualEffects * 0.09) + 100000;
+                float fac2 = ((i + 1) / (float)TrueL) * 3 + (float)(-Main.timeForVisualEffects * 0.09) + 100000;
 
                 fac1 %= 1f;
                 fac2 %= 1f;
@@ -199,7 +204,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
             SoundEngine.PlaySound(SoundID.Drip, Projectile.Center);
             Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<NormalHit>(), Projectile.damage, Projectile.knockBack, Projectile.owner, Projectile.velocity.Length(), Main.rand.NextFloat(6.283f));
             float Power = Projectile.ai[0] + 0.5f;
-            for (int x = 0; x < 34; x++)
+            for (int x = 0; x < 100 * Power; x++)
             {
                 int index = Dust.NewDust(Projectile.position - new Vector2(4), Projectile.width, Projectile.height, ModContent.DustType<Dusts.JungleSpore>(), 0f, 0f, 100, default, Power);
                 Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(3.5f, 4f)).RotatedByRandom(6.283);
@@ -207,25 +212,19 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
                 Main.dust[index2].velocity = new Vector2(0, Main.rand.NextFloat(3.5f, 4f)).RotatedByRandom(6.283);
                 Main.dust[index2].alpha = (int)(Main.dust[index2].scale * 50);
 
-                for (float v = 0; v < Projectile.velocity.Length(); v += 1f)
-                {
-                    int type = ModContent.DustType<Dusts.LittleJungleSpore>();
-                    if (Main.rand.NextBool(8))
-                    {
-                        int r2 = Dust.NewDust(Projectile.Center + Projectile.velocity - Utils.SafeNormalize(Projectile.velocity, Vector2.Zero) * v - new Vector2(4), 0, 0, type, 0, 0, 200, default, Power);
-                        Main.dust[r2].velocity = new Vector2(0, Main.rand.NextFloat(3.5f, 4f)).RotatedByRandom(6.283);
-                        Main.dust[r2].noGravity = true;
-                    }
-                }
+                int type = ModContent.DustType<Dusts.LittleJungleSpore>();
+                int r2 = Dust.NewDust(Projectile.Center - new Vector2(4), 0, 0, type, 0, 0, 200, default, Power * 2);
+                Main.dust[r2].velocity = new Vector2(0, Main.rand.NextFloat(3.5f, 4f)).RotatedByRandom(6.283);
+                Main.dust[r2].noGravity = true;
             }
         }
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            target.AddBuff(BuffID.Poisoned, 180);
+            target.AddBuff(BuffID.Poisoned, 540);
         }
         public override void OnHitPvp(Player target, int damage, bool crit)
         {
-            target.AddBuff(BuffID.Poisoned, 180);
+            target.AddBuff(BuffID.Poisoned, 540);
         }
     }
 }

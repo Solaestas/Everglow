@@ -1,10 +1,24 @@
 ﻿using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.Audio;
+using Terraria.DataStructures;
+
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Projectiles
 {
     public class StarAmmo : SlingshotAmmo
     {
+        public override void OnSpawn(IEntitySource source)
+        {
+            Player player = Main.player[Projectile.owner];
+            if(player.position.Y > Main.UnderworldLayer * 16f)
+            {
+                Projectile.CritChance -= 15;
+            }
+            else
+            {
+                Projectile.CritChance += 15;
+            }
+        }
         public override void AI()
         {
             if (TimeTokill >= 0 && TimeTokill <= 2)
@@ -148,7 +162,19 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
                     player.addDPS((int)(Projectile.damage * (1 + Projectile.ai[0] / 100f) * 1f));
                 }
             }
+            Projectile.friendly = false;
             Projectile.velocity *= 0f;
+        }
+        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        {
+            if (!Main.dayTime)
+            {
+                damage = (int)(damage * 1.25f);
+            }
+            else
+            {
+                damage = (int)(damage * 0.75f);
+            }
         }
     }
 }

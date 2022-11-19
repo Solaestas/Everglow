@@ -4,6 +4,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
 {
     internal class StarSlingshot : SlingshotProjectile
     {
+        //TODO:Translation暮色孤星:攻击会造成范围AOE,夜晚伤害提升25%,地表或天空暴击提升15%,白天伤害降低25%，地下暴击降低15%
         public override void SetDef()
         {
             ShootProjType = ModContent.ProjectileType<StarAmmo>();

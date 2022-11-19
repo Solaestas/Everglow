@@ -16,7 +16,7 @@
             dust.rotation += 0.1f;
             dust.velocity *= 0.95f;
             dust.alpha++;
-            Lighting.AddLight(dust.position, (float)((255 - dust.alpha) * 0.0005f), (float)((255 - dust.alpha) * 0.0015f), 0);
+            Lighting.AddLight(dust.position, (float)((255 - dust.alpha) * 0.0005f), (float)((255 - dust.alpha) * 0.0045f), 0);
             if (Collision.SolidCollision(dust.position, 8, 8))
             {
                 Vector2 v0 = dust.velocity;
@@ -37,13 +37,31 @@
             {
                 dust.active = false;
             }
+            //低损耗挂毒
+            int LuckTarget = Main.rand.Next(200);
+            NPC target = Main.npc[LuckTarget];
+            if (target.active)
+            {
+                if (!target.dontTakeDamage)
+                {
+                    if(!target.friendly)
+                    {
+                        if (!target.buffImmune[BuffID.Poisoned])
+                        {
+                            if ((target.Center - dust.position).Length() < 60)
+                            {
+                                target.AddBuff(BuffID.Poisoned, 180);
+                            }
+                        }
+                    }
+                }
+            }
             return false;
         }
 
         public override Color? GetAlpha(Dust dust, Color lightColor)
         {
             float k = (255 - dust.alpha) / 255f;
-            float k2 = (float)(Math.Sqrt(k));
             if (dust.scale > 0.6f)
             {
                 return new Color?(new Color(0.3f * k * k, 0.9f * k, 0, 0f));

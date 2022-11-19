@@ -26,6 +26,22 @@
                 Main.dust[r2].velocity = dust.velocity.RotatedBy(Main.rand.NextFloat(-1.3f, -0.2f));
                 Main.dust[r2].noGravity = true;
             }
+            if (Collision.SolidCollision(dust.position, 8, 8))
+            {
+                Vector2 v0 = dust.velocity;
+                int T = 0;
+                while (Collision.SolidCollision(dust.position + v0, 8, 8))
+                {
+                    T++;
+                    v0 = v0.RotatedByRandom(6.283);
+                    if (T > 10)
+                    {
+                        v0 *= -1;
+                        break;
+                    }
+                }
+                dust.velocity = v0;
+            }
             if (dust.scale < 0.01f)
             {
                 dust.active = false;

@@ -12,12 +12,12 @@
 
         public override bool Update(Dust dust)
         {
-            dust.alpha += 3;
+            dust.alpha += 5;
             dust.position += dust.velocity;
             dust.velocity += new Vector2(0, 0.015f).RotatedByRandom(MathHelper.Pi * 2d);
             dust.velocity *= 0.95f;
             dust.scale = (float)(Math.Sin(dust.alpha / 255d * Math.PI)) * dust.rotation;
-            Lighting.AddLight(dust.position, 0.16f * dust.scale / 1.8f, 0.355f * dust.scale / 1.8f, 0f * dust.scale / 1.8f);
+            Lighting.AddLight(dust.position, 0.16f * dust.scale / 1.8f, 0.655f * dust.scale / 1.8f, 0f * dust.scale / 1.8f);
             if (Collision.SolidCollision(dust.position, 8, 8))
             {
                 Vector2 v0 = dust.velocity;

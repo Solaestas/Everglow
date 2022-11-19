@@ -8,6 +8,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
         public override void SetDef()
         {
             ShootProjType = ModContent.ProjectileType<GelBall>();
+            SlingshotLength = 12;
         }
         public override void DrawString()
         {
@@ -43,7 +44,6 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
                 Head1 = HeadCenter + Utils.SafeNormalize(HeadCenter.RotatedBy(Math.PI / 8 * 5 + DrawRot), Vector2.Zero) * SplitBranchDis;
                 Head2 = HeadCenter - Utils.SafeNormalize(HeadCenter.RotatedBy(Math.PI / 8 * 5 + DrawRot), Vector2.Zero) * SplitBranchDis;
             }
-            Color Light = new Color(Power / 120f, Power / 260f, 0, 0);
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 

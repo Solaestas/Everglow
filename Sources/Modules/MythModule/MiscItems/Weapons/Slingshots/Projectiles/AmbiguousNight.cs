@@ -4,7 +4,7 @@
     {
         public override void SetDef()
         {
-            ShootProjType = ModContent.ProjectileType<NormalAmmo>();
+            ShootProjType = ModContent.ProjectileType<AmbiguousNightAmmo>();
             SlingshotLength = 8;
             SplitBranchDis = 8;
         }
