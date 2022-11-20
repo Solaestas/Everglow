@@ -120,6 +120,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             float Str = 1;
 
             mplayer.ShakeStrength = Str;*/
+            ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
+            mplayer.FlyCamPosition = new Vector2(0, 48).RotatedByRandom(6.283);
             SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, Projectile.Center);
             for (int h = 0; h < 120; h += 3)
             {
