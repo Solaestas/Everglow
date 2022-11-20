@@ -51,7 +51,7 @@ namespace Everglow.Sources.Icons
             {
                 return;
             } // TODO: Fix an object reference error on mod reload without introducing other bugs
-            //HookTarget = null;
+            HookTarget = null;
             HookEndpointManager.Remove(MethodBase.GetMethodFromHandle(HookTarget.MethodHandle), HookMethod);
         }
         private void HookMethod(Action<UIElement> orig, UIElement self)
