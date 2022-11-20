@@ -21,7 +21,7 @@
         {
             CreateRecipe()
                 .AddIngredient(ModContent.ItemType<Materials.WindMoveSeed>(), 15)
-                .AddIngredient(ModContent.ItemType<Flowers.BlueFreeze>(), 24)
+                .AddIngredient(ModContent.ItemType<Materials.BlueFreeze>(), 24)
                 .AddTile(304)
                 .Register();
         }

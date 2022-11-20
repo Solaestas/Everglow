@@ -1,4 +1,4 @@
-﻿namespace MythMod.Items.Accessories
+﻿namespace Everglow.Sources.Modules.PlantAndFarmModule.Items.Accessories
 {
     public class PurpleReedHalo : ModItem
     {
@@ -25,8 +25,8 @@
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ModContent.ItemType<WindMoveSeed>(), 15)
-                .AddIngredient(ModContent.ItemType<Flowers.PurpleTail>(), 24)
+                .AddIngredient(ModContent.ItemType<Materials.WindMoveSeed>(), 15)
+                .AddIngredient(ModContent.ItemType<Materials.PurpleTail>(), 24)
                 .AddTile(304)
                 .Register();
         }

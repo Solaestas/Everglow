@@ -1,5 +1,4 @@
-﻿using MythMod.Common.Players;
-namespace MythMod.Items.Accessories
+﻿namespace Everglow.Sources.Modules.PlantAndFarmModule.Items.Accessories
 {
     public class HotPinkCrown : ModItem
     {
@@ -20,13 +19,13 @@ namespace MythMod.Items.Accessories
         }
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            MythPlayer.AddCritDamage += player.statLifeMax2 * 0.05f / 100f;
+            //MythPlayer.AddCritDamage += player.statLifeMax2 * 0.05f / 100f;
         }
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ModContent.ItemType<WindMoveSeed>(), 15)
-                .AddIngredient(ModContent.ItemType<Flowers.HotPinkTulip>(), 24)
+                .AddIngredient(ModContent.ItemType<Materials.WindMoveSeed>(), 15)
+                .AddIngredient(ModContent.ItemType<Materials.HotPinkTulip>(), 24)
                 .AddTile(304)
                 .Register();
         }

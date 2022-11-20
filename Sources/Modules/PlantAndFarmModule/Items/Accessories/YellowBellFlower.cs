@@ -1,4 +1,4 @@
-﻿namespace MythMod.Items.Accessories
+﻿namespace Everglow.Sources.Modules.PlantAndFarmModule.Items.Accessories
 {
     public class YellowBellFlower : ModItem
     {
@@ -24,8 +24,8 @@
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ModContent.ItemType<WindMoveSeed>(), 15)
-                .AddIngredient(ModContent.ItemType<Flowers.GoldWhip>(), 24)
+                .AddIngredient(ModContent.ItemType<Materials.WindMoveSeed>(), 15)
+                .AddIngredient(ModContent.ItemType<Materials.GoldWhip>(), 24)
                 .AddTile(304)
                 .Register();
         }

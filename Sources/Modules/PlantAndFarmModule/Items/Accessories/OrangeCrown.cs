@@ -1,4 +1,4 @@
-﻿namespace MythMod.Items.Accessories
+﻿namespace Everglow.Sources.Modules.PlantAndFarmModule.Items.Accessories
 {
     public class OrangeCrown : ModItem
     {
@@ -24,8 +24,8 @@
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ModContent.ItemType<WindMoveSeed>(), 15)
-                .AddIngredient(ModContent.ItemType<Flowers.OrangeTulip>(), 24)
+                .AddIngredient(ModContent.ItemType<Materials.WindMoveSeed>(), 15)
+                .AddIngredient(ModContent.ItemType<Materials.OrangeTulip>(), 24)
                 .AddTile(304)
                 .Register();
         }

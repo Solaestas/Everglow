@@ -1,5 +1,4 @@
-﻿using MythMod.Common.Players;
-namespace MythMod.Items.Accessories
+﻿namespace Everglow.Sources.Modules.PlantAndFarmModule.Items.Accessories
 {
     public class ThreeColorCrown : ModItem
     {
@@ -20,9 +19,9 @@ namespace MythMod.Items.Accessories
         }
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            MythPlayer.ThreeColorCrown = 2;
-            if (MythPlayer.ThreeColorCrownBuff1 > 0)
-            {
+            //MythPlayer.ThreeColorCrown = 2;
+            //if (MythPlayer.ThreeColorCrownBuff1 > 0)
+            //{
                 player.GetDamage(DamageClass.Generic) *= 1.22f;
                 player.GetCritChance(DamageClass.Generic) += 11;
                 if (Main.rand.Next(6) == 0)
@@ -30,13 +29,13 @@ namespace MythMod.Items.Accessories
                     int R = 255;
                     int G = 0;
                     int B = 0;
-                    int num90 = Dust.NewDust(player.Center - new Vector2(37.5f, 27.5f), 60, 80, ModContent.DustType<Dusts.Buff>(), 0f, 0f, 0, new Color(R, G, B, 0), Main.rand.NextFloat(0.4f, 0.8f));
+                    int num90 = Dust.NewDust(player.Center - new Vector2(37.5f, 27.5f), 60, 80, ModContent.DustType<Dusts.PFMBuff>(), 0f, 0f, 0, new Color(R, G, B, 0), Main.rand.NextFloat(0.4f, 0.8f));
                     Main.dust[num90].noGravity = true;
                     Main.dust[num90].velocity = new Vector2(0, Main.rand.NextFloat(-6f, -3f));
                 }
-            }
-            if (MythPlayer.ThreeColorCrownBuff2 > 0)
-            {
+            //}
+            //if (MythPlayer.ThreeColorCrownBuff2 > 0)
+            //{
                 for (int i = 0; i < player.buffType.Length; i++)
                 {
                     if (Main.debuff[player.buffType[i]])
@@ -51,35 +50,35 @@ namespace MythMod.Items.Accessories
                     int R = 160;
                     int G = 0;
                     int B = 160;
-                    int num90 = Dust.NewDust(player.Center - new Vector2(37.5f, 27.5f), 60, 80, ModContent.DustType<Dusts.Buff>(), 0f, 0f, 0, new Color(R, G, B, 0), Main.rand.NextFloat(0.4f, 0.8f));
+                    int num90 = Dust.NewDust(player.Center - new Vector2(37.5f, 27.5f), 60, 80, ModContent.DustType<Dusts.PFMBuff>(), 0f, 0f, 0, new Color(R, G, B, 0), Main.rand.NextFloat(0.4f, 0.8f));
                     Main.dust[num90].noGravity = true;
                     Main.dust[num90].velocity = new Vector2(0, Main.rand.NextFloat(-6f, -3f));
                 }
-            }
-            if (MythPlayer.ThreeColorCrownBuff3 > 0)
-            {
+            //}
+            //if (MythPlayer.ThreeColorCrownBuff3 > 0)
+            //{
                 player.statManaMax2 += 300;
-                if (MythPlayer.ThreeColorCrownBuff3 >= 419)
-                {
+                //if (MythPlayer.ThreeColorCrownBuff3 >= 419)
+                //{
                     player.statMana = player.statManaMax2;
-                }
+                //}
                 if (Main.rand.Next(3) == 0)
                 {
                     int R = 0;
                     int G = 0;
                     int B = 255;
-                    int num90 = Dust.NewDust(player.Center - new Vector2(37.5f, 27.5f), 60, 80, ModContent.DustType<Dusts.Buff>(), 0f, 0f, 0, new Color(R, G, B, 0), Main.rand.NextFloat(0.4f, 0.8f));
+                    int num90 = Dust.NewDust(player.Center - new Vector2(37.5f, 27.5f), 60, 80, ModContent.DustType<Dusts.PFMBuff>(), 0f, 0f, 0, new Color(R, G, B, 0), Main.rand.NextFloat(0.4f, 0.8f));
 
                     Main.dust[num90].noGravity = true;
                     Main.dust[num90].velocity = new Vector2(0, Main.rand.NextFloat(-6f, -3f));
                 }
-            }
+            //}
         }
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ModContent.ItemType<WindMoveSeed>(), 15)
-                .AddIngredient(ModContent.ItemType<Flowers.PurplePhantom>(), 24)
+                .AddIngredient(ModContent.ItemType<Materials.WindMoveSeed>(), 15)
+                .AddIngredient(ModContent.ItemType<Materials.PurplePhantom>(), 24)
                 .AddTile(304)
                 .Register();
         }

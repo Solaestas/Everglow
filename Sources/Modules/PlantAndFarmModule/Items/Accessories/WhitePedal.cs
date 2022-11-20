@@ -1,5 +1,4 @@
-﻿using MythMod.Common.Players;
-namespace MythMod.Items.Accessories
+﻿namespace Everglow.Sources.Modules.PlantAndFarmModule.Items.Accessories
 {
     public class WhitePedal : ModItem
     {
@@ -21,13 +20,13 @@ namespace MythMod.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             player.GetCritChance(DamageClass.Generic) += 4;
-            MythPlayer.WhitePedal = 2;
+            //MythPlayer.WhitePedal = 2;
         }
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ModContent.ItemType<WindMoveSeed>(), 15)
-                .AddIngredient(ModContent.ItemType<Flowers.ShallowNight>(), 24)
+                .AddIngredient(ModContent.ItemType<Materials.WindMoveSeed>(), 15)
+                .AddIngredient(ModContent.ItemType<Materials.ShallowNight>(), 24)
                 .AddTile(304)
                 .Register();
         }

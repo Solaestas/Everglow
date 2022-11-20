@@ -1,5 +1,4 @@
-﻿using MythMod.Common.Players;
-namespace MythMod.Items.Accessories
+﻿namespace Everglow.Sources.Modules.PlantAndFarmModule.Items.Accessories
 {
     public class CyanBranch : ModItem
     {
@@ -20,13 +19,13 @@ namespace MythMod.Items.Accessories
         }
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            MythPlayer.CyanBranch = 2;
+            //MythPlayer.CyanBranch = 2;
         }
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ModContent.ItemType<WindMoveSeed>(), 15)
-                .AddIngredient(ModContent.ItemType<Flowers.CyanHyacinth>(), 24)
+                .AddIngredient(ModContent.ItemType<Materials.WindMoveSeed>(), 15)
+                .AddIngredient(ModContent.ItemType<Materials.CyanHyacinth>(), 24)
                 .AddTile(304)
                 .Register();
         }

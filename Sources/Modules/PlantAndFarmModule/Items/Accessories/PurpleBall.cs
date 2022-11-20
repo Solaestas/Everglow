@@ -1,5 +1,4 @@
-﻿using MythMod.Common.Players;
-namespace MythMod.Items.Accessories
+﻿namespace Everglow.Sources.Modules.PlantAndFarmModule.Items.Accessories
 {
     public class PurpleBall : ModItem
     {
@@ -20,13 +19,13 @@ namespace MythMod.Items.Accessories
         }
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            MythPlayer.PurpleBallFlower = 2;
+            //MythPlayer.PurpleBallFlower = 2;
         }
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ModContent.ItemType<WindMoveSeed>(), 15)
-                .AddIngredient(ModContent.ItemType<Flowers.LightPurpleBalls>(), 24)
+                .AddIngredient(ModContent.ItemType<Materials.WindMoveSeed>(), 15)
+                .AddIngredient(ModContent.ItemType<Materials.LightPurpleBalls>(), 24)
                 .AddTile(304)
                 .Register();
         }

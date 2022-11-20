@@ -64,7 +64,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ModContent.ItemType<MiscItems.Materials.WindMoveSeed>(), 8) // 15
+                .AddIngredient(ModContent.ItemType<PlantAndFarmModule.Items.Materials.WindMoveSeed>(), 8) // 15
                 .AddIngredient(ModContent.ItemType<BlackStarShrub>(), 24)
                 .AddIngredient(ModContent.ItemType<GlowingPedal>(), 6)
                 .AddTile(TileID.LivingLoom)

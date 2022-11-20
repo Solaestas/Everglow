@@ -1,5 +1,4 @@
-﻿using MythMod.Common.Players;
-namespace MythMod.Items.Accessories
+﻿namespace Everglow.Sources.Modules.PlantAndFarmModule.Items.Accessories
 {
     public class OrangeStick : ModItem
     {
@@ -20,18 +19,18 @@ namespace MythMod.Items.Accessories
         }
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            MythPlayer.OrangeStick = 2;
-            if (MythPlayer.OrangeStickCool > 0)
-            {
+            //MythPlayer.OrangeStick = 2;
+            //if (MythPlayer.OrangeStickCool > 0)
+            //{
                 player.statDefense += 5;
                 player.noKnockback = true;
-            }
+            //}
         }
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ModContent.ItemType<WindMoveSeed>(), 15)
-                .AddIngredient(ModContent.ItemType<Flowers.OrangeSausage>(), 24)
+                .AddIngredient(ModContent.ItemType<Materials.WindMoveSeed>(), 15)
+                .AddIngredient(ModContent.ItemType<Materials.OrangeSausage>(), 24)
                 .AddTile(304)
                 .Register();
         }
