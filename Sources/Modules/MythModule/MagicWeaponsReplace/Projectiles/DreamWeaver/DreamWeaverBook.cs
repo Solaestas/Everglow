@@ -16,9 +16,36 @@
             TexCoordDown = new Vector2(21, 46);
             TexCoordRight = new Vector2(34, 9);
         }
+
         public override void SpecialAI()
         {
-    
+            Player player = Main.player[Projectile.owner];
+            if (player.itemTime <= 0 || player.HeldItem.type != ModContent.ItemType<TheFirefly.Items.Weapons.DreamWeaver>())
+            {
+                if (Timer < 0)
+                {
+                    Projectile.Kill();
+                }
+            }
+            if (player.itemTime == 2 && player.HeldItem.type == ItemType)
+            {
+                if (Main.mouseRight)
+                {
+                    player.statMana -= 7;
+                    for (int d = 0; d < 2; d++)
+                    {
+                        Vector2 velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero).RotatedBy(Main.rand.NextFloat(-0.1f, 0.1f)) * player.HeldItem.shootSpeed * 1.3f;
+                        Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 + new Vector2(0, -10), velocity, ModContent.ProjectileType<DreamWeaverII>(), player.HeldItem.damage * 2, player.HeldItem.knockBack, player.whoAmI);
+                        p.CritChance = (int)player.GetCritChance(DamageClass.Generic);
+                    }
+                }
+                else
+                {
+                    Vector2 velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero) * player.HeldItem.shootSpeed * 1.3f;
+                    Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 + new Vector2(0, -10), velocity, ModContent.ProjectileType<DreamWeaverII>(), player.HeldItem.damage * 2, player.HeldItem.knockBack, player.whoAmI);
+                    p.CritChance = (int)player.GetCritChance(DamageClass.Generic);
+                }
+            }
         }
     }
 }
