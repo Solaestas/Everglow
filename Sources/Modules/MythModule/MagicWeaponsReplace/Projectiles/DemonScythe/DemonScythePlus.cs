@@ -1,4 +1,5 @@
-﻿using Everglow.Sources.Commons.Function.Vertex;
+﻿using Everglow.Sources.Commons.Core.VFX;
+using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MEACModule;
 using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.Audio;
@@ -139,7 +140,25 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
             }
         }
-
+        private void DrawTexMoon(VFXBatch spriteBatch,float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
+        {
+            List<Vertex2D> circle = new List<Vertex2D>();
+            for (int h = 0; h < radious * 5; h++)
+            {
+                Vector2 up = new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 0.27 + addRot);
+                Vector2 down = new Vector2(0, radious + width).RotatedBy(h / radious * Math.PI * 0.27 + addRot);
+                up = RotAndEclipse(up);
+                down = RotAndEclipse(down);
+                circle.Add(new Vertex2D(center + up, color, new Vector3(h * 0.2f / radious, 1, 0)));
+                circle.Add(new Vertex2D(center + down, color, new Vector3(h * 0.2f / radious, 0, 0)));
+            }
+            //circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0.5f, 1, 0)));
+            //circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(addRot), color, new Vector3(0.5f, 0, 0)));
+            if (circle.Count > 0)
+            {
+                spriteBatch.Draw(tex,circle,PrimitiveType.TriangleStrip);
+            }
+        }
         private Vector2 RotAndEclipse(Vector2 orig)
         {
             return new Vector2(orig.X, orig.Y * 0.6f).RotatedBy(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X));
@@ -192,16 +211,11 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
         }
 
-        public void DrawWarp()
+        public void DrawWarp(VFXBatch spriteBatch)
         {
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-            KEx.CurrentTechnique.Passes[0].Apply();
-            DrawTexMoon(34, 35, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BloomLight"), Main.timeForVisualEffects / 3);
-            DrawTexMoon(22, 35, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BloomLight"), -Main.timeForVisualEffects / 1.8);
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            
+            DrawTexMoon(spriteBatch,34, 35, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BloomLight"), Main.timeForVisualEffects / 3);
+            DrawTexMoon(spriteBatch, 22, 35, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BloomLight"), -Main.timeForVisualEffects / 1.8);
         }
     }
 }

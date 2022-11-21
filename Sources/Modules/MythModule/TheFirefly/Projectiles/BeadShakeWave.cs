@@ -1,4 +1,5 @@
-﻿using Everglow.Sources.Commons.Function.Vertex;
+﻿using Everglow.Sources.Commons.Core.VFX;
+using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MEACModule;
 using Everglow.Sources.Modules.MythModule.Common;
 
@@ -42,7 +43,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         private static void DrawCircle(float radious, float width, Color color, Vector2 center, bool Black = false)
         {
             List<Vertex2D> circle = new List<Vertex2D>();
-            for (int h = 0; h < radious / 2; h++)
+            for (int h = 0; h < radious / 2; h+=5)
             {
                 circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4), color, new Vector3(0.5f, 1, 0)));
                 circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(h / radious * Math.PI * 4), color, new Vector3(0.5f, 0, 0)));
@@ -60,13 +61,29 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
             }
         }
-
-        public void DrawWarp()
+        private static void DrawCircle(VFXBatch spriteBatch,float radious, float width, Color color, Vector2 center, bool Black = false)
         {
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-            KEx.CurrentTechnique.Passes[0].Apply();
+            List<Vertex2D> circle = new List<Vertex2D>();
+            for (int h = 0; h < radious / 2; h+=5)
+            {
+                circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4), color, new Vector3(0.5f, 1, 0)));
+                circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(h / radious * Math.PI * 4), color, new Vector3(0.5f, 0, 0)));
+            }
+            circle.Add(new Vertex2D(center + new Vector2(0, radious), color, new Vector3(0.5f, 1, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, radious + width), color, new Vector3(0.5f, 0, 0)));
+            if (circle.Count > 0)
+            {
+                Texture2D t = MythContent.QuickTexture("OmniElementItems/Projectiles/Wave");
+                if (Black)
+                {
+                    t = MythContent.QuickTexture("OmniElementItems/Projectiles/WaveBlack");
+                }
+                Main.graphics.GraphicsDevice.Textures[0] = t;
+                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
+            }
+        }
+        public void DrawWarp(VFXBatch spriteBatch)
+        {
             float value = (200 - Projectile.timeLeft) / (float)Projectile.timeLeft * 1.4f;
             float colorV = 0.6f * (1 - value) * Projectile.ai[0];
             float x0 = Projectile.ai[0];
@@ -78,15 +95,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 
             if (value < 1)
             {
-                DrawCircle(value * 1100 * Projectile.ai[0], 150 * x0 * (1 - value) + 30 * Projectile.ai[0], new Color(colorV, colorV, colorV, 0f), Projectile.Center - Main.screenPosition);
+                DrawCircle(spriteBatch,value * 1100 * Projectile.ai[0], 150 * x0 * (1 - value) + 30 * Projectile.ai[0], new Color(colorV, colorV, colorV, 0f), Projectile.Center - Main.screenPosition);
             }
             value -= 0.2f;
             if (value is < 1 and > 0)
             {
-                DrawCircle(value * 900 * Projectile.ai[0], 80 * x0 * (1 - value) + 30 * Projectile.ai[0], new Color(colorV, colorV, colorV, 0f), Projectile.Center - Main.screenPosition);
+                DrawCircle(spriteBatch,value * 900 * Projectile.ai[0], 80 * x0 * (1 - value) + 30 * Projectile.ai[0], new Color(colorV, colorV, colorV, 0f), Projectile.Center - Main.screenPosition);
             }
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
         }
     }
 }

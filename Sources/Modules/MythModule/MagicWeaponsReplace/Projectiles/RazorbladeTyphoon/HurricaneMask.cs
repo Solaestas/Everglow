@@ -4,7 +4,7 @@ using Everglow.Sources.Modules.MythModule.Common;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.RazorbladeTyphoon
 {
-    public class HurricaneMask : ModProjectile, IWarpProjectile
+    public class HurricaneMask : ModProjectile
     {
         protected override bool CloneNewInstances => false;
         public override bool IsCloneable => false;
@@ -35,8 +35,6 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ra
         {
             return false;
         }
-        public void DrawWarp()
-        {
-        }
+
     }
 }

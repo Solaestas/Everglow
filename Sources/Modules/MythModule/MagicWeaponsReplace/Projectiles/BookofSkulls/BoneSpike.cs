@@ -1,4 +1,5 @@
-﻿using Everglow.Sources.Commons.Function.Vertex;
+﻿using Everglow.Sources.Commons.Core.VFX;
+using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MEACModule;
 using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.Audio;
@@ -164,6 +165,51 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             Main.graphics.GraphicsDevice.Textures[0] = tex;
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
         }
+        public void DrawTexLineColor(VFXBatch spriteBatch,Vector2 StartPos, Vector2 EndPos, Color color1, Color color2, float Wid, Texture2D tex)
+        {
+            Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
+
+            List<Vertex2D> vertex2Ds = new List<Vertex2D>();
+
+            for (int x = 0; x < 3; x++)
+            {
+                float Value0 = (float)(Main.timeForVisualEffects / 91d + 20) % 1f;
+                float Value1 = (float)(Main.timeForVisualEffects / 91d + 20.1) % 1f;
+
+                if (Value1 < Value0)
+                {
+                    float D0 = 1 - Value0;
+                    Vector2 Delta = EndPos - StartPos;
+                    vertex2Ds.Add(new Vertex2D(StartPos + Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(Value0, 0, 0)));
+                    vertex2Ds.Add(new Vertex2D(StartPos + Delta * D0 + Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(1, 0, 0)));
+                    vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(Value0, 1, 0)));
+
+                    vertex2Ds.Add(new Vertex2D(StartPos + Delta * D0 + Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(1, 0, 0)));
+                    vertex2Ds.Add(new Vertex2D(StartPos + Delta * D0 - Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(1, 1, 0)));
+                    vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(Value0, 1, 0)));
+
+                    vertex2Ds.Add(new Vertex2D(StartPos + Delta * D0 + Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(0, 0, 0)));
+                    vertex2Ds.Add(new Vertex2D(EndPos + Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(Value1, 0, 0)));
+                    vertex2Ds.Add(new Vertex2D(StartPos + Delta * D0 - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(0, 1, 0)));
+
+                    vertex2Ds.Add(new Vertex2D(EndPos + Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(Value1, 0, 0)));
+                    vertex2Ds.Add(new Vertex2D(EndPos - Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(Value1, 1, 0)));
+                    vertex2Ds.Add(new Vertex2D(StartPos + Delta * D0 - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(0, 1, 0)));
+
+                    continue;
+                }
+
+                vertex2Ds.Add(new Vertex2D(StartPos + Width + new Vector2(x / 3f).RotatedBy(x) - Main.screenPosition, color1, new Vector3(Value0, 0, 0)));
+                vertex2Ds.Add(new Vertex2D(EndPos + Width + new Vector2(x / 3f).RotatedBy(x) - Main.screenPosition, color2, new Vector3(Value1, 0, 0)));
+                vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x) - Main.screenPosition, color1, new Vector3(Value0, 1, 0)));
+
+                vertex2Ds.Add(new Vertex2D(EndPos + Width + new Vector2(x / 3f).RotatedBy(x) - Main.screenPosition, color2, new Vector3(Value1, 0, 0)));
+                vertex2Ds.Add(new Vertex2D(EndPos - Width + new Vector2(x / 3f).RotatedBy(x) - Main.screenPosition, color2, new Vector3(Value1, 1, 0)));
+                vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x) - Main.screenPosition, color1, new Vector3(Value0, 1, 0)));
+            }
+
+            spriteBatch.Draw(tex,vertex2Ds,PrimitiveType.TriangleList);
+        }
 
         public void DrawTexLineColor(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2, float Wid, Texture2D tex)
         {
@@ -231,12 +277,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             }
         }
 
-        public void DrawWarp()
+        public void DrawWarp(VFXBatch spriteBatch)
         {
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-            KEx.CurrentTechnique.Passes[0].Apply();
             Texture2D Power = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine");
             float Pdark = 0f;
             float Pwidth = 1f;
@@ -250,16 +292,14 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
                 Pdark = (Projectile.timeLeft - 1750) / 30f;
             }
             Color c1 = new Color(0.25f * Pdark, 0.11f * Pdark * Pdark, 0f, 0f);
-            DrawTexLineColor(Projectile.Center + new Vector2(0, -70).RotatedBy(Projectile.rotation), Projectile.Center, Color.Transparent, c1, 14f * Pwidth, Power);
-            DrawTexLineColor(Projectile.Center, Projectile.Center + new Vector2(0, 70).RotatedBy(Projectile.rotation), c1, Color.Transparent, 14f * Pwidth, Power);
+            DrawTexLineColor(spriteBatch,Projectile.Center + new Vector2(0, -70).RotatedBy(Projectile.rotation), Projectile.Center, Color.Transparent, c1, 14f * Pwidth, Power);
+            DrawTexLineColor(spriteBatch, Projectile.Center, Projectile.Center + new Vector2(0, 70).RotatedBy(Projectile.rotation), c1, Color.Transparent, 14f * Pwidth, Power);
             Color c2 = new Color(Projectile.rotation / 6.283f, 0.3f, 0f, 0f);
             if (shot)
             {
-                DrawTexLineColor(Projectile.Center + new Vector2(0, -350).RotatedBy(Projectile.rotation), Projectile.Center, Color.Transparent, c2, 14f * Pwidth, Power);
-                DrawTexLineColor(Projectile.Center, Projectile.Center + new Vector2(0, 30).RotatedBy(Projectile.rotation), c2, Color.Transparent, 14f * Pwidth, Power);
+                DrawTexLineColor(spriteBatch, Projectile.Center + new Vector2(0, -350).RotatedBy(Projectile.rotation), Projectile.Center, Color.Transparent, c2, 14f * Pwidth, Power);
+                DrawTexLineColor(spriteBatch, Projectile.Center, Projectile.Center + new Vector2(0, 30).RotatedBy(Projectile.rotation), c2, Color.Transparent, 14f * Pwidth, Power);
             }
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
         }
     }
 }
