@@ -73,7 +73,26 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
         internal Vector2 TexCoordLeft = new Vector2(1, 15);
         internal Vector2 TexCoordDown = new Vector2(12, 28);
         internal Vector2 TexCoordRight = new Vector2(27, 11);
-
+        /// <summary>
+        /// 荧光效果路径,从MythModule后(不含)开始算起
+        /// </summary>
+        internal string GlowPath = "";
+        /// <summary>
+        /// 后部荧光效果路径,从MythModule后(不含)开始算起
+        /// </summary>
+        internal string BackGlowPath = "";
+        /// <summary>
+        /// 封面图路径,从MythModule后(不含)开始算起
+        /// </summary>
+        internal string FrontTexPath = "";
+        /// <summary>
+        /// 书页图路径,从MythModule后(不含)开始算起
+        /// </summary>
+        internal string PaperTexPath = "";
+        /// <summary>
+        /// 封底图路径,从MythModule后(不含)开始算起
+        /// </summary>
+        internal string BackTexPath = "";
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
@@ -128,14 +147,70 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
                 return;
             }
             Texture2D Book = TextureAssets.Item[ItemType].Value;
-            Texture2D BookGlow = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Item_" + ItemType + "_Glow");
+            if (BackTexPath == "" && FrontTexPath == "")
+            {
+                
+            }
+            else
+            {
+                if(BackTexPath == "")
+                {
+                    Book = MythContent.QuickTexture(FrontTexPath);
+                }
+                else
+                {
+                    Book = MythContent.QuickTexture(BackTexPath);
+                }
+            }
+            Texture2D BookGlow;
+            if(BackGlowPath == "" && GlowPath == "")
+            {
+                BookGlow = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Item_" + ItemType + "_Glow");
+            }
+            else
+            {
+                if (BackGlowPath == "")
+                {
+                    BookGlow = MythContent.QuickTexture(GlowPath);
+                }
+                else
+                {
+                    BookGlow = MythContent.QuickTexture(BackGlowPath);
+                }
+            }
             Texture2D Paper = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/MagicBookPaper");
-
+            if (PaperTexPath != "")
+            {
+                Paper = MythContent.QuickTexture(PaperTexPath);
+            }
             Projectile.hide = true;
             DrawBack(Book);
             DrawBack(BookGlow, UseGlow);
             DrawPaper(Paper);
+            if (BackTexPath == "" && FrontTexPath == "")
+            {
+
+            }
+            else
+            {
+                if (FrontTexPath == "")
+                {
+                    Book = MythContent.QuickTexture(BackTexPath);
+                }
+                else
+                {
+                    Book = MythContent.QuickTexture(FrontTexPath);
+                }
+            }
             DrawFront(Book);
+            if (GlowPath == "")
+            {
+                BookGlow = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Item_" + ItemType + "_Glow");
+            }
+            else
+            {
+                BookGlow = MythContent.QuickTexture(GlowPath);
+            }
             DrawFront(BookGlow, UseGlow);
             SpecialDraw();
         }
