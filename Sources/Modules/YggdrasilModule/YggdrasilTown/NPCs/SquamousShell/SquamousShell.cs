@@ -23,7 +23,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.NPCs.SquamousSh
             NPC.aiStyle = -1;
             NPC.damage = 30;
             NPC.width = 140;
-            NPC.height = 90;
+            NPC.height = 150;
             NPC.defense = 15;
             NPC.lifeMax = 6000;
             NPC.knockBackResist = 0;
@@ -91,82 +91,155 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.NPCs.SquamousSh
             if (NPC.localAI[0] < 1000)
             {
                 if (NPC.localAI[0] <= 60000 && NPC.localAI[0] > 0)
-                {
-                    Leg1Root = NPC.Center + new Vector2(-35 * NPC.spriteDirection, 30).RotatedBy(NPC.rotation);
-                    Leg2Root = NPC.Center + new Vector2(-15 * NPC.spriteDirection, 30).RotatedBy(NPC.rotation);
-                    Leg3Root = NPC.Center + new Vector2(26 * NPC.spriteDirection, 30).RotatedBy(NPC.rotation);
-
-                    if (!Collision.SolidCollision(Leg1FCen + new Vector2(0, L1Length * 0.5f).RotatedBy(Leg1FRot),0,0))
+                {                  
+                    
+                    MoveLegs();
+                    MoveTo(player.Center, 4);
+                    if(NPC.collideX)
                     {
-                        Leg1FrontVel.Y += 0.5f;
+                        NPC.velocity.Y -= 1.5f;
                     }
-                    else
-                    {
-                        Leg1FrontVel *= 0;
-                        Leg1FrontPos -= NPC.velocity;
-                    }
-                    if(Leg1FrontPos.Length() > 30)
-                    {
-                        Leg1FrontVel -= Vector2.Normalize(Leg1FrontPos) * (Leg1FrontPos.Length() - 30f) / 30f;
-                    }
-                    Leg1FrontPos += Leg1FrontVel;
-
-                    Leg1FCen = NPC.Center + (new Vector2(-83 * NPC.spriteDirection, 40) + Leg1FrontPos).RotatedBy(NPC.rotation);
-                    Leg1FRot = 0.2873 * Math.PI + NPC.rotation * NPC.spriteDirection - Leg1FrontPos.X * 0.03f * NPC.spriteDirection;
-
-                    Vector2 Leg1FTop = new Vector2(0,-L1Length * 0.35f).RotatedBy(Leg1FRot * NPC.spriteDirection) + Leg1FCen;
-                    Vector2 Joint1 = JointPointCalculate(Leg1FTop, Leg1Root, LLength * 0.85f);
-
-                    Leg1MCen = (Joint1 + Leg1FTop) * 0.5f;
-                    Leg1MRot = GetVector2Rot(Leg1FTop - Joint1);
-                    Leg1BCen = (Joint1 + Leg1Root) * 0.5f;
-                    Leg1BRot = GetVector2Rot(Joint1 - Leg1Root);
-
-
-                    Leg2FCen = NPC.Center + (new Vector2(4 * NPC.spriteDirection, 44) + Leg2FrontPos).RotatedBy(NPC.rotation);
-                    Leg2FRot = 0.0072 * Math.PI + NPC.rotation * NPC.spriteDirection - Leg2FrontPos.X * 0.03f * NPC.spriteDirection;
-
-
-                    Leg2MCen = NPC.Center + new Vector2(-4 * NPC.spriteDirection, 45).RotatedBy(NPC.rotation);
-                    Leg2MRot = -0.9114 * Math.PI + NPC.rotation * NPC.spriteDirection;
-                    Leg2BCen = NPC.Center + new Vector2(-16 * NPC.spriteDirection, 43).RotatedBy(NPC.rotation);
-                    Leg2BRot = -0.2671 * Math.PI + NPC.rotation * NPC.spriteDirection;
-
-
-                    Leg3FCen = NPC.Center + new Vector2(77 * NPC.spriteDirection, 39).RotatedBy(NPC.rotation);
-                    Leg3FRot = -0.2082 * Math.PI + NPC.rotation * NPC.spriteDirection;
-                    Leg3MCen = NPC.Center + new Vector2(55 * NPC.spriteDirection, 43).RotatedBy(NPC.rotation);
-                    Leg3MRot = -0.892 * Math.PI + NPC.rotation * NPC.spriteDirection;
-                    Leg3BCen = NPC.Center + new Vector2(35 * NPC.spriteDirection, 41).RotatedBy(NPC.rotation);
-                    Leg3BRot = -0.2693 * Math.PI + NPC.rotation * NPC.spriteDirection;
-                    if (NPC.spriteDirection == -1)
-                    {
-                        Leg1FRot = CheckRotDir(Leg1FRot);
-                        Leg1MRot = CheckRotDir(Leg1MRot);
-                        Leg1BRot = CheckRotDir(Leg1BRot);
-                        Leg2FRot = CheckRotDir(Leg2FRot);
-                        Leg2MRot = CheckRotDir(Leg2MRot);
-                        Leg2BRot = CheckRotDir(Leg2BRot);
-                        Leg3FRot = CheckRotDir(Leg3FRot);
-                        Leg3MRot = CheckRotDir(Leg3MRot);
-                        Leg3BRot = CheckRotDir(Leg3BRot);
-                    }
-                    Leg1Tip = Leg1FCen + new Vector2(0, L1Length / 2f - 4).RotatedBy(Leg1FRot);
-                    Leg2Tip = Leg2FCen + new Vector2(0, L2Length / 2f - 4).RotatedBy(Leg2FRot);
-                    Leg3Tip = Leg3FCen + new Vector2(0, L3Length / 2f - 4).RotatedBy(Leg3FRot);
-                    if (Collision.SolidCollision(Leg1Tip, 2, 2) || Collision.SolidCollision(Leg2Tip, 2, 2) || Collision.SolidCollision(Leg3Tip, 2, 2))
-                    {
-                        NPC.noGravity = true;
-                        NPC.velocity *= 0;
-                    }
-
-                    MoveTo(player.Center);
                     CheckSpriteDir();
                 }
             }
             else
             {
                 NPC.localAI[0] = 0;
+            }
+        }
+        private Vector2 getRotationVec()
+        {
+            Vector2 outValue = Vector2.Zero;
+            for(int rad = 16;rad < 256;rad += 32)
+            {
+                for(int rot = 0; rot < rad / 4;rot++)
+                {
+                    float value = rot / (float)rad * 4f;
+                    if (!Collision.SolidCollision(NPC.Center + new Vector2(0, rad).RotatedBy(value * MathHelper.TwoPi), 0, 0))
+                    {
+                        outValue += Vector2.Normalize(new Vector2(0, rad).RotatedBy(value * MathHelper.TwoPi)) / rad; 
+                    }
+                    else
+                    {
+                        outValue -= Vector2.Normalize(new Vector2(0, rad).RotatedBy(value * MathHelper.TwoPi)) / rad;
+                    }
+                }
+            }
+            return Utils.SafeNormalize(outValue,Vector2.Zero);
+        }
+        private void MoveLegs()
+        {
+            Vector2 GravRot = getRotationVec();
+            NPC.rotation = MathF.Atan2(GravRot.Y, GravRot.X) + MathF.PI / 2f;
+            Leg1Root = NPC.Center + new Vector2(-35 * NPC.spriteDirection, 30).RotatedBy(NPC.rotation);
+            Leg2Root = NPC.Center + new Vector2(-15 * NPC.spriteDirection, 30).RotatedBy(NPC.rotation);
+            Leg3Root = NPC.Center + new Vector2(26 * NPC.spriteDirection, 30).RotatedBy(NPC.rotation);
+
+            if (!Collision.SolidCollision(Leg1FCen + new Vector2(0, L1Length * 0.5f).RotatedBy(Leg1FRot), 0, 0))
+            {
+                Leg1FrontVel -= GravRot * 0.5f;
+            }
+            else
+            {
+                Leg1FrontVel *= 0;
+                Leg1FrontPos -= NPC.velocity;
+            }
+            if (Leg1FrontPos.Length() > 30)
+            {
+                Leg1FrontVel -= Vector2.Normalize(Leg1FrontPos) * (Leg1FrontPos.Length() - 30f) / 30f;
+            }
+            float Leg1PosXRotByNPCRotation = Vector2.Dot(Leg1FrontPos,new Vector2(0, 1).RotatedBy(NPC.rotation));
+            if(Leg1FrontPos.X * NPC.spriteDirection > 30)
+            {
+                Leg1FrontVel += new Vector2(-2 * NPC.spriteDirection, -8);
+            }
+            Leg1FrontPos += Leg1FrontVel;
+
+            Leg1FCen = NPC.Center + (new Vector2(-83 * NPC.spriteDirection, 40) + Leg1FrontPos).RotatedBy(NPC.rotation);
+            Leg1FRot = 0.2873 * Math.PI + NPC.rotation * NPC.spriteDirection - Leg1FrontPos.X * 0.02f * NPC.spriteDirection;
+
+            Vector2 Leg1FTop = new Vector2(0, -L1Length * 0.35f).RotatedBy(Leg1FRot * NPC.spriteDirection) + Leg1FCen;
+            Vector2 Joint1 = JointPointCalculate(Leg1FTop, Leg1Root, LLength * 0.85f);
+
+            Leg1MCen = (Joint1 + Leg1FTop) * 0.5f;
+            Leg1MRot = GetVector2Rot(Leg1FTop - Joint1);
+            Leg1BCen = (Joint1 + Leg1Root) * 0.5f;
+            Leg1BRot = GetVector2Rot(Joint1 - Leg1Root);
+
+            if (!Collision.SolidCollision(Leg2FCen + new Vector2(0, L2Length * 0.5f).RotatedBy(Leg2FRot), 0, 0))
+            {
+                Leg2FrontVel -= GravRot * 0.5f;
+            }
+            else
+            {
+                Leg2FrontVel *= 0;
+                Leg2FrontPos -= NPC.velocity;
+            }
+            if (Leg2FrontPos.Length() > 30)
+            {
+                Leg2FrontVel -= Vector2.Normalize(Leg2FrontPos) * (Leg2FrontPos.Length() - 30f) / 30f;
+            }
+            if (Leg2FrontPos.X * NPC.spriteDirection > 10)
+            {
+                Leg2FrontVel += new Vector2(-3 * NPC.spriteDirection, -4);
+            }
+            Leg2FrontPos += Leg2FrontVel;
+
+
+            Leg2FCen = NPC.Center + (new Vector2(4 * NPC.spriteDirection, 44) + Leg2FrontPos).RotatedBy(NPC.rotation);
+            Leg2FRot = 0.0072 * Math.PI + NPC.rotation * NPC.spriteDirection - Leg2FrontPos.X * 0.03f * NPC.spriteDirection;
+
+            Vector2 Leg2FTop = new Vector2(0, -L2Length * 0.35f).RotatedBy(Leg2FRot * NPC.spriteDirection) + Leg2FCen;
+            Vector2 Joint2 = JointPointCalculate(Leg2FTop, Leg2Root, LLength * 0.85f);
+
+            Leg2MCen = (Joint2 + Leg2FTop) * 0.5f;
+            Leg2MRot = GetVector2Rot(Leg2FTop - Joint2);
+            Leg2BCen = (Joint2 + Leg2Root) * 0.5f;
+            Leg2BRot = GetVector2Rot(Joint2 - Leg2Root);
+
+            if (!Collision.SolidCollision(Leg3FCen + new Vector2(0, L3Length * 0.5f).RotatedBy(Leg3FRot), 0, 0))
+            {
+                Leg3FrontVel -= GravRot * 0.5f;
+            }
+            else
+            {
+                Leg3FrontVel *= 0;
+                Leg3FrontPos -= NPC.velocity;
+            }
+            if (Leg3FrontPos.Length() > 30)
+            {
+                Leg3FrontVel -= Vector2.Normalize(Leg3FrontPos) * (Leg3FrontPos.Length() - 30f) / 30f;
+            }
+
+            if (Leg3FrontPos.X * NPC.spriteDirection > 10)
+            {
+                Leg3FrontVel += new Vector2(-1 * NPC.spriteDirection, -4);
+            }
+            Leg3FrontPos += Leg3FrontVel;
+
+            Leg3FCen = NPC.Center + (new Vector2(77 * NPC.spriteDirection, 39) + Leg3FrontPos).RotatedBy(NPC.rotation);
+            Leg3FRot = -0.2082 * Math.PI + NPC.rotation * NPC.spriteDirection - Leg3FrontPos.X * 0.03f * NPC.spriteDirection;
+
+
+            Vector2 Leg3FTop = new Vector2(0, -L3Length * 0.35f).RotatedBy(Leg3FRot * NPC.spriteDirection) + Leg3FCen;
+            Vector2 Joint3 = JointPointCalculate(Leg3FTop, Leg3Root, LLength * 0.85f);
+
+            Leg3MCen = (Joint3 + Leg3FTop) * 0.5f;
+            Leg3MRot = GetVector2Rot(Leg3FTop - Joint3);
+            Leg3BCen = (Joint3 + Leg3Root) * 0.5f;
+            Leg3BRot = GetVector2Rot(Joint3 - Leg3Root);
+
+            if (NPC.spriteDirection == -1)
+            {
+                Leg1FRot = CheckRotDir(Leg1FRot);
+                Leg1MRot = CheckRotDir(Leg1MRot);
+                Leg1BRot = CheckRotDir(Leg1BRot);
+                Leg2FRot = CheckRotDir(Leg2FRot);
+                Leg2MRot = CheckRotDir(Leg2MRot);
+                Leg2BRot = CheckRotDir(Leg2BRot);
+                Leg3FRot = CheckRotDir(Leg3FRot);
+                Leg3MRot = CheckRotDir(Leg3MRot);
+                Leg3BRot = CheckRotDir(Leg3BRot);
             }
         }
         private void CheckSpriteDir()
@@ -183,7 +256,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.NPCs.SquamousSh
         private void MoveTo(Vector2 aimPosition, float Speed = 1)
         {
             Vector2 v0 = Utils.SafeNormalize(aimPosition - NPC.Center,Vector2.Zero);
-            NPC.velocity = v0 * Speed;
+            NPC.velocity.X = v0.X * Speed;
         }
 
         private float LLength = 54;
