@@ -1,9 +1,9 @@
-﻿using Terraria.Audio;
-using Everglow.Sources.Modules.MythModule;
+﻿using Everglow.Sources.Modules.MythModule;
+using Terraria.Audio;
 
 namespace Everglow.Sources.Modules.MEACModule.Projectiles
 {
-    public class VortexVanquisher : MeleeProj
+    public class VortexVanquisher : MeleeProj,IBloomProjectile
     {
         public override void SetDef()
         {
@@ -20,11 +20,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         }
         public override float TrailAlpha(float factor)
         {
-            if (attackType == 3)
-            {
-                return base.TrailAlpha(factor) * 1.5f;
-            }
-            return base.TrailAlpha(factor) * 1.3f;
+            return base.TrailAlpha(factor) * 1.1f;
         }
         public override BlendState TrailBlendState()
         {
@@ -188,9 +184,10 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             }
             if (attackType == 2)
             {
+                useTrail = false;
+                drawScaleFactor = 0;
                 if (timer < 20)
                 {
-                    useTrail = false;
                     LockPlayerDir(Player);
                     float targetRot = MathHelper.PiOver2 - Player.direction * 0.5f;
                     mainVec = Vector2.Lerp(mainVec, targetRot.ToRotationVector2() * 180, 0.15f);
@@ -219,6 +216,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                 if (timer >= 50)
                 {
                     NextAttackType();
+                    drawScaleFactor = 1;
                 }
                 else if (timer > 1)
                 {
@@ -332,6 +330,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             Projectile.Kill();
             player.GetModPlayer<MEACPlayer>().isUsingMeleeProj = false;
         }
+
     }
 }
 

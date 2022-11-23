@@ -311,7 +311,7 @@ public class VFXManager : IModule
                 continue;
             }
 
-            if (Main.targetSet)
+            if (Lighting.Mode is Terraria.Graphics.Light.LightMode.Color)
             {
                 if (pipelineIndex.next != null && pipelineIndex.next.index != nextPipelineIndex)
                 {
@@ -335,7 +335,7 @@ public class VFXManager : IModule
             pipelineInstances[pipelineIndex.index].Render(visibles);
         }
 
-        if (Main.targetSet && TrCurrentTarget != Main.screenTarget)
+        if (Lighting.Mode is Terraria.Graphics.Light.LightMode.Color && TrCurrentTarget != Main.screenTarget)
         {
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
             SetRenderTarget(Main.screenTarget);

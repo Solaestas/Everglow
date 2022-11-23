@@ -15,7 +15,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule
 
         //public override bool ShouldSave => true;
 
-        //public override bool NormalUpdates => true;
+        public override bool NormalUpdates => true;
 
         public override List<GenPass> Tasks => new() { new WorldGeneration.YggdrasilWorldGeneration.YggdrasilWorldGenPass()};
         public override void OnLoad()

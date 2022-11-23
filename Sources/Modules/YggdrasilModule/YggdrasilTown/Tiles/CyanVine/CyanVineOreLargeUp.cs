@@ -19,7 +19,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles.CyanVine
             TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
             TileObjectData.addTile(Type);
             AddMapEntry(new Color(84, 130, 154));
-            DustType = DustID.Silver;
+            DustType = ModContent.DustType<Dusts.CyanVine>();
             AdjTiles = new int[] { Type };
         }
         public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
@@ -56,7 +56,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Tiles.CyanVine
                 Vector2 vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28d);
                 Gore.NewGore(null, new Vector2(i * 16 + Main.rand.Next(90) - 16, j * 16 + Main.rand.Next(64)) + vF, vF, ModContent.Find<ModGore>("Everglow/CyanVineOre" + Main.rand.Next(13).ToString()).Type, 1f);
                 vF = new Vector2(0, Main.rand.NextFloat(0, 4f)).RotatedByRandom(6.28d);
-                Dust.NewDust(new Vector2(i * 16 + Main.rand.Next(90) - 16, j * 16 + Main.rand.Next(64)) + vF, 0, 0, DustID.Silver, vF.X, vF.Y);
+                Dust.NewDust(new Vector2(i * 16 + Main.rand.Next(90) - 16, j * 16 + Main.rand.Next(64)) + vF, 0, 0, ModContent.DustType<Dusts.CyanVine>(), vF.X, vF.Y);
             }
         }
         public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)

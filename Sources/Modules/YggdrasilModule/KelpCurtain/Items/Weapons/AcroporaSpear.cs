@@ -15,7 +15,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.KelpCurtain.Items.Weapons
             Item.useAnimation = 5;
             Item.useTime = 5;
             Item.shootSpeed = 5f;
-            Item.knockBack = 2.5f;
+            Item.knockBack = 5.5f;
             Item.damage = 34; //Original: Item.damage = 30
             Item.rare = ItemRarityID.Green;
 
