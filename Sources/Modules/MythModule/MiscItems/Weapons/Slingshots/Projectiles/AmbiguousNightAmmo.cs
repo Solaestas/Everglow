@@ -165,10 +165,12 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
             SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot.WithVolumeScale(Projectile.ai[0]), Projectile.Center);
             Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<NormalHit>(), Projectile.damage, Projectile.knockBack, Projectile.owner, Projectile.velocity.Length(), Main.rand.NextFloat(6.283f));
             float Power = Projectile.ai[0] + 0.5f;
+
             for (int x = 0; x < 100 * Power; x++)
             {
-                int index = Dust.NewDust(Projectile.position - new Vector2(4), Projectile.width, Projectile.height, DustID.Shadowflame, 0f, 0f, 0, default, Power * Main.rand.NextFloat(0.7f, 1.3f));
+                int index = Dust.NewDust(Projectile.position - new Vector2(4), Projectile.width, Projectile.height, DustID.WaterCandle, 0f, 0f, 0, default, Power * Main.rand.NextFloat(1.7f, 2.3f));
                 Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(3.5f, 4f)).RotatedByRandom(6.283) * Power;
+
             }
             Projectile.friendly = false;
             TimeTokill = 30;

@@ -53,7 +53,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
             player.heldProj = Projectile.whoAmI;
             if (Power == 24 && Main.mouseLeft)
             {
-                SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/MiscItems/Weapons/Slingshots/Sounds/Slingshot").WithVolumeScale(Power / (float)MaxPower), Projectile.Center);
+                SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/MiscItems/Weapons/Slingshots/Sounds/NewSlingshot" + Main.rand.Next(8).ToString()), Projectile.Center);
             }
             Vector2 MouseToPlayer = Main.MouseWorld - player.MountedCenter;
             if (Main.mouseLeft && Release)
