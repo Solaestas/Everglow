@@ -39,6 +39,10 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         internal int trailLength = 40;
         internal int timer = 0;
 
+        /// <summary>
+        /// 是否采用自己的DrawWarp
+        /// </summary>
+        internal bool selfWarp = false;
         internal bool isAttacking = false;
         internal bool useTrail = true;
         /// <summary>
