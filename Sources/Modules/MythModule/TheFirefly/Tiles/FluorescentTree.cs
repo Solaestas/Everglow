@@ -19,7 +19,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 
             ModTranslation modTranslation = LocalizationLoader.GetOrCreateTranslation("Mods.Everglow.MapEntry.FireflyTree");
             AddMapEntry(new Color(51, 26, 58), modTranslation);
-            DustType = ModContent.DustType<TheFirefly.Dusts.MothBlue2>();
+            DustType = ModContent.DustType<Dusts.FluorescentTreeDust>();
             ItemDrop = ModContent.ItemType<Items.GlowWood>();
             AdjTiles = new int[] { Type };
         }
@@ -28,49 +28,95 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
         {
 
         }
+        public override bool CreateDust(int i, int j, ref int type)
+        {
+            
+            return false;
+        }
+        public override bool Drop(int i, int j)
+        {
+            Item.NewItem(null,new Rectangle(i * 16 - 16, j * 16 ,48,16), ItemDrop,1,false,0,false,true);
+            for (int x = 0; x < 6; x++)
+            {
+                Dust.NewDust(new Vector2(i * 16, j * 16), 16, 16, DustType,0,0,0,default,Main.rand.NextFloat(0.5f,1f));
+            }
+            var tile = Main.tile[i, j];
+            if (tile.TileFrameY > 3)
+            {
+                Gore.NewGore(null, new Vector2(i * 16, j * 16) + new Vector2(Main.rand.Next(16), Main.rand.Next(16)), new Vector2(0, Main.rand.NextFloat(0f, 1f)).RotatedByRandom(6.283), ModContent.GoreType<FireflyTree_Leaf>(), Main.rand.NextFloat(0.65f, 1.45f));
+            }
+            if (tile.TileFrameY == 2)
+            {
+                Main.NewText(j);
+                for (int x = 0; x < 12; x++)
+                {
+                    Gore.NewGore(null, new Vector2(i * 16 - 32, j * 16 - 120) + new Vector2(Main.rand.Next(0), Main.rand.Next(0)), new Vector2(0, Main.rand.NextFloat(0f, 1f)).RotatedByRandom(6.283), ModContent.GoreType<FireflyTree_Leaf>(), Main.rand.NextFloat(0.65f, 1.45f));
+                }
+            }
+            return false;
+        }
+        private void newDrop(int i, int j, int frameY)
+        {
 
+        }
         public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
         {
             if (!fail)
             {
-                int Dy = -1;
-                while (Main.tile[i, j + Dy].TileType == Type && Dy > -100)
+                int Dy = -1;//向上破坏的自变化Y坐标
+                if (Main.tile[i, j].TileFrameY < 4)
                 {
-                    Tile tileLeft = Main.tile[i - 1, j + Dy];
-                    Tile tileRight = Main.tile[i + 1, j + Dy];
-                    Main.tile[i, j + Dy].TileFrameX = 0;
-                    Main.tile[i, j + Dy].TileFrameY = 0;
-                    WorldGen.KillTile(i, j + Dy);
-                    if (tileLeft.TileType == Type)
+                    Tile tileLeft;
+                    Tile tileRight;
+
+                    while (Main.tile[i, j + Dy].TileType == Type && Dy > -100)
                     {
-                        Main.tile[i - 1, j + Dy].TileFrameX = 0;
-                        Main.tile[i - 1, j + Dy].TileFrameY = 0;
-                        WorldGen.KillTile(i - 1, j + Dy);
-                    }
-                    if (tileRight.TileType == Type)
-                    {
-                        Main.tile[i + 1, j + Dy].TileFrameX = 0;
-                        Main.tile[i + 1, j + Dy].TileFrameY = 0;
-                        WorldGen.KillTile(i + 1, j + Dy);
-                    }
-                    if (Dy == -1)
-                    {
-                        tileLeft = Main.tile[i - 1, j];
+                        Drop(i, j + Dy);
+                        tileLeft = Main.tile[i - 1, j + Dy];
+                        tileRight = Main.tile[i + 1, j + Dy];
                         if (tileLeft.TileType == Type)
                         {
-                            Main.tile[i - 1, j].TileFrameX = 0;
-                            Main.tile[i - 1, j].TileFrameY = 0;
-                            WorldGen.KillTile(i - 1, j);
+                            Drop(i - 1, j + Dy);
                         }
-                        tileRight = Main.tile[i + 1, j];
                         if (tileRight.TileType == Type)
                         {
-                            Main.tile[i + 1, j].TileFrameX = 0;
-                            Main.tile[i + 1, j].TileFrameY = 0;
-                            WorldGen.KillTile(i + 1, j);
+                            Drop(i + 1, j + Dy);
                         }
+                        Dy -= 1;
                     }
-                    Dy -= 1;
+
+
+                    Dy = -1;//向上破坏的自变化Y坐标
+                    tileLeft = Main.tile[i - 1, j];
+                    if (tileLeft.TileType == Type)
+                    {
+                        tileLeft.HasTile = false;
+                    }
+                    tileRight = Main.tile[i + 1, j];
+                    if (tileRight.TileType == Type)
+                    {
+                        tileRight.HasTile = false;
+                    }
+                    while (Main.tile[i, j + Dy].TileType == Type && Dy > -100)
+                    {
+                        Tile baseTile = Main.tile[i, j + Dy];
+
+                        baseTile.HasTile = false;
+
+                        tileLeft = Main.tile[i - 1, j + Dy];
+                        tileRight = Main.tile[i + 1, j + Dy];
+                        if (tileLeft.TileType == Type)
+                        {
+
+                            tileLeft.HasTile = false;
+                        }
+                        if (tileRight.TileType == Type)
+                        {
+
+                            tileRight.HasTile = false;
+                        }
+                        Dy -= 1;
+                    }
                 }
             }
         }
