@@ -1,4 +1,6 @@
-﻿using Terraria.DataStructures;
+﻿using Everglow.Sources.Modules.MythModule.Common;
+using Terraria.Audio;
+using Terraria.DataStructures;
 
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots
 {
@@ -32,7 +34,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots
             Item.autoReuse = false;
 
             Item.DamageType = DamageClass.Ranged;
-            Item.UseSound = SoundID.Item5;
+            Item.UseSound = new SoundStyle("Everglow/Sources/Modules/MythModule/MiscItems/Weapons/Slingshots/Sounds/SlingshotUse"); //SoundID.Item5?
 
             Item.knockBack = 2f;
             Item.shootSpeed = 1f;
