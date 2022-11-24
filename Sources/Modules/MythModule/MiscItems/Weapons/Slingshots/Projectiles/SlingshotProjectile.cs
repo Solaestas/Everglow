@@ -53,7 +53,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
             player.heldProj = Projectile.whoAmI;
             if (Power == 24 && Main.mouseLeft)
             {
-                SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/MiscItems/Weapons/Slingshots/Sounds/Slingshot").WithVolumeScale(Power / (float)MaxPower), Projectile.Center);
+                SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/MiscItems/Weapons/Slingshots/Sounds/NewSlingshot" + Main.rand.Next(8).ToString()), Projectile.Center);
             }
             Vector2 MouseToPlayer = Main.MouseWorld - player.MountedCenter;
             if (Main.mouseLeft && Release)
@@ -84,7 +84,9 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
             {
                 Projectile.Center = Main.player[Projectile.owner].MountedCenter + Vector2.Normalize(MouseToPlayer) * 15f + new Vector2(0, -4);
                 SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/MiscItems/Weapons/Slingshots/Sounds/SlingshotShoot"), Projectile.Center);
-
+                if (Power == MaxPower) {
+                    SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/MiscItems/Weapons/Slingshots/Sounds/SlingshotShoot2"), Projectile.Center);
+                }
                 Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + SlingshotStringHead, -Vector2.Normalize(MinusShootDir) * (float)(Power / 5f + 8f), ShootProjType, (int)(Projectile.damage * (1 + Power / 40f)), Projectile.knockBack, player.whoAmI, Power / 450f);
 
                 Projectile.timeLeft = 5;
