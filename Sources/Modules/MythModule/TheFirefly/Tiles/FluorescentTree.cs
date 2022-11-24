@@ -1,5 +1,6 @@
 using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.ObjectData;
+using Terraria.GameContent;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 {
@@ -37,13 +38,19 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                 {
                     Tile tileLeft = Main.tile[i - 1, j + Dy];
                     Tile tileRight = Main.tile[i + 1, j + Dy];
+                    Main.tile[i, j + Dy].TileFrameX = 0;
+                    Main.tile[i, j + Dy].TileFrameY = 0;
                     WorldGen.KillTile(i, j + Dy);
                     if (tileLeft.TileType == Type)
                     {
+                        Main.tile[i - 1, j + Dy].TileFrameX = 0;
+                        Main.tile[i - 1, j + Dy].TileFrameY = 0;
                         WorldGen.KillTile(i - 1, j + Dy);
                     }
                     if (tileRight.TileType == Type)
                     {
+                        Main.tile[i + 1, j + Dy].TileFrameX = 0;
+                        Main.tile[i + 1, j + Dy].TileFrameY = 0;
                         WorldGen.KillTile(i + 1, j + Dy);
                     }
                     if (Dy == -1)
@@ -51,11 +58,15 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                         tileLeft = Main.tile[i - 1, j];
                         if (tileLeft.TileType == Type)
                         {
+                            Main.tile[i - 1, j].TileFrameX = 0;
+                            Main.tile[i - 1, j].TileFrameY = 0;
                             WorldGen.KillTile(i - 1, j);
                         }
                         tileRight = Main.tile[i + 1, j];
                         if (tileRight.TileType == Type)
                         {
+                            Main.tile[i + 1, j].TileFrameX = 0;
+                            Main.tile[i + 1, j].TileFrameY = 0;
                             WorldGen.KillTile(i + 1, j);
                         }
                     }
@@ -98,6 +109,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                 zero = Vector2.Zero;
             }
             Tile tile = Main.tile[i, j];
+
+
 
             int Width;
             int Height = 16;
@@ -147,8 +160,18 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                     break;
             }
             Vector2 origin = new Vector2(Width / 2f, Height);
-            spriteBatch.Draw(treeTexture, new Vector2(i * 16 + OffsetX, j * 16 + OffsetY) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX * Width, TexCoordY, Width, Height), color, Rot, origin,1,SpriteEffects.None,0);
-            spriteBatch.Draw(treeTexture, new Vector2(i * 16 + OffsetX, j * 16 + OffsetY) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX * Width, TexCoordY + 274, Width, Height), new Color(1f, 1f, 1f, 0), Rot, origin, 1, SpriteEffects.None, 0);
+            spriteBatch.Draw(treeTexture, new Vector2(i * 16 + OffsetX + 8, j * 16 + OffsetY) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX * Width, TexCoordY, Width, Height), color, Rot, origin,1,SpriteEffects.None,0);
+            spriteBatch.Draw(treeTexture, new Vector2(i * 16 + OffsetX + 8, j * 16 + OffsetY) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX * Width, TexCoordY + 274, Width, Height), new Color(1f, 1f, 1f, 0), Rot, origin, 1, SpriteEffects.None, 0);
+
+
+            //int i0 = (int)(Main.MouseWorld.X / 16d);
+            //int j0 = (int)(Main.MouseWorld.Y / 16d);
+            //if ((i0, j0) == (i, j))
+            //{
+            //    Main.NewText(tile.TileFrameY, new Color(MathF.Sin((float)(Main.timeForVisualEffects / 10f)) * 0.5f + 0.5f, 0.5f, 0.5f));
+            //    Main.NewText(tile.TileFrameX, new Color(0.2f, 0.5f, MathF.Sin((float)(Main.timeForVisualEffects / 10f)) * 0.5f + 0.5f));
+            //    spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Vector2(i * 16 + 8, j * 16 + 8) - Main.screenPosition + zero, new Rectangle(0, 0, 16, 16), new Color(1f, 0f, 0f, 0), 0, new Vector2(8), 1, SpriteEffects.None, 0);
+            //}
             return false;
         }
     }
@@ -156,6 +179,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
     {
         public override void PostUpdateEverything()
         {
+            //Main.NewText(tile0.TileFrameY);
             if(Main.mouseRight && Main.mouseRightRelease)
             {
                 int i = (int)(Main.MouseWorld.X / 16);
@@ -187,6 +211,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                     {
                         tile.TileType = (ushort)ModContent.TileType<Tiles.FluorescentTree>();
                         tile.TileFrameY = 0;
+                        tile.TileFrameX = 0;
                         tile.HasTile = true;
                         continue;
                     }
@@ -194,6 +219,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                     {
                         tile.TileType = (ushort)ModContent.TileType<Tiles.FluorescentTree>();
                         tile.TileFrameY = -1;
+                        tile.TileFrameX = 0;
                         tile.HasTile = true;
                         continue;
                     }
@@ -209,6 +235,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                     {
                         tile.TileType = (ushort)ModContent.TileType<Tiles.FluorescentTree>();
                         tile.TileFrameY = 2;
+                        tile.TileFrameX = 0;
                         tile.HasTile = true;
                         continue;
                     }
