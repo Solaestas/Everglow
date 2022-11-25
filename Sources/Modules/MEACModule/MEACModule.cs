@@ -159,6 +159,7 @@ namespace Everglow.Sources.Modules.MEACModule
             bool flag = false;
             VFXManager.spriteBatch.Begin();
             Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+            KEx.Parameters["uTransform"].SetValue(Main.Transform *Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1));
             KEx.CurrentTechnique.Passes[0].Apply();
             foreach (Projectile proj in Main.projectile)
             {

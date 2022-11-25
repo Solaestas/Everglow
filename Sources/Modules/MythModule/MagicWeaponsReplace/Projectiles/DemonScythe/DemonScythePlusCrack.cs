@@ -14,7 +14,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
             Projectile.friendly = true;
             Projectile.hostile = false;
             Projectile.penetrate = 16;
-            Projectile.timeLeft = 300;
+            Projectile.timeLeft = 1;
+            Projectile.aiStyle = -1;
             Projectile.DamageType = DamageClass.MagicSummonHybrid;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 3;
@@ -24,7 +25,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
         }
 
         public override void AI()
-        {                                                                                                                                                                                                                                                                                                                                                                
+        {
             float vL = Projectile.velocity.Length() * 0.1f;
             vL = Math.Min(vL, 4f);
             float kSize = Math.Min(vL, 1f);
@@ -87,7 +88,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
             }
 
 
-            DrawFlameTrail(TrueL, width, true, Color.White * 0.9f);
+            DrawFlameTrail(TrueL, width, true, Color.White);
 
             DrawFlameTrail(TrueL, width, false, c0);
 

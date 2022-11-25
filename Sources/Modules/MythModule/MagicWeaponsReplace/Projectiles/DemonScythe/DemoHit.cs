@@ -158,11 +158,12 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
         }
         public void DrawBloom()
         {
+            /*
             float size = Math.Clamp(Projectile.timeLeft / 8f - 60, 0f, 20f);
             if (size > 0)
             {
                 DrawSpark(new Color(255, 255, 255, 0), size, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/SparkLight"));
-            }
+            }*/
         }
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {

@@ -28,6 +28,7 @@
             {
                 dust.active = false;
             }
+            
             if (Collision.SolidCollision(dust.position, 8, 8))
             {
                 Vector2 v0 = dust.velocity;

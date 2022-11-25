@@ -36,16 +36,17 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
             float vL = Projectile.velocity.Length() * 0.1f;
             vL = Math.Min(vL, 4f);
             float kSize = Math.Min(vL, 1f);
-            for (float x = -vL; x < vL + 1; x += 1)
+            for (float x = -vL; x < vL + 1; x += 2f)
             {
                 float size = Main.rand.NextFloat(1.45f, 1.75f) * kSize;
                 Vector2 lineVel = new Vector2(0, 24).RotatedBy(Math.PI * 0.5 - Main.timeForVisualEffects / 1.8 + x / 2d);
                 lineVel = RotAndEclipse(lineVel);
+                
                 Dust d0 = Dust.NewDustDirect(Projectile.Center + lineVel - new Vector2(size * 4, size * 4.5f), 0, 0, ModContent.DustType<Dusts.DemoFlame>(), 0, 0, 0, default, size);
                 d0.fadeIn = 12f;
                 Vector2 lineVel2 = new Vector2(0, 24).RotatedBy(Math.PI * 1 - Main.timeForVisualEffects / 1.8 + x / 2d);
                 lineVel2 = RotAndEclipse(lineVel2);
-                d0.velocity = Projectile.velocity + lineVel2 * 0.1f;
+                d0.velocity = Projectile.velocity + lineVel2 * 0.1f + Main.rand.NextVector2Unit()*0.3f;
             }
             if (Collision.SolidCollision(Projectile.Center, 0, 0))
             {
@@ -71,7 +72,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
             for (int x = 0; x < Projectile.velocity.Length() / 12 - 2; x++)
             {
                 Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center - Projectile.velocity * 2, Projectile.velocity.RotatedByRandom(6.283) * 0.4f, ModContent.ProjectileType<DemonScythePlusCrack>(), (int)(Projectile.damage * k * 0.1), (int)(Projectile.knockBack * k * 0.3), Projectile.owner, Projectile.velocity.Length() / 120f, Main.rand.NextFloat(8f, 24f));
-                p.timeLeft = Main.rand.Next(45) + (int)Projectile.velocity.Length();
+                p.timeLeft = Main.rand.Next(30) + (int)Projectile.velocity.Length();
             }
             knockback = Projectile.knockBack * Projectile.velocity.Length() * 0.12f;
             Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center - Projectile.velocity * 2, Vector2.One, ModContent.ProjectileType<DemoHit>(), 0, 0, Projectile.owner, Projectile.velocity.Length() / 3f, Projectile.rotation + Main.rand.NextFloat(6.283f));
