@@ -8,7 +8,7 @@
             Item.height = 34;
             Item.maxStack = 999;
             Item.value = 10000;
-            Item.rare = 0;
+            Item.rare = ItemUseStyleID.Swing;
             Item.autoReuse = true;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.consumable = true;
