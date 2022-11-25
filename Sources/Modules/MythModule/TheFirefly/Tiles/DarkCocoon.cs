@@ -15,21 +15,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             ItemDrop = ModContent.ItemType<Items.DarkCocoon>();
             AddMapEntry(new Color(17, 16, 17));
         }
-
-        private void PlantTree(int i, int j, int style)
-        {
-            for (int y = -8; y < 0; y++)
-            {
-                Tile tile = Main.tile[i, j + y];
-                tile.TileType = (ushort)ModContent.TileType<Tiles.FireflyTree>();
-                tile.HasTile = true;
-                tile.TileFrameX = (short)(style * 256);
-                tile.TileFrameY = (short)((y + 8) * 16);
-            }
-            var fireFlyTree = ModContent.GetInstance<FireflyTree>();
-            fireFlyTree.InsertOneTreeRope(i, j - 8, style);
-        }
-
         public override void NearbyEffects(int i, int j, bool closer)
         {
             RandomUpdate(i, j);//TODO:为了让这玩意效果正常强行采取的暴力措施，如果sublib更新了就删掉
@@ -54,18 +39,25 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                 if (Main.tile[i, j].Slope == SlopeType.Solid && Main.tile[i + 1, j].Slope == SlopeType.Solid && Main.tile[i - 1, j].Slope == SlopeType.Solid && Main.tile[i + 2, j].Slope == SlopeType.Solid && Main.tile[i - 2, j].Slope == SlopeType.Solid && 
                     Main.tile[i, j + 1].Slope == SlopeType.Solid && Main.tile[i + 1, j + 1].Slope == SlopeType.Solid && Main.tile[i - 1, j + 1].Slope == SlopeType.Solid && Main.tile[i + 2, j + 1].Slope == SlopeType.Solid && Main.tile[i - 2, j + 1].Slope == SlopeType.Solid)//树木
                 {
+                    int MaxHeight = 0;
                     for (int x = -2; x < 3; x++)
                     {
-                        for (int y = -2; y < 0; y++)
+                        for (int y = -1; y > -30; y--)
                         {
-                            if (Main.tile[i + x, j + y].HasTile || Main.tile[i + x, j + y].LiquidAmount > 3)
+                            if(j + y > 20)
                             {
-                                return;
+                                if (Main.tile[i + x, j + y].HasTile || Main.tile[i + x, j + y].LiquidAmount > 3)
+                                {
+                                    return;
+                                }
                             }
+                            MaxHeight = -y;
                         }
                     }
-                    short FrX = (short)(Main.rand.Next(0, 16));
-                    PlantTree(i, j, FrX);
+                    if(MaxHeight > 7)
+                    {
+                        BuildFluorescentTree(i, j - 1, MaxHeight);
+                    }
                 }
             }
 
@@ -190,7 +182,70 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                 }
             }
         }
+        public static void BuildFluorescentTree(int i, int j, int height = 0)
+        {
+            int Height = Main.rand.Next(7, height);
 
+            for (int g = 0; g < Height; g++)
+            {
+                Tile tile = Main.tile[i, j - g];
+                if (g > 3)
+                {
+                    if (Main.rand.NextBool(5))
+                    {
+                        Tile tileLeft = Main.tile[i - 1, j - g];
+                        tileLeft.TileType = (ushort)ModContent.TileType<FluorescentTree>();
+                        tileLeft.TileFrameY = 4;
+                        tileLeft.TileFrameX = (short)Main.rand.Next(4);
+                        tileLeft.HasTile = true;
+                    }
+                    if (Main.rand.NextBool(5))
+                    {
+                        Tile tileRight = Main.tile[i + 1, j - g];
+                        tileRight.TileType = (ushort)ModContent.TileType<FluorescentTree>();
+                        tileRight.TileFrameY = 5;
+                        tileRight.TileFrameX = (short)Main.rand.Next(4);
+                        tileRight.HasTile = true;
+                    }
+                }
+                if (g == 0)
+                {
+                    tile.TileType = (ushort)ModContent.TileType<FluorescentTree>();
+                    tile.TileFrameY = 0;
+                    tile.TileFrameX = 0;
+                    tile.HasTile = true;
+                    continue;
+                }
+                if (g == 1)
+                {
+                    tile.TileType = (ushort)ModContent.TileType<FluorescentTree>();
+                    tile.TileFrameY = -1;
+                    tile.TileFrameX = 0;
+                    tile.HasTile = true;
+                    continue;
+                }
+                if (g == 2)
+                {
+                    tile.TileType = (ushort)ModContent.TileType<FluorescentTree>();
+                    tile.TileFrameY = 3;
+                    tile.TileFrameX = (short)Main.rand.Next(4);
+                    tile.HasTile = true;
+                    continue;
+                }
+                if (g == Height - 1)
+                {
+                    tile.TileType = (ushort)ModContent.TileType<FluorescentTree>();
+                    tile.TileFrameY = 2;
+                    tile.TileFrameX = 0;
+                    tile.HasTile = true;
+                    continue;
+                }
+                tile.TileType = (ushort)ModContent.TileType<FluorescentTree>();
+                tile.TileFrameY = 1;
+                tile.TileFrameX = (short)Main.rand.Next(12);
+                tile.HasTile = true;
+            }
+        }
         public override bool CanExplode(int i, int j)
         {
             return false;

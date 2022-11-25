@@ -37,12 +37,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
         private void UpdateMove(Gore gore)
         {
             gore.velocity.Y -= 0.21f;
-            gore.velocity.Y += 0.05f * gore.scale;
-            gore.velocity.X += Main.windSpeedCurrent * 0.6f * Main.rand.NextFloat(0.85f, 1.15f) / gore.scale;
+            gore.velocity.Y += 0.04f * gore.scale;
+            gore.velocity.X += Main.windSpeedCurrent * 0.2f * Main.rand.NextFloat(0.85f, 1.15f) / gore.scale + MathF.Sin(gore.timeLeft * 0.02f * gore.scale) * 0.1f * gore.scale;
             gore.velocity *= 0.97f;
         }
         public override void OnSpawn(Gore gore, IEntitySource source)
         {
+            gore.timeLeft = Main.rand.Next(350, 450);
             gore.drawOffset = new Vector2(10, 10);
             gore.frameCounter = (byte)Main.rand.Next(6);
             gore.numFrames = 8;
