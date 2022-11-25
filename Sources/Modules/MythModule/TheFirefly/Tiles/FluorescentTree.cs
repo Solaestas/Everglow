@@ -335,6 +335,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
         }
         public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
         {
+            
             Texture2D treeTexture = MythContent.QuickTexture("TheFirefly/Tiles/FluorescentTree");
             Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
             if (Main.drawToScreen)
@@ -392,6 +393,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                     {
                         InsertOneTreeRope(i, j, 0);
                     }
+                    Lighting.AddLight(i, j, 0.08f, 0.4f, 0.96f);
                     break;
                 case 5:  //右树枝
                     Width = 34;
