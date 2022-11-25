@@ -13,6 +13,11 @@ using Terraria.Utilities;
 using Terraria.WorldBuilding;
 using Terraria.ID;
 using System;
+using System.Runtime.CompilerServices;
+using Terraria.ModLoader.IO;
+using Terraria.Graphics;
+using Terraria.UI;
+using Terraria.Map;
 
 namespace Everglow.Sources.Modules.SubWorldModule
 {
@@ -602,5 +607,97 @@ namespace Everglow.Sources.Modules.SubWorldModule
             current = c;
             return path;
         }
+        #region 子世界的WorldSystem
+        public override void OnWorldLoad() 
+            => current?.WorldSystem?.OnWorldLoad();
+        public override void OnWorldUnload() 
+            => current?.WorldSystem?.OnWorldUnload();
+        public override void ModifyScreenPosition() 
+            => current?.WorldSystem?.ModifyScreenPosition();
+        public override void ModifyTransformMatrix(ref SpriteViewMatrix Transform) 
+            => current?.WorldSystem?.ModifyTransformMatrix(ref Transform);
+        public override void UpdateUI(GameTime gameTime) 
+            => current?.WorldSystem?.UpdateUI(gameTime);
+        public override void PreUpdateEntities() 
+            => current?.WorldSystem?.PreUpdateEntities();
+        public override void PreUpdatePlayers() 
+            => current?.WorldSystem?.PreUpdatePlayers();
+        public override void PostUpdatePlayers() 
+            => current?.WorldSystem?.PostUpdatePlayers();
+        public override void PreUpdateNPCs() 
+            => current?.WorldSystem?.PreUpdateNPCs();
+        public override void PostUpdateNPCs() 
+            => current?.WorldSystem?.PostUpdateNPCs();
+        public override void PreUpdateGores() 
+            => current?.WorldSystem?.PreUpdateGores();
+        public override void PostUpdateGores() 
+            => current?.WorldSystem?.PostUpdateGores();
+        public override void PreUpdateProjectiles() 
+            => current?.WorldSystem?.PreUpdateProjectiles();
+        public override void PostUpdateProjectiles() 
+            => current?.WorldSystem?.PostUpdateProjectiles();
+        public override void PreUpdateItems() 
+            => current?.WorldSystem?.PreUpdateItems();
+        public override void PostUpdateItems() 
+            => current?.WorldSystem?.PostUpdateItems();
+        public override void PreUpdateDusts() 
+            => current?.WorldSystem?.PreUpdateDusts();
+        public override void PostUpdateDusts() 
+            => current?.WorldSystem?.PostUpdateDusts();
+        public override void PreUpdateTime() 
+            => current?.WorldSystem?.PreUpdateTime();
+        public override void PostUpdateTime() 
+            => current?.WorldSystem?.PostUpdateTime();
+        public override void PreUpdateWorld() 
+            => current?.WorldSystem?.PreUpdateWorld();
+        public override void PostUpdateWorld() 
+            => current?.WorldSystem?.PostUpdateWorld();
+        public override void PreUpdateInvasions() 
+            => current?.WorldSystem?.PreUpdateInvasions();
+        public override void PostUpdateInvasions() 
+            => current?.WorldSystem?.PostUpdateInvasions();
+        public override void PostUpdateEverything() 
+            => current?.WorldSystem?.PostUpdateEverything();
+        public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers) 
+            => current?.WorldSystem?.ModifyInterfaceLayers(layers);
+        public override void ModifyGameTipVisibility(IReadOnlyList<GameTipData> gameTips) 
+            => current?.WorldSystem?.ModifyGameTipVisibility(gameTips);
+        public override void PostDrawInterface(SpriteBatch spriteBatch) 
+            => current?.WorldSystem?.PostDrawInterface(spriteBatch);
+        public override void PreDrawMapIconOverlay(IReadOnlyList<IMapLayer> layers, MapOverlayDrawContext mapOverlayDrawContext) 
+            => current?.WorldSystem?.PreDrawMapIconOverlay(layers, mapOverlayDrawContext);
+        public override void PostDrawFullscreenMap(ref string mouseText) 
+            => current?.WorldSystem?.PostDrawFullscreenMap(ref mouseText);
+        public override void PostUpdateInput() 
+            => current?.WorldSystem?.PostUpdateInput();
+        public override void PreSaveAndQuit() 
+            => current?.WorldSystem?.PreSaveAndQuit();
+        public override void PostDrawTiles() 
+            => PostDrawTiles();
+        public override void ModifyTimeRate(ref double timeRate, ref double tileUpdateRate, ref double eventUpdateRate) 
+            => current?.WorldSystem?.ModifyTimeRate(ref timeRate, ref tileUpdateRate, ref eventUpdateRate);
+        public override void SaveWorldData(TagCompound tag) 
+            => current?.WorldSystem?.SaveWorldData(tag);
+        public override void LoadWorldData(TagCompound tag) 
+            => current?.WorldSystem?.LoadWorldData(tag);
+        public override void NetSend(BinaryWriter writer) 
+            => current?.WorldSystem?.NetSend(writer);
+        public override void NetReceive(BinaryReader reader) 
+            => current?.WorldSystem?.NetReceive(reader);
+        public override bool HijackGetData(ref byte messageType, ref BinaryReader reader, int playerNumber) 
+            => current?.WorldSystem?.HijackGetData(ref messageType, ref reader, playerNumber) ?? false;
+        public override bool HijackSendData(int whoAmI, int msgType, int remoteClient, int ignoreClient, NetworkText text, int number, float number2, float number3, float number4, int number5, int number6, int number7)
+            => current?.WorldSystem?.HijackSendData(whoAmI, msgType, remoteClient, ignoreClient, text, number, number2, number3, number4, number5, number6, number7) ?? false;
+        public override void ResetNearbyTileEffects()
+            => current?.WorldSystem?.ResetNearbyTileEffects();
+        public override void ModifyHardmodeTasks(List<GenPass> list)
+            => ModifyHardmodeTasks(list);
+        public override void ModifySunLightColor(ref Color tileColor, ref Color backgroundColor)
+            => current?.WorldSystem?.ModifySunLightColor(ref tileColor, ref backgroundColor);
+        public override void ModifyLightingBrightness(ref float scale)
+            => current?.WorldSystem?.ModifyLightingBrightness(ref scale);
+        public override void TileCountsAvailable(ReadOnlySpan<int> tileCounts)
+            => current?.WorldSystem?.TileCountsAvailable(tileCounts);
+        #endregion
     }
 }

@@ -386,7 +386,7 @@ namespace Everglow.Sources.Modules.SubWorldModule
             }
             private static void Player_InternalSaveMap(On.Terraria.Player.orig_InternalSaveMap orig, bool isCloudSave)
             {
-                if (SubworldSystem.cache is not null && SubworldSystem.cache.HowSaveWorld == Subworld.SaveSetting.NoSave)
+                if (SubworldSystem.cache is not null && (SubworldSystem.cache.HowSaveWorld == Subworld.SaveSetting.NoSave || !SubworldSystem.cache.SaveMap))
                 {
                     return;
                 }
