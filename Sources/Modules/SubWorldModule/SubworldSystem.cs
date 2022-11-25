@@ -140,8 +140,10 @@ namespace Everglow.Sources.Modules.SubWorldModule
                             find = find.Previous;
                             if (find is null)
                             {
+                                history.Clear();
                                 break;
                             }
+                            history.Remove(find);
                             if (find.Value.HowSaveWorld != Subworld.SaveSetting.NoSave)
                             {
                                 break;

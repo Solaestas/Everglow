@@ -180,6 +180,20 @@ namespace Everglow.Sources.Modules.SubWorldModule
         {
             if(SubworldSystem.current is not null)
             {
+                if (IngameOptions.DrawLeftSide(sprite, Language.GetTextValue(ReturnAll), num9, vector, vector2, IngameOptions.leftScale, 0.7f, 0.8f, 0.01f))
+                {
+                    IngameOptions.leftHover = num9;
+                    if (flag4)
+                    {
+                        SteamedWraps.StopPlaytimeTracking();
+                        SystemLoader.PreSaveAndQuit();
+                        IngameOptions.Close();
+                        Main.menuMode = 10;
+                        Main.gameMenu = true;
+                        SubworldSystem.ExitAll();
+                    }
+                }
+                num9++;
                 if (IngameOptions.DrawLeftSide(sprite, Language.GetTextValue(ReturnNow), num9, vector, vector2, IngameOptions.leftScale, 0.7f, 0.8f, 0.01f))
                 {
                     IngameOptions.leftHover = num9;
@@ -323,11 +337,18 @@ namespace Everglow.Sources.Modules.SubWorldModule
                     Main.mapMinY = 0;
                     Main.mapMaxX = Main.maxTilesX;
                     Main.mapMaxY = Main.maxTilesY;
-                    Main.mapTargetX = (Main.maxTilesX / Main.textureMaxWidth) + 1;
-                    Main.mapTargetY = (Main.maxTilesY / Main.textureMaxHeight) + 1;
-                    Main.instance.mapTarget = new RenderTarget2D[Main.mapTargetX, Main.mapTargetY];
-                    Main.mapWasContentLost = new bool[Main.mapTargetX, Main.mapTargetY];
-                    Main.initMap = new bool[Main.mapTargetX, Main.mapTargetY];
+
+                    //Main.mapTargetX = (Main.maxTilesX / Main.textureMaxWidth) + 1;
+                    //Main.mapTargetY = (Main.maxTilesY / Main.textureMaxHeight) + 1;
+                    //Main.instance.mapTarget = new RenderTarget2D[Main.mapTargetX, Main.mapTargetY];
+                    //Main.mapWasContentLost = new bool[Main.mapTargetX, Main.mapTargetY];
+                    //Main.initMap = new bool[Main.mapTargetX, Main.mapTargetY];
+
+                    Main.instance.mapTarget = new RenderTarget2D[(Main.maxTilesX / Main.textureMaxWidth) + 1,
+                        (Main.maxTilesY / Main.textureMaxHeight) + 1];
+                    Main.mapWasContentLost = new bool[Main.instance.mapTarget.GetLength(0), Main.instance.mapTarget.GetLength(1)];
+                    Main.initMap = new bool[Main.instance.mapTarget.GetLength(0), Main.instance.mapTarget.GetLength(1)];
+
                     Main.instance.TilePaintSystem = new();
                     Main.instance.TilesRenderer = new(Main.instance.TilePaintSystem);
                     Main.instance.WallsRenderer = new(Main.instance.TilePaintSystem);
@@ -603,46 +624,46 @@ namespace Everglow.Sources.Modules.SubWorldModule
                 c.EmitDelegate(() => SubworldSystem.current is null ? 0 : 1);
                 c.Emit(Add);
 
-                if (!c.TryGotoNext(i => i.MatchLdsfld(typeof(Lang), nameof(Lang.inter)), i => i.MatchLdcI4(35)))
-                {
-                    throw new OperationCanceledException("IL Patch Is Failed.");
-                }
+                //if (!c.TryGotoNext(i => i.MatchLdsfld(typeof(Lang), nameof(Lang.inter)), i => i.MatchLdcI4(35)))
+                //{
+                //    throw new OperationCanceledException("IL Patch Is Failed.");
+                //}
 
-                c.Emit(Ldsfld, typeof(SubworldSystem).GetField(nameof(SubworldSystem.current), BindingFlags.NonPublic | BindingFlags.Static));
-                c.Emit(Brfalse, Skip_ReplaceLanginter35);
-                c.EmitDelegate(() => Language.GetTextValue(ReturnAll));
-                c.Emit(Br, SkipLanginter35);
-                c.MarkLabel(Skip_ReplaceLanginter35);
+                //c.Emit(Ldsfld, typeof(SubworldSystem).GetField(nameof(SubworldSystem.current), BindingFlags.NonPublic | BindingFlags.Static));
+                //c.Emit(Brfalse, Skip_ReplaceLanginter35);
+                //c.EmitDelegate(() => Language.GetTextValue(ReturnAll));
+                //c.Emit(Br, SkipLanginter35);
+                //c.MarkLabel(Skip_ReplaceLanginter35);
 
-                if (!c.TryGotoNext(MoveType.After, i => i.MatchCallvirt(typeof(LocalizedText), "get_Value")))
-                {
-                    throw new OperationCanceledException("IL Patch Is Failed.");
-                }
-                c.MarkLabel(SkipLanginter35);
+                //if (!c.TryGotoNext(MoveType.After, i => i.MatchCallvirt(typeof(LocalizedText), "get_Value")))
+                //{
+                //    throw new OperationCanceledException("IL Patch Is Failed.");
+                //}
+                //c.MarkLabel(SkipLanginter35);
 
-                if (!c.TryGotoNext(i => i.MatchLdnull(), i => i.MatchCall(typeof(WorldGen), nameof(WorldGen.SaveAndQuit))))
-                {
-                    throw new OperationCanceledException("IL Patch Is Failed.");
-                }
+                //if (!c.TryGotoNext(i => i.MatchLdnull(), i => i.MatchCall(typeof(WorldGen), nameof(WorldGen.SaveAndQuit))))
+                //{
+                //    throw new OperationCanceledException("IL Patch Is Failed.");
+                //}
 
-                c.EmitDelegate(() =>
-                {
-                    if (SubworldSystem.current is null)
-                    {
-                        WorldGen.SaveAndQuit(null);
-                    }
-                    else
-                    {
-                        SubworldSystem.ExitAll();
-                    }
-                });
-                c.Emit(Br, Skip_Orig_SaveAndQuit);
+                //c.EmitDelegate(() =>
+                //{
+                //    if (SubworldSystem.current is null)
+                //    {
+                //        WorldGen.SaveAndQuit(null);
+                //    }
+                //    else
+                //    {
+                //        SubworldSystem.ExitAll();
+                //    }
+                //});
+                //c.Emit(Br, Skip_Orig_SaveAndQuit);
 
                 if (!c.TryGotoNext(MoveType.After, i => i.MatchCall(typeof(WorldGen), nameof(WorldGen.SaveAndQuit))))
                 {
                     throw new OperationCanceledException("IL Patch Is Failed.");
                 }
-                c.MarkLabel(Skip_Orig_SaveAndQuit);
+                //c.MarkLabel(Skip_Orig_SaveAndQuit);
 
                 if (!c.TryGotoNext(i => i.MatchLdsfld(typeof(IngameOptions), nameof(IngameOptions.category))))
                 {
