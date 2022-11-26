@@ -15,8 +15,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             Main.tileLighted[Type] = true;
             Main.tileAxe[Type] = true;
 
-            TileObjectData.addTile(Type);
-
             ModTranslation modTranslation = LocalizationLoader.GetOrCreateTranslation("Mods.Everglow.MapEntry.FluorescentTree");
             AddMapEntry(new Color(51, 26, 58), modTranslation);
             DustType = ModContent.DustType<Dusts.FluorescentTreeDust>();
