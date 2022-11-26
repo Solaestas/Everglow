@@ -25,7 +25,6 @@ namespace Everglow.Sources.Modules.SubWorldModule
     {
         internal static Dictionary<RemoteAddress, int> playerLocations = new();
         internal static Dictionary<string, Subworld> subworlds = new();
-        internal static LinkedList<Subworld> history = new();
         internal static Subworld current;
         internal static Subworld cache;
         internal static WorldFileData root;
@@ -52,7 +51,7 @@ namespace Everglow.Sources.Modules.SubWorldModule
                             nameof(Subworld),
                             current.FullName + ".wld"),
                     _ => throw new InvalidOperationException("You're not supposed to run it here.")
-                } ;
+                };
             }
         }
         internal static void Register(Subworld subworld)
@@ -71,7 +70,6 @@ namespace Everglow.Sources.Modules.SubWorldModule
         {
             playerLocations.Clear();
             subworlds.Clear();
-            history.Clear();
             current = cache = null;
             root = null;
         }
@@ -81,21 +79,13 @@ namespace Everglow.Sources.Modules.SubWorldModule
             {
                 cache?.OnUnload();
                 current?.OnLoad();
-                if (current is not null)
-                {
-                    history.AddLast(current);
-                }
-                else
-                {
-                    history.Clear();
-                }
             }
             cache = current;
         }
         public static bool IsActive<T>() where T : Subworld => ModContent.GetInstance<T>() == current;
         static void Enter(Subworld target)
         {
-            if(!subworlds.ContainsKey(target.FullName))
+            if (!subworlds.ContainsKey(target.FullName))
             {
                 Everglow.Instance.Logger.Error("The historical record is wrong.");
                 ExitAll();
@@ -137,33 +127,6 @@ namespace Everglow.Sources.Modules.SubWorldModule
             {
                 if (Main.netMode == NetmodeID.SinglePlayer)
                 {
-                    if (history.Count > 0)
-                    {
-                        LinkedListNode<Subworld> find = history.Last;
-                        while (true)
-                        {
-                            find = find.Previous;
-                            if (find is null)
-                            {
-                                history.Clear();
-                                break;
-                            }
-                            history.Remove(find);
-                            if (find.Value.HowSaveWorld != Subworld.SaveSetting.NoSave)
-                            {
-                                break;
-                            }
-                        }
-                        if (find is null)
-                        {
-                            current = null;
-                            Task.Factory.StartNew(ExitWorldCallBack);
-                        }
-                        else
-                        {
-                            Enter(find.Value);
-                        }
-                    }
                 }
                 else if (Main.netMode == NetmodeID.MultiplayerClient)
                 {
@@ -178,7 +141,7 @@ namespace Everglow.Sources.Modules.SubWorldModule
         {
             if (Program.LaunchParameters.TryGetValue("-subworld", out string fullname))
             {
-                if(subworlds.TryGetValue(fullname,out Subworld target))
+                if (subworlds.TryGetValue(fullname, out Subworld target))
                 {
                     Main.myPlayer = 255;
                     root = Main.ActiveWorldFileData;
@@ -592,8 +555,12 @@ namespace Everglow.Sources.Modules.SubWorldModule
         {
             Subworld c = current;
             current = ModContent.GetInstance<T>();
+            if (current.HowSaveWorld != Subworld.SaveSetting.Public)
+            {
+                return;
+            }
             string path = CurrentPath;
-            if(File.Exists(path))
+            if (File.Exists(path))
             {
                 File.Delete(path);
             }
@@ -603,88 +570,92 @@ namespace Everglow.Sources.Modules.SubWorldModule
         {
             Subworld c = current;
             current = ModContent.GetInstance<T>();
+            if (current.HowSaveWorld != Subworld.SaveSetting.Public)
+            {
+                return string.Empty;
+            }
             string path = CurrentPath;
             current = c;
             return path;
         }
         #region 子世界的WorldSystem
-        public override void OnWorldLoad() 
+        public override void OnWorldLoad()
             => current?.WorldSystem?.OnWorldLoad();
-        public override void OnWorldUnload() 
+        public override void OnWorldUnload()
             => current?.WorldSystem?.OnWorldUnload();
-        public override void ModifyScreenPosition() 
+        public override void ModifyScreenPosition()
             => current?.WorldSystem?.ModifyScreenPosition();
-        public override void ModifyTransformMatrix(ref SpriteViewMatrix Transform) 
+        public override void ModifyTransformMatrix(ref SpriteViewMatrix Transform)
             => current?.WorldSystem?.ModifyTransformMatrix(ref Transform);
-        public override void UpdateUI(GameTime gameTime) 
+        public override void UpdateUI(GameTime gameTime)
             => current?.WorldSystem?.UpdateUI(gameTime);
-        public override void PreUpdateEntities() 
+        public override void PreUpdateEntities()
             => current?.WorldSystem?.PreUpdateEntities();
-        public override void PreUpdatePlayers() 
+        public override void PreUpdatePlayers()
             => current?.WorldSystem?.PreUpdatePlayers();
-        public override void PostUpdatePlayers() 
+        public override void PostUpdatePlayers()
             => current?.WorldSystem?.PostUpdatePlayers();
-        public override void PreUpdateNPCs() 
+        public override void PreUpdateNPCs()
             => current?.WorldSystem?.PreUpdateNPCs();
-        public override void PostUpdateNPCs() 
+        public override void PostUpdateNPCs()
             => current?.WorldSystem?.PostUpdateNPCs();
-        public override void PreUpdateGores() 
+        public override void PreUpdateGores()
             => current?.WorldSystem?.PreUpdateGores();
-        public override void PostUpdateGores() 
+        public override void PostUpdateGores()
             => current?.WorldSystem?.PostUpdateGores();
-        public override void PreUpdateProjectiles() 
+        public override void PreUpdateProjectiles()
             => current?.WorldSystem?.PreUpdateProjectiles();
-        public override void PostUpdateProjectiles() 
+        public override void PostUpdateProjectiles()
             => current?.WorldSystem?.PostUpdateProjectiles();
-        public override void PreUpdateItems() 
+        public override void PreUpdateItems()
             => current?.WorldSystem?.PreUpdateItems();
-        public override void PostUpdateItems() 
+        public override void PostUpdateItems()
             => current?.WorldSystem?.PostUpdateItems();
-        public override void PreUpdateDusts() 
+        public override void PreUpdateDusts()
             => current?.WorldSystem?.PreUpdateDusts();
-        public override void PostUpdateDusts() 
+        public override void PostUpdateDusts()
             => current?.WorldSystem?.PostUpdateDusts();
-        public override void PreUpdateTime() 
+        public override void PreUpdateTime()
             => current?.WorldSystem?.PreUpdateTime();
-        public override void PostUpdateTime() 
+        public override void PostUpdateTime()
             => current?.WorldSystem?.PostUpdateTime();
-        public override void PreUpdateWorld() 
+        public override void PreUpdateWorld()
             => current?.WorldSystem?.PreUpdateWorld();
-        public override void PostUpdateWorld() 
+        public override void PostUpdateWorld()
             => current?.WorldSystem?.PostUpdateWorld();
-        public override void PreUpdateInvasions() 
+        public override void PreUpdateInvasions()
             => current?.WorldSystem?.PreUpdateInvasions();
-        public override void PostUpdateInvasions() 
+        public override void PostUpdateInvasions()
             => current?.WorldSystem?.PostUpdateInvasions();
-        public override void PostUpdateEverything() 
+        public override void PostUpdateEverything()
             => current?.WorldSystem?.PostUpdateEverything();
-        public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers) 
+        public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
             => current?.WorldSystem?.ModifyInterfaceLayers(layers);
-        public override void ModifyGameTipVisibility(IReadOnlyList<GameTipData> gameTips) 
+        public override void ModifyGameTipVisibility(IReadOnlyList<GameTipData> gameTips)
             => current?.WorldSystem?.ModifyGameTipVisibility(gameTips);
-        public override void PostDrawInterface(SpriteBatch spriteBatch) 
+        public override void PostDrawInterface(SpriteBatch spriteBatch)
             => current?.WorldSystem?.PostDrawInterface(spriteBatch);
-        public override void PreDrawMapIconOverlay(IReadOnlyList<IMapLayer> layers, MapOverlayDrawContext mapOverlayDrawContext) 
+        public override void PreDrawMapIconOverlay(IReadOnlyList<IMapLayer> layers, MapOverlayDrawContext mapOverlayDrawContext)
             => current?.WorldSystem?.PreDrawMapIconOverlay(layers, mapOverlayDrawContext);
-        public override void PostDrawFullscreenMap(ref string mouseText) 
+        public override void PostDrawFullscreenMap(ref string mouseText)
             => current?.WorldSystem?.PostDrawFullscreenMap(ref mouseText);
-        public override void PostUpdateInput() 
+        public override void PostUpdateInput()
             => current?.WorldSystem?.PostUpdateInput();
-        public override void PreSaveAndQuit() 
+        public override void PreSaveAndQuit()
             => current?.WorldSystem?.PreSaveAndQuit();
-        public override void PostDrawTiles() 
-            => PostDrawTiles();
-        public override void ModifyTimeRate(ref double timeRate, ref double tileUpdateRate, ref double eventUpdateRate) 
+        public override void PostDrawTiles()
+            => current?.WorldSystem?.PostDrawTiles();
+        public override void ModifyTimeRate(ref double timeRate, ref double tileUpdateRate, ref double eventUpdateRate)
             => current?.WorldSystem?.ModifyTimeRate(ref timeRate, ref tileUpdateRate, ref eventUpdateRate);
-        public override void SaveWorldData(TagCompound tag) 
+        public override void SaveWorldData(TagCompound tag)
             => current?.WorldSystem?.SaveWorldData(tag);
-        public override void LoadWorldData(TagCompound tag) 
+        public override void LoadWorldData(TagCompound tag)
             => current?.WorldSystem?.LoadWorldData(tag);
-        public override void NetSend(BinaryWriter writer) 
+        public override void NetSend(BinaryWriter writer)
             => current?.WorldSystem?.NetSend(writer);
-        public override void NetReceive(BinaryReader reader) 
+        public override void NetReceive(BinaryReader reader)
             => current?.WorldSystem?.NetReceive(reader);
-        public override bool HijackGetData(ref byte messageType, ref BinaryReader reader, int playerNumber) 
+        public override bool HijackGetData(ref byte messageType, ref BinaryReader reader, int playerNumber)
             => current?.WorldSystem?.HijackGetData(ref messageType, ref reader, playerNumber) ?? false;
         public override bool HijackSendData(int whoAmI, int msgType, int remoteClient, int ignoreClient, NetworkText text, int number, float number2, float number3, float number4, int number5, int number6, int number7)
             => current?.WorldSystem?.HijackSendData(whoAmI, msgType, remoteClient, ignoreClient, text, number, number2, number3, number4, number5, number6, number7) ?? false;

@@ -176,9 +176,9 @@ namespace Everglow.Sources.Modules.SubWorldModule
             }
             return state is not bool;
         }
-        static void Insert_IngameOptions_Draw(SpriteBatch sprite,ref int num9,ref Vector2 vector,ref Vector2 vector2,bool flag4)
+        static void Insert_IngameOptions_Draw(SpriteBatch sprite, ref int num9, ref Vector2 vector, ref Vector2 vector2, bool flag4)
         {
-            if(SubworldSystem.current is not null)
+            if (SubworldSystem.current is not null)
             {
                 if (IngameOptions.DrawLeftSide(sprite, Language.GetTextValue(ReturnAll), num9, vector, vector2, IngameOptions.leftScale, 0.7f, 0.8f, 0.01f))
                 {
@@ -210,22 +210,22 @@ namespace Everglow.Sources.Modules.SubWorldModule
                 num9++;
             }
         }
-        static void Insert_Player_UpdateBiomes(ref bool IsInUnderworld,ref bool IsUnderTheSea)
+        static void Insert_Player_UpdateBiomes(ref bool IsInUnderworld, ref bool IsUnderTheSea)
         {
             if (SubworldSystem.current?.HideUnderworld ?? false)
             {
                 IsInUnderworld = IsUnderTheSea = false;
             }
         }
-        static void Insert_Player_Update_ModifyBasicGravity(Player player, ref float basicfloat,ref float maxFallSpeed)
+        static void Insert_Player_Update_ModifyBasicGravity(Player player, ref float basicfloat, ref float maxFallSpeed)
         {
             SubworldSystem.current?.ModifyPlayerBasicGravity(player, ref basicfloat, ref maxFallSpeed);
         }
-        static void Insert_NPC_Update_Gravity_ModifyBasicGravity(NPC npc,ref float basicgravity,ref float maxFallSpeed)
+        static void Insert_NPC_Update_Gravity_ModifyBasicGravity(NPC npc, ref float basicgravity, ref float maxFallSpeed)
         {
             SubworldSystem.current?.ModifyNPCBasicGravity(npc, ref basicgravity, ref maxFallSpeed);
         }
-        static bool Insert_TileLightScanner_GetTileLight(Tile tile,int x,int y,ref FastRandom random,ref Color outcolor)
+        static bool Insert_TileLightScanner_GetTileLight(Tile tile, int x, int y, ref FastRandom random, ref Color outcolor)
         {
             return SubworldSystem.current?.GetTileLight(tile, x, y, ref random, ref outcolor) ?? true;
         }
@@ -293,9 +293,9 @@ namespace Everglow.Sources.Modules.SubWorldModule
                     Main.instance.WallsRenderer = new(Main.instance.TilePaintSystem);
                 }
             }
-            internal static void Load() 
+            internal static void Load()
             {
-                if(Main.dedServ)
+                if (Main.dedServ)
                 {
                     IL.Terraria.Main.DedServ_PostModLoad += Main_DedServ_PostModLoad;
                     AsyncSend += Hooks_AsyncSend;
@@ -738,7 +738,7 @@ namespace Everglow.Sources.Modules.SubWorldModule
                 ILLabel Skip_DrawSetUp = c.DefineLabel();
                 ILLabel SkipWhenNull = c.DefineLabel();
 
-                if(!c.TryGotoNext(MoveType.After, i => i.MatchStsfld(typeof(Main),nameof(Main.HoverItem))))
+                if (!c.TryGotoNext(MoveType.After, i => i.MatchStsfld(typeof(Main), nameof(Main.HoverItem))))
                 {
                     throw new OperationCanceledException("IL Patch Is Failed.");
                 }
@@ -794,7 +794,7 @@ namespace Everglow.Sources.Modules.SubWorldModule
                 ILLabel BreakLoop = c.DefineLabel();
                 ILLabel Skip_HasClient = c.DefineLabel();
 
-                if(!c.TryGotoNext(MoveType.After, i => i.MatchStindI1()))
+                if (!c.TryGotoNext(MoveType.After, i => i.MatchStindI1()))
                 {
                     throw new OperationCanceledException("IL Patch Is Failed.");
                 }
