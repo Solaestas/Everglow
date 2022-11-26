@@ -375,6 +375,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                     {
                         InsertOneTreeRope(i, j, 2);
                     }
+                    Lighting.AddLight(i, j, 0.4f, 0.4f, 0.4f);
                     break;
                 case 3:  //粗树干
                     Width = 50;
@@ -393,7 +394,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                     {
                         InsertOneTreeRope(i, j, 0);
                     }
-                    Lighting.AddLight(i, j, 0.08f, 0.4f, 0.96f);
+
                     break;
                 case 5:  //右树枝
                     Width = 34;
