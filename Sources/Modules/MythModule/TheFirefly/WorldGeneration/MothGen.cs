@@ -50,7 +50,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             tag["FIREFLYcenterX"] = fireflyCenterX;
             tag["FIREFLYcenterY"] = fireflyCenterY;
 
-            var fireFlyTree = ModContent.GetInstance<FireflyTree>();
+            var fireFlyTree = ModContent.GetInstance<FluorescentTree>();
             var list = new List<TagCompound>();
             foreach (var (x, y, style) in fireFlyTree.GetRopeStyleList())
             {
@@ -70,7 +70,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
 
             if (tag.ContainsKey("FIREFLY_FireflyTree"))
             {
-                var fireFlyTree = ModContent.GetInstance<FireflyTree>();
+                var fireFlyTree = ModContent.GetInstance<FluorescentTree>();
                 var listTag = tag.GetList<TagCompound>("FIREFLY_FireflyTree");
                 List<(int x, int y, int style)> ropeData = new List<(int x, int y, int style)>();
                 foreach (var item in listTag)

@@ -24,7 +24,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             }
             Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/FireflyMossGlow");
 
-            spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(1f, 1f, 1f, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
+            spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(0.2f, 0.2f, 0.2f, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
 
             base.PostDraw(i, j, spriteBatch);
         }
