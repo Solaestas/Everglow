@@ -5,6 +5,7 @@ float uRatio;// width/height
 
 float uRadius;
 float uIntensity;
+
 float4 PixelShaderFunction(float2 coords : TEXCOORD0) : COLOR0
 {
     float coord = coords;
@@ -26,6 +27,7 @@ float4 PixelShaderFunction(float2 coords : TEXCOORD0) : COLOR0
         }
 
     }
+
     return tex2D(uImage0,pos+offset*scale);
 }
 technique Technique1

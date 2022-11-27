@@ -17,6 +17,7 @@ using Terraria.Graphics.Effects;
 using Terraria.Graphics.Light;
 using Terraria.ModLoader;
 using Terraria.Utilities;
+using Everglow.Sources.Modules.MythModule.Common;
 using static Humanizer.On;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.LunarFlare
@@ -44,7 +45,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
             On.Terraria.Main.DoDraw_Tiles_NonSolid += Main_DoDraw_Tiles_NonSolid;
             On.Terraria.Main.DoDraw_WallsAndBlacks += Main_DoDraw_WallsAndBlacks;
             On.Terraria.GameContent.Drawing.TileDrawing.DrawMultiTileVines += TileDrawing_DrawMultiTileVines;
-            lerpeffect = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/TextureLerp", AssetRequestMode.ImmediateLoad).Value;
+            lerpeffect = MythContent.QuickEffect("Effects/TextureLerp");
         }
         public override void Unload()
         {
@@ -60,7 +61,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
             {
                 if (timer > 0)
                 {
-                    timer--;
+                    timer-= 10;
                 }
                 else
                 {
@@ -182,6 +183,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
                 lerpeffect.Parameters["lerp"].SetValue(timer / 750f);
                 lerpeffect.Parameters["lerptarget"].SetValue(Asset<Texture2D>.DefaultValue);
+                lerpeffect.Parameters["uImage2"].SetValue(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/LunarFlare/InterferenceSpectral"));
                 lerpeffect.CurrentTechnique.Passes[0].Apply();
             }
             orig(self);
@@ -199,6 +201,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
                 lerpeffect.Parameters["lerp"].SetValue(timer / 750f);
                 lerpeffect.Parameters["lerptarget"].SetValue(Asset<Texture2D>.DefaultValue);
+                lerpeffect.Parameters["uImage2"].SetValue(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/LunarFlare/InterferenceSpectral"));
                 lerpeffect.CurrentTechnique.Passes[0].Apply();
                 Main.spriteBatch.Draw(self.blackTarget, Main.sceneTilePos - Main.screenPosition, Color.White);
                 TimeLogger.DetailedDrawTime(13);
@@ -228,6 +231,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
                 lerpeffect.Parameters["lerp"].SetValue(timer / 750f);
                 lerpeffect.Parameters["lerptarget"].SetValue(Asset<Texture2D>.DefaultValue);
+                lerpeffect.Parameters["uImage2"].SetValue(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/LunarFlare/InterferenceSpectral"));
                 lerpeffect.CurrentTechnique.Passes[0].Apply();
                 Main.spriteBatch.Draw(self.tile2Target, Main.sceneTile2Pos - Main.screenPosition, Color.White);
                 TimeLogger.DetailedDrawTime(15);
@@ -271,6 +275,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
                         Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
                         lerpeffect.Parameters["lerp"].SetValue(timer / 750f);
                         lerpeffect.Parameters["lerptarget"].SetValue(Asset<Texture2D>.DefaultValue);
+                        lerpeffect.Parameters["uImage2"].SetValue(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/LunarFlare/InterferenceSpectral"));
                         lerpeffect.CurrentTechnique.Passes[0].Apply();
                         Main.spriteBatch.Draw(self.tileTarget, Main.sceneTilePos - Main.screenPosition, Color.White);
                         Main.spriteBatch.End();

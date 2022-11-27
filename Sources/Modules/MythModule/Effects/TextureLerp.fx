@@ -5,6 +5,15 @@ sampler2D Texture2 = sampler_state
     Texture = <lerptarget>;
 };
 float lerp;
+texture uImage2;
+sampler2D s3 = sampler_state
+{
+    Texture = <uImage2>;
+    MinFilter = Linear;
+    MagFilter = Linear;
+    AddressU = Wrap;
+    AddressV = Wrap;
+};
 
 float4 PixelShaderFunction(float2 texCoord : TEXCOORD,float4 texColor:COLOR0) : COLOR0
 {
@@ -14,7 +23,12 @@ float4 PixelShaderFunction(float2 texCoord : TEXCOORD,float4 texColor:COLOR0) : 
     float g = data1.g + (data2.g - data1.g) * lerp;
     float b = data1.b + (data2.b - data1.b) * lerp;
     float a = data1.a + (data2.a - data1.a) * lerp;
-    return float4(r, g, b, a) * texColor;
+
+    float light = max(max(data1.r , data1.g),data1.b);
+    if(data1.a <= 0.3)
+        return float4(0,0,0,0);
+    float4 C = data1 * (1 - lerp) + tex2D(s3, float2(light, 0)) * lerp;
+    return C * texColor;
 }
 
 technique Technique1

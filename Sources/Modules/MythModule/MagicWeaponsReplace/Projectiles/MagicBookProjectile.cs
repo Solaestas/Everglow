@@ -69,7 +69,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
         /// 荧光的颜色
         /// </summary>
         internal Color glowColor = new Color(255, 255, 255, 0);
-
+        internal Vector2 TexCoordTop = new Vector2(16, 0);
+        internal Vector2 TexCoordLeft = new Vector2(1, 15);
+        internal Vector2 TexCoordDown = new Vector2(12, 28);
+        internal Vector2 TexCoordRight = new Vector2(27, 11);
 
         public override void AI()
         {
@@ -104,7 +107,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
             {
                 return;
             }
-            if (player.itemTime == 2 && player.HeldItem.type == ItemType)
+            if (player.itemTime == player.itemTimeMax - 2 && player.HeldItem.type == ItemType)
             {
                 Vector2 velocity = Utils.SafeNormalize(vTOMouse, Vector2.Zero) * player.HeldItem.shootSpeed;
                 Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * MulStartPosByVelocity, velocity * MulVelocity, ProjType, (int)(player.HeldItem.damage * MulDamage), player.HeldItem.knockBack, player.whoAmI);
@@ -164,10 +167,12 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
                     rot += Projectile.rotation;//当然也收到弹幕本身的旋转角度影响
                     Vector2 BasePos = Projectile.Center + X0 - X0.RotatedBy(rot) * i / 4.5f;//【矩形长条】长轴的中点，借X0遍历经过弯曲的宽轴【-X0,X0】，如果你意识到了X0是半宽轴，这里就不会有什么疑问
 
-                    float UpX = MathHelper.Lerp(16f / tex.Width, 27f / tex.Width, i / 9f);//纹理坐标的横向插值
-                    float UpY = MathHelper.Lerp(0, 11f / tex.Height, i / 9f);//纹理坐标的纵向插值
+                    float UpX = MathHelper.Lerp(TexCoordTop.X / tex.Width, TexCoordRight.X / tex.Width, i / 9f);//纹理坐标的横向插值
+                    float UpY = MathHelper.Lerp(TexCoordTop.Y / tex.Height, TexCoordRight.Y / tex.Height, i / 9f);//纹理坐标的纵向插值
                     Vector2 Up = new Vector2(UpX, UpY);//合并
-                    Vector2 Down = Up + new Vector2(-15f / tex.Width, 15f / tex.Height);
+                    Vector2 DownLeft = Up + new Vector2((TexCoordLeft.X - TexCoordTop.X) / tex.Width, (TexCoordLeft.Y - TexCoordTop.Y) / tex.Height);
+                    Vector2 DownRight = Up + new Vector2((TexCoordDown.X - TexCoordRight.X) / tex.Width, (TexCoordDown.Y - TexCoordRight.Y) / tex.Height);
+                    Vector2 Down = Vector2.Lerp(DownLeft, DownRight, i / 9f);
                     //上面这几行如果看不懂，就看这个目录下的BookDrawPrinciple.png
 
                     if (Math.Abs(rot) > Math.PI / 2d)//TR不支持禁用背景剔除，只能这样取巧
@@ -218,11 +223,12 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
                 rotIV += Projectile.rotation;
                 Vector2 BasePos = Projectile.Center + X0 - X0.RotatedBy(rotIV) * i / 4.5f - Y0 * 0.05f - X0 * 0.02f;//前半部分已经讲过了，至于为什么多出来【- Y0 * 0.05f - X0 * 0.02f】，是因为要凸显出正在被翻起的那一页
 
-                float UpX = MathHelper.Lerp(16f / tex.Width, 27f / tex.Width, i / 9f);
-                float UpY = MathHelper.Lerp(0, 11f / tex.Height, i / 9f);
+                float UpX = MathHelper.Lerp(TexCoordTop.X / tex.Width, TexCoordRight.X / tex.Width, i / 9f);
+                float UpY = MathHelper.Lerp(TexCoordTop.Y / tex.Height, TexCoordRight.Y / tex.Height, i / 9f);
                 Vector2 Up = new Vector2(UpX, UpY);
-                Vector2 Down = Up + new Vector2(-15f / tex.Width, 15f / tex.Height);
-
+                Vector2 DownLeft = Up + new Vector2((TexCoordLeft.X - TexCoordTop.X) / tex.Width, (TexCoordLeft.Y - TexCoordTop.Y) / tex.Height);
+                Vector2 DownRight = Up + new Vector2((TexCoordDown.X - TexCoordRight.X) / tex.Width, (TexCoordDown.Y - TexCoordRight.Y) / tex.Height);
+                Vector2 Down = Vector2.Lerp(DownLeft, DownRight, i / 9f);
                 if (Math.Abs(rotIV) > Math.PI / 2d)
                 {
                     if (player.direction == 1)
@@ -266,11 +272,12 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
                     rot += Projectile.rotation;
                     Vector2 BasePos = Projectile.Center + X0 - X0.RotatedBy(rot) * i / 4.5f - Y0 * 0.05f - X0 * 0.02f;//【- Y0 * 0.05f - X0 * 0.02f】再现，为了不让翻起的那一页到前面时凸出来
 
-                    float UpX = MathHelper.Lerp(16f / tex.Width, 27f / tex.Width, i / 9f);
-                    float UpY = MathHelper.Lerp(0 / tex.Height, 11f / tex.Height, i / 9f);
+                    float UpX = MathHelper.Lerp(TexCoordTop.X / tex.Width, TexCoordRight.X / tex.Width, i / 9f);
+                    float UpY = MathHelper.Lerp(TexCoordTop.Y / tex.Height, TexCoordRight.Y / tex.Height, i / 9f);
                     Vector2 Up = new Vector2(UpX, UpY);
-                    Vector2 Down = Up + new Vector2(-15f / tex.Width, 15f / tex.Height);
-
+                    Vector2 DownLeft = Up + new Vector2((TexCoordLeft.X - TexCoordTop.X) / tex.Width, (TexCoordLeft.Y - TexCoordTop.Y) / tex.Height);
+                    Vector2 DownRight = Up + new Vector2((TexCoordDown.X - TexCoordRight.X) / tex.Width, (TexCoordDown.Y - TexCoordRight.Y) / tex.Height);
+                    Vector2 Down = Vector2.Lerp(DownLeft, DownRight, i / 9f);
                     if (Math.Abs(rot) > Math.PI / 2d)
                     {
                         if (player.direction * player.gravDir == 1)
@@ -328,11 +335,12 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
                 double rot = Timer / 270d + i * Timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d) * 0.4);
                 Vector2 BasePos = Projectile.Center + X0 - X0.RotatedBy(rot) * i / 4.5f;
 
-                float UpX = MathHelper.Lerp(16f / tex.Width, 27f / tex.Width, i / 9f);
-                float UpY = MathHelper.Lerp(0 / tex.Height, 11f / tex.Height, i / 9f);
+                float UpX = MathHelper.Lerp(TexCoordTop.X / tex.Width, TexCoordRight.X / tex.Width, i / 9f);
+                float UpY = MathHelper.Lerp(TexCoordTop.Y / tex.Height, TexCoordRight.Y / tex.Height, i / 9f);
                 Vector2 Up = new Vector2(UpX, UpY);
-                Vector2 Down = Up + new Vector2(-15f / tex.Width, 15f / tex.Height);
-
+                Vector2 DownLeft = Up + new Vector2((TexCoordLeft.X - TexCoordTop.X) / tex.Width, (TexCoordLeft.Y - TexCoordTop.Y) / tex.Height);
+                Vector2 DownRight = Up + new Vector2((TexCoordDown.X - TexCoordRight.X) / tex.Width, (TexCoordDown.Y - TexCoordRight.Y) / tex.Height);
+                Vector2 Down = Vector2.Lerp(DownLeft, DownRight, i / 9f);
                 rot += Projectile.rotation;
                 if (Math.Abs(rot) > Math.PI / 2d)
                 {
@@ -389,11 +397,12 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
                 rot += Projectile.rotation;
                 Vector2 BasePos = Projectile.Center + X0 - X0.RotatedBy(rot) * i / 4.5f - Y0 * 0.05f - X0 * 0.02f;
 
-                float UpX = MathHelper.Lerp(16f / tex.Width, 27f / tex.Width, i / 9f);
-                float UpY = MathHelper.Lerp(0 / tex.Height, 11f / tex.Height, i / 9f);
+                float UpX = MathHelper.Lerp(TexCoordTop.X / tex.Width, TexCoordRight.X / tex.Width, i / 9f);
+                float UpY = MathHelper.Lerp(TexCoordTop.Y / tex.Height, TexCoordRight.Y / tex.Height, i / 9f);
                 Vector2 Up = new Vector2(UpX, UpY);
-                Vector2 Down = Up + new Vector2(-15f / tex.Width, 15f / tex.Height);
-
+                Vector2 DownLeft = Up + new Vector2((TexCoordLeft.X - TexCoordTop.X) / tex.Width, (TexCoordLeft.Y - TexCoordTop.Y) / tex.Height);
+                Vector2 DownRight = Up + new Vector2((TexCoordDown.X - TexCoordRight.X) / tex.Width, (TexCoordDown.Y - TexCoordRight.Y) / tex.Height);
+                Vector2 Down = Vector2.Lerp(DownLeft, DownRight, i / 9f);
                 if (Math.Abs(rot) > Math.PI / 2d)
                 {
                     if (player.direction * player.gravDir == 1)
