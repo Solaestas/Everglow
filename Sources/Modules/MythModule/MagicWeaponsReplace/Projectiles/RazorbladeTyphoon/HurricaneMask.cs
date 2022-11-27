@@ -1,11 +1,12 @@
 ﻿using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MEACModule;
+using Everglow.Sources.Commons.Core.VFX;
 using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.Audio;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.RazorbladeTyphoon
 {
-    public class HurricaneMask : ModProjectile
+    public class HurricaneMask : ModProjectile, IWarpProjectile
     {
         protected override bool CloneNewInstances => false;
         public override bool IsCloneable => false;
@@ -86,22 +87,32 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ra
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
             }
         }
-
-        public void DrawWarp()
+        private static void DrawTexCircle_VFXBatch(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
         {
-            float value = (float)Math.Sin(Projectile.timeLeft / 200d * Math.PI);
-            float colorV = 1.6f * (1 - value) * Projectile.ai[0];
-            float x0 = Projectile.ai[0];
+            List<Vertex2D> circle = new List<Vertex2D>();
 
-            if (value < 1)
+            for (int h = 0; h < radious / 2; h += 5)
             {
-                DrawTexCircle(value * 1100 * Projectile.ai[0], 150 * x0 * (1 - value) + 30 * Projectile.ai[0], new Color(colorV, colorV + 0.5f, 0, 0f), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("OmniElementItems/Projectiles/Wave"));
+                circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 1, 0)));
+                circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0, 0)));
             }
-            value -= 0.2f;
-            if (value is < 1 and > 0)
+            circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0.5f, 1, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(addRot), color, new Vector3(0.5f, 0, 0)));
+            if (circle.Count > 0)
             {
-                DrawTexCircle(value * 1100 * Projectile.ai[0], 150 * x0 * (1 - value) + 30 * Projectile.ai[0], new Color(colorV, colorV + 0.5f, 0, 0f), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("OmniElementItems/Projectiles/Wave"));
+                spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
             }
+        }
+        public void DrawWarp(VFXBatch spriteBatch)
+        {
+            float value = (200 - Projectile.timeLeft) / 200f;
+            float colorV = 0.9f * (1 - value);
+            if (Projectile.ai[0] >= 10)
+            {
+                colorV *= Projectile.ai[0] / 10f;
+            }
+            Texture2D t = MythContent.QuickTexture("OmniElementItems/Projectiles/Wave");
+            DrawTexCircle_VFXBatch(spriteBatch, MathF.Sqrt(value) * 1200 * Projectile.ai[0], 100, new Color(colorV, colorV, colorV, 0f), Projectile.Center - Main.screenPosition, t);
         }
     }
 }

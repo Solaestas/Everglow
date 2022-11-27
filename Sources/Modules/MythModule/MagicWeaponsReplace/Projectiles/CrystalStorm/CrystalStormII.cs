@@ -284,8 +284,6 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             Projectile.penetrate--;
 
             return false;
-        }
-
-        
+        }     
     }
 }

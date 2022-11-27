@@ -6,7 +6,7 @@ using Everglow.Sources.Commons.Core.VFX;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.MagnetSphere
 {
-    public class MagnetSphereII : ModProjectile, IWarpProjectile
+    public class MagnetSphereII : ModProjectile
     {
         public override void SetDefaults()
         {
@@ -89,52 +89,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
             return false;
         }
 
-        public void DrawWarp(VFXBatch spriteBatch)
-        {
-            
-            Color c0 = new Color(0.6f, 0.6f, 0f);
-            List<Vertex2D> bars = new List<Vertex2D>();
-            float width = 64;
-
-            int TrueL = 0;
-            for (int i = 1; i < Projectile.oldPos.Length; ++i)
-            {
-                if (Projectile.oldPos[i] == Vector2.Zero)
-                {
-                    break;
-                }
-
-                TrueL++;
-            }
-            for (int i = 1; i < Projectile.oldPos.Length; ++i)
-            {
-                if (Projectile.oldPos[i] == Vector2.Zero)
-                {
-                    break;
-                }
-
-                var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
-                normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
-                var factor = i / (float)TrueL;
-                var w = MathHelper.Lerp(1f, 0.05f, factor);
-                float x0 = factor * 1.6f - (float)(Main.timeForVisualEffects / 15d) + 10000;
-                x0 %= 1f;
-                float mul = 1f;
-                if(i < 10)
-                {
-                    mul = i / 10f;
-                }
-                bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) * mul + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 1, w)));
-                bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) * mul + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 0, w)));
-            }
-            Texture2D t = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/FogTrace");
-            Main.graphics.GraphicsDevice.Textures[0] = t;
-            if (bars.Count > 3)
-            {
-                spriteBatch.Draw(t,bars,PrimitiveType.TriangleStrip);
-            }
-        }
-
+     
 
         public override void Kill(int timeLeft)
         {

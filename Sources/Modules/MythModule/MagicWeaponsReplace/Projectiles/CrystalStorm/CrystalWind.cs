@@ -105,7 +105,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
 
         public void DrawWarp(VFXBatch spriteBatch)
         {
-            Color c0 = new Color(0.2f, 0.2f, 0f);
+            Color c0 = new Color(0.6f, 0.6f, 0f);
             List<Vertex2D> bars = new List<Vertex2D>();
             float width = 24;
 

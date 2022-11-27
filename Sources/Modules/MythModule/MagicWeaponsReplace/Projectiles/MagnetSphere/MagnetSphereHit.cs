@@ -121,7 +121,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
                 colorV *= Projectile.ai[0] / 10f;
             }
             Texture2D t = MythContent.QuickTexture("OmniElementItems/Projectiles/Wave");
-            DrawTexCircle(spriteBatch,value * 16 * Projectile.ai[0], 100, new Color(colorV, colorV * 0.2f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
+            DrawTexCircle(spriteBatch,MathF.Sqrt(value) * 8 * Projectile.ai[0], 100, new Color(colorV, colorV * 0.2f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
         }
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
