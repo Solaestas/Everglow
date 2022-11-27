@@ -14,7 +14,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             Main.tileBlockLight[Type] = false;
             Main.tileLighted[Type] = true;
             Main.tileAxe[Type] = true;
+            Main.tileNoAttach[Type] = false;
 
+            TileID.Sets.IsATreeTrunk[Type] = true;
             ModTranslation modTranslation = LocalizationLoader.GetOrCreateTranslation("Mods.Everglow.MapEntry.FluorescentTree");
             AddMapEntry(new Color(51, 26, 58), modTranslation);
             DustType = ModContent.DustType<Dusts.FluorescentTreeDust>();
@@ -68,7 +70,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             {
                 if (style != 2)
                 {
-                    Vector2 HalfSize = new Vector2(-5, 12);
+                    Vector2 HalfSize = new Vector2(-5, 24);
                     ropes[style] = ropeManager.LoadRope(new Rectangle(0, 0, 4, 2), tileCenterWS + HalfSize, () => Vector2.Zero);
                     hasRope.Add((xTS, yTS), (style, ropes[style]));
                 }
