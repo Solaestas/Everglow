@@ -86,7 +86,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.Common.Elevator
                     }
                 }
             }
-
+            //ÒªÆô¶¯ÁË
             if (PauseTime == 2)
             {
                 int Lamp = 0;
