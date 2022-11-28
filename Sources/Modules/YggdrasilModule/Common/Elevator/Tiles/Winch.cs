@@ -32,7 +32,9 @@ namespace Everglow.Sources.Modules.YggdrasilModule.Common.Elevator.Tiles
             foreach (var Dtile in TileSystem.GetTiles<YggdrasilElevator>())
             {
                 Vector2 Dc = Dtile.Center;
-                if (Math.Abs(Dc.X / 16f - i) < Dtile.size.X / 32f + 2 && Collision.CanHit(new Vector2(i, j + 2) * 16, 1, 1, Dc, 1, 1))
+                float Dy = Math.Abs(Dc.Y / 16f - j);
+                //电梯至少要在绞盘下10格。如果大于1000格且还有阻挡，那么不认为还具有所属电梯
+                if (Math.Abs(Dc.X / 16f - i) < Dtile.size.X / 32f + 2 && Dy > 10 && (Dy < 1000 || Collision.CanHit(new Vector2(i, j + 2) * 16, 1, 1, Dc, 1, 1)))
                 {
                     HasLift = true;
                 }

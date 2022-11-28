@@ -2,6 +2,7 @@ using Everglow.Sources.Modules.ZYModule.Commons.Core;
 using Everglow.Sources.Modules.ZYModule.Commons.Core.DataStructures;
 using Everglow.Sources.Modules.ZYModule.Commons.Function;
 using Everglow.Sources.Modules.ZYModule.TileModule.Tiles;
+using Everglow.Sources.Modules.ZYModule.TileModule;
 using Everglow.Sources.Commons.Function.Vertex;
 using Terraria.Audio;
 
@@ -9,20 +10,37 @@ namespace Everglow.Sources.Modules.YggdrasilModule.Common.Elevator
 {
     internal class YggdrasilElevator : DBlock
     {
-        int ContinueUp = 1;
-        int PauseTime = 0;
-        int Statcooling = 0;
-        bool LampOn = false;
+        /// <summary>
+        /// 接下来运行的方向
+        /// </summary>
+        internal int RunningDirection = 1;
+        /// <summary>
+        /// 停靠时间
+        /// </summary>
+        internal int PauseTime = 0;
+        /// <summary>
+        /// 持续加速时间
+        /// </summary>
+        internal int AccelerateTimeLeft = 0;
+        /// <summary>
+        /// 电梯上的灯有没有开
+        /// </summary>
+        internal bool LampOn = false;
+
         public override void AI()
         {
-            size = new Vector2(96, 16);
+            //碰撞体积,高度要+1要不然会被吸走，紫幽可以试着修复这个Bug（<= 16高度就会被原版的物块吸附贯穿）
+            size = new Vector2(96, 17);
 
             Vector2 TileCenter = Center / 16f;
             int TCX = (int)TileCenter.X;
             int TCY = (int)TileCenter.Y;
+            //电梯平台的半宽度
             int TCWidth = (int)(size.X / 32f);
+
             if (PauseTime > 0)
             {
+                //停机减速
                 PauseTime--;
                 velocity *= 0.9f;
                 if (velocity.Length() < 0.01f)
@@ -32,35 +50,37 @@ namespace Everglow.Sources.Modules.YggdrasilModule.Common.Elevator
             }
             else
             {
+                //开机加速
                 PauseTime = 0;
                 if (velocity.Length() < 2f)
                 {
-                    velocity.Y += 0.1f * ContinueUp;
+                    velocity.Y += 0.1f * RunningDirection;
                 }
-                Statcooling--;
+                AccelerateTimeLeft--;
             }
-            if (Statcooling > 0)
+            if (AccelerateTimeLeft > 0)
             {
-                Statcooling--;
+                AccelerateTimeLeft--;
             }
             else
             {
-                Statcooling = 0;
+                AccelerateTimeLeft = 0;
                 if (PauseTime == 0)
                 {
+                    //检测站台
                     for (int dx = 0; dx < 5; dx++)
                     {
-                        if (TCX - (TCWidth + dx) < Main.maxTilesX - 20 && TCX + (TCWidth + dx) < Main.maxTilesX - 20 && TCY + (1 - ContinueUp) * ContinueUp < Main.maxTilesY - 20 && TCY + (1 - ContinueUp) * ContinueUp > 20 && TCX + (TCWidth + dx) > 20 && TCX - (TCWidth + dx) > 20)
+                        if (TCX - (TCWidth + dx) < Main.maxTilesX - 20 && TCX + (TCWidth + dx) < Main.maxTilesX - 20 && TCY + (1 - RunningDirection) * RunningDirection < Main.maxTilesY - 20 && TCY + (1 - RunningDirection) * RunningDirection > 20 && TCX + (TCWidth + dx) > 20 && TCX - (TCWidth + dx) > 20)
                         {
-                            Tile tileleft = Main.tile[TCX - (TCWidth + dx), TCY + (1 - ContinueUp) * ContinueUp];
-                            Tile tileright = Main.tile[TCX + (TCWidth + dx), TCY + (1 - ContinueUp) * ContinueUp];
+                            Tile tileleft = Main.tile[TCX - (TCWidth + dx), TCY + (1 - RunningDirection) * RunningDirection];
+                            Tile tileright = Main.tile[TCX + (TCWidth + dx), TCY + (1 - RunningDirection) * RunningDirection];
                             if (tileleft.TileType == ModContent.TileType<Tiles.LiftLamp>() && tileleft.TileFrameY == 36)
                             {
-                                PauseTime = 300;
+                                PauseTime = 240;
                             }
                             if (tileright.TileType == ModContent.TileType<Tiles.LiftLamp>() && tileright.TileFrameY == 36)
                             {
-                                PauseTime = 300;
+                                PauseTime = 240;
                             }
                         }
                     }
@@ -75,13 +95,13 @@ namespace Everglow.Sources.Modules.YggdrasilModule.Common.Elevator
                 {
                     for (int dx = -2; dx < 3; dx++)
                     {
-                        if (TCX + dx < Main.maxTilesX - 20 && TCY + dy * ContinueUp < Main.maxTilesY - 20 && TCY + dy * ContinueUp > 20 && TCX + dx > 20)
+                        if (TCX + dx < Main.maxTilesX - 20 && TCY + dy * RunningDirection < Main.maxTilesY - 20 && TCY + dy * RunningDirection > 20 && TCX + dx > 20)
                         {
-                            Tile tile0 = Main.tile[TCX + dx, TCY + dy * ContinueUp];
+                            Tile tile0 = Main.tile[TCX + dx, TCY + dy * RunningDirection];
                             if (tile0.TileType == ModContent.TileType<Tiles.Winch>())
                             {
                                 MaxLength = dy;
-                                if (ContinueUp == -1)
+                                if (RunningDirection == -1)
                                 {
                                     MaxLength -= 12;
                                 }
@@ -90,7 +110,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.Common.Elevator
                             if (tile0.HasTile)
                             {
                                 MaxLength = dy;
-                                if (ContinueUp == -1)
+                                if (RunningDirection == -1)
                                 {
                                     MaxLength -= 12;
                                 }
@@ -109,10 +129,10 @@ namespace Everglow.Sources.Modules.YggdrasilModule.Common.Elevator
                     {
                         for (int dx = 0; dx < 5; dx++)
                         {
-                            if (TCX - (TCWidth + dx) < Main.maxTilesX - 20 && TCX + (TCWidth + dx) < Main.maxTilesX - 20 && TCY + dy * ContinueUp < Main.maxTilesY - 20 && TCY + dy * ContinueUp > 20 && TCX + (TCWidth + dx) > 20 && TCX - (TCWidth + dx) > 20)
+                            if (TCX - (TCWidth + dx) < Main.maxTilesX - 20 && TCX + (TCWidth + dx) < Main.maxTilesX - 20 && TCY + dy * RunningDirection < Main.maxTilesY - 20 && TCY + dy * RunningDirection > 20 && TCX + (TCWidth + dx) > 20 && TCX - (TCWidth + dx) > 20)
                             {
-                                Tile tileleft = Main.tile[TCX - (TCWidth + dx), TCY + dy * ContinueUp];
-                                Tile tileright = Main.tile[TCX + (TCWidth + dx), TCY + dy * ContinueUp];
+                                Tile tileleft = Main.tile[TCX - (TCWidth + dx), TCY + dy * RunningDirection];
+                                Tile tileright = Main.tile[TCX + (TCWidth + dx), TCY + dy * RunningDirection];
                                 if (tileleft.TileType == ModContent.TileType<Tiles.LiftLamp>() && tileleft.TileFrameY == 36)
                                 {
                                     Lamp++;
@@ -128,18 +148,19 @@ namespace Everglow.Sources.Modules.YggdrasilModule.Common.Elevator
                 }
                 else
                 {
-                    PauseTime = 300;
+                    PauseTime = 240;
                 }
                 if (Lamp == 0)
                 {
-                    ContinueUp *= -1;
+                    RunningDirection *= -1;
                 }
-                Statcooling = 60;
+                AccelerateTimeLeft = 60;
             }
         }
         public override Color MapColor => new Color(122, 91, 79);
         public override void Draw()
         {
+            //绘制区完全不用管
             if (position.X / 16f < Main.maxTilesX - 28 && position.Y / 16f < Main.maxTilesY - 28 && position.X / 16f > 28 && position.Y / 16f > 28)
             {
                 Color drawc = Lighting.GetColor((int)(Center.X / 16f), (int)(Center.Y / 16f) - 3);
