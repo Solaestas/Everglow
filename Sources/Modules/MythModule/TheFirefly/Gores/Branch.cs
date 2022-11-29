@@ -8,6 +8,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Gores
         {
             base.OnSpawn(gore, source);
         }
+
         public override Color? GetAlpha(Gore gore, Color lightColor)
         {
             return base.GetAlpha(gore, lightColor);

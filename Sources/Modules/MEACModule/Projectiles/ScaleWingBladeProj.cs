@@ -2,11 +2,13 @@
 using Everglow.Sources.Modules.MythModule;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Everglow.Sources.Modules.MythModule.TheFirefly;
 
 namespace Everglow.Sources.Modules.MEACModule.Projectiles
 {
     public class ScaleWingBladeProj : MeleeProj
     {
+        FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
         public override void SetDef()
         {
             maxAttackType = 2;
@@ -24,7 +26,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         }
         public override float TrailAlpha(float factor)
         {
-            return base.TrailAlpha(factor) * 1.35f;
+            return base.TrailAlpha(factor)*1.15f;
         }
         public override BlendState TrailBlendState()
         {
@@ -38,6 +40,15 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         {
             ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
 
+            bool hasMothEye = false;
+            foreach (var item in Player.armor)
+            {
+                if (item.type == ModContent.ItemType<MythModule.TheFirefly.Items.Accessories.MothEye>())
+                {
+                    hasMothEye = true;
+                }
+            }
+
             if (attackType == 100)
             {
                 damage *= 3;
@@ -48,6 +59,12 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                     for (int i = 0; i < counts; i++)
                     {
                         Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center, Main.rand.NextVector2Unit() * Main.rand.Next(6, 13), ModContent.ProjectileType<ButterflyDreamFriendly>(), damage / 4, 0, Main.myPlayer, target.whoAmI);
+                        if (hasMothEye == true && fireflyBiome.IsBiomeActive(Main.LocalPlayer))
+                        {
+                            Projectile proj2 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center, Main.rand.NextVector2Unit() * Main.rand.Next(6, 13), ModContent.ProjectileType<ButterflyDreamFriendly>(), damage / 4, 0, Main.myPlayer, target.whoAmI);
+                            proj2.netUpdate2 = true;
+                            proj2.CritChance = Projectile.CritChance;
+                        }
                         proj.netUpdate2 = true;
                         proj.CritChance = Projectile.CritChance;
                     }
@@ -62,6 +79,12 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                     for (int i = 0; i < counts; i++)
                     {
                         Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center, Main.rand.NextVector2Unit() * Main.rand.Next(6, 13), ModContent.ProjectileType<ButterflyDreamFriendly>(), damage / 4, 0, Main.myPlayer, target.whoAmI);
+                        if (hasMothEye == true && fireflyBiome.IsBiomeActive(Main.LocalPlayer))
+                        {
+                            Projectile proj2 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center, Main.rand.NextVector2Unit() * Main.rand.Next(6, 13), ModContent.ProjectileType<ButterflyDreamFriendly>(), damage / 4, 0, Main.myPlayer, target.whoAmI);
+                            proj2.netUpdate2 = true;
+                            proj2.CritChance = Projectile.CritChance;
+                        }
                         proj.netUpdate2 = true;
                         proj.CritChance = Projectile.CritChance;
 
@@ -70,6 +93,19 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                 Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 50, 50)).RotatedByRandom(6.283);
             }
         }
+        public override void End()
+        {
+            Player player = Main.player[Projectile.owner];
+            TestPlayerDrawer Tplayer = player.GetModPlayer<TestPlayerDrawer>();
+            player.legFrame = new Rectangle(0, 0, player.legFrame.Width, player.legFrame.Height);
+            player.fullRotation = 0;
+            player.legRotation = 0;
+            Tplayer.HeadRotation = 0;
+            Tplayer.HideLeg = false;
+            player.legPosition = Vector2.Zero;
+            Projectile.Kill();
+            player.GetModPlayer<MEACPlayer>().isUsingMeleeProj = false;
+        }
         public override void Attack()
         {
             Player player = Main.player[Projectile.owner];
@@ -77,6 +113,15 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             Tplayer.HideLeg = true;
             useTrail = true;
             float timeMul = 1f - GetMeleeSpeed(player) / 100f;
+
+            bool hasMothEye = false;
+            foreach (var item in Player.armor)
+            {
+                if (item.type == ModContent.ItemType<MythModule.TheFirefly.Items.Accessories.MothEye>())
+                {
+                    hasMothEye = true;
+                }
+            }
 
             Vector2 vToMouse = Main.MouseWorld - player.Top;
             float AddHeadRotation = (float)Math.Atan2(vToMouse.Y, vToMouse.X) + (1 - player.direction) * 1.57f;
@@ -250,6 +295,12 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                             {
                                 Vector2 vel = new Vector2(Projectile.spriteDirection * 10, 0);
                                 Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + vel, vel + Main.rand.NextVector2Unit() * 5, ModContent.ProjectileType<ButterflyDreamFriendly>(), Projectile.damage / 2, 0, Main.myPlayer, target.whoAmI);
+                                if (hasMothEye == true && fireflyBiome.IsBiomeActive(Main.LocalPlayer))
+                                {
+                                    Projectile proj2 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + vel, vel + Main.rand.NextVector2Unit() * 5, ModContent.ProjectileType<ButterflyDreamFriendly>(), Projectile.damage / 2, 0, Main.myPlayer, target.whoAmI);
+                                    proj2.netUpdate2 = true;
+                                    proj2.CritChance = Projectile.CritChance;
+                                }
                                 proj.netUpdate2 = true;
                                 proj.CritChance = Projectile.CritChance;
                             }

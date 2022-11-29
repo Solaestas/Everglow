@@ -1,12 +1,5 @@
-﻿using Everglow.Sources.Commons.Core.ModuleSystem;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds;
+﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds;
 using ReLogic.Content;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.GameContent;
 using Terraria.GameContent.Shaders;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
@@ -28,6 +21,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
             m_waterDustRenderer.PresentDusts();
         }
     }
+
     internal class WaterDustRenderer
     {
         private RenderTarget2D[] m_dustTargetSwap = null;
@@ -98,7 +92,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
             var graphicsDevice = Main.graphics.GraphicsDevice;
             var spriteBatch = Main.spriteBatch;
 
-
             var motionVector = m_lastDrawPosition - Main.screenPosition;
 
             if (!Main.gamePaused)
@@ -106,6 +99,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
                 var waterShader = (WaterShaderData)Terraria.Graphics.Effects.Filters.Scene["WaterDistortion"].GetShader();
                 var disortionTarget = (RenderTarget2D)typeof(WaterShaderData).GetField("_distortionTarget", BindingFlags.NonPublic | BindingFlags.Instance)
                     .GetValue(waterShader);
+                if(disortionTarget == null)
+                {
+                    return;
+                }
                 var lastDistortionDrawOffset = (Vector2)typeof(WaterShaderData).GetField("_lastDistortionDrawOffset", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(waterShader);
                 Vector2 value = new Vector2(Main.screenWidth, Main.screenHeight) * 0.5f * (Vector2.One - Vector2.One / Main.GameViewMatrix.Zoom);
                 Vector2 value2 = (Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange, Main.offScreenRange)) - Main.screenPosition - value;
