@@ -71,25 +71,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
             }
             Projectile.velocity *= 0;
         }
-        private static void DrawTexCircle_VFXBatch(VFXBatch spriteBatch,float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
-        {
-            List<Vertex2D> circle = new List<Vertex2D>();
-            
-            for (int h = 0; h < radious / 2; h+=5)
-            {
-                circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 1, 0)));
-                circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0, 0)));
-            }
-            circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0.5f, 1, 0)));
-            circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(addRot), color, new Vector3(0.5f, 0, 0)));
-            if (circle.Count > 0)
-            {
-               // Main.NewText(radious);
-                //Main.graphics.GraphicsDevice.Textures[0] = tex;
-                //Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
-                spriteBatch.Draw(tex,circle,PrimitiveType.TriangleStrip);
-            }
-        }
+     
         public override void PostDraw(Color lightColor)
         {
             Texture2D Shadow = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/CursedHitLight");
@@ -165,7 +147,22 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
             }
         }
+        private static void DrawTexCircle_VFXBatch(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
+        {
+            List<Vertex2D> circle = new List<Vertex2D>();
 
+            for (int h = 0; h < radious / 2; h += 5)
+            {
+                circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 1, 0)));
+                circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0, 0)));
+            }
+            circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0.5f, 1, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(addRot), color, new Vector3(0.5f, 0, 0)));
+            if (circle.Count > 2)
+            {
+                spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
+            }
+        }
         public void DrawWarp(VFXBatch spriteBatch)
         {
             float value = (200 - Projectile.timeLeft) / (200f);

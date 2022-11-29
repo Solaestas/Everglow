@@ -61,7 +61,10 @@ public class VFXBatch : IDisposable
 
             public void DrawPrimitive()
             {
-                Debug.Assert(VertexPosition != 0 && indexPosition != 0);
+                if((VertexPosition == 0 || indexPosition == 0))
+                {
+                    return;
+                }
                 vertexBuffer.SetData(vertices, 0, vertexPosition, SetDataOptions.None);
                 graphicsDevice.SetVertexBuffer(vertexBuffer);
                 indexBuffer.SetData(indices, 0, indexPosition, SetDataOptions.None);
@@ -179,7 +182,7 @@ public class VFXBatch : IDisposable
     }
 
     //numbers Copy from SpriteBatch
-    private const int MAX_VERTICES = 8192;
+    private const int MAX_VERTICES = 1048576;
 
     //如果所有网格都是Strip形式
     private const int MAX_INDICES = MAX_VERTICES * 3;
