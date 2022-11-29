@@ -23,12 +23,38 @@ namespace Everglow.Sources.Modules.YggdrasilModule.Common.Elevator
         /// </summary>
         internal int AccelerateTimeLeft = 0;
         /// <summary>
+        /// 因故障卡顿的滞留时间
+        /// </summary>
+        internal int DetentionTime = 0;
+        /// <summary>
+        /// 起始Y坐标
+        /// </summary>
+        internal float StartCoordY = 0;
+        /// <summary>
         /// 电梯上的灯有没有开
         /// </summary>
         internal bool LampOn = false;
+        /// <summary>
+        /// 初始化的检验
+        /// </summary>
+        internal bool CheckDefault = false;
+
+        public override void OnCollision(AABB aabb, Direction dir)
+        {
+            //此区域仅用作测试
+            //Main.NewText(StartCoordY);
+            //Main.NewText(DetentionTime, Color.Red);
+            //Main.NewText(AccelerateTimeLeft, Color.Green);
+            //Main.NewText(PauseTime, Color.Blue);
+        }
 
         public override void AI()
         {
+            if(!CheckDefault)
+            {
+                StartCoordY = position.Y;
+                CheckDefault = true;
+            }
             //碰撞体积,高度要+1要不然会被吸走，紫幽可以试着修复这个Bug（<= 16高度就会被原版的物块吸附贯穿）
             size = new Vector2(96, 17);
 
@@ -61,13 +87,14 @@ namespace Everglow.Sources.Modules.YggdrasilModule.Common.Elevator
             if (AccelerateTimeLeft > 0)
             {
                 AccelerateTimeLeft--;
+                PauseTime = 0;
             }
             else
             {
                 AccelerateTimeLeft = 0;
                 if (PauseTime == 0)
                 {
-                    //检测站台
+                    //检测站台,到了就停
                     for (int dx = 0; dx < 5; dx++)
                     {
                         if (TCX - (TCWidth + dx) < Main.maxTilesX - 20 && TCX + (TCWidth + dx) < Main.maxTilesX - 20 && TCY + (1 - RunningDirection) * RunningDirection < Main.maxTilesY - 20 && TCY + (1 - RunningDirection) * RunningDirection > 20 && TCX + (TCWidth + dx) > 20 && TCX - (TCWidth + dx) > 20)
@@ -89,73 +116,102 @@ namespace Everglow.Sources.Modules.YggdrasilModule.Common.Elevator
             //要启动了
             if (PauseTime == 2)
             {
-                int Lamp = 0;
-                int MaxLength = 1000;
-                for (int dy = 3; dy < 1000; dy++)
+                CheckRunningDirection();
+            }
+            //停机时间检测
+            if(Math.Abs(velocity.Y) <= 0.2f)
+            {
+                DetentionTime++;
+                //停机太久,判定为卡死，重启
+                if (DetentionTime > 300)
                 {
-                    for (int dx = -2; dx < 3; dx++)
+                    PauseTime = 10;
+                    DetentionTime = 0;
+                }
+            }
+            else
+            {
+                DetentionTime = 0;
+            }
+            //位置太高需要重启
+            if (position.Y < StartCoordY - 1)
+            {
+                if(PauseTime == 0 && AccelerateTimeLeft == 0)
+                {
+                    PauseTime =300;
+                }
+            }
+        }
+        private void CheckRunningDirection()
+        {
+            Vector2 TileCenter = Center / 16f;
+            int TCX = (int)TileCenter.X;
+            int TCY = (int)TileCenter.Y;
+            //电梯平台的半宽度
+            int TCWidth = (int)(size.X / 32f);
+            int Lamp = 0;
+            int distanceToWinch = 1000;
+            //向上1000格检索绞盘
+            for (int dy = 0; dy < 1000; dy++)
+            {
+                if (TCX  < Main.maxTilesX - 20 && TCY + dy * RunningDirection < Main.maxTilesY - 20 && TCY + dy * RunningDirection > 20 && TCX  > 20)
+                {
+                    Tile tile0 = Main.tile[TCX , TCY + dy * RunningDirection];
+                    if (tile0.TileType == ModContent.TileType<Tiles.Winch>())
                     {
-                        if (TCX + dx < Main.maxTilesX - 20 && TCY + dy * RunningDirection < Main.maxTilesY - 20 && TCY + dy * RunningDirection > 20 && TCX + dx > 20)
+                        distanceToWinch = dy;
+                        if (RunningDirection == -1)
                         {
-                            Tile tile0 = Main.tile[TCX + dx, TCY + dy * RunningDirection];
-                            if (tile0.TileType == ModContent.TileType<Tiles.Winch>())
-                            {
-                                MaxLength = dy;
-                                if (RunningDirection == -1)
-                                {
-                                    MaxLength -= 12;
-                                }
-                                break;
-                            }
-                            if (tile0.HasTile)
-                            {
-                                MaxLength = dy;
-                                if (RunningDirection == -1)
-                                {
-                                    MaxLength -= 12;
-                                }
-                                break;
-                            }
+                            distanceToWinch -= 12;
                         }
+                        break;
                     }
-                    if (MaxLength != 1000)
+                    if (tile0.HasTile)
                     {
+                        distanceToWinch = dy;
+                        if (RunningDirection == -1)
+                        {
+                            distanceToWinch -= 12;
+                        }
                         break;
                     }
                 }
-                if (MaxLength > 3)
+                if (distanceToWinch != 1000)
                 {
-                    for (int dy = 3; dy < MaxLength; dy++)
+                    break;
+                }
+            }
+            if (distanceToWinch > 3)
+            {
+                for (int dy = 0; dy < distanceToWinch; dy++)
+                {
+                    for (int dx = 0; dx < 5; dx++)
                     {
-                        for (int dx = 0; dx < 5; dx++)
+                        if (TCX - (TCWidth + dx) < Main.maxTilesX - 20 && TCX + (TCWidth + dx) < Main.maxTilesX - 20 && TCY + dy * RunningDirection < Main.maxTilesY - 20 && TCY + dy * RunningDirection > 20 && TCX + (TCWidth + dx) > 20 && TCX - (TCWidth + dx) > 20)
                         {
-                            if (TCX - (TCWidth + dx) < Main.maxTilesX - 20 && TCX + (TCWidth + dx) < Main.maxTilesX - 20 && TCY + dy * RunningDirection < Main.maxTilesY - 20 && TCY + dy * RunningDirection > 20 && TCX + (TCWidth + dx) > 20 && TCX - (TCWidth + dx) > 20)
+                            Tile tileleft = Main.tile[TCX - (TCWidth + dx), TCY + dy * RunningDirection];
+                            Tile tileright = Main.tile[TCX + (TCWidth + dx), TCY + dy * RunningDirection];
+                            if (tileleft.TileType == ModContent.TileType<Tiles.LiftLamp>() && tileleft.TileFrameY == 36)
                             {
-                                Tile tileleft = Main.tile[TCX - (TCWidth + dx), TCY + dy * RunningDirection];
-                                Tile tileright = Main.tile[TCX + (TCWidth + dx), TCY + dy * RunningDirection];
-                                if (tileleft.TileType == ModContent.TileType<Tiles.LiftLamp>() && tileleft.TileFrameY == 36)
-                                {
-                                    Lamp++;
-
-                                }
-                                if (tileright.TileType == ModContent.TileType<Tiles.LiftLamp>() && tileright.TileFrameY == 36)
-                                {
-                                    Lamp++;
-                                }
+                                Lamp++;
+                            }
+                            if (tileright.TileType == ModContent.TileType<Tiles.LiftLamp>() && tileright.TileFrameY == 36)
+                            {
+                                Lamp++;
                             }
                         }
                     }
                 }
-                else
-                {
-                    PauseTime = 240;
-                }
-                if (Lamp == 0)
-                {
-                    RunningDirection *= -1;
-                }
-                AccelerateTimeLeft = 60;
             }
+            else
+            {
+                PauseTime = 240;
+            }
+            if (Lamp == 0)
+            {
+                RunningDirection *= -1;
+            }
+            AccelerateTimeLeft = 60;
         }
         public override Color MapColor => new Color(122, 91, 79);
         public override void Draw()

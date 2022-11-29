@@ -25,25 +25,58 @@ namespace Everglow.Sources.Modules.YggdrasilModule.Common.Elevator.Tiles
         {
             return false;
         }
-
+        public override void PlaceInWorld(int i, int j, Item item)
+        {
+            Tile thisTile = Main.tile[i, j];
+            thisTile.TileFrameX = 0;
+        }
         public override void NearbyEffects(int i, int j, bool closer)
         {
-            bool HasLift = false;
-            foreach (var Dtile in TileSystem.GetTiles<YggdrasilElevator>())
+            Tile thisTile = Main.tile[i, j];
+            //只有帧位于18的整数倍时才会
+            if(thisTile.TileFrameX % 18 == 0)
             {
-                Vector2 Dc = Dtile.Center;
-                float Dy = Math.Abs(Dc.Y / 16f - j);
-                //电梯至少要在绞盘下10格。如果大于1000格且还有阻挡，那么不认为还具有所属电梯
-                if (Math.Abs(Dc.X / 16f - i) < Dtile.size.X / 32f + 2 && Dy > 10 && (Dy < 1000 || Collision.CanHit(new Vector2(i, j + 2) * 16, 1, 1, Dc, 1, 1)))
+                bool HasLift = false;
+                for(int x = -2;x < 4;x++)
                 {
-                    HasLift = true;
+                    for (int y = 1; y < 16; y++)
+                    {
+                        if(Main.tile[i + x, j + y].HasTile)
+                        {
+                            return;
+                        }
+                    }
+                }
+                foreach (var Dtile in TileSystem.GetTiles<YggdrasilElevator>())
+                {
+                    Vector2 Dc = Dtile.Center;
+                    float Dy = Math.Abs(Dc.Y / 16f - j);
+                    //电梯至少要在绞盘下10格
+                    if (Dc.X / 16f - i == 0 && Dy > 10)
+                    {
+                        HasLift = true;
+                        //确保这个电梯的所有绞盘是自己,如果不是就手动生成电梯
+                        for (int y = 0; y < Dc.Y / 16f - 20; y++)
+                        {
+                            int CoordY = (int)(Dc.Y / 16f) - y;
+                            Tile tile = Main.tile[i, CoordY];
+                            if (CoordY < j + 5)
+                            {
+                                break;
+                            }
+                            if (tile.TileType == Type)
+                            {
+                                HasLift = false;
+                            }
+                        }
+                    }
+                }
+                if (!HasLift)
+                {
+                    TileSystem.AddTile(new YggdrasilElevator() { Position = new Vector2(i, j + 15) * 16 - new Vector2(48, 8) });
+                    thisTile.TileFrameX = 1;
                 }
             }
-            if (!HasLift)
-            {
-                TileSystem.AddTile(new YggdrasilElevator() { Position = new Vector2(i, j + 15) * 16 - new Vector2(48, 8) });
-            }
-            base.NearbyEffects(i, j, closer);
         }
 
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
