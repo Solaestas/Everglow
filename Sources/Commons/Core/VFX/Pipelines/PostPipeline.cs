@@ -13,12 +13,16 @@ internal abstract class PostPipeline : IPipeline
 
     public void Render(IEnumerable<IVisual> visuals)
     {
-        Debug.Assert(visuals.Count() == 1);
-        var rt2D = visuals.Single() as VFXManager.Rt2DVisual;
-        Debug.Assert(rt2D != null);
-        Render(rt2D.locker.Resource);
-        rt2D.Active = false;
-        rt2D.locker.Release();
+        if (visuals.FirstOrDefault() is VFXManager.Rt2DVisual rt2D)
+        {
+            Render(rt2D.locker.Resource);
+            rt2D.Active = false;
+            rt2D.locker.Release();
+        }
+        else
+        {
+            Render((RenderTarget2D)null);
+        }
     }
 
     public abstract void Render(RenderTarget2D rt2D);

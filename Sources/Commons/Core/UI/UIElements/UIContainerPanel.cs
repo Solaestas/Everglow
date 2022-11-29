@@ -48,32 +48,35 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
         }
         public void SetVerticalScrollbar(VerticalScrollbar scrollbar) => _verticalScrollbar = scrollbar;
         public void SetHorizontalScrollbar(HorizontalScrollbar scrollbar) => _horizontalScrollbar = scrollbar;
+        public void SetVerticalWhell(float whell)
+        {
+            if (_verticalScrollbar != null)
+                _verticalScrollbar.WheelValue = whell;
+        }
+        public void SetHorizontalWhell(float whell)
+        {
+            if (_horizontalScrollbar != null)
+                _horizontalScrollbar.WheelValue = whell;
+        }
         public override void OnInitialization()
         {
             base.OnInitialization();
             _innerPanel = new InnerPanel();
             Register(_innerPanel);
         }
+        public int GetElementsCount() => _innerPanel.ChildrenElements.Count;
         public override void Update(GameTime gt)
         {
             base.Update(gt);
             if (_verticalScrollbar != null && verticalWhellValue != _verticalScrollbar.WheelValue)
             {
                 verticalWhellValue = _verticalScrollbar.WheelValue;
-                float maxY = innerPanelMaxLocation.Y - _innerPanel.Info.TotalSize.Y;
-                if (maxY < innerPanelMinLocation.Y)
-                    maxY = innerPanelMinLocation.Y;
-                _innerPanel.Info.Top.Pixel = -MathHelper.Lerp(innerPanelMinLocation.Y, maxY, verticalWhellValue);
                 Calculation();
             }
 
             if (_horizontalScrollbar != null && horizontalWhellValue != _horizontalScrollbar.WheelValue)
             {
                 horizontalWhellValue = _horizontalScrollbar.WheelValue;
-                float maxX = innerPanelMaxLocation.X - _innerPanel.Info.TotalSize.X;
-                if (maxX < innerPanelMinLocation.X)
-                    maxX = innerPanelMinLocation.X;
-                _innerPanel.Info.Left.Pixel = -MathHelper.Lerp(innerPanelMinLocation.X, maxX, horizontalWhellValue);
                 Calculation();
             }
         }
@@ -84,7 +87,20 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
                 Calculation();
             return flag;
         }
-        public bool RemoveElement(BaseElement element) 
+        public void AddElements(List<BaseElement> elements)
+        {
+            foreach (var element in elements)
+            {
+                if (element == null || ChildrenElements.Contains(element) || element.ParentElement != null)
+                    continue;
+                element.SetParentElement(_innerPanel);
+                if (!element.Info.InitDone)
+                    element.OnInitialization();
+                _innerPanel.ChildrenElements.Add(element);
+            }
+            Calculation();
+        }
+        public bool RemoveElement(BaseElement element)
         {
             bool flag = _innerPanel.Remove(element);
             if (flag)
@@ -93,7 +109,8 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
         }
         public void ClearAllElements()
         {
-            foreach (var child in _innerPanel.ChildrenElements)
+            var list = new List<BaseElement>(_innerPanel.ChildrenElements);
+            foreach (var child in list)
                 _innerPanel.Remove(child);
             Calculation();
         }
@@ -102,7 +119,7 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
             innerPanelMinLocation = Vector2.Zero;
             innerPanelMaxLocation = Vector2.Zero;
             Vector2 v = Vector2.Zero;
-            _innerPanel.ForEach(element =>
+            foreach (var element in _innerPanel.ChildrenElements)
             {
                 v.X = element.Info.TotalLocation.X - _innerPanel.Info.Location.X;
                 v.Y = element.Info.TotalLocation.Y - _innerPanel.Info.Location.Y;
@@ -118,13 +135,27 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
                     innerPanelMaxLocation.X = v.X;
                 if (innerPanelMaxLocation.Y < v.Y)
                     innerPanelMaxLocation.Y = v.Y;
-            });
+            }
         }
         public override void Calculation()
         {
             base.Calculation();
             CalculationInnerPanelSize();
+
+            float maxY = innerPanelMaxLocation.Y - _innerPanel.Info.TotalSize.Y;
+            if (maxY < innerPanelMinLocation.Y)
+                maxY = innerPanelMinLocation.Y;
+            _innerPanel.Info.Top.Pixel = -MathHelper.Lerp(innerPanelMinLocation.Y, maxY, verticalWhellValue);
+
+            float maxX = innerPanelMaxLocation.X - _innerPanel.Info.TotalSize.X;
+            if (maxX < innerPanelMinLocation.X)
+                maxX = innerPanelMinLocation.X;
+            _innerPanel.Info.Left.Pixel = -MathHelper.Lerp(innerPanelMinLocation.X, maxX, horizontalWhellValue);
+
             _innerPanel.Calculation();
+
+            if (_verticalScrollbar != null)
+                _verticalScrollbar.WhellValueMult = MathHelper.Max(0f, _innerPanel.Info.TotalSize.Y / (innerPanelMaxLocation.Y - innerPanelMinLocation.Y) * 5f);
         }
     }
 }

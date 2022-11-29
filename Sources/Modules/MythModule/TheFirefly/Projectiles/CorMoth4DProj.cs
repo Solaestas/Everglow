@@ -1,15 +1,18 @@
 using Terraria.Localization;
+
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
     public class CorMoth4DProj : ModProjectile
     {
         public override string Texture => "Everglow/Sources/Modules/MythModule/TheFirefly/Projectiles/ButterflyDream";
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Dream Butterfly");
             DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "蓝蝶幻梦");
             Main.projFrames[Projectile.type] = 4;
         }
+
         public override void SetDefaults()
         {
             Projectile.width = 10;
@@ -29,6 +32,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         public Vector4 targetPos;
         private Vector4 v4Position;
         private int maxTimeleft;
+
         public override void SendExtraAI(BinaryWriter writer)
         {
             writer.Write(targetPos.X);
@@ -36,6 +40,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             writer.Write(targetPos.Z);
             writer.Write(targetPos.W);
         }
+
         public override void ReceiveExtraAI(BinaryReader reader)
         {
             targetPos.X = reader.ReadSingle();
@@ -43,6 +48,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             targetPos.Z = reader.ReadSingle();
             targetPos.W = reader.ReadSingle();
         }
+
         public override void AI()
         {
             if (Projectile.timeLeft % 3 == 0 && Main.rand.NextBool())
@@ -104,11 +110,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 Projectile.hostile = false;
             }
         }
+
         private static Vector4 VecRotByYoZ(Vector4 vec, float rot)
         {
             Vector2 v = new Vector2(vec.X, vec.W).RotatedBy(rot);
             return new Vector4(v.X, vec.Y, vec.Z, v.Y);
         }
+
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D Light = Common.MythContent.QuickTexture("TheFirefly/Projectiles/FixCoinLight3");
@@ -118,7 +126,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Vector3 v3 = Projection(v4Position * Projectile.ai[1] + new Vector4(Owner.Center, 0, 0), 1000);
             if (v3.Z < 900)
             {
-
                 Vector2 pos = Projection2(v3, Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2, out float scale, 1000);
 
                 Color c = new Color(55, 125, 255, 0);

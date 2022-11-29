@@ -1,6 +1,4 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Commons.Function.Vertex;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
@@ -10,6 +8,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         {
             Main.projFrames[Projectile.type] = 6;
         }
+
         public override void SetDefaults()
         {
             Projectile.width = 46;
@@ -24,7 +23,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Projectile.DamageType = DamageClass.Summon;
             Projectile.alpha = 255;
         }
-        float Ome = 0;
+
+        private float Ome = 0;
+
         public override void AI()
         {
             Player owner = Main.player[Projectile.owner];
@@ -70,7 +71,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             }
             Stre = Math.Clamp((100 - Projectile.timeLeft) / 10f, 0, 1f);
 
-
             if (Projectile.timeLeft % 5 == 0)
             {
                 if (Projectile.frame != 5)
@@ -102,6 +102,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Movement(foundTarget, distanceFromTarget, targetCenter, distanceToIdlePosition, vectorToIdlePosition);
             Visuals();
         }
+
         private void GeneralBehavior(Player owner, out Vector2 vectorToIdlePosition, out float distanceToIdlePosition)
         {
             Vector2 idlePosition = owner.Center;
@@ -271,11 +272,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         {
             Lighting.AddLight(Projectile.Center, new Vector3(0, 0.05f * (255 - Projectile.alpha) / 255f, 0.12f * (255 - Projectile.alpha) / 255f));
         }
+
         private int y = 0;
-        float Stre;
+        private float Stre;
+
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
         }
+
         public override void Kill(int timeLeft)
         {
             if (Projectile.alpha > 180)
@@ -293,10 +297,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 Main.dust[num90].noGravity = true;
             }
         }
+
         public override Color? GetAlpha(Color lightColor)
         {
             return new Color((255 - Projectile.alpha), (255 - Projectile.alpha), (255 - Projectile.alpha), (255 - Projectile.alpha) / 3);
         }
+
         /*private Effect ef;
          public override void PostDraw(Color lightColor)
          {

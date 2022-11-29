@@ -6,8 +6,9 @@ using Terraria.GameContent.Shaders;
 
 namespace Everglow.Sources.Modules.MEACModule.Projectiles
 {
-    public abstract class MeleeProj : ModProjectile, IWarpProjectile
+    public abstract class MeleeProj : ModProjectile, IWarpProjectile,IBloomProjectile
     {
+        
         public override void SetDefaults()
         {
             Projectile.width = 30;
@@ -38,6 +39,10 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         internal int trailLength = 40;
         internal int timer = 0;
 
+        /// <summary>
+        /// 是否采用自己的DrawWarp
+        /// </summary>
+        internal bool selfWarp = false;
         internal bool isAttacking = false;
         internal bool useTrail = true;
         /// <summary>
@@ -408,15 +413,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         public virtual float TrailAlpha(float factor)
         {
             float w;
-            if (factor > 0.5f)
-            {
-                w = MathHelper.Lerp(0.5f, 0.7f, factor);
-            }
-            else
-            {
-                w = MathHelper.Lerp(0f, 0.5f, factor * 2f);
-            }
-
+            w = MathHelper.Lerp(0f, 1, factor);
             return w;
         }
         public virtual string TrailShapeTex()
@@ -484,6 +481,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
         }
+        Vector2 r = Vector2.One;
         public void DrawWarp()
         {
             List<Vector2> SmoothTrailX = CatmullRom.SmoothPath(trailVecs.ToList());//平滑
@@ -507,8 +505,13 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             {
                 float factor = i / (length - 1f);
                 float w = 1f;
-                float d = trail[i].ToRotation() + 1.57f;
+                float d = trail[i].ToRotation()+3.14f+1.57f;
+                if(d>6.28f)
+                {
+                    d -= 6.28f;
+                }
                 float dir = d / MathHelper.TwoPi;
+                
                 bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(dir, w, 0, 1), new Vector3(factor, 1, w)));
                 bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + trail[i] * Projectile.scale * 1.1f, new Color(dir, w, 0, 1), new Vector3(factor, 0, w)));
             }
@@ -560,6 +563,10 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         public void AttSound(SoundStyle sound)
         {
             SoundEngine.PlaySound(sound, Projectile.Center);
+        }
+        public void DrawBloom()
+        {
+            DrawTrail(Color.White);
         }
     }
 }
