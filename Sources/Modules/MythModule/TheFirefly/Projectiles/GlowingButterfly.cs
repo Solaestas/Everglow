@@ -1,4 +1,5 @@
 ﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
@@ -16,7 +17,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Projectile.netImportant = true;
             Projectile.friendly = false;
             Projectile.hostile = false;
-            Projectile.penetrate = 1;
+            Projectile.penetrate = ItemUseStyleID.Swing;
             Projectile.timeLeft = 100;
             Projectile.tileCollide = false;
             Projectile.usesLocalNPCImmunity = false;
@@ -35,7 +36,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 Projectile.frame = Main.rand.Next(6);
                 Ome = Main.rand.NextFloat(-0.02f, 0.02f);
                 Projectile.scale = Main.rand.NextFloat(0.6f, 1.0f);
-                y = 1;
+                y = ItemUseStyleID.Swing;
             }
             if (Projectile.timeLeft > 50 && Projectile.alpha >= 8)
             {
@@ -288,11 +289,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             }
             for (int i = 0; i < 18; i++)
             {
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 113, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default(Color), 0.6f * Stre);
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Clentaminator_Blue, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default(Color), 0.6f * Stre);
             }
             for (int i = 0; i < 6; i++)
             {
-                int num90 = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, 226, 0f, 0f, 100, Color.Blue, Main.rand.NextFloat(0.7f, 1.2f) * Stre);
+                int num90 = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, DustID.Electric, 0f, 0f, 100, Color.Blue, Main.rand.NextFloat(0.7f, 1.2f) * Stre);
                 Main.dust[num90].velocity = new Vector2(0, Main.rand.NextFloat(5f, 10f)).RotatedByRandom(6.283) * Stre;
                 Main.dust[num90].noGravity = true;
             }
