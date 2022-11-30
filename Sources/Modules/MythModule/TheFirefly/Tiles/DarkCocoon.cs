@@ -17,14 +17,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
         }
         public override void NearbyEffects(int i, int j, bool closer)
         {
-            if(Main.rand.NextBool(1000))
-            {
-                RandomUpdate(i, j);
-            }
         }
 
         public override void RandomUpdate(int i, int j)
         {
+            Main.NewText("Execute");
             if (Main.rand.NextBool(6))
             {
                 if (Main.tile[i, j].Slope == SlopeType.Solid && Main.tile[i + 1, j].Slope == SlopeType.Solid && Main.tile[i - 1, j].Slope == SlopeType.Solid && Main.tile[i + 2, j].Slope == SlopeType.Solid && Main.tile[i - 2, j].Slope == SlopeType.Solid && 
