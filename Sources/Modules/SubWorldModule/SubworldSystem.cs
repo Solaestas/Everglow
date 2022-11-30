@@ -11,88 +11,91 @@ using Terraria.Net;
 using Terraria.Social;
 using Terraria.Utilities;
 using Terraria.WorldBuilding;
+using Terraria.ID;
+using System;
+using System.Runtime.CompilerServices;
+using Terraria.ModLoader.IO;
+using Terraria.Graphics;
+using Terraria.UI;
+using Terraria.Map;
 
 namespace Everglow.Sources.Modules.SubWorldModule
 {
     internal class SubworldSystem : ModSystem
     {
-        public static void SetUp()
-        {
-            Player.Hooks.OnEnterWorld += OnEnterWorld;
-            subworlds = new();
-            while (waitregister.TryDequeue(out var world))
-            {
-                subworlds.Add(world);
-            }
-            playerLocations = new();
-        }
-        public override void Unload()
-        {
-            Player.Hooks.OnEnterWorld -= OnEnterWorld;
-        }
+        internal static Dictionary<RemoteAddress, int> playerLocations = new();
+        internal static Dictionary<string, Subworld> subworlds = new();
+        internal static Subworld current;
+        internal static Subworld cache;
+        internal static WorldFileData root;
+        public static IReadOnlyDictionary<RemoteAddress, int> PlayerLocations => playerLocations;
         public static Subworld Current => current;
-        public static bool IsActive(string id)
+        public static string CurrentPath
         {
-            return (current?.FullName) == id;
-        }
-        public static bool IsActive<T>() where T : Subworld
-        {
-            return (current?.GetType()) == typeof(T);
-        }
-        public static bool AnyActive(Mod mod)
-        {
-            return (current?.Mod) == mod;
-        }
-        public static bool AnyActive() => current is not null;
-        public static bool AnyActive<T>() where T : Mod
-        {
-            return (current?.Mod) == ModContent.GetInstance<T>();
-        }
-        public static string CurrentPath => Path.Combine(Main.WorldPath, "Subworlds", Path.GetFileNameWithoutExtension(main.Path), current.Mod.Name + "_" + current.Name + ".wld");
-        private static void BeginEntering(int index)
-        {
-            if (Main.netMode == NetmodeID.SinglePlayer)
+            get
             {
-                if (current is null)
+                return current.HowSaveWorld switch
                 {
-                    main = Main.ActiveWorldFileData;
-                }
-                current = subworlds[index];
-                Task.Factory.StartNew(new Action(ExitWorldCallBack));
-            }
-            else
-            {
-                if (Main.netMode == NetmodeID.MultiplayerClient)
-                {
-                    new SubworldPacket()
-                        .Write(0)
-                        .Write((ushort)index)
-                        .Send();
-                    //ModPacket packet = Everglow.Instance.GetPacket(256);
-                    //packet.Write(0);
-                    //packet.Write((ushort)index);
-                    //packet.Send(-1, -1);
-                }
+                    Subworld.SaveSetting.PerPlayer
+                        => Path.Combine(Main.PlayerPath,
+                            nameof(Subworld),
+                            Path.GetFileNameWithoutExtension(Main.ActivePlayerFileData.Path),
+                            current.FullName + ".wld"),
+                    Subworld.SaveSetting.PerWorld
+                        => Path.Combine(Main.WorldPath,
+                            nameof(Subworld),
+                            Path.GetFileNameWithoutExtension(root.Path),
+                            current.FullName + ".wld"),
+                    Subworld.SaveSetting.Public
+                        => Path.Combine(Main.SavePath,
+                            nameof(Subworld),
+                            current.FullName + ".wld"),
+                    _ => throw new InvalidOperationException("You're not supposed to run it here.")
+                };
             }
         }
-        public static bool Enter(string id)
+        internal static void Register(Subworld subworld)
+        {
+            ModTypeLookup<Subworld>.Register(subworld);
+            subworlds[subworld.FullName] = subworld;
+            subworld.SetupContent();
+        }
+        public override void OnModLoad()
+        {
+            current = cache = null;
+            root = null;
+            Player.Hooks.OnEnterWorld += Hooks_OnEnterWorld;
+        }
+        public override void OnModUnload()
+        {
+            playerLocations.Clear();
+            subworlds.Clear();
+            current = cache = null;
+            root = null;
+        }
+        private void Hooks_OnEnterWorld(Player player)
+        {
+            if (Main.netMode != NetmodeID.Server)
+            {
+                cache?.OnUnload();
+                current?.OnLoad();
+            }
+            cache = current;
+        }
+        public static bool IsActive<T>() where T : Subworld => ModContent.GetInstance<T>() == current;
+        static void Enter(Subworld target)
         {
             if (Main.netMode != NetmodeID.SinglePlayer)
             {
                 return false;
             }
-            if (current == cache)
+            if (!subworlds.ContainsKey(target.FullName))
             {
-                for (int i = 0; i < subworlds.Count; i++)
-                {
-                    if (subworlds[i].FullName == id)
-                    {
-                        BeginEntering(i);
-                        return true;
-                    }
-                }
+                Everglow.Instance.Logger.Error("The historical record is wrong.");
+                ExitAll();
+                return;
             }
-            return false;
+            BeginEntering(target);
         }
         public static bool Enter<T>() where T : Subworld
         {
@@ -100,327 +103,163 @@ namespace Everglow.Sources.Modules.SubWorldModule
             {
                 return false;
             }
-            if (current == cache)
+            if (subworlds.TryGetValue(ModContent.GetInstance<T>().FullName, out Subworld target))
             {
-                for (int i = 0; i < subworlds.Count; i++)
-                {
-                    if (subworlds[i].GetType() == typeof(T))
-                    {
-                        BeginEntering(i);
-                        return true;
-                    }
-                }
+                BeginEntering(target);
+                return true;
             }
             return false;
         }
-        public static void Exit()
+        public static void Exit() => ExitNow();
+        internal static void ExitAll()
         {
-            if (current is not null && current == cache)
+            if (current != null && current == cache)
             {
                 if (Main.netMode == NetmodeID.SinglePlayer)
                 {
                     current = null;
-                    Task.Factory.StartNew(new Action(ExitWorldCallBack));
+                    Task.Factory.StartNew(ExitWorldCallBack);
                 }
-                else
+                else if (Main.netMode == NetmodeID.MultiplayerClient)
                 {
-                    if (Main.netMode == NetmodeID.MultiplayerClient)
+                    //TODO:联机
+                    //ModPacket packet = ModContent.GetInstance<SubworldLibrary>().GetPacket();
+                    //packet.Write((byte)1);
+                    //packet.Send();
+                }
+            }
+        }
+        internal static void ExitNow()
+        {
+            if (current != null && current == cache)
+            {
+                if (Main.netMode == NetmodeID.SinglePlayer)
+                {
+                    current = null;
+                    Task.Factory.StartNew(ExitWorldCallBack);
+                }
+                else if (Main.netMode == NetmodeID.MultiplayerClient)
+                {
+                    //TODO:联机
+                    //ModPacket packet = ModContent.GetInstance<SubworldLibrary>().GetPacket();
+                    //packet.Write((byte)1);
+                    //packet.Send();
+                }
+            }
+        }
+        internal static bool LoadIntoSubworlds()
+        {
+            if (Program.LaunchParameters.TryGetValue("-subworld", out string fullname))
+            {
+                if (subworlds.TryGetValue(fullname, out Subworld target))
+                {
+                    Main.myPlayer = 255;
+                    root = Main.ActiveWorldFileData;
+                    current = target;
+                    LoadWorld();
+                    Console.Title = Main.worldName;
+
+                    for (int j = 0; j < Netplay.Clients.Length; j++)
                     {
-                        new SubworldPacket()
-                            .Write(1)
-                            .Send();
-                        //ModPacket packet = Everglow.Instance.GetPacket(256);
-                        //packet.Write(1);
-                        //packet.Send(-1, -1);
+                        Netplay.Clients[j].Id = j;
+                        Netplay.Clients[j].Reset();
+                        Netplay.Clients[j].ReadBuffer = null; // not used, saves 262kb
                     }
-                }
-            }
-        }
-        public static void StartSubserver(string id)
-        {
-            Process process = new();
-            string fileName = Environment.ProcessPath;
-            process.StartInfo.FileName = fileName.Remove(fileName.LastIndexOf("."));
-            process.StartInfo.Arguments = string.Concat(new string[]
-            {
-                "tModLoader.dll -server -showserverconsole -world \"",
-                Program.LaunchParameters["-world"],
-                "\" -subworld \"",
-                id,
-                "\""
-            });
-            process.StartInfo.UseShellExecute = true;
-            Task.Factory.StartNew(new Action<object>(SubserverCallBack), id);
-            process.Start();
-        }
-        internal static void GenerateSubworlds()
-        {
-            main = Main.ActiveWorldFileData;
-            bool isCloudSave = main.IsCloudSave;
-            foreach (Subworld subworld in subworlds)
-            {
-                if (subworld.ShouldSave)
-                {
-                    current = subworld;
-                    LoadSubworld(CurrentPath, isCloudSave);
-                    WorldFile.SaveWorld(isCloudSave, false);
-                    Main.ActiveWorldFileData = main;
-                }
-            }
-            current = null;
-        }
-        internal static void EraseSubworlds(int index)
-        {
-            WorldFileData worldFileData = Main.WorldList[index];
-            string path = Path.Combine(Main.WorldPath, "Subworlds", Path.GetFileNameWithoutExtension(worldFileData.Path));
-            if (FileUtilities.Exists(path, worldFileData.IsCloudSave))
-            {
-                FileUtilities.Delete(path, worldFileData.IsCloudSave, false);
-            }
-        }
-        internal static bool LoadIntoSubworld()
-        {
-            if (Program.LaunchParameters.TryGetValue("-subworld", out string b))
-            {
-                for (int i = 0; i < subworlds.Count; i++)
-                {
-                    if (subworlds[i].FullName == b)
-                    {
-                        Main.myPlayer = 255;
-                        main = Main.ActiveWorldFileData;
-                        current = subworlds[i];
-                        LoadWorld();
-                        Console.Title = Main.worldName;
-                        for (int j = 0; j < Netplay.Clients.Length; j++)
-                        {
-                            Netplay.Clients[j].Id = j;
-                            Netplay.Clients[j].Reset();
-                            Netplay.Clients[j].ReadBuffer = null;
-                        }
-                        new Thread(new ThreadStart(ServerCallBack)).Start();
-                        return true;
-                    }
+
+                    new Thread(new ThreadStart(ServerCallBack)).Start();
+
+                    return true;
                 }
                 Main.instance.Exit();
             }
             return false;
         }
-        private static void SubserverCallBack(object id)
+        static void ServerCallBack()
         {
-            using (NamedPipeServerStream namedPipeServerStream = new((string)id, PipeDirection.In, -1))
+            using NamedPipeServerStream pipe = new NamedPipeServerStream("World", PipeDirection.In, -1);
+            while (!Netplay.Disconnect)
             {
-                while (true)
+                pipe.WaitForConnection();
+
+                MessageBuffer buffer = NetMessage.buffer[pipe.ReadByte()];
+
+                pipe.Read(buffer.readBuffer, 0, 2);
+                int length = BitConverter.ToUInt16(buffer.readBuffer, 0);
+                pipe.Read(buffer.readBuffer, 2, length - 2);
+
+                if (buffer.readBuffer[2] == 1)
                 {
-                    namedPipeServerStream.WaitForConnection();
-                    int num = namedPipeServerStream.ReadByte();
-                    int num2 = namedPipeServerStream.ReadByte();
-                    int num3 = namedPipeServerStream.ReadByte();
-                    int num4 = num3 << 8 | num2;
-                    byte[] array = new byte[num4];
-                    namedPipeServerStream.Read(array, 2, num4 - 2);
-                    array[0] = (byte)num2;
-                    array[1] = (byte)num3;
-                    Netplay.Clients[num].Socket.AsyncSend(array, 0, num4, delegate (object state)
-                    {
-                    }, true);
-                    namedPipeServerStream.Disconnect();
+                    Netplay.Clients[buffer.whoAmI].Socket = new SubserverSocket(buffer.whoAmI);
+                    Netplay.Clients[buffer.whoAmI].IsActive = true;
+                    Netplay.HasClients = true;
                 }
+
+                //string str = "R" + buffer.readBuffer[2] + "(" + length + ") " + buffer.whoAmI + " ";
+                //for (int i = 0; i < length; i++)
+                //{
+                //	str += buffer.readBuffer[i] + " ";
+                //}
+                //ModContent.GetInstance<SubworldLibrary>().Logger.Info(str);
+
+                buffer.GetData(2, length - 2, out var _);
+
+                pipe.Disconnect();
             }
+
+            // no caching; world loading is very infrequent
+            typeof(ModLoader).Assembly.GetType("Terraria.ModLoader.IO.TileIO").GetMethod("PostExitWorldCleanup", BindingFlags.NonPublic | BindingFlags.Static).Invoke(null, null);
         }
-        private static void ServerCallBack()
+        static void LoadWorld()
         {
-            using (NamedPipeServerStream namedPipeServerStream = new NamedPipeServerStream("World", PipeDirection.In, -1))
-            {
-                while (!Netplay.Disconnect)
-                {
-                    namedPipeServerStream.WaitForConnection();
-                    MessageBuffer messageBuffer = NetMessage.buffer[namedPipeServerStream.ReadByte()];
-                    namedPipeServerStream.Read(messageBuffer.readBuffer, 0, 2);
-                    int num = BitConverter.ToUInt16(messageBuffer.readBuffer, 0);
-                    namedPipeServerStream.Read(messageBuffer.readBuffer, 2, num - 2);
-                    if (messageBuffer.readBuffer[2] == NetmodeID.MultiplayerClient)
-                    {
-                        Netplay.Clients[messageBuffer.whoAmI].Socket = new SubserverSocket(messageBuffer.whoAmI);
-                        Netplay.Clients[messageBuffer.whoAmI].IsActive = true;
-                        Netplay.HasClients = true;
-                    }
-                    messageBuffer.GetData(2, num - 2, out _);
-                    namedPipeServerStream.Disconnect();
-                }
-            }
-        }
-        internal static void ExitWorldCallBack()
-        {
-            if (Main.netMode != NetmodeID.Server)
-            {
-                if (Main.netMode != NetmodeID.SinglePlayer)
-                {
-                    WorldFile.CacheSaveTime();
-                }
-                Main.invasionProgress = -1;
-                Main.invasionProgressDisplayLeft = 0;
-                Main.invasionProgressAlpha = 0f;
-                Main.invasionProgressIcon = 0;
-                cache?.OnExit();
-                noReturn = false;
-                hideUnderworld = false;
-                current?.OnEnter();
-                Main.gameMenu = true;
-                SoundEngine.StopTrackedSounds();
-                CaptureInterface.ResetFocus();
-                Main.ActivePlayerFileData.StopPlayTimer();
-                Player.SavePlayer(Main.ActivePlayerFileData, false);
-                Player.ClearPlayerTempInfo();
-                Rain.ClearRain();
-            }
-            if (Main.netMode != NetmodeID.MultiplayerClient)
-            {
-                WorldFile.SaveWorld();
-            }
-            SystemLoader.OnWorldUnload();
-            typeof(ModLoader).Assembly.GetType("Terraria.ModLoader.IO.TileIO").GetMethod("ClearWorld", BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, null);
-            Main.fastForwardTime = false;
-            Main.UpdateTimeRate();
-            WorldGen.noMapUpdate = true;
-            if (cache is not null && cache.NoPlayerSaving && Main.netMode != NetmodeID.Server)
-            {
-                PlayerFileData fileData = Player.GetFileData(Main.ActivePlayerFileData.Path, Main.ActivePlayerFileData.IsCloudSave);
-                if (fileData is not null)
-                {
-                    fileData.Player.whoAmI = Main.myPlayer;
-                    fileData.SetAsActive();
-                }
-            }
-            if (Main.netMode != NetmodeID.MultiplayerClient)
-            {
-                LoadWorld();
-            }
-            else
-            {
-                NetMessage.SendData(MessageID.Hello, -1, -1, null, 0, 0f, 0f, 0f, 0, 0, 0);
-            }
-        }
-        internal static void LoadWorld()
-        {
+            bool isSubworld = current != null;
+
             WorldGen.gen = true;
             WorldGen.loadFailed = false;
             WorldGen.loadSuccess = false;
-            WorldGen.worldBackup = true;
+
             Main.rand = new UnifiedRandom((int)DateTime.Now.Ticks);
-            bool flag = current is not null;
-            bool isCloudSave = main.IsCloudSave;
-            string text = flag ? CurrentPath : main.Path;
-            if (current is null || current.ShouldSave)
-            {
-                if (FileUtilities.Exists(text, isCloudSave))
-                {
-                    var data = WorldFile.GetAllMetadata(text, isCloudSave);
-                    int fixedx = (int)(Math.Floor(data.WorldSizeX / 200f) * 200);
-                    int fixedy = (int)(Math.Floor(data.WorldSizeY / 150f) * 150);
-                    Main.maxTilesX = fixedx;
-                    Main.maxTilesY = fixedy;
-                    Main.tile = (Tilemap)TileMapConstructor.Invoke(new object[] { (ushort)(fixedx + 1), (ushort)(fixedy + 1) });
-                    Main.Map = new(Main.maxTilesX, Main.maxTilesY);
-                    Main.mapMinX = 0;
-                    Main.mapMinY = 0;
-                    Main.mapMaxX = Main.maxTilesX;
-                    Main.mapMaxY = Main.maxTilesY;
-                    Main.worldSurface = Main.maxTilesY * 0.3;
-                    Main.rockLayer = Main.maxTilesY * 0.5;
-                    WorldGen.lavaLine = (int)(Main.rockLayer + Main.maxTilesY) / 2 + Main.rand.Next(50, 80);
-                    Main.instance.mapTarget = new RenderTarget2D[(Main.maxTilesX / Main.textureMaxWidth) + 1,
-                        (Main.maxTilesY / Main.textureMaxHeight) + 1];
-                    Main.mapWasContentLost = new bool[Main.instance.mapTarget.GetLength(0), Main.instance.mapTarget.GetLength(1)];
-                    Main.initMap = new bool[Main.instance.mapTarget.GetLength(0), Main.instance.mapTarget.GetLength(1)];
-                    Main.instance.TilePaintSystem = new();
-                    Main.instance.TilesRenderer = new(Main.instance.TilePaintSystem);
-                    Main.instance.WallsRenderer = new(Main.instance.TilePaintSystem);
-                    Main.bottomWorld = Main.maxTilesY * 16;
-                    Main.rightWorld = Main.maxTilesX * 16;
-                    Main.maxSectionsX = (Main.maxTilesX - 1) / 200 + 1;
-                    Main.maxSectionsY = (Main.maxTilesY - 1) / 150 + 1;
-                }
-                if (current is null)
-                {
-                    Main.ActiveWorldFileData = main;
-                }
-                LoadWorldFile(text, isCloudSave);
-                if (WorldGen.loadFailed)
-                {
-                    LoadWorldFile(text, isCloudSave);
-                    if (WorldGen.loadFailed)
-                    {
-                        if (FileUtilities.Exists(text + ".bak", isCloudSave))
-                        {
-                            FileUtilities.Copy(text, text + ".bad", isCloudSave, true);
-                            FileUtilities.Copy(text + ".bak", text, isCloudSave, true);
-                            FileUtilities.Delete(text + ".bak", isCloudSave, false);
-                            string text2 = Path.ChangeExtension(text, ".twld");
-                            if (FileUtilities.Exists(text2, isCloudSave))
-                            {
-                                FileUtilities.Copy(text2, text2 + ".bad", isCloudSave, true);
-                            }
-                            if (FileUtilities.Exists(text2 + ".bak", isCloudSave))
-                            {
-                                FileUtilities.Copy(text2 + ".bak", text2, isCloudSave, true);
-                                FileUtilities.Delete(text2 + ".bak", isCloudSave, false);
-                            }
-                            LoadWorldFile(text, isCloudSave);
-                            if (WorldGen.loadFailed)
-                            {
-                                LoadWorldFile(text, isCloudSave);
-                                if (WorldGen.loadFailed)
-                                {
-                                    FileUtilities.Copy(text, text + ".bak", isCloudSave, true);
-                                    FileUtilities.Copy(text + ".bad", text, isCloudSave, true);
-                                    FileUtilities.Delete(text + ".bad", isCloudSave, false);
-                                    if (FileUtilities.Exists(text2, isCloudSave))
-                                    {
-                                        FileUtilities.Copy(text2, text2 + ".bak", isCloudSave, true);
-                                    }
-                                    if (FileUtilities.Exists(text2 + ".bad", isCloudSave))
-                                    {
-                                        FileUtilities.Copy(text2 + ".bad", text2, isCloudSave, true);
-                                        FileUtilities.Delete(text2 + ".bad", isCloudSave, false);
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            WorldGen.worldBackup = false;
-                        }
-                    }
-                }
-            }
+
+            bool cloud = root.IsCloudSave;
+            string path = isSubworld ? CurrentPath : root.Path;
+
             cache?.OnUnload();
-            if (flag)
+
+            if (!isSubworld || current.HowSaveWorld != Subworld.SaveSetting.NoSave)
             {
-                Main.worldName = Language.GetTextValue("Mods." + current.Mod.Name + ".SubworldName." + current.Name);
+                if (!isSubworld)
+                {
+                    Main.ActiveWorldFileData = root;
+                }
+
+                TryLoadWorldFile(path, cloud, 0);
+            }
+
+            if (isSubworld)
+            {
+                Main.worldName = Language.GetTextValue("Mods.Everglow.Subworld.Name" + current.Name);
                 if (WorldGen.loadFailed)
                 {
-                    Everglow.Instance.Logger.Warn("Line-396:Failed to load \"" + Main.worldName + (WorldGen.worldBackup ? "\" from file" : "\" from file, no backup"));
+                    Everglow.Instance.Logger.Warn("Failed to load \"" + Main.worldName + (WorldGen.worldBackup ? "\" from file" : "\" from file, no backup"));
                 }
-                else
+                if (!WorldGen.loadSuccess)
                 {
-                    LoadSubworld(text, isCloudSave);
+                    LoadSubworld(path, cloud);
                 }
                 current.OnLoad();
             }
-            else
+            else if (!WorldGen.loadSuccess)
             {
-                if (!WorldGen.loadSuccess)
+                Everglow.Instance.Logger.Error("Failed to load \"" + root.Name + (WorldGen.worldBackup ? "\" from file" : "\" from file, no backup"));
+                Main.menuMode = 0;
+                if (Main.netMode == NetmodeID.Server)
                 {
-                    Everglow.Instance.Logger.Error("Line-408:Failed to load \"" + main.Name + (WorldGen.worldBackup ? "\" from file" : "\" from file, no backup"));
-                    Main.menuMode = 0;
-                    if (Main.netMode == NetmodeID.Server)
-                    {
-                        Netplay.Disconnect = true;
-                    }
-                    return;
+                    Netplay.Disconnect = true;
                 }
+                return;
             }
+
             WorldGen.gen = false;
+
             if (Main.netMode != NetmodeID.Server)
             {
                 if (Main.mapEnabled)
@@ -430,244 +269,416 @@ namespace Everglow.Sources.Modules.SubWorldModule
                 Main.sectionManager.SetAllFramesLoaded();
                 while (Main.mapEnabled && Main.loadMapLock)
                 {
-                    Main.statusText = Language.GetTextValue("LegacyWorldGen.68") + " " + ((int)((Main.loadMapLastX / (float)Main.maxTilesX * 100f) + 1f)).ToString() + "%";
+                    Main.statusText = Lang.gen[68].Value + " " + (int)((float)Main.loadMapLastX / Main.maxTilesX * 100 + 1) + "%";
                     Thread.Sleep(0);
                 }
-                Player localPlayer = Main.LocalPlayer;
-                if (Main.anglerWhoFinishedToday.Contains(localPlayer.name))
+
+                Player player = Main.LocalPlayer;
+                if (Main.anglerWhoFinishedToday.Contains(player.name))
                 {
                     Main.anglerQuestFinished = true;
                 }
-                localPlayer.Spawn(PlayerSpawnContext.SpawningIntoWorld);
+                player.Spawn(PlayerSpawnContext.SpawningIntoWorld);
                 Main.ActivePlayerFileData.StartPlayTimer();
                 Player.Hooks.EnterWorld(Main.myPlayer);
                 Main.resetClouds = true;
                 Main.gameMenu = false;
             }
         }
-        private static void OnEnterWorld(Player player)
+        static void LoadSubworld(string path, bool cloud)
         {
-            if (Main.netMode == NetmodeID.MultiplayerClient)
-            {
-                cache?.OnUnload();
-                current?.OnLoad();
-            }
-            cache = current;
-        }
-        internal static void LoadSubworld(string path, bool fromCloud)
-        {
-            WorldFileData worldFileData = new(path, fromCloud)
+            WorldFileData data = new WorldFileData(path, cloud)
             {
                 Name = Main.worldName,
                 GameMode = Main.GameMode,
                 CreationTime = DateTime.Now,
                 Metadata = FileMetadata.FromCurrentSettings(FileType.World),
-                WorldGeneratorVersion = 1065151889409UL
+                WorldGeneratorVersion = Main.WorldGeneratorVersion
             };
-            worldFileData.SetSeed(main.SeedText);
-            using (MD5 md = MD5.Create())
+            data.SetSeed(root.SeedText);
+            using (MD5 md5 = MD5.Create())
             {
-                worldFileData.UniqueId = new Guid(md.ComputeHash(Encoding.ASCII.GetBytes(Path.GetFileNameWithoutExtension(main.Path) + current.Name)));
+                data.UniqueId = new Guid(md5.ComputeHash(Encoding.ASCII.GetBytes(CurrentPath)));
             }
-            Main.ActiveWorldFileData = worldFileData;
-            int fixedx = (int)(Math.Floor(current.Width / 200f) * 200);
-            int fixedy = (int)(Math.Floor(current.Height / 150f) * 150);
-            if (FileUtilities.Exists(path, fromCloud))
-            {
-                var data = WorldFile.GetAllMetadata(path, fromCloud);
-                fixedx = data.WorldSizeX;
-                fixedy = data.WorldSizeY;
-            }
-            Main.maxTilesX = fixedx;
-            Main.maxTilesY = fixedy;
-            Main.tile = (Tilemap)TileMapConstructor.Invoke(new object[] { (ushort)(fixedx + 1), (ushort)(fixedy + 1) });
-            Main.Map = new(Main.maxTilesX, Main.maxTilesY);
-            Main.mapMinX = 0;
-            Main.mapMinY = 0;
-            Main.mapMaxX = Main.maxTilesX;
-            Main.mapMaxY = Main.maxTilesY;
-            Main.worldSurface = Main.maxTilesY * 0.3;
-            Main.rockLayer = Main.maxTilesY * 0.5;
-            WorldGen.lavaLine = (int)(Main.rockLayer + Main.maxTilesY) / 2 + Main.rand.Next(50, 80);
-            Main.instance.mapTarget = new RenderTarget2D[(Main.maxTilesX / Main.textureMaxWidth) + 1,
-                (Main.maxTilesY / Main.textureMaxHeight) + 1];
-            Main.mapWasContentLost = new bool[Main.instance.mapTarget.GetLength(0), Main.instance.mapTarget.GetLength(1)];
-            Main.initMap = new bool[Main.instance.mapTarget.GetLength(0), Main.instance.mapTarget.GetLength(1)];
-            Main.instance.TilePaintSystem = new();
-            Main.instance.TilesRenderer = new(Main.instance.TilePaintSystem);
-            Main.instance.WallsRenderer = new(Main.instance.TilePaintSystem);
-            Main.bottomWorld = Main.maxTilesY * 16;
-            Main.rightWorld = Main.maxTilesX * 16;
-            Main.maxSectionsX = (Main.maxTilesX - 1) / 200 + 1;
-            Main.maxSectionsY = (Main.maxTilesY - 1) / 150 + 1;
+            Main.ActiveWorldFileData = data;
+
+            Main.maxTilesX = current.Width;
+            Main.maxTilesY = current.Height;
             Main.spawnTileX = Main.maxTilesX / 2;
             Main.spawnTileY = Main.maxTilesY / 2;
+            WorldGen.setWorldSize();
             WorldGen.clearWorld();
             Main.worldSurface = Main.maxTilesY * 0.3;
             Main.rockLayer = Main.maxTilesY * 0.5;
             WorldGen.waterLine = Main.maxTilesY;
             Main.weatherCounter = int.MaxValue;
             Cloud.resetClouds();
-            float num = 0f;
+
+            float weight = 0;
             for (int i = 0; i < current.Tasks.Count; i++)
             {
-                num += current.Tasks[i].Weight;
+                weight += current.Tasks[i].Weight;
             }
             WorldGenerator.CurrentGenerationProgress = new GenerationProgress
             {
-                TotalWeight = num
+                TotalWeight = weight
             };
+
             WorldGenConfiguration config = current.Config;
-            for (int j = 0; j < current.Tasks.Count; j++)
+
+            for (int i = 0; i < current.Tasks.Count; i++)
             {
-                WorldGen._genRand = new UnifiedRandom(worldFileData.Seed);
-                Main.rand = new UnifiedRandom(worldFileData.Seed);
-                GenPass genPass = current.Tasks[j];
-                WorldGenerator.CurrentGenerationProgress.Start(genPass.Weight);
-                genPass.Apply(WorldGenerator.CurrentGenerationProgress, config?.GetPassConfiguration(genPass.Name));
+                WorldGen._genRand = new UnifiedRandom(data.Seed);
+                Main.rand = new UnifiedRandom(data.Seed);
+
+                GenPass task = current.Tasks[i];
+
+                WorldGenerator.CurrentGenerationProgress.Start(task.Weight);
+                task.Apply(WorldGenerator.CurrentGenerationProgress, config?.GetPassConfiguration(task.Name));
                 WorldGenerator.CurrentGenerationProgress.End();
             }
             WorldGenerator.CurrentGenerationProgress = null;
+
             SystemLoader.OnWorldLoad();
         }
-        internal static void LoadWorldFile(string path, bool fromCloud)
+        static void TryLoadWorldFile(string path, bool cloud, int tries)
         {
-            bool flag = fromCloud && SocialAPI.Cloud is not null;
-            if (FileUtilities.Exists(path, flag))
+            LoadWorldFile(path, cloud);
+            if (WorldGen.loadFailed)
             {
-                if (current is not null)
+                if (tries == 1)
                 {
-                    WorldFileData allMetadata = WorldFile.GetAllMetadata(path, fromCloud);
-                    if (allMetadata is not null)
+                    if (FileUtilities.Exists(path + ".bak", cloud))
                     {
-                        Main.ActiveWorldFileData = allMetadata;
+                        WorldGen.worldBackup = false;
+
+                        FileUtilities.Copy(path, path + ".bad", cloud);
+                        FileUtilities.Copy(path + ".bak", path, cloud);
+                        FileUtilities.Delete(path + ".bak", cloud);
+
+                        string tMLPath = Path.ChangeExtension(path, ".twld");
+                        if (FileUtilities.Exists(tMLPath, cloud))
+                        {
+                            FileUtilities.Copy(tMLPath, tMLPath + ".bad", cloud);
+                        }
+                        if (FileUtilities.Exists(tMLPath + ".bak", cloud))
+                        {
+                            FileUtilities.Copy(tMLPath + ".bak", tMLPath, cloud);
+                            FileUtilities.Delete(tMLPath + ".bak", cloud);
+                        }
+                    }
+                    else
+                    {
+                        WorldGen.worldBackup = false;
+                        return;
                     }
                 }
-                using (MemoryStream memoryStream = new MemoryStream(FileUtilities.ReadAllBytes(path, flag)))
+                else if (tries == 3)
                 {
-                    using (BinaryReader binaryReader = new BinaryReader(memoryStream))
+                    FileUtilities.Copy(path, path + ".bak", cloud);
+                    FileUtilities.Copy(path + ".bad", path, cloud);
+                    FileUtilities.Delete(path + ".bad", cloud);
+
+                    string tMLPath = Path.ChangeExtension(path, ".twld");
+                    if (FileUtilities.Exists(tMLPath, cloud))
                     {
-                        try
-                        {
-                            int num = WorldFile.LoadWorld_Version2(binaryReader);
-                            binaryReader.Close();
-                            memoryStream.Close();
-                            SystemLoader.OnWorldLoad();
-                            typeof(ModLoader).Assembly.GetType("Terraria.ModLoader.IO.WorldIO").GetMethod("Load", BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, new object[]
-                            {
-                                path,
-                                flag
-                            });
-                            bool flag5 = num != 0;
-                            if (flag5)
-                            {
-                                WorldGen.loadFailed = true;
-                                WorldGen.loadSuccess = false;
-                            }
-                            else
-                            {
-                                WorldGen.loadSuccess = true;
-                                WorldGen.loadFailed = false;
-                                WorldGen.waterLine = Main.maxTilesY;
-                                Liquid.QuickWater(2, -1, -1);
-                                WorldGen.WaterCheck();
-                                Liquid.quickSettle = true;
-                                int num2 = 0;
-                                int num3 = Liquid.numLiquid + LiquidBuffer.numLiquidBuffer;
-                                float num4 = 0f;
-                                while (Liquid.numLiquid > 0 && num2 < 100000)
-                                {
-                                    num2++;
-                                    float num5 = (num3 - Liquid.numLiquid + LiquidBuffer.numLiquidBuffer) / (float)num3;
-                                    bool flag6 = Liquid.numLiquid + LiquidBuffer.numLiquidBuffer > num3;
-                                    if (flag6)
-                                    {
-                                        num3 = Liquid.numLiquid + LiquidBuffer.numLiquidBuffer;
-                                    }
-                                    bool flag7 = num5 > num4;
-                                    if (flag7)
-                                    {
-                                        num4 = num5;
-                                    }
-                                    else
-                                    {
-                                        num5 = num4;
-                                    }
-                                    Main.statusText = Language.GetTextValue("LegacyWorldGen.27") + " " + ((int)(num5 * 100f / 2f + 50f)).ToString() + "%";
-                                    Liquid.UpdateLiquid();
-                                }
-                                Liquid.quickSettle = false;
-                                Main.weatherCounter = int.MaxValue;
-                                Cloud.resetClouds();
-                                WorldGen.WaterCheck();
-                                bool flag8 = Main.slimeRainTime > 0.0;
-                                if (flag8)
-                                {
-                                    Main.StartSlimeRain(false);
-                                }
-                                WorldFile.SetOngoingToTemps();
-                            }
-                        }
-                        catch
-                        {
-                            WorldGen.loadFailed = true;
-                            WorldGen.loadSuccess = false;
-                            try
-                            {
-                                binaryReader.Close();
-                                memoryStream.Close();
-                            }
-                            catch
-                            {
-                            }
-                        }
+                        FileUtilities.Copy(tMLPath, tMLPath + ".bak", cloud);
                     }
+                    if (FileUtilities.Exists(tMLPath + ".bad", cloud))
+                    {
+                        FileUtilities.Copy(tMLPath + ".bad", tMLPath, cloud);
+                        FileUtilities.Delete(tMLPath + ".bad", cloud);
+                    }
+
+                    return;
+                }
+                TryLoadWorldFile(path, cloud, tries++);
+            }
+        }
+        static void LoadWorldFile(string path, bool cloud)
+        {
+            bool flag = cloud && SocialAPI.Cloud != null;
+            if (!FileUtilities.Exists(path, flag))
+            {
+                return;
+            }
+
+            if (current != null)
+            {
+                WorldFileData data = WorldFile.GetAllMetadata(path, cloud);
+                if (data != null)
+                {
+                    Main.ActiveWorldFileData = data;
+                }
+            }
+
+            using MemoryStream stream = new MemoryStream(FileUtilities.ReadAllBytes(path, flag));
+            using BinaryReader reader = new BinaryReader(stream);
+
+            try
+            {
+                int status = WorldFile.LoadWorld_Version2(reader);
+                reader.Close();
+                stream.Close();
+                SystemLoader.OnWorldLoad();
+                typeof(ModLoader).Assembly.GetType("Terraria.ModLoader.IO.WorldIO").GetMethod("Load", BindingFlags.NonPublic | BindingFlags.Static).Invoke(null, new object[] { path, flag });
+                if (status != 0)
+                {
+                    WorldGen.loadFailed = true;
+                    WorldGen.loadSuccess = false;
+                    return;
+                }
+                WorldGen.loadSuccess = true;
+                WorldGen.loadFailed = false;
+                WorldGen.waterLine = Main.maxTilesY;
+                Liquid.QuickWater(2);
+                WorldGen.WaterCheck();
+                Liquid.quickSettle = true;
+                int updates = 0;
+                int amount = Liquid.numLiquid + LiquidBuffer.numLiquidBuffer;
+                float num = 0;
+                while (Liquid.numLiquid > 0 && updates < 100000)
+                {
+                    updates++;
+                    float progress = (amount - Liquid.numLiquid + LiquidBuffer.numLiquidBuffer) / (float)amount;
+                    if (Liquid.numLiquid + LiquidBuffer.numLiquidBuffer > amount)
+                    {
+                        amount = Liquid.numLiquid + LiquidBuffer.numLiquidBuffer;
+                    }
+                    if (progress > num)
+                    {
+                        num = progress;
+                    }
+                    else
+                    {
+                        progress = num;
+                    }
+                    Main.statusText = Lang.gen[27].Value + " " + (int)(progress * 100 / 2 + 50) + "%";
+                    Liquid.UpdateLiquid();
+                }
+                Liquid.quickSettle = false;
+                Main.weatherCounter = int.MaxValue;
+                Cloud.resetClouds();
+                WorldGen.WaterCheck();
+                if (Main.slimeRainTime > 0)
+                {
+                    Main.StartSlimeRain(false);
+                }
+                WorldFile.SetOngoingToTemps();
+            }
+            catch
+            {
+                WorldGen.loadFailed = true;
+                WorldGen.loadSuccess = false;
+                try
+                {
+                    reader.Close();
+                    stream.Close();
+                }
+                catch
+                {
                 }
             }
         }
-        internal static List<Subworld> subworlds;
-        internal static Queue<Subworld> waitregister = new();
-        public static Dictionary<RemoteAddress, int> playerLocations;
-        internal static Subworld current;
-        internal static Subworld cache;
-        internal static WorldFileData main;
-        public static bool noReturn;
-        public static bool hideUnderworld;
-        private static ConstructorInfo _tileMapConstructor;
-        internal static ConstructorInfo TileMapConstructor
+        static void BeginEntering(Subworld target)
         {
-            get
+            if (Main.netMode == NetmodeID.SinglePlayer)
             {
-                if (_tileMapConstructor is null)
+                if (current == null)
                 {
-                    try
-                    {
-                        _tileMapConstructor = typeof(Tilemap).GetConstructor(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic, new Type[] { typeof(ushort), typeof(ushort) });
-                        if (_tileMapConstructor is null)
-                        {
-                            Everglow.Instance.Logger.Error("Can't Find TileMap's ConstructorInfo\n" + new NullReferenceException(nameof(_tileMapConstructor)).ToString());
-                            throw new Exception("找不到TileMap的构造方法");
-                        }
-                        else
-                        {
-                            return _tileMapConstructor;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Everglow.Instance.Logger.Error(ex);
-                        throw new Exception("找不到TileMap的构造方法");
-                    }
+                    root = Main.ActiveWorldFileData;
                 }
-                else
-                {
-                    return _tileMapConstructor;
-                }
+                current = target;
+                Task.Factory.StartNew(ExitWorldCallBack);
             }
-            set
+            else if (Main.netMode == NetmodeID.MultiplayerClient)
             {
-                _tileMapConstructor = value;
+                //TODO:联机
+                //ModPacket packet = ModContent.GetInstance<SubworldLibrary>().GetPacket();
+                //packet.Write((byte)0);
+                //packet.Write((ushort)index);
+                //packet.Send();
             }
         }
+        static void ExitWorldCallBack()
+        {
+            int netMode = Main.netMode;
+
+            if (netMode != NetmodeID.Server)
+            {
+                cache?.OnExit();
+
+                if (netMode == 0)
+                {
+                    WorldFile.CacheSaveTime();
+                }
+
+                Main.invasionProgress = -1;
+                Main.invasionProgressDisplayLeft = 0;
+                Main.invasionProgressAlpha = 0;
+                Main.invasionProgressIcon = 0;
+
+                current?.OnEnter();
+
+                Main.gameMenu = true;
+
+                SoundEngine.StopTrackedSounds();
+                CaptureInterface.ResetFocus();
+
+                Main.ActivePlayerFileData.StopPlayTimer();
+                Player.SavePlayer(Main.ActivePlayerFileData);
+                Player.ClearPlayerTempInfo();
+
+                Rain.ClearRain();
+            }
+
+            if (netMode != NetmodeID.MultiplayerClient)
+            {
+                WorldFile.SaveWorld();
+            }
+            SystemLoader.OnWorldUnload();
+
+            Main.fastForwardTime = false;
+            Main.UpdateTimeRate();
+            WorldGen.noMapUpdate = true;
+
+            if (cache != null && !cache.SavePlayer && netMode != NetmodeID.Server)
+            {
+                PlayerFileData playerData = Player.GetFileData(Main.ActivePlayerFileData.Path, Main.ActivePlayerFileData.IsCloudSave);
+                if (playerData != null)
+                {
+                    playerData.Player.whoAmI = Main.myPlayer;
+                    playerData.SetAsActive();
+                }
+            }
+
+            if (netMode != NetmodeID.MultiplayerClient)
+            {
+                LoadWorld();
+            }
+            else
+            {
+                NetMessage.SendData(MessageID.Hello);
+            }
+        }
+        public static void DeleteFileData<T>() where T : Subworld
+        {
+            Subworld c = current;
+            current = ModContent.GetInstance<T>();
+            if (current.HowSaveWorld != Subworld.SaveSetting.Public)
+            {
+                return;
+            }
+            string path = CurrentPath;
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+            current = c;
+        }
+        public static string GetFilePath<T>() where T : Subworld
+        {
+            Subworld c = current;
+            current = ModContent.GetInstance<T>();
+            if (current.HowSaveWorld != Subworld.SaveSetting.Public)
+            {
+                return string.Empty;
+            }
+            string path = CurrentPath;
+            current = c;
+            return path;
+        }
+        #region 子世界的WorldSystem
+        public override void OnWorldLoad()
+            => current?.WorldSystem?.OnWorldLoad();
+        public override void OnWorldUnload()
+            => current?.WorldSystem?.OnWorldUnload();
+        public override void ModifyScreenPosition()
+            => current?.WorldSystem?.ModifyScreenPosition();
+        public override void ModifyTransformMatrix(ref SpriteViewMatrix Transform)
+            => current?.WorldSystem?.ModifyTransformMatrix(ref Transform);
+        public override void UpdateUI(GameTime gameTime)
+            => current?.WorldSystem?.UpdateUI(gameTime);
+        public override void PreUpdateEntities()
+            => current?.WorldSystem?.PreUpdateEntities();
+        public override void PreUpdatePlayers()
+            => current?.WorldSystem?.PreUpdatePlayers();
+        public override void PostUpdatePlayers()
+            => current?.WorldSystem?.PostUpdatePlayers();
+        public override void PreUpdateNPCs()
+            => current?.WorldSystem?.PreUpdateNPCs();
+        public override void PostUpdateNPCs()
+            => current?.WorldSystem?.PostUpdateNPCs();
+        public override void PreUpdateGores()
+            => current?.WorldSystem?.PreUpdateGores();
+        public override void PostUpdateGores()
+            => current?.WorldSystem?.PostUpdateGores();
+        public override void PreUpdateProjectiles()
+            => current?.WorldSystem?.PreUpdateProjectiles();
+        public override void PostUpdateProjectiles()
+            => current?.WorldSystem?.PostUpdateProjectiles();
+        public override void PreUpdateItems()
+            => current?.WorldSystem?.PreUpdateItems();
+        public override void PostUpdateItems()
+            => current?.WorldSystem?.PostUpdateItems();
+        public override void PreUpdateDusts()
+            => current?.WorldSystem?.PreUpdateDusts();
+        public override void PostUpdateDusts()
+            => current?.WorldSystem?.PostUpdateDusts();
+        public override void PreUpdateTime()
+            => current?.WorldSystem?.PreUpdateTime();
+        public override void PostUpdateTime()
+            => current?.WorldSystem?.PostUpdateTime();
+        public override void PreUpdateWorld()
+            => current?.WorldSystem?.PreUpdateWorld();
+        public override void PostUpdateWorld()
+            => current?.WorldSystem?.PostUpdateWorld();
+        public override void PreUpdateInvasions()
+            => current?.WorldSystem?.PreUpdateInvasions();
+        public override void PostUpdateInvasions()
+            => current?.WorldSystem?.PostUpdateInvasions();
+        public override void PostUpdateEverything()
+            => current?.WorldSystem?.PostUpdateEverything();
+        public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
+            => current?.WorldSystem?.ModifyInterfaceLayers(layers);
+        public override void ModifyGameTipVisibility(IReadOnlyList<GameTipData> gameTips)
+            => current?.WorldSystem?.ModifyGameTipVisibility(gameTips);
+        public override void PostDrawInterface(SpriteBatch spriteBatch)
+            => current?.WorldSystem?.PostDrawInterface(spriteBatch);
+        public override void PreDrawMapIconOverlay(IReadOnlyList<IMapLayer> layers, MapOverlayDrawContext mapOverlayDrawContext)
+            => current?.WorldSystem?.PreDrawMapIconOverlay(layers, mapOverlayDrawContext);
+        public override void PostDrawFullscreenMap(ref string mouseText)
+            => current?.WorldSystem?.PostDrawFullscreenMap(ref mouseText);
+        public override void PostUpdateInput()
+            => current?.WorldSystem?.PostUpdateInput();
+        public override void PreSaveAndQuit()
+            => current?.WorldSystem?.PreSaveAndQuit();
+        public override void PostDrawTiles()
+            => current?.WorldSystem?.PostDrawTiles();
+        public override void ModifyTimeRate(ref double timeRate, ref double tileUpdateRate, ref double eventUpdateRate)
+            => current?.WorldSystem?.ModifyTimeRate(ref timeRate, ref tileUpdateRate, ref eventUpdateRate);
+        public override void SaveWorldData(TagCompound tag)
+            => current?.WorldSystem?.SaveWorldData(tag);
+        public override void LoadWorldData(TagCompound tag)
+            => current?.WorldSystem?.LoadWorldData(tag);
+        public override void NetSend(BinaryWriter writer)
+            => current?.WorldSystem?.NetSend(writer);
+        public override void NetReceive(BinaryReader reader)
+            => current?.WorldSystem?.NetReceive(reader);
+        public override bool HijackGetData(ref byte messageType, ref BinaryReader reader, int playerNumber)
+            => current?.WorldSystem?.HijackGetData(ref messageType, ref reader, playerNumber) ?? false;
+        public override bool HijackSendData(int whoAmI, int msgType, int remoteClient, int ignoreClient, NetworkText text, int number, float number2, float number3, float number4, int number5, int number6, int number7)
+            => current?.WorldSystem?.HijackSendData(whoAmI, msgType, remoteClient, ignoreClient, text, number, number2, number3, number4, number5, number6, number7) ?? false;
+        public override void ResetNearbyTileEffects()
+            => current?.WorldSystem?.ResetNearbyTileEffects();
+        public override void ModifyHardmodeTasks(List<GenPass> list)
+            => ModifyHardmodeTasks(list);
+        public override void ModifySunLightColor(ref Color tileColor, ref Color backgroundColor)
+            => current?.WorldSystem?.ModifySunLightColor(ref tileColor, ref backgroundColor);
+        public override void ModifyLightingBrightness(ref float scale)
+            => current?.WorldSystem?.ModifyLightingBrightness(ref scale);
+        public override void TileCountsAvailable(ReadOnlySpan<int> tileCounts)
+            => current?.WorldSystem?.TileCountsAvailable(tileCounts);
+        #endregion
     }
 }

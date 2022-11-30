@@ -5,6 +5,7 @@ using ReLogic.Graphics;
 
 using Terraria;
 using Terraria.GameContent;
+using Terraria.ID;
 
 namespace Everglow.Sources.Commons.Core.UI.UIElements
 {
@@ -81,7 +82,7 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
                 //Main.playerInventory = true;
 
                 //当鼠标没物品，框里有物品的时候
-                if (Main.mouseItem.type == 0 && ContainedItem != null && ContainedItem.type != 0)
+                if (Main.mouseItem.type == ItemID.None && ContainedItem != null && ContainedItem.type != ItemID.None)
                 {
                     //如果可以拿起物品
                     if (CanTakeOutSlot == null || CanTakeOutSlot(ContainedItem))
@@ -99,7 +100,7 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
                     }
                 }
                 //当鼠标有物品，框里没物品的时候
-                else if (Main.mouseItem.type != 0 && (ContainedItem == null || ContainedItem.type == 0))
+                else if (Main.mouseItem.type != ItemID.None && (ContainedItem == null || ContainedItem.type == ItemID.None))
                 {
                     //如果可以放入物品
                     if (CanPutInSlot == null || CanPutInSlot(Main.mouseItem))
@@ -117,7 +118,7 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
                     }
                 }
                 //当鼠标和框都有物品时
-                else if (Main.mouseItem.type != 0 && ContainedItem != null && ContainedItem.type != 0)
+                else if (Main.mouseItem.type != ItemID.None && ContainedItem != null && ContainedItem.type != ItemID.None)
                 {
                     //如果不能放入物品
                     if (!(CanPutInSlot == null || CanPutInSlot(Main.mouseItem)))
@@ -183,7 +184,7 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
             float scale = Info.Size.X / 50f;
             DynamicSpriteFont font = FontAssets.MouseText.Value;
             //调用原版的介绍绘制
-            if (ContainedItem != null && ContainsPoint(Main.MouseScreen) && ContainedItem.type != 0)
+            if (ContainedItem != null && ContainsPoint(Main.MouseScreen) && ContainedItem.type != ItemID.None)
             {
                 Main.hoverItemName = ContainedItem.Name;
                 Main.HoverItem = ContainedItem.Clone();
@@ -194,7 +195,7 @@ namespace Everglow.Sources.Commons.Core.UI.UIElements
             DrawAdvBox(sb, (int)DrawRectangle.X, (int)DrawRectangle.Y,
                 (int)DrawRectangle.Width, (int)DrawRectangle.Height,
                 DrawColor * Opacity, SlotBackTexture, CornerSize, 1f);
-            if (ContainedItem != null && ContainedItem.type != 0)
+            if (ContainedItem != null && ContainedItem.type != ItemID.None)
             {
                 var frame = Main.itemAnimations[ContainedItem.type] != null ? Main.itemAnimations[ContainedItem.type].GetFrame(TextureAssets.Item[ContainedItem.type].Value) : Item.GetDrawHitbox(ContainedItem.type, null);
                 //绘制物品贴图
