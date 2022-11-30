@@ -21,7 +21,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 
         public override void RandomUpdate(int i, int j)
         {
-            Main.NewText("Execute");
             if (Main.rand.NextBool(6))
             {
                 if (Main.tile[i, j].Slope == SlopeType.Solid && Main.tile[i + 1, j].Slope == SlopeType.Solid && Main.tile[i - 1, j].Slope == SlopeType.Solid && Main.tile[i + 2, j].Slope == SlopeType.Solid && Main.tile[i - 2, j].Slope == SlopeType.Solid && 
@@ -134,7 +133,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                             t1.HasTile = true;
                             t2.HasTile = true;
                             t3.HasTile = true;
-                            short num2 = (short)(Main.rand.Next(0, 10) * 120);
+                            short num2 = (short)(Main.rand.Next(0, 12) * 120);
                             t3.TileFrameX = num2;
                             t2.TileFrameX = num2;
                             t1.TileFrameX = num2;
@@ -172,6 +171,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
         }
         public static void BuildFluorescentTree(int i, int j, int height = 0)
         {
+            if(j < 30)
+            {
+                return;
+            }
             int Height = Main.rand.Next(7, height);
 
             for (int g = 0; g < Height; g++)

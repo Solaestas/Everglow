@@ -1,13 +1,14 @@
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Walls
 {
-    public class DarkCocoonWall : ModWall
+    public class LiveFluorescentWoodWall : ModWall
     {
         public override void SetStaticDefaults()
         {
             Main.wallHouse[Type] = true;
-            DustType = 191;
+            DustType = ModContent.DustType<Dusts.FluorescentTreeDust>();
             ItemDrop = ModContent.ItemType<Items.DarkCocoonWall>();
-            AddMapEntry(new Color(10, 10, 10));
+            HitSound = SoundID.Dig;
+            AddMapEntry(new Color(33, 1, 53));
         }
     }
 }

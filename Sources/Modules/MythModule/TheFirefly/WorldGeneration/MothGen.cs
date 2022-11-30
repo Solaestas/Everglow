@@ -10,6 +10,19 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
 {
     public class MothLand : ModSystem
     {
+        public override void PostUpdateEverything()
+        {
+            if(Main.mouseRight && Main.mouseRightRelease)
+            {
+
+            }
+        }
+        private void BuildLivingFluorescentTree()
+        {
+
+        }
+
+
         internal class MothLandGenPass : GenPass
         {
             public MothLandGenPass() : base("MothLand", 500)
@@ -99,8 +112,24 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                 for (int y = 0; y < accessor.Height; y++)
                 {
                     var pixelRow = accessor.GetRowSpan(y);
+                    if (y + b < 20)
+                    {
+                        continue;
+                    }
+                    if(y + b > Main.maxTilesY - 20)
+                    {
+                        break;
+                    }
                     for (int x = 0; x < pixelRow.Length; x++)
                     {
+                        if (x + a < 20)
+                        {
+                            continue;
+                        }
+                        if (x + a > Main.maxTilesX - 20)
+                        {
+                            break;
+                        }
                         ref var pixel = ref pixelRow[x];
                         Tile tile = Main.tile[x + a, y + b];
                         switch (type)//21ÊÇÏä×Ó
@@ -239,6 +268,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             MothLand mothLand = ModContent.GetInstance<MothLand>();
             mothLand.fireflyCenterX = a + 140;
             mothLand.fireflyCenterY = b + 140;
+            Main.statusText = "CocoonStart";
+            ShapeTile("CocoonWorld.bmp", 0, 0, 1);
+            ShapeTile("CocoonWorldWall.bmp", 0, 0, 2);
             Main.statusText = "CocoonKillStart";
             ShapeTile("CocoonKill.bmp", a, b, 0);
             Main.statusText = "CocoonStart";

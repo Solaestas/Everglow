@@ -44,8 +44,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         public override bool HideUnderworld => true;
         public override void OnLoad()
         {
-            Main.worldSurface = 1;
-            Main.rockLayer = 2;
+            Main.worldSurface = 20;
+            Main.rockLayer = 150;
             WorldGen.waterLine = Main.maxTilesY;
         }
     }
