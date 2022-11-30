@@ -186,8 +186,14 @@ namespace Everglow.Sources.Modules.MEACModule
 
         void IModule.Unload()
         {
-            bloomTarget1?.Dispose();
-            bloomTarget2?.Dispose();
+            bool wait = true;
+            Main.QueueMainThreadAction(() =>
+            {
+                bloomTarget1?.Dispose();
+                bloomTarget2?.Dispose();
+                wait = false;
+            });
+            while (wait) ;
         }
     }
 }
