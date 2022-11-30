@@ -6,6 +6,7 @@ using Mono.Cecil.Cil;
 using MonoMod.Cil;
 
 namespace Everglow.Sources.Modules.ZYModule.TileModule.EntityColliding;
+
 internal class ProjColliding : GlobalProjectile
 {
     public ProjHandler handler;
@@ -14,16 +15,14 @@ internal class ProjColliding : GlobalProjectile
     public override bool InstancePerEntity => true;
     protected override bool CloneNewInstances => true;
     public override bool IsCloneable => true;
+
     public override GlobalProjectile Clone(Projectile from, Projectile to)
     {
         var clone = base.Clone(from, to) as ProjColliding;
         clone.handler = new ProjHandler(to);
         return clone;
     }
-    public override bool AppliesToEntity(Projectile entity, bool lateInstantiation)
-    {
-        return entity.tileCollide || entity.aiStyle == HookAiStyle;
-    }
+
     public override void Load()
     {
         On.Terraria.Projectile.AI_007_GrapplingHooks += Projectile_AI_007_GrapplingHooks_On;
@@ -46,7 +45,6 @@ internal class ProjColliding : GlobalProjectile
             return;
         }
 
-
         TileSystem.EnableCollisionHook = false;
         var proj = self.GetGlobalProjectile<ProjColliding>();
         proj.handler.position = self.position;//记录位置，否则会把传送当成位移
@@ -54,6 +52,7 @@ internal class ProjColliding : GlobalProjectile
         proj.handler.Update(true);
         TileSystem.EnableCollisionHook = true;
     }
+
     private static void Projectile_AI_007_GrapplingHooks_On(On.Terraria.Projectile.orig_AI_007_GrapplingHooks orig, Projectile self)
     {
         if (!TileSystem.Enable)
@@ -80,7 +79,7 @@ internal class ProjColliding : GlobalProjectile
         {
             numHooks = 1;
         }
-        else if (self.type >= 646 && self.type <= 649)
+        else if (self.type is >= 646 and <= 649)
         {
             numHooks = 4;
         }
@@ -154,6 +153,7 @@ internal class ProjColliding : GlobalProjectile
         orig(self);
         callFromHook.Remove(self);
     }
+
     private static void Projectile_AI_007_GrapplingHooks_IL(ILContext il)
     {
         var cursor = new ILCursor(il);
