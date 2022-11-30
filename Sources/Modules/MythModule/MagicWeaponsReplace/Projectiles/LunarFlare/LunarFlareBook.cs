@@ -11,27 +11,27 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
         int timer;
         public override void SetDef()
         {
-            DustType = DustID.WhiteTorch;
+            DustType = DustID.Shadewood;
             //DustTypeII = DustID.GemSapphire;
             ItemType = ItemID.LunarFlareBook;
         }
         public override void SpecialAI()
         {
             Player player = Main.player[Projectile.owner];
-            if (MoonNight.Timer < 0)
-            {
-                MoonNight.Timer = 0;
-            }
-            MoonNight.Timer+= 10;
-            if (player.itemTime == 2)
-            {
-                timer++;
-                if (timer % 2 == 0)
-                {
-                    int count = Math.Min(timer / 12, 15);
-                    MoonNight.GenerateStars(count * 5);
-                }
-            }
+            //if (MoonNight.Timer < 0)
+            //{
+            //    MoonNight.Timer = 0;
+            //}
+            //MoonNight.Timer+= 10;
+            //if (player.itemTime == 2)
+            //{
+            //    timer++;
+            //    if (timer % 2 == 0)
+            //    {
+            //        int count = Math.Min(timer / 12, 15);
+            //        MoonNight.GenerateStars(count * 5);
+            //    }
+            //}
         }
     }
 }

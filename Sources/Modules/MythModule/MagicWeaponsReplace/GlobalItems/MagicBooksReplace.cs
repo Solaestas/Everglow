@@ -297,6 +297,11 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
                 {
                     Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
                 }
+                aimType = ModContent.ProjectileType<Projectiles.LunarFlare.LunarFlareArray>();
+                if (player.ownedProjectileCounts[aimType] < 1)
+                {
+                    Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
+                }
             }
             return base.UseItem(item, player);
         }
