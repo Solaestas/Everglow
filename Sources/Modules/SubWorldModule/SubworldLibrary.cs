@@ -57,7 +57,7 @@ namespace Everglow.Sources.Modules.SubWorldModule
             ReturnNow_Translation.AddTranslation(GameCulture.FromCultureName(GameCulture.CultureName.Russian),
                 "");
             ReturnNow_Translation.AddTranslation(GameCulture.FromCultureName(GameCulture.CultureName.Chinese),
-                "退出当前");
+                "退出当前(暂不可用)");
             ReturnNow_Translation.AddTranslation(GameCulture.FromCultureName(GameCulture.CultureName.Portuguese),
                 "");
             ReturnNow_Translation.AddTranslation(GameCulture.FromCultureName(GameCulture.CultureName.Polish),

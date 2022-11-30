@@ -85,6 +85,10 @@ namespace Everglow.Sources.Modules.SubWorldModule
         public static bool IsActive<T>() where T : Subworld => ModContent.GetInstance<T>() == current;
         static void Enter(Subworld target)
         {
+            if (Main.netMode != NetmodeID.SinglePlayer)
+            {
+                return false;
+            }
             if (!subworlds.ContainsKey(target.FullName))
             {
                 Everglow.Instance.Logger.Error("The historical record is wrong.");
@@ -95,6 +99,10 @@ namespace Everglow.Sources.Modules.SubWorldModule
         }
         public static bool Enter<T>() where T : Subworld
         {
+            if (Main.netMode != NetmodeID.SinglePlayer)
+            {
+                return false;
+            }
             if (subworlds.TryGetValue(ModContent.GetInstance<T>().FullName, out Subworld target))
             {
                 BeginEntering(target);
@@ -127,6 +135,8 @@ namespace Everglow.Sources.Modules.SubWorldModule
             {
                 if (Main.netMode == NetmodeID.SinglePlayer)
                 {
+                    current = null;
+                    Task.Factory.StartNew(ExitWorldCallBack);
                 }
                 else if (Main.netMode == NetmodeID.MultiplayerClient)
                 {
