@@ -15,10 +15,10 @@
             {
                 Vector2 velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero) * player.HeldItem.shootSpeed;
                 int T = ProjectileID.WaterBolt;
-                if (player.HasBuff(ModContent.BuffType<MagicWeaponsReplace.Buffs.WaterBoltII>()))
+                if (player.HasBuff(ModContent.BuffType<Buffs.WaterBoltII>()))
                 {
                     damage = (int)(damage * 1.85);
-                    T = ModContent.ProjectileType<Projectiles.WaterBolt.NewWaterBolt>();
+                    T = ModContent.ProjectileType<NewWaterBolt>();
                 }
                 Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * 6, velocity, T, damage, player.HeldItem.knockBack, player.whoAmI);
                 p.penetrate = 2;
