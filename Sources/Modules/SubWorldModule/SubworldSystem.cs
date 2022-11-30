@@ -87,7 +87,7 @@ namespace Everglow.Sources.Modules.SubWorldModule
         {
             if (Main.netMode != NetmodeID.SinglePlayer)
             {
-                return false;
+                return;
             }
             if (!subworlds.ContainsKey(target.FullName))
             {
