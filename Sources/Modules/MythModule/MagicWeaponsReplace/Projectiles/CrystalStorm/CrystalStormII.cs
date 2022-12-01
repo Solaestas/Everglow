@@ -6,7 +6,7 @@ using Terraria.Audio;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.CrystalStorm
 {
-    public class CrystalStormII : ModProjectile, IWarpProjectile
+    public class CrystalStormII : ModProjectile, IWarpProjectile//将接口改为使用IWarpProjectile
     {
         public override void SetDefaults()
         {
@@ -171,15 +171,15 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
             }
         }
-        public void DrawWarp()
+        public void DrawWarp(VFXBatch spriteBatch)
         {
+            
+            /*不再用开启shader
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
             KEx.CurrentTechnique.Passes[0].Apply();
-
-
-
+            */
             float width = 16;
 
             int TrueL = 0;
@@ -252,16 +252,21 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
                 }
             }
             Texture2D t = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/FogTraceLight");
-            Main.graphics.GraphicsDevice.Textures[0] = t;
+
+            //贴图不用在这里传
+            //Main.graphics.GraphicsDevice.Textures[0] = t;
 
             if (bars.Count > 3)
             {
-                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+                //Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+
+                //里面的所有绘制（包括顶点绘制）改为用VFXBatch spriteBatch的Draw，如下
+                spriteBatch.Draw(t, bars, PrimitiveType.TriangleStrip);
             }
 
-
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            //结尾的begin-end也删掉
+            //Main.spriteBatch.End();
+            //Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
         }
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
@@ -279,6 +284,6 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             Projectile.penetrate--;
 
             return false;
-        }
+        }     
     }
 }

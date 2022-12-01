@@ -106,9 +106,9 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             Vx.Add(new Vertex2D(po2 + position, colorD, new Vector3(0.02f, 0.03f, 0.09f)));
             Vx.Add(new Vertex2D(po3 + position, colorD, new Vector3(0.06f, 0.05f, 0.07f)));
 
-            gd.Textures[0] = TextureAssets.MagicPixel.Value;
-            gd.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count - 2);
-            //VFXManager.spriteBatch.Draw(Vx, PrimitiveType.TriangleList);
+            //gd.Textures[0] = TextureAssets.MagicPixel.Value;
+            //gd.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count - 2);
+            VFXManager.spriteBatch.Draw(TextureAssets.MagicPixel.Value,Vx, PrimitiveType.TriangleList);
         }
 
         public override CallOpportunity DrawLayer => CallOpportunity.PostDrawNPCs;

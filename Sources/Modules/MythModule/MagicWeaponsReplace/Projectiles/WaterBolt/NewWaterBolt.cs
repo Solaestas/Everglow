@@ -1,3 +1,4 @@
+using Everglow.Sources.Commons.Core.VFX;
 using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MEACModule;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
@@ -131,7 +132,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
             return false;
         }
 
-        public void DrawWarp()
+        public void DrawWarp(VFXBatch spriteBatch)
         {
             Color c0 = new Color(0.6f, 0.3f, 0f);
             List<Vertex2D> bars = new List<Vertex2D>();
@@ -167,7 +168,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
             Main.graphics.GraphicsDevice.Textures[0] = t;
             if (bars.Count > 3)
             {
-                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+                spriteBatch.Draw(t,bars,PrimitiveType.TriangleStrip);
             }
         }
         public override void Kill(int timeLeft)
