@@ -549,7 +549,7 @@ public class VFXBatch : IDisposable
                         continue;
                     }
                     graphicsDevice.Textures[0] = textures[count++];
-                    graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, currentVertex, 0, nextVertex - currentVertex, 0, (nextIndex - currentIndex) / 3);
+                    graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, nextVertex - currentVertex, 0, (nextIndex - currentIndex) / 3);
                     (currentIndex, currentVertex) = (nextIndex, nextVertex);
                 }
             }
