@@ -198,7 +198,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                                 }
                                 if (pixel.R == 45 && pixel.G == 49 && pixel.B == 255)
                                 {
-                                    //MythUtils.PlaceFrameImportantTiles(a + x, b + y, 3, 4, ModContent.TileType<Pylon.FireflyPylon>());
+                                    //TODO:@SilverMoonŒﬁ∑®∑≈÷√Pylon
+                                    MythUtils.PlaceFrameImportantTiles(a + x, b + y, 3, 4, ModContent.TileType<Pylon.FireflyPylon>());
                                 }
                                 break;
                         }
