@@ -1,3 +1,4 @@
+using Everglow.Sources.Commons.Core.VFX;
 using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MEACModule;
 
@@ -29,40 +30,24 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
 
         public override void AI()
         {
-            if ((OldAimCenter - Main.MouseWorld).Length() > 200 && OldAimCenter != Vector2.Zero)
+            if ((OldAimCenter - Main.projectile[(int)Projectile.ai[0]].Center).Length() > 200 && OldAimCenter != Vector2.Zero)
             {
                 if (Projectile.timeLeft > 20)
                 {
                     Projectile.timeLeft -= 5;
                 }
             }
-            AimCenter = Main.MouseWorld;
-            OldAimCenter = Main.MouseWorld;
-            for (int x = -80; x < 808; x += 8)
-            {
-                if (Collision.SolidCollision(AimCenter + new Vector2(0, x), 1, 1))
-                {
-                    AimCenter += new Vector2(0, x);
-                    break;
-                }
-            }
+            AimCenter = Main.projectile[(int)Projectile.ai[0]].Center;
+            OldAimCenter = Main.projectile[(int)Projectile.ai[0]].Center;
+
             float Dy = AimCenter.Y - Projectile.position.Y;
             float xCoefficient = Dy * Dy / 600f - 0.4f * Dy + 50;
-            Vector2 TrueAim = AimCenter + new Vector2(xCoefficient * (float)(Math.Sin(Main.timeForVisualEffects * 0.1 * Projectile.extraUpdates + Projectile.ai[0])), 0) - Projectile.Center;
+            Vector2 TrueAim = AimCenter + new Vector2(xCoefficient * (float)(Math.Sin(Main.timeForVisualEffects * 0.1 * Projectile.extraUpdates + Projectile.rotation)), 0) - Projectile.Center;
 
             Projectile.alpha = (byte)(Projectile.alpha * 0.95 + xCoefficient * 0.05);
 
-            if (!Main.mouseRight)
-            {
-                Projectile.velocity = Projectile.velocity * 0.75f + new Vector2(Utils.SafeNormalize(TrueAim, new Vector2(0, 0.05f)).X, -Projectile.ai[1] * 0.3f) * 0.25f / Projectile.alpha * 500f;
-                Projectile.velocity *= Main.rand.NextFloat(0.85f, 1.15f);
-                Projectile.extraUpdates = 1;
-            }
-            else
-            {
-                Projectile.velocity = Projectile.velocity * 0.75f + new Vector2(Utils.SafeNormalize(TrueAim, new Vector2(0, 0.05f)).X, -Projectile.ai[1] * 0.3f) * 0.25f / Projectile.alpha * 500f;
-                Projectile.velocity *= Main.rand.NextFloat(0.85f, 1.15f);
-            }
+            Projectile.velocity = Projectile.velocity * 0.75f + new Vector2(Utils.SafeNormalize(TrueAim, new Vector2(0, 0.05f)).X, -Projectile.ai[1] * 0.3f) * 0.25f / Projectile.alpha * 500f;
+            Projectile.velocity *= Main.rand.NextFloat(0.85f, 1.15f);
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -118,21 +103,9 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             return false;
         }
 
-        public void DrawWarp()
+        public void DrawWarp(VFXBatch spriteBatch)
         {
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-            KEx.CurrentTechnique.Passes[0].Apply();
-            float k1 = (100f + Projectile.ai[0] * 25) * 0.3f;
-            float k0 = (1000 - Projectile.timeLeft) / k1;
-
-            if (Projectile.timeLeft <= 1000 - k1)
-            {
-                k0 = 1;
-            }
-
-            Color c0 = new Color(0.2f, 0.2f, 0f);
+            Color c0 = new Color(0.6f, 0.6f, 0f);
             List<Vertex2D> bars = new List<Vertex2D>();
             float width = 24;
 
@@ -163,13 +136,14 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
                 bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 0, w)));
             }
             Texture2D t = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/GoldLine");
-            Main.graphics.GraphicsDevice.Textures[0] = t;
+            //Main.graphics.GraphicsDevice.Textures[0] = t;
             if (bars.Count > 3)
             {
-                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+                //Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+                spriteBatch.Draw(t,bars,PrimitiveType.TriangleStrip);
             }
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            //Main.spriteBatch.End();
+            //Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
         }
     }
 }

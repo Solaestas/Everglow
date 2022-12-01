@@ -13,15 +13,7 @@
 
         public override bool Update(Dust dust)
         {
-            Vector2 AimCenter = Main.MouseWorld;
-            for (int x = -80; x < 808; x += 8)
-            {
-                if (Collision.SolidCollision(AimCenter + new Vector2(0, x), 1, 1))
-                {
-                    AimCenter += new Vector2(0, x);
-                    break;
-                }
-            }
+            Vector2 AimCenter = Main.projectile[dust.dustIndex].Center;
             float Dy = AimCenter.Y - dust.position.Y;
             float xCoefficient = Dy * Dy / 600f - 0.4f * Dy + 50;
 
@@ -29,7 +21,7 @@
             dust.position += dust.velocity;
             dust.color.B = (byte)(dust.color.B * 0.95 + xCoefficient * 0.05);//蓝度用来存加速度
 
-            if (!Main.mouseRight)
+            if (!Main.projectile[dust.dustIndex].active || Main.projectile[dust.dustIndex].type != ModContent.ProjectileType<Projectiles.CrystalStorm.Storm>())
             {
                 dust.velocity.Y += 0.05f;
                 dust.velocity *= 0.95f;

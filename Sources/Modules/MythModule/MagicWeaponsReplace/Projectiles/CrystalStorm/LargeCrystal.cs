@@ -4,7 +4,7 @@ using Terraria.Audio;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.CrystalStorm
 {
-    public class LargeCrystal : ModProjectile
+    public class LargeCrystal : ModProjectile//This proj summon storm at breaking 
     {
         public override void SetDefaults()
         {
@@ -116,6 +116,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
 
         public override void Kill(int timeLeft)
         {
+            Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<Storm>(), (int)(Projectile.damage * 0.6f), Projectile.knockBack, Projectile.owner);
+
             float k1 = 1;
             float k0 = 5;
             for (int j = 0; j < 48 * k0; j++)
@@ -123,7 +125,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
                 Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * Projectile.scale * k1;
                 int dust0 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<Dusts.CrystalAppearStoppedByTile>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(0.3f, 0.6f) * Projectile.scale * 0.4f * k0);
                 Main.dust[dust0].noGravity = true;
-
+                Main.dust[dust0].dustIndex = p.whoAmI;
                 CrystalParticle cp = new CrystalParticle
                 {
                     timeLeft = 70,
@@ -173,13 +175,14 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
 
                 if (Dis < k0 * 50)
                 {
-                    if (!target.dontTakeDamage && !target.friendly && target.active)
+                    if (!target.dontTakeDamage && !target.friendly && target.CanBeChasedBy() && target.active)
                     {
                         target.StrikeNPC((int)(Projectile.damage / (Dis + 35f) * 35f), 0.2f, 1);
                     }
                 }
             }
             SoundEngine.PlaySound(SoundID.Item27, Projectile.Center);
+
         }
     }
 }
