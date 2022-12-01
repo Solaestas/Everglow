@@ -1,6 +1,7 @@
 using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MEACModule;
+using Everglow.Sources.Commons.Core.VFX;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -29,13 +30,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         internal int breakTime = 200;
         public override void OnSpawn(IEntitySource source)
         {
-            breakTime = Main.rand.Next(200,232);
+            breakTime = Main.rand.Next(200, 232);
         }
         public override void AI()
         {
-            if(Projectile.ai[0] == 3)
+            if (Projectile.ai[0] == 3)
             {
-                if(Projectile.velocity.Length() > 5f)
+                if (Projectile.velocity.Length() > 5f)
                 {
                     Projectile.velocity *= 0.95f;
                 }
@@ -84,7 +85,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 }
             }
             Projectile.velocity.Y += 0.15f;
-            if(Projectile.timeLeft < 239)
+            if (Projectile.timeLeft < 239)
             {
                 if (Collision.SolidCollision(Projectile.Center, 0, 0))
                 {
@@ -120,7 +121,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                     }
                 }
             }
-            if(Projectile.timeLeft == 210)
+            if (Projectile.timeLeft == 210)
             {
                 Projectile.friendly = true;
             }
@@ -134,7 +135,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 Dust d0 = Dust.NewDustDirect(BasePos, 0, 0, ModContent.DustType<BlueGlowAppearStoppedByTile>(), 0, 0, 0, default, 0.6f);
                 d0.noGravity = true;
             }
-            if(Projectile.ai[0] != 3)
+            if (Projectile.ai[0] != 3)
             {
                 for (int x = 0; x < 3; x++)
                 {
@@ -210,16 +211,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             return false;
         }
 
-        public void DrawWarp()
+        public void DrawWarp(VFXBatch spriteBatch)
         {
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-            KEx.CurrentTechnique.Passes[0].Apply();
-
-            Color c0 = new Color(0.2f, 0.2f, 0f);
-            List<Vertex2D> bars = new List<Vertex2D>();
-            float width = 24;
+            float width = 16;
 
             int TrueL = 0;
             for (int i = 1; i < Projectile.oldPos.Length; ++i)
@@ -228,33 +222,68 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 {
                     break;
                 }
-
                 TrueL++;
             }
+            List<Vertex2D> bars = new List<Vertex2D>();
             for (int i = 1; i < Projectile.oldPos.Length; ++i)
             {
                 if (Projectile.oldPos[i] == Vector2.Zero)
                 {
                     break;
                 }
-
+                float MulColor = 1f;
                 var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
                 normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
+                if (i == 1)
+                {
+                    MulColor = 0f;
+                }
+                if (i >= 2)
+                {
+                    var normalDirII = Projectile.oldPos[i - 2] - Projectile.oldPos[i - 1];
+                    normalDirII = Vector2.Normalize(new Vector2(-normalDirII.Y, normalDirII.X));
+                    if (Vector2.Dot(normalDirII, normalDir) <= 0.965f)
+                    {
+                        MulColor = 0f;
+                    }
+                }
+                if (i < Projectile.oldPos.Length - 1)
+                {
+                    var normalDirII = Projectile.oldPos[i] - Projectile.oldPos[i + 1];
+                    normalDirII = Vector2.Normalize(new Vector2(-normalDirII.Y, normalDirII.X));
+                    if (Vector2.Dot(normalDirII, normalDir) <= 0.965f)
+                    {
+                        MulColor = 0f;
+                    }
+                }
+
+                float k0 = (float)(Math.Atan2(normalDir.Y, normalDir.X));
+                k0 += 3.14f + 1.57f;
+                if (k0 > 6.28f)
+                {
+                    k0 -= 6.28f;
+                }
+                Color c0 = new Color(k0, 0.4f, 0, 0);
+
                 var factor = i / (float)TrueL;
-                var w = MathHelper.Lerp(1f, 0.05f, factor);
-                float x0 = factor * 0.6f - (float)(Main.timeForVisualEffects / 35d) + 10000;
+                float x0 = factor * 1.3f - (float)(Main.timeForVisualEffects / 15d) + 100000;
                 x0 %= 1f;
-                bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 1, w)));
-                bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 0, w)));
+                bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f) - Main.screenPosition, c0 * MulColor, new Vector3(x0, 1, 0)));
+                bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f) - Main.screenPosition, c0 * MulColor, new Vector3(x0, 0, 0)));
+                var factorII = factor;
+                factor = (i + 1) / (float)TrueL;
+                var x1 = factor * 1.3f - (float)(Main.timeForVisualEffects / 15d) + 100000;
+                x1 %= 1f;
+                if (x0 > x1)
+                {
+                    float DeltaValue = 1 - x0;
+                    var factorIII = factorII * x0 + factor * DeltaValue;
+                    bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factorIII) + new Vector2(5f) - Main.screenPosition, c0 * MulColor, new Vector3(1, 1, 0)));
+                    bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factorIII) + new Vector2(5f) - Main.screenPosition, c0 * MulColor, new Vector3(1, 0, 0)));
+                    bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factorIII) + new Vector2(5f) - Main.screenPosition, c0 * MulColor, new Vector3(0, 1, 0)));
+                    bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factorIII) + new Vector2(5f) - Main.screenPosition, c0 * MulColor, new Vector3(0, 0, 0)));
+                }
             }
-            Texture2D t = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/GoldLine");
-            Main.graphics.GraphicsDevice.Textures[0] = t;
-            if (bars.Count > 3)
-            {
-                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-            }
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
         }
     }
 }

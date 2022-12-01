@@ -98,15 +98,16 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
         public void DrawStarrySky()
         {
             //从RT池子里抓3个
-            var renderTargets = Everglow.RenderTargetPool.GetRenderTarget2DArray(3);
+            var renderTargets = Everglow.RenderTargetPool.GetRenderTarget2DArray(4);
             RenderTarget2D screen = renderTargets.Resource[0];
             RenderTarget2D StarryTarget = renderTargets.Resource[1];
             RenderTarget2D blackTarget = renderTargets.Resource[2];
+            RenderTarget2D StarrySkyTarget = renderTargets.Resource[3];
 
             Effect Starry = MythContent.QuickEffect("Effects/StarrySkyZone");
             //保存原图
             GraphicsDevice graphicsDevice = Main.instance.GraphicsDevice;
-            graphicsDevice.SetRenderTarget(blackTarget);
+            graphicsDevice.SetRenderTarget(screen);
             graphicsDevice.Clear(Color.Transparent);
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
@@ -114,7 +115,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
             Main.spriteBatch.End();
 
             //绘制黑域
-            graphicsDevice.SetRenderTarget(screen);
+            graphicsDevice.SetRenderTarget(blackTarget);
             graphicsDevice.Clear(Color.Transparent);
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             Texture2D tex = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/LunarFlare/BlackSky");
@@ -129,19 +130,31 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
                 }
             }
             Main.spriteBatch.End();
+
+
+            //绘制星空域
+            graphicsDevice.SetRenderTarget(StarrySkyTarget);
+            graphicsDevice.Clear(Color.Transparent);
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            tex = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/LunarFlare/StarrySky");
+            //TODO:@SliverMoon把星星绘制在这里
+            Main.spriteBatch.Draw(tex, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White);
+            Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+
+
             //在StarryTarget用Shader实现星空
 
             var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
             Starry.Parameters["uTransform"].SetValue(projection);
             Starry.Parameters["tex2"].SetValue(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Perlin"));
             Starry.Parameters["uTime"].SetValue((float)(Main.timeForVisualEffects * 0.005f));
-            Starry.Parameters["tex1"].SetValue(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/LunarFlare/StarrySky"));
+            Starry.Parameters["tex1"].SetValue(StarrySkyTarget);
             Starry.CurrentTechnique.Passes[0].Apply();
 
             graphicsDevice.SetRenderTarget(StarryTarget);
             graphicsDevice.Clear(Color.Transparent);
-            Main.spriteBatch.Draw(screen, Vector2.Zero, Color.White);
+            Main.spriteBatch.Draw(blackTarget, Vector2.Zero, Color.White);
 
             Main.spriteBatch.End();
 
@@ -149,7 +162,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
             graphicsDevice.Clear(Color.Transparent);
             //叠加
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-            Main.spriteBatch.Draw(blackTarget, Vector2.Zero, Color.White);
+            Main.spriteBatch.Draw(screen, Vector2.Zero, Color.White);
             Main.spriteBatch.Draw(StarryTarget, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White);
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);

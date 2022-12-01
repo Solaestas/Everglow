@@ -363,6 +363,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
             {
                 return false;
             }
+            if (item.type == ItemID.LunarFlareBook)
+            {
+                return false;
+            }
             return base.Shoot(item, player, source, position, velocity, type, damage, knockback);
         }
 
