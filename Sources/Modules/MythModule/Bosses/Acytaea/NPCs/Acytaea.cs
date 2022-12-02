@@ -2084,7 +2084,7 @@ public class Acytaea : VisualNPC
 
     public override float SpawnChance(NPCSpawnInfo spawnInfo)
     {
-        return NPC.AnyNPCs(NPC.type) ? 0f : 2f;
+        return 0;
     }
 
     public override bool CanChat()

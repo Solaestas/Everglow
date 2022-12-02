@@ -3,6 +3,7 @@ using Everglow.Sources.Commons.Function.Curves;
 using Terraria.Audio;
 using Terraria.Enums;
 using Terraria.GameContent.Shaders;
+using Everglow.Sources.Commons.Core.VFX;
 
 namespace Everglow.Sources.Modules.MEACModule.Projectiles
 {
@@ -482,7 +483,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
         }
         Vector2 r = Vector2.One;
-        public void DrawWarp()
+        public void DrawWarp(VFXBatch spriteBatch)
         {
             List<Vector2> SmoothTrailX = CatmullRom.SmoothPath(trailVecs.ToList());//平滑
             List<Vector2> SmoothTrail = new List<Vector2>();
@@ -515,14 +516,8 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                 bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(dir, w, 0, 1), new Vector3(factor, 1, w)));
                 bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + trail[i] * Projectile.scale * 1.1f, new Color(dir, w, 0, 1), new Vector3(factor, 0, w)));
             }
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-            Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-            Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/Images/Warp").Value;//扭曲用贴图
-            KEx.CurrentTechnique.Passes[0].Apply();
-            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            
+            spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/Images/Warp").Value,bars,PrimitiveType.TriangleStrip);
         }
         /// <summary>
         /// 根据鼠标位置锁定玩家方向

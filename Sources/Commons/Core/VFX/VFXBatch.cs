@@ -422,25 +422,25 @@ public class VFXBatch : IDisposable
 
         public static DynamicIndexBuffer IndexBuffer => instance.indexBuffer;
 
-        public static ref ushort IndexPosition => ref instance.indexPosition;
+        public static ref int IndexPosition => ref instance.indexPosition;
 
-        public static ushort[] Indices => instance.indices;
+        public static int[] Indices => instance.indices;
 
         public static IBuffers Instance => instance;
 
-        public static Queue<(ushort index, ushort vertex)> SameTexture => instance.sameTexture;
+        public static Queue<(int index, int vertex)> SameTexture => instance.sameTexture;
 
         public static List<Texture2D> Textures => instance.textures;
 
         public static DynamicVertexBuffer VertexBuffer => instance.vertexBuffer;
 
-        public static ref ushort VertexPosition => ref instance.vertexPosition;
+        public static ref int VertexPosition => ref instance.vertexPosition;
 
         public static T[] Vertices => instance.vertices;
 
         public static void AddVertex(IEnumerable<T> vertices, PrimitiveType type)
         {
-            ushort pos = instance.vertexPosition;
+            int pos = instance.vertexPosition;
             int count = 0;
             foreach (var vertex in vertices)
             {
@@ -453,16 +453,16 @@ public class VFXBatch : IDisposable
                 case PrimitiveType.TriangleList:
                     for (int i = 0; i < count; i++)
                     {
-                        instance.indices[instance.indexPosition++] = (ushort)(i + instance.vertexPosition);
+                        instance.indices[instance.indexPosition++] = i + instance.vertexPosition;
                     }
                     break;
 
                 case PrimitiveType.TriangleStrip:
                     for (int i = 0; i < count - 2; i++)
                     {
-                        instance.indices[instance.indexPosition++] = (ushort)(i + instance.vertexPosition);
-                        instance.indices[instance.indexPosition++] = (ushort)(i + 1 + instance.vertexPosition);
-                        instance.indices[instance.indexPosition++] = (ushort)(i + 2 + instance.vertexPosition);
+                        instance.indices[instance.indexPosition++] = i + instance.vertexPosition;
+                        instance.indices[instance.indexPosition++] = i + 1 + instance.vertexPosition;
+                        instance.indices[instance.indexPosition++] = i + 2 + instance.vertexPosition;
                     }
                     break;
 
@@ -483,11 +483,11 @@ public class VFXBatch : IDisposable
             instance = new Buffers()
             {
                 vertices = new T[maxVertices],
-                indices = new ushort[maxIndices],
+                indices = new int[maxIndices],
                 vertexBuffer = new DynamicVertexBuffer(graphicsDevice, typeof(T), maxVertices, BufferUsage.WriteOnly),
-                indexBuffer = new DynamicIndexBuffer(graphicsDevice, IndexElementSize.SixteenBits, maxIndices, BufferUsage.WriteOnly),
+                indexBuffer = new DynamicIndexBuffer(graphicsDevice, IndexElementSize.ThirtyTwoBits, maxIndices, BufferUsage.WriteOnly),
                 textures = new List<Texture2D>(),
-                sameTexture = new Queue<(ushort index, ushort vertex)>(),
+                sameTexture = new Queue<(int index, int vertex)>(),
                 graphicsDevice = graphicsDevice
             };
             return instance;
@@ -497,12 +497,12 @@ public class VFXBatch : IDisposable
         {
             public GraphicsDevice graphicsDevice;
             public DynamicIndexBuffer indexBuffer;
-            public ushort indexPosition;
-            public ushort[] indices;
-            public Queue<(ushort index, ushort vertex)> sameTexture;
+            public int indexPosition;
+            public int[] indices;
+            public Queue<(int index, int vertex)> sameTexture;
             public List<Texture2D> textures;
             public DynamicVertexBuffer vertexBuffer;
-            public ushort vertexPosition;
+            public int vertexPosition;
             public T[] vertices;
             public Type VertexType => typeof(T);
 
@@ -549,7 +549,7 @@ public class VFXBatch : IDisposable
                         continue;
                     }
                     graphicsDevice.Textures[0] = textures[count++];
-                    graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, currentVertex, 0, nextVertex - currentVertex, 0, (nextIndex - currentIndex) / 3);
+                    graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, nextVertex, currentIndex, (nextIndex - currentIndex) / 3);
                     (currentIndex, currentVertex) = (nextIndex, nextVertex);
                 }
             }
