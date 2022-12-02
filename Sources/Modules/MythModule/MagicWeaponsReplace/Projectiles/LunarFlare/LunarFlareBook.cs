@@ -4,9 +4,10 @@
     {
         public override void SetDef()
         {
-            DustType = DustID.Shadewood;
+            DustType = DustID.UltraBrightTorch;
             ItemType = ItemID.LunarFlareBook;
             ProjType = -1;
+            effectColor = new Color(15, 125, 175, 0);
         }
         public override void SpecialAI()
         {

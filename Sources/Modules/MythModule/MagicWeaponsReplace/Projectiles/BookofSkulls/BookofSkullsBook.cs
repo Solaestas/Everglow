@@ -9,6 +9,7 @@
             ItemType = ItemID.BookofSkulls;
             MulStartPosByVelocity = 2f;
             UseGlow = false;
+            effectColor = new Color(105, 75, 45, 100);
         }
     }
 }

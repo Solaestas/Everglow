@@ -13,6 +13,18 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Go
         {
             DustType = DustID.Ichor;
             ItemType = ItemID.GoldenShower;
+            string pathBase = "MagicWeaponsReplace/Textures/";
+            FrontTexPath = pathBase + "GoldenShower_A";
+            PaperTexPath = pathBase + "GoldenShower_C";
+            BackTexPath = pathBase + "GoldenShower_B";
+            GlowPath = pathBase + "GoldenShower_E";
+
+            TexCoordTop = new Vector2(6, 0);
+            TexCoordLeft = new Vector2(0, 24);
+            TexCoordDown = new Vector2(22, 24);
+            TexCoordRight = new Vector2(28, 0);
+
+            effectColor = new Color(255, 175, 0, 0);
         }
         public override void SpecialAI()
         {
@@ -69,6 +81,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Go
                     p.CritChance = (int)player.GetCritChance(DamageClass.Generic);
                 }
             }
+
         }
         public override void OnSpawn(IEntitySource source)
         {

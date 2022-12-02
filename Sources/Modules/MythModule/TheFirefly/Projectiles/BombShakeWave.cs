@@ -13,7 +13,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 
         public override void SetDefaults()
         {
-            Projectile.extraUpdates = 1;
+            Projectile.extraUpdates = 6;
             Projectile.width = 24;
             Projectile.height = 24;
             Projectile.hostile = false;
@@ -79,27 +79,38 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
             }
         }
+        private static void DrawTexCircle_VFXBatch(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
+        {
+            List<Vertex2D> circle = new List<Vertex2D>();
+
+            for (int h = 0; h < radious / 2; h += 1)
+            {
+                circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 1, 0)));
+                circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0, 0)));
+            }
+            circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(1, 1, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(1, 0, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(0, 1, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0, 0, 0)));
+            if (circle.Count > 2)
+            {
+                spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
+            }
+        }
         public void DrawWarp(VFXBatch sb)
         {
-           
-            float value = (200 - Projectile.timeLeft) / (float)Projectile.timeLeft * 1.4f;
-            float colorV = 0.6f * (1 - value) * Projectile.ai[0];
-            float x0 = Projectile.ai[0];
-            if (Projectile.ai[1] != 0)
+            float value = (200 - Projectile.timeLeft) / (200f);
+            value = MathF.Sqrt(value);
+            float colorV = 0.9f * (1 - value);
+            colorV *= 30f;
+            Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Vague");
+            float width = 60;
+            if (Projectile.timeLeft < 60)
             {
-                colorV = 0.6f * (1 - value) * Projectile.ai[1];
-                x0 = Projectile.ai[1] * 0.3f;
+                width = Projectile.timeLeft;
             }
 
-            if (value < 1)
-            {
-                DrawCircle(sb,value * 1100 * Projectile.ai[0], 500 * x0 * (1 - value) + 130 * Projectile.ai[0], new Color(colorV, colorV, colorV, 0f), Projectile.Center - Main.screenPosition);
-            }
-            value -= 0.2f;
-            if (value is < 1 and > 0)
-            {
-                DrawCircle(sb,value * 900 * Projectile.ai[0], 300 * x0 * (1 - value) + 130 * Projectile.ai[0], new Color(colorV, colorV, colorV, 0f), Projectile.Center - Main.screenPosition);
-            }
+            DrawTexCircle_VFXBatch(sb, value * 450, width * 20, new Color(colorV, colorV * 0.7f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
         }
     }
 }

@@ -66,9 +66,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
         /// </summary>
         internal bool UseGlow = true;
         /// <summary>
-        /// 荧光的颜色
+        /// 封面荧光的颜色
         /// </summary>
         internal Color glowColor = new Color(255, 255, 255, 0);
+        /// <summary>
+        /// 环绕魔法光效的颜色
+        /// </summary>
+        internal Color effectColor = new Color(255, 255, 255, 0);
         internal Vector2 TexCoordTop = new Vector2(16, 0);
         internal Vector2 TexCoordLeft = new Vector2(1, 15);
         internal Vector2 TexCoordDown = new Vector2(12, 28);
@@ -184,8 +188,16 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
                 Paper = MythContent.QuickTexture(PaperTexPath);
             }
             Projectile.hide = true;
+
+            DrawBack(TextureAssets.MagicPixel.Value, 2, 1.2f);
+            DrawPaper(TextureAssets.MagicPixel.Value, 2, 1.2f);
+            DrawFront(TextureAssets.MagicPixel.Value, 2, 1.2f);
+
             DrawBack(Book);
-            DrawBack(BookGlow, UseGlow);
+            if (UseGlow)
+            {
+                DrawBack(BookGlow, 1);
+            }
             DrawPaper(Paper);
             if (BackTexPath == "" && FrontTexPath == "")
             {
@@ -211,7 +223,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
             {
                 BookGlow = MythContent.QuickTexture(GlowPath);
             }
-            DrawFront(BookGlow, UseGlow);
+            if(UseGlow)
+            {
+                DrawFront(BookGlow, 1);
+            }
             SpecialDraw();
         }
         public virtual void SpecialDraw()
@@ -221,15 +236,19 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
         /// 对于书页的绘制，包括正在被翻起的以及堆叠在前后两侧的。关于纸张的绘制，因为较小，都没有经过严格的投影，随手捏了一个近似函数，只保证视觉效果上大致正确
         /// </summary>
         /// <param name="tex"></param>
-        public void DrawPaper(Texture2D tex, bool Glowing = false)
+        public void DrawPaper(Texture2D tex, int GlowType = 0, float MulSize = 1f)
         {
             Player player = Main.player[Projectile.owner];
-            Vector2 X0 = new Vector2(BookScale * player.direction, BookScale * player.gravDir) * 0.45f;//把书本贴图（有内容部分）算作一个矩形，这里表示这个矩形的半宽。玩家朝右，重力方向朝下时指向右下
-            Vector2 Y0 = new Vector2(BookScale * player.direction, -BookScale * player.gravDir) * 0.64f;//把书本贴图（有内容部分）算作一个矩形，这里表示这个矩形的半长，方向与X0垂直，玩家朝右，重力方向朝下时指向右上
-            Color c0 = Lighting.GetColor((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f));
-            if (Glowing)//如果开荧光，用不同的颜色，否则取光照色
+            Vector2 X0 = new Vector2(BookScale * player.direction, BookScale * player.gravDir) * 0.45f * MulSize;//把书本贴图（有内容部分）算作一个矩形，这里表示这个矩形的半宽。玩家朝右，重力方向朝下时指向右下
+            Vector2 Y0 = new Vector2(BookScale * player.direction, -BookScale * player.gravDir) * 0.64f * MulSize;//把书本贴图（有内容部分）算作一个矩形，这里表示这个矩形的半长，方向与X0垂直，玩家朝右，重力方向朝下时指向右上
+            Color c0 = glowColor;
+            if (GlowType == 0)//如果GlowType = 0不开荧光，取光照色
             {
-                c0 = glowColor;
+                c0 = Lighting.GetColor((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f));
+            }
+            if(GlowType == 2)//如果GlowType = 2，取光效色
+            {
+                c0 = effectColor;
             }
             //后部书页
             for (int x = 0; x < 8/*一共8页*/; x++)
@@ -393,16 +412,20 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
         /// </summary>
         /// <param name="tex"></param>
         /// <param name="Glowing"></param>
-        public void DrawBack(Texture2D tex, bool Glowing = false)
+        public void DrawBack(Texture2D tex, int GlowType = 0, float MulSize = 1f)
         {
             //这里应该不用注解了（
             Player player = Main.player[Projectile.owner];
-            Vector2 X0 = new Vector2(BookScale * player.direction, BookScale * player.gravDir) * 0.5f;
-            Vector2 Y0 = new Vector2(BookScale * player.direction, -BookScale * player.gravDir) * 0.707f;
-            Color c0 = Lighting.GetColor((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f));
-            if (Glowing)
+            Vector2 X0 = new Vector2(BookScale * player.direction, BookScale * player.gravDir) * 0.5f * MulSize;
+            Vector2 Y0 = new Vector2(BookScale * player.direction, -BookScale * player.gravDir) * 0.707f * MulSize;
+            Color c0 = glowColor;
+            if (GlowType == 0)
             {
-                c0 = glowColor;
+                c0 = Lighting.GetColor((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f));
+            }
+            if (GlowType == 2)
+            {
+                c0 = effectColor;
             }
             List<Vertex2D> bars = new List<Vertex2D>();
             for (int i = 0; i < 10; ++i)
@@ -455,15 +478,19 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
         /// </summary>
         /// <param name="tex"></param>
         /// <param name="Glowing"></param>
-        public void DrawFront(Texture2D tex, bool Glowing = false)
+        public void DrawFront(Texture2D tex, int GlowType = 0, float MulSize = 1f)
         {
             Player player = Main.player[Projectile.owner];
-            Vector2 X0 = new Vector2(BookScale * player.direction, BookScale * player.gravDir) * 0.5f;
-            Vector2 Y0 = new Vector2(BookScale * player.direction, -BookScale * player.gravDir) * 0.707f;
-            Color c0 = Lighting.GetColor((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f));
-            if (Glowing)
+            Vector2 X0 = new Vector2(BookScale * player.direction, BookScale * player.gravDir) * 0.5f * MulSize;
+            Vector2 Y0 = new Vector2(BookScale * player.direction, -BookScale * player.gravDir) * 0.707f * MulSize;
+            Color c0 = glowColor;
+            if (GlowType == 0)
             {
-                c0 = glowColor;
+                c0 = Lighting.GetColor((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f));
+            }
+            if (GlowType == 2)
+            {
+                c0 = effectColor;
             }
             List<Vertex2D> bars = new List<Vertex2D>();
             for (int i = 0; i < 10; ++i)

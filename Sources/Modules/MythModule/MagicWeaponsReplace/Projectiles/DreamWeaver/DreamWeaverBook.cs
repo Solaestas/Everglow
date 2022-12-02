@@ -15,6 +15,7 @@
             TexCoordLeft = new Vector2(0, 34);
             TexCoordDown = new Vector2(21, 46);
             TexCoordRight = new Vector2(34, 9);
+            effectColor = new Color(0, 0, 55, 175);
         }
 
         public override void SpecialAI()
