@@ -9,6 +9,7 @@
             ProjType = ModContent.ProjectileType<CursedFlamesII>();
             MulDamage = 1f;
             MulVelocity = 0.3f;
+            effectColor = new Color(105, 255, 0, 0);
         }
     }
 }

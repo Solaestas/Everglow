@@ -9,6 +9,7 @@
             ProjType = ModContent.ProjectileType<MagnetSphereII>();
             MulStartPosByVelocity = 6f;
             MulVelocity = 2f;
+            effectColor = new Color(15, 185, 115, 100);
         }
     }
 }

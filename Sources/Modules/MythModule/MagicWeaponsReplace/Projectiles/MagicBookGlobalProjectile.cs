@@ -15,11 +15,11 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
             {
                 if(!crit)
                 {
-                    crit = Main.rand.NextFloat() < MoonNight.stars.Count * 0.002f;
+                    //crit = Main.rand.NextFloat() < MoonNight.stars.Count * 0.002f;
                 }
                 else
                 {
-                    damage += (int)(MoonNight.stars.Count * 0.006f * damage);
+                    //damage += (int)(MoonNight.stars.Count * 0.006f * damage);
                 }
             }
         }

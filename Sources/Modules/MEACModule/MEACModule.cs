@@ -157,7 +157,7 @@ namespace Everglow.Sources.Modules.MEACModule
         private bool DrawWarp(SpriteBatch sb)//扭曲层
         {
             bool flag = false;
-            VFXManager.spriteBatch.Begin();
+            VFXManager.spriteBatch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
             Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
             KEx.Parameters["uTransform"].SetValue(Main.Transform *Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1));
             KEx.CurrentTechnique.Passes[0].Apply();

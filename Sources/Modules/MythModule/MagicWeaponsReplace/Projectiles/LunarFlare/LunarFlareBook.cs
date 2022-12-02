@@ -1,35 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.LunarFlare
+﻿namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.LunarFlare
 {
     internal class LunarFlareBook : MagicBookProjectile
     {
-        int timer;
         public override void SetDef()
         {
-            DustType = DustID.WhiteTorch;
-            //DustTypeII = DustID.GemSapphire;
+            DustType = DustID.UltraBrightTorch;
             ItemType = ItemID.LunarFlareBook;
+            ProjType = -1;
+            effectColor = new Color(15, 125, 175, 0);
         }
         public override void SpecialAI()
         {
             Player player = Main.player[Projectile.owner];
-            if (MoonNight.Timer < 0)
+            for(int x = 0;x < 4;x++)
             {
-                MoonNight.Timer = 0;
-            }
-            MoonNight.Timer+= 10;
-            if (player.itemTime == 2)
-            {
-                timer++;
-                if (timer % 2 == 0)
+                if (player.itemTime == player.itemTimeMax - 2 && player.HeldItem.type == ItemType)
                 {
-                    int count = Math.Min(timer / 12, 15);
-                    MoonNight.GenerateStars(count * 5);
+                    Vector2 StartPos = Projectile.Center + new Vector2(Main.rand.NextFloat(-600, 600), -1000);
+                    Vector2 vToMouse = Main.MouseWorld - StartPos;
+                    Vector2 velocity = Utils.SafeNormalize(vToMouse, Vector2.Zero) * player.HeldItem.shootSpeed * Main.rand.NextFloat(0.85f,1.15f);
+                    Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), StartPos + velocity * MulStartPosByVelocity, velocity * MulVelocity * 8, ModContent.ProjectileType<LunarFlareII>(), (int)(player.HeldItem.damage * MulDamage), player.HeldItem.knockBack, player.whoAmI);
+                    p.CritChance = (int)player.GetCritChance(DamageClass.Generic);
                 }
             }
         }

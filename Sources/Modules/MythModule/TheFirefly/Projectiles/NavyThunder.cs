@@ -175,7 +175,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Projectile.frame = (int)((addi % 25) / 5f);
             Rectangle DrawRect = new Rectangle(0, Projectile.frame * Projectile.height, Projectile.width, Projectile.height);
 
-            Color drawColor = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
             SpriteEffects se = SpriteEffects.None;
             if (player.direction == 1)
             {

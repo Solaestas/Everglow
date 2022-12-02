@@ -102,9 +102,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
                             player.AddBuff(ModContent.BuffType<Buffs.WaterBoltII>(), 300);
                             foreach (Projectile p0 in Main.projectile)
                             {
-                                if (p0.owner == player.whoAmI && p0.type == Projectile.type)
+                                if (p0.owner == player.whoAmI && p0.type == Projectile.type && p0.active)
                                 {
                                     p0.Kill();
+                                    Projectile.NewProjectile(p0.GetSource_FromAI(), p0.Center, Vector2.Zero, ModContent.ProjectileType<BeadShakeWave>(), 0, 0, 255, 1);
                                     p0.active = false;
                                 }
                             }
@@ -184,7 +185,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
             {
                 return;
             }
-            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BeadShakeWave>(), 0, 0, Projectile.owner, 1);
+
 
             float k1 = 0.3f;
             float k2 = 8;
