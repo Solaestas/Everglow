@@ -1,10 +1,5 @@
 ﻿using Everglow.Sources.Commons.Core.ModuleSystem;
-using Everglow.Sources.Commons.Function.ObjectPool;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Everglow.Sources.Commons.Core.VFX;
 using Terraria.Graphics.Effects;
 
 namespace Everglow.Sources.Modules.YggdrasilModule
@@ -37,11 +32,11 @@ namespace Everglow.Sources.Modules.YggdrasilModule
 
             graphicsDevice.SetRenderTarget(render);
             graphicsDevice.Clear(Color.Transparent);
-            bool flag = DrawOcclusion(Main.spriteBatch);
+            bool flag = DrawOcclusion(VFXManager.spriteBatch);
 
             graphicsDevice.SetRenderTarget(render2);
             graphicsDevice.Clear(Color.Transparent);
-            flag = DrawEffect(Main.spriteBatch);
+            flag = DrawEffect(VFXManager.spriteBatch);
 
             if (flag)
             {
@@ -70,10 +65,10 @@ namespace Everglow.Sources.Modules.YggdrasilModule
             renderTargets.Release();
             orig(self, finalTexture, screenTarget1, screenTarget2, clearColor);
         }
-        private bool DrawOcclusion(SpriteBatch sb)//遮盖层
+        private bool DrawOcclusion(VFXBatch spriteBatch)//遮盖层
         {
+            VFXManager.spriteBatch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
             bool flag = false;
-            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             foreach (Projectile proj in Main.projectile)
             {
                 if (proj.active)
@@ -81,17 +76,17 @@ namespace Everglow.Sources.Modules.YggdrasilModule
                     if(proj.ModProjectile is IOcclusionProjectile ModProj)
                     {
                         flag = true;
-                        ModProj.DrawOcclusion();
+                        ModProj.DrawOcclusion(VFXManager.spriteBatch);
                     }
                 }
             }
-            sb.End();
+            VFXManager.spriteBatch.End();
             return flag;
         }
-        private bool DrawEffect(SpriteBatch sb)//特效层
+        private bool DrawEffect(VFXBatch spriteBatch)//特效层
         {
             bool flag = false;
-            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            VFXManager.spriteBatch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
             foreach (Projectile proj in Main.projectile)
             {
                 if (proj.active)
@@ -99,11 +94,11 @@ namespace Everglow.Sources.Modules.YggdrasilModule
                     if (proj.ModProjectile is IOcclusionProjectile ModProj)
                     {
                         flag = true;
-                        ModProj.DrawEffect();
+                        ModProj.DrawEffect(VFXManager.spriteBatch);
                     }
                 }
             }
-            sb.End();
+            VFXManager.spriteBatch.End();
             return flag;
         }
         private void GetOrig(GraphicsDevice graphicsDevice)

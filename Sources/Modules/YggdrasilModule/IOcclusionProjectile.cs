@@ -1,8 +1,9 @@
-﻿namespace Everglow.Sources.Modules.YggdrasilModule
+﻿using Everglow.Sources.Commons.Core.VFX;
+namespace Everglow.Sources.Modules.YggdrasilModule
 {
     public interface IOcclusionProjectile
     {
-        void DrawOcclusion();
-        void DrawEffect();
+        void DrawOcclusion(VFXBatch spriteBatch);
+        void DrawEffect(VFXBatch spriteBatch);
     }
 }
