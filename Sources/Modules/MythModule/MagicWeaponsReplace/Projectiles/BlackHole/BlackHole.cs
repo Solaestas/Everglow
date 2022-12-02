@@ -3,6 +3,7 @@ using Everglow.Sources.Commons.Core.VFX.Visuals;
 using Everglow.Sources.Commons.Core.VFX;
 using Everglow.Sources.Commons.Core;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.BlackHole.Dust;
 
@@ -240,6 +241,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bl
         }
         public override bool PreDraw(ref Color lightColor)
         {
+            Texture2D tex = TextureAssets.MagicPixel.Value;
+            Main.spriteBatch.Draw(tex,new Rectangle(0, 0, Main.screenWidth, Main.screenHeight),new Color(0,0,0,(float)(100f / ((Main.LocalPlayer.Center - Projectile.Center).Length() + 100f)) * Projectile.scale / 60f));
             if (!Main.drawToScreen)
             {
                 DrawRing(Projectile);
@@ -248,7 +251,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bl
            else//低特效
             {
                 DrawRing(Projectile);
-                Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
+                tex = ModContent.Request<Texture2D>(Texture).Value;
                 Main.spriteBatch.Draw(tex, proj.Center - Main.screenPosition, null, Color.White, 0, tex.Size() / 2, proj.scale / 255f, 0, 0);
                 BlackHole.DrawRing(proj, true);
 
