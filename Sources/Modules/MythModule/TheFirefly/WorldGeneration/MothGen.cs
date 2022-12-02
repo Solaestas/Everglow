@@ -1,4 +1,5 @@
 using Everglow.Sources.Commons.Function.ImageReader;
+using Everglow.Sources.Modules.ZYModule.Commons.Function.MapIO;
 using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Tiles;
 using Terraria.DataStructures;
@@ -14,7 +15,26 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         {
             if(Main.mouseRight && Main.mouseRightRelease)
             {
+                //QuickBuild((int)Main.MouseWorld.X / 16, (int)Main.MouseWorld.Y / 16, "MapIOResources/ShabbyPylonWithCastle22x22Style0.mapio");
+                for (int i = 0; i < 7;i++)
+                {
+                    //QuickBuild((int)Main.MouseWorld.X / 16 + i * 40, (int)Main.MouseWorld.Y / 16, "MapIOResources/ShabbyCastle0" + (i + 1).ToString() + ".mapio");
+                }
 
+                //MythUtils.PlaceFrameImportantTiles((int)Main.MouseWorld.X / 16, (int)Main.MouseWorld.Y / 16, 3, 4, ModContent.TileType<Pylon.FireflyPylon>());
+            }
+        }
+        public static void QuickBuild(int x, int y, string Path)
+        {
+            MapIO mapIO = new MapIO(x, y);
+
+            mapIO.Read(Everglow.Instance.GetFileStream("Sources/Modules/MythModule/" + Path));
+
+            var it = mapIO.GetEnumerator();
+            while (it.MoveNext())
+            {
+                WorldGen.SquareTileFrame(it.CurrentCoord.X, it.CurrentCoord.Y);
+                WorldGen.SquareWallFrame(it.CurrentCoord.X, it.CurrentCoord.Y);
             }
         }
         private void BuildLivingFluorescentTree()
@@ -198,7 +218,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                                 }
                                 if (pixel.R == 45 && pixel.G == 49 && pixel.B == 255)
                                 {
-                                    //TODO:@SilverMoonŒﬁ∑®∑≈÷√Pylon
                                     MythUtils.PlaceFrameImportantTiles(a + x, b + y, 3, 4, ModContent.TileType<Pylon.FireflyPylon>());
                                 }
                                 break;
@@ -375,11 +394,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             return new Point16(PoX, PoY);
         }
 
-        private static void SmoothMothTile(int a, int b)
+        private static void SmoothMothTile(int a, int b, int width = 256, int height = 512)
         {
-            for (int y = 0; y < 256; y += 1)
+            for (int y = 0; y < width; y += 1)
             {
-                for (int x = 0; x < 512; x += 1)
+                for (int x = 0; x < height; x += 1)
                 {
                     if (Main.tile[x + a, y + b].TileType == (ushort)ModContent.TileType<Tiles.DarkCocoon>())
                     {

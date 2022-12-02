@@ -12,6 +12,10 @@ internal class ShabbyPylonTileEntity : TEModdedPylon
 
 internal class ShabbyPylon : BaseModPylon<ShabbyPylonTileEntity>
 {
+    public override void PostSetDefaults()
+    {
+        DustType = DustID.Lead;
+    }
     public override int DropItemType => ModContent.ItemType<ShabbyPylonItem>();
 
     public override bool ValidTeleportCheck_BiomeRequirements(TeleportPylonInfo pylonInfo, SceneMetrics sceneData)
