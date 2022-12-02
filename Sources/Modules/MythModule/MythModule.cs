@@ -4,6 +4,7 @@ using MonoMod.Cil;
 using ReLogic.Content;
 using Terraria.GameContent.Shaders;
 using Terraria.Graphics.Shaders;
+using Terraria.Graphics.Effects;
 
 namespace Everglow.Sources.Modules.MythModule
 {
@@ -93,7 +94,6 @@ namespace Everglow.Sources.Modules.MythModule
                 effect.Apply();
             });
         }
-
         public void Unload()
         {
             ReplaceEffectPass = null;
