@@ -55,6 +55,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                     {
                         Vector2 velocity = new Vector2(0, Main.rand.NextFloat(2f, 12f)).RotatedByRandom(6.283);
                         Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 - Projectile.velocity * 4, velocity + Projectile.velocity, ModContent.ProjectileType<DreamWeaver>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 3f/*If ai[0] equal to 3, another ai will be execute*/);
+                        SoundEngine.PlaySound(SoundID.Item54);
                         p.friendly = false;
                         p.damage = Projectile.damage / 4;
                         p.timeLeft = 240;
@@ -106,6 +107,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                             {
                                 Vector2 velocity = new Vector2(0, Main.rand.NextFloat(2f, 6f)).RotatedByRandom(6.283) - Projectile.velocity * 0.2f;
                                 Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 - Projectile.velocity * 2, velocity, ModContent.ProjectileType<DreamWeaver>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 3f/*If ai[0] equal to 3, another ai will be execute*/);
+                                SoundEngine.PlaySound(SoundID.Item54);
                                 p.friendly = false;
                             }
                         }
@@ -141,6 +143,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 {
                     Vector2 velocity = new Vector2(0, Main.rand.NextFloat(2f, 6f)).RotatedByRandom(6.283) - Projectile.velocity * 0.2f;
                     Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2, velocity, ModContent.ProjectileType<DreamWeaver>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 3f/*If ai[0] equal to 3, another ai will be execute*/);
+                    SoundEngine.PlaySound(SoundID.Item54);
                     p.friendly = false;
                 }
             }
