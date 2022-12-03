@@ -12,7 +12,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             Projectile.hostile = false;
             Projectile.penetrate = -1;
             Projectile.timeLeft = 600;
-            Projectile.DamageType = DamageClass.Summon;
+            Projectile.DamageType = DamageClass.Magic;
             Projectile.tileCollide = false;
         }
         public void GenerateVFX(int Frequency)

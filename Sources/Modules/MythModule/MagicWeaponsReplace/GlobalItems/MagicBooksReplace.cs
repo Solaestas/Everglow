@@ -385,7 +385,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
                             {
                                 Vector2 ReleasePoint = Main.MouseWorld + new Vector2(0, g * 5 * player.gravDir);
                                 Projectile p = Projectile.NewProjectileDirect(item.GetSource_FromAI(), ReleasePoint, Vector2.Zero, ModContent.ProjectileType<Projectiles.BookofSkulls.SkullHand>(), player.HeldItem.damage * 3, player.HeldItem.knockBack * 6, player.whoAmI);
-                                p.CritChance = (int)(player.HeldItem.crit + player.GetCritChance(DamageClass.Generic));
+                                p.CritChance = player.GetWeaponCrit(player.HeldItem);
 
                                 mplayer.HandCooling = 18;
                                 player.statMana -= player.HeldItem.mana * 4;
