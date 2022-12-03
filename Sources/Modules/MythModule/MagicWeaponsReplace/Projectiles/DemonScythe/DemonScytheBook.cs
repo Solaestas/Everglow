@@ -29,7 +29,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
                 Vector2 velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero) * player.HeldItem.shootSpeed;
                 Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + Utils.SafeNormalize(velocity, Vector2.Zero) * 25, velocity * 16, ModContent.ProjectileType<DemonScythePlus>()/*ProjectileID.DemonScythe*/, player.HeldItem.damage, player.HeldItem.knockBack, player.whoAmI);
                 SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/MagicWeaponsReplace/Sounds/DemonScyth"), Projectile.Center);
-                p.CritChance = (int)(player.GetCritChance(DamageClass.Generic) + player.HeldItem.crit);
+                p.CritChance = player.GetWeaponCrit(player.HeldItem);
             }
         }
     }

@@ -21,7 +21,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Go
             Projectile.alpha = 0;
             Projectile.penetrate = 1;
             Projectile.scale = 1f;
-            Projectile.DamageType = DamageClass.MagicSummonHybrid;
+            Projectile.DamageType = DamageClass.Magic;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 30;
         }
@@ -60,6 +60,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Go
                                 Vector2 velocity = new Vector2(0, Main.rand.NextFloat(2f, 6f)).RotatedByRandom(6.283) - Projectile.velocity * 0.2f;
                                 Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 - Projectile.velocity * 2, velocity, ModContent.ProjectileType<GoldenShowerII>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 3f/*If ai[0] equal to 3, another ai will be execute*/);
                                 p.friendly = false;
+                                p.CritChance = Projectile.CritChance;
                             }
                         }
                         Projectile.extraUpdates = 2;
@@ -95,6 +96,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Go
                     Vector2 velocity = new Vector2(0, Main.rand.NextFloat(2f, 6f)).RotatedByRandom(6.283) - Projectile.velocity * 0.2f;
                     Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2, velocity, ModContent.ProjectileType<GoldenShowerII>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 3f/*If ai[0] equal to 3, another ai will be execute*/);
                     p.friendly = false;
+                    p.CritChance = Projectile.CritChance;
                 }
             }
             target.AddBuff(BuffID.Ichor, 600);

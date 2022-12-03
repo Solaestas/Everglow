@@ -37,14 +37,14 @@
                     {
                         Vector2 velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero).RotatedBy(Main.rand.NextFloat(-0.1f, 0.1f)) * player.HeldItem.shootSpeed * 1.3f;
                         Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 + new Vector2(0, -10), velocity, ModContent.ProjectileType<DreamWeaverII>(), player.HeldItem.damage * 2, player.HeldItem.knockBack, player.whoAmI);
-                        p.CritChance = (int)player.GetCritChance(DamageClass.Generic);
+                        p.CritChance = player.GetWeaponCrit(player.HeldItem);
                     }
                 }
                 else
                 {
                     Vector2 velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero) * player.HeldItem.shootSpeed * 1.3f;
                     Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 + new Vector2(0, -10), velocity, ModContent.ProjectileType<DreamWeaverII>(), player.HeldItem.damage * 2, player.HeldItem.knockBack, player.whoAmI);
-                    p.CritChance = (int)player.GetCritChance(DamageClass.Generic);
+                    p.CritChance = player.GetWeaponCrit(player.HeldItem);
                 }
             }
         }

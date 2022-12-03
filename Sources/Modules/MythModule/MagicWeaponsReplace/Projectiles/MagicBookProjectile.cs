@@ -17,7 +17,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
             Projectile.hostile = false;
             Projectile.penetrate = -1;
             Projectile.timeLeft = 10000;
-            Projectile.DamageType = DamageClass.MagicSummonHybrid;
+            Projectile.DamageType = DamageClass.Magic;
             Projectile.tileCollide = false;
             Projectile.alpha = 255;
             SetDef();
@@ -134,7 +134,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
             {
                 Vector2 velocity = Utils.SafeNormalize(vTOMouse, Vector2.Zero) * player.HeldItem.shootSpeed;
                 Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * MulStartPosByVelocity, velocity * MulVelocity, ProjType, (int)(player.HeldItem.damage * MulDamage), player.HeldItem.knockBack, player.whoAmI);
-                p.CritChance = (int)player.GetCritChance(DamageClass.Generic);
+                p.CritChance = player.GetWeaponCrit(player.HeldItem);
             }
         }
         public virtual void SpecialAI()

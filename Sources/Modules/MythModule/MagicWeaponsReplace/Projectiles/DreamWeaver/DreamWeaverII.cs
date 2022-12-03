@@ -23,7 +23,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Dr
             Projectile.alpha = 0;
             Projectile.penetrate = 30;
             Projectile.scale = 1f;
-            Projectile.DamageType = DamageClass.MagicSummonHybrid;
+            Projectile.DamageType = DamageClass.Magic;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 30;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;

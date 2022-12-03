@@ -807,5 +807,62 @@
 			Thirsty : "You are thirsty"
 			NotThirsty : "You don't want to drink"
 		}
+		ExtraTooltip : 
+		{
+			Spellbook : 
+			{
+				WaterBolt : 
+					'''
+					Generates a waterball for every 5 hits which can stack up to 6
+					Right click consumes 1 and teleport you to cursor
+					Middle click at maximum stack consumes all and amplify attacks for 5 seconds
+					Clears all waterballs when switch weapons
+					'''
+				DemonScythe : 
+					'''
+					The demon scythes are replaced with lunatic blades
+					Damage and knockback rises as speed increases
+					'''
+				BookofSkulls : 
+					'''
+					Hitting enemies releases several bone nails which can stack up to 12
+					The bone nails will be fired with the next attack
+					Right click summons flaming bone claws on the ground
+					'''
+				CrystalStorm : 
+					'''
+					Periodically fires a large stormcrystal
+					The stormcrystal forms an attracting tornado after broken
+					Coins, hearts and stars inside the tornado will be attracted to the player
+					'''
+				CursedFlames : 
+					'''
+					The cursed flame balls can bounce or penetrate for 3 times
+					Damage increases by 20% for each bounce or penetration
+					'''
+				GoldenShower : 
+					'''
+					Sprays ichor shower on opened and closed
+					Scale of the ichor shower on book closed increases with cast time
+					Right click increases both the spray rate and mana cost
+					'''
+				MagnetSphere : 
+					'''
+					Multiple magnet spheres can exist simultaneously
+					They randomly electrocute nearby enemies and burst into powerful lightnings on hit
+					'''
+				RazorbladeTyphoon : 
+					'''
+					Fires typhoons that attract and home into enemies
+					Coins, hearts and stars inside the typhoon will be attracted to the player
+					If casted for a long time, accumulation of substance will result in unexpected consequences
+					'''
+				LunarFlareBook : 
+					'''
+					Reveals the star sky
+                    Gradually increases crit chance and crit damage
+					'''
+			}
+		}
 	}
 }

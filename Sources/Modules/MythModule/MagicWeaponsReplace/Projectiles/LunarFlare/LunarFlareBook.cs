@@ -20,7 +20,7 @@
                     Vector2 vToMouse = Main.MouseWorld - StartPos;
                     Vector2 velocity = Utils.SafeNormalize(vToMouse, Vector2.Zero) * player.HeldItem.shootSpeed * Main.rand.NextFloat(0.85f,1.15f);
                     Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), StartPos + velocity * MulStartPosByVelocity, velocity * MulVelocity * 8, ModContent.ProjectileType<LunarFlareII>(), (int)(player.HeldItem.damage * MulDamage), player.HeldItem.knockBack, player.whoAmI);
-                    p.CritChance = (int)player.GetCritChance(DamageClass.Generic);
+                    p.CritChance = player.GetWeaponCrit(player.HeldItem);
                 }
             }
         }

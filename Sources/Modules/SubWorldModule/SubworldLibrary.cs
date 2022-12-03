@@ -486,42 +486,48 @@ namespace Everglow.Sources.Modules.SubWorldModule
             {
                 PlayerFileData Erasing = Main.PlayerList[i];
                 string rootpath = Path.Combine(Main.PlayerPath, nameof(Subworld), Path.GetFileNameWithoutExtension(Erasing.Path));
-                List<string> subworlds = new();
-                FindFiles(subworlds, rootpath, file => file.Contains(".wld") || file.Contains("twld"));
-                bool iswindow = OperatingSystem.IsWindows();
-                foreach (string file in subworlds)
+                if (Directory.Exists(rootpath))
                 {
-                    if (iswindow)
+                    List<string> subworlds = new();
+                    FindFiles(subworlds, rootpath, file => file.Contains(".wld") || file.Contains("twld"));
+                    bool iswindow = OperatingSystem.IsWindows();
+                    foreach (string file in subworlds)
                     {
-                        FileOperationAPIWrapper.MoveToRecycleBin(file);
+                        if (iswindow)
+                        {
+                            FileOperationAPIWrapper.MoveToRecycleBin(file);
+                        }
+                        else
+                        {
+                            File.Delete(file);
+                        }
                     }
-                    else
-                    {
-                        File.Delete(file);
-                    }
+                    ClearEmptyFolder(rootpath);
                 }
-                ClearEmptyFolder(rootpath);
                 orig(i);
             }
             private static void Main_EraseWorld(On.Terraria.Main.orig_EraseWorld orig, int i)
             {
                 WorldFileData Erasing = Main.WorldList[i];
                 string rootpath = Path.Combine(Main.WorldPath, nameof(Subworld), Path.GetFileNameWithoutExtension(Erasing.Path));
-                List<string> subworlds = new();
-                FindFiles(subworlds, rootpath, file => file.Contains(".wld") || file.Contains("twld"));
-                bool iswindow = OperatingSystem.IsWindows();
-                foreach (string file in subworlds)
+                if (Directory.Exists(rootpath))
                 {
-                    if (iswindow)
+                    List<string> subworlds = new();
+                    FindFiles(subworlds, rootpath, file => file.Contains(".wld") || file.Contains("twld"));
+                    bool iswindow = OperatingSystem.IsWindows();
+                    foreach (string file in subworlds)
                     {
-                        FileOperationAPIWrapper.MoveToRecycleBin(file);
+                        if (iswindow)
+                        {
+                            FileOperationAPIWrapper.MoveToRecycleBin(file);
+                        }
+                        else
+                        {
+                            File.Delete(file);
+                        }
                     }
-                    else
-                    {
-                        File.Delete(file);
-                    }
+                    ClearEmptyFolder(rootpath);
                 }
-                ClearEmptyFolder(rootpath);
                 orig(i);
             }
             private static void Netplay_AddCurrentServerToRecentList(On.Terraria.Netplay.orig_AddCurrentServerToRecentList orig)
@@ -659,11 +665,17 @@ namespace Everglow.Sources.Modules.SubWorldModule
                 //});
                 //c.Emit(Br, Skip_Orig_SaveAndQuit);
 
-                if (!c.TryGotoNext(MoveType.After, i => i.MatchCall(typeof(WorldGen), nameof(WorldGen.SaveAndQuit))))
+                if (!c.TryGotoNext(/*MoveType.After, */i => i.MatchCall(typeof(WorldGen), nameof(WorldGen.SaveAndQuit))))
                 {
                     throw new OperationCanceledException("IL Patch Is Failed.");
                 }
                 //c.MarkLabel(Skip_Orig_SaveAndQuit);
+                c.EmitDelegate(() =>
+                {
+                    SubworldSystem.cache?.Unload();
+                    SubworldSystem.current?.Unload();
+                    SubworldSystem.current = SubworldSystem.cache = null;
+                });
 
                 if (!c.TryGotoNext(i => i.MatchLdsfld(typeof(IngameOptions), nameof(IngameOptions.category))))
                 {
