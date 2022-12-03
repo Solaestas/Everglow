@@ -2,10 +2,12 @@ using Everglow.Sources.Commons.Function.ImageReader;
 using Everglow.Sources.Modules.ZYModule.Commons.Function.MapIO;
 using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Tiles;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Pylon;
 using Terraria.DataStructures;
 using Terraria.IO;
 using Terraria.ModLoader.IO;
 using Terraria.WorldBuilding;
+
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
 {
@@ -21,7 +23,16 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                     //QuickBuild((int)Main.MouseWorld.X / 16 + i * 40, (int)Main.MouseWorld.Y / 16, "MapIOResources/ShabbyCastle0" + (i + 1).ToString() + ".mapio");
                 }
 
-                //MythUtils.PlaceFrameImportantTiles((int)Main.MouseWorld.X / 16, (int)Main.MouseWorld.Y / 16, 3, 4, ModContent.TileType<Pylon.FireflyPylon>());
+                //MythUtils.PlaceFrameImportantTiles((int)Main.MouseWorld.X / 16, (int)Main.MouseWorld.Y / 16, 3, 9, ModContent.TileType<BoCPostAndBead>());
+
+
+            }
+            if (!PylonSystem.Instance.shabbyPylonEnable && NPC.downedBoss2)
+            {
+                PylonSystem.Instance.shabbyPylonEnable = true;
+                PylonSystem.Instance.firstEnableAnimation = true;
+
+                Main.NewText("Repaired");
             }
         }
         public static void QuickBuild(int x, int y, string Path)

@@ -47,9 +47,9 @@ internal class ShabbyPylon : BaseModPylon<ShabbyPylonTileEntity>
     }
 
     public float AscensionTimer = 0;
-    public const float MaxAscensionTime = 300;
+    public const float MaxAscensionTime = 100;
     public int AnimationTimer = 0;
-    public const float MaxTime = 300f;
+    public const float MaxTime = 100f;
 
     public override void DrawMapIcon(ref MapOverlayDrawContext context, ref string mouseOverText, TeleportPylonInfo pylonInfo, bool isNearPylon, Color drawColor, float deselectedScale, float selectedScale)
     {
@@ -82,13 +82,7 @@ internal class ShabbyPylonItem : ModItem
 {
     public override bool? UseItem(Player player)
     {
-        if (Item.favorited && !PylonSystem.Instance.shabbyPylonEnable)
-        {
-            PylonSystem.Instance.shabbyPylonEnable = true;
-            PylonSystem.Instance.firstEnableAnimation = true;
 
-            Main.NewText("Repaired");
-        }
         return null;
     }
 
