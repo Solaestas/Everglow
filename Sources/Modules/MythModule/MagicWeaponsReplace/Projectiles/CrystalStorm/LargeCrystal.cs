@@ -20,7 +20,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             Projectile.alpha = 0;
             Projectile.penetrate = 1;
             Projectile.scale = 1f;
-            Projectile.DamageType = DamageClass.MagicSummonHybrid;
+            Projectile.DamageType = DamageClass.Magic;
 
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 60;
@@ -117,6 +117,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
         public override void Kill(int timeLeft)
         {
             Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<Storm>(), (int)(Projectile.damage * 0.6f), Projectile.knockBack, Projectile.owner);
+            p.CritChance = Projectile.CritChance / 4;
 
             float k1 = 1;
             float k0 = 5;
@@ -153,7 +154,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
             for (int j = 0; j < 3 * k0; j++)
             {
                 Vector2 v = new Vector2(0, Main.rand.NextFloat(2f, 7f)).RotatedByRandom(6.28);
-                int ds = Projectile.NewProjectile(null, Projectile.Center + v * 3f + Projectile.velocity, v, ProjectileID.CrystalStorm, Projectile.damage / 3, 1, Projectile.owner, 0);
+                int ds = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + v * 3f + Projectile.velocity, v, ProjectileID.CrystalStorm, Projectile.damage / 3, 1, Projectile.owner, 0);
                 Main.projectile[ds].scale = Main.rand.NextFloat(0.85f, 1.25f);
             }
             float x0 = Main.rand.NextFloat(0, 6.283f);
