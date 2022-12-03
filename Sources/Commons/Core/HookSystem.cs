@@ -1,4 +1,5 @@
 ﻿using MonoMod.Cil;
+using MonoMod.Utils;
 
 namespace Everglow.Sources.Commons.Core
 {
@@ -17,21 +18,26 @@ namespace Everglow.Sources.Commons.Core
                 action = value;
             }
         }
+
         private Action action;
         private string name;
         private bool enable;
+
         public bool Enable
         {
             get => enable;
             set => enable = value;
         }
+
         public string Name => name;
+
         public ActionHandler(Action action)
         {
             this.action = action;
             name = action.ToString();
             enable = true;
         }
+
         public ActionHandler(Action action, string name)
         {
             this.action = action;
@@ -47,13 +53,17 @@ namespace Everglow.Sources.Commons.Core
         }
 
         public void Invoke() => action.Invoke();
+
         public override string ToString() => name;
     }
+
     public enum CallOpportunity
     {
         None,
+
         //绘制
         PostDrawFilter,
+
         PostDrawTiles,
         PostDrawProjectiles,
         PostDrawDusts,
@@ -61,8 +71,10 @@ namespace Everglow.Sources.Commons.Core
         PostDrawPlayers,
         PostDrawMapIcons,
         PostDrawBG,
+
         //加载
         PostUpdateEverything,
+
         PostUpdateProjectiles,
         PostUpdatePlayers,
         PostUpdateNPCs,
@@ -88,7 +100,9 @@ namespace Everglow.Sources.Commons.Core
                 methods.Add(op, new List<ActionHandler>());
             }
         }
+
         private List<(CallOpportunity op, ActionHandler handler)> waitToRemove;
+
         public static readonly CallOpportunity[] validOpportunity = new CallOpportunity[]
         {
             //Draw
@@ -113,10 +127,12 @@ namespace Everglow.Sources.Commons.Core
             CallOpportunity.PostEnterWorld_Server,
             CallOpportunity.ResolutionChanged
         };
+
         internal bool DisableDrawNPCs { get; set; } = false;
         internal bool DisableDrawSkyAndHell { get; set; } = false;
         internal bool DisableDrawBackground { get; set; } = false;
         internal Dictionary<CallOpportunity, List<ActionHandler>> methods;
+
         /// <summary>
         /// 现在存在的问题就是，这里的method都是无参数的Action，但是如DrawMapIcon这样的方法就需要传参了，只好用这种这种定义字段的方法
         /// </summary>
@@ -124,6 +140,7 @@ namespace Everglow.Sources.Commons.Core
         {
             get; internal set;
         }
+
         /// <summary>
         /// 更新的计时器，PostUpateEverything后加一
         /// </summary>
@@ -131,6 +148,7 @@ namespace Everglow.Sources.Commons.Core
         {
             get; private set;
         }
+
         /// <summary>
         /// 绘制的计时器，PostDrawEverything后加一
         /// </summary>
@@ -138,6 +156,7 @@ namespace Everglow.Sources.Commons.Core
         {
             get; private set;
         }
+
         /// <summary>
         /// 针对UI的计时器，暂停时也会加一
         /// </summary>
@@ -145,8 +164,9 @@ namespace Everglow.Sources.Commons.Core
         {
             get; private set;
         }
+
         /// <summary>
-        /// 在<paramref name="op"/>时执行<paramref name="action"/>
+        /// 在 <paramref name="op"/> 时执行 <paramref name="action"/>
         /// </summary>
         /// <param name="action"></param>
         /// <param name="op"></param>
@@ -163,6 +183,7 @@ namespace Everglow.Sources.Commons.Core
             methods[op].Add(handler);
             return handler;
         }
+
         public void AddMethod(ActionHandler handler, CallOpportunity op)
         {
             if (!validOpportunity.Contains(op))
@@ -172,6 +193,7 @@ namespace Everglow.Sources.Commons.Core
             }
             methods[op].Add(handler);
         }
+
         /// <summary>
         /// 根据Name寻找方法
         /// </summary>
@@ -204,6 +226,7 @@ namespace Everglow.Sources.Commons.Core
             }
             return null;
         }
+
         /// <summary>
         /// 根据Handler移除一个方法
         /// </summary>
@@ -226,6 +249,7 @@ namespace Everglow.Sources.Commons.Core
             }
             return false;
         }
+
         /// <summary>
         /// 移除所有被Disable的Action
         /// </summary>
@@ -236,6 +260,7 @@ namespace Everglow.Sources.Commons.Core
                 methods[op].RemoveAll(handler => !handler.Enable);
             }
         }
+
         public void HookLoad()
         {
             IL.Terraria.Main.DoDraw += Main_DoDraw;
@@ -243,7 +268,8 @@ namespace Everglow.Sources.Commons.Core
             On.Terraria.Main.DrawProjectiles += Main_DrawProjectiles;
             On.Terraria.Main.DrawNPCs += Main_DrawNPCs;
             On.Terraria.Graphics.Renderers.LegacyPlayerRenderer.DrawPlayers += LegacyPlayerRenderer_DrawPlayers;
-            On.Terraria.WorldGen.playWorldCallBack += WorldGen_playWorldCallBack; ;
+            On.Terraria.WorldGen.playWorldCallBack += WorldGen_playWorldCallBack;
+
             On.Terraria.WorldGen.SaveAndQuit += WorldGen_SaveAndQuit;
             On.Terraria.Main.DrawMiscMapIcons += Main_DrawMiscMapIcons;
             On.Terraria.WorldGen.serverLoadWorldCallBack += WorldGen_serverLoadWorldCallBack;
@@ -252,10 +278,53 @@ namespace Everglow.Sources.Commons.Core
             On.Terraria.Main.DoDraw_WallsTilesNPCs += Main_DoDraw_WallsTilesNPCs;
             Main.OnResolutionChanged += Main_OnResolutionChanged;
         }
+
         public void HookUnload()
         {
+            IL.Terraria.Main.DoDraw -= Main_DoDraw;
+            On.Terraria.Main.DrawDust -= Main_DrawDust;
+            On.Terraria.Main.DrawProjectiles -= Main_DrawProjectiles;
+            On.Terraria.Main.DrawNPCs -= Main_DrawNPCs;
+            On.Terraria.Graphics.Renderers.LegacyPlayerRenderer.DrawPlayers -= LegacyPlayerRenderer_DrawPlayers;
+            On.Terraria.WorldGen.playWorldCallBack -= WorldGen_playWorldCallBack;
+
+            On.Terraria.WorldGen.SaveAndQuit -= WorldGen_SaveAndQuit;
+            On.Terraria.Main.DrawMiscMapIcons -= Main_DrawMiscMapIcons;
+            On.Terraria.WorldGen.serverLoadWorldCallBack -= WorldGen_serverLoadWorldCallBack;
+            On.Terraria.Main.DrawBG -= Main_DrawBG;
+            On.Terraria.Main.DrawBackground -= Main_DrawBackground;
+            On.Terraria.Main.DoDraw_WallsTilesNPCs -= Main_DoDraw_WallsTilesNPCs;
             Main.OnResolutionChanged -= Main_OnResolutionChanged;
+            ClearReflectionCache();
         }
+
+        public static void ClearReflectionCache()
+        {
+            if (typeof(ReflectionHelper).GetField("AssemblyCache", BindingFlags.Static | BindingFlags.NonPublic)?.GetValue(null) is Dictionary<string, WeakReference> cache)
+            {
+                foreach (var key in cache.Keys.ToArray())
+                {
+                    cache.Remove(key);
+                }
+            }
+
+            if (typeof(ReflectionHelper).GetField("AssembliesCache", BindingFlags.Static | BindingFlags.NonPublic)?.GetValue(null) is Dictionary<string, WeakReference[]> cache1)
+            {
+                foreach (var key in cache1.Keys.ToArray())
+                {
+                    cache1.Remove(key);
+                }
+            }
+
+            if (typeof(ReflectionHelper).GetField("ResolveReflectionCache", BindingFlags.Static | BindingFlags.NonPublic)?.GetValue(null) is Dictionary<string, WeakReference> cache2)
+            {
+                foreach (var key in cache2.Keys.ToArray())
+                {
+                    cache2.Remove(key);
+                }
+            }
+        }
+
         internal void Invoke(CallOpportunity op)
         {
             foreach (var handler in methods[op])
@@ -275,10 +344,12 @@ namespace Everglow.Sources.Commons.Core
                 }
             }
         }
+
         public override void PostUpdateInvasions()
         {
             Invoke(CallOpportunity.PostUpdateInvasions);
         }
+
         public override void PostUpdateEverything()
         {
             Invoke(CallOpportunity.PostUpdateEverything);
@@ -293,6 +364,7 @@ namespace Everglow.Sources.Commons.Core
         {
             UITimer++;
         }
+
         public override void PostUpdateNPCs()
         {
             Invoke(CallOpportunity.PostUpdateNPCs);
@@ -317,6 +389,7 @@ namespace Everglow.Sources.Commons.Core
         {
             Invoke(CallOpportunity.PostDrawTiles);
         }
+
         private void Main_DrawBackground(On.Terraria.Main.orig_DrawBackground orig, Main self)
         {
             if (DisableDrawBackground)
@@ -325,6 +398,7 @@ namespace Everglow.Sources.Commons.Core
             }
             orig(self);
         }
+
         private void Main_DrawBG(On.Terraria.Main.orig_DrawBG orig, Main self)
         {
             if (DisableDrawSkyAndHell)
@@ -407,6 +481,4 @@ namespace Everglow.Sources.Commons.Core
             cursor.EmitDelegate(() => Invoke(CallOpportunity.PostDrawFilter));
         }
     }
-
 }
-
