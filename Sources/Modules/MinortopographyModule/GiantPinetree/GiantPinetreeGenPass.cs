@@ -15,7 +15,7 @@ namespace Everglow.Sources.Modules.MinortopographyModule.GiantPinetree
 
             protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
             {
-                //Todo:·­Òë£º½¨Ôì¾Ş´óµÄÑ©ËÉ
+                //Todo:ç¿»è¯‘ï¼šå»ºé€ å·¨å¤§çš„é›ªæ¾
                 Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everlow.Common.WorldSystem.BuildMothCave");
 
                 BuildGiantPinetree();
@@ -24,7 +24,7 @@ namespace Everglow.Sources.Modules.MinortopographyModule.GiantPinetree
 
         public static void placePineLeaves(int i, int j, int iteration, float strength, Vector2 direction)
         {
-            if (iteration > 50)//ÍòÒ»·¢É¢¾ÍÍêÁË
+            if (iteration > 50)//ä¸‡ä¸€å‘æ•£å°±å®Œäº†
                 return;
             for (int x = 0; x < strength; x++)
             {
@@ -36,7 +36,7 @@ namespace Everglow.Sources.Modules.MinortopographyModule.GiantPinetree
                     Vector2 VnormalizedDirection = normalizedDirection.RotatedBy(Math.PI / 2d);
                     int a = (int)(i + normalizedDirection.X * x + VnormalizedDirection.X * y);
                     int b = (int)(j + normalizedDirection.Y * x + VnormalizedDirection.Y * y);
-                    if (b >= Main.maxTilesY - 10 || b <= 10 || a <= 20 || a >= Main.maxTilesX - 20)//·ÀÖ¹³¬½ç
+                    if (b >= Main.maxTilesY - 10 || b <= 10 || a <= 20 || a >= Main.maxTilesX - 20)//é˜²æ­¢è¶…ç•Œ
                     {
                         break;
                     }
@@ -63,30 +63,37 @@ namespace Everglow.Sources.Modules.MinortopographyModule.GiantPinetree
         }
         public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight) => tasks.Add(new GiantPinetreeGenPass());
         /// <summary>
-        /// ½¨Ôì¾Ş´óµÄÑ©ËÉ
+        /// å»ºé€ å·¨å¤§çš„é›ªæ¾
         /// </summary>
         public static void BuildGiantPinetree()
         {
             
             Point16 CenterPoint = RandomPointInSurfaceSnow();
-            int X0 = CenterPoint.X;//(int)(Main.MouseWorld.X / 16);
-            int Y0 = CenterPoint.Y - 26;//ÉÏÒÆ26¸ñ(int)(Main.MouseWorld.Y / 16); 
+
+            //TODO å°è¯•ä¿®å¤å°ä¸–ç•Œé›ªæ¾è¿‡é«˜çš„é—®é¢˜
+
+            //é¿å…å°ä¸–ç•Œç”Ÿæˆä½ç½®çªå…€
+            int X0 = Main.maxTilesX == 4200 ? CenterPoint.X + 2 : CenterPoint.X;
+
+            //é™ä½é«˜åº¦
+            int Y0 = Main.maxTilesX == 4200 ? CenterPoint.Y - 10 : CenterPoint.Y - 26;
+
             float Size = Main.rand.NextFloat(16f, 20f);
             placePineLeaves(X0, Y0, 0, Size * 7.5f, new Vector2(0, -1));
-            if (Main.snowBG[2] == 260)//ÔÚÕâÖÖÌõ¼şÏÂ£¬±³¾°·ûºÏÕâ¶Î´úÂëÉú³ÉµÄËÉÊ÷
+            if (Main.snowBG[2] == 260)//åœ¨è¿™ç§æ¡ä»¶ä¸‹ï¼ŒèƒŒæ™¯ç¬¦åˆè¿™æ®µä»£ç ç”Ÿæˆçš„æ¾æ ‘
             {
 
             }
-            float Width = Size;//Ëæ»úÒ¡¿í¶È
+            float Width = Size;//éšæœºæ‘‡å®½åº¦
             int j = 0;
             for (int a = -3; a <= 3; a++)
             {
-                GenerateRoots(new Point16(X0, Y0), 0, a / 2f);//Ëæ»ú·¢ÉäÊ÷¸ù
+                GenerateRoots(new Point16(X0, Y0), 0, a / 2f);//éšæœºå‘å°„æ ‘æ ¹
             }
             while (Width > 0)
             {
                 j--;
-                if (j + Y0 >= Main.maxTilesY - 10 || j + Y0 <= 10 || X0 <= 20 || X0 >= Main.maxTilesX - 20)//·ÀÖ¹³¬½ç
+                if (j + Y0 >= Main.maxTilesY - 10 || j + Y0 <= 10 || X0 <= 20 || X0 >= Main.maxTilesX - 20)//é˜²æ­¢è¶…ç•Œ
                 {
                     break;
                 }
@@ -98,13 +105,13 @@ namespace Everglow.Sources.Modules.MinortopographyModule.GiantPinetree
                         tile.HasTile = false;
                     }
                 }
-                Width -= (float)(Math.Sin(j * 0.8) * 0.5 + 0.2);//ÖÆÔìËÉÊ÷Ò»²ãÒ»²ãµÄĞ§¹û
+                Width -= (float)(Math.Sin(j * 0.8) * 0.5 + 0.2);//åˆ¶é€ æ¾æ ‘ä¸€å±‚ä¸€å±‚çš„æ•ˆæœ
             }
-            GenerateRoots(new Point16(X0, Y0), 3.14159f, 3.14159f, false);//·´ÏòÉú³ÉÊ÷¸ù£¬×÷ÎªÊ÷¸É
+            GenerateRoots(new Point16(X0, Y0), 3.14159f, 3.14159f, false);//åå‘ç”Ÿæˆæ ‘æ ¹ï¼Œä½œä¸ºæ ‘å¹²
         }
 
         /// <summary>
-        /// ½¨Ôì¸ùÏµ,ÆğÊ¼½Ç¶È=0Ê±ÏòÏÂ,¸ùÏµ»áÔÚÆğÊ¼Î»ÖÃÒÔÆğÊ¼½Ç¶È·¢Éä,²¢Öğ½¥×ªÏòÄ¿±ê½Ç¶È,Èç¹ûÌìÈ»¾íÇú,¸ùÏµ»áÔÚÄ©Î²´¦ÔÙ·¢ÉúÒ»´Î¹ÕÍä
+        /// å»ºé€ æ ¹ç³»,èµ·å§‹è§’åº¦=0æ—¶å‘ä¸‹,æ ¹ç³»ä¼šåœ¨èµ·å§‹ä½ç½®ä»¥èµ·å§‹è§’åº¦å‘å°„,å¹¶é€æ¸è½¬å‘ç›®æ ‡è§’åº¦,å¦‚æœå¤©ç„¶å·æ›²,æ ¹ç³»ä¼šåœ¨æœ«å°¾å¤„å†å‘ç”Ÿä¸€æ¬¡æ‹å¼¯
         /// </summary>
         /// <param name="Start"></param>
         /// <param name="startRotation"></param>
@@ -114,16 +121,16 @@ namespace Everglow.Sources.Modules.MinortopographyModule.GiantPinetree
         {
             int X0 = Start.X;
             int Y0 = Start.Y;
-            float Width = Main.rand.NextFloat(8f, 10f);//Ëæ»úÒ¡¿í¶È
+            float Width = Main.rand.NextFloat(8f, 10f);//éšæœºæ‘‡å®½åº¦
             Vector2 IJ = new Vector2(0, 0);
-            Vector2 RootVelocity = new Vector2(0, 1).RotatedBy(startRotation);//¸ùÏµµ±Ç°ËÙ¶È
-            Vector2 RootTrendVelocity = new Vector2(0, 1).RotatedBy(trendRotation);//¸ùÏµÎÈ¶¨Ç÷ÊÆËÙ¶È
-            float omega = Main.rand.NextFloat(-0.2f, 0.2f);//Ä©¶ËĞı×ªµÄ½ÇËÙ¶È
-            if (!naturalCurve)//Èç¹û½ûÖ¹ÁË×ÔÈ»Ğı×ª,½ÇËÙ¶È=0
+            Vector2 RootVelocity = new Vector2(0, 1).RotatedBy(startRotation);//æ ¹ç³»å½“å‰é€Ÿåº¦
+            Vector2 RootTrendVelocity = new Vector2(0, 1).RotatedBy(trendRotation);//æ ¹ç³»ç¨³å®šè¶‹åŠ¿é€Ÿåº¦
+            float omega = Main.rand.NextFloat(-0.2f, 0.2f);//æœ«ç«¯æ—‹è½¬çš„è§’é€Ÿåº¦
+            if (!naturalCurve)//å¦‚æœç¦æ­¢äº†è‡ªç„¶æ—‹è½¬,è§’é€Ÿåº¦=0
             {
                 omega = 0;
             }
-            float StartToRotatedByOmega = Main.rand.NextFloat(1.81f, 3.62f);//Ëã×÷Ä©¶ËµÄÆğÊ¼Î»ÖÃ£¬ÕâÀïÓÃÊ£Óà¿í¶ÈÍ³¼Æ
+            float StartToRotatedByOmega = Main.rand.NextFloat(1.81f, 3.62f);//ç®—ä½œæœ«ç«¯çš„èµ·å§‹ä½ç½®ï¼Œè¿™é‡Œç”¨å‰©ä½™å®½åº¦ç»Ÿè®¡
             while (Width > 0)
             {
                 for (int a = (int)-Width; a <= (int)Width; a++)
@@ -131,14 +138,14 @@ namespace Everglow.Sources.Modules.MinortopographyModule.GiantPinetree
                     Vector2 RootBuildingPosition = IJ + a * (RootVelocity).RotatedBy(MathHelper.PiOver2) * 0.6f;
                     int i = (int)(RootBuildingPosition.X);
                     int j = (int)(RootBuildingPosition.Y);
-                    if (j + Y0 >= Main.maxTilesY - 10 || j + Y0 <= 10 || -10 + X0 <= 10 || 10 + X0 >= Main.maxTilesX + 10)//·ÀÖ¹³¬½ç
+                    if (j + Y0 >= Main.maxTilesY - 10 || j + Y0 <= 10 || -10 + X0 <= 10 || 10 + X0 >= Main.maxTilesX + 10)//é˜²æ­¢è¶…ç•Œ
                     {
                         break;
                     }
                     Tile tile = Main.tile[i + X0, j + Y0];
                     if (a <= -Width + 4 || a >= Width - 4)
                     {
-                        if (tile.WallType != ModContent.WallType<PineWoodWall>())//·ÀÖ¹ËÉÊ÷¿é»¥ÏàÖØºÏ
+                        if (tile.WallType != ModContent.WallType<PineWoodWall>())//é˜²æ­¢æ¾æ ‘å—äº’ç›¸é‡åˆ
                         {
                             tile.TileType = (ushort)ModContent.TileType<PineWood>();
                             tile.HasTile = true;
@@ -156,49 +163,49 @@ namespace Everglow.Sources.Modules.MinortopographyModule.GiantPinetree
                     }
                 }
                 IJ += RootVelocity;
-                if (Width > StartToRotatedByOmega)//Ã»ÓĞÊÕÊøµ½Ä©¶Ë
+                if (Width > StartToRotatedByOmega)//æ²¡æœ‰æ”¶æŸåˆ°æœ«ç«¯
                 {
                     RootVelocity = RootVelocity * 0.95f + RootTrendVelocity * 0.05f;
                 }
-                else//ÒÑ¾­ÊÕÊøµ½Ä©¶Ë
+                else//å·²ç»æ”¶æŸåˆ°æœ«ç«¯
                 {
                     RootVelocity = RootVelocity.RotatedBy(omega * (StartToRotatedByOmega - Width) / StartToRotatedByOmega);
                 }
-                if (naturalCurve)//Ö»ÓĞ×ÔÈ»¾íÇú²Å»áµ¼ÖÂÒÔÏÂÏÖÏó
+                if (naturalCurve)//åªæœ‰è‡ªç„¶å·æ›²æ‰ä¼šå¯¼è‡´ä»¥ä¸‹ç°è±¡
                 {
-                    //ÖØÁ¦ÒòËØÒ²»áÓ°Ïì¸ùÏµ,ÏÂÃæÅĞ¶¨¸ùÏµĞü¿Õ³Ì¶È
-                    int AroundTileCount = 0;//ÎÒÃÇÅĞ¶¨ÖÜÎ§´æÔÚ·½¿éµÄÊıÁ¿À´ÍÆ¶ÏĞü¿Õ³Ì¶È£¬´æÔÚ·½¿éÔ½ÉÙÔ½Ğü¿Õ
+                    //é‡åŠ›å› ç´ ä¹Ÿä¼šå½±å“æ ¹ç³»,ä¸‹é¢åˆ¤å®šæ ¹ç³»æ‚¬ç©ºç¨‹åº¦
+                    int AroundTileCount = 0;//æˆ‘ä»¬åˆ¤å®šå‘¨å›´å­˜åœ¨æ–¹å—çš„æ•°é‡æ¥æ¨æ–­æ‚¬ç©ºç¨‹åº¦ï¼Œå­˜åœ¨æ–¹å—è¶Šå°‘è¶Šæ‚¬ç©º
                     for (int b = 0; b < 12; b++)
                     {
                         Vector2 RootBuildingPosition = IJ + 3 * (RootVelocity).RotatedBy(b / 6d * Math.PI);
                         int i = (int)(RootBuildingPosition.X);
                         int j = (int)(RootBuildingPosition.Y);
                         Tile tile = Main.tile[i + X0, j + Y0];
-                        if (tile.HasTile || tile.WallType == (ushort)ModContent.WallType<PineWoodWall>()/*ÕâÒ»ÏîÊÇÎªÁË·ÀÖ¹×Ô¼º¸ÉÈÅ×Ô¼º*/)
+                        if (tile.HasTile || tile.WallType == (ushort)ModContent.WallType<PineWoodWall>()/*è¿™ä¸€é¡¹æ˜¯ä¸ºäº†é˜²æ­¢è‡ªå·±å¹²æ‰°è‡ªå·±*/)
                         {
                             AroundTileCount++;
                         }
                     }
                     if (AroundTileCount < 6)
                     {
-                        RootVelocity += new Vector2(0, (6 - AroundTileCount) / 16f);//ÖØÁ¦×ÔÈ»ÏÂ´¹
-                        RootVelocity = Vector2.Normalize(RootVelocity);//»¯×÷µ¥Î»ÏòÁ¿
-                        Width += (6 - AroundTileCount) / 50f;//·ÀÖ¹ÏÂ½µ¹ı³Ì¸ùÏµ¹ı·ÖÊÕÊø
+                        RootVelocity += new Vector2(0, (6 - AroundTileCount) / 16f);//é‡åŠ›è‡ªç„¶ä¸‹å‚
+                        RootVelocity = Vector2.Normalize(RootVelocity);//åŒ–ä½œå•ä½å‘é‡
+                        Width += (6 - AroundTileCount) / 50f;//é˜²æ­¢ä¸‹é™è¿‡ç¨‹æ ¹ç³»è¿‡åˆ†æ”¶æŸ
                     }
                     else if (AroundTileCount > 9)
                     {
-                        Width -= (AroundTileCount - 9) / 20f;//ÖÜÎ§Îï¿éÌ«¶à£¬²úÉú×èÁ¦£¬¼Ó¿ìÊÕÊø
+                        Width -= (AroundTileCount - 9) / 20f;//å‘¨å›´ç‰©å—å¤ªå¤šï¼Œäº§ç”Ÿé˜»åŠ›ï¼ŒåŠ å¿«æ”¶æŸ
                     }
                 }
                 Width -= 0.1f;
-                if(Width < 1.8f)//Ì«Ï¸ÁË£¬ÆÆµô°É
+                if(Width < 1.8f)//å¤ªç»†äº†ï¼Œç ´æ‰å§
                 {
                     break;
                 }
             }
         }
         /// <summary>
-        /// ÔÚÑ©µØ±íÃæËæ»ú»ñÈ¡Ò»µã
+        /// åœ¨é›ªåœ°è¡¨é¢éšæœºè·å–ä¸€ç‚¹
         /// </summary>
         /// <returns></returns>
         public static Point16 RandomPointInSurfaceSnow()
