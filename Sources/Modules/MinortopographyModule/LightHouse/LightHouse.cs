@@ -9,7 +9,7 @@ namespace Everglow.Sources.Modules.MinortopographyModule.LightHouse
 
 
 
-    //TODO 代码有问题 无法生成世界 会越界。如果您有时间的话，能不能帮忙看看问题所在，这个实在不是我现在能解决的能力范围，非常抱歉。
+    //TODO 目前生成世界有一点问题，我会自己解决这个问题的。
 
     /* Fork：Minortopography/GenPass
      * 
