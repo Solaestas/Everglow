@@ -1,6 +1,6 @@
 ﻿using MonoMod.RuntimeDetour.HookGen;
 
-namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Items.Weapons//TODO:Localization"尽管镐力不达标,但是允许破坏石化龙鳞木,对青缎矿加速破坏"
+namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Items.Weapons
 {
     public class CyanVinePickaxe : ModItem
     {

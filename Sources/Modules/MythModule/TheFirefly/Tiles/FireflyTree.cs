@@ -26,11 +26,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             AddMapEntry(new Color(51, 26, 58), modTranslation); //Mods.Everglow.MapEntry.FireflyTree
             DustType = ModContent.DustType<TheFirefly.Dusts.MothBlue2>();
             AdjTiles = new int[] { Type };
-            //TODO Hjson
-            //ModTranslation modTranslation = CreateMapEntryName(null);
-            //modTranslation.SetDefault("Mods.Everglow.MapEntry.FireflyTree");
-            //modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "树");
-            //AddMapEntry(new Color(155, 173, 183), modTranslation);
 
             Everglow.HookSystem.AddMethod(DrawRopes, Commons.Core.CallOpportunity.PostDrawTiles);
         }
