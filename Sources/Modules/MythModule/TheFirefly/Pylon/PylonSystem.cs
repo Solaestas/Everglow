@@ -1,5 +1,6 @@
 ﻿using Terraria.GameContent;
 using Terraria.ModLoader.IO;
+using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Pylon;
 
@@ -41,7 +42,7 @@ internal class PylonValidCheck : GlobalPylon
         {
             if (!PylonSystem.Instance.shabbyPylonEnable)
             {
-                errorKey = "Not Enable";
+                errorKey = Language.GetTextValue("Mods.Everglow.Common.NotActivated");
                 return;
             }
 
@@ -52,8 +53,7 @@ internal class PylonValidCheck : GlobalPylon
             }
             else
             {
-                //TODO Translation
-                errorKey = "You only can teleport to ......(摸了)";
+                errorKey = Language.GetTextValue("Mods.Everglow.PylonSystem.FireflyPylonLimit");
                 destinationPylonValid = false;
             }
         }

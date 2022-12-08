@@ -12,6 +12,7 @@ Mods:
 			Minute : "minute"
 			Second : "second"
 			Duration : "duration"
+			NotActivated : "unactivated"
 			WarWhipGT :
 				'''
 				No summon tag damage
@@ -290,6 +291,7 @@ Mods:
 				StoneDragonScaleWood : "Fossilized Dragon Scale Wood"
 				StreetLantern : "Street Lantern"
 				YellowDynastyShingles : "Yellow Dynasty Shingles"
+				CyanVinePickaxe : "Cyan Pickaxe"
 
 			#Plant Module Items
 			CactusBall : "Cactus Rod"
@@ -478,7 +480,9 @@ Mods:
 				'''
 			StarSlingshot : 
 				'''
-				Shoots little pebbles
+				Shoots a gloaming star, dealing AOE damage
+				Damage increases by 25% in nighttime, else decreases by 25%
+				Crit chance increases by 15% above the ground, else decreases by 15%
 				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			WhiteGemSlingshot : 
@@ -579,6 +583,14 @@ Mods:
 				Shoots a series of explosive glowing beads
 				'''
 			
+			# 天穹树系列物品
+				# 天穹树小镇
+				CyanVinePickaxe : 
+					'''
+					Allows you to destroy Fossilised Dragonscale Woods
+					Mines Cyan Ores faster
+					'''
+
 			#Music Boxes
 			GlowWoodMusicBox : "Plays 'Setnour6 - Within the Giant Cocoon (身陷巨茧)'"
 
@@ -918,6 +930,10 @@ Mods:
                     Gradually increases crit chance and crit damage
 					'''
 			}
+		}
+		PylonSystem : 
+		{
+			FireflyPylonLimit : "A Firefly Pylon can only teleport you to another Firefly Pylon"
 		}
 	}
 }
