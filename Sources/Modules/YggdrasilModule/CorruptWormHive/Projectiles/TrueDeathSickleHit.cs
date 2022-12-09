@@ -2,6 +2,7 @@
 using Everglow.Sources.Modules.MEACModule;
 using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.YggdrasilModule.Common;
+using Everglow.Sources.Commons.Core.VFX;
 
 namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
 {
@@ -188,18 +189,40 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
             }
         }
 
-        public void DrawWarp()
+        private static void DrawTexCircle_VFXBatch(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
         {
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-            KEx.CurrentTechnique.Passes[0].Apply();
-            float value = (200 - Projectile.timeLeft) / (float)Projectile.timeLeft * 1.4f;
+            List<Vertex2D> circle = new List<Vertex2D>();
+
+            for (int h = 0; h < radious / 2; h += 1)
+            {
+                circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 1, 0)));
+                circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0, 0)));
+            }
+            circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(1, 1, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(1, 0, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(0, 1, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0, 0, 0)));
+            if (circle.Count > 2)
+            {
+                spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
+            }
+        }
+        public void DrawWarp(VFXBatch spriteBatch)
+        {
+            float value = (200 - Projectile.timeLeft) / (200f);
             float colorV = 0.9f * (1 - value);
-            Texture2D t = MythContent.QuickTexture("OmniElementItems/Projectiles/Wave");
-            DrawTexCircle(value * 16 * Projectile.ai[0], 100, new Color(colorV, colorV, colorV, 0f), Projectile.Center - Main.screenPosition, t);
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            if (Projectile.ai[0] >= 10)
+            {
+                colorV *= Projectile.ai[0] / 10f;
+            }
+            Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/EShoot");
+            float width = 60;
+            if (Projectile.timeLeft < 60)
+            {
+                width = Projectile.timeLeft;
+            }
+
+            DrawTexCircle_VFXBatch(spriteBatch, value * 27 * Projectile.ai[0], width * 2, new Color(colorV, colorV * 0.7f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
         }
         public void DrawBloom()
         {

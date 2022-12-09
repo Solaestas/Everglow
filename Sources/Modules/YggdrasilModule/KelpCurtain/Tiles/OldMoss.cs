@@ -11,7 +11,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.KelpCurtain.Tiles
             Main.tileBlendAll[Type] = true;
             Main.tileBlockLight[Type] = true;
             Main.tileMerge[Type][ModContent.TileType<DragonScaleWood>()] = true;
-            Main.tileMerge[Type][ModContent.TileType<OldMoss>()] = true;
+            Main.tileMerge[Type][ModContent.TileType<YggdrasilDirt>()] = true;
             Main.tileMerge[Type][TileID.Stone] = true;
             Main.tileMerge[TileID.Stone][Type] = true;
             Main.ugBackTransition = 1000;

@@ -350,13 +350,18 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
                 VFXManager.Add(df);
             }
         }
-        public void DrawBloom()
+        public void DrawBloom(SpriteBatch spriteBatch)
         {
-            DrawEffect();
-            DrawOcclusion();
+            if(spriteBatch == Main.spriteBatch)
+            {
+                VFXManager.spriteBatch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
+                DrawEffect(VFXManager.spriteBatch);
+                DrawOcclusion(VFXManager.spriteBatch);
+                VFXManager.spriteBatch.End();
+            }
         }
 
-        public void DrawWarp()
+        public void DrawWarp(VFXBatch spriteBatch)
         {
             List<Vector2> SmoothTrailX = CatmullRom.SmoothPath(trailVecs.ToList());//平滑
             List<Vector2> SmoothTrail = new List<Vector2>();
@@ -384,15 +389,10 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
                 bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(dir, w, 0, 1), new Vector3(factor, 1, w)));
                 bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + trail[i] * Projectile.scale * 1.1f, new Color(dir, w, 0, 1), new Vector3(factor, 0, w)));
             }
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-            Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-            Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/Images/Warp").Value;//扭曲用贴图
-            KEx.CurrentTechnique.Passes[0].Apply();
-            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            DrawOcclusion();
+            
+            spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/Images/Warp").Value, bars, PrimitiveType.TriangleStrip);
+
+            DrawOcclusion(spriteBatch);
             return;
         }
         public override void DrawTrail(Color color)
@@ -400,7 +400,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
 
         }
         internal int timer2 = 0;
-        public void DrawEffect()
+        public void DrawEffect(VFXBatch spriteBatch)
         {
             timer2++;
             List<Vector2> SmoothTrailX = CatmullRom.SmoothPath(trailVecs.ToList());//平滑
@@ -441,8 +441,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
                     bars.Add(new Vertex2D(Projectile.Center + trail[i] * Projectile.scale, Color.White, new Vector3(factor * 2, 0, w)));
                 }
             }
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone);
+
             var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
             var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
 
@@ -450,16 +449,13 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
             MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
             MeleeTrail.Parameters["uTime"].SetValue(timer2 * 0.007f);
             Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-            //Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 
             MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
             MeleeTrail.CurrentTechnique.Passes[shadertype].Apply();
 
-            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            spriteBatch.Draw(ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value, bars, PrimitiveType.TriangleStrip);
         }
-        public void DrawOcclusion()
+        public void DrawOcclusion(VFXBatch spriteBatch)
         {
             Player player = Main.player[Projectile.owner];
             Texture2D tex = YggdrasilContent.QuickTexture("CorruptWormHive/Projectiles/TrueDeathSickle_Shade_Handle");
@@ -470,7 +466,8 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
             if (attackType == 2)
             {
                 tex = YggdrasilContent.QuickTexture("CorruptWormHive/Projectiles/TrueDeathSickle_Shade");
-                Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, null, Color.White, Projectile.rotation + (float)(Math.PI / 4d) * player.direction - 0.25f, new Vector2(0, player.direction == -1 ? 0 : tex.Height), 1.22f,player.direction == -1 ? SpriteEffects.FlipVertically : SpriteEffects.None, 0);
+                spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, null, new Color(255, 0, 0, 255), Projectile.rotation + (float)(Math.PI / 4d) * player.direction - 0.25f, new Vector2(0, player.direction == -1 ? 0 : tex.Height), 1.22f, player.direction == -1 ? SpriteEffects.FlipVertically : SpriteEffects.None);
+
                 return;
             }
             float texWidth = 208;
@@ -524,7 +521,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
                 sourceBottomRight = new Vector2(0.5f) + ITexNormal + JTexNormal;
             }
 
-            Color lightColor = Color.White;
+            Color lightColor = new Color(255,0,0,255);
             List<Vertex2D> vertex2Ds = new List<Vertex2D>
             {
                     new Vertex2D(drawCenter2 + TopLeft, lightColor, new Vector3(sourceTopLeft.X, sourceTopLeft.Y, 0)),
@@ -536,15 +533,8 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
                     new Vertex2D(drawCenter + TopRight, lightColor, new Vector3(sourceTopRight.X, sourceTopRight.Y, 0))
             };
 
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            spriteBatch.Draw(tex, vertex2Ds, PrimitiveType.TriangleStrip);
 
-            Main.graphics.GraphicsDevice.Textures[0] = tex;
-            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
-
-
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
         }
         public override void End()
         {
