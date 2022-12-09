@@ -122,17 +122,17 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                         float dis1 = MathHelper.Clamp(chargeTime1 - timer, 0, chargeTime1) / 1;
                         float dis2 = MathHelper.Clamp(chargeTime2 - timer, 0, chargeTime2) / 1;
                         float dis3 = MathHelper.Clamp(chargeTime3 - timer, 0, chargeTime3) / 1;
-                        Dust d1 = Dust.NewDustDirect(Projectile.Center + r * dis1, 10, 10, ModContent.DustType<MothSmog>(), 0, 0, 125, new Color(250, 150, 20), 0.8f);
+                        Dust d1 = Dust.NewDustDirect(Projectile.Center + r * dis1, 10, 10, ModContent.DustType<MothSmog>(), 0, 0, 100, new Color(250, 150, 20), 0.8f);
                         d1.velocity = -r * 4;
                         d1.position += Main.rand.NextVector2Unit() * 5;
                         d1.noGravity = true;
 
-                        Dust d2 = Dust.NewDustDirect(Projectile.Center + r * dis2, 10, 10, ModContent.DustType<MothSmog>(), 0, 0, 125, new Color(250, 150, 20), 0.8f);
+                        Dust d2 = Dust.NewDustDirect(Projectile.Center + r * dis2, 10, 10, ModContent.DustType<MothSmog>(), 0, 0, 100, new Color(250, 150, 20), 0.8f);
                         d2.velocity = -r * 4;
                         d2.position += Main.rand.NextVector2Unit() * 5;
                         d2.noGravity = true;
 
-                        Dust d3 = Dust.NewDustDirect(Projectile.Center + r * dis3, 10, 10, ModContent.DustType<MothSmog>(), 0, 0, 125, new Color(250, 150, 20), 0.8f);
+                        Dust d3 = Dust.NewDustDirect(Projectile.Center + r * dis3, 10, 10, ModContent.DustType<MothSmog>(), 0, 0, 100, new Color(250, 150, 20), 0.8f);
                         d3.velocity = -r * 4;
                         d3.position += Main.rand.NextVector2Unit() * 5;
                         d3.noGravity = true;
@@ -414,5 +414,12 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
             }
             return false;
         }
+    }
+
+    public class Canhitproj : GlobalProjectile
+    {
+        public override bool InstancePerEntity => true;
+
+        public bool Canhit = true;
     }
 }
