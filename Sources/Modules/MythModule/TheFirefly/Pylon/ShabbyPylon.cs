@@ -80,14 +80,24 @@ internal class ShabbyPylon : BaseModPylon<ShabbyPylonTileEntity>
 
 internal class ShabbyPylonItem : ModItem
 {
-    public override bool? UseItem(Player player)
-    {
-
-        return null;
-    }
-
     public override void SetDefaults()
     {
         Item.DefaultToPlaceableTile(ModContent.TileType<ShabbyPylon>());
+    }
+}
+internal class ShabbyPylonUpdate : GlobalNPC
+{
+    public override void OnKill(NPC npc)
+    {
+        if(npc.type is NPCID.BrainofCthulhu or NPCID.EaterofWorldsHead)
+        {
+            if (!PylonSystem.Instance.shabbyPylonEnable && NPC.downedBoss2)
+            {
+                PylonSystem.Instance.shabbyPylonEnable = true;
+                PylonSystem.Instance.firstEnableAnimation = true;
+
+                Main.NewText("Repaired");
+            }
+        }
     }
 }

@@ -7,7 +7,11 @@ using Terraria.DataStructures;
 using Terraria.IO;
 using Terraria.ModLoader.IO;
 using Terraria.WorldBuilding;
-
+using ReLogic.Content;
+using Terraria.GameContent;
+using Terraria.Map;
+using Terraria.ModLoader.Default;
+using Terraria.ObjectData;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
 {
@@ -27,13 +31,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
 
 
             }
-            if (!PylonSystem.Instance.shabbyPylonEnable && NPC.downedBoss2)
-            {
-                PylonSystem.Instance.shabbyPylonEnable = true;
-                PylonSystem.Instance.firstEnableAnimation = true;
-
-                Main.NewText("Repaired");
-            }
+            
         }
         public static void QuickBuild(int x, int y, string Path)
         {
@@ -230,6 +228,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                                 if (pixel.R == 45 && pixel.G == 49 && pixel.B == 255)
                                 {
                                     MythUtils.PlaceFrameImportantTiles(a + x, b + y, 3, 4, ModContent.TileType<Pylon.FireflyPylon>());
+                                    TEModdedPylon moddedPylon = ModContent.GetInstance<FireflyPylonTileEntity>();
+                                    TileObjectData.newTile.HookCheckIfCanPlace = new PlacementHook(moddedPylon.PlacementPreviewHook_CheckIfCanPlace, 1, 0, true);
+                                    TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(moddedPylon.Hook_AfterPlacement, -1, 0, false);
+                                    TileObjectData.addTile(ModContent.TileType<Pylon.FireflyPylon>());
                                 }
                                 break;
                         }
