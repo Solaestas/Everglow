@@ -1,6 +1,6 @@
 ﻿namespace Everglow.Sources.Modules.FoodModule.Buffs.ModDrinkBuffs
 {
-    public class WatermelonBuff : ModBuff
+    public class QuinceMarryBuff : ModBuff
     {
         public override void SetStaticDefaults()
         {

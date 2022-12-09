@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace Everglow.Sources.Modules.FoodModule.Items.ModDrink
 {
-	public class ExampleDrinkItem :   DrinkBase
+	public class GreenStorm :   DrinkBase
     {
         public override  DrinkInfo DrinkInfo
         {
