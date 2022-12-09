@@ -5,20 +5,41 @@ using Everglow.Sources.Commons.Core.VFX.Visuals;
 using Everglow.Sources.Commons.Function.NetUtils;
 using Everglow.Sources.Commons.Function.ObjectPool;
 using ReLogic.Content;
+using Terraria.Graphics.Light;
 
 namespace Everglow.Sources.Commons.Core.VFX;
 
 [ClientOnlyModule]
 public class VFXManager : IModule
 {
+    #region Visuals
+
+    [DontAutoLoad]
+    internal class Rt2DVisual : Visual
+    {
+        public ResourceLocker<RenderTarget2D> locker;
+
+        public Rt2DVisual(ResourceLocker<RenderTarget2D> locker)
+        {
+            this.locker = locker;
+        }
+
+        public override CallOpportunity DrawLayer => throw new InvalidOperationException("Don't use this manually!");
+
+        public override void Draw()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     private interface IVisualCollection : IEnumerable<IVisual>
     {
-        PipelineIndex Index
+        int Count
         {
             get;
         }
 
-        int Count
+        PipelineIndex Index
         {
             get;
         }
@@ -38,9 +59,8 @@ public class VFXManager : IModule
             this.index = index;
         }
 
-        public PipelineIndex Index => index;
-
         public int Count => visual == null ? 0 : 1;
+        public PipelineIndex Index => index;
 
         public void Add(IVisual visual)
         {
@@ -74,46 +94,14 @@ public class VFXManager : IModule
     private class VisualCollection : IVisualCollection
     {
         private const int FLUSH_COUNT = 50;
-        private SortedSet<IVisual> visuals;
-        private PipelineIndex index;
 
         /// <summary>
         /// 比较器
         /// </summary>
         private static VisualComparer compare = new VisualComparer();
 
-        public PipelineIndex Index => index;
-        public int Count => visuals.Count;
-
-        public VisualCollection(PipelineIndex index)
-        {
-            visuals = new SortedSet<IVisual>(compare);
-            this.index = index;
-        }
-
-        public IEnumerator<IVisual> GetEnumerator()
-        {
-            return visuals.GetEnumerator();
-        }
-
-        public void Add(IVisual visual)
-        {
-            if (visuals.Count % FLUSH_COUNT == 0)
-            {
-                Flush();
-            }
-            visuals.Add(visual);
-        }
-
-        public void Flush()
-        {
-            int b = visuals.RemoveWhere(visual => !visual.Active);
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        private PipelineIndex index;
+        private SortedSet<IVisual> visuals;
 
         private class VisualComparer : Comparer<IVisual>
         {
@@ -133,12 +121,54 @@ public class VFXManager : IModule
                 return diff == 0 ? x.GetHashCode() - y.GetHashCode() : diff;
             }
         }
+
+        public VisualCollection(PipelineIndex index)
+        {
+            visuals = new SortedSet<IVisual>(compare);
+            this.index = index;
+        }
+
+        public int Count => visuals.Count;
+        public PipelineIndex Index => index;
+
+        public void Add(IVisual visual)
+        {
+            if (visuals.Count % FLUSH_COUNT == 0)
+            {
+                Flush();
+            }
+            visuals.Add(visual);
+        }
+
+        public void Flush()
+        {
+            int b = visuals.RemoveWhere(visual => !visual.Active);
+        }
+
+        public IEnumerator<IVisual> GetEnumerator()
+        {
+            return visuals.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 
+    #endregion Visuals
+
+    #region Private Fields
+
+    private const bool DefaultRt2DIndex = true;
+
     /// <summary>
-    /// Pipeline的Type
+    /// GraphicsDevice引用
     /// </summary>
-    private List<Type> pipelineTypes = new List<Type>();
+    private GraphicsDevice graphicsDevice = Main.instance.GraphicsDevice;
+
+    private Dictionary<(CallOpportunity, PipelineIndex), IVisualCollection> lookup =
+        new Dictionary<(CallOpportunity, PipelineIndex), IVisualCollection>();
 
     /// <summary>
     /// Pipeline的实例
@@ -146,18 +176,30 @@ public class VFXManager : IModule
     private List<IPipeline> pipelineInstances = new List<IPipeline>();
 
     /// <summary>
-    /// 用绘制层 + 第一个调用的绘制层作为Key来储存List<IVisual>
+    /// Pipeline的Type
     /// </summary>
-    private Dictionary<CallOpportunity, List<IVisualCollection>> visuals =
-        new Dictionary<CallOpportunity, List<IVisualCollection>>();
+    private List<Type> pipelineTypes = new List<Type>();
 
-    private Dictionary<(CallOpportunity, PipelineIndex), IVisualCollection> lookup =
-        new Dictionary<(CallOpportunity, PipelineIndex), IVisualCollection>();
+    private Rt2DVisual renderingRt2D;
 
     /// <summary>
     /// 保存每一种Visual所需的Pipeline
     /// </summary>
     private List<PipelineIndex> requiredPipeline = new List<PipelineIndex>();
+
+    /// <summary>
+    /// 当前使用RenderTarget的Index
+    /// </summary>
+    private bool rt2DIndex = true;
+
+    /// <summary>
+    /// 用于Swap的RenderTarget
+    /// </summary>
+    private ResourceLocker<RenderTarget2D> tempRenderTarget;
+
+    /// <summary> 用绘制层 + 第一个调用的绘制层作为Key来储存List<IVisual> </summary>
+    private Dictionary<CallOpportunity, List<IVisualCollection>> visuals =
+        new Dictionary<CallOpportunity, List<IVisualCollection>>();
 
     /// <summary>
     /// 保存每一种Visual的Type
@@ -168,23 +210,13 @@ public class VFXManager : IModule
     };
 
     /// <summary>
-    /// RenderTarget池子
-    /// <br></br>
-    /// 直接引用的Everglow.renderTargetPool
+    /// RenderTarget池子 <br></br> 直接引用的Everglow.renderTargetPool
     /// </summary>
     public RenderTargetPool renderTargetPool;
 
-    /// <summary>
-    /// GraphicsDevice引用
-    /// </summary>
-    private GraphicsDevice graphicsDevice = Main.instance.GraphicsDevice;
+    #endregion Private Fields
 
-    /// <summary>
-    /// 当前使用RenderTarget的Index
-    /// </summary>
-    private bool rt2DIndex = true;
-
-    private const bool DefaultRt2DIndex = true;
+    #region Private Properties
 
     /// <summary>
     /// 当前的RenderTarget
@@ -196,6 +228,49 @@ public class VFXManager : IModule
     /// </summary>
     private RenderTarget2D TrNextTarget => rt2DIndex ? Main.screenTargetSwap : Main.screenTarget;
 
+    #endregion Private Properties
+
+    #region Public
+
+    public static readonly CallOpportunity[] drawLayers = new CallOpportunity[]
+    {
+        CallOpportunity.PostDrawFilter,
+        CallOpportunity.PostDrawProjectiles,
+        CallOpportunity.PostDrawTiles,
+        CallOpportunity.PostDrawDusts,
+        CallOpportunity.PostDrawBG,
+        CallOpportunity.PostDrawPlayers,
+        CallOpportunity.PostDrawNPCs
+    };
+
+    /// <summary>
+    /// 代替SpriteBatch，可以用来处理顶点绘制
+    /// </summary>
+    public static VFXBatch spriteBatch;
+
+    /// <summary>
+    /// 光照为复古或者迷幻
+    /// </summary>
+    public static bool LowQuality => Lighting.Mode is LightMode.Retro or LightMode.Trippy;
+
+    /// <summary>
+    /// 光照为彩色或者白
+    /// </summary>
+    public static bool HighQuality => Lighting.Mode is LightMode.Color or LightMode.White;
+
+    /// <summary>
+    /// 包含uTransform，对s0进行采样的普通Shader
+    /// </summary>
+    public static Asset<Effect> DefaultEffect => ModContent.Request<Effect>("Everglow/Sources/Commons/Core/VFX/Effect/Shader2D");
+
+    /// <summary>
+    /// IModule加载时的实例
+    /// </summary>
+    public static VFXManager Instance
+    {
+        get; private set;
+    }
+
     /// <summary>
     /// 当前RenderTarget
     /// </summary>
@@ -205,160 +280,15 @@ public class VFXManager : IModule
     }
 
     /// <summary>
-    /// 用于Swap的RenderTarget
-    /// </summary>
-    private ResourceLocker<RenderTarget2D> tempRenderTarget;
-
-    private Rt2DVisual renderingRt2D;
-
-    /// <summary>
-    /// 代替SpriteBatch，可以用来处理顶点绘制
-    /// </summary>
-    public static VFXBatch spriteBatch;
-
-    public static VFXManager Instance
-    {
-        get; private set;
-    }
-
-    /// <summary>
     /// 名称
     /// </summary>
     public string Name => "VFXManager";
-    public static Asset<Effect> DefaultEffect => ModContent.Request<Effect>("Everglow/Sources/Commons/Core/VFX/Effect/Shader2D");
+
+    #endregion Public
+
+    #region Methods
 
     /// <summary>
-    /// 获得一种Pipeline的下标，若没有此Pipeline便创建此Pipeline
-    /// </summary>
-    /// <param name="pipelineType"></param>
-    /// <returns></returns>
-    public int GetOrCreatePipeline(Type pipelineType)
-    {
-        if (pipelineTypes.Contains(pipelineType))
-        {
-            return pipelineTypes.IndexOf(pipelineType);
-        }
-        pipelineTypes.Add(pipelineType);
-        IPipeline pipeline = (IPipeline)Activator.CreateInstance(pipelineType);
-        pipeline.Load();
-        pipelineInstances.Add(pipeline);
-        return pipelineTypes.Count - 1;
-    }
-
-    /// <summary>
-    /// 获得Visual的Type
-    /// </summary>
-    /// <param name="visual"></param>
-    /// <returns></returns>
-    public int GetVisualType(IVisual visual)
-    {
-        return visualTypes[visual.GetType()];
-    }
-
-    /// <summary>
-    /// 注册一个Visual
-    /// </summary>
-    /// <param name="visual"></param>
-    /// <exception cref="Exception">该Visual未绑定任何Pipeline</exception>
-    public void Register(IVisual visual)
-    {
-        Type type = visual.GetType();
-        visualTypes.Add(type, requiredPipeline.Count);
-        if (type.IsDefined(typeof(PipelineAttribute)))
-        {
-            var pipelines = type.GetCustomAttribute<PipelineAttribute>().types;
-            if (pipelines.Length == 0)
-            {
-                Debug.Fail("Not bind any pipeline");
-                throw new Exception("Not bind any pipeline");
-            }
-            requiredPipeline.Add(new PipelineIndex(pipelines.Select(i => GetOrCreatePipeline(i))));
-        }
-        else
-        {
-            requiredPipeline.Add(null);
-        }
-    }
-
-    public void SwapRenderTarget()
-    {
-        if (CurrentRenderTarget == TrCurrentTarget)
-        {
-            graphicsDevice.SetRenderTarget(TrNextTarget);
-            graphicsDevice.Clear(Color.Transparent);
-            CurrentRenderTarget = TrNextTarget;
-            rt2DIndex = !rt2DIndex;
-        }
-        else
-        {
-            graphicsDevice.SetRenderTarget(tempRenderTarget.Resource);
-            graphicsDevice.Clear(Color.Transparent);
-            CurrentRenderTarget = tempRenderTarget.Resource;
-            (renderingRt2D.locker, tempRenderTarget) = (tempRenderTarget, renderingRt2D.locker);
-        }
-    }
-
-    public void Draw(CallOpportunity layer)
-    {
-        var visuals = this.visuals[layer];
-        int nextPipelineIndex = -1;
-        foreach (var innerVisuals in visuals)
-        {
-            var pipelineIndex = innerVisuals.Index;
-            var visibles = innerVisuals.Where(v => v.Visible && v.Active);
-            if (!visibles.Any())
-            {
-                continue;
-            }
-
-            if (Main.targetSet)
-            {
-                if (pipelineIndex.next != null && pipelineIndex.next.index != nextPipelineIndex)
-                {
-                    nextPipelineIndex = pipelineIndex.next.index;
-                    var locker = renderTargetPool.GetRenderTarget2D();
-                    SetRenderTarget(locker.Resource);
-                    renderingRt2D = new Rt2DVisual(locker);
-                    lookup[(layer, pipelineIndex.next)].Add(renderingRt2D);
-                }
-                else if (pipelineIndex.next == null && nextPipelineIndex != -1)
-                {
-                    nextPipelineIndex = -1;
-                    SetRenderTarget(TrNextTarget);
-                    Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
-                    Main.spriteBatch.Draw(TrCurrentTarget, Vector2.Zero, Color.White);
-                    Main.spriteBatch.End();
-                    rt2DIndex = !rt2DIndex;
-                }
-            }
-
-            pipelineInstances[pipelineIndex.index].Render(visibles);
-        }
-
-        if (Main.targetSet && TrCurrentTarget != Main.screenTarget)
-        {
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
-            SetRenderTarget(Main.screenTarget);
-            Main.spriteBatch.Draw(TrCurrentTarget, Vector2.Zero, Color.White);
-            rt2DIndex = DefaultRt2DIndex;
-            Main.spriteBatch.End();
-        }
-    }
-
-    /// <summary>
-    /// 添加一个Visual实例
-    /// </summary>
-    /// <param name="visual"></param>
-    public static void Add(IVisual visual)
-    {
-        if (NetUtils.IsServer)
-        {
-            return;
-        }
-        Instance.Add(visual, 0);
-    }
-    /// <summary>
-    ///
     /// </summary>
     /// <param name="visual"></param>
     /// <param name="flag">为了避免重复的占位符</param>
@@ -373,15 +303,6 @@ public class VFXManager : IModule
         }
 
         GetOrAddCollection(visual.DrawLayer, requiredPipeline[visual.Type]).Add(visual);
-    }
-
-    public int VisualType<T>() => visualTypes[typeof(T)];
-
-    public void SetRenderTarget(RenderTarget2D rt2D)
-    {
-        graphicsDevice.SetRenderTarget(rt2D);
-        graphicsDevice.Clear(Color.Transparent);
-        CurrentRenderTarget = rt2D;
     }
 
     private IVisualCollection GetOrAddCollection(CallOpportunity layer, PipelineIndex index, bool first = true)
@@ -407,26 +328,77 @@ public class VFXManager : IModule
         return collection;
     }
 
-    public void ModifyPipeline<T>(params Type[] pipelines) where T : IVisual
+    /// <summary>
+    /// 添加一个Visual实例
+    /// </summary>
+    /// <param name="visual"></param>
+    public static void Add(IVisual visual)
     {
-        //TODO 未进行测试
-        requiredPipeline[visualTypes[typeof(T)]] = new PipelineIndex(pipelines.Select(i => GetOrCreatePipeline(i)));
+        if (NetUtils.IsServer)
+        {
+            return;
+        }
+        Instance.Add(visual, 0);
     }
 
-    public void Update()
+    public static bool InScreen(Vector2 position, float exRange)
+    {
+        return Main.screenPosition.X - exRange < position.X && position.X < Main.screenPosition.X + Main.screenWidth + exRange
+            && Main.screenPosition.Y - exRange < position.Y && position.Y < Main.screenPosition.Y + Main.screenHeight + exRange;
+    }
+
+    public void Clear()
     {
         foreach (var visuals in visuals.Values)
         {
-            foreach (var list in visuals)
+            visuals.Clear();
+        }
+    }
+
+    public void Draw(CallOpportunity layer)
+    {
+        var visuals = this.visuals[layer];
+        int nextPipelineIndex = -1;
+        foreach (var innerVisuals in visuals)
+        {
+            var pipelineIndex = innerVisuals.Index;
+            var visibles = innerVisuals.Where(v => v.Visible && v.Active);
+            if (!visibles.Any())
             {
-                foreach (var visual in list)
+                continue;
+            }
+
+            if (HighQuality)
+            {
+                if (pipelineIndex.next != null && pipelineIndex.next.index != nextPipelineIndex)
                 {
-                    if (visual.Active)
-                    {
-                        visual.Update();
-                    }
+                    nextPipelineIndex = pipelineIndex.next.index;
+                    var locker = renderTargetPool.GetRenderTarget2D();
+                    SetRenderTarget(locker.Resource);
+                    renderingRt2D = new Rt2DVisual(locker);
+                    lookup[(layer, pipelineIndex.next)].Add(renderingRt2D);
+                }
+                else if (pipelineIndex.next == null && nextPipelineIndex != -1)
+                {
+                    nextPipelineIndex = -1;
+                    SetRenderTarget(TrNextTarget);
+                    Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
+                    Main.spriteBatch.Draw(TrCurrentTarget, Vector2.Zero, Color.White);
+                    Main.spriteBatch.End();
+                    rt2DIndex = !rt2DIndex;
                 }
             }
+
+            pipelineInstances[pipelineIndex.index].Render(visibles);
+        }
+
+        if (HighQuality && TrCurrentTarget != Main.screenTarget)
+        {
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
+            SetRenderTarget(Main.screenTarget);
+            Main.spriteBatch.Draw(TrCurrentTarget, Vector2.Zero, Color.White);
+            rt2DIndex = DefaultRt2DIndex;
+            Main.spriteBatch.End();
         }
     }
 
@@ -463,24 +435,33 @@ public class VFXManager : IModule
         }
     }
 
-    public void Clear()
+    /// <summary>
+    /// 获得一种Pipeline的下标，若没有此Pipeline便创建此Pipeline
+    /// </summary>
+    /// <param name="pipelineType"></param>
+    /// <returns></returns>
+    public int GetOrCreatePipeline(Type pipelineType)
     {
-        foreach (var visuals in visuals.Values)
+        if (pipelineTypes.Contains(pipelineType))
         {
-            visuals.Clear();
+            return pipelineTypes.IndexOf(pipelineType);
         }
+        pipelineTypes.Add(pipelineType);
+        IPipeline pipeline = (IPipeline)Activator.CreateInstance(pipelineType);
+        pipeline.Load();
+        pipelineInstances.Add(pipeline);
+        return pipelineTypes.Count - 1;
     }
 
-    public static readonly CallOpportunity[] drawLayers = new CallOpportunity[]
+    /// <summary>
+    /// 获得Visual的Type
+    /// </summary>
+    /// <param name="visual"></param>
+    /// <returns></returns>
+    public int GetVisualType(IVisual visual)
     {
-        CallOpportunity.PostDrawFilter,
-        CallOpportunity.PostDrawProjectiles,
-        CallOpportunity.PostDrawTiles,
-        CallOpportunity.PostDrawDusts,
-        CallOpportunity.PostDrawBG,
-        CallOpportunity.PostDrawPlayers,
-        CallOpportunity.PostDrawNPCs
-    };
+        return visualTypes[visual.GetType()];
+    }
 
     public void Load()
     {
@@ -510,6 +491,62 @@ public class VFXManager : IModule
         Everglow.MainThreadContext.AddTask(() => tempRenderTarget = renderTargetPool.GetRenderTarget2D());
     }
 
+    public void ModifyPipeline<T>(params Type[] pipelines) where T : IVisual
+    {
+        //TODO 未进行测试
+        requiredPipeline[visualTypes[typeof(T)]] = new PipelineIndex(pipelines.Select(i => GetOrCreatePipeline(i)));
+    }
+
+    /// <summary>
+    /// 注册一个Visual
+    /// </summary>
+    /// <param name="visual"></param>
+    /// <exception cref="Exception">该Visual未绑定任何Pipeline</exception>
+    public void Register(IVisual visual)
+    {
+        Type type = visual.GetType();
+        visualTypes.Add(type, requiredPipeline.Count);
+        if (type.IsDefined(typeof(PipelineAttribute)))
+        {
+            var pipelines = type.GetCustomAttribute<PipelineAttribute>().types;
+            if (pipelines.Length == 0)
+            {
+                Debug.Fail("Not bind any pipeline");
+                throw new Exception("Not bind any pipeline");
+            }
+            requiredPipeline.Add(new PipelineIndex(pipelines.Select(i => GetOrCreatePipeline(i))));
+        }
+        else
+        {
+            requiredPipeline.Add(null);
+        }
+    }
+
+    public void SetRenderTarget(RenderTarget2D rt2D)
+    {
+        graphicsDevice.SetRenderTarget(rt2D);
+        graphicsDevice.Clear(Color.Transparent);
+        CurrentRenderTarget = rt2D;
+    }
+
+    public void SwapRenderTarget()
+    {
+        if (CurrentRenderTarget == TrCurrentTarget)
+        {
+            graphicsDevice.SetRenderTarget(TrNextTarget);
+            graphicsDevice.Clear(Color.Transparent);
+            CurrentRenderTarget = TrNextTarget;
+            rt2DIndex = !rt2DIndex;
+        }
+        else
+        {
+            graphicsDevice.SetRenderTarget(tempRenderTarget.Resource);
+            graphicsDevice.Clear(Color.Transparent);
+            CurrentRenderTarget = tempRenderTarget.Resource;
+            (renderingRt2D.locker, tempRenderTarget) = (tempRenderTarget, renderingRt2D.locker);
+        }
+    }
+
     public void Unload()
     {
         Everglow.MainThreadContext.AddTask(() =>
@@ -523,27 +560,24 @@ public class VFXManager : IModule
         });
     }
 
-    [DontAutoLoad]
-    internal class Rt2DVisual : Visual
+    public void Update()
     {
-        public override CallOpportunity DrawLayer => throw new InvalidOperationException("Don't use this manually!");
-
-        public ResourceLocker<RenderTarget2D> locker;
-
-        public Rt2DVisual(ResourceLocker<RenderTarget2D> locker)
+        foreach (var visuals in visuals.Values)
         {
-            this.locker = locker;
-        }
-
-        public override void Draw()
-        {
-            throw new NotImplementedException();
+            foreach (var list in visuals)
+            {
+                foreach (var visual in list)
+                {
+                    if (visual.Active)
+                    {
+                        visual.Update();
+                    }
+                }
+            }
         }
     }
 
-    public static bool InScreen(Vector2 position, float exRange)
-    {
-        return Main.screenPosition.X - exRange < position.X && position.X < Main.screenPosition.X + Main.screenWidth + exRange
-            && Main.screenPosition.Y - exRange < position.Y && position.Y < Main.screenPosition.Y + Main.screenHeight + exRange;
-    }
+    public int VisualType<T>() => visualTypes[typeof(T)];
+
+    #endregion Methods
 }

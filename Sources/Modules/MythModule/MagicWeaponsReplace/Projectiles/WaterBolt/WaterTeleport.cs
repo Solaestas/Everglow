@@ -1,9 +1,10 @@
-﻿using Everglow.Sources.Commons.Function.Vertex;
+﻿using Everglow.Sources.Commons.Core.VFX;
+using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MEACModule;
 using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
-
+using static Everglow.Sources.Modules.MythModule.Common.MythUtils;
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.WaterBolt
 {
     internal class WaterTeleport : ModProjectile, IWarpProjectile
@@ -101,9 +102,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
                             player.AddBuff(ModContent.BuffType<Buffs.WaterBoltII>(), 300);
                             foreach (Projectile p0 in Main.projectile)
                             {
-                                if (p0.owner == player.whoAmI && p0.type == Projectile.type)
+                                if (p0.owner == player.whoAmI && p0.type == Projectile.type && p0.active)
                                 {
                                     p0.Kill();
+                                    Projectile.NewProjectile(p0.GetSource_FromAI(), p0.Center, Vector2.Zero, ModContent.ProjectileType<BeadShakeWave>(), 0, 0, 255, 1);
                                     p0.active = false;
                                 }
                             }
@@ -142,22 +144,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
             DrawTexCircle(SizeII, (40 - SizeII) * Timer / 30f, c0, Projectile.Center - Main.screenPosition, tex, Main.timeForVisualEffects / 17);
         }
 
-        private static void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
-        {
-            List<Vertex2D> circle = new List<Vertex2D>();
-            for (int h = 0; h < radious * 2; h++)
-            {
-                circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 1f + addRot), color, new Vector3(h / 2f / radious, 1, 0)));
-                circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(h / radious * Math.PI * 1f + addRot), color, new Vector3(h / 2f / radious, 0, 0)));
-            }
-            circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0.5f, 1, 0)));
-            circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(addRot), color, new Vector3(0.5f, 0, 0)));
-            if (circle.Count > 0)
-            {
-                Main.graphics.GraphicsDevice.Textures[0] = tex;
-                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
-            }
-        }
+        
 
         public static void DrawTexLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2, Texture2D tex)
         {
@@ -183,18 +170,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
         }
 
-        public void DrawWarp()
+        public void DrawWarp(VFXBatch spriteBatch)
         {
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-            KEx.CurrentTechnique.Passes[0].Apply();
+           
             float Size = (float)((Main.timeForVisualEffects / 2d + Projectile.ai[0] * 4) % 40d);
             float SizeII = (float)((Main.timeForVisualEffects / 2d + 20 + Projectile.ai[0] * 4) % 40d);
-            DrawTexCircle(Size, (40 - Size) * Timer / 30f, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), Main.timeForVisualEffects / 17);
-            DrawTexCircle(SizeII, (40 - SizeII) * Timer / 30f, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), Main.timeForVisualEffects / 17);
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            DrawTexCircle(spriteBatch,Size, (40 - Size) * Timer / 30f, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), Main.timeForVisualEffects / 17);
+            DrawTexCircle(spriteBatch,SizeII, (40 - SizeII) * Timer / 30f, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), Main.timeForVisualEffects / 17);
         }
 
         public override void Kill(int timeLeft)
@@ -203,7 +185,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
             {
                 return;
             }
-            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BeadShakeWave>(), 0, 0, Projectile.owner, 1);
+
 
             float k1 = 0.3f;
             float k2 = 8;

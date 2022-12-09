@@ -1,4 +1,6 @@
-﻿namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Items
+﻿using Terraria.ID;
+
+namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Items
 {
     public class CyanVineBar : ModItem
     {
@@ -13,7 +15,7 @@
             Item.height = 24;
             Item.rare = ItemRarityID.White;
             Item.scale = 1f;
-            Item.createTile = 0;
+            Item.createTile = TileID.Dirt;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.useTurn = true;
             Item.useAnimation = 15;

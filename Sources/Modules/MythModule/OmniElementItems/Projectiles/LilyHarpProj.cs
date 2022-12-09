@@ -1,4 +1,5 @@
-﻿using Everglow.Sources.Commons.Function.Vertex;
+﻿using Everglow.Sources.Commons.Core.VFX;
+using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MEACModule;
 using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.DataStructures;
@@ -322,29 +323,39 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
             }
         }
-
-        public void DrawWarp()
+        private static void DrawCircle(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center)
         {
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-            KEx.CurrentTechnique.Passes[0].Apply();
+            List<Vertex2D> circle = new List<Vertex2D>();
+            for (int h = 0; h < radious / 2; h++)
+            {
+                circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4), color, new Vector3(0.5f, 1, 0)));
+                circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(h / radious * Math.PI * 4), color, new Vector3(0.5f, 0, 0)));
+            }
+            circle.Add(new Vertex2D(center + new Vector2(0, radious), color, new Vector3(0.5f, 1, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, radious + width), color, new Vector3(0.5f, 0, 0)));
+            if (circle.Count > 0)
+            {
+                Texture2D t = MythContent.QuickTexture("OmniElementItems/Projectiles/Wave");
+                spriteBatch.Draw(t, circle, PrimitiveType.TriangleStrip);
+            }
+        }
+        public void DrawWarp(VFXBatch spriteBatch)
+        {
+           
             Player player = Main.player[Projectile.owner];
             float value = (player.itemTimeMax - player.itemTime) / (float)player.itemTimeMax * 1.4f;
             value -= 0.02f;
             if (value < 1)
             {
                 float c0 = 0.3f * (float)Math.Sqrt(1 - value);
-                DrawCircle(value * 160, 30 * (1 - value) + 6, new Color(c0, c0, c0, 0f), player.Center + new Vector2(player.direction * 15, 0) - Main.screenPosition);
+                DrawCircle(spriteBatch,value * 160, 30 * (1 - value) + 6, new Color(c0, c0, c0, 0f), player.Center + new Vector2(player.direction * 15, 0) - Main.screenPosition);
             }
             value -= 0.22f;
             if (value is < 1 and > 0)
             {
                 float c0 = 0.2f * (float)Math.Sqrt(1 - value);
-                DrawCircle(value * 133, 16 * (1 - value) + 6, new Color(c0, c0, c0, 0f), player.Center + new Vector2(player.direction * 15, 0) - Main.screenPosition);
+                DrawCircle(spriteBatch,value * 133, 16 * (1 - value) + 6, new Color(c0, c0, c0, 0f), player.Center + new Vector2(player.direction * 15, 0) - Main.screenPosition);
             }
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
         }
     }
 

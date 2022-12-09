@@ -1,3 +1,4 @@
+using Everglow.Sources.Commons.Core.VFX;
 using Everglow.Sources.Commons.Function.Vertex;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -16,7 +17,7 @@ namespace Everglow.Sources.Modules.MEACModule.NonTrueMeleeProj
             Projectile.timeLeft = 1200;
             Projectile.penetrate = -1;
         }
-        public void DrawWarp()
+        public void DrawWarp(VFXBatch spriteBatch)
         {
             float WaveRange = 0.7f;
             //Texture2D BackG = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/NonTrueMeleeProj/Black").Value;
@@ -30,24 +31,37 @@ namespace Everglow.Sources.Modules.MEACModule.NonTrueMeleeProj
                 float k3 = (float)Math.Sqrt(k1);
                 Vector2 DrawCen = Projectile.Center - Main.screenPosition;
 
+                DrawDoubleLine(spriteBatch,DrawCen + new Vector2(0, -k0 * 150) * WaveRange, DrawCen + new Vector2(k0 * 75, -k0 * 75) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));
+                DrawDoubleLine(spriteBatch, DrawCen + new Vector2(k0 * 75, -k0 * 75) * WaveRange, DrawCen + new Vector2(k0 * 150, 0) * WaveRange, new Color(1f * k2, 0.7f * k2, 0f, 0f), new Color(1f * k3, 0.6f * k3, 0f, 0f));
+                DrawDoubleLine(spriteBatch, DrawCen + new Vector2(0, -k0 * 150) * WaveRange, DrawCen + new Vector2(-k0 * 75, -k0 * 75) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));
+                DrawDoubleLine(spriteBatch, DrawCen + new Vector2(-k0 * 75, -k0 * 75) * WaveRange, DrawCen + new Vector2(-k0 * 150, 0) * WaveRange, new Color(1f * k2, 0.7f * k2, 0f, 0f), new Color(1f * k3, 0.6f * k3, 0f, 0f));
 
-                Main.spriteBatch.End();
-                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-                Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-                KEx.CurrentTechnique.Passes[0].Apply();
-
-                DrawDoubleLine(DrawCen + new Vector2(0, -k0 * 150) * WaveRange, DrawCen + new Vector2(k0 * 75, -k0 * 75) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));
-                DrawDoubleLine(DrawCen + new Vector2(k0 * 75, -k0 * 75) * WaveRange, DrawCen + new Vector2(k0 * 150, 0) * WaveRange, new Color(1f * k2, 0.7f * k2, 0f, 0f), new Color(1f * k3, 0.6f * k3, 0f, 0f));
-                DrawDoubleLine(DrawCen + new Vector2(0, -k0 * 150) * WaveRange, DrawCen + new Vector2(-k0 * 75, -k0 * 75) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));
-                DrawDoubleLine(DrawCen + new Vector2(-k0 * 75, -k0 * 75) * WaveRange, DrawCen + new Vector2(-k0 * 150, 0) * WaveRange, new Color(1f * k2, 0.7f * k2, 0f, 0f), new Color(1f * k3, 0.6f * k3, 0f, 0f));
-
-                DrawDoubleLine(DrawCen + new Vector2(0, k0 * 150) * WaveRange, DrawCen + new Vector2(k0 * 75, k0 * 75) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));
-                DrawDoubleLine(DrawCen + new Vector2(k0 * 75, k0 * 75) * WaveRange, DrawCen + new Vector2(k0 * 150, 0) * WaveRange, new Color(1f * k2, 0.7f * k2, 0f, 0f), new Color(1f * k3, 0.6f * k3, 0f, 0f));
-                DrawDoubleLine(DrawCen + new Vector2(0, k0 * 150) * WaveRange, DrawCen + new Vector2(-k0 * 75, k0 * 75) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));
-                DrawDoubleLine(DrawCen + new Vector2(-k0 * 75, k0 * 75) * WaveRange, DrawCen + new Vector2(-k0 * 150, 0) * WaveRange, new Color(1f * k2, 0.7f * k2, 0f, 0f), new Color(1f * k3, 0.6f * k3, 0f, 0f));
+                DrawDoubleLine(spriteBatch, DrawCen + new Vector2(0, k0 * 150) * WaveRange, DrawCen + new Vector2(k0 * 75, k0 * 75) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));
+                DrawDoubleLine(spriteBatch, DrawCen + new Vector2(k0 * 75, k0 * 75) * WaveRange, DrawCen + new Vector2(k0 * 150, 0) * WaveRange, new Color(1f * k2, 0.7f * k2, 0f, 0f), new Color(1f * k3, 0.6f * k3, 0f, 0f));
+                DrawDoubleLine(spriteBatch, DrawCen + new Vector2(0, k0 * 150) * WaveRange, DrawCen + new Vector2(-k0 * 75, k0 * 75) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));
+                DrawDoubleLine(spriteBatch, DrawCen + new Vector2(-k0 * 75, k0 * 75) * WaveRange, DrawCen + new Vector2(-k0 * 150, 0) * WaveRange, new Color(1f * k2, 0.7f * k2, 0f, 0f), new Color(1f * k3, 0.6f * k3, 0f, 0f));
             }
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+        }
+        public void DrawDoubleLine(VFXBatch spriteBatch, Vector2 StartPos, Vector2 EndPos, Color color1, Color color2)
+        {
+            Vector2 DrawCen = Projectile.Center - Main.screenPosition;
+            float Wid = (Projectile.timeLeft - 1170) / 2f;
+            Vector2 WidthS = Vector2.Normalize(StartPos - DrawCen).RotatedBy(Math.PI / 2d) * Wid;
+            Vector2 WidthE = Vector2.Normalize(EndPos - DrawCen).RotatedBy(Math.PI / 2d) * Wid;
+            List<Vertex2D> vertex2Ds = new List<Vertex2D>();
+
+            for (int x = 0; x < 3; x++)
+            {
+                vertex2Ds.Add(new Vertex2D(StartPos + WidthS + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(0, 0, 0)));
+                vertex2Ds.Add(new Vertex2D(EndPos + WidthE + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(0, 0, 0)));
+                vertex2Ds.Add(new Vertex2D(StartPos - WidthS + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(0, 0, 0)));
+
+                vertex2Ds.Add(new Vertex2D(EndPos + WidthE + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(0, 0, 0)));
+                vertex2Ds.Add(new Vertex2D(EndPos - WidthE + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(0, 0, 0)));
+                vertex2Ds.Add(new Vertex2D(StartPos - WidthS + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(0, 0, 0)));
+            }
+
+            spriteBatch.Draw(TextureAssets.MagicPixel.Value,vertex2Ds,PrimitiveType.TriangleList);
         }
         public void DrawDoubleLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2)
         {
