@@ -19,7 +19,7 @@ namespace Everglow.Sources.Modules.FoodModule.Items.ModDrink
 				{
 					Thirsty = false,
 					BuffType = ModContent.BuffType<WatermelonBuff>(),
-					BuffTime = new FoodDuration(0, 7, 30),
+					BuffTime = new FoodDuration(0, 10, 0),
 					Name = "SakeBuff"
 				};
             }

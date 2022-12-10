@@ -25,7 +25,7 @@ namespace Everglow.Sources.Modules.FoodModule
                     new DrinkInfo() {
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<AleBuff> (),
-                        BuffTime = new FoodDuration(0, 7, 30),
+                        BuffTime = new FoodDuration(0, 10, 0),
                         Name =  "SakeBuff"
                     }
                 },
@@ -35,7 +35,7 @@ namespace Everglow.Sources.Modules.FoodModule
                     new DrinkInfo() {
                        Thirsty = false ,
                        BuffType = ModContent.BuffType<AppleJuiceBuff>(),
-                       BuffTime = new FoodDuration(0, 7, 30),
+                       BuffTime = new FoodDuration(0, 10, 0),
                        Name =  "AppleJuiceBuff"
                     }
                 },
@@ -45,7 +45,7 @@ namespace Everglow.Sources.Modules.FoodModule
                     new DrinkInfo() {
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<BananaDaiquiriBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30),
+                        BuffTime = new FoodDuration(0, 10, 0),
                         Name = "BananaDaiquiriBuff"
                     }
                 },
@@ -55,7 +55,7 @@ namespace Everglow.Sources.Modules.FoodModule
                     new DrinkInfo() {
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<BloodyMoscatoBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30),
+                        BuffTime = new FoodDuration(0, 10, 0),
                         Name = "BloodyMoscatoBuff"
                     }
                 },
@@ -65,7 +65,7 @@ namespace Everglow.Sources.Modules.FoodModule
                     new DrinkInfo() {
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<CreamSodaBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30),
+                        BuffTime = new FoodDuration(0, 10, 0),
                         Name = "CreamSodaBuff"
                     }
                 },
@@ -75,7 +75,7 @@ namespace Everglow.Sources.Modules.FoodModule
                     new DrinkInfo() {
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<CoffeeCupBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30),
+                        BuffTime = new FoodDuration(0, 30, 0),
                         Name = "CoffeeCupBuff"
                     }
                 },
@@ -85,7 +85,7 @@ namespace Everglow.Sources.Modules.FoodModule
                     new DrinkInfo() {
                        Thirsty = false ,
                        BuffType = ModContent.BuffType<FruitJuiceBuff>(),
-                       BuffTime = new FoodDuration(0, 7, 30),
+                       BuffTime = new FoodDuration(0, 10, 0),
                         Name = "FruitJuiceBuff"
                     }
                 },
@@ -95,7 +95,7 @@ namespace Everglow.Sources.Modules.FoodModule
                     new DrinkInfo() {
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<GrapeJuiceBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30),
+                        BuffTime = new FoodDuration(0, 10, 0),
                         Name = "GrapeJuiceBuff"
                     }
                 },                
@@ -105,7 +105,7 @@ namespace Everglow.Sources.Modules.FoodModule
                     new DrinkInfo() {
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<LemonadeBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30),
+                        BuffTime = new FoodDuration(0, 10, 0),
                         Name = "LemonadeBuff"
                     }
                 },     
@@ -115,7 +115,7 @@ namespace Everglow.Sources.Modules.FoodModule
                     new DrinkInfo() {
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<MilkCartonBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30),
+                        BuffTime = new FoodDuration(0, 10, 0),
                         Name = "MilkCartonBuff"
                     }
                 },
@@ -125,7 +125,7 @@ namespace Everglow.Sources.Modules.FoodModule
                     new DrinkInfo() {
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<MilkshakeBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30),
+                        BuffTime = new FoodDuration(0, 10, 0),
                         Name = "MilkshakeBuff"
                     }
                 },
@@ -135,7 +135,7 @@ namespace Everglow.Sources.Modules.FoodModule
                     new DrinkInfo() {
                         Thirsty = false,
                         BuffType = ModContent.BuffType<PeachSangriaBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30),
+                        BuffTime = new FoodDuration(0, 10, 0),
                         Name = "PeachSangriaBuff"
                     }
                 },
@@ -145,7 +145,7 @@ namespace Everglow.Sources.Modules.FoodModule
                     new DrinkInfo() {
                         Thirsty = false,
                         BuffType = ModContent.BuffType<PinaColadaBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30),
+                        BuffTime = new FoodDuration(0, 10, 0),
                         Name = "PinaColadaBuff"
                     }
                 },
@@ -155,7 +155,7 @@ namespace Everglow.Sources.Modules.FoodModule
                     new DrinkInfo() {
                         Thirsty = false,
                         BuffType = ModContent.BuffType<PrismaticPunchBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30),
+                        BuffTime = new FoodDuration(0, 10, 0),
                         Name = "PrismaticPunchBuff"
                     }
                 },                
@@ -165,7 +165,7 @@ namespace Everglow.Sources.Modules.FoodModule
                     new DrinkInfo() {
                         Thirsty = false,
                         BuffType = ModContent.BuffType<SakeBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30),
+                        BuffTime = new FoodDuration(0, 10, 0),
                         Name = "SakeBuff"
                     }
                 },
@@ -176,7 +176,7 @@ namespace Everglow.Sources.Modules.FoodModule
                         Thirsty = false,
                         BuffType = ModContent.
                         BuffType<SmoothieofDarknessBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30),
+                        BuffTime = new FoodDuration(0, 10, 0),
                         Name = "SmoothieofDarknessBuff"
                     }
                 }, 
@@ -186,7 +186,7 @@ namespace Everglow.Sources.Modules.FoodModule
                     new DrinkInfo() {
                         Thirsty = false,
                         BuffType = ModContent.BuffType<TeacupBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30),
+                        BuffTime = new FoodDuration(0, 10, 0),
                         Name = "TeacupBuff"
                     }
                 },
@@ -196,7 +196,7 @@ namespace Everglow.Sources.Modules.FoodModule
                     new DrinkInfo() {
                         Thirsty = false,
                         BuffType = ModContent.BuffType<TropicalSmoothieBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30),
+                        BuffTime = new FoodDuration(0, 10, 0),
                         Name = "TropicalSmoothieBuff"
                     }
                 }
