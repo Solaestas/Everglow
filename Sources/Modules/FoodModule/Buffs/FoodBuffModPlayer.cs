@@ -1,4 +1,6 @@
-﻿namespace Everglow.Sources.Modules.FoodModule.Buffs
+﻿using Everglow.Sources.Modules.FoodModule.Buffs.VanillaFoodBuffs;
+
+namespace Everglow.Sources.Modules.FoodModule.Buffs
 {
     public class FoodBuffModPlayer : ModPlayer
     {
@@ -20,6 +22,7 @@
         public bool RoastedBirdBuff;
         public bool RoastedDuckBuff;
         public bool BloodyMoscatoBuff;
+        public bool FriedEggBuff;
 
         public static float CritDamage;
         public static float AddCritDamage;
@@ -44,6 +47,7 @@
             RoastedBirdBuff = false;
             RoastedDuckBuff = false;
             BloodyMoscatoBuff = false;
+            FriedEggBuff = false;
 
             CritDamage = 1f;
             AddCritDamage = 0;
@@ -68,6 +72,7 @@
             RoastedBirdBuff = false;
             RoastedDuckBuff = false;
             BloodyMoscatoBuff = false;
+            FriedEggBuff = false;
 
             CritDamage = 1f;
             AddCritDamage = 0;
