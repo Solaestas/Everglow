@@ -14,7 +14,7 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
     public class FoodBuffGlobalItem : GlobalItem
     {
         public override bool InstancePerEntity => true;
-        float shootspeed;
+
         public override bool Shoot(Item item, Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             if (player.GetModPlayer<FoodBuffModPlayer>().StarfruitBuff) 
@@ -42,6 +42,14 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
                 if (Consumables.vanillaConsumables.Contains(item.type))
                 {
                     Projectile.NewProjectile(source, position,1.5f*velocity, type, damage, knockback, player.whoAmI, 0);
+                    return false;
+                }
+            }
+            if(player.GetModPlayer<FoodBuffModPlayer>().NachosBuff)
+            {
+                if (Launchers.vanillaLaunchers.Contains(item.type))
+                {
+                    Projectile.NewProjectile(source, position, velocity, type, (int)1.04f*damage, 1.04f * knockback, player.whoAmI, 0);
                     return false;
                 }
             }

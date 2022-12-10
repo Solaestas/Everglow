@@ -86,7 +86,7 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
         public override bool CanConsumeAmmo(Item weapon, Item ammo)
         {
 
-            if (BananaBuff && Main.rand.NextBool(5))
+            if (BananaBuff && Main.rand.NextBool(20))
             {
                 return false;
             }
@@ -94,7 +94,7 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
             {
                 return false;
             }
-            if (BananaSplitBuff && Main.rand.NextBool(3))
+            if (BananaSplitBuff && Main.rand.NextBool(10))
             {
                 return false;
             }
@@ -138,14 +138,6 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
                 target.AddBuff(BuffID.Oiled, 600);
                 target.AddBuff(BuffID.OnFire, 600);
             }
-            if (NachosBuff)
-            {
-                target.AddBuff(BuffID.OnFire, 600);
-                target.AddBuff(BuffID.CursedInferno, 600);
-                target.AddBuff(BuffID.ShadowFlame, 600);
-                target.AddBuff(BuffID.Frostburn, 600);
-                target.AddBuff(BuffID.Oiled, 600);
-            }
             if (BloodyMoscatoBuff)
             {
                 Player.HealEffect(5, true);
@@ -160,14 +152,6 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
             {
                 target.AddBuff(BuffID.Oiled, 600);
                 target.AddBuff(BuffID.OnFire, 600);
-            }
-            if (NachosBuff)
-            {
-                target.AddBuff(BuffID.OnFire, 600);
-                target.AddBuff(BuffID.CursedInferno, 600);
-                target.AddBuff(BuffID.ShadowFlame, 600);
-                target.AddBuff(BuffID.Frostburn, 600);
-                target.AddBuff(BuffID.Oiled, 600);
             }
             if (BloodyMoscatoBuff)
             {
@@ -212,7 +196,7 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
                     }
 
                     Player.lifeRegenTime = 0;
-                    Player.lifeRegen -= 4;
+                    Player.lifeRegen -= 3;
                 }
                 else
                 {
@@ -222,7 +206,7 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
                     }
 
                     Player.lifeRegenTime = 0;
-                    Player.lifeRegen -= 10;
+                    Player.lifeRegen -= 6;
                 }
 
             }
@@ -246,7 +230,7 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
                     }
 
                     Player.lifeRegenTime = 0;
-                    Player.lifeRegen -= 6;
+                    Player.lifeRegen -= 4;
                 }
 
             }
