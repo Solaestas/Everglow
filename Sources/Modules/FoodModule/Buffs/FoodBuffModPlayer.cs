@@ -111,7 +111,7 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
 
         public override void Hurt(bool pvp, bool quiet, double damage, int hitDirection, bool crit, int cooldownCounter)
         {
-            if (Player.whoAmI == Main.myPlayer && SmoothieofDarknessBuff && !Main.rand.NextBool(5))
+            if (Player.whoAmI == Main.myPlayer && SmoothieofDarknessBuff && Main.rand.NextBool(2))
             {
                 Player.NinjaDodge();
             }
@@ -138,7 +138,22 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
             if (BloodyMoscatoBuff)
             {
                 Player.HealEffect(5, true);
-                Player.statLife += 5;
+                Player.statLife += 1;
+            }
+
+        }
+        public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
+        {
+
+            if (DragonfruitBuff)
+            {
+                target.AddBuff(BuffID.Oiled, 600);
+                target.AddBuff(BuffID.OnFire, 600);
+            }
+            if (BloodyMoscatoBuff)
+            {
+                Player.HealEffect(5, true);
+                Player.statLife += 1;
             }
 
         }
@@ -191,21 +206,7 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
             }
             base.Kill(damage, hitDirection, pvp, damageSource);
         }
-        public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
-        {
-
-            if (DragonfruitBuff)
-            {
-                target.AddBuff(BuffID.Oiled, 600);
-                target.AddBuff(BuffID.OnFire, 600);
-            }
-            if (BloodyMoscatoBuff)
-            {
-                Player.HealEffect(5, true);
-                Player.statLife += 5;
-            }
-
-        }
+        
         public override void UpdateBadLifeRegen()
         {
             if (GrubSoupBuff)
