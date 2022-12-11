@@ -633,7 +633,7 @@ namespace Everglow.Sources.Modules.FoodModule
         }
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
-            if (m_vanillaFoodInfos.ContainsKey(item.type))
+            if (m_vanillaFoodInfos.ContainsKey(item.type) || (item.ModItem is FoodBase))
             {
 
                 int firstIndex = -1;

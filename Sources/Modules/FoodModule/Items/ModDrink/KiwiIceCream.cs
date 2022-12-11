@@ -1,5 +1,4 @@
 ﻿using Everglow.Sources.Modules.FoodModule.Buffs.ModFoodBuffs;
-using Everglow.Sources.Modules.FoodModule.Buffs.VanillaFoodBuffs;
 using Everglow.Sources.Modules.FoodModule.Utils;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -8,20 +7,20 @@ using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Everglow.Sources.Modules.FoodModule.Items.ModFood
+namespace Everglow.Sources.Modules.FoodModule.Items.ModDrink
 {
-    public class StrawberryIcecream : FoodBase
+    public class KiwiIceCream : DrinkBase
     {
-        public override FoodInfo FoodInfo
+        public override DrinkInfo DrinkInfo
         {
             get
             {
-                return new FoodInfo()
+                return new DrinkInfo()
                 {
-                    Satiety = 10,
-                    BuffType = ModContent.BuffType<AppleBuff>(),
-                    BuffTime = new FoodDuration(4, 0, 0),
-                    Name = "AppleBuff"
+                    Thirsty = false,
+                    BuffType = ModContent.BuffType<WatermelonBuff>(),
+                    BuffTime = new FoodDuration(0, 10, 0),
+                    Name = "SakeBuff"
                 };
             }
         }

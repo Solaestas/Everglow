@@ -8,6 +8,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Everglow.Sources.Modules.FoodModule.Buffs.ModFoodBuffs;
 
 namespace Everglow.Sources.Modules.FoodModule.Items.ModFood
 {
@@ -19,17 +20,17 @@ namespace Everglow.Sources.Modules.FoodModule.Items.ModFood
             {
 				return new FoodInfo()
 				{
-					Satiety = 10,
-					BuffType = ModContent.BuffType<AppleBuff>(),
-					BuffTime = new FoodDuration(4, 0, 0),
-					Name = "AppleBuff"
-				};
+					Satiety = 40,
+					BuffType = ModContent.BuffType<SeafoodPizzaBuff>(),
+					BuffTime = new FoodDuration(12, 0, 0),
+					Name = "SeafoodPizzaBuff"
+                };
             }
         }
         public override void SetStaticDefaults() {
-			DisplayName.SetDefault("Example Pie");
+			DisplayName.SetDefault("海鲜披萨");
 
-			Tooltip.SetDefault("{$CommonItemTooltip.MediumStats}\n'Who knew examples could taste good'");
+			Tooltip.SetDefault("{$CommonItemTooltip.MediumStats}\n'一个人吃完这个可不容易'");
 
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 5;
 

@@ -205,7 +205,7 @@ namespace Everglow.Sources.Modules.FoodModule
 
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
-            if (m_vanillaDrinkInfos.ContainsKey(item.type))
+            if (m_vanillaDrinkInfos.ContainsKey(item.type) || (item.ModItem is DrinkBase))
             {
                 int firstIndex = -1;
                 firstIndex = tooltips.FindIndex((tpline) =>
@@ -284,7 +284,7 @@ namespace Everglow.Sources.Modules.FoodModule
                     return false;
                 }
             }
-            else if (item.ModItem is FoodBase && CanText == true)
+            else if (item.ModItem is DrinkBase && CanText == true)
             {
                 var foodItem = item.ModItem as DrinkBase;
                 var drinkInfo = foodItem.DrinkInfo;
@@ -318,7 +318,7 @@ namespace Everglow.Sources.Modules.FoodModule
                     return false;
                 }
             }
-            else if (item.ModItem is FoodBase)
+            else if (item.ModItem is DrinkBase)
             {
                 var foodItem = item.ModItem as DrinkBase;
                 var drinkInfo = foodItem.DrinkInfo;
