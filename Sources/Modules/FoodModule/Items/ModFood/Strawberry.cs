@@ -30,7 +30,7 @@ namespace Everglow.Sources.Modules.FoodModule.Items.ModFood
         public override void SetStaticDefaults() {
 			DisplayName.SetDefault("草莓");
 
-			Tooltip.SetDefault("{$CommonItemTooltip.MediumStats}\n'受人欢迎'");
+			Tooltip.SetDefault("{$CommonItemTooltip.MediumStats}\n'受人欢迎的水果'");
 
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 5;
 

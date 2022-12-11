@@ -1,4 +1,5 @@
-﻿using Everglow.Sources.Modules.FoodModule.Buffs.ModFoodBuffs;
+﻿using Everglow.Sources.Modules.FoodModule.Buffs.ModDrinkBuffs;
+using Everglow.Sources.Modules.FoodModule.Buffs.ModFoodBuffs;
 using Everglow.Sources.Modules.FoodModule.Utils;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -18,16 +19,16 @@ namespace Everglow.Sources.Modules.FoodModule.Items.ModDrink
 				return new DrinkInfo()
 				{
 					Thirsty = false,
-					BuffType = ModContent.BuffType<WatermelonBuff>(),
+					BuffType = ModContent.BuffType<B_52Buff>(),
 					BuffTime = new FoodDuration(0, 10, 0),
-					Name = "SakeBuff"
-				};
+					Name = "B_52Buff"
+                };
             }
         }
         public override void SetStaticDefaults() {
-			DisplayName.SetDefault("Example Pie");
+			DisplayName.SetDefault("B_52");
 
-			Tooltip.SetDefault("{$CommonItemTooltip.MediumStats}\n'Who knew examples could taste good'");
+			Tooltip.SetDefault("{$CommonItemTooltip.MediumStats}\n'轰炸机！！！'");
 
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 5;
 

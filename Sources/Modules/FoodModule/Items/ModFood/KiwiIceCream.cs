@@ -1,4 +1,5 @@
 ﻿using Everglow.Sources.Modules.FoodModule.Buffs.ModFoodBuffs;
+using Everglow.Sources.Modules.FoodModule.Items;
 using Everglow.Sources.Modules.FoodModule.Utils;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -7,28 +8,28 @@ using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Everglow.Sources.Modules.FoodModule.Items.ModDrink
+namespace Everglow.Sources.Modules.FoodModule.Items.ModFood
 {
-    public class StrawberryIcecream : DrinkBase
+    public class KiwiIceCream : FoodBase
     {
-        public override DrinkInfo DrinkInfo
+        public override FoodInfo FoodInfo
         {
             get
             {
-                return new DrinkInfo()
+                return new FoodInfo()
                 {
-                    Thirsty = false,
-                    BuffType = ModContent.BuffType<WatermelonBuff>(),
-                    BuffTime = new FoodDuration(0, 10, 0),
-                    Name = "SakeBuff"
+                    Satiety = 10,
+                    BuffType = ModContent.BuffType<KiwiIceCreamBuff>(),
+                    BuffTime = new FoodDuration(4, 0, 0),
+                    Name = "KiwiIceCreamBuff"
                 };
             }
         }
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Example Pie");
+            DisplayName.SetDefault("猕猴桃冰激凌");
 
-            Tooltip.SetDefault("{$CommonItemTooltip.MediumStats}\n'Who knew examples could taste good'");
+            Tooltip.SetDefault("{$CommonItemTooltip.MediumStats}\n'奇异的力量'");
 
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 5;
 
@@ -38,7 +39,7 @@ namespace Everglow.Sources.Modules.FoodModule.Items.ModDrink
                 new Color(249, 230, 136),
                 new Color(152, 93, 95),
                 new Color(174, 192, 192)
-            }
+            };
 
             ItemID.Sets.IsFood[Type] = true;
         }

@@ -1,4 +1,5 @@
-﻿using Everglow.Sources.Modules.FoodModule.Buffs.ModFoodBuffs;
+﻿using Everglow.Sources.Modules.FoodModule.Buffs.ModDrinkBuffs;
+using Everglow.Sources.Modules.FoodModule.Buffs.ModFoodBuffs;
 using Everglow.Sources.Modules.FoodModule.Utils;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -18,38 +19,21 @@ namespace Everglow.Sources.Modules.FoodModule.Items.ModDrink
 				return new DrinkInfo()
 				{
 					Thirsty = false,
-					BuffType = ModContent.BuffType<WatermelonBuff>(),
+					BuffType = ModContent.BuffType<DryMartiniBuff>(),
 					BuffTime = new FoodDuration(0, 10, 0),
-					Name = "SakeBuff"
-				};
+					Name = "DryMartiniBuff"
+                };
             }
         }
         public override void SetStaticDefaults() {
-			DisplayName.SetDefault("Example Pie");
-			
-			
-			
-			
-			
-			Tooltip.SetDefault("{$CommonItemTooltip.MediumStats}\n'Who knew examples could taste good'");
+			DisplayName.SetDefault("干马提尼");
+
+			Tooltip.SetDefault("{$CommonItemTooltip.MediumStats}\n'经典之作'");
 
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 5;
 
-			
-			
-			
-			
-			
-			
-			
 			Main.RegisterItemAnimation(Type, new DrawAnimationVertical(int.MaxValue, 3));
 
-			
-			
-			
-			
-			
-			
 			ItemID.Sets.FoodParticleColors[Item.type] = new Color[3] {
 				new Color(249, 230, 136),
 				new Color(152, 93, 95),
@@ -58,18 +42,11 @@ namespace Everglow.Sources.Modules.FoodModule.Items.ModDrink
 
 			ItemID.Sets.IsFood[Type] = true; 
 		}
-
 		public override void SetDefaults() {
-			
-
-			
 			Item.DefaultToFood(22, 22, BuffID.WellFed3, 57600); 
 			Item.value = Item.buyPrice(0, 3);
 			Item.rare = ItemRarityID.Blue;
 		}
-
-		
-		
 		public override bool ConsumeItem(Player player) {
 			player.AddBuff(BuffID.SugarRush, 3600);
 			return true;
