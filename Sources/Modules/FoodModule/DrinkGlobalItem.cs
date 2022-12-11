@@ -3,6 +3,7 @@ using Everglow.Sources.Modules.FoodModule.Utils;
 using Everglow.Sources.Modules.FoodModule.Items;
 using Everglow.Sources.Modules.FoodModule.Buffs.VanillaDrinkBuffs;
 using Terraria.Localization;
+using Terraria.ModLoader;
 
 namespace Everglow.Sources.Modules.FoodModule
 {
@@ -205,7 +206,7 @@ namespace Everglow.Sources.Modules.FoodModule
 
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
-            if (m_vanillaDrinkInfos.ContainsKey(item.type) || (item.ModItem is DrinkBase))
+            if (m_vanillaDrinkInfos.ContainsKey(item.type) /*|| (item.ModItem is DrinkBase)*/)
             {
                 int firstIndex = -1;
                 firstIndex = tooltips.FindIndex((tpline) =>
@@ -256,10 +257,20 @@ namespace Everglow.Sources.Modules.FoodModule
             if (m_vanillaDrinkInfos.ContainsKey(item.type))
             {
                 var drinkInfo = m_vanillaDrinkInfos[item.type];
-                var foodPlayer = player.GetModPlayer<FoodModPlayer>();
+                var FoodPlayer = player.GetModPlayer<FoodModPlayer>();
 
                 // 变得不渴
-                foodPlayer.Thirstystate = drinkInfo.Thirsty;
+                FoodPlayer.Thirstystate = drinkInfo.Thirsty;
+                //加上Buff
+                player.AddBuff(drinkInfo.BuffType, drinkInfo.BuffTime.TotalFrames);
+            }
+            else if (item.ModItem is DrinkBase)
+            {
+                var drinkItem = item.ModItem as DrinkBase;
+                var drinkInfo = drinkItem.DrinkInfo;
+                var FoodPlayer = player.GetModPlayer<FoodModPlayer>();
+                // 变得不渴
+                FoodPlayer.Thirstystate = drinkInfo.Thirsty;
                 //加上Buff
                 player.AddBuff(drinkInfo.BuffType, drinkInfo.BuffTime.TotalFrames);
             }

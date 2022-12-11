@@ -55,7 +55,7 @@ namespace Everglow.Sources.Modules.FoodModule.Items.ModFood
 
         public override bool ConsumeItem(Player player)
         {
-            player.AddBuff(BuffID.SugarRush, 3600);
+            
             return true;
         }
     }

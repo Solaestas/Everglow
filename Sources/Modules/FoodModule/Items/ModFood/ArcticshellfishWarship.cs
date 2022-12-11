@@ -51,11 +51,5 @@ namespace Everglow.Sources.Modules.FoodModule.Items.ModFood
 			Item.value = Item.buyPrice(0, 3);
 			Item.rare = ItemRarityID.Blue;
 		}
-
-
-		public override bool ConsumeItem(Player player) {
-			player.AddBuff(BuffID.SugarRush, 3600);
-			return true;
-		}
 	}
 }
