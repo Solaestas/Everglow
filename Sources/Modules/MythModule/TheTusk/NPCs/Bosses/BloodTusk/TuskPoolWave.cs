@@ -76,7 +76,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                 BackBase.Add(new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(x, 0) - Main.screenPosition, color, new Vector3(0, 1, 0)));
 
             }
-            Texture2D thang = ModContent.Request<Texture2D>("MythMod/NPCs/BloodTusk/BloodWave").Value;
+            Texture2D thang = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/BloodWave").Value;
             Main.graphics.GraphicsDevice.Textures[0] = thang;
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, BackBase.ToArray(), 0, BackBase.Count / 3);
             return false;

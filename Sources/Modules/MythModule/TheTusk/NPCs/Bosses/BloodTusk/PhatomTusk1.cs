@@ -72,7 +72,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                     V[4] = NPC.Bottom;
                 }
                 // 弹幕
-                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.Magic.MagicHit>(), (int)NPC.ai[0], 5, Main.myPlayer);
+                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<MiscProjectiles.Weapon.MagicHit>(), (int)NPC.ai[0], 5, Main.myPlayer);
                 if (Main.tile[(int)(NPC.Bottom.X / 16d), (int)(NPC.Bottom.Y / 16d)].IsHalfBlock && Down)
                 {
                     Down = false;
@@ -139,10 +139,10 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
             Color color = Lighting.GetColor((int)(NPC.Center.X / 16d), (int)(NPC.Center.Y / 16d));
             color = NPC.GetAlpha(color) * ((255 - NPC.alpha) / 255f);
             Color color2 = NPC.GetAlpha(color);
-            Texture2D tb = ModContent.Request<Texture2D>("MythMod/NPCs/BloodTusk/TuskplusBottom").Value;
+            Texture2D tb = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/TuskplusBottom").Value;
             float Sc = (255 - NPC.alpha) / 200f;
             Main.spriteBatch.Draw(tb, V[4] - Main.screenPosition + new Vector2(4, 4) - new Vector2(0, 12) + new Vector2(0, 16).RotatedBy(NPC.rotation), null, color2, NPC.rotation, new Vector2(tb.Width / 2f, tb.Height / 2f), Sc, SpriteEffects.None, 0f);
-            Texture2D t = ModContent.Request<Texture2D>("MythMod/NPCs/BloodTusk/Tusk" + RamInt.ToString()).Value;
+            Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/Tusk" + RamInt.ToString()).Value;
             if (Dir > 50)
             {
                 Main.spriteBatch.Draw(t, NPC.position - Main.screenPosition + new Vector2(10, 24) + V[0], new Rectangle(0, 0, t.Width, t.Height - (int)V[0].Y), color, NPC.rotation, new Vector2(t.Width / 2f, t.Height / 2f), 1f, SpriteEffects.None, 0f);

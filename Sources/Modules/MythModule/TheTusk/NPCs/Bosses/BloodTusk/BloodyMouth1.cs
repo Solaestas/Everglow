@@ -1,5 +1,4 @@
-﻿using MythMod.Common.Players;
-using Terraria.Localization;
+﻿using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 {
@@ -157,7 +156,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                     {
                         if ((player.Center - NPC.Center).Length() < 120)
                         {
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center, new Vector2(0), ModContent.ProjectileType<Projectiles.Typeless.playerHit>(), 90, 3f, Main.myPlayer, 0);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center, new Vector2(0), ModContent.ProjectileType<MiscProjectiles.Typeless.playerHit>(), 90, 3f, Main.myPlayer, 0);
                         }
                     }
                 }
@@ -190,7 +189,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
             }
             Color color = Lighting.GetColor((int)(NPC.Center.X / 16d), (int)(NPC.Center.Y / 16d));
             color = NPC.GetAlpha(color) * ((255 - NPC.alpha) / 255f);
-            Texture2D t0 = ModContent.Request<Texture2D>("MythMod/NPCs/BloodTusk/BloodyMouth1").Value;
+            Texture2D t0 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/BloodyMouth1").Value;
             if (!Main.gamePaused)
             {
                 for (int x = 0; x < t0.Width - (int)V[1].Y - 40; x += 20)
@@ -201,11 +200,11 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                         {
                             if ((Main.LocalPlayer.Center - NPC.Center + new Vector2(-x, 0).RotatedBy(NPC.rotation)).Length() < 30)
                             {
-                                Projectile.NewProjectile(null, Main.LocalPlayer.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.Typeless.playerHit>(), Dam / 8, 1, 0, 0, 0);
+                                Projectile.NewProjectile(null, Main.LocalPlayer.Center, Vector2.Zero, ModContent.ProjectileType<MiscProjectiles.Typeless.playerHit>(), Dam / 8, 1, 0, 0, 0);
                             }
                             if ((Main.LocalPlayer.Center - NPC.Center + new Vector2(-x, 0).RotatedBy(NPC.rotation)).Length() < 30)
                             {
-                                Projectile.NewProjectile(null, Main.LocalPlayer.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.Typeless.playerHit>(), Dam / 8, 1, 0, 0, 0);
+                                Projectile.NewProjectile(null, Main.LocalPlayer.Center, Vector2.Zero, ModContent.ProjectileType<MiscProjectiles.Typeless.playerHit>(), Dam / 8, 1, 0, 0, 0);
                             }
                         }
                     }
@@ -244,7 +243,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
             }
             if (Coo >= 200)
             {
-                Texture2D t = ModContent.Request<Texture2D>("MythMod/NPCs/BloodTusk/BloodyMouth1Tusk").Value;
+                Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/BloodyMouth1Tusk").Value;
                 Main.spriteBatch.Draw(t, NPC.position - Main.screenPosition + new Vector2(96, 0).RotatedBy(NPC.rotation) + V[0] - new Vector2(0, 8), new Rectangle(0, 0, t.Width, t.Height - (int)V[0].Y), color, NPC.rotation, new Vector2(t.Width / 2f, t.Height / 2f), 1f, SpriteEffects.None, 0f);
             }
             return false;

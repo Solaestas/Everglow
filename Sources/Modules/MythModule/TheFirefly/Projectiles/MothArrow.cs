@@ -43,7 +43,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             /*for (int j = 0; j < 20; j++)
             {
                 Vector2 v = new Vector2(0, Main.rand.NextFloat(0, 7f)).RotatedByRandom(6.28);
-                Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center + v * 2f, v, ModContent.ProjectileType<Projectiles.Typeless.BlueTriangle>(), 0, 1, Main.myPlayer, Projectile.ai[0], 0f);
+                Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center + v * 2f, v, ModContent.ProjectileType<MiscProjectiles.Typeless.BlueTriangle>(), 0, 1, Main.myPlayer, Projectile.ai[0], 0f);
             }*/
             for (int j = 0; j < 16; j++)
             {

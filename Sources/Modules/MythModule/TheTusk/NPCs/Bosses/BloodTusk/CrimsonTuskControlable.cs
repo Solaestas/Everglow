@@ -304,7 +304,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
             {
                 Color colorx = Lighting.GetColor((int)(NPC.Center.X / 16d), (int)(NPC.Center.Y / 16d));
                 colorx = NPC.GetAlpha(colorx);
-                Texture2D texture = ModContent.Request<Texture2D>("MythMod/NPCs/BloodTusk/CrimsonTuskControlable").Value;
+                Texture2D texture = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/CrimsonTuskControlable").Value;
                 Vector2 DarwV = NPC.Center;
                 if (killing < 178 && killing > 0)
                 {

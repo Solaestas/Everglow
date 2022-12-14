@@ -2,12 +2,17 @@ Mods:
 {
 	Everglow:
 	{
+		NPCName:
+		{
+			Butterfly : 幻蝶
+		}
 		Common:
 		{
 			Hour : "小时"
 			Minute : "分钟"
 			Second : "秒"
 			Duration : "持续时间"
+			NotActivated : "未激活"
 			WarWhipGT :
 				'''
 				无召唤标记伤害
@@ -84,7 +89,7 @@ Mods:
 			CyanPedal : "四瓣琉璃"
 			DarkHat : "罂粟花坠饰"
 			DukeTooth : "公爵之牙"
-			FlameBorageBadge : "黑萤苣之章"
+			FireflyBorageBadge : "黑萤苣之章"
 			GoldLiquidPupil : "僭越之眼"
 			GoldRound : "金盏轮盘"
 			GreenGel : "森绿凝晶"
@@ -203,7 +208,7 @@ Mods:
 			YellowGemSlingshot : 黄玉弹弓
 			BloodyBoneYoyo : 血骨球
 			SpineGun : 脊骨火铳
-			ToothKnfe : 齿刃
+			ToothKnife : 齿刃
 			ToothMagicBall : 血色法球
 			ToothStaff : 獠牙法杖
 			Acropora : 花鹿角珊瑚
@@ -223,10 +228,7 @@ Mods:
 			OceanWorld : 海洋世界(无效)
 			OldMoss : 苍苔
 			ReefSharkSpecimen : 礁鲨标本
-			StoneDragonScaleWood : 石化龙鳞木
 			TerrariaContinent : 泰拉瑞亚大陆(无效)
-			CyanVineBar : 青缎钢锭
-			CyanVineOre : 青缎矿
 			DarkSeaBar : 深焚锭
 			DarkSeaOre : 深焚石
 			OceanBlueBar : 沧流锭
@@ -236,7 +238,6 @@ Mods:
 			LanternCrystal : 皇城晶塔
 			LanternPost1 : 灯笼柱
 			LanternPost2 : 灯笼柱
-			YellowDynastyShingles : 黄王朝瓦
 			DiscordBallF1 : 混沌晶球·天穹古道
 			LiftLamp : 电梯指示灯
 			TestItem : 木制升降梯
@@ -259,10 +260,40 @@ Mods:
 			SilverStabbingSword : 银刺剑
 			VegetationBayonet : 草木刺剑
 			TDMT : 陨雷之劫
+			CrystalSkull : "水晶头骨"
+
+			#流萤系列物品
+			GlowBeadGun : "荧光轨道炮"
+
+			#Glow Wood Furniture
+			
+			#Music Boxes
+			GlowWoodMusicBox : Glow Wood Music Box (The Firefly)
+
 
 			#食物系统物品
 			BloodGlucoseMonitor : "血糖检测仪"
 			OsmoticPressureMonitor : "渗透压检测仪"
+
+			#天穹树系列物品
+
+				#天穹树小镇
+				ChinesePartitionLamp : "中式屏风灯"
+				ChineseStyleFloorLamp : "中式落地灯"
+				CyanVineBar : "青缎钢锭"
+				CyanVineOre : "青缎矿"
+				DoubleArmsChineseStreetLamp : "中式双臂街灯"
+				HangingSkyLantern : "吊挂式孔明灯"
+				HexagonalCeilingLamp : "六角宫灯"
+				ShoreMud : "深色淤泥"
+				SideHangingLantern : "侧挂式灯笼"
+				StoneDragonScaleWood : "石化龙鳞木"
+				StreetLantern : "灯笼街灯"
+				YellowDynastyShingles : "黄王朝瓦"
+				CyanVinePickaxe : "青缎镐"
+
+			#Plant Module Items
+			CactusBall : "仙人球棍"
 		}
 		ItemTooltip:
 		{
@@ -307,7 +338,7 @@ Mods:
 			CyanPedal : "闪避能力增加4\n'少的那一瓣化作你的勇气'"
 			DarkHat : "暴击率增加4%,暴击伤害增加12%\n'除用于战斗和装饰不建议使用'"
 			DukeTooth : "增加12盔甲穿透力\n'还好猪鲨不是濒危物种...只要有松露虫'"
-			FlameBorageBadge : "-12防御\n伤害增加18%\n'受到那只巨蛾怒气的影响,你的攻击变得更加狂野'"
+		//	FireflyBorageBadge : "Increases magic damage by 6%\nIncreases movement speed by 15%\n'A badge made to remind you of how beautiful that place is'"
 			GoldLiquidPupil : "你的攻击无视敌人35%的防御\n受伤之后生成灵液之环,持续12秒,不可叠加\n灵液之环生成时造成高额伤害\n持续伤害环上的敌人\n对环内的敌人施加灵液"
 			GoldRound : "7防御\n伤害增加7%\n'传统的泰拉人通常配戴它来保持健康'"
 			GreenGel : "生命上限增加30,生命回复增加4\n'研究显示绿史莱姆通常比蓝史莱姆更具生命力'"
@@ -448,7 +479,9 @@ Mods:
 				'''
 			StarSlingshot : 
 				'''
-				射出坠星
+				射出暮色孤星, 造成范围伤害
+				夜晚伤害提升25%, 否则降低25%
+				在地表之上暴击率提升15%, 否则降低15%
 				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			WhiteGemSlingshot : 
@@ -468,7 +501,7 @@ Mods:
 				'''
 			BloodyBoneYoyo : 每击中5次敌人会释放1次獠牙钉
 			SpineGun : 射出一发勘测到敌人就会分裂的子母弹
-			ToothKnfe : ""
+			ToothKnife : ""
 			ToothMagicBall : ""
 			ToothStaff : 释放拔地而起的獠牙刺
 			BlackWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
@@ -527,10 +560,52 @@ Mods:
 			SilverStabbingSword : "{$Mods.Everglow.Common.RapierGT}"
 			VegetationBayonet : "{$Mods.Everglow.Common.RapierGT}"
 			TDMT : "{$Mods.Everglow.Common.RapierGT}"
+			CrystalSkull : 
+				'''
+				释放原版与流光无际的魔法书的真正力量
+				作为巫师们智慧的果实，绝大多数魔法古卷上的符文都十分复杂且晦涩难懂
+				然而，当你使用这个由巫王设计的，充盈着全视之力的水晶头骨
+				即使是最无知的菜鸟也能轻松理解古代巫师们的智慧
+				'''
+
+			#流萤系列物品
+			GlowBeadGun : 
+				'''
+				长按攻击键以充能
+				射出一系列易爆的光球
+				'''
+
+			# 天穹树系列物品
+				# 天穹树小镇
+				CyanVinePickaxe : 
+					'''
+					允许你破坏石化龙鳞木
+					加速破坏青缎矿
+					'''
+
+			#Music Boxes
+			GlowWoodMusicBox : "Plays 'Setnour6 - Within the Giant Cocoon (身陷巨茧)'"
 			
 			#食物系统物品
 			BloodGlucoseMonitor : "显示当前饱食度"
 			OsmoticPressureMonitor : "显示渴觉状态"
+
+			#Plant Module Items
+			CactusBall : "旋转并掷出你的仙人掌球！\n击碎敌人护甲，并让它们流血"
+		}
+		ExtraItemTooltip :
+		{
+			UnfinishedItem : "[c/BA0022:This item is unfinished]"
+			MothEyeText0 : "[c/7FC1FF:While in the Firefly biome:]"
+			MothEyeText1 : "[c/7FC1FF:- Mana cost is reduced by 5%]"
+			MothEyeText2 : "[c/7FC1FF:- The effectiveness of mana sickness is reduced by 4]"
+			MothEyeText3 : "[c/7FC1FF:- All Firefly weapons deal 5% more damage]"
+			MothEyeText4 : "[c/7FC1FF:- Some Firefly-related items gain bonuses]"
+			FFBBadge0 : "[c/7FC1FF:'受到那只巨蛾怒气的影响,你的攻击变得更加狂野']"
+			FFBBadge1 : "[c/7FC1FF:Defense is lowered based on how much defense you currently have, up to -12]"
+			FFBBadge2 : "[c/7FC1FF:伤害增加18%]"
+			FFBBadge3 : "[c/7FC1FF:Increases melee speed by 10%]"
+			FFBBadge4 : "[c/7FC1FF:Base critical strike chance for melee weapons and whips is reduced to 0]"
 		}
 		BuffName : 
 		{
@@ -737,12 +812,40 @@ Mods:
 			TeacupBuff : "短时间内大幅增加魔力回复，魔法攻击，暴击\n“醇香四溢”"
 			TropicalSmoothieBuff : "短时间内魔法攻击仅消耗一点魔力，大幅增加魔法攻击，暴击\n“热带风暴”"
 		}
+		MapEntry :
+		{
+			FireflyTree : "萤火树"
+
+			#天穹树系列
+
+				#天穹树小镇
+				SideHangingLantern : "侧挂式灯笼"
+		}
 		Config:
 		{
+			Header:
+			{
+				TextureReplace : "Texture Configurations"
+				AudioReplace : "Audio Configurations"
+			}
 			TextureReplace:
 			{
 				Label: "贴图更换模式"
 				Tooltip: "选择你想要的贴图组进行更换"
+			}
+			ItemPickSoundReplace:
+			{
+				Label : "New pickup and inventory sounds"
+			}
+			MothAudioReplace:
+			{
+				Label : "Corrupted Moth's Theme Song"
+				Tooltip : "Choose your preferred Corrupted Moth theme music to replace\nOptions: Original Theme, Alternate Theme, Old Theme\nOriginal: Plays 'Setnour6, Shiryuu, windclimb - Moth Dance'\nAlternate: Plays 'Setnour6, Shiryuu, windclimb - Moth Dance (Alt Version)'\nOld: Plays 'Void - Sudden Romance'\nThis setting won't take effect if the Corrupted Moth is currently alive"
+			}
+			TuskAudioReplace:
+			{
+				Label : "(NOT IMPLEMENTED) The Tusk's Theme Song"
+				Tooltip : "Choose your preferred Bloody Tusk theme music to replace\nOptions: Original Theme, Old Theme\nThis setting won't take effect if The Tusk is currently alive\nNOTE: This config is not fully set up yet and therefore does not work at the moment"
 			}
 		}
 		InfoDisplay:
@@ -751,6 +854,67 @@ Mods:
 			StateOfThirst : "口渴程度"
 			Thirsty : "你最好喝点什么"
 			NotThirsty : "你不想喝东西"
+		}
+		ExtraTooltip : 
+		{
+			Spellbook : 
+			{
+				WaterBolt : 
+					'''
+					每命中5次生成一个水球, 最多叠加6个
+					右键消耗一个水球以将你传送至光标的位置
+					叠满时, 中键消耗全部水之球以增幅5秒的攻击
+					切换武器时清除全部水之球
+					'''
+				DemonScythe : 
+					'''
+					恶魔镰刀替换为恶魔月刃
+					伤害和击退力度随速度增长而提高
+					'''
+				BookofSkulls : 
+					'''
+					命中敌人后释放若干骨刺, 最多叠加12个
+					骨刺会与下一次攻击一起发射
+					右键在地面召唤烈焰白骨爪
+					'''
+				CrystalStorm : 
+					'''
+					每隔一定时间释放出大块风暴魔晶
+					风暴魔晶碎裂后会产生有吸引力的旋风
+					旋风中的钱币, 心和魔力星会被吸引到玩家的位置
+					'''
+				CursedFlames : 
+					'''
+					诅咒焰火球可以穿透或反弹3次
+					每穿透或反弹一次, 伤害增加20%
+					'''
+				GoldenShower : 
+					'''
+					打开和关闭魔法书时喷出灵液雨
+					关闭时灵液雨的规模随施法时间延长而扩大
+					右键增加喷射剂量和法力消耗
+					'''
+				MagnetSphere : 
+					'''
+					可以同时存在多个的大型磁球
+					它们随机电击附近的敌人, 命中后也会爆发出强大电流
+					'''
+				RazorbladeTyphoon : 
+					'''
+					发射会追踪并吸引敌人的台风
+					台风中的钱币, 心和魔力星会被吸引到玩家的位置
+					如果长时间使用, 物质的聚集会导致意想不到的后果
+					'''
+				LunarFlareBook : 
+					'''
+					使星空浮现
+                    逐渐提升暴击率和暴击伤害
+					'''
+			}
+		}
+		PylonSystem : 
+		{
+			FireflyPylonLimit : "流萤晶塔只能将你传送到另一个流萤晶塔"
 		}
 	}
 }

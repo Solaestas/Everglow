@@ -203,7 +203,7 @@ Mods:
 			YellowGemSlingshot : Topaz Slingshot
 			BloodyBoneYoyo : Bloody Bone Yoyo
 			SpineGun : Spine Musket
-			ToothKnfe : Tusk Blade
+			ToothKnife : Tusk Blade
 			ToothMagicBall : Sanguine Orb
 			ToothStaff : Tusk Staff
 			Acropora : Acropora
@@ -461,7 +461,7 @@ Mods:
 				'''
 			BloodyBoneYoyo : Releases tusk nails on every 5 hits
 			SpineGun : Fires bullets which split upon detecting enemies
-			ToothKnfe : ""
+			ToothKnife : ""
 			ToothMagicBall : ""
 			ToothStaff : Raises tusks from the ground
 			FragransBlade : Don't be lonely when moon and fragrans bright, breeze and moon still.

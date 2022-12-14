@@ -162,7 +162,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
                 List<VertexBase.CustomVertexInfo> bars = new List<VertexBase.CustomVertexInfo>();
-                ef = ModContent.Request<Effect>("MythMod/Effects/TrailB2").Value;
+                ef = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/TrailB2").Value;
                 Player player = Main.player[Projectile.owner];
                 Vector2 v0 = Projectile.Center;
                 Vector2 Vi = IniV[j];
@@ -231,8 +231,8 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
             Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(0, 0.5f * Stre * Stre, 0, 0), (float)(Main.time / 26d), new Vector2(128f, 128f), 0.5f + (float)(0.25 * Math.Sin(Main.time / 26d + 3.14)), SpriteEffects.None, 0);
             Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(0, 0.5f * Stre * Stre, 0, 0), -(float)(Main.time / 26d), new Vector2(128f, 128f), 0.5f + (float)(0.25 * Math.Sin(Main.time / 26d + 4.71)), SpriteEffects.None, 0);
             Texture2D Ball = (Texture2D)ModContent.Request<Texture2D>(Texture);
-            Texture2D Circle = ModContent.Request<Texture2D>("MythMod/Projectiles/Typeless/FixCoinFramework").Value;
-            Texture2D Light = ModContent.Request<Texture2D>("MythMod/Projectiles/Typeless/FixCoinLight2").Value;
+            Texture2D Circle = ModContent.Request<Texture2D>("MythMod/MiscProjectiles.Typeless.FixCoinFramework").Value;
+            Texture2D Light = ModContent.Request<Texture2D>("MythMod/MiscProjectiles.Typeless.FixCoinLight2").Value;
             Color color = Lighting.GetColor((int)(Projectile.Center.X / 16d), (int)(Projectile.Center.Y / 16d));
             color = Projectile.GetAlpha(color) * ((255 - Projectile.alpha) / 255f);
             Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color((int)(155 * Stre2), (int)(155 * Stre2), (int)(155 * Stre2), 0), Projectile.rotation, new Vector2(56f, 56f), Projectile.scale, SpriteEffects.None, 0);
