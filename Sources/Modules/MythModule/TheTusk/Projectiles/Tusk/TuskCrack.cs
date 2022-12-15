@@ -44,7 +44,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Tusk
                     Projectile.Kill();
                 }
             }
-            ef2 = (Effect)ModContent.Request<Effect>("MythMod/Effects/ef2/TuskCrack").Value;
+            ef2 = (Effect)ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/TuskCrack").Value;
             float k0 = Projectile.velocity.Y / (float)Projectile.velocity.X;
             k0 *= (float)Main.screenWidth / (float)Main.screenHeight;
             ef2.Parameters["k0"].SetValue(k0);

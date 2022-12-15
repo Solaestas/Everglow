@@ -81,7 +81,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
             NPC.HitSound = SoundID.DD2_SkeletonHurt;
             NPC.DeathSound = SoundID.DD2_SkeletonDeath;
             NPC.dontTakeDamage = true;
-            Music = MusicLoader.GetMusicSlot(Mod, "Musics/TuskBiome");
+            Music = Common.MythContent.QuickMusic("TuskTension");
         }
         private bool OSquzze = false;
         private bool DSquzze = false;
@@ -2041,7 +2041,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                 ReallyStart = true;
                 if (!Main.dedServ)
                 {
-                    Music = MusicLoader.GetMusicSlot(Mod, "Musics/TuskFighting");
+                    Music = Common.MythContent.QuickMusic("TuskFighting");
                 }
                 NPC.NewNPC(null, (int)NPC.Center.X - 800, (int)NPC.Center.Y - 200, ModContent.NPCType<TuskWallLeft>());
                 NPC.NewNPC(null, (int)NPC.Center.X + 800, (int)NPC.Center.Y - 200, ModContent.NPCType<TuskWallRight>());
@@ -2436,7 +2436,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                             triangleList1.Add(bars1[i + 2]);
                             triangleList1.Add(bars1[i + 3]);
                         }
-                        Texture2D t1 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIImages/Tusk/BloodRope").Value;
+                        Texture2D t1 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/Tusk/BloodRope").Value;
                         Main.graphics.GraphicsDevice.Textures[0] = t1;//GlodenBloodScaleMirror
                         Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList1.ToArray(), 0, triangleList1.Count / 3);
 
@@ -2462,7 +2462,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                             triangleList2.Add(bars2[i + 2]);
                             triangleList2.Add(bars2[i + 3]);
                         }
-                        Texture2D t1 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIImages/Tusk/BloodRope").Value;
+                        Texture2D t1 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/Tusk/BloodRope").Value;
                         Main.graphics.GraphicsDevice.Textures[0] = t1;//GlodenBloodScaleMirror
                         Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList2.ToArray(), 0, triangleList2.Count / 3);
 
@@ -2510,7 +2510,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                 Main.spriteBatch.Draw(TuskS7P1, NPC.position - Main.screenPosition + new Vector2(15, 90) + V[6], new Rectangle?(NPC.frame), color, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
                 Main.spriteBatch.Draw(TuskS8P1, NPC.position - Main.screenPosition + new Vector2(15, 90) + V[7], new Rectangle?(NPC.frame), color, NPC.rotation, new Vector2(110, 156), 1f, SpriteEffects.None, 0f);
             }
-            Effect ef = ModContent.Request<Effect>("MythMod/Effects/ef3/TuskFade").Value;
+            Effect ef = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/TuskFade").Value;
             if (NPC.life < NPC.lifeMax / 2f && HasTranSkin > 0)
             {
                 NPC.localAI[0] = 0;
@@ -2532,13 +2532,13 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                 }
                 if (HasTranSkin == 239)
                 {
-                    SoundEngine.PlaySound(new SoundStyle("Sounds/TuskCrack")/*, NPC.Bottom*/); //Camera moves to boss when going in phase 2. ~Setnour6
+                    //SoundEngine.PlaySound(new SoundStyle("Sounds/TuskCrack")/*, NPC.Bottom*/); //Camera moves to boss when going in phase 2. ~Setnour6
                 }
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
                 ef.Parameters["minr"].SetValue(1 - HasTranSkin / 180f);
-                ef.Parameters["uImage1"].SetValue(ModContent.Request<Texture2D>("MythMod/UIImages/Perlin").Value);//
+                ef.Parameters["uImage1"].SetValue(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/Tusk/Perlin").Value);
 
                 ef.CurrentTechnique.Passes["Test"].Apply();
                 Color cg = color;
@@ -2789,7 +2789,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                 Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/WhiteBlack2").Value;
                 Main.graphics.GraphicsDevice.Textures[0] = t;
                 Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/PerlinFog").Value;
-                Effect PurpleFog = ModContent.Request<Effect>("MythMod/Effects/ef3/PurpleFog").Value;
+                Effect PurpleFog = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/PurpleFog").Value;
                 PurpleFog.Parameters["m"].SetValue((float)Main.time * -0.001f);
                 PurpleFog.CurrentTechnique.Passes[0].Apply();
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
@@ -2805,7 +2805,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 
             /*Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            Effect PurpleFog2 = ModContent.Request<Effect>("MythMod/Effects/ef3/DarkFog").Value;
+            Effect PurpleFog2 = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/DarkFog").Value;
             if(Killing > 0)
             {
                 Minr = 1 - Killing / 180f;

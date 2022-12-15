@@ -290,7 +290,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
                     vF2 = new Vector2(0, Main.rand.NextFloat(0, 45f)).RotatedByRandom(6.28);
                     Dust.NewDust(new Vector2(i * 16 + 0, j * 16 - 72) + vF2, 0, 0, 4, vF.X, vF.Y, 0, default(Color), Main.rand.NextFloat(0.8f, 2.1f));
                 }
-                int[] Ty = { ModContent.ItemType<Items.FixCoinDamage3>(), ModContent.ItemType<MiscItems.FixCoinCrit3>(), ModContent.ItemType<Items.FixCoinDefense3>(), ModContent.ItemType<Items.FixCoinSpeed3>(), ModContent.ItemType<Items.Weapons.FixCoinMelee3>() };
+                int[] Ty = { ModContent.ItemType<MiscItems.FixCoins.FixCoinDamage3>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinCrit3>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinDefense3>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinSpeed3>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinMelee3>() };
                 Item.NewItem(null, new Vector2(i * 16 + 0, j * 16 - 72), Ty[Main.rand.Next(Ty.Length)]);
                 Item.NewItem(null, new Vector2(i * 16 + 0, j * 16 - 72), ItemID.GoldCoin, 5);
                 Main.tile[i, j].TileType = (ushort)ModContent.TileType<Tiles.TuskPanF>();

@@ -1,9 +1,10 @@
-﻿using Terraria.Audio;
+using Everglow.Sources.Modules.MythModule.TheTusk;
+using Terraria.Audio;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
+namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Typeless
 {
-    public class FixCoinDamage2 : ModProjectile
+    public class FixCoinCrit1 : ModProjectile
     {
         public override void SetStaticDefaults()
         {
@@ -66,7 +67,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
             for (int h = 0; h < 20; h++)
             {
                 Vector2 v3 = new Vector2(0, (float)Math.Sin(h * Math.PI / 4d + Projectile.ai[0]) + 5).RotatedBy(h * Math.PI / 10d) * Main.rand.NextFloat(0.2f, 1.1f);
-                int r = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4), 0, 0, ModContent.DustType<Dusts.PureLime>(), 0, 0, 0, default(Color), 15f * Main.rand.NextFloat(0.4f, 1.1f));
+                int r = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4), 0, 0, ModContent.DustType<TheTusk.Dusts.PureWhite>(), 0, 0, 0, default(Color), 15f * Main.rand.NextFloat(0.4f, 1.1f));
                 Main.dust[r].noGravity = true;
                 Main.dust[r].velocity = v3;
             }
@@ -81,19 +82,12 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
             {
                 if (player.inventory[x].accessory)
                 {
-                    if (Main.rand.Next(100) > 50)
-                    {
-                        player.inventory[x].prefix = PrefixID.Angry;
-                    }
-                    else
-                    {
-                        player.inventory[x].prefix = PrefixID.Spiked;
-                    }
+                    //player.inventory[x].prefix = ModContent.PrefixType<Prefixs.Accurate>();
                     SoundEngine.PlaySound(SoundID.DD2_WitherBeastCrystalImpact, player.Center);
                     for (int h = 0; h < 20; h++)
                     {
                         Vector2 v3 = new Vector2(0, (float)Math.Sin(h * Math.PI / 4d) + 5).RotatedBy(h * Math.PI / 10d) * Main.rand.NextFloat(0.2f, 1.1f);
-                        int r = Dust.NewDust(new Vector2(player.Center.X, player.Center.Y) - new Vector2(4, 4), 0, 0, ModContent.DustType<Dusts.PureLime>(), 0, 0, 0, default(Color), 15f * Main.rand.NextFloat(0.4f, 1.1f));
+                        int r = Dust.NewDust(new Vector2(player.Center.X, player.Center.Y) - new Vector2(4, 4), 0, 0, ModContent.DustType<TheTusk.Dusts.PureWhite>(), 0, 0, 0, default(Color), 15f * Main.rand.NextFloat(0.4f, 1.1f));
                         Main.dust[r].noGravity = true;
                         Main.dust[r].velocity = v3;
                         //Main.dust[r].dustIndex = (int)(Math.Cos(h * Math.PI / 10d + player.ai[0]) * 100d);
@@ -105,7 +99,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
                         tex1 = "你的[";
                         tex2 = "]得到了附魔";
                     }
-                    CombatText.NewText(new Rectangle((int)player.Center.X - 10, (int)player.Center.Y - 10, 20, 20), Color.Lime, tex1 + player.inventory[x].Name + tex2);
+                    CombatText.NewText(new Rectangle((int)player.Center.X - 10, (int)player.Center.Y - 10, 20, 20), Color.White, tex1 + player.inventory[x].Name + tex2);
                     return;
                 }
 
@@ -114,19 +108,12 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
             {
                 if (player.inventory[x].accessory)
                 {
-                    if (Main.rand.Next(100) > 50)
-                    {
-                        player.inventory[x].prefix = PrefixID.Angry;
-                    }
-                    else
-                    {
-                        player.inventory[x].prefix = PrefixID.Spiked;
-                    }
+                    //player.inventory[x].prefix = ModContent.PrefixType<Prefixs.Accurate>();
                     SoundEngine.PlaySound(SoundID.DD2_WitherBeastCrystalImpact, player.Center);
                     for (int h = 0; h < 20; h++)
                     {
                         Vector2 v3 = new Vector2(0, (float)Math.Sin(h * Math.PI / 4d) + 5).RotatedBy(h * Math.PI / 10d) * Main.rand.NextFloat(0.2f, 1.1f);
-                        int r = Dust.NewDust(new Vector2(player.Center.X, player.Center.Y) - new Vector2(4, 4), 0, 0, ModContent.DustType<Dusts.PureLime>(), 0, 0, 0, default(Color), 15f * Main.rand.NextFloat(0.4f, 1.1f));
+                        int r = Dust.NewDust(new Vector2(player.Center.X, player.Center.Y) - new Vector2(4, 4), 0, 0, ModContent.DustType<TheTusk.Dusts.PureWhite>(), 0, 0, 0, default(Color), 15f * Main.rand.NextFloat(0.4f, 1.1f));
                         Main.dust[r].noGravity = true;
                         Main.dust[r].velocity = v3;
                         //Main.dust[r].dustIndex = (int)(Math.Cos(h * Math.PI / 10d + player.ai[0]) * 100d);
@@ -138,7 +125,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
                         tex1 = "你的[";
                         tex2 = "]得到了附魔";
                     }
-                    CombatText.NewText(new Rectangle((int)player.Center.X - 10, (int)player.Center.Y - 10, 20, 20), Color.Lime, tex1 + player.inventory[x].Name + tex2);
+                    CombatText.NewText(new Rectangle((int)player.Center.X - 10, (int)player.Center.Y - 10, 20, 20), Color.White, tex1 + player.inventory[x].Name + tex2);
                     return;
                 }
             }
@@ -147,14 +134,13 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
             {
                 tex3 = "你的背包中没有饰品";
             }
-            Item.NewItem(null, Projectile.Center, ModContent.ItemType<Items.FixCoinDamage2>());
+            Item.NewItem(null, Projectile.Center, ModContent.ItemType<MiscItems.FixCoins.FixCoinCrit1>());
             CombatText.NewText(new Rectangle((int)player.Center.X - 10, (int)player.Center.Y - 10, 20, 20), Color.White, tex3);
         }
-
-        private float Stre = 0;
-        private float Stre2 = 0;
+        float Stre = 0;
+        float Stre2 = 0;
         private Effect ef;
-        private Vector2[] IniV = new Vector2[5];
+        Vector2[] IniV = new Vector2[5];
         public override void PostDraw(Color lightColor)
         {
             for (int j = 0; j < 3; j++)
@@ -162,7 +148,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
                 List<VertexBase.CustomVertexInfo> bars = new List<VertexBase.CustomVertexInfo>();
-                ef = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/TrailB2").Value;
+                ef = (Effect)ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/TrailB2").Value;
                 Player player = Main.player[Projectile.owner];
                 Vector2 v0 = Projectile.Center;
                 Vector2 Vi = IniV[j];
@@ -177,7 +163,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
                     Vector2 v2 = v0;
                     v0 += Vi + v1 * 5;
                     Vi *= 0.99f;
-                    int width = (int)(13 * Stre2);
+                    int width = (int)(9 * Stre2);
                     var normalDir = v2 - v0;
                     normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
                     var factor = Math.Abs(((i / 23f) % 1) - 0.5f);
@@ -208,7 +194,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
                     var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
                     ef.Parameters["uTransform"].SetValue(model * projection);
                     ef.Parameters["uTime"].SetValue(-(float)Main.time * 0.03f + Projectile.ai[0]);
-                    Texture2D Blue = ModContent.Request<Texture2D>("MythMod/UIImages/heatmapLime").Value;
+                    Texture2D Blue = ModContent.Request<Texture2D>("MythMod/UIImages/heatmapWhite").Value;
                     Texture2D Shape = ModContent.Request<Texture2D>("MythMod/UIImages/Lightline").Value;
                     Texture2D Mask = ModContent.Request<Texture2D>("MythMod/UIImages/IceTrace").Value;
                     Main.graphics.GraphicsDevice.Textures[0] = Blue;
@@ -225,17 +211,17 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
                 }
             }
             Texture2D LightE = ModContent.Request<Texture2D>("MythMod/UIImages/LightEffect").Value;
-            Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(0, 0.15f * Stre * Stre, 0, 0), -(float)(Math.Sin(Main.time / 26d)) + 0.6f, new Vector2(128f, 128f), 0.5f + (float)(0.25 * Math.Sin(Main.time / 26d)), SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(0, 0.5f * Stre * Stre, 0, 0), (float)(Math.Sin(Main.time / 12d + 2)) + 1.6f, new Vector2(128f, 128f), 0.5f + (float)(0.25 * Math.Sin(Main.time / 26d)), SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(0, 0.15f * Stre * Stre, 0, 0), (float)Math.PI / 2f + (float)(Main.time / 9d), new Vector2(128f, 128f), 0.5f + (float)(0.25 * Math.Sin(Main.time / 26d + 1.57)), SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(0, 0.5f * Stre * Stre, 0, 0), (float)(Main.time / 26d), new Vector2(128f, 128f), 0.5f + (float)(0.25 * Math.Sin(Main.time / 26d + 3.14)), SpriteEffects.None, 0);
-            Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(0, 0.5f * Stre * Stre, 0, 0), -(float)(Main.time / 26d), new Vector2(128f, 128f), 0.5f + (float)(0.25 * Math.Sin(Main.time / 26d + 4.71)), SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(0.03f * Stre * Stre, 0.03f * Stre * Stre, 0.03f * Stre * Stre, 0), -(float)(Math.Sin(Main.time / 26d)) + 0.6f, new Vector2(128f, 128f), 0.5f + (float)(0.25 * Math.Sin(Main.time / 26d)), SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(0.03f * Stre * Stre, 0.03f * Stre * Stre, 0.03f * Stre * Stre, 0), (float)(Math.Sin(Main.time / 12d + 2)) + 1.6f, new Vector2(128f, 128f), 0.5f + (float)(0.25 * Math.Sin(Main.time / 26d)), SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(0.03f * Stre * Stre, 0.03f * Stre * Stre, 0.03f * Stre * Stre, 0), (float)Math.PI / 2f + (float)(Main.time / 9d), new Vector2(128f, 128f), 0.5f + (float)(0.25 * Math.Sin(Main.time / 26d + 1.57)), SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(0.03f * Stre * Stre, 0.03f * Stre * Stre, 0.03f * Stre * Stre, 0), (float)(Main.time / 26d), new Vector2(128f, 128f), 0.5f + (float)(0.25 * Math.Sin(Main.time / 26d + 3.14)), SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(0.03f * Stre * Stre, 0.03f * Stre * Stre, 0.03f * Stre * Stre, 0), -(float)(Main.time / 26d), new Vector2(128f, 128f), 0.5f + (float)(0.25 * Math.Sin(Main.time / 26d + 4.71)), SpriteEffects.None, 0);
             Texture2D Ball = (Texture2D)ModContent.Request<Texture2D>(Texture);
-            Texture2D Circle = ModContent.Request<Texture2D>("MythMod/MiscProjectiles.Typeless.FixCoinFramework").Value;
-            Texture2D Light = ModContent.Request<Texture2D>("MythMod/MiscProjectiles.Typeless.FixCoinLight2").Value;
+            Texture2D Circle = ModContent.Request<Texture2D>("Everglow.Sources.Modules.MythModule.MiscProjectiles.Typeless/FixCoinFramework").Value;
+            Texture2D Light = ModContent.Request<Texture2D>("Everglow.Sources.Modules.MythModule.MiscProjectiles.Typeless/FixCoinLight1").Value;
             Color color = Lighting.GetColor((int)(Projectile.Center.X / 16d), (int)(Projectile.Center.Y / 16d));
             color = Projectile.GetAlpha(color) * ((255 - Projectile.alpha) / 255f);
-            Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color((int)(155 * Stre2), (int)(155 * Stre2), (int)(155 * Stre2), 0), Projectile.rotation, new Vector2(56f, 56f), Projectile.scale, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color((int)(255 * Stre2), (int)(255 * Stre2), (int)(255 * Stre2), 0), Projectile.rotation, new Vector2(56f, 56f), Projectile.scale, SpriteEffects.None, 0);
             if (Projectile.timeLeft > 50)
             {
                 Main.spriteBatch.Draw(Ball, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(255 + color.R, 255 + color.G, 255 + color.B, color.A), Projectile.rotation, new Vector2(14f, 14f), Projectile.scale, SpriteEffects.None, 0);

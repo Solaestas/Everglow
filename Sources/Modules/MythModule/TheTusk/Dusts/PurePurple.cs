@@ -1,6 +1,6 @@
 ﻿namespace Everglow.Sources.Modules.MythModule.TheTusk.Dusts
 {
-    public class PureBlue : ModDust
+    public class PurePurple : ModDust
     {
         //private float Ome = 0;
         public override void OnSpawn(Dust dust)
@@ -21,7 +21,7 @@
             dust.velocity = dust.velocity.RotatedBy(-dust.velocity.Length() * dust.dustIndex / 33000f);
 
             float scale = dust.scale;
-            Lighting.AddLight(dust.position, dust.scale * 0f, dust.scale * 0f, dust.scale * 0.25f);
+            Lighting.AddLight(dust.position, dust.scale * 0.15f, dust.scale * 0f, dust.scale * 0.22f);
             if (dust.scale < 0.25f)
             {
                 dust.active = false;
@@ -37,7 +37,7 @@
         }
         public override Color? GetAlpha(Dust dust, Color lightColor)
         {
-            return new Color?(new Color(0f, 0f, 0.5f, 0f));
+            return new Color?(new Color(0.275f, 0f, 0.4f, 0f));
         }
     }
 }

@@ -1,15 +1,15 @@
 ﻿using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Items
+namespace Everglow.Sources.Modules.MythModule.MiscItems.FixCoins
 {
-    public class FixCoinDamage1 : ModItem
+    public class FixCoinSpeed2 : ModItem
     {
         public override void SetStaticDefaults()
         {
-            ////DisplayName.SetDefault("Enchanted Coin Damage I");
-            ////DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "一阶伤害附魔币");
-            ////Tooltip.SetDefault("Gives a random accessory in inventory a prefix which increases damage by 1%");
-            ////Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "随机地给你背包中的一个饰品施加1%伤害的前缀");
+            //DisplayName.SetDefault("Enchanted Coin Speed II");
+            //DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "二阶移速附魔币");
+            //Tooltip.SetDefault("Gives a random accessory in inventory a prefix which increases movement speed by 2%~3%");
+            //Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "随机地给你背包中的一个饰品施加2%~3%移速的前缀");
         }
 
         public override void SetDefaults()
@@ -26,7 +26,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items
             Item.maxStack = 999;
             Item.consumable = true;
             Item.UseSound = SoundID.Item1;
-            Item.shoot = ModContent.ProjectileType<Projectiles.FixCoinDamage1>();
+            Item.shoot = ModContent.ProjectileType<MiscProjectiles.Typeless.FixCoinSpeed2>();
             Item.shootSpeed = 16;
             Item.noUseGraphic = true;
         }
@@ -46,6 +46,13 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items
             }
             CombatText.NewText(new Rectangle((int)player.Center.X - 10, (int)player.Center.Y - 10, 20, 20), Color.White, tex3);
             return false;
+        }
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+                .AddIngredient<MiscItems.FixCoins.FixCoinSpeed1>(3)
+                .AddTile(TileID.WorkBenches)
+                .Register();
         }
     }
 }

@@ -45,10 +45,10 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
                     TpTime += 3;
                 }
                 Col = 100;
-                if (player.ownedProjectileCounts[ModContent.ProjectileType<MiscProjectiles.TransportCircle>()] < 1)
-                {
+                //if (player.ownedProjectileCounts[ModContent.ProjectileType<MiscProjectiles.TransportCircle>()] < 1)
+                //{
                     Projectile.NewProjectile(null, player.Center, Vector2.Zero, ModContent.ProjectileType<MiscProjectiles.TuskTranF>(), 0, 0, player.whoAmI, 0);
-                }
+                //}
                 for (int f = 0; f < Main.projectile.Length; f++)
                 {
                     if (Main.projectile[f].owner == player.whoAmI)

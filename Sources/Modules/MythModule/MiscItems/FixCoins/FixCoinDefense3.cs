@@ -1,15 +1,15 @@
 ﻿using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Items
+namespace Everglow.Sources.Modules.MythModule.MiscItems.FixCoins
 {
-    public class FixCoinDamage3 : ModItem
+    public class FixCoinDefense3 : ModItem
     {
         public override void SetStaticDefaults()
         {
-            ////DisplayName.SetDefault("Enchanted Coin Damage III");
-            ////DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "三阶伤害附魔币");
-            ////Tooltip.SetDefault("Gives a random accessory in inventory a prefix which increases damage by 4%");
-            ////Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "随机地给你背包中的一个饰品施加4%伤害的前缀");
+            //DisplayName.SetDefault("Enchanted Coin DefenseIII");
+            //DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "三阶防御附魔币");
+            //Tooltip.SetDefault("Gives a random accessory in inventory a prefix which increases defense by 4");
+            //Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "随机地给你背包中的一个饰品施加4防御的前缀");
         }
 
         public override void SetDefaults()
@@ -26,7 +26,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items
             Item.maxStack = 999;
             Item.consumable = true;
             Item.UseSound = SoundID.Item1;
-            Item.shoot = ModContent.ProjectileType<Projectiles.FixCoinDamage3>();
+            Item.shoot = ModContent.ProjectileType<MiscProjectiles.Typeless.FixCoinDefense3>();
             Item.shootSpeed = 16;
             Item.noUseGraphic = true;
         }
@@ -50,7 +50,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient<Items.FixCoinDamage2>(3)
+                .AddIngredient<MiscItems.FixCoins.FixCoinDefense2>(3)
                 .AddTile(TileID.WorkBenches)
                 .Register();
         }

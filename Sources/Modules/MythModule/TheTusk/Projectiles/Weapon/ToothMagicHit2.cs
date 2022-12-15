@@ -87,7 +87,7 @@
                     Vx3.Add(new VertexBase.CustomVertexInfo(Vbase + Circle2D[h].RotatedBy(Ro[g]) * 0.5f, Color.Lime, new Vector3(factor, 1, 0.35f)));
                     Vx3.Add(new VertexBase.CustomVertexInfo(Vbase + Circle2D[h].RotatedBy(Ro[g]) * 1.2f, Color.Lime, new Vector3(factor, 0, 0.35f)));
                 }
-                ef = (Effect)ModContent.Request<Effect>("MythMod/Effects/ef3/FadeLaserRed").Value;
+                ef = (Effect)ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/FadeLaserRed").Value;
                 List<VertexBase.CustomVertexInfo> triangleList = new List<VertexBase.CustomVertexInfo>();
                 if (Vx3.Count > 2)
                 {
@@ -112,9 +112,9 @@
                     ef.Parameters["uTransform"].SetValue(model * projection);
                     ef.Parameters["uTime"].SetValue(-(float)Main.time * 0.06f);
                     ef.Parameters["maxr"].SetValue(Math.Clamp(widxM * widxM + DeltaRed[g], 0, 1));
-                    Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("MythMod/UIImages/heatmapTuskLine").Value;
-                    Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("MythMod/UIImages/LightCrackF").Value;
-                    Main.graphics.GraphicsDevice.Textures[2] = ModContent.Request<Texture2D>("MythMod/UIImages/LightCrackF").Value;
+                    Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/VisualTextures/heatmapTuskLine").Value;
+                    Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/VisualTextures/LightCrackF").Value;
+                    Main.graphics.GraphicsDevice.Textures[2] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/VisualTextures/LightCrackF").Value;
                     Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
                     Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
                     Main.graphics.GraphicsDevice.SamplerStates[2] = SamplerState.PointWrap;

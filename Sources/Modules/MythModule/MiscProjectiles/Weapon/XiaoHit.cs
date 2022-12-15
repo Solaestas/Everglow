@@ -61,7 +61,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
             List<VertexBase.CustomVertexInfo> bars = new List<VertexBase.CustomVertexInfo>();
-            ef = (Effect)ModContent.Request<Effect>("MythMod/Effects/ef3/FadeCurseGreen").Value;
+            ef = (Effect)ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/FadeCurseGreen").Value;
             float widx = Projectile.timeLeft / 120f;
             float widxM = 1f - widx;
             radious = (float)(Math.Sqrt(5 * widxM) * 60) * Projectile.ai[0];

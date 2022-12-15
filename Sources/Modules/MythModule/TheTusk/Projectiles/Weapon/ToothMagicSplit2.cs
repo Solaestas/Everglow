@@ -279,7 +279,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
                     Vx.Add(bars[i + 3]);
                 }
             }
-            Texture2D t = ModContent.Request<Texture2D>("MythMod/UIImages/DarkBloodRope").Value;
+            Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIImages/Tusk/DarkBloodRope").Value;
             Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
         }

@@ -1,15 +1,15 @@
 ﻿using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Items
+namespace Everglow.Sources.Modules.MythModule.MiscItems.FixCoins
 {
-    public class FixCoinDamage2 : ModItem
+    public class FixCoinCrit5 : ModItem
     {
         public override void SetStaticDefaults()
         {
-            ////DisplayName.SetDefault("Enchanted Coin Damage II");
-            ////DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "二阶伤害附魔币");
-            ////Tooltip.SetDefault("Gives a random accessory in inventory a prefix which increases damage by 2%~3%");
-            ////Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "随机地给你背包中的一个饰品施加2%~3%伤害的前缀");
+            //DisplayName.SetDefault("Enchanted Coin CritV");
+            //DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "五阶暴击附魔币");
+            //Tooltip.SetDefault("Gives a random accessory in inventory a prefix which increases crit chance by 7%~9%");
+            //Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "随机地给你背包中的一个饰品施加7%~9%暴击的前缀");
         }
 
         public override void SetDefaults()
@@ -21,12 +21,12 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items
             Item.useAnimation = 20;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
-            Item.value = 2000;
+            Item.value = 18000;
             Item.rare = 0;
             Item.maxStack = 999;
             Item.consumable = true;
             Item.UseSound = SoundID.Item1;
-            Item.shoot = ModContent.ProjectileType<Projectiles.FixCoinDamage2>();
+            Item.shoot = ModContent.ProjectileType<MiscProjectiles.Typeless.FixCoinCrit5>();
             Item.shootSpeed = 16;
             Item.noUseGraphic = true;
         }
@@ -46,13 +46,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items
             }
             CombatText.NewText(new Rectangle((int)player.Center.X - 10, (int)player.Center.Y - 10, 20, 20), Color.White, tex3);
             return false;
-        }
-        public override void AddRecipes()
-        {
-            CreateRecipe()
-                .AddIngredient<Items.FixCoinDamage1>(3)
-                .AddTile(TileID.WorkBenches)
-                .Register();
         }
     }
 }

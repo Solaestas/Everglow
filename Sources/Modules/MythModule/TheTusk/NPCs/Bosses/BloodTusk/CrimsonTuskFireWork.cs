@@ -349,7 +349,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                     triangleList2.Add(bars2[i + 2]);
                     triangleList2.Add(bars2[i + 3]);
                 }
-                Texture2D t1 = ModContent.Request<Texture2D>("MythMod/UIImages/BloodRope").Value;
+                Texture2D t1 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/Tusk/BloodRope").Value;
                 Main.graphics.GraphicsDevice.Textures[0] = t1;//GlodenBloodScaleMirror
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList2.ToArray(), 0, triangleList2.Count / 3);
 
