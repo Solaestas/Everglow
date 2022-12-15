@@ -1,10 +1,11 @@
 ﻿using Everglow.Sources.Commons.Core.ModuleSystem;
-using Everglow.Sources.Commons.Function.FeatureFlags;
 using Everglow.Sources.Modules.ZYModule.Commons.Core;
 
 using Everglow.Sources.Modules.ZYModule.Commons.Function;
 namespace Everglow.Sources.Modules.ZYModule.Visuals.ScreenShaders;
 
+//不确定是否有存在的必要
+[DontAutoLoad]
 internal class ScreenShaderManager : IModule
 {
     private Dictionary<string, ScreenShader> screenShaders = new Dictionary<string, ScreenShader>();
@@ -46,7 +47,7 @@ internal class ScreenShaderManager : IModule
 
     public void Unload()
     {
-        
+
     }
     public void Switch()
     {
@@ -73,7 +74,7 @@ internal class ScreenShaderManager : IModule
         rtIndex = 0;
 
         sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
-        
+
         foreach (var shader in enableShaders)
         {
             gd.SetRenderTarget(Next);

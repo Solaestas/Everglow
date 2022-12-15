@@ -6,6 +6,5 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
         {
             //Lighting.AddLight(new Vector2(i, j).ToWorldCoordinates(), new Vector3(0, 0, 0));
         }
-            
     }
 }
