@@ -229,9 +229,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                                 {
                                     MythUtils.PlaceFrameImportantTiles(a + x, b + y, 3, 4, ModContent.TileType<Pylon.FireflyPylon>());
                                     TEModdedPylon moddedPylon = ModContent.GetInstance<FireflyPylonTileEntity>();
-                                    TileObjectData.newTile.HookCheckIfCanPlace = new PlacementHook(moddedPylon.PlacementPreviewHook_CheckIfCanPlace, 1, 0, true);
-                                    TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(moddedPylon.Hook_AfterPlacement, -1, 0, false);
-                                    TileObjectData.addTile(ModContent.TileType<Pylon.FireflyPylon>());
+
+                                    moddedPylon.Find(a + x, b + y);
                                 }
                                 break;
                         }

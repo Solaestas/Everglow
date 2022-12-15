@@ -8,15 +8,14 @@ using Terraria.Audio;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
-    public class MissileProj : ModProjectile, IWarpProjectile
+    public class MissileProjHostile : ModProjectile, IWarpProjectile
     {
         public override void SetDefaults()
         {
             Projectile.width = 10;
             Projectile.height = 10;
             Projectile.aiStyle = -1;
-            Projectile.friendly = true;
-            Projectile.hostile = false;
+            Projectile.hostile = true;
             Projectile.ignoreWater = false;
             Projectile.tileCollide = true;
             Projectile.extraUpdates = 1;
@@ -38,37 +37,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         }
         private void ChaseTarget()
         {
-            float MinDis = 350;
-            foreach (var target in Main.npc)
-            {
-                if (target.active && Main.rand.NextBool(2))
-                {
-                    if (!target.dontTakeDamage && !target.friendly && target.CanBeChasedBy())
-                    {
-                        Vector2 ToTarget = target.Center - Projectile.Center;
-                        float dis = ToTarget.Length();
-                        if (dis < 250 && ToTarget != Vector2.Zero)
-                        {
-                            if (dis < MinDis)
-                            {
-                                MinDis = dis;
-                                Aimnpc = target.whoAmI;
-                            }
-                        }
-                    }
-                }
-            }
-            if (Aimnpc != -1)
-            {
-                NPC npc = Main.npc[Aimnpc];
-                if (npc.active && (npc.Center - Projectile.Center).Length() < 350)
-                {
-                    Vector2 v0 = npc.Center - Projectile.Center;
-                    Projectile.velocity += Vector2.Normalize(v0).RotatedBy(Projectile.ai[1]) * 0.5f;
 
-                    Projectile.velocity = Vector2.Normalize(Projectile.velocity) * Math.Max(StartSpeed, 5);
-                }
-            }
         }
         private void GenerateDust()
         {
@@ -108,16 +77,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 Projectile.velocity = Projectile.oldVelocity;
             }
             TimeTokill--;
-            if (TimeTokill < 0)
-            {
-                ChaseTarget();
-            }
-            else
+            if (TimeTokill >= 0)
             {
                 if (TimeTokill < 10)
                 {
                     Projectile.damage = 0;
-                    Projectile.friendly = false;
+                    Projectile.hostile = false;
                 }
                 Projectile.velocity *= 0f;
             }
@@ -125,15 +90,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             GenerateDust();
             if (Projectile.timeLeft == 2310)
             {
-                Projectile.friendly = true;
+                Projectile.hostile = true;
             }
         }
         private int TimeTokill = -1;
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-        {
-            HitToAnything();
-        }
-        public override void OnHitPvp(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, int damage, bool crit)
         {
             HitToAnything();
         }
@@ -151,55 +112,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, Projectile.Center);
             TimeTokill = 90;
             Projectile.velocity = Projectile.oldVelocity;
-
-            if (Projectile.ai[0] > 180)
-            {
-                Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BombShakeWave>(), 0, 0, Projectile.owner, 2, 6f);
-                Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BeadShakeWave>(), 0, 0, Projectile.owner, 4f);
-                foreach (NPC target in Main.npc)
-                {
-                    float Dis = (target.Center - Projectile.Center).Length();
-
-                    if (Dis < 350)
-                    {
-                        if (!target.dontTakeDamage && !target.friendly && target.CanBeChasedBy() && target.active)
-                        {
-                            bool crit = Main.rand.NextBool(33, 100);
-                            target.StrikeNPC((int)(Projectile.damage * Main.rand.NextFloat(1.70f, 2.30f)), 2f, 1, crit);
-
-                            player.addDPS(Math.Max(0, target.defDamage));
-                        }
-                    }
-                }
-                for (int h = 0; h < 200; h += 3)
-                {
-                    Vector2 v3 = new Vector2(0, (float)Math.Sin(h * Math.PI / 4d + Projectile.ai[0]) + 5).RotatedBy(h * Math.PI / 10d) * Main.rand.NextFloat(0.8f, 2.4f);
-                    int r = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4), 0, 0, ModContent.DustType<Dusts.PureBlue>(), 0, 0, 0, default(Color), 35f * Main.rand.NextFloat(0.7f, 2.9f));
-                    Main.dust[r].noGravity = true;
-                    Main.dust[r].velocity = v3 * 6;
-                }
-                for (int y = 0; y < 180; y += 3)
-                {
-                    int index = Dust.NewDust(Projectile.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(3.3f, 14.2f));
-                    Main.dust[index].noGravity = true;
-                    Main.dust[index].velocity = new Vector2(Main.rand.NextFloat(0.0f, 37.5f), 0).RotatedByRandom(Math.PI * 2d);
-                }
-                for (int y = 0; y < 180; y += 3)
-                {
-                    int index = Dust.NewDust(Projectile.Center + new Vector2(0, Main.rand.NextFloat(2f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(3.3f, 14.2f));
-                    Main.dust[index].noGravity = true;
-                    Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(3.0f, 47.5f)).RotatedByRandom(Math.PI * 2d);
-                }
-                for (int y = 0; y < 36; y++)
-                {
-                    int index = Dust.NewDust(Projectile.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(3.3f, 10.2f));
-                    Main.dust[index].noGravity = true;
-                    Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(1.8f, 13.5f)).RotatedByRandom(Math.PI * 2d);
-                }
-                Projectile.friendly = false;
-                return;
-            }
-
             Gsplayer.FlyCamPosition = new Vector2(0, 30).RotatedByRandom(6.283);
             Projectile P = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BombShakeWave>(), 0, 0, Projectile.owner, 1, 2f);
             P.timeLeft = 200;
@@ -243,7 +155,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 Main.dust[index].noGravity = true;
                 Main.dust[index].velocity = new Vector2(Main.rand.NextFloat(0.0f, 2.5f), Main.rand.NextFloat(1.8f, 5.5f)).RotatedByRandom(Math.PI * 2d);
             }
-            Projectile.friendly = false;
+            Projectile.hostile = false;
         }
         private void DrawTrail()
         {

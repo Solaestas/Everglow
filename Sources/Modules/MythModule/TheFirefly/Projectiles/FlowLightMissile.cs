@@ -99,11 +99,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         private void HitToAnything()
         {
             Player player = Main.player[Projectile.owner];
-            SoundEngine.PlaySound(SoundID.Item27, Projectile.Center);
+            SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, Projectile.Center);
             ScreenShaker Gsplayer = player.GetModPlayer<ScreenShaker>();
             Gsplayer.FlyCamPosition = new Vector2(0, 30).RotatedByRandom(6.283);
             Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BombShakeWave>(), 0, 0, Projectile.owner, 2, 6f);
-
+            Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BeadShakeWave>(), 0, 0, Projectile.owner, 4f);
             foreach (NPC target in Main.npc)
             {
                 float Dis = (target.Center - Projectile.Center).Length();
@@ -154,7 +154,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             v0 = Vector2.Normalize(v0);
             Player player = Main.player[Projectile.owner];
 
-            Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + v0 * 62, v0 * (Energy + 20) / 9f, ModContent.ProjectileType<MissileProj>(), (int)(Projectile.damage * (Energy + 450) / 450f), Projectile.knockBack, player.whoAmI, 1, 0);
+            Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + v0 * 62, v0 * (Energy + 20) / 9f, ModContent.ProjectileType<MissileProj>(), (int)(Projectile.damage * (Energy + 450) / 450f), Projectile.knockBack, player.whoAmI, Energy, 0);
 
             Vector2 newVelocity = v0;
             newVelocity *= 1f - Main.rand.NextFloat(0.3f);
