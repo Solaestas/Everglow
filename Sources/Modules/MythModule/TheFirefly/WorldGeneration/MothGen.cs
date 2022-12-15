@@ -229,8 +229,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                                 {
                                     MythUtils.PlaceFrameImportantTiles(a + x, b + y, 3, 4, ModContent.TileType<Pylon.FireflyPylon>());
                                     TEModdedPylon moddedPylon = ModContent.GetInstance<FireflyPylonTileEntity>();
-
-                                    moddedPylon.Find(a + x, b + y);
+                                    moddedPylon.Position = new Point16(a + x, b + y);
+                                    //TODO:I need help to generate map Icon;
                                 }
                                 break;
                         }
