@@ -1,5 +1,4 @@
-﻿//using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
-using Everglow.Sources.Modules.MythModule.Bosses.CorruptMoth.Dusts;
+﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
@@ -95,7 +94,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             if (Projectile.timeLeft % 6 == 0)
             {
                 //int num89 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 113, 0,0, 0, default(Color), 0.6f);
-                int num90 = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<BlueGlow>() /*TODO: Replace with BlueGlowAppear*/, 0f, 0f, 100, default(Color), Main.rand.NextFloat(0.4f, 1.2f));
+                int num90 = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<BlueGlowAppear>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(0.4f, 1.2f));
                 //Main.dust[num89].velocity = Projectile.velocity * 0.5f;
                 Main.dust[num90].velocity = Projectile.velocity * 0.5f;
             }
@@ -311,7 +310,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
              Main.spriteBatch.End();
              Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
              List<VertexBase.CustomVertexInfo> bars = new List<VertexBase.CustomVertexInfo>();
-             ef = (Effect)ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/TrailB2").Value;
+             ef = (Effect)ModContent.Request<Effect>("MythMod/Effects/TrailB2").Value;
              for (int i = 1; i < Projectile.oldPos.Length; ++i)
              {
                  if (Projectile.oldPos[i] == Vector2.Zero) break;

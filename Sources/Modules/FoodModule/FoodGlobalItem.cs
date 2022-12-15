@@ -1,6 +1,5 @@
 ﻿using Everglow.Sources.Modules.FoodModule.Buffs.VanillaFoodBuffs;
 using Everglow.Sources.Modules.FoodModule.Utils;
-using Everglow.Sources.Modules.FoodModule.DataStructures;
 using Everglow.Sources.Modules.FoodModule.Buffs;
 using Everglow.Sources.Modules.FoodModule.Items;
 using Terraria.Localization;
@@ -56,7 +55,7 @@ namespace Everglow.Sources.Modules.FoodModule
                         Satiety = 20,
                         BuffType = ModContent.BuffType<BaconBuff>(),
                         BuffTime = new FoodDuration(8, 0, 0),
-                        Name = "MilkCartonBuff"
+                        Name = "BaconBuff"
                     }
                 },
                 //香蕉
@@ -648,13 +647,13 @@ namespace Everglow.Sources.Modules.FoodModule
                 {
                     tooltips.RemoveAll((tp) => tp.Name.Contains("Tooltip"));
                     tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.BuffDescription." + FoodInfo.Name)));
-                    tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, "{FoodInfo.Satiety} " + Language.GetTextValue("Mods.Everglow.InfoDisplay.Satiety")));
+                    tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, FoodInfo.Satiety  + Language.GetTextValue("Mods.Everglow.InfoDisplay.Satiety")));
                 }
                 else
                 {
                     // 否则加到最后面
                     tooltips.Add(new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.BuffDescription." + FoodInfo.Name)));
-                    tooltips.Add(new TooltipLine(Mod, item.Name, "{FoodInfo.Satiety} " + Language.GetTextValue("Mods.Everglow.InfoDisplay.Satiety")));
+                    tooltips.Add(new TooltipLine(Mod, item.Name, FoodInfo.Satiety + Language.GetTextValue("Mods.Everglow.InfoDisplay.Satiety")));
                 }
 
                 int buffTimeIndex = tooltips.FindIndex((tp) => tp.Name.Contains("BuffTime"));
@@ -712,7 +711,7 @@ namespace Everglow.Sources.Modules.FoodModule
                    Language.GetTextValue("Mods.Everglow.Common.FoodSystem.CannotEat"),
                    true,false);
 
-                    foodPlayer.TextTimer = FoodUtils.GetFrames(0, 0, 3, 0);
+                    foodPlayer.TextTimer = FoodUtils.GetFrames(0, 0, 2, 30);
                     return false;
                 }
             }
@@ -727,7 +726,7 @@ namespace Everglow.Sources.Modules.FoodModule
                    Language.GetTextValue("Mods.Everglow.Common.FoodSystem.CannotEat"),
                    true,false);
 
-                   foodPlayer.TextTimer = FoodUtils.GetFrames(0, 0, 3, 0);
+                   foodPlayer.TextTimer = FoodUtils.GetFrames(0, 0, 2, 30);
                    return false;
                 }
             }
