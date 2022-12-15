@@ -98,7 +98,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             position -= slotSize * Main.inventoryScale / 2f - frame.Size() * scale / 2f;
             Vector2 drawPos = position + slotSize * Main.inventoryScale / 2f/* - texture.Size() * Main.inventoryScale / 2f*/;
             Texture2D RArr = MythContent.QuickTexture("TheFirefly/Projectiles/GlowFanTex/RightDFan");
-            //ModContent.Request<Texture2D>("MythMod/UIImages/RightDFan").Value;
+            //ModContent.Request<Texture2D>("MythMod/UIimages/RightDFan").Value;
             if (!Main.gamePaused)
             {
                 if (CoolRarr > 0)

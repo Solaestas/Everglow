@@ -211,9 +211,9 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Typeless
                     var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
                     ef.Parameters["uTransform"].SetValue(model * projection);
                     ef.Parameters["uTime"].SetValue(-(float)Main.time * 0.03f + Projectile.ai[0]);
-                    Texture2D Purple = ModContent.Request<Texture2D>("MythMod/UIImages/heatmapColdPurple").Value;
-                    Texture2D Shape = ModContent.Request<Texture2D>("MythMod/UIImages/Lightline").Value;
-                    Texture2D Mask = ModContent.Request<Texture2D>("MythMod/UIImages/IceTrace").Value;
+                    Texture2D Purple = ModContent.Request<Texture2D>("MythMod/UIimages/heatmapColdPurple").Value;
+                    Texture2D Shape = ModContent.Request<Texture2D>("MythMod/UIimages/Lightline").Value;
+                    Texture2D Mask = ModContent.Request<Texture2D>("MythMod/UIimages/IceTrace").Value;
                     Main.graphics.GraphicsDevice.Textures[0] = Purple;
                     Main.graphics.GraphicsDevice.Textures[1] = Shape;
                     Main.graphics.GraphicsDevice.Textures[2] = Mask;
@@ -227,7 +227,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Typeless
                     Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
                 }
             }
-            Texture2D LightE = ModContent.Request<Texture2D>("MythMod/UIImages/LightEffect").Value;
+            Texture2D LightE = ModContent.Request<Texture2D>("MythMod/UIimages/LightEffect").Value;
             Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(0.21f * Stre * Stre, 0, 0.3f * Stre * Stre, 0), -(float)(Math.Sin(Main.time / 26d)) + 0.6f, new Vector2(128f, 128f), 0.5f + (float)(0.25 * Math.Sin(Main.time / 26d)), SpriteEffects.None, 0);
             Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(0.56f * Stre * Stre, 0, 0.8f * Stre * Stre, 0), (float)(Math.Sin(Main.time / 12d + 2)) + 1.6f, new Vector2(128f, 128f), 0.5f + (float)(0.25 * Math.Sin(Main.time / 26d)), SpriteEffects.None, 0);
             Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(0.21f * Stre * Stre, 0, 0.3f * Stre * Stre, 0), (float)Math.PI / 2f + (float)(Main.time / 9d), new Vector2(128f, 128f), 0.5f + (float)(0.25 * Math.Sin(Main.time / 26d + 1.57)), SpriteEffects.None, 0);

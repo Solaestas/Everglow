@@ -67,7 +67,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Typeless
             for (int h = 0; h < 20; h++)
             {
                 Vector2 v3 = new Vector2(0, (float)Math.Sin(h * Math.PI / 4d + Projectile.ai[0]) + 5).RotatedBy(h * Math.PI / 10d) * Main.rand.NextFloat(0.2f, 1.1f);
-                int r = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4), 0, 0, ModContent.DustType<Bosses.CorruptMoth.Dusts.PureBlue>(), 0, 0, 0, default(Color), 15f * Main.rand.NextFloat(0.4f, 1.1f));
+                int r = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4), 0, 0, ModContent.DustType<TheFirefly.Dusts.PureBlue>(), 0, 0, 0, default(Color), 15f * Main.rand.NextFloat(0.4f, 1.1f));
                 Main.dust[r].noGravity = true;
                 Main.dust[r].velocity = v3;
             }
@@ -87,7 +87,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Typeless
                     for (int h = 0; h < 20; h++)
                     {
                         Vector2 v3 = new Vector2(0, (float)Math.Sin(h * Math.PI / 4d) + 5).RotatedBy(h * Math.PI / 10d) * Main.rand.NextFloat(0.2f, 1.1f);
-                        int r = Dust.NewDust(new Vector2(player.Center.X, player.Center.Y) - new Vector2(4, 4), 0, 0, ModContent.DustType<Bosses.CorruptMoth.Dusts.PureBlue>(), 0, 0, 0, default(Color), 15f * Main.rand.NextFloat(0.4f, 1.1f));
+                        int r = Dust.NewDust(new Vector2(player.Center.X, player.Center.Y) - new Vector2(4, 4), 0, 0, ModContent.DustType<TheFirefly.Dusts.PureBlue>(), 0, 0, 0, default(Color), 15f * Main.rand.NextFloat(0.4f, 1.1f));
                         Main.dust[r].noGravity = true;
                         Main.dust[r].velocity = v3;
                         //Main.dust[r].dustIndex = (int)(Math.Cos(h * Math.PI / 10d + player.ai[0]) * 100d);
@@ -113,7 +113,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Typeless
                     for (int h = 0; h < 20; h++)
                     {
                         Vector2 v3 = new Vector2(0, (float)Math.Sin(h * Math.PI / 4d) + 5).RotatedBy(h * Math.PI / 10d) * Main.rand.NextFloat(0.2f, 1.1f);
-                        int r = Dust.NewDust(new Vector2(player.Center.X, player.Center.Y) - new Vector2(4, 4), 0, 0, ModContent.DustType<Bosses.CorruptMoth.Dusts.PureBlue>(), 0, 0, 0, default(Color), 15f * Main.rand.NextFloat(0.4f, 1.1f));
+                        int r = Dust.NewDust(new Vector2(player.Center.X, player.Center.Y) - new Vector2(4, 4), 0, 0, ModContent.DustType<TheFirefly.Dusts.PureBlue>(), 0, 0, 0, default(Color), 15f * Main.rand.NextFloat(0.4f, 1.1f));
                         Main.dust[r].noGravity = true;
                         Main.dust[r].velocity = v3;
                         //Main.dust[r].dustIndex = (int)(Math.Cos(h * Math.PI / 10d + player.ai[0]) * 100d);
@@ -194,9 +194,9 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Typeless
                     var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
                     ef.Parameters["uTransform"].SetValue(model * projection);
                     ef.Parameters["uTime"].SetValue(-(float)Main.time * 0.03f + Projectile.ai[0]);
-                    Texture2D Blue = ModContent.Request<Texture2D>("MythMod/UIImages/heatmapBlue2").Value;
-                    Texture2D Shape = ModContent.Request<Texture2D>("MythMod/UIImages/Lightline").Value;
-                    Texture2D Mask = ModContent.Request<Texture2D>("MythMod/UIImages/IceTrace").Value;
+                    Texture2D Blue = ModContent.Request<Texture2D>("MythMod/UIimages/heatmapBlue2").Value;
+                    Texture2D Shape = ModContent.Request<Texture2D>("MythMod/UIimages/Lightline").Value;
+                    Texture2D Mask = ModContent.Request<Texture2D>("MythMod/UIimages/IceTrace").Value;
                     Main.graphics.GraphicsDevice.Textures[0] = Blue;
                     Main.graphics.GraphicsDevice.Textures[1] = Shape;
                     Main.graphics.GraphicsDevice.Textures[2] = Mask;
@@ -210,7 +210,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Typeless
                     Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
                 }
             }
-            Texture2D LightE = ModContent.Request<Texture2D>("MythMod/UIImages/LightEffect").Value;
+            Texture2D LightE = ModContent.Request<Texture2D>("MythMod/UIimages/LightEffect").Value;
             Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(0, 0, 0.3f * Stre * Stre, 0), -(float)(Math.Sin(Main.time / 26d)) + 0.6f, new Vector2(128f, 128f), 0.5f + (float)(0.25 * Math.Sin(Main.time / 26d)), SpriteEffects.None, 0);
             Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(0, 0, 1f * Stre * Stre, 0), (float)(Math.Sin(Main.time / 12d + 2)) + 1.6f, new Vector2(128f, 128f), 0.5f + (float)(0.25 * Math.Sin(Main.time / 26d)), SpriteEffects.None, 0);
             Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(0, 0, 0.3f * Stre * Stre, 0), (float)Math.PI / 2f + (float)(Main.time / 9d), new Vector2(128f, 128f), 0.5f + (float)(0.25 * Math.Sin(Main.time / 26d + 1.57)), SpriteEffects.None, 0);

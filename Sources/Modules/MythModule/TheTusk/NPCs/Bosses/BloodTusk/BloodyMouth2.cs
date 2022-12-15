@@ -1,4 +1,5 @@
-﻿using Terraria.Localization;
+﻿using Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles;
+using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 {
@@ -156,7 +157,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                         if ((player.Center - NPC.Center).Length() < 120)
                         {
                             // 弹幕
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center, new Vector2(0), ModContent.ProjectileType<MiscProjectiles.Typeless.playerHit>(), 90, 3f, Main.myPlayer, 0);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center, new Vector2(0), ModContent.ProjectileType<playerHit>(), 90, 3f, Main.myPlayer, 0);
                         }
                     }
                 }
@@ -201,12 +202,12 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                             if ((Main.LocalPlayer.Center - NPC.Center + new Vector2(-x, 0).RotatedBy(NPC.rotation)).Length() < 30)
                             {
                                 // 弹幕
-                                Projectile.NewProjectile(null, Main.LocalPlayer.Center, Vector2.Zero, ModContent.ProjectileType<MiscProjectiles.Typeless.playerHit>(), Dam / 8, 1, 0, 0, 0);
+                                Projectile.NewProjectile(null, Main.LocalPlayer.Center, Vector2.Zero, ModContent.ProjectileType<playerHit>(), Dam / 8, 1, 0, 0, 0);
                             }
                             if ((Main.LocalPlayer.Center - NPC.Center + new Vector2(-x, 0).RotatedBy(NPC.rotation)).Length() < 30)
                             {
                                 // 弹幕
-                                Projectile.NewProjectile(null, Main.LocalPlayer.Center, Vector2.Zero, ModContent.ProjectileType<MiscProjectiles.Typeless.playerHit>(), Dam / 8, 1, 0, 0, 0);
+                                Projectile.NewProjectile(null, Main.LocalPlayer.Center, Vector2.Zero, ModContent.ProjectileType<playerHit>(), Dam / 8, 1, 0, 0, 0);
                             }
                         }
                     }

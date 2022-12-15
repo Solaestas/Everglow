@@ -112,9 +112,9 @@
                     ef.Parameters["uTransform"].SetValue(model * projection);
                     ef.Parameters["uTime"].SetValue(-(float)Main.time * 0.06f);
                     ef.Parameters["maxr"].SetValue(Math.Clamp(widxM * widxM + DeltaRed[g], 0, 1));
-                    Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/VisualTextures/heatmapTuskLine").Value;
-                    Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/VisualTextures/LightCrackF").Value;
-                    Main.graphics.GraphicsDevice.Textures[2] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/VisualTextures/LightCrackF").Value;
+                    Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/heatmapTuskLine").Value;
+                    Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/LightCrackF").Value;
+                    Main.graphics.GraphicsDevice.Textures[2] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/LightCrackF").Value;
                     Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
                     Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
                     Main.graphics.GraphicsDevice.SamplerStates[2] = SamplerState.PointWrap;

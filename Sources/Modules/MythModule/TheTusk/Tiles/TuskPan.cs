@@ -55,7 +55,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
             }
 
             Player player = Main.LocalPlayer;
-            Texture2D BaseCo1 = ModContent.Request<Texture2D>("MythMod/UIImages/ForgeWave").Value;
+            Texture2D BaseCo1 = ModContent.Request<Texture2D>("MythMod/UIimages/ForgeWave").Value;
             Texture2D Sp1a = ModContent.Request<Texture2D>("MythMod/Tiles/StonePanBottomLine").Value;
             Texture2D Sp1b = ModContent.Request<Texture2D>("MythMod/Tiles/StonePanBottomRedLight").Value;
             Texture2D Sp1c = ModContent.Request<Texture2D>("MythMod/Tiles/StonePanBottomFace").Value;

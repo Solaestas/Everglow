@@ -316,7 +316,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                         Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
                         Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, VxB.ToArray(), 0, VxB.Count / 3);
 
-                        t = ModContent.Request<Texture2D>("MythMod/Projectiles/Acytaea/AcytaeaLaser").Value;
+                        t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Projectiles/AcytaeaLaser").Value;
                         Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
                         Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 

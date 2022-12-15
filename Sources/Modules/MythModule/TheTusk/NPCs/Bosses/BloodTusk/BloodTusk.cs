@@ -1,4 +1,5 @@
-﻿using Terraria.Audio;
+﻿using Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
@@ -2291,7 +2292,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                                         {
                                             if ((Main.player[j].Center - (Mouth1[i] + new Vector2(0, -10) + normalDir * Math.Clamp(Len, 0, HangMaxL1[i]))).Length() < 30)
                                             {
-                                                Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<MiscProjectiles.Typeless.playerHit>(), NPC.damage / 8, 0, j, 0, 0);
+                                                Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<playerHit>(), NPC.damage / 8, 0, j, 0, 0);
                                             }
                                         }
                                     }
@@ -2321,7 +2322,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                                         {
                                             if ((Main.player[j].Center - (Mouth1[i] + new Vector2(0, -10) + normalDir * Math.Clamp(Len, 0, HangMaxL1[i]))).Length() < 30)
                                             {
-                                                Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<MiscProjectiles.Typeless.playerHit>(), NPC.damage / 8, 0, j, 0, 0);
+                                                Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<playerHit>(), NPC.damage / 8, 0, j, 0, 0);
                                             }
                                         }
                                     }
@@ -2376,7 +2377,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                                         {
                                             if ((Main.player[j].Center - (Mouth2[i] + new Vector2(0, -10) + normalDir * Math.Clamp(Len, 0, HangMaxL2[i]))).Length() < 30)
                                             {
-                                                Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<MiscProjectiles.Typeless.playerHit>(), NPC.damage / 8, 0, j, 0, 0);
+                                                Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<playerHit>(), NPC.damage / 8, 0, j, 0, 0);
                                             }
                                         }
                                     }
@@ -2406,7 +2407,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                                         {
                                             if ((Main.player[j].Center - (Mouth2[i] + new Vector2(0, -10) + normalDir * Math.Clamp(Len, 0, HangMaxL2[i]))).Length() < 30)
                                             {
-                                                Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<MiscProjectiles.Typeless.playerHit>(), NPC.damage / 8, 0, j, 0, 0);
+                                                Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<playerHit>(), NPC.damage / 8, 0, j, 0, 0);
                                             }
                                         }
                                     }
@@ -2532,7 +2533,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                 }
                 if (HasTranSkin == 239)
                 {
-                    //SoundEngine.PlaySound(new SoundStyle("Sounds/TuskCrack")/*, NPC.Bottom*/); //Camera moves to boss when going in phase 2. ~Setnour6
+                    SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/TuskCrack")/*, NPC.Bottom*/); //Camera moves to boss when going in phase 2. ~Setnour6
                 }
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);

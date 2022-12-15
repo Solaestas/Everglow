@@ -319,10 +319,10 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
                         Vx.Add(bars[i + 3]);
                     }
                 }
-                Texture2D t = ModContent.Request<Texture2D>("MythMod/UIImages/BloodBallLine").Value;
+                Texture2D t = ModContent.Request<Texture2D>("MythMod/UIimages/BloodBallLine").Value;
                 if (f == 0)
                 {
-                    t = ModContent.Request<Texture2D>("MythMod/UIImages/BloodLine").Value;
+                    t = ModContent.Request<Texture2D>("MythMod/UIimages/BloodLine").Value;
                 }
                 Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
