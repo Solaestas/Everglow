@@ -208,7 +208,7 @@ Mods:
 			YellowGemSlingshot : 黄玉弹弓
 			BloodyBoneYoyo : 血骨球
 			SpineGun : 脊骨火铳
-			ToothKnfe : 齿刃
+			ToothKnife : 齿刃
 			ToothMagicBall : 血色法球
 			ToothStaff : 獠牙法杖
 			Acropora : 花鹿角珊瑚
@@ -501,7 +501,7 @@ Mods:
 				'''
 			BloodyBoneYoyo : 每击中5次敌人会释放1次獠牙钉
 			SpineGun : 射出一发勘测到敌人就会分裂的子母弹
-			ToothKnfe : ""
+			ToothKnife : ""
 			ToothMagicBall : ""
 			ToothStaff : 释放拔地而起的獠牙刺
 			BlackWoodenClub : "{$Mods.Everglow.Common.ClubGT}"

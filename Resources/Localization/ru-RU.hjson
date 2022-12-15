@@ -197,7 +197,7 @@
 			YellowGemSlingshot : Топазовая рогатка
 			BloodyBoneYoyo : Кровавая кость
 			SpineGun : Позвоночный мушкет
-			ToothKnfe : Клинок-бивень
+			ToothKnife : Клинок-бивень
 			ToothMagicBall : Сангвинический Шар
 			ToothStaff : Посох бивня
 			Acropora : Акропора
@@ -472,7 +472,7 @@
 				'''
 			BloodyBoneYoyo : Releases tusk nails on every 5 hits
 			SpineGun : Fires bullets which split upon detecting enemies
-			ToothKnfe : ""
+			ToothKnife : ""
 			ToothMagicBall : ""
 			ToothStaff : Raises tusks from the ground
 			FragransBlade : Don't be lonely when moon and fragrans bright, breeze and moon still.

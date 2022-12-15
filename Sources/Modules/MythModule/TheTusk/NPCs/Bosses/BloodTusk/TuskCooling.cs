@@ -28,7 +28,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
             NPC.boss = true;
             if (!Main.dedServ)
             {
-                Music = MusicLoader.GetMusicSlot(Mod, "Musics/TuskBiome");
+                Music = Common.MythContent.QuickMusic("TuskBiome");
             }
         }
         public override void AI()

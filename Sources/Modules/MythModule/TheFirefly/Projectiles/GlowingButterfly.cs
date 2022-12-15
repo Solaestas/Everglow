@@ -350,9 +350,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                  var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
                  ef.Parameters["uTransform"].SetValue(model * projection);
                  ef.Parameters["uTime"].SetValue(-(float)Main.time * 0.03f + Projectile.ai[0]);
-                 Texture2D Blue = ModContent.Request<Texture2D>("MythMod/UIImages/heatmapBlue").Value;
-                 Texture2D Shape = ModContent.Request<Texture2D>("MythMod/UIImages/Lightline").Value;
-                 Texture2D Mask = ModContent.Request<Texture2D>("MythMod/UIImages/IceTrace").Value;
+                 Texture2D Blue = ModContent.Request<Texture2D>("MythMod/UIimages/heatmapBlue").Value;
+                 Texture2D Shape = ModContent.Request<Texture2D>("MythMod/UIimages/Lightline").Value;
+                 Texture2D Mask = ModContent.Request<Texture2D>("MythMod/UIimages/IceTrace").Value;
                  Main.graphics.GraphicsDevice.Textures[0] = Blue;
                  Main.graphics.GraphicsDevice.Textures[1] = Shape;
                  Main.graphics.GraphicsDevice.Textures[2] = Mask;

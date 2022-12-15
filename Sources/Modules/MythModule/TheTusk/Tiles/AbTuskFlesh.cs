@@ -65,7 +65,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
             }
             if (RandomCheck <= 0)
             {
-                if (NPC.CountNPCS(ModContent.NPCType<NPCs.BloodTusk.BloodTusk>()) + NPC.CountNPCS(ModContent.NPCType<NPCs.BloodTusk.TuskCooling>()) < 1)
+                if (NPC.CountNPCS(ModContent.NPCType<NPCs.Bosses.BloodTusk.BloodTusk>()) + NPC.CountNPCS(ModContent.NPCType<NPCs.Bosses.BloodTusk.TuskCooling>()) < 1)
                 {
                     for (int x = -30; x < 31; x++)
                     {
@@ -73,7 +73,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
                         {
                             if (Main.tile[i + x, j + y].TileType == (ushort)ModContent.TileType<Tiles.TuskPanF>())
                             {
-                                NPC.NewNPC(null, i * 16, j * 16, ModContent.NPCType<NPCs.BloodTusk.BloodTusk>());
+                                NPC.NewNPC(null, i * 16, j * 16, ModContent.NPCType<NPCs.Bosses.BloodTusk.BloodTusk>());
                                 RandomCheck = 3600;
                                 return;
                             }

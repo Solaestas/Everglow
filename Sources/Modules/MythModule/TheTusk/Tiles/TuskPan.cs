@@ -55,7 +55,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
             }
 
             Player player = Main.LocalPlayer;
-            Texture2D BaseCo1 = ModContent.Request<Texture2D>("MythMod/UIImages/ForgeWave").Value;
+            Texture2D BaseCo1 = ModContent.Request<Texture2D>("MythMod/UIimages/ForgeWave").Value;
             Texture2D Sp1a = ModContent.Request<Texture2D>("MythMod/Tiles/StonePanBottomLine").Value;
             Texture2D Sp1b = ModContent.Request<Texture2D>("MythMod/Tiles/StonePanBottomRedLight").Value;
             Texture2D Sp1c = ModContent.Request<Texture2D>("MythMod/Tiles/StonePanBottomFace").Value;
@@ -247,42 +247,42 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
                 SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, new Vector2(i * 16 + 0, j * 16 - 72));
                 Vector2 vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28);
                 Vector2 vF2 = new Vector2(0, Main.rand.NextFloat(0, 45f)).RotatedByRandom(6.28);
-                Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("MythMod/StonePanBreak1").Type, 1f);
+                Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Sources/Modules/MythModule/TheTusk/Gores/StonePanBreak1").Type, 1f);
                 vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28);
                 vF2 = new Vector2(0, Main.rand.NextFloat(0, 45f)).RotatedByRandom(6.28);
-                Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("MythMod/StonePanBreak1").Type, 1f);
+                Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Sources/Modules/MythModule/TheTusk/Gores/StonePanBreak1").Type, 1f);
                 vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28);
                 vF2 = new Vector2(0, Main.rand.NextFloat(0, 45f)).RotatedByRandom(6.28);
-                Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("MythMod/StonePanBreak2").Type, 1f);
+                Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Sources/Modules/MythModule/TheTusk/Gores/StonePanBreak2").Type, 1f);
                 vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28);
                 vF2 = new Vector2(0, Main.rand.NextFloat(0, 45f)).RotatedByRandom(6.28);
-                Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("MythMod/StonePanBreak3").Type, 1f);
+                Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Sources/Modules/MythModule/TheTusk/Gores/StonePanBreak3").Type, 1f);
                 vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28);
                 vF2 = new Vector2(0, Main.rand.NextFloat(0, 45f)).RotatedByRandom(6.28);
-                Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("MythMod/StonePanBreak4").Type, 1f);
+                Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Sources/Modules/MythModule/TheTusk/Gores/StonePanBreak4").Type, 1f);
                 vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28);
                 vF2 = new Vector2(0, Main.rand.NextFloat(0, 45f)).RotatedByRandom(6.28);
-                Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("MythMod/StonePanBreak5").Type, 1f);
+                Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Sources/Modules/MythModule/TheTusk/Gores/StonePanBreak5").Type, 1f);
                 vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28);
                 vF2 = new Vector2(0, Main.rand.NextFloat(0, 45f)).RotatedByRandom(6.28);
-                Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("MythMod/StonePanBreak6").Type, 1f);
+                Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Sources/Modules/MythModule/TheTusk/Gores/StonePanBreak6").Type, 1f);
                 for (int h = 0; h < 7; h++)
                 {
                     vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28);
                     vF2 = new Vector2(0, Main.rand.NextFloat(0, 45f)).RotatedByRandom(6.28);
-                    Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("MythMod/StonePanBreak7").Type, 1f);
+                    Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Sources/Modules/MythModule/TheTusk/Gores/StonePanBreak7").Type, 1f);
                 }
                 for (int h = 0; h < 10; h++)
                 {
                     vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28);
                     vF2 = new Vector2(0, Main.rand.NextFloat(0, 45f)).RotatedByRandom(6.28);
-                    Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("MythMod/StonePanBreak8").Type, 1f);
+                    Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Sources/Modules/MythModule/TheTusk/Gores/StonePanBreak8").Type, 1f);
                 }
                 for (int h = 0; h < 10; h++)
                 {
                     vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28);
                     vF2 = new Vector2(0, Main.rand.NextFloat(0, 45f)).RotatedByRandom(6.28);
-                    Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("MythMod/StonePanBreak9").Type, 1f);
+                    Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Sources/Modules/MythModule/TheTusk/Gores/StonePanBreak9").Type, 1f);
                 }
                 for (int z = 0; z < 120; z++)
                 {
@@ -290,7 +290,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
                     vF2 = new Vector2(0, Main.rand.NextFloat(0, 45f)).RotatedByRandom(6.28);
                     Dust.NewDust(new Vector2(i * 16 + 0, j * 16 - 72) + vF2, 0, 0, 4, vF.X, vF.Y, 0, default(Color), Main.rand.NextFloat(0.8f, 2.1f));
                 }
-                int[] Ty = { ModContent.ItemType<Items.FixCoinDamage3>(), ModContent.ItemType<Items.FixCoinCrit3>(), ModContent.ItemType<Items.FixCoinDefense3>(), ModContent.ItemType<Items.FixCoinSpeed3>(), ModContent.ItemType<Items.Weapons.FixCoinMelee3>() };
+                int[] Ty = { ModContent.ItemType<MiscItems.FixCoins.FixCoinDamage3>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinCrit3>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinDefense3>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinSpeed3>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinMelee3>() };
                 Item.NewItem(null, new Vector2(i * 16 + 0, j * 16 - 72), Ty[Main.rand.Next(Ty.Length)]);
                 Item.NewItem(null, new Vector2(i * 16 + 0, j * 16 - 72), ItemID.GoldCoin, 5);
                 Main.tile[i, j].TileType = (ushort)ModContent.TileType<Tiles.TuskPanF>();
