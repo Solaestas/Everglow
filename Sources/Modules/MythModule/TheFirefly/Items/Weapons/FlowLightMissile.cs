@@ -11,7 +11,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 
         public override void SetDefaults()
         {
-            Item.damage = 13;
+            Item.damage = 33;
             Item.DamageType = DamageClass.Magic;
             Item.mana = 4;
             Item.width = 60;
@@ -26,13 +26,16 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             Item.rare = ItemRarityID.Green;
             Item.UseSound = SoundID.Item20;
             Item.autoReuse = true;
-            Item.shoot = ModContent.ProjectileType<Projectiles.CorruptDust>();
+            Item.shoot = ModContent.ProjectileType<Projectiles.FlowLightMissile>();
             Item.shootSpeed = 12f;
         }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, 0, player.GetCritChance(DamageClass.Magic));
+            if(player.ownedProjectileCounts[Item.shoot] < 1)
+            {
+                Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, 0, 0);
+            }
             return false;
         }
     }

@@ -110,7 +110,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 width = Projectile.timeLeft;
             }
 
-            DrawTexCircle_VFXBatch(sb, value * 450, width * 20, new Color(colorV, colorV * 0.7f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
+            DrawTexCircle_VFXBatch(sb, value * 450 * Projectile.ai[0], width * 20 * Projectile.ai[0], new Color(colorV, colorV * 0.7f * Projectile.ai[1], colorV, 0f), Projectile.Center - Main.screenPosition, t);
         }
     }
 }
