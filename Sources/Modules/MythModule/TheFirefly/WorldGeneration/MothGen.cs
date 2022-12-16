@@ -19,11 +19,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
     {
         public override void PostUpdateEverything()
         {
-            if(Main.mouseRight && Main.mouseRightRelease)
+            if (Main.mouseRight && Main.mouseRightRelease)
             {
                 //TestCode;
             }
-            
+
         }
         public static void QuickBuild(int x, int y, string Path)
         {
@@ -53,14 +53,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             Point pylonBottom = new Point(sbpp.X + Main.rand.Next(8, 16), sbpp.Y - Height / 2 + 8);
             ushort PylonType = (ushort)ModContent.TileType<ShabbyPylon>();
             PylonSystem.Instance.shabbyPylonEnable = false;
-            for (int a = 0;a < 12;a++)
+            for (int a = 0; a < 12; a++)
             {
                 pylonBottom.Y++;
-                if(Main.tile[pylonBottom.X,pylonBottom.Y].HasTile)
+                if (Main.tile[pylonBottom.X, pylonBottom.Y].HasTile)
                 {
                     pylonBottom.Y -= 1;
                     break;
-                }    
+                }
             }
             for (int i = -1; i <= 1; i++)
             {
@@ -103,6 +103,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             {
                 Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everglow.Common.WorldSystem.BuildMothCave");
                 BuildMothCave();
+                Main.spawnTileX = 723;
+                Main.spawnTileY = 226;
             }
         }
 
@@ -146,6 +148,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                 });
             }
             tag.Set("FIREFLY_FireflyTree", list);
+
+            //tag["DepartX"] = (int)(Main.LocalPlayer.Center.X - Main.LocalPlayer.velocity.X);
+            //tag["DepartY"] = (int)(Main.LocalPlayer.Center.Y - Main.LocalPlayer.velocity.Y);
         }
 
         public override void LoadWorldData(TagCompound tag)
@@ -167,6 +172,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                 }
                 fireFlyTree.InitTreeRopes(ropeData);
             }
+            //if(tag.ContainsKey("DepartX") && tag.ContainsKey("DepartY"))
+            //{
+            //    Main.LocalPlayer.position = new Vector2(tag.GetAsInt("DepartX"), tag.GetAsInt("DepartY"));
+            //}
         }
 
         /// <summary>
@@ -188,7 +197,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                     {
                         continue;
                     }
-                    if(y + b > Main.maxTilesY - 20)
+                    if (y + b > Main.maxTilesY - 20)
                     {
                         break;
                     }
@@ -277,17 +286,19 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
 
                                     ushort PylonType = (ushort)ModContent.TileType<Pylon.FireflyPylon>();
                                     var bottom = new Point(a + x, b + y);
-                                    for(int i = -1;i <=1;i++)
+                                    for (int i = -1; i <= 1; i++)
                                     {
                                         var PylonTile = Main.tile[bottom.X + i, bottom.Y + 1];
                                         PylonTile.TileType = (ushort)ModContent.TileType<DarkCocoon>();
                                         PylonTile.HasTile = true;
+                                        PylonTile.IsHalfBlock = false;
+                                        PylonTile.Slope = 0;
                                         WorldGen.TileFrame(bottom.X + i, bottom.Y + 1);
                                     }
 
-                                    TileObject.CanPlace(bottom.X, bottom.Y,PylonType,0,0,out var tileObject);
+                                    TileObject.CanPlace(bottom.X, bottom.Y, PylonType, 0, 0, out var tileObject);
                                     TileObject.Place(tileObject);
-                                    TileObjectData.CallPostPlacementPlayerHook(bottom.X, bottom.Y, PylonType,0,0,0, tileObject);
+                                    TileObjectData.CallPostPlacementPlayerHook(bottom.X, bottom.Y, PylonType, 0, 0, 0, tileObject);
                                 }
                                 break;
                         }
@@ -469,15 +480,15 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         /// <returns></returns>
         private static Point16 ShabbyPylonPos()
         {
-            int PoX = (int)(Main.rand.Next(20, 160) * (Main.rand.Next(2) - 0.5f) * 2 + Main.maxTilesX / 2);
+            int PoX = (int)(Main.rand.Next(40, 160) * (Main.rand.Next(2) - 0.5f) * 2 + Main.maxTilesX / 2);
             int PoY = 20;
 
             while (!IsTileSmooth(new Point(PoX, PoY)))
             {
-                PoX = (int)(Main.rand.Next(20, 240) * (Main.rand.Next(2) - 0.5f) * 2 + Main.maxTilesX / 2);
+                PoX = (int)(Main.rand.Next(40, 240) * (Main.rand.Next(2) - 0.5f) * 2 + Main.maxTilesX / 2);
                 for (int y = 20; y < Main.maxTilesY / 3; y++)
                 {
-                    if(Main.tile[PoX,y].HasTile)
+                    if (Main.tile[PoX, y].HasTile)
                     {
                         PoY = y;
                         break;
@@ -488,7 +499,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         }
         private static bool IsTileSmooth(Point point, int Width = 22)
         {
-            if(point.X > Main.maxTilesX - 20 || point.Y > Main.maxTilesY-20||point.X < 20|| point.Y < 20)
+            if (point.X > Main.maxTilesX - 20 || point.Y > Main.maxTilesY - 20 || point.X < 20 || point.Y < 20)
             {
                 return false;
             }
