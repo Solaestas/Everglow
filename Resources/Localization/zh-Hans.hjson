@@ -593,20 +593,6 @@ Mods:
 			#Plant Module Items
 			CactusBall : "旋转并掷出你的仙人掌球！\n击碎敌人护甲，并让它们流血"
 		}
-		ExtraItemTooltip :
-		{
-			UnfinishedItem : "[c/BA0022:This item is unfinished]"
-			MothEyeText0 : "[c/7FC1FF:While in the Firefly biome:]"
-			MothEyeText1 : "[c/7FC1FF:- Mana cost is reduced by 5%]"
-			MothEyeText2 : "[c/7FC1FF:- The effectiveness of mana sickness is reduced by 4]"
-			MothEyeText3 : "[c/7FC1FF:- All Firefly weapons deal 5% more damage]"
-			MothEyeText4 : "[c/7FC1FF:- Some Firefly-related items gain bonuses]"
-			FFBBadge0 : "[c/7FC1FF:'受到那只巨蛾怒气的影响,你的攻击变得更加狂野']"
-			FFBBadge1 : "[c/7FC1FF:Defense is lowered based on how much defense you currently have, up to -12]"
-			FFBBadge2 : "[c/7FC1FF:伤害增加18%]"
-			FFBBadge3 : "[c/7FC1FF:Increases melee speed by 10%]"
-			FFBBadge4 : "[c/7FC1FF:Base critical strike chance for melee weapons and whips is reduced to 0]"
-		}
 		BuffName : 
 		{
 			BanTransport : "现实之锁"
@@ -860,6 +846,25 @@ Mods:
 		}
 		ExtraTooltip : 
 		{
+			Misc :
+			{
+				UnfinishedItem : "[c/BA0022:This item is unfinished]"
+			}
+			FireflyItems :
+			{
+				MothEyeText0 : "[c/7FC1FF:While in the Firefly biome:]"
+				MothEyeText1 : "[c/7FC1FF:- Mana cost is reduced by 5%]"
+				MothEyeText2 : "[c/7FC1FF:- The effectiveness of mana sickness is reduced by 4]"
+				MothEyeText3 : "[c/7FC1FF:- All Firefly weapons deal 5% more damage]"
+				MothEyeText4 : "[c/7FC1FF:- Some Firefly-related items gain bonuses]"
+				MothEyeBonusText : "[c/7FC1FF:Bonus gained from {$Mods.Everglow.ItemName.MothEye}:]"
+				MEyeBonusTextMothBlade : "[c/7FC1FF:More moths appear from the blade]"
+				FFBBadge0 : "[c/7FC1FF:'受到那只巨蛾怒气的影响,你的攻击变得更加狂野']"
+				FFBBadge1 : "[c/7FC1FF:Defense is lowered based on how much defense you currently have, up to -12]"
+				FFBBadge2 : "[c/7FC1FF:伤害增加18%]"
+				FFBBadge3 : "[c/7FC1FF:Increases melee speed by 10%]"
+				FFBBadge4 : "[c/7FC1FF:Base critical strike chance for melee weapons and whips is reduced to 0]"
+			}
 			Spellbook : 
 			{
 				WaterBolt : 

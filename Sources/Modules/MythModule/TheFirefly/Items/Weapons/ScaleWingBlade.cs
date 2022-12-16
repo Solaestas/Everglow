@@ -90,8 +90,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
                     {
                         tooltips.AddRange(new TooltipLine[]
                         {
-                            new(Everglow.Instance, "MothEyeBonusText", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.MothEyeBonusText")),
-                            new(Everglow.Instance, "MothEyeBladeBonus", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.MEyeBonusTextMothBlade")),
+                            new(Everglow.Instance, "MothEyeBonusText", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeBonusText")),
+                            new(Everglow.Instance, "MothEyeBladeBonus", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextMothBlade")),
                         });
                     }
                 }
