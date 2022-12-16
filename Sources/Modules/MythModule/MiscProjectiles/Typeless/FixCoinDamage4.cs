@@ -74,7 +74,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Typeless
             for (int h = 0; h < 5; h++)
             {
                 Vector2 vF = new Vector2(0, Main.rand.NextFloat(0, 2f)).RotatedByRandom(3.14159);
-                Gore.NewGore(null, Projectile.position, vF, ModContent.Find<ModGore>("MythMod/CoinFrame" + (h % 3 + 1).ToString()).Type, 1f);
+                Gore.NewGore(null, Projectile.position, vF, ModContent.Find<ModGore>("Everglow/Sources/Modules/MythModule/MiscGore/CoinFrame" + (h % 3 + 1).ToString()).Type, 1f);
             }
             Player player = Main.player[Projectile.owner];
             int X0 = Main.rand.Next(58);
@@ -211,9 +211,9 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Typeless
                     var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
                     ef.Parameters["uTransform"].SetValue(model * projection);
                     ef.Parameters["uTime"].SetValue(-(float)Main.time * 0.03f + Projectile.ai[0]);
-                    Texture2D Purple = ModContent.Request<Texture2D>("MythMod/UIimages/heatmapColdPurple").Value;
-                    Texture2D Shape = ModContent.Request<Texture2D>("MythMod/UIimages/Lightline").Value;
-                    Texture2D Mask = ModContent.Request<Texture2D>("MythMod/UIimages/IceTrace").Value;
+                    Texture2D Purple = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/heatmapColdPurple").Value;
+                    Texture2D Shape = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/Lightline").Value;
+                    Texture2D Mask = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/IceTrace").Value;
                     Main.graphics.GraphicsDevice.Textures[0] = Purple;
                     Main.graphics.GraphicsDevice.Textures[1] = Shape;
                     Main.graphics.GraphicsDevice.Textures[2] = Mask;
@@ -227,15 +227,15 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Typeless
                     Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
                 }
             }
-            Texture2D LightE = ModContent.Request<Texture2D>("MythMod/UIimages/LightEffect").Value;
+            Texture2D LightE = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/LightEffect").Value;
             Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(0.21f * Stre * Stre, 0, 0.3f * Stre * Stre, 0), -(float)(Math.Sin(Main.time / 26d)) + 0.6f, new Vector2(128f, 128f), 0.5f + (float)(0.25 * Math.Sin(Main.time / 26d)), SpriteEffects.None, 0);
             Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(0.56f * Stre * Stre, 0, 0.8f * Stre * Stre, 0), (float)(Math.Sin(Main.time / 12d + 2)) + 1.6f, new Vector2(128f, 128f), 0.5f + (float)(0.25 * Math.Sin(Main.time / 26d)), SpriteEffects.None, 0);
             Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(0.21f * Stre * Stre, 0, 0.3f * Stre * Stre, 0), (float)Math.PI / 2f + (float)(Main.time / 9d), new Vector2(128f, 128f), 0.5f + (float)(0.25 * Math.Sin(Main.time / 26d + 1.57)), SpriteEffects.None, 0);
             Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(0.56f * Stre * Stre, 0, 0.8f * Stre * Stre, 0), (float)(Main.time / 26d), new Vector2(128f, 128f), 0.5f + (float)(0.25 * Math.Sin(Main.time / 26d + 3.14)), SpriteEffects.None, 0);
             Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(0.56f * Stre * Stre, 0, 0.8f * Stre * Stre, 0), -(float)(Main.time / 26d), new Vector2(128f, 128f), 0.5f + (float)(0.25 * Math.Sin(Main.time / 26d + 4.71)), SpriteEffects.None, 0);
             Texture2D Ball = (Texture2D)ModContent.Request<Texture2D>(Texture);
-            Texture2D Circle = ModContent.Request<Texture2D>("Everglow.Sources.Modules.MythModule.MiscProjectiles.Typeless/FixCoinFramework").Value;
-            Texture2D Light = ModContent.Request<Texture2D>("Everglow.Sources.Modules.MythModule.MiscProjectiles.Typeless/FixCoinLight4").Value;
+            Texture2D Circle = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscProjectiles/Typeless/FixCoinFramework").Value;
+            Texture2D Light = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscProjectiles/Typeless/FixCoinLight4").Value;
             Color color = Lighting.GetColor((int)(Projectile.Center.X / 16d), (int)(Projectile.Center.Y / 16d));
             color = Projectile.GetAlpha(color) * ((255 - Projectile.alpha) / 255f);
             Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color((int)(255 * Stre2), (int)(255 * Stre2), (int)(255 * Stre2), 0), Projectile.rotation, new Vector2(56f, 56f), Projectile.scale, SpriteEffects.None, 0);

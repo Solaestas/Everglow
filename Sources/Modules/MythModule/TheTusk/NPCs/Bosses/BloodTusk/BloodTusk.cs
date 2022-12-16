@@ -2044,6 +2044,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                 {
                     Music = Common.MythContent.QuickMusic("TuskFighting");
                 }
+                Main.NewText("The Tusk has awoken!", 175, 75, 255);
                 NPC.NewNPC(null, (int)NPC.Center.X - 800, (int)NPC.Center.Y - 200, ModContent.NPCType<TuskWallLeft>());
                 NPC.NewNPC(null, (int)NPC.Center.X + 800, (int)NPC.Center.Y - 200, ModContent.NPCType<TuskWallRight>());
             }

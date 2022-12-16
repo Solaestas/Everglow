@@ -121,9 +121,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
                 zero = Vector2.Zero;
             }
 
-            Texture2D Tdoor = ModContent.Request<Texture2D>("MythMod/Tiles/CosmicFlame").Value;
-            Texture2D Tdoor2 = ModContent.Request<Texture2D>("MythMod/Tiles/CosmicVort").Value;
-            Texture2D Tdoor3 = ModContent.Request<Texture2D>("MythMod/Tiles/CosmicPerlin").Value;
+            Texture2D Tdoor = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/Tusk/CosmicFlame").Value;
+            Texture2D Tdoor2 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/Tusk/CosmicVort").Value;
+            Texture2D Tdoor3 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/Tusk/CosmicPerlin").Value;
             Vector2 Correction = new Vector2(-186f, -260f);
             Main.spriteBatch.Draw(Tdoor, new Vector2(TileI * 16, TileJ * 16) + Correction - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 30f, new Vector2(56), 65f / 45f, SpriteEffects.None, 0f);
             Main.spriteBatch.Draw(Tdoor, new Vector2(TileI * 16, TileJ * 16) + Correction - Main.screenPosition + zero, null, new Color(100, 100, 100, 0), -(float)Main.time / 20f, new Vector2(56), 65f / 45f, SpriteEffects.None, 0f);

@@ -55,16 +55,16 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
             }
 
             Player player = Main.LocalPlayer;
-            Texture2D BaseCo1 = ModContent.Request<Texture2D>("MythMod/UIimages/ForgeWave").Value;
-            Texture2D Sp1a = ModContent.Request<Texture2D>("MythMod/Tiles/StonePanBottomLine").Value;
-            Texture2D Sp1b = ModContent.Request<Texture2D>("MythMod/Tiles/StonePanBottomRedLight").Value;
-            Texture2D Sp1c = ModContent.Request<Texture2D>("MythMod/Tiles/StonePanBottomFace").Value;
-            Texture2D Sp2 = ModContent.Request<Texture2D>("MythMod/Tiles/StonePanPin").Value;
-            Texture2D SpL1 = ModContent.Request<Texture2D>("MythMod/Tiles/StonePanL1").Value;
-            Texture2D SpL2 = ModContent.Request<Texture2D>("MythMod/Tiles/StonePanL2").Value;
-            Texture2D SpL3 = ModContent.Request<Texture2D>("MythMod/Tiles/StonePanL3").Value;
-            Texture2D SpL4 = ModContent.Request<Texture2D>("MythMod/Tiles/StonePanL4").Value;
-            Texture2D SpIC = ModContent.Request<Texture2D>("MythMod/Tiles/StonePanStrick").Value;
+            Texture2D BaseCo1 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/Tusk/ForgeWave").Value;
+            Texture2D Sp1a = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Tiles/TileEffects/StonePanBottomLine").Value;
+            Texture2D Sp1b = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Tiles/TileEffects/StonePanBottomRedLight").Value;
+            Texture2D Sp1c = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Tiles/TileEffects/StonePanBottomFace").Value;
+            Texture2D Sp2 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Tiles/TileEffects/StonePanPin").Value;
+            Texture2D SpL1 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Tiles/TileEffects/StonePanL1").Value;
+            Texture2D SpL2 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Tiles/TileEffects/StonePanL2").Value;
+            Texture2D SpL3 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Tiles/TileEffects/StonePanL3").Value;
+            Texture2D SpL4 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Tiles/TileEffects/StonePanL4").Value;
+            Texture2D SpIC = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Tiles/TileEffects/StonePanStrick").Value;
             Vector2 origin = new Vector2(56);
             float num3 = (float)Math.Sin((double)(Main.GlobalTimeWrappedHourly * 6.28318548f / 5f));
             Color color = Lighting.GetColor(i, j);
@@ -153,7 +153,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
             Vector2 CorrectedMouseScreenCenter = (Main.MouseScreen - Main.screenTarget.Size() / 2f) / vZoom.X;//鼠标的中心指向位
             Vector2 CorrectedMouseWorld = CorrectedMouseScreenCenter + ScreenCenter;//鼠标世界坐标校正
 
-            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("MythMod/Tiles/Symbol" + Symbol.ToString()).Value, new Vector2(i * 16 + 6, j * 16 - 68) + zero - Main.screenPosition, null, new Color(150 + (int)v.X, 150 + (int)v.X, 150 + (int)v.X, 0), 0f, origin, 1f, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Tiles/TileEffects/Symbol" + Symbol.ToString()).Value, new Vector2(i * 16 + 6, j * 16 - 68) + zero - Main.screenPosition, null, new Color(150 + (int)v.X, 150 + (int)v.X, 150 + (int)v.X, 0), 0f, origin, 1f, SpriteEffects.None, 0f);
             if ((CorrectedMouseWorld - (new Vector2(i * 16 + 6, j * 16 - 64) + new Vector2(0, -50))).Length() < 12 * vZoom.X)
             {
                 Main.spriteBatch.Draw(SpL1, new Vector2(i * 16 + 6, j * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), 0, origin, 1f, SpriteEffects.None, 0f);
@@ -307,9 +307,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
                 zero = Vector2.Zero;
             }
 
-            Texture2D Tdoor = ModContent.Request<Texture2D>("MythMod/Tiles/CosmicFlame").Value;
-            Texture2D Tdoor2 = ModContent.Request<Texture2D>("MythMod/Tiles/CosmicVort").Value;
-            Texture2D Tdoor3 = ModContent.Request<Texture2D>("MythMod/Tiles/CosmicPerlin").Value;
+            Texture2D Tdoor = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/Tusk/CosmicFlame").Value;
+            Texture2D Tdoor2 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/Tusk/CosmicVort").Value;
+            Texture2D Tdoor3 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/Tusk/CosmicPerlin").Value;
             if (CanK)
             {
                 Killing--;
