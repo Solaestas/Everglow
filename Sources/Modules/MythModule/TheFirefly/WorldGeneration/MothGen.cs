@@ -231,6 +231,20 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                                     TEModdedPylon moddedPylon = ModContent.GetInstance<FireflyPylonTileEntity>();
                                     moddedPylon.Position = new Point16(a + x, b + y);
                                     //TODO:I need help to generate map Icon;
+
+                                    ushort PylonType = (ushort)ModContent.TileType<Pylon.FireflyPylon>();
+                                    var bottom = new Point(a + x, b + y);
+                                    for(int i = -1;i <=1;i++)
+                                    {
+                                        var PylonTile = Main.tile[bottom.X + i, bottom.Y + 1];
+                                        PylonTile.TileType = (ushort)ModContent.TileType<DarkCocoon>();
+                                        PylonTile.HasTile = true;
+                                        WorldGen.TileFrame(bottom.X + i, bottom.Y + 1);
+                                    }
+
+                                    TileObject.CanPlace(bottom.X, bottom.Y,PylonType,0,0,out var tileObject);
+                                    TileObject.Place(tileObject);
+                                    TileObjectData.CallPostPlacementPlayerHook(bottom.X, bottom.Y, PylonType,0,0,0, tileObject);
                                 }
                                 break;
                         }
