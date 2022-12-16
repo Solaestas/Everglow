@@ -97,7 +97,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                 }
                 if (Main.masterMode)
                 {
-                    Dam = 200;
+                    Dam = 250;
                 }
             }
         }

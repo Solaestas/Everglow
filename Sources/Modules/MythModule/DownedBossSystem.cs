@@ -12,29 +12,28 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk
     {
         public static bool downedTusk = false;
         public static bool downedMoth = false;
+        public static bool downedAcytaea = false;
         public static string TuskName;
         public static string MothName;
+        public static string AcyName;
         // public static bool downedOtherBoss = false;
         public override void OnWorldLoad()
         {
             if (Language.ActiveCulture.Name == "zh-Hans")
             {
                 TuskName = "鲜血獠牙";
+                MothName = "腐檀巨蛾";
+                AcyName = "雅思塔亚";
             }
             else
             {
                 TuskName = "Bloody Tusk";
-            }
-            if (Language.ActiveCulture.Name == "zh-Hans")
-            {
-                MothName = "腐檀巨蛾";
-            }
-            else
-            {
                 MothName = "Corrupt Moth";
+                AcyName = "Acytaea";
             }
             downedTusk = false;
             downedMoth = false;
+            downedAcytaea = false;
             // downedOtherBoss = false;
         }
 
@@ -42,6 +41,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk
         {
             downedTusk = false;
             downedMoth = false;
+            downedAcytaea = false;
             // downedOtherBoss = false;
         }
 
@@ -51,6 +51,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk
         {
             downedTusk = tag.ContainsKey("downedTusk");
             downedMoth = tag.ContainsKey("downedMoth");
+            downedAcytaea = tag.ContainsKey("downedAcytaea");
             // downedOtherBoss = tag.ContainsKey("downedOtherBoss");
         }
         public override void SaveWorldData(TagCompound tag)
@@ -62,6 +63,10 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk
             if (downedMoth)
             {
                 tag["downedMoth"] = true;
+            }
+            if (downedAcytaea)
+            {
+                tag["downedAcytaea"] = true;
             }
 
             // if (downedOtherBoss) {
