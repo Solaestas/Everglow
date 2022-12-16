@@ -21,15 +21,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         {
             if(Main.mouseRight && Main.mouseRightRelease)
             {
-                //QuickBuild((int)Main.MouseWorld.X / 16, (int)Main.MouseWorld.Y / 16, "MapIOResources/ShabbyPylonWithCastle22x22Style0.mapio");
-                for (int i = 0; i < 7;i++)
-                {
-                    //QuickBuild((int)Main.MouseWorld.X / 16 + i * 40, (int)Main.MouseWorld.Y / 16, "MapIOResources/ShabbyCastle0" + (i + 1).ToString() + ".mapio");
-                }
-
-                //MythUtils.PlaceFrameImportantTiles((int)Main.MouseWorld.X / 16, (int)Main.MouseWorld.Y / 16, 3, 9, ModContent.TileType<BoCPostAndBead>());
-
-
+                //TestCode;
             }
             
         }
@@ -50,7 +42,56 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         {
 
         }
+        public static void BuildShabbyCastle()
+        {
+            Point16 sbpp = ShabbyPylonPos();
+            string Path = "MapIOResources/ShabbyCastle0" + (Main.rand.Next(7) + 1) + ".mapio";
+            MapIO mapIO = new MapIO(sbpp.X, sbpp.Y);
+            int Height = mapIO.ReadHeight(Everglow.Instance.GetFileStream("Sources/Modules/MythModule/" + Path));
+            QuickBuild(sbpp.X, sbpp.Y - Height / 2, Path);
 
+            Point pylonBottom = new Point(sbpp.X + Main.rand.Next(8, 16), sbpp.Y - Height / 2 + 8);
+            ushort PylonType = (ushort)ModContent.TileType<ShabbyPylon>();
+            PylonSystem.Instance.shabbyPylonEnable = false;
+            for (int a = 0;a < 12;a++)
+            {
+                pylonBottom.Y++;
+                if(Main.tile[pylonBottom.X,pylonBottom.Y].HasTile)
+                {
+                    pylonBottom.Y -= 1;
+                    break;
+                }    
+            }
+            for (int i = -1; i <= 1; i++)
+            {
+                var PylonTile = Main.tile[pylonBottom.X + i, pylonBottom.Y + 1];
+                PylonTile.TileType = TileID.GrayBrick;
+                PylonTile.HasTile = true;
+                WorldGen.TileFrame(pylonBottom.X + i, pylonBottom.Y + 1);
+            }
+
+            TileObject.CanPlace(pylonBottom.X, pylonBottom.Y, PylonType, 0, 0, out var tileObject);
+            TileObject.Place(tileObject);
+            TileObjectData.CallPostPlacementPlayerHook(pylonBottom.X, pylonBottom.Y, PylonType, 0, 0, 0, tileObject);
+            //switch (Main.rand.Next(5))
+            //{
+            //    case 0:
+            //        QuickBuild(sbpp.X, sbpp.Y - 13, "MapIOResources/ShabbyPylonWithCastle20x23Style2.mapio");
+            //        break;
+            //    case 1:
+            //        QuickBuild(sbpp.X, sbpp.Y - 13, "MapIOResources/ShabbyPylonWithCastle21x26Style1.mapio");
+            //        break;
+            //    case 2:
+            //        QuickBuild(sbpp.X, sbpp.Y - 13, "MapIOResources/ShabbyPylonWithCastle22x22Style0.mapio");
+            //        break;
+            //    case 3:
+            //        QuickBuild(sbpp.X, sbpp.Y - 13, "MapIOResources/ShabbyPylonWithCastle22x26Style3.mapio");
+            //        break;
+            //    case 4:
+            //        QuickBuild(sbpp.X, sbpp.Y - 13, "MapIOResources/ShabbyPylonWithCastle22x26Style4.mapio");
+            //        break;
+            //}
+        }
 
         internal class MothLandGenPass : GenPass
         {
@@ -75,8 +116,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             {
                 Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everglow.Common.WorldSystem.BuildWorldMothCave");
                 BuildWorldMothCave();
+                BuildShabbyCastle();
             }
         }
+
 
         public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight) => tasks.Add(new WorldMothLandGenPass());
 
@@ -330,12 +373,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
 
         public static void BuildWorldMothCave()
         {
-            //Point16 AB = CocoonPos();
-            int a = 2000;//AB.X;
-            int b = 600;//AB.Y;
+            Point16 AB = CocoonPos();
+            int a = AB.X;
+            int b = AB.Y;
             MothLand mothLand = ModContent.GetInstance<MothLand>();
-            mothLand.fireflyCenterX = a + 140;
-            mothLand.fireflyCenterY = b + 140;
+            mothLand.fireflyCenterX = a;
+            mothLand.fireflyCenterY = b;
             Main.statusText = "CocoonKillStart";
             ShapeTile("WorldCocoonKill.bmp", a, b, 0);
             Main.statusText = "CocoonStart";
@@ -420,6 +463,50 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             return new Point16(PoX, PoY);
         }
 
+        /// <summary>
+        /// 获取一个出生地附近的平坦地面
+        /// </summary>
+        /// <returns></returns>
+        private static Point16 ShabbyPylonPos()
+        {
+            int PoX = (int)(Main.rand.Next(20, 160) * (Main.rand.Next(2) - 0.5f) * 2 + Main.maxTilesX / 2);
+            int PoY = 20;
+
+            while (!IsTileSmooth(new Point(PoX, PoY)))
+            {
+                PoX = (int)(Main.rand.Next(20, 240) * (Main.rand.Next(2) - 0.5f) * 2 + Main.maxTilesX / 2);
+                for (int y = 20; y < Main.maxTilesY / 3; y++)
+                {
+                    if(Main.tile[PoX,y].HasTile)
+                    {
+                        PoY = y;
+                        break;
+                    }
+                }
+            }
+            return new Point16(PoX, PoY);
+        }
+        private static bool IsTileSmooth(Point point, int Width = 22)
+        {
+            if(point.X > Main.maxTilesX - 20 || point.Y > Main.maxTilesY-20||point.X < 20|| point.Y < 20)
+            {
+                return false;
+            }
+            int x = point.X;
+            int y = point.Y;
+            var LeftTile = Main.tile[x, y];
+            var RightTile = Main.tile[x + Width, y];
+            var LeftTileUp = Main.tile[x, y - 1];
+            var RightTileUp = Main.tile[x + Width, y - 1];
+            if (!LeftTileUp.HasTile && !RightTileUp.HasTile)
+            {
+                if (LeftTile.HasTile && RightTile.HasTile)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         private static void SmoothMothTile(int a, int b, int width = 256, int height = 512)
         {
             for (int y = 0; y < width; y += 1)

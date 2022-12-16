@@ -96,7 +96,7 @@ internal class ShabbyPylonUpdate : GlobalNPC
                 PylonSystem.Instance.shabbyPylonEnable = true;
                 PylonSystem.Instance.firstEnableAnimation = true;
 
-                Main.NewText("Repaired");
+                Main.NewText("Something happen at a mystery pylon.");
             }
         }
     }

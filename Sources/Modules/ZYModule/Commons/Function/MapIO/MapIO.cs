@@ -179,6 +179,27 @@ internal class MapIO
         height = reader.ReadInt32();
         return height;
     }
+
+    public int ReadWidth(Stream stream)
+    {
+        var entry = new ModEntry();
+        using var zip = new GZipStream(stream, CompressionMode.Decompress);
+        using var reader = new BinaryReader(zip);
+        entry.Read(reader);
+        width = reader.ReadInt32();
+        height = reader.ReadInt32(); ;
+        return width;
+    }
+    public int ReadHeight(Stream stream)
+    {
+        var entry = new ModEntry();
+        using var zip = new GZipStream(stream, CompressionMode.Decompress);
+        using var reader = new BinaryReader(zip);
+        entry.Read(reader);
+        width = reader.ReadInt32();
+        height = reader.ReadInt32();
+        return height;
+    }
     /// <summary>
     /// 写入<paramref name="accessor"/>访问到的所有Tile，并且采取相邻相同Tile统一保存
     /// </summary>
