@@ -812,10 +812,13 @@
 				Tooltip : "Choose your preferred Bloody Tusk theme music to replace\nOptions: Original Theme, Old Theme\nThis setting won't take effect if The Tusk is currently alive\nNOTE: This config is not fully set up yet and therefore does not work at the moment"
 			}
 		}
+		InfoDisplayName : 
+		{
+			FoodSatietyInfoDisplay : "Satiety"
+			ThirstystateInfoDisplay : "State of Thirst"
+		}
 		InfoDisplay:
 		{
-			Satiety : "Satiety"
-			StateOfThirst : "State of Thirst"
 			Thirsty : "You are thirsty"
 			NotThirsty : "You don't want to drink"
 		}

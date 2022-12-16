@@ -2,12 +2,6 @@
 {
     internal class ThirstystateInfoDisplay : InfoDisplay
     {
-        public override void SetStaticDefaults()
-        {
-            InfoName.SetDefault(Terraria.Localization.Language.GetTextValue("Mods.Everglow.InfoDisplay.StateOfThirst"));
-        }
-
-
         public override bool Active()
         {
             return Main.LocalPlayer.GetModPlayer<ThirstystateInfoDisplayplayer>().ShowThirstystate;

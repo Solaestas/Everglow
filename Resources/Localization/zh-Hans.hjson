@@ -848,10 +848,13 @@ Mods:
 				Tooltip : "Choose your preferred Bloody Tusk theme music to replace\nOptions: Original Theme, Old Theme\nThis setting won't take effect if The Tusk is currently alive\nNOTE: This config is not fully set up yet and therefore does not work at the moment"
 			}
 		}
+		InfoDisplayName : 
+		{
+			FoodSatietyInfoDisplay : "饱食度"
+			ThirstystateInfoDisplay : "口渴程度"
+		}
 		InfoDisplay:
 		{
-			Satiety : "饱食度"
-			StateOfThirst : "口渴程度"
 			Thirsty : "你最好喝点什么"
 			NotThirsty : "你不想喝东西"
 		}

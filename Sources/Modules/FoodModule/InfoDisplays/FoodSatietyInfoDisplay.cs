@@ -2,12 +2,6 @@
 {
     internal class FoodSatietyInfoDisplay : InfoDisplay
     {
-        public override void SetStaticDefaults()
-        {
-            InfoName.SetDefault(Terraria.Localization.Language.GetTextValue("Mods.Everglow.InfoDisplay.Satiety"));
-        }
-
-
         public override bool Active()
         {
             return Main.LocalPlayer.GetModPlayer<FoodSatietyInfoDisplayplayer>().ShowCurrentSatiety;
@@ -17,7 +11,7 @@
         {
 
             int CurrentSatiety = Main.LocalPlayer.GetModPlayer<FoodModPlayer>().CurrentSatiety;
-            return $"{CurrentSatiety}"+ Terraria.Localization.Language.GetTextValue("Mods.Everglow.InfoDisplay.Satiety");
+            return $"{CurrentSatiety} {Terraria.Localization.Language.GetTextValue("Mods.Everglow.InfoDisplay.Satiety")}";
         }
     }
 
