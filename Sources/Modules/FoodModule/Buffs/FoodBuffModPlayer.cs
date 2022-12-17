@@ -4,6 +4,11 @@ using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
 using Everglow.Sources.Modules.MythModule;
 using Terraria.DataStructures;
 using Terraria.Audio;
+using Everglow.Resources.ItemList.Weapons.Ranged;
+using Everglow.Resources.NPCList.EventNPCs;
+using Mono.Cecil;
+using Everglow.Sources.Modules.FoodModule.Buffs.ModDrinkBuffs;
+using Everglow.Sources.Modules.FoodModule.Buffs.ModFoodBuffs;
 
 namespace Everglow.Sources.Modules.FoodModule.Buffs
 {
@@ -29,6 +34,22 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
         public bool BloodyMoscatoBuff;
         public bool FriedEggBuff;
         public bool CherryBuff;
+        public bool PiercoldWindBuff;
+        public bool PurpleHooterBuff;
+        public bool QuinceMarryBuff;
+        public bool RedWineBuff;
+        public bool SunriseBuff;
+        public bool TricolourBuff;
+        public bool BlueHawaiiBuff;
+        public bool DreamYearningBuff;
+        public bool KiwiJuiceBuff;
+        public bool KiwiFruitBuff;
+        public bool KiwiIceCreamBuff;
+        public bool MangosteenBuff;
+        public bool DurianBuff;
+        public bool StinkyTofuBuff;
+        public bool StrawberryBuff;
+        public bool StrawberryIcecreamBuff;
 
         public static float CritDamage;
         public static float AddCritDamage;
@@ -55,10 +76,25 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
             BloodyMoscatoBuff = false;
             FriedEggBuff = false;
             CherryBuff = false;
+            PiercoldWindBuff = false;
+            PurpleHooterBuff = false;
+            QuinceMarryBuff = false;
+            RedWineBuff = false;
+            SunriseBuff = false;
+            TricolourBuff = false;
+            BlueHawaiiBuff = false;
+            DreamYearningBuff = false;
+            KiwiJuiceBuff = false;
+            KiwiFruitBuff = false;
+            KiwiIceCreamBuff = false;
+            MangosteenBuff = false;
+            DurianBuff=false;
+            StrawberryBuff = false;
+            StrawberryIcecreamBuff = false;
 
             CritDamage = 1f;
             AddCritDamage = 0;
-    }
+        }
         public override void ResetEffects()
         {
             WingTimeModifier = 1f;
@@ -81,9 +117,37 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
             BloodyMoscatoBuff = false;
             FriedEggBuff = false;
             CherryBuff = false;
+            PiercoldWindBuff = false;
+            PurpleHooterBuff = false;
+            QuinceMarryBuff = false;
+            RedWineBuff = false;
+            SunriseBuff = false;
+            TricolourBuff = false;
+            BlueHawaiiBuff = false;
+            DreamYearningBuff = false;
+            KiwiJuiceBuff = false;
+            KiwiFruitBuff = false;
+            KiwiIceCreamBuff = false;
+            MangosteenBuff = false;
+            DurianBuff = false;
+            StrawberryBuff = false;
+            StrawberryIcecreamBuff = false;
 
             CritDamage = 1f;
             AddCritDamage = 0;
+
+            foreach (NPC target in Main.npc)
+            {
+                float Dis = (target.Center - Player.Center).Length();
+
+                if (Dis < 300)
+                {
+                    if (Main.rand.NextBool(300))
+                    {
+                        target.AddBuff(BuffID.Confused, 600);
+                    }
+                }
+            }
         }
 
         public override void PostUpdate()
@@ -140,7 +204,7 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
                 Player.HealEffect(5, true);
                 Player.statLife += 1;
             }
-
+            base.OnHitNPC(item, target, damage, knockback, crit);
         }
         public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
         {
@@ -152,10 +216,10 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
             }
             if (BloodyMoscatoBuff)
             {
-                Player.HealEffect(5, true);
+                Player.HealEffect(2, true);
                 Player.statLife += 1;
             }
-
+            base.OnHitNPCWithProj( proj,  target,  damage,  knockback,  crit);
         }
         public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
         {
@@ -206,7 +270,7 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
             }
             base.Kill(damage, hitDirection, pvp, damageSource);
         }
-        
+
         public override void UpdateBadLifeRegen()
         {
             if (GrubSoupBuff)

@@ -28,7 +28,7 @@ namespace Everglow.Sources.Modules.FoodModule.Items.ModDrink
         public override void SetStaticDefaults() {
 			DisplayName.SetDefault("绿色风暴");
 
-			Tooltip.SetDefault("{$CommonItemTooltip.MediumStats}\n',别以为草便宜,没上规模前,它比苹果核桃什么的都贵'");
+			Tooltip.SetDefault("{$CommonItemTooltip.MediumStats}\n'别以为草便宜,没上规模前,它比苹果核桃什么的都贵。'");
 
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 5;
 

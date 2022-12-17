@@ -28,7 +28,7 @@ namespace Everglow.Sources.Modules.FoodModule.Items.ModDrink
         public override void SetStaticDefaults() {
 			DisplayName.SetDefault("日出");
 
-			Tooltip.SetDefault("{$CommonItemTooltip.MediumStats}\n'温暖又柔和'");
+			Tooltip.SetDefault("{$CommonItemTooltip.MediumStats}\n'阳光与明媚'");
 
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 5;
 			Main.RegisterItemAnimation(Type, new DrawAnimationVertical(int.MaxValue, 3));

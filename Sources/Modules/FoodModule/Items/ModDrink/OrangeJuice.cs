@@ -28,7 +28,7 @@ namespace Everglow.Sources.Modules.FoodModule.Items.ModDrink
         public override void SetStaticDefaults() {
 			DisplayName.SetDefault("橙汁");
 
-			Tooltip.SetDefault("{$CommonItemTooltip.MediumStats}\n'LCL'");
+			Tooltip.SetDefault("{$CommonItemTooltip.MediumStats}\n'嗯，有点像LCL'");
 
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 5;
 

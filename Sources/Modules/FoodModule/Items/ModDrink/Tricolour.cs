@@ -27,7 +27,7 @@ namespace Everglow.Sources.Modules.FoodModule.Items.ModDrink
         }
         public override void SetStaticDefaults() {
 			DisplayName.SetDefault("三色旗");
-			Tooltip.SetDefault("{$CommonItemTooltip.MediumStats}\n'复杂又专一'");
+			Tooltip.SetDefault("{$CommonItemTooltip.MediumStats}\n'复杂与专一'");
 
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 5;
 			Main.RegisterItemAnimation(Type, new DrawAnimationVertical(int.MaxValue, 3));
