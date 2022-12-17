@@ -4,8 +4,8 @@
     {
         public override void SetStaticDefaults()
         {
-            //DisplayName.SetDefault("AleBuff");
-            //Description.SetDefault("短时间内鞭子的范围和速度提升至2.5倍\n“耍酒疯”");
+            //DisplayName.SetDefault("GreenStormBuff");
+            //Description.SetDefault("短时间内鞭子的范围和速度提升至2.5倍\n“别以为草便宜,没上规模前,它比苹果核桃什么的都贵。”");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
         }
