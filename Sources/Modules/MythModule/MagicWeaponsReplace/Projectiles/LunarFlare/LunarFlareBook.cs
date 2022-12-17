@@ -8,6 +8,7 @@
             ItemType = ItemID.LunarFlareBook;
             ProjType = -1;
             effectColor = new Color(15, 125, 175, 0);
+            MulDamage = 2.5f;
         }
         public override void SpecialAI()
         {
