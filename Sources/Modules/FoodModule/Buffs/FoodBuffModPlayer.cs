@@ -92,6 +92,7 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
             KiwiIceCreamBuff = false;
             MangosteenBuff = false;
             DurianBuff = false;
+            StinkyTofuBuff = false;
             StrawberryBuff = false;
             StrawberryIcecreamBuff = false;
             CaramelPuddingBuff = false;
@@ -136,6 +137,7 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
             KiwiIceCreamBuff = false;
             MangosteenBuff = false;
             DurianBuff = false;
+            StinkyTofuBuff = false;
             StrawberryBuff = false;
             StrawberryIcecreamBuff = false;
             CaramelPuddingBuff = false;
@@ -144,19 +146,26 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
 
             CritDamage = 1f;
             AddCritDamage = 0;
-
-            foreach (NPC target in Main.npc)
+            if (StinkyTofuBuff)
             {
-                float Dis = (target.Center - Player.Center).Length();
-
-                if (Dis < 300)
+                foreach (NPC target in Main.npc)
                 {
-                    if (Main.rand.NextBool(300))
+                    float Dis = (target.Center - Player.Center).Length();
+
+                    if (Dis < 500)
                     {
-                        target.AddBuff(BuffID.Confused, 600);
+                        if (Main.rand.NextBool(100))
+                        {
+                            if (!target.buffImmune[BuffID.Confused])
+                            {
+                                target.AddBuff(BuffID.Confused, 600);
+                                target.velocity *= 0.5f;
+                            }
+                        }
                     }
                 }
             }
+
         }
 
         public override void PostUpdate()
