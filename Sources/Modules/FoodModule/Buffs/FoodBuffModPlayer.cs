@@ -50,6 +50,9 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
         public bool StinkyTofuBuff;
         public bool StrawberryBuff;
         public bool StrawberryIcecreamBuff;
+        public bool CaramelPuddingBuff;
+        public bool CantaloupeJellyBuff;
+        public bool GreenStormBuff;
 
         public static float CritDamage;
         public static float AddCritDamage;
@@ -88,9 +91,12 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
             KiwiFruitBuff = false;
             KiwiIceCreamBuff = false;
             MangosteenBuff = false;
-            DurianBuff=false;
+            DurianBuff = false;
             StrawberryBuff = false;
             StrawberryIcecreamBuff = false;
+            CaramelPuddingBuff = false;
+            CantaloupeJellyBuff = false;
+            GreenStormBuff = false;
 
             CritDamage = 1f;
             AddCritDamage = 0;
@@ -132,6 +138,9 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
             DurianBuff = false;
             StrawberryBuff = false;
             StrawberryIcecreamBuff = false;
+            CaramelPuddingBuff = false;
+            CantaloupeJellyBuff = false;
+            GreenStormBuff = false;
 
             CritDamage = 1f;
             AddCritDamage = 0;
@@ -219,7 +228,7 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
                 Player.HealEffect(2, true);
                 Player.statLife += 1;
             }
-            base.OnHitNPCWithProj( proj,  target,  damage,  knockback,  crit);
+            base.OnHitNPCWithProj(proj, target, damage, knockback, crit);
         }
         public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
         {
