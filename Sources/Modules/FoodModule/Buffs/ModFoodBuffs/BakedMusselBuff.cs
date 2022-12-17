@@ -4,17 +4,16 @@
     {
         public override void SetStaticDefaults()
         {
-            //DisplayName.SetDefault("AleBuff");
-            //Description.SetDefault("短时间内鞭子的范围和速度提升至2.5倍\n“耍酒疯”");
+            //DisplayName.SetDefault("BakedMusselBuff");
+            //Description.SetDefault("增加6%爆伤、4防御\n“似乎没那么生猛了”");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
         }
 
         public override void Update(Player player, ref int buffIndex)
         {
-            player.whipRangeMultiplier *= 2.5f;//
-            player.GetAttackSpeed(DamageClass.Summon) *= 2.5f;
-            
+            FoodBuffModPlayer.AddCritDamage += 0.06f;
+            player.statDefense += 4;
         }
     }
 }

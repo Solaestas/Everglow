@@ -4,17 +4,16 @@
     {
         public override void SetStaticDefaults()
         {
-            //DisplayName.SetDefault("AleBuff");
-            //Description.SetDefault("短时间内鞭子的范围和速度提升至2.5倍\n“耍酒疯”");
+            //DisplayName.SetDefault("ArcticshellfishWarshipBuff");
+            //Description.SetDefault("提升防御\n“美味的北极贝军舰”");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
         }
 
         public override void Update(Player player, ref int buffIndex)
         {
-            player.whipRangeMultiplier *= 2.5f;//
-            player.GetAttackSpeed(DamageClass.Summon) *= 2.5f;
-            
+            player.statDefense += 4; // 加4防御
+
         }
     }
 }
