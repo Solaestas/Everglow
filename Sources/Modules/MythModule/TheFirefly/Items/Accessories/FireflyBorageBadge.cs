@@ -59,14 +59,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
                 {
                     tooltips.AddRange(new TooltipLine[]
                     {
-                       new(Everglow.Instance, "FFBBadge0", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.FFBBadge0")),
-                       new(Everglow.Instance, "FFBBadge1", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.FFBBadge1")),
-                       new(Everglow.Instance, "FFBBadge2", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.FFBBadge2")),
-                       new(Everglow.Instance, "FFBBadge3", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.FFBBadge3")),
-                       new(Everglow.Instance, "FFBBadge4", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.FFBBadge4")),
+                       new(Everglow.Instance, "FFBBadge0", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.FFBBadge0")),
+                       new(Everglow.Instance, "FFBBadge1", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.FFBBadge1")),
+                       new(Everglow.Instance, "FFBBadge2", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.FFBBadge2")),
+                       new(Everglow.Instance, "FFBBadge3", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.FFBBadge3")),
+                       new(Everglow.Instance, "FFBBadge4", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.FFBBadge4")),
                     });
                 }
-                tooltips.Add(new TooltipLine(Everglow.Instance, "UnfinishedItem", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.UnfinishedItem")));
+                tooltips.Add(new TooltipLine(Everglow.Instance, "UnfinishedItem", Language.GetTextValue("Mods.Everglow.ExtraTooltip.Misc.UnfinishedItem")));
             }
             base.ModifyTooltips(tooltips);
         }
