@@ -108,7 +108,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
             {
                 NPC.alpha = 0;
                 wait--;
-                if (wait == 20)
+                if (wait == 5)
                 {
                     SoundEngine.PlaySound(SoundID.NPCDeath11.WithVolumeScale(.4f), NPC.Bottom);
                 }
@@ -118,11 +118,11 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                 NPC.damage = 30;
                 if (Main.expertMode)
                 {
-                    NPC.damage = 60;
+                    NPC.damage = 50;
                 }
                 if (Main.masterMode)
                 {
-                    NPC.damage = 90;
+                    NPC.damage = 70;
                 }
                 V *= 0.6f;
                 /*if ((player.Center - NPC.Center).Length() < 400)
@@ -152,7 +152,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                         NPC.active = false;
                     }
                 }
-                if (V.Y > 40)
+                if (V.Y > 20)
                 {
                     NPC.damage = 0;
                 }
