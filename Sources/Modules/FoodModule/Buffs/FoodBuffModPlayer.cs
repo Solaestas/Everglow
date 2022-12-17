@@ -1,4 +1,11 @@
-﻿namespace Everglow.Sources.Modules.FoodModule.Buffs
+﻿using Everglow.Sources.Modules.FoodModule.Buffs.VanillaFoodBuffs;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
+using Everglow.Sources.Modules.MythModule;
+using Terraria.DataStructures;
+using Terraria.Audio;
+
+namespace Everglow.Sources.Modules.FoodModule.Buffs
 {
     public class FoodBuffModPlayer : ModPlayer
     {
@@ -20,6 +27,8 @@
         public bool RoastedBirdBuff;
         public bool RoastedDuckBuff;
         public bool BloodyMoscatoBuff;
+        public bool FriedEggBuff;
+        public bool CherryBuff;
 
         public static float CritDamage;
         public static float AddCritDamage;
@@ -44,6 +53,8 @@
             RoastedBirdBuff = false;
             RoastedDuckBuff = false;
             BloodyMoscatoBuff = false;
+            FriedEggBuff = false;
+            CherryBuff = false;
 
             CritDamage = 1f;
             AddCritDamage = 0;
@@ -68,6 +79,8 @@
             RoastedBirdBuff = false;
             RoastedDuckBuff = false;
             BloodyMoscatoBuff = false;
+            FriedEggBuff = false;
+            CherryBuff = false;
 
             CritDamage = 1f;
             AddCritDamage = 0;
@@ -81,7 +94,7 @@
         public override bool CanConsumeAmmo(Item weapon, Item ammo)
         {
 
-            if (BananaBuff && Main.rand.NextBool(5))
+            if (BananaBuff && Main.rand.NextBool(20))
             {
                 return false;
             }
@@ -89,7 +102,7 @@
             {
                 return false;
             }
-            if (BananaSplitBuff && Main.rand.NextBool(3))
+            if (BananaSplitBuff && Main.rand.NextBool(10))
             {
                 return false;
             }
@@ -98,7 +111,7 @@
 
         public override void Hurt(bool pvp, bool quiet, double damage, int hitDirection, bool crit, int cooldownCounter)
         {
-            if (Player.whoAmI == Main.myPlayer && SmoothieofDarknessBuff && !Main.rand.NextBool(5))
+            if (Player.whoAmI == Main.myPlayer && SmoothieofDarknessBuff && Main.rand.NextBool(2))
             {
                 Player.NinjaDodge();
             }
@@ -114,17 +127,6 @@
                 Player.wingTimeMax = (int)(Player.wingTimeMax * WingTimeModifier);
             }
         }
-       /* public override void PostUpdateBuffs()
-        {
-            if (RoastedBirdBuff)
-            {
-                Player.wingTimeMax = (int)(Player.wingTimeMax * WingTimeModifier);
-            }
-            if (RoastedDuckBuff)
-            {
-                Player.wingTimeMax = (int)(Player.wingTimeMax * WingTimeModifier);
-            }
-        }*/
 
         public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
         {
@@ -133,18 +135,10 @@
                 target.AddBuff(BuffID.Oiled, 600);
                 target.AddBuff(BuffID.OnFire, 600);
             }
-            if (NachosBuff)
-            {
-                target.AddBuff(BuffID.OnFire, 600);
-                target.AddBuff(BuffID.CursedInferno, 600);
-                target.AddBuff(BuffID.ShadowFlame, 600);
-                target.AddBuff(BuffID.Frostburn, 600);
-                target.AddBuff(BuffID.Oiled, 600);
-            }
             if (BloodyMoscatoBuff)
             {
                 Player.HealEffect(5, true);
-                Player.statLife += 5;
+                Player.statLife += 1;
             }
 
         }
@@ -156,21 +150,63 @@
                 target.AddBuff(BuffID.Oiled, 600);
                 target.AddBuff(BuffID.OnFire, 600);
             }
-            if (NachosBuff)
-            {
-                target.AddBuff(BuffID.OnFire, 600);
-                target.AddBuff(BuffID.CursedInferno, 600);
-                target.AddBuff(BuffID.ShadowFlame, 600);
-                target.AddBuff(BuffID.Frostburn, 600);
-                target.AddBuff(BuffID.Oiled, 600);
-            }
             if (BloodyMoscatoBuff)
             {
                 Player.HealEffect(5, true);
-                Player.statLife += 5;
+                Player.statLife += 1;
             }
 
         }
+        public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
+        {
+            if (CherryBuff)
+            {
+                SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, Player.Center);
+                ScreenShaker Gsplayer = Player.GetModPlayer<ScreenShaker>();
+                Gsplayer.FlyCamPosition = new Vector2(0, 150).RotatedByRandom(6.283);
+                Projectile.NewProjectile(null, Player.Center, Vector2.Zero, ModContent.ProjectileType<BombShakeWave>(), 0, 0, Player.whoAmI, 0.4f, 2f);
+                float k1 = Math.Clamp(Player.velocity.Length(), 1, 3);
+                float k2 = Math.Clamp(Player.velocity.Length(), 6, 10);
+                float k0 = 1f / 4 * k2;
+                for (int j = 0; j < 8 * k0; j++)
+                {
+                    Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * k1;
+                    int dust0 = Dust.NewDust(Player.Center, 0, 0, ModContent.DustType<BlueGlowAppearStoppedByTile>(), v0.X / 10, v0.Y / 10, 100, default(Color), Main.rand.NextFloat(0.6f, 1.8f) * 2);
+                    Main.dust[dust0].noGravity = true;
+                }
+                for (int j = 0; j < 16 * k0; j++)
+                {
+                    Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * k1;
+                    int dust1 = Dust.NewDust(Player.Center, 0, 0, ModContent.DustType<BlueParticleDark2StoppedByTile>(), v0.X / 10, v0.Y / 10, 100, default(Color), Main.rand.NextFloat(3.7f, 5.1f) * 2);
+                    Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 50 / k0);
+                    Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
+                }
+                for (int j = 0; j < 16 * k0; j++)
+                {
+                    Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * k1;
+                    int dust1 = Dust.NewDust(Player.Center, 0, 0, ModContent.DustType<MothSmog>(), v0.X / 10, v0.Y / 10, 100, default(Color), Main.rand.NextFloat(3.7f, 5.1f) * 2);
+                    Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 50 / k0);
+                    Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
+                }
+                foreach (NPC target in Main.npc)
+                {
+                    float Dis = (target.Center - Player.Center).Length();
+
+                    if (Dis < 250)
+                    {
+                        if (!target.dontTakeDamage && !target.friendly && target.active)
+                        {
+                            bool crit = Main.rand.NextBool(33, 100);
+                            target.StrikeNPC(Math.Max(Player.HeldItem.damage * 5, 100), Math.Max(Player.HeldItem.knockBack * 5, 20), 1, crit);
+
+                            Player.addDPS(Math.Max(0, target.defDamage));
+                        }
+                    }
+                }
+            }
+            base.Kill(damage, hitDirection, pvp, damageSource);
+        }
+        
         public override void UpdateBadLifeRegen()
         {
             if (GrubSoupBuff)
@@ -207,7 +243,7 @@
                     }
 
                     Player.lifeRegenTime = 0;
-                    Player.lifeRegen -= 4;
+                    Player.lifeRegen -= 3;
                 }
                 else
                 {
@@ -217,7 +253,7 @@
                     }
 
                     Player.lifeRegenTime = 0;
-                    Player.lifeRegen -= 10;
+                    Player.lifeRegen -= 6;
                 }
 
             }
@@ -241,7 +277,7 @@
                     }
 
                     Player.lifeRegenTime = 0;
-                    Player.lifeRegen -= 6;
+                    Player.lifeRegen -= 4;
                 }
 
             }

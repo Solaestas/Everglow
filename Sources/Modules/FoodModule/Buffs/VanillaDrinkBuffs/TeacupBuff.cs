@@ -5,7 +5,7 @@
         public override void SetStaticDefaults()
         {
             //DisplayName.SetDefault("TeacupBuff");
-            //Description.SetDefault("短时间内大幅增加魔力回复，魔法攻击，暴击\n“醇香四溢”");
+            //TODO Description.SetDefault("短时间内大幅增加魔力回复，魔法伤害，暴击\n“醇香四溢”");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
         }

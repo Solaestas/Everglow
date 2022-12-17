@@ -15,6 +15,7 @@ using Everglow.Sources.Modules.MEACModule;
 using System.Linq.Expressions;
 using Everglow.Sources.Modules.ZYModule.Commons.Core;
 using static Terraria.ModLoader.PlayerDrawLayer;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 
 namespace Everglow.Sources.Modules.FoodModule.Projectiles
 {
@@ -39,6 +40,8 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
             Projectile.height = 20;//判定区域的宽度，默认为15
 
             Projectile.scale = 1f;//总大小，有需要时可以使用
+
+            Projectile.timeLeft = 3000;
 
 
             /*
@@ -93,85 +96,6 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
         public override void Attack()
         {
             useTrail = true;
-            Player player = Main.player[Projectile.owner];
-            if (attackType == 0)
-            {
-                foreach (Projectile proj in Main.projectile)
-                {
-                    if (proj.active && proj != Projectile)
-                    {
-                        if (Projectile.Colliding(new Rectangle((int)Projectile.position.X, (int)Projectile.position.Y, Projectile.width, Projectile.height), proj.Hitbox))
-                        {
-                            Vector2 v1 = proj.velocity;
-                            Vector2 v2 = Projectile.velocity;
-
-                            float m1 = proj.width * proj.height * proj.knockBack * proj.scale;
-                            float m2 = Projectile.width * Projectile.height * Projectile.knockBack * Projectile.scale;
-
-                            Vector2 newvelocity1 = (v1 * (m1 - m2) + 2 * m2 * v2) / (m1 + m2);
-                            Vector2 newvelocity2 = (v2 * (m2 - m1) + 2 * m1 * v1) / (m1 + m2);
-
-                            proj.velocity = newvelocity1;
-                            Projectile.velocity = newvelocity2;
-                        }  
-                    }
-                }
-                longHandle = true;
-                Player.heldProj = -1;
-                Player.GetModPlayer<MEACPlayer>().isUsingMeleeProj = false;
-                if (timer == 1)
-                {
-                    AttSound(SoundID.NPCHit4);
-                    Projectile.velocity = Vector2.Zero;
-                }
-                if (timer < 1200)
-                {
-                    trailLength = 20;
-                    Lighting.AddLight(Projectile.Center + mainVec + Projectile.velocity, 0.9f, 0.6f, 0f);
-                    if (timer % 10 == 0)
-                    {
-                        AttSound(SoundID.Item1);
-                    }
-                    CanIgnoreTile = true;
-                    isAttacking = true;
-
-
-                    Projectile.Center += Projectile.velocity;
-                    Projectile.velocity = Vector2.Lerp(Projectile.velocity, Vector2.Normalize(MouseWorld_WithoutGravDir - Player.Center) * 450, 0.06f);
-                    Projectile.rotation += 0.3f * Projectile.spriteDirection;
-                    mainVec = Projectile.rotation.ToRotationVector2() * 38;
-                }
-
-                if (timer > 1200)
-                {
-                    CanIgnoreTile = false;
-                    NextAttackType();
-                    Projectile.extraUpdates = 1;
-                    longHandle = false;
-                }
-                /*
-                //travelling out
-                if (Projectile.ai[0] == 0)
-                {
-                    Projectile.ai[1]++;
-
-                    if (Projectile.ai[1] > 20)
-                    {
-                        Projectile.ai[0] = 1;
-                        Projectile.netUpdate = true;
-                    }
-                }
-                //travel back to player
-                else
-                {
-                    Projectile.extraUpdates = 0;
-                    Projectile.velocity = Vector2.Normalize(Main.player[Projectile.owner].Center - Projectile.Center) * 45;
-
-                    //kill when back to player
-                    if (Projectile.Distance(Main.player[Projectile.owner].Center) <= 30)
-                        Projectile.Kill();
-                }*/
-            }
             if (attackType == 100)//右键长按蓄力斩的写法。因为不在循环内，所以这个type数值可以随便写，由Item切换到这个attackType
             {
                 int chargeTime1 = 30;
@@ -191,24 +115,29 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                     Projectile.rotation = mainVec.ToRotation();
 
                     //向内的粒子效果
-                    Vector2 r = Main.rand.NextVector2Unit();
-                    float dis1 = MathHelper.Clamp(chargeTime1 - timer, 0, chargeTime1) / 1;
-                    float dis2 = MathHelper.Clamp(chargeTime2 - timer, 0, chargeTime2) / 1;
-                    float dis3 = MathHelper.Clamp(chargeTime3 - timer, 0, chargeTime3) / 1;
-                    Dust d1 = Dust.NewDustDirect(Projectile.Center + r * dis1, 10, 10, DustID.AncientLight, 0, 0, 0, Color.White, 0.8f);
-                    d1.velocity = -r * 4;
-                    d1.position += Main.rand.NextVector2Unit() * 5;
-                    d1.noGravity = true;
+                    if (timer % 10 == 0)
+                    {
+                        AttSound(SoundID.Item1);
+                        Vector2 r = Main.rand.NextVector2Unit();
+                        float dis1 = MathHelper.Clamp(chargeTime1 - timer, 0, chargeTime1) / 1;
+                        float dis2 = MathHelper.Clamp(chargeTime2 - timer, 0, chargeTime2) / 1;
+                        float dis3 = MathHelper.Clamp(chargeTime3 - timer, 0, chargeTime3) / 1;
+                        Dust d1 = Dust.NewDustDirect(Projectile.Center + r * dis1, 10, 10, ModContent.DustType<MothSmog>(), 0, 0, 100, new Color(250, 150, 20), 0.8f);
+                        d1.velocity = -r * 4;
+                        d1.position += Main.rand.NextVector2Unit() * 5;
+                        d1.noGravity = true;
 
-                    Dust d2 = Dust.NewDustDirect(Projectile.Center + r * dis2, 10, 10, DustID.AncientLight, 0, 0, 0, Color.White, 0.8f);
-                    d2.velocity = -r * 4;
-                    d2.position += Main.rand.NextVector2Unit() * 5;
-                    d2.noGravity = true;
+                        Dust d2 = Dust.NewDustDirect(Projectile.Center + r * dis2, 10, 10, ModContent.DustType<MothSmog>(), 0, 0, 100, new Color(250, 150, 20), 0.8f);
+                        d2.velocity = -r * 4;
+                        d2.position += Main.rand.NextVector2Unit() * 5;
+                        d2.noGravity = true;
 
-                    Dust d3 = Dust.NewDustDirect(Projectile.Center + r * dis3, 10, 10, DustID.AncientLight, 0, 0, 0, Color.White, 0.8f);
-                    d3.velocity = -r * 4;
-                    d3.position += Main.rand.NextVector2Unit() * 5;
-                    d3.noGravity = true;
+                        Dust d3 = Dust.NewDustDirect(Projectile.Center + r * dis3, 10, 10, ModContent.DustType<MothSmog>(), 0, 0, 100, new Color(250, 150, 20), 0.8f);
+                        d3.velocity = -r * 4;
+                        d3.position += Main.rand.NextVector2Unit() * 5;
+                        d3.noGravity = true;
+                    }
+                    
                 }
                 SoundStyle sound = SoundID.Item4;
                 sound.Volume *= 0.4f;
@@ -334,89 +263,163 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                 //攻击时的粒子之类的
             }
         }
+
+        int hittimes = 49;
         public override void AI()
         {
-            Player.heldProj = Projectile.whoAmI;
-            if (attackType != 0)
+
+            if (attackType == 0)
             {
-                Player.GetModPlayer<MEACPlayer>().isUsingMeleeProj = true;
-            }
-
-            Projectile.Center = Player.Center + Terraria.Utils.SafeNormalize(mainVec, Vector2.One) * disFromPlayer;
-            isAttacking = false;
-
-            Projectile.timeLeft++;
-
-            if (attackType != 0)
-            {
-                Player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, mainVec.ToRotation() - 1.57f);
-            }
-            Attack();
-
-            timer++;
-            if (!isAttacking)
-            {
-                if (!isRightClick)
+                Projectile.tileCollide = true;
+                Projectile.ignoreWater = false;
+                isAttacking = true;
+                longHandle = true;
+                Player player = Main.player[Projectile.owner];
+                Vector2 velocity = Vector2.Normalize(MouseWorld_WithoutGravDir - Player.Center);
+                Projectile.Center += Projectile.velocity;
+                useTrail = true;
+                if (hittimes > 0)
                 {
-                    bool IsEnd = AutoEnd ? (!Player.controlUseItem || Player.dead) : Player.dead;
-                    if (IsEnd)
+                    foreach (Projectile proj in Main.projectile)
                     {
-                        End();
+                        if (proj.active && proj != Projectile && proj.GetGlobalProjectile<Canhitproj>().Canhit && proj.penetrate != -1)
+                        {
+                            if ((Projectile.Center - proj.Center).Length() <= (float)Math.Sqrt(proj.width ^ 2 + proj.height ^ 2) * proj.scale / 2 + 42 * Projectile.scale)
+                            {
+                                Vector2 v1 = proj.velocity;
+                                Vector2 v2 = Projectile.velocity;
+
+                                float m1 = proj.width * proj.height * proj.knockBack * proj.scale;
+                                float m2 = Projectile.width * Projectile.height * Projectile.knockBack * Projectile.scale / 50;
+
+                                Vector2 newvelocity1 = (v1 * (m1 - m2) + 2 * m2 * v2) / (m1 + m2);
+                                Vector2 newvelocity2 = (v2 * (m2 - m1) + 2 * m1 * v1) / (m1 + m2);
+                                Vector2 dustvelocity = newvelocity1 - v1;
+                                
+                                if(newvelocity1.Length()<= v1.Length())
+                                {
+                                    proj.velocity = Vector2.Normalize(newvelocity1) * v1.Length();
+                                }
+                                else
+                                {
+                                    proj.velocity = newvelocity1;
+                                }
+                                Projectile.velocity = newvelocity2;//这里是质心动量守恒的弹性碰撞
+
+                                Dust dust = Dust.NewDustPerfect(Projectile.Center - (Vector2.Normalize(dustvelocity).RotatedBy(Math.PI / 4) * 32), ModContent.DustType<Dusts.FireDust>(), Vector2.Normalize(dustvelocity) * 15, 125, new Color(250, 150, 20));
+
+
+                                int dust1 = Dust.NewDust(Projectile.Center - (Vector2.Normalize(dustvelocity).RotatedBy(Math.PI / 4) * 32), 0, 0, ModContent.DustType<MothSmog>(), Vector2.Normalize(dustvelocity).X * 5, Vector2.Normalize(dustvelocity).Y * 10, 100, default, Main.rand.NextFloat(3.7f, 5.1f));
+                                Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 50);
+                                Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
+
+                                SoundEngine.PlaySound(SoundID.NPCHit4, Projectile.Center);
+                                proj.GetGlobalProjectile<Canhitproj>().Canhit = false;
+                                hittimes--;
+                                Projectile.timeLeft = 2880;
+                            }
+                        }
                     }
                 }
-                else
+                Projectile.rotation += 0.3f * Projectile.spriteDirection;
+                mainVec = Projectile.rotation.ToRotationVector2() * 38;
+                if (Projectile.timeLeft <= 2880)
                 {
-                    bool IsEnd = AutoEnd ? (!Player.controlUseTile || Player.dead) : Player.dead;
-                    if (IsEnd)
+                    Projectile.velocity = Projectile.velocity * 0.9f + Vector2.Normalize(player.Center - Projectile.Center) * 0.5f;
+                    Projectile.tileCollide = false;
+                    Projectile.rotation += 0.3f * Projectile.spriteDirection;
+                    mainVec = Projectile.rotation.ToRotationVector2() * 38;
+                    if ((player.Center - Projectile.Center).Length() < 32)
                     {
-                        End();
+                        Projectile.timeLeft = 0;
                     }
                 }
-            }
-            if (!HasContinueLeftClick && timer > 15)//大于1/60s即判定为下一击继续
-            {
-                if (Main.mouseLeft)
+
+                if (useTrail)
                 {
-                    HasContinueLeftClick = true;
+                    trailVecs.Enqueue(mainVec);
+                    if (trailVecs.Count > trailLength)
+                    {
+                        trailVecs.Dequeue();
+                    }
+                }
+                else//清空！
+                {
+                    trailVecs.Clear();
                 }
             }
-            if (isAttacking && attackType != 0)
+            else
             {
-                Player.direction = Projectile.spriteDirection;
+                base.AI();
             }
-            if (useTrail)
-            {
-                trailVecs.Enqueue(mainVec);
-                if (trailVecs.Count > trailLength)
-                {
-                    trailVecs.Dequeue();
-                }
-            }
-            else//清空！
-            {
-                trailVecs.Clear();
-            }
-            if (CanLongLeftClick)
-            {
-                if (Main.mouseLeft)
-                {
-                    Clicktimer++;
-                }
-                else
-                {
-                    Clicktimer = 0;
-                }
-            }
-            ProduceWaterRipples(new Vector2(mainVec.Length(), 30));
         }
-
-        private void ProduceWaterRipples(Vector2 beamDims)
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            WaterShaderData shaderData = (WaterShaderData)Terraria.Graphics.Effects.Filters.Scene["WaterDistortion"].GetShader();
-            float waveSine = 1f * (float)Math.Sin(Main.GlobalTimeWrappedHourly * 20f);
-            Vector2 ripplePos = Projectile.Center + new Vector2(beamDims.X * 0.5f, 0f).RotatedBy(mainVec.ToRotation());
-            Color waveData = new Color(0.5f, 0.1f * Math.Sign(waveSine) + 0.5f, 0f, 1f) * Math.Abs(waveSine);
-            shaderData.QueueRipple(ripplePos, waveData, beamDims, RippleShape.Square, mainVec.ToRotation());
+            if (attackType == 0) 
+            {
+                if (Projectile.timeLeft > 2880)
+                {
+                    if (Projectile.ai[1] != 0)
+                    {
+                        return;
+                    }
+                    Projectile.velocity.X = Projectile.velocity.X * -1f;
+                    Projectile.velocity.Y = Projectile.velocity.Y * -1f;
+                    Projectile.timeLeft = 2880;
+                }
+            }
+            
+            return;
         }
+        public override void OnHitPvp(Player target, int damage, bool crit)
+        {
+            if (attackType == 0)
+            {
+                if (Projectile.timeLeft > 2880)
+                {
+                    if (Projectile.ai[1] != 0)
+                    {
+                        return;
+                    }
+                    Projectile.velocity.X = Projectile.velocity.X * -1f;
+                    Projectile.velocity.Y = Projectile.velocity.Y * -1f;
+
+                    Projectile.timeLeft = 2880;
+                }
+            }
+            return;
+        }
+        public override bool OnTileCollide(Vector2 oldVelocity)
+        {
+            SoundEngine.PlaySound(SoundID.NPCHit4, Projectile.Center);
+            if (attackType == 0)
+            {
+                if (Projectile.timeLeft > 2880)
+                {
+                    if (Projectile.ai[1] != 0)
+                    {
+                        return true;
+                    }
+                    Projectile.soundDelay = 10;
+                    if (Projectile.velocity.X != oldVelocity.X && Math.Abs(oldVelocity.X) > 1f)
+                    {
+                        Projectile.velocity.X = oldVelocity.X * -1f;
+                    }
+                    if (Projectile.velocity.Y != oldVelocity.Y && Math.Abs(oldVelocity.Y) > 1f)
+                    {
+                        Projectile.velocity.Y = oldVelocity.Y * -1f;
+                    }
+                    Projectile.timeLeft = 2880;
+                }
+            }
+            return false;
+        }
+    }
+
+    public class Canhitproj : GlobalProjectile
+    {
+        public override bool InstancePerEntity => true;
+
+        public bool Canhit = true;
     }
 }
