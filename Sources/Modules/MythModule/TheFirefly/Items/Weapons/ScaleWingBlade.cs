@@ -67,7 +67,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
         //{
         //    owner = player;
         //    //owner.GetModPlayer<MothEyePlayer>().MothEyeEquipped = true;
-        //    if (/*owner.GetModPlayer<MothEyePlayer>().MothEyeEquipped*/ owner != null && owner.TryGetModPlayer(out MothEyePlayer mothEyePlayer) && fireflyBiome.IsBiomeActive(Main.LocalPlayer))
+        //    if (/*owner != null &&*/ owner.TryGetModPlayer(out MothEyePlayer mothEyePlayer) && fireflyBiome.IsBiomeActive(Main.LocalPlayer))
         //    {
         //        owner.statDefense = 999; //used as an example
         //    }
