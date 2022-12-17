@@ -13,8 +13,12 @@
             MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Musics/MothFightingOld2");
             // Acytaea
             MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Musics/AcytaeaFighting");
+        
+            // Tusk Musics
+            MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Musics/TuskBiome");
+            MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Musics/TuskTension");
+            MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Musics/TuskFighting");
         }
-
         public void Unload()
         {
         }
