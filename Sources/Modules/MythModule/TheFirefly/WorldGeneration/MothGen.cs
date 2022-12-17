@@ -21,6 +21,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         {
             if (Main.mouseRight && Main.mouseRightRelease)
             {
+                BuildShabbyCastle();
                 //Main.NewText(SubWorldModule.SubworldSystem.IsActive<MothWorld>());
             }
 
@@ -337,8 +338,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                                         var PylonTile = Main.tile[bottom.X + i, bottom.Y + 1];
                                         PylonTile.TileType = (ushort)ModContent.TileType<DarkCocoon>();
                                         PylonTile.HasTile = true;
-                                        PylonTile.IsHalfBlock = false;
-                                        PylonTile.Slope = 0;
+                                        PylonTile.Slope = SlopeType.Solid;
                                         WorldGen.TileFrame(bottom.X + i, bottom.Y + 1);
                                     }
 
