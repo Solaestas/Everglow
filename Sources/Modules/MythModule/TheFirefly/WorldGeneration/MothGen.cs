@@ -126,7 +126,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight) => tasks.Add(new WorldMothLandGenPass());
 
         /// <summary>
-        /// µØĞÎÖĞĞÄ×ø±ê
+        /// åœ°å½¢ä¸­å¿ƒåæ ‡
         /// </summary>
         public int fireflyCenterX = 400;
 
@@ -148,6 +148,29 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                 });
             }
             tag.Set("FIREFLY_FireflyTree", list);
+
+            //using (MemoryStream stream = new())
+            //{
+            //    using (BinaryWriter writer = new(stream))
+            //    {
+            //        var ropeinfos = ModContent.GetInstance<FluorescentTree>().GetRopeStyleList();
+            //        writer.Write(ropeinfos.Count);
+            //        ropeinfos.ForEach(info =>
+            //        {
+            //            writer.Write(info.x);
+            //            writer.Write(info.y);
+            //            writer.Write(info.style);
+            //        });
+            //        tag.Set("Ropes", stream.GetBuffer());
+            //    }
+            //}
+
+            //if (Main.ActiveWorldFileData == SubWorldModule.SubworldSystem.root && SubWorldModule.SubworldSystem.current is not null)
+            //{
+            //    tag.Add("ExitTo", SubWorldModule.SubworldSystem.current.FullName);
+            //    tag.Add("ExitPosX", Main.LocalPlayer.Center.X);
+            //    tag.Add("ExitPosY", Main.LocalPlayer.Center.Y);
+            //}
 
             //tag["DepartX"] = (int)(Main.LocalPlayer.Center.X - Main.LocalPlayer.velocity.X);
             //tag["DepartY"] = (int)(Main.LocalPlayer.Center.Y - Main.LocalPlayer.velocity.Y);
@@ -172,6 +195,29 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                 }
                 fireFlyTree.InitTreeRopes(ropeData);
             }
+            
+            //if (tag.TryGet("Ropes", out byte[] ropedata))
+            //{
+            //    using (MemoryStream stream = new(ropedata))
+            //    {
+            //        using (BinaryReader reader = new(stream))
+            //        {
+            //            List<(int, int, int)> ropes = new();
+            //            int count = reader.ReadInt32();
+            //            for (int i = 0; i < count; i++)
+            //            {
+            //                ropes.Add((reader.ReadInt32(), reader.ReadInt32(), reader.ReadInt32()));
+            //            }
+            //            ModContent.GetInstance<FluorescentTree>().InitTreeRopes(ropes);
+            //        }
+            //    }
+            //}
+
+            //if (tag.TryGet("ExitTo", out string subworldname) && SubWorldModule.SubworldSystem.cache is not null && SubWorldModule.SubworldSystem.cache.Name == subworldname)
+            //{
+            //    Main.LocalPlayer.Center = new(tag.Get<int>("ExitPosX"), tag.Get<int>("ExitPosY"));
+            //}
+            
             //if(tag.ContainsKey("DepartX") && tag.ContainsKey("DepartY"))
             //{
             //    Main.LocalPlayer.position = new Vector2(tag.GetAsInt("DepartX"), tag.GetAsInt("DepartY"));
@@ -213,7 +259,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                         }
                         ref var pixel = ref pixelRow[x];
                         Tile tile = Main.tile[x + a, y + b];
-                        switch (type)//21ÊÇÏä×Ó
+                        switch (type)//21æ˜¯ç®±å­
                         {
                             case 0:
                                 if (pixel.R == 255 && pixel.G == 0 && pixel.B == 0)// == new SixLabors.ImageSharp.PixelFormats.Rgb24(255, 0, 0))
@@ -312,7 +358,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             //    for (int x = 0; x < width; x += 1)
             //    {
             //        Tile tile = Main.tile[x + a, y + b];
-            //        switch (type)//21ÊÇÏä×Ó
+            //        switch (type)//21æ˜¯ç®±å­
             //        {
             //            case 0:
             //                if (colors[x, y] == new Color(255, 0, 0, 255))
@@ -358,7 +404,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         }
 
         /// <summary>
-        /// ½¨ÔìÁ÷Ó©Ö®¼ë
+        /// å»ºé€ æµè¤ä¹‹èŒ§
         /// </summary>
         public static void BuildMothCave()
         {
@@ -406,19 +452,19 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             int CrashCount = 0;
             ushort[] DangerTileType = new ushort[]
             {
-                41,//À¶µØÀÎ×©
-                43,//ÂÌµØÀÎ×©
-                44,//·ÛµØÀÎ×©
-                48,//¼â´Ì
-                49,//Ë®À¯Öò
-                50,//Êé
-                137,//ÉñÃí»ú¹Ø
-                226,//ÉñÃíÊ¯×©
-                232,//Ä¾´Ì
-                237,//ÉñÃí¼ÀÌ³
-                481,//ËéÀ¶µØÀÎ×©
-                482,//ËéÂÌµØÀÎ×©
-                483//Ëé·ÛµØÀÎ×©
+                41,//è“åœ°ç‰¢ç –
+                43,//ç»¿åœ°ç‰¢ç –
+                44,//ç²‰åœ°ç‰¢ç –
+                48,//å°–åˆº
+                49,//æ°´èœ¡çƒ›
+                50,//ä¹¦
+                137,//ç¥åº™æœºå…³
+                226,//ç¥åº™çŸ³ç –
+                232,//æœ¨åˆº
+                237,//ç¥åº™ç¥­å›
+                481,//ç¢è“åœ°ç‰¢ç –
+                482,//ç¢ç»¿åœ°ç‰¢ç –
+                483//ç¢ç²‰åœ°ç‰¢ç –
             };
             for (int x = -256; x < 257; x += 8)
             {
@@ -438,11 +484,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             int CrashCount = 0;
             ushort[] MustHaveTileType = new ushort[]
             {
-                TileID.JungleGrass,//´ÔÁÖ²İ·½¿é
-                TileID.JunglePlants,//´ÔÁÖ²İ
-                TileID.JungleVines,//´ÔÁÖÌÙ
-                TileID.JunglePlants2,//¸ß´ó´ÔÁÖ²İ
-                TileID.PlantDetritus//´ÔÁÖ»¨
+                TileID.JungleGrass,//ä¸›æ—è‰æ–¹å—
+                TileID.JunglePlants,//ä¸›æ—è‰
+                TileID.JungleVines,//ä¸›æ—è—¤
+                TileID.JunglePlants2,//é«˜å¤§ä¸›æ—è‰
+                TileID.PlantDetritus//ä¸›æ—èŠ±
             };
             for (int x = -256; x < 257; x += 8)
             {
@@ -458,7 +504,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         }
 
         /// <summary>
-        /// »ñÈ¡Ò»¸ö²»ÓëÔ­°æµØĞÎ³åÍ»µÄµã
+        /// è·å–ä¸€ä¸ªä¸ä¸åŸç‰ˆåœ°å½¢å†²çªçš„ç‚¹
         /// </summary>
         /// <returns></returns>
         private static Point16 CocoonPos()
@@ -475,7 +521,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         }
 
         /// <summary>
-        /// »ñÈ¡Ò»¸ö³öÉúµØ¸½½üµÄÆ½Ì¹µØÃæ
+        /// è·å–ä¸€ä¸ªå‡ºç”Ÿåœ°é™„è¿‘çš„å¹³å¦åœ°é¢
         /// </summary>
         /// <returns></returns>
         private static Point16 ShabbyPylonPos()
