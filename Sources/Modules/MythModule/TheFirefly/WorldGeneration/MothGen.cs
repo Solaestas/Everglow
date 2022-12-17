@@ -368,13 +368,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             ShapeTile("CocoonWorld.bmp", 0, 0, 1);
             ShapeTile("CocoonWorldWall.bmp", 0, 0, 2);
             Main.statusText = "CocoonKillStart";
-            ShapeTile("CocoonKill.bmp", a, b, 0);
+            ShapeTile("CocoonSubKill.bmp", a, b, 0);
             Main.statusText = "CocoonStart";
-            ShapeTile("Cocoon.bmp", a, b, 1);
+            ShapeTile("CocoonSub.bmp", a, b, 1);
             Main.statusText = "CocoonWallStart";
-            ShapeTile("CocoonWall.bmp", a, b, 2);
+            ShapeTile("CocoonSubWall.bmp", a, b, 2);
             Main.statusText = "CocoonAnotherStart";
-            ShapeTile("Cocoon.bmp", a, b, 3);
+            ShapeTile("CocoonSub.bmp", a, b, 3);
             SmoothMothTile(a, b);
             for(int x = 20;x < Main.maxTilesX - 20;x++)
             {
