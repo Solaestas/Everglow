@@ -19,7 +19,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
     {
         public override void PostUpdateEverything()
         {
-            if (Main.mouseRight && Main.mouseRightRelease)
+            if (Main.mouseRight && Main.mouseRightRelease && Main.keyState.PressingShift())
             {
                 BuildShabbyCastle();
                 //Main.NewText(SubWorldModule.SubworldSystem.IsActive<MothWorld>());
