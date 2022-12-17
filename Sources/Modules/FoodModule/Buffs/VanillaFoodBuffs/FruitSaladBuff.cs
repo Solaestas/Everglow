@@ -12,7 +12,7 @@
 
         public override void Update(Player player, ref int buffIndex)
         {
-            player.statDefense += 4; // 加3防御
+            player.statDefense += 3; // 加3防御
             player.GetCritChance(DamageClass.Generic) += 3; // 加3%暴击
             player.GetDamage(DamageClass.Generic) *= 1.03f; // 加3%伤害
             player.GetAttackSpeed(DamageClass.Generic) += 0.03f; // 加3%攻速

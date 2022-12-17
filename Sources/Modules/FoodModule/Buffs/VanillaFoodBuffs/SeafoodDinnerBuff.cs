@@ -14,8 +14,8 @@
         {
             player.GetCritChance(DamageClass.Generic) += 8; // 加8%暴击
             player.GetDamage(DamageClass.Generic) *= 1.08f; // 加8%伤害
-            player.GetAttackSpeed(DamageClass.Generic) *= 1.12f; // 加8%攻速
-            
+            player.GetAttackSpeed(DamageClass.Generic) *= 1.08f; // 加8%攻速
+            FoodBuffModPlayer.AddCritDamage += 0.08f;
         }
     }
 }
