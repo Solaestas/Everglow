@@ -1,10 +1,13 @@
-﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+﻿using Everglow.Sources.Modules.MythModule.TheFirefly;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories;
 
 namespace Everglow.Sources.Modules.MEACModule.Projectiles
 {
-   
+
     public class ButterflyDreamFriendly : ModProjectile
     {
+        public Player owner;
         public override string Texture => "Everglow/Sources/Modules/MythModule/TheFirefly/Projectiles/ButterflyDream";
         public override void SetStaticDefaults()
         {
@@ -35,18 +38,26 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         }
         public override void AI()
         {
+            FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
+
             Projectile.spriteDirection = Projectile.velocity.X > 0 ? -1 : 1;
             if (Projectile.timeLeft < 260)
             {
                 Projectile.friendly = true;
                 NPC target = Main.npc[(int)Projectile.ai[0]];
-                if (!target.active&&Projectile.timeLeft>10)
+                if (!target.active && Projectile.timeLeft > 10)
                 {
                     Projectile.timeLeft = 10;
                 }
                 else//追踪目标
                 {
-                    Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(target.Center) * 15, 0.05f);
+                    //if (owner != null && owner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
+                    //{
+                    //    if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer))
+                    //        Projectile.velocity = Vector2.Lerp(Projectile.velocity * 2f, Projectile.DirectionTo(target.Center) * 15, 0.05f);
+                    //}
+                    //else
+                        Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(target.Center) * 15, 0.05f);
                 }
             }
             else
@@ -55,7 +66,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             }
             if (Projectile.timeLeft < 10)
                 Projectile.scale -= 0.1f;
-            if(Projectile.timeLeft == 300)
+            if (Projectile.timeLeft == 300)
             {
                 Projectile.frame = Main.rand.Next(3);
             }
@@ -67,7 +78,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             {
                 Projectile.frame++;
             }
-            if (Projectile.timeLeft % 3 == 0 )
+            if (Projectile.timeLeft % 3 == 0)
             {
                 int index = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<BlueGlowAppear>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.7f, 1.9f));
                 Main.dust[index].velocity = Projectile.velocity * 0.5f;

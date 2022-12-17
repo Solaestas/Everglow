@@ -7,7 +7,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
     public class ScaleWingBlade : ModItem
     {
         FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
-        MothEye mothEye = ModContent.GetInstance<MothEye>();
+        //MothEye mothEye = ModContent.GetInstance<MothEye>();
         public Player owner;
 
         public override void SetStaticDefaults()
@@ -75,7 +75,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
         //}
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
-            if (owner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
+            if (owner != null && owner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
             {
                 if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer))
                 {
