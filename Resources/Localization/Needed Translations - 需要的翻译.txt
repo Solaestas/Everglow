@@ -1,5 +1,4 @@
 *en-US*:
-WoodShield Name Update & Tooltip
 
 *zh-Hans*:
 

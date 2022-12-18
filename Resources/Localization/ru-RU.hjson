@@ -297,6 +297,9 @@
 
 			#Plant Module Items
 			CactusBall : "Cactus Rod"
+			
+			# Shields
+			WoodShield : "Wooden Shield"
 
 			# Genshin Impact items
 			Hepuyuan : "Prinomial Jade Winged Spear"
@@ -590,6 +593,9 @@
 
 			#Plant Module Items
 			CactusBall : "Spin and throw a cactus ball!\nShred victims' armour and bleed them"
+			
+			# Shields
+			WoodShield : "Left click to attack\nRight click to defend\n'Just a normal shield, no one would use it for offense, would you?'"
 			
 			# Genshin Impact items
 			Hepuyuan : "{$Mods.Everglow.Common.ExcluWeapon}\nLeft click to dash, right click to smash\n'You should't be getting it'\nHomaging to Genshin Impact"

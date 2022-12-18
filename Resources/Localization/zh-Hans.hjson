@@ -304,6 +304,9 @@ Mods:
 			#Plant Module Items
 			CactusBall : "仙人球棍"
 
+			# Shields
+			WoodShield : "木制盾牌"
+
 			# Genshin Impact items
 			Hepuyuan : "和璞鸢"
 			VortexVanquisherItem : "贯虹之槊"
