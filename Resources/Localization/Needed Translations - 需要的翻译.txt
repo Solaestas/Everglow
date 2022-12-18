@@ -1,5 +1,4 @@
 *en-US*:
-CactusBall Item Name & Tooltip (provided name in file does not work)
 WoodShield Name Update & Tooltip
 
 *zh-Hans*:
