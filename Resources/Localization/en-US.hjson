@@ -189,12 +189,6 @@ Mods:
 			TitaniumClub : Titanium Club
 			TungstenClub : Tungsten Club
 			WoodenClub : Wooden Club
-			DustOfCorrupt : Corrupted Scales
-			EvilChrysalis : Cocoon Staff
-			PhosphorescenceGun : Scale Shotgun
-			ScaleWingBlade : Lepidoptera Blade
-			ShadowWingBow : Occulting Wings
-			MothYoyo : Glow-yo
 			AmbiguousNight : Ambiguous Night
 			BlackWoodSlingshot : Ebonwood Slingshot
 			BlueGemSlingshot : Sapphire Slingshot
@@ -272,6 +266,12 @@ Mods:
 			#流萤系列物品
 			ShabbyPylonItem : "Shabby Pylon"
 			GlowBeadGun : "Glowing Railgun"
+			DustOfCorrupt : Corrupted Scales
+			EvilChrysalis : Cocoon Staff
+			PhosphorescenceGun : Scale Shotgun
+			ScaleWingBlade : Lepidoptera Blade
+			ShadowWingBow : Occulting Wings
+			MothYoyo : Glow-yo
 			BlueflowerBra : "Blueflower Bra"
 
 			#Glow Wood Furniture
@@ -396,24 +396,6 @@ Mods:
 			FixCoinSpeed1 : "Gives a random accessory in inventory a prefix which increases movement speed by 1%"
 			FixCoinSpeed2 : "Gives a random accessory in inventory a prefix which increases movement speed by 2%~3%"
 			FixCoinSpeed3 : "Gives a random accessory in inventory a prefix which increases movement speed by 4%"
-			DustOfCorrupt : Scatter moth scales
-			EvilChrysalis : 
-				'''
-				Summoms little black moths to fight for you
-				Deal 400% damage to nearby enemies while summoning
-				'''
-			MothYoyo : Moths will appear around this Yo-yo, allowing you to deal more damage
-			PhosphorescenceGun : Shoots out shots and blue scale bullets which deal 36% damage
-			ScaleWingBlade :
-				'''
-				Striking enemies with this blade or swinging this blade while near enemies will spawn moths that home in on said enemies
-				Right click to charge a more powerful swing and to spawn more moths on impact
-				'''
-			ShadowWingBow : 
-				'''
-				Hold to charge to  increase damage, capped at +200%, and additionally fires Blue Butterfly Arrows.
-				Needs 1.5s to be fully charged
-				'''
 			AmbiguousNight : 
 				'''
 				Shoots phantom pebbles
@@ -588,6 +570,24 @@ Mods:
 				'''
 				Hold attack to charge
 				Shoots a series of explosive glowing beads
+				'''
+			DustOfCorrupt : Scatter moth scales
+			EvilChrysalis : 
+				'''
+				Summoms little black moths to fight for you
+				Deal 400% damage to nearby enemies while summoning
+				'''
+			MothYoyo : Moths will appear around this Yo-yo, allowing you to deal more damage
+			PhosphorescenceGun : Shoots out shots and blue scale bullets which deal 36% damage
+			ScaleWingBlade :
+				'''
+				Striking enemies with this blade or swinging this blade while near enemies will spawn moths that home in on said enemies
+				Right click to charge a more powerful swing and to spawn more moths on impact
+				'''
+			ShadowWingBow : 
+				'''
+				Hold to charge to  increase damage, capped at +200%, and additionally fires Blue Butterfly Arrows.
+				Needs 1.5s to be fully charged
 				'''
 			
 			# 天穹树系列物品

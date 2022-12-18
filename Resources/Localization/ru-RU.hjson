@@ -177,11 +177,6 @@
 			TitaniumClub : Титановая дубинка
 			TungstenClub : Вольфрамовая дубинка
 			WoodenClub : Деревянная дубинка
-			DustOfCorrupt : Corrupted Scales
-			EvilChrysalis : Посох-кокон
-			PhosphorescenceGun : Чешуйчатый дробовик
-			ScaleWingBlade : Чешуекрылый Клинок
-			ShadowWingBow : Закрывающие крылья
 			AmbiguousNight : Неоднозначная Ночь
 			BlackWoodSlingshot : Эбеновая рогатка
 			BlueGemSlingshot : Сапфировая рогатка
@@ -263,6 +258,12 @@
 			#流萤系列物品
 			ShabbyPylonItem : "Shabby Pylon"
 			GlowBeadGun : "Glowing Railgun"
+			DustOfCorrupt : Corrupted Scales
+			EvilChrysalis : Посох-кокон
+			PhosphorescenceGun : Чешуйчатый дробовик
+			ScaleWingBlade : Чешуекрылый Клинок
+			ShadowWingBow : Закрывающие крылья
+			MothYoyo : Glow-yo
 			BlueflowerBra : "Blueflower Bra"
 
 			#Glow Wood Furniture
@@ -371,19 +372,6 @@
 			FixCoinSpeed1 : "Дает случайному аксессуару в инвентаре префикс, который увеличивает скрость передвижения на 1%"
 			FixCoinSpeed2 : "Дает случайному аксессуару в инвентаре префикс, который увеличивает скрость передвижения на 2%~3%"
 			FixCoinSpeed3 : "Дает случайному аксессуару в инвентаре префикс, который увеличивает скрость передвижения на 4%"
-			DustOfCorrupt : Scatter moth scales
-			EvilChrysalis : 
-				'''
-				Призывает маленьких черных мотыльков сражаться за вас
-				Наносит 400% урона ближайшим врагам во время призыва
-				'''
-			PhosphorescenceGun : Shoots out shots and blue scale bullets which deal 36% damage
-			ScaleWingBlade : TODO
-			ShadowWingBow : 
-				'''
-				Hold to charge to  increase damage, capped at +200%, and additionally fires Blue Butterfly Arrows.
-				Needs 1.5s to be fully charged
-				'''
 			AmbiguousNight : 
 				'''
 				Shoots phantom pebbles
@@ -559,6 +547,20 @@
 				Hold attack to charge
 				Shoots a series of explosive glowing beads
 				'''
+			DustOfCorrupt : Scatter moth scales
+			EvilChrysalis : 
+				'''
+				Призывает маленьких черных мотыльков сражаться за вас
+				Наносит 400% урона ближайшим врагам во время призыва
+				'''
+			PhosphorescenceGun : Shoots out shots and blue scale bullets which deal 36% damage
+			ScaleWingBlade : TODO
+			ShadowWingBow : 
+				'''
+				Hold to charge to  increase damage, capped at +200%, and additionally fires Blue Butterfly Arrows.
+				Needs 1.5s to be fully charged
+				'''
+			MothYoyo : Moths will appear around this Yo-yo, allowing you to deal more damage
 
 			# 天穹树系列物品
 				# 天穹树小镇

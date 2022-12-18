@@ -188,11 +188,6 @@ Mods:
 			TitaniumClub : 钛金棍
 			TungstenClub : 钨棍
 			WoodenClub : 木棍
-			DustOfCorrupt : 腐化粉尘
-			EvilChrysalis : 邪茧法杖
-			PhosphorescenceGun : 光鳞霰弹枪
-			ScaleWingBlade : 鳞翅之刃
-			ShadowWingBow : 影翼巨弓
 			AmbiguousNight : 幻夜弹弓
 			BlackWoodSlingshot : 乌木弹弓
 			BlueGemSlingshot : 蓝宝石弹弓
@@ -270,6 +265,12 @@ Mods:
 			#流萤系列物品
 			ShabbyPylonItem : "破损晶塔"
 			GlowBeadGun : "荧光轨道炮"
+			DustOfCorrupt : 腐化粉尘
+			EvilChrysalis : 邪茧法杖
+			PhosphorescenceGun : 光鳞霰弹枪
+			ScaleWingBlade : 鳞翅之刃
+			ShadowWingBow : 影翼巨弓
+			MothYoyo : Glow-yo
 			BlueflowerBra : "蓝花内衣"
 
 			#Glow Wood Furniture
@@ -400,19 +401,6 @@ Mods:
 			FragransMagic : 花好月圆时,愿清风与你相伴
 			FragransSpear : 花好月圆时,愿清风与你相伴
 			FragransStaff : 花好月圆时,愿清风与你相伴
-			DustOfCorrupt : 散播鳞粉
-			EvilChrysalis : 
-				'''
-				召唤小黑蛾为你而战
-				召唤过程会对附近敌怪造成400%攻击倍率的伤害
-				'''
-			PhosphorescenceGun : 喷射出散弹和36%伤害的蓝鳞光弹
-			ScaleWingBlade : ""
-			ShadowWingBow : 
-				'''
-				长按可以蓄力,使伤害提升最大倍率200%并释放蓝蝶箭
-				满蓄时间1.50秒
-				'''
 			AmbiguousNight : 
 				'''
 				射出幻影石子
@@ -581,6 +569,24 @@ Mods:
 				长按攻击键以充能
 				射出一系列易爆的光球
 				'''
+			DustOfCorrupt : 散播鳞粉
+			EvilChrysalis : 
+				'''
+				召唤小黑蛾为你而战
+				召唤过程会对附近敌怪造成400%攻击倍率的伤害
+				'''
+			PhosphorescenceGun : 喷射出散弹和36%伤害的蓝鳞光弹
+			ScaleWingBlade : 
+				'''
+				命中敌人或在敌人附近挥舞将释放追踪敌人的幻影蛾
+				右键蓄力以进行增幅攻击
+				'''
+			ShadowWingBow : 
+				'''
+				长按可以蓄力,使伤害提升最大倍率200%并释放蓝蝶箭
+				满蓄时间1.50秒
+				'''
+			MothYoyo : 幻影蛾将围绕悠悠球, 允许你造成更多伤害
 
 			# 天穹树系列物品
 				# 天穹树小镇
