@@ -271,6 +271,7 @@ Mods:
 			ShadowWingBow : 影翼巨弓
 			MothYoyo : "荧光球"
 			DreamWeaver : "织梦丝雨"
+			NavyThunder : "潜火影雷"
 			DarknessFan : "幻蝶萤火扇"
 			BlueflowerBra : "蓝花内衣"
 
@@ -587,6 +588,7 @@ Mods:
 				满蓄时间1.50秒
 				'''
 			MothYoyo : 幻影蛾将围绕悠悠球, 允许你造成更多伤害
+			NavyThunder : "部署一枚定时荧光炸弹"
 			DarknessFan : "{$Mods.Everglow.Common.LegendWeapon}\n无召唤标记伤害\n你的召唤物将集中打击敌人\n无召唤标记伤害\n你的召唤物将集中打击被扇子击中的敌人\n以扇子和幻蝶打击敌人，右键扔出扇子\n扇子本体施加幻蝶之印(可叠加), 每层使幻蝶造成的伤害提高10%\n层数上限随共鸣层数增长\n'蕴含着被巨蛾吞噬的灵魂'"
 
 			# 天穹树系列物品

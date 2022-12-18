@@ -273,6 +273,7 @@ Mods:
 			ShadowWingBow : Occulting Wings
 			MothYoyo : Glow-yo
 			DreamWeaver : "DreamWeaver"
+			NavyThunder : "Navy Thunder"
 			DarknessFan : "Phantasm Fan of Fireflies"
 			BlueflowerBra : "Blueflower Bra"
 
@@ -590,6 +591,7 @@ Mods:
 				Hold to charge to  increase damage, capped at +200%, and additionally fires Blue Butterfly Arrows.
 				Needs 1.5s to be fully charged
 				'''
+			NavyThunder : "Deployes a glowing timebomb"
 			DarknessFan : "{$Mods.Everglow.Common.LegendWeapon}\n{$Mods.Everglow.Common.WarWhipGT}\nStrike enemies with the fan and Phantom Butterflies (PBs)\nRight click to throw out the fan\nThe fan itself inflicts Mark of PB (stackable), each level increases damage dealt by PBs by 10%\nMax stack increases with Sync level"
 			
 			# 天穹树系列物品

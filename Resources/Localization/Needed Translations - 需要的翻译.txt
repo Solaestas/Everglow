@@ -4,7 +4,6 @@ WoodShield Name Update & Tooltip
 
 *zh-Hans*:
 VortexVanquisherItem Item Name & Tooltip
-NavyThunder Item Name & Tooltip
 LilyHarp Item Name & Tooltip
 
 *ru-RU*:
