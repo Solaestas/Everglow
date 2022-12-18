@@ -847,6 +847,7 @@ Mods:
 		}
 		InfoDisplay:
 		{
+			Satiety : "饱食度"
 			Thirsty : "你最好喝点什么"
 			NotThirsty : "你不想喝东西"
 		}

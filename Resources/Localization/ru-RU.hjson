@@ -825,6 +825,7 @@
 		}
 		InfoDisplay:
 		{
+			Satiety : "satiety"
 			Thirsty : "You are thirsty"
 			NotThirsty : "You don't want to drink"
 		}
