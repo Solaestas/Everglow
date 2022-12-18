@@ -8,6 +8,7 @@
 			Minute : "Минута"
 			Second : "Секунда"
 			Duration : "продолжительность"
+			NotActivated : "unactivated"
 			WarWhipGT :
 				'''
 				Нет повреждений от метки призыва
@@ -282,6 +283,7 @@
 				StoneDragonScaleWood : "Fossilized Dragon Scale Wood"
 				StreetLantern : "Street Lantern"
 				YellowDynastyShingles : "Yellow Dynasty Shingles"
+				CyanVinePickaxe : "Cyan Pickaxe"
 
 			#Plant Module Items
 			CactusBall : "Cactus Rod"
@@ -448,7 +450,9 @@
 				'''
 			StarSlingshot : 
 				'''
-				Shoots little pebbles
+				Shoots a gloaming star, dealing AOE damage
+				Damage increases by 25% in nighttime, else decreases by 25%
+				Crit chance increases by 15% above the ground, else decreases by 15%
 				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			WhiteGemSlingshot : 
@@ -536,7 +540,7 @@
 			TDMT : "{$Mods.Everglow.Common.RapierGT}"
 			CrystalSkull : 
 				'''
-				Unleashes the true power of vanilla and Everglow magic books
+				Unleashes the true power of vanilla and Everglow spellbooks
 				As the fruit of wisdom of the Wizards, most of the runes that were written on magic tomes are complex and unreadable.
 				However, when you use this crystal skull which was designed by the Witch-king and imbued with the power of true sight,
 				even the most ignorat apprentice can easily understand the wisdom of ancient wizards.
@@ -548,6 +552,14 @@
 				Hold attack to charge
 				Shoots a series of explosive glowing beads
 				'''
+
+			# 天穹树系列物品
+				# 天穹树小镇
+				CyanVinePickaxe : 
+					'''
+					Allows you to destroy Fossilised Dragonscale Woods
+					Mines Cyan Ores faster
+					'''
 
 			#Music Boxes
 			GlowWoodMusicBox : "Plays 'Setnour6 - Within the Giant Cocoon (身陷巨茧)'"
@@ -800,15 +812,37 @@
 				Tooltip : "Choose your preferred Bloody Tusk theme music to replace\nOptions: Original Theme, Old Theme\nThis setting won't take effect if The Tusk is currently alive\nNOTE: This config is not fully set up yet and therefore does not work at the moment"
 			}
 		}
+		InfoDisplayName : 
+		{
+			FoodSatietyInfoDisplay : "Satiety"
+			ThirstystateInfoDisplay : "State of Thirst"
+		}
 		InfoDisplay:
 		{
-			Satiety : "Satiety"
-			StateOfThirst : "State of Thirst"
 			Thirsty : "You are thirsty"
 			NotThirsty : "You don't want to drink"
 		}
 		ExtraTooltip : 
 		{
+			Misc :
+			{
+				UnfinishedItem : "[c/BA0022:This item is unfinished]"
+			}
+			FireflyItems :
+			{
+				MothEyeText0 : "[c/7FC1FF:While in the Firefly biome:]"
+				MothEyeText1 : "[c/7FC1FF:- Mana cost is reduced by 5%]"
+				MothEyeText2 : "[c/7FC1FF:- The effectiveness of mana sickness is reduced by 4]"
+				MothEyeText3 : "[c/7FC1FF:- All Firefly weapons deal 5% more damage]"
+				MothEyeText4 : "[c/7FC1FF:- Some Firefly-related items gain bonuses]"
+				MothEyeBonusText : "[c/7FC1FF:Bonus gained from {$Mods.Everglow.ItemName.MothEye}:]"
+				MEyeBonusTextMothBlade : "[c/7FC1FF:More moths appear from the blade]"
+				FFBBadge0 : "[c/7FC1FF:'Affected by rage of that giant moth, your attacks become wilder']"
+				FFBBadge1 : "[c/7FC1FF:Defense is lowered based on how much defense you currently have, up to -12]"
+				FFBBadge2 : "[c/7FC1FF:Increases damage by 18%]"
+				FFBBadge3 : "[c/7FC1FF:Increases melee speed by 10%]"
+				FFBBadge4 : "[c/7FC1FF:Base critical strike chance for melee weapons and whips is reduced to 0]"
+			}
 			Spellbook : 
 			{
 				WaterBolt : 
@@ -863,6 +897,10 @@
                     Gradually increases crit chance and crit damage
 					'''
 			}
+		}
+		PylonSystem : 
+		{
+			FireflyPylonLimit : "A Firefly Pylon can only teleport you to another Firefly Pylon"
 		}
 	}
 }
