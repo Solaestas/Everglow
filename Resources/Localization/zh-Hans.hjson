@@ -45,6 +45,11 @@ Mods:
 				CannotEat : "你吃饱了"
 				CannotDrink : "你不想再喝了"
 			}
+
+			PylonSystem : 
+			{
+				ShabbyPylonRepairedTip : "晶塔已修复"
+			}
 		}
 		ItemName:
 		{

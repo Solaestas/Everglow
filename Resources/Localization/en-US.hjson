@@ -45,6 +45,11 @@ Mods:
 				CannotEat : "You are full"
 				CannotDrink : "You don't feel like to drink"
 			}
+
+			PylonSystem : 
+			{
+				ShabbyPylonRepairedTip : "Pylon repaired"
+			}
 		}
 		ItemName: 
 		{

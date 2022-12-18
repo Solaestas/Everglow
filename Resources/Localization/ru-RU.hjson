@@ -50,6 +50,11 @@
 				CannotEat : "Ты сыт"
 				CannotDrink : "Тебе не хочется пить"
 			}
+
+			PylonSystem : 
+			{
+				ShabbyPylonRepairedTip : "Pylon repaired"
+			}
 		}
 		ItemName:
 		{
