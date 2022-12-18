@@ -75,7 +75,6 @@ Mods:
 			BloodLightCyanFlame : "血光青炎"
 			BlueRain : "雨落蓝池"
 			ChaosCurrent : "混沌爆流"
-			DarknessFan : "幻蝶萤火扇"
 			FrozenStormPine : "冰凌雪松"
 			GelPowerGun : "啫喱充能器"
 			LaserWhip : "激光鞭"
@@ -272,6 +271,7 @@ Mods:
 			ShadowWingBow : 影翼巨弓
 			MothYoyo : "荧光球"
 			DreamWeaver : "织梦丝雨"
+			DarknessFan : "幻蝶萤火扇"
 			BlueflowerBra : "蓝花内衣"
 
 			#Glow Wood Furniture
@@ -329,7 +329,6 @@ Mods:
 			BloodLightCyanFlame : "{$Mods.Everglow.Common.LegendWeapon}\n交替掷出激光旋刃和咒火旋刃\n'它们本应是双子魔眼的武器,幸好你救出了机械师'"
 			BlueRain : "{$Mods.Everglow.Common.LegendWeapon}\n长按右键蓄力重击\n雨滴为保持纯净抗拒与海水融合,最终在深海的乱流中汇聚成这个形状"
 			ChaosCurrent : "{$Mods.Everglow.Common.LegendWeapon}\n发射一团扰乱神经的乱流\n无视无敌帧\n'造成大量神经损伤！'"
-			DarknessFan : "{$Mods.Everglow.Common.LegendWeapon}\n无召唤标记伤害\n你的召唤物将集中打击敌人\n无召唤标记伤害\n你的召唤物将集中打击被扇子击中的敌人\n以扇子和幻蝶打击敌人，右键扔出扇子\n扇子本体施加幻蝶之印(可叠加), 每层使幻蝶造成的伤害提高10%\n层数上限随共鸣层数增长\n'蕴含着被巨蛾吞噬的灵魂'"
 			GelPowerGun : "{$Mods.Everglow.Common.LegendWeapon}\n以凝胶作为弹药\n射出弹性凝胶团\n前3次弹射释放小团弹力凝胶\n'弹弹弹，弹走毁灭者'"
 			LaserWhip : "{$Mods.Everglow.Common.LegendWeapon}\n{$Mods.Everglow.Common.WarWhipGT}\n命中敌人有概率生成临时召唤物激光虫并施加激光标记\n有激光标记的敌人受到的伤害增加50%，受到的暴击伤害增加25%\n'传说中有的蠕虫可以使它们的激光连成一线'"
 			MachineFit : "{$Mods.Everglow.Common.LegendWeapon}\n无情的灭杀之拳\n命中敌人后分裂成5发追踪导弹\n'利用好它的手，而不是头"
@@ -588,6 +587,7 @@ Mods:
 				满蓄时间1.50秒
 				'''
 			MothYoyo : 幻影蛾将围绕悠悠球, 允许你造成更多伤害
+			DarknessFan : "{$Mods.Everglow.Common.LegendWeapon}\n无召唤标记伤害\n你的召唤物将集中打击敌人\n无召唤标记伤害\n你的召唤物将集中打击被扇子击中的敌人\n以扇子和幻蝶打击敌人，右键扔出扇子\n扇子本体施加幻蝶之印(可叠加), 每层使幻蝶造成的伤害提高10%\n层数上限随共鸣层数增长\n'蕴含着被巨蛾吞噬的灵魂'"
 
 			# 天穹树系列物品
 				# 天穹树小镇

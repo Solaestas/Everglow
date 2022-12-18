@@ -3,8 +3,6 @@ CactusBall Item Name & Tooltip (provided name in file does not work)
 WoodShield Name Update & Tooltip
 
 *zh-Hans*:
-ScaleWingBlade Tooltip
-MothYoyo Item Name & Tooltip
 VortexVanquisherItem Item Name & Tooltip
 NavyThunder Item Name & Tooltip
 LilyHarp Item Name & Tooltip
