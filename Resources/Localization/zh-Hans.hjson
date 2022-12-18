@@ -274,7 +274,7 @@ Mods:
 			#Glow Wood Furniture
 			
 			#Music Boxes
-			GlowWoodMusicBox : Glow Wood Music Box (The Firefly)
+			GlowWoodMusicBox : 萤火木八音盒(流萤)
 
 
 			#食物系统物品
@@ -344,7 +344,7 @@ Mods:
 			CyanPedal : "闪避能力增加4\n'少的那一瓣化作你的勇气'"
 			DarkHat : "暴击率增加4%,暴击伤害增加12%\n'除用于战斗和装饰不建议使用'"
 			DukeTooth : "增加12盔甲穿透力\n'还好猪鲨不是濒危物种...只要有松露虫'"
-		//	FireflyBorageBadge : "Increases magic damage by 6%\nIncreases movement speed by 15%\n'A badge made to remind you of how beautiful that place is'"
+			FireflyBorageBadge : "增加6%魔法伤害\n增加15%移动速度\n'一枚用于纪念那美丽流萤的徽章'"
 			GoldLiquidPupil : "你的攻击无视敌人35%的防御\n受伤之后生成灵液之环,持续12秒,不可叠加\n灵液之环生成时造成高额伤害\n持续伤害环上的敌人\n对环内的敌人施加灵液"
 			GoldRound : "7防御\n伤害增加7%\n'传统的泰拉人通常配戴它来保持健康'"
 			GreenGel : "生命上限增加30,生命回复增加4\n'研究显示绿史莱姆通常比蓝史莱姆更具生命力'"
@@ -507,8 +507,8 @@ Mods:
 				'''
 			BloodyBoneYoyo : 每击中5次敌人会释放1次獠牙钉
 			SpineGun : 射出一发勘测到敌人就会分裂的子母弹
-			ToothKnfe : ""
-			ToothMagicBall : ""
+			# ToothKnfe : ""
+			# ToothMagicBall : ""
 			ToothStaff : 释放拔地而起的獠牙刺
 			BlackWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
 			BloodClub : "{$Mods.Everglow.Common.ClubGT}"
@@ -545,15 +545,15 @@ Mods:
 			TitaniumClub : "{$Mods.Everglow.Common.ClubGT}"
 			TungstenClub : "{$Mods.Everglow.Common.ClubGT}"
 			WoodenClub : "{$Mods.Everglow.Common.ClubGT}"
-			LiftLamp : ""
-			TestItem : ""
-			EkandaBrick : ""
-			Guding : ""
-			NoFlawsDream : ""
+			# LiftLamp : ""
+			# TestItem : ""
+			# EkandaBrick : ""
+			# Guding : ""
+			# NoFlawsDream : ""
 			Origin : 传说中珍贵的起源之石
-			DurableAxe : ""
-			ElectricHeatingPlate : ""
-			BrokenPick : ""
+			# DurableAxe : ""
+			# ElectricHeatingPlate : ""
+			# BrokenPick : ""
 			BloodGoldBayonet : "{$Mods.Everglow.Common.RapierGT}"
 			DreamStar : "{$Mods.Everglow.Common.RapierGT}"
 			EternalNight : "{$Mods.Everglow.Common.RapierGT}"
@@ -817,8 +817,8 @@ Mods:
 		{
 			Header:
 			{
-				TextureReplace : "Texture Configurations"
-				AudioReplace : "Audio Configurations"
+				TextureReplace : "材质配置"
+				AudioReplace : "音频配置"
 			}
 			TextureReplace:
 			{
@@ -827,17 +827,17 @@ Mods:
 			}
 			ItemPickSoundReplace:
 			{
-				Label : "New pickup and inventory sounds"
+				Label : "新增物品拾取与拿起音效"
 			}
 			MothAudioReplace:
 			{
-				Label : "Corrupted Moth's Theme Song"
-				Tooltip : "Choose your preferred Corrupted Moth theme music to replace\nOptions: Original Theme, Alternate Theme, Old Theme\nOriginal: Plays 'Setnour6, Shiryuu, windclimb - Moth Dance'\nAlternate: Plays 'Setnour6, Shiryuu, windclimb - Moth Dance (Alt Version)'\nOld: Plays 'Void - Sudden Romance'\nThis setting won't take effect if the Corrupted Moth is currently alive"
+				Label : "腐檀巨蛾主题曲"
+				Tooltip : "选择你喜欢的腐檀巨蛾主题曲\n选项: 原曲, 额外曲, 旧曲\n原曲: 播放 'Setnour6, Shiryuu, windclimb - 巨蛾之舞'\n额外曲: 播放 'Setnour6, Shiryuu, windclimb - 巨蛾之舞 (额外版)'\n旧曲: 播放 'Void - Sudden Romance'\n腐檀巨蛾存活时, 不会立即改变曲目"
 			}
 			TuskAudioReplace:
 			{
-				Label : "(NOT IMPLEMENTED) The Tusk's Theme Song"
-				Tooltip : "Choose your preferred Bloody Tusk theme music to replace\nOptions: Original Theme, Old Theme\nThis setting won't take effect if The Tusk is currently alive\nNOTE: This config is not fully set up yet and therefore does not work at the moment"
+				Label : "(未完成) 鲜血獠牙主题曲"
+				Tooltip : "选择你喜欢的鲜血獠牙主题曲\n选项: 原曲, 旧曲\n鲜血獠牙存活时, 不会立即改变曲目\n注意: 此配置选项暂时无效"
 			}
 		}
 		InfoDisplayName : 
@@ -855,22 +855,22 @@ Mods:
 		{
 			Misc :
 			{
-				UnfinishedItem : "[c/BA0022:This item is unfinished]"
+				UnfinishedItem : "[c/BA0022:此物品尚未完善]"
 			}
 			FireflyItems :
 			{
-				MothEyeText0 : "[c/7FC1FF:While in the Firefly biome:]"
-				MothEyeText1 : "[c/7FC1FF:- Mana cost is reduced by 5%]"
-				MothEyeText2 : "[c/7FC1FF:- The effectiveness of mana sickness is reduced by 4]"
-				MothEyeText3 : "[c/7FC1FF:- All Firefly weapons deal 5% more damage]"
-				MothEyeText4 : "[c/7FC1FF:- Some Firefly-related items gain bonuses]"
-				MothEyeBonusText : "[c/7FC1FF:Bonus gained from {$Mods.Everglow.ItemName.MothEye}:]"
-				MEyeBonusTextMothBlade : "[c/7FC1FF:More moths appear from the blade]"
+				MothEyeText0 : "[c/7FC1FF:处于流萤群系时:]"
+				MothEyeText1 : "[c/7FC1FF:- 降低5%魔力消耗]"
+				MothEyeText2 : "[c/7FC1FF:- 降低4魔力病的效力]"
+				MothEyeText3 : "[c/7FC1FF:- 增加5%流萤武器的伤害]"
+				MothEyeText4 : "[c/7FC1FF:- 部分流萤物品获得增幅]"
+				MothEyeBonusText : "[c/7FC1FF:来自 {$Mods.Everglow.ItemName.MothEye} 的增幅:]"
+				MEyeBonusTextMothBlade : "[c/7FC1FF:释放更多幻影蛾]"
 				FFBBadge0 : "[c/7FC1FF:'受到那只巨蛾怒气的影响,你的攻击变得更加狂野']"
-				FFBBadge1 : "[c/7FC1FF:Defense is lowered based on how much defense you currently have, up to -12]"
-				FFBBadge2 : "[c/7FC1FF:伤害增加18%]"
-				FFBBadge3 : "[c/7FC1FF:Increases melee speed by 10%]"
-				FFBBadge4 : "[c/7FC1FF:Base critical strike chance for melee weapons and whips is reduced to 0]"
+				FFBBadge1 : "[c/7FC1FF:防御基于当前的值降低, 最多-12]"
+				FFBBadge2 : "[c/7FC1FF:增加18%伤害]"
+				FFBBadge3 : "[c/7FC1FF:增加10%近战攻速]"
+				FFBBadge4 : "[c/7FC1FF:近战武器和鞭的基础暴击率降至0]"
 			}
 			Spellbook : 
 			{
