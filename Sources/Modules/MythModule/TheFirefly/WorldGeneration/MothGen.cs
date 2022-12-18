@@ -19,11 +19,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
     {
         public override void PostUpdateEverything()
         {
-            if (Main.mouseRight && Main.mouseRightRelease)
-            {
-                BuildShabbyCastle();
-                //Main.NewText(SubWorldModule.SubworldSystem.IsActive<MothWorld>());
-            }
+            //if (Main.mouseRight && Main.mouseRightRelease)
+            //{
+            //    BuildShabbyCastle();
+            //    //Main.NewText(SubWorldModule.SubworldSystem.IsActive<MothWorld>());
+            //}
 
         }
         public static void QuickBuild(int x, int y, string Path)
