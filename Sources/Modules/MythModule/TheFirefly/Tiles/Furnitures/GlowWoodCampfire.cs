@@ -72,7 +72,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             Player player = Main.LocalPlayer;
             if (player != null && !player.dead && player.active)
             {
-                player.AddBuff(BuffID.Campfire, 20, true, false);
+                Main.SceneMetrics.HasCampfire = true;
+                //player.AddBuff(BuffID.Campfire, 2, true, false);
             }
             Tile tile = Main.tile[i, j];
             if (tile.TileFrameX < 54 && tile.TileFrameY == 18)
