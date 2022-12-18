@@ -32,13 +32,15 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
             if (player != null && player.active && !player.dead)
             {
                 if (player.GetModPlayer<FoodBuffModPlayer>().CaramelPuddingBuff)
+                {
                     if (projectile.velocity.X != oldVelocity.X && Math.Abs(oldVelocity.X) > 1f)
                     {
                         projectile.velocity.X = oldVelocity.X * -0.9f;
                     }
-                if (projectile.velocity.Y != oldVelocity.Y && Math.Abs(oldVelocity.Y) > 1f)
-                {
-                    projectile.velocity.Y = oldVelocity.Y * -0.9f;
+                    if (projectile.velocity.Y != oldVelocity.Y && Math.Abs(oldVelocity.Y) > 1f)
+                    {
+                        projectile.velocity.Y = oldVelocity.Y * -0.9f;
+                    }
                 }
             }
             return false;
