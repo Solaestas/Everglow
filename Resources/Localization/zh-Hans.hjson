@@ -608,7 +608,7 @@ Mods:
 					'''
 
 			#Music Boxes
-			GlowWoodMusicBox : "Plays 'Setnour6 - Within the Giant Cocoon (身陷巨茧)'"
+			GlowWoodMusicBox : "播放 'Setnour6 - Within the Giant Cocoon (身陷巨茧)'"
 			
 			#食物系统物品
 			BloodGlucoseMonitor : "显示当前饱食度"
