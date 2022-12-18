@@ -64,7 +64,6 @@ Mods:
 			FireFeatherMagic : 烈焰羽箭
 			FreezeFeatherMagic : 寒冰羽箭
 			GoldRoundYoyo : "金边球"
-			Hepuyuan : "和璞鸢"
 			SilveralGun : "银猎之狐Fx01"
 			SilveralRifle : "银影幽豹Ct01"
 			Sunflower : "向日飞盘"
@@ -304,6 +303,10 @@ Mods:
 
 			#Plant Module Items
 			CactusBall : "仙人球棍"
+
+			# Genshin Impact items
+			Hepuyuan : "和璞鸢"
+			VortexVanquisherItem : "贯虹之槊"
 		}
 		ItemTooltip:
 		{
@@ -319,7 +322,6 @@ Mods:
 			FireFeatherMagic : 射出爆燃羽毛
 			FreezeFeatherMagic : 射出冰封羽毛
 			GoldRoundYoyo : "留下跟踪的金圈轨迹"
-			Hepuyuan : "{$Mods.Everglow.Common.ExcluWeapon}\n左键突刺,右键打桩\n你不应该得到它\n致敬<原神>"
 			SilveralGun : "命中后移速和伤害提升5%,持续5秒"
 			SilveralRifle : "命中后移速和伤害提升5%,持续5秒"
 			Sunflower : "葵花打造的武器,拥有象征希望的色彩"
@@ -608,6 +610,10 @@ Mods:
 
 			#Plant Module Items
 			CactusBall : "旋转并掷出你的仙人掌球！\n击碎敌人护甲，并让它们流血"
+			
+			# Genshin Impact items
+			Hepuyuan : "{$Mods.Everglow.Common.ExcluWeapon}\n左键突刺,右键打桩\n你不应该得到它\n致敬<原神>"
+			VortexVanquisherItem : "{$Mods.Everglow.Common.ExcluWeapon}\n[c/B4B16E:'此为秩序']\n连续左键以使用不同攻击\n最后一种轻微地将你推向光标\n左键并长按以冲刺并召唤一排坠落的槊\n右键以召唤石柱并给予你减少伤害的护盾"
 		}
 		BuffName : 
 		{
