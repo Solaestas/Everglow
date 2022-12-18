@@ -12,7 +12,7 @@ Mods:
 			Minute : "minute"
 			Second : "second"
 			Duration : "duration"
-			NotActivated : "unactivated"
+			NotActivated : "Unactivated"
 			WarWhipGT :
 				'''
 				No summon tag damage
@@ -43,12 +43,12 @@ Mods:
 			FoodSystem:
 			{
 				CannotEat : "You are full"
-				CannotDrink : "You don't feel like to drink"
+				CannotDrink : "You don't feel like drinking"
 			}
 
 			PylonSystem : 
 			{
-				ShabbyPylonRepairedTip : "Pylon repaired"
+				ShabbyPylonRepairedTip : "Pylon Repaired"
 			}
 		}
 		ItemName: 
@@ -74,7 +74,6 @@ Mods:
 			BloodLightCyanFlame : "Bloody Lasers and Cyan Flames"
 			BlueRain : "Seperate Ocean"
 			ChaosCurrent : "Chaotic Currents"
-			DarknessFan : "Fan of Phantom Butterflies and Fireflies"
 			FrozenStormPine : "Ice Storm Pine"
 			GelPowerGun : "Gelatin Charger"
 			LaserWhip : "Laser Whip"
@@ -195,7 +194,7 @@ Mods:
 			DarkWoodSlingShot : Shadewood SlingShot
 			GreenGemSlingshot : Emerald Slingshot
 			JellySlingshot : Jelly Slingshot
-			JungleSlingshot : JungleSlingshot
+			JungleSlingshot : Jungle Slingshot
 			PalmWoodSlingshot : Palm Wood Slingshot
 			PearlWoodSlingshot : Pearlwood Slingshot
 			PurpleGemSlingshot : Amethyst Purple Gem Slingshot
