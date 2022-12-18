@@ -24,7 +24,7 @@ Mods:
 				你的召唤物将集中攻击被击中的敌人
 				'''
 			ClubGT : 旋转挥舞以攻击敌人
-			RapierGT : Right click and hold to charge an invincibility dash with high damage
+			RapierGT : 按住右键为一次高伤害, 附带无敌的冲刺充能
 			NoAmmoConsum : 不消耗弹药
 			Acytaea : 雅思塔亚
 			ExcluWeapon : 专属武器
