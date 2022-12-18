@@ -301,6 +301,9 @@
 			# Genshin Impact items
 			Hepuyuan : "Prinomial Jade Winged Spear"
 			VortexVanquisherItem : "Vortex Vanquisher"
+			
+			# Dev items
+			LilyHarp : "Harp of the Valley"
 		}
 
 		ItemTooltip:
@@ -591,6 +594,9 @@
 			# Genshin Impact items
 			Hepuyuan : "{$Mods.Everglow.Common.ExcluWeapon}\nLeft click to dash, right click to smash\n'You should't be getting it'\nHomaging to Genshin Impact"
 			VortexVanquisherItem : "{$Mods.Everglow.Common.ExcluWeapon}\n[c/B4B16E:'This is Order']\nLeft click in succession to perform different attacks\nThe last attack slightly propels you to the cursor\nLeft click and hold to dash and summon falling spears\nRight click to summon a pillar and grant you a damage-reducing shield"
+			
+			# Dev items
+			LilyHarp : "Music notes fly in a beautiful succession\nThe notes follow your cursor while holding left click\n[c/856Eb5:Developer Item: Omnielement]"
 		}
 		BuffName : 
 		{

@@ -3,7 +3,6 @@ CactusBall Item Name & Tooltip (provided name in file does not work)
 WoodShield Name Update & Tooltip
 
 *zh-Hans*:
-LilyHarp Item Name & Tooltip
 
 *ru-RU*:
 DustOfCorrupt Item Name & Tooltip
