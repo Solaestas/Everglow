@@ -62,7 +62,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
             {
                 if (NPC.ai[1] > 90)
                 {
-                    if(NPC.ai[2] == 0)
+                    if (NPC.ai[2] == 0)
                     {
                         for (int i = 0; i < 2; i++)
                         {
@@ -231,9 +231,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
             //Main.spriteBatch.Draw(tBox, rt, new Color(55, 0, 0, 0));
 
             Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred,BlendState.AlphaBlend,SamplerState.AnisotropicWrap,DepthStencilState.None,RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix) ;
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             Vector2 CrackCenter = new Vector2(-24, 196).RotatedBy(NPC.rotation) + drawOffset;
-            if(NPC.ai[1] <= 90)
+            if (NPC.ai[1] <= 90)
             {
                 DrawCrack(CrackCenter + NPC.position - Main.screenPosition, Math.Clamp(NPC.ai[1], 0, 15), 0);
                 DrawCrack(CrackCenter + NPC.position - Main.screenPosition, Math.Clamp(NPC.ai[1] - 8, 0, 15), 1);

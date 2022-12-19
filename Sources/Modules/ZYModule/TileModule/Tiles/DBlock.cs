@@ -21,6 +21,7 @@ internal abstract class DBlock : DynamicTile, IGrabbable, IHookable
         this.position = position;
         this.size = size;
     }
+    public Vector2 Center => position + size / 2f;
     public override Color MapColor => new Color(255, 255, 255, 255);
     public override TextureType TextureType => TextureType.WhitePixel;
     public AABB AABB => new AABB(position, size);

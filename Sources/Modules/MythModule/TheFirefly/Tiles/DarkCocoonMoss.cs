@@ -17,22 +17,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             AddMapEntry(new Color(35, 49, 122));
         }
 
-        private void PlantTree(int i, int j, int style)
-        {
-            for (int y = -8; y < 0; y++)
-            {
-                Tile tile = Main.tile[i, j + y];
-                tile.TileType = (ushort)ModContent.TileType<Tiles.FireflyTree>();
-                tile.HasTile = true;
-                tile.TileFrameX = (short)(style * 256);
-                tile.TileFrameY = (short)((y + 8) * 16);
-            }
-            var fireFlyTree = ModContent.GetInstance<FireflyTree>();
-            fireFlyTree.InsertOneTreeRope(i, j - 8, style);
-        }
-
         public override void NearbyEffects(int i, int j, bool closer)
         {
+            Lighting.AddLight(i, j, 0.02f, 0.1f, 0.24f);
             RandomUpdate(i, j);//TODO:为了让这玩意效果正常强行采取的暴力措施，如果sublib更新了就删掉
 
             base.NearbyEffects(i, j, closer);
@@ -85,7 +72,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             }
             Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/DarkCocoonMossGlow");
 
-            spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(255, 255, 255, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
+            spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(55, 55, 55, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
 
             base.PostDraw(i, j, spriteBatch);
         }

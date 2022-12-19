@@ -1,4 +1,6 @@
 using Terraria.Localization;
+using Everglow.Sources.Commons.Core.VFX;
+using Everglow.Sources.Commons.Function.Vertex;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
@@ -15,7 +17,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Projectile.width = 8;
             Projectile.height = 8;
             Projectile.aiStyle = -1;
-            Projectile.friendly = false;
             Projectile.hostile = true;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
@@ -31,89 +32,51 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             return new Color?(new Color(255, 255, 255, 0));
         }
 
-        private bool initialization = true;
-        private float X;
-        private float E;
-        private float Y;
-        private float b;
-        private float Stre2 = 1;
-        private float sc = 0;
-
         public override void AI()
         {
-            if (initialization)
-            {
-                X = (float)Math.Sqrt(Projectile.velocity.X * (double)Projectile.velocity.X + Projectile.velocity.Y * (double)Projectile.velocity.Y);
-                b = Main.rand.Next(-50, 50);
-                initialization = false;
-                if (Main.rand.Next(0, 2) == 1)
-                {
-                    Y = (float)Math.Sin((double)X / 5f * 3.1415926535f / 1f) / 1000f + 1;
-                }
-                else
-                {
-                    Y = (float)Math.Sin(-(double)X / 5f * 3.1415926535f / 1f) / 1000f + 1;
-                }
-            }
-            if (Projectile.timeLeft < 995)
-            {
-                /*
-                Vector2 vector = base.Projectile.position + new Vector2(2);
-                int num = Dust.NewDust(vector - new Vector2(1), 2, 2, 191, 0f, 0f, 0, default(Color), (float)Projectile.scale * 0.8f * sc);
-                Main.dust[num].velocity *= 0.0f;
-                Main.dust[num].noGravity = true;
-                Main.dust[num].scale *= 1.2f;
-                Main.dust[num].alpha = 200;*/
-            }
-            if (sc < 1 && Projectile.timeLeft < 900)
-            {
-                sc += 0.01f;
-            }
-            if (Projectile.timeLeft is < 600 and >= 585)
-            {
-                if (Y < 1)
-                {
-                    Projectile.scale *= Y / (Projectile.timeLeft / 585f);
-                }
-                else
-                {
-                    Projectile.scale *= Y * Projectile.timeLeft / 585f;
-                }
-            }
-            if (Projectile.timeLeft < 580 && Projectile.timeLeft >= 100 + b)
-            {
-                Projectile.scale *= Y;
-            }
-            if (Projectile.timeLeft < 100 + b)
-            {
-                Projectile.scale *= 0.95f;
-            }
             if (Projectile.velocity.Length() < 5f)
             {
                 Projectile.velocity *= 1.018f;
             }
-            if (Stre2 > 0)
-            {
-                Stre2 -= 0.005f;
-            }
-            if (E < 1)
-            {
-                E += 0.01f;
-            }
-            Lighting.AddLight(base.Projectile.Center, (255 - base.Projectile.alpha) * 0f / 255f * Projectile.scale * E, (255 - base.Projectile.alpha) * 0.01f / 255f * E, (255 - base.Projectile.alpha) * 0.6f / 255f * Projectile.scale * E);
+            Lighting.AddLight(base.Projectile.Center, 0,0.4f,0.9f);
         }
 
         public override void PostDraw(Color lightColor)
         {
-            Texture2D texture = Common.MythContent.QuickTexture("TheFirefly/Projectiles/Lightball");
-            Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(10, 83, 110, 0), Projectile.rotation, new Vector2(250f, 250f), Projectile.scale * 0.25f * (float)(1.4 + Math.Sin(Projectile.timeLeft / 15d + Projectile.position.X / 36d)) / 5f * E, SpriteEffects.None, 0);
+            Texture2D t = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/FogTraceLight");
+            float width = 20;
+            if (Projectile.timeLeft < 120)
+            {
+                width = Projectile.timeLeft / 6f;
+            }
+            VFXManager.spriteBatch.Begin();
+            DrawTexCircle_VFXBatch(VFXManager.spriteBatch, 30 + 7 * MathF.Sin((float)(Main.timeForVisualEffects / 3f + Projectile.ai[0])), width, new Color(0, 150,255, 0) * 0.4f, Projectile.Center - Main.screenPosition,t , (float)(Main.timeForVisualEffects / 3.8f + Projectile.ai[0]));
+            VFXManager.spriteBatch.End();
         }
 
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D Light = Common.MythContent.QuickTexture("TheFirefly/Projectiles/FixCoinLight3");
-            Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color((int)(255 * Stre2), (int)(255 * Stre2), (int)(255 * Stre2), 0), Projectile.rotation, new Vector2(56f, 56f), Projectile.scale, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition, null, new Color(1f,1f,1f, 0), Projectile.rotation, Light.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
             return true;
+        }
+        private static void DrawTexCircle_VFXBatch(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
+        {
+            List<Vertex2D> circle = new List<Vertex2D>();
+
+            for (int h = 0; h < radious / 2; h += 1)
+            {
+                circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0.8f, 0)));
+                circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0.2f, 0)));
+            }
+            circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(1, 0.8f, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(1, 0.2f, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(0, 0.2f, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0, 0.8f, 0)));
+            if (circle.Count > 2)
+            {
+                spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
+            }
         }
     }
 }

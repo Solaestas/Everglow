@@ -1,6 +1,7 @@
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
+using Everglow.Sources.Modules.MythModule.Common;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 {
@@ -16,7 +17,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("测试版蜈蚣");
+            DisplayName.SetDefault("Firefly Centipede");
 
             var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
             {
@@ -38,11 +39,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             NPC.scale = 0.9f;
             NPC.dontCountMe = true;
 
-            NPC.damage = 26;
+            NPC.damage = 30;
             NPC.width = 22;
             NPC.height = 22;
-            NPC.defense = 30;
-            NPC.lifeMax = 200;
+            NPC.defense = 36;
+            NPC.lifeMax = 1200;
             NPC.knockBackResist = 0f;
             NPC.value = 300f;
             NPC.aiStyle = -1;
@@ -55,22 +56,38 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Underground,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Caverns,
 
-                new FlavorTextBestiaryInfoElement("看起来就是条蜈蚣")
+                new FlavorTextBestiaryInfoElement("Look like a centipede?")
             });
         }
-
+        public override float SpawnChance(NPCSpawnInfo spawnInfo)
+        {
+            FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
+            if (!fireflyBiome.IsBiomeActive(Main.LocalPlayer))
+            {
+                return 0f;
+            }
+            else if (NPC.CountNPCS(ModContent.NPCType<CentipedeHead>()) > 1)
+            {
+                return 0f;
+            }
+            else if (NPC.CountNPCS(ModContent.NPCType<CentipedeHead>()) > 0)
+            {
+                return 0.6f;
+            }
+            return 0.12f;
+        }
         public override void Init()
         {
-            MinSegmentLength = 4;
-            MaxSegmentLength = 6;
+            MinSegmentLength = 24;
+            MaxSegmentLength = 32;
             CommonWormInit(this);
         }
 
         internal static void CommonWormInit(FireWorm worm)
         {
             // 这两个属性处理蠕虫的运动
-            worm.MoveSpeed = 5.5f;
-            worm.Acceleration = 0.045f;
+            worm.MoveSpeed = 10.5f;
+            worm.Acceleration = 0.03f;
         }
 
         private int attackCounter;
@@ -89,258 +106,23 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
         {
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                if (attackCounter > 0)
-                {
-                    attackCounter--;
-                }
                 Player target = Main.player[NPC.target];
-                attackCounter = 2000;  // 先不让其转成蠕虫AI
-                if (attackCounter == 0)
-                {
-                    // 如果攻击计数器为0，切换成蠕虫AI
-                    bool collision = HeadAI_CheckCollisionForDustSpawns();
-                    // 测量与目标的距离
-                    HeadAI_CheckTargetDistance(ref collision);
-                    HeadAI_Movement(collision);
+                bool collision = HeadAI_CheckCollisionForDustSpawns();
+                // 测量与目标的距离
+                HeadAI_CheckTargetDistance(ref collision);
+                HeadAI_Movement(collision);
 
-                    NPC.noGravity = true;
-                    NPC.noTileCollide = true;
-                    attackCounter = 2000;
-                }
-                // 如果靠近玩家，且头部无碰撞，且计数器大于0.就切换成爬虫AI
-                // if (attackCounter > 500 && Vector2.Distance(NPC.Center, target.Center) < 200 && !Collision.SolidCollision(NPC.Center, NPC.width / 2, NPC.height / 2))  //  && Collision.CanHit(NPC.Center, 1, 1, target.Center, 1, 1)
-                else
-                {
-                    NPC.noTileCollide = false;
-                    // 先检测下右上左四个方向的碰撞
-                    Vector2[] hitDirBase = { new Vector2(0, 1), new Vector2(1, 0), new Vector2(0, -1), new Vector2(-1, 0) };
-                    int[] isHitDirList = { 0, 0, 0, 0, 0 };
-                    for (int i = 0; i < hitDirBase.Length; i++)
-                    {
-                        Vector2 dirItem = hitDirBase[i];
-                        Vector2 newPos = NPC.Center + dirItem * 25;  // TODO 调节碰撞大小
-                        if (Collision.SolidCollision(newPos, 1, 1))
-                        {
-                            isHitDirList[i + 1] = 1;
-                            isHitDirList[0] += 1;
-                        }
-                    }
-                    // 检测离玩家多远
-                    Player playerTarget = Main.player[NPC.target];
-                    Vector2 relatPosit = playerTarget.position - NPC.position;  // 相对位置
-                    bool xBigery = true;
-                    if (Math.Abs(relatPosit.X) <= Math.Abs(relatPosit.Y))
-                    {
-                        xBigery = false;
-                    }
+                NPC.noGravity = true;
+                NPC.noTileCollide = true;
 
-                    if (isHitDirList[0] == 4)
-                    {  // 卡住了，切换蠕虫AI
-                        attackCounter = 0;
-                        Main.NewText("四个方向发生了碰撞");
-                    }
-                    else if (isHitDirList[0] == 3)
-                    {  // 只有一个方向可走
-                        Main.NewText("三个方向发生了碰撞");
-                        for (int i = 1; i < isHitDirList.Length; i++)
-                        {
-                            if (isHitDirList[i] == 0)
-                            {
-                                NPC.velocity = new Vector2(hitDirBase[i - 1].X, hitDirBase[i - 1].Y) * wormSpeed;
-                            }
-                        }
-                    }
-                    else if (isHitDirList[0] == 2 && !(isHitDirList[1] == 1 && isHitDirList[3] == 1) && !(isHitDirList[2] == 1 && isHitDirList[4] == 1))
-                    {
-                        Main.NewText("两个方向发生了碰撞");
-                        // 在两个拐角处发生了碰撞，先设置x和y速度的方向
-                        for (int i = 1; i < isHitDirList.Length; i++)
-                        {
-                            if (isHitDirList[i] == 1)
-                            {
-                                if (hitDirBase[i - 1].X > 0)
-                                {
-                                    NPC.velocity.X = -wormSpeed;
-                                }
-                                else if (hitDirBase[i - 1].X < 0)
-                                {
-                                    NPC.velocity.X = wormSpeed;
-                                }
-
-                                if (hitDirBase[i - 1].Y > 0)
-                                {
-                                    NPC.velocity.Y = -wormSpeed;
-                                }
-                                else if (hitDirBase[i - 1].Y < 0)
-                                {
-                                    NPC.velocity.Y = wormSpeed;
-                                }
-
-                                Main.NewText("isHitDirList: " + (i - 1));
-                            }
-                        }
-                        // 按照当前玩家方向为目标
-                        if (relatPosit.X * NPC.velocity.X >= 0)
-                        {
-                            NPC.velocity.Y = 0f;
-                        }
-                        else
-                        {
-                            if (relatPosit.Y * NPC.velocity.Y > 0 || xBigery)
-                            {
-                                NPC.velocity.X = 0f;
-                            }
-                            else
-                            {
-                                NPC.velocity.Y = 0f;
-                            }
-                        }
-                        Main.NewText("finally, NPC.velocity, (" + NPC.velocity.X + ", " + NPC.velocity.Y + ")");
-                    }
-                    else if (isHitDirList[0] == 0)
-                    {  // 上下左右都没发生碰撞，那检测四个角的碰撞(右下，右上，左上，左下)
-                        Vector2[] hitDirAdv = { new Vector2(1, 1), new Vector2(1, -1), new Vector2(-1, -1), new Vector2(-1, 1) };
-                        for (int i = 0; i < hitDirAdv.Length; i++)
-                        {
-                            Vector2 dirItem = hitDirAdv[i];
-                            Vector2 newPos = NPC.Center + dirItem * (float)Math.Sqrt(10);  // TODO 调节碰撞大小
-                            if (Collision.SolidCollision(newPos, 1, 1))
-                            {
-                                isHitDirList[i + 1] = 1;
-                                isHitDirList[0] += 1;
-                            }
-                        }
-                        if (isHitDirList[0] == 0)
-                        {  // 真的在悬空
-                            // 切换蠕虫AI
-                            // attackCounter = 0;
-                            // NPC.noGravity = false;
-                            NPC.velocity.Y += 0.1f;  // 向下落
-                            if (NPC.velocity.Y > 3f)
-                            {
-                                NPC.velocity.Y = 3f;
-                            }
-
-                            Main.NewText("在悬空");
-                        }
-                        else if (isHitDirList[0] == 1)
-                        {  // 只有两个方向可选
-                            Main.NewText("有一个对角碰撞");
-                            for (int i = 1; i < isHitDirList.Length; i++)
-                            {
-                                if (isHitDirList[i] == 1)
-                                {  // 先确定可能运动的方向
-                                    NPC.velocity.X = hitDirAdv[i - 1].X * wormSpeed;
-                                    NPC.velocity.Y = hitDirAdv[i - 1].Y * wormSpeed;
-                                    break;
-                                }
-                            }
-                            // 若Y方向速度远离玩家，则将其设置为0
-                            if ((playerTarget.position.Y - NPC.position.Y) * NPC.velocity.Y < 0)
-                            {
-                                NPC.velocity.Y = 0;
-                            }
-                            else
-                            {
-                                NPC.velocity.X = 0;
-                            }
-                            Main.NewText("速度：(" + NPC.velocity.X + " ," + NPC.velocity.Y + ")");
-                        }
-                        else if (isHitDirList[0] == 2 && !(isHitDirList[1] == 1 && isHitDirList[3] == 1) && !(isHitDirList[2] == 1 && isHitDirList[4] == 1))
-                        {
-                            Main.NewText("有两个对角碰撞");
-                            // 只有两个碰撞，且两个位置不处于对角线,则有三个可能运动的方向
-                            NPC.velocity = new Vector2(0f, 0f);
-                            for (int i = 1; i < isHitDirList.Length; i++)
-                            {
-                                if (isHitDirList[i] == 1)
-                                {  // 先确定可能运动的方向
-                                    NPC.velocity.X += hitDirAdv[i - 1].X;
-                                    NPC.velocity.Y += hitDirAdv[i - 1].Y;
-                                }
-                            }
-                            // X轴速度同向，可以接近玩家
-                            if (relatPosit.X * NPC.velocity.X >= 0)
-                            {
-                                NPC.velocity.X = relatPosit.X / Math.Abs(relatPosit.X) * wormSpeed;
-                                NPC.velocity.Y = 0f;
-                            }
-                            else
-                            {  // 如果Y轴可以接近玩家，或者X轴距离玩家距离大于Y轴，则设置Y速度。
-                                if (relatPosit.Y * NPC.velocity.Y >= 0 || xBigery)
-                                {
-                                    NPC.velocity.Y = relatPosit.Y / Math.Abs(relatPosit.Y) * wormSpeed;
-                                    NPC.velocity.X = 0f;
-                                }
-                                else
-                                {
-                                    NPC.velocity.X = relatPosit.X / Math.Abs(relatPosit.X) * wormSpeed;
-                                    NPC.velocity.Y = 0f;
-                                }
-                            }
-                        }
-                        else
-                        {  // 剩余情况相同，有四个可能的运动方向
-                            Main.NewText("有多个对角碰撞");
-                            if (relatPosit.Y * NPC.velocity.Y >= 0 || xBigery)
-                            {
-                                NPC.velocity.Y = relatPosit.Y / Math.Abs(relatPosit.Y) * wormSpeed;
-                                NPC.velocity.X = 0f;
-                            }
-                            else
-                            {
-                                NPC.velocity.X = relatPosit.X / Math.Abs(relatPosit.X) * wormSpeed;
-                                NPC.velocity.Y = 0f;
-                            }
-                        }
-                    }
-                    else
-                    {  // 只有一个方向发生了碰撞，则令蠕虫贴着走即可
-                        for (int i = 1; i < isHitDirList.Length; i++)
-                        {
-                            if (isHitDirList[i] == 1)
-                            {
-                                if (hitDirBase[i - 1].X == 0)
-                                {  // 在上或下碰撞，就将Y速度分量设置为0
-                                    NPC.velocity.Y = 0;
-                                    if (playerTarget.position.X > NPC.position.X)
-                                    {
-                                        NPC.velocity.X = wormSpeed;
-                                    }
-                                    else
-                                    {
-                                        NPC.velocity.X = -wormSpeed;
-                                    }
-                                }
-                                else
-                                {  // 在左或右发生碰撞，就将X速度分量设置为0
-                                    NPC.velocity.X = 0;
-                                    if (playerTarget.position.Y > NPC.position.Y)
-                                    {
-                                        NPC.velocity.Y = wormSpeed;
-                                    }
-                                    else
-                                    {
-                                        NPC.velocity.Y = -wormSpeed;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    // 调整头部方向
-                    if (NPC.velocity.X != 0)
-                    {
-                        NPC.rotation = (float)Math.Atan2(NPC.velocity.Y, NPC.velocity.X) + MathHelper.PiOver2;
-                    }
-                    else
-                    {
-                        NPC.rotation = MathHelper.PiOver2 * (NPC.velocity.Y / Math.Abs(NPC.velocity.Y));
-                    }
-                }
                 NPC.netUpdate = true;
             }
         }
-
+        public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            Texture2D tex = MythContent.QuickTexture("TheFirefly/NPCs/CentipedeHead_Glow");
+            spriteBatch.Draw(tex, NPC.Center - Main.screenPosition + new Vector2(0, -28), null, new Color(255, 255, 255, 0), NPC.rotation, tex.Size() / 2f, NPC.scale, SpriteEffects.None, 0);
+        }
         private bool HeadAI_CheckCollisionForDustSpawns()
         {
             int minTilePosX = (int)(NPC.Left.X / 16) - 1;
@@ -348,25 +130,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             int minTilePosY = (int)(NPC.Top.Y / 16) - 1;
             int maxTilePosY = (int)(NPC.Bottom.Y / 16) + 2;
 
-            if (minTilePosX < 0)
-            {
-                minTilePosX = 0;
-            }
-
-            if (maxTilePosX > Main.maxTilesX)
-            {
-                maxTilePosX = Main.maxTilesX;
-            }
-
-            if (minTilePosY < 0)
-            {
-                minTilePosY = 0;
-            }
-
-            if (maxTilePosY > Main.maxTilesY)
-            {
-                maxTilePosY = Main.maxTilesY;
-            }
+            minTilePosX = Math.Clamp(minTilePosX, 0, Main.maxTilesX);
+            minTilePosY = Math.Clamp(minTilePosY, 0, Main.maxTilesY);
+            maxTilePosX = Math.Clamp(maxTilePosX, 0, Main.maxTilesX);
+            maxTilePosY = Math.Clamp(maxTilePosY, 0, Main.maxTilesY);
 
             bool collision = false;
 
@@ -378,7 +145,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
                     Tile tile = Main.tile[i, j];
 
                     // 如果物体是实心的或被认为是一个平台，那么就有有效的碰撞。
-                    if (tile.HasUnactuatedTile && (Main.tileSolid[tile.TileType] || Main.tileSolidTop[tile.TileType] && tile.TileFrameY == 0) || tile.LiquidAmount > 64)
+                    if (tile.HasUnactuatedTile && (Main.tileSolid[tile.TileType] || Main.tileSolidTop[tile.TileType] && tile.TileFrameY == 0))
                     {
                         Vector2 tileWorld = new Point16(i, j).ToWorldCoordinates(0, 0);
 
@@ -395,6 +162,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
                     }
                 }
             }
+
             return collision;
         }
 
@@ -473,7 +241,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             // 如果我们没有任何类型的碰撞，我们希望NPC向下并沿X轴减速。
             if (!collision && !CanFly)
             {
-                HeadAI_Movement_HandleFallingFromNoCollision(dirX, speed, acceleration);
+                HeadAI_Movement_HandleFallingFromNoCollision(dirX, speed * NPC.localAI[0], acceleration);
             }
             else
             {
@@ -493,9 +261,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             NPC.velocity.Y += 0.11f;
 
             // Ensure that the NPC does not fall too quickly
-            if (NPC.velocity.Y > speed)
+            if (NPC.velocity.Y > speed + 12.5)
             {
-                NPC.velocity.Y = speed;
+                NPC.velocity.Y = speed + 12.5f;
             }
 
             // 以下行为模仿了香草虫的运动
@@ -554,6 +322,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
                 }
 
                 NPC.soundDelay = (int)num1;
+                Tile tile = Main.tile[(int)(NPC.Center.X / 16f), (int)(NPC.Center.Y / 16f)];
+                if (tile.LiquidAmount > 15)
+                {
+                    SoundEngine.PlaySound(SoundID.Waterfall, NPC.position);
+                    return;
+                }
 
                 SoundEngine.PlaySound(SoundID.WormDig, NPC.position);
             }
@@ -694,13 +468,40 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
                 NPC.netUpdate = true;
             }
         }
+        public override void OnKill()
+        {
+            Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, Main.rand.Next(40)).RotatedByRandom(6.283),
+                           new Vector2(0, Main.rand.Next(8)).RotatedByRandom(6.283) + new Vector2(-2, 2), ModContent.Find<ModGore>("Everglow/FireflyCentipedeBodyHead0").Type);
+            Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, Main.rand.Next(40)).RotatedByRandom(6.283),
+               new Vector2(0, Main.rand.Next(8)).RotatedByRandom(6.283) + new Vector2(-2, 2), ModContent.Find<ModGore>("Everglow/FireflyCentipedeBodyHead1").Type);
+            Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, Main.rand.Next(40)).RotatedByRandom(6.283),
+               new Vector2(0, Main.rand.Next(8)).RotatedByRandom(6.283) + new Vector2(-2, 2), ModContent.Find<ModGore>("Everglow/FireflyCentipedeBodyHead2").Type);
+            for (int f = 0; f < 16; f++)
+            {
+                Vector2 v0 = new Vector2(0, Main.rand.NextFloat(9f)).RotatedByRandom(6.283);
+                Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.NavyBlood>(), v0.X, v0.Y, 0, default, Main.rand.NextFloat(0.85f, 2.75f));
+            }
+        }
+        public override void HitEffect(int hitDirection, double damage)
+        {
+            for (int f = 0; f < 8; f++)
+            {
+                Vector2 v0 = new Vector2(0, Main.rand.NextFloat(9f)).RotatedByRandom(6.283);
+                Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.NavyBlood>(), v0.X, v0.Y, 0, default, Main.rand.NextFloat(0.85f, 1.75f));
+            }
+        }
+        public override bool CheckActive()
+        {
+            Player player = Main.player[NPC.target];
+            return (player.Center - NPC.Center).Length() > 3500;
+        }
     }
 
     internal class CentipedeBody : FireWormBody
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("测试版蜈蚣");
+            DisplayName.SetDefault("Firefly Centipede");
 
             NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
             {
@@ -709,7 +510,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             };
             NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, value);
         }
-
+        
         public override void SetDefaults()
         {
             NPC.netAlways = true;
@@ -719,11 +520,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             NPC.scale = 0.9f;
             NPC.dontCountMe = true;
 
-            NPC.damage = 26;
+            NPC.damage = 20;
             NPC.width = 24;
             NPC.height = 24;
             NPC.defense = 30;
-            NPC.lifeMax = 200;
+            NPC.lifeMax = 1200;
             NPC.knockBackResist = 0f;
             NPC.value = 300f;
             NPC.aiStyle = -1;
@@ -733,13 +534,112 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
         {
             CentipedeHead.CommonWormInit(this);
         }
+        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            float AddRot = (float)(Math.Sin(Main.timeForVisualEffects * 0.2 + NPC.ai[2] * 0.7) * 0.3f);
+            Texture2D tex = MythContent.QuickTexture("TheFirefly/NPCs/CentipedeBody");
+            int FrameType = (int)NPC.ai[2] % 2;
+            if (FrameType == 1 && (int)NPC.ai[2] % 4 == 1)
+            {
+                FrameType = 2;
+            }
+            if (FrameType == 1)
+            {
+                tex = MythContent.QuickTexture("TheFirefly/NPCs/CentipedeBody1");
+            }
+            if (FrameType == 2)
+            {
+                tex = MythContent.QuickTexture("TheFirefly/NPCs/CentipedeBody2");
+            }
+            spriteBatch.Draw(tex, NPC.Center - Main.screenPosition + new Vector2(0, -28), null, Lighting.GetColor((int)(NPC.Center.X / 16), (int)(NPC.Center.Y / 16)), NPC.rotation + AddRot, tex.Size() / 2f, NPC.scale, SpriteEffects.None, 0);
+            return false;
+        }
+        public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+
+            float AddRot = (float)(Math.Sin(Main.timeForVisualEffects * 0.2 + NPC.ai[2] * 0.7) * 0.3f);
+            int FrameType = (int)NPC.ai[2] % 2;
+            if (FrameType == 1 && (int)NPC.ai[2] % 4 == 1)
+            {
+                FrameType = 2;
+            }
+            if (FrameType == 1)
+            {
+                Texture2D tex = MythContent.QuickTexture("TheFirefly/NPCs/CentipedeBody1_Glow");
+                spriteBatch.Draw(tex, NPC.Center - Main.screenPosition + new Vector2(0, -28), null, new Color(255, 255, 255, 0), NPC.rotation + AddRot, tex.Size() / 2f, NPC.scale, SpriteEffects.None, 0);
+            }
+            if (FrameType == 2)
+            {
+                Texture2D tex = MythContent.QuickTexture("TheFirefly/NPCs/CentipedeBody2_Glow");
+                spriteBatch.Draw(tex, NPC.Center - Main.screenPosition + new Vector2(0, -28), null, new Color(255, 255, 255, 0), NPC.rotation + AddRot, tex.Size() / 2f, NPC.scale, SpriteEffects.None, 0);
+            }
+        }
+        public override void AI()
+        {
+            if (NPC.life <= 0)
+            {
+                int FrameType = (int)NPC.ai[2] % 2;
+                if (FrameType == 1 && (int)NPC.ai[2] % 4 == 1)
+                {
+                    FrameType = 2;
+                }
+                if (FrameType == 0)
+                {
+                    if (Main.rand.NextBool(2))
+                    {
+                        Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, Main.rand.Next(40)).RotatedByRandom(6.283),
+                    new Vector2(0, Main.rand.Next(8)).RotatedByRandom(6.283) + new Vector2(-2, 2), ModContent.Find<ModGore>("Everglow/FireflyCentipedeBodyGore0").Type);
+                    }
+                    else
+                    {
+                        Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, Main.rand.Next(40)).RotatedByRandom(6.283),
+                            new Vector2(0, Main.rand.Next(8)).RotatedByRandom(6.283) + new Vector2(-2, 2), ModContent.Find<ModGore>("Everglow/FireflyCentipedeBodyGore1").Type);
+                        Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, Main.rand.Next(40)).RotatedByRandom(6.283),
+                            new Vector2(0, Main.rand.Next(8)).RotatedByRandom(6.283) + new Vector2(-2, 2), ModContent.Find<ModGore>("Everglow/FireflyCentipedeBodyGore2").Type);
+                    }
+                }
+                else
+                {
+                    Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, Main.rand.Next(40)).RotatedByRandom(6.283),
+                        new Vector2(0, Main.rand.Next(8)).RotatedByRandom(6.283) + new Vector2(-2, 2), ModContent.Find<ModGore>("Everglow/FireflyCentipedeBodyHead1").Type);
+                }
+                if (FrameType == 1)
+                {
+                    Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, Main.rand.Next(40)).RotatedByRandom(6.283),
+                    new Vector2(0, Main.rand.Next(8)).RotatedByRandom(6.283) + new Vector2(-2, 2), ModContent.Find<ModGore>("Everglow/FireflyCentipedeBodyGore3").Type);
+                }
+                if (FrameType == 2)
+                {
+                    Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, Main.rand.Next(40)).RotatedByRandom(6.283),
+                    new Vector2(0, Main.rand.Next(8)).RotatedByRandom(6.283) + new Vector2(-2, 2), ModContent.Find<ModGore>("Everglow/FireflyCentipedeBodyGore4").Type);
+                }
+                for (int f = 0; f < 16; f++)
+                {
+                    Vector2 v0 = new Vector2(0, Main.rand.NextFloat(9f)).RotatedByRandom(6.283);
+                    Dust d = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.NavyBlood>(), v0.X, v0.Y, 0, default, Main.rand.NextFloat(0.85f, 2.75f));
+                }
+            }
+        }
+        public override void HitEffect(int hitDirection, double damage)
+        {
+            for (int f = 0; f < 8; f++)
+            {
+                Vector2 v0 = new Vector2(0, Main.rand.NextFloat(9f)).RotatedByRandom(6.283);
+                Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.NavyBlood>(), v0.X, v0.Y, 0, default, Main.rand.NextFloat(0.85f, 1.75f));
+            }
+        }
+        public override bool CheckActive()
+        {
+            Player player = Main.player[NPC.target];
+            return (player.Center - NPC.Center).Length() > 3500;
+        }
     }
 
     internal class CentipedeTail : FireWormTail
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("测试版蜈蚣");
+            DisplayName.SetDefault("Firefly Centipede");
 
             NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
             {
@@ -757,11 +657,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             NPC.scale = 0.9f;
             NPC.dontCountMe = true;
 
-            NPC.damage = 26;
+            NPC.damage = 12;
             NPC.width = 24;
             NPC.height = 24;
-            NPC.defense = 30;
-            NPC.lifeMax = 200;
+            NPC.defense = 24;
+            NPC.lifeMax = 1200;
             NPC.knockBackResist = 0f;
             NPC.value = 300f;
             NPC.aiStyle = -1;
@@ -770,6 +670,44 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
         public override void Init()
         {
             CentipedeHead.CommonWormInit(this);
+        }
+        public override void HitEffect(int hitDirection, double damage)
+        {
+            for (int f = 0; f < 8; f++)
+            {
+                Vector2 v0 = new Vector2(0, Main.rand.NextFloat(9f)).RotatedByRandom(6.283);
+                Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.NavyBlood>(), v0.X, v0.Y, 0, default, Main.rand.NextFloat(0.85f, 1.75f));
+            }
+        }
+        public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            Texture2D tex = MythContent.QuickTexture("TheFirefly/NPCs/CentipedeTail_Glow");
+            spriteBatch.Draw(tex, NPC.Center - Main.screenPosition + new Vector2(0, -28), null, new Color(255, 255, 255, 0), NPC.rotation, tex.Size() / 2f, NPC.scale, SpriteEffects.None, 0);
+        }
+
+        public override void AI()
+        {
+            if (NPC.life <= 0)
+            {
+                Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, Main.rand.Next(40)).RotatedByRandom(6.283),
+                           new Vector2(0, Main.rand.Next(8)).RotatedByRandom(6.283) + new Vector2(-2, 2), ModContent.Find<ModGore>("Everglow/FireflyCentipedeBodyTail").Type);
+                Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, Main.rand.Next(40)).RotatedByRandom(6.283),
+                     new Vector2(0, Main.rand.Next(8)).RotatedByRandom(6.283) + new Vector2(-2, 2), ModContent.Find<ModGore>("Everglow/FireflyCentipedeBodyHead1").Type);
+                for (int f = 0; f < 16; f++)
+                {
+                    Vector2 v0 = new Vector2(0, Main.rand.NextFloat(9f)).RotatedByRandom(6.283);
+                    Dust d = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.NavyBlood>(), v0.X, v0.Y, 0, default, Main.rand.NextFloat(0.85f, 2.75f));
+
+                    //Dust d2 = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.BlueParticleDark2StoppedByTile>(), v0.X, v0.Y, 0, default, Main.rand.NextFloat(1.65f, 3.75f));
+                    //d2.alpha = (int)(d2.scale * 50);
+                    //d2.rotation = Main.rand.NextFloat(0, 6.283f);
+                }
+            }
+        }
+        public override bool CheckActive()
+        {
+            Player player = Main.player[NPC.target];
+            return (player.Center - NPC.Center).Length() > 3500;
         }
     }
 }

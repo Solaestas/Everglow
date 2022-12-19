@@ -203,7 +203,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Vector2 vec = player.DirectionTo(Main.MouseWorld);
             Vector2 v = vec.RotatedBy(1.57f);
 
-            Vector2 basePos = player.MountedCenter + vec * 7;
+            Vector2 basePos = player.MountedCenter + vec * 7 + new Vector2(0, 8);
             float b0 = Math.Clamp(Energy / 2f, 0, 60);
             float b3 = (b0 / 60f) * (b0 / 60f);
 
