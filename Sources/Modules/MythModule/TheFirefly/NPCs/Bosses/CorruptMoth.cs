@@ -122,7 +122,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
             Main.npcFrameCount[NPC.type] = 10;
 
             NPC.behindTiles = true;
-            NPC.damage = 40;
+            NPC.damage = 30;
             NPC.width = 80;
             NPC.height = 120;
             NPC.defense = 5;
