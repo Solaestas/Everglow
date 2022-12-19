@@ -3,13 +3,14 @@ using Everglow.Sources.Modules.FoodModule.Utils;
 using Everglow.Sources.Modules.FoodModule.Buffs;
 using Everglow.Sources.Modules.FoodModule.Items;
 using Terraria.Localization;
+using Terraria.ModLoader;
 
 namespace Everglow.Sources.Modules.FoodModule
 {
     public class FoodGlobalItem : GlobalItem
     {
         // 对于原版的食物进行类型Id到 FoodInfo 的映射，直接获取FoodInfo实例
-        private static Dictionary<int, FoodInfo> m_vanillaFoodInfos;
+        public static Dictionary<int, FoodInfo> m_vanillaFoodInfos;
         public override void Unload()
         {
             m_vanillaFoodInfos = null;
@@ -633,7 +634,7 @@ namespace Everglow.Sources.Modules.FoodModule
         }
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
-            if (m_vanillaFoodInfos.ContainsKey(item.type))
+            if (m_vanillaFoodInfos.ContainsKey(item.type) /*|| (item.ModItem is FoodBase)*/)
             {
 
                 int firstIndex = -1;
@@ -688,6 +689,16 @@ namespace Everglow.Sources.Modules.FoodModule
                 var FoodInfo = m_vanillaFoodInfos[item.type];
                 var FoodPlayer = player.GetModPlayer<FoodModPlayer>();
 
+                // 增加饱食度
+                FoodPlayer.CurrentSatiety += FoodInfo.Satiety;
+                //加上Buff
+                player.AddBuff(FoodInfo.BuffType, FoodInfo.BuffTime.TotalFrames);
+            }
+            else if (item.ModItem is FoodBase)
+            {
+                var foodItem = item.ModItem as FoodBase;
+                var FoodInfo = foodItem.FoodInfo;
+                var FoodPlayer = player.GetModPlayer<FoodModPlayer>();
                 // 增加饱食度
                 FoodPlayer.CurrentSatiety += FoodInfo.Satiety;
                 //加上Buff
