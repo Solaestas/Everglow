@@ -3,6 +3,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.Map;
 using Terraria.ModLoader.Default;
+using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Pylon;
 

@@ -50,6 +50,11 @@
 				CannotEat : "Ты сыт"
 				CannotDrink : "Тебе не хочется пить"
 			}
+
+			PylonSystem : 
+			{
+				ShabbyPylonRepairedTip : "Pylon repaired"
+			}
 		}
 		ItemName:
 		{
@@ -64,7 +69,6 @@
 			FireFeatherMagic : Книга пылающего пера
 			FreezeFeatherMagic : Книга ледяного пера
 			GoldRoundYoyo : "Золотой тур"
-			Hepuyuan : "Нефритовый коршун"
 			SilveralGun : "Охотник на лис Fx01"
 			SilveralRifle : "Серебряная Тень Ct 01"
 			Sunflower : "Диск-подсолнух"
@@ -172,11 +176,6 @@
 			TitaniumClub : Титановая дубинка
 			TungstenClub : Вольфрамовая дубинка
 			WoodenClub : Деревянная дубинка
-			DustOfCorrupt : Corrupted Scales
-			EvilChrysalis : Посох-кокон
-			PhosphorescenceGun : Чешуйчатый дробовик
-			ScaleWingBlade : Чешуекрылый Клинок
-			ShadowWingBow : Закрывающие крылья
 			AmbiguousNight : Неоднозначная Ночь
 			BlackWoodSlingshot : Эбеновая рогатка
 			BlueGemSlingshot : Сапфировая рогатка
@@ -256,7 +255,18 @@
 			CrystalSkull : Crystal Skull
 
 			#流萤系列物品
+			ShabbyPylonItem : "Shabby Pylon"
 			GlowBeadGun : "Glowing Railgun"
+			DustOfCorrupt : Corrupted Scales
+			EvilChrysalis : Посох-кокон
+			PhosphorescenceGun : Чешуйчатый дробовик
+			ScaleWingBlade : Чешуекрылый Клинок
+			ShadowWingBow : Закрывающие крылья
+			MothYoyo : Glow-yo
+			DreamWeaver : "DreamWeaver"
+			NavyThunder : "Navy Thunder"
+			DarknessFan : "Phantasm Fan of Fireflies"
+			BlueflowerBra : "Blueflower Bra"
 
 			#Glow Wood Furniture
 			
@@ -287,6 +297,16 @@
 
 			#Plant Module Items
 			CactusBall : "Cactus Rod"
+			
+			# Shields
+			WoodShield : "Wooden Shield"
+
+			# Genshin Impact items
+			Hepuyuan : "Prinomial Jade Winged Spear"
+			VortexVanquisherItem : "Vortex Vanquisher"
+			
+			# Dev items
+			LilyHarp : "Harp of the Valley"
 		}
 
 		ItemTooltip:
@@ -364,19 +384,6 @@
 			FixCoinSpeed1 : "Дает случайному аксессуару в инвентаре префикс, который увеличивает скрость передвижения на 1%"
 			FixCoinSpeed2 : "Дает случайному аксессуару в инвентаре префикс, который увеличивает скрость передвижения на 2%~3%"
 			FixCoinSpeed3 : "Дает случайному аксессуару в инвентаре префикс, который увеличивает скрость передвижения на 4%"
-			DustOfCorrupt : Scatter moth scales
-			EvilChrysalis : 
-				'''
-				Призывает маленьких черных мотыльков сражаться за вас
-				Наносит 400% урона ближайшим врагам во время призыва
-				'''
-			PhosphorescenceGun : Shoots out shots and blue scale bullets which deal 36% damage
-			ScaleWingBlade : TODO
-			ShadowWingBow : 
-				'''
-				Hold to charge to  increase damage, capped at +200%, and additionally fires Blue Butterfly Arrows.
-				Needs 1.5s to be fully charged
-				'''
 			AmbiguousNight : 
 				'''
 				Shoots phantom pebbles
@@ -552,6 +559,22 @@
 				Hold attack to charge
 				Shoots a series of explosive glowing beads
 				'''
+			DustOfCorrupt : Scatter moth scales
+			EvilChrysalis : 
+				'''
+				Призывает маленьких черных мотыльков сражаться за вас
+				Наносит 400% урона ближайшим врагам во время призыва
+				'''
+			PhosphorescenceGun : Shoots out shots and blue scale bullets which deal 36% damage
+			ScaleWingBlade : TODO
+			ShadowWingBow : 
+				'''
+				Hold to charge to  increase damage, capped at +200%, and additionally fires Blue Butterfly Arrows.
+				Needs 1.5s to be fully charged
+				'''
+			MothYoyo : Moths will appear around this Yo-yo, allowing you to deal more damage
+			NavyThunder : "Deployes a glowing timebomb"
+			DarknessFan : "{$Mods.Everglow.Common.LegendWeapon}\n{$Mods.Everglow.Common.WarWhipGT}\nStrike enemies with the fan and Phantom Butterflies (PBs)\nRight click to throw out the fan\nThe fan itself inflicts Mark of PB (stackable), each level increases damage dealt by PBs by 10%\nMax stack increases with Sync level"
 
 			# 天穹树系列物品
 				# 天穹树小镇
@@ -570,6 +593,16 @@
 
 			#Plant Module Items
 			CactusBall : "Spin and throw a cactus ball!\nShred victims' armour and bleed them"
+			
+			# Shields
+			WoodShield : "Left click to attack\nRight click to defend\n'Just a normal shield, no one would use it for offense, would you?'"
+			
+			# Genshin Impact items
+			Hepuyuan : "{$Mods.Everglow.Common.ExcluWeapon}\nLeft click to dash, right click to smash\n'You should't be getting it'\nHomaging to Genshin Impact"
+			VortexVanquisherItem : "{$Mods.Everglow.Common.ExcluWeapon}\n[c/B4B16E:'This is Order']\nLeft click in succession to perform different attacks\nThe last attack slightly propels you to the cursor\nLeft click and hold to dash and summon falling spears\nRight click to summon a pillar and grant you a damage-reducing shield"
+			
+			# Dev items
+			LilyHarp : "Music notes fly in a beautiful succession\nThe notes follow your cursor while holding left click\n[c/856Eb5:Developer Item: Omnielement]"
 		}
 		BuffName : 
 		{
@@ -819,6 +852,7 @@
 		}
 		InfoDisplay:
 		{
+			Satiety : "satiety"
 			Thirsty : "You are thirsty"
 			NotThirsty : "You don't want to drink"
 		}
