@@ -14,6 +14,14 @@ namespace Everglow.Sources.Menu
     {
         public override int Music => Modules.MythModule.Common.MythContent.QuickMusic("BaseMusic");
         public List<Star> stars = new();
+        public override void Load()
+        {
+
+        }
+        public override void Unload()
+        {
+            stars=null;
+        }
         public void Update()
         {
             for (int i=0;i<stars.Count;i++)
@@ -125,7 +133,7 @@ namespace Everglow.Sources.Menu
             //绘制水以及反射的天空
             Texture2D water = ModContent.Request<Texture2D>("Everglow/Sources/Menu/water").Value;
             spriteBatch.Draw(water, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White*0.95f);
-            Rectangle rec = new Rectangle(464,728,592,168);
+            Rectangle rec = new Rectangle(864,729,592,168);
             rec.X = (int)(rec.X * Main.UIScale * Main.screenWidth /1920f);
             rec.Y = (int)(rec.Y * Main.UIScale * Main.screenHeight /1080f);
             Vector2 size = new Vector2(bg.Width, bg.Height);
@@ -152,13 +160,14 @@ namespace Everglow.Sources.Menu
             Texture2D front1 = ModContent.Request<Texture2D>("Everglow/Sources/Menu/front1").Value;
             spriteBatch.Draw(front1, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White);
 
+            //TODO 绘制标题字
+            Texture2D front0 = ModContent.Request<Texture2D>("Everglow/Sources/Menu/上层").Value;  
+            
 
-            Texture2D front0 = ModContent.Request<Texture2D>("Everglow/Sources/Menu/上层").Value;
-            spriteBatch.Draw(front0, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White);
-           
+
             bg = null;
             renderTargets.Release();
-            return false;
+            return true;
         }
     }
 }
