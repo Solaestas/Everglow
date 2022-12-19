@@ -5,7 +5,7 @@
         public override void SetStaticDefaults()
         {
             //DisplayName.SetDefault("RambutanBuff");
-            //Description.SetDefault("免疫中毒和毒液以及十字章一样的免疫效果\n“提高免疫”");
+            //TODO Description.SetDefault("免疫许多减益\n“提高免疫”");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
         }
@@ -24,7 +24,7 @@
             player.buffImmune[35] = true;
             player.buffImmune[23] = true;
             player.buffImmune[22] = true;//十字章一样的免疫
-            player.wellFed = true;
+            
         }
     }
 }
