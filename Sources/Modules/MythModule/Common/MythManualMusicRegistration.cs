@@ -4,6 +4,8 @@
     {
         public void Load(Mod mod)
         {
+            // Title Music
+            MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Musics/BaseMusic");
             // Moth Musics
             MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Musics/MothBiome");
             MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Musics/MothFighting");
