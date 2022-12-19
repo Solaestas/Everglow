@@ -2,6 +2,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
 using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 {
@@ -66,15 +67,19 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             {
                 return 0f;
             }
+            if (NPC.CountNPCS(ModContent.NPCType<CorruptMoth>()) > 0)
+            {
+                return 0;
+            }
             else if (NPC.CountNPCS(ModContent.NPCType<CentipedeHead>()) > 1)
             {
                 return 0f;
             }
             else if (NPC.CountNPCS(ModContent.NPCType<CentipedeHead>()) > 0)
             {
-                return 0.6f;
+                return 0.4f;
             }
-            return 0.12f;
+            return 0.8f;
         }
         public override void Init()
         {
