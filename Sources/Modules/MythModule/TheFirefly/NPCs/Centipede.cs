@@ -2,6 +2,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
 using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 {
@@ -39,11 +40,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             NPC.scale = 0.9f;
             NPC.dontCountMe = true;
 
-            NPC.damage = 26;
+            NPC.damage = 30;
             NPC.width = 22;
             NPC.height = 22;
-            NPC.defense = 30;
-            NPC.lifeMax = 2600;
+            NPC.defense = 36;
+            NPC.lifeMax = 1200;
             NPC.knockBackResist = 0f;
             NPC.value = 300f;
             NPC.aiStyle = -1;
@@ -66,7 +67,19 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             {
                 return 0f;
             }
-            return 0.3f;
+            if (NPC.CountNPCS(ModContent.NPCType<CorruptMoth>()) > 0)
+            {
+                return 0;
+            }
+            else if (NPC.CountNPCS(ModContent.NPCType<CentipedeHead>()) > 1)
+            {
+                return 0f;
+            }
+            else if (NPC.CountNPCS(ModContent.NPCType<CentipedeHead>()) > 0)
+            {
+                return 0.4f;
+            }
+            return 0.8f;
         }
         public override void Init()
         {
@@ -512,11 +525,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             NPC.scale = 0.9f;
             NPC.dontCountMe = true;
 
-            NPC.damage = 26;
+            NPC.damage = 20;
             NPC.width = 24;
             NPC.height = 24;
             NPC.defense = 30;
-            NPC.lifeMax = 2600;
+            NPC.lifeMax = 1200;
             NPC.knockBackResist = 0f;
             NPC.value = 300f;
             NPC.aiStyle = -1;
@@ -649,11 +662,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             NPC.scale = 0.9f;
             NPC.dontCountMe = true;
 
-            NPC.damage = 26;
+            NPC.damage = 12;
             NPC.width = 24;
             NPC.height = 24;
-            NPC.defense = 30;
-            NPC.lifeMax = 2600;
+            NPC.defense = 24;
+            NPC.lifeMax = 1200;
             NPC.knockBackResist = 0f;
             NPC.value = 300f;
             NPC.aiStyle = -1;
