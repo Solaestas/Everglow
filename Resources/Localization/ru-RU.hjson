@@ -290,10 +290,38 @@
 			DarknessFan : "Phantasm Fan of Fireflies"
 			BlueflowerBra : "Blueflower Bra"
 
-			#Glow Wood Furniture
-			
-			#Music Boxes
-			GlowWoodMusicBox : Glow Wood Music Box (The Firefly)
+			# Glow Wood Furniture
+			GlowWoodBed : "Glowwood Bed"
+			GlowWoodBookcase : "Glowwood Bookcase"
+			GlowWoodBookcaseType2 : "Glowwood Bookcase 2"
+			GlowWoodCampfire : "Glowwood Campfire"
+			GlowWoodCandelabra : "Glowwood Candelabra"
+			GlowWoodCandle : "Glowwood Candle"
+			GlowWoodChair : "Glowwood Chair"
+			GlowWoodChandelier : "Glowwood Chandelier"
+			GlowWoodChandelierType2 : "Glowwood Chandelier 2"
+			GlowWoodChandelierType3 : "Glowwood Chandelier 3"
+			GlowWoodChandelierType4 : "Glowwood Chandelier 4"
+			GlowWoodChandelierType5 : "Glowwood Chandelier 5"
+			GlowWoodChest : "Glowwood Chest"
+			GlowWoodClock : "Glowwood Clock"
+			GlowWoodDoor : "Glowwood Door"
+			GlowWoodDoorType2 : "Glowwood Door 2"
+			GlowWoodDresser : "Glowwood Dresser"
+			GlowWoodDresserType2 : "Glowwood Dresser 2"
+			GlowWoodLamp : "Glowwood Lamp"
+			GlowWoodLantern : "Glowwood Lantern"
+			GlowWoodLanternType2 : "Glowwood Lantern 2"
+			GlowWoodMusicBox : "Glowwood Music Box (The Firefly)"
+			GlowWoodPiano : "Glowwood Piano"
+			GlowWoodPlatform : "Glowwood Platform"
+			GlowWoodSink : "Glowwood Sink"
+			GlowWoodSinkType2 : "Glowwood Sink 2"
+			GlowWoodSofa : "Glowwood Sofa"
+			GlowWoodSofaType2 : "Glowwood Sofa 2"
+			GlowWoodTable : "Glowwood Table"
+			GlowWoodTorch : "Glowwood Torch"
+			GlowWoodWorkBench : "Glowwood Work Bench"
 
 
 			#食物系统物品

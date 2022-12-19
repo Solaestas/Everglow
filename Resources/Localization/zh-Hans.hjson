@@ -60,7 +60,7 @@ Mods:
 		}
 		Bestiary: 
 		{
-		CorruptMoth： 
+			CorruptMoth： 
 			{
 				Flavor: "有些时候,腐化蠕虫也能破茧..."
 			}
@@ -292,10 +292,38 @@ Mods:
 			DarknessFan : "幻蝶萤火扇"
 			BlueflowerBra : "蓝花内衣"
 
-			#Glow Wood Furniture
-			
-			#Music Boxes
-			GlowWoodMusicBox : 萤火木八音盒(流萤)
+			# Glow Wood Furniture
+			GlowWoodBed : "萤火木床"
+			GlowWoodBookcase : "萤火木书架"
+			GlowWoodBookcaseType2 : "萤火木书架2"
+			GlowWoodCampfire : "萤火木营火"
+			GlowWoodCandelabra : "萤火木烛台"
+			GlowWoodCandle : "萤火木蜡烛"
+			GlowWoodChair : "萤火木椅"
+			GlowWoodChandelier : "萤火木吊灯"
+			GlowWoodChandelierType2 : "萤火木吊灯2"
+			GlowWoodChandelierType3 : "萤火木吊灯3"
+			GlowWoodChandelierType4 : "萤火木吊灯4"
+			GlowWoodChandelierType5 : "萤火木吊灯5"
+			GlowWoodChest : "萤火木箱"
+			GlowWoodClock : "萤火木钟"
+			GlowWoodDoor : "萤火木门"
+			GlowWoodDoorType2 : "萤火木门2"
+			GlowWoodDresser : "萤火木梳妆台"
+			GlowWoodDresserType2 : "萤火木梳妆台2"
+			GlowWoodLamp : "萤火木台灯"
+			GlowWoodLantern : "萤火木灯笼"
+			GlowWoodLanternType2 : "萤火木灯笼2"
+			GlowWoodMusicBox : "萤火木八音盒 (流萤)"
+			GlowWoodPiano : "萤火木钢琴"
+			GlowWoodPlatform : "萤火木平台"
+			GlowWoodSink : "萤火木水槽"
+			GlowWoodSinkType2 : "萤火木水槽2"
+			GlowWoodSofa : "萤火木沙发"
+			GlowWoodSofaType2 : "萤火木沙发2"
+			GlowWoodTable : "萤火木桌"
+			GlowWoodTorch : "萤火木火把"
+			GlowWoodWorkBench : "萤火木工作台"
 
 
 			#食物系统物品
