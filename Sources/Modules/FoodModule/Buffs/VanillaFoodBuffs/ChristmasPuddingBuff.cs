@@ -13,7 +13,7 @@
         public override void Update(Player player, ref int buffIndex)
         {
             player.aggro -= 800;//仇恨值减800
-            player.wellFed = true;
+            
         }
     }
 }

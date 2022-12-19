@@ -3,6 +3,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.Map;
 using Terraria.ModLoader.Default;
+using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Pylon;
 
@@ -95,6 +96,7 @@ internal class ShabbyPylonUpdate : GlobalNPC
             {
                 PylonSystem.Instance.shabbyPylonEnable = true;
                 PylonSystem.Instance.firstEnableAnimation = true;
+                Main.NewText(Language.GetTextValue("Mods.Everglow.Common.PylonSystem.ShabbyPylonRepairedTip"));
             }
         }
     }

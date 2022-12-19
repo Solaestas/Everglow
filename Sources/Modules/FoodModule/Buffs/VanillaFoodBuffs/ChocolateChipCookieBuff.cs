@@ -14,7 +14,7 @@
         {
             player.lifeRegen += 2; // 加2生命恢复
             player.manaRegen += 2; // 加2魔力恢复
-            player.wellFed = true;
+            
         }
     }
 }

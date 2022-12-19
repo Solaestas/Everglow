@@ -2,6 +2,7 @@
 using Terraria.ModLoader.IO;
 using Terraria;
 using Everglow.Sources.Modules.FoodModule.Buffs;
+using Everglow.Sources.Modules.FoodModule.Buffs.ModFoodBuffs;
 
 namespace Everglow.Sources.Modules.FoodModule
 {
@@ -47,7 +48,7 @@ namespace Everglow.Sources.Modules.FoodModule
             }
             return false;
         }
-       
+
         /// <summary>
         /// 如果能喝下，返回true，否则为false
         /// </summary>
@@ -89,7 +90,7 @@ namespace Everglow.Sources.Modules.FoodModule
         }
         public override void PostUpdateMiscEffects()
         {
-            Player.buffImmune[BuffID.WellFed] = true ;
+            Player.buffImmune[BuffID.WellFed] = true;
             Player.buffImmune[BuffID.WellFed2] = true;
             Player.buffImmune[BuffID.WellFed3] = true;
             Player.buffImmune[BuffID.Tipsy] = true;
@@ -97,6 +98,10 @@ namespace Everglow.Sources.Modules.FoodModule
         public override void PostUpdate()
         {
             FoodState();
+            if (CurrentSatiety > 0 || !Thirstystate)
+            {
+                Player.wellFed = true;
+            }
             if (!Player.active)
             {
                 CurrentSatiety = 0;
@@ -149,17 +154,31 @@ namespace Everglow.Sources.Modules.FoodModule
                 ThirstyChangeTimer++;
             }
 
-            if(!CanText())
+            if (!CanText())
             {
                 TextTimer--;
             }
 
             //每三十秒减少一饱食度
-            if (SatietyLossTimer >= FoodUtils.GetFrames(0, 0, 30, 0))
+            if (Player.GetModPlayer<FoodBuffModPlayer>().DurianBuff)
             {
-                CurrentSatiety -= 1;
-                SatietyLossTimer = 0;
+                if (SatietyLossTimer >= FoodUtils.GetFrames(0, 0, 15, 0))
+                {
+                    CurrentSatiety -= 1;
+                    SatietyLossTimer = 0;
+                }
             }
+            else
+            {
+
+                if (SatietyLossTimer >= FoodUtils.GetFrames(0, 0, 30, 0))
+                {
+                    CurrentSatiety -= 1;
+                    SatietyLossTimer = 0;
+                }
+
+            }
+
             if (CurrentSatiety <= 0)
             {
                 CurrentSatiety = 0;
