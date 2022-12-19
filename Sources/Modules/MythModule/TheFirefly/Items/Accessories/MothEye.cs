@@ -10,7 +10,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
     public class MothEye : ModItem
     {
         FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
-        
+        public static Player LocalOwner => Main.LocalPlayer;
         public override void SetDefaults()
         {
             Item.width = 44;
@@ -104,7 +104,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
     {
         FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
         public bool MothEyeEquipped;
-        public Player owner;
 
         public override void ResetEffects()
         {

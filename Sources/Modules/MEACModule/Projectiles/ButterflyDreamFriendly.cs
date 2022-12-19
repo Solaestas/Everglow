@@ -51,13 +51,14 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                 }
                 else//追踪目标
                 {
-                    //if (owner != null && owner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
-                    //{
-                    //    if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer))
-                    //        Projectile.velocity = Vector2.Lerp(Projectile.velocity * 1.5f, Projectile.DirectionTo(target.Center) * 15, 0.05f);
-                    //}
-                    //else
+                    if (MothEye.LocalOwner != null && MothEye.LocalOwner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
+                    {
+                        if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer))
+                            Projectile.velocity = Vector2.Lerp(Projectile.velocity * 1.06f, Projectile.DirectionTo(target.Center) * 15, 0.05f);
                         Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(target.Center) * 15, 0.05f);
+                    }
+                    //else
+                       
                 }
             }
             else

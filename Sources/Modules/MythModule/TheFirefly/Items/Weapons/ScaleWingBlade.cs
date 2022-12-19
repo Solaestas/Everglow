@@ -75,14 +75,18 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
         //}
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
-            if (owner != null && owner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
+            //Main.NewText(owner != null); // DEBUGGING PURPOSES
+            //Console.WriteLine(owner != null); // DEBUGGING PURPOSES
+            //Main.NewText(LocalOwner != null); // DEBUGGING PURPOSES
+            //Console.WriteLine(LocalOwner != null); // DEBUGGING PURPOSES
+            if (MothEye.LocalOwner != null && MothEye.LocalOwner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
             {
                 if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer))
                 {
                     tooltips.AddRange(new TooltipLine[]
                     {
-                            new(Everglow.Instance, "MothEyeBonusText", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeBonusText")),
-                            new(Everglow.Instance, "MothEyeBladeBonus", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextMothBlade")),
+                        new(Everglow.Instance, "MothEyeBonusText", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeBonusText")),
+                        new(Everglow.Instance, "MothEyeBladeBonus", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextMothBlade")),
                     });
                 }
             }
