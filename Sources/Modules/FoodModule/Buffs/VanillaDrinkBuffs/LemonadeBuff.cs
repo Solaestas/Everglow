@@ -14,7 +14,7 @@
         {
             player.GetKnockback(DamageClass.Ranged) *= 2f; // 击退加倍
             player.aggro -= 2400;//仇恨值减2400
-            player.wellFed = true;
+            
         }
     }
 }
