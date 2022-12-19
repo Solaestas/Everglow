@@ -56,6 +56,28 @@
 				ShabbyPylonRepairedTip : "Pylon repaired"
 			}
 		}
+		NPCName:
+		{
+			CorruptMoth : "Corrupted Moth"
+			Butterfly : "Phantasm Moth"
+			CentipedeHead : "Glowing Centipede"
+			CentipedeBody : "Glowing Centipede"
+			CentipedeTail : "Glowing Centipede"
+			Dendroid_normal : "Dendroid"
+			GlowingFirefly : "Glowing Firefly"
+			LittleFireBulb : "Firefly Bulb"
+		}
+		Bestiary: 
+		{
+			CorruptMoth： 
+			{
+				Flavor: "Sometimes, corrupted worm can metamorphose..."
+			}
+			Centipede: 
+			{
+				Flavor : "Seems like a centipede, with an unexpectedly hard head"
+			}
+		}
 		ItemName:
 		{
 			#神话传说武器，常规武器，棍棒，弹弓，饰品，附魔币，boss宝藏袋圣物召唤物，金秋武器

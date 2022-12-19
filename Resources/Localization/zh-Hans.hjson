@@ -2,10 +2,6 @@ Mods:
 {
 	Everglow:
 	{
-		NPCName:
-		{
-			Butterfly : 幻蝶
-		}
 		Common:
 		{
 			Hour : "小时"
@@ -49,6 +45,28 @@ Mods:
 			PylonSystem : 
 			{
 				ShabbyPylonRepairedTip : "晶塔已修复"
+			}
+		}
+		NPCName:
+		{
+			CorruptMoth : "腐檀巨蛾"
+			Butterfly : "幻影蛾"
+			CentipedeHead : "荧光蜈蚣"
+			CentipedeBody : "荧光蜈蚣"
+			CentipedeTail : "荧光蜈蚣"
+			Dendroid_normal : "枯木人"
+			GlowingFirefly : "萤光虫"
+			LittleFireBulb : "萤火泡"
+		}
+		Bestiary: 
+		{
+		CorruptMoth： 
+			{
+				Flavor: "有些时候,腐化蠕虫也能破茧..."
+			}
+			Centipede: 
+			{
+				Flavor : "看起来就是条蜈蚣, 有着超乎意料得硬的头"
 			}
 		}
 		ItemName:
