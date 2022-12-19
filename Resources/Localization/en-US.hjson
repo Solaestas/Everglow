@@ -12,7 +12,7 @@ Mods:
 			Minute : "minute"
 			Second : "second"
 			Duration : "duration"
-			NotActivated : "unactivated"
+			NotActivated : "Unactivated"
 			WarWhipGT :
 				'''
 				No summon tag damage
@@ -43,7 +43,12 @@ Mods:
 			FoodSystem:
 			{
 				CannotEat : "You are full"
-				CannotDrink : "You don't feel like to drink"
+				CannotDrink : "You don't feel like drinking"
+			}
+
+			PylonSystem : 
+			{
+				ShabbyPylonRepairedTip : "Pylon Repaired"
 			}
 		}
 		ItemName: 
@@ -59,8 +64,6 @@ Mods:
 			FireFeatherMagic : Book of Flaming Feather
 			FreezeFeatherMagic : Book of Ice Feather
 			GoldRoundYoyo : "Golden Round"
-			Hepuyuan : "Prinomial Jade Winged Spear"
-			VortexVanquisherItem : "Vortex Vanquisher"
 			SilveralGun : "Fox Hunter Fx01"
 			SilveralRifle : "Silver Shadow Ct01"
 			Sunflower : "Sunflower Disc"
@@ -71,7 +74,6 @@ Mods:
 			BloodLightCyanFlame : "Bloody Lasers and Cyan Flames"
 			BlueRain : "Seperate Ocean"
 			ChaosCurrent : "Chaotic Currents"
-			DarknessFan : "Fan of Phantom Butterflies and Fireflies"
 			FrozenStormPine : "Ice Storm Pine"
 			GelPowerGun : "Gelatin Charger"
 			LaserWhip : "Laser Whip"
@@ -184,12 +186,6 @@ Mods:
 			TitaniumClub : Titanium Club
 			TungstenClub : Tungsten Club
 			WoodenClub : Wooden Club
-			DustOfCorrupt : Corrupted Scales
-			EvilChrysalis : Cocoon Staff
-			PhosphorescenceGun : Scale Shotgun
-			ScaleWingBlade : Lepidoptera Blade
-			ShadowWingBow : Occulting Wings
-			MothYoyo : Glow-yo
 			AmbiguousNight : Ambiguous Night
 			BlackWoodSlingshot : Ebonwood Slingshot
 			BlueGemSlingshot : Sapphire Slingshot
@@ -198,7 +194,7 @@ Mods:
 			DarkWoodSlingShot : Shadewood SlingShot
 			GreenGemSlingshot : Emerald Slingshot
 			JellySlingshot : Jelly Slingshot
-			JungleSlingshot : JungleSlingshot
+			JungleSlingshot : Jungle Slingshot
 			PalmWoodSlingshot : Palm Wood Slingshot
 			PearlWoodSlingshot : Pearlwood Slingshot
 			PurpleGemSlingshot : Amethyst Purple Gem Slingshot
@@ -265,18 +261,29 @@ Mods:
 			CrystalSkull : Crystal Skull
 
 			#流萤系列物品
+			ShabbyPylonItem : "Shabby Pylon"
 			GlowBeadGun : "Glowing Railgun"
+			DustOfCorrupt : Corrupted Scales
+			EvilChrysalis : Cocoon Staff
+			PhosphorescenceGun : Scale Shotgun
+			ScaleWingBlade : Lepidoptera Blade
+			ShadowWingBow : Occulting Wings
+			MothYoyo : Glow-yo
+			DreamWeaver : "DreamWeaver"
+			NavyThunder : "Navy Thunder"
+			DarknessFan : "Phantasm Fan of Fireflies"
+			BlueflowerBra : "Blueflower Bra"
 
-			#Glow Wood Furniture
+			# Glow Wood Furniture
 			
-			#Music Boxes
+			# Music Boxes
 			GlowWoodMusicBox : Glow Wood Music Box (The Firefly)
 
-			#食物系统物品
+			# 食物系统物品
 			BloodGlucoseMonitor : "Blood Glucose Monitor"
 			OsmoticPressureMonitor : "Osmotic Pressure Monitor"
 
-			#Yggdrasil Items
+			# Yggdrasil Items
 
 				#Yggdrasil Town
 				ChinesePartitionLamp : "Chinese Partition Lamp"
@@ -293,8 +300,18 @@ Mods:
 				YellowDynastyShingles : "Yellow Dynasty Shingles"
 				CyanVinePickaxe : "Cyan Pickaxe"
 
-			#Plant Module Items
+			# Plant Module Items
 			CactusBall : "Cactus Rod"
+
+			# Shields
+			WoodShield : "Wooden Shield"
+
+			# Genshin Impact items
+			Hepuyuan : "Prinomial Jade Winged Spear"
+			VortexVanquisherItem : "Vortex Vanquisher"
+			
+			# Dev items
+			LilyHarp : "Harp of the Valley"
 		}
 		ItemTooltip :
 		{
@@ -310,9 +327,6 @@ Mods:
 			FireFeatherMagic : Shoots explosive feathers
 			FreezeFeatherMagic : Shoots ice-bound feathers
 			GoldRoundYoyo : "Leaves a track of homing golden rings"
-			Hepuyuan : "{$Mods.Everglow.Common.ExcluWeapon}\nLeft click to dash, right click to smash\n'You should't be getting it'\nHomaging to Genshin Impact"
-			LilyHarp : "Music notes fly in a beautiful succession\nHold the attack button to make the notes follow the cursor\n[c/856Eb5:Developer Item, Belonging to Omnielement]"
-			VortexVanquisherItem : "[c/B4B16E:'This is Order']\nLeft click multiple times for different attacks\nThe last attack propels you to the cursor\nHold left click to dash and summon falling spears\nRight click summons a pillar and gives you a damage-reducing shield"
 			SilveralGun : "5% increased movement speed and damage after hitting enemies"
 			SilveralRifle : "5% increased movement speed and damage after hitting enemies"
 			Sunflower : "'A weapon made of sunflowers, has a color of hope'"
@@ -323,7 +337,6 @@ Mods:
 			BloodLightCyanFlame : "{$Mods.Everglow.Common.LegendWeapon}\nAlternately throws boomerblades of laser or cursed flame\n'They should be weapons of the Twins, fortunately you have saved the Mechanic'"
 			BlueRain : "{$Mods.Everglow.Common.LegendWeapon}\nRight click and hold to make a charged attack\n'Rain drops refused to be blend with sea water to maintain their purity, finally converged to this form in chaotic currents'"
 			ChaosCurrent : "{$Mods.Everglow.Common.LegendWeapon}\nLauches chaotic currents that disturb nerves\nIgnore immunity frames\n'Cause massive nerve injury!'"
-			DarknessFan : "{$Mods.Everglow.Common.LegendWeapon}\n{$Mods.Everglow.Common.WarWhipGT}\nStrike enemies with the fan and Phantom Butterflies (PBs)\nRight click to throw out the fan\nThe fan itself inflicts Mark of PB (stackable), each level increases damage dealt by PBs by 10%\nMax stack increases with Sync level"
 			GelPowerGun : "{$Mods.Everglow.Common.LegendWeapon}\nUses gel for ammo\nShoots bouncy gelatin balls\nRelease small bouncy gelatin balls on the first three bounces\n'Bouncing bouncy, bounce the Destroyer away'"
 			LaserWhip : "{$Mods.Everglow.Common.LegendWeapon}{$Mods.Everglow.Common.WarWhipGT}Hitting enemies has a chance to generate Laser Worms as temporary summons and mark enemies\nMarked enemies take 50% more damage and 25% more crit damage\n'According to a legend some worms can align their lasers into a line'"
 			MachineFit : "{$Mods.Everglow.Common.LegendWeapon}\nA ruthless killing fist\nSplits into 5 homing missiles upon hitting enemies\n'Make good use of its hand, not head'"
@@ -389,24 +402,6 @@ Mods:
 			FixCoinSpeed1 : "Gives a random accessory in inventory a prefix which increases movement speed by 1%"
 			FixCoinSpeed2 : "Gives a random accessory in inventory a prefix which increases movement speed by 2%~3%"
 			FixCoinSpeed3 : "Gives a random accessory in inventory a prefix which increases movement speed by 4%"
-			DustOfCorrupt : Scatter moth scales
-			EvilChrysalis : 
-				'''
-				Summoms little black moths to fight for you
-				Deal 400% damage to nearby enemies while summoning
-				'''
-			MothYoyo : Moths will appear around this Yo-yo, allowing you to deal more damage
-			PhosphorescenceGun : Shoots out shots and blue scale bullets which deal 36% damage
-			ScaleWingBlade :
-				'''
-				Striking enemies with this blade or swinging this blade while near enemies will spawn moths that home in on said enemies
-				Right click to charge a more powerful swing and to spawn more moths on impact
-				'''
-			ShadowWingBow : 
-				'''
-				Hold to charge to  increase damage, capped at +200%, and additionally fires Blue Butterfly Arrows.
-				Needs 1.5s to be fully charged
-				'''
 			AmbiguousNight : 
 				'''
 				Shoots phantom pebbles
@@ -582,6 +577,26 @@ Mods:
 				Hold attack to charge
 				Shoots a series of explosive glowing beads
 				'''
+			DustOfCorrupt : Scatter moth scales
+			EvilChrysalis : 
+				'''
+				Summoms little black moths to fight for you
+				Deal 400% damage to nearby enemies while summoning
+				'''
+			MothYoyo : Moths will appear around this Yo-yo, allowing you to deal more damage
+			PhosphorescenceGun : Shoots out shots and blue scale bullets which deal 36% damage
+			ScaleWingBlade :
+				'''
+				Striking enemies with this blade or swinging this blade while near enemies will spawn moths that home in on said enemies
+				Right click to charge a more powerful swing and to spawn more moths on impact
+				'''
+			ShadowWingBow : 
+				'''
+				Hold to charge to  increase damage, capped at +200%, and additionally fires Blue Butterfly Arrows.
+				Needs 1.5s to be fully charged
+				'''
+			NavyThunder : "Deployes a glowing timebomb"
+			DarknessFan : "{$Mods.Everglow.Common.LegendWeapon}\n{$Mods.Everglow.Common.WarWhipGT}\nStrike enemies with the fan and Phantom Butterflies (PBs)\nRight click to throw out the fan\nThe fan itself inflicts Mark of PB (stackable), each level increases damage dealt by PBs by 10%\nMax stack increases with Sync level"
 			
 			# 天穹树系列物品
 				# 天穹树小镇
@@ -600,6 +615,16 @@ Mods:
 
 			#Plant Module Items
 			CactusBall : "Spin and throw a cactus ball!\nShred victims' armour and bleed them"
+			
+			# Shields
+			WoodShield : "Left click to attack\nRight click to defend\n'Just a normal shield, no one would use it for offense, would you?'"
+			
+			# Genshin Impact items
+			Hepuyuan : "{$Mods.Everglow.Common.ExcluWeapon}\nLeft click to dash, right click to smash\n'You should't be getting it'\nHomaging to Genshin Impact"
+			VortexVanquisherItem : "{$Mods.Everglow.Common.ExcluWeapon}\n[c/B4B16E:'This is Order']\nLeft click in succession to perform different attacks\nThe last attack slightly propels you to the cursor\nLeft click and hold to dash and summon falling spears\nRight click to summon a pillar and grant you a damage-reducing shield"
+
+			# Dev items
+			LilyHarp : "Music notes fly in a beautiful succession\nThe notes follow your cursor while holding left click\n[c/856Eb5:Developer Item: Omnielement]"
 		}
 		BuffName : 
 		{
@@ -858,6 +883,7 @@ Mods:
 		}
 		InfoDisplay:
 		{
+			Satiety : "satiety"
 			Thirsty : "You are thirsty"
 			NotThirsty : "You don't want to drink"
 		}
