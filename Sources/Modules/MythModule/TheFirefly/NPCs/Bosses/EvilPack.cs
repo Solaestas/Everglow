@@ -13,8 +13,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Evil Cocoon");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "魔茧");
             Main.npcFrameCount[NPC.type] = 7;
         }
 
