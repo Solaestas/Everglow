@@ -1,6 +1,7 @@
 ﻿using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MEACModule.Projectiles;
 using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories;
 using Terraria.Audio;
 using Terraria.GameContent;
 
@@ -8,6 +9,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
     internal class ShadowWingBow : ModProjectile
     {
+        FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
         public override string Texture => "Everglow/Sources/Modules/MythModule/TheFirefly/Projectiles/ShadowWingBowTex/ShadowWingBowMain";
 
         public override void SetDefaults()
@@ -141,7 +143,16 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 {
                     if (addi % 2 == 1)
                     {
-                        Energy++;
+                        if (MothEye.LocalOwner != null && MothEye.LocalOwner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
+                        {
+                            if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer))
+                            {
+                                Energy++; Energy++;
+                            }
+                            else
+                                Energy++;
+                        }
+                        
                     }
                     Energy++;
                 }
@@ -153,7 +164,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             if (!Main.mouseLeft && Release)//发射
             {
                 SoundEngine.PlaySound(SoundID.Item5, Projectile.Center);
-                Projectile.NewProjectileDirect(Projectile.InheritSource(Projectile), Projectile.Center, Vector2.Normalize(v0) * 20f, (int)(Projectile.ai[0]), Projectile.damage + Energy / 5, Projectile.knockBack, player.whoAmI).extraUpdates++;
+                Projectile.NewProjectileDirect(Projectile.InheritSource(Projectile), Projectile.Center, Vector2.Normalize(v0) * (Energy + 6) / 9f, (int)(Projectile.ai[0]), Projectile.damage + Energy / 5, Projectile.knockBack, player.whoAmI).extraUpdates++;
                 for (int s = 0; s < 5; s++)
                 {
                     if (Arcol[s] > 0)
