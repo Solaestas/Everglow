@@ -61,7 +61,7 @@ Mods:
 		}
 		Bestiary: 
 		{
-			CorruptMoth： 
+			CorruptMoth:
 			{
 				Flavor: "Sometimes, corrupted worm can metamorphose..."
 			}
