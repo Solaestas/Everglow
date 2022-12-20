@@ -146,26 +146,6 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
 
             CritDamage = 1f;
             AddCritDamage = 0;
-            if (StinkyTofuBuff)
-            {
-                foreach (NPC target in Main.npc)
-                {
-                    float Dis = (target.Center - Player.Center).Length();
-
-                    if (Dis < 500)
-                    {
-                        if (Main.rand.NextBool(100))
-                        {
-                            if (!target.buffImmune[BuffID.Confused])
-                            {
-                                target.AddBuff(BuffID.Confused, 600);
-                                target.velocity *= 0.5f;
-                            }
-                        }
-                    }
-                }
-            }
-
         }
 
         public override void PostUpdate()
