@@ -1,7 +1,9 @@
 *en-US*:
 
 *zh-Hans*:
+New Moth Blade Bonus Text Tooltip
 Moth Bow Bonus Text Tooltip
+Moth Yoyo Bonus Text Tooltip
 
 *ru-RU*:
 DustOfCorrupt Item Name & Tooltip
@@ -17,5 +19,8 @@ LilyHarp Item Name & Tooltip
 MothEye Tooltip Update & Extra Tooltips Update
 FireflyBorageBadge Tooltip Update & Extra Tooltips Update
 All Firefly Items Extra Tooltips
+New Moth Blade Bonus Text Tooltip
+Moth Bow Bonus Text Tooltip
+Moth Yoyo Bonus Text Tooltip
 
 *All*:

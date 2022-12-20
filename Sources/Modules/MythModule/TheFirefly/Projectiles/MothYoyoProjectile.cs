@@ -1,16 +1,11 @@
-﻿using Terraria.GameContent;
+﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories;
+using Terraria.GameContent;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
     internal class MothYoyoProjectile : ModProjectile
     {
-        public override void SetStaticDefaults()
-        {
-            ProjectileID.Sets.YoyosLifeTimeMultiplier[Projectile.type] = 100f;
-            ProjectileID.Sets.YoyosMaximumRange[Projectile.type] = 260f;
-            ProjectileID.Sets.YoyosTopSpeed[Projectile.type] = 23f;
-        }
-
+        FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
         private readonly Vector3[] cubeVec = new Vector3[]
         {
             new Vector3(1,1,1),
@@ -25,10 +20,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 
         public override void SetDefaults()
         {
-            ProjectileID.Sets.YoyosLifeTimeMultiplier[Projectile.type] = 5f;
+            ProjectileID.Sets.YoyosLifeTimeMultiplier[Projectile.type] = 40f;
             ProjectileID.Sets.YoyosMaximumRange[Projectile.type] = 300f;
-
             ProjectileID.Sets.YoyosTopSpeed[Projectile.type] = 16f;
+
             Projectile.extraUpdates = 0;
             Projectile.width = 16;
             Projectile.height = 16;
@@ -49,6 +44,19 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                     (proj.ModProjectile as MothYoyoSub).targetPos = cubeVec[i] * 30;
                     proj.CritChance = Projectile.CritChance;
                     proj.netUpdate2 = true;
+                }
+                if (MothEye.LocalOwner != null && MothEye.LocalOwner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
+                {
+                    if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer))
+                    {
+                        for (int i = 0; i < cubeVec.Length; i++)
+                        {
+                            Projectile proj2 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<MothYoyoSub>(), Projectile.damage / 2, 0, Projectile.owner, Projectile.whoAmI);
+                            (proj2.ModProjectile as MothYoyoSub).targetPos = cubeVec[i] * 60;
+                            proj2.CritChance = Projectile.CritChance;
+                            proj2.netUpdate2 = true;
+                        }
+                    }
                 }
             }
         }
