@@ -215,7 +215,7 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
             if (BloodyMoscatoBuff)
             {
                 Player.HealEffect(2, true);
-                Player.statLife += 1;
+                Player.statLife += 2;
             }
             base.OnHitNPCWithProj(proj, target, damage, knockback, crit);
         }
