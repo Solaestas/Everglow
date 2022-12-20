@@ -263,10 +263,13 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
                     {
                         if (!target.dontTakeDamage && !target.friendly && target.active)
                         {
+                            target.AddBuff(ModContent.BuffType<CherryBuff>(), 1200);
                             Player.ApplyDamageToNPC(target, Math.Max(Player.HeldItem.damage * 5, 120), Math.Max(Player.HeldItem.knockBack * 5, 24), 0, Main.rand.NextBool(22, 33));
                         }
                     }
                 }
+                CombatText.NewText(Player.Hitbox, Color.HotPink, "可汗，再带我冲一次吧"); //TODO localization
+                Player.ClearBuff(ModContent.BuffType<CherryBuff>());
             }
             base.Kill(damage, hitDirection, pvp, damageSource);
         }
