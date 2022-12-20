@@ -5,7 +5,7 @@
         public override void SetStaticDefaults()
         {
             //DisplayName.SetDefault("EscargotBuf");
-            //TODO Description.SetDefault("大大减速，加25%减伤\n“神龟药水？”");
+            //Description.SetDefault("大大减速，加25%减伤\n“神龟药水？”");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
         }

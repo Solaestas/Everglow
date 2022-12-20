@@ -5,7 +5,7 @@
         public override void SetStaticDefaults()
         {
             //DisplayName.SetDefault("PlumBuff");
-            //TODO Description.SetDefault("增加600仇恨值，8%攻速\n“至于我的建议，还是再等等吧!”");
+            //Description.SetDefault("增加600仇恨值，8%攻速\n“至于我的建议，还是再等等吧!”");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
         }

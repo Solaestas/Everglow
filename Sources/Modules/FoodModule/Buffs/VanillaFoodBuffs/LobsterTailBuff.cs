@@ -5,7 +5,7 @@
         public override void SetStaticDefaults()
         {
             //DisplayName.SetDefault("LobsterTailBuff");
-            //TODO Description.SetDefault("加6防御,33%挖矿速度\n“壮阳”");
+            //Description.SetDefault("加6防御,33%挖矿速度\n“壮阳”");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
         }
