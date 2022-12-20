@@ -226,7 +226,7 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
                 SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, Player.Center);
                 ScreenShaker Gsplayer = Player.GetModPlayer<ScreenShaker>();
                 Gsplayer.FlyCamPosition = new Vector2(0, 150).RotatedByRandom(6.283);
-                Projectile.NewProjectile(null, Player.Center, Vector2.Zero, ModContent.ProjectileType<BombShakeWave>(), 0, 0, Player.whoAmI, 0.4f, 2f);
+                Projectile.NewProjectile(Player.GetSource_Death("CherryBuff"), Player.Center, Vector2.Zero, ModContent.ProjectileType<BombShakeWave>(), 0, 0, Player.whoAmI, 0.4f, 2f);
                 float k1 = Math.Clamp(Player.velocity.Length(), 1, 3);
                 float k2 = Math.Clamp(Player.velocity.Length(), 6, 10);
                 float k0 = 1f / 4 * k2;
@@ -258,10 +258,7 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
                     {
                         if (!target.dontTakeDamage && !target.friendly && target.active)
                         {
-                            bool crit = Main.rand.NextBool(33, 100);
-                            target.StrikeNPC(Math.Max(Player.HeldItem.damage * 5, 100), Math.Max(Player.HeldItem.knockBack * 5, 20), 1, crit);
-
-                            Player.addDPS(Math.Max(0, target.defDamage));
+                            Player.ApplyDamageToNPC(target, Math.Max(Player.HeldItem.damage * 5, 120), Math.Max(Player.HeldItem.knockBack * 5, 24), 0, Main.rand.NextBool(22, 33));
                         }
                     }
                 }
