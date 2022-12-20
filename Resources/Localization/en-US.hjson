@@ -1233,7 +1233,7 @@ Mods:
 					'''
 				DreamYearningBuff : 
 					'''
-					Increases speed of your projectiles
+					Your projectiles will home into nearby enemies
 					'Thinking of thou and missing thou, yearning in intoxicated dream
 					browpowder fades, frangrance dissipates, sobriety suffers more'
 					'''
@@ -1320,7 +1320,7 @@ Mods:
 					'''
 				CaramelPuddingBuff : 
 					'''
-					Your projectiles can penetrate one more time
+					Your projectiles can bounce one more time
 					'Duang, duang, duang'
 					'''
 				CrabseedWarshipBuff : 
