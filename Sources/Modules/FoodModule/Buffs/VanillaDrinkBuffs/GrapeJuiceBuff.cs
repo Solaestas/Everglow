@@ -13,7 +13,7 @@
         public override void Update(Player player, ref int buffIndex)
         {
             player.luck += 10000;
-            player.wellFed = true;
+            
         }
     }
 }
