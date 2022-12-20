@@ -345,6 +345,47 @@ Mods:
 			#食物系统物品
 			BloodGlucoseMonitor : "血糖检测仪"
 			OsmoticPressureMonitor : "渗透压检测仪"
+			# Modded food items
+				# Modded drink items
+				B_52 : "B_52"
+				BlueHawaii : "蓝色夏威夷"
+				DreamYearning : "魂牵梦萦"
+				DryMartini : "干马天尼"
+				GreenStorm : "绿色风暴"
+				KiwiJuice : "猕猴桃汁"
+				LonelyJellyfish : "'孤独的水母'"
+				OrangeJuice : "橙汁"
+				PiercoldWind : "'凛冽寒风'"
+				PurpleHooter : "紫色汽笛"
+				QuinceMarry : "榅桲玛丽"
+				RedWine : "红酒"
+				Sunrise : "日出"
+				Tricolour : "三色"
+				WaterMelonJuice : "西瓜汁"
+				# Modded food items
+				ArcticshellfishWarship : "北极贝军舰"
+				BakedMussel : "烤贻贝"
+				BakedOyster : "烤牡蛎"
+				CantaloupeJelly : "哈密瓜冻"
+				CaramelPudding : "焦糖布丁"
+				CrabseedWarship : "蟹籽军舰"
+				Durian : "榴莲"
+				EggTart : "鸡蛋馅饼"
+				KiwiFruit : "猕猴桃"
+				KiwiIceCream : "猕猴桃冰激凌"
+				Mangosteen : "山竹"
+				OrangeIcecream : "橘子冰激凌"
+				SalmonInPepper : "胡椒三文鱼"
+				SalmonWarship : "三文鱼军舰"
+				SeafoodPizza : "海鲜披萨"
+				StinkyTofu : "臭豆腐"
+				Strawberry : "草莓"
+				StrawberryIcecream : "草莓冰激凌"
+				SweetshrimpSushi : "甜虾寿司"
+				TamakoSushi : "玉子烧寿司"
+				WakameWarship : "裙带菜军舰"
+				Watermelon : "西瓜"
+				WatermelonPlate : "西瓜拼盘"
 
 			#天穹树系列物品
 
@@ -675,6 +716,235 @@ Mods:
 			#食物系统物品
 			BloodGlucoseMonitor : "显示当前饱食度"
 			OsmoticPressureMonitor : "显示渴觉状态"
+			# Modded items
+				# Modded drink items
+				BlueHawaii : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					短时间内射弹速度获得提升
+					“海风吹拂”
+					'''
+				B_52 : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					短时间内大幅提升发射器速度、暴击、伤害
+					“轰炸机”
+					'''
+				DreamYearning : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					短时间内射弹速度获得提升
+					“思君忆君，魂牵梦萦，翠销香暖云屏，更哪堪酒醒。”
+					'''
+				DryMartini : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					短时间大幅提升攻击
+					“经典之作”
+					'''
+				GreenStorm : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					短时间交替射出叶绿水晶和孢子云
+					“别以为草便宜,没上规模前,它比苹果核桃什么的都贵。”
+					'''
+				KiwiJuice : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					短时间内大幅增大武器大小
+					“浓缩的奇异之力”
+					'''
+				LonelyJellyfish : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					短时间内不断于鼠标处生成水母电圈，并且获得隐身能力
+					“观赏完就一饮而尽吧”
+					'''
+				OrangeJuice : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					短时间内获得超长无敌帧
+					“嗯，有点像LCL”
+					'''
+				PiercoldWind : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					对灯笼月敌怪特攻
+					“长啸出原野，凛然寒风生。”
+					'''
+				PurpleHooter : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					对血月敌怪特攻
+					“高贵与深沉”
+					'''
+				QuinceMarry : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					对南瓜月敌怪特攻
+					“炙热与温柔”
+					'''
+				RedWine : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					对霜月敌怪特攻
+					“上流与优雅”
+					'''
+				Sunrise : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					对日食敌怪特攻
+					“阳光与明媚”
+					'''
+				Tricolour : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					对boss仆从特攻
+					“复杂与专一”
+					'''
+				WaterMelonJuice : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					短时间大幅增加击退与暴击
+					“浓缩的打击力度”
+					'''
+				# Modded food items
+				ArcticshellfishWarship : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					提升防御
+					“美味的北极贝军舰”
+					'''
+				BakedMussel : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					增加6%爆伤、4防御
+					“似乎没那么生猛了”
+					'''
+				BakedOyster : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					增加4点盔甲穿透、4防御
+					“已灭虫”
+					'''
+				CantaloupeJelly : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					射弹可以多穿透一次
+					“duangduangduang”
+					'''
+				CaramelPudding : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					射弹可以多反弹一次
+					“duangduangduang”
+					'''
+				CrabseedWarship : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					提升暴击率
+					“美味的蟹籽军舰”
+					'''
+				Durian : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					加快消化食物的速度
+					“促进消化”
+					'''
+				EggTart : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					增加5%爆伤
+					“这酥皮不错”
+					'''
+				KiwiFruit : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					增大20%武器大小
+					“又称奇异果”
+					'''
+				KiwiIceCream : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					增大10%武器大小，加快武器攻速
+					“奇异的力量”
+					'''
+				Mangosteen : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					提升回旋镖，悠悠球、链枷类武器距离
+					“补养之效”
+					'''
+				OrangeIcecream : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					延长无敌帧时间
+					“真实存于心中”
+					'''
+				SalmonInPepper : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					提升速度,尤其是在水中
+					“冰海之皇”
+					'''
+				SalmonWarship : 
+					'''
+					提升速度
+					“美味的三文鱼军舰”
+					'''
+				SeafoodPizza : 
+					'''
+					提升大部分属性
+					“一个人吃完这个可不容易”
+					'''
+				StinkyTofu : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					使靠近的敌怪混乱
+					“又香又臭”
+					'''
+				Strawberry : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					敌怪越近，造成的伤害越高
+					“受人欢迎的水果”
+					'''
+				StrawberryIcecream : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					敌怪越近，造成的伤害越高
+					“冰冷如你，依旧令人爱不忍释”
+					'''
+				SweetshrimpSushi : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					提升攻击
+					“美味的甜虾寿司”
+					'''
+				TamakoSushi : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					提升生命回复
+					“美味的玉子寿司”
+					'''
+				WakameWarship : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					提升魔力回复
+					“美味的裙带菜寿司”
+					'''
+				Watermelon : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					增强8%击退能力
+					“最大的打击力度”
+					'''
+				WatermelonPlate : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					提升6%暴击率和爆伤
+					“朴实无华的摆盘”
+					'''
 
 			#Plant Module Items
 			CactusBall : "旋转并掷出你的仙人掌球！\n击碎敌人护甲，并让它们流血"
@@ -1024,7 +1294,7 @@ Mods:
 				BakedOysterBuff : 
 					'''
 					增加4点盔甲穿透、4防御
-					“耍酒疯”
+					“已灭虫”
 					'''
 				CantaloupeJellyBuff : 
 					'''

@@ -343,6 +343,47 @@
 			#食物系统物品
 			BloodGlucoseMonitor : "Blood Glucose Monitor"
 			OsmoticPressureMonitor : "Osmotic Pressure Monitor"
+			# Modded items
+				# Modded drink items
+				B_52 : "B_52"
+				BlueHawaii : "Blue Hawaii"
+				DreamYearning : "Yearning Dream"
+				DryMartini : "Dry Martini"
+				GreenStorm : "Green Storm"
+				KiwiJuice : "Kiwi Juice"
+				LonelyJellyfish : "'A Lonely Jellyfish'"
+				OrangeJuice : "Orange Juice"
+				PiercoldWind : "'Piercingly Cold Winds'"
+				PurpleHooter : "Purple Hooter"
+				QuinceMarry : "Quince Marry"
+				RedWine : "Red Wine"
+				Sunrise : "Sunrise"
+				Tricolour : "Tricoloured"
+				WaterMelonJuice : "Watermelon Juice"
+				# Modded food items
+				ArcticshellfishWarship : "Arctic Shellfish Warship"
+				BakedMussel : "Baked Mussel"
+				BakedOyster : "Baked Oyster"
+				CantaloupeJelly : "Cantaloupe Jelly"
+				CaramelPudding : "Caramel Pudding"
+				CrabseedWarship : "Crab Roe Warship"
+				Durian : "Durian"
+				EggTart : "Egg Tart"
+				KiwiFruit : "Kiwi Fruit"
+				KiwiIceCream : "Kiwi Icecream"
+				Mangosteen : "Mangosteen"
+				OrangeIcecream : "Orange Icecream"
+				SalmonInPepper : "Pepper Salmon"
+				SalmonWarship : "Salmon Warship"
+				SeafoodPizza : "Seafood Pizza"
+				StinkyTofu : "Stinky Tofu"
+				Strawberry : "Strawberry"
+				StrawberryIcecream : "Strawberry Icecream"
+				SweetshrimpSushi : "Sweetshrimp Sushi"
+				TamakoSushi : "Tamago Sushi"
+				WakameWarship : "Wakame Warship"
+				Watermelon : "Watermelon"
+				WatermelonPlate : "Watermelon Plate"
 
 			#Yggdrasil Items
 
@@ -656,6 +697,238 @@
 			#食物系统物品
 			BloodGlucoseMonitor : "Display hunger information"
 			OsmoticPressureMonitor : "Display thrist information"
+			# Modded items
+				# Modded drink items
+				BlueHawaii : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					Increases speed of your projectiles
+					'Sea wind breezes'
+					'''
+				B_52 : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					Greatly increases launchers' speed, damage and crit chance
+					'Bomber'
+					'''
+				DreamYearning : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					Increases speed of your projectiles
+					'Thinking of thou and missing thou, yearning in intoxicated dream
+					browpowder fades, frangrance dissipates, sobriety suffers more'
+					'''
+				DryMartini : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					Greatly increases damage
+					'Classic'
+					'''
+				GreenStorm : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					Shoots chlorophyte crystals and spore clouds in succession
+					'Don't think grasses are cheap, they're more expensive than apples and walnuts until mass production'
+					'''
+				KiwiJuice : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					Greatly increases weapon size
+					'Concentrated Kiwi power'
+					'''
+				LonelyJellyfish : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					Makes you invisible and summon jellyfish electrspheres
+					'Toss it off after appreciating'
+					'''
+				OrangeJuice : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					Grants you invincibility
+					'Emm, kind of like LCL'
+					'''
+				PiercoldWind : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					Effectively against the Lantern Moon enemies
+					'长啸出原野, 凛然寒风生'
+					'''
+				PurpleHooter : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					Effectively against the Blood Moon enemies
+					'Nobleness and profoundness'
+					'''
+				QuinceMarry : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					Effectively against the Pumpkin Moon enemies
+					'Hotness and gentleness'
+					'''
+				RedWine : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					Effectively against the Frost Moon enemies
+					'The upper class and elegance'
+					'''
+				Sunrise : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					Effectively against the Solar Eclipse enemies
+					'Sunshine and brightness'
+					'''
+				Tricolour : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					Effectively against bosses' minions
+					'Complexity and specificity'
+					'''
+				WaterMelonJuice : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					Greatly increases crit chance and knockback
+					'Focused striking force'
+					'''
+				# Modded food items
+				ArcticshellfishWarship : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					Increases defense
+					'Delicious arctic shellfish warship'
+					'''
+				BakedMussel : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					6% increased crit damage and 4 increased defense
+					'Seems to be less raw'
+					'''
+				BakedOyster : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					4 increased armor penetration and defense
+					'Parasites slain'
+					'''
+				CantaloupeJelly : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					Your projectiles can penetrate one more time
+					'Duang, duang, duang'
+					'''
+				CaramelPudding : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					Your projectiles can penetrate one more time
+					'Duang, duang, duang'
+					'''
+				CrabseedWarship : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					Increases crit chance
+					'Delicious crab roe warship'
+					'''
+				Durian : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					Speeds up digestion
+					'Helps digestion'
+					'''
+				EggTart : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					5% increased crit damage 
+					'Crispy crust'
+					'''
+				KiwiFruit : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					20% increased weapon size
+					'Also called Chinese gooseberry'
+					'''
+				KiwiIceCream : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					10% increased weapon size and increases attack speed
+					'Kiwi power'
+					'''
+				Mangosteen : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					Increases attack range of boomerangs, yoyos and flails
+					'Nurishing'
+					'''
+				OrangeIcecream : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					Extends invincibility frames
+					'The reality is in your mind'
+					'''
+				SalmonInPepper : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					Increases movement speed, especially in water
+					'Queen of the Arctic ocean'
+					'''
+				SalmonWarship : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					Increases movement speed
+					'Delicious salmon warship'
+					'''
+				SeafoodPizza : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					Increases most stats
+					'It's not easy to finish this by one'
+					'''
+				StinkyTofu : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					Confuses nearby enemies
+					'Appetizing but stinky'
+					'''
+				Strawberry : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					Nearer enemies take more damage
+					'Popular fruit'
+					'''
+				StrawberryIcecream : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					Nearer enemies take more damage
+					'Cold as you, but still I can't part with it'
+					'''
+				SweetshrimpSushi : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					Increases damage
+					'Delicious sweetshrip sushi'
+					'''
+				TamakoSushi : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					Increases life regeneration
+					'Delicious tamago sushi'
+					'''
+				WakameWarship : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					Increases mana regeneration
+					'Delicious wakame sushi'
+					'''
+				Watermelon : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					8% increases knockback
+					'Maximum striking force'
+					'''
+				WatermelonPlate : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					6% increased crit chance and crit damage
+					'Unpretentious arrangement'
+					'''
 
 			#Plant Module Items
 			CactusBall : "Spin and throw a cactus ball!\nShred victims' armour and bleed them"
@@ -1009,7 +1282,7 @@
 				BakedOysterBuff : 
 					'''
 					4 increased armor penetration and defense
-					“耍酒疯”
+					'Parasites slain'
 					'''
 				CantaloupeJellyBuff : 
 					'''

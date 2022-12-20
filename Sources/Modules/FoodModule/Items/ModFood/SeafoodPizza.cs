@@ -28,10 +28,6 @@ namespace Everglow.Sources.Modules.FoodModule.Items.ModFood
             }
         }
         public override void SetStaticDefaults() {
-			DisplayName.SetDefault("海鲜披萨");
-
-			Tooltip.SetDefault("{$CommonItemTooltip.MediumStats}\n'一个人吃完这个可不容易'");
-
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 5;
 
 			Main.RegisterItemAnimation(Type, new DrawAnimationVertical(int.MaxValue, 3));
