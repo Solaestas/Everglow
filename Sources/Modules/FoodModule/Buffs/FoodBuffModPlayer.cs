@@ -273,101 +273,40 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
         {
             if (GrubSoupBuff)
             {
-                if (MangoBuff)
+                if (Player.lifeRegen > 0)
                 {
-                    if (Player.lifeRegen > 0)
-                    {
-                        Player.lifeRegen = 0;
-                    }
-
-                    Player.lifeRegenTime = 0;
-                    Player.lifeRegen -= 2;
+                    Player.lifeRegen = 0;
                 }
-                else
-                {
-                    if (Player.lifeRegen > 0)
-                    {
-                        Player.lifeRegen = 0;
-                    }
-
-                    Player.lifeRegenTime = 0;
-                    Player.lifeRegen -= 4;
-                }
-
+                Player.lifeRegenTime = 0;
+                Player.lifeRegen -= MangoBuff ? 2 : 4;
             }
             if (MonsterLasagnaBuff)
             {
-                if (MangoBuff)
+                if (Player.lifeRegen > 0)
                 {
-                    if (Player.lifeRegen > 0)
-                    {
-                        Player.lifeRegen = 0;
-                    }
-
-                    Player.lifeRegenTime = 0;
-                    Player.lifeRegen -= 3;
+                    Player.lifeRegen = 0;
                 }
-                else
-                {
-                    if (Player.lifeRegen > 0)
-                    {
-                        Player.lifeRegen = 0;
-                    }
-
-                    Player.lifeRegenTime = 0;
-                    Player.lifeRegen -= 6;
-                }
-
+                Player.lifeRegenTime = 0;
+                Player.lifeRegen -= MangoBuff ? 3 : 6;
             }
             if (SashimiBuff)
             {
-                if (MangoBuff)
+                if (Player.lifeRegen > 0)
                 {
-                    if (Player.lifeRegen > 0)
-                    {
-                        Player.lifeRegen = 0;
-                    }
-
-                    Player.lifeRegenTime = 0;
-                    Player.lifeRegen -= 2;
+                    Player.lifeRegen = 0;
                 }
-                else
-                {
-                    if (Player.lifeRegen > 0)
-                    {
-                        Player.lifeRegen = 0;
-                    }
-
-                    Player.lifeRegenTime = 0;
-                    Player.lifeRegen -= 4;
-                }
-
+                Player.lifeRegenTime = 0;
+                Player.lifeRegen -= MangoBuff ? 2 : 4;
             }
             if (ShuckedOysterBuff)
             {
-                if (MangoBuff)
+                if (Player.lifeRegen > 0)
                 {
-                    if (Player.lifeRegen > 0)
-                    {
-                        Player.lifeRegen = 0;
-                    }
-
-                    Player.lifeRegenTime = 0;
-                    Player.lifeRegen -= 2;
+                    Player.lifeRegen = 0;
                 }
-                else
-                {
-                    if (Player.lifeRegen > 0)
-                    {
-                        Player.lifeRegen = 0;
-                    }
-
-                    Player.lifeRegenTime = 0;
-                    Player.lifeRegen -= 6;
-                }
+                Player.lifeRegenTime = 0;
+                Player.lifeRegen -= MangoBuff ? 2 : 4;
             }
-
         }
-
     }
 }
