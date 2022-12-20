@@ -53,7 +53,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
         {
             if (MothEye.LocalOwner != null && MothEye.LocalOwner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
             {
-                if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer))
+                if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
                 {
                     tooltips.AddRange(new TooltipLine[]
                     {

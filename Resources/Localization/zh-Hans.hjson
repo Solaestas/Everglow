@@ -884,6 +884,7 @@ Mods:
 			}
 			FireflyItems :
 			{
+			//	MothEyeCriteriaText : "[c/6B6BB2:In order to harness a fragment of the ommateum, a powerful underworld creature must be slain]"
 				MothEyeText0 : "[c/7FC1FF:处于流萤群系时:]"
 				MothEyeText1 : "[c/7FC1FF:- 降低5%魔力消耗]"
 				MothEyeText2 : "[c/7FC1FF:- 降低4魔力病的效力]"

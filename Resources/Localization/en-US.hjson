@@ -895,6 +895,7 @@ Mods:
 			}
 			FireflyItems :
 			{
+				MothEyeCriteriaText : "[c/6B6BB2:In order to harness a fragment of the ommateum, a powerful underworld creature must be slain]"
 				MothEyeText0 : "[c/7FC1FF:While in the Firefly biome:]"
 				MothEyeText1 : "[c/7FC1FF:- Mana cost is reduced by 5%]"
 				MothEyeText2 : "[c/7FC1FF:- The effectiveness of mana sickness is reduced by 4]"

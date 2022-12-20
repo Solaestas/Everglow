@@ -47,7 +47,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 }
                 if (MothEye.LocalOwner != null && MothEye.LocalOwner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
                 {
-                    if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer))
+                    if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
                     {
                         for (int i = 0; i < cubeVec.Length; i++)
                         {
