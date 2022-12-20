@@ -14,7 +14,6 @@
 
         public override void SetStaticDefaults()
         {
-            //    base.DisplayName.SetDefault("幻蝶");
             Main.npcFrameCount[NPC.type] = 4;
         }
 

@@ -5,7 +5,7 @@
         public override void SetStaticDefaults()
         {
             //DisplayName.SetDefault("PrismaticPunchBuff");
-            //TODO Description.SetDefault("短时间内增加5召唤栏，5哨兵栏，增加50%召唤伤害，击退\n“高雅兴致”");
+            //Description.SetDefault("短时间内增加5召唤栏，5哨兵栏，增加50%召唤伤害，击退\n“高雅兴致”");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
         }

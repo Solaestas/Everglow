@@ -28,9 +28,6 @@ namespace Everglow.Sources.Modules.FoodModule.Items.ModFood
             }
         }
         public override void SetStaticDefaults() {
-			DisplayName.SetDefault("哈密瓜果冻");
-
-			Tooltip.SetDefault("{$CommonItemTooltip.MediumStats}\n'duangduangduang'");
 
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 5;
 
