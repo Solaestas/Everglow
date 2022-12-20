@@ -770,6 +770,48 @@
 			SugarCookieBuff : Сахарное печенье
 			TeacupBuff : Чайная чашка
 			TropicalSmoothieBuff : Тропический Смузи
+
+			# Modded buffs
+				# Modded drink buffs
+				B_52Buff : "B_52"
+				BlueHawaiiBuff : "Blue Hawaii"
+				DreamYearningBuff : "Yearning Dream"
+				DryMartiniBuff : "Dry Martini"
+				GreenStormBuff : "Green Storm"
+				KiwiJuiceBuff : "Kiwi Juice"
+				LonelyJellyfishBuff : "'A Lonely Jellyfish'"
+				OrangeJuiceBuff : "Orange Juice"
+				PiercoldWindBuff : "'Piercingly Cold Winds'"
+				PurpleHooterBuff : "Purple Hooter"
+				QuinceMarryBuff : "Quince Marry"
+				RedWineBuff : "Red Wine"
+				SunriseBuff : "Sunrise"
+				TricolourBuff : "Tricoloured"
+				WaterMelonJuiceBuff : "Watermelon Juice"
+				# Modded food buffs
+				ArcticshellfishWarshipBuff : "Arctic Shellfish Warship"
+				BakedMusselBuff : "Baked Mussel"
+				BakedOysterBuff : "Baked Oyster"
+				CantaloupeJellyBuff : "Cantaloupe Jelly"
+				CaramelPuddingBuff : "Caramel Pudding"
+				CrabseedWarshipBuff : "Crab Roe Warship"
+				DurianBuff : "Durian"
+				EggTartBuff : "Egg Tart"
+				KiwiFruitBuff : "Kiwi Fruit"
+				KiwiIceCreamBuff : "Kiwi Icecream"
+				MangosteenBuff : "Mangosteen"
+				OrangeIcecreamBuff : "Orange Icecream"
+				SalmonInPepperBuff : "Pepper Salmon"
+				SalmonWarshipBuff : "Salmon Warship"
+				SeafoodPizzaBuff : "Seafood Pizza"
+				StinkyTofuBuff : "Stinky Tofu"
+				StrawberryBuff : "Strawberry"
+				StrawberryIcecreamBuff : "Strawberry Icecream"
+				SweetshrimpSushiBuff : "Sweetshrimp Sushi"
+				TamakoSushiBuff : "Tamago Sushi"
+				WakameWarshipBuff : "Wakame Warship"
+				WatermelonBuff : "Watermelon"
+				WatermelonPlateBuff : "Watermelon Plate"
 		}
 		BuffDescription : 
 		{
@@ -874,6 +916,201 @@
 			SugarCookieBuff : "5% increased ranged damage\n'Nourishing'"
 			TeacupBuff : "Greatly increased mana regen, magic damage and magic crit chance\n'Fragrant'"
 			TropicalSmoothieBuff : "Greatly increased magic damage and magic crit chance, your mana cost is reduced to 1\n'Tropical storm'"
+
+			# Modded buffs
+				# Modded drink buffs
+				BlueHawaiiBuff : 
+					'''
+					Increases speed of your projectiles
+					'Sea wind breezes'
+					'''
+				B_52Buff : 
+					'''
+					Greatly increases launchers' speed, damage and crit chance
+					'Bomber'
+					'''
+				DreamYearningBuff : 
+					'''
+					Increases speed of your projectiles
+					'Thinking of thou and missing thou, yearning in intoxicated dream
+					browpowder fades, frangrance dissipates, sobriety suffers more'
+					'''
+				DryMartiniBuff : 
+					'''
+					Greatly increases damage
+					'Classic'
+					'''
+				GreenStormBuff : 
+					'''
+					Shoots chlorophyte crystals and spore clouds in succession
+					'Don't think grasses are cheap, they're more expensive than apples and walnuts until mass production'
+					'''
+				KiwiJuiceBuff : 
+					'''
+					Greatly increases weapon size
+					'Concentrated Kiwi power'
+					'''
+				LonelyJellyfishBuff : 
+					'''
+					Makes you invisible and summon jellyfish electrspheres
+					'Toss it off after appreciating'
+					'''
+				OrangeJuiceBuff : 
+					'''
+					Grants you invincibility
+					'Emm, kind of like LCL'
+					'''
+				PiercoldWindBuff : 
+					'''
+					Effectively against the Lantern Moon enemies
+					'长啸出原野, 凛然寒风生'
+					'''
+				PurpleHooterBuff : 
+					'''
+					Effectively against the Blood Moon enemies
+					'Nobleness and profoundness'
+					'''
+				QuinceMarryBuff : 
+					'''
+					Effectively against the Pumpkin Moon enemies
+					'Hotness and gentleness'
+					'''
+				RedWineBuff : 
+					'''
+					Effectively against the Frost Moon enemies
+					'The upper class and elegance'
+					'''
+				SunriseBuff : 
+					'''
+					Effectively against the Solar Eclipse enemies
+					'Sunshine and brightness'
+					'''
+				TricolourBuff : 
+					'''
+					Effectively against bosses' minions
+					'Complexity and specificity'
+					'''
+				WaterMelonJuiceBuff : 
+					'''
+					Greatly increases crit chance and knockback
+					'Focused striking force'
+					'''
+				# Modded food buffs
+				ArcticshellfishWarshipBuff : 
+					'''
+					Increases defense
+					'Delicious arctic shellfish warship'
+					'''
+				BakedMusselBuff : 
+					'''
+					6% increased crit damage and 4 increased defense
+					'Seems to be less raw'
+					'''
+				BakedOysterBuff : 
+					'''
+					4 increased armor penetration and defense
+					“耍酒疯”
+					'''
+				CantaloupeJellyBuff : 
+					'''
+					Your projectiles can penetrate one more time
+					'Duang, duang, duang'
+					'''
+				CaramelPuddingBuff : 
+					'''
+					Your projectiles can penetrate one more time
+					'Duang, duang, duang'
+					'''
+				CrabseedWarshipBuff : 
+					'''
+					Increases crit chance
+					'Delicious crab roe warship'
+					'''
+				DurianBuff : 
+					'''
+					Speeds up digestion
+					'Helps digestion'
+					'''
+				EggTartBuff : 
+					'''
+					5% increased crit damage 
+					'Crispy crust'
+					'''
+				KiwiFruitBuff : 
+					'''
+					20% increased weapon size
+					'Also called Chinese gooseberry'
+					'''
+				KiwiIceCreamBuff : 
+					'''
+					10% increased weapon size and increases attack speed
+					'Kiwi power'
+					'''
+				MangosteenBuff : 
+					'''
+					Increases attack range of boomerangs, yoyos and flails
+					'Nurishing'
+					'''
+				OrangeIcecreamBuff : 
+					'''
+					Extends invincibility frames
+					'The reality is in your mind'
+					'''
+				SalmonInPepperBuff : 
+					'''
+					Increases movement speed, especially in water
+					'Queen of the Arctic ocean'
+					'''
+				SalmonWarshipBuff : 
+					'''
+					Increases movement speed
+					'Delicious salmon warship'
+					'''
+				SeafoodPizzaBuff : 
+					'''
+					Increases most stats
+					'It's not easy to finish this by one'
+					'''
+				StinkyTofuBuff : 
+					'''
+					Confuses nearby enemies
+					'Appetizing but stinky'
+					'''
+				StrawberryBuff : 
+					'''
+					Nearer enemies take more damage
+					'Popular fruit'
+					'''
+				StrawberryIcecreamBuff : 
+					'''
+					Nearer enemies take more damage
+					'Cold as you, but still I can't part with it'
+					'''
+				SweetshrimpSushiBuff : 
+					'''
+					Increases damage
+					'Delicious sweetshrip sushi'
+					'''
+				TamakoSushiBuff : 
+					'''
+					Increases life regeneration
+					'Delicious tamago sushi'
+					'''
+				WakameWarshipBuff : 
+					'''
+					Increases mana regeneration
+					'Delicious wakame sushi'
+					'''
+				WatermelonBuff : 
+					'''
+					8% increases knockback
+					'Maximum striking force'
+					'''
+				WatermelonPlateBuff : 
+					'''
+					6% increased crit chance and crit damage
+					'Unpretentious arrangement'
+					'''
 		}
 		MapEntry :
 		{

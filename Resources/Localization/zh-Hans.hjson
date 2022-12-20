@@ -786,6 +786,48 @@ Mods:
 			SugarCookieBuff : "蜜糖饼干"
 			TeacupBuff : "茶"
 			TropicalSmoothieBuff : "热带奶昔"
+
+			# Modded buffs
+				# Modded drink buffs
+				B_52Buff : "B_52"
+				BlueHawaiiBuff : "蓝色夏威夷"
+				DreamYearningBuff : "魂牵梦萦"
+				DryMartiniBuff : "干马天尼"
+				GreenStormBuff : "绿色风暴"
+				KiwiJuiceBuff : "猕猴桃汁"
+				LonelyJellyfishBuff : "'孤独的水母'"
+				OrangeJuiceBuff : "橙汁"
+				PiercoldWindBuff : "'凛冽寒风'"
+				PurpleHooterBuff : "紫色汽笛"
+				QuinceMarryBuff : "榅桲玛丽"
+				RedWineBuff : "红酒"
+				SunriseBuff : "日出"
+				TricolourBuff : "三色"
+				WaterMelonJuiceBuff : "西瓜汁"
+				# Modded food buffs
+				ArcticshellfishWarshipBuff : "北极贝军舰"
+				BakedMusselBuff : "烤贻贝"
+				BakedOysterBuff : "烤牡蛎"
+				CantaloupeJellyBuff : "哈密瓜冻"
+				CaramelPuddingBuff : "焦糖布丁"
+				CrabseedWarshipBuff : "蟹籽军舰"
+				DurianBuff : "榴莲"
+				EggTartBuff : "鸡蛋馅饼"
+				KiwiFruitBuff : "猕猴桃"
+				KiwiIceCreamBuff : "猕猴桃冰激凌"
+				MangosteenBuff : "山竹"
+				OrangeIcecreamBuff : "橘子冰激凌"
+				SalmonInPepperBuff : "胡椒三文鱼"
+				SalmonWarshipBuff : "三文鱼军舰"
+				SeafoodPizzaBuff : "海鲜披萨"
+				StinkyTofuBuff : "臭豆腐"
+				StrawberryBuff : "草莓"
+				StrawberryIcecreamBuff : "草莓冰激凌"
+				SweetshrimpSushiBuff : "甜虾寿司"
+				TamakoSushiBuff : "玉子烧寿司"
+				WakameWarshipBuff : "裙带菜军舰"
+				WatermelonBuff : "西瓜"
+				WatermelonPlateBuff : "西瓜拼盘"
 		}
 		BuffDescription : 
 		{
@@ -890,6 +932,200 @@ Mods:
 			SugarCookieBuff : "加5%远程伤害\n“养胃滋润”"
 			TeacupBuff : "短时间内大幅增加魔力回复，魔法攻击，暴击\n“醇香四溢”"
 			TropicalSmoothieBuff : "短时间内魔法攻击仅消耗一点魔力，大幅增加魔法攻击，暴击\n“热带风暴”"
+
+			# Modded buffs
+				# Modded drink buffs
+				BlueHawaiiBuff : 
+					'''
+					短时间内射弹速度获得提升
+					“海风吹拂”
+					'''
+				B_52Buff : 
+					'''
+					短时间内大幅提升发射器速度、暴击、伤害
+					“轰炸机”
+					'''
+				DreamYearningBuff : 
+					'''
+					短时间内射弹速度获得提升
+					“思君忆君，魂牵梦萦，翠销香暖云屏，更哪堪酒醒。”
+					'''
+				DryMartiniBuff : 
+					'''
+					短时间大幅提升攻击
+					“经典之作”
+					'''
+				GreenStormBuff : 
+					'''
+					短时间交替射出叶绿水晶和孢子云
+					“别以为草便宜,没上规模前,它比苹果核桃什么的都贵。”
+					'''
+				KiwiJuiceBuff : 
+					'''
+					短时间内大幅增大武器大小
+					“浓缩的奇异之力”
+					'''
+				LonelyJellyfishBuff : 
+					'''
+					短时间内不断于鼠标处生成水母电圈，并且获得隐身能力
+					“观赏完就一饮而尽吧”
+					'''
+				OrangeJuiceBuff : 
+					'''
+					短时间内获得超长无敌帧
+					“嗯，有点像LCL”
+					'''
+				PiercoldWindBuff : 
+					'''
+					对灯笼月敌怪特攻
+					“长啸出原野，凛然寒风生。”
+					'''
+				PurpleHooterBuff : 
+					'''
+					对血月敌怪特攻
+					“高贵与深沉”
+					'''
+				QuinceMarryBuff : 
+					'''
+					对南瓜月敌怪特攻
+					“炙热与温柔”
+					'''
+				RedWineBuff : 
+					'''
+					对霜月敌怪特攻
+					“上流与优雅”
+					'''
+				SunriseBuff : 
+					'''
+					对日食敌怪特攻
+					“阳光与明媚”
+					'''
+				TricolourBuff : 
+					'''
+					对boss仆从特攻
+					“复杂与专一”
+					'''
+				WaterMelonJuiceBuff : 
+					'''
+					短时间大幅增加击退与暴击
+					“浓缩的打击力度”
+					'''
+				# Modded food buffs
+				ArcticshellfishWarshipBuff : 
+					'''
+					提升防御
+					“美味的北极贝军舰”
+					'''
+				BakedMusselBuff : 
+					'''
+					增加6%爆伤、4防御
+					“似乎没那么生猛了”
+					'''
+				BakedOysterBuff : 
+					'''
+					增加4点盔甲穿透、4防御
+					“耍酒疯”
+					'''
+				CantaloupeJellyBuff : 
+					'''
+					射弹可以多穿透一次
+					“duangduangduang”
+					'''
+				CaramelPuddingBuff : 
+					'''
+					射弹可以多反弹一次
+					“duangduangduang”
+					'''
+				CrabseedWarshipBuff : 
+					'''
+					提升暴击率
+					“美味的蟹籽军舰”
+					'''
+				DurianBuff : 
+					'''
+					加快消化食物的速度
+					“促进消化”
+					'''
+				EggTartBuff : 
+					'''
+					增加5%爆伤
+					“这酥皮不错”
+					'''
+				KiwiFruitBuff : 
+					'''
+					增大20%武器大小
+					“又称奇异果”
+					'''
+				KiwiIceCreamBuff : 
+					'''
+					增大10%武器大小，加快武器攻速
+					“奇异的力量”
+					'''
+				MangosteenBuff : 
+					'''
+					提升回旋镖，悠悠球、链枷类武器距离
+					“补养之效”
+					'''
+				OrangeIcecreamBuff : 
+					'''
+					延长无敌帧时间
+					“真实存于心中”
+					'''
+				SalmonInPepperBuff : 
+					'''
+					提升速度,尤其是在水中
+					“冰海之皇”
+					'''
+				SalmonWarshipBuff : 
+					'''
+					提升速度
+					“美味的三文鱼军舰”
+					'''
+				SeafoodPizzaBuff : 
+					'''
+					提升大部分属性
+					“一个人吃完这个可不容易”
+					'''
+				StinkyTofuBuff : 
+					'''
+					使靠近的敌怪混乱
+					“又香又臭”
+					'''
+				StrawberryBuff : 
+					'''
+					敌怪越近，造成的伤害越高
+					“受人欢迎的水果”
+					'''
+				StrawberryIcecreamBuff : 
+					'''
+					敌怪越近，造成的伤害越高
+					“冰冷如你，依旧令人爱不忍释”
+					'''
+				SweetshrimpSushiBuff : 
+					'''
+					提升攻击
+					“美味的甜虾寿司”
+					'''
+				TamakoSushiBuff : 
+					'''
+					提升生命回复
+					“美味的玉子寿司”
+					'''
+				WakameWarshipBuff : 
+					'''
+					提升魔力回复
+					“美味的裙带菜寿司”
+					'''
+				WatermelonBuff : 
+					'''
+					增强8%击退能力
+					“最大的打击力度”
+					'''
+				WatermelonPlateBuff : 
+					'''
+					提升6%暴击率和爆伤
+					“朴实无华的摆盘”
+					'''
 		}
 		MapEntry :
 		{
