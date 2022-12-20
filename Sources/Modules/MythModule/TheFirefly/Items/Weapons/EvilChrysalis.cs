@@ -1,10 +1,13 @@
-﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
+﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
 using Terraria.DataStructures;
+using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 {
     public class EvilChrysalis : ModItem
     {
+        FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
         public override void SetStaticDefaults()
         {
             ItemGlowManager.AutoLoadItemGlow(this);
@@ -53,6 +56,21 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
                 }
             }
             return base.CanUseItem(player);
+        }
+        public override void ModifyTooltips(List<TooltipLine> tooltips)
+        {
+            if (MothEye.LocalOwner != null && MothEye.LocalOwner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
+            {
+                if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer))
+                {
+                    tooltips.AddRange(new TooltipLine[]
+                    {
+                        new(Everglow.Instance, "MothEyeBonusText", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeBonusText")),
+                        new(Everglow.Instance, "MothEyeYoyoBonus", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextEvilChrysalis0")),
+                        new(Everglow.Instance, "MothEyeYoyoBonus", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextEvilChrysalis1")),
+                    });
+                }
+            }
         }
 
         public override bool AltFunctionUse(Player player)

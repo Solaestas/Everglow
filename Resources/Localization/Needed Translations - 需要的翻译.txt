@@ -4,6 +4,7 @@
 New Moth Blade Bonus Text Tooltip
 Moth Bow Bonus Text Tooltip
 Moth Yoyo Bonus Text Tooltip
+Moth Chrysalis Bonus Text Tooltip
 
 *ru-RU*:
 DustOfCorrupt Item Name & Tooltip
@@ -22,5 +23,6 @@ All Firefly Items Extra Tooltips
 New Moth Blade Bonus Text Tooltip
 Moth Bow Bonus Text Tooltip
 Moth Yoyo Bonus Text Tooltip
+Moth Chrysalis Bonus Text Tooltip
 
 *All*:
