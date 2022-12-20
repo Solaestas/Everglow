@@ -32,6 +32,7 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
         public bool RoastedBirdBuff;
         public bool RoastedDuckBuff;
         public bool BloodyMoscatoBuff;
+        public int BloodyMoscatoHealCount;
         public bool FriedEggBuff;
         public bool CherryBuff;
         public bool PiercoldWindBuff;
@@ -77,6 +78,7 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
             RoastedBirdBuff = false;
             RoastedDuckBuff = false;
             BloodyMoscatoBuff = false;
+            BloodyMoscatoHealCount = 0;
             FriedEggBuff = false;
             CherryBuff = false;
             PiercoldWindBuff = false;
@@ -122,6 +124,7 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
             RoastedBirdBuff = false;
             RoastedDuckBuff = false;
             BloodyMoscatoBuff = false;
+            BloodyMoscatoHealCount = Math.Max(--BloodyMoscatoHealCount, 0);
             FriedEggBuff = false;
             CherryBuff = false;
             PiercoldWindBuff = false;
@@ -197,10 +200,11 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
                 target.AddBuff(BuffID.Oiled, 600);
                 target.AddBuff(BuffID.OnFire, 600);
             }
-            if (BloodyMoscatoBuff)
+            if (BloodyMoscatoBuff && BloodyMoscatoHealCount <= 60)
             {
                 Player.HealEffect(2, true);
                 Player.statLife += 2;
+                BloodyMoscatoHealCount += 10;
             }
             base.OnHitNPC(item, target, damage, knockback, crit);
         }
@@ -212,10 +216,11 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
                 target.AddBuff(BuffID.Oiled, 600);
                 target.AddBuff(BuffID.OnFire, 600);
             }
-            if (BloodyMoscatoBuff)
+            if (BloodyMoscatoBuff && BloodyMoscatoHealCount <= 60)
             {
                 Player.HealEffect(2, true);
                 Player.statLife += 2;
+                BloodyMoscatoHealCount += 10;
             }
             base.OnHitNPCWithProj(proj, target, damage, knockback, crit);
         }
