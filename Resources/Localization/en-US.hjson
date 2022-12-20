@@ -165,7 +165,6 @@ Mods:
 			TuskRelic : "The Tusk Relic"
 			CorruptMothTreasureBag : "Treasure Bag (Corrupted Moth)"
 			CursedJawbone : "Cursed Jawbone"
-			EvilCocoon : "Magical Cocoon"
 			TuskTreasureBag : "Treasure Bag (The Tusk)"
 			FragransBlade : 金秋爽夜
 			FragransBoomerang : Swirl Cloud At Night
@@ -281,6 +280,7 @@ Mods:
 
 			# 流萤系列物品
 			ShabbyPylonItem : "Shabby Pylon"
+
 			GlowBeadGun : "Glowing Railgun"
 			DustOfCorrupt : Corrupted Scales
 			EvilChrysalis : Cocoon Staff
@@ -292,7 +292,22 @@ Mods:
 			NavyThunder : "Navy Thunder"
 			GlowWoodSword : "Glowwood Sword"
 			DarknessFan : "Phantasm Fan of Fireflies"
+
 			BlueflowerBra : "Blueflower Bra"
+			BlackStarShrub : "Black Star Shrub"
+			DarkCocoon : "Black Cocoon"
+			DarkCocoonWall : "Black Cocoon Wall"
+			EvilCocoon : "Magical Cocoon"
+			FireflyCapital : "'An Illusion of The Firefly'"
+			FireflyMoss : "Firefly Moss"
+			FireflyPigment : "Firefly Pigment"
+			GlowCrystal : "Glowing Crystal"
+			GlowingFirefly : "Glowing Firefly"
+			GlowingPedal : "Glowing Pedal"
+			GlowMetal : "Glowing Metal Block"
+			GlowStone : "Glowing Stone"
+			GlowWood : "Glowwood"
+			MothScaleDust : "Moth Dust"
 
 			# Glow Wood Furniture
 			GlowWoodBed : "Glowwood Bed"

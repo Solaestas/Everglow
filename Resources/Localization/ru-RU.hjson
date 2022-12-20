@@ -159,7 +159,6 @@
 			TuskRelic : "Реликвия Бивня"
 			CorruptMothTreasureBag : "Мешок с Сокровищами (Испорченный Мотылька)"
 			CursedJawbone : "Проклятая Челюстная кость"
-			EvilCocoon : "Магический Кокон"
 			TuskTreasureBag : "Мешок с Сокровищами (Бивень)"
 			FragransBlade : 金秋爽夜
 			FragransBoomerang : Вихревое Облако Ночи
@@ -279,6 +278,7 @@
 
 			#流萤系列物品
 			ShabbyPylonItem : "Shabby Pylon"
+
 			GlowBeadGun : "Glowing Railgun"
 			DustOfCorrupt : Corrupted Scales
 			EvilChrysalis : Посох-кокон
@@ -290,7 +290,21 @@
 			NavyThunder : "Navy Thunder"
 			GlowWoodSword : "Glowwood Sword"
 			DarknessFan : "Phantasm Fan of Fireflies"
+
 			BlueflowerBra : "Blueflower Bra"
+			DarkCocoon : "Black Cocoon"
+			DarkCocoonWall : "Black Cocoon Wall"
+			EvilCocoon : "Магический Кокон"
+			FireflyCapital : "'An Illusion of The Firefly'"
+			FireflyMoss : "Firefly Moss"
+			FireflyPigment : "Firefly Pigment"
+			GlowCrystal : "Glowing Crystal"
+			GlowingFirefly : "Glowing Firefly"
+			GlowingPedal : "Glowing Pedal"
+			GlowMetal : "Glowing Metal Block"
+			GlowStone : "Glowing Stone"
+			GlowWood : "Glowwood"
+			MothScaleDust : "Moth Dust"
 
 			# Glow Wood Furniture
 			GlowWoodBed : "Glowwood Bed"

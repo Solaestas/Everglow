@@ -165,7 +165,6 @@ Mods:
 			TuskRelic : "鲜血獠牙圣物"
 			CorruptMothTreasureBag : "宝藏袋 (腐檀巨蛾)"
 			CursedJawbone : "诅咒颌骨"
-			EvilCocoon : "魔茧"
 			TuskTreasureBag : "宝藏袋 (鲜血獠牙)"
 			FragransBlade : 金秋爽夜
 			FragransBoomerang : 旋云舞月
@@ -281,6 +280,7 @@ Mods:
 
 			#流萤系列物品
 			ShabbyPylonItem : "破损晶塔"
+
 			GlowBeadGun : "荧光轨道炮"
 			DustOfCorrupt : 腐化粉尘
 			EvilChrysalis : 邪茧法杖
@@ -292,7 +292,21 @@ Mods:
 			NavyThunder : "潜火影雷"
 			GlowWoodSword : "萤火木剑"
 			DarknessFan : "幻蝶萤火扇"
+
 			BlueflowerBra : "蓝花内衣"
+			DarkCocoon : "黑茧"
+			DarkCocoonWall : "黑茧墙"
+			EvilCocoon : "魔茧"
+			FireflyCapital : "'流萤印象'"
+			FireflyMoss : "流萤苔"
+			FireflyPigment : "流萤色素"
+			GlowCrystal : "荧光水晶"
+			GlowingFirefly : "荧光虫"
+			GlowingPedal : "荧光花瓣"
+			GlowMetal : "荧光金属块"
+			GlowStone : "荧光石块"
+			GlowWood : "萤火木"
+			MothScaleDust : "蛾尘"
 
 			# Glow Wood Furniture
 			GlowWoodBed : "萤火木床"
