@@ -27,7 +27,7 @@ namespace Everglow.Sources.Modules.FoodModule
         /// <summary>
         /// 玩家的饱食等级
         /// </summary>
-        public int SatietyLevel { get; set; }
+        public int SatietyLevel { get; private set; }
         /// <summary>
         /// 玩家当前渴觉状态
         /// </summary>
