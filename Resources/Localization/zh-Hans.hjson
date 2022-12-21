@@ -24,7 +24,7 @@ Mods:
 				你的召唤物将集中攻击被击中的敌人
 				'''
 			ClubGT : 旋转挥舞以攻击敌人
-			RapierGT : Right click and hold to charge an invincibility dash with high damage
+			RapierGT : 按住右键为一次高伤害, 附带无敌的冲刺充能
 			NoAmmoConsum : 不消耗弹药
 			Acytaea : 雅思塔亚
 			ExcluWeapon : 专属武器
@@ -45,6 +45,11 @@ Mods:
 				CannotEat : "你吃饱了"
 				CannotDrink : "你不想再喝了"
 			}
+
+			PylonSystem : 
+			{
+				ShabbyPylonRepairedTip : "晶塔已修复"
+			}
 		}
 		ItemName:
 		{
@@ -59,7 +64,6 @@ Mods:
 			FireFeatherMagic : 烈焰羽箭
 			FreezeFeatherMagic : 寒冰羽箭
 			GoldRoundYoyo : "金边球"
-			Hepuyuan : "和璞鸢"
 			SilveralGun : "银猎之狐Fx01"
 			SilveralRifle : "银影幽豹Ct01"
 			Sunflower : "向日飞盘"
@@ -70,7 +74,6 @@ Mods:
 			BloodLightCyanFlame : "血光青炎"
 			BlueRain : "雨落蓝池"
 			ChaosCurrent : "混沌爆流"
-			DarknessFan : "幻蝶萤火扇"
 			FrozenStormPine : "冰凌雪松"
 			GelPowerGun : "啫喱充能器"
 			LaserWhip : "激光鞭"
@@ -183,11 +186,6 @@ Mods:
 			TitaniumClub : 钛金棍
 			TungstenClub : 钨棍
 			WoodenClub : 木棍
-			DustOfCorrupt : 腐化粉尘
-			EvilChrysalis : 邪茧法杖
-			PhosphorescenceGun : 光鳞霰弹枪
-			ScaleWingBlade : 鳞翅之刃
-			ShadowWingBow : 影翼巨弓
 			AmbiguousNight : 幻夜弹弓
 			BlackWoodSlingshot : 乌木弹弓
 			BlueGemSlingshot : 蓝宝石弹弓
@@ -263,12 +261,23 @@ Mods:
 			CrystalSkull : "水晶头骨"
 
 			#流萤系列物品
+			ShabbyPylonItem : "破损晶塔"
 			GlowBeadGun : "荧光轨道炮"
+			DustOfCorrupt : 腐化粉尘
+			EvilChrysalis : 邪茧法杖
+			PhosphorescenceGun : 光鳞霰弹枪
+			ScaleWingBlade : 鳞翅之刃
+			ShadowWingBow : 影翼巨弓
+			MothYoyo : "荧光球"
+			DreamWeaver : "织梦丝雨"
+			NavyThunder : "潜火影雷"
+			DarknessFan : "幻蝶萤火扇"
+			BlueflowerBra : "蓝花内衣"
 
 			#Glow Wood Furniture
 			
 			#Music Boxes
-			GlowWoodMusicBox : Glow Wood Music Box (The Firefly)
+			GlowWoodMusicBox : 萤火木八音盒(流萤)
 
 
 			#食物系统物品
@@ -294,6 +303,16 @@ Mods:
 
 			#Plant Module Items
 			CactusBall : "仙人球棍"
+
+			# Shields
+			WoodShield : "木制盾牌"
+
+			# Genshin Impact items
+			Hepuyuan : "和璞鸢"
+			VortexVanquisherItem : "贯虹之槊"
+			
+			# Dev items
+			LilyHarp : "铃兰竖琴"
 		}
 		ItemTooltip:
 		{
@@ -309,7 +328,6 @@ Mods:
 			FireFeatherMagic : 射出爆燃羽毛
 			FreezeFeatherMagic : 射出冰封羽毛
 			GoldRoundYoyo : "留下跟踪的金圈轨迹"
-			Hepuyuan : "{$Mods.Everglow.Common.ExcluWeapon}\n左键突刺,右键打桩\n你不应该得到它\n致敬<原神>"
 			SilveralGun : "命中后移速和伤害提升5%,持续5秒"
 			SilveralRifle : "命中后移速和伤害提升5%,持续5秒"
 			Sunflower : "葵花打造的武器,拥有象征希望的色彩"
@@ -320,7 +338,6 @@ Mods:
 			BloodLightCyanFlame : "{$Mods.Everglow.Common.LegendWeapon}\n交替掷出激光旋刃和咒火旋刃\n'它们本应是双子魔眼的武器,幸好你救出了机械师'"
 			BlueRain : "{$Mods.Everglow.Common.LegendWeapon}\n长按右键蓄力重击\n雨滴为保持纯净抗拒与海水融合,最终在深海的乱流中汇聚成这个形状"
 			ChaosCurrent : "{$Mods.Everglow.Common.LegendWeapon}\n发射一团扰乱神经的乱流\n无视无敌帧\n'造成大量神经损伤！'"
-			DarknessFan : "{$Mods.Everglow.Common.LegendWeapon}\n无召唤标记伤害\n你的召唤物将集中打击敌人\n无召唤标记伤害\n你的召唤物将集中打击被扇子击中的敌人\n以扇子和幻蝶打击敌人，右键扔出扇子\n扇子本体施加幻蝶之印(可叠加), 每层使幻蝶造成的伤害提高10%\n层数上限随共鸣层数增长\n'蕴含着被巨蛾吞噬的灵魂'"
 			GelPowerGun : "{$Mods.Everglow.Common.LegendWeapon}\n以凝胶作为弹药\n射出弹性凝胶团\n前3次弹射释放小团弹力凝胶\n'弹弹弹，弹走毁灭者'"
 			LaserWhip : "{$Mods.Everglow.Common.LegendWeapon}\n{$Mods.Everglow.Common.WarWhipGT}\n命中敌人有概率生成临时召唤物激光虫并施加激光标记\n有激光标记的敌人受到的伤害增加50%，受到的暴击伤害增加25%\n'传说中有的蠕虫可以使它们的激光连成一线'"
 			MachineFit : "{$Mods.Everglow.Common.LegendWeapon}\n无情的灭杀之拳\n命中敌人后分裂成5发追踪导弹\n'利用好它的手，而不是头"
@@ -338,7 +355,7 @@ Mods:
 			CyanPedal : "闪避能力增加4\n'少的那一瓣化作你的勇气'"
 			DarkHat : "暴击率增加4%,暴击伤害增加12%\n'除用于战斗和装饰不建议使用'"
 			DukeTooth : "增加12盔甲穿透力\n'还好猪鲨不是濒危物种...只要有松露虫'"
-		//	FireflyBorageBadge : "Increases magic damage by 6%\nIncreases movement speed by 15%\n'A badge made to remind you of how beautiful that place is'"
+			FireflyBorageBadge : "增加6%魔法伤害\n增加15%移动速度\n'一枚用于纪念那美丽流萤的徽章'"
 			GoldLiquidPupil : "你的攻击无视敌人35%的防御\n受伤之后生成灵液之环,持续12秒,不可叠加\n灵液之环生成时造成高额伤害\n持续伤害环上的敌人\n对环内的敌人施加灵液"
 			GoldRound : "7防御\n伤害增加7%\n'传统的泰拉人通常配戴它来保持健康'"
 			GreenGel : "生命上限增加30,生命回复增加4\n'研究显示绿史莱姆通常比蓝史莱姆更具生命力'"
@@ -393,19 +410,6 @@ Mods:
 			FragransMagic : 花好月圆时,愿清风与你相伴
 			FragransSpear : 花好月圆时,愿清风与你相伴
 			FragransStaff : 花好月圆时,愿清风与你相伴
-			DustOfCorrupt : 散播鳞粉
-			EvilChrysalis : 
-				'''
-				召唤小黑蛾为你而战
-				召唤过程会对附近敌怪造成400%攻击倍率的伤害
-				'''
-			PhosphorescenceGun : 喷射出散弹和36%伤害的蓝鳞光弹
-			ScaleWingBlade : ""
-			ShadowWingBow : 
-				'''
-				长按可以蓄力,使伤害提升最大倍率200%并释放蓝蝶箭
-				满蓄时间1.50秒
-				'''
 			AmbiguousNight : 
 				'''
 				射出幻影石子
@@ -501,8 +505,8 @@ Mods:
 				'''
 			BloodyBoneYoyo : 每击中5次敌人会释放1次獠牙钉
 			SpineGun : 射出一发勘测到敌人就会分裂的子母弹
-			ToothKnfe : ""
-			ToothMagicBall : ""
+			# ToothKnfe : ""
+			# ToothMagicBall : ""
 			ToothStaff : 释放拔地而起的獠牙刺
 			BlackWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
 			BloodClub : "{$Mods.Everglow.Common.ClubGT}"
@@ -539,15 +543,15 @@ Mods:
 			TitaniumClub : "{$Mods.Everglow.Common.ClubGT}"
 			TungstenClub : "{$Mods.Everglow.Common.ClubGT}"
 			WoodenClub : "{$Mods.Everglow.Common.ClubGT}"
-			LiftLamp : ""
-			TestItem : ""
-			EkandaBrick : ""
-			Guding : ""
-			NoFlawsDream : ""
+			# LiftLamp : ""
+			# TestItem : ""
+			# EkandaBrick : ""
+			# Guding : ""
+			# NoFlawsDream : ""
 			Origin : 传说中珍贵的起源之石
-			DurableAxe : ""
-			ElectricHeatingPlate : ""
-			BrokenPick : ""
+			# DurableAxe : ""
+			# ElectricHeatingPlate : ""
+			# BrokenPick : ""
 			BloodGoldBayonet : "{$Mods.Everglow.Common.RapierGT}"
 			DreamStar : "{$Mods.Everglow.Common.RapierGT}"
 			EternalNight : "{$Mods.Everglow.Common.RapierGT}"
@@ -574,6 +578,26 @@ Mods:
 				长按攻击键以充能
 				射出一系列易爆的光球
 				'''
+			DustOfCorrupt : 散播鳞粉
+			EvilChrysalis : 
+				'''
+				召唤小黑蛾为你而战
+				召唤过程会对附近敌怪造成400%攻击倍率的伤害
+				'''
+			PhosphorescenceGun : 喷射出散弹和36%伤害的蓝鳞光弹
+			ScaleWingBlade : 
+				'''
+				命中敌人或在敌人附近挥舞将释放追踪敌人的幻影蛾
+				右键蓄力以进行增幅攻击
+				'''
+			ShadowWingBow : 
+				'''
+				长按可以蓄力,使伤害提升最大倍率200%并释放蓝蝶箭
+				满蓄时间1.50秒
+				'''
+			MothYoyo : 幻影蛾将围绕悠悠球, 允许你造成更多伤害
+			NavyThunder : "部署一枚定时荧光炸弹"
+			DarknessFan : "{$Mods.Everglow.Common.LegendWeapon}\n无召唤标记伤害\n你的召唤物将集中打击敌人\n无召唤标记伤害\n你的召唤物将集中打击被扇子击中的敌人\n以扇子和幻蝶打击敌人，右键扔出扇子\n扇子本体施加幻蝶之印(可叠加), 每层使幻蝶造成的伤害提高10%\n层数上限随共鸣层数增长\n'蕴含着被巨蛾吞噬的灵魂'"
 
 			# 天穹树系列物品
 				# 天穹树小镇
@@ -584,7 +608,7 @@ Mods:
 					'''
 
 			#Music Boxes
-			GlowWoodMusicBox : "Plays 'Setnour6 - Within the Giant Cocoon (身陷巨茧)'"
+			GlowWoodMusicBox : "播放 'Setnour6 - Within the Giant Cocoon (身陷巨茧)'"
 			
 			#食物系统物品
 			BloodGlucoseMonitor : "显示当前饱食度"
@@ -592,6 +616,13 @@ Mods:
 
 			#Plant Module Items
 			CactusBall : "旋转并掷出你的仙人掌球！\n击碎敌人护甲，并让它们流血"
+			
+			# Genshin Impact items
+			Hepuyuan : "{$Mods.Everglow.Common.ExcluWeapon}\n左键突刺,右键打桩\n你不应该得到它\n致敬<原神>"
+			VortexVanquisherItem : "{$Mods.Everglow.Common.ExcluWeapon}\n[c/B4B16E:'此为秩序']\n连续左键以使用不同攻击\n最后一种轻微地将你推向光标\n左键并长按以冲刺并召唤一排坠落的槊\n右键以召唤石柱并给予你减少伤害的护盾"
+
+			# Dev items
+			LilyHarp : "依次奏出动人的音符\n按住左键时, 音符会跟随你的光标\n[c/856Eb5:开发者物品: 万象元素]"
 		}
 		BuffName : 
 		{
@@ -811,8 +842,8 @@ Mods:
 		{
 			Header:
 			{
-				TextureReplace : "Texture Configurations"
-				AudioReplace : "Audio Configurations"
+				TextureReplace : "材质配置"
+				AudioReplace : "音频配置"
 			}
 			TextureReplace:
 			{
@@ -821,17 +852,17 @@ Mods:
 			}
 			ItemPickSoundReplace:
 			{
-				Label : "New pickup and inventory sounds"
+				Label : "新增物品拾取与拿起音效"
 			}
 			MothAudioReplace:
 			{
-				Label : "Corrupted Moth's Theme Song"
-				Tooltip : "Choose your preferred Corrupted Moth theme music to replace\nOptions: Original Theme, Alternate Theme, Old Theme\nOriginal: Plays 'Setnour6, Shiryuu, windclimb - Moth Dance'\nAlternate: Plays 'Setnour6, Shiryuu, windclimb - Moth Dance (Alt Version)'\nOld: Plays 'Void - Sudden Romance'\nThis setting won't take effect if the Corrupted Moth is currently alive"
+				Label : "腐檀巨蛾主题曲"
+				Tooltip : "选择你喜欢的腐檀巨蛾主题曲\n选项: 原曲, 额外曲, 旧曲\n原曲: 播放 'Setnour6, Shiryuu, windclimb - 巨蛾之舞'\n额外曲: 播放 'Setnour6, Shiryuu, windclimb - 巨蛾之舞 (额外版)'\n旧曲: 播放 'Void - Sudden Romance'\n腐檀巨蛾存活时, 不会立即改变曲目"
 			}
 			TuskAudioReplace:
 			{
-				Label : "(NOT IMPLEMENTED) The Tusk's Theme Song"
-				Tooltip : "Choose your preferred Bloody Tusk theme music to replace\nOptions: Original Theme, Old Theme\nThis setting won't take effect if The Tusk is currently alive\nNOTE: This config is not fully set up yet and therefore does not work at the moment"
+				Label : "(未完成) 鲜血獠牙主题曲"
+				Tooltip : "选择你喜欢的鲜血獠牙主题曲\n选项: 原曲, 旧曲\n鲜血獠牙存活时, 不会立即改变曲目\n注意: 此配置选项暂时无效"
 			}
 		}
 		InfoDisplayName : 
@@ -841,6 +872,7 @@ Mods:
 		}
 		InfoDisplay:
 		{
+			Satiety : "饱食度"
 			Thirsty : "你最好喝点什么"
 			NotThirsty : "你不想喝东西"
 		}
@@ -848,22 +880,22 @@ Mods:
 		{
 			Misc :
 			{
-				UnfinishedItem : "[c/BA0022:This item is unfinished]"
+				UnfinishedItem : "[c/BA0022:此物品尚未完善]"
 			}
 			FireflyItems :
 			{
-				MothEyeText0 : "[c/7FC1FF:While in the Firefly biome:]"
-				MothEyeText1 : "[c/7FC1FF:- Mana cost is reduced by 5%]"
-				MothEyeText2 : "[c/7FC1FF:- The effectiveness of mana sickness is reduced by 4]"
-				MothEyeText3 : "[c/7FC1FF:- All Firefly weapons deal 5% more damage]"
-				MothEyeText4 : "[c/7FC1FF:- Some Firefly-related items gain bonuses]"
-				MothEyeBonusText : "[c/7FC1FF:Bonus gained from {$Mods.Everglow.ItemName.MothEye}:]"
-				MEyeBonusTextMothBlade : "[c/7FC1FF:More moths appear from the blade]"
+				MothEyeText0 : "[c/7FC1FF:处于流萤群系时:]"
+				MothEyeText1 : "[c/7FC1FF:- 降低5%魔力消耗]"
+				MothEyeText2 : "[c/7FC1FF:- 降低4魔力病的效力]"
+				MothEyeText3 : "[c/7FC1FF:- 增加5%流萤武器的伤害]"
+				MothEyeText4 : "[c/7FC1FF:- 部分流萤物品获得增幅]"
+				MothEyeBonusText : "[c/7FC1FF:来自 {$Mods.Everglow.ItemName.MothEye} 的增幅:]"
+				MEyeBonusTextMothBlade : "[c/7FC1FF:释放更多幻影蛾]"
 				FFBBadge0 : "[c/7FC1FF:'受到那只巨蛾怒气的影响,你的攻击变得更加狂野']"
-				FFBBadge1 : "[c/7FC1FF:Defense is lowered based on how much defense you currently have, up to -12]"
-				FFBBadge2 : "[c/7FC1FF:伤害增加18%]"
-				FFBBadge3 : "[c/7FC1FF:Increases melee speed by 10%]"
-				FFBBadge4 : "[c/7FC1FF:Base critical strike chance for melee weapons and whips is reduced to 0]"
+				FFBBadge1 : "[c/7FC1FF:防御基于当前的值降低, 最多-12]"
+				FFBBadge2 : "[c/7FC1FF:增加18%伤害]"
+				FFBBadge3 : "[c/7FC1FF:增加10%近战攻速]"
+				FFBBadge4 : "[c/7FC1FF:近战武器和鞭的基础暴击率降至0]"
 			}
 			Spellbook : 
 			{

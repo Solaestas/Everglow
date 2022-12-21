@@ -15,7 +15,7 @@
             player.maxRunSpeed *= 0.6f;
             player.runAcceleration *= 0.6f;
             player.statDefense += 10;
-            player.wellFed = true;
+            
         }
     }
 }
