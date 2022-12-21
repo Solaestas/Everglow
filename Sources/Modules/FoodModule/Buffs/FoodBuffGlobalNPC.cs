@@ -14,6 +14,7 @@ using Everglow.Sources.Modules.MythModule;
 using Steamworks;
 using Terraria.DataStructures;
 using Terraria.Audio;
+using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.FoodModule.Buffs
 {
@@ -115,13 +116,13 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
                         {
                             if (!target.dontTakeDamage && !target.friendly && target.active)
                             {
-                                target.AddBuff(ModContent.BuffType<CherryBuff>(), 1200);
+                                target.AddBuff(ModContent.BuffType<CherryBuff>(), 1800);
                                 target.StrikeNPC(Main.rand.Next(80, 160) - target.defense, Main.rand.Next(8, 24), 0, Main.rand.NextBool(22, 33));
                             }
                         }
                     }
                 }
-                CombatText.NewText(npc.Hitbox, Color.HotPink, "可汗，再带我冲一次吧"); //TODO localization
+                CombatText.NewText(npc.Hitbox, Color.HotPink, Language.GetTextValue("Mods.Everglow.Common.FoodSystem.Khan"));
                 npc.DelBuff(npc.FindBuffIndex(ModContent.BuffType<CherryBuff>()));
             }
         }
