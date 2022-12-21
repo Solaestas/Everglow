@@ -40,6 +40,7 @@ Mods:
 			{
 				CannotEat : "You are full"
 				CannotDrink : "You don't feel like drinking"
+				Khan : "Khan, take me on one more charge"
 			}
 
 			PylonSystem : 
@@ -345,6 +346,9 @@ Mods:
 			# 食物系统物品
 			BloodGlucoseMonitor : "Blood Glucose Monitor"
 			OsmoticPressureMonitor : "Osmotic Pressure Monitor"
+			
+			FryingPanItem : "Frying Pan"
+
 			# Modded items
 				# Modded drink items
 				B_52 : "B_52"
@@ -716,6 +720,9 @@ Mods:
 			#食物系统物品
 			BloodGlucoseMonitor : "Display hunger information"
 			OsmoticPressureMonitor : "Display thrist information"
+			
+			FryingPanItem : "Left click to throw it as a bommerang, right click and hold to swing it as a sword"
+
 			# Modded items
 				# Modded drink items
 				BlueHawaii : 
@@ -1155,7 +1162,7 @@ Mods:
 			BowlofSoupBuff : "20 increased max mana and 5% increased magic damage\n'Brain food'"
 			BunnyStewBuff : "Enabled auto jump and increased jumping ability\n'No rabit was hurt during production process'"
 			BurgerBuff : "Reduced movement speed but increased defense\n'Calorie bomb'"
-			CherryBuff : "Lauch explosions after death\n'Your love, is your life'"
+			CherryBuff : "Lauches an explosion on death and apply this buff to all targets\n'Your love, is your life'"
 			ChickenNuggetBuff : "1 increased life regen and 4% increased attack speed\n'Finger-licking good!'"
 			ChocolateChipCookieBuff : "2 increased life and mana regen\n'Restoring energy'"
 			ChristmasPuddingBuff : "800 decreased aggro\n'Beauty'"
