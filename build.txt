@@ -1,5 +1,5 @@
-displayName = Everglow
-author = Dream Chaser Group
+displayName = Everglow | 流光无际 [Early Access]
+author = Dream Chaser Group | 孤舟逐梦团队
 version = 0.1
 includePDB = true
 noCompile = true

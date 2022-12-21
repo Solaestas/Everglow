@@ -9,6 +9,7 @@ using Everglow.Resources.NPCList.EventNPCs;
 using Mono.Cecil;
 using Everglow.Sources.Modules.FoodModule.Buffs.ModDrinkBuffs;
 using Everglow.Sources.Modules.FoodModule.Buffs.ModFoodBuffs;
+using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.FoodModule.Buffs
 {
@@ -263,12 +264,12 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
                     {
                         if (!target.dontTakeDamage && !target.friendly && target.active)
                         {
-                            target.AddBuff(ModContent.BuffType<CherryBuff>(), 1200);
-                            Player.ApplyDamageToNPC(target, Math.Max(Player.HeldItem.damage * 5, 120), Math.Max(Player.HeldItem.knockBack * 5, 24), 0, Main.rand.NextBool(22, 33));
+                            target.AddBuff(ModContent.BuffType<CherryBuff>(), 1800);
+                            Player.ApplyDamageToNPC(target, Math.Max(Player.HeldItem.damage * 4, 120), Math.Max(Player.HeldItem.knockBack * 4, 24), 0, Main.rand.NextBool(22, 33));
                         }
                     }
                 }
-                CombatText.NewText(Player.Hitbox, Color.HotPink, "可汗，再带我冲一次吧"); //TODO localization
+                CombatText.NewText(Player.Hitbox, Color.HotPink, Language.GetTextValue("Mods.Everglow.Common.FoodSystem.Khan"));
                 Player.ClearBuff(ModContent.BuffType<CherryBuff>());
             }
             base.Kill(damage, hitDirection, pvp, damageSource);
