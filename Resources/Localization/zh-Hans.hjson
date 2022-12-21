@@ -884,13 +884,18 @@ Mods:
 			}
 			FireflyItems :
 			{
+			//	MothEyeCriteriaText : "[c/6B6BB2:In order to harness a fragment of the ommateum, a powerful underworld creature must be slain]"
 				MothEyeText0 : "[c/7FC1FF:处于流萤群系时:]"
 				MothEyeText1 : "[c/7FC1FF:- 降低5%魔力消耗]"
 				MothEyeText2 : "[c/7FC1FF:- 降低4魔力病的效力]"
 				MothEyeText3 : "[c/7FC1FF:- 增加5%流萤武器的伤害]"
 				MothEyeText4 : "[c/7FC1FF:- 部分流萤物品获得增幅]"
 				MothEyeBonusText : "[c/7FC1FF:来自 {$Mods.Everglow.ItemName.MothEye} 的增幅:]"
-				MEyeBonusTextMothBlade : "[c/7FC1FF:释放更多幻影蛾]"
+			//	MEyeBonusTextMothBlade : "[c/7FC1FF:Moths appearing from this blade move faster]"
+			//	MEyeBonusTextMothBow : "[c/7FC1FF:Reduces the charging time of the bow]"
+			//	MEyeBonusTextMothYoyo : "[c/7FC1FF:More moths appear from this yoyo]"
+			//	MEyeBonusTextEvilChrysalis0 : "[c/7FC1FF:Projectiles summoned from the moths can go through tiles]"
+			//	MEyeBonusTextEvilChrysalis1 : "[c/7FC1FF:The moths have a chance to shoot a stronger projectile]"
 				FFBBadge0 : "[c/7FC1FF:'受到那只巨蛾怒气的影响,你的攻击变得更加狂野']"
 				FFBBadge1 : "[c/7FC1FF:防御基于当前的值降低, 最多-12]"
 				FFBBadge2 : "[c/7FC1FF:增加18%伤害]"

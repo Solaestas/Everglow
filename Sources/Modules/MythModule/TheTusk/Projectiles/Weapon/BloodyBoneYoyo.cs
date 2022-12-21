@@ -6,7 +6,7 @@
         private float X = 0;
         public override void SetDefaults()
         {
-            Projectile.CloneDefaults(547);
+            Projectile.CloneDefaults(549);
             Projectile.width = 16;
             Projectile.height = 16;
             Projectile.scale = 1f;
