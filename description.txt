@@ -36,10 +36,13 @@ Developers (in no particular order):
 	- 吞某
 	- Redusty
 	- 锈铁
-- Musics & Sound Effects
+- Musics
 	- 東の明るさ
 	- Dirty Octopus
 	- Setnour6
+- Sound Effects
+	- Setnour6
+	- Omnielement
 - Buildings
 	- 青枫
 - Lores
@@ -105,10 +108,13 @@ Mod将支持联机
 	- 吞某
 	- 红尘
 	- 锈铁
-- 音乐&音效
+- 音乐
 	- 東の明るさ
 	- 脏渔歌
 	- Setnour6
+- 音效
+	- Setnour6
+	- 万象元素
 - 建筑
 	- 青枫
 - 文案
