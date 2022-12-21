@@ -1,5 +1,5 @@
-displayName = Everglow | 流光无际 [Early Access]
-author = Dream Chaser Group | 孤舟逐梦团队
+锘縟isplayName = Everglow | 娴佸厜鏃犻檯 [Early Access]
+author = Dream Chaser Group | 瀛よ垷閫愭ⅵ鍥㈤槦
 version = 0.1
 includePDB = true
 noCompile = true
