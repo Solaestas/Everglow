@@ -3,6 +3,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.Map;
 using Terraria.ModLoader.Default;
+using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Pylon;
 
@@ -83,7 +84,7 @@ internal class ShabbyPylonItem : ModItem
             PylonSystem.Instance.shabbyPylonEnable = true;
             PylonSystem.Instance.firstEnableAnimation = true;
 
-            Main.NewText("Repaired");
+            Main.NewText(Language.GetTextValue("Mods.Everglow.Common.PylonSystem.ShabbyPylonRepairedTip"));
         }
         return null;
     }

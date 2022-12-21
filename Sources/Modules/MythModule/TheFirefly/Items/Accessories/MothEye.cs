@@ -38,14 +38,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
             {
                 tooltips.AddRange(new TooltipLine[]
                 {
-                    new(Everglow.Instance, "MothEyeText0", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.MothEyeText0")),
-                    new(Everglow.Instance, "MothEyeText1", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.MothEyeText1")),
-                    new(Everglow.Instance, "MothEyeText2", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.MothEyeText2")),
-                    new(Everglow.Instance, "MothEyeText3", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.MothEyeText3")),
-                    new(Everglow.Instance, "MothEyeText4", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.MothEyeText4")),
+                    new(Everglow.Instance, "MothEyeText0", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeText0")),
+                    new(Everglow.Instance, "MothEyeText1", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeText1")),
+                    new(Everglow.Instance, "MothEyeText2", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeText2")),
+                    new(Everglow.Instance, "MothEyeText3", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeText3")),
+                    new(Everglow.Instance, "MothEyeText4", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeText4")),
                 }); // Using \n would cause spacing problems in the tooltip section (blank space underneath all tooltips). ~Setnour6
             }
-            tooltips.Add(new TooltipLine(Everglow.Instance, "UnfinishedItem", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.UnfinishedItem")));
+            tooltips.Add(new TooltipLine(Everglow.Instance, "UnfinishedItem", Language.GetTextValue("Mods.Everglow.ExtraTooltip.Misc.UnfinishedItem")));
         }
         public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {

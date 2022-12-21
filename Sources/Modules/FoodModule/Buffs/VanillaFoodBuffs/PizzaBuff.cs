@@ -5,7 +5,7 @@
         public override void SetStaticDefaults()
         {
             //DisplayName.SetDefault("PizzaBuff");
-            //TODO Description.SetDefault("增加10点盔甲穿透\n“会让意大利人破防的菠萝披萨”");
+            //Description.SetDefault("增加10点盔甲穿透\n“会让意大利人破防的菠萝披萨”");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
         }

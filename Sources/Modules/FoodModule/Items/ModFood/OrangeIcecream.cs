@@ -27,10 +27,6 @@ namespace Everglow.Sources.Modules.FoodModule.Items.ModFood
         }
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("橙子冰激凌");
-
-            Tooltip.SetDefault("{$CommonItemTooltip.MediumStats}\n'真实存于心中'");
-
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 5;
 
             Main.RegisterItemAnimation(Type, new DrawAnimationVertical(int.MaxValue, 3));

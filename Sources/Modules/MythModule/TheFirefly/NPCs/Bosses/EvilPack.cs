@@ -5,6 +5,7 @@ using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.Localization;
+using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 {
@@ -12,8 +13,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Evil Cocoon");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "魔茧");
             Main.npcFrameCount[NPC.type] = 7;
         }
 
@@ -82,7 +81,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
                                 d2.alpha = (int)(d2.scale * 50);
                             }
 
-                            Dust d3 = Dust.NewDustDirect(NPC.position + new Vector2(26 - 20, 106 - 30), 40, 60, 191, 0, 0, 0, default, Main.rand.NextFloat(0.7f, 1.7f));
+                            Dust d3 = Dust.NewDustDirect(NPC.position + new Vector2(26 - 20, 106 - 30), 40, 60, DustID.SpookyWood, 0, 0, 0, default, Main.rand.NextFloat(0.7f, 1.7f));
                             d3.velocity = new Vector2(0, Main.rand.Next(16)).RotatedByRandom(6.283) + new Vector2(-4, 4);
                         }
                         if (!NPC.AnyNPCs(ModContent.NPCType<CorruptMoth>()))

@@ -1,4 +1,5 @@
-﻿using Everglow.Sources.Commons.Function.Vertex;
+﻿using Everglow.Sources.Commons.Core.VFX;
+using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MEACModule;
 using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
@@ -155,12 +156,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
         }
 
-        public void DrawWarp()
+        public void DrawWarp(VFXBatch sb)
         {
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-            KEx.CurrentTechnique.Passes[0].Apply();
             if (!Release)
             {
                 return;
@@ -178,15 +175,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Projectile.frame = (int)((addi % 25) / 5f);
             Rectangle DrawRect = new Rectangle(0, Projectile.frame * Projectile.height, Projectile.width, Projectile.height);
 
-            Color drawColor = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
             SpriteEffects se = SpriteEffects.None;
             if (player.direction == 1)
             {
                 se = SpriteEffects.FlipHorizontally;
             }
-            Main.spriteBatch.Draw(TexMainG, Projectile.Center - Main.screenPosition, DrawRect, new Color(0.3f, 0.3f, 0.2f, 0), Projectile.rotation, new Vector2(27, 42), 1f, se, 0);
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            sb.Draw(TexMainG, Projectile.Center - Main.screenPosition, DrawRect, new Color(0.3f, 0.3f, 0.2f, 0), Projectile.rotation, new Vector2(27, 42), 1f, se);
         }
     }
 }

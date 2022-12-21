@@ -1,4 +1,5 @@
-﻿using Everglow.Sources.Commons.Function.Vertex;
+﻿using Everglow.Sources.Commons.Core.VFX;
+using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MEACModule;
 using Everglow.Sources.Modules.MythModule.Common;
 
@@ -14,7 +15,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
             Projectile.hostile = false;
             Projectile.penetrate = -1;
             Projectile.timeLeft = 10000;
-            Projectile.DamageType = DamageClass.MagicSummonHybrid;
+            Projectile.DamageType = DamageClass.Magic;
             Projectile.tileCollide = false;
         }
 
@@ -118,6 +119,21 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
             }
         }
+        private static void DrawTexMoon(VFXBatch spriteBatch,float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
+        {
+            List<Vertex2D> circle = new List<Vertex2D>();
+            for (int h = 0; h < radious * 5; h++)
+            {
+                circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 0.27 + addRot), color, new Vector3(h * 0.2f / radious, 1, 0)));
+                circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(h / radious * Math.PI * 0.27 + addRot), color, new Vector3(h * 0.2f / radious, 0, 0)));
+            }
+            //circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0.5f, 1, 0)));
+            //circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(addRot), color, new Vector3(0.5f, 0, 0)));
+            if (circle.Count > 0)
+            {
+                spriteBatch.Draw(tex,circle,PrimitiveType.TriangleStrip);
+            }
+        }
 
         public static void DrawTexLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2, Texture2D tex)
         {
@@ -143,18 +159,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
         }
 
-        public void DrawWarp()
+        public void DrawWarp(VFXBatch spriteBatch)
         {
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-            KEx.CurrentTechnique.Passes[0].Apply();
+          
             Player player = Main.player[Projectile.owner];
             //DrawTexCircle(Timer * 1.2f, 52, new Color(64, 70, 255, 0), player.Center + RingPos - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), Main.timeForVisualEffects / 17);
-            DrawTexMoon(Timer * 1.4f, 35, new Color(64, 70, 255, 0), player.Center + RingPos - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BloomLight"), Main.timeForVisualEffects / 3);
-            DrawTexMoon(Timer * 0.65f, 35, new Color(64, 70, 255, 0), player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(-Main.timeForVisualEffects / 36), MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BloomLight"), -Main.timeForVisualEffects / 1.8);
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            DrawTexMoon(spriteBatch,Timer * 1.4f, 35, new Color(64, 70, 255, 0), player.Center + RingPos - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BloomLight"), Main.timeForVisualEffects / 3);
+            DrawTexMoon(spriteBatch, Timer * 0.65f, 35, new Color(64, 70, 255, 0), player.Center + RingPos - Main.screenPosition + new Vector2(0, Timer * 0.8f).RotatedBy(-Main.timeForVisualEffects / 36), MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BloomLight"), -Main.timeForVisualEffects / 1.8);
         }
     }
 }

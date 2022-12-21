@@ -6,8 +6,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Magical Cocoon");
-            Tooltip.SetDefault("Summons Corrupted Moth");
             ItemGlowManager.AutoLoadItemGlow(this);
         }
 

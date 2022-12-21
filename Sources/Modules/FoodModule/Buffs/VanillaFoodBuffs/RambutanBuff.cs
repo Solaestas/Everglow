@@ -5,7 +5,7 @@
         public override void SetStaticDefaults()
         {
             //DisplayName.SetDefault("RambutanBuff");
-            //TODO Description.SetDefault("免疫许多减益\n“提高免疫”");
+            //Description.SetDefault("免疫许多减益\n“提高免疫”");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
         }

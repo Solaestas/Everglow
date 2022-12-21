@@ -7,8 +7,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("LittleFireBulb");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "萤火泡");
         }
 
         public override void SetDefaults()

@@ -1,4 +1,5 @@
 ﻿using Everglow.Sources.Commons.Core.ModuleSystem;
+using Everglow.Sources.Commons.Core.VFX;
 using Everglow.Sources.Commons.Function.ObjectPool;
 using System;
 using System.Collections.Generic;
@@ -131,7 +132,7 @@ namespace Everglow.Sources.Modules.MEACModule
                 graphicsDevice.SamplerStates[1] = SamplerState.LinearClamp;
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
                 ScreenWarp.CurrentTechnique.Passes[0].Apply();
-                ScreenWarp.Parameters["i"].SetValue(0.02f);//扭曲程度
+                ScreenWarp.Parameters["i"].SetValue(0.025f);//扭曲程度
                 Main.spriteBatch.Draw(screen, Vector2.Zero, Color.White);
                 Main.spriteBatch.End();
             }
@@ -156,19 +157,22 @@ namespace Everglow.Sources.Modules.MEACModule
         private bool DrawWarp(SpriteBatch sb)//扭曲层
         {
             bool flag = false;
-            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            VFXManager.spriteBatch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
+            Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+            KEx.Parameters["uTransform"].SetValue(Main.Transform *Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1));
+            KEx.CurrentTechnique.Passes[0].Apply();
             foreach (Projectile proj in Main.projectile)
             {
                 if (proj.active)
                 {
-                    if(proj.ModProjectile is IWarpProjectile ModProj)
+                    if (proj.ModProjectile is IWarpProjectile ModProj2)
                     {
                         flag = true;
-                        ModProj.DrawWarp();
+                        ModProj2.DrawWarp(VFXManager.spriteBatch);
                     }
                 }
             }
-            sb.End();
+            VFXManager.spriteBatch.End();
             return flag;
         }
         /// <summary>
@@ -186,8 +190,14 @@ namespace Everglow.Sources.Modules.MEACModule
 
         void IModule.Unload()
         {
-            bloomTarget1?.Dispose();
-            bloomTarget2?.Dispose();
+            bool wait = true;
+            Main.QueueMainThreadAction(() =>
+            {
+                bloomTarget1?.Dispose();
+                bloomTarget2?.Dispose();
+                wait = false;
+            });
+            while (wait) ;
         }
     }
 }

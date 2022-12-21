@@ -11,69 +11,69 @@ namespace Everglow.Sources.Icons
         MethodInfo HookTarget;
         public void Load(Mod mod)
         {
-            //ËµÃ÷¹³×ÓÒÑ¾­¹ÒÉÏ,Ö±½ÓÌø¹ı
+            //è¯´æ˜é’©å­å·²ç»æŒ‚ä¸Š,ç›´æ¥è·³è¿‡
             if (HookTarget is not null)
             {
                 return;
             }
-            //ÄÃÈ¡ÉÏ¼¶³ÌĞò¼¯
+            //æ‹¿å–ä¸Šçº§ç¨‹åºé›†
             Assembly assembly = typeof(Terraria.ModLoader.UI.UICommon).Assembly;
-            //×¼±¸ÈİÆ÷
+            //å‡†å¤‡å®¹å™¨
             Type[] types;
             try
             {
-                //³¢ÊÔ½«ÀàĞÍ×¢ÈëÈİÆ÷
+                //å°è¯•å°†ç±»å‹æ³¨å…¥å®¹å™¨
                 types = assembly.GetTypes();
             }
             catch (ReflectionTypeLoadException e)
             {
-                //´ÓÒì³£ÖĞÈ¡³öÒÑ¾­³É¹¦ÄÃµ½µÄÀàĞÍ
+                //ä»å¼‚å¸¸ä¸­å–å‡ºå·²ç»æˆåŠŸæ‹¿åˆ°çš„ç±»å‹
                 types = (from Type t in e.Types where t is not null select t).ToArray();
             }
-            //É¸Ñ¡Ä¿±ê
+            //ç­›é€‰ç›®æ ‡
             foreach (var type in types)
             {
-                //ÕÒµ½Ä¿±ê
+                //æ‰¾åˆ°ç›®æ ‡
                 if (type.Name == "UIModItem")
                 {
-                    //ÄÃÈ¡Ä¿±êÀàĞÍµÄ³õÊ¼»¯·½·¨¾ä±ú
+                    //æ‹¿å–ç›®æ ‡ç±»å‹çš„åˆå§‹åŒ–æ–¹æ³•å¥æŸ„
                     HookTarget = type.GetMethod("OnInitialize", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
                     break;
                 }
             }
-            //Í¨¹ı¾ä±ú¹Ò¹³,Êµ¼ÊÉÏÓ¦¸Ã½øĞĞÒ»´ÎHookTargetÅĞ¿Õ,µ«ÊÇÎÒÀÁ
+            //é€šè¿‡å¥æŸ„æŒ‚é’©,å®é™…ä¸Šåº”è¯¥è¿›è¡Œä¸€æ¬¡HookTargetåˆ¤ç©º,ä½†æ˜¯æˆ‘æ‡’
             HookEndpointManager.Add(MethodBase.GetMethodFromHandle(HookTarget.MethodHandle), HookMethod);
         }
         public void Unload()
         {
-            //ËµÃ÷Ã»¹ÒÉÏ,Ã»±ØÒªĞ¶ÔØ
+            //è¯´æ˜æ²¡æŒ‚ä¸Š,æ²¡å¿…è¦å¸è½½
             if (HookTarget is null)
             {
                 return;
-            }
-            HookTarget = null;
+            } // TODO: Fix an object reference error on mod reload without introducing other bugs
             HookEndpointManager.Remove(MethodBase.GetMethodFromHandle(HookTarget.MethodHandle), HookMethod);
+            HookTarget = null;
         }
         private void HookMethod(Action<UIElement> orig, UIElement self)
         {
-            //ÔËĞĞÔ­°æ·½·¨,°Ñ»ù´¡ÄÚÈİ¼ÓÉÏ
+            //è¿è¡ŒåŸç‰ˆæ–¹æ³•,æŠŠåŸºç¡€å†…å®¹åŠ ä¸Š
             orig(self);
-            //ÄÃÈ¡¸¸¶ÔÏóÀïµÄmodµÄÃû×ÖÅĞ¶¨ÊÇ²»ÊÇ×Ô¼º
+            //æ‹¿å–çˆ¶å¯¹è±¡é‡Œçš„modçš„åå­—åˆ¤å®šæ˜¯ä¸æ˜¯è‡ªå·±
             string Name = (string)self.GetType().GetMethod("get_ModName", BindingFlags.Public | BindingFlags.Instance).Invoke(self, null);
             if (Name == Everglow.Instance.Name)
             {
-                //ÒÆ³ıÔ­°æµÄÄ£×éÍ¼±ê,Êµ¼ÊÉÏÓ¦¸Ã¶Ô·´Éä½øĞĞÒ»´ÎÅĞ¿Õ,µ«ÊÇÎÒÀÁ
+                //ç§»é™¤åŸç‰ˆçš„æ¨¡ç»„å›¾æ ‡,å®é™…ä¸Šåº”è¯¥å¯¹åå°„è¿›è¡Œä¸€æ¬¡åˆ¤ç©º,ä½†æ˜¯æˆ‘æ‡’
                 self.RemoveChild((UIElement)self.GetType().GetField("_modIcon", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(self));
-                //°ÑÍ¼±ê×ö³É¶¯Ì¬UI·Å½øÈ¥
+                //æŠŠå›¾æ ‡åšæˆåŠ¨æ€UIæ”¾è¿›å»
                 self.Append(new DynamicIconUI(ModContent.Request<Texture2D>("Everglow/Sources/Icons/Icon_content", AssetRequestMode.ImmediateLoad).Value, new Rectangle(0, 0, 80, 80), 3));
-                //°Ñ±ß¿ò×ö³É¶¯Ì¬UI·Å½øÈ¥
-                var boader = new DynamicIconUI(ModContent.Request<Texture2D>("Everglow/Sources/Icons/Icon_framework", AssetRequestMode.ImmediateLoad).Value, new Rectangle(0, 0, 96, 96), 3);
-                //±ß¿ò±ÈÍ¼±ê´ó16,ËùÒÔĞèÒªÏò×óÉÏÆ«ÒÆ(8,8)
-                boader.Left.Set(-8, 0);
-                boader.Top.Set(-8, 0);
-                self.Append(boader);
-                //·ÀÖ¹±ß¿ò³¬³öµ×°å
-                self.OverflowHidden = true;
+                //æŠŠè¾¹æ¡†åšæˆåŠ¨æ€UIæ”¾è¿›å»
+                var border = new DynamicIconUI(ModContent.Request<Texture2D>("Everglow/Sources/Icons/Icon_framework", AssetRequestMode.ImmediateLoad).Value, new Rectangle(0, 0, 96, 96), 3);
+                //è¾¹æ¡†æ¯”å›¾æ ‡å¤§16,æ‰€ä»¥éœ€è¦å‘å·¦ä¸Šåç§»(8,8)
+                border.Left.Set(-8, 0);
+                border.Top.Set(-8, 0);
+                self.Append(border);
+                //é˜²æ­¢è¾¹æ¡†è¶…å‡ºåº•æ¿
+                //self.OverflowHidden = true;
             }
         }
         public class DynamicIconUI : UIElement, IColorable
@@ -85,12 +85,12 @@ namespace Everglow.Sources.Icons
             public int Timer;
             public Color Color { get; set; } = Color.White;
             /// <summary>
-            /// ¶¯Ì¬Í¼Æ¬µÄUI,Ö»½ÓÊÜµ¥ÁĞÖ¡Í¼,ÄãÒ²¿ÉÒÔ¸ÄÏÂÃæµÄdraw
+            /// åŠ¨æ€å›¾ç‰‡çš„UI,åªæ¥å—å•åˆ—å¸§å›¾,ä½ ä¹Ÿå¯ä»¥æ”¹ä¸‹é¢çš„draw
             /// </summary>
-            /// <param name="texture">Òª»æÖÆµÄÍ¼Æ¬</param>
-            /// <param name="frame">Ã¿Ö¡µÄ´óĞ¡</param>
-            /// <param name="size">ÊÊÓ¦ĞÔËõ·Å´óĞ¡ÏŞÖÆ</param>
-            /// <param name="interval">Ë¢ĞÂ¼ä¸ô</param>
+            /// <param name="texture">è¦ç»˜åˆ¶çš„å›¾ç‰‡</param>
+            /// <param name="frame">æ¯å¸§çš„å¤§å°</param>
+            /// <param name="size">é€‚åº”æ€§ç¼©æ”¾å¤§å°é™åˆ¶</param>
+            /// <param name="interval">åˆ·æ–°é—´éš”</param>
             public DynamicIconUI(Texture2D texture, Rectangle frame, Vector2 size, int interval)
             {
                 Texture = texture;
@@ -110,39 +110,39 @@ namespace Everglow.Sources.Icons
             //}
             //#endregion
             /// <summary>
-            /// ¶¯Ì¬Í¼Æ¬µÄUI,Ö»½ÓÊÜµ¥ÁĞÖ¡Í¼,ÄãÒ²¿ÉÒÔ¸ÄÏÂÃæµÄdraw
+            /// åŠ¨æ€å›¾ç‰‡çš„UI,åªæ¥å—å•åˆ—å¸§å›¾,ä½ ä¹Ÿå¯ä»¥æ”¹ä¸‹é¢çš„draw
             /// </summary>
-            /// <param name="texture">Òª»æÖÆµÄÍ¼Æ¬</param>
-            /// <param name="frame">Ã¿Ö¡µÄ´óĞ¡</param>
-            /// <param name="interval">Ë¢ĞÂ¼ä¸ô</param>
+            /// <param name="texture">è¦ç»˜åˆ¶çš„å›¾ç‰‡</param>
+            /// <param name="frame">æ¯å¸§çš„å¤§å°</param>
+            /// <param name="interval">åˆ·æ–°é—´éš”</param>
             public DynamicIconUI(Texture2D texture, Rectangle frame, int interval) : this(texture, frame, frame.Size(), interval)
             {
 
             }
             public override void OnInitialize()
             {
-                //ÖØÖÃË¢ĞÂ¼ä¸ô¼ÆÊ±Æ÷
+                //é‡ç½®åˆ·æ–°é—´éš”è®¡æ—¶å™¨
                 Timer = 0;
             }
             protected override void DrawSelf(SpriteBatch spriteBatch)
             {
-                //¸üĞÂ¼ÆÊ±Æ÷
+                //æ›´æ–°è®¡æ—¶å™¨
                 Timer++;
-                //Èç¹û¸Ã»»Ö¡ÁË
+                //å¦‚æœè¯¥æ¢å¸§äº†
                 if (Timer % Interval == 0)
                 {
-                    //Èç¹ûÏÂÒ»Ö¡µÖ´ïÌùÍ¼µ×²¿(³¬³öÍ¼Æ¬½çÏŞ)
+                    //å¦‚æœä¸‹ä¸€å¸§æŠµè¾¾è´´å›¾åº•éƒ¨(è¶…å‡ºå›¾ç‰‡ç•Œé™)
                     if (Timer / Interval * Frame.Height >= Texture.Height)
                     {
-                        //ÖØÖÃ¼ÆÊ±Æ÷
+                        //é‡ç½®è®¡æ—¶å™¨
                         Timer = 0;
                     }
-                    //ÖØÖÃÖ¡ÇøÓò
+                    //é‡ç½®å¸§åŒºåŸŸ
                     Frame = new Rectangle(0, Timer / Interval * Frame.Height, Frame.Width, Frame.Height);
                 }
-                //»ñÈ¡×ÔÊÊÓ¦Ëõ·Å±¶ÂÊ
+                //è·å–è‡ªé€‚åº”ç¼©æ”¾å€ç‡
                 Vector2 scale = new(Size.X / Frame.Width, Size.Y / Frame.Height);
-                //»­Í¼
+                //ç”»å›¾
                 spriteBatch.Draw(Texture,
                     GetDimensions().Position(),
                     Frame,
@@ -152,8 +152,8 @@ namespace Everglow.Sources.Icons
                     scale,
                     SpriteEffects.None,
                     0);
-                //Èç¹ûÄãÒªÇĞ»»ÆäËûµÄ»æÖÆÍ¼Æ¬µÄ»°,¿ÉÒÔ×Ô¼º¼ÓÍ¼Æ¬Ë÷Òı
-                //È»ºó¶ÔTexture,Frame,Size,IntervalÖØĞÂ¸³Öµ¼´¿É½øĞĞÇĞ»»
+                //å¦‚æœä½ è¦åˆ‡æ¢å…¶ä»–çš„ç»˜åˆ¶å›¾ç‰‡çš„è¯,å¯ä»¥è‡ªå·±åŠ å›¾ç‰‡ç´¢å¼•
+                //ç„¶åå¯¹Texture,Frame,Size,Intervalé‡æ–°èµ‹å€¼å³å¯è¿›è¡Œåˆ‡æ¢
             }
         }
     }
