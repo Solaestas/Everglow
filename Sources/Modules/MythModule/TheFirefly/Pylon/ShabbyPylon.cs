@@ -3,6 +3,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.Map;
 using Terraria.ModLoader.Default;
+using Terraria.ObjectData;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Pylon;
 
@@ -83,6 +84,17 @@ internal class ShabbyPylonItem : ModItem
     public override void SetDefaults()
     {
         Item.DefaultToPlaceableTile(ModContent.TileType<ShabbyPylon>());
+    }
+    public override bool CanUseItem(Player player)
+    {
+        ushort TileID = (ushort)ModContent.TileType<ShabbyPylon>();
+        var position = Main.MouseWorld;
+        var bottom = position.ToTileCoordinates();
+
+        TileObject.CanPlace(bottom.X,bottom.Y,TileID,0,0,out var tileObject);
+        TileObject.Place(tileObject);
+        TileObjectData.CallPostPlacementPlayerHook(bottom.X, bottom.Y, TileID, 0, 0, 0, tileObject);
+        return base.CanUseItem(player);
     }
 }
 internal class ShabbyPylonUpdate : GlobalNPC
