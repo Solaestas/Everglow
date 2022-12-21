@@ -674,7 +674,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                     t2.TileFrameY = (short)(Main.rand.Next(6, 9) * 18);
                 }
             }
-            if (Main.rand.NextBool(3))//流萤滴
+            if (Main.rand.NextBool(16))//流萤滴
             {
                 int count = 0;
                 for (int x = -1; x <= 1; x++)
@@ -683,6 +683,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                     {
                         Tile t0 = Main.tile[i + x, j + y];
                         if (t0.HasTile)
+                        {
+                            count++;
+                        }
+                        Tile t1 = Main.tile[i + x, j + y - 1];
+                        if (y == 1 && (!t1.HasTile || t1.Slope != SlopeType.Solid))
                         {
                             count++;
                         }
