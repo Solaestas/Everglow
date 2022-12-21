@@ -721,7 +721,7 @@ Mods:
 			BloodGlucoseMonitor : "Display hunger information"
 			OsmoticPressureMonitor : "Display thrist information"
 			
-			FryingPanItem : "Left click to throw it as a bommerang, right click and hold to swing it as a sword"
+			FryingPanItem : "Left click to throw it as a boomerang, right click and hold to swing it as a sword"
 
 			# Modded items
 				# Modded drink items
