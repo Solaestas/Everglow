@@ -25,6 +25,10 @@ namespace Everglow.Sources.Modules.FoodModule
             get; set;
         }
         /// <summary>
+        /// 玩家的饱食等级
+        /// </summary>
+        public int SatietyLevel { get; set; }
+        /// <summary>
         /// 玩家当前渴觉状态
         /// </summary>
         public bool Thirstystate
@@ -101,6 +105,7 @@ namespace Everglow.Sources.Modules.FoodModule
             if (!Player.active)
             {
                 CurrentSatiety = 0;
+                SatietyLevel = 0;
                 Thirstystate = true;
             }
         }
@@ -108,6 +113,7 @@ namespace Everglow.Sources.Modules.FoodModule
         {
             CurrentSatiety = 0;
             MaximumSatiety = 50;
+            SatietyLevel = 0;
             SatietyLossTimer = 0;
 
             Thirstystate = true;
@@ -191,6 +197,18 @@ namespace Everglow.Sources.Modules.FoodModule
             if (CurrentSatiety > 0 || !Thirstystate)
             {
                 Player.wellFed = true;
+                if (CurrentSatiety <= MaximumSatiety * 0.5f) // well fed
+                {
+                    SatietyLevel = 1;
+                }
+                else if (CurrentSatiety > MaximumSatiety * 0.5f && CurrentSatiety <= MaximumSatiety * 0.75f) // plently satisfied
+                {
+                    SatietyLevel = 2;
+                }
+                else // exquisitely stuffed
+                {
+                    SatietyLevel = 3;
+                }
             }
         }
     }
