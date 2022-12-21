@@ -67,6 +67,44 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                     t2.TileFrameY = (short)(Main.rand.Next(6, 9) * 18);
                 }
             }
+            if (Main.rand.NextBool(3))//Á÷Ó©µÎ
+            {
+                int count = 0;
+                for (int x = -1; x <= 1; x++)
+                {
+                    for (int y = 1; y <= 3; y++)
+                    {
+                        Tile t0 = Main.tile[i + x, j + y];
+                        if (t0.HasTile)
+                        {
+                            count++;
+                        }
+                        Tile t1 = Main.tile[i + x, j + y - 1];
+                        if (y == 1 && (!t1.HasTile || t1.Slope != SlopeType.Solid))
+                        {
+                            count++;
+                        }
+                    }
+                }
+                if(count == 0)
+                {
+                    Common.MythUtils.PlaceFrameImportantTiles(i - 1, j + 1, 3, 3, ModContent.TileType<Tiles.Furnitures.GlowingDrop>());
+                }
+
+            }
+            Tile tx = Main.tile[i, j + 1];
+            if (!tx.HasTile)
+            {
+                NPC.NewNPC(null, i * 16 + Main.rand.Next(-8, 9), j * 16, ModContent.NPCType<NPCs.LittleFireBulb>());
+            }
+            if (Main.rand.NextBool(9))//Á÷Ó©µÎ
+            {
+                Tile t0 = Main.tile[i, j + 1];
+                if (!t0.HasTile)
+                {
+                    NPC.NewNPC(null, i * 16 + Main.rand.Next(-8, 9), j * 16 + 180, ModContent.NPCType<NPCs.LargeFireBulb>());
+                }
+            }
             if (!Main.tile[i, j - 1].HasTile && !Main.tile[i + 1, j - 1].HasTile && !Main.tile[i - 1, j - 1].HasTile && Main.tile[i, j].Slope == SlopeType.Solid && Main.tile[i - 1, j].Slope == SlopeType.Solid && Main.tile[i + 1, j].Slope == SlopeType.Solid)//ºÚÓ©ÜÄ
             {
                 Tile t1 = Main.tile[i, j - 1];

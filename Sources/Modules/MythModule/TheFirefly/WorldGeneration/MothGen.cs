@@ -674,6 +674,26 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                     t2.TileFrameY = (short)(Main.rand.Next(6, 9) * 18);
                 }
             }
+            if (Main.rand.NextBool(3))//流萤滴
+            {
+                int count = 0;
+                for (int x = -1; x <= 1; x++)
+                {
+                    for (int y = 1; y <= 3; y++)
+                    {
+                        Tile t0 = Main.tile[i + x, j + y];
+                        if (t0.HasTile)
+                        {
+                            count++;
+                        }
+                    }
+                }
+                if (count == 0)
+                {
+                    Common.MythUtils.PlaceFrameImportantTiles(i - 1, j + 1, 3, 3, ModContent.TileType<Tiles.Furnitures.GlowingDrop>());
+                }
+
+            }
             if (!Main.tile[i, j - 1].HasTile && !Main.tile[i + 1, j - 1].HasTile && !Main.tile[i - 1, j - 1].HasTile && Main.tile[i, j].Slope == SlopeType.Solid && Main.tile[i - 1, j].Slope == SlopeType.Solid && Main.tile[i + 1, j].Slope == SlopeType.Solid)//黑萤苣
             {
                 Tile t1 = Main.tile[i, j - 1];

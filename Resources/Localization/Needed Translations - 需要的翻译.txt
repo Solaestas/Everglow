@@ -26,3 +26,4 @@ Moth Yoyo Bonus Text Tooltip
 Moth Chrysalis Bonus Text Tooltip
 
 *All*:
+New MEyeBonusTextMothBlade: "Moths appearing from this blade move faster"
