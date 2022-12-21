@@ -1469,13 +1469,18 @@ Mods:
 			}
 			FireflyItems :
 			{
+				MothEyeCriteriaText : "[c/6B6BB2:In order to harness a fragment of the ommateum, a powerful underworld creature must be slain]"
 				MothEyeText0 : "[c/7FC1FF:While in the Firefly biome:]"
 				MothEyeText1 : "[c/7FC1FF:- Mana cost is reduced by 5%]"
 				MothEyeText2 : "[c/7FC1FF:- The effectiveness of mana sickness is reduced by 4]"
 				MothEyeText3 : "[c/7FC1FF:- All Firefly weapons deal 5% more damage]"
 				MothEyeText4 : "[c/7FC1FF:- Some Firefly-related items gain bonuses]"
 				MothEyeBonusText : "[c/7FC1FF:Bonus gained from {$Mods.Everglow.ItemName.MothEye}:]"
-				MEyeBonusTextMothBlade : "[c/7FC1FF:More moths appear from the blade]"
+				MEyeBonusTextMothBlade : "[c/7FC1FF:Moths appearing from this blade move faster]"
+				MEyeBonusTextMothBow : "[c/7FC1FF:Reduces the charging time of the bow]"
+				MEyeBonusTextMothYoyo : "[c/7FC1FF:More moths appear from this yoyo]"
+				MEyeBonusTextEvilChrysalis0 : "[c/7FC1FF:Projectiles summoned from the moths can go through tiles]"
+				MEyeBonusTextEvilChrysalis1 : "[c/7FC1FF:The moths have a chance to shoot a stronger projectile]"
 				FFBBadge0 : "[c/7FC1FF:'Affected by rage of that giant moth, your attacks become wilder']"
 				FFBBadge1 : "[c/7FC1FF:Defense is lowered based on how much defense you currently have, up to -12]"
 				FFBBadge2 : "[c/7FC1FF:Increases damage by 18%]"

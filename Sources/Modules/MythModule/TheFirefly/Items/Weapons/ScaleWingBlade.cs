@@ -7,7 +7,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
     public class ScaleWingBlade : ModItem
     {
         FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
-        MothEye mothEye = ModContent.GetInstance<MothEye>();
+        //MothEye mothEye = ModContent.GetInstance<MothEye>();
+        public Player owner;
+
         public override void SetStaticDefaults()
         {
             ItemGlowManager.AutoLoadItemGlow(this);
@@ -63,40 +65,31 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 
         //public override void UpdateInventory(Player player) //KEEP FOR REFERENCE
         //{
-        //    bool hasMothEye = false;
-        //    foreach (var item in player.armor)
+        //    owner = player;
+        //    //owner.GetModPlayer<MothEyePlayer>().MothEyeEquipped = true;
+        //    if (owner != null && owner.TryGetModPlayer(out MothEyePlayer mothEyePlayer) && fireflyBiome.IsBiomeActive(Main.LocalPlayer))
         //    {
-        //        if (item.type == ModContent.ItemType<Items.Accessories.MothEye>())
-        //        {
-        //            hasMothEye = true;
-        //            if (hasMothEye == true && fireflyBiome.IsBiomeActive(Main.LocalPlayer))
-        //            {
-        //                player.statDefense = 999; //used as an example
-        //            }
-        //            break;
-        //        }
+        //        owner.statDefense = 999; //used as an example
         //    }
         //    base.UpdateInventory(player);
         //}
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
-            bool hasMothEye = false;
-            foreach (var item in Main.LocalPlayer.armor) //player.armor didn't work, and Player.armor also didn't work. ~Setnour6
+            //Main.NewText(owner != null); // DEBUGGING PURPOSES
+            //Console.WriteLine(owner != null); // DEBUGGING PURPOSES
+            //Main.NewText(LocalOwner != null); // DEBUGGING PURPOSES
+            //Console.WriteLine(LocalOwner != null); // DEBUGGING PURPOSES
+            if (MothEye.LocalOwner != null && MothEye.LocalOwner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
             {
-                if (item.type == ModContent.ItemType<Items.Accessories.MothEye>())
+                if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
                 {
-                    hasMothEye = true;
-                    if (hasMothEye == true && fireflyBiome.IsBiomeActive(Main.LocalPlayer))
+                    tooltips.AddRange(new TooltipLine[]
                     {
-                        tooltips.AddRange(new TooltipLine[]
-                        {
-                            new(Everglow.Instance, "MothEyeBonusText", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeBonusText")),
-                            new(Everglow.Instance, "MothEyeBladeBonus", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextMothBlade")),
-                        });
-                    }
+                        new(Everglow.Instance, "MothEyeBonusText", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeBonusText")),
+                        new(Everglow.Instance, "MothEyeBladeBonus", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextMothBlade")),
+                    });
                 }
             }
-            base.ModifyTooltips(tooltips);
         }
     }
 }
