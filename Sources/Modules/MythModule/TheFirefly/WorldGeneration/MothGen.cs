@@ -21,7 +21,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         {
             if (Main.mouseRight && Main.mouseRightRelease)
             {
-                BuildShabbyCastle();
+                //BuildShabbyCastle();
                 //Main.NewText(SubWorldModule.SubworldSystem.IsActive<MothWorld>());
             }
 
