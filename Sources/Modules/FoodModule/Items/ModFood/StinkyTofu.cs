@@ -28,10 +28,6 @@ namespace Everglow.Sources.Modules.FoodModule.Items.ModFood
             }
         }
         public override void SetStaticDefaults() {
-			DisplayName.SetDefault("臭豆腐");
-
-			Tooltip.SetDefault("{$CommonItemTooltip.MediumStats}\n'又香又臭'");
-
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 5;
 
 			Main.RegisterItemAnimation(Type, new DrawAnimationVertical(int.MaxValue, 3));

@@ -1,8 +1,7 @@
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
-using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses;
+using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 {
@@ -18,8 +17,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Firefly Centipede");
-
             var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
             {
                 CustomTexturePath = "TheFirefly/NPCs/FireflyCentipede_Bestiary",
@@ -57,7 +54,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Underground,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Caverns,
 
-                new FlavorTextBestiaryInfoElement("Look like a centipede?")
+                new FlavorTextBestiaryInfoElement(Language.GetTextValue("Mods.Everglow.Bestiary.Centipede.Flavor"))
             });
         }
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
@@ -506,8 +503,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Firefly Centipede");
-
             NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
             {
                 // 将此NPC从Bestiary中隐藏起来，对于你只想要一个条目的多部分NPC很有用。
@@ -644,8 +639,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Firefly Centipede");
-
             NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
             {
                 Hide = true

@@ -5,7 +5,7 @@
         public override void SetStaticDefaults()
         {
             //DisplayName.SetDefault("ShuckedOysterBuff");
-            //TODO Description.SetDefault("减少5防御，加10点盔甲穿透，每秒减少3点生命\n“小心寄生虫！”");
+            //Description.SetDefault("减少5防御，加10点盔甲穿透，每秒减少3点生命\n“小心寄生虫！”");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
         }

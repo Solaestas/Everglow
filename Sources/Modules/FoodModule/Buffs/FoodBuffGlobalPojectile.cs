@@ -4,16 +4,20 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
 {
     public class FoodBuffGlobalPojectile : GlobalProjectile
     {
+        public override bool InstancePerEntity => true;
+
+        public int CaramelPuddingBounce = 0;
+
         public override void OnSpawn(Projectile projectile, IEntitySource source)
         {
-            Player player = Main.LocalPlayer;
+            Player player = Main.player[projectile.owner];
             if (player != null && player.active && !player.dead)
             {
                 if (player.GetModPlayer<FoodBuffModPlayer>().BlueHawaiiBuff)
                 {
                     if (projectile.owner == player.whoAmI)
                     {
-                        projectile.velocity *= 2;
+                        projectile.velocity *= 1.67f;
                     }
                 }
                 if (player.GetModPlayer<FoodBuffModPlayer>().CantaloupeJellyBuff)
@@ -28,10 +32,10 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
         }
         public override bool OnTileCollide(Projectile projectile, Vector2 oldVelocity)
         {
-            Player player = Main.LocalPlayer;
+            Player player = Main.player[projectile.owner];
             if (player != null && player.active && !player.dead)
             {
-                if (player.GetModPlayer<FoodBuffModPlayer>().CaramelPuddingBuff)
+                if (player.GetModPlayer<FoodBuffModPlayer>().CaramelPuddingBuff && CaramelPuddingBounce < 1)
                 {
                     if (projectile.velocity.X != oldVelocity.X && Math.Abs(oldVelocity.X) > 1f)
                     {
@@ -41,13 +45,15 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
                     {
                         projectile.velocity.Y = oldVelocity.Y * -0.9f;
                     }
+                    CaramelPuddingBounce++;
+                    return false;
                 }
             }
-            return false;
+            return base.OnTileCollide(projectile, oldVelocity);
         }
     public override void AI(Projectile projectile)
     {
-        Player player = Main.LocalPlayer;
+        Player player = Main.player[projectile.owner];
         if (player != null && player.active && !player.dead)
         {
             if (player.GetModPlayer<FoodBuffModPlayer>().DreamYearningBuff)
@@ -60,7 +66,7 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
                     }
                     Vector2 destination = projectile.Center;
                     bool locatedTarget = false;
-                    for (int i = 0; i < 200; i++)
+                    for (int i = 0; i < Main.maxNPCs; i++)
                     {
                         if (Main.npc[i].CanBeChasedBy(projectile, false) && projectile.WithinRange(Main.npc[i].Center, 250) && (projectile.tileCollide || Collision.CanHit(projectile.Center, 1, 1, Main.npc[i].Center, 1, 1)))
                         {
@@ -72,7 +78,7 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
                     if (locatedTarget)
                     {
                         Vector2 homeDirection = Vector2.Normalize(destination - projectile.Center);
-                        projectile.velocity = projectile.velocity + homeDirection * 2;
+                        projectile.velocity += homeDirection * 0.67f;
                     }
                 }
             }

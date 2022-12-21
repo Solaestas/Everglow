@@ -7,7 +7,7 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs.ModDrinkBuffs
         public override void SetStaticDefaults()
         {
             //DisplayName.SetDefault("B_52Buff");
-            //Description.SetDefault("短时间内大幅提升发射器速度、暴击、伤害\n“耍酒疯”");
+            //Description.SetDefault("短时间内大幅提升发射器速度、暴击、伤害\n“轰炸机”");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
         }
@@ -20,6 +20,7 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs.ModDrinkBuffs
                 player.GetCritChance(DamageClass.Ranged) += 25;
                 player.GetDamage(DamageClass.Ranged) *= 1.5f;
             }
+            player.wellFed = true; //TODO other buffs should have this
         }
     }
 }
