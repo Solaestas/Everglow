@@ -58,7 +58,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                         Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(target.Center) * 15, 0.05f);
                     }
                     //else
-                       
+
                 }
             }
             else

@@ -95,12 +95,28 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             Tile tx = Main.tile[i, j + 1];
             if (!tx.HasTile)
             {
-                NPC.NewNPC(null, i * 16 + Main.rand.Next(-8, 9), j * 16, ModContent.NPCType<NPCs.LittleFireBulb>());
+                NPC.NewNPC(null, i * 16 + Main.rand.Next(-8, 9), j * 16 + 32, ModContent.NPCType<NPCs.LittleFireBulb>());
             }
-            if (Main.rand.NextBool(9))//Á÷Ó©µÎ
+            if (Main.rand.NextBool(3))//Á÷Ó©µÎ
             {
-                Tile t0 = Main.tile[i, j + 1];
-                if (!t0.HasTile)
+                int count = 0;
+                for (int x = -1; x <= 1; x++)
+                {
+                    for (int y = 1; y <= 16; y++)
+                    {
+                        Tile t0 = Main.tile[i + x, j + y];
+                        if (t0.HasTile)
+                        {
+                            count++;
+                        }
+                        Tile t1 = Main.tile[i + x, j + y - 1];
+                        if (y == 1 && (!t1.HasTile || t1.Slope != SlopeType.Solid))
+                        {
+                            count++;
+                        }
+                    }
+                }
+                if (count == 0)
                 {
                     NPC.NewNPC(null, i * 16 + Main.rand.Next(-8, 9), j * 16 + 180, ModContent.NPCType<NPCs.LargeFireBulb>());
                 }

@@ -149,11 +149,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             Vector2 vector = new Vector2(tx.Width / 2f, tx.Height / (float)Main.npcFrameCount[NPC.type] / 2f);
 
             Color color0 = Lighting.GetColor((int)(NPC.Center.X / 16d), (int)(NPC.Center.Y / 16d));
-            Main.spriteBatch.Draw(tx, NPC.Center - Main.screenPosition, new Rectangle(0, 32, 32, 32), color0, NPC.rotation, vector, 1f, effects, 0f);
-            Color color1 = Lighting.GetColor((int)(StaCen.X / 16d), (int)(StaCen.Y / 16d));
+            Main.spriteBatch.Draw(tx, NPC.Center - Main.screenPosition, new Rectangle(0, 32, 32, 30), color0, NPC.rotation, vector, 1f, effects, 0f);
             Main.spriteBatch.Draw(tx, StaCen - Main.screenPosition + new Vector2(0, 24), new Rectangle(0, 0, 32, 8), color0, 0, vector, 1f, effects, 0f);
             Color color = new Color(255, 255, 255, 0);
-            Main.spriteBatch.Draw(tg, NPC.Center - Main.screenPosition, new Rectangle(0, 32, 32, 32), color, NPC.rotation, vector, 1f, effects, 0f);
+            Main.spriteBatch.Draw(tg, NPC.Center - Main.screenPosition, new Rectangle(0, 32, 32, 30), color, NPC.rotation, vector, 1f, effects, 0f);
             vPos[0] = NPC.Center;
             for (int f = 1; f < 200; f++)
             {

@@ -695,7 +695,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                 }
                 if (count == 0)
                 {
-                    Common.MythUtils.PlaceFrameImportantTiles(i - 1, j + 1, 3, 3, ModContent.TileType<Tiles.Furnitures.GlowingDrop>());
+                    MythUtils.PlaceFrameImportantTiles(i - 1, j + 1, 3, 3, ModContent.TileType<Tiles.Furnitures.GlowingDrop>());
                 }
 
             }
