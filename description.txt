@@ -7,7 +7,8 @@ The mod will support multiplayer
 Developed by Dream Chaser Group
 
 Developers (in no particular order):
-Programmers: Colin Weiss, Mr.Skirt, Omnielement, yiyang233, Ye_you, Plantare, Uin, Felixyang, Cyril, 局长, JDSALing，月霞玉桥听红雨
+Lead: Omnielement
+Programmers: Colin Weiss, Mr.Skirt, Omnielement, yiyang233, Ye_you, Plantare, Uin, Felixyang, Cyril, 局长, JDSALing，月霞玉桥听红雨, SilverMoon
 Art: Jelly, Omnielement, Vedotek Lily, 仙阁, 凝胶, Doggo-go!!, 吞某, Nomis, 红茶, Redusty, Felixyang, 青枫
 Music: Dirty Octopus, Setnour6, Uni
 Sound Effects：Setnour6, 短毛猫, Vedotek Lily, Omnielement
@@ -18,7 +19,7 @@ Publicity & Moderation: 绮逾依, Colin Weiss, Lacewing, 夜鸽, Redusty, Dirty
 Special thanks to (in no particular order): 
 Publicity: Starlight River, Endless Escapade, Blood Soul, Ryuusei (BabeElena), Lastprismer
 Sprites: flowey, Verycd, 余墨, and some anonymous spriters
-Codes: SilverMoon
+Composition: Shiryuu, windclimb
 Wiki: Moonseer
 
 --------------------------------------
@@ -32,7 +33,8 @@ Mod将支持联机
 由【孤舟逐梦团队】开发
 
 制作人员名单(无先后顺序)：
-程序：科林维斯，小裙子，万象元素，夜谷紫幽，yiyang233，世纪小花，幽银，菲利克斯·杨，Cyril，局长，JDSALing，月霞玉桥听红雨
+领导：万象元素
+程序：科林维斯，小裙子，万象元素，夜谷紫幽，yiyang233，世纪小花，幽银，菲利克斯·杨，Cyril，局长，JDSALing，月霞玉桥听红雨, 银月
 美术：果冻，万象元素, 维多泰克莉莉，仙阁，凝胶，杜格，吞某，Nomis，红茶，红尘，菲利克斯·杨，青枫
 音乐：脏渔歌，Setnour6, Uni
 音效：Setnour6，短毛猫，维多泰克莉莉，万象元素
@@ -43,5 +45,5 @@ Mod将支持联机
 特别感谢(无先后顺序)：
 宣传: Starlight River (星光之河), Endless Escapade (无尽逃脱), 血魂 (Blood Soul), Ryuusei (BabeElena)，棱镜 (Lastprismer)
 贴图: 小花, 心动游戏, 余墨, 以及一些匿名画师
-程序: 银月
+组成: Shiryuu, windclimb
 维基: Moonseer
