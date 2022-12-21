@@ -2,6 +2,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
 using Terraria.Localization;
+using Everglow.Sources.Modules.MythModule.Common;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 {
@@ -64,7 +65,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             {
                 return 0f;
             }
-            if (NPC.CountNPCS(ModContent.NPCType<CorruptMoth>()) > 0)
+            if (NPC.CountNPCS(ModContent.NPCType<NPCs.Bosses.CorruptMoth>()) > 0)
             {
                 return 0;
             }
