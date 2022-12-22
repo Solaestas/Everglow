@@ -102,7 +102,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                 int count = 0;
                 for (int x = -1; x <= 1; x++)
                 {
-                    for (int y = 1; y <= 16; y++)
+                    for (int y = 1; y <= 10; y++)
                     {
                         Tile t0 = Main.tile[i + x, j + y];
                         if (t0.HasTile)

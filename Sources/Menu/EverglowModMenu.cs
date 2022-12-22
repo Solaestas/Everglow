@@ -12,7 +12,7 @@ namespace Everglow.Sources.Menu
 {
     internal class EverglowModMenu : ModMenu
     {
-        public override int Music => Modules.MythModule.Common.MythContent.QuickMusic("BaseMusic");
+        public override int Music => Modules.MythModule.Common.MythContent.QuickMusic("MenuMusic");
         public List<Star> stars = new();
         public override void Load()
         {
@@ -167,7 +167,7 @@ namespace Everglow.Sources.Menu
 
             bg = null;
             renderTargets.Release();
-            return true;
+            return false;
         }
     }
 }
