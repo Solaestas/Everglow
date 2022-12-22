@@ -1464,9 +1464,16 @@ Mods:
 		}
 		InfoDisplay:
 		{
-			Satiety : "satiety"
+			Satiety : "{0} satiety, {1}"
 			Thirsty : "You are thirsty"
 			NotThirsty : "You don't want to drink"
+			SatietyLevel: 
+			{
+				0 : "empty"
+				1 : "well fed"
+				2 : "satisfied"
+				3 : "stuffed"
+			}
 		}
 		ExtraTooltip : 
 		{
