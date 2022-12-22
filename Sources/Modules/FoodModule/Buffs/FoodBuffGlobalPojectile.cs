@@ -78,7 +78,7 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
                     if (locatedTarget)
                     {
                         Vector2 homeDirection = Vector2.Normalize(destination - projectile.Center);
-                        projectile.velocity += homeDirection * 0.67f;
+                        projectile.velocity += homeDirection * 0.75f;
                     }
                 }
             }
