@@ -20,7 +20,6 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs.ModDrinkBuffs
                 player.GetCritChance(DamageClass.Ranged) += 25;
                 player.GetDamage(DamageClass.Ranged) *= 1.5f;
             }
-            player.wellFed = true; //TODO other buffs should have this
         }
     }
 }

@@ -25,6 +25,10 @@ namespace Everglow.Sources.Modules.FoodModule
             get; set;
         }
         /// <summary>
+        /// 玩家的饱食等级
+        /// </summary>
+        public int SatietyLevel { get; private set; }
+        /// <summary>
         /// 玩家当前渴觉状态
         /// </summary>
         public bool Thirstystate
@@ -98,13 +102,10 @@ namespace Everglow.Sources.Modules.FoodModule
         public override void PostUpdate()
         {
             FoodState();
-            if (CurrentSatiety > 0 || !Thirstystate)
-            {
-                Player.wellFed = true;
-            }
             if (!Player.active)
             {
                 CurrentSatiety = 0;
+                SatietyLevel = 0;
                 Thirstystate = true;
             }
         }
@@ -112,6 +113,7 @@ namespace Everglow.Sources.Modules.FoodModule
         {
             CurrentSatiety = 0;
             MaximumSatiety = 50;
+            SatietyLevel = 0;
             SatietyLossTimer = 0;
 
             Thirstystate = true;
@@ -188,6 +190,43 @@ namespace Everglow.Sources.Modules.FoodModule
             {
                 Thirstystate = true;
                 ThirstyChangeTimer = 0;
+            }
+        }
+        public override void PostUpdateBuffs()
+        {
+            if (CurrentSatiety > 0 || !Thirstystate)
+            {
+                Player.wellFed = true;
+                if (CurrentSatiety <= MaximumSatiety * 0.5f) // well fed
+                {
+                    SatietyLevel = 1;
+                    Player.statDefense += 1;
+                    Player.GetCritChance(DamageClass.Generic) += 0.01f;
+                    Player.GetDamage(DamageClass.Generic) += 0.02f;
+                    Player.GetAttackSpeed(DamageClass.Generic) += 0.02f;
+                    Player.GetKnockback(DamageClass.Summon) += 0.25f;
+                    Player.moveSpeed += 0.1f;
+                    Player.pickSpeed += 0.1f;
+                }
+                else if (CurrentSatiety > MaximumSatiety * 0.5f && CurrentSatiety <= MaximumSatiety * 0.75f) // plently satisfied
+                {
+                    SatietyLevel = 2;
+                    Player.statDefense += 2;
+                    Player.GetCritChance(DamageClass.Generic) += 0.02f;
+                    Player.GetDamage(DamageClass.Generic) += 0.04f;
+                    Player.GetAttackSpeed(DamageClass.Generic) += 0.04f;
+                    Player.GetKnockback(DamageClass.Summon) += 0.5f;
+                    Player.moveSpeed += 0.05f;
+                    Player.pickSpeed += 0.15f;
+                }
+                else // exquisitely stuffed
+                {
+                    SatietyLevel = 3;
+                    Player.statDefense += 4;
+                    Player.GetDamage(DamageClass.Generic) += 0.04f;
+                    Player.GetKnockback(DamageClass.Summon) += 0.75f;
+                    Player.pickSpeed += 0.1f;
+                }
             }
         }
     }
