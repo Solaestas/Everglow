@@ -11,7 +11,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
     public class NavyThunderBomb : ModProjectile, IWarpProjectile
     {
         private float r = 20;
-        private Vector2 v0;
         private int Fra = 0;
         private int FraX = 0;
         private int FraY = 0;
@@ -59,10 +58,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Fra = ((600 - Projectile.timeLeft) / 3) % 30;
             FraX = (Fra % 6) * 270;
             FraY = (Fra / 6) * 290;
-            if (v0 != Vector2.Zero)
-            {
-                // Projectile.position = v0 - new Vector2(Dx, Dy) / 2f;
-            }
             if (Projectile.timeLeft < 10)
             {
                 Projectile.friendly = true;
