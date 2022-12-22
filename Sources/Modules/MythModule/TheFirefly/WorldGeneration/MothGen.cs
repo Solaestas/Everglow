@@ -345,6 +345,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                                     TileObject.CanPlace(bottom.X, bottom.Y, PylonType, 0, 0, out var tileObject);
                                     TileObject.Place(tileObject);
                                     TileObjectData.CallPostPlacementPlayerHook(bottom.X, bottom.Y, PylonType, 0, 0, 0, tileObject);
+                                    //TODO:有概率会爆掉，需要修复
                                 }
                                 break;
                         }
