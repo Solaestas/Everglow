@@ -44,9 +44,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
         public static float Timer = 0;
         public static int WHOAMI = -1;
         public static int Typ = -1;
-        private int TrueL = 1;
-        private float CirR0 = 0;
-        private float CirPro0 = 0;
         private float yd = 1;
         private Vector2[,] Vlaser = new Vector2[30, 200];
 

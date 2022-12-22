@@ -1,10 +1,12 @@
 ﻿using Terraria.Localization;
+using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.BossDrop
 {
     public class TuskTreasureBag : ModItem
     {
         //Sets the associated NPC this treasure bag is dropped from
+        [Obsolete]
         public override int BossBagNPC => ModContent.NPCType<NPCs.Bosses.BloodTusk.BloodTusk>();
 
         public override void SetStaticDefaults()
@@ -20,7 +22,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.BossDrop
             Item.consumable = true;
             Item.width = 32;
             Item.height = 32;
-            Item.rare = 9;
+            Item.rare = ItemRarityID.Cyan;
             Item.expert = true;
         }
 
@@ -28,6 +30,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.BossDrop
         {
             return true;
         }
+        [Obsolete]
         public override void OpenBossBag(Player player)
         {
             //player.TryGettingDevArmor();

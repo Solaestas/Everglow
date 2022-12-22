@@ -28,11 +28,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 3;
         }
 
-        public override Color? GetAlpha(Color lightColor)
-        {
-            return new Color?(new Color((float)(fade * fade), (float)(fade * fade), (float)(fade * fade), 0));
-        }
-
         private float Ome = 0;
         private float Ros = 0;
         private float Theta = 0;
@@ -78,8 +73,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                 Projectile.Kill();
             }
         }
-
-        private float fade;
 
         public override void PostDraw(Color lightColor)
         {

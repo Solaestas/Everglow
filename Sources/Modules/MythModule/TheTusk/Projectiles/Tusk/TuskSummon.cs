@@ -1,6 +1,5 @@
 using Terraria.Localization;
 
-
 namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Tusk
 {
     public class TuskSummon : ModProjectile
@@ -24,7 +23,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Tusk
             Projectile.penetrate = -1;
             Projectile.scale = 1f;
         }
-        int Fra = 0;
         float Sca = 0;
         public override void AI()
         {
@@ -42,7 +40,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Tusk
             }
             if (Projectile.timeLeft % 4 == 0)
             {
-                int k = Dust.NewDust(Projectile.Center - new Vector2(4), 0, 0, 183, 0, 0, 0, default, Sca);
+                int k = Dust.NewDust(Projectile.Center - new Vector2(4), 0, 0, DustID.VampireHeal, 0, 0, 0, default, Sca);
                 Main.dust[k].noGravity = true;
             }
 

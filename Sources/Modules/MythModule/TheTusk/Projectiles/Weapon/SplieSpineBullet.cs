@@ -66,12 +66,12 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
                             for (int i = 0; i < 16; i++)
                             {
                                 Vector2 v = new Vector2(0, Main.rand.NextFloat(1, 3)).RotatedByRandom(MathHelper.TwoPi);
-                                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 188, v.X, v.Y, 150, default(Color), Main.rand.NextFloat(0.8f, 5f));
+                                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 188, v.X, v.Y, 150, default, Main.rand.NextFloat(0.8f, 5f));
                             }
                             for (int i = 0; i < 16; i++)
                             {
                                 Vector2 v = new Vector2(0, Main.rand.NextFloat(1, 3)).RotatedByRandom(MathHelper.TwoPi);
-                                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, v.X, v.Y, 0, default(Color), Main.rand.NextFloat(0.8f, 1.3f));
+                                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, v.X, v.Y, 0, default, Main.rand.NextFloat(0.8f, 1.3f));
                             }
                             for (int i = 0; i < 7; i++)
                             {
@@ -111,12 +111,12 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
             for (int i = 0; i < 16; i++)
             {
                 Vector2 v = new Vector2(0, Main.rand.NextFloat(1, 3)).RotatedByRandom(MathHelper.TwoPi);
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 188, v.X, v.Y, 150, default(Color), Main.rand.NextFloat(0.8f, 5f));
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 188, v.X, v.Y, 150, default, Main.rand.NextFloat(0.8f, 5f));
             }
             for (int i = 0; i < 16; i++)
             {
                 Vector2 v = new Vector2(0, Main.rand.NextFloat(1, 3)).RotatedByRandom(MathHelper.TwoPi);
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, v.X, v.Y, 0, default(Color), Main.rand.NextFloat(0.8f, 1.3f));
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, v.X, v.Y, 0, default, Main.rand.NextFloat(0.8f, 1.3f));
             }
             for (int i = 0; i < 7; i++)
             {
@@ -148,12 +148,12 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
             for (int i = 0; i < 16; i++)
             {
                 Vector2 v = new Vector2(0, Main.rand.NextFloat(1, 3)).RotatedByRandom(MathHelper.TwoPi);
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 188, v.X, v.Y, 150, default(Color), Main.rand.NextFloat(0.8f, 5f));
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 188, v.X, v.Y, 150, default, Main.rand.NextFloat(0.8f, 5f));
             }
             for (int i = 0; i < 16; i++)
             {
                 Vector2 v = new Vector2(0, Main.rand.NextFloat(1, 3)).RotatedByRandom(MathHelper.TwoPi);
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, v.X, v.Y, 0, default(Color), Main.rand.NextFloat(0.8f, 1.3f));
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, v.X, v.Y, 0, default, Main.rand.NextFloat(0.8f, 1.3f));
             }
             for (int i = 0; i < 7; i++)
             {

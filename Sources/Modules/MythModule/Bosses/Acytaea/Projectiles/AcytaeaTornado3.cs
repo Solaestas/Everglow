@@ -26,7 +26,6 @@ internal class AcytaeaTornado3 : VisualProjectile
     {
     }
 
-    private float ka = 0;
     private int AIMNpc = -1;
 
     public override void AI()

@@ -199,7 +199,7 @@ namespace Everglow.Sources.Modules.PlantModule.Projectiles.Melee
 				for (int j = 0; j < 3 * k0; j++)
 				{
 					Vector2 v0 = new Vector2(Main.rand.NextFloat(0.2f, 0.6f), 0).RotatedByRandom(6.283) * Projectile.scale * k0;
-					int dust1 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<Dusts.CactusJuice>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(3.7f, 5.1f) * k0 * 0.02f);
+					int dust1 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<Dusts.CactusJuice>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(3.7f, 5.1f) * k0 * 0.02f);
 					Main.dust[dust1].alpha = 0;
 					Main.dust[dust1].rotation = 0;
 				}
@@ -227,7 +227,7 @@ namespace Everglow.Sources.Modules.PlantModule.Projectiles.Melee
 			for (int j = 0; j < 3 * k0; j++)
 			{
 				Vector2 v0 = new Vector2(Main.rand.NextFloat(0.2f, 0.6f), 0).RotatedByRandom(6.283) * Projectile.scale * k0;
-				int dust1 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<Dusts.CactusJuice>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(3.7f, 5.1f) * k0 * 0.02f);
+				int dust1 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<Dusts.CactusJuice>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(3.7f, 5.1f) * k0 * 0.02f);
 				Main.dust[dust1].alpha = 0;
 				Main.dust[dust1].rotation = 0;
 			}
@@ -241,7 +241,7 @@ namespace Everglow.Sources.Modules.PlantModule.Projectiles.Melee
 			for (int j = 0; j < 2 * k0; j++)
 			{
 				Vector2 v0 = new Vector2(Main.rand.NextFloat(0.1f, 0.4f), 0).RotatedByRandom(6.283) * Projectile.scale * k0;
-				int dust1 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<Dusts.CactusSmog>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(0.17f, 0.31f) * k0);
+				int dust1 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<Dusts.CactusSmog>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(0.17f, 0.31f) * k0);
 				Main.dust[dust1].alpha = 180;
 				Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
 			}

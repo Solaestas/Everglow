@@ -50,7 +50,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
         public bool Battle = false;
         public bool CanUseWing = false;
         private Vector2 AIMpos = new Vector2(200, 0);
-        private int FirstDir = -1;
         private int MinorDir = -1;
 
         public override void AI()
@@ -243,11 +242,9 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
         private Vector2 LeftWingPos;
         private Vector2 RightWingPos;
         private Vector2 LegPos;
-        private Vector2 BladePos;
         private float LeftArmRot = 0;
         private float RightArmRot = 0;
         private float BladePro = 0;
-        private float BladeGlowPro = 0;
         private float BladeRot = 0;
         private float OldBladeRot = 0;
         private float BladeSquz = 1;
@@ -350,8 +347,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
                             {
                                 break;
                             }
-                            Vector2 v1 = OldBladePos[h + 1] - vf;
-                            Vector2 v0 = OldBladePos[h] - vf;
                             if (BladeRot < OldBladeRot)
                             {
                                 Vx.Add(new Vertex2D(OldBladePos[h] - Main.screenPosition, color3, new Vector3(h / 60f, 0, 0)));

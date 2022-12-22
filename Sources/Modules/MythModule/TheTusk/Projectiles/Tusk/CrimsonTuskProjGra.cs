@@ -36,12 +36,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Tusk
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 3;
             Projectile.damage = 0;
         }
-        Vector2 SP = Vector2.Zero;
-        float Omega = 0;
-        bool OnPlac = false;
         bool Down = false;
         bool Collid = false;
-        int Fra = 0;
+
         public override void AI()
         {
             Projectile.velocity.Y += 0.25f;
@@ -94,7 +91,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Tusk
         {
             return false;
         }
-        private Effect ef;
         public override void PostDraw(Color lightColor)
         {
             if (Projectile.velocity.Y > 0)
@@ -122,7 +118,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Tusk
             }
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-            List<VertexBase.CustomVertexInfo> bars = new List<VertexBase.CustomVertexInfo>();
+
             if (Projectile.alpha == 0)
             {
                 for (int f = 0; f < Projectile.oldPos.Length; f++)

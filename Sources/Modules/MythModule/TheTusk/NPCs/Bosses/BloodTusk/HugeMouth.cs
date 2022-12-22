@@ -10,13 +10,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
             DisplayName.SetDefault("");
             DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "");
         }
-
-        private int Coo = 720;
-        private bool Drag = false;
-        private int Drown = 120;
-        private Vector2[] V = new Vector2[10];
-        private Vector2[] VMax = new Vector2[10];
-        private int[] I = new int[10];
         public override void SetDefaults()
         {
             NPC.behindTiles = true;

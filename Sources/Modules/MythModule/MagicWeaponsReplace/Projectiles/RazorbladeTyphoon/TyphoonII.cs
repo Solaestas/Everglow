@@ -2,6 +2,7 @@ using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Commons.Core.VFX;
 using Everglow.Sources.Modules.MEACModule;
 using Terraria.DataStructures;
+using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.RazorbladeTyphoon
 {
@@ -130,7 +131,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ra
                         {
                             if(dis < 45)
                             {
-                                if((target.type >= 71 && target.type <= 74) || target.type == ItemID.Star || target.type == ItemID.Heart)
+                                if((target.type >= ItemID.CopperCoin && target.type <= ItemID.PlatinumCoin) || target.type == ItemID.Star || target.type == ItemID.Heart)
                                 {
                                     target.position = player.Center;
                                 }

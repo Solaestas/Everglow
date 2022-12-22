@@ -1,4 +1,6 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Accessories
+﻿using Terraria.ID;
+
+namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Accessories
 {
     [AutoloadEquip(EquipType.Neck)]
     public class TuskLace : ModItem
@@ -16,7 +18,7 @@
             Item.height = 46;
             Item.value = 2000;
             Item.accessory = true;
-            Item.rare = 2;
+            Item.rare = ItemRarityID.Green;
             //Item.vanity = true;
         }
         public override void UpdateAccessory(Player player, bool hideVisual)

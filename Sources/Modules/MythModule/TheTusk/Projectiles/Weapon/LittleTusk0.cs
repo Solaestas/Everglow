@@ -71,9 +71,9 @@
                         }
                     }
                 }
-                if (Main.rand.Next(3) == 1)
+                if (Main.rand.NextBool(3))
                 {
-                    int num91 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4), 4, 4, 183, 0f, 0f, 100, default(Color), Main.rand.NextFloat(1.3f, 3f) * Sc * 0.4f);
+                    int num91 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4), 4, 4, 183, 0f, 0f, 100, default, Main.rand.NextFloat(1.3f, 3f) * Sc * 0.4f);
                     Main.dust[num91].noGravity = true;
                     Main.dust[num91].velocity = new Vector2(0, Main.rand.NextFloat(0.4f, 2.5f)).RotatedByRandom(Math.PI * 2d) * Vd * 0.5f;
                 }
@@ -85,7 +85,7 @@
                     Vector2 a0 = new Vector2(Projectile.width, Projectile.height) / 2f;
                     Vector2 v3 = Projectile.oldPosition + a0;
                     Vector2 v4 = Vector2.Normalize(Projectile.velocity) * 0.6f;
-                    int num92 = Dust.NewDust(v3 + v4 * g - new Vector2(4, 4), 4, 4, DustID.Blood, 0f, 0f, 100, default(Color), Main.rand.NextFloat(1.3f, 2f) * Sc * 0.4f);
+                    int num92 = Dust.NewDust(v3 + v4 * g - new Vector2(4, 4), 4, 4, DustID.Blood, 0f, 0f, 100, default, Main.rand.NextFloat(1.3f, 2f) * Sc * 0.4f);
                     Main.dust[num92].noGravity = true;
                     Main.dust[num92].velocity = new Vector2(0, Main.rand.NextFloat(0.4f, 2.5f)).RotatedByRandom(Math.PI * 2d) * Vd * 0.5f;
                 }

@@ -171,7 +171,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                 {
                     // 弹幕
                     Projectile.NewProjectile(null, VPos + new Vector2(0, 4), Vector2.Zero, ModContent.ProjectileType<Projectiles.Weapon.ToothMagicHit>(), 0, 0);
-                    Projectile.NewProjectile(null, VPos + new Vector2(0, 4), Vector2.Zero, ModContent.ProjectileType<Projectiles.Weapon.ToothMagicHit2>(), 0, 0);
                     for (int g = 0; g < 12; g++)
                     {
                         Projectile.NewProjectile(null, VPos + new Vector2(0, 4), new Vector2(lengTusk[g] / 2f, 0).RotatedBy(rotTusk[g]), ModContent.ProjectileType<Projectiles.Tusk.CrimsonTuskProj>(), NPC.damage / 12, 0);

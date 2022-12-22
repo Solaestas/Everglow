@@ -26,10 +26,6 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
 
         private float Theta;
 
-        private Vector2 VS1;
-        private Vector2 VS2;
-        private Vector2 VS3;
-
         private Vector2 p1;
         private Vector2 p2;
         private Vector2 p3;
@@ -37,14 +33,12 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
         private Vector2 po1;
         private Vector2 po2;
         private Vector2 po3;
-        private float RamdomC;
 
         private float Ros;
 
         public override void OnSpawn()
         {
             timeLeft = Main.rand.Next(387, 399);
-            RamdomC = Main.rand.NextFloat(0f, 1500f);
             Theta += Main.rand.NextFloat(-3.14f, 3.14f);
             Ros = Main.rand.NextFloat(-0.15f, 0.15f);
             p1 = new Vector2(Main.rand.NextFloat(-0.5f, 0.5f), Main.rand.NextFloat(-0.5f, 0.5f));
@@ -97,8 +91,6 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
         public override void Draw()
         {
             Color colorD;
-
-            GraphicsDevice gd = Main.graphics.GraphicsDevice;
 
             List<Vertex2D> Vx = new List<Vertex2D>();
             colorD = new Color(1, 1, velocity.X / 30f, 1f);

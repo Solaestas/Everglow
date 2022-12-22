@@ -1,5 +1,6 @@
 ﻿using Terraria.GameContent.Creative;
 using Terraria.Localization;
+using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Weapons
 {
@@ -25,12 +26,12 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Weapons
             Item.height = 52;
             Item.useTime = 17;
             Item.useAnimation = 17;
-            Item.useStyle = 5;
+            Item.useStyle = ItemUseStyleID.Shoot;
             Item.staff[Item.type] = true;
             Item.noMelee = true;
             Item.knockBack = 6;
             Item.value = 2000;
-            Item.rare = 2;
+            Item.rare = ItemRarityID.Green;
             Item.UseSound = SoundID.Item71;
             Item.autoReuse = true;
             Item.shoot = ModContent.ProjectileType<Projectiles.Weapon.TuskPower>();

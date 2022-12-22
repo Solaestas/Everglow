@@ -33,7 +33,7 @@
                                 break;
                             }
                         }
-                        Dust.NewDust(dust.position + new Vector2(8) * dust.scale + v0 * 5,0,0,dust.type,v0.X,v0.Y,0,default(Color), dust.scale * 0.666f);
+                        Dust.NewDust(dust.position + new Vector2(8) * dust.scale + v0 * 5,0,0,dust.type,v0.X,v0.Y,0,default, dust.scale * 0.666f);
                     }
                     dust.active = false;
                 }

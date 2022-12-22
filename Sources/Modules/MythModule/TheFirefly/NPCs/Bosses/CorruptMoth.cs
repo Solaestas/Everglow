@@ -909,19 +909,19 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
                                     r = Main.rand.NextFloat(0, 1f);
                                     vel = (r + i * MathHelper.TwoPi / NPC.ai[2]).ToRotationVector2();
                                     vel.Y *= 0.5f;
-                                    int ra = Dust.NewDust(NPC.Center, 0, 0, ModContent.DustType<Dusts.PureBlue>(), 0, 0, 0, default(Color), 4f * Main.rand.NextFloat(0.7f, 2.9f));
+                                    int ra = Dust.NewDust(NPC.Center, 0, 0, ModContent.DustType<Dusts.PureBlue>(), 0, 0, 0, default, 4f * Main.rand.NextFloat(0.7f, 2.9f));
                                     Main.dust[ra].noGravity = true;
                                     Main.dust[ra].velocity = vel * NPC.ai[2] * 8;
 
-                                    int index = Dust.NewDust(NPC.Center, 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(0.3f, 2.2f));
+                                    int index = Dust.NewDust(NPC.Center, 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.3f, 2.2f));
                                     Main.dust[index].noGravity = true;
                                     Main.dust[index].velocity = vel * NPC.ai[2] * 1;
 
-                                    index = Dust.NewDust(NPC.Center, 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(0.3f, 2.2f));
+                                    index = Dust.NewDust(NPC.Center, 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.3f, 2.2f));
                                     Main.dust[index].noGravity = true;
                                     Main.dust[index].velocity = vel * NPC.ai[2] * 1;
 
-                                    index = Dust.NewDust(NPC.Center, 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(0.3f, 2.2f));
+                                    index = Dust.NewDust(NPC.Center, 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.3f, 2.2f));
                                     Main.dust[index].noGravity = true;
                                     Main.dust[index].velocity = vel * NPC.ai[2] * 1;
                                 }

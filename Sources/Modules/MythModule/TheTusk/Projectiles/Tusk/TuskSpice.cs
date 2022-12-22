@@ -136,7 +136,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Tusk
         {
             return false;
         }
-        private Effect ef;
         public override void PostDraw(Color lightColor)
         {
 
@@ -150,7 +149,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Tusk
             }
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-            List<VertexBase.CustomVertexInfo> bars = new List<VertexBase.CustomVertexInfo>();
             if (Projectile.alpha == 0)
             {
                 for (int f = 0; f < Projectile.oldPos.Length; f++)

@@ -22,13 +22,8 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles
         {
             return new Color(0, 0, 0, 0);
         }
-        float ka = 1;
         public override void AI()
         {
-            if (Projectile.timeLeft < 60f)
-            {
-                ka *= 0.97f;
-            }
             //Lighting.AddLight(Projectile.Center,(byte)(color0.R * ka) / 300f, (byte)(color0.G * ka) / 300f, (byte)(color0.B * ka) / 300f);
             int AimPlayer = Projectile.owner;
             if (Main.player[AimPlayer].active)
@@ -75,22 +70,15 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles
             color0.G = (byte)(color0.G * 0.84f + Aimcolor.G * 0.16f);
             color0.B = (byte)(color0.B * 0.84f + Aimcolor.B * 0.16f);
             color0.A = (byte)(color0.A * 0.84f + Aimcolor.A * 0.16f);
-            kb *= 0.97f;
         }
         Color color0 = new Color(0, 0, 0, 0);
         Color Aimcolor = new Color(0, 0, 0, 0);
-        float kb = 1;
         public override bool PreDraw(ref Color lightColor)
         {
             return false;
         }
-        int TrueL = 1;
-        float CirR0 = 0;
-        float CirPro0 = 0;
         public override void PostDraw(Color lightColor)
         {
-            CirR0 += 0.007f;
-            CirPro0 += 0.1f;
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             List<VertexBase.CustomVertexInfo> Vx = new List<VertexBase.CustomVertexInfo>();

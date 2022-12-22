@@ -125,7 +125,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
                 {
                     for (int y = 0; y < 30; y += 3)
                     {
-                        int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(0.9f, 4.2f));
+                        int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.9f, 4.2f));
                         Main.dust[index].noGravity = true;
                         Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(1.8f, 2.5f)).RotatedByRandom(Math.PI * 2d);
                     }

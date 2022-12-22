@@ -92,7 +92,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
             Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center + Projectile.velocity, Vector2.Zero, ModContent.ProjectileType<NormalHit>(), Projectile.damage, Projectile.knockBack, Projectile.owner,Projectile.velocity.Length(), Main.rand.NextFloat(6.283f));
             for (int x = 0; x < 5; x++)
             {
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 0, 0f, 0f, 0, default(Color), 0.7f);
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 0, 0f, 0f, 0, default, 0.7f);
             }
         }
         public override bool PreDraw(ref Color lightColor)

@@ -342,17 +342,17 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         {
             if (AutoAddingTimer % 144 == 0)
             {
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<MothBlue>(), Projectile.velocity.X, Projectile.velocity.Y, 0, default(Color), Main.rand.NextFloat(0.6f, 0.8f));
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<MothBlue>(), Projectile.velocity.X, Projectile.velocity.Y, 0, default, Main.rand.NextFloat(0.6f, 0.8f));
                 Vector2 v = new Vector2(0, Main.rand.NextFloat(0.3f, 1.4f)).RotatedByRandom(Math.PI);
 
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.SpookyWood, v.X + Projectile.velocity.X, v.Y + Projectile.velocity.Y, 0, default(Color), Main.rand.NextFloat(0.3f, 0.7f));
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.SpookyWood, v.X + Projectile.velocity.X, v.Y + Projectile.velocity.Y, 0, default, Main.rand.NextFloat(0.3f, 0.7f));
             }
             if (AutoAddingTimer % 144 == 72)
             {
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<MothBlue2>(), Projectile.velocity.X, Projectile.velocity.Y, 0, default(Color), Main.rand.NextFloat(0.6f, 0.8f));
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<MothBlue2>(), Projectile.velocity.X, Projectile.velocity.Y, 0, default, Main.rand.NextFloat(0.6f, 0.8f));
                 Vector2 v = new Vector2(0, Main.rand.NextFloat(0.3f, 1.4f)).RotatedByRandom(Math.PI);
 
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.SpookyWood, v.X + Projectile.velocity.X, v.Y + Projectile.velocity.Y, 0, default(Color), Main.rand.NextFloat(0.3f, 0.7f));
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.SpookyWood, v.X + Projectile.velocity.X, v.Y + Projectile.velocity.Y, 0, default, Main.rand.NextFloat(0.3f, 0.7f));
             }
         }
 
@@ -373,7 +373,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             {
                 for (int i = 0; i < 2; i++)
                 {
-                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.SpookyWood, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default(Color), 0.6f);
+                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.SpookyWood, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, 0.6f);
                 }
             }
         }

@@ -9,10 +9,6 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
     public class TrueDeathSickleHit : ModProjectile, IWarpProjectile, IBloomProjectile
     {
         private float r = 20;
-        private Vector2 v0;
-        private int Fra = 0;
-        private int FraX = 0;
-        private int FraY = 0;
         private float Stre2 = 1;
         public override string Texture => "Everglow/Sources/Modules/MythModule/TheFirefly/Projectiles/MothBall";
         protected override bool CloneNewInstances => false;
@@ -55,13 +51,6 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
             {
                 r -= 1f;
             }
-            Fra = ((600 - Projectile.timeLeft) / 3) % 30;
-            FraX = (Fra % 6) * 270;
-            FraY = (Fra / 6) * 290;
-            if (v0 != Vector2.Zero)
-            {
-                // Projectile.position = v0 - new Vector2(Dx, Dy) / 2f;
-            }
             if (Projectile.timeLeft < 10)
             {
                 Projectile.friendly = true;
@@ -102,22 +91,6 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
                 SparkVelocity[x].Y += 0.04f;
             }
             Projectile.velocity *= 0;
-        }
-        private static void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
-        {
-            List<Vertex2D> circle = new List<Vertex2D>();
-            for (int h = 0; h < radious / 2; h++)
-            {
-                circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 1, 0)));
-                circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0, 0)));
-            }
-            circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0.5f, 1, 0)));
-            circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(addRot), color, new Vector3(0.5f, 0, 0)));
-            if (circle.Count > 0)
-            {
-                Main.graphics.GraphicsDevice.Textures[0] = tex;
-                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
-            }
         }
         public override bool PreDraw(ref Color lightColor)
         {
