@@ -161,8 +161,8 @@ namespace Everglow.Sources.Menu
             spriteBatch.Draw(front1, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White);
 
             //TODO 绘制标题字
-            Texture2D front0 = ModContent.Request<Texture2D>("Everglow/Sources/Menu/上层").Value;  
-            
+            Texture2D front0 = ModContent.Request<Texture2D>("Everglow/Sources/Menu/上层").Value;
+            spriteBatch.Draw(front0, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White);
 
 
             bg = null;
