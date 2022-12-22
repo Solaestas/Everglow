@@ -77,7 +77,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             {
                 return 0.4f;
             }
-            return 0.8f;
+            return 0.08f;
         }
         public override void Init()
         {
