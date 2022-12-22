@@ -1,4 +1,5 @@
 ﻿using Terraria.Localization;
+using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 {
@@ -9,13 +10,8 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
             DisplayName.SetDefault("");
             DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "獠牙致命池");
         }
-        private bool X = true;
-        private int num10;
-        private float num13;
-        private bool T = false;
         private Vector2[] V = new Vector2[10];
         private Vector2[] VMax = new Vector2[10];
-        private int[] I = new int[10];
         public override void SetDefaults()
         {
             NPC.behindTiles = true;
@@ -34,8 +30,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
             NPC.dontTakeDamage = true;
         }
         private int wait = 480;
-        private bool squ = false;
-        private bool Down = true;
         public override void AI()
         {
             if (wait == 480)
@@ -57,9 +51,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
             {
                 if (V[3].Y > 3 && NPC.velocity.Length() < 5)
                 {
-                    int k = Dust.NewDust(NPC.Bottom + new Vector2(Main.rand.Next(-100, 100), 0), 0, 0, 5, 0, 0, 0, default, Main.rand.NextFloat(1.3f, 2.3f));
+                    int k = Dust.NewDust(NPC.Bottom + new Vector2(Main.rand.Next(-100, 100), 0), 0, 0, DustID.Blood, 0, 0, 0, default, Main.rand.NextFloat(1.3f, 2.3f));
                     Main.dust[k].noGravity = true;
-                    int kk = Dust.NewDust(NPC.Bottom + new Vector2(Main.rand.Next(-100, 100), 0), 0, 0, 183, 0, 0, 0, default, Main.rand.NextFloat(1.3f, 2.3f));
+                    int kk = Dust.NewDust(NPC.Bottom + new Vector2(Main.rand.Next(-100, 100), 0), 0, 0, DustID.VampireHeal, 0, 0, 0, default, Main.rand.NextFloat(1.3f, 2.3f));
                     Main.dust[kk].noGravity = true;
                 }
             }

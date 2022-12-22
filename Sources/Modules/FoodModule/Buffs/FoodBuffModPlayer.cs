@@ -238,20 +238,20 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
                 for (int j = 0; j < 8 * k0; j++)
                 {
                     Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * k1;
-                    int dust0 = Dust.NewDust(Player.Center, 0, 0, ModContent.DustType<BlueGlowAppearStoppedByTile>(), v0.X / 10, v0.Y / 10, 100, default(Color), Main.rand.NextFloat(0.6f, 1.8f) * 2);
+                    int dust0 = Dust.NewDust(Player.Center, 0, 0, ModContent.DustType<BlueGlowAppearStoppedByTile>(), v0.X / 10, v0.Y / 10, 100, default, Main.rand.NextFloat(0.6f, 1.8f) * 2);
                     Main.dust[dust0].noGravity = true;
                 }
                 for (int j = 0; j < 16 * k0; j++)
                 {
                     Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * k1;
-                    int dust1 = Dust.NewDust(Player.Center, 0, 0, ModContent.DustType<BlueParticleDark2StoppedByTile>(), v0.X / 10, v0.Y / 10, 100, default(Color), Main.rand.NextFloat(3.7f, 5.1f) * 2);
+                    int dust1 = Dust.NewDust(Player.Center, 0, 0, ModContent.DustType<BlueParticleDark2StoppedByTile>(), v0.X / 10, v0.Y / 10, 100, default, Main.rand.NextFloat(3.7f, 5.1f) * 2);
                     Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 50 / k0);
                     Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
                 }
                 for (int j = 0; j < 16 * k0; j++)
                 {
                     Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * k1;
-                    int dust1 = Dust.NewDust(Player.Center, 0, 0, ModContent.DustType<MothSmog>(), v0.X / 10, v0.Y / 10, 100, default(Color), Main.rand.NextFloat(3.7f, 5.1f) * 2);
+                    int dust1 = Dust.NewDust(Player.Center, 0, 0, ModContent.DustType<MothSmog>(), v0.X / 10, v0.Y / 10, 100, default, Main.rand.NextFloat(3.7f, 5.1f) * 2);
                     Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 50 / k0);
                     Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
                 }

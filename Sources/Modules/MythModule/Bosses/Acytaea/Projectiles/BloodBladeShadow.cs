@@ -26,7 +26,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 30;
         }
 
-        private float K = 10;
+
 
         public override Color? GetAlpha(Color lightColor)
         {
@@ -37,48 +37,11 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
         {
             Projectile.rotation = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + Math.PI * 0.25);
             Projectile.velocity *= 1 + 0.5f / Projectile.velocity.Length();
-            if (K >= 40)
-            {
-                K *= 0.96f;
-            }
-            if (K <= 6)
-            {
-                K *= 1.05f;
-            }
             if (Projectile.penetrate <= 0)
             {
                 Projectile.Kill();
             }
-            K += Main.rand.NextFloat(-0.025f, 0.025f);
-            /*int num = Dust.NewDust(Projectile.Center - new Vector2(4, 4) + new Vector2(0, 12).RotatedBy(Projectile.timeLeft / 4f), 2, 2, ModContent.DustType<Dusts.RedEffect2>(), 0, 0, 0, default(Color), 1f);
-            Main.dust[num].noGravity = false;
-            Main.dust[num].velocity *= 0;
-            int num20 = Dust.NewDust(Projectile.Center - new Vector2(4, 4) - new Vector2(0, 12).RotatedBy(Projectile.timeLeft / 4f), 2, 2, ModContent.DustType<Dusts.RedEffect2>(), 0, 0, 0, default(Color), 1f);
-            Main.dust[num20].noGravity = false;
-            Main.dust[num20].velocity *= 0;
-            int num21 = Dust.NewDust(Projectile.Center - new Vector2(4, 4), 2, 2, ModContent.DustType<Dusts.RedEffect2>(), 0, 0, 0, default(Color), 1.5f);
-            Main.dust[num21].velocity *= 0;
-            int num22 = Dust.NewDust(Projectile.Center - new Vector2(4, 4) + new Vector2(0, Main.rand.NextFloat(0, 8f)).RotatedByRandom(Math.PI * 2), 2, 2, ModContent.DustType<Dusts.RedEffect2>(), 0, 0, 0, default(Color), 1.5f);
-            Main.dust[num22].velocity *= 0.2f;
-            if(Collision.CanHit(Projectile.Center, 1, 1, Main.player[Player.FindClosest(Projectile.Center, 60, 60)].Center, 1, 1))
-            {
-                Projectile.tileCollide = true;
-            }*/
         }
-
-        public override void Kill(int timeLeft)
-        {
-            for (int i = 0; i <= 32; i++)
-            {
-                float num4 = Main.rand.Next(500, 8000) * ((600 - timeLeft) / 600f + 0.4f);
-                double num1 = Main.rand.Next(0, 1000) / 500f;
-                double num2 = Math.Sin((double)num1 * Math.PI) * num4 / 40f;
-                double num3 = Math.Cos((double)num1 * Math.PI) * num4 / 40f;
-                /*int num5 = Projectile.NewProjectile(base.Projectile.Center.X, base.Projectile.Center.Y, (float)num2, (float)num3, base.mod.ProjectileType("RedGemDust"), 0, 0, base.Projectile.owner, 0f, 0f);
-                Main.Projectile[num5].scale = Main.rand.Next(1150, 2200) / 1000f;*/
-            }
-        }
-
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture2D = (Texture2D)ModContent.Request<Texture2D>(Texture);

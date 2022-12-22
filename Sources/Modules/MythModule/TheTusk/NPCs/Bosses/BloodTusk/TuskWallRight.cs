@@ -9,13 +9,8 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
             DisplayName.SetDefault("Tusk Wall");
             DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "獠牙");
         }
-        private bool X = true;
-        private int num10;
-        private float num13;
-        private bool T = false;
         private Vector2[] V = new Vector2[10];
         private Vector2[] VMax = new Vector2[10];
-        private int[] I = new int[10];
         public override void SetDefaults()
         {
             NPC.behindTiles = true;
@@ -33,7 +28,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
             NPC.noTileCollide = false;
             NPC.dontTakeDamage = true;
         }
-        private int wait = 90;
         private bool squ = false;
         private bool Down = true;
         private bool canDespawn;
@@ -101,7 +95,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                     V[0].Y -= 5f;
                     for (int h = 0; h < 20; h++)
                     {
-                        int k = Dust.NewDust(NPC.Bottom + new Vector2(Main.rand.NextFloat(-200f, 200f), Main.rand.NextFloat(-8f, 8f)), 0, 0, 5, 0, 0, 0, default, Main.rand.NextFloat(1.3f, 4.3f));
+                        int k = Dust.NewDust(NPC.Bottom + new Vector2(Main.rand.NextFloat(-200f, 200f), Main.rand.NextFloat(-8f, 8f)), 0, 0, DustID.Blood, 0, 0, 0, default, Main.rand.NextFloat(1.3f, 4.3f));
                         Main.dust[k].noGravity = true;
                     }
                 }
@@ -144,7 +138,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                 V[0].Y += 5f;
                 for (int h = 0; h < 20; h++)
                 {
-                    int k = Dust.NewDust(NPC.Bottom + new Vector2(Main.rand.NextFloat(-200f, 200f), Main.rand.NextFloat(-8f, 8f)), 0, 0, 5, 0, 0, 0, default, Main.rand.NextFloat(1.3f, 4.3f));
+                    int k = Dust.NewDust(NPC.Bottom + new Vector2(Main.rand.NextFloat(-200f, 200f), Main.rand.NextFloat(-8f, 8f)), 0, 0, DustID.Blood, 0, 0, 0, default, Main.rand.NextFloat(1.3f, 4.3f));
                     Main.dust[k].noGravity = true;
                 }
                 if (V[0].Y > 860)
@@ -187,7 +181,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
         {
         }
         private bool startFight = false;
-        private int RamInt = 0;
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             if (!startFight)

@@ -334,7 +334,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
                 VFXManager.Add(df);
             }
         }
-        public void GenerateVFXFromTarget(NPC target, int Frequency, float mulVelocity = 1f)
+        public static void GenerateVFXFromTarget(NPC target, int Frequency, float mulVelocity = 1f)
         {
             for (int g = 0; g < Frequency; g++)
             {

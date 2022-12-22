@@ -264,14 +264,14 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             for (int f = 0; f < 20; f++)
             {
                 Vector2 v0 = new Vector2(Main.rand.NextFloat(0f, 8f), 0).RotatedByRandom(6.283);
-                Dust dust0 = Dust.NewDustDirect(Projectile.Center + Vector2.Normalize(Projectile.velocity) * 75, 0, 0, DustID.Torch, v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(0.6f, 1.8f));
+                Dust dust0 = Dust.NewDustDirect(Projectile.Center + Vector2.Normalize(Projectile.velocity) * 75, 0, 0, DustID.Torch, v0.X, v0.Y, 100, default, Main.rand.NextFloat(0.6f, 1.8f));
                 dust0.velocity = v0 + Projectile.velocity * 0.2f;
                 dust0.noGravity = true;
             }
             for (int f = 0; f < 20; f++)
             {
                 Vector2 v0 = new Vector2(Main.rand.NextFloat(0f, 8f), 0).RotatedByRandom(6.283);
-                Dust dust0 = Dust.NewDustDirect(Projectile.Center + Vector2.Normalize(Projectile.velocity) * 75, 0, 0, DustID.Bone, v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(0.6f, 1.8f));
+                Dust dust0 = Dust.NewDustDirect(Projectile.Center + Vector2.Normalize(Projectile.velocity) * 75, 0, 0, DustID.Bone, v0.X, v0.Y, 100, default, Main.rand.NextFloat(0.6f, 1.8f));
                 dust0.velocity = v0 + Projectile.velocity * 0.2f;
                 dust0.noGravity = true;
             }

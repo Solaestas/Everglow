@@ -38,13 +38,11 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
             NPC.noTileCollide = true;
             NPC.dontTakeDamage = true;
         }
-        private bool Stop = false;
         private bool start = true;
         private Vector2[] vpos = new Vector2[400];
         public override void AI()
         {
             NPC.TargetClosest(true);
-            Player player = Main.player[NPC.target];
             BloodTusk.N[(int)NPC.ai[1]] = NPC.whoAmI;
             if (start)
             {
@@ -62,8 +60,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 
         }
         private float length = 100;
-        private Effect ef;
-        private Effect ef2;
         private bool CanD = false;
         private int killing = 0;
         private bool killed = false;
@@ -179,8 +175,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
             }
             return true;
         }
-
-        private float AimN = -1;
         private Vector2[] vkilpos = new Vector2[400];
         private Vector2[] Prevkilpos = new Vector2[400];
         private Vector2[] Delvkilpos = new Vector2[400];
@@ -240,7 +234,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                 {
                     colori = Lighting.GetColor((int)(vkilpos[i].X / 16d), (int)(vkilpos[i].Y / 16d));
                 }
-                float Stre = (colori.R + colori.G + colori.B) / 765f;
                 var factor = Math.Abs(i / 30f % 2 - 1);
 
                 var w2 = MathHelper.Lerp(1f, 0.0f, 0);

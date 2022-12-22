@@ -123,16 +123,16 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
             Player player = Main.player[Projectile.owner];
             for (int x = 0; x < ((DrawC + 0.25f) * 2) * 7; x = StepLength + 1)
             {
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 58, Projectile.velocity.X * 0.1f * DrawC, Projectile.velocity.Y * 0.1f * DrawC * 2, 150, default(Color), 0.8f);
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 58, Projectile.velocity.X * 0.1f * DrawC, Projectile.velocity.Y * 0.1f * DrawC * 2, 150, default, 0.8f);
                 StepLength = x;
             }
             for (float x = 0f; x < (DrawC + 0.25f) * 2; x += 0.125f)
             {
-                Dust.NewDustPerfect(Projectile.Center, 278, new Vector2?(Vector2.UnitY.RotatedBy((double)(x * 6.28318548f + Main.rand.NextFloat() * 0.5f), default(Vector2)) * (4f + Main.rand.NextFloat() * 4f)) * DrawC * 2, 150, Color.CornflowerBlue, 1f).noGravity = true;
+                Dust.NewDustPerfect(Projectile.Center, 278, new Vector2?(Vector2.UnitY.RotatedBy((double)(x * 6.28318548f + Main.rand.NextFloat() * 0.5f), default) * (4f + Main.rand.NextFloat() * 4f)) * DrawC * 2, 150, Color.CornflowerBlue, 1f).noGravity = true;
             }
             for (float x = 0f; x < (DrawC + 0.25f) * 2; x += 0.25f)
             {
-                Dust.NewDustPerfect(Projectile.Center, 278, new Vector2?(Vector2.UnitY.RotatedBy((double)(x * 6.28318548f + Main.rand.NextFloat() * 0.5f), default(Vector2)) * (2f + Main.rand.NextFloat() * 3f)) * DrawC * 2, 150, Color.Gold, 1f).noGravity = true;
+                Dust.NewDustPerfect(Projectile.Center, 278, new Vector2?(Vector2.UnitY.RotatedBy((double)(x * 6.28318548f + Main.rand.NextFloat() * 0.5f), default) * (2f + Main.rand.NextFloat() * 3f)) * DrawC * 2, 150, Color.Gold, 1f).noGravity = true;
             }
             Vector2 value21 = new Vector2(Main.screenWidth, Main.screenHeight);
             bool flag6 = Projectile.Hitbox.Intersects(Utils.CenteredRectangle(Main.screenPosition + value21 / 2f, value21 + new Vector2(400f)));

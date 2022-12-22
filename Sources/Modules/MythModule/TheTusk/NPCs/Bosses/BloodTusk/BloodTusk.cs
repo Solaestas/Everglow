@@ -4,6 +4,7 @@ using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.Localization;
+using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 {
@@ -43,8 +44,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 				new FlavorTextBestiaryInfoElement(tex)
             });
         }
-        private bool X = true;
-        private bool T = false;
         private Vector2[] V = new Vector2[10];
         private Vector2[] VMax = new Vector2[10];
         private int[] I = new int[10];
@@ -226,7 +225,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                                 }
                                 else
                                 {
-                                    if (Main.rand.Next(600) == 0 && n < 8)
+                                    if (Main.rand.NextBool(600) && n < 8)
 
                                     {
                                         I[n] = 1;
@@ -241,7 +240,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                                 }
                                 else
                                 {
-                                    if (Main.rand.Next(240) == 0 && n < 8)
+                                    if (Main.rand.NextBool(240) && n < 8)
                                     {
                                         I[n] = 0;
                                     }
@@ -272,7 +271,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                                 }
                                 else
                                 {
-                                    if (Main.rand.Next(600) == 0 && n < 8)
+                                    if (Main.rand.NextBool(600) && n < 8)
 
                                     {
                                         I[n] = 1;
@@ -287,7 +286,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                                 }
                                 else
                                 {
-                                    if (Main.rand.Next(240) == 0 && n < 8)
+                                    if (Main.rand.NextBool(240) && n < 8)
                                     {
                                         I[n] = 0;
                                     }
@@ -941,7 +940,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                         for (int i = 1; i < Dist; i++)
                         {
                             int dX = Main.rand.Next(-5, 5);
-                            if (Main.rand.Next(3) != 1)
+                            if (!Main.rand.NextBool(3))
                             {
                                 NPC.NewNPC(null, (int)NPC.Center.X + (int)(96 * i * 15f / Dist) + X + dX, (int)player.Center.Y - 20, ModContent.NPCType<LittleTusk>());
                             }
@@ -951,7 +950,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                             }
                             dX = Main.rand.Next(-5, 5);
 
-                            if (Main.rand.Next(3) != 1)
+                            if (!Main.rand.NextBool(3))
                             {
                                 NPC.NewNPC(null, (int)NPC.Center.X - (int)(96 * i * 15f / Dist) + X + dX, (int)player.Center.Y - 20, ModContent.NPCType<LittleTusk>());
                             }
@@ -980,7 +979,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                     if (NPC.localAI[0] % (Dist * 2) == Dist)
                     {
                         int X = Main.rand.Next(-15, 15);
-                        if (Main.rand.Next(3) != 1)
+                        if (!Main.rand.NextBool(3))
                         {
                             NPC.NewNPC(null, (int)NPC.Center.X + (int)(NPC.localAI[0] % 200) * 5 + X, (int)player.Center.Y - 20, ModContent.NPCType<LittleTusk>());
                         }
@@ -989,7 +988,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                             NPC.NewNPC(null, (int)NPC.Center.X + (int)(NPC.localAI[0] % 200) * 5 + X, (int)player.Center.Y - 20, ModContent.NPCType<LargeTusk>());
                         }
                         X = Main.rand.Next(-15, 15);
-                        if (Main.rand.Next(3) != 1)
+                        if (!Main.rand.NextBool(3))
                         {
                             NPC.NewNPC(null, (int)NPC.Center.X - (int)(NPC.localAI[0] % 200) * 5 + X, (int)player.Center.Y - 20, ModContent.NPCType<LittleTusk>());
                         }
@@ -1044,7 +1043,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                     {
                         for (int i = 0; i < 10; i++)
                         {
-                            int h = Dust.NewDust(NPC.Center + new Vector2(-13, 60), 20, 20, DustID.Blood, 0, Main.rand.NextFloat(-15f, -9f) * Hm, 0, default, Main.rand.NextFloat(0.3f, 4f));
+                            Dust.NewDust(NPC.Center + new Vector2(-13, 60), 20, 20, DustID.Blood, 0, Main.rand.NextFloat(-15f, -9f) * Hm, 0, default, Main.rand.NextFloat(0.3f, 4f));
                         }
                         int Freq = 18;
                         if (Main.expertMode && !Main.masterMode)
@@ -1283,8 +1282,8 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                     if (NPC.localAI[0] == 3605)
                     {
                         Dx1 = (int)(player.Center.X - 3);
-                        int r = NPC.NewNPC(null, Dx1, (int)(player.Center.Y - 10), ModContent.NPCType<BloodyMouth1>(), 0, 1, 0);
-                        int s = NPC.NewNPC(null, Dx1, (int)(player.Center.Y - 10), ModContent.NPCType<BloodyMouth2>(), 0, -1, 0);
+                        NPC.NewNPC(null, Dx1, (int)(player.Center.Y - 10), ModContent.NPCType<BloodyMouth1>(), 0, 1, 0);
+                        NPC.NewNPC(null, Dx1, (int)(player.Center.Y - 10), ModContent.NPCType<BloodyMouth2>(), 0, -1, 0);
                     }
                     if (NPC.localAI[0] % 10 == 0 && NPC.localAI[0] >= 3605 && NPC.localAI[0] <= 3720)
                     {
@@ -1307,9 +1306,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                 {
                     if (NPC.localAI[0] == 4205)
                     {
-                        Vector2 vnp0 = NPC.Center + new Vector2(0, Main.rand.NextFloat(140f, 245f)).RotatedByRandom(Math.PI * 2d);
-                        Vector2 vnp1 = Main.MouseWorld - vnp0;
-                        vnp1 = vnp1 / vnp1.Length() * 10f;
                         Vector2 v0 = NPC.Center - player.Center;
                         if (v0.X > 0)
                         {
@@ -1766,7 +1762,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
         }
 
         private int Dx1 = 0;
-        private int Dx2 = 0;
         public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position)
         {
             bool flag = NPC.life <= 0;
@@ -1804,9 +1799,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                     num8 = 255f;
                 }
                 float num9 = 0.95f;
-                num8 = num8 * num9;
-                num7 = num7 * num9;
-                num6 = num6 * num9;
+                num8 *= num9;
+                num7 *= num9;
+                num6 *= num9;
                 bool flag5 = num8 < 0f;
                 if (flag5)
                 {
@@ -1897,8 +1892,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
         {
             NPC.TargetClosest(false);
 
-            Player player = Main.player[NPC.target];
-
             if (HasbeenKilled)
             {
                 Killing--;
@@ -1919,7 +1912,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                     {
                         float vX = Main.rand.NextFloat(-2f, 2f);
                         float vY = (float)Math.Cos(vX / 4d * Math.PI) * 12f;
-                        int r = Dust.NewDust(new Vector2(NPC.Center.X, NPC.Center.Y + 22f), 0, 0, 117, vX, -vY, 0, default, 1.1f);
+                        int r = Dust.NewDust(new Vector2(NPC.Center.X, NPC.Center.Y + 22f), 0, 0, DustID.Crimstone, vX, -vY, 0, default, 1.1f);
                         Main.dust[r].noGravity = false;
                     }
                     for (int u = 0; u < 25; u++)
@@ -1933,16 +1926,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                     {
                         float vX = Main.rand.Next(-2000, 2000) / 6000f;
                         float vY = (float)Math.Cos(vX * Math.PI) * 2f;
-                        int r = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y + 110f), NPC.width, 30, 117, vX, -vY, 0, default, 3f);
+                        int r = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y + 110f), NPC.width, 30, DustID.Crimstone, vX, -vY, 0, default, 3f);
                         Main.dust[r].noGravity = false;
                     }
-                    for (int u = 0; u < 12; u++)
-                    {
-                        float num12 = Main.rand.Next(-10000, 10000) / 2000f;
-                        float num13 = (float)Math.Cos(num12 / 16d * Math.PI) * 24f * Main.rand.NextFloat(0.6f, 1.8f);
-                        //int num11 = Projectile.NewProjectile(NPC.Center.X, NPC.Center.Y, num12, -num13, mod.ProjectileType("BrokenTusk"), 0, 0f, Main.myPlayer, 0f, 0f);
-                    }
-
                     NPC.position.X = NPC.position.X + NPC.width / 2;
                     NPC.position.Y = NPC.position.Y + NPC.height / 2;
                     NPC.position.X = NPC.position.X - NPC.width / 2;
@@ -2000,7 +1986,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                             Item.NewItem(null, NPC.Hitbox, ModContent.ItemType<Items.BossDrop.TuskRelic>());
                         }
                     }
-                    if (Main.rand.Next(10) == 1)
+                    if (Main.rand.NextBool(10))
                     {
                         Item.NewItem(null, NPC.Hitbox, ModContent.ItemType<Items.BossDrop.BloodyTuskTrophy>());
                     }
@@ -2079,7 +2065,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
         private Vector2[] EyeMove = new Vector2[7];
         private Vector2 tuskHitMove = Vector2.Zero;
         private float SprK = 0.9f;
-        private Vector2 DeltaHeight = Vector2.Zero;
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             if (!startFight)
@@ -2130,7 +2115,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                 {
                     for (int i = 0; i < 7; i++)
                     {
-                        if (Main.rand.Next(400) == 0 && Eye[i] == 0 && EyeMove[i] == Vector2.Zero)
+                        if (Main.rand.NextBool(400)&& Eye[i] == 0 && EyeMove[i] == Vector2.Zero)
                         {
                             Eye[i] = 60;
                         }
@@ -2139,7 +2124,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                             Eye[i]--;
                         }
                         int Eyevalue = 30 - Math.Abs(Eye[i] - 30);
-                        if (Main.rand.Next(400) == 0 && EyeMove[i] == Vector2.Zero && Eye[i] == 0)
+                        if (Main.rand.NextBool(400) && EyeMove[i] == Vector2.Zero && Eye[i] == 0)
                         {
                             EyeMotivate[i] = 180;
                             EyeRot[i] = Main.rand.NextFloat(0, 6.283f);
@@ -2264,7 +2249,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                             var normalDir = Mouth1[i - 1] - Mouth1[i];
                             normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
                             Color colori = Lighting.GetColor((int)(Mouth1[i].X / 16d), (int)(Mouth1[i].Y / 16d));
-                            float Stre = (colori.R + colori.G + colori.B) / 765f;
                             var factor = Math.Abs(i / 30f % 2 - 1);
 
                             var w2 = MathHelper.Lerp(1f, 0.0f, 0);
@@ -2350,7 +2334,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                             var normalDir = Mouth2[i - 1] - Mouth2[i];
                             normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
                             Color colori = Lighting.GetColor((int)(Mouth2[i].X / 16d), (int)(Mouth2[i].Y / 16d));
-                            float Stre = (colori.R + colori.G + colori.B) / 765f;
                             var factor = Math.Abs(i / 30f % 2 - 1);
 
                             var w2 = MathHelper.Lerp(1f, 0.0f, 0);
@@ -2424,9 +2407,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                     {
                         Main.spriteBatch.End();
                         Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-                        triangleList1.Add(bars1[bars1.Count - 2]);
-                        var vertex = new VertexBase.CustomVertexInfo((bars1[bars1.Count - 2].Position + bars1[bars1.Count - 1].Position) * 0.5f + Mouth1Vel * 15f, Color.White, new Vector3(0, 0.5f, 0));
-                        triangleList1.Add(bars1[bars1.Count - 1]);
+                        triangleList1.Add(bars1[^2]);
+                        var vertex = new VertexBase.CustomVertexInfo((bars1[^2].Position + bars1[^1].Position) * 0.5f + Mouth1Vel * 15f, Color.White, new Vector3(0, 0.5f, 0));
+                        triangleList1.Add(bars1[^1]);
                         triangleList1.Add(vertex);
                         for (int i = bars1.Count - 4; i > -2; i -= 2)
                         {

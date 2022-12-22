@@ -107,7 +107,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Tusk
         {
             return false;
         }
-        private Effect ef;
         public override void PostDraw(Color lightColor)
         {
 

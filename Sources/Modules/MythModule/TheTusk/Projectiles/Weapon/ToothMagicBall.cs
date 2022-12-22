@@ -1,5 +1,5 @@
 using Terraria.Localization;
-
+using Everglow.Sources.Modules.MythModule.Common;
 namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 {
     public class ToothMagicBall : ModProjectile
@@ -24,10 +24,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
             Projectile.penetrate = -1;
             Projectile.scale = 1;
         }
-        private bool initialization = true;
-        private double X;
-        private float Omega;
-        private float b;
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
@@ -42,7 +38,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
             }
             if (addi % player.HeldItem.useTime == 0)
             {
-                Vector2 velocity = Vector2.Normalize(Main.MouseWorld - player.Center) * 8f;
+                Vector2 velocity = Vector2.Normalize(Main.MouseWorld - player.Center) * player.HeldItem.shootSpeed;
                 Projectile.NewProjectile(Projectile.InheritSource(Projectile), player.Center + new Vector2(28 * player.direction, -5), velocity, ModContent.ProjectileType<Projectiles.Weapon.ToothMagic>(), Projectile.damage, Projectile.knockBack, player.whoAmI);
             }
             Projectile.Center = player.Center;
@@ -58,21 +54,21 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
         public override void PostDraw(Color lightColor)
         {
             Player player = Main.player[Projectile.owner];
-            Texture2D TC = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Items/Weapons/ToothMagicBallBloodCore").Value;
-            Texture2D TB0 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Items/Weapons/ToothMagicBallBloodDrop0").Value;
-            Texture2D TB1 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Items/Weapons/ToothMagicBallBloodDrop1").Value;
-            Texture2D TB2 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Items/Weapons/ToothMagicBallBloodDrop2").Value;
-            Texture2D TB3 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Items/Weapons/ToothMagicBallBloodDrop3").Value;
-            Texture2D TT0 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Items/Weapons/ToothMagicBallBloodDropTusk0").Value;
-            Texture2D TT1 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Items/Weapons/ToothMagicBallBloodDropTusk1").Value;
-            Texture2D TT2 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Items/Weapons/ToothMagicBallBloodDropTusk2").Value;
-            Texture2D TT3 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Items/Weapons/ToothMagicBallBloodDropTusk3").Value;
-            Texture2D TT4 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Items/Weapons/ToothMagicBallBloodDropTusk4").Value;
-            Texture2D TT5 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Items/Weapons/ToothMagicBallBloodDropTusk5").Value;
-            Texture2D TT6 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Items/Weapons/ToothMagicBallBloodDropTusk6").Value;
-            Texture2D TT7 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Items/Weapons/ToothMagicBallBloodDropTusk7").Value;
-            Texture2D TT8 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Items/Weapons/ToothMagicBallBloodDropTusk8").Value;
-            Texture2D TT9 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Items/Weapons/ToothMagicBallBloodDropTusk9").Value;
+            Texture2D TC = MythContent.QuickTexture("TheTusk/Items/Weapons/ToothMagicBallBloodCore");
+            Texture2D TB0 = MythContent.QuickTexture("TheTusk/Items/Weapons/ToothMagicBallBloodDrop0");
+            Texture2D TB1 = MythContent.QuickTexture("TheTusk/Items/Weapons/ToothMagicBallBloodDrop1");
+            Texture2D TB2 = MythContent.QuickTexture("TheTusk/Items/Weapons/ToothMagicBallBloodDrop2");
+            Texture2D TB3 = MythContent.QuickTexture("TheTusk/Items/Weapons/ToothMagicBallBloodDrop3");
+            Texture2D TT0 = MythContent.QuickTexture("TheTusk/Items/Weapons/ToothMagicBallBloodDropTusk0");
+            Texture2D TT1 = MythContent.QuickTexture("TheTusk/Items/Weapons/ToothMagicBallBloodDropTusk1");
+            Texture2D TT2 = MythContent.QuickTexture("TheTusk/Items/Weapons/ToothMagicBallBloodDropTusk2");
+            Texture2D TT3 = MythContent.QuickTexture("TheTusk/Items/Weapons/ToothMagicBallBloodDropTusk3");
+            Texture2D TT4 = MythContent.QuickTexture("TheTusk/Items/Weapons/ToothMagicBallBloodDropTusk4");
+            Texture2D TT5 = MythContent.QuickTexture("TheTusk/Items/Weapons/ToothMagicBallBloodDropTusk5");
+            Texture2D TT6 = MythContent.QuickTexture("TheTusk/Items/Weapons/ToothMagicBallBloodDropTusk6");
+            Texture2D TT7 = MythContent.QuickTexture("TheTusk/Items/Weapons/ToothMagicBallBloodDropTusk7");
+            Texture2D TT8 = MythContent.QuickTexture("TheTusk/Items/Weapons/ToothMagicBallBloodDropTusk8");
+            Texture2D TT9 = MythContent.QuickTexture("TheTusk/Items/Weapons/ToothMagicBallBloodDropTusk9");
             Vector2 drawOrigin = new Vector2(TC.Width * 0.5f, TC.Height * 0.5f);
             Color c0 = Lighting.GetColor((int)(player.Center.X / 16f), (int)(player.Center.Y / 16f));
             SpriteEffects sp = SpriteEffects.None;
@@ -90,9 +86,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
                 {
                     if (!Main.dust[DustBlood[f]].active || Main.dust[DustBlood[f]].type != ModContent.DustType<Dusts.BloodBall>())
                     {
-                        if (Main.rand.Next(8) == 1)
+                        if (Main.rand.NextBool(8))
                         {
-                            DustBlood[f] = Dust.NewDust(Vcen - new Vector2(4, 4) + new Vector2(0, Main.rand.NextFloat(4f, 12f)).RotatedByRandom(6.283), 0, 0, ModContent.DustType<Dusts.BloodBall>(), 0, 0, 0, default(Color), 0.1f);
+                            DustBlood[f] = Dust.NewDust(Vcen - new Vector2(4, 4) + new Vector2(0, Main.rand.NextFloat(4f, 12f)).RotatedByRandom(6.283), 0, 0, ModContent.DustType<Dusts.BloodBall>(), 0, 0, 0, default, 0.1f);
                             Main.dust[DustBlood[f]].velocity = Vector2.Zero;
                             Main.dust[DustBlood[f]].noGravity = true;
                         }

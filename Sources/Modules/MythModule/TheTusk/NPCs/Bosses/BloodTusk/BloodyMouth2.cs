@@ -12,11 +12,8 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
         }
 
         private int Coo = 720;
-        private bool Drag = false;
-        private int Drown = 120;
         private Vector2[] V = new Vector2[10];
         private Vector2[] VMax = new Vector2[10];
-        private int[] I = new int[10];
         public override void SetDefaults()
         {
             NPC.behindTiles = true;
@@ -71,10 +68,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                     NPC.position.Y += 16;
                 }
                 startFight = true;
-                if (NPC.alpha == 255)
-                {
-                    RamInt = Main.rand.Next(6);
-                }
                 V[0] = VMax[0];
                 V[1] = VMax[1];
                 NPC.alpha -= 25;
@@ -181,7 +174,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
         {
         }
         private bool startFight = false;
-        private int RamInt = 0;
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             if (!startFight)

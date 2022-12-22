@@ -22,8 +22,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
         }
-
-        private float ka = 0;
         private int AIMNpc = -1;
 
         public override void AI()

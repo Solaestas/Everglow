@@ -62,7 +62,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
                 {
                     continue;
                 }
-                Dust dust0 = Dust.NewDustDirect(Projectile.Center + v1, 0, 0, ModContent.DustType<Dusts.CrystalAppearStoppedByTileInAStorm>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(0.3f, 1.6f) * Math.Min(Intensity, 300) / 450f);
+                Dust dust0 = Dust.NewDustDirect(Projectile.Center + v1, 0, 0, ModContent.DustType<Dusts.CrystalAppearStoppedByTileInAStorm>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(0.3f, 1.6f) * Math.Min(Intensity, 300) / 450f);
                 dust0.noGravity = true;
                 dust0.color.B = (byte)(v1.Length() / 2f);
                 dust0.color.A = (byte)(Intensity / 2);

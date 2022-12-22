@@ -27,9 +27,9 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Typeless
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
         }
-        private bool initialization = true;
-        private double X;
-        private float Omega;
+
+
+
         private float b;
         public override void AI()
         {
@@ -67,7 +67,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Typeless
             for (int h = 0; h < 20; h++)
             {
                 Vector2 v3 = new Vector2(0, (float)Math.Sin(h * Math.PI / 4d + Projectile.ai[0]) + 5).RotatedBy(h * Math.PI / 10d) * Main.rand.NextFloat(0.2f, 1.1f);
-                int r = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4), 0, 0, ModContent.DustType<TheFirefly.Dusts.PureBlue>(), 0, 0, 0, default(Color), 15f * Main.rand.NextFloat(0.4f, 1.1f));
+                int r = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4), 0, 0, ModContent.DustType<TheFirefly.Dusts.PureBlue>(), 0, 0, 0, default, 15f * Main.rand.NextFloat(0.4f, 1.1f));
                 Main.dust[r].noGravity = true;
                 Main.dust[r].velocity = v3;
             }
@@ -87,7 +87,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Typeless
                     for (int h = 0; h < 20; h++)
                     {
                         Vector2 v3 = new Vector2(0, (float)Math.Sin(h * Math.PI / 4d) + 5).RotatedBy(h * Math.PI / 10d) * Main.rand.NextFloat(0.2f, 1.1f);
-                        int r = Dust.NewDust(new Vector2(player.Center.X, player.Center.Y) - new Vector2(4, 4), 0, 0, ModContent.DustType<TheFirefly.Dusts.PureBlue>(), 0, 0, 0, default(Color), 15f * Main.rand.NextFloat(0.4f, 1.1f));
+                        int r = Dust.NewDust(new Vector2(player.Center.X, player.Center.Y) - new Vector2(4, 4), 0, 0, ModContent.DustType<TheFirefly.Dusts.PureBlue>(), 0, 0, 0, default, 15f * Main.rand.NextFloat(0.4f, 1.1f));
                         Main.dust[r].noGravity = true;
                         Main.dust[r].velocity = v3;
                         //Main.dust[r].dustIndex = (int)(Math.Cos(h * Math.PI / 10d + player.ai[0]) * 100d);
@@ -113,7 +113,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Typeless
                     for (int h = 0; h < 20; h++)
                     {
                         Vector2 v3 = new Vector2(0, (float)Math.Sin(h * Math.PI / 4d) + 5).RotatedBy(h * Math.PI / 10d) * Main.rand.NextFloat(0.2f, 1.1f);
-                        int r = Dust.NewDust(new Vector2(player.Center.X, player.Center.Y) - new Vector2(4, 4), 0, 0, ModContent.DustType<TheFirefly.Dusts.PureBlue>(), 0, 0, 0, default(Color), 15f * Main.rand.NextFloat(0.4f, 1.1f));
+                        int r = Dust.NewDust(new Vector2(player.Center.X, player.Center.Y) - new Vector2(4, 4), 0, 0, ModContent.DustType<TheFirefly.Dusts.PureBlue>(), 0, 0, 0, default, 15f * Main.rand.NextFloat(0.4f, 1.1f));
                         Main.dust[r].noGravity = true;
                         Main.dust[r].velocity = v3;
                         //Main.dust[r].dustIndex = (int)(Math.Cos(h * Math.PI / 10d + player.ai[0]) * 100d);
@@ -148,7 +148,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Typeless
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
                 List<VertexBase.CustomVertexInfo> bars = new List<VertexBase.CustomVertexInfo>();
-                ef = (Effect)ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/TrailB2").Value;
+                ef = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/TrailB2").Value;
                 Player player = Main.player[Projectile.owner];
                 Vector2 v0 = Projectile.Center;
                 Vector2 Vi = IniV[j];
@@ -159,7 +159,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Typeless
                     {
                         break;
                     }
-                    v1 = v1 / v1.Length();
+                    v1 /= v1.Length();
                     Vector2 v2 = v0;
                     v0 += Vi + v1 * 5;
                     Vi *= 0.99f;
