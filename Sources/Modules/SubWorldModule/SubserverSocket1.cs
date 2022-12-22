@@ -15,9 +15,9 @@ namespace Everglow.Sources.Modules.SubWorldModule
             this.index = index;
         }
 
-        void ISocket.AsyncReceive(byte[] data, int offset, int size, SocketReceiveCallback callback, object state = null) { }
+        void ISocket.AsyncReceive(byte[] data, int offset, int size, SocketReceiveCallback callback, object state) { }
 
-        void ISocket.AsyncSend(byte[] data, int offset, int size, SocketSendCallback callback, object state = null)
+        void ISocket.AsyncSend(byte[] data, int offset, int size, SocketSendCallback callback, object state)
         {
             byte[] packet = new byte[size + 1];
             packet[0] = (byte)index;

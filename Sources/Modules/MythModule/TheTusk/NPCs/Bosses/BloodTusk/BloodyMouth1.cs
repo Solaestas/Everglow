@@ -12,11 +12,8 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
         }
 
         private int Coo = 720;
-        private bool Drag = false;
-        private int Drown = 120;
         private Vector2[] V = new Vector2[10];
         private Vector2[] VMax = new Vector2[10];
-        private int[] I = new int[10];
         public override void SetDefaults()
         {
             NPC.behindTiles = true;
@@ -45,7 +42,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
             VMax[1] = new Vector2(0, 166);
             NPC.TargetClosest(false);
 
-            Player player = Main.player[NPC.target];
             if (NPC.collideX && Down)
             {
                 NPC.active = false;
@@ -81,10 +77,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                     NPC.position.Y += 16;
                 }
                 startFight = true;
-                if (NPC.alpha == 255)
-                {
-                    RamInt = Main.rand.Next(6);
-                }
                 V[0] = VMax[0];
                 V[1] = VMax[1];
                 NPC.alpha -= 25;
@@ -97,10 +89,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
             if (wait <= 0 && !squ)
             {
                 V[0] *= 0.9f;
-                if ((player.Center - NPC.Center).Length() < 400)
-                {
-                    TuskModPlayer mplayer = Main.player[Main.myPlayer].GetModPlayer<TuskModPlayer>();
-                }
                 if (V[0].Y <= 0.5f)
                 {
                     Coo--;
@@ -181,7 +169,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
         {
         }
         private bool startFight = false;
-        private int RamInt = 0;
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             if (!startFight)
@@ -215,7 +202,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
             {
                 if (Coo >= 120)
                 {
-                    int xz = 910 - Coo * 2;
+                    int xz = 910 - (Coo * 2);
                     if (xz > t0.Height)
                     {
                         xz = t0.Height;
@@ -229,7 +216,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                         V[1].Y += 4;
                         for (int i = 0; i < 10; i++)
                         {
-                            int k = Dust.NewDust(NPC.Bottom + new Vector2(-60, 0), 120, 0, 5, 0, 0, 0, default, Main.rand.NextFloat(1.3f, 2.3f));
+                            int k = Dust.NewDust(NPC.Bottom + new Vector2(-60, 0), 120, 0, DustID.Blood, 0, 0, 0, default, Main.rand.NextFloat(1.3f, 2.3f));
                             Main.dust[k].noGravity = true;
                         }
 

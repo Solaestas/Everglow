@@ -41,9 +41,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
 
         public override void RandomUpdate(int i, int j)
         {
-            if (!((Tile)Main.tile[i, j - 1]).HasTile)
+            if (!Main.tile[i, j - 1].HasTile)
             {
-                if (Main.rand.Next(8) == 1)
+                if (Main.rand.NextBool(8))
                 {
                     switch (Main.rand.Next(1, 4))
                     {

@@ -209,7 +209,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
             {
                 if (Coo >= 120)
                 {
-                    int xz = 910 - Coo * 2;
+                    int xz = 910 - (Coo * 2);
                     if (xz > t0.Height)
                     {
                         xz = t0.Height;
@@ -223,7 +223,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                         V[1].Y += 4;
                         for (int i = 0; i < 10; i++)
                         {
-                            int k = Dust.NewDust(NPC.Bottom + new Vector2(-60, 0), 120, 0, 5, 0, 0, 0, default, Main.rand.NextFloat(1.3f, 2.3f));
+                            int k = Dust.NewDust(NPC.Bottom + new Vector2(-60, 0), 120, 0, DustID.Blood, 0, 0, 0, default, Main.rand.NextFloat(1.3f, 2.3f));
                             Main.dust[k].noGravity = true;
                         }
 

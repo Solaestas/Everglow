@@ -16,11 +16,11 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.BossDrop
             Item.useAnimation = 20;
             Item.useTime = 20;
             Item.maxStack = 99;
-            Item.rare = 1;
+            Item.rare = ItemRarityID.Blue;
             Item.value = Item.sellPrice(0, 1, 0, 0);
             Item.useAnimation = 15;
             Item.useTime = 10;
-            Item.useStyle = 1;
+            Item.useStyle = ItemUseStyleID.Swing;
             Item.consumable = true;
             Item.useTurn = true;
             Item.autoReuse = true;

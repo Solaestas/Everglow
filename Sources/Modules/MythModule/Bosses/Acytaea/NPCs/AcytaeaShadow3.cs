@@ -70,7 +70,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
                     for (int j = 0; j < 6; j++)
                     {
                         Vector2 v = new Vector2(0, Main.rand.NextFloat(0, 7f)).RotatedByRandom(6.28);
-                        Projectile.NewProjectile(null, NPC.Center + v * 2f, v, ModContent.ProjectileType<BrokenAcytaea2>(), 0, 1, Main.myPlayer);
+                        Projectile.NewProjectile(null, NPC.Center + (v * 2f), v, ModContent.ProjectileType<BrokenAcytaea2>(), 0, 1, Main.myPlayer);
                     }
                     NPC.active = false;
                 }
@@ -123,10 +123,10 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
                     {
                         Vector2 v0 = AIMpos + Main.npc[AIMNPC].Center;
                         Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
-                        v1 = (v0 - NPC.Center + v1 * 60f) / 48f;
+                        v1 = (v0 - NPC.Center + (v1 * 60f)) / 48f;
                         NPC.noGravity = true;
                         NPC.velocity += v1;
-                        NPC.velocity *= Math.Clamp(1 - NPC.localAI[0] / 40f, 0, 1);
+                        NPC.velocity *= Math.Clamp(1 - (NPC.localAI[0] / 40f), 0, 1);
                     }
                     CanUseWing = (AIMpos + Main.npc[AIMNPC].Center - NPC.Center).Length() > 1 && (AIMpos + Main.npc[AIMNPC].Center - NPC.Center).Y < 0;
                 }
@@ -147,10 +147,10 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
                     {
                         Vector2 v0 = AIMpos + player.Center;
                         Vector2 v1 = Vector2.Normalize(v0 - NPC.Center);
-                        v1 = (v0 - NPC.Center + v1 * 60f) / 48f;
+                        v1 = (v0 - NPC.Center + (v1 * 60f)) / 48f;
                         NPC.noGravity = true;
                         NPC.velocity += v1;
-                        NPC.velocity *= Math.Clamp(1 - NPC.localAI[0] / 40f, 0, 1);
+                        NPC.velocity *= Math.Clamp(1 - (NPC.localAI[0] / 40f), 0, 1);
                     }
                     CanUseWing = (AIMpos + player.Center - NPC.Center).Length() > 1 && (AIMpos + player.Center - NPC.Center).Y < 0;
                 }
@@ -166,7 +166,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
                         for (int j = 0; j < 6; j++)
                         {
                             Vector2 v = new Vector2(0, Main.rand.NextFloat(0, 7f)).RotatedByRandom(6.28);
-                            Projectile.NewProjectile(null, NPC.Center + v * 2f, v, ModContent.ProjectileType<BrokenAcytaea2>(), 0, 1, Main.myPlayer);
+                            Projectile.NewProjectile(null, NPC.Center + (v * 2f), v, ModContent.ProjectileType<BrokenAcytaea2>(), 0, 1, Main.myPlayer);
                         }
                     }
                     NPC.active = false;
@@ -183,7 +183,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
                         for (int j = 0; j < 6; j++)
                         {
                             Vector2 v = new Vector2(0, Main.rand.NextFloat(0, 7f)).RotatedByRandom(6.28);
-                            Projectile.NewProjectile(null, NPC.Center + v * 2f, v, ModContent.ProjectileType<BrokenAcytaea2>(), 0, 1, Main.myPlayer);
+                            Projectile.NewProjectile(null, NPC.Center + (v * 2f), v, ModContent.ProjectileType<BrokenAcytaea2>(), 0, 1, Main.myPlayer);
                         }
                     }
                     NPC.active = false;
@@ -197,15 +197,9 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
         }
 
         /*String Ta = "挑战";*/
-
-        private Vector2 HeadPos;
-        private Vector2 LeftArmPos;
         private Vector2 RightArmPos;
-        private Vector2 BodyPos;
         private Vector2 LeftWingPos;
         private Vector2 RightWingPos;
-        private Vector2 LegPos;
-        private Vector2 BowPos;
         private bool HasBow = false;
         private float LeftArmRot = 0;
         private float RightArmRot = 0;
@@ -249,7 +243,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
                     {
                         float Col = Math.Clamp(NPC.velocity.Length() / 10f, 0, 1) * (8 - h) / 8f;
                         Color colorφ = new Color(Col, Col, Col, 0);
-                        spriteBatch.Draw(tx, NPC.oldPos[h] - Main.screenPosition + NPC.Size / 2f, null, colorφ, NPC.rotation, NPC.Size / 2f, NPC.scale, effects, 0f);
+                        spriteBatch.Draw(tx, NPC.oldPos[h] - Main.screenPosition + (NPC.Size / 2f), null, colorφ, NPC.rotation, NPC.Size / 2f, NPC.scale, effects, 0f);
                     }
                 }
             }
@@ -264,9 +258,9 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
                 Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaRightWing").Value, NPC.Center + RightWingPos - Main.screenPosition + new Vector2(10, 0), new Rectangle(0, wingFrame * 56, 86, 56), color, NPC.rotation, new Vector2(43, 28), 1f, effects, 0f);
                 Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaLeftWing").Value, NPC.Center + LeftWingPos - Main.screenPosition + new Vector2(10, 0), new Rectangle(0, wingFrame * 56, 86, 56), color, NPC.rotation, new Vector2(43, 28), 1f, effects, 0f);
             }
-            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaLeftArm").Value, NPC.Center + LeftArmPos - Main.screenPosition, null, color, NPC.rotation + LeftArmRot, NPC.Size / 2f, 1f, effects, 0f);
-            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaBody").Value, NPC.Center + BodyPos - Main.screenPosition, null, color, NPC.rotation, NPC.Size / 2f, 1f, effects, 0f);
-            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaLeg").Value, NPC.Center + LegPos - Main.screenPosition, null, color, NPC.rotation, NPC.Size / 2f, 1f, effects, 0f);
+            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaLeftArm").Value, NPC.Center - Main.screenPosition, null, color, NPC.rotation + LeftArmRot, NPC.Size / 2f, 1f, effects, 0f);
+            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaBody").Value, NPC.Center - Main.screenPosition, null, color, NPC.rotation, NPC.Size / 2f, 1f, effects, 0f);
+            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaLeg").Value, NPC.Center - Main.screenPosition, null, color, NPC.rotation, NPC.Size / 2f, 1f, effects, 0f);
             if (HasBlade)
             {
                 if (NPC.localAI[0] <= 900)
@@ -276,10 +270,10 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
                     if (BladePro == 1)
                     {
                         List<Vertex2D> Vx = new List<Vertex2D>();
-                        Vector2 vBla = new Vector2(88 - (MinorDir - 1) * 8, -158).RotatedBy(BladeRot);
+                        Vector2 vBla = new Vector2(88 - ((MinorDir - 1) * 8), -158).RotatedBy(BladeRot);
                         vBla.Y *= BladeSquz;
                         Vector2 vc = NPC.Center + vBla;
-                        BladeSquz = BladeSquz * 0.75f + AimBladeSquz * 0.25f;
+                        BladeSquz = (BladeSquz * 0.75f) + (AimBladeSquz * 0.25f);
 
                         if (!Main.gamePaused)
                         {
@@ -338,7 +332,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
                 Main.spriteBatch.Begin();
                 List<Vertex2D> Vx = new List<Vertex2D>();
                 Color color3 = new Color((int)(255 * BladePro), (int)(255 * BladePro), (int)(255 * BladePro), 0);
-                Vector2 vBla = new Vector2(88 - (MinorDir - 1) * 8, -158).RotatedBy(BladeRot);
+                Vector2 vBla = new Vector2(88 - ((MinorDir - 1) * 8), -158).RotatedBy(BladeRot);
                 vBla.Y *= BladeSquz;
                 Vector2 vc = NPC.Center + vBla - Main.screenPosition;
                 Vector2 vd = new Vector2(17.02f, 0).RotatedBy(0.4 + BladeRot) + vc;
@@ -377,8 +371,8 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
                     Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaRightArm").Value, NPC.Center + RightArmPos - Main.screenPosition + new Vector2(10, 0), null, color, NPC.rotation + RightArmRot, new Vector2(17, 23), 1f, effects, 0f);
                 }
             }
-            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaHead").Value, NPC.Center + HeadPos - Main.screenPosition, new Rectangle(0, headFrame * 56, 50, 56), color, NPC.rotation, NPC.Size / 2f, 1f, effects, 0f);
-            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaEye").Value, NPC.Center + HeadPos - Main.screenPosition, new Rectangle(0, headFrame * 56, 50, 56), new Color(255, 255, 255, 0), NPC.rotation, NPC.Size / 2f, 1f, effects, 0f);
+            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaHead").Value, NPC.Center - Main.screenPosition, new Rectangle(0, headFrame * 56, 50, 56), color, NPC.rotation, NPC.Size / 2f, 1f, effects, 0f);
+            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaEye").Value, NPC.Center - Main.screenPosition, new Rectangle(0, headFrame * 56, 50, 56), new Color(255, 255, 255, 0), NPC.rotation, NPC.Size / 2f, 1f, effects, 0f);
             if (MinorDir == 1)
             {
                 if (RightArmRot > Math.PI / 2d)
@@ -395,7 +389,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
             }
             if (HasBow)
             {
-                Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaBow").Value, NPC.Center + BowPos - Main.screenPosition, null, color, NPC.rotation + BowRot, new Vector2(30, 28), 1f, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/NPCs/AcytaeaBow").Value, NPC.Center + Vector2.Zero - Main.screenPosition, null, color, NPC.rotation + BowRot, new Vector2(30, 28), 1f, SpriteEffects.None, 0f);
             }
         }
 

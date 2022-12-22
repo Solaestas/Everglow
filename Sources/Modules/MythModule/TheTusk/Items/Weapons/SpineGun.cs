@@ -22,7 +22,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Weapons
             // Common Properties
             Item.width = 64;
             Item.height = 40;
-            Item.rare = 2;
+            Item.rare = ItemRarityID.Green;
             Item.value = 2000;
 
             // Use Properties
@@ -49,7 +49,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Weapons
         {
             if (player.ownedProjectileCounts[ModContent.ProjectileType<Projectiles.Weapon.SpineGun>()] < 1)
             {
-                Projectile.NewProjectileDirect(source, position + velocity * 2.0f - new Vector2(0, 4), Vector2.Zero, ModContent.ProjectileType<Projectiles.Weapon.SpineGun>(), damage, knockback, player.whoAmI, 1f, Item.useAnimation);
+                Projectile.NewProjectileDirect(source, position + (velocity * 2.0f) - new Vector2(0, 4), Vector2.Zero, ModContent.ProjectileType<Projectiles.Weapon.SpineGun>(), damage, knockback, player.whoAmI, 1f, Item.useAnimation);
             }
             else
             {
@@ -75,7 +75,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Weapons
             {
                 Beilv = 2.4f;
             }
-            Projectile.NewProjectileDirect(source, position + newVelocity * 0.9f + new Vector2(0, -6), newVelocity * 2 * Beilv, ModContent.ProjectileType<Projectiles.Weapon.SplieSpineBullet>(), damage, knockback, player.whoAmI, player.GetCritChance(DamageClass.Ranged) + player.GetCritChance(DamageClass.Generic), type);
+            Projectile.NewProjectileDirect(source, position + (newVelocity * 0.9f) + new Vector2(0, -6), newVelocity * 2 * Beilv, ModContent.ProjectileType<Projectiles.Weapon.SplieSpineBullet>(), damage, knockback, player.whoAmI, player.GetCritChance(DamageClass.Ranged) + player.GetCritChance(DamageClass.Generic), type);
             return false;
         }
         public override Vector2? HoldoutOffset()

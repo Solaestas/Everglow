@@ -30,7 +30,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Weapons
             Item.crit = 6;
 
             Item.value = 4000;
-            Item.rare = 2;
+            Item.rare = ItemRarityID.Green;
             Item.UseSound = SoundID.Item1;
 
             Item.shoot = ModContent.ProjectileType<Projectiles.Weapon.Tusk0>(); // ID of the projectiles the sword will shoot
@@ -71,7 +71,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Weapons
                 {
                     Ntype = ModContent.NPCType<NPCs.Bosses.BloodTusk.PhatomTusk0>();
                 }
-                int h = NPC.NewNPC(null, (int)position.X + Main.rand.Next(-10, 10) + k * 50, (int)position.Y + Main.rand.Next(-16, -10), Ntype, 0, player.GetWeaponDamage(player.HeldItem) /* player.GetDamage(DamageClass.Generic).Additive*/);
+                int h = NPC.NewNPC(null, (int)position.X + Main.rand.Next(-10, 10) + (k * 50), (int)position.Y + Main.rand.Next(-16, -10), Ntype, 0, player.GetWeaponDamage(player.HeldItem) /* player.GetDamage(DamageClass.Generic).Additive*/);
                 Main.npc[h].velocity = v;
             }
             return false;

@@ -7,14 +7,14 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
     {
         public override void SetStaticDefaults()
         {
-            Main.tileLighted[(int)base.Type] = true;
-            Main.tileFrameImportant[(int)base.Type] = true;
-            Main.tileSolidTop[(int)base.Type] = true;
-            Main.tileSolid[(int)base.Type] = true;
-            Main.tileNoAttach[(int)base.Type] = true;
-            Main.tileTable[(int)base.Type] = true;
-            Main.tileLavaDeath[(int)base.Type] = true;
-            TileID.Sets.Platforms[(int)base.Type] = true;
+            Main.tileLighted[Type] = true;
+            Main.tileFrameImportant[Type] = true;
+            Main.tileSolidTop[Type] = true;
+            Main.tileSolid[Type] = true;
+            Main.tileNoAttach[Type] = true;
+            Main.tileTable[Type] = true;
+            Main.tileLavaDeath[Type] = true;
+            TileID.Sets.Platforms[Type] = true;
             TileObjectData.newTile.CoordinateHeights = new int[]
             {
                 16
@@ -26,7 +26,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
             TileObjectData.newTile.StyleWrapLimit = 27;
             TileObjectData.newTile.UsesCustomCanPlace = false;
             TileObjectData.newTile.LavaDeath = true;
-            TileObjectData.addTile((int)base.Type);
+            TileObjectData.addTile(Type);
             base.AddToArray(ref TileID.Sets.RoomNeeds.CountsAsDoor);
             ModTranslation modTranslation = base.CreateMapEntryName(null);
             AddMapEntry(new Color(168, 11, 0), modTranslation);
@@ -36,20 +36,20 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
         }
         public override bool CreateDust(int i, int j, ref int type)
         {
-            Dust.NewDust(new Vector2((float)i, (float)j) * 16f, 16, 16, DustID.Blood, 0f, 0f, 1, Color.White, 1f);
+            Dust.NewDust(new Vector2(i, j) * 16f, 16, 16, DustID.Blood, 0f, 0f, 1, Color.White, 1f);
             return false;
         }
         public override void PostSetDefaults()
         {
-            Main.tileNoSunLight[(int)base.Type] = false;
+            Main.tileNoSunLight[Type] = false;
         }
         public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
         {
-            if (Main.rand.Next(30) == 0)
+            if (Main.rand.NextBool(30))
             {
-                Dust.NewDust(new Vector2((float)i, (float)j) * 16f, 16, 16, DustID.Blood, 0f, 0f, 1, Color.White, 1f);
+                Dust.NewDust(new Vector2(i, j) * 16f, 16, 16, DustID.Blood, 0f, 0f, 1, Color.White, 1f);
             }
-            if (Main.rand.Next(300) == 0)
+            if (Main.rand.NextBool(300))
             {
                 WorldGen.KillTile(i, j);
             }
@@ -57,7 +57,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
         }
         public override void NumDust(int i, int j, bool fail, ref int num)
         {
-            num = (fail ? 1 : 3);
+            num = fail ? 1 : 3;
         }
     }
 }

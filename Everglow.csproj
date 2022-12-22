@@ -10,6 +10,7 @@
 		<DisableFody Condition="'$(Configuration)' != 'Debug'">true</DisableFody>
 		<Configurations>Debug;Release;DebugWithoutFody;ReleaseWithoutFody</Configurations>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<DefineConstants>$(DefineConstants);TML_2022_05</DefineConstants>
@@ -50,8 +51,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Costura.Fody" Version="5.7.0">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>All</PrivateAssets>
 		</PackageReference>
 		<PackageReference Include="MethodBoundaryAspect.Fody" Version="2.0.145" />
 		<PackageReference Include="SixLabors.ImageSharp" Version="2.1.2" />

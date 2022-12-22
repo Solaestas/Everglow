@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Everglow.Sources.Commons.Core.Coroutines
+﻿namespace Everglow.Sources.Commons.Core.Coroutines
 {
     /// <summary>
     /// 管理所有协程运行器的类，支持异步地发起新的协程
@@ -13,7 +6,6 @@ namespace Everglow.Sources.Commons.Core.Coroutines
     public class CoroutineManager
     {
         private LinkedList<ICoroutine> m_coroutines;
-        private List<ICoroutine> m_coroutinesToStop;
 
         public CoroutineManager()
         {

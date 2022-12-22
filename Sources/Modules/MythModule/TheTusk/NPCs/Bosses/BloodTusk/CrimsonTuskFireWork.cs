@@ -95,9 +95,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
             {
                 Vector2 VPos = NPC.Center + new Vector2(0, i * 5f);
                 Color colori = Lighting.GetColor((int)(VPos.X / 16d), (int)(VPos.Y / 16d));
-                var factor = Math.Abs(i / 30f % 2 - 1);
+                var factor = Math.Abs((i / 30f % 2) - 1);
                 float width2 = width;
-                if (Bomb <= 240 && Bomb > 60)
+                if (Bomb is <= 240 and > 60)
                 {
                     if (i == 1)
                     {
@@ -116,7 +116,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                         width2 += (240 - Bomb) / 60f;
                     }
                 }
-                if (Bomb <= 60 && Bomb > 5)
+                if (Bomb is <= 60 and > 5)
                 {
                     if (i == 1)
                     {
@@ -160,7 +160,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                 }
                 if (width <= 3)
                 {
-                    if (Main.rand.Next(5) == 2)
+                    if (Main.rand.NextBool(5))
                     {
                         Vector2 vd = new Vector2(0, Main.rand.NextFloat(-1.3f, -0.5f)).RotatedByRandom(6.283);
                         int a = Dust.NewDust(VPos - new Vector2(4, 4) + new Vector2(0, Main.rand.NextFloat(-8f, 8f)), 0, 0, DustID.Blood, vd.X, vd.Y, 0, default, Main.rand.NextFloat(0.5f, 1.5f));
@@ -219,11 +219,11 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                         int Count = 0;
                         for (int m = 0; m < 500; ++m)
                         {
-                            if (Collision.SolidCollision(NPC.Center + new Vector2(step, 0).RotatedBy(rotTusk[g]) * m, 1, 1))
+                            if (Collision.SolidCollision(NPC.Center + (new Vector2(step, 0).RotatedBy(rotTusk[g]) * m), 1, 1))
                             {
                                 break;
                             }
-                            Vlaser[g, m] = NPC.Center + new Vector2(step, 0).RotatedBy(rotTusk[g]) * m;
+                            Vlaser[g, m] = NPC.Center + (new Vector2(step, 0).RotatedBy(rotTusk[g]) * m);
                             ++Count;
                         }
                         for (int iz = 1; iz < Count; ++iz)
@@ -236,7 +236,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                             var normalDir = Vlaser[g, iz - 1] - Vlaser[g, iz];
                             normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
 
-                            var lerpvalue = (float)Math.Sqrt(iz + 1) / 9f + Bomb / 60f;
+                            var lerpvalue = ((float)Math.Sqrt(iz + 1) / 9f) + (Bomb / 60f);
                             var w = MathHelper.Lerp(1f, 0.05f, lerpvalue);
                             float width3 = 12;
                             if (iz <= 25)
@@ -250,35 +250,35 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                                 int sc = Math.Clamp((int)(255 * (Count - iz - 1) / 5f * (200 - iz) / 200f), 0, 255);
                                 Color c0 = new Color(sc, 0, 0, 0);
                                 Color c1 = new Color(sc / 3, sc / 3, sc / 3, sc / 3);
-                                if ((iz + Bomb * 2) % 15 < 9)
+                                if ((iz + (Bomb * 2)) % 15 < 9)
                                 {
                                     c0 *= 0;
                                 }
-                                bars.Add(new VertexBase.CustomVertexInfo(Vlaser[g, iz] + normalDir * width3 - Main.screenPosition, c0, new Vector3(lerpvalue % 1f, 1, w)));
-                                bars.Add(new VertexBase.CustomVertexInfo(Vlaser[g, iz] + normalDir * -width3 - Main.screenPosition, c0, new Vector3(lerpvalue % 1f, 0, w)));
-                                barsB.Add(new VertexBase.CustomVertexInfo(Vlaser[g, iz] + normalDir * width3 - Main.screenPosition, c1, new Vector3(lerpvalue % 1f, 1, w)));
-                                barsB.Add(new VertexBase.CustomVertexInfo(Vlaser[g, iz] + normalDir * -width3 - Main.screenPosition, c1, new Vector3(lerpvalue % 1f, 0, w)));
+                                bars.Add(new VertexBase.CustomVertexInfo(Vlaser[g, iz] + (normalDir * width3) - Main.screenPosition, c0, new Vector3(lerpvalue % 1f, 1, w)));
+                                bars.Add(new VertexBase.CustomVertexInfo(Vlaser[g, iz] + (normalDir * -width3) - Main.screenPosition, c0, new Vector3(lerpvalue % 1f, 0, w)));
+                                barsB.Add(new VertexBase.CustomVertexInfo(Vlaser[g, iz] + (normalDir * width3) - Main.screenPosition, c1, new Vector3(lerpvalue % 1f, 1, w)));
+                                barsB.Add(new VertexBase.CustomVertexInfo(Vlaser[g, iz] + (normalDir * -width3) - Main.screenPosition, c1, new Vector3(lerpvalue % 1f, 0, w)));
                             }
                             else
                             {
                                 int sc = Math.Clamp((int)(255 * (200 - iz) / 200f), 0, 255);
                                 Color c0 = new Color(sc, 0, 0, 0);
                                 Color c1 = new Color(sc / 3, sc / 3, sc / 3, sc / 3);
-                                if ((iz + Bomb * 2) % 15 < 9)
+                                if ((iz + (Bomb * 2)) % 15 < 9)
                                 {
                                     c0 *= 0;
                                 }
-                                bars.Add(new VertexBase.CustomVertexInfo(Vlaser[g, iz] + normalDir * width3 - Main.screenPosition, c0, new Vector3(lerpvalue % 1f, 1, w)));
-                                bars.Add(new VertexBase.CustomVertexInfo(Vlaser[g, iz] + normalDir * -width3 - Main.screenPosition, c0, new Vector3(lerpvalue % 1f, 0, w)));
-                                barsB.Add(new VertexBase.CustomVertexInfo(Vlaser[g, iz] + normalDir * width3 - Main.screenPosition, c1, new Vector3(lerpvalue % 1f, 1, w)));
-                                barsB.Add(new VertexBase.CustomVertexInfo(Vlaser[g, iz] + normalDir * -width3 - Main.screenPosition, c1, new Vector3(lerpvalue % 1f, 0, w)));
+                                bars.Add(new VertexBase.CustomVertexInfo(Vlaser[g, iz] + (normalDir * width3) - Main.screenPosition, c0, new Vector3(lerpvalue % 1f, 1, w)));
+                                bars.Add(new VertexBase.CustomVertexInfo(Vlaser[g, iz] + (normalDir * -width3) - Main.screenPosition, c0, new Vector3(lerpvalue % 1f, 0, w)));
+                                barsB.Add(new VertexBase.CustomVertexInfo(Vlaser[g, iz] + (normalDir * width3) - Main.screenPosition, c1, new Vector3(lerpvalue % 1f, 1, w)));
+                                barsB.Add(new VertexBase.CustomVertexInfo(Vlaser[g, iz] + (normalDir * -width3) - Main.screenPosition, c1, new Vector3(lerpvalue % 1f, 0, w)));
                             }
                         }
                         List<VertexBase.CustomVertexInfo> Vx = new List<VertexBase.CustomVertexInfo>();
                         if (bars.Count > 2)
                         {
                             Vx.Add(bars[0]);
-                            var vertex = new VertexBase.CustomVertexInfo((bars[0].Position + bars[1].Position) * 0.5f + new Vector2(-5, 0).RotatedBy(rotTusk[g]), new Color(255, 0, 0, 0), new Vector3(0, 0.5f, 1));
+                            var vertex = new VertexBase.CustomVertexInfo(((bars[0].Position + bars[1].Position) * 0.5f) + new Vector2(-5, 0).RotatedBy(rotTusk[g]), new Color(255, 0, 0, 0), new Vector3(0, 0.5f, 1));
                             Vx.Add(bars[1]);
                             Vx.Add(vertex);
                             for (int iz = 0; iz < bars.Count - 2; iz += 2)
@@ -297,7 +297,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                         if (barsB.Count > 2)
                         {
                             VxB.Add(barsB[0]);
-                            var vertex = new VertexBase.CustomVertexInfo((barsB[0].Position + barsB[1].Position) * 0.5f + new Vector2(-5, 0).RotatedBy(rotTusk[g]), new Color(255, 0, 0, 0), new Vector3(0, 0.5f, 1));
+                            var vertex = new VertexBase.CustomVertexInfo(((barsB[0].Position + barsB[1].Position) * 0.5f) + new Vector2(-5, 0).RotatedBy(rotTusk[g]), new Color(255, 0, 0, 0), new Vector3(0, 0.5f, 1));
                             VxB.Add(barsB[1]);
                             VxB.Add(vertex);
                             for (int iz = 0; iz < barsB.Count - 2; iz += 2)
@@ -335,7 +335,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                 Vector2 VPos = NPC.Center;
                 Color colori = Lighting.GetColor((int)(VPos.X / 16d), (int)(VPos.Y / 16d));
                 triangleList2.Add(bars2[0]);
-                var vertex = new VertexBase.CustomVertexInfo((bars2[0].Position + bars2[1].Position) * 0.5f + new Vector2(0, -5), colori, new Vector3(0, 0.5f, 0));
+                var vertex = new VertexBase.CustomVertexInfo(((bars2[0].Position + bars2[1].Position) * 0.5f) + new Vector2(0, -5), colori, new Vector3(0, 0.5f, 0));
                 triangleList2.Add(bars2[1]);
                 triangleList2.Add(vertex);
                 for (int i = 0; i < bars2.Count - 2; i += 2)

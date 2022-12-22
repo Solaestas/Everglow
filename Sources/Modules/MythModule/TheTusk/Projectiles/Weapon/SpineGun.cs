@@ -1,6 +1,6 @@
 ﻿namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 {
-    class SpineGun : ModProjectile
+    internal class SpineGun : ModProjectile
     {
         public override void SetDefaults()
         {
@@ -16,27 +16,24 @@
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 40;
         }
-        int Ran = -1;
-        int Tokill = -1;
+
+        private int Ran = -1;
         public override Color? GetAlpha(Color lightColor)
         {
             return new Color(255 - Projectile.alpha, 255 - Projectile.alpha, 255 - Projectile.alpha, 0);
         }
-        bool Release = true;
-        int PdamF = 0;
-        Vector2 oldPo = Vector2.Zero;
-        int addi = 0;
+
+        private bool Release = true;
+        private Vector2 oldPo = Vector2.Zero;
         public override void AI()
         {
-            Player player = Main.player[Projectile.owner];
-            addi++;
             Vector2 v0 = Main.MouseWorld - Main.player[Projectile.owner].MountedCenter;
             if (Main.mouseLeft && Release)
             {
                 Projectile.ai[0] *= 0.9f;
                 Projectile.ai[1] -= 1f;
-                Projectile.rotation = (float)(Math.Atan2(v0.Y, v0.X) + Math.PI * 0.25);
-                Projectile.Center = Main.player[Projectile.owner].MountedCenter + Vector2.Normalize(v0).RotatedBy(Projectile.ai[0] / 4d) * (8f - Projectile.ai[0] * 4);
+                Projectile.rotation = (float)(Math.Atan2(v0.Y, v0.X) + (Math.PI * 0.25));
+                Projectile.Center = Main.player[Projectile.owner].MountedCenter + (Vector2.Normalize(v0).RotatedBy(Projectile.ai[0] / 4d) * (8f - (Projectile.ai[0] * 4)));
                 oldPo = Projectile.Center;
                 Projectile.Center = oldPo;
                 Projectile.velocity *= 0;
@@ -47,7 +44,7 @@
                 {
                     Projectile.ai[0] *= 0.9f;
                     Projectile.ai[1] -= 1f;
-                    Projectile.Center = Main.player[Projectile.owner].MountedCenter + Vector2.Normalize(v0).RotatedBy(Projectile.ai[0] / 4d) * (8f - Projectile.ai[0] * 4);
+                    Projectile.Center = Main.player[Projectile.owner].MountedCenter + (Vector2.Normalize(v0).RotatedBy(Projectile.ai[0] / 4d) * (8f - (Projectile.ai[0] * 4)));
                 }
                 else
                 {
@@ -59,12 +56,10 @@
                 Ran = Main.rand.Next(9);
             }
         }
-        private bool Nul = false;
         public override bool PreDraw(ref Color lightColor)
         {
             return false;
         }
-        int Energy = 0;
         public override void PostDraw(Color lightColor)
         {
             if (!Release)
@@ -76,11 +71,11 @@
             Vector2 v0 = Projectile.Center - player.MountedCenter;
             if (Main.mouseLeft)
             {
-                player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(v0.Y, v0.X) - Math.PI / 2d));
+                player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(v0.Y, v0.X) - (Math.PI / 2d)));
             }
 
             Texture2D TexMain = ModContent.Request<Texture2D>("Everglow/Sources/Modules/TheTusk/Items/Weapons/SpineGun").Value;
-            Color drawColor = Lighting.GetColor((int)Projectile.Center.X / 16, (int)((double)Projectile.Center.Y / 16.0));
+            Color drawColor = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
             SpriteEffects se = SpriteEffects.None;
             if (Projectile.Center.X < player.Center.X)
             {
@@ -93,8 +88,8 @@
             }
             Main.spriteBatch.Draw(TexMain, Projectile.Center - Main.screenPosition - new Vector2(0, 6), null, drawColor, Projectile.rotation - (float)(Math.PI * 0.25), new Vector2(TexMain.Width / 2f, TexMain.Height / 2f), 1f, se, 0);
         }
-        bool[] HasHit = new bool[200];
-        private float x = 0;
+
+        private bool[] HasHit = new bool[200];
         private struct CustomVertexInfo : IVertexType
         {
             private static VertexDeclaration _vertexDeclaration = new VertexDeclaration(new VertexElement[3]

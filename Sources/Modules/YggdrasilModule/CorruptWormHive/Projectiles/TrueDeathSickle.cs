@@ -1,15 +1,15 @@
-﻿using Terraria.Audio;
-using Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.VFXs;
-using Everglow.Sources.Commons.Core.VFX;
+﻿using Everglow.Sources.Commons.Core.VFX;
+using Everglow.Sources.Commons.Function.Curves;
+using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Sources.Modules.MEACModule;
 using Everglow.Sources.Modules.MEACModule.Projectiles;
 using Everglow.Sources.Modules.MythModule;
 using Everglow.Sources.Modules.YggdrasilModule.Common;
-using Everglow.Sources.Modules.MEACModule;
-using Everglow.Sources.Commons.Function.Vertex;
-using Everglow.Sources.Commons.Function.Curves;
+using Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.VFXs;
+using Terraria.Audio;
 namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
 {
-    public class TrueDeathSickle : MeleeProj, IOcclusionProjectile,IWarpProjectile, IBloomProjectile
+    public class TrueDeathSickle : MeleeProj, IOcclusionProjectile, IWarpProjectile, IBloomProjectile
     {
         public override void SetDef()
         {
@@ -49,7 +49,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
             if (attackType == 2)
             {
                 tex = YggdrasilContent.QuickTexture("CorruptWormHive/Projectiles/TrueDeathSickle");
-                Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation + (float)(Math.PI / 4d) * player.direction - 0.25f, new Vector2(0, player.direction == -1 ? 0 : tex.Height), 1.22f,player.direction == -1 ? SpriteEffects.FlipVertically : SpriteEffects.None, 0);
+                Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation + ((float)(Math.PI / 4d) * player.direction) - 0.25f, new Vector2(0, player.direction == -1 ? 0 : tex.Height), 1.22f, player.direction == -1 ? SpriteEffects.FlipVertically : SpriteEffects.None, 0);
                 return;
             }
             float texWidth = 208;
@@ -66,7 +66,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
 
             Vector2 Zoom = new Vector2(exScale * drawScaleFactor * mainVec.Length() / tex.Width, 1.2f) * Projectile.scale;
 
-            double ProjRotation = MainVec_WithoutGravDir.ToRotation() + Math.PI / 4;
+            double ProjRotation = MainVec_WithoutGravDir.ToRotation() + (Math.PI / 4);
 
             float QuarterSqrtTwo = 0.35355f;
 
@@ -74,20 +74,20 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
             Vector2 CenterMoveByPlayerRotation = new Vector2(6 * player.direction, -player.height * player.gravDir) - new Vector2(0, -player.height * player.gravDir).RotatedBy(player.fullRotation);
             Vector2 drawCenter2 = drawCenter - CenterMoveByPlayerRotation;
 
-            Vector2 INormal = new Vector2(texHeight * QuarterSqrtTwo).RotatedBy(ProjRotation - (baseRotation - Math.PI / 4)) * Zoom.Y * Size;
-            Vector2 JNormal = new Vector2(texWidth * QuarterSqrtTwo).RotatedBy(ProjRotation - (baseRotation + Math.PI / 4)) * Zoom.X * Size;
+            Vector2 INormal = new Vector2(texHeight * QuarterSqrtTwo).RotatedBy(ProjRotation - (baseRotation - (Math.PI / 4))) * Zoom.Y * Size;
+            Vector2 JNormal = new Vector2(texWidth * QuarterSqrtTwo).RotatedBy(ProjRotation - (baseRotation + (Math.PI / 4))) * Zoom.X * Size;
 
-            Vector2 ITexNormal = new Vector2(texHeight * QuarterSqrtTwo).RotatedBy(-(baseRotation - Math.PI / 4));
+            Vector2 ITexNormal = new Vector2(texHeight * QuarterSqrtTwo).RotatedBy(-(baseRotation - (Math.PI / 4)));
             ITexNormal.X /= tex.Width;
             ITexNormal.Y /= tex.Height;
-            Vector2 JTexNormal = new Vector2(texWidth * QuarterSqrtTwo).RotatedBy(-(baseRotation + Math.PI / 4));
+            Vector2 JTexNormal = new Vector2(texWidth * QuarterSqrtTwo).RotatedBy(-(baseRotation + (Math.PI / 4)));
             JTexNormal.X /= tex.Width;
             JTexNormal.Y /= tex.Height;
 
-            Vector2 TopLeft/*原水平贴图的左上角,以此类推*/ = Vector2.Normalize(INormal) * origin.Y - Vector2.Normalize(JNormal) * origin.X;
-            Vector2 TopRight = Vector2.Normalize(JNormal) * (JNormal.Length() * 2 - origin.X) + Vector2.Normalize(INormal) * origin.Y;
-            Vector2 BottomLeft = -Vector2.Normalize(INormal) * (INormal.Length() * 2 - origin.Y) - Vector2.Normalize(JNormal) * origin.X;
-            Vector2 BottomRight = Vector2.Normalize(JNormal) * (JNormal.Length() * 2 - origin.X) - Vector2.Normalize(INormal) * (INormal.Length() * 2 - origin.Y);
+            Vector2 TopLeft/*原水平贴图的左上角,以此类推*/ = (Vector2.Normalize(INormal) * origin.Y) - (Vector2.Normalize(JNormal) * origin.X);
+            Vector2 TopRight = (Vector2.Normalize(JNormal) * ((JNormal.Length() * 2) - origin.X)) + (Vector2.Normalize(INormal) * origin.Y);
+            Vector2 BottomLeft = (-Vector2.Normalize(INormal) * ((INormal.Length() * 2) - origin.Y)) - (Vector2.Normalize(JNormal) * origin.X);
+            Vector2 BottomRight = (Vector2.Normalize(JNormal) * ((JNormal.Length() * 2) - origin.X)) - (Vector2.Normalize(INormal) * ((INormal.Length() * 2) - origin.Y));
 
 
             Vector2 sourceTopLeft = new Vector2(0.5f) + ITexNormal - JTexNormal;
@@ -131,9 +131,9 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
             if (attackType == 2)
             {
                 damage = (int)(damage * 2.3f);
-                knockback *=2.3f;
+                knockback *= 2.3f;
                 GenerateVFXFromTarget(target, 36, 2.6f);
-                if(player.ownedProjectileCounts[HitType] < 5)
+                if (player.ownedProjectileCounts[HitType] < 5)
                 {
                     Projectile.NewProjectile(Projectile.GetSource_FromAI(), target.Center, Vector2.One, HitType, 0, 0, Projectile.owner, 30, Projectile.rotation);
                 }
@@ -160,7 +160,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
                 {
                     useTrail = false;
                     LockPlayerDir(Player);
-                    float targetRot = -MathHelper.PiOver2 + Player.direction * -1.6f;
+                    float targetRot = -MathHelper.PiOver2 + (Player.direction * -1.6f);
                     mainVec = Vector2.Lerp(mainVec, Vector2Elipse(250, targetRot, 1.2f), 0.15f);
                     mainVec += Projectile.DirectionFrom(Player.Center) * 3;
                     Projectile.rotation = mainVec.ToRotation();
@@ -178,15 +178,15 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
                     Gsplayer.FlyCamPosition = new Vector2(0, 30).RotatedByRandom(6.283);
                 }
 
-                if (timer > 20 && timer < 52)
+                if (timer is > 20 and < 52)
                 {
                     GenerateVFX(4);
                     Lighting.AddLight(Projectile.Center + mainVec, 0.24f, 0.0f, 0.75f);
                     isAttacking = true;
-                    Projectile.rotation += player.direction * 0.1f * (timer) / 20f;
+                    Projectile.rotation += player.direction * 0.1f * timer / 20f;
                     mainVec = Vector2Elipse(250, Projectile.rotation, -1.2f, 0, 1000);
 
-                    float BodyRotation = (float)(Math.Sin((timer - 30) / 40d * Math.PI)) * 0.2f * player.direction * player.gravDir;
+                    float BodyRotation = (float)Math.Sin((timer - 30) / 40d * Math.PI) * 0.2f * player.direction * player.gravDir;
                     player.fullRotation = BodyRotation;
                     player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
                     player.legRotation = -BodyRotation;
@@ -210,7 +210,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
                 {
                     useTrail = false;
                     LockPlayerDir(Player);
-                    float targetRot = -MathHelper.PiOver2 + Player.direction * 1.2f;
+                    float targetRot = -MathHelper.PiOver2 + (Player.direction * 1.2f);
                     mainVec = Vector2.Lerp(mainVec, Vector2Elipse(180, targetRot, -1.2f), 0.09f);
                     mainVec += Projectile.DirectionFrom(Player.Center) * 3;
                     Projectile.rotation = mainVec.ToRotation();
@@ -228,15 +228,15 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
                 }
 
 
-                if (timer > 50 && timer < 75)
+                if (timer is > 50 and < 75)
                 {
                     GenerateVFX(4);
                     Lighting.AddLight(Projectile.Center + mainVec, 0.24f, 0.0f, 0.75f);
                     isAttacking = true;
                     Projectile.rotation -= player.direction * 0.24f;
-                    mainVec = Vector2Elipse(250, Projectile.rotation, -1.2f,0,1000);
+                    mainVec = Vector2Elipse(250, Projectile.rotation, -1.2f, 0, 1000);
 
-                    float BodyRotation = (float)(Math.Sin((timer - 30) / 40d * Math.PI)) * 0.2f * player.direction * player.gravDir;
+                    float BodyRotation = (float)Math.Sin((timer - 30) / 40d * Math.PI) * 0.2f * player.direction * player.gravDir;
                     player.fullRotation = BodyRotation;
                     player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
                     player.legRotation = -BodyRotation;
@@ -263,7 +263,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
                     useTrail = false;
                     LockPlayerDir(Player);
                     float targetRot = 0;
-                    if(player.direction == 1)
+                    if (player.direction == 1)
                     {
                         targetRot = -MathHelper.PiOver4 * 3;
                     }
@@ -282,7 +282,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
                     ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
                     Gsplayer.FlyCamPosition = new Vector2(0, 60).RotatedByRandom(6.283);
                 }
-                if (timer > 20 && timer < 55)
+                if (timer is > 20 and < 55)
                 {
                     GenerateVFX(timer / 5);
                     Lighting.AddLight(Projectile.Center + mainVec, 0.24f, 0.0f, 0.75f);
@@ -290,7 +290,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
                     Projectile.rotation += player.direction * 0.162f * (float)(1 - Math.Cos((timer - 20) / 17.5d * Math.PI));
                     mainVec = Vector2Elipse(240, Projectile.rotation, 0.3f, 0.3f, 10000);
 
-                    float BodyRotation = (float)(Math.Sin((timer - 30) / 40d * Math.PI)) * 0.2f * player.direction * player.gravDir;
+                    float BodyRotation = (float)Math.Sin((timer - 30) / 40d * Math.PI) * 0.2f * player.direction * player.gravDir;
                     player.fullRotation = BodyRotation;
                     player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
                     player.legRotation = -BodyRotation;
@@ -313,23 +313,23 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
         public void GenerateVFX(int Frequency)
         {
             Player player = Main.player[Projectile.owner];
-            float dir = player.direction * ((attackType + 1) % 2 - 0.5f) * 2;
+            float dir = player.direction * (((attackType + 1) % 2) - 0.5f) * 2;
             float mulVelocity = 1f;
             mulVelocity *= Frequency / 5f;
-            if(attackType == 2)
+            if (attackType == 2)
             {
                 mulVelocity = 2.4f;
             }
-            for (int g = 0;g < Frequency; g++)
+            for (int g = 0; g < Frequency; g++)
             {
                 DevilFlameDust df = new DevilFlameDust
                 {
-                    velocity = (Vector2.Normalize(mainVec)).RotatedBy(1.57 * dir) * 250f / mainVec.Length() * Main.rand.NextFloat(0.65f, 8.6f) * mulVelocity,
+                    velocity = Vector2.Normalize(mainVec).RotatedBy(1.57 * dir) * 250f / mainVec.Length() * Main.rand.NextFloat(0.65f, 8.6f) * mulVelocity,
                     Active = true,
                     Visible = true,
-                    position = Projectile.Center + mainVec * Main.rand.NextFloat(0.85f, 1.3f) + new Vector2(Main.rand.NextFloat(0.05f, 36f), 0).RotatedByRandom(6.283),
+                    position = Projectile.Center + (mainVec * Main.rand.NextFloat(0.85f, 1.3f)) + new Vector2(Main.rand.NextFloat(0.05f, 36f), 0).RotatedByRandom(6.283),
                     maxTime = Main.rand.Next(9, 24),
-                    ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(0.01f, 0.1f) * dir, Main.rand.NextFloat(8f, 32f)}
+                    ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(0.01f, 0.1f) * dir, Main.rand.NextFloat(8f, 32f) }
                 };
                 VFXManager.Add(df);
             }
@@ -345,14 +345,14 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
                     Visible = true,
                     position = target.Center,
                     maxTime = Main.rand.Next(12, 30),
-                    ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.1f, 0.1f), Main.rand.NextFloat(8f, 32f)}
+                    ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.1f, 0.1f), Main.rand.NextFloat(8f, 32f) }
                 };
                 VFXManager.Add(df);
             }
         }
         public void DrawBloom(SpriteBatch spriteBatch)
         {
-            if(spriteBatch == Main.spriteBatch)
+            if (spriteBatch == Main.spriteBatch)
             {
                 VFXManager.spriteBatch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
                 DrawEffect(VFXManager.spriteBatch);
@@ -361,7 +361,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
             }
         }
 
-        public void DrawWarp(VFXBatch spriteBatch)
+        public new void DrawWarp(VFXBatch spriteBatch)
         {
             List<Vector2> SmoothTrailX = CatmullRom.SmoothPath(trailVecs.ToList());//平滑
             List<Vector2> SmoothTrail = new List<Vector2>();
@@ -387,9 +387,9 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
                 float d = trail[i].ToRotation() + 1.57f;
                 float dir = d / MathHelper.TwoPi;
                 bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(dir, w, 0, 1), new Vector3(factor, 1, w)));
-                bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + trail[i] * Projectile.scale * 1.1f, new Color(dir, w, 0, 1), new Vector3(factor, 0, w)));
+                bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + (trail[i] * Projectile.scale * 1.1f), new Color(dir, w, 0, 1), new Vector3(factor, 0, w)));
             }
-            
+
             spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/Images/Warp").Value, bars, PrimitiveType.TriangleStrip);
 
             DrawOcclusion(spriteBatch);
@@ -426,19 +426,19 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
             {
                 float factor = i / (length - 1f);
                 float w = TrailAlpha(factor);
-                if(attackType == 2)
+                if (attackType == 2)
                 {
                     w *= 1.2f;
                 }
                 if (!longHandle)
                 {
-                    bars.Add(new Vertex2D(Projectile.Center + trail[i] * 0.15f * Projectile.scale, Color.White, new Vector3(factor * 1, 1, 0f)));
-                    bars.Add(new Vertex2D(Projectile.Center + trail[i] * Projectile.scale, Color.White, new Vector3(factor * 2, 0, w)));
+                    bars.Add(new Vertex2D(Projectile.Center + (trail[i] * 0.15f * Projectile.scale), Color.White, new Vector3(factor * 1, 1, 0f)));
+                    bars.Add(new Vertex2D(Projectile.Center + (trail[i] * Projectile.scale), Color.White, new Vector3(factor * 2, 0, w)));
                 }
                 else
                 {
-                    bars.Add(new Vertex2D(Projectile.Center + trail[i] * 0.05f * Projectile.scale, Color.White, new Vector3(factor * 1, 1, 0f)));
-                    bars.Add(new Vertex2D(Projectile.Center + trail[i] * Projectile.scale, Color.White, new Vector3(factor * 2, 0, w)));
+                    bars.Add(new Vertex2D(Projectile.Center + (trail[i] * 0.05f * Projectile.scale), Color.White, new Vector3(factor * 1, 1, 0f)));
+                    bars.Add(new Vertex2D(Projectile.Center + (trail[i] * Projectile.scale), Color.White, new Vector3(factor * 2, 0, w)));
                 }
             }
 
@@ -466,7 +466,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
             if (attackType == 2)
             {
                 tex = YggdrasilContent.QuickTexture("CorruptWormHive/Projectiles/TrueDeathSickle_Shade");
-                spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, null, new Color(255, 0, 0, 255), Projectile.rotation + (float)(Math.PI / 4d) * player.direction - 0.25f, new Vector2(0, player.direction == -1 ? 0 : tex.Height), 1.22f, player.direction == -1 ? SpriteEffects.FlipVertically : SpriteEffects.None);
+                spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, null, new Color(255, 0, 0, 255), Projectile.rotation + ((float)(Math.PI / 4d) * player.direction) - 0.25f, new Vector2(0, player.direction == -1 ? 0 : tex.Height), 1.22f, player.direction == -1 ? SpriteEffects.FlipVertically : SpriteEffects.None);
 
                 return;
             }
@@ -484,7 +484,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
 
             Vector2 Zoom = new Vector2(exScale * drawScaleFactor * mainVec.Length() / tex.Width, 1.2f) * Projectile.scale;
 
-            double ProjRotation = MainVec_WithoutGravDir.ToRotation() + Math.PI / 4;
+            double ProjRotation = MainVec_WithoutGravDir.ToRotation() + (Math.PI / 4);
 
             float QuarterSqrtTwo = 0.35355f;
 
@@ -492,20 +492,20 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
             Vector2 CenterMoveByPlayerRotation = new Vector2(6 * player.direction, -player.height * player.gravDir) - new Vector2(0, -player.height * player.gravDir).RotatedBy(player.fullRotation);
             Vector2 drawCenter2 = drawCenter - CenterMoveByPlayerRotation;
 
-            Vector2 INormal = new Vector2(texHeight * QuarterSqrtTwo).RotatedBy(ProjRotation - (baseRotation - Math.PI / 4)) * Zoom.Y * Size;
-            Vector2 JNormal = new Vector2(texWidth * QuarterSqrtTwo).RotatedBy(ProjRotation - (baseRotation + Math.PI / 4)) * Zoom.X * Size;
+            Vector2 INormal = new Vector2(texHeight * QuarterSqrtTwo).RotatedBy(ProjRotation - (baseRotation - (Math.PI / 4))) * Zoom.Y * Size;
+            Vector2 JNormal = new Vector2(texWidth * QuarterSqrtTwo).RotatedBy(ProjRotation - (baseRotation + (Math.PI / 4))) * Zoom.X * Size;
 
-            Vector2 ITexNormal = new Vector2(texHeight * QuarterSqrtTwo).RotatedBy(-(baseRotation - Math.PI / 4));
+            Vector2 ITexNormal = new Vector2(texHeight * QuarterSqrtTwo).RotatedBy(-(baseRotation - (Math.PI / 4)));
             ITexNormal.X /= tex.Width;
             ITexNormal.Y /= tex.Height;
-            Vector2 JTexNormal = new Vector2(texWidth * QuarterSqrtTwo).RotatedBy(-(baseRotation + Math.PI / 4));
+            Vector2 JTexNormal = new Vector2(texWidth * QuarterSqrtTwo).RotatedBy(-(baseRotation + (Math.PI / 4)));
             JTexNormal.X /= tex.Width;
             JTexNormal.Y /= tex.Height;
 
-            Vector2 TopLeft/*原水平贴图的左上角,以此类推*/ = Vector2.Normalize(INormal) * origin.Y - Vector2.Normalize(JNormal) * origin.X;
-            Vector2 TopRight = Vector2.Normalize(JNormal) * (JNormal.Length() * 2 - origin.X) + Vector2.Normalize(INormal) * origin.Y;
-            Vector2 BottomLeft = -Vector2.Normalize(INormal) * (INormal.Length() * 2 - origin.Y) - Vector2.Normalize(JNormal) * origin.X;
-            Vector2 BottomRight = Vector2.Normalize(JNormal) * (JNormal.Length() * 2 - origin.X) - Vector2.Normalize(INormal) * (INormal.Length() * 2 - origin.Y);
+            Vector2 TopLeft/*原水平贴图的左上角,以此类推*/ = (Vector2.Normalize(INormal) * origin.Y) - (Vector2.Normalize(JNormal) * origin.X);
+            Vector2 TopRight = (Vector2.Normalize(JNormal) * ((JNormal.Length() * 2) - origin.X)) + (Vector2.Normalize(INormal) * origin.Y);
+            Vector2 BottomLeft = (-Vector2.Normalize(INormal) * ((INormal.Length() * 2) - origin.Y)) - (Vector2.Normalize(JNormal) * origin.X);
+            Vector2 BottomRight = (Vector2.Normalize(JNormal) * ((JNormal.Length() * 2) - origin.X)) - (Vector2.Normalize(INormal) * ((INormal.Length() * 2) - origin.Y));
 
 
             Vector2 sourceTopLeft = new Vector2(0.5f) + ITexNormal - JTexNormal;
@@ -521,7 +521,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
                 sourceBottomRight = new Vector2(0.5f) + ITexNormal + JTexNormal;
             }
 
-            Color lightColor = new Color(255,0,0,255);
+            Color lightColor = new Color(255, 0, 0, 255);
             List<Vertex2D> vertex2Ds = new List<Vertex2D>
             {
                     new Vertex2D(drawCenter2 + TopLeft, lightColor, new Vector3(sourceTopLeft.X, sourceTopLeft.Y, 0)),
