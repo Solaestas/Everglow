@@ -47,6 +47,7 @@
 			#食物系统FoodSystem
 			FoodSystem:
 			{
+			    Satiety : "Satiety"
 				CannotEat : "Ты сыт"
 				CannotDrink : "Тебе не хочется пить"
 				Khan : "Khan, take me on one more charge"

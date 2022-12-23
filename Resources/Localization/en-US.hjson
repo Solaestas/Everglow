@@ -38,6 +38,7 @@ Mods:
 			#食物系统FoodSystem
 			FoodSystem:
 			{
+			    Satiety : "Satiety"
 				CannotEat : "You are full"
 				CannotDrink : "You don't feel like drinking"
 				Khan : "Khan, take me on one more charge"

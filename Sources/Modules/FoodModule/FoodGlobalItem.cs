@@ -648,13 +648,43 @@ namespace Everglow.Sources.Modules.FoodModule
                 {
                     tooltips.RemoveAll((tp) => tp.Name.Contains("Tooltip"));
                     tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.BuffDescription." + FoodInfo.Name)));
-                    tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, FoodInfo.Satiety  + Language.GetTextValue("Mods.Everglow.InfoDisplay.Satiety")));
+                    tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, FoodInfo.Satiety  + Language.GetTextValue("Mods.Everglow.Common.FoodSystem.Satiety")));
                 }
                 else
                 {
                     // 否则加到最后面
                     tooltips.Add(new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.BuffDescription." + FoodInfo.Name)));
-                    tooltips.Add(new TooltipLine(Mod, item.Name, FoodInfo.Satiety + Language.GetTextValue("Mods.Everglow.InfoDisplay.Satiety")));
+                    tooltips.Add(new TooltipLine(Mod, item.Name, FoodInfo.Satiety + Language.GetTextValue("Mods.Everglow.Common.FoodSystem.Satiety")));
+                }
+
+                int buffTimeIndex = tooltips.FindIndex((tp) => tp.Name.Contains("BuffTime"));
+                if (buffTimeIndex != -1)
+                {
+                    tooltips[buffTimeIndex].Text = FoodInfo.BuffTime.ToBuffTimeString();
+                    //tooltips.RemoveAt(buffTimeIndex);
+                }
+            }
+            if (item.ModItem is FoodBase)
+            {
+                int firstIndex = -1;
+                firstIndex = tooltips.FindIndex((tpline) =>
+                {
+                    return tpline.Name.Contains("Tooltip");
+                });
+                // 如果有tooltip，就删掉所有Tooltip的line然后插入到第一个所在位置
+                var foodItem = item.ModItem as FoodBase;
+                var FoodInfo = foodItem.FoodInfo;
+                if (firstIndex >= 0)
+                {
+                    tooltips.RemoveAll((tp) => tp.Name.Contains("Tooltip"));
+                    tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.BuffDescription." + FoodInfo.Name)));
+                    tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, FoodInfo.Satiety + Language.GetTextValue("Mods.Everglow.Common.FoodSystem.Satiety")));
+                }
+                else
+                {
+                    // 否则加到最后面
+                    tooltips.Add(new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.BuffDescription." + FoodInfo.Name)));
+                    tooltips.Add(new TooltipLine(Mod, item.Name, FoodInfo.Satiety + Language.GetTextValue("Mods.Everglow.Common.FoodSystem.Satiety")));
                 }
 
                 int buffTimeIndex = tooltips.FindIndex((tp) => tp.Name.Contains("BuffTime"));
