@@ -672,7 +672,7 @@ namespace Everglow.Sources.Modules.SubWorldModule
         public override void ResetNearbyTileEffects()
             => current?.WorldSystem?.ResetNearbyTileEffects();
         public override void ModifyHardmodeTasks(List<GenPass> list)
-            => ModifyHardmodeTasks(list);
+            => current?.WorldSystem?.ModifyHardmodeTasks(list);
         public override void ModifySunLightColor(ref Color tileColor, ref Color backgroundColor)
             => current?.WorldSystem?.ModifySunLightColor(ref tileColor, ref backgroundColor);
         public override void ModifyLightingBrightness(ref float scale)
