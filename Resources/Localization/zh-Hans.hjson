@@ -357,9 +357,9 @@ Mods:
 				DryMartini : "干马天尼"
 				GreenStorm : "绿色风暴"
 				KiwiJuice : "猕猴桃汁"
-				LonelyJellyfish : "'孤独的水母'"
+				LonelyJellyfish : "孤独的水母"
 				OrangeJuice : "橙汁"
-				PiercoldWind : "'凛冽寒风'"
+				PiercoldWind : "凛冽寒风"
 				PurpleHooter : "紫色汽笛"
 				QuinceMarry : "榅桲玛丽"
 				RedWine : "红酒"
@@ -374,7 +374,7 @@ Mods:
 				CaramelPudding : "焦糖布丁"
 				CrabseedWarship : "蟹籽军舰"
 				Durian : "榴莲"
-				EggTart : "鸡蛋馅饼"
+				EggTart : "蛋挞"
 				KiwiFruit : "猕猴桃"
 				KiwiIceCream : "猕猴桃冰激凌"
 				Mangosteen : "山竹"
@@ -1072,9 +1072,9 @@ Mods:
 				DryMartiniBuff : "干马天尼"
 				GreenStormBuff : "绿色风暴"
 				KiwiJuiceBuff : "猕猴桃汁"
-				LonelyJellyfishBuff : "'孤独的水母'"
+				LonelyJellyfishBuff : "孤独的水母"
 				OrangeJuiceBuff : "橙汁"
-				PiercoldWindBuff : "'凛冽寒风'"
+				PiercoldWindBuff : "凛冽寒风"
 				PurpleHooterBuff : "紫色汽笛"
 				QuinceMarryBuff : "榅桲玛丽"
 				RedWineBuff : "红酒"
@@ -1089,7 +1089,7 @@ Mods:
 				CaramelPuddingBuff : "焦糖布丁"
 				CrabseedWarshipBuff : "蟹籽军舰"
 				DurianBuff : "榴莲"
-				EggTartBuff : "鸡蛋馅饼"
+				EggTartBuff : "蛋挞"
 				KiwiFruitBuff : "猕猴桃"
 				KiwiIceCreamBuff : "猕猴桃冰激凌"
 				MangosteenBuff : "山竹"
@@ -1396,7 +1396,7 @@ Mods:
 				WatermelonBuff : 
 					'''
 					增强8%击退能力
-					“最大的打击力度”
+					“比起西瓜本身，我更好奇你怎么把它一整个吃下去”
 					'''
 				WatermelonPlateBuff : 
 					'''
