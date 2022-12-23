@@ -12,33 +12,29 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Buffs
 
         public override void Update(NPC npc, ref int buffIndex)
         {
-            for (int t = 0; t < npc.buffType.Length; t++)
+            int LuckyTarget = Main.rand.Next(200);
+            if(LuckyTarget == npc.whoAmI)
             {
-                if (npc.buffType[t] == ModContent.BuffType<ShadowSupervisor>())
+                return;
+            }
+            NPC target = Main.npc[LuckyTarget];
+            if (target.active)
+            {
+                int i = target.FindBuffIndex(ModContent.BuffType<ShadowSupervisor>());
+                if (i != -1)
                 {
-                    int LuckyTarget = Main.rand.Next(200);
-                    if(LuckyTarget == npc.whoAmI)
+                    if (!target.dontTakeDamage)
                     {
-                        return;
-                    }
-                    NPC target = Main.npc[LuckyTarget];
-                    if (target.active)
-                    {
-                        if(target.HasBuff(ModContent.BuffType<ShadowSupervisor>()))
+                        if (!target.friendly)
                         {
-                            if (!target.dontTakeDamage)
+                            if ((target.Center - npc.position).Length() < 600)
                             {
-                                if (!target.friendly)
-                                {
-                                    if ((target.Center - npc.position).Length() < 600)
-                                    {
-                                        int x = (int)(Main.timeForVisualEffects);
-                                        Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.AmbiguousLine>(), 40, 0, Main.myPlayer, x, 0);
-                                        Projectile.NewProjectile(npc.GetSource_FromAI(), target.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.AmbiguousLine>(), 40, 0, Main.myPlayer, x, 1/*ai1 = 1才绘制*/);
-                                        ScreenShaker Gsplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
-                                        Gsplayer.FlyCamPosition = new Vector2(0, 2).RotatedByRandom(6.283);
-                                    }
-                                }
+                                int x = (int)(Main.timeForVisualEffects);
+                                Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.AmbiguousLine>(), 40, 0, Main.myPlayer, x, 0);
+                                Projectile.NewProjectile(npc.GetSource_FromAI(), target.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.AmbiguousLine>(), 40, 0, Main.myPlayer, x, 1/*ai1 = 1才绘制*/);
+                                ScreenShaker Gsplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
+                                Gsplayer.FlyCamPosition = new Vector2(0, 2).RotatedByRandom(6.283);
+                                npc.buffTime[buffIndex] -= 120;
                             }
                         }
                     }

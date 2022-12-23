@@ -40,6 +40,7 @@ Mods:
 			{
 				CannotEat : "你吃饱了"
 				CannotDrink : "你不想再喝了"
+				Khan : "可汗，再带我冲一次吧"
 			}
 
 			PylonSystem : 
@@ -320,7 +321,7 @@ Mods:
 			GlowWoodChandelierType2 : "萤火木吊灯2"
 			GlowWoodChandelierType3 : "萤火木吊灯3"
 			GlowWoodChandelierType4 : "萤火木吊灯4"
-			GlowWoodChandelierType5 : "萤火木吊灯5"
+			GlowWoodChandelierType5 : "流萤滴"
 			GlowWoodChest : "萤火木箱"
 			GlowWoodClock : "萤火木钟"
 			GlowWoodDoor : "萤火木门"
@@ -345,6 +346,9 @@ Mods:
 			#食物系统物品
 			BloodGlucoseMonitor : "血糖检测仪"
 			OsmoticPressureMonitor : "渗透压检测仪"
+
+			FryingPanItem : "炒锅"
+
 			# Modded food items
 				# Modded drink items
 				B_52 : "B_52"
@@ -516,6 +520,9 @@ Mods:
 			AmbiguousNight : 
 				'''
 				射出幻影石子
+				命中时对目标施加幻夜印记: 
+				靠近带有相同印记的敌人时会产生梦魇织丝
+				对双方造成伤害并将幻夜印记的持续时间降低2s
 				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			BlackWoodSlingshot : 
@@ -716,6 +723,9 @@ Mods:
 			#食物系统物品
 			BloodGlucoseMonitor : "显示当前饱食度"
 			OsmoticPressureMonitor : "显示渴觉状态"
+
+			FryingPanItem : "左键作为回旋镖投掷，长按右键作为近战武器"
+
 			# Modded items
 				# Modded drink items
 				BlueHawaii : 
@@ -1139,7 +1149,7 @@ Mods:
 			BowlofSoupBuff : "增加20魔力上限,5%魔法伤害\n“补脑”"
 			BunnyStewBuff : "自动跳跃，增加跳跃能力\n“没有任何兔子在制作过程中受到伤害 ”"
 			BurgerBuff : "减少移速，增加防御\n“热量炸弹”"
-			CherryBuff : "死亡后产生爆炸\n“你所热爱的，就是你的生活”"
+			CherryBuff : "死亡后产生爆炸并对波及到的敌人施加同样的buff\n“你所热爱的，就是你的生活”"
 			ChickenNuggetBuff : "增加1生命回复、4%攻速\n“数一数二的鸡块！”"
 			ChocolateChipCookieBuff : "增加2点生命回复和魔力回复\n“补充能量”"
 			ChristmasPuddingBuff : "仇恨值减少800\n“美容养颜”"
@@ -1440,9 +1450,16 @@ Mods:
 		}
 		InfoDisplay:
 		{
-			Satiety : "饱食度"
+			Satiety : "{0} 饱食度, {1}"
 			Thirsty : "你最好喝点什么"
 			NotThirsty : "你不想喝东西"
+			SatietyLevel: 
+			{
+				0 : "腹中空空"
+				1 : "吃得好"
+				2 : "很满意"
+				3 : "吃撑了"
+			}
 		}
 		ExtraTooltip : 
 		{
