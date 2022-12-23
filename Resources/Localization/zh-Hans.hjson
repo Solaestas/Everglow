@@ -1447,9 +1447,16 @@ Mods:
 		}
 		InfoDisplay:
 		{
-			Satiety : "饱食度"
+			Satiety : "{0} 饱食度, {1}"
 			Thirsty : "你最好喝点什么"
 			NotThirsty : "你不想喝东西"
+			SatietyLevel: 
+			{
+				0 : "腹中空空"
+				1 : "吃得好"
+				2 : "很满意"
+				3 : "吃撑了"
+			}
 		}
 		ExtraTooltip : 
 		{
