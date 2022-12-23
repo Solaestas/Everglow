@@ -32,9 +32,9 @@ namespace Everglow.Sources.Modules.FoodModule.Items.ModDrink
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 5;
 			Main.RegisterItemAnimation(Type, new DrawAnimationVertical(int.MaxValue, 3));
 			ItemID.Sets.FoodParticleColors[Item.type] = new Color[3] {
-				new Color(249, 230, 136),
-				new Color(152, 93, 95),
-				new Color(174, 192, 192)
+				new Color(107, 23, 46),
+				new Color(224, 31, 57),
+				new Color(140, 19, 35)
 			};
 
 			ItemID.Sets.IsFood[Type] = true; 
