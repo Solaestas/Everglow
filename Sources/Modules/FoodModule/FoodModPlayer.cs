@@ -228,6 +228,10 @@ namespace Everglow.Sources.Modules.FoodModule
                     Player.pickSpeed += 0.1f;
                 }
             }
+            if (CurrentSatiety <= 0)
+            {
+                SatietyLevel = 0;
+            }
         }
     }
 }
