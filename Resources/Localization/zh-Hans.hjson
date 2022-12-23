@@ -520,6 +520,9 @@ Mods:
 			AmbiguousNight : 
 				'''
 				射出幻影石子
+				命中时对目标施加幻夜印记: 
+				靠近带有相同印记的敌人时会产生梦魇织丝
+				对双方造成伤害并将幻夜印记的持续时间降低2s
 				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			BlackWoodSlingshot : 

@@ -512,7 +512,10 @@ Mods:
 			FixCoinSpeed3 : "Gives a random accessory in inventory a prefix which increases movement speed by 4%"
 			AmbiguousNight : 
 				'''
-				Shoots phantom pebbles
+				Shoots phantasm pebbles
+				Inflict Mark of Night on targets: 
+				Weaves Nightmare Silks when close to another enemy with the same mark
+				Deals damage to both enemies and decreases duration of the Mark of Night by 2s
 				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			BlackWoodSlingshot : 

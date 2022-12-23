@@ -38,7 +38,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Buffs
                                         Projectile.NewProjectile(npc.GetSource_FromAI(), target.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.AmbiguousLine>(), 40, 0, Main.myPlayer, x, 1/*ai1 = 1才绘制*/);
                                         ScreenShaker Gsplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
                                         Gsplayer.FlyCamPosition = new Vector2(0, 2).RotatedByRandom(6.283);
-                                        npc.buffTime[i] -= 120;
+                                        npc.buffTime[buffIndex] -= 120;
                                     }
                                 }
                             }
