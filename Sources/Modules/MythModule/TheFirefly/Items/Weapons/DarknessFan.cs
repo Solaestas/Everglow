@@ -23,8 +23,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             Item.mana = 7;
             Item.width = 74;
             Item.height = 90;
-            Item.useTime = 40;
-            Item.useAnimation = 40;
+            Item.useTime = 36;
+            Item.useAnimation = 36;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
             Item.noUseGraphic = true;
@@ -45,8 +45,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             {
                 CoolRarr = 120;
                 Projectile.NewProjectile(source, position + new Vector2(0, -24), velocity * 3.4f, ModContent.ProjectileType<Projectiles.DarkFanFly>(), damage * 2, knockback, player.whoAmI, 6 + player.maxMinions * 1.5f, 0f);
-                Item.useTime = 2;
-                Item.useAnimation = 2;
+                Item.useTime = 6;
+                Item.useAnimation = 6;
                 //Item.UseSound = SoundID.DD2_JavelinThrowersAttack;
                 return false;
             }
@@ -84,13 +84,15 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
         {
             if (player.altFunctionUse == 2 && CoolRarr == 0)
             {
-                Item.useTime = 2;
-                Item.useAnimation = 2;
+                Item.useTime = 6;
+                Item.useAnimation = 6;
+                Item.UseSound = SoundID.DD2_JavelinThrowersAttack;
             }
             else
             {
                 Item.useTime = 36;
                 Item.useAnimation = 36;
+                Item.UseSound = SoundID.DD2_GhastlyGlaivePierce;
             }
             return true;
         }
