@@ -126,9 +126,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
                     int[] FireflyWeapon =
                     {
                             ModContent.ItemType<Weapons.DarknessFan>(),
+                            ModContent.ItemType<Weapons.DreamWeaver>(),
                             ModContent.ItemType<Weapons.DustOfCorrupt>(),
                             ModContent.ItemType<Weapons.EvilChrysalis>(),
+                            ModContent.ItemType<Weapons.FlowLightMissile>(),
                             ModContent.ItemType<Weapons.GlowBeadGun>(),
+                            ModContent.ItemType<Weapons.GlowWoodSword>(),
                             ModContent.ItemType<Weapons.MothYoyo>(),
                             ModContent.ItemType<Weapons.NavyThunder>(),
                             ModContent.ItemType<Weapons.PhosphorescenceGun>(),

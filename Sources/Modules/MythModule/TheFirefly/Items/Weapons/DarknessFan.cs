@@ -1,12 +1,15 @@
 ﻿using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories;
 using ReLogic.Graphics;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 {
     public class DarknessFan : ModItem
     {
+        FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
         public override void SetStaticDefaults()
         {
             ItemGlowManager.AutoLoadItemGlow(this);
@@ -91,7 +94,20 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             }
             return true;
         }
-
+        public override void ModifyTooltips(List<TooltipLine> tooltips)
+        {
+            if (MothEye.LocalOwner != null && MothEye.LocalOwner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
+            {
+                if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
+                {
+                    tooltips.AddRange(new TooltipLine[]
+                    {
+                        new(Everglow.Instance, "MothEyeBonusText", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeBonusText")),
+                        new(Everglow.Instance, "MothEyeDFanBonus", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextMothFan")),
+                    });
+                }
+            }
+        }
         public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
             Vector2 slotSize = new Vector2(52f, 52f);

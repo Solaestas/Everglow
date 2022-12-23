@@ -5,6 +5,7 @@ New Moth Blade Bonus Text Tooltip
 Moth Bow Bonus Text Tooltip
 Moth Yoyo Bonus Text Tooltip
 Moth Chrysalis Bonus Text Tooltip
+Moth Fan Bonus Text Tooltip
 
 *ru-RU*:
 DustOfCorrupt Item Name & Tooltip
@@ -24,6 +25,7 @@ New Moth Blade Bonus Text Tooltip
 Moth Bow Bonus Text Tooltip
 Moth Yoyo Bonus Text Tooltip
 Moth Chrysalis Bonus Text Tooltip
+Moth Fan Bonus Text Tooltip
 
 *All*:
 New MEyeBonusTextMothBlade: "Moths appearing from this blade move faster"
