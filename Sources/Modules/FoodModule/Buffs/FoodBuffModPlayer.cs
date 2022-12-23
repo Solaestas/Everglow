@@ -152,18 +152,29 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
             CritDamage = 1f;
             AddCritDamage = 0;
 
+        }
+        public override void PostUpdateBuffs()
+        {
             if (StinkyTofuBuff)
             {
-                foreach(NPC target in Main.npc)
+                foreach (NPC target in Main.npc)
                 {
-                    if (!target.friendly && Main.rand.NextBool(100))
+                    if (!target.friendly && Main.rand.NextBool(100) && Player.WithinRange(target.Center, 300))
                     {
                         target.AddBuff(BuffID.Confused, 600);
                     }
                 }
             }
+            if (RoastedBirdBuff)
+            {
+                Player.wingTimeMax = (int)(Player.wingTimeMax * WingTimeModifier);
+            }
+            if (RoastedDuckBuff)
+            {
+                Player.wingTimeMax = (int)(Player.wingTimeMax * WingTimeModifier);
+            }
+            base.PostUpdateBuffs();
         }
-
         public override void PostUpdate()
         {
             CritDamage += AddCritDamage;
@@ -194,17 +205,6 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
                 Player.NinjaDodge();
             }
         }
-        public override void PostUpdateMiscEffects()
-        {
-            if (RoastedBirdBuff)
-            {
-                Player.wingTimeMax = (int)(Player.wingTimeMax * WingTimeModifier);
-            }
-            if (RoastedDuckBuff)
-            {
-                Player.wingTimeMax = (int)(Player.wingTimeMax * WingTimeModifier);
-            }
-        }
 
         public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
         {
@@ -213,11 +213,11 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
                 target.AddBuff(BuffID.Oiled, 600);
                 target.AddBuff(BuffID.OnFire, 600);
             }
-            if (BloodyMoscatoBuff && BloodyMoscatoHealCount <= 150)
+            if (BloodyMoscatoBuff && BloodyMoscatoHealCount <= (Main.hardMode?150:75))
             {
                 Player.HealEffect(2, true);
                 Player.statLife += 2;
-                BloodyMoscatoHealCount += 10;
+                BloodyMoscatoHealCount += 2;
             }
             base.OnHitNPC(item, target, damage, knockback, crit);
         }
@@ -229,11 +229,11 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
                 target.AddBuff(BuffID.Oiled, 600);
                 target.AddBuff(BuffID.OnFire, 600);
             }
-            if (BloodyMoscatoBuff && BloodyMoscatoHealCount <= 150)
+            if (BloodyMoscatoBuff && BloodyMoscatoHealCount <= (Main.hardMode ? 150 : 75))
             {
                 Player.HealEffect(2, true);
                 Player.statLife += 2;
-                BloodyMoscatoHealCount += 10;
+                BloodyMoscatoHealCount += 2;
             }
             base.OnHitNPCWithProj(proj, target, damage, knockback, crit);
         }

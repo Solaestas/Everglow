@@ -35,7 +35,7 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
             Player player = Main.player[projectile.owner];
             if (player != null && player.active && !player.dead)
             {
-                if (player.GetModPlayer<FoodBuffModPlayer>().CaramelPuddingBuff && CaramelPuddingBounce < 1)
+                if (player.GetModPlayer<FoodBuffModPlayer>().CaramelPuddingBuff && CaramelPuddingBounce < 1 && projectile.tileCollide)
                 {
                     if (projectile.velocity.X != oldVelocity.X && Math.Abs(oldVelocity.X) > 1f)
                     {
@@ -51,39 +51,42 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
             }
             return base.OnTileCollide(projectile, oldVelocity);
         }
-    public override void AI(Projectile projectile)
-    {
-        Player player = Main.player[projectile.owner];
-        if (player != null && player.active && !player.dead)
+        public override void AI(Projectile projectile)
         {
-            if (player.GetModPlayer<FoodBuffModPlayer>().DreamYearningBuff)
+            Player player = Main.player[projectile.owner];
+            if (player != null && player.active && !player.dead)
             {
-                if (projectile.owner == player.whoAmI)
+                if (player.GetModPlayer<FoodBuffModPlayer>().DreamYearningBuff)
                 {
-                    if (!projectile.friendly && projectile.penetrate >= 0)
+                    if (projectile.owner == player.whoAmI)
                     {
-                        return;
-                    }
-                    Vector2 destination = projectile.Center;
-                    bool locatedTarget = false;
-                    for (int i = 0; i < Main.maxNPCs; i++)
-                    {
-                        if (Main.npc[i].CanBeChasedBy(projectile, false) && projectile.WithinRange(Main.npc[i].Center, 250) && (projectile.tileCollide || Collision.CanHit(projectile.Center, 1, 1, Main.npc[i].Center, 1, 1)))
+                        if (projectile.friendly && projectile.penetrate >= 0)
                         {
-                            destination = (Main.npc[i]).Center;
-                            locatedTarget = true;
-                            break;
+                            Vector2 destination = projectile.Center;
+                            bool locatedTarget = false;
+                            for (int i = 0; i < Main.maxNPCs; i++)
+                            {
+                                if (Main.npc[i].CanBeChasedBy(projectile, false) && projectile.WithinRange(Main.npc[i].Center, 300) && (projectile.tileCollide || Collision.CanHit(projectile.Center, 1, 1, Main.npc[i].Center, 1, 1)))
+                                {
+                                    destination = (Main.npc[i]).Center;
+                                    locatedTarget = true;
+                                    break;
+                                }
+                            }
+                            if (locatedTarget)
+                            {
+                                Vector2 homeDirection = Vector2.Normalize(destination - projectile.Center);
+                                projectile.velocity = Vector2.Normalize(projectile.velocity + homeDirection * 2.5f) * projectile.velocity.Length();
+                            }
                         }
-                    }
-                    if (locatedTarget)
-                    {
-                        Vector2 homeDirection = Vector2.Normalize(destination - projectile.Center);
-                        projectile.velocity += homeDirection * 0.75f;
+                        else
+                        {
+                            base.AI(projectile);
+                        }
                     }
                 }
             }
+            base.AI(projectile);
         }
-        base.AI(projectile);
     }
-}
 }
