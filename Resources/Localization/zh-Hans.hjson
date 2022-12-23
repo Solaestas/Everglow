@@ -1461,6 +1461,8 @@ Mods:
 				MothEyeBonusText : "[c/7FC1FF:来自 {$Mods.Everglow.ItemName.MothEye} 的增幅:]"
 			//	MEyeBonusTextMothBlade : "[c/7FC1FF:Moths appearing from this blade move faster]"
 			//	MEyeBonusTextMothBow : "[c/7FC1FF:Reduces the charging time of the bow]"
+			//	MEyeBonusTextMothGun0 : "[c/7FC1FF:Increases the damage of the phosphorescent bullets]"
+			//	MEyeBonusTextMothGun1 : "[c/7FC1FF:Prevents recoil from occuring]"
 			//	MEyeBonusTextMothYoyo : "[c/7FC1FF:More moths appear from this yoyo]"
 			//	MEyeBonusTextMothChry0 : "[c/7FC1FF:Projectiles summoned from the moths can go through tiles]"
 			//	MEyeBonusTextMothChry1 : "[c/7FC1FF:The moths have a chance to shoot a stronger projectile]"
