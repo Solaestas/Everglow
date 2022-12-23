@@ -1,4 +1,6 @@
-﻿namespace Everglow.Sources.Modules.FoodModule.InfoDisplays
+﻿using Terraria.Localization;
+
+namespace Everglow.Sources.Modules.FoodModule.InfoDisplays
 {
     internal class FoodSatietyInfoDisplay : InfoDisplay
     {
@@ -12,7 +14,7 @@
 
             int currentSatiety = Main.LocalPlayer.GetModPlayer<FoodModPlayer>().CurrentSatiety;
             int level = Main.LocalPlayer.GetModPlayer<FoodModPlayer>().SatietyLevel;
-            return $"{currentSatiety} {Terraria.Localization.Language.GetTextValue("Mods.Everglow.InfoDisplay.Satiety")}, {level}"; //TODO localization
+            return Language.GetTextValue("Mods.Everglow.InfoDisplay.Satiety", currentSatiety, Language.GetTextValue($"Mods.Everglow.InfoDisplay.SatietyLevel.{level}"));
         }
     }
 
