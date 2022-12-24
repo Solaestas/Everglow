@@ -48,6 +48,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 
         public override void NearbyEffects(int i, int j, bool closer)
         {
+            Lighting.AddLight(i, j, 0.1f, 0.5f, 1.2f);
             if (closer)
             {
                 var tile = Main.tile[i, j];
@@ -110,7 +111,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                 Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/BlueBlossomDraw");
                 tileSpin.DrawRotatedTile(i, j - tile.TileFrameY / 16, tex, new Rectangle(tile.TileFrameX, 0, 120, 108), new Vector2(60, 108), 16, 54, false);
                 tex = MythContent.QuickTexture("TheFirefly/Tiles/BlueBlossomGlow");
-                tileSpin.DrawRotatedTile(i, j - tile.TileFrameY / 16, tex, new Rectangle(tile.TileFrameX, 0, 120, 108), new Vector2(60, 108), 16, 54, true, new Color(255, 255, 255, 0));
+                tileSpin.DrawRotatedTile(i, j - tile.TileFrameY / 16, tex, new Rectangle(tile.TileFrameX, 0, 120, 108), new Vector2(60, 108), 16, 54, true, new Color(5, 5, 5, 0));
             }
             return false;
         }

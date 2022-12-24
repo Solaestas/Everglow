@@ -7,7 +7,7 @@ using Terraria.ObjectData;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 {
-    public class GlowWoodChandelierType5 : ModTile
+    public class GlowingDrop : ModTile
     {
         public override void SetStaticDefaults()
         {
@@ -35,9 +35,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             TileObjectData.addTile(Type);
 
             // Etc
-            ModTranslation name = CreateMapEntryName();
-            name.SetDefault("Chandelier");
-            AddMapEntry(new Color(0, 14, 175), name);
+            //ModTranslation name = CreateMapEntryName();
+            //name.SetDefault("Chandelier");
+            AddMapEntry(new Color(0, 14, 175));
+            //TODO:这个Tile作为一种植物可能比灯具更加合理一点
         }
 
         public override void HitWire(int i, int j)
@@ -179,7 +180,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             {
                 TileSpin tileSpin = new TileSpin();
                 tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18);
-                Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodChandelierType5");
+                Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowingDrop");
                 tileSpin.DrawRotatedTile(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, tex, new Rectangle(30 + Adx, 0, 10, 48), new Vector2(5, 0), 16, -2, 1);
 
                 tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18);
@@ -197,7 +198,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 
         public override void KillMultiTile(int x, int y, int frameX, int frameY)
         {
-            Item.NewItem(new EntitySource_TileBreak(x, y), x * 16, y * 16, 48, 32, ModContent.ItemType<Items.Furnitures.GlowWoodChandelierType5>());
+            Item.NewItem(new EntitySource_TileBreak(x, y), x * 16, y * 16, 48, 32, ModContent.ItemType<Items.Furnitures.GlowingDrop>());
         }
     }
 }

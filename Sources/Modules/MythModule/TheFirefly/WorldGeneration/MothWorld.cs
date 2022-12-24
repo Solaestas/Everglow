@@ -40,12 +40,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         public override int Width { get; init; } = 800;
         public override int Height { get; init; } = 600;
         public override List<GenPass> Tasks { get; init; } = new() { new MothLand.MothLandGenPass() };
-        public override bool NormalTime => false;
+        public override bool NormalTime => true;
         public override bool HideUnderworld => true;
         public override void OnLoad()
         {
-            Main.worldSurface = 1;
-            Main.rockLayer = 2;
+            Main.worldSurface = 20;
+            Main.rockLayer = 150;
             WorldGen.waterLine = Main.maxTilesY;
         }
     }
