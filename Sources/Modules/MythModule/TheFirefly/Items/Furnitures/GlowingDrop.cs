@@ -2,7 +2,7 @@ using Terraria.GameContent.Creative;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures
 {
-    public class GlowWoodChandelierType5 : ModItem
+    public class GlowingDrop : ModItem
     {
         public override void SetStaticDefaults()
         {
@@ -21,17 +21,17 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures
             Item.useStyle = ItemUseStyleID.Swing;
             Item.consumable = true;
             Item.value = 2000;
-            Item.createTile = ModContent.TileType<Tiles.Furnitures.GlowWoodChandelierType5>();
+            Item.createTile = ModContent.TileType<Tiles.Furnitures.GlowingDrop>();
         }
 
-        public override void AddRecipes()
-        {
-            Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ModContent.ItemType<GlowWood>(), 4);
-            recipe.AddIngredient(ItemID.Torch, 4);
-            recipe.AddIngredient(ItemID.Chain, 1);
-            recipe.AddTile(TileID.WorkBenches);
-            recipe.Register();
-        }
+        //public override void AddRecipes()
+        //{
+        //    Recipe recipe = CreateRecipe();
+        //    recipe.AddIngredient(ModContent.ItemType<GlowWood>(), 4);
+        //    recipe.AddIngredient(ItemID.Torch, 4);
+        //    recipe.AddIngredient(ItemID.Chain, 1);
+        //    recipe.AddTile(TileID.WorkBenches);
+        //    recipe.Register();
+        //}
     }
 }

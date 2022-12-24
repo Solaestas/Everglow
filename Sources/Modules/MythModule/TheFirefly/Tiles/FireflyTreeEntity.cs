@@ -4,7 +4,7 @@
     {
         public override bool IsTileValidForEntity(int x, int y)
         {
-            return Main.tile[x, y].TileType == ModContent.TileType<FireflyTree>();
+            return Main.tile[x, y].TileType == ModContent.TileType<FluorescentTree>();
         }
     }
 }

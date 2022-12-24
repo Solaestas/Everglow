@@ -3,6 +3,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.Map;
 using Terraria.ModLoader.Default;
+using Terraria.ObjectData;
 using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Pylon;
@@ -13,6 +14,10 @@ internal class ShabbyPylonTileEntity : TEModdedPylon
 
 internal class ShabbyPylon : BaseModPylon<ShabbyPylonTileEntity>
 {
+    public override void PostSetDefaults()
+    {
+        DustType = DustID.Lead;
+    }
     public override int DropItemType => ModContent.ItemType<ShabbyPylonItem>();
 
     public override bool ValidTeleportCheck_BiomeRequirements(TeleportPylonInfo pylonInfo, SceneMetrics sceneData)
@@ -44,9 +49,9 @@ internal class ShabbyPylon : BaseModPylon<ShabbyPylonTileEntity>
     }
 
     public float AscensionTimer = 0;
-    public const float MaxAscensionTime = 300;
+    public const float MaxAscensionTime = 100;
     public int AnimationTimer = 0;
-    public const float MaxTime = 300f;
+    public const float MaxTime = 100f;
 
     public override void DrawMapIcon(ref MapOverlayDrawContext context, ref string mouseOverText, TeleportPylonInfo pylonInfo, bool isNearPylon, Color drawColor, float deselectedScale, float selectedScale)
     {
@@ -77,20 +82,64 @@ internal class ShabbyPylon : BaseModPylon<ShabbyPylonTileEntity>
 
 internal class ShabbyPylonItem : ModItem
 {
-    public override bool? UseItem(Player player)
-    {
-        if (Item.favorited && !PylonSystem.Instance.shabbyPylonEnable)
-        {
-            PylonSystem.Instance.shabbyPylonEnable = true;
-            PylonSystem.Instance.firstEnableAnimation = true;
-
-            Main.NewText(Language.GetTextValue("Mods.Everglow.Common.PylonSystem.ShabbyPylonRepairedTip"));
-        }
-        return null;
-    }
-
     public override void SetDefaults()
     {
         Item.DefaultToPlaceableTile(ModContent.TileType<ShabbyPylon>());
+    }
+    public override bool CanUseItem(Player player)
+    {
+        ushort TileID = (ushort)ModContent.TileType<ShabbyPylon>();
+        var position = Main.MouseWorld;
+        var bottom = position.ToTileCoordinates();
+
+        TileObject.CanPlace(bottom.X,bottom.Y,TileID,0,0,out var tileObject);
+        TileObject.Place(tileObject);
+        TileObjectData.CallPostPlacementPlayerHook(bottom.X, bottom.Y, TileID, 0, 0, 0, tileObject);
+        return base.CanUseItem(player);
+    }
+}
+internal class ShabbyPylonUpdate : GlobalNPC
+{
+    public override void OnKill(NPC npc)
+    {
+        if(npc.type is NPCID.BrainofCthulhu or NPCID.EaterofWorldsHead)
+        {
+            if (!PylonSystem.Instance.shabbyPylonEnable && !NPC.downedBoss2)
+            {
+                PylonSystem.Instance.shabbyPylonEnable = true;
+                PylonSystem.Instance.firstEnableAnimation = true;
+                Main.NewText(Language.GetTextValue("Mods.Everglow.Common.PylonSystem.ShabbyPylonRepairedTip"));
+            }
+        }
+    }
+}
+internal class ScreenMovePlayer : ModPlayer
+{
+    public int AnimationTimer = 0;
+    public const float MaxTime = 600f;
+    public override void ModifyScreenPosition()
+    {
+        if (PylonSystem.Instance.firstEnableAnimation)
+        {
+            var firefly = TileEntity.ByPosition.FirstOrDefault(pair => pair.Value is ShabbyPylonTileEntity);
+            var target = firefly.Key.ToWorldCoordinates() - Main.ScreenSize.ToVector2() / 2;
+            AnimationTimer++;
+            float Value = (1 - MathF.Cos(AnimationTimer / 60f * MathF.PI)) / 2f;
+            if(AnimationTimer >= 60 && AnimationTimer < 540)
+            {
+                Value = 1;
+            }
+            if (AnimationTimer >= 540)
+            {
+                Value = (1 + MathF.Cos((AnimationTimer - 540) / 60f * MathF.PI)) / 2f;
+            }
+            Main.screenPosition = (Value).Lerp(Main.screenPosition, target);
+            if (AnimationTimer >= MaxTime)
+            {
+                PylonSystem.Instance.firstEnableAnimation = false;
+            }
+            Player.immune = true;
+            Player.immuneTime = 2;
+        }
     }
 }

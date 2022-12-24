@@ -10,7 +10,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
     public class MothEye : ModItem
     {
         FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
-
+        public static Player LocalOwner => Main.LocalPlayer;
         public override void SetDefaults()
         {
             Item.width = 44;
@@ -23,6 +23,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
+            player.GetModPlayer<MothEyePlayer>().MothEyeEquipped = true;
             player.maxMinions += 1;
             player.maxTurrets += 1;
             player.GetDamage(DamageClass.Summon) *= 1.06f;
@@ -71,19 +72,20 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
             }
         }
 
-        /*public override void UpdateInventory(Player player) //KEEP FOR REFERENCE
-        {
-            bool hasMothEye = false;
-            foreach (var item in player.armor)
-            {
-                if (item.type == ModContent.ItemType<Items.Accessories.MothEye>())
-                {
-                    hasMothEye = true;
-                    break;
-                }
-            }
-            base.UpdateInventory(player);
-        }*/
+        //public override void UpdateInventory(Player player) //KEEP FOR REFERENCE
+        //{
+        //    bool hasMothEye = false;
+        //    foreach (var item in player.armor)
+        //    {
+        //        if (item.type == ModContent.ItemType<Items.Accessories.MothEye>())
+        //        {
+        //            hasMothEye = true;
+        //            break;
+        //        }
+        //    }
+        //    base.UpdateInventory(player);
+        //}
+
         //public override void EquipFrameEffects(Player player, EquipType type)
         //{
         //    if (fireflyBiome.IsBiomeActive(player))
@@ -101,7 +103,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
     class MothEyePlayer : ModPlayer
     {
         FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
+        public bool MothEyeEquipped;
 
+        public override void ResetEffects()
+        {
+            MothEyeEquipped = false;
+        }
         public override void ModifyWeaponDamage(Item item, ref StatModifier damage)
         {
             if (fireflyBiome.IsBiomeActive(Main.LocalPlayer))
@@ -132,5 +139,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
                 }
             }
         }
+        //public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit) //Example use of MothEyeEquipped
+        //{
+        //    if (MothEyeEquipped == true)
+        //    {
+        //        target.AddBuff(BuffID.Bleeding, 300);
+        //    }
+        //    base.OnHitNPC(item, target, damage, knockback, crit);
+        //}
     }
 } //   TODO: Finish Item Equip Effects (Displays a different equip texture when in the Firefly Biome, See MothEye_Neck.png and MothEye_NeckOff.png

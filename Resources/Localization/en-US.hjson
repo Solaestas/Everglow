@@ -323,7 +323,7 @@ Mods:
 			GlowWoodChandelierType2 : "Glowwood Chandelier 2"
 			GlowWoodChandelierType3 : "Glowwood Chandelier 3"
 			GlowWoodChandelierType4 : "Glowwood Chandelier 4"
-			GlowWoodChandelierType5 : "Firefly Drop Chandelier"
+			GlowWoodChandelierType5 : "Firefly Drop"
 			GlowWoodChest : "Glowwood Chest"
 			GlowWoodClock : "Glowwood Clock"
 			GlowWoodDoor : "Glowwood Door"
@@ -513,7 +513,10 @@ Mods:
 			FixCoinSpeed3 : "Gives a random accessory in inventory a prefix which increases movement speed by 4%"
 			AmbiguousNight : 
 				'''
-				Shoots phantom pebbles
+				Shoots phantasm pebbles
+				Inflict Mark of Night on targets: 
+				Weaves Nightmare Silks when close to another enemy with the same mark
+				Deals damage to both enemies and decreases duration of the Mark of Night by 2s
 				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			BlackWoodSlingshot : 
@@ -720,7 +723,7 @@ Mods:
 
 			#食物系统物品
 			BloodGlucoseMonitor : "Display hunger information"
-			OsmoticPressureMonitor : "Display thrist information"
+			OsmoticPressureMonitor : "Display thirst information"
 			
 			FryingPanItem : "Left click to throw it as a boomerang, right click and hold to swing it as a sword"
 
