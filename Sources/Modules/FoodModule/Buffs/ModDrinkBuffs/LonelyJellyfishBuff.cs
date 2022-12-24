@@ -1,4 +1,6 @@
-﻿namespace Everglow.Sources.Modules.FoodModule.Buffs.ModDrinkBuffs
+﻿using Everglow.Sources.Commons.Core;
+
+namespace Everglow.Sources.Modules.FoodModule.Buffs.ModDrinkBuffs
 {
     public class LonelyJellyfishBuff : ModBuff
     {
@@ -13,9 +15,10 @@
         public override void Update(Player player, ref int buffIndex)
         {
             player.invis = true;
-            if (Main.time % 20f == 0)
+            if (Main.myPlayer == player.whoAmI && HookSystem.UpdateTimer % 15 == 0)
             {
-                int projectile = Projectile.NewProjectile(player.GetSource_Buff(buffIndex), Main.MouseWorld, Vector2.Zero, ProjectileID.Electrosphere, Math.Clamp(player.HeldItem.damage, 25, 150), 10, player.whoAmI);
+                Projectile proj = Projectile.NewProjectileDirect(player.GetSource_Buff(buffIndex), Main.MouseWorld, Vector2.Zero, ProjectileID.Electrosphere, Math.Clamp(player.HeldItem.damage, 25, 150), 10, player.whoAmI);
+                proj.timeLeft = 150;
             }
         }
     }
