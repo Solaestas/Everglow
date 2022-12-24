@@ -10,6 +10,7 @@ using Mono.Cecil;
 using Everglow.Sources.Modules.FoodModule.Buffs.ModDrinkBuffs;
 using Everglow.Sources.Modules.FoodModule.Buffs.ModFoodBuffs;
 using Terraria.Localization;
+using Everglow.Sources.Modules.FoodModule.Dusts;
 
 namespace Everglow.Sources.Modules.FoodModule.Buffs
 {
@@ -150,8 +151,30 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
 
             CritDamage = 1f;
             AddCritDamage = 0;
-        }
 
+        }
+        public override void PostUpdateBuffs()
+        {
+            if (StinkyTofuBuff)
+            {
+                foreach (NPC target in Main.npc)
+                {
+                    if (!target.friendly && Main.rand.NextBool(100) && Player.WithinRange(target.Center, 300))
+                    {
+                        target.AddBuff(BuffID.Confused, 600);
+                    }
+                }
+            }
+            if (RoastedBirdBuff)
+            {
+                Player.wingTimeMax = (int)(Player.wingTimeMax * WingTimeModifier);
+            }
+            if (RoastedDuckBuff)
+            {
+                Player.wingTimeMax = (int)(Player.wingTimeMax * WingTimeModifier);
+            }
+            base.PostUpdateBuffs();
+        }
         public override void PostUpdate()
         {
             CritDamage += AddCritDamage;
@@ -182,17 +205,6 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
                 Player.NinjaDodge();
             }
         }
-        public override void PostUpdateMiscEffects()
-        {
-            if (RoastedBirdBuff)
-            {
-                Player.wingTimeMax = (int)(Player.wingTimeMax * WingTimeModifier);
-            }
-            if (RoastedDuckBuff)
-            {
-                Player.wingTimeMax = (int)(Player.wingTimeMax * WingTimeModifier);
-            }
-        }
 
         public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
         {
@@ -201,11 +213,11 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
                 target.AddBuff(BuffID.Oiled, 600);
                 target.AddBuff(BuffID.OnFire, 600);
             }
-            if (BloodyMoscatoBuff && BloodyMoscatoHealCount <= 60)
+            if (BloodyMoscatoBuff && BloodyMoscatoHealCount <= (Main.hardMode?150:75))
             {
                 Player.HealEffect(2, true);
                 Player.statLife += 2;
-                BloodyMoscatoHealCount += 10;
+                BloodyMoscatoHealCount += 2;
             }
             base.OnHitNPC(item, target, damage, knockback, crit);
         }
@@ -217,11 +229,11 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
                 target.AddBuff(BuffID.Oiled, 600);
                 target.AddBuff(BuffID.OnFire, 600);
             }
-            if (BloodyMoscatoBuff && BloodyMoscatoHealCount <= 60)
+            if (BloodyMoscatoBuff && BloodyMoscatoHealCount <= (Main.hardMode ? 150 : 75))
             {
                 Player.HealEffect(2, true);
                 Player.statLife += 2;
-                BloodyMoscatoHealCount += 10;
+                BloodyMoscatoHealCount += 2;
             }
             base.OnHitNPCWithProj(proj, target, damage, knockback, crit);
         }
@@ -236,24 +248,11 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
                 float k1 = Math.Clamp(Player.velocity.Length(), 1, 3);
                 float k2 = Math.Clamp(Player.velocity.Length(), 6, 10);
                 float k0 = 1f / 4 * k2;
-                for (int j = 0; j < 8 * k0; j++)
-                {
-                    Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * k1;
-                    int dust0 = Dust.NewDust(Player.Center, 0, 0, ModContent.DustType<BlueGlowAppearStoppedByTile>(), v0.X / 10, v0.Y / 10, 100, default(Color), Main.rand.NextFloat(0.6f, 1.8f) * 2);
-                    Main.dust[dust0].noGravity = true;
-                }
                 for (int j = 0; j < 16 * k0; j++)
                 {
                     Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * k1;
-                    int dust1 = Dust.NewDust(Player.Center, 0, 0, ModContent.DustType<BlueParticleDark2StoppedByTile>(), v0.X / 10, v0.Y / 10, 100, default(Color), Main.rand.NextFloat(3.7f, 5.1f) * 2);
-                    Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 50 / k0);
-                    Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
-                }
-                for (int j = 0; j < 16 * k0; j++)
-                {
-                    Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * k1;
-                    int dust1 = Dust.NewDust(Player.Center, 0, 0, ModContent.DustType<MothSmog>(), v0.X / 10, v0.Y / 10, 100, default(Color), Main.rand.NextFloat(3.7f, 5.1f) * 2);
-                    Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 50 / k0);
+                    int dust1 = Dust.NewDust(Player.Center - (Vector2.Normalize(v0).RotatedBy(Math.PI / 4) * 32), 0, 0, ModContent.DustType<MothSmog>(), Vector2.Normalize(v0).X * 5, Vector2.Normalize(v0).Y * 10, 100, default, Main.rand.NextFloat(5.1f, 7.5f));
+                    Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 25);
                     Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
                 }
                 foreach (NPC target in Main.npc)

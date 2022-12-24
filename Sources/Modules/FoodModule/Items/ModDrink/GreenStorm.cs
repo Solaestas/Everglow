@@ -35,8 +35,8 @@ namespace Everglow.Sources.Modules.FoodModule.Items.ModDrink
 			Main.RegisterItemAnimation(Type, new DrawAnimationVertical(int.MaxValue, 3));
 
 			ItemID.Sets.FoodParticleColors[Item.type] = new Color[3] {
-				new Color(249, 230, 136),
-				new Color(152, 93, 95),
+				new Color(255, 89, 111),
+				new Color(169, 216, 147),
 				new Color(174, 192, 192)
 			};
 
