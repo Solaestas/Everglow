@@ -47,6 +47,7 @@
 			#食物系统FoodSystem
 			FoodSystem:
 			{
+			    Satiety : "Satiety"
 				CannotEat : "Ты сыт"
 				CannotDrink : "Тебе не хочется пить"
 				Khan : "Khan, take me on one more charge"
@@ -54,7 +55,12 @@
 
 			PylonSystem : 
 			{
-				ShabbyPylonRepairedTip : "Pylon repaired"
+				ShabbyPylonRepairedTip : "Pylon reconnected"
+			}
+
+			Message : 
+			{
+				HasAwoken : "has awoken!"
 			}
 		}
 		NPCName:
@@ -355,9 +361,9 @@
 				DryMartini : "Dry Martini"
 				GreenStorm : "Green Storm"
 				KiwiJuice : "Kiwi Juice"
-				LonelyJellyfish : "'A Lonely Jellyfish'"
+				LonelyJellyfish : "A Lonely Jellyfish"
 				OrangeJuice : "Orange Juice"
-				PiercoldWind : "'Piercingly Cold Winds'"
+				PiercoldWind : "Piercingly Cold Winds"
 				PurpleHooter : "Purple Hooter"
 				QuinceMarry : "Quince Marry"
 				RedWine : "Red Wine"
@@ -931,7 +937,7 @@
 					'''
 					{$CommonItemTooltip.MediumStats}
 					8% increases knockback
-					'Maximum striking force'
+					'I'm more curious about how you can eat it whole than the watermelon itself'
 					'''
 				WatermelonPlate : 
 					'''
@@ -1062,9 +1068,9 @@
 				DryMartiniBuff : "Dry Martini"
 				GreenStormBuff : "Green Storm"
 				KiwiJuiceBuff : "Kiwi Juice"
-				LonelyJellyfishBuff : "'A Lonely Jellyfish'"
+				LonelyJellyfishBuff : "A Lonely Jellyfish"
 				OrangeJuiceBuff : "Orange Juice"
-				PiercoldWindBuff : "'Piercingly Cold Winds'"
+				PiercoldWindBuff : "Piercingly Cold Winds"
 				PurpleHooterBuff : "Purple Hooter"
 				QuinceMarryBuff : "Quince Marry"
 				RedWineBuff : "Red Wine"
@@ -1189,7 +1195,7 @@
 			SakeBuff : "18 decreased defense but greatly increased melee ability\n'The Purity, so high'"
 			SashimiBuff : "Move like normal in water, you can breathe in water\n10% increased damage and 20% increased movement speed but you lose 3 life per second\n'Parasites!'"
 			SauteedFrogLegsBuff : "Enabled auto jump and increased jumping ability\n'Haven't fish the Frog Leg? Then eat it!'"
-			SeafoodDinnerBuff : "12% increased damage, crit chance and attack speed\n'Raw enough!'"
+			SeafoodDinnerBuff : "6% increased damage, crit chance and attack speed\n'Raw enough!'"
 			ShrimpPoBoyBuff : "6 increased defense and 25% increased mining speed\n'Life force'"
 			ShuckedOysterBuff : "10 increased armor penetration but 5 decreased defense, you lose 3 life per second\n'Parasites!'"
 			SmoothieofDarknessBuff : "50% increased dodge chance\n'Dark(literally)'"
@@ -1387,7 +1393,7 @@
 				WatermelonBuff : 
 					'''
 					8% increases knockback
-					'Maximum striking force'
+					'I'm more curious about how you can eat it whole than the watermelon itself'
 					'''
 				WatermelonPlateBuff : 
 					'''

@@ -206,7 +206,7 @@ namespace Everglow.Sources.Modules.FoodModule
                     Player.GetAttackSpeed(DamageClass.Generic) += 0.02f;
                     Player.GetKnockback(DamageClass.Summon) += 0.25f;
                     Player.moveSpeed += 0.1f;
-                    Player.pickSpeed += 0.1f;
+                    Player.pickSpeed -= 0.1f;
                 }
                 else if (CurrentSatiety > MaximumSatiety * 0.5f && CurrentSatiety <= MaximumSatiety * 0.75f) // plently satisfied
                 {
@@ -217,7 +217,7 @@ namespace Everglow.Sources.Modules.FoodModule
                     Player.GetAttackSpeed(DamageClass.Generic) += 0.04f;
                     Player.GetKnockback(DamageClass.Summon) += 0.5f;
                     Player.moveSpeed += 0.05f;
-                    Player.pickSpeed += 0.15f;
+                    Player.pickSpeed -= 0.15f;
                 }
                 else // exquisitely stuffed
                 {
@@ -225,7 +225,7 @@ namespace Everglow.Sources.Modules.FoodModule
                     Player.statDefense += 4;
                     Player.GetDamage(DamageClass.Generic) += 0.04f;
                     Player.GetKnockback(DamageClass.Summon) += 0.75f;
-                    Player.pickSpeed += 0.1f;
+                    Player.pickSpeed -= 0.1f;
                 }
             }
             if (CurrentSatiety <= 0)

@@ -232,6 +232,33 @@ namespace Everglow.Sources.Modules.FoodModule
                     tooltips[buffTimeIndex].Text = DrinkInfo.BuffTime.ToBuffTimeString();
                 }
             }
+            if (item.ModItem is DrinkBase)
+            {
+                int firstIndex = -1;
+                firstIndex = tooltips.FindIndex((tpline) =>
+                {
+                    return tpline.Name.Contains("Tooltip");
+                });
+                // 如果有tooltip，就删掉所有Tooltip的line然后插入到第一个所在位置
+                var drinkItem = item.ModItem as DrinkBase;
+                var drinkInfo = drinkItem.DrinkInfo;
+                if (firstIndex >= 0)
+                {
+                    tooltips.RemoveAll((tp) => tp.Name.Contains("Tooltip"));
+                    tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.BuffDescription." + drinkInfo.Name)));
+                }
+                else
+                {
+                    // 否则加到最后面
+                    tooltips.Add(new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.BuffDescription." + drinkInfo.Name)));
+                }
+
+                int buffTimeIndex = tooltips.FindIndex((tp) => tp.Name.Contains("BuffTime"));
+                if (buffTimeIndex != -1)
+                {
+                    tooltips[buffTimeIndex].Text = drinkInfo.BuffTime.ToBuffTimeString();
+                }
+            }
         }
 
         public override void SetStaticDefaults()

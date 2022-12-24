@@ -83,7 +83,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
                         }
                         if (!NPC.AnyNPCs(ModContent.NPCType<CorruptMoth>()))
                         {
-                            Main.NewText("Corrupted Moth has awoken!", 175, 75, 255);
+                            Main.NewText($"{Language.GetTextValue("Mods.Everglow.NPCName.CorruptMoth")} {Language.GetTextValue("Mods.Everglow.Common.Message.HasAwoken")}", 175, 75, 255);
                         }
                         int n = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.position.X + 26, (int)NPC.position.Y + 106, ModContent.NPCType<CorruptMoth>());
                         Main.npc[n].velocity = new Vector2(-1, 1);
