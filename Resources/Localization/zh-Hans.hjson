@@ -26,6 +26,11 @@ Mods:
 			ExcluWeapon : 专属武器
 			MythWeapon : 神话武器
 			LegendWeapon : 传说武器
+			DebugItem : 
+				'''
+				! 调试物品 !
+				后果自负
+				'''
 
 			#世界系统WorldSystem
 			WorldSystem:
@@ -261,9 +266,6 @@ Mods:
 			LanternCrystal : 皇城晶塔
 			LanternPost1 : 灯笼柱
 			LanternPost2 : 灯笼柱
-			DiscordBallF1 : 混沌晶球·天穹古道
-			LiftLamp : 电梯指示灯
-			TestItem : 木制升降梯
 			EkandaBrick : 埃坎达砖
 			Guding : 埃坎达合金
 			NoFlawsDream : 无瑕梦境
@@ -398,6 +400,9 @@ Mods:
 				WatermelonPlate : "西瓜拼盘"
 
 			#天穹树系列物品
+			YggdrasilCapital : "'天穹印象'"
+			LiftLamp : 电梯指示灯
+			TestItem : 木制升降梯
 
 				#天穹树小镇
 				ChinesePartitionLamp : "中式屏风灯"
@@ -413,6 +418,7 @@ Mods:
 				StreetLantern : "灯笼街灯"
 				YellowDynastyShingles : "黄王朝瓦"
 				CyanVinePickaxe : "青缎镐"
+				DiscordBallF1 : 混沌晶球·天穹古道
 
 			#Plant Module Items
 			CactusBall : "仙人球棍"
@@ -659,8 +665,6 @@ Mods:
 			TitaniumClub : "{$Mods.Everglow.Common.ClubGT}"
 			TungstenClub : "{$Mods.Everglow.Common.ClubGT}"
 			WoodenClub : "{$Mods.Everglow.Common.ClubGT}"
-			# LiftLamp : ""
-			# TestItem : ""
 			# EkandaBrick : ""
 			# Guding : ""
 			# NoFlawsDream : ""
@@ -689,6 +693,12 @@ Mods:
 				'''
 
 			#流萤系列物品
+			FireflyCapital : 
+				'''
+				带你到流萤
+				{$Mods.Everglow.Common.DebugItem}
+				'''
+
 			GlowBeadGun : 
 				'''
 				长按攻击键以充能
@@ -716,6 +726,16 @@ Mods:
 			DarknessFan : "{$Mods.Everglow.Common.LegendWeapon}\n无召唤标记伤害\n你的召唤物将集中打击敌人\n无召唤标记伤害\n你的召唤物将集中打击被扇子击中的敌人\n以扇子和幻蝶打击敌人，右键扔出扇子\n扇子本体施加幻蝶之印(可叠加), 每层使幻蝶造成的伤害提高10%\n层数上限随共鸣层数增长\n'蕴含着被巨蛾吞噬的灵魂'"
 
 			# 天穹树系列物品
+			YggdrasilCapital : 
+				'''
+				带你到天穹树
+				{$Mods.Everglow.Common.DebugItem}
+				'''
+			# LiftLamp
+			TestItem : 
+				'''
+				{$Mods.Everglow.Common.DebugItem}
+				'''
 				# 天穹树小镇
 				CyanVinePickaxe : 
 					'''

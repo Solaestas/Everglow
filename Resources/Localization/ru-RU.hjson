@@ -259,9 +259,6 @@
 			LanternPost1 : Фонарный столб
 			LanternPost2 : Фонарный столб
 			YellowDynastyShingles : Черепица Желтой Династии
-			DiscordBallF1 : Discord Crystal Ball · The Ancient Path
-			LiftLamp : Lift Indicator
-			TestItem : Деревянный Подъемник
 			EkandaBrick : Ekanda Brick
 			Guding : Ekanda Alloy
 			NoFlawsDream : Flawless Dream
@@ -396,6 +393,10 @@
 				WatermelonPlate : "Watermelon Plate"
 
 			#Yggdrasil Items
+			YggdrasilCapital : "'An Illusion of The Yggdrasil'"
+			DiscordBallF1 : Discord Crystal Ball · The Ancient Path
+			LiftLamp : Lift Indicator
+			TestItem : Деревянный Подъемник
 
 				#Yggdrasil Town
 				ChinesePartitionLamp : "Chinese Partition Lamp"
@@ -644,8 +645,6 @@
 			TitaniumClub : "{$Mods.Everglow.Common.ClubGT}"
 			TungstenClub : "{$Mods.Everglow.Common.ClubGT}"
 			WoodenClub : "{$Mods.Everglow.Common.ClubGT}"
-			LiftLamp : ""
-			TestItem : ""
 			EkandaBrick : ""
 			Guding : ""
 			NoFlawsDream : ""
@@ -674,6 +673,12 @@
 				'''
 
 			#流萤系列物品
+			FireflyCapital : 
+				'''
+				Brings you to The Firefly
+				{$Mods.Everglow.Common.DebugItem}
+				'''
+
 			GlowBeadGun : 
 				'''
 				Hold attack to charge
@@ -697,6 +702,16 @@
 			DarknessFan : "{$Mods.Everglow.Common.LegendWeapon}\n{$Mods.Everglow.Common.WarWhipGT}\nStrike enemies with the fan and Phantom Butterflies (PBs)\nRight click to throw out the fan\nThe fan itself inflicts Mark of PB (stackable), each level increases damage dealt by PBs by 10%\nMax stack increases with Sync level"
 
 			# 天穹树系列物品
+			YggdrasilCapital : 
+				'''
+				Brings you to The Yggdrasil
+				{$Mods.Everglow.Common.DebugItem}
+				'''
+			# LiftLamp
+			TestItem : 
+				'''
+				{$Mods.Everglow.Common.DebugItem}
+				'''
 				# 天穹树小镇
 				CyanVinePickaxe : 
 					'''

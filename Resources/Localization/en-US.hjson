@@ -26,6 +26,11 @@ Mods:
 			ExcluWeapon : Exclusive Weapon
 			MythWeapon : Mythical Weapon
 			LegendWeapon : Legendary Weapon
+			DebugItem : 
+				'''
+				! Debug item !
+				Use on your own risk
+				'''
 
 			#世界系统WorldSystem
 			WorldSystem:
@@ -261,9 +266,6 @@ Mods:
 			LanternCrystal : Royal City Pylon
 			LanternPost1 : Lantern Post
 			LanternPost2 : Lantern Post
-			DiscordBallF1 : Discord Crystal Ball · The Ancient Path
-			LiftLamp : Lift Indicator
-			TestItem : Wooden Lift
 			EkandaBrick : Ekanda Brick
 			Guding : Ekanda Alloy
 			NoFlawsDream : Flawless Dream
@@ -398,6 +400,10 @@ Mods:
 				WatermelonPlate : "Watermelon Plate"
 
 			# Yggdrasil Items
+			YggdrasilCapital : "'An Illusion of The Yggdrasil'"
+			DiscordBallF1 : Discord Crystal Ball · The Ancient Path
+			LiftLamp : Lift Indicator
+			TestItem : Wooden Lift
 
 				#Yggdrasil Town
 				ChinesePartitionLamp : "Chinese Partition Lamp"
@@ -659,8 +665,6 @@ Mods:
 			TitaniumClub : "{$Mods.Everglow.Common.ClubGT}"
 			TungstenClub : "{$Mods.Everglow.Common.ClubGT}"
 			WoodenClub : "{$Mods.Everglow.Common.ClubGT}"
-			LiftLamp : ""
-			TestItem : ""
 			EkandaBrick : ""
 			Guding : ""
 			NoFlawsDream : ""
@@ -689,6 +693,12 @@ Mods:
 				'''
 
 			#流萤系列物品
+			FireflyCapital : 
+				'''
+				Brings you to The Firefly
+				{$Mods.Everglow.Common.DebugItem}
+				'''
+
 			GlowBeadGun : 
 				'''
 				Hold attack to charge
@@ -716,6 +726,16 @@ Mods:
 			DarknessFan : "{$Mods.Everglow.Common.LegendWeapon}\n{$Mods.Everglow.Common.WarWhipGT}\nStrike enemies with the fan and Phantom Butterflies (PBs)\nRight click to throw out the fan\nThe fan itself inflicts Mark of PB (stackable), each level increases damage dealt by PBs by 10%\nMax stack increases with Sync level"
 			
 			# 天穹树系列物品
+			YggdrasilCapital : 
+				'''
+				Brings you to The Yggdrasil
+				{$Mods.Everglow.Common.DebugItem}
+				'''
+			# LiftLamp
+			TestItem : 
+				'''
+				{$Mods.Everglow.Common.DebugItem}
+				'''
 				# 天穹树小镇
 				CyanVinePickaxe : 
 					'''
