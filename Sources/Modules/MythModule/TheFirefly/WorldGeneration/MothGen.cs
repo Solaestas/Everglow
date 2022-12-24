@@ -64,7 +64,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                     break;
                 }
             }
-            for (int i = -1; i <= 1; i++)
+            for (int i = -2; i <= 2; i++)
             {
                 var PylonTile = Main.tile[pylonBottom.X + i, pylonBottom.Y + 1];
                 PylonTile.TileType = TileID.GrayBrick;
@@ -336,13 +336,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
 
                                     ushort PylonType = (ushort)ModContent.TileType<Pylon.FireflyPylon>();
                                     var bottom = new Point(a + x, b + y);
-                                    for (int i = -1; i <= 1; i++)
+                                    for (int i = -2; i <= 2; i++)
                                     {
                                         var PylonTile = Main.tile[bottom.X + i, bottom.Y + 1];
                                         PylonTile.TileType = (ushort)ModContent.TileType<DarkCocoon>();
                                         PylonTile.HasTile = true;
                                         PylonTile.Slope = SlopeType.Solid;
                                         PylonTile.IsHalfBlock = false;
+                                        WorldGen.TileFrame(bottom.X + i, bottom.Y + 1);
                                     }
 
                                     TileObject.CanPlace(bottom.X, bottom.Y, PylonType, 0, 0, out var tileObject);
