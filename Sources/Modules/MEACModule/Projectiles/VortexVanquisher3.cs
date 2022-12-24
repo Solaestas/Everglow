@@ -101,5 +101,11 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             }
             return false;
         }
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        {
+            Player player = Main.player[Projectile.owner];
+            player.immune = true;
+            player.immuneTime = Math.Max(player.immuneTime, 30);
+        }
     }
 }

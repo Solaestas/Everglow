@@ -30,8 +30,11 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             {
                 StrikeDown();
             }
-            player.immune = true;
-            player.immuneTime = 8;
+            if (Projectile.timeLeft == 30)
+            {
+                player.immune = true;
+                player.immuneTime = Math.Max(player.immuneTime, 30);
+            }
             Projectile.position += new Vector2(18 * Math.Sign(Projectile.velocity.X), 0);
             if(Projectile.timeLeft > 20)
             {
