@@ -20,16 +20,12 @@ namespace Everglow.Sources.Modules.FoodModule.Items.ModDrink
 				{
 					Thirsty = false,
 					BuffType = ModContent.BuffType<LonelyJellyfishBuff>(),
-					BuffTime = new FoodDuration(0, 10, 0),
+					BuffTime = new FoodDuration(0, 15, 0),
 					Name = "LonelyJellyfishBuff"
                 };
             }
         }
         public override void SetStaticDefaults() {
-			DisplayName.SetDefault("孤独的水母");
-
-			Tooltip.SetDefault("{$CommonItemTooltip.MediumStats}\n'观赏完就一饮而尽吧'");
-
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 5;
 
 			Main.RegisterItemAnimation(Type, new DrawAnimationVertical(int.MaxValue, 3));
