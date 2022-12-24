@@ -46,7 +46,12 @@ Mods:
 
 			PylonSystem : 
 			{
-				ShabbyPylonRepairedTip : "Pylon Repaired"
+				ShabbyPylonRepairedTip : "Pylon reconnected"
+			}
+
+			Message : 
+			{
+				HasAwoken : "has awoken!"
 			}
 		}
 		NPCName:
