@@ -63,7 +63,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
             List<VertexBase.CustomVertexInfo> bars = new List<VertexBase.CustomVertexInfo>();
-            ef = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/Trail").Value;
+                            ef = Common.MythContent.QuickEffect("Effects/Trail");
             // 把所有的点都生成出来，按照顺序
             int width = 30;
             if (Projectile.timeLeft < 30)

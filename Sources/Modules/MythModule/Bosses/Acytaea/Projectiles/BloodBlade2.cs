@@ -131,7 +131,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
             List<Vertex2D> bars = new List<Vertex2D>();
-            ef = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/Trail").Value;
+                            ef = Common.MythContent.QuickEffect("Effects/Trail");
             // 把所有的点都生成出来，按照顺序
             int width = 40;
             for (int i = 1; i < Projectile.oldPos.Length; ++i)
