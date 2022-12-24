@@ -14,7 +14,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Projectile.height = 36;
             Projectile.friendly = false;
             Projectile.hostile = false;
-            Projectile.timeLeft = 360;
+            Projectile.timeLeft = 720;
             Projectile.tileCollide = false;
             Projectile.DamageType = DamageClass.Magic;
         }
@@ -30,7 +30,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            if (Projectile.timeLeft % 5 == 0)
+            if (Projectile.timeLeft % 5 == 0 && Energy < 180)
             {
                 player.statMana--;
             }
