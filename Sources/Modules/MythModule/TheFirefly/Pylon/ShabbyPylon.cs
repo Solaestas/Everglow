@@ -122,7 +122,7 @@ internal class ScreenMovePlayer : ModPlayer
         if (PylonSystem.Instance.firstEnableAnimation)
         {
             var firefly = TileEntity.ByPosition.FirstOrDefault(pair => pair.Value is ShabbyPylonTileEntity);
-            if (firefly.Value != default)
+            if (firefly.Value != default(TileEntity))
             {
                 var target = firefly.Key.ToWorldCoordinates() - Main.ScreenSize.ToVector2() / 2;
                 AnimationTimer++;
