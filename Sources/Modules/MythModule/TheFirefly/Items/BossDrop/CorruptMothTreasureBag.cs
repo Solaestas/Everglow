@@ -41,7 +41,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.BossDrop
         {
             var entitySource = player.GetSource_OpenItem(Type);
 
-            switch (Main.rand.Next(6))
+            switch (Main.rand.Next(9))
             {
                 case 0:
                     player.QuickSpawnItem(entitySource, ModContent.ItemType<ShadowWingBow>());
@@ -65,6 +65,17 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.BossDrop
 
                 case 5:
                     player.QuickSpawnItem(entitySource, ModContent.ItemType<ScaleWingBlade>());
+                    break;
+                case 6:
+                    player.QuickSpawnItem(entitySource, ModContent.ItemType<DreamWeaver>());
+                    break;
+
+                case 7:
+                    player.QuickSpawnItem(entitySource, ModContent.ItemType<FlowLightMissile>());
+                    break;
+
+                case 8:
+                    player.QuickSpawnItem(entitySource, ModContent.ItemType<NavyThunder>());
                     break;
             }
             if (Main.rand.NextBool(2) && Main.hardMode == true)
