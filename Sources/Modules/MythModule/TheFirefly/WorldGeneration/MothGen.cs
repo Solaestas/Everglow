@@ -12,11 +12,13 @@ using Terraria.GameContent;
 using Terraria.Map;
 using Terraria.ModLoader.Default;
 using Terraria.ObjectData;
+using Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Items;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
 {
     public class MothLand : ModSystem
     {
+        public static Vector2 ShabbyPos = new Vector2();
         public override void PostUpdateEverything()
         {
             //if (Main.mouseRight && Main.mouseRightRelease && Main.keyState.PressingShift())
@@ -50,7 +52,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             MapIO mapIO = new MapIO(sbpp.X, sbpp.Y);
             int Height = mapIO.ReadHeight(Everglow.Instance.GetFileStream("Sources/Modules/MythModule/" + Path));
             QuickBuild(sbpp.X, sbpp.Y - Height / 2, Path);
-
+            ShabbyPos = new Vector2(sbpp.X, sbpp.Y - Height / 2);
             Point pylonBottom = new Point(sbpp.X + Main.rand.Next(8, 16), sbpp.Y - Height / 2 + 8);
             ushort PylonType = (ushort)ModContent.TileType<ShabbyPylon>();
             PylonSystem.Instance.shabbyPylonEnable = false;
@@ -801,6 +803,113 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                     }
                 }
             }
+        }
+        public override void PostWorldGen()
+        {
+            bool placed = false;
+            for (int offX = -36; offX < 36; offX += 72)
+            {
+                for (int offY = -36; offY < 12; offY++)
+                {
+                    if (!placed)
+                    {
+                        placed = TrySpellbookChest(Main.spawnTileX + offX, Main.spawnTileY + offY, 36);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+        private bool TrySpellbookChest(int startX, int startY, int rangeX = 16)
+        {
+            int[] legalTile = new int[] 
+            {
+                    TileID.Stone,
+                    TileID.Grass,
+                    TileID.Dirt,
+                    TileID.SnowBlock,
+                    TileID.IceBlock,
+                    TileID.ClayBlock,
+                    TileID.Mud,
+                    TileID.JungleGrass,
+                    TileID.Sand
+            };
+            bool canPlace = true;
+            int dir = -1;
+            if (startY < 4 || startY > Main.maxTilesY - 1)
+            {
+                return false;
+            }
+            for (int x = startX; dir > 0 ? x <= startX + rangeX : x >= startX - rangeX; x += dir)
+            {
+                if (x < 0 || x > Main.maxTilesX - 4)
+                {
+                    continue;
+                }
+                for (int i = 0; i < 4; i++)
+                {
+                    for (int j = 0; j < 4; j++)
+                    {
+                        Tile tile = Framing.GetTileSafely(x + i, startY - j);
+                        if (WorldGen.SolidOrSlopedTile(tile))
+                        {
+                            canPlace = false;
+                            break;
+                        }
+                    }
+                }
+                if (canPlace)
+                {
+                    for (int i = 0; i < 4; i++)
+                    {
+                        Tile tile = Framing.GetTileSafely(x + i, startY + 1);
+                        if (!WorldGen.SolidTile(tile) || !legalTile.Contains(tile.TileType))
+                        {
+                            canPlace = false; 
+                            break;
+                        }
+                    }
+                }
+                if (canPlace)
+                {
+                    for (int i = 0; i < 4; i++)
+                    {
+                        for (int j = 0; j < 4; j++)
+                        {
+                            WorldGen.KillTile(x + i, startY - j);
+                        }
+                    }
+                    WorldGen.PlaceTile(x, startY + 1, TileID.MeteoriteBrick, forced: true);
+                    WorldGen.PlaceTile(x + 1, startY + 1, TileID.MeteoriteBrick, forced: true);
+                    WorldGen.PlaceTile(x + 2, startY + 1, TileID.MeteoriteBrick, forced: true);
+                    WorldGen.PlaceTile(x + 3, startY + 1, TileID.MeteoriteBrick, forced: true);
+                    int c = WorldGen.PlaceChest(x + 1, startY, style: 49);
+                    Chest chest = Main.chest[c];
+                    if (chest != null)
+                    {
+                        chest.name = "Spellbook Demo";
+                        chest.item[0].SetDefaults(ModContent.ItemType<CrystalSkull>());
+                        chest.item[1].SetDefaults(ItemID.WaterBolt);
+                        chest.item[2].SetDefaults(ItemID.DemonScythe);
+                        chest.item[3].SetDefaults(ItemID.BookofSkulls);
+                        chest.item[4].SetDefaults(ItemID.CrystalStorm);
+                        chest.item[5].SetDefaults(ItemID.CursedFlames);
+                        chest.item[6].SetDefaults(ItemID.GoldenShower);
+                        chest.item[7].SetDefaults(ItemID.MagnetSphere);
+                        chest.item[8].SetDefaults(ItemID.RazorbladeTyphoon);
+                        chest.item[9].SetDefaults(ItemID.LunarFlareBook);
+                    }
+                    return true;
+                }
+                if (x <= startX - rangeX)
+                {
+                    dir = 1;
+                    x = startX;
+                }
+            }
+            return false;
         }
     }
 }
