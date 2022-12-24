@@ -1,3 +1,6 @@
+! This is a demonstration !
+! 此为演示版 !
+
 Everglow is a comprehensive content mod, dedicated to add rich and interesting playable content to Terraria
 These contents will cover all aspects of the game: from the Terraria Continent to the wider world, weapons, equipment, bosses, biomes, new worlds, and new mechanics
 With a unique module system, players can selectively load some modules to customize the mod content to a certain extent, and find their favorite way to play
