@@ -493,12 +493,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         /// <returns></returns>
         private static Point16 ShabbyPylonPos()
         {
-            int PoX = (int)(Main.rand.Next(40, 160) * (Main.rand.Next(2) - 0.5f) * 2 + Main.maxTilesX / 2);
+            int PoX = (int)(Main.rand.Next(80, 160) * (Main.rand.Next(2) - 0.5f) * 2 - 20 + Main.maxTilesX / 2);
             int PoY = 100;
 
             while (!IsTileSmooth(new Point(PoX, PoY)))
             {
-                PoX = (int)(Main.rand.Next(40, 240) * (Main.rand.Next(2) - 0.5f) * 2 + Main.maxTilesX / 2);
+                PoX = (int)(Main.rand.Next(80, 240) * (Main.rand.Next(2) - 0.5f) * 2 - 20 + Main.maxTilesX / 2);
                 for (int y = 100; y < Main.maxTilesY / 3; y++)
                 {
                     if (Main.tile[PoX, y].HasTile)

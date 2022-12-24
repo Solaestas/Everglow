@@ -88,6 +88,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
                     {
                         if (!target.dontTakeDamage && !target.friendly && target.CanBeChasedBy() && target.knockBackResist > 0)
                         {
+                            if (target.velocity.Length() <= 0.001f)
+                            {
+                                continue;
+                            }
                             Vector2 ToTarget = target.Center - (Projectile.Center - new Vector2(0, 150));
                             float dis = ToTarget.Length();
                             if (dis < 800 && ToTarget != Vector2.Zero)
