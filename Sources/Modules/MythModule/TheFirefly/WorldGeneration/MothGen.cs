@@ -341,7 +341,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                                         var PylonTile = Main.tile[bottom.X + i, bottom.Y + 1];
                                         PylonTile.TileType = (ushort)ModContent.TileType<DarkCocoon>();
                                         PylonTile.HasTile = true;
-                                        WorldGen.TileFrame(bottom.X + i, bottom.Y + 1);
+                                        PylonTile.Slope = SlopeType.Solid;
+                                        PylonTile.IsHalfBlock = false;
                                     }
 
                                     TileObject.CanPlace(bottom.X, bottom.Y, PylonType, 0, 0, out var tileObject);
