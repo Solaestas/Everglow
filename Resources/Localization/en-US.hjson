@@ -45,7 +45,7 @@ Mods:
 
 			PylonSystem : 
 			{
-				ShabbyPylonRepairedTip : "Pylon Repaired"
+				ShabbyPylonRepairedTip : "Pylon reconnected"
 			}
 
 			Message : 

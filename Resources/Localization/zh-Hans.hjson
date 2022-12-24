@@ -45,7 +45,7 @@ Mods:
 
 			PylonSystem : 
 			{
-				ShabbyPylonRepairedTip : "晶塔已修复"
+				ShabbyPylonRepairedTip : "晶塔已重新链接"
 			}
 
 			Message : 
