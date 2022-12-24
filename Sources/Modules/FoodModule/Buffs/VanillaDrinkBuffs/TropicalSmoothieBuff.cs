@@ -5,7 +5,7 @@
         public override void SetStaticDefaults()
         {
             //DisplayName.SetDefault("TropicalSmoothieBuff");
-            //TODO Description.SetDefault("短时间内魔法攻击仅消耗一点魔力，大幅增加魔法伤害，暴击\n“热带风暴”");
+            //Description.SetDefault("短时间内魔法攻击仅消耗一点魔力，大幅增加魔法伤害，暴击\n“热带风暴”");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
         }

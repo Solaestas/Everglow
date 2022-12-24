@@ -7,8 +7,14 @@ using System.Threading.Tasks;
 using Everglow.Resources.NPCList.EventNPCs;
 using Everglow.Sources.Modules.FoodModule.Buffs;
 using Everglow.Sources.Modules.FoodModule.Buffs.ModDrinkBuffs;
+using Everglow.Sources.Modules.FoodModule.Buffs.VanillaFoodBuffs;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
+using Everglow.Sources.Modules.MythModule;
 using Steamworks;
 using Terraria.DataStructures;
+using Terraria.Audio;
+using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.FoodModule.Buffs
 {
@@ -70,6 +76,54 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
                 {
                     isservant = true;
                 }
+            }
+        }
+        public override void OnKill(NPC npc)
+        {
+            if (npc.HasBuff(ModContent.BuffType<CherryBuff>()))
+            {
+                SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, npc.Center);
+                Projectile.NewProjectile(npc.GetSource_Death("CherryBuff"), npc.Center, Vector2.Zero, ModContent.ProjectileType<BombShakeWave>(), 0, 0, npc.whoAmI, 0.4f, 2f);
+                float k1 = Math.Clamp(npc.velocity.Length(), 1, 3);
+                float k2 = Math.Clamp(npc.velocity.Length(), 6, 10);
+                float k0 = 1f / 4 * k2;
+                for (int j = 0; j < 8 * k0; j++)
+                {
+                    Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * k1;
+                    int dust0 = Dust.NewDust(npc.Center, 0, 0, ModContent.DustType<BlueGlowAppearStoppedByTile>(), v0.X / 10, v0.Y / 10, 100, default(Color), Main.rand.NextFloat(0.6f, 1.8f) * 2);
+                    Main.dust[dust0].noGravity = true;
+                }
+                for (int j = 0; j < 16 * k0; j++)
+                {
+                    Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * k1;
+                    int dust1 = Dust.NewDust(npc.Center, 0, 0, ModContent.DustType<BlueParticleDark2StoppedByTile>(), v0.X / 10, v0.Y / 10, 100, default(Color), Main.rand.NextFloat(3.7f, 5.1f) * 2);
+                    Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 50 / k0);
+                    Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
+                }
+                for (int j = 0; j < 16 * k0; j++)
+                {
+                    Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * k1;
+                    int dust1 = Dust.NewDust(npc.Center, 0, 0, ModContent.DustType<MothSmog>(), v0.X / 10, v0.Y / 10, 100, default(Color), Main.rand.NextFloat(3.7f, 5.1f) * 2);
+                    Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 50 / k0);
+                    Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
+                }
+                foreach (NPC target in Main.npc)
+                {
+                    if (target != npc)
+                    {
+                        float Dis = (target.Center - npc.Center).Length();
+                        if (Dis < 250)
+                        {
+                            if (!target.dontTakeDamage && !target.friendly && target.active)
+                            {
+                                target.AddBuff(ModContent.BuffType<CherryBuff>(), 1800);
+                                target.StrikeNPC(Main.rand.Next(80, 160) - target.defense, Main.rand.Next(8, 24), 0, Main.rand.NextBool(22, 33));
+                            }
+                        }
+                    }
+                }
+                CombatText.NewText(npc.Hitbox, Color.HotPink, Language.GetTextValue("Mods.Everglow.Common.FoodSystem.Khan"));
+                npc.DelBuff(npc.FindBuffIndex(ModContent.BuffType<CherryBuff>()));
             }
         }
     }

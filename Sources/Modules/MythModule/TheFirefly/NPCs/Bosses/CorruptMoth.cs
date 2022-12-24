@@ -73,8 +73,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Corrupted Moth");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "腐檀巨蛾");
             Main.npcFrameCount[NPC.type] = 10;
             var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
             {
@@ -90,11 +88,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-            string tex = "There are times when a corrupted worm can break out of its cocoon...";
-            if (Language.ActiveCulture.Name == "zh-Hans")
-            {
-                tex = "有些时候,腐化蠕虫也能破茧...";
-            }
             // We can use AddRange instead of calling Add multiple times in order to add multiple items at once
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
@@ -104,7 +97,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 
 				// Sets the description of this NPC that is listed in the bestiary.
 
-				new FlavorTextBestiaryInfoElement(tex)
+				new FlavorTextBestiaryInfoElement(Language.GetTextValue("Mods.Everglow.Bestiary.CorruptMoth.Flavor"))
             });
         }
 

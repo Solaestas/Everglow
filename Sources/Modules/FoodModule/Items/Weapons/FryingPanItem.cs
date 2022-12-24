@@ -13,8 +13,6 @@ namespace Everglow.Sources.Modules.FoodModule.Items.Weapons
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("炒锅");
-            Tooltip.SetDefault("左键作为回旋镖投掷，长按右键作为近战武器");
         }
         public override void SetDefaults()
         {

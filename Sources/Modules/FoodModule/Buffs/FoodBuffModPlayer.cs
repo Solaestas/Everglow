@@ -9,6 +9,7 @@ using Everglow.Resources.NPCList.EventNPCs;
 using Mono.Cecil;
 using Everglow.Sources.Modules.FoodModule.Buffs.ModDrinkBuffs;
 using Everglow.Sources.Modules.FoodModule.Buffs.ModFoodBuffs;
+using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.FoodModule.Buffs
 {
@@ -32,6 +33,7 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
         public bool RoastedBirdBuff;
         public bool RoastedDuckBuff;
         public bool BloodyMoscatoBuff;
+        public int BloodyMoscatoHealCount;
         public bool FriedEggBuff;
         public bool CherryBuff;
         public bool PiercoldWindBuff;
@@ -77,6 +79,7 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
             RoastedBirdBuff = false;
             RoastedDuckBuff = false;
             BloodyMoscatoBuff = false;
+            BloodyMoscatoHealCount = 0;
             FriedEggBuff = false;
             CherryBuff = false;
             PiercoldWindBuff = false;
@@ -122,6 +125,7 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
             RoastedBirdBuff = false;
             RoastedDuckBuff = false;
             BloodyMoscatoBuff = false;
+            BloodyMoscatoHealCount = Math.Max(--BloodyMoscatoHealCount, 0);
             FriedEggBuff = false;
             CherryBuff = false;
             PiercoldWindBuff = false;
@@ -146,26 +150,6 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
 
             CritDamage = 1f;
             AddCritDamage = 0;
-            if (StinkyTofuBuff)
-            {
-                foreach (NPC target in Main.npc)
-                {
-                    float Dis = (target.Center - Player.Center).Length();
-
-                    if (Dis < 500)
-                    {
-                        if (Main.rand.NextBool(100))
-                        {
-                            if (!target.buffImmune[BuffID.Confused])
-                            {
-                                target.AddBuff(BuffID.Confused, 600);
-                                target.velocity *= 0.5f;
-                            }
-                        }
-                    }
-                }
-            }
-
         }
 
         public override void PostUpdate()
@@ -217,10 +201,11 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
                 target.AddBuff(BuffID.Oiled, 600);
                 target.AddBuff(BuffID.OnFire, 600);
             }
-            if (BloodyMoscatoBuff)
+            if (BloodyMoscatoBuff && BloodyMoscatoHealCount <= 60)
             {
-                Player.HealEffect(5, true);
-                Player.statLife += 1;
+                Player.HealEffect(2, true);
+                Player.statLife += 2;
+                BloodyMoscatoHealCount += 10;
             }
             base.OnHitNPC(item, target, damage, knockback, crit);
         }
@@ -232,10 +217,11 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
                 target.AddBuff(BuffID.Oiled, 600);
                 target.AddBuff(BuffID.OnFire, 600);
             }
-            if (BloodyMoscatoBuff)
+            if (BloodyMoscatoBuff && BloodyMoscatoHealCount <= 60)
             {
                 Player.HealEffect(2, true);
-                Player.statLife += 1;
+                Player.statLife += 2;
+                BloodyMoscatoHealCount += 10;
             }
             base.OnHitNPCWithProj(proj, target, damage, knockback, crit);
         }
@@ -246,7 +232,7 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
                 SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, Player.Center);
                 ScreenShaker Gsplayer = Player.GetModPlayer<ScreenShaker>();
                 Gsplayer.FlyCamPosition = new Vector2(0, 150).RotatedByRandom(6.283);
-                Projectile.NewProjectile(null, Player.Center, Vector2.Zero, ModContent.ProjectileType<BombShakeWave>(), 0, 0, Player.whoAmI, 0.4f, 2f);
+                Projectile.NewProjectile(Player.GetSource_Death("CherryBuff"), Player.Center, Vector2.Zero, ModContent.ProjectileType<BombShakeWave>(), 0, 0, Player.whoAmI, 0.4f, 2f);
                 float k1 = Math.Clamp(Player.velocity.Length(), 1, 3);
                 float k2 = Math.Clamp(Player.velocity.Length(), 6, 10);
                 float k0 = 1f / 4 * k2;
@@ -278,13 +264,13 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
                     {
                         if (!target.dontTakeDamage && !target.friendly && target.active)
                         {
-                            bool crit = Main.rand.NextBool(33, 100);
-                            target.StrikeNPC(Math.Max(Player.HeldItem.damage * 5, 100), Math.Max(Player.HeldItem.knockBack * 5, 20), 1, crit);
-
-                            Player.addDPS(Math.Max(0, target.defDamage));
+                            target.AddBuff(ModContent.BuffType<CherryBuff>(), 1800);
+                            Player.ApplyDamageToNPC(target, Math.Max(Player.HeldItem.damage * 4, 120), Math.Max(Player.HeldItem.knockBack * 4, 24), 0, Main.rand.NextBool(22, 33));
                         }
                     }
                 }
+                CombatText.NewText(Player.Hitbox, Color.HotPink, Language.GetTextValue("Mods.Everglow.Common.FoodSystem.Khan"));
+                Player.ClearBuff(ModContent.BuffType<CherryBuff>());
             }
             base.Kill(damage, hitDirection, pvp, damageSource);
         }
@@ -293,101 +279,40 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
         {
             if (GrubSoupBuff)
             {
-                if (MangoBuff)
+                if (Player.lifeRegen > 0)
                 {
-                    if (Player.lifeRegen > 0)
-                    {
-                        Player.lifeRegen = 0;
-                    }
-
-                    Player.lifeRegenTime = 0;
-                    Player.lifeRegen -= 2;
+                    Player.lifeRegen = 0;
                 }
-                else
-                {
-                    if (Player.lifeRegen > 0)
-                    {
-                        Player.lifeRegen = 0;
-                    }
-
-                    Player.lifeRegenTime = 0;
-                    Player.lifeRegen -= 4;
-                }
-
+                Player.lifeRegenTime = 0;
+                Player.lifeRegen -= MangoBuff ? 2 : 4;
             }
             if (MonsterLasagnaBuff)
             {
-                if (MangoBuff)
+                if (Player.lifeRegen > 0)
                 {
-                    if (Player.lifeRegen > 0)
-                    {
-                        Player.lifeRegen = 0;
-                    }
-
-                    Player.lifeRegenTime = 0;
-                    Player.lifeRegen -= 3;
+                    Player.lifeRegen = 0;
                 }
-                else
-                {
-                    if (Player.lifeRegen > 0)
-                    {
-                        Player.lifeRegen = 0;
-                    }
-
-                    Player.lifeRegenTime = 0;
-                    Player.lifeRegen -= 6;
-                }
-
+                Player.lifeRegenTime = 0;
+                Player.lifeRegen -= MangoBuff ? 3 : 6;
             }
             if (SashimiBuff)
             {
-                if (MangoBuff)
+                if (Player.lifeRegen > 0)
                 {
-                    if (Player.lifeRegen > 0)
-                    {
-                        Player.lifeRegen = 0;
-                    }
-
-                    Player.lifeRegenTime = 0;
-                    Player.lifeRegen -= 2;
+                    Player.lifeRegen = 0;
                 }
-                else
-                {
-                    if (Player.lifeRegen > 0)
-                    {
-                        Player.lifeRegen = 0;
-                    }
-
-                    Player.lifeRegenTime = 0;
-                    Player.lifeRegen -= 4;
-                }
-
+                Player.lifeRegenTime = 0;
+                Player.lifeRegen -= MangoBuff ? 2 : 4;
             }
             if (ShuckedOysterBuff)
             {
-                if (MangoBuff)
+                if (Player.lifeRegen > 0)
                 {
-                    if (Player.lifeRegen > 0)
-                    {
-                        Player.lifeRegen = 0;
-                    }
-
-                    Player.lifeRegenTime = 0;
-                    Player.lifeRegen -= 2;
+                    Player.lifeRegen = 0;
                 }
-                else
-                {
-                    if (Player.lifeRegen > 0)
-                    {
-                        Player.lifeRegen = 0;
-                    }
-
-                    Player.lifeRegenTime = 0;
-                    Player.lifeRegen -= 6;
-                }
+                Player.lifeRegenTime = 0;
+                Player.lifeRegen -= MangoBuff ? 2 : 4;
             }
-
         }
-
     }
 }
