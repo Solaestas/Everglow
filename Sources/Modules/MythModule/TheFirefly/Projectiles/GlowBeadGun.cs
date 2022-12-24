@@ -14,7 +14,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Projectile.height = 36;
             Projectile.friendly = false;
             Projectile.hostile = false;
-            Projectile.timeLeft = 350;
+            Projectile.timeLeft = 720;
             Projectile.tileCollide = false;
             Projectile.DamageType = DamageClass.Magic;
         }
@@ -24,21 +24,20 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             return new Color(255 - Projectile.alpha, 255 - Projectile.alpha, 255 - Projectile.alpha, 0);
         }
 
-        private bool Release = true;
         private Vector2 oldPo = Vector2.Zero;
         private int Energy = 0;
 
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            if (Projectile.timeLeft % 5 == 0)
+            if (Projectile.timeLeft % 5 == 0 && Energy < 180)
             {
                 player.statMana--;
             }
-            Energy++;
+            Energy = Math.Min(++Energy, 180);
             Vector2 v0 = Main.MouseWorld - Main.player[Projectile.owner].MountedCenter;
             v0 = Vector2.Normalize(v0);
-            if (Main.mouseLeft && Release)
+            if (player.controlUseItem)
             {
                 Projectile.ai[0] *= 0.9f;
                 Projectile.ai[1] -= 1f;
@@ -48,7 +47,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 Projectile.Center = oldPo;
                 Projectile.velocity *= 0;
             }
-            if (!Main.mouseLeft && Release)
+            if (!player.controlUseItem)
             {
                 if (Projectile.ai[1] > 0)
                 {
@@ -61,7 +60,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                     Shoot();
                 }
             }
-            if (Energy == 180 || player.statMana <= 0)
+            if (player.statMana <= 0 || Projectile.timeLeft < 2)
             {
                 Shoot();
             }
@@ -122,10 +121,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 
         public override void PostDraw(Color lightColor)
         {
-            if (!Release)
-            {
-                return;
-            }
             Player player = Main.player[Projectile.owner];
             player.heldProj = Projectile.whoAmI;
             Vector2 v0 = Projectile.Center - player.MountedCenter;
