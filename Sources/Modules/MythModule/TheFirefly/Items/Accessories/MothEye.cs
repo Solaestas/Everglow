@@ -50,7 +50,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
             {
                 tooltips.Add(new TooltipLine(Everglow.Instance, "MothEyeCriteriaText", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeCriteriaText")));
             }
-            tooltips.Add(new TooltipLine(Everglow.Instance, "UnfinishedItem", Language.GetTextValue("Mods.Everglow.ExtraTooltip.Misc.UnfinishedItem")));
         }
         public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
