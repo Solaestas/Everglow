@@ -3,6 +3,7 @@ using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Terraria.Audio;
+using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 {
