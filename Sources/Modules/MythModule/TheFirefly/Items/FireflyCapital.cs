@@ -35,11 +35,5 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items
             }
             return base.UseItem(player);
         }
-
-        public override void AddRecipes()
-        {
-            CreateRecipe()
-                .Register();
-        }
     }
 }

@@ -33,10 +33,5 @@ namespace Everglow.Sources.Modules.YggdrasilModule
             }
             return base.UseItem(player);
         }
-        public override void AddRecipes()
-        {
-            CreateRecipe()
-                .Register();
-        }
     }
 }

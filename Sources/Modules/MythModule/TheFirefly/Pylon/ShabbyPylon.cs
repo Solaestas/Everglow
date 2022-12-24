@@ -92,9 +92,11 @@ internal class ShabbyPylonItem : ModItem
         var position = Main.MouseWorld;
         var bottom = position.ToTileCoordinates();
 
-        TileObject.CanPlace(bottom.X,bottom.Y,TileID,0,0,out var tileObject);
-        TileObject.Place(tileObject);
-        TileObjectData.CallPostPlacementPlayerHook(bottom.X, bottom.Y, TileID, 0, 0, 0, tileObject);
+        if(TileObject.CanPlace(bottom.X, bottom.Y, TileID, 0, 0, out var tileObject) && TileObject.Place(tileObject))
+        {
+            TileObjectData.CallPostPlacementPlayerHook(bottom.X, bottom.Y, TileID, 0, 0, 0, tileObject);
+        }
+
         return base.CanUseItem(player);
     }
 }
