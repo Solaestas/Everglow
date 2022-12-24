@@ -38,6 +38,7 @@ Mods:
 			#食物系统FoodSystem
 			FoodSystem:
 			{
+			    Satiety : "饱食度"
 				CannotEat : "你吃饱了"
 				CannotDrink : "你不想再喝了"
 				Khan : "可汗，再带我冲一次吧"
@@ -362,9 +363,9 @@ Mods:
 				DryMartini : "干马天尼"
 				GreenStorm : "绿色风暴"
 				KiwiJuice : "猕猴桃汁"
-				LonelyJellyfish : "'孤独的水母'"
+				LonelyJellyfish : "孤独的水母"
 				OrangeJuice : "橙汁"
-				PiercoldWind : "'凛冽寒风'"
+				PiercoldWind : "凛冽寒风"
 				PurpleHooter : "紫色汽笛"
 				QuinceMarry : "榅桲玛丽"
 				RedWine : "红酒"
@@ -379,7 +380,7 @@ Mods:
 				CaramelPudding : "焦糖布丁"
 				CrabseedWarship : "蟹籽军舰"
 				Durian : "榴莲"
-				EggTart : "鸡蛋馅饼"
+				EggTart : "蛋挞"
 				KiwiFruit : "猕猴桃"
 				KiwiIceCream : "猕猴桃冰激凌"
 				Mangosteen : "山竹"
@@ -952,7 +953,7 @@ Mods:
 					'''
 					{$CommonItemTooltip.MediumStats}
 					增强8%击退能力
-					“最大的打击力度”
+					“比起西瓜本身，我更好奇你怎么把它一整个吃下去”
 					'''
 				WatermelonPlate : 
 					'''
@@ -1080,9 +1081,9 @@ Mods:
 				DryMartiniBuff : "干马天尼"
 				GreenStormBuff : "绿色风暴"
 				KiwiJuiceBuff : "猕猴桃汁"
-				LonelyJellyfishBuff : "'孤独的水母'"
+				LonelyJellyfishBuff : "孤独的水母"
 				OrangeJuiceBuff : "橙汁"
-				PiercoldWindBuff : "'凛冽寒风'"
+				PiercoldWindBuff : "凛冽寒风"
 				PurpleHooterBuff : "紫色汽笛"
 				QuinceMarryBuff : "榅桲玛丽"
 				RedWineBuff : "红酒"
@@ -1097,7 +1098,7 @@ Mods:
 				CaramelPuddingBuff : "焦糖布丁"
 				CrabseedWarshipBuff : "蟹籽军舰"
 				DurianBuff : "榴莲"
-				EggTartBuff : "鸡蛋馅饼"
+				EggTartBuff : "蛋挞"
 				KiwiFruitBuff : "猕猴桃"
 				KiwiIceCreamBuff : "猕猴桃冰激凌"
 				MangosteenBuff : "山竹"
@@ -1207,7 +1208,7 @@ Mods:
 			SakeBuff : "短时间内减少18防御，大幅增加近战能力\n“纯度，太高了。”"
 			SashimiBuff : "可以游泳，水下呼吸，增加10%伤害，20%移速，但每秒减3生命\n“寄生虫！”"
 			SauteedFrogLegsBuff : "自动跳跃，提升跳跃能力\n“钓不到蛙腿？那就吃吧。”"
-			SeafoodDinnerBuff : "增加12%暴击，伤害，攻速\n“够生猛！”"
+			SeafoodDinnerBuff : "增加6%暴击，伤害，攻速\n“够生猛！”"
 			ShrimpPoBoyBuff : "加6防御,25%挖矿速度\n“壮阳”"
 			ShuckedOysterBuff : "增加10穿甲, 但降低5防御且每秒减少3生命\n“寄生虫！”"
 			SmoothieofDarknessBuff : "短时间内50%闪避\n“腹黑（字面意义上）”"
@@ -1404,7 +1405,7 @@ Mods:
 				WatermelonBuff : 
 					'''
 					增强8%击退能力
-					“最大的打击力度”
+					“比起西瓜本身，我更好奇你怎么把它一整个吃下去”
 					'''
 				WatermelonPlateBuff : 
 					'''

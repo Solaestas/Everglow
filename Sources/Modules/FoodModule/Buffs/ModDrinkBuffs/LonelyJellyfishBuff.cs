@@ -12,10 +12,10 @@
 
         public override void Update(Player player, ref int buffIndex)
         {
-            player.stealth = 100;
-            if (Main.time % 0.5f == 0)
+            player.invis = true;
+            if (Main.time % 20f == 0)
             {
-                int projectile = Projectile.NewProjectile(null, Main.MouseWorld, Vector2.Zero, ProjectileID.Electrosphere, Math.Clamp(player.HeldItem.damage, 25, 150), 10, player.whoAmI);
+                int projectile = Projectile.NewProjectile(player.GetSource_Buff(buffIndex), Main.MouseWorld, Vector2.Zero, ProjectileID.Electrosphere, Math.Clamp(player.HeldItem.damage, 25, 150), 10, player.whoAmI);
             }
         }
     }

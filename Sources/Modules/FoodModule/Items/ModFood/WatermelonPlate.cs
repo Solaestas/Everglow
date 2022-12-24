@@ -33,10 +33,10 @@ namespace Everglow.Sources.Modules.FoodModule.Items.ModFood
 			Main.RegisterItemAnimation(Type, new DrawAnimationVertical(int.MaxValue, 3));
 
 			ItemID.Sets.FoodParticleColors[Item.type] = new Color[3] {
-				new Color(249, 230, 136),
-				new Color(152, 93, 95),
-				new Color(174, 192, 192)
-			};
+                new Color(108, 150, 12),
+                new Color(242, 18, 0),
+                new Color(255, 94, 81)
+            };
 
 			ItemID.Sets.IsFood[Type] = true; 
 		}
