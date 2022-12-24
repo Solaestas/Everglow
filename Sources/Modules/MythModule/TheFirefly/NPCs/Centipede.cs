@@ -56,6 +56,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Caverns,
 
                 new FlavorTextBestiaryInfoElement(Language.GetTextValue("Mods.Everglow.Bestiary.Centipede.Flavor"))
+            });
         }
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
