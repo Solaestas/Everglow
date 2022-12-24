@@ -25,7 +25,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.WorldGeneration
 
             protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
             {
-                Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everlow.Common.WorldSystem.BuildtheTreeWorld");
+                Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everglow.Common.WorldSystem.BuildtheTreeWorld");
                 BuildtheTreeWorld();
             }
         }

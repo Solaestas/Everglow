@@ -17,3 +17,4 @@ MothEye Tooltip Update & Extra Tooltips Update
 FireflyBorageBadge Tooltip Update & Extra Tooltips Update
 
 *All*:
+New MEyeBonusTextMothBlade: "Moths appearing from this blade move faster"
