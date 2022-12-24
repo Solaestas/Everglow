@@ -70,7 +70,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                 PylonTile.TileType = TileID.GrayBrick;
                 PylonTile.HasTile = true;
                 PylonTile.Slope = SlopeType.Solid;
-                WorldGen.TileFrame(pylonBottom.X + i, pylonBottom.Y + 1);
+                PylonTile.IsHalfBlock = false;
             }
 
             TileObject.CanPlace(pylonBottom.X, pylonBottom.Y, PylonType, 0, 0, out var tileObject);
@@ -501,7 +501,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                 PoX = (int)(Main.rand.Next(80, 240) * (Main.rand.Next(2) - 0.5f) * 2 - 20 + Main.maxTilesX / 2);
                 for (int y = 160; y < Main.maxTilesY / 3; y++)
                 {
-                    if (Main.tile[PoX, y].HasTile)
+                    if (Main.tile[PoX, y].HasTile && Main.tile[PoX, y].TileType != TileID.Trees)
                     {
                         PoY = y;
                         break;
