@@ -75,7 +75,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             }
             else if (NPC.CountNPCS(ModContent.NPCType<CentipedeHead>()) > 0)
             {
-                return 0.4f;
+                return 0.04f;
             }
             return 0.08f;
         }
