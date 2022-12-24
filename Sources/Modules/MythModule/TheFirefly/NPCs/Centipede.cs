@@ -1,8 +1,8 @@
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
-using Terraria.Localization;
 using Everglow.Sources.Modules.MythModule.Common;
+using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 {

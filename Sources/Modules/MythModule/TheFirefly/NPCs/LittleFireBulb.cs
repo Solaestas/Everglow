@@ -6,10 +6,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 {
     public class LittleFireBulb : ModNPC
     {
-        public override void SetStaticDefaults()
-        {
-        }
-
         public override void SetDefaults()
         {
             NPC.damage = 0;

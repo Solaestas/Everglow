@@ -703,7 +703,7 @@
 
 			#食物系统物品
 			BloodGlucoseMonitor : "Display hunger information"
-			OsmoticPressureMonitor : "Display thrist information"
+			OsmoticPressureMonitor : "Display thirst information"
 			
 			FryingPanItem : "Left click to throw it as a boomerang, right click and hold to swing it as a sword"
 
