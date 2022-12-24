@@ -24,7 +24,6 @@ namespace Everglow.Sources.Modules.PlantModule.Projectiles.Melee
 			Projectile.width = Projectile.height = 32;
 			Projectile.friendly = true;
 			Projectile.DamageType = DamageClass.Melee;
-			Projectile.penetrate = -1;
 			Projectile.usesLocalNPCImmunity = true;
 			Projectile.localNPCHitCooldown = 20;
 			Projectile.extraUpdates = 1;
@@ -78,6 +77,7 @@ namespace Everglow.Sources.Modules.PlantModule.Projectiles.Melee
 			if(Projectile.ai[1] > 10f)
             {
 				Projectile.tileCollide = true;
+				Projectile.hostile = true;
 			}
 
 			if (!player.active || player.dead || player.CCed || !player.channel)
@@ -217,11 +217,15 @@ namespace Everglow.Sources.Modules.PlantModule.Projectiles.Melee
 		{
 			SoundEngine.PlaySound(SoundID.Dig, Projectile.Center);
 			float k0 = Projectile.oldVelocity.Length();
-			for (int i = 0; i < 2 * k0; i++)
+			if (Main.myPlayer == Projectile.owner)
 			{
-				Vector2 vector = new Vector2(Main.rand.NextFloat(0.06f, 0.24f), 0).RotatedByRandom(6.283) * Projectile.scale * k0;
-				Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + vector * 5f, vector * 3f,
-					ModContent.ProjectileType<CactusBallSpike>(), Projectile.damage / 3, 0f, Projectile.owner, 0f, 0f);
+				for (int i = 0; i < 2 * k0; i++)
+				{
+					Vector2 vector = new Vector2(Main.rand.NextFloat(0.06f, 0.24f), 0).RotatedByRandom(6.283) * Projectile.scale * k0;
+					Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + vector * 5f, vector * 3f,
+						ModContent.ProjectileType<CactusBallSpike>(), Projectile.damage / 3, 0f, Projectile.owner, 0f, 0f);
+					proj.hostile = true;
+				}
 			}
 
 			for (int j = 0; j < 3 * k0; j++)
