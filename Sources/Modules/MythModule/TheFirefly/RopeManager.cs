@@ -113,6 +113,35 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
             });
             return result;
         }
+        /// <summary>
+        /// 在指定区域随机生成Rope
+        /// </summary>
+        /// <param name="rectangle"></param>
+        /// <param name="basePosition"></param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
+        public List<Rope> LoadRope(Rectangle rectangle, Vector2 basePosition, Func<Vector2> offset)
+        {
+            List<Rope> result = new List<Rope>();
+            for (int j = 0; j < rectangle.Height; j++)
+            {
+                for (int i = 0; i < rectangle.Width; i++)
+                {
+                    if (Main.rand.NextBool(12) || (i, j) == (rectangle.Width / 2, rectangle.Height / 2))
+                    {
+                        int MaxCount = 4;
+                        if(rectangle.Width > 10)
+                        {
+                            MaxCount = 6;
+                        }
+                        var rope = new Rope(new Vector2(i * 5, j * 5) + basePosition, (Main.rand.Next(0, 60) + 140) / 300f, Main.rand.Next(2, MaxCount + 1), offset);
+                        ropes.Add(rope);
+                        result.Add(rope);
+                    }
+                }
+            }
+            return result;
+        }
 
         public void LoadRope(IEnumerable<Rope> ropes)
         {
@@ -167,8 +196,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
                 }
                 foreach (var m in rope.mass)
                 {
-                    m.force += new Vector2(0.04f + 0.06f * (float)(Math.Sin(Main.timeForVisualEffects / 72f + m.position.X / 13d + m.position.Y / 4d)), 0)
-                        * (Main.windSpeedCurrent + 1f) * 2f
+                    m.force += new Vector2(0.12f * (float)(Math.Sin(Main.timeForVisualEffects / 72f + m.position.X / 13d + m.position.Y / 4d)) + Main.windSpeedCurrent * 0.13f, 0)
                         + new Vector2(0, gravity * m.mass);
                     m.Update(deltaTime);
                 }

@@ -67,11 +67,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.BossDrop
                     player.QuickSpawnItem(entitySource, ModContent.ItemType<ScaleWingBlade>());
                     break;
             }
-            if (Main.rand.NextBool(2))
+            if (Main.rand.NextBool(2) && Main.hardMode == true)
             {
                 player.QuickSpawnItem(entitySource, ModContent.ItemType<Items.Accessories.MothEye>());
             }
-            else if (Main.masterMode)
+            else if (Main.masterMode && Main.hardMode == true)
             {
                 player.QuickSpawnItem(entitySource, ModContent.ItemType<Items.Accessories.MothEye>());
             }
