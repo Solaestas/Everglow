@@ -47,6 +47,11 @@ Mods:
 			{
 				ShabbyPylonRepairedTip : "晶塔已修复"
 			}
+
+			Message : 
+			{
+				HasAwoken : "已苏醒!"
+			}
 		}
 		NPCName:
 		{
