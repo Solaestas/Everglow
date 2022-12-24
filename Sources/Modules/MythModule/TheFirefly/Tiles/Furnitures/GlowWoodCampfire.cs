@@ -68,13 +68,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 
         public override void NearbyEffects(int i, int j, bool closer)
         {
+            Tile tile = Main.tile[i, j];
             Player player = Main.LocalPlayer;
-            if (player != null && !player.dead && player.active)
+            if (player != null && !player.dead && player.active && tile.TileFrameX < 54)
             {
                 Main.SceneMetrics.HasCampfire = true;
                 //player.AddBuff(BuffID.Campfire, 2, true, false);
             }
-            Tile tile = Main.tile[i, j];
             if (tile.TileFrameX < 54 && tile.TileFrameY == 18)
             {
                 int frequency = 24;
