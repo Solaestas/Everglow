@@ -69,12 +69,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                 var PylonTile = Main.tile[pylonBottom.X + i, pylonBottom.Y + 1];
                 PylonTile.TileType = TileID.GrayBrick;
                 PylonTile.HasTile = true;
+                PylonTile.Slope = SlopeType.Solid;
                 WorldGen.TileFrame(pylonBottom.X + i, pylonBottom.Y + 1);
             }
 
             TileObject.CanPlace(pylonBottom.X, pylonBottom.Y, PylonType, 0, 0, out var tileObject);
             TileObject.Place(tileObject);
             TileObjectData.CallPostPlacementPlayerHook(pylonBottom.X, pylonBottom.Y, PylonType, 0, 0, 0, tileObject);
+            //TODO:有概率会爆掉，需要修复
             //switch (Main.rand.Next(5))
             //{
             //    case 0:
@@ -339,14 +341,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                                         var PylonTile = Main.tile[bottom.X + i, bottom.Y + 1];
                                         PylonTile.TileType = (ushort)ModContent.TileType<DarkCocoon>();
                                         PylonTile.HasTile = true;
-                                        PylonTile.Slope = SlopeType.Solid;
                                         WorldGen.TileFrame(bottom.X + i, bottom.Y + 1);
                                     }
 
                                     TileObject.CanPlace(bottom.X, bottom.Y, PylonType, 0, 0, out var tileObject);
                                     TileObject.Place(tileObject);
                                     TileObjectData.CallPostPlacementPlayerHook(bottom.X, bottom.Y, PylonType, 0, 0, 0, tileObject);
-                                    //TODO:有概率会爆掉，需要修复
                                 }
                                 break;
                         }
@@ -494,12 +494,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         private static Point16 ShabbyPylonPos()
         {
             int PoX = (int)(Main.rand.Next(80, 160) * (Main.rand.Next(2) - 0.5f) * 2 - 20 + Main.maxTilesX / 2);
-            int PoY = 100;
+            int PoY = 160;
 
             while (!IsTileSmooth(new Point(PoX, PoY)))
             {
                 PoX = (int)(Main.rand.Next(80, 240) * (Main.rand.Next(2) - 0.5f) * 2 - 20 + Main.maxTilesX / 2);
-                for (int y = 100; y < Main.maxTilesY / 3; y++)
+                for (int y = 160; y < Main.maxTilesY / 3; y++)
                 {
                     if (Main.tile[PoX, y].HasTile)
                     {
