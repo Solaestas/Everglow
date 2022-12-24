@@ -99,6 +99,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bl
                         {
                             continue;
                         }
+                        if (target.velocity.Length() <= 0.001f)
+                        {
+                            continue;
+                        }
                         Vector2 ToTarget = target.Center - Projectile.Center;
                         float dis = ToTarget.Length();
                         if (dis < MinDis && ToTarget != Vector2.Zero)

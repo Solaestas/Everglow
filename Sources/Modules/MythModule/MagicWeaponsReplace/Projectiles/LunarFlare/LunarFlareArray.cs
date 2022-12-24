@@ -228,6 +228,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
 
         public void DrawStarrySky()
         {
+            if(Lighting.Mode != Terraria.Graphics.Light.LightMode.Color && Lighting.Mode != Terraria.Graphics.Light.LightMode.White)
+            {
+                return;
+            }
             //从RT池子里抓3个
             var renderTargets = Everglow.RenderTargetPool.GetRenderTarget2DArray(4);
             RenderTarget2D screen = renderTargets.Resource[0];
