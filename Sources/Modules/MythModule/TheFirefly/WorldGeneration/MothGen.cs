@@ -18,7 +18,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
 {
     public class MothLand : ModSystem
     {
-        public static Vector2 ShabbyPos = new Vector2();
         public override void PostUpdateEverything()
         {
             //if (Main.mouseRight && Main.mouseRightRelease && Main.keyState.PressingShift())
@@ -52,7 +51,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             MapIO mapIO = new MapIO(sbpp.X, sbpp.Y);
             int Height = mapIO.ReadHeight(Everglow.Instance.GetFileStream("Sources/Modules/MythModule/" + Path));
             QuickBuild(sbpp.X, sbpp.Y - Height / 2, Path);
-            ShabbyPos = new Vector2(sbpp.X, sbpp.Y - Height / 2);
+
             Point pylonBottom = new Point(sbpp.X + Main.rand.Next(8, 16), sbpp.Y - Height / 2 + 8);
             ushort PylonType = (ushort)ModContent.TileType<ShabbyPylon>();
             PylonSystem.Instance.shabbyPylonEnable = false;

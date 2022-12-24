@@ -38,9 +38,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 
         public override void Kill(int timeLeft)
         {
-            int i = (int)(Projectile.Center.X / 16f);
-            int j = (int)(Projectile.Center.Y / 16f);
-            WorldGen.Place3x2(i, j, (ushort)ModContent.TileType<Tiles.BlackFrenLarge>(), 0);
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)

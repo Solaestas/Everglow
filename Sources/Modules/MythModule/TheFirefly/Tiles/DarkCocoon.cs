@@ -115,6 +115,16 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                             count++;
                         }
                     }
+                    foreach(var npc in Main.npc)
+                    {
+                        if(npc.active)
+                        {
+                            if((Math.Abs(npc.Center.X - i * 16)) < 20)
+                            {
+                                count++;
+                            }
+                        }
+                    }
                 }
                 if (count == 0)
                 {

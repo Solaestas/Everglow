@@ -4,6 +4,7 @@ using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;
+using Terraria.Localization;
 using Terraria.ObjectData;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
@@ -29,7 +30,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
 
             // Names
-            ContainerName.SetDefault("GlowWood Dresser");
+            ContainerName.SetDefault(Language.GetTextValue("ItemName.Dresser"));
             ModTranslation name = CreateMapEntryName();
             name.SetDefault("GlowWood Dresser");
             AddMapEntry(new Color(0, 14, 175), name);
