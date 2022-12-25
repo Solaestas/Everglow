@@ -1,6 +1,6 @@
 ﻿displayName = Everglow | 流光无际 [Demonstration]
 author = Dream Chaser Group | 孤舟逐梦团队
-version = 0.1
+version = 0.1.4
 includePDB = true
 noCompile = true
 dllReferences = MethodBoundaryAspect, SixLabors.ImageSharp

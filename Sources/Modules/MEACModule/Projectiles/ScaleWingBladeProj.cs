@@ -280,7 +280,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             }
             if (attackType == 100)//右键攻击
             {
-                float BodyRotation = 0;
+                float BodyRotation;
                 if (timer < 60)
                 {
                     CanIgnoreTile = true;
@@ -346,15 +346,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                         mainVec = Vector2Elipse(220, Projectile.rotation, -1.2f, Projectile.ai[0], 1000);
                         Projectile.rotation += Projectile.spriteDirection * 0.42f;
                     }
-                    if (timer == 115)
-                    {
-                        Projectile.friendly = false;
-                    }
-                    if (timer > 125)
-                    {
-                        CanIgnoreTile = false;
-                        End();
-                    }
+
                     BodyRotation = (float)(Math.Sin((timer - 114.514) / 18d * Math.PI)) * 0.7f * player.direction * player.gravDir;
 
                 }
@@ -369,17 +361,18 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                 player.legRotation = -BodyRotation;
                 player.legPosition = (new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height) - player.fullRotationOrigin).RotatedBy(-BodyRotation);
                 Tplayer.HeadRotation = -BodyRotation + AddHeadRotation;
+
+                if (timer == 115)
+                {
+                    Projectile.friendly = false;
+                }
+                if (timer > 125)
+                {
+                    CanIgnoreTile = false;
+                    End();
+                }
             }
-            if(timer == 131)
-            {
-                float BodyRotation = 0;
-                player.fullRotation = BodyRotation;
-                player.legRotation = -BodyRotation;
-                player.headRotation = -BodyRotation;
-                player.legPosition = Vector2.Zero;
-                Tplayer.HeadRotation = 0;
-                Tplayer.HideLeg = false;
-            }
+            
             if (isAttacking)
             {
                 for (int i = 0; i < 2; i++)
