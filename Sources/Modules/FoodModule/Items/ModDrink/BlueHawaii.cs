@@ -26,9 +26,7 @@ namespace Everglow.Sources.Modules.FoodModule.Items.ModDrink
             }
         }
         public override void SetStaticDefaults() {
-			DisplayName.SetDefault("蓝色夏威夷");
 
-			Tooltip.SetDefault("{$CommonItemTooltip.MediumStats}\n'海风吹拂'");
 
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 5;
 

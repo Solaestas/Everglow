@@ -26,9 +26,7 @@ namespace Everglow.Sources.Modules.FoodModule.Items.ModDrink
             }
         }
         public override void SetStaticDefaults() {
-			DisplayName.SetDefault("西瓜汁");
 
-			Tooltip.SetDefault("{$CommonItemTooltip.MediumStats}\n'浓缩的打击力度'");
 
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 5;
 

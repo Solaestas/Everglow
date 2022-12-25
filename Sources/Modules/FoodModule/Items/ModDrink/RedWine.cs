@@ -26,8 +26,7 @@ namespace Everglow.Sources.Modules.FoodModule.Items.ModDrink
             }
         }
         public override void SetStaticDefaults() {
-			DisplayName.SetDefault("红酒");	
-			Tooltip.SetDefault("{$CommonItemTooltip.MediumStats}\n'上流与优雅'");
+
 
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 5;
 			Main.RegisterItemAnimation(Type, new DrawAnimationVertical(int.MaxValue, 3));

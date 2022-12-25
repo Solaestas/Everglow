@@ -26,9 +26,7 @@ namespace Everglow.Sources.Modules.FoodModule.Items.ModDrink
             }
         }
         public override void SetStaticDefaults() {
-			DisplayName.SetDefault("寒风凛冽");
 
-			Tooltip.SetDefault("{$CommonItemTooltip.MediumStats}\n'长啸出原野，凛然寒风生。'");
 
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 5;
 

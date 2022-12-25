@@ -26,9 +26,6 @@ namespace Everglow.Sources.Modules.FoodModule.Items.ModDrink
             }
         }
         public override void SetStaticDefaults() {
-			DisplayName.SetDefault("B_52");
-
-			Tooltip.SetDefault("{$CommonItemTooltip.MediumStats}\n'轰炸机！！！'");
 
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 5;
 

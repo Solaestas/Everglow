@@ -26,9 +26,7 @@ namespace Everglow.Sources.Modules.FoodModule.Items.ModDrink
             }
         }
         public override void SetStaticDefaults() {
-			DisplayName.SetDefault("猕猴桃果汁");
 
-			Tooltip.SetDefault("{$CommonItemTooltip.MediumStats}\n'浓缩的奇异之力'");
 
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 5;
 

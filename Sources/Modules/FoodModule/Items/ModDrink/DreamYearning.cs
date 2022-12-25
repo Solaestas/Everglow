@@ -26,9 +26,7 @@ namespace Everglow.Sources.Modules.FoodModule.Items.ModDrink
             }
         }
         public override void SetStaticDefaults() {
-			DisplayName.SetDefault("魂牵梦萦");
 
-			Tooltip.SetDefault("{$CommonItemTooltip.MediumStats}\n'思君忆君，魂牵梦萦，翠销香暖云屏，更哪堪酒醒。'");
 
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 5;
 
