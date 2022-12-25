@@ -50,7 +50,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
             {
                 tooltips.Add(new TooltipLine(Everglow.Instance, "MothEyeCriteriaText", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeCriteriaText")));
             }
-            tooltips.Add(new TooltipLine(Everglow.Instance, "UnfinishedItem", Language.GetTextValue("Mods.Everglow.ExtraTooltip.Misc.UnfinishedItem")));
         }
         public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
@@ -126,9 +125,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
                     int[] FireflyWeapon =
                     {
                             ModContent.ItemType<Weapons.DarknessFan>(),
+                            ModContent.ItemType<Weapons.DreamWeaver>(),
                             ModContent.ItemType<Weapons.DustOfCorrupt>(),
                             ModContent.ItemType<Weapons.EvilChrysalis>(),
+                            ModContent.ItemType<Weapons.FlowLightMissile>(),
                             ModContent.ItemType<Weapons.GlowBeadGun>(),
+                            ModContent.ItemType<Weapons.GlowWoodSword>(),
                             ModContent.ItemType<Weapons.MothYoyo>(),
                             ModContent.ItemType<Weapons.NavyThunder>(),
                             ModContent.ItemType<Weapons.PhosphorescenceGun>(),
