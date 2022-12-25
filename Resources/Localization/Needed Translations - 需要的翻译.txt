@@ -16,4 +16,3 @@ LilyHarp Item Name & Tooltip
 FireflyBorageBadge Tooltip Update & Extra Tooltips Update
 
 *All*:
-New MEyeBonusTextMothBlade: "Moths appearing from this blade move faster"
