@@ -104,10 +104,10 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
             ModelEntity entity = new ModelEntity
             {
                 Vertices = vertices,
-                Texture = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/NonTrueMeleeProj/PlanetBefall/PlanetBeFallTexture").Value,
+                Texture = ModContent.Request<Texture2D>("Everglow/Sources/Modules/IIIDModule/Projectiles/PlanetBefall/PlanetBeFallTexture").Value,
                 NormalTexture = NormalMap.Value,
                 MaterialTexture = TextureAssets.MagicPixel.Value,//ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/NonTrueMeleeProj/PlanetBefall/PlanetBeFallTexture").Value,
-                EmissionTexture = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/NonTrueMeleeProj/PlanetBefall/PlanetBeFallTexture").Value,
+                EmissionTexture = ModContent.Request<Texture2D>("Everglow/Sources/Modules/IIIDModule/Projectiles/PlanetBefall/PlanetBeFallEmission").Value,
                 ModelTransform = modelMatrix,
             };
 
@@ -179,8 +179,8 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
 
         public override void OnModLoad()
         {
-            PlanetBeFall.model = ObjReader.LoadFile("Everglow/Sources/Modules/MEACModule/NonTrueMeleeProj/PlanetBefall/PlanetBeFall.obj");
-            PlanetBeFall.NormalMap = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/NonTrueMeleeProj/PlanetBefall/PlanetBeFallNormal");
+            PlanetBeFall.model = ObjReader.LoadFile("Everglow/Sources/Modules/IIIDModule/Projectiles/PlanetBefall/PlanetBeFall.obj");
+            PlanetBeFall.NormalMap = ModContent.Request<Texture2D>("Everglow/Sources/Modules/IIIDModule/Projectiles/PlanetBefall/PlanetBeFallNormal");
             base.OnModLoad();
         }
 

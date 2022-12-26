@@ -66,10 +66,10 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
         }
         public override void OnModLoad()
         {
-            m_gbufferPassEffect = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/IIIDEffects/GBufferPass"); 
-            m_filtersEffect = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/IIIDEffects/Filters");
-            m_toneMapping = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/IIIDEffects/ToneMapping");
-            m_pixelArt = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/IIIDEffects/PixelArt");
+            m_gbufferPassEffect = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/IIIDEffects/GBufferPass"); 
+            m_filtersEffect = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/IIIDEffects/Filters");
+            m_toneMapping = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/IIIDEffects/ToneMapping");
+            m_pixelArt = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/IIIDEffects/PixelArt");
             Everglow.MainThreadContext.AddTask(() =>
             {
                 m_fakeScreenTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, RenderTargetSize, RenderTargetSize, false,
