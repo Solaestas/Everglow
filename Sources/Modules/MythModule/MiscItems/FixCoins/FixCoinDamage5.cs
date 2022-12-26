@@ -22,7 +22,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.FixCoins
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
             Item.value = 18000;
-            Item.rare = 0;
+            Item.rare = ItemRarityID.White;
             Item.maxStack = 999;
             Item.consumable = true;
             Item.UseSound = SoundID.Item1;

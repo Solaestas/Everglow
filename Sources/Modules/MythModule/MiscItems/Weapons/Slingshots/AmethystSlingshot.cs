@@ -10,7 +10,7 @@
             Item.height = 36;
             Item.useTime = 40;
             Item.useAnimation = 40;
-            Item.rare = 3;
+            Item.rare = ItemRarityID.Orange;
             Item.value = Item.sellPrice(0, 0, 8, 0);
         }
         public override void AddRecipes()

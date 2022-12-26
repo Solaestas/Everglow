@@ -1,6 +1,7 @@
 ﻿using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.Localization;
+using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Weapons
 {
@@ -27,11 +28,11 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Weapons
             Item.noUseGraphic = true;
             Item.knockBack = 6;
             Item.value = 2000;
-            Item.rare = 2;
+            Item.rare = ItemRarityID.Green;
             Item.UseSound = SoundID.Item71;
             Item.autoReuse = true;
             Item.shoot = ModContent.ProjectileType<Projectiles.Weapon.ToothMagicBall>();
-            Item.shootSpeed = 0;
+            Item.shootSpeed = 3;
             Item.crit = 1;
             Item.mana = 16;
         }

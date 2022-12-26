@@ -31,10 +31,10 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
         public override void AI()
         {
             Projectile.rotation = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X));
-            /*int num91 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(12, 12) - Projectile.velocity, 16, 16, DustID.Blood, 0f, 0f, 100, default(Color), Main.rand.NextFloat(1f, 2.6f));
+            /*int num91 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(12, 12) - Projectile.velocity, 16, 16, DustID.Blood, 0f, 0f, 100, default, Main.rand.NextFloat(1f, 2.6f));
             Main.dust[num91].noGravity = true;
             Main.dust[num91].velocity *= 0.5f;
-            int num90 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(12, 12) - Projectile.velocity, 16, 16, 183, 0f, 0f, 100, default(Color), Main.rand.NextFloat(1f, 2.6f));
+            int num90 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(12, 12) - Projectile.velocity, 16, 16, 183, 0f, 0f, 100, default, Main.rand.NextFloat(1f, 2.6f));
             Main.dust[num90].noGravity = true;
             Main.dust[num90].velocity *= 0.5f;*/
             addi++;
@@ -88,9 +88,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
                 Projectile.position = Projectile.oldPosition;
                 Projectile.velocity = Projectile.oldVelocity;
             }
-            /*int r2 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) + Projectile.velocity / Projectile.velocity.Length() * 12f, 0, 0, DustID.Blood, 0, 0, 0, default(Color),3f);
+            /*int r2 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) + Projectile.velocity / Projectile.velocity.Length() * 12f, 0, 0, DustID.Blood, 0, 0, 0, default,3f);
             Main.dust[r2].noGravity = true;
-            int r = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) + Projectile.velocity / Projectile.velocity.Length() * 12f, 0, 0, 183, 0, 0, 0, default(Color), 4f);
+            int r = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) + Projectile.velocity / Projectile.velocity.Length() * 12f, 0, 0, 183, 0, 0, 0, default, 4f);
             Main.dust[r].noGravity = true;*/
             if (MaxAdd == -1)
             {
@@ -118,7 +118,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
             }
             if (MaxP < 2)
             {
-                if (Main.rand.Next(13) == 1)
+                if (Main.rand.NextBool(13))
                 {
                     Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center, Projectile.velocity, ModContent.ProjectileType<Projectiles.Weapon.ToothMagicSplit2>(), (int)(Projectile.damage * 0.75f), Projectile.knockBack, player.whoAmI);
                     MaxP++;

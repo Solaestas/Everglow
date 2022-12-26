@@ -24,7 +24,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Tusk
             Projectile.height = 80;
             Projectile.tileCollide = false;
         }
-        private Effect ef2;
         public override void AI()
         {
             //if (Projectile.timeLeft > 590)

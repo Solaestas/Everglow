@@ -92,14 +92,14 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
                         {
                             Vector2 vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28);
                             Vector2 vF2 = new Vector2(0, Main.rand.NextFloat(0, 15f)).RotatedByRandom(6.28);
-                            Dust.NewDust(player.Center + vF2, 0, 0, 183, vF.X, vF.Y, 0, default(Color), Main.rand.NextFloat(0.8f, 2.1f));
+                            Dust.NewDust(player.Center + vF2, 0, 0, DustID.VampireHeal, vF.X, vF.Y, 0, default, Main.rand.NextFloat(0.8f, 2.1f));
                         }
                         player.position += new Vector2(0, a * 16 - 64);
                         for (int z = 0; z < 120; z++)
                         {
                             Vector2 vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28);
                             Vector2 vF2 = new Vector2(0, Main.rand.NextFloat(0, 15f)).RotatedByRandom(6.28);
-                            Dust.NewDust(player.Center + vF2, 0, 0, 183, vF.X, vF.Y, 0, default(Color), Main.rand.NextFloat(0.8f, 2.1f));
+                            Dust.NewDust(player.Center + vF2, 0, 0, DustID.VampireHeal, vF.X, vF.Y, 0, default, Main.rand.NextFloat(0.8f, 2.1f));
                         }
                         Col = 0;
                         TpTime = 0;
@@ -125,12 +125,12 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
             Texture2D Tdoor2 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/Tusk/CosmicVort").Value;
             Texture2D Tdoor3 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/Tusk/CosmicPerlin").Value;
             Vector2 Correction = new Vector2(-186f, -260f);
-            Main.spriteBatch.Draw(Tdoor, new Vector2(TileI * 16, TileJ * 16) + Correction - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 30f, new Vector2(56), 65f / 45f, SpriteEffects.None, 0f);
-            Main.spriteBatch.Draw(Tdoor, new Vector2(TileI * 16, TileJ * 16) + Correction - Main.screenPosition + zero, null, new Color(100, 100, 100, 0), -(float)Main.time / 20f, new Vector2(56), 65f / 45f, SpriteEffects.None, 0f);
-            Main.spriteBatch.Draw(Tdoor, new Vector2(TileI * 16, TileJ * 16) + Correction - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 15f, new Vector2(56), 65f / 50f, SpriteEffects.None, 0f);
-            Main.spriteBatch.Draw(Tdoor2, new Vector2(TileI * 16, TileJ * 16) + Correction - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 30f, new Vector2(56), 65 / 45f, SpriteEffects.None, 0f);
-            Main.spriteBatch.Draw(Tdoor3, new Vector2(TileI * 16, TileJ * 16) + Correction - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), -(float)Main.time / 20f, new Vector2(56), 65f / 45f, SpriteEffects.None, 0f);
-            Main.spriteBatch.Draw(Tdoor3, new Vector2(TileI * 16, TileJ * 16) + Correction - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 15f, new Vector2(56), 65 / 45f, SpriteEffects.None, 0f);
+            sb.Draw(Tdoor, new Vector2(TileI * 16, TileJ * 16) + Correction - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 30f, new Vector2(56), 65f / 45f, SpriteEffects.None, 0f);
+            sb.Draw(Tdoor, new Vector2(TileI * 16, TileJ * 16) + Correction - Main.screenPosition + zero, null, new Color(100, 100, 100, 0), -(float)Main.time / 20f, new Vector2(56), 65f / 45f, SpriteEffects.None, 0f);
+            sb.Draw(Tdoor, new Vector2(TileI * 16, TileJ * 16) + Correction - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 15f, new Vector2(56), 65f / 50f, SpriteEffects.None, 0f);
+            sb.Draw(Tdoor2, new Vector2(TileI * 16, TileJ * 16) + Correction - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 30f, new Vector2(56), 65 / 45f, SpriteEffects.None, 0f);
+            sb.Draw(Tdoor3, new Vector2(TileI * 16, TileJ * 16) + Correction - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), -(float)Main.time / 20f, new Vector2(56), 65f / 45f, SpriteEffects.None, 0f);
+            sb.Draw(Tdoor3, new Vector2(TileI * 16, TileJ * 16) + Correction - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 15f, new Vector2(56), 65 / 45f, SpriteEffects.None, 0f);
         }
         public static float TileI = 0;
         public static float TileJ = 0;

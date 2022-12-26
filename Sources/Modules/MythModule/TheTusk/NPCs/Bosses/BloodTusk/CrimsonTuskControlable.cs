@@ -38,20 +38,18 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
             NPC.noTileCollide = true;
             NPC.dontTakeDamage = true;
         }
-        private bool Stop = false;
         private bool start = true;
         private Vector2[] vpos = new Vector2[400];
         public override void AI()
         {
             NPC.TargetClosest(true);
-            Player player = Main.player[NPC.target];
             BloodTusk.N[(int)NPC.ai[1]] = NPC.whoAmI;
             if (start)
             {
                 NPC.velocity = new Vector2(0, -7f).RotatedBy(NPC.ai[0] * NPC.ai[2] / 4d);
                 start = false;
             }
-            NPC.rotation = (float)(Math.Atan2(NPC.velocity.Y, NPC.velocity.X) + Math.PI / 2d);
+            NPC.rotation = (float)(Math.Atan2(NPC.velocity.Y, NPC.velocity.X) + (Math.PI / 2d));
 
             length = (NPC.Center - BloodTusk.Cen).Length();
             if (length > 700)
@@ -62,8 +60,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 
         }
         private float length = 100;
-        private Effect ef;
-        private Effect ef2;
         private bool CanD = false;
         private int killing = 0;
         private bool killed = false;
@@ -84,7 +80,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
             if (killed)
             {
                 killing--;
-                if (Collision.SolidCollision(NPC.Center - Vector2.One * 5f, 10, 10))
+                if (Collision.SolidCollision(NPC.Center - (Vector2.One * 5f), 10, 10))
                 {
                     NPC.velocity *= 0.9f;
                 }
@@ -95,13 +91,13 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                 }
                 if (NPC.velocity != Vector2.Zero)
                 {
-                    NPC.rotation = (float)(Math.Atan2(NPC.velocity.Y, NPC.velocity.X) + Math.PI / 2d);
+                    NPC.rotation = (float)(Math.Atan2(NPC.velocity.Y, NPC.velocity.X) + (Math.PI / 2d));
                 }
                 if (killing <= 0)
                 {
                     NPC.active = false;
                 }
-                if (killing < 178 && killing > 0)
+                if (killing is < 178 and > 0)
                 {
                     for (int i = 1; i < 400; ++i)
                     {
@@ -179,8 +175,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
             }
             return true;
         }
-
-        private float AimN = -1;
         private Vector2[] vkilpos = new Vector2[400];
         private Vector2[] Prevkilpos = new Vector2[400];
         private Vector2[] Delvkilpos = new Vector2[400];
@@ -197,7 +191,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 
             for (int i = 1; i < 400; ++i)
             {
-                if (killing < 178 && killing > 0)
+                if (killing is < 178 and > 0)
                 {
                     if (vkilpos[i] == Vector2.Zero)
                     {
@@ -205,7 +199,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                     }
                     if (killing == 9)
                     {
-                        int k = Dust.NewDust(vkilpos[i] - new Vector2(0, 8), 0, 0, 5, 0, 0, 0, default, Main.rand.NextFloat(1.3f, 3f));
+                        int k = Dust.NewDust(vkilpos[i] - new Vector2(0, 8), 0, 0, DustID.Blood, 0, 0, 0, default, Main.rand.NextFloat(1.3f, 3f));
                         Main.dust[k].noGravity = true;
 
                     }
@@ -217,7 +211,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                 }
                 else
                 {
-                    vpos[i] = vpos[i - 1] + (vpos[i - 1] - vpos[i - 2]) * 0.95f + (BloodTusk.Cen - vpos[i - 1]) / (BloodTusk.Cen - vpos[i - 1]).Length() * 0.2f;
+                    vpos[i] = vpos[i - 1] + ((vpos[i - 1] - vpos[i - 2]) * 0.95f) + ((BloodTusk.Cen - vpos[i - 1]) / (BloodTusk.Cen - vpos[i - 1]).Length() * 0.2f);
                 }
                 if (killing == 179)
                 {
@@ -230,32 +224,31 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                 }
                 int width = 9;
                 var normalDir = vpos[i - 1] - vpos[i];
-                if (killing < 178 && killing > 0)
+                if (killing is < 178 and > 0)
                 {
                     normalDir = vkilpos[i - 1] - vkilpos[i];
                 }
                 normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
                 Color colori = Lighting.GetColor((int)(vpos[i].X / 16d), (int)(vpos[i].Y / 16d));
-                if (killing < 178 && killing > 0)
+                if (killing is < 178 and > 0)
                 {
                     colori = Lighting.GetColor((int)(vkilpos[i].X / 16d), (int)(vkilpos[i].Y / 16d));
                 }
-                float Stre = (colori.R + colori.G + colori.B) / 765f;
-                var factor = Math.Abs(i / 30f % 2 - 1);
+                var factor = Math.Abs((i / 30f % 2) - 1);
 
                 var w2 = MathHelper.Lerp(1f, 0.0f, 0);
 
-                if (killing < 178 && killing > 0)
+                if (killing is < 178 and > 0)
                 {
-                    bars2.Add(new VertexBase.CustomVertexInfo(vkilpos[i] + normalDir * width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(factor, 1, w2)));
-                    bars2.Add(new VertexBase.CustomVertexInfo(vkilpos[i] + normalDir * -width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(factor, 0, w2)));
+                    bars2.Add(new VertexBase.CustomVertexInfo(vkilpos[i] + (normalDir * width) + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(factor, 1, w2)));
+                    bars2.Add(new VertexBase.CustomVertexInfo(vkilpos[i] + (normalDir * -width) + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(factor, 0, w2)));
                 }
                 else
                 {
-                    bars2.Add(new VertexBase.CustomVertexInfo(vpos[i] + normalDir * width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(factor, 1, w2)));
-                    bars2.Add(new VertexBase.CustomVertexInfo(vpos[i] + normalDir * -width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(factor, 0, w2)));
+                    bars2.Add(new VertexBase.CustomVertexInfo(vpos[i] + (normalDir * width) + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(factor, 1, w2)));
+                    bars2.Add(new VertexBase.CustomVertexInfo(vpos[i] + (normalDir * -width) + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(factor, 0, w2)));
                 }
-                if (killing < 178 && killing > 0)
+                if (killing is < 178 and > 0)
                 {
                     if ((vkilpos[i] - BloodTusk.Cen).Length() < 6)
                     {
@@ -280,7 +273,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
             if (bars2.Count > 2)
             {
                 triangleList2.Add(bars2[0]);
-                var vertex = new VertexBase.CustomVertexInfo((bars2[0].Position + bars2[1].Position) * 0.5f + Vector2.Normalize(NPC.velocity), Color.White, new Vector3(0, 0.5f, 0));
+                var vertex = new VertexBase.CustomVertexInfo(((bars2[0].Position + bars2[1].Position) * 0.5f) + Vector2.Normalize(NPC.velocity), Color.White, new Vector3(0, 0.5f, 0));
                 triangleList2.Add(bars2[1]);
                 triangleList2.Add(vertex);
                 for (int i = 0; i < bars2.Count - 2; i += 2)
@@ -306,7 +299,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                 colorx = NPC.GetAlpha(colorx);
                 Texture2D texture = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/CrimsonTuskControlable").Value;
                 Vector2 DarwV = NPC.Center;
-                if (killing < 178 && killing > 0)
+                if (killing is < 178 and > 0)
                 {
                     DarwV = vkilpos[1];
                 }

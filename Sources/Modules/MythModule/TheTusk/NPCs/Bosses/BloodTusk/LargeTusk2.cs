@@ -109,7 +109,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
             {
                 NPC.alpha = 0;
                 wait--;
-                if (wait == 20)
+                if (wait == 5)
                 {
                     SoundEngine.PlaySound(SoundID.NPCDeath11.WithVolumeScale(.4f), NPC.Bottom);
                 }

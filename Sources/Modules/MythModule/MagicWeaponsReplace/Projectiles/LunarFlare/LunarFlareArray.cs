@@ -58,6 +58,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
             player.SetCompositeArmBack(true, PCAS, (float)(Math.Atan2(vTOMouse.Y, vTOMouse.X) - Math.PI / 2d));
             Projectile.rotation = player.fullRotation;
 
+            if (Lighting.Mode != Terraria.Graphics.Light.LightMode.Color && Lighting.Mode != Terraria.Graphics.Light.LightMode.White)
+            {
+                return;
+            }
             RingPos = RingPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
             Projectile.velocity = RingPos;
             for (int x = (int)(-Timer * 3.5f); x <= Timer * 3.5f; x += 8)
@@ -228,6 +232,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
 
         public void DrawStarrySky()
         {
+            if(Lighting.Mode != Terraria.Graphics.Light.LightMode.Color && Lighting.Mode != Terraria.Graphics.Light.LightMode.White)
+            {
+                return;
+            }
             //从RT池子里抓3个
             var renderTargets = Everglow.RenderTargetPool.GetRenderTarget2DArray(4);
             RenderTarget2D screen = renderTargets.Resource[0];

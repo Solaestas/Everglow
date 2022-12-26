@@ -1,5 +1,6 @@
 using Terraria.Audio;
 using Terraria.Localization;
+using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Tusk
 {
@@ -26,10 +27,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Tusk
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
         }
-        private bool initialization = true;
-        private double X;
-        private float Omega;
-        private float b;
         public override void AI()
         {
             Projectile.rotation = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X));
@@ -42,7 +39,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Tusk
             for (int h = 0; h < 20; h++)
             {
                 Vector2 v3 = new Vector2(0, (float)Math.Sin(h * Math.PI / 4d + Projectile.ai[0]) + 5).RotatedBy(h * Math.PI / 10d) * Main.rand.NextFloat(0.2f, 1.1f);
-                int r = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4), 0, 0, 183, 0, 0, 0, default(Color), 15f * Main.rand.NextFloat(0.4f, 1.1f));
+                int r = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4), 0, 0, DustID.VampireHeal, 0, 0, 0, default, 15f * Main.rand.NextFloat(0.4f, 1.1f));
                 Main.dust[r].noGravity = true;
                 Main.dust[r].velocity = v3;
                 //Main.dust[r].dustIndex = (int)(Math.Cos(h * Math.PI / 10d + Projectile.ai[0]) * 100d);
@@ -50,7 +47,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Tusk
             NPC.NewNPC(null, (int)Projectile.Center.X, (int)Projectile.Bottom.Y, ModContent.NPCType<NPCs.Bosses.BloodTusk.TuskPoolWave>());
             NPC.NewNPC(null, (int)Projectile.Center.X, (int)Projectile.Bottom.Y, ModContent.NPCType<NPCs.Bosses.BloodTusk.TuskRedLight>());
             Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<Weapon.ToothMagicHit>(), 0, Projectile.knockBack, Projectile.owner, 0f, 0f);
-            Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<Weapon.ToothMagicHit2>(), 0, Projectile.knockBack, Projectile.owner, 0f, 0f);
         }
         private Effect ef;
         public override void PostDraw(Color lightColor)

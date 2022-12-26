@@ -25,7 +25,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             Item.knockBack = 2.5f;
             Item.value = Item.sellPrice(0, 0, 20, 0);
             Item.rare = ItemRarityID.Green;
-            Item.UseSound = SoundID.Item20;
+            Item.UseSound = SoundID.Item42;
             Item.autoReuse = true;
             Item.shoot = ModContent.ProjectileType<Projectiles.DreamWeaver>();
             Item.shootSpeed = 12f;

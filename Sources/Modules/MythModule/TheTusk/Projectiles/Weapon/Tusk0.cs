@@ -1,4 +1,6 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
+﻿using Terraria.ID;
+
+namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 {
     class Tusk0 : ModProjectile
     {
@@ -21,7 +23,6 @@
         public override void AI()
         {
             float Rot1 = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + Math.PI * 0.25);
-            float Rot2 = 1.8f;
             Projectile.rotation = Rot1;
             Player player = Main.player[Projectile.owner];
             Vector2 v0 = player.Center + new Vector2(-20 * player.direction, -40) - Projectile.Center;
@@ -50,8 +51,6 @@
                 Vd = Projectile.timeLeft / 60f;
                 Sc = Projectile.timeLeft / 60f;
             }
-            float num2 = Projectile.Center.X;
-            float num3 = Projectile.Center.Y;
             for (int j = 0; j < 200; j++)
             {
                 if (Main.npc[j].CanBeChasedBy(Projectile, false) && Collision.CanHit(Projectile.Center, 1, 1, Main.npc[j].Center, 1, 1))
@@ -68,9 +67,9 @@
                     }
                 }
             }
-            if (Main.rand.Next(3) == 1)
+            if (Main.rand.NextBool(3))
             {
-                int num91 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4), 4, 4, 183, 0f, 0f, 100, default(Color), Main.rand.NextFloat(1.3f, 9f) * Sc * 0.4f);
+                int num91 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4), 4, 4, DustID.VampireHeal, 0f, 0f, 100, default, Main.rand.NextFloat(1.3f, 9f) * Sc * 0.4f);
                 Main.dust[num91].noGravity = true;
                 Main.dust[num91].velocity = new Vector2(0, Main.rand.NextFloat(0.4f, 2.5f)).RotatedByRandom(Math.PI * 2d) * Vd * 0.5f;
             }

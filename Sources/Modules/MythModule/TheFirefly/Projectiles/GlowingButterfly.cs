@@ -1,10 +1,12 @@
 ﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories;
 using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
     public class GlowingButterfly : ModProjectile
     {
+        FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 6;
@@ -18,7 +20,17 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Projectile.friendly = false;
             Projectile.hostile = false;
             Projectile.penetrate = ItemUseStyleID.Swing;
-            Projectile.timeLeft = 100;
+            if (MothEye.LocalOwner != null && MothEye.LocalOwner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
+            {
+                if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
+                {
+                    Projectile.timeLeft = 400;
+                }
+                else
+                {
+                    Projectile.timeLeft = 100;
+                }
+            }
             Projectile.tileCollide = false;
             Projectile.usesLocalNPCImmunity = false;
             Projectile.DamageType = DamageClass.Summon;
@@ -30,30 +42,65 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         public override void AI()
         {
             Player owner = Main.player[Projectile.owner];
-            if (y == 0)
+            if (MothEye.LocalOwner != null && MothEye.LocalOwner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
             {
-                Projectile.timeLeft = Main.rand.Next(85, 135);
-                Projectile.frame = Main.rand.Next(6);
-                Ome = Main.rand.NextFloat(-0.02f, 0.02f);
-                Projectile.scale = Main.rand.NextFloat(0.6f, 1.0f);
-                y = ItemUseStyleID.Swing;
+                
+                if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
+                {
+                    if (y == 0)
+                    {
+                        Projectile.timeLeft = Main.rand.Next(135, 185);
+                        Projectile.frame = Main.rand.Next(6);
+                        Ome = Main.rand.NextFloat(-0.02f, 0.02f);
+                        Projectile.scale = Main.rand.NextFloat(0.6f, 1.0f);
+                        y = ItemUseStyleID.Swing;
+                    }
+                    if (Projectile.timeLeft > 100 && Projectile.alpha >= 8)
+                    {
+                        Projectile.alpha -= 4;
+                    }
+                    if (Projectile.timeLeft <= 66)
+                    {
+                        Projectile.alpha += 4;
+                    }
+                    if (Projectile.alpha < 100)
+                    {
+                        Projectile.friendly = true;
+                    }
+                    else
+                    {
+                        Projectile.friendly = false;
+                    }
+                }
+                else
+                {
+                    if (y == 0)
+                    {
+                        Projectile.timeLeft = Main.rand.Next(85, 135);
+                        Projectile.frame = Main.rand.Next(6);
+                        Ome = Main.rand.NextFloat(-0.02f, 0.02f);
+                        Projectile.scale = Main.rand.NextFloat(0.6f, 1.0f);
+                        y = ItemUseStyleID.Swing;
+                    }
+                    if (Projectile.timeLeft > 50 && Projectile.alpha >= 8)
+                    {
+                        Projectile.alpha -= 8;
+                    }
+                    if (Projectile.timeLeft <= 33)
+                    {
+                        Projectile.alpha += 8;
+                    }
+                    if (Projectile.alpha < 50)
+                    {
+                        Projectile.friendly = true;
+                    }
+                    else
+                    {
+                        Projectile.friendly = false;
+                    }
+                }
             }
-            if (Projectile.timeLeft > 50 && Projectile.alpha >= 8)
-            {
-                Projectile.alpha -= 8;
-            }
-            if (Projectile.timeLeft <= 33)
-            {
-                Projectile.alpha += 8;
-            }
-            if (Projectile.alpha < 50)
-            {
-                Projectile.friendly = true;
-            }
-            else
-            {
-                Projectile.friendly = false;
-            }
+            
             //Projectile.spriteDirection = Projectile.velocity.X > 0 ? -1 : 1;
             Projectile.rotation = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + Math.PI * 0.75);
             Projectile.velocity = Projectile.velocity.RotatedBy(Ome);
@@ -93,8 +140,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Projectile.velocity.Y *= 0.96f;
             if (Projectile.timeLeft % 6 == 0)
             {
-                //int num89 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 113, 0,0, 0, default(Color), 0.6f);
-                int num90 = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<BlueGlowAppear>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(0.4f, 1.2f));
+                //int num89 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 113, 0,0, 0, default, 0.6f);
+                int num90 = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<BlueGlowAppear>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.4f, 1.2f));
                 //Main.dust[num89].velocity = Projectile.velocity * 0.5f;
                 Main.dust[num90].velocity = Projectile.velocity * 0.5f;
             }
@@ -289,7 +336,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             }
             for (int i = 0; i < 18; i++)
             {
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Clentaminator_Blue, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default(Color), 0.6f * Stre);
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Clentaminator_Blue, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, 0.6f * Stre);
             }
             for (int i = 0; i < 6; i++)
             {
@@ -310,7 +357,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
              Main.spriteBatch.End();
              Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
              List<VertexBase.CustomVertexInfo> bars = new List<VertexBase.CustomVertexInfo>();
-             ef = (Effect)ModContent.Request<Effect>("MythMod/Effects/TrailB2").Value;
+             ef = (Effect)ModContent.Request<Effect>("MythMod/Effects/Trail").Value;
              for (int i = 1; i < Projectile.oldPos.Length; ++i)
              {
                  if (Projectile.oldPos[i] == Vector2.Zero) break;

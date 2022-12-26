@@ -1,6 +1,7 @@
 ﻿using Terraria.Audio;
 using Terraria.Localization;
 using Terraria.ObjectData;
+using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
 {
@@ -54,7 +55,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
                 zero = Vector2.Zero;
             }
 
-            Player player = Main.LocalPlayer;
             Texture2D BaseCo1 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/Tusk/ForgeWave").Value;
             Texture2D Sp1a = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Tiles/TileEffects/StonePanBottomLine").Value;
             Texture2D Sp1b = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Tiles/TileEffects/StonePanBottomRedLight").Value;
@@ -66,7 +66,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
             Texture2D SpL4 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Tiles/TileEffects/StonePanL4").Value;
             Texture2D SpIC = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Tiles/TileEffects/StonePanStrick").Value;
             Vector2 origin = new Vector2(56);
-            float num3 = (float)Math.Sin((double)(Main.GlobalTimeWrappedHourly * 6.28318548f / 5f));
+
             Color color = Lighting.GetColor(i, j);
             Vector2 v = new Vector2(0, 100).RotatedBy(Main.time / 60f);
             Main.spriteBatch.Draw(BaseCo1, new Vector2(i * 16 - 16 + 6, j * 16 - 68 - 16) + origin - Main.screenPosition + zero, new Rectangle(256 + (int)v.X, 256 + (int)v.Y, 32, 32), new Color(255, 0, 0, 255), 0f, origin, 1f, SpriteEffects.None, 0f);
@@ -288,7 +288,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
                 {
                     vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28);
                     vF2 = new Vector2(0, Main.rand.NextFloat(0, 45f)).RotatedByRandom(6.28);
-                    Dust.NewDust(new Vector2(i * 16 + 0, j * 16 - 72) + vF2, 0, 0, 4, vF.X, vF.Y, 0, default(Color), Main.rand.NextFloat(0.8f, 2.1f));
+                    Dust.NewDust(new Vector2(i * 16 + 0, j * 16 - 72) + vF2, 0, 0, DustID.TintableDust, vF.X, vF.Y, 0, default, Main.rand.NextFloat(0.8f, 2.1f));
                 }
                 int[] Ty = { ModContent.ItemType<MiscItems.FixCoins.FixCoinDamage3>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinCrit3>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinDefense3>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinSpeed3>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinMelee3>() };
                 Item.NewItem(null, new Vector2(i * 16 + 0, j * 16 - 72), Ty[Main.rand.Next(Ty.Length)]);

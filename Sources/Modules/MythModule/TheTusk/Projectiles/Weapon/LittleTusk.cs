@@ -1,4 +1,6 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
+﻿using Terraria.ID;
+
+namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 {
     class LittleTusk : ModProjectile
     {
@@ -16,18 +18,17 @@
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10;
         }
-        private float K = 10;
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             for (int y = 0; y < 12; y++)
             {
-                int num90 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) + Projectile.velocity / Projectile.velocity.Length() * 25, 4, 4, 183, 0f, 0f, 100, default(Color), Main.rand.NextFloat(0.7f, 1.2f));
+                int num90 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) + Projectile.velocity / Projectile.velocity.Length() * 25, 4, 4, DustID.VampireHeal, 0f, 0f, 100, default, Main.rand.NextFloat(0.7f, 1.2f));
                 Main.dust[num90].noGravity = true;
                 Main.dust[num90].velocity = new Vector2(Main.rand.NextFloat(2.0f, 2.5f), Main.rand.NextFloat(1.8f, 11.5f)).RotatedByRandom(Math.PI * 2d);
             }
             for (int y = 0; y < 16; y++)
             {
-                int num90 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) + Projectile.velocity / Projectile.velocity.Length() * 25, 4, 4, DustID.Blood, 0f, 0f, 100, default(Color), Main.rand.NextFloat(0.7f, 1.4f));
+                int num90 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) + Projectile.velocity / Projectile.velocity.Length() * 25, 4, 4, DustID.Blood, 0f, 0f, 100, default, Main.rand.NextFloat(0.7f, 1.4f));
                 Main.dust[num90].noGravity = false;
                 Main.dust[num90].velocity = new Vector2(Main.rand.NextFloat(0.4f, 2.2f), 0).RotatedByRandom(Math.PI * 2d);
             }
@@ -43,7 +44,7 @@
                     Vector2 a0 = new Vector2(Projectile.width, Projectile.height) / 2f;
                     Vector2 v3 = Projectile.oldPosition + a0;
                     Vector2 v4 = Vector2.Normalize(Projectile.velocity) * 0.6f;
-                    int num92 = Dust.NewDust(v3 + v4 * g - new Vector2(4, 4), 4, 4, DustID.Blood, 0f, 0f, 100, default(Color), Main.rand.NextFloat(1.3f, 2f) * 0.4f);
+                    int num92 = Dust.NewDust(v3 + v4 * g - new Vector2(4, 4), 4, 4, DustID.Blood, 0f, 0f, 100, default, Main.rand.NextFloat(1.3f, 2f) * 0.4f);
                     Main.dust[num92].noGravity = true;
                     Main.dust[num92].velocity = new Vector2(0, Main.rand.NextFloat(0.4f, 2.5f)).RotatedByRandom(Math.PI * 2d) * 0.5f;
                 }
@@ -55,11 +56,8 @@
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
             List<VertexBase.CustomVertexInfo> bars = new List<VertexBase.CustomVertexInfo>();
-            ef = (Effect)ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/Trail").Value;
+                            ef = Common.MythContent.QuickEffect("Effects/Trail");
             // 把所有的点都生成出来，按照顺序
-            double o1 = Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
-            double o2 = Math.Atan2(Projectile.oldVelocity.Y, Projectile.oldVelocity.X);
-            double omega = Math.Abs(o2 - o1) % MathHelper.TwoPi;
             int width = 30;
             if (Projectile.timeLeft < 30)
             {
@@ -141,13 +139,13 @@
         {
             for (int y = 0; y < 12; y++)
             {
-                int num90 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) + Projectile.velocity / Projectile.velocity.Length() * 25, 4, 4, 183, 0f, 0f, 100, default(Color), Main.rand.NextFloat(1.3f, 4.2f));
+                int num90 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) + Projectile.velocity / Projectile.velocity.Length() * 25, 4, 4, DustID.VampireHeal, 0f, 0f, 100, default, Main.rand.NextFloat(1.3f, 4.2f));
                 Main.dust[num90].noGravity = true;
                 Main.dust[num90].velocity = new Vector2(Main.rand.NextFloat(2.0f, 2.5f), Main.rand.NextFloat(1.8f, 11.5f)).RotatedByRandom(Math.PI * 2d);
             }
             for (int y = 0; y < 16; y++)
             {
-                int num90 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) + Projectile.velocity / Projectile.velocity.Length() * 25, 4, 4, DustID.Blood, 0f, 0f, 100, default(Color), Main.rand.NextFloat(0.6f, 1.4f));
+                int num90 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) + Projectile.velocity / Projectile.velocity.Length() * 25, 4, 4, DustID.Blood, 0f, 0f, 100, default, Main.rand.NextFloat(0.6f, 1.4f));
                 Main.dust[num90].noGravity = false;
                 Main.dust[num90].velocity = new Vector2(Main.rand.NextFloat(0.4f, 2.2f), 0).RotatedByRandom(Math.PI * 2d);
             }

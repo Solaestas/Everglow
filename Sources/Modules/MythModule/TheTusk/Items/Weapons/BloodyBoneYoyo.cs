@@ -18,10 +18,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Weapons
             ItemID.Sets.GamepadSmartQuickReach[Item.type] = true;
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
-        private int o = 0;
         public override void SetDefaults()
         {
-            Item.useStyle = 5;
+            Item.useStyle = ItemUseStyleID.Shoot;
             Item.width = 24;
             Item.height = 24;
             Item.noUseGraphic = true;
@@ -36,7 +35,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Weapons
             Item.damage = 24;
             Item.noMelee = true;
             Item.value = Item.sellPrice(0, 0, 2, 0);
-            Item.rare = 2;
+            Item.rare = ItemRarityID.Green;
             ItemID.Sets.Yoyo[base.Item.type] = true;
         }
     }

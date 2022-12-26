@@ -23,22 +23,32 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
             if (CorruptMoth.CorruptMothNPC != null && CorruptMoth.CorruptMothNPC.active)
             {
                 if (player.statDefense <= 48)
+                {
                     player.statDefense -= (player.statDefense / 4); //48 / 4, would be player.statDefense / 4, up to a value change of -12.
+                }
                 else
+                {
                     player.statDefense -= 12;
+                }
                 player.GetDamage(DamageClass.Generic) *= 1.18f;
                 player.GetAttackSpeed(DamageClass.SummonMeleeSpeed) *= 1.1f;
                 player.GetAttackSpeed(DamageClass.Melee) *= 1.1f;
                 if (player.GetCritChance(DamageClass.Melee) > 0)
+                {
                     player.GetTotalCritChance(DamageClass.Melee);
                     player.GetCritChance(DamageClass.Melee) = 0;
+                }
                 if (player.GetCritChance(DamageClass.MeleeNoSpeed) > 0)
+                {
                     player.GetTotalCritChance(DamageClass.MeleeNoSpeed);
                     player.GetCritChance(DamageClass.MeleeNoSpeed) = 0;
+                }
                 if (player.GetCritChance(DamageClass.SummonMeleeSpeed) > 0)
+                {
                     player.GetTotalCritChance(DamageClass.SummonMeleeSpeed);
                     player.GetCritChance(DamageClass.SummonMeleeSpeed) = 0;
-                player.GetCritChance(DamageClass.SummonMeleeSpeed) *= 0;
+                    player.GetCritChance(DamageClass.SummonMeleeSpeed) *= 0;
+                }
             } // Does anyone know how to set all melee weapon crit chances to 0? I can set them to negatives but it would look weird. ~Setnour6
         }
 
@@ -49,14 +59,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
                 {
                     tooltips.AddRange(new TooltipLine[]
                     {
-                       new(Everglow.Instance, "FFBBadge0", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.FFBBadge0")),
-                       new(Everglow.Instance, "FFBBadge1", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.FFBBadge1")),
-                       new(Everglow.Instance, "FFBBadge2", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.FFBBadge2")),
-                       new(Everglow.Instance, "FFBBadge3", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.FFBBadge3")),
-                       new(Everglow.Instance, "FFBBadge4", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.FFBBadge4")),
+                       new(Everglow.Instance, "FFBBadge0", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.FFBBadge0")),
+                       new(Everglow.Instance, "FFBBadge1", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.FFBBadge1")),
+                       new(Everglow.Instance, "FFBBadge2", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.FFBBadge2")),
+                       new(Everglow.Instance, "FFBBadge3", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.FFBBadge3")),
+                       new(Everglow.Instance, "FFBBadge4", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.FFBBadge4")),
                     });
                 }
-                tooltips.Add(new TooltipLine(Everglow.Instance, "UnfinishedItem", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.UnfinishedItem")));
+                tooltips.Add(new TooltipLine(Everglow.Instance, "UnfinishedItem", Language.GetTextValue("Mods.Everglow.ExtraTooltip.Misc.UnfinishedItem")));
             }
             base.ModifyTooltips(tooltips);
         }

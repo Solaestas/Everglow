@@ -19,7 +19,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 8;
         }
 
-        private float K = 10;
+
 
         public override void Kill(int timeLeft)
         {
@@ -32,7 +32,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             for (int j = 0; j < 30; j++)
             {
                 Vector2 v0 = new Vector2(0, Main.rand.NextFloat(2f, 6f)).RotatedByRandom(Math.PI * 2);
-                int num22 = Dust.NewDust(Projectile.Center - new Vector2(4, 4) + new Vector2(0, Main.rand.NextFloat(0, 8f)).RotatedByRandom(Math.PI * 2), 2, 2, ModContent.DustType<Dusts.RedEffect2>(), v0.X, v0.Y, 0, default, 1.5f);
+                Dust.NewDust(Projectile.Center - new Vector2(4, 4) + new Vector2(0, Main.rand.NextFloat(0, 8f)).RotatedByRandom(Math.PI * 2), 2, 2, ModContent.DustType<Dusts.RedEffect2>(), v0.X, v0.Y, 0, default, 1.5f);
             }
         }
 
@@ -63,7 +63,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Projectiles/AcytaeaArrow").Value;
-            int frameHeight = t.Height;
             Vector2 drawOrigin = new Vector2(t.Width * 0.5f, t.Height * 0.5f);
             for (int k = 0; k < Projectile.oldPos.Length; k++)
             {

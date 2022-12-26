@@ -23,8 +23,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
         }
 
         private float ka = 0;
-        private int AIMNpc = -1;
-        private Vector2 AIMpos;
 
         public override void AI()
         {
@@ -134,7 +132,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                 }
             }
             Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Projectiles/Metero").Value;
-            if (Vx.Count >= 3)
+            if(Vx.Count >= 3)
             {
                 Main.graphics.GraphicsDevice.Textures[0] = t;//GoldenBloodScaleMirror
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);

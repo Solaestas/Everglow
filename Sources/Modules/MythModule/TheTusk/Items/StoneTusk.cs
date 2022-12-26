@@ -15,7 +15,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items
             Item.height = 24;
             Item.maxStack = 999;
             Item.value = 100;
-            Item.rare = 1;
+            Item.rare = ItemRarityID.Blue;
         }
     }
 }
