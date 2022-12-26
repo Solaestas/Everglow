@@ -1,4 +1,7 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
+﻿using Everglow.Sources.Commons.Function.Numerics;
+using MathNet.Numerics.LinearAlgebra;
+
+namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
 {
     internal class Spring
     {

@@ -183,7 +183,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
                         {
                             MaxCount = 6;
                         }
-                        var rope = new Rope(new Vector2(i * 5, j * 5) + basePosition, (Main.rand.Next(0, 60) + 140) / 300f, Main.rand.Next(2, MaxCount + 1), offset);
+                        
+                        var rope = new Rope(new Vector2(i * 5, j * 5) + basePosition, 0.2f, (Main.rand.Next(0, 60) + 140) / 300f, Main.rand.Next(2, MaxCount + 1), (v) => offset());
                         ropes.Add(rope);
                         result.Add(rope);
                     }
