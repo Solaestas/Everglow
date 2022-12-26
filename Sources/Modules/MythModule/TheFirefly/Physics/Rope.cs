@@ -152,9 +152,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
             for (int i = 0; i < m_masses.Length; i++)
             {
                 ref _Mass m = ref m_masses[i];
-                m.Force += new Vector2(0.04f + 0.06f *
+                m.Force += new Vector2(0.6f *
                     (float)(Math.Sin(Main.timeForVisualEffects / 72f + m.Position.X / 13d + m.Position.Y / 4d)), 0)
-                    * (Main.windSpeedCurrent + 1f) * 0f
+                    * (Main.windSpeedCurrent + 1f)
                     + new Vector2(0, gravity * m.Mass);
             }
 
@@ -175,10 +175,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
             for (int i = 0; i < m_masses.Length; i++)
             {
                 ref _Mass m = ref m_masses[i];
-                if (m.Position.HasNaNs())
-                {
-                    Main.NewText("!!");
-                }
+                //if (m.Position.HasNaNs())
+                //{
+                //    Main.NewText("!!");
+                //}
 
                 m.Velocity *= (float)Math.Pow(m_damping, deltaTime);
                 m_dummyPos[i] = (m.Position + m.Velocity * deltaTime);
@@ -216,7 +216,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
                 for (int i = 0; i < m_masses.Length; i++)
                 {
                     ref _Mass m = ref m_masses[i];
-                    m.Force = Vector2.Zero;
                     if (m.IsStatic)
                     {
                         continue;
@@ -310,6 +309,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
             for (int i = 0; i < m_masses.Length; i++)
             {
                 ref _Mass m = ref m_masses[i];
+                m.Force = Vector2.Zero;
                 if (m.IsStatic)
                 {
                     continue;

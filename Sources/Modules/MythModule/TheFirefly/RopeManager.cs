@@ -153,7 +153,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
                         var pixel = span[i + rect.X];
                         if (pixel.R == 255)
                         {
-                            var rope = new Rope(new Vector2(i * 5, j * 5) + basePosition, 10f, (pixel.B + 140) / 300f, Math.Max((int)pixel.G, 3), transform);
+                            var rope = new Rope(new Vector2(i * 5, j * 5) + basePosition, 0.6f, (pixel.B + 140) / 300f, Math.Max((int)pixel.G, 3), transform);
                             ropes.Add(rope);
                             result.Add(rope);
                         }
@@ -184,7 +184,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
                             MaxCount = 6;
                         }
                         
-                        var rope = new Rope(new Vector2(i * 5, j * 5) + basePosition, 0.2f, (Main.rand.Next(0, 60) + 140) / 300f, Main.rand.Next(2, MaxCount + 1), (v) => offset());
+                        var rope = new Rope(new Vector2(i * 5, j * 5) + basePosition, 10f, (Main.rand.Next(0, 60) + 140) / 300f, Main.rand.Next(2, MaxCount + 1), (v) => v + offset());
                         ropes.Add(rope);
                         result.Add(rope);
                     }

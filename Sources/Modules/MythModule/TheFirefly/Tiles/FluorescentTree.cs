@@ -97,7 +97,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             if (!Main.gamePaused)
             {
                 ropeManager.drawColor = new Color(0, 0, 0, 0);
-                ropeManager.Update(1f);
+                ropeManager.Update(0.2f);
             }
             ropeManager.Draw();
         }
@@ -432,7 +432,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                         {
                             if (playerRect.Contains(rope.GetMassList[k].Position.ToPoint()))
                             {
-                                rope.GetMassList[k].Force += Main.LocalPlayer.velocity / 1.5f;
+                                rope.GetMassList[k].Force += Main.LocalPlayer.velocity * 5f;
                             }
                         }
                     }

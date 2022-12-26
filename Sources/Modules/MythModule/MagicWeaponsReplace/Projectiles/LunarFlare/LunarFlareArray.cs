@@ -226,7 +226,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
         {
             if (Main.netMode != NetmodeID.Server)
             {
-                //Everglow.HookSystem.AddMethod(DrawStarrySky, Commons.Core.CallOpportunity.PostDrawBG);
+                Everglow.HookSystem.AddMethod(DrawStarrySky, Commons.Core.CallOpportunity.PostDrawBG);
             }
         }
 
