@@ -109,7 +109,14 @@ public class Acytaea : VisualNPC
     {
         return canDespawn;
     }
-
+    public override void OnKill()
+    {
+        NPC.SetEventFlagCleared(ref DownedBossSystem.downedAcytaea, -1);
+        if (Main.netMode == NetmodeID.Server)
+        {
+            NetMessage.SendData(MessageID.WorldData);
+        }
+    }
     public void UseBlade(int timerBegin, int add, int mul)
     {
         ref float Timer = ref NPC.localAI[0];

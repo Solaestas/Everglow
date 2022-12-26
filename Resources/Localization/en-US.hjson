@@ -742,6 +742,15 @@ Mods:
 					Allows you to destroy Fossilised Dragonscale Woods
 					Mines Cyan Ores faster
 					'''
+			# Extra Debug Items
+			HardmodeItem : 
+			'''
+			{$Mods.Everglow.Common.DebugItem}
+			'''
+			LifeMaxItem : 
+			'''
+			{$Mods.Everglow.Common.DebugItem}
+			'''
 
 			#Music Boxes
 			GlowWoodMusicBox : "Plays 'Setnour6 - Within the Giant Cocoon (身陷巨茧)'"

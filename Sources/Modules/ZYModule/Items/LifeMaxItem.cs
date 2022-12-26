@@ -1,4 +1,5 @@
 ﻿using Everglow.Sources.Commons.Core.VFX;
+using Everglow.Sources.Commons.Function.FeatureFlags;
 using Everglow.Sources.Modules.ExampleModule.VFX;
 
 namespace Everglow.Sources.Modules.ZYModule.Commons.Function;
@@ -41,6 +42,9 @@ internal class LifeMaxItem : ModItem
     }
     public override void AddRecipes()
     {
-        //CreateRecipe().Register();
+        if (EverglowConfig.DebugMode)
+        {
+            //CreateRecipe().Register();
+        }
     }
 }

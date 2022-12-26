@@ -742,6 +742,15 @@ Mods:
 					允许你破坏石化龙鳞木
 					加速破坏青缎矿
 					'''
+			# Extra Debug Items
+			HardmodeItem : 
+			'''
+			{$Mods.Everglow.Common.DebugItem}
+			'''
+			LifeMaxItem : 
+			'''
+			{$Mods.Everglow.Common.DebugItem}
+			'''
 
 			#Music Boxes
 			GlowWoodMusicBox : "播放 'Setnour6 - Within the Giant Cocoon (身陷巨茧)'"

@@ -1,4 +1,5 @@
 ﻿using Everglow.Sources.Commons.Core.VFX;
+using Everglow.Sources.Commons.Function.FeatureFlags;
 using Everglow.Sources.Modules.ExampleModule.VFX;
 using Everglow.Sources.Modules.YggdrasilModule.Common.Elevator;
 namespace Everglow.Sources.Modules.ZYModule.Commons.Function;
@@ -22,6 +23,9 @@ internal class TestItem : ModItem
     }
     public override void AddRecipes()
     {
-        CreateRecipe().Register();
+        if (EverglowConfig.DebugMode)
+        {
+            //CreateRecipe().Register();
+        }
     }
 }
