@@ -1,7 +1,7 @@
 ﻿using Terraria.Localization;
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk
+namespace Everglow.Sources.Modules.MythModule
 {
     // Acts as a container for "downed boss" flags.
     // Set a flag like this in your bosses OnKill hook:

@@ -1,11 +1,14 @@
 ﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
 using Terraria.DataStructures;
+using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 {
     public class PhosphorescenceGun : ModItem
     {
+        FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
         public override void SetStaticDefaults()
         {
             ItemGlowManager.AutoLoadItemGlow(this);
@@ -58,7 +61,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
                             {
                                 Main.projectile[x].ai[0] = 1f;
                                 Main.projectile[x].ai[1] = Item.useAnimation;
-                                player.velocity -= velocity * 0.2f;
+                                if (MothEye.LocalOwner != null && MothEye.LocalOwner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
+                                {
+                                    if (!mothEyePlayer.MothEyeEquipped && !fireflyBiome.IsBiomeActive(Main.LocalPlayer) && !Main.hardMode)
+                                    {
+                                        player.velocity -= velocity * 0.2f;
+                                    }
+                                }
                             }
                         }
                     }
@@ -74,7 +83,18 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             {
                 Vector2 newVelocity = velocity.RotatedByRandom(MathHelper.ToRadians(15));
                 newVelocity *= 1f - Main.rand.NextFloat(0.3f);
-                Projectile.NewProjectileDirect(source, position + velocity * 2.0f - new Vector2(0, 4), newVelocity, ModContent.ProjectileType<PhosphorescenceBullet>(), (int)(damage * 0.26f), knockback, player.whoAmI);
+                if (MothEye.LocalOwner != null && MothEye.LocalOwner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
+                {
+                    if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
+                    {
+                        Projectile.NewProjectileDirect(source, position + velocity * 2.0f - new Vector2(0, 4), newVelocity, ModContent.ProjectileType<PhosphorescenceBullet>(), (int)(damage * 0.39f), knockback, player.whoAmI);
+                    }
+                    else
+                    {
+                        Projectile.NewProjectileDirect(source, position + velocity * 2.0f - new Vector2(0, 4), newVelocity, ModContent.ProjectileType<PhosphorescenceBullet>(), (int)(damage * 0.26f), knockback, player.whoAmI);
+                    }
+                }
+                
                 Vector2 basePos = position + newVelocity * 3.7f - new Vector2(0, 4);
                 for (int z = 0; z < 3; z++)
                 {
@@ -99,6 +119,21 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
                 }
             }
             return false;
+        }
+        public override void ModifyTooltips(List<TooltipLine> tooltips)
+        {
+            if (MothEye.LocalOwner != null && MothEye.LocalOwner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
+            {
+                if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
+                {
+                    tooltips.AddRange(new TooltipLine[]
+                    {
+                        new(Everglow.Instance, "MothEyeBonusText", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeBonusText")),
+                        new(Everglow.Instance, "MothEyeGunBonus0", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextMothGun0")),
+                        new(Everglow.Instance, "MothEyeGunBonus1", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextMothGun1")),
+                    });
+                }
+            }
         }
     }
 }
