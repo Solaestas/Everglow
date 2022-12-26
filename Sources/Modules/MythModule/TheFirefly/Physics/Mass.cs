@@ -1,4 +1,14 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+using MathNet.Numerics.LinearAlgebra.Single;
+using MathNet.Numerics.LinearAlgebra;
+using Everglow.Sources.Commons.Function.Numerics;
+
+namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
 {
     internal class Mass
     {
@@ -42,9 +52,28 @@
             {
                 return;
             }
-            velocity += force / mass * deltaTime;
-            position += velocity * deltaTime;
-            force = Vector2.Zero;
+            //var oldPos = position;
+            //position = X;
+            //var offset = position - (oldPos + deltaTime * velocity);
+            //velocity += offset / deltaTime;
+            //force = Vector2.Zero;
         }
+
+        //private Vector2 G_1(float dt)
+        //{
+        //    Vector2 x_hat = (position + dt * velocity);
+        //    return mass / (dt * dt) * (X - x_hat);
+        //}
+
+        //public void FEM_Prepare(float dt)
+        //{
+        //    velocity *= 0.99f;
+        //    X = (position + velocity * dt);
+        //}
+
+        //public void FEM_UpdateG(float dt)
+        //{
+        //    G = G_1(dt);
+        //}
     }
 }
