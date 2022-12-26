@@ -1,11 +1,13 @@
 ﻿ using Everglow.Sources.Commons.Core.VFX;
 using Everglow.Sources.Commons.Function.FeatureFlags;
 using Everglow.Sources.Modules.ExampleModule.VFX;
+using Everglow.Sources.Modules.MythModule.TheFirefly;
 
 namespace Everglow.Sources.Modules.ZYModule.Commons.Function;
 
 internal class HardmodeItem : ModItem
 {
+    FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
     //protected override bool CloneNewInstances => true;
     public override string Texture => "Terraria/Images/UI/Wires_0";
     public override void SetDefaults()
@@ -30,9 +32,9 @@ internal class HardmodeItem : ModItem
     }
     public override void AddRecipes()
     {
-        if (EverglowConfig.DebugMode)
+        if (/*fireflyBiome.IsBiomeActive(Main.LocalPlayer) &&*/ EverglowConfig.DebugMode)
         {
-            //CreateRecipe().Register();
+            CreateRecipe().Register();
         }
     }
 }

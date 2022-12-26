@@ -53,23 +53,23 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
         }
         public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
-            if (!fireflyBiome.IsBiomeActive(Main.LocalPlayer) && !Main.hardMode)
+            if (fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
+            {
+                Texture2D mEyeTex = MythContent.QuickTexture("TheFirefly/Items/Accessories/MothEye_GlowOn");
+                for (int x = 0; x < 8; x++)
+                {
+                    Vector2 v0 = new Vector2(0, 6 + 2f * (float)(Math.Sin(Main.timeForVisualEffects * 0.1))).RotatedBy(x / 4d * Math.PI);
+                    spriteBatch.Draw(mEyeTex, position + v0, null, new Color(0.2f, 0.2f, 0.2f, 0), 0f, origin, scale, 0, 0f);
+                }
+                spriteBatch.Draw(mEyeTex, position, null, drawColor, 0f, origin, scale, 0, 0f);
+            }
+            else
             {
                 Texture2D mEyeTex = MythContent.QuickTexture("TheFirefly/Items/Accessories/MothEye_GlowOff");
                 for (int x = 0; x < 8; x++)
                 {
                     Vector2 v0 = new Vector2(0, 8 + 3f * (float)Main.timeForVisualEffects).RotatedBy(x / 4d * Math.PI);
                     spriteBatch.Draw(mEyeTex, position + v0 * 15, null, new Color(1f, 1f, 1f, 0), 0f, origin, scale, 0, 0f);
-                }
-                spriteBatch.Draw(mEyeTex, position, null, drawColor, 0f, origin, scale, 0, 0f);
-            }
-            else
-            {
-                Texture2D mEyeTex = MythContent.QuickTexture("TheFirefly/Items/Accessories/MothEye_GlowOn");
-                for(int x = 0;x < 8;x++)
-                {
-                    Vector2 v0 = new Vector2(0, 6 + 2f * (float)(Math.Sin(Main.timeForVisualEffects * 0.1))).RotatedBy(x / 4d * Math.PI);
-                    spriteBatch.Draw(mEyeTex, position + v0, null, new Color(0.2f, 0.2f, 0.2f, 0), 0f, origin, scale, 0, 0f);
                 }
                 spriteBatch.Draw(mEyeTex, position, null, drawColor, 0f, origin, scale, 0, 0f);
             }
@@ -125,14 +125,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
                     int[] FireflyWeapon =
                     {
                             ModContent.ItemType<Weapons.DarknessFan>(),
-                            ModContent.ItemType<Weapons.DreamWeaver>(),
-                            ModContent.ItemType<Weapons.DustOfCorrupt>(),
+                            ModContent.ItemType<Weapons.DreamWeaver>(), // no MothEye effect
+                            ModContent.ItemType<Weapons.DustOfCorrupt>(), // no MothEye effect
                             ModContent.ItemType<Weapons.EvilChrysalis>(),
-                            ModContent.ItemType<Weapons.FlowLightMissile>(),
-                            ModContent.ItemType<Weapons.GlowBeadGun>(),
+                            ModContent.ItemType<Weapons.FlowLightMissile>(), // no MothEye effect
+                            ModContent.ItemType<Weapons.GlowBeadGun>(), // no MothEye effect
                             ModContent.ItemType<Weapons.GlowWoodSword>(),
                             ModContent.ItemType<Weapons.MothYoyo>(),
-                            ModContent.ItemType<Weapons.NavyThunder>(),
+                            ModContent.ItemType<Weapons.NavyThunder>(), // no MothEye effect
                             ModContent.ItemType<Weapons.PhosphorescenceGun>(),
                             ModContent.ItemType<Weapons.ScaleWingBlade>(),
                             ModContent.ItemType<Weapons.ShadowWingBow>()

@@ -8,7 +8,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
 			textureSlots[0] = BackgroundTextureLoader.GetBackgroundSlot(Mod, Path + "0");
 			textureSlots[1] = BackgroundTextureLoader.GetBackgroundSlot(Mod, Path + "1");
 			textureSlots[2] = BackgroundTextureLoader.GetBackgroundSlot(Mod, Path + "2");
-			textureSlots[3] = BackgroundTextureLoader.GetBackgroundSlot(Mod, Path + "0");
+			textureSlots[3] = BackgroundTextureLoader.GetBackgroundSlot(Mod, Path + "1");
 		}
 	}
 }
