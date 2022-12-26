@@ -87,7 +87,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
                 if (!Main.gamePaused && Main.instance.IsActive && (!Lighting.UpdateEveryFrame || Main.rand.NextBool(4)) && Main.rand.NextBool(frequency))
                 {
                     Rectangle dustBox = Utils.CenteredRectangle(new Vector2(i * 16 + 8, j * 16 + 4), new Vector2(16, 16));
-                    int numForDust = Dust.NewDust(dustBox.TopLeft(), dustBox.Width, dustBox.Height, ModContent.DustType<Dusts.BlueToPurpleSpark>(), 0f, 0f, 254, default(Color), Main.rand.NextFloat(0.95f, 1.75f));
+                    int numForDust = Dust.NewDust(dustBox.TopLeft(), dustBox.Width, dustBox.Height, ModContent.DustType<Dusts.BlueToPurpleSpark>(), 0f, 0f, 254, default, Main.rand.NextFloat(0.95f, 1.75f));
                     Dust obj = Main.dust[numForDust];
                     obj.velocity *= 0.4f;
                     Main.dust[numForDust].velocity.Y -= 0.4f;

@@ -13,13 +13,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 
         public override void SetDefaults()
         {
-            NPC.damage = 30;
+            NPC.damage = 24;
             NPC.width = 40;
             NPC.height = 56;
-            NPC.defense = 12;
-            NPC.lifeMax = 160;
-            NPC.knockBackResist = 0.6f;
-            NPC.value = Item.buyPrice(0, 0, 16, 0);
+            NPC.defense = 18;
+            NPC.lifeMax = 140;
+            NPC.knockBackResist = 0.4f;
+            NPC.value = Item.buyPrice(0, 0, 12, 0);
             NPC.aiStyle = NPCAIStyleID.Fighter;
             
         }
@@ -31,7 +31,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             {
                 return 0f;
             }
-            return 0.3f;
+            return 0.24f;
         }
 
         public override void AI()

@@ -10,7 +10,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
     public class MothEye : ModItem
     {
         FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
-
+        public static Player LocalOwner => Main.LocalPlayer;
         public override void SetDefaults()
         {
             Item.width = 44;
@@ -23,10 +23,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
+            player.GetModPlayer<MothEyePlayer>().MothEyeEquipped = true;
             player.maxMinions += 1;
             player.maxTurrets += 1;
             player.GetDamage(DamageClass.Summon) *= 1.06f;
-            if (fireflyBiome.IsBiomeActive(Main.LocalPlayer))
+            if (fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
             {
                 player.manaSickReduction += 4;
                 player.manaCost -= 0.05f;
@@ -34,22 +35,25 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
         }
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
-            if (fireflyBiome.IsBiomeActive(Main.LocalPlayer))
+            if (fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
             {
                 tooltips.AddRange(new TooltipLine[]
                 {
-                    new(Everglow.Instance, "MothEyeText0", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.MothEyeText0")),
-                    new(Everglow.Instance, "MothEyeText1", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.MothEyeText1")),
-                    new(Everglow.Instance, "MothEyeText2", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.MothEyeText2")),
-                    new(Everglow.Instance, "MothEyeText3", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.MothEyeText3")),
-                    new(Everglow.Instance, "MothEyeText4", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.MothEyeText4")),
+                    new(Everglow.Instance, "MothEyeText0", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeText0")),
+                    new(Everglow.Instance, "MothEyeText1", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeText1")),
+                    new(Everglow.Instance, "MothEyeText2", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeText2")),
+                    new(Everglow.Instance, "MothEyeText3", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeText3")),
+                    new(Everglow.Instance, "MothEyeText4", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeText4")),
                 }); // Using \n would cause spacing problems in the tooltip section (blank space underneath all tooltips). ~Setnour6
             }
-            tooltips.Add(new TooltipLine(Everglow.Instance, "UnfinishedItem", Language.GetTextValue("Mods.Everglow.ExtraItemTooltip.UnfinishedItem")));
+            else if (fireflyBiome.IsBiomeActive(Main.LocalPlayer))
+            {
+                tooltips.Add(new TooltipLine(Everglow.Instance, "MothEyeCriteriaText", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeCriteriaText")));
+            }
         }
         public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
-            if (!fireflyBiome.IsBiomeActive(Main.LocalPlayer))
+            if (!fireflyBiome.IsBiomeActive(Main.LocalPlayer) && !Main.hardMode)
             {
                 Texture2D mEyeTex = MythContent.QuickTexture("TheFirefly/Items/Accessories/MothEye_GlowOff");
                 for (int x = 0; x < 8; x++)
@@ -71,19 +75,20 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
             }
         }
 
-        /*public override void UpdateInventory(Player player) //KEEP FOR REFERENCE
-        {
-            bool hasMothEye = false;
-            foreach (var item in player.armor)
-            {
-                if (item.type == ModContent.ItemType<Items.Accessories.MothEye>())
-                {
-                    hasMothEye = true;
-                    break;
-                }
-            }
-            base.UpdateInventory(player);
-        }*/
+        //public override void UpdateInventory(Player player) //KEEP FOR REFERENCE
+        //{
+        //    bool hasMothEye = false;
+        //    foreach (var item in player.armor)
+        //    {
+        //        if (item.type == ModContent.ItemType<Items.Accessories.MothEye>())
+        //        {
+        //            hasMothEye = true;
+        //            break;
+        //        }
+        //    }
+        //    base.UpdateInventory(player);
+        //}
+
         //public override void EquipFrameEffects(Player player, EquipType type)
         //{
         //    if (fireflyBiome.IsBiomeActive(player))
@@ -101,10 +106,15 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
     class MothEyePlayer : ModPlayer
     {
         FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
+        public bool MothEyeEquipped;
 
+        public override void ResetEffects()
+        {
+            MothEyeEquipped = false;
+        }
         public override void ModifyWeaponDamage(Item item, ref StatModifier damage)
         {
-            if (fireflyBiome.IsBiomeActive(Main.LocalPlayer))
+            if (fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
             {
                 for (int f = 0; f < Player.armor.Length; f++)
                 {
@@ -115,9 +125,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
                     int[] FireflyWeapon =
                     {
                             ModContent.ItemType<Weapons.DarknessFan>(),
+                            ModContent.ItemType<Weapons.DreamWeaver>(),
                             ModContent.ItemType<Weapons.DustOfCorrupt>(),
                             ModContent.ItemType<Weapons.EvilChrysalis>(),
+                            ModContent.ItemType<Weapons.FlowLightMissile>(),
                             ModContent.ItemType<Weapons.GlowBeadGun>(),
+                            ModContent.ItemType<Weapons.GlowWoodSword>(),
                             ModContent.ItemType<Weapons.MothYoyo>(),
                             ModContent.ItemType<Weapons.NavyThunder>(),
                             ModContent.ItemType<Weapons.PhosphorescenceGun>(),
@@ -132,5 +145,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
                 }
             }
         }
+        //public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit) //Example use of MothEyeEquipped
+        //{
+        //    if (MothEyeEquipped == true)
+        //    {
+        //        target.AddBuff(BuffID.Bleeding, 300);
+        //    }
+        //    base.OnHitNPC(item, target, damage, knockback, crit);
+        //}
     }
 } //   TODO: Finish Item Equip Effects (Displays a different equip texture when in the Firefly Biome, See MothEye_Neck.png and MothEye_NeckOff.png

@@ -2,6 +2,7 @@ using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Commons.Core.VFX;
 using Everglow.Sources.Modules.MEACModule;
 using Terraria.DataStructures;
+using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.RazorbladeTyphoon
 {
@@ -23,6 +24,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ra
             Projectile.scale = 1f;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 30;
+            Projectile.DamageType = DamageClass.Magic;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 120;
         }
@@ -94,6 +96,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ra
                     {
                         if (!target.dontTakeDamage && !target.friendly && target.CanBeChasedBy())
                         {
+                            if (target.velocity.Length() <= 0.001f)
+                            {
+                                continue;
+                            }
                             Vector2 ToTarget = target.Center - Projectile.Center;
                             float dis = ToTarget.Length();
                             if (dis < 250 && ToTarget != Vector2.Zero)
@@ -129,7 +135,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ra
                         {
                             if(dis < 45)
                             {
-                                if((target.type >= 71 && target.type <= 74) || target.type == ItemID.Star || target.type == ItemID.Heart)
+                                if((target.type >= ItemID.CopperCoin && target.type <= ItemID.PlatinumCoin) || target.type == ItemID.Star || target.type == ItemID.Heart)
                                 {
                                     target.position = player.Center;
                                 }

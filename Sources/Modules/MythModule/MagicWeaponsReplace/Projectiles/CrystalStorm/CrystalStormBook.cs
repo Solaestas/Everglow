@@ -23,13 +23,13 @@
                 {
                     velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero).RotatedBy(Main.rand.NextFloat(-0.3f, 0.3f)) * player.HeldItem.shootSpeed;
                     Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -1, velocity * 1.9f, ModContent.ProjectileType<CrystalStormII>(), player.HeldItem.damage, player.HeldItem.knockBack, player.whoAmI);
-                    p0.CritChance = (int)(player.HeldItem.crit + player.GetCritChance(DamageClass.Generic));
+                    p0.CritChance = player.GetWeaponCrit(player.HeldItem);
                 }
                 if (times % 33 == 12)
                 {
                     velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero) * player.HeldItem.shootSpeed;
                     Projectile p1 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -1, velocity * 0.6f, ModContent.ProjectileType<LargeCrystal>(), (int)(player.HeldItem.damage * 2.8), player.HeldItem.knockBack, player.whoAmI);
-                    p1.CritChance = (int)(player.HeldItem.crit + player.GetCritChance(DamageClass.Generic) * 100);
+                    p1.CritChance = player.GetWeaponCrit(player.HeldItem) * 3;
                 }
                 times++;
                 if (times > 33)

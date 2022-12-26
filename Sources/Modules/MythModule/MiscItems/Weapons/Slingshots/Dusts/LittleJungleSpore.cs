@@ -19,10 +19,10 @@
             if (Main.rand.NextBool(3))
             {
                 int type = dust.type;
-                int r1 = Dust.NewDust(dust.position, 0, 0, type, 0, 0, 200, default(Color), dust.scale * 0.75f);
+                int r1 = Dust.NewDust(dust.position, 0, 0, type, 0, 0, 200, default, dust.scale * 0.75f);
                 Main.dust[r1].velocity = dust.velocity.RotatedBy(Main.rand.NextFloat(0.2f, 1.3f));
                 Main.dust[r1].noGravity = true;
-                int r2 = Dust.NewDust(dust.position, 0, 0, type, 0, 0, 200, default(Color), dust.scale * 0.75f);
+                int r2 = Dust.NewDust(dust.position, 0, 0, type, 0, 0, 200, default, dust.scale * 0.75f);
                 Main.dust[r2].velocity = dust.velocity.RotatedBy(Main.rand.NextFloat(-1.3f, -0.2f));
                 Main.dust[r2].noGravity = true;
             }

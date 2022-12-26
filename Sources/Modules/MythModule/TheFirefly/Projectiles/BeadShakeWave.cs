@@ -43,8 +43,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 width = Projectile.timeLeft;
             }
             VFXManager.spriteBatch.Begin();
-            DrawTexCircle_VFXBatch(VFXManager.spriteBatch, value * 270, width, new Color(0, colorV * 0.2f, colorV, 0f) * 0.4f, Projectile.Center - Main.screenPosition, t);
-            DrawTexCircle_VFXBatch(VFXManager.spriteBatch, value * 160, width * 0.6f, new Color(0, colorV * 0.2f, colorV, 0f) * 0.4f, Projectile.Center - Main.screenPosition, t);
+            DrawTexCircle_VFXBatch(VFXManager.spriteBatch, value * 270 * Projectile.ai[0], width, new Color(0, colorV * 0.2f, colorV, 0f) * 0.4f, Projectile.Center - Main.screenPosition, t);
+            DrawTexCircle_VFXBatch(VFXManager.spriteBatch, value * 160 * Projectile.ai[0], width * 0.6f, new Color(0, colorV * 0.2f, colorV, 0f) * 0.4f, Projectile.Center - Main.screenPosition, t);
             VFXManager.spriteBatch.End();
             return false;
         }
@@ -85,9 +85,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 width = Projectile.timeLeft;
             }
 
-            DrawTexCircle_VFXBatch(spriteBatch, value * 270, width, new Color(colorV, colorV * 0.7f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
+            DrawTexCircle_VFXBatch(spriteBatch, value * 270 * Projectile.ai[0], width, new Color(colorV, colorV * 0.7f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
 
-            DrawTexCircle_VFXBatch(spriteBatch, value * 160, width * 0.6f, new Color(colorV, colorV * 0.7f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
+            DrawTexCircle_VFXBatch(spriteBatch, value * 160 * Projectile.ai[0], width * 0.6f, new Color(colorV, colorV * 0.7f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
         }
     }
 }

@@ -21,7 +21,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
             Projectile.alpha = 0;
             Projectile.penetrate = 3;
             Projectile.scale = 1f;
-            Projectile.DamageType = DamageClass.MagicSummonHybrid;
+            Projectile.DamageType = DamageClass.Magic;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 120;
         }
@@ -214,7 +214,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
             ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
             Gsplayer.FlyCamPosition = new Vector2(0, 33).RotatedByRandom(6.283);
 
-            GenerateVFXExpolode(64, 2.2f);
+            GenerateVFXExpolode(24, 2.2f);
 
             for(int d = 0;d <70;d++)
             {
@@ -232,7 +232,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
         {
             ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
             Gsplayer.FlyCamPosition = new Vector2(0, 11).RotatedByRandom(6.283);
-            GenerateVFXExpolode(34, 1.2f);
+            GenerateVFXExpolode(14, 1.2f);
             for (int d = 0; d < 28; d++)
             {
                 Vector2 BasePos = Projectile.Center - new Vector2(4) - Projectile.velocity;
@@ -251,7 +251,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
         {
             ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
             Gsplayer.FlyCamPosition = new Vector2(0, 11).RotatedByRandom(6.283);
-            GenerateVFXExpolode(34, 1.2f);
+            GenerateVFXExpolode(14, 1.2f);
             for (int d = 0; d < 28; d++)
             {
                 Vector2 BasePos = Projectile.Center - new Vector2(4) - Projectile.velocity;
@@ -271,7 +271,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
             ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
             Gsplayer.FlyCamPosition = new Vector2(0, 11).RotatedByRandom(6.283);
             SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot.WithVolumeScale(0.4f), Projectile.Center);
-            GenerateVFXExpolode(34, 1.2f);
+            GenerateVFXExpolode(14, 1.2f);
             for (int d = 0; d < 28; d++)
             {
                 Vector2 BasePos = Projectile.Center - new Vector2(4) - Projectile.velocity;

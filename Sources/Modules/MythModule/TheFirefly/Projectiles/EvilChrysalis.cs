@@ -39,9 +39,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 
                     for (int z = 0; z < 4; z++)
                     {
-                        int ds = Dust.NewDust(player.Bottom + new Vector2(Main.rand.NextFloat(-60, 60), Main.rand.NextFloat(-5, 15)), 0, 0, ModContent.DustType<MothBlue2>(), 0, Main.rand.NextFloat(-8, -4), 0, default(Color), Main.rand.NextFloat(0.6f, 1.8f));
+                        int ds = Dust.NewDust(player.Bottom + new Vector2(Main.rand.NextFloat(-60, 60), Main.rand.NextFloat(-5, 15)), 0, 0, ModContent.DustType<MothBlue2>(), 0, Main.rand.NextFloat(-8, -4), 0, default, Main.rand.NextFloat(0.6f, 1.8f));
                         Main.dust[ds].velocity = new Vector2(0, Main.rand.NextFloat(-8, -4));
-                        int es = Dust.NewDust(player.Bottom + new Vector2(Main.rand.NextFloat(-60, 60), Main.rand.NextFloat(-5, 15)), 0, 0, DustID.SpookyWood, 0, Main.rand.NextFloat(-8, -4), 0, default(Color), Main.rand.NextFloat(0.3f, 1.0f));
+                        int es = Dust.NewDust(player.Bottom + new Vector2(Main.rand.NextFloat(-60, 60), Main.rand.NextFloat(-5, 15)), 0, 0, DustID.SpookyWood, 0, Main.rand.NextFloat(-8, -4), 0, default, Main.rand.NextFloat(0.3f, 1.0f));
                         Main.dust[es].velocity = new Vector2(0, Main.rand.NextFloat(-8, -4));
                     }
                 }

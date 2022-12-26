@@ -5,7 +5,7 @@ using Everglow.Sources.Modules.MythModule.Common;
 
 namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles
 {
-    public class LilyHarpNoteKill : ModProjectile, IWarpProjectile
+    public class LilyHarpNoteKill : ModProjectile//, IWarpProjectile
     {
         public override void SetStaticDefaults()
         {

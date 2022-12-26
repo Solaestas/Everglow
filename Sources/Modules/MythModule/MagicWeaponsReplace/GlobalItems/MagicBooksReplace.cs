@@ -5,6 +5,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
 {
     public class MagicBooksReplace : GlobalItem
     {
+        private static string SpellbookExtra = "Mods.Everglow.ExtraTooltip.Spellbook.";
+        private static string SpellbookGTV(string key) => Language.GetTextValue(SpellbookExtra + key);
         public override void SetDefaults(Item item)
         {
             base.SetDefaults(item);
@@ -30,79 +32,39 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
             {
                 if (item.type == ItemID.WaterBolt)
                 {
-                    tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "Text1", "After hitting the enemy 5 times, you will get a Water Orb. right click to consume it and teleport to the cursor. The maximum number of Water Orbs you can have is 6. \nWhen the number of Water Orbs reaches 6, you can consume all of the Water Orbs with the middle mouse button to get 5 seconds of high intensity attacks. \nSwitch weapons to clear all the water orbs."));
-                    if (Language.ActiveCulture.Name == "zh-Hans")
-                    {
-                        tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "Text1", "累计命中敌人5次后获得一个水之球,右键消耗并传送至老鼠\n水之球最多叠加6个,水之球达到6个时,中键消耗全部水之球获得5秒高强度攻击\n切换武器清除全部水之球"));
-                    }
+                    tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "ExtraTooltip", SpellbookGTV("WaterBolt")));
                 }
                 if (item.type == ItemID.DemonScythe)
                 {
-                    //TODO 英语翻译
-                    if (Language.ActiveCulture.Name == "zh-Hans")
-                    {
-                        tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "Text1", "法术替换为旋转的恶魔月刃,速度会逐渐加快,伤害和击退力度也随着速度增长而加大"));
-                    }
+                    tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "ExtraTooltip", SpellbookGTV("DemonScythe")));
                 }
                 if (item.type == ItemID.BookofSkulls)
                 {
-                    //TODO 英语翻译
-                    if (Language.ActiveCulture.Name == "zh-Hans")
-                    {
-                        tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "Text1", "命中敌人后释放若干骨刺,骨刺会与下一次攻击一起发射,最多拥有12个骨刺\n右键在地面召唤烈焰白骨之爪"));
-                    }
+                    tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "ExtraTooltip", SpellbookGTV("BookofSkulls")));
                 }
                 if (item.type == ItemID.CrystalStorm)
                 {
-                    //TODO 英语翻译
-                    if (Language.ActiveCulture.Name == "zh-Hans")
-                    {
-                        tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "Text1", "每隔一定时间释放出大块风暴魔晶,风暴魔晶碎裂后会产生有吸引力的旋风,旋风可以回收金币,魔法星,和生命心"));
-                    }
+                    tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "ExtraTooltip", SpellbookGTV("CrystalStorm")));
                 }
                 if (item.type == ItemID.CursedFlames)
                 {
-                    //TODO 英语翻译
-                    if (Language.ActiveCulture.Name == "zh-Hans")
-                    {
-                        tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "Text1", "诅咒焰火球的穿透,包括反弹次数最大为3次,这个次数每减少一次就会导致威力增加20%"));
-                    }
+                    tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "ExtraTooltip", SpellbookGTV("CursedFlames")));
                 }
                 if (item.type == ItemID.GoldenShower)
                 {
-                    //TODO 英语翻译
-                    if (Language.ActiveCulture.Name == "zh-Hans")
-                    {
-                        tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "Text1", "打开和关闭魔法书的瞬间降下大范围灵液雨,关闭书本的时候产生灵液雨的规模由持续使用的时间决定,越久规模越大\n右键加大喷射剂量和法力消耗"));
-                    }
+                    tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "ExtraTooltip", SpellbookGTV("GoldenShower")));
                 }
                 if (item.type == ItemID.MagnetSphere)
                 {
-                    //TODO 英语翻译
-                    if (Language.ActiveCulture.Name == "zh-Hans")
-                    {
-                        tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "Text1", "可以同时存在多个的大型磁球,随机电击对附近怪物,命中怪物后也会爆发出强大电流"));
-                    }
+                    tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "ExtraTooltip", SpellbookGTV("MagnetSphere")));
                 }
                 if (item.type == ItemID.RazorbladeTyphoon)
                 {
-                    //TODO 英语翻译
-                    if (Language.ActiveCulture.Name == "zh-Hans")
-                    {
-                        tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "Text1", "制造会追踪并吸引敌人的台风,台风可以回收金币,魔法星,和生命心\n如果连续使用得足够久,会引发暴风黑洞"));
-                    }
+                    tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "ExtraTooltip", SpellbookGTV("RazorbladeTyphoon")));
                 }
                 if (item.type == ItemID.LunarFlareBook)
                 {
-                    //TODO 英语翻译
-                    if (Language.ActiveCulture.Name == "zh-Hans")
-                    {
-                        tooltips.Add(new TooltipLine(Mod,
-                            "Text1",
-                            "额外支付魔力使月夜浮现\n" +
-                            "逐渐降低不暴击率\n" +
-                            "逐渐提高原始暴击的伤害"));
-                    }
+                    tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "ExtraTooltip", SpellbookGTV("LunarFlareBook")));
                 }
             }
         }
@@ -385,7 +347,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
                             {
                                 Vector2 ReleasePoint = Main.MouseWorld + new Vector2(0, g * 5 * player.gravDir);
                                 Projectile p = Projectile.NewProjectileDirect(item.GetSource_FromAI(), ReleasePoint, Vector2.Zero, ModContent.ProjectileType<Projectiles.BookofSkulls.SkullHand>(), player.HeldItem.damage * 3, player.HeldItem.knockBack * 6, player.whoAmI);
-                                p.CritChance = (int)(player.HeldItem.crit + player.GetCritChance(DamageClass.Generic));
+                                p.CritChance = player.GetWeaponCrit(player.HeldItem);
 
                                 mplayer.HandCooling = 18;
                                 player.statMana -= player.HeldItem.mana * 4;
