@@ -1,7 +1,7 @@
-﻿displayName = Everglow | �����޼� [Demonstration]
-author = Dream Chaser Group | ���������Ŷ�
-version = 0.1.4
+﻿displayName = Everglow | 流光无际 [Demonstration]
+author = Dream Chaser Group | 孤舟逐梦团队
+version = 0.1.5
 includePDB = true
 noCompile = true
-dllReferences = MethodBoundaryAspect, SixLabors.ImageSharp, MathNet.Numerics
+dllReferences = MethodBoundaryAspect, SixLabors.ImageSharp
 buildIgnore = Everglow-UnitTest/*, Sources/Tools/*, Documents/*, *.md. *.txt
