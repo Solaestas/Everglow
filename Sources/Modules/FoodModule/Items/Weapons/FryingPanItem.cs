@@ -30,7 +30,7 @@ namespace Everglow.Sources.Modules.FoodModule.Items.Weapons
             Item.noMelee = true;
             Item.noUseGraphic = true;
 
-            Item.shootSpeed = 10f;
+            Item.shootSpeed = 20f;
             Item.shoot = ModContent.ProjectileType<FryingPan>();
 
             Item.value = Item.sellPrice(gold: 2);

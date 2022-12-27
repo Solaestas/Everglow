@@ -87,12 +87,20 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
             //调整各个攻击方式的伤害倍率等等
 
             ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
-
+            Player player = Main.player[Projectile.owner];
             if (attackType == 100)
             {
                 damage *= 5;
                 knockback *= 5;
                 Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 12, 150)).RotatedByRandom(6.283);
+                Projectile.NewProjectileDirect(Projectile.GetSource_FromAI("hit"), Projectile.Center, new Vector2(0, -1f).RotatedByRandom(Math.PI/4), ProjectileID.Spark, Projectile.damage, Projectile.knockBack, player.whoAmI);
+                SoundEngine.PlaySound(SoundID.NPCHit4, target.Center);
+            }
+            else
+            {
+                Projectile P = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI("hit"), target.Center, new Vector2(0, -1f).RotatedByRandom(Math.PI / 4), ProjectileID.Spark, Projectile.damage / 2, Projectile.knockBack / 2, player.whoAmI);
+                P.GetGlobalProjectile<Canhitproj>().Canhit = false;
+                SoundEngine.PlaySound(SoundID.NPCHit4, target.Center);
             }
         }
 
@@ -298,7 +306,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                                 Vector2 v2 = Projectile.velocity;
 
                                 float m1 = proj.width * proj.height * proj.knockBack * proj.scale;
-                                float m2 = Projectile.width * Projectile.height * Projectile.knockBack * Projectile.scale / 10;
+                                float m2 = Projectile.width * Projectile.height * Projectile.knockBack * Projectile.scale / 20;
 
                                 Vector2 newvelocity1 = (v1 * (m1 - m2) + 2 * m2 * v2) / (m1 + m2);
                                 Vector2 newvelocity2 = (v2 * (m2 - m1) + 2 * m1 * v1) / (m1 + m2);
@@ -325,16 +333,16 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                                 SoundEngine.PlaySound(SoundID.NPCHit4, Projectile.Center);
                                 proj.GetGlobalProjectile<Canhitproj>().Canhit = false;
                                 hittimes--;
-                                Projectile.timeLeft = 2940;
+                                Projectile.timeLeft = 2970;
                             }
                         }
                     }
                 }
                 Projectile.rotation += 0.3f * Projectile.spriteDirection;
                 mainVec = Projectile.rotation.ToRotationVector2() * 38;
-                if (Projectile.timeLeft <= 2940)
+                if (Projectile.timeLeft <= 2970)
                 {
-                    Projectile.velocity = Projectile.velocity * 0.99f + Vector2.Normalize(player.Center - Projectile.Center) * 0.5f;
+                    Projectile.velocity = Projectile.velocity * 0.96f + Vector2.Normalize(player.Center - Projectile.Center) * 0.5f;
                     Projectile.tileCollide = false;
                     Projectile.rotation += 0.3f * Projectile.spriteDirection;
                     mainVec = Projectile.rotation.ToRotationVector2() * 38;
@@ -366,7 +374,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
         {
             if (attackType == 0)
             {
-                if (Projectile.timeLeft > 2940)
+                if (Projectile.timeLeft > 2970)
                 {
                     if (Projectile.ai[1] != 0)
                     {
@@ -374,7 +382,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                     }
                     Projectile.velocity.X = Projectile.velocity.X * -1f;
                     Projectile.velocity.Y = Projectile.velocity.Y * -1f;
-                    Projectile.timeLeft = 2940;
+                    Projectile.timeLeft = 2970;
                 }
             }
 
@@ -384,7 +392,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
         {
             if (attackType == 0)
             {
-                if (Projectile.timeLeft > 2940)
+                if (Projectile.timeLeft > 2970)
                 {
                     if (Projectile.ai[1] != 0)
                     {
@@ -393,7 +401,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                     Projectile.velocity.X = Projectile.velocity.X * -1f;
                     Projectile.velocity.Y = Projectile.velocity.Y * -1f;
 
-                    Projectile.timeLeft = 2940;
+                    Projectile.timeLeft = 2970;
                 }
             }
             return;
@@ -403,7 +411,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
             SoundEngine.PlaySound(SoundID.NPCHit4, Projectile.Center);
             if (attackType == 0)
             {
-                if (Projectile.timeLeft > 2940)
+                if (Projectile.timeLeft > 2970)
                 {
                     if (Projectile.ai[1] != 0)
                     {
@@ -418,7 +426,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                     {
                         Projectile.velocity.Y = oldVelocity.Y * -1f;
                     }
-                    Projectile.timeLeft = 2940;
+                    Projectile.timeLeft = 2970;
                 }
             }
             return false;
