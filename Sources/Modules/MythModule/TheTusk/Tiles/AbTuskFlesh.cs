@@ -5,7 +5,8 @@
         public override void SetStaticDefaults()
         {
             Main.tileSolid[Type] = true;
-            Main.tileMergeDirt[Type] = true;
+            Main.tileMerge[Type][ModContent.TileType<TuskFlesh>()] = true;
+            Main.tileMerge[ModContent.TileType<TuskFlesh>()][Type] = true;
             Main.tileBlockLight[Type] = true;
 
             DustType = 5;
@@ -85,10 +86,6 @@
                 RandomCheck--;
             }
         }
-        public override void NumDust(int i, int j, bool fail, ref int num)
-        {
-            num = fail ? 1 : 3;
-        }
         public override void RandomUpdate(int i, int j)
         {
             if (!Main.tile[i, j - 1].HasTile)
@@ -118,7 +115,6 @@
                             break;
                     }
                 }
-
             }
         }
     }
