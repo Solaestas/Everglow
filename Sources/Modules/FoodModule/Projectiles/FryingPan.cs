@@ -298,7 +298,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                                 Vector2 v2 = Projectile.velocity;
 
                                 float m1 = proj.width * proj.height * proj.knockBack * proj.scale;
-                                float m2 = Projectile.width * Projectile.height * Projectile.knockBack * Projectile.scale;
+                                float m2 = Projectile.width * Projectile.height * Projectile.knockBack * Projectile.scale / 10;
 
                                 Vector2 newvelocity1 = (v1 * (m1 - m2) + 2 * m2 * v2) / (m1 + m2);
                                 Vector2 newvelocity2 = (v2 * (m2 - m1) + 2 * m1 * v1) / (m1 + m2);
@@ -315,9 +315,8 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                                 Projectile.velocity = newvelocity2;//这里是质心动量守恒的弹性碰撞
 
                                 Dust.NewDustPerfect(Projectile.Center - (Vector2.Normalize(dustvelocity).RotatedBy(Math.PI / 4) * 32), ModContent.DustType<Dusts.FireDust>(), Vector2.Normalize(dustvelocity) * 15, 125, new Color(250, 150, 20));
-                                Projectile P = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI("hit"), Projectile.Center - (Vector2.Normalize(dustvelocity).RotatedBy(Math.PI / 4) * 32), Vector2.Normalize(dustvelocity)*2+new Vector2(0,-1.5f), ProjectileID.Spark, Projectile.damage/2, Projectile.knockBack, player.whoAmI);
+                                Projectile P = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI("hit"), Projectile.Center - (Vector2.Normalize(dustvelocity).RotatedBy(Math.PI / 4) * 32), Vector2.Normalize(dustvelocity)+new Vector2(0,-1f), ProjectileID.Spark, Projectile.damage/2, Projectile.knockBack, player.whoAmI);
                                 P.GetGlobalProjectile<Canhitproj>().Canhit = false;
-                                P.timeLeft = 1200;
 
                                 int dust1 = Dust.NewDust(Projectile.Center - (Vector2.Normalize(dustvelocity).RotatedBy(Math.PI / 4) * 32), 0, 0, ModContent.DustType<MothSmog>(), Vector2.Normalize(dustvelocity).X * 5, Vector2.Normalize(dustvelocity).Y * 10, 100, default, Main.rand.NextFloat(3.7f, 5.1f));
                                 Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 50);
@@ -335,7 +334,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                 mainVec = Projectile.rotation.ToRotationVector2() * 38;
                 if (Projectile.timeLeft <= 2940)
                 {
-                    Projectile.velocity = Projectile.velocity * 0.95f + Vector2.Normalize(player.Center - Projectile.Center) * 0.25f;
+                    Projectile.velocity = Projectile.velocity * 0.99f + Vector2.Normalize(player.Center - Projectile.Center) * 0.5f;
                     Projectile.tileCollide = false;
                     Projectile.rotation += 0.3f * Projectile.spriteDirection;
                     mainVec = Projectile.rotation.ToRotationVector2() * 38;
