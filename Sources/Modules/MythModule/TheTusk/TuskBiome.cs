@@ -13,7 +13,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk
 
     public class TuskBiome : ModBiome
     {
-        public override int Music => Common.MythContent.QuickMusic("MothBiome");
+        public override int Music => Common.MythContent.QuickMusic("TuskBiome");
         public override SceneEffectPriority Priority => SceneEffectPriority.Environment;
         public override string BestiaryIcon => "Everglow/Sources/Modules/MythModule/TheTusk/TuskIcon";
         public override string BackgroundPath => base.BackgroundPath;
