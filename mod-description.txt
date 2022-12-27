@@ -66,7 +66,7 @@ Developers (in no particular order):
 	- Windbecalm
 	
 Special thanks to (in no particular order): 
-Publicity: Starlight River, Endless Escapade, Blood Soul, Ryuusei (BabeElena), Lastprismer
+Publicity: Starlight River, Endless Escapade, Blood Soul, Ryuusei (BabeElena), Lastprismer, Cataclysmic Armageddon, Murasama
 Sprites: flowey, Verycd, 余墨, 仙阁, and some anonymous spriters
 Composition: Shiryuu and windclimb
 Wiki: Moonseer
@@ -138,7 +138,7 @@ Mod将支持联机
 	- Windbecalm
 	
 特别感谢(无先后顺序)：
-宣传: Starlight River (星光之河), Endless Escapade (无尽逃脱), 血魂 (Blood Soul), Ryuusei (BabeElena)，棱镜 (Lastprismer)
+宣传: Starlight River (星光之河), Endless Escapade (无尽逃脱), 血魂 (Blood Soul), Ryuusei (BabeElena)，棱镜 (Lastprismer), Cataclysmic Armageddon, Murasama
 贴图: 小花, 心动游戏, 余墨, Moonseer, 仙阁, 以及一些匿名画师
 音乐: Shiryuu 和 windclimb
 维基: Moonseer
