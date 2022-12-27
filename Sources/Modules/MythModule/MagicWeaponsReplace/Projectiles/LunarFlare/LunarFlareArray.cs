@@ -226,13 +226,14 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
         {
             if (Main.netMode != NetmodeID.Server)
             {
-                //Everglow.HookSystem.AddMethod(DrawStarrySky, Commons.Core.CallOpportunity.PostDrawBG);
+                Everglow.HookSystem.AddMethod(DrawStarrySky, Commons.Core.CallOpportunity.PostDrawBG);
             }
         }
 
         public void DrawStarrySky()
         {
-            if(Lighting.Mode != Terraria.Graphics.Light.LightMode.Color && Lighting.Mode != Terraria.Graphics.Light.LightMode.White)
+            if ((Lighting.Mode != Terraria.Graphics.Light.LightMode.Color && Lighting.Mode != Terraria.Graphics.Light.LightMode.White)
+                || Main.WaveQuality == 0)
             {
                 return;
             }
@@ -244,12 +245,14 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
             RenderTarget2D StarrySkyTarget = renderTargets.Resource[3];
 
             Effect Starry = MythContent.QuickEffect("Effects/StarrySkyZone");
+
             //保存原图
             GraphicsDevice graphicsDevice = Main.instance.GraphicsDevice;
+
             graphicsDevice.SetRenderTarget(screen);
             graphicsDevice.Clear(Color.Transparent);
             Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
             Main.spriteBatch.Draw(Main.screenTarget, Vector2.Zero, Color.White);
             Main.spriteBatch.End();
 
@@ -302,14 +305,14 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
 
             Main.spriteBatch.End();
 
-            graphicsDevice.SetRenderTarget(Main.screenTarget);
+            graphicsDevice.SetRenderTarget(Main.screenTargetSwap);
             graphicsDevice.Clear(Color.Transparent);
             //叠加
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
             Main.spriteBatch.Draw(screen, Vector2.Zero, Color.White);
-            Main.spriteBatch.Draw(StarryTarget, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White);
+            // Main.spriteBatch.Draw(StarryTarget, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White);
             Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            Main.spriteBatch.Begin();
 
             renderTargets.Release();
         }

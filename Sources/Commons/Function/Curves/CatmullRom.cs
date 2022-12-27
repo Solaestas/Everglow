@@ -38,8 +38,15 @@ public static class CatmullRom
             {
                 // 根据当前和下一个节点所代表的向量的旋转差异来增加采样数量
                 // 如果旋转差异越大，采样数量就越大
-                float dis = Math.Abs(rotCurrent - rotNext);
-                dom = (int)((dis >= MathHelper.Pi ? MathHelper.TwoPi - dis : dis) / 0.22f + 2);
+                if (float.IsNaN(rotCurrent) || float.IsNaN(rotNext))
+                {
+                    dom = 2;
+                }
+                else
+                {
+                    float dis = Math.Abs(rotCurrent - rotNext);
+                    dom = (int)((dis >= MathHelper.Pi ? MathHelper.TwoPi - dis : dis) / 0.22f + 2);
+                }
             }
             else
             {
