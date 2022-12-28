@@ -6,7 +6,7 @@ using Terraria.DataStructures;
 
 namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles
 {
-    internal class LilyHarpProj : ModProjectile, IWarpProjectile
+    internal class LilyHarpProj : ModProjectile//, IWarpProjectile
     {
         public override void SetDefaults()
         {
