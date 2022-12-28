@@ -1,7 +1,7 @@
 using Terraria.Graphics.Capture;
 using Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration;
 using Everglow.Sources.Modules.MythModule.TheTusk.Backgrounds;
-using Terraria.Graphics.Effects;
+
 namespace Everglow.Sources.Modules.MythModule.TheTusk
 {
     public class TuskBiomeBG : ModSurfaceBackgroundStyle

@@ -6,11 +6,7 @@ using Terraria.DataStructures;
 using Terraria.IO;
 using Terraria.ModLoader.IO;
 using Terraria.WorldBuilding;
-using ReLogic.Content;
-using Terraria.GameContent;
-using Terraria.Map;
-using Terraria.ModLoader.Default;
-using Terraria.ObjectData;
+using Terraria.Graphics.Effects;
 
 namespace Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration
 {
@@ -41,9 +37,50 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration
             TuskGen tuskGen = ModContent.GetInstance<TuskGen>();
             Vector2 TuskBiomeCenter = new Vector2(tuskGen.tuskCenterX, tuskGen.tuskCenterY) * 16;
             Vector2 v0 = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f - TuskBiomeCenter;
-            return v0.Length() < 2000;
+            return v0.Length() < 1000;
         }
+        internal float TuskS = 0;
+        public override void ModifySunLightColor(ref Color tileColor, ref Color backgroundColor)
+        {
+            if (TuskLandActive())
+            {
+                if (TuskS < 1)
+                {
+                    TuskS += 0.01f;
+                }
+                else
+                {
+                    TuskS = 1f;
+                }
 
+
+                if (!SkyManager.Instance["TuskSky"].IsActive())
+                {
+                    SkyManager.Instance.Activate("TuskSky");
+                }
+            }
+            else
+            {
+                if (TuskS > 0)
+                {
+                    TuskS -= 0.01f;
+                }
+                else
+                {
+                    TuskS = 0;
+                }
+                if (SkyManager.Instance["TuskSky"].IsActive())
+                {
+                    SkyManager.Instance.Deactivate("TuskSky");
+                }
+            }
+            tileColor *= (1 - TuskS * 0.6f);
+            tileColor.G = (byte)(tileColor.G * (1 - TuskS * 0.6f));
+            tileColor.B = (byte)(tileColor.B * (1 - TuskS * 0.6f));
+            backgroundColor *= (1 - TuskS * 0.6f);
+            backgroundColor.A = 255;
+            base.ModifySunLightColor(ref tileColor, ref backgroundColor);
+        }
         internal class WorldTuskLandGenPass : GenPass
         {
             public WorldTuskLandGenPass() : base("TuskLand", 500)//TODO:给大地安装血肉之颌
@@ -147,329 +184,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration
                                         tile.HasTile = true;
                                     }
                                 }
-                                if (pixel.R == 155 && pixel.G == 66 && pixel.B == 183)
-                                {
-                                    if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
-                                    {
-                                        Main.tile[x + a, y + b].TileType = (ushort)ModContent.TileType<Tiles.TuskFlesh>();
-                                        ((Tile)Main.tile[x + a, y + b]).HasTile = true;
-                                        if (Main.netMode == 1)
-                                        {
-                                            NetMessage.SendTileSquare(Main.myPlayer, x + a, y + b);
-                                        }
-                                        for (int h = 0; h < 200; h++)
-                                        {
-                                            Main.tile[x + a, y + b + h].TileType = (ushort)ModContent.TileType<Tiles.TuskFlesh>();
-                                            ((Tile)Main.tile[x + a, y + b + h]).HasTile = true;
-                                            if (Main.netMode == 1)
-                                            {
-                                                NetMessage.SendTileSquare(Main.myPlayer, x + a, y + b + h);
-                                            }
-                                            Main.tile[x + a + 1, y + b + h].TileType = (ushort)ModContent.TileType<Tiles.TuskFlesh>();
-                                            ((Tile)Main.tile[x + a + 1, y + b + h]).HasTile = true;
-                                            if (Main.netMode == 1)
-                                            {
-                                                NetMessage.SendTileSquare(Main.myPlayer, x + a + 1, y + b + h);
-                                            }
-                                            if (((Tile)Main.tile[x + a, y + b + h + 12]).HasTile && Main.tile[x + a, y + b + h + 12].TileType != (ushort)ModContent.TileType<Tiles.TuskFlesh>() && Main.tile[x + a, y + b + h + 12].TileType != 208)
-                                            {
-                                                Plc[c] = new Vector2(x + a, y + b + h + 3);
-                                                c++;
-                                                Ty = y + h;
-                                                break;
-                                            }
-                                        }
-                                    }
-                                }
-                                for (int k = 0; k < 30; k += 1)
-                                {
-                                    if (Plc[k] == Vector2.Zero)
-                                    {
-                                        break;
-                                    }
-                                    Plc2[k * 2] = Plc[k];
-                                }
-                                for (int k = 0; k < 29; k += 1)
-                                {
-                                    if (Plc[k + 1] == Vector2.Zero)
-                                    {
-                                        break;
-                                    }
-                                    Plc2[k * 2 + 1] = Plc[k] * 0.5f + Plc[k + 1] * 0.5f;
-                                }
-
-                                for (int k = 3; k < 58; k += 2)
-                                {
-                                    if (Plc2[k] == Vector2.Zero)
-                                    {
-                                        break;
-                                    }
-                                    for (int l = 0; l < 30; l += 1)
-                                    {
-                                        float t = l / 30f;
-                                        Vector2 v = Plc2[k - 2] * t + Plc2[k] * (1 - t);
-                                        ushort type = (ushort)ModContent.TileType<Tiles.TuskFlesh>();
-                                        int WALL = 0;
-                                        int MaxC = 30;
-
-                                        if (k >= 7 && k <= 27)
-                                        {
-                                            WALL = 1;
-                                        }
-
-                                        for (int h = 1; h < 21; h += 1)
-                                        {
-                                            if ((int)v.Y - 3 + h > 20 && (int)v.Y - 3 + h < Main.maxTilesY && (int)v.X > 20 && (int)v.X < Main.maxTilesX)
-                                            {
-                                                if (k < 7)
-                                                {
-                                                    MaxC = (int)v.X - a - 20;
-                                                }
-                                                if (k > 27)
-                                                {
-                                                    MaxC = a + 135 - (int)v.X;
-                                                }
-                                                if (MaxC > 30)
-                                                {
-                                                    MaxC = 30;
-                                                }
-                                                if (h <= MaxC)
-                                                {
-                                                    Main.tile[(int)v.X, (int)v.Y - 3 + h].ClearEverything();
-                                                    if (Main.netMode == 1)
-                                                    {
-                                                        NetMessage.SendTileSquare(Main.myPlayer, (int)v.X, (int)v.Y - 3 + h);
-                                                    }
-                                                }
-
-                                                if (WALL == 1)
-                                                {
-                                                    Main.tile[(int)v.X, (int)v.Y - 3 + h].WallType = (ushort)ModContent.WallType<Walls.BloodyStoneWall>();
-                                                    if (Main.netMode == 1)
-                                                    {
-                                                        NetMessage.SendTileSquare(Main.myPlayer, (int)v.X, (int)v.Y - 3 + h);
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    if ((int)v.X % 6 >= 4)
-                                                    {
-                                                        Main.tile[(int)v.X, (int)v.Y - 3 + h].WallType = (ushort)ModContent.WallType<Walls.BloodyStoneWall>();
-                                                        if (Main.netMode == 1)
-                                                        {
-                                                            NetMessage.SendTileSquare(Main.myPlayer, (int)v.X, (int)v.Y - 3 + h);
-                                                        }
-                                                    }
-                                                }
-
-                                                if (h >= 18)
-                                                {
-                                                    Main.tile[(int)v.X, (int)v.Y - 3 + h].TileType = (ushort)ModContent.TileType<Tiles.BloodMossStone>();
-                                                    ((Tile)Main.tile[(int)v.X, (int)v.Y - 3 + h]).HasTile = true;
-                                                    if (Main.netMode == 1)
-                                                    {
-                                                        NetMessage.SendTileSquare(Main.myPlayer, (int)v.X, (int)v.Y - 3 + h);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        if ((int)v.Y - 3 > 20 && (int)v.Y - 3 < Main.maxTilesY && (int)v.X > 20 && (int)v.X < Main.maxTilesX)
-                                        {
-                                            Main.tile[(int)v.X, (int)v.Y - 2].TileType = type;
-                                            ((Tile)Main.tile[(int)v.X, (int)v.Y - 2]).HasTile = true;
-                                            if (Main.netMode == 1)
-                                            {
-                                                NetMessage.SendTileSquare(Main.myPlayer, (int)v.X, (int)v.Y - 2);
-                                            }
-                                            Main.tile[(int)v.X, (int)v.Y - 3].TileType = type;
-                                            ((Tile)Main.tile[(int)v.X, (int)v.Y - 3]).HasTile = true;
-                                            if (Main.netMode == 1)
-                                            {
-                                                NetMessage.SendTileSquare(Main.myPlayer, (int)v.X, (int)v.Y - 3);
-                                            }
-                                            Main.tile[(int)v.X, (int)v.Y - 4].TileType = type;
-                                            ((Tile)Main.tile[(int)v.X, (int)v.Y - 4]).HasTile = true;
-                                            if (Main.netMode == 1)
-                                            {
-                                                NetMessage.SendTileSquare(Main.myPlayer, (int)v.X, (int)v.Y - 4);
-                                            }
-                                            Main.tile[(int)v.X, (int)v.Y - 5].TileType = type;
-                                            ((Tile)Main.tile[(int)v.X, (int)v.Y - 5]).HasTile = true;
-                                            if (Main.netMode == 1)
-                                            {
-                                                NetMessage.SendTileSquare(Main.myPlayer, (int)v.X, (int)v.Y - 5);
-                                            }
-                                        }
-                                        if (Math.Abs((int)v.X - a - 70) <= 8)
-                                        {
-                                            Ty = (int)v.Y - 4;
-                                        }
-                                    }
-                                }
-                                for (int k = 3; k < 58; k += 2)
-                                {
-                                    if (Plc2[k] == Vector2.Zero)
-                                    {
-                                        break;
-                                    }
-                                    if (k == 7)
-                                    {
-                                        Vector2 v = Plc2[k] - new Vector2(0, 3);
-                                        for (int za = -2; za < 3; za++)
-                                        {
-                                            if ((int)v.Y + 18 > 20 && (int)v.Y + 18 < Main.maxTilesY && (int)v.X + za > 20 && (int)v.X + za < Main.maxTilesX)
-                                            {
-                                                Main.tile[(int)v.X + za, (int)v.Y + 17].TileType = (ushort)ModContent.TileType<Tiles.BloodMossStone>();
-                                                ((Tile)Main.tile[(int)v.X + za, (int)v.Y + 17]).HasTile = true;
-                                                if (Main.netMode == 1)
-                                                {
-                                                    NetMessage.SendTileSquare(Main.myPlayer, (int)v.X + za, (int)v.Y + 17);
-                                                }
-                                                Main.tile[(int)v.X + za, (int)v.Y + 18].TileType = (ushort)ModContent.TileType<Tiles.BloodMossStone>();
-                                                ((Tile)Main.tile[(int)v.X + za, (int)v.Y + 18]).HasTile = true;
-                                                if (Main.netMode == 1)
-                                                {
-                                                    NetMessage.SendTileSquare(Main.myPlayer, (int)v.X + za, (int)v.Y + 18);
-                                                }
-                                                Main.tile[(int)v.X + za, (int)v.Y + 19].TileType = (ushort)ModContent.TileType<Tiles.BloodMossStone>();
-                                                ((Tile)Main.tile[(int)v.X + za, (int)v.Y + 19]).HasTile = true;
-                                                if (Main.netMode == 1)
-                                                {
-                                                    NetMessage.SendTileSquare(Main.myPlayer, (int)v.X + za, (int)v.Y + 19);
-                                                }
-                                            }
-                                        }
-                                        for (int ia = 0; ia < 7; ia++)
-                                        {
-                                            if ((int)v.Y + 10 + ia > 20 && (int)v.Y + 10 + ia < Main.maxTilesY && (int)v.X > 20 && (int)v.X < Main.maxTilesX)
-                                            {
-                                                ((Tile)Main.tile[(int)v.X, (int)v.Y + 10 + ia]).HasTile = true;
-                                                Main.tile[(int)v.X, (int)v.Y + 10 + ia].TileType = (ushort)ModContent.TileType<Tiles.StrangeTuskStone>();
-                                                short num0 = 0;
-                                                Main.tile[(int)v.X, (int)v.Y + 10 + ia].TileFrameX = num0;
-                                                Main.tile[(int)v.X, (int)v.Y + 10 + ia].TileFrameY = (short)(ia * 18);
-                                                if (Main.netMode == 1)
-                                                {
-                                                    NetMessage.SendTileSquare(Main.myPlayer, (int)v.X, (int)v.Y + 10 + ia);
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if (k == 13)
-                                    {
-                                        Vector2 v = Plc2[k] - new Vector2(0, 3);
-                                        for (int za = -2; za < 3; za++)
-                                        {
-                                            if ((int)v.Y + 18 > 20 && (int)v.Y + 18 < Main.maxTilesY && (int)v.X > 20 && (int)v.X < Main.maxTilesX)
-                                            {
-                                                Main.tile[(int)v.X + za, (int)v.Y + 17].TileType = (ushort)ModContent.TileType<Tiles.BloodMossStone>();
-                                                ((Tile)Main.tile[(int)v.X + za, (int)v.Y + 17]).HasTile = true;
-                                                if (Main.netMode == 1)
-                                                {
-                                                    NetMessage.SendTileSquare(Main.myPlayer, (int)v.X + za, (int)v.Y + 17);
-                                                }
-                                                Main.tile[(int)v.X + za, (int)v.Y + 18].TileType = (ushort)ModContent.TileType<Tiles.BloodMossStone>();
-                                                ((Tile)Main.tile[(int)v.X + za, (int)v.Y + 18]).HasTile = true;
-                                                if (Main.netMode == 1)
-                                                {
-                                                    NetMessage.SendTileSquare(Main.myPlayer, (int)v.X + za, (int)v.Y + 18);
-                                                }
-                                                Main.tile[(int)v.X + za, (int)v.Y + 19].TileType = (ushort)ModContent.TileType<Tiles.BloodMossStone>();
-                                                ((Tile)Main.tile[(int)v.X + za, (int)v.Y + 19]).HasTile = true;
-                                                if (Main.netMode == 1)
-                                                {
-                                                    NetMessage.SendTileSquare(Main.myPlayer, (int)v.X + za, (int)v.Y + 19);
-                                                }
-                                            }
-                                        }
-                                        for (int ia = 0; ia < 7; ia++)
-                                        {
-                                            ((Tile)Main.tile[(int)v.X, (int)v.Y + 10 + ia]).HasTile = true;
-                                            Main.tile[(int)v.X, (int)v.Y + 10 + ia].TileType = (ushort)ModContent.TileType<Tiles.StrangeTuskStone>();
-                                            short num0 = 192;
-                                            Main.tile[(int)v.X, (int)v.Y + 10 + ia].TileFrameX = num0;
-                                            Main.tile[(int)v.X, (int)v.Y + 10 + ia].TileFrameY = (short)(ia * 18);
-                                            if (Main.netMode == 1)
-                                            {
-                                                NetMessage.SendTileSquare(Main.myPlayer, (int)v.X, (int)v.Y + 10 + ia);
-                                            }
-                                        }
-                                    }
-                                    if (k == 21)
-                                    {
-                                        Vector2 v = Plc2[k] - new Vector2(0, 3);
-                                        for (int za = -2; za < 3; za++)
-                                        {
-                                            Main.tile[(int)v.X + za, (int)v.Y + 17].TileType = (ushort)ModContent.TileType<Tiles.BloodMossStone>();
-                                            ((Tile)Main.tile[(int)v.X + za, (int)v.Y + 17]).HasTile = true;
-                                            if (Main.netMode == 1)
-                                            {
-                                                NetMessage.SendTileSquare(Main.myPlayer, (int)v.X + za, (int)v.Y + 17);
-                                            }
-                                            Main.tile[(int)v.X + za, (int)v.Y + 18].TileType = (ushort)ModContent.TileType<Tiles.BloodMossStone>();
-                                            ((Tile)Main.tile[(int)v.X + za, (int)v.Y + 18]).HasTile = true;
-                                            if (Main.netMode == 1)
-                                            {
-                                                NetMessage.SendTileSquare(Main.myPlayer, (int)v.X + za, (int)v.Y + 18);
-                                            }
-                                            Main.tile[(int)v.X + za, (int)v.Y + 19].TileType = (ushort)ModContent.TileType<Tiles.BloodMossStone>();
-                                            ((Tile)Main.tile[(int)v.X + za, (int)v.Y + 19]).HasTile = true;
-                                            if (Main.netMode == 1)
-                                            {
-                                                NetMessage.SendTileSquare(Main.myPlayer, (int)v.X + za, (int)v.Y + 19);
-                                            }
-                                        }
-                                        for (int ia = 0; ia < 7; ia++)
-                                        {
-                                            ((Tile)Main.tile[(int)v.X, (int)v.Y + 10 + ia]).HasTile = true;
-                                            Main.tile[(int)v.X, (int)v.Y + 10 + ia].TileType = (ushort)ModContent.TileType<Tiles.StrangeTuskStone>();
-                                            short num0 = 64;
-                                            Main.tile[(int)v.X, (int)v.Y + 10 + ia].TileFrameX = num0;
-                                            Main.tile[(int)v.X, (int)v.Y + 10 + ia].TileFrameY = (short)(ia * 18);
-                                            if (Main.netMode == 1)
-                                            {
-                                                NetMessage.SendTileSquare(Main.myPlayer, (int)v.X, (int)v.Y + 10 + ia);
-                                            }
-                                        }
-                                    }
-                                    if (k == 27)
-                                    {
-                                        Vector2 v = Plc2[k] - new Vector2(0, 3);
-                                        for (int za = -2; za < 3; za++)
-                                        {
-                                            Main.tile[(int)v.X + za, (int)v.Y + 17].TileType = (ushort)ModContent.TileType<Tiles.BloodMossStone>();
-                                            ((Tile)Main.tile[(int)v.X + za, (int)v.Y + 17]).HasTile = true;
-                                            if (Main.netMode == 1)
-                                            {
-                                                NetMessage.SendTileSquare(Main.myPlayer, (int)v.X + za, (int)v.Y + 17);
-                                            }
-                                            Main.tile[(int)v.X + za, (int)v.Y + 18].TileType = (ushort)ModContent.TileType<Tiles.BloodMossStone>();
-                                            ((Tile)Main.tile[(int)v.X + za, (int)v.Y + 18]).HasTile = true;
-                                            if (Main.netMode == 1)
-                                            {
-                                                NetMessage.SendTileSquare(Main.myPlayer, (int)v.X + za, (int)v.Y + 18);
-                                            }
-                                            Main.tile[(int)v.X + za, (int)v.Y + 19].TileType = (ushort)ModContent.TileType<Tiles.BloodMossStone>();
-                                            ((Tile)Main.tile[(int)v.X + za, (int)v.Y + 19]).HasTile = true;
-                                            if (Main.netMode == 1)
-                                            {
-                                                NetMessage.SendTileSquare(Main.myPlayer, (int)v.X + za, (int)v.Y + 19);
-                                            }
-                                        }
-                                        for (int ia = 0; ia < 7; ia++)
-                                        {
-                                            ((Tile)Main.tile[(int)v.X, (int)v.Y + 10 + ia]).HasTile = true;
-                                            Main.tile[(int)v.X, (int)v.Y + 10 + ia].TileType = (ushort)ModContent.TileType<Tiles.StrangeTuskStone>();
-                                            short num0 = 128;
-                                            Main.tile[(int)v.X, (int)v.Y + 10 + ia].TileFrameX = num0;
-                                            Main.tile[(int)v.X, (int)v.Y + 10 + ia].TileFrameY = (short)(ia * 18);
-                                            if (Main.netMode == 1)
-                                            {
-                                                NetMessage.SendTileSquare(Main.myPlayer, (int)v.X, (int)v.Y + 10 + ia);
-                                            }
-                                        }
-                                    }
-                                }
                                 break;
 
                             case 2:
@@ -488,58 +202,52 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration
         }
         public static void BuildTuskLand()
         {
-
-            int a;
-            int b;
-
-            for (int h0 = 50; h0 < Main.maxTilesY - 400; h0 += 1)
-            {
-                int xk = 0;
-                for (int w0 = 20; w0 < Main.maxTilesX - 240; w0 += 10)
-                {
-                    if (Main.tile[w0, h0].TileType == 203)
-                    {
-                        h0 = Main.maxTilesY - 200;
-                        xk = 2;
-                        break;
-                    }
-                    if (Main.tile[w0, h0].TileType == 116)
-                    {
-                        h0 = Main.maxTilesY - 200;
-                        xk = 2;
-                        break;
-                    }
-                }
-                if (xk > 1)
-                {
-                    break;
-                }
-            }
-            a = (int)(Main.maxTilesX * 0.3);
-
-            b = (int)(Main.maxTilesY * 0.1);
-            if (Main.maxTilesX > 6000)
-            {
-                b = (int)(Main.maxTilesY * 0.16);
-            }
-            Main.statusText = "BloodPlatKillStart";
-            ShapeTile("BloodPlatKill.bmp", a, b, 0);
+            Point abPos = GetTuskLandPosition();
+            int a = abPos.X;
+            int b = abPos.Y;
             Main.statusText = "CocoonStart";
             ShapeTile("BloodPlat.bmp", a, b, 1);
             Main.statusText = "TuskWallStart";
             ShapeTile("BloodPlatWall.bmp", a, b, 2);
-            SmoothMothTile(a, b,160,80);
+            SmoothTuskTile(a, b, 160, 80);
             TuskGen tuskGen = ModContent.GetInstance<TuskGen>();
             tuskGen.tuskCenterX = a + 80;
-            tuskGen.tuskCenterY = b + 40;
+            tuskGen.tuskCenterY = b + 10;
         }
-
-        /// <summary>
-        /// 获取一个出生地附近的平坦地面
-        /// </summary>
-        /// <returns></returns>
-        
-        private static void SmoothMothTile(int a, int b, int width = 256, int height = 512)
+        public static Point GetTuskLandPosition()
+        {
+            int a = (int)(Main.maxTilesX * 0.3);
+            int b = (int)(Main.maxTilesY * 0.1);
+            while (!CanPlaceTusk(new Point(a, b)))
+            {
+                a = (int)(Main.maxTilesX * Main.rand.NextFloat(0.1f, 0.88f));
+                b = (int)(Main.maxTilesY * Main.rand.NextFloat(0.11f,0.31f));
+            }
+            return new Point(a, b);
+        }
+        public static bool CanPlaceTusk(Point position)
+        {
+            if(position.X < 20 || position.Y < 20)
+            {
+                return false;
+            }
+            if (position.X + 160 > Main.maxTilesX - 20 || position.Y + 80 > Main.maxTilesY - 20)
+            {
+                return false;
+            }
+            for (int x = 0;x < 161;x++)
+            {
+                for (int y = 0; y < 81; y++)
+                {
+                    if(Main.tile[x + position.X, y + position.Y].HasTile)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        private static void SmoothTuskTile(int a, int b, int width = 256, int height = 512)
         {
             for (int y = 0; y < width; y += 1)
             {

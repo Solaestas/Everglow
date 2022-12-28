@@ -1,5 +1,6 @@
 ﻿using Terraria.Graphics.Effects;
 using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration;
 namespace Everglow.Sources.Modules.MythModule.TheTusk.Backgrounds
 {
@@ -8,7 +9,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Backgrounds
         public static bool Open = false;
         public override void OnLoad()
         {
-            SkyManager.Instance["TuskSky"] = new TuskBiomeSky();
+
         }
         public override void Deactivate(params object[] args)
         {
@@ -29,31 +30,36 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Backgrounds
         {
 
         }
-
-        public override void Draw(SpriteBatch spriteBatch, float minDepth, float maxDepth)
+        /// <summary>
+        /// 获取绘制矩形
+        /// </summary>
+        /// <param name="texSize"></param>
+        /// <param name="MoveStep"></param>
+        /// <returns></returns>
+        public Rectangle GetDrawRect(Vector2 texSize, float MoveStep, float MulSize = 1)
         {
-            Main.NewText("active");
+            Vector2 sampleTopleft = Vector2.Zero;
+            Vector2 sampleCenter = sampleTopleft + (texSize / 2);
+            Vector2 screenSize = new Vector2(Main.screenWidth, Main.screenHeight) / MulSize;
             TuskGen tuskGen = ModContent.GetInstance<TuskGen>();
             Vector2 TuskBiomeCenter = new Vector2(tuskGen.tuskCenterX, tuskGen.tuskCenterY) * 16;
-            Vector2 TuskBiomeCenterToScreenPosition = TuskBiomeCenter - Main.screenPosition;
+            Vector2 deltaPos = Main.screenPosition - TuskBiomeCenter;
+            deltaPos *= MoveStep;
+            int RX = (int)(sampleCenter.X - screenSize.X / 2f + deltaPos.X);
+            int RY = (int)(sampleCenter.Y - screenSize.Y / 2f + deltaPos.Y);
+
+            return new Rectangle(RX, RY, (int)(screenSize.X), (int)(screenSize.Y));
+        }
+        public override void Draw(SpriteBatch spriteBatch, float minDepth, float maxDepth)
+        {
+            TuskGen tuskGen = ModContent.GetInstance<TuskGen>();
+            Vector2 TuskBiomeCenter = new Vector2(tuskGen.tuskCenterX, tuskGen.tuskCenterY) * 16;
+            Vector2 TuskBiomeCenterToScreenPosition = Main.screenPosition - TuskBiomeCenter;
 
             Color DrawC = Main.ColorOfTheSkies * opacity;
-            Color DrawA = DrawC * Main.atmo;
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            if (maxDepth >= 3E+38f && minDepth < 3E+38f)
-            {
-                List<Vertex2D> VTsky = new List<Vertex2D>();
-                VTsky.Add(new Vertex2D(new Vector2(Main.screenWidth, 0), DrawA, new Vector3(1, 0, 0)));
-                VTsky.Add(new Vertex2D(new Vector2(Main.screenWidth, Main.screenHeight), DrawA, new Vector3(1, 1, 0)));
-                VTsky.Add(new Vertex2D(new Vector2(0, Main.screenHeight), DrawA, new Vector3(0, 1, 0)));
 
-                VTsky.Add(new Vertex2D(new Vector2(Main.screenWidth, 0), DrawA, new Vector3(1, 0, 0)));
-                VTsky.Add(new Vertex2D(new Vector2(0, 0), DrawA, new Vector3(0, 0, 0)));
-                VTsky.Add(new Vertex2D(new Vector2(0, Main.screenHeight), DrawA, new Vector3(0, 1, 0)));
-                Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Backgrounds/TuskBiomeSky").Value;
-                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, VTsky.ToArray(), 0, VTsky.Count / 3);
-            }
             Vector2 SkyBase = new Vector2(Main.screenWidth / 2f, Main.screenHeight * 1.0f - 160f) - TuskBiomeCenterToScreenPosition * 0.01f;
             Vector2 SkyVortex = SkyBase + new Vector2(1210, 161)/*图心偏移坐标*/ - new Vector2(1024, 600)/*绘制中心*/;
 
@@ -193,20 +199,49 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Backgrounds
             Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Backgrounds/TuskFar").Value;
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, VskyF.ToArray(), 0, VskyF.Count / 3);
 
-            Vector2 MiddleS = new Vector2(Main.screenWidth / 2f, Main.screenHeight + 100) - TuskBiomeCenterToScreenPosition * 0.07f;
-            List<Vertex2D> VskyM = new List<Vertex2D>();
-            VskyM.Add(new Vertex2D(MiddleS + new Vector2(1024, -750), DrawC, new Vector3(1, 0, 0)));
-            VskyM.Add(new Vertex2D(MiddleS + new Vector2(1024, 150), DrawC, new Vector3(1, 1, 0)));
-            VskyM.Add(new Vertex2D(MiddleS + new Vector2(-1024, 150), DrawC, new Vector3(0, 1, 0)));
 
-            VskyM.Add(new Vertex2D(MiddleS + new Vector2(1024, -750), DrawC, new Vector3(1, 0, 0)));
-            VskyM.Add(new Vertex2D(MiddleS + new Vector2(-1024, -750), DrawC, new Vector3(0, 0, 0)));
-            VskyM.Add(new Vertex2D(MiddleS + new Vector2(-1024, 150), DrawC, new Vector3(0, 1, 0)));
-            Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Backgrounds/TuskMiddle").Value;
-            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, VskyM.ToArray(), 0, VskyM.Count / 3);
+            Main.spriteBatch.End();
+
+            var texCloseII = MythContent.QuickTexture("TheTusk/Backgrounds/TuskMiddle");
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            Rectangle rvcII = GetDrawRect(texCloseII.Size(), 0.27f, 2);
+            rvcII.Y -= 0;
+            rvcII.X += -360;
+
+            float UpY = rvcII.Y / (float)texCloseII.Height;
+            float DownY = (rvcII.Y + rvcII.Height) / (float)texCloseII.Height;
+            List<Vertex2D> CloseII = new List<Vertex2D>
+            {
+                new Vertex2D(new Vector2(0, 0), DrawC, new Vector3(rvcII.X / (float)texCloseII.Width, UpY, 0)),
+                new Vertex2D(new Vector2(Main.screenWidth, 0), DrawC, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, UpY, 0)),
+                new Vertex2D(new Vector2(0, Main.screenHeight), DrawC, new Vector3(rvcII.X / (float)texCloseII.Width, DownY, 0)),
+
+                new Vertex2D(new Vector2(0, Main.screenHeight), DrawC, new Vector3(rvcII.X / (float)texCloseII.Width, DownY, 0)),
+                new Vertex2D(new Vector2(Main.screenWidth, 0), DrawC, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, UpY, 0)),
+                new Vertex2D(new Vector2(Main.screenWidth, Main.screenHeight), DrawC, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, DownY, 0))
+            };
+            Effect bgW = MythContent.QuickEffect("Effects/BackgroundWrapWithColor");
+            var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+            bgW.Parameters["uTransform"].SetValue(projection);
+            bgW.Parameters["uTime"].SetValue(0.34f);
+            bgW.Parameters["uColor"].SetValue(DrawC.ToVector4());
+            bgW.CurrentTechnique.Passes[0].Apply();
+
+            if (CloseII.Count > 2)
+            {
+                Main.graphics.GraphicsDevice.Textures[0] = texCloseII;
+                Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, CloseII.ToArray(), 0, 2);
+            }
+            if (DownY > 1)
+            {
+                float DrawY = (1 - UpY) / (DownY - UpY) * Main.screenHeight - 5;
+                Main.spriteBatch.Draw(texCloseII, new Rectangle(0, (int)DrawY, Main.screenWidth, Main.screenHeight - (int)DrawY), new Rectangle(1000, 1100, 1, 1), DrawC);
+            }
+
+
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            throw new NotImplementedException();
         }
         public override void Update(GameTime gameTime)
         {
