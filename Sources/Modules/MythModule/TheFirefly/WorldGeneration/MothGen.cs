@@ -12,6 +12,7 @@ using Terraria.GameContent;
 using Terraria.Map;
 using Terraria.ModLoader.Default;
 using Terraria.ObjectData;
+using Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Items;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
 {
@@ -19,11 +20,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
     {
         public override void PostUpdateEverything()
         {
-            if (Main.mouseRight && Main.mouseRightRelease)
-            {
-                //BuildShabbyCastle();
-                //Main.NewText(SubWorldModule.SubworldSystem.IsActive<MothWorld>());
-            }
+            //if (Main.mouseRight && Main.mouseRightRelease && Main.keyState.PressingShift())
+            //{
+            //    BuildShabbyCastle();
+            //    //Main.NewText(SubWorldModule.SubworldSystem.IsActive<MothWorld>());
+            //}
 
         }
         public static void QuickBuild(int x, int y, string Path)
@@ -63,17 +64,19 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                     break;
                 }
             }
-            for (int i = -1; i <= 1; i++)
+            for (int i = -2; i <= 2; i++)
             {
                 var PylonTile = Main.tile[pylonBottom.X + i, pylonBottom.Y + 1];
                 PylonTile.TileType = TileID.GrayBrick;
                 PylonTile.HasTile = true;
-                WorldGen.TileFrame(pylonBottom.X + i, pylonBottom.Y + 1);
+                PylonTile.Slope = SlopeType.Solid;
+                PylonTile.IsHalfBlock = false;
             }
 
             TileObject.CanPlace(pylonBottom.X, pylonBottom.Y, PylonType, 0, 0, out var tileObject);
             TileObject.Place(tileObject);
             TileObjectData.CallPostPlacementPlayerHook(pylonBottom.X, pylonBottom.Y, PylonType, 0, 0, 0, tileObject);
+            //TODO:有概率会爆掉，需要修复
             //switch (Main.rand.Next(5))
             //{
             //    case 0:
@@ -333,12 +336,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
 
                                     ushort PylonType = (ushort)ModContent.TileType<Pylon.FireflyPylon>();
                                     var bottom = new Point(a + x, b + y);
-                                    for (int i = -1; i <= 1; i++)
+                                    for (int i = -2; i <= 2; i++)
                                     {
                                         var PylonTile = Main.tile[bottom.X + i, bottom.Y + 1];
                                         PylonTile.TileType = (ushort)ModContent.TileType<DarkCocoon>();
                                         PylonTile.HasTile = true;
                                         PylonTile.Slope = SlopeType.Solid;
+                                        PylonTile.IsHalfBlock = false;
                                         WorldGen.TileFrame(bottom.X + i, bottom.Y + 1);
                                     }
 
@@ -491,15 +495,15 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         /// <returns></returns>
         private static Point16 ShabbyPylonPos()
         {
-            int PoX = (int)(Main.rand.Next(40, 160) * (Main.rand.Next(2) - 0.5f) * 2 + Main.maxTilesX / 2);
-            int PoY = 20;
+            int PoX = (int)(Main.rand.Next(80, 160) * (Main.rand.Next(2) - 0.5f) * 2 - 20 + Main.maxTilesX / 2);
+            int PoY = 160;
 
             while (!IsTileSmooth(new Point(PoX, PoY)))
             {
-                PoX = (int)(Main.rand.Next(40, 240) * (Main.rand.Next(2) - 0.5f) * 2 + Main.maxTilesX / 2);
-                for (int y = 20; y < Main.maxTilesY / 3; y++)
+                PoX = (int)(Main.rand.Next(80, 240) * (Main.rand.Next(2) - 0.5f) * 2 - 20 + Main.maxTilesX / 2);
+                for (int y = 160; y < Main.maxTilesY / 3; y++)
                 {
-                    if (Main.tile[PoX, y].HasTile)
+                    if (Main.tile[PoX, y].HasTile && Main.tile[PoX, y].TileType != TileID.Trees)
                     {
                         PoY = y;
                         break;
@@ -553,6 +557,360 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                     WorldGen.SquareWallFrame(x + a, y + b, true);
                 }
             }
+        }
+        public static void BuildFluorescentTree(int i, int j, int height = 0)
+        {
+            if (j < 30)
+            {
+                return;
+            }
+            int Height = Main.rand.Next(7, height);
+
+            for (int g = 0; g < Height; g++)
+            {
+                Tile tile = Main.tile[i, j - g];
+                if (g > 3)
+                {
+                    if (Main.rand.NextBool(5))
+                    {
+                        Tile tileLeft = Main.tile[i - 1, j - g];
+                        tileLeft.TileType = (ushort)ModContent.TileType<FluorescentTree>();
+                        tileLeft.TileFrameY = 4;
+                        tileLeft.TileFrameX = (short)Main.rand.Next(4);
+                        tileLeft.HasTile = true;
+                    }
+                    if (Main.rand.NextBool(5))
+                    {
+                        Tile tileRight = Main.tile[i + 1, j - g];
+                        tileRight.TileType = (ushort)ModContent.TileType<FluorescentTree>();
+                        tileRight.TileFrameY = 5;
+                        tileRight.TileFrameX = (short)Main.rand.Next(4);
+                        tileRight.HasTile = true;
+                    }
+                }
+                if (g == 0)
+                {
+                    tile.TileType = (ushort)ModContent.TileType<FluorescentTree>();
+                    tile.TileFrameY = 0;
+                    tile.TileFrameX = 0;
+                    tile.HasTile = true;
+                    continue;
+                }
+                if (g == 1)
+                {
+                    tile.TileType = (ushort)ModContent.TileType<FluorescentTree>();
+                    tile.TileFrameY = -1;
+                    tile.TileFrameX = 0;
+                    tile.HasTile = true;
+                    continue;
+                }
+                if (g == 2)
+                {
+                    tile.TileType = (ushort)ModContent.TileType<FluorescentTree>();
+                    tile.TileFrameY = 3;
+                    tile.TileFrameX = (short)Main.rand.Next(4);
+                    tile.HasTile = true;
+                    continue;
+                }
+                if (g == Height - 1)
+                {
+                    tile.TileType = (ushort)ModContent.TileType<FluorescentTree>();
+                    tile.TileFrameY = 2;
+                    tile.TileFrameX = 0;
+                    tile.HasTile = true;
+                    continue;
+                }
+                tile.TileType = (ushort)ModContent.TileType<FluorescentTree>();
+                tile.TileFrameY = 1;
+                tile.TileFrameX = (short)Main.rand.Next(12);
+                tile.HasTile = true;
+            }
+        }
+        public static void RandomUpdate(int i,int j,int Type)
+        {
+            if(Main.tile[i,j].TileType != Type || !Main.tile[i, j].HasTile)
+            {
+                return;
+            }
+            if (Main.rand.NextBool(4))
+            {
+                if (Main.tile[i, j].Slope == SlopeType.Solid && Main.tile[i + 1, j].Slope == SlopeType.Solid && Main.tile[i - 1, j].Slope == SlopeType.Solid && Main.tile[i + 2, j].Slope == SlopeType.Solid && Main.tile[i - 2, j].Slope == SlopeType.Solid &&
+                    Main.tile[i, j + 1].Slope == SlopeType.Solid && Main.tile[i + 1, j + 1].Slope == SlopeType.Solid && Main.tile[i - 1, j + 1].Slope == SlopeType.Solid && Main.tile[i + 2, j + 1].Slope == SlopeType.Solid && Main.tile[i - 2, j + 1].Slope == SlopeType.Solid)//树木
+                {
+                    int MaxHeight = 0;
+                    for (int x = -2; x < 3; x++)
+                    {
+                        for (int y = -1; y > -30; y--)
+                        {
+                            if (j + y > 20)
+                            {
+                                if (Main.tile[i + x, j + y].HasTile || Main.tile[i + x, j + y].LiquidAmount > 3)
+                                {
+                                    return;
+                                }
+                            }
+                            MaxHeight = -y;
+                        }
+                    }
+                    if (MaxHeight > 7)
+                    {
+                        BuildFluorescentTree(i, j - 1, MaxHeight);
+                    }
+                }
+            }
+
+            if (!Main.tile[i, j - 1].HasTile && Main.tile[i, j].Slope == SlopeType.Solid && Main.tile[i, j - 1].LiquidAmount > 0)
+            {
+                Tile tile = Main.tile[i, j - 1];
+                tile.TileType = (ushort)(ModContent.TileType<Tiles.LampLotus>());
+                tile.HasTile = true;
+                tile.TileFrameX = (short)(28 * Main.rand.Next(8));
+            }
+            if (Main.rand.NextBool(6))//黑萤藤蔓
+            {
+                Tile t0 = Main.tile[i, j];
+
+                Tile t2 = Main.tile[i, j + 1];
+                if (t0.Slope == SlopeType.Solid && !t2.HasTile)
+                {
+                    t2.TileType = (ushort)ModContent.TileType<Tiles.BlackVine>();
+                    t2.HasTile = true;
+                    t2.TileFrameY = (short)(Main.rand.Next(6, 9) * 18);
+                }
+            }
+            if (Main.rand.NextBool(16))//流萤滴
+            {
+                int count = 0;
+                for (int x = -1; x <= 1; x++)
+                {
+                    for (int y = 1; y <= 3; y++)
+                    {
+                        Tile t0 = Main.tile[i + x, j + y];
+                        if (t0.HasTile)
+                        {
+                            count++;
+                        }
+                        Tile t1 = Main.tile[i + x, j + y - 1];
+                        if (y == 1 && (!t1.HasTile || t1.Slope != SlopeType.Solid))
+                        {
+                            count++;
+                        }
+                    }
+                }
+                if (count == 0)
+                {
+                    MythUtils.PlaceFrameImportantTiles(i - 1, j + 1, 3, 3, ModContent.TileType<Tiles.Furnitures.GlowingDrop>());
+                }
+
+            }
+            if (!Main.tile[i, j - 1].HasTile && !Main.tile[i + 1, j - 1].HasTile && !Main.tile[i - 1, j - 1].HasTile && Main.tile[i, j].Slope == SlopeType.Solid && Main.tile[i - 1, j].Slope == SlopeType.Solid && Main.tile[i + 1, j].Slope == SlopeType.Solid)//黑萤苣
+            {
+                Tile t1 = Main.tile[i, j - 1];
+                Tile t2 = Main.tile[i, j - 2];
+                Tile t3 = Main.tile[i, j - 3];
+                for (int x = -1; x < 2; x++)
+                {
+                    for (int y = -3; y < 4; y++)
+                    {
+                        if (Main.tile[i + x, j + y].LiquidAmount > 3)
+                        {
+                            return;
+                        }
+                    }
+                }
+                if (Main.rand.NextBool(2))
+                {
+                    switch (Main.rand.Next(1, 10))
+                    {
+                        case 1:
+                            t1.TileType = (ushort)ModContent.TileType<Tiles.BlackStarShrubSmall>();
+                            t2.TileType = (ushort)ModContent.TileType<Tiles.BlackStarShrubSmall>();
+                            t1.HasTile = true;
+                            t2.HasTile = true;
+                            short numa = (short)(Main.rand.Next(0, 6) * 48);
+                            t1.TileFrameX = numa;
+                            t2.TileFrameX = numa;
+                            t1.TileFrameY = 16;
+                            t2.TileFrameY = 0;
+                            break;
+
+                        case 2:
+                            t1.TileType = (ushort)ModContent.TileType<Tiles.BlackStarShrubSmall>();
+                            t2.TileType = (ushort)ModContent.TileType<Tiles.BlackStarShrubSmall>();
+                            t1.HasTile = true;
+                            t2.HasTile = true;
+                            short num = (short)(Main.rand.Next(0, 6) * 48);
+                            t2.TileFrameX = num;
+                            t1.TileFrameX = num;
+                            t1.TileFrameY = 16;
+                            t2.TileFrameY = 0;
+                            break;
+
+                        case 3:
+                            t1.TileType = (ushort)ModContent.TileType<Tiles.BlackStarShrub>();
+                            t2.TileType = (ushort)ModContent.TileType<Tiles.BlackStarShrub>();
+                            t3.TileType = (ushort)ModContent.TileType<Tiles.BlackStarShrub>();
+                            t1.HasTile = true;
+                            t2.HasTile = true;
+                            t3.HasTile = true;
+                            short num1 = (short)(Main.rand.Next(0, 6) * 72);
+                            t3.TileFrameX = num1;
+                            t2.TileFrameX = num1;
+                            t1.TileFrameX = num1;
+                            t1.TileFrameY = 32;
+                            t2.TileFrameY = 16;
+                            t3.TileFrameY = 0;
+                            break;
+
+                        case 4:
+                            t1.TileType = (ushort)ModContent.TileType<Tiles.BlueBlossom>();
+                            t2.TileType = (ushort)ModContent.TileType<Tiles.BlueBlossom>();
+                            t3.TileType = (ushort)ModContent.TileType<Tiles.BlueBlossom>();
+                            t1.HasTile = true;
+                            t2.HasTile = true;
+                            t3.HasTile = true;
+                            short num2 = (short)(Main.rand.Next(0, 12) * 120);
+                            t3.TileFrameX = num2;
+                            t2.TileFrameX = num2;
+                            t1.TileFrameX = num2;
+                            t1.TileFrameY = 32;
+                            t2.TileFrameY = 16;
+                            t3.TileFrameY = 0;
+                            break;
+
+                        case 5:
+                            WorldGen.Place3x2(i - 1, j - 1, (ushort)ModContent.TileType<Tiles.BlackFrenLarge>(), Main.rand.Next(3));
+                            break;
+
+                        case 6:
+                            WorldGen.Place2x2(i - 1, j - 1, (ushort)ModContent.TileType<Tiles.BlackFren>(), Main.rand.Next(3));
+                            break;
+
+                        case 7:
+                            WorldGen.Place3x2(i - 1, j - 1, (ushort)ModContent.TileType<Tiles.BlackFrenLarge>(), Main.rand.Next(3));
+                            break;
+
+                        case 8:
+                            WorldGen.Place2x2(i - 1, j - 1, (ushort)ModContent.TileType<Tiles.BlackFren>(), Main.rand.Next(3));
+                            break;
+
+                        case 9:
+                            WorldGen.Place2x1(i - 1, j - 1, (ushort)ModContent.TileType<Tiles.CocoonRock>(), Main.rand.Next(3));
+                            break;
+
+                        case 10:
+                            WorldGen.Place2x1(i - 1, j - 1, (ushort)ModContent.TileType<Tiles.CocoonRock>(), Main.rand.Next(3));
+                            break;
+                    }
+                }
+            }
+        }
+        public override void PostWorldGen()
+        {
+            bool placed = false;
+            for (int offX = -36; offX < 36; offX += 72)
+            {
+                for (int offY = -36; offY < 12; offY++)
+                {
+                    if (!placed)
+                    {
+                        placed = TrySpellbookChest(Main.spawnTileX + offX, Main.spawnTileY + offY, 36);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+        private bool TrySpellbookChest(int startX, int startY, int rangeX = 16)
+        {
+            int[] legalTile = new int[] 
+            {
+                    TileID.Stone,
+                    TileID.Grass,
+                    TileID.Dirt,
+                    TileID.SnowBlock,
+                    TileID.IceBlock,
+                    TileID.ClayBlock,
+                    TileID.Mud,
+                    TileID.JungleGrass,
+                    TileID.Sand
+            };
+            bool canPlace = true;
+            int dir = -1;
+            if (startY < 4 || startY > Main.maxTilesY - 1)
+            {
+                return false;
+            }
+            for (int x = startX; dir > 0 ? x <= startX + rangeX : x >= startX - rangeX; x += dir)
+            {
+                if (x < 0 || x > Main.maxTilesX - 4)
+                {
+                    continue;
+                }
+                for (int i = 0; i < 4; i++)
+                {
+                    for (int j = 0; j < 4; j++)
+                    {
+                        Tile tile = Framing.GetTileSafely(x + i, startY - j);
+                        if (WorldGen.SolidOrSlopedTile(tile))
+                        {
+                            canPlace = false;
+                            break;
+                        }
+                    }
+                }
+                if (canPlace)
+                {
+                    for (int i = 0; i < 4; i++)
+                    {
+                        Tile tile = Framing.GetTileSafely(x + i, startY + 1);
+                        if (!WorldGen.SolidTile(tile) || !legalTile.Contains(tile.TileType))
+                        {
+                            canPlace = false; 
+                            break;
+                        }
+                    }
+                }
+                if (canPlace)
+                {
+                    for (int i = 0; i < 4; i++)
+                    {
+                        for (int j = 0; j < 4; j++)
+                        {
+                            WorldGen.KillTile(x + i, startY - j);
+                        }
+                    }
+                    WorldGen.PlaceTile(x, startY + 1, TileID.MeteoriteBrick, forced: true);
+                    WorldGen.PlaceTile(x + 1, startY + 1, TileID.MeteoriteBrick, forced: true);
+                    WorldGen.PlaceTile(x + 2, startY + 1, TileID.MeteoriteBrick, forced: true);
+                    WorldGen.PlaceTile(x + 3, startY + 1, TileID.MeteoriteBrick, forced: true);
+                    int c = WorldGen.PlaceChest(x + 1, startY, style: 49);
+                    Chest chest = Main.chest[c];
+                    if (chest != null)
+                    {
+                        chest.name = "Spellbook Demo";
+                        chest.item[0].SetDefaults(ModContent.ItemType<CrystalSkull>());
+                        chest.item[1].SetDefaults(ItemID.WaterBolt);
+                        chest.item[2].SetDefaults(ItemID.DemonScythe);
+                        chest.item[3].SetDefaults(ItemID.BookofSkulls);
+                        chest.item[4].SetDefaults(ItemID.CrystalStorm);
+                        chest.item[5].SetDefaults(ItemID.CursedFlames);
+                        chest.item[6].SetDefaults(ItemID.GoldenShower);
+                        chest.item[7].SetDefaults(ItemID.MagnetSphere);
+                        chest.item[8].SetDefaults(ItemID.RazorbladeTyphoon);
+                        chest.item[9].SetDefaults(ItemID.LunarFlareBook);
+                    }
+                    return true;
+                }
+                if (x <= startX - rangeX)
+                {
+                    dir = 1;
+                    x = startX;
+                }
+            }
+            return false;
         }
         public static void BuildFluorescentTree(int i, int j, int height = 0)
         {

@@ -27,19 +27,19 @@
             NPC.lifeMax = 1;
             NPC.aiStyle = -1;
             NPC.damage = 20;
-            if (Main.expertMode)
-            {
-                NPC.damage = 40;
-            }
-            if (Main.masterMode)
-            {
-                NPC.damage = 60;
-            }
+            //if (Main.expertMode)
+            //{
+            //    NPC.damage = 40;
+            //}
+            //if (Main.masterMode)
+            //{
+            //    NPC.damage = 60;
+            //}
             if (Main.getGoodWorld)
             {
                 NPC.lifeMax = 3;
                 NPC.defense = 9999;
-                NPC.damage = 80;
+                //NPC.damage = 80;
             }
 
             NPC.dontTakeDamageFromHostiles = true;

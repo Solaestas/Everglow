@@ -5,11 +5,14 @@ using Terraria.DataStructures;
 using ReLogic.Graphics;
 using Terraria.GameContent;
 using Terraria.ID;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories;
+using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 {
     public class GlowWoodSword : ModItem
     {
+        FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
         public override void SetStaticDefaults()
         {
             ItemGlowManager.AutoLoadItemGlow(this);
@@ -38,6 +41,21 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
                 Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center + v0 * 3,v0, ModContent.ProjectileType<Projectiles.GlowWoodSword>(), (int)(Item.damage * 0.3f), Item.knockBack, player.whoAmI);
             }
             base.MeleeEffects(player, hitbox);
+        }
+        public override void ModifyTooltips(List<TooltipLine> tooltips)
+        {
+            if (MothEye.LocalOwner != null && MothEye.LocalOwner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
+            {
+                if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
+                {
+                    tooltips.AddRange(new TooltipLine[]
+                    {
+                        new(Everglow.Instance, "MothEyeBonusText", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeBonusText")),
+                        new(Everglow.Instance, "MothEyeGlowSwordBonus0", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextGlowSword0")),
+                        new(Everglow.Instance, "MothEyeGlowSwordBonus1", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextGlowSword1")),
+                    });
+                }
+            }
         }
         public override void AddRecipes()
         {

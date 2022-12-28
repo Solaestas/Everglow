@@ -201,7 +201,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
             Player player = Main.player[Projectile.owner];
             for (int x = 0; x < 50; x++)
             {
-                Dust d = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, dustType, 0, 0, 150, default(Color), Main.rand.NextFloat(0.35f, 1.35f) * Power * 3);
+                Dust d = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, dustType, 0, 0, 150, default, Main.rand.NextFloat(0.35f, 1.35f) * Power * 3);
                 d.velocity =  new Vector2(0, Main.rand.NextFloat(Main.rand.NextFloat(1f, 4f), 16f) / d.scale).RotatedByRandom(6.283) * Power;
             }
             for (int j = 0; j < 200; j++)

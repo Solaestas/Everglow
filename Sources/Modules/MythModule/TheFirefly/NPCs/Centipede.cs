@@ -38,11 +38,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             NPC.scale = 0.9f;
             NPC.dontCountMe = true;
 
-            NPC.damage = 26;
+            NPC.damage = 30;
             NPC.width = 22;
             NPC.height = 22;
-            NPC.defense = 30;
-            NPC.lifeMax = 2600;
+            NPC.defense = 36;
+            NPC.lifeMax = 1200;
             NPC.knockBackResist = 0f;
             NPC.value = 300f;
             NPC.aiStyle = -1;
@@ -65,7 +65,19 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             {
                 return 0f;
             }
-            return 0.3f;
+            if (NPC.CountNPCS(ModContent.NPCType<NPCs.Bosses.CorruptMoth>()) > 0)
+            {
+                return 0;
+            }
+            else if (NPC.CountNPCS(ModContent.NPCType<CentipedeHead>()) > 1)
+            {
+                return 0f;
+            }
+            else if (NPC.CountNPCS(ModContent.NPCType<CentipedeHead>()) > 0)
+            {
+                return 0.04f;
+            }
+            return 0.08f;
         }
         public override void Init()
         {
@@ -509,11 +521,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             NPC.scale = 0.9f;
             NPC.dontCountMe = true;
 
-            NPC.damage = 26;
+            NPC.damage = 20;
             NPC.width = 24;
             NPC.height = 24;
             NPC.defense = 30;
-            NPC.lifeMax = 2600;
+            NPC.lifeMax = 1200;
             NPC.knockBackResist = 0f;
             NPC.value = 300f;
             NPC.aiStyle = -1;
@@ -624,6 +636,84 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
         }
     }
 
+            float AddRot = (float)(Math.Sin(Main.timeForVisualEffects * 0.2 + NPC.ai[2] * 0.7) * 0.3f);
+            int FrameType = (int)NPC.ai[2] % 2;
+            if (FrameType == 1 && (int)NPC.ai[2] % 4 == 1)
+            {
+                FrameType = 2;
+            }
+            if (FrameType == 1)
+            {
+                Texture2D tex = MythContent.QuickTexture("TheFirefly/NPCs/CentipedeBody1_Glow");
+                spriteBatch.Draw(tex, NPC.Center - Main.screenPosition + new Vector2(0, -28), null, new Color(255, 255, 255, 0), NPC.rotation + AddRot, tex.Size() / 2f, NPC.scale, SpriteEffects.None, 0);
+            }
+            if (FrameType == 2)
+            {
+                Texture2D tex = MythContent.QuickTexture("TheFirefly/NPCs/CentipedeBody2_Glow");
+                spriteBatch.Draw(tex, NPC.Center - Main.screenPosition + new Vector2(0, -28), null, new Color(255, 255, 255, 0), NPC.rotation + AddRot, tex.Size() / 2f, NPC.scale, SpriteEffects.None, 0);
+            }
+        }
+        public override void AI()
+        {
+            if (NPC.life <= 0)
+            {
+                int FrameType = (int)NPC.ai[2] % 2;
+                if (FrameType == 1 && (int)NPC.ai[2] % 4 == 1)
+                {
+                    FrameType = 2;
+                }
+                if (FrameType == 0)
+                {
+                    if (Main.rand.NextBool(2))
+                    {
+                        Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, Main.rand.Next(40)).RotatedByRandom(6.283),
+                    new Vector2(0, Main.rand.Next(8)).RotatedByRandom(6.283) + new Vector2(-2, 2), ModContent.Find<ModGore>("Everglow/FireflyCentipedeBodyGore0").Type);
+                    }
+                    else
+                    {
+                        Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, Main.rand.Next(40)).RotatedByRandom(6.283),
+                            new Vector2(0, Main.rand.Next(8)).RotatedByRandom(6.283) + new Vector2(-2, 2), ModContent.Find<ModGore>("Everglow/FireflyCentipedeBodyGore1").Type);
+                        Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, Main.rand.Next(40)).RotatedByRandom(6.283),
+                            new Vector2(0, Main.rand.Next(8)).RotatedByRandom(6.283) + new Vector2(-2, 2), ModContent.Find<ModGore>("Everglow/FireflyCentipedeBodyGore2").Type);
+                    }
+                }
+                else
+                {
+                    Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, Main.rand.Next(40)).RotatedByRandom(6.283),
+                        new Vector2(0, Main.rand.Next(8)).RotatedByRandom(6.283) + new Vector2(-2, 2), ModContent.Find<ModGore>("Everglow/FireflyCentipedeBodyHead1").Type);
+                }
+                if (FrameType == 1)
+                {
+                    Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, Main.rand.Next(40)).RotatedByRandom(6.283),
+                    new Vector2(0, Main.rand.Next(8)).RotatedByRandom(6.283) + new Vector2(-2, 2), ModContent.Find<ModGore>("Everglow/FireflyCentipedeBodyGore3").Type);
+                }
+                if (FrameType == 2)
+                {
+                    Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, Main.rand.Next(40)).RotatedByRandom(6.283),
+                    new Vector2(0, Main.rand.Next(8)).RotatedByRandom(6.283) + new Vector2(-2, 2), ModContent.Find<ModGore>("Everglow/FireflyCentipedeBodyGore4").Type);
+                }
+                for (int f = 0; f < 16; f++)
+                {
+                    Vector2 v0 = new Vector2(0, Main.rand.NextFloat(9f)).RotatedByRandom(6.283);
+                    Dust d = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.NavyBlood>(), v0.X, v0.Y, 0, default, Main.rand.NextFloat(0.85f, 2.75f));
+                }
+            }
+        }
+        public override void HitEffect(int hitDirection, double damage)
+        {
+            for (int f = 0; f < 8; f++)
+            {
+                Vector2 v0 = new Vector2(0, Main.rand.NextFloat(9f)).RotatedByRandom(6.283);
+                Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.NavyBlood>(), v0.X, v0.Y, 0, default, Main.rand.NextFloat(0.85f, 1.75f));
+            }
+        }
+        public override bool CheckActive()
+        {
+            Player player = Main.player[NPC.target];
+            return (player.Center - NPC.Center).Length() > 3500;
+        }
+    }
+
     internal class CentipedeTail : FireWormTail
     {
         public override void SetStaticDefaults()
@@ -644,11 +734,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             NPC.scale = 0.9f;
             NPC.dontCountMe = true;
 
-            NPC.damage = 26;
+            NPC.damage = 12;
             NPC.width = 24;
             NPC.height = 24;
-            NPC.defense = 30;
-            NPC.lifeMax = 2600;
+            NPC.defense = 24;
+            NPC.lifeMax = 1200;
             NPC.knockBackResist = 0f;
             NPC.value = 300f;
             NPC.aiStyle = -1;

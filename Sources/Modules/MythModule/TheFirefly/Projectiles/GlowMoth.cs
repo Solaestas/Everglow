@@ -1,10 +1,12 @@
 ﻿using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
     public class GlowMoth : ModProjectile
     {
+        FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 4;
@@ -192,6 +194,23 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                     Projectile p = Projectile.NewProjectileDirect(Projectile.InheritSource(Projectile), Projectile.Center, Utils.SafeNormalize(v0, Vector2.Zero) * 3, ModContent.ProjectileType<Projectiles.BlackCorruptRainFriendly>(), (int)(Projectile.damage * Power * 4), Projectile.knockBack, Projectile.owner);
                     p.CritChance = Projectile.CritChance;
                     p.friendly = true;
+                    if (MothEye.LocalOwner != null && MothEye.LocalOwner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
+                    {
+                        if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
+                        {
+                            p.tileCollide = false;
+                            if (Main.rand.NextBool(10))
+                            {
+                                Projectile p3 = Projectile.NewProjectileDirect(Projectile.InheritSource(Projectile), Projectile.Center, Utils.SafeNormalize(v0, Vector2.Zero) * 3, ModContent.ProjectileType<Projectiles.BlackCorruptRain3Friendly>(), (int)(Projectile.damage * Power * 5), Projectile.knockBack, Projectile.owner);
+                                p3.CritChance = Projectile.CritChance;
+                                p3.friendly = true;
+                            }
+                        }
+                        else
+                        {
+                            p.tileCollide = true;
+                        }
+                    }
                 }
                 Projectile.velocity = (Projectile.velocity * 10f + v2 / v2.Length() * 9f) / 11f;
                 mothOwner.WhoSleepInPlayer[player.whoAmI] = -1;
@@ -319,21 +338,21 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             return new Vector2((float)(Math.Sin(baseValue + Main.time / (30d + k0))) * 150, (float)(Math.Sin(baseValue + Main.time / (120d + 4 * k0))) * 40 - 40);
         }
 
-        private void produceDust()
+        private void ProduceDust()
         {
             if (AutoAddingTimer % 144 == 0)
             {
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<MothBlue>(), Projectile.velocity.X, Projectile.velocity.Y, 0, default(Color), Main.rand.NextFloat(0.6f, 0.8f));
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<MothBlue>(), Projectile.velocity.X, Projectile.velocity.Y, 0, default, Main.rand.NextFloat(0.6f, 0.8f));
                 Vector2 v = new Vector2(0, Main.rand.NextFloat(0.3f, 1.4f)).RotatedByRandom(Math.PI);
 
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.SpookyWood, v.X + Projectile.velocity.X, v.Y + Projectile.velocity.Y, 0, default(Color), Main.rand.NextFloat(0.3f, 0.7f));
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.SpookyWood, v.X + Projectile.velocity.X, v.Y + Projectile.velocity.Y, 0, default, Main.rand.NextFloat(0.3f, 0.7f));
             }
             if (AutoAddingTimer % 144 == 72)
             {
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<MothBlue2>(), Projectile.velocity.X, Projectile.velocity.Y, 0, default(Color), Main.rand.NextFloat(0.6f, 0.8f));
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<MothBlue2>(), Projectile.velocity.X, Projectile.velocity.Y, 0, default, Main.rand.NextFloat(0.6f, 0.8f));
                 Vector2 v = new Vector2(0, Main.rand.NextFloat(0.3f, 1.4f)).RotatedByRandom(Math.PI);
 
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.SpookyWood, v.X + Projectile.velocity.X, v.Y + Projectile.velocity.Y, 0, default(Color), Main.rand.NextFloat(0.3f, 0.7f));
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.SpookyWood, v.X + Projectile.velocity.X, v.Y + Projectile.velocity.Y, 0, default, Main.rand.NextFloat(0.3f, 0.7f));
             }
         }
 
@@ -354,7 +373,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             {
                 for (int i = 0; i < 2; i++)
                 {
-                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.SpookyWood, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default(Color), 0.6f);
+                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.SpookyWood, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, 0.6f);
                 }
             }
         }

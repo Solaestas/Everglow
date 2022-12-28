@@ -1,11 +1,9 @@
-﻿using Everglow.Sources.Commons.Function.Vertex;
-using Everglow.Sources.Commons.Core.Utils;
+﻿using Everglow.Sources.Commons.Core.Utils;
+using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Terraria.Audio;
-using Terraria.GameContent;
 using Terraria.Localization;
-using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 {
@@ -46,15 +44,15 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
             omega *= 0.97f;
             int valueTime = (int)(Main.timeForVisualEffects * 0.13) % 7;
             NPC.frame = new Rectangle(186 * valueTime, 0, 186, 278);
-            float ValueLight = MathUtils.Sin((float)(Main.timeForVisualEffects * 0.26 * Math.PI / 7d + 0.5)) * 0.2f + 0.2f;
-            if(ValueLight > 1)
+            float ValueLight = (MathUtils.Sin((float)((Main.timeForVisualEffects * 0.26 * Math.PI / 7d) + 0.5)) * 0.2f) + 0.2f;
+            if (ValueLight > 1)
             {
                 ValueLight *= ValueLight;
             }
             //Lighting.AddLight((int)(NPC.Center.X / 16f), (int)(NPC.Center.Y / 16f),0.2f * ValueLight, 0.2f * ValueLight, 0.4f * ValueLight);
             if (NPC.ai[0] < 10)
             {
-               
+
             }
             else
             {
@@ -164,38 +162,30 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            SpriteEffects effects = SpriteEffects.None;
-            if (NPC.spriteDirection == 1)
-            {
-                effects = SpriteEffects.FlipHorizontally;
-            }
             Texture2D tg = MythContent.QuickTexture("TheFirefly/NPCs/Bosses/EvilHive");
-            Color color = drawColor;
-            Vector2 drawOrigin = new Vector2(tg.Width / 2f / Main.npcFrameCount[NPC.type], 0);
-            Vector2 drawOffset = new Vector2(67, -90);
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
             List<Vertex2D> vertices = new();
-            
-            float frameX = (float)NPC.frame.X / tg.Width;
-            float frameX1= (float)NPC.frame.Width /tg.Width;
 
-            Vector2 center = NPC.position+new Vector2(67,-90);
+            float frameX = (float)NPC.frame.X / tg.Width;
+            float frameX1 = (float)NPC.frame.Width / tg.Width;
+
+            Vector2 center = NPC.position + new Vector2(67, -90);
             Vector2 offset = new Vector2(-NPC.frame.Width / 2, 0).RotatedBy(NPC.rotation);
-            vertices.Add(new(center+offset - Main.screenPosition, Lighting.GetColor((center + offset).ToTileCoordinates()),new Vector3(frameX,0,0)));
-            
-            offset = new Vector2(+NPC.frame.Width / 2, 0).RotatedBy(NPC.rotation) ;
-            vertices.Add(new(center + offset - Main.screenPosition, Lighting.GetColor((center + offset).ToTileCoordinates()), new Vector3(frameX+frameX1, 0, 0)));
-            
+            vertices.Add(new(center + offset - Main.screenPosition, Lighting.GetColor((center + offset).ToTileCoordinates()), new Vector3(frameX, 0, 0)));
+
+            offset = new Vector2(+NPC.frame.Width / 2, 0).RotatedBy(NPC.rotation);
+            vertices.Add(new(center + offset - Main.screenPosition, Lighting.GetColor((center + offset).ToTileCoordinates()), new Vector3(frameX + frameX1, 0, 0)));
+
             offset = new Vector2(-NPC.frame.Width / 2, +NPC.frame.Height).RotatedBy(NPC.rotation);
             vertices.Add(new(center + offset - Main.screenPosition, Lighting.GetColor((center + offset).ToTileCoordinates()), new Vector3(frameX, 1, 0)));
-            
+
             offset = new Vector2(+NPC.frame.Width / 2, +NPC.frame.Height).RotatedBy(NPC.rotation);
             vertices.Add(new(center + offset - Main.screenPosition, Lighting.GetColor((center + offset).ToTileCoordinates()), new Vector3(frameX + frameX1, 1, 0)));
 
             Main.graphics.GraphicsDevice.Textures[0] = tg;
-            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip,vertices.ToArray(),0,2);
+            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, 2);
             //Main.spriteBatch.Draw(tg, , new Rectangle?(NPC.frame), color, NPC.rotation, drawOrigin, 1f, effects, 0f);
 
             Main.spriteBatch.End();
@@ -212,8 +202,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
                 effects = SpriteEffects.FlipHorizontally;
             }
             Texture2D tg = MythContent.QuickTexture("TheFirefly/NPCs/Bosses/EvilHiveGlow");
-            float C = (float)Math.Sqrt(Math.Max((90 - NPC.ai[1]) / 90f, 0)) * 0.6f + Math.Abs(omega * 15);
-            C = 0.8f + C * 0.2f;
+            float C = ((float)Math.Sqrt(Math.Max((90 - NPC.ai[1]) / 90f, 0)) * 0.6f) + Math.Abs(omega * 15);
+            C = 0.8f + (C * 0.2f);
             Color color = new Color(C, C, C, 0);
             Vector2 drawOrigin = new Vector2(tg.Width / 2f / Main.npcFrameCount[NPC.type], 0);
             Vector2 drawOffset = new Vector2(67, -90);
@@ -251,16 +241,16 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
             for (int a = 1; a < Power + 1; a++)
             {
                 Color color = new Color(1f / a, 1f / a, 1f / a, 0);
-                float scale = 2 + (a - 1) / 8f;
+                float scale = 2 + ((a - 1) / 8f);
                 Vector2 Move = new Vector2(-1, 1) * a;
                 for (int x = 0; x < 10; x++)
                 {
                     Vector2 DrawPoint1 = new Vector2(0, -Radius).RotatedBy(x / 5d * Math.PI);
                     Vector2 DrawPoint2 = new Vector2(0, -Radius).RotatedBy((x + 1) / 5d * Math.PI);
-                    Vector2 dp1 = DrawPoint1.RotatedBy(NPC.rotation) * scale + Move;
-                    Vector2 dp2 = DrawPoint2.RotatedBy(NPC.rotation) * scale + Move;
-                    vertex2Ds.Add(new Vertex2D(DrawCenter + dp1, color, new Vector3(0.5f + DrawPoint1.X / t0.Width, 0.5f + DrawPoint1.Y / t0.Height, 0)));
-                    vertex2Ds.Add(new Vertex2D(DrawCenter + dp2, color, new Vector3(0.5f + DrawPoint2.X / t0.Width, 0.5f + DrawPoint2.Y / t0.Height, 0)));
+                    Vector2 dp1 = (DrawPoint1.RotatedBy(NPC.rotation) * scale) + Move;
+                    Vector2 dp2 = (DrawPoint2.RotatedBy(NPC.rotation) * scale) + Move;
+                    vertex2Ds.Add(new Vertex2D(DrawCenter + dp1, color, new Vector3(0.5f + (DrawPoint1.X / t0.Width), 0.5f + (DrawPoint1.Y / t0.Height), 0)));
+                    vertex2Ds.Add(new Vertex2D(DrawCenter + dp2, color, new Vector3(0.5f + (DrawPoint2.X / t0.Width), 0.5f + (DrawPoint2.Y / t0.Height), 0)));
                     vertex2Ds.Add(new Vertex2D(DrawCenter, color, new Vector3(0.5f, 0.5f, 0)));
                 }
             }

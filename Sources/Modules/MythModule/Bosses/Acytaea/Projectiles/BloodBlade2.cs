@@ -28,7 +28,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 30;
         }
 
-        private float K = 10;
 
         public override Color? GetAlpha(Color lightColor)
         {
@@ -49,19 +48,12 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                 }
                 Projectile.rotation = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + Math.PI * 0.25);
                 Projectile.velocity *= 1 + 0.5f / Projectile.velocity.Length();
-                if (K >= 40)
-                {
-                    K *= 0.96f;
-                }
-                if (K <= 6)
-                {
-                    K *= 1.05f;
-                }
+
                 if (Projectile.penetrate <= 0)
                 {
                     Projectile.Kill();
                 }
-                K += Main.rand.NextFloat(-0.025f, 0.025f);
+
                 int index = Dust.NewDust(Projectile.Center - new Vector2(4, 4) + new Vector2(0, 12).RotatedBy(Projectile.timeLeft / 4f), 2, 2, ModContent.DustType<Dusts.RedEffect2>(), 0, 0, 0, default, 1f);
                 Main.dust[index].noGravity = false;
                 Main.dust[index].velocity *= 0;
@@ -94,15 +86,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                 {
                     Projectile.alpha = 0;
                 }
-                if (K >= 40)
-                {
-                    K *= 0.96f;
-                }
-                if (K <= 6)
-                {
-                    K *= 1.05f;
-                }
-                K += Main.rand.NextFloat(-0.025f, 0.025f);
                 int num = Dust.NewDust(Projectile.Center - new Vector2(4, 4) + new Vector2(0, 12).RotatedBy(Projectile.timeLeft / 4f), 2, 2, ModContent.DustType<Dusts.RedEffect2>(), 0, 0, 0, default, 1f);
                 Main.dust[num].noGravity = false;
                 Main.dust[num].velocity *= 0;
@@ -148,7 +131,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
             List<Vertex2D> bars = new List<Vertex2D>();
-            ef = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/Trail").Value;
+                            ef = Common.MythContent.QuickEffect("Effects/Trail");
             // 把所有的点都生成出来，按照顺序
             int width = 40;
             for (int i = 1; i < Projectile.oldPos.Length; ++i)

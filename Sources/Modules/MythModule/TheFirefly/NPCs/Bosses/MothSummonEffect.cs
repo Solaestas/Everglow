@@ -11,7 +11,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
         private float Ome = 0;
         private float kx = 1;
         private int AimN = -1;
-        private Effect ef;
         public override string Texture => "Terraria/Images/NPC_0";
 
         public override void SetStaticDefaults()

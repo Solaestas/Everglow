@@ -121,7 +121,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
                 {
                     for (int y = 0; y < 30; y += 3)
                     {
-                        int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(0.9f, 4.2f));
+                        int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.9f, 4.2f));
                         Main.dust[index].noGravity = true;
                         Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(1.8f, 2.5f)).RotatedByRandom(Math.PI * 2d);
                     }
@@ -145,11 +145,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             Vector2 vector = new Vector2(tx.Width / 2f, tx.Height / (float)Main.npcFrameCount[NPC.type] / 2f);
 
             Color color0 = Lighting.GetColor((int)(NPC.Center.X / 16d), (int)(NPC.Center.Y / 16d));
-            Main.spriteBatch.Draw(tx, NPC.Center - Main.screenPosition, new Rectangle(0, 32, 32, 32), color0, NPC.rotation, vector, 1f, effects, 0f);
-            Color color1 = Lighting.GetColor((int)(StaCen.X / 16d), (int)(StaCen.Y / 16d));
+            Main.spriteBatch.Draw(tx, NPC.Center - Main.screenPosition, new Rectangle(0, 32, 32, 30), color0, NPC.rotation, vector, 1f, effects, 0f);
             Main.spriteBatch.Draw(tx, StaCen - Main.screenPosition + new Vector2(0, 24), new Rectangle(0, 0, 32, 8), color0, 0, vector, 1f, effects, 0f);
             Color color = new Color(255, 255, 255, 0);
-            Main.spriteBatch.Draw(tg, NPC.Center - Main.screenPosition, new Rectangle(0, 32, 32, 32), color, NPC.rotation, vector, 1f, effects, 0f);
+            Main.spriteBatch.Draw(tg, NPC.Center - Main.screenPosition, new Rectangle(0, 32, 32, 30), color, NPC.rotation, vector, 1f, effects, 0f);
             vPos[0] = NPC.Center;
             for (int f = 1; f < 200; f++)
             {

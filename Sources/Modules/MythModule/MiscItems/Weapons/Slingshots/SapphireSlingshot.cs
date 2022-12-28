@@ -1,4 +1,6 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots
+﻿using Terraria.ID;
+
+namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots
 {
     public class SapphireSlingshot : SlingshotItem
     {
@@ -10,7 +12,7 @@
             Item.height = 36;
             Item.useTime = 38;
             Item.useAnimation = 38;
-            Item.rare = 3;
+            Item.rare = ItemRarityID.Orange;
             Item.value = Item.sellPrice(0, 0, 12, 0);
         }
         public override void AddRecipes()
