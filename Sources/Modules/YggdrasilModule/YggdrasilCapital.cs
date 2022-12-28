@@ -19,17 +19,17 @@ namespace Everglow.Sources.Modules.YggdrasilModule
         {
             if (player.itemAnimation == player.itemAnimationMax)
             {
-                if (SubWorldModule.SubworldSystem.IsActive<YggdrasilWorld>())
-                {
-                    SubWorldModule.SubworldSystem.Exit();
-                }
-                else
-                {
-                    if (!SubWorldModule.SubworldSystem.Enter<YggdrasilWorld>())
-                    {
-                        Main.NewText("Fail!");
-                    }
-                }
+                //if (SubWorldModule.SubworldSystem.IsActive<YggdrasilWorld>())
+                //{
+                //    SubWorldModule.SubworldSystem.Exit();
+                //}
+                //else
+                //{
+                //    if (!SubWorldModule.SubworldSystem.Enter<YggdrasilWorld>())
+                //    {
+                //        Main.NewText("Fail!");
+                //    }
+                //}
             }
             return base.UseItem(player);
         }
