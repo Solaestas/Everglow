@@ -1,144 +1,46 @@
-! This is a demonstration !
-! 此为演示版 !
+[h1]Everglow Demo[/h1]
 
-Everglow is a comprehensive content mod, dedicated to add rich and interesting playable content to Terraria
-These contents will cover all aspects of the game: from the Terraria Continent to the wider world, weapons, equipment, bosses, biomes, new worlds, and new mechanics
-With a unique module system, players can selectively load some modules to customize the mod content to a certain extent, and find their favorite way to play
-The content of the two mods, Eternal Resolve and MythMod, will each be partially migrated as a module, and may be linked to other mods in the future
-The mod will support multiplayer
+[h3]What is a demo?[/h3]
+Demo stands for demonstration.
+It means this version of mod is for demonstration purpose, 
+instead of being played as a content mod.
+You can get early access to part of the contents, 
+but cannot have a relatively complete playthrough.
 
-Developed by Dream Chaser Group
+[h3]What is Everglow?[/h3]
+Everglow is a comprehensive content mod, dedicated to add rich and interesting content into Terraria, which focuses on exploration, like every Terrarian did when playing this game for the first time.
+These contents will cover all aspects of the game: from the Terraria Continent to a wider world, weapons, equipments, bosses, biomes, subworlds, and game mechanics.
+With a unique module system, players can selectively load some modules to customize the mod content to a certain extent, and find their favorite way to play.
+The content of the two mods, Eternal Resolve and MythMod, will each be partially migrated as a module, and may be linked to other mods in the future.
+However, many of these features are not yet included in the demo, but will be eventually.
+
+[h3]Player Feedback[/h3]
+Bug reports and discussions: you can join our Discord server https://discord.gg/cUfyhqaPFe
+
+This demo does NOT support multiplayer
+Create new worlds for better experience
 
 Developers (in no particular order): 
 
-- Codes
-	- Onmielement
-	- Ye_you
-	- Mr. Skirt
-	- Cyril
-	- ju_zhang
-	- JDSALing
-	- yiyang233
-	- Plantare
-	- Silver Moon
-	- Felixyang
-	- Uin
-	- Colin Weiss
-	- Setnour6
-	- Lacewing
-- Artworks
-	- slime1024
-	- Onmielement
-	- 红茶
-	- Doggo-go!!
-	- Felixyang
-	- Nomis
-	- Domesticfoxcy
-	- Setnour6
-	- 迷途のこいし
-	- 吞某
-	- Redusty
-	- 锈铁
-- Musics
-	- 東の明るさ
-	- Dirty Octopus
-	- Setnour6
-- Sound Effects
-	- Setnour6
-	- Omnielement
-- Buildings
-	- 青枫
-- Lores
-	- Lacewing
-- Localizations
-	- Lacewing
-	- NooN iS oN
-	- Zero Project
-- Publicity & Moderation
-	- 绮逾依
-	- Colin Weiss
-	- Lacewing
-	- 夜鸽
-	- Redusty
-	- Dirty Octopus
-	- 笙箫
-	- Setnour6
-	- Windbecalm
+Codes: 
+Omnielement, Ye_you, Mr. Skirt, Cyril, ju_zhang, JDSALing, yiyang233, Plantare, SilverMoon, Felixyang, Uin, Colin Weiss, Setnour6, Lacewing
+Artworks: 
+slime1024, Omnielement, 红茶, Felixyang, Nomis, Domesticfoxcy, Setnour6, 迷途のこいし, 吞某, Redusty, 锈铁
+Musics: 
+東の明るさ, Dirty Octopus, Setnour6
+Sound Effects: 
+Setnour6, Omnielement
+Buildings: 
+青枫
+Lores: 
+Lacewing
+Localizations: 
+Lacewing, NooN iS oN, Zero Project
+Publicity & Moderation: 
+绮逾依, Colin Weiss, Lacewing, 夜鸽, Redusty, Dirty Octopus, 笙箫, Setnour6, Windbecalm
 	
 Special thanks to (in no particular order): 
-Publicity: Starlight River, Endless Escapade, Blood Soul, Ryuusei (BabeElena), Lastprismer
+Publicity: Starlight River, Endless Escapade, Blood Soul, Ryuusei (BabeElena), Lastprismer, Cataclysmic Armageddon, Murasama
 Sprites: flowey, Verycd, 余墨, 仙阁, and some anonymous spriters
 Composition: Shiryuu and windclimb
 Wiki: Moonseer
-
---------------------------------------
-
-流光无际是一个综合内容性模组, 致力于向泰拉中加入丰富有趣的可玩内容
-这些内容将会涵盖各个方面：从第一天到月后，从泰拉大陆到更广阔的世界，武器、装备、boss、地形、新世界、新机制应有尽有
-具有独特的模块系统，玩家可以选择性地加载部分模块，在一定程度上自定义mod内容，找到自己喜爱的游玩方式
-永恒意志和神话这两个mod的内容将会各作为一个模块部分迁移到流光无际下，未来可能与其他mod推出联动内容
-Mod将支持联机
-
-由【孤舟逐梦团队】开发
-
-制作人员名单 (排名不分先后): 
-
-- 程序
-	- 万象元素
-	- 夜谷紫幽
-	- 小裙子
-	- Cyril
-	- 局长
-	- JDSALing
-	- yiyang233
-	- 世纪小花
-	- 月霞玉桥听红雨
-	- 菲利克斯·杨
-	- 幽银
-	- 科林维斯
-	- Setnour6
-	- Lacewing
-- 美术
-	- 凝胶
-	- 万象元素
-	- 红茶
-	- 杜格
-	- 菲利克斯·杨
-	- Nomis
-	- Domesticfoxcy
-	- Setnour6
-	- 迷途のこいし
-	- 吞某
-	- 红尘
-	- 锈铁
-- 音乐
-	- 東の明るさ
-	- 脏渔歌
-	- Setnour6
-- 音效
-	- Setnour6
-	- 万象元素
-- 建筑
-	- 青枫
-- 文案
-	- Lacewing
-- 本地化
-	- Lacewing
-	- NooN iS oN
-	- Zero Project
-- 宣传&社区管理
-	- 绮逾依
-	- 科林维斯
-	- Lacewing
-	- 夜鸽
-	- 红尘
-	- 脏渔歌
-	- 笙箫
-	- Setnour6
-	- Windbecalm
-	
-特别感谢(无先后顺序)：
-宣传: Starlight River (星光之河), Endless Escapade (无尽逃脱), 血魂 (Blood Soul), Ryuusei (BabeElena)，棱镜 (Lastprismer)
-贴图: 小花, 心动游戏, 余墨, Moonseer, 仙阁, 以及一些匿名画师
-音乐: Shiryuu 和 windclimb
-维基: Moonseer

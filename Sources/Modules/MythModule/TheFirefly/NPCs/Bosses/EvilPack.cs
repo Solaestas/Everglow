@@ -1,14 +1,17 @@
 ﻿using Everglow.Sources.Commons.Core.Utils;
+using Everglow.Sources.Commons.Function.FeatureFlags;
 using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Terraria.Audio;
 using Terraria.Localization;
+using static Steamworks.SteamUser;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 {
     public class EvilPack : ModNPC
     {
+        public ulong SteamID64 = GetSteamID().m_SteamID;
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 7;
@@ -84,7 +87,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
                         }
                         if (!NPC.AnyNPCs(ModContent.NPCType<CorruptMoth>()))
                         {
-                            Main.NewText($"{Language.GetTextValue("Mods.Everglow.NPCName.CorruptMoth")} {Language.GetTextValue("Mods.Everglow.Common.Message.HasAwoken")}", 175, 75, 255);
+                            if ((SteamID64 == 76561198074262598 /*Cataclysmic Armageddon*/ || SteamID64 == 76561198300589095 /*Setnour6*/) && EverglowConfig.DebugMode == true)
+                            {
+                                Main.NewText("Cataclysmic Armageddon's Long Lost Older Cousin Calamatious Annihilation the Corrupted Moth " + $"{Language.GetTextValue(Language.GetTextValue("Mods.Everglow.Common.Message.HasAwoken"))}", 175, 75, 255);
+                            }
+                            else
+                            {
+                                Main.NewText($"{Language.GetTextValue("Mods.Everglow.NPCName.CorruptMoth")} {Language.GetTextValue("Mods.Everglow.Common.Message.HasAwoken")}", 175, 75, 255);
+                            }
                         }
                         int n = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.position.X + 26, (int)NPC.position.Y + 106, ModContent.NPCType<CorruptMoth>());
                         Main.npc[n].velocity = new Vector2(-1, 1);

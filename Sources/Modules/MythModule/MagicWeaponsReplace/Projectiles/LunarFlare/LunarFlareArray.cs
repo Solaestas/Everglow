@@ -232,8 +232,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
 
         public void DrawStarrySky()
         {
-            if ((Lighting.Mode != Terraria.Graphics.Light.LightMode.Color && Lighting.Mode != Terraria.Graphics.Light.LightMode.White)
-                || Main.WaveQuality == 0)
+            if (/*(Lighting.Mode != Terraria.Graphics.Light.LightMode.Color && Lighting.Mode != Terraria.Graphics.Light.LightMode.White)
+                ||*/ Main.WaveQuality >= 0) // Was Main.WaveQuality == 0
             {
                 return;
             }

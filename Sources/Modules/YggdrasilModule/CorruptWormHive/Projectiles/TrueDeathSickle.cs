@@ -1,5 +1,6 @@
 ﻿using Everglow.Sources.Commons.Core.VFX;
 using Everglow.Sources.Commons.Function.Curves;
+using Everglow.Sources.Commons.Function.FeatureFlags;
 using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MEACModule;
 using Everglow.Sources.Modules.MEACModule.Projectiles;
@@ -167,9 +168,8 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
                 }
                 if (timer == 20)
                 {
-                    AttSound(new SoundStyle(
-                "Everglow/Sources/Modules/MEACModule/Sounds/TrueMeleeSwing"));
-
+                    if (!EverglowConfig.DebugMode) { AttSound(new SoundStyle("Everglow/Sources/Modules/MEACModule/Sounds/TrueMeleeSwing")); }
+                    else { AttSound(SoundID.Item71.WithPitchOffset(-0.3f)); }
                 }
 
                 if (timer == 50)
@@ -217,8 +217,8 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
                 }
                 if (timer == 50)
                 {
-                    AttSound(new SoundStyle(
-                "Everglow/Sources/Modules/MEACModule/Sounds/TrueMeleeSwing"));
+                    if (!EverglowConfig.DebugMode) { AttSound(new SoundStyle("Everglow/Sources/Modules/MEACModule/Sounds/TrueMeleeSwing")); }
+                    else { AttSound(SoundID.Item71.WithPitchOffset(-0.3f)); }
                 }
 
                 if (timer == 70)
@@ -274,8 +274,8 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
                 }
                 if (timer == 30)
                 {
-                    AttSound(new SoundStyle(
-                "Everglow/Sources/Modules/MEACModule/Sounds/TrueMeleePowerSwing"));
+                    if (!EverglowConfig.DebugMode) { AttSound(new SoundStyle("Everglow/Sources/Modules/MEACModule/Sounds/TrueMeleePowerSwing")); }
+                    else { AttSound(new SoundStyle("Everglow/Sources/Modules/MEACModule/Sounds/TrueMeleePowerSwing")); SoundEngine.PlaySound(SoundID.Item71); }
                 }
                 if (timer == 50)
                 {
