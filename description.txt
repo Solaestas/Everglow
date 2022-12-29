@@ -6,19 +6,66 @@ The mod will support multiplayer
 
 Developed by Dream Chaser Group
 
-Developers (in no particular order):
-Programmers: Colin Weiss, Mr.Skirt, Omnielement, yiyang233, Ye_you, Plantare, Uin, Felixyang, Cyril, 局长, JDSALing，月霞玉桥听红雨
-Art: Jelly, Omnielement, Vedotek Lily, 仙阁, 凝胶, Doggo-go!!, 吞某, Nomis, 红茶, Redusty, Felixyang, 青枫
-Music: Dirty Octopus, Setnour6, Uni
-Sound Effects：Setnour6, 短毛猫, Vedotek Lily, Omnielement
-Copywriting: 荔枝, Lacewing
-Localization: Lacewing(en-US), NooN iS oN(ru-RU), Zero Project(ru-RU)
-Publicity & Moderation: 绮逾依, Colin Weiss, Lacewing, 夜鸽, Redusty, Dirty Octopus, 笙箫
+Developers (in no particular order): 
 
+- Codes
+	- Onmielement
+	- Ye_you
+	- Mr. Skirt
+	- Cyril
+	- ju_zhang
+	- JDSALing
+	- yiyang233
+	- Plantare
+	- Silver Moon
+	- Felixyang
+	- Uin
+	- Colin Weiss
+	- Setnour6
+	- Lacewing
+- Artworks
+	- slime1024
+	- Onmielement
+	- 红茶
+	- Doggo-go!!
+	- Felixyang
+	- Nomis
+	- Domesticfoxcy
+	- Setnour6
+	- 迷途のこいし
+	- 吞某
+	- Redusty
+	- 锈铁
+- Musics
+	- 東の明るさ
+	- Dirty Octopus
+	- Setnour6
+- Sound Effects
+	- Setnour6
+	- Omnielement
+- Buildings
+	- 青枫
+- Lores
+	- Lacewing
+- Localizations
+	- Lacewing
+	- NooN iS oN
+	- Zero Project
+- Publicity & Moderation
+	- 绮逾依
+	- Colin Weiss
+	- Lacewing
+	- 夜鸽
+	- Redusty
+	- Dirty Octopus
+	- 笙箫
+	- Setnour6
+	- Windbecalm
+	
 Special thanks to (in no particular order): 
 Publicity: Starlight River, Endless Escapade, Blood Soul, Ryuusei (BabeElena), Lastprismer
-Sprites: flowey, Verycd, 余墨, and some anonymous spriters
-Codes: SilverMoon
+Sprites: flowey, Verycd, 余墨, 仙阁, and some anonymous spriters
+Composition: Shiryuu and windclimb
 Wiki: Moonseer
 
 --------------------------------------
@@ -31,17 +78,64 @@ Mod将支持联机
 
 由【孤舟逐梦团队】开发
 
-制作人员名单(无先后顺序)：
-程序：科林维斯，小裙子，万象元素，夜谷紫幽，yiyang233，世纪小花，幽银，菲利克斯·杨，Cyril，局长，JDSALing，月霞玉桥听红雨
-美术：果冻，万象元素, 维多泰克莉莉，仙阁，凝胶，杜格，吞某，Nomis，红茶，红尘，菲利克斯·杨，青枫
-音乐：脏渔歌，Setnour6, Uni
-音效：Setnour6，短毛猫，维多泰克莉莉，万象元素
-文案：荔枝，Lacewing
-翻译：Lacewing[英]，荔枝[英]，NooN iS oN[俄]，Zero Project[俄]
-宣传与社区管理：绮逾依，科林维斯，Lacewing，夜鸽，红尘，脏渔歌，笙箫
+制作人员名单 (排名不分先后): 
 
+- 程序
+	- 万象元素
+	- 夜谷紫幽
+	- 小裙子
+	- Cyril
+	- 局长
+	- JDSALing
+	- yiyang233
+	- 世纪小花
+	- 月霞玉桥听红雨
+	- 菲利克斯·杨
+	- 幽银
+	- 科林维斯
+	- Setnour6
+	- Lacewing
+- 美术
+	- 凝胶
+	- 万象元素
+	- 红茶
+	- 杜格
+	- 菲利克斯·杨
+	- Nomis
+	- Domesticfoxcy
+	- Setnour6
+	- 迷途のこいし
+	- 吞某
+	- 红尘
+	- 锈铁
+- 音乐
+	- 東の明るさ
+	- 脏渔歌
+	- Setnour6
+- 音效
+	- Setnour6
+	- 万象元素
+- 建筑
+	- 青枫
+- 文案
+	- Lacewing
+- 本地化
+	- Lacewing
+	- NooN iS oN
+	- Zero Project
+- 宣传&社区管理
+	- 绮逾依
+	- 科林维斯
+	- Lacewing
+	- 夜鸽
+	- 红尘
+	- 脏渔歌
+	- 笙箫
+	- Setnour6
+	- Windbecalm
+	
 特别感谢(无先后顺序)：
 宣传: Starlight River (星光之河), Endless Escapade (无尽逃脱), 血魂 (Blood Soul), Ryuusei (BabeElena)，棱镜 (Lastprismer)
-贴图: 小花, 心动游戏, 余墨, 以及一些匿名画师
-程序: 银月
+贴图: 小花, 心动游戏, 余墨, Moonseer, 仙阁, 以及一些匿名画师
+音乐: Shiryuu 和 windclimb
 维基: Moonseer
