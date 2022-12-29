@@ -1415,7 +1415,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 
             npcLoot.Add(rule);
 
-            if (Main.hardMode == true) { npcLoot.Add(ItemDropRule.ByCondition(new Conditions.NotExpert(), ModContent.ItemType<Items.Accessories.MothEye>(), 3, 1, 1, 1)); } //Classic Moth Eye Accessory
+            npcLoot.Add(ItemDropRule.ByCondition(new Conditions.NotExpert(), ModContent.ItemType<Items.Accessories.MothEye>(), 3, 1, 1, 1)); //Classic Moth Eye Accessory
 
             //npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsMasterMode(), ModContent.ItemType<Items.Weapons.Legendary.ToothSpear>(), 40/*概率分母*/, 1/*最小*/, 1/*最大*/, 1/*概率分子*/));
             /*

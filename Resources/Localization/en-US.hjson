@@ -26,6 +26,11 @@ Mods:
 			ExcluWeapon : Exclusive Weapon
 			MythWeapon : Mythical Weapon
 			LegendWeapon : Legendary Weapon
+			DebugItem : 
+				'''
+				! Debug item !
+				Use on your own risk
+				'''
 
 			#世界系统WorldSystem
 			WorldSystem:
@@ -38,6 +43,7 @@ Mods:
 			#食物系统FoodSystem
 			FoodSystem:
 			{
+			    Satiety : "Satiety"
 				CannotEat : "You are full"
 				CannotDrink : "You don't feel like drinking"
 				Khan : "Khan, take me on one more charge"
@@ -45,7 +51,12 @@ Mods:
 
 			PylonSystem : 
 			{
-				ShabbyPylonRepairedTip : "Pylon Repaired"
+				ShabbyPylonRepairedTip : "Pylon reconnected"
+			}
+
+			Message : 
+			{
+				HasAwoken : "has awoken!"
 			}
 		}
 		NPCName:
@@ -255,9 +266,6 @@ Mods:
 			LanternCrystal : Royal City Pylon
 			LanternPost1 : Lantern Post
 			LanternPost2 : Lantern Post
-			DiscordBallF1 : Discord Crystal Ball · The Ancient Path
-			LiftLamp : Lift Indicator
-			TestItem : Wooden Lift
 			EkandaBrick : Ekanda Brick
 			Guding : Ekanda Alloy
 			NoFlawsDream : Flawless Dream
@@ -357,9 +365,9 @@ Mods:
 				DryMartini : "Dry Martini"
 				GreenStorm : "Green Storm"
 				KiwiJuice : "Kiwi Juice"
-				LonelyJellyfish : "'A Lonely Jellyfish'"
+				LonelyJellyfish : "A Lonely Jellyfish"
 				OrangeJuice : "Orange Juice"
-				PiercoldWind : "'Piercingly Cold Winds'"
+				PiercoldWind : "Piercingly Cold Winds"
 				PurpleHooter : "Purple Hooter"
 				QuinceMarry : "Quince Marry"
 				RedWine : "Red Wine"
@@ -392,6 +400,10 @@ Mods:
 				WatermelonPlate : "Watermelon Plate"
 
 			# Yggdrasil Items
+			YggdrasilCapital : "'An Illusion of The Yggdrasil'"
+			DiscordBallF1 : Discord Crystal Ball · The Ancient Path
+			LiftLamp : Lift Indicator
+			TestItem : Wooden Lift
 
 				#Yggdrasil Town
 				ChinesePartitionLamp : "Chinese Partition Lamp"
@@ -653,8 +665,6 @@ Mods:
 			TitaniumClub : "{$Mods.Everglow.Common.ClubGT}"
 			TungstenClub : "{$Mods.Everglow.Common.ClubGT}"
 			WoodenClub : "{$Mods.Everglow.Common.ClubGT}"
-			LiftLamp : ""
-			TestItem : ""
 			EkandaBrick : ""
 			Guding : ""
 			NoFlawsDream : ""
@@ -683,6 +693,12 @@ Mods:
 				'''
 
 			#流萤系列物品
+			FireflyCapital : 
+				'''
+				Brings you to The Firefly
+				{$Mods.Everglow.Common.DebugItem}
+				'''
+
 			GlowBeadGun : 
 				'''
 				Hold attack to charge
@@ -710,19 +726,38 @@ Mods:
 			DarknessFan : "{$Mods.Everglow.Common.LegendWeapon}\n{$Mods.Everglow.Common.WarWhipGT}\nStrike enemies with the fan and Phantom Butterflies (PBs)\nRight click to throw out the fan\nThe fan itself inflicts Mark of PB (stackable), each level increases damage dealt by PBs by 10%\nMax stack increases with Sync level"
 			
 			# 天穹树系列物品
+			YggdrasilCapital : 
+				'''
+				Brings you to The Yggdrasil
+				{$Mods.Everglow.Common.DebugItem}
+				'''
+			# LiftLamp
+			TestItem : 
+				'''
+				{$Mods.Everglow.Common.DebugItem}
+				'''
 				# 天穹树小镇
 				CyanVinePickaxe : 
 					'''
 					Allows you to destroy Fossilised Dragonscale Woods
 					Mines Cyan Ores faster
 					'''
+			# Extra Debug Items
+			HardmodeItem : 
+			'''
+			{$Mods.Everglow.Common.DebugItem}
+			'''
+			LifeMaxItem : 
+			'''
+			{$Mods.Everglow.Common.DebugItem}
+			'''
 
 			#Music Boxes
 			GlowWoodMusicBox : "Plays 'Setnour6 - Within the Giant Cocoon (身陷巨茧)'"
 
 			#食物系统物品
 			BloodGlucoseMonitor : "Display hunger information"
-			OsmoticPressureMonitor : "Display thrist information"
+			OsmoticPressureMonitor : "Display thirst information"
 			
 			FryingPanItem : "Left click to throw it as a boomerang, right click and hold to swing it as a sword"
 
@@ -950,7 +985,7 @@ Mods:
 					'''
 					{$CommonItemTooltip.MediumStats}
 					8% increases knockback
-					'Maximum striking force'
+					'I'm more curious about how you can eat it whole than the watermelon itself'
 					'''
 				WatermelonPlate : 
 					'''
@@ -1087,9 +1122,9 @@ Mods:
 				DryMartiniBuff : "Dry Martini"
 				GreenStormBuff : "Green Storm"
 				KiwiJuiceBuff : "Kiwi Juice"
-				LonelyJellyfishBuff : "'A Lonely Jellyfish'"
+				LonelyJellyfishBuff : "A Lonely Jellyfish"
 				OrangeJuiceBuff : "Orange Juice"
-				PiercoldWindBuff : "'Piercingly Cold Winds'"
+				PiercoldWindBuff : "Piercingly Cold Winds"
 				PurpleHooterBuff : "Purple Hooter"
 				QuinceMarryBuff : "Quince Marry"
 				RedWineBuff : "Red Wine"
@@ -1416,7 +1451,7 @@ Mods:
 				WatermelonBuff : 
 					'''
 					8% increases knockback
-					'Maximum striking force'
+					'I'm more curious about how you can eat it whole than the watermelon itself'
 					'''
 				WatermelonPlateBuff : 
 					'''
@@ -1486,13 +1521,23 @@ Mods:
 			}
 			FireflyItems :
 			{
+				MothEyeCriteriaText : "[c/6B6BB2:In order to harness a fragment of the ommateum, a powerful underworld creature must be slain]"
 				MothEyeText0 : "[c/7FC1FF:While in the Firefly biome:]"
 				MothEyeText1 : "[c/7FC1FF:- Mana cost is reduced by 5%]"
 				MothEyeText2 : "[c/7FC1FF:- The effectiveness of mana sickness is reduced by 4]"
 				MothEyeText3 : "[c/7FC1FF:- All Firefly weapons deal 5% more damage]"
 				MothEyeText4 : "[c/7FC1FF:- Some Firefly-related items gain bonuses]"
 				MothEyeBonusText : "[c/7FC1FF:Bonus gained from {$Mods.Everglow.ItemName.MothEye}:]"
-				MEyeBonusTextMothBlade : "[c/7FC1FF:More moths appear from the blade]"
+				MEyeBonusTextMothBlade : "[c/7FC1FF:- Moths appearing from this blade move faster]"
+				MEyeBonusTextMothBow : "[c/7FC1FF:- Reduces the charging time of the bow]"
+				MEyeBonusTextMothGun0 : "[c/7FC1FF:- The phosphorescent bullets deal more damage]"
+				MEyeBonusTextMothGun1 : "[c/7FC1FF:- Prevents recoil from occuring]"
+				MEyeBonusTextMothYoyo : "[c/7FC1FF:- More moths appear from this yoyo]"
+				MEyeBonusTextMothChry0 : "[c/7FC1FF:- Projectiles summoned from the moths can go through tiles]"
+				MEyeBonusTextMothChry1 : "[c/7FC1FF:- The moths have a chance to shoot a stronger projectile]"
+				MEyeBonusTextMothFan : "[c/7FC1FF:- Moths appearing from this fan last longer]"
+				MEyeBonusTextGlowSword0 : "[c/7FC1FF:- The initial scale of the glow wood sword projectiles are larger]"
+				MEyeBonusTextGlowSword1 : "[c/7FC1FF:- Glow sword projectiles deal more damage]"
 				FFBBadge0 : "[c/7FC1FF:'Affected by rage of that giant moth, your attacks become wilder']"
 				FFBBadge1 : "[c/7FC1FF:Defense is lowered based on how much defense you currently have, up to -12]"
 				FFBBadge2 : "[c/7FC1FF:Increases damage by 18%]"

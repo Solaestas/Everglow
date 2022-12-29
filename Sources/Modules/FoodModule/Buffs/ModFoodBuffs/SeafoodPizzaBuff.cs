@@ -12,13 +12,13 @@
 
         public override void Update(Player player, ref int buffIndex)
         {
-            player.GetCritChance(DamageClass.Generic) += 10; // 加10%暴击
-            player.GetDamage(DamageClass.Generic) *= 1.1f; // 加10%伤害
-            player.GetAttackSpeed(DamageClass.Generic) *= 1.1f; // 加10%攻速
-            FoodBuffModPlayer.AddCritDamage += 0.1f;
-            player.statDefense += 3; // 加3防御
-            player.lifeRegen += 2; // 加2生命回复
-            player.manaRegen += 2; // 魔力再生加2
+            player.GetCritChance(DamageClass.Generic) += 8; // 加8%暴击
+            player.GetDamage(DamageClass.Generic) *= 1.08f; // 加8%伤害
+            player.GetAttackSpeed(DamageClass.Generic) *= 1.08f; // 加8%攻速
+            FoodBuffModPlayer.AddCritDamage += 0.08f;
+            player.statDefense += 2; // 加2防御
+            player.lifeRegen += 1; // 加1生命回复
+            player.manaRegen += 1; // 魔力再生加1
 
         }
     }

@@ -27,7 +27,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         }
         public override float TrailAlpha(float factor)
         {
-            return base.TrailAlpha(factor)*1.15f;
+            return base.TrailAlpha(factor) * 1.15f;
         }
         public override BlendState TrailBlendState()
         {
@@ -96,7 +96,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
 
             Vector2 vToMouse = Main.MouseWorld - player.Top;
             float AddHeadRotation = (float)Math.Atan2(vToMouse.Y, vToMouse.X) + (1 - player.direction) * 1.57f;
-            if(player.gravDir == -1)
+            if (player.gravDir == -1)
             {
                 if (player.direction == -1)
                 {
@@ -280,7 +280,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             }
             if (attackType == 100)//右键攻击
             {
-                float BodyRotation = 0;
+                float BodyRotation;
                 if (timer < 60)
                 {
                     CanIgnoreTile = true;
@@ -346,22 +346,14 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                         mainVec = Vector2Elipse(220, Projectile.rotation, -1.2f, Projectile.ai[0], 1000);
                         Projectile.rotation += Projectile.spriteDirection * 0.42f;
                     }
-                    if (timer == 115)
-                    {
-                        Projectile.friendly = false;
-                    }
-                    if (timer > 125)
-                    {
-                        CanIgnoreTile = false;
-                        End();
-                    }
+
                     BodyRotation = (float)(Math.Sin((timer - 114.514) / 18d * Math.PI)) * 0.7f * player.direction * player.gravDir;
 
                 }
                 else
                 {
                     Vector2 ToMouseWorld = Main.MouseWorld - player.Top;
-                    float HeadRot = (float)Math.Atan2(ToMouseWorld.Y, ToMouseWorld.X) + (float)(Math.PI * 0.5 * (1-player.direction));
+                    float HeadRot = (float)Math.Atan2(ToMouseWorld.Y, ToMouseWorld.X) + (float)(Math.PI * 0.5 * (1 - player.direction));
                     BodyRotation = -timer * player.direction * 0.003f * player.gravDir;
                 }
                 player.fullRotation = BodyRotation;
@@ -369,17 +361,18 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                 player.legRotation = -BodyRotation;
                 player.legPosition = (new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height) - player.fullRotationOrigin).RotatedBy(-BodyRotation);
                 Tplayer.HeadRotation = -BodyRotation + AddHeadRotation;
+
+                if (timer == 115)
+                {
+                    Projectile.friendly = false;
+                }
+                if (timer > 125)
+                {
+                    CanIgnoreTile = false;
+                    End();
+                }
             }
-            if(timer == 131)
-            {
-                float BodyRotation = 0;
-                player.fullRotation = BodyRotation;
-                player.legRotation = -BodyRotation;
-                player.headRotation = -BodyRotation;
-                player.legPosition = Vector2.Zero;
-                Tplayer.HeadRotation = 0;
-                Tplayer.HideLeg = false;
-            }
+
             if (isAttacking)
             {
                 for (int i = 0; i < 2; i++)
