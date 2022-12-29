@@ -53,7 +53,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
         }
         public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
-            if (fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
+            if (!fireflyBiome.IsBiomeActive(Main.LocalPlayer) && !Main.hardMode)
             {
                 Texture2D mEyeTex = MythContent.QuickTexture("TheFirefly/Items/Accessories/MothEye_GlowOn");
                 for (int x = 0; x < 8; x++)
