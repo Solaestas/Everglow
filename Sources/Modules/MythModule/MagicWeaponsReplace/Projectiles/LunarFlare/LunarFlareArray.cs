@@ -232,7 +232,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
             {
                 return;
             }
-            if (Main.WaveQuality < 3)
+            if (Main.WaveQuality == 0)
             {
                 return;
             }
