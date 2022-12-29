@@ -115,25 +115,25 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
                     for (int h = 0; h < 60; h += 3)
                     {
                         Vector2 v3 = new Vector2(0, (float)Math.Sin(h * Math.PI / 4d) + 2).RotatedBy(h * Math.PI / 10d) * Main.rand.NextFloat(0.2f, 1.1f);
-                        int r = Dust.NewDust(NPC.Center - new Vector2(4, 4), 0, 0, ModContent.DustType<Dusts.PureBlue>(), 0, 0, 0, default, 4f * Main.rand.NextFloat(0.7f, 5.9f));
+                        int r = Dust.NewDust(NPC.Center - new Vector2(4, 4), 0, 0, ModContent.DustType<Dusts.PureBlue>(), 0, 0, 0, default(Color), 4f * Main.rand.NextFloat(0.7f, 5.9f));
                         Main.dust[r].noGravity = true;
                         Main.dust[r].velocity = v3 * 4;
                     }
                     for (int y = 0; y < 30; y += 3)
                     {
-                        int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.9f, 4.2f));
+                        int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(0.9f, 4.2f));
                         Main.dust[index].noGravity = true;
                         Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(1.8f, 8.5f)).RotatedByRandom(Math.PI * 2d);
                     }
                     for (int y = 0; y < 30; y += 3)
                     {
-                        int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(2f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.9f, 4.2f));
+                        int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(2f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(0.9f, 4.2f));
                         Main.dust[index].noGravity = true;
                         Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(3.0f, 10f)).RotatedByRandom(Math.PI * 2d);
                     }
                     for (int y = 0; y < 18; y++)
                     {
-                        int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.8f, 3.2f));
+                        int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(0.8f, 3.2f));
                         Main.dust[index].noGravity = true;
                         Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(1.8f, 4.5f)).RotatedByRandom(Math.PI * 2d);
                     }
