@@ -1,8 +1,4 @@
-﻿using Everglow.Sources.Commons.Function.Vertex;
-using Everglow.Sources.Modules.MEACModule;
-using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Modules.YggdrasilModule.Common;
-using IL.Terraria.DataStructures;
+﻿using Everglow.Sources.Modules.MythModule.Common;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.LunarFlare
 {
@@ -232,7 +228,11 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
 
         public void DrawStarrySky()
         {
-            if(Lighting.Mode != Terraria.Graphics.Light.LightMode.Color && Lighting.Mode != Terraria.Graphics.Light.LightMode.White)
+            if (Lighting.Mode != Terraria.Graphics.Light.LightMode.Color && Lighting.Mode != Terraria.Graphics.Light.LightMode.White)
+            {
+                return;
+            }
+            if (Main.WaveQuality < 3)
             {
                 return;
             }
