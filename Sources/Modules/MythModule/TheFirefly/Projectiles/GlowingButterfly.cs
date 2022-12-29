@@ -1,10 +1,12 @@
 ﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories;
 using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
     public class GlowingButterfly : ModProjectile
     {
+        FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 6;
@@ -18,7 +20,17 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Projectile.friendly = false;
             Projectile.hostile = false;
             Projectile.penetrate = ItemUseStyleID.Swing;
-            Projectile.timeLeft = 100;
+            if (MothEye.LocalOwner != null && MothEye.LocalOwner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
+            {
+                if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
+                {
+                    Projectile.timeLeft = 400;
+                }
+                else
+                {
+                    Projectile.timeLeft = 100;
+                }
+            }
             Projectile.tileCollide = false;
             Projectile.usesLocalNPCImmunity = false;
             Projectile.DamageType = DamageClass.Summon;
@@ -30,30 +42,65 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         public override void AI()
         {
             Player owner = Main.player[Projectile.owner];
-            if (y == 0)
+            if (MothEye.LocalOwner != null && MothEye.LocalOwner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
             {
-                Projectile.timeLeft = Main.rand.Next(85, 135);
-                Projectile.frame = Main.rand.Next(6);
-                Ome = Main.rand.NextFloat(-0.02f, 0.02f);
-                Projectile.scale = Main.rand.NextFloat(0.6f, 1.0f);
-                y = ItemUseStyleID.Swing;
+                
+                if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
+                {
+                    if (y == 0)
+                    {
+                        Projectile.timeLeft = Main.rand.Next(135, 185);
+                        Projectile.frame = Main.rand.Next(6);
+                        Ome = Main.rand.NextFloat(-0.02f, 0.02f);
+                        Projectile.scale = Main.rand.NextFloat(0.6f, 1.0f);
+                        y = ItemUseStyleID.Swing;
+                    }
+                    if (Projectile.timeLeft > 100 && Projectile.alpha >= 8)
+                    {
+                        Projectile.alpha -= 4;
+                    }
+                    if (Projectile.timeLeft <= 66)
+                    {
+                        Projectile.alpha += 4;
+                    }
+                    if (Projectile.alpha < 100)
+                    {
+                        Projectile.friendly = true;
+                    }
+                    else
+                    {
+                        Projectile.friendly = false;
+                    }
+                }
+                else
+                {
+                    if (y == 0)
+                    {
+                        Projectile.timeLeft = Main.rand.Next(85, 135);
+                        Projectile.frame = Main.rand.Next(6);
+                        Ome = Main.rand.NextFloat(-0.02f, 0.02f);
+                        Projectile.scale = Main.rand.NextFloat(0.6f, 1.0f);
+                        y = ItemUseStyleID.Swing;
+                    }
+                    if (Projectile.timeLeft > 50 && Projectile.alpha >= 8)
+                    {
+                        Projectile.alpha -= 8;
+                    }
+                    if (Projectile.timeLeft <= 33)
+                    {
+                        Projectile.alpha += 8;
+                    }
+                    if (Projectile.alpha < 50)
+                    {
+                        Projectile.friendly = true;
+                    }
+                    else
+                    {
+                        Projectile.friendly = false;
+                    }
+                }
             }
-            if (Projectile.timeLeft > 50 && Projectile.alpha >= 8)
-            {
-                Projectile.alpha -= 8;
-            }
-            if (Projectile.timeLeft <= 33)
-            {
-                Projectile.alpha += 8;
-            }
-            if (Projectile.alpha < 50)
-            {
-                Projectile.friendly = true;
-            }
-            else
-            {
-                Projectile.friendly = false;
-            }
+            
             //Projectile.spriteDirection = Projectile.velocity.X > 0 ? -1 : 1;
             Projectile.rotation = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + Math.PI * 0.75);
             Projectile.velocity = Projectile.velocity.RotatedBy(Ome);
@@ -350,9 +397,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                  var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
                  ef.Parameters["uTransform"].SetValue(model * projection);
                  ef.Parameters["uTime"].SetValue(-(float)Main.time * 0.03f + Projectile.ai[0]);
-                 Texture2D Blue = ModContent.Request<Texture2D>("MythMod/UIImages/heatmapBlue").Value;
-                 Texture2D Shape = ModContent.Request<Texture2D>("MythMod/UIImages/Lightline").Value;
-                 Texture2D Mask = ModContent.Request<Texture2D>("MythMod/UIImages/IceTrace").Value;
+                 Texture2D Blue = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/heatmapBlue").Value;
+                 Texture2D Shape = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/Lightline").Value;
+                 Texture2D Mask = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/IceTrace").Value;
                  Main.graphics.GraphicsDevice.Textures[0] = Blue;
                  Main.graphics.GraphicsDevice.Textures[1] = Shape;
                  Main.graphics.GraphicsDevice.Textures[2] = Mask;

@@ -26,6 +26,11 @@ Mods:
 			ExcluWeapon : 专属武器
 			MythWeapon : 神话武器
 			LegendWeapon : 传说武器
+			DebugItem : 
+				'''
+				! 调试物品 !
+				后果自负
+				'''
 
 			#世界系统WorldSystem
 			WorldSystem:
@@ -261,9 +266,6 @@ Mods:
 			LanternCrystal : 皇城晶塔
 			LanternPost1 : 灯笼柱
 			LanternPost2 : 灯笼柱
-			DiscordBallF1 : 混沌晶球·天穹古道
-			LiftLamp : 电梯指示灯
-			TestItem : 木制升降梯
 			EkandaBrick : 埃坎达砖
 			Guding : 埃坎达合金
 			NoFlawsDream : 无瑕梦境
@@ -398,6 +400,9 @@ Mods:
 				WatermelonPlate : "西瓜拼盘"
 
 			#天穹树系列物品
+			YggdrasilCapital : "'天穹印象'"
+			LiftLamp : 电梯指示灯
+			TestItem : 木制升降梯
 
 				#天穹树小镇
 				ChinesePartitionLamp : "中式屏风灯"
@@ -413,6 +418,7 @@ Mods:
 				StreetLantern : "灯笼街灯"
 				YellowDynastyShingles : "黄王朝瓦"
 				CyanVinePickaxe : "青缎镐"
+				DiscordBallF1 : 混沌晶球·天穹古道
 
 			#Plant Module Items
 			CactusBall : "仙人球棍"
@@ -659,8 +665,6 @@ Mods:
 			TitaniumClub : "{$Mods.Everglow.Common.ClubGT}"
 			TungstenClub : "{$Mods.Everglow.Common.ClubGT}"
 			WoodenClub : "{$Mods.Everglow.Common.ClubGT}"
-			# LiftLamp : ""
-			# TestItem : ""
 			# EkandaBrick : ""
 			# Guding : ""
 			# NoFlawsDream : ""
@@ -689,6 +693,12 @@ Mods:
 				'''
 
 			#流萤系列物品
+			FireflyCapital : 
+				'''
+				带你到流萤
+				{$Mods.Everglow.Common.DebugItem}
+				'''
+
 			GlowBeadGun : 
 				'''
 				长按攻击键以充能
@@ -716,12 +726,31 @@ Mods:
 			DarknessFan : "{$Mods.Everglow.Common.LegendWeapon}\n无召唤标记伤害\n你的召唤物将集中打击敌人\n无召唤标记伤害\n你的召唤物将集中打击被扇子击中的敌人\n以扇子和幻蝶打击敌人，右键扔出扇子\n扇子本体施加幻蝶之印(可叠加), 每层使幻蝶造成的伤害提高10%\n层数上限随共鸣层数增长\n'蕴含着被巨蛾吞噬的灵魂'"
 
 			# 天穹树系列物品
+			YggdrasilCapital : 
+				'''
+				带你到天穹树
+				{$Mods.Everglow.Common.DebugItem}
+				'''
+			# LiftLamp
+			TestItem : 
+				'''
+				{$Mods.Everglow.Common.DebugItem}
+				'''
 				# 天穹树小镇
 				CyanVinePickaxe : 
 					'''
 					允许你破坏石化龙鳞木
 					加速破坏青缎矿
 					'''
+			# Extra Debug Items
+			HardmodeItem : 
+			'''
+			{$Mods.Everglow.Common.DebugItem}
+			'''
+			LifeMaxItem : 
+			'''
+			{$Mods.Everglow.Common.DebugItem}
+			'''
 
 			#Music Boxes
 			GlowWoodMusicBox : "播放 'Setnour6 - Within the Giant Cocoon (身陷巨茧)'"
@@ -1475,13 +1504,23 @@ Mods:
 			}
 			FireflyItems :
 			{
+				MothEyeCriteriaText : "[c/6B6BB2:为了掌控这块蛾眼碎片, 必须先杀死一只强大的地下生物]"
 				MothEyeText0 : "[c/7FC1FF:处于流萤群系时:]"
 				MothEyeText1 : "[c/7FC1FF:- 降低5%魔力消耗]"
 				MothEyeText2 : "[c/7FC1FF:- 降低4魔力病的效力]"
 				MothEyeText3 : "[c/7FC1FF:- 增加5%流萤武器的伤害]"
 				MothEyeText4 : "[c/7FC1FF:- 部分流萤物品获得增幅]"
 				MothEyeBonusText : "[c/7FC1FF:来自 {$Mods.Everglow.ItemName.MothEye} 的增幅:]"
-				MEyeBonusTextMothBlade : "[c/7FC1FF:释放更多幻影蛾]"
+				MEyeBonusTextMothBlade : "[c/7FC1FF:- 从此刃中飞出的飞蛾移速更快]"
+				MEyeBonusTextMothBow : "[c/7FC1FF:- 此弓蓄力更快]"
+				MEyeBonusTextMothGun0 : "[c/7FC1FF:- 磷光弹造成更多伤害]"
+				MEyeBonusTextMothGun1 : "[c/7FC1FF:- 不再产生后坐]"
+				MEyeBonusTextMothYoyo : "[c/7FC1FF:- 更多飞蛾从此球中飞出]"
+				MEyeBonusTextMothChry0 : "[c/7FC1FF:- 小飞蛾发出的射弹无视物块]"
+				MEyeBonusTextMothChry1 : "[c/7FC1FF:- 小飞蛾有几率发射更强的射弹]"
+				MEyeBonusTextMothFan : "[c/7FC1FF:- 从此扇中飞出的飞蛾存活更久]"
+				MEyeBonusTextGlowSword0 : "[c/7FC1FF:- 萤火木剑的射弹的初始大小变大]"
+				MEyeBonusTextGlowSword1 : "[c/7FC1FF:- 萤火木剑的射弹造成更多伤害]"
 				FFBBadge0 : "[c/7FC1FF:'受到那只巨蛾怒气的影响,你的攻击变得更加狂野']"
 				FFBBadge1 : "[c/7FC1FF:防御基于当前的值降低, 最多-12]"
 				FFBBadge2 : "[c/7FC1FF:增加18%伤害]"

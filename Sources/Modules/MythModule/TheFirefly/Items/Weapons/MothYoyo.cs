@@ -1,9 +1,12 @@
-﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
+﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
+using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 {
     public class MothYoyo : ModItem
     {
+        FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
         public override void SetStaticDefaults()
         {
             // These are all related to gamepad controls and don't seem to affect anything else
@@ -46,7 +49,20 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             }
             return true;
         }
-
+        public override void ModifyTooltips(List<TooltipLine> tooltips)
+        {
+            if (MothEye.LocalOwner != null && MothEye.LocalOwner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
+            {
+                if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
+                {
+                    tooltips.AddRange(new TooltipLine[]
+                    {
+                        new(Everglow.Instance, "MothEyeBonusText", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeBonusText")),
+                        new(Everglow.Instance, "MothEyeYoyoBonus", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextMothYoyo")),
+                    });
+                }
+            }
+        }
         public override void AddRecipes()
         {
         }
