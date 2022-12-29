@@ -2,6 +2,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
 using Everglow.Sources.Modules.MythModule.Common;
+using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 {
@@ -17,8 +18,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Firefly Centipede");
-
             var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
             {
                 CustomTexturePath = "TheFirefly/NPCs/FireflyCentipede_Bestiary",
@@ -39,11 +38,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             NPC.scale = 0.9f;
             NPC.dontCountMe = true;
 
-            NPC.damage = 26;
+            NPC.damage = 30;
             NPC.width = 22;
             NPC.height = 22;
-            NPC.defense = 30;
-            NPC.lifeMax = 2600;
+            NPC.defense = 36;
+            NPC.lifeMax = 1200;
             NPC.knockBackResist = 0f;
             NPC.value = 300f;
             NPC.aiStyle = -1;
@@ -56,7 +55,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Underground,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Caverns,
 
-                new FlavorTextBestiaryInfoElement("Look like a centipede?")
+                new FlavorTextBestiaryInfoElement(Language.GetTextValue("Mods.Everglow.Bestiary.Centipede.Flavor"))
             });
         }
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
@@ -66,7 +65,19 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             {
                 return 0f;
             }
-            return 0.3f;
+            if (NPC.CountNPCS(ModContent.NPCType<NPCs.Bosses.CorruptMoth>()) > 0)
+            {
+                return 0;
+            }
+            else if (NPC.CountNPCS(ModContent.NPCType<CentipedeHead>()) > 1)
+            {
+                return 0f;
+            }
+            else if (NPC.CountNPCS(ModContent.NPCType<CentipedeHead>()) > 0)
+            {
+                return 0.04f;
+            }
+            return 0.08f;
         }
         public override void Init()
         {
@@ -493,8 +504,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Firefly Centipede");
-
             NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
             {
                 // 将此NPC从Bestiary中隐藏起来，对于你只想要一个条目的多部分NPC很有用。
@@ -512,11 +521,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             NPC.scale = 0.9f;
             NPC.dontCountMe = true;
 
-            NPC.damage = 26;
+            NPC.damage = 20;
             NPC.width = 24;
             NPC.height = 24;
             NPC.defense = 30;
-            NPC.lifeMax = 2600;
+            NPC.lifeMax = 1200;
             NPC.knockBackResist = 0f;
             NPC.value = 300f;
             NPC.aiStyle = -1;
@@ -631,8 +640,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Firefly Centipede");
-
             NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
             {
                 Hide = true
@@ -649,11 +656,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             NPC.scale = 0.9f;
             NPC.dontCountMe = true;
 
-            NPC.damage = 26;
+            NPC.damage = 12;
             NPC.width = 24;
             NPC.height = 24;
-            NPC.defense = 30;
-            NPC.lifeMax = 2600;
+            NPC.defense = 24;
+            NPC.lifeMax = 1200;
             NPC.knockBackResist = 0f;
             NPC.value = 300f;
             NPC.aiStyle = -1;

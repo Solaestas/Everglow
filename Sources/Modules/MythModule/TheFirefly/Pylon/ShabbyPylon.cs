@@ -92,9 +92,11 @@ internal class ShabbyPylonItem : ModItem
         var position = Main.MouseWorld;
         var bottom = position.ToTileCoordinates();
 
-        TileObject.CanPlace(bottom.X,bottom.Y,TileID,0,0,out var tileObject);
-        TileObject.Place(tileObject);
-        TileObjectData.CallPostPlacementPlayerHook(bottom.X, bottom.Y, TileID, 0, 0, 0, tileObject);
+        if(TileObject.CanPlace(bottom.X, bottom.Y, TileID, 0, 0, out var tileObject) && TileObject.Place(tileObject))
+        {
+            TileObjectData.CallPostPlacementPlayerHook(bottom.X, bottom.Y, TileID, 0, 0, 0, tileObject);
+        }
+
         return base.CanUseItem(player);
     }
 }
@@ -122,24 +124,27 @@ internal class ScreenMovePlayer : ModPlayer
         if (PylonSystem.Instance.firstEnableAnimation)
         {
             var firefly = TileEntity.ByPosition.FirstOrDefault(pair => pair.Value is ShabbyPylonTileEntity);
-            var target = firefly.Key.ToWorldCoordinates() - Main.ScreenSize.ToVector2() / 2;
-            AnimationTimer++;
-            float Value = (1 - MathF.Cos(AnimationTimer / 60f * MathF.PI)) / 2f;
-            if(AnimationTimer >= 60 && AnimationTimer < 540)
+            if (firefly.Value != default(TileEntity))
             {
-                Value = 1;
+                var target = firefly.Key.ToWorldCoordinates() - Main.ScreenSize.ToVector2() / 2;
+                AnimationTimer++;
+                float Value = (1 - MathF.Cos(AnimationTimer / 60f * MathF.PI)) / 2f;
+                if (AnimationTimer >= 60 && AnimationTimer < 540)
+                {
+                    Value = 1;
+                }
+                if (AnimationTimer >= 540)
+                {
+                    Value = (1 + MathF.Cos((AnimationTimer - 540) / 60f * MathF.PI)) / 2f;
+                }
+                Main.screenPosition = (Value).Lerp(Main.screenPosition, target);
+                if (AnimationTimer >= MaxTime)
+                {
+                    PylonSystem.Instance.firstEnableAnimation = false;
+                }
+                Player.immune = true;
+                Player.immuneTime = 2;
             }
-            if (AnimationTimer >= 540)
-            {
-                Value = (1 + MathF.Cos((AnimationTimer - 540) / 60f * MathF.PI)) / 2f;
-            }
-            Main.screenPosition = (Value).Lerp(Main.screenPosition, target);
-            if (AnimationTimer >= MaxTime)
-            {
-                PylonSystem.Instance.firstEnableAnimation = false;
-            }
-            Player.immune = true;
-            Player.immuneTime = 2;
         }
     }
 }
