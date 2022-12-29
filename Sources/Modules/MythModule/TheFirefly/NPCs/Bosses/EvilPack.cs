@@ -9,7 +9,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 {
     public class EvilPack : ModNPC
     {
-        public ulong SteamID64 = GetSteamID().m_SteamID;
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 7;
