@@ -5,7 +5,7 @@
         public override void SetStaticDefaults()
         {
             //DisplayName.SetDefault("CoconutBuff");
-            //TODO Description.SetDefault("增加4防御，3%减伤\n“我从小啃到大”");
+            //Description.SetDefault("增加4防御，3%减伤\n“我从小啃到大”");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
         }

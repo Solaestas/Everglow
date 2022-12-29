@@ -28,10 +28,6 @@ namespace Everglow.Sources.Modules.FoodModule.Items.ModFood
             }
         }
         public override void SetStaticDefaults() {
-			DisplayName.SetDefault("烤牡蛎");
-
-			Tooltip.SetDefault("{$CommonItemTooltip.MediumStats}\n'似乎没有了寄生虫'");
-
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 5;
 
 			Main.RegisterItemAnimation(Type, new DrawAnimationVertical(int.MaxValue, 3));

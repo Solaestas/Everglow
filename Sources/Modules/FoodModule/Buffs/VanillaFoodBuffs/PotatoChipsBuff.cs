@@ -5,7 +5,7 @@
         public override void SetStaticDefaults()
         {
             //DisplayName.SetDefault("PotatoChipsBuff");
-            //TODO Description.SetDefault("增加4防御，8%伤害\n“高油高盐”");
+            //Description.SetDefault("增加4防御，8%伤害\n“高油高盐”");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
         }

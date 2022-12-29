@@ -5,7 +5,7 @@
         public override void SetStaticDefaults()
         {
             //DisplayName.SetDefault("ChickenNuggetBuff");
-            //TODO Description.SetDefault("增加1生命回复、4%攻速\n“数一数二的鸡块！”");
+            //Description.SetDefault("增加1生命回复、4%攻速\n“数一数二的鸡块！”");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
         }
