@@ -98,8 +98,11 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
             }
             else
             {
-                Projectile P = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI("hit"), target.Center, new Vector2(0, -1f).RotatedByRandom(Math.PI / 4), ProjectileID.Spark, Projectile.damage / 2, Projectile.knockBack / 2, player.whoAmI);
-                P.GetGlobalProjectile<Canhitproj>().Canhit = false;
+                if (Main.rand.NextBool(3))
+                {
+                    Projectile P = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI("hit"), target.Center, new Vector2(0, -1f).RotatedByRandom(Math.PI / 4), ProjectileID.Spark, Projectile.damage / 4, Projectile.knockBack / 4, player.whoAmI);
+                    P.GetGlobalProjectile<Canhitproj>().Canhit = false;
+                }
                 SoundEngine.PlaySound(SoundID.NPCHit4, target.Center);
             }
         }
