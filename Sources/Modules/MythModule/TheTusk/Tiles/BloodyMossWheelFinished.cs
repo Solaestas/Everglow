@@ -3,7 +3,7 @@ using Terraria.ObjectData;
 
 namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
 {
-    public class TuskPanF : ModTile
+    public class BloodyMossWheelFinished : ModTile
     {
         public override void PostSetDefaults()
         {

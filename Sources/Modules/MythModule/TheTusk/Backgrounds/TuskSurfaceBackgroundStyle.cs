@@ -1,4 +1,4 @@
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Background
+namespace Everglow.Sources.Modules.MythModule.TheTusk.Backgrounds
 {
     public class TuskSurfaceBackgroundStyle : ModSurfaceBackgroundStyle
     {
@@ -27,17 +27,18 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Background
 
         public override int ChooseFarTexture()
         {
-            return BackgroundTextureLoader.GetBackgroundSlot("Everglow/Sources/Modules/MythModule/TheTusk/Background/Empty");
+            return BackgroundTextureLoader.GetBackgroundSlot("Everglow/Sources/Modules/MythModule/TheTusk/Backgrounds/TuskFar");
         }
 
         public override int ChooseMiddleTexture()
         {
-            return BackgroundTextureLoader.GetBackgroundSlot("Everglow/Sources/Modules/MythModule/TheTusk/Background/Empty");
+            return BackgroundTextureLoader.GetBackgroundSlot("Everglow/Sources/Modules/MythModule/TheTusk/Backgrounds/Empty");
         }
 
         public override int ChooseCloseTexture(ref float scale, ref double parallax, ref float a, ref float b)
         {
-            return BackgroundTextureLoader.GetBackgroundSlot("Everglow/Sources/Modules/MythModule/TheTusk/Background/Empty");
+            b = 1000;
+            return BackgroundTextureLoader.GetBackgroundSlot("Everglow/Sources/Modules/MythModule/TheTusk/Backgrounds/TuskMiddle");
         }
     }
 }

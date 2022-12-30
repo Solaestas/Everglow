@@ -38,7 +38,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             NPC.scale = 0.9f;
             NPC.dontCountMe = true;
 
-            NPC.damage = 30;
+            NPC.damage = 26;
             NPC.width = 22;
             NPC.height = 22;
             NPC.defense = 36;
@@ -521,7 +521,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             NPC.scale = 0.9f;
             NPC.dontCountMe = true;
 
-            NPC.damage = 20;
+            NPC.damage = 26;
             NPC.width = 24;
             NPC.height = 24;
             NPC.defense = 30;
@@ -656,7 +656,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             NPC.scale = 0.9f;
             NPC.dontCountMe = true;
 
-            NPC.damage = 12;
+            NPC.damage = 26;
             NPC.width = 24;
             NPC.height = 24;
             NPC.defense = 24;
