@@ -176,7 +176,7 @@
 			FragransStaff : Посох бомб Драцены
 			BlackWoodenClub : Эбеновая дубинка
 			BloodClub : Багряновая дубинка
-			BloodLiquidClub : Ихоровая дубинка
+			IchorClub : Ихоровая дубинка
 			CactusClub : Кактусовая дубинка
 			CobaltClub : Кобальтовая дубинка
 			ColdWoodenClub : Boreal Wood Club
@@ -612,7 +612,7 @@
 			FragransStaff : Don't be lonely when moon and fragrans bright, breeze and moon still.
 			BlackWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
 			BloodClub : "{$Mods.Everglow.Common.ClubGT}"
-			BloodLiquidClub : "{$Mods.Everglow.Common.ClubGT}"
+			IchorClub : "{$Mods.Everglow.Common.ClubGT}"
 			CactusClub : "{$Mods.Everglow.Common.ClubGT}"
 			CobaltClub : "{$Mods.Everglow.Common.ClubGT}"
 			ColdWoodenClub : "{$Mods.Everglow.Common.ClubGT}"

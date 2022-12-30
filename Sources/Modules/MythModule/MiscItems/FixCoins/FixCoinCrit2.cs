@@ -26,7 +26,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.FixCoins
             Item.maxStack = 999;
             Item.consumable = true;
             Item.UseSound = SoundID.Item1;
-            Item.shoot = ModContent.ProjectileType<MiscProjectiles.Typeless.FixCoinCrit2>();
+            Item.shoot = ModContent.ProjectileType<MiscProjectiles.Typeless.FixCoins.FixCoinCrit2>();
             Item.shootSpeed = 16;
             Item.noUseGraphic = true;
         }

@@ -187,7 +187,7 @@ Mods:
 			FragransStaff : Fragrans Bomb Staff
 			BlackWoodenClub : Ebonwood Club
 			BloodClub : Crimson Club
-			BloodLiquidClub : Ichor Club
+			IchorClub : Ichor Club
 			CactusClub : Cactus Club
 			CobaltClub : Cobalt Club
 			ColdWoodenClub : Boreal Wood Club
@@ -632,7 +632,7 @@ Mods:
 			FragransStaff : Don't be lonely when moon and fragrans bright, breeze and moon still.
 			BlackWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
 			BloodClub : "{$Mods.Everglow.Common.ClubGT}"
-			BloodLiquidClub : "{$Mods.Everglow.Common.ClubGT}"
+			IchorClub : "{$Mods.Everglow.Common.ClubGT}"
 			CactusClub : "{$Mods.Everglow.Common.ClubGT}"
 			CobaltClub : "{$Mods.Everglow.Common.ClubGT}"
 			ColdWoodenClub : "{$Mods.Everglow.Common.ClubGT}"

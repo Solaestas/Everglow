@@ -187,7 +187,7 @@ Mods:
 			FragransStaff : 闪耀金花
 			BlackWoodenClub : 乌木棍棒
 			BloodClub : 猩红破风棍
-			BloodLiquidClub : 灵液棍
+			IchorClub : 灵液棍
 			CactusClub : 仙人掌棍
 			CobaltClub : 钴棍
 			ColdWoodenClub : 针叶木棍
@@ -632,7 +632,7 @@ Mods:
 			ToothStaff : 释放拔地而起的獠牙刺
 			BlackWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
 			BloodClub : "{$Mods.Everglow.Common.ClubGT}"
-			BloodLiquidClub : "{$Mods.Everglow.Common.ClubGT}"
+			IchorClub : "{$Mods.Everglow.Common.ClubGT}"
 			CactusClub : "{$Mods.Everglow.Common.ClubGT}"
 			CobaltClub : "{$Mods.Everglow.Common.ClubGT}"
 			ColdWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
