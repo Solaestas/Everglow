@@ -14,7 +14,7 @@
         {
             FoodBuffModPlayer FoodBuffModPlayer = player.GetModPlayer<FoodBuffModPlayer>();
             FoodBuffModPlayer.MangoBuff = true;
-            player.wellFed = true;
+            
         }
     }
 }

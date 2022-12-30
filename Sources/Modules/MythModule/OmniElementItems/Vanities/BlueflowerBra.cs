@@ -6,12 +6,6 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Vanities
     [AutoloadEquip(EquipType.Body)]
     public class BlueflowerBra : ModItem
     {
-        public override void SetStaticDefaults()
-        {
-            DisplayName.SetDefault("Blueflower Bra");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "蓝花内衣");
-        }
-
         public override void SetDefaults()
         {
             Item.width = 22;

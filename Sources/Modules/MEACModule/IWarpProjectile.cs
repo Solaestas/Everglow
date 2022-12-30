@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Everglow.Sources.Commons.Core.VFX;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace Everglow.Sources.Modules.MEACModule
 {
     public interface IWarpProjectile
     {
-        void DrawWarp();
+        void DrawWarp(VFXBatch spriteBatch);
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Everglow.Sources.Modules.YggdrasilModule.KelpCurtain.Items
+﻿using Terraria.ID;
+
+namespace Everglow.Sources.Modules.YggdrasilModule.KelpCurtain.Items
 {
     public class DragonScaleWood : ModItem
     {
@@ -11,10 +13,10 @@
         {
             Item.width = 24;
             Item.height = 22;
-            Item.rare = 0;
+            Item.rare = ItemRarityID.White;
             Item.scale = 1f;
             Item.createTile = ModContent.TileType<Tiles.DragonScaleWood>();
-            Item.useStyle = 1;
+            Item.useStyle = ItemUseStyleID.Swing;
             Item.useTurn = true;
             Item.useAnimation = 15;
             Item.useTime = 10;

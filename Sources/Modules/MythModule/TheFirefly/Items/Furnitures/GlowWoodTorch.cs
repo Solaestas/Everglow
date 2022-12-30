@@ -37,7 +37,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures
         {
             if (Main.rand.NextBool((player.itemAnimation > 0) ? 10 : 20))
             {
-                Dust d = Dust.NewDustDirect(new Vector2(player.itemLocation.X + 10f * player.direction - 6, player.itemLocation.Y - 14f * player.gravDir), 4, 4, ModContent.DustType<Dusts.BlueToPurpleSpark>(),0,0,0,default(Color),Main.rand.NextFloat(0.95f,1.65f));
+                Dust d = Dust.NewDustDirect(new Vector2(player.itemLocation.X + 10f * player.direction - 6, player.itemLocation.Y - 14f * player.gravDir), 4, 4, ModContent.DustType<Dusts.BlueToPurpleSpark>(),0,0,0,default,Main.rand.NextFloat(0.95f,1.65f));
                 d.velocity.Y = -2;
                 d.velocity.X *= 0.05f;
             }

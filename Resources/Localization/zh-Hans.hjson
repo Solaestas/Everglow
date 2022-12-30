@@ -2,16 +2,13 @@ Mods:
 {
 	Everglow:
 	{
-		NPCName:
-		{
-			Butterfly : 幻蝶
-		}
 		Common:
 		{
 			Hour : "小时"
 			Minute : "分钟"
 			Second : "秒"
 			Duration : "持续时间"
+			NotActivated : "未激活"
 			WarWhipGT :
 				'''
 				无召唤标记伤害
@@ -23,12 +20,17 @@ Mods:
 				你的召唤物将集中攻击被击中的敌人
 				'''
 			ClubGT : 旋转挥舞以攻击敌人
-			RapierGT : Right click and hold to charge an invincibility dash with high damage
+			RapierGT : 按住右键为一次高伤害, 附带无敌的冲刺充能
 			NoAmmoConsum : 不消耗弹药
 			Acytaea : 雅思塔亚
 			ExcluWeapon : 专属武器
 			MythWeapon : 神话武器
 			LegendWeapon : 传说武器
+			DebugItem : 
+				'''
+				! 调试物品 !
+				后果自负
+				'''
 
 			#世界系统WorldSystem
 			WorldSystem:
@@ -41,8 +43,43 @@ Mods:
 			#食物系统FoodSystem
 			FoodSystem:
 			{
+			    Satiety : "饱食度"
 				CannotEat : "你吃饱了"
 				CannotDrink : "你不想再喝了"
+				Khan : "可汗，再带我冲一次吧"
+			}
+
+			PylonSystem : 
+			{
+				ShabbyPylonRepairedTip : "晶塔已重新链接"
+			}
+
+			Message : 
+			{
+				HasAwoken : "已苏醒!"
+			}
+		}
+		NPCName:
+		{
+			CorruptMoth : "腐檀巨蛾"
+			EvilPack : "魔茧"
+			Butterfly : "幻影蛾"
+			CentipedeHead : "荧光蜈蚣"
+			CentipedeBody : "荧光蜈蚣"
+			CentipedeTail : "荧光蜈蚣"
+			Dendroid_normal : "枯木人"
+			GlowingFirefly : "萤光虫"
+			LittleFireBulb : "萤火泡"
+		}
+		Bestiary: 
+		{
+			CorruptMoth: 
+			{
+				Flavor: "有些时候,腐化蠕虫也能破茧..."
+			}
+			Centipede: 
+			{
+				Flavor : "看起来就是条蜈蚣, 有着超乎意料得硬的头"
 			}
 		}
 		ItemName:
@@ -58,7 +95,6 @@ Mods:
 			FireFeatherMagic : 烈焰羽箭
 			FreezeFeatherMagic : 寒冰羽箭
 			GoldRoundYoyo : "金边球"
-			Hepuyuan : "和璞鸢"
 			SilveralGun : "银猎之狐Fx01"
 			SilveralRifle : "银影幽豹Ct01"
 			Sunflower : "向日飞盘"
@@ -69,7 +105,6 @@ Mods:
 			BloodLightCyanFlame : "血光青炎"
 			BlueRain : "雨落蓝池"
 			ChaosCurrent : "混沌爆流"
-			DarknessFan : "幻蝶萤火扇"
 			FrozenStormPine : "冰凌雪松"
 			GelPowerGun : "啫喱充能器"
 			LaserWhip : "激光鞭"
@@ -142,7 +177,6 @@ Mods:
 			TuskRelic : "鲜血獠牙圣物"
 			CorruptMothTreasureBag : "宝藏袋 (腐檀巨蛾)"
 			CursedJawbone : "诅咒颌骨"
-			EvilCocoon : "魔茧"
 			TuskTreasureBag : "宝藏袋 (鲜血獠牙)"
 			FragransBlade : 金秋爽夜
 			FragransBoomerang : 旋云舞月
@@ -182,11 +216,6 @@ Mods:
 			TitaniumClub : 钛金棍
 			TungstenClub : 钨棍
 			WoodenClub : 木棍
-			DustOfCorrupt : 腐化粉尘
-			EvilChrysalis : 邪茧法杖
-			PhosphorescenceGun : 光鳞霰弹枪
-			ScaleWingBlade : 鳞翅之刃
-			ShadowWingBow : 影翼巨弓
 			AmbiguousNight : 幻夜弹弓
 			BlackWoodSlingshot : 乌木弹弓
 			BlueGemSlingshot : 蓝宝石弹弓
@@ -237,9 +266,6 @@ Mods:
 			LanternCrystal : 皇城晶塔
 			LanternPost1 : 灯笼柱
 			LanternPost2 : 灯笼柱
-			DiscordBallF1 : 混沌晶球·天穹古道
-			LiftLamp : 电梯指示灯
-			TestItem : 木制升降梯
 			EkandaBrick : 埃坎达砖
 			Guding : 埃坎达合金
 			NoFlawsDream : 无瑕梦境
@@ -262,19 +288,121 @@ Mods:
 			CrystalSkull : "水晶头骨"
 
 			#流萤系列物品
-			GlowBeadGun : "荧光轨道炮"
+			ShabbyPylonItem : "破损晶塔"
 
-			#Glow Wood Furniture
-			
-			#Music Boxes
-			GlowWoodMusicBox : Glow Wood Music Box (The Firefly)
+			GlowBeadGun : "荧光轨道炮"
+			DustOfCorrupt : 腐化粉尘
+			EvilChrysalis : 邪茧法杖
+			PhosphorescenceGun : 光鳞霰弹枪
+			ScaleWingBlade : 鳞翅之刃
+			ShadowWingBow : 影翼巨弓
+			MothYoyo : "荧光球"
+			DreamWeaver : "织梦丝雨"
+			NavyThunder : "潜火影雷"
+			GlowWoodSword : "萤火木剑"
+			DarknessFan : "幻蝶萤火扇"
+
+			BlueflowerBra : "蓝花内衣"
+			DarkCocoon : "黑茧"
+			DarkCocoonWall : "黑茧墙"
+			EvilCocoon : "魔茧"
+			FireflyCapital : "'流萤印象'"
+			FireflyMoss : "流萤苔"
+			FireflyPigment : "流萤色素"
+			GlowCrystal : "荧光水晶"
+			GlowingFirefly : "荧光虫"
+			GlowingPedal : "荧光花瓣"
+			GlowMetal : "荧光金属块"
+			GlowStone : "荧光石块"
+			GlowWood : "萤火木"
+			MothScaleDust : "蛾尘"
+
+			# Glow Wood Furniture
+			GlowWoodBed : "萤火木床"
+			GlowWoodBookcase : "萤火木书架"
+			GlowWoodBookcaseType2 : "萤火木书架2"
+			GlowWoodCampfire : "萤火木营火"
+			GlowWoodCandelabra : "萤火木烛台"
+			GlowWoodCandle : "萤火木蜡烛"
+			GlowWoodChair : "萤火木椅"
+			GlowWoodChandelier : "萤火木吊灯"
+			GlowWoodChandelierType2 : "萤火木吊灯2"
+			GlowWoodChandelierType3 : "萤火木吊灯3"
+			GlowWoodChandelierType4 : "萤火木吊灯4"
+			GlowWoodChandelierType5 : "流萤滴"
+			GlowWoodChest : "萤火木箱"
+			GlowWoodClock : "萤火木钟"
+			GlowWoodDoor : "萤火木门"
+			GlowWoodDoorType2 : "萤火木门2"
+			GlowWoodDresser : "萤火木梳妆台"
+			GlowWoodDresserType2 : "萤火木梳妆台2"
+			GlowWoodLamp : "萤火木台灯"
+			GlowWoodLantern : "萤火木灯笼"
+			GlowWoodLanternType2 : "萤火木灯笼2"
+			GlowWoodMusicBox : "萤火木八音盒 (流萤)"
+			GlowWoodPiano : "萤火木钢琴"
+			GlowWoodPlatform : "萤火木平台"
+			GlowWoodSink : "萤火木水槽"
+			GlowWoodSinkType2 : "萤火木水槽2"
+			GlowWoodSofa : "萤火木沙发"
+			GlowWoodSofaType2 : "萤火木沙发2"
+			GlowWoodTable : "萤火木桌"
+			GlowWoodTorch : "萤火木火把"
+			GlowWoodWorkBench : "萤火木工作台"
 
 
 			#食物系统物品
 			BloodGlucoseMonitor : "血糖检测仪"
 			OsmoticPressureMonitor : "渗透压检测仪"
 
+			FryingPanItem : "炒锅"
+
+			# Modded food items
+				# Modded drink items
+				B_52 : "B_52"
+				BlueHawaii : "蓝色夏威夷"
+				DreamYearning : "魂牵梦萦"
+				DryMartini : "干马天尼"
+				GreenStorm : "绿色风暴"
+				KiwiJuice : "猕猴桃汁"
+				LonelyJellyfish : "孤独的水母"
+				OrangeJuice : "橙汁"
+				PiercoldWind : "凛冽寒风"
+				PurpleHooter : "紫色汽笛"
+				QuinceMarry : "榅桲玛丽"
+				RedWine : "红酒"
+				Sunrise : "日出"
+				Tricolour : "三色"
+				WaterMelonJuice : "西瓜汁"
+				# Modded food items
+				ArcticshellfishWarship : "北极贝军舰"
+				BakedMussel : "烤贻贝"
+				BakedOyster : "烤牡蛎"
+				CantaloupeJelly : "哈密瓜冻"
+				CaramelPudding : "焦糖布丁"
+				CrabseedWarship : "蟹籽军舰"
+				Durian : "榴莲"
+				EggTart : "蛋挞"
+				KiwiFruit : "猕猴桃"
+				KiwiIceCream : "猕猴桃冰激凌"
+				Mangosteen : "山竹"
+				OrangeIcecream : "橘子冰激凌"
+				SalmonInPepper : "胡椒三文鱼"
+				SalmonWarship : "三文鱼军舰"
+				SeafoodPizza : "海鲜披萨"
+				StinkyTofu : "臭豆腐"
+				Strawberry : "草莓"
+				StrawberryIcecream : "草莓冰激凌"
+				SweetshrimpSushi : "甜虾寿司"
+				TamakoSushi : "玉子烧寿司"
+				WakameWarship : "裙带菜军舰"
+				Watermelon : "西瓜"
+				WatermelonPlate : "西瓜拼盘"
+
 			#天穹树系列物品
+			YggdrasilCapital : "'天穹印象'"
+			LiftLamp : 电梯指示灯
+			TestItem : 木制升降梯
 
 				#天穹树小镇
 				ChinesePartitionLamp : "中式屏风灯"
@@ -289,9 +417,21 @@ Mods:
 				StoneDragonScaleWood : "石化龙鳞木"
 				StreetLantern : "灯笼街灯"
 				YellowDynastyShingles : "黄王朝瓦"
+				CyanVinePickaxe : "青缎镐"
+				DiscordBallF1 : 混沌晶球·天穹古道
 
 			#Plant Module Items
 			CactusBall : "仙人球棍"
+
+			# Shields
+			WoodShield : "木制盾牌"
+
+			# Genshin Impact items
+			Hepuyuan : "和璞鸢"
+			VortexVanquisherItem : "贯虹之槊"
+			
+			# Dev items
+			LilyHarp : "铃兰竖琴"
 		}
 		ItemTooltip:
 		{
@@ -307,7 +447,6 @@ Mods:
 			FireFeatherMagic : 射出爆燃羽毛
 			FreezeFeatherMagic : 射出冰封羽毛
 			GoldRoundYoyo : "留下跟踪的金圈轨迹"
-			Hepuyuan : "{$Mods.Everglow.Common.ExcluWeapon}\n左键突刺,右键打桩\n你不应该得到它\n致敬<原神>"
 			SilveralGun : "命中后移速和伤害提升5%,持续5秒"
 			SilveralRifle : "命中后移速和伤害提升5%,持续5秒"
 			Sunflower : "葵花打造的武器,拥有象征希望的色彩"
@@ -318,7 +457,6 @@ Mods:
 			BloodLightCyanFlame : "{$Mods.Everglow.Common.LegendWeapon}\n交替掷出激光旋刃和咒火旋刃\n'它们本应是双子魔眼的武器,幸好你救出了机械师'"
 			BlueRain : "{$Mods.Everglow.Common.LegendWeapon}\n长按右键蓄力重击\n雨滴为保持纯净抗拒与海水融合,最终在深海的乱流中汇聚成这个形状"
 			ChaosCurrent : "{$Mods.Everglow.Common.LegendWeapon}\n发射一团扰乱神经的乱流\n无视无敌帧\n'造成大量神经损伤！'"
-			DarknessFan : "{$Mods.Everglow.Common.LegendWeapon}\n无召唤标记伤害\n你的召唤物将集中打击敌人\n无召唤标记伤害\n你的召唤物将集中打击被扇子击中的敌人\n以扇子和幻蝶打击敌人，右键扔出扇子\n扇子本体施加幻蝶之印(可叠加), 每层使幻蝶造成的伤害提高10%\n层数上限随共鸣层数增长\n'蕴含着被巨蛾吞噬的灵魂'"
 			GelPowerGun : "{$Mods.Everglow.Common.LegendWeapon}\n以凝胶作为弹药\n射出弹性凝胶团\n前3次弹射释放小团弹力凝胶\n'弹弹弹，弹走毁灭者'"
 			LaserWhip : "{$Mods.Everglow.Common.LegendWeapon}\n{$Mods.Everglow.Common.WarWhipGT}\n命中敌人有概率生成临时召唤物激光虫并施加激光标记\n有激光标记的敌人受到的伤害增加50%，受到的暴击伤害增加25%\n'传说中有的蠕虫可以使它们的激光连成一线'"
 			MachineFit : "{$Mods.Everglow.Common.LegendWeapon}\n无情的灭杀之拳\n命中敌人后分裂成5发追踪导弹\n'利用好它的手，而不是头"
@@ -336,7 +474,7 @@ Mods:
 			CyanPedal : "闪避能力增加4\n'少的那一瓣化作你的勇气'"
 			DarkHat : "暴击率增加4%,暴击伤害增加12%\n'除用于战斗和装饰不建议使用'"
 			DukeTooth : "增加12盔甲穿透力\n'还好猪鲨不是濒危物种...只要有松露虫'"
-		//	FireflyBorageBadge : "Increases magic damage by 6%\nIncreases movement speed by 15%\n'A badge made to remind you of how beautiful that place is'"
+			FireflyBorageBadge : "增加6%魔法伤害\n增加15%移动速度\n'一枚用于纪念那美丽流萤的徽章'"
 			GoldLiquidPupil : "你的攻击无视敌人35%的防御\n受伤之后生成灵液之环,持续12秒,不可叠加\n灵液之环生成时造成高额伤害\n持续伤害环上的敌人\n对环内的敌人施加灵液"
 			GoldRound : "7防御\n伤害增加7%\n'传统的泰拉人通常配戴它来保持健康'"
 			GreenGel : "生命上限增加30,生命回复增加4\n'研究显示绿史莱姆通常比蓝史莱姆更具生命力'"
@@ -391,22 +529,12 @@ Mods:
 			FragransMagic : 花好月圆时,愿清风与你相伴
 			FragransSpear : 花好月圆时,愿清风与你相伴
 			FragransStaff : 花好月圆时,愿清风与你相伴
-			DustOfCorrupt : 散播鳞粉
-			EvilChrysalis : 
-				'''
-				召唤小黑蛾为你而战
-				召唤过程会对附近敌怪造成400%攻击倍率的伤害
-				'''
-			PhosphorescenceGun : 喷射出散弹和36%伤害的蓝鳞光弹
-			ScaleWingBlade : ""
-			ShadowWingBow : 
-				'''
-				长按可以蓄力,使伤害提升最大倍率200%并释放蓝蝶箭
-				满蓄时间1.50秒
-				'''
 			AmbiguousNight : 
 				'''
 				射出幻影石子
+				命中时对目标施加幻夜印记: 
+				靠近带有相同印记的敌人时会产生梦魇织丝
+				对双方造成伤害并将幻夜印记的持续时间降低2s
 				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			BlackWoodSlingshot : 
@@ -477,7 +605,9 @@ Mods:
 				'''
 			StarSlingshot : 
 				'''
-				射出坠星
+				射出暮色孤星, 造成范围伤害
+				夜晚伤害提升25%, 否则降低25%
+				在地表之上暴击率提升15%, 否则降低15%
 				{$Mods.Everglow.Common.NoAmmoConsum}
 				'''
 			WhiteGemSlingshot : 
@@ -497,8 +627,8 @@ Mods:
 				'''
 			BloodyBoneYoyo : 每击中5次敌人会释放1次獠牙钉
 			SpineGun : 射出一发勘测到敌人就会分裂的子母弹
-			ToothKnfe : ""
-			ToothMagicBall : ""
+			# ToothKnfe : ""
+			# ToothMagicBall : ""
 			ToothStaff : 释放拔地而起的獠牙刺
 			BlackWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
 			BloodClub : "{$Mods.Everglow.Common.ClubGT}"
@@ -535,15 +665,13 @@ Mods:
 			TitaniumClub : "{$Mods.Everglow.Common.ClubGT}"
 			TungstenClub : "{$Mods.Everglow.Common.ClubGT}"
 			WoodenClub : "{$Mods.Everglow.Common.ClubGT}"
-			LiftLamp : ""
-			TestItem : ""
-			EkandaBrick : ""
-			Guding : ""
-			NoFlawsDream : ""
+			# EkandaBrick : ""
+			# Guding : ""
+			# NoFlawsDream : ""
 			Origin : 传说中珍贵的起源之石
-			DurableAxe : ""
-			ElectricHeatingPlate : ""
-			BrokenPick : ""
+			# DurableAxe : ""
+			# ElectricHeatingPlate : ""
+			# BrokenPick : ""
 			BloodGoldBayonet : "{$Mods.Everglow.Common.RapierGT}"
 			DreamStar : "{$Mods.Everglow.Common.RapierGT}"
 			EternalNight : "{$Mods.Everglow.Common.RapierGT}"
@@ -565,35 +693,313 @@ Mods:
 				'''
 
 			#流萤系列物品
+			FireflyCapital : 
+				'''
+				带你到流萤
+				{$Mods.Everglow.Common.DebugItem}
+				'''
+
 			GlowBeadGun : 
 				'''
 				长按攻击键以充能
 				射出一系列易爆的光球
 				'''
+			DustOfCorrupt : 散播鳞粉
+			EvilChrysalis : 
+				'''
+				召唤小黑蛾为你而战
+				召唤过程会对附近敌怪造成400%攻击倍率的伤害
+				'''
+			PhosphorescenceGun : 喷射出散弹和36%伤害的蓝鳞光弹
+			ScaleWingBlade : 
+				'''
+				命中敌人或在敌人附近挥舞将释放追踪敌人的幻影蛾
+				右键蓄力以进行增幅攻击
+				'''
+			ShadowWingBow : 
+				'''
+				长按可以蓄力,使伤害提升最大倍率200%并释放蓝蝶箭
+				满蓄时间1.50秒
+				'''
+			MothYoyo : 幻影蛾将围绕悠悠球, 允许你造成更多伤害
+			NavyThunder : "部署一枚定时荧光炸弹"
+			DarknessFan : "{$Mods.Everglow.Common.LegendWeapon}\n无召唤标记伤害\n你的召唤物将集中打击敌人\n无召唤标记伤害\n你的召唤物将集中打击被扇子击中的敌人\n以扇子和幻蝶打击敌人，右键扔出扇子\n扇子本体施加幻蝶之印(可叠加), 每层使幻蝶造成的伤害提高10%\n层数上限随共鸣层数增长\n'蕴含着被巨蛾吞噬的灵魂'"
+
+			# 天穹树系列物品
+			YggdrasilCapital : 
+				'''
+				带你到天穹树
+				{$Mods.Everglow.Common.DebugItem}
+				'''
+			# LiftLamp
+			TestItem : 
+				'''
+				{$Mods.Everglow.Common.DebugItem}
+				'''
+				# 天穹树小镇
+				CyanVinePickaxe : 
+					'''
+					允许你破坏石化龙鳞木
+					加速破坏青缎矿
+					'''
+			# Extra Debug Items
+			HardmodeItem : 
+			'''
+			{$Mods.Everglow.Common.DebugItem}
+			'''
+			LifeMaxItem : 
+			'''
+			{$Mods.Everglow.Common.DebugItem}
+			'''
 
 			#Music Boxes
-			GlowWoodMusicBox : "Plays 'Setnour6 - Within the Giant Cocoon (身陷巨茧)'"
+			GlowWoodMusicBox : "播放 'Setnour6 - Within the Giant Cocoon (身陷巨茧)'"
 			
 			#食物系统物品
 			BloodGlucoseMonitor : "显示当前饱食度"
 			OsmoticPressureMonitor : "显示渴觉状态"
 
+			FryingPanItem : "左键作为回旋镖投掷，长按右键作为近战武器"
+
+			# Modded items
+				# Modded drink items
+				BlueHawaii : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					短时间内射弹速度获得提升
+					“海风吹拂”
+					'''
+				B_52 : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					短时间内大幅提升发射器速度、暴击、伤害
+					“轰炸机”
+					'''
+				DreamYearning : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					短时间内射弹速度获得提升
+					“思君忆君，魂牵梦萦，翠销香暖云屏，更哪堪酒醒。”
+					'''
+				DryMartini : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					短时间大幅提升攻击
+					“经典之作”
+					'''
+				GreenStorm : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					短时间交替射出叶绿水晶和孢子云
+					“别以为草便宜,没上规模前,它比苹果核桃什么的都贵。”
+					'''
+				KiwiJuice : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					短时间内大幅增大武器大小
+					“浓缩的奇异之力”
+					'''
+				LonelyJellyfish : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					短时间内不断于鼠标处生成水母电圈，并且获得隐身能力
+					“观赏完就一饮而尽吧”
+					'''
+				OrangeJuice : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					短时间内获得超长无敌帧
+					“嗯，有点像LCL”
+					'''
+				PiercoldWind : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					对灯笼月敌怪特攻
+					“长啸出原野，凛然寒风生。”
+					'''
+				PurpleHooter : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					对血月敌怪特攻
+					“高贵与深沉”
+					'''
+				QuinceMarry : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					对南瓜月敌怪特攻
+					“炙热与温柔”
+					'''
+				RedWine : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					对霜月敌怪特攻
+					“上流与优雅”
+					'''
+				Sunrise : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					对日食敌怪特攻
+					“阳光与明媚”
+					'''
+				Tricolour : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					对boss仆从特攻
+					“复杂与专一”
+					'''
+				WaterMelonJuice : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					短时间大幅增加击退与暴击
+					“浓缩的打击力度”
+					'''
+				# Modded food items
+				ArcticshellfishWarship : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					提升防御
+					“美味的北极贝军舰”
+					'''
+				BakedMussel : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					增加6%爆伤、4防御
+					“似乎没那么生猛了”
+					'''
+				BakedOyster : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					增加4点盔甲穿透、4防御
+					“已灭虫”
+					'''
+				CantaloupeJelly : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					射弹可以多穿透一次
+					“duangduangduang”
+					'''
+				CaramelPudding : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					射弹可以多反弹一次
+					“duangduangduang”
+					'''
+				CrabseedWarship : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					提升暴击率
+					“美味的蟹籽军舰”
+					'''
+				Durian : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					加快消化食物的速度
+					“促进消化”
+					'''
+				EggTart : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					增加5%爆伤
+					“这酥皮不错”
+					'''
+				KiwiFruit : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					增大20%武器大小
+					“又称奇异果”
+					'''
+				KiwiIceCream : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					增大10%武器大小，加快武器攻速
+					“奇异的力量”
+					'''
+				Mangosteen : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					提升回旋镖，悠悠球、链枷类武器距离
+					“补养之效”
+					'''
+				OrangeIcecream : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					延长无敌帧时间
+					“真实存于心中”
+					'''
+				SalmonInPepper : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					提升速度,尤其是在水中
+					“冰海之皇”
+					'''
+				SalmonWarship : 
+					'''
+					提升速度
+					“美味的三文鱼军舰”
+					'''
+				SeafoodPizza : 
+					'''
+					提升大部分属性
+					“一个人吃完这个可不容易”
+					'''
+				StinkyTofu : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					使靠近的敌怪混乱
+					“又香又臭”
+					'''
+				Strawberry : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					敌怪越近，造成的伤害越高
+					“受人欢迎的水果”
+					'''
+				StrawberryIcecream : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					敌怪越近，造成的伤害越高
+					“冰冷如你，依旧令人爱不忍释”
+					'''
+				SweetshrimpSushi : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					提升攻击
+					“美味的甜虾寿司”
+					'''
+				TamakoSushi : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					提升生命回复
+					“美味的玉子寿司”
+					'''
+				WakameWarship : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					提升魔力回复
+					“美味的裙带菜寿司”
+					'''
+				Watermelon : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					增强8%击退能力
+					“比起西瓜本身，我更好奇你怎么把它一整个吃下去”
+					'''
+				WatermelonPlate : 
+					'''
+					{$CommonItemTooltip.MediumStats}
+					提升6%暴击率和爆伤
+					“朴实无华的摆盘”
+					'''
+
 			#Plant Module Items
 			CactusBall : "旋转并掷出你的仙人掌球！\n击碎敌人护甲，并让它们流血"
-		}
-		ExtraItemTooltip :
-		{
-			UnfinishedItem : "[c/BA0022:This item is unfinished]"
-			MothEyeText0 : "[c/7FC1FF:While in the Firefly biome:]"
-			MothEyeText1 : "[c/7FC1FF:- Mana cost is reduced by 5%]"
-			MothEyeText2 : "[c/7FC1FF:- The effectiveness of mana sickness is reduced by 4]"
-			MothEyeText3 : "[c/7FC1FF:- All Firefly weapons deal 5% more damage]"
-			MothEyeText4 : "[c/7FC1FF:- Some Firefly-related items gain bonuses]"
-			FFBBadge0 : "[c/7FC1FF:'受到那只巨蛾怒气的影响,你的攻击变得更加狂野']"
-			FFBBadge1 : "[c/7FC1FF:Defense is lowered based on how much defense you currently have, up to -12]"
-			FFBBadge2 : "[c/7FC1FF:伤害增加18%]"
-			FFBBadge3 : "[c/7FC1FF:Increases melee speed by 10%]"
-			FFBBadge4 : "[c/7FC1FF:Base critical strike chance for melee weapons and whips is reduced to 0]"
+			
+			# Genshin Impact items
+			Hepuyuan : "{$Mods.Everglow.Common.ExcluWeapon}\n左键突刺,右键打桩\n你不应该得到它\n致敬<原神>"
+			VortexVanquisherItem : "{$Mods.Everglow.Common.ExcluWeapon}\n[c/B4B16E:'此为秩序']\n连续左键以使用不同攻击\n最后一种轻微地将你推向光标\n左键并长按以冲刺并召唤一排坠落的槊\n右键以召唤石柱并给予你减少伤害的护盾"
+
+			# Dev items
+			LilyHarp : "依次奏出动人的音符\n按住左键时, 音符会跟随你的光标\n[c/856Eb5:开发者物品: 万象元素]"
 		}
 		BuffName : 
 		{
@@ -695,6 +1101,48 @@ Mods:
 			SugarCookieBuff : "蜜糖饼干"
 			TeacupBuff : "茶"
 			TropicalSmoothieBuff : "热带奶昔"
+
+			# Modded buffs
+				# Modded drink buffs
+				B_52Buff : "B_52"
+				BlueHawaiiBuff : "蓝色夏威夷"
+				DreamYearningBuff : "魂牵梦萦"
+				DryMartiniBuff : "干马天尼"
+				GreenStormBuff : "绿色风暴"
+				KiwiJuiceBuff : "猕猴桃汁"
+				LonelyJellyfishBuff : "孤独的水母"
+				OrangeJuiceBuff : "橙汁"
+				PiercoldWindBuff : "凛冽寒风"
+				PurpleHooterBuff : "紫色汽笛"
+				QuinceMarryBuff : "榅桲玛丽"
+				RedWineBuff : "红酒"
+				SunriseBuff : "日出"
+				TricolourBuff : "三色"
+				WaterMelonJuiceBuff : "西瓜汁"
+				# Modded food buffs
+				ArcticshellfishWarshipBuff : "北极贝军舰"
+				BakedMusselBuff : "烤贻贝"
+				BakedOysterBuff : "烤牡蛎"
+				CantaloupeJellyBuff : "哈密瓜冻"
+				CaramelPuddingBuff : "焦糖布丁"
+				CrabseedWarshipBuff : "蟹籽军舰"
+				DurianBuff : "榴莲"
+				EggTartBuff : "蛋挞"
+				KiwiFruitBuff : "猕猴桃"
+				KiwiIceCreamBuff : "猕猴桃冰激凌"
+				MangosteenBuff : "山竹"
+				OrangeIcecreamBuff : "橘子冰激凌"
+				SalmonInPepperBuff : "胡椒三文鱼"
+				SalmonWarshipBuff : "三文鱼军舰"
+				SeafoodPizzaBuff : "海鲜披萨"
+				StinkyTofuBuff : "臭豆腐"
+				StrawberryBuff : "草莓"
+				StrawberryIcecreamBuff : "草莓冰激凌"
+				SweetshrimpSushiBuff : "甜虾寿司"
+				TamakoSushiBuff : "玉子烧寿司"
+				WakameWarshipBuff : "裙带菜军舰"
+				WatermelonBuff : "西瓜"
+				WatermelonPlateBuff : "西瓜拼盘"
 		}
 		BuffDescription : 
 		{
@@ -720,10 +1168,10 @@ Mods:
 			FoodBuff : "你刚吃完东西"
 
 			#原版食物的新buff
-			AleBuff : "短时间内鞭子的范围和速度提升至2.5倍\n“耍酒疯”"
-			AppleBuff : "增加8%减伤\n“一天一苹果，医生远离我”"
-			AppleJuiceBuff : " 短时间内增加80%减伤\n“一天一苹果，医生远离我”"
-			ApplePieBuff : "加8%减伤,1生命回复\n“一天一苹果，医生远离我”"
+			AleBuff : "短时间内鞭子的范围和速度提升至1.5倍\n“耍酒疯”"
+			AppleBuff : "增加5%减伤\n“一天一苹果，医生远离我”"
+			AppleJuiceBuff : " 短时间内增加60%减伤\n“一天一苹果，医生远离我”"
+			ApplePieBuff : "增加5%减伤, 1生命回复\n“一天一苹果，医生远离我”"
 			ApricotBuff : "增加加4魔力再生\n“止渴润肺”"
 			BaconBuff : "加2生命回复，所受冷系伤害降低\n“开胃祛寒”"
 			BananaBuff : "20%不消耗弹药，加5%远程伤害\n“低血压”"
@@ -732,73 +1180,267 @@ Mods:
 			BBQRibsBuff : "加50血量上限\n“滋阴补血”"
 			BlackCurrantBuff : "获得夜视、危险感知能力\n“改善視力”"
 			BloodOrangeBuff : "增加加25血量上限\n“这里不是崽饿”"
-			BloodyMoscatoBuff : "短时间内每次攻击回5点生命\n血色"
+			BloodyMoscatoBuff : "短时间内每次攻击回2点生命\n血色"
 			BowlofSoupBuff : "增加20魔力上限,5%魔法伤害\n“补脑”"
 			BunnyStewBuff : "自动跳跃，增加跳跃能力\n“没有任何兔子在制作过程中受到伤害 ”"
 			BurgerBuff : "减少移速，增加防御\n“热量炸弹”"
-			CherryBuff : "增加移速与跳跃高度\n“你所热爱的，就是你的生活”"
-			ChickenNuggetBuff : "增加1生命回复、8%攻速\n“数一数二的鸡块！”"
+			CherryBuff : "死亡后产生爆炸并对波及到的敌人施加同样的buff\n“你所热爱的，就是你的生活”"
+			ChickenNuggetBuff : "增加1生命回复、4%攻速\n“数一数二的鸡块！”"
 			ChocolateChipCookieBuff : "增加2点生命回复和魔力回复\n“补充能量”"
 			ChristmasPuddingBuff : "仇恨值减少800\n“美容养颜”"
-			CoconutBuff : "增加4防御，5%减伤\n“我从小啃到大”"
+			CoconutBuff : "增加4防御，3%减伤\n“我从小啃到大”"
 			CoffeeCupBuff : "短时间内大幅增加铺墙铺砖速度，高亮标记敌人、陷阱和宝藏，你会散发光芒\n“社畜的宝物”"
-			CookedFishBuff : "加40魔力上限,8%魔法暴击率\n“益气健脾”"
+			CookedFishBuff : "加40魔力上限,4%魔法暴击率\n“益气健脾”"
 			CookedMarshmallowBuff : "减75%最大掉落速度,但无法操控下落速度\n“轻飘飘的”"
 			CookedShrimpBuff : "加10防御,4穿甲\n“补钙”"
 			CreamSodaBuff : "短时间内大幅增加近战能力，但极其吸引仇恨\n“喷射！”"
 			DragonfruitBuff : "攻击造成着火以及涂油\n“红红火火恍恍惚惚”"
 			ElderberryBuff : "你可以短距离冲刺\n“抗氧化”"
-			EscargotBuff : "大大减速，加50%减伤\n“神龟药水？”"
-			FriedEggBuff : "加8%伤害\n“蛋白质”"
+			EscargotBuff : "大大减速，增加25%减伤\n“神龟药水？”"
+			FriedEggBuff : "增加投掷类武器的攻击范围\n“蛋白质”"
 			FriesBuff : "加4防御，8%暴击\n“高油高盐”"
 			FroggleBunwichBuff : "自动跳跃，增加伤害和跳跃能力\n“你能真正尝到沼泽的味道。”"
 			FruitJuiceBuff : "短时间内幅大大提升大部分属性\n“维生素！”"
 			FruitSaladBuff : "提升大部分属性\n“长久的维生素！”"
-			GingerbreadCookieBuff : "加1生命回复,保暖\n“驱寒排毒”"
+			GingerbreadCookieBuff : " 增加2生命回复, 保暖\n“驱寒排毒”"
 			GoldenDelightBuff : "攻击造迈达斯，提升大部分属性\n“金灿灿!”"
-			GrapefruitBuff : "加50%召唤物击退\n “拒绝肾透支”"
+			GrapefruitBuff : "增加50%召唤物击退\n “拒绝肾透支”"
 			GrapeJuiceBuff : "短时间极其幸运\n“浓缩的幸福”"
-			GrapesBuff : "加1召唤栏，幸运值加10%，减8防御\n“多子多福 ”"
+			GrapesBuff : "增加1召唤栏和10%幸运值，但降低12防御\n“多子多福 ”"
 			GrilledSquirrelBuff : "增加跳跃能力\n“欢跃”"
 			GrubSoupBuff : "加25渔力，每秒减2生命\n“吃啥补啥，就是有点恶心”"
-			HotdogBuff : "减少移速，增加近战伤害\n“热量炸弹”"
+			HotdogBuff : "减少移速，增加近战伤害\n“吔~~”"
 			IceCreamBuff : "免疫着火和火块\n“吃雪（bushi”"
 			LemonadeBuff : "短时间内远程击退加倍,仇恨值减2400\n“消炎美容”"
-			LemonBuff : "加5%远程暴击,仇恨值减300\n“消炎美容”"
-			LobsterTailBuff : "加6防御,25%挖矿速度\n“壮阳”"
+			LemonBuff : "增加4%远程暴击, 降低300仇恨值\n“消炎美容”"
+			LobsterTailBuff : "增加6防御和33%挖矿速度\n“壮阳”"
 			MangoBuff : "减缓因食物中毒而产生的持续减血效果\n“清胃解毒”"
 			MarshmallowBuff : "可以二段跳\n“像云一样”"
 			MilkCartonBuff : "短时间内免疫几乎所有debuff\n“一奶解百毒 ”"
 			MilkshakeBuff : "短时间内大幅加移速\n“节食减肥 ”"
-			MonsterLasagnaBuff : "增加25%暴击率，但每秒减4生命\n“弄熟的恶魔还是恶魔，在千层饼中也不会改变。”"
-			NachosBuff : "攻击造成涂油以及所有火焰减益\n“爆米花”"
+			MonsterLasagnaBuff : "增加25%暴击率，但每秒减3生命\n“弄熟的恶魔还是恶魔，在千层饼中也不会改变。”"
+			NachosBuff : "增强发射器类武器\n“爆米花”"
 			PadThaiBuff : "增加50%召唤物击退\n“异域风情”"
 			PeachBuff : "增加心的拾取范围，1生命回复\n“在想peach”"
 			PeachSangriaBuff : "短时间内大幅回复生命，增加心的拾取范围\n“我也是桃饱用户”"
-			PhoBuff : "增加10%召唤物伤害\n“异域风情 ”"
-			PinaColadaBuff : "短时间内十倍反伤（上限1000）,防御增加20\n“从不添加香精当生榨 。"
+			PhoBuff : "增加8%召唤物伤害\n“异域风情 ”"
+			PinaColadaBuff : "短时间内近战攻击玩家者将承受1000%反伤（上限1000）\n“从不添加香精当生榨 。"
 			PineappleBuff : "增加6防御，50%反伤\n“菠萝碱”"
-			PizzaBuff : "增加10穿甲\n“会让意大利人破防的菠萝披萨”"
-			PlumBuff : "加600仇恨值，8%攻速\n“至于我的建议，还是再等等吧!”"
-			PotatoChipsBuff : "加4防御，8%伤害\n“高油高盐”"
-			PrismaticPunchBuff : "短时间内增加10召唤栏，增加50%召唤伤害，击退\n“高雅兴致”"
-			PumpkinPieBuff : "最大生命值加50\n“丰收的喜悦”"
-			RambutanBuff : "免疫中毒和毒液以及十字章一样的免疫效果\n“提高免疫”"
-			RoastedBirdBuff : "增加飞行能力\n“我是一只小小小鸟”"
-			RoastedDuckBuff : "可以在水上行走，增加飞行能力\n“这是烤鸭”"
-			SakeBuff : "短时间内减18防御，大幅增加近战能力\n“纯度，太高了。”"
+			PizzaBuff : "增加10点盔甲穿透\n“会让意大利人破防的菠萝披萨”"
+			PlumBuff : "增加600仇恨值和8%攻速\n“至于我的建议，还是再等等吧!”"
+			PotatoChipsBuff : "增加4防御和8%伤害\n“高油高盐”"
+			PrismaticPunchBuff : "短时间内增加5召唤栏，5哨兵栏，增加50%召唤伤害，击退\n“高雅兴致”"
+			PumpkinPieBuff : "增加50最大生命值\n“丰收的喜悦”"
+			RambutanBuff : "免疫许多减益\n“提高免疫”"
+			RoastedBirdBuff : "提升飞行能力\n“我是一只小小小鸟”"
+			RoastedDuckBuff : "可以在水上行走，提升飞行能力\n“这是烤鸭”"
+			SakeBuff : "短时间内减少18防御，大幅增加近战能力\n“纯度，太高了。”"
 			SashimiBuff : "可以游泳，水下呼吸，增加10%伤害，20%移速，但每秒减3生命\n“寄生虫！”"
-			SauteedFrogLegsBuff : "自动跳跃，增加跳跃能力\n“钓不到蛙腿？那就吃吧。”"
-			SeafoodDinnerBuff : "增加12%暴击，伤害，攻速\n“够生猛！”"
+			SauteedFrogLegsBuff : "自动跳跃，提升跳跃能力\n“钓不到蛙腿？那就吃吧。”"
+			SeafoodDinnerBuff : "增加6%暴击，伤害，攻速\n“够生猛！”"
 			ShrimpPoBoyBuff : "加6防御,25%挖矿速度\n“壮阳”"
-			ShuckedOysterBuff : "减5防御，加10穿甲，每秒减3生命\n“寄生虫！”"
-			SmoothieofDarknessBuff : "短时间内80%闪避\n“腹黑（字面意义上）”"
+			ShuckedOysterBuff : "增加10穿甲, 但降低5防御且每秒减少3生命\n“寄生虫！”"
+			SmoothieofDarknessBuff : "短时间内50%闪避\n“腹黑（字面意义上）”"
 			SpaghettiBuff : "增加1召唤栏\n“异域风情”"
-			StarfruitBuff : "使用远程武器时会生成向后的射弹\n“1437大帝的淫威”"
+			StarfruitBuff : "霰弹枪类武器多射出一发子弹\n“1437大帝的淫威”"
 			SteakBuff : "减少33%魔力消耗\n“上流 ”"
 			SugarCookieBuff : "加5%远程伤害\n“养胃滋润”"
-			TeacupBuff : "短时间内大幅增加魔力回复，魔法攻击，暴击\n“醇香四溢”"
-			TropicalSmoothieBuff : "短时间内魔法攻击仅消耗一点魔力，大幅增加魔法攻击，暴击\n“热带风暴”"
+			TeacupBuff : "短时间内大幅增加魔力回复，魔法伤害和魔法暴击\n“醇香四溢”"
+			TropicalSmoothieBuff : "短时间内魔法攻击仅消耗一点魔力，大幅增加魔法伤害和魔法暴击\n“热带风暴”"
+
+			# Modded buffs
+				# Modded drink buffs
+				BlueHawaiiBuff : 
+					'''
+					短时间内射弹速度获得提升
+					“海风吹拂”
+					'''
+				B_52Buff : 
+					'''
+					短时间内大幅提升发射器速度、暴击、伤害
+					“轰炸机”
+					'''
+				DreamYearningBuff : 
+					'''
+					你的射弹会追踪附近的敌人
+					“思君忆君，魂牵梦萦，翠销香暖云屏，更哪堪酒醒。”
+					'''
+				DryMartiniBuff : 
+					'''
+					短时间大幅提升攻击
+					“经典之作”
+					'''
+				GreenStormBuff : 
+					'''
+					短时间交替射出叶绿水晶和孢子云
+					“别以为草便宜,没上规模前,它比苹果核桃什么的都贵。”
+					'''
+				KiwiJuiceBuff : 
+					'''
+					短时间内大幅增大武器大小
+					“浓缩的奇异之力”
+					'''
+				LonelyJellyfishBuff : 
+					'''
+					短时间内不断于鼠标处生成水母电圈，并且获得隐身能力
+					“观赏完就一饮而尽吧”
+					'''
+				OrangeJuiceBuff : 
+					'''
+					短时间内获得超长无敌帧
+					“嗯，有点像LCL”
+					'''
+				PiercoldWindBuff : 
+					'''
+					对灯笼月敌怪特攻
+					“长啸出原野，凛然寒风生。”
+					'''
+				PurpleHooterBuff : 
+					'''
+					对血月敌怪特攻
+					“高贵与深沉”
+					'''
+				QuinceMarryBuff : 
+					'''
+					对南瓜月敌怪特攻
+					“炙热与温柔”
+					'''
+				RedWineBuff : 
+					'''
+					对霜月敌怪特攻
+					“上流与优雅”
+					'''
+				SunriseBuff : 
+					'''
+					对日食敌怪特攻
+					“阳光与明媚”
+					'''
+				TricolourBuff : 
+					'''
+					对boss仆从特攻
+					“复杂与专一”
+					'''
+				WaterMelonJuiceBuff : 
+					'''
+					短时间大幅增加击退与暴击
+					“浓缩的打击力度”
+					'''
+				# Modded food buffs
+				ArcticshellfishWarshipBuff : 
+					'''
+					提升防御
+					“美味的北极贝军舰”
+					'''
+				BakedMusselBuff : 
+					'''
+					增加6%爆伤、4防御
+					“似乎没那么生猛了”
+					'''
+				BakedOysterBuff : 
+					'''
+					增加4点盔甲穿透、4防御
+					“已灭虫”
+					'''
+				CantaloupeJellyBuff : 
+					'''
+					射弹可以多穿透一次
+					“duangduangduang”
+					'''
+				CaramelPuddingBuff : 
+					'''
+					射弹可以多反弹一次
+					“duangduangduang”
+					'''
+				CrabseedWarshipBuff : 
+					'''
+					提升暴击率
+					“美味的蟹籽军舰”
+					'''
+				DurianBuff : 
+					'''
+					加快消化食物的速度
+					“促进消化”
+					'''
+				EggTartBuff : 
+					'''
+					增加5%爆伤
+					“这酥皮不错”
+					'''
+				KiwiFruitBuff : 
+					'''
+					增大20%武器大小
+					“又称奇异果”
+					'''
+				KiwiIceCreamBuff : 
+					'''
+					增大10%武器大小，加快武器攻速
+					“奇异的力量”
+					'''
+				MangosteenBuff : 
+					'''
+					提升回旋镖，悠悠球、链枷类武器距离
+					“补养之效”
+					'''
+				OrangeIcecreamBuff : 
+					'''
+					延长无敌帧时间
+					“真实存于心中”
+					'''
+				SalmonInPepperBuff : 
+					'''
+					提升速度,尤其是在水中
+					“冰海之皇”
+					'''
+				SalmonWarshipBuff : 
+					'''
+					提升速度
+					“美味的三文鱼军舰”
+					'''
+				SeafoodPizzaBuff : 
+					'''
+					提升大部分属性
+					“一个人吃完这个可不容易”
+					'''
+				StinkyTofuBuff : 
+					'''
+					使靠近的敌怪混乱
+					“又香又臭”
+					'''
+				StrawberryBuff : 
+					'''
+					敌怪越近，造成的伤害越高
+					“受人欢迎的水果”
+					'''
+				StrawberryIcecreamBuff : 
+					'''
+					敌怪越近，造成的伤害越高
+					“冰冷如你，依旧令人爱不忍释”
+					'''
+				SweetshrimpSushiBuff : 
+					'''
+					提升攻击
+					“美味的甜虾寿司”
+					'''
+				TamakoSushiBuff : 
+					'''
+					提升生命回复
+					“美味的玉子寿司”
+					'''
+				WakameWarshipBuff : 
+					'''
+					提升魔力回复
+					“美味的裙带菜寿司”
+					'''
+				WatermelonBuff : 
+					'''
+					增强8%击退能力
+					“比起西瓜本身，我更好奇你怎么把它一整个吃下去”
+					'''
+				WatermelonPlateBuff : 
+					'''
+					提升6%暴击率和爆伤
+					“朴实无华的摆盘”
+					'''
 		}
 		MapEntry :
 		{
@@ -813,8 +1455,8 @@ Mods:
 		{
 			Header:
 			{
-				TextureReplace : "Texture Configurations"
-				AudioReplace : "Audio Configurations"
+				TextureReplace : "材质配置"
+				AudioReplace : "音频配置"
 			}
 			TextureReplace:
 			{
@@ -823,25 +1465,126 @@ Mods:
 			}
 			ItemPickSoundReplace:
 			{
-				Label : "New pickup and inventory sounds"
+				Label : "新增物品拾取与拿起音效"
 			}
 			MothAudioReplace:
 			{
-				Label : "Corrupted Moth's Theme Song"
-				Tooltip : "Choose your preferred Corrupted Moth theme music to replace\nOptions: Original Theme, Alternate Theme, Old Theme\nOriginal: Plays 'Setnour6, Shiryuu, windclimb - Moth Dance'\nAlternate: Plays 'Setnour6, Shiryuu, windclimb - Moth Dance (Alt Version)'\nOld: Plays 'Void - Sudden Romance'\nThis setting won't take effect if the Corrupted Moth is currently alive"
+				Label : "腐檀巨蛾主题曲"
+				Tooltip : "选择你喜欢的腐檀巨蛾主题曲\n选项: 原曲, 额外曲, 旧曲\n原曲: 播放 'Setnour6, Shiryuu, windclimb - 巨蛾之舞'\n额外曲: 播放 'Setnour6, Shiryuu, windclimb - 巨蛾之舞 (额外版)'\n旧曲: 播放 'Void - Sudden Romance'\n腐檀巨蛾存活时, 不会立即改变曲目"
 			}
 			TuskAudioReplace:
 			{
-				Label : "(NOT IMPLEMENTED) The Tusk's Theme Song"
-				Tooltip : "Choose your preferred Bloody Tusk theme music to replace\nOptions: Original Theme, Old Theme\nThis setting won't take effect if The Tusk is currently alive\nNOTE: This config is not fully set up yet and therefore does not work at the moment"
+				Label : "(未完成) 鲜血獠牙主题曲"
+				Tooltip : "选择你喜欢的鲜血獠牙主题曲\n选项: 原曲, 旧曲\n鲜血獠牙存活时, 不会立即改变曲目\n注意: 此配置选项暂时无效"
 			}
+		}
+		InfoDisplayName : 
+		{
+			FoodSatietyInfoDisplay : "饱食度"
+			ThirstystateInfoDisplay : "口渴程度"
 		}
 		InfoDisplay:
 		{
-			Satiety : "饱食度"
-			StateOfThirst : "口渴程度"
+			Satiety : "{0} 饱食度, {1}"
 			Thirsty : "你最好喝点什么"
 			NotThirsty : "你不想喝东西"
+			SatietyLevel: 
+			{
+				0 : "腹中空空"
+				1 : "吃得好"
+				2 : "很满意"
+				3 : "吃撑了"
+			}
+		}
+		ExtraTooltip : 
+		{
+			Misc :
+			{
+				UnfinishedItem : "[c/BA0022:此物品尚未完善]"
+			}
+			FireflyItems :
+			{
+				MothEyeCriteriaText : "[c/6B6BB2:为了掌控这块蛾眼碎片, 必须先杀死一只强大的地下生物]"
+				MothEyeText0 : "[c/7FC1FF:处于流萤群系时:]"
+				MothEyeText1 : "[c/7FC1FF:- 降低5%魔力消耗]"
+				MothEyeText2 : "[c/7FC1FF:- 降低4魔力病的效力]"
+				MothEyeText3 : "[c/7FC1FF:- 增加5%流萤武器的伤害]"
+				MothEyeText4 : "[c/7FC1FF:- 部分流萤物品获得增幅]"
+				MothEyeBonusText : "[c/7FC1FF:来自 {$Mods.Everglow.ItemName.MothEye} 的增幅:]"
+				MEyeBonusTextMothBlade : "[c/7FC1FF:- 从此刃中飞出的飞蛾移速更快]"
+				MEyeBonusTextMothBow : "[c/7FC1FF:- 此弓蓄力更快]"
+				MEyeBonusTextMothGun0 : "[c/7FC1FF:- 磷光弹造成更多伤害]"
+				MEyeBonusTextMothGun1 : "[c/7FC1FF:- 不再产生后坐]"
+				MEyeBonusTextMothYoyo : "[c/7FC1FF:- 更多飞蛾从此球中飞出]"
+				MEyeBonusTextMothChry0 : "[c/7FC1FF:- 小飞蛾发出的射弹无视物块]"
+				MEyeBonusTextMothChry1 : "[c/7FC1FF:- 小飞蛾有几率发射更强的射弹]"
+				MEyeBonusTextMothFan : "[c/7FC1FF:- 从此扇中飞出的飞蛾存活更久]"
+				MEyeBonusTextGlowSword0 : "[c/7FC1FF:- 萤火木剑的射弹的初始大小变大]"
+				MEyeBonusTextGlowSword1 : "[c/7FC1FF:- 萤火木剑的射弹造成更多伤害]"
+				FFBBadge0 : "[c/7FC1FF:'受到那只巨蛾怒气的影响,你的攻击变得更加狂野']"
+				FFBBadge1 : "[c/7FC1FF:防御基于当前的值降低, 最多-12]"
+				FFBBadge2 : "[c/7FC1FF:增加18%伤害]"
+				FFBBadge3 : "[c/7FC1FF:增加10%近战攻速]"
+				FFBBadge4 : "[c/7FC1FF:近战武器和鞭的基础暴击率降至0]"
+			}
+			Spellbook : 
+			{
+				WaterBolt : 
+					'''
+					每命中5次生成一个水球, 最多叠加6个
+					右键消耗一个水球以将你传送至光标的位置
+					叠满时, 中键消耗全部水之球以增幅5秒的攻击
+					切换武器时清除全部水之球
+					'''
+				DemonScythe : 
+					'''
+					恶魔镰刀替换为恶魔月刃
+					伤害和击退力度随速度增长而提高
+					'''
+				BookofSkulls : 
+					'''
+					命中敌人后释放若干骨刺, 最多叠加12个
+					骨刺会与下一次攻击一起发射
+					右键在地面召唤烈焰白骨爪
+					'''
+				CrystalStorm : 
+					'''
+					每隔一定时间释放出大块风暴魔晶
+					风暴魔晶碎裂后会产生有吸引力的旋风
+					旋风中的钱币, 心和魔力星会被吸引到玩家的位置
+					'''
+				CursedFlames : 
+					'''
+					诅咒焰火球可以穿透或反弹3次
+					每穿透或反弹一次, 伤害增加20%
+					'''
+				GoldenShower : 
+					'''
+					打开和关闭魔法书时喷出灵液雨
+					关闭时灵液雨的规模随施法时间延长而扩大
+					右键增加喷射剂量和法力消耗
+					'''
+				MagnetSphere : 
+					'''
+					可以同时存在多个的大型磁球
+					它们随机电击附近的敌人, 命中后也会爆发出强大电流
+					'''
+				RazorbladeTyphoon : 
+					'''
+					发射会追踪并吸引敌人的台风
+					台风中的钱币, 心和魔力星会被吸引到玩家的位置
+					如果长时间使用, 物质的聚集会导致意想不到的后果
+					'''
+				LunarFlareBook : 
+					'''
+					使星空浮现
+                    逐渐提升暴击率和暴击伤害
+					'''
+			}
+		}
+		PylonSystem : 
+		{
+			FireflyPylonLimit : "流萤晶塔只能将你传送到另一个流萤晶塔"
 		}
 	}
 }

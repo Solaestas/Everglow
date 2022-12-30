@@ -1,5 +1,6 @@
 ﻿using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.Localization;
+using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Vanities
 {
@@ -17,14 +18,14 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Vanities
             Item.width = 18;
             Item.height = 18;
             Item.value = Item.buyPrice(0, 1, 0, 0);
-            Item.rare = 2;
+            Item.rare = ItemRarityID.Green;
             Item.vanity = true;
             Item.accessory = true;
         }
 
         public override void Load()
         {
-            On.Terraria.Main.DrawPlayers_AfterProjectiles += DrawHat;
+            //On.Terraria.Main.DrawPlayers_AfterProjectiles += DrawHat;
             On.Terraria.Main.DrawPlayers_BehindNPCs += DrawDress;
         }
 

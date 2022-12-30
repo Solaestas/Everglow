@@ -12,7 +12,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
     public class FireflyBiome : ModBiome
     {
         public override int Music => Common.MythContent.QuickMusic("MothBiome");
-
         public override SceneEffectPriority Priority => SceneEffectPriority.Environment;
         public override string BestiaryIcon => "Everglow/Sources/Modules/MythModule/TheFirefly/FireflyIcon";
         public override string BackgroundPath => base.BackgroundPath;
@@ -20,6 +19,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
         public override ModWaterStyle WaterStyle => ModContent.GetInstance<Water.FireflyWaterStyle>();
         public override Color? BackgroundColor => base.BackgroundColor;
         public override ModSurfaceBackgroundStyle SurfaceBackgroundStyle => ModContent.GetInstance<FireflyBiomeBG>();
+        public override ModUndergroundBackgroundStyle UndergroundBackgroundStyle => ModContent.Find<ModUndergroundBackgroundStyle>("Everglow/MothUndergroundBackground");
 
         public override void SetStaticDefaults()
         {

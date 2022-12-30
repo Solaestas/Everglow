@@ -108,9 +108,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 
         /// <summary>
         /// 以像素为单位的NPC将发生碰撞的最大距离。
-        /// Defaults to 1000 pixels, which is equivalent to 62.5 tiles.
+        /// Defaults to 500 pixels, which is equivalent to 62.5 tiles.
         /// </summary>
-        public virtual int MaxDistanceForUsingTileCollision => 1000;
+        public virtual int MaxDistanceForUsingTileCollision => 500;
 
         /// <summary>
         /// Whether the NPC uses
@@ -141,13 +141,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
         /// <param name="type">蠕虫NPC的段的ID。T</param>
         /// <param name="latestNPC">The whoAmI of the most-recently spawned segment NPC in the worm, including the head</param>
         /// <returns></returns>
-        protected int SpawnSegment(IEntitySource source, int type, int latestNPC)
+        protected int SpawnSegment(IEntitySource source, int type, int latestNPC, int ai2 = 0)
         {
             int oldLatest = latestNPC;
 
             latestNPC = NPC.NewNPC(source, (int)NPC.Center.X, (int)NPC.Center.Y, type, NPC.whoAmI, 0, latestNPC);
 
             Main.npc[oldLatest].ai[0] = latestNPC;
+            Main.npc[oldLatest].ai[2] = ai2;
 
             NPC latest = Main.npc[latestNPC];
             // NPC.realLife是产生的NPC的whoAmI，该NPC将与之分享其健康。
@@ -198,7 +199,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
                         // 像往常一样产生体节
                         while (distance > 0)
                         {
-                            latestNPC = SpawnSegment(source, BodyType, latestNPC);
+                            int ai2 = distance;
+                            latestNPC = SpawnSegment(source, BodyType, latestNPC, ai2);
                             distance--;
                         }
                     }

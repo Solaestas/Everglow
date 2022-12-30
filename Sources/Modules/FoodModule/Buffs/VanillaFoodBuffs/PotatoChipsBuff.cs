@@ -5,7 +5,7 @@
         public override void SetStaticDefaults()
         {
             //DisplayName.SetDefault("PotatoChipsBuff");
-            //Description.SetDefault("加4防御，8%伤害\n“高油高盐”");
+            //Description.SetDefault("增加4防御，8%伤害\n“高油高盐”");
             Main.buffNoTimeDisplay[Type] = false;
             Main.debuff[Type] = false; // 添加这个，这样护士在治疗时就不会去除buff
         }
@@ -14,7 +14,7 @@
         {
             player.statDefense += 4; // 加4防御
             player.GetDamage(DamageClass.Melee) *= 1.04f; // 加4%伤害
-            player.wellFed = true;
+            
         }
     }
 }
