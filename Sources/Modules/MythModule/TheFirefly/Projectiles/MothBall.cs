@@ -118,7 +118,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             MythPlayer mplayer = Terraria.Main.player[Terraria.Main.myPlayer].GetModPlayer<MythPlayer>();
             mplayer.Shake = 6;
             float Str = 1;
-
             mplayer.ShakeStrength = Str;*/
             ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
             mplayer.FlyCamPosition = new Vector2(0, 48).RotatedByRandom(6.283);
@@ -126,7 +125,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BombShakeWave>(), 0, 0, Projectile.owner, 2, 6f);
             Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BeadShakeWave>(), 0, 0, Projectile.owner, 4f);
 
-            if(Main.masterMode)
+            if (Main.masterMode)
             {
                 for (int h = 0; h < 6; h++)
                 {
@@ -140,28 +139,24 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             {
                 Vector2 v3 = new Vector2(0, (float)Math.Sin(h * Math.PI / 4d + Projectile.ai[0]) + 5).RotatedBy(h * Math.PI / 10d) * Main.rand.NextFloat(0.8f, 2.4f);
                 int r = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4), 0, 0, ModContent.DustType<Dusts.PureBlue>(), 0, 0, 0, default, 35f * Main.rand.NextFloat(0.7f, 2.9f));
-                int r = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4), 0, 0, ModContent.DustType<Dusts.PureBlue>(), 0, 0, 0, default(Color), 35f * Main.rand.NextFloat(0.7f, 2.9f));
-=========
-                int r = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4), 0, 0, ModContent.DustType<Dusts.PureBlue>(), 0, 0, 0, default, 35f * Main.rand.NextFloat(0.7f, 2.9f));
->>>>>>>>> Temporary merge branch 2
                 Main.dust[r].noGravity = true;
+                Main.dust[r].velocity = v3 * 6;
+            }
+            for (int y = 0; y < 180; y += 3)
+            {
                 int index = Dust.NewDust(Projectile.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(3.3f, 14.2f));
-                int index = Dust.NewDust(Projectile.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(3.3f, 14.2f));
-=========
-                int index = Dust.NewDust(Projectile.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(3.3f, 14.2f));
->>>>>>>>> Temporary merge branch 2
                 Main.dust[index].noGravity = true;
+                Main.dust[index].velocity = new Vector2(Main.rand.NextFloat(0.0f, 37.5f), 0).RotatedByRandom(Math.PI * 2d);
+            }
+            for (int y = 0; y < 180; y += 3)
+            {
                 int index = Dust.NewDust(Projectile.Center + new Vector2(0, Main.rand.NextFloat(2f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(3.3f, 14.2f));
-                int index = Dust.NewDust(Projectile.Center + new Vector2(0, Main.rand.NextFloat(2f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(3.3f, 14.2f));
-=========
-                int index = Dust.NewDust(Projectile.Center + new Vector2(0, Main.rand.NextFloat(2f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(3.3f, 14.2f));
->>>>>>>>> Temporary merge branch 2
                 Main.dust[index].noGravity = true;
+                Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(3.0f, 47.5f)).RotatedByRandom(Math.PI * 2d);
+            }
+            for (int y = 0; y < 36; y++)
+            {
                 int index = Dust.NewDust(Projectile.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(3.3f, 10.2f));
-                int index = Dust.NewDust(Projectile.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(3.3f, 10.2f));
-=========
-                int index = Dust.NewDust(Projectile.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(3.3f, 10.2f));
->>>>>>>>> Temporary merge branch 2
                 Main.dust[index].noGravity = true;
                 Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(1.8f, 13.5f)).RotatedByRandom(Math.PI * 2d);
             }
