@@ -1,5 +1,5 @@
 ﻿using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
-
+using SubworldLibrary;
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items
 {
     public class FireflyCapital : ModItem
@@ -20,13 +20,24 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items
         {
             if (player.itemAnimation == player.itemAnimationMax)
             {
-                if (SubWorldModule.SubworldSystem.IsActive<MothWorld>())
+                //if (SubWorldModule.SubworldSystem.IsActive<MothWorld>())
+                //{
+                //    SubWorldModule.SubworldSystem.Exit();
+                //}
+                //else
+                //{
+                //    if (!SubWorldModule.SubworldSystem.Enter<MothWorld>())
+                //    {
+                //        Main.NewText("Fail!");
+                //    }
+                //}
+                if (SubworldSystem.Enter<MothWorld>())
                 {
-                    SubWorldModule.SubworldSystem.Exit();
+                    SubworldSystem.Exit();
                 }
                 else
                 {
-                    if (!SubWorldModule.SubworldSystem.Enter<MothWorld>())
+                    if (!SubworldSystem.Enter<MothWorld>())
                     {
                         Main.NewText("Fail!");
                     }

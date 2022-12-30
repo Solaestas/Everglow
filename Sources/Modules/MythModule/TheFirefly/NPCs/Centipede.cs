@@ -511,7 +511,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             };
             NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, value);
         }
-        
+
         public override void SetDefaults()
         {
             NPC.netAlways = true;
