@@ -33,12 +33,12 @@
                 {
                     for (int y = 5; y < 300; y++)
                     {
-                        if (Main.tile[i + x, j + y].TileType == (ushort)ModContent.TileType<Tiles.TuskPan>())
+                        if (Main.tile[i + x, j + y].TileType == (ushort)ModContent.TileType<Tiles.BloodyMossWheel>())
                         {
                             HasCheckPan += 1;
                             return;
                         }
-                        if (Main.tile[i + x, j + y].TileType == (ushort)ModContent.TileType<Tiles.TuskPanF>())
+                        if (Main.tile[i + x, j + y].TileType == (ushort)ModContent.TileType<Tiles.BloodyMossWheelFinished>())
                         {
                             HasCheckPan += 1;
                             return;
@@ -53,7 +53,7 @@
                         CountCriW++;
                         if (CountCriW > 2)
                         {
-                            Main.tile[i, j + y + 12].TileType = (ushort)ModContent.TileType<Tiles.TuskPan>();
+                            Main.tile[i, j + y + 12].TileType = (ushort)ModContent.TileType<Tiles.BloodyMossWheel>();
                             ((Tile)Main.tile[i, j + y + 12]).HasTile = true;
                             HasCheckPan += 1;
                             return;
@@ -70,7 +70,7 @@
                     {
                         for (int y = 5; y < 300; y++)
                         {
-                            if (Main.tile[i + x, j + y].TileType == (ushort)ModContent.TileType<Tiles.TuskPanF>())
+                            if (Main.tile[i + x, j + y].TileType == (ushort)ModContent.TileType<Tiles.BloodyMossWheelFinished>())
                             {
                                 NPC.NewNPC(null, i * 16, j * 16, ModContent.NPCType<NPCs.Bosses.BloodTusk.BloodTusk>());
                                 RandomCheck = 3600;

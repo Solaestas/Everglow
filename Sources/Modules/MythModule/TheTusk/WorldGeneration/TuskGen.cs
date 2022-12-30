@@ -213,6 +213,90 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration
             TuskGen tuskGen = ModContent.GetInstance<TuskGen>();
             tuskGen.tuskCenterX = a + 80;
             tuskGen.tuskCenterY = b + 10;
+            BuildTuskArray(a, b);
+        }
+        public static void BuildTuskArray(int x, int y)
+        {
+            x += 80;
+            y += 120;
+            for(int Dy = 0;Dy < 300;Dy++)
+            {
+                if(Main.tile[x, y + Dy].HasTile)
+                {
+                    y += Dy + 12;
+                    break;
+                }
+            }
+            for(int i = -30;i < 31;i++)
+            {
+                for (int j = -30; j < 31; j++)
+                {
+                    float Length = (new Vector2(i, j)).Length();
+                    var tile = Main.tile[x + i, y + j];
+                    if (Length is < 30f and > 18f)
+                    {
+                        if (tile.HasTile)
+                        {
+                            if(Main.tileSolid[tile.TileType])
+                            {
+                                tile.TileType = (ushort)ModContent.TileType<TuskFlesh>();
+                            }
+                            else
+                            {
+                                tile.ClearEverything();
+                            }
+                        }
+                        if(Length is < 24f and > 20f && j > -7)
+                        {
+                            tile.TileType = (ushort)ModContent.TileType<TuskFlesh>();
+                            tile.HasTile = true;
+                        }
+                    }
+                    if (Length < 19f)
+                    {
+                        if (tile.HasTile)
+                        {
+                            tile.HasTile = false;
+                        }
+                    }
+                    if (Length < 28f)
+                    {
+                        if (tile.WallType != 0 || (Length < 22f && j > -5))
+                        {
+                            tile.WallType = (ushort)ModContent.WallType<Walls.TuskFleshWall>();
+                        }
+                    }
+                }
+            }
+
+            PlaceStone(x - 14, y);
+            PlaceStone(x - 6, y);
+            PlaceStone(x + 6, y);
+            PlaceStone(x + 14, y);
+
+            var tileWheel = Main.tile[x, y + 14];
+            tileWheel.TileType = (ushort)ModContent.TileType<BloodyMossWheel>();
+            tileWheel.HasTile = true;
+        }
+        public static void PlaceStone(int x, int y)
+        {
+            for (int j = 0; j < 71; j++)
+            {
+                var tile = Main.tile[x ,y + j];
+                if (tile.HasTile)
+                {
+                    for(int dx =-2;dx < 3;dx++)
+                    {
+                        var tileUp = Main.tile[x + dx, y + j - 1];
+                        tileUp.HasTile = false;
+                        var tileDown = Main.tile[x + dx, y + j];
+                        tileDown.TileType = (ushort)ModContent.TileType<TuskFlesh>();
+                        tileDown.HasTile = true;
+                    }
+                    MythUtils.PlaceFrameImportantTiles(x, y + j - 7, 1, 7, ModContent.TileType<StrangeTuskStone1>());
+                    break;
+                }
+            }
         }
         public static Point GetTuskLandPosition()
         {
@@ -221,13 +305,18 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration
             while (!CanPlaceTusk(new Point(a, b)))
             {
                 a = (int)(Main.maxTilesX * Main.rand.NextFloat(0.1f, 0.88f));
+                while (Math.Abs(a - Main.maxTilesX * 0.5f) < Main.maxTilesX * 0.1f)
+                {
+                    a = (int)(Main.maxTilesX * Main.rand.NextFloat(0.1f, 0.88f));
+                }
+
                 b = (int)(Main.maxTilesY * Main.rand.NextFloat(0.11f,0.31f));
             }
             return new Point(a, b);
         }
         public static bool CanPlaceTusk(Point position)
         {
-            if(position.X < 20 || position.Y < 20)
+            if(position.X < 20 || position.Y - 60 < 20)
             {
                 return false;
             }
@@ -237,7 +326,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration
             }
             for (int x = 0;x < 161;x++)
             {
-                for (int y = 0; y < 81; y++)
+                for (int y = -60; y < 81; y++)
                 {
                     if(Main.tile[x + position.X, y + position.Y].HasTile)
                     {

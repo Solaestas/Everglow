@@ -5,7 +5,7 @@ using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
 {
-    public class TuskPan : ModTile
+    public class BloodyMossWheel : ModTile
     {
         public override void PostSetDefaults()
         {
@@ -293,7 +293,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
                 int[] Ty = { ModContent.ItemType<MiscItems.FixCoins.FixCoinDamage3>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinCrit3>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinDefense3>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinSpeed3>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinMelee3>() };
                 Item.NewItem(null, new Vector2(i * 16 + 0, j * 16 - 72), Ty[Main.rand.Next(Ty.Length)]);
                 Item.NewItem(null, new Vector2(i * 16 + 0, j * 16 - 72), ItemID.GoldCoin, 5);
-                Main.tile[i, j].TileType = (ushort)ModContent.TileType<Tiles.TuskPanF>();
+                Main.tile[i, j].TileType = (ushort)ModContent.TileType<Tiles.BloodyMossWheelFinished>();
                 ((Tile)Main.tile[i, j]).HasTile = true;
             }
             TileI = i;

@@ -7,6 +7,8 @@
             Main.tileSolid[Type] = true;
             Main.tileMerge[Type][TileID.BoneBlock] = true;
             Main.tileMerge[TileID.BoneBlock][Type] = true;
+            Main.tileMerge[Type][ModContent.TileType<BloodMossStone>()] = true;
+            Main.tileMerge[ModContent.TileType<BloodMossStone>()][Type] = true;
             Main.tileBlockLight[Type] = true;
             MinPick = 60;
             DustType = DustID.Blood;
