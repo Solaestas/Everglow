@@ -1,33 +1,69 @@
-﻿namespace Everglow.Sources.Commons.Core
+﻿using MonoMod.Cil;
+using MonoMod.Utils;
+
+namespace Everglow.Sources.Commons.Core
 {
     /// <summary>
     /// 对一个方法的管理，可以用来控制钩子是否启用
     /// </summary>
+    [DebuggerDisplay("{name} : {enable ? \"Enable\" : \"Disable\"}")]
     public class ActionHandler
     {
-        internal Action action;
-        public string Name
+        public Action Action
         {
-            get; internal set;
+            get => action;
+            set
+            {
+                enable = value is not null;
+                action = value;
+            }
         }
-        public bool Enable { get; set; } = true;
+
+        private Action action;
+        private string name;
+        private bool enable;
+
+        public bool Enable
+        {
+            get => enable;
+            set => enable = value;
+        }
+
+        public string Name => name;
+
         public ActionHandler(Action action)
         {
             this.action = action;
-            Name = action.ToString();
+            name = action.ToString();
+            enable = true;
         }
+
         public ActionHandler(Action action, string name)
         {
             this.action = action;
-            Name = name;
+            this.name = name;
+            enable = true;
         }
+
+        public ActionHandler()
+        {
+            action = null;
+            name = string.Empty;
+            enable = false;
+        }
+
         public void Invoke() => action.Invoke();
+
+        public override string ToString() => name;
     }
+
     public enum CallOpportunity
     {
         None,
+
         //绘制
-        PostDrawEverything,
+        PostDrawFilter,
+
         PostDrawTiles,
         PostDrawProjectiles,
         PostDrawDusts,
@@ -35,8 +71,10 @@
         PostDrawPlayers,
         PostDrawMapIcons,
         PostDrawBG,
+
         //加载
         PostUpdateEverything,
+
         PostUpdateProjectiles,
         PostUpdatePlayers,
         PostUpdateNPCs,
@@ -55,21 +93,25 @@
     {
         public HookSystem()
         {
+            waitToRemove = new List<(CallOpportunity op, ActionHandler handler)>();
             methods = new Dictionary<CallOpportunity, List<ActionHandler>>();
             foreach (var op in validOpportunity)
             {
                 methods.Add(op, new List<ActionHandler>());
             }
         }
+
+        private List<(CallOpportunity op, ActionHandler handler)> waitToRemove;
+
         public static readonly CallOpportunity[] validOpportunity = new CallOpportunity[]
         {
             //Draw
+            CallOpportunity.PostDrawFilter,
             CallOpportunity.PostDrawTiles,
             CallOpportunity.PostDrawProjectiles,
             CallOpportunity.PostDrawDusts,
             CallOpportunity.PostDrawNPCs,
             CallOpportunity.PostDrawPlayers,
-            CallOpportunity.PostDrawEverything,
             CallOpportunity.PostDrawMapIcons,
             CallOpportunity.PostDrawBG,
             //Update
@@ -85,10 +127,12 @@
             CallOpportunity.PostEnterWorld_Server,
             CallOpportunity.ResolutionChanged
         };
+
         internal bool DisableDrawNPCs { get; set; } = false;
         internal bool DisableDrawSkyAndHell { get; set; } = false;
         internal bool DisableDrawBackground { get; set; } = false;
         internal Dictionary<CallOpportunity, List<ActionHandler>> methods;
+
         /// <summary>
         /// 现在存在的问题就是，这里的method都是无参数的Action，但是如DrawMapIcon这样的方法就需要传参了，只好用这种这种定义字段的方法
         /// </summary>
@@ -96,22 +140,33 @@
         {
             get; internal set;
         }
+
         /// <summary>
         /// 更新的计时器，PostUpateEverything后加一
         /// </summary>
         public static int UpdateTimer
         {
-            get; internal set;
+            get; private set;
         }
+
         /// <summary>
         /// 绘制的计时器，PostDrawEverything后加一
         /// </summary>
         public static int DrawTimer
         {
-            get; internal set;
+            get; private set;
         }
+
         /// <summary>
-        /// 在<paramref name="op"/>时执行<paramref name="action"/>
+        /// 针对UI的计时器，暂停时也会加一
+        /// </summary>
+        public static int UITimer
+        {
+            get; private set;
+        }
+
+        /// <summary>
+        /// 在 <paramref name="op"/> 时执行 <paramref name="action"/>
         /// </summary>
         /// <param name="action"></param>
         /// <param name="op"></param>
@@ -125,9 +180,10 @@
                 throw new ArgumentException("Invaild Opportunity");
             }
             var handler = new ActionHandler(action, name ?? action.ToString());
-            methods[op].Add(new ActionHandler(action));
+            methods[op].Add(handler);
             return handler;
         }
+
         public void AddMethod(ActionHandler handler, CallOpportunity op)
         {
             if (!validOpportunity.Contains(op))
@@ -137,6 +193,7 @@
             }
             methods[op].Add(handler);
         }
+
         /// <summary>
         /// 根据Name寻找方法
         /// </summary>
@@ -169,14 +226,50 @@
             }
             return null;
         }
+
+        /// <summary>
+        /// 根据Handler移除一个方法
+        /// </summary>
+        /// <param name="handler"></param>
+        /// <returns>是否成功移除</returns>
+        public bool Remove(ActionHandler handler)
+        {
+            foreach (var op in validOpportunity)
+            {
+                var handlers = methods[op];
+                for (int i = 0; i < handlers.Count; i++)
+                {
+                    if (handler == handlers[i])
+                    {
+                        waitToRemove.Add((op, handler));
+                        handler.Enable = false;
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 移除所有被Disable的Action
+        /// </summary>
+        public void RemoveDisabledAction()
+        {
+            foreach (var op in validOpportunity)
+            {
+                methods[op].RemoveAll(handler => !handler.Enable);
+            }
+        }
+
         public void HookLoad()
         {
+            IL.Terraria.Main.DoDraw += Main_DoDraw;
             On.Terraria.Main.DrawDust += Main_DrawDust;
             On.Terraria.Main.DrawProjectiles += Main_DrawProjectiles;
             On.Terraria.Main.DrawNPCs += Main_DrawNPCs;
             On.Terraria.Graphics.Renderers.LegacyPlayerRenderer.DrawPlayers += LegacyPlayerRenderer_DrawPlayers;
-            On.Terraria.Main.DoDraw += Main_DoDraw;
-            On.Terraria.WorldGen.playWorldCallBack += WorldGen_playWorldCallBack; ;
+            On.Terraria.WorldGen.playWorldCallBack += WorldGen_playWorldCallBack;
+
             On.Terraria.WorldGen.SaveAndQuit += WorldGen_SaveAndQuit;
             On.Terraria.Main.DrawMiscMapIcons += Main_DrawMiscMapIcons;
             On.Terraria.WorldGen.serverLoadWorldCallBack += WorldGen_serverLoadWorldCallBack;
@@ -188,8 +281,50 @@
 
         public void HookUnload()
         {
+            IL.Terraria.Main.DoDraw -= Main_DoDraw;
+            On.Terraria.Main.DrawDust -= Main_DrawDust;
+            On.Terraria.Main.DrawProjectiles -= Main_DrawProjectiles;
+            On.Terraria.Main.DrawNPCs -= Main_DrawNPCs;
+            On.Terraria.Graphics.Renderers.LegacyPlayerRenderer.DrawPlayers -= LegacyPlayerRenderer_DrawPlayers;
+            On.Terraria.WorldGen.playWorldCallBack -= WorldGen_playWorldCallBack;
+
+            On.Terraria.WorldGen.SaveAndQuit -= WorldGen_SaveAndQuit;
+            On.Terraria.Main.DrawMiscMapIcons -= Main_DrawMiscMapIcons;
+            On.Terraria.WorldGen.serverLoadWorldCallBack -= WorldGen_serverLoadWorldCallBack;
+            On.Terraria.Main.DrawBG -= Main_DrawBG;
+            On.Terraria.Main.DrawBackground -= Main_DrawBackground;
+            On.Terraria.Main.DoDraw_WallsTilesNPCs -= Main_DoDraw_WallsTilesNPCs;
             Main.OnResolutionChanged -= Main_OnResolutionChanged;
+            ClearReflectionCache();
         }
+
+        public static void ClearReflectionCache()
+        {
+            if (typeof(ReflectionHelper).GetField("AssemblyCache", BindingFlags.Static | BindingFlags.NonPublic)?.GetValue(null) is Dictionary<string, WeakReference> cache)
+            {
+                foreach (var key in cache.Keys.ToArray())
+                {
+                    cache.Remove(key);
+                }
+            }
+
+            if (typeof(ReflectionHelper).GetField("AssembliesCache", BindingFlags.Static | BindingFlags.NonPublic)?.GetValue(null) is Dictionary<string, WeakReference[]> cache1)
+            {
+                foreach (var key in cache1.Keys.ToArray())
+                {
+                    cache1.Remove(key);
+                }
+            }
+
+            if (typeof(ReflectionHelper).GetField("ResolveReflectionCache", BindingFlags.Static | BindingFlags.NonPublic)?.GetValue(null) is Dictionary<string, WeakReference> cache2)
+            {
+                foreach (var key in cache2.Keys.ToArray())
+                {
+                    cache2.Remove(key);
+                }
+            }
+        }
+
         internal void Invoke(CallOpportunity op)
         {
             foreach (var handler in methods[op])
@@ -202,56 +337,32 @@
                     }
                     catch (Exception ex)
                     {
-                        Everglow.Instance.Logger.Error($"{handler.Name} 抛出了异常 {ex}");
+                        Debug.Fail($"{handler} 抛出了异常 {ex}");
+                        Everglow.Instance.Logger.Error($"{handler} 抛出了异常 {ex}");
                         handler.Enable = false;
-                        Debug.Fail($"{handler.Name} 抛出了异常 {ex}");
                     }
                 }
             }
         }
-        private void Main_DrawBackground(On.Terraria.Main.orig_DrawBackground orig, Main self)
-        {
-            if (DisableDrawBackground)
-            {
-                return;
-            }
-            orig(self);
-        }
-        private void Main_DrawBG(On.Terraria.Main.orig_DrawBG orig, Main self)
-        {
-            if (DisableDrawSkyAndHell)
-            {
-                return;
-            }
-            orig(self);
-        }
 
-        private void Main_DoDraw_WallsTilesNPCs(On.Terraria.Main.orig_DoDraw_WallsTilesNPCs orig, Main self)
-        {
-            Invoke(CallOpportunity.PostDrawBG);
-            orig(self);
-        }
-
-        internal void WorldGen_serverLoadWorldCallBack(On.Terraria.WorldGen.orig_serverLoadWorldCallBack orig)
-        {
-            orig();
-            Invoke(CallOpportunity.PostEnterWorld_Server);
-        }
-
-        internal void Main_DrawMiscMapIcons(On.Terraria.Main.orig_DrawMiscMapIcons orig, Main self, SpriteBatch spriteBatch, Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale, float drawScale, ref string mouseTextString)
-        {
-            orig(self, spriteBatch, mapTopLeft, mapX2Y2AndOff, mapRect, mapScale, drawScale, ref mouseTextString);
-            MapIconInfomation = (mapTopLeft, mapX2Y2AndOff, mapRect, mapScale);
-            Invoke(CallOpportunity.PostDrawMapIcons);
-        }
         public override void PostUpdateInvasions()
         {
             Invoke(CallOpportunity.PostUpdateInvasions);
         }
+
         public override void PostUpdateEverything()
         {
             Invoke(CallOpportunity.PostUpdateEverything);
             UpdateTimer++;
+            foreach (var (op, handler) in waitToRemove)
+            {
+                methods[op].Remove(handler);
+            }
+        }
+
+        public override void UpdateUI(GameTime gameTime)
+        {
+            UITimer++;
         }
 
         public override void PostUpdateNPCs()
@@ -279,7 +390,44 @@
             Invoke(CallOpportunity.PostDrawTiles);
         }
 
-        internal void WorldGen_SaveAndQuit(On.Terraria.WorldGen.orig_SaveAndQuit orig, Action callback)
+        private void Main_DrawBackground(On.Terraria.Main.orig_DrawBackground orig, Main self)
+        {
+            if (DisableDrawBackground)
+            {
+                return;
+            }
+            orig(self);
+        }
+
+        private void Main_DrawBG(On.Terraria.Main.orig_DrawBG orig, Main self)
+        {
+            if (DisableDrawSkyAndHell)
+            {
+                return;
+            }
+            orig(self);
+        }
+
+        private void Main_DoDraw_WallsTilesNPCs(On.Terraria.Main.orig_DoDraw_WallsTilesNPCs orig, Main self)
+        {
+            Invoke(CallOpportunity.PostDrawBG);
+            orig(self);
+        }
+
+        private void WorldGen_serverLoadWorldCallBack(On.Terraria.WorldGen.orig_serverLoadWorldCallBack orig)
+        {
+            orig();
+            Invoke(CallOpportunity.PostEnterWorld_Server);
+        }
+
+        private void Main_DrawMiscMapIcons(On.Terraria.Main.orig_DrawMiscMapIcons orig, Main self, SpriteBatch spriteBatch, Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale, float drawScale, ref string mouseTextString)
+        {
+            orig(self, spriteBatch, mapTopLeft, mapX2Y2AndOff, mapRect, mapScale, drawScale, ref mouseTextString);
+            MapIconInfomation = (mapTopLeft, mapX2Y2AndOff, mapRect, mapScale);
+            Invoke(CallOpportunity.PostDrawMapIcons);
+        }
+
+        private void WorldGen_SaveAndQuit(On.Terraria.WorldGen.orig_SaveAndQuit orig, Action callback)
         {
             orig(callback);
             Invoke(CallOpportunity.PostExitWorld_Single);
@@ -291,18 +439,18 @@
             Invoke(CallOpportunity.PostEnterWorld_Single);
         }
 
-        internal void Main_OnResolutionChanged(Vector2 obj)
+        private void Main_OnResolutionChanged(Vector2 obj)
         {
             Invoke(CallOpportunity.ResolutionChanged);
         }
 
-        internal void LegacyPlayerRenderer_DrawPlayers(On.Terraria.Graphics.Renderers.LegacyPlayerRenderer.orig_DrawPlayers orig, Terraria.Graphics.Renderers.LegacyPlayerRenderer self, Terraria.Graphics.Camera camera, IEnumerable<Player> players)
+        private void LegacyPlayerRenderer_DrawPlayers(On.Terraria.Graphics.Renderers.LegacyPlayerRenderer.orig_DrawPlayers orig, Terraria.Graphics.Renderers.LegacyPlayerRenderer self, Terraria.Graphics.Camera camera, IEnumerable<Player> players)
         {
             orig.Invoke(self, camera, players);
             Invoke(CallOpportunity.PostDrawPlayers);
         }
 
-        internal void Main_DrawNPCs(On.Terraria.Main.orig_DrawNPCs orig, Main self, bool behindTiles)
+        private void Main_DrawNPCs(On.Terraria.Main.orig_DrawNPCs orig, Main self, bool behindTiles)
         {
             orig.Invoke(self, behindTiles);
             if (!behindTiles)
@@ -311,32 +459,26 @@
             }
         }
 
-        internal void Main_DrawDust(On.Terraria.Main.orig_DrawDust orig, Main self)
+        private void Main_DrawDust(On.Terraria.Main.orig_DrawDust orig, Main self)
         {
             orig.Invoke(self);
             Invoke(CallOpportunity.PostDrawDusts);
         }
 
-        internal void Main_DrawProjectiles(On.Terraria.Main.orig_DrawProjectiles orig, Main self)
+        private void Main_DrawProjectiles(On.Terraria.Main.orig_DrawProjectiles orig, Main self)
         {
             orig.Invoke(self);
             Invoke(CallOpportunity.PostDrawProjectiles);
         }
 
-        private void Main_DoDraw(On.Terraria.Main.orig_DoDraw orig, Main self, GameTime gameTime)
+        private void Main_DoDraw(ILContext il)
         {
-            orig(self, gameTime);
-            Invoke(CallOpportunity.PostDrawEverything);
-            DrawTimer++;
-        }
-
-        internal void EndCapture(On.Terraria.Graphics.Effects.FilterManager.orig_EndCapture orig, Terraria.Graphics.Effects.FilterManager self, RenderTarget2D finalTexture, RenderTarget2D screenTarget1, RenderTarget2D screenTarget2, Color clearColor)
-        {
-            orig(self, finalTexture, screenTarget1, screenTarget2, clearColor);
-            Invoke(CallOpportunity.PostDrawEverything);
-            DrawTimer++;
+            var cursor = new ILCursor(il);
+            if (!cursor.TryGotoNext(MoveType.Before, ins => ins.MatchLdcI4(36)))
+            {
+                throw new Exception("Main_DoDraw_NotFound_1");
+            }
+            cursor.EmitDelegate(() => Invoke(CallOpportunity.PostDrawFilter));
         }
     }
-
 }
-

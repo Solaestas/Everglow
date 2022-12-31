@@ -1,6 +1,9 @@
-﻿using Everglow.Sources.Modules.FoodModule.Buffs;
-using Everglow.Sources.Modules.FoodModule.Items;
+using Everglow.Sources.Modules.FoodModule.Buffs;
 using Everglow.Sources.Modules.FoodModule.Utils;
+using Everglow.Sources.Modules.FoodModule.Items;
+using Everglow.Sources.Modules.FoodModule.Buffs.VanillaDrinkBuffs;
+using Terraria.Localization;
+using Terraria.ModLoader;
 
 namespace Everglow.Sources.Modules.FoodModule
 {
@@ -8,7 +11,7 @@ namespace Everglow.Sources.Modules.FoodModule
     {
 
         // 对于原版的饮料进行类型Id到 DrinkInfo 的映射，直接获取DrinkInfo实例
-        private static Dictionary<int, DrinkInfo> m_vanillaDrinkInfos;
+        public static Dictionary<int, DrinkInfo> m_vanillaDrinkInfos;
         public override void Unload()
         {
             m_vanillaDrinkInfos = null;
@@ -23,8 +26,8 @@ namespace Everglow.Sources.Modules.FoodModule
                     new DrinkInfo() {
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<AleBuff> (),
-                        BuffTime = new FoodDuration(0, 7, 30),
-                        Description =  "短时间内鞭子的范围和速度提升至2.5倍\n“耍酒疯”"
+                        BuffTime = new FoodDuration(0, 10, 0),
+                        Name =  "SakeBuff"
                     }
                 },
                 //苹果汁
@@ -33,8 +36,8 @@ namespace Everglow.Sources.Modules.FoodModule
                     new DrinkInfo() {
                        Thirsty = false ,
                        BuffType = ModContent.BuffType<AppleJuiceBuff>(),
-                       BuffTime = new FoodDuration(0, 7, 30),
-                       Description =  " 短时间内增加80%减伤\n“一天一苹果，医生远离我”"
+                       BuffTime = new FoodDuration(0, 10, 0),
+                       Name =  "AppleJuiceBuff"
                     }
                 },
                  //冰冻香蕉代基里
@@ -43,8 +46,8 @@ namespace Everglow.Sources.Modules.FoodModule
                     new DrinkInfo() {
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<BananaDaiquiriBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30),
-                        Description = "短时间内不消耗子弹，大幅增加远程伤害与暴击\n“低体温血压”"
+                        BuffTime = new FoodDuration(0, 10, 0),
+                        Name = "BananaDaiquiriBuff"
                     }
                 },
                  //血腥麝香葡萄
@@ -53,8 +56,8 @@ namespace Everglow.Sources.Modules.FoodModule
                     new DrinkInfo() {
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<BloodyMoscatoBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30),
-                        Description ="短时间内每次攻击回5点生命\n血色"
+                        BuffTime = new FoodDuration(0, 10, 0),
+                        Name = "BloodyMoscatoBuff"
                     }
                 },
                 //奶油苏打水
@@ -63,8 +66,8 @@ namespace Everglow.Sources.Modules.FoodModule
                     new DrinkInfo() {
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<CreamSodaBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30),
-                        Description ="短时间内大幅增加近战能力，但极其吸引仇恨\n“喷射！”"
+                        BuffTime = new FoodDuration(0, 10, 0),
+                        Name = "CreamSodaBuff"
                     }
                 },
                 //咖啡
@@ -73,8 +76,8 @@ namespace Everglow.Sources.Modules.FoodModule
                     new DrinkInfo() {
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<CoffeeCupBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30),
-                        Description ="短时间内大幅增加铺墙铺砖速度，高亮标记敌人、陷阱和宝藏，你会散发光芒\n“社畜的宝物”"
+                        BuffTime = new FoodDuration(0, 30, 0),
+                        Name = "CoffeeCupBuff"
                     }
                 },
                 //果汁
@@ -83,8 +86,8 @@ namespace Everglow.Sources.Modules.FoodModule
                     new DrinkInfo() {
                        Thirsty = false ,
                        BuffType = ModContent.BuffType<FruitJuiceBuff>(),
-                       BuffTime = new FoodDuration(0, 7, 30),
-                        Description ="短时间内幅大大提升大部分属性\n“维生素！”"
+                       BuffTime = new FoodDuration(0, 10, 0),
+                        Name = "FruitJuiceBuff"
                     }
                 },
                 //葡萄汁
@@ -93,8 +96,8 @@ namespace Everglow.Sources.Modules.FoodModule
                     new DrinkInfo() {
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<GrapeJuiceBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30),
-                        Description ="短时间极其幸运\n“浓缩的幸福”"
+                        BuffTime = new FoodDuration(0, 10, 0),
+                        Name = "GrapeJuiceBuff"
                     }
                 },                
                 //柠檬水
@@ -103,8 +106,8 @@ namespace Everglow.Sources.Modules.FoodModule
                     new DrinkInfo() {
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<LemonadeBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30),
-                        Description ="短时间内远程击退加倍,仇恨值减2400\n“消炎美容”"
+                        BuffTime = new FoodDuration(0, 10, 0),
+                        Name = "LemonadeBuff"
                     }
                 },     
                 //盒装牛奶
@@ -113,8 +116,8 @@ namespace Everglow.Sources.Modules.FoodModule
                     new DrinkInfo() {
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<MilkCartonBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30),
-                        Description ="短时间内免疫几乎所有debuff\n“一奶解百毒 ”"
+                        BuffTime = new FoodDuration(0, 10, 0),
+                        Name = "MilkCartonBuff"
                     }
                 },
                 //奶昔
@@ -123,8 +126,8 @@ namespace Everglow.Sources.Modules.FoodModule
                     new DrinkInfo() {
                         Thirsty = false ,
                         BuffType = ModContent.BuffType<MilkshakeBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30),
-                        Description ="短时间内大幅加移速\n“节食减肥 ”"
+                        BuffTime = new FoodDuration(0, 10, 0),
+                        Name = "MilkshakeBuff"
                     }
                 },
                 //桃子果酒
@@ -133,8 +136,8 @@ namespace Everglow.Sources.Modules.FoodModule
                     new DrinkInfo() {
                         Thirsty = false,
                         BuffType = ModContent.BuffType<PeachSangriaBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30),
-                        Description ="短时间内大幅回复生命，增加心的拾取范围\n“我也是桃饱用户”"
+                        BuffTime = new FoodDuration(0, 10, 0),
+                        Name = "PeachSangriaBuff"
                     }
                 },
                 //椰林飘香
@@ -143,8 +146,8 @@ namespace Everglow.Sources.Modules.FoodModule
                     new DrinkInfo() {
                         Thirsty = false,
                         BuffType = ModContent.BuffType<PinaColadaBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30),
-                        Description ="短时间内十倍反伤（上限1000）,防御增加20\n“从不添加香精当生榨 。”"
+                        BuffTime = new FoodDuration(0, 10, 0),
+                        Name = "PinaColadaBuff"
                     }
                 },
                 //七彩潘趣酒
@@ -153,8 +156,8 @@ namespace Everglow.Sources.Modules.FoodModule
                     new DrinkInfo() {
                         Thirsty = false,
                         BuffType = ModContent.BuffType<PrismaticPunchBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30),
-                        Description ="短时间内增加10召唤栏，增加50%召唤伤害，击退\n“高雅兴致”"
+                        BuffTime = new FoodDuration(0, 10, 0),
+                        Name = "PrismaticPunchBuff"
                     }
                 },                
                 //清酒
@@ -163,8 +166,8 @@ namespace Everglow.Sources.Modules.FoodModule
                     new DrinkInfo() {
                         Thirsty = false,
                         BuffType = ModContent.BuffType<SakeBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30),
-                        Description ="短时间内减18防御，大幅增加近战能力\n“纯度，太高了。”"
+                        BuffTime = new FoodDuration(0, 10, 0),
+                        Name = "SakeBuff"
                     }
                 },
                 //暗黑奶昔
@@ -174,8 +177,8 @@ namespace Everglow.Sources.Modules.FoodModule
                         Thirsty = false,
                         BuffType = ModContent.
                         BuffType<SmoothieofDarknessBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30),
-                        Description ="短时间内80%闪避\n“腹黑（字面意义上）”"
+                        BuffTime = new FoodDuration(0, 10, 0),
+                        Name = "SmoothieofDarknessBuff"
                     }
                 }, 
                 //一杯茶
@@ -184,8 +187,8 @@ namespace Everglow.Sources.Modules.FoodModule
                     new DrinkInfo() {
                         Thirsty = false,
                         BuffType = ModContent.BuffType<TeacupBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30),
-                        Description ="短时间内大幅增加魔力回复，魔法攻击，暴击\n“醇香四溢”"
+                        BuffTime = new FoodDuration(0, 10, 0),
+                        Name = "TeacupBuff"
                     }
                 },
                 //热带奶昔
@@ -194,8 +197,8 @@ namespace Everglow.Sources.Modules.FoodModule
                     new DrinkInfo() {
                         Thirsty = false,
                         BuffType = ModContent.BuffType<TropicalSmoothieBuff>(),
-                        BuffTime = new FoodDuration(0, 7, 30),
-                        Description ="短时间内魔法攻击仅消耗一点魔力，大幅增加5%魔法攻击，暴击\n“热带风暴”"
+                        BuffTime = new FoodDuration(0, 10, 0),
+                        Name = "TropicalSmoothieBuff"
                     }
                 }
             };
@@ -203,7 +206,7 @@ namespace Everglow.Sources.Modules.FoodModule
 
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
-            if (m_vanillaDrinkInfos.ContainsKey(item.type))
+            if (m_vanillaDrinkInfos.ContainsKey(item.type) /*|| (item.ModItem is DrinkBase)*/)
             {
                 int firstIndex = -1;
                 firstIndex = tooltips.FindIndex((tpline) =>
@@ -215,18 +218,45 @@ namespace Everglow.Sources.Modules.FoodModule
                 if (firstIndex >= 0)
                 {
                     tooltips.RemoveAll((tp) => tp.Name.Contains("Tooltip"));
-                    tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, DrinkInfo.Description));
+                    tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.BuffDescription." + DrinkInfo.Name)));
                 }
                 else
                 {
                     // 否则加到最后面
-                    tooltips.Add(new TooltipLine(Mod, item.Name, DrinkInfo.Description));
+                    tooltips.Add(new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.BuffDescription."+ DrinkInfo.Name)));
                 }
 
                 int buffTimeIndex = tooltips.FindIndex((tp) => tp.Name.Contains("BuffTime"));
                 if (buffTimeIndex != -1)
                 {
                     tooltips[buffTimeIndex].Text = DrinkInfo.BuffTime.ToBuffTimeString();
+                }
+            }
+            if (item.ModItem is DrinkBase)
+            {
+                int firstIndex = -1;
+                firstIndex = tooltips.FindIndex((tpline) =>
+                {
+                    return tpline.Name.Contains("Tooltip");
+                });
+                // 如果有tooltip，就删掉所有Tooltip的line然后插入到第一个所在位置
+                var drinkItem = item.ModItem as DrinkBase;
+                var drinkInfo = drinkItem.DrinkInfo;
+                if (firstIndex >= 0)
+                {
+                    tooltips.RemoveAll((tp) => tp.Name.Contains("Tooltip"));
+                    tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.BuffDescription." + drinkInfo.Name)));
+                }
+                else
+                {
+                    // 否则加到最后面
+                    tooltips.Add(new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.BuffDescription." + drinkInfo.Name)));
+                }
+
+                int buffTimeIndex = tooltips.FindIndex((tp) => tp.Name.Contains("BuffTime"));
+                if (buffTimeIndex != -1)
+                {
+                    tooltips[buffTimeIndex].Text = drinkInfo.BuffTime.ToBuffTimeString();
                 }
             }
         }
@@ -244,10 +274,6 @@ namespace Everglow.Sources.Modules.FoodModule
             {
                 var drinkInfo = m_vanillaDrinkInfos[item.type];
 
-                // 替换掉原版的 buff 类型
-                item.buffType = drinkInfo.BuffType;
-                item.buffTime = drinkInfo.BuffTime.TotalFrames;
-
             }
             base.SetDefaults(item);
         }
@@ -258,34 +284,56 @@ namespace Everglow.Sources.Modules.FoodModule
             if (m_vanillaDrinkInfos.ContainsKey(item.type))
             {
                 var drinkInfo = m_vanillaDrinkInfos[item.type];
-                var foodPlayer = player.GetModPlayer<FoodModPlayer>();
+                var FoodPlayer = player.GetModPlayer<FoodModPlayer>();
 
                 // 变得不渴
-                foodPlayer.Thirstystate = drinkInfo.Thirsty;
-
+                FoodPlayer.Thirstystate = drinkInfo.Thirsty;
+                //加上Buff
+                player.AddBuff(drinkInfo.BuffType, drinkInfo.BuffTime.TotalFrames);
+            }
+            else if (item.ModItem is DrinkBase)
+            {
+                var drinkItem = item.ModItem as DrinkBase;
+                var drinkInfo = drinkItem.DrinkInfo;
+                var FoodPlayer = player.GetModPlayer<FoodModPlayer>();
+                // 变得不渴
+                FoodPlayer.Thirstystate = drinkInfo.Thirsty;
+                //加上Buff
+                player.AddBuff(drinkInfo.BuffType, drinkInfo.BuffTime.TotalFrames);
             }
         }
 
         public override bool CanUseItem(Item item, Player player)
         {
+            bool CanText = true;
             var foodPlayer = player.GetModPlayer<FoodModPlayer>();
             // 判断能否喝下物品
-            if (m_vanillaDrinkInfos.ContainsKey(item.type))
+            if (m_vanillaDrinkInfos.ContainsKey(item.type) && CanText == true)
             {
                 var drinkInfo = m_vanillaDrinkInfos[item.type];
-                if (!foodPlayer.CanDrink(drinkInfo))
+                if (!foodPlayer.CanDrink(drinkInfo) && foodPlayer.CanText())
                 {
-                    Main.NewText($"Cannot drink this!");
+                    CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height),
+                    new Color(255, 0, 0), 
+                    Language.GetTextValue("Mods.Everglow.Common.FoodSystem.CannotDrink"),
+                    true, false);
+
+                    foodPlayer.TextTimer = FoodUtils.GetFrames(0, 0, 2, 30);
                     return false;
                 }
             }
-            else if (item.ModItem is FoodBase)
+            else if (item.ModItem is DrinkBase && CanText == true)
             {
                 var foodItem = item.ModItem as DrinkBase;
                 var drinkInfo = foodItem.DrinkInfo;
-                if (!foodPlayer.CanDrink(drinkInfo))
+                if (!foodPlayer.CanDrink(drinkInfo) && foodPlayer.CanText())
                 {
-                    Main.NewText($"Cannot drink this!");
+                    CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height),
+                    new Color(255, 0, 0),
+                    Language.GetTextValue("Mods.Everglow.Common.FoodSystem.CannotDrink"),
+                    true,false);
+
+                    foodPlayer.TextTimer = FoodUtils.GetFrames(0, 0, 2, 30);
                     return false;
                 }
             }
@@ -295,6 +343,7 @@ namespace Everglow.Sources.Modules.FoodModule
 
         public override bool ConsumeItem(Item item, Player player)
         {
+            
             var foodPlayer = player.GetModPlayer<FoodModPlayer>();
             // 判断能否喝下物品
             if (m_vanillaDrinkInfos.ContainsKey(item.type))
@@ -302,17 +351,18 @@ namespace Everglow.Sources.Modules.FoodModule
                 var drinkInfo = m_vanillaDrinkInfos[item.type];
                 if (!foodPlayer.CanDrink(drinkInfo))
                 {
-                    Main.NewText($"Cannot drink this!");
+                    //Main.NewText(Language.GetTextValue("Mods.Everglow.Common.FoodSystem.CannotDrink"));
+
                     return false;
                 }
             }
-            else if (item.ModItem is FoodBase)
+            else if (item.ModItem is DrinkBase)
             {
                 var foodItem = item.ModItem as DrinkBase;
                 var drinkInfo = foodItem.DrinkInfo;
                 if (!foodPlayer.CanDrink(drinkInfo))
                 {
-                    Main.NewText($"Cannot drink this!");
+                    //Main.NewText(Language.GetTextValue("Mods.Everglow.Common.FoodSystem.CannotDrink"));
                     return false;
                 }
             }

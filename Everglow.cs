@@ -1,11 +1,11 @@
-global using Microsoft.Xna.Framework;
-global using Microsoft.Xna.Framework.Graphics;
-global using System;
+﻿global using System;
 global using System.Collections.Generic;
 global using System.Diagnostics;
 global using System.IO;
 global using System.Linq;
 global using System.Reflection;
+global using Microsoft.Xna.Framework;
+global using Microsoft.Xna.Framework.Graphics;
 global using Terraria;
 global using Terraria.ID;
 global using Terraria.ModLoader;
@@ -14,6 +14,7 @@ using Everglow.Sources.Commons.Core.ModuleSystem;
 using Everglow.Sources.Commons.Core.Network.PacketHandle;
 using Everglow.Sources.Commons.Core.Profiler;
 using Everglow.Sources.Commons.Core.Profiler.Fody;
+using Everglow.Sources.Commons.Function.ObjectPool;
 
 namespace Everglow
 {
@@ -81,14 +82,22 @@ namespace Everglow
                 return Instance.m_mainThreadContext;
             }
         }
+        internal static RenderTargetPool RenderTargetPool
+        {
+            get
+            {
+                return Instance.m_renderTargetPool;
+            }
+        }
 
         private static Everglow m_instance;
+        public static event Action OnPostSetupContent;
 
         private ModuleManager m_moduleManager;
         private PacketResolver m_packetResolver;
         private ProfilerManager m_profilerManager;
+        private RenderTargetPool m_renderTargetPool;
         private MainThreadContext m_mainThreadContext;
-
         public Everglow()
         {
             m_instance = this;
@@ -97,6 +106,12 @@ namespace Everglow
             m_profilerManager = new ProfilerManager();
             m_mainThreadContext = new MainThreadContext();
             m_moduleManager = new ModuleManager();
+
+            if (Main.netMode != NetmodeID.Server)
+            {
+                m_renderTargetPool = new RenderTargetPool();
+            }
+
             m_packetResolver = new PacketResolver();
         }
 
@@ -106,6 +121,15 @@ namespace Everglow
             HookSystem.HookLoad();
             m_moduleManager.LoadAllModules();
         }
+
+        public override void PostSetupContent()
+        {
+            if (OnPostSetupContent != null)
+            {
+                OnPostSetupContent.Invoke();
+            }
+        }
+
         public override void Unload()
         {
             m_moduleManager.UnloadAllModules();

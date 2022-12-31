@@ -46,7 +46,7 @@ namespace Everglow.Sources.Modules.PlantAndFarmModule.Common.Systems
                         {
                             for (int y = -2; y < 3; y++)
                             {
-                                if (!((Tile)Main.tile[i + x, j + y]).HasTile && Main.tile[i + x, j + y + 1].TileType == 2 && !Main.tile[i + x, j + y + 1].IsHalfBlock && !(Main.tile[i + x, j + y].LiquidAmount > 1))
+                                if (!((Tile)Main.tile[i + x, j + y]).HasTile && Main.tile[i + x, j + y + 1].TileType == 2 && Main.tile[i + x, j + y + 1].Slope == SlopeType.Solid && !(Main.tile[i + x, j + y].LiquidAmount > 1))
                                 {
                                     int TYPE = 0;
                                     if (u >= 3)
@@ -55,11 +55,11 @@ namespace Everglow.Sources.Modules.PlantAndFarmModule.Common.Systems
                                     }
                                     if (u == 2)
                                     {
-                                        TYPE = Main.rand.Next(2) == 0 ? 13 : 18;
+                                        TYPE = Main.rand.NextBool()? 13 : 18;
                                     }
                                     if (u == 1)
                                     {
-                                        TYPE = Main.rand.Next(2) == 0 ? 10 : 11;
+                                        TYPE = Main.rand.NextBool()? 10 : 11;
                                     }
                                     Main.tile[i + x, j + y].TileType = 3;
                                     Main.tile[i + x, j + y].TileFrameX = (short)(TYPE * 18);
