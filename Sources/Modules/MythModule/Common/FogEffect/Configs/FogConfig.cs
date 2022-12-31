@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using Terraria.ModLoader.Config;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Configs
+namespace Everglow.Sources.Modules.MythModule.Common.FogEffect.Configs
 {
     /// <summary>
     /// 用于给美术调节雾效最终效果

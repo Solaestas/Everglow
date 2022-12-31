@@ -1,21 +1,7 @@
-﻿using Everglow.Sources.Commons.Core.ModuleSystem;
-using Everglow.Sources.Commons.Core.UI;
-using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds;
-using Everglow.Sources.Modules.MythModule.TheFirefly.UI;
-using Everglow.Sources.Modules.MythModule.TheTusk.Configs;
-using MonoMod.Cil;
+﻿using Everglow.Sources.Modules.MythModule.Common.FogEffect.Configs;
 using ReLogic.Content;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Terraria.Audio;
-using Terraria.GameContent.Shaders;
-using Terraria.Graphics.Shaders;
-
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Sky
+namespace Everglow.Sources.Modules.MythModule.Common.FogEffect.Sky
 {
     public struct FogState
     {
