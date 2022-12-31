@@ -73,7 +73,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Configs
         public float FogAbsorptionB;
 
         [DefaultValue(false)]
-        [Range(0.0f, 1.0f)]
         [Label("扩散率随距离增大")]
         [Tooltip("是否让散射效果随着距离增大而增大")]
         public bool FogScatterWithDistance;
@@ -89,5 +88,10 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Configs
         [Label("雾散射能见度影响系数")]
         [Tooltip("散射光受到能见度影响的比率，0为不受能见度影响，1完全受能见度影响")]
         public float FogBloomAbsorptionFactor;
+
+        [DefaultValue(false)]
+        [Label("开启Temporal插值")]
+        [Tooltip("是否允许光照结果进行帧间插值来平滑")]
+        public bool EnableTemporalInterp;
     }
 }

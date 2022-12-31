@@ -10,7 +10,8 @@ float gauss[3][3] = {
 };
 
 
-float4 PixelShaderFunction(float2 coords : TEXCOORD0) : COLOR0 {
+float4 PixelShaderFunction(float2 coords : TEXCOORD0) : COLOR0 
+{
 	float dx = 1.0 / uImageSize0.x;
 	float dy = 1.0 / uImageSize0.y;
 	float origin = tex2D(uImage0, coords).r;

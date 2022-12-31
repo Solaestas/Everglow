@@ -34,12 +34,14 @@ namespace Everglow.Sources.Modules.MythModule
 
                 On.Terraria.Graphics.Effects.FilterManager.EndCapture += FilterManager_EndCapture;
 
+
                 m_fogPass = new FogPass();
             }
         }
 
         private void FilterManager_EndCapture(On.Terraria.Graphics.Effects.FilterManager.orig_EndCapture orig, Terraria.Graphics.Effects.FilterManager self, RenderTarget2D finalTexture, RenderTarget2D screenTarget1, RenderTarget2D screenTarget2, Color clearColor)
         {
+            m_fogPass.Update();
             m_fogPass.Apply(screenTarget1, screenTarget2);
             orig(self, finalTexture, screenTarget1, screenTarget2, clearColor);
         }
