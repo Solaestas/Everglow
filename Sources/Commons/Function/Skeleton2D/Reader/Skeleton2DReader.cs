@@ -11,10 +11,11 @@ using Terraria.Utilities;
 using Terraria;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json.Linq;
+using System.Net.Mail;
 
 namespace Everglow.Sources.Commons.Function.Skeleton2D.Reader
 {
-
     /// <summary>
     /// Json: Skin块每个皮肤都描述了可分配给每个槽位的附件
     /// </summary>
@@ -226,6 +227,9 @@ namespace Everglow.Sources.Commons.Function.Skeleton2D.Reader
         [JsonProperty("skins")]
         public List<J_Skin> Skins;
 
+        [JsonProperty(PropertyName = "animations", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        public Dictionary<string, J_Animation> Animations;
+
         public J_Skeleton()
         {
         }
@@ -348,6 +352,7 @@ namespace Everglow.Sources.Commons.Function.Skeleton2D.Reader
                 }
             }
 
+            Dictionary<string, Slot> slotsDict = new Dictionary<string, Slot>();
             // 加载Slots
             foreach (var jSlot in jSkeleton.Slots)
             {
@@ -362,10 +367,205 @@ namespace Everglow.Sources.Commons.Function.Skeleton2D.Reader
                     slot.Attachment = attachmentDict[jSlot.Attachment];
                 }
                 skeleton.Slots.Add(slot);
+                slotsDict.Add(slot.Name, slot);
             }
+
+            // 加载 Animations 动画元素
+            ParseAnimations(jSkeleton.Animations, skeleton, attachmentDict, slotsDict, bonesDict);
+
             return skeleton;
         }
 
+        /// <summary>
+        /// 解析动画帧部分
+        /// </summary>
+        /// <param name="jAnimations"></param>
+        /// <param name="skeleton"></param>
+        /// <param name="attachmentsDict"></param>
+        /// <param name="slotsDict"></param>
+        /// <param name="bonesDict"></param>
+        private static void ParseAnimations(Dictionary<string, J_Animation> jAnimations, 
+            Skeleton2D skeleton, 
+            Dictionary<string, Attachment> attachmentsDict,
+            Dictionary<string, Slot> slotsDict,
+            Dictionary<string, Bone2D> bonesDict)
+        {
+            skeleton.Animations = new Dictionary<string, Animation>();
+
+            foreach (var animKV in jAnimations)
+            {
+                Animation animation = new Animation();
+                animation.Name = animKV.Key;
+                animation.BonesTimeline = ParseBoneTimelines(animKV.Value.Bones, bonesDict);
+                animation.SlotsTimeline = ParseSlotTimelines(animKV.Value.Slots, slotsDict, attachmentsDict);
+                skeleton.Animations.Add(animation.Name, animation);
+            }
+        }
+
+
+        private static List<Timeline> ParseBoneTimelines(Dictionary<string, JObject> bones, 
+            Dictionary<string, Bone2D> bonesDict)
+        {
+            List<Timeline> timelines = new List<Timeline>();
+            if (bones == null)
+            {
+                return timelines;
+            }
+
+            foreach (var kvPair in bones)
+            {
+                var bone = bonesDict[kvPair.Key];
+                var jobject = kvPair.Value;
+
+                Timeline timeline = new Timeline();
+
+                foreach (var componentKFPair in jobject)
+                {
+                    var type = componentKFPair.Key;
+                    var values = componentKFPair.Value as JArray;
+                    var track = new Track();
+
+                    foreach (JObject keyFrame in values)
+                    {
+                        float time = 0;
+                        InterpolationType interpolation = InterpolationType.Linear;
+
+                        // 非必要 time 属性
+                        if (keyFrame.ContainsKey("time"))
+                        {
+                            time = keyFrame.Value<float>("time");
+                        }
+
+                        // 非必要 curve 属性
+                        if (keyFrame.ContainsKey("curve"))
+                        {
+                            // TODO: 曲线控制参数暂时没做
+                            var curvetype = keyFrame.Value<string>("curve");
+                            switch (curvetype)
+                            {
+                                case "linear":
+                                    {
+                                        interpolation = InterpolationType.Linear;
+                                        break;
+                                    }
+                                case "stepped":
+                                    {
+                                        interpolation = InterpolationType.Step;
+                                        break;
+                                    }
+                            }
+                        }
+
+                        if (type == "translate")
+                        {
+                            // translate有x，y两个可选属性
+                            Vector2 translate = Vector2.Zero;
+                            if (keyFrame.ContainsKey("x"))
+                            {
+                                translate.X = keyFrame.Value<float>("x");
+                            }
+                            if (keyFrame.ContainsKey("y"))
+                            {
+                                translate.Y = keyFrame.Value<float>("y");
+                            }
+                            track.AddKeyFrame(new BoneTranslationKeyFrame(time, bone, interpolation, bone.Position + translate));
+                        }
+                        else if (type == "rotate")
+                        {
+                            // rotate 只有旋转角一个可选属性
+                            float angle = 0f;
+                            if (keyFrame.ContainsKey("angle"))
+                            {
+                                angle = keyFrame.Value<float>("angle");
+                            }
+                            track.AddKeyFrame(new BoneRotationKeyFrame(time, bone, interpolation, bone.Rotation - angle / 180.0f * MathHelper.Pi));
+                        }
+                    }
+                    timeline.AddTrack(track);
+                }
+                timelines.Add(timeline);
+            }
+            return timelines;
+        }
+
+
+        private static List<Timeline> ParseSlotTimelines(Dictionary<string, JObject> slots,
+            Dictionary<string, Slot> slotsDict, 
+            Dictionary<string, Attachment> attachmentsDict
+            )
+        {
+            List<Timeline> timelines = new List<Timeline>();
+            if (slots == null)
+            {
+                return timelines;
+            }
+            foreach (var kvPair in slots)
+            {
+                var slot = slotsDict[kvPair.Key];
+                var jobject = kvPair.Value;
+
+                Timeline timeline = new Timeline();
+
+                foreach (var componentKFPair in jobject)
+                {
+                    var type = componentKFPair.Key;
+                    var values = componentKFPair.Value as JArray;
+                    var track = new Track();
+
+                    foreach (JObject keyFrame in values.Cast<JObject>())
+                    {
+                        float time = 0;
+                        InterpolationType interpolation = InterpolationType.Linear;
+
+                        // 非必要 time 属性
+                        if (keyFrame.ContainsKey("time"))
+                        {
+                            time = keyFrame.Value<float>("time");
+                        }
+
+                        // 非必要 curve 属性
+                        if (keyFrame.ContainsKey("curve"))
+                        {
+                            // TODO: 曲线控制参数暂时没做
+                            var curvetype = keyFrame.Value<string>("curve");
+                            switch (curvetype)
+                            {
+                                case "linear":
+                                    {
+                                        interpolation = InterpolationType.Linear;
+                                        break;
+                                    }
+                                case "steppped":
+                                    {
+                                        interpolation = InterpolationType.Step;
+                                        break;
+                                    }
+                            }
+                        }
+
+                        if (type == "attachment")
+                        {
+                            Attachment attachment = null;
+                            if (keyFrame.GetValue("name").Type != JTokenType.Null)
+                            {
+                                var name = keyFrame.Value<string>("name");
+                                if (attachmentsDict.ContainsKey(name))
+                                {
+                                    attachment = attachmentsDict[name];
+                                }
+                            }
+
+                            track.AddKeyFrame(new SlotAttachmentKeyFrame(time, slot, attachment));
+                        }
+
+                    }
+
+                    timeline.AddTrack(track);
+                }
+                timelines.Add(timeline);
+            }
+            return timelines;
+        }
 
         private static int charToHex(char c)
         {

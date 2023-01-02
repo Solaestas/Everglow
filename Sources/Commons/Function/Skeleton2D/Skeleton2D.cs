@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Terraria.GameContent;
 using static Terraria.ModLoader.PlayerDrawLayer;
-using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Commons.Core.Utils;
+using Everglow.Sources.Commons.Function.Vertex;
 
 namespace Everglow.Sources.Commons.Function.Skeleton2D
 {
@@ -29,6 +29,11 @@ namespace Everglow.Sources.Commons.Function.Skeleton2D
         }
 
         private List<Bone2D> m_bones;
+
+        public Dictionary<string, Animation> Animations
+        {
+            get; set;
+        }
 
         public Skeleton2D(List<Bone2D> bones)
         {
@@ -61,6 +66,30 @@ namespace Everglow.Sources.Commons.Function.Skeleton2D
             //bone1.AddChild(bone2);
 
             //m_bones.Add(bone1);
+        }
+
+        public void PlayAnimation(string name, float time)
+        {
+            var animation = Animations[name];
+            foreach (var boneTimeline in animation.BonesTimeline)
+            {
+                foreach (var track in boneTimeline.Tracks)
+                {
+                    IKeyFrame cur, next;
+                    track.LocateKeyFrames(time, out cur, out next);
+                    cur?.Interpolate(time, next);
+                }
+            }
+
+            foreach (var slotTimeline in animation.SlotsTimeline)
+            {
+                foreach (var track in slotTimeline.Tracks)
+                {
+                    IKeyFrame cur, next;
+                    track.LocateKeyFrames(time, out cur, out next);
+                    cur?.Interpolate(time, next);
+                }
+            }
         }
 
 
