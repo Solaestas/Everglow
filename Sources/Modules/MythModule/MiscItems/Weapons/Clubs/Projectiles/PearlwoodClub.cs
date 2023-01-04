@@ -4,11 +4,11 @@ using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectiles
 {
-    public class PearlWoodenClub : ModProjectile
+    public class PearlwoodClub : ModProjectile
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("PearlWoodenClub");
+            DisplayName.SetDefault("PearlwoodClub");
             DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "珍珠木棍");
         }
 
@@ -59,7 +59,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
             {
                 Ome *= 0.9f;
             }
-            if (Projectile.timeLeft < 22 && Main.mouseLeft && !p.dead && p.HeldItem.type == ModContent.ItemType<Clubs.PearlWoodenClub>())
+            if (Projectile.timeLeft < 22 && Main.mouseLeft && !p.dead && p.HeldItem.type == ModContent.ItemType<Clubs.PearlwoodClub>())
             {
                 Projectile.timeLeft = 22;
             }

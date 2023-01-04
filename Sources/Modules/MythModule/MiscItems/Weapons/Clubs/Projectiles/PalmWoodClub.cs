@@ -4,13 +4,13 @@ using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectiles
 {
-    public class BlackWoodenClub : ModProjectile
+    public class PalmWoodClub : ModProjectile
     {
-        //public override void SetStaticDefaults()
-        //{
-        //    DisplayName.SetDefault("Ebonwood Club");
-        //    DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "乌木棍棒");
-        //}
+        public override void SetStaticDefaults()
+        {
+            DisplayName.SetDefault("PalmWoodClub");
+            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "棕榈木棍");
+        }
 
         public override void SetDefaults()
         {
@@ -37,13 +37,14 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
                 DOpen = Projectile.damage;
                 Projectile.damage = 0;
             }
-            Projectile.damage = (int)(DOpen * Ome * 3.334);
+            Projectile.damage = (int)(Ome * 3.3334 * DOpen);
             lz += 1;
-
             Player p = Main.player[Projectile.owner];
             Vector2 v = Main.screenPosition + new Vector2(Main.mouseX, Main.mouseY) - p.Center;
             v = v / v.Length();
             Projectile.velocity = v * 15f;
+            Vector2 vT0 = Main.MouseWorld - p.Center;
+            p.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(vT0.Y, vT0.X) - Math.PI / 2d));
             Projectile.position = p.position + v + new Vector2(-(Projectile.width / 2 - p.width / 2), -24);
             Projectile.spriteDirection = p.direction;
             Projectile.rotation += Ome;
@@ -58,7 +59,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
             {
                 Ome *= 0.9f;
             }
-            if (Projectile.timeLeft < 22 && Main.mouseLeft && !p.dead && p.HeldItem.type == ModContent.ItemType<Clubs.BlackWoodenClub>())
+            if (Projectile.timeLeft < 22 && Main.mouseLeft && !p.dead && p.HeldItem.type == ModContent.ItemType<Clubs.PalmWoodClub>())
             {
                 Projectile.timeLeft = 22;
             }
@@ -77,6 +78,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
             }
             p.ChangeDir(Projectile.direction);
             p.heldProj = Projectile.whoAmI;
+
             Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
             ef2 = (Effect)ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/ClubVague").Value;
             float k0 = Projectile.velocity.Y / (float)Projectile.velocity.X;
@@ -84,7 +86,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
             ef2.Parameters["k0"].SetValue(k0);
             Vector2 v0 = Projectile.Center + v - Main.screenPosition + new Vector2(32, -32).RotatedBy(Projectile.rotation);
             Vector2 v1 = new Vector2(32, -32).RotatedBy(Projectile.rotation);
-            Vector2 vc = Projectile.Center + v * 15 * Main.GameViewMatrix.Zoom.X - Main.screenPosition - p.velocity;
+            Vector2 vc = Projectile.Center + v * 15 - Main.screenPosition - p.velocity;
             float x0 = v0.X / (float)Main.screenWidth;
             float y0 = v0.Y / (float)Main.screenHeight;
             float xc = vc.X / (float)Main.screenWidth;
@@ -102,8 +104,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
             ef2.Parameters["uImage1"].SetValue(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/ClubShader").Value);
             ef2.Parameters["uImage2"].SetValue(texture);
 
-            Vector2 vT0 = Main.MouseWorld - p.Center;
-            p.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(vT0.Y, vT0.X) - Math.PI / 2d));
+
             ef3 = (Effect)ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/ClubVague2").Value;
             v0 = Projectile.Center + v - Main.screenPosition + new Vector2(-32, 32).RotatedBy(Projectile.rotation);
             v1 = new Vector2(-32, 32).RotatedBy(Projectile.rotation);
@@ -193,20 +194,3 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
         }
     }
 }
-/*RenderTarget2D rd = new RenderTarget2D(Main.graphics.GraphicsDevice,Main.screenWidth,Main.screenHeight);
-GraphicsDevice gd = Main.instance.GraphicsDevice;
-SpriteBatch sb = Main.spriteBatch;
-gd.SetRenderTarget(Main.screenTargetSwap);
-sb.Begin(SpriteSortMode.Deferred,BlendState.AlphaBlend);
-sb.Draw(Main.screenTarget,Vector2.Zero,Color.White);
-sb.End();
-gd.SetRenderTarget(rd);
-gd.Clear(Color.Transparent);
-sb.Begin(SpriteSortMode.Deferred, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-sb.Draw(rd, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), new Rectangle?(new Rectangle(0, y, Heig, 64)), color, Projectile.rotation, new Vector2(32, 32), Projectile.scale, effects, 0f);
-sb.End();
-gd.SetRenderTarget(Main.screenTarget);
-sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-sb.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
-sb.Draw(rd, Vector2.Zero, Color.White);
-sb.End();*/

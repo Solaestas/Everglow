@@ -2,18 +2,18 @@ using Terraria.DataStructures;
 using Terraria.Localization;
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs
 {
-    public class RedWoodenClub : ModItem
+    public class ShadewoodClub : ModItem
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Mahogany Club");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "红木棍");
+            DisplayName.SetDefault("Shadewood Club");
+            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "暗影木棍");
             Tooltip.SetDefault("Spin to hit enemies");
             Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "旋转挥舞以攻击敌人");
         }
         public override void SetDefaults()
         {
-            Item.damage = 6;
+            Item.damage = 7;
             Item.DamageType = DamageClass.Melee;
             Item.width = 64;
             Item.height = 64;
@@ -27,9 +27,9 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs
             //Item.UseSound = SoundID.Item1;
             Item.autoReuse = true;
             Item.crit = 0;
-            Item.value = 300;
+            Item.value = 50;
             Item.scale = 1f;
-            Item.shoot = ModContent.ProjectileType<Projectiles.RedWoodenClub>();
+            Item.shoot = ModContent.ProjectileType<Projectiles.ShadewoodClub>();
             Item.shootSpeed = 0.04f;
         }
         private bool St = false;
@@ -55,7 +55,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(620, 18)
+                .AddIngredient(911, 18)
                 .AddTile(18)
                 .Register();
         }

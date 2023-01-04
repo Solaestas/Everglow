@@ -4,7 +4,7 @@ using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectiles
 {
-    public class RedWoodenClub : ModProjectile
+    public class RichMahoganyClub : ModProjectile
     {
         public override void SetStaticDefaults()
         {
@@ -60,7 +60,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
             {
                 Ome *= 0.9f;
             }
-            if (Projectile.timeLeft < 22 && Main.mouseLeft && !p.dead && p.HeldItem.type == ModContent.ItemType<Clubs.RedWoodenClub>())
+            if (Projectile.timeLeft < 22 && Main.mouseLeft && !p.dead && p.HeldItem.type == ModContent.ItemType<Clubs.RichMahoganyClub>())
             {
                 Projectile.timeLeft = 22;
             }

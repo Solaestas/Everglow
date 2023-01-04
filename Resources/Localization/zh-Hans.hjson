@@ -185,29 +185,29 @@ Mods:
 			FragransMagic : 金堆作浪
 			FragransSpear : 月色无芒
 			FragransStaff : 闪耀金花
-			BlackWoodenClub : 乌木棍棒
-			BloodClub : 猩红破风棍
+			EbonwoodClub : 乌木棍棒
+			CrimsonClub : 猩红破风棍
 			IchorClub : 灵液棍
 			CactusClub : 仙人掌棍
 			CobaltClub : 钴棍
-			ColdWoodenClub : 针叶木棍
+			BorealWoodClub : 针叶木棍
 			CopperClub : 铜棍
 			CorruptClub : 魔影棍
 			CrystalClub : 水晶棍
 			CurseClub : 咒火棍
-			DarkWoodenClub : 暗影木棍
+			ShadewoodClub : 暗影木棍
 			GoldClub : 金棍
 			IronClub : 铁棍
 			LeadClub : 铅棍
-			LeafClub : 叶绿棍
+			ChlorophyteClub : 叶绿棍
 			MeteorClub : 流星棍
 			MithrilClub : 秘银棍
-			MountainCuClub : 山铜棍
+			OrichalcumClub : 山铜棍
 			PalladiumClub : 钯金棍
-			PalmWoodenClub : 棕榈木棍
-			PearlWoodenClub : 珍珠木棍
+			PalmWoodClub : 棕榈木棍
+			PearlwoodClub : 珍珠木棍
 			PlatinumClub : 铂金棍
-			RedWoodenClub : 红木棍
+			RichMahoganyClub : 红木棍
 			RefinedClub : 精金棍
 			SilverClub : 银棍
 			SpikeClub : 尖刺棍
@@ -630,29 +630,29 @@ Mods:
 			# ToothKnfe : ""
 			# ToothMagicBall : ""
 			ToothStaff : 释放拔地而起的獠牙刺
-			BlackWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
-			BloodClub : "{$Mods.Everglow.Common.ClubGT}"
+			EbonwoodClub : "{$Mods.Everglow.Common.ClubGT}"
+			CrimsonClub : "{$Mods.Everglow.Common.ClubGT}"
 			IchorClub : "{$Mods.Everglow.Common.ClubGT}"
 			CactusClub : "{$Mods.Everglow.Common.ClubGT}"
 			CobaltClub : "{$Mods.Everglow.Common.ClubGT}"
-			ColdWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
+			BorealWoodClub : "{$Mods.Everglow.Common.ClubGT}"
 			CopperClub : "{$Mods.Everglow.Common.ClubGT}"
 			CorruptClub : "{$Mods.Everglow.Common.ClubGT}"
 			CrystalClub : "{$Mods.Everglow.Common.ClubGT}"
 			CurseClub : "{$Mods.Everglow.Common.ClubGT}"
-			DarkWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
+			ShadewoodClub : "{$Mods.Everglow.Common.ClubGT}"
 			GoldClub : "{$Mods.Everglow.Common.ClubGT}"
 			IronClub : "{$Mods.Everglow.Common.ClubGT}"
 			LeadClub : "{$Mods.Everglow.Common.ClubGT}"
-			LeafClub : "{$Mods.Everglow.Common.ClubGT}"
+			ChlorophyteClub : "{$Mods.Everglow.Common.ClubGT}"
 			MeteorClub : "{$Mods.Everglow.Common.ClubGT}"
 			MithrilClub : "{$Mods.Everglow.Common.ClubGT}"
-			MountainCuClub : "{$Mods.Everglow.Common.ClubGT}"
+			OrichalcumClub : "{$Mods.Everglow.Common.ClubGT}"
 			PalladiumClub : "{$Mods.Everglow.Common.ClubGT}"
-			PalmWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
-			PearlWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
+			PalmWoodClub : "{$Mods.Everglow.Common.ClubGT}"
+			PearlwoodClub : "{$Mods.Everglow.Common.ClubGT}"
 			PlatinumClub : "{$Mods.Everglow.Common.ClubGT}"
-			RedWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
+			RichMahoganyClub : "{$Mods.Everglow.Common.ClubGT}"
 			RefinedClub : "{$Mods.Everglow.Common.ClubGT}"
 			SilverClub : "{$Mods.Everglow.Common.ClubGT}"
 			SpikeClub : "{$Mods.Everglow.Common.ClubGT}"

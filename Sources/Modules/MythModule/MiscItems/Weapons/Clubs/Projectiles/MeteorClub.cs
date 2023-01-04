@@ -273,7 +273,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
         public override void PostDraw(Color lightColor)
         {
             SpriteEffects effects = SpriteEffects.None;
-            Texture2D texture = ModContent.Request<Texture2D>("MythMod/Projectiles/Melee/Clubs/MeteorClubGlow").Value;
+            Texture2D texture = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Weapons/Clubs/Projectiles/MeteorClubGlow").Value;
             Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 0), Projectile.rotation, new Vector2(32f, 32f), 1f, effects, 0f);
             Color color = new Color(55, 55, 55, 0);
             for (int i = 0; i < 25; i++)

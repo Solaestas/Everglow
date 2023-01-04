@@ -2,21 +2,21 @@ using Terraria.DataStructures;
 using Terraria.Localization;
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs
 {
-    public class DarkWoodenClub : ModItem
+    public class EbonwoodClub : ModItem
     {
-        public override void SetStaticDefaults()
-        {
-            DisplayName.SetDefault("Shadewood Club");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "暗影木棍");
-            Tooltip.SetDefault("Spin to hit enemies");
-            Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "旋转挥舞以攻击敌人");
-        }
+        //public override void SetStaticDefaults()
+        //{
+        //    DisplayName.SetDefault("Ebonwood Club");
+        //    DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "乌木棍棒");
+        //    Tooltip.SetDefault("Spin to hit enemies");
+        //    Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "旋转挥舞以攻击敌人");
+        //}
         public override void SetDefaults()
         {
-            Item.damage = 7;
+            Item.damage = 6;
             Item.DamageType = DamageClass.Melee;
-            Item.width = 64;
-            Item.height = 64;
+            Item.width = 48;
+            Item.height = 48;
             Item.useTime = 4;
             Item.rare = 0;
             Item.noMelee = true;
@@ -29,7 +29,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs
             Item.crit = 0;
             Item.value = 50;
             Item.scale = 1f;
-            Item.shoot = ModContent.ProjectileType<Projectiles.DarkWoodenClub>();
+            Item.shoot = ModContent.ProjectileType<Projectiles.EbonwoodClub>();
             Item.shootSpeed = 0.04f;
         }
         private bool St = false;
@@ -55,7 +55,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(911, 18)
+                .AddIngredient(619, 18)
                 .AddTile(18)
                 .Register();
         }

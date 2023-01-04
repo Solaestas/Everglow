@@ -4,13 +4,13 @@ using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectiles
 {
-    public class PalmWoodenClub : ModProjectile
+    public class CrimsonClub : ModProjectile
     {
-        public override void SetStaticDefaults()
-        {
-            DisplayName.SetDefault("PalmWoodenClub");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "棕榈木棍");
-        }
+        //public override void SetStaticDefaults()
+        //{
+        //    DisplayName.SetDefault("CrimsonClub");
+        //    DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "猩红破风棍");
+        //}
 
         public override void SetDefaults()
         {
@@ -37,8 +37,9 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
                 DOpen = Projectile.damage;
                 Projectile.damage = 0;
             }
-            Projectile.damage = (int)(Ome * 3.3334 * DOpen);
+            Projectile.damage = (int)(DOpen * Ome * 2.5);
             lz += 1;
+
             Player p = Main.player[Projectile.owner];
             Vector2 v = Main.screenPosition + new Vector2(Main.mouseX, Main.mouseY) - p.Center;
             v = v / v.Length();
@@ -50,16 +51,16 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
             Projectile.rotation += Ome;
             if (Projectile.timeLeft > 20)
             {
-                if (Ome < 0.3f)
+                if (Ome < 0.4f)
                 {
-                    Ome += 0.003f;
+                    Ome += 0.005f;
                 }
             }
             else
             {
                 Ome *= 0.9f;
             }
-            if (Projectile.timeLeft < 22 && Main.mouseLeft && !p.dead && p.HeldItem.type == ModContent.ItemType<Clubs.PalmWoodenClub>())
+            if (Projectile.timeLeft < 22 && Main.mouseLeft && !p.dead && p.HeldItem.type == ModContent.ItemType<Clubs.CrimsonClub>())
             {
                 Projectile.timeLeft = 22;
             }

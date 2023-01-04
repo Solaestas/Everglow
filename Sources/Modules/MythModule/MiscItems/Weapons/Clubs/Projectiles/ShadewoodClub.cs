@@ -4,12 +4,12 @@ using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectiles
 {
-    public class LeafClub : ModProjectile
+    public class ShadewoodClub : ModProjectile
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("LeadClub");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "叶绿棍");
+            DisplayName.SetDefault("Shadewood Club");
+            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "暗影木棍");
         }
 
         public override void SetDefaults()
@@ -37,8 +37,9 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
                 DOpen = Projectile.damage;
                 Projectile.damage = 0;
             }
-            Projectile.damage = (int)(DOpen * Ome * 2.5);
+            Projectile.damage = (int)(DOpen * Ome * 3.3334);
             lz += 1;
+
             Player p = Main.player[Projectile.owner];
             Vector2 v = Main.screenPosition + new Vector2(Main.mouseX, Main.mouseY) - p.Center;
             v = v / v.Length();
@@ -50,16 +51,16 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
             Projectile.rotation += Ome;
             if (Projectile.timeLeft > 20)
             {
-                if (Ome < 0.4f)
+                if (Ome < 0.3f)
                 {
-                    Ome += 0.01f;
+                    Ome += 0.003f;
                 }
             }
             else
             {
                 Ome *= 0.9f;
             }
-            if (Projectile.timeLeft < 22 && Main.mouseLeft && !p.dead && p.HeldItem.type == ModContent.ItemType<Clubs.LeafClub>())
+            if (Projectile.timeLeft < 22 && Main.mouseLeft && !p.dead && p.HeldItem.type == ModContent.ItemType<Clubs.ShadewoodClub>())
             {
                 Projectile.timeLeft = 22;
             }
@@ -143,48 +144,21 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
                     Filters.Scene.Deactivate("ClubVague2");
                 }
             }
-            if (lz % 72 == 30 && Ome >= 0.39)
+        }
+
+        public override void Kill(int timeLeft)
+        {
+            if (Filters.Scene["ClubVague"].IsActive())
             {
-                Vector2 vk = new Vector2((float)Main.screenPosition.X + Main.mouseX - p.Center.X, (float)Main.screenPosition.Y + Main.mouseY - p.Center.Y);
-                vk = vk / vk.Length() * 12f;
-                int i = Projectile.NewProjectile(Projectile.InheritSource(Projectile), p.Center + vk, vk, ModContent.ProjectileType<Projectiles.LeafClub2>(), Projectile.damage, Projectile.knockBack * 0.5f, p.whoAmI, p.GetCritChance(DamageClass.Melee), 0);
+                Filters.Scene.Deactivate("ClubVague");
             }
-            if (lz % 72 == 70 && Ome >= 0.39)
+            if (Filters.Scene["ClubVague2"].IsActive())
             {
-                for (int g = 0; g < 8; g++)
-                {
-                    Vector2 vk = new Vector2((float)Main.screenPosition.X + Main.mouseX - p.Center.X, (float)Main.screenPosition.Y + Main.mouseY - p.Center.Y);
-                    vk = vk / vk.Length() * 5f;
-                    vk = vk.RotatedBy(g / 4d * Math.PI);
-                    int i = Projectile.NewProjectile(Projectile.InheritSource(Projectile), p.Center + vk, vk, ModContent.ProjectileType<Projectiles.LeafClub3>(), Projectile.damage / 6, Projectile.knockBack * 0.5f, p.whoAmI, p.GetCritChance(DamageClass.Melee), 0);
-                    Main.projectile[i].rotation = Main.rand.NextFloat(0f, 6.283f);
-                }
+                Filters.Scene.Deactivate("ClubVague2");
             }
-            /*if (lz % 4 == 3)
-            {
-                Vector2 vk = new Vector2((float)Main.screenPosition.X + Main.mouseX - p.Center.X, (float)Main.screenPosition.Y + Main.mouseY - p.Center.Y).RotatedByRandom(Math.PI * 2);
-                vk = vk / vk.Length() * Main.rand.NextFloat(0.8f,3f);
-                int i = Projectile.NewProjectile(Projectile.InheritSource(Projectile), p.Center + vk * 10f, vk, 228, Projectile.damage, Projectile.knockBack * 0.5f, p.whoAmI, 0, 0);
-            }*/
         }
         private Effect ef2;
         private Effect ef3;
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-        {
-            if (target.type == NPCID.TargetDummy)
-            {
-                return;
-            }
-            Player p = Main.player[Projectile.owner];
-            Vector2 vk = new Vector2(0, 5).RotatedByRandom(6.28);
-            for (int g = 0; g < 12; g++)
-            {
-                vk = vk / vk.Length() * 12f;
-                vk = vk.RotatedBy(1d / 6d * Math.PI);
-                int i = Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center + vk, vk, ModContent.ProjectileType<Projectiles.LeafClub3>(), Projectile.damage / 6, Projectile.knockBack * 0.5f, p.whoAmI, p.GetCritChance(DamageClass.Melee), 0);
-                Main.projectile[i].rotation = Main.rand.NextFloat(0f, 6.283f);
-            }
-        }
         public override bool PreDraw(ref Color lightColor)
         {
             SpriteEffects effects = SpriteEffects.None;

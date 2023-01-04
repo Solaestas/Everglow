@@ -185,29 +185,29 @@ Mods:
 			FragransMagic : Moon & Fragrans Magic
 			FragransSpear : Moon Dosn't Shine
 			FragransStaff : Fragrans Bomb Staff
-			BlackWoodenClub : Ebonwood Club
-			BloodClub : Crimson Club
+			EbonwoodClub : Ebonwood Club
+			CrimsonClub : Crimson Club
 			IchorClub : Ichor Club
 			CactusClub : Cactus Club
 			CobaltClub : Cobalt Club
-			ColdWoodenClub : Boreal Wood Club
+			BorealWoodClub : Boreal Wood Club
 			CopperClub : Copper Club
 			CorruptClub : Corruption Club
 			CrystalClub : Crystal Club
 			CurseClub : Cursed Flame Club
-			DarkWoodenClub : Shadewood Club
+			ShadewoodClub : Shadewood Club
 			GoldClub : Gold Club
 			IronClub : Iron Club
 			LeadClub : Lead Club
-			LeafClub : Chlorophyte Club
+			ChlorophyteClub : Chlorophyte Club
 			MeteorClub : Meteor Club
 			MithrilClub : Mythril Club
-			MountainCuClub : Orichalcum Club
+			OrichalcumClub : Orichalcum Club
 			PalladiumClub : Palladium Club
-			PalmWoodenClub : Palm Wood Club
-			PearlWoodenClub : Pearlwood Club
+			PalmWoodClub : Palm Wood Club
+			PearlwoodClub : Pearlwood Club
 			PlatinumClub : Platinum Club
-			RedWoodenClub : Mahogany Club
+			RichMahoganyClub : Mahogany Club
 			RefinedClub : Adamantite Club
 			SilverClub : Silver Club
 			SpikeClub : Spike Club
@@ -630,29 +630,29 @@ Mods:
 			FragransMagic : Don't be lonely when moon and fragrans bright, breeze and moon still.
 			FragransSpear : Don't be lonely when moon and fragrans bright, breeze and moon still.
 			FragransStaff : Don't be lonely when moon and fragrans bright, breeze and moon still.
-			BlackWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
-			BloodClub : "{$Mods.Everglow.Common.ClubGT}"
+			EbonwoodClub : "{$Mods.Everglow.Common.ClubGT}"
+			CrimsonClub : "{$Mods.Everglow.Common.ClubGT}"
 			IchorClub : "{$Mods.Everglow.Common.ClubGT}"
 			CactusClub : "{$Mods.Everglow.Common.ClubGT}"
 			CobaltClub : "{$Mods.Everglow.Common.ClubGT}"
-			ColdWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
+			BorealWoodClub : "{$Mods.Everglow.Common.ClubGT}"
 			CopperClub : "{$Mods.Everglow.Common.ClubGT}"
 			CorruptClub : "{$Mods.Everglow.Common.ClubGT}"
 			CrystalClub : "{$Mods.Everglow.Common.ClubGT}"
 			CurseClub : "{$Mods.Everglow.Common.ClubGT}"
-			DarkWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
+			ShadewoodClub : "{$Mods.Everglow.Common.ClubGT}"
 			GoldClub : "{$Mods.Everglow.Common.ClubGT}"
 			IronClub : "{$Mods.Everglow.Common.ClubGT}"
 			LeadClub : "{$Mods.Everglow.Common.ClubGT}"
-			LeafClub : "{$Mods.Everglow.Common.ClubGT}"
+			ChlorophyteClub : "{$Mods.Everglow.Common.ClubGT}"
 			MeteorClub : "{$Mods.Everglow.Common.ClubGT}"
 			MithrilClub : "{$Mods.Everglow.Common.ClubGT}"
-			MountainCuClub : "{$Mods.Everglow.Common.ClubGT}"
+			OrichalcumClub : "{$Mods.Everglow.Common.ClubGT}"
 			PalladiumClub : "{$Mods.Everglow.Common.ClubGT}"
-			PalmWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
-			PearlWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
+			PalmWoodClub : "{$Mods.Everglow.Common.ClubGT}"
+			PearlwoodClub : "{$Mods.Everglow.Common.ClubGT}"
 			PlatinumClub : "{$Mods.Everglow.Common.ClubGT}"
-			RedWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
+			RichMahoganyClub : "{$Mods.Everglow.Common.ClubGT}"
 			RefinedClub : "{$Mods.Everglow.Common.ClubGT}"
 			SilverClub : "{$Mods.Everglow.Common.ClubGT}"
 			SpikeClub : "{$Mods.Everglow.Common.ClubGT}"

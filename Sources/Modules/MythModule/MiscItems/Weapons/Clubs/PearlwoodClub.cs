@@ -2,7 +2,7 @@ using Terraria.DataStructures;
 using Terraria.Localization;
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs
 {
-    public class PearlWoodenClub : ModItem
+    public class PearlwoodClub : ModItem
     {
         public override void SetStaticDefaults()
         {
@@ -29,7 +29,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs
             Item.crit = 0;
             Item.value = 50;
             Item.scale = 1f;
-            Item.shoot = ModContent.ProjectileType<Projectiles.PearlWoodenClub>();
+            Item.shoot = ModContent.ProjectileType<Projectiles.PearlwoodClub>();
             Item.shootSpeed = 0.04f;
         }
         private bool St = false;

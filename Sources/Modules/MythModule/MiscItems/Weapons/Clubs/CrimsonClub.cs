@@ -2,23 +2,23 @@ using Terraria.DataStructures;
 using Terraria.Localization;
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs
 {
-    public class LeafClub : ModItem
+    public class CrimsonClub : ModItem
     {
-        public override void SetStaticDefaults()
-        {
-            DisplayName.SetDefault("Chlorophyte Club");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "叶绿棍");
-            Tooltip.SetDefault("Spin to hit enemies");
-            Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "旋转挥舞以攻击敌人");
-        }
+        //public override void SetStaticDefaults()
+        //{
+        //    DisplayName.SetDefault("Crimson Club");
+        //    DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "猩红破风棍");
+        //    Tooltip.SetDefault("Spin to hit enemies");
+        //    Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "旋转挥舞以攻击敌人");
+        //}
         public override void SetDefaults()
         {
-            Item.damage = 80;
+            Item.damage = 13;
             Item.DamageType = DamageClass.Melee;
             Item.width = 64;
             Item.height = 64;
             Item.useTime = 4;
-            Item.rare = 6;
+            Item.rare = 1;
             Item.noMelee = true;
             Item.noUseGraphic = true;
             Item.useAnimation = 4;
@@ -29,7 +29,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs
             Item.crit = 0;
             Item.value = 50;
             Item.scale = 1f;
-            Item.shoot = ModContent.ProjectileType<Projectiles.LeafClub>();
+            Item.shoot = ModContent.ProjectileType<Projectiles.CrimsonClub>();
             Item.shootSpeed = 0.04f;
         }
         private bool St = false;
@@ -55,8 +55,8 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(1006, 18)
-                .AddTile(134)
+                .AddIngredient(1257, 18)
+                .AddTile(18)
                 .Register();
         }
     }

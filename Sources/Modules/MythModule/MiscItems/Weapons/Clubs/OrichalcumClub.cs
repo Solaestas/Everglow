@@ -2,23 +2,23 @@ using Terraria.DataStructures;
 using Terraria.Localization;
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs
 {
-    public class PalmWoodenClub : ModItem
+    public class OrichalcumClub : ModItem
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Palm Wood Club");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "棕榈木棍");
+            DisplayName.SetDefault("Orichalcum Club");
+            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "山铜棍");
             Tooltip.SetDefault("Spin to hit enemies");
             Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "旋转挥舞以攻击敌人");
         }
         public override void SetDefaults()
         {
-            Item.damage = 7;
+            Item.damage = 60;
             Item.DamageType = DamageClass.Melee;
             Item.width = 64;
             Item.height = 64;
             Item.useTime = 4;
-            Item.rare = 0;
+            Item.rare = 4;
             Item.noMelee = true;
             Item.noUseGraphic = true;
             Item.useAnimation = 4;
@@ -27,9 +27,9 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs
             //Item.UseSound = SoundID.Item1;
             Item.autoReuse = true;
             Item.crit = 0;
-            Item.value = 50;
+            Item.value = 4000;
             Item.scale = 1f;
-            Item.shoot = ModContent.ProjectileType<Projectiles.PalmWoodenClub>();
+            Item.shoot = ModContent.ProjectileType<Projectiles.OrichalcumClub>();
             Item.shootSpeed = 0.04f;
         }
         private bool St = false;
@@ -55,8 +55,8 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(2504, 18)
-                .AddTile(18)
+                .AddIngredient(1191, 18)
+                .AddTile(134)
                 .Register();
         }
     }

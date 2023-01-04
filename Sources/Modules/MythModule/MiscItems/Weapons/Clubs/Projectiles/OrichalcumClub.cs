@@ -4,7 +4,7 @@ using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectiles
 {
-    public class MountainCuClub : ModProjectile
+    public class OrichalcumClub : ModProjectile
     {
         public override void SetStaticDefaults()
         {
@@ -60,7 +60,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
             {
                 Ome *= 0.9f;
             }
-            if (Projectile.timeLeft < 22 && Main.mouseLeft && !p.dead && p.HeldItem.type == ModContent.ItemType<Clubs.MountainCuClub>())
+            if (Projectile.timeLeft < 22 && Main.mouseLeft && !p.dead && p.HeldItem.type == ModContent.ItemType<Clubs.OrichalcumClub>())
             {
                 Projectile.timeLeft = 22;
             }

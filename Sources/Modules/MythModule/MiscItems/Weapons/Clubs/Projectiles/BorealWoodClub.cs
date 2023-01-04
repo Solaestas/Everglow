@@ -4,11 +4,11 @@ using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectiles
 {
-    public class ColdWoodenClub : ModProjectile
+    public class BorealWoodClub : ModProjectile
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("ColdWoodenClub");
+            DisplayName.SetDefault("BorealWoodClub");
             DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "针叶木棍");
         }
 
@@ -60,7 +60,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
             {
                 Ome *= 0.9f;
             }
-            if (Projectile.timeLeft < 22 && Main.mouseLeft && !p.dead && p.HeldItem.type == ModContent.ItemType<Clubs.ColdWoodenClub>())
+            if (Projectile.timeLeft < 22 && Main.mouseLeft && !p.dead && p.HeldItem.type == ModContent.ItemType<Clubs.BorealWoodClub>())
             {
                 Projectile.timeLeft = 22;
             }
