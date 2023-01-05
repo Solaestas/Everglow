@@ -36,7 +36,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration
             bool b1 = TheTusk.Background.TuskBiomeSky.Open;
             /*if(b1)
             {
-				MythMod.Common.Players.MythPlayer.ZoneTusk = 2;
+				MythMod.MiscProjectiles.Weapon.Fragrans.Fragrans.ZoneTusk = 2;
 			}*/
             return b1;
         }
