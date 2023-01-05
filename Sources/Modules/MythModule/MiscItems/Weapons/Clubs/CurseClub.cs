@@ -7,10 +7,10 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Cursed Flame Club");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "咒火棍");
-            Tooltip.SetDefault("Spin to hit enemies");
-            Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "旋转挥舞以攻击敌人");
+            //DisplayName.SetDefault("Cursed Flame Club");
+            //DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "咒火棍");
+            //Tooltip.SetDefault("Spin to hit enemies");
+            //Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "旋转挥舞以攻击敌人");
             ItemGlowManager.AutoLoadItemGlow(this);
         }
         public static short GetGlowMask = 0;
