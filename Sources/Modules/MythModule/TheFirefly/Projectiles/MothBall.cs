@@ -118,7 +118,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             MythPlayer mplayer = Terraria.Main.player[Terraria.Main.myPlayer].GetModPlayer<MythPlayer>();
             mplayer.Shake = 6;
             float Str = 1;
-
             mplayer.ShakeStrength = Str;*/
             ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
             mplayer.FlyCamPosition = new Vector2(0, 48).RotatedByRandom(6.283);
@@ -126,7 +125,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BombShakeWave>(), 0, 0, Projectile.owner, 2, 6f);
             Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BeadShakeWave>(), 0, 0, Projectile.owner, 4f);
 
-            if(Main.masterMode)
+            if (Main.masterMode)
             {
                 for (int h = 0; h < 6; h++)
                 {

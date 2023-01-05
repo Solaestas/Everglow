@@ -8,15 +8,9 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles
         {
             Projectile.width = 34;
             Projectile.height = 34;
-            Projectile.friendly = false;
-            Projectile.hostile = false;
             Projectile.penetrate = -1;
             Projectile.timeLeft = 180000;
             Projectile.tileCollide = false;
-            Projectile.DamageType = DamageClass.Magic;
-        }
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-        {
         }
         public override Color? GetAlpha(Color lightColor)
         {
@@ -54,7 +48,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles
                 {
                     for (int y = -5; y < 6; y++)
                     {
-                        if (Main.tile[(int)Projectile.Center.X / 16 + x, (int)Projectile.Center.Y / 16 + y].TileType == ModContent.TileType<TheTusk.Tiles.TuskPanF>())
+                        if (Main.tile[(int)Projectile.Center.X / 16 + x, (int)Projectile.Center.Y / 16 + y].TileType == ModContent.TileType<TheTusk.Tiles.BloodyMossWheelFinished>())
                         {
                             Ct += 1;
                         }
