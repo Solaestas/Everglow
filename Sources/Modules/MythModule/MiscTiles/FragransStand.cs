@@ -75,6 +75,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscTiles
                     for (float num4 = 0f; num4 < 1f; num4 += 0.166666672f)
                     {
                         Main.spriteBatch.Draw(value, value3 - Main.screenPosition + (6.28318548f * num4).ToRotationVector2() * (6f + num3 * 2f) + zero, null, color2, 0f, origin, 1f, effects, 0f);
+                        ;
                     }
                     for (int z = 0; z < 4; z++)
                     {

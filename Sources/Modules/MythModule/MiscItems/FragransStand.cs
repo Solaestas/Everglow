@@ -10,7 +10,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems
             DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "天外之月");
             Tooltip.SetDefault("Right Click will consume 120 fragrans soul to start a random prize");
             Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "右键点击消耗300金桂之魂启动一次抽奖");
-            ItemGlowManager.AutoLoadItemGlow(this);
+			ItemGlowManager.AutoLoadItemGlow(this);
 		}
         public static short GetGlowMask = 0;
         public override void SetDefaults()
