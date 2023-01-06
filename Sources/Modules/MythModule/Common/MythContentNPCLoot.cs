@@ -284,7 +284,7 @@ namespace Everglow.Sources.Modules.MythModule.Common
         //    if (npc.type == 344)
         //    {
         //        npcLoot.Add(ItemDropRule.ByCondition(new InFrostMoonFinal(), ModContent.ItemType<FrozenStormPine>(), 50/*概率分母*/, 1/*最小*/, 1/*最大*/, 1/*概率分子*/));
-        //        npcLoot.Add(ItemDropRule.ByCondition(new InFrostMoonFinal(), ModContent.ItemType<XmaxWhip>(), 50/*概率分母*/, 1/*最小*/, 1/*最大*/, 1/*概率分子*/));
+        //        npcLoot.Add(ItemDropRule.ByCondition(new InFrostMoonFinal(), ModContent.ItemType<XmasWhip>(), 50/*概率分母*/, 1/*最小*/, 1/*最大*/, 1/*概率分子*/));
         //    }
         //}
         public static int[] Ty1 = { ModContent.ItemType<MiscItems.FixCoins.FixCoinDamage1>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinCrit1>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinDefense1>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinSpeed1>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinMelee1>() };

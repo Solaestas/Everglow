@@ -665,7 +665,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Gores
                     Main.spriteBatch.Draw(tex, Main.gore[g].position + new Vector2(Main.gore[g].Width / 2f, Main.gore[g].Height / 2f) - Main.screenPosition, new Rectangle((int)Gores.PlatformGore.PlatFrame[g].X, (int)Gores.PlatformGore.PlatFrame[g].Y, 16, 16), cg, Main.gore[g].rotation, new Vector2(8), Main.gore[g].scale, SpriteEffects.None, 0);
                 }
 
-                if (Main.gore[g].type == ModContent.GoreType<Gores.XiaoDash0>() && Main.gore[g].active)
+                if (Main.gore[g].type == ModContent.GoreType<XiaoDash0>() && Main.gore[g].active)
                 {
                     if (!Collision.SolidCollision(Main.gore[g].position, (int)Main.gore[g].Width, (int)Main.gore[g].Height))
                     {
@@ -675,7 +675,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Gores
                     texG = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/LanternMoon/Gores/XiaoDash0G").Value;
                     Main.spriteBatch.End();
                     Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-                    ef = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/EffectsXiaoDash").Value;
+                    ef = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/XiaoDash").Value;
                     ef.Parameters["minr"].SetValue(1 - Main.gore[g].scale);
                     ef.Parameters["uImage1"].SetValue(texG);
 
@@ -688,7 +688,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Gores
                     Main.spriteBatch.End();
                     Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
                 }
-                if (Main.gore[g].type == ModContent.GoreType<Gores.XiaoDash1>() && Main.gore[g].active)
+                if (Main.gore[g].type == ModContent.GoreType<XiaoDash1>() && Main.gore[g].active)
                 {
                     if (!Collision.SolidCollision(Main.gore[g].position, (int)Main.gore[g].Width, (int)Main.gore[g].Height))
                     {
@@ -698,7 +698,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Gores
                     texG = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/LanternMoon/Gores/XiaoDash1G").Value;
                     Main.spriteBatch.End();
                     Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-                    ef = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/EffectsXiaoDash").Value;
+                    ef = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/XiaoDash").Value;
                     ef.Parameters["minr"].SetValue(1 - Main.gore[g].scale);
                     ef.Parameters["uImage1"].SetValue(texG);
 

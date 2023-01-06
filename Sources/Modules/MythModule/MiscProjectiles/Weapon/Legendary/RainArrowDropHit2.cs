@@ -638,181 +638,181 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Legendary
                     //    Main.spriteBatch.End();
                     //    Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
                     //}
-                    //if (Main.projectile[s].type == ModContent.ProjectileType<Melee.World>())
-                    //{
-                    //    for (int k = 0; k < 5; ++k)
-                    //    {
-                    //        Main.spriteBatch.End();
-                    //        Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-                    //        List<Vertex2D> bars = new List<Vertex2D>();
-                    //        //TrueL = 0;
-                    //        for (int i = 1; i < 240; ++i)
-                    //        {
-                    //            if (Melee.World.OldMouseWorldV[Main.projectile[s].owner, i] == Vector2.Zero)
-                    //                break;
-                    //            //TrueL++;
-                    //        }
-                    //        int colorS = 254;
-                    //        if (k > 0)
-                    //        {
-                    //            colorS = 54;
-                    //        }
-                    //        for (int i = 1; i < 240; ++i)
-                    //        {
-                    //            float width = Melee.World.OldWidth[Main.projectile[s].owner, i] * Math.Clamp((i - 1) / 4f, 0, 1);
-                    //            if (k == 1)
-                    //            {
-                    //                width = Melee.World.OldWidthII[Main.projectile[s].owner, i] * Math.Clamp((i - 1) / 4f, 0, 1);
-                    //            }
-                    //            if (k == 2)
-                    //            {
-                    //                width = Melee.World.OldWidthIII[Main.projectile[s].owner, i] * Math.Clamp((i - 1) / 4f, 0, 1);
-                    //            }
-                    //            if (k == 3)
-                    //            {
-                    //                width = Melee.World.OldWidthIV[Main.projectile[s].owner, i] * Math.Clamp((i - 1) / 4f, 0, 1);
-                    //            }
-                    //            if (k == 4)
-                    //            {
-                    //                width = Melee.World.OldWidthV[Main.projectile[s].owner, i] * Math.Clamp((i - 1) / 4f, 0, 1);
-                    //            }
-                    //            width *= Main.projectile[s].timeLeft / 60f;
-                    //            if (Melee.World.OldMouseWorldV[Main.projectile[s].owner, i] == Vector2.Zero)
-                    //                break;
-                    //            var normalDir = Melee.World.OldMouseWorldV[Main.projectile[s].owner, i - 1] - Melee.World.OldMouseWorldV[Main.projectile[s].owner, i];
-                    //            var normalDirBase = Vector2.Normalize(normalDir);
-                    //            normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
-                    //            var factor = 1f;
-                    //            if (240 > 0)
-                    //            {
-                    //                factor = i / (float)240;
-                    //            }
-                    //            var w = MathHelper.Lerp(1f, 0.05f, factor);
-                    //            Vector2 zero = Vector2.Zero;
-                    //            if (k > 0)
-                    //            {
-                    //                zero = new Vector2(8, 6).RotatedBy(k * Math.PI / 2.5d);
-                    //            }
-                    //            else
-                    //            {
-                    //                if ((Melee.World.OldMouseWorldV[Main.projectile[s].owner, i] - Melee.World.OldMouseWorldV[Main.projectile[s].owner, i - 1]).Length() > 5)
-                    //                {
-                    //                    Vector2 Vpi = Vector2.Normalize((Melee.World.OldMouseWorldV[Main.projectile[s].owner, i] - Melee.World.OldMouseWorldV[Main.projectile[s].owner, i - 1])) * 5;
-                    //                    for (int j = 0; j < (Melee.World.OldMouseWorldV[Main.projectile[s].owner, i] - Melee.World.OldMouseWorldV[Main.projectile[s].owner, i - 1]).Length() / 5; j++)
-                    //                    {
-                    //                        Lighting.AddLight(Melee.World.OldMouseWorldV[Main.projectile[s].owner, i - 1] + Vpi * j, (float)(255 - Main.projectile[s].alpha) * 0.04f / 50f * (1 - factor) * width / 24f, (float)(255 - Main.projectile[s].alpha) * 0.14f / 50f * (1 - factor) * width / 24f, 0);
-                    //                    }
-                    //                }
-                    //            }
-                    //            float Color4R = Math.Clamp(width / 3f, 0, 1);
-                    //            float Color4G = (float)((Math.Atan2(normalDirBase.Y, normalDirBase.X) + 62.83) % 62.83) / 6.283f;
-                    //            Color color4 = new Color(Color4R, Color4G, 0, 0);
-                    //            bars.Add(new Vertex2D(Melee.World.OldMouseWorldV[Main.projectile[s].owner, i] + zero + normalDir * width - Main.screenPosition, color4, new Vector3(factor, 1, w)));
-                    //            bars.Add(new Vertex2D(Melee.World.OldMouseWorldV[Main.projectile[s].owner, i] + zero + normalDir * -width - Main.screenPosition, color4, new Vector3(factor, 0, w)));
-                    //        }
-                    //        List<Vertex2D> Vx = new List<Vertex2D>();
-                    //        if (bars.Count > 2)
-                    //        {
-                    //            Vx.Add(bars[0]);
-                    //            var vertex = new Vertex2D((bars[0].Position + bars[1].Position) * 0.5f + Vector2.Normalize(Main.projectile[s].velocity) * 30, new Color(colorS, colorS, colorS, 0), new Vector3(0, 0.5f, 1));
-                    //            Vx.Add(bars[1]);
-                    //            Vx.Add(vertex);
-                    //            for (int i = 0; i < bars.Count - 2; i += 2)
-                    //            {
-                    //                Vx.Add(bars[i]);
-                    //                Vx.Add(bars[i + 2]);
-                    //                Vx.Add(bars[i + 1]);
+                    if (Main.projectile[s].type == ModContent.ProjectileType<Melee.World>())
+                    {
+                        for (int k = 0; k < 5; ++k)
+                        {
+                            Main.spriteBatch.End();
+                            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+                            List<Vertex2D> bars = new List<Vertex2D>();
+                            //TrueL = 0;
+                            for (int i = 1; i < 240; ++i)
+                            {
+                                if (Melee.World.OldMouseWorldV[Main.projectile[s].owner, i] == Vector2.Zero)
+                                    break;
+                                //TrueL++;
+                            }
+                            int colorS = 254;
+                            if (k > 0)
+                            {
+                                colorS = 54;
+                            }
+                            for (int i = 1; i < 240; ++i)
+                            {
+                                float width = Melee.World.OldWidth[Main.projectile[s].owner, i] * Math.Clamp((i - 1) / 4f, 0, 1);
+                                if (k == 1)
+                                {
+                                    width = Melee.World.OldWidthII[Main.projectile[s].owner, i] * Math.Clamp((i - 1) / 4f, 0, 1);
+                                }
+                                if (k == 2)
+                                {
+                                    width = Melee.World.OldWidthIII[Main.projectile[s].owner, i] * Math.Clamp((i - 1) / 4f, 0, 1);
+                                }
+                                if (k == 3)
+                                {
+                                    width = Melee.World.OldWidthIV[Main.projectile[s].owner, i] * Math.Clamp((i - 1) / 4f, 0, 1);
+                                }
+                                if (k == 4)
+                                {
+                                    width = Melee.World.OldWidthV[Main.projectile[s].owner, i] * Math.Clamp((i - 1) / 4f, 0, 1);
+                                }
+                                width *= Main.projectile[s].timeLeft / 60f;
+                                if (Melee.World.OldMouseWorldV[Main.projectile[s].owner, i] == Vector2.Zero)
+                                    break;
+                                var normalDir = Melee.World.OldMouseWorldV[Main.projectile[s].owner, i - 1] - Melee.World.OldMouseWorldV[Main.projectile[s].owner, i];
+                                var normalDirBase = Vector2.Normalize(normalDir);
+                                normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
+                                var factor = 1f;
+                                if (240 > 0)
+                                {
+                                    factor = i / (float)240;
+                                }
+                                var w = MathHelper.Lerp(1f, 0.05f, factor);
+                                Vector2 zero = Vector2.Zero;
+                                if (k > 0)
+                                {
+                                    zero = new Vector2(8, 6).RotatedBy(k * Math.PI / 2.5d);
+                                }
+                                else
+                                {
+                                    if ((Melee.World.OldMouseWorldV[Main.projectile[s].owner, i] - Melee.World.OldMouseWorldV[Main.projectile[s].owner, i - 1]).Length() > 5)
+                                    {
+                                        Vector2 Vpi = Vector2.Normalize((Melee.World.OldMouseWorldV[Main.projectile[s].owner, i] - Melee.World.OldMouseWorldV[Main.projectile[s].owner, i - 1])) * 5;
+                                        for (int j = 0; j < (Melee.World.OldMouseWorldV[Main.projectile[s].owner, i] - Melee.World.OldMouseWorldV[Main.projectile[s].owner, i - 1]).Length() / 5; j++)
+                                        {
+                                            Lighting.AddLight(Melee.World.OldMouseWorldV[Main.projectile[s].owner, i - 1] + Vpi * j, (float)(255 - Main.projectile[s].alpha) * 0.04f / 50f * (1 - factor) * width / 24f, (float)(255 - Main.projectile[s].alpha) * 0.14f / 50f * (1 - factor) * width / 24f, 0);
+                                        }
+                                    }
+                                }
+                                float Color4R = Math.Clamp(width / 3f, 0, 1);
+                                float Color4G = (float)((Math.Atan2(normalDirBase.Y, normalDirBase.X) + 62.83) % 62.83) / 6.283f;
+                                Color color4 = new Color(Color4R, Color4G, 0, 0);
+                                bars.Add(new Vertex2D(Melee.World.OldMouseWorldV[Main.projectile[s].owner, i] + zero + normalDir * width - Main.screenPosition, color4, new Vector3(factor, 1, w)));
+                                bars.Add(new Vertex2D(Melee.World.OldMouseWorldV[Main.projectile[s].owner, i] + zero + normalDir * -width - Main.screenPosition, color4, new Vector3(factor, 0, w)));
+                            }
+                            List<Vertex2D> Vx = new List<Vertex2D>();
+                            if (bars.Count > 2)
+                            {
+                                Vx.Add(bars[0]);
+                                var vertex = new Vertex2D((bars[0].position + bars[1].position) * 0.5f + Vector2.Normalize(Main.projectile[s].velocity) * 30, new Color(colorS, colorS, colorS, 0), new Vector3(0, 0.5f, 1));
+                                Vx.Add(bars[1]);
+                                Vx.Add(vertex);
+                                for (int i = 0; i < bars.Count - 2; i += 2)
+                                {
+                                    Vx.Add(bars[i]);
+                                    Vx.Add(bars[i + 2]);
+                                    Vx.Add(bars[i + 1]);
 
-                    //                Vx.Add(bars[i + 1]);
-                    //                Vx.Add(bars[i + 2]);
-                    //                Vx.Add(bars[i + 3]);
-                    //            }
-                    //        }
-                    //        Texture2D t = ModContent.Request<Texture2D>("MythMod/UIImages/WorldFade").Value;
-                    //        Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
-                    //        Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
-                    //    }
-                    //}
+                                    Vx.Add(bars[i + 1]);
+                                    Vx.Add(bars[i + 2]);
+                                    Vx.Add(bars[i + 3]);
+                                }
+                            }
+                            Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/WorldFade").Value;
+                            Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
+                            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
+                        }
+                    }
 
-                    //if (Main.projectile[s].type == ModContent.ProjectileType<Melee.Spears.Hepuyuan>() || Main.projectile[s].type == ModContent.ProjectileType<Melee.Spears.HepuyuanDown>())
-                    //{
-                    //    Player player = Main.player[Main.projectile[s].owner];
-                    //    Vector2 FirstVel = Vector2.Zero;
-                    //    if (!Main.gamePaused)
-                    //    {
-                    //        OldplCenHepuyuan[s, 0] = Main.projectile[s].Center - Vector2.Normalize(Main.projectile[s].velocity) * 15f;//记录位置
-                    //        for (int f = 59; f > 0; f--)
-                    //        {
-                    //            OldplCenHepuyuan[s, f] = OldplCenHepuyuan[s, f - 1];
-                    //        }
-                    //        widHepuyuan[s, 0] = Math.Clamp(Main.projectile[s].velocity.Length() / 6f, 0, 60);//宽度
-                    //        for (int f = 59; f > 0; f--)
-                    //        {
-                    //            widHepuyuan[s, f] = widHepuyuan[s, f - 1];
-                    //        }
-                    //    }
-                    //    if (FirstVel == Vector2.Zero)
-                    //    {
-                    //        FirstVel = Vector2.Normalize(Main.projectile[s].velocity);
-                    //    }
-                    //    if (Main.projectile[s].timeLeft == 1)
-                    //    {
-                    //        for (int f = 59; f >= 0; f--)
-                    //        {
-                    //            OldplCenHepuyuan[s, f] = Vector2.Zero;
-                    //        }
-                    //    }
-                    //    Vector2 FlipVel = FirstVel.RotatedBy(Math.PI / 2d);
-                    //    for (int d = 0; d < 7; d++)
-                    //    {
-                    //        Main.spriteBatch.End();
-                    //        Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-                    //        List<Vertex2D> VxII = new List<Vertex2D>();
-                    //        List<Vertex2D> barsII = new List<Vertex2D>();
-                    //        Vector2 deltaPos = new Vector2(0, 24).RotatedBy(d / 3d * Math.PI + Main.time / 7d);
-                    //        float widk = Vector2.Dot(Vector2.Normalize(deltaPos), Vector2.Normalize(Main.projectile[s].velocity)) + 1.2f;
-                    //        float widV = (float)Math.Clamp(1.6 - Math.Sqrt(Main.projectile[s].velocity.Length() / 16f), 0, 1.6f);
-                    //        if (d == 0)
-                    //        {
-                    //            deltaPos *= 0;
-                    //            widk = 4f * Main.projectile[s].timeLeft / 60f;
-                    //        }
-                    //        for (int i = 1; i < 60; ++i)
-                    //        {
-                    //            if (OldplCenHepuyuan[s, i] == Vector2.Zero)
-                    //                break;
-                    //            var factor = i / 60f;
-                    //            float Color4R = Math.Clamp((float)Math.Sqrt(widV) / 3f, 0, 1);
-                    //            float Color4G = (float)((Math.Atan2(FlipVel.Y, FlipVel.X) + 62.83) % 62.83) / 6.283f;
-                    //            Color color4 = new Color(Color4R, Color4G, 0, 0);
-                    //            barsII.Add(new Vertex2D(deltaPos * (float)(Math.Clamp(Math.Sqrt(factor * 3), 0, 1)) * widV * 1.5f + OldplCenHepuyuan[s, i] + FlipVel * widHepuyuan[s, i] * widk * 2 - Main.screenPosition, color4, new Vector3((float)Math.Sqrt(factor), 1, 0)));
-                    //            barsII.Add(new Vertex2D(deltaPos * (float)(Math.Clamp(Math.Sqrt(factor * 3), 0, 1)) * widV * 1.5f + OldplCenHepuyuan[s, i] - FlipVel * widHepuyuan[s, i] * widk * 2 - Main.screenPosition, color4, new Vector3((float)Math.Sqrt(factor), 0, 0)));
-                    //        }
-                    //        if (barsII.Count > 2)
-                    //        {
-                    //            VxII.Add(barsII[0]);
-                    //            var vertex = new Vertex2D((barsII[0].Position + barsII[1].Position) * 0.5f + Vector2.Normalize(Main.projectile[s].velocity) * 30, new Color(255, 255, 255, 255), new Vector3(0, 0.5f, 1));
-                    //            VxII.Add(barsII[1]);
-                    //            VxII.Add(vertex);
-                    //            for (int i = 0; i < barsII.Count - 2; i += 2)
-                    //            {
-                    //                VxII.Add(barsII[i]);
-                    //                VxII.Add(barsII[i + 2]);
-                    //                VxII.Add(barsII[i + 1]);
+                    if (Main.projectile[s].type == ModContent.ProjectileType<Melee.Hepuyuan.Hepuyuan>() || Main.projectile[s].type == ModContent.ProjectileType<Melee.Hepuyuan.HepuyuanDown>())
+                    {
+                        Player player = Main.player[Main.projectile[s].owner];
+                        Vector2 FirstVel = Vector2.Zero;
+                        if (!Main.gamePaused)
+                        {
+                            OldplCenHepuyuan[s, 0] = Main.projectile[s].Center - Vector2.Normalize(Main.projectile[s].velocity) * 15f;//记录位置
+                            for (int f = 59; f > 0; f--)
+                            {
+                                OldplCenHepuyuan[s, f] = OldplCenHepuyuan[s, f - 1];
+                            }
+                            widHepuyuan[s, 0] = Math.Clamp(Main.projectile[s].velocity.Length() / 6f, 0, 60);//宽度
+                            for (int f = 59; f > 0; f--)
+                            {
+                                widHepuyuan[s, f] = widHepuyuan[s, f - 1];
+                            }
+                        }
+                        if (FirstVel == Vector2.Zero)
+                        {
+                            FirstVel = Vector2.Normalize(Main.projectile[s].velocity);
+                        }
+                        if (Main.projectile[s].timeLeft == 1)
+                        {
+                            for (int f = 59; f >= 0; f--)
+                            {
+                                OldplCenHepuyuan[s, f] = Vector2.Zero;
+                            }
+                        }
+                        Vector2 FlipVel = FirstVel.RotatedBy(Math.PI / 2d);
+                        for (int d = 0; d < 7; d++)
+                        {
+                            Main.spriteBatch.End();
+                            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+                            List<Vertex2D> VxII = new List<Vertex2D>();
+                            List<Vertex2D> barsII = new List<Vertex2D>();
+                            Vector2 deltaPos = new Vector2(0, 24).RotatedBy(d / 3d * Math.PI + Main.time / 7d);
+                            float widk = Vector2.Dot(Vector2.Normalize(deltaPos), Vector2.Normalize(Main.projectile[s].velocity)) + 1.2f;
+                            float widV = (float)Math.Clamp(1.6 - Math.Sqrt(Main.projectile[s].velocity.Length() / 16f), 0, 1.6f);
+                            if (d == 0)
+                            {
+                                deltaPos *= 0;
+                                widk = 4f * Main.projectile[s].timeLeft / 60f;
+                            }
+                            for (int i = 1; i < 60; ++i)
+                            {
+                                if (OldplCenHepuyuan[s, i] == Vector2.Zero)
+                                    break;
+                                var factor = i / 60f;
+                                float Color4R = Math.Clamp((float)Math.Sqrt(widV) / 3f, 0, 1);
+                                float Color4G = (float)((Math.Atan2(FlipVel.Y, FlipVel.X) + 62.83) % 62.83) / 6.283f;
+                                Color color4 = new Color(Color4R, Color4G, 0, 0);
+                                barsII.Add(new Vertex2D(deltaPos * (float)(Math.Clamp(Math.Sqrt(factor * 3), 0, 1)) * widV * 1.5f + OldplCenHepuyuan[s, i] + FlipVel * widHepuyuan[s, i] * widk * 2 - Main.screenPosition, color4, new Vector3((float)Math.Sqrt(factor), 1, 0)));
+                                barsII.Add(new Vertex2D(deltaPos * (float)(Math.Clamp(Math.Sqrt(factor * 3), 0, 1)) * widV * 1.5f + OldplCenHepuyuan[s, i] - FlipVel * widHepuyuan[s, i] * widk * 2 - Main.screenPosition, color4, new Vector3((float)Math.Sqrt(factor), 0, 0)));
+                            }
+                            if (barsII.Count > 2)
+                            {
+                                VxII.Add(barsII[0]);
+                                var vertex = new Vertex2D((barsII[0].position + barsII[1].position) * 0.5f + Vector2.Normalize(Main.projectile[s].velocity) * 30, new Color(255, 255, 255, 255), new Vector3(0, 0.5f, 1));
+                                VxII.Add(barsII[1]);
+                                VxII.Add(vertex);
+                                for (int i = 0; i < barsII.Count - 2; i += 2)
+                                {
+                                    VxII.Add(barsII[i]);
+                                    VxII.Add(barsII[i + 2]);
+                                    VxII.Add(barsII[i + 1]);
 
-                    //                VxII.Add(barsII[i + 1]);
-                    //                VxII.Add(barsII[i + 2]);
-                    //                VxII.Add(barsII[i + 3]);
-                    //            }
-                    //        }
+                                    VxII.Add(barsII[i + 1]);
+                                    VxII.Add(barsII[i + 2]);
+                                    VxII.Add(barsII[i + 3]);
+                                }
+                            }
 
-                    //        Texture2D t0 = ModContent.Request<Texture2D>("MythMod/UIImages/WorldFade").Value;
-                    //        Main.graphics.GraphicsDevice.Textures[0] = t0;//GlodenBloodScaleMirror
-                    //        Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, VxII.ToArray(), 0, VxII.Count / 3);
-                    //        Main.spriteBatch.End();
-                    //        Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-                    //    }
-                    //}
+                            Texture2D t0 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/WorldFade").Value;
+                            Main.graphics.GraphicsDevice.Textures[0] = t0;//GlodenBloodScaleMirror
+                            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, VxII.ToArray(), 0, VxII.Count / 3);
+                            Main.spriteBatch.End();
+                            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+                        }
+                    }
                 }
             }
         }

@@ -74,7 +74,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Typeless.FixCoins
             for (int h = 0; h < 5; h++)
             {
                 Vector2 vF = new Vector2(0, Main.rand.NextFloat(0, 2f)).RotatedByRandom(3.14159);
-                ////Gore.NewGore(null, Projectile.position, vF, ModContent.Find<ModGore>("Everglow/Sources/Modules/MythModule/MiscGore/CoinFrame" + (h % 3 + 1).ToString()).Type, 1f);
+                ////Gore.NewGore(null, Projectile.position, vF, ModContent.Find<ModGore>("Everglow/Sources/Modules/MythModule/MiscGores/FixCoin/CoinFrame" + (h % 3 + 1).ToString()).Type, 1f);
             }
             Player player = Main.player[Projectile.owner];
             int X0 = Main.rand.Next(58);

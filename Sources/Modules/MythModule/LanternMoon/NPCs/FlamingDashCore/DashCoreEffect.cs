@@ -12,7 +12,7 @@
                 Projectile.NewProjectile(null, Main.LocalPlayer.Center + new Vector2(0, -30), new Vector2(0, Main.rand.NextFloat(0, 2f)).RotatedByRandom(6.28), ModContent.ProjectileType<Projectiles.Typeless.AcytaeaEffect>(), 0, 1, Main.myPlayer);
             }*/
 
-            /*ef = (Effect)ModContent.Request<Effect>("MythMod/Effects/ef3/DarkFlame").Value;
+            /*ef = (Effect)ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/DarkFlame").Value;
             ef.Parameters["uImageSize"].SetValue(new Vector2(Main.screenWidth,Main.screenHeight));
             if (!Filters.Scene["DarkFlame"].IsActive())
             {

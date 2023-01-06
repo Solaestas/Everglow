@@ -13,7 +13,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Items
         public static short GetGlowMask = 0;
         public override void SetDefaults()
         {
-            Item.glowMask = GetGlowMask;
+            Item.glowMask = ItemGlowManager.GetItemGlow(this);
             Item.width = 38;//宽
             Item.height = 60;//高
             Item.rare = 2;//品质

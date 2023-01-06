@@ -633,9 +633,6 @@ namespace Everglow.Sources.Modules.MythModule.Common
 			//	sandWall = ModContent.Request<Texture2D>("MythMod/Map/MiddleOce002").Value;
 			//}
 
-			//Cocoon = ModContent.Request<Texture2D>("MythMod/UIImages/World/Cocoon").Value;
-			//CocoonWall = ModContent.Request<Texture2D>("MythMod/UIImages/World/CocoonWall").Value;
-			//CocoonKill = ModContent.Request<Texture2D>("MythMod/UIImages/World/CocoonKill").Value;
 			if (GenshinPlayer > 0)
 			{
 				Color color = Lighting.GetColor((int)(Player.Center.X / 16d), (int)(Player.Center.Y / 16d));

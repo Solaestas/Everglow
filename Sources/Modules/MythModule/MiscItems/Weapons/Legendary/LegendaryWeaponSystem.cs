@@ -3,7 +3,7 @@ using Terraria.GameContent.Shaders;
 using Terraria.Graphics.Shaders;
 using Terraria.Graphics.Effects;
 
-namespace Everglow.Sources.Modules.Everglowule.MiscItems.Weapons.Legendary
+namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Legendary
 {
 	public class LegendaryWeaponSystem : ModSystem
 	{

@@ -1,4 +1,5 @@
-﻿using Terraria.Audio;
+﻿using Everglow.Sources.Modules.MythModule.MiscBuffs;
+using Terraria.Audio;
 namespace Everglow.Sources.Modules.MythModule.Common
 {
 	public class MythContentGlobalNPC : GlobalNPC
@@ -29,10 +30,10 @@ namespace Everglow.Sources.Modules.MythModule.Common
 			{
 				damage *= (MythContentPlayer.CritDamage + 1) / 2f;
 			}
-			//if (player.HeldItem.type == ModContent.ItemType<Items.Weapons.SilveralGun>() || player.HeldItem.type == ModContent.ItemType<Items.Weapons.SilveralRifle>())
-			//{//TODO: Port Silveral Gun
-			//	MythContentPlayer.SilverBuff = 300;
-			//}
+			if (player.HeldItem.type == ModContent.ItemType<MiscItems.Weapons.SilveralGun>() || player.HeldItem.type == ModContent.ItemType<MiscItems.Weapons.SilveralRifle>())
+			{
+				MythContentPlayer.SilverBuff = 300;
+			}
 			if (MythContentPlayer.GoldLiquidPupil > 0)
 			{
 				damage += npc.defense * 0.35;
@@ -144,27 +145,27 @@ namespace Everglow.Sources.Modules.MythModule.Common
 		}
 		public override void UpdateLifeRegen(NPC npc, ref int damage)
 		{//TODO: port freeze buff
-			//if (npc.HasBuff(ModContent.BuffType<Freeze2>()) && !npc.HasBuff(ModContent.BuffType<Freeze>()))
-			//{
-			//	if (4f * npc.width * npc.height / 10300f * npc.scale > 1.5f)
-			//	{
-			//		for (int i = 0; i < 20; i++)
-			//		{
-			//			Dust.NewDust(npc.position, npc.width, npc.height, 33, 0, 0, 0, default(Color), 3f);
-			//		}
-			//	}
-			//	else
-			//	{
-			//		for (int i = 0; i < 20; i++)
-			//		{
-			//			Dust.NewDust(npc.position, npc.width, npc.height, 33, 0, 0, 0, default(Color), 2f);
-			//		}
-			//	}
-			//}
+			if (npc.HasBuff(ModContent.BuffType<Freeze2>()) && !npc.HasBuff(ModContent.BuffType<Freeze>()))
+			{
+				if (4f * npc.width * npc.height / 10300f * npc.scale > 1.5f)
+				{
+					for (int i = 0; i < 20; i++)
+					{
+						Dust.NewDust(npc.position, npc.width, npc.height, 33, 0, 0, 0, default(Color), 3f);
+					}
+				}
+				else
+				{
+					for (int i = 0; i < 20; i++)
+					{
+						Dust.NewDust(npc.position, npc.width, npc.height, 33, 0, 0, 0, default(Color), 2f);
+					}
+				}
+			}
 		}
 		public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 		{
-			//Mod mod = ModLoader.GetMod("MythMod");
+			//Mod mod = ModLoader.GetMod("Everglow");
 			//if (npc.HasBuff(ModContent.BuffType<Freeze>()))
 			//{
 			//	npc.color = new Color(50, 50, 50, 0);
@@ -275,10 +276,10 @@ namespace Everglow.Sources.Modules.MythModule.Common
 			{
 				LaserMark2[npc.whoAmI] = 0;
 			}
-			//if (npc.HasBuff(ModContent.BuffType<Freeze>()))
-			//{
-			//	return false;
-			//}
+			if (npc.HasBuff(ModContent.BuffType<Freeze>()))
+			{
+				return false;
+			}
 			return true;
 		}
 	}
