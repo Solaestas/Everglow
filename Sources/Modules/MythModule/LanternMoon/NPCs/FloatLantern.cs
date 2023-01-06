@@ -98,7 +98,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs
         }
         public override void HitEffect(int hitDirection, double damage)
         {
-            //MythPlayer mplayer = Main.player[Main.myPlayer].GetModPlayer<MythPlayer>();
+            //MythContentPlayer mplayer = Main.player[Main.myPlayer].GetModPlayer<MythContentPlayer>();
             if (NPC.life <= 0)
             {
                 Vector2 vF = new Vector2(Main.rand.NextFloat(-0.4f, 0.4f), 0).RotatedByRandom(6.283) * 6f;

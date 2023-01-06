@@ -144,7 +144,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
                 {
                     Shine = 3;
                     ColorShine = NPC.color;
-                    //MythPlayer mplayer = Terraria.Main.player[Terraria.Main.myPlayer].GetModPlayer<MythPlayer>();
+                    //MythContentPlayer mplayer = Terraria.Main.player[Terraria.Main.myPlayer].GetModPlayer<MythContentPlayer>();
                     //mplayer.Shake = 3;
                     ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
                     mplayer.FlyCamPosition = new Vector2(0, 56).RotatedByRandom(6.283);
@@ -177,7 +177,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
                 {
                     Shine = 3;
                     ColorShine = new Color(255, 60, 0);
-                    //MythPlayer mplayer = Terraria.Main.player[Terraria.Main.myPlayer].GetModPlayer<MythPlayer>();
+                    //MythContentPlayer mplayer = Terraria.Main.player[Terraria.Main.myPlayer].GetModPlayer<MythContentPlayer>();
                     //mplayer.Shake = 3;
                     ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
                     mplayer.FlyCamPosition = new Vector2(0, 56).RotatedByRandom(6.283);
@@ -209,7 +209,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
                 {
                     Shine = 3;
                     ColorShine = new Color(255, 60, 0);
-                    //MythPlayer mplayer = Terraria.Main.player[Terraria.Main.myPlayer].GetModPlayer<MythPlayer>();
+                    //MythContentPlayer mplayer = Terraria.Main.player[Terraria.Main.myPlayer].GetModPlayer<MythContentPlayer>();
                     //mplayer.Shake = 3;
                     ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
                     mplayer.FlyCamPosition = new Vector2(0, 56).RotatedByRandom(6.283);
@@ -235,7 +235,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
                 {
                     Shine = 3;
                     ColorShine = new Color(255, 60, 0);
-                    //MythPlayer mplayer = Terraria.Main.player[Terraria.Main.myPlayer].GetModPlayer<MythPlayer>();
+                    //MythContentPlayer mplayer = Terraria.Main.player[Terraria.Main.myPlayer].GetModPlayer<MythContentPlayer>();
                     //mplayer.Shake = 3;
                     ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
                     mplayer.FlyCamPosition = new Vector2(0, 56).RotatedByRandom(6.283);
@@ -261,7 +261,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
                 {
                     Shine = 3;
                     ColorShine = NPC.color;
-                    //MythPlayer mplayer = Terraria.Main.player[Terraria.Main.myPlayer].GetModPlayer<MythPlayer>();
+                    //MythContentPlayer mplayer = Terraria.Main.player[Terraria.Main.myPlayer].GetModPlayer<MythContentPlayer>();
                     //mplayer.Shake = 3;
                     ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
                     mplayer.FlyCamPosition = new Vector2(0, 56).RotatedByRandom(6.283);
@@ -321,7 +321,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
                 {
                     /*Shine = 3;
                     ColorShine = Color.White;
-                    MythPlayer mplayer = Terraria.Main.player[Terraria.Main.myPlayer].GetModPlayer<MythPlayer>();
+                    MythContentPlayer mplayer = Terraria.Main.player[Terraria.Main.myPlayer].GetModPlayer<MythContentPlayer>();
                     mplayer.Shake = 3;
                     float Str = 1;
                     if ((player.Center - NPC.Center).Length() > 100)
@@ -513,7 +513,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
                 {
                     Shine = 3;
                     ColorShine = NPC.color;
-                    //MythPlayer mplayer = Terraria.Main.player[Terraria.Main.myPlayer].GetModPlayer<MythPlayer>();
+                    //MythContentPlayer mplayer = Terraria.Main.player[Terraria.Main.myPlayer].GetModPlayer<MythContentPlayer>();
                     //mplayer.Shake = 3;
                     ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
                     mplayer.FlyCamPosition = new Vector2(0, 56).RotatedByRandom(6.283);

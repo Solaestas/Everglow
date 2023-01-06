@@ -29,7 +29,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             mplayer.FlyCamPosition = new Vector2(0, 28).RotatedByRandom(6.283);
             //if (!shake) // KEEP FOR REFERENCE
             //{
-            //    MythPlayer mplayer = Main.player[Main.myPlayer].GetModPlayer<MythPlayer>();
+            //    MythContentPlayer mplayer = Main.player[Main.myPlayer].GetModPlayer<MythContentPlayer>();
             //    mplayer.ShakeStrength = 7;
             //    mplayer.Shake = 15;
             //    shake = true;

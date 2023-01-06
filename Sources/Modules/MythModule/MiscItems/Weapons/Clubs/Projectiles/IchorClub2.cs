@@ -155,7 +155,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
             {
                 effects = SpriteEffects.FlipHorizontally;
             }
-            Mod mod = ModLoader.GetMod("MythMod");
+            Mod mod = ModLoader.GetMod("Everglow");
             Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
             float im = Omega * 50;
             if (im >= 1)

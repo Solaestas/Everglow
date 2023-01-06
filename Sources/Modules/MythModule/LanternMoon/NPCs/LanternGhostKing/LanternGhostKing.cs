@@ -420,7 +420,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.LanternGhostKing
         private bool canDespawn;
         public override void HitEffect(int hitDirection, double damage)
         {
-            //MythPlayer mplayer = Main.player[player.whoAmI].GetModPlayer<MythPlayer>();
+            //MythContentPlayer mplayer = Main.player[player.whoAmI].GetModPlayer<MythContentPlayer>();
             /*if(20000 - (int)(NPC.life / (float)NPC.lifeMax * 10000f) < 20000)
             {
                 mplayer.LanternMoonPoint = 20000 - (int)(NPC.life / (float)NPC.lifeMax * 10000f);

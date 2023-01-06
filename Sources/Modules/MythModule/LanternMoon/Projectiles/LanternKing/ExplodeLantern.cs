@@ -103,7 +103,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKin
         }
         public override void Kill(int timeLeft)
         {
-            //MythPlayer mplayer = Terraria.Main.player[Terraria.Main.myPlayer].GetModPlayer<MythPlayer>();
+            //MythContentPlayer mplayer = Terraria.Main.player[Terraria.Main.myPlayer].GetModPlayer<MythContentPlayer>();
             //mplayer.Shake = 15;
             //Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Item, "Sounds/Item/烟花爆炸>(), (int)Projectile.Center.X, (int)Projectile.Center.Y);
             /*for (int k = 0; k <= 10; k++)

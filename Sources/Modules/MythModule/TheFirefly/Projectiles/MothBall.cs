@@ -115,7 +115,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         public override void Kill(int timeLeft)
         {
             /*震屏
-            MythPlayer mplayer = Terraria.Main.player[Terraria.Main.myPlayer].GetModPlayer<MythPlayer>();
+            MythContentPlayer mplayer = Terraria.Main.player[Terraria.Main.myPlayer].GetModPlayer<MythContentPlayer>();
             mplayer.Shake = 6;
             float Str = 1;
             mplayer.ShakeStrength = Str;*/

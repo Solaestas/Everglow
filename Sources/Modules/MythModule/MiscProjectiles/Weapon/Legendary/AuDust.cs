@@ -1,6 +1,6 @@
 ﻿using Everglow.Sources.Commons.Function.Vertex;
 
-namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon
+namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Legendary
 {
     public class AuDust : ModProjectile
     {

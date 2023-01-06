@@ -128,7 +128,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                 V *= 0.6f;
                 /*if ((player.Center - NPC.Center).Length() < 400)
                 {
-                    MythPlayer mplayer = Terraria.Main.player[Terraria.Main.myPlayer].GetModPlayer<MythPlayer>();
+                    MythContentPlayer mplayer = Terraria.Main.player[Terraria.Main.myPlayer].GetModPlayer<MythContentPlayer>();
                     mplayer.MinaShake = 4;
                     float Str = 1;
                     if ((player.Center - NPC.Center).Length() > 100)
