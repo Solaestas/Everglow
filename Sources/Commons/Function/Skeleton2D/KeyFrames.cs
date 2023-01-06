@@ -4,22 +4,58 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terraria.ModLoader;
 
 namespace Everglow.Sources.Commons.Function.Skeleton2D
 {
-    internal enum InterpolationType
+    internal abstract class InterpolationMethod
     {
-        Linear,
-        Step,
-        Cubic
+        public static InterpolationMethod Lerp = new Lerp();
+        public static InterpolationMethod Step = new Step();
+        public abstract float GetValue(float t);
     }
+
+    internal class Lerp : InterpolationMethod
+    {
+        public override float GetValue(float t)
+        {
+            return t;
+        }
+    }
+
+    internal class Step : InterpolationMethod
+    {
+        public override float GetValue(float t)
+        {
+            return t >= 0 ? 1 : 0;
+        }
+    }
+
+    internal class Curve : InterpolationMethod
+    {
+        private Vector2 m_pA, m_pB;
+        public Curve(Vector2 A, Vector2 B)
+        {
+            m_pA = A;
+            m_pB = B;
+        }
+        public override float GetValue(float t)
+        {
+            Vector2 p0 = Vector2.Zero;
+            Vector2 p1 = Vector2.One;
+            Vector2 p = 3 * m_pA * t * (1 - t) * (1 - t) + 3 * m_pB * t * t * (1 - t) + p1 * t * t * t;
+            return p.Y;
+        }
+    }
+
+
     internal interface IKeyFrame
     {
         public float Time
         {
             get; set;
         }
-        public InterpolationType Interpolation
+        public InterpolationMethod Interpolation
         {
             get; set;
         }
@@ -37,7 +73,7 @@ namespace Everglow.Sources.Commons.Function.Skeleton2D
         {
             get; set;
         }
-        public InterpolationType Interpolation
+        public InterpolationMethod Interpolation
         {
             get; set;
         }
@@ -55,7 +91,7 @@ namespace Everglow.Sources.Commons.Function.Skeleton2D
         {
             get; set;
         }
-        public InterpolationType Interpolation
+        public InterpolationMethod Interpolation
         {
             get; set;
         }
@@ -65,11 +101,11 @@ namespace Everglow.Sources.Commons.Function.Skeleton2D
 
     internal class BoneTranslationKeyFrame : BoneKeyFrame
     {
-        public BoneTranslationKeyFrame(float time, Bone2D bone, InterpolationType type, Vector2 translation)
+        public BoneTranslationKeyFrame(float time, Bone2D bone, InterpolationMethod interp, Vector2 translation)
         {
             Time = time;
             Bone = bone;
-            Interpolation = type;
+            Interpolation = interp;
             m_translation = translation;
         }
 
@@ -84,27 +120,16 @@ namespace Everglow.Sources.Commons.Function.Skeleton2D
             }
             var nextK = nextKFrame as BoneTranslationKeyFrame;
             float factor = MathHelper.Clamp((t - Time) / (nextKFrame.Time - Time), 0, 1f);
-            switch (Interpolation)
-            {
-                case InterpolationType.Linear:
-                    Bone.Position = Vector2.Lerp(m_translation, nextK.m_translation, factor);
-                    break;
-                case InterpolationType.Step:
-                    if (t >= Time)
-                    {
-                        Bone.Position = m_translation;
-                    }
-                    break;
-            }
+            Bone.Position = Vector2.Lerp(m_translation, nextK.m_translation, Interpolation.GetValue(factor));
         }
     }
     internal class BoneRotationKeyFrame : BoneKeyFrame
     {
-        public BoneRotationKeyFrame(float time, Bone2D bone, InterpolationType type, float rotation)
+        public BoneRotationKeyFrame(float time, Bone2D bone, InterpolationMethod interp, float rotation)
         {
             Time = time;
             Bone = bone;
-            Interpolation = type;
+            Interpolation = interp;
             m_rotation = rotation;
         }
 
@@ -119,18 +144,7 @@ namespace Everglow.Sources.Commons.Function.Skeleton2D
             }
             var nextK = nextKFrame as BoneRotationKeyFrame;
             float factor = MathHelper.Clamp((t - Time) / (nextKFrame.Time - Time), 0, 1f);
-            switch (Interpolation)
-            {
-                case InterpolationType.Linear:
-                    Bone.Rotation = MathHelper.Lerp(m_rotation, nextK.m_rotation, factor);
-                    break;
-                case InterpolationType.Step:
-                    if (t >= Time)
-                    {
-                        Bone.Rotation = m_rotation;
-                    }
-                    break;
-            }
+            Bone.Rotation = MathHelper.Lerp(m_rotation, nextK.m_rotation, Interpolation.GetValue(factor));
         }
     }
 
@@ -154,16 +168,7 @@ namespace Everglow.Sources.Commons.Function.Skeleton2D
                 return;
             }
             var nextK = nextKFrame as SlotAttachmentKeyFrame;
-            float factor = MathHelper.Clamp((t - Time) / (nextKFrame.Time - Time), 0, 1f);
-            switch (Interpolation)
-            {
-                case InterpolationType.Linear:
-                    Slot.Attachment = m_attachment;
-                    break;
-                case InterpolationType.Step:
-                    Slot.Attachment = m_attachment;
-                    break;
-            }
+            Slot.Attachment = m_attachment;
         }
     }
 }

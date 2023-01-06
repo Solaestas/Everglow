@@ -44,7 +44,7 @@ namespace Everglow.Sources.Modules.ExampleModule.Skeleton
                 skeleton2D.Position = player.Center;
                 skeleton2D.Rotation = 0f;
                 // skeleton2D.InverseKinematics(Main.MouseWorld);
-                skeleton2D.PlayAnimation("idle", ((float)Main.time % 600) / 60f);
+                skeleton2D.PlayAnimation("idle", ((float)Main.time % 300) / 60f);
                 skeleton2D.DrawDebugView(Main.spriteBatch);
             }
         }

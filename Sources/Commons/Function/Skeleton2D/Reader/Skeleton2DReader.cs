@@ -428,7 +428,7 @@ namespace Everglow.Sources.Commons.Function.Skeleton2D.Reader
                     foreach (JObject keyFrame in values)
                     {
                         float time = 0;
-                        InterpolationType interpolation = InterpolationType.Linear;
+                        InterpolationMethod interpolation = InterpolationMethod.Lerp;
 
                         // 非必要 time 属性
                         if (keyFrame.ContainsKey("time"))
@@ -439,20 +439,42 @@ namespace Everglow.Sources.Commons.Function.Skeleton2D.Reader
                         // 非必要 curve 属性
                         if (keyFrame.ContainsKey("curve"))
                         {
-                            // TODO: 曲线控制参数暂时没做
-                            var curvetype = keyFrame.Value<string>("curve");
-                            switch (curvetype)
+                            if (keyFrame["curve"].Type == JTokenType.String)
                             {
-                                case "linear":
-                                    {
-                                        interpolation = InterpolationType.Linear;
-                                        break;
-                                    }
-                                case "stepped":
-                                    {
-                                        interpolation = InterpolationType.Step;
-                                        break;
-                                    }
+                                var curvetype = keyFrame.Value<string>("curve");
+                                switch (curvetype)
+                                {
+                                    case "linear":
+                                        {
+                                            interpolation = InterpolationMethod.Lerp;
+                                            break;
+                                        }
+                                    case "stepped":
+                                        {
+                                            interpolation = InterpolationMethod.Step;
+                                            break;
+                                        }
+                                }
+                            }
+                            else // 不是string那么就是曲线参数
+                            {
+                                float cx1 = keyFrame.Value<float>("curve");
+                                float cy1 = 0;
+                                float cx2 = 1;
+                                float cy2 = 1;
+                                if (keyFrame.ContainsKey("c2"))
+                                {
+                                    cy1 = keyFrame.Value<float>("c2");
+                                }
+                                if (keyFrame.ContainsKey("c3"))
+                                {
+                                    cx2 = keyFrame.Value<float>("c3");
+                                }
+                                if (keyFrame.ContainsKey("c4"))
+                                {
+                                    cy2 = keyFrame.Value<float>("c4");
+                                }
+                                interpolation = new Curve(new Vector2(cx1, cy1), new Vector2(cx2, cy2));
                             }
                         }
 
@@ -515,7 +537,7 @@ namespace Everglow.Sources.Commons.Function.Skeleton2D.Reader
                     foreach (JObject keyFrame in values.Cast<JObject>())
                     {
                         float time = 0;
-                        InterpolationType interpolation = InterpolationType.Linear;
+                        InterpolationMethod interpolation = InterpolationMethod.Lerp;
 
                         // 非必要 time 属性
                         if (keyFrame.ContainsKey("time"))
@@ -532,12 +554,12 @@ namespace Everglow.Sources.Commons.Function.Skeleton2D.Reader
                             {
                                 case "linear":
                                     {
-                                        interpolation = InterpolationType.Linear;
+                                        interpolation = InterpolationMethod.Lerp;
                                         break;
                                     }
                                 case "steppped":
                                     {
-                                        interpolation = InterpolationType.Step;
+                                        interpolation = InterpolationMethod.Step;
                                         break;
                                     }
                             }
