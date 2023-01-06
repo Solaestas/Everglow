@@ -1,4 +1,5 @@
-﻿using Everglow.Sources.Commons.Function.Vertex;
+﻿using Everglow.Sources.Commons.Function.FeatureFlags;
+using Everglow.Sources.Commons.Function.Vertex;
 using Terraria.Audio;
 using Terraria.Graphics.Effects;
 using Terraria.Localization;
@@ -373,7 +374,10 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(0, -350), new Vector2(-8, 0), ModContent.ProjectileType<Projectiles.DashCore.GoldDashLine>(), Dam, 0f, player.whoAmI, 0, 0);
                     }
                 }
-                Main.NewText(Main.MouseWorld.ToString(), 255, 0, 0);
+                if (EverglowConfig.DebugMode)
+                {
+                    Main.NewText(Main.MouseWorld.ToString(), 255, 0, 0);
+                }
             }//红绿花火
             if (NPC.localAI[0] > 1820 && NPC.localAI[0] <= 2560)//蓝黄风车
             {
@@ -894,7 +898,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
                     CheckAutoPause = Main.autoPause;
                     HasCheckAutoPause = true;
                 }
-                CheckAutoPause = true;
+                Main.autoPause = true;
                 Main.InGameUI.IsVisible = true;
                 Main.gamePaused = true;
                 ef.Parameters["Stren"].SetValue(VagueStre);

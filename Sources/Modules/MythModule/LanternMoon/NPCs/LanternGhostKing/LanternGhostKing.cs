@@ -661,8 +661,8 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.LanternGhostKing
             {
                 if (!Main.dedServ)
                 {
-                    Music = MusicLoader.GetMusicSlot(Mod, "Musics/DashCore");
-                }
+					Music = Common.MythContent.QuickMusic("DashCore");
+				}
                 ef.Parameters["Stren"].SetValue(VagueStre);
                 if (VagueStre > 0f)
                 {
