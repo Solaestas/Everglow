@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Sources.Modules.WorldModlue
+namespace Everglow.Sources.Modules.WorldModule
 {
     /// <summary>
     /// 用来实现某个我觉得非常坏的但是万象想要的效果
