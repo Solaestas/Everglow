@@ -8,6 +8,12 @@ namespace Everglow.Sources.Modules.WorldModlue
 {
     internal abstract class World : ModType
     {
+        public World(uint width, uint height, SaveType howsave)
+        {
+            Width = (int)width;
+            Height = (int)height;
+            HowSave = howsave;
+        }
         protected sealed override void Register()
         {
             WorldManager.Register(this);
@@ -15,15 +21,25 @@ namespace Everglow.Sources.Modules.WorldModlue
         /// <summary>
         /// 联机同步务必检查此项在各端一致!
         /// </summary>
-        public abstract int Width { get; }
+        public int Width { get; init; }
         /// <summary>
         /// 联机同步务必检查此项在各端一致!
         /// </summary>
-        public abstract int Height { get; }
+        public int Height { get; init; }
         /// <summary>
         /// 只在单人模式或者服务端调用,注意检查
         /// </summary>
-        public virtual SaveType HowSave => SaveType.None;
+        public SaveType HowSave { get; init; }
+        internal string GetFilePath(WorldHistory history)
+        {
+            return HowSave switch
+            {
+                SaveType.PerWorld => Path.Combine(Main.WorldPath, nameof(SaveType.PerWorld), history.root.GetFileName(false), Mod.Name, Name + ".wld"),
+                SaveType.PerPlayer => Path.Combine(Main.WorldPath, nameof(SaveType.PerPlayer), Main.ActivePlayerFileData.GetFileName(false), Mod.Name, Name + ".wld"),
+                SaveType.Public => Path.Combine(Main.WorldPath, nameof(SaveType.Public), Mod.Name, Name + ".wld"),
+                _ => "",
+            };
+        }
         /// <summary>
         /// 只在单人模式或者客户端调用,注意检查
         /// <br>在不保存地图时设置为true也不会保存</br>

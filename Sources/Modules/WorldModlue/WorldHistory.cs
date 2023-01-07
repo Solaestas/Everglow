@@ -33,5 +33,9 @@ namespace Everglow.Sources.Modules.WorldModlue
         /// 读取访问过的世界
         /// </summary>
         public IReadOnlySet<World> Visited => history.ToHashSet();
+        public void WriteSyncData(BinaryWriter writer)
+        {
+
+        }
     }
 }

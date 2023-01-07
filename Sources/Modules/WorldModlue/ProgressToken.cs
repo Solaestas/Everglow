@@ -9,7 +9,7 @@ namespace Everglow.Sources.Modules.WorldModlue
 {
     public class ProgressToken
     {
-        public ProgressToken()
+        public ProgressToken(params Action<State>[] wheninvalids)
         {
             WhenInvalid += (state) =>
             {
