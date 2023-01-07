@@ -6,6 +6,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
     public class BlackCorruptRain3Friendly : ModProjectile
     {
+        public override string Texture => "Everglow/Sources/Modules/MythModule/TheFirefly/Projectiles/BlackCorruptRain3";
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Black Corrupt Ball");

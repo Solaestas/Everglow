@@ -16,6 +16,7 @@ using System.Linq.Expressions;
 using Everglow.Sources.Modules.ZYModule.Commons.Core;
 using static Terraria.ModLoader.PlayerDrawLayer;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Everglow.Sources.Modules.FoodModule.Dusts;
 
 namespace Everglow.Sources.Modules.FoodModule.Projectiles
 {
@@ -52,7 +53,14 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
         //一定程度上决定拖尾的亮度/不透明度
         public override float TrailAlpha(float factor)
         {
-            return base.TrailAlpha(factor) * 1.3f;
+            if (attackType == 0)
+            {
+                return base.TrailAlpha(factor) * 1.2f;
+            }
+            else
+            {
+                return base.TrailAlpha(factor) * 0.9f;
+            }
         }
         public override string TrailShapeTex()
         {
@@ -117,27 +125,26 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                     //向内的粒子效果
                     if (timer % 10 == 0)
                     {
-                        AttSound(SoundID.Item1);
                         Vector2 r = Main.rand.NextVector2Unit();
                         float dis1 = MathHelper.Clamp(chargeTime1 - timer, 0, chargeTime1) / 1;
                         float dis2 = MathHelper.Clamp(chargeTime2 - timer, 0, chargeTime2) / 1;
                         float dis3 = MathHelper.Clamp(chargeTime3 - timer, 0, chargeTime3) / 1;
-                        Dust d1 = Dust.NewDustDirect(Projectile.Center + r * dis1, 10, 10, ModContent.DustType<MothSmog>(), 0, 0, 100, new Color(250, 150, 20), 0.8f);
+                        Dust d1 = Dust.NewDustDirect(Projectile.Center + r * dis1, 10, 10, DustID.AncientLight, 0, 0, 100, new Color(250, 150, 20), 0.8f);
                         d1.velocity = -r * 4;
                         d1.position += Main.rand.NextVector2Unit() * 5;
                         d1.noGravity = true;
 
-                        Dust d2 = Dust.NewDustDirect(Projectile.Center + r * dis2, 10, 10, ModContent.DustType<MothSmog>(), 0, 0, 100, new Color(250, 150, 20), 0.8f);
+                        Dust d2 = Dust.NewDustDirect(Projectile.Center + r * dis2, 10, 10, DustID.AncientLight, 0, 0, 100, new Color(250, 150, 20), 0.8f);
                         d2.velocity = -r * 4;
                         d2.position += Main.rand.NextVector2Unit() * 5;
                         d2.noGravity = true;
 
-                        Dust d3 = Dust.NewDustDirect(Projectile.Center + r * dis3, 10, 10, ModContent.DustType<MothSmog>(), 0, 0, 100, new Color(250, 150, 20), 0.8f);
+                        Dust d3 = Dust.NewDustDirect(Projectile.Center + r * dis3, 10, 10, DustID.AncientLight, 0, 0, 100, new Color(250, 150, 20), 0.8f);
                         d3.velocity = -r * 4;
                         d3.position += Main.rand.NextVector2Unit() * 5;
                         d3.noGravity = true;
                     }
-                    
+
                 }
                 SoundStyle sound = SoundID.Item4;
                 sound.Volume *= 0.4f;
@@ -275,9 +282,12 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                 isAttacking = true;
                 longHandle = true;
                 Player player = Main.player[Projectile.owner];
-                Vector2 velocity = Vector2.Normalize(MouseWorld_WithoutGravDir - Player.Center);
                 Projectile.Center += Projectile.velocity;
                 useTrail = true;
+                if (timer % 10 == 0)
+                {
+                    AttSound(SoundID.Item1);
+                }
                 if (hittimes > 0)
                 {
                     foreach (Projectile proj in Main.projectile)
@@ -295,8 +305,8 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                                 Vector2 newvelocity1 = (v1 * (m1 - m2) + 2 * m2 * v2) / (m1 + m2);
                                 Vector2 newvelocity2 = (v2 * (m2 - m1) + 2 * m1 * v1) / (m1 + m2);
                                 Vector2 dustvelocity = newvelocity1 - v1;
-                                
-                                if(newvelocity1.Length()<= v1.Length())
+
+                                if (newvelocity1.Length() <= v1.Length())
                                 {
                                     proj.velocity = Vector2.Normalize(newvelocity1) * v1.Length();
                                 }
@@ -306,8 +316,8 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                                 }
                                 Projectile.velocity = newvelocity2;//这里是质心动量守恒的弹性碰撞
 
-                                Dust dust = Dust.NewDustPerfect(Projectile.Center - (Vector2.Normalize(dustvelocity).RotatedBy(Math.PI / 4) * 32), ModContent.DustType<Dusts.FireDust>(), Vector2.Normalize(dustvelocity) * 15, 125, new Color(250, 150, 20));
-
+                                Dust.NewDustPerfect(Projectile.Center - (Vector2.Normalize(dustvelocity).RotatedBy(Math.PI / 4) * 32), ModContent.DustType<Dusts.FireDust>(), Vector2.Normalize(dustvelocity) * 15, 125, new Color(250, 150, 20));
+                                Projectile.NewProjectile(null, Projectile.Center - (Vector2.Normalize(dustvelocity).RotatedBy(Math.PI / 4) * 32), Vector2.Normalize(dustvelocity) * 15, ProjectileID.Spark, Projectile.damage, Projectile.knockBack, player.whoAmI);
 
                                 int dust1 = Dust.NewDust(Projectile.Center - (Vector2.Normalize(dustvelocity).RotatedBy(Math.PI / 4) * 32), 0, 0, ModContent.DustType<MothSmog>(), Vector2.Normalize(dustvelocity).X * 5, Vector2.Normalize(dustvelocity).Y * 10, 100, default, Main.rand.NextFloat(3.7f, 5.1f));
                                 Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 50);
@@ -325,7 +335,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                 mainVec = Projectile.rotation.ToRotationVector2() * 38;
                 if (Projectile.timeLeft <= 2880)
                 {
-                    Projectile.velocity = Projectile.velocity * 0.9f + Vector2.Normalize(player.Center - Projectile.Center) * 0.5f;
+                    Projectile.velocity = Projectile.velocity * 0.8f + Vector2.Normalize(player.Center - Projectile.Center) * 0.5f;
                     Projectile.tileCollide = false;
                     Projectile.rotation += 0.3f * Projectile.spriteDirection;
                     mainVec = Projectile.rotation.ToRotationVector2() * 38;
@@ -355,7 +365,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
         }
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            if (attackType == 0) 
+            if (attackType == 0)
             {
                 if (Projectile.timeLeft > 2880)
                 {
@@ -368,7 +378,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                     Projectile.timeLeft = 2880;
                 }
             }
-            
+
             return;
         }
         public override void OnHitPvp(Player target, int damage, bool crit)

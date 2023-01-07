@@ -1,11 +1,4 @@
-﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
-using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
-using Everglow.Sources.Modules.MythModule.Common;
-using Terraria.DataStructures;
-using ReLogic.Graphics;
-using Terraria.GameContent;
-using Terraria.ID;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories;
+﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories;
 using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
@@ -38,7 +31,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             if (player.itemAnimation % 4 == 2)
             {
                 Vector2 v0 = new Vector2(-3 * player.direction, -7 * player.gravDir).RotatedBy((player.itemAnimationMax - player.itemAnimation) * 0.13 * player.direction * player.gravDir + Math.Sin(Main.timeForVisualEffects / 16) * 0.3);
-                Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center + v0 * 3,v0, ModContent.ProjectileType<Projectiles.GlowWoodSword>(), (int)(Item.damage * 0.3f), Item.knockBack, player.whoAmI);
+                Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center + v0 * 3, v0, ModContent.ProjectileType<Projectiles.GlowWoodSword>(), (int)(Item.damage * 0.3f), Item.knockBack, player.whoAmI);
             }
             base.MeleeEffects(player, hitbox);
         }
