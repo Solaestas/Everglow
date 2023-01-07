@@ -244,9 +244,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
             if (Player.HeldItem.type == ModContent.ItemType<Hepuyuan>())
             {
                 Player.jumpSpeedBoost += 12.75f;
-				Player.maxFallSpeed += 12.75f; //temporary
-				Player.extraFall += 12; //temporary
-				Player.noFallDmg = true; //temporary
+				//Player.noFallDmg = true;
 			}
         }
     }

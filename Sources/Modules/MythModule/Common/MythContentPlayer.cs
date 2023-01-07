@@ -1,4 +1,5 @@
 ﻿//using MythMod.Buffs;
+using Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Fragrans;
 using Terraria.DataStructures;
 //using System.Drawing;
 using Terraria.ModLoader.IO;
@@ -30,8 +31,6 @@ namespace Everglow.Sources.Modules.MythModule.Common
 		public static int RainCritAdd = 0;
 		public static float RainDamageAdd = 0;
 		public static float StackDamageAdd = 0;
-		public static int FragCritAdd = 0;
-		public static float FragDamageAdd = 0;
 		public static int RainLifeAdd = 0;
 		public static float RainManaAdd = 0;
 		public static float RainManaAdd2 = 0;
@@ -40,7 +39,6 @@ namespace Everglow.Sources.Modules.MythModule.Common
 		public static int RainDefenseAdd = 0;
 		public static float RainMissAdd = 0;
 		public static float Miss = 0;
-		public static int FragransIndex = 1;
 		public static int damage40 = 0;
 		public static float CritDamage = 1f;
 		public static int SilverBuff = 0;
@@ -354,8 +352,8 @@ namespace Everglow.Sources.Modules.MythModule.Common
 			CritDamage = 1f;
 			Player.GetCritChance(DamageClass.Generic) += RainCritAdd;
 			Player.GetDamage(DamageClass.Generic) *= RainDamageAdd + 1;
-			Player.GetCritChance(DamageClass.Generic) += FragCritAdd;
-			Player.GetDamage(DamageClass.Generic) *= FragDamageAdd + 1;
+			Player.GetCritChance(DamageClass.Generic) += Fragrans.FragCritAdd;
+			Player.GetDamage(DamageClass.Generic) *= Fragrans.FragDamageAdd + 1;
 			Player.GetDamage(DamageClass.Generic) *= StackDamageAdd + 1;
 			Miss += RainMissAdd;
 			if (CyanPedal > 0)
@@ -431,14 +429,14 @@ namespace Everglow.Sources.Modules.MythModule.Common
 			{
 				Player.maxFallSpeed += 1000f;
 			}
-			//if (Items.Weapons.Activity.Fragrans.FragransSpear.coll > 0)
-			//{
-			//	Player.maxFallSpeed += 1000f;
-			//}
-			//if (Items.Weapons.Hepuyuan.coll > 0)
-			//{
-			//	Player.maxFallSpeed += 1800f;
-			//}
+			if (MiscItems.Weapons.Fragrans.FragransSpear.coll > 0)
+			{
+				Player.maxFallSpeed += 1000f;
+			}
+			if (MiscItems.Weapons.Hepuyuan.coll > 0)
+			{
+				Player.maxFallSpeed += 1800f;
+			}
 			//if (Player.ownedProjectileCounts[ModContent.ProjectileType<EternalResolveMod.Items.Weapons.Stabbings.StabbingCatchEnemiesProj>()] > 0)
 			//{
 			//	Player.maxFallSpeed += 1800f;

@@ -9,10 +9,10 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Fragrans
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Moon Dosn't Shine");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "月色无芒");
-            Tooltip.SetDefault("Don't be lonely when moon and fragrans bright, breeze and moon still.");
-            Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "花好月圆时,愿清风与你相伴");
+            //DisplayName.SetDefault("Moon Dosn't Shine");
+            //DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "月色无芒");
+            //Tooltip.SetDefault("Don't be lonely when moon and fragrans bright, breeze and moon still.");
+            //Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "花好月圆时,愿清风与你相伴");
             ItemGlowManager.AutoLoadItemGlow(this);
         }
         public static short GetGlowMask = 0;
