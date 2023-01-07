@@ -31,6 +31,7 @@ namespace Everglow.Sources.Modules.WorldModule
             ModTypeLookup<World>.Register(world);
             worlddic[world.FullName] = world;
         }
+        public static bool TryGetCache<T>(string key, out T data) => cacheDatas.TryGet(key, out data);
         internal static ProgressToken TryEnter<T>(Action<ProgressToken.State> whenInvalid = null) where T : World
         {
             ProgressToken token = new ProgressToken();
@@ -81,10 +82,18 @@ namespace Everglow.Sources.Modules.WorldModule
             }
             catch when (token.IsCancelled)
             {
+                //TODO
+                //倒序依次尝试返回History
+                //仍然失败返回主世界
+                //仍然失败返回选择世界页面
             }
             catch (Exception e)
             {
                 token.Exception(e);
+                //TODO
+                //倒序依次尝试返回History
+                //仍然失败返回主世界
+                //仍然失败返回选择世界页面
             }
         }
         static void WriteCache()
@@ -258,7 +267,6 @@ namespace Everglow.Sources.Modules.WorldModule
                 {
                     token.StopByOther($"Can't load meta data from {bufferpath}.");
                 }
-                WriteCache();
                 data.SetAsActive();
                 WorldGen.playWorld();
             }
@@ -290,12 +298,14 @@ namespace Everglow.Sources.Modules.WorldModule
                     };
                     newdata.SetSeed(history.root.SeedText);
                 }
-                WriteCache();
                 newdata.SetAsActive();
                 WorldGen.clearWorld();
                 history.buffer.CreateWorld(new GameTime());
                 WorldGen.saveAndPlay();
             }
+            history.history.Enqueue(history.buffer);
+            activing = history.buffer;
+            history.buffer = null;
         }
         static void CallServerToStartNew(WorldHistory history, ProgressToken token)
         {
