@@ -1,4 +1,5 @@
-﻿using Terraria.Localization;
+﻿using Everglow.Sources.Modules.MythModule.LanternMoon.LanternCommon;
+using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs
 {
@@ -21,7 +22,9 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs
         private int num22;
         private int num23;
         private int num24;
-        public override void SetStaticDefaults()
+
+		public LanternMoonProgress LanternMoonProgress = ModContent.GetInstance<LanternMoonProgress>();
+		public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Lantern Ghost");
             Main.npcFrameCount[NPC.type] = 3;
@@ -120,8 +123,8 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs
                     int gra3 = Gore.NewGore(null, NPC.position, vF, ModContent.Find<ModGore>("Everglow/Sources/Modules/MythModule/LanternMoon/Gores/FloatLanternGore6").Type, 1f);
                     Main.gore[gra3].timeLeft = Main.rand.Next(300, 600);
                 }
-                LanternMoon.Point += 15;
-                LanternMoon.WavePoint += 15;
+				LanternMoonProgress.Point += 15;
+                LanternMoonProgress.WavePoint += 15;
                 for (int f = 0; f < 55; f++)
                 {
                     Vector2 v3 = new Vector2(0, Main.rand.NextFloat(0, 12f)).RotatedByRandom(MathHelper.TwoPi);
