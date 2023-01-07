@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Everglow.Sources.Modules.WorldModlue
+namespace Everglow.Sources.Modules.WorldModule
 {
     internal abstract class World : ModType
     {

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria.IO;
 
-namespace Everglow.Sources.Modules.WorldModlue
+namespace Everglow.Sources.Modules.WorldModule
 {
     internal class WorldHistory
     {

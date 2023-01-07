@@ -8,11 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria.IO;
 
-namespace Everglow.Sources.Modules.WorldModlue
+namespace Everglow.Sources.Modules.WorldModule
 {
     internal class WorldSupport : IModule
     {
-        public string Name => nameof(WorldModlue);
+        public string Name => nameof(WorldModule);
         public void Load()
         {
             Hooks.Load();

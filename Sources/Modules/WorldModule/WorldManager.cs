@@ -11,7 +11,7 @@ using Terraria.IO;
 using Terraria.ModLoader.IO;
 using Terraria.Utilities;
 
-namespace Everglow.Sources.Modules.WorldModlue
+namespace Everglow.Sources.Modules.WorldModule
 {
     internal static class WorldManager
     {
