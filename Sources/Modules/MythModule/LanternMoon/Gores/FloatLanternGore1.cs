@@ -71,7 +71,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Gores
                                 int r = Dust.NewDust(Main.gore[g].position - new Vector2(4, 4), (int)Main.gore[g].Width, (int)Main.gore[g].Height, ModContent.DustType<Dusts.Flame4>(), v3.X, v3.Y, 0, default(Color), Main.rand.NextFloat(0.6f, 1f) * Sc);
                                 Main.dust[r].noGravity = true;
                                 Main.dust[r].velocity = Vector2.Zero;
-                            }
+                            }DDDDDD
                         }
                         if (OldVelo[g] != Vector2.Zero)
                         {
