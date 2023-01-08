@@ -78,7 +78,7 @@ namespace Everglow.Sources.Modules.WorldModule
                         fixedwidth = ((fixedwidth - 1) / 200 + 1) * 200;
                         fixedheight = ((fixedheight - 1) / 150 + 1) * 150;
                         //要不要考虑额外预留?
-                        long ExpectedSize = 
+                        long ExpectedSize =
                             //服务端本体占用,单机模式直接切换不考虑此项
                             NetUtils.IsServer ? Process.GetCurrentProcess().PagedMemorySize64 : 0 +
                             //地图大小差距
@@ -91,7 +91,7 @@ namespace Everglow.Sources.Modules.WorldModule
                                 $"The remaining operating space is smaller than the expected required space:" +
                                 $"[{ExpectedSize}/{AvailableBytes}]");
                         }
-                        TileMap_ctor ??= typeof(Tilemap).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, 
+                        TileMap_ctor ??= typeof(Tilemap).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic,
                             new Type[]
                             {
                                 typeof(ushort),
@@ -102,15 +102,21 @@ namespace Everglow.Sources.Modules.WorldModule
                             (ushort)fixedwidth,
                             (ushort)fixedheight
                         });
+                        Main.Map = new(data.WorldSizeX, data.WorldSizeY);
+                        Main.mapMaxX = data.WorldSizeX;
+                        Main.mapMaxY = data.WorldSizeY;
                         int fixedMapWidth = data.WorldSizeX / Main.textureMaxWidth + 2;
-                        int FixedMapHeight = data.WorldSizeY / Main.textureMaxHeight + 2;
-                        if (fixedMapWidth > Main.mapTargetX || FixedMapHeight > Main.mapTargetY)
+                        int fixedMapHeight = data.WorldSizeY / Main.textureMaxHeight + 2;
+                        if (fixedMapWidth > Main.mapTargetX || fixedMapHeight > Main.mapTargetY)
                         {
                             Main.mapTargetX = Math.Max(5, fixedMapWidth);
-                            Main.mapTargetY = Math.Max(3, FixedMapHeight);
+                            Main.mapTargetY = Math.Max(3, fixedMapHeight);
                             Main.instance.mapTarget = new RenderTarget2D[Main.mapTargetX, Main.mapTargetY];
                             Main.initMap = new bool[Main.mapTargetX, Main.mapTargetY];
                             Main.mapWasContentLost = new bool[Main.mapTargetX, Main.mapTargetY];
+                            Main.instance.TilePaintSystem = new();
+                            Main.instance.TilesRenderer = new(Main.instance.TilePaintSystem);
+                            Main.instance.WallsRenderer = new(Main.instance.TilePaintSystem);
                         }
                     }
                 }

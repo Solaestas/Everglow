@@ -26,6 +26,11 @@ namespace Everglow.Sources.Modules.WorldModule
         /// </summary>
         static World activing;
         static TagCompound cacheDatas = new();
+        static MethodInfo InnerSaveWorld;
+        public static bool Activing<T>() where T : World
+        {
+            return activing is not null && activing.GetType().TypeHandle.Equals(typeof(T).TypeHandle);
+        }
         internal static void Register(World world)
         {
             ModTypeLookup<World>.Register(world);
@@ -83,6 +88,7 @@ namespace Everglow.Sources.Modules.WorldModule
             }
             catch when (token.IsCancelled)
             {
+                TryBack(true);
                 //TODO
                 //倒序依次尝试返回History
                 //仍然失败返回主世界
@@ -91,6 +97,7 @@ namespace Everglow.Sources.Modules.WorldModule
             catch (Exception e)
             {
                 token.Exception(e);
+                TryBack(true);
                 //TODO
                 //倒序依次尝试返回History
                 //仍然失败返回主世界
@@ -256,6 +263,10 @@ namespace Everglow.Sources.Modules.WorldModule
         }
         static void Load_SinglePlayer(WorldHistory history, ProgressToken token)
         {
+            InnerSaveWorld ??= typeof(WorldFile).GetMethod("InternalSaveWorld", BindingFlags.NonPublic | BindingFlags.Static);
+            InnerSaveWorld.Invoke(null, new object[] { history.root.IsCloudSave, false });
+            Player.InternalSaveMap(history.root.IsCloudSave);
+            typeof(Player).GetMethod("InternalSavePlayerFile", BindingFlags.NonPublic | BindingFlags.Static).Invoke(null, new object[] { Main.ActivePlayerFileData });
             if (history.History.Count == 0)
             {
                 WriteCache();
@@ -267,6 +278,10 @@ namespace Everglow.Sources.Modules.WorldModule
                 if (data is null)
                 {
                     token.StopByOther($"Can't load meta data from {bufferpath}.");
+                }
+                if (data.WorldSizeX != history.buffer.Width || data.WorldSizeY != history.buffer.Height)
+                {
+                    token.Exception(new FileLoadException("Metadata does not match"));
                 }
                 data.SetAsActive();
                 WorldGen.playWorld();
@@ -293,7 +308,7 @@ namespace Everglow.Sources.Modules.WorldModule
                         CreationTime = DateTime.Now,
                         Metadata = FileMetadata.FromCurrentSettings(FileType.World),
                         WorldGeneratorVersion = 1065151889409UL,
-                        UniqueId = new Guid(),
+                        UniqueId = Guid.NewGuid(),
                         WorldSizeX = history.buffer.Width,
                         WorldSizeY = history.buffer.Height,
                     };
@@ -301,8 +316,19 @@ namespace Everglow.Sources.Modules.WorldModule
                 }
                 newdata.SetAsActive();
                 WorldGen.clearWorld();
+                Main.maxTilesX = history.buffer.Width;
+                Main.maxTilesY = history.buffer.Height;
+                WorldGen.setWorldSize();
+                Main.spawnTileX = Main.maxTilesX / 2;
+                Main.spawnTileY = Main.maxTilesY / 2;
+                Main.worldSurface = (double)Main.maxTilesY * 0.3;
+                Main.rockLayer = (double)Main.maxTilesY * 0.5;
+                WorldGen.waterLine = Main.maxTilesY;
+                Main.weatherCounter = 18000;
+                Cloud.resetClouds();
                 history.buffer.CreateWorld(new GameTime());
-                WorldGen.saveAndPlay();
+                InnerSaveWorld.Invoke(null, new object[] { history.root.IsCloudSave, false });
+                WorldGen.playWorld();
             }
             history.history.Enqueue(history.buffer);
             activing = history.buffer;
@@ -311,6 +337,52 @@ namespace Everglow.Sources.Modules.WorldModule
         static void CallServerToStartNew(WorldHistory history, ProgressToken token)
         {
 
+        }
+
+        public static ProgressToken TryBack(bool exitall = false)
+        {
+            ProgressToken token = new();
+            if (currenthistory is null)
+            {
+                token.Over();
+            }
+            else
+            {
+                if (exitall)
+                {
+                    Task.Factory.StartNew(() =>
+                    {
+                        Main.gameMenu = true;
+                        try
+                        {
+                            currenthistory.root.SetAsActive();
+                            WorldGen.playWorld();
+                            currenthistory = null;
+                            activing = null;
+                        }
+                        catch when (token.IsCancelled)
+                        {
+                            Main.menuMode = MenuID.WorldSelect;
+                            currenthistory = null;
+                            activing = null;
+                            //TODO
+                        }
+                        catch (Exception e)
+                        {
+                            token.Exception(e);
+                            Main.menuMode = MenuID.WorldSelect;
+                            currenthistory = null;
+                            activing = null;
+                            //TODO
+                        }
+                    });
+                }
+                else
+                {
+                    token.StopByOther("No code run.");
+                }
+            }
+            return token;
         }
     }
 }

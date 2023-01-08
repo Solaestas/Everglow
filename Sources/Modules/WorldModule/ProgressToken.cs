@@ -65,6 +65,7 @@ namespace Everglow.Sources.Modules.WorldModule
             TokenState = State.FailedByOther;
             logs.Add($"[{DateTime.Now:HH-mm-ss}]{reason}");
             WhenInvalid(TokenState);
+            throw new OperationCanceledException();
         }
         internal void Over()
         {
@@ -78,6 +79,7 @@ namespace Everglow.Sources.Modules.WorldModule
             TokenState = State.FailedByException;
             logs.Add($"[{DateTime.Now:HH-mm-ss}]\n{e}");
             WhenInvalid(TokenState);
+            throw new OperationCanceledException();
         }
         public enum State
         {

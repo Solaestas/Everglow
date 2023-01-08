@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Everglow.Sources.Modules.WorldModule
@@ -40,6 +41,10 @@ namespace Everglow.Sources.Modules.WorldModule
                 _ => "",
             };
         }
+        /// <summary>
+        /// 只在单人模式或者客户端调用,注意检查
+        /// </summary>
+        public virtual bool SavePlayer => false;
         /// <summary>
         /// 只在单人模式或者客户端调用,注意检查
         /// <br>在不保存地图时设置为true也不会保存</br>
@@ -114,6 +119,38 @@ namespace Everglow.Sources.Modules.WorldModule
             /// 通用的
             /// </summary>
             Public
+        }
+    }
+    class TestWorld : World
+    {
+        public TestWorld() : base(3000, 6000, SaveType.PerWorld) { }
+    }
+    class TestWorldCommand : ModCommand
+    {
+        public override string Command => "Test";
+
+        public override CommandType Type => CommandType.World;
+
+        public override void Action(CommandCaller caller, string input, string[] args)
+        {
+            if(WorldManager.Activing<TestWorld>())
+            {
+                Task.Factory.StartNew(() =>
+                {
+                    Main.NewText("将返回");
+                    Thread.Sleep(5000);
+                    WorldManager.TryBack(true);
+                });
+            }
+            else
+            {
+                Task.Factory.StartNew(() =>
+                {
+                    Main.NewText("将进入");
+                    Thread.Sleep(5000);
+                    WorldManager.TryEnter<TestWorld>();
+                });
+            }
         }
     }
 }
