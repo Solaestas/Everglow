@@ -32,11 +32,12 @@ namespace Everglow.Sources.Modules.WorldModule
             set
             {
                 iscancelled = iscancelled || value;
-                if(!value)
+                if (!value)
                 {
                     TokenState = State.FailedByUserCancellation;
                     logs.Add($"[{DateTime.Now:HH-mm-ss}]The user canceled the operation.");
                     WhenInvalid(TokenState);
+                    throw new OperationCanceledException();
                 }
             }
         }

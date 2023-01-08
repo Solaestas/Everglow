@@ -65,6 +65,7 @@ namespace Everglow.Sources.Modules.WorldModule
         }
         static void Enter(World world, ProgressToken token)
         {
+            token.StartRun();
             try
             {
                 Main.gameMenu = true;
