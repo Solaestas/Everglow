@@ -1,5 +1,6 @@
 ﻿using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
+using Everglow.Sources.Modules.WorldModule;
 using Terraria.ObjectData;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
@@ -61,16 +62,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             Player player = Main.LocalPlayer;
             if ((player.Center - new Vector2(i * 16, j * 16)).Length() < 12)
             {
-                if (SubWorldModule.SubworldSystem.IsActive<MothWorld>())
+                //TestCode
+                if (WorldManager.Activing<MothWorld>())
                 {
-                    SubWorldModule.SubworldSystem.Exit();
+                    WorldManager.TryBack();
                 }
                 else
                 {
-                    if (!SubWorldModule.SubworldSystem.Enter<MothWorld>())
-                    {
-                        Main.NewText("Fail!");
-                    }
+                    WorldManager.TryEnter<MothWorld>();
                 }
             }
             base.NearbyEffects(i, j, closer);

@@ -1,4 +1,5 @@
 ﻿using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
+using Everglow.Sources.Modules.WorldModule;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items
 {
@@ -21,16 +22,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items
         {
             if (player.itemAnimation == player.itemAnimationMax)
             {
-                if (SubWorldModule.SubworldSystem.IsActive<MothWorld>())
+                //TestCode
+                if (WorldManager.Activing<MothWorld>())
                 {
-                    SubWorldModule.SubworldSystem.Exit();
+                    WorldManager.TryBack();
                 }
                 else
                 {
-                    if (!SubWorldModule.SubworldSystem.Enter<MothWorld>())
-                    {
-                        Main.NewText("Fail!");
-                    }
+                    WorldManager.TryEnter<MothWorld>();
                 }
             }
             return base.UseItem(player);

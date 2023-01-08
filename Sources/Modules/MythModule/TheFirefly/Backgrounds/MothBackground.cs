@@ -3,6 +3,7 @@ using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses;
 using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
+using Everglow.Sources.Modules.WorldModule;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
 {
@@ -112,7 +113,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
         /// <returns></returns>
         public static bool BiomeActive()
         {
-            return SubWorldModule.SubworldSystem.IsActive<MothWorld>();
+            //TestCode
+            return WorldManager.Activing<MothWorld>();
         }
         /// <summary>
         /// 判定是否开启地形
@@ -125,7 +127,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             Vector2 v0 = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f - BiomeCenter;//距离中心Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f
             v0.Y *= 1.35f;
             v0.X *= 0.9f;//近似于椭圆形，所以xy坐标变换
-            return (v0.Length() < 2000) && SubWorldModule.SubworldSystem.IsActive<MothWorld>();
+            //TestCode
+            return (v0.Length() < 2000) && WorldManager.Activing<MothWorld>();
         }
 
         /// <summary>
