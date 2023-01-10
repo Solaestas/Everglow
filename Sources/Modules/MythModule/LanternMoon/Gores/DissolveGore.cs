@@ -23,6 +23,10 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Gores
         /// 烧剩后的骨架的路径
         /// </summary>
         public string BurnedTexture;
+        /// <summary>
+        /// 是否启用骨骼
+        /// </summary>
+        public bool HasBone = false;
         public override void SetStaticDefaults()
         {
             GoreID.Sets.DisappearSpeed[Type] = 3;
@@ -63,20 +67,17 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Gores
             DissolveAnimationTexture = CheckHasNameSpace(DissolveAnimationTexture);
             FreshDeathTexture = CheckHasNameSpace(FreshDeathTexture);
             BurnedTexture = CheckHasNameSpace(BurnedTexture);
-            Main.NewText(DissolveAnimationTexture);
-            Main.NewText(FreshDeathTexture);
-            Main.NewText(BurnedTexture);
-
-            Texture2D tex = ModContent.Request<Texture2D>(FreshDeathTexture, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-            Texture2D texG = ModContent.Request<Texture2D>(DissolveAnimationTexture, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-            Texture2D texB = ModContent.Request<Texture2D>(BurnedTexture, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+            
+            Texture2D tex = ModContent.Request<Texture2D>(FreshDeathTexture).Value;
+            Texture2D texG = ModContent.Request<Texture2D>(DissolveAnimationTexture).Value;
+            
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             Color cg = Lighting.GetColor((int)(gore.position.X / 16f), (int)(gore.position.Y / 16f));
             Effect ef = MythContent.QuickEffect("Effects/LanternGore");
             ef.Parameters["alphaValue"].SetValue((600 - gore.timeLeft) / 600f);
             ef.Parameters["tex0"].SetValue(texG);
-            ef.Parameters["environmentLight"].SetValue(new Vector4(cg.R * 255f, cg.G * 255f, cg.B * 255f, 255 - gore.alpha) / 255f);
+            ef.Parameters["environmentLight"].SetValue(new Vector4(cg.R, cg.G, cg.B, 255 - gore.alpha) / 255f);
             ef.CurrentTechnique.Passes["Test"].Apply();
             float alp = (255 - gore.alpha) / 255f;
             cg = new Color(cg.R / 255f * alp, cg.G / 255f * alp, cg.B / 255f * alp, alp);
@@ -84,7 +85,11 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Gores
             Main.spriteBatch.Draw(tex, gore.position + new Vector2(gore.Width / 2f, gore.Height / 2f) - Main.screenPosition, null, cg, gore.rotation, tex.Size() / 2, gore.scale, SpriteEffects.None, 0);
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            Main.spriteBatch.Draw(texB, gore.position + new Vector2(gore.Width / 2f, gore.Height / 2f) - Main.screenPosition, null, cg, gore.rotation, tex.Size() / 2, gore.scale, SpriteEffects.None, 0);
+            if (HasBone)
+            {
+                Texture2D texB = ModContent.Request<Texture2D>(BurnedTexture).Value;
+                Main.spriteBatch.Draw(texB, gore.position + new Vector2(gore.Width / 2f, gore.Height / 2f) - Main.screenPosition, null, cg, gore.rotation, tex.Size() / 2, gore.scale, SpriteEffects.None, 0);
+            }
         }
     }
     public class ShaderLanternGore

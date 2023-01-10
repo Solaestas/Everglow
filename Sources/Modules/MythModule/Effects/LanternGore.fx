@@ -29,7 +29,7 @@ float4 PixelShaderFunction(float3 coords : TEXCOORD0) : COLOR0
 {
 	float4 c = tex2D(uImage0, coords.xy);
 	c *= environmentLight;
-	float4 c1 = tex2D(uPerlinTex, float2((c.r - alphaValue) / (1 - alphaValue),0));
+	float4 c1 = tex2D(uPerlinTex, coords.xy);
 	float light = max(max(c1.r,c1.g),c1.b);
 	float value = (light - alphaValue) * 5;
 	if(light < alphaValue)
