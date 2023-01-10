@@ -229,7 +229,7 @@ namespace Everglow.Sources.Modules.FoodModule
                 }
                 else // neutural
                 {
-                    SatietyLevel = -3;
+                    SatietyLevel = 0;
                 }
                 #endregion
             }
