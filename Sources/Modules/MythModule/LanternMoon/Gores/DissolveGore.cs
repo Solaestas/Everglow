@@ -1,5 +1,7 @@
 ﻿using Terraria.GameContent;
 using Everglow.Sources.Modules.MythModule.Common;
+using Terraria.DataStructures;
+
 namespace Everglow.Sources.Modules.MythModule.LanternMoon.Gores
 {
 
@@ -10,15 +12,15 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Gores
         /// </summary>
         public float LightValue = 0;
         /// <summary>
-        /// 溶解动画贴图的路径。从MythModule(不含)算起
+        /// 溶解动画贴图的路径
         /// </summary>
         public string DissolveAnimationTexture;
-        /// <summary>
-        /// 新死状态贴图的路径。从MythModule(不含)算起
+        /// <summary>d
+        /// 新死状态贴图的路径
         /// </summary>
         public string FreshDeathTexture;
         /// <summary>
-        /// 烧剩后的骨架的路径。从MythModule(不含)算起
+        /// 烧剩后的骨架的路径
         /// </summary>
         public string BurnedTexture;
         public override void SetStaticDefaults()
@@ -29,6 +31,18 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Gores
             FreshDeathTexture = "Everglow/" + Texture + "S";
             BurnedTexture = "Everglow/" + Texture + "B";
             SSD();
+        }
+        private string CheckHasNameSpace(string path)
+        {
+            if (!path.Contains("Everglow"))
+            {
+                return "Everglow/" + path;
+            }
+            if(path.Contains("Everglow/Everglow/"))
+            {
+                return path.Replace("Everglow/Everglow/", "Everglow/");
+            }
+            return path;
         }
         public virtual void SSD()
         {
@@ -45,9 +59,14 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Gores
         }
         public virtual void DrawDissolve(Gore gore)
         {
-            Texture2D tex = ModContent.Request<Texture2D>(FreshDeathTexture).Value;
-            Texture2D texG = ModContent.Request<Texture2D>(DissolveAnimationTexture).Value;
-            Texture2D texB = ModContent.Request<Texture2D>(BurnedTexture).Value;
+            //TODO:I cant understand! WHY!!!
+            DissolveAnimationTexture = CheckHasNameSpace(DissolveAnimationTexture);
+            FreshDeathTexture = CheckHasNameSpace(FreshDeathTexture);
+            BurnedTexture = CheckHasNameSpace(BurnedTexture);
+            Main.NewText(BurnedTexture);
+            Texture2D tex = ModContent.Request<Texture2D>(FreshDeathTexture, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+            Texture2D texG = ModContent.Request<Texture2D>(DissolveAnimationTexture, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+            Texture2D texB = ModContent.Request<Texture2D>(BurnedTexture, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             Color cg = Lighting.GetColor((int)(gore.position.X / 16f), (int)(gore.position.Y / 16f));
