@@ -63,7 +63,10 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Gores
             DissolveAnimationTexture = CheckHasNameSpace(DissolveAnimationTexture);
             FreshDeathTexture = CheckHasNameSpace(FreshDeathTexture);
             BurnedTexture = CheckHasNameSpace(BurnedTexture);
+            Main.NewText(DissolveAnimationTexture);
+            Main.NewText(FreshDeathTexture);
             Main.NewText(BurnedTexture);
+
             Texture2D tex = ModContent.Request<Texture2D>(FreshDeathTexture, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
             Texture2D texG = ModContent.Request<Texture2D>(DissolveAnimationTexture, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
             Texture2D texB = ModContent.Request<Texture2D>(BurnedTexture, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
