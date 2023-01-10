@@ -155,6 +155,7 @@ namespace Everglow.Sources.Modules.FoodModule
         {
             tag.Add("CurrentSatiety", CurrentSatiety);
             tag.Add("Thirstystate", Thirstystate);
+            tag.Add("StarvationCounter", StarvationCounter);
             base.SaveData(tag);
         }
 
@@ -168,6 +169,10 @@ namespace Everglow.Sources.Modules.FoodModule
             if (tag.ContainsKey("Thirstystate"))
             {
                 Thirstystate = tag.GetBool("Thirstystate");
+            }
+            if (tag.ContainsKey("StarvationCounter"))
+            {
+                StarvationCounter = tag.GetInt("StarvationCounter");
             }
             base.LoadData(tag);
         }
