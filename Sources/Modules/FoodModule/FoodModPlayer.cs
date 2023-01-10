@@ -4,6 +4,7 @@ using Terraria;
 using Everglow.Sources.Modules.FoodModule.Buffs;
 using Everglow.Sources.Modules.FoodModule.Buffs.ModFoodBuffs;
 using Terraria.DataStructures;
+using Terraria.GameContent.UI;
 
 namespace Everglow.Sources.Modules.FoodModule
 {
@@ -126,6 +127,7 @@ namespace Everglow.Sources.Modules.FoodModule
         public override void PostUpdate()
         {
             FoodState();
+            UpdateHungerEmote();
             base.PostUpdate();
         }
         public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
@@ -213,15 +215,15 @@ namespace Everglow.Sources.Modules.FoodModule
                 StarvationCounter++;
 
                 #region Set satiety level
-                if (StarvationCounter > 54000) // starving
+                if (StarvationCounter > FoodUtils.GetFrames(0, 15, 0, 0)) // starving
                 {
                     SatietyLevel = -3;
                 }
-                else if (StarvationCounter > 36000) // hungry
+                else if (StarvationCounter > FoodUtils.GetFrames(0, 10, 0, 0)) // hungry
                 {
                     SatietyLevel = -2;
                 }
-                else if (StarvationCounter > 18000) // neutrual hungry
+                else if (StarvationCounter > FoodUtils.GetFrames(0, 5, 0, 0)) // neutrual hungry
                 {
                     SatietyLevel = -1;
                 }
@@ -351,5 +353,24 @@ namespace Everglow.Sources.Modules.FoodModule
             #endregion
             base.PostUpdateBuffs();
         }
+        public void UpdateHungerEmote()
+        {
+            if (Main.dontStarveWorld)
+            {
+                if (StarvationCounter == FoodUtils.GetFrames(0, 15, 0, 0)) // starving
+                {
+                    EmoteBubble.MakeLocalPlayerEmote(148);
+                }
+                else if (StarvationCounter == FoodUtils.GetFrames(0, 10, 0, 0)) // hungry
+                {
+                    EmoteBubble.MakeLocalPlayerEmote(147);
+                }
+                else if (StarvationCounter == FoodUtils.GetFrames(0, 5, 0, 0)) // neutrual hungry
+                {
+                    EmoteBubble.MakeLocalPlayerEmote(146);
+                }
+            }
+        }
+
     }
 }
