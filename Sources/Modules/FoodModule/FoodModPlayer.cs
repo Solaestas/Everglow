@@ -3,6 +3,7 @@ using Terraria.ModLoader.IO;
 using Terraria;
 using Everglow.Sources.Modules.FoodModule.Buffs;
 using Everglow.Sources.Modules.FoodModule.Buffs.ModFoodBuffs;
+using Terraria.DataStructures;
 
 namespace Everglow.Sources.Modules.FoodModule
 {
@@ -120,16 +121,19 @@ namespace Everglow.Sources.Modules.FoodModule
             Player.buffImmune[BuffID.NeutralHunger] = true;
             Player.buffImmune[BuffID.Hunger] = true;
             Player.buffImmune[BuffID.Starving] = true;
+            base.PostUpdateMiscEffects();
         }
         public override void PostUpdate()
         {
             FoodState();
-            if (!Player.active)
-            {
-                CurrentSatiety = 0;
-                SatietyLevel = 0;
-                Thirstystate = true;
-            }
+            base.PostUpdate();
+        }
+        public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
+        {
+            CurrentSatiety = 0;
+            SatietyLevel = 0;
+            Thirstystate = true;
+            base.Kill(damage, hitDirection, pvp, damageSource);
         }
         public override void Initialize()
         {
@@ -163,6 +167,7 @@ namespace Everglow.Sources.Modules.FoodModule
             {
                 Thirstystate = tag.GetBool("Thirstystate");
             }
+            base.LoadData(tag);
         }
 
         public void FoodState()
@@ -344,6 +349,7 @@ namespace Everglow.Sources.Modules.FoodModule
                 }
             }
             #endregion
+            base.PostUpdateBuffs();
         }
     }
 }
