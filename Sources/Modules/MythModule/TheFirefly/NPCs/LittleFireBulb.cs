@@ -1,15 +1,11 @@
 ﻿using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
 using Terraria.Localization;
+
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 {
     public class LittleFireBulb : ModNPC
     {
-        public override void SetStaticDefaults()
-        {
-            DisplayName.SetDefault("LittleFireBulb");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "萤火泡");
-            MothLandGlobalNPC.RegisterMothLandNPC(Type);
-        }
         public override void SetDefaults()
         {
             NPC.damage = 0;
@@ -34,6 +30,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
         private bool Ini = false;
         private float MaxL = 0;
         private Vector2 StaCen = Vector2.Zero;
+
         public override void AI()
         {
             if (!Ini)
@@ -96,17 +93,46 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
             NPC.rotation = (float)(Math.Atan2(TOCen.Y, TOCen.X) + Math.PI / 2d);
             Lighting.AddLight((int)(NPC.Center.X / 16), (int)(NPC.Center.Y / 16 - 1), 0, 0.1f, 0.8f);
         }
-
+            // Failed attempt to try to spawn Little Fire Bulbs on the biome roof only ~Setnour6
+        //public override int SpawnNPC(int tileX, int tileY)
+        //{
+        //    MothLand mothLand = ModContent.GetInstance<MothLand>(); // 联机应该没问题。
+        //    SpawnNPC(mothLand.fireflyCenterX, mothLand.fireflyCenterY * 100);
+        //    return base.SpawnNPC(mothLand.fireflyCenterX, tileY);
+        //}
+        //public override float SpawnChance(NPCSpawnInfo spawnInfo)
+        //{
+        //    FireflyBiome FireflyBiome = ModContent.GetInstance<FireflyBiome>();
+        //    if (!FireflyBiome.IsBiomeActive(Main.LocalPlayer))
+        //    {
+        //        return 0f;
+        //    }
+        //    return 2f;
+        //}
+        int HitCount = 0;
         public override void HitEffect(int hitDirection, double damage)
         {
             if (NPC.life <= 0)
             {
                 NPC.life = 1;
                 NPC.active = true;
+                HitCount++;
+                if (HitCount >= (2 + Main.rand.Next(2, 5))) //Attempted random hit count criteria. ~Setnour6
+                {
+                    for (int y = 0; y < 30; y += 3)
+                    {
+                        int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(0.9f, 4.2f));
+                        Main.dust[index].noGravity = true;
+                        Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(1.8f, 2.5f)).RotatedByRandom(Math.PI * 2d);
+                    }
+                    NPC.active = false;
+                    return;
+                }
             }
         }
 
         private Vector2[] vPos = new Vector2[200];
+
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             SpriteEffects effects = SpriteEffects.None;
@@ -120,6 +146,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 
             Color color0 = Lighting.GetColor((int)(NPC.Center.X / 16d), (int)(NPC.Center.Y / 16d));
             Main.spriteBatch.Draw(tx, NPC.Center - Main.screenPosition, new Rectangle(0, 32, 32, 32), color0, NPC.rotation, vector, 1f, effects, 0f);
+            Color color1 = Lighting.GetColor((int)(StaCen.X / 16d), (int)(StaCen.Y / 16d));
             Main.spriteBatch.Draw(tx, StaCen - Main.screenPosition + new Vector2(0, 24), new Rectangle(0, 0, 32, 8), color0, 0, vector, 1f, effects, 0f);
             Color color = new Color(255, 255, 255, 0);
             Main.spriteBatch.Draw(tg, NPC.Center - Main.screenPosition, new Rectangle(0, 32, 32, 32), color, NPC.rotation, vector, 1f, effects, 0f);

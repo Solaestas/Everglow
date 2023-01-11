@@ -1,5 +1,4 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using Terraria.ObjectData;
+﻿using Terraria.ObjectData;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 {
@@ -9,13 +8,15 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
         {
             Main.tileFrameImportant[Type] = true;
             Main.tileNoAttach[Type] = true;
+            Main.tileMerge[ModContent.TileType<DarkCocoon>()][Type] = true;
+            Main.tileMerge[Type][ModContent.TileType<DarkCocoon>()] = true;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style2x1);
             TileObjectData.newTile.RandomStyleRange = 3;
             TileObjectData.addTile(Type);
             DustType = 191;
             ModTranslation modTranslation = base.CreateMapEntryName(null);
             AddMapEntry(new Color(25, 24, 25), modTranslation);
-            HitSound = SoundID.Grass;
+            HitSound = SoundID.Dig;
         }
     }
 }

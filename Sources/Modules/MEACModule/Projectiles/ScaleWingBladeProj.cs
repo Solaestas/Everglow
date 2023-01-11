@@ -2,11 +2,14 @@
 using Everglow.Sources.Modules.MythModule;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Everglow.Sources.Modules.MythModule.TheFirefly;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories;
 
 namespace Everglow.Sources.Modules.MEACModule.Projectiles
 {
     public class ScaleWingBladeProj : MeleeProj
     {
+        FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
         public override void SetDef()
         {
             maxAttackType = 2;
@@ -24,7 +27,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         }
         public override float TrailAlpha(float factor)
         {
-            return base.TrailAlpha(factor) * 1.35f;
+            return base.TrailAlpha(factor)*1.15f;
         }
         public override BlendState TrailBlendState()
         {
@@ -69,6 +72,19 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                 }
                 Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 50, 50)).RotatedByRandom(6.283);
             }
+        }
+        public override void End()
+        {
+            Player player = Main.player[Projectile.owner];
+            TestPlayerDrawer Tplayer = player.GetModPlayer<TestPlayerDrawer>();
+            player.legFrame = new Rectangle(0, 0, player.legFrame.Width, player.legFrame.Height);
+            player.fullRotation = 0;
+            player.legRotation = 0;
+            Tplayer.HeadRotation = 0;
+            Tplayer.HideLeg = false;
+            player.legPosition = Vector2.Zero;
+            Projectile.Kill();
+            player.GetModPlayer<MEACPlayer>().isUsingMeleeProj = false;
         }
         public override void Attack()
         {

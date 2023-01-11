@@ -2,14 +2,15 @@
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
-   
     public class PhantomMoth : ModProjectile
     {
         public override string Texture => "Everglow/Sources/Modules/MythModule/TheFirefly/Projectiles/ButterflyDream";
+
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 4;
         }
+
         public override void SetDefaults()
         {
             Projectile.width = 36;
@@ -22,14 +23,17 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Projectile.usesLocalNPCImmunity = false;
             Projectile.tileCollide = true;
         }
+
         public override void SendExtraAI(BinaryWriter writer)
         {
             writer.Write(Projectile.timeLeft);
         }
+
         public override void ReceiveExtraAI(BinaryReader reader)
         {
             Projectile.timeLeft = reader.ReadInt32();
         }
+
         public override void AI()
         {
             Projectile.spriteDirection = Projectile.velocity.X > 0 ? -1 : 1;
@@ -55,20 +59,23 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 {
                     Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(TargetPos) * 15, 0.05f);
                 }
-                else if(Projectile.timeLeft > 240)
+                else if (Projectile.timeLeft > 240)
                 {
                     Vector2 AimPos = new Vector2(Projectile.ai[0], Projectile.ai[1]);
-                    Vector2 v0 = Utils.SafeNormalize(AimPos - Projectile.Center,Vector2.Zero);
+                    Vector2 v0 = Utils.SafeNormalize(AimPos - Projectile.Center, Vector2.Zero);
                     Projectile.velocity = Vector2.Lerp(Projectile.velocity, v0 * 15, 0.05f);
-                }               
+                }
             }
             else
             {
                 Projectile.velocity *= 0.98f;
             }
             if (Projectile.timeLeft < 10)
+            {
                 Projectile.scale -= 0.1f;
-            if(Projectile.timeLeft == 300)
+            }
+
+            if (Projectile.timeLeft == 300)
             {
                 Projectile.frame = Main.rand.Next(3);
             }
@@ -80,7 +87,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             {
                 Projectile.frame++;
             }
-            if (Projectile.timeLeft % 3 == 0 )
+            if (Projectile.timeLeft % 3 == 0)
             {
                 int index = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<BlueGlowAppear>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.7f, 1.9f) * Projectile.timeLeft / 300f);
                 Main.dust[index].velocity = Projectile.velocity * 0.5f;
@@ -93,6 +100,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
         }
+
         public override void Kill(int timeLeft)
         {
             if (timeLeft > 0)
@@ -110,10 +118,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 }
             }
         }
+
         public override Color? GetAlpha(Color lightColor)
         {
             return new Color(0.6f, 0.6f, 0.9f, 0) * ((1 - Projectile.alpha / 255f) * Projectile.timeLeft / 300f);
         }
-
     }
 }

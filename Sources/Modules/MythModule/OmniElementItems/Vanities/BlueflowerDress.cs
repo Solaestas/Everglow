@@ -1,4 +1,5 @@
 ﻿using Terraria.Localization;
+using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Vanities
 {
@@ -10,12 +11,13 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Vanities
             DisplayName.SetDefault("Blue flower Dress");
             DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "黑蓝色花裙");
         }
+
         public override void SetDefaults()
         {
             Item.width = 18;
             Item.height = 18;
             Item.value = Item.buyPrice(0, 1, 0, 0);
-            Item.rare = 2;
+            Item.rare = ItemRarityID.Green;
         }
     }
 }

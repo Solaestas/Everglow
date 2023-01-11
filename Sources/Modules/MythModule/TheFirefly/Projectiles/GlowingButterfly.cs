@@ -1,6 +1,5 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Commons.Function.Vertex;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
@@ -10,6 +9,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         {
             Main.projFrames[Projectile.type] = 6;
         }
+
         public override void SetDefaults()
         {
             Projectile.width = 46;
@@ -17,14 +17,16 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Projectile.netImportant = true;
             Projectile.friendly = false;
             Projectile.hostile = false;
-            Projectile.penetrate = 1;
+            Projectile.penetrate = ItemUseStyleID.Swing;
             Projectile.timeLeft = 100;
             Projectile.tileCollide = false;
             Projectile.usesLocalNPCImmunity = false;
             Projectile.DamageType = DamageClass.Summon;
             Projectile.alpha = 255;
         }
-        float Ome = 0;
+
+        private float Ome = 0;
+
         public override void AI()
         {
             Player owner = Main.player[Projectile.owner];
@@ -34,7 +36,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 Projectile.frame = Main.rand.Next(6);
                 Ome = Main.rand.NextFloat(-0.02f, 0.02f);
                 Projectile.scale = Main.rand.NextFloat(0.6f, 1.0f);
-                y = 1;
+                y = ItemUseStyleID.Swing;
             }
             if (Projectile.timeLeft > 50 && Projectile.alpha >= 8)
             {
@@ -70,7 +72,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             }
             Stre = Math.Clamp((100 - Projectile.timeLeft) / 10f, 0, 1f);
 
-
             if (Projectile.timeLeft % 5 == 0)
             {
                 if (Projectile.frame != 5)
@@ -102,6 +103,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Movement(foundTarget, distanceFromTarget, targetCenter, distanceToIdlePosition, vectorToIdlePosition);
             Visuals();
         }
+
         private void GeneralBehavior(Player owner, out Vector2 vectorToIdlePosition, out float distanceToIdlePosition)
         {
             Vector2 idlePosition = owner.Center;
@@ -271,11 +273,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         {
             Lighting.AddLight(Projectile.Center, new Vector3(0, 0.05f * (255 - Projectile.alpha) / 255f, 0.12f * (255 - Projectile.alpha) / 255f));
         }
+
         private int y = 0;
-        float Stre;
+        private float Stre;
+
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
         }
+
         public override void Kill(int timeLeft)
         {
             if (Projectile.alpha > 180)
@@ -284,19 +289,21 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             }
             for (int i = 0; i < 18; i++)
             {
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 113, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default(Color), 0.6f * Stre);
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Clentaminator_Blue, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default(Color), 0.6f * Stre);
             }
             for (int i = 0; i < 6; i++)
             {
-                int num90 = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, 226, 0f, 0f, 100, Color.Blue, Main.rand.NextFloat(0.7f, 1.2f) * Stre);
+                int num90 = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, DustID.Electric, 0f, 0f, 100, Color.Blue, Main.rand.NextFloat(0.7f, 1.2f) * Stre);
                 Main.dust[num90].velocity = new Vector2(0, Main.rand.NextFloat(5f, 10f)).RotatedByRandom(6.283) * Stre;
                 Main.dust[num90].noGravity = true;
             }
         }
+
         public override Color? GetAlpha(Color lightColor)
         {
             return new Color((255 - Projectile.alpha), (255 - Projectile.alpha), (255 - Projectile.alpha), (255 - Projectile.alpha) / 3);
         }
+
         /*private Effect ef;
          public override void PostDraw(Color lightColor)
          {

@@ -1,4 +1,6 @@
-﻿namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Items
+﻿using Terraria.ID;
+
+namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Items
 {
     public class CyanVineOre : ModItem
     {
@@ -11,10 +13,10 @@
         {
             Item.width = 18;
             Item.height = 20;
-            Item.rare = 3;
+            Item.rare = ItemRarityID.White;
             Item.scale = 1f;
-            Item.createTile = 0;
-            Item.useStyle = 1;
+            Item.createTile = TileID.Dirt;
+            Item.useStyle = ItemUseStyleID.Swing;
             Item.useTurn = true;
             Item.useAnimation = 15;
             Item.useTime = 15;
@@ -22,7 +24,7 @@
             Item.consumable = true;
             Item.maxStack = 999;
             Item.value = 400;
-            Item.createTile = ModContent.TileType<Tiles.CyanVineStone>();
+            Item.createTile = ModContent.TileType<Tiles.CyanVine.CyanVineStone>();
         }
     }
 }
