@@ -53,7 +53,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             }
             for (int i = 0; i < 18; i++)
             {
-                Dust.NewDust(target.Center, 0, 0, DustID.Clentaminator_Blue, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default(Color), 0.6f);
+                Dust.NewDust(target.Center, 0, 0, DustID.Clentaminator_Blue, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, 0.6f);
             }
             for (int i = 0; i < 6; i++)
             {
@@ -182,14 +182,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 }
                 var factor = i / (float)TrueL;
                 var w = MathHelper.Lerp(1f, 0.05f, factor);
-                var UpValue = ((delta > 0 ? delta : 0) - 1);
-                var DownValue = ((delta < 0 ? delta : 0) + 1);
 
                 Vector2 v3 = new Vector2(0.707f, -0.707f).RotatedBy((Projectile.timeLeft + i) / 10f);
                 double rot = Math.Atan2(OldVelocity[i].Y, OldVelocity[i].X);
                 v3 = new Vector2(v3.X, v3.Y / 2f).RotatedBy(rot);
-                bars.Add(new Vertex2D(Projectile.oldPos[i] + v3 * 45 * OldScale[i] + new Vector2(29) - Main.screenPosition, new Color(254, 254, 254, 255), new Vector3(factor, 0, w)));
-                bars.Add(new Vertex2D(Projectile.oldPos[i] + v3 * 45 * OldScale[i] + width * normalDir * 2 + new Vector2(29) - Main.screenPosition, new Color(254, 254, 254, 255), new Vector3(factor, 1, w)));
+                Vector2 v4 = Projectile.oldPos[i] + new Vector2(29) - Main.screenPosition;
+                bars.Add(new Vertex2D(v4 + v3 * 45 * OldScale[i], new Color(254, 254, 254, 255), new Vector3(factor, 0, w)));
+                bars.Add(new Vertex2D(v4, new Color(254, 254, 254, 255), new Vector3(factor, 1, w)));
             }
             Texture2D t = MythContent.QuickTexture("TheFirefly/Projectiles/heatmapShade");
             if (bars.Count > 0)

@@ -140,8 +140,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Projectile.velocity.Y *= 0.96f;
             if (Projectile.timeLeft % 6 == 0)
             {
-                //int num89 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 113, 0,0, 0, default(Color), 0.6f);
-                int num90 = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<BlueGlowAppear>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(0.4f, 1.2f));
+                //int num89 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 113, 0,0, 0, default, 0.6f);
+                int num90 = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<BlueGlowAppear>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.4f, 1.2f));
                 //Main.dust[num89].velocity = Projectile.velocity * 0.5f;
                 Main.dust[num90].velocity = Projectile.velocity * 0.5f;
             }
@@ -336,7 +336,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             }
             for (int i = 0; i < 18; i++)
             {
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Clentaminator_Blue, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default(Color), 0.6f * Stre);
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Clentaminator_Blue, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, 0.6f * Stre);
             }
             for (int i = 0; i < 6; i++)
             {
@@ -357,7 +357,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
              Main.spriteBatch.End();
              Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
              List<VertexBase.CustomVertexInfo> bars = new List<VertexBase.CustomVertexInfo>();
-             ef = (Effect)ModContent.Request<Effect>("MythMod/Effects/TrailB2").Value;
+             ef = (Effect)ModContent.Request<Effect>("MythMod/Effects/Trail").Value;
              for (int i = 1; i < Projectile.oldPos.Length; ++i)
              {
                  if (Projectile.oldPos[i] == Vector2.Zero) break;

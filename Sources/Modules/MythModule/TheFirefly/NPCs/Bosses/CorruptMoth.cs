@@ -115,7 +115,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
             Main.npcFrameCount[NPC.type] = 10;
 
             NPC.behindTiles = true;
-            NPC.damage = 40;
+            NPC.damage = 30;
             NPC.width = 80;
             NPC.height = 120;
             NPC.defense = 5;
@@ -909,19 +909,19 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
                                     r = Main.rand.NextFloat(0, 1f);
                                     vel = (r + i * MathHelper.TwoPi / NPC.ai[2]).ToRotationVector2();
                                     vel.Y *= 0.5f;
-                                    int ra = Dust.NewDust(NPC.Center, 0, 0, ModContent.DustType<Dusts.PureBlue>(), 0, 0, 0, default(Color), 4f * Main.rand.NextFloat(0.7f, 2.9f));
+                                    int ra = Dust.NewDust(NPC.Center, 0, 0, ModContent.DustType<Dusts.PureBlue>(), 0, 0, 0, default, 4f * Main.rand.NextFloat(0.7f, 2.9f));
                                     Main.dust[ra].noGravity = true;
                                     Main.dust[ra].velocity = vel * NPC.ai[2] * 8;
 
-                                    int index = Dust.NewDust(NPC.Center, 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(0.3f, 2.2f));
+                                    int index = Dust.NewDust(NPC.Center, 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.3f, 2.2f));
                                     Main.dust[index].noGravity = true;
                                     Main.dust[index].velocity = vel * NPC.ai[2] * 1;
 
-                                    index = Dust.NewDust(NPC.Center, 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(0.3f, 2.2f));
+                                    index = Dust.NewDust(NPC.Center, 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.3f, 2.2f));
                                     Main.dust[index].noGravity = true;
                                     Main.dust[index].velocity = vel * NPC.ai[2] * 1;
 
-                                    index = Dust.NewDust(NPC.Center, 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(0.3f, 2.2f));
+                                    index = Dust.NewDust(NPC.Center, 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.3f, 2.2f));
                                     Main.dust[index].noGravity = true;
                                     Main.dust[index].velocity = vel * NPC.ai[2] * 1;
                                 }
@@ -1411,7 +1411,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
                 npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsMasterMode(), ModContent.ItemType<Items.Weapons.GlowBeadGun>(), 8, 1, 1, 1)); //Master Bead Gun
 
             LeadingConditionRule rule = new LeadingConditionRule(new Conditions.NotExpert());
-            rule.OnSuccess(ItemDropRule.OneFromOptions(1, ModContent.ItemType<Items.Weapons.ShadowWingBow>(), ModContent.ItemType<Items.Weapons.ScaleWingBlade>(), ModContent.ItemType<Items.Weapons.PhosphorescenceGun>(), ModContent.ItemType<Items.Weapons.EvilChrysalis>(), ModContent.ItemType<Items.Weapons.DustOfCorrupt>()));
+            rule.OnSuccess(ItemDropRule.OneFromOptions(1, ModContent.ItemType<Items.Weapons.ShadowWingBow>(), ModContent.ItemType<Items.Weapons.ScaleWingBlade>(), ModContent.ItemType<Items.Weapons.PhosphorescenceGun>(), ModContent.ItemType<Items.Weapons.EvilChrysalis>(), ModContent.ItemType<Items.Weapons.DustOfCorrupt>(), ModContent.ItemType<Items.Weapons.MothYoyo>(), ModContent.ItemType<Items.Weapons.DreamWeaver>(), ModContent.ItemType<Items.Weapons.FlowLightMissile>(), ModContent.ItemType<Items.Weapons.NavyThunder>()));
 
             npcLoot.Add(rule);
 
