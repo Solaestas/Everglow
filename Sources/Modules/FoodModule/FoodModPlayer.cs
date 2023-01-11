@@ -135,6 +135,7 @@ namespace Everglow.Sources.Modules.FoodModule
             CurrentSatiety = 0;
             SatietyLevel = 0;
             Thirstystate = true;
+            starvationCounter = 0;
             base.Kill(damage, hitDirection, pvp, damageSource);
         }
         public override void Initialize()
@@ -353,7 +354,8 @@ namespace Everglow.Sources.Modules.FoodModule
                         Player.lifeRegen = 0;
                     }
                     Player.lifeRegen -= (int)(Player.statLifeMax2 * 0.02f);
-                }
+                    Player.starving = true;
+				}
             }
             #endregion
             base.PostUpdateBuffs();
