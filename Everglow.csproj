@@ -52,6 +52,7 @@
 		<PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
 	</ItemGroup>
 	<ItemGroup>
+		<Folder Include="Product\" />
 		<Folder Include="Resources\Tools\" />
 		<Folder Include="lib\" />
 		<Folder Include="Sources\Modules\FoodModule\Buffs\ModDrinkBuffs\" />
