@@ -1,4 +1,5 @@
 ﻿using Everglow.Sources.Commons.Function.Vertex;
+using Terraria.DataStructures;
 
 namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKing
 {
@@ -18,19 +19,14 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKin
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
         }
-        int AIMNpc = -1;
-        Vector2 AIMpos;
+        public override void OnSpawn(IEntitySource source)
+        {
+            Projectile.rotation = Projectile.ai[0];
+        }
         public override void AI()
         {
-            Player player = Main.player[Player.FindClosest(Projectile.position, Projectile.width, Projectile.height)];
-
             Projectile.velocity *= 0.96f;
 
-            if (AIMNpc == -1)
-            {
-                Projectile.rotation = Projectile.ai[0];
-                AIMNpc = 1;
-            }
             Projectile.rotation = Projectile.rotation * 0.96f + Projectile.ai[1] * 0.04f;
             if (Projectile.timeLeft < 60)
             {

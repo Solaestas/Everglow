@@ -14,13 +14,11 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon
         public override void Load()
         {
             Gores.ShaderLanternGore.Load();
-            DrawBossUI.Load();
 			base.Load();
         }
         public override void Unload()
         {
             Gores.ShaderLanternGore.UnLoad();
-            DrawBossUI.Unload();
             base.Unload();
         }
         public override void SetStaticDefaults()

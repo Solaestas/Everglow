@@ -71,10 +71,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs
                 NPC.velocity += v / v.Length() * 0.35f;
             }
             NPC.velocity *= 0.96f;
-            /*if (Math.Abs(NPC.Center.X - player.Center.X) < 200 && A2 % 25 == 1)
-            {
-                Projectile.NewProjectile(NPC.Center.X, NPC.Center.Y + 30f, NPC.velocity.X / 3f, NPC.velocity.Y * 0.25f + 1.5f, mod.ProjectileType("LanternBoomLi"), 25, 0f, Main.myPlayer, 0f, 0f);
-            }*/
+
             if (Main.dayTime)
             {
                 NPC.velocity.Y += 1;
@@ -85,7 +82,6 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs
         }
         public override void HitEffect(int hitDirection, double damage)
         {
-            //MythPlayer mplayer = Main.player[Main.myPlayer].GetModPlayer<MythPlayer>();
             if (NPC.life <= 0)
             {
                 Vector2 vF = new Vector2(Main.rand.NextFloat(-0.4f, 0.4f), 0).RotatedByRandom(6.283) * 6f;

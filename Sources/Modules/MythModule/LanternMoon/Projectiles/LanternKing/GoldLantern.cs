@@ -27,22 +27,17 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKin
             return new Color?(new Color(1f, 1f, 1f, 0.5f));
         }
         private bool initialization = true;
-        private bool Boom = false;
         private float Sca = 0;
         public override void AI()
         {
             if (initialization)
             {
                 num1 = Main.rand.Next(-120, 0);
-                num2 = (int)Projectile.ai[0] * 4;
-                num3 = Main.rand.NextFloat(0.3f, 1.8f);
                 num4 = Main.rand.NextFloat(0.3f, 1800f);
-                num5 = Main.rand.NextFloat(2.85f, 3.15f);
                 Fy = Main.rand.Next(4);
                 initialization = false;
             }
             num1 += 1;
-            num2 -= 1;
             num4 += 0.01f;
             if (Projectile.timeLeft > 510)
             {
@@ -56,21 +51,10 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKin
                 Projectile.velocity *= 0;
                 if (Projectile.timeLeft == 510)
                 {
-                    Vector2 v1 = new Vector2(0, -36).RotatedBy(Projectile.rotation + 1);
-                    Vector2 v2 = new Vector2(0, -36).RotatedBy(Projectile.rotation - 1);
                     Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center, Projectile.velocity, ModContent.ProjectileType<GoldLanternRay>(), 0, 0, Main.myPlayer, Projectile.rotation + 1, Projectile.rotation + 0.3f);
                     Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center, Projectile.velocity, ModContent.ProjectileType<GoldLanternRay>(), 0, 0, Main.myPlayer, Projectile.rotation - 1, Projectile.rotation - 0.3f);
                 }
             }
-            /*if (Projectile.timeLeft < 995)
-            {
-                Vector2 vector = Projectile.Center - new Vector2(4, 4);
-                int num = Dust.NewDust(vector, 2, 2, 102, 0f, 0f, 0, default(Color), (float)Projectile.scale * 0.8f);
-                Main.dust[num].velocity *= 0.0f;
-                Main.dust[num].noGravity = true;
-                Main.dust[num].scale *=  1.2f;
-                Main.dust[num].alpha = 200;
-            }*/
             if (num1 > 0 && num1 <= 120)
             {
                 num = num1 / 120f;
@@ -80,16 +64,11 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKin
                 num = Projectile.timeLeft / 120f;
                 Sca -= 0.01f;
             }
-            //Lighting.AddLight(Projectile.Center, (float)(255 - Projectile.alpha) * 0.8f / 255f * Projectile.scale * num1, (float)(255 - Projectile.alpha) * 0.2f / 255f * Projectile.scale * num1, (float)(255 - Projectile.alpha) * 0f / 255f * Projectile.scale * num1);
         }
         private float num = 0;
         private int num1 = 0;
-        private int num2 = -1;
-        private float num3 = 0.8f;
         private float num4 = 0;
-        private float num5 = 0;
         private float x = 0;
-        private float y = 0;
         private int Fy = 0;
         private int fyc = 0;
         float ka = 0;

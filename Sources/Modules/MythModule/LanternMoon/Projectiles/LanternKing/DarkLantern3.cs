@@ -4,10 +4,6 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKin
 {
     public class DarkLantern3 : ModProjectile
     {
-        public override void SetStaticDefaults()
-        {
-            DisplayName.SetDefault("爆炸灯笼");
-        }
         public override void SetDefaults()
         {
             Projectile.width = 20;
@@ -18,34 +14,28 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKin
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
             Projectile.extraUpdates = 3;
-            Projectile.timeLeft = 3600;
+            Projectile.timeLeft = 5280;
             Projectile.alpha = 0;
             Projectile.penetrate = -1;
             Projectile.scale = 1.5f;
 
         }
-        //55555
         public override Color? GetAlpha(Color lightColor)
         {
             return new Color?(new Color(1f, 1f, 1f, 0.5f));
         }
         private bool initialization = true;
-        private bool Boom = false;
         public override void AI()
         {
             if (initialization)
             {
                 num1 = Main.rand.Next(-120, 0);
-                num3 = Main.rand.NextFloat(0.3f, 1.8f);
                 num4 = Main.rand.NextFloat(0.3f, 1800f);
-                num5 = Main.rand.NextFloat(2.85f, 3.15f);
                 Projectile.timeLeft = 5280;
-                num6 = Projectile.timeLeft;
                 Fy = Main.rand.Next(4);
                 initialization = false;
             }
             num1 += 1;
-            num2 -= 1;
             num4 += 0.01f;
             if (num1 > 0 && num1 <= 120)
             {
@@ -55,24 +45,14 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKin
             {
                 Projectile.hostile = true;
             }
-            rot += LanternGhostKing.Adc;
             if (Projectile.timeLeft < 240)
             {
                 Projectile.scale *= 0.99f;
             }
-            Projectile.position = LanternGhostKing.Cirposi + new Vector2(0, Projectile.ai[1]).RotatedBy(Projectile.ai[0] / 15d * Math.PI + rot);
-            //Lighting.AddLight(Projectile.Center, (float)(255 - Projectile.alpha) * 0.8f / 255f * Projectile.scale * num1, (float)(255 - Projectile.alpha) * 0.2f / 255f * Projectile.scale * num1, (float)(255 - Projectile.alpha) * 0f / 255f * Projectile.scale * num1);
         }
-        private float rot = 0;
         private float num = 0;
         private int num1 = 0;
-        private int num6 = 0;
-        private int num2 = -1;
-        private float num3 = 0.8f;
         private float num4 = 0;
-        private float num5 = 0;
-        private float x = 0;
-        private float y = 0;
         private int Fy = 0;
         private int fyc = 0;
         public override bool PreDraw(ref Color lightColor)
