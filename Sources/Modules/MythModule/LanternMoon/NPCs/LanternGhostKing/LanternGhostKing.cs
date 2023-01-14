@@ -35,7 +35,8 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.LanternGhostKing
             NPC.noGravity = true;
             NPC.noTileCollide = true;
             NPC.HitSound = SoundID.NPCHit3;
-        }
+			Music = MythContent.QuickMusic("DashCore");
+		}
         internal bool NearDie = false;
         internal Vector2 RingCenterTrend;
         internal Vector2 RingCenter;
@@ -378,7 +379,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.LanternGhostKing
                 if (!NearDie)
                 {
                     NearDie = true;
-                    NPC.life = 10000;
+                    NPC.life = 1;
                     NPC.active = true;
                     NPC.dontTakeDamage = true;
                     NPC.localAI[0] = 12999;
