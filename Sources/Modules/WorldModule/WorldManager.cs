@@ -24,7 +24,7 @@ namespace Everglow.Sources.Modules.WorldModule
         /// <summary>
         /// 当前处于的世界
         /// </summary>
-        static World activing;
+        internal static World activing;
         static TagCompound cacheDatas = new();
         static MethodInfo InnerSaveWorld;
         public static bool Activing<T>() where T : World

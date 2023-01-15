@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ReLogic.Content;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,6 +32,10 @@ namespace Everglow.Sources.Modules.WorldModule
         /// 只在单人模式或者服务端调用,注意检查
         /// </summary>
         public SaveType HowSave { get; init; }
+        /// <summary>
+        /// 是否使用自定义地图背景,启用后DrawCustomMap和PostDrawMapContent将被调用
+        /// </summary>
+        public bool UseCustomMap { get; init; }
         internal string GetFilePath(WorldHistory history)
         {
             return HowSave switch
@@ -96,6 +101,19 @@ namespace Everglow.Sources.Modules.WorldModule
         /// <param name="color"></param>
         /// <returns></returns>
         public virtual bool ModifyTileLight(Tile tile, int x, int y, ref Color color) => false;
+        /// <summary>
+        /// 自定义绘制地图背景和底板
+        /// <br>应依次绘制两个部分</br>
+        /// <br>地图背景</br>
+        /// <br>地图底板</br>
+        /// </summary>
+        /// <param name="ContainerRange">底板的映射区域,参考Map.png的(40,4,848,240)范围</param>
+        public virtual void DrawCustomMap(Rectangle ContainerRange) { }
+        /// <summary>
+        /// 在地图物块绘制完毕后调用,用于遮罩不可见区域
+        /// </summary>
+        /// <param name="ContentRange">与DrawCustomMap.ContainerRange一致</param>
+        public virtual void PostDrawMapContent(Rectangle ContentRange) { }
         //TODO 各种功能拓展
 
         /// <summary>

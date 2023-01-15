@@ -2,18 +2,39 @@
 using Everglow.Sources.Modules.WorldModule;
 using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Tiles;
+using ReLogic.Content;
+using Terraria.GameContent;
+
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
 {
     //TestCode
     internal class MothWorld : World
     {
-        public MothWorld() : base(800, 600, SaveType.PerWorld) { }
+        public MothWorld() : base(800, 600, SaveType.PerWorld) { UseCustomMap = true; }
 
         public override void CreateWorld(GameTime gameTime)
         {
             BuildMothCave();
             Main.spawnTileX = 723;
             Main.spawnTileY = 226;
+        }
+        public override void DrawCustomMap(Rectangle ContainerRange)
+        {
+            //这是背景
+            var asset = WorldSupport.GetCache<Asset<Texture2D>>("TestBackground");
+            if(asset is null)
+            {
+                asset = ModContent.Request<Texture2D>("Everglow/Sources/Modules/WorldModule/TestSource/testbackround", AssetRequestMode.ImmediateLoad);
+                WorldSupport.SetCache("TestBackground", asset);
+            }
+            Main.spriteBatch.Draw(asset.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White);
+            //底板没图
+        }
+        public override void PostDrawMapContent(Rectangle ContentRange)
+        {
+            float lerp = (float)Math.Sin(Main.GameUpdateCount % 180 / 180f) / 2 + 0.5f;
+            Color color = Color.Lerp(Color.White, Color.Black, lerp);
+            Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, ContentRange, color);
         }
         public void BuildMothCave()
         {
