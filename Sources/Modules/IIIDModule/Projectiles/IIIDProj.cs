@@ -1,31 +1,29 @@
-﻿using Everglow.Sources.Commons.Function.IIIDModelReader;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Sources.Commons.Function.Curves;
+using Terraria.Audio;
+using Terraria.Enums;
+using Terraria.GameContent.Shaders;
+using Everglow.Sources.Commons.Core.VFX;
+using Everglow.Sources.Commons.Function.IIIDModelReader;
+using Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall;
 using Everglow.Sources.Modules.IIIDModule.Utils;
 using ReLogic.Content;
 using Terraria.DataStructures;
 using Terraria.GameContent;
-using Humanizer;
-using Terraria.GameContent.Drawing;
-using Terraria.UI;
-using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
-using Terraria.GameContent.UI.Elements;
-using Terraria.Localization;
 
-
-namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
+namespace Everglow.Sources.Modules.IIIDModule.Projectiles
 {
-    
-    public class PlanetBeFall : ModProjectile
+    public abstract class IIIDProj : ModProjectile
     {
-        public TileDrawing projectorTileDrawing;
         public override void SetDefaults()
         {
-            
-            Projectile.width = 114;
-            Projectile.height = 114;
+            Projectile.width = 14;
+            Projectile.height = 14;
             Projectile.friendly = true;
             Projectile.DamageType = DamageClass.Melee;
             Projectile.aiStyle = -1;
@@ -35,20 +33,14 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
             Projectile.alpha = 255;
             Projectile.tileCollide = true;
             Projectile.ignoreWater = true;
-           // Projectile.hide = true;
+            SetDef();
+            // Projectile.hide = true;
         }
 
-        public override void AI()
+        public virtual void SetDef()
         {
-            Player player = Main.player[Projectile.owner];
-            Vector2 ToPlayer = (Projectile.Center - player.Center);
-            player.heldProj = Projectile.whoAmI;
-        }
-        public override void Kill(int timeLeft)
-        {
-            base.Kill(timeLeft);
-        }
 
+        }
         public static ObjReader.Model model;
         public static Asset<Texture2D> NormalMap;
 
@@ -68,18 +60,6 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
         }
         public override bool PreDraw(ref Color lightColor)
         {
-            Viewport viewport = Main.graphics.GraphicsDevice.Viewport;
-            //float Vx = viewport.Width > 0 ? (1f / viewport.Width) : 0;
-            //float Vy = viewport.Height > 0 ? (1f / viewport.Height) : 0;
-            //Matrix matrix = default(Matrix);
-            //matrix.M11 = Vx * 2f;
-            //matrix.M22 = Vy * 2f;
-            //matrix.M33 = 1f;
-            //matrix.M44 = 1f;
-            //matrix.M41 = -1f;
-            //matrix.M42 = 1f;
-            //matrix.M41 -= Vx;
-            //matrix.M42 -= Vy;
             List<VertexRP> vertices = new List<VertexRP>();
             Main.instance.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
             for (int f = 0; f < model.faces.Count; f++)
@@ -122,17 +102,16 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
             var t = new Vector3(0, 0, -600);
             t.Y = -t.Y;
             var modelMatrix =
-               IIIDUtils.CreateLookAtFront(new Vector3((Projectile.Center.X - Main.LocalPlayer.Center.X) / -1, (Projectile.Center.Y - Main.LocalPlayer.Center.Y) / -1, 0),
+               IIIDUtils.CreateLookAtFront(new Vector3((Projectile.Center.X - Main.LocalPlayer.Center.X) / -1, (Projectile.Center.Y - Main.LocalPlayer.Center.Y) / -1, -0),
                                      new Vector3((Projectile.Center.X - Main.LocalPlayer.Center.X) / -1, (Projectile.Center.Y - Main.LocalPlayer.Center.Y) / -1, 600),
                                      //new Vector3(Main.LocalPlayer.Center.X- Projectile.Center.X, Main.LocalPlayer.Center.Y- Projectile.Center.Y, 600),
                                      new Vector3(0, -1, 0))
-               //Matrix.CreateRotationY((float)Math.Atan((Projectile.Center.X - Main.LocalPlayer.Center.X) / 1200))    
-               //* Matrix.CreateRotationX((float)Math.Atan((Projectile.Center.Y - Main.LocalPlayer.Center.Y) / 1200))
-               // *Matrix.CreateRotationY((float)Main.time * 0.01f)
-               //* Matrix.CreateRotationZ((float)Main.time * 0.01f)
-               * Matrix.CreateScale(0.25f)
-               * Matrix.CreateTranslation(t);
-                
+                //Matrix.CreateRotationY((float)Math.Atan((Projectile.Center.X - Main.LocalPlayer.Center.X) / 1200))    
+                //* Matrix.CreateRotationX((float)Math.Atan((Projectile.Center.Y - Main.LocalPlayer.Center.Y) / 1200))
+                // *Matrix.CreateRotationY((float)Main.time * 0.01f)
+                //* Matrix.CreateRotationZ((float)Main.time * 0.01f)
+                * Matrix.CreateTranslation(t)
+                * Matrix.CreateScale(0.5f);
 
 
             ModelEntity entity = new ModelEntity
@@ -146,10 +125,6 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
             };
 
 
-            //ef.Parameters["uModel"].SetValue(modelMatrix);
-            //ef.Parameters["uViewProjection"].SetValue(projection);
-            //// 如果Model有非均匀缩放，就要用法线变换矩阵而不是Model矩阵
-            //ef.Parameters["uModelNormal"].SetValue(Matrix.Transpose(Matrix.Invert(modelMatrix)));
 
             BloomParams bloom = new BloomParams
             {
@@ -158,7 +133,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
             };
             ViewProjectionParams viewProjectionParams = new ViewProjectionParams
             {
-                ViewTransform =  Matrix.Identity,
+                ViewTransform = Matrix.Identity,
                 FieldOfView = MathF.PI / 3f,
                 AspectRatio = 1.0f,
                 ZNear = 1f,
@@ -169,14 +144,14 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
                 EnableOuterEdge = false
             };
             modelPipeline.BeginCapture(viewProjectionParams, bloom, artParameters);
-            {
-                modelPipeline.PushModelEntity(entity);
-            }
+            
+            modelPipeline.PushModelEntity(entity);
+            
             modelPipeline.EndCapture();
 
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
-            Main.spriteBatch.Draw(modelPipeline.ModelTarget, Vector2.Lerp(Projectile.Center, Main.LocalPlayer.Center, 0.7f) - Main.screenPosition - new Vector2(1000, 1000),
+            Main.spriteBatch.Draw(modelPipeline.ModelTarget, Projectile.Center - Main.screenPosition - new Vector2(500, 500) - (Projectile.Center - Main.LocalPlayer.Center),
                 null, Color.White, 0, Vector2.One * 0.5f, 2f, SpriteEffects.None, 0);
 
             //Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
@@ -206,17 +181,5 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, verticesII.ToArray(), 0, verticesII.Count - 2);*/
             return true;
         }
-    }
-
-    public class TestProjModelSystem : ModSystem
-    {
-
-        public override void OnModLoad()
-        {
-            PlanetBeFall.model = ObjReader.LoadFile("Everglow/Sources/Modules/IIIDModule/Projectiles/PlanetBefall/PlanetBeFall.obj");
-            PlanetBeFall.NormalMap = ModContent.Request<Texture2D>("Everglow/Sources/Modules/IIIDModule/Projectiles/PlanetBefall/PlanetBeFallNormal");
-            base.OnModLoad();
-        }
-
     }
 }

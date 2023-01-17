@@ -1,4 +1,5 @@
-﻿using Everglow.Sources.Modules.MEACModule.Projectiles;
+﻿using Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall;
+using Everglow.Sources.Modules.MEACModule.Projectiles;
 using ReLogic.Graphics;
 using Terraria.GameContent;
 using Terraria.ID;
@@ -67,6 +68,10 @@ namespace Everglow.Sources.Modules.MEACModule.Items
 
                 if (Main.myPlayer == player.whoAmI)
                 {
+                    if (Main.mouseMiddle&&Main.mouseMiddleRelease)
+                    {
+                        Projectile.NewProjectile(null, Main.MouseWorld, new Vector2(0, 0), ModContent.ProjectileType<PlanetBeFall>(), 10, 0);
+                    }
                     if (player.altFunctionUse != 2)
                     {
                         if (LeftClick && !Main.mouseLeft)

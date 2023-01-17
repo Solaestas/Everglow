@@ -20,8 +20,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
         public float AspectRatio;
         public float ZNear;
         public float ZFar;
-    }
-
+    } 
     public struct ArtParameters
     {
         public bool EnableOuterEdge;
@@ -39,7 +38,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
         private RenderTarget2D[] m_blurRenderTargets;
 
         private const int MAX_BLUR_LEVELS = 5;
-        private const int RenderTargetSize = 512;
+        private const int RenderTargetSize = 1024;
 
         //private RenderTarget2D m_albedoTarget;
         //private RenderTarget2D m_normalTarget;
@@ -70,6 +69,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
             m_filtersEffect = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/IIIDEffects/Filters");
             m_toneMapping = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/IIIDEffects/ToneMapping");
             m_pixelArt = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/IIIDEffects/PixelArt");
+            Main.OnResolutionChanged += Main_OnResolutionChanged;
             Everglow.MainThreadContext.AddTask(() =>
             {
                 m_fakeScreenTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, RenderTargetSize, RenderTargetSize, false,
@@ -102,11 +102,17 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
             m_models = new List<ModelEntity>();
             base.OnModLoad();
         }
+
+        
         public override void OnModUnload()
         {
+
             base.OnModUnload();
         }
-
+        private void Main_OnResolutionChanged(Vector2 obj)
+        {
+          //  CreateRender(obj);
+        }
         public void PushModelEntity(ModelEntity entity)
         {
             m_models.Add(entity);
@@ -401,7 +407,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
             if (Main.mouseRight && Main.mouseRightRelease)
             {
                 Player player = Main.LocalPlayer;
-                Projectile.NewProjectile(null, Main.MouseWorld, new Vector2(0, 0), ModContent.ProjectileType<PlanetBeFall>(), 10, 0);
+                
             }
             base.PostUpdateProjectiles();
         }
