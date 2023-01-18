@@ -1,10 +1,14 @@
 ﻿using ReLogic.Content;
+using ReLogic.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Terraria.GameContent;
+using Terraria.GameInput;
+using Terraria.Utilities;
 
 namespace Everglow.Sources.Modules.WorldModule
 {
@@ -36,7 +40,7 @@ namespace Everglow.Sources.Modules.WorldModule
         /// 是否使用自定义地图背景,启用后DrawCustomMap和PostDrawMapContent将被调用
         /// </summary>
         public bool UseCustomMap { get; init; }
-        internal string GetFilePath(WorldHistory history)
+        internal virtual string GetFilePath(WorldHistory history)
         {
             return HowSave switch
             {
@@ -100,7 +104,7 @@ namespace Everglow.Sources.Modules.WorldModule
         /// <param name="y"></param>
         /// <param name="color"></param>
         /// <returns></returns>
-        public virtual bool ModifyTileLight(Tile tile, int x, int y, ref Color color) => false;
+        public virtual bool HijackTileLight(Tile tile, int x, int y, FastRandom fastRandom, ref Color color) => false;
         /// <summary>
         /// 自定义绘制地图背景和底板
         /// <br>应依次绘制两个部分</br>
@@ -114,6 +118,16 @@ namespace Everglow.Sources.Modules.WorldModule
         /// </summary>
         /// <param name="ContentRange">与DrawCustomMap.ContainerRange一致</param>
         public virtual void PostDrawMapContent(Rectangle ContentRange) { }
+        public virtual bool HijackPlayerBimoes(Player player, Point where) { return false; }
+        public virtual void DrawScreenWhenEnterWorld(GameTime time) 
+        {
+            PlayerInput.SetZoom_Unscaled();
+            Main.instance.GraphicsDevice.Clear(Color.Black);
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, Main.Rasterizer, null, Main.UIScaleMatrix);
+            Main.spriteBatch.DrawString(FontAssets.MouseText.Value, Main.statusText, new Vector2(Main.screenWidth, Main.screenHeight) / 2 - FontAssets.DeathText.Value.MeasureString(Main.statusText) / 2, Color.White);
+            Main.DrawCursor(Main.DrawThickCursor());
+            Main.spriteBatch.End();
+        }
         //TODO 各种功能拓展
 
         /// <summary>

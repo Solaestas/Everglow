@@ -13,14 +13,17 @@ using Terraria.Utilities;
 
 namespace Everglow.Sources.Modules.WorldModule
 {
+    /// <summary>
+    /// public可读写,internal许读不许写,private不许读写
+    /// </summary>
     internal static class WorldManager
     {
-        static bool AnyTryEnterInProgress;
+        public static bool AnyTryEnterInProgress { get; internal set; }
         static Dictionary<string, World> worlddic = new();
         /// <summary>
         /// activing不为null时此项不应为null
         /// </summary>
-        static WorldHistory currenthistory;
+        internal static WorldHistory currenthistory;
         /// <summary>
         /// 当前处于的世界
         /// </summary>
@@ -50,6 +53,7 @@ namespace Everglow.Sources.Modules.WorldModule
                 {
                     if (worlddic.TryGetValue(ModContent.GetInstance<T>().FullName, out World target))
                     {
+                        AnyTryEnterInProgress = true;
                         Task.Factory.StartNew(() => Enter(target, token));
                     }
                     else
@@ -88,7 +92,7 @@ namespace Everglow.Sources.Modules.WorldModule
             }
             catch when (token.IsCancelled)
             {
-                TryBack(true);
+                TryBack();
                 //TODO
                 //倒序依次尝试返回History
                 //仍然失败返回主世界
@@ -97,12 +101,13 @@ namespace Everglow.Sources.Modules.WorldModule
             catch (Exception e)
             {
                 token.Exception(e);
-                TryBack(true);
+                TryBack();
                 //TODO
                 //倒序依次尝试返回History
                 //仍然失败返回主世界
                 //仍然失败返回选择世界页面
             }
+            AnyTryEnterInProgress = false;
         }
         static void WriteCache()
         {
@@ -345,6 +350,7 @@ namespace Everglow.Sources.Modules.WorldModule
             if (currenthistory is null)
             {
                 token.Over();
+                AnyTryEnterInProgress = false;
             }
             else
             {
@@ -359,6 +365,7 @@ namespace Everglow.Sources.Modules.WorldModule
                             WorldGen.playWorld();
                             currenthistory = null;
                             activing = null;
+                            token.Over();
                         }
                         catch when (token.IsCancelled)
                         {
@@ -375,11 +382,23 @@ namespace Everglow.Sources.Modules.WorldModule
                             activing = null;
                             //TODO
                         }
+                        AnyTryEnterInProgress = false;
                     });
                 }
                 else
                 {
-                    token.StopByOther("No code run.");
+                    Task.Factory.StartNew(() =>
+                    {
+                        if (currenthistory.history.TryDequeue(out currenthistory.buffer))
+                        {
+                            Load_SinglePlayer(currenthistory, token);
+                        }
+                        else
+                        {
+                            TryBack(true);
+                        }
+                        AnyTryEnterInProgress = false;
+                    });
                 }
             }
             return token;

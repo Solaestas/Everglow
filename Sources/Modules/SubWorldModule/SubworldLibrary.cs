@@ -283,6 +283,7 @@ namespace Everglow.Sources.Modules.SubWorldModule
             }
             internal static void Load()
             {
+                return;
                 if (Main.dedServ)
                 {
                     IL.Terraria.Main.DedServ_PostModLoad += Main_DedServ_PostModLoad;
