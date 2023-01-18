@@ -118,7 +118,7 @@ namespace Everglow.Sources.Modules.WorldModule
         /// </summary>
         /// <param name="ContentRange">与DrawCustomMap.ContainerRange一致</param>
         public virtual void PostDrawMapContent(Rectangle ContentRange) { }
-        public virtual bool HijackPlayerBimoes(Player player, Point where) { return false; }
+        public virtual bool HijackPlayerBiomes(Player player, Point where) { return false; }
         public virtual void DrawScreenWhenEnterWorld(GameTime time) 
         {
             PlayerInput.SetZoom_Unscaled();
