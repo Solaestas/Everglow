@@ -12,6 +12,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule
 {
     internal class YggdrasilWorld : World
     {
+        //TestCode
         public YggdrasilWorld() : base(1200, 12000, SaveType.PerWorld) { UseCustomMap = true; }
         public override void CreateWorld(GameTime gameTime)
         {
