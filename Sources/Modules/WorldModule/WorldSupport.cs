@@ -25,6 +25,9 @@ using MonoMod.Cil;
 using Mono.Cecil.Cil;
 using Terraria.Utilities;
 using Terraria.Graphics.Light;
+using Terraria.Social;
+using System.ComponentModel;
+using Everglow.Sources.Modules.WorldModule;
 
 namespace Everglow.Sources.Modules.WorldModule
 {
@@ -74,6 +77,53 @@ namespace Everglow.Sources.Modules.WorldModule
             }
             return default;
         }
+        internal static List<string> FindCloudFiles(Predicate<string> filter)
+        {
+            List<string> files = new();
+            if(NetUtils.IsServer)
+            {
+                return files;
+            }
+            var cloud = SocialAPI.Cloud;
+            if (cloud is not null)
+            {
+                List<string> cloudfiles = cloud.GetFiles().ToList();
+                cloudfiles.ForEach(f =>
+                {
+                    if (filter(f))
+                    {
+                        files.Add(f);
+                    }
+                });
+            }
+            return files;
+        }
+        internal static bool FileFilter(string p) => p.EndsWith(".wld") ||
+                p.EndsWith(".wld.bak") ||
+                p.EndsWith(".twld") ||
+                p.EndsWith(".twld.bak");
+        internal static void FindFiles(List<string> container, string root, Predicate<string> filter)
+        {
+            if(NetUtils.IsServer)
+            {
+                return;
+            }
+            string[] dirsandfiles = Directory.GetFileSystemEntries(root);
+            Parallel.ForEach(dirsandfiles, path =>
+            {
+                if (File.Exists(path))
+                {
+                    if (filter(path))
+                    {
+                        container.Add(path);
+                    }
+                }
+                else if(Directory.Exists(path)) 
+                {
+                    FindFiles(container, path, filter);
+                }
+            });
+        }
         class Hooks
         {
             internal static void Unload()
@@ -99,7 +149,97 @@ namespace Everglow.Sources.Modules.WorldModule
                     IL.Terraria.Main.OldDrawBackground += Main_OldDrawBackground;
                     IL.Terraria.Graphics.Light.TileLightScanner.GetTileLight += TileLightScanner_GetTileLight;
                     IL.Terraria.Player.UpdateBiomes += Player_UpdateBiomes;
+
+                    IL.Terraria.Main.ErasePlayer += Main_ErasePlayer;
+                    IL.Terraria.Main.EraseWorld += Main_EraseWorld;
+                    IL.Terraria.Main.DoUpdateInWorld += Main_DoUpdateInWorld;
                     //TODO 支持需要的钩子
+                }
+
+                private static void Main_DoUpdateInWorld(ILContext il)
+                {
+                    ILCursor c = new(il);
+                    if (!c.TryGotoNext(MoveType.After, i => i.MatchCall("Terraria.ModLoader.IO.WorldIO", "EraseWorld")))
+                    {
+                        Everglow.Instance.Logger.Error("IL Patch Is Failed:WorldSupport.\n\tMain_DoUpdateInWorld\n\tMatch A Point To Skip Update Time");
+                        throw new OperationCanceledException("IL Patch Is Failed.");
+                    }
+                }
+                private static void EraseWorldPerWorld(int i)
+                {
+                    List<string> files = new();
+                    try
+                    {
+                        WorldFileData data = Main.WorldList[i];
+                        FindFiles(files,
+                            Path.Combine(Main.WorldPath,
+                                nameof(World.SaveType.PerPlayer),
+                                data.GetFileName(false)),
+                                FileFilter);
+                        if (data.IsCloudSave)
+                        {
+                            files.AddRange(FindCloudFiles(FileFilter));
+                        }
+                        foreach (string file in files.ToHashSet())
+                        {
+                            FileUtilities.Delete(file, data.IsCloudSave);
+                        }
+                    }
+                    catch
+                    {
+                        files.Insert(0, "[Debug]Files Collect Data:");
+                        Everglow.Instance.Logger.Debug(string.Join("\n\t", files));
+                        throw;
+                    }
+                }
+                private static void Main_EraseWorld(ILContext il)
+                {
+                    ILCursor c = new(il);
+                    if (!c.TryGotoNext(MoveType.After, i => i.MatchCall("Terraria.ModLoader.IO.WorldIO", "EraseWorld")))
+                    {
+                        Everglow.Instance.Logger.Error("IL Patch Is Failed:WorldSupport.\n\tMain_EraseWorld\n\tMatch A Point To Delete World Files");
+                        throw new OperationCanceledException("IL Patch Is Failed.");
+                    }
+                    c.Emit(OpCodes.Ldarg, 0);
+                    c.EmitDelegate(EraseWorldPerWorld);
+                }
+                private static void EraseWorldPerPlayer(int i)
+                {
+                    List<string> files = new();
+                    try
+                    {
+                        PlayerFileData data = Main.PlayerList[i];
+                        FindFiles(files,
+                            Path.Combine(Main.WorldPath,
+                                nameof(World.SaveType.PerPlayer),
+                                data.GetFileName(false)),
+                                FileFilter);
+                        if(data.IsCloudSave)
+                        {
+                            files.AddRange(FindCloudFiles(FileFilter));
+                        }
+                        foreach(string file in files.ToHashSet())
+                        {
+                            FileUtilities.Delete(file, data.IsCloudSave);
+                        }
+                    }
+                    catch
+                    {
+                        files.Insert(0, "[Debug]Files Collect Data:");
+                        Everglow.Instance.Logger.Debug(string.Join("\n\t", files));
+                        throw;
+                    }
+                }
+                private static void Main_ErasePlayer(ILContext il)
+                {
+                    ILCursor c = new(il);
+                    if (!c.TryGotoNext(MoveType.After, i => i.MatchCall("Terraria.ModLoader.IO.PlayerIO", "ErasePlayer")))
+                    {
+                        Everglow.Instance.Logger.Error("IL Patch Is Failed:WorldSupport.\n\tMain_ErasePlayer\n\tMatch A Point To Delete World Files");
+                        throw new OperationCanceledException("IL Patch Is Failed.");
+                    }
+                    c.Emit(OpCodes.Ldarg, 0);
+                    c.EmitDelegate(EraseWorldPerPlayer);
                 }
                 private static void HideUnderWorld_Player_UpdateBiomes(ref bool inhell)
                 {

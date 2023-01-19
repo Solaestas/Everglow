@@ -40,6 +40,31 @@ namespace Everglow.Sources.Modules.WorldModule
             worlddic[world.FullName] = world;
         }
         public static bool TryGetCache<T>(string key, out T data) => cacheDatas.TryGet(key, out data);
+        internal static ProgressToken TryEnter(World world, Action<ProgressToken.State> whenInvalid = null)
+        {
+            ProgressToken token = new ProgressToken();
+            if (whenInvalid is not null)
+            {
+                token.WhenInvalid += whenInvalid;
+            }
+            if (!AnyTryEnterInProgress)
+            {
+                try
+                {
+                    AnyTryEnterInProgress = true;
+                    Task.Factory.StartNew(() => Enter(world, token));
+                }
+                catch (Exception e)
+                {
+                    token.Exception(e);
+                }
+            }
+            else
+            {
+                token.StopByOther("There is a world occupied in processing");
+            }
+            return token;
+        }
         internal static ProgressToken TryEnter<T>(Action<ProgressToken.State> whenInvalid = null) where T : World
         {
             ProgressToken token = new ProgressToken();
