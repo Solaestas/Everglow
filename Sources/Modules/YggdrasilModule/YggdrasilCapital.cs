@@ -1,4 +1,4 @@
-﻿using Everglow.Sources.Modules.YggdrasilModule.WorldGeneration;
+﻿using Everglow.Sources.Modules.WorldModule;
 namespace Everglow.Sources.Modules.YggdrasilModule
 {
     public class YggdrasilCapital : ModItem
@@ -19,16 +19,14 @@ namespace Everglow.Sources.Modules.YggdrasilModule
         {
             if (player.itemAnimation == player.itemAnimationMax)
             {
-                if (SubWorldModule.SubworldSystem.IsActive<YggdrasilWorld>())
+                //TestCode
+                if (WorldManager.Activing<YggdrasilWorld>())
                 {
-                    SubWorldModule.SubworldSystem.Exit();
+                    WorldManager.TryBack();
                 }
                 else
                 {
-                    if (!SubWorldModule.SubworldSystem.Enter<YggdrasilWorld>())
-                    {
-                        Main.NewText("Fail!");
-                    }
+                    WorldManager.TryEnter<YggdrasilWorld>();
                 }
             }
             return base.UseItem(player);

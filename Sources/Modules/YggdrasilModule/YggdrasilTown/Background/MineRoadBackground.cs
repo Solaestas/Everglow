@@ -4,6 +4,7 @@ using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.YggdrasilModule.Common;
 using Everglow.Sources.Modules.YggdrasilModule.Common.BackgroundManager;
 using Everglow.Sources.Modules.SubWorldModule;
+using Everglow.Sources.Modules.WorldModule;
 
 namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Background
 {
@@ -75,7 +76,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Background
             
             if (Main.screenPosition.Y > 172200)
             {
-                if (SubworldSystem.IsActive<YggdrasilWorld>())
+                if (WorldManager.Activing<YggdrasilWorld>())
                 {
                     return true;
                 }
