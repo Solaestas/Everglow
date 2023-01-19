@@ -251,7 +251,7 @@ namespace Everglow.Sources.Modules.WorldModule
                 }
                 private static bool HijackPlayerBiomes(Player player, Point where)
                 {
-                    return WorldManager.activing?.HijackPlayerBiomes(player, where) ?? false;
+                    return WorldManager.activing?.HijackPlayerBimoes(player, where) ?? false;
                 }
                 private static void Player_UpdateBiomes(ILContext il)
                 {
