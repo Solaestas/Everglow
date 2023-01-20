@@ -158,12 +158,6 @@ namespace Everglow.Sources.Modules.WorldModule
 
                 private static void Main_DoUpdateInWorld(ILContext il)
                 {
-                    ILCursor c = new(il);
-                    if (!c.TryGotoNext(MoveType.After, i => i.MatchCall("Terraria.ModLoader.IO.WorldIO", "EraseWorld")))
-                    {
-                        Everglow.Instance.Logger.Error("IL Patch Is Failed:WorldSupport.\n\tMain_DoUpdateInWorld\n\tMatch A Point To Skip Update Time");
-                        throw new OperationCanceledException("IL Patch Is Failed.");
-                    }
                 }
                 private static void EraseWorldPerWorld(int i)
                 {
