@@ -437,10 +437,10 @@ namespace Everglow.Sources.Modules.WorldModule
                         throw new OperationCanceledException("IL Patch Is Failed.");
                     }
                     c.MarkLabel(skiporig);
-                    if (!c.TryGotoNext(i => i.MatchLdloc(18),
-                        i => i.MatchBrfalse(out _),
-                        i => i.MatchLdsfld(typeof(Main), nameof(Main.spriteBatch)),
-                        i => i.MatchCallvirt(typeof(SpriteBatch), nameof(SpriteBatch.End))))
+                    if (!c.TryGotoNext(MoveType.After,
+                        i => i.MatchCall(typeof(CoinLossRevengeSystem.RevengeMarker), nameof(CoinLossRevengeSystem.RevengeMarker.UseMouseOver)),
+                        i => i.MatchLdsfld(typeof(Main), nameof(Main.mapFullscreen)),
+                        i => i.MatchBrfalse(out _)))
                     {
                         Everglow.Instance.Logger.Error("IL Patch Is Failed:WorldSupport.\n\tMain_DrawMap\n\tMatch SpriteBatch.End");
                         throw new OperationCanceledException("IL Patch Is Failed.");
