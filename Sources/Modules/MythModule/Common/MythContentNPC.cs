@@ -223,13 +223,13 @@ namespace Everglow.Sources.Modules.MythModule.Common
 				if (4f * npc.width * npc.height / 10300f * npc.scale > 1.5f)
 				{
 					spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/LaserMark").Value, npc.Center - Main.screenPosition, null, new Color(Stre, Stre, Stre, 0), 0, new Vector2(60, 60), 2.4f, SpriteEffects.None, 0f);
-					spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/GeerRed").Value, npc.Center - Main.screenPosition, null, new Color(Stre2 * 0.5f, Stre2 * 0.5f, Stre2 * 0.5f, 0), (float)(Main.time / 100d), new Vector2(40, 40), 3f, SpriteEffects.None, 0f);
+					spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/GearRed").Value, npc.Center - Main.screenPosition, null, new Color(Stre2 * 0.5f, Stre2 * 0.5f, Stre2 * 0.5f, 0), (float)(Main.time / 100d), new Vector2(40, 40), 3f, SpriteEffects.None, 0f);
 
 				}
 				else
 				{
 					spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/LaserMark").Value, npc.Center - Main.screenPosition, null, new Color(Stre, Stre, Stre, 0), 0, new Vector2(60, 60), 4f * npc.width * npc.height / 10300f * npc.scale * 1.6f, SpriteEffects.None, 0f);
-					spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/GeerRed").Value, npc.Center - Main.screenPosition, null, new Color(Stre2 * 0.5f, Stre2 * 0.5f, Stre2 * 0.5f, 0), (float)(Main.time / 100d), new Vector2(40, 40), 4f * npc.width * npc.height / 10300f * npc.scale * 2, SpriteEffects.None, 0f);
+					spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/GearRed").Value, npc.Center - Main.screenPosition, null, new Color(Stre2 * 0.5f, Stre2 * 0.5f, Stre2 * 0.5f, 0), (float)(Main.time / 100d), new Vector2(40, 40), 4f * npc.width * npc.height / 10300f * npc.scale * 2, SpriteEffects.None, 0f);
 				}
 			}
 		}
