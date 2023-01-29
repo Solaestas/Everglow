@@ -83,7 +83,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
 
             // 根节点生成，朝向0，粗细1，长度随机50中选
             root = new Node(0, 0, 1, 200f * Rand(), false, true, false, false, Vector2.Zero);
-            root = Buildmaster(root, 5);
+            root = Buildmaster(root, 6);
             Nodes = new Node[cnt + 1];
             //root = _build(root, 5);
         }

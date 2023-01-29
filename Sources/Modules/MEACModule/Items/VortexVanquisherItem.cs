@@ -27,30 +27,43 @@ namespace Everglow.Sources.Modules.MEACModule.Items
               Item.noMelee = true;
               Item.noUseGraphic = true;
 
-              Item.value = Item.sellPrice(gold: 1);
-          }
+            Item.value = Item.sellPrice(gold: 1);
+        }
 
-          private int CoolTimeForE = 0;
-          public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
-          {
-              Vector2 slotSize = new Vector2(52f, 52f);
-              position -= slotSize * Main.inventoryScale / 2f - frame.Size() * scale / 2f;
-              Vector2 drawPos = position + slotSize * Main.inventoryScale / 2f;
-              Texture2D RArr = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/NonTrueMeleeProj/Post").Value;
-              if (!Main.gamePaused)
-              {
-                  if (CoolTimeForE > 0)
-                  {
-                      CoolTimeForE--;
-                      spriteBatch.Draw(RArr, drawPos + new Vector2(26.73f) * scale + new Vector2(4, 4), null, new Color(0, 0, 0, 255), 0f, RArr.Size() / 2f, scale * 1.91f, SpriteEffects.None, 0f);
-                      Main.spriteBatch.DrawString(FontAssets.MouseText.Value, (CoolTimeForE / 60f).ToString("#.#"), drawPos + new Vector2(22.91f) * scale, Color.White, 0f, Vector2.Zero, scale * 1.91f, SpriteEffects.None, 0);
-                  }
-                  else
-                  {
-                      CoolTimeForE = 0;
-                      spriteBatch.Draw(RArr, drawPos + new Vector2(26.73f) * scale + new Vector2(4, 4), null, new Color(155, 155, 155, 50), 0f, RArr.Size() / 2f, scale * 1.91f, SpriteEffects.None, 0f);
-                  }
-              }
+        private int CoolTimeForE = 0;
+        private int CoolTimeForQ = 0;
+        public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
+        {
+            Vector2 slotSize = new Vector2(52f, 52f);
+            position -= slotSize * Main.inventoryScale / 2f - frame.Size() * scale / 2f;
+            Vector2 drawPos = position + slotSize * Main.inventoryScale / 2f;
+            Texture2D RArr1 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/NonTrueMeleeProj/Post").Value;
+            Texture2D RArr2 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/NonTrueMeleeProj/PlanetBeFall").Value;
+            if (!Main.gamePaused)
+            {
+                if (CoolTimeForE > 0)
+                {
+                    CoolTimeForE--;
+                    spriteBatch.Draw(RArr1, drawPos + new Vector2(26.73f) * scale + new Vector2(4, 4), null, new Color(0, 0, 0, 255), 0f, RArr1.Size() / 2f, scale * 1.91f, SpriteEffects.None, 0f);
+                    Main.spriteBatch.DrawString(FontAssets.MouseText.Value, (CoolTimeForE / 60f).ToString("#.#"), drawPos + new Vector2(22.91f) * scale, Color.White, 0f, Vector2.Zero, scale * 1.91f, SpriteEffects.None, 0);
+                }
+                else
+                {
+                    CoolTimeForE = 0;
+                    spriteBatch.Draw(RArr1, drawPos + new Vector2(26.73f) * scale + new Vector2(4, 4), null, new Color(155, 155, 155, 50), 0f, RArr1.Size() / 2f, scale * 1.91f, SpriteEffects.None, 0f);
+                }
+                if (CoolTimeForQ > 0)
+                {
+                    CoolTimeForQ--;
+                    spriteBatch.Draw(RArr2, drawPos + new Vector2(26.73f) * scale + new Vector2(-20, 4), null, new Color(0, 0, 0, 255), 0f, RArr2.Size() / 2f, scale * 1.91f, SpriteEffects.None, 0f);
+                    Main.spriteBatch.DrawString(FontAssets.MouseText.Value, (CoolTimeForQ / 60f).ToString("#.#"), drawPos + new Vector2(22.91f) * scale + new Vector2(-30,0), Color.White, 0f, Vector2.Zero, scale * 1.91f, SpriteEffects.None, 0);
+                }
+                else
+                {
+                    CoolTimeForQ = 0;
+                    spriteBatch.Draw(RArr2, drawPos + new Vector2(26.73f) * scale + new Vector2(-20, 4), null, new Color(155, 155, 155, 50), 0f, RArr2.Size() / 2f, scale * 1.91f, SpriteEffects.None, 0f);
+                }
+            }
           }
 
           public override bool CanUseItem(Player player)
@@ -67,19 +80,25 @@ namespace Everglow.Sources.Modules.MEACModule.Items
           public override void HoldItem(Player player)
           {
               if (player.ownedProjectileCounts[ModContent.ProjectileType<VortexVanquisher>()] + player.ownedProjectileCounts[ModContent.ProjectileType<VortexVanquisherThump>()] < 1)
-              {
+            {
 
-                  if (Main.myPlayer == player.whoAmI)
-                  {
-                      if (Main.mouseMiddle&&Main.mouseMiddleRelease)
-                      {for (int i = 0; i < 8; i++)
+                if (Main.myPlayer == player.whoAmI)
+                {
+                    if (Main.mouseMiddle && Main.mouseMiddleRelease)
+                    {
+                        if (CoolTimeForQ > 0)
+                        {
+                            return;
+                        }
+                        CoolTimeForQ = 1440;
+                        for (int i = 0; i < 8; i++)
                         {
                             Vector2 v = new Vector2(0.001f, 0);
-                            Projectile.NewProjectile(null, Main.MouseWorld, v.RotatedBy(Math.PI*i/4).RotatedByRandom(Math.PI * i / 16), ModContent.ProjectileType<GoldenCrack>(), 10, 0);
+                            Projectile.NewProjectile(null, Main.MouseWorld, v.RotatedBy(Math.PI * i / 4).RotatedByRandom(Math.PI * i / 16), ModContent.ProjectileType<GoldenCrack>(), 10, 0);
                         }
-                         
-                      }
-                      if (player.altFunctionUse != 2)
+
+                    }
+                    if (player.altFunctionUse != 2)
                       {
                           if (LeftClick && !Main.mouseLeft)
                           {
