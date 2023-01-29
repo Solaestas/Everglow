@@ -1,6 +1,5 @@
 ﻿using Everglow.Sources.Commons.Function.IIIDModelReader;
 using Everglow.Sources.Commons.Function.Vertex;
-using Everglow.Sources.Modules.IIIDModule.Utils;
 using ReLogic.Content;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -122,7 +121,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
             var t = new Vector3(0, 0, -600);
             t.Y = -t.Y;
             var modelMatrix =
-               IIIDUtils.CreateLookAtFront(new Vector3((Projectile.Center.X - Main.LocalPlayer.Center.X) / -1, (Projectile.Center.Y - Main.LocalPlayer.Center.Y) / -1, 0),
+               Matrix.CreateLookAt(new Vector3((Projectile.Center.X - Main.LocalPlayer.Center.X) / -1, (Projectile.Center.Y - Main.LocalPlayer.Center.Y) / -1, 0),
                                      new Vector3((Projectile.Center.X - Main.LocalPlayer.Center.X) / -1, (Projectile.Center.Y - Main.LocalPlayer.Center.Y) / -1, 600),
                                      //new Vector3(Main.LocalPlayer.Center.X- Projectile.Center.X, Main.LocalPlayer.Center.Y- Projectile.Center.Y, 600),
                                      new Vector3(0, -1, 0))
