@@ -24,14 +24,128 @@ using ReLogic.Content;
 
 namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrack
 {
-    public class GoldenCrack : ModProjectile ,IBloomProjectile 
+    public class Tree
+    {
+        public int cnt, brunchnum;
+        public Node[] Nodes;
+        public Node root;
+        public UnifiedRandom random;
+        public Vector2 vel;
+        public Tree(UnifiedRandom random, Vector2 vel)
+        {
+            cnt = 0;
+            brunchnum = 0;
+            root = null;
+            this.random = random;
+            this.vel = vel;
+        }
+
+        public class Node
+        {
+            public int num;
+            public bool ismaster, isbrunch;
+            public float rad, size, length;
+            public bool isterminal;
+            public bool isfork;
+            public Vector2 position;
+            public List<Node> children;
+            public Node(int num, float rad, float size, float length, bool isterminal, bool ismaster, bool isbrunch, bool isfork, Vector2 position)
+            {
+                this.num = num;
+                this.ismaster = ismaster;
+                this.isbrunch = isbrunch;
+                this.rad = rad;
+                this.size = size;
+                this.length = length;
+                this.isterminal = isterminal;
+                this.isfork = isfork;
+                this.position = position;
+                this.children = new List<Node>();
+            }
+        }
+        public Vector2 Position(Vector2 pos, Vector2 vel, Node node)
+        {
+            return pos + (vel.ToRotation() + node.rad).ToRotationVector2() * node.length;
+        }
+        private float Rand(float range)
+        {
+            return random.NextFloatDirection() * range;
+        }
+        public static float Rand()
+        {
+            UnifiedRandom random = Main.rand;
+            double u = -2 * Math.Log(random.NextDouble());
+            double v = 2 * Math.PI * random.NextDouble();
+            return Math.Clamp((float)Math.Max(0, Math.Sqrt(u) * Math.Cos(v) * 0.3 + 0.5) + 0.4f, 0.7f, 1.2f);
+        }
+        public void Generate()
+        {
+
+            // 根节点生成，朝向0，粗细1，长度随机50中选
+            root = new Node(0, 0, 1, 200f * Rand(), false, true, false, false, Vector2.Zero);
+            root = Buildmaster(root, 5);
+            Nodes = new Node[cnt + 1];
+            //root = _build(root, 5);
+        }
+        private Node Buildmaster(Node node, int dep)
+        {
+            cnt++;
+
+            if (dep == 10)
+            {
+                node.isterminal = true;
+                return node;
+
+            }
+
+            if (Main.rand.NextBool(8) || dep == 5)
+            {
+                var rad = Rand(MathHelper.Pi / 4f);
+                Node brunch = new Node(cnt, (node.rad > 0) ? Math.Abs(rad) : -Math.Abs(rad), node.size * Rand(), node.length * Rand(), false, false, true, false, Position(node.position, vel, node));
+                node.isfork = true;
+                node.children.Add(Buildbrunch(brunch, 0));
+            }
+            // 参数修改了
+            Node master = new Node(cnt, Rand(MathHelper.Pi / 6f), node.size * Rand(), node.length * Rand(), false, true, false, false, Position(node.position, vel, node));
+            node.children.Add(Buildmaster(master, dep + 1));
+            if (node.isfork)
+                CombatText.NewText(new Rectangle((int)Main.LocalPlayer.position.X, (int)Main.LocalPlayer.position.Y, Main.LocalPlayer.width, Main.LocalPlayer.height),
+                   new Color(255, 0, 0),
+                   node.num,
+                   true, false);
+            return node;
+        }
+        private Node Buildbrunch(Node node, int dep)
+        {
+            cnt++;
+            brunchnum++;
+            if (dep == 2)
+            {
+
+                node.isterminal = true;
+                return node;
+            }
+            Node child = new Node(cnt, Rand(MathHelper.Pi / 6f), node.size * Rand(), node.length * Rand(), false, false, true, false, Position(node.position, vel, node));
+            node.children.Add(Buildbrunch(child, dep + 1));
+            return node;
+        }
+        public void Array(Node node)
+        {
+            Nodes[node.num] = node;
+            foreach (var child in node.children)
+            {
+                Array(child);
+            }
+        }
+    }
+    public class GoldenCrack : ModProjectile, IBloomProjectile
     {
         public override void SetDefaults()
         {
             Projectile.width = 6;
             Projectile.height = 20;
             Projectile.aiStyle = -1;
-            Projectile.timeLeft = 40;
+            Projectile.timeLeft = 1200;
             Projectile.tileCollide = false;
             Projectile.scale = 0.8f;
             Projectile.alpha = 60;
@@ -44,69 +158,122 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
             Projectile.localNPCHitCooldown = 1;
         }
 
-        public override void SetStaticDefaults()
-        {
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 4;
-        }
-
+        private Tree tree;
+        private Vector2[] NodePosition;
+        int j, terminal;
+        bool back = false;
+        bool[] terminals;
         public override void AI()
         {
+
+            if (Projectile.ai[0] == 0)
+            {
+                tree = new Tree(Main.rand, Projectile.velocity);
+                tree.Generate();
+                if (tree.root != null)
+                    tree.Array(tree.root);
+
+                NodePosition = new Vector2[tree.Nodes.Length + tree.brunchnum];
+                terminals = new bool[tree.Nodes.Length + tree.brunchnum];
+                for (int i = 0; i < NodePosition.Length; i++)
+                {
+                    NodePosition[i] = tree.Nodes[j].position;
+                    terminals[i] = false;
+                    if (tree.Nodes[j].isterminal)
+                    {
+                        terminal = j;
+                        terminals[i] = true;
+                        if (tree.Nodes[j].isbrunch)
+                        {
+                            back = true;
+                        }
+                        else
+                        {
+                            j--;
+                        }
+
+                    }
+                    if (!back)
+                    {
+                        j++;
+                    }
+                    else
+                    {
+                        j--;
+                    }
+                    if (back && tree.Nodes[j].isfork)
+                    {
+                        back = false;
+                        j = terminal + 1;
+                    }
+
+
+                }
+                Projectile.ai[0]++;
+            }
             if (Projectile.timeLeft >= 28)
             {
-                Projectile.ai[1] = 1f;
-                if (Projectile.timeLeft % 4 == 0)
-                {
-                    Projectile.oldPos[(int)Projectile.ai[0]] = Projectile.Center;
-                    Projectile obj = Projectile;
-                    obj.Center = obj.Center + Utils.RotatedBy(Projectile.velocity, (double)((Projectile.ai[0] % 2f == 0f ? 1 : (-1)) * 0.4f));
-                    Projectile obj2 = Projectile;
-                    obj2.Center = obj2.Center + 2f * Utils.NextVector2Unit(Main.rand, 0f, (float)Math.PI * 2f * 30f);
-                    Projectile.ai[0] += 1f;
-                }
+                Projectile.ai[1] += 1f / 60f;
             }
             else
             {
                 Projectile.ai[1] -= 1f / 24f;
             }
-            Projectile obj3 = Projectile;
-            obj3.Center = (obj3.Center - Projectile.velocity);
+
+            if (Projectile.ai[1] >= 1)
+            {
+                Projectile.ai[1] = 1;
+            }
+            Projectile.ai[0]++;
         }
 
         public override bool PreDraw(ref Color lightColor)
         {
 
             List<Vertex2D> vertices = new List<Vertex2D>();
-            Color color = default(Color);
-            color = new Color(150, 0, 200);
+            Color color = Color.Yellow;
             Main.spriteBatch.End();
             Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, (Effect)null, Main.GameViewMatrix.TransformationMatrix);
-            for (int i = 0; i < Projectile.oldPos.Length; i++)
+            for (int i = 0; i < NodePosition.Length - 1; i++)
             {
-                if (!(Projectile.oldPos[i] == Vector2.Zero))
+
+                if (NodePosition[i] + Projectile.Center != Vector2.Zero)
                 {
-                    if (i == 0 || i == 3)
+                    if (terminals[i])
                     {
-                        vertices.Add(new Vertex2D(Projectile.oldPos[i] - Main.screenPosition, new Color(200, 100, 200), new Vector3(1f, 0f, 1f)));
+                        vertices.Add(new Vertex2D(NodePosition[i] + Projectile.Center - Main.screenPosition, color, new Vector3(1f, 0f, 1f)));
+                        // vertices.Add(new Vertex2D(Main.LocalPlayer.Center - Main.screenPosition, new Vector3(1f, 0f, 1f), new Color(200, 100, 200)));
+
+
                     }
-                    if (i == 1 || i == 2)
+                    else
                     {
-                        Vector2 normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
+                        Vector2 normalDir = NodePosition[i] - NodePosition[i + 1];
                         normalDir = Vector2.Normalize(new Vector2(0f - normalDir.Y, normalDir.X));
-                        float width = 15f * Projectile.ai[1];
-                        vertices.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width - Main.screenPosition, color, new Vector3(1f, 0f, 1f)));
-                        vertices.Add(new Vertex2D(Projectile.oldPos[i] - normalDir * width - Main.screenPosition, color, new Vector3(1f, 0f, 1f)));
+                        float width = Math.Clamp(Projectile.ai[0] * 25 - NodePosition[i].Length(), 0, 15) * Projectile.ai[1];
+                        vertices.Add(new Vertex2D(NodePosition[i] + Projectile.Center + (i == 0 ? 2 : 1) * normalDir * width * ((float)Math.Pow(0.9f,i))- Main.screenPosition, color, new Vector3(1f, 0f, 1f)));
+                        vertices.Add(new Vertex2D(NodePosition[i] + Projectile.Center - (i == 0 ? 2 : 1) * normalDir * width * ((float)Math.Pow(0.9f, i)) - Main.screenPosition, color, new Vector3(1f, 0f, 1f)));
                     }
                 }
             }
             Main.graphics.GraphicsDevice.Textures[1] = TextureAssets.MagicPixel.Value;
             if (vertices.Count > 2)
             {
-                Main.graphics.GraphicsDevice.DrawUserPrimitives<Vertex2D>((PrimitiveType)1, vertices.ToArray(), 0, vertices.Count - 2);
+                Main.graphics.GraphicsDevice.DrawUserPrimitives<Vertex2D>(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);
             }
             Main.spriteBatch.End();
             Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, (Effect)null, Main.GameViewMatrix.TransformationMatrix);
             return false;
         }
+        public static Vector2 Normalize2(Vector2 vector2)
+        {
+            if (vector2 != Vector2.Zero)
+            {
+                return Vector2.Normalize(vector2);
+            }
+            return new Vector2(0f, 0.001f);
+        }
+
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
@@ -125,7 +292,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
 
         public void DrawBloom()
         {
-            Color color = Color.White;
+            Color color = Color.Yellow;
             this.PreDraw(ref color);
         }
     }
@@ -135,7 +302,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
         Effect GoldenCrack;
         public override void OnModLoad()
         {
-            GoldenCrack = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/Cosmic").Value;
+            GoldenCrack = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/GoldenCrack").Value;
             On.Terraria.Graphics.Effects.FilterManager.EndCapture += FilterManager_EndCapture;//原版绘制场景的最后部分——滤镜。在这里运用render保证不会与原版冲突
             Main.OnResolutionChanged += Main_OnResolutionChanged;
             On.Terraria.Main.LoadWorlds += Main_OnLoadWorlds;
@@ -157,40 +324,6 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
             Main.spriteBatch.Draw((Texture2D)(object)Main.screenTarget, Vector2.Zero, Color.White);
             Main.spriteBatch.End();
         }
-        private void UseCosmic(GraphicsDevice graphicsDevice)
-        {
-            GoldenCrack = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/Cosmic").Value;
-            bool use = false;
-            GetOrig(graphicsDevice);
-            graphicsDevice.SetRenderTarget(Main.screenTargetSwap);
-            graphicsDevice.Clear(Color.Transparent);
-            Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, (Effect)null, Main.GameViewMatrix.TransformationMatrix);
-            foreach (Projectile proj in Main.projectile)
-            {
-                if (!(proj).active)
-                {
-                    continue;
-                }
-                if (proj.type == ModContent.ProjectileType<GoldenCrack>())
-                {
-                    Color c3 = Color.White;
-                    ((proj.ModProjectile as GoldenCrack)).PreDraw(ref c3);
-                }
-            }
-            Main.spriteBatch.End();
-            graphicsDevice.SetRenderTarget(Main.screenTarget);
-            graphicsDevice.Clear(Color.Transparent);
-            Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend);
-            Main.spriteBatch.Draw((Texture2D)(object)screen, Vector2.Zero, Color.White);
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin((SpriteSortMode)1, BlendState.AlphaBlend);
-            GoldenCrack.CurrentTechnique.Passes[0].Apply();
-            GoldenCrack.Parameters["m"].SetValue(0.1f);
-            GoldenCrack.Parameters["t"].SetValue(0.1f * ((float)Math.Sin(Main.timeForVisualEffects * 0.01) * 0.5f + 0.5f));
-            GoldenCrack.Parameters["tex0"].SetValue((Texture)(object)ModContent.Request<Texture2D>("Everglow/Sources/Modules/Core/IIIDModule/Projectiles/NonIIIDProj/GoldenCrack/GoldenCrack").Value);
-            Main.spriteBatch.Draw((Texture2D)(object)Main.screenTargetSwap, Vector2.Zero, Color.White);
-            Main.spriteBatch.End();
-        }
         private void FilterManager_EndCapture(On.Terraria.Graphics.Effects.FilterManager.orig_EndCapture orig, Terraria.Graphics.Effects.FilterManager self, Microsoft.Xna.Framework.Graphics.RenderTarget2D finalTexture, Microsoft.Xna.Framework.Graphics.RenderTarget2D screenTarget1, Microsoft.Xna.Framework.Graphics.RenderTarget2D screenTarget2, Microsoft.Xna.Framework.Color clearColor)
         {
             GraphicsDevice gd = Main.instance.GraphicsDevice;
@@ -204,7 +337,39 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
             {
                 return;
             }
-            UseCosmic(gd);
+
+            GoldenCrack = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/GoldenCrack").Value;
+            GetOrig(gd);
+            gd.SetRenderTarget(Main.screenTargetSwap);
+            gd.Clear(Color.Transparent);
+            Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, (Effect)null, Main.GameViewMatrix.TransformationMatrix);
+            foreach (Projectile proj in Main.projectile)
+            {
+                if (!(proj).active)
+                {
+                    continue;
+                }
+                if (proj.type == ModContent.ProjectileType<GoldenCrack>())
+                {
+                    Color c3 = Color.White;
+                    ((proj.ModProjectile as GoldenCrack)).PreDraw(ref c3);
+                }
+            }
+
+            Main.spriteBatch.End();
+            gd.SetRenderTarget(Main.screenTarget);
+            gd.Clear(Color.Transparent);
+            Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend);
+            Main.spriteBatch.Draw((Texture2D)(object)screen, Vector2.Zero, Color.White);
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin((SpriteSortMode)1, BlendState.AlphaBlend);
+            GoldenCrack.CurrentTechnique.Passes[0].Apply();
+            GoldenCrack.Parameters["m"].SetValue(0.1f);
+            GoldenCrack.Parameters["t"].SetValue(0.1f * ((float)Math.Sin(Main.timeForVisualEffects * 0.0099999997764825821) * 0.5f + 0.5f));
+            GoldenCrack.Parameters["tex0"].SetValue(ModContent.Request<Texture2D>("Everglow/Sources/Modules/IIIDModule/Projectiles/NonIIIDProj/GoldenCrack/GoldenCrack").Value);
+            Main.spriteBatch.Draw((Texture2D)(object)Main.screenTargetSwap, Vector2.Zero, Color.White);
+            Main.spriteBatch.End();
+
             orig(self, finalTexture, screenTarget1, screenTarget2, clearColor);
         }
         private void Main_OnResolutionChanged(Vector2 obj)//在分辨率更改时，重建render防止某些bug
@@ -228,6 +393,5 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
             screen = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth, Main.screenHeight);
         }
     }
-
 }
 

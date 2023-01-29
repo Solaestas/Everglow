@@ -2,39 +2,16 @@
 using Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall;
 using Everglow.Sources.Modules.MEACModule.Projectiles;
 using ReLogic.Graphics;
+using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
+using static Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrack.Tree;
 
 namespace Everglow.Sources.Modules.MEACModule.Items
 {
     public class VortexVanquisherItem : ModItem
     {
-        public override void SetStaticDefaults()
-        {
-            DisplayName.SetDefault(""); // By default, capitalization in classnames will add spaces to the display name. You can customize the display name here by uncommenting this line.
-            Tooltip.SetDefault("This is a basic modded sword.");
-        }
-
-        public override void SetDefaults()
-        {
-            Item.noUseGraphic = false;
-            Item.damage = 50;
-            Item.DamageType = DamageClass.Melee;
-            Item.width = 40;
-            Item.height = 40;
-            Item.useTime = 20;
-            Item.useAnimation = 20;
-            Item.useStyle = 5;
-            Item.knockBack = 6;
-            Item.value = 10000;
-            Item.rare = 2;
-            Item.UseSound = SoundID.Item1;
-            Item.autoReuse = true;
-            Item.shoot = ModContent.ProjectileType<GoldenCrack>();
-            Item.shootSpeed = 114;
-        }
-
-        /*  public override void SetDefaults()
+          public override void SetDefaults()
           {
               Item.useStyle = ItemUseStyleID.Swing;
               Item.width = 1;
@@ -95,8 +72,12 @@ namespace Everglow.Sources.Modules.MEACModule.Items
                   if (Main.myPlayer == player.whoAmI)
                   {
                       if (Main.mouseMiddle&&Main.mouseMiddleRelease)
-                      {
-                         // Projectile.NewProjectile(null, Main.MouseWorld, new Vector2(10, 0), ModContent.ProjectileType<Plan>(), 10, 0);
+                      {for (int i = 0; i < 8; i++)
+                        {
+                            Vector2 v = new Vector2(0.001f, 0);
+                            Projectile.NewProjectile(null, Main.MouseWorld, v.RotatedBy(Math.PI*i/4).RotatedByRandom(Math.PI * i / 16), ModContent.ProjectileType<GoldenCrack>(), 10, 0);
+                        }
+                         
                       }
                       if (player.altFunctionUse != 2)
                       {
@@ -212,6 +193,6 @@ namespace Everglow.Sources.Modules.MEACModule.Items
           public override void AddRecipes()
           {
 
-          }*/
+          }
     }
 }
