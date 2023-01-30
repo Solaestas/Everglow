@@ -82,8 +82,8 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
         {
 
             // 根节点生成，朝向0，粗细1，长度随机50中选
-            root = new Node(0, 0, 1, 200f * Rand(), false, true, false, false, Vector2.Zero);
-            root = Buildmaster(root, 6);
+            root = new Node(0, 0, Rand(), 200f * Rand(), false, true, false, false, Vector2.Zero);
+            root = Buildmaster(root, 5);
             Nodes = new Node[cnt + 1];
             //root = _build(root, 5);
         }
@@ -98,12 +98,17 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
 
             }
 
-            if (Main.rand.NextBool(8) || dep == 5)
+            if (Main.rand.NextBool(5) || dep == 5)
             {
-                var rad = Rand(MathHelper.Pi / 4f);
-                Node brunch = new Node(cnt, (node.rad > 0) ? Math.Abs(rad) : -Math.Abs(rad), node.size * Rand(), node.length * Rand(), false, false, true, false, Position(node.position, vel, node));
-                node.isfork = true;
-                node.children.Add(Buildbrunch(brunch, 0));
+                int numChild = Main.rand.Next(4);
+                for (int i = 0; i < numChild; i++)
+                {
+                    var rad = Rand(MathHelper.Pi / 4f);
+                    Node brunch = new Node(cnt, (node.rad > 0) ? Math.Abs(rad) : -Math.Abs(rad), node.size * Rand(), node.length * Rand(), false, false, true, false, Position(node.position, vel, node));
+                    node.isfork = true;
+                    node.children.Add(Buildbrunch(brunch, 0));
+                }
+                
             }
             // 参数修改了
             Node master = new Node(cnt, Rand(MathHelper.Pi / 6f), node.size * Rand(), node.length * Rand(), false, true, false, false, Position(node.position, vel, node));
@@ -250,7 +255,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
                     {
                         Vector2 normalDir = NodePosition[i] - NodePosition[i + 1];
                         normalDir = Vector2.Normalize(new Vector2(0f - normalDir.Y, normalDir.X));
-                        float width = Math.Clamp(Projectile.ai[0] * 25 - NodePosition[i].Length(), 0, 15) * Projectile.ai[1];
+                        float width = Math.Clamp(Projectile.ai[0] * 15 - NodePosition[i].Length(), 0, 5) * Projectile.ai[1];
                         vertices.Add(new Vertex2D(NodePosition[i] + Projectile.Center + (i == 0 ? 2 : 1) * normalDir * width * ((float)Math.Pow(0.9f,i))- Main.screenPosition, color, new Vector3(1f, 0f, 1f)));
                         vertices.Add(new Vertex2D(NodePosition[i] + Projectile.Center - (i == 0 ? 2 : 1) * normalDir * width * ((float)Math.Pow(0.9f, i)) - Main.screenPosition, color, new Vector3(1f, 0f, 1f)));
                     }

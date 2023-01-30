@@ -90,11 +90,11 @@ namespace Everglow.Sources.Modules.MEACModule.Items
                         {
                             return;
                         }
-                        CoolTimeForQ = 1440;
-                        for (int i = 0; i < 8; i++)
+                        CoolTimeForQ = 100;
+                        for (int i = 0; i < 16; i++)
                         {
                             Vector2 v = new Vector2(0.001f, 0);
-                            Projectile.NewProjectile(null, Main.MouseWorld, v.RotatedBy(Math.PI * i / 4).RotatedByRandom(Math.PI * i / 16), ModContent.ProjectileType<GoldenCrack>(), 10, 0);
+                            Projectile.NewProjectile(null, Main.MouseWorld, v.RotatedBy(Math.PI * i / 8).RotatedByRandom(Math.PI * i / 100), ModContent.ProjectileType<GoldenCrack>(), 10, 0);
                         }
 
                     }
