@@ -143,7 +143,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
             }
         }
     }
-    public class GoldenCrack : ModProjectile, IBloomProjectile
+    public class GoldenCrack : ModProjectile,IBloomProjectile
     {
         public override void SetDefaults()
         {
@@ -301,9 +301,16 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
             this.PreDraw(ref color);
         }
     }
+
+
+
+
+
+
+
     public class GoldenCrackEffect : ModSystem
     {
-        RenderTarget2D render, screen;
+        RenderTarget2D render, screen , bloomTarget1 = null, bloomTarget2 = null;
         Effect GoldenCrack;
         public override void OnModLoad()
         {
@@ -336,7 +343,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
 
             if (render == null)
             {
-                CreateRender();
+                CreateRender(new Vector2(Main.screenWidth, Main.screenHeight));
             }
             if (gd == null)
             {
@@ -370,10 +377,74 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
             Main.spriteBatch.Begin((SpriteSortMode)1, BlendState.AlphaBlend);
             GoldenCrack.CurrentTechnique.Passes[0].Apply();
             GoldenCrack.Parameters["m"].SetValue(0.1f);
-            GoldenCrack.Parameters["t"].SetValue(0.1f * ((float)Math.Sin(Main.timeForVisualEffects * 0.0099999997764825821) * 0.5f + 0.5f));
+            GoldenCrack.Parameters["t"].SetValue(0.1f);
             GoldenCrack.Parameters["tex0"].SetValue(ModContent.Request<Texture2D>("Everglow/Sources/Modules/IIIDModule/Projectiles/NonIIIDProj/GoldenCrack/GoldenCrack").Value);
             Main.spriteBatch.Draw((Texture2D)(object)Main.screenTargetSwap, Vector2.Zero, Color.White);
             Main.spriteBatch.End();
+
+
+            Effect Bloom = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/Bloom1", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+            //保存原图
+            gd.SetRenderTarget(Main.screenTargetSwap);
+            gd.Clear(Color.Transparent);
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            Main.spriteBatch.Draw(Main.screenTarget, Vector2.Zero, Color.White);
+            Main.spriteBatch.End();
+
+            //在screen上绘制发光部分
+            gd.SetRenderTarget(screen);
+            gd.Clear(Color.Transparent);
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            foreach (Projectile proj in Main.projectile)
+            {
+                if (proj.active)
+                {
+                    if (proj.ModProjectile is GoldenCrack ModProj)
+                    {
+                        ModProj.DrawBloom();
+                    }
+                }
+            }
+            Main.spriteBatch.End();
+
+            //取样
+
+            gd.SetRenderTarget(bloomTarget2);
+            gd.Clear(Color.Transparent);
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            Bloom.CurrentTechnique.Passes[0].Apply();//取亮度超过m值的部分
+            Bloom.Parameters["m"].SetValue(0.5f);
+            Main.spriteBatch.Draw(screen, new Rectangle(0, 0, Main.screenWidth / 3, Main.screenHeight / 3), Color.White);
+            Main.spriteBatch.End();
+
+            //处理
+
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            Bloom.Parameters["uScreenResolution"].SetValue(new Vector2(Main.screenWidth, Main.screenHeight) / 3f);
+            Bloom.Parameters["uRange"].SetValue(1.5f);//范围
+            Bloom.Parameters["uIntensity"].SetValue(0.97f);//发光强度
+            for (int i = 0; i < 2; i++)//交替使用两个RenderTarget2D，进行多次模糊
+            {
+                Bloom.CurrentTechnique.Passes["GlurV"].Apply();//横向
+                gd.SetRenderTarget(bloomTarget1);
+                gd.Clear(Color.Transparent);
+                Main.spriteBatch.Draw(bloomTarget2, Vector2.Zero, Color.White);
+
+                Bloom.CurrentTechnique.Passes["GlurH"].Apply();//纵向
+                gd.SetRenderTarget(bloomTarget2);
+                gd.Clear(Color.Transparent);
+                Main.spriteBatch.Draw(bloomTarget1, Vector2.Zero, Color.White);
+            }
+            Main.spriteBatch.End();
+
+            gd.SetRenderTarget(Main.screenTarget);
+            gd.Clear(Color.Transparent);
+            //叠加
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
+            Main.spriteBatch.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
+            Main.spriteBatch.Draw(bloomTarget2, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White);
+            Main.spriteBatch.End();
+
 
             orig(self, finalTexture, screenTarget1, screenTarget2, clearColor);
         }
@@ -381,21 +452,23 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
         {
             if (render != null)
             {
-                CreateRender();
+                CreateRender(new Vector2(Main.screenWidth, Main.screenHeight));
             }
         }
         private void Main_OnLoadWorlds(On.Terraria.Main.orig_LoadWorlds orig)
         {
             if (render != null)
             {
-                CreateRender();
+                CreateRender(new Vector2(Main.screenWidth, Main.screenHeight));
             }
             orig();
         }
-        public void CreateRender()
+        public void CreateRender(Vector2 obj)
         {
             render = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth, Main.screenHeight);
             screen = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth, Main.screenHeight);
+            bloomTarget1 = new RenderTarget2D(Main.graphics.GraphicsDevice, (int)obj.X / 3, (int)obj.Y / 3);
+            bloomTarget2 = new RenderTarget2D(Main.graphics.GraphicsDevice, (int)obj.X / 3, (int)obj.Y / 3);
         }
     }
 }
