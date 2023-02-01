@@ -140,7 +140,7 @@ namespace Everglow.Sources.Modules.MEACModule
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
                 Bloom.Parameters["uScreenResolution"].SetValue(new Vector2(Main.screenWidth, Main.screenHeight) / 3f);
                 Bloom.Parameters["uRange"].SetValue(1.5f);//范围
-                Bloom.Parameters["uIntensity"].SetValue(10f);//发光强度
+                Bloom.Parameters["uIntensity"].SetValue(0.97f);//发光强度
                 for (int i = 0; i < 2; i++)//交替使用两个RenderTarget2D，进行多次模糊
                 {
                     Bloom.CurrentTechnique.Passes["GlurV"].Apply();//横向
