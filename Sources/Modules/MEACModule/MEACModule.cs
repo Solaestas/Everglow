@@ -1,6 +1,7 @@
 ﻿using Everglow.Sources.Commons.Core.ModuleSystem;
 using Everglow.Sources.Commons.Core.VFX;
 using Everglow.Sources.Commons.Function.ObjectPool;
+using Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrack;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,6 +50,62 @@ namespace Everglow.Sources.Modules.MEACModule
             }
             return flag;
         }
+        private void UseCosmic(GraphicsDevice graphicsDevice)
+        {
+            Effect Cosmic = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/GoldenCrack").Value;
+            bool use = false;
+            Projectile[] projectile = Main.projectile;
+            foreach (Projectile proj2 in projectile)
+            {
+                if (!(proj2).active)
+                {
+                    continue;
+                }
+                if (proj2.active)
+                {
+                    if (proj2.ModProjectile is ICosmicProjectile ModProj)
+                    {
+                        use = true;
+                        break;
+                    }
+                }
+                if (use)
+                {
+                    break;
+                }
+            }
+            if (!use)
+            {
+                return;
+            }
+            GetOrig(graphicsDevice);
+            graphicsDevice.SetRenderTarget(Main.screenTargetSwap);
+            graphicsDevice.Clear(Color.Transparent);
+            Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, (Effect)null, Main.GameViewMatrix.TransformationMatrix);
+            foreach (Projectile proj in Main.projectile)
+            {
+                if (proj.active)
+                {
+                    if (proj.ModProjectile is ICosmicProjectile ModProj)
+                    {
+                        ModProj.DrawCosmic();
+                    }
+                }
+            }
+            Main.spriteBatch.End();
+            graphicsDevice.SetRenderTarget(Main.screenTarget);
+            graphicsDevice.Clear(Color.Transparent);
+            Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend);
+            Main.spriteBatch.Draw((Texture2D)(object)screen, Vector2.Zero, Color.White);
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin((SpriteSortMode)1, BlendState.AlphaBlend);
+            Cosmic.CurrentTechnique.Passes[0].Apply();
+            Cosmic.Parameters["m"].SetValue(0.1f);
+            Cosmic.Parameters["t"].SetValue(0.1f);
+            Cosmic.Parameters["tex0"].SetValue((Texture)(object)ModContent.Request<Texture2D>("Everglow/Sources/Modules/IIIDModule/Projectiles/NonIIIDProj/GoldenCrack/GoldenCrack").Value);
+            Main.spriteBatch.Draw((Texture2D)(object)Main.screenTargetSwap, Vector2.Zero, Color.White);
+            Main.spriteBatch.End();
+        }
         private void UseBloom(GraphicsDevice graphicsDevice)
         {
             if (HasBloom())
@@ -83,7 +140,7 @@ namespace Everglow.Sources.Modules.MEACModule
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
                 Bloom.Parameters["uScreenResolution"].SetValue(new Vector2(Main.screenWidth, Main.screenHeight) / 3f);
                 Bloom.Parameters["uRange"].SetValue(1.5f);//范围
-                Bloom.Parameters["uIntensity"].SetValue(0.97f);//发光强度
+                Bloom.Parameters["uIntensity"].SetValue(10f);//发光强度
                 for (int i = 0; i < 2; i++)//交替使用两个RenderTarget2D，进行多次模糊
                 {
                     Bloom.CurrentTechnique.Passes["GlurV"].Apply();//横向
@@ -137,6 +194,7 @@ namespace Everglow.Sources.Modules.MEACModule
                 Main.spriteBatch.End();
             }
             UseBloom(graphicsDevice);
+            UseCosmic(graphicsDevice);
             screen = null;
             renderTargets.Release();
             orig(self, finalTexture, screenTarget1, screenTarget2, clearColor);
