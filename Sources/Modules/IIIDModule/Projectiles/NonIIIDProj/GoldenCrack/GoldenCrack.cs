@@ -83,7 +83,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
 
             // 根节点生成，朝向0，粗细1，长度随机50中选
             root = new Node(0, 0, Rand(), 200f * Rand(), false, true, false, false, Vector2.Zero);
-            root = Buildmaster(root, 5);
+            root = Buildmaster(root, 4);
             Nodes = new Node[cnt + 1];
             //root = _build(root, 5);
         }
@@ -100,14 +100,10 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
 
             if (Main.rand.NextBool(5) || dep == 5)
             {
-                int numChild = Main.rand.Next(4);
-                for (int i = 0; i < numChild; i++)
-                {
                     var rad = Rand(MathHelper.Pi / 4f);
                     Node brunch = new Node(cnt, (node.rad > 0) ? Math.Abs(rad) : -Math.Abs(rad), node.size * Rand(), node.length * Rand(), false, false, true, false, Position(node.position, vel, node));
                     node.isfork = true;
                     node.children.Add(Buildbrunch(brunch, 0));
-                }
                 
             }
             // 参数修改了
