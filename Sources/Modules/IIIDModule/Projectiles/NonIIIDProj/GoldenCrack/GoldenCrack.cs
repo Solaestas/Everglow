@@ -252,8 +252,8 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
                         Vector2 normalDir = NodePosition[i] - NodePosition[i + 1];
                         normalDir = Vector2.Normalize(new Vector2(0f - normalDir.Y, normalDir.X));
                         float width = Math.Clamp(Projectile.ai[0] * 15 - NodePosition[i].Length(), 0, 5) * Projectile.ai[1];
-                        vertices.Add(new Vertex2D(NodePosition[i] + Projectile.Center + (i == 0 ? Projectile.ai[0] < 60 ? 6 : 2 : 1) * normalDir * width * ((float)Math.Pow(0.9f,i))- Main.screenPosition, color, new Vector3(1f, 0f, 1f)));
-                        vertices.Add(new Vertex2D(NodePosition[i] + Projectile.Center - (i == 0 ? Projectile.ai[0] < 60 ? 6 : 2 : 1) * normalDir * width * ((float)Math.Pow(0.9f, i)) - Main.screenPosition, color, new Vector3(1f, 0f, 1f)));
+                        vertices.Add(new Vertex2D(NodePosition[i] + Projectile.Center + (i == 0 ? Projectile.ai[0] > 60 ? 6 : 2 : 1) * normalDir * width * ((float)Math.Pow(0.9f,i))- Main.screenPosition, color, new Vector3(1f, 0f, 1f)));
+                        vertices.Add(new Vertex2D(NodePosition[i] + Projectile.Center - (i == 0 ? Projectile.ai[0] > 60 ? 6 : 2 : 1) * normalDir * width * ((float)Math.Pow(0.9f, i)) - Main.screenPosition, color, new Vector3(1f, 0f, 1f)));
                     }
                 }
             }
