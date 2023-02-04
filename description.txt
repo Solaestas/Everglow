@@ -14,6 +14,18 @@ With a unique module system, players can selectively load some modules to custom
 The content of the two mods, Eternal Resolve and MythMod, will each be partially migrated as a module, and may be linked to other mods in the future.
 However, many of these features are not yet included in the demo, but will be eventually.
 
+Currently, Everglow contains the following content:
+- Slingshots
+- Food System
+- New Magic Book System
+- More Food Items
+- The Firefly Biome, located in the Firefly Subworld (currently broken)
+- The boss of the Firefly Biome: Corrupted Moth!
+- Two other bosses, The Tusk and Acytaea (unspawnable in normal gameplay)
+- VFX Pipeline System
+- A Frying Pan?
+- Enchanting Coins, for giving accessories prefixes (currently doesn't function properly)
+
 [h3]Player Feedback[/h3]
 Bug reports and discussions: you can join our Discord server https://discord.gg/cUfyhqaPFe
 
