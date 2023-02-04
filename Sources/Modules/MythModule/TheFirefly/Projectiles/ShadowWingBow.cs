@@ -152,7 +152,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                             else
                                 Energy++;
                         }
-                        
+
                     }
                     Energy++;
                 }

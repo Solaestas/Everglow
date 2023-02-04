@@ -27,7 +27,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         }
         public override float TrailAlpha(float factor)
         {
-            return base.TrailAlpha(factor)*1.15f;
+            return base.TrailAlpha(factor) * 1.15f;
         }
         public override BlendState TrailBlendState()
         {
@@ -96,7 +96,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
 
             Vector2 vToMouse = Main.MouseWorld - player.Top;
             float AddHeadRotation = (float)Math.Atan2(vToMouse.Y, vToMouse.X) + (1 - player.direction) * 1.57f;
-            if(player.gravDir == -1)
+            if (player.gravDir == -1)
             {
                 if (player.direction == -1)
                 {
@@ -353,7 +353,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                 else
                 {
                     Vector2 ToMouseWorld = Main.MouseWorld - player.Top;
-                    float HeadRot = (float)Math.Atan2(ToMouseWorld.Y, ToMouseWorld.X) + (float)(Math.PI * 0.5 * (1-player.direction));
+                    float HeadRot = (float)Math.Atan2(ToMouseWorld.Y, ToMouseWorld.X) + (float)(Math.PI * 0.5 * (1 - player.direction));
                     BodyRotation = -timer * player.direction * 0.003f * player.gravDir;
                 }
                 player.fullRotation = BodyRotation;
@@ -372,7 +372,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                     End();
                 }
             }
-            
+
             if (isAttacking)
             {
                 for (int i = 0; i < 2; i++)

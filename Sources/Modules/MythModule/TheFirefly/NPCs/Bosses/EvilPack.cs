@@ -5,6 +5,7 @@ using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Terraria.Audio;
 using Terraria.Localization;
+using Everglow.Sources.Commons.Function.FeatureFlags;
 using static Steamworks.SteamUser;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
