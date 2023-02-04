@@ -40,7 +40,53 @@ Publicity & Moderation:
 绮逾依, Colin Weiss, Lacewing, 夜鸽, Redusty, Dirty Octopus, 笙箫, Setnour6, Windbecalm
 	
 Special thanks to (in no particular order): 
-Publicity: Starlight River, Endless Escapade, Blood Soul, Ryuusei (BabeElena), Lastprismer, Cataclysmic Armageddon, Murasama
+Publicity: Starlight River, Endless Escapade, Blood Soul, Ryuusei (BabeElena), Lastprismer
 Sprites: flowey, Verycd, 余墨, 仙阁, and some anonymous spriters
 Composition: Shiryuu and windclimb
 Wiki: Moonseer
+
+-----------------
+
+[h1]流光无际 Demo[/h1]
+
+[h3]什么是Demo?[/h3]
+Demo即demonstration, 演示版.
+这意味着此版本的目的是演示,
+而非供玩家正常游玩.
+你可以抢先体验到该模组的部分内容,
+但并不能体验到相对完整的流程.
+
+[h3]什么是流光无际？[/h3]
+流光无际(Everglow)是一个大型综合性内容mod，致力于向泰拉中加入丰富有趣的可玩内容。
+这些内容将会涵盖各个方面：从第一天到月后，从泰拉大陆到更广阔的世界，武器、装备、boss、地形、新世界、新机制应有尽有。
+具有独特的模块系统，玩家可以选择性地加载部分模块，在一定程度上自定义mod内容，找到自己喜爱的游玩方式。
+永恒意志和神话这两个mod的内容将会各作为一个模块迁移到流光无际下，未来可能与其他mod推出联动内容。
+不过，上述许多部分并未包含在此demo中，还请耐心等待。
+
+此demo不支持联机
+创建新世界以获得更佳体验
+
+制作人员名单 (排名不分先后):
+
+程序:
+万象元素, 夜谷紫幽, 小裙子, Cyril, 局长, JDSALing, yiyang233, 世纪小花, 月霞玉桥听红雨, 菲利克斯·杨, 幽银, 科林维斯, Setnour6, Lacewing
+美术:
+凝胶, 万象元素, 红茶, 菲利克斯·杨, Nomis, Domesticfoxcy, Setnour6, 迷途のこいし, 吞某, 红尘, 锈铁
+音乐:
+東の明るさ, 脏渔歌, Setnour6
+音效:
+Setnour6, 万象元素
+建筑:
+青枫
+文案:
+Lacewing
+本地化:
+Lacewing, NooN iS oN, Zero Project
+宣传&社区管理:
+绮逾依, 科林维斯, Lacewing, 夜鸽, 红尘, 脏渔歌, 笙箫, Setnour6, Windbecalm
+
+特别感谢(无先后顺序)：
+宣传: Starlight River (星光之河), Endless Escapade (无尽逃脱), 血魂 (Blood Soul), Ryuusei (BabeElena)，棱镜 (Lastprismer)
+贴图: 小花, 心动游戏, 余墨, Moonseer, 仙阁, 以及一些匿名画师
+音乐: Shiryuu 和 windclimb
+维基: Moonseer

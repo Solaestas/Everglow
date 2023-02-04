@@ -1,6 +1,6 @@
 ﻿displayName = Everglow | 流光无际 [Demonstration]
 author = Dream Chaser Group | 孤舟逐梦团队
-version = 0.1.8
+version = 0.1.9
 includePDB = true
 noCompile = true
 modReferences = SubworldLibrary
