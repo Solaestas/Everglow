@@ -100,11 +100,11 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
 
             if (Main.rand.NextBool(5) || dep == 5)
             {
-                    var rad = Rand(MathHelper.Pi / 4f);
-                    Node brunch = new Node(cnt, (node.rad > 0) ? Math.Abs(rad) : -Math.Abs(rad), node.size * Rand(), node.length * Rand(), false, false, true, false, Position(node.position, vel, node));
-                    node.isfork = true;
-                    node.children.Add(Buildbrunch(brunch, 0));
-                
+                var rad = Rand(MathHelper.Pi / 4f);
+                Node brunch = new Node(cnt, (node.rad > 0) ? Math.Abs(rad) : -Math.Abs(rad), node.size * Rand(), node.length * Rand(), false, false, true, false, Position(node.position, vel, node));
+                node.isfork = true;
+                node.children.Add(Buildbrunch(brunch, 0));
+
             }
             // 参数修改了
             Node master = new Node(cnt, Rand(MathHelper.Pi / 6f), node.size * Rand(), node.length * Rand(), false, true, false, false, Position(node.position, vel, node));
@@ -139,7 +139,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
             }
         }
     }
-    public class GoldenCrack : ModProjectile,IBloomProjectile,ICosmicProjectile
+    public class GoldenCrack : ModProjectile, IBloomProjectile
     {
         public override void SetDefaults()
         {
@@ -252,7 +252,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
                         Vector2 normalDir = NodePosition[i] - NodePosition[i + 1];
                         normalDir = Vector2.Normalize(new Vector2(0f - normalDir.Y, normalDir.X));
                         float width = Math.Clamp(Projectile.ai[0] * 15 - NodePosition[i].Length(), 0, 5) * Projectile.ai[1];
-                        vertices.Add(new Vertex2D(NodePosition[i] + Projectile.Center + (i == 0 ? Projectile.ai[0] > 60 ? 6 : 2 : 1) * normalDir * width * ((float)Math.Pow(0.9f,i))- Main.screenPosition, color, new Vector3(1f, 0f, 1f)));
+                        vertices.Add(new Vertex2D(NodePosition[i] + Projectile.Center + (i == 0 ? Projectile.ai[0] > 60 ? 6 : 2 : 1) * normalDir * width * ((float)Math.Pow(0.9f, i)) - Main.screenPosition, color, new Vector3(1f, 0f, 1f)));
                         vertices.Add(new Vertex2D(NodePosition[i] + Projectile.Center - (i == 0 ? Projectile.ai[0] > 60 ? 6 : 2 : 1) * normalDir * width * ((float)Math.Pow(0.9f, i)) - Main.screenPosition, color, new Vector3(1f, 0f, 1f)));
                     }
                 }
@@ -291,16 +291,187 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
             return flag;
         }
 
-        public void DrawCosmic()
+        public void DrawBloom()
         {
             Color color = Color.Yellow;
             this.PreDraw(ref color);
         }
+    }
 
-            public void DrawBloom()
+    public class GoldenCrackEffect : ModSystem
+    {
+        RenderTarget2D render;
+        RenderTarget2D screen;
+        RenderTarget2D bloom1;
+        RenderTarget2D bloom2;
+        Effect  Bloom, GoldenCrack;
+        public static bool bloomActive = false;
+        public override void Load()
         {
-            Color color = Color.Yellow;
-            this.PreDraw(ref color);
+            Bloom = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/Bloom").Value;
+            GoldenCrack = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/GoldenCrack").Value;
+            On.Terraria.Graphics.Effects.FilterManager.EndCapture += FilterManager_EndCapture;//原版绘制场景的最后部分——滤镜。在这里运用render保证不会与原版冲突
+            Main.OnResolutionChanged += Main_OnResolutionChanged;
+            On.Terraria.Main.LoadWorlds += Main_OnLoadWorlds;
+            base.Load();
+        }
+        public override void Unload()
+        {
+            On.Terraria.Graphics.Effects.FilterManager.EndCapture -= FilterManager_EndCapture;
+            Main.OnResolutionChanged -= Main_OnResolutionChanged;
+            On.Terraria.Main.LoadWorlds -= Main_OnLoadWorlds;
+            base.Unload();
+        }
+        private void Main_OnResolutionChanged(Vector2 obj)//在分辨率更改时，重建render防止某些bug
+        {
+            if (render != null)
+            {
+                CreateRender();
+            }
+        }
+        private bool HasBloom()
+        {
+            bool flag = false;
+            Projectile[] projectile = Main.projectile;
+            foreach (Projectile proj in projectile)
+            {
+                if (((Entity)proj).active && proj.ModProjectile is GoldenCrack)
+                {
+                    flag = true;
+                }
+            }
+            return flag;
+        }
+
+        private void UseCosmic(GraphicsDevice graphicsDevice)
+        {
+            GoldenCrack = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/GoldenCrack").Value;
+            Projectile[] projectile = Main.projectile;
+
+            graphicsDevice.SetRenderTarget(screen);
+            graphicsDevice.Clear(Color.Transparent);
+            Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend);
+            Main.spriteBatch.Draw((Texture2D)(object)Main.screenTarget, Vector2.Zero, Color.White);
+            Main.spriteBatch.End();
+
+            graphicsDevice.SetRenderTarget(Main.screenTargetSwap);
+            graphicsDevice.Clear(Color.Transparent);
+            Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, (Effect)null, Main.GameViewMatrix.TransformationMatrix);
+            projectile = Main.projectile;
+            foreach (Projectile proj in projectile)
+            {
+                if (!((Entity)proj).active)
+                {
+                    continue;
+                }
+                if (proj.type == ModContent.ProjectileType<GoldenCrack>())
+                {
+                    Color c3 = Color.Yellow;
+                    ((ModProjectile)(proj.ModProjectile as GoldenCrack)).PreDraw(ref c3);
+                }
+            }
+
+            Main.spriteBatch.End();
+            graphicsDevice.SetRenderTarget(Main.screenTarget);
+            graphicsDevice.Clear(Color.Transparent);
+            Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend);
+            Main.spriteBatch.Draw((Texture2D)(object)screen, Vector2.Zero, Color.White);
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin((SpriteSortMode)1, BlendState.AlphaBlend);
+            GoldenCrack.CurrentTechnique.Passes[0].Apply();
+            GoldenCrack.Parameters["m"].SetValue(0.1f);
+            GoldenCrack.Parameters["t"].SetValue(0.1f * ((float)Math.Sin(1) * 0.5f + 0.5f));
+            GoldenCrack.Parameters["tex0"].SetValue((Texture)(object)ModContent.Request<Texture2D>("Everglow/Sources/Modules/IIIDModule/Projectiles/NonIIIDProj/GoldenCrack/GoldenCrack").Value);
+            Main.spriteBatch.Draw((Texture2D)(object)Main.screenTargetSwap, Vector2.Zero, Color.White);
+            Main.spriteBatch.End();
+        }
+        private void FilterManager_EndCapture(On.Terraria.Graphics.Effects.FilterManager.orig_EndCapture orig, Terraria.Graphics.Effects.FilterManager self, Microsoft.Xna.Framework.Graphics.RenderTarget2D finalTexture, Microsoft.Xna.Framework.Graphics.RenderTarget2D screenTarget1, Microsoft.Xna.Framework.Graphics.RenderTarget2D screenTarget2, Microsoft.Xna.Framework.Color clearColor)
+        {
+            GraphicsDevice gd = Main.instance.GraphicsDevice;
+            SpriteBatch sb = Main.spriteBatch;
+
+            if (render == null)
+            {
+                CreateRender();
+            }
+            if (gd == null)
+            {
+                return;
+            }
+
+            UseBloom(gd);
+            UseCosmic(gd);
+
+            orig(self, finalTexture, screenTarget1, screenTarget2, clearColor);
+        }
+        private void Main_OnLoadWorlds(On.Terraria.Main.orig_LoadWorlds orig)
+        {
+            if (render != null)
+            {
+                CreateRender();
+            }
+            orig();
+        }
+        private void UseBloom(GraphicsDevice graphicsDevice)
+        {
+            
+
+
+            if (HasBloom())
+            {
+                graphicsDevice.SetRenderTarget(Main.screenTargetSwap);
+                graphicsDevice.Clear(Color.Transparent);
+                Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+                Main.spriteBatch.Draw(Main.screenTarget, Vector2.Zero, Color.White);
+                Main.spriteBatch.End();
+
+                graphicsDevice.SetRenderTarget(screen);
+                graphicsDevice.Clear(Color.Transparent);
+                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+
+                Projectile[] projectile = Main.projectile;
+                foreach (Projectile proj in projectile)
+                {
+                    if (proj.active && proj.ModProjectile is GoldenCrack a)
+                    {
+                        a.DrawBloom();
+                    }
+                }
+                Main.spriteBatch.End();
+
+                Main.spriteBatch.Begin((SpriteSortMode)1, BlendState.AlphaBlend);
+                Bloom = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/Bloom").Value;
+                Bloom.Parameters["uScreenResolution"].SetValue(new Vector2((float)Main.screenWidth, (float)Main.screenHeight) / 3f);
+                Bloom.Parameters["uRange"].SetValue(1.5f);
+                Bloom.Parameters["uIntensity"].SetValue(1.5f);
+                Bloom.CurrentTechnique.Passes["GlurV"].Apply();
+
+
+                graphicsDevice.SetRenderTarget(bloom1);
+                graphicsDevice.Clear(Color.Transparent);
+                Main.spriteBatch.Draw(screen, Vector2.Zero, Color.White);
+                Bloom.CurrentTechnique.Passes["GlurH"].Apply();
+
+                graphicsDevice.SetRenderTarget(bloom2);
+                graphicsDevice.Clear(Color.Transparent);
+                Main.spriteBatch.Draw(bloom1, Vector2.Zero, Color.White);
+                Main.spriteBatch.End();
+
+                graphicsDevice.SetRenderTarget(Main.screenTarget);
+                graphicsDevice.Clear(Color.Transparent);
+                Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.Additive);
+                Main.spriteBatch.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
+                Main.spriteBatch.Draw(bloom2, new Rectangle(0, 0, Main.screenWidth * 3, Main.screenHeight * 3), Color.White);
+                Main.spriteBatch.End();
+
+            }
+        }
+        public void CreateRender()
+        {
+            render = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth, Main.screenHeight);
+            screen = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth, Main.screenHeight);
+            bloom1 = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth / 3, Main.screenHeight / 3);
+            bloom2 = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth / 3, Main.screenHeight / 3);
         }
     }
 }
