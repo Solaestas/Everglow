@@ -139,7 +139,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
             }
         }
     }
-    public class GoldenCrack : ModProjectile, IBloomProjectile
+    public class GoldenCrack : ModProjectile
     {
         public override void SetDefaults()
         {
@@ -155,8 +155,6 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
             Projectile.penetrate = -1;
             Projectile.ignoreWater = true;
             Projectile.hide = true;
-            Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 1;
         }
 
         private Tree tree;
@@ -166,7 +164,6 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
         bool[] terminals;
         public override void AI()
         {
-
             if (Projectile.ai[0] == 0)
             {
                 tree = new Tree(Main.rand, Projectile.velocity);
@@ -232,7 +229,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
         {
 
             List<Vertex2D> vertices = new List<Vertex2D>();
-            Color color = Color.Yellow;
+            Color color = Color.Gold;
             Main.spriteBatch.End();
             Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, (Effect)null, Main.GameViewMatrix.TransformationMatrix);
             for (int i = 0; i < NodePosition.Length - 1; i++)
@@ -266,34 +263,9 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
             Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, (Effect)null, Main.GameViewMatrix.TransformationMatrix);
             return false;
         }
-        public static Vector2 Normalize2(Vector2 vector2)
-        {
-            if (vector2 != Vector2.Zero)
-            {
-                return Vector2.Normalize(vector2);
-            }
-            return new Vector2(0f, 0.001f);
-        }
-
-
-        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
-        {
-            float point = 0f;
-            bool flag = false;
-            float width = 20f * Projectile.ai[1];
-            for (int i = 0; i < Projectile.oldPos.Length - 1 && !(Projectile.oldPos[i + 1] == Vector2.Zero); i++)
-            {
-                if (Collision.CheckAABBvLineCollision(Utils.TopLeft(targetHitbox), Utils.Size(targetHitbox), Projectile.oldPos[i], Projectile.oldPos[i + 1], width * 2f, ref point))
-                {
-                    flag = true;
-                }
-            }
-            return flag;
-        }
-
         public void DrawBloom()
         {
-            Color color = Color.Yellow;
+            Color color = Color.Gold;
             this.PreDraw(ref color);
         }
     }
@@ -304,12 +276,12 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
         RenderTarget2D screen;
         RenderTarget2D bloom1;
         RenderTarget2D bloom2;
-        Effect  Bloom, GoldenCrack;
+        Effect  Bloom, GoldenCrackVFX;
         public static bool bloomActive = false;
         public override void Load()
         {
-            Bloom = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/Bloom").Value;
-            GoldenCrack = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/GoldenCrack").Value;
+            Bloom = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/Bloom1").Value;
+            GoldenCrackVFX = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/GoldenCrack").Value;
             On.Terraria.Graphics.Effects.FilterManager.EndCapture += FilterManager_EndCapture;//原版绘制场景的最后部分——滤镜。在这里运用render保证不会与原版冲突
             Main.OnResolutionChanged += Main_OnResolutionChanged;
             On.Terraria.Main.LoadWorlds += Main_OnLoadWorlds;
@@ -329,23 +301,10 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
                 CreateRender();
             }
         }
-        private bool HasBloom()
-        {
-            bool flag = false;
-            Projectile[] projectile = Main.projectile;
-            foreach (Projectile proj in projectile)
-            {
-                if (((Entity)proj).active && proj.ModProjectile is GoldenCrack)
-                {
-                    flag = true;
-                }
-            }
-            return flag;
-        }
 
         private void UseCosmic(GraphicsDevice graphicsDevice)
         {
-            GoldenCrack = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/GoldenCrack").Value;
+            GoldenCrackVFX = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/GoldenCrack").Value;
             Projectile[] projectile = Main.projectile;
 
             graphicsDevice.SetRenderTarget(screen);
@@ -357,16 +316,12 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
             graphicsDevice.SetRenderTarget(Main.screenTargetSwap);
             graphicsDevice.Clear(Color.Transparent);
             Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, (Effect)null, Main.GameViewMatrix.TransformationMatrix);
-            projectile = Main.projectile;
+
             foreach (Projectile proj in projectile)
             {
-                if (!((Entity)proj).active)
+                if (proj.active && proj.type == ModContent.ProjectileType<GoldenCrack>())
                 {
-                    continue;
-                }
-                if (proj.type == ModContent.ProjectileType<GoldenCrack>())
-                {
-                    Color c3 = Color.Yellow;
+                    Color c3 = Color.Gold;
                     ((ModProjectile)(proj.ModProjectile as GoldenCrack)).PreDraw(ref c3);
                 }
             }
@@ -378,10 +333,10 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
             Main.spriteBatch.Draw((Texture2D)(object)screen, Vector2.Zero, Color.White);
             Main.spriteBatch.End();
             Main.spriteBatch.Begin((SpriteSortMode)1, BlendState.AlphaBlend);
-            GoldenCrack.CurrentTechnique.Passes[0].Apply();
-            GoldenCrack.Parameters["m"].SetValue(0.1f);
-            GoldenCrack.Parameters["t"].SetValue(0.1f * ((float)Math.Sin(1) * 0.5f + 0.5f));
-            GoldenCrack.Parameters["tex0"].SetValue((Texture)(object)ModContent.Request<Texture2D>("Everglow/Sources/Modules/IIIDModule/Projectiles/NonIIIDProj/GoldenCrack/GoldenCrack").Value);
+            GoldenCrackVFX.CurrentTechnique.Passes[0].Apply();
+            GoldenCrackVFX.Parameters["m"].SetValue(0.1f);
+            GoldenCrackVFX.Parameters["t"].SetValue(0.1f * ((float)Math.Sin(1) * 0.5f + 0.5f));
+            GoldenCrackVFX.Parameters["tex0"].SetValue((Texture)(object)ModContent.Request<Texture2D>("Everglow/Sources/Modules/IIIDModule/Projectiles/NonIIIDProj/GoldenCrack/GoldenCrack").Value);
             Main.spriteBatch.Draw((Texture2D)(object)Main.screenTargetSwap, Vector2.Zero, Color.White);
             Main.spriteBatch.End();
         }
@@ -399,8 +354,88 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
                 return;
             }
 
-            UseBloom(gd);
-            UseCosmic(gd);
+            //UseBloom(gd);
+            Bloom = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/Bloom1").Value;
+            gd.SetRenderTarget(Main.screenTargetSwap);
+            gd.Clear(Color.Transparent);
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            Main.spriteBatch.Draw(Main.screenTarget, Vector2.Zero, Color.White);
+            Main.spriteBatch.End();
+
+            gd.SetRenderTarget(screen);
+            gd.Clear(Color.Transparent);
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+           
+            foreach (Projectile proj in Main.projectile)
+            {
+                if (proj.active && proj.type == ModContent.ProjectileType<GoldenCrack>())
+                {
+                    Color c3 = Color.Gold;
+                    (proj.ModProjectile as GoldenCrack).PreDraw(ref c3);
+                }
+            }
+            Main.spriteBatch.End();
+
+            Main.spriteBatch.Begin((SpriteSortMode)1, BlendState.AlphaBlend);
+            Bloom.Parameters["uScreenResolution"].SetValue(new Vector2((float)Main.screenWidth, (float)Main.screenHeight) / 3f);
+            Bloom.Parameters["uRange"].SetValue(1.5f);
+            Bloom.Parameters["uIntensity"].SetValue(1.05f);
+            Bloom.CurrentTechnique.Passes["GlurV"].Apply();
+
+
+            gd.SetRenderTarget(bloom1);
+            gd.Clear(Color.Transparent);
+            Main.spriteBatch.Draw(screen, Vector2.Zero, Color.White);
+            Bloom.CurrentTechnique.Passes["GlurH"].Apply();
+
+            gd.SetRenderTarget(bloom2);
+            gd.Clear(Color.Transparent);
+            Main.spriteBatch.Draw(bloom1, Vector2.Zero, Color.White);
+            Main.spriteBatch.End();
+
+            gd.SetRenderTarget(Main.screenTarget);
+            gd.Clear(Color.Transparent);
+            Main.spriteBatch.Begin((SpriteSortMode)0, BlendState.Additive);
+            Main.spriteBatch.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
+            Main.spriteBatch.Draw(bloom2, new Rectangle(0, 0, Main.screenWidth * 3, Main.screenHeight * 3), Color.White);
+            Main.spriteBatch.End();
+
+            // UseCosmic(gd);
+            GoldenCrackVFX = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/GoldenCrack").Value;
+            gd.SetRenderTarget(Main.screenTargetSwap);
+            gd.Clear(Color.Transparent);
+            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            sb.Draw(Main.screenTarget, Vector2.Zero, Color.White);
+            sb.End();
+
+            gd.SetRenderTarget(render);
+            gd.Clear(Color.Transparent);
+            sb.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            foreach (Projectile proj in Main.projectile)
+            {
+                if (proj.active && proj.type == ModContent.ProjectileType<GoldenCrack>())
+                {
+                    Color c3 = Color.Gold;
+                    (proj.ModProjectile as GoldenCrack).PreDraw(ref c3);
+                }
+            }
+            sb.End();
+
+            gd.SetRenderTarget(Main.screenTarget);
+            gd.Clear(Color.Transparent);
+            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            sb.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
+            sb.End();
+            sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            gd.Textures[1] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/IIIDModule/Projectiles/NonIIIDProj/GoldenCrack/GoldenCrack").Value;
+
+
+            GoldenCrackVFX.CurrentTechnique.Passes["Tentacle"].Apply();
+            GoldenCrackVFX.Parameters["m"].SetValue(0.0f);
+            GoldenCrackVFX.Parameters["n"].SetValue(0.00f);
+            sb.Draw(render, Vector2.Zero, Color.White);
+            sb.End();
+
 
             orig(self, finalTexture, screenTarget1, screenTarget2, clearColor);
         }
@@ -414,11 +449,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
         }
         private void UseBloom(GraphicsDevice graphicsDevice)
         {
-            
-
-
-            if (HasBloom())
-            {
+ 
                 graphicsDevice.SetRenderTarget(Main.screenTargetSwap);
                 graphicsDevice.Clear(Color.Transparent);
                 Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
@@ -432,9 +463,10 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
                 Projectile[] projectile = Main.projectile;
                 foreach (Projectile proj in projectile)
                 {
-                    if (proj.active && proj.ModProjectile is GoldenCrack a)
+                    if (proj.active && proj.type == ModContent.ProjectileType<GoldenCrack>())
                     {
-                        a.DrawBloom();
+                        Color c3 = Color.Gold;
+                        ((ModProjectile)(proj.ModProjectile as GoldenCrack)).PreDraw(ref c3);
                     }
                 }
                 Main.spriteBatch.End();
@@ -464,7 +496,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
                 Main.spriteBatch.Draw(bloom2, new Rectangle(0, 0, Main.screenWidth * 3, Main.screenHeight * 3), Color.White);
                 Main.spriteBatch.End();
 
-            }
+            
         }
         public void CreateRender()
         {
