@@ -20,6 +20,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Graphics.Effects;
 using ReLogic.Content;
+using static Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrack.Tree;
 
 
 namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrack
@@ -109,11 +110,6 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
             // 参数修改了
             Node master = new Node(cnt, Rand(MathHelper.Pi / 6f), node.size * Rand(), node.length * Rand(), false, true, false, false, Position(node.position, vel, node));
             node.children.Add(Buildmaster(master, dep + 1));
-            if (node.isfork)
-                CombatText.NewText(new Rectangle((int)Main.LocalPlayer.position.X, (int)Main.LocalPlayer.position.Y, Main.LocalPlayer.width, Main.LocalPlayer.height),
-                   new Color(255, 0, 0),
-                   node.num,
-                   true, false);
             return node;
         }
         private Node Buildbrunch(Node node, int dep)
@@ -139,7 +135,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
             }
         }
     }
-    public class GoldenCrack : ModProjectile
+    public class GoldenCrack : ModProjectile,IBloomProjectile
     {
         public override void SetDefaults()
         {
@@ -355,7 +351,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
             }
 
             //UseBloom(gd);
-            Bloom = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/Bloom1").Value;
+           Bloom = ModContent.Request<Effect>("Everglow/Sources/Modules/IIIDModule/Effects/Bloom1").Value;
             gd.SetRenderTarget(Main.screenTargetSwap);
             gd.Clear(Color.Transparent);
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
@@ -379,11 +375,14 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
             Main.spriteBatch.Begin((SpriteSortMode)1, BlendState.AlphaBlend);
             Bloom.Parameters["uScreenResolution"].SetValue(new Vector2((float)Main.screenWidth, (float)Main.screenHeight) / 3f);
             Bloom.Parameters["uRange"].SetValue(1.5f);
-            Bloom.Parameters["uIntensity"].SetValue(1.05f);
+            Bloom.Parameters["uIntensity"].SetValue(15f);
             Bloom.CurrentTechnique.Passes["GlurV"].Apply();
+            /*CombatText.NewText(new Rectangle((int)Main.LocalPlayer.position.X, (int)Main.LocalPlayer.position.Y, Main.LocalPlayer.width, Main.LocalPlayer.height),
+                   new Color(255, 0, 0),
+                   node.num,
+                   true, false);*/
 
-
-            gd.SetRenderTarget(bloom1);
+           gd.SetRenderTarget(bloom1);
             gd.Clear(Color.Transparent);
             Main.spriteBatch.Draw(screen, Vector2.Zero, Color.White);
             Bloom.CurrentTechnique.Passes["GlurH"].Apply();
