@@ -1,4 +1,6 @@
 ﻿using Everglow.Sources.Modules.TwilightForestModule.Tiles;
+using Terraria.ModLoader;
+
 namespace Everglow.Sources.Modules.TwilightForestModule.Items;
 
 internal class TreePlacer : ModItem
@@ -17,7 +19,7 @@ internal class TreePlacer : ModItem
         {
             int i = (int)(Main.MouseWorld.X / 16);
             int j = (int)(Main.MouseWorld.Y / 16);
-            WorldGen.PlaceTile(i,j,ModContent.TileType<Tiles.TwilightGrassBlock>());
+            //WorldGen.PlaceTile(i,j,ModContent.TileType<Tiles.TwilightGrassBlock>());
             //BuildTwilightTree(i, j, 30);
         }
         if (Main.mouseRight && Main.mouseRightRelease)
@@ -25,7 +27,9 @@ internal class TreePlacer : ModItem
             int i = (int)(Main.MouseWorld.X / 16);
             int j = (int)(Main.MouseWorld.Y / 16);
             Main.NewText(Main.tile[i, j].TileType);
-            Main.tile[i, j].TileType = TileID.Grass;
+            Main.NewText(Main.tile[i, j].TileFrameX,Color.Green);
+            Main.NewText(Main.tile[i, j].TileFrameY,Color.GreenYellow);
+            Main.tile[i, j].TileType = (ushort)ModContent.TileType<Tiles.TwilightGrassBlock>();
         }
     }
     public static void BuildTwilightTree(int i, int j, int height = 10)
