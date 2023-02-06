@@ -375,7 +375,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
             Main.spriteBatch.Begin((SpriteSortMode)1, BlendState.AlphaBlend);
             Bloom.Parameters["uScreenResolution"].SetValue(new Vector2((float)Main.screenWidth, (float)Main.screenHeight) / 3f);
             Bloom.Parameters["uRange"].SetValue(1.5f);
-            Bloom.Parameters["uIntensity"].SetValue(15f);
+            Bloom.Parameters["uIntensity"].SetValue(1.5f);
             Bloom.CurrentTechnique.Passes["GlurV"].Apply();
             /*CombatText.NewText(new Rectangle((int)Main.LocalPlayer.position.X, (int)Main.LocalPlayer.position.Y, Main.LocalPlayer.width, Main.LocalPlayer.height),
                    new Color(255, 0, 0),
