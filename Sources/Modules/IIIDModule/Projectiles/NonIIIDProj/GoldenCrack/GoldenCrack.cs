@@ -250,7 +250,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrac
                     }
                 }
             }
-            Main.graphics.GraphicsDevice.Textures[1] = TextureAssets.MagicPixel.Value;
+            Main.graphics.GraphicsDevice.Textures[0] = TextureAssets.MagicPixel.Value;
             if (vertices.Count > 2)
             {
                 Main.graphics.GraphicsDevice.DrawUserPrimitives<Vertex2D>(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);
