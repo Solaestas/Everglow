@@ -3,6 +3,5 @@ author = Dream Chaser Group | 孤舟逐梦团队
 version = 0.1.9
 includePDB = true
 noCompile = true
-modReferences = SubworldLibrary
 dllReferences = MethodBoundaryAspect, SixLabors.ImageSharp, MathNet.Numerics
 buildIgnore = Everglow-UnitTest/*, Sources/Tools/*, Documents/*, *.md. *.txt

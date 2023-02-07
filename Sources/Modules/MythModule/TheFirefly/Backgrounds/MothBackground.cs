@@ -4,7 +4,6 @@ using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Physics;
 using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
-using SubworldLibrary;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
 {
@@ -108,26 +107,32 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
             }
         }
 
-        /// <summary>
-        /// 判定是否开启地形
-        /// </summary>
-        /// <returns></returns>
-        public static bool BiomeActive()
-        {
-            return /*SubWorldModule.*/SubworldSystem.IsActive<MothWorld>();
-        }
-        /// <summary>
-        /// 判定是否开启地形
-        /// </summary>
-        /// <returns></returns>
-        public static bool GlowingFlowerLandActive()
+		/// <summary>
+		/// 判定是否开启地形
+		/// </summary>
+		/// <returns></returns>
+		public static bool BiomeActive()
+		{
+			MothLand mothLand = ModContent.GetInstance<MothLand>();
+			Vector2 BiomeCenter = new Vector2(mothLand.fireflyCenterX * 16, (mothLand.fireflyCenterY - 20) * 16);//读取地形信息
+			Vector2 v0 = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f - BiomeCenter;//距离中心Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f
+			v0.Y *= 1.35f;
+			v0.X *= 0.9f;//近似于椭圆形，所以xy坐标变换
+			return (v0.Length() < 2000);
+			//return /*SubWorldModule.*/SubworldSystem.IsActive<MothWorld>();
+		}
+		/// <summary>
+		/// 判定是否开启地形
+		/// </summary>
+		/// <returns></returns>
+		public static bool GlowingFlowerLandActive()
         {
             MothLand mothLand = ModContent.GetInstance<MothLand>();
             Vector2 BiomeCenter = new Vector2(mothLand.fireflyCenterX * 16, (mothLand.fireflyCenterY - 20) * 16);//读取地形信息
             Vector2 v0 = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f - BiomeCenter;//距离中心Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f
             v0.Y *= 1.35f;
             v0.X *= 0.9f;//近似于椭圆形，所以xy坐标变换
-            return (v0.Length() < 2000) && /*SubWorldModule.*/SubworldSystem.IsActive<MothWorld>();
+            return (v0.Length() < 2000); //&& /*SubWorldModule.*/SubworldSystem.IsActive<MothWorld>();
         }
 
         /// <summary>

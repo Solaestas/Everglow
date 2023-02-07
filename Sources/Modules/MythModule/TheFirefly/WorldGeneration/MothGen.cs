@@ -105,14 +105,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
 
             protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
             {
-                Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everglow.Common.WorldSystem.BuildMothCave");
-                BuildMothCave();
-                Main.spawnTileX = 723;
-                Main.spawnTileY = 226;
+                //Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everglow.Common.WorldSystem.BuildMothCave");
+                //BuildMothCave();
+                //Main.spawnTileX = 723;
+                //Main.spawnTileY = 226;
             }
         }
 
-        internal class WorldMothLandGenPass : GenPass
+		internal class WorldMothLandGenPass : GenPass
         {
             public WorldMothLandGenPass() : base("MothLand", 500)
             {
@@ -121,22 +121,22 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
             protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
             {
                 Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everglow.Common.WorldSystem.BuildWorldMothCave");
-                BuildWorldMothCave();
-                BuildShabbyCastle();
+				//BuildWorldMothCave();
+				BuildMothCave();
+				BuildShabbyCastle();
             }
         }
 
 
         public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight) => tasks.Add(new WorldMothLandGenPass());
 
-        /// <summary>
-        /// 地形中心坐标
-        /// </summary>
-        public int fireflyCenterX = 400;
+		/// <summary>
+		/// 地形中心坐标
+		/// </summary>
+		public int fireflyCenterX = 1000; //400
+		public int fireflyCenterY = 500; //300
 
-        public int fireflyCenterY = 300;
-
-        public override void SaveWorldData(TagCompound tag)
+		public override void SaveWorldData(TagCompound tag)
         {
             tag["FIREFLYcenterX"] = fireflyCenterX;
             tag["FIREFLYcenterY"] = fireflyCenterY;
@@ -268,7 +268,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                             case 0:
                                 if (pixel.R == 255 && pixel.G == 0 && pixel.B == 0)// == new SixLabors.ImageSharp.PixelFormats.Rgb24(255, 0, 0))
                                 {
-                                    if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+                                    if (/*tile.TileType != 21 && */Main.tile[x + a, y + b - 1].TileType != 21)
                                     {
                                         tile.ClearEverything();
                                     }
@@ -325,7 +325,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
                             case 3:
                                 if (pixel.R == 165 && pixel.G == 0 && pixel.B == 255)
                                 {
-                                    MythUtils.PlaceFrameImportantTiles(a + x, b + y, 5, 7, ModContent.TileType<Tiles.MothWorldDoor>());
+                                    //MythUtils.PlaceFrameImportantTiles(a + x, b + y, 5, 7, ModContent.TileType<Tiles.MothWorldDoor>());
                                 }
                                 if (pixel.R == 45 && pixel.G == 49 && pixel.B == 255)
                                 {
@@ -362,23 +362,23 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
         /// </summary>
         public static void BuildMothCave()
         {
-            //Point16 AB = CocoonPos();
-            int a = 230;//AB.X;
-            int b = 200;//AB.Y;
-            MothLand mothLand = ModContent.GetInstance<MothLand>();
+            Point16 AB = CocoonPos();
+            int a = AB.X;//230;
+			int b = AB.Y;//200;
+			MothLand mothLand = ModContent.GetInstance<MothLand>();
             mothLand.fireflyCenterX = a + 140;
             mothLand.fireflyCenterY = b + 140;
-            Main.statusText = "CocoonStart";
-            ShapeTile("CocoonWorld.bmp", 0, 0, 1);
-            ShapeTile("CocoonWorldWall.bmp", 0, 0, 2);
+            //Main.statusText = "CocoonStart";
+            //ShapeTile("CocoonWorld.bmp", 0, 0, 1);
+            //ShapeTile("CocoonWorldWall.bmp", 0, 0, 2);
             Main.statusText = "CocoonKillStart";
-            ShapeTile("CocoonSubKill.bmp", a, b, 0);
+            ShapeTile("CocoonSoloKill.bmp", a, b, 0);
             Main.statusText = "CocoonStart";
-            ShapeTile("CocoonSub.bmp", a, b, 1);
+            ShapeTile("CocoonSolo.bmp", a, b, 1);
             Main.statusText = "CocoonWallStart";
-            ShapeTile("CocoonSubWall.bmp", a, b, 2);
+            ShapeTile("CocoonSoloWall.bmp", a, b, 2);
             Main.statusText = "CocoonAnotherStart";
-            ShapeTile("CocoonSub.bmp", a, b, 3);
+            ShapeTile("CocoonSolo.bmp", a, b, 3);
             SmoothMothTile(a, b);
             for(int x = 20;x < Main.maxTilesX - 20;x++)
             {
