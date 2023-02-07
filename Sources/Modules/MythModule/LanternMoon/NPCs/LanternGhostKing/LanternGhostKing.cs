@@ -609,12 +609,12 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.LanternGhostKing
         float lightStre = 1;
         bool CheckAutoPause = false;
         bool HasCheckAutoPause = false;
-        private Effect ef;
+
         public static float VagueStre = 0;
 
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            ef = (Effect)ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/VagueBoss").Value;
+
             if (CheckNewBoss)
             {
                 if (Main.netMode != 0)
@@ -630,19 +630,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.LanternGhostKing
                 Main.autoPause = true;
                 Main.InGameUI.IsVisible = true;
                 Main.gamePaused = true;
-                ef.Parameters["Stren"].SetValue(VagueStre);
-                if (VagueStre < 0.08f)
-                {
-                    VagueStre += 0.002f;
-                }
-                else
-                {
-                    VagueStre = 0.08f;
-                }
-                if (!Filters.Scene["VagueBoss"].IsActive())
-                {
-                    Filters.Scene.Activate("VagueBoss");
-                }
+
                 if (PauseCool > 0)
                 {
                     PauseCool--;
@@ -663,19 +651,6 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.LanternGhostKing
                 {
 					Music = Common.MythContent.QuickMusic("DashCore");
 				}
-                ef.Parameters["Stren"].SetValue(VagueStre);
-                if (VagueStre > 0f)
-                {
-                    VagueStre -= 0.002f;
-                }
-                else
-                {
-                    VagueStre = 0;
-                    if (Filters.Scene["VagueBoss"].IsActive())
-                    {
-                        Filters.Scene.Deactivate("VagueBoss");
-                    }
-                }
             }
             NPC.TargetClosest(false);
             Player player = Main.player[NPC.target];

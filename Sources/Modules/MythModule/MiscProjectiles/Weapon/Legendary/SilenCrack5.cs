@@ -46,7 +46,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Legendary
                     Projectile.Kill();
                 }
             }
-            ef2 = (Effect)ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/SilenceCrack5").Value;
+            ef2 = (Effect)ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/SilenceCrack").Value;
             float k0 = Projectile.velocity.Y / (float)Projectile.velocity.X;
             k0 *= (float)Main.screenWidth / (float)Main.screenHeight;
             ef2.Parameters["k0"].SetValue(k0);

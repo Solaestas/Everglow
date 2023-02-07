@@ -25,7 +25,6 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Legendary
         {
             return false;
         }
-        private Effect ef;
         float radious = 0;
         float FirstRo = 0;
         float SecondRo = 0;
@@ -42,7 +41,6 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Legendary
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
             List<Vertex2D> bars = new List<Vertex2D>();
-            ef = (Effect)ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/FadeLaserRed").Value;
             float widx = Projectile.timeLeft / 120f;
             float widxM = 1f - widx;
             radious = (float)(Math.Sqrt(5 * widxM) * 80);
@@ -78,19 +76,15 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Legendary
                     triangleList.Add(bars[i + 3]);
                 }
                 RasterizerState originalState = Main.graphics.GraphicsDevice.RasterizerState;
-                var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-                var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
 
-                ef.Parameters["uTransform"].SetValue(model * projection);
-                ef.Parameters["uTime"].SetValue(-(float)Main.time * 0.06f);
-                ef.Parameters["maxr"].SetValue(widxM * widxM);
+
                 Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/heatmapRed").Value;
                 Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/LightWave").Value;
                 Main.graphics.GraphicsDevice.Textures[2] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/LightWave").Value;
                 Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
                 Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
                 Main.graphics.GraphicsDevice.SamplerStates[2] = SamplerState.PointWrap;
-                ef.CurrentTechnique.Passes[0].Apply();
+
 
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList.ToArray(), 0, triangleList.Count / 3);
 

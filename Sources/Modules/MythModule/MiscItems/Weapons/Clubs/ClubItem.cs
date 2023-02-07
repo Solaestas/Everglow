@@ -27,7 +27,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs
             Item.noUseGraphic = true;
 
             Item.shootSpeed = 1f;
-            Item.knockBack = 4f;
+            Item.knockBack = 16f;
 
             Item.DamageType = DamageClass.Melee;
             Item.useStyle = ItemUseStyleID.Thrust;

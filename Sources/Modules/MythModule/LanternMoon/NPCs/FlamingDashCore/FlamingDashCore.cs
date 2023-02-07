@@ -714,7 +714,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
         Color[] NPCOldColor = new Color[70];
         float[] NPCOldWidth = new float[70];
         float oldH = 0;
-        private Effect ef;
+
         private Effect ef2;
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
@@ -885,7 +885,6 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
         }
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            ef = (Effect)ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/VagueBoss").Value;
             if (CheckNewBoss)
             {
                 if (Main.netMode != NetmodeID.SinglePlayer)
@@ -901,7 +900,6 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
                 Main.autoPause = true;
                 Main.InGameUI.IsVisible = true;
                 Main.gamePaused = true;
-                ef.Parameters["Stren"].SetValue(VagueStre);
                 if (VagueStre < 0.08f)
                 {
                     VagueStre += 0.001f;
@@ -909,10 +907,6 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
                 else
                 {
                     VagueStre = 0.08f;
-                }
-                if (!Filters.Scene["VagueBoss"].IsActive())
-                {
-                    Filters.Scene.Activate("VagueBoss");
                 }
                 if (PauseCool > 0)
                 {
@@ -934,7 +928,6 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
                 {
                     Music = Common.MythContent.QuickMusic("DashCore");
                 }
-                ef.Parameters["Stren"].SetValue(VagueStre);
                 if (VagueStre > 0f)
                 {
                     VagueStre -= 0.001f;
@@ -942,10 +935,6 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
                 else
                 {
                     VagueStre = 0;
-                    if (Filters.Scene["VagueBoss"].IsActive())
-                    {
-                        Filters.Scene.Deactivate("VagueBoss");
-                    }
                 }
             }
             x += 0.01f;
