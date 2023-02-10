@@ -1,7 +1,9 @@
 ﻿using Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrack;
+using Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.PlanetBefallArray;
 using Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall;
 using Everglow.Sources.Modules.MEACModule.Projectiles;
 using ReLogic.Graphics;
+using System.Security.AccessControl;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
@@ -91,12 +93,13 @@ namespace Everglow.Sources.Modules.MEACModule.Items
                             return;
                         }
                         CoolTimeForQ = 100;
-                        for (int i = 0; i < 16; i++)
-                        {
-                            Vector2 v = new Vector2(0.001f, 0);
-                            Projectile.NewProjectile(null, Main.MouseWorld, v.RotatedBy(Math.PI * i / 8).RotatedByRandom(Math.PI * i / 100), ModContent.ProjectileType<GoldenCrack>(), 10, 0);
-                        }
-
+                        /* for (int i = 0; i < 16; i++)
+                         {
+                             Vector2 v = new Vector2(0.001f, 0);
+                             Projectile.NewProjectile(null, Main.MouseWorld, v.RotatedBy(Math.PI * i / 8).RotatedByRandom(Math.PI * i / 100), ModContent.ProjectileType<GoldenCrack>(), 10, 0);  
+                         }*/
+                        Projectile Proj =Projectile.NewProjectileDirect(player.GetSource_FromAI(), Main.MouseWorld, Vector2.Zero, ModContent.ProjectileType<PlanetBefallArray>(), 0, 0, player.whoAmI);
+                        Proj.Center = Main.MouseWorld;
                     }
                     if (player.altFunctionUse != 2)
                       {
