@@ -75,23 +75,24 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.PlanetBefa
             Texture2D PlantBeFallIn = ModContent.Request<Texture2D>("Everglow/Sources/Modules/IIIDModule/Projectiles/NonIIIDProj/PlanetBefallArray/PlantBeFallIn").Value;
             Texture2D PlantBeFallOut = ModContent.Request<Texture2D>("Everglow/Sources/Modules/IIIDModule/Projectiles/NonIIIDProj/PlanetBefallArray/PlantBeFallOut").Value;
             Texture2D GeoElement = ModContent.Request<Texture2D>("Everglow/Sources/Modules/IIIDModule/Projectiles/NonIIIDProj/PlanetBefallArray/GeoElement").Value;
-            Main.spriteBatch.Draw(GeoElement, Projectile.Center  - Main.screenPosition- new Vector2(GeoElement.Width, GeoElement.Height)/2,Color.White);
-            // DrawTexCircle(Timer* 30f, 100, Color.Gold, Projectile.Center + RingPos - Main.screenPosition, PlantBeFallOut, Main.timeForVisualEffects / 400 + MathHelper.PiOver4);
-            
-            Vector2 Point1 = Projectile.Center  - Main.screenPosition + new Vector2(0, Timer * 20).RotatedBy(-Math.PI  - Main.timeForVisualEffects / 500);
-            Vector2 Point2 = Projectile.Center  - Main.screenPosition + new Vector2(0, Timer * 20).RotatedBy(Math.PI * 1 / 2d);
-            Vector2 Point3 = Projectile.Center  - Main.screenPosition + new Vector2(0, Timer * 20).RotatedBy(Math.PI * 2 / 2d);
-            Vector2 Point4 = Projectile.Center  - Main.screenPosition + new Vector2(0, Timer * 20).RotatedBy(Math.PI * 3 / 2d);
+            Vector2 p = Projectile.Center - Main.screenPosition - new Vector2(GeoElement.Width, GeoElement.Height) / 8;
+            Main.spriteBatch.Draw(GeoElement,new Rectangle((int)p.X, (int)p.Y, GeoElement.Width/4, GeoElement.Height/4) ,Color.White);
+            DrawTexCircle(Timer* 30f, 100, Color.Gold, Projectile.Center - Main.screenPosition, PlantBeFallOut, Main.timeForVisualEffects / 1500 + MathHelper.PiOver4);
+            List<Vertex2D> In = new List<Vertex2D>();
 
-            Rectangle Rectangle1 = new Rectangle((int)Point1.X, (int)Point1.Y, PlantBeFallIn.Width, PlantBeFallIn.Height);
-
-            Main.spriteBatch.Draw(PlantBeFallIn, Rectangle1, new Rectangle(0,0, PlantBeFallIn.Width, PlantBeFallIn.Height), Color.Gold, (float)(Math.PI*1/4 - Main.timeForVisualEffects / 500),
-                new Vector2(PlantBeFallIn.Width, PlantBeFallIn.Height)/2, SpriteEffects.FlipHorizontally, 0);
-
-            //DrawTexLine(Point1, Point2, Color.Gold, Color.Gold, PlantBeFallIn, 0.1f);
-           // DrawTexLine(Point2, Point3, Color.Gold, Color.Gold, PlantBeFallIn, 0.1f);
-           // DrawTexLine(Point3, Point4, Color.Gold, Color.Gold, PlantBeFallIn, 0.1f);
-           // DrawTexLine(Point4, Point1, Color.Gold, Color.Gold, PlantBeFallIn, 0.1f);
+            Vector2 Point1 = Projectile.Center  - Main.screenPosition + new Vector2(Timer * 25, Timer * 25).RotatedBy(Math.PI*0  - Main.timeForVisualEffects / 500);
+            Vector2 Point2 = Projectile.Center  - Main.screenPosition + new Vector2(Timer * 25, Timer * 25).RotatedBy(Math.PI * 1 / 2d - Main.timeForVisualEffects / 500);
+            Vector2 Point3 = Projectile.Center  - Main.screenPosition + new Vector2(Timer * 25, Timer * 25).RotatedBy(Math.PI * 2 / 2d - Main.timeForVisualEffects / 500);
+            Vector2 Point4 = Projectile.Center  - Main.screenPosition + new Vector2(Timer * 25, Timer * 25).RotatedBy(Math.PI * 3 / 2d - Main.timeForVisualEffects / 500);
+            In.Add(new Vertex2D(Point1, Color.Gold, new Vector3(0, 0, 0)));
+            In.Add(new Vertex2D(Point2, Color.Gold, new Vector3(1, 0, 0)));
+            In.Add(new Vertex2D(Point4, Color.Gold, new Vector3(0, 1, 0)));
+            In.Add(new Vertex2D(Point3, Color.Gold, new Vector3(1, 1, 0)));
+            if (In.Count > 0)
+            {
+                Main.graphics.GraphicsDevice.Textures[0] = PlantBeFallIn;
+                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, In.ToArray(), 0, In.Count - 2);
+            }
         }
 
         private static void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
