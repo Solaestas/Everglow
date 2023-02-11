@@ -16,45 +16,29 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.PlanetBefa
             Projectile.friendly = true;
             Projectile.hostile = false;
             Projectile.penetrate = -1;
-            Projectile.timeLeft = 10000;
+            Projectile.timeLeft = 1800;
             Projectile.DamageType = DamageClass.Magic;
             Projectile.tileCollide = false;
         }
-
+        internal int Timer = 0;
+        internal float alpha = 1;
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            Projectile.spriteDirection = player.direction;
             Projectile.velocity *= 0;
-            if (player.HeldItem.type ==ModContent.ItemType<VortexVanquisherItem>())
-            {
-                Projectile.timeLeft = player.itemTime + 60;
                 if (Timer < 20)
                 {
                     Timer++;
                 }
-            }
-            else
+            if (Projectile.timeLeft < 60)
             {
-                Timer--;
-                if (Timer < 0)
-                {
-                    Projectile.Kill();
-                }
+                alpha *= 0.8f;
             }
-            Player.CompositeArmStretchAmount PCAS = Player.CompositeArmStretchAmount.Full;
-
-            player.SetCompositeArmFront(true, PCAS, (float)(-Math.Sin(Main.timeForVisualEffects / 18d) * 0.6 + 1.2) * -player.direction);
-            Vector2 vTOMouse = Main.MouseWorld - player.Center;
-            player.SetCompositeArmBack(true, PCAS, (float)(Math.Atan2(vTOMouse.Y, vTOMouse.X) - Math.PI / 2d));
-            Projectile.rotation = player.fullRotation;
-
-    
         }
 
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
         {
-            behindNPCs.Add(index);
+            overPlayers.Add(index);
         }
         public override bool PreDraw(ref Color lightColor)
         { 
@@ -67,7 +51,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.PlanetBefa
             Color c = Color.White;
             PreDraw(ref c);
         }
-        internal int Timer = 0;
+
 
         public void DrawMagicArray(Color c0)
         {
@@ -76,18 +60,18 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.PlanetBefa
             Texture2D PlantBeFallOut = ModContent.Request<Texture2D>("Everglow/Sources/Modules/IIIDModule/Projectiles/NonIIIDProj/PlanetBefallArray/PlantBeFallOut").Value;
             Texture2D GeoElement = ModContent.Request<Texture2D>("Everglow/Sources/Modules/IIIDModule/Projectiles/NonIIIDProj/PlanetBefallArray/GeoElement").Value;
             Vector2 p = Projectile.Center - Main.screenPosition - new Vector2(GeoElement.Width, GeoElement.Height) / 8;
-            Main.spriteBatch.Draw(GeoElement,new Rectangle((int)p.X, (int)p.Y, GeoElement.Width/4, GeoElement.Height/4) ,Color.White);
-            DrawTexCircle(Timer* 30f, 100, Color.Gold, Projectile.Center - Main.screenPosition, PlantBeFallOut, Main.timeForVisualEffects / 1500 + MathHelper.PiOver4);
+            Main.spriteBatch.Draw(GeoElement,new Rectangle((int)p.X, (int)p.Y, GeoElement.Width/4, GeoElement.Height/4) ,Color.White* alpha);
+            DrawTexCircle(Timer* 30f, 100, Color.Gold * alpha, Projectile.Center - Main.screenPosition, PlantBeFallOut, Main.timeForVisualEffects / 1500 + MathHelper.PiOver4);
             List<Vertex2D> In = new List<Vertex2D>();
 
             Vector2 Point1 = Projectile.Center  - Main.screenPosition + new Vector2(Timer * 25, Timer * 25).RotatedBy(Math.PI*0  - Main.timeForVisualEffects / 500);
             Vector2 Point2 = Projectile.Center  - Main.screenPosition + new Vector2(Timer * 25, Timer * 25).RotatedBy(Math.PI * 1 / 2d - Main.timeForVisualEffects / 500);
             Vector2 Point3 = Projectile.Center  - Main.screenPosition + new Vector2(Timer * 25, Timer * 25).RotatedBy(Math.PI * 2 / 2d - Main.timeForVisualEffects / 500);
             Vector2 Point4 = Projectile.Center  - Main.screenPosition + new Vector2(Timer * 25, Timer * 25).RotatedBy(Math.PI * 3 / 2d - Main.timeForVisualEffects / 500);
-            In.Add(new Vertex2D(Point1, Color.Gold, new Vector3(0, 0, 0)));
-            In.Add(new Vertex2D(Point2, Color.Gold, new Vector3(1, 0, 0)));
-            In.Add(new Vertex2D(Point4, Color.Gold, new Vector3(0, 1, 0)));
-            In.Add(new Vertex2D(Point3, Color.Gold, new Vector3(1, 1, 0)));
+            In.Add(new Vertex2D(Point1, Color.Gold * alpha, new Vector3(0, 0, 0)));
+            In.Add(new Vertex2D(Point2, Color.Gold * alpha, new Vector3(1, 0, 0)));
+            In.Add(new Vertex2D(Point4, Color.Gold * alpha, new Vector3(0, 1, 0)));
+            In.Add(new Vertex2D(Point3, Color.Gold * alpha, new Vector3(1, 1, 0)));
             if (In.Count > 0)
             {
                 Main.graphics.GraphicsDevice.Textures[0] = PlantBeFallIn;
