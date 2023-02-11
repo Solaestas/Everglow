@@ -97,45 +97,5 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.PlanetBefa
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
             }
         }
-
-        public void DrawTexLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2, Texture2D tex, float AddValue = 0)
-        {
-            float Wid =282.842f;
-            Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
-
-            List<Vertex2D> vertex2Ds = new List<Vertex2D>();
-            float Value0 = (float)( 20 + AddValue) % 1f;
-            float Value1 = (float)(20.1 + AddValue) % 1f;
-            if (Value1 < Value0)
-            {
-                float D0 = 1 - Value0;
-                Vector2 Delta = EndPos - StartPos;
-
-                vertex2Ds.Add(new Vertex2D(StartPos + Delta * D0 + Width, color2, new Vector3(1, 0, 0)));
-                vertex2Ds.Add(new Vertex2D(StartPos + Delta * D0 - Width, color2, new Vector3(1, 1, 0)));
-
-                vertex2Ds.Add(new Vertex2D(StartPos + Width, color1, new Vector3(0, 0, 0)));
-                vertex2Ds.Add(new Vertex2D(StartPos - Width, color1, new Vector3(0, 1, 0)));
-
-
-
-                vertex2Ds.Add(new Vertex2D(StartPos + Delta * D0 + Width, color1, new Vector3(0, 0, 0)));
-                vertex2Ds.Add(new Vertex2D(StartPos + Delta * D0 - Width, color1, new Vector3(0, 1, 0)));
-
-                vertex2Ds.Add(new Vertex2D(EndPos + Width, color2, new Vector3(1, 0, 0)));
-                vertex2Ds.Add(new Vertex2D(EndPos - Width, color2, new Vector3(1, 1, 0)));
-            }
-            else
-            {
-                vertex2Ds.Add(new Vertex2D(StartPos + Width, color1, new Vector3(0, 0, 0)));
-                vertex2Ds.Add(new Vertex2D(StartPos - Width, color1, new Vector3(0, 1, 0)));
-
-                vertex2Ds.Add(new Vertex2D(EndPos + Width, color2, new Vector3(1, 0, 0)));
-                vertex2Ds.Add(new Vertex2D(EndPos - Width, color2, new Vector3(1, 1, 0)));
-            }
-
-            Main.graphics.GraphicsDevice.Textures[0] = tex;
-            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertex2Ds.ToArray(), 0, vertex2Ds.Count - 2);
-        }
     }
 }

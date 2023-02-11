@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.Localization;
-
+using Everglow.Sources.Modules.MEACModule.Items;
 
 namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
 {
@@ -20,6 +20,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
     public class PlanetBeFall : ModProjectile
     {
         public TileDrawing projectorTileDrawing;
+        public Vector2 target;
         public override void SetDefaults()
         {
             
@@ -29,22 +30,34 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
             Projectile.DamageType = DamageClass.Melee;
             Projectile.aiStyle = -1;
             Projectile.penetrate = 1;
-            Projectile.timeLeft = 600;
+            Projectile.timeLeft = 6000;
             Projectile.hostile = false;
             Projectile.alpha = 255;
             Projectile.tileCollide = true;
             Projectile.ignoreWater = true;
            // Projectile.hide = true;
         }
-
+        public override void OnSpawn(IEntitySource source)
+        {
+            Player player = Main.player[Projectile.owner];
+            PlanetBeFallScreenMovePlayer PlanetBeFallScreenMovePlayer = player.GetModPlayer<PlanetBeFallScreenMovePlayer>();
+            PlanetBeFallScreenMovePlayer.PlanetBeFallAnimation = true;
+            PlanetBeFallScreenMovePlayer.proj = Projectile;
+            base.OnSpawn(source);
+        }
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            Vector2 ToPlayer = (Projectile.Center - player.Center);
+
             player.heldProj = Projectile.whoAmI;
         }
         public override void Kill(int timeLeft)
         {
+            Player player = Main.player[Projectile.owner];
+            PlanetBeFallScreenMovePlayer PlanetBeFallScreenMovePlayer = player.GetModPlayer<PlanetBeFallScreenMovePlayer>();
+            PlanetBeFallScreenMovePlayer.PlanetBeFallAnimation = false;
+            PlanetBeFallScreenMovePlayer.proj = null;
+            PlanetBeFallScreenMovePlayer.AnimationTimer = 0;
             base.Kill(timeLeft);
         }
 

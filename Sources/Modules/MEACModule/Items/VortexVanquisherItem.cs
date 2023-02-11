@@ -101,7 +101,8 @@ namespace Everglow.Sources.Modules.MEACModule.Items
                              Vector2 v = new Vector2(0.001f, 0);
                             // Projectile.NewProjectile(null, new Vector2(player.Center.X, Main.MouseWorld.Y-1000), v.RotatedBy(Math.PI * i / 8).RotatedByRandom(Math.PI * i / 100), ModContent.ProjectileType<GoldenCrack>(), 10, 0);
                          }
-                        Projectile.NewProjectile(null, new Vector2(player.Center.X, Main.MouseWorld.Y), Vector2.Zero, ModContent.ProjectileType<PlanetBeFall>(), 0, 0, player.whoAmI);
+                        Projectile PlanetBeFall= Projectile.NewProjectileDirect(null, new Vector2(player.Center.X, Main.MouseWorld.Y-500), Vector2.Zero, ModContent.ProjectileType<PlanetBeFall>(), 0, 0, player.whoAmI);
+                        PlanetBeFall.
                         //Projectile Proj =Projectile.NewProjectileDirect(player.GetSource_FromAI(), Main.MouseWorld, Vector2.Zero, ModContent.ProjectileType<PlanetBefallArray>(), 0, 0, player.whoAmI);
                         //Proj.Center = Main.MouseWorld;
                     }
@@ -221,44 +222,63 @@ namespace Everglow.Sources.Modules.MEACModule.Items
 
         }
     }
-    internal class PlanetBeFallScreenMovePlayer : ModPlayer
+    public class PlanetBeFallScreenMovePlayer : ModPlayer
     {
         public int AnimationTimer = 0;
+        public bool PlanetBeFallAnimation = false;
+        public Projectile proj;
         public override void ModifyScreenPosition()
         {
             
-            const int MaxTime = 600;
+            const int MaxTime = 45;
             Vector2 target;
-            foreach (Projectile proj in Main.projectile)
+            if (proj != null)
             {
-                if (proj.owner == Player.whoAmI && proj.type == ModContent.ProjectileType<PlanetBeFall>() && proj.active)
+                if (proj.owner == Player.whoAmI )
                 {
                     target = proj.Center - Main.ScreenSize.ToVector2() / 2;
-                    AnimationTimer++;
-                    float Value = (1 - MathF.Cos(AnimationTimer / 60f * MathF.PI)) / 2f;
-                    if (AnimationTimer >= 60 && AnimationTimer < 540)
+                    if (PlanetBeFallAnimation)
                     {
-                        Value = 1;
+                        AnimationTimer++;
+                        float Value = (1 - MathF.Cos(AnimationTimer / 60f * MathF.PI)) / 2f;
+                        if (AnimationTimer >= 60 && AnimationTimer < 540)
+                        {
+                            Value = 1;
+                        }
+                        if (AnimationTimer >= 540)
+                        {
+                            Value = (1 + MathF.Cos((AnimationTimer - 540) / 60f * MathF.PI)) / 2f;
+                        }
+                        Main.screenPosition = Value.Lerp(Main.screenPosition, target);
+                        if (AnimationTimer >= MaxTime)
+                        {
+                            AnimationTimer = MaxTime;
+                            PlanetBeFallAnimation = false;
+                        }
+                        Player.immune = true;
+                        Player.immuneTime = 60;
+                        Player.velocity *= 0;
                     }
-                    if (AnimationTimer >= 540)
+                    else
                     {
-                        Value = (1 + MathF.Cos((AnimationTimer - 540) / 60f * MathF.PI)) / 2f;
+                        AnimationTimer-=4;
+                        float Value = (1 - MathF.Cos(AnimationTimer / 60f * MathF.PI)) / 2f;
+                        if (AnimationTimer >= 60 && AnimationTimer < 540)
+                        {
+                            Value = 1;
+                        }
+                        if (AnimationTimer >= 540)
+                        {
+                            Value = (1 + MathF.Cos((AnimationTimer - 540) / 60f * MathF.PI)) / 2f;
+                        }
+                        Main.screenPosition = Value.Lerp(Main.screenPosition, target);
+                        if (AnimationTimer <= 0)
+                        {
+                            AnimationTimer = 0;
+                            PlanetBeFallAnimation = false;
+                        }
                     }
-                    Main.screenPosition = Value.Lerp(Main.screenPosition, target);
-                    if (AnimationTimer >= MaxTime)
-                    {
-                        AnimationTimer = MaxTime;
-                    }
-                    Player.immune = true;
-                    Player.immuneTime = 600;
-                }
-                else
-                {
-                    AnimationTimer--;
-                    if (AnimationTimer < 0)
-                    {
-                        AnimationTimer = 0;
-                    }
+                    
                 }
             }
         }
