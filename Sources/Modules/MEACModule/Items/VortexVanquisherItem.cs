@@ -1,7 +1,9 @@
-﻿using Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrack;
+﻿using Everglow.Sources.Commons.Core.Utils;
+using Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrack;
 using Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.PlanetBefallArray;
 using Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall;
 using Everglow.Sources.Modules.MEACModule.Projectiles;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Pylon;
 using ReLogic.Graphics;
 using System.Security.AccessControl;
 using Terraria;
@@ -81,7 +83,8 @@ namespace Everglow.Sources.Modules.MEACModule.Items
           internal bool LeftClick = false;
           public override void HoldItem(Player player)
           {
-              if (player.ownedProjectileCounts[ModContent.ProjectileType<VortexVanquisher>()] + player.ownedProjectileCounts[ModContent.ProjectileType<VortexVanquisherThump>()] < 1)
+            Main.screenPosition += new Vector2(0, 100);
+            if (player.ownedProjectileCounts[ModContent.ProjectileType<VortexVanquisher>()] + player.ownedProjectileCounts[ModContent.ProjectileType<VortexVanquisherThump>()] < 1)
             {
 
                 if (Main.myPlayer == player.whoAmI)
@@ -93,13 +96,14 @@ namespace Everglow.Sources.Modules.MEACModule.Items
                             return;
                         }
                         CoolTimeForQ = 100;
-                        /* for (int i = 0; i < 16; i++)
+                         for (int i = 0; i < 16; i++)
                          {
                              Vector2 v = new Vector2(0.001f, 0);
-                             Projectile.NewProjectile(null, Main.MouseWorld, v.RotatedBy(Math.PI * i / 8).RotatedByRandom(Math.PI * i / 100), ModContent.ProjectileType<GoldenCrack>(), 10, 0);  
-                         }*/
-                        Projectile Proj =Projectile.NewProjectileDirect(player.GetSource_FromAI(), Main.MouseWorld, Vector2.Zero, ModContent.ProjectileType<PlanetBefallArray>(), 0, 0, player.whoAmI);
-                        Proj.Center = Main.MouseWorld;
+                            // Projectile.NewProjectile(null, new Vector2(player.Center.X, Main.MouseWorld.Y-1000), v.RotatedBy(Math.PI * i / 8).RotatedByRandom(Math.PI * i / 100), ModContent.ProjectileType<GoldenCrack>(), 10, 0);
+                         }
+                        Projectile.NewProjectile(null, new Vector2(player.Center.X, Main.MouseWorld.Y), Vector2.Zero, ModContent.ProjectileType<PlanetBeFall>(), 0, 0, player.whoAmI);
+                        //Projectile Proj =Projectile.NewProjectileDirect(player.GetSource_FromAI(), Main.MouseWorld, Vector2.Zero, ModContent.ProjectileType<PlanetBefallArray>(), 0, 0, player.whoAmI);
+                        //Proj.Center = Main.MouseWorld;
                     }
                     if (player.altFunctionUse != 2)
                       {
@@ -211,10 +215,52 @@ namespace Everglow.Sources.Modules.MEACModule.Items
           {
 
               return true;
-          }
-          public override void AddRecipes()
-          {
+        }
+        public override void AddRecipes()
+        {
 
-          }
+        }
+    }
+    internal class PlanetBeFallScreenMovePlayer : ModPlayer
+    {
+        public int AnimationTimer = 0;
+        public override void ModifyScreenPosition()
+        {
+            
+            const int MaxTime = 600;
+            Vector2 target;
+            foreach (Projectile proj in Main.projectile)
+            {
+                if (proj.owner == Player.whoAmI && proj.type == ModContent.ProjectileType<PlanetBeFall>() && proj.active)
+                {
+                    target = proj.Center - Main.ScreenSize.ToVector2() / 2;
+                    AnimationTimer++;
+                    float Value = (1 - MathF.Cos(AnimationTimer / 60f * MathF.PI)) / 2f;
+                    if (AnimationTimer >= 60 && AnimationTimer < 540)
+                    {
+                        Value = 1;
+                    }
+                    if (AnimationTimer >= 540)
+                    {
+                        Value = (1 + MathF.Cos((AnimationTimer - 540) / 60f * MathF.PI)) / 2f;
+                    }
+                    Main.screenPosition = Value.Lerp(Main.screenPosition, target);
+                    if (AnimationTimer >= MaxTime)
+                    {
+                        AnimationTimer = MaxTime;
+                    }
+                    Player.immune = true;
+                    Player.immuneTime = 600;
+                }
+                else
+                {
+                    AnimationTimer--;
+                    if (AnimationTimer < 0)
+                    {
+                        AnimationTimer = 0;
+                    }
+                }
+            }
+        }
     }
 }

@@ -68,17 +68,6 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
         public override bool PreDraw(ref Color lightColor)
         {
             Viewport viewport = Main.graphics.GraphicsDevice.Viewport;
-            //float Vx = viewport.Width > 0 ? (1f / viewport.Width) : 0;
-            //float Vy = viewport.Height > 0 ? (1f / viewport.Height) : 0;
-            //Matrix matrix = default(Matrix);
-            //matrix.M11 = Vx * 2f;
-            //matrix.M22 = Vy * 2f;
-            //matrix.M33 = 1f;
-            //matrix.M44 = 1f;
-            //matrix.M41 = -1f;
-            //matrix.M42 = 1f;
-            //matrix.M41 -= Vx;
-            //matrix.M42 -= Vy;
             List<VertexRP> vertices = new List<VertexRP>();
             Main.instance.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
             for (int f = 0; f < model.faces.Count; f++)
@@ -120,15 +109,14 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
             var projection = Matrix.CreatePerspectiveFieldOfView(MathF.PI / 3f, 1.0f, 1f, 1200f);
             var t = new Vector3(0, 0, -600);
             t.Y = -t.Y;
+            Vector2 lookat = Main.screenPosition + Main.ScreenSize.ToVector2() / 2;
             var modelMatrix =
-               Matrix.CreateLookAt(new Vector3((Projectile.Center.X - Main.LocalPlayer.Center.X) / -1, (Projectile.Center.Y - Main.LocalPlayer.Center.Y) / -1, 0),
-                                     new Vector3((Projectile.Center.X - Main.LocalPlayer.Center.X) / -1, (Projectile.Center.Y - Main.LocalPlayer.Center.Y) / -1, 600),
-                                     //new Vector3(Main.LocalPlayer.Center.X- Projectile.Center.X, Main.LocalPlayer.Center.Y- Projectile.Center.Y, 600),
+                Matrix.CreateRotationX((float)Main.timeForVisualEffects * 0.01f)
+               * Matrix.CreateRotationZ((float)Main.timeForVisualEffects * 0.01f)
+               *Matrix.CreateLookAt(new Vector3((Projectile.Center.X - lookat.X) / -1, (Projectile.Center.Y - lookat.Y) / -1, 0),
+                                     new Vector3((Projectile.Center.X - lookat.X) / -1, (Projectile.Center.Y - lookat.Y) / -1, 600),
                                      new Vector3(0, -1, 0))
-               //Matrix.CreateRotationY((float)Math.Atan((Projectile.Center.X - Main.LocalPlayer.Center.X) / 1200))    
-               //* Matrix.CreateRotationX((float)Math.Atan((Projectile.Center.Y - Main.LocalPlayer.Center.Y) / 1200))
-               // *Matrix.CreateRotationY((float)Main.time * 0.01f)
-               //* Matrix.CreateRotationZ((float)Main.time * 0.01f)
+                
                * Matrix.CreateScale(0.25f)
                * Matrix.CreateTranslation(t);
                 
@@ -175,7 +163,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
 
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
-            Main.spriteBatch.Draw(modelPipeline.ModelTarget, Vector2.Lerp(Projectile.Center, Main.LocalPlayer.Center, 0.7f) - Main.screenPosition - new Vector2(1000, 1000),
+            Main.spriteBatch.Draw(modelPipeline.ModelTarget, Vector2.Lerp(Projectile.Center, lookat, 0.65f) - Main.screenPosition - new Vector2(1000, 1000),
                 null, Color.White, 0, Vector2.One * 0.5f, 2f, SpriteEffects.None, 0);
 
             //Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
