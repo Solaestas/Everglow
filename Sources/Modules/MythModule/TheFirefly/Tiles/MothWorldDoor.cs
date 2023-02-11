@@ -62,22 +62,26 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             Player player = Main.LocalPlayer;
             if ((player.Center - new Vector2(i * 16, j * 16)).Length() < 12)
             {
-                //if (SubWorldModule.SubworldSystem.IsActive<MothWorld>())
-                //{
-                //    SubWorldModule.SubworldSystem.Exit();
-                //}
-                //else
-                //{
-                //    if (!SubWorldModule.SubworldSystem.Enter<MothWorld>())
-                //    {
-                //        Main.NewText("Fail!");
-                //    }
-                //}
-                if (SubworldSystem.Enter<MothWorld>())
-                {
-                    SubworldSystem.Exit();
-                }
-                else
+				//if (SubWorldModule.SubworldSystem.IsActive<MothWorld>())
+				//{
+				//    SubWorldModule.SubworldSystem.Exit();
+				//}
+				//else
+				//{
+				//    if (!SubWorldModule.SubworldSystem.Enter<MothWorld>())
+				//    {
+				//        Main.NewText("Fail!");
+				//    }
+				//}
+				if (!SubworldSystem.IsActive<MothWorld>())
+				{
+					SubworldSystem.Enter<MothWorld>();
+				}
+				else if (SubworldSystem.IsActive<MothWorld>())
+				{
+					SubworldSystem.Exit();
+				}
+				else
                 {
                     if (!SubworldSystem.Enter<MothWorld>())
                     {

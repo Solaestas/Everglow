@@ -31,7 +31,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items
                 //        Main.NewText("Fail!");
                 //    }
                 //}
-                if (SubworldSystem.Enter<MothWorld>())
+                if (!SubworldSystem.IsActive<MothWorld>()) 
+                {
+                    SubworldSystem.Enter<MothWorld>();
+                }
+                else if (SubworldSystem.IsActive<MothWorld>())
                 {
                     SubworldSystem.Exit();
                 }
