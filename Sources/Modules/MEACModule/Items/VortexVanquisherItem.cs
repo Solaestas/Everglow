@@ -96,15 +96,12 @@ namespace Everglow.Sources.Modules.MEACModule.Items
                             return;
                         }
                         CoolTimeForQ = 100;
-                         for (int i = 0; i < 16; i++)
-                         {
-                             Vector2 v = new Vector2(0.001f, 0);
-                            // Projectile.NewProjectile(null, new Vector2(player.Center.X, Main.MouseWorld.Y-1000), v.RotatedBy(Math.PI * i / 8).RotatedByRandom(Math.PI * i / 100), ModContent.ProjectileType<GoldenCrack>(), 10, 0);
-                         }
-                        Projectile PlanetBeFall= Projectile.NewProjectileDirect(null, new Vector2(player.Center.X, Main.MouseWorld.Y-500), Vector2.Zero, ModContent.ProjectileType<PlanetBeFall>(), 0, 0, player.whoAmI);
-                        PlanetBeFall.
-                        //Projectile Proj =Projectile.NewProjectileDirect(player.GetSource_FromAI(), Main.MouseWorld, Vector2.Zero, ModContent.ProjectileType<PlanetBefallArray>(), 0, 0, player.whoAmI);
-                        //Proj.Center = Main.MouseWorld;
+                        Projectile PlanetBeFall= Projectile.NewProjectileDirect(null, new Vector2(player.Center.X, Main.MouseWorld.Y-1500), Vector2.Zero, ModContent.ProjectileType<PlanetBeFall>(), 0, 0, player.whoAmI);
+                        Projectile Proj =Projectile.NewProjectileDirect(player.GetSource_FromAI(), Main.MouseWorld, Vector2.Zero, ModContent.ProjectileType<PlanetBefallArray>(), 0, 0, player.whoAmI);
+                        Proj.Center = Main.MouseWorld;
+                        PlanetBeFall.ai[0] = Proj.Center.X;
+                        PlanetBeFall.ai[1] = Proj.Center.Y;
+                        PlanetBeFall.velocity = Vector2.Normalize(Proj.Center - new Vector2(player.Center.X, Main.MouseWorld.Y - 1000))*10;
                     }
                     if (player.altFunctionUse != 2)
                       {
@@ -120,7 +117,7 @@ namespace Everglow.Sources.Modules.MEACModule.Items
                           {
                               return;
                           }
-                          CoolTimeForE = 720;
+                          CoolTimeForE = 60;
                           bool HasProj = false;
                           foreach (Projectile proj in Main.projectile)
                           {
@@ -230,7 +227,7 @@ namespace Everglow.Sources.Modules.MEACModule.Items
         public override void ModifyScreenPosition()
         {
             
-            const int MaxTime = 45;
+            const int MaxTime = 180;
             Vector2 target;
             if (proj != null)
             {
@@ -239,15 +236,15 @@ namespace Everglow.Sources.Modules.MEACModule.Items
                     target = proj.Center - Main.ScreenSize.ToVector2() / 2;
                     if (PlanetBeFallAnimation)
                     {
-                        AnimationTimer++;
-                        float Value = (1 - MathF.Cos(AnimationTimer / 60f * MathF.PI)) / 2f;
-                        if (AnimationTimer >= 60 && AnimationTimer < 540)
+                        AnimationTimer+=4;
+                        float Value = (1 - MathF.Cos(AnimationTimer / 60 * MathF.PI)) / 2f;
+                        if (AnimationTimer >= 60 && AnimationTimer <120)
                         {
                             Value = 1;
                         }
-                        if (AnimationTimer >= 540)
+                        if (AnimationTimer >= 120)
                         {
-                            Value = (1 + MathF.Cos((AnimationTimer - 540) / 60f * MathF.PI)) / 2f;
+                            Value = (1 + MathF.Cos((AnimationTimer - 120) / 60 * MathF.PI)) / 2f;
                         }
                         Main.screenPosition = Value.Lerp(Main.screenPosition, target);
                         if (AnimationTimer >= MaxTime)
@@ -256,29 +253,9 @@ namespace Everglow.Sources.Modules.MEACModule.Items
                             PlanetBeFallAnimation = false;
                         }
                         Player.immune = true;
-                        Player.immuneTime = 60;
+                        Player.immuneTime = 15;
                         Player.velocity *= 0;
                     }
-                    else
-                    {
-                        AnimationTimer-=4;
-                        float Value = (1 - MathF.Cos(AnimationTimer / 60f * MathF.PI)) / 2f;
-                        if (AnimationTimer >= 60 && AnimationTimer < 540)
-                        {
-                            Value = 1;
-                        }
-                        if (AnimationTimer >= 540)
-                        {
-                            Value = (1 + MathF.Cos((AnimationTimer - 540) / 60f * MathF.PI)) / 2f;
-                        }
-                        Main.screenPosition = Value.Lerp(Main.screenPosition, target);
-                        if (AnimationTimer <= 0)
-                        {
-                            AnimationTimer = 0;
-                            PlanetBeFallAnimation = false;
-                        }
-                    }
-                    
                 }
             }
         }

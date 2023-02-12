@@ -16,7 +16,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.PlanetBefa
             Projectile.friendly = true;
             Projectile.hostile = false;
             Projectile.penetrate = -1;
-            Projectile.timeLeft = 1800;
+            Projectile.timeLeft = 180;
             Projectile.DamageType = DamageClass.Magic;
             Projectile.tileCollide = false;
         }

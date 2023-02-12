@@ -13,14 +13,15 @@ using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.Localization;
 using Everglow.Sources.Modules.MEACModule.Items;
+using Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrack;
 
 namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
 {
     
     public class PlanetBeFall : ModProjectile
     {
-        public TileDrawing projectorTileDrawing;
         public Vector2 target;
+        public Vector2 spawnposition;
         public override void SetDefaults()
         {
             
@@ -30,25 +31,42 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
             Projectile.DamageType = DamageClass.Melee;
             Projectile.aiStyle = -1;
             Projectile.penetrate = 1;
-            Projectile.timeLeft = 6000;
+            Projectile.timeLeft = 600;
             Projectile.hostile = false;
             Projectile.alpha = 255;
-            Projectile.tileCollide = true;
+            Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
-           // Projectile.hide = true;
+            Projectile.hide = true;
         }
         public override void OnSpawn(IEntitySource source)
         {
+            for (int i = 0; i < 16; i++)
+            {
+                Vector2 v = new Vector2(0.001f, 0);
+                Projectile.NewProjectile(null, new Vector2(Projectile.Center.X, Projectile.Center.Y), v.RotatedBy(Math.PI * i / 8).RotatedByRandom(Math.PI * i / 100), ModContent.ProjectileType<GoldenCrack>(), 10, 0);
+            }
+
             Player player = Main.player[Projectile.owner];
             PlanetBeFallScreenMovePlayer PlanetBeFallScreenMovePlayer = player.GetModPlayer<PlanetBeFallScreenMovePlayer>();
             PlanetBeFallScreenMovePlayer.PlanetBeFallAnimation = true;
             PlanetBeFallScreenMovePlayer.proj = Projectile;
+
+            target = new Vector2(Projectile.ai[0], Projectile.ai[1]);
             base.OnSpawn(source);
         }
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
+            target = new Vector2(Projectile.ai[0], Projectile.ai[1]);
+            CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height),
+                    new Color(255, 0, 0),
+                    (int)Projectile.Center.X,
+                    true, false);
 
+            if ((Projectile.Center - target).Length() < 100)
+            {
+                Projectile.Kill();
+            }
             player.heldProj = Projectile.whoAmI;
         }
         public override void Kill(int timeLeft)
@@ -58,6 +76,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
             PlanetBeFallScreenMovePlayer.PlanetBeFallAnimation = false;
             PlanetBeFallScreenMovePlayer.proj = null;
             PlanetBeFallScreenMovePlayer.AnimationTimer = 0;
+            
             base.Kill(timeLeft);
         }
 
@@ -78,7 +97,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
         {
             //overPlayers.Add(index);
         }
-        public override bool PreDraw(ref Color lightColor)
+        public void DrawIIIDProj()
         {
             Viewport viewport = Main.graphics.GraphicsDevice.Viewport;
             List<VertexRP> vertices = new List<VertexRP>();
@@ -124,15 +143,15 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
             t.Y = -t.Y;
             Vector2 lookat = Main.screenPosition + Main.ScreenSize.ToVector2() / 2;
             var modelMatrix =
-                Matrix.CreateRotationX((float)Main.timeForVisualEffects * 0.01f)
+               Matrix.CreateRotationX((float)Main.timeForVisualEffects * 0.01f)
                * Matrix.CreateRotationZ((float)Main.timeForVisualEffects * 0.01f)
-               *Matrix.CreateLookAt(new Vector3((Projectile.Center.X - lookat.X) / -1, (Projectile.Center.Y - lookat.Y) / -1, 0),
-                                     new Vector3((Projectile.Center.X - lookat.X) / -1, (Projectile.Center.Y - lookat.Y) / -1, 600),
+               *Matrix.CreateLookAt(new Vector3((Projectile.Center.X - lookat.X) / -1.25f, (Projectile.Center.Y - lookat.Y) / -1.25f, 0),
+                                     new Vector3((Projectile.Center.X - lookat.X) / -1.25f, (Projectile.Center.Y - lookat.Y) / -1.25f, 600),
                                      new Vector3(0, -1, 0))
-                
-               * Matrix.CreateScale(0.25f)
+
+               * Matrix.CreateScale(0.5f)
                * Matrix.CreateTranslation(t);
-                
+
 
 
             ModelEntity entity = new ModelEntity
@@ -158,7 +177,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
             };
             ViewProjectionParams viewProjectionParams = new ViewProjectionParams
             {
-                ViewTransform =  Matrix.Identity,
+                ViewTransform = Matrix.Identity,
                 FieldOfView = MathF.PI / 3f,
                 AspectRatio = 1.0f,
                 ZNear = 1f,
@@ -176,7 +195,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
 
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
-            Main.spriteBatch.Draw(modelPipeline.ModelTarget, Vector2.Lerp(Projectile.Center, lookat, 0.65f) - Main.screenPosition - new Vector2(1000, 1000),
+            Main.spriteBatch.Draw(modelPipeline.ModelTarget, Vector2.Lerp(Projectile.Center, lookat, 1f) - Main.screenPosition - new Vector2(1000, 1000),
                 null, Color.White, 0, Vector2.One * 0.5f, 2f, SpriteEffects.None, 0);
 
             //Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList,
@@ -204,7 +223,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
             }
             Main.graphics.GraphicsDevice.Textures[0] = TextureAssets.MagicPixel.Value;
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, verticesII.ToArray(), 0, verticesII.Count - 2);*/
-            return true;
+            return ;
         }
     }
 
