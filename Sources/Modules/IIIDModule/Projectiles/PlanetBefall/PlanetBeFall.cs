@@ -31,7 +31,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
             Projectile.DamageType = DamageClass.Melee;
             Projectile.aiStyle = -1;
             Projectile.penetrate = 1;
-            Projectile.timeLeft = 600;
+            Projectile.timeLeft = 1200;
             Projectile.hostile = false;
             Projectile.alpha = 255;
             Projectile.tileCollide = false;
@@ -58,14 +58,19 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
         {
             Player player = Main.player[Projectile.owner];
             target = new Vector2(Projectile.ai[0], Projectile.ai[1]);
-            CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height),
-                    new Color(255, 0, 0),
-                    (int)Projectile.Center.X,
-                    true, false);
-
+            
             if ((Projectile.Center - target).Length() < 100)
             {
                 Projectile.Kill();
+            }
+            if (Projectile.timeLeft < 1185)
+            {
+                if (Projectile.velocity.Length() < 15)
+                {
+                    Projectile.velocity *= 1.05f;
+                }
+                if (s < 0.5f)
+                    s += 0.005f;
             }
             player.heldProj = Projectile.whoAmI;
         }
@@ -97,6 +102,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
         {
             //overPlayers.Add(index);
         }
+        float s = 0f;
         public void DrawIIIDProj()
         {
             Viewport viewport = Main.graphics.GraphicsDevice.Viewport;
@@ -149,7 +155,7 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
                                      new Vector3((Projectile.Center.X - lookat.X) / -1.25f, (Projectile.Center.Y - lookat.Y) / -1.25f, 600),
                                      new Vector3(0, -1, 0))
 
-               * Matrix.CreateScale(0.5f)
+               * Matrix.CreateScale(s)
                * Matrix.CreateTranslation(t);
 
 

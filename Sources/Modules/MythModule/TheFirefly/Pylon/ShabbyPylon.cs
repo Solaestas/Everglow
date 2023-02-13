@@ -133,13 +133,14 @@ internal class ScreenMovePlayer : ModPlayer
             {
                 Value = (1 + MathF.Cos((AnimationTimer - 540) / 60f * MathF.PI)) / 2f;
             }
-            Main.screenPosition = (Value).Lerp(Main.screenPosition, target);
+            
             if (AnimationTimer >= MaxTime)
             {
                 PylonSystem.Instance.firstEnableAnimation = false;
             }
             Player.immune = true;
             Player.immuneTime = 2;
+            Main.screenPosition = (Value).Lerp(Main.screenPosition, target);
         }
     }
 }
