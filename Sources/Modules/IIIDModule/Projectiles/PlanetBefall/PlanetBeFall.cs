@@ -63,9 +63,9 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
             {
                 Projectile.Kill();
             }
-            if (Projectile.timeLeft < 1185)
+            if (Projectile.timeLeft < 1170)
             {
-                if (Projectile.velocity.Length() < 15)
+                if (Projectile.velocity.Length() < 10)
                 {
                     Projectile.velocity *= 1.05f;
                 }
