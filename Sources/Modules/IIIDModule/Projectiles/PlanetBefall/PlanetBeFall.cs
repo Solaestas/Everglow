@@ -14,6 +14,17 @@ using Terraria.GameContent.UI.Elements;
 using Terraria.Localization;
 using Everglow.Sources.Modules.MEACModule.Items;
 using Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrack;
+using Everglow.Sources.Modules.FoodModule.Buffs.VanillaFoodBuffs;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
+using Everglow.Sources.Modules.MythModule;
+using Terraria.Audio;
+using Everglow.Resources.ItemList.Weapons.Ranged;
+using Everglow.Resources.NPCList.EventNPCs;
+using Mono.Cecil;
+using Everglow.Sources.Modules.FoodModule.Buffs.ModDrinkBuffs;
+using Everglow.Sources.Modules.FoodModule.Buffs.ModFoodBuffs;
+using Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.PlanetBefallWave;
 
 namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
 {
@@ -81,7 +92,36 @@ namespace Everglow.Sources.Modules.IIIDModule.Projectiles.PlanetBefall
             PlanetBeFallScreenMovePlayer.PlanetBeFallAnimation = false;
             PlanetBeFallScreenMovePlayer.proj = null;
             PlanetBeFallScreenMovePlayer.AnimationTimer = 0;
-            
+
+
+            SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, player.Center);
+            ScreenShaker Gsplayer = player.GetModPlayer<ScreenShaker>();
+            Gsplayer.FlyCamPosition = new Vector2(0, 150).RotatedByRandom(6.283);
+            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BombShakeWave>(), 0, 0, Projectile.owner, 6, 10f);
+            Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<PlanetBefallWave>(), 0, 0, Projectile.owner, 4f);
+            float k1 = Math.Clamp(Projectile.velocity.Length(), 1, 3);
+            float k2 = Math.Clamp(Projectile.velocity.Length(), 6, 10);
+            float k0 = 1f / 4 * k2;
+            for (int j = 0; j < 16 * k0; j++)
+            {
+                Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * k1;
+                int dust1 = Dust.NewDust(Projectile.Center - (Vector2.Normalize(v0).RotatedBy(Math.PI / 4) * 200), 0, 0, ModContent.DustType<MothSmog>(), Vector2.Normalize(v0).X * 5, Vector2.Normalize(v0).Y * 10, 100, default, Main.rand.NextFloat(20f, 30f));
+                Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 7.5f);
+                Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
+            }
+            foreach (NPC target in Main.npc)
+            {
+                float Dis = (target.Center - Projectile.Center).Length();
+
+                if (Dis < 2500)
+                {
+                    if (!target.dontTakeDamage && !target.friendly && target.active)
+                    {
+                        target.AddBuff(ModContent.BuffType<CherryBuff>(), 1800);
+                        player.ApplyDamageToNPC(target, Projectile.damage, Projectile.knockBack, 0, Main.rand.NextBool(22, 33));
+                    }
+                }
+            }
             base.Kill(timeLeft);
         }
 

@@ -96,7 +96,7 @@ namespace Everglow.Sources.Modules.MEACModule.Items
                             return;
                         }
                         CoolTimeForQ = 100;
-                        Projectile PlanetBeFall = Projectile.NewProjectileDirect(null, new Vector2(player.Center.X, Main.MouseWorld.Y - 1500), Vector2.Zero, ModContent.ProjectileType<PlanetBeFall>(), 0, 0, player.whoAmI);
+                        Projectile PlanetBeFall = Projectile.NewProjectileDirect(null, new Vector2(player.Center.X, Main.MouseWorld.Y - 1500), Vector2.Zero, ModContent.ProjectileType<PlanetBeFall>(), Item.damage*10, Item.knockBack * 10, player.whoAmI);
                         Projectile Proj = Projectile.NewProjectileDirect(player.GetSource_FromAI(), Main.MouseWorld, Vector2.Zero, ModContent.ProjectileType<PlanetBefallArray>(), 0, 0, player.whoAmI);
                         Proj.Center = Main.MouseWorld;
                         PlanetBeFall.ai[0] = Proj.Center.X;
@@ -255,9 +255,7 @@ namespace Everglow.Sources.Modules.MEACModule.Items
                             PlanetBeFallAnimation = false;
                         }
                         Player.immune = true;
-                        Player.immuneTime = 15;
-                        CombatText.NewText(new Rectangle((int)Main.LocalPlayer.position.X, (int)Main.LocalPlayer.position.Y, Main.LocalPlayer.width, Main.LocalPlayer.height),
-        new Color(255, 0, 0), (int)(Value * 100), true, false);
+                        Player.immuneTime = 1;
                         Main.screenPosition = (Value).Lerp(Main.screenPosition, target);
                     }
                 }
