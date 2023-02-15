@@ -112,6 +112,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.WorldGeneration
                                 {
                                     tile.TileType = (ushort)ModContent.TileType<BloodLightCrystal>();
                                     tile.HasTile = true;
+                                    ModContent.GetInstance<BloodLightCrystalEntity>().Place(x + a, y + b);
                                 }
 
 

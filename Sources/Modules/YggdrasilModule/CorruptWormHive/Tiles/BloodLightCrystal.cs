@@ -1,15 +1,25 @@
 using Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.VFXs;
 using Everglow.Sources.Commons.Core.VFX;
+using Terraria.DataStructures;
+using Terraria.ObjectData;
 
 namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Tiles
 {
     public class BloodLightCrystal : ModTile
     {
+        public override void SetStaticDefaults()
+        {
+            base.SetStaticDefaults();
+            TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
+            TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(ModContent.GetInstance<BloodLightCrystalEntity>().Hook_AfterPlacement, -1, 0, false);
+            TileObjectData.addTile(Type);
+        }
         public override void PostSetDefaults()
         {
             Main.tileSolid[Type] = true;
             MinPick = 375;
             ItemDrop = ModContent.ItemType<Items.BloodLightCrystal>();
+
             AddMapEntry(new Color(107, 34, 21, 205));
         }
         public override bool CanExplode(int i, int j)
@@ -26,6 +36,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Tiles
 
             if(c0.R > 160 && c0.G + c0.B < 80)
             {
+                Main.NewText("1:[" + i + ", " + j + "] killed");
                 BrokenCrystal bc = new BrokenCrystal
                 {
                     timeLeft = 70,
@@ -49,6 +60,11 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Tiles
                 }
                 WorldGen.KillTile(i, j,false,false,true);
             }
+        }
+
+        public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
+        {
+            return base.PreDraw(i, j, spriteBatch);
         }
         public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
         {
