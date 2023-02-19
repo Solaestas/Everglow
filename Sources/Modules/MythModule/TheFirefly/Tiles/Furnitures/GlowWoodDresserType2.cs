@@ -1,12 +1,11 @@
-using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Everglow.Sources.Commons.Core.Utils;
-using Terraria.Audio;
+using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.Localization;
 using Terraria.ObjectData;
-using Everglow.Sources.Modules.MythModule.Common;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 {
@@ -31,7 +30,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
 
             // Names
-            ContainerName.SetDefault("GlowWood Dresser");
+            ContainerName.SetDefault(Language.GetTextValue("ItemName.Dresser"));
             ModTranslation name = CreateMapEntryName();
             name.SetDefault("GlowWood Dresser");
             AddMapEntry(new Color(0, 14, 175), name);
@@ -48,8 +47,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             TileObjectData.newTile.LavaDeath = false;
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
             TileObjectData.addTile(Type);
-
         }
+
         public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
 
         public override bool RightClick(int i, int j)
@@ -59,24 +58,27 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 
         public override void MouseOverFar(int i, int j)
         {
-            string chestName = this.ContainerName.GetDefault();
+            string chestName = ContainerName.GetDefault();
             FurnitureUtils.DresserMouseFar<Items.Furnitures.GlowWoodDresserType2>(chestName);
         }
 
         public override void MouseOver(int i, int j)
         {
-            string chestName = this.ContainerName.GetDefault();
+            string chestName = ContainerName.GetDefault();
             FurnitureUtils.DresserMouseOver<Items.Furnitures.GlowWoodDresserType2>(chestName);
         }
+
         public override void NumDust(int i, int j, bool fail, ref int num)
         {
             num = fail ? 1 : 3;
         }
+
         public override void KillMultiTile(int x, int y, int frameX, int frameY)
         {
             Item.NewItem(new EntitySource_TileBreak(x, y), x * 16, y * 16, 16, 32, DresserDrop);
             Chest.DestroyChest(x, y);
         }
+
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
             var tile = Main.tile[i, j];

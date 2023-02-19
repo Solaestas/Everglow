@@ -14,7 +14,7 @@
         {
             player.maxRunSpeed *= 5f;
             player.runAcceleration *= 5f;
-            player.wellFed = true;
+            
         }
     }
 }

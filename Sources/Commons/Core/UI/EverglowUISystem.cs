@@ -40,6 +40,7 @@ namespace Everglow.Sources.Commons.Core.UI
         /// 鼠标左键冷却
         /// </summary>
         private KeyCooldown mouseRightCooldown;
+        private Point ScreenSize;
         public EverglowUISystem()
         {
             Elements = new Dictionary<string, ContainerElement>();
@@ -78,6 +79,12 @@ namespace Everglow.Sources.Commons.Core.UI
         /// <param name="gt"></param>
         public void Update(GameTime gt)
         {
+            if (ScreenSize != Main.ScreenSize)
+            {
+                ScreenSize = Main.ScreenSize;
+                Calculation();
+            }
+
             if (CallOrder.Count == 0 || Elements.Count == 0)
                 return;
 
@@ -97,7 +104,11 @@ namespace Everglow.Sources.Commons.Core.UI
                 }
             }
 
-            Main.LocalPlayer.mouseInterface = true;
+            if (interact.Count > 0)
+            {
+                Main.LocalPlayer.mouseInterface = true;
+                interact.ForEach(x => x.Events.MouseHover(x));
+            }
 
             foreach (var ce in interact)
                 if (!interactContainerElementsBuffer.Contains(ce))

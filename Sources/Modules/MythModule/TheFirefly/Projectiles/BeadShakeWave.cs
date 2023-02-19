@@ -1,6 +1,8 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Sources.Commons.Core.VFX;
 using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MEACModule;
+using Everglow.Sources.Modules.MythModule.Common;
+
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
     public class BeadShakeWave : ModProjectile, IWarpProjectile
@@ -8,9 +10,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         public override void SetStaticDefaults()
         {
         }
+
         public override void SetDefaults()
         {
-            Projectile.extraUpdates = 1;
+            Projectile.extraUpdates = 3;
             Projectile.width = 24;
             Projectile.height = 24;
             Projectile.hostile = false;
@@ -26,63 +29,65 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         {
             Projectile.hide = true;
         }
-       
+
         public override bool PreDraw(ref Color lightColor)
         {
+            float value = (200 - Projectile.timeLeft) / (200f);
+            value = MathF.Sqrt(value);
+            float colorV = 0.9f * (1 - value);
+            colorV *= 10;
+            Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Lightline");
+            float width = 120;
+            if (Projectile.timeLeft < 120)
+            {
+                width = Projectile.timeLeft;
+            }
+            VFXManager.spriteBatch.Begin();
+            DrawTexCircle_VFXBatch(VFXManager.spriteBatch, value * 270 * Projectile.ai[0], width, new Color(0, colorV * 0.2f, colorV, 0f) * 0.4f, Projectile.Center - Main.screenPosition, t);
+            DrawTexCircle_VFXBatch(VFXManager.spriteBatch, value * 160 * Projectile.ai[0], width * 0.6f, new Color(0, colorV * 0.2f, colorV, 0f) * 0.4f, Projectile.Center - Main.screenPosition, t);
+            VFXManager.spriteBatch.End();
             return false;
         }
+
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
         {
             behindProjectiles.Add(index);
-            base.DrawBehind(index, behindNPCsAndTiles, behindNPCs, behindProjectiles, overPlayers, overWiresUI);
         }
-        private void DrawCircle(float radious, float width, Color color, Vector2 center, bool Black = false)
+
+        private static void DrawTexCircle_VFXBatch(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
         {
             List<Vertex2D> circle = new List<Vertex2D>();
-            for (int h = 0; h < radious / 2; h++)
+
+            for (int h = 0; h < radious / 2; h += 1)
             {
-                circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4), color, new Vector3(0.5f, 1, 0)));
-                circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(h / radious * Math.PI * 4), color, new Vector3(0.5f, 0, 0)));
+                circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0.8f, 0)));
+                circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0.2f, 0)));
             }
-            circle.Add(new Vertex2D(center + new Vector2(0, radious), color, new Vector3(0.5f, 1, 0)));
-            circle.Add(new Vertex2D(center + new Vector2(0, radious + width), color, new Vector3(0.5f, 0, 0)));
-            if (circle.Count > 0)
+            circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(1, 0.8f, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(1, 0, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(0, 0.2f, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0, 0, 0)));
+            if (circle.Count > 2)
             {
-                Texture2D t = MythContent.QuickTexture("OmniElementItems/Projectiles/Wave");
-                if(Black)
-                {
-                    t = MythContent.QuickTexture("OmniElementItems/Projectiles/WaveBlack");
-                }
-                Main.graphics.GraphicsDevice.Textures[0] = t;
-                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
+                spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
             }
         }
-        public void DrawWarp()
+        public void DrawWarp(VFXBatch spriteBatch)
         {
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-            KEx.CurrentTechnique.Passes[0].Apply();
-            float value = (200 - Projectile.timeLeft) / (float)Projectile.timeLeft * 1.4f;
-            float colorV = 0.6f * (1 - value) * Projectile.ai[0];
-            float x0 = Projectile.ai[0];
-            if (Projectile.ai[1] != 0)
+            float value = (200 - Projectile.timeLeft) / (200f);
+            value = MathF.Sqrt(value);
+            float colorV = 0.9f * (1 - value);
+            colorV *= 10;
+            Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Lightline");
+            float width = 120;
+            if (Projectile.timeLeft < 120)
             {
-                colorV = 0.6f * (1 - value) * Projectile.ai[1];
-                x0 = Projectile.ai[1] * 0.3f;
+                width = Projectile.timeLeft;
             }
 
-            if (value < 1)
-            {
-                DrawCircle(value * 1100 * Projectile.ai[0], 150 * x0 * (1 - value) + 30 * Projectile.ai[0], new Color(colorV, colorV, colorV, 0f), Projectile.Center - Main.screenPosition);
-            }
-            value -= 0.2f;
-            if (value < 1 && value > 0)
-            {
-                DrawCircle(value * 900 * Projectile.ai[0], 80 * x0 * (1 - value) + 30 * Projectile.ai[0], new Color(colorV, colorV, colorV, 0f), Projectile.Center - Main.screenPosition);
-            }
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            DrawTexCircle_VFXBatch(spriteBatch, value * 270 * Projectile.ai[0], width, new Color(colorV, colorV * 0.7f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
+
+            DrawTexCircle_VFXBatch(spriteBatch, value * 160 * Projectile.ai[0], width * 0.6f, new Color(colorV, colorV * 0.7f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
         }
     }
 }

@@ -461,11 +461,21 @@ namespace Everglow.Sources.Commons.Core.Utils
                 player.cursorItemIconReversed = true;
             }
         }
-        public static void LightHitwire(int i, int j, int type, int tileX, int tileY)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="i"></param>
+        /// <param name="j"></param>
+        /// <param name="type"></param>
+        /// <param name="tileX"></param>物块组合体横向占多少块
+        /// <param name="tileY"></param>物块组合体纵向占多少块
+        /// <param name="coordinateX"></param>物块组合体横向每一帧宽度(单位像素)
+        /// <param name="coordinateY"></param>物块组合体纵向每一帧高度(单位像素)
+        public static void LightHitwire(int i, int j, int type, int tileX, int tileY, int coordinateX = 18, int coordinateY = 18)
         {
             Tile tile = Main.tile[i, j];
-            int x = i - tile.TileFrameX / 18 % tileX;
-            int y = j - tile.TileFrameY / 18 % tileY;
+            int x = i - tile.TileFrameX / coordinateX % tileX;
+            int y = j - tile.TileFrameY / coordinateY % tileY;
             for (int m = x; m < x + tileX; m++)
             {
                 for (int n = y; n < y + tileY; n++)
@@ -477,15 +487,15 @@ namespace Everglow.Sources.Commons.Core.Utils
                     if (tile.TileType == type)
                     {
                         tile = Main.tile[m, n];
-                        if (tile.TileFrameX < 18 * tileX)
+                        if (tile.TileFrameX < coordinateX * tileX)
                         {
                             tile = Main.tile[m, n];
-                            tile.TileFrameX += (short)(18 * tileX);
+                            tile.TileFrameX += (short)(coordinateX * tileX);
                         }
                         else
                         {
                             tile = Main.tile[m, n];
-                            tile.TileFrameX -= (short)(18 * tileX);
+                            tile.TileFrameX -= (short)(coordinateX * tileX);
                         }
                     }
                 }

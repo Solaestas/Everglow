@@ -1,34 +1,34 @@
-﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
-using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
-using Everglow.Sources.Modules.MythModule.Common;
-using Terraria.DataStructures;
+﻿using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories;
 using ReLogic.Graphics;
+using Terraria.DataStructures;
 using Terraria.GameContent;
-using Terraria.ID;
+using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 {
     public class DarknessFan : ModItem
     {
+        FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
         public override void SetStaticDefaults()
         {
-            GetGlowMask = MythContent.SetStaticDefaultsGlowMask(this);
+            ItemGlowManager.AutoLoadItemGlow(this);
         }
-        public static short GetGlowMask = 0;
+
         public override void SetDefaults()
         {
-            Item.glowMask = GetGlowMask;
+            Item.glowMask = ItemGlowManager.GetItemGlow(this);
             Item.damage = 17;
             Item.DamageType = DamageClass.Summon;
             Item.mana = 7;
             Item.width = 74;
             Item.height = 90;
-            Item.useTime = 40;
-            Item.useAnimation = 40;
+            Item.useTime = 36;
+            Item.useAnimation = 36;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
             Item.noUseGraphic = true;
-            Item.knockBack = 5f;
+            Item.knockBack = 4f;
             Item.value = Item.sellPrice(0, 5, 0, 0);
             Item.rare = ItemRarityID.LightRed;
             Item.UseSound = SoundID.DD2_GhastlyGlaivePierce;
@@ -36,15 +36,17 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             Item.shoot = ModContent.ProjectileType<Projectiles.GlowingButterfly>();
             Item.shootSpeed = 8;
         }
+
         private int l = 0;
+
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             if (player.altFunctionUse == 2 && CoolRarr == 0)
             {
                 CoolRarr = 120;
                 Projectile.NewProjectile(source, position + new Vector2(0, -24), velocity * 3.4f, ModContent.ProjectileType<Projectiles.DarkFanFly>(), damage * 2, knockback, player.whoAmI, 6 + player.maxMinions * 1.5f, 0f);
-                Item.useTime = 2;
-                Item.useAnimation = 2;
+                Item.useTime = 6;
+                Item.useAnimation = 6;
                 //Item.UseSound = SoundID.DD2_JavelinThrowersAttack;
                 return false;
             }
@@ -72,23 +74,41 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
         }
 
         private int CoolRarr = 0;
+
         public override bool AltFunctionUse(Player player)
         {
             return true;
         }
+
         public override bool CanUseItem(Player player)
         {
             if (player.altFunctionUse == 2 && CoolRarr == 0)
             {
-                Item.useTime = 2;
-                Item.useAnimation = 2;
+                Item.useTime = 6;
+                Item.useAnimation = 6;
+                Item.UseSound = SoundID.DD2_JavelinThrowersAttack;
             }
             else
             {
                 Item.useTime = 36;
                 Item.useAnimation = 36;
+                Item.UseSound = SoundID.DD2_GhastlyGlaivePierce;
             }
             return true;
+        }
+        public override void ModifyTooltips(List<TooltipLine> tooltips)
+        {
+            if (MothEye.LocalOwner != null && MothEye.LocalOwner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
+            {
+                if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
+                {
+                    tooltips.AddRange(new TooltipLine[]
+                    {
+                        new(Everglow.Instance, "MothEyeBonusText", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeBonusText")),
+                        new(Everglow.Instance, "MothEyeDFanBonus", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextMothFan")),
+                    });
+                }
+            }
         }
         public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
@@ -96,7 +116,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             position -= slotSize * Main.inventoryScale / 2f - frame.Size() * scale / 2f;
             Vector2 drawPos = position + slotSize * Main.inventoryScale / 2f/* - texture.Size() * Main.inventoryScale / 2f*/;
             Texture2D RArr = MythContent.QuickTexture("TheFirefly/Projectiles/GlowFanTex/RightDFan");
-                //ModContent.Request<Texture2D>("MythMod/UIImages/RightDFan").Value;
+            //ModContent.Request<Texture2D>("MythMod/UIimages/RightDFan").Value;
             if (!Main.gamePaused)
             {
                 if (CoolRarr > 0)
