@@ -17,6 +17,12 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Tiles
             if (dissolveProgress > 0 && dissolveProgress <= 1) {
                 dissolveProgress += DISSOLVE_STEP;
 
+                if (Main.rand.NextBool(30)) {
+                    BloodLightCrystal.summonDust(Position.X, Position.Y);
+                }
+
+                Main.NewText("Updated: [" + Position.X + "," + Position.Y + "]");
+
                 if (dissolveProgress >= 1) {
                     WorldGen.KillTile(Position.X, Position.Y, false, false, true);
                     Kill(Position.X, Position.Y);
@@ -25,8 +31,8 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Tiles
         }
         public override bool IsTileValidForEntity(int x, int y)
         {
+            Main.NewText("Validate: [" + x + "," + y+ "]");
             Tile tile = Main.tile[x, y];
-            Main.NewText("[" + x + "," + y + "]:" + tile.HasTile + "," + tile.TileType + "<>" + ModContent.TileType<BloodLightCrystal>());
             return tile.HasTile && tile.TileType == ModContent.TileType<BloodLightCrystal>();
         }
 
@@ -46,7 +52,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Tiles
         public void startDissolve() {
             if (dissolveProgress == 0)
             {
-                Main.NewText("5:[" + Position + "] start kill");
+                Main.NewText("6:[" + Position + "] start kill");
                 dissolveProgress += DISSOLVE_STEP;
             }
         }

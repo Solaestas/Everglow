@@ -9,6 +9,8 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Tiles
 {
     public class BloodLightCrystal : ModTile
     {
+        public static Vector4 EDGE_COLOR = new Vector4(1, 40f/255f, 7f/255f, 1);
+        public static Vector2 EDGE_THRESHOLD = new Vector2(0.01f, 0.15f);
         public override void SetStaticDefaults()
         {
             base.SetStaticDefaults();
@@ -42,6 +44,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Tiles
                     && existing is BloodLightCrystalEntity existingAsT)
                 {
                     existingAsT.startDissolve();
+                    summonCrystal(i,j);
                 }
                 
                 //WorldGen.KillTile(i, j,false,false,true);
@@ -57,7 +60,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Tiles
 
                 if (dissolveProgress > 0) {
                     spriteBatch.End();
-                    spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+                    spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
 
                     Vector2 worldPos = new Vector2(i, j) * 16 + new Vector2(Main.offScreenRange);
                     Texture2D tex = ModContent.Request<Texture2D>(Texture, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
@@ -67,6 +70,8 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Tiles
                     dissolveEffect.Parameters["worldPos"].SetValue(worldPos);
                     dissolveEffect.Parameters["textureWidth"].SetValue(400);
                     dissolveEffect.Parameters["progress"].SetValue(dissolveProgress);
+                    dissolveEffect.Parameters["edgeColor"].SetValue(EDGE_COLOR);
+                    dissolveEffect.Parameters["edgeThreshold"].SetValue(EDGE_THRESHOLD);
                     dissolveEffect.CurrentTechnique.Passes["NoiseDissolve"].Apply();
                     
                     Tile tile = Main.tile[i,j];
@@ -74,12 +79,28 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Tiles
                     spriteBatch.Draw(tex, worldPos-Main.screenPosition, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), Lighting.GetColor(i, j));
                     spriteBatch.End();
                     spriteBatch.Begin();
+
                     return false;
                 }
             }
             return base.PreDraw(i, j, spriteBatch);
         }
         public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
+        {
+            // ´ý¶¨
+        }
+
+        public static void summonDust(int i, int j)
+        {
+            Dust d = Dust.NewDustDirect(new Vector2(i * 16, j * 16), 16, 16, ModContent.DustType<Dusts.BloodSpark>());
+            d.velocity = new Vector2(Main.rand.NextFloat(1.5f, 4f), 0).RotatedByRandom(6.283);
+
+            d.color.R = (byte)Main.rand.Next(15, 255);
+            d.alpha = Main.rand.Next(10);
+            d.noGravity = true;
+        }
+
+        public static void summonCrystal(int i, int j)
         {
             BrokenCrystal bc = new BrokenCrystal
             {
@@ -90,18 +111,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Tiles
                 Visible = true,
                 position = new Vector2(i * 16 + 8, j * 16 + 8)
             };
-
-            if (Main.rand.NextBool(4))
-            {
-                Dust d = Dust.NewDustDirect(new Vector2(i * 16, j * 16), 16, 16, ModContent.DustType<Dusts.BloodSpark>());
-                d.velocity = new Vector2(Main.rand.NextFloat(1.5f, 4f), 0).RotatedByRandom(6.283);
-
-                d.color.R = (byte)Main.rand.Next(15, 255);
-                d.alpha = Main.rand.Next(10);
-                d.noGravity = true;
-
-                VFXManager.Add(bc);
-            }
+            VFXManager.Add(bc);
         }
     }
 }
