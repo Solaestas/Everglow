@@ -44,7 +44,10 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Tiles
                     && existing is BloodLightCrystalEntity existingAsT)
                 {
                     existingAsT.startDissolve();
-                    summonCrystal(i,j);
+                    if (Main.rand.NextBool(10))
+                    {
+                        summonCrystal(i, j);
+                    }
                 }
                 
                 //WorldGen.KillTile(i, j,false,false,true);

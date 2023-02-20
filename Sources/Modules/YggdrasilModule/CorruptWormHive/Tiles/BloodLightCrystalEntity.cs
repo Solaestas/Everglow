@@ -17,7 +17,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Tiles
             if (dissolveProgress > 0 && dissolveProgress <= 1) {
                 dissolveProgress += DISSOLVE_STEP;
 
-                if (Main.rand.NextBool(30)) {
+                if (Main.rand.NextBool(50)) {
                     BloodLightCrystal.summonDust(Position.X, Position.Y);
                 }
 
