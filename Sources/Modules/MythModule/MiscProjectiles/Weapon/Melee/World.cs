@@ -425,14 +425,14 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Melee
                                     int Dam = (int)(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f) * Damk);
                                     bool Crit = Main.rand.Next(100) < player.GetCritChance(DamageClass.Generic) + player.GetCritChance(DamageClass.Melee) + 15 + width * 1.5f;
                                     Main.npc[v].StrikeNPC(Dam, 2 * width / 72f, Math.Sign(Projectile.velocity.X), Crit);
-                                    Player player2 = Main.player[Projectile.owner];
                                     if (Crit)
                                     {
-                                        player2.addDPS((int)((Dam - Main.npc[v].defDefense) * (0.6 + MythContentPlayer.CritDamage)));
+                                        MythContentPlayer myplayer = player.GetModPlayer<MythContentPlayer>();
+                                        player.addDPS((int)((Dam - Main.npc[v].defDefense) * (0.6 + myplayer.CritDamage)));
                                     }
                                     else
                                     {
-                                        player2.addDPS((Dam - Main.npc[v].defDefense));
+                                        player.addDPS((Dam - Main.npc[v].defDefense));
                                     }
                                     if (Mode == 1)
                                     {

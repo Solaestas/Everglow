@@ -81,8 +81,9 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
         {
 
             coll = 90;
-            CoolRarr = 480 - (int)(MythContentPlayer.StackDamageAdd / 0.05f * 90);
-            MythContentPlayer.Dashcool = 480 - (int)(MythContentPlayer.StackDamageAdd / 0.05f * 90);
+            MythContentPlayer myplayer = player.GetModPlayer<MythContentPlayer>();
+            CoolRarr = 480 - (int)(myplayer.StackDamageAdd / 0.05f * 90);
+            myplayer.Dashcool = 480 - (int)(myplayer.StackDamageAdd / 0.05f * 90);
 
             if (player.altFunctionUse == 2)
             {

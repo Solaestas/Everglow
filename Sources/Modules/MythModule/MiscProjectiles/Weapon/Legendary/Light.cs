@@ -1,4 +1,5 @@
-﻿using Terraria.Audio;
+﻿using Everglow.Sources.Modules.MythModule.Common;
+using Terraria.Audio;
 using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Legendary
@@ -115,78 +116,76 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Legendary
             {
                 B = true;
             }
-            for (int i = 0; i < 256; i++)
+            MythContentPlayer myplayer = player.GetModPlayer<MythContentPlayer>();
+            if (vz.Length() <= 650 && rot > 1 && rot < 2 && Projectile.timeLeft > 10)
             {
-                if (vz.Length() <= 650 && rot > 1 && rot < 2 && Projectile.timeLeft > 10)
+                if (inAdd == 0)
                 {
-                    if (inAdd == 0)
+                    inAdd += 1;
+                    if (R)
                     {
-                        inAdd += 1;
-                        if (R)
-                        {
-                            Common.MythContentPlayer.RainCritAdd += Projectile.damage / 4;
-                        }
-                        if (O)
-                        {
-                            Common.MythContentPlayer.RainDefenseAdd += Projectile.damage / 3;
-                        }
-                        if (Y)
-                        {
-                            Common.MythContentPlayer.RainDamageAdd += Projectile.damage / 100f;
-                        }
-                        if (G)
-                        {
-                            Common.MythContentPlayer.RainLifeAdd += Projectile.damage / 3;
-                        }
-                        if (C)
-                        {
-                            Common.MythContentPlayer.RainMissAdd += Projectile.damage / 8f;
-                        }
-                        if (B)
-                        {
-                            Common.MythContentPlayer.RainManaAdd += Projectile.damage / 10f;
-                        }
-                        if (P && !Padd)
-                        {
-                            Common.MythContentPlayer.RainSpeedAdd += Projectile.damage / 10f;
-                            Common.MythContentPlayer.RainSpeedAddTime = Projectile.timeLeft;
-                            Padd = true;
-                        }
+                        myplayer.RainCritAdd += Projectile.damage / 4;
+                    }
+                    if (O)
+                    {
+                        myplayer.RainDefenseAdd += Projectile.damage / 3;
+                    }
+                    if (Y)
+                    {
+                        myplayer.RainDamageAdd += Projectile.damage / 100f;
+                    }
+                    if (G)
+                    {
+                        myplayer.RainLifeAdd += Projectile.damage / 3;
+                    }
+                    if (C)
+                    {
+                        myplayer.RainMissAdd += Projectile.damage / 8f;
+                    }
+                    if (B)
+                    {
+                        myplayer.RainManaAdd += Projectile.damage / 10f;
+                    }
+                    if (P && !Padd)
+                    {
+                        myplayer.RainSpeedAdd += Projectile.damage / 10f;
+                        myplayer.RainSpeedAddTime = Projectile.timeLeft;
+                        Padd = true;
                     }
                 }
-                else
+            }
+            else
+            {
+                if (inAdd == 1)
                 {
-                    if (inAdd == 1)
+                    inAdd = 0;
+                    if (R)
                     {
-                        inAdd = 0;
-                        if (R)
-                        {
-                            Common.MythContentPlayer.RainCritAdd -= Projectile.damage / 4;
-                        }
-                        if (O)
-                        {
-                            Common.MythContentPlayer.RainDefenseAdd -= Projectile.damage / 3;
-                        }
-                        if (Y)
-                        {
-                            Common.MythContentPlayer.RainDamageAdd -= Projectile.damage / 100f;
-                        }
-                        if (G)
-                        {
-                            Common.MythContentPlayer.RainLifeAdd -= Projectile.damage / 3;
-                        }
-                        if (C)
-                        {
-                            Common.MythContentPlayer.RainMissAdd -= Projectile.damage / 8f;
-                        }
-                        if (B)
-                        {
-                            Common.MythContentPlayer.RainManaAdd -= Projectile.damage / 10f;
-                        }
-                        if (P)
-                        {
-                            Common.MythContentPlayer.RainSpeedAdd -= Projectile.damage / 10f;
-                        }
+                        myplayer.RainCritAdd -= Projectile.damage / 4;
+                    }
+                    if (O)
+                    {
+                        myplayer.RainDefenseAdd -= Projectile.damage / 3;
+                    }
+                    if (Y)
+                    {
+                        myplayer.RainDamageAdd -= Projectile.damage / 100f;
+                    }
+                    if (G)
+                    {
+                        myplayer.RainLifeAdd -= Projectile.damage / 3;
+                    }
+                    if (C)
+                    {
+                        myplayer.RainMissAdd -= Projectile.damage / 8f;
+                    }
+                    if (B)
+                    {
+                        myplayer.RainManaAdd -= Projectile.damage / 10f;
+                    }
+                    if (P)
+                    {
+                        myplayer.RainSpeedAdd -= Projectile.damage / 10f;
                     }
                 }
             }
@@ -202,13 +201,13 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Legendary
         int inAdd = 0;
         public override void Kill(int timeLeft)
         {
-            /*Common.MythContentPlayer.RainCritAdd = 0;
-            Common.MythContentPlayer.RainDamageAdd = 0;
-            Common.MythContentPlayer.RainMissAdd = 0;
-            Common.MythContentPlayer.RainManaAdd = 0;
-            Common.MythContentPlayer.RainLifeAdd = 0;
-            Common.MythContentPlayer.RainSpeedAdd = 0;
-            Common.MythContentPlayer.RainDefenseAdd = 0;*/
+            /*myplayer.RainCritAdd = 0;
+            myplayer.RainDamageAdd = 0;
+            myplayer.RainMissAdd = 0;
+            myplayer.RainManaAdd = 0;
+            myplayer.RainLifeAdd = 0;
+            myplayer.RainSpeedAdd = 0;
+            myplayer.RainDefenseAdd = 0;*/
         }
         float Strengt = 0;
         float adding;
@@ -276,7 +275,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Legendary
                 }
                 for (int i = 0; i < 256; i++)
                 {
-                    if (inAdd == 1 && Main.rand.Next(3) == 0)
+                    if (inAdd == 1 && Main.rand.NextBool(3))
                     {
                         int R = (int)((Projectile.ai[0] - 5) * Strengt / 3f);
                         int G = (int)(((Projectile.ai[0] % 1) * 1000f + 9) * Strengt / 3f);

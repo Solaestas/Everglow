@@ -1,4 +1,5 @@
-﻿using Terraria.Audio;
+﻿using Everglow.Sources.Modules.MythModule.Common;
+using Terraria.Audio;
 using Terraria.Enums;
 using Terraria.Localization;
 
@@ -223,7 +224,8 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Legendary
                     }
                 }
                 float CritC = player.GetCritChance(DamageClass.Summon) + player.GetCritChance(DamageClass.Generic);
-                float CriD = Common.MythContentPlayer.CritDamage;
+                MythContentPlayer myplayer = player.GetModPlayer<MythContentPlayer>();
+                float CriD = myplayer.CritDamage;
                 for (int j = 0; j < 200; j++)
                 {
                     if (!Hitj[j])

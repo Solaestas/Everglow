@@ -1,4 +1,5 @@
-﻿using Terraria.Localization;
+﻿using Everglow.Sources.Modules.MythModule.Common;
+using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 {
@@ -57,9 +58,10 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
             Player player = Main.player[Projectile.owner]; // Since we access the owner player instance so much, it's useful to create a helper local variable for this
             int duration = player.itemAnimationMax; // Define the duration the projectile will exist in frames
             player.heldProj = Projectile.whoAmI; // Update the player's held projectile id
-            if (Main.mouseRight && Common.MythContentPlayer.Dashcool == 0)
+            MythContentPlayer myplayer = player.GetModPlayer<MythContentPlayer>();
+            if (Main.mouseRight && myplayer.Dashcool == 0)
             {
-                Common.MythContentPlayer.Dashcool = 480 - (int)(Common.MythContentPlayer.StackDamageAdd / 0.05f * 90);
+                myplayer.Dashcool = 480 - (int)(myplayer.StackDamageAdd / 0.05f * 90);
                 Vector2 velocity = Main.MouseWorld - Projectile.Center;
                 velocity.Normalize();
                 Projectile.NewProjectile(null, Projectile.Center, velocity * 20.4f, ModContent.ProjectileType<Projectiles.Weapon.ToothSpear2>(), Projectile.damage * 4, Projectile.knockBack, player.whoAmI, 0f, 0f);

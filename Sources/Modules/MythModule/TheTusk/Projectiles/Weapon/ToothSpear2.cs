@@ -1,4 +1,5 @@
-﻿using Terraria.Localization;
+﻿using Everglow.Sources.Modules.MythModule.Common;
+using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 {
@@ -108,7 +109,8 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
                 sTp = player.Center;
                 fi = false;
             }
-            Common.MythContentPlayer.IMMUNE = 15;
+            MythContentPlayer myplayer = player.GetModPlayer<MythContentPlayer>();
+            myplayer.IMMUNE = 15;
             return false; // Don't execute vanilla AI.
         }
         private Effect ef;

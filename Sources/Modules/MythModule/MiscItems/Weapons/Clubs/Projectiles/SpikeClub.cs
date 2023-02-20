@@ -9,6 +9,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
     {
         public override void SetDef()
         {
+            HitLength = 45f;
             ReflectStrength = 6f;
         }
         internal List<Vector2> MoonBladeI = new List<Vector2>();
@@ -23,7 +24,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
         {
             base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
             int k = (int)(Omega * 10);
-            for (int x = 0; x < k; x++)
+            for (int x = 0; x < Main.rand.Next(k); x++)
             {
                 target.StrikeNPC((int)(Projectile.damage * 0.5f * Omega), 0, 1);
             }
@@ -98,11 +99,11 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
             listVec = new List<Vector2>();
             if(Main.rand.NextBool(2))
             {
-                listVec.Add(trailVecs.ToList()[1] * Main.rand.NextFloat(0.95f, Math.Min(1.75f, 1 + Omega * 1.5f)));
+                listVec.Add(trailVecs.ToList()[1] * Main.rand.NextFloat(0.75f, Math.Min(1.45f, 1 + Omega * 1.1f)));
             }
             else
             {
-                listVec.Add(trailVecs.ToList()[1] * -Main.rand.NextFloat(0.95f, Math.Min(1.75f, 1 + Omega * 1.5f)));
+                listVec.Add(trailVecs.ToList()[1] * -Main.rand.NextFloat(0.75f, Math.Min(1.45f, 1 + Omega * 1.1f)));
             }
         }
         private void DeactivateMoon(ref List<Vector2> listVec)
@@ -147,8 +148,8 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
                 float w = 1 - Math.Abs((trail[i].X * 0.5f + trail[i].Y * 0.5f) / trail[i].Length());
                 float w2 = MathF.Sqrt(TrailAlpha(factor));
                 w *= w2 * w;
-                bars.Add(new Vertex2D(Projectile.Center - trail[i] * 0.7f * Projectile.scale, Color.White, new Vector3(factor, 1, 0f)));
-                bars.Add(new Vertex2D(Projectile.Center - trail[i] * Projectile.scale, Color.White, new Vector3(factor, 0, w * ReflectStrength)));
+                bars.Add(new Vertex2D(Projectile.Center - trail[i] * 0.5f * Projectile.scale, Color.White, new Vector3(factor, 1, 0f)));
+                bars.Add(new Vertex2D(Projectile.Center - trail[i] * 0.8f * Projectile.scale, Color.White, new Vector3(factor, 0, w * ReflectStrength)));
             }
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone);

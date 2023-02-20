@@ -1,4 +1,5 @@
 ﻿using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Legendary
@@ -63,7 +64,8 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Legendary
             for (int j = 0; j < 200; j++)
             {
                 float CritC = owner.GetCritChance(DamageClass.Summon) + owner.GetCritChance(DamageClass.Generic);
-                float CriD = Common.MythContentPlayer.CritDamage;
+                MythContentPlayer myplayer = owner.GetModPlayer<MythContentPlayer>();
+                float CriD = myplayer.CritDamage;
                 if ((Main.npc[j].Center - Projectile.Center).Length() < 15 && !Main.npc[j].dontTakeDamage && !Main.npc[j].friendly)
                 {
                     int dam = (int)(Projectile.ai[1] * Main.rand.NextFloat(0.85f, 1.15f));

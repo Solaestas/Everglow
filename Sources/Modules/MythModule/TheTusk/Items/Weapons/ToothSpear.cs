@@ -1,4 +1,5 @@
-﻿using ReLogic.Graphics;
+﻿using Everglow.Sources.Modules.MythModule.Common;
+using ReLogic.Graphics;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -60,10 +61,11 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Weapons
         }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            if (player.altFunctionUse == 2 && Common.MythContentPlayer.Dashcool < 1)
+            MythContentPlayer myplayer = player.GetModPlayer<MythContentPlayer>();
+            if (player.altFunctionUse == 2 && myplayer.Dashcool < 1)
             {
-                CoolRarr = 480 - (int)(Common.MythContentPlayer.StackDamageAdd / 0.05f * 90);
-                Common.MythContentPlayer.Dashcool = 480 - (int)(Common.MythContentPlayer.StackDamageAdd / 0.05f * 90);
+                CoolRarr = 480 - (int)(myplayer.StackDamageAdd / 0.05f * 90);
+                myplayer.Dashcool = 480 - (int)(myplayer.StackDamageAdd / 0.05f * 90);
                 Projectile.NewProjectile(source, position, velocity * 6, ModContent.ProjectileType<Projectiles.Weapon.ToothSpear2>(), damage * 2, knockback, player.whoAmI, 0f, 0f);
                 player.velocity += velocity * 6;
                 return false;

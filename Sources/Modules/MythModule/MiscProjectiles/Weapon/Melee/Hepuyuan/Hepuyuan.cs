@@ -124,7 +124,8 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Melee.Hepuy
                 player.velocity *= 0.4f;
                 Projectile.velocity *= 0.4f;
             }
-            MythContentPlayer.IMMUNE = 15;
+            MythContentPlayer myplayer = player.GetModPlayer<MythContentPlayer>();
+            myplayer.IMMUNE = 15;
             return false;
         }
         private Effect ef;
