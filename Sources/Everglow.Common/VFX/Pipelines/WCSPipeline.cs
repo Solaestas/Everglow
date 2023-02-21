@@ -1,6 +1,4 @@
-﻿using Everglow.Common.VFX;
-
-namespace Everglow.Core.VFX.Pipelines
+﻿namespace Everglow.Common.VFX.Pipelines
 {
 	/// <summary>
 	/// 世界坐标系Pipeline，会自动剪去Main.screenPosition

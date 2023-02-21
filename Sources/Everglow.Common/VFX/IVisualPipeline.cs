@@ -1,6 +1,4 @@
-﻿using Everglow.Core.VFX.Visuals;
-
-namespace Everglow.Core.VFX.Pipelines
+﻿namespace Everglow.Common.VFX
 {
 	public interface IPipeline
 	{

@@ -1,7 +1,6 @@
-﻿using Everglow.Common.VFX;
-using Everglow.Core.Enums;
+﻿using Everglow.Common.Enums;
 
-namespace Everglow.Core.VFX.Visuals;
+namespace Everglow.Common.VFX.Visuals;
 
 internal abstract class VisualProjectile : ModProjectile, IVisual
 {
@@ -11,7 +10,7 @@ internal abstract class VisualProjectile : ModProjectile, IVisual
 
 	public bool Visible => !Projectile.hide && VFXManager.InScreen(Projectile.position, ProjectileID.Sets.DrawScreenCheckFluff[Type]);
 
-	public int Type => throw new NotImplementedException();
+	public new int Type => throw new NotImplementedException();
 
 	public string Name => throw new NotImplementedException();
 

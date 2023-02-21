@@ -1,39 +1,37 @@
-﻿using Everglow.Core.VFX.Pipelines;
-using Everglow.Core.VFX.Visuals;
-using ReLogic.Content;
+﻿using ReLogic.Content;
 
-namespace Everglow.Core.VFX
+namespace Everglow.Common.VFX
 {
-    internal abstract class Pipeline : IPipeline
-    {
-        protected Asset<Effect> effect;
+	internal abstract class Pipeline : IPipeline
+	{
+		protected Asset<Effect> effect;
 
-        /// <summary>
-        /// 准备开始渲染
-        /// </summary>
-        public abstract void BeginRender();
+		/// <summary>
+		/// 准备开始渲染
+		/// </summary>
+		public abstract void BeginRender();
 
-        /// <summary>
-        /// 结束渲染，刷新VFXBatch
-        /// </summary>
-        public abstract void EndRender();
+		/// <summary>
+		/// 结束渲染，刷新VFXBatch
+		/// </summary>
+		public abstract void EndRender();
 
-        public virtual void Load()
-        {
-        }
+		public virtual void Load()
+		{
+		}
 
-        public void Render(IEnumerable<IVisual> visuals)
-        {
-            BeginRender();
-            foreach (var visual in visuals)
-            {
-                visual.Draw();
-            }
-            EndRender();
-        }
+		public void Render(IEnumerable<IVisual> visuals)
+		{
+			BeginRender();
+			foreach (var visual in visuals)
+			{
+				visual.Draw();
+			}
+			EndRender();
+		}
 
-        public virtual void Unload()
-        {
-        }
-    }
+		public virtual void Unload()
+		{
+		}
+	}
 }

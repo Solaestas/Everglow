@@ -1,6 +1,6 @@
-﻿using Everglow.Core.Network.PacketHandle;
+﻿using Everglow.Common.Network.PacketHandle;
 
-namespace Everglow.Core.PlayerUtils;
+namespace Everglow.Common.PlayerUtils;
 
 internal class InputPacketToServer : IPacket
 {

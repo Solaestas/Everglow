@@ -1,6 +1,6 @@
-﻿using Everglow.Core.UI.UIElements;
+﻿using Everglow.Common.UI.UIElements;
 
-namespace Everglow.Core.UI
+namespace Everglow.Common.UI
 {
 	internal class EverglowUISystem
 	{

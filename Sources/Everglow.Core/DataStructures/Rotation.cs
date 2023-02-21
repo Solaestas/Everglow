@@ -1,4 +1,4 @@
-﻿namespace Everglow.Core.DataStructures;
+﻿namespace Everglow.Common.DataStructures;
 
 [DebuggerDisplay("Angle = {angle}")]
 public struct Rotation : IComparable, IComparable<Rotation>, IConvertible, IEquatable<Rotation>, ISpanFormattable, IFormattable

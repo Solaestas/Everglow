@@ -1,4 +1,4 @@
-namespace Everglow.Core.ObjectPool
+namespace Everglow.Common.ObjectPool
 {
 	/// <summary>
 	/// 管理屏幕大小的 RenderTarget 的对象池

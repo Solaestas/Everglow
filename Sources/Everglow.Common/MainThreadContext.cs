@@ -1,5 +1,4 @@
-﻿using Everglow.Core.Interfaces;
-using Terraria;
+﻿using Everglow.Common.Interfaces;
 
 namespace Everglow.Common;
 

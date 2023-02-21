@@ -1,13 +1,8 @@
 ﻿using System.Collections;
 using System.Reflection;
-using Everglow.Core;
-using Everglow.Core.Enums;
-using Everglow.Core.Interfaces;
-using Everglow.Core.ModuleSystem;
-using Everglow.Core.ObjectPool;
-using Everglow.Core.VFX;
-using Everglow.Core.VFX.Pipelines;
-using Everglow.Core.VFX.Visuals;
+using Everglow.Common.Enums;
+using Everglow.Common.Interfaces;
+using Everglow.Common.ObjectPool;
 using ReLogic.Content;
 
 namespace Everglow.Common.VFX;
@@ -159,19 +154,17 @@ public class VFXManager : IDisposable
 	}
 
 	#endregion Visuals
-	
-	public GraphicsDevice Device { get; init; }
-	public IVisualQualityController VisualQuality { get; init }
+
+	public IVisualQualityController VisualQuality { get; init; }
 	public IMainThreadContext MainThread { get; init; }
-	public RenderTargetPool Pool { get; init; }
+	public HookSystem HookSystem { get; init; }
 	public VFXManager(GraphicsDevice device, IVisualQualityController visualQuality, IMainThreadContext mainThread, RenderTargetPool pool, HookSystem hookSystem)
 	{
 		Debug.Assert(Instance == null);
 		Instance = this;
-		Device = device;
 		VisualQuality = visualQuality;
 		MainThread = mainThread;
-		Pool = pool;
+		HookSystem = hookSystem;
 		spriteBatch = new VFXBatch(device, mainThread);
 		foreach (var layer in drawLayers)
 		{
@@ -194,7 +187,6 @@ public class VFXManager : IDisposable
 		}
 		hookSystem.AddMethod(Update, CodeLayer.PostUpdateEverything, "VFX Update");
 		mainThread.AddTask(() => tempRenderTarget = renderTargetPool.GetRenderTarget2D());
-
 	}
 
 	private const bool DefaultRt2DIndex = true;

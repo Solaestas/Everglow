@@ -1,6 +1,6 @@
 ﻿using ReLogic.Content;
 
-namespace Everglow.Core.UI.UIElements
+namespace Everglow.Common.UI.UIElements
 {
 	internal class UIPanel : BaseElement
 	{

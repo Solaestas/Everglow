@@ -1,7 +1,7 @@
 ﻿using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 
-namespace Everglow.Core.PlayerUtils
+namespace Everglow.Common.PlayerUtils
 {
 	internal static class PlayerUtils
 	{

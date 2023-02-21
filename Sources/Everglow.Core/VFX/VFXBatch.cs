@@ -1,7 +1,7 @@
-﻿using Everglow.Core.Interfaces;
-using Everglow.Core.Vertex;
+﻿using Everglow.Common.Interfaces;
+using Everglow.Common.Vertex;
 
-namespace Everglow.Core.VFX;
+namespace Everglow.Common.VFX;
 
 public class VFXBatch : IDisposable
 {

@@ -1,5 +1,4 @@
 ﻿using Everglow.Common.VFX;
-using Everglow.Core.VFX.Visuals;
 
 namespace Everglow.Common.Utils;
 

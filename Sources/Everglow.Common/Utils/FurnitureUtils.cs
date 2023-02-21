@@ -2,7 +2,7 @@
 using Terraria.GameContent;
 using Terraria.Localization;
 
-namespace Everglow.Core.Utils
+namespace Everglow.Common.Utils
 {
 	public static class FurnitureUtils
 	{
@@ -261,10 +261,10 @@ namespace Everglow.Core.Utils
 			{
 				Main.CancelClothesWindow(true);
 				Main.mouseRightRelease = false;
-				int left = (int)(Main.tile[Player.tileTargetX, Player.tileTargetY].TileFrameX / 18);
+				int left = Main.tile[Player.tileTargetX, Player.tileTargetY].TileFrameX / 18;
 				left %= 3;
 				left = Player.tileTargetX - left;
-				int top = Player.tileTargetY - (int)(Main.tile[Player.tileTargetX, Player.tileTargetY].TileFrameY / 18);
+				int top = Player.tileTargetY - Main.tile[Player.tileTargetX, Player.tileTargetY].TileFrameY / 18;
 				if (player.sign > -1)
 				{
 					SoundEngine.PlaySound(SoundID.MenuClose);
@@ -348,7 +348,7 @@ namespace Everglow.Core.Utils
 			Tile tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
 			int left = Player.tileTargetX;
 			int top = Player.tileTargetY;
-			left -= (int)(tile.TileFrameX % 54 / 18);
+			left -= tile.TileFrameX % 54 / 18;
 			if (tile.TileFrameY % 36 != 0)
 			{
 				top--;
@@ -390,7 +390,7 @@ namespace Everglow.Core.Utils
 			Tile tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
 			int left = Player.tileTargetX;
 			int top = Player.tileTargetY;
-			left -= (int)(tile.TileFrameX % 54 / 18);
+			left -= tile.TileFrameX % 54 / 18;
 			if (tile.TileFrameY % 36 != 0)
 			{
 				top--;

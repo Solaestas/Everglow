@@ -1,9 +1,9 @@
 ﻿using System.Text;
 using Terraria.Audio;
 using Terraria.ModLoader.Core;
-using Hook = Everglow.Core.ModHooks.IModifyItemPickSound;
+using Hook = Everglow.Common.ModHooks.IModifyItemPickSound;
 
-namespace Everglow.Core.ModHooks
+namespace Everglow.Common.ModHooks
 {
 	public interface IModifyItemPickSound
 	{

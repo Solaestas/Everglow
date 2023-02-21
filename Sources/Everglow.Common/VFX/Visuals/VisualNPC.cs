@@ -1,7 +1,6 @@
-﻿using Everglow.Common.VFX;
-using Everglow.Core.Enums;
+﻿using Everglow.Common.Enums;
 
-namespace Everglow.Core.VFX.Visuals;
+namespace Everglow.Common.VFX.Visuals;
 
 public abstract class VisualNPC : ModNPC, IVisual
 {
@@ -11,7 +10,7 @@ public abstract class VisualNPC : ModNPC, IVisual
 
 	public bool Visible => !NPC.hide && VFXManager.InScreen(NPC.position, 100);
 
-	public int Type => throw new NotImplementedException();
+	public new int Type => throw new NotImplementedException();
 
 	public string Name => throw new NotImplementedException();
 

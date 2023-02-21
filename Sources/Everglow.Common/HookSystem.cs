@@ -1,14 +1,14 @@
-﻿using Everglow.Core.Enums;
+﻿using Everglow.Common.Enums;
 using MonoMod.Cil;
 using MonoMod.Utils;
-using Terraria.ModLoader;
+using Terraria.Graphics.Renderers;
 
-namespace Everglow.Core
+namespace Everglow.Common
 {
-    /// <summary>
-    /// 对一个方法的管理，可以用来控制钩子是否启用
-    /// </summary>
-    [DebuggerDisplay("{name} : {enable ? \"Enable\" : \"Disable\"}")]
+	/// <summary>
+	/// 对一个方法的管理，可以用来控制钩子是否启用
+	/// </summary>
+	[DebuggerDisplay("{name} : {enable ? \"Enable\" : \"Disable\"}")]
 	public class ActionHandler
 	{
 		public Action Action
@@ -236,37 +236,37 @@ namespace Everglow.Core
 
 		public void HookLoad()
 		{
-			IL.Terraria.Main.DoDraw += Main_DoDraw;
-			On.Terraria.Main.DrawDust += Main_DrawDust;
-			On.Terraria.Main.DrawProjectiles += Main_DrawProjectiles;
-			On.Terraria.Main.DrawNPCs += Main_DrawNPCs;
-			On.Terraria.Graphics.Renderers.LegacyPlayerRenderer.DrawPlayers += LegacyPlayerRenderer_DrawPlayers;
-			On.Terraria.WorldGen.playWorldCallBack += WorldGen_playWorldCallBack;
+			IL_Main.DoDraw += Main_DoDraw;
+			On_Main.DrawDust += Main_DrawDust;
+			On_Main.DrawProjectiles += Main_DrawProjectiles;
+			On_Main.DrawNPCs += Main_DrawNPCs;
+			On_LegacyPlayerRenderer.DrawPlayers += LegacyPlayerRenderer_DrawPlayers;
+			On_WorldGen.playWorldCallBack += WorldGen_playWorldCallBack;
 
-			On.Terraria.WorldGen.SaveAndQuit += WorldGen_SaveAndQuit;
-			On.Terraria.Main.DrawMiscMapIcons += Main_DrawMiscMapIcons;
-			On.Terraria.WorldGen.serverLoadWorldCallBack += WorldGen_serverLoadWorldCallBack;
-			On.Terraria.Main.DrawBG += Main_DrawBG;
-			On.Terraria.Main.DrawBackground += Main_DrawBackground;
-			On.Terraria.Main.DoDraw_WallsTilesNPCs += Main_DoDraw_WallsTilesNPCs;
+			On_WorldGen.SaveAndQuit += WorldGen_SaveAndQuit;
+			On_Main.DrawMiscMapIcons += Main_DrawMiscMapIcons;
+			On_WorldGen.serverLoadWorldCallBack += WorldGen_serverLoadWorldCallBack;
+			On_Main.DrawBG += Main_DrawBG;
+			On_Main.DrawBackground += Main_DrawBackground;
+			On_Main.DoDraw_WallsTilesNPCs += Main_DoDraw_WallsTilesNPCs;
 			Main.OnResolutionChanged += Main_OnResolutionChanged;
 		}
 
 		public void HookUnload()
 		{
-			IL.Terraria.Main.DoDraw -= Main_DoDraw;
-			On.Terraria.Main.DrawDust -= Main_DrawDust;
-			On.Terraria.Main.DrawProjectiles -= Main_DrawProjectiles;
-			On.Terraria.Main.DrawNPCs -= Main_DrawNPCs;
-			On.Terraria.Graphics.Renderers.LegacyPlayerRenderer.DrawPlayers -= LegacyPlayerRenderer_DrawPlayers;
-			On.Terraria.WorldGen.playWorldCallBack -= WorldGen_playWorldCallBack;
+			IL_Main.DoDraw -= Main_DoDraw;
+			On_Main.DrawDust -= Main_DrawDust;
+			On_Main.DrawProjectiles -= Main_DrawProjectiles;
+			On_Main.DrawNPCs -= Main_DrawNPCs;
+			On_LegacyPlayerRenderer.DrawPlayers -= LegacyPlayerRenderer_DrawPlayers;
+			On_WorldGen.playWorldCallBack -= WorldGen_playWorldCallBack;
 
-			On.Terraria.WorldGen.SaveAndQuit -= WorldGen_SaveAndQuit;
-			On.Terraria.Main.DrawMiscMapIcons -= Main_DrawMiscMapIcons;
-			On.Terraria.WorldGen.serverLoadWorldCallBack -= WorldGen_serverLoadWorldCallBack;
-			On.Terraria.Main.DrawBG -= Main_DrawBG;
-			On.Terraria.Main.DrawBackground -= Main_DrawBackground;
-			On.Terraria.Main.DoDraw_WallsTilesNPCs -= Main_DoDraw_WallsTilesNPCs;
+			On_WorldGen.SaveAndQuit -= WorldGen_SaveAndQuit;
+			On_Main.DrawMiscMapIcons -= Main_DrawMiscMapIcons;
+			On_WorldGen.serverLoadWorldCallBack -= WorldGen_serverLoadWorldCallBack;
+			On_Main.DrawBG -= Main_DrawBG;
+			On_Main.DrawBackground -= Main_DrawBackground;
+			On_Main.DoDraw_WallsTilesNPCs -= Main_DoDraw_WallsTilesNPCs;
 			Main.OnResolutionChanged -= Main_OnResolutionChanged;
 			ClearReflectionCache();
 		}
@@ -343,7 +343,7 @@ namespace Everglow.Core
 			Invoke(CodeLayer.PostDrawTiles);
 		}
 
-		private void Main_DrawBackground(On.Terraria.Main.orig_DrawBackground orig, Main self)
+		private void Main_DrawBackground(On_Main.orig_DrawBackground orig, Main self)
 		{
 			if (DisableDrawBackground)
 			{
@@ -352,7 +352,7 @@ namespace Everglow.Core
 			orig(self);
 		}
 
-		private void Main_DrawBG(On.Terraria.Main.orig_DrawBG orig, Main self)
+		private void Main_DrawBG(On_Main.orig_DrawBG orig, Main self)
 		{
 			if (DisableDrawSkyAndHell)
 			{
@@ -361,32 +361,32 @@ namespace Everglow.Core
 			orig(self);
 		}
 
-		private void Main_DoDraw_WallsTilesNPCs(On.Terraria.Main.orig_DoDraw_WallsTilesNPCs orig, Main self)
+		private void Main_DoDraw_WallsTilesNPCs(On_Main.orig_DoDraw_WallsTilesNPCs orig, Main self)
 		{
 			Invoke(CodeLayer.PostDrawBG);
 			orig(self);
 		}
 
-		private void WorldGen_serverLoadWorldCallBack(On.Terraria.WorldGen.orig_serverLoadWorldCallBack orig)
+		private void WorldGen_serverLoadWorldCallBack(On_WorldGen.orig_serverLoadWorldCallBack orig)
 		{
 			orig();
 			Invoke(CodeLayer.PostEnterWorld_Server);
 		}
 
-		private void Main_DrawMiscMapIcons(On.Terraria.Main.orig_DrawMiscMapIcons orig, Main self, SpriteBatch spriteBatch, Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale, float drawScale, ref string mouseTextString)
+		private void Main_DrawMiscMapIcons(On_Main.orig_DrawMiscMapIcons orig, Main self, SpriteBatch spriteBatch, Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale, float drawScale, ref string mouseTextString)
 		{
 			orig(self, spriteBatch, mapTopLeft, mapX2Y2AndOff, mapRect, mapScale, drawScale, ref mouseTextString);
 			MapIconInfomation = (mapTopLeft, mapX2Y2AndOff, mapRect, mapScale);
 			Invoke(CodeLayer.PostDrawMapIcons);
 		}
 
-		private void WorldGen_SaveAndQuit(On.Terraria.WorldGen.orig_SaveAndQuit orig, Action callback)
+		private void WorldGen_SaveAndQuit(On_WorldGen.orig_SaveAndQuit orig, Action callback)
 		{
 			orig(callback);
 			Invoke(CodeLayer.PostExitWorld_Single);
 		}
 
-		private void WorldGen_playWorldCallBack(On.Terraria.WorldGen.orig_playWorldCallBack orig, object threadContext)
+		private void WorldGen_playWorldCallBack(On_WorldGen.orig_playWorldCallBack orig, object threadContext)
 		{
 			orig(threadContext);
 			Invoke(CodeLayer.PostEnterWorld_Single);
@@ -397,13 +397,13 @@ namespace Everglow.Core
 			Invoke(CodeLayer.ResolutionChanged);
 		}
 
-		private void LegacyPlayerRenderer_DrawPlayers(On.Terraria.Graphics.Renderers.LegacyPlayerRenderer.orig_DrawPlayers orig, Terraria.Graphics.Renderers.LegacyPlayerRenderer self, Terraria.Graphics.Camera camera, IEnumerable<Player> players)
+		private void LegacyPlayerRenderer_DrawPlayers(On_LegacyPlayerRenderer.orig_DrawPlayers orig, LegacyPlayerRenderer self, Terraria.Graphics.Camera camera, IEnumerable<Player> players)
 		{
 			orig.Invoke(self, camera, players);
 			Invoke(CodeLayer.PostDrawPlayers);
 		}
 
-		private void Main_DrawNPCs(On.Terraria.Main.orig_DrawNPCs orig, Main self, bool behindTiles)
+		private void Main_DrawNPCs(On_Main.orig_DrawNPCs orig, Main self, bool behindTiles)
 		{
 			orig.Invoke(self, behindTiles);
 			if (!behindTiles)
@@ -412,18 +412,19 @@ namespace Everglow.Core
 			}
 		}
 
-		private void Main_DrawDust(On.Terraria.Main.orig_DrawDust orig, Main self)
+		private void Main_DrawDust(On_Main.orig_DrawDust orig, Main self)
 		{
 			orig.Invoke(self);
 			Invoke(CodeLayer.PostDrawDusts);
 		}
 
-		private void Main_DrawProjectiles(On.Terraria.Main.orig_DrawProjectiles orig, Main self)
+		private void Main_DrawProjectiles(On_Main.orig_DrawProjectiles orig, Main self)
 		{
 			orig.Invoke(self);
 			Invoke(CodeLayer.PostDrawProjectiles);
 		}
 
+		// TODO 不要给这种大函数直接IL了
 		private void Main_DoDraw(ILContext il)
 		{
 			var cursor = new ILCursor(il);

@@ -4,7 +4,7 @@ using ReLogic.Graphics;
 using ReLogic.Localization.IME;
 using ReLogic.OS;
 
-namespace Everglow.Core.UI.UIElements
+namespace Everglow.Common.UI.UIElements
 {
 	internal delegate void TextChange(UIInputBox inputBox, string text);
 	internal class UIInputBox : UIPanel

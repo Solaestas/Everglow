@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Everglow.Core.Enums;
+﻿using Everglow.Common.Enums;
 
-namespace Everglow.Core.Interfaces;
+namespace Everglow.Common.Interfaces;
 
 public interface IVisualQualityController
 {

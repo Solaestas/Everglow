@@ -1,6 +1,6 @@
 ﻿using Terraria.UI;
 
-namespace Everglow.Core.UI
+namespace Everglow.Common.UI
 {
 	internal class UISystem : ModSystem
 	{

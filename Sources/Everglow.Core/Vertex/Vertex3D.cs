@@ -1,4 +1,4 @@
-namespace Everglow.Core.Vertex;
+namespace Everglow.Common.Vertex;
 
 /// <summary>
 /// 顶点数据结构：空间坐标,纹理坐标,法线向量

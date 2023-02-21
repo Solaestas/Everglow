@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Everglow.Core.ModuleSystem;
+namespace Everglow.Common.ModuleSystem;
 
 /// <summary>
 /// 用于管理模块加载、卸载的类

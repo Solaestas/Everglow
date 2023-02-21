@@ -1,4 +1,4 @@
-﻿namespace Everglow.Core.Coroutines
+﻿namespace Everglow.Common.Coroutines
 {
 	/// <summary>
 	/// 管理所有协程运行器的类，支持异步地发起新的协程

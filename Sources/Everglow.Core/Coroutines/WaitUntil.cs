@@ -1,4 +1,4 @@
-﻿namespace Everglow.Core.Coroutines
+﻿namespace Everglow.Common.Coroutines
 {
 	/// <summary>
 	/// 协程的剩余内容将在条件满足以后继续执行

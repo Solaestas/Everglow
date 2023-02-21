@@ -1,4 +1,4 @@
-﻿namespace Everglow.Core.NetUtils
+﻿namespace Everglow.Common.NetUtils
 {
 	/// <summary>
 	/// 只有单人和多人客户端才会加载拥有该特性的Module

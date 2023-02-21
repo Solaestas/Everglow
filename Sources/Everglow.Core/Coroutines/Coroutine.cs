@@ -1,4 +1,4 @@
-﻿namespace Everglow.Core.Coroutines
+﻿namespace Everglow.Common.Coroutines
 {
 	/// <summary>
 	/// 表示一个标准的协程运行器

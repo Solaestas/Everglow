@@ -1,4 +1,4 @@
-﻿namespace Everglow.Core.PlayerUtils;
+﻿namespace Everglow.Common.PlayerUtils;
 
 public class WeaponPrefix
 {

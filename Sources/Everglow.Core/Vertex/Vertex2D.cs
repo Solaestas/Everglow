@@ -1,4 +1,4 @@
-﻿namespace Everglow.Core.Vertex;
+﻿namespace Everglow.Common.Vertex;
 
 public struct Vertex2D : IVertexType
 {

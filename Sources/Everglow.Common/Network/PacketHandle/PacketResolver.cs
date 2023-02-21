@@ -1,4 +1,4 @@
-namespace Everglow.Core.Network.PacketHandle
+namespace Everglow.Common.Network.PacketHandle
 {
 	using Packet_Id = Int32;
 

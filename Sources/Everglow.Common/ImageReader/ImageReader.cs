@@ -1,6 +1,6 @@
 ﻿using Color = Microsoft.Xna.Framework.Color;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
-namespace Everglow.Core.ImageReader;
+namespace Everglow.Common.ImageReader;
 
 internal struct ImageKeyPoint
 {

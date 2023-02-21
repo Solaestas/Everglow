@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 	<Import Project="..\Shared.props" />
+	<PropertyGroup>
+		<RootNamespace>Everglow.Common</RootNamespace>
+	</PropertyGroup>
 	<ItemGroup>
 		<None Remove="UI\Images\HorizontalScrollbar.png" />
 		<None Remove="UI\Images\HorizontalScrollbarInner.png" />

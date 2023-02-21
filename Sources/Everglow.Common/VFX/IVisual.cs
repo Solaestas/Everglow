@@ -1,11 +1,8 @@
-﻿using Everglow.Common.VFX;
-using Everglow.Core.Enums;
-using Everglow.Core.ModuleSystem;
+﻿using Everglow.Common.Enums;
+using Everglow.Common.ModuleSystem;
 
-namespace Everglow.Core.VFX.Visuals;
+namespace Everglow.Common.VFX;
 
-[ModuleDependency(typeof(VFXManager))]
-[ClientOnlyModule]
 public interface IVisual : IModule
 {
 	/// <summary>

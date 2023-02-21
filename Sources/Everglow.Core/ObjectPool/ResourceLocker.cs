@@ -1,4 +1,4 @@
-﻿namespace Everglow.Core.ObjectPool
+﻿namespace Everglow.Common.ObjectPool
 {
 	/// <summary>
 	/// 一个可独占资源的句柄，拥有者获得对在对象池中的对象的访问权，使用结束后需要调用Release来释放对对象池中对象的访问权

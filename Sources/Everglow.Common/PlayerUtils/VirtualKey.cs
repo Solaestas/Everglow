@@ -1,7 +1,6 @@
-﻿using Everglow.Core.NetUtils;
-using Everglow.Core;
+﻿using Everglow.Common.NetUtils;
 
-namespace Everglow.Core.PlayerUtils;
+namespace Everglow.Common.PlayerUtils;
 
 internal class VirtualKey : INetUpdate<bool>
 {

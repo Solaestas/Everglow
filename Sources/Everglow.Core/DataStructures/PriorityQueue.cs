@@ -1,4 +1,4 @@
-﻿namespace Everglow.Core.DataStructures
+﻿namespace Everglow.Common.DataStructures
 {
 	/// <summary>
 	/// 优先队列数据结构，使用小根堆实现。Pop，Push复杂度保证O(log n)

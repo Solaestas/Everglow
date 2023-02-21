@@ -2,7 +2,7 @@
 using Terraria.GameContent;
 using Terraria.ID;
 
-namespace Everglow.Core.UI.UIElements
+namespace Everglow.Common.UI.UIElements
 {
 	internal delegate bool CheckPutSlotCondition(Item mouseItem);
 	internal delegate void ExchangeItemHandler(BaseElement target);

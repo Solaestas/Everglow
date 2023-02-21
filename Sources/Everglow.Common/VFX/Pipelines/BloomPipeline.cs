@@ -1,7 +1,6 @@
-﻿using Everglow.Common.VFX;
-using Everglow.Core.Enums;
+﻿using Everglow.Common.Enums;
 
-namespace Everglow.Core.VFX.Pipelines
+namespace Everglow.Common.VFX.Pipelines
 {
 	internal class BloomPipeline : PostPipeline
 	{
@@ -13,12 +12,12 @@ namespace Everglow.Core.VFX.Pipelines
 
 		public override void Load()
 		{
-			Everglow.MainThreadContext.AddTask(() =>
+			VFXManager.Instance.MainThread.AddTask(() =>
 			{
 				AllocateRenderTarget();
 			});
 			blurScreens = new RenderTarget2D[MAX_BLUR_LEVELS];
-			Everglow.HookSystem.AddMethod(() =>
+			VFXManager.Instance.HookSystem.AddMethod(() =>
 			{
 				for (int i = 0; i < blurScreens.Length; i++)
 				{

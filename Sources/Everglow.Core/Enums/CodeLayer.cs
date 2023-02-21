@@ -1,29 +1,29 @@
-﻿namespace Everglow.Core.Enums;
+﻿namespace Everglow.Common.Enums;
 
 public enum CodeLayer
 {
-    None,
+	None,
 
-    //绘制
-    PostDrawFilter,
+	//绘制
+	PostDrawFilter,
 
-    PostDrawTiles,
-    PostDrawProjectiles,
-    PostDrawDusts,
-    PostDrawNPCs,
-    PostDrawPlayers,
-    PostDrawMapIcons,
-    PostDrawBG,
+	PostDrawTiles,
+	PostDrawProjectiles,
+	PostDrawDusts,
+	PostDrawNPCs,
+	PostDrawPlayers,
+	PostDrawMapIcons,
+	PostDrawBG,
 
-    //加载
-    PostUpdateEverything,
-    PostUpdateProjectiles,
-    PostUpdatePlayers,
-    PostUpdateNPCs,
-    PostUpdateDusts,
-    PostUpdateInvasions,
-    PostEnterWorld_Single,
-    PostEnterWorld_Server,
-    PostExitWorld_Single,
-    ResolutionChanged
+	//加载
+	PostUpdateEverything,
+	PostUpdateProjectiles,
+	PostUpdatePlayers,
+	PostUpdateNPCs,
+	PostUpdateDusts,
+	PostUpdateInvasions,
+	PostEnterWorld_Single,
+	PostEnterWorld_Server,
+	PostExitWorld_Single,
+	ResolutionChanged
 }

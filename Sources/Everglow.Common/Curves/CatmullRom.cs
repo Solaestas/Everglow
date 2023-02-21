@@ -1,4 +1,4 @@
-﻿namespace Everglow.Core.Curves;
+﻿namespace Everglow.Common.Curves;
 
 public static class CatmullRom
 {

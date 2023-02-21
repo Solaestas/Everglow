@@ -2,7 +2,7 @@
 
 using Terraria.ModLoader.Config;
 
-namespace Everglow.Core.FeatureFlags
+namespace Everglow.Common.FeatureFlags
 {
 	public class EverglowConfig : ModConfig
 	{

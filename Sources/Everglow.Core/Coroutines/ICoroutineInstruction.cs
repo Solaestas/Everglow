@@ -1,4 +1,4 @@
-﻿namespace Everglow.Core.Coroutines
+﻿namespace Everglow.Common.Coroutines
 {
 	/// <summary>
 	/// 协程的控制指令

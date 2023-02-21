@@ -1,6 +1,6 @@
-﻿using Everglow.Core.DataStructures;
+﻿using Everglow.Common.DataStructures;
 
-namespace Everglow.Core.Utils
+namespace Everglow.Common.Utils
 {
 	public static class MathUtils
 	{

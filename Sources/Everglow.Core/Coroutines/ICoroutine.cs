@@ -1,4 +1,4 @@
-﻿namespace Everglow.Core.Coroutines
+﻿namespace Everglow.Common.Coroutines
 {
 	public interface ICoroutine
 	{

@@ -1,4 +1,4 @@
-﻿namespace Everglow.Core.UI.UIElements
+﻿namespace Everglow.Common.UI.UIElements
 {
 	internal class UIContainerPanel : BaseElement
 	{
