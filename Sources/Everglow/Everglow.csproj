@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\Shared.props" />
+	<ItemGroup>
+		<PackageReference Include="SixLabors.ImageSharp" Version="2.1.2" />
+		<PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
+		<ProjectReference Include="..\**\*.csproj" />
+		<ProjectReference Remove="Everglow.csproj" />
+	</ItemGroup>
+</Project>

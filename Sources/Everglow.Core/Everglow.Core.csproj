@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\Shared.props" />
+	<ItemGroup>
+		<Reference Remove="$(tMLPath)" />
+		<Reference Remove="$(tMLDirectory)\Libraries\**\tModPorter.dll" />
+		<Reference Remove="$(tMLDirectory)\Libraries\**\TerrariaHooks.dll" />
+	</ItemGroup>
+</Project>

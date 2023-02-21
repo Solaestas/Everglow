@@ -1,0 +1,16 @@
+<Project>
+    <Import Project="..\..\tModLoader.props" />
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
+	<ItemGroup>
+		<PackageReference  Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.0" ExcludeAssets="runtime" />
+		<Publicize Include="tModLoader" />
+		<Publicize Include="MonoMod.RuntimeDetour" />
+		<Publicize Include="MonoMod.Utils" />
+	</ItemGroup>
+</Project>
