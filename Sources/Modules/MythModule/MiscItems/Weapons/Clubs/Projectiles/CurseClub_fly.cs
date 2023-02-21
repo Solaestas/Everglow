@@ -3,11 +3,12 @@ using Everglow.Sources.Commons.Function.Curves;
 using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MEACModule;
 using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.CursedFlames;
 using Terraria.GameContent.Shaders;
 
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectiles
 {
-    public class ChlorophyteClub_fly : ModProjectile, IWarpProjectile
+    public class CurseClub_fly : ModProjectile, IWarpProjectile
     {
         /// <summary>
         /// 角速度
@@ -67,13 +68,52 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
             trailVecs = new Queue<Vector2>(trailLength + 1);
         }
 
-        private int FlyClubCooling = 0;
+        private void GenerateVFX()
+        {
+            Vector2 v2 = Projectile.velocity;
+            float mulVelocity = 0.3f + Omega + v2.Length() / 10f;
+            mulVelocity *= 0.8f;
+            Vector2 v0 = new Vector2(1, 1);
+            v0 *= Main.rand.NextFloat(Main.rand.NextFloat(HitLength * 0.75f, HitLength), HitLength);
+            v0.X *= Projectile.spriteDirection;
+            if (Main.rand.NextBool(2))
+            {
+                v0 *= -1;
+            }
+            v0 = v0.RotatedBy(Projectile.rotation + Main.rand.NextFloat(Omega));
+            float Speed = Math.Min(Omega * 0.15f, 0.061f);
+            Vector2 v1 = new Vector2(-v0.Y * Speed, v0.X * Speed);
+
+            CursedFlameDust cf = new CursedFlameDust
+            {
+                velocity = v1 + v2 * 0.5f,
+                Active = true,
+                Visible = true,
+                position = Projectile.Center + v0,
+                maxTime = Main.rand.Next(17, 32),
+                ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.01f, 0.01f), Main.rand.NextFloat(3.6f, 10f) * mulVelocity }
+            };
+            VFXManager.Add(cf);
+        }
+        private void GenerateDust()
+        {
+            Vector2 v0 = new Vector2(1, 1);
+            v0 *= Main.rand.NextFloat(Main.rand.NextFloat(1, HitLength), HitLength);
+            v0.X *= Projectile.spriteDirection;
+            if (Main.rand.NextBool(2))
+            {
+                v0 *= -1;
+            }
+            v0 = v0.RotatedBy(Projectile.rotation);
+            float Speed = Math.Min(Omega * 0.5f, 0.221f);
+            Dust D = Dust.NewDustDirect(Projectile.Center + v0 - new Vector2(4)/*Dust的Size=8x8*/, 0, 0, DustID.CursedTorch, -v0.Y * Speed, v0.X * Speed, 150, default, Main.rand.NextFloat(0.4f, 1.1f));
+            D.noGravity = true;
+            D.velocity = new Vector2(-v0.Y * Speed, v0.X * Speed);
+        }
+
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            if(FlyClubCooling == 0 && Omega > 0.1f)
-            {
-
-            }
+            target.AddBuff(BuffID.CursedInferno, (int)(818 * Omega));
         }
         public virtual BlendState TrailBlendState()
         {
@@ -88,7 +128,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
             float power = Math.Max(StrikeOmegaDecrease - MathF.Pow(target.knockBackResist / 4f, 3), MinStrikeOmegaDecrease);
 
             ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
-            float ShakeStrength = Omega * 0.4f;
+            float ShakeStrength = Omega * 0.04f;
             Omega *= power;
             damage = (int)(damage / power);
             Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 12f * ShakeStrength, 100)).RotatedByRandom(6.283);
@@ -97,6 +137,25 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
         }
         public override void AI()
         {
+            if (Omega > 0.1f)
+            {
+                for (float d = 0.1f; d < Omega; d += 0.1f)
+                {
+                    GenerateDust();
+                    if(Main.rand.NextBool(3))
+                    {
+                        GenerateVFX();
+                    }
+                }
+            }
+            else
+            {
+                GenerateDust();
+                if (Main.rand.NextBool(3))
+                {
+                    GenerateVFX();
+                }
+            }
             if (DamageStartValue == 0)
             {
                 DamageStartValue = Projectile.damage;
@@ -115,49 +174,26 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
                 Projectile.spriteDirection = player.direction;
                 if(Projectile.timeLeft == 550)
                 {
-                    Projectile.velocity = Utils.SafeNormalize(vT0, Vector2.Zero) * 55;
+                    Projectile.velocity = Utils.SafeNormalize(vT0, Vector2.Zero) * 15;
                     Projectile.friendly = true;
                 }
-                if(Projectile.timeLeft == 558)
-                {
-                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<ChlorophyteClub_VFX>(), Projectile.damage, Projectile.knockBack * 0.4f, Projectile.owner, Omega);
-                }
-                float value = (580 - Projectile.timeLeft) / 70f;
-                Lighting.AddLight(Projectile.Center,value * 2f, value * 6f, value);
             }
             if (Projectile.timeLeft < 550 && Projectile.timeLeft > 500)
             {
-                Projectile.velocity *= 0.93f;
+                Projectile.velocity *= 0.985f;
             }
             if (Projectile.timeLeft < 500)
             {
-                Vector2 ProjToPlayer = player.MountedCenter - Projectile.Center;
-                if(ProjToPlayer.Length() < 100 && Projectile.timeLeft > 20)
+                Projectile.velocity *= 0.96f;
+                if(Projectile.timeLeft > 20 && Omega < 0.1f)
                 {
                     Projectile.timeLeft = 20;
                 }
-                ProjToPlayer = Utils.SafeNormalize(ProjToPlayer, Vector2.Zero) * 55;
-                var value = Math.Max((Projectile.timeLeft - 400) / 100f, 0);
-                Projectile.velocity = ProjToPlayer * (1 - value) + Projectile.velocity * value;
-            }
-            if (Projectile.timeLeft < 20)
-            {
-                Vector2 MouseToPlayer = Main.MouseWorld - player.MountedCenter;
-                MouseToPlayer = Vector2.Normalize(MouseToPlayer) * 15f;
-                Projectile.Center = player.MountedCenter + MouseToPlayer;
-                Projectile.velocity *= 0;
             }
             Projectile.localNPCHitCooldown = (int)(MathF.PI / (Math.Max(Omega, 0.157)));
-            //这个受击冷却是个麻烦的问题                                                                          
-            //旋转一周打两次，理论结果是Pi/Omega
-            //存在角加速过程
-            //localNPCHitCooldown一旦命中就会开始计时，以当时的localNPCHitCooldown值倒计时。
-            //这个计时器还没归零，下一击已然命中。则这一击失效。
-            //如果设计极短，又会重复判断
-            //而且还考虑到怪物会动
 
             Projectile.rotation += Omega;
-            if (Projectile.timeLeft > 120)
+            if (Projectile.timeLeft > 550)
             {
                 float MeleeSpeed = player.GetAttackSpeed(Projectile.DamageType);
                 if (Omega < MeleeSpeed * MaxOmega)
@@ -167,7 +203,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
             }
             else
             {
-                Omega *= 0.9f;
+                Omega *= 0.98f;
             }
             Vector2 HitRange = new Vector2(HitLength, HitLength * Projectile.spriteDirection).RotatedBy(Projectile.rotation) * Projectile.scale;
             trailVecs.Enqueue(HitRange);
@@ -182,7 +218,51 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
             }
 
             ProduceWaterRipples(new Vector2(HitLength * Projectile.scale));
+            float distance = 200f;
+            
+            if(target == -1)
+            {
+                foreach (var npc in Main.npc)
+                {
+                    if (npc.active)
+                    {
+                        if (npc.CanBeChasedBy())
+                        {
+                            if (!npc.dontTakeDamage)
+                            {
+                                if (!npc.friendly)
+                                {
+                                    if ((npc.Center - Projectile.Center).Length() < distance)
+                                    {
+                                        target = npc.whoAmI;
+                                        distance = (npc.Center - Projectile.Center).Length();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if(target >= 0)
+            {
+                if(!Main.npc[target].active)
+                {
+                    target = -1;
+                    return;
+                }
+                Vector2 addV = Utils.SafeNormalize(Main.npc[target].Center - Projectile.Center, Vector2.Zero);
+                Projectile.velocity = addV * Projectile.velocity.Length() * 0.15f + Projectile.velocity * 0.9f;
+
+                if (Projectile.timeLeft > 100)
+                {
+                    if (Omega < MaxOmega)
+                    {
+                        Omega += Beta * 1f;
+                    }
+                }
+            }
         }
+        internal int target = -1;
         public override bool PreDraw(ref Color lightColor)
         {
             SpriteEffects effects = SpriteEffects.None;
@@ -191,13 +271,14 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
                 effects = SpriteEffects.FlipHorizontally;
             }
             Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
-            lightColor.A = 0;
-            Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, lightColor * Omega * 2, Projectile.rotation, texture.Size() / 2f, Projectile.scale, effects, 0f);
+            float colorValue = MathF.Sqrt(Omega / 0.4f);
+            Color color = new Color(colorValue, colorValue, colorValue, colorValue);
+            Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, color, Projectile.rotation, texture.Size() / 2f, Projectile.scale, effects, 0f);
             for (int i = 0; i < 5; i++)
             {
-                float alp = Omega / 0.4f;
-                Color color2 = new Color((int)(lightColor.R * (5 - i) / 5f * alp), (int)(lightColor.G * (5 - i) / 5f * alp), (int)(lightColor.B * (5 - i) / 5f * alp), 0);
-                Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, color2 * Omega * 2, Projectile.rotation - i * 0.75f * Omega, texture.Size() / 2f, Projectile.scale, effects, 0f);
+                float alp = Omega / 0.4f + 2.5f;
+                Color color2 = new Color((int)((5 - i) / 5f * alp), (int)((5 - i) / 5f * alp), (int)((5 - i) / 5f * alp), 0);
+                Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, color2, Projectile.rotation - i * 0.75f * Omega, texture.Size() / 2f, Projectile.scale, effects, 0f);
             }
             DrawTrail();
             PostPreDraw();
@@ -228,41 +309,39 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
             Vector2[] trail = SmoothTrail.ToArray();
             List<Vertex2D> bars = new List<Vertex2D>();
 
-            for (int i = 0; i < length; i++)
+            float fade = Omega * 2f + 0.2f;
+            Color color2 = new Color(Math.Min(fade * 0.6f, 0.6f), fade, fade * 0.01f, fade * 0.5f);
+            if(Projectile.timeLeft < 20)
             {
-                float factor = i / (length - 1f);
-                float w = TrailAlpha(factor);
-                bars.Add(new Vertex2D(Projectile.Center + trail[i] * 0.1f * Projectile.scale, Color.White, new Vector3(factor, 1, 0f)));
-                bars.Add(new Vertex2D(Projectile.Center + trail[i] * Projectile.scale, Color.White, new Vector3(factor, 0, w)));
+                color2 *= Projectile.timeLeft / 20f;
             }
-            bars.Add(new Vertex2D(Projectile.Center, Color.Transparent, new Vector3(0, 0, 0)));
-            bars.Add(new Vertex2D(Projectile.Center, Color.Transparent, new Vector3(0, 0, 0)));
             for (int i = 0; i < length; i++)
             {
                 float factor = i / (length - 1f);
-                float w = TrailAlpha(factor);
-                bars.Add(new Vertex2D(Projectile.Center - trail[i] * 0.1f * Projectile.scale, Color.White, new Vector3(factor, 1, 0f)));
-                bars.Add(new Vertex2D(Projectile.Center - trail[i] * Projectile.scale, Color.White, new Vector3(factor, 0, w)));
+                float w = 1 - Math.Abs((trail[i].X * 0.5f + trail[i].Y * 0.5f) / trail[i].Length());
+                float w2 = MathF.Sqrt(TrailAlpha(factor));
+                w *= w2 * w;
+                bars.Add(new Vertex2D(Projectile.Center + trail[i] * 0.5f * Projectile.scale - Main.screenPosition, color2, new Vector3(factor, 1, 0f)));
+                bars.Add(new Vertex2D(Projectile.Center + trail[i] * 1.0f * Projectile.scale - Main.screenPosition, color2, new Vector3(factor, 0, w)));
+            }
+            bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, Color.Transparent, new Vector3(0, 0, 0)));
+            bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, Color.Transparent, new Vector3(0, 0, 0)));
+            for (int i = 0; i < length; i++)
+            {
+                float factor = i / (length - 1f);
+                float w = 1 - Math.Abs((trail[i].X * 0.5f + trail[i].Y * 0.5f) / trail[i].Length());
+                float w2 = MathF.Sqrt(TrailAlpha(factor));
+                w *= w2 * w;
+                bars.Add(new Vertex2D(Projectile.Center - trail[i] * 0.5f * Projectile.scale - Main.screenPosition, color2, new Vector3(factor, 1, 0f)));
+                bars.Add(new Vertex2D(Projectile.Center - trail[i] * 1.0f * Projectile.scale - Main.screenPosition, color2, new Vector3(factor, 0, w)));
             }
             Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone);
-            var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-            var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-            Effect MeleeTrail = MythContent.QuickEffect("MiscItems/Weapons/Clubs/Projectiles/ClubTrail");
-            MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
-            Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+            Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("MiscItems/Weapons/Clubs/Projectiles/CurseClub_trail");
 
-            MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Weapons/Clubs/Projectiles/ChlorophyteClub_light").Value);
             Vector4 lightColor = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16)).ToVector4();
             lightColor.W = 0.7f * Omega;
-            if(Projectile.timeLeft > 550)
-            {
-                float value = (580 - Projectile.timeLeft) / 90f;
-                lightColor = new Vector4(value * 2, value * 6, value, value);
-            }
-            MeleeTrail.Parameters["Light"].SetValue(lightColor);
-            MeleeTrail.CurrentTechnique.Passes["TrailByOrigTex"].Apply();
 
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
             Main.spriteBatch.End();

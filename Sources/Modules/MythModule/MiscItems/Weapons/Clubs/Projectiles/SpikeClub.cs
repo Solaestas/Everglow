@@ -1,7 +1,6 @@
 ﻿using Everglow.Sources.Commons.Function.Curves;
 using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MythModule.Common;
-using System.Collections.Generic;
 
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectiles
 {
@@ -9,22 +8,15 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
     {
         public override void SetDef()
         {
-            HitLength = 45f;
+            HitLength = 32f;
             ReflectStrength = 6f;
         }
-        internal List<Vector2> MoonBladeI = new List<Vector2>();
-        internal List<Vector2> MoonBladeII = new List<Vector2>();
-        internal List<Vector2> MoonBladeIII = new List<Vector2>();
-        internal List<Vector2> MoonBladeIV = new List<Vector2>();
-        internal int timeI = 60;
-        internal int timeII = 60;
-        internal int timeIII = 60;
-        internal int timeIV = 60;
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
             base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
             int k = (int)(Omega * 10);
-            for (int x = 0; x < Main.rand.Next(k); x++)
+            k = Main.rand.Next(k * 2);
+            for (int x = 0; x < k; x++)
             {
                 target.StrikeNPC((int)(Projectile.damage * 0.5f * Omega), 0, 1);
             }
@@ -35,6 +27,14 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
         {
             target.AddBuff(BuffID.Bleeding, 600);
         }
+        internal List<Vector2> MoonBladeI = new List<Vector2>();
+        internal List<Vector2> MoonBladeII = new List<Vector2>();
+        internal List<Vector2> MoonBladeIII = new List<Vector2>();
+        internal List<Vector2> MoonBladeIV = new List<Vector2>();
+        internal int timeI = 60;
+        internal int timeII = 60;
+        internal int timeIII = 60;
+        internal int timeIV = 60;
         private void DrawMoon(List<Vector2> listVec, float timeLeft)
         {
             Main.spriteBatch.End();
@@ -99,16 +99,26 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
             listVec = new List<Vector2>();
             if(Main.rand.NextBool(2))
             {
-                listVec.Add(trailVecs.ToList()[1] * Main.rand.NextFloat(0.75f, Math.Min(1.45f, 1 + Omega * 1.1f)));
+                listVec.Add(trailVecs.ToList()[1] * Main.rand.NextFloat(0.95f, Math.Min(1.75f, 1 + Omega * 1.5f)));
             }
             else
             {
-                listVec.Add(trailVecs.ToList()[1] * -Main.rand.NextFloat(0.75f, Math.Min(1.45f, 1 + Omega * 1.1f)));
+                listVec.Add(trailVecs.ToList()[1] * -Main.rand.NextFloat(0.95f, Math.Min(1.75f, 1 + Omega * 1.5f)));
             }
         }
         private void DeactivateMoon(ref List<Vector2> listVec)
         {
             listVec.Clear();
+        }
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+        {
+            float point = 0;
+            Vector2 HitRange = new Vector2(HitLength, HitLength * Projectile.spriteDirection).RotatedBy(Projectile.rotation) * Projectile.scale;
+            if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center - HitRange / 32f * 45f, Projectile.Center + HitRange / 32f * 45f, 2 * HitLength / 32f * Omega / 0.3f, ref point))
+            {
+                return true;
+            }
+            return false;
         }
         public override void PostPreDraw()
         {
@@ -148,8 +158,8 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
                 float w = 1 - Math.Abs((trail[i].X * 0.5f + trail[i].Y * 0.5f) / trail[i].Length());
                 float w2 = MathF.Sqrt(TrailAlpha(factor));
                 w *= w2 * w;
-                bars.Add(new Vertex2D(Projectile.Center - trail[i] * 0.5f * Projectile.scale, Color.White, new Vector3(factor, 1, 0f)));
-                bars.Add(new Vertex2D(Projectile.Center - trail[i] * 0.8f * Projectile.scale, Color.White, new Vector3(factor, 0, w * ReflectStrength)));
+                bars.Add(new Vertex2D(Projectile.Center - trail[i] * 0.6f * Projectile.scale, Color.White, new Vector3(factor, 1, 0f)));
+                bars.Add(new Vertex2D(Projectile.Center - trail[i] * 1.0f * Projectile.scale, Color.White, new Vector3(factor, 0, w * ReflectStrength)));
             }
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone);
