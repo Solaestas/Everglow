@@ -171,21 +171,21 @@ public class VFXManager : IDisposable
 			visuals[layer] = new List<IVisualCollection>();
 			if (layer is CodeLayer.PostDrawNPCs or CodeLayer.PostDrawBG)
 			{
-				hookSystem.AddMethod(() =>
+				hookSystem.AddMethod(layer, () =>
 				{
 					Main.spriteBatch.End();
 					Draw(layer);
 					Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend,
 						SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullNone,
 						null, Main.GameViewMatrix.TransformationMatrix);
-				}, layer, $"VFX {layer}");
+				}, $"VFX {layer}");
 			}
 			else
 			{
-				hookSystem.AddMethod(() => Draw(layer), layer, $"VFX {layer}");
+				hookSystem.AddMethod(layer, () => Draw(layer), $"VFX {layer}");
 			}
 		}
-		hookSystem.AddMethod(Update, CodeLayer.PostUpdateEverything, "VFX Update");
+		hookSystem.AddMethod(CodeLayer.PostUpdateEverything, Update, "VFX Update");
 		mainThread.AddTask(() => tempRenderTarget = renderTargetPool.GetRenderTarget2D());
 	}
 

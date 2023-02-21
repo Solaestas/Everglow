@@ -17,7 +17,7 @@ namespace Everglow.Common.VFX.Pipelines
 				AllocateRenderTarget();
 			});
 			blurScreens = new RenderTarget2D[MAX_BLUR_LEVELS];
-			VFXManager.Instance.HookSystem.AddMethod(() =>
+			VFXManager.Instance.HookSystem.AddMethod(CodeLayer.ResolutionChanged, () =>
 			{
 				for (int i = 0; i < blurScreens.Length; i++)
 				{
@@ -25,7 +25,7 @@ namespace Everglow.Common.VFX.Pipelines
 				}
 				blurScreenSwap?.Dispose();
 				AllocateRenderTarget();
-			}, CodeLayer.ResolutionChanged, "Realloc RenderTarget");
+			}, "Realloc RenderTarget");
 			effect = ModContent.Request<Effect>("Everglow/Sources/Commons/Core/VFX/Effect/Bloom");
 		}
 

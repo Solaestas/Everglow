@@ -9,7 +9,4 @@
 		<Reference Remove="$(tMLDirectory)\Libraries\**\tModPorter.dll" />
 		<Reference Remove="$(tMLDirectory)\Libraries\**\TerrariaHooks.dll" />
 	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Hooks\" />
-	</ItemGroup>
 </Project>

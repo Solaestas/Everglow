@@ -1,85 +1,130 @@
-﻿using Everglow.Common.Enums;
+﻿using System.Reflection;
+using Everglow.Common.Enums;
+using Everglow.Common.Interfaces;
 using MonoMod.Cil;
+using MonoMod.RuntimeDetour;
 using MonoMod.Utils;
 using Terraria.Graphics.Renderers;
 
-namespace Everglow.Common;
+namespace Everglow.Common.Hooks;
 
-/// <summary>
-/// 对一个方法的管理，可以用来控制钩子是否启用
-/// </summary>
-[DebuggerDisplay("{name} : {enable ? \"Enable\" : \"Disable\"}")]
-public class ActionHandler
+public class OnHookHandler : IHookHandler
 {
-	public Action Action
-	{
-		get => action;
-		set
-		{
-			enable = value is not null;
-			action = value;
-		}
-	}
-
-	private Action action;
-	private string name;
-	private bool enable;
+	public Hook Hook { get; init; }
 
 	public bool Enable
 	{
-		get => enable;
-		set => enable = value;
+		get => Hook.IsApplied;
+		set
+		{
+			if (value)
+			{
+				Hook.Apply();
+			}
+			else
+			{
+				Hook.Undo();
+			}
+		}
 	}
-
-	public string Name => name;
-
-	public ActionHandler(Action action)
-	{
-		this.action = action;
-		name = action.ToString();
-		enable = true;
-	}
-
-	public ActionHandler(Action action, string name)
-	{
-		this.action = action;
-		this.name = name;
-		enable = true;
-	}
-
-	public ActionHandler()
-	{
-		action = null;
-		name = string.Empty;
-		enable = false;
-	}
-
-	public void Invoke() => action.Invoke();
-
-	public override string ToString() => name;
 }
 
-/// <summary>
-/// 钩子统一管理，不用继承一大堆ModSystem或者加很多的On，一些常见的加载时刻都写了
-/// </summary>
-public class HookSystem : ModSystem
+public class ILHookHandler : IHookHandler
 {
-	public HookSystem()
+	public ILHook Hook { get; init; }
+
+	public bool Enable
 	{
-		waitToRemove = new List<(CodeLayer op, ActionHandler handler)>();
-		methods = new Dictionary<CodeLayer, List<ActionHandler>>();
-		foreach (var op in validOpportunity)
+		get => Hook.IsApplied;
+		set
 		{
-			methods.Add(op, new List<ActionHandler>());
+			if (value)
+			{
+				Hook.Apply();
+			}
+			else
+			{
+				Hook.Undo();
+			}
+		}
+	}
+}
+
+public class HookHandler : IHookHandler
+{
+	public CodeLayer Layer { get; init; }
+	public Action Hook { get; init; }
+	public bool Enable { get; set; }
+}
+
+public class HookManager : ModSystem, IHookManager
+{
+	public IHookHandler AddHook(CodeLayer layer, Action hook)
+	{
+		var handler = new HookHandler
+		{
+			Layer = layer,
+			Hook = hook,
+		};
+		hooks[layer].Add(handler);
+		return handler;
+	}
+
+	public IHookHandler AddHook(MethodInfo target, Delegate hook)
+	{
+		var on = new Hook(target, hook);
+		monoHooks.Add(on);
+		return new OnHookHandler
+		{
+			Hook = on,
+		};
+	}
+
+	public IHookHandler AddHook(MethodInfo target, ILContext.Manipulator hook)
+	{
+		var il = new ILHook(target, hook);
+		monoHooks.Add(il);
+		return new ILHookHandler
+		{
+			Hook = il,
+		};
+	}
+
+	public void Dispose()
+	{
+		foreach (var hook in monoHooks)
+		{
+			hook.Dispose();
+		}
+		GC.SuppressFinalize(this);
+	}
+
+	public void RemoveHook(IHookHandler handler)
+	{
+		switch (handler)
+		{
+			case ILHookHandler il:
+				il.Hook.Dispose();
+				monoHooks.Remove(il.Hook);
+				break;
+
+			case OnHookHandler on:
+				on.Hook.Dispose();
+				monoHooks.Remove(on.Hook);
+				break;
+
+			case HookHandler hook:
+				hooks[hook.Layer].Remove(hook);
+				break;
 		}
 	}
 
-	private List<(CodeLayer op, ActionHandler handler)> waitToRemove;
+	private List<IHookHandler> waitToRemove = new();
 
-	public static readonly CodeLayer[] validOpportunity = new CodeLayer[]
+	private static readonly CodeLayer[] validLayers = new CodeLayer[]
 	{
             //Draw
-            CodeLayer.PostDrawFilter,
+        CodeLayer.PostDrawFilter,
 		CodeLayer.PostDrawTiles,
 		CodeLayer.PostDrawProjectiles,
 		CodeLayer.PostDrawDusts,
@@ -101,126 +146,18 @@ public class HookSystem : ModSystem
 		CodeLayer.ResolutionChanged
 	};
 
-	internal bool DisableDrawNPCs { get; set; } = false;
-	internal bool DisableDrawSkyAndHell { get; set; } = false;
-	internal bool DisableDrawBackground { get; set; } = false;
-	internal Dictionary<CodeLayer, List<ActionHandler>> methods;
+	public bool DisableDrawNPCs { get; set; } = false;
+	public bool DisableDrawSkyAndHell { get; set; } = false;
+	public bool DisableDrawBackground { get; set; } = false;
+	private Dictionary<CodeLayer, List<HookHandler>> hooks = validLayers.ToDictionary(l => l, l => new List<HookHandler>());
+	private List<IDisposable> monoHooks = new List<IDisposable>();
 
 	/// <summary>
 	/// 现在存在的问题就是，这里的method都是无参数的Action，但是如DrawMapIcon这样的方法就需要传参了，只好用这种这种定义字段的方法
 	/// </summary>
 	public (Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale) MapIconInfomation
 	{
-		get; internal set;
-	}
-
-	/// <summary>
-	/// 更新的计时器，PostUpateEverything后加一
-	/// </summary>
-	public static int UpdateTimer
-	{
 		get; private set;
-	}
-
-	/// <summary>
-	/// 绘制的计时器，PostDrawEverything后加一
-	/// </summary>
-	public static int DrawTimer
-	{
-		get; private set;
-	}
-
-	/// <summary>
-	/// 针对UI的计时器，暂停时也会加一
-	/// </summary>
-	public static int UITimer
-	{
-		get; private set;
-	}
-
-	/// <summary>
-	/// 在 <paramref name="op"/> 时执行 <paramref name="action"/>
-	/// </summary>
-	/// <param name="op"></param>
-	/// <param name="action"></param>
-	/// <param name="name">Handler的名字，方便查找</param>
-	/// <exception cref="ArgumentException"></exception>
-	public ActionHandler AddMethod(CodeLayer op, Action action, string name = null)
-	{
-		if (!validOpportunity.Contains(op))
-		{
-			//除非搞事不然应该不会执行这行代码
-			throw new ArgumentException("Invaild Opportunity");
-		}
-		var handler = new ActionHandler(action, name ?? action.ToString());
-		methods[op].Add(handler);
-		return handler;
-	}
-
-	public void AddMethod(ActionHandler handler, CodeLayer op)
-	{
-		if (!validOpportunity.Contains(op))
-		{
-			//除非搞事不然应该不会执行这行代码
-			throw new ArgumentException("Invaild Opportunity");
-		}
-		methods[op].Add(handler);
-	}
-
-	/// <summary>
-	/// 根据Name寻找方法
-	/// </summary>
-	/// <param name="name"></param>
-	/// <returns></returns>
-	public ActionHandler Find(string name, CodeLayer op = CodeLayer.None)
-	{
-		if (op == CodeLayer.None)
-		{
-			foreach (var vs in methods.Values)
-			{
-				foreach (var handler in vs)
-				{
-					if (handler.Name == name)
-					{
-						return handler;
-					}
-				}
-			}
-		}
-		else
-		{
-			foreach (var handler in methods[op])
-			{
-				if (handler.Name == name)
-				{
-					return handler;
-				}
-			}
-		}
-		return null;
-	}
-
-	/// <summary>
-	/// 根据Handler移除一个方法
-	/// </summary>
-	/// <param name="handler"></param>
-	/// <returns>是否成功移除</returns>
-	public bool Remove(ActionHandler handler)
-	{
-		foreach (var op in validOpportunity)
-		{
-			var handlers = methods[op];
-			for (int i = 0; i < handlers.Count; i++)
-			{
-				if (handler == handlers[i])
-				{
-					waitToRemove.Add((op, handler));
-					handler.Enable = false;
-					return true;
-				}
-			}
-		}
-		return false;
 	}
 
 	/// <summary>
@@ -228,9 +165,9 @@ public class HookSystem : ModSystem
 	/// </summary>
 	public void RemoveDisabledAction()
 	{
-		foreach (var op in validOpportunity)
+		foreach (var op in validLayers)
 		{
-			methods[op].RemoveAll(handler => !handler.Enable);
+			hooks[op].RemoveAll(handler => !handler.Enable);
 		}
 	}
 
@@ -280,7 +217,7 @@ public class HookSystem : ModSystem
 
 	internal void Invoke(CodeLayer op)
 	{
-		foreach (var handler in methods[op])
+		foreach (var handler in hooks[op])
 		{
 			if (handler.Enable)
 			{
@@ -309,7 +246,7 @@ public class HookSystem : ModSystem
 		UpdateTimer++;
 		foreach (var (op, handler) in waitToRemove)
 		{
-			methods[op].Remove(handler);
+			hooks[op].Remove(handler);
 		}
 	}
 
