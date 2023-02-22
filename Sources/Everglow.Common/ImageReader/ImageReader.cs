@@ -1,12 +1,17 @@
-﻿using Color = Microsoft.Xna.Framework.Color;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
+using Color = Microsoft.Xna.Framework.Color;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
+
 namespace Everglow.Common.ImageReader;
 
 internal struct ImageKeyPoint
 {
 	public int Row;
 	public int Column;
-};
+}
 
 internal static class ImageReader
 {
@@ -52,7 +57,8 @@ internal static class ImageReader
 	/// </summary>
 	/// <param name="path">路径，可以不带后缀名</param>
 	/// <returns></returns>
-	public static Image<TPixel> Read<TPixel>(string path) where TPixel : unmanaged, IPixel<TPixel>
+	public static Image<TPixel> Read<TPixel>(string path)
+		where TPixel : unmanaged, IPixel<TPixel>
 	{
 		path = ConvertImagePath(path);
 		using var memoryStream = new MemoryStream(ModContent.GetFileBytes(path));

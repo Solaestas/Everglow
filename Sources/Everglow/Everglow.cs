@@ -1,114 +1,58 @@
-﻿global using System;
+global using System;
 global using System.IO;
 global using Terraria;
 global using Terraria.ID;
 global using Terraria.ModLoader;
 using Everglow.Common;
+using Everglow.Common.Enums;
+using Everglow.Common.Hooks;
+using Everglow.Common.Interfaces;
 using Everglow.Common.ModuleSystem;
 using Everglow.Common.Network.PacketHandle;
 using Everglow.Common.ObjectPool;
+using Everglow.Common.VFX;
+using Humanizer;
 
-namespace Everglow
+namespace Everglow;
+
+public class Everglow : Mod
 {
-	public class Everglow : Mod
+	public static event Action OnPostSetupContent;
+
+	private PacketResolver m_packetResolver;
+
+	public override void Load()
 	{
-		/// <summary>
-		/// Get the instance of Everglow
-		/// </summary>
-		public static Everglow Instance
-		{
-			get
-			{
-				return m_instance;
-			}
-		}
+		Ins.SetInstance(
+			Logger,
+			Main.instance.GraphicsDevice,
+			new VisualQualityController(),
+			ModContent.GetInstance<HookManager>(),
+			new ModuleManager(),
+			new MainThreadContext(),
+			Main.netMode != NetmodeID.Server ? new RenderTargetPool() : null,
+			Main.netMode != NetmodeID.Server ? new VFXBatch() : null,
+			Main.netMode != NetmodeID.Server ? new VFXManager() : new FakeManager());
+		ModIns.SetInstance(this);
+		m_packetResolver = new PacketResolver(this);
+		Ins.ModuleManager.LoadAllModules();
+	}
 
-		/// <summary>
-		/// 获取 ModuleManager 实例
-		/// </summary>
-		public static ModuleManager ModuleManager
-		{
-			get
-			{
-				return Instance.m_moduleManager;
-			}
-		}
+	public override void PostSetupContent()
+	{
+		OnPostSetupContent?.Invoke();
+	}
 
-		/// <summary>
-		/// 获取 PacketResolver 实例
-		/// </summary>
-		public static PacketResolver PacketResolver
-		{
-			get
-			{
-				return Instance.m_packetResolver;
-			}
-		}
+	public override void Unload()
+	{
+		Ins.ModuleManager.UnloadAllModules();
+		Ins.DisposeAll();
+		ModIns.DisposeAll();
+		m_packetResolver = null;
+	}
 
-		/// <summary>
-		/// 获取HookSystem实例
-		/// </summary>
-		public static HookSystem HookSystem
-		{
-			get
-			{
-				return ModContent.GetInstance<HookSystem>();
-			}
-		}
-
-		public static RenderTargetPool RenderTargetPool
-		{
-			get
-			{
-				return Instance.m_renderTargetPool;
-			}
-		}
-
-		private static Everglow m_instance;
-		public static event Action OnPostSetupContent;
-
-		private ModuleManager m_moduleManager;
-		private PacketResolver m_packetResolver;
-		private RenderTargetPool m_renderTargetPool;
-		public Everglow()
-		{
-			m_instance = this;
-
-			m_moduleManager = new ModuleManager();
-
-			if (Main.netMode != NetmodeID.Server)
-			{
-				m_renderTargetPool = new RenderTargetPool();
-			}
-
-			m_packetResolver = new PacketResolver();
-		}
-
-		public override void Load()
-		{
-			HookSystem.HookLoad();
-			m_moduleManager.LoadAllModules();
-		}
-
-		public override void PostSetupContent()
-		{
-			OnPostSetupContent?.Invoke();
-		}
-
-		public override void Unload()
-		{
-			m_moduleManager.UnloadAllModules();
-			HookSystem.HookUnload();
-
-
-			m_packetResolver = null;
-			m_moduleManager = null;
-			m_instance = null;
-		}
-
-		public override void HandlePacket(BinaryReader reader, int whoAmI)
-		{
-			m_packetResolver.Resolve(reader, whoAmI);
-		}
+	public override void HandlePacket(BinaryReader reader, int whoAmI)
+	{
+		m_packetResolver.Resolve(reader, whoAmI);
 	}
 }

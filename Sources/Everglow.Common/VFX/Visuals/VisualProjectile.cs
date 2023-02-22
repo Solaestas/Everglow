@@ -1,4 +1,6 @@
-﻿using Everglow.Common.Enums;
+using Everglow.Common.Enums;
+using Everglow.Common.Interfaces;
+using Terraria.ID;
 
 namespace Everglow.Common.VFX.Visuals;
 
@@ -10,10 +12,6 @@ internal abstract class VisualProjectile : ModProjectile, IVisual
 
 	public bool Visible => !Projectile.hide && VFXManager.InScreen(Projectile.position, ProjectileID.Sets.DrawScreenCheckFluff[Type]);
 
-	public new int Type => throw new NotImplementedException();
-
-	public string Name => throw new NotImplementedException();
-
 	public virtual void Draw()
 	{
 	}
@@ -22,7 +20,7 @@ internal abstract class VisualProjectile : ModProjectile, IVisual
 	{
 		if (!Main.gameMenu)
 		{
-			VFXManager.Add(this);
+			Ins.VFXManager.Add(this);
 		}
 	}
 
@@ -33,15 +31,5 @@ internal abstract class VisualProjectile : ModProjectile, IVisual
 
 	public void Update()
 	{
-	}
-
-	public void Load()
-	{
-		throw new NotImplementedException();
-	}
-
-	public void Unload()
-	{
-		throw new NotImplementedException();
 	}
 }

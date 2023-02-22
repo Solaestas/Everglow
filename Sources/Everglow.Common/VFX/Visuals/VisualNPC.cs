@@ -1,4 +1,5 @@
-﻿using Everglow.Common.Enums;
+using Everglow.Common.Enums;
+using Everglow.Common.Interfaces;
 
 namespace Everglow.Common.VFX.Visuals;
 
@@ -10,10 +11,6 @@ public abstract class VisualNPC : ModNPC, IVisual
 
 	public bool Visible => !NPC.hide && VFXManager.InScreen(NPC.position, 100);
 
-	public new int Type => throw new NotImplementedException();
-
-	public string Name => throw new NotImplementedException();
-
 	public virtual void Draw()
 	{
 	}
@@ -22,7 +19,7 @@ public abstract class VisualNPC : ModNPC, IVisual
 	{
 		if (!Main.gameMenu)
 		{
-			VFXManager.Add(this);
+			Ins.VFXManager.Add(this);
 		}
 	}
 
@@ -32,15 +29,5 @@ public abstract class VisualNPC : ModNPC, IVisual
 
 	public void Update()
 	{
-	}
-
-	public void Load()
-	{
-		throw new NotImplementedException();
-	}
-
-	public void Unload()
-	{
-		throw new NotImplementedException();
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using Everglow.Common.Enums;
+using Everglow.Common.Interfaces;
 
 namespace Everglow.Common.VFX;
 
@@ -8,10 +9,15 @@ namespace Everglow.Common.VFX;
 public abstract class Visual : IVisual
 {
 	public abstract CodeLayer DrawLayer { get; }
+
 	public virtual bool Active { get; set; } = true;
+
 	public virtual bool Visible { get; set; } = true;
+
 	public int Type => VFXManager.Instance.GetVisualType(this);
+
 	public virtual string Name => GetType().Name;
+
 	public Visual() => OnSpawn();
 
 	public abstract void Draw();

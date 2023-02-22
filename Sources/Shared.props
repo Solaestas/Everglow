@@ -6,8 +6,10 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <PlatformTarget>AnyCPU</PlatformTarget>
         <LangVersion>latest</LangVersion>
+        <NoWarn>$(NoWarn);CS0436</NoWarn>
     </PropertyGroup>
 	<ItemGroup>
+		<PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
 		<PackageReference  Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.0" ExcludeAssets="runtime" />
 		<Publicize Include="tModLoader" />
 		<Publicize Include="MonoMod.RuntimeDetour" />

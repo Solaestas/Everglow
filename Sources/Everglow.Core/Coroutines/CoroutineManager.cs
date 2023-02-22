@@ -1,4 +1,4 @@
-﻿namespace Everglow.Common.Coroutines
+namespace Everglow.Common.Coroutines
 {
 	/// <summary>
 	/// 管理所有协程运行器的类，支持异步地发起新的协程
@@ -6,7 +6,6 @@
 	public class CoroutineManager
 	{
 		private LinkedList<ICoroutine> m_coroutines;
-		private List<ICoroutine> m_coroutinesToStop;
 
 		public CoroutineManager()
 		{

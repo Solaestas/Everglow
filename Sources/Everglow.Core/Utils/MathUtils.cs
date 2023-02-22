@@ -32,7 +32,7 @@ namespace Everglow.Common.Utils
 		/// <returns></returns>
 		public static Vector2 Approach(this Vector2 val, Vector2 target, float maxMove)
 		{
-			if (val.Distance(target) < maxMove)
+			if (Vector2.Distance(val, target) < maxMove)
 			{
 				return target;
 			}

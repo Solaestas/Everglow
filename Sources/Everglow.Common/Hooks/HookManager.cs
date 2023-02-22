@@ -11,6 +11,7 @@ namespace Everglow.Common.Hooks;
 public class OnHookHandler : IHookHandler
 {
 	public Hook Hook { get; init; }
+	public string Name => Hook.Target.Name;
 
 	public bool Enable
 	{
@@ -32,7 +33,7 @@ public class OnHookHandler : IHookHandler
 public class ILHookHandler : IHookHandler
 {
 	public ILHook Hook { get; init; }
-
+	public string Name => Hook.Method.Name;
 	public bool Enable
 	{
 		get => Hook.IsApplied;
@@ -50,22 +51,17 @@ public class ILHookHandler : IHookHandler
 	}
 }
 
-public class HookHandler : IHookHandler
+public record HookHandler(CodeLayer Layer, dynamic Hook, string Name) : IHookHandler 
 {
-	public CodeLayer Layer { get; init; }
-	public Action Hook { get; init; }
 	public bool Enable { get; set; }
 }
 
 public class HookManager : ModSystem, IHookManager
 {
-	public IHookHandler AddHook(CodeLayer layer, Action hook)
+
+	public IHookHandler AddHook(CodeLayer layer, Delegate hook, string name = default)
 	{
-		var handler = new HookHandler
-		{
-			Layer = layer,
-			Hook = hook,
-		};
+		var handler = new HookHandler(layer, hook, name ?? string.Empty);
 		hooks[layer].Add(handler);
 		return handler;
 	}
@@ -119,12 +115,9 @@ public class HookManager : ModSystem, IHookManager
 		}
 	}
 
-	private List<IHookHandler> waitToRemove = new();
-
 	private static readonly CodeLayer[] validLayers = new CodeLayer[]
 	{
-            //Draw
-        CodeLayer.PostDrawFilter,
+		CodeLayer.PostDrawFilter,
 		CodeLayer.PostDrawTiles,
 		CodeLayer.PostDrawProjectiles,
 		CodeLayer.PostDrawDusts,
@@ -132,25 +125,28 @@ public class HookManager : ModSystem, IHookManager
 		CodeLayer.PostDrawPlayers,
 		CodeLayer.PostDrawMapIcons,
 		CodeLayer.PostDrawBG,
-            //Update
-            CodeLayer.PostUpdateEverything,
+
+		CodeLayer.PostUpdateEverything,
 		CodeLayer.PostUpdateProjectiles,
 		CodeLayer.PostUpdatePlayers,
 		CodeLayer.PostUpdateNPCs,
 		CodeLayer.PostUpdateDusts,
 		CodeLayer.PostUpdateInvasions,
-            //Misc
-            CodeLayer.PostEnterWorld_Single,
+
+		CodeLayer.PostEnterWorld_Single,
 		CodeLayer.PostExitWorld_Single,
 		CodeLayer.PostEnterWorld_Server,
-		CodeLayer.ResolutionChanged
+		CodeLayer.ResolutionChanged,
 	};
 
 	public bool DisableDrawNPCs { get; set; } = false;
+
 	public bool DisableDrawSkyAndHell { get; set; } = false;
+
 	public bool DisableDrawBackground { get; set; } = false;
+
 	private Dictionary<CodeLayer, List<HookHandler>> hooks = validLayers.ToDictionary(l => l, l => new List<HookHandler>());
-	private List<IDisposable> monoHooks = new List<IDisposable>();
+	private List<IDisposable> monoHooks = new();
 
 	/// <summary>
 	/// 现在存在的问题就是，这里的method都是无参数的Action，但是如DrawMapIcon这样的方法就需要传参了，只好用这种这种定义字段的方法
@@ -165,9 +161,9 @@ public class HookManager : ModSystem, IHookManager
 	/// </summary>
 	public void RemoveDisabledAction()
 	{
-		foreach (var op in validLayers)
+		foreach (var layer in validLayers)
 		{
-			hooks[op].RemoveAll(handler => !handler.Enable);
+			hooks[layer].RemoveAll(handler => !handler.Enable);
 		}
 	}
 
@@ -215,22 +211,19 @@ public class HookManager : ModSystem, IHookManager
 		ReflectionHelper.ResolveReflectionCache.Clear();
 	}
 
-	internal void Invoke(CodeLayer op)
+	internal void Invoke(CodeLayer layer)
 	{
-		foreach (var handler in hooks[op])
+		foreach (var handler in hooks[layer].Where(h => h.Enable))
 		{
-			if (handler.Enable)
+			try
 			{
-				try
-				{
-					handler.Invoke();
-				}
-				catch (Exception ex)
-				{
-					Debug.Fail($"{handler} 抛出了异常 {ex}");
-					Mod.Logger.Error($"{handler} 抛出了异常 {ex}");
-					handler.Enable = false;
-				}
+				handler.Hook.Invoke();
+			}
+			catch (Exception ex)
+			{
+				Debug.Fail(ex.ToString());
+				Ins.Logger.Error($"{handler} 抛出了异常 {ex}");
+				handler.Enable = false;
 			}
 		}
 	}
@@ -243,16 +236,6 @@ public class HookManager : ModSystem, IHookManager
 	public override void PostUpdateEverything()
 	{
 		Invoke(CodeLayer.PostUpdateEverything);
-		UpdateTimer++;
-		foreach (var (op, handler) in waitToRemove)
-		{
-			hooks[op].Remove(handler);
-		}
-	}
-
-	public override void UpdateUI(GameTime gameTime)
-	{
-		UITimer++;
 	}
 
 	public override void PostUpdateNPCs()
@@ -313,8 +296,20 @@ public class HookManager : ModSystem, IHookManager
 	private void Main_DrawMiscMapIcons(On_Main.orig_DrawMiscMapIcons orig, Main self, SpriteBatch spriteBatch, Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale, float drawScale, ref string mouseTextString)
 	{
 		orig(self, spriteBatch, mapTopLeft, mapX2Y2AndOff, mapRect, mapScale, drawScale, ref mouseTextString);
-		MapIconInfomation = (mapTopLeft, mapX2Y2AndOff, mapRect, mapScale);
-		Invoke(CodeLayer.PostDrawMapIcons);
+		foreach (var handler in hooks[CodeLayer.PostDrawMapIcons].Where(h => h.Enable))
+		{
+			try
+			{
+				handler.Hook.Invoke(mapTopLeft, mapX2Y2AndOff, mapRect, mapScale);
+			}
+			catch (Exception ex)
+			{
+				Debug.Fail(ex.ToString());
+				Ins.Logger.Error($"{handler} 抛出了异常 {ex}");
+				handler.Enable = false;
+			}
+		}
+
 	}
 
 	private void WorldGen_SaveAndQuit(On_WorldGen.orig_SaveAndQuit orig, Action callback)
@@ -331,7 +326,19 @@ public class HookManager : ModSystem, IHookManager
 
 	private void Main_OnResolutionChanged(Vector2 obj)
 	{
-		Invoke(CodeLayer.ResolutionChanged);
+		foreach (var handler in hooks[CodeLayer.ResolutionChanged].Where(h => h.Enable))
+		{
+			try
+			{
+				handler.Hook.Invoke(obj);
+			}
+			catch (Exception ex)
+			{
+				Debug.Fail(ex.ToString());
+				Ins.Logger.Error($"{handler} 抛出了异常 {ex}");
+				handler.Enable = false;
+			}
+		}
 	}
 
 	private void LegacyPlayerRenderer_DrawPlayers(On_LegacyPlayerRenderer.orig_DrawPlayers orig, LegacyPlayerRenderer self, Terraria.Graphics.Camera camera, IEnumerable<Player> players)

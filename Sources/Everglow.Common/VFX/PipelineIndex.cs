@@ -1,64 +1,64 @@
-﻿namespace Everglow.Common.VFX
+﻿namespace Everglow.Common.VFX;
+
+/// <summary>
+/// 表示一种IVisual所需的所有Pipeline的排列
+/// </summary>
+internal class PipelineIndex : IEquatable<PipelineIndex>
 {
-	/// <summary>
-	/// 表示一种IVisual所需的所有Pipeline的排列
-	/// </summary>
-	internal class PipelineIndex : IEquatable<PipelineIndex>
+	public int index;
+	public PipelineIndex next;
+
+	public PipelineIndex(int index)
 	{
-		public int index;
-		public PipelineIndex next;
+		this.index = index;
+	}
 
-		public PipelineIndex(int index)
+	public PipelineIndex(IEnumerable<int> indices)
+	{
+		var current = this;
+		using var it = indices.GetEnumerator();
+		if (!it.MoveNext())
 		{
-			this.index = index;
+			throw new ArgumentException("Indices count should > 0");
 		}
 
-		public PipelineIndex(IEnumerable<int> indices)
+		current.index = it.Current;
+		while (it.MoveNext())
 		{
-			var current = this;
-			using var it = indices.GetEnumerator();
-			if (!it.MoveNext())
-			{
-				throw new ArgumentException("Indices count should > 0");
-			}
+			current.next = new PipelineIndex(it.Current);
+			current = current.next;
+		}
+	}
 
-			current.index = it.Current;
-			while (it.MoveNext())
-			{
-				current.next = new PipelineIndex(it.Current);
-				current = current.next;
-			}
-		}
-		public int GetDepth()
+	public int GetDepth()
+	{
+		int depth = 1;
+		var next = this.next;
+		while (next != null)
 		{
-			int depth = 1;
-			var next = this.next;
-			while (next != null)
-			{
-				depth++;
-				next = next.next;
-			}
-			return depth;
+			depth++;
+			next = next.next;
 		}
+		return depth;
+	}
 
-		public bool Equals(PipelineIndex other)
-		{
-			return other != null && index == other.index && next == other.next;
-		}
+	public bool Equals(PipelineIndex other)
+	{
+		return other != null && index == other.index && next == other.next;
+	}
 
-		public override bool Equals(object obj)
-		{
-			return obj != null && Equals(obj as PipelineIndex);
-		}
+	public override bool Equals(object obj)
+	{
+		return obj != null && Equals(obj as PipelineIndex);
+	}
 
-		public override int GetHashCode()
-		{
-			return next == null ? index.GetHashCode() : index.GetHashCode() + next.GetHashCode();
-		}
+	public override int GetHashCode()
+	{
+		return next == null ? index.GetHashCode() : index.GetHashCode() + next.GetHashCode();
+	}
 
-		public override string ToString()
-		{
-			return $"{index}{(next is null ? "" : $" - {next}")}";
-		}
+	public override string ToString()
+	{
+		return $"{index}{(next is null ? string.Empty : $" - {next}")}";
 	}
 }

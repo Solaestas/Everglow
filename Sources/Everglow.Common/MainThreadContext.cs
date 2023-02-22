@@ -6,6 +6,7 @@ public class Future<T>
 {
 	private bool isLoaded;
 	private T value;
+
 	public T Value
 	{
 		get
@@ -16,6 +17,7 @@ public class Future<T>
 			}
 			return value;
 		}
+
 		set
 		{
 			if (IsLoaded)
@@ -26,6 +28,7 @@ public class Future<T>
 			this.value = value;
 		}
 	}
+
 	public bool IsLoaded => isLoaded;
 }
 public class MainThreadContext : IMainThreadContext
@@ -34,6 +37,7 @@ public class MainThreadContext : IMainThreadContext
 	{
 		Main.QueueMainThreadAction(task);
 	}
+
 	public Future<Color[]> DelayGetColors(Texture2D texture)
 	{
 		Future<Color[]> future = new();
@@ -45,6 +49,7 @@ public class MainThreadContext : IMainThreadContext
 		});
 		return future;
 	}
+
 	public Future<T> DelayGetData<T>(Func<T> func)
 	{
 		Future<T> future = new();

@@ -23,10 +23,10 @@ public class VFXBatch : IDisposable
 
 	#endregion Private Field
 
-	public VFXBatch(GraphicsDevice gd, IMainThreadContext mainThreadContext)
+	public VFXBatch()
 	{
-		graphicsDevice = gd;
-		mainThreadContext.AddTask(() =>
+		graphicsDevice = Ins.Device;
+		Ins.MainThread.AddTask(() =>
 		{
 			RegisterVertex<VFX2D>(MAX_VERTICES, MAX_VERTICES * 6 / 4);//四个顶点两个三角形六个下标
 			RegisterVertex<Vertex2D>();

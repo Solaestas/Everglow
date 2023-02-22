@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Reflection;
 using Everglow.Common.Enums;
 using Everglow.Common.Interfaces;
@@ -7,251 +7,8 @@ using ReLogic.Content;
 
 namespace Everglow.Common.VFX;
 
-public class VFXManager : IDisposable
+public class VFXManager : IVFXManager
 {
-	#region Visuals
-
-	[DontAutoLoad]
-	internal class Rt2DVisual : Visual
-	{
-		public ResourceLocker<RenderTarget2D> locker;
-
-		public Rt2DVisual(ResourceLocker<RenderTarget2D> locker)
-		{
-			this.locker = locker;
-		}
-
-		public override CodeLayer DrawLayer => throw new InvalidOperationException("Don't use this manually!");
-
-		public override void Draw()
-		{
-			throw new NotImplementedException();
-		}
-	}
-
-	private interface IVisualCollection : IEnumerable<IVisual>
-	{
-		int Count
-		{
-			get;
-		}
-
-		PipelineIndex Index
-		{
-			get;
-		}
-
-		void Add(IVisual visual);
-
-		void Flush();
-	}
-
-	private class SingleVisual : IVisualCollection
-	{
-		public PipelineIndex index;
-		public IVisual visual;
-
-		public SingleVisual(PipelineIndex index)
-		{
-			this.index = index;
-		}
-
-		public int Count => visual == null ? 0 : 1;
-		public PipelineIndex Index => index;
-
-		public void Add(IVisual visual)
-		{
-			this.visual = visual;
-		}
-
-		public void Flush()
-		{
-			if (!visual.Active)
-			{
-				visual = null;
-			}
-		}
-
-		public IEnumerator<IVisual> GetEnumerator()
-		{
-			if (visual != null)
-			{
-				yield return visual;
-			}
-
-			yield break;
-		}
-
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
-	}
-
-	private class VisualCollection : IVisualCollection
-	{
-		private const int FLUSH_COUNT = 50;
-
-		/// <summary>
-		/// 比较器
-		/// </summary>
-		private static VisualComparer compare = new();
-
-		private PipelineIndex index;
-		private SortedSet<IVisual> visuals;
-
-		private class VisualComparer : Comparer<IVisual>
-		{
-			/// <summary>
-			/// 按照Type从小到大排序，允许重复
-			/// </summary>
-			/// <param name="x"></param>
-			/// <param name="y"></param>
-			/// <returns></returns>
-			public override int Compare(IVisual x, IVisual y)
-			{
-				if (x == y)
-				{
-					return 0;
-				}
-				var diff = x.Type - y.Type;
-				return diff == 0 ? x.GetHashCode() - y.GetHashCode() : diff;
-			}
-		}
-
-		public VisualCollection(PipelineIndex index)
-		{
-			visuals = new SortedSet<IVisual>(compare);
-			this.index = index;
-		}
-
-		public int Count => visuals.Count;
-		public PipelineIndex Index => index;
-
-		public void Add(IVisual visual)
-		{
-			if (visuals.Count % FLUSH_COUNT == 0)
-			{
-				Flush();
-			}
-			visuals.Add(visual);
-		}
-
-		public void Flush()
-		{
-			int b = visuals.RemoveWhere(visual => !visual.Active);
-		}
-
-		public IEnumerator<IVisual> GetEnumerator()
-		{
-			return visuals.GetEnumerator();
-		}
-
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
-	}
-
-	#endregion Visuals
-
-	public IVisualQualityController VisualQuality { get; init; }
-	public IMainThreadContext MainThread { get; init; }
-	public HookSystem HookSystem { get; init; }
-	public VFXManager(GraphicsDevice device, IVisualQualityController visualQuality, IMainThreadContext mainThread, RenderTargetPool pool, HookSystem hookSystem)
-	{
-		Debug.Assert(Instance == null);
-		Instance = this;
-		VisualQuality = visualQuality;
-		MainThread = mainThread;
-		HookSystem = hookSystem;
-		spriteBatch = new VFXBatch(device, mainThread);
-		foreach (var layer in drawLayers)
-		{
-			visuals[layer] = new List<IVisualCollection>();
-			if (layer is CodeLayer.PostDrawNPCs or CodeLayer.PostDrawBG)
-			{
-				hookSystem.AddMethod(layer, () =>
-				{
-					Main.spriteBatch.End();
-					Draw(layer);
-					Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend,
-						SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullNone,
-						null, Main.GameViewMatrix.TransformationMatrix);
-				}, $"VFX {layer}");
-			}
-			else
-			{
-				hookSystem.AddMethod(layer, () => Draw(layer), $"VFX {layer}");
-			}
-		}
-		hookSystem.AddMethod(CodeLayer.PostUpdateEverything, Update, "VFX Update");
-		mainThread.AddTask(() => tempRenderTarget = renderTargetPool.GetRenderTarget2D());
-	}
-
-	private const bool DefaultRt2DIndex = true;
-
-	/// <summary>
-	/// GraphicsDevice引用
-	/// </summary>
-	private GraphicsDevice graphicsDevice = Main.instance.GraphicsDevice;
-	private Dictionary<(CodeLayer, PipelineIndex), IVisualCollection> lookup =
-		new();
-
-	/// <summary>
-	/// Pipeline的实例
-	/// </summary>
-	private List<IPipeline> pipelineInstances = new();
-
-	/// <summary>
-	/// Pipeline的Type
-	/// </summary>
-	private List<Type> pipelineTypes = new();
-
-	private Rt2DVisual renderingRt2D;
-
-	/// <summary>
-	/// 保存每一种Visual所需的Pipeline
-	/// </summary>
-	private List<PipelineIndex> requiredPipeline = new();
-
-	/// <summary>
-	/// 当前使用RenderTarget的Index
-	/// </summary>
-	private bool rt2DIndex = true;
-
-	/// <summary>
-	/// 用于Swap的RenderTarget
-	/// </summary>
-	private ResourceLocker<RenderTarget2D> tempRenderTarget;
-
-	/// <summary> 用绘制层 + 第一个调用的绘制层作为Key来储存List<IVisual> </summary>
-	private Dictionary<CodeLayer, List<IVisualCollection>> visuals =
-		new();
-
-	/// <summary>
-	/// 保存每一种Visual的Type
-	/// </summary>
-	private Dictionary<Type, int> visualTypes = new()
-	{
-		[typeof(Rt2DVisual)] = int.MaxValue
-	};
-
-	/// <summary>
-	/// RenderTarget池子 <br></br> 直接引用的Everglow.renderTargetPool
-	/// </summary>
-	public RenderTargetPool renderTargetPool;
-
-	/// <summary>
-	/// 当前的RenderTarget
-	/// </summary>
-	private RenderTarget2D TrCurrentTarget => rt2DIndex ? Main.screenTarget : Main.screenTargetSwap;
-
-	/// <summary>
-	/// 下一个RenderTarget
-	/// </summary>
-	private RenderTarget2D TrNextTarget => rt2DIndex ? Main.screenTargetSwap : Main.screenTarget;
-
 	public static readonly CodeLayer[] drawLayers = new CodeLayer[]
 	{
 		CodeLayer.PostDrawFilter,
@@ -260,13 +17,13 @@ public class VFXManager : IDisposable
 		CodeLayer.PostDrawDusts,
 		CodeLayer.PostDrawBG,
 		CodeLayer.PostDrawPlayers,
-		CodeLayer.PostDrawNPCs
+		CodeLayer.PostDrawNPCs,
 	};
 
 	/// <summary>
-	/// 代替SpriteBatch，可以用来处理顶点绘制
+	/// RenderTarget池子 <br></br> 直接引用的Everglow.renderTargetPool
 	/// </summary>
-	public static VFXBatch spriteBatch;
+	public RenderTargetPool renderTargetPool;
 
 	/// <summary>
 	/// 包含uTransform，对s0进行采样的普通Shader
@@ -289,51 +46,54 @@ public class VFXManager : IDisposable
 		get; private set;
 	}
 
+	public VFXManager()
+	{
+		Debug.Assert(Instance == null);
+		Instance = this;
+		foreach (var layer in drawLayers)
+		{
+			visuals[layer] = new List<IVisualCollection>();
+			if (layer is CodeLayer.PostDrawNPCs or CodeLayer.PostDrawBG)
+			{
+				Ins.HookManager.AddHook(layer, () =>
+				{
+					Main.spriteBatch.End();
+					Draw(layer);
+					Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend,
+						SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullNone,
+						null, Main.GameViewMatrix.TransformationMatrix);
+				}, $"VFX {layer}");
+			}
+			else
+			{
+				Ins.HookManager.AddHook(layer, () => Draw(layer), $"VFX {layer}");
+			}
+		}
+		Ins.HookManager.AddHook(CodeLayer.PostUpdateEverything, Update, "VFX Update");
+		Ins.MainThread.AddTask(() => tempRenderTarget = renderTargetPool.GetRenderTarget2D());
+	}
+
+	public static bool InScreen(Vector2 position, float exRange)
+	{
+		return Main.screenPosition.X - exRange < position.X && position.X < Main.screenPosition.X + Main.screenWidth + exRange
+			&& Main.screenPosition.Y - exRange < position.Y && position.Y < Main.screenPosition.Y + Main.screenHeight + exRange;
+	}
+
 	/// <summary>
 	/// </summary>
 	/// <param name="visual"></param>
 	/// <param name="flag">为了避免重复的占位符</param>
 	public void Add(IVisual visual)
 	{
-		//将Visual实例加到对应绘制层与第一个Pipeline的位置
-		PipelineIndex index = requiredPipeline[visual.Type];
+		// 将Visual实例加到对应绘制层与第一个Pipeline的位置
+		PipelineIndex index = requiredPipeline[visual.VisualType];
 		if (lookup.TryGetValue((visual.DrawLayer, index), out var collection))
 		{
 			collection.Add(visual);
 			return;
 		}
 
-		GetOrAddCollection(visual.DrawLayer, requiredPipeline[visual.Type]).Add(visual);
-	}
-
-	private IVisualCollection GetOrAddCollection(CodeLayer layer, PipelineIndex index, bool first = true)
-	{
-		if (lookup.TryGetValue((layer, index), out var collection))
-		{
-			return collection;
-		}
-		collection = first ? new VisualCollection(index) : new SingleVisual(index);
-		if (index.next == null)
-		{
-			visuals[layer].Add(collection);
-			lookup[(layer, index)] = collection;
-			return collection;
-		}
-		lookup[(layer, index)] = collection;
-		//保证next在index后面
-		visuals[layer].Insert(
-			Math.Min(
-				visuals[layer].IndexOf(GetOrAddCollection(layer, index.next, false)),
-				visuals[layer].FindIndex(v => v.Index.GetDepth() > index.GetDepth()) + 1
-				), collection);
-		return collection;
-	}
-
-
-	public static bool InScreen(Vector2 position, float exRange)
-	{
-		return Main.screenPosition.X - exRange < position.X && position.X < Main.screenPosition.X + Main.screenWidth + exRange
-			&& Main.screenPosition.Y - exRange < position.Y && position.Y < Main.screenPosition.Y + Main.screenHeight + exRange;
+		GetOrAddCollection(visual.DrawLayer, requiredPipeline[visual.VisualType]).Add(visual);
 	}
 
 	public void Clear()
@@ -342,6 +102,20 @@ public class VFXManager : IDisposable
 		{
 			visuals.Clear();
 		}
+	}
+
+	public void Dispose()
+	{
+		Ins.MainThread.AddTask(() =>
+		{
+			foreach (var pipeline in pipelineInstances)
+			{
+				pipeline.Unload();
+			}
+			spriteBatch?.Dispose();
+			tempRenderTarget?.Release();
+		});
+		GC.SuppressFinalize(this);
 	}
 
 	public void Draw(CodeLayer layer)
@@ -357,7 +131,7 @@ public class VFXManager : IDisposable
 				continue;
 			}
 
-			if (VisualQuality.High)
+			if (Ins.VisualQuality.High)
 			{
 				if (pipelineIndex.next != null && pipelineIndex.next.index != nextPipelineIndex)
 				{
@@ -381,7 +155,7 @@ public class VFXManager : IDisposable
 			pipelineInstances[pipelineIndex.index].Render(visibles);
 		}
 
-		if (VisualQuality.High && TrCurrentTarget != Main.screenTarget)
+		if (Ins.VisualQuality.High && TrCurrentTarget != Main.screenTarget)
 		{
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
 			SetRenderTarget(Main.screenTarget);
@@ -452,9 +226,10 @@ public class VFXManager : IDisposable
 		return visualTypes[visual.GetType()];
 	}
 
-	public void ModifyPipeline<T>(params Type[] pipelines) where T : IVisual
+	public void ModifyPipeline<T>(params Type[] pipelines)
+		where T : IVisual
 	{
-		//TODO 未进行测试
+		// TODO 未进行测试
 		requiredPipeline[visualTypes[typeof(T)]] = new PipelineIndex(pipelines.Select(i => GetOrCreatePipeline(i)));
 	}
 
@@ -527,17 +302,229 @@ public class VFXManager : IDisposable
 
 	public int VisualType<T>() => visualTypes[typeof(T)];
 
-	public void Dispose()
+	internal class Rt2DVisual : Visual
 	{
-		MainThread.AddTask(() =>
+		public ResourceLocker<RenderTarget2D> locker;
+
+		public override CodeLayer DrawLayer => throw new InvalidOperationException("Don't use this manually!");
+
+		public Rt2DVisual(ResourceLocker<RenderTarget2D> locker)
 		{
-			foreach (var pipeline in pipelineInstances)
+			this.locker = locker;
+		}
+
+		public override void Draw()
+		{
+			throw new NotImplementedException();
+		}
+	}
+
+	private const bool DefaultRt2DIndex = true;
+
+	/// <summary>
+	/// GraphicsDevice引用
+	/// </summary>
+	private GraphicsDevice graphicsDevice = Main.instance.GraphicsDevice;
+
+	private Dictionary<(CodeLayer, PipelineIndex), IVisualCollection> lookup =
+		new();
+
+	/// <summary>
+	/// Pipeline的实例
+	/// </summary>
+	private List<IPipeline> pipelineInstances = new();
+
+	/// <summary>
+	/// Pipeline的Type
+	/// </summary>
+	private List<Type> pipelineTypes = new();
+
+	private Rt2DVisual renderingRt2D;
+
+	/// <summary>
+	/// 保存每一种Visual所需的Pipeline
+	/// </summary>
+	private List<PipelineIndex> requiredPipeline = new();
+
+	/// <summary>
+	/// 当前使用RenderTarget的Index
+	/// </summary>
+	private bool rt2DIndex = true;
+
+	private VFXBatch spriteBatch = Ins.Batch;
+
+	/// <summary>
+	/// 用于Swap的RenderTarget
+	/// </summary>
+	private ResourceLocker<RenderTarget2D> tempRenderTarget;
+
+	/// <summary> 用绘制层 + 第一个调用的绘制层作为Key来储存List<IVisual> </summary>
+	private Dictionary<CodeLayer, List<IVisualCollection>> visuals =
+		new();
+
+	/// <summary>
+	/// 保存每一种Visual的Type
+	/// </summary>
+	private Dictionary<Type, int> visualTypes = new()
+	{
+		[typeof(Rt2DVisual)] = int.MaxValue,
+	};
+
+	/// <summary>
+	/// 当前的RenderTarget
+	/// </summary>
+	private RenderTarget2D TrCurrentTarget => rt2DIndex ? Main.screenTarget : Main.screenTargetSwap;
+
+	/// <summary>
+	/// 下一个RenderTarget
+	/// </summary>
+	private RenderTarget2D TrNextTarget => rt2DIndex ? Main.screenTargetSwap : Main.screenTarget;
+
+	private interface IVisualCollection : IEnumerable<IVisual>
+	{
+		int Count
+		{
+			get;
+		}
+
+		PipelineIndex Index
+		{
+			get;
+		}
+
+		void Add(IVisual visual);
+
+		void Flush();
+	}
+
+	private IVisualCollection GetOrAddCollection(CodeLayer layer, PipelineIndex index, bool first = true)
+	{
+		if (lookup.TryGetValue((layer, index), out var collection))
+		{
+			return collection;
+		}
+		collection = first ? new VisualCollection(index) : new SingleVisual(index);
+		if (index.next == null)
+		{
+			visuals[layer].Add(collection);
+			lookup[(layer, index)] = collection;
+			return collection;
+		}
+		lookup[(layer, index)] = collection;
+
+		// 保证next在index后面
+		visuals[layer].Insert(
+			Math.Min(
+				visuals[layer].IndexOf(GetOrAddCollection(layer, index.next, false)),
+				visuals[layer].FindIndex(v => v.Index.GetDepth() > index.GetDepth()) + 1), collection);
+		return collection;
+	}
+
+	private class SingleVisual : IVisualCollection
+	{
+		public PipelineIndex index;
+		public IVisual visual;
+
+		public int Count => visual == null ? 0 : 1;
+
+		public PipelineIndex Index => index;
+
+		public SingleVisual(PipelineIndex index)
+		{
+			this.index = index;
+		}
+
+		public void Add(IVisual visual)
+		{
+			this.visual = visual;
+		}
+
+		public void Flush()
+		{
+			if (!visual.Active)
 			{
-				pipeline.Unload();
+				visual = null;
 			}
-			spriteBatch?.Dispose();
-			tempRenderTarget?.Release();
-		});
-		GC.SuppressFinalize(this);
+		}
+
+		public IEnumerator<IVisual> GetEnumerator()
+		{
+			if (visual != null)
+			{
+				yield return visual;
+			}
+
+			yield break;
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return GetEnumerator();
+		}
+	}
+
+	private class VisualCollection : IVisualCollection
+	{
+		public int Count => visuals.Count;
+		public PipelineIndex Index => index;
+
+		public VisualCollection(PipelineIndex index)
+		{
+			visuals = new SortedSet<IVisual>(compare);
+			this.index = index;
+		}
+
+		public void Add(IVisual visual)
+		{
+			if (visuals.Count % FLUSH_COUNT == 0)
+			{
+				Flush();
+			}
+			visuals.Add(visual);
+		}
+
+		public void Flush()
+		{
+			int b = visuals.RemoveWhere(visual => !visual.Active);
+		}
+
+		public IEnumerator<IVisual> GetEnumerator()
+		{
+			return visuals.GetEnumerator();
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return GetEnumerator();
+		}
+
+		private const int FLUSH_COUNT = 50;
+
+		/// <summary>
+		/// 比较器
+		/// </summary>
+		private static VisualComparer compare = new();
+
+		private PipelineIndex index;
+		private SortedSet<IVisual> visuals;
+
+		private class VisualComparer : Comparer<IVisual>
+		{
+			/// <summary>
+			/// 按照Type从小到大排序，允许重复
+			/// </summary>
+			/// <param name="x"></param>
+			/// <param name="y"></param>
+			/// <returns></returns>
+			public override int Compare(IVisual x, IVisual y)
+			{
+				if (x == y)
+				{
+					return 0;
+				}
+				var diff = x.VisualType - y.VisualType;
+				return diff == 0 ? x.GetHashCode() - y.GetHashCode() : diff;
+			}
+		}
 	}
 }

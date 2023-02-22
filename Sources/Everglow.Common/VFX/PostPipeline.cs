@@ -1,4 +1,5 @@
-﻿using ReLogic.Content;
+﻿using Everglow.Common.Interfaces;
+using ReLogic.Content;
 
 namespace Everglow.Common.VFX;
 
