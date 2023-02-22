@@ -1,4 +1,3 @@
-using Everglow.Common.Enums;
 using Everglow.Common.Interfaces;
 using Everglow.Common.ModuleSystem;
 using Everglow.Common.ObjectPool;
@@ -12,51 +11,53 @@ namespace Everglow.Common;
 /// </summary>
 public static class Ins
 {
-	public static ILog Logger { get; private set; }
-	public static GraphicsDevice Device { get; private set; }
-	public static IVisualQualityController VisualQuality { get; private set; }
-	public static IHookManager HookManager { get; private set; }
-	public static ModuleManager ModuleManager { get; private set; }
-	public static IMainThreadContext MainThread { get; private set; }
-	public static RenderTargetPool RenderTargetPool { get; private set; }
-	public static VFXBatch Batch { get; private set; }
-	public static IVFXManager VFXManager { get; private set; }
-
-	public static void SetInstance(
-		ILog logger,
-		GraphicsDevice device,
-		IVisualQualityController visualQuality,
-		IHookManager hookManager,
-		ModuleManager moduleManager,
-		IMainThreadContext mainThread,
-		RenderTargetPool renderTargetPool,
-		VFXBatch batch,
-		IVFXManager manager)
+	public static VFXBatch Batch => Get<VFXBatch>();
+	public static GraphicsDevice Device => Get<GraphicsDevice>();
+	public static IHookManager HookManager => Get<IHookManager>();
+	public static ILog Logger => Get<ILog>();
+	public static IMainThreadContext MainThread => Get<IMainThreadContext>();
+	public static ModuleManager ModuleManager => Get<ModuleManager>();
+	public static RenderTargetPool RenderTargetPool => Get<RenderTargetPool>();
+	public static IVFXManager VFXManager => Get<IVFXManager>();
+	public static IVisualQualityController VisualQuality => Get<IVisualQualityController>();
+	public static void Set<T>(T instance) where T : class
 	{
-		Logger = logger;
-		Device = device;
-		VisualQuality = visualQuality;
-		HookManager = hookManager;
-		ModuleManager = moduleManager;
-		MainThread = mainThread;
-		RenderTargetPool = renderTargetPool;
-		Batch = batch;
-		VFXManager = manager;
+		instances.Add(instance);
+		Reference<T>.reference = new WeakReference<T>(instance);
 	}
 
-	public static void DisposeAll()
+	public static void Clear()
 	{
-		Logger = null;
-		Device = null;
-		VisualQuality = null;
-		HookManager?.Dispose();
-		HookManager = null;
-		ModuleManager = null;
-		MainThread = null;
-		RenderTargetPool = null;
-		Batch?.Dispose();
-		Batch = null;
-		VFXManager?.Dispose();
-		VFXManager = null;
+		foreach (var instance in instances.OfType<IDisposable>())
+		{
+			instance.Dispose();
+		}
+		instances.Clear();
+	}
+
+	public static T Get<T>() where T : class
+	{
+		if (Reference<T>.reference == null)
+		{
+			return null;
+		}
+
+		if (Reference<T>.reference.TryGetTarget(out var target))
+		{
+			return target;
+		}
+
+		return null;
+	}
+
+	private static List<object> instances = new();
+
+	/// <summary>
+	/// 我也不清楚用泛型弱引用快还是直接用字典存实例强制转换快，建议来个人测一下，我摸了（）
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	private static class Reference<T> where T : class
+	{
+		public static WeakReference<T> reference;
 	}
 }

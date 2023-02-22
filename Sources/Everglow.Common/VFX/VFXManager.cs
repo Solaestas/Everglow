@@ -21,11 +21,6 @@ public class VFXManager : IVFXManager
 	};
 
 	/// <summary>
-	/// RenderTarget池子 <br></br> 直接引用的Everglow.renderTargetPool
-	/// </summary>
-	public RenderTargetPool renderTargetPool;
-
-	/// <summary>
 	/// 包含uTransform，对s0进行采样的普通Shader
 	/// </summary>
 	public static Asset<Effect> DefaultEffect => ModContent.Request<Effect>("Everglow/Sources/Commons/Core/VFX/Effect/Shader2D");
@@ -70,7 +65,7 @@ public class VFXManager : IVFXManager
 			}
 		}
 		Ins.HookManager.AddHook(CodeLayer.PostUpdateEverything, Update, "VFX Update");
-		Ins.MainThread.AddTask(() => tempRenderTarget = renderTargetPool.GetRenderTarget2D());
+		Ins.MainThread.AddTask(() => tempRenderTarget = Ins.RenderTargetPool.GetRenderTarget2D());
 	}
 
 	public static bool InScreen(Vector2 position, float exRange)
@@ -136,7 +131,7 @@ public class VFXManager : IVFXManager
 				if (pipelineIndex.next != null && pipelineIndex.next.index != nextPipelineIndex)
 				{
 					nextPipelineIndex = pipelineIndex.next.index;
-					var locker = renderTargetPool.GetRenderTarget2D();
+					var locker = Ins.RenderTargetPool.GetRenderTarget2D();
 					SetRenderTarget(locker.Resource);
 					renderingRt2D = new Rt2DVisual(locker);
 					lookup[(layer, pipelineIndex.next)].Add(renderingRt2D);

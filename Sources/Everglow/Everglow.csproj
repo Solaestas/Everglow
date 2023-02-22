@@ -5,4 +5,20 @@
 		<ProjectReference Include="..\**\*.csproj" />
 		<ProjectReference Remove="Everglow.csproj" />
 	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="Costura.Fody" Version="5.7.0" PrivateAssets="all" />
+		
+	</ItemGroup>
+	
+	<UsingTask TaskName="BuildMod" AssemblyFile="$(TaskPath)" />
+	<Target Name="PrepareBuildMod" BeforeTargets="Build">
+		<ItemGroup>
+			<!--在此Include可以使模组csproj对ImageFile和EffectFile的修改生效-->
+			<AssetFile Include="@(ImageFile->'$(OutputPath)Assets\%(RelativeDir)%(Filename).rawimg')" />
+			<AssetFile Include="@(EffectFile->'$(OutputPath)Assets\%(RelativeDir)%(Filename).xnb')" />
+		</ItemGroup>
+	</Target>
+	<Target Name="BuildMod" AfterTargets="Build" Inputs="@(ResourceFile);@(AssetFile);@(Compile);@(ModFile)" Outputs="$(ModDirectory)$(AssemblyName).tmod">
+		<BuildMod ModSourceDirectory="$(MSBuildProjectDirectory)\" ModName="$(AssemblyName)" OutputDirectory="$(OutputPath)" ModDirectory="$(ModDirectory)" Configuration="$(Configuration)" IgnoreBuildFile="$(IgnoreBuildFile)" AssetFiles="@(AssetFile);" ResourceFiles="@(ResourceFile)" />
+	</Target>
 </Project>

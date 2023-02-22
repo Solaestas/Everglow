@@ -1,20 +1,19 @@
-global using System;
-global using System.IO;
-global using Terraria;
-global using Terraria.ID;
-global using Terraria.ModLoader;
 using Everglow.Common;
-using Everglow.Common.Enums;
 using Everglow.Common.Hooks;
 using Everglow.Common.Interfaces;
 using Everglow.Common.ModuleSystem;
 using Everglow.Common.Network.PacketHandle;
 using Everglow.Common.ObjectPool;
 using Everglow.Common.VFX;
-using Humanizer;
+using log4net;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace Everglow;
 
+[NoJIT]
 public class Everglow : Mod
 {
 	public static event Action OnPostSetupContent;
@@ -23,19 +22,25 @@ public class Everglow : Mod
 
 	public override void Load()
 	{
-		Ins.SetInstance(
-			Logger,
-			Main.instance.GraphicsDevice,
-			new VisualQualityController(),
-			ModContent.GetInstance<HookManager>(),
-			new ModuleManager(),
-			new MainThreadContext(),
-			Main.netMode != NetmodeID.Server ? new RenderTargetPool() : null,
-			Main.netMode != NetmodeID.Server ? new VFXBatch() : null,
-			Main.netMode != NetmodeID.Server ? new VFXManager() : new FakeManager());
-		ModIns.SetInstance(this);
+		var moduleManager = new ModuleManager();
+		moduleManager.LoadModule(Code);
+		foreach(var content in moduleManager.CreateInstances<ILoadable>())
+		{
+			AddContent(content);
+		}
+		
+		Ins.Set<ILog>(Logger);
+		Ins.Set<GraphicsDevice>(Main.instance.GraphicsDevice);
+		Ins.Set<IVisualQualityController>(new VisualQualityController());
+		Ins.Set<IHookManager>(ModContent.GetInstance<HookManager>());
+		Ins.Set<ModuleManager>(moduleManager);
+		Ins.Set<IMainThreadContext>(new MainThreadContext());
+		Ins.Set<RenderTargetPool>(Main.netMode != NetmodeID.Server ? new RenderTargetPool() : null);
+		Ins.Set<VFXBatch>(Main.netMode != NetmodeID.Server ? new VFXBatch() : null);
+		Ins.Set<IVFXManager>(Main.netMode != NetmodeID.Server ? new VFXManager() : new FakeManager());
+
+		ModIns.Mod = this;
 		m_packetResolver = new PacketResolver(this);
-		Ins.ModuleManager.LoadAllModules();
 	}
 
 	public override void PostSetupContent()
@@ -45,10 +50,10 @@ public class Everglow : Mod
 
 	public override void Unload()
 	{
-		Ins.ModuleManager.UnloadAllModules();
-		Ins.DisposeAll();
-		ModIns.DisposeAll();
 		m_packetResolver = null;
+		ModIns.Mod = null;
+
+		Ins.Clear();
 	}
 
 	public override void HandlePacket(BinaryReader reader, int whoAmI)

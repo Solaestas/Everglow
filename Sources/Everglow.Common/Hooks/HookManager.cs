@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using Everglow.Common.Enums;
 using Everglow.Common.Interfaces;
 using MonoMod.Cil;
@@ -51,7 +51,7 @@ public class ILHookHandler : IHookHandler
 	}
 }
 
-public record HookHandler(CodeLayer Layer, dynamic Hook, string Name) : IHookHandler 
+public record HookHandler(CodeLayer Layer, dynamic Hook, string Name) : IHookHandler
 {
 	public bool Enable { get; set; }
 }
@@ -149,17 +149,9 @@ public class HookManager : ModSystem, IHookManager
 	private List<IDisposable> monoHooks = new();
 
 	/// <summary>
-	/// 现在存在的问题就是，这里的method都是无参数的Action，但是如DrawMapIcon这样的方法就需要传参了，只好用这种这种定义字段的方法
+	/// 移除所有被Disable的Hook
 	/// </summary>
-	public (Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale) MapIconInfomation
-	{
-		get; private set;
-	}
-
-	/// <summary>
-	/// 移除所有被Disable的Action
-	/// </summary>
-	public void RemoveDisabledAction()
+	public void RemoveDisabledHook()
 	{
 		foreach (var layer in validLayers)
 		{
@@ -167,7 +159,7 @@ public class HookManager : ModSystem, IHookManager
 		}
 	}
 
-	public void HookLoad()
+	public override void Load()
 	{
 		IL_Main.DoDraw += Main_DoDraw;
 		On_Main.DrawDust += Main_DrawDust;
@@ -185,7 +177,7 @@ public class HookManager : ModSystem, IHookManager
 		Main.OnResolutionChanged += Main_OnResolutionChanged;
 	}
 
-	public void HookUnload()
+	public override void Unload()
 	{
 		IL_Main.DoDraw -= Main_DoDraw;
 		On_Main.DrawDust -= Main_DrawDust;
