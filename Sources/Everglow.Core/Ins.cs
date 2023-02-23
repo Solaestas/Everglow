@@ -20,6 +20,7 @@ public static class Ins
 	public static RenderTargetPool RenderTargetPool => Get<RenderTargetPool>();
 	public static IVFXManager VFXManager => Get<IVFXManager>();
 	public static IVisualQualityController VisualQuality => Get<IVisualQualityController>();
+
 	public static void Set<T>(T instance) where T : class
 	{
 		instances.Add(instance);
@@ -30,7 +31,10 @@ public static class Ins
 	{
 		foreach (var instance in instances.OfType<IDisposable>())
 		{
-			instance.Dispose();
+			if (instance is not GraphicsDevice)
+			{
+				instance.Dispose();
+			}
 		}
 		instances.Clear();
 	}
