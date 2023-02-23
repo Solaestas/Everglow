@@ -6,7 +6,8 @@ public class ModuleManager
 {
 	private Assembly[] _modules;
 
-	public IEnumerable<Type> Types => _modules.SelectMany(m => m.GetTypes());
+	public IEnumerable<Type> Types => _modules.SelectMany(m => m.GetTypes())
+		.Where(t => t.GetCustomAttribute(typeof(DontAutoLoadAttribute)) is null);
 
 	public IEnumerable<T> CreateInstances<T>() => Types
 		.Where(t => t.IsAssignableTo(typeof(T)))

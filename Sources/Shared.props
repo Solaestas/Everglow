@@ -7,6 +7,7 @@
         <PlatformTarget>AnyCPU</PlatformTarget>
         <LangVersion>latest</LangVersion>
         <NoWarn>$(NoWarn);CS0436</NoWarn>
+		<EverglowOutputDirectory>$(MSBuildThisFileDirectory)Everglow\bin\$(Configuration)\$(TargetFramework)\</EverglowOutputDirectory>
     </PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />

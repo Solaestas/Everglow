@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\Shared.props" />
+	<PropertyGroup>
+		<RootNamespace>Everglow.Common</RootNamespace>
+		<AssetsOutputDirectory>$(EverglowOutputDirectory)Assets\Common\</AssetsOutputDirectory>
+		<AssetsIntermediateOutputDirectory>$(IntermediateOutputPath)Assets\Common\</AssetsIntermediateOutputDirectory>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
+		<ProjectReference Include="..\Everglow.Core\Everglow.Core.csproj" />
+	</ItemGroup>
+
+	<UsingTask TaskName="BuildEffect" AssemblyFile="$(TaskPath)" />
+	<UsingTask TaskName="BuildImage" AssemblyFile="$(TaskPath)" />
+	<Target Name="BuildEffect" BeforeTargets="Build" Inputs="@(EffectFile)" Outputs="@(EffectFile->'$(AssetsOutputDirectory)%(RelativeDir)%(Filename).xnb')">
+		<BuildEffect BuilderDirectory="$(ContentBuilderDirectory)" InputFiles="@(EffectFile)" TargetPlatform="Windows" TargetProfile="HiDef" BuildConfiguration="Release" IntermediateDirectory="$(AssetsIntermediateOutputDirectory)" OutputDirectory="$(AssetsOutputDirectory)" />
+	</Target>
+	<Target Name="BuildImage" BeforeTargets="Build" Inputs="@(ImageFile)" Outputs="@(ImageFile->'$(AssetsOutputDirectory)%(RelativeDir)%(Filename).rawimg')">
+		<BuildImage InputFiles="@(ImageFile)" OutputDirectory="$(AssetsOutputDirectory)" />
+	</Target>
+
+</Project>

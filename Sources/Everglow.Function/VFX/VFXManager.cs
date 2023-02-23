@@ -2,6 +2,7 @@ using System.Collections;
 using System.Reflection;
 using Everglow.Common.Enums;
 using Everglow.Common.Interfaces;
+using Everglow.Common.ModuleSystem;
 using Everglow.Common.ObjectPool;
 using ReLogic.Content;
 
@@ -25,9 +26,6 @@ public class VFXManager : IVFXManager
 	/// </summary>
 	public static Asset<Effect> DefaultEffect => ModContent.Request<Effect>("Everglow/Sources/Commons/Core/VFX/Effect/Shader2D");
 
-	/// <summary>
-	/// IModule加载时的实例
-	/// </summary>
 	public static VFXManager Instance
 	{
 		get; private set;
@@ -66,6 +64,10 @@ public class VFXManager : IVFXManager
 		}
 		Ins.HookManager.AddHook(CodeLayer.PostUpdateEverything, Update, "VFX Update");
 		Ins.MainThread.AddTask(() => tempRenderTarget = Ins.RenderTargetPool.GetRenderTarget2D());
+		foreach(var visual in Ins.ModuleManager.CreateInstances<IVisual>())
+		{
+			Register(visual);
+		}
 	}
 
 	public static bool InScreen(Vector2 position, float exRange)
@@ -297,6 +299,7 @@ public class VFXManager : IVFXManager
 
 	public int VisualType<T>() => visualTypes[typeof(T)];
 
+	[DontAutoLoad]
 	internal class Rt2DVisual : Visual
 	{
 		public ResourceLocker<RenderTarget2D> locker;

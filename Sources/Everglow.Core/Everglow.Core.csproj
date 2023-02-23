@@ -8,5 +8,6 @@
 		<Reference Remove="$(tMLPath)" />
 		<Reference Remove="$(tMLDirectory)\Libraries\**\tModPorter.dll" />
 		<Reference Remove="$(tMLDirectory)\Libraries\**\TerrariaHooks.dll" />
+		<Reference Remove="$(tMLDirectory)\Libraries\**\ReLogic.dll" />
 	</ItemGroup>
 </Project>
