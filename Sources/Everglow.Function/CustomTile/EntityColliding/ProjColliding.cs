@@ -10,10 +10,15 @@ namespace Everglow.Common.CustomTile.EntityColliding;
 public class ProjColliding : GlobalProjectile
 {
 	public ProjHandler handler;
+
 	public static HashSet<Projectile> callFromHook = new();
+
 	public const int HookAiStyle = 7;
+
 	public override bool InstancePerEntity => true;
+
 	public override bool CloneNewInstances => true;
+
 	public override bool IsCloneable => true;
 
 	public override GlobalProjectile Clone(Projectile from, Projectile to)
@@ -57,7 +62,9 @@ public class ProjColliding : GlobalProjectile
 		Player player = Main.player[self.owner];
 		int numHooks = 3;
 		if (self.type == 165)
+		{
 			numHooks = 8;
+		}
 		else if (self.type == 256)
 		{
 			numHooks = 2;
@@ -146,21 +153,20 @@ public class ProjColliding : GlobalProjectile
 	private static void Projectile_AI_007_GrapplingHooks_IL(ILContext il)
 	{
 		var cursor = new ILCursor(il);
-		if (!cursor.TryGotoNext(MoveType.After, ins => (ins.Previous?.MatchLdcI4(1) ?? false) &&
-			ins.MatchStloc(44) &&
-			(ins.Next?.MatchLdsflda<Main>(nameof(Main.tile)) ?? false)))
+		if (!cursor.TryGotoNext(MoveType.After, ins => ins.Offset == 0x0e65))
 		{
 			throw new HookException();
 		}
+		Debug.Assert(cursor.Prev.MatchStloc(44));
 		cursor.Emit(OpCodes.Ldarg_0);
 		cursor.EmitDelegate((Projectile proj) => callFromHook.Contains(proj));
 		var label = il.DefineLabel();
 		cursor.Emit(OpCodes.Brtrue, label);
-		if (!cursor.TryGotoNext(MoveType.Before, ins => ins.MatchLdsfld<Main>(nameof(Main.player)) &&
-			ins.Previous.MatchRet()))
+		if (!cursor.TryGotoNext(MoveType.Before, ins => ins.Offset == 0x0E91))
 		{
 			throw new HookException();
 		}
+		Debug.Assert(cursor.Next.MatchRet());
 		cursor.MarkLabel(label);
 	}
 }
