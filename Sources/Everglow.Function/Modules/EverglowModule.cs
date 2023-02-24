@@ -8,6 +8,7 @@ public abstract class EverglowModule : IModule
 	{
 		Code = GetType().Assembly;
 	}
+
 	public Assembly Code { get; }
 
 	public virtual bool Condition => true;

@@ -2,11 +2,36 @@ using System.Reflection;
 
 namespace Everglow.Common.Modules;
 
-public class ModuleManager
+public class ModuleManager : IDisposable
 {
-	private List<IModule> _modules = new();
+	private List<Assembly> _assemblies;
+	private List<IModule> _modules;
 
-	public IEnumerable<Type> Types => Assembly.GetExecutingAssembly().GetTypes()
+	public ModuleManager()
+	{
+		var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+		var main = assemblies.Single(asm => asm.GetName().Name == "Everglow");
+
+		_assemblies = assemblies
+			.Where(asm => asm.GetName().Name.StartsWith($"Everglow.", StringComparison.Ordinal))
+			.Where(asm => asm != main)
+			.ToList();
+
+		_modules = _assemblies
+			.SelectMany(asm => asm.GetTypes())
+			.Where(type => !type.IsAbstract)
+			.Where(type => !type.IsInterface)
+			.Where(type => type.IsAssignableTo(typeof(IModule)))
+			.Select(type => Activator.CreateInstance(type) as IModule)
+			.Where(module => module.Condition)
+			.ToList();
+		foreach (var module in _modules)
+		{
+			module.Load();
+		}
+	}
+
+	public IEnumerable<Type> Types => _assemblies.SelectMany(s => s.GetTypes())
 		.Where(t => t.GetCustomAttribute(typeof(ModuleHideTypeAttribute)) is null);
 
 	public IEnumerable<T> CreateInstances<T>() => Types
@@ -15,18 +40,13 @@ public class ModuleManager
 		.Select(Activator.CreateInstance)
 		.Cast<T>();
 
-	public void LoadModule()
+	public void Dispose()
 	{
-		//var mainName = main.GetName().Name;
-		//var core = Assembly.GetExecutingAssembly();
-		//var codes = AppDomain.CurrentDomain.GetAssemblies()
-		//	.Where(asm => asm != core)
-		//	.Where(asm => asm.GetName().Name.StartsWith($"{mainName}.", StringComparison.Ordinal))
-		//	.ToArray();
-		//foreach (var code in codes)
-		//{
-		//	var module = code.GetTypes().Single(type => type.IsAssignableTo(typeof(IModule)));
-		//	_modules.Add(Activator.CreateInstance(module) as IModule);
-		//}
+		foreach (var module in _modules)
+		{
+			module.Unload();
+		}
+		GC.SuppressFinalize(this);
 	}
+
 }

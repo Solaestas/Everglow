@@ -1,4 +1,3 @@
-﻿using Everglow.Common.Interfaces;
 using Everglow.Common.Vertex;
 
 namespace Everglow.Common.VFX;
@@ -325,10 +324,13 @@ public class VFXBatch : IDisposable
 
 	public void Dispose()
 	{
-		foreach (var buffer in buffers)
+		Ins.MainThread.AddTask(() =>
 		{
-			buffer.Dispose();
-		}
+			foreach (var buffer in buffers)
+			{
+				buffer.Dispose();
+			}
+		});
 		GC.SuppressFinalize(this);
 	}
 
@@ -353,6 +355,7 @@ public class VFXBatch : IDisposable
 
 	public void Flush<T>() where T : struct, IVertexType
 	{
+		Debug.Assert(!hasBegun);
 		Buffer<T>.Instance.DrawPrimitive();
 		Buffer<T>.Instance.Clear();
 	}

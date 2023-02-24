@@ -109,7 +109,6 @@ public class VFXManager : IVFXManager
 			{
 				pipeline.Unload();
 			}
-			spriteBatch?.Dispose();
 			tempRenderTarget?.Release();
 		});
 		GC.SuppressFinalize(this);
@@ -348,8 +347,6 @@ public class VFXManager : IVFXManager
 	/// 当前使用RenderTarget的Index
 	/// </summary>
 	private bool rt2DIndex = true;
-
-	private VFXBatch spriteBatch = Ins.Batch;
 
 	/// <summary>
 	/// 用于Swap的RenderTarget

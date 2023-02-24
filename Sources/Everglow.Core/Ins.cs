@@ -29,7 +29,7 @@ public static class Ins
 
 	public static void Clear()
 	{
-		foreach (var instance in instances.OfType<IDisposable>())
+		foreach (var instance in instances.OfType<IDisposable>().Reverse())
 		{
 			if (instance is not GraphicsDevice)
 			{

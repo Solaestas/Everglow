@@ -24,7 +24,7 @@
 					 TargetPlatform="Windows" 
 					 TargetProfile="HiDef" 
 					 BuildConfiguration="Release" 
-					 IntermediateDirectory="$(IntermediateOutputDirectory)Assets\$(AssetsPrefix)\"
+					 IntermediateDirectory="$(IntermediateOutputPath)Assets\"
 					 OutputDirectory="$(EverglowOutputDirectory)Assets\$(AssetsPrefix)\" />
 	</Target>
 	<Target Name="BuildImage" BeforeTargets="Build"
@@ -32,4 +32,9 @@
 			Outputs="@(ImageFile->'$(EverglowOutputDirectory)Assets\$(AssetsPrefix)\%(RelativeDir)%(Filename).rawimg')">
 		<BuildImage InputFiles="@(ImageFile)" OutputDirectory="$(EverglowOutputDirectory)\Assets\$(AssetsPrefix)\" />
 	</Target>
+	<Target Name="CleanAsset" BeforeTargets="Clean">
+		<RemoveDir Directories="$(OutputPath)Assets" />
+		<RemoveDir Directories="$(IntermediateOutputPath)Assets" />
+	</Target>
+
 </Project>

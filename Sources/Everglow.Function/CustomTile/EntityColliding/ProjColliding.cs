@@ -11,7 +11,7 @@ public class ProjColliding : GlobalProjectile
 {
 	public ProjHandler handler;
 
-	public static HashSet<Projectile> callFromHook = new();
+	public static readonly HashSet<Projectile> callFromHook = new();
 
 	public const int HookAiStyle = 7;
 

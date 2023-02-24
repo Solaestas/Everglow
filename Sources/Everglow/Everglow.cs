@@ -1,5 +1,4 @@
 using Everglow.Common;
-using Everglow.Common.Hooks;
 using Everglow.Common.Interfaces;
 using Everglow.Common.Modules;
 using Everglow.Common.Network.PacketHandle;
@@ -13,6 +12,7 @@ using Terraria.ModLoader;
 
 namespace Everglow;
 
+[NoJIT]
 public class Everglow : Mod
 {
 	public static event Action OnPostSetupContent;
@@ -21,17 +21,21 @@ public class Everglow : Mod
 
 	public override void Load()
 	{
+		ModIns.Mod = this;
+
 		Ins.Set<ILog>(Logger);
 		Ins.Set<GraphicsDevice>(Main.instance.GraphicsDevice);
 		Ins.Set<IVisualQualityController>(new VisualQualityController());
-		Ins.Set<IHookManager>(ModContent.GetInstance<HookManager>());
 		Ins.Set<ModuleManager>(new ModuleManager());
+		foreach (var ins in Ins.ModuleManager.CreateInstances<ILoadable>())
+		{
+			AddContent(ins);
+		}
 		Ins.Set<IMainThreadContext>(new MainThreadContext());
 		Ins.Set<RenderTargetPool>(Main.netMode != NetmodeID.Server ? new RenderTargetPool() : null);
 		Ins.Set<VFXBatch>(Main.netMode != NetmodeID.Server ? new VFXBatch() : null);
 		Ins.Set<IVFXManager>(Main.netMode != NetmodeID.Server ? new VFXManager() : new FakeManager());
 
-		ModIns.Mod = this;
 		m_packetResolver = new PacketResolver(this);
 	}
 

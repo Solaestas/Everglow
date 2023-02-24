@@ -8,32 +8,8 @@ using Terraria.Graphics.Renderers;
 
 namespace Everglow.Common.Hooks;
 
-public class OnHookHandler : IHookHandler
-{
-	public Hook Hook { get; init; }
-	public string Name => Hook.Target.Name;
-
-	public bool Enable
-	{
-		get => Hook.IsApplied;
-		set
-		{
-			if (value)
-			{
-				Hook.Apply();
-			}
-			else
-			{
-				Hook.Undo();
-			}
-		}
-	}
-}
-
 public class ILHookHandler : IHookHandler
 {
-	public ILHook Hook { get; init; }
-	public string Name => Hook.Method.Name;
 	public bool Enable
 	{
 		get => Hook.IsApplied;
@@ -49,8 +25,32 @@ public class ILHookHandler : IHookHandler
 			}
 		}
 	}
+
+	public ILHook Hook { get; init; }
+	public string Name => Hook.Method.Name;
 }
 
+public class OnHookHandler : IHookHandler
+{
+	public bool Enable
+	{
+		get => Hook.IsApplied;
+		set
+		{
+			if (value)
+			{
+				Hook.Apply();
+			}
+			else
+			{
+				Hook.Undo();
+			}
+		}
+	}
+
+	public Hook Hook { get; init; }
+	public string Name => Hook.Target.Name;
+}
 public record HookHandler(CodeLayer Layer, dynamic Hook, string Name) : IHookHandler
 {
 	public bool Enable { get; set; }
@@ -58,6 +58,51 @@ public record HookHandler(CodeLayer Layer, dynamic Hook, string Name) : IHookHan
 
 public class HookManager : ModSystem, IHookManager
 {
+
+	private static readonly CodeLayer[] validLayers = new CodeLayer[]
+	{
+		CodeLayer.PostDrawFilter,
+		CodeLayer.PostDrawTiles,
+		CodeLayer.PostDrawProjectiles,
+		CodeLayer.PostDrawDusts,
+		CodeLayer.PostDrawNPCs,
+		CodeLayer.PostDrawPlayers,
+		CodeLayer.PostDrawMapIcons,
+		CodeLayer.PostDrawBG,
+
+		CodeLayer.PostUpdateEverything,
+		CodeLayer.PostUpdateProjectiles,
+		CodeLayer.PostUpdatePlayers,
+		CodeLayer.PostUpdateNPCs,
+		CodeLayer.PostUpdateDusts,
+		CodeLayer.PostUpdateInvasions,
+
+		CodeLayer.PostEnterWorld_Single,
+		CodeLayer.PostExitWorld_Single,
+		CodeLayer.PostEnterWorld_Server,
+		CodeLayer.ResolutionChanged,
+	};
+
+	private Dictionary<CodeLayer, List<HookHandler>> hooks = validLayers.ToDictionary(l => l, l => new List<HookHandler>());
+
+	private List<IDisposable> monoHooks = new();
+
+	public HookManager()
+	{
+		Ins.Set<IHookManager>(this);
+	}
+	public bool DisableDrawBackground { get; set; } = false;
+
+	public bool DisableDrawNPCs { get; set; } = false;
+
+	public bool DisableDrawSkyAndHell { get; set; } = false;
+
+	public static void ClearReflectionCache()
+	{
+		ReflectionHelper.AssemblyCache.Clear();
+		ReflectionHelper.AssembliesCache.Clear();
+		ReflectionHelper.ResolveReflectionCache.Clear();
+	}
 
 	public IHookHandler AddHook(CodeLayer layer, Delegate hook, string name = default)
 	{
@@ -96,6 +141,70 @@ public class HookManager : ModSystem, IHookManager
 		GC.SuppressFinalize(this);
 	}
 
+	public override void Load()
+	{
+		IL_Main.DoDraw += Main_DoDraw;
+		On_Main.DrawDust += Main_DrawDust;
+		On_Main.DrawProjectiles += Main_DrawProjectiles;
+		On_Main.DrawNPCs += Main_DrawNPCs;
+		On_LegacyPlayerRenderer.DrawPlayers += LegacyPlayerRenderer_DrawPlayers;
+		On_WorldGen.playWorldCallBack += WorldGen_playWorldCallBack;
+
+		On_WorldGen.SaveAndQuit += WorldGen_SaveAndQuit;
+		On_Main.DrawMiscMapIcons += Main_DrawMiscMapIcons;
+		On_WorldGen.serverLoadWorldCallBack += WorldGen_serverLoadWorldCallBack;
+		On_Main.DrawBG += Main_DrawBG;
+		On_Main.DrawBackground += Main_DrawBackground;
+		On_Main.DoDraw_WallsTilesNPCs += Main_DoDraw_WallsTilesNPCs;
+		Main.OnResolutionChanged += Main_OnResolutionChanged;
+	}
+
+	public override void PostDrawTiles()
+	{
+		Invoke(CodeLayer.PostDrawTiles);
+	}
+
+	public override void PostUpdateDusts()
+	{
+		Invoke(CodeLayer.PostUpdateDusts);
+	}
+
+	public override void PostUpdateEverything()
+	{
+		Invoke(CodeLayer.PostUpdateEverything);
+	}
+
+	public override void PostUpdateInvasions()
+	{
+		Invoke(CodeLayer.PostUpdateInvasions);
+	}
+
+	public override void PostUpdateNPCs()
+	{
+		Invoke(CodeLayer.PostUpdateNPCs);
+	}
+
+	public override void PostUpdatePlayers()
+	{
+		Invoke(CodeLayer.PostUpdatePlayers);
+	}
+
+	public override void PostUpdateProjectiles()
+	{
+		Invoke(CodeLayer.PostUpdateProjectiles);
+	}
+
+	/// <summary>
+	/// 移除所有被Disable的Hook
+	/// </summary>
+	public void RemoveDisabledHook()
+	{
+		foreach (var layer in validLayers)
+		{
+			hooks[layer].RemoveAll(handler => !handler.Enable);
+		}
+	}
+
 	public void RemoveHook(IHookHandler handler)
 	{
 		switch (handler)
@@ -115,69 +224,6 @@ public class HookManager : ModSystem, IHookManager
 				break;
 		}
 	}
-
-	private static readonly CodeLayer[] validLayers = new CodeLayer[]
-	{
-		CodeLayer.PostDrawFilter,
-		CodeLayer.PostDrawTiles,
-		CodeLayer.PostDrawProjectiles,
-		CodeLayer.PostDrawDusts,
-		CodeLayer.PostDrawNPCs,
-		CodeLayer.PostDrawPlayers,
-		CodeLayer.PostDrawMapIcons,
-		CodeLayer.PostDrawBG,
-
-		CodeLayer.PostUpdateEverything,
-		CodeLayer.PostUpdateProjectiles,
-		CodeLayer.PostUpdatePlayers,
-		CodeLayer.PostUpdateNPCs,
-		CodeLayer.PostUpdateDusts,
-		CodeLayer.PostUpdateInvasions,
-
-		CodeLayer.PostEnterWorld_Single,
-		CodeLayer.PostExitWorld_Single,
-		CodeLayer.PostEnterWorld_Server,
-		CodeLayer.ResolutionChanged,
-	};
-
-	public bool DisableDrawNPCs { get; set; } = false;
-
-	public bool DisableDrawSkyAndHell { get; set; } = false;
-
-	public bool DisableDrawBackground { get; set; } = false;
-
-	private Dictionary<CodeLayer, List<HookHandler>> hooks = validLayers.ToDictionary(l => l, l => new List<HookHandler>());
-	private List<IDisposable> monoHooks = new();
-
-	/// <summary>
-	/// 移除所有被Disable的Hook
-	/// </summary>
-	public void RemoveDisabledHook()
-	{
-		foreach (var layer in validLayers)
-		{
-			hooks[layer].RemoveAll(handler => !handler.Enable);
-		}
-	}
-
-	public override void Load()
-	{
-		IL_Main.DoDraw += Main_DoDraw;
-		On_Main.DrawDust += Main_DrawDust;
-		On_Main.DrawProjectiles += Main_DrawProjectiles;
-		On_Main.DrawNPCs += Main_DrawNPCs;
-		On_LegacyPlayerRenderer.DrawPlayers += LegacyPlayerRenderer_DrawPlayers;
-		On_WorldGen.playWorldCallBack += WorldGen_playWorldCallBack;
-
-		On_WorldGen.SaveAndQuit += WorldGen_SaveAndQuit;
-		On_Main.DrawMiscMapIcons += Main_DrawMiscMapIcons;
-		On_WorldGen.serverLoadWorldCallBack += WorldGen_serverLoadWorldCallBack;
-		On_Main.DrawBG += Main_DrawBG;
-		On_Main.DrawBackground += Main_DrawBackground;
-		On_Main.DoDraw_WallsTilesNPCs += Main_DoDraw_WallsTilesNPCs;
-		Main.OnResolutionChanged += Main_OnResolutionChanged;
-	}
-
 	public override void Unload()
 	{
 		IL_Main.DoDraw -= Main_DoDraw;
@@ -196,14 +242,6 @@ public class HookManager : ModSystem, IHookManager
 		Main.OnResolutionChanged -= Main_OnResolutionChanged;
 		Dispose();
 	}
-
-	public static void ClearReflectionCache()
-	{
-		ReflectionHelper.AssemblyCache.Clear();
-		ReflectionHelper.AssembliesCache.Clear();
-		ReflectionHelper.ResolveReflectionCache.Clear();
-	}
-
 	internal void Invoke(CodeLayer layer)
 	{
 		foreach (var handler in hooks[layer].Where(h => h.Enable))
@@ -220,40 +258,27 @@ public class HookManager : ModSystem, IHookManager
 			}
 		}
 	}
-
-	public override void PostUpdateInvasions()
+	private void LegacyPlayerRenderer_DrawPlayers(On_LegacyPlayerRenderer.orig_DrawPlayers orig, LegacyPlayerRenderer self, Terraria.Graphics.Camera camera, IEnumerable<Player> players)
 	{
-		Invoke(CodeLayer.PostUpdateInvasions);
+		orig.Invoke(self, camera, players);
+		Invoke(CodeLayer.PostDrawPlayers);
 	}
 
-	public override void PostUpdateEverything()
+	// TODO 不要给这种大函数直接IL了
+	private void Main_DoDraw(ILContext il)
 	{
-		Invoke(CodeLayer.PostUpdateEverything);
+		var cursor = new ILCursor(il);
+		if (!cursor.TryGotoNext(MoveType.Before, ins => ins.MatchLdcI4(36)))
+		{
+			throw new Exception("Main_DoDraw_NotFound_1");
+		}
+		cursor.EmitDelegate(() => Invoke(CodeLayer.PostDrawFilter));
 	}
 
-	public override void PostUpdateNPCs()
+	private void Main_DoDraw_WallsTilesNPCs(On_Main.orig_DoDraw_WallsTilesNPCs orig, Main self)
 	{
-		Invoke(CodeLayer.PostUpdateNPCs);
-	}
-
-	public override void PostUpdateProjectiles()
-	{
-		Invoke(CodeLayer.PostUpdateProjectiles);
-	}
-
-	public override void PostUpdateDusts()
-	{
-		Invoke(CodeLayer.PostUpdateDusts);
-	}
-
-	public override void PostUpdatePlayers()
-	{
-		Invoke(CodeLayer.PostUpdatePlayers);
-	}
-
-	public override void PostDrawTiles()
-	{
-		Invoke(CodeLayer.PostDrawTiles);
+		Invoke(CodeLayer.PostDrawBG);
+		orig(self);
 	}
 
 	private void Main_DrawBackground(On_Main.orig_DrawBackground orig, Main self)
@@ -273,17 +298,10 @@ public class HookManager : ModSystem, IHookManager
 		}
 		orig(self);
 	}
-
-	private void Main_DoDraw_WallsTilesNPCs(On_Main.orig_DoDraw_WallsTilesNPCs orig, Main self)
+	private void Main_DrawDust(On_Main.orig_DrawDust orig, Main self)
 	{
-		Invoke(CodeLayer.PostDrawBG);
-		orig(self);
-	}
-
-	private void WorldGen_serverLoadWorldCallBack(On_WorldGen.orig_serverLoadWorldCallBack orig)
-	{
-		orig();
-		Invoke(CodeLayer.PostEnterWorld_Server);
+		orig.Invoke(self);
+		Invoke(CodeLayer.PostDrawDusts);
 	}
 
 	private void Main_DrawMiscMapIcons(On_Main.orig_DrawMiscMapIcons orig, Main self, SpriteBatch spriteBatch, Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale, float drawScale, ref string mouseTextString)
@@ -305,16 +323,19 @@ public class HookManager : ModSystem, IHookManager
 
 	}
 
-	private void WorldGen_SaveAndQuit(On_WorldGen.orig_SaveAndQuit orig, Action callback)
+	private void Main_DrawNPCs(On_Main.orig_DrawNPCs orig, Main self, bool behindTiles)
 	{
-		orig(callback);
-		Invoke(CodeLayer.PostExitWorld_Single);
+		orig.Invoke(self, behindTiles);
+		if (!behindTiles)
+		{
+			Invoke(CodeLayer.PostDrawNPCs);
+		}
 	}
 
-	private void WorldGen_playWorldCallBack(On_WorldGen.orig_playWorldCallBack orig, object threadContext)
+	private void Main_DrawProjectiles(On_Main.orig_DrawProjectiles orig, Main self)
 	{
-		orig(threadContext);
-		Invoke(CodeLayer.PostEnterWorld_Single);
+		orig.Invoke(self);
+		Invoke(CodeLayer.PostDrawProjectiles);
 	}
 
 	private void Main_OnResolutionChanged(Vector2 obj)
@@ -334,41 +355,21 @@ public class HookManager : ModSystem, IHookManager
 		}
 	}
 
-	private void LegacyPlayerRenderer_DrawPlayers(On_LegacyPlayerRenderer.orig_DrawPlayers orig, LegacyPlayerRenderer self, Terraria.Graphics.Camera camera, IEnumerable<Player> players)
+	private void WorldGen_playWorldCallBack(On_WorldGen.orig_playWorldCallBack orig, object threadContext)
 	{
-		orig.Invoke(self, camera, players);
-		Invoke(CodeLayer.PostDrawPlayers);
+		orig(threadContext);
+		Invoke(CodeLayer.PostEnterWorld_Single);
 	}
 
-	private void Main_DrawNPCs(On_Main.orig_DrawNPCs orig, Main self, bool behindTiles)
+	private void WorldGen_SaveAndQuit(On_WorldGen.orig_SaveAndQuit orig, Action callback)
 	{
-		orig.Invoke(self, behindTiles);
-		if (!behindTiles)
-		{
-			Invoke(CodeLayer.PostDrawNPCs);
-		}
+		orig(callback);
+		Invoke(CodeLayer.PostExitWorld_Single);
 	}
 
-	private void Main_DrawDust(On_Main.orig_DrawDust orig, Main self)
+	private void WorldGen_serverLoadWorldCallBack(On_WorldGen.orig_serverLoadWorldCallBack orig)
 	{
-		orig.Invoke(self);
-		Invoke(CodeLayer.PostDrawDusts);
-	}
-
-	private void Main_DrawProjectiles(On_Main.orig_DrawProjectiles orig, Main self)
-	{
-		orig.Invoke(self);
-		Invoke(CodeLayer.PostDrawProjectiles);
-	}
-
-	// TODO 不要给这种大函数直接IL了
-	private void Main_DoDraw(ILContext il)
-	{
-		var cursor = new ILCursor(il);
-		if (!cursor.TryGotoNext(MoveType.Before, ins => ins.MatchLdcI4(36)))
-		{
-			throw new Exception("Main_DoDraw_NotFound_1");
-		}
-		cursor.EmitDelegate(() => Invoke(CodeLayer.PostDrawFilter));
+		orig();
+		Invoke(CodeLayer.PostEnterWorld_Server);
 	}
 }
