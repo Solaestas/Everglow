@@ -1,4 +1,3 @@
-using Everglow.Common.CustomTile;
 using Everglow.Common.CustomTile.Tiles;
 using Terraria.DataStructures;
 
@@ -26,7 +25,9 @@ public class PlayerHandler : EntityHandler<Player>
 	public override void OnAttach()
 	{
 		if (attachType == AttachType.Stand)
+		{
 			Entity.velocity.Y = 0;
+		}
 		else if (attachType == AttachType.Grab)
 		{
 			Entity.velocity.Y = TileSystem.AirSpeed;
@@ -42,8 +43,8 @@ public class PlayerHandler : EntityHandler<Player>
 			var player = Entity;
 			player.slideDir = (int)player.GetControlDirectionH().ToVector2().X;
 			if (player.slideDir == 0 || player.spikedBoots <= 0 || player.mount.Active ||
-				(!player.controlLeft || player.slideDir != -1 || dir != Direction.Left) &&
-				(!player.controlRight || player.slideDir != 1 || dir != Direction.Right))
+				((!player.controlLeft || player.slideDir != -1 || dir != Direction.Left) &&
+				(!player.controlRight || player.slideDir != 1 || dir != Direction.Right)))
 			{
 				return;
 			}

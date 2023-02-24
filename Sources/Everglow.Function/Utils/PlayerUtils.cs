@@ -1,6 +1,5 @@
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
-using Terraria.ID;
 
 namespace Everglow.Common.Utils;
 

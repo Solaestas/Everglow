@@ -1,5 +1,3 @@
-using Everglow.Common.CustomTile;
-
 namespace Everglow.Common.CustomTile.EntityColliding;
 
 public class NPCColliding : GlobalNPC

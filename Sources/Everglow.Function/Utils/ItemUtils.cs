@@ -1,5 +1,3 @@
-using Terraria.ID;
-
 namespace Everglow.Common.Utils;
 
 public class ItemUtils
@@ -11,7 +9,7 @@ public class ItemUtils
 			PrefixID.Dangerous => 1.05f,
 			PrefixID.Savage => 1.1f,
 			PrefixID.Sharp => 1.15f,
-			PrefixID.Pointy=> 1.1f,	// ？？？怎么这个也是1.1f
+			PrefixID.Pointy => 1.1f,    // ？？？怎么这个也是1.1f
 			PrefixID.Legendary => 1.15f,
 			PrefixID.Terrible => 0.85f,
 			PrefixID.Dull => 0.85f,

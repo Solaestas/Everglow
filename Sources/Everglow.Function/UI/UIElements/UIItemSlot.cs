@@ -1,6 +1,5 @@
 ﻿using ReLogic.Graphics;
 using Terraria.GameContent;
-using Terraria.ID;
 
 namespace Everglow.Common.UI.UIElements;
 
@@ -220,8 +219,8 @@ internal class UIItemSlot : BaseElement
 
 			// 绘制物品贴图
 			sb.Draw(TextureAssets.Item[ContainedItem.type].Value, new Vector2(
-				DrawRectangle.X + (DrawRectangle.Width / 2),
-				DrawRectangle.Y + (DrawRectangle.Height / 2)) - (new Vector2(frame.Width, frame.Height) / 2f * scale),
+				DrawRectangle.X + DrawRectangle.Width / 2,
+				DrawRectangle.Y + DrawRectangle.Height / 2) - new Vector2(frame.Width, frame.Height) / 2f * scale,
 				new Rectangle?(frame), Color.White * Opacity, 0f, Vector2.Zero, scale, 0, 0);
 
 			// 绘制物品左下角那个代表数量的数字
@@ -264,13 +263,13 @@ internal class UIItemSlot : BaseElement
 			h = width;
 		}
 		sp.Draw(box, new Rectangle(x, y, width, height), new Rectangle(0, 0, width, height), c);
-		sp.Draw(box, new Rectangle(x + width, y, w - (width * 2), height), new Rectangle(width, 0, box.Width - (width * 2), height), c);
+		sp.Draw(box, new Rectangle(x + width, y, w - width * 2, height), new Rectangle(width, 0, box.Width - width * 2, height), c);
 		sp.Draw(box, new Rectangle(x + w - width, y, width, height), new Rectangle(box.Width - width, 0, width, height), c);
-		sp.Draw(box, new Rectangle(x, y + height, width, h - (height * 2)), new Rectangle(0, height, width, box.Height - (height * 2)), c);
-		sp.Draw(box, new Rectangle(x + width, y + height, w - (width * 2), h - (height * 2)), new Rectangle(width, height, box.Width - (width * 2), box.Height - (height * 2)), c);
-		sp.Draw(box, new Rectangle(x + w - width, y + height, width, h - (height * 2)), new Rectangle(box.Width - width, height, width, box.Height - (height * 2)), c);
+		sp.Draw(box, new Rectangle(x, y + height, width, h - height * 2), new Rectangle(0, height, width, box.Height - height * 2), c);
+		sp.Draw(box, new Rectangle(x + width, y + height, w - width * 2, h - height * 2), new Rectangle(width, height, box.Width - width * 2, box.Height - height * 2), c);
+		sp.Draw(box, new Rectangle(x + w - width, y + height, width, h - height * 2), new Rectangle(box.Width - width, height, width, box.Height - height * 2), c);
 		sp.Draw(box, new Rectangle(x, y + h - height, width, height), new Rectangle(0, box.Height - height, width, height), c);
-		sp.Draw(box, new Rectangle(x + width, y + h - height, w - (width * 2), height), new Rectangle(width, box.Height - height, box.Width - (width * 2), height), c);
+		sp.Draw(box, new Rectangle(x + width, y + h - height, w - width * 2, height), new Rectangle(width, box.Height - height, box.Width - width * 2, height), c);
 		sp.Draw(box, new Rectangle(x + w - width, y + h - height, width, height), new Rectangle(box.Width - width, box.Height - height, width, height), c);
 	}
 }

@@ -1,7 +1,6 @@
-﻿namespace Everglow.Common.Coroutines
+﻿namespace Everglow.Common.Coroutines;
+
+public interface ICoroutine
 {
-	public interface ICoroutine
-	{
-		bool MoveNext();
-	}
+	bool MoveNext();
 }

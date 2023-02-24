@@ -135,17 +135,17 @@ internal class HorizontalScrollbar : BaseElement
 	{
 		sb.Draw(uiScrollbarTexture, new Rectangle(
 			Info.HitBox.X - 12,
-			Info.HitBox.Y + ((Info.HitBox.Height - uiScrollbarTexture.Height) / 2), 12, uiScrollbarTexture.Height),
+			Info.HitBox.Y + (Info.HitBox.Height - uiScrollbarTexture.Height) / 2, 12, uiScrollbarTexture.Height),
 			new Rectangle(0, 0, 12, uiScrollbarTexture.Height), Color.White * alpha);
 
 		sb.Draw(uiScrollbarTexture, new Rectangle(
 			Info.HitBox.X,
-			Info.HitBox.Y + ((Info.HitBox.Height - uiScrollbarTexture.Height) / 2), Info.HitBox.Width, uiScrollbarTexture.Height),
+			Info.HitBox.Y + (Info.HitBox.Height - uiScrollbarTexture.Height) / 2, Info.HitBox.Width, uiScrollbarTexture.Height),
 			new Rectangle(12, 0, uiScrollbarTexture.Width - 24, uiScrollbarTexture.Height), Color.White * alpha);
 
 		sb.Draw(uiScrollbarTexture, new Rectangle(
 			Info.HitBox.X + Info.HitBox.Width,
-			Info.HitBox.Y + ((Info.HitBox.Height - uiScrollbarTexture.Height) / 2), 12, uiScrollbarTexture.Height),
+			Info.HitBox.Y + (Info.HitBox.Height - uiScrollbarTexture.Height) / 2, 12, uiScrollbarTexture.Height),
 			new Rectangle(uiScrollbarTexture.Width - 12, 0, 12, uiScrollbarTexture.Height), Color.White * alpha);
 	}
 }

@@ -14,7 +14,9 @@ public class Array2<T>
 		{
 			Debug.Assert(index <= 1);
 			if (index == 0)
+			{
 				valueA = value;
+			}
 			else
 			{
 				valueB = value;
@@ -38,7 +40,7 @@ public class Array2<T>
 		return new ArrayEnumerator(this);
 	}
 
-	public class ArrayEnumerator 
+	public class ArrayEnumerator
 	{
 		private Array2<T> array;
 		private int index;

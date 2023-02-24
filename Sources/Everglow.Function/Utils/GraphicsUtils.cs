@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Everglow.Common.Utils;
 public static class GraphicsUtils
 {
@@ -30,8 +24,8 @@ public static class GraphicsUtils
 		}
 
 		// 头尾增加两个不影响曲线效果的点
-		path[0] = (path[1] * 2) - path[2];
-		path[^1] = (path[^2] * 2) - path[^3];
+		path[0] = path[1] * 2 - path[2];
+		path[^1] = path[^2] * 2 - path[^3];
 
 		List<Vector2> result = new(count * 3);
 
@@ -45,7 +39,7 @@ public static class GraphicsUtils
 				// 根据当前和下一个节点所代表的向量的旋转差异来增加采样数量
 				// 如果旋转差异越大，采样数量就越大
 				float dis = Math.Abs(rotCurrent - rotNext);
-				dom = (int)(((dis >= MathHelper.Pi ? MathHelper.TwoPi - dis : dis) / 0.22f) + 2);
+				dom = (int)((dis >= MathHelper.Pi ? MathHelper.TwoPi - dis : dis) / 0.22f + 2);
 			}
 			else
 			{

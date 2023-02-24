@@ -1,6 +1,5 @@
 using Everglow.Common.Enums;
 using Everglow.Common.Interfaces;
-using Terraria.ID;
 
 namespace Everglow.Common.VFX.Visuals;
 

@@ -41,7 +41,7 @@ internal class BaseElement
 		/// <returns></returns>
 		public float GetPixelBaseParent(float pixel)
 		{
-			return (Percent * pixel) + Pixel;
+			return Percent * pixel + Pixel;
 		}
 
 		public void SetValue(float pixel, float percent)

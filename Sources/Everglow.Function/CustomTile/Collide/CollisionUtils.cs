@@ -160,7 +160,9 @@ public static class CollisionUtils
 		if (or.X > aabb.Width / 2)
 		{
 			if (or.Y > aabb.Height / 2)
+			{
 				return or.Distance(aabb.size / 2) <= circle.radius;
+			}
 			else
 			{
 				return or.X - aabb.Width / 2 <= circle.radius;

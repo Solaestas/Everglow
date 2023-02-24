@@ -54,7 +54,9 @@ public abstract class DBlock : DynamicTile, IGrabbable, IHookable
 		} while (aabb.position != target);
 
 		if (isX is null)
+		{
 			return Direction.None;
+		}
 		else if (isX.Value)
 		{
 			aabb.position.X = aabb.Left < collider.Left ? collider.Left - aabb.size.X : collider.Right;
@@ -163,7 +165,9 @@ public abstract class DBlock : DynamicTile, IGrabbable, IHookable
 				var drawdes = new Rectangle((int)DrawPos.X - 1, (int)DrawPos.Y - 1, 2, 2);
 				bool candraw;
 				if (mapRect != null)
+				{
 					candraw = drawdes.Intersects(mapRect.Value);
+				}
 				else
 				{
 					candraw = true;

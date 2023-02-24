@@ -1,6 +1,4 @@
-﻿using Terraria.ID;
-
-namespace Everglow.Common.Utils;
+﻿namespace Everglow.Common.Utils;
 
 public static class NetUtils
 {

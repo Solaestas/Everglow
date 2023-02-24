@@ -63,8 +63,8 @@ internal class UIText : BaseElement
 				var y = CenterY.Value;
 				Info.Left.Percent = x.Percent;
 				Info.Top.Percent = y.Percent;
-				Info.Left.Pixel = x.Pixel - (Info.Width.Pixel / 2f);
-				Info.Top.Pixel = y.Pixel - (Info.Height.Pixel / 2f);
+				Info.Left.Pixel = x.Pixel - Info.Width.Pixel / 2f;
+				Info.Top.Pixel = y.Pixel - Info.Height.Pixel / 2f;
 			}
 		}
 		base.Calculation();

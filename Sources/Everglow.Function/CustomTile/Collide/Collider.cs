@@ -1,4 +1,3 @@
-using Everglow.Common;
 using Everglow.Common.CustomTile.DataStructures;
 
 namespace Everglow.Common.CustomTile.Collide;
@@ -31,7 +30,9 @@ public class CPoint : Collider
 			return false;
 
 		if (other is CPoint)
+		{
 			return other.Position == Position;
+		}
 		else if (newCheck)
 		{
 			return other.Collision(this, false);
@@ -69,7 +70,9 @@ public class CAABB : Collider
 			return false;
 
 		if (other is CPoint point)
+		{
 			return aabb.Contain(point.Position);
+		}
 		else if (other is CAABB)
 		{
 			return true;//AABB已经在粗碰撞检测过
@@ -159,7 +162,9 @@ public class CCircle : Collider
 			return false;
 
 		if (other is CPoint)
+		{
 			return circle.Contain(other.Position);
+		}
 		else if (other is CAABB)
 		{
 			return true;

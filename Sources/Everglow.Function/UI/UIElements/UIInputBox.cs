@@ -217,7 +217,7 @@ internal class UIInputBox : UIPanel
 			{
 				for (int i = 0; i < text.Length; i++)
 				{
-					if (mousePos.X <= _font.MeasureString(text.Substring(0, i + 1)).X)
+					if (mousePos.X <= _font.MeasureString(text[..(i + 1)]).X)
 					{
 						cp.X = i;
 						break;
@@ -263,7 +263,7 @@ internal class UIInputBox : UIPanel
 			text = texts[i];
 			if (isEnableIME && i == CursorPosition.Y && j <= 8 && j >= 0)
 			{
-				x = _font.MeasureString(text.Substring(0, CursorPosition.X)).X;
+				x = _font.MeasureString(text[..CursorPosition.X]).X;
 				symHitBox.X = (int)(Info.Location.X + x - symOffsetX + offset.X);
 				symHitBox.Y = (int)(Info.Location.Y + offsetY + offset.Y);
 				if (!Info.HitBox.Contains(symHitBox))
@@ -315,8 +315,8 @@ internal class UIInputBox : UIPanel
 			Terraria.GameInput.PlayerInput.WritingText = true;
 			Main.instance.HandleIME();
 			var cp = Cursor;
-			var remaining = _text.Substring(cp, _text.Length - cp);
-			var crop = _text.Substring(0, cp);
+			var remaining = _text[cp..];
+			var crop = _text[..cp];
 			var input = Main.GetInputText(crop, true);
 			var p = CursorPosition;
 			_text = input + remaining;

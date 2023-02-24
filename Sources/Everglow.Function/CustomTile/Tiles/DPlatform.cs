@@ -1,4 +1,3 @@
-using Everglow.Common.CustomTile;
 using Everglow.Common.CustomTile.Collide;
 using Everglow.Common.CustomTile.DataStructures;
 using Everglow.Common.CustomTile.EntityColliding;
@@ -119,8 +118,8 @@ public abstract class DPlatform : DynamicTile, IHookable
 				}
 				if (result == Direction.Inside)
 				{
-					if (-MathHelper.PiOver4 * 3 < rotation.Angle && rotation.Angle <= -MathHelper.PiOver4 ||
-						MathHelper.PiOver4 < rotation.Angle && rotation.Angle <= MathHelper.PiOver4 * 3)
+					if ((-MathHelper.PiOver4 * 3 < rotation.Angle && rotation.Angle <= -MathHelper.PiOver4) ||
+						(MathHelper.PiOver4 < rotation.Angle && rotation.Angle <= MathHelper.PiOver4 * 3))
 					{
 						result = aabb.Center.Y > position.Y ? Direction.Top : Direction.Bottom;
 						float w;
@@ -198,8 +197,10 @@ public abstract class DPlatform : DynamicTile, IHookable
 					Direction h = result & (Direction.Right | Direction.Left);
 					float w = Vector2.Dot(result.ToVector2() * aabb.size / 2 + aabb.Center - position, rotation.YAxis);
 					result = result & ~Direction.Right & ~Direction.Left;
-					if (rotation.Angle < 0 && result == Direction.Top || rotation.Angle > 0 && result == Direction.Bottom)
+					if ((rotation.Angle < 0 && result == Direction.Top) || (rotation.Angle > 0 && result == Direction.Bottom))
+					{
 						result = Direction.None;
+					}
 					else
 					{
 						aabb.position.X = target.X;

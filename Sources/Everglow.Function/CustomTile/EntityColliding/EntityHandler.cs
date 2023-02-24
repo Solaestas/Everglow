@@ -1,5 +1,4 @@
-﻿using Everglow.Common.CustomTile;
-using Everglow.Common.CustomTile.DataStructures;
+﻿using Everglow.Common.CustomTile.DataStructures;
 using Everglow.Common.CustomTile.Tiles;
 
 namespace Everglow.Common.CustomTile.EntityColliding;

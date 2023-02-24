@@ -10,7 +10,7 @@ public static class FurnitureUtils
 	{
 		Player player = Main.LocalPlayer;
 		Tile tile = Main.tile[i, j];
-		int spawnX = i - (tile.TileFrameX / 18) + (tile.TileFrameX >= 72 ? 5 : 2);
+		int spawnX = i - tile.TileFrameX / 18 + (tile.TileFrameX >= 72 ? 5 : 2);
 		int spawnY = j + 2;
 
 		if (tile.TileFrameY % 38 != 0)
@@ -275,7 +275,7 @@ public static class FurnitureUtils
 			int left = Main.tile[Player.tileTargetX, Player.tileTargetY].TileFrameX / 18;
 			left %= 3;
 			left = Player.tileTargetX - left;
-			int top = Player.tileTargetY - (Main.tile[Player.tileTargetX, Player.tileTargetY].TileFrameY / 18);
+			int top = Player.tileTargetY - Main.tile[Player.tileTargetX, Player.tileTargetY].TileFrameY / 18;
 			if (player.sign > -1)
 			{
 				SoundEngine.PlaySound(SoundID.MenuClose);
@@ -304,7 +304,7 @@ public static class FurnitureUtils
 				}
 				else
 				{
-					NetMessage.SendData(MessageID.RequestChestOpen, -1, -1, null, left, (float)top, 0f, 0f, 0, 0, 0);
+					NetMessage.SendData(MessageID.RequestChestOpen, -1, -1, null, left, top, 0f, 0f, 0, 0, 0);
 					Main.stackSplit = 600;
 				}
 			}
@@ -361,7 +361,7 @@ public static class FurnitureUtils
 		Tile tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
 		int left = Player.tileTargetX;
 		int top = Player.tileTargetY;
-		left -= (tile.TileFrameX % 54) / 18;
+		left -= tile.TileFrameX % 54 / 18;
 		if (tile.TileFrameY % 36 != 0)
 		{
 			top--;
@@ -405,7 +405,7 @@ public static class FurnitureUtils
 		Tile tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
 		int left = Player.tileTargetX;
 		int top = Player.tileTargetY;
-		left -= (tile.TileFrameX % 54) / 18;
+		left -= tile.TileFrameX % 54 / 18;
 		if (tile.TileFrameY % 36 != 0)
 		{
 			top--;
@@ -487,8 +487,8 @@ public static class FurnitureUtils
 	public static void LightHitwire(int i, int j, int type, int tileX, int tileY, int coordinateX = 18, int coordinateY = 18)
 	{
 		Tile tile = Main.tile[i, j];
-		int x = i - ((tile.TileFrameX / coordinateX) % tileX);
-		int y = j - ((tile.TileFrameY / coordinateY) % tileY);
+		int x = i - tile.TileFrameX / coordinateX % tileX;
+		int y = j - tile.TileFrameY / coordinateY % tileY;
 		for (int m = x; m < x + tileX; m++)
 		{
 			for (int n = y; n < y + tileY; n++)

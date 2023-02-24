@@ -1,4 +1,3 @@
-using Everglow.Common;
 using Everglow.Common.CustomTile.Collide;
 using Everglow.Common.CustomTile.DataStructures;
 using Everglow.Common.CustomTile.EntityColliding;
@@ -122,7 +121,9 @@ public class TileSystem : ILoadable
 		{
 			var tile = dynamicTiles[i];
 			if (!tile.Active)
+			{
 				dynamicTiles.RemoveAt(i--);
+			}
 			else
 			{
 				tile.Update();
