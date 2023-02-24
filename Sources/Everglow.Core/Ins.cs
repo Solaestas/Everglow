@@ -1,5 +1,5 @@
 using Everglow.Common.Interfaces;
-using Everglow.Common.ModuleSystem;
+using Everglow.Common.Modules;
 using Everglow.Common.ObjectPool;
 using Everglow.Common.VFX;
 using log4net;

@@ -1,34 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Everglow.ZYModule.Commons.Core;
 
-namespace Everglow.Sources.Modules.ZYModule.Commons.Core
+public interface IUpdateable
 {
-    public interface IUpdateable
-    {
-        void Update();
-    }
+	void Update();
+}
 
-    public interface IDrawable
-    {
-        void Draw();
-    }
+public interface IDrawable
+{
+	void Draw();
+}
 
-    public interface IActive
-    {
-        bool Active { get; set; }
-        void Kill()
-        {
-            Active = false;
-        }
-    }
+public interface IActive
+{
+	bool Active { get; set; }
+	void Kill()
+	{
+		Active = false;
+	}
+}
 
-    public interface IMoveable
-    {
-        Vector2 Position { get; set; }
-        Vector2 Velocity { get; set; }
-        void Move();
-    }
+public interface IMoveable
+{
+	Vector2 Position { get; set; }
+	Vector2 Velocity { get; set; }
+	void Move();
 }

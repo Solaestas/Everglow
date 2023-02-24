@@ -1,0 +1,14 @@
+<Project>
+	<Import Project="..\Shared.props" />
+	<PropertyGroup>
+		<ModuleName>$(MSBuildProjectName)</ModuleName>
+		<AssemblyName>Everglow.$(ModuleName)</AssemblyName>
+		<RootNamespace>Everglow.$(ModuleName)</RootNamespace>
+		<AssetsPrefix>$(ModuleName)</AssetsPrefix>
+		<DefineConstants>$(DefineConstants);$(ModuleName)</DefineConstants>
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="$(MSBuildThisFileDirectory)\..\Everglow.Core\Everglow.Core.csproj" />
+		<ProjectReference Include="$(MSBuildThisFileDirectory)\..\Everglow.Function\Everglow.Function.csproj" />
+	</ItemGroup>
+</Project>

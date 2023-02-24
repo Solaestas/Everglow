@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 	<Import Project="..\Shared.props" />
+	<PropertyGroup>
+		<DoILRepack>true</DoILRepack>
+	</PropertyGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\**\*.csproj" />
+		<ProjectReference Include="..\Everglow.Core\Everglow.Core.csproj" />
+		<ProjectReference Include="..\Everglow.Function\Everglow.Function.csproj" />
 		<ProjectReference Remove="Everglow.csproj" />
-		<PackageReference Condition="'$(Configuration)'=='Debug'" Include="Costura.Fody" Version="5.7.0" PrivateAssets="all" />
+		<ILRepackExtraLibPath Include="@(Reference -> '%(RootDir)%(Directory)')" />
+		<ILRepackExcludeAssemblies Include="SixLabors.ImageSharp.dll" />
+	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="ILRepack.Lib.MSBuild" Version="2.1.18" />
 	</ItemGroup>
 	
 	<UsingTask TaskName="BuildMod" AssemblyFile="$(TaskPath)" />
@@ -16,7 +24,7 @@
 		</ItemGroup>
 	</Target>
 
-	<Target Name="BuildMod" AfterTargets="Build" Inputs="@(ResourceFile);@(AssetFile);@(Compile);@(ModFile)" Outputs="$(ModDirectory)$(AssemblyName).tmod">
+	<Target Name="BuildMod" AfterTargets="ILRepack" Inputs="@(ResourceFile);@(AssetFile);@(Compile);@(ModFile)" Outputs="$(ModDirectory)$(AssemblyName).tmod">
 		<BuildMod ModSourceDirectory="$(MSBuildProjectDirectory)\" ModName="$(AssemblyName)" OutputDirectory="$(OutputPath)" ModDirectory="$(ModDirectory)" Configuration="$(Configuration)" IgnoreBuildFile="$(IgnoreBuildFile)" AssetFiles="@(AssetFile);" ResourceFiles="@(ResourceFile)" />
 	</Target>
 </Project>

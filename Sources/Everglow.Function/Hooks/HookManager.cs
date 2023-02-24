@@ -92,6 +92,7 @@ public class HookManager : ModSystem, IHookManager
 		{
 			hook.Dispose();
 		}
+		ClearReflectionCache();
 		GC.SuppressFinalize(this);
 	}
 
@@ -193,7 +194,7 @@ public class HookManager : ModSystem, IHookManager
 		On_Main.DrawBackground -= Main_DrawBackground;
 		On_Main.DoDraw_WallsTilesNPCs -= Main_DoDraw_WallsTilesNPCs;
 		Main.OnResolutionChanged -= Main_OnResolutionChanged;
-		ClearReflectionCache();
+		Dispose();
 	}
 
 	public static void ClearReflectionCache()

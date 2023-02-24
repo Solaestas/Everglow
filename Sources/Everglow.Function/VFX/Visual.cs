@@ -1,4 +1,4 @@
-﻿using Everglow.Common.Enums;
+using Everglow.Common.Enums;
 using Everglow.Common.Interfaces;
 
 namespace Everglow.Common.VFX;
@@ -27,20 +27,7 @@ public abstract class Visual : IVisual
 		Active = false;
 	}
 
-	public virtual void OnSpawn()
-	{
-	}
+	public virtual void OnSpawn() { }
 
-	public virtual void Load()
-	{
-		VFXManager.Instance.Register(this);
-	}
-
-	public virtual void Unload()
-	{
-	}
-
-	public virtual void Update()
-	{
-	}
+	public virtual void Update() { }
 }

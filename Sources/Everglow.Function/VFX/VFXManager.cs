@@ -2,7 +2,7 @@ using System.Collections;
 using System.Reflection;
 using Everglow.Common.Enums;
 using Everglow.Common.Interfaces;
-using Everglow.Common.ModuleSystem;
+using Everglow.Common.Modules;
 using Everglow.Common.ObjectPool;
 using ReLogic.Content;
 
@@ -64,7 +64,7 @@ public class VFXManager : IVFXManager
 		}
 		Ins.HookManager.AddHook(CodeLayer.PostUpdateEverything, Update, "VFX Update");
 		Ins.MainThread.AddTask(() => tempRenderTarget = Ins.RenderTargetPool.GetRenderTarget2D());
-		foreach(var visual in Ins.ModuleManager.CreateInstances<IVisual>())
+		foreach (var visual in Ins.ModuleManager.CreateInstances<IVisual>())
 		{
 			Register(visual);
 		}
@@ -299,7 +299,7 @@ public class VFXManager : IVFXManager
 
 	public int VisualType<T>() => visualTypes[typeof(T)];
 
-	[DontAutoLoad]
+	[ModuleHideType]
 	internal class Rt2DVisual : Visual
 	{
 		public ResourceLocker<RenderTarget2D> locker;

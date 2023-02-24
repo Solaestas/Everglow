@@ -1,9 +1,8 @@
 using Everglow.Common.Enums;
-using Everglow.Common.ModuleSystem;
 
 namespace Everglow.Common.Interfaces;
 
-public interface IVisual : IModule
+public interface IVisual
 {
 	/// <summary>
 	/// 判断这个视觉特效是否还处于激活状态。我们需要保证如果它不是激活状态那么以后不会再用到它
