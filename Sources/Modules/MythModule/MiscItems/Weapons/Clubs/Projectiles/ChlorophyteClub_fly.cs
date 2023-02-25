@@ -75,11 +75,11 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
 
             }
         }
-        public virtual BlendState TrailBlendState()
+        public BlendState TrailBlendState()
         {
             return BlendState.AlphaBlend;
         }
-        public virtual string TrailShapeTex()
+        public string TrailShapeTex()
         {
             return "Everglow/Sources/Modules/MEACModule/Images/Melee";
         }
@@ -203,11 +203,11 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
             PostPreDraw();
             return false;
         }
-        public virtual void PostPreDraw()
+        public void PostPreDraw()
         {
 
         }
-        public virtual void DrawTrail()
+        public void DrawTrail()
         {
             List<Vector2> SmoothTrailX = CatmullRom.SmoothPath(trailVecs.ToList());//平滑
             List<Vector2> SmoothTrail = new List<Vector2>();
@@ -380,7 +380,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
 
             spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/Images/Warp").Value, bars, PrimitiveType.TriangleStrip);
         }
-        public virtual float TrailAlpha(float factor)
+        public float TrailAlpha(float factor)
         {
             float w;
             w = MathHelper.Lerp(0f, 1, factor);

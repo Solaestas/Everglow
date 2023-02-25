@@ -4,6 +4,7 @@ using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MEACModule;
 using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.CursedFlames;
+using Terraria.Audio;
 using Terraria.GameContent.Shaders;
 
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectiles
@@ -115,11 +116,11 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
         {
             target.AddBuff(BuffID.CursedInferno, (int)(818 * Omega));
         }
-        public virtual BlendState TrailBlendState()
+        public BlendState TrailBlendState()
         {
             return BlendState.AlphaBlend;
         }
-        public virtual string TrailShapeTex()
+        public string TrailShapeTex()
         {
             return "Everglow/Sources/Modules/MEACModule/Images/Melee";
         }
@@ -176,6 +177,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
                 {
                     Projectile.velocity = Utils.SafeNormalize(vT0, Vector2.Zero) * 15;
                     Projectile.friendly = true;
+                    SoundEngine.PlaySound((SoundID.DD2_FlameburstTowerShot.WithPitchOffset(-1f)), Projectile.Center);
                 }
             }
             if (Projectile.timeLeft < 550 && Projectile.timeLeft > 500)
@@ -193,9 +195,9 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
             Projectile.localNPCHitCooldown = (int)(MathF.PI / (Math.Max(Omega, 0.157)));
 
             Projectile.rotation += Omega;
+            float MeleeSpeed = player.GetAttackSpeed(Projectile.DamageType);
             if (Projectile.timeLeft > 550)
             {
-                float MeleeSpeed = player.GetAttackSpeed(Projectile.DamageType);
                 if (Omega < MeleeSpeed * MaxOmega)
                 {
                     Omega += Beta * MeleeSpeed * 4f;
@@ -203,7 +205,17 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
             }
             else
             {
-                Omega *= 0.98f;
+                if (Projectile.timeLeft < 500)
+                {
+                    Omega *= 0.98f;
+                }
+                else
+                {
+                    if (Omega < MeleeSpeed * MaxOmega + 0.2f)
+                    {
+                        Omega += Beta * MeleeSpeed * 0.04f;
+                    }
+                }
             }
             Vector2 HitRange = new Vector2(HitLength, HitLength * Projectile.spriteDirection).RotatedBy(Projectile.rotation) * Projectile.scale;
             trailVecs.Enqueue(HitRange);
@@ -271,7 +283,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
                 effects = SpriteEffects.FlipHorizontally;
             }
             Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
-            float colorValue = MathF.Sqrt(Omega / 0.4f);
+            float colorValue = Omega / 0.4f;
             Color color = new Color(colorValue, colorValue, colorValue, colorValue);
             Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, color, Projectile.rotation, texture.Size() / 2f, Projectile.scale, effects, 0f);
             for (int i = 0; i < 5; i++)
@@ -284,11 +296,11 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
             PostPreDraw();
             return false;
         }
-        public virtual void PostPreDraw()
+        public void PostPreDraw()
         {
 
         }
-        public virtual void DrawTrail()
+        public void DrawTrail()
         {
             List<Vector2> SmoothTrailX = CatmullRom.SmoothPath(trailVecs.ToList());//平滑
             List<Vector2> SmoothTrail = new List<Vector2>();
@@ -459,7 +471,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
 
             spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/Images/Warp").Value, bars, PrimitiveType.TriangleStrip);
         }
-        public virtual float TrailAlpha(float factor)
+        public float TrailAlpha(float factor)
         {
             float w;
             w = MathHelper.Lerp(0f, 1, factor);

@@ -4,31 +4,44 @@ using Everglow.Sources.Modules.MythModule.Common;
 
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectiles
 {
-    public class CrystalClub : ClubProj
+    public class StarDancer : ClubProj
     {
         public override void SetDef()
         {
             Beta = 0.005f;
             MaxOmega = 0.45f;
-            WarpValue = 0.3f;
+            WarpValue = 0.5f;
         }
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            int type = 0;
-            switch (Main.rand.Next(3))
+            if (Main.rand.NextBool(7))
             {
-                case 0:
-                    type = DustID.BlueCrystalShard; break;
-                case 1:
-                    type = DustID.PinkCrystalShard; break;
-                case 2:
-                    type = DustID.PurpleCrystalShard; break;
-            }
-            for (float d = 0.1f; d < Omega; d += 0.04f)
-            {
-                Dust D = Dust.NewDustDirect(target.Center - new Vector2(4)/*Dust的Size=8x8*/, 0, 0, type, 0, 0, 150, default, Main.rand.NextFloat(0.4f, 1.1f));
-                D.noGravity = true;
-                D.velocity = new Vector2(0, Main.rand.NextFloat(Omega * 25f)).RotatedByRandom(6.283);
+                Vector2 v0 = new Vector2(Main.rand.NextFloat(1f, 1.2f), 0).RotatedByRandom(6.283);
+                for (int i = 0; i < 5; i++)
+                {
+                    Vector2 v1 = v0.RotatedBy(i / 2.5 * Math.PI);
+                    Vector2 v2 = v0.RotatedBy((i + 0.5) / 2.5 * Math.PI) * 3;
+                    Vector2 v3 = v0.RotatedBy((i + 1) / 2.5 * Math.PI);
+                    for (int j = 0; j < 15; j++)
+                    {
+                        Vector2 v4 = (v1 * j + v2 * (14 - j)) / 14f;
+                        Vector2 v5 = (v3 * j + v2 * (14 - j)) / 14f;
+                        Vector2 v6 = v2 * (14 - j) / 14f;
+                        Dust D = Dust.NewDustDirect(target.Center + v4 - new Vector2(4)/*Dust的Size=8x8*/, 0, 0, DustID.GoldCoin, 0, 0, 0, default, 1.5f);
+                        D.noGravity = true;
+                        D.velocity = v4;
+
+                        Dust D1 = Dust.NewDustDirect(target.Center + v5 - new Vector2(4)/*Dust的Size=8x8*/, 0, 0, DustID.GoldCoin, 0, 0, 0, default, 1.5f);
+                        D1.noGravity = true;
+                        D1.velocity = v5;
+
+                        Dust D2 = Dust.NewDustDirect(target.Center + v6 - new Vector2(4)/*Dust的Size=8x8*/, 0, 0, DustID.GoldCoin, 0, 0, 0, default, 1.3f);
+                        D2.noGravity = true;
+                        D2.velocity = v6;
+                    }
+                }
+                Vector2 v7 = new Vector2(0, -Main.rand.NextFloat(1000f, 1200f)).RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f));
+                Projectile.NewProjectile(Projectile.GetSource_FromAI(), target.Center + v7, -v7 / 40f, ProjectileID.FallingStar, (int)(Projectile.damage * 8.3f), Projectile.knockBack, Projectile.owner);
             }
         }
         public override void AI()
@@ -36,23 +49,10 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
             base.AI();
             if (Omega > 0.1f)
             {
-                for (float d = 0.1f; d < Omega; d += 0.1f)
-                {
-                }
-                if (FlyClubCooling > 0)
-                {
-                    FlyClubCooling--;
-                }
-                if (FlyClubCooling <= 0 && Omega > 0.2f)
-                {
-                    FlyClubCooling = 44;
-                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<CrystalClub_fly>(), (int)(Projectile.damage * 0.3f), Projectile.knockBack * 0.4f, Projectile.owner);
-                }
                 GenerateDust();
             }
         }
         internal float ReflectStrength = 1.2f;
-        private int FlyClubCooling = 0;
         private void GenerateDust()
         {
             Vector2 v0 = new Vector2(1, 1);
@@ -64,21 +64,29 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
             }
             v0 = v0.RotatedBy(Projectile.rotation);
             float Speed = Math.Min(Omega * 0.5f, 0.181f);
-            int type = 0;
-            switch (Main.rand.Next(3))
-            {
-                case 0:
-                    type = DustID.BlueCrystalShard; break;
-                case 1:
-                    type = DustID.PinkCrystalShard; break;
-                case 2:
-                    type = DustID.PurpleCrystalShard; break;
-            }
+            int type = DustID.FlameBurst;
             for (float d = 0.1f; d < Omega; d += 0.04f)
             {
                 Dust D = Dust.NewDustDirect(Projectile.Center + v0 - new Vector2(4)/*Dust的Size=8x8*/, 0, 0, type, -v0.Y * Speed, v0.X * Speed, 150, default, Main.rand.NextFloat(0.4f, 0.7f));
                 D.noGravity = true;
                 D.velocity = new Vector2(-v0.Y * Speed, v0.X * Speed);
+            }
+        }
+        public override void PostDraw(Color lightColor)
+        {
+            SpriteEffects effects = SpriteEffects.None;
+            if (Projectile.spriteDirection == 1)
+            {
+                effects = SpriteEffects.FlipHorizontally;
+            }
+            Texture2D texture = MythContent.QuickTexture("MiscItems/Weapons/Clubs/Projectiles/StarDancer_glow");
+            Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, texture.Size() / 2f, Projectile.scale, effects, 0f);
+            for (int i = 0; i < 5; i++)
+            {
+                float fade = Omega * 2f + 0.2f;
+                fade *= (5 - i) / 5f;
+                Color color2 = new Color(fade, fade, fade, 0);
+                Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, color2, Projectile.rotation - i * 0.75f * Omega, texture.Size() / 2f, Projectile.scale, effects, 0f);
             }
         }
         public override void PostPreDraw()
@@ -131,7 +139,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
             MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
             Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 
-            MeleeTrail.Parameters["tex1"].SetValue(MythContent.QuickTexture("MiscItems/Weapons/Clubs/Projectiles/CrystalClub_fly"));
+            MeleeTrail.Parameters["tex1"].SetValue(MythContent.QuickTexture("MiscItems/Weapons/Clubs/Projectiles/CrystalClub_trail"));
             Vector4 lightColor = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16)).ToVector4();
             lightColor.W = 0.7f * Omega;
             MeleeTrail.Parameters["Light"].SetValue(lightColor);

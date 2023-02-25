@@ -1,6 +1,9 @@
 ﻿using Everglow.Sources.Commons.Function.Curves;
 using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.GoldenShower;
+using Microsoft.Xna.Framework.Audio;
+using Terraria.Audio;
 
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectiles
 {
@@ -10,9 +13,17 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
         {
             Beta = 0.005f;
             MaxOmega = 0.45f;
+            WarpValue = 0.3f;
         }
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
+            for (int x = 0; x < 2; x++)
+            {
+                Vector2 velocity = new Vector2(0, Main.rand.NextFloat(2f, 6f)).RotatedByRandom(6.283) - Projectile.velocity * 0.2f;
+                Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center + velocity * -2, velocity, ModContent.ProjectileType<GoldenShowerII>(), Projectile.damage / 3, Projectile.knockBack, Projectile.owner, 3f/*If ai[0] equal to 3, another ai will be execute*/);
+                p.friendly = false;
+                p.CritChance = Projectile.CritChance;
+            }
             target.AddBuff(BuffID.Ichor, (int)(818 * Omega));
         }
         public override void AI()
@@ -30,7 +41,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
                 }
                 if (FlyClubCooling <= 0 && Omega > 0.2f)
                 {
-                    FlyClubCooling = (int)(44);
+                    FlyClubCooling = 44;
                     Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<IchorClub_fly>(), (int)(Projectile.damage * 0.3f), Projectile.knockBack * 0.4f, Projectile.owner);
                 }
             }
@@ -351,6 +362,8 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
             {
                 listVec.Add(trailVecs.ToList()[1] * -Main.rand.NextFloat(0.95f, Math.Min(1.75f, 1 + Omega * 1.5f)));
             }
+
+            //SoundEngine.PlaySound(SoundID.SplashWeak.WithPitchOffset(0.6f),Projectile.Center);
         }
         private void DeactivateMoon(ref List<Vector2> listVec)
         {

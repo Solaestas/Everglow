@@ -3,13 +3,13 @@ using Everglow.Sources.Commons.Function.Curves;
 using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MEACModule;
 using Everglow.Sources.Modules.MythModule.Common;
-using Terraria.GameContent.Shaders;
+using Terraria;
 using Terraria.Audio;
-
+using Terraria.GameContent.Shaders;
 
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectiles
 {
-    public class IchorClub_fly : ModProjectile, IWarpProjectile
+    public class CrystalClub_fly : ModProjectile, IWarpProjectile
     {
         /// <summary>
         /// 角速度
@@ -68,25 +68,59 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
 
             trailVecs = new Queue<Vector2>(trailLength + 1);
         }
-        private void GenerateDust()
-        {
-            Vector2 v0 = new Vector2(1, 1);
-            v0 *= Main.rand.NextFloat(Main.rand.NextFloat(1, HitLength), HitLength);
-            v0.X *= Projectile.spriteDirection;
-            if (Main.rand.NextBool(2))
-            {
-                v0 *= -1;
-            }
-            v0 = v0.RotatedBy(Projectile.rotation);
-            float Speed = Math.Min(Omega * 0.5f, 0.221f);
-            Dust D = Dust.NewDustDirect(Projectile.Center + v0 - new Vector2(4)/*Dust的Size=8x8*/, 0, 0, DustID.Ichor, -v0.Y * Speed, v0.X * Speed, 150, default, Main.rand.NextFloat(0.4f, 1.1f));
-            D.noGravity = true;
-            D.velocity = new Vector2(-v0.Y * Speed, v0.X * Speed);
-        }
-
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            target.AddBuff(BuffID.Ichor, (int)(818 * Omega));
+            float Rnd = Main.rand.NextFloat(6.283f);
+            for(int d = 0;d < 9;d++)
+            {
+                Vector2 v0 = new Vector2(0, 0.7f).RotatedBy(d / 4.5 * Math.PI + Rnd) * 5;
+                Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, v0, ProjectileID.CrystalShard, Projectile.damage / 2, Projectile.knockBack * 0.1f, Projectile.owner);
+                p.scale = 1.6f;
+            }
+            for (int d = 0; d < 9; d++)
+            {
+                Vector2 v0 = new Vector2(0, 1.2f).RotatedBy((d + 0.5) / 4.5 * Math.PI + Rnd) * 5;
+                Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, v0, ProjectileID.CrystalShard, Projectile.damage / 2, Projectile.knockBack * 0.1f, Projectile.owner);
+                p.scale = 2.4f;
+            }
+            SoundEngine.PlaySound(SoundID.Shatter.WithPitchOffset(Main.rand.NextFloat(0.2f, 0.9f)), Projectile.Center);
+            int type = 0;
+
+            for (int d = 0; d < 50; d += 1)
+            {
+                switch (Main.rand.Next(3))
+                {
+                    case 0:
+                        type = DustID.BlueCrystalShard; break;
+                    case 1:
+                        type = DustID.PinkCrystalShard; break;
+                    case 2:
+                        type = DustID.PurpleCrystalShard; break;
+                }
+                float scale = Main.rand.NextFloat(0.4f, 2.1f);
+                Dust D = Dust.NewDustDirect(Projectile.Center - new Vector2(4)/*Dust的Size=8x8*/, 0, 0, type, 0, 0, 150, default, scale);
+                D.noGravity = true;
+                D.velocity = new Vector2(0, Main.rand.NextFloat(10f)).RotatedByRandom(6.283) * scale;
+            }
+            for (int d = 0; d < 120; d += 1)
+            {
+                switch (Main.rand.Next(4))
+                {
+                    case 0:
+                        type = ModContent.DustType<Slingshots.Dusts.SapphireDust>(); break;
+                    case 1:
+                        type = ModContent.DustType<Slingshots.Dusts.EmeraldDust>(); break;
+                    case 2:
+                        type = ModContent.DustType<Slingshots.Dusts.EmeraldDust>(); break;
+                    case 3:
+                        type = ModContent.DustType<Slingshots.Dusts.EmeraldDust>(); break;
+                }
+                float scale = Main.rand.NextFloat(0.4f, 1.1f);
+                Dust D = Dust.NewDustDirect(Projectile.Center - new Vector2(4)/*Dust的Size=8x8*/, 0, 0, type, 0, 0, 150, default, scale);
+                D.noGravity = true;
+                D.velocity = new Vector2(0, Main.rand.NextFloat(20f)).RotatedByRandom(6.283) * scale;
+            }
+            Projectile.Kill();
         }
         public BlendState TrailBlendState()
         {
@@ -109,8 +143,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
             knockback *= Omega * 3;
         }
         public override void AI()
-        {
-            
+        {         
             if (DamageStartValue == 0)
             {
                 DamageStartValue = Projectile.damage;
@@ -131,7 +164,6 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
                 {
                     Projectile.velocity = Utils.SafeNormalize(vT0, Vector2.Zero) * 15;
                     Projectile.friendly = true;
-                    SoundEngine.PlaySound(SoundID.Splash.WithPitchOffset(0.6f), Projectile.Center);
                 }
             }
             if (Projectile.timeLeft < 550 && Projectile.timeLeft > 500)
@@ -169,18 +201,6 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
                     {
                         Omega += Beta * MeleeSpeed * 0.04f;
                     }
-                }
-
-                if (Omega > 0.1f)
-                {
-                    for (float d = 0.1f; d < Omega; d += 0.1f)
-                    {
-                        GenerateDust();
-                    }
-                }
-                else
-                {
-                    GenerateDust();
                 }
             }
             Vector2 HitRange = new Vector2(HitLength, HitLength * Projectile.spriteDirection).RotatedBy(Projectile.rotation) * Projectile.scale;
@@ -249,17 +269,79 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
                 effects = SpriteEffects.FlipHorizontally;
             }
             Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
-            float colorValue = MathF.Sqrt(Omega / 0.4f);
+            float colorValue = Omega / 0.4f;
             Color color = new Color(colorValue, colorValue, colorValue, colorValue);
             Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, color, Projectile.rotation, texture.Size() / 2f, Projectile.scale, effects, 0f);
             for (int i = 0; i < 5; i++)
             {
-                float alp = Omega / 0.4f + 2.5f;
+                float alp = Omega / 0.4f;
                 Color color2 = new Color((int)((5 - i) / 5f * alp), (int)((5 - i) / 5f * alp), (int)((5 - i) / 5f * alp), 0);
                 Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, color2, Projectile.rotation - i * 0.75f * Omega, texture.Size() / 2f, Projectile.scale, effects, 0f);
             }
             DrawTrail();
+            PostPreDraw();
             return false;
+        }
+
+        public void PostPreDraw()
+        {
+            List<Vector2> SmoothTrailX = CatmullRom.SmoothPath(trailVecs.ToList());//平滑
+            List<Vector2> SmoothTrail = new List<Vector2>();
+            for (int x = 0; x < SmoothTrailX.Count - 1; x++)
+            {
+                SmoothTrail.Add(SmoothTrailX[x]);
+            }
+            if (trailVecs.Count != 0)
+            {
+                SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
+            }
+
+            int length = SmoothTrail.Count;
+            if (length <= 3)
+            {
+                return;
+            }
+            Vector2[] trail = SmoothTrail.ToArray();
+            List<Vertex2D> bars = new List<Vertex2D>();
+
+            for (int i = 0; i < length; i++)
+            {
+                float factor = i / (length - 1f);
+                float w = 1 - Math.Abs((trail[i].X * 0.5f + trail[i].Y * 0.5f) / trail[i].Length());
+                float w2 = MathF.Sqrt(TrailAlpha(factor));
+                w *= w2;
+                bars.Add(new Vertex2D(Projectile.Center + trail[i] * 0.1f * Projectile.scale, Color.White, new Vector3(factor, 1, 0f)));
+                bars.Add(new Vertex2D(Projectile.Center + trail[i] * Projectile.scale, Color.White, new Vector3(factor, 0, w * 2f * Omega)));
+            }
+            bars.Add(new Vertex2D(Projectile.Center, Color.Transparent, new Vector3(0, 0, 0)));
+            bars.Add(new Vertex2D(Projectile.Center, Color.Transparent, new Vector3(0, 0, 0)));
+            for (int i = 0; i < length; i++)
+            {
+                float factor = i / (length - 1f);
+                float w = 1 - Math.Abs((trail[i].X * 0.5f + trail[i].Y * 0.5f) / trail[i].Length());
+                float w2 = MathF.Sqrt(TrailAlpha(factor));
+                w *= w2 * w;
+                bars.Add(new Vertex2D(Projectile.Center - trail[i] * 0.1f * Projectile.scale, Color.Black, new Vector3(factor, 1, 0f)));
+                bars.Add(new Vertex2D(Projectile.Center - trail[i] * Projectile.scale, Color.Black, new Vector3(factor, 0, w * 2f * Omega)));
+            }
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone);
+            var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+            var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
+
+            Effect MeleeTrail = MythContent.QuickEffect("MiscItems/Weapons/Clubs/Projectiles/CrystalClubTrail");
+            MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
+            Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+
+            MeleeTrail.Parameters["tex1"].SetValue(MythContent.QuickTexture("MiscItems/Weapons/Clubs/Projectiles/CrystalClub_fly"));
+            Vector4 lightColor = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16)).ToVector4();
+            lightColor.W = 0.7f * Omega;
+            MeleeTrail.Parameters["Light"].SetValue(lightColor);
+            MeleeTrail.CurrentTechnique.Passes["TrailByOrigTex"].Apply();
+
+            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
         }
         public void DrawTrail()
         {
@@ -282,8 +364,9 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
             Vector2[] trail = SmoothTrail.ToArray();
             List<Vertex2D> bars = new List<Vertex2D>();
 
-            float fade = Omega * 2f + 0.2f;
-            Color color2 = new Color(fade, Math.Min(fade * 0.8f, 0.8f), 0, fade * 0.5f);
+            float fade = Omega * 0.6f + 0.1f;
+            Vector4 lightColor = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16)).ToVector4();
+            Color color2 = new Color(fade * 0.7f * lightColor.X, fade * 0.1f * lightColor.Y, fade * 0.4f * lightColor.Z, fade * 1.4f * lightColor.W);
             if(Projectile.timeLeft < 20)
             {
                 color2 *= Projectile.timeLeft / 20f;
@@ -299,6 +382,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
             }
             bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, Color.Transparent, new Vector3(0, 0, 0)));
             bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, Color.Transparent, new Vector3(0, 0, 0)));
+            color2 = new Color(fade * 0.1f * lightColor.X, fade * 0.5f * lightColor.Y, fade * 0.7f * lightColor.Z, fade * 1.4f * lightColor.W);
             for (int i = 0; i < length; i++)
             {
                 float factor = i / (length - 1f);
@@ -311,9 +395,8 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-            Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("MiscItems/Weapons/Clubs/Projectiles/IchorClub_trail");
+            Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("MiscItems/Weapons/Clubs/Projectiles/CrystalClub_trail");
 
-            Vector4 lightColor = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16)).ToVector4();
             lightColor.W = 0.7f * Omega;
 
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);

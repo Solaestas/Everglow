@@ -4,6 +4,7 @@ using Terraria.GameContent.Shaders;
 using Everglow.Sources.Commons.Function.Curves;
 using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MythModule.Common;
+using Terraria.Audio;
 
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectiles
 {
@@ -46,6 +47,10 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
         /// </summary>
         internal float HitLength = 32f;
         /// <summary>
+        /// 扭曲强度
+        /// </summary>
+        internal float WarpValue = 0.6f;
+        /// <summary>
         /// 命中敌人后对于角速度的削减率(会根据敌人的击退抗性而再次降低)
         /// </summary>
         internal float StrikeOmegaDecrease = 0.9f;
@@ -53,6 +58,10 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
         /// 命中敌人后最低剩余角速度(默认40%,即0.4)
         /// </summary>
         internal float MinStrikeOmegaDecrease = 0.4f;
+        /// <summary>
+        /// 内部音效播放计时器
+        /// </summary>
+        internal float AudioTimer = 3.14159f;
         /// <summary>
         /// 内部参数，用来计算伤害
         /// </summary>
@@ -79,7 +88,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
         }
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
-            float power = Math.Max(StrikeOmegaDecrease - MathF.Pow(target.knockBackResist / 4f,3), MinStrikeOmegaDecrease);
+            float power = Math.Max(StrikeOmegaDecrease - MathF.Pow(target.knockBackResist / 4f, 3), MinStrikeOmegaDecrease);
 
             ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
             float ShakeStrength = Omega;
@@ -89,8 +98,19 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
             hitDirection = target.Center.X > Main.player[Projectile.owner].Center.X ? 1 : -1;
             knockback *= Omega * 3;
         }
+        public virtual void UpdateSound()
+        {
+            AudioTimer -= Omega;
+            if (AudioTimer <= 0)
+            {
+                //SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/MiscItems/Weapons/Clubs/Projectiles/Club_wood").WithPitchOffset(-1 + Omega * 3f), Projectile.Center);
+                SoundEngine.PlaySound(((SoundID.DD2_MonkStaffSwing.WithPitchOffset(-1 + Omega * 3f)).WithVolumeScale(1 - Omega)), Projectile.Center);
+                AudioTimer = MathF.PI;
+            }
+        }
         public override void AI()
         {
+
             if (DamageStartValue == 0)
             {
                 DamageStartValue = Projectile.damage;
@@ -148,6 +168,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
                 Projectile.Kill();
             }
             player.heldProj = Projectile.whoAmI;
+            UpdateSound();
             ProduceWaterRipples(new Vector2(HitLength * Projectile.scale));
         }
         public bool HasContinueUsing()
@@ -155,7 +176,11 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
             Player player = Main.player[Projectile.owner];
             if (player.controlUseItem && !player.dead)
             {
-                return true;
+                if(player.HeldItem.shoot == Projectile.type)
+                {
+                    return true;
+                }
+                
             }
             return false;
         }
@@ -283,23 +308,23 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
                 {
                     var MidValue = (1 - dir) / (1 - dir + dir1);
                     var MidPoint = MidValue * trail[i] + (1 - MidValue) * trail[i - 1];
-                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(0, Omega, 0, 1), new Vector3(factor, 1, 1)));
-                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + MidPoint * Projectile.scale * 1.1f, new Color(0, Omega, 0, 1), new Vector3(factor, 0, 1)));
-                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(1, Omega, 0, 1), new Vector3(factor, 1, 1)));
-                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + MidPoint * Projectile.scale * 1.1f, new Color(1, Omega, 0, 1), new Vector3(factor, 0, 1)));
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(0, Omega * WarpValue, 0, 1), new Vector3(factor, 1, 1)));
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + MidPoint * Projectile.scale * 1.1f, new Color(0, Omega * WarpValue, 0, 1), new Vector3(factor, 0, 1)));
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(1, Omega * WarpValue, 0, 1), new Vector3(factor, 1, 1)));
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + MidPoint * Projectile.scale * 1.1f, new Color(1, Omega * WarpValue, 0, 1), new Vector3(factor, 0, 1)));
                 }
                 if (dir1 - dir > 0.5)
                 {
                     var MidValue = (1 - dir1) / (1 - dir1 + dir);
                     var MidPoint = MidValue * trail[i - 1] + (1 - MidValue) * trail[i];
-                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(1, Omega, 0, 1), new Vector3(factor, 1, 1)));
-                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + MidPoint * Projectile.scale * 1.1f, new Color(1, Omega, 0, 1), new Vector3(factor, 0, 1)));
-                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(0, Omega, 0, 1), new Vector3(factor, 1, 1)));
-                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + MidPoint * Projectile.scale * 1.1f, new Color(0, Omega, 0, 1), new Vector3(factor, 0, 1)));
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(1, Omega * WarpValue, 0, 1), new Vector3(factor, 1, 1)));
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + MidPoint * Projectile.scale * 1.1f, new Color(1, Omega * WarpValue, 0, 1), new Vector3(factor, 0, 1)));
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(0, Omega * WarpValue, 0, 1), new Vector3(factor, 1, 1)));
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + MidPoint * Projectile.scale * 1.1f, new Color(0, Omega * WarpValue, 0, 1), new Vector3(factor, 0, 1)));
                 }
 
-                bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(dir,Omega, 0, 1), new Vector3(factor, 1, 1)));
-                bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + trail[i] * Projectile.scale * 1.1f, new Color(dir, Omega, 0, 1), new Vector3(factor, 0, 1)));
+                bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(dir,Omega * WarpValue, 0, 1), new Vector3(factor, 1, 1)));
+                bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + trail[i] * Projectile.scale * 1.1f, new Color(dir, Omega * WarpValue, 0, 1), new Vector3(factor, 0, 1)));
             }
             bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, Color.Transparent, new Vector3(0, 0, 0)));
             bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, Color.Transparent, new Vector3(0, 0, 0)));
@@ -329,23 +354,23 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
                 {
                     var MidValue = (1 - dir) / (1 - dir + dir1);
                     var MidPoint = MidValue * trail[i] + (1 - MidValue) * trail[i - 1];
-                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(0, Omega, 0, 1), new Vector3(factor, 1, 1)));
-                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition - MidPoint * Projectile.scale * 1.1f, new Color(0, Omega, 0, 1), new Vector3(factor, 0, 1)));
-                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(1, Omega, 0, 1), new Vector3(factor, 1, 1)));
-                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition - MidPoint * Projectile.scale * 1.1f, new Color(1, Omega, 0, 1), new Vector3(factor, 0, 1)));
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(0, Omega * WarpValue, 0, 1), new Vector3(factor, 1, 1)));
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition - MidPoint * Projectile.scale * 1.1f, new Color(0, Omega * WarpValue, 0, 1), new Vector3(factor, 0, 1)));
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(1, Omega * WarpValue, 0, 1), new Vector3(factor, 1, 1)));
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition - MidPoint * Projectile.scale * 1.1f, new Color(1, Omega * WarpValue, 0, 1), new Vector3(factor, 0, 1)));
                 }
                 if (dir1 - dir > 0.5)
                 {
                     var MidValue = (1 - dir1) / (1 - dir1 + dir);
                     var MidPoint = MidValue * trail[i - 1] + (1 - MidValue) * trail[i];
-                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(1, Omega, 0, 1), new Vector3(factor, 1, 1)));
-                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition - MidPoint * Projectile.scale * 1.1f, new Color(1, Omega, 0, 1), new Vector3(factor, 0, 1)));
-                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(0, Omega, 0, 1), new Vector3(factor, 1, 1)));
-                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition - MidPoint * Projectile.scale * 1.1f, new Color(0, Omega, 0, 1), new Vector3(factor, 0, 1)));
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(1, Omega * WarpValue, 0, 1), new Vector3(factor, 1, 1)));
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition - MidPoint * Projectile.scale * 1.1f, new Color(1, Omega * WarpValue, 0, 1), new Vector3(factor, 0, 1)));
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(0, Omega * WarpValue, 0, 1), new Vector3(factor, 1, 1)));
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition - MidPoint * Projectile.scale * 1.1f, new Color(0, Omega * WarpValue, 0, 1), new Vector3(factor, 0, 1)));
                 }
 
-                bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(dir, Omega, 0, 1), new Vector3(factor, 1, 1)));
-                bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition - trail[i] * Projectile.scale * 1.1f, new Color(dir, Omega, 0, 1), new Vector3(factor, 0, 1)));
+                bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(dir, Omega * WarpValue, 0, 1), new Vector3(factor, 1, 1)));
+                bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition - trail[i] * Projectile.scale * 1.1f, new Color(dir, Omega * WarpValue, 0, 1), new Vector3(factor, 0, 1)));
             }
 
             spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/Images/Warp").Value, bars, PrimitiveType.TriangleStrip);
