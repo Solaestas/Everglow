@@ -7,11 +7,4 @@
 		<ModuleReference Include="$(Modules.Split(';'))" />
 		<ProjectReference Include="@(ModuleReference->'..\Modules\%(Filename)\Everglow.%(Filename).csproj')" />
 	</ItemGroup>
-
-	<PropertyGroup>
-		<ModuleAssetPath>@(ModuleReference->'..\Modules\%(Identity)\')</ModuleAssetPath>
-	</PropertyGroup>
-	<ItemGroup>
-		<!--<AssetFile Include="$(ModuleAssetPath)" Hide="true" />-->
-	</ItemGroup>
 </Project>

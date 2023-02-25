@@ -88,8 +88,6 @@
 					AfterTargets="AfterBuild"
 					Inputs="@(ResourceFile);@(AssetFile);@(AssemblyFile);@(ModFile)"
 					Outputs="$(ModDirectory)$(AssemblyName).tmod">
-		<Message Importance="high"
-						 Text="Resource : @(ResourceLists), @(ResourceFile)" />
 		<BuildMod ModSourceDirectory="$(MSBuildProjectDirectory)\"
 							ModName="$(AssemblyName)"
 							OutputDirectory="$(OutputPath)"
