@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.Config;
 
 namespace Everglow;
 
@@ -27,6 +28,10 @@ public class Everglow : Mod
 		Ins.Set<GraphicsDevice>(Main.instance.GraphicsDevice);
 		Ins.Set<IVisualQualityController>(new VisualQualityController());
 		Ins.Set<ModuleManager>(new ModuleManager());
+		foreach (var config in Ins.ModuleManager.CreateInstances<ModConfig>())
+		{
+			AddConfig(config.Name, config);
+		}
 		foreach (var ins in Ins.ModuleManager.CreateInstances<ILoadable>())
 		{
 			AddContent(ins);

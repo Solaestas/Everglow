@@ -35,6 +35,9 @@
 	<Target Name="CleanAsset" BeforeTargets="Clean">
 		<RemoveDir Directories="$(OutputPath)Assets" />
 		<RemoveDir Directories="$(IntermediateOutputPath)Assets" />
+		<Delete Files="$(EverglowIntermediateOutputDirectory)$(AssetsPrefix).asset" />
 	</Target>
-
+	<Target Name="AssetList" BeforeTargets="Build" Inputs="@(EffectFile);@(ImageFile)" Outputs="$(EverglowDirectory)obj\$(AssetsPrefix).asset">
+		<WriteLinesToFile File="$(EverglowDirectory)obj\$(AssetsPrefix).asset.list" Lines="@(EffectFile);@(ImageFile)" />
+	</Target>
 </Project>

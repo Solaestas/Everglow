@@ -10,7 +10,8 @@ public class ModuleManager : IDisposable
 	public ModuleManager()
 	{
 		var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-		// 为什么重新加载时之前的程序集还在
+		// 为什么重新加载时之前的程序集还在-		assemblies	{System.Reflection.RuntimeAssembly[127]}	System.Reflection.Assembly[] {System.Reflection.RuntimeAssembly[]}
+
 		var main = assemblies.Last(asm => asm.GetName().Name == "Everglow");
 
 		_assemblies = assemblies
