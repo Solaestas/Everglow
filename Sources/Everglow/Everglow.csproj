@@ -2,74 +2,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<Import Project="..\Shared.props" />
 	<Import Project="Module.Build.props" />
+	<Import Project="Everglow.targets"/>
 	<ItemGroup>
 		<ProjectReference Include="..\Everglow.Core\Everglow.Core.csproj" />
 		<ProjectReference Include="..\Everglow.Function\Everglow.Function.csproj" />
 	</ItemGroup>
-
-	<UsingTask TaskName="BuildMod"
-						 AssemblyFile="$(TaskPath)" />
-	<UsingTask TaskName="ReadAssets"
-						 TaskFactory="CodeTaskFactory"
-						 AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
-		<ParameterGroup>
-			<AssetLists ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
-			<Assets ParameterType="Microsoft.Build.Framework.ITaskItem[]" Output="true" />
-			<AssetPath ParameterType="System.String"
-									Required="true"/>
-		</ParameterGroup>
-		<Task>
-			<Code Type="Fragment"
-						Language="cs">
-				<![CDATA[
-          	List<ITaskItem> assets = new List<ITaskItem>();
-						foreach (var list in AssetLists)
-						{
-							var name = Path.GetFileNameWithoutExtension(list.GetMetadata("Filename"));
-							var lines = File.ReadAllLines(list.ItemSpec);
-							assets.AddRange(lines.Select(line =>
-							{
-								var ext = Path.GetExtension(line);
-								if(ext == ".fx")
-									line = Path.ChangeExtension(line, "xnb");
-								else
-									line = Path.ChangeExtension(line, "rawimg");
-								return new TaskItem(AssetPath + name + '\\' + line);
-							}));
-						}
-						Assets = assets.ToArray();
-        ]]>
-			</Code>
-		</Task>
-	</UsingTask>
-	<Target Name="PrepareBuildMod"
-					BeforeTargets="BuildMod">
-		<ItemGroup>
-			<!--在此Include可以使模组csproj对ImageFile和EffectFile的修改生效-->
-			<AssetLists Include="$(BaseIntermediateOutputPath)*.asset.list" />
-			<AssemblyFile Include="$(OutputPath)*.dll" />
-		</ItemGroup>
-		<ReadAssets AssetLists="@(AssetLists)"
-							AssetPath="$(OutputPath)Assets\">
-			<Output TaskParameter="Assets"
-							ItemName="AssetFile" />
-		</ReadAssets>
-
-	</Target>
-
-	<Target Name="BuildMod"
-					AfterTargets="AfterBuild"
-					Inputs="@(ResourceFile);@(AssetFile);@(AssemblyFile);@(ModFile)"
-					Outputs="$(ModDirectory)$(AssemblyName).tmod">
-		<Message Importance="high"
-						 Text="Assets : @(AssetLists), @(AssetFile)" />
-		<BuildMod ModSourceDirectory="$(MSBuildProjectDirectory)\"
-							ModName="$(AssemblyName)"
-							OutputDirectory="$(OutputPath)"
-							ModDirectory="$(ModDirectory)"
-							Configuration="$(Configuration)"
-							IgnoreBuildFile="$(IgnoreBuildFile)"
-							AssetFiles="@(AssetFile);"
-							ResourceFiles="@(ResourceFile)" />
-	</Target>
 </Project>

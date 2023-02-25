@@ -1,5 +1,6 @@
 <Project>
 	<Import Project="..\Shared.props" />
+	<Import Project="..\Shared.targets" />
 	<PropertyGroup>
 		<ModuleName>$(MSBuildProjectName.SubString(9))</ModuleName>
 		<AssetsPrefix>$(ModuleName)</AssetsPrefix>

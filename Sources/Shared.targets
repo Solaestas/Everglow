@@ -1,0 +1,31 @@
+﻿<Project>
+	<UsingTask TaskName="BuildEffect" AssemblyFile="$(TaskPath)" />
+	<UsingTask TaskName="BuildImage" AssemblyFile="$(TaskPath)" />
+	<Target Name="BuildEffect" BeforeTargets="Build" 
+			Inputs="@(EffectFile)" 
+			Outputs="@(EffectFile->'$(EverglowOutputDirectory)Assets\$(AssetsPrefix)\%(RelativeDir)%(Filename).xnb')">
+		<BuildEffect BuilderDirectory="$(ContentBuilderDirectory)" 
+					 InputFiles="@(EffectFile)" 
+					 TargetPlatform="Windows" 
+					 TargetProfile="HiDef" 
+					 BuildConfiguration="Release" 
+					 IntermediateDirectory="$(IntermediateOutputPath)Assets\"
+					 OutputDirectory="$(EverglowOutputDirectory)Assets\$(AssetsPrefix)\" />
+	</Target>
+	<Target Name="BuildImage" BeforeTargets="Build"
+			Inputs="@(ImageFile)"
+			Outputs="@(ImageFile->'$(EverglowOutputDirectory)Assets\$(AssetsPrefix)\%(RelativeDir)%(Filename).rawimg')">
+		<BuildImage InputFiles="@(ImageFile)" OutputDirectory="$(EverglowOutputDirectory)Assets\$(AssetsPrefix)\" />
+	</Target>
+	<Target Name="CleanAsset" BeforeTargets="Clean">
+		<RemoveDir Directories="$(OutputPath)Assets" />
+		<RemoveDir Directories="$(IntermediateOutputPath)Assets" />
+		<Delete Files="$(EverglowIntermediateOutputDirectory)$(AssetsPrefix).*.asset" />
+	</Target>
+	<Target Name="AssetList" BeforeTargets="Build">
+		<WriteLinesToFile File="$(EverglowDirectory)obj\$(AssetsPrefix).asset.list" Lines="@(EffectFile);@(ImageFile)" Overwrite="true"/>
+	</Target>
+	<Target Name="ResourceList" BeforeTargets="Build">
+		<WriteLinesToFile File="$(EverglowDirectory)obj\$(AssetsPrefix).resource.list" Lines="@(ResourceFile)" Overwrite="true" />
+	</Target>
+</Project>
