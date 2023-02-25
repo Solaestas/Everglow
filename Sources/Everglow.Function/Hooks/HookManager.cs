@@ -1,12 +1,12 @@
 using System.Reflection;
-using Everglow.Common.Enums;
-using Everglow.Common.Interfaces;
+using Everglow.Commons.Enums;
+using Everglow.Commons.Interfaces;
 using MonoMod.Cil;
 using MonoMod.RuntimeDetour;
 using MonoMod.Utils;
 using Terraria.Graphics.Renderers;
 
-namespace Everglow.Common.Hooks;
+namespace Everglow.Commons.Hooks;
 
 public class ILHookHandler : IHookHandler
 {
@@ -16,9 +16,7 @@ public class ILHookHandler : IHookHandler
 		set
 		{
 			if (value)
-			{
 				Hook.Apply();
-			}
 			else
 			{
 				Hook.Undo();
@@ -38,9 +36,7 @@ public class OnHookHandler : IHookHandler
 		set
 		{
 			if (value)
-			{
 				Hook.Apply();
-			}
 			else
 			{
 				Hook.Undo();
@@ -269,9 +265,7 @@ public class HookManager : ModSystem, IHookManager
 	{
 		var cursor = new ILCursor(il);
 		if (!cursor.TryGotoNext(MoveType.Before, ins => ins.MatchLdcI4(36)))
-		{
 			throw new Exception("Main_DoDraw_NotFound_1");
-		}
 		cursor.EmitDelegate(() => Invoke(CodeLayer.PostDrawFilter));
 	}
 
@@ -284,18 +278,14 @@ public class HookManager : ModSystem, IHookManager
 	private void Main_DrawBackground(On_Main.orig_DrawBackground orig, Main self)
 	{
 		if (DisableDrawBackground)
-		{
 			return;
-		}
 		orig(self);
 	}
 
 	private void Main_DrawBG(On_Main.orig_DrawBG orig, Main self)
 	{
 		if (DisableDrawSkyAndHell)
-		{
 			return;
-		}
 		orig(self);
 	}
 	private void Main_DrawDust(On_Main.orig_DrawDust orig, Main self)
@@ -327,9 +317,7 @@ public class HookManager : ModSystem, IHookManager
 	{
 		orig.Invoke(self, behindTiles);
 		if (!behindTiles)
-		{
 			Invoke(CodeLayer.PostDrawNPCs);
-		}
 	}
 
 	private void Main_DrawProjectiles(On_Main.orig_DrawProjectiles orig, Main self)

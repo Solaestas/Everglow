@@ -1,4 +1,4 @@
-﻿namespace Everglow.Common.DataStructures;
+﻿namespace Everglow.Commons.DataStructures;
 
 [DebuggerDisplay("Angle = {angle}")]
 public struct Rotation : IComparable, IComparable<Rotation>, IConvertible, IEquatable<Rotation>, ISpanFormattable, IFormattable
@@ -88,9 +88,7 @@ public struct Rotation : IComparable, IComparable<Rotation>, IConvertible, IEqua
 	public Rotation Lerp(Rotation to, float value)
 	{
 		if (Math.Abs(angle - to.angle) > MathHelper.Pi)
-		{
 			to.angle -= Math.Sign(to.angle) * MathHelper.TwoPi;
-		}
 		return angle * (1 - value) + to * value;
 	}
 	/// <summary>
@@ -128,9 +126,7 @@ public struct Rotation : IComparable, IComparable<Rotation>, IConvertible, IEqua
 		float dis = Math.Abs(angle - target.angle);
 		bool clockwise = dis < MathHelper.Pi;
 		if ((clockwise ? dis : MathHelper.TwoPi - dis) <= value)
-		{
 			return target;
-		}
 		return new Rotation(angle + value * (clockwise ^ angle > target.angle ? 1 : -1));
 	}
 	#region Operator

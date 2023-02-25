@@ -1,4 +1,4 @@
-﻿namespace Everglow.Common.Coroutines;
+﻿namespace Everglow.Commons.Coroutines;
 
 /// <summary>
 /// 指示协程机剩余的内容将在下一帧继续执行

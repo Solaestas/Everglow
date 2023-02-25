@@ -2,7 +2,7 @@ using System.ComponentModel;
 
 using Terraria.ModLoader.Config;
 
-namespace Everglow.Common.FeatureFlags;
+namespace Everglow.Commons.FeatureFlags;
 
 public class EverglowConfig : ModConfig
 {
@@ -64,17 +64,11 @@ public class EverglowClientConfig : ModConfig
 	public override void OnChanged()
 	{
 		if ((int)TextureReplace >= 3)
-		{
 			TextureReplace = TextureReplaceMode.Terraria;
-		}
 		if ((int)MothAudioReplace >= 3)
-		{
 			MothAudioReplace = MothAudioReplaceMode.MothFighting;
-		}
 		if ((int)TuskAudioReplace >= 2)
-		{
 			TuskAudioReplace = TuskAudioReplaceMode.TuskFighting;
-		}
 		//if (AssetReplaceModule.IsLoaded)
 		//{
 		//	AssetReplaceModule.ReplaceTextures(TextureReplace);

@@ -1,4 +1,4 @@
-﻿namespace Everglow.Common.VFX;
+﻿namespace Everglow.Commons.VFX;
 
 /// <summary>
 /// 表示一种IVisual所需的所有Pipeline的排列
@@ -18,9 +18,7 @@ internal class PipelineIndex : IEquatable<PipelineIndex>
 		var current = this;
 		using var it = indices.GetEnumerator();
 		if (!it.MoveNext())
-		{
 			throw new ArgumentException("Indices count should > 0");
-		}
 
 		current.index = it.Current;
 		while (it.MoveNext())

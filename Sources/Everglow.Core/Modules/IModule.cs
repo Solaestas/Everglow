@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace Everglow.Common.Modules;
+namespace Everglow.Commons.Modules;
 
 public interface IModule
 {

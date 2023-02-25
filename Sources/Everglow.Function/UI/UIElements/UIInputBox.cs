@@ -1,10 +1,11 @@
-﻿using Microsoft.Xna.Framework.Input;
+﻿using Everglow.Commons.UI;
+using Microsoft.Xna.Framework.Input;
 
 using ReLogic.Graphics;
 using ReLogic.Localization.IME;
 using ReLogic.OS;
 
-namespace Everglow.Common.UI.UIElements;
+namespace Everglow.Commons.UI.UIElements;
 
 internal delegate void TextChange(UIInputBox inputBox, string text);
 internal class UIInputBox : UIPanel
@@ -88,9 +89,7 @@ internal class UIInputBox : UIPanel
 				v.Y--;
 			}
 			if (v.Y < 0)
-			{
 				v.Y = 0;
-			}
 
 			// while (v.Y < texts.Length && v.X > texts[v.Y].Length)
 			// {
@@ -98,24 +97,16 @@ internal class UIInputBox : UIPanel
 			//    v.Y++;
 			// }
 			if (v.Y >= texts.Length)
-			{
 				v.Y = texts.Length - 1;
-			}
 
 			if (v.Y < 0)
-			{
 				v.Y = 0;
-			}
 
 			if (v.X > texts[v.Y].Length)
-			{
 				v.X = texts[v.Y].Length;
-			}
 
 			if (v.X < 0)
-			{
 				v.X = 0;
-			}
 
 			_cursorPosition = v;
 		}
@@ -176,9 +167,7 @@ internal class UIInputBox : UIPanel
 		Events.OnMouseHover += element =>
 		{
 			if (!Main.mouseLeft)
-			{
 				return;
-			}
 
 			isEnableIME = true;
 
@@ -195,24 +184,18 @@ internal class UIInputBox : UIPanel
 			for (int i = 0; i < texts.Length; i++)
 			{
 				if (mousePos.Y > lineYHight)
-				{
 					mousePos.Y -= lineYHight;
-				}
 				else
 				{
 					break;
 				}
 
 				if (cp.Y < texts.Length - 1)
-				{
 					cp.Y++;
-				}
 			}
 			var text = texts[cp.Y];
 			if (mousePos.X >= _font.MeasureString(text).X)
-			{
 				cp.X = text.Length;
-			}
 			else
 			{
 				for (int i = 0; i < text.Length; i++)
@@ -231,9 +214,7 @@ internal class UIInputBox : UIPanel
 	public override void Update(GameTime gt)
 	{
 		if (Main.mouseLeft && !ContainsPoint(Main.MouseScreen) && isEnableIME)
-		{
 			isEnableIME = false;
-		}
 
 		up.Update();
 		down.Update();
@@ -242,9 +223,7 @@ internal class UIInputBox : UIPanel
 		enter.Update();
 		base.Update(gt);
 		if (isEnableIME)
-		{
 			timer++;
-		}
 		else
 		{
 			timer = 14;
@@ -284,24 +263,16 @@ internal class UIInputBox : UIPanel
 						symHitboxMaxY = symHitBox.Y + symHitBox.Height;
 					}
 					if (hitboxMaxX < symHitboxMaxX)
-					{
 						offset.X -= symHitboxMaxX - hitboxMaxX;
-					}
 
 					if (hitboxMaxY < symHitboxMaxY)
-					{
 						offset.Y -= symHitboxMaxY - hitboxMaxY;
-					}
 
 					if (symHitBox.X < Info.HitBox.X)
-					{
 						offset.X += Info.HitBox.X - symHitBox.X;
-					}
 
 					if (symHitBox.Y < Info.HitBox.Y)
-					{
 						offset.Y += Info.HitBox.Y - symHitBox.Y;
-					}
 				}
 				sb.DrawString(_font, CursorSym, Info.Location + new Vector2(x - symOffsetX, offsetY) + offset, _color);
 			}
@@ -322,9 +293,7 @@ internal class UIInputBox : UIPanel
 			_text = input + remaining;
 			p.X += input.Length - crop.Length;
 			if (input != crop)
-			{
 				OnTextChange?.Invoke(this, _text);
-			}
 
 			if (Platform.Get<IImeService>().CandidateCount == 0)
 			{

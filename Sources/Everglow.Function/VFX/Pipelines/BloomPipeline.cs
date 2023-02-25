@@ -1,6 +1,7 @@
-using Everglow.Common.Enums;
+using Everglow.Commons.Enums;
+using Everglow.Commons.VFX;
 
-namespace Everglow.Common.VFX.Pipelines;
+namespace Everglow.Commons.VFX.Pipelines;
 
 internal class BloomPipeline : PostPipeline
 {
@@ -28,7 +29,7 @@ internal class BloomPipeline : PostPipeline
 			blurScreenSwap?.Dispose();
 			AllocateRenderTarget();
 		}, "Realloc RenderTarget");
-		effect = ModContent.Request<Effect>("Everglow/Sources/Commons/Core/VFX/Effect/Bloom");
+		effect = ModContent.Request<Effect>("Everglow/Common/VFX/Effect/Bloom");
 	}
 
 	private void AllocateRenderTarget()

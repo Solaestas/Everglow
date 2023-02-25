@@ -1,10 +1,10 @@
-using Everglow.Common.CustomTile.Collide;
-using Everglow.Common.CustomTile.DataStructures;
-using Everglow.Common.CustomTile.EntityColliding;
-using Everglow.Common.CustomTile.Tiles;
-using Everglow.Common.Enums;
+using Everglow.Commons.CustomTile.Collide;
+using Everglow.Commons.CustomTile.DataStructures;
+using Everglow.Commons.CustomTile.EntityColliding;
+using Everglow.Commons.CustomTile.Tiles;
+using Everglow.Commons.Enums;
 
-namespace Everglow.Common.CustomTile;
+namespace Everglow.Commons.CustomTile;
 
 public class TileSystem : ILoadable
 {
@@ -121,9 +121,7 @@ public class TileSystem : ILoadable
 		{
 			var tile = dynamicTiles[i];
 			if (!tile.Active)
-			{
 				dynamicTiles.RemoveAt(i--);
-			}
 			else
 			{
 				tile.Update();

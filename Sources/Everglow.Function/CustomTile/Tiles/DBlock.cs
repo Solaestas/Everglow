@@ -1,10 +1,11 @@
-using Everglow.Common.CustomTile.Collide;
-using Everglow.Common.CustomTile.DataStructures;
-using Everglow.Common.CustomTile.EntityColliding;
-using Everglow.Common.Utils;
+using Everglow.Commons.CustomTile;
+using Everglow.Commons.CustomTile.Collide;
+using Everglow.Commons.CustomTile.DataStructures;
+using Everglow.Commons.CustomTile.EntityColliding;
+using Everglow.Commons.Utils;
 using Terraria.GameContent;
 
-namespace Everglow.Common.CustomTile.Tiles;
+namespace Everglow.Commons.CustomTile.Tiles;
 
 public abstract class DBlock : DynamicTile, IGrabbable, IHookable
 {
@@ -45,7 +46,7 @@ public abstract class DBlock : DynamicTile, IGrabbable, IHookable
 		Vector2 target = aabb.position + rvel;
 		do
 		{
-			aabb.position = MathUtils.Approach(aabb.position, target, 1);
+			aabb.position = aabb.position.Approach(target, 1);
 			if (aabb.Intersect(collider, out var area))
 			{
 				isX = area.size.X < area.size.Y;
@@ -54,9 +55,7 @@ public abstract class DBlock : DynamicTile, IGrabbable, IHookable
 		} while (aabb.position != target);
 
 		if (isX is null)
-		{
 			return Direction.None;
-		}
 		else if (isX.Value)
 		{
 			aabb.position.X = aabb.Left < collider.Left ? collider.Left - aabb.size.X : collider.Right;
@@ -165,9 +164,7 @@ public abstract class DBlock : DynamicTile, IGrabbable, IHookable
 				var drawdes = new Rectangle((int)DrawPos.X - 1, (int)DrawPos.Y - 1, 2, 2);
 				bool candraw;
 				if (mapRect != null)
-				{
 					candraw = drawdes.Intersects(mapRect.Value);
-				}
 				else
 				{
 					candraw = true;

@@ -1,7 +1,7 @@
-using Everglow.Common.Enums;
-using Everglow.Common.Interfaces;
+using Everglow.Commons.Enums;
+using Everglow.Commons.Interfaces;
 
-namespace Everglow.Common.VFX;
+namespace Everglow.Commons.VFX;
 
 /// <summary>
 /// 一个非抽象的Visual子类必须具有一个无参构造函数

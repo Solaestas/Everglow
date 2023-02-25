@@ -2,7 +2,7 @@ using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.Localization;
 
-namespace Everglow.Common.Utils;
+namespace Everglow.Commons.Utils;
 
 public static class FurnitureUtils
 {
@@ -14,9 +14,7 @@ public static class FurnitureUtils
 		int spawnY = j + 2;
 
 		if (tile.TileFrameY % 38 != 0)
-		{
 			spawnY--;
-		}
 		if (!Player.IsHoveringOverABottomSideOfABed(i, j))
 		{ // This assumes your bed is 4x2 with 2x2 sections. You have to write your own code here otherwise
 			if (player.IsWithinSnappngRangeToTile(i, j, PlayerSleepingHelper.BedSleepingMaxDistance))
@@ -84,18 +82,14 @@ public static class FurnitureUtils
 		Player player = Main.LocalPlayer;
 
 		if (!player.IsWithinSnappngRangeToTile(i, j, PlayerSittingHelper.ChairSittingMaxDistance))
-		{ // Match condition in RightClick. Interaction should only show if clicking it does something
 			return;
-		}
 
 		player.noThrow = 2;
 		player.cursorItemIconEnabled = true;
 		player.cursorItemIconID = ModContent.ItemType<T>();
 
 		if (Main.tile[i, j].TileFrameX / 18 < 1)
-		{
 			player.cursorItemIconReversed = true;
-		}
 	}
 
 	public static bool ChestRightClick(int i, int j)
@@ -106,14 +100,10 @@ public static class FurnitureUtils
 		int left = i;
 		int top = j;
 		if (tile.TileFrameX % 36 != 0)
-		{
 			left--;
-		}
 
 		if (tile.TileFrameY != 0)
-		{
 			top--;
-		}
 
 		player.CloseSign();
 		player.SetTalkNPC(-1);
@@ -181,20 +171,14 @@ public static class FurnitureUtils
 		int left = i;
 		int top = j;
 		if (tile.TileFrameX % 36 != 0)
-		{
 			left--;
-		}
 
 		if (tile.TileFrameY != 0)
-		{
 			top--;
-		}
 		int chest = Chest.FindChest(left, top);
 		player.cursorItemIconID = -1;
 		if (chest < 0)
-		{
 			player.cursorItemIconText = Language.GetTextValue("LegacyChestType.0");
-		}
 		else
 		{
 			player.cursorItemIconText = Main.chest[chest].name.Length > 0 ? Main.chest[chest].name : chestName;
@@ -227,40 +211,28 @@ public static class FurnitureUtils
 		string text = "AM";
 		double time = Main.time;
 		if (!Main.dayTime)
-		{
 			time += 54000.0;
-		}
 
 		time = time / 86400.0 * 24.0;
 		time = time - 7.5 - 12.0;
 		if (time < 0.0)
-		{
 			time += 24.0;
-		}
 
 		if (time >= 12.0)
-		{
 			text = "PM";
-		}
 
 		int intTime = (int)time;
 		double deltaTime = time - intTime;
 		deltaTime = (int)(deltaTime * 60.0);
 		string text2 = string.Concat(deltaTime);
 		if (deltaTime < 10.0)
-		{
 			text2 = "0" + text2;
-		}
 
 		if (intTime > 12)
-		{
 			intTime -= 12;
-		}
 
 		if (intTime == 0)
-		{
 			intTime = 12;
-		}
 		Main.NewText($"Time: {intTime}:{text2} {text}", 255, 240, 20);
 		return true;
 	}
@@ -363,22 +335,16 @@ public static class FurnitureUtils
 		int top = Player.tileTargetY;
 		left -= tile.TileFrameX % 54 / 18;
 		if (tile.TileFrameY % 36 != 0)
-		{
 			top--;
-		}
 		int chestIndex = Chest.FindChest(left, top);
 		player.cursorItemIconID = -1;
 		if (chestIndex < 0)
-		{
 			player.cursorItemIconText = Language.GetTextValue("LegacyDresserType.0");
-		}
 		else
 		{
 			string defaultName = TileLoader.ContainerName(tile.TileType, left, top); // This gets the ContainerName text for the currently selected language
 			if (player.cursorItemIconText == defaultName)
-			{
 				player.cursorItemIconText = Main.chest[chestIndex].name;
-			}
 			else
 			{
 				player.cursorItemIconText = chestName;
@@ -407,21 +373,15 @@ public static class FurnitureUtils
 		int top = Player.tileTargetY;
 		left -= tile.TileFrameX % 54 / 18;
 		if (tile.TileFrameY % 36 != 0)
-		{
 			top--;
-		}
 		int chest = Chest.FindChest(left, top);
 		player.cursorItemIconID = -1;
 		if (chest < 0)
-		{
 			player.cursorItemIconText = Language.GetTextValue("LegacyChestType.0");
-		}
 		else
 		{
 			if (Main.chest[chest].name != string.Empty)
-			{
 				player.cursorItemIconText = Main.chest[chest].name;
-			}
 			else
 			{
 				player.cursorItemIconText = chestName;
@@ -460,18 +420,14 @@ public static class FurnitureUtils
 		Player player = Main.LocalPlayer;
 
 		if (!player.IsWithinSnappngRangeToTile(i, j, PlayerSittingHelper.ChairSittingMaxDistance))
-		{ // Match condition in RightClick. Interaction should only show if clicking it does something
 			return;
-		}
 
 		player.noThrow = 2;
 		player.cursorItemIconEnabled = true;
 		player.cursorItemIconID = ModContent.ItemType<T>();
 
 		if (Main.tile[i, j].TileFrameX / 18 < 1)
-		{
 			player.cursorItemIconReversed = true;
-		}
 	}
 
 	/// <summary>
@@ -494,9 +450,7 @@ public static class FurnitureUtils
 			for (int n = y; n < y + tileY; n++)
 			{
 				if (!tile.HasTile)
-				{
 					continue;
-				}
 				if (tile.TileType == type)
 				{
 					tile = Main.tile[m, n];
@@ -514,9 +468,7 @@ public static class FurnitureUtils
 			}
 		}
 		if (!Wiring.running)
-		{
 			return;
-		}
 		for (int k = 0; k < tileX; k++)
 		{
 			for (int l = 0; l < tileY; l++)

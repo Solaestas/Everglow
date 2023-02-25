@@ -1,4 +1,4 @@
-﻿namespace Everglow.ZYModule.Commons.Function.MapIO;
+﻿namespace Everglow.ZY.Commons.Function.MapIO;
 
 internal class AirTile : ModTile
 {

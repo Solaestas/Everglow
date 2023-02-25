@@ -1,15 +1,20 @@
 using System.Diagnostics.CodeAnalysis;
-using Everglow.Common.Coroutines;
+using Everglow.Commons.Coroutines;
 
-namespace Everglow.ZYModule.Commons.Function.Base;
+namespace Everglow.ZY.Commons.Function.Base;
 
 internal class ProjState
 {
 	public string Name { get; private set; }
+
 	public Func<int> Update { get; private set; }
+
 	public Action Begin { get; private set; }
+
 	public Action End { get; private set; }
+
 	public Func<IEnumerator<ICoroutineInstruction>> Corrutine { get; private set; }
+
 	public ProjState(string name, [NotNull] Func<int> update, Action begin, Action end, Func<IEnumerator<ICoroutineInstruction>> corrutine)
 	{
 		Name = name;
@@ -18,32 +23,44 @@ internal class ProjState
 		End = end ?? EmptyAction;
 		Corrutine = corrutine;
 	}
-	private static void EmptyAction() { }
+
+	private static void EmptyAction()
+	{
+	}
 }
 public class Coroutine
 {
 	private Stack<IEnumerator<ICoroutineInstruction>> enumerators = new();
 	private bool finished = false;
 	private ICoroutineInstruction coroutineInstruction;
+
 	public void Replace(IEnumerator<ICoroutineInstruction> enumerator)
 	{
 		enumerators.Clear();
 		enumerators.Push(enumerator);
 		finished = false;
 	}
+
 	public void Update()
 	{
 		if (finished)
+		{
 			return;
+		}
+
 		if (coroutineInstruction != null)
 		{
 			if (coroutineInstruction is AwaitForTask task)
+			{
 				enumerators.Push(task.Task);
+			}
 			else
 			{
 				coroutineInstruction.Update();
 				if (coroutineInstruction.ShouldWait())
+				{
 					return;
+				}
 			}
 		}
 		if (enumerators.Count > 0)
@@ -59,7 +76,9 @@ public class Coroutine
 				enumerators.Pop();
 				coroutineInstruction = null;
 				if (enumerators.Count == 0)
+				{
 					finished = true;
+				}
 			}
 		}
 	}
@@ -70,12 +89,14 @@ internal abstract class BaseFSMProj : BaseProjectile
 	private Dictionary<string, int> stateDir = new();
 	private Coroutine coroutine = new();
 	private int stateID;
+
 	public int StateID
 	{
 		get
 		{
 			return stateID;
 		}
+
 		set
 		{
 			if (stateID != value && value >= 0)
@@ -86,13 +107,19 @@ internal abstract class BaseFSMProj : BaseProjectile
 				Reset();
 				State.Begin();
 				if (State.Corrutine != null)
+				{
 					coroutine.Replace(State.Corrutine());
+				}
+
 				StateID = State.Update();
 			}
 		}
 	}
+
 	public int Timer { get => (int)Projectile.ai[0]; set => Projectile.ai[0] = value; }
+
 	public ProjState State => states[StateID];
+
 	public override ModProjectile Clone(Projectile newEntity)
 	{
 		var clone = base.Clone(newEntity) as BaseFSMProj;
@@ -101,21 +128,31 @@ internal abstract class BaseFSMProj : BaseProjectile
 		clone.coroutine = new Coroutine();
 		return clone;
 	}
+
 	public override void SendExtraAI(BinaryWriter writer)
 	{
 		writer.Write(stateID);
 	}
+
 	public override void ReceiveExtraAI(BinaryReader reader)
 	{
 		StateID = reader.ReadInt32();
 	}
-	public virtual void OnStateChange(int from, int to) { }
+
+	public virtual void OnStateChange(int from, int to)
+	{
+	}
+
 	public sealed override void SetDefaults()
 	{
 		Initialize();
 		SetUp();
 	}
-	public virtual void Initialize() { }
+
+	public virtual void Initialize()
+	{
+	}
+
 	public virtual void SetUp()
 	{
 		int i = 0;
@@ -124,23 +161,30 @@ internal abstract class BaseFSMProj : BaseProjectile
 			stateDir.Add(state.Name, i++);
 		}
 	}
+
 	public virtual void Reset()
 	{
 		Timer = 0;
 	}
+
 	public void RegisterState(ProjState projState) => states.Add(projState);
+
 	public void RegisterState(string name, Func<int> update, Action begin = null, Action end = null, Func<IEnumerator<ICoroutineInstruction>> func = null)
 	{
 		states.Add(new ProjState(name, update, begin, end, func));
 	}
+
 	public int GetStateID(string name) => stateDir[name];
+
 	public ProjState GetState(int id) => states[id];
+
 	public sealed override void AI()
 	{
 		Timer++;
 		coroutine.Update();
 		StateID = State.Update();
 	}
+
 	public void ForceState(int id)
 	{
 		State.End();
@@ -149,6 +193,8 @@ internal abstract class BaseFSMProj : BaseProjectile
 		Reset();
 		State.Begin();
 		if (State.Corrutine != null)
+		{
 			coroutine.Replace(State.Corrutine());
+		}
 	}
 }

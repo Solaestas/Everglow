@@ -1,4 +1,4 @@
-﻿namespace Everglow.Common.UI.UIElements;
+﻿namespace Everglow.Commons.UI.UIElements;
 
 internal class UIImage : BaseElement
 {

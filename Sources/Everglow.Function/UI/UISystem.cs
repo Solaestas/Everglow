@@ -1,6 +1,6 @@
 ﻿using Terraria.UI;
 
-namespace Everglow.Common.UI;
+namespace Everglow.Commons.UI;
 
 internal class UISystem : ModSystem
 {
@@ -28,9 +28,7 @@ internal class UISystem : ModSystem
 	{
 		base.Load();
 		if (Main.netMode != NetmodeID.Server)
-		{
 			system.Load();
-		}
 	}
 
 	public override void UpdateUI(GameTime gameTime)
@@ -59,9 +57,7 @@ internal class UISystem : ModSystem
 				delegate
 				{
 					if (Main.netMode != NetmodeID.Server)
-					{
 						system.Draw(Main.spriteBatch);
-					}
 
 					return true;
 				},

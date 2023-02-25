@@ -1,11 +1,12 @@
-using Everglow.Common.CustomTile.Collide;
-using Everglow.Common.CustomTile.DataStructures;
-using Everglow.Common.CustomTile.Tiles;
-using Everglow.Common.Hooks;
+using Everglow.Commons.CustomTile.Collide;
+using Everglow.Commons.CustomTile.DataStructures;
+using Everglow.Commons.Hooks;
+using Everglow.Commons.CustomTile;
+using Everglow.Commons.CustomTile.Tiles;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 
-namespace Everglow.Common.CustomTile.EntityColliding;
+namespace Everglow.Commons.CustomTile.EntityColliding;
 
 public class ProjColliding : GlobalProjectile
 {
@@ -62,9 +63,7 @@ public class ProjColliding : GlobalProjectile
 		Player player = Main.player[self.owner];
 		int numHooks = 3;
 		if (self.type == 165)
-		{
 			numHooks = 8;
-		}
 		else if (self.type == 256)
 		{
 			numHooks = 2;
@@ -154,18 +153,14 @@ public class ProjColliding : GlobalProjectile
 	{
 		var cursor = new ILCursor(il);
 		if (!cursor.TryGotoNext(MoveType.After, ins => ins.Offset == 0x0e65))
-		{
 			throw new HookException();
-		}
 		Debug.Assert(cursor.Prev.MatchStloc(44));
 		cursor.Emit(OpCodes.Ldarg_0);
 		cursor.EmitDelegate((Projectile proj) => callFromHook.Contains(proj));
 		var label = il.DefineLabel();
 		cursor.Emit(OpCodes.Brtrue, label);
 		if (!cursor.TryGotoNext(MoveType.Before, ins => ins.Offset == 0x0E91))
-		{
 			throw new HookException();
-		}
 		Debug.Assert(cursor.Next.MatchRet());
 		cursor.MarkLabel(label);
 	}

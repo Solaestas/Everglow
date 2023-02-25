@@ -1,4 +1,4 @@
-﻿namespace Everglow.Common.DataStructures;
+﻿namespace Everglow.Commons.DataStructures;
 
 /// <summary>
 /// 优先队列数据结构，使用小根堆实现。Pop，Push复杂度保证O(log n)
@@ -30,9 +30,7 @@ public class PriorityQueue<T> where T : IComparable<T>, new()
 		get
 		{
 			if (m_top < 1)
-			{
 				throw new IndexOutOfRangeException();
-			}
 			return m_heap[1];
 		}
 	}
@@ -79,13 +77,9 @@ public class PriorityQueue<T> where T : IComparable<T>, new()
 		{
 			int j = k << 1;
 			if (j + 1 <= m_top && m_heap[j].CompareTo(m_heap[j + 1]) > 0)
-			{
 				j++;
-			}
 			if (m_heap[k].CompareTo(m_heap[j]) <= 0)
-			{
 				break;
-			}
 			Swap(k, j);
 			k = j;
 		}

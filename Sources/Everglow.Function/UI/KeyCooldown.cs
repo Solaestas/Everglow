@@ -1,4 +1,4 @@
-﻿namespace Everglow.Common.UI;
+﻿namespace Everglow.Commons.UI;
 
 internal class KeyCooldown
 {
@@ -19,9 +19,7 @@ internal class KeyCooldown
 		set
 		{
 			if (value >= 0)
-			{
 				_coolDownTicks = value;
-			}
 		}
 	}
 
@@ -39,9 +37,7 @@ internal class KeyCooldown
 	public void Update()
 	{
 		if (coolDown > 0)
-		{
 			coolDown--;
-		}
 	}
 
 	public bool IsCoolDown()

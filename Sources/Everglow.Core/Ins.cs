@@ -1,10 +1,10 @@
-using Everglow.Common.Interfaces;
-using Everglow.Common.Modules;
-using Everglow.Common.ObjectPool;
-using Everglow.Common.VFX;
+using Everglow.Commons.Interfaces;
+using Everglow.Commons.Modules;
+using Everglow.Commons.ObjectPool;
+using Everglow.Commons.VFX;
 using log4net;
 
-namespace Everglow.Common;
+namespace Everglow.Commons;
 
 /// <summary>
 /// 手动（伪）单例（？），代替Everglow的作用，存在一些依赖关系
@@ -32,9 +32,7 @@ public static class Ins
 		foreach (var instance in instances.OfType<IDisposable>().Reverse())
 		{
 			if (instance is not GraphicsDevice)
-			{
 				instance.Dispose();
-			}
 		}
 		instances.Clear();
 	}
@@ -42,14 +40,10 @@ public static class Ins
 	public static T Get<T>() where T : class
 	{
 		if (Reference<T>.reference == null)
-		{
 			return null;
-		}
 
 		if (Reference<T>.reference.TryGetTarget(out var target))
-		{
 			return target;
-		}
 
 		return null;
 	}

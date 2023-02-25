@@ -1,4 +1,4 @@
-namespace Everglow.Common;
+namespace Everglow.Commons;
 
 public static class ModIns
 {

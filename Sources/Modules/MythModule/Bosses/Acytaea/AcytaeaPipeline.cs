@@ -25,7 +25,7 @@ internal class NPPipeline : Pipeline
 
     public override void Load()
     {
-        effect = ModContent.Request<Effect>("Everglow/Sources/Commons/Core/VFX/Effect/Shader2D");
+        effect = ModContent.Request<Effect>("Everglow/Common/VFX/Effect/Shader2D");
     }
 }
 

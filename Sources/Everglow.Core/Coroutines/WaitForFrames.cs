@@ -1,4 +1,4 @@
-﻿namespace Everglow.Common.Coroutines;
+﻿namespace Everglow.Commons.Coroutines;
 
 /// <summary>
 /// 协程的剩余内容将在经过指定帧数以后继续执行

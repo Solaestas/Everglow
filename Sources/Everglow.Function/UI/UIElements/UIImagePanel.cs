@@ -1,4 +1,4 @@
-﻿namespace Everglow.Common.UI.UIElements;
+﻿namespace Everglow.Commons.UI.UIElements;
 
 internal class UIImagePanel : UIImage
 {
@@ -25,9 +25,7 @@ internal class UIImagePanel : UIImage
 		Events.OnLeftClick += element =>
 		{
 			if (CanDrag)
-			{
 				dragging = false;
-			}
 		};
 	}
 

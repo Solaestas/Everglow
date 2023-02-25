@@ -1,4 +1,4 @@
-﻿namespace Everglow.Common.CustomTile.DataStructures;
+﻿namespace Everglow.Commons.CustomTile.DataStructures;
 
 [DebuggerDisplay("begin = ({begin.X}, {begin.Y}) end = ({end.X}, {end.Y})")]
 public struct Edge

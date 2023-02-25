@@ -1,4 +1,4 @@
-namespace Everglow.Common.CustomTile.DataStructures;
+namespace Everglow.Commons.CustomTile.DataStructures;
 
 public class Array2<T>
 {
@@ -14,9 +14,7 @@ public class Array2<T>
 		{
 			Debug.Assert(index <= 1);
 			if (index == 0)
-			{
 				valueA = value;
-			}
 			else
 			{
 				valueB = value;

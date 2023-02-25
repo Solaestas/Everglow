@@ -1,7 +1,7 @@
-﻿using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Input;
 using ReLogic.Content;
 
-namespace Everglow.Common.UI.UIElements;
+namespace Everglow.Commons.UI.UIElements;
 
 internal class HorizontalScrollbar : BaseElement
 {
@@ -22,10 +22,8 @@ internal class HorizontalScrollbar : BaseElement
 
 		set
 		{
-			if (value <= 1f && value >= 0f)
-			{
+			if (value is <= 1f and >= 0f)
 				wheelValue = value;
-			}
 		}
 	}
 
@@ -38,7 +36,7 @@ internal class HorizontalScrollbar : BaseElement
 		Info.LeftMargin.Pixel = 5f;
 		Info.RightMargin.Pixel = 5f;
 		Info.IsSensitive = true;
-		uiScrollbarTexture = ModContent.Request<Texture2D>("Everglow/Sources/Commons/Core/UI/Images/HorizontalScrollbar", AssetRequestMode.ImmediateLoad).Value;
+		uiScrollbarTexture = ModContent.Request<Texture2D>("Everglow/Common/UI/Images/HorizontalScrollbar", AssetRequestMode.ImmediateLoad).Value;
 		WheelValue = wheelValue;
 	}
 
@@ -62,7 +60,7 @@ internal class HorizontalScrollbar : BaseElement
 	public override void OnInitialization()
 	{
 		base.OnInitialization();
-		inner = new UIImage(ModContent.Request<Texture2D>("Everglow/Sources/Commons/Core/UI/Images/HorizontalScrollbarInner", AssetRequestMode.ImmediateLoad).Value, Color.White);
+		inner = new UIImage(ModContent.Request<Texture2D>("Everglow/Common/UI/Images/HorizontalScrollbarInner", AssetRequestMode.ImmediateLoad).Value, Color.White);
 		inner.Info.Top.Pixel = -(inner.Info.Height.Pixel - Info.Height.Pixel) / 2f;
 		Register(inner);
 	}
@@ -71,31 +69,23 @@ internal class HorizontalScrollbar : BaseElement
 	{
 		base.Update(gt);
 		if (ParentElement == null)
-		{
 			return;
-		}
 
 		bool needCalculation = false;
 
 		bool isMouseHover = ParentElement.GetCanHitBox().Contains(Main.MouseScreen.ToPoint());
 		if ((isMouseHover || isMouseDown) && alpha < 1f)
-		{
 			alpha += 0.01f;
-		}
 
 		if (!(isMouseHover || isMouseDown) && alpha > 0f)
-		{
 			alpha -= 0.01f;
-		}
 
 		inner.ChangeColor(Color.White * alpha);
 
 		MouseState state = Mouse.GetState();
 		float width = Info.Size.X - 26f;
 		if (!isMouseHover)
-		{
 			whell = state.ScrollWheelValue;
-		}
 
 		// if (isMouseHover && whell != state.ScrollWheelValue)
 		// {
@@ -112,9 +102,7 @@ internal class HorizontalScrollbar : BaseElement
 		{
 			inner.Info.Left.Pixel += Main.mouseX - mouseX;
 			if (inner.Info.Left.Pixel > width)
-			{
 				inner.Info.Left.Pixel = width;
-			}
 			else if (inner.Info.Left.Pixel < 0)
 			{
 				inner.Info.Left.Pixel = 0;
@@ -126,9 +114,7 @@ internal class HorizontalScrollbar : BaseElement
 		}
 
 		if (needCalculation)
-		{
 			Calculation();
-		}
 	}
 
 	protected override void DrawSelf(SpriteBatch sb)

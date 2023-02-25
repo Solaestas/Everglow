@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Everglow.ZYModule.Commons.Core.Enumerator;
+namespace Everglow.ZY.Commons.Core.Enumerator;
 
 internal static class EnumeratorExtension
 {
@@ -12,6 +12,7 @@ internal static class EnumeratorExtension
 			action(it.Current);
 		}
 	}
+
 	public static void SetValues<T>(this IReadWriteEnumerable<T> values, Func<T, T> getValue)
 	{
 		var it = values.GetEnumerator();
@@ -20,6 +21,7 @@ internal static class EnumeratorExtension
 			it.Current = getValue(it.Current);
 		}
 	}
+
 	public static void ResetValues<T>(this IReadWriteEnumerable<T> values)
 	{
 		var it = values.GetEnumerator();
@@ -38,6 +40,7 @@ internal static class EnumeratorExtension
 		}
 		return stringBuilder.ToString();
 	}
+
 	public static string BuildString(this IEnumerable<string> chars)
 	{
 		var stringBuilder = new StringBuilder();

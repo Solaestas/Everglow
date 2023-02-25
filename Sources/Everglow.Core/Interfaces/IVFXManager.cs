@@ -1,4 +1,4 @@
-namespace Everglow.Common.Interfaces;
+namespace Everglow.Commons.Interfaces;
 public interface IVFXManager : IDisposable
 {
 	public void Add(IVisual visual);

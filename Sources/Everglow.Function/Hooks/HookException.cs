@@ -1,7 +1,7 @@
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace Everglow.Common.Hooks;
+namespace Everglow.Commons.Hooks;
 
 internal class HookException : Exception
 {

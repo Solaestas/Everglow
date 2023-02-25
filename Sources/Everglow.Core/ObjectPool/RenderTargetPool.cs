@@ -1,6 +1,6 @@
-using Everglow.Common.Enums;
+using Everglow.Commons.Enums;
 
-namespace Everglow.Common.ObjectPool;
+namespace Everglow.Commons.ObjectPool;
 
 /// <summary>
 /// 管理屏幕大小的 RenderTarget 的对象池

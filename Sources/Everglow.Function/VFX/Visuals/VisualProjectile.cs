@@ -1,7 +1,8 @@
-using Everglow.Common.Enums;
-using Everglow.Common.Interfaces;
+using Everglow.Commons.Enums;
+using Everglow.Commons.Interfaces;
+using Everglow.Commons.VFX;
 
-namespace Everglow.Common.VFX.Visuals;
+namespace Everglow.Commons.VFX.Visuals;
 
 internal abstract class VisualProjectile : ModProjectile, IVisual
 {
@@ -18,9 +19,7 @@ internal abstract class VisualProjectile : ModProjectile, IVisual
 	public override void SetDefaults()
 	{
 		if (!Main.gameMenu)
-		{
 			Ins.VFXManager.Add(this);
-		}
 	}
 
 	public void Kill()

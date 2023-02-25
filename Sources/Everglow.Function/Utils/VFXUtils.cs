@@ -1,7 +1,7 @@
-﻿using Everglow.Common.Interfaces;
-using Everglow.Common.VFX;
+﻿using Everglow.Commons.Interfaces;
+using Everglow.Commons.VFX;
 
-namespace Everglow.Common.Utils;
+namespace Everglow.Commons.Utils;
 
 public static class VFXUtils
 {
@@ -12,9 +12,7 @@ public static class VFXUtils
 	public static void Add(IVisual visual)
 	{
 		if (NetUtils.IsServer)
-		{
 			return;
-		}
 		VFXManager.Instance.Add(visual);
 	}
 }

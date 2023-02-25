@@ -1,8 +1,8 @@
 using System.Runtime.CompilerServices;
-using Everglow.Common.CustomTile.Collide;
-using Everglow.Common.CustomTile.DataStructures;
+using Everglow.Commons.CustomTile.Collide;
+using Everglow.Commons.CustomTile.DataStructures;
 
-namespace Everglow.Common.CustomTile.Collide;
+namespace Everglow.Commons.CustomTile.Collide;
 
 public static class CollisionUtils
 {
@@ -160,9 +160,7 @@ public static class CollisionUtils
 		if (or.X > aabb.Width / 2)
 		{
 			if (or.Y > aabb.Height / 2)
-			{
 				return or.Distance(aabb.size / 2) <= circle.radius;
-			}
 			else
 			{
 				return or.X - aabb.Width / 2 <= circle.radius;

@@ -1,8 +1,8 @@
-using Everglow.Common.Enums;
-using Everglow.Common.Interfaces;
+using Everglow.Commons.Enums;
+using Everglow.Commons.Interfaces;
 using Terraria.Graphics.Light;
 
-namespace Everglow.Common.VFX;
+namespace Everglow.Commons.VFX;
 
 public class VisualQualityController : IVisualQualityController
 {

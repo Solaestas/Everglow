@@ -5,7 +5,7 @@ using SixLabors.ImageSharp.Processing;
 using Color = Microsoft.Xna.Framework.Color;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
-namespace Everglow.Common.Utils;
+namespace Everglow.Commons.Utils;
 
 public record struct ImageKeyPoint(int Row, int Column);
 

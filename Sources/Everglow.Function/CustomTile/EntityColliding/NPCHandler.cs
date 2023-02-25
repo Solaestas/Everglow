@@ -1,6 +1,7 @@
-﻿using Everglow.Common.CustomTile.Tiles;
+﻿using Everglow.Commons.CustomTile;
+using Everglow.Commons.CustomTile.Tiles;
 
-namespace Everglow.Common.CustomTile.EntityColliding;
+namespace Everglow.Commons.CustomTile.EntityColliding;
 
 public class NPCHandler : EntityHandler<NPC>
 {

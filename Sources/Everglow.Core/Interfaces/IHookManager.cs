@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
-using Everglow.Common.Enums;
+using Everglow.Commons.Enums;
 using MonoMod.Cil;
 
-namespace Everglow.Common.Interfaces;
+namespace Everglow.Commons.Interfaces;
 
 public interface IHookManager : IDisposable
 {

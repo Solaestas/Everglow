@@ -1,9 +1,9 @@
-using Everglow.Common;
-using Everglow.Common.Interfaces;
-using Everglow.Common.Modules;
-using Everglow.Common.Network.PacketHandle;
-using Everglow.Common.ObjectPool;
-using Everglow.Common.VFX;
+using Everglow.Commons;
+using Everglow.Commons.Interfaces;
+using Everglow.Commons.Modules;
+using Everglow.Commons.Network.PacketHandle;
+using Everglow.Commons.ObjectPool;
+using Everglow.Commons.VFX;
 using log4net;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;

@@ -1,6 +1,6 @@
-﻿using Everglow.Common.UI.UIElements;
+﻿using Everglow.Commons.UI.UIElements;
 
-namespace Everglow.Common.UI;
+namespace Everglow.Commons.UI;
 
 internal class EverglowUISystem
 {
@@ -80,9 +80,7 @@ internal class EverglowUISystem
 		{
 			element = (ContainerElement)Activator.CreateInstance(c);
 			if (element.AutoLoad)
-			{
 				Register(element);
-			}
 		}
 	}
 
@@ -99,13 +97,11 @@ internal class EverglowUISystem
 		}
 
 		if (CallOrder.Count == 0 || Elements.Count == 0)
-		{
 			return;
-		}
 
 		List<BaseElement> interact = new();
 		ContainerElement child;
-		Point mousePos = Main.MouseScreen.ToPoint();
+		var mousePos = Main.MouseScreen.ToPoint();
 		foreach (var key in CallOrder)
 		{
 			child = Elements[key];
@@ -115,9 +111,7 @@ internal class EverglowUISystem
 				child.Update(gt);
 				interact = child.GetElementsContainsPoint(mousePos);
 				if (interact.Count > 0)
-				{
 					break;
-				}
 			}
 		}
 
@@ -130,17 +124,13 @@ internal class EverglowUISystem
 		foreach (var ce in interact)
 		{
 			if (!interactContainerElementsBuffer.Contains(ce))
-			{
 				ce.Events.MouseOver(ce);
-			}
 		}
 
 		foreach (var ce in interactContainerElementsBuffer)
 		{
 			if (!interact.Contains(ce))
-			{
 				ce.Events.MouseOut(ce);
-			}
 		}
 
 		interactContainerElementsBuffer = interact;
@@ -174,9 +164,7 @@ internal class EverglowUISystem
 		if (mouseRightDown != Main.mouseRight)
 		{
 			if (Main.mouseRight)
-			{
 				interact.ForEach(x => x.Events.RightDown(x));
-			}
 			else
 			{
 				if (mouseRightCooldown.IsCoolDown())
@@ -206,18 +194,14 @@ internal class EverglowUISystem
 	public void Draw(SpriteBatch sb)
 	{
 		if (CallOrder.Count == 0 || Elements.Count == 0)
-		{
 			return;
-		}
 
 		ContainerElement child;
 		for (int i = CallOrder.Count - 1; i >= 0; i--)
 		{
 			child = Elements[CallOrder[i]];
 			if (child != null && child.IsVisible)
-			{
 				child.Draw(sb);
-			}
 		}
 	}
 
@@ -240,9 +224,7 @@ internal class EverglowUISystem
 	public bool Register(string name, ContainerElement element)
 	{
 		if (element == null || Elements.ContainsKey(name) || CallOrder.Contains(name))
-		{
 			return false;
-		}
 
 		Elements.Add(name, element);
 		CallOrder.Add(element.Name);
@@ -259,9 +241,7 @@ internal class EverglowUISystem
 	public bool Remove(string name)
 	{
 		if (CallOrder.Count == 0 || Elements.Count == 0 || !(Elements.ContainsKey(name) || CallOrder.Contains(name)))
-		{
 			return false;
-		}
 
 		Elements.Remove(name);
 		CallOrder.Remove(name);
@@ -287,14 +267,10 @@ internal class EverglowUISystem
 	public bool SetContainerTop(string name)
 	{
 		if (CallOrder.Count == 0 || Elements.Count == 0 || !(Elements.ContainsKey(name) || CallOrder.Contains(name)))
-		{
 			return false;
-		}
 
 		if (CallOrder[0] == name)
-		{
 			return true;
-		}
 
 		CallOrder.Remove(name);
 		CallOrder.Insert(0, name);

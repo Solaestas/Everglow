@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<Import Project="..\Shared.props" />
 	<PropertyGroup>
-		<RootNamespace>Everglow.Common</RootNamespace>
+		<RootNamespace>Everglow.Commons</RootNamespace>
 	</PropertyGroup>
 	<ItemGroup>
 		<Reference Remove="$(tMLPath)" />

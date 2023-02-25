@@ -1,4 +1,4 @@
-namespace Everglow.Common.Utils;
+namespace Everglow.Commons.Utils;
 
 public class ItemUtils
 {

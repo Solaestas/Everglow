@@ -1,8 +1,9 @@
-namespace Everglow.ZYModule.Commons.Function;
+namespace Everglow.ZY.Commons.Function;
 
 internal class TestItem : ModItem
 {
 	public override string Texture => "Terraria/Images/UI/Wires_0";
+
 	public override void SetDefaults()
 	{
 		Item.useAnimation = 10;
@@ -10,10 +11,12 @@ internal class TestItem : ModItem
 		Item.useStyle = ItemUseStyleID.Swing;
 		Item.autoReuse = false;
 	}
+
 	public override bool CanUseItem(Player player)
 	{
 		return false;
 	}
+
 	public override void AddRecipes()
 	{
 		CreateRecipe().Register();

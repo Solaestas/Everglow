@@ -1,4 +1,4 @@
-﻿namespace Everglow.Common.VFX;
+﻿namespace Everglow.Commons.VFX;
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface)]
 public class PipelineAttribute : Attribute

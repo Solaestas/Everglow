@@ -1,6 +1,6 @@
 ﻿using ReLogic.Graphics;
 
-namespace Everglow.Common.UI.UIElements;
+namespace Everglow.Commons.UI.UIElements;
 
 internal class UITextButton : UIPanel
 {

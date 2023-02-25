@@ -1,4 +1,4 @@
-﻿namespace Everglow.Common.Enums;
+﻿namespace Everglow.Commons.Enums;
 
 public enum VisualQuality
 {

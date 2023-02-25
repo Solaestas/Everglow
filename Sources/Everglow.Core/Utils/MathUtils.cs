@@ -1,6 +1,6 @@
-﻿using Everglow.Common.DataStructures;
+﻿using Everglow.Commons.DataStructures;
 
-namespace Everglow.Common.Utils;
+namespace Everglow.Commons.Utils;
 
 public static class MathUtils
 {
@@ -16,9 +16,7 @@ public static class MathUtils
 	public static float Approach(float val, float target, float maxMove)
 	{
 		if (val <= target)
-		{
 			return Math.Min(val + maxMove, target);
-		}
 		return Math.Max(val - maxMove, target);
 	}
 	/// <summary>
@@ -33,9 +31,7 @@ public static class MathUtils
 	public static Vector2 Approach(this Vector2 val, Vector2 target, float maxMove)
 	{
 		if (Vector2.Distance(val, target) < maxMove)
-		{
 			return target;
-		}
 		return val + (target - val).NormalizeSafe() * maxMove;
 	}
 	/// <summary>
@@ -94,9 +90,7 @@ public static class MathUtils
 	public static float Clamp(this float value, float from, float to)
 	{
 		if (value < from)
-		{
 			return from;
-		}
 		else if (value > to)
 		{
 			return to;
@@ -147,9 +141,7 @@ public static class MathUtils
 	public static float AbsMax(float a, float b)
 	{
 		if (Math.Abs(a) > Math.Abs(b))
-		{
 			return a;
-		}
 		return b;
 	}
 	/// <summary>
@@ -161,9 +153,7 @@ public static class MathUtils
 	public static float AbsMin(float a, float b)
 	{
 		if (Math.Abs(a) > Math.Abs(b))
-		{
 			return b;
-		}
 		return a;
 	}
 	/// <summary>
@@ -195,9 +185,7 @@ public static class MathUtils
 	{
 		float len = (vector.X * vector.X + vector.Y * vector.Y).Sqrt();
 		if (len == 0)
-		{
 			return Vector2.UnitX;
-		}
 		else
 		{
 			return new Vector2(vector.X / len, vector.Y / len);
@@ -219,9 +207,7 @@ public static class MathUtils
 	{
 		float len = (vector.X * vector.X + vector.Y * vector.Y).Sqrt();
 		if (len == 0)
-		{
 			return defaultValue;
-		}
 		else
 		{
 			return (float)Math.Atan2(vector.Y, vector.X);

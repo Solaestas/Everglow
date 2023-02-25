@@ -1,4 +1,4 @@
-﻿namespace Everglow.Common.Coroutines;
+﻿namespace Everglow.Commons.Coroutines;
 
 /// <summary>
 /// 指示协程机等待一个新的任务完成以后再继续执行（相当于同步函数调用）

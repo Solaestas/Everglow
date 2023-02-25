@@ -1,24 +1,27 @@
-﻿namespace Everglow.ZYModule.Commons.Function.Base;
+﻿namespace Everglow.ZY.Commons.Function.Base;
 
 internal abstract class BaseHeldItem : BaseItem
 {
-
 }
-internal abstract class BaseHeldItem<T> : BaseHeldItem where T : BaseHeldProj
+internal abstract class BaseHeldItem<T> : BaseHeldItem
+	where T : BaseHeldProj
 {
-	public T projectile;//只有Owner端有，不建议随意调用
+	public T projectile; // 只有Owner端有，不建议随意调用
+
 	public override ModItem Clone(Item newEntity)
 	{
 		var clone = base.Clone(newEntity) as BaseHeldItem<T>;
 		clone.projectile = null;
 		return clone;
 	}
+
 	public override void SetDefaults()
 	{
 		Item.useStyle = ItemUseStyleID.HiddenAnimation;
 		Item.noMelee = true;
 		Item.noUseGraphic = true;
 	}
+
 	public override void HoldItem(Player player)
 	{
 		if (Main.myPlayer == player.whoAmI && (projectile == null || !projectile.Projectile.active))

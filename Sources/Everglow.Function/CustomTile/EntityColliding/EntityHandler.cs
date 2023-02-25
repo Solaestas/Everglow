@@ -1,7 +1,8 @@
-﻿using Everglow.Common.CustomTile.DataStructures;
-using Everglow.Common.CustomTile.Tiles;
+﻿using Everglow.Commons.CustomTile;
+using Everglow.Commons.CustomTile.DataStructures;
+using Everglow.Commons.CustomTile.Tiles;
 
-namespace Everglow.Common.CustomTile.EntityColliding;
+namespace Everglow.Commons.CustomTile.EntityColliding;
 
 public enum AttachType
 {

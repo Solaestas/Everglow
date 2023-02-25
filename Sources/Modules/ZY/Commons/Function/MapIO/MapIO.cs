@@ -2,13 +2,13 @@ using System.IO.Compression;
 using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
 
-
-namespace Everglow.ZYModule.Commons.Function.MapIO;
+namespace Everglow.ZY.Commons.Function.MapIO;
 
 internal class ModEntry
 {
 	public Dictionary<string, ushort> entries = new();
 	public Dictionary<ushort, ushort> typeMaping = new();
+
 	public char GetPostFix(IModType type)
 	{
 		if (type is ModTile)
@@ -25,14 +25,19 @@ internal class ModEntry
 		}
 		return 'u';
 	}
+
 	public ushort GetOrAddEntry(IModType block)
 	{
 		var key = $"{block.FullName}{GetPostFix(block)}";
 		if (entries.ContainsKey(key))
+		{
 			return entries[key];
+		}
+
 		entries.Add(key, (ushort)entries.Count);
 		return (ushort)(entries.Count - 1);
 	}
+
 	public void Write(BinaryWriter writer)
 	{
 		writer.Write(entries.Count);
@@ -42,6 +47,7 @@ internal class ModEntry
 			writer.Write(type);
 		}
 	}
+
 	public void Read(BinaryReader reader)
 	{
 		int count = reader.ReadInt32();
@@ -72,12 +78,16 @@ internal class ModEntry
 internal class MapIO
 {
 	public static int AirTileType => ModContent.TileType<AirTile>();
+
 	public static int AirWallType => ModContent.WallType<AirWall>();
+
 	public int x;
 	public int y;
 	public int width;
 	public int height;
+
 	public Rectangle Rectangle => new(x, y, width, height);
+
 	public MapIO(int x, int y, int width, int height)
 	{
 		this.x = x;
@@ -93,6 +103,7 @@ internal class MapIO
 		width = rect.Width;
 		height = rect.Height;
 	}
+
 	public MapIO(Point a, Point b)
 	{
 		var min = new Point(Math.Min(a.X, b.X), Math.Min(a.Y, b.Y));
@@ -102,6 +113,7 @@ internal class MapIO
 		width = max.X - min.X;
 		height = max.Y - min.Y;
 	}
+
 	public MapIO(int x, int y)
 	{
 		this.x = x;
@@ -113,6 +125,7 @@ internal class MapIO
 		using var stream = File.Create(path);
 		Write(stream);
 	}
+
 	public void Write(Stream stream)
 	{
 		var entry = new ModEntry();
@@ -132,13 +145,14 @@ internal class MapIO
 		memoryStream.WriteTo(targetStream);
 		using var zip = new GZipStream(stream, CompressionLevel.Optimal);
 		targetStream.WriteTo(zip);
-
 	}
+
 	public void Read(string path)
 	{
 		using var stream = File.OpenRead(path);
 		Read(stream);
 	}
+
 	public void Read(Stream stream)
 	{
 		var entry = new ModEntry();
@@ -151,8 +165,11 @@ internal class MapIO
 		ReadChest(reader, Rectangle);
 		ReadSign(reader, Rectangle);
 		if (stream.Length != stream.Position)
+		{
 			ReadTileEntity(reader, Rectangle, entry);
+		}
 	}
+
 	public int ReadWidth(string path)
 	{
 		using var stream = File.OpenRead(path);
@@ -162,9 +179,9 @@ internal class MapIO
 		entry.Read(reader);
 		width = reader.ReadInt32();
 		height = reader.ReadInt32();
-		;
 		return width;
 	}
+
 	public int ReadHeight(string path)
 	{
 		using var stream = File.OpenRead(path);
@@ -185,9 +202,9 @@ internal class MapIO
 		entry.Read(reader);
 		width = reader.ReadInt32();
 		height = reader.ReadInt32();
-		;
 		return width;
 	}
+
 	public int ReadHeight(Stream stream)
 	{
 		var entry = new ModEntry();
@@ -198,6 +215,7 @@ internal class MapIO
 		height = reader.ReadInt32();
 		return height;
 	}
+
 	/// <summary>
 	/// 写入<paramref name="accessor"/>访问到的所有Tile，并且采取相邻相同Tile统一保存
 	/// </summary>
@@ -207,7 +225,9 @@ internal class MapIO
 	public static void WriteTile(BinaryWriter writer, ITileAccessor accessor, ModEntry entry)
 	{
 		if (!accessor.MoveNext())
+		{
 			return;
+		}
 
 		int airBlockType = AirTileType;
 		do
@@ -216,7 +236,8 @@ internal class MapIO
 			var tile = accessor.Current;
 			var memoryStream = new MemoryStream(16);
 			var writer_local = new BinaryWriter(memoryStream);
-			//0：是否有方块，1：是否为Mod方块
+
+			// 0：是否有方块，1：是否为Mod方块
 			if (!tile.HasTile)
 			{
 				heads[0][0] = false;
@@ -233,7 +254,8 @@ internal class MapIO
 				{
 					heads[0][0] = true;
 					heads[0][1] = true;
-					//ModTile写入FullName对应的Index
+
+					// ModTile写入FullName对应的Index
 					ushort index = entry.GetOrAddEntry(ModContent.GetModTile(tile.TileType));
 					if (index > byte.MaxValue)
 					{
@@ -250,7 +272,8 @@ internal class MapIO
 				{
 					heads[0][0] = true;
 					heads[0][1] = false;
-					//原版Tile写入TileType
+
+					// 原版Tile写入TileType
 					if (tile.TileType > byte.MaxValue)
 					{
 						heads[0][2] = true;
@@ -265,12 +288,12 @@ internal class MapIO
 
 				if (Main.tileFrameImportant[tile.TileType])
 				{
-					//可能不需要的针对旧版的代码
+					// 可能不需要的针对旧版的代码
 					////原版代码---------
-					//short frameX = tile.TileFrameX;
-					//bool mannequin = tile.TileType == 128 || tile.TileType == 269;
-					//if (mannequin)
-					//{
+					// short frameX = tile.TileFrameX;
+					// bool mannequin = tile.TileType == 128 || tile.TileType == 269;
+					// if (mannequin)
+					// {
 					//    int slot = tile.TileFrameX / 100;
 					//    int position = tile.TileFrameX / 18;
 					//    var hasModArmor = position switch
@@ -284,7 +307,7 @@ internal class MapIO
 					//    {
 					//        frameX %= 100;
 					//    }
-					//}
+					// }
 					////--------------
 					if (tile.TileFrameX > byte.MaxValue)
 					{
@@ -310,16 +333,24 @@ internal class MapIO
 
 				int style = (int)tile.BlockType;
 				if ((style & 1) == 1)
+				{
 					heads[1][0] = true;
+				}
+
 				if ((style & 2) == 2)
+				{
 					heads[1][1] = true;
+				}
+
 				if ((style & 4) == 4)
+				{
 					heads[1][2] = true;
+				}
 			}
 
 			if (tile.WallType == 0)
 			{
-				//无墙壁
+				// 无墙壁
 				heads[1][3] = false;
 				heads[1][4] = false;
 			}
@@ -330,12 +361,12 @@ internal class MapIO
 			}
 			else
 			{
-				//有墙壁
+				// 有墙壁
 				heads[1][3] = true;
 				ushort wallType;
 				if (tile.WallType > WallID.Count)
 				{
-					//Mod墙壁
+					// Mod墙壁
 					heads[1][4] = true;
 					wallType = entry.GetOrAddEntry(ModContent.GetModWall(tile.WallType));
 				}
@@ -355,11 +386,12 @@ internal class MapIO
 					heads[1][5] = false;
 					writer_local.Write((byte)wallType);
 				}
-				//真的有墙壁要存Frame吗？
+
+				// 真的有墙壁要存Frame吗？
 				if (tile.WallFrameX != 0 || tile.WallFrameY != 0)
 				{
-					heads[0][5] = true;//剩下一个5位没用
-					writer_local.Write((byte)(tile.WallFrameX / 36 << 4 | tile.WallFrameY / 36));
+					heads[0][5] = true; // 剩下一个5位没用
+					writer_local.Write((byte)((tile.WallFrameX / 36) << 4 | tile.WallFrameY / 36));
 				}
 			}
 
@@ -393,7 +425,7 @@ internal class MapIO
 				ushort count = SameCount(tile, accessor);
 				if (count > 0)
 				{
-					//存在重复物块，则将6位设为true
+					// 存在重复物块，则将6位设为true
 					heads[0][6] = true;
 					writer_local.Write(count);
 				}
@@ -404,22 +436,31 @@ internal class MapIO
 			}
 
 			if (heads[2] != 0)
+			{
 				heads[1][7] = true;
+			}
+
 			if (heads[1] != 0)
+			{
 				heads[0][7] = true;
+			}
 
 			writer.Write(heads[0]);
 			if (heads[0][7])
+			{
 				writer.Write(heads[1]);
+			}
 
 			if (heads[1][7])
+			{
 				writer.Write(heads[2]);
+			}
 
 			writer.Write(memoryStream.ToArray());
-
-		} while (accessor.Good);
-
+		}
+		while (accessor.Good);
 	}
+
 	public static void ReadTile(BinaryReader reader, ITileAccessor accessor, ModEntry entry)
 	{
 		while (accessor.MoveNext())
@@ -428,26 +469,34 @@ internal class MapIO
 			var heads = new BitsByte[3];
 			heads[0] = reader.ReadByte();
 			if (heads[0][7])
+			{
 				heads[1] = reader.ReadByte();
+			}
+
 			if (heads[1][7])
+			{
 				heads[2] = reader.ReadByte();
+			}
+
 			if (!heads[0][0])
 			{
 				if (!heads[0][1])
-					//空气
+				{
+					// 空气
 					tile.HasTile = false;
+				}
 			}
 			else
 			{
 				tile.HasTile = true;
 				if (heads[0][1])
 				{
-					//Mod物块
+					// Mod物块
 					tile.TileType = entry.typeMaping[heads[0][2] ? reader.ReadUInt16() : reader.ReadByte()];
 				}
 				else
 				{
-					//原版物块
+					// 原版物块
 					tile.TileType = heads[0][2] ? reader.ReadUInt16() : reader.ReadByte();
 				}
 
@@ -462,18 +511,20 @@ internal class MapIO
 			if (!heads[1][3])
 			{
 				if (!heads[1][4])
+				{
 					tile.WallType = 0;
+				}
 			}
 			else
 			{
 				if (heads[1][4])
 				{
-					//Mod墙壁
+					// Mod墙壁
 					tile.WallType = entry.typeMaping[heads[1][5] ? reader.ReadUInt16() : reader.ReadByte()];
 				}
 				else
 				{
-					//原版墙壁
+					// 原版墙壁
 					tile.WallType = heads[1][5] ? reader.ReadUInt16() : reader.ReadByte();
 				}
 
@@ -535,6 +586,7 @@ internal class MapIO
 			}
 		}
 	}
+
 	public static void WriteChest(BinaryWriter writer, Rectangle range, bool withoutItem = false)
 	{
 		var it = Main.chest.Where(c => c != null && range.Contains(new Point(c.x, c.y)));
@@ -547,7 +599,9 @@ internal class MapIO
 			writer.Write(c.frame);
 
 			if (withoutItem)
+			{
 				continue;
+			}
 
 			foreach (var item in c.item)
 			{
@@ -555,19 +609,23 @@ internal class MapIO
 			}
 		}
 	}
+
 	public static void ReadChest(BinaryReader reader, Rectangle range, bool withoutItem = false)
 	{
-		//清除在范围内的箱子
+		// 清除在范围内的箱子
 		for (int i = 0; i < Main.chest.Length; i++)
 		{
 			var chest = Main.chest[i];
 			if (chest == null)
+			{
 				continue;
+			}
 
 			if (range.Contains(new Point(chest.x, chest.y)))
+			{
 				Main.chest[i] = null;
+			}
 		}
-
 
 		int count = reader.ReadInt32();
 		for (int i = 0; i < count; i++)
@@ -578,11 +636,13 @@ internal class MapIO
 				x = reader.ReadInt32() + range.X,
 				y = reader.ReadInt32() + range.Y,
 				name = reader.ReadString(),
-				frame = reader.ReadInt32()
+				frame = reader.ReadInt32(),
 			};
 
 			if (withoutItem)
+			{
 				continue;
+			}
 
 			for (int j = 0; j < Chest.maxItems; j++)
 			{
@@ -590,6 +650,7 @@ internal class MapIO
 			}
 		}
 	}
+
 	public static void WriteSign(BinaryWriter writer, Rectangle range)
 	{
 		var it = Main.sign.Where(s => s != null && range.Contains(new Point(s.x, s.y)));
@@ -601,17 +662,22 @@ internal class MapIO
 			writer.Write(s.text);
 		}
 	}
+
 	public static void ReadSign(BinaryReader reader, Rectangle range)
 	{
-		//清除在范围内的Sign
+		// 清除在范围内的Sign
 		for (int i = 0; i < Main.sign.Length; i++)
 		{
 			var sign = Main.sign[i];
 			if (sign == null)
+			{
 				continue;
+			}
 
 			if (range.Contains(new Point(sign.x, sign.y)))
+			{
 				Main.sign[i] = null;
+			}
 		}
 
 		int count = reader.ReadInt32();
@@ -622,10 +688,11 @@ internal class MapIO
 			{
 				x = reader.ReadInt32() + range.X,
 				y = reader.ReadInt32() + range.Y,
-				text = reader.ReadString()
+				text = reader.ReadString(),
 			};
 		}
 	}
+
 	public static void WriteTileEntity(BinaryWriter writer, Rectangle range, ModEntry entry, bool withoutData = false)
 	{
 		var it = TileEntity.ByID.Where(s => s.Value != null && range.Contains(s.Value.Position.ToPoint()));
@@ -642,8 +709,9 @@ internal class MapIO
 				writer.Write((short)(modTE.Position.Y - range.Y));
 
 				if (!withoutData)
+				{
 					TagIO.Write(tag, writer);
-
+				}
 			}
 			else
 			{
@@ -653,6 +721,7 @@ internal class MapIO
 			}
 		}
 	}
+
 	public static void ReadTileEntity(BinaryReader reader, Rectangle range, ModEntry entry, bool withoutData = false)
 	{
 		int count = reader.ReadInt32();
@@ -668,7 +737,9 @@ internal class MapIO
 				te.Position = new Point16(reader.ReadInt16(), reader.ReadInt16());
 
 				if (!withoutData)
+				{
 					te.LoadData(TagIO.Read(reader));
+				}
 			}
 			else
 			{
@@ -678,13 +749,18 @@ internal class MapIO
 			te.ID = TileEntity.AssignNewID();
 			TileEntity.ByID[te.ID] = te;
 			if (TileEntity.ByPosition.TryGetValue(te.Position, out var oldTE))
+			{
 				TileEntity.ByID.Remove(oldTE.ID);
+			}
+
 			TileEntity.ByPosition[te.Position] = te;
 			if (Main.netMode == NetmodeID.MultiplayerClient)
+			{
 				NetMessage.SendData(MessageID.TileEntityPlacement, -1, -1, null, te.ID);
+			}
 		}
 
-		//移除被覆盖的TE，Copy from vanilla
+		// 移除被覆盖的TE，Copy from vanilla
 		var list = new List<Point16>();
 		foreach (KeyValuePair<Point16, TileEntity> tes in TileEntity.ByPosition)
 		{
@@ -703,36 +779,52 @@ internal class MapIO
 			{
 				TileEntity te = TileEntity.ByPosition[pos];
 				if (TileEntity.ByID.ContainsKey(te.ID))
+				{
 					TileEntity.ByID.Remove(te.ID);
+				}
+
 				if (TileEntity.ByPosition.ContainsKey(pos))
+				{
 					TileEntity.ByPosition.Remove(pos);
+				}
 			}
 		}
 		catch
 		{
 		}
 	}
+
 	private static ushort SameCount(in Tile tile, ITileAccessor accessor)
 	{
-		//从原版Copy过来判断Tile是否相同的方法
+		// 从原版Copy过来判断Tile是否相同的方法
 		static bool IsSameTile(Tile tile, Tile compTile)
 		{
 			if (tile.Get<TileWallWireStateData>().NonFrameBits != compTile.Get<TileWallWireStateData>().NonFrameBits)
+			{
 				return false;
+			}
 
 			if (tile.WallType != compTile.WallType || tile.LiquidAmount != compTile.LiquidAmount)
+			{
 				return false;
+			}
 
 			if (tile.LiquidAmount > 0 && tile.LiquidType != compTile.LiquidType)
+			{
 				return false;
+			}
 
 			if (tile.HasTile)
 			{
 				if (tile.TileType != compTile.TileType)
+				{
 					return false;
+				}
 
 				if (Main.tileFrameImportant[tile.TileType] && (tile.TileFrameX != compTile.TileFrameX || tile.TileFrameY != compTile.TileFrameY))
+				{
 					return false;
+				}
 			}
 
 			return true;
@@ -753,6 +845,7 @@ internal class MapIO
 		}
 		return count;
 	}
+
 	public ITileAccessor GetEnumerator()
 	{
 		return new TileAccessor(x, y, x + width, y + height);

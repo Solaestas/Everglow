@@ -1,6 +1,6 @@
-﻿using Everglow.Common.Enums;
+﻿using Everglow.Commons.Enums;
 
-namespace Everglow.Common.Interfaces;
+namespace Everglow.Commons.Interfaces;
 
 public interface IVisualQualityController
 {

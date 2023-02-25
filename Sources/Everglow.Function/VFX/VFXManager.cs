@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Reflection;
-using Everglow.Common.Enums;
-using Everglow.Common.Interfaces;
-using Everglow.Common.Modules;
-using Everglow.Common.ObjectPool;
+using Everglow.Commons.Modules;
+using Everglow.Commons.Enums;
+using Everglow.Commons.Interfaces;
+using Everglow.Commons.ObjectPool;
 using ReLogic.Content;
 
-namespace Everglow.Common.VFX;
+namespace Everglow.Commons.VFX;
 
 public class VFXManager : IVFXManager
 {
@@ -24,7 +24,7 @@ public class VFXManager : IVFXManager
 	/// <summary>
 	/// 包含uTransform，对s0进行采样的普通Shader
 	/// </summary>
-	public static Asset<Effect> DefaultEffect => ModContent.Request<Effect>("Everglow/Sources/Commons/Core/VFX/Effect/Shader2D");
+	public static Asset<Effect> DefaultEffect => ModContent.Request<Effect>("Everglow/Common/VFX/Effect/Shader2D");
 
 	public static VFXManager Instance
 	{
@@ -123,9 +123,7 @@ public class VFXManager : IVFXManager
 			var pipelineIndex = innerVisuals.Index;
 			var visibles = innerVisuals.Where(v => v.Visible && v.Active);
 			if (!visibles.Any())
-			{
 				continue;
-			}
 
 			if (Ins.VisualQuality.High)
 			{
@@ -202,11 +200,9 @@ public class VFXManager : IVFXManager
 	public int GetOrCreatePipeline(Type pipelineType)
 	{
 		if (pipelineTypes.Contains(pipelineType))
-		{
 			return pipelineTypes.IndexOf(pipelineType);
-		}
 		pipelineTypes.Add(pipelineType);
-		IPipeline pipeline = (IPipeline)Activator.CreateInstance(pipelineType);
+		var pipeline = (IPipeline)Activator.CreateInstance(pipelineType);
 		pipeline.Load();
 		pipelineInstances.Add(pipeline);
 		return pipelineTypes.Count - 1;
@@ -288,9 +284,7 @@ public class VFXManager : IVFXManager
 				foreach (var visual in list)
 				{
 					if (visual.Active)
-					{
 						visual.Update();
-					}
 				}
 			}
 		}
@@ -395,9 +389,7 @@ public class VFXManager : IVFXManager
 	private IVisualCollection GetOrAddCollection(CodeLayer layer, PipelineIndex index, bool first = true)
 	{
 		if (lookup.TryGetValue((layer, index), out var collection))
-		{
 			return collection;
-		}
 		collection = first ? new VisualCollection(index) : new SingleVisual(index);
 		if (index.next == null)
 		{
@@ -437,17 +429,13 @@ public class VFXManager : IVFXManager
 		public void Flush()
 		{
 			if (!visual.Active)
-			{
 				visual = null;
-			}
 		}
 
 		public IEnumerator<IVisual> GetEnumerator()
 		{
 			if (visual != null)
-			{
 				yield return visual;
-			}
 
 			yield break;
 		}
@@ -472,9 +460,7 @@ public class VFXManager : IVFXManager
 		public void Add(IVisual visual)
 		{
 			if (visuals.Count % FLUSH_COUNT == 0)
-			{
 				Flush();
-			}
 			visuals.Add(visual);
 		}
 
@@ -514,9 +500,7 @@ public class VFXManager : IVFXManager
 			public override int Compare(IVisual x, IVisual y)
 			{
 				if (x == y)
-				{
 					return 0;
-				}
 				var diff = x.VisualType - y.VisualType;
 				return diff == 0 ? x.GetHashCode() - y.GetHashCode() : diff;
 			}

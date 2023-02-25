@@ -1,4 +1,4 @@
-﻿namespace Everglow.Common.Interfaces;
+﻿namespace Everglow.Commons.Interfaces;
 
 public interface IMainThreadContext
 {

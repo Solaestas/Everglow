@@ -378,3 +378,6 @@ dotnet_analyzer_diagnostic.category-StyleCop.CSharp.OrderingRules.severity = non
 
 # SA1117: Parameters should be on same line or separate lines
 dotnet_diagnostic.SA1117.severity = none
+
+# SA1407: Arithmetic expressions should declare precedence
+dotnet_diagnostic.SA1407.severity = none

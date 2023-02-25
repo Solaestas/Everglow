@@ -1,8 +1,8 @@
-using Everglow.ZYModule.Commons.Function.MapIO;
+using Everglow.ZY.Commons.Function.MapIO;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.ZYModule.Items;
+namespace Everglow.ZY.Items;
 
 public class SightOfTile : ModItem
 {
@@ -21,6 +21,7 @@ public class SightOfTile : ModItem
 		Item.shoot = ModContent.ProjectileType<SightOfTileProj>();
 		Item.noUseGraphic = true;
 	}
+
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
 		if (ModContent.GetInstance<SightOfTileUI>().InTile)
@@ -35,10 +36,12 @@ public class SightOfTile : ModItem
 		}
 		return false;
 	}
+
 	public override bool CanUseItem(Player player)
 	{
 		return !ModContent.GetInstance<SightOfTileUI>().EnableMapIOUI;
 	}
+
 	public override void HoldItem(Player player)
 	{
 		if (player.ownedProjectileCounts[ModContent.ProjectileType<SightOfTileProj>()] + player.ownedProjectileCounts[ModContent.ProjectileType<SightOfTileProjRead>()] == 0)
@@ -72,59 +75,61 @@ internal class SightOfTileUI : ModSystem
 		{
 			Size = 0f;
 			AddCenter = Vector2.Zero;
-			this.texcoord = ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZYModule/Items/Wires_0").Value;
-			this.contain = ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZYModule/Items/InTile").Value;
+			this.texcoord = ModContent.Request<Texture2D>("Everglow/ZY/Items/Wires_0").Value;
+			this.contain = ModContent.Request<Texture2D>("Everglow/ZY/Items/InTile").Value;
 		}
 	}
 
-	private UICircle circle0 = new(0f, Vector2.Zero, ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZYModule/Items/Wires_0").Value, ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZYModule/Items/InTile").Value);
-	private UICircle circle1 = new(0f, Vector2.Zero, ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZYModule/Items/Wires_0").Value, ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZYModule/Items/OutTile").Value);
+	private UICircle circle0 = new(0f, Vector2.Zero, ModContent.Request<Texture2D>("Everglow/ZY/Items/Wires_0").Value, ModContent.Request<Texture2D>("Everglow/ZY/Items/InTile").Value);
+	private UICircle circle1 = new(0f, Vector2.Zero, ModContent.Request<Texture2D>("Everglow/ZY/Items/Wires_0").Value, ModContent.Request<Texture2D>("Everglow/ZY/Items/OutTile").Value);
 	public Vector2 DrawCenter;
-	private int AnimationTimer = 0;
+	private int animationTimer = 0;
 	public bool EnableMapIOUI = false;
 	public bool InTile = true;
 	public bool OutTile = true;
 	public List<string> fileName = new();
 	public string OutFileName;
+
 	public override void PostDrawInterface(SpriteBatch spriteBatch)
 	{
 		if (EnableMapIOUI)
 		{
-			if (AnimationTimer < 30)
+			if (animationTimer < 30)
 			{
-				AnimationTimer += 3;
+				animationTimer += 3;
 			}
 			else
 			{
-				AnimationTimer = 30;
+				animationTimer = 30;
 			}
 		}
 		else
 		{
-			if (AnimationTimer > 0)
+			if (animationTimer > 0)
 			{
-				AnimationTimer -= 3;
+				animationTimer -= 3;
 			}
 			else
 			{
-				AnimationTimer = 0;
+				animationTimer = 0;
 			}
 		}
-		if (AnimationTimer > 0)
+		if (animationTimer > 0)
 		{
-			circle0.contain = ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZYModule/Items/InTile").Value;
-			circle1.contain = ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZYModule/Items/OutTile").Value;
+			circle0.contain = ModContent.Request<Texture2D>("Everglow/ZY/Items/InTile").Value;
+			circle1.contain = ModContent.Request<Texture2D>("Everglow/ZY/Items/OutTile").Value;
 			UpdateAndDraw(circle0, 0);
 			UpdateAndDraw(circle1, 1);
 		}
 		base.PostDrawInterface(spriteBatch);
 	}
+
 	public void UpdateAndDraw(UICircle c0, int Count)
 	{
-		c0.AddCenter = new Vector2(0, AnimationTimer * 1.0f).RotatedBy(AnimationTimer / 60d * Math.PI + Count * Math.PI);
-		if (AnimationTimer < 30)
+		c0.AddCenter = new Vector2(0, animationTimer * 1.0f).RotatedBy(animationTimer / 60d * Math.PI + Count * Math.PI);
+		if (animationTimer < 30)
 		{
-			c0.Size = AnimationTimer / 30f;
+			c0.Size = animationTimer / 30f;
 		}
 		else
 		{
@@ -133,7 +138,9 @@ internal class SightOfTileUI : ModSystem
 		DrawUICircle(c0);
 		CheckMouseClick(c0, Count);
 		if (Count == 1 && fileName != null && OutTile)
+		{
 			DrawSquireUI(c0, fileName);
+		}
 	}
 
 	public void CheckMouseClick(UICircle c0, int Count)
@@ -155,11 +162,13 @@ internal class SightOfTileUI : ModSystem
 					if (Directory.Exists(rootpath))
 					{
 						List<string> result = new();
-						//查找根目录下全部以.mapio为结尾的文件
+
+						// 查找根目录下全部以.mapio为结尾的文件
 						FindFiles(rootpath, ".mapio", ref result);
 						fileName = result;
-						//获取根目录下当前层级全部与*.mapio匹配的文件(仅文件)
-						string[] files = Directory.GetFiles(rootpath, "*.mapio");
+
+						// 获取根目录下当前层级全部与*.mapio匹配的文件(仅文件)
+						// string[] files = Directory.GetFiles(rootpath, "*.mapio");
 					}
 					else
 					{
@@ -169,22 +178,25 @@ internal class SightOfTileUI : ModSystem
 			}
 		}
 	}
+
 	public void FindFiles(string rootpath, string extension, ref List<string> filepaths)
 	{
-		//获取根目录下所有的文件和文件夹路径
+		// 获取根目录下所有的文件和文件夹路径
 		string[] paths = Directory.GetFileSystemEntries(rootpath);
 		foreach (string path in paths)
 		{
-			//判断是不是文件
+			// 判断是不是文件
 			if (File.Exists(path))
 			{
-				//查询文件名是否以目标结尾
+				// 查询文件名是否以目标结尾
 				if (path.EndsWith(extension))
+				{
 					filepaths.Add(path);
+				}
 			}
 			else
 			{
-				//查询这个文件夹下以目标结尾的文件
+				// 查询这个文件夹下以目标结尾的文件
 				FindFiles(path, extension, ref filepaths);
 			}
 		}
@@ -201,7 +213,7 @@ internal class SightOfTileUI : ModSystem
 			{
 				count++;
 				Dx += 18;
-				Texture2D sqrt = ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZYModule/Items/RectangleSmall").Value;
+				Texture2D sqrt = ModContent.Request<Texture2D>("Everglow/ZY/Items/RectangleSmall").Value;
 				Vector2 DrawPos = DrawCenter + c0.AddCenter + new Vector2(Dx, Dy);
 				if (!new Rectangle(0, 0, Main.screenWidth, Main.screenHeight).Contains(new Rectangle((int)DrawPos.X - 9, (int)DrawPos.Y - 9, 18, 18)))
 				{
@@ -219,7 +231,7 @@ internal class SightOfTileUI : ModSystem
 					var mapIO = new MapIO((int)(Main.MouseWorld.X / 16), (int)(Main.MouseWorld.Y / 16));
 					int TWidth = mapIO.ReadWidth(name);
 					int THeight = mapIO.ReadHeight(name);
-					string LastTime = "Creat at: " + File.GetCreationTime(name).ToString("");
+					string LastTime = "Creat at: " + File.GetCreationTime(name).ToString(string.Empty);
 					string TSize = TWidth.ToString() + "x" + THeight.ToString();
 					Main.instance.MouseText(name[(index + 1)..] + "\n" + TSize + "\n" + LastTime);
 					if (Main.mouseLeft && Main.mouseLeftRelease)
@@ -234,44 +246,52 @@ internal class SightOfTileUI : ModSystem
 			}
 		}
 	}
+
 	public void CheckMouseOver(UICircle c0)
 	{
-		if ((Main.MouseScreen - DrawCenter - c0.AddCenter).Length() < 20 && c0.texcoord != ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZYModule/Items/Wires_1").Value)
+		if ((Main.MouseScreen - DrawCenter - c0.AddCenter).Length() < 20 && c0.texcoord != ModContent.Request<Texture2D>("Everglow/ZY/Items/Wires_1").Value)
 		{
 			SoundEngine.PlaySound(SoundID.MenuClose);
 			c0.Size = 1.2f;
-			c0.texcoord = ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZYModule/Items/Wires_1").Value;
+			c0.texcoord = ModContent.Request<Texture2D>("Everglow/ZY/Items/Wires_1").Value;
 		}
-		if ((Main.MouseScreen - DrawCenter - c0.AddCenter).Length() >= 20 && c0.texcoord != ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZYModule/Items/Wires_0").Value)
+		if ((Main.MouseScreen - DrawCenter - c0.AddCenter).Length() >= 20 && c0.texcoord != ModContent.Request<Texture2D>("Everglow/ZY/Items/Wires_0").Value)
 		{
 			c0.Size = 1f;
-			c0.texcoord = ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZYModule/Items/Wires_0").Value;
+			c0.texcoord = ModContent.Request<Texture2D>("Everglow/ZY/Items/Wires_0").Value;
 		}
 	}
+
 	public void DrawUICircle(UICircle c0)
 	{
 		Main.spriteBatch.Draw(c0.texcoord, DrawCenter + c0.AddCenter, null, Color.White, 0, c0.texcoord.Size() / 2f, c0.Size, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(c0.contain, DrawCenter + c0.AddCenter, null, Color.White, 0, c0.contain.Size() / 2f, c0.Size, SpriteEffects.None, 0);
 	}
+
 	public void OpenUI()
 	{
 		DrawCenter = Main.MouseScreen / Main.UIScale;
-		circle0.texcoord = ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZYModule/Items/Wires_0").Value;
-		circle1.texcoord = ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZYModule/Items/Wires_0").Value;
+		circle0.texcoord = ModContent.Request<Texture2D>("Everglow/ZY/Items/Wires_0").Value;
+		circle1.texcoord = ModContent.Request<Texture2D>("Everglow/ZY/Items/Wires_0").Value;
 		InTile = false;
 		OutTile = false;
 		EnableMapIOUI = true;
 	}
+
 	public void CloseUI()
 	{
-		circle0.texcoord = ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZYModule/Items/Wires_0").Value;
-		circle1.texcoord = ModContent.Request<Texture2D>("Everglow/Sources/Modules/ZYModule/Items/Wires_0").Value;
+		circle0.texcoord = ModContent.Request<Texture2D>("Everglow/ZY/Items/Wires_0").Value;
+		circle1.texcoord = ModContent.Request<Texture2D>("Everglow/ZY/Items/Wires_0").Value;
 		EnableMapIOUI = false;
 	}
+
 	public override void UpdateUI(GameTime gameTime)
 	{
 		if (Main.LocalPlayer.HeldItem.type != ModContent.ItemType<SightOfTile>())
+		{
 			CloseUI();
+		}
+
 		base.UpdateUI(gameTime);
 	}
 }

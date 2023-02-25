@@ -1,6 +1,6 @@
 ﻿using ReLogic.Content;
 
-namespace Everglow.Common.UI.UIElements;
+namespace Everglow.Commons.UI.UIElements;
 
 internal class UIPanel : BaseElement
 {
@@ -23,9 +23,7 @@ internal class UIPanel : BaseElement
 		Events.OnLeftClick += element =>
 		{
 			if (CanDrag)
-			{
 				dragging = false;
-			}
 		};
 	}
 
@@ -67,7 +65,7 @@ internal class UIPanel : BaseElement
 	protected override void DrawSelf(SpriteBatch sb)
 	{
 		base.DrawSelf(sb);
-		Texture2D texture = ModContent.Request<Texture2D>("Everglow/Sources/Commons/Core/UI/Images/Panel", AssetRequestMode.ImmediateLoad).Value;
+		Texture2D texture = ModContent.Request<Texture2D>("Everglow/Common/UI/Images/Panel", AssetRequestMode.ImmediateLoad).Value;
 		Point textureSize = new(texture.Width, texture.Height);
 		Rectangle rectangle = Info.TotalHitBox;
 

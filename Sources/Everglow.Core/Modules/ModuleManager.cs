@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace Everglow.Common.Modules;
+namespace Everglow.Commons.Modules;
 
 public class ModuleManager : IDisposable
 {
@@ -10,7 +10,8 @@ public class ModuleManager : IDisposable
 	public ModuleManager()
 	{
 		var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-		var main = assemblies.Single(asm => asm.GetName().Name == "Everglow");
+		// 为什么重新加载时之前的程序集还在
+		var main = assemblies.Last(asm => asm.GetName().Name == "Everglow");
 
 		_assemblies = assemblies
 			.Where(asm => asm.GetName().Name.StartsWith($"Everglow.", StringComparison.Ordinal))

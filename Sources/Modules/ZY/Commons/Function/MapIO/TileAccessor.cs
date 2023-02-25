@@ -1,4 +1,4 @@
-﻿namespace Everglow.ZYModule.Commons.Function.MapIO;
+namespace Everglow.ZY.Commons.Function.MapIO;
 
 internal class TileAccessor : ITileAccessor
 {
@@ -19,6 +19,7 @@ internal class TileAccessor : ITileAccessor
 	}
 
 	public Point CurrentCoord => new(x, y);
+
 	public Tile Current => Good ? Main.tile[x, y] : throw new InvalidOperationException();
 
 	public bool Good => minX <= x && x < maxX && minY <= y && y < maxY;
@@ -29,6 +30,7 @@ internal class TileAccessor : ITileAccessor
 		{
 			return x - minX + (y - minY) * (maxX - minX);
 		}
+
 		set
 		{
 			x = value / (maxX - minX) + minX;
@@ -36,7 +38,9 @@ internal class TileAccessor : ITileAccessor
 		}
 	}
 
-	public void Dispose() { }
+	public void Dispose()
+	{
+	}
 
 	public bool MoveNext()
 	{

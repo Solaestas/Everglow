@@ -1,6 +1,6 @@
-﻿using Everglow.Common.Interfaces;
+﻿using Everglow.Commons.Interfaces;
 
-namespace Everglow.Common;
+namespace Everglow.Commons;
 
 public class Future<T>
 {
@@ -12,18 +12,14 @@ public class Future<T>
 		get
 		{
 			if (!IsLoaded)
-			{
 				throw new InvalidOperationException("Hasn't been Loaded");
-			}
 			return value;
 		}
 
 		set
 		{
 			if (IsLoaded)
-			{
 				throw new InvalidOperationException("Has been Loaded");
-			}
 			isLoaded = true;
 			this.value = value;
 		}
@@ -43,7 +39,7 @@ public class MainThreadContext : IMainThreadContext
 		Future<Color[]> future = new();
 		AddTask(() =>
 		{
-			Color[] temp = new Color[texture.Width * texture.Height];
+			var temp = new Color[texture.Width * texture.Height];
 			texture.GetData(temp);
 			future.Value = temp;
 		});

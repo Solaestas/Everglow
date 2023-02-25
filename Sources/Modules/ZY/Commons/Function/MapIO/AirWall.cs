@@ -1,4 +1,4 @@
-﻿namespace Everglow.ZYModule.Commons.Function.MapIO;
+﻿namespace Everglow.ZY.Commons.Function.MapIO;
 
 internal class AirWall : ModWall
 {
@@ -7,7 +7,6 @@ internal class AirWall : ModWall
 		AddMapEntry(Color.White);
 	}
 }
-
 
 internal class AirWallItem : ModItem
 {

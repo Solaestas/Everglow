@@ -1,6 +1,6 @@
-﻿using Everglow.Common.Enums;
+﻿using Everglow.Commons.Enums;
 
-namespace Everglow.Common.VFX.Visuals;
+namespace Everglow.Commons.VFX.Visuals;
 
 public abstract class Particle : Visual
 {

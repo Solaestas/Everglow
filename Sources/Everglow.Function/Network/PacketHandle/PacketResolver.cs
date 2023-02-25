@@ -1,7 +1,8 @@
-namespace Everglow.Common.Network.PacketHandle;
+namespace Everglow.Commons.Network.PacketHandle;
 
 using System.Reflection;
-using Everglow.Common.FeatureFlags;
+using Everglow.Commons;
+using Everglow.Commons.FeatureFlags;
 using Terraria.ID;
 using Packet_Id = Int32;
 
@@ -41,9 +42,7 @@ public class PacketResolver
 	{
 		// 单人模式不要有任何动作
 		if (Main.netMode == NetmodeID.SinglePlayer)
-		{
 			return;
-		}
 		var modPacket = GetPacket();
 		using (MemoryStream ms = new())
 		{
@@ -51,9 +50,7 @@ public class PacketResolver
 			int id = packetIDMapping[packet.GetType()];
 			packet.Send(bw);
 			if (CompileTimeFeatureFlags.NetworkPacketIDUseInt32)
-			{
 				modPacket.Write(id);
-			}
 			else
 			{
 				modPacket.Write((byte)id);
@@ -74,9 +71,7 @@ public class PacketResolver
 	{
 		var type = typeof(T);
 		if (packetIDMapping.ContainsKey(type))
-		{
 			return packetIDMapping[type];
-		}
 		throw new ArgumentException("不存在的Packet类型");
 	}
 
@@ -91,9 +86,7 @@ public class PacketResolver
 
 		// 首先读取封包ID
 		if (CompileTimeFeatureFlags.NetworkPacketIDUseInt32)
-		{
 			packetID = reader.ReadInt32();
-		}
 		else
 		{
 			packetID = reader.ReadByte();
@@ -105,7 +98,7 @@ public class PacketResolver
 		}
 
 		// 直接从reader里构造packet数据
-		IPacket packet = Activator.CreateInstance(packetIDToTypeMapping[packetID]) as IPacket;
+		var packet = Activator.CreateInstance(packetIDToTypeMapping[packetID]) as IPacket;
 		packet.Receive(reader, whoAmI);
 
 		// 让handler处理封包数据
@@ -142,17 +135,13 @@ public class PacketResolver
 			{
 				Type packetType = handlePacket.PacketType;
 				if (!packetIDMapping.ContainsKey(packetType))
-				{
 					throw new InvalidOperationException("Unknown packet type");
-				}
 
 				// 获取封包类型的对应ID，并且将handler绑定上去
 				Packet_Id packetId = packetIDMapping[packetType];
-				IPacketHandler handler = Activator.CreateInstance(type) as IPacketHandler;
+				var handler = Activator.CreateInstance(type) as IPacketHandler;
 				if (packetHandlers.ContainsKey(packetId))
-				{
 					packetHandlers[packetId].Add(handler);
-				}
 				else
 				{
 					packetHandlers.Add(packetId, new List<IPacketHandler> { handler });

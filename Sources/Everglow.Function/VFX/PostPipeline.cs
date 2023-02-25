@@ -1,7 +1,7 @@
-﻿using Everglow.Common.Interfaces;
+﻿using Everglow.Commons.Interfaces;
 using ReLogic.Content;
 
-namespace Everglow.Common.VFX;
+namespace Everglow.Commons.VFX;
 
 internal abstract class PostPipeline : IPipeline
 {

@@ -1,6 +1,6 @@
-using Everglow.Common.Interfaces;
+using Everglow.Commons.Interfaces;
 
-namespace Everglow.Common.VFX;
+namespace Everglow.Commons.VFX;
 
 public class FakeManager : IVFXManager
 {

@@ -1,4 +1,4 @@
-namespace Everglow.Common.Utils;
+namespace Everglow.Commons.Utils;
 public static class GraphicsUtils
 {
 	/// <summary>
@@ -11,11 +11,9 @@ public static class GraphicsUtils
 	{
 		int count = origPath.Count();
 		if (count <= 2)
-		{
 			return origPath.ToList();
-		}
 
-		Vector2[] path = new Vector2[count + 2];
+		var path = new Vector2[count + 2];
 		var it = origPath.GetEnumerator();
 		int index = 0;
 		while (it.MoveNext())

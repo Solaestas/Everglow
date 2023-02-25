@@ -2,8 +2,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<Import Project="..\Shared.props" />
 	<PropertyGroup>
-		<RootNamespace>Everglow.Common</RootNamespace>
-		<AssetsPrefix>Common</AssetsPrefix>
+		<RootNamespace>Everglow.Commons</RootNamespace>
+		<AssetsPrefix>Commons</AssetsPrefix>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />

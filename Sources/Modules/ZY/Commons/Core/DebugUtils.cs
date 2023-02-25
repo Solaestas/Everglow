@@ -1,10 +1,10 @@
-using Everglow.ZYModule.Commons.Core.Enumerator;
+using Everglow.ZY.Commons.Core.Enumerator;
 
-namespace Everglow.ZYModule.Commons.Core;
+namespace Everglow.ZY.Commons.Core;
 
 internal enum HookFlag
 {
-	WallSlideException
+	WallSlideException,
 }
 internal static class DebugUtils
 {
@@ -12,6 +12,7 @@ internal static class DebugUtils
 	public static void DebugInvoke(Action action) => action();
 
 	private static Dictionary<HookFlag, int> flags = new();
+
 	[Conditional("DEBUG")]
 	public static void TriggerFlag(HookFlag flag)
 	{
@@ -29,6 +30,6 @@ internal static class DebugUtils
 		Console.WriteLine($"未触发Flag ： {(from flag in EnumUtils.GetEnums<HookFlag>() where !flags.ContainsKey(flag) select flag.ToString() + " ").BuildString()}");
 		Console.WriteLine($"已触发Flag ： {(from flag in EnumUtils.GetEnums<HookFlag>() where flags.ContainsKey(flag) select $"{flag} : {flags[flag]}次 ").BuildString()}");
 	}
-	public static void ProfilerInvoke(Action action) => action();
 
+	public static void ProfilerInvoke(Action action) => action();
 }

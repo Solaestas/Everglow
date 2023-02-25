@@ -1,4 +1,4 @@
-﻿namespace Everglow.Common.UI.UIElements;
+﻿namespace Everglow.Commons.UI.UIElements;
 
 internal class BaseElement
 {
@@ -410,14 +410,10 @@ internal class BaseElement
 		{
 			child = ChildrenElements[i];
 			if (child != null && child.IsVisible)
-			{
 				child.Update(gt);
-			}
 		}
 		if (IsVisible)
-		{
 			Events.Update(this, gt);
-		}
 	}
 
 	/// <summary>
@@ -509,9 +505,7 @@ internal class BaseElement
 		ChildrenElements.ForEach(child =>
 		{
 			if (child != null && child.IsVisible)
-			{
 				child.Draw(sb);
-			}
 		});
 	}
 
@@ -523,15 +517,11 @@ internal class BaseElement
 	public bool Register(BaseElement element)
 	{
 		if (element == null || ChildrenElements.Contains(element) || element.ParentElement != null)
-		{
 			return false;
-		}
 
 		element.ParentElement = this;
 		if (!element.Info.InitDone)
-		{
 			element.OnInitialization();
-		}
 
 		element.Calculation();
 		ChildrenElements.Add(element);
@@ -546,9 +536,7 @@ internal class BaseElement
 	public bool Remove(BaseElement element)
 	{
 		if (element == null || !ChildrenElements.Contains(element) || element.ParentElement == null)
-		{
 			return false;
-		}
 
 		element.ParentElement = null;
 		ChildrenElements.Remove(element);
@@ -634,9 +622,7 @@ internal class BaseElement
 		List<BaseElement> elements = new();
 		bool contains = ContainsPoint(point);
 		if (contains && Info.IsSensitive && Info.CanBeInteract)
-		{
 			elements.Add(this);
-		}
 
 		if (ChildrenElements.Count > 0)
 		{
@@ -650,17 +636,13 @@ internal class BaseElement
 					childrens = child.GetElementsContainsPoint(point);
 					elements.AddRange(childrens);
 					if (child.Info.InteractiveMask && childrens.Count > 0)
-					{
 						break;
-					}
 				}
 			}
 		}
 
 		if (elements.Count == 0 && contains && Info.CanBeInteract && !elements.Contains(this))
-		{
 			elements.Add(this);
-		}
 		return elements;
 	}
 
@@ -684,9 +666,7 @@ internal class BaseElement
 	public virtual Rectangle GetCanHitBox()
 	{
 		if (ParentElement == null)
-		{
 			return Rectangle.Intersect(new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), HitBox);
-		}
 
 		return Rectangle.Intersect(Rectangle.Intersect(HitBox, ParentElement.HitBox), ParentElement.GetCanHitBox());
 	}
@@ -698,14 +678,10 @@ internal class BaseElement
 	public bool GetParentElementIsHiddenOverflow()
 	{
 		if (Info.HiddenOverflow)
-		{
 			return true;
-		}
 
 		if (ParentElement == null)
-		{
 			return false;
-		}
 
 		return ParentElement.GetParentElementIsHiddenOverflow();
 	}

@@ -1,4 +1,4 @@
-﻿namespace Everglow.Common.Coroutines;
+﻿namespace Everglow.Commons.Coroutines;
 
 /// <summary>
 /// 协程将会等到条件不满足才继续执行

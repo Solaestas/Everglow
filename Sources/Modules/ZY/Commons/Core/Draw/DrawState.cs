@@ -1,4 +1,4 @@
-﻿namespace Everglow.ZYModule.Commons.Core.Draw;
+﻿namespace Everglow.ZY.Commons.Core.Draw;
 
 internal class DrawState
 {
@@ -22,7 +22,6 @@ internal class DrawState
 		graphicsDevice.DepthStencilState = depthStencilState;
 		graphicsDevice.RasterizerState = rasterizerState;
 	}
-
 
 	public readonly DrawState Default = new(BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone);
 	public readonly DrawState Additive = new(BlendState.Additive, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone);

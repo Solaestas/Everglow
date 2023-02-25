@@ -1,7 +1,7 @@
 ﻿using ReLogic.Graphics;
 using Terraria.GameContent;
 
-namespace Everglow.Common.UI.UIElements;
+namespace Everglow.Commons.UI.UIElements;
 
 internal delegate bool CheckPutSlotCondition(Item mouseItem);
 internal delegate void ExchangeItemHandler(BaseElement target);
@@ -132,10 +132,8 @@ internal class UIItemSlot : BaseElement
 			{
 				// 如果不能放入物品
 				if (!(CanPutInSlot == null || CanPutInSlot(Main.mouseItem)))
-				{
 					// 中断函数
 					return;
-				}
 
 				// 如果框里的物品和鼠标的相同
 				if (Main.mouseItem.type == ContainedItem.type)
@@ -225,9 +223,7 @@ internal class UIItemSlot : BaseElement
 
 			// 绘制物品左下角那个代表数量的数字
 			if (ContainedItem.stack > 1)
-			{
 				sb.DrawString(font, ContainedItem.stack.ToString(), new Vector2(DrawRectangle.X + 10, DrawRectangle.Y + DrawRectangle.Height - 20), Color.White * Opacity, 0f, Vector2.Zero, scale * 0.8f, SpriteEffects.None, 0f);
-			}
 		}
 	}
 
@@ -255,13 +251,9 @@ internal class UIItemSlot : BaseElement
 		var width = (int)size4.X;
 		var height = (int)size4.Y;
 		if (w < size4.X)
-		{
 			w = width;
-		}
 		if (h < size4.Y)
-		{
 			h = width;
-		}
 		sp.Draw(box, new Rectangle(x, y, width, height), new Rectangle(0, 0, width, height), c);
 		sp.Draw(box, new Rectangle(x + width, y, w - width * 2, height), new Rectangle(width, 0, box.Width - width * 2, height), c);
 		sp.Draw(box, new Rectangle(x + w - width, y, width, height), new Rectangle(box.Width - width, 0, width, height), c);
