@@ -1,4 +1,5 @@
-﻿using Terraria.Audio;
+using Everglow.ZYModule.Commons.Function.MapIO;
+using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace Everglow.ZYModule.Items;
@@ -45,7 +46,9 @@ public class SightOfTile : ModItem
 			if (Main.mouseRight && Main.mouseRightRelease)
 			{
 				if (ModContent.GetInstance<SightOfTileUI>().EnableMapIOUI)
+				{
 					ModContent.GetInstance<SightOfTileUI>().CloseUI();
+				}
 				else
 				{
 					ModContent.GetInstance<SightOfTileUI>().OpenUI();
@@ -88,7 +91,9 @@ internal class SightOfTileUI : ModSystem
 		if (EnableMapIOUI)
 		{
 			if (AnimationTimer < 30)
+			{
 				AnimationTimer += 3;
+			}
 			else
 			{
 				AnimationTimer = 30;
@@ -97,7 +102,9 @@ internal class SightOfTileUI : ModSystem
 		else
 		{
 			if (AnimationTimer > 0)
+			{
 				AnimationTimer -= 3;
+			}
 			else
 			{
 				AnimationTimer = 0;
@@ -116,7 +123,9 @@ internal class SightOfTileUI : ModSystem
 	{
 		c0.AddCenter = new Vector2(0, AnimationTimer * 1.0f).RotatedBy(AnimationTimer / 60d * Math.PI + Count * Math.PI);
 		if (AnimationTimer < 30)
+		{
 			c0.Size = AnimationTimer / 30f;
+		}
 		else
 		{
 			CheckMouseOver(c0);
@@ -212,7 +221,7 @@ internal class SightOfTileUI : ModSystem
 					int THeight = mapIO.ReadHeight(name);
 					string LastTime = "Creat at: " + File.GetCreationTime(name).ToString("");
 					string TSize = TWidth.ToString() + "x" + THeight.ToString();
-					Main.instance.MouseText(name.Substring(index + 1) + "\n" + TSize + "\n" + LastTime);
+					Main.instance.MouseText(name[(index + 1)..] + "\n" + TSize + "\n" + LastTime);
 					if (Main.mouseLeft && Main.mouseLeftRelease)
 					{
 						OutFileName = name;

@@ -1,4 +1,5 @@
-﻿using Terraria.GameContent;
+using Everglow.ZYModule.Commons.Function.MapIO;
+using Terraria.GameContent;
 
 namespace Everglow.ZYModule.Items;
 
@@ -94,7 +95,9 @@ internal class SightOfTileProjRead : ModProjectile
 		Color color = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
 		SpriteEffects S = SpriteEffects.None;
 		if (Math.Sign(Vdr.X) == -1)
+		{
 			player.direction = -1;
+		}
 		else
 		{
 			player.direction = 1;

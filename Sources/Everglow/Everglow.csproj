@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 	<Import Project="..\Shared.props" />
-	<PropertyGroup>
-		<DoILRepack>true</DoILRepack>
-	</PropertyGroup>
+	<Import Project="Module.Build.props"/>
 	<ItemGroup>
 		<ProjectReference Include="..\Everglow.Core\Everglow.Core.csproj" />
 		<ProjectReference Include="..\Everglow.Function\Everglow.Function.csproj" />
-		<ProjectReference Remove="Everglow.csproj" />
 		<PackageReference Include="Costura.Fody" Version="5.7.0">
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
 	</ItemGroup>
-	
+
 	<UsingTask TaskName="BuildMod" AssemblyFile="$(TaskPath)" />
 	<Target Name="PrepareBuildMod" BeforeTargets="Build">
 		<ItemGroup>

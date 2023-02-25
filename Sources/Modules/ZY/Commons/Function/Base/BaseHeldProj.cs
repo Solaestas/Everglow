@@ -1,4 +1,4 @@
-﻿using Terraria.DataStructures;
+using Terraria.DataStructures;
 
 namespace Everglow.ZYModule.Commons.Function.Base;
 
@@ -11,7 +11,6 @@ internal abstract class BaseHeldProj<T> : BaseHeldProj where T : BaseHeldItem
 	public T item;
 	public override void SetItem(BaseHeldItem item) => this.item = (T)item;
 	public Player Owner => Main.player[Projectile.owner];
-	public PlayerManager PlayerManager => Main.player[Projectile.owner].GetModPlayer<PlayerManager>();
 	public override void Initialize()
 	{
 		Projectile.timeLeft = 2;
@@ -27,7 +26,9 @@ internal abstract class BaseHeldProj<T> : BaseHeldProj where T : BaseHeldItem
 	{
 		base.SendExtraAI(writer);
 		if (item is null)
+		{
 			writer.Write(-1);
+		}
 		else
 		{
 			writer.Write(Array.FindIndex(Owner.inventory, i => i == item.Item));

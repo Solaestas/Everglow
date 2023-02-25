@@ -1,9 +1,7 @@
 <Project>
 	<Import Project="..\Shared.props" />
 	<PropertyGroup>
-		<ModuleName>$(MSBuildProjectName)</ModuleName>
-		<AssemblyName>Everglow.$(ModuleName)</AssemblyName>
-		<RootNamespace>Everglow.$(ModuleName)</RootNamespace>
+		<ModuleName>$(MSBuildProjectName.SubString(9))</ModuleName>
 		<AssetsPrefix>$(ModuleName)</AssetsPrefix>
 		<DefineConstants>$(DefineConstants);$(ModuleName)</DefineConstants>
 	</PropertyGroup>

@@ -1,6 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
-using Everglow.Common.CustomTile;
-using Everglow.Common.CustomTile.Collide;
 using ReLogic.Content;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
@@ -65,29 +62,6 @@ internal static class Quick
 	public static Asset<Effect> RequestEffect(string path, bool async = false) =>
 		ModContent.Request<Effect>(ModulePath + path,
 		async ? AssetRequestMode.AsyncLoad : AssetRequestMode.ImmediateLoad);
-
-	public static void Log(object obj)
-	{
-		Everglow.Instance.Logger.Info(obj);
-		Main.NewText(obj, Color.Green);
-		Console.WriteLine(obj);
-	}
-	[DoesNotReturn]
-	public static void Throw(Exception ex)
-	{
-		Everglow.Instance.Logger.Error($"{ex.Source} : {ex.Message}");
-		Console.WriteLine(ex);
-		throw ex;
-	}
-
-	public static Vector2 ToMouse(this Player player)
-	{
-		return player.GetModPlayer<PlayerManager>().MouseWorld.Current - player.Center;
-	}
-
-
-
-
 
 	/// <summary>
 	/// 造成一次无法被闪避的伤害

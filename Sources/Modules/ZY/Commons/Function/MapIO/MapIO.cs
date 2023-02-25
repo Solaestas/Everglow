@@ -1,4 +1,4 @@
-﻿using System.IO.Compression;
+using System.IO.Compression;
 using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
 
@@ -12,7 +12,9 @@ internal class ModEntry
 	public char GetPostFix(IModType type)
 	{
 		if (type is ModTile)
+		{
 			return 't';
+		}
 		else if (type is ModWall)
 		{
 			return 'w';
@@ -49,7 +51,9 @@ internal class ModEntry
 			var type = reader.ReadUInt16();
 			entries.Add(name, type);
 			if (name[^1] == 'w' && ModContent.TryFind<ModWall>(name[..^1], out var wall))
+			{
 				typeMaping.Add(type, wall.Type);
+			}
 			else if (name[^1] == 't' && ModContent.TryFind<ModTile>(name[..^1], out var tile))
 			{
 				typeMaping.Add(type, tile.Type);
@@ -437,8 +441,10 @@ internal class MapIO
 			{
 				tile.HasTile = true;
 				if (heads[0][1])
+				{
 					//Mod物块
 					tile.TileType = entry.typeMaping[heads[0][2] ? reader.ReadUInt16() : reader.ReadByte()];
+				}
 				else
 				{
 					//原版物块
@@ -461,8 +467,10 @@ internal class MapIO
 			else
 			{
 				if (heads[1][4])
+				{
 					//Mod墙壁
 					tile.WallType = entry.typeMaping[heads[1][5] ? reader.ReadUInt16() : reader.ReadByte()];
+				}
 				else
 				{
 					//原版墙壁
@@ -498,14 +506,18 @@ internal class MapIO
 			tile.IsActuated = heads[2][5];
 
 			if (heads[2][6])
+			{
 				tile.TileColor = reader.ReadByte();
+			}
 			else
 			{
 				tile.TileColor = 0;
 			}
 
 			if (heads[2][7])
+			{
 				tile.WallColor = reader.ReadByte();
+			}
 			else
 			{
 				tile.WallColor = 0;
@@ -677,7 +689,9 @@ internal class MapIO
 		foreach (KeyValuePair<Point16, TileEntity> tes in TileEntity.ByPosition)
 		{
 			if (!WorldGen.InWorld(tes.Value.Position.X, tes.Value.Position.Y, 1))
+			{
 				list.Add(tes.Value.Position);
+			}
 			else if (!TileEntity.manager.CheckValidTile(tes.Value.type, tes.Value.Position.X, tes.Value.Position.Y))
 			{
 				list.Add(tes.Value.Position);
@@ -729,7 +743,9 @@ internal class MapIO
 		{
 			var next = accessor.Current;
 			if (IsSameTile(tile, next) && count <= short.MaxValue - 1)
+			{
 				++count;
+			}
 			else
 			{
 				return count;
