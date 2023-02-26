@@ -1,8 +1,12 @@
-﻿using Everglow.Sources.Commons.Function.Vertex;
+﻿using Everglow.Sources.Commons.Core.VFX;
+using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Sources.Modules.MEACModule;
+using Everglow.Sources.Modules.MythModule.Common;
+using Terraria.DataStructures;
 
 namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Melee
 {
-    class WorldHit : ModProjectile
+    class WorldHit : ModProjectile, IWarpProjectile
     {
         public override void SetDefaults()
         {
@@ -16,6 +20,20 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Melee
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
             Projectile.extraUpdates = 3;
+        }
+        public override void OnSpawn(IEntitySource source)
+        {
+            for (int f = 0; f < Projectile.ai[0] * 30f; f++)
+            {
+                Dust d = Dust.NewDustDirect(Projectile.Center - new Vector2(4), 0, 0, DustID.GemEmerald, 0, 0, 0, default, Main.rand.NextFloat(2f));
+                d.velocity =new Vector2(0, 25).RotatedByRandom(6.283) * Main.rand.NextFloat(1f);
+                d.noGravity = true;
+            }
+        }
+
+        public void DrawWarp(VFXBatch spriteBatch)
+        {
+
         }
         public override void AI()
         {
@@ -43,11 +61,12 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Melee
             return false;
         }
         private Effect ef;
-        float radious = 0;
-        float FirstRo = 0;
-        float SecondRo = 0;
-        Vector2[,] DrawLine = new Vector2[23, 18];
-        Vector2[] DrawLineVelocity = new Vector2[23];
+        internal float radious = 0;
+        internal float FirstRo = 0;
+        internal float SecondRo = 0;
+        internal Vector2[,] DrawLine = new Vector2[23, 18];
+        internal Vector2[] DrawLineVelocity = new Vector2[23];
+
         public override void PostDraw(Color lightColor)
         {
             if (FirstRo == 0)
@@ -61,66 +80,52 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Melee
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
             List<Vertex2D> bars = new List<Vertex2D>();
-            ef = (Effect)ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/FadeCurseGreen").Value;
+            ef = MythContent.QuickEffect("Effects/FadeCurseGreen");
             float widx = Projectile.timeLeft / 120f;
             float widxM = 1f - widx;
             radious = (float)(Math.Sqrt(5 * widxM) * 60) * Projectile.ai[0];
             float width = widx * widx * 80f + 10;
-            for (int i = 0; i < 201; ++i)
+            for (int i = 0; i < 51; ++i)
             {
-                Vector2 vDp = new Vector2(0, radious).RotatedBy(i / 100d * Math.PI + FirstRo);
+                Vector2 vDp = new Vector2(0, radious).RotatedBy(i / 25d * Math.PI + FirstRo);
                 var normalDir = Vector2.Normalize(vDp);
 
                 var factor = i / 50f;
                 var color = Color.Lime;
                 var w = MathHelper.Lerp(1f, 0.05f, 0.5f);
-                bars.Add(new Vertex2D(vDp + Projectile.Center + normalDir * width, color, new Vector3((float)Math.Sqrt(factor), 1, w)));
-                bars.Add(new Vertex2D(vDp + Projectile.Center + normalDir * -width, color, new Vector3((float)Math.Sqrt(factor), 0, w)));
+                
+                if(width < radious)
+                {
+                    bars.Add(new Vertex2D(Projectile.Center, color, new Vector3(factor, 0, w)));
+                }
+                else
+                {
+                    bars.Add(new Vertex2D(vDp + Projectile.Center + normalDir * width, color, new Vector3(factor, 1, w)));                  
+                }
+                bars.Add(new Vertex2D(vDp + Projectile.Center + normalDir * -width, color, new Vector3(factor, 0, w)));
             }
-
-            List<Vertex2D> triangleList = new List<Vertex2D>();
 
             if (bars.Count > 2)
             {
-                triangleList.Add(bars[0]);
-                var vertex = new Vertex2D((bars[0].position + bars[1].position) * 0.5f + Vector2.Normalize(Projectile.velocity) * 30, Color.White, new Vector3(0, 0.5f, 1));
-                triangleList.Add(bars[1]);
-                triangleList.Add(vertex);
-                for (int i = 0; i < bars.Count - 2; i += 2)
-                {
-                    triangleList.Add(bars[i]);
-                    triangleList.Add(bars[i + 2]);
-                    triangleList.Add(bars[i + 1]);
-
-                    triangleList.Add(bars[i + 1]);
-                    triangleList.Add(bars[i + 2]);
-                    triangleList.Add(bars[i + 3]);
-                }
                 RasterizerState originalState = Main.graphics.GraphicsDevice.RasterizerState;
                 var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
                 var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
 
+                ef.Parameters["tex0"].SetValue(MythContent.QuickTexture("UIimages/VisualTextures/heatmapLime"));
                 ef.Parameters["uTransform"].SetValue(model * projection);
-                ef.Parameters["uTime"].SetValue(-(float)Main.time * 0.06f);
-                ef.Parameters["maxr"].SetValue(widxM * widxM);
-                Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/heatmapTerraria").Value;
-                Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/ShakeWave").Value;
-                Main.graphics.GraphicsDevice.Textures[2] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/ShakeWave").Value;
-                Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
-                Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
-                Main.graphics.GraphicsDevice.SamplerStates[2] = SamplerState.PointWrap;
+                ef.Parameters["alphaValue"].SetValue(0.1f);
+
                 ef.CurrentTechnique.Passes[0].Apply();
 
-                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList.ToArray(), 0, triangleList.Count / 3);
+                Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("UIimages/VisualTextures/EShootDark");
+                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 
                 Main.graphics.GraphicsDevice.RasterizerState = originalState;
-                Main.spriteBatch.End();
-                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
             }
             for (int i = 0; i < 23; i++)
             {
-                Main.spriteBatch.End();
-                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+
                 List<Vertex2D> barsII = new List<Vertex2D>();
 
 
@@ -137,46 +142,25 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Melee
                     barsII.Add(new Vertex2D(DrawLine[i, z] + normalDir * widthII, Color.White, new Vector3((float)Math.Sqrt(factor), 1, w)));
                     barsII.Add(new Vertex2D(DrawLine[i, z] + normalDir * -widthII, Color.White, new Vector3((float)Math.Sqrt(factor), 0, w)));
                 }
-
-                List<Vertex2D> Vx = new List<Vertex2D>();
-
                 if (barsII.Count > 2)
                 {
-                    Vx.Add(barsII[0]);
-                    var vertex = new Vertex2D(DrawLine[i, 0], Color.White, new Vector3(0, 0.5f, 1));
-                    Vx.Add(barsII[1]);
-                    Vx.Add(vertex);
-                    for (int z = 0; z < barsII.Count - 2; z += 2)
-                    {
-                        Vx.Add(barsII[z]);
-                        Vx.Add(barsII[z + 2]);
-                        Vx.Add(barsII[z + 1]);
-
-                        Vx.Add(barsII[z + 1]);
-                        Vx.Add(barsII[z + 2]);
-                        Vx.Add(barsII[z + 3]);
-                    }
                     RasterizerState originalState = Main.graphics.GraphicsDevice.RasterizerState;
                     var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
                     var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
+
+                    ef.Parameters["tex0"].SetValue(MythContent.QuickTexture("UIimages/VisualTextures/heatmapLime"));
                     ef.Parameters["uTransform"].SetValue(model * projection);
-                    ef.Parameters["uTime"].SetValue(-(float)Main.time * 0.06f);
-                    ef.Parameters["maxr"].SetValue(widxM * widxM);
-                    Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/heatmapTerraria").Value;
-                    Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/ShakeWave").Value;
-                    Main.graphics.GraphicsDevice.Textures[2] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/ShakeWave").Value;
-                    Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
-                    Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
-                    Main.graphics.GraphicsDevice.SamplerStates[2] = SamplerState.PointWrap;
+                    ef.Parameters["alphaValue"].SetValue(0.1f);
                     ef.CurrentTechnique.Passes[0].Apply();
 
-                    Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
+                    Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("UIimages/VisualTextures/EShootDark");
+                    Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, barsII.ToArray(), 0, barsII.Count - 2);
 
                     Main.graphics.GraphicsDevice.RasterizerState = originalState;
-                    Main.spriteBatch.End();
-                    Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
                 }
             }
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
         }
     }
 }

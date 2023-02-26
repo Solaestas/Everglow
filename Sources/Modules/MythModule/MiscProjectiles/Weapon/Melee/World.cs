@@ -1,9 +1,12 @@
-﻿using Everglow.Sources.Commons.Function.Vertex;
+﻿using Everglow.Sources.Commons.Core.VFX;
+using Everglow.Sources.Commons.Function.Curves;
+using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Sources.Modules.MEACModule;
 using Everglow.Sources.Modules.MythModule.Common;
 
 namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Melee
 {
-    class World : ModProjectile
+    class World : ModProjectile, IWarpProjectile
     {
         public override void SetDefaults()
         {
@@ -13,29 +16,47 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Melee
             Projectile.hostile = false;
             Projectile.penetrate = -1;
             Projectile.timeLeft = 60;
-            //Projectile.extraUpdates = 1;
             Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
             Projectile.DamageType = DamageClass.Melee;
         }
-        float[] OldRotation = new float[60];
-        Vector2[] OldMouseWorld = new Vector2[60];
-        Vector2[] OldMouseWorldII = new Vector2[60];
-        Vector2[] OldMouseWorldIII = new Vector2[120];
-        Vector2[] OldMouseWorldIV = new Vector2[120];
-        public static Vector2[,] OldMouseWorldV = new Vector2[259, 240];
-        public static float[,] OldWidth = new float[259, 240];
-        public static float[,] OldWidthII = new float[259, 240];
-        public static float[,] OldWidthIII = new float[259, 240];
-        public static float[,] OldWidthIV = new float[259, 240];
-        public static float[,] OldWidthV = new float[259, 240];
-        int SecFrame = 8;
-        Vector2 CatchPos = Vector2.Zero;
-        int Mode = 0;
-        int ModeRightClick = 0;
-        Vector2 CrackPoint;
-        int timer = 0;
-        int Aimtimer = 0;
+
+        internal Vector2[] OldMouseWorld = new Vector2[60];
+        internal Vector2[] OldMouseWorldII = new Vector2[60];
+        internal Vector2[] OldMouseWorldIII = new Vector2[120];
+        internal Vector2[] OldMouseWorldIV = new Vector2[120];
+        internal Vector2[] OldMouseWorldV = new Vector2[240];
+        internal float[] OldRotation = new float[60];
+        internal float[] OldWidth = new float[240];
+        internal float[] OldWidthII = new float[240];
+        internal float[] OldWidthIII = new float[240];
+        internal float[] OldWidthIV = new float[240];
+        internal float[] OldWidthV = new float[240];
+        internal int SecFrame = 8;
+        internal Vector2 CatchPos = Vector2.Zero;
+        internal int Mode = 1;
+        internal Vector2 CrackPoint;
+        internal int timer = 0;
+        internal int Aimtimer = 0;
+        internal int[] HasNOHitV = new int[200];
+        internal float Omega = 0;
+        private void UpdateOldWidth(ref float[] value)
+        {
+            value[0] = Math.Clamp((OldMouseWorldV[2] - OldMouseWorldV[4]).Length() / 6f - 6f, 0, 32);
+            value[1] = Math.Clamp((OldMouseWorldV[3] - OldMouseWorldV[5]).Length() / 6f - 6f, 0, 32);//记录数据模板,这里记录撕裂宽度(由鼠标速度决定）
+            if (SecFrame > 0)//第二帧需要特殊处理
+            {
+                value[0] = 0;
+                value[1] = 0;
+                SecFrame--;
+            }
+            for (int f = 239; f > 1; f -= 2)
+            {
+                value[f] = value[f - 2] * 0.88f;
+                value[f - 1] = value[f - 3] * 0.88f;
+            }
+        }
+
         public override void AI()
         {
             timer++;
@@ -44,28 +65,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Melee
             {
                 Projectile.timeLeft = 60;
             }
-            if (Main.mouseRight)
-            {
-                ModeRightClick = 3;
-            }
-            if (ModeRightClick > 0)
-            {
-                ModeRightClick--;
-            }
-            if (ModeRightClick == 1)
-            {
-                if (Mode == 0)
-                {
-                    Mode = 1;
-                    CrackPoint = Main.MouseWorld + new Vector2(Main.rand.NextFloat(150f, 600f), 0).RotatedByRandom(6.283);
-                    Main.NewText("切换为斩切模式", 42, 161, 76);
-                }
-                else
-                {
-                    Mode = 0;
-                    Main.NewText("切换为追随模式", 42, 161, 76);
-                }
-            }
+            
             Projectile.Center = player.Center;
 
             if (CatchPos == Vector2.Zero)
@@ -126,13 +126,13 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Melee
             }
             if (OldMouseWorldIV[2] != Vector2.Zero)//第二帧需要特殊处理
             {
-                OldMouseWorldV[Projectile.owner, 0] = OldMouseWorldIV[0];//记录数据模板,这里记录鼠标坐标
-                OldMouseWorldV[Projectile.owner, 1] = (OldMouseWorldIV[1] + OldMouseWorldIV[2] + OldMouseWorldIII[1]) / 3f;//记录数据模板,这里取重心,为了平滑
+                OldMouseWorldV[0] = OldMouseWorldIV[0];//记录数据模板,这里记录鼠标坐标
+                OldMouseWorldV[1] = (OldMouseWorldIV[1] + OldMouseWorldIV[2] + OldMouseWorldIII[1]) / 3f;//记录数据模板,这里取重心,为了平滑
             }
             for (int f = 239; f > 1; f -= 2)
             {
-                OldMouseWorldV[Projectile.owner, f] = OldMouseWorldV[Projectile.owner, f - 2];
-                OldMouseWorldV[Projectile.owner, f - 1] = OldMouseWorldV[Projectile.owner, f - 3];
+                OldMouseWorldV[f] = OldMouseWorldV[f - 2];
+                OldMouseWorldV[f - 1] = OldMouseWorldV[f - 3];
             }
 
             Vector2 ArrowToMouse = Main.MouseWorld - player.Center;
@@ -140,113 +140,30 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Melee
             {
                 ArrowToMouse = CrackPoint - player.Center;
             }
+
+
             OldRotation[0] = (float)(Math.Atan2(ArrowToMouse.Y, ArrowToMouse.X));//记录数据模板,这里记录旋转角度
             for (int f = OldRotation.Length - 1; f > 0; f--)
             {
                 OldRotation[f] = OldRotation[f - 1];
             }
 
-            OldWidth[Projectile.owner, 0] = Math.Clamp((OldMouseWorldV[Projectile.owner, 2] - OldMouseWorldV[Projectile.owner, 4]).Length() / 10f - 2, 0, 72);
-            OldWidth[Projectile.owner, 1] = Math.Clamp((OldMouseWorldV[Projectile.owner, 3] - OldMouseWorldV[Projectile.owner, 5]).Length() / 10f - 2, 0, 72);//记录数据模板,这里记录撕裂宽度(由鼠标速度决定）
-            if (SecFrame > 0)//第二帧需要特殊处理
-            {
-                OldWidth[Projectile.owner, 0] = 0;
-                OldWidth[Projectile.owner, 1] = 0;
-                SecFrame--;
-            }
-            /*for (int f = OldWidth.Length - 1; f > 0; f--)
-            {
-                OldWidth[Projectile.owner,f] = OldWidth[Projectile.owner,f - 1] * 0.97f;
-            }*/
-            for (int f = 239; f > 1; f -= 2)
-            {
-                OldWidth[Projectile.owner, f] = OldWidth[Projectile.owner, f - 2] * 0.88f;
-                OldWidth[Projectile.owner, f - 1] = OldWidth[Projectile.owner, f - 3] * 0.88f;
-            }
 
-            OldWidthII[Projectile.owner, 0] = Math.Clamp((OldMouseWorldV[Projectile.owner, 2] - OldMouseWorldV[Projectile.owner, 4]).Length() / 19f - 0.7f, 0, 12);
-            OldWidthII[Projectile.owner, 1] = Math.Clamp((OldMouseWorldV[Projectile.owner, 3] - OldMouseWorldV[Projectile.owner, 5]).Length() / 19f - 0.7f, 0, 12);//记录数据模板,这里记录撕裂宽度(由鼠标速度决定）
-            if (SecFrame > 0)//第二帧需要特殊处理
-            {
-                OldWidthII[Projectile.owner, 0] = 0;
-                OldWidthII[Projectile.owner, 1] = 0;
-                SecFrame--;
-            }
-            /*for (int f = OldWidthII.Length - 1; f > 0; f--)
-            {
-                OldWidthII[Projectile.owner,f] = OldWidthII[Projectile.owner,f - 1] * 0.97f;
-            }*/
-            for (int f = 239; f > 1; f -= 2)
-            {
-                OldWidthII[Projectile.owner, f] = OldWidthII[Projectile.owner, f - 2] * 0.88f;
-                OldWidthII[Projectile.owner, f - 1] = OldWidthII[Projectile.owner, f - 3] * 0.88f;
-            }
-
-            OldWidthIII[Projectile.owner, 0] = Math.Clamp((OldMouseWorldV[Projectile.owner, 2] - OldMouseWorldV[Projectile.owner, 4]).Length() / 6f - 6f, 0, 32);
-            OldWidthIII[Projectile.owner, 1] = Math.Clamp((OldMouseWorldV[Projectile.owner, 3] - OldMouseWorldV[Projectile.owner, 5]).Length() / 6f - 6f, 0, 32);//记录数据模板,这里记录撕裂宽度(由鼠标速度决定）
-            if (SecFrame > 0)//第二帧需要特殊处理
-            {
-                OldWidthIII[Projectile.owner, 0] = 0;
-                OldWidthIII[Projectile.owner, 1] = 0;
-                SecFrame--;
-            }
-            /*for (int f = OldWidthIII.Length - 1; f > 0; f--)
-            {
-                OldWidthIII[Projectile.owner,f] = OldWidthIII[Projectile.owner,f - 1] * 0.97f;
-            }*/
-            for (int f = 239; f > 1; f -= 2)
-            {
-                OldWidthIII[Projectile.owner, f] = OldWidthIII[Projectile.owner, f - 2] * 0.88f;
-                OldWidthIII[Projectile.owner, f - 1] = OldWidthIII[Projectile.owner, f - 3] * 0.88f;
-            }
-
-            OldWidthIV[Projectile.owner, 0] = Math.Clamp((OldMouseWorldV[Projectile.owner, 2] - OldMouseWorldV[Projectile.owner, 4]).Length() / 8f - 7f, 0, 22);
-            OldWidthIV[Projectile.owner, 1] = Math.Clamp((OldMouseWorldV[Projectile.owner, 3] - OldMouseWorldV[Projectile.owner, 5]).Length() / 8f - 7f, 0, 22);//记录数据模板,这里记录撕裂宽度(由鼠标速度决定）
-            if (SecFrame > 0)//第二帧需要特殊处理
-            {
-                OldWidthIV[Projectile.owner, 0] = 0;
-                OldWidthIV[Projectile.owner, 1] = 0;
-                SecFrame--;
-            }
-            /*for (int f = OldWidthIV.Length - 1; f > 0; f--)
-            {
-                OldWidthIV[Projectile.owner,f] = OldWidthIV[Projectile.owner,f - 1] * 0.97f;
-            }*/
-            for (int f = 239; f > 1; f -= 2)
-            {
-                OldWidthIV[Projectile.owner, f] = OldWidthIV[Projectile.owner, f - 2] * 0.88f;
-                OldWidthIV[Projectile.owner, f - 1] = OldWidthIV[Projectile.owner, f - 3] * 0.88f;
-            }
-
-            OldWidthV[Projectile.owner, 0] = Math.Clamp((OldMouseWorldV[Projectile.owner, 2] - OldMouseWorldV[Projectile.owner, 4]).Length() / 11f - 6f, 0, 32);
-            OldWidthV[Projectile.owner, 1] = Math.Clamp((OldMouseWorldV[Projectile.owner, 3] - OldMouseWorldV[Projectile.owner, 5]).Length() / 11f - 6f, 0, 32);//记录数据模板,这里记录撕裂宽度(由鼠标速度决定）
-            if (SecFrame > 0)//第二帧需要特殊处理
-            {
-                OldWidthV[Projectile.owner, 0] = 0;
-                OldWidthV[Projectile.owner, 1] = 0;
-                SecFrame--;
-            }
-            /*for (int f = OldWidthV.Length - 1; f > 0; f--)
-            {
-                OldWidthV[Projectile.owner,f] = OldWidthV[Projectile.owner,f - 1] * 0.97f;
-            }*/
-            for (int f = 239; f > 1; f -= 2)
-            {
-                OldWidthV[Projectile.owner, f] = OldWidthV[Projectile.owner, f - 2] * 0.88f;
-                OldWidthV[Projectile.owner, f - 1] = OldWidthV[Projectile.owner, f - 3] * 0.88f;
-            }
+            UpdateOldWidth(ref OldWidth);
+            UpdateOldWidth(ref OldWidthII);
+            UpdateOldWidth(ref OldWidthIII);
+            UpdateOldWidth(ref OldWidthIV);
+            UpdateOldWidth(ref OldWidthV);
         }
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
 
         }
-        int[] HasNOHitV = new int[200];
         public override bool PreDraw(ref Color lightColor)
         {
             return false;
         }
-        //int TrueL = 0;
-        float Omega;
+
         public override void PostDraw(Color lightColor)
         {
             Player player = Main.player[Projectile.owner];
@@ -255,8 +172,8 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Melee
             float KnifeLength = 180;
             float StartLength = -90;
             Color lightC = Lighting.GetColor((int)(player.Center.X / 16f), (int)(player.Center.Y / 16f));
-            float Kcolor = Math.Clamp((7 - (OldWidth[player.whoAmI, 1] + OldWidth[player.whoAmI, 2] + OldWidth[player.whoAmI, 3]) / 3f) / 12f, 0, 1);
-            var LineRot = OldMouseWorldV[Projectile.owner, 1] - OldMouseWorldV[Projectile.owner, 2];
+            float Kcolor = Math.Clamp((7 - (OldWidth[1] + OldWidth[2] + OldWidth[3]) / 3f) / 12f, 0, 1);
+            var LineRot = OldMouseWorldV[1] - OldMouseWorldV[2];
             if (Kcolor < 0.4f)
             {
                 Projectile.rotation = (float)(Math.Atan2(LineRot.Y, LineRot.X) + Math.PI) * 0.25f + Projectile.rotation * 0.75f;
@@ -299,7 +216,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Melee
             }
 
             Color trueC = new Color(R0, G0, B0, A0);
-            Vector2 DrawPos = OldMouseWorldV[player.whoAmI, 1] * (1 - Kvec) + (player.Center + new Vector2(-24 * player.direction, 0)) * (Kvec);//滑动到玩家
+            Vector2 DrawPos = OldMouseWorldV[1] * (1 - Kvec) + (player.Center + new Vector2(-24 * player.direction, 0)) * (Kvec);//滑动到玩家
             float TrueRot = Projectile.rotation * (1 - Kvec) + AimRot * Kvec;
             Knife.Add(new Vertex2D(DrawPos + new Vector2(StartLength, 0).RotatedBy(TrueRot) - Main.screenPosition, trueC, new Vector3(0, 1, 0)));
             Knife.Add(new Vertex2D(DrawPos + new Vector2(StartLength + KnifeLength, 0).RotatedBy(TrueRot) - Main.screenPosition, trueC, new Vector3(1, 0, 0)));
@@ -310,33 +227,21 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Melee
             Knife.Add(new Vertex2D(DrawPos + new Vector2(StartLength + KnifeLength, 0).RotatedBy(TrueRot) - Main.screenPosition, trueC, new Vector3(1, 0, 0)));
 
 
-            Main.graphics.GraphicsDevice.Textures[0] = MainKnife;//GlodenBloodScaleMirror
+            Main.graphics.GraphicsDevice.Textures[0] = MainKnife;
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Knife.ToArray(), 0, Knife.Count / 3);
+            //Knife = new List<Vertex2D>();
+            //trueC = new Color(R0 * 2, G0 * 20, B0 * 2, 0);
+            //Knife.Add(new Vertex2D(DrawPos + new Vector2(StartLength, 0).RotatedBy(TrueRot) - Main.screenPosition, trueC, new Vector3(0, 1, 0)));
+            //Knife.Add(new Vertex2D(DrawPos + new Vector2(StartLength + KnifeLength, 0).RotatedBy(TrueRot) - Main.screenPosition, trueC, new Vector3(1, 0, 0)));
+            //Knife.Add(new Vertex2D(DrawPos + new Vector2(StartLength + KnifeLength / 2f, KnifeLength / 2f).RotatedBy(TrueRot) - Main.screenPosition, trueC, new Vector3(1, 1, 0)));
 
-            /*exture2D KnifeLight = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/WorldLight").Value;
-            List<Vertex2D> Light = new List<Vertex2D>();
-            for(int d = 2;d < 60;d++)
-            {
-                float Strength = (float)((OldRotation[d] - OldRotation[d - 1] + Math.PI * 20d) % (Math.PI * 2d)) / 16f;
-                Color c0 = new Color(Strength, Strength, Strength,0);
-                if(OldRotation[d] > OldRotation[d - 1])
-                {
-                    Light.Add(new Vertex2D(player.Center - Main.screenPosition, c0, new Vector3(0, 1, 0)));
-                    Light.Add(new Vertex2D(player.Center + new Vector2(StartLength + KnifeLength, 0).RotatedBy(OldRotation[d - 1]) - Main.screenPosition, c0, new Vector3((d - 1) / 60f, 0, 0)));
-                    Light.Add(new Vertex2D(player.Center + new Vector2(StartLength + KnifeLength, 0).RotatedBy(OldRotation[d]) - Main.screenPosition, c0, new Vector3((d) / 60f, 0, 0)));
-                }
-                else
-                {
-                    Light.Add(new Vertex2D(player.Center - Main.screenPosition, c0, new Vector3(0, 1, 0)));
-                    Light.Add(new Vertex2D(player.Center + new Vector2(StartLength + KnifeLength, 0).RotatedBy(OldRotation[d]) - Main.screenPosition, c0, new Vector3((d) / 60f, 0, 0)));
-                    Light.Add(new Vertex2D(player.Center + new Vector2(StartLength + KnifeLength, 0).RotatedBy(OldRotation[d - 1]) - Main.screenPosition, c0, new Vector3((d - 1) / 60f, 0, 0)));
-                }
-            }
+            //Knife.Add(new Vertex2D(DrawPos + new Vector2(StartLength, 0).RotatedBy(TrueRot) - Main.screenPosition, trueC, new Vector3(0, 1, 0)));
+            //Knife.Add(new Vertex2D(DrawPos + new Vector2(StartLength + KnifeLength / 2f, -KnifeLength / 2f).RotatedBy(TrueRot) - Main.screenPosition, trueC, new Vector3(0, 0, 0)));
+            //Knife.Add(new Vertex2D(DrawPos + new Vector2(StartLength + KnifeLength, 0).RotatedBy(TrueRot) - Main.screenPosition, trueC, new Vector3(1, 0, 0)));
 
 
-            Main.graphics.GraphicsDevice.Textures[0] = KnifeLight;//GlodenBloodScaleMirror
-            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Light.ToArray(), 0, Light.Count / 3);*/
-
+            //Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("MiscProjectiles/Weapon/Melee/World_glow");
+            //Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Knife.ToArray(), 0, Knife.Count / 3);
 
             if (Main.mouseLeft)
             {
@@ -346,14 +251,12 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Melee
 
             for (int k = 0; k < 5; ++k)
             {
-                Main.spriteBatch.End();
-                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
                 List<Vertex2D> bars = new List<Vertex2D>();
                 List<Vertex2D> barsII = new List<Vertex2D>();
                 //TrueL = 0;
                 for (int i = 1; i < 240; ++i)
                 {
-                    if (OldMouseWorldV[Projectile.owner, i] == Vector2.Zero)
+                    if (OldMouseWorldV[i] == Vector2.Zero)
                         break;
                     //TrueL++;
                 }
@@ -364,30 +267,30 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Melee
                 }
                 for (int i = 1; i < 240; ++i)
                 {
-                    float width = OldWidth[Projectile.owner, i] * Math.Clamp((i - 1) / 4f, 0, 1);
+                    float width = OldWidth[i] * Math.Clamp((i - 1) / 4f, 0, 1);
                     if (k == 1)
                     {
-                        width = OldWidthII[Projectile.owner, i] * Math.Clamp((i - 1) / 4f, 0, 1);
+                        width = OldWidthII[i] * Math.Clamp((i - 1) / 4f, 0, 1);
                     }
                     if (k == 2)
                     {
-                        width = OldWidthIII[Projectile.owner, i] * Math.Clamp((i - 1) / 4f, 0, 1);
+                        width = OldWidthIII[i] * Math.Clamp((i - 1) / 4f, 0, 1);
                     }
                     if (k == 3)
                     {
-                        width = OldWidthIV[Projectile.owner, i] * Math.Clamp((i - 1) / 4f, 0, 1);
+                        width = OldWidthIV[i] * Math.Clamp((i - 1) / 4f, 0, 1);
                     }
                     if (k == 4)
                     {
-                        width = OldWidthV[Projectile.owner, i] * Math.Clamp((i - 1) / 4f, 0, 1);
+                        width = OldWidthV[i] * Math.Clamp((i - 1) / 4f, 0, 1);
                     }
                     width *= Projectile.timeLeft / 60f;
-                    if (OldMouseWorldV[Projectile.owner, i] == Vector2.Zero)
+                    if (OldMouseWorldV[i] == Vector2.Zero)
                         break;
-                    var normalDir = OldMouseWorldV[Projectile.owner, i - 1] - OldMouseWorldV[Projectile.owner, i];
+                    var normalDir = OldMouseWorldV[i - 1] - OldMouseWorldV[i];
 
                     normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
-                    var factor = i / 108f;
+                    var factor = i / 240f;
                     var w = MathHelper.Lerp(1f, 0.05f, factor);
                     Vector2 zero = Vector2.Zero;
                     if (k > 0)
@@ -396,25 +299,37 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Melee
                     }
                     else
                     {
-                        if ((OldMouseWorldV[Projectile.owner, i] - OldMouseWorldV[Projectile.owner, i - 1]).Length() > 5)
+                        if ((OldMouseWorldV[i] - OldMouseWorldV[i - 1]).Length() > 5)
                         {
-                            Vector2 Vpi = Vector2.Normalize((OldMouseWorldV[Projectile.owner, i] - OldMouseWorldV[Projectile.owner, i - 1])) * 5;
-                            for (int j = 0; j < (OldMouseWorldV[Projectile.owner, i] - OldMouseWorldV[Projectile.owner, i - 1]).Length() / 5; j++)
+                            Vector2 Vpi = Vector2.Normalize((OldMouseWorldV[i] - OldMouseWorldV[i - 1])) * 5;
+                            for (int j = 0; j < (OldMouseWorldV[i] - OldMouseWorldV[i - 1]).Length() / 5; j++)
                             {
-                                Lighting.AddLight(OldMouseWorldV[Projectile.owner, i - 1] + Vpi * j, (float)(255 - Projectile.alpha) * 0.04f / 50f * (1 - Math.Clamp(factor, 0, 1)) * width / 24f, (float)(255 - Projectile.alpha) * 0.14f / 50f * (1 - Math.Clamp(factor, 0, 1)) * width / 24f, 0);
+                                Lighting.AddLight(OldMouseWorldV[i - 1] + Vpi * j, (float)(255 - Projectile.alpha) * 0.04f / 50f * (1 - Math.Clamp(factor, 0, 1)) * width / 24f, (float)(255 - Projectile.alpha) * 0.14f / 50f * (1 - Math.Clamp(factor, 0, 1)) * width / 24f, 0);
                             }
                         }
                     }
                     float TrueC = colorS * (1 - Math.Clamp(factor * 0.2f, 0, 1)) * 1.9f;
-                    bars.Add(new Vertex2D(OldMouseWorldV[Projectile.owner, i] + zero + normalDir * width - Main.screenPosition, new Color(TrueC, TrueC, TrueC, Math.Clamp(0.45f - TrueC, 0, 1)), new Vector3(Math.Clamp(factor, 0, 1), 1, w)));
-                    bars.Add(new Vertex2D(OldMouseWorldV[Projectile.owner, i] + zero + normalDir * -width - Main.screenPosition, new Color(TrueC, TrueC, TrueC, Math.Clamp(0.45f - TrueC, 0, 1)), new Vector3(Math.Clamp(factor, 0, 1), 0, w)));
+                    bars.Add(new Vertex2D(OldMouseWorldV[i] + zero + normalDir * width - Main.screenPosition, new Color(TrueC, TrueC, TrueC, Math.Clamp(0.45f - TrueC, 0, 1)), new Vector3(factor, 1, w)));
+                    bars.Add(new Vertex2D(OldMouseWorldV[i] + zero + normalDir * -width - Main.screenPosition, new Color(TrueC, TrueC, TrueC, Math.Clamp(0.45f - TrueC, 0, 1)), new Vector3(factor, 0, w)));
                     if (k == 0)
                     {
-                        if (i == 4)
+                        if (i == 4 && !Main.gamePaused)
                         {
+                            Vector2 v0 = OldMouseWorldV[i - 1] - OldMouseWorldV[i];
+                            float value = v0.Length();
+                            if (value > 10f)
+                            {
+                                for(int f = 0;f < value * 0.1f;f++)
+                                {
+                                    float x = Main.rand.NextFloat(-1.2f, 1.2f);
+                                    Dust d = Dust.NewDustDirect(OldMouseWorldV[i] * x + OldMouseWorldV[i - 1] * (1 - x) - new Vector2(4) + new Vector2(0, width * 1.6f).RotateRandom(6.283), 0, 0, DustID.GemEmerald, 0, 0, 0, default, Main.rand.NextFloat(2f));
+                                    d.velocity = v0 * Main.rand.NextFloat(0.2f);
+                                    d.noGravity = true;
+                                }
+                            }
                             for (int v = 0; v < 200; v++)
                             {
-                                if (Math.Abs(Main.npc[v].Center.Y - OldMouseWorldV[Projectile.owner, i].Y) < Main.npc[v].height + 70 + width * 2 && Math.Abs(Main.npc[v].Center.X - OldMouseWorldV[Projectile.owner, i].X) < Main.npc[v].width + 70 + width * 2 && !Main.npc[v].dontTakeDamage && !Main.npc[v].friendly && Main.npc[v].active && HasNOHitV[v] == 0 && !Main.gamePaused)
+                                if (Math.Abs(Main.npc[v].Center.Y - OldMouseWorldV[i].Y) < Main.npc[v].height + 70 + width * 2 && Math.Abs(Main.npc[v].Center.X - OldMouseWorldV[i].X) < Main.npc[v].width + 70 + width * 2 && !Main.npc[v].dontTakeDamage && !Main.npc[v].friendly && Main.npc[v].active && HasNOHitV[v] == 0 && !Main.gamePaused)
                                 {
                                     HasNOHitV[v] = 8;
                                     float Damk = Math.Clamp(width / 12f, 0.1f, 15f);
@@ -436,11 +351,11 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Melee
                                     }
                                     if (Mode == 1)
                                     {
-                                        Projectile.NewProjectile(Projectile.InheritSource(Projectile), Main.npc[v].Center, Vector2.Zero, ModContent.ProjectileType<MiscProjectiles.Weapon.Melee.WorldHit>(), 0, Projectile.knockBack, Projectile.owner, Math.Clamp(width / 12f, 0, 1f), 0f);
+                                        Projectile.NewProjectile(Projectile.InheritSource(Projectile), Main.npc[v].Center, Vector2.Zero, ModContent.ProjectileType<WorldHit>(), 0, Projectile.knockBack, Projectile.owner, Math.Clamp(width / 12f, 0, 1f), 0f);
                                     }
                                     else
                                     {
-                                        Projectile.NewProjectile(Projectile.InheritSource(Projectile), Main.npc[v].Center, Vector2.Zero, ModContent.ProjectileType<MiscProjectiles.Weapon.Melee.WorldHit>(), 0, Projectile.knockBack, Projectile.owner, Math.Clamp(width / 4f, 0, 1f), 0f);
+                                        Projectile.NewProjectile(Projectile.InheritSource(Projectile), Main.npc[v].Center, Vector2.Zero, ModContent.ProjectileType<WorldHit>(), 0, Projectile.knockBack, Projectile.owner, Math.Clamp(width / 4f, 0, 1f), 0f);
                                     }
                                 }
                                 if (HasNOHitV[v] > 0)
@@ -449,8 +364,8 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Melee
                                 }
                             }
                         }
-                        barsII.Add(new Vertex2D(OldMouseWorldV[Projectile.owner, i] + zero + normalDir * Math.Clamp(width * 1.6f, 0, 72) - Main.screenPosition, new Color(255, 255, 255, 255), new Vector3(Math.Clamp(factor, 0, 1), 1, w)));
-                        barsII.Add(new Vertex2D(OldMouseWorldV[Projectile.owner, i] + zero + normalDir * -Math.Clamp(width * 1.6f, 0, 72) - Main.screenPosition, new Color(255, 255, 255, 255), new Vector3(Math.Clamp(factor, 0, 1), 0, w)));
+                        barsII.Add(new Vertex2D(OldMouseWorldV[i] + zero + normalDir * Math.Clamp(width * 1.6f, 0, 72) - Main.screenPosition, new Color(255, 255, 255, 255), new Vector3(Math.Clamp(factor, 0, 1), 1, w)));
+                        barsII.Add(new Vertex2D(OldMouseWorldV[i] + zero + normalDir * -Math.Clamp(width * 1.6f, 0, 72) - Main.screenPosition, new Color(255, 255, 255, 255), new Vector3(Math.Clamp(factor, 0, 1), 0, w)));
                     }
                 }
                 List<Vertex2D> Vx = new List<Vertex2D>();
@@ -493,13 +408,98 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Melee
                         }
                     }
                     Texture2D t0 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/heatmapShade").Value;
-                    Main.graphics.GraphicsDevice.Textures[0] = t0;//GlodenBloodScaleMirror
+                    Main.graphics.GraphicsDevice.Textures[0] = t0;
                     Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, VxII.ToArray(), 0, VxII.Count / 3);
                 }
-                Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/World").Value;
-                Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
+                Texture2D t = MythContent.QuickTexture("UIimages/VisualTextures/World");
+                Main.graphics.GraphicsDevice.Textures[0] = t;
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
             }
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
+            //Texture2D glow = MythContent.QuickTexture("MiscProjectiles/Weapon/Melee/World_glow");
+            //Main.spriteBatch.Draw(glow, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 0), Projectile.rotation, glow.Size() / 2f, Projectile.scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+        
+        }
+        public void DrawWarp(VFXBatch spriteBatch)
+        {
+
+            List<Vertex2D> bars = new List<Vertex2D>();
+            for (int i = 1; i < 240; ++i)
+            {
+                float width = OldWidth[i] * OldWidth[i] * Math.Clamp((i - 1) / 4f, 0, 1) * 0.3f;
+                if (OldMouseWorldV[i] == Vector2.Zero)
+                    break;
+                var normalDir = OldMouseWorldV[i - 1] - OldMouseWorldV[i];
+
+                normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
+                var factor = 1 - i / 240f;
+                var w = MathHelper.Lerp(1f, 0.05f, factor);
+
+                Vector2 DeltaV0 = OldMouseWorldV[i] - OldMouseWorldV[i - 1];
+                float d = DeltaV0.ToRotation() + 3.14f + 1.57f;
+                if (d > 6.28f)
+                {
+                    d -= 6.28f;
+                }
+                float dir = d / MathHelper.TwoPi;
+                Vector2 DeltaV1 = DeltaV0;
+                float dir1 = dir;
+                if (i > 1)
+                {
+                    DeltaV1 = OldMouseWorldV[i - 1] - OldMouseWorldV[i - 2];
+                    float d1 = DeltaV1.ToRotation() + 3.14f + 1.57f;
+                    if (d1 > 6.28f)
+                    {
+                        d1 -= 6.28f;
+                    }
+                    dir1 = d1 / MathHelper.TwoPi;
+                }
+
+
+                float strength = width / 30f;
+                if (dir - dir1 > 0.5)
+                {
+                    var MidValue = (1 - dir) / (1 - dir + dir1);
+                    var MidPoint = MidValue * DeltaV0 + (1 - MidValue) * DeltaV1;
+                    bars.Add(new Vertex2D(OldMouseWorldV[i] - Main.screenPosition, new Color(0, strength, 0, 1), new Vector3(factor, 1, 1)));
+                    bars.Add(new Vertex2D(OldMouseWorldV[i] - Main.screenPosition - MidPoint * Projectile.scale * 1.1f, new Color(0, strength, 0, 1), new Vector3(factor, 0, 1)));
+                    bars.Add(new Vertex2D(OldMouseWorldV[i] - Main.screenPosition, new Color(1, strength, 0, 1), new Vector3(factor, 1, 1)));
+                    bars.Add(new Vertex2D(OldMouseWorldV[i] - Main.screenPosition - MidPoint * Projectile.scale * 1.1f, new Color(1, strength, 0, 1), new Vector3(factor, 0, 1)));
+                }
+                if (dir1 - dir > 0.5)
+                {
+                    var MidValue = (1 - dir1) / (1 - dir1 + dir);
+                    var MidPoint = MidValue * DeltaV1 + (1 - MidValue) * DeltaV0;
+                    bars.Add(new Vertex2D(OldMouseWorldV[i] - Main.screenPosition, new Color(1, strength, 0, 1), new Vector3(factor, 1, 1)));
+                    bars.Add(new Vertex2D(OldMouseWorldV[i] - Main.screenPosition - MidPoint * Projectile.scale * 1.1f, new Color(1, strength, 0, 1), new Vector3(factor, 0, 1)));
+                    bars.Add(new Vertex2D(OldMouseWorldV[i] - Main.screenPosition, new Color(0, strength, 0, 1), new Vector3(factor, 1, 1)));
+                    bars.Add(new Vertex2D(OldMouseWorldV[i] - Main.screenPosition - MidPoint * Projectile.scale * 1.1f, new Color(0, strength, 0, 1), new Vector3(factor, 0, 1)));
+                }
+
+                bars.Add(new Vertex2D(OldMouseWorldV[i] + normalDir * width - Main.screenPosition, new Color(dir, strength, 0, 1), new Vector3(factor, 1, w)));
+                bars.Add(new Vertex2D(OldMouseWorldV[i] + normalDir * -width - Main.screenPosition, new Color(dir, strength, 0, 1), new Vector3(factor, 0, w)));
+            }
+            List<Vertex2D> Vx = new List<Vertex2D>();
+            if (bars.Count > 2)
+            {
+                Vx.Add(bars[0]);
+                var vertex = new Vertex2D((bars[0].position + bars[1].position) * 0.5f + Vector2.Normalize(Projectile.velocity) * 30, new Color(0, 0, 0, 0), new Vector3(0, 0.5f, 1));
+                Vx.Add(bars[1]);
+                Vx.Add(vertex);
+                for (int i = 0; i < bars.Count - 2; i += 2)
+                {
+                    Vx.Add(bars[i]);
+                    Vx.Add(bars[i + 2]);
+                    Vx.Add(bars[i + 1]);
+
+                    Vx.Add(bars[i + 1]);
+                    Vx.Add(bars[i + 2]);
+                    Vx.Add(bars[i + 3]);
+                }
+            }
+            spriteBatch.Draw(MythContent.QuickTexture("MiscItems/Weapons/Clubs/Projectiles/CrystalClub_trail"), Vx, PrimitiveType.TriangleList);
         }
     }
 }
