@@ -94,7 +94,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
                         Projectile.NewProjectileDirect(source, position + velocity * 2.0f - new Vector2(0, 4), newVelocity, ModContent.ProjectileType<PhosphorescenceBullet>(), (int)(damage * 0.26f), knockback, player.whoAmI);
                     }
                 }
-                
+
                 Vector2 basePos = position + newVelocity * 3.7f - new Vector2(0, 4);
                 for (int z = 0; z < 3; z++)
                 {

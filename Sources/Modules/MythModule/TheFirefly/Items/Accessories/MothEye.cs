@@ -53,7 +53,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
         }
         public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
-            if (!fireflyBiome.IsBiomeActive(Main.LocalPlayer))
+            if (fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
             {
                 Texture2D mEyeTex = MythContent.QuickTexture("TheFirefly/Items/Accessories/MothEye_GlowOn");
                 for (int x = 0; x < 8; x++)
@@ -125,9 +125,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
                     int[] FireflyWeapon =
                     {
                             ModContent.ItemType<Weapons.DarknessFan>(),
-                            ModContent.ItemType<Weapons.DustOfCorrupt>(),
+                            ModContent.ItemType<Weapons.DreamWeaver>(), // no MothEye effect
+                            ModContent.ItemType<Weapons.DustOfCorrupt>(), // no MothEye effect
                             ModContent.ItemType<Weapons.EvilChrysalis>(),
-                            ModContent.ItemType<Weapons.GlowBeadGun>(),
+                            ModContent.ItemType<Weapons.FlowLightMissile>(), // no MothEye effect
+                            ModContent.ItemType<Weapons.GlowBeadGun>(), // no MothEye effect
+                            ModContent.ItemType<Weapons.GlowWoodSword>(),
                             ModContent.ItemType<Weapons.MothYoyo>(),
                             ModContent.ItemType<Weapons.NavyThunder>(), // no MothEye effect
                             ModContent.ItemType<Weapons.PhosphorescenceGun>(),
