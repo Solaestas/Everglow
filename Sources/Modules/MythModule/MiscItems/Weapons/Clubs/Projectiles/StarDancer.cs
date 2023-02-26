@@ -1,6 +1,7 @@
 ﻿using Everglow.Sources.Commons.Function.Curves;
 using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MythModule.Common;
+using Terraria.Audio;
 
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectiles
 {
@@ -42,6 +43,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
                 }
                 Vector2 v7 = new Vector2(0, -Main.rand.NextFloat(1000f, 1200f)).RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f));
                 Projectile.NewProjectile(Projectile.GetSource_FromAI(), target.Center + v7, -v7 / 40f, ProjectileID.FallingStar, (int)(Projectile.damage * 8.3f), Projectile.knockBack, Projectile.owner);
+                SoundEngine.PlaySound(SoundID.DD2_CrystalCartImpact,target.Center);
             }
         }
         public override void AI()
@@ -64,10 +66,10 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
             }
             v0 = v0.RotatedBy(Projectile.rotation);
             float Speed = Math.Min(Omega * 0.5f, 0.181f);
-            int type = DustID.FlameBurst;
+            int type = DustID.GoldCoin;
             for (float d = 0.1f; d < Omega; d += 0.04f)
             {
-                Dust D = Dust.NewDustDirect(Projectile.Center + v0 - new Vector2(4)/*Dust的Size=8x8*/, 0, 0, type, -v0.Y * Speed, v0.X * Speed, 150, default, Main.rand.NextFloat(0.4f, 0.7f));
+                Dust D = Dust.NewDustDirect(Projectile.Center + v0 - new Vector2(4)/*Dust的Size=8x8*/, 0, 0, type, -v0.Y * Speed, v0.X * Speed, 150, default, Main.rand.NextFloat(0.1f, 0.2f));
                 D.noGravity = true;
                 D.velocity = new Vector2(-v0.Y * Speed, v0.X * Speed);
             }

@@ -12,7 +12,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs
         {
             CreateRecipe()
                 .AddIngredient(ItemID.MeteoriteBar, 18)
-                .AddTile(18)
+                .AddTile(TileID.WorkBenches)
                 .Register();
         }
     }

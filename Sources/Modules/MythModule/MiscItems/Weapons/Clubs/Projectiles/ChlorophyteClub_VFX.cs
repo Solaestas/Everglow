@@ -1,10 +1,7 @@
-﻿using Everglow.Sources.Commons.Core.VFX;
-using Everglow.Sources.Commons.Function.Vertex;
-using Everglow.Sources.Modules.MEACModule;
+﻿using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.DataStructures;
-using Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles;
-using Everglow.Sources.Modules.MythModule.OmniElementItems;
+using Terraria.Audio;
 
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectiles
 {
@@ -35,6 +32,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
                 Vector2 v = new Vector2(0, Main.rand.NextFloat(2.9f, 2.4f)).RotatedBy((i / 12d) * Math.PI) * Projectile.ai[0] * 2.2f;
                 Dust.NewDust(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<Dusts.LeafVFX>(), v.X, v.Y, 0, default, Main.rand.NextFloat(1f, 2.4f) * MathF.Sqrt(Projectile.ai[0]));
             }
+            SoundEngine.PlaySound(SoundID.DD2_BetsyFlameBreath.WithPitchOffset(0.3f), Projectile.Center);
         }
         public override void AI()
         {
