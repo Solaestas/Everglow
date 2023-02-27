@@ -80,19 +80,19 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
                 for (int a = 0; a < 4; a++)
                 {
                     Vector2 vF = new Vector2(0, Main.rand.NextFloat(0, 4f)).RotatedByRandom(6.283);
-                    int f = Gore.NewGore(null, NPC.Center, vF, ModContent.Find<ModGore>("Everglow/Sources/Modules/MythModule/LanternMoon/Gores/CoreGore0").Type, 1f);
+                    int f = Gore.NewGore(null, NPC.Center, vF, ModContent.Find<ModGore>("Everglow/CoreGore0").Type, 1f);
                     Main.gore[f].GetAlpha(new Color(NPC.color.R, NPC.color.G, NPC.color.B, 150));
                     vF = new Vector2(0, Main.rand.NextFloat(0, 4f)).RotatedByRandom(6.283);
-                    f = Gore.NewGore(null, NPC.Center, vF, ModContent.Find<ModGore>("Everglow/Sources/Modules/MythModule/LanternMoon/Gores/CoreGore1").Type, 1f);
+                    f = Gore.NewGore(null, NPC.Center, vF, ModContent.Find<ModGore>("Everglow/CoreGore1").Type, 1f);
                     Main.gore[f].GetAlpha(new Color(NPC.color.R, NPC.color.G, NPC.color.B, 150));
                     vF = new Vector2(0, Main.rand.NextFloat(0, 4f)).RotatedByRandom(6.283);
-                    f = Gore.NewGore(null, NPC.Center, vF, ModContent.Find<ModGore>("Everglow/Sources/Modules/MythModule/LanternMoon/Gores/CoreGore2").Type, 1f);
+                    f = Gore.NewGore(null, NPC.Center, vF, ModContent.Find<ModGore>("Everglow/CoreGore2").Type, 1f);
                     Main.gore[f].GetAlpha(new Color(NPC.color.R, NPC.color.G, NPC.color.B, 150));
                     vF = new Vector2(0, Main.rand.NextFloat(0, 4f)).RotatedByRandom(6.283);
-                    f = Gore.NewGore(null, NPC.Center, vF, ModContent.Find<ModGore>("Everglow/Sources/Modules/MythModule/LanternMoon/Gores/CoreGore3").Type, 1f);
+                    f = Gore.NewGore(null, NPC.Center, vF, ModContent.Find<ModGore>("Everglow/CoreGore3").Type, 1f);
                     Main.gore[f].GetAlpha(new Color(NPC.color.R, NPC.color.G, NPC.color.B, 150));
                     vF = new Vector2(0, Main.rand.NextFloat(0, 4f)).RotatedByRandom(6.283);
-                    f = Gore.NewGore(null, NPC.Center, vF, ModContent.Find<ModGore>("Everglow/Sources/Modules/MythModule/LanternMoon/Gores/CoreGore4").Type, 1f);
+                    f = Gore.NewGore(null, NPC.Center, vF, ModContent.Find<ModGore>("Everglow/CoreGore4").Type, 1f);
                     Main.gore[f].GetAlpha(new Color(NPC.color.R, NPC.color.G, NPC.color.B, 150));
                 }
                 for (int d = 0; d < Main.player.Length; d++)

@@ -1,152 +1,207 @@
+using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Sources.Modules.MEACModule;
+using Everglow.Sources.Commons.Core.VFX;
+using static Everglow.Sources.Modules.MythModule.Common.MythUtils;
+using Terraria.DataStructures;
+using Terraria.Audio;
+using Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKing.VFXs;
+
 namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKing
 {
-    public class DarkLanternBomb : ModProjectile
+    public class DarkLanternBomb : ModProjectile, IWarpProjectile
     {
-        public override void SetStaticDefaults()
-        {
-            DisplayName.SetDefault("爆炸灯笼");
-        }
         public override void SetDefaults()
         {
             Projectile.width = 100;
             Projectile.height = 100;
             Projectile.aiStyle = -1;
-            Projectile.friendly = false;
             Projectile.hostile = false;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
             Projectile.extraUpdates = 3;
-            Projectile.timeLeft = 3600;
-            Projectile.alpha = 0;
-            Projectile.penetrate = -1;
-            Projectile.scale = 1f;
-
+            Projectile.timeLeft = 900;
         }
-        public override Color? GetAlpha(Color lightColor)
+        public override void OnSpawn(IEntitySource source)
         {
-            return new Color?(new Color(1f, 1f, 1f, 0.5f));
+            float MinDis = 3000;
+            foreach(NPC npc in Main.npc)
+            {
+                if(npc.active)
+                {
+                    if(npc.type == ModContent.NPCType<NPCs.LanternGhostKing.LanternGhostKing>())
+                    {
+                        float Dis = (npc.Center - Projectile.Center).Length();
+                        if (Dis < MinDis)
+                        {
+                            MinDis = Dis;
+                        }
+                    }
+                }
+            }
+            Projectile.timeLeft = (int)(900 + MinDis * 0.3);
         }
-        private float y = 0;
-        private bool initialization = true;
-        private bool Boom = false;
         public override void AI()
         {
-            if (initialization)
+            Projectile.ai[1] += 0.01f;
+            if (Projectile.ai[1] % 0.15 == 0)
             {
-                num1 = -(int)(Projectile.ai[0]);
-                num3 = Main.rand.NextFloat(0.3f, 1.8f);
-                num4 = Main.rand.NextFloat(0.3f, 1800f);
-                x = Main.rand.NextFloat(0.3f, 1800f);
-                Projectile.timeLeft = (int)(Projectile.ai[0]) + 600;
-                Fy = Main.rand.Next(4);
-                y = 5;
-                initialization = false;
-            }
-            num1 += 1;
-            num2 -= 1;
-            if (y > 1)
-            {
-                y -= 0.25f;
-            }
-            else
-            {
-                y = 1;
-            }
-            num4 += 0.01f;
-            if (num1 > 0 && num1 <= 120)
-            {
-                num = num1 / 120f;
+                if (Projectile.frame < 2)
+                {
+                    Projectile.frame++;
+                }
+                else
+                {
+                    Projectile.frame = 0;
+                }
             }
             Projectile.velocity *= 0f;
             if (Projectile.timeLeft < 90)
             {
                 Projectile.scale += 0.05f;
-                num += 0.1f;
             }
             if (Projectile.timeLeft < 3)
             {
                 Projectile.scale += 0.05f;
                 Projectile.hostile = true;
-                num += 0.5f;
             }
-            //Lighting.AddLight(Projectile.Center, (float)(255 - Projectile.alpha) * 0.8f / 255f * Projectile.scale * num1, (float)(255 - Projectile.alpha) * 0.2f / 255f * Projectile.scale * num1, (float)(255 - Projectile.alpha) * 0f / 255f * Projectile.scale * num1);
         }
-        private float num = 0;
-        private int num1 = 0;
-        private int num2 = -1;
-        private float num3 = 0.8f;
-        private float num4 = 0;
-        private float num5 = 0;
-        private int Fy = 0;
-        private int fyc = 0;
         public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D texture2D = (Texture2D)ModContent.Request<Texture2D>(Texture);
-            int nuM = texture2D.Height;
-            fyc += 1;
-            if (fyc == 8)
-            {
-                fyc = 0;
-                Fy += 1;
-            }
-            if (Fy > 3)
-            {
-                Fy = 0;
-            }
-            Color colorT = new Color(1f * num * (float)(Math.Sin(num4) + 2) / 3f, 1f * num * (float)(Math.Sin(num4) + 2) / 3f, 1f * num * (float)(Math.Sin(num4) + 2) / 3f, 0.5f * num * (float)(Math.Sin(num4) + 2) / 3f);
-            x += 0.01f;
-            float K = (float)(Math.Sin(x + Math.Sin(x) * 6) * (0.95 + Math.Sin(x + 0.24 + Math.Sin(x))) + 3) / 30f;
-            float M = (float)(Math.Sin(x + Math.Tan(x) * 6) * (0.95 + Math.Cos(x + 0.24 + Math.Sin(x))) + 3) / 30f;
-            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/LightEffect").Value, Projectile.Center - Main.screenPosition, null, new Color(1f, 0.05f, 0f, 0) * 0.4f, 0, new Vector2(128f, 128f), K * 12f * y, SpriteEffects.None, 0f);
-            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/LightEffect").Value, Projectile.Center - Main.screenPosition, null, new Color(1f, 0.05f, 0f, 0) * 0.4f, (float)(Math.PI * 0.5), new Vector2(128f, 128f), K * 6f * y, SpriteEffects.None, 0f);
-            Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/LanternMoon/Projectiles/LanternKing/LanternFire").Value, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), new Rectangle?(new Rectangle(0, 30 * Fy, 20, 30)), colorT, 0, new Vector2(10, 15), Projectile.scale * 0.5f, SpriteEffects.None, 1f);
-            for (float k = 0; k < num; k += 0.5f)
+            Texture2D MainTex = (Texture2D)ModContent.Request<Texture2D>(Texture);
+            float timeValue = (900 - Projectile.timeLeft) / 900f;
+            float ColorValue = timeValue * (float)(Math.Sin(Projectile.ai[1]) + 2) / 3f;
+            Color colorT = new Color(ColorValue, ColorValue, ColorValue, 0.5f * ColorValue);
+
+
+            Texture2D textureLight = MythContent.QuickTexture("LanternMoon/Projectiles/LanternKing/LightEffect");
+            Texture2D flameRing = MythContent.QuickTexture("UIimages/VisualTextures/CoreFlame");
+            Main.spriteBatch.Draw(textureLight, Projectile.Center - Main.screenPosition, null, new Color(1f, 0.05f, 0f, 0) * 0.4f, 0, textureLight.Size() * 0.5f, new Vector2(1, (900 - Projectile.timeLeft) / 260f), SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(textureLight, Projectile.Center - Main.screenPosition, null, new Color(1f, 0.05f, 0f, 0) * 0.4f, MathF.PI * 0.5f, textureLight.Size() * 0.5f, new Vector2(1, (900 - Projectile.timeLeft) / 180f), SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(MythContent.QuickTexture("LanternMoon/Projectiles/LanternKing/LanternFire"), Projectile.Center - Main.screenPosition, new Rectangle(0, 30 * Projectile.frame, 20, 30), colorT, 0, new Vector2(10, 15), Projectile.scale * 0.5f, SpriteEffects.None, 1f);
+            for (float k = 0; k < timeValue; k += 0.5f)
             {
                 if (k > 0.5)
                 {
-                    Main.spriteBatch.Draw(texture2D, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), new Rectangle?(new Rectangle(0, 0, texture2D.Width, nuM)), new Color(1f, 1f, 1f, 0), Projectile.rotation, new Vector2((float)texture2D.Width / 2f, (float)nuM / 2f), Projectile.scale, SpriteEffects.None, 1f);
+                    Main.spriteBatch.Draw(MainTex, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 0), Projectile.rotation, MainTex.Size() / 2f, Projectile.scale, SpriteEffects.None, 1f);
+                    
                 }
                 else
                 {
-                    Main.spriteBatch.Draw(texture2D, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), new Rectangle?(new Rectangle(0, 0, texture2D.Width, nuM)), colorT, Projectile.rotation, new Vector2((float)texture2D.Width / 2f, (float)nuM / 2f), Projectile.scale, SpriteEffects.None, 1f);
+                    Main.spriteBatch.Draw(MainTex, Projectile.Center - Main.screenPosition, null, colorT, Projectile.rotation, MainTex.Size() / 2f, Projectile.scale, SpriteEffects.None, 1f);
                 }
             }
+            float timeValuex2 = Math.Min(timeValue * 2, 1);
+            float value0 = (float)(Math.Sin(2400d / (Projectile.timeLeft + 35)) * 0.75f - 0.15f);
+            value0 = Math.Max(0.05f, value0);
+            value0 += 1 - timeValuex2;
+            float floatValue = 1 + MathF.Sin((float)(Main.timeForVisualEffects - Projectile.timeLeft) * 0.05f) * 0.15f;
+            DrawTexCircle(132 * timeValuex2, 22 * timeValuex2 + 22, new Color(0.75f, 0.45f, 0.45f, 0) * value0, Projectile.Center - Main.screenPosition, flameRing, Main.time / 17);
             return false;
         }
-        private float x = 0;
+        private static void DrawTexCircle_VFXBatch(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
+        {
+            List<Vertex2D> circle = new List<Vertex2D>();
+
+            for (int h = 0; h < radious / 2; h += 1)
+            {
+                circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 1, 0)));
+                circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0, 0)));
+            }
+            circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(1, 1, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(1, 0, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(0, 1, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0, 0, 0)));
+            if (circle.Count > 2)
+            {
+                spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
+            }
+        }
+        public void DrawWarp(VFXBatch sb)
+        {
+            float value = 130;
+            float colorV = 0.9f * (1 - value);
+            Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Vague");
+            float width = 60;
+            if (Projectile.timeLeft < 60)
+            {
+                width = Projectile.timeLeft;
+            }
+            float timeValue = (900 - Projectile.timeLeft) / 900f;
+            float timeValuex2 = Math.Min(timeValue * 2, 1);
+
+            DrawTexCircle_VFXBatch(sb, value * timeValuex2, width * timeValuex2, new Color(colorV, colorV * 0.7f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
+        }
+        public void GenerateVFXExpolode(int Frequency, float mulVelocity = 1f)
+        {
+            for (int g = 0; g < Frequency * 3; g++)
+            {
+                FlameDust cf = new FlameDust
+                {
+                    velocity = new Vector2(0, Main.rand.NextFloat(4.65f, 5.5f)).RotatedByRandom(6.283) * mulVelocity,
+                    Active = true,
+                    Visible = true,
+                    position = Projectile.Center + new Vector2(Main.rand.NextFloat(-56f, 56f), 0).RotatedByRandom(6.283),
+                    maxTime = Main.rand.Next(16, 36),
+                    ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.18f, 0.18f), Main.rand.NextFloat(8f, 12f) }
+                };
+                VFXManager.Add(cf);
+            }
+            for (int g = 0; g < Frequency; g++)
+            {
+                FlameDust cf = new FlameDust
+                {
+                    velocity = new Vector2(0, Main.rand.NextFloat(6.65f, 10.5f)).RotatedByRandom(6.283) * mulVelocity,
+                    Active = true,
+                    Visible = true,
+                    position = Projectile.Center,
+                    maxTime = Main.rand.Next(12, 30),
+                    ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.4f, 0.4f), Main.rand.NextFloat(22f, 32f) }
+                };
+                VFXManager.Add(cf);
+            }
+        }
         public override void Kill(int timeLeft)
         {
-            /*MythContentPlayer mplayer = Terraria.Main.player[Terraria.Main.myPlayer].GetModPlayer<MythContentPlayer>();
-            mplayer.Shake = 15;*/
-            //Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Item, "Sounds/Item/烟花爆炸>(), (int)Projectile.Center.X, (int)Projectile.Center.Y);
-            /*for (int k = 0; k <= 10; k++)
+            ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
+            Gsplayer.FlyCamPosition = new Vector2(0, 33).RotatedByRandom(6.283);
+
+            GenerateVFXExpolode(24, 2.2f);
+
+            for (int d = 0; d < 70; d++)
             {
-                float a = (float)Main.rand.Next(0, 720) / 360 * 3.141592653589793238f;
-                float m = (float)Main.rand.Next(0, 50000);
-                float l = (float)Main.rand.Next((int)m, 50000) / 1800;
-                int num4 = Projectile.NewProjectile(Projectile.Center.X, Projectile.Center.Y, (float)((float)l * Math.Cos((float)a)) * 0.36f, (float)((float)l * Math.Sin((float)a)) * 0.36f, ModContent.ProjectileType<Projectiles.LanternKing.火山溅射>(), Projectile.damage / 5, Projectile.knockBack, Projectile.owner, 0f, 0f);
-                Main.Projectile[num4].scale = (float)Main.rand.Next(7000, 13000) / 10000f;
-            }*/
-            //Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.LanternKing.FireBallWave>(), 0, 0, Projectile.owner, 0f, 0f);
-            for (int i = 0; i < 90; i++)
-            {
-                Vector2 v = new Vector2(0, Main.rand.NextFloat(2.9f, (float)(2.4 * Math.Log10(Projectile.damage)))).RotatedByRandom(Math.PI * 2);
-                int num5 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, ModContent.DustType<Dusts.Flame>(), 0f, 0f, 100, Color.White, (float)(4f * Math.Log10(Projectile.damage)));
-                Main.dust[num5].velocity = v;
+                Vector2 BasePos = Projectile.Center - new Vector2(4) - Projectile.velocity;
+                Dust d0 = Dust.NewDustDirect(BasePos, 0, 0, DustID.Torch, 0, 0, 0, default, 0.6f);
+                d0.velocity = new Vector2(0, Main.rand.NextFloat(3.65f, 7.5f)).RotatedByRandom(6.283);
             }
-            for (int i = 0; i < 60; i++)
+
+            Vector2 GorePos;
+            GorePos = new Vector2(Main.rand.NextFloat(-0.4f, 1.4f), 0).RotatedByRandom(6.283) * 6f;
+            int gra0 = Gore.NewGore(null, Projectile.Center, GorePos, ModContent.Find<ModGore>("Everglow/FloatLanternGore3").Type, 1f);
+            Main.gore[gra0].timeLeft = Main.rand.Next(300, 600);
+            GorePos = new Vector2(Main.rand.NextFloat(-0.4f, 1.4f), 0).RotatedByRandom(6.283) * 6f;
+            int gra1 = Gore.NewGore(null, Projectile.Center, GorePos, ModContent.Find<ModGore>("Everglow/FloatLanternGore4").Type, 1f);
+            Main.gore[gra1].timeLeft = Main.rand.Next(300, 600);
+            GorePos = new Vector2(Main.rand.NextFloat(-0.4f, 1.4f), 0).RotatedByRandom(6.283) * 6f;
+            int gra2 = Gore.NewGore(null, Projectile.Center, GorePos, ModContent.Find<ModGore>("Everglow/FloatLanternGore5").Type, 1f);
+            Main.gore[gra2].timeLeft = Main.rand.Next(300, 600);
+            GorePos = new Vector2(Main.rand.NextFloat(-0.4f, 1.4f), 0).RotatedByRandom(6.283) * 6f;
+            int gra3 = Gore.NewGore(null, Projectile.Center, GorePos, ModContent.Find<ModGore>("Everglow/FloatLanternGore6").Type, 1f);
+            Main.gore[gra3].timeLeft = Main.rand.Next(300, 600);
+
+            int HitType = ModContent.ProjectileType<StrikePlayer>();
+            foreach (Player player in Main.player)
             {
-                Vector2 v = new Vector2(0, Main.rand.NextFloat(0f, (float)(2.4 * Math.Log10(Projectile.damage)))).RotatedByRandom(Math.PI * 2);
-                int num5 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y) + v * 45f, Projectile.width, Projectile.height, ModContent.DustType<Dusts.Flame>(), 0f, 0f, 100, Color.White, (float)(12f * Math.Log10(Projectile.damage)));
-                Main.dust[num5].velocity = v * 0.1f;
-                Main.dust[num5].rotation = Main.rand.NextFloat(0, (float)(MathHelper.TwoPi));
+                if (player != null)
+                {
+                    float Dis = (player.Center - Projectile.Center).Length();
+                    if(Dis < 125)
+                    {
+                        Projectile.NewProjectile(Projectile.GetSource_FromAI(), player.Center, Vector2.Zero, HitType, Projectile.damage, Projectile.knockBack, Projectile.owner);
+                    }
+                }
             }
-            for (int i = 0; i < 60; i++)
-            {
-                Vector2 v = new Vector2(0, Main.rand.NextFloat(25f, 80f)).RotatedByRandom(Math.PI * 2);
-                int num5 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 6, v.X, v.Y, 0, Color.White, 1f);
-                Main.dust[num5].velocity = v;
-            }
+            SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithVolumeScale(0.4f), Projectile.Center);
         }
     }
 }
