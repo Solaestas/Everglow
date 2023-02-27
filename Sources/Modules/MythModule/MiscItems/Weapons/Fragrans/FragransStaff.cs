@@ -30,7 +30,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Fragrans
             Item.rare = 10;
             Item.UseSound = SoundID.Item71;
             Item.autoReuse = true;
-            Item.shoot = ModContent.ProjectileType<MiscProjectiles.Weapon.Fragrans.FragransMagicBeta>(); // Shoot a black bolt, also known as the projectile shot from the onyx blaster.
+            Item.shoot = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Fragrans.FragransMagicBeta>(); // Shoot a black bolt, also known as the projectile shot from the onyx blaster.
             Item.shootSpeed = 10; // How fast the item shoots the projectile.
             Item.crit = 3; // The percent chance at hitting an enemy with a crit, plus the default amount of 4.
             Item.mana = 33; //6→13
@@ -76,16 +76,16 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Fragrans
         {
             Coun++;
             float Dam = damage;
-            if (MiscProjectiles.Weapon.Fragrans.Fragrans.FragransIndex == 1)
+            if (MiscItems.Projectiles.Weapon.Fragrans.Fragrans.FragransIndex == 1)
             {
                 Dam *= player.GetDamage(DamageClass.Magic).Additive;
             }
-            if (MiscProjectiles.Weapon.Fragrans.Fragrans.FragransIndex == 2)
+            if (MiscItems.Projectiles.Weapon.Fragrans.Fragrans.FragransIndex == 2)
             {
                 Dam *= player.GetDamage(DamageClass.Magic).Additive;
                 Dam *= player.GetDamage(DamageClass.Magic).Additive;
             }
-            if (MiscProjectiles.Weapon.Fragrans.Fragrans.FragransIndex == 3)
+            if (MiscItems.Projectiles.Weapon.Fragrans.Fragrans.FragransIndex == 3)
             {
                 Dam *= player.GetDamage(DamageClass.Magic).Additive;
                 Dam *= player.GetDamage(DamageClass.Magic).Additive;
@@ -96,9 +96,9 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Fragrans
             for (int i = 0; i < NumProjectiles; i++)
             {
                 float ad = 0.3f;
-                Projectile.NewProjectileDirect(source, Main.MouseWorld, velocity.RotatedByRandom(6.28) * Main.rand.NextFloat(0.85f, 1.15f), ModContent.ProjectileType<MiscProjectiles.Weapon.Fragrans.FragransMagicBeta>(), (int)(Dam * 0.4f), knockback, player.whoAmI, ad * Main.rand.NextFloat(0.0f, 0.35f));
+                Projectile.NewProjectileDirect(source, Main.MouseWorld, velocity.RotatedByRandom(6.28) * Main.rand.NextFloat(0.85f, 1.15f), ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Fragrans.FragransMagicBeta>(), (int)(Dam * 0.4f), knockback, player.whoAmI, ad * Main.rand.NextFloat(0.0f, 0.35f));
             }
-            Projectile.NewProjectileDirect(source, Main.MouseWorld, Vector2.Zero, ModContent.ProjectileType<MiscProjectiles.Weapon.Fragrans.FragransBomb>(), (int)Dam * 2, knockback, player.whoAmI, 0);
+            Projectile.NewProjectileDirect(source, Main.MouseWorld, Vector2.Zero, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Fragrans.FragransBomb>(), (int)Dam * 2, knockback, player.whoAmI, 0);
             return false;
         }
 

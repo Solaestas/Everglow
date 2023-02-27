@@ -27,7 +27,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Legendary
             Item.rare = 7;
             Item.UseSound = SoundID.Item11;
             Item.autoReuse = true;
-            Item.shoot = ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.JellyPower>();
+            Item.shoot = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.JellyPower>();
             Item.shootSpeed = 5f; // The speed of the projectile (measured in pixels per frame.)
             Item.useAmmo = 23;
             Item.crit = 4; // The percent chance at hitting an enemy with a crit, plus the default amount of 4.
@@ -36,7 +36,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Legendary
         {
             if (Main.rand.Next(100) > 50)
             {
-                type = ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.JellyPower2>();
+                type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.JellyPower2>();
             }
             int h = Projectile.NewProjectile(source, position + velocity * 8 + new Vector2(0, -8), velocity, type, damage, knockback, player.whoAmI, 0);
             Main.projectile[h].ai[0] = 0;

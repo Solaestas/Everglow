@@ -16,7 +16,7 @@
         public override void SetDefaults()
         {
             Item.glowMask = ItemGlowManager.GetItemGlow(this);
-            DefaultToWhip(ModContent.ProjectileType<MiscProjectiles.Weapon.Summon.XmasWhip>(), 348, 2f, 5.4f, 30);
+            DefaultToWhip(ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Summon.XmasWhip>(), 348, 2f, 5.4f, 30);
             Item.rare = 11;
             Item.damage = 308;
             Item.value = Item.sellPrice(0, 10, 0, 0);

@@ -17,7 +17,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Legendary
             Item.glowMask = ItemGlowManager.GetItemGlow(this);
             Item.useStyle = 1;
             Item.shootSpeed = 17f;
-            Item.shoot = ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.BloodLightCyanFlame>();
+            Item.shoot = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.BloodLightCyanFlame>();
             Item.width = 68;
             Item.height = 68;
             Item.UseSound = SoundID.Item1;
@@ -36,11 +36,11 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Legendary
         {
             if (l % 2 == 0)
             {
-                type = ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.BloodLightCyanFlame>();
+                type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.BloodLightCyanFlame>();
             }
             else
             {
-                type = ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.BloodLightCyanFlame1>();
+                type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.BloodLightCyanFlame1>();
             }
             Projectile.NewProjectile(source, position + new Vector2(0, -24), velocity, type, damage, knockback, Main.LocalPlayer.whoAmI, 0f, 0f);
             l++;

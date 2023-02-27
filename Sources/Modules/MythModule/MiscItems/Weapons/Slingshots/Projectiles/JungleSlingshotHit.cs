@@ -20,14 +20,14 @@
             Projectile.velocity *= 0;
             for (int i = 0; i < Main.dust.Length; i++)
             {
-                if (Main.dust[i].type == ModContent.DustType<MiscDusts.GlowSporeFlip>() || Main.dust[i].type == ModContent.DustType<MiscDusts.GlowSpore>())
+                if (Main.dust[i].type == ModContent.DustType<MiscItems.Dusts.GlowSporeFlip>() || Main.dust[i].type == ModContent.DustType<MiscItems.Dusts.GlowSpore>())
                 {
-                    if (Main.rand.Next(120) == 1)
+                    if (Main.rand.NextBool(120))
                     {
                         int type = Main.dust[i].type;
                         if (Main.rand.Next(100) > 50)
                         {
-                            type = ModContent.DustType<MiscDusts.GlowSporeFlip>();
+                            type = ModContent.DustType<MiscItems.Dusts.GlowSporeFlip>();
                         }
                         int r1 = Dust.NewDust(Main.dust[i].position, 0, 0, type, 0, 0, 200, default(Color), Main.dust[i].scale * 0.75f);
                         Main.dust[r1].velocity = Main.dust[i].velocity.RotatedBy(Main.rand.NextFloat(0.2f, 1.3f));

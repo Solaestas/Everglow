@@ -320,7 +320,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                 }
                 /*if (!lockBlood)
                 {
-                    if (MiscProjectiles.Weapon.Fragrans.Fragrans.DefTusk)
+                    if (MiscItems.Projectiles.Weapon.Fragrans.Fragrans.DefTusk)
                     {
                         lockBlood = true;
                     }

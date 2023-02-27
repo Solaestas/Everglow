@@ -27,7 +27,7 @@
             Item.UseSound = SoundID.Item1;
             Item.DamageType = DamageClass.Melee;
             Item.channel = true;
-            Item.shoot = ModContent.ProjectileType<MiscProjectiles.Weapon.Melee.GoldRoundYoyo>();
+            Item.shoot = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Melee.GoldRoundYoyo>();
             Item.useAnimation = 5;
             Item.useTime = 14;
             Item.shootSpeed = 0f;

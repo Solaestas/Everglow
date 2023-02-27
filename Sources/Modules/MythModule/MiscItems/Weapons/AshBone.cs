@@ -13,7 +13,7 @@
         //}
         public override void SetDefaults()
         {
-            DefaultToWhip(ModContent.ProjectileType<MiscProjectiles.Weapon.Summon.AshBone>(), 25, 2f, 5.4f, 30);
+            DefaultToWhip(ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Summon.AshBone>(), 25, 2f, 5.4f, 30);
             Item.rare = 3;
             Item.damage = 25;
             Item.value = Item.sellPrice(0, 3, 0, 0);

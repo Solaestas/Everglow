@@ -26,7 +26,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Legendary
             Item.useTime = 10;
             Item.useAnimation = 10;
             Item.useStyle = ItemUseStyleID.HoldUp;
-            Item.shoot = ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.RainbowCircle>();
+            Item.shoot = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.RainbowCircle>();
             Item.shootSpeed = 0.0001f;
             Item.noUseGraphic = true;
             Item.UseSound = SoundID.Item71;

@@ -18,7 +18,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
             Item.value = 20000;
             Item.rare = ItemRarityID.Red;
             Item.autoReuse = true;
-            Item.shoot = ModContent.ProjectileType<MiscProjectiles.Weapon.Melee.World>();
+            Item.shoot = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Melee.World>();
             Item.shootSpeed = 0;
             Item.crit = 8; 
         }

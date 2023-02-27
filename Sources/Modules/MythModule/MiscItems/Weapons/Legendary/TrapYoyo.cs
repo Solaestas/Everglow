@@ -24,7 +24,7 @@
             Item.UseSound = SoundID.Item1;
             Item.DamageType = DamageClass.Melee;
             Item.channel = true;
-            Item.shoot = ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.TrapYoyo>();
+            Item.shoot = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.TrapYoyo>();
             Item.useAnimation = 5;
             Item.useTime = 14;
             Item.shootSpeed = 0f;

@@ -40,7 +40,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Legendary
             Item.rare = 11;
             Item.UseSound = new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/Knife");
             Item.autoReuse = true;
-            Item.shoot = ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.SlienceMirror>(); // Shoot a black bolt, also known as the projectile shot from the onyx blaster.
+            Item.shoot = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.SlienceMirror>(); // Shoot a black bolt, also known as the projectile shot from the onyx blaster.
             Item.shootSpeed = 8; // How fast the item shoots the projectile.
             Item.crit = 25; // The percent chance at hitting an enemy with a crit, plus the default amount of 4.
         }
@@ -57,56 +57,56 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Legendary
                     Dam *= 0.64f;
                     Item.useTime = 18;
                     Item.useAnimation = 18;
-                    type = ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.SlienceMirror>();
+                    type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.SlienceMirror>();
                 }
                 else if (l % 8 == 1)
                 {
                     Dam *= 0.81f;
                     Item.useTime = 18;
                     Item.useAnimation = 18;
-                    type = ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.SlienceMirror2>();
+                    type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.SlienceMirror2>();
                 }
                 else if (l % 8 == 2)
                 {
                     Dam *= 1.00f;
                     Item.useTime = 16;
                     Item.useAnimation = 16;
-                    type = ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.SlienceMirror>();
+                    type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.SlienceMirror>();
                 }
                 else if (l % 8 == 3)
                 {
                     Dam *= 1.21f;
                     Item.useTime = 16;
                     Item.useAnimation = 16;
-                    type = ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.SlienceMirror3>();
+                    type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.SlienceMirror3>();
                 }
                 else if (l % 8 == 4)
                 {
                     Dam *= 1.44f;
                     Item.useTime = 16;
                     Item.useAnimation = 16;
-                    type = ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.SlienceMirror>();
+                    type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.SlienceMirror>();
                 }
                 else if (l % 8 == 5)
                 {
                     Dam *= 1.69f;
                     Item.useTime = 16;
                     Item.useAnimation = 16;
-                    type = ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.SlienceMirror2>();
+                    type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.SlienceMirror2>();
                 }
                 else if (l % 8 == 6)
                 {
                     Dam *= 1.96f;
                     Item.useTime = 16;
                     Item.useAnimation = 16;
-                    type = ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.SlienceMirror>();
+                    type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.SlienceMirror>();
                 }
                 else if (l % 8 == 7)
                 {
                     Dam *= 2.25f;
                     Item.useTime = 16;
                     Item.useAnimation = 16;
-                    type = ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.SlienceMirror6>();
+                    type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.SlienceMirror6>();
                 }
                 cooling2 = 36;
             }
@@ -118,56 +118,56 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Legendary
                     Item.useTime = 21;
                     Item.useAnimation = 21;
                     Dam *= 0.64f;
-                    type = ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.SlienceMirrorII>();
+                    type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.SlienceMirrorII>();
                 }
                 else if (l % 8 == 1)
                 {
                     Item.useTime = 21;
                     Item.useAnimation = 21;
                     Dam *= 1.28f;
-                    type = ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.SlienceMirrorII2>();
+                    type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.SlienceMirrorII2>();
                 }
                 else if (l % 8 == 2)
                 {
                     Item.useTime = 21;
                     Item.useAnimation = 21;
                     Dam *= 1.60f;
-                    type = ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.SlienceMirrorII3>();
+                    type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.SlienceMirrorII3>();
                 }
                 else if (l % 8 == 3)
                 {
                     Item.useTime = 21;
                     Item.useAnimation = 21;
                     Dam *= 1.76f;
-                    type = ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.SlienceMirrorII4>();
+                    type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.SlienceMirrorII4>();
                 }
                 else if (l % 8 == 4)
                 {
                     Item.useTime = 21;
                     Item.useAnimation = 21;
                     Dam *= 1.84f;
-                    type = ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.SlienceMirrorII>();
+                    type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.SlienceMirrorII>();
                 }
                 else if (l % 8 == 5)
                 {
                     Item.useTime = 21;
                     Item.useAnimation = 21;
                     Dam *= 1.88f;
-                    type = ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.SlienceMirrorII3>();
+                    type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.SlienceMirrorII3>();
                 }
                 else if (l % 8 == 6)
                 {
                     Item.useTime = 21;
                     Item.useAnimation = 21;
                     Dam *= 1.90f;
-                    type = ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.SlienceMirrorII2>();
+                    type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.SlienceMirrorII2>();
                 }
                 else if (l % 8 == 7)
                 {
                     Item.useTime = 21;
                     Item.useAnimation = 21;
                     Dam *= 1.91f;
-                    type = ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.SlienceMirrorII4>();
+                    type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.SlienceMirrorII4>();
                 }
                 cooling2 = 64;
             }

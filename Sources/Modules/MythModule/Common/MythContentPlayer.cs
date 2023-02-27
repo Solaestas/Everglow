@@ -1,4 +1,4 @@
-﻿using Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Fragrans;
+﻿using Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Fragrans;
 using Terraria.DataStructures;
 
 namespace Everglow.Sources.Modules.MythModule.Common

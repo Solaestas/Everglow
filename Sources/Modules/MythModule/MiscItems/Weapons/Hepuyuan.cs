@@ -28,7 +28,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
             Item.DamageType = DamageClass.Melee;
             Item.noMelee = true; 
             Item.shootSpeed = 17f;
-            Item.shoot = ModContent.ProjectileType<MiscProjectiles.Weapon.Melee.Hepuyuan.Hepuyuan>(); 
+            Item.shoot = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Melee.Hepuyuan.Hepuyuan>(); 
         }
         public override bool AltFunctionUse(Player player)
         {
@@ -74,7 +74,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
             if (player.altFunctionUse == 2)
             {
                 Vector2 VelcD = new Vector2(0, 1);
-                Projectile.NewProjectile(source, position, VelcD, ModContent.ProjectileType<MiscProjectiles.Weapon.Melee.Hepuyuan.HepuyuanDown>(), damage * 5, knockback, player.whoAmI, 0f, 0f);
+                Projectile.NewProjectile(source, position, VelcD, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Melee.Hepuyuan.HepuyuanDown>(), damage * 5, knockback, player.whoAmI, 0f, 0f);
                 player.velocity += VelcD * 4;
                 HepuyuanOwner.MouseCooling = 40;
                 return false;
@@ -158,7 +158,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
 
                 NewVelocity = Vector2.Normalize((Main.npc[MaxD].Center + Main.npc[MaxD].velocity * 2) - player.Center) * velocity.Length();
             }
-            Projectile.NewProjectile(source, position, NewVelocity, ModContent.ProjectileType<MiscProjectiles.Weapon.Melee.Hepuyuan.Hepuyuan>(), damage * 2, knockback, player.whoAmI, 0f, 0f);
+            Projectile.NewProjectile(source, position, NewVelocity, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Melee.Hepuyuan.Hepuyuan>(), damage * 2, knockback, player.whoAmI, 0f, 0f);
 
             player.velocity += NewVelocity * 4;
             HepuyuanOwner.MouseCooling = 30;
@@ -170,7 +170,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
             Vector2 slotSize = new Vector2(52f, 52f);
             position -= slotSize * Main.inventoryScale / 2f - frame.Size() * scale / 2f;
             Vector2 drawPos = position + slotSize * Main.inventoryScale / 2f/* - texture.Size() * Main.inventoryScale / 2f*/;
-            Texture2D RArr = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscProjectiles/Weapon/Melee/Hepuyuan/RightGreenSpice").Value;
+            Texture2D RArr = MythContent.QuickTexture("MiscItems/Projectiles/Weapon/Melee/Hepuyuan/RightGreenSpice");
             if (!Main.gamePaused)
             {
                 if (!CanDown)
@@ -231,7 +231,6 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
             if (Player.HeldItem.type == ModContent.ItemType<Hepuyuan>())
             {
                 Player.jumpSpeedBoost += 12.75f;
-				//Player.noFallDmg = true;
 			}
         }
     }

@@ -46,16 +46,16 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Legendary
             Main.projectile[f].timeLeft = 1200;
             if (Main.mouseRight)
             {
-                if (player.ownedProjectileCounts[ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.PineVortex>()] < 1)
+                if (player.ownedProjectileCounts[ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.PineVortex>()] < 1)
                 {
                     v = velocity;
-                    Projectile.NewProjectile(source, position + v * 10, v, ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.PineVortex>(), (int)damage, (float)knockback, player.whoAmI, 0f, 0f);
+                    Projectile.NewProjectile(source, position + v * 10, v, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.PineVortex>(), (int)damage, (float)knockback, player.whoAmI, 0f, 0f);
                 }
             }
-            if (player.ownedProjectileCounts[ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.PineHalo>()] < 1)
+            if (player.ownedProjectileCounts[ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.PineHalo>()] < 1)
             {
                 v = velocity;
-                Projectile.NewProjectile(source, position + v * 10, Vector2.Zero, ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.PineHalo>(), (int)damage, (float)knockback, player.whoAmI, 0f, 0f);
+                Projectile.NewProjectile(source, position + v * 10, Vector2.Zero, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.PineHalo>(), (int)damage, (float)knockback, player.whoAmI, 0f, 0f);
             }
             return false;
         }

@@ -31,7 +31,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Legendary
             Item.rare = 3;
             Item.UseSound = SoundID.Item43;
             Item.autoReuse = true;
-            Item.shoot = ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.ChaosCurrent>();
+            Item.shoot = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.ChaosCurrent>();
             Item.shootSpeed = 8;
         }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)

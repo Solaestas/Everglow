@@ -25,7 +25,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Legendary
             Item.knockBack = 6f;
             Item.autoReuse = true;
             Item.value = Item.sellPrice(0, 5, 0, 0);
-            Item.shoot = ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.GreenThornBomb>();
+            Item.shoot = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.GreenThornBomb>();
             Item.noUseGraphic = true;
             Item.rare = 7;
             Item.UseSound = SoundID.Item5;
@@ -36,11 +36,11 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Legendary
         {
             if (l % 2 == 0)
             {
-                type = ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.GreenThornBomb>();
+                type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.GreenThornBomb>();
             }
             else
             {
-                type = ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.PinkThornBomb>();
+                type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.PinkThornBomb>();
             }
             Projectile.NewProjectile(source, position, velocity, type, damage, knockback, Main.myPlayer, Item.crit + player.GetCritChance(DamageClass.Ranged), 0f);
             l++;

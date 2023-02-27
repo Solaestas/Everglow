@@ -61,6 +61,14 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Gores
             gore.velocity.Y -= LightValue;
             return base.Update(gore);
         }
+        /// <summary>
+        /// 从MythModule算起
+        /// </summary>
+        /// <returns></returns>
+        public virtual string EffectPath()
+        {
+            return "Effects/LanternGore";
+        }
         public virtual void DrawDissolve(Gore gore)
         {
             //TODO:I cant understand! WHY!!!
@@ -74,7 +82,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Gores
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             Color cg = Lighting.GetColor((int)(gore.position.X / 16f), (int)(gore.position.Y / 16f));
-            Effect ef = MythContent.QuickEffect("Effects/LanternGore");
+            Effect ef = MythContent.QuickEffect(EffectPath());
             ef.Parameters["alphaValue"].SetValue((600 - gore.timeLeft) / 600f);
             ef.Parameters["tex0"].SetValue(texG);
             ef.Parameters["environmentLight"].SetValue(new Vector4(cg.R, cg.G, cg.B, 255 - gore.alpha) / 255f);

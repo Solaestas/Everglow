@@ -1,4 +1,4 @@
-﻿using Everglow.Sources.Modules.MythModule.MiscBuffs;
+﻿using Everglow.Sources.Modules.MythModule.MiscItems.Buffs;
 using Terraria.Audio;
 namespace Everglow.Sources.Modules.MythModule.Common
 {
@@ -77,13 +77,13 @@ namespace Everglow.Sources.Modules.MythModule.Common
 			{
 				if ((npc.Center - player.Center).Length() < 100)
 				{
-					int d = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, Vector2.Zero, ModContent.ProjectileType<MiscProjectiles.Typeless.PurpleBallEffect>(), (int)damage, 0f, player.whoAmI, Main.rand.NextFloat(0, 6.283f), (float)damage);
+					int d = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, Vector2.Zero, ModContent.ProjectileType<MiscItems.Projectiles.Typeless.PurpleBallEffect>(), (int)damage, 0f, player.whoAmI, Main.rand.NextFloat(0, 6.283f), (float)damage);
 					Main.projectile[d].timeLeft = 240;
 					Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, Vector2.Zero, ModContent.ProjectileType<MiscItems.Weapons.Slingshots.Projectiles.KSSlingshotHitPink>(), (int)(damage / 4f), 0f, player.whoAmI, 1f, 1f);
 					for (int t = 0; t < 8; t++)
 					{
 						Vector2 v2 = new Vector2(0, Main.rand.NextFloat(0, 4f)).RotatedByRandom(Math.PI * 2d);
-						int y = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + v2 * 5, v2, ModContent.ProjectileType<MiscProjectiles.Typeless.FlowerPetalPurple>(), (int)damage, 0.5f, player.whoAmI);
+						int y = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + v2 * 5, v2, ModContent.ProjectileType<MiscItems.Projectiles.Typeless.FlowerPetalPurple>(), (int)damage, 0.5f, player.whoAmI);
 						Main.projectile[y].scale = Main.rand.NextFloat(0.9f, 1.1f);
 						Main.projectile[y].damage = (int)(damage * Main.projectile[y].scale);
 						Main.projectile[y].frame = Main.rand.Next(0, 8);
@@ -103,7 +103,7 @@ namespace Everglow.Sources.Modules.MythModule.Common
 			{
 				SoundEngine.PlaySound(SoundID.Item33, npc.Center);
 				Vector2 v = new Vector2(0, 50).RotatedBy(Math.PI * 2);
-				int num2 = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, v, ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.LaserWorm>(), (int)damage, 0.2f, Main.LocalPlayer.whoAmI, Main.LocalPlayer.GetCritChance(DamageClass.Summon), (float)damage);
+				int num2 = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, v, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.LaserWorm>(), (int)damage, 0.2f, Main.LocalPlayer.whoAmI, Main.LocalPlayer.GetCritChance(DamageClass.Summon), (float)damage);
 				Main.projectile[num2].timeLeft = 90;
 				LaserMark[npc.whoAmI] = 0;
 				for (int z = 0; z < 40; z++)

@@ -35,7 +35,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Fragrans
             Item.knockBack = 15f;
             Item.noMelee = true;
 
-            Item.shoot = ModContent.ProjectileType<MiscProjectiles.Weapon.Fragrans.FragransArrow>();
+            Item.shoot = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Fragrans.FragransArrow>();
             Item.shootSpeed = 37f;
             Item.useAmmo = AmmoID.Arrow;
         }
@@ -66,16 +66,16 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Fragrans
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             float Dam = damage;
-            if (MiscProjectiles.Weapon.Fragrans.Fragrans.FragransIndex == 1)
+            if (MiscItems.Projectiles.Weapon.Fragrans.Fragrans.FragransIndex == 1)
             {
                 Dam *= player.GetDamage(DamageClass.Ranged).Additive;
             }
-            if (MiscProjectiles.Weapon.Fragrans.Fragrans.FragransIndex == 2)
+            if (MiscItems.Projectiles.Weapon.Fragrans.Fragrans.FragransIndex == 2)
             {
                 Dam *= player.GetDamage(DamageClass.Ranged).Additive;
                 Dam *= player.GetDamage(DamageClass.Ranged).Additive;
             }
-            if (MiscProjectiles.Weapon.Fragrans.Fragrans.FragransIndex == 3)
+            if (MiscItems.Projectiles.Weapon.Fragrans.Fragrans.FragransIndex == 3)
             {
                 Dam *= player.GetDamage(DamageClass.Ranged).Additive;
                 Dam *= player.GetDamage(DamageClass.Ranged).Additive;
@@ -87,13 +87,13 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Fragrans
                 {
                     if ((Main.npc[h].Center - player.Center).Length() < 2048 && !Main.npc[h].dontTakeDamage && !Main.npc[h].friendly && Main.npc[h].active && Main.npc[h].life >= 0)
                     {
-                        Projectile.NewProjectile(source, position, Main.npc[h].velocity, ModContent.ProjectileType<MiscProjectiles.Weapon.Fragrans.FragransAim>(), 0, knockback, player.whoAmI, h, Dam * 10);
+                        Projectile.NewProjectile(source, position, Main.npc[h].velocity, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Fragrans.FragransAim>(), 0, knockback, player.whoAmI, h, Dam * 10);
                     }
                 }
                 CoolRarr = 900;
                 return false;
             }
-            type = ModContent.ProjectileType<MiscProjectiles.Weapon.Fragrans.FragransArrow>();
+            type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Fragrans.FragransArrow>();
 
             Projectile.NewProjectile(source, position, velocity, type, (int)Dam, knockback, player.whoAmI, 0f);
             return false;
@@ -122,7 +122,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Fragrans
             Vector2 slotSize = new Vector2(52f, 52f);
             position -= slotSize * Main.inventoryScale / 2f - frame.Size() * scale / 2f;
             Vector2 drawPos = position + slotSize * Main.inventoryScale / 2f;
-            Texture2D RArr = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscProjectiles/Weapon/Fragrans/RightFraArrow").Value;
+            Texture2D RArr = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Projectiles/Weapon/Fragrans/RightFraArrow").Value;
             if (!Main.gamePaused)
             {
                 if (CoolRarr > 0)

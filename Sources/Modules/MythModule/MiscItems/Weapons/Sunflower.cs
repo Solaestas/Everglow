@@ -20,7 +20,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
             Item.glowMask = ItemGlowManager.GetItemGlow(this);
             Item.useStyle = 1;
             Item.shootSpeed = 9f;
-            Item.shoot = ModContent.ProjectileType<MiscProjectiles.Weapon.Melee.Sunflower>();
+            Item.shoot = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Melee.Sunflower>();
             Item.DamageType = DamageClass.Melee;
             Item.width = 46;
             Item.height = 46;

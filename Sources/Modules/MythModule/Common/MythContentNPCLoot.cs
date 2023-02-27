@@ -298,7 +298,7 @@ namespace Everglow.Sources.Modules.MythModule.Common
                 HasL = 0;
                 if (npc.lifeMax > 200 && npc.lifeMax < 1000)
                 {
-                    if (Main.rand.Next(20) == 1 && HasL == 0)
+                    if (Main.rand.NextBool(20) && HasL == 0)
                     {
                         Item.NewItem(null, npc.Hitbox, Ty1[Main.rand.Next(Ty1.Length)], 1);
                         HasL = 1;
@@ -306,7 +306,7 @@ namespace Everglow.Sources.Modules.MythModule.Common
                 }
                 if (npc.lifeMax > 200 && npc.lifeMax < 1000)
                 {
-                    if (Main.rand.Next(100) == 1 && HasL == 0)
+                    if (Main.rand.NextBool(100) && HasL == 0)
                     {
                         Item.NewItem(null, npc.Hitbox, Ty2[Main.rand.Next(Ty2.Length)], 1);
                         HasL = 1;
@@ -314,7 +314,7 @@ namespace Everglow.Sources.Modules.MythModule.Common
                 }
                 if (npc.lifeMax > 200 && npc.lifeMax < 1000)
                 {
-                    if (Main.rand.Next(500) == 1 && HasL == 0)
+                    if (Main.rand.NextBool(500) && HasL == 0)
                     {
                         Item.NewItem(null, npc.Hitbox, Ty3[Main.rand.Next(Ty3.Length)], 1);
                         HasL = 1;
@@ -322,7 +322,7 @@ namespace Everglow.Sources.Modules.MythModule.Common
                 }
                 if (npc.lifeMax > 1000 && npc.lifeMax < 15000)
                 {
-                    if (Main.rand.Next(20) == 1 && HasL == 0)
+                    if (Main.rand.NextBool(20) && HasL == 0)
                     {
                         Item.NewItem(null, npc.Hitbox, Ty2[Main.rand.Next(Ty2.Length)], 1);
                         HasL = 1;
@@ -330,7 +330,7 @@ namespace Everglow.Sources.Modules.MythModule.Common
                 }
                 if (npc.lifeMax > 1000 && npc.lifeMax < 15000)
                 {
-                    if (Main.rand.Next(100) == 1 && HasL == 0)
+                    if (Main.rand.NextBool(100) && HasL == 0)
                     {
                         Item.NewItem(null, npc.Hitbox, Ty3[Main.rand.Next(Ty3.Length)], 1);
                         HasL = 1;
@@ -338,7 +338,7 @@ namespace Everglow.Sources.Modules.MythModule.Common
                 }
                 if (npc.lifeMax > 15000)
                 {
-                    if (Main.rand.Next(20) == 1 && HasL == 0)
+                    if (Main.rand.NextBool(20) && HasL == 0)
                     {
                         Item.NewItem(null, npc.Hitbox, Ty3[Main.rand.Next(Ty3.Length)], 1);
                         HasL = 1;

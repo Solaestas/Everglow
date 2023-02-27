@@ -32,7 +32,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Fragrans
             Item.rare = 10;
             Item.UseSound = SoundID.Item1;
             Item.autoReuse = true;
-            Item.shoot = ModContent.ProjectileType<MiscProjectiles.Weapon.Fragrans.FragransBlade>(); // Shoot a black bolt, also known as the projectile shot from the onyx blaster.
+            Item.shoot = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Fragrans.FragransBlade>(); // Shoot a black bolt, also known as the projectile shot from the onyx blaster.
             Item.shootSpeed = 8; // How fast the item shoots the projectile.
             Item.crit = 8; // The percent chance at hitting an enemy with a crit, plus the default amount of 4.
         }
@@ -64,19 +64,19 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Fragrans
         {
             if (l % 4 == 0)
             {
-                type = ModContent.ProjectileType<MiscProjectiles.Weapon.Fragrans.FragransBlade>();
+                type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Fragrans.FragransBlade>();
             }
             else if (l % 4 == 1)
             {
-                type = ModContent.ProjectileType<MiscProjectiles.Weapon.Fragrans.FragransBlade2>();
+                type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Fragrans.FragransBlade2>();
             }
             else if (l % 4 == 2)
             {
-                type = ModContent.ProjectileType<MiscProjectiles.Weapon.Fragrans.FragransBlade>();
+                type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Fragrans.FragransBlade>();
             }
             else
             {
-                type = ModContent.ProjectileType<MiscProjectiles.Weapon.Fragrans.FragransBlade2>();
+                type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Fragrans.FragransBlade2>();
             }
             Projectile.NewProjectile(source, position + new Vector2(0, -24), velocity, type, damage, knockback, player.whoAmI, 0f, 0f);
             l++;

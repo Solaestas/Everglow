@@ -82,16 +82,16 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Fragrans
         {
             Coun++;
             float Dam = damage;
-            if (MiscProjectiles.Weapon.Fragrans.Fragrans.FragransIndex == 1)
+            if (MiscItems.Projectiles.Weapon.Fragrans.Fragrans.FragransIndex == 1)
             {
                 Dam *= player.GetDamage(DamageClass.Ranged).Additive;
             }
-            if (MiscProjectiles.Weapon.Fragrans.Fragrans.FragransIndex == 2)
+            if (MiscItems.Projectiles.Weapon.Fragrans.Fragrans.FragransIndex == 2)
             {
                 Dam *= player.GetDamage(DamageClass.Ranged).Additive;
                 Dam *= player.GetDamage(DamageClass.Ranged).Additive;
             }
-            if (MiscProjectiles.Weapon.Fragrans.Fragrans.FragransIndex == 3)
+            if (MiscItems.Projectiles.Weapon.Fragrans.Fragrans.FragransIndex == 3)
             {
                 Dam *= player.GetDamage(DamageClass.Ranged).Additive;
                 Dam *= player.GetDamage(DamageClass.Ranged).Additive;
@@ -106,7 +106,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Fragrans
                 {
                     Vector2 Vc = velocity.RotatedByRandom(MathHelper.ToRadians(15)) * 1.1f;
                     Vc *= 1f - Main.rand.NextFloat(0.3f);
-                    Projectile.NewProjectileDirect(source, position, Vc, ModContent.ProjectileType<MiscProjectiles.Weapon.Fragrans.FragransBullet>(), (int)(Dam * 1.1f), knockback, player.whoAmI);
+                    Projectile.NewProjectileDirect(source, position, Vc, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Fragrans.FragransBullet>(), (int)(Dam * 1.1f), knockback, player.whoAmI);
                 }
             }
             for (int i = 0; i < 3; i++)
@@ -114,7 +114,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Fragrans
                 Vector2 newVelocity = velocity.RotatedByRandom(MathHelper.ToRadians(1));
                 newVelocity *= 2f - Main.rand.NextFloat(0.15f);
                 newVelocity = newVelocity.RotatedByRandom(0.15f);
-                Projectile.NewProjectileDirect(source, position - velocity * 0.7f, newVelocity, ModContent.ProjectileType<MiscProjectiles.Weapon.Fragrans.FragransGun>(), (int)(Dam * 0.8f), knockback, player.whoAmI, player.GetCritChance(DamageClass.Ranged));
+                Projectile.NewProjectileDirect(source, position - velocity * 0.7f, newVelocity, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Fragrans.FragransGun>(), (int)(Dam * 0.8f), knockback, player.whoAmI, player.GetCritChance(DamageClass.Ranged));
             }
             return false;
         }

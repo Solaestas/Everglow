@@ -34,7 +34,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Fragrans
             Item.rare = 10;
             Item.UseSound = SoundID.Item1;
             Item.autoReuse = true;
-            Item.shoot = ModContent.ProjectileType<MiscProjectiles.Weapon.Fragrans.FragransBlade>();
+            Item.shoot = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Fragrans.FragransBlade>();
             Item.shootSpeed = 8;
             Item.crit = 8;
         }
@@ -88,31 +88,31 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Fragrans
             if (player.altFunctionUse == 2)
             {
                 CoolRarr = 60;
-                Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<MiscProjectiles.Weapon.Fragrans.FragransSpear4>(), damage * 5, knockback, player.whoAmI, 0f, 0f);
+                Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Fragrans.FragransSpear4>(), damage * 5, knockback, player.whoAmI, 0f, 0f);
                 return false;
             }
             int ai0 = 0;
             float Damk = 1;
             if (l % 5 == 0)
             {
-                type = ModContent.ProjectileType<MiscProjectiles.Weapon.Fragrans.FragransSpear>();
+                type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Fragrans.FragransSpear>();
             }
             else if (l % 5 == 1)
             {
-                type = ModContent.ProjectileType<MiscProjectiles.Weapon.Fragrans.FragransSpear2>();
+                type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Fragrans.FragransSpear2>();
             }
             else if (l % 5 == 2)
             {
-                type = ModContent.ProjectileType<MiscProjectiles.Weapon.Fragrans.FragransSpear>();
+                type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Fragrans.FragransSpear>();
             }
             else if (l % 5 == 3)
             {
-                type = ModContent.ProjectileType<MiscProjectiles.Weapon.Fragrans.FragransSpear3>();
+                type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Fragrans.FragransSpear3>();
                 Damk = 1.33f;
             }
             else
             {
-                type = ModContent.ProjectileType<MiscProjectiles.Weapon.Fragrans.FragransSpear3>();
+                type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Fragrans.FragransSpear3>();
                 Damk = 1.33f;
                 ai0 = 1;
             }
@@ -135,7 +135,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Fragrans
             }*/
             Vector2 slotSize = new Vector2(52f, 52f);
             Vector2 drawPos = position + slotSize * Main.inventoryScale / 2f;
-            Texture2D RArr = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscProjectiles/Weapon/Fragrans/RightFraSpice").Value;
+            Texture2D RArr = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Projectiles/Weapon/Fragrans/RightFraSpice").Value;
             if (!Main.gamePaused)
             {
                 if (CoolRarr > 0)

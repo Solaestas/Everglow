@@ -17,7 +17,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Legendary
             Item.glowMask = ItemGlowManager.GetItemGlow(this);
             Item.useStyle = 1;
             Item.shootSpeed = 4f;
-            Item.shoot = ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.MachineFit>();
+            Item.shoot = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.MachineFit>();
             Item.width = 58;
             Item.height = 100;
             Item.UseSound = SoundID.Item1;

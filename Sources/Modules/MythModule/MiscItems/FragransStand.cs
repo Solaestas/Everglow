@@ -29,7 +29,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems
             Item.consumable = true;
             Item.useTurn = true;
             Item.autoReuse = true;
-            Item.createTile = ModContent.TileType<MiscTiles.FragransStand>();
+            Item.createTile = ModContent.TileType<MiscItems.Tiles.FragransStand>();
         }
         public override bool CanUseItem(Player player)
         {

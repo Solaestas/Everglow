@@ -28,7 +28,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Legendary
             Item.rare = 5;
             Item.UseSound = SoundID.Item1;
             Item.autoReuse = true;
-            Item.shoot = ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.BloodGoldBlade>(); // Shoot a black bolt, also known as the projectile shot from the onyx blaster.
+            Item.shoot = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.BloodGoldBlade>(); // Shoot a black bolt, also known as the projectile shot from the onyx blaster.
             Item.shootSpeed = 8; // How fast the item shoots the projectile.
             Item.crit = 4; // The percent chance at hitting an enemy with a crit, plus the default amount of 4.
         }
@@ -37,19 +37,19 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Legendary
         {
             if (l % 4 == 0)
             {
-                type = ModContent.ProjectileType< MiscProjectiles.Weapon.Legendary.BloodGoldBlade>();
+                type = ModContent.ProjectileType< MiscItems.Projectiles.Weapon.Legendary.BloodGoldBlade>();
             }
             else if (l % 4 == 1)
             {
-                type = ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.BloodGoldBlade2>();
+                type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.BloodGoldBlade2>();
             }
             else if (l % 4 == 2)
             {
-                type = ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.BloodGoldBlade3>();
+                type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.BloodGoldBlade3>();
             }
             else
             {
-                type = ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.BloodGoldBlade1>();
+                type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.BloodGoldBlade1>();
             }
             Projectile.NewProjectile(source, position + new Vector2(0, -24), velocity, type, damage, knockback, player.whoAmI, 0f, 0f);
             l++;

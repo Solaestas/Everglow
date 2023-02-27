@@ -79,7 +79,7 @@
                     }
                 }
             }
-            if (Main.rand.Next(3) == 1)
+            if (Main.rand.NextBool(3))
             {
                 int num91 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4), 4, 4, 183, 0f, 0f, 100, default(Color), Main.rand.NextFloat(1.3f, 9f) * Sc * 0.4f);
                 Main.dust[num91].noGravity = true;

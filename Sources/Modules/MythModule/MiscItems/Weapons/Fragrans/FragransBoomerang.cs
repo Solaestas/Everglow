@@ -18,7 +18,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Fragrans
 			Item.glowMask = ItemGlowManager.GetItemGlow(this);
 			Item.useStyle = 1;
             Item.shootSpeed = 17f;
-            Item.shoot = ModContent.ProjectileType<MiscProjectiles.Weapon.Fragrans.FragransBoomerang>();
+            Item.shoot = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Fragrans.FragransBoomerang>();
             Item.width = 68;
             Item.height = 68;
             Item.UseSound = SoundID.Item1;
@@ -36,16 +36,16 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Fragrans
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             float Dam = damage;
-            if (MiscProjectiles.Weapon.Fragrans.Fragrans.FragransIndex == 1)
+            if (MiscItems.Projectiles.Weapon.Fragrans.Fragrans.FragransIndex == 1)
             {
                 Dam *= player.GetDamage(DamageClass.Melee).Additive;
             }
-            if (MiscProjectiles.Weapon.Fragrans.Fragrans.FragransIndex == 2)
+            if (MiscItems.Projectiles.Weapon.Fragrans.Fragrans.FragransIndex == 2)
             {
                 Dam *= player.GetDamage(DamageClass.Melee).Additive;
                 Dam *= player.GetDamage(DamageClass.Melee).Additive;
             }
-            if (MiscProjectiles.Weapon.Fragrans.Fragrans.FragransIndex == 3)
+            if (MiscItems.Projectiles.Weapon.Fragrans.Fragrans.FragransIndex == 3)
             {
                 Dam *= player.GetDamage(DamageClass.Melee).Additive;
                 Dam *= player.GetDamage(DamageClass.Melee).Additive;

@@ -39,37 +39,37 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Legendary
             Vector2 newVelocity = velocity.RotatedByRandom(MathHelper.ToRadians(1));
             newVelocity *= 1f - Main.rand.NextFloat(0.3f);
             Projectile.NewProjectileDirect(source, position, newVelocity, type, damage, knockback, player.whoAmI);
-            if (player.ownedProjectileCounts[ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.Gear>()] < 1)
+            if (player.ownedProjectileCounts[ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.Gear>()] < 1)
             {
                 for (int i = 0; i < 230; i++)
                 {
-                    Projectile.NewProjectile(source, position, newVelocity, ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.Null>(), 0, 1, Main.myPlayer, 0, 0f);
+                    Projectile.NewProjectile(source, position, newVelocity, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.Null>(), 0, 1, Main.myPlayer, 0, 0f);
                 }
-                Projectile.NewProjectileDirect(source, position, newVelocity, ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.Gear>(), damage, knockback, player.whoAmI, -player.direction);
+                Projectile.NewProjectileDirect(source, position, newVelocity, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.Gear>(), damage, knockback, player.whoAmI, -player.direction);
             }
-            if (player.ownedProjectileCounts[ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.Gear9>()] < 1)
+            if (player.ownedProjectileCounts[ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.Gear9>()] < 1)
             {
-                Projectile.NewProjectileDirect(source, position, newVelocity, ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.Gear9>(), damage, knockback, player.whoAmI, -player.direction);
+                Projectile.NewProjectileDirect(source, position, newVelocity, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.Gear9>(), damage, knockback, player.whoAmI, -player.direction);
             }
-            if (player.ownedProjectileCounts[ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.Gear2>()] < 1)
+            if (player.ownedProjectileCounts[ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.Gear2>()] < 1)
             {
-                Projectile.NewProjectileDirect(source, position, newVelocity, ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.Gear2>(), damage, knockback, player.whoAmI, -player.direction);
+                Projectile.NewProjectileDirect(source, position, newVelocity, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.Gear2>(), damage, knockback, player.whoAmI, -player.direction);
             }
-            if (player.ownedProjectileCounts[ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.Gear4>()] < 1)
+            if (player.ownedProjectileCounts[ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.Gear4>()] < 1)
             {
-                Projectile.NewProjectileDirect(source, position, newVelocity, ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.Gear4>(), damage, knockback, player.whoAmI, -player.direction);
+                Projectile.NewProjectileDirect(source, position, newVelocity, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.Gear4>(), damage, knockback, player.whoAmI, -player.direction);
             }
-            if (player.ownedProjectileCounts[ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.Gear3>()] < 1)
+            if (player.ownedProjectileCounts[ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.Gear3>()] < 1)
             {
-                Projectile.NewProjectileDirect(source, position, newVelocity, ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.Gear3>(), damage, knockback, player.whoAmI, -player.direction);
+                Projectile.NewProjectileDirect(source, position, newVelocity, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.Gear3>(), damage, knockback, player.whoAmI, -player.direction);
             }
-            if (player.ownedProjectileCounts[ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.Gear7>()] < 1)
+            if (player.ownedProjectileCounts[ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.Gear7>()] < 1)
             {
-                Projectile.NewProjectileDirect(source, position, newVelocity, ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.Gear7>(), damage, knockback, player.whoAmI, -player.direction);
+                Projectile.NewProjectileDirect(source, position, newVelocity, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.Gear7>(), damage, knockback, player.whoAmI, -player.direction);
             }
-            if (player.ownedProjectileCounts[ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.Gear8>()] < 1)
+            if (player.ownedProjectileCounts[ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.Gear8>()] < 1)
             {
-                Projectile.NewProjectileDirect(source, position, newVelocity, ModContent.ProjectileType<MiscProjectiles.Weapon.Legendary.Gear8>(), damage, knockback, player.whoAmI, -player.direction);
+                Projectile.NewProjectileDirect(source, position, newVelocity, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.Gear8>(), damage, knockback, player.whoAmI, -player.direction);
             }
             return false;
         }

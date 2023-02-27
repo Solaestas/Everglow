@@ -1,0 +1,155 @@
+﻿using Terraria.Localization;
+
+namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Fragrans
+{
+	public class FragransR : ModProjectile
+    {
+        public override void SetStaticDefaults()
+        {
+            DisplayName.SetDefault("Fragrans");
+            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "落花");
+            Main.projFrames[Projectile.type] = 8;
+        }
+        public override void SetDefaults()
+        {
+            Projectile.width = 12;
+            Projectile.height = 14;
+            Projectile.friendly = true;
+            Projectile.alpha = 0;
+            Projectile.penetrate = 1;
+            Projectile.tileCollide = true;
+            Projectile.timeLeft = 9000;
+            ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 8;
+        }
+        public override Color? GetAlpha(Color lightColor)
+        {
+            if (Projectile.timeLeft < 60)
+            {
+                return new Color?(new Color(0.5f * Projectile.timeLeft / 60f, 0.5f * Projectile.timeLeft / 60f, 0.5f * Projectile.timeLeft / 60f, 0));
+            }
+            else
+            {
+                return new Color?(new Color(0.5f, 0.5f, 0.5f, 0));
+            }
+        }
+        public float num2 = 0;
+        public bool Hittil = false;
+        public override void AI()
+        {
+            if (Projectile.timeLeft == 8999)
+            {
+                Projectile.timeLeft = Main.rand.Next(600, 1000);
+            }
+            if (num2 == 0)
+            {
+                num2 = Main.rand.Next(-100, 100) / 1000f;
+            }
+            if (Projectile.velocity.Length() > 0.1f)
+            {
+                Projectile.frameCounter++;
+                if (Projectile.frameCounter > 6)
+                {
+                    Projectile.frame++;
+                    Projectile.frameCounter = 0;
+                }
+                if (Projectile.frame > 7)
+                {
+                    Projectile.frame = 0;
+                }
+            }
+            if (!Hittil)
+            {
+                Projectile.rotation += num2;
+                if (Projectile.velocity.Length() < 3.6f && Projectile.timeLeft > 60)
+                {
+                    Projectile.velocity.Y += 0.025f;
+                }
+                if (Projectile.timeLeft > 60)
+                {
+                    Projectile.velocity.X += (float)(Math.Sin(Projectile.timeLeft / 30f)) * 0.035f;
+                }
+                if (Projectile.velocity.Length() > 3.6f)
+                {
+                    Projectile.velocity *= 0.96f;
+                }
+                Projectile.velocity += new Vector2(Main.windSpeedCurrent * 0.05f, 0);
+            }
+            if (Projectile.timeLeft >= 60)
+            {
+                Projectile.alpha = 0;
+                Lighting.AddLight(Projectile.Center, (float)(255 - Projectile.alpha) * 0.12f / 255f, (float)(255 - Projectile.alpha) * 0f / 255f, (float)(255 - Projectile.alpha) * 0.12f / 255f);
+            }
+            else
+            {
+                Lighting.AddLight(Projectile.Center, (float)(255 - Projectile.alpha) * 0.12f / 255f * Projectile.timeLeft / 60f, (float)(255 - Projectile.alpha) * 0f / 255f * Projectile.timeLeft / 60f, (float)(255 - Projectile.alpha) * 0.12f / 255f * Projectile.timeLeft / 60f);
+                Projectile.alpha = (int)((60 - Projectile.timeLeft) / 60f * 255f);
+            }
+        }
+        public override bool OnTileCollide(Vector2 oldVelocity)
+        {
+            if (Projectile.velocity.Length() > 8)
+            {
+                if (Projectile.velocity.X != oldVelocity.X)
+                {
+                    Projectile.velocity.X = -oldVelocity.X;
+                }
+                if (Projectile.velocity.Y != oldVelocity.Y)
+                {
+                    Projectile.velocity.Y = -oldVelocity.Y;
+                }
+                Projectile.velocity *= 0.9f;
+                return false;
+            }
+            Projectile.timeLeft = 60;
+            if (Projectile.oldVelocity.Y > 0)
+            {
+                Projectile.velocity *= 0;
+                Hittil = true;
+                Projectile.tileCollide = false;
+            }
+            else
+            {
+                Projectile.velocity.Y *= -1;
+                Projectile.position += Projectile.velocity * 2;
+            }
+            return false;
+        }
+        /*public override Color? GetAlpha(Color lightColor)
+        {
+            if (Projectile.timeLeft > 60)
+            {
+                return new Color?(new Color(1f,1f,1f,1f));
+            }
+            else
+            {
+                return new Color?(new Color(1f * Projectile.timeLeft / 60f, 1f * Projectile.timeLeft / 60f, 1f * Projectile.timeLeft / 60f, 1f * Projectile.timeLeft / 60f));
+            }
+        }*/
+        /*public override void Kill(int timeLeft)
+		{
+            Main.PlaySound(2, (int)Projectile.position.X, (int)Projectile.position.Y, 37, 0.5f, 0f);
+        }*/
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        {
+        }
+        public override bool PreDraw(ref Color lightColor)
+        {
+            Texture2D texture2D = (Texture2D)ModContent.Request<Texture2D>(Texture);
+            int num = texture2D.Height / Main.projFrames[Projectile.type];
+            int y = num * Projectile.frame;
+            Vector2 drawOrigin = new Vector2((float)texture2D.Width / 2f, (float)num / 2f);
+            Vector2 v = Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY + Projectile.height / 2f);
+            Main.spriteBatch.Draw(texture2D, v, new Rectangle?(new Rectangle(0, y, texture2D.Width, num)), Projectile.GetAlpha(lightColor), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+            for (int k = 0; k < Projectile.oldPos.Length; k++)
+            {
+                Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(1f, Projectile.gfxOffY);
+                Color color = new Color(255, 255, 255, 0);
+                float Fad = (Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length;
+                Color color2 = new Color((int)(color.R * Fad * Fad), (int)(color.G * Fad * Fad), (int)(color.B * Fad), (int)(color.A * Fad));
+                Main.spriteBatch.Draw(texture2D, drawPos, new Rectangle?(new Rectangle(0, y, texture2D.Width, num)), color2, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+            }
+            return false;
+        }
+    }
+}
