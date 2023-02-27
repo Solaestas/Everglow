@@ -304,7 +304,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Melee
                             Vector2 Vpi = Vector2.Normalize((OldMouseWorldV[i] - OldMouseWorldV[i - 1])) * 5;
                             for (int j = 0; j < (OldMouseWorldV[i] - OldMouseWorldV[i - 1]).Length() / 5; j++)
                             {
-                                Lighting.AddLight(OldMouseWorldV[i - 1] + Vpi * j, (float)(255 - Projectile.alpha) * 0.04f / 50f * (1 - Math.Clamp(factor, 0, 1)) * width / 24f, (float)(255 - Projectile.alpha) * 0.14f / 50f * (1 - Math.Clamp(factor, 0, 1)) * width / 24f, 0);
+                                Lighting.AddLight(OldMouseWorldV[i - 1] + Vpi * j, (float)(255 - Projectile.alpha) * 0.04f / 50f * (1 - Math.Clamp(factor, 0, 1)) * width / 18f, (float)(255 - Projectile.alpha) * 0.14f / 50f * (1 - Math.Clamp(factor, 0, 1)) * width / 24f, 0);
                             }
                         }
                     }

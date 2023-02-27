@@ -1,5 +1,4 @@
 ﻿using Everglow.Sources.Modules.MythModule.Common;
-using IL.Terraria.Graphics.Shaders;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -9,40 +8,27 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
     {
         public override void SetStaticDefaults()
         {
-            /*DisplayName.SetDefault("Prinomial Jade Winged Spear");
-			DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "和璞鸢");
-			DisplayName.AddTranslation((int)GameCulture.CultureName.Russian, "Нефритовый коршун");
-			Tooltip.SetDefault("Exclusive weapon\nLeft click to dash, right click to smash\n'You should't be getting it'\nHomaging to Genshin Impact");
-			Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "专属武器\n左键突刺,右键打桩\n你不应该得到它\n致敬<原神>");
-			Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "Эксклюзивное оружие \nщелкните левой кнопкой мыши, чтобы сделать дэш, щелчок правой кнопкой мыши, чтобы разрушать\n\"Вы не должны его получить\"\nдань уважения Genshin Impact");*/
             ItemGlowManager.AutoLoadItemGlow(this);
         }
         public static short GetGlowMask = 0;
         public override void SetDefaults()
         {
             Item.glowMask = ItemGlowManager.GetItemGlow(this);
-            // Common Properties
-            Item.rare = 11; // Assign this item a rarity level of Pink
-            Item.value = Item.sellPrice(silver: 50); // The number and type of coins item can be sold for to an NPC
-
-            // Use Properties
-            Item.useStyle = ItemUseStyleID.Shoot; // How you use the item (swinging, holding out, etc.)
-            Item.useAnimation = 18; // The length of the item's use animation in ticks (60 ticks == 1 second.)
-            Item.useTime = 18; // The length of the item's use time in ticks (60 ticks == 1 second.)
-            Item.UseSound = SoundID.Item71; // The sound that this item plays when used.
-            Item.autoReuse = true; // Allows the player to hold click to automatically use the item again. Most spears don't autoReuse, but it's possible when used in conjunction with CanUseItem()		
-
-            // Weapon Properties
+            Item.rare = ItemRarityID.Purple;
+            Item.value = Item.sellPrice(silver: 50);
+            Item.useStyle = ItemUseStyleID.Shoot;
+            Item.useAnimation = 18;
+            Item.useTime = 18;
+            Item.UseSound = SoundID.Item71;
+            Item.autoReuse = true; 
             Item.damage = 674;
             Item.crit = 22;
             Item.knockBack = 6.5f;
-            Item.noUseGraphic = true; // When true, the item's sprite will not be visible while the item is in use. This is true because the spear projectile is what's shown so we do not want to show the spear sprite as well.
+            Item.noUseGraphic = true; 
             Item.DamageType = DamageClass.Melee;
-            Item.noMelee = true; // Allows the item's animation to do damage. This is important because the spear is actually a projectile instead of an item. This prevents the melee hitbox of this item.
-
-            // Projectile Properties
-            Item.shootSpeed = 17f; // The speed of the projectile measured in pixels per frame.
-            Item.shoot = ModContent.ProjectileType<MiscProjectiles.Weapon.Melee.Hepuyuan.Hepuyuan>(); //The projectile that is fired from this weapon
+            Item.noMelee = true; 
+            Item.shootSpeed = 17f;
+            Item.shoot = ModContent.ProjectileType<MiscProjectiles.Weapon.Melee.Hepuyuan.Hepuyuan>(); 
         }
         public override bool AltFunctionUse(Player player)
         {

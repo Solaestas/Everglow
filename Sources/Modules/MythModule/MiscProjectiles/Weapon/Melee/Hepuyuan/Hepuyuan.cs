@@ -221,8 +221,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Melee.Hepuy
                 var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
 
                 ef2.Parameters["uTransform"].SetValue(model * projection);
-                ef2.Parameters["uTime"].SetValue(-(float)Main.time * 0.06f);
-                ef2.Parameters["maxr"].SetValue(widk * widk / 36f);
+                ef2.Parameters["alphaValue"].SetValue(widk * widk / 36f);
                 Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/heatmapWindCyan").Value;
                 Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/ShakeWave").Value;
                 Main.graphics.GraphicsDevice.Textures[2] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/ShakeWave").Value;
