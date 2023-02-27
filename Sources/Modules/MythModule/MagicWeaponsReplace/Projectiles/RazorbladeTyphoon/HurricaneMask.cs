@@ -29,7 +29,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ra
         {
             if(Projectile.timeLeft == 1)
             {
-                Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BlackHole.BlackHole>(), Projectile.damage * 12, 0, Projectile.owner, Projectile.ai[0]);
+                Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BlackHole.BlackHole>(), Projectile.damage * 12, 0, Projectile.owner, Projectile.ai[0] * 2);
                 p.CritChance = Projectile.CritChance;
                 p.timeLeft = 100 + (int)(Projectile.ai[0] * 240);
                 if(Projectile.ai[0] < 0.5f)
@@ -49,6 +49,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ra
             if (Projectile.timeLeft < 100)
             {
                 Projectile.extraUpdates = 9;
+            }
+            if(Projectile.timeLeft == 100)
+            {
+                SoundEngine.PlaySound((new SoundStyle("Everglow/Sources/Modules/MythModule/MagicWeaponsReplace/Sounds/TyphoonBlackHoleSummon").WithVolumeScale(Projectile.ai[0])).WithPitchOffset(0f), Projectile.Center);
             }
         }
         public override void PostDraw(Color lightColor)
