@@ -42,7 +42,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Typeless
                 Projectile.Kill();
             }
         }
-        int[] Ty = { ModContent.ItemType<MiscItems.FixCoins.FixCoinCrit4>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinDamage4>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinDefense4>(), ModContent.ItemType<MiscItems.Weapons.AngelSword>() };
+        int[] Ty = { ModContent.ItemType<MiscItems.FixCoins.FixCoinCrit4>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinDamage4>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinDefense4>() };
         public override void Kill(int timeLeft)
         {
             SoundEngine.PlaySound(SoundID.DD2_WitherBeastCrystalImpact, Projectile.Center);

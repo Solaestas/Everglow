@@ -11,7 +11,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Summon
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Xmax Whip");
+            DisplayName.SetDefault("Xmas Whip");
             DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "彩灯鞭");
             DefaultToWhip();
         }
