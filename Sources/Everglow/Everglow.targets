@@ -93,7 +93,7 @@
 							OutputDirectory="$(OutputPath)"
 							ModDirectory="$(ModDirectory)"
 							Configuration="$(Configuration)"
-							IgnoreBuildFile="$(IgnoreBuildFile)"
+							IgnoreBuildFile="true"
 							AssetFiles="@(AssetFile);"
 							ResourceFiles="@(ResourceFile)" />
 	</Target>
