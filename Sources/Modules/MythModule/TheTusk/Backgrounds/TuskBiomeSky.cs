@@ -7,28 +7,33 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Backgrounds
     public class TuskBiomeSky : CustomSky
     {
         public static bool Open = false;
+        //public static bool HasSky = false;
+        //private bool skyActive;
         public override void OnLoad()
         {
 
         }
         public override void Deactivate(params object[] args)
         {
-
+            //HasSky = false;
+            //this.skyActive = false;
         }
 
         public override void Reset()
         {
-
+            //HasSky = false;
+            //this.skyActive = false;
         }
 
         public override bool IsActive()
         {
-            return this.opacity > 0f;
+            return /*this.skyActive ||*/ this.opacity > 0f;
         }
 
         public override void Activate(Vector2 position, params object[] args)
         {
-
+            //HasSky = true;
+            //this.skyActive = true;
         }
         /// <summary>
         /// 获取绘制矩形
