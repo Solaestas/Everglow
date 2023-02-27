@@ -17,7 +17,6 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
             Item.knockBack = 6;
             Item.value = 20000;
             Item.rare = ItemRarityID.Red;
-            Item.UseSound = SoundID.Item1;
             Item.autoReuse = true;
             Item.shoot = ModContent.ProjectileType<MiscProjectiles.Weapon.Melee.World>();
             Item.shootSpeed = 0;

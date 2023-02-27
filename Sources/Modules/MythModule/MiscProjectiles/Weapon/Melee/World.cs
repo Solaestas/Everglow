@@ -3,6 +3,7 @@ using Everglow.Sources.Commons.Function.Curves;
 using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MEACModule;
 using Everglow.Sources.Modules.MythModule.Common;
+using Terraria.Audio;
 
 namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Melee
 {
@@ -75,9 +76,11 @@ namespace Everglow.Sources.Modules.MythModule.MiscProjectiles.Weapon.Melee
             CatchPos = Main.MouseWorld * 0.75f + CatchPos * 0.25f;
             if (Mode == 1 && timer >= Aimtimer && Main.mouseLeft)
             {
-                timer = 0;
                 Aimtimer = Main.rand.Next(3, 9);
-                CrackPoint = Main.MouseWorld + Vector2.Normalize(Main.MouseWorld - CrackPoint).RotatedBy(Main.rand.NextFloat(Main.rand.NextFloat(Main.rand.NextFloat(-0.5f, -0.2f), 0.2f), 0.5f)) * Main.rand.NextFloat(420f, 600f);
+                float range = Main.rand.NextFloat(420f, 600f);
+                CrackPoint = Main.MouseWorld + Vector2.Normalize(Main.MouseWorld - CrackPoint).RotatedBy(Main.rand.NextFloat(Main.rand.NextFloat(Main.rand.NextFloat(-0.5f, -0.2f), 0.2f), 0.5f)) * range;
+                SoundEngine.PlaySound((new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/Knife").WithPitchOffset(Main.rand.NextFloat(0.7f, 1f) - MathF.Min(timer / 15f, 1f))).WithVolumeScale(range / 600f), Projectile.Center);
+                timer = 0;
             }
             OldMouseWorld[0] = Main.MouseWorld;//记录数据模板,这里记录鼠标坐标
             if (Mode == 1)
