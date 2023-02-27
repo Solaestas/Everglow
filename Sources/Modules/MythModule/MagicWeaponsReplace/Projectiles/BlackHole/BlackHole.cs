@@ -1,5 +1,6 @@
 ﻿using Everglow.Sources.Commons.Core.VFX;
 using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.BlackHole.Dust;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -225,7 +226,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bl
 
             Color c = new Color(0.2f, 0.7f, 1f);//环的颜色
 
-            float time = (float)Main.timeForVisualEffects * 0.005f;
+            float time = (float)Main.timeForVisualEffects * 0.02f;
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.Transform);
 
@@ -242,12 +243,53 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bl
                 v2 = Projection(new Vector3(Projectile.Center.X + v3.X - Main.screenPosition.X, Projectile.Center.Y + v3.Y - Main.screenPosition.Y, v3.Z), new Vector2(Main.screenWidth, Main.screenHeight) / 2);
                 vertices.Add(new Vertex2D(v2, c, new Vector3(time + (i / 50f), 1, 0)));
             }
-            Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MagicWeaponsReplace/Projectiles/BlackHole/tex3").Value;
-            ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/MagicWeaponsReplace/Projectiles/BlackHole/Colorize", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value.CurrentTechnique.Passes[0].Apply();
+            Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BlackHole/tex3");
+            //Effect ef = MythContent.QuickEffect("MagicWeaponsReplace/Projectiles/BlackHole/Colorize");
+            //ef.CurrentTechnique.Passes[0].Apply();
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);
+
+            if(Main.gfxQuality == 1)
+            {
+                c = new Color(0.2f, 0.7f, 1f);//环的颜色
+                time = (float)Main.timeForVisualEffects * 0.03f;
+                vertices = new();
+                r = front ? (50, 100) : (0, 50);
+                for (int i = r.Item1; i <= r.Item2; i++)
+                {
+                    Vector3 v3 = Vector3.Transform(Vector3.UnitX * Projectile.scale * 0.8f, Matrix.CreateRotationY(i * MathHelper.TwoPi / 100));
+                    v3.Y -= 0.009f * Projectile.scale;
+                    Vector2 v2 = Projection(new Vector3(Projectile.Center.X + v3.X - Main.screenPosition.X, Projectile.Center.Y + v3.Y - Main.screenPosition.Y, v3.Z), new Vector2(Main.screenWidth, Main.screenHeight) / 2);
+                    vertices.Add(new Vertex2D(v2, c * 0.8f, new Vector3(time + (i / 50f), 0, 0)));
+
+                    v3 *= MathF.Sin(Projectile.timeLeft / 10f) * 0.2f + 1.9f;
+                    v2 = Projection(new Vector3(Projectile.Center.X + v3.X - Main.screenPosition.X, Projectile.Center.Y + v3.Y - Main.screenPosition.Y, v3.Z), new Vector2(Main.screenWidth, Main.screenHeight) / 2);
+                    vertices.Add(new Vertex2D(v2, c, new Vector3(time + (i / 50f), 1, 0)));
+                }
+                Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/EShoot");
+                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);
+
+                time = (float)Main.timeForVisualEffects * 0.02f;
+                vertices = new();
+                r = front ? (50, 100) : (0, 50);
+                for (int i = r.Item1; i <= r.Item2; i++)
+                {
+                    Vector3 v3 = Vector3.Transform(Vector3.UnitX * Projectile.scale * 0.8f, Matrix.CreateRotationY(i * MathHelper.TwoPi / 100));
+                    v3.Y += 0.009f * Projectile.scale;
+                    Vector2 v2 = Projection(new Vector3(Projectile.Center.X + v3.X - Main.screenPosition.X, Projectile.Center.Y + v3.Y - Main.screenPosition.Y, v3.Z), new Vector2(Main.screenWidth, Main.screenHeight) / 2);
+                    vertices.Add(new Vertex2D(v2, c * 0.8f, new Vector3(time, 0, 0)));
+
+                    v3 *= MathF.Sin(Projectile.timeLeft / 10f + 3.14f) * 0.3f + 2.4f;
+                    v2 = Projection(new Vector3(Projectile.Center.X + v3.X - Main.screenPosition.X, Projectile.Center.Y + v3.Y - Main.screenPosition.Y, v3.Z), new Vector2(Main.screenWidth, Main.screenHeight) / 2);
+                    vertices.Add(new Vertex2D(v2, c, new Vector3(time, 1, 0)));
+                }
+                Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/FogTrace");
+                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);
+            }
+
+
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.Default, RasterizerState.CullNone, null, Main.Transform);
-
+           
         }
         public override bool PreDraw(ref Color lightColor)
         {
