@@ -54,7 +54,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
         {
             for (int h = 0; h < 20; h++)
             {
-                if (Collision.SolidCollision(player.Center + new Vector2(0, h * 16), 1, 1))
+                if (Collision.SolidCollision(player.Center + new Vector2(0, h * 16 * player.gravDir), 1, 1))
                 {
                     CanDown = false;
                     return;
@@ -73,7 +73,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
 
             if (player.altFunctionUse == 2)
             {
-                Vector2 VelcD = new Vector2(0, 1);
+                Vector2 VelcD = new Vector2(0, player.gravDir);
                 Projectile.NewProjectile(source, position, VelcD, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Melee.Hepuyuan.HepuyuanDown>(), damage * 5, knockback, player.whoAmI, 0f, 0f);
                 player.velocity += VelcD * 4;
                 HepuyuanOwner.MouseCooling = 40;
@@ -169,14 +169,13 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
         {
             Vector2 slotSize = new Vector2(52f, 52f);
             position -= slotSize * Main.inventoryScale / 2f - frame.Size() * scale / 2f;
-            Vector2 drawPos = position + slotSize * Main.inventoryScale / 2f/* - texture.Size() * Main.inventoryScale / 2f*/;
+            Vector2 drawPos = position + slotSize * Main.inventoryScale / 2f;
             Texture2D RArr = MythContent.QuickTexture("MiscItems/Projectiles/Weapon/Melee/Hepuyuan/RightGreenSpice");
             if (!Main.gamePaused)
             {
                 if (!CanDown)
                 {
                     spriteBatch.Draw(RArr, drawPos + new Vector2(42) * scale, null, new Color(0, 0, 0, 255), 0f, new Vector2(8), scale * 3, SpriteEffects.None, 0f);
-                    //Main.spriteBatch.DrawString(FontAssets.MouseText.Value, ((int)(CoolRarr / 60f)).ToString(), drawPos + new Vector2(12), Color.Red, 0f, Vector2.Zero, 0.75f, SpriteEffects.None, 0);
                 }
                 else
                 {

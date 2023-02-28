@@ -1,16 +1,9 @@
 using Everglow.Sources.Commons.Function.Vertex;
 using Terraria.Audio;
-using Terraria.Localization;
-
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 {
     public class ThunderBall : ModProjectile
     {
-        public override void SetStaticDefaults()
-        {
-            DisplayName.SetDefault("ThunderBall");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "雷暴球");
-        }
         public override void SetDefaults()
         {
             Projectile.width = 12;
@@ -18,17 +11,22 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
             Projectile.aiStyle = -1;
             Projectile.friendly = true;
             Projectile.DamageType = DamageClass.Magic;
-            Projectile.hostile = false;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = true;
             Projectile.timeLeft = 180;
             Projectile.alpha = 0;
             Projectile.penetrate = 4;
-            Projectile.scale = 1;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 60;
         }
-        int Tokill = -1;
+        internal int Tokill = -1;
+        internal bool[] HasBeenHit = new bool[200];
+        internal int[] HasCool = new int[200];
+        internal int[] coolingHit = new int[200];
+        internal int TotalPower = 10;
+        internal int addi = 0;
+        private bool Nul = false;
+        private Vector2[] vdp = new Vector2[65];
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             Projectile.penetrate--;
@@ -73,11 +71,6 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
                 Main.dust[num25].noGravity = false;
             }
         }
-        bool[] HasBeenHit = new bool[200];
-        int[] HasCool = new int[200];
-        int[] coolingHit = new int[200];
-        int TotalPower = 10;
-        int addi = 0;
         public override void AI()
         {
             addi += 1;
@@ -186,7 +179,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 
             Tokill--;
         }
-        private bool Nul = false;
+
         public override Color? GetAlpha(Color lightColor)
         {
             if (!Nul)
@@ -206,14 +199,10 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
                 return new Color?(new Color((float)Tokill / 45f, (float)Tokill / 45f, (float)Tokill / 45f, 0));
             }
         }
-        private Vector2[] vdp = new Vector2[65];
-        private Effect ef;
+
         public override void PostDraw(Color lightColor)
         {
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             List<Vertex2D> bars = new List<Vertex2D>();
-            ef = (Effect)ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/Trail2").Value;
             for (int i = 1; i < Projectile.oldPos.Length; ++i)
             {
                 int g = (i + 1080 - Projectile.timeLeft) % 60;
@@ -245,18 +234,19 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
                 normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
 
                 var factor = i / (float)Projectile.oldPos.Length;
-                var color = Color.Lerp(Color.White, Color.Red, factor);
+                var color = Color.Lerp(Color.White, Color.Transparent, factor);
+                color.A = 0;
                 var w = MathHelper.Lerp(1f, 0.05f, factor);
 
                 if (i != 1)
                 {
-                    bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(6, 6) + vdp[g], color, new Vector3((float)Math.Sqrt(factor), 1, w)));
-                    bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(6, 6) + vdp[g], color, new Vector3((float)Math.Sqrt(factor), 0, w)));
+                    bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(6, 6) + vdp[g] - Main.screenPosition, color, new Vector3((float)Math.Sqrt(factor), 1, w)));
+                    bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(6, 6) + vdp[g] - Main.screenPosition, color, new Vector3((float)Math.Sqrt(factor), 0, w)));
                 }
                 else
                 {
-                    bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(6, 6), color, new Vector3((float)Math.Sqrt(factor), 1, w)));
-                    bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(6, 6), color, new Vector3((float)Math.Sqrt(factor), 0, w)));
+                    bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(6, 6) - Main.screenPosition, color, new Vector3((float)Math.Sqrt(factor), 1, w)));
+                    bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(6, 6) - Main.screenPosition, color, new Vector3((float)Math.Sqrt(factor), 0, w)));
                 }
             }
             List<Vertex2D> triangleList = new List<Vertex2D>();
@@ -277,21 +267,10 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
                     triangleList.Add(bars[i + 3]);
                 }
                 RasterizerState originalState = Main.graphics.GraphicsDevice.RasterizerState;
-                var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-                var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
-                ef.Parameters["uTransform"].SetValue(model * projection);
-                ef.Parameters["uTime"].SetValue(-(float)Main.time * 0.03f);
-                Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/heatmapBlue").Value;
-                Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/DarkGrey").Value;
-                Main.graphics.GraphicsDevice.Textures[2] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/ElecLine").Value;
-                Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
-                Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
-                Main.graphics.GraphicsDevice.SamplerStates[2] = SamplerState.PointWrap;
-                ef.CurrentTechnique.Passes[0].Apply();
+                Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/ElecLine").Value;
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList.ToArray(), 0, triangleList.Count / 3);
                 Main.graphics.GraphicsDevice.RasterizerState = originalState;
-                Main.spriteBatch.End();
-                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
             }
         }
     }

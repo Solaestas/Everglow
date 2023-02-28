@@ -1,7 +1,6 @@
-﻿//using MythMod.Visuals;
-//using MythMod.Visuals.FlameDust;
-using Terraria.DataStructures;
+﻿using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
+using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
 {
@@ -9,12 +8,6 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
     {
         public override void SetStaticDefaults()
         {
-            /*DisplayName.SetDefault("Book of Flaming Feather");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "烈焰羽箭");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Russian, "Книга пылающего пера");
-            Tooltip.SetDefault("Shoots explosive feathers");
-            Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "射出爆燃羽毛");
-            Tooltip.AddTranslation((int)GameCulture.CultureName.Russian, "Стреляет взрывными перьями");*/
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
@@ -40,25 +33,24 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
         }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            /*Vector2 v = velocity;
+            Vector2 v = velocity;
             for (int k = 0; k < 3; k++)
             {
                 Vector2 v2 = v.RotatedBy(Main.rand.NextFloat(-0.42f, 0.42f)) * Main.rand.NextFloat(0.9f, 1.1f);
                 int u = Projectile.NewProjectile(source, position + velocity * 2f, v2,type,damage, knockback, player.whoAmI, Item.crit + player.GetCritChance(DamageClass.Magic));
                 Main.projectile[u].hostile = false;
                 Main.projectile[u].friendly = true;
-            }*/
+            }
             //VisualSystem.CreatVisual(new NormalFlameDust(position, velocity, 120)); //VisualSystem for Myth Content is Not Implemented
 
             return false;
         }
-        // Please see Content/ExampleRecipes.cs for a detailed explanation of recipe creation.
         public override void AddRecipes()
         {
             CreateRecipe()
                 .AddIngredient<FeatherMagic>()
-                .AddIngredient(1518, 3)
-                .AddTile(125)
+                .AddIngredient(ItemID.FireFeather, 3)
+                .AddTile(TileID.CrystalBall)
                 .Register();
         }
     }

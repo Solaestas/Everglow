@@ -1,4 +1,5 @@
 ﻿using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Sources.Modules.MythModule.Common;
 
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
 {
@@ -178,18 +179,13 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
         public override void Kill(int timeLeft)
         {
         }
-        //private int DelOme = 0;
-        private Effect ef;
-        private Effect ef2;
+
         public override void PostDraw(Color lightColor)
         {
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
             List<Vertex2D> bart = new List<Vertex2D>();
-            ef2 = (Effect)ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/TrailY").Value;
-            double ox1 = Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
-            double ox2 = Math.Atan2(Projectile.oldVelocity.Y, Projectile.oldVelocity.X);
-            double omegb = Math.Abs(ox2 - ox1) % MathHelper.TwoPi;
+            Effect ef2 = MythContent.QuickEffect("Effects/Trail");
             int widti = 70;
             if (ExtraKnife)
             {
@@ -286,16 +282,11 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
                 ef2.CurrentTechnique.Passes[0].Apply();
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleLisu.ToArray(), 0, triangleLisu.Count / 3);
                 Main.graphics.GraphicsDevice.RasterizerState = originalState;
-                Main.spriteBatch.End();
-                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             }
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
             List<Vertex2D> bars = new List<Vertex2D>();
-            ef = (Effect)ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/TrailTuskRush").Value;
-            double o1 = Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
-            double o2 = Math.Atan2(Projectile.oldVelocity.Y, Projectile.oldVelocity.X);
-            double omega = Math.Abs(o2 - o1) % MathHelper.TwoPi;
+            Effect ef = MythContent.QuickEffect("Effects/Trail");
             int width = 70;
             if (ExtraKnife)
             {
@@ -380,9 +371,9 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
                 ef.CurrentTechnique.Passes[0].Apply();
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList.ToArray(), 0, triangleList.Count / 3);
                 Main.graphics.GraphicsDevice.RasterizerState = originalState;
-                Main.spriteBatch.End();
-                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             }
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
         }
     }
 }

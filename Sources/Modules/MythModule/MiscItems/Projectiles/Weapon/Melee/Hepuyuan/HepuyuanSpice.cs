@@ -8,18 +8,11 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
         {
             Projectile.width = 100;
             Projectile.height = 180;
-            Projectile.aiStyle = -1;
             Projectile.friendly = true;
-            Projectile.hostile = false;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
             Projectile.timeLeft = 80;
-            Projectile.alpha = 0;
             Projectile.penetrate = -1;
-            Projectile.scale = 1f;
-            ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
-            Projectile.extraUpdates = 1;
         }
 
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
@@ -29,96 +22,49 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
 
         public override bool PreDraw(ref Color lightColor)
         {
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            for (int p = 0; p < Main.projectile.Length; p++)
+            Player player = Main.player[Projectile.owner];
+            List<Vertex2D> Vx = new List<Vertex2D>();
+            Vector2 Vbase = Projectile.Center - Main.screenPosition + new Vector2(0, 24 * player.gravDir);
+            Vector2 v0 = new Vector2(0, -1);
+            Vector2 v0T = new Vector2(1, 0);
+            float length = Projectile.ai[0];
+            v0 = v0 * length * Math.Clamp((80 - Projectile.timeLeft) / 12f, 0, 1f);
+            v0T = v0T * 77.77f;
+            v0 = v0.RotatedBy(Projectile.rotation);
+            v0T = v0T.RotatedBy(Projectile.rotation);
+
+            Color ct = Lighting.GetColor((int)(Projectile.Center.X) / 16, (int)(Projectile.Center.Y) / 16);
+            ct.A = 180;
+            Color cp = new Color(200, 200, 200, 0);
+            float fadeK = Math.Clamp((Projectile.timeLeft - 10) / 24f, 0, 1f);
+            float fadeG = Math.Clamp((Projectile.timeLeft - 10) / 24f + 0.12f, 0, 1f);
+
+            Vx.Add(new Vertex2D(Vbase + v0 * 2, cp, new Vector3(1, 0, 0)));
+            Vx.Add(new Vertex2D(Vbase + (v0 + v0T) * fadeG + (v0 * 2) * (1 - fadeG), cp, new Vector3(1, fadeG, 0)));
+            Vx.Add(new Vertex2D(Vbase + (v0 * 2) * (1 - fadeG), cp, new Vector3(1 - fadeG, fadeG, 0)));
+
+            Vx.Add(new Vertex2D(Vbase + v0 * 2, cp, new Vector3(1, 0, 0)));
+            Vx.Add(new Vertex2D(Vbase + (v0 * 2) * (1 - fadeG), cp, new Vector3(1 - fadeG, fadeG, 0)));
+            Vx.Add(new Vertex2D(Vbase + (v0 - v0T) * fadeG + (v0 * 2) * (1 - fadeG), cp, new Vector3(1 - fadeG, 0, 0)));
+
+            if(Projectile.Center.X > player.Center.X)
             {
-                if (Main.projectile[p].type == ModContent.ProjectileType<HepuyuanShake>())
-                {
-
-                    List<Vertex2D> Vx = new List<Vertex2D>();
-                    Vector2 Vbase = Main.projectile[p].Center - Main.screenPosition + new Vector2(0, 24);
-                    Vector2 v0 = new Vector2(0, -1);
-                    Vector2 v0T = new Vector2(1, 0);
-                    float length = Main.projectile[p].ai[0];
-                    v0 = v0 * length * Math.Clamp((80 - Main.projectile[p].timeLeft) / 24f, 0, 1f);
-                    v0T = v0T * 77.77f * Main.projectile[p].timeLeft / 120f;
-                    v0 = v0.RotatedBy(Main.projectile[p].rotation);
-                    v0T = v0T.RotatedBy(Main.projectile[p].rotation);
-
-                    Color cr = new Color(0.0f, 0.17f, 0.17f, 0);
-                    float fadeK = Math.Clamp((Main.projectile[p].timeLeft - 10) / 24f, 0, 1f);
-
-                    Vx.Add(new Vertex2D(Vbase + v0 * 2, cr, new Vector3(1, 0, 0)));
-                    Vx.Add(new Vertex2D(Vbase + (v0 + v0T) * fadeK + (v0 * 2) * (1 - fadeK), cr, new Vector3(1, fadeK, 0)));
-                    Vx.Add(new Vertex2D(Vbase + (v0 * 2) * (1 - fadeK), cr, new Vector3(1 - fadeK, fadeK, 0)));
-
-                    Vx.Add(new Vertex2D(Vbase + v0 * 2, cr, new Vector3(1, 0, 0)));
-                    Vx.Add(new Vertex2D(Vbase + (v0 - v0T) * fadeK + (v0 * 2) * (1 - fadeK), cr, new Vector3(1 - fadeK, 0, 0)));
-                    Vx.Add(new Vertex2D(Vbase + (v0 * 2) * (1 - fadeK), cr, new Vector3(1 - fadeK, fadeK, 0)));
-
-                    Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Projectiles/Weapon/Melee/Hepuyuan/HepuyuanShake").Value;
-
-                    Main.graphics.GraphicsDevice.Textures[0] = t;
-                    Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
-
-                }
-                if (Main.projectile[p].type == ModContent.ProjectileType<HepuyuanSpice>())
-                {
-                    List<Vertex2D> Vx = new List<Vertex2D>();
-                    Vector2 Vbase = Main.projectile[p].Center - Main.screenPosition + new Vector2(0, 24);
-                    Vector2 v0 = new Vector2(0, -1);
-                    Vector2 v0T = new Vector2(1, 0);
-                    float length = Main.projectile[p].ai[0];
-                    v0 = v0 * length * Math.Clamp((80 - Main.projectile[p].timeLeft) / 12f, 0, 1f);
-                    v0T = v0T * 77.77f;
-                    v0 = v0.RotatedBy(Main.projectile[p].rotation);
-                    v0T = v0T.RotatedBy(Main.projectile[p].rotation);
-
-                    float Stre = Math.Clamp((Main.projectile[p].timeLeft - 40) / 40f, 0f, 1f);
-                    Color cr = new Color(Stre, Stre, Stre, 0);
-                    Color ct = Lighting.GetColor((int)(Main.projectile[p].Center.X) / 16, (int)(Main.projectile[p].Center.Y) / 16);
-                    Color cp = new Color(200, 200, 200, 0);
-                    float fadeK = Math.Clamp((Main.projectile[p].timeLeft - 10) / 24f, 0, 1f);
-                    float fadeG = Math.Clamp((Main.projectile[p].timeLeft - 10) / 24f + 0.12f, 0, 1f);
-
-                    Vx.Add(new Vertex2D(Vbase + v0 * 2, cp, new Vector3(1, 0, 0)));
-                    Vx.Add(new Vertex2D(Vbase + (v0 + v0T) * fadeG + (v0 * 2) * (1 - fadeG), cp, new Vector3(1, fadeG, 0)));
-                    Vx.Add(new Vertex2D(Vbase + (v0 * 2) * (1 - fadeG), cp, new Vector3(1 - fadeG, fadeG, 0)));
-
-                    Vx.Add(new Vertex2D(Vbase + v0 * 2, cp, new Vector3(1, 0, 0)));
-                    Vx.Add(new Vertex2D(Vbase + (v0 - v0T) * fadeG + (v0 * 2) * (1 - fadeG), cp, new Vector3(1 - fadeG, 0, 0)));
-                    Vx.Add(new Vertex2D(Vbase + (v0 * 2) * (1 - fadeG), cp, new Vector3(1 - fadeG, fadeG, 0)));
-
-                    Vx.Add(new Vertex2D(Vbase + v0 * 2, ct, new Vector3(1, 0, 0)));
-                    Vx.Add(new Vertex2D(Vbase + (v0 + v0T) * fadeK + (v0 * 2) * (1 - fadeK), ct, new Vector3(1, fadeK, 0)));
-                    Vx.Add(new Vertex2D(Vbase + (v0 * 2) * (1 - fadeK), ct, new Vector3(1 - fadeK, fadeK, 0)));
-
-                    Vx.Add(new Vertex2D(Vbase + v0 * 2, ct, new Vector3(1, 0, 0)));
-                    Vx.Add(new Vertex2D(Vbase + (v0 - v0T) * fadeK + (v0 * 2) * (1 - fadeK), ct, new Vector3(1 - fadeK, 0, 0)));
-                    Vx.Add(new Vertex2D(Vbase + (v0 * 2) * (1 - fadeK), ct, new Vector3(1 - fadeK, fadeK, 0)));
-
-                    Vx.Add(new Vertex2D(Vbase + v0 * 2, cr, new Vector3(1, 0, 0)));
-                    Vx.Add(new Vertex2D(Vbase + (v0 + v0T) * fadeK + (v0 * 2) * (1 - fadeK), cr, new Vector3(1, fadeK, 0)));
-                    Vx.Add(new Vertex2D(Vbase + (v0 * 2) * (1 - fadeK), cr, new Vector3(1 - fadeK, fadeK, 0)));
-
-                    Vx.Add(new Vertex2D(Vbase + v0 * 2, cr, new Vector3(1, 0, 0)));
-                    Vx.Add(new Vertex2D(Vbase + (v0 - v0T) * fadeK + (v0 * 2) * (1 - fadeK), cr, new Vector3(1 - fadeK, 0, 0)));
-                    Vx.Add(new Vertex2D(Vbase + (v0 * 2) * (1 - fadeK), cr, new Vector3(1 - fadeK, fadeK, 0)));
-
-
-                    Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Projectiles/Weapon/Melee/Hepuyuan/HepuyuanSpice").Value;
-                    Main.graphics.GraphicsDevice.Textures[0] = t;
-                    Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
-
-                }
-                Main.spriteBatch.End();
-                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+                Vx.Add(new Vertex2D(Vbase + v0 * 2, ct, new Vector3(1, 0, 0)));
+                Vx.Add(new Vertex2D(Vbase + (v0 * 2) * (1 - fadeK), ct, new Vector3(1 - fadeK, fadeK, 0)));
+                Vx.Add(new Vertex2D(Vbase + (v0 - v0T) * fadeK + (v0 * 2) * (1 - fadeK), ct, new Vector3(1 - fadeK, 0, 0)));
             }
+            else
+            {
+                Vx.Add(new Vertex2D(Vbase + v0 * 2, ct, new Vector3(1, 0, 0)));
+                Vx.Add(new Vertex2D(Vbase + (v0 + v0T) * fadeK + (v0 * 2) * (1 - fadeK), ct, new Vector3(1, fadeK, 0)));
+                Vx.Add(new Vertex2D(Vbase + (v0 * 2) * (1 - fadeK), ct, new Vector3(1 - fadeK, fadeK, 0)));
+            }
+
+            Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Projectiles/Weapon/Melee/Hepuyuan/HepuyuanSpice").Value;
+            Main.graphics.GraphicsDevice.Textures[0] = t;
+            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
             return false;
         }
-
-
         public override void AI()
         {
             if (Projectile.timeLeft <= 78)

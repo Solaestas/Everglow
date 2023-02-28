@@ -52,7 +52,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
             Effect ef = MythContent.QuickEffect("Effects/FadeCurseGreen");
 
             Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
             float widx = Projectile.timeLeft / 120f;
             float widxM = 1f - widx;

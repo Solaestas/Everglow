@@ -93,27 +93,27 @@ namespace Everglow.Sources.Modules.MythModule.Common
 			}
 			return true;
 		}
-		public override void HitEffect(NPC npc, int hitDirection, double damage)
-		{
-			if (npc.life < 0)
-			{
-				LaserMark[npc.whoAmI] = 0;
-			}
-			if (LaserMark[npc.whoAmI] != 0 && LaserMark[npc.whoAmI] < 175)
-			{
-				SoundEngine.PlaySound(SoundID.Item33, npc.Center);
-				Vector2 v = new Vector2(0, 50).RotatedBy(Math.PI * 2);
-				int num2 = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, v, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.LaserWorm>(), (int)damage, 0.2f, Main.LocalPlayer.whoAmI, Main.LocalPlayer.GetCritChance(DamageClass.Summon), (float)damage);
-				Main.projectile[num2].timeLeft = 90;
-				LaserMark[npc.whoAmI] = 0;
-				for (int z = 0; z < 40; z++)
-				{
-					Vector2 v4 = new Vector2(0, Main.rand.NextFloat(0.15f, 5.05f)).RotatedByRandom(MathHelper.TwoPi);
-					int h = Dust.NewDust(npc.Center, 0, 0, 182, v4.X, v4.Y, 0, default(Color), Main.rand.NextFloat(1.5f, 3f));
-					Main.dust[h].noGravity = true;
-				}
-			}
-		}
+		//public override void HitEffect(NPC npc, int hitDirection, double damage)
+		//{
+		//	if (npc.life < 0)
+		//	{
+		//		LaserMark[npc.whoAmI] = 0;
+		//	}
+		//	if (LaserMark[npc.whoAmI] != 0 && LaserMark[npc.whoAmI] < 175)
+		//	{
+		//		SoundEngine.PlaySound(SoundID.Item33, npc.Center);
+		//		Vector2 v = new Vector2(0, 50).RotatedBy(Math.PI * 2);
+		//		int num2 = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, v, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.LaserWorm>(), (int)damage, 0.2f, Main.LocalPlayer.whoAmI, Main.LocalPlayer.GetCritChance(DamageClass.Summon), (float)damage);
+		//		Main.projectile[num2].timeLeft = 90;
+		//		LaserMark[npc.whoAmI] = 0;
+		//		for (int z = 0; z < 40; z++)
+		//		{
+		//			Vector2 v4 = new Vector2(0, Main.rand.NextFloat(0.15f, 5.05f)).RotatedByRandom(MathHelper.TwoPi);
+		//			int h = Dust.NewDust(npc.Center, 0, 0, 182, v4.X, v4.Y, 0, default(Color), Main.rand.NextFloat(1.5f, 3f));
+		//			Main.dust[h].noGravity = true;
+		//		}
+		//	}
+		//}
 		public override void UpdateLifeRegen(NPC npc, ref int damage)
 		{
 			if (npc.HasBuff(ModContent.BuffType<Freeze2>()) && !npc.HasBuff(ModContent.BuffType<Freeze>()))

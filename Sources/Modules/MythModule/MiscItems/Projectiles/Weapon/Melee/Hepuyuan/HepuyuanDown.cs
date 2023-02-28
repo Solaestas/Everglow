@@ -1,6 +1,5 @@
 ﻿using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Modules.MythModule.LanternMoon.Gores;
 using Terraria.Audio;
 using Everglow.Sources.Modules.MythModule.MiscItems.Gores;
 using Everglow.Sources.Modules.MEACModule;
@@ -73,7 +72,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
             {
                 if (Collision.SolidCollision(player.Top, 1, 1))
                 {
-                    player.position.Y -= 64;
+                    player.position.Y -= 64 * player.gravDir;
                 }
             }
             float halfDuration = duration * 0.5f;
@@ -84,14 +83,6 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
             }
 
             Projectile.velocity *= 0.995f;
-            if (Projectile.spriteDirection == -1)
-            {
-                Projectile.rotation += MathHelper.ToRadians(45f);
-            }
-            else
-            {
-                Projectile.rotation += MathHelper.ToRadians(135f);
-            }
 
             if (Collision.SolidCollision(Projectile.Center + Projectile.velocity, 1, 1))
             {
@@ -119,15 +110,16 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
                     {
                         Vector2 v0 = new Vector2(Main.rand.NextFloat(0.8f, 3f), 0).RotatedByRandom(6.28);
                         float Dx = Main.rand.NextFloat(-250f, 250f);
-                        Vector2 Pos = OldplCen[0] + new Vector2(Dx, 40 + Main.rand.NextFloat(-10f, 10f));
+                        Vector2 Pos = OldplCen[0] + new Vector2(Dx, (40 + Main.rand.NextFloat(-10f, 10f)) * player.gravDir);
                         for (int i = 0; i < 5; i++)
                         {
                             if (Collision.SolidCollision(Pos, 1, 1))
                             {
-                                Pos.Y -= 16;
+                                Pos.Y -= 16 * player.gravDir;
                             }
                         }
                         Vector2 Dy = v0 + new Vector2(0, Main.rand.NextFloat(Math.Abs(Dx) - 278, 0) / 12f);
+                        Dy.Y *= player.gravDir;
                         if (Main.rand.NextBool(2))
                         {
                             Gore g = Gore.NewGoreDirect(null, Pos, Dy * 2f, ModContent.GoreType<XiaoDash0>(), Main.rand.NextFloat(1f, 4.5f));
@@ -143,44 +135,81 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
                     {
                         Vector2 v0 = new Vector2(Main.rand.NextFloat(0.8f, 3f), 0).RotatedByRandom(6.28);
                         float Dx = Main.rand.NextFloat(-350f, 350f);
-                        Vector2 Pos = OldplCen[0] + new Vector2(Dx, 40 + Main.rand.NextFloat(-10f, 10f));
+                        Vector2 Pos = OldplCen[0] + new Vector2(Dx, (40 + Main.rand.NextFloat(-10f, 10f)) * player.gravDir);
                         for (int i = 0; i < 5; i++)
                         {
                             if (Collision.SolidCollision(Pos, 1, 1))
                             {
-                                Pos.Y -= 16;
+                                Pos.Y -= 16 * player.gravDir;
                             }
                         }
                         Vector2 Dy = v0 + new Vector2(0, Main.rand.NextFloat(Math.Abs(Dx) - 278, 0) / 12f);
+                        Dy.Y *= player.gravDir;
                         Vector2 v2 = new Vector2(Main.rand.NextFloat(30f), 0).RotatedByRandom(6.28);
                         Dust.NewDust(Pos - new Vector2(4) + v2, 1, 1, Main.rand.NextBool(2) ? ModContent.DustType<MiscItems.Dusts.XiaoDustCyan>() : ModContent.DustType<MiscItems.Dusts.XiaoDust>(), Dy.X * 2f, Dy.Y * 2f, 0, default, Main.rand.NextFloat(0.85f, Main.rand.NextFloat(0.85f, 5.75f)));
                     }
                     for (int f = 0; f < 8; f++)
                     {
-                        Vector2 Pos = Projectile.Center + new Vector2((f - 3.5f) * 80, -300);
+                        Vector2 Pos = Projectile.Center + new Vector2((f - 3.5f) * 80, -300 * player.gravDir);
+                        bool empty = false;
                         for (int i = 0; i < 75; i++)
                         {
                             if (!Collision.SolidCollision(Pos, 1, 1))
                             {
-                                Pos.Y += 8;
+                                Pos.Y += 8 * player.gravDir;
+                                empty = true;
+                            }
+                            else
+                            {
+                                empty = false;
                             }
                         }
+                        if (empty)
+                        {
+                            continue;
+                        }
                         int h = Projectile.NewProjectile(Projectile.InheritSource(Projectile), Pos, Vector2.Zero, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Melee.Hepuyuan.HepuyuanSpice>(), Projectile.damage, Projectile.knockBack, player.whoAmI, Main.rand.NextFloat(50f, 110f), 0);
-                        Main.projectile[h].rotation = Main.rand.NextFloat((f - 3.5f) / 15f - 0.3f, (f - 3.5f) / 15f + 0.3f);
+                        if(player.gravDir == 1)
+                        {
+                            Main.projectile[h].rotation = Main.rand.NextFloat((f - 3.5f) / 15f - 0.3f, (f - 3.5f) / 15f + 0.3f);
+                        }
+                        else
+                        {
+                            Main.projectile[h].rotation = MathF.PI - Main.rand.NextFloat((f - 3.5f) / 15f - 0.3f, (f - 3.5f) / 15f + 0.3f);
+                        }
                     }
 
                     for (int f = 0; f < 12; f++)
                     {
-                        Vector2 Pos = Projectile.Center + new Vector2((f - 5.5f) * 50, -300);
+                        Vector2 Pos = Projectile.Center + new Vector2((f - 5.5f) * 50, -300 * player.gravDir);
+                        bool empty = false;
                         for (int i = 0; i < 75; i++)
                         {
                             if (!Collision.SolidCollision(Pos, 1, 1))
                             {
-                                Pos.Y += 8;
+                                Pos.Y += 8 * player.gravDir;
+                                empty = true;
+                            }
+                            else
+                            {
+                                empty = false;
                             }
                         }
+                        if(empty)
+                        {
+                            continue;
+                        }
                         int h = Projectile.NewProjectile(Projectile.InheritSource(Projectile), Pos, Vector2.Zero, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Melee.Hepuyuan.HepuyuanShake>(), 0, Projectile.knockBack, player.whoAmI, Main.rand.NextFloat(17f, 32f) * (Math.Abs(f - 5.5f) + 0.5f), 0);
-                        Main.projectile[h].rotation = Main.rand.NextFloat((f - 5.5f) / 15f - 0.1f + Math.Sign(f - 5.5f) * 0.75f, (f - 5.5f) / 15f + 0.1f + Math.Sign(f - 5.5f) * 0.75f);
+
+
+                        if (player.gravDir == 1)
+                        {
+                            Main.projectile[h].rotation = Main.rand.NextFloat((f - 5.5f) / 15f - 0.1f + Math.Sign(f - 5.5f) * 0.75f, (f - 5.5f) / 15f + 0.1f + Math.Sign(f - 5.5f) * 0.75f);
+                        }
+                        else
+                        {
+                            Main.projectile[h].rotation = MathF.PI - Main.rand.NextFloat((f - 5.5f) / 15f - 0.1f + Math.Sign(f - 5.5f) * 0.75f, (f - 5.5f) / 15f + 0.1f + Math.Sign(f - 5.5f) * 0.75f);
+                        }
                     }
                     ScreenShaker mplayer = Main.player[Terraria.Main.myPlayer].GetModPlayer<ScreenShaker>();
 					mplayer.FlyCamPosition = new Vector2(0, 84).RotatedByRandom(6.283);
@@ -281,7 +310,6 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
 
             for (int d = 0; d < 4; d++)
             {
-
                 List<Vertex2D> VxII = new List<Vertex2D>();
                 List<Vertex2D> barsII = new List<Vertex2D>();
                 Vector2 deltaPos = new Vector2(0, 24).RotatedBy(d / 2d * Math.PI + Main.time / 32d);
@@ -333,20 +361,15 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
                         VxII.Add(barsII[i + 3]);
                     }
                 }
-
                 RasterizerState originalState = Main.graphics.GraphicsDevice.RasterizerState;
-
                 Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("UIimages/VisualTextures/EShoot");
-
-
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, VxII.ToArray(), 0, VxII.Count / 3);
-
                 Main.graphics.GraphicsDevice.RasterizerState = originalState;
-
             }
         }
         public override bool PreDraw(ref Color lightColor)
         {
+            Player player = Main.player[Projectile.owner];
             if (FirstVel == Vector2.Zero)
             {
                 FirstVel = Vector2.Normalize(Projectile.velocity);
@@ -354,8 +377,6 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
             Vector2 FlipVel = FirstVel.RotatedBy(Math.PI / 2d);
             for (int d = 0; d < 7; d++)
             {
-                Main.spriteBatch.End();
-                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
                 List<Vertex2D> VxII = new List<Vertex2D>();
                 List<Vertex2D> barsII = new List<Vertex2D>();
                 Vector2 deltaPos = new Vector2(0, 24).RotatedBy(d / 3d * Math.PI + Main.time / 7d);
@@ -402,11 +423,10 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
                 }
                 Main.graphics.GraphicsDevice.Textures[0] = t0;
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, VxII.ToArray(), 0, VxII.Count / 3);
-                Main.spriteBatch.End();
-                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
             }
-
-            return true;
+            Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+            Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition - new Vector2(0, player.gravDir * 140f), null, lightColor, player.gravDir == 1 ? MathF.PI * 1.25f : MathF.PI * 0.25f, texture.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
+            return false;
         }
         public static int CyanStrike = 0;
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)

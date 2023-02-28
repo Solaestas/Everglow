@@ -30,6 +30,11 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
         {
             Player player = Main.player[Projectile.owner];
             OldplCen[0] = Projectile.Center - Vector2.Normalize(Projectile.velocity) * 15f;//记录位置
+            for (int f = OldplCen.Length - 1; f > 0; f--)
+            {
+                OldplCen[f] = OldplCen[f - 1];
+            }
+
             for (int i = 0; i < 1; i++)
             {
                 Vector2 v1 = new Vector2(Main.rand.NextFloat(0.8f, 10f), 0).RotatedByRandom(6.28);
@@ -61,10 +66,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
                 int h = Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Melee.Hepuyuan.XiaoBlackWave>(), 0, 0, player.whoAmI, Math.Clamp(Projectile.velocity.Length() / 8f, 0f, 4f), 0);
                 Main.projectile[h].rotation = (float)(Math.Atan2(v.Y, v.X) + Math.PI / 2d);
             }
-            for (int f = OldplCen.Length - 1; f > 0; f--)
-            {
-                OldplCen[f] = OldplCen[f - 1];
-            }
+
             wid[0] = Math.Clamp(Projectile.velocity.Length() / 6f, 0, 60);//宽度
             for (int f = wid.Length - 1; f > 0; f--)
             {
@@ -209,8 +211,6 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
 
             for (int d = 0; d < 4; d++)
             {
-                Main.spriteBatch.End();
-                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
                 List<Vertex2D> VxII = new List<Vertex2D>();
                 List<Vertex2D> barsII = new List<Vertex2D>();
                 Vector2 deltaPos = new Vector2(0, 24).RotatedBy(d / 2d * Math.PI + Main.time / 32d);
@@ -265,17 +265,12 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
                 }
 
                 RasterizerState originalState = Main.graphics.GraphicsDevice.RasterizerState;
-                var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-                var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
-
                 Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("UIimages/VisualTextures/EShoot");
 
 
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, VxII.ToArray(), 0, VxII.Count / 3);
 
                 Main.graphics.GraphicsDevice.RasterizerState = originalState;
-                Main.spriteBatch.End();
-                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             }
         }
         public override bool PreDraw(ref Color lightColor)
@@ -296,8 +291,6 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
             Vector2 FlipVel = FirstVel.RotatedBy(Math.PI / 2d);
             for (int d = 0; d < 7; d++)
             {
-                Main.spriteBatch.End();
-                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
                 List<Vertex2D> VxII = new List<Vertex2D>();
                 List<Vertex2D> barsII = new List<Vertex2D>();
                 Vector2 deltaPos = new Vector2(0, 24).RotatedBy(d / 3d * Math.PI + Main.time / 7d);
@@ -352,8 +345,6 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
                 }
                 Main.graphics.GraphicsDevice.Textures[0] = t0;
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, VxII.ToArray(), 0, VxII.Count / 3);
-                Main.spriteBatch.End();
-                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
             }
             return true;
         }

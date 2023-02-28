@@ -146,7 +146,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Typeless.Fix
             for (int j = 0; j < 3; j++)
             {
                 Main.spriteBatch.End();
-                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
                 List<VertexBase.CustomVertexInfo> bars = new List<VertexBase.CustomVertexInfo>();
                                 ef = Common.MythContent.QuickEffect("Effects/Trail");
                 Player player = Main.player[Projectile.owner];
@@ -191,7 +191,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Typeless.Fix
                     }
                     RasterizerState originalState = Main.graphics.GraphicsDevice.RasterizerState;
                     var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-                    var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
+                    var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
                     ef.Parameters["uTransform"].SetValue(model * projection);
                     ef.Parameters["uTime"].SetValue(-(float)Main.time * 0.03f + Projectile.ai[0]);
                     Texture2D Blue = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/heatmapWhite").Value;
