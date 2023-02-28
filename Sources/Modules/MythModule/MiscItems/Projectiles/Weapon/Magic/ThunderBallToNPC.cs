@@ -6,11 +6,6 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 {
     public class ThunderBallToNPC : ModProjectile
     {
-        public override void SetStaticDefaults()
-        {
-            DisplayName.SetDefault("ThunderBall");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "雷暴球");
-        }
         public override void SetDefaults()
         {
             Projectile.width = 10;
@@ -35,11 +30,9 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
             }
             streng = (int)(Projectile.timeLeft / 30f);
         }
-        private Effect ef;
-        Vector2[,] vP = new Vector2[8, 600];
-        Vector2[,] vvP = new Vector2[8, 600];
-        Vector2[] VagueV = new Vector2[8];
-        int streng = 9;
+        internal Vector2[,] vP = new Vector2[8, 600];
+        internal Vector2[,] vvP = new Vector2[8, 600];
+        internal int streng = 9;
         public override void PostDraw(Color lightColor)
         {
             if (vP[0, 0] == Vector2.Zero)

@@ -1,5 +1,5 @@
-﻿//using Terraria.DataStructures;
-//using Terraria.GameContent.Creative;
+﻿using Terraria.DataStructures;
+using Terraria.GameContent.Creative;
 
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
 {
