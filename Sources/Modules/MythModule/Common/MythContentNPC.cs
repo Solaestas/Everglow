@@ -103,8 +103,6 @@ namespace Everglow.Sources.Modules.MythModule.Common
 			{
 				SoundEngine.PlaySound(SoundID.Item33, npc.Center);
 				Vector2 v = new Vector2(0, 50).RotatedBy(Math.PI * 2);
-				int num2 = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, v, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Legendary.LaserWorm>(), (int)damage, 0.2f, Main.LocalPlayer.whoAmI, Main.LocalPlayer.GetCritChance(DamageClass.Summon), (float)damage);
-				Main.projectile[num2].timeLeft = 90;
 				LaserMark[npc.whoAmI] = 0;
 				for (int z = 0; z < 40; z++)
 				{
