@@ -123,30 +123,43 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
             mplayer.FlyCamPosition = new Vector2(0, 48).RotatedByRandom(6.283);
             SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, Projectile.Center);
-            for (int h = 0; h < 120; h += 3)
+            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BombShakeWave>(), 0, 0, Projectile.owner, 2, 6f);
+            Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BeadShakeWave>(), 0, 0, Projectile.owner, 4f);
+
+            if(Main.masterMode)
             {
-                Vector2 v3 = new Vector2(0, (float)Math.Sin(h * Math.PI / 4d + Projectile.ai[0]) + 5).RotatedBy(h * Math.PI / 10d) * Main.rand.NextFloat(0.2f, 1.1f);
-                int r = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4), 0, 0, ModContent.DustType<Dusts.PureBlue>(), 0, 0, 0, default(Color), 15f * Main.rand.NextFloat(0.7f, 2.9f));
+                for (int h = 0; h < 6; h++)
+                {
+                    Vector2 v0 = new Vector2(0, 8f).RotatedBy(Main.timeForVisualEffects + h / 3d * Math.PI);
+                    Vector2 v1 = new Vector2(0, 8f).RotatedBy(Main.timeForVisualEffects + h / 3d * Math.PI + 0.2);
+                    Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, v0, ModContent.ProjectileType<MissileProjHostile>(), Projectile.damage, 3, Projectile.owner, 4f);
+                    Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, v1, ModContent.ProjectileType<MissileProjHostile>(), Projectile.damage, 3, Projectile.owner, 4f);
+                }
+            }
+            for (int h = 0; h < 200; h += 3)
+            {
+                Vector2 v3 = new Vector2(0, (float)Math.Sin(h * Math.PI / 4d + Projectile.ai[0]) + 5).RotatedBy(h * Math.PI / 10d) * Main.rand.NextFloat(0.8f, 2.4f);
+                int r = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4), 0, 0, ModContent.DustType<Dusts.PureBlue>(), 0, 0, 0, default, 35f * Main.rand.NextFloat(0.7f, 2.9f));
                 Main.dust[r].noGravity = true;
                 Main.dust[r].velocity = v3 * 6;
             }
             for (int y = 0; y < 180; y += 3)
             {
-                int index = Dust.NewDust(Projectile.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(1.3f, 6.2f));
+                int index = Dust.NewDust(Projectile.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(3.3f, 14.2f));
                 Main.dust[index].noGravity = true;
-                Main.dust[index].velocity = new Vector2(Main.rand.NextFloat(0.0f, 4.5f), Main.rand.NextFloat(1.8f, 5.5f)).RotatedByRandom(Math.PI * 2d);
+                Main.dust[index].velocity = new Vector2(Main.rand.NextFloat(0.0f, 37.5f), 0).RotatedByRandom(Math.PI * 2d);
             }
             for (int y = 0; y < 180; y += 3)
             {
-                int index = Dust.NewDust(Projectile.Center + new Vector2(0, Main.rand.NextFloat(2f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(1.3f, 6.2f));
+                int index = Dust.NewDust(Projectile.Center + new Vector2(0, Main.rand.NextFloat(2f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(3.3f, 14.2f));
                 Main.dust[index].noGravity = true;
-                Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(3.0f, 27.5f)).RotatedByRandom(Math.PI * 2d);
+                Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(3.0f, 47.5f)).RotatedByRandom(Math.PI * 2d);
             }
             for (int y = 0; y < 36; y++)
             {
-                int index = Dust.NewDust(Projectile.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(1.3f, 4.2f));
+                int index = Dust.NewDust(Projectile.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(3.3f, 10.2f));
                 Main.dust[index].noGravity = true;
-                Main.dust[index].velocity = new Vector2(Main.rand.NextFloat(0.0f, 2.5f), Main.rand.NextFloat(1.8f, 5.5f)).RotatedByRandom(Math.PI * 2d);
+                Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(1.8f, 13.5f)).RotatedByRandom(Math.PI * 2d);
             }
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
@@ -205,7 +218,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 Main.spriteBatch.Draw(Common.MythContent.QuickTexture("TheFirefly/Projectiles/ButterflyDream"), Projectile.Center + vB[g] * r / 60f - Main.screenPosition, new Rectangle(0, yB[g], 36, 34), new Color(0.2f, 0.5f, 1f, 0), Projectile.rotation, new Vector2(18f, 17f), r / 60f, eff, 0f);
             }
             Texture2D Light = Common.MythContent.QuickTexture("TheFirefly/Projectiles/CorruptLight");
-            Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color((int)(255 * Stre2), (int)(255 * Stre2), (int)(255 * Stre2), 0), Projectile.rotation, new Vector2(168f, 168f), Projectile.scale * 2 * r / 60f, SpriteEffects.None, 0);
+            Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition, null, new Color((int)(255 * Stre2), (int)(255 * Stre2), (int)(255 * Stre2), 0), Projectile.rotation, Light.Size() / 2f, Projectile.scale * 2 * r / 60f, SpriteEffects.None, 0);
+            if (Projectile.timeLeft < 60)
+            {
+                Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 0), Projectile.rotation, Light.Size() / 2f, (60 - Projectile.timeLeft) / 30f, SpriteEffects.None, 0);
+            }
             return false;
         }
     }

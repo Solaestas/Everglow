@@ -3,6 +3,7 @@ using Everglow.Sources.Modules.MythModule;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Everglow.Sources.Modules.MythModule.TheFirefly;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories;
 
 namespace Everglow.Sources.Modules.MEACModule.Projectiles
 {
@@ -26,7 +27,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         }
         public override float TrailAlpha(float factor)
         {
-            return base.TrailAlpha(factor)*1.15f;
+            return base.TrailAlpha(factor) * 1.15f;
         }
         public override BlendState TrailBlendState()
         {
@@ -40,15 +41,6 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         {
             ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
 
-            bool hasMothEye = false;
-            foreach (var item in Player.armor)
-            {
-                if (item.type == ModContent.ItemType<MythModule.TheFirefly.Items.Accessories.MothEye>())
-                {
-                    hasMothEye = true;
-                }
-            }
-
             if (attackType == 100)
             {
                 damage *= 3;
@@ -59,12 +51,6 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                     for (int i = 0; i < counts; i++)
                     {
                         Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center, Main.rand.NextVector2Unit() * Main.rand.Next(6, 13), ModContent.ProjectileType<ButterflyDreamFriendly>(), damage / 4, 0, Main.myPlayer, target.whoAmI);
-                        if (hasMothEye == true && fireflyBiome.IsBiomeActive(Main.LocalPlayer))
-                        {
-                            Projectile proj2 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center, Main.rand.NextVector2Unit() * Main.rand.Next(6, 13), ModContent.ProjectileType<ButterflyDreamFriendly>(), damage / 4, 0, Main.myPlayer, target.whoAmI);
-                            proj2.netUpdate2 = true;
-                            proj2.CritChance = Projectile.CritChance;
-                        }
                         proj.netUpdate2 = true;
                         proj.CritChance = Projectile.CritChance;
                     }
@@ -79,12 +65,6 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                     for (int i = 0; i < counts; i++)
                     {
                         Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center, Main.rand.NextVector2Unit() * Main.rand.Next(6, 13), ModContent.ProjectileType<ButterflyDreamFriendly>(), damage / 4, 0, Main.myPlayer, target.whoAmI);
-                        if (hasMothEye == true && fireflyBiome.IsBiomeActive(Main.LocalPlayer))
-                        {
-                            Projectile proj2 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center, Main.rand.NextVector2Unit() * Main.rand.Next(6, 13), ModContent.ProjectileType<ButterflyDreamFriendly>(), damage / 4, 0, Main.myPlayer, target.whoAmI);
-                            proj2.netUpdate2 = true;
-                            proj2.CritChance = Projectile.CritChance;
-                        }
                         proj.netUpdate2 = true;
                         proj.CritChance = Projectile.CritChance;
 
@@ -114,18 +94,9 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             useTrail = true;
             float timeMul = 1f - GetMeleeSpeed(player) / 100f;
 
-            bool hasMothEye = false;
-            foreach (var item in Player.armor)
-            {
-                if (item.type == ModContent.ItemType<MythModule.TheFirefly.Items.Accessories.MothEye>())
-                {
-                    hasMothEye = true;
-                }
-            }
-
             Vector2 vToMouse = Main.MouseWorld - player.Top;
             float AddHeadRotation = (float)Math.Atan2(vToMouse.Y, vToMouse.X) + (1 - player.direction) * 1.57f;
-            if(player.gravDir == -1)
+            if (player.gravDir == -1)
             {
                 if (player.direction == -1)
                 {
@@ -295,12 +266,6 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                             {
                                 Vector2 vel = new Vector2(Projectile.spriteDirection * 10, 0);
                                 Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + vel, vel + Main.rand.NextVector2Unit() * 5, ModContent.ProjectileType<ButterflyDreamFriendly>(), Projectile.damage / 2, 0, Main.myPlayer, target.whoAmI);
-                                if (hasMothEye == true && fireflyBiome.IsBiomeActive(Main.LocalPlayer))
-                                {
-                                    Projectile proj2 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + vel, vel + Main.rand.NextVector2Unit() * 5, ModContent.ProjectileType<ButterflyDreamFriendly>(), Projectile.damage / 2, 0, Main.myPlayer, target.whoAmI);
-                                    proj2.netUpdate2 = true;
-                                    proj2.CritChance = Projectile.CritChance;
-                                }
                                 proj.netUpdate2 = true;
                                 proj.CritChance = Projectile.CritChance;
                             }
@@ -315,7 +280,7 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
             }
             if (attackType == 100)//右键攻击
             {
-                float BodyRotation = 0;
+                float BodyRotation;
                 if (timer < 60)
                 {
                     CanIgnoreTile = true;
@@ -381,22 +346,14 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                         mainVec = Vector2Elipse(220, Projectile.rotation, -1.2f, Projectile.ai[0], 1000);
                         Projectile.rotation += Projectile.spriteDirection * 0.42f;
                     }
-                    if (timer == 115)
-                    {
-                        Projectile.friendly = false;
-                    }
-                    if (timer > 125)
-                    {
-                        CanIgnoreTile = false;
-                        End();
-                    }
+
                     BodyRotation = (float)(Math.Sin((timer - 114.514) / 18d * Math.PI)) * 0.7f * player.direction * player.gravDir;
 
                 }
                 else
                 {
                     Vector2 ToMouseWorld = Main.MouseWorld - player.Top;
-                    float HeadRot = (float)Math.Atan2(ToMouseWorld.Y, ToMouseWorld.X) + (float)(Math.PI * 0.5 * (1-player.direction));
+                    float HeadRot = (float)Math.Atan2(ToMouseWorld.Y, ToMouseWorld.X) + (float)(Math.PI * 0.5 * (1 - player.direction));
                     BodyRotation = -timer * player.direction * 0.003f * player.gravDir;
                 }
                 player.fullRotation = BodyRotation;
@@ -404,17 +361,18 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                 player.legRotation = -BodyRotation;
                 player.legPosition = (new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height) - player.fullRotationOrigin).RotatedBy(-BodyRotation);
                 Tplayer.HeadRotation = -BodyRotation + AddHeadRotation;
+
+                if (timer == 115)
+                {
+                    Projectile.friendly = false;
+                }
+                if (timer > 125)
+                {
+                    CanIgnoreTile = false;
+                    End();
+                }
             }
-            if(timer == 131)
-            {
-                float BodyRotation = 0;
-                player.fullRotation = BodyRotation;
-                player.legRotation = -BodyRotation;
-                player.headRotation = -BodyRotation;
-                player.legPosition = Vector2.Zero;
-                Tplayer.HeadRotation = 0;
-                Tplayer.HideLeg = false;
-            }
+
             if (isAttacking)
             {
                 for (int i = 0; i < 2; i++)

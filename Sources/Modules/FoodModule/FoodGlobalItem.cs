@@ -3,13 +3,14 @@ using Everglow.Sources.Modules.FoodModule.Utils;
 using Everglow.Sources.Modules.FoodModule.Buffs;
 using Everglow.Sources.Modules.FoodModule.Items;
 using Terraria.Localization;
+using Terraria.ModLoader;
 
 namespace Everglow.Sources.Modules.FoodModule
 {
     public class FoodGlobalItem : GlobalItem
     {
         // 对于原版的食物进行类型Id到 FoodInfo 的映射，直接获取FoodInfo实例
-        private static Dictionary<int, FoodInfo> m_vanillaFoodInfos;
+        public static Dictionary<int, FoodInfo> m_vanillaFoodInfos;
         public override void Unload()
         {
             m_vanillaFoodInfos = null;
@@ -633,7 +634,7 @@ namespace Everglow.Sources.Modules.FoodModule
         }
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
-            if (m_vanillaFoodInfos.ContainsKey(item.type))
+            if (m_vanillaFoodInfos.ContainsKey(item.type) /*|| (item.ModItem is FoodBase)*/)
             {
 
                 int firstIndex = -1;
@@ -647,13 +648,43 @@ namespace Everglow.Sources.Modules.FoodModule
                 {
                     tooltips.RemoveAll((tp) => tp.Name.Contains("Tooltip"));
                     tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.BuffDescription." + FoodInfo.Name)));
-                    tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, FoodInfo.Satiety  + Language.GetTextValue("Mods.Everglow.InfoDisplay.Satiety")));
+                    tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, FoodInfo.Satiety  + Language.GetTextValue("Mods.Everglow.Common.FoodSystem.Satiety")));
                 }
                 else
                 {
                     // 否则加到最后面
                     tooltips.Add(new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.BuffDescription." + FoodInfo.Name)));
-                    tooltips.Add(new TooltipLine(Mod, item.Name, FoodInfo.Satiety + Language.GetTextValue("Mods.Everglow.InfoDisplay.Satiety")));
+                    tooltips.Add(new TooltipLine(Mod, item.Name, FoodInfo.Satiety + Language.GetTextValue("Mods.Everglow.Common.FoodSystem.Satiety")));
+                }
+
+                int buffTimeIndex = tooltips.FindIndex((tp) => tp.Name.Contains("BuffTime"));
+                if (buffTimeIndex != -1)
+                {
+                    tooltips[buffTimeIndex].Text = FoodInfo.BuffTime.ToBuffTimeString();
+                    //tooltips.RemoveAt(buffTimeIndex);
+                }
+            }
+            if (item.ModItem is FoodBase)
+            {
+                int firstIndex = -1;
+                firstIndex = tooltips.FindIndex((tpline) =>
+                {
+                    return tpline.Name.Contains("Tooltip");
+                });
+                // 如果有tooltip，就删掉所有Tooltip的line然后插入到第一个所在位置
+                var foodItem = item.ModItem as FoodBase;
+                var FoodInfo = foodItem.FoodInfo;
+                if (firstIndex >= 0)
+                {
+                    tooltips.RemoveAll((tp) => tp.Name.Contains("Tooltip"));
+                    tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.BuffDescription." + FoodInfo.Name)));
+                    tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, FoodInfo.Satiety + Language.GetTextValue("Mods.Everglow.Common.FoodSystem.Satiety")));
+                }
+                else
+                {
+                    // 否则加到最后面
+                    tooltips.Add(new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.BuffDescription." + FoodInfo.Name)));
+                    tooltips.Add(new TooltipLine(Mod, item.Name, FoodInfo.Satiety + Language.GetTextValue("Mods.Everglow.Common.FoodSystem.Satiety")));
                 }
 
                 int buffTimeIndex = tooltips.FindIndex((tp) => tp.Name.Contains("BuffTime"));
@@ -688,6 +719,16 @@ namespace Everglow.Sources.Modules.FoodModule
                 var FoodInfo = m_vanillaFoodInfos[item.type];
                 var FoodPlayer = player.GetModPlayer<FoodModPlayer>();
 
+                // 增加饱食度
+                FoodPlayer.CurrentSatiety += FoodInfo.Satiety;
+                //加上Buff
+                player.AddBuff(FoodInfo.BuffType, FoodInfo.BuffTime.TotalFrames);
+            }
+            else if (item.ModItem is FoodBase)
+            {
+                var foodItem = item.ModItem as FoodBase;
+                var FoodInfo = foodItem.FoodInfo;
+                var FoodPlayer = player.GetModPlayer<FoodModPlayer>();
                 // 增加饱食度
                 FoodPlayer.CurrentSatiety += FoodInfo.Satiety;
                 //加上Buff

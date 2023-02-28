@@ -40,7 +40,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Go
                     {
                         Vector2 velocity = new Vector2(0, Main.rand.NextFloat(-16f, -12f)).RotatedBy(Main.rand.NextFloat(-(Rain / 120f), (Rain / 120f)));
                         Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 + new Vector2(0, -10), velocity, ModContent.ProjectileType<GoldenShowerII>(), player.HeldItem.damage * 2, player.HeldItem.knockBack, player.whoAmI);
-                        p0.CritChance = (int)player.GetCritChance(DamageClass.Generic);
+                        p0.CritChance = player.GetWeaponCrit(player.HeldItem);
                     }
 
                     for (int i = 0; i < 15 + ConstantUsingTime / 15; ++i)
@@ -57,7 +57,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Go
                     SoundEngine.PlaySound(SoundID.Item20, Projectile.Center);
                     int HitType = ModContent.ProjectileType<GoldenShowerBomb>();
                     Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, Projectile.damage, Projectile.knockBack * 6, Projectile.owner, Rain / 4f, Projectile.rotation + Main.rand.NextFloat(6.283f));
-                    p.CritChance = (int)player.GetCritChance(DamageClass.Generic);
+                    p.CritChance = player.GetWeaponCrit(player.HeldItem);
                     Projectile.Kill();
                 }
             }
@@ -71,14 +71,14 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Go
                     {
                         Vector2 velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero).RotatedBy(Main.rand.NextFloat(-0.1f, 0.1f)) * player.HeldItem.shootSpeed * 1.3f;
                         Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 + new Vector2(0, -10), velocity, ModContent.ProjectileType<GoldenShowerII>(), player.HeldItem.damage * 2, player.HeldItem.knockBack, player.whoAmI);
-                        p.CritChance = (int)player.GetCritChance(DamageClass.Generic);
+                        p.CritChance = player.GetWeaponCrit(player.HeldItem);
                     }
                 }
                 else
                 {
                     Vector2 velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero) * player.HeldItem.shootSpeed * 1.3f;
                     Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 + new Vector2(0, -10), velocity, ModContent.ProjectileType<GoldenShowerII>(), player.HeldItem.damage * 2, player.HeldItem.knockBack, player.whoAmI);
-                    p.CritChance = (int)player.GetCritChance(DamageClass.Generic);
+                    p.CritChance = player.GetWeaponCrit(player.HeldItem);
                 }
             }
 

@@ -1,11 +1,14 @@
 ﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
 using Terraria.DataStructures;
+using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 {
     public class PhosphorescenceGun : ModItem
     {
+        FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
         public override void SetStaticDefaults()
         {
             ItemGlowManager.AutoLoadItemGlow(this);
@@ -58,7 +61,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
                             {
                                 Main.projectile[x].ai[0] = 1f;
                                 Main.projectile[x].ai[1] = Item.useAnimation;
-                                player.velocity -= velocity * 0.2f;
+                                if (MothEye.LocalOwner != null && MothEye.LocalOwner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
+                                {
+                                    if (!mothEyePlayer.MothEyeEquipped && !fireflyBiome.IsBiomeActive(Main.LocalPlayer) && !Main.hardMode)
+                                    {
+                                        player.velocity -= velocity * 0.2f;
+                                    }
+                                }
                             }
                         }
                     }
@@ -74,31 +83,57 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             {
                 Vector2 newVelocity = velocity.RotatedByRandom(MathHelper.ToRadians(15));
                 newVelocity *= 1f - Main.rand.NextFloat(0.3f);
-                Projectile.NewProjectileDirect(source, position + velocity * 2.0f - new Vector2(0, 4), newVelocity, ModContent.ProjectileType<PhosphorescenceBullet>(), (int)(damage * 0.26f), knockback, player.whoAmI);
+                if (MothEye.LocalOwner != null && MothEye.LocalOwner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
+                {
+                    if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
+                    {
+                        Projectile.NewProjectileDirect(source, position + velocity * 2.0f - new Vector2(0, 4), newVelocity, ModContent.ProjectileType<PhosphorescenceBullet>(), (int)(damage * 0.39f), knockback, player.whoAmI);
+                    }
+                    else
+                    {
+                        Projectile.NewProjectileDirect(source, position + velocity * 2.0f - new Vector2(0, 4), newVelocity, ModContent.ProjectileType<PhosphorescenceBullet>(), (int)(damage * 0.26f), knockback, player.whoAmI);
+                    }
+                }
+
                 Vector2 basePos = position + newVelocity * 3.7f - new Vector2(0, 4);
                 for (int z = 0; z < 3; z++)
                 {
                     Vector2 v = newVelocity * z / 3f;
-                    Dust.NewDust(basePos, 0, 0, ModContent.DustType<MothBlue>(), v.X, v.Y, 0, default(Color), Main.rand.NextFloat(0.8f, 1.7f));
+                    Dust.NewDust(basePos, 0, 0, ModContent.DustType<MothBlue>(), v.X, v.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
                     v = newVelocity * (z + 0.5f) / 3f;
-                    Dust.NewDust(basePos, 0, 0, ModContent.DustType<MothBlue2>(), v.X, v.Y, 0, default(Color), Main.rand.NextFloat(0.8f, 1.7f));
+                    Dust.NewDust(basePos, 0, 0, ModContent.DustType<MothBlue2>(), v.X, v.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
                 }
                 for (int j = 0; j < 9; j++)
                 {
                     Vector2 v = newVelocity / 27f * j;
                     Vector2 v0 = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) * 0.3f + v;
-                    int num20 = Dust.NewDust(basePos - new Vector2(8), 0, 0, ModContent.DustType<BlueGlowAppear>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(0.6f, 1.8f) * 0.4f);
+                    int num20 = Dust.NewDust(basePos - new Vector2(8), 0, 0, ModContent.DustType<BlueGlowAppear>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(0.6f, 1.8f) * 0.4f);
                     Main.dust[num20].noGravity = true;
                 }
                 for (int j = 0; j < 18; j++)
                 {
                     Vector2 v = newVelocity / 54f * j;
                     Vector2 v0 = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) * 0.3f + v;
-                    int num21 = Dust.NewDust(basePos - new Vector2(8), 0, 0, ModContent.DustType<BlueParticleDark2>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(3.7f, 5.1f));
+                    int num21 = Dust.NewDust(basePos - new Vector2(8), 0, 0, ModContent.DustType<BlueParticleDark2>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(3.7f, 5.1f));
                     Main.dust[num21].alpha = (int)(Main.dust[num21].scale * 50);
                 }
             }
             return false;
+        }
+        public override void ModifyTooltips(List<TooltipLine> tooltips)
+        {
+            if (MothEye.LocalOwner != null && MothEye.LocalOwner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
+            {
+                if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
+                {
+                    tooltips.AddRange(new TooltipLine[]
+                    {
+                        new(Everglow.Instance, "MothEyeBonusText", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeBonusText")),
+                        new(Everglow.Instance, "MothEyeGunBonus0", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextMothGun0")),
+                        new(Everglow.Instance, "MothEyeGunBonus1", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextMothGun1")),
+                    });
+                }
+            }
         }
     }
 }

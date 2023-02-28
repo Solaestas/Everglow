@@ -22,7 +22,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ra
             Projectile.timeLeft = 200;
             Projectile.extraUpdates = 3;
             Projectile.tileCollide = false;
-            Projectile.DamageType = DamageClass.MagicSummonHybrid;
+            Projectile.DamageType = DamageClass.Magic;
         }
 
         public override void AI()
@@ -30,7 +30,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ra
             if(Projectile.timeLeft == 1)
             {
                 Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BlackHole.BlackHole>(), Projectile.damage * 12, 0, Projectile.owner, Projectile.ai[0]);
-                p.CritChance = (int)Main.player[Projectile.owner].GetCritChance(DamageClass.Generic);
+                p.CritChance = Projectile.CritChance;
                 p.timeLeft = 100 + (int)(Projectile.ai[0] * 240);
                 if(Projectile.ai[0] < 0.5f)
                 {

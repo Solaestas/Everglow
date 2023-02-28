@@ -25,6 +25,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bl
             Projectile.penetrate = -1;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 30;
+            Projectile.DamageType = DamageClass.Magic;
             ProjectileID.Sets.DrawScreenCheckFluff[Projectile.type]=5000;
         }
         public static bool ProjActive()

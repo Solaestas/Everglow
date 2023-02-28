@@ -297,11 +297,11 @@ public class Acytaea : VisualNPC
             }
             if (Main.expertMode)
             {
-                damage = 180 / 2;
+                NPC.damage = 90;
             }
             if (Main.masterMode)
             {
-                NPC.damage = 240 / 4;
+                NPC.damage = 80;
             }
         }
 
@@ -820,6 +820,7 @@ public class Acytaea : VisualNPC
                     Vector2 v0a = Vector2.Normalize(player.Center - NPC.Center).RotatedBy(k / 3d);
                     Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - (v0a * 60), v0a * 2, ModContent.ProjectileType<BloodBlade>(), NPC.damage, 3, player.whoAmI);
                 }
+                SoundEngine.PlaySound(SoundID.Item71, NPC.Center);
                 float ka = Main.rand.NextFloat(Main.rand.NextFloat(0.65f, 1f), 1f);
                 Vector2 vf = Vector2.Normalize(player.Center - NPC.Center);
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - (vf * 60), vf * 2, ModContent.ProjectileType<AcytaeaLight>(), NPC.damage, 3, player.whoAmI, ka);
@@ -849,6 +850,7 @@ public class Acytaea : VisualNPC
                     Vector2 v0a = Vector2.Normalize(player.Center - NPC.Center).RotatedBy(k / 3d);
                     Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - (v0a * 60), v0a * 2, ModContent.ProjectileType<BloodBlade>(), NPC.damage, 3, player.whoAmI);
                 }
+                SoundEngine.PlaySound(SoundID.Item71, NPC.Center);
                 float ka = Main.rand.NextFloat(Main.rand.NextFloat(0.65f, 1f), 1f);
                 Vector2 vf = Vector2.Normalize(player.Center - NPC.Center);
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - (vf * 60), vf * 2, ModContent.ProjectileType<AcytaeaLight>(), NPC.damage, 3, player.whoAmI, ka);
@@ -878,6 +880,7 @@ public class Acytaea : VisualNPC
                     Vector2 v0a = Vector2.Normalize(player.Center - NPC.Center).RotatedBy(k / 3d);
                     Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - (v0a * 60), v0a * 2, ModContent.ProjectileType<BloodBlade>(), NPC.damage, 3, player.whoAmI);
                 }
+                SoundEngine.PlaySound(SoundID.Item71, NPC.Center);
                 float ka = Main.rand.NextFloat(Main.rand.NextFloat(0.65f, 1f), 1f);
                 Vector2 vf = Vector2.Normalize(player.Center - NPC.Center);
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - (vf * 60), vf * 2, ModContent.ProjectileType<AcytaeaLight>(), NPC.damage, 3, player.whoAmI, ka);
@@ -906,6 +909,7 @@ public class Acytaea : VisualNPC
                     Vector2 v0a = Vector2.Normalize(player.Center - NPC.Center).RotatedBy(k / 3d);
                     Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - (v0a * 60), v0a * 2, ModContent.ProjectileType<BloodBlade>(), NPC.damage, 3, player.whoAmI);
                 }
+                SoundEngine.PlaySound(SoundID.Item71, NPC.Center);
                 float ka = Main.rand.NextFloat(Main.rand.NextFloat(0.65f, 1f), 1f);
                 Vector2 vf = Vector2.Normalize(player.Center - NPC.Center);
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - (vf * 60), vf * 2, ModContent.ProjectileType<AcytaeaLight>(), NPC.damage, 3, player.whoAmI, ka);
@@ -1075,7 +1079,7 @@ public class Acytaea : VisualNPC
             }
             if (Timer % 20 == 0 && Timer > 3300 && Main.netMode != NetmodeID.MultiplayerClient)
             {
-                //TODO ?
+                SoundEngine.PlaySound(SoundID.Item5, NPC.Center);
                 Vector2 vf = new Vector2(-1, 0);
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 34, ModContent.ProjectileType<AcytaeaArrow>(), NPC.damage, 3, player.whoAmI);
             }
@@ -1107,6 +1111,7 @@ public class Acytaea : VisualNPC
             }
             if (Timer % 18 == 0 && Timer > 3550 && Main.netMode != NetmodeID.MultiplayerClient)
             {
+                SoundEngine.PlaySound(SoundID.Item5, NPC.Center);
                 Vector2 vf = new Vector2(0, 1);
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 34, ModContent.ProjectileType<AcytaeaArrow>(), NPC.damage, 3, player.whoAmI);
             }
@@ -1137,6 +1142,7 @@ public class Acytaea : VisualNPC
             }
             if (Timer % 16 == 0 && Timer > 3800 && Main.netMode != NetmodeID.MultiplayerClient)
             {
+                SoundEngine.PlaySound(SoundID.Item5, NPC.Center);
                 Vector2 vf = new Vector2(1, 0);
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 34, ModContent.ProjectileType<AcytaeaArrow>(), NPC.damage, 3, player.whoAmI);
             }
@@ -1167,6 +1173,7 @@ public class Acytaea : VisualNPC
             }
             if (Timer % 10 == 0 && Timer > 4050 && Main.netMode != NetmodeID.MultiplayerClient)
             {
+                SoundEngine.PlaySound(SoundID.Item5, NPC.Center);
                 Vector2 vf = new Vector2(0, -1);
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 34, ModContent.ProjectileType<AcytaeaArrow>(), NPC.damage, 3, player.whoAmI);
             }
@@ -1212,6 +1219,7 @@ public class Acytaea : VisualNPC
                 Vector2 vf = Vector2.Normalize(va);
                 for (int i = 0; i < 6; i++)
                 {
+                    SoundEngine.PlaySound(SoundID.Item5, NPC.Center);
                     Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf.RotatedBy(Math.Sqrt(Math.Abs(i - 2.5)) * Math.Sign(i - 2.5) * (400 - va.Length()) / 200f) * 34, ModContent.ProjectileType<AcytaeaArrow>(), NPC.damage, 3, player.whoAmI);
                 }
                 if (Timer < 4799)
@@ -1257,6 +1265,7 @@ public class Acytaea : VisualNPC
             }
             if (Timer % 200 == 30 && Timer > 4800 && Main.netMode != NetmodeID.MultiplayerClient)
             {
+                SoundEngine.PlaySound(SoundID.Item5, NPC.Center);
                 Vector2 vf = new Vector2(-1, 0);
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 34, ModContent.ProjectileType<AcytaeaArrow2>(), NPC.damage, 3, player.whoAmI, 1);
             }
@@ -1293,6 +1302,7 @@ public class Acytaea : VisualNPC
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 34, ModContent.ProjectileType<AcytaeaArrow>(), NPC.damage, 3, player.whoAmI);
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + vg, vf * 34, ModContent.ProjectileType<AcytaeaArrow>(), NPC.damage, 3, player.whoAmI);
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + vh, vf * 34, ModContent.ProjectileType<AcytaeaArrow>(), NPC.damage, 3, player.whoAmI);
+                SoundEngine.PlaySound(SoundID.Item5, NPC.Center);
             }
         }//→→→
         if (Timer is > 5600 and <= 5700)
@@ -1329,6 +1339,7 @@ public class Acytaea : VisualNPC
                     Vector2 vf = new Vector2(0, -1).RotatedBy((d + 0.5) / 13d);
                     Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 12, ModContent.ProjectileType<AcytaeaArrowGra>(), NPC.damage, 3, player.whoAmI);
                 }
+                SoundEngine.PlaySound(SoundID.Item5, NPC.Center);
             }
         }//↖↑↗
         if (Timer is > 5700 and <= 6000)
@@ -1355,6 +1366,7 @@ public class Acytaea : VisualNPC
             }
             if (Timer == 5865)
             {
+                SoundEngine.PlaySound(SoundID.Item5, NPC.Center);
                 Vector2 vf = new Vector2(0, -1);
                 int f = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 34, ModContent.ProjectileType<AcytaeaArrow>(), NPC.damage, 3, player.whoAmI);
                 Main.projectile[f].scale = 3;
@@ -1447,10 +1459,12 @@ public class Acytaea : VisualNPC
                     Main.projectile[g].timeLeft = 100;
                     Main.projectile[h].timeLeft = 100;
                     Main.projectile[i].timeLeft = 100;
+                    SoundEngine.PlaySound(SoundID.Item5, NPC.Center);
                     for (int z = 0; z < 200; z++)
                     {
                         if (Main.npc[z].active && Main.npc[z].type == ModContent.NPCType<AcytaeaShadow3>())
                         {
+                            SoundEngine.PlaySound(SoundID.Item5, NPC.Center);
                             Vector2 vλ = new Vector2(0.5f, -0.5f * Main.npc[z].ai[2]);
                             int λ = Projectile.NewProjectile(NPC.GetSource_FromAI(), Main.npc[z].Center, vλ * 34, ModContent.ProjectileType<AcytaeaArrow>(), NPC.damage, 3, player.whoAmI);
                             Main.projectile[λ].timeLeft = 100;
@@ -1463,12 +1477,14 @@ public class Acytaea : VisualNPC
                 BowRot = (float)(Math.PI * 1.25);
                 Vector2 vf = new Vector2(1f, 0.7f);
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 25, ModContent.ProjectileType<AcytaeaArrow3>(), NPC.damage, 3, player.whoAmI);
+                SoundEngine.PlaySound(SoundID.Item5, NPC.Center);
             }
             if (Timer == 6449)
             {
                 BowRot = (float)(Math.PI * 0.75);
                 Vector2 vf = new Vector2(1f, -0.7f);
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 25, ModContent.ProjectileType<AcytaeaArrow3>(), NPC.damage, 3, player.whoAmI);
+                SoundEngine.PlaySound(SoundID.Item5, NPC.Center);
             }
         }//放幻影箭
         if (Timer is > 6450 and <= 6550)
@@ -1501,6 +1517,7 @@ public class Acytaea : VisualNPC
                     {
                         Vector2 vf = new Vector2(0, -1).RotatedBy(d / 13d);
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 14, ModContent.ProjectileType<AcytaeaArrowGra>(), NPC.damage, 3, player.whoAmI);
+                        SoundEngine.PlaySound(SoundID.Item5, NPC.Center);
                     }
                 }
             }
@@ -1533,6 +1550,7 @@ public class Acytaea : VisualNPC
             }
             if (Timer % 4 == 0 && Timer > 6590)
             {
+                SoundEngine.PlaySound(SoundID.Item5, NPC.Center);
                 Vector2 vf = new Vector2(0, 1);
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 2, ModContent.ProjectileType<AcytaeaArrowGra>(), NPC.damage, 3, player.whoAmI);
             }
@@ -1561,6 +1579,7 @@ public class Acytaea : VisualNPC
             }
             if (Timer % 16 == 0 && Timer > 6970 && Main.netMode != NetmodeID.MultiplayerClient)
             {
+                SoundEngine.PlaySound(SoundID.Item5, NPC.Center);
                 Vector2 vf = new Vector2(0, 1);
                 Vector2 vg = vf.RotatedBy(Math.PI / 2d) * 16;
                 Vector2 vh = vf.RotatedBy(Math.PI / 2d) * -16;
@@ -1616,6 +1635,7 @@ public class Acytaea : VisualNPC
             {
                 if (Timer % 20 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
                 {
+                    SoundEngine.PlaySound(SoundID.Item5, NPC.Center);
                     Vector2 vf = new Vector2(-1f, 0);
                     int f = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 34, ModContent.ProjectileType<AcytaeaArrow>(), NPC.damage, 3, player.whoAmI);
                     Main.projectile[f].timeLeft = 100;
@@ -1632,12 +1652,14 @@ public class Acytaea : VisualNPC
             }
             if (Timer == 7464 && Main.netMode != NetmodeID.MultiplayerClient)
             {
+                SoundEngine.PlaySound(SoundID.Item5, NPC.Center);
                 BowRot = (float)(Math.PI * 0.5);
                 Vector2 vf = new Vector2(0, -1f);
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 25, ModContent.ProjectileType<AcytaeaArrow3>(), NPC.damage, 3, player.whoAmI);
             }
             if (Timer == 7489 && Main.netMode != NetmodeID.MultiplayerClient)
             {
+                SoundEngine.PlaySound(SoundID.Item5, NPC.Center);
                 BowRot = (float)(-Math.PI * 0.5);
                 Vector2 vf = new Vector2(0, 1f);
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 25, ModContent.ProjectileType<AcytaeaArrow3>(), NPC.damage, 3, player.whoAmI);
@@ -1667,6 +1689,7 @@ public class Acytaea : VisualNPC
             }
             if (Timer % 3 == 0 && Timer > 7540 && Main.netMode != NetmodeID.MultiplayerClient)
             {
+                SoundEngine.PlaySound(SoundID.Item5, NPC.Center);
                 Vector2 vf = new Vector2(1, 0).RotatedBy(Math.Sin(Timer / 15d) * 0.75);
                 int f = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 20, ModContent.ProjectileType<AcytaeaArrow>(), NPC.damage, 3, player.whoAmI);
                 Main.projectile[f].timeLeft = 100;
@@ -1718,6 +1741,7 @@ public class Acytaea : VisualNPC
                 Vector2 vf = Vector2.Normalize(va);
                 for (int g = 0; g < 12; g++)
                 {
+                    SoundEngine.PlaySound(SoundID.Item5, NPC.Center);
                     Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf.RotatedBy((g - 5.5) / 6d * Math.PI) * 34, ModContent.ProjectileType<AcytaeaArrow>(), NPC.damage, 3, player.whoAmI);
                 }
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<AcytaeaCenterBow>(), NPC.damage, 0, player.whoAmI);
@@ -1780,6 +1804,7 @@ public class Acytaea : VisualNPC
             }
             if (Timer % 15 == 0 && Timer > 8560 && Main.netMode != NetmodeID.MultiplayerClient)
             {
+                SoundEngine.PlaySound(SoundID.Item20, NPC.Center);
                 Vector2 vf = new Vector2(1, 0).RotatedBy(Math.Sin(Timer / 15d) * 0.75);
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 20, ModContent.ProjectileType<Metero>(), NPC.damage, 3, player.whoAmI, -1);
                 vf = new Vector2(1, 0).RotatedBy(-Math.Sin(Timer / 15d) * 0.75);
@@ -1810,6 +1835,7 @@ public class Acytaea : VisualNPC
             }
             if (Timer % 14 == 0 && Timer > 9000 && Main.netMode != NetmodeID.MultiplayerClient)
             {
+                SoundEngine.PlaySound(SoundID.Item20, NPC.Center);
                 Vector2 v0 = Vector2.Normalize(player.Center - NPC.Center) * 0.3f;
                 Vector2 vf = new Vector2(0, -1) + v0;
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vf * 20, ModContent.ProjectileType<Metero2>(), NPC.damage, 3, player.whoAmI, 1);
@@ -1860,11 +1886,13 @@ public class Acytaea : VisualNPC
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + vf, va, ModContent.ProjectileType<AcytaeaLaserLight>(), NPC.damage, 3, player.whoAmI, -1);
                     }
                 }
+                SoundEngine.PlaySound(SoundID.Zombie104, NPC.Center);
             }
             if (Timer >= 9820 && Timer % 15 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 for (int h = 0; h < 20; h++)
                 {
+                    SoundEngine.PlaySound(SoundID.Item20, NPC.Center);
                     Vector2 v0 = Vector2.Normalize(player.Center - NPC.Center) * 1f;
                     Vector2 vf = v0.RotatedBy(h / 10d * Math.PI);
                     if (h % 4 >= 2)
@@ -1902,6 +1930,7 @@ public class Acytaea : VisualNPC
             }
             if (Timer >= 10620 && Timer % 60 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
             {
+                SoundEngine.PlaySound(SoundID.Item20, NPC.Center);
                 Vector2 v0 = Vector2.Normalize(player.Center - NPC.Center) * 12f;
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v0, ModContent.ProjectileType<Metero4>(), NPC.damage, 3, player.whoAmI, -1);
             }
@@ -2289,8 +2318,19 @@ public class Acytaea : VisualNPC
         {
             NPC.friendly = false;
             NPC.aiStyle = -1;
-            NPC.lifeMax = 275000;
-            NPC.life = 275000;
+
+            NPC.lifeMax = 165000;
+            NPC.life = 165000;
+            if (Main.expertMode)
+            {
+                NPC.lifeMax = 275000;
+                NPC.life = 275000;
+            }
+            if (Main.masterMode)
+            {
+                NPC.lifeMax = 385000;
+                NPC.life = 385000;
+            }
             NPC.boss = true;
             NPC.localAI[0] = 0;
             NPC.aiStyle = -1;

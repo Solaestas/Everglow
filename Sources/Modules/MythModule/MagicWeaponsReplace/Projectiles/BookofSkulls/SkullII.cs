@@ -24,6 +24,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
             Projectile.scale = 1f;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 30;
+            Projectile.DamageType = DamageClass.Magic;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 120;
         }
@@ -306,7 +307,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
                 for (int x = 0; x < 3; x++)
                 {
                     player.GetModPlayer<GlobalItems.MagicBookPlayer>().WaterBoltHasHit = 0;
-                    Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), player.Center + new Vector2(0, -30 * player.gravDir), new Vector2(0, 18 * player.gravDir), type, player.HeldItem.damage / 2, player.HeldItem.knockBack, Projectile.owner, Main.rand.NextFloat(-1.5f, 7f), Main.rand.NextFloat(0.65f, 0.95f));
+                    Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), player.Center + new Vector2(0, -30 * player.gravDir), new Vector2(0, 18 * player.gravDir), type, player.HeldItem.damage / 2, player.HeldItem.knockBack, Projectile.owner, Main.rand.NextFloat(-1.5f, 7f), Main.rand.NextFloat(0.65f, 0.95f));
+                    p.CritChance = player.GetWeaponCrit(player.HeldItem);
                 }
             }
             if (Projectile.penetrate == 1)
@@ -346,7 +348,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
                 for (int x = 0; x < 3; x++)
                 {
                     player.GetModPlayer<GlobalItems.MagicBookPlayer>().WaterBoltHasHit = 0;
-                    Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), player.Center + new Vector2(0, -30 * player.gravDir), new Vector2(0, 18 * player.gravDir), type, player.HeldItem.damage / 2, player.HeldItem.knockBack, Projectile.owner, Main.rand.NextFloat(-1.5f, 7f), Main.rand.NextFloat(0.65f, 0.95f));
+                    Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), player.Center + new Vector2(0, -30 * player.gravDir), new Vector2(0, 18 * player.gravDir), type, player.HeldItem.damage / 2, player.HeldItem.knockBack, Projectile.owner, Main.rand.NextFloat(-1.5f, 7f), Main.rand.NextFloat(0.65f, 0.95f));
+                    p.CritChance = player.GetWeaponCrit(player.HeldItem);
                 }
             }
             if (Projectile.penetrate == 1)

@@ -33,7 +33,7 @@
                 }
                 Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * 6, velocity, T, damage, player.HeldItem.knockBack, player.whoAmI);
                 p.penetrate = 2;
-                p.CritChance = (int)player.GetCritChance(DamageClass.Generic);
+                p.CritChance = player.GetWeaponCrit(player.HeldItem);
             }
         }
     }

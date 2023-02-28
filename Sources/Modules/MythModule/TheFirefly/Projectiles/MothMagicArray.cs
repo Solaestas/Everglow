@@ -6,7 +6,7 @@ using Terraria.GameContent;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
-    public class MothMagicArray : ModProjectile, IWarpProjectile
+    public class MothMagicArray : ModProjectile
     {
         public override void SetDefaults()
         {
@@ -290,20 +290,20 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             return true;
         }
 
-        public void DrawWarp(VFXBatch sb)
-        {
-            float Rad;
-            if (Projectile.timeLeft >= 20)
-            {
-                Rad = Math.Min(Projectile.localAI[0] * 3, 90);
-            }
-            else
-            {
-                Rad = Math.Min(Projectile.localAI[0] * 3, 90) * Projectile.timeLeft / 20f;
-            }
-            Rad = Rad * Rad / 90f;
-            DrawCircle(sb,Rad * 0.6f, 45 * Rad / 90f + 18, new Color(1f, 0.24f, 0, 0f), Projectile.Center - Main.screenPosition);
-        }
+        //public void drawwarp(vfxbatch sb)
+        //{
+        //    float rad;
+        //    if (projectile.timeleft >= 20)
+        //    {
+        //        rad = math.min(projectile.localai[0] * 3, 90);
+        //    }
+        //    else
+        //    {
+        //        rad = math.min(projectile.localai[0] * 3, 90) * projectile.timeleft / 20f;
+        //    }
+        //    rad = rad * rad / 90f;
+        //    drawcircle(sb,rad * 0.6f, 45 * rad / 90f + 18, new color(1f, 0.24f, 0, 0f), projectile.center - main.screenposition);
+        //}
         private static void DrawCircle(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center, bool Black = false)
         {
             List<Vertex2D> circle = new List<Vertex2D>();

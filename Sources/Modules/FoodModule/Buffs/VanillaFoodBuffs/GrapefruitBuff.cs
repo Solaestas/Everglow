@@ -12,8 +12,8 @@
 
         public override void Update(Player player, ref int buffIndex)
         {
-            player.GetKnockback(DamageClass.Summon) += 0.5f;//加50%召唤物击退
-            player.wellFed = true;
+            player.GetKnockback(DamageClass.Summon) += 0.25f;//加25%召唤物击退
+            
         }
     }
 }

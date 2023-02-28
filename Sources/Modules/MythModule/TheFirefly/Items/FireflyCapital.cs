@@ -16,7 +16,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items
             Item.useStyle = ItemUseStyleID.Swing;
             Item.consumable = false;
         }
-
         public override bool? UseItem(Player player)
         {
             if (player.itemAnimation == player.itemAnimationMax)
@@ -34,12 +33,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items
                 }
             }
             return base.UseItem(player);
-        }
-
-        public override void AddRecipes()
-        {
-            CreateRecipe()
-                .Register();
         }
     }
 }
