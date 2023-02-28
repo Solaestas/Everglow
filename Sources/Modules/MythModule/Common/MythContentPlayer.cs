@@ -1,5 +1,4 @@
-﻿using Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Fragrans;
-using Terraria.DataStructures;
+﻿using Terraria.DataStructures;
 
 namespace Everglow.Sources.Modules.MythModule.Common
 {
@@ -111,8 +110,6 @@ namespace Everglow.Sources.Modules.MythModule.Common
 			CritDamage = 1f;
 			Player.GetCritChance(DamageClass.Generic) += RainCritAdd;
 			Player.GetDamage(DamageClass.Generic) *= RainDamageAdd + 1;
-			Player.GetCritChance(DamageClass.Generic) += Fragrans.FragCritAdd;
-			Player.GetDamage(DamageClass.Generic) *= Fragrans.FragDamageAdd + 1;
 			Player.GetDamage(DamageClass.Generic) *= StackDamageAdd + 1;
 			Miss += RainMissAdd;
 			if (CyanPedal > 0)
@@ -185,10 +182,6 @@ namespace Everglow.Sources.Modules.MythModule.Common
 			}
 
 			if (TheTusk.Items.Weapons.ToothSpear.coll > 0)
-			{
-				Player.maxFallSpeed += 1000f;
-			}
-			if (MiscItems.Weapons.Fragrans.FragransSpear.coll > 0)
 			{
 				Player.maxFallSpeed += 1000f;
 			}

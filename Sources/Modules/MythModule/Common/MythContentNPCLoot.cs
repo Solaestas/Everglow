@@ -1,13 +1,9 @@
 using Terraria.GameContent.ItemDropRules;
 using Terraria.Localization;
-using Terraria.ID;
-using Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Legendary;
-//using MythMod.Common.ItemDropRules.Conditions;
 
 namespace Everglow.Sources.Modules.MythModule.Common
 {
-    // This file shows numerous examples of what you can do with the extensive NPC Loot lootable system. 
-    // Despite this file being GlobalNPC, everything here can be used with a ModNPC as well! See examples of this in the Content/NPCs folder.
+
     public class MythContentNPCLoot : GlobalNPC
     {
         //ModifyNPCLoot uses a unique system called the ItemDropDatabase, which has many different rules for many different drop use cases.
@@ -287,68 +283,10 @@ namespace Everglow.Sources.Modules.MythModule.Common
         //        npcLoot.Add(ItemDropRule.ByCondition(new InFrostMoonFinal(), ModContent.ItemType<XmasWhip>(), 50/*概率分母*/, 1/*最小*/, 1/*最大*/, 1/*概率分子*/));
         //    }
         //}
-        public static int[] Ty1 = { ModContent.ItemType<MiscItems.FixCoins.FixCoinDamage1>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinCrit1>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinDefense1>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinSpeed1>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinMelee1>() };
-        public static int[] Ty2 = { ModContent.ItemType<MiscItems.FixCoins.FixCoinDamage2>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinCrit2>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinDefense2>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinSpeed2>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinMelee2>() };
-        public static int[] Ty3 = { ModContent.ItemType<MiscItems.FixCoins.FixCoinDamage3>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinCrit3>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinDefense3>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinSpeed3>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinMelee3>() };
-        public static int HasL = 0;
-        public override void HitEffect(NPC npc, int hitDirection, double damage)
-        {
-            if (npc.life <= 0)
-            {
-                HasL = 0;
-                if (npc.lifeMax > 200 && npc.lifeMax < 1000)
-                {
-                    if (Main.rand.NextBool(20) && HasL == 0)
-                    {
-                        Item.NewItem(null, npc.Hitbox, Ty1[Main.rand.Next(Ty1.Length)], 1);
-                        HasL = 1;
-                    }
-                }
-                if (npc.lifeMax > 200 && npc.lifeMax < 1000)
-                {
-                    if (Main.rand.NextBool(100) && HasL == 0)
-                    {
-                        Item.NewItem(null, npc.Hitbox, Ty2[Main.rand.Next(Ty2.Length)], 1);
-                        HasL = 1;
-                    }
-                }
-                if (npc.lifeMax > 200 && npc.lifeMax < 1000)
-                {
-                    if (Main.rand.NextBool(500) && HasL == 0)
-                    {
-                        Item.NewItem(null, npc.Hitbox, Ty3[Main.rand.Next(Ty3.Length)], 1);
-                        HasL = 1;
-                    }
-                }
-                if (npc.lifeMax > 1000 && npc.lifeMax < 15000)
-                {
-                    if (Main.rand.NextBool(20) && HasL == 0)
-                    {
-                        Item.NewItem(null, npc.Hitbox, Ty2[Main.rand.Next(Ty2.Length)], 1);
-                        HasL = 1;
-                    }
-                }
-                if (npc.lifeMax > 1000 && npc.lifeMax < 15000)
-                {
-                    if (Main.rand.NextBool(100) && HasL == 0)
-                    {
-                        Item.NewItem(null, npc.Hitbox, Ty3[Main.rand.Next(Ty3.Length)], 1);
-                        HasL = 1;
-                    }
-                }
-                if (npc.lifeMax > 15000)
-                {
-                    if (Main.rand.NextBool(20) && HasL == 0)
-                    {
-                        Item.NewItem(null, npc.Hitbox, Ty3[Main.rand.Next(Ty3.Length)], 1);
-                        HasL = 1;
-                    }
-                }
-            }
-        }
     }
     class CrimsonExpertHardmode : IItemDropRuleCondition
     {
+        //TODO:下列掉落条件需要翻译
         bool CanD => Main.expertMode && !Main.masterMode && Main.hardMode && Main.LocalPlayer.ZoneCrimson;
         public bool CanDrop(DropAttemptInfo info)
         {

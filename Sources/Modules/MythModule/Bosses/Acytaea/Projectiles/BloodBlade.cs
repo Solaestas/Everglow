@@ -6,11 +6,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 {
     public class BloodBlade : ModProjectile
     {
-        public override void SetStaticDefaults()
-        {
-            DisplayName.SetDefault("BloodBlade");
-        }
-
         public override void SetDefaults()
         {
             Projectile.width = 60;
@@ -26,14 +21,10 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 30;
         }
-
-
-
         public override Color? GetAlpha(Color lightColor)
         {
             return new Color?(new Color(1f - 1f / Projectile.velocity.Length(), 1f - 1f / Projectile.velocity.Length(), 1f - 1f / Projectile.velocity.Length(), 0));
         }
-
         public override void AI()
         {
             Lighting.AddLight(Projectile.Center, (255 - Projectile.alpha) * 0.12f / 51f, (255 - Projectile.alpha) * 0f / 255f, (255 - Projectile.alpha) * 0f / 255f);
@@ -74,23 +65,19 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                 Dust.NewDust(Projectile.Center - new Vector2(4, 4) + new Vector2(0, Main.rand.NextFloat(0, 8f)).RotatedByRandom(Math.PI * 2), 2, 2, ModContent.DustType<Dusts.RedEffect2>(), v0.X, v0.Y, 0, default, 1.5f);
             }
         }
-
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D texture2D = (Texture2D)ModContent.Request<Texture2D>(Texture);
             Main.spriteBatch.Draw(texture2D, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, Projectile.GetAlpha(lightColor), Projectile.rotation, new Vector2(61, 61), Projectile.scale, SpriteEffects.None, 0f);
             return false;
         }
-
-        private Effect ef;
-
         public override void PostDraw(Color lightColor)
         {
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
             List<Vertex2D> bars = new List<Vertex2D>();
-                            ef = Common.MythContent.QuickEffect("Effects/Trail");
-            // 把所有的点都生成出来，按照顺序
+            Effect ef = Common.MythContent.QuickEffect("Effects/Trail");
+
             int width = 40;
             for (int i = 1; i < Projectile.oldPos.Length; ++i)
             {
@@ -98,8 +85,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                 {
                     break;
                 }
-                //spriteBatch.Draw(Main.magicPixel, Projectile.oldPos[i] - Main.screenPosition,
-                //    new Rectangle(0, 0, 1, 1), Color.White, 0f, new Vector2(0.5f, 0.5f), 5f, SpriteEffects.None, 0f);
 
                 var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
                 normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
@@ -116,7 +101,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 
             if (bars.Count > 2)
             {
-                // 按照顺序连接三角形
                 triangleList.Add(bars[0]);
                 var vertex = new Vertex2D((bars[0].position + bars[1].position) * 0.5f + Vector2.Normalize(Projectile.velocity) * 30, Color.White, new Vector3(0, 0.5f, 1));
                 triangleList.Add(bars[1]);
@@ -132,16 +116,10 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                     triangleList.Add(bars[i + 3]);
                 }
                 RasterizerState originalState = Main.graphics.GraphicsDevice.RasterizerState;
-                // 干掉注释掉就可以只显示三角形栅格
-                //RasterizerState rasterizerState = new RasterizerState();
-                //rasterizerState.CullMode = CullMode.None;
-                //rasterizerState.FillMode = FillMode.WireFrame;
-                //Main.graphics.GraphicsDevice.RasterizerState = rasterizerState;
 
                 var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
                 var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
 
-                // 把变换和所需信息丢给shader
                 ef.Parameters["uTransform"].SetValue(model * projection);
                 ef.Parameters["uTime"].SetValue(-(float)Main.time * 0.06f);
                 Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/heatmapRed").Value;
@@ -150,18 +128,16 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                 Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
                 Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
                 Main.graphics.GraphicsDevice.SamplerStates[2] = SamplerState.PointWrap;
-                //Main.graphics.GraphicsDevice.Textures[0] = Main.magicPixel;
-                //Main.graphics.GraphicsDevice.Textures[1] = Main.magicPixel;
-                //Main.graphics.GraphicsDevice.Textures[2] = Main.magicPixel;
 
                 ef.CurrentTechnique.Passes[0].Apply();
 
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList.ToArray(), 0, triangleList.Count / 3);
 
                 Main.graphics.GraphicsDevice.RasterizerState = originalState;
-                Main.spriteBatch.End();
-                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
             }
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
         }
     }
 }
