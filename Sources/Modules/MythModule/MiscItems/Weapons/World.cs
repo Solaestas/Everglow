@@ -9,8 +9,8 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
             Item.DamageType = DamageClass.Melee;
             Item.width = 118;
             Item.height = 146;
-            Item.useTime = 6;
-            Item.useAnimation = 6;
+            Item.useTime = 10;
+            Item.useAnimation = 10;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.noMelee = true;
             Item.noUseGraphic = true;
@@ -26,7 +26,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
         {
             if (player.ownedProjectileCounts[type] == 0)
             {
-                Projectile.NewProjectile(source, player.Center, velocity, type, damage, knockback, player.whoAmI, 0f, 0f);
+                Projectile.NewProjectile(source, player.Center, velocity, type, damage, knockback, player.whoAmI, 2, 0f);
             }
             return false;
         }

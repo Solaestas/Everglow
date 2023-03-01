@@ -6,14 +6,8 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
 {
     public class Hepuyuan : ModItem
     {
-        public override void SetStaticDefaults()
-        {
-            ItemGlowManager.AutoLoadItemGlow(this);
-        }
-        public static short GetGlowMask = 0;
-        public override void SetDefaults()
-        {
-            Item.glowMask = ItemGlowManager.GetItemGlow(this);
+        public override void SetDefaults() 
+        { 
             Item.rare = ItemRarityID.Purple;
             Item.value = Item.sellPrice(silver: 50);
             Item.useStyle = ItemUseStyleID.Shoot;
@@ -65,10 +59,8 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
         }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-
             coll = 90;
             MythContentPlayer myplayer = player.GetModPlayer<MythContentPlayer>();
-            CoolRarr = 480 - (int)(myplayer.StackDamageAdd / 0.05f * 90);
             myplayer.Dashcool = 480 - (int)(myplayer.StackDamageAdd / 0.05f * 90);
 
             if (player.altFunctionUse == 2)
@@ -84,6 +76,10 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
             {
                 if (Main.npc[d].active && !Main.npc[d].friendly && !Main.npc[d].dontTakeDamage && Collision.CanHit(player, Main.npc[d]))//活着,敌对,能被打
                 {
+                    if ((Main.npc[d].Center - player.Center).Length() > 1500)//距离
+                    {
+                        continue;
+                    }
                     Threaten[d] += 1;
                     if ((Main.npc[d].Center - player.Center).Length() < 500)//距离
                     {
@@ -164,7 +160,6 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
             HepuyuanOwner.MouseCooling = 30;
             return false;
         }
-        int CoolRarr = 0;
         public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
             Vector2 slotSize = new Vector2(52f, 52f);

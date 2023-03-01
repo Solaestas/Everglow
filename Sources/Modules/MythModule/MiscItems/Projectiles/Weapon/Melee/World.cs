@@ -62,7 +62,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
         {
             timer++;
             Player player = Main.player[Projectile.owner];
-            if (Main.mouseLeft && player.HeldItem.type == ModContent.ItemType<MiscItems.Weapons.World>())
+            if ((player.controlUseItem || Projectile.ai[0] > 0) && player.HeldItem.type == ModContent.ItemType<Weapons.World>())
             {
                 Projectile.timeLeft = 60;
             }
@@ -74,12 +74,19 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
                 CatchPos = Main.MouseWorld;
             }
             CatchPos = Main.MouseWorld * 0.75f + CatchPos * 0.25f;
-            if (Mode == 1 && timer >= Aimtimer && Main.mouseLeft)
+            if (Mode == 1 && timer >= Aimtimer && (player.controlUseItem || Projectile.ai[0] > 0))
             {
+                if (Projectile.ai[0] > 0)
+                {
+                    Projectile.ai[0] -= 1;
+                }
                 Aimtimer = Main.rand.Next(3, 9);
                 float range = Main.rand.NextFloat(420f, 600f);
                 CrackPoint = Main.MouseWorld + Vector2.Normalize(Main.MouseWorld - CrackPoint).RotatedBy(Main.rand.NextFloat(Main.rand.NextFloat(Main.rand.NextFloat(-0.5f, -0.2f), 0.2f), 0.5f)) * range;
-                SoundEngine.PlaySound((new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/Knife").WithPitchOffset(Main.rand.NextFloat(0.7f, 1f) - MathF.Min(timer / 15f, 1f))).WithVolumeScale(range / 600f), Projectile.Center);
+                if (Projectile.ai[0] <= 0)
+                {
+                    SoundEngine.PlaySound((new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/Knife").WithPitchOffset(Main.rand.NextFloat(0.7f, 1f) - MathF.Min(timer / 15f, 1f))).WithVolumeScale(range / 600f), Projectile.Center);
+                }
                 timer = 0;
             }
             OldMouseWorld[0] = Main.MouseWorld;//记录数据模板,这里记录鼠标坐标
@@ -196,7 +203,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
 
             float Kvec = Math.Clamp((60 - Projectile.timeLeft) / 30f, 0, 1);
             Kvec = (float)Math.Sqrt(Kvec);
-            if (Main.mouseLeft)
+            if ((player.controlUseItem || Projectile.ai[0] > 0))
             {
                 Kvec = 0;
             }
@@ -232,21 +239,8 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
 
             Main.graphics.GraphicsDevice.Textures[0] = MainKnife;
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Knife.ToArray(), 0, Knife.Count / 3);
-            //Knife = new List<Vertex2D>();
-            //trueC = new Color(R0 * 2, G0 * 20, B0 * 2, 0);
-            //Knife.Add(new Vertex2D(DrawPos + new Vector2(StartLength, 0).RotatedBy(TrueRot) - Main.screenPosition, trueC, new Vector3(0, 1, 0)));
-            //Knife.Add(new Vertex2D(DrawPos + new Vector2(StartLength + KnifeLength, 0).RotatedBy(TrueRot) - Main.screenPosition, trueC, new Vector3(1, 0, 0)));
-            //Knife.Add(new Vertex2D(DrawPos + new Vector2(StartLength + KnifeLength / 2f, KnifeLength / 2f).RotatedBy(TrueRot) - Main.screenPosition, trueC, new Vector3(1, 1, 0)));
 
-            //Knife.Add(new Vertex2D(DrawPos + new Vector2(StartLength, 0).RotatedBy(TrueRot) - Main.screenPosition, trueC, new Vector3(0, 1, 0)));
-            //Knife.Add(new Vertex2D(DrawPos + new Vector2(StartLength + KnifeLength / 2f, -KnifeLength / 2f).RotatedBy(TrueRot) - Main.screenPosition, trueC, new Vector3(0, 0, 0)));
-            //Knife.Add(new Vertex2D(DrawPos + new Vector2(StartLength + KnifeLength, 0).RotatedBy(TrueRot) - Main.screenPosition, trueC, new Vector3(1, 0, 0)));
-
-
-            //Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("MiscItems/Projectiles/Weapon/Melee/World_glow");
-            //Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Knife.ToArray(), 0, Knife.Count / 3);
-
-            if (Main.mouseLeft)
+            if ((player.controlUseItem || Projectile.ai[0] > 0))
             {
                 player.heldProj = Projectile.whoAmI;
                 player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(OldRotation[1] - Math.PI / 2d));
@@ -256,13 +250,6 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
             {
                 List<Vertex2D> bars = new List<Vertex2D>();
                 List<Vertex2D> barsII = new List<Vertex2D>();
-                //TrueL = 0;
-                for (int i = 1; i < 240; ++i)
-                {
-                    if (OldMouseWorldV[i] == Vector2.Zero)
-                        break;
-                    //TrueL++;
-                }
                 float colorS = 254f / 255f;
                 if (k > 0)
                 {
@@ -316,7 +303,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
                     bars.Add(new Vertex2D(OldMouseWorldV[i] + zero + normalDir * -width - Main.screenPosition, new Color(TrueC, TrueC, TrueC, Math.Clamp(0.45f - TrueC, 0, 1)), new Vector3(factor, 0, w)));
                     if (k == 0)
                     {
-                        if (i == 4 && !Main.gamePaused)
+                        if (i == 4 && !Main.gamePaused && Projectile.ai[0] <= 0)
                         {
                             Vector2 v0 = OldMouseWorldV[i - 1] - OldMouseWorldV[i];
                             float value = v0.Length();

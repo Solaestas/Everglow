@@ -167,13 +167,17 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
                 float factor2 = i / (float)(TrueL);
 
                 Color c0 = new Color(dir, MathF.Sin(factor2 * 3.14159f), 0f, 0f);
+                if(i < 10)
+                {
+                    c0 = new Color(dir, MathF.Sin(factor2 * 3.14159f) * i / 10f, 0f, 0f);
+                }
                 barsII.Add(new Vertex2D(OldplCen[i] + FlipVel * wid[i] * widk - Main.screenPosition, c0, new Vector3((float)Math.Sqrt(factor), 1, 1 - factor2)));
                 barsII.Add(new Vertex2D(OldplCen[i] - FlipVel * wid[i] * widk - Main.screenPosition, c0, new Vector3((float)Math.Sqrt(factor), 0, 1 - factor2)));
             }
             if (barsII.Count > 2)
             {
                 VxII.Add(barsII[0]);
-                var vertex = new Vertex2D((barsII[0].position + barsII[1].position) * 0.5f + Vector2.Normalize(Projectile.velocity) * 90, new Color(255, 255, 255, 255), new Vector3(0, 0.5f, 1));
+                var vertex = new Vertex2D((barsII[0].position + barsII[1].position) * 0.5f + Vector2.Normalize(Projectile.velocity) * 90, new Color(0,0,0,0), new Vector3(0, 0.5f, 1));
                 VxII.Add(barsII[1]);
                 VxII.Add(vertex);
                 for (int i = 0; i < barsII.Count - 2; i += 2)
