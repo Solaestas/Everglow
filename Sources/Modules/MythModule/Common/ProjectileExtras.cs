@@ -1,53 +1,61 @@
 ﻿using Terraria.GameContent;
-
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
+namespace Everglow.Sources.Modules.MythModule.Common
 {
     public static class ProjectileExtras
     {
+        /// <summary>
+        /// 悠悠球
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="seconds"></param>
+        /// <param name="length"></param>
+        /// <param name="acceleration"></param>
+        /// <param name="rotationSpeed"></param>
         public static void YoyoAI(int index, float seconds, float length, float acceleration = 14f, float rotationSpeed = 0.45f)
         {
             Projectile projectile = Main.projectile[index];
-            bool flag = false;
+            Player player = Main.player[projectile.owner];
+
+            bool checkSelf = false;
             for (int i = 0; i < projectile.whoAmI; i++)
             {
                 if (Main.projectile[i].active && Main.projectile[i].owner == projectile.owner && Main.projectile[i].type == projectile.type)
                 {
-                    flag = true;
+                    checkSelf = true;
                 }
             }
             if (projectile.owner == Main.myPlayer)
             {
                 projectile.localAI[0] += 1f;
-                if (flag)
+                if (checkSelf)
                 {
-                    projectile.localAI[0] += (float)Main.rand.Next(10, 31) * 0.1f;
+                    projectile.localAI[0] += Main.rand.NextFloat(1.0f, 3.1f);
                 }
                 float num = projectile.localAI[0] / 60f;
-                num /= (1f + Main.player[projectile.owner].GetAttackSpeed(DamageClass.Generic)) / 2f;
+                num /= (1f + player.GetAttackSpeed(DamageClass.Generic)) / 2f;
                 if (num > seconds)
                 {
                     projectile.ai[0] = -1f;
                 }
             }
-            bool flag2 = false;
-            if (Main.player[projectile.owner].dead)
+            if (player.dead)
             {
                 projectile.Kill();
                 return;
             }
-            if (!flag2 && !flag)
+            if (!checkSelf)
             {
-                Main.player[projectile.owner].heldProj = projectile.whoAmI;
-                Main.player[projectile.owner].itemAnimation = 2;
-                Main.player[projectile.owner].itemTime = 2;
-                if (projectile.position.X + (float)(projectile.width / 2) > Main.player[projectile.owner].position.X + (float)(Main.player[projectile.owner].width / 2))
+                player.heldProj = projectile.whoAmI;
+                player.itemAnimation = 2;
+                player.itemTime = 2;
+                if (projectile.Center.X > player.Center.X)
                 {
-                    Main.player[projectile.owner].ChangeDir(1);
+                    player.ChangeDir(1);
                     projectile.direction = 1;
                 }
                 else
                 {
-                    Main.player[projectile.owner].ChangeDir(-1);
+                    player.ChangeDir(-1);
                     projectile.direction = -1;
                 }
             }
@@ -56,16 +64,16 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
                 projectile.Kill();
             }
             projectile.timeLeft = 6;
-            float num2 = length;
-            if (Main.player[projectile.owner].yoyoString)
+
+            if (player.yoyoString)
             {
-                num2 = num2 * 1.25f + 30f;
+                length = length * 1.25f + 30f;
             }
-            num2 /= (1f + Main.player[projectile.owner].GetAttackSpeed(DamageClass.Generic) * 3f) / 4f;
-            float num3 = acceleration / ((1f + Main.player[projectile.owner].GetAttackSpeed(DamageClass.Generic) * 3f) / 4f);
+            length /= (1f + player.GetAttackSpeed(DamageClass.Generic) * 3f) / 4f;
+            float num3 = acceleration / ((1f + player.GetAttackSpeed(DamageClass.Generic) * 3f) / 4f);
             float num4 = 14f - num3 / 2f;
             float num5 = 5f + num3 / 2f;
-            if (flag)
+            if (checkSelf)
             {
                 num5 += 20f;
             }
@@ -77,18 +85,18 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
                 }
                 bool flag3 = false;
                 bool flag4 = false;
-                Vector2 vector = Main.player[projectile.owner].Center - projectile.Center;
-                if (vector.Length() > num2)
+                Vector2 vector = player.Center - projectile.Center;
+                if (vector.Length() > length)
                 {
                     flag3 = true;
-                    if ((double)vector.Length() > (double)num2 * 1.3)
+                    if ((double)vector.Length() > (double)length * 1.3)
                     {
                         flag4 = true;
                     }
                 }
                 if (projectile.owner == Main.myPlayer)
                 {
-                    if (!Main.player[projectile.owner].channel || Main.player[projectile.owner].stoned || Main.player[projectile.owner].frozen)
+                    if (!player.channel || player.stoned || player.frozen)
                     {
                         projectile.ai[0] = -1f;
                         projectile.ai[1] = 0f;
@@ -99,24 +107,24 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
                         Vector2 vector2 = Main.ReverseGravitySupport(Main.MouseScreen, 0f) + Main.screenPosition;
                         float x = vector2.X;
                         float y = vector2.Y;
-                        Vector2 vector3 = new Vector2(x, y) - Main.player[projectile.owner].Center;
-                        if (vector3.Length() > num2)
+                        Vector2 vector3 = new Vector2(x, y) - player.Center;
+                        if (vector3.Length() > length)
                         {
                             vector3.Normalize();
-                            vector3 *= num2;
-                            vector3 = Main.player[projectile.owner].Center + vector3;
+                            vector3 *= length;
+                            vector3 = player.Center + vector3;
                             x = vector3.X;
                             y = vector3.Y;
                         }
                         if (projectile.ai[0] != x || projectile.ai[1] != y)
                         {
                             Vector2 value = new Vector2(x, y);
-                            Vector2 vector4 = value - Main.player[projectile.owner].Center;
-                            if (vector4.Length() > num2 - 1f)
+                            Vector2 vector4 = value - player.Center;
+                            if (vector4.Length() > length - 1f)
                             {
                                 vector4.Normalize();
-                                vector4 *= num2 - 1f;
-                                value = Main.player[projectile.owner].Center + vector4;
+                                vector4 *= length - 1f;
+                                value = player.Center + vector4;
                                 x = value.X;
                                 y = value.Y;
                             }
@@ -137,19 +145,19 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
                     {
                         num4 /= 2f;
                         num3 *= 2f;
-                        if (projectile.Center.X > Main.player[projectile.owner].Center.X && projectile.velocity.X > 0f)
+                        if (projectile.Center.X > player.Center.X && projectile.velocity.X > 0f)
                         {
                             projectile.velocity.X = projectile.velocity.X * 0.5f;
                         }
-                        if (projectile.Center.Y > Main.player[projectile.owner].Center.Y && projectile.velocity.Y > 0f)
+                        if (projectile.Center.Y > player.Center.Y && projectile.velocity.Y > 0f)
                         {
                             projectile.velocity.Y = projectile.velocity.Y * 0.5f;
                         }
-                        if (projectile.Center.X < Main.player[projectile.owner].Center.X && projectile.velocity.X > 0f)
+                        if (projectile.Center.X < player.Center.X && projectile.velocity.X > 0f)
                         {
                             projectile.velocity.X = projectile.velocity.X * 0.5f;
                         }
-                        if (projectile.Center.Y < Main.player[projectile.owner].Center.Y && projectile.velocity.Y > 0f)
+                        if (projectile.Center.Y < player.Center.Y && projectile.velocity.Y > 0f)
                         {
                             projectile.velocity.Y = projectile.velocity.Y * 0.5f;
                         }
@@ -163,7 +171,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
                         vector5 *= num3;
                         projectile.velocity = (projectile.velocity * (num4 - 1f) + vector5) / num4;
                     }
-                    else if (flag)
+                    else if (checkSelf)
                     {
                         if ((double)projectile.velocity.Length() < (double)num3 * 0.6)
                         {
@@ -177,7 +185,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
                     {
                         projectile.velocity *= 0.8f;
                     }
-                    if (flag && !flag3 && (double)projectile.velocity.Length() < (double)num3 * 0.6)
+                    if (checkSelf && !flag3 && (double)projectile.velocity.Length() < (double)num3 * 0.6)
                     {
                         projectile.velocity.Normalize();
                         projectile.velocity *= num3 * 0.6f;
@@ -186,10 +194,10 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
             }
             else
             {
-                num4 = (float)((int)((double)num4 * 0.8));
+                num4 *= 0.8f;
                 num3 *= 1.5f;
                 projectile.tileCollide = false;
-                Vector2 vector6 = Main.player[projectile.owner].position - projectile.Center;
+                Vector2 vector6 = player.position - projectile.Center;
                 float num6 = vector6.Length();
                 if (num6 < num3 + 10f || num6 == 0f)
                 {
@@ -207,9 +215,10 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
         public static void DrawString(int index, Vector2 to = default(Vector2))
         {
             Projectile projectile = Main.projectile[index];
-            Vector2 mountedCenter = Main.player[projectile.owner].MountedCenter;
+            Player player = Main.player[projectile.owner];
+            Vector2 mountedCenter = player.MountedCenter;
             Vector2 vector = mountedCenter;
-            vector.Y += Main.player[projectile.owner].gfxOffY;
+            vector.Y += player.gfxOffY;
             if (to != default(Vector2))
             {
                 vector = to;
@@ -217,21 +226,21 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
             float num = projectile.Center.X - vector.X;
             float num2 = projectile.Center.Y - vector.Y;
             Math.Sqrt((double)(num * num + num2 * num2));
-            float rotation = (float)Math.Atan2((double)num2, (double)num) - 1.57f;
+            float rotation;
             if (!projectile.counterweight)
             {
                 int num3 = -1;
-                if (projectile.position.X + (float)(projectile.width / 2) < Main.player[projectile.owner].position.X + (float)(Main.player[projectile.owner].width / 2))
+                if (projectile.position.X + (float)(projectile.width / 2) < player.position.X + (float)(player.width / 2))
                 {
                     num3 = 1;
                 }
                 num3 *= -1;
-                Main.player[projectile.owner].itemRotation = (float)Math.Atan2((double)(num2 * (float)num3), (double)(num * (float)num3));
+                player.itemRotation = (float)Math.Atan2((double)(num2 * (float)num3), (double)(num * (float)num3));
             }
-            bool flag = true;
+            bool checkSelf = true;
             if (num == 0f && num2 == 0f)
             {
-                flag = false;
+                checkSelf = false;
             }
             else
             {
@@ -244,21 +253,21 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
                 num = projectile.position.X + (float)projectile.width * 0.5f - vector.X;
                 num2 = projectile.position.Y + (float)projectile.height * 0.5f - vector.Y;
             }
-            while (flag)
+            while (checkSelf)
             {
                 float num5 = 12f;
                 float num6 = (float)Math.Sqrt((double)(num * num + num2 * num2));
                 float num7 = num6;
                 if (float.IsNaN(num6) || float.IsNaN(num7))
                 {
-                    flag = false;
+                    checkSelf = false;
                 }
                 else
                 {
                     if (num6 < 20f)
                     {
                         num5 = num6 - 8f;
-                        flag = false;
+                        checkSelf = false;
                     }
                     num6 = 12f / num6;
                     num *= num6;
@@ -312,7 +321,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
                         }
                     }
                     rotation = (float)Math.Atan2((double)num2, (double)num) - 1.57f;
-                    int stringColor = Main.player[projectile.owner].stringColor;
+                    int stringColor = player.stringColor;
                     Color color = WorldGen.paintColor(stringColor);
                     if (color.R < 75)
                     {
