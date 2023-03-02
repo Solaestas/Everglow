@@ -52,24 +52,13 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 8;
         }
-        private bool fi = true;
         public override bool PreAI()
         {
-            Player player = Main.player[Projectile.owner]; // Since we access the owner player instance so much, it's useful to create a helper local variable for this
-            int duration = player.itemAnimationMax; // Define the duration the projectile will exist in frames
-            player.heldProj = Projectile.whoAmI; // Update the player's held projectile id
+            Player player = Main.player[Projectile.owner];
+            int duration = player.itemAnimationMax;
+            player.heldProj = Projectile.whoAmI;
             MythContentPlayer myplayer = player.GetModPlayer<MythContentPlayer>();
-            if (Main.mouseRight && myplayer.Dashcool == 0)
-            {
-                myplayer.Dashcool = 480 - (int)(myplayer.StackDamageAdd / 0.05f * 90);
-                Vector2 velocity = Main.MouseWorld - Projectile.Center;
-                velocity.Normalize();
-                Projectile.NewProjectile(null, Projectile.Center, velocity * 20.4f, ModContent.ProjectileType<Projectiles.Weapon.ToothSpear2>(), Projectile.damage * 4, Projectile.knockBack, player.whoAmI, 0f, 0f);
-                player.velocity += velocity * 20.4f;
-                Projectile.Kill();
-            }
 
-            // Reset projectile time left if necessary
             if (Projectile.timeLeft > duration)
             {
                 Projectile.timeLeft = duration;

@@ -180,14 +180,9 @@ namespace Everglow.Sources.Modules.MythModule.Common
 				Player.wingAccRunSpeed += 0.05f;
 				Player.GetDamage(DamageClass.Generic) *= 1.05f;
 			}
-
-			if (TheTusk.Items.Weapons.ToothSpear.coll > 0)
+			if (Player.ownedProjectileCounts[ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Melee.Hepuyuan.Hepuyuan>()] + Player.ownedProjectileCounts[ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Melee.Hepuyuan.HepuyuanDown>()] > 0)
 			{
-				Player.maxFallSpeed += 1000f;
-			}
-			if (MiscItems.Weapons.Hepuyuan.coll > 0)
-			{
-				Player.maxFallSpeed += 1800f;
+				Player.maxFallSpeed += 10000f;
 			}
 		}
 		public int IMMUNE = 0;

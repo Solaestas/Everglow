@@ -59,7 +59,6 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
         }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            coll = 90;
             MythContentPlayer myplayer = player.GetModPlayer<MythContentPlayer>();
             myplayer.Dashcool = 480 - (int)(myplayer.StackDamageAdd / 0.05f * 90);
 
@@ -178,22 +177,8 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
                 }
             }
         }
-        public static int coll = 0;
         public override void HoldItem(Player player)
         {
-            if (Main.mouseRight)
-            {
-                coll = 18;
-            }
-            if (coll > 0)
-            {
-                player.maxFallSpeed = 10000f;
-                coll--;
-            }
-            else
-            {
-                coll = 0;
-            }
         }
         public override bool? UseItem(Player player)
         {
