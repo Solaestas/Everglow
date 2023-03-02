@@ -110,7 +110,6 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
         }
         public override void AI()
         {
-
             if (DamageStartValue == 0)
             {
                 DamageStartValue = Projectile.damage;
