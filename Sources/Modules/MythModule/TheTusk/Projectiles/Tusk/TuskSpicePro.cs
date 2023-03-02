@@ -42,7 +42,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Tusk
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
             CyanStrike = 1;
-            Projectile.NewProjectile(Projectile.InheritSource(Projectile), target.Center, Vector2.Zero, ModContent.ProjectileType<MiscProjectiles.Weapon.XiaoHit>(), 0, 0, Projectile.owner, 0.45f);
+            Projectile.NewProjectile(Projectile.InheritSource(Projectile), target.Center, Vector2.Zero, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Melee.Hepuyuan.XiaoHit>(), 0, 0, Projectile.owner, 0.45f);
             base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
         }
 

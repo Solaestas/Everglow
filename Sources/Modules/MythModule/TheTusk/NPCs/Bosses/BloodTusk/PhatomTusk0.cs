@@ -73,7 +73,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                     V[4] = NPC.Bottom;
                 }
                 // 弹幕
-                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<MiscProjectiles.Weapon.MagicHit>(), (int)NPC.ai[0], 5, Main.myPlayer);
+                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.MagicHit>(), (int)NPC.ai[0], 5, Main.myPlayer);
                 if (Main.tile[(int)(NPC.Bottom.X / 16d), (int)(NPC.Bottom.Y / 16d)].IsHalfBlock && Down)
                 {
                     Down = false;

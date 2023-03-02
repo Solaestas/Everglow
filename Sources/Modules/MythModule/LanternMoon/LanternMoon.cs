@@ -10,7 +10,6 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon
     public class LanternMoon : ModSystem//灯笼月
     {
         public static Effect LanternGore, LanternGoreFlame, OcenaUBG, TrailRainbow, XiaoDash;
-        public Effect VagueBoss = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/VagueBoss").Value;
         public override void Load()
         {
             Gores.ShaderLanternGore.Load();
@@ -23,9 +22,6 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon
         }
         public override void SetStaticDefaults()
         {
-            var VagueBoss = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/VagueBoss").Value;
-			Filters.Scene["VagueBoss"] = new Filter(new ScreenShaderData(new Ref<Effect>(VagueBoss), "Test"), EffectPriority.Medium);
-			Filters.Scene["VagueBoss"].Load();
 			base.SetStaticDefaults();
         }
     }

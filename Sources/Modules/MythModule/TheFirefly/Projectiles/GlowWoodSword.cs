@@ -30,7 +30,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Projectile.velocity *= 0.97f;
             float k0 = Projectile.timeLeft / 60f;
             Vector2 v0 = new Vector2(Main.rand.NextFloat(0, 0.06f), 0).RotatedByRandom(6.283) * k0;
-            Dust d =  Dust.NewDustDirect(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<BlueGlowAppear>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(0.6f, 1.8f) * Projectile.scale * 0.2f * k0);
+            Dust d = Dust.NewDustDirect(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<BlueGlowAppear>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(0.6f, 1.8f) * Projectile.scale * 0.2f * k0);
             if (MothEye.LocalOwner != null && MothEye.LocalOwner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
             {
                 if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
@@ -45,7 +45,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                     Projectile.scale = k0 * 2;
                 }
             }
-           
+
             Projectile.rotation = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + Math.PI * 0.25);
         }
         public override bool? CanDamage()

@@ -1,11 +1,4 @@
-﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
-using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
-using Everglow.Sources.Modules.MythModule.Common;
-using Terraria.DataStructures;
-using ReLogic.Graphics;
-using Terraria.GameContent;
-using Terraria.ID;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories;
+﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories;
 using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons

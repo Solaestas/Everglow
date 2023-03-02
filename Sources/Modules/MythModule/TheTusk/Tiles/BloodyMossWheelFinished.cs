@@ -45,20 +45,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
                     TpTime += 3;
                 }
                 Col = 100;
-                //if (player.ownedProjectileCounts[ModContent.ProjectileType<MiscProjectiles.TransportCircle>()] < 1)
-                //{
-                    Projectile.NewProjectile(null, player.Center, Vector2.Zero, ModContent.ProjectileType<MiscProjectiles.TuskTranF>(), 0, 0, player.whoAmI, 0);
-                //}
-                for (int f = 0; f < Main.projectile.Length; f++)
-                {
-                    if (Main.projectile[f].owner == player.whoAmI)
-                    {
-                        if (Main.projectile[f].type == ModContent.ProjectileType<MiscProjectiles.TuskTranF>())
-                        {
-                            Main.projectile[f].ai[0] = TpTime;
-                        }
-                    }
-                }
+
             }
             else
             {
@@ -70,17 +57,8 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
                 {
                     Col = 0;
                     TpTime = 0;
-                }//Projectile.ai[1] == 7
-                for (int f = 0; f < Main.projectile.Length; f++)
-                {
-                    if (Main.projectile[f].owner == player.whoAmI)
-                    {
-                        if (Main.projectile[f].type == ModContent.ProjectileType<MiscProjectiles.TuskTranF>())
-                        {
-                            Main.projectile[f].ai[1] = 7;
-                        }
-                    }
                 }
+
             }
             if (TpTime >= 120)
             {
