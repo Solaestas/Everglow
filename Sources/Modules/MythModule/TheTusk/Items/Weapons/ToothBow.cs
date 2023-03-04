@@ -4,19 +4,11 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Weapons
 {
     public class ToothBow : ModItem
     {
-        public override void SetStaticDefaults()
-        {
-            /*DisplayName.SetDefault("Tooth Bow");
-			DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "獠牙巨弓");
-			Tooltip.SetDefault("Legendary Weapon\nRight click to gather tootharrows");
-			Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "传说武器\n右键聚集齿箭");*/
-        }
-
         public override void SetDefaults()
         {
             Item.width = 64;
             Item.height = 78;
-            Item.rare = 2;
+            Item.rare = ItemRarityID.Green;
 
             Item.useTime = 20;
             Item.useAnimation = 20;
@@ -37,7 +29,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Weapons
         {
             return new Vector2(-12f, 0f);
         }
-        int add = 0;
+        internal int count = 0;
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             Vector2 target = Main.screenPosition + new Vector2(Main.mouseX, Main.mouseY);
@@ -59,14 +51,14 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Weapons
             {
                 heading.Y = 20f;
             }
-            add += 1;
+            count += 1;
             heading.Normalize();
             heading *= velocity.Length() * 3f;
             heading.Y += Main.rand.Next(-40, 41) * 0.02f;
-            if (add % 2 == 0)
+            if (count % 2 == 0)
             {
-                add = 0;
-                Projectile.NewProjectile(source, position, heading, ModContent.ProjectileType<Projectiles.Weapon.TuskArrow>(), damage, knockback, player.whoAmI, 0f, ceilingLimit);
+                count = 0;
+                Projectile.NewProjectile(source, position, heading, ModContent.ProjectileType<Projectiles.Weapon.TuskArrow>(), damage, knockback * 0.2f, player.whoAmI, 0f, ceilingLimit);
             }
             return true;
         }
