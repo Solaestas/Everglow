@@ -49,7 +49,7 @@ public class OnHookHandler : IHookHandler
 }
 public record HookHandler(CodeLayer Layer, dynamic Hook, string Name) : IHookHandler
 {
-	public bool Enable { get; set; }
+	public bool Enable { get; set; } = true;
 }
 
 public class HookManager : ModSystem, IHookManager
