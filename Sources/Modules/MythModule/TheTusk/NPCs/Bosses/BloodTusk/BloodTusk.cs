@@ -721,8 +721,8 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                         float sinx = (float)(Math.Sin(dx * Math.PI) * 800f);
                         float y = (float)(-Math.Cos(dx * Math.PI) * 40f);
                         Vector2 v = new Vector2(sinx, y);
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v + new Vector2(0, -250), Vector2.Zero, ModContent.ProjectileType<Projectiles.Tusk.TuskSummon>(), NPC.damage / 12, 0, Main.myPlayer, (float)Math.PI);
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - v + new Vector2(0, -250), Vector2.Zero, ModContent.ProjectileType<Projectiles.Tusk.TuskSummon>(), NPC.damage / 12, 0, Main.myPlayer, (float)Math.PI);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v + new Vector2(0, -20), Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - v + new Vector2(0, -20), Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
                     }
                 }
                 if (NPC.localAI[0] >= 2600 && NPC.localAI[0] < 3000)
@@ -761,7 +761,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                             Vector2 v1 = v0.RotatedBy((f - (times / 2 - 0.5)) / (double)(times + 5d));
                             Vector2 v2 = v1.RotatedBy((NPC.localAI[0] % 7 - 3.5) * 0.1);
                             v2.Y -= 6f;
-                            Projectile.NewProjectile(null, new Vector2(-3, 80) + NPC.Center, v2, ModContent.ProjectileType<Projectiles.Tusk.CrimsonTuskProjGra>(), NPC.damage / 9, 1);
+                            Projectile.NewProjectile(null, new Vector2(-3, 80) + NPC.Center, v2, ModContent.ProjectileType<Projectiles.CrimsonTuskProjGra>(), NPC.damage / 9, 1);
                         }
                     }
                 }
@@ -781,7 +781,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                         Vector2 v0 = new Vector2(0, -16f);
                         Vector2 v2 = v0.RotatedBy((NPC.localAI[0] % 41 - 20) * 0.04);
                         v2.Y -= 3f;
-                        Projectile.NewProjectile(null, new Vector2(-3, 80) + NPC.Center, v2, ModContent.ProjectileType<Projectiles.Tusk.CrimsonTuskProjGra>(), NPC.damage / 9, 1);
+                        Projectile.NewProjectile(null, new Vector2(-3, 80) + NPC.Center, v2, ModContent.ProjectileType<Projectiles.CrimsonTuskProjGra>(), NPC.damage / 9, 1);
                     }
                 }
                 if (NPC.localAI[0] >= 4400 && NPC.localAI[0] <= 5400)//层层落下
@@ -801,8 +801,8 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                         {
                             for (int f = 0; f < 4; f++)
                             {
-                                Vector2 v0 = new Vector2((NPC.localAI[0] + 4600 + f * 27 + ec * 222) % 2000 - 1000, -250f);
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v0, Vector2.Zero, ModContent.ProjectileType<Projectiles.Tusk.TuskSummon>(), NPC.damage / 12, 0, Main.myPlayer, (float)Math.PI);
+                                Vector2 v0 = new Vector2((NPC.localAI[0] + 4600 + f * 27 + ec * 222) % 2000 - 1000, -20f);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v0, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
                             }
                         }
                     }
@@ -812,8 +812,8 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                         {
                             for (int f = 0; f < 4; f++)
                             {
-                                Vector2 v0 = new Vector2((NPC.localAI[0] + 4600 + f * 27 + ec * 222 + 67) % 2000 - 1000, -280f);
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v0, Vector2.Zero, ModContent.ProjectileType<Projectiles.Tusk.TuskSummon>(), NPC.damage / 12, 0, Main.myPlayer, (float)Math.PI);
+                                Vector2 v0 = new Vector2((NPC.localAI[0] + 4600 + f * 27 + ec * 222 + 67) % 2000 - 1000, -20f);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v0, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
                             }
                         }
                     }
@@ -823,8 +823,8 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                         {
                             for (int f = 0; f < 4; f++)
                             {
-                                Vector2 v0 = new Vector2((NPC.localAI[0] + 4600 + f * 27 + ec * 222 + 133) % 2000 - 1000, -310f);
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v0, Vector2.Zero, ModContent.ProjectileType<Projectiles.Tusk.TuskSummon>(), NPC.damage / 12, 0, Main.myPlayer, (float)Math.PI);
+                                Vector2 v0 = new Vector2((NPC.localAI[0] + 4600 + f * 27 + ec * 222 + 133) % 2000 - 1000, -20f);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v0, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
                             }
                         }
                     }
@@ -1003,24 +1003,24 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                         {
                             if (NPC.localAI[0] % Dist == 0)
                             {
-                                Vector2 v = new Vector2((NPC.localAI[0] - 1300) * 12, -220 + (NPC.localAI[0] - 1300) * 0.4f);
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.Tusk.TuskSummon>(), NPC.damage / 12, 0, Main.myPlayer, (float)Math.PI);
+                                Vector2 v = new Vector2((NPC.localAI[0] - 1300) * 12, -20 + (NPC.localAI[0] - 1300) * 0.04f);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
                             }
                         }
                         if (NPC.localAI[0] > 1400 && NPC.localAI[0] < 1600)
                         {
                             if (NPC.localAI[0] % Dist == 0)
                             {
-                                Vector2 v = new Vector2(-(NPC.localAI[0] - 1500) * 12, -220 + (NPC.localAI[0] - 1500) * 0.4f);
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.Tusk.TuskSummon>(), NPC.damage / 12, 0, Main.myPlayer, (float)Math.PI);
+                                Vector2 v = new Vector2(-(NPC.localAI[0] - 1500) * 12, -20 + (NPC.localAI[0] - 1500) * 0.04f);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
                             }
                         }
                         if (NPC.localAI[0] > 1600 && NPC.localAI[0] < 1800)
                         {
                             if (NPC.localAI[0] % Dist == 0)
                             {
-                                Vector2 v = new Vector2((NPC.localAI[0] - 1700) * 12, -220 + (NPC.localAI[0] - 1700) * 0.4f);
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.Tusk.TuskSummon>(), NPC.damage / 12, 0, Main.myPlayer, (float)Math.PI);
+                                Vector2 v = new Vector2((NPC.localAI[0] - 1700) * 12, -20 + (NPC.localAI[0] - 1700) * 0.04f);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
                             }
                         }
                     }
@@ -1056,7 +1056,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                         }
                         if (NPC.localAI[0] % Freq == 1)
                         {
-                            int r = /*NPC.NewNPC(null, (int)(NPC.Center.X - 3), (int)(NPC.Center.Y + 80), ModContent.NPCType<CrimsonTusk>())*/Projectile.NewProjectile(null, new Vector2(-3, 80) + NPC.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.Tusk.CrimsonTuskProjGra>(), NPC.damage / 9, 1);
+                            int r = /*NPC.NewNPC(null, (int)(NPC.Center.X - 3), (int)(NPC.Center.Y + 80), ModContent.NPCType<CrimsonTusk>())*/Projectile.NewProjectile(null, new Vector2(-3, 80) + NPC.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.CrimsonTuskProjGra>(), NPC.damage / 9, 1);
                             Main.projectile[r].velocity = new Vector2(0, Main.rand.NextFloat(-26f, -12f)).RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f));
                         }
                     }
@@ -1078,20 +1078,20 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                     }
                     if (NPC.localAI[0] % Freq == 0)
                     {
-                        Vector2 v = new Vector2(0, -280).RotatedBy(Math.Sin(NPC.localAI[0] / 100d * Math.PI));
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.Tusk.TuskSummon>(), NPC.damage / 12, 0, Main.myPlayer, (float)(Math.Atan2(v.Y, v.X) - Math.PI / 2d) - Math.Sign(v.X) * 0.3f);
+                        Vector2 v = new Vector2(0, -28).RotatedBy(Math.Sin(NPC.localAI[0] / 100d * Math.PI));
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
                     }
                     if (Main.masterMode)
                     {
                         if (NPC.localAI[0] % Freq == 2)
                         {
-                            Vector2 v = new Vector2(0, -780).RotatedBy(Math.Sin(NPC.localAI[0] / 100d * Math.PI) + 0.84);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.Tusk.TuskSummon>(), NPC.damage / 12, 0, Main.myPlayer, -(float)Math.Atan2(v.Y, v.X));
+                            Vector2 v = new Vector2(0, -20).RotatedBy(Math.Sin(NPC.localAI[0] / 100d * Math.PI) + 0.84);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
                         }
                         if (NPC.localAI[0] % Freq == 4)
                         {
-                            Vector2 v = new Vector2(0, -780).RotatedBy(Math.Sin(NPC.localAI[0] / 100d * Math.PI) - 0.84);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.Tusk.TuskSummon>(), NPC.damage / 12, 0, Main.myPlayer, -(float)Math.Atan2(v.Y, v.X));
+                            Vector2 v = new Vector2(0, -20).RotatedBy(Math.Sin(NPC.localAI[0] / 100d * Math.PI) - 0.84);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
                         }
                     }
                 }
@@ -1109,13 +1109,13 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                     if (NPC.localAI[0] % Freq == 0)
                     {
                         Vector2 v = new Vector2(0, -360).RotatedBy(Math.Sin(NPC.localAI[0] / 100d * Math.PI));
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.Tusk.TuskSummon>(), NPC.damage / 12, 0, Main.myPlayer, (float)(Math.Atan2(v.Y, v.X) - Math.PI / 2d) - Math.Sign(v.X) * 0.3f);
-                    }
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
+                        }
                     if (NPC.localAI[0] % Freq == 0)
                     {
                         Vector2 v = new Vector2((NPC.localAI[0] - 2700) * 6, -220 + (NPC.localAI[0] - 2700) * 0.4f);
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.Tusk.TuskSummon>(), NPC.damage / 12, 0, Main.myPlayer, (float)Math.PI);
-                    }
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
+                        }
                 }
                 if (NPC.localAI[0] > 2800 && NPC.localAI[0] <= 3000)
                 {
@@ -1131,20 +1131,20 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                     if (NPC.localAI[0] % Freq == 0)
                     {
                         Vector2 v = new Vector2(0, -500).RotatedBy(Math.Sin(NPC.localAI[0] / 100d * Math.PI));
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.Tusk.TuskSummon>(), NPC.damage / 12, 0, Main.myPlayer, (float)(Math.Atan2(v.Y, v.X) - Math.PI / 2d) - Math.Sign(v.X) * 0.3f);
-                    }
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
+                        }
                     if (Main.masterMode)
                     {
                         if (NPC.localAI[0] % Freq == 2)
                         {
                             Vector2 v = new Vector2(0, -720).RotatedBy(Math.Sin(NPC.localAI[0] / 100d * Math.PI) + 0.84);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.Tusk.TuskSummon>(), NPC.damage / 12, 0, Main.myPlayer, -(float)Math.Atan2(v.Y, v.X));
-                        }
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
+                            }
                         if (NPC.localAI[0] % Freq == 4)
                         {
                             Vector2 v = new Vector2(0, -720).RotatedBy(Math.Sin(NPC.localAI[0] / 100d * Math.PI) - 0.84);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.Tusk.TuskSummon>(), NPC.damage / 12, 0, Main.myPlayer, -(float)Math.Atan2(v.Y, v.X));
-                        }
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
+                            }
                     }
                 }
                 if (NPC.localAI[0] > 3000 && NPC.localAI[0] <= 3200)
@@ -1153,33 +1153,33 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                     {
                         if (NPC.localAI[0] % 24 == 0)
                         {
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100), new Vector2(0, -15).RotatedBy(-Math.Sin((NPC.localAI[0] - 3000) / 40f)), ModContent.ProjectileType<Projectiles.Tusk.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) + 240);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100), new Vector2(0, -15).RotatedBy(-Math.Sin((NPC.localAI[0] - 3000) / 40f)), ModContent.ProjectileType<Projectiles.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) + 240);
                         }
                         if (NPC.localAI[0] % 24 == 12)
                         {
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100), new Vector2(0, -15).RotatedBy(Math.Sin((NPC.localAI[0] - 3000) / 40f)), ModContent.ProjectileType<Projectiles.Tusk.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, -Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) - 240);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100), new Vector2(0, -15).RotatedBy(Math.Sin((NPC.localAI[0] - 3000) / 40f)), ModContent.ProjectileType<Projectiles.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, -Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) - 240);
                         }
                     }
                     if (Main.expertMode && !Main.masterMode)
                     {
                         if (NPC.localAI[0] % 12 == 0)
                         {
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100), new Vector2(0, -15).RotatedBy(-Math.Sin((NPC.localAI[0] - 3000) / 40f)), ModContent.ProjectileType<Projectiles.Tusk.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) + 240);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100), new Vector2(0, -15).RotatedBy(-Math.Sin((NPC.localAI[0] - 3000) / 40f)), ModContent.ProjectileType<Projectiles.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) + 240);
                         }
                         if (NPC.localAI[0] % 12 == 6)
                         {
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100), new Vector2(0, -15).RotatedBy(Math.Sin((NPC.localAI[0] - 3000) / 40f)), ModContent.ProjectileType<Projectiles.Tusk.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, -Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) - 240);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100), new Vector2(0, -15).RotatedBy(Math.Sin((NPC.localAI[0] - 3000) / 40f)), ModContent.ProjectileType<Projectiles.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, -Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) - 240);
                         }
                     }
                     if (Main.masterMode)
                     {
                         if (NPC.localAI[0] % 6 == 0)
                         {
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100), new Vector2(0, -15).RotatedBy(-Math.Sin((NPC.localAI[0] - 3000) / 40f)), ModContent.ProjectileType<Projectiles.Tusk.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) + 240);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100), new Vector2(0, -15).RotatedBy(-Math.Sin((NPC.localAI[0] - 3000) / 40f)), ModContent.ProjectileType<Projectiles.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) + 240);
                         }
                         if (NPC.localAI[0] % 6 == 3)
                         {
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100), new Vector2(0, -15).RotatedBy(Math.Sin((NPC.localAI[0] - 3000) / 40f)), ModContent.ProjectileType<Projectiles.Tusk.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, -Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) - 240);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100), new Vector2(0, -15).RotatedBy(Math.Sin((NPC.localAI[0] - 3000) / 40f)), ModContent.ProjectileType<Projectiles.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, -Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) - 240);
                         }
                     }
                 }
@@ -1191,11 +1191,11 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                         {
                             for (int i = 0; i < 2; i++)
                             {
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100), new Vector2(0, -15).RotatedBy(-Math.Sin((NPC.localAI[0] - 3000) / 40f + i)), ModContent.ProjectileType<Projectiles.Tusk.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) + 240);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100), new Vector2(0, -15).RotatedBy(-Math.Sin((NPC.localAI[0] - 3000) / 40f + i)), ModContent.ProjectileType<Projectiles.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) + 240);
                             }
                             for (int i = 0; i < 2; i++)
                             {
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100), new Vector2(0, -15).RotatedBy(-Math.Sin((NPC.localAI[0] - 3000) / 40f - i)), ModContent.ProjectileType<Projectiles.Tusk.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, -Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) - 240);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100), new Vector2(0, -15).RotatedBy(-Math.Sin((NPC.localAI[0] - 3000) / 40f - i)), ModContent.ProjectileType<Projectiles.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, -Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) - 240);
                             }
                         }
                     }
@@ -1205,11 +1205,11 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                         {
                             for (int i = 0; i < 2; i++)
                             {
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100), new Vector2(0, -15).RotatedBy(-Math.Sin((NPC.localAI[0] - 3000) / 40f + i)), ModContent.ProjectileType<Projectiles.Tusk.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) + 240);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100), new Vector2(0, -15).RotatedBy(-Math.Sin((NPC.localAI[0] - 3000) / 40f + i)), ModContent.ProjectileType<Projectiles.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) + 240);
                             }
                             for (int i = 0; i < 2; i++)
                             {
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100), new Vector2(0, -15).RotatedBy(-Math.Sin((NPC.localAI[0] - 3000) / 40f - i)), ModContent.ProjectileType<Projectiles.Tusk.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, -Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) - 240);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100), new Vector2(0, -15).RotatedBy(-Math.Sin((NPC.localAI[0] - 3000) / 40f - i)), ModContent.ProjectileType<Projectiles.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, -Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) - 240);
                             }
                         }
                     }
@@ -1219,11 +1219,11 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                         {
                             for (int i = 0; i < 3; i++)
                             {
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100), new Vector2(0, -15).RotatedBy(-Math.Sin((NPC.localAI[0] - 3000) / 40f + i)), ModContent.ProjectileType<Projectiles.Tusk.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) + 240);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100), new Vector2(0, -15).RotatedBy(-Math.Sin((NPC.localAI[0] - 3000) / 40f + i)), ModContent.ProjectileType<Projectiles.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) + 240);
                             }
                             for (int i = 0; i < 3; i++)
                             {
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100), new Vector2(0, -15).RotatedBy(-Math.Sin((NPC.localAI[0] - 3000) / 40f - i)), ModContent.ProjectileType<Projectiles.Tusk.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, -Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) - 240);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100), new Vector2(0, -15).RotatedBy(-Math.Sin((NPC.localAI[0] - 3000) / 40f - i)), ModContent.ProjectileType<Projectiles.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, -Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) - 240);
                             }
                         }
                     }
@@ -1236,11 +1236,11 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                         {
                             for (int i = 0; i < 2; i++)
                             {
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100) + new Vector2(Main.rand.Next(-100, 100), 0), new Vector2(0, -15), ModContent.ProjectileType<Projectiles.Tusk.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) + 240);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100) + new Vector2(Main.rand.Next(-100, 100), 0), new Vector2(0, -15), ModContent.ProjectileType<Projectiles.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) + 240);
                             }
                             for (int i = 0; i < 2; i++)
                             {
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100) + new Vector2(Main.rand.Next(-100, 100), 0), new Vector2(0, -15), ModContent.ProjectileType<Projectiles.Tusk.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, -Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) - 240);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100) + new Vector2(Main.rand.Next(-100, 100), 0), new Vector2(0, -15), ModContent.ProjectileType<Projectiles.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, -Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) - 240);
                             }
                         }
                     }
@@ -1250,11 +1250,11 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                         {
                             for (int i = 0; i < 2; i++)
                             {
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100) + new Vector2(Main.rand.Next(-100, 100), 0), new Vector2(0, -15), ModContent.ProjectileType<Projectiles.Tusk.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) + 240);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100) + new Vector2(Main.rand.Next(-100, 100), 0), new Vector2(0, -15), ModContent.ProjectileType<Projectiles.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) + 240);
                             }
                             for (int i = 0; i < 2; i++)
                             {
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100) + new Vector2(Main.rand.Next(-100, 100), 0), new Vector2(0, -15), ModContent.ProjectileType<Projectiles.Tusk.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, -Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) - 240);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100) + new Vector2(Main.rand.Next(-100, 100), 0), new Vector2(0, -15), ModContent.ProjectileType<Projectiles.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, -Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) - 240);
                             }
                         }
                     }
@@ -1264,11 +1264,11 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                         {
                             for (int i = 0; i < 3; i++)
                             {
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100) + new Vector2(Main.rand.Next(-100, 100), 0), new Vector2(0, -15), ModContent.ProjectileType<Projectiles.Tusk.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) + 240);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100) + new Vector2(Main.rand.Next(-100, 100), 0), new Vector2(0, -15), ModContent.ProjectileType<Projectiles.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) + 240);
                             }
                             for (int i = 0; i < 3; i++)
                             {
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100) + new Vector2(Main.rand.Next(-100, 100), 0), new Vector2(0, -15), ModContent.ProjectileType<Projectiles.Tusk.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, -Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) - 240);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100) + new Vector2(Main.rand.Next(-100, 100), 0), new Vector2(0, -15), ModContent.ProjectileType<Projectiles.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, -Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) - 240);
                             }
                         }
                     }
@@ -1309,41 +1309,39 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                         Vector2 v0 = NPC.Center - player.Center;
                         if (v0.X > 0)
                         {
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 10), new Vector2(-20, -36), ModContent.ProjectileType<Projectiles.Tusk.TuskCurse>(), 0, 3f, player.whoAmI, 0, 0f);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 10), new Vector2(16, -26), ModContent.ProjectileType<Projectiles.Tusk.TuskCurse>(), 0, 3f, player.whoAmI, 0, 0f);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 10), new Vector2(-20, -36), ModContent.ProjectileType<Projectiles.TuskCurse>(), 0, 3f, player.whoAmI, 0, 0f);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 10), new Vector2(16, -26), ModContent.ProjectileType<Projectiles.TuskCurse>(), 0, 3f, player.whoAmI, 0, 0f);
                             if (Main.masterMode || Main.masterMode)
                             {
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 10), new Vector2(4, -6), ModContent.ProjectileType<Projectiles.Tusk.TuskCurse>(), 0, 3f, player.whoAmI, 0, 0f);
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 10), new Vector2(2, -36), ModContent.ProjectileType<Projectiles.Tusk.TuskCurse>(), 0, 3f, player.whoAmI, 0, 0f);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 10), new Vector2(4, -6), ModContent.ProjectileType<Projectiles.TuskCurse>(), 0, 3f, player.whoAmI, 0, 0f);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 10), new Vector2(2, -36), ModContent.ProjectileType<Projectiles.TuskCurse>(), 0, 3f, player.whoAmI, 0, 0f);
                             }
                             if (Main.masterMode)
                             {
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 10), new Vector2(6, -37), ModContent.ProjectileType<Projectiles.Tusk.TuskCurse>(), 0, 3f, player.whoAmI, 0, 0f);
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 10), new Vector2(3, -32), ModContent.ProjectileType<Projectiles.Tusk.TuskCurse>(), 0, 3f, player.whoAmI, 0, 0f);
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 10), new Vector2(-15, -29), ModContent.ProjectileType<Projectiles.Tusk.TuskCurse>(), 0, 3f, player.whoAmI, 0, 0f);
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 10), new Vector2(10, -29), ModContent.ProjectileType<Projectiles.Tusk.TuskCurse>(), 0, 3f, player.whoAmI, 0, 0f);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 10), new Vector2(6, -37), ModContent.ProjectileType<Projectiles.TuskCurse>(), 0, 3f, player.whoAmI, 0, 0f);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 10), new Vector2(3, -32), ModContent.ProjectileType<Projectiles.TuskCurse>(), 0, 3f, player.whoAmI, 0, 0f);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 10), new Vector2(-15, -29), ModContent.ProjectileType<Projectiles.TuskCurse>(), 0, 3f, player.whoAmI, 0, 0f);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 10), new Vector2(10, -29), ModContent.ProjectileType<Projectiles.TuskCurse>(), 0, 3f, player.whoAmI, 0, 0f);
                             }
                         }
                         else
                         {
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 10), new Vector2(-16, -26), ModContent.ProjectileType<Projectiles.Tusk.TuskCurse>(), 0, 3f, player.whoAmI, 0, 0f);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 10), new Vector2(20, -36), ModContent.ProjectileType<Projectiles.Tusk.TuskCurse>(), 0, 3f, player.whoAmI, 0, 0f);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 10), new Vector2(-16, -26), ModContent.ProjectileType<Projectiles.TuskCurse>(), 0, 3f, player.whoAmI, 0, 0f);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 10), new Vector2(20, -36), ModContent.ProjectileType<Projectiles.TuskCurse>(), 0, 3f, player.whoAmI, 0, 0f);
                             if (Main.masterMode || Main.masterMode)
                             {
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 10), new Vector2(-2, -36), ModContent.ProjectileType<Projectiles.Tusk.TuskCurse>(), 0, 3f, player.whoAmI, 0, 0f);
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 10), new Vector2(-4, -6), ModContent.ProjectileType<Projectiles.Tusk.TuskCurse>(), 0, 3f, player.whoAmI, 0, 0f);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 10), new Vector2(-2, -36), ModContent.ProjectileType<Projectiles.TuskCurse>(), 0, 3f, player.whoAmI, 0, 0f);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 10), new Vector2(-4, -6), ModContent.ProjectileType<Projectiles.TuskCurse>(), 0, 3f, player.whoAmI, 0, 0f);
                             }
                             if (Main.masterMode)
                             {
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 10), new Vector2(-3, -32), ModContent.ProjectileType<Projectiles.Tusk.TuskCurse>(), 0, 3f, player.whoAmI, 0, 0f);
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 10), new Vector2(-8, -27), ModContent.ProjectileType<Projectiles.Tusk.TuskCurse>(), 0, 3f, player.whoAmI, 0, 0f);
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 10), new Vector2(-10, -29), ModContent.ProjectileType<Projectiles.Tusk.TuskCurse>(), 0, 3f, player.whoAmI, 0, 0f);
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 10), new Vector2(15, -29), ModContent.ProjectileType<Projectiles.Tusk.TuskCurse>(), 0, 3f, player.whoAmI, 0, 0f);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 10), new Vector2(-3, -32), ModContent.ProjectileType<Projectiles.TuskCurse>(), 0, 3f, player.whoAmI, 0, 0f);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 10), new Vector2(-8, -27), ModContent.ProjectileType<Projectiles.TuskCurse>(), 0, 3f, player.whoAmI, 0, 0f);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 10), new Vector2(-10, -29), ModContent.ProjectileType<Projectiles.TuskCurse>(), 0, 3f, player.whoAmI, 0, 0f);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 10), new Vector2(15, -29), ModContent.ProjectileType<Projectiles.TuskCurse>(), 0, 3f, player.whoAmI, 0, 0f);
                             }
                         }
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(-300, -270) + new Vector2(15, -1) * 68f, new Vector2(-45, 3), ModContent.ProjectileType<Projectiles.Tusk.TuskCrack>(), NPC.damage, 3f, player.whoAmI, 0, 0f);
-                        ;
-                        //Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(-300, -270), new Vector2(15, -1) * 3, ModContent.ProjectileType<Projectiles.Tusk.TuskCrack>(), NPC.damage / 9, 3f, Main.myPlayer, -Math.Abs((((NPC.localAI[0] - 3000) / 4f) % 70 - 35) * 18) - 240);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(-300, -270) + new Vector2(15, -1) * 68f, new Vector2(-45, 3), ModContent.ProjectileType<Projectiles.TuskCrack>(), NPC.damage, 3f, player.whoAmI, 0, 0f);
                     }
                 }
                 if (NPC.localAI[0] > 4800 && NPC.localAI[0] <= 5400)
@@ -1371,17 +1369,17 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                     {
                         for (int i = 0; i < MaxTusk; i++)
                         {
-                            Vector2 v = new Vector2(-i * 18 - 1200, -220);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.Tusk.TuskSummon>(), NPC.damage / 12, 0, Main.myPlayer, (float)Math.PI);
-                            v = new Vector2(-i * 18 - 600, -220);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.Tusk.TuskSummon>(), NPC.damage / 12, 0, Main.myPlayer, (float)Math.PI);
-                            v = new Vector2(-i * 18 + 0, -220);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.Tusk.TuskSummon>(), NPC.damage / 12, 0, Main.myPlayer, (float)Math.PI);
-                            v = new Vector2(-i * 18 + 600, -220);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.Tusk.TuskSummon>(), NPC.damage / 12, 0, Main.myPlayer, (float)Math.PI);
-                            v = new Vector2(-i * 18 + 1200, -220);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.Tusk.TuskSummon>(), NPC.damage / 12, 0, Main.myPlayer, (float)Math.PI);
-                        }
+                            Vector2 v = new Vector2(-i * 18 - 1200, -20);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
+                                v = new Vector2(-i * 18 - 600, -20);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
+                                v = new Vector2(-i * 18 + 0, -20);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
+                                v = new Vector2(-i * 18 + 600, -20);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
+                                v = new Vector2(-i * 18 + 1200, -20);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
+                            }
                     }
                     if (NPC.localAI[0] == 5001)
                     {
@@ -1398,15 +1396,15 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                     {
                         for (int i = 0; i < MaxTusk; i++)
                         {
-                            Vector2 v = new Vector2(-i * 18 - 900, -220);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.Tusk.TuskSummon>(), NPC.damage / 12, 0, Main.myPlayer, (float)Math.PI);
-                            v = new Vector2(-i * 18 - 300, -220);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.Tusk.TuskSummon>(), NPC.damage / 12, 0, Main.myPlayer, (float)Math.PI);
-                            v = new Vector2(-i * 18 + 300, -220);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.Tusk.TuskSummon>(), NPC.damage / 12, 0, Main.myPlayer, (float)Math.PI);
-                            v = new Vector2(-i * 18 + 900, -220);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.Tusk.TuskSummon>(), NPC.damage / 12, 0, Main.myPlayer, (float)Math.PI);
-                        }
+                            Vector2 v = new Vector2(-i * 18 - 900, -20);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
+                                v = new Vector2(-i * 18 - 300, -20);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
+                                v = new Vector2(-i * 18 + 300, -20);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
+                                v = new Vector2(-i * 18 + 900, -20);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
+                            }
                     }
                     if (NPC.localAI[0] == 5201)
                     {
@@ -1422,17 +1420,17 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                     {
                         for (int i = 0; i < MaxTusk; i++)
                         {
-                            Vector2 v = new Vector2(-i * 18 - 1200, -220);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.Tusk.TuskSummon>(), NPC.damage / 12, 0, Main.myPlayer, (float)Math.PI);
-                            v = new Vector2(-i * 18 - 600, -220);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.Tusk.TuskSummon>(), NPC.damage / 12, 0, Main.myPlayer, (float)Math.PI);
-                            v = new Vector2(-i * 18 + 0, -220);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.Tusk.TuskSummon>(), NPC.damage / 12, 0, Main.myPlayer, (float)Math.PI);
-                            v = new Vector2(-i * 18 + 600, -220);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.Tusk.TuskSummon>(), NPC.damage / 12, 0, Main.myPlayer, (float)Math.PI);
-                            v = new Vector2(-i * 18 + 1200, -220);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.Tusk.TuskSummon>(), NPC.damage / 12, 0, Main.myPlayer, (float)Math.PI);
-                        }
+                            Vector2 v = new Vector2(-i * 18 - 1200, -20);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
+                                v = new Vector2(-i * 18 - 600, -20);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
+                                v = new Vector2(-i * 18 + 0, -20);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
+                                v = new Vector2(-i * 18 + 600, -20);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
+                                v = new Vector2(-i * 18 + 1200, -20);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
+                            }
                     }
                 }
                 if (NPC.localAI[0] > 5400 && NPC.localAI[0] <= 6000)
@@ -1899,8 +1897,8 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                 {
                     for (int h = 0; h < 15; h++)
                     {
-                        //Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 50), Vector2.Zero, ModContent.ProjectileType<Projectiles.Tusk.TuskKillEffect>(), 0, 0, Main.myPlayer, 0);
-                        NPC.NewNPC(null, (int)NPC.Center.X - 3, (int)NPC.Center.Y + 50, ModContent.NPCType<Projectiles.Tusk.TuskKillEffect>());
+                        //Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 50), Vector2.Zero, ModContent.ProjectileType<Projectiles.TuskKillEffect>(), 0, 0, Main.myPlayer, 0);
+                        NPC.NewNPC(null, (int)NPC.Center.X - 3, (int)NPC.Center.Y + 50, ModContent.NPCType<Projectiles.TuskKillEffect>());
                     }
 
                 }

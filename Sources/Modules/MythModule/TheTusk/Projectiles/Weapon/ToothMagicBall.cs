@@ -4,6 +4,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 {
     public class ToothMagicBall : ModProjectile
     {
+        //TODO
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Tooth Magic Ball");

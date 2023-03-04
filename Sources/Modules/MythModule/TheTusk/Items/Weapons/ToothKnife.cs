@@ -1,20 +1,10 @@
-﻿using Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Tusk;
+﻿using Everglow.Sources.Modules.MythModule.TheTusk.Projectiles;
 using Terraria.DataStructures;
-using Terraria.GameContent.Creative;
-using Terraria.Localization;
-
 namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Weapons
 {
     public class ToothKnife : ModItem
     {
-        public override void SetStaticDefaults()
-        {
-            DisplayName.SetDefault("Tooth Blade");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "齿刃");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Russian, "Зубное лезвие");
-            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-        }
-
+        //TODO:暴击后在地上召唤獠牙刺
         public override void SetDefaults()
         {
             Item.width = 40;
@@ -45,10 +35,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Weapons
         {
             if(crit)
             {
-                Projectile.NewProjectile(Item.GetSource_OnHit(target), target.Center + new Vector2(80, 0), new Vector2(Main.rand.NextFloat(-1f, 1f), 0), ModContent.ProjectileType<EarthTusk>(), Item.damage, Item.knockBack * 0.8f, player.whoAmI, 7, 1);
-                Projectile.NewProjectile(Item.GetSource_OnHit(target), target.Center + new Vector2(-80, 0), new Vector2(Main.rand.NextFloat(-1f, 1f), 0), ModContent.ProjectileType<EarthTusk>(), Item.damage, Item.knockBack * 0.8f, player.whoAmI, 7, -1);
+                Projectile.NewProjectile(Item.GetSource_OnHit(target), target.Center + new Vector2(80, 0), new Vector2(Main.rand.NextFloat(-1f, 1f), 0), ModContent.ProjectileType<EarthTusk>(), Item.damage, Item.knockBack * 0.8f, player.whoAmI, 2, 1);
+                Projectile.NewProjectile(Item.GetSource_OnHit(target), target.Center + new Vector2(-80, 0), new Vector2(Main.rand.NextFloat(-1f, 1f), 0), ModContent.ProjectileType<EarthTusk>(), Item.damage, Item.knockBack * 0.8f, player.whoAmI, 2, -1);
             }
-
         }
     }
 }

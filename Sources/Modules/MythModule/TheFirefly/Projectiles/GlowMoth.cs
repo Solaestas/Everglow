@@ -16,12 +16,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         {
             Projectile.width = 36;
             Projectile.height = 34;
-            Projectile.tileCollide = false; // Makes the minion go through tiles freely
+            Projectile.tileCollide = false; 
             Projectile.hostile = false;
             Projectile.timeLeft = 720;
-            Projectile.friendly = true; // Only controls if it deals damage to enemies on contact (more on that later)
-            Projectile.minionSlots = 1; // Amount of slots this minion occupies from the total minion slots available to the player (more on that later)
-            Projectile.penetrate = -1; // Needed so the minion doesn't despawn on collision with enemies or tiles
+            Projectile.friendly = true;
+            Projectile.minionSlots = 1; 
+            Projectile.penetrate = -1;
             Projectile.aiStyle = -1;
             Projectile.DamageType = DamageClass.Summon;
             Projectile.minion = true;//这玩意会捆绑武器Item的伤害
@@ -49,7 +49,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         private int AutoAddingTimer = 0;
         private float[] OldRotation = new float[12];
         private int[] OldFrame = new int[12];
-        private int PlayerStickTime = 0;
         private bool SleepOutside = false;
         private float Power = 0.25f;
 
@@ -282,31 +281,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             }
             else/*其他的飞蛾*/
             {
-                if (player.velocity.Length() < 0.5f)
-                {
-                    PlayerStickTime++;
-                }
-                else
-                {
-                    PlayerStickTime = 0;
-                }
-                /*if(PlayerStickTime > 60)
-                {
-                    if(Collision.SolidCollision(Projectile.Center,1, 1))
-                    {
-                        SleepOutside = true;
-                        Projectile.velocity *= 0;
-                        return;
-                    }
-                    else
-                    {
-                        SleepOutside = false;
-                    }
-                }
-                else
-                {
-                    SleepOutside = false;
-                }*/
                 Vector2 v = player.MountedCenter + ProduceFlyTrace(Projectile.ai[0]) - Projectile.Center;
 
                 Projectile.velocity = (Projectile.velocity * 10f + v / v.Length() * 5f) / 11f;
@@ -399,7 +373,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
                 Texture2D Gtexture = MythContent.QuickTexture("TheFirefly/Projectiles/GlowMothGlow");
                 Vector2 DrawPos = Projectile.oldPos[i] + new Vector2(Projectile.width / 2f, Projectile.height / 2f) - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY);
-                Color c0 = Lighting.GetColor((int)(DrawPos.X / 16f), (int)(DrawPos.Y / 16f));
                 SpriteEffects sf = SpriteEffects.None;
                 float AddRotation = 0;
                 if (Projectile.spriteDirection == -1)

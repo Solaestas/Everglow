@@ -1,15 +1,7 @@
-using Terraria.Localization;
-
-
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Tusk
+namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 {
     public class TuskSpicePro : ModProjectile
     {
-        public override void SetStaticDefaults()
-        {
-            DisplayName.SetDefault("Tusk Staff");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "獠牙法杖");
-        }
         public override void SetDefaults()
         {
             Projectile.width = 100;

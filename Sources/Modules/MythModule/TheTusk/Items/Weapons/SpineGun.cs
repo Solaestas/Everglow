@@ -6,6 +6,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Weapons
 {
     public class SpineGun : ModItem
     {
+        //TODO：翻译，如果做完了就删掉
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Spine Musket");
@@ -41,7 +42,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Weapons
 
             // Gun Properties
             Item.shoot = ProjectileID.PurificationPowder;
-            Item.shootSpeed = 10f;
+            Item.shootSpeed = 18f;
             Item.useAmmo = AmmoID.Bullet;
         }
 

@@ -1,6 +1,6 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheFirefly.Buffs
+﻿namespace Everglow.Sources.Modules.MythModule.TheTusk.Buffs
 {
-    public class GlowMothBuff : ModBuff
+    public class TuskStaff : ModBuff
     {
         public override void SetStaticDefaults()
         {
@@ -10,7 +10,6 @@
 
         public override void Update(Player player, ref int buffIndex)
         {
-            // if the minions exist reset the buff time, otherwise remove the buff from the player.
         }
     }
 }

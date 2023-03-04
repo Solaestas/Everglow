@@ -1,4 +1,4 @@
-﻿//using MythMod.Common.Players;
+﻿using Everglow.Sources.Commons.Function.Vertex;
 using Terraria.GameContent;
 using Terraria.Localization;
 
@@ -6,6 +6,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 {
     public class SplieSpineBullet : ModProjectile
     {
+        //TODO:Splie应为Split翻译
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("SplieSpineBullet");
@@ -29,11 +30,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
         private int Tokill = -1;
         public override void AI()
         {
-            ka = 0.2f;
-            if (Projectile.timeLeft < 60f)
-            {
-                ka = Projectile.timeLeft / 300f;
-            }
             if (Tokill < 0)
             {
                 for (int j = 0; j < 200; j++)
@@ -45,44 +41,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
                         float CosAng = Vector2.Dot(v0, v1);//夹角余弦值大于0.707,即为45°
                         if (CosAng > 0.707)//爆
                         {
-                            int NumProjectiles = 6;
-
-                            for (int i = 0; i < NumProjectiles; i++)
-                            {
-                                Vector2 newVelocity = Projectile.velocity.RotatedByRandom(MathHelper.ToRadians(15));
-                                newVelocity *= 0.6f - Main.rand.NextFloat(0.2f);
-                                Projectile.NewProjectileDirect(Projectile.InheritSource(Projectile), Projectile.Center, newVelocity, (int)Projectile.ai[1], Projectile.damage, Projectile.knockBack, Projectile.owner);
-                            }
-                            /*int NumProjectiles2 = Main.rand.Next(2, 4);
-                            for (int i = 0; i < NumProjectiles2; i++)
-                            {
-                                Vector2 newVelocity = Projectile.velocity.RotatedByRandom(MathHelper.ToRadians(13));
-                                newVelocity *= 2.4f - Main.rand.NextFloat(0.3f);
-                                Projectile.NewProjectileDirect(Projectile.InheritSource(Projectile), Projectile.Center, newVelocity, ModContent.ProjectileType<Projectiles.Ranged.BloodyGun>(), (int)(Projectile.damage * 1.5f), Projectile.knockBack, Projectile.owner);
-                            }*/
-                            TuskModPlayer mplayer = Terraria.Main.player[Terraria.Main.myPlayer].GetModPlayer<TuskModPlayer>();
-                            mplayer.Shake = 1;
-                            for (int i = 0; i < 16; i++)
-                            {
-                                Vector2 v = new Vector2(0, Main.rand.NextFloat(1, 3)).RotatedByRandom(MathHelper.TwoPi);
-                                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.FartInAJar, v.X, v.Y, 150, default, Main.rand.NextFloat(0.8f, 5f));
-                            }
-                            for (int i = 0; i < 16; i++)
-                            {
-                                Vector2 v = new Vector2(0, Main.rand.NextFloat(1, 3)).RotatedByRandom(MathHelper.TwoPi);
-                                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, v.X, v.Y, 0, default, Main.rand.NextFloat(0.8f, 1.3f));
-                            }
-                            for (int i = 0; i < 7; i++)
-                            {
-                                Gore.NewGore(null, Projectile.Center, new Vector2(0, Main.rand.NextFloat(1, 3)).RotatedByRandom(MathHelper.TwoPi), Main.rand.Next(61, 64), Main.rand.NextFloat(1f, 3.2f));
-                            }
-                            Projectile.velocity = Projectile.oldVelocity;
-                            Tokill = 45;//0.75s后消掉
-                            Projectile.friendly = false;
-                            Projectile.damage = 0;
-                            Projectile.tileCollide = false;
-                            Projectile.ignoreWater = true;
-                            Projectile.aiStyle = -1;
+                            Explosion();
                             break;
                         }
                     }
@@ -103,32 +62,26 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
                 Projectile.velocity = Projectile.oldVelocity;
             }
         }
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        private void Explosion()
         {
-            TuskModPlayer mplayer = Terraria.Main.player[Terraria.Main.myPlayer].GetModPlayer<TuskModPlayer>();
+            TuskModPlayer mplayer = Main.player[Projectile.owner].GetModPlayer<TuskModPlayer>();
             mplayer.Shake = 1;
-            for (int i = 0; i < 16; i++)
+            int NumProjectiles = 6;
+            for (int i = 0; i < NumProjectiles; i++)
             {
-                Vector2 v = new Vector2(0, Main.rand.NextFloat(1, 3)).RotatedByRandom(MathHelper.TwoPi);
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.FartInAJar, v.X, v.Y, 150, default, Main.rand.NextFloat(0.8f, 5f));
+                Vector2 newVelocity = Projectile.velocity.RotatedByRandom(MathHelper.ToRadians(35));
+                newVelocity *= 0.6f - Main.rand.NextFloat(0.2f);
+                Projectile.NewProjectileDirect(Projectile.InheritSource(Projectile), Projectile.Center, newVelocity, (int)Projectile.ai[1], Projectile.damage, Projectile.knockBack, Projectile.owner);
+            }
+            for (int i = 0; i < 26; i++)
+            {
+                Vector2 v = new Vector2(0, Main.rand.NextFloat(0.4f, 1.4f)).RotatedByRandom(MathHelper.TwoPi);
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke, v.X, v.Y, 150, default, Main.rand.NextFloat(0.8f, 4f));
             }
             for (int i = 0; i < 16; i++)
             {
                 Vector2 v = new Vector2(0, Main.rand.NextFloat(1, 3)).RotatedByRandom(MathHelper.TwoPi);
                 Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, v.X, v.Y, 0, default, Main.rand.NextFloat(0.8f, 1.3f));
-            }
-            for (int i = 0; i < 7; i++)
-            {
-                Gore.NewGore(null, Projectile.Center, new Vector2(0, Main.rand.NextFloat(1, 3)).RotatedByRandom(MathHelper.TwoPi), Main.rand.Next(61, 64), Main.rand.NextFloat(1f, 3.2f));
-            }
-            for (int j = 0; j < 200; j++)
-            {
-                if ((Main.npc[j].Center - Projectile.Center).Length() < 20 && !Main.npc[j].dontTakeDamage && !Main.npc[j].friendly && Main.npc[j].active)
-                {
-                    Main.npc[j].StrikeNPC((int)(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f)), 2, Math.Sign(Projectile.velocity.X), Main.rand.Next(100) < Projectile.ai[0]);
-                    Player player2 = Main.player[Projectile.owner];
-                    player2.dpsDamage += (int)(Projectile.damage * (1 + (Projectile.ai[0] / 100f)) * 1f);
-                }
             }
             Projectile.velocity = Projectile.oldVelocity;
             Tokill = 45;//0.75s后消掉
@@ -138,42 +91,13 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
             Projectile.ignoreWater = true;
             Projectile.aiStyle = -1;
         }
-        private NPC md = Main.npc[0];
-        private Vector2 v = new Vector2(0, 0);
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        {
+            Explosion();
+        }
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            TuskModPlayer mplayer = Main.player[Main.myPlayer].GetModPlayer<TuskModPlayer>();
-            mplayer.Shake = 1;
-            for (int i = 0; i < 16; i++)
-            {
-                Vector2 v = new Vector2(0, Main.rand.NextFloat(1, 3)).RotatedByRandom(MathHelper.TwoPi);
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.FartInAJar, v.X, v.Y, 150, default, Main.rand.NextFloat(0.8f, 5f));
-            }
-            for (int i = 0; i < 16; i++)
-            {
-                Vector2 v = new Vector2(0, Main.rand.NextFloat(1, 3)).RotatedByRandom(MathHelper.TwoPi);
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, v.X, v.Y, 0, default, Main.rand.NextFloat(0.8f, 1.3f));
-            }
-            for (int i = 0; i < 7; i++)
-            {
-                Gore.NewGore(null, Projectile.Center, new Vector2(0, Main.rand.NextFloat(1, 3)).RotatedByRandom(MathHelper.TwoPi), Main.rand.Next(61, 64), Main.rand.NextFloat(1f, 3.2f));
-            }
-            for (int j = 0; j < 200; j++)
-            {
-                if ((Main.npc[j].Center - Projectile.Center).Length() < 20 && !Main.npc[j].dontTakeDamage && !Main.npc[j].friendly && Main.npc[j].active)
-                {
-                    Main.npc[j].StrikeNPC((int)(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f)), 2, Math.Sign(Projectile.velocity.X), Main.rand.Next(100) < Projectile.ai[0]);
-                    Player player2 = Main.player[Projectile.owner];
-                    player2.dpsDamage += (int)(Projectile.damage * (1 + (Projectile.ai[0] / 100f)) * 1f);
-                }
-            }
-            Projectile.velocity = Projectile.oldVelocity;
-            Tokill = 45;//0.75s后消掉
-            Projectile.friendly = false;
-            Projectile.damage = 0;
-            Projectile.tileCollide = false;
-            Projectile.ignoreWater = true;
-            Projectile.aiStyle = -1;
+            Explosion();
             return false;
         }
         public override void Kill(int timeLeft)
@@ -184,18 +108,18 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
         }
 
         private int TrueL = 1;
-        private float ka = 0;
-        private Color c0 = new Color(0, 0, 0, 0);
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D t = TextureAssets.Projectile[Math.Clamp((int)Projectile.ai[1], 0, TextureAssets.Projectile.Length)].Value;
+            //获取贴图中央颜色像素块,后面用于光照
             Color[] Lig = new Color[t.Width * t.Height];
             t.GetData(Lig);
-            c0 = Lig[(int)((t.Width * t.Height / 2f) - 1)];
+            Color c0 = Lig[(int)((t.Width * t.Height / 2f) - 1)];
+
 
             Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            List<VertexBase.CustomVertexInfo> bars = new List<VertexBase.CustomVertexInfo>();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            List<Vertex2D> bars = new List<Vertex2D>();
             float width = 2 * Projectile.scale;
             if (Projectile.timeLeft < 60)
             {
@@ -220,36 +144,25 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 
                 var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
                 normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
-                var factor = 1f;
-                factor = i / (float)TrueL;
-                var w = MathHelper.Lerp(1f, 0.05f, factor);
+                var factor = i / (float)TrueL;
+
                 float Tr = c0.R / 300f;
                 float Tg = c0.G / 300f;
                 float Tb = c0.B / 300f;
-                Lighting.AddLight(Projectile.oldPos[i], (255 - Projectile.alpha) * Tr / 50f * ka * (1 - factor), (255 - Projectile.alpha) * Tg / 50f * ka * (1 - factor), (255 - Projectile.alpha) * Tb / 50f * ka * (1 - factor));
-                bars.Add(new VertexBase.CustomVertexInfo(Projectile.oldPos[i] + (normalDir * width) + new Vector2(4f, 4f) - Main.screenPosition, new Color(254, 254, 254, 0), new Vector3(1, factor, w)));
-                bars.Add(new VertexBase.CustomVertexInfo(Projectile.oldPos[i] + (normalDir * -width) + new Vector2(4f, 4f) - Main.screenPosition, new Color(254, 254, 254, 0), new Vector3(0, factor, w)));
-            }
-            List<VertexBase.CustomVertexInfo> Vx = new List<VertexBase.CustomVertexInfo>();
-            if (bars.Count > 2)
-            {
-                Vx.Add(bars[0]);
-                var vertex = new VertexBase.CustomVertexInfo(((bars[0].Position + bars[1].Position) * 0.5f) + Vector2.Normalize(Projectile.velocity), new Color(254, 254, 254, 0), new Vector3(0.5f, 0, 1));
-                Vx.Add(bars[1]);
-                Vx.Add(vertex);
-                for (int i = 0; i < bars.Count - 2; i += 2)
+                float mulLight = 0.2f;
+                if (Projectile.timeLeft < 60f)
                 {
-                    Vx.Add(bars[i]);
-                    Vx.Add(bars[i + 2]);
-                    Vx.Add(bars[i + 1]);
-
-                    Vx.Add(bars[i + 1]);
-                    Vx.Add(bars[i + 2]);
-                    Vx.Add(bars[i + 3]);
+                    mulLight = Projectile.timeLeft / 300f;
                 }
+                float lightValue = (255 - Projectile.alpha) / 50f * mulLight * (1 - factor);
+                Lighting.AddLight(Projectile.oldPos[i], Tr * lightValue, Tg * lightValue, Tb * lightValue);
+                bars.Add(new Vertex2D(Projectile.oldPos[i] + (normalDir * width) + new Vector2(4f, 4f) - Main.screenPosition, new Color(254, 254, 254, 0), new Vector3(1, factor, 0)));
+                bars.Add(new Vertex2D(Projectile.oldPos[i] + (normalDir * -width) + new Vector2(4f, 4f) - Main.screenPosition, new Color(254, 254, 254, 0), new Vector3(0, factor, 0)));
             }
             Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
-            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
+            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             return false;
         }
     }

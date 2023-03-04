@@ -1,16 +1,8 @@
 using Terraria.Audio;
-using Terraria.Localization;
-using Terraria.ID;
-
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Tusk
+namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 {
     public class TuskCurse : ModProjectile
     {
-        public override void SetStaticDefaults()
-        {
-            DisplayName.SetDefault("");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "");
-        }
         public override void SetDefaults()
         {
             Projectile.width = 30;
@@ -42,7 +34,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Tusk
                 int r = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4), 0, 0, DustID.VampireHeal, 0, 0, 0, default, 15f * Main.rand.NextFloat(0.4f, 1.1f));
                 Main.dust[r].noGravity = true;
                 Main.dust[r].velocity = v3;
-                //Main.dust[r].dustIndex = (int)(Math.Cos(h * Math.PI / 10d + Projectile.ai[0]) * 100d);
             }
             NPC.NewNPC(null, (int)Projectile.Center.X, (int)Projectile.Bottom.Y, ModContent.NPCType<NPCs.Bosses.BloodTusk.TuskPoolWave>());
             NPC.NewNPC(null, (int)Projectile.Center.X, (int)Projectile.Bottom.Y, ModContent.NPCType<NPCs.Bosses.BloodTusk.TuskRedLight>());
@@ -51,7 +42,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Tusk
         private Effect ef;
         public override void PostDraw(Color lightColor)
         {
-            Texture2D texture = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Projectiles/Tusk/TuskCurseGlow").Value;
+            Texture2D texture = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Projectiles/TuskCurseGlow").Value;
             Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(255, 255, 255, 0), Projectile.rotation, new Vector2(15f, 15f), Projectile.scale, SpriteEffects.None, 0);
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);

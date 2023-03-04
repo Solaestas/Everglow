@@ -4,9 +4,9 @@ using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Shaders;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Tusk
+namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 {
-    public class EarthTusk : ModProjectile
+    public class EarthTuskHostile : ModProjectile
     {
         public override string Texture => "Everglow/Sources/Modules/MythModule/TheTusk/Projectiles/Textures/Tuskplus0";
         public override void SetDefaults()
@@ -68,7 +68,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Tusk
             Projectile.position -= new Vector2(0, -80).RotatedBy(Projectile.rotation) * Projectile.scale;
             SummonCenter = Projectile.Center;
             TextureType = Main.rand.Next(6);
-            Projectile.friendly = true;
+            Projectile.hostile = true;
             Collision.HitTiles(Projectile.Center + new Vector2(0, -80).RotatedBy(Projectile.rotation) * Projectile.scale - new Vector2(8), new Vector2(0, -0.2f).RotatedBy(Projectile.rotation), 16, 16);
         }
         private float ToTileOutside(Vector2 Point)

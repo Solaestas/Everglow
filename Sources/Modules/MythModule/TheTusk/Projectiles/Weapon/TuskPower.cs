@@ -80,7 +80,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
                     if (NewPos[f] != Vector2.Zero)
                     {
                         Vector2 vx = NewPos[f] - Main.MouseWorld;
-                        int h = Projectile.NewProjectile(Projectile.InheritSource(Projectile), NewPos[f], Vector2.Zero, ModContent.ProjectileType<Projectiles.Tusk.TuskSpicePro>(), (int)(Stre * player.HeldItem.damage * 5), Projectile.knockBack, player.whoAmI, Main.rand.NextFloat(22f, 27f) * Stre * 2.4f + 4, Stre);
+                        int h = Projectile.NewProjectile(Projectile.InheritSource(Projectile), NewPos[f], Vector2.Zero, ModContent.ProjectileType<Projectiles.TuskSpicePro>(), (int)(Stre * player.HeldItem.damage * 5), Projectile.knockBack, player.whoAmI, Main.rand.NextFloat(22f, 27f) * Stre * 2.4f + 4, Stre);
                         float rot = (float)(Math.Atan2(vx.Y, vx.X) - Math.PI / 2d) + Main.rand.NextFloat(-0.6f, 0.6f);
                         Main.projectile[h].rotation = rot;
                         for (int z = 0; z < 10; z++)

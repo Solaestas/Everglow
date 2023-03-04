@@ -1,11 +1,4 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.LanternGhostKing;
-using Terraria.GameContent;
-using Terraria.Graphics.Effects;
-using Terraria.Graphics.Shaders;
-using Terraria.Localization;
-
-namespace Everglow.Sources.Modules.MythModule.LanternMoon
+﻿namespace Everglow.Sources.Modules.MythModule.LanternMoon
 {
     public class LanternMoon : ModSystem//灯笼月
     {

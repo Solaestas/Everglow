@@ -1,15 +1,7 @@
-using Terraria.Localization;
-
-
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Tusk
+namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 {
     public class TuskKillEffect : ModNPC
     {
-        public override void SetStaticDefaults()
-        {
-            DisplayName.SetDefault("");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "");
-        }
         public override void SetDefaults()
         {
             NPC.width = 10;

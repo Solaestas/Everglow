@@ -1,28 +1,14 @@
 using Terraria.Audio;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Tusk
+namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 {
     public class CrimsonTuskProj : ModProjectile
     {
-        public override void SetStaticDefaults()
-        {
-            DisplayName.SetDefault("Tusk Spike");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "獠牙刺");
-        }
         public override void SetDefaults()
         {
             Projectile.width = 10;
             Projectile.height = 10;
-            /* Projectile.damage = 60;
-               if (Main.expertMode)
-               {
-                   Projectile.damage = 90;
-               }
-               if (Main.masterMode)
-               {
-                   Projectile.damage = 120;
-               } */
             Projectile.aiStyle = -1;
             Projectile.friendly = false;
             Projectile.hostile = true;
@@ -95,7 +81,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Tusk
 
             Color colorz = Lighting.GetColor((int)(Projectile.Center.X / 16d), (int)(Projectile.Center.Y / 16d));
             colorz = Projectile.GetAlpha(colorz) * ((255 - Projectile.alpha) / 255f);
-            Texture2D texture = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Projectiles/Tusk/CrimsonTuskProj").Value;
+            Texture2D texture = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Projectiles/CrimsonTuskProj").Value;
             Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, colorz, Projectile.rotation, texture.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
             if (!Down)
             {

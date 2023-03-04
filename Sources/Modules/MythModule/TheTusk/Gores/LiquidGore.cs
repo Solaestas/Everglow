@@ -1,14 +1,10 @@
 ﻿using Everglow.Sources.Modules.MythModule.Common;
 
-namespace Everglow.Sources.Modules.MythModule.LanternMoon.Gores
+namespace Everglow.Sources.Modules.MythModule.TheTusk.Gores
 {
 
-    public abstract class DissolveGore : ModGore
+    public abstract class LiquidGore : ModGore
     {
-        /// <summary>
-        /// 轻度值,下降速度的减缓程度,0~0.1为佳
-        /// </summary>
-        public float LightValue = 0;
         /// <summary>
         /// 溶解动画贴图的路径
         /// </summary>
@@ -17,21 +13,11 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Gores
         /// 新死状态贴图的路径
         /// </summary>
         public string FreshDeathTexture;
-        /// <summary>
-        /// 烧剩后的骨架的路径
-        /// </summary>
-        public string BurnedTexture;
-        /// <summary>
-        /// 是否启用骨骼
-        /// </summary>
-        public bool HasBone = false;
         public override void SetStaticDefaults()
         {
             GoreID.Sets.DisappearSpeed[Type] = 3;
-            LightValue = 0.06f;
             DissolveAnimationTexture = "Everglow/" + Texture + "G";
             FreshDeathTexture = "Everglow/" + Texture + "S";
-            BurnedTexture = "Everglow/" + Texture + "B";
             SSD();
         }
         private string CheckHasNameSpace(string path)
@@ -56,7 +42,6 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Gores
         }
         public override bool Update(Gore gore)
         {
-            gore.velocity.Y -= LightValue;
             return base.Update(gore);
         }
         /// <summary>
@@ -65,58 +50,50 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Gores
         /// <returns></returns>
         public virtual string EffectPath()
         {
-            return "Effects/LanternGore";
+            return "Effects/BloodDrop";
         }
         public virtual void DrawDissolve(Gore gore)
         {
-            //TODO:I cant understand! WHY!!!
             DissolveAnimationTexture = CheckHasNameSpace(DissolveAnimationTexture);
             FreshDeathTexture = CheckHasNameSpace(FreshDeathTexture);
-            BurnedTexture = CheckHasNameSpace(BurnedTexture);
             
             Texture2D tex = ModContent.Request<Texture2D>(FreshDeathTexture).Value;
             Texture2D texG = ModContent.Request<Texture2D>(DissolveAnimationTexture).Value;
             
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             Color cg = Lighting.GetColor((int)(gore.position.X / 16f), (int)(gore.position.Y / 16f));
             Effect ef = MythContent.QuickEffect(EffectPath());
-            ef.Parameters["alphaValue"].SetValue((600 - gore.timeLeft) / 600f);
+            float alphaValue = (600 - gore.timeLeft) / 600f;
+            alphaValue = MathF.Sqrt(alphaValue);
+            ef.Parameters["alphaValue"].SetValue(alphaValue);
             ef.Parameters["tex0"].SetValue(texG);
             ef.Parameters["environmentLight"].SetValue(new Vector4(cg.R, cg.G, cg.B, 255 - gore.alpha) / 255f);
+            ef.Parameters["rotation"].SetValue(0);
             ef.CurrentTechnique.Passes["Test"].Apply();
             float alp = (255 - gore.alpha) / 255f;
             cg = new Color(cg.R / 255f * alp, cg.G / 255f * alp, cg.B / 255f * alp, alp);
 
             Main.spriteBatch.Draw(tex, gore.position + new Vector2(gore.Width / 2f, gore.Height / 2f) - Main.screenPosition, null, cg, gore.rotation, tex.Size() / 2, gore.scale, SpriteEffects.None, 0);
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            if (HasBone)
-            {
-                Texture2D texB = ModContent.Request<Texture2D>(BurnedTexture).Value;
-                Main.spriteBatch.Draw(texB, gore.position + new Vector2(gore.Width / 2f, gore.Height / 2f) - Main.screenPosition, null, cg, gore.rotation, tex.Size() / 2, gore.scale, SpriteEffects.None, 0);
-            }
         }
     }
-    public class ShaderLanternGore
+    public class ShaderLiquidGore
     {
         public static void Load()
         {
-            On.Terraria.Main.DrawGore += DrawShaderLantern;
+            On.Terraria.Main.DrawGore += DrawShaderLiquid;
         }
-        public static void UnLoad()
+        private static void DrawShaderLiquid(On.Terraria.Main.orig_DrawGore orig, Terraria.Main self)
         {
-            //On.Terraria.Main.DrawGore -= DrawShaderLantern;
-        }
-        private static void DrawShaderLantern(On.Terraria.Main.orig_DrawGore orig, Terraria.Main self)
-        {
-            foreach(Gore gore in Main.gore)
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            foreach (Gore gore in Main.gore)
             {
-                if(gore.ModGore is DissolveGore dGore)
+                if(gore.ModGore is LiquidGore dGore && gore.active)
                 {
                     dGore.DrawDissolve(gore);
                 }
             }
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             orig.Invoke(self);
         }
     }

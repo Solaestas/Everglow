@@ -93,8 +93,6 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration
                 BuildTuskLand();
             }
         }
-
-
         public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight) => tasks.Add(new WorldTuskLandGenPass());
 
         /// <summary>
@@ -104,17 +102,27 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration
 
         public int tuskCenterY = 300;
 
+        /// <summary>
+        /// 这里偷懒,用固定点标记獠牙的生物群系
+        /// </summary>
+        /// <param name="tag"></param>
         public override void SaveWorldData(TagCompound tag)
         {
             tag["TUSKcenterX"] = tuskCenterX;
             tag["TUSKcenterY"] = tuskCenterY;
         }
-
         public override void LoadWorldData(TagCompound tag)
         {
             tuskCenterX = tag.GetAsInt("TUSKcenterX");
             tuskCenterY = tag.GetAsInt("TUSKcenterY");
         }
+        /// <summary>
+        /// 原版方法,让物块边缘自然
+        /// </summary>
+        /// <param name="Shapepath"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="type"></param>
         public static void ShapeTile(string Shapepath, int a, int b, int type)
         {
             var imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Sources/Modules/MythModule/TheTusk/WorldGeneration/" + Shapepath);
@@ -200,6 +208,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration
                 }
             });
         }
+        /// <summary>
+        /// 主要程序
+        /// </summary>
         public static void BuildTuskLand()
         {
             Point abPos = GetTuskLandPosition();
@@ -215,6 +226,11 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration
             tuskGen.tuskCenterY = b + 10;
             BuildTuskArray(a, b);
         }
+        /// <summary>
+        /// 制造獠牙地形下半部分的一个盘状物
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         public static void BuildTuskArray(int x, int y)
         {
             x += 80;
@@ -278,6 +294,11 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration
             tileWheel.TileType = (ushort)ModContent.TileType<BloodyMossWheel>();
             tileWheel.HasTile = true;
         }
+        /// <summary>
+        /// 放置石碑
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         public static void PlaceStone(int x, int y)
         {
             for (int j = 0; j < 71; j++)
@@ -298,6 +319,10 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration
                 }
             }
         }
+        /// <summary>
+        /// 抽选獠牙地形的地址
+        /// </summary>
+        /// <returns></returns>
         public static Point GetTuskLandPosition()
         {
             int a = (int)(Main.maxTilesX * 0.3);
@@ -314,6 +339,11 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration
             }
             return new Point(a, b);
         }
+        /// <summary>
+        /// 判定被抽出来的点是否具备建造獠牙地形的条件
+        /// </summary>
+        /// <param name="position"></param>
+        /// <returns></returns>
         public static bool CanPlaceTusk(Point position)
         {
             if(position.X < 20 || position.Y - 60 < 20)
@@ -336,6 +366,13 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration
             }
             return true;
         }
+        /// <summary>
+        /// 让獠牙地里面的物块执行ShapeTile
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
         private static void SmoothTuskTile(int a, int b, int width = 256, int height = 512)
         {
             for (int y = 0; y < width; y += 1)
@@ -355,13 +392,5 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration
                 }
             }
         }
-    
-        public static void RandomUpdate(int i,int j,int Type)
-        {
-            if(Main.tile[i,j].TileType != Type || !Main.tile[i, j].HasTile)
-            {
-                return;
-            } 
-        }    
     }
 }
