@@ -32,7 +32,7 @@ public class PlayerHandler : EntityHandler<Player>
 			Entity.velocity.Y = TileSystem.AirSpeed;
 		}
 	}
-	public override void OnCollision(DynamicTile tile, Direction dir, ref DynamicTile newAttach)
+	public override void OnCollision(CustomTile tile, Direction dir, ref CustomTile newAttach)
 	{
 		if (dir == Direction.Inside)
 			Entity.Hurt(PlayerDeathReason.ByCustomReason("Inside Tile"), 10, 0);

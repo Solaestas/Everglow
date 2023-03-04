@@ -1,24 +1,23 @@
-using Everglow.Commons.CustomTile.Collide;
-using Everglow.Commons.CustomTile.DataStructures;
+using Everglow.Commons.CustomTiles.Collide;
+using Everglow.Commons.CustomTiles.DataStructures;
+using Everglow.Commons.CustomTiles.Tiles;
 using Everglow.Commons.Hooks;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
-using Everglow.Commons.CustomTiles.Tiles;
-using Everglow.Commons.CustomTiles;
 
 namespace Everglow.Commons.CustomTiles.EntityColliding;
 
 public class ProjColliding : GlobalProjectile
 {
-	public ProjHandler handler;
+	public const int HookAiStyle = 7;
 
 	public static readonly HashSet<Projectile> callFromHook = new();
 
-	public const int HookAiStyle = 7;
-
-	public override bool InstancePerEntity => true;
+	public ProjHandler handler;
 
 	public override bool CloneNewInstances => true;
+
+	public override bool InstancePerEntity => true;
 
 	public override bool IsCloneable => true;
 
@@ -36,20 +35,20 @@ public class ProjColliding : GlobalProjectile
 		IL_Projectile.AI_007_GrapplingHooks += Projectile_AI_007_GrapplingHooks_IL;
 	}
 
-	private static void Projectile_HandleMovement(On_Projectile.orig_HandleMovement orig, Projectile self, Vector2 wetVelocity, out int overrideWidth, out int overrideHeight)
+	private static void Projectile_AI_007_GrapplingHooks_IL(ILContext il)
 	{
-		if (!TileSystem.Enable || !self.tileCollide || self.aiStyle == HookAiStyle)
-		{
-			orig(self, wetVelocity, out overrideWidth, out overrideHeight);
-			return;
-		}
-
-		TileSystem.EnableCollisionHook = false;
-		var proj = self.GetGlobalProjectile<ProjColliding>();
-		proj.handler.position = self.position;//记录位置，否则会把传送当成位移
-		orig(self, wetVelocity, out overrideWidth, out overrideHeight);
-		proj.handler.Update(true);
-		TileSystem.EnableCollisionHook = true;
+		var cursor = new ILCursor(il);
+		if (!cursor.TryGotoNext(MoveType.After, ins => ins.Offset == 0x0e65))
+			throw new HookException();
+		Debug.Assert(cursor.Prev.MatchStloc(44));
+		cursor.Emit(OpCodes.Ldarg_0);
+		cursor.EmitDelegate((Projectile proj) => callFromHook.Contains(proj));
+		var label = il.DefineLabel();
+		cursor.Emit(OpCodes.Brtrue, label);
+		if (!cursor.TryGotoNext(MoveType.Before, ins => ins.Offset == 0x0E91))
+			throw new HookException();
+		Debug.Assert(cursor.Next.MatchRet());
+		cursor.MarkLabel(label);
 	}
 
 	private static void Projectile_AI_007_GrapplingHooks_On(On_Projectile.orig_AI_007_GrapplingHooks orig, Projectile self)
@@ -63,7 +62,9 @@ public class ProjColliding : GlobalProjectile
 		Player player = Main.player[self.owner];
 		int numHooks = 3;
 		if (self.type == 165)
+		{
 			numHooks = 8;
+		}
 		else if (self.type == 256)
 		{
 			numHooks = 2;
@@ -104,7 +105,7 @@ public class ProjColliding : GlobalProjectile
 			var gproj = self.GetGlobalProjectile<ProjColliding>();
 			if (gproj.handler.attachTile is null)
 			{
-				foreach (var tile in TileSystem.DynamicTiles)
+				foreach (var tile in TileSystem.Instance.Tiles)
 				{
 					if (tile is IHookable hookable)
 					{
@@ -149,19 +150,19 @@ public class ProjColliding : GlobalProjectile
 		callFromHook.Remove(self);
 	}
 
-	private static void Projectile_AI_007_GrapplingHooks_IL(ILContext il)
+	private static void Projectile_HandleMovement(On_Projectile.orig_HandleMovement orig, Projectile self, Vector2 wetVelocity, out int overrideWidth, out int overrideHeight)
 	{
-		var cursor = new ILCursor(il);
-		if (!cursor.TryGotoNext(MoveType.After, ins => ins.Offset == 0x0e65))
-			throw new HookException();
-		Debug.Assert(cursor.Prev.MatchStloc(44));
-		cursor.Emit(OpCodes.Ldarg_0);
-		cursor.EmitDelegate((Projectile proj) => callFromHook.Contains(proj));
-		var label = il.DefineLabel();
-		cursor.Emit(OpCodes.Brtrue, label);
-		if (!cursor.TryGotoNext(MoveType.Before, ins => ins.Offset == 0x0E91))
-			throw new HookException();
-		Debug.Assert(cursor.Next.MatchRet());
-		cursor.MarkLabel(label);
+		if (!TileSystem.Enable || !self.tileCollide || self.aiStyle == HookAiStyle)
+		{
+			orig(self, wetVelocity, out overrideWidth, out overrideHeight);
+			return;
+		}
+
+		TileSystem.EnableCollisionHook = false;
+		var proj = self.GetGlobalProjectile<ProjColliding>();
+		proj.handler.position = self.position;//记录位置，否则会把传送当成位移
+		orig(self, wetVelocity, out overrideWidth, out overrideHeight);
+		proj.handler.Update(true);
+		TileSystem.EnableCollisionHook = true;
 	}
 }

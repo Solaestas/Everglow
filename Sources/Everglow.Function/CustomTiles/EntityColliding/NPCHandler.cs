@@ -20,7 +20,7 @@ public class NPCHandler : EntityHandler<NPC>
 		}
 		base.Update(ignorePlats);
 	}
-	public override void OnCollision(DynamicTile tile, Direction dir, ref DynamicTile newAttach)
+	public override void OnCollision(CustomTile tile, Direction dir, ref CustomTile newAttach)
 	{
 		if (dir == Direction.Inside && !Entity.boss)
 			Entity.StrikeNPC(10, 0, 0);

@@ -6,7 +6,7 @@ namespace Everglow.Commons.CustomTiles.EntityColliding;
 public class ProjHandler : EntityHandler<Projectile>
 {
 	public ProjHandler(Projectile entity) : base(entity) { }
-	public override void OnCollision(DynamicTile tile, Direction dir, ref DynamicTile newAttach)
+	public override void OnCollision(CustomTile tile, Direction dir, ref CustomTile newAttach)
 	{
 		if (dir == Direction.Inside)
 			Entity.Kill();

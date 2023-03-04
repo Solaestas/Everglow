@@ -1,4 +1,3 @@
-﻿using Everglow.Commons.CustomTiles;
 using Everglow.Commons.CustomTiles.DataStructures;
 using Everglow.Commons.CustomTiles.Tiles;
 
@@ -7,25 +6,39 @@ namespace Everglow.Commons.CustomTiles.EntityColliding;
 public enum AttachType
 {
 	None,
+
 	Stand,
+
 	Grab
 }
+
 public abstract class EntityHandler
 {
 	public abstract Entity GetEntity();
+
 	public Vector2 position;
+
 	public Vector2 extraVelocity;
+
 	public Vector2 trueVelocity;
-	public DynamicTile attachTile;
+
+	public CustomTile attachTile;
+
 	public AttachType attachType;
+
 	public Direction attachDir;
+
 	public AABB HitBox => new(position, GetEntity().Size);
 }
+
 public abstract class EntityHandler<TEntity> : EntityHandler where TEntity : Entity
 {
 	private TEntity entity;
+
 	public override Entity GetEntity() => entity;
+
 	public TEntity Entity => entity;
+
 	protected EntityHandler(TEntity entity)
 	{
 		this.entity = entity;
@@ -35,10 +48,18 @@ public abstract class EntityHandler<TEntity> : EntityHandler where TEntity : Ent
 	}
 
 	public virtual bool CanAttach() => true;
+
 	public virtual Direction Ground => Direction.Bottom;
-	public virtual void OnCollision(DynamicTile tile, Direction dir, ref DynamicTile newAttach) { }
-	public virtual void OnAttach() { }
-	public virtual void OnLeave() { }
+
+	public virtual void OnCollision(CustomTile tile, Direction dir, ref CustomTile newAttach)
+	{ }
+
+	public virtual void OnAttach()
+	{ }
+
+	public virtual void OnLeave()
+	{ }
+
 	public virtual void Update(bool ignorePlats = false)
 	{
 		if (position == Vector2.Zero)
@@ -51,10 +72,10 @@ public abstract class EntityHandler<TEntity> : EntityHandler where TEntity : Ent
 		Vector2 move = entity.position - position + extraVelocity;//计算获得物块推动的强制位移
 		trueVelocity = entity.velocity + extraVelocity;//当前帧实体速度的变化
 
-		DynamicTile newAttach = null;
+		CustomTile newAttach = null;
 		if (attachTile != null && !attachTile.Active)
 			attachTile = null;
-		foreach (var (tile, dir) in TileSystem.MoveCollision(this, move, ignorePlats))
+		foreach (var (tile, dir) in TileSystem.Instance.MoveCollision(this, move, ignorePlats))
 		{
 			OnCollision(tile, dir, ref newAttach);
 			if (dir == Ground && CanAttach())
@@ -98,6 +119,5 @@ public abstract class EntityHandler<TEntity> : EntityHandler where TEntity : Ent
 		entity.velocity = trueVelocity - extraVelocity;
 		if (attachTile != null)
 			OnAttach();
-
 	}
 }

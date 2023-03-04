@@ -6,7 +6,7 @@ using Terraria.GameContent;
 
 namespace Everglow.Commons.CustomTiles.Tiles;
 
-public abstract class DBlock : DynamicTile, IGrabbable, IHookable
+public abstract class DBlock : CustomTile, IGrabbable, IHookable
 {
 	public Vector2 size;
 	public override bool IsGrabbable => true;

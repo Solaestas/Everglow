@@ -6,7 +6,7 @@ using Everglow.Commons.Utils;
 
 namespace Everglow.Commons.CustomTiles.Tiles;
 
-public abstract class DPlatform : DynamicTile, IHookable
+public abstract class DPlatform : CustomTile, IHookable
 {
 	private static readonly Dictionary<(Direction, Direction), Direction> hitEdges = new()
 	{
