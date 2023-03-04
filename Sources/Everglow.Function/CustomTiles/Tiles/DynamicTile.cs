@@ -1,10 +1,10 @@
-using Everglow.Commons.CustomTile;
-using Everglow.Commons.CustomTile.Collide;
-using Everglow.Commons.CustomTile.DataStructures;
-using Everglow.Commons.CustomTile.EntityColliding;
+using Everglow.Commons.CustomTiles;
+using Everglow.Commons.CustomTiles.Collide;
+using Everglow.Commons.CustomTiles.DataStructures;
+using Everglow.Commons.CustomTiles.EntityColliding;
 using ReLogic.Content;
 
-namespace Everglow.Commons.CustomTile.Tiles;
+namespace Everglow.Commons.CustomTiles.Tiles;
 
 public interface IHookable
 {

@@ -1,7 +1,7 @@
 using Everglow.Commons.CustomTile.DataStructures;
-using Everglow.Commons.CustomTile.Collide;
+using Everglow.Commons.CustomTiles.Collide;
 
-namespace Everglow.Commons.CustomTile;
+namespace Everglow.Commons.CustomTiles;
 public static class Extensions
 {
 	public static bool IsH(this Direction dir) => dir == Direction.Left || dir == Direction.Right;

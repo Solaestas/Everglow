@@ -1,8 +1,9 @@
+using Everglow.Commons.CustomTiles;
 using Everglow.Commons.Hooks;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 
-namespace Everglow.Commons.CustomTile.EntityColliding;
+namespace Everglow.Commons.CustomTiles.EntityColliding;
 
 public class PlayerColliding : ModPlayer
 {

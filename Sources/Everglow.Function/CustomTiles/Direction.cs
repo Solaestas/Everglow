@@ -1,4 +1,4 @@
-﻿namespace Everglow.Commons.CustomTile;
+﻿namespace Everglow.Commons.CustomTiles;
 
 public enum Direction : byte
 {

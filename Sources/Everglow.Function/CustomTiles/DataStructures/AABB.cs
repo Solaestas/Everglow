@@ -1,4 +1,4 @@
-namespace Everglow.Commons.CustomTile.DataStructures;
+namespace Everglow.Commons.CustomTiles.DataStructures;
 
 [DebuggerDisplay("position = ({position.X}, {position.Y}) size = ({size.X}, {size.Y})")]
 public struct AABB

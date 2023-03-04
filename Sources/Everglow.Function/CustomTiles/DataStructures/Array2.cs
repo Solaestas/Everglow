@@ -1,4 +1,4 @@
-namespace Everglow.Commons.CustomTile.DataStructures;
+namespace Everglow.Commons.CustomTiles.DataStructures;
 
 public class Array2<T>
 {

@@ -1,6 +1,6 @@
-using Everglow.Commons.CustomTile.DataStructures;
+using Everglow.Commons.CustomTiles.DataStructures;
 
-namespace Everglow.Commons.CustomTile.Collide;
+namespace Everglow.Commons.CustomTiles.Collide;
 public abstract class Collider
 {
 	public abstract Vector2 Position { get; set; }

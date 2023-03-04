@@ -1,11 +1,10 @@
-using Everglow.Commons.CustomTile;
-using Everglow.Commons.CustomTile.Collide;
-using Everglow.Commons.CustomTile.DataStructures;
-using Everglow.Commons.CustomTile.EntityColliding;
+using Everglow.Commons.CustomTiles.Collide;
+using Everglow.Commons.CustomTiles.DataStructures;
+using Everglow.Commons.CustomTiles.EntityColliding;
 using Everglow.Commons.Utils;
 using Terraria.GameContent;
 
-namespace Everglow.Commons.CustomTile.Tiles;
+namespace Everglow.Commons.CustomTiles.Tiles;
 
 public abstract class DBlock : DynamicTile, IGrabbable, IHookable
 {

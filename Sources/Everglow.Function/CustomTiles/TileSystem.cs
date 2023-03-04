@@ -1,10 +1,10 @@
-using Everglow.Commons.CustomTile.Collide;
-using Everglow.Commons.CustomTile.DataStructures;
-using Everglow.Commons.CustomTile.EntityColliding;
-using Everglow.Commons.CustomTile.Tiles;
+using Everglow.Commons.CustomTiles.Collide;
+using Everglow.Commons.CustomTiles.DataStructures;
+using Everglow.Commons.CustomTiles.EntityColliding;
+using Everglow.Commons.CustomTiles.Tiles;
 using Everglow.Commons.Enums;
 
-namespace Everglow.Commons.CustomTile;
+namespace Everglow.Commons.CustomTiles;
 
 public class TileSystem : ILoadable
 {

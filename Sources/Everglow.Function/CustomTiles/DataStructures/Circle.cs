@@ -1,6 +1,6 @@
 using Everglow.Commons.DataStructures;
 
-namespace Everglow.Commons.CustomTile.DataStructures;
+namespace Everglow.Commons.CustomTiles.DataStructures;
 
 [DebuggerDisplay("position = ({position.X}, {position.Y}) radius = {radius}")]
 public struct Circle

@@ -1,12 +1,12 @@
 using Everglow.Commons.CustomTile.Collide;
 using Everglow.Commons.CustomTile.DataStructures;
 using Everglow.Commons.Hooks;
-using Everglow.Commons.CustomTile;
-using Everglow.Commons.CustomTile.Tiles;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
+using Everglow.Commons.CustomTiles.Tiles;
+using Everglow.Commons.CustomTiles;
 
-namespace Everglow.Commons.CustomTile.EntityColliding;
+namespace Everglow.Commons.CustomTiles.EntityColliding;
 
 public class ProjColliding : GlobalProjectile
 {

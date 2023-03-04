@@ -1,7 +1,8 @@
-using Everglow.Commons.CustomTile.Tiles;
+using Everglow.Commons.CustomTiles;
+using Everglow.Commons.CustomTiles.Tiles;
 using Terraria.DataStructures;
 
-namespace Everglow.Commons.CustomTile.EntityColliding;
+namespace Everglow.Commons.CustomTiles.EntityColliding;
 
 public class PlayerHandler : EntityHandler<Player>
 {

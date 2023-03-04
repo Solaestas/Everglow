@@ -1,10 +1,10 @@
-using Everglow.Commons.CustomTile.Collide;
-using Everglow.Commons.CustomTile.DataStructures;
-using Everglow.Commons.CustomTile.EntityColliding;
+using Everglow.Commons.CustomTiles.Collide;
+using Everglow.Commons.CustomTiles.DataStructures;
+using Everglow.Commons.CustomTiles.EntityColliding;
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Utils;
 
-namespace Everglow.Commons.CustomTile.Tiles;
+namespace Everglow.Commons.CustomTiles.Tiles;
 
 public abstract class DPlatform : DynamicTile, IHookable
 {

@@ -1,8 +1,9 @@
 using System.Runtime.CompilerServices;
-using Everglow.Commons.CustomTile.Collide;
-using Everglow.Commons.CustomTile.DataStructures;
+using Everglow.Commons.CustomTiles;
+using Everglow.Commons.CustomTiles.Collide;
+using Everglow.Commons.CustomTiles.DataStructures;
 
-namespace Everglow.Commons.CustomTile.Collide;
+namespace Everglow.Commons.CustomTiles.Collide;
 
 public static class CollisionUtils
 {

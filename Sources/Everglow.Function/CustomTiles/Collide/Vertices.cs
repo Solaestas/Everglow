@@ -1,4 +1,4 @@
-﻿namespace Everglow.Commons.CustomTile.Collide;
+﻿namespace Everglow.Commons.CustomTiles.Collide;
 
 public class Vertices : List<Vector2>
 {
