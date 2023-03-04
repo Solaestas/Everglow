@@ -51,7 +51,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
             float value = (200 - Projectile.timeLeft) / 200f;
             float colorV = 0.02f * MathF.Sqrt(Projectile.ai[0]) * (1 - value);
             Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/EShoot");
-            DrawTexCircle(value * 32 * MathF.Sqrt(Projectile.ai[0]), 4 * MathF.Sqrt(Projectile.ai[0]) * value, new Color(colorV, colorV, colorV, 0f), Projectile.Center - Main.screenPosition, t);
+            DrawTexCircle(value * 22 * MathF.Sqrt(Projectile.ai[0]), 8 * MathF.Sqrt(Projectile.ai[0]) * value, new Color(colorV, colorV, colorV, 0f), Projectile.Center - Main.screenPosition, t);
         }
         public override bool PreDraw(ref Color lightColor)
         {
@@ -62,13 +62,27 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
         {
             List<Vertex2D> circle = new List<Vertex2D>();
 
-            for (float h = 0; h < radious / 2; h += 1f)
+            for (int h = 0; h < radious / 2; h += 1)
             {
-                circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 1, 0)));
-                circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0, 0)));
+                float colorR = (h / radious * MathF.PI * 4 + (float)addRot + 1.57f) % (MathF.PI * 2f) / (MathF.PI * 2f);
+                float color2R = ((h + 1) / radious * MathF.PI * 4 + (float)addRot + 1.57f) % (MathF.PI * 2f) / (MathF.PI * 2f);
+
+                color = new Color(colorR, color.G / 255f, 0, 0);
+                circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0.8f, 0)));
+                circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0.2f, 0)));
+                if (Math.Abs(color2R - colorR) > 0.8f)
+                {
+                    float midValue = (1f - colorR) / (float)(color2R + (1f - colorR));
+                    color.R = 255;
+                    circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy((h + midValue) / radious * Math.PI * 4 + addRot), color, new Vector3((h + midValue) * 2 / radious, 0.8f, 0)));
+                    circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy((h + midValue) / radious * Math.PI * 4 + addRot), color, new Vector3((h + midValue) * 2 / radious, 0.2f, 0)));
+                    color.R = 0;
+                    circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy((h + midValue) / radious * Math.PI * 4 + addRot), color, new Vector3((h + midValue) * 2 / radious, 0.8f, 0)));
+                    circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy((h + midValue) / radious * Math.PI * 4 + addRot), color, new Vector3((h + midValue) * 2 / radious, 0.2f, 0)));
+                }
             }
-            circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0.5f, 1, 0)));
-            circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(addRot), color, new Vector3(0.5f, 0, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(0, 0.8f, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0, 0.2f, 0)));
             if (circle.Count > 2)
             {
                 spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
@@ -79,7 +93,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
             float value = (200 - Projectile.timeLeft) / 200f;
             float colorV = 0.6f * MathF.Sqrt(Projectile.ai[0]) * (1 - value);
             Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/EShoot");
-            DrawTexCircle_VFXBatch(spriteBatch, value * 32 * MathF.Sqrt(Projectile.ai[0]), 8 * MathF.Sqrt(Projectile.ai[0]) * value, new Color(colorV, colorV * 0.4f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
+            DrawTexCircle_VFXBatch(spriteBatch, value * 22 * MathF.Sqrt(Projectile.ai[0]), 8 * MathF.Sqrt(Projectile.ai[0]) * value, new Color(colorV, colorV * 0.4f * (1 - value), colorV, 0f), Projectile.Center - Main.screenPosition, t);
         }
     }
 }

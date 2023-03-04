@@ -1,4 +1,8 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Sources.Modules.MEACModule;
+using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Modules.YggdrasilModule.Common;
+using IL.Terraria.DataStructures;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.LunarFlare
 {
@@ -232,7 +236,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
             {
                 return;
             }
-            if (Main.WaveQuality == 0)
+            if (Main.WaveQuality < 3)
             {
                 return;
             }

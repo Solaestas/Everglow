@@ -21,8 +21,9 @@
             MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Musics/TuskBiome");
             MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Musics/TuskTension");
             MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Musics/TuskFighting");
-
-        }
+			// Lantern Moon Musics
+			MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Musics/DashCore");
+		}
         public void Unload()
         {
         }

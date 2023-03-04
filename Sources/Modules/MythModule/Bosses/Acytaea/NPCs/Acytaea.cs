@@ -661,7 +661,7 @@ public class Acytaea : VisualNPC
             if (Timer % 2 == 1)
             {
                 //TODO 震屏
-                //MythPlayer mplayer = Main.player[Main.myPlayer].GetModPlayer<MythPlayer>();
+                //MythContentPlayer mplayer = Main.player[Main.myPlayer].GetModPlayer<MythContentPlayer>();
                 //mplayer.ShakeStrength = 7;
                 //mplayer.Shake = 1;
                 ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();

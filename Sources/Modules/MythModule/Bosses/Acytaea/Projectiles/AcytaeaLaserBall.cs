@@ -1,5 +1,5 @@
 ﻿using Everglow.Sources.Commons.Function.Vertex;
-
+using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
@@ -95,60 +95,10 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
         {
         }
 
-        private Effect ef2;
-
         public override void PostDraw(Color lightColor)
         {
-            /*for (int z = 0; z < 7; z++)
-            {
-                if (Rota[z] == 0)
-                {
-                    Rota[z] = Main.rand.NextFloat(0, 6.283f);
-                }
-                if (Sca[z] == 0)
-                {
-                    Sca[z] = Main.rand.NextFloat(0.3f, 1.1f);
-                }
-                if (ARota[z] == 0)
-                {
-                    ARota[z] = Main.rand.NextFloat(0, 6.283f) / 40f;
-                }
-                Rota[z] += ARota[z];
-            }
-            float Timer = Projectile.timeLeft / 15f + 6;
-            for (int z = 0; z < 7; z++)
-            {
-                Main.spriteBatch.End();
-                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-                List<Vertex2D> Vx = new List<Vertex2D>();
 
-                for (int h = 0; h < 60; h++)
-                {
-                    float MinCosZ = (float)(2.4 - Math.Cos(Math.PI)) / 2.4f;
-                    Vector2 vBla = new Vector2(120 * MinCosZ, 0).RotatedBy(Timer - h * 0.1f);
-                    vBla.Y *= 0.3f;
-                    Vector2 vb = Projectile.Center + (vBla + new Vector2(0, -St / 80f * Sca[z])).RotatedBy(0.4 + Rota[z]);
-                    Vector2 vCla = new Vector2(120 * MinCosZ, 0).RotatedBy(Timer - (float)(Math.PI / 30d) - h * 0.1f);
-                    vCla.Y *= 0.3f;
-                    Vector2 vc = Projectile.Center + (vCla + new Vector2(0, -St / 80f * Sca[z])).RotatedBy(0.4 + Rota[z]);
-                    Color color3 = new Color(255, 255, 255, 0);
-                    if (Projectile.timeLeft < 255)
-                    {
-                        color3 = new Color(Projectile.timeLeft, Projectile.timeLeft, Projectile.timeLeft, 0);
-                    }
-                    if (Projectile.timeLeft > 945)
-                    {
-                        color3 = new Color(1200 - Projectile.timeLeft, 1200 - Projectile.timeLeft, 1200 - Projectile.timeLeft, 0);
-                    }
-                    Vx.Add(new Vertex2D(vc - Main.screenPosition + new Vector2(0, 0), color3, new Vector3((h + 1) / 60f, 0, 0)));
-                    Vx.Add(new Vertex2D(vb - Main.screenPosition + new Vector2(0, 0), color3, new Vector3((h) / 60f, 0, 0)));
-                    Vx.Add(new Vertex2D(Projectile.Center - Main.screenPosition + new Vector2(0, 0) + new Vector2(0, St / 160f * Sca[z]).RotatedBy(0.4 + Rota[z]), color3, new Vector3(0.5f, 1, 0)));
-                }
-                Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Projectiles/AcytaeaTornado5").Value;
-                Main.graphics.GraphicsDevice.Textures[0] = t;//GoldenBloodScaleMirror
-                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
-            }*/
-            ef2 = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/SpherePerspective3", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+            Effect ef2 = MythContent.QuickEffect("Bosses/Acytaea/SpherePerspective3");
             List<Vertex2D> triangleList2 = new List<Vertex2D>();
             int radius = (int)(St / 80f);//sss
             triangleList2.Add(new Vertex2D(Projectile.Center - new Vector2(radius, radius), Color.White, new Vector3(-1, 1, 0)));
@@ -162,15 +112,11 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             RasterizerState originalState2 = Main.graphics.GraphicsDevice.RasterizerState;
-            // 干掉注释掉就可以只显示三角形栅格
-            //RasterizerState rasterizerState = new RasterizerState();
-            //rasterizerState.CullMode = CullMode.None;
-            //rasterizerState.FillMode = FillMode.WireFrame;
-            //Main.graphics.GraphicsDevice.RasterizerState = rasterizerState;
+
 
             var projection2 = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
             var model2 = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0));
-            // 把变换和所需信息丢给shader
+
             ef2.Parameters["uTransform"].SetValue(model2 * projection2);
             ef2.Parameters["circleCenter"].SetValue(new Vector3(0, 0, -2));
             ef2.Parameters["radiusOfCircle"].SetValue(1f);

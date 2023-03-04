@@ -179,11 +179,10 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
             }
 
 
-            DrawFlameTrail(TrueL, width, true, Color.White);
-            DrawFlameTrail(TrueL, width, true, Color.White);
+            DrawFlameTrail(TrueL, width, true, new Color(255, 255, 255, 180));
 
 
-            if(TimeTokill <= 0)
+            if (TimeTokill <= 0)
             {
                 Color c2 = Lighting.GetColor((int)Projectile.Center.X / 16, (int)Projectile.Center.Y / 16);
                 float MulColor = (c2.R + c2.G + c2.B) / 765f;
@@ -256,7 +255,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
             Texture2D t = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/FogTrace");
             if (Shade)
             {
-                t = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/FogTraceShade");
+                t = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/FogTraceShade5xDark");
             }
             Main.graphics.GraphicsDevice.Textures[0] = t;
 

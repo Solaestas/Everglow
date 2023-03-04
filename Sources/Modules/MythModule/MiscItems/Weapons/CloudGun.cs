@@ -31,7 +31,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
             Item.rare = ItemRarityID.Blue;
             Item.UseSound = SoundID.Item11;
             Item.autoReuse = true;
-            Item.shoot = ModContent.ProjectileType<MiscProjectiles.CloudBall>();
+            Item.shoot = ModContent.ProjectileType<MiscItems.Projectiles.CloudBall>();
             Item.shootSpeed = 8f;
             Item.useAmmo = ModContent.ItemType<Ammos.CloudBall>();
             Item.crit = 16;

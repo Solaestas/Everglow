@@ -25,6 +25,8 @@ namespace Everglow.Sources.Modules.MythModule
                 On.Terraria.GameContent.Shaders.WaterShaderData.Update += WaterShaderData_Update;
                 IL.Terraria.GameContent.Shaders.WaterShaderData.Apply += WaterShaderData_Apply;
                 On.Terraria.GameContent.Shaders.WaterShaderData.StepLiquids += WaterShaderData_StepLiquids;
+                SkyManager.Instance["TuskSky"] = new TheTusk.Backgrounds.TuskBiomeSky();
+                TheTusk.Gores.ShaderLiquidGore.Load();
             }
         }
 

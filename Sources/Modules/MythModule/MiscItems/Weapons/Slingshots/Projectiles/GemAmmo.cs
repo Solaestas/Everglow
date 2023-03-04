@@ -36,7 +36,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
             }
             else
             {
-                if (TimeTokill < 10)
+                if (TimeTokill < 30)
                 {
                     Projectile.damage = 0;
                     Projectile.friendly = false;

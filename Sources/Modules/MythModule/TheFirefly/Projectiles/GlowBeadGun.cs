@@ -85,14 +85,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             newVelocity *= Math.Clamp(Energy / 18f, 0.2f, 10f);
             Vector2 basePos = Projectile.Center + newVelocity * 3.7f + v0 * 62;
 
-            for (int j = 0; j < Energy * 2; j++)
+            for (int j = 0; j < Energy; j++)
             {
                 Vector2 v = newVelocity / 27f * j;
                 Vector2 v1 = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) * 0.3f + v;
                 int num20 = Dust.NewDust(basePos, 0, 0, ModContent.DustType<BlueGlowAppearStoppedByTile>(), v1.X, v1.Y, 100, default, Main.rand.NextFloat(0.6f, 1.8f) * 0.4f);
                 Main.dust[num20].noGravity = true;
             }
-            for (int j = 0; j < Energy * 2; j++)
+            for (int j = 0; j < Energy; j++)
             {
                 Vector2 v = newVelocity / 54f * j;
                 Vector2 v1 = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) * 0.3f + v;

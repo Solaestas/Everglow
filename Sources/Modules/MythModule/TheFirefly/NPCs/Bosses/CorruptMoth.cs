@@ -103,7 +103,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 
         public override void OnKill()
         {
-            NPC.SetEventFlagCleared(ref DownedBossSystem.downedMoth, -1);
+            //NPC.SetEventFlagCleared(ref DownedBossSystem.downedMoth, -1);
             if (Main.netMode == NetmodeID.Server)
             {
                 NetMessage.SendData(MessageID.WorldData);
@@ -115,7 +115,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
             Main.npcFrameCount[NPC.type] = 10;
 
             NPC.behindTiles = true;
-            NPC.damage = 30;
+            NPC.damage = 40;
             NPC.width = 80;
             NPC.height = 120;
             NPC.defense = 5;
@@ -1411,7 +1411,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
                 npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsMasterMode(), ModContent.ItemType<Items.Weapons.GlowBeadGun>(), 8, 1, 1, 1)); //Master Bead Gun
 
             LeadingConditionRule rule = new LeadingConditionRule(new Conditions.NotExpert());
-            rule.OnSuccess(ItemDropRule.OneFromOptions(1, ModContent.ItemType<Items.Weapons.ShadowWingBow>(), ModContent.ItemType<Items.Weapons.ScaleWingBlade>(), ModContent.ItemType<Items.Weapons.PhosphorescenceGun>(), ModContent.ItemType<Items.Weapons.EvilChrysalis>(), ModContent.ItemType<Items.Weapons.DustOfCorrupt>(), ModContent.ItemType<Items.Weapons.MothYoyo>(), ModContent.ItemType<Items.Weapons.DreamWeaver>(), ModContent.ItemType<Items.Weapons.FlowLightMissile>(), ModContent.ItemType<Items.Weapons.NavyThunder>()));
+            rule.OnSuccess(ItemDropRule.OneFromOptions(1, ModContent.ItemType<Items.Weapons.ShadowWingBow>(), ModContent.ItemType<Items.Weapons.ScaleWingBlade>(), ModContent.ItemType<Items.Weapons.PhosphorescenceGun>(), ModContent.ItemType<Items.Weapons.EvilChrysalis>(), ModContent.ItemType<Items.Weapons.DustOfCorrupt>()));
 
             npcLoot.Add(rule);
 
