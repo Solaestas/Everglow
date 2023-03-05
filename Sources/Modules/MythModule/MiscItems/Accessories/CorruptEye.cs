@@ -1,4 +1,6 @@
-﻿using Everglow.Sources.Modules.MythModule;
+﻿using Everglow.Sources.Commons.Core.VFX;
+using Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.CursedFlames;
+using Terraria.Audio;
 
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Accessories
 {
@@ -6,10 +8,6 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Accessories
     {
         public override void SetStaticDefaults()
         {
-            //DisplayName.SetDefault("Scaled Cursed Eye");
-            //DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "鳞甲诅咒眼");
-            //Tooltip.SetDefault("5 defence\nincreases crit chance by 4%\nGrants immunity to Cursed Inferno\nRelease cursed flame when struck\nTough its owner has gone, it's still filled with curse to enemies'");
-            //Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "5防御\n增加4%暴击率\n免疫咒火\n受伤时释放咒火\n'即便它的主人已经死了,它仍充满着对敌人的诅咒'");
             ItemGlowManager.AutoLoadItemGlow(this);
         }
         public static short GetGlowMask = 0;
@@ -20,17 +18,67 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Accessories
             Item.height = 32;
             Item.value = 5000;
             Item.accessory = true;
-            Item.rare = 5;
+            Item.rare = ItemRarityID.Pink;
         }
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            //MythPlayer.ImmuCurseF = 2;
             player.statDefense += 5;
-            player.GetCritChance(DamageClass.Melee) += 4;
-            player.GetCritChance(DamageClass.Ranged) += 4;
-            player.GetCritChance(DamageClass.Magic) += 4;
-            player.GetCritChance(DamageClass.Summon) += 4;
+            player.GetCritChance(DamageClass.Generic) += 4;
             player.buffImmune[39] = true;
+            CorruptEyeEquiper cEE = player.GetModPlayer<CorruptEyeEquiper>();
+            cEE.CorruptEyeEnable = true;
+        }
+    }
+    class CorruptEyeEquiper : ModPlayer
+    {
+        public bool CorruptEyeEnable = false;
+        public override void ResetEffects()
+        {
+            CorruptEyeEnable = false;
+        }
+        public override void PostHurt(bool pvp, bool quiet, double damage, int hitDirection, bool crit, int cooldownCounter)
+        {
+            if (CorruptEyeEnable)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    Vector2 velocity = new Vector2(0, Main.rand.NextFloat(4.3f, 6f)).RotatedByRandom(6.283);
+                    Projectile CursedFlame = Projectile.NewProjectileDirect(Player.GetSource_FromThis(), Player.Center, velocity, ProjectileID.CursedFlameFriendly, 60, 1.5f, Player.whoAmI);
+                    CursedFlame.timeLeft = Main.rand.Next(25, 45);
+                }
+                for (int i = 0; i < 18; i++)
+                {
+                    GenerateVFX();
+                }
+                for (int i = 0; i < 12; i++)
+                {
+                    GenerateDust();
+                }
+                SoundEngine.PlaySound((SoundID.DD2_FlameburstTowerShot.WithPitchOffset(-0.2f)), Player.Center);
+            }
+        }
+        private void GenerateVFX()
+        {
+            Vector2 v2 = Player.velocity;
+            float mulVelocity = 0.3f + v2.Length() / 10f;
+            Vector2 velocity = new Vector2(0, Main.rand.NextFloat(4.3f, 14f)).RotatedByRandom(6.283);
+            CursedFlameDust cf = new CursedFlameDust
+            {
+                velocity = velocity,
+                Active = true,
+                Visible = true,
+                position = Player.Center + new Vector2(0, Main.rand.NextFloat(0f, 35f)),
+                maxTime = Main.rand.Next(27, 72),
+                ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.04f, 0.04f), Main.rand.NextFloat(3.6f, 10f) * mulVelocity }
+            };
+            VFXManager.Add(cf);
+        }
+        private void GenerateDust()
+        {
+            Vector2 velocity = new Vector2(0, Main.rand.NextFloat(4.3f, 6f)).RotatedByRandom(6.283);
+            Dust D = Dust.NewDustDirect(Player.Center - new Vector2(4)/*Dust的Size=8x8*/, 0, 0, DustID.CursedTorch, 0, 0, 150, default, Main.rand.NextFloat(0.4f, 1.1f));
+            D.noGravity = true;
+            D.velocity = velocity;
         }
     }
 }

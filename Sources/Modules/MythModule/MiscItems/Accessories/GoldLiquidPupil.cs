@@ -1,4 +1,5 @@
-﻿using Everglow.Sources.Modules.MythModule;
+﻿using Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Accessory;
+using Terraria.Audio;
 
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Accessories
 {
@@ -6,10 +7,6 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Accessories
     {
         public override void SetStaticDefaults()
         {
-            //DisplayName.SetDefault("Arrogating Eye");
-            //DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "僭越之眼");
-            //Tooltip.SetDefault("Your attacks ignore 35% of enemies' defense\nGenerates a Ring of Ichor after struck, lasts 12s and unstackable\nDeals high damage while it's generating\nDamages enemies on the ring continuously\nInflicts Ichor to enemies inside the ring");
-            //Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "你的攻击无视敌人35%的防御\n受伤之后生成灵液之环,持续12秒,不可叠加\n灵液之环生成时造成高额伤害\n持续伤害环上的敌人\n对环内的敌人施加灵液");
             ItemGlowManager.AutoLoadItemGlow(this);
         }
         public static short GetGlowMask = 0;
@@ -20,11 +17,70 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Accessories
             Item.height = 22;
             Item.value = 5500;
             Item.accessory = true;
-            Item.rare = 5;
+            Item.rare = ItemRarityID.Pink;
         }
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            //MythPlayer.GoldLiquidPupil = 2;
+            GoldLiquidPupilEquiper gLPE = player.GetModPlayer<GoldLiquidPupilEquiper>();
+            gLPE.GoldLiquidPupilEnable = true;
+        }
+    }
+    class GoldLiquidPupilEquiper : ModPlayer
+    {
+        public bool GoldLiquidPupilEnable = false;
+        public override void ResetEffects()
+        {
+            GoldLiquidPupilEnable = false;
+        }
+        public override void PostHurt(bool pvp, bool quiet, double damage, int hitDirection, bool crit, int cooldownCounter)
+        {
+            if (GoldLiquidPupilEnable)
+            {
+                if (Player.ownedProjectileCounts[ModContent.ProjectileType<IchorRing>()] <= 0)
+                {
+                    Projectile.NewProjectileDirect(Player.GetSource_FromThis(), Player.Center, Vector2.Zero, ModContent.ProjectileType<IchorRing>(), 6, 1.5f, Player.whoAmI);
+                    for (int i = 0; i < 12; i++)
+                    {
+                        GenerateDust();
+                    }
+                    SoundEngine.PlaySound(SoundID.Splash.WithPitchOffset(-0.2f), Player.Center);
+                }
+            }
+        }
+        public override void ModifyHitNPC(Item item, NPC target, ref int damage, ref float knockback, ref bool crit)
+        {
+            if (GoldLiquidPupilEnable)
+            {
+                damage = (int)(damage + target.defense * 0.175f);
+            }
+        }
+        public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        {
+            if (GoldLiquidPupilEnable)
+            {
+                damage = (int)(damage + target.defense * 0.175f);
+            }
+        }
+        public override void ModifyHitPvp(Item item, Player target, ref int damage, ref bool crit)
+        {
+            if (GoldLiquidPupilEnable)
+            {
+                damage = (int)(damage + target.statDefense * 0.175f);
+            }
+        }
+        public override void ModifyHitPvpWithProj(Projectile proj, Player target, ref int damage, ref bool crit)
+        {
+            if (GoldLiquidPupilEnable)
+            {
+                damage = (int)(damage + target.statDefense * 0.175f);
+            }
+        }
+        private void GenerateDust()
+        {
+            Vector2 velocity = new Vector2(0, Main.rand.NextFloat(4.3f, 6f)).RotatedByRandom(6.283);
+            Dust D = Dust.NewDustDirect(Player.Center - new Vector2(4)/*Dust的Size=8x8*/, 0, 0, DustID.Ichor, 0, 0, 150, default, Main.rand.NextFloat(0.4f, 1.1f));
+            D.noGravity = true;
+            D.velocity = velocity;
         }
     }
 }
