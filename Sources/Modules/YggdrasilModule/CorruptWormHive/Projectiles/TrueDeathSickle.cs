@@ -422,11 +422,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
         }
         public override void DrawTrail(Color color)
         {
-            VFXBatch spriteBatch = new VFXBatch(Main.graphics.GraphicsDevice);
-            spriteBatch.End();
-            spriteBatch.Begin();
-            DrawEffect(spriteBatch);
-            spriteBatch.End();
+
         }
         internal int timer2 = 0;
         public void DrawEffect(VFXBatch spriteBatch)
