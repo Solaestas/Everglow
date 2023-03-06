@@ -7,6 +7,8 @@ using Everglow.Sources.Modules.YggdrasilModule.Common;
 using Everglow.Sources.Modules.MEACModule;
 using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Commons.Function.Curves;
+using Microsoft.Xna.Framework.Graphics;
+
 namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
 {
     public class TrueDeathSickle : MeleeProj, IOcclusionProjectile,IWarpProjectile, IBloomProjectile
@@ -388,6 +390,29 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
                 float dir = d / MathHelper.TwoPi;
                 bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(dir, w, 0, 1), new Vector3(factor, 1, w)));
                 bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + trail[i] * Projectile.scale * 1.1f, new Color(dir, w, 0, 1), new Vector3(factor, 0, w)));
+                if(i < length - 1)
+                {
+                    float d1 = trail[i + 1].ToRotation() + 1.57f;
+                    float dir1 = d1 / MathHelper.TwoPi;
+                    if(dir1 - dir > 0.8)
+                    {
+                        float midValue = dir / (1 - dir1 + dir);
+                        Vector2 drawMidPoint = trail[i] * midValue + trail[i + 1] * (1 - midValue);
+                        bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(0, w, 0, 1), new Vector3(factor, 1, w)));
+                        bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + drawMidPoint * Projectile.scale * 1.1f, new Color(0, w, 0, 1), new Vector3(factor, 0, w)));
+                        bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(1, w, 0, 1), new Vector3(factor, 1, w)));
+                        bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + drawMidPoint * Projectile.scale * 1.1f, new Color(1, w, 0, 1), new Vector3(factor, 0, w)));
+                    }
+                    if (dir - dir1 > 0.8)
+                    {
+                        float midValue = dir1 / (1 - dir + dir1);
+                        Vector2 drawMidPoint = trail[i + 1] * midValue + trail[i] * (1 - midValue);
+                        bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(1, w, 0, 1), new Vector3(factor, 1, w)));
+                        bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + drawMidPoint * Projectile.scale * 1.1f, new Color(1, w, 0, 1), new Vector3(factor, 0, w)));
+                        bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(0, w, 0, 1), new Vector3(factor, 1, w)));
+                        bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + drawMidPoint * Projectile.scale * 1.1f, new Color(0, w, 0, 1), new Vector3(factor, 0, w)));
+                    }
+                }
             }
             
             spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/Images/Warp").Value, bars, PrimitiveType.TriangleStrip);
@@ -397,7 +422,11 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
         }
         public override void DrawTrail(Color color)
         {
-
+            VFXBatch spriteBatch = new VFXBatch(Main.graphics.GraphicsDevice);
+            spriteBatch.End();
+            spriteBatch.Begin();
+            DrawEffect(spriteBatch);
+            spriteBatch.End();
         }
         internal int timer2 = 0;
         public void DrawEffect(VFXBatch spriteBatch)

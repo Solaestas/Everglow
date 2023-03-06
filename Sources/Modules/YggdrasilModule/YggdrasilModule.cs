@@ -82,7 +82,6 @@ namespace Everglow.Sources.Modules.YggdrasilModule
                 {
                     if (proj.ModProjectile is IOcclusionProjectile ModProj)
                     {
-                        Main.NewText(proj.whoAmI);
                         flag = true;
                         ModProj.DrawOcclusion(VFXManager.spriteBatch);
                     }
