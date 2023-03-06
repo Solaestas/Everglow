@@ -11,15 +11,12 @@ namespace Everglow.Sources.Modules.MinortopographyModule.GreatTombLand
      * Everglow Dev Team
      * 
      * 后续需要解决的问题：
-     * 1、箱子的东西随机化生成
-     * 2、布局优化
-     * 3、空气方块怎么被替换
-     * 4、不使用MapIO怎么生成类似的 想参考丛林神庙的方法（
-     * 5、怎么才能避开原版的地形，我想参考MothGen的方法，等有空再说吧
-     * 6、WordGen的灵活运用
-     * 
+     * 1、箱子的东西随机化生成,应该和MapIO的WriteChest有关系，看看能不能@Override
+     * 2、地形的集群序列化生成
+     * 3、地块边缘的额外算法
+     * 4、通过随机数，其他三个墓穴的构建完成
      *  
-     * Ling Write 2022-11-14 00:30
+     * Ling Write 2023-03-06 16:40
      */
     public class GreatTombLand : ModSystem
     {
@@ -64,7 +61,7 @@ namespace Everglow.Sources.Modules.MinortopographyModule.GreatTombLand
         /// </summary>
         public static void BuildGreatTombLand()
         {
-            //获取目标点
+            //TODO 自适应尚未完成
             Point16 CenterPoint = RandomGreatTombLandGenPass();
             int X0 = CenterPoint.X;
             int Y0 = CenterPoint.Y - 90;
@@ -88,6 +85,7 @@ namespace Everglow.Sources.Modules.MinortopographyModule.GreatTombLand
                             QuickBuild(X0, Y0, "GreatTombLandDemo-1.mapio");
                         break;
                            //其他Roll
+                           //TODO 尚未完成
                         case 1:
                         case 2:
                             QuickBuild(X0, Y0, "GreatTombLandDemo-1.mapio");
@@ -142,7 +140,8 @@ namespace Everglow.Sources.Modules.MinortopographyModule.GreatTombLand
                 for (int j = 12; j < Main.maxTilesY - 300; j += 6)
                 {
                     Tile tile = Main.tile[i, j];
-                    //是丛林植物2，且在地下300的深度
+                    //获取的物块是丛林神庙墙 然后区域在正上方90地块。
+                    //TODO 可能含有其他地形冲突，需要后续解决
                     if (tile.TileType == TileID.LihzahrdBrick)
                     {
                         AimPoint.Add(new Point16(i, j));
