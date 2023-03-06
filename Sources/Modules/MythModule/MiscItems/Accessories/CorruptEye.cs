@@ -4,6 +4,7 @@ using Terraria.Audio;
 
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Accessories
 {
+    [AutoloadEquip(EquipType.Neck)]
     public class CorruptEye : ModItem
     {
         public override void SetStaticDefaults()

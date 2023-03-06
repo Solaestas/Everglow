@@ -3,6 +3,7 @@ using Terraria.Audio;
 
 namespace Everglow.Sources.Modules.MythModule.MiscItems.Accessories
 {
+    [AutoloadEquip(EquipType.Neck)]
     public class GoldLiquidPupil : ModItem
     {
         public override void SetStaticDefaults()

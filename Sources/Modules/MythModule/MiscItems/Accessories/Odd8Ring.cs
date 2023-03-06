@@ -30,6 +30,10 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Accessories
         {
             if(Odd8Enable)
             {
+                if (damage < 8)
+                {
+                    GoldStrike = 1;
+                }
                 damage = Math.Max(8, damage);
             }
         }
@@ -37,6 +41,10 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Accessories
         {
             if (Odd8Enable)
             {
+                if(damage < 8)
+                {
+                    GoldStrike = 1;
+                }
                 damage = Math.Max(8, damage);
             }
         }
@@ -44,15 +52,38 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Accessories
         {
             if (Odd8Enable)
             {
+                if (damage < 8)
+                {
+                    GoldStrike = 1;
+                }
                 damage = Math.Max(8, damage);
             }
         }
         public override void ModifyHitPvpWithProj(Projectile proj, Player target, ref int damage, ref bool crit)
         {
+            
             if (Odd8Enable)
             {
+                if (damage < 8)
+                {
+                    GoldStrike = 1;
+                }
                 damage = Math.Max(8, damage);
             }
+        }
+        public static int GoldStrike = 0;
+        public override void Load()
+        {
+            On.Terraria.CombatText.NewText_Rectangle_Color_string_bool_bool += CombatText_NewText_Rectangle_Color_string_bool_bool;
+        }
+        private int CombatText_NewText_Rectangle_Color_string_bool_bool(On.Terraria.CombatText.orig_NewText_Rectangle_Color_string_bool_bool orig, Rectangle location, Color color, string text, bool dramatic, bool dot)
+        {
+            if (GoldStrike > 0)
+            {
+                color = new Color(255, 235, 0);
+                GoldStrike--;
+            }
+            return orig(location, color, text, dramatic, dot);
         }
     }
 }

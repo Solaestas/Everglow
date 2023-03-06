@@ -1,28 +1,17 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Accessories
+﻿using Everglow.Sources.Modules.MythModule.Common;
+
+namespace Everglow.Sources.Modules.MythModule.MiscItems.Accessories
 {
+    [AutoloadEquip(EquipType.Neck)]
     public class SilverWing : ModItem
     {
-        public override void SetStaticDefaults()
-        {
-            //DisplayName.SetDefault("Badge of Silver Wings");
-            //DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "银翼之章");
-            //Tooltip.SetDefault("Increases crit damage by 8%\nIf you have not been using a weapon for 3s, increases damage by 40%\n'Concentrate the power of your soul'");
-            //Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "暴击伤害增加8%\n若3秒没有使用武器则伤害增加40%\n'聚集你灵魂的力量'");
-        }
         public override void SetDefaults()
         {
             Item.width = 60;
             Item.height = 26;
             Item.value = 1000;
             Item.accessory = true;
-            Item.rare = 0;
-        }
-        public override void UpdateAccessory(Player player, bool hideVisual)
-        {
-            //if (MythPlayer.damage40 <= 1)
-            //{
-                player.GetDamage(DamageClass.Generic) *= 1.4f;
-            //}
+            Item.rare = ItemRarityID.White;
         }
         public override void AddRecipes()
         {
@@ -36,6 +25,61 @@
                 .AddIngredient(ItemID.Ruby, 8)
                 .AddTile(TileID.Anvils)
                 .Register();
+        }
+        public override void UpdateAccessory(Player player, bool hideVisual)
+        {           
+            MythContentPlayer mplayer = player.GetModPlayer<MythContentPlayer>();
+            mplayer.CriticalDamage += 0.08f;
+            if (player.controlUseItem)
+            {
+                noContinueUsingWeaponTime = 0;
+            }
+            else
+            {
+                noContinueUsingWeaponTime++;
+            }
+            if(noContinueUsingWeaponTime == 0)
+            {
+                SliverWingEquiper sWE = player.GetModPlayer<SliverWingEquiper>();
+                sWE.SliverWingEnable = true;
+            }
+        }
+        internal int noContinueUsingWeaponTime = 0;
+    }
+    class SliverWingEquiper : ModPlayer
+    {
+        public bool SliverWingEnable = false;
+        public override void ModifyHitNPC(Item item, NPC target, ref int damage, ref float knockback, ref bool crit)
+        {
+            if(SliverWingEnable)
+            {
+                damage = (int)(damage * 1.4f);
+                SliverWingEnable = false;
+            }
+        }
+        public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        {
+            if (SliverWingEnable)
+            {
+                damage = (int)(damage * 1.4f);
+                SliverWingEnable = false;
+            }
+        }
+        public override void ModifyHitPvp(Item item, Player target, ref int damage, ref bool crit)
+        {
+            if (SliverWingEnable)
+            {
+                damage = (int)(damage * 1.4f);
+                SliverWingEnable = false;
+            }
+        }
+        public override void ModifyHitPvpWithProj(Projectile proj, Player target, ref int damage, ref bool crit)
+        {
+            if (SliverWingEnable)
+            {
+                damage = (int)(damage * 1.4f);
+                SliverWingEnable = false;
+            }
         }
     }
 }

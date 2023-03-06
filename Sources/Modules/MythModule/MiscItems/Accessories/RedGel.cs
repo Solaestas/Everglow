@@ -1,5 +1,8 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Accessories
+﻿using Everglow.Sources.Modules.MythModule.Common;
+
+namespace Everglow.Sources.Modules.MythModule.MiscItems.Accessories
 {
+    [AutoloadEquip(EquipType.Neck)]
     public class RedGel : ModItem
     {
         public override void SetStaticDefaults()
@@ -15,11 +18,13 @@
             Item.height = 34;
             Item.value = 1824;
             Item.accessory = true;
-            Item.rare = 3;
+            Item.rare = ItemRarityID.Orange;
         }
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             player.GetCritChance(DamageClass.Generic) += 6;
+            MythContentPlayer mplayer = player.GetModPlayer<MythContentPlayer>();
+            mplayer.CriticalDamage += 0.09f;
         }
     }
 }

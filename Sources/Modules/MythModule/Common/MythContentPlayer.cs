@@ -22,31 +22,44 @@ namespace Everglow.Sources.Modules.MythModule.Common
 		public int BlueTorchFlowerTime = 0;
 		public bool create1sand = false;
 		public bool Turn = true;
-		public int ImmuCurseF = 0;
 		public int Dashcool = 0;
-		public int RainCritAdd = 0;
-		public float RainDamageAdd = 0;
-		public float StackDamageAdd = 0;
-		public int RainLifeAdd = 0;
-		public float RainManaAdd = 0;
-		public float RainManaAdd2 = 0;
-		public float RainSpeedAdd = 0;
-		public int RainSpeedAddTime = 0;
-		public int RainDefenseAdd = 0;
-		public float RainMissAdd = 0;
+		
 		public float Miss = 0;
-		public int damage40 = 0;
-		public float CritDamage = 1f;
+		public float CriticalDamage = 1f;
 		public int SilverBuff = 0;
-		public float AddCritDamage = 0;
-		public bool DefMoth;
-		public bool DefTusk;
-		public float AddDamagePoint = 0;
-
-		public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
-		{
-			return true;
-		}
+        public override void ResetEffects()//这个是更新帧刷的函数,在UpdateAccessory之前
+        {
+            CriticalDamage = 0f;
+        }
+        public override void ModifyHitNPC(Item item, NPC target, ref int damage, ref float knockback, ref bool crit)
+        {
+            if (crit)
+			{
+                damage = (int)(damage * (CriticalDamage + 1));
+            }
+        }
+        public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        {
+            if (crit)
+            {
+                damage = (int)(damage * (CriticalDamage + 1));
+            }
+        }
+        public override void ModifyHitPvp(Item item, Player target, ref int damage, ref bool crit)
+        {
+            if (crit)
+            {
+                damage = (int)(damage * (CriticalDamage + 1));
+            }
+        }
+        public override void ModifyHitPvpWithProj(Projectile proj, Player target, ref int damage, ref bool crit)
+        {
+            if (crit)
+            {
+                damage = (int)(damage * (CriticalDamage + 1));
+            }
+        }
+        public int InvincibleFrameTime = 0;
 		internal void UpdateDecrease(ref int value)
 		{
             if (value > 0)
@@ -77,41 +90,12 @@ namespace Everglow.Sources.Modules.MythModule.Common
             UpdateDecrease(ref BlueTorchFlower);
             UpdateDecrease(ref BlueTorchFlowerTime);
             UpdateDecrease(ref CyanBranch);
-            UpdateDecrease(ref damage40);
             UpdateDecrease(ref SilverBuff);
-            UpdateDecrease(ref ImmuCurseF);
             UpdateDecrease(ref Dashcool);
-            UpdateDecrease(ref IMMUNE);
-            UpdateDecrease(ref RainSpeedAddTime);
-            UpdateDecrease(ref SilverBuff);
-            AddCritDamage = 0;	
-			if (IMMUNE > 0)
-			{
-				IMMUNE--;
-			}
-			base.PreUpdate();
+            UpdateDecrease(ref InvincibleFrameTime);
 		}
 		public override void PostUpdateMiscEffects()
 		{
-			int MaxS = -1;
-			for (int p = 0; p < 58; p++)
-			{
-				if (Player.inventory[p].type == Player.HeldItem.type)
-				{
-					MaxS += 1;
-				}
-			}
-			if (MaxS > 5)
-			{
-				MaxS = 5;
-			}
-			StackDamageAdd = MaxS * 0.05f;
-			Miss = 0;
-			CritDamage = 1f;
-			Player.GetCritChance(DamageClass.Generic) += RainCritAdd;
-			Player.GetDamage(DamageClass.Generic) *= RainDamageAdd + 1;
-			Player.GetDamage(DamageClass.Generic) *= StackDamageAdd + 1;
-			Miss += RainMissAdd;
 			if (CyanPedal > 0)
 			{
 				Miss += 4;
@@ -124,55 +108,7 @@ namespace Everglow.Sources.Modules.MythModule.Common
 			{
 				Miss += 8;
 			}
-			Player.lifeRegen += RainLifeAdd;
-			CritDamage += AddCritDamage;
-			RainManaAdd2 = RainManaAdd;
-			if (RainManaAdd2 > 10)
-			{
-				Player.statMana += 1;
-				RainManaAdd2 -= 10;
-				if (RainManaAdd2 > 10)
-				{
-					Player.statMana += 1;
-					RainManaAdd2 -= 10;
-					if (RainManaAdd2 > 10)
-					{
-						Player.statMana += 1;
-						RainManaAdd2 -= 10;
-						if (RainManaAdd2 > 10)
-						{
-							Player.statMana += 1;
-							RainManaAdd2 -= 10;
-							if (RainManaAdd2 > 10)
-							{
-								Player.statMana += 1;
-								RainManaAdd2 -= 10;
-								if (RainManaAdd2 > 10)
-								{
-									Player.statMana += 1;
-									RainManaAdd2 -= 10;
-									if (RainManaAdd2 > 10)
-									{
-										Player.statMana += 1;
-										RainManaAdd2 -= 10;
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			if (Main.rand.Next(10) < RainManaAdd2)
-			{
-				Player.statMana += 1;
-			}
-			Player.statDefense += RainDefenseAdd;
-			if (RainSpeedAddTime > 0)
-			{
-				Player.maxRunSpeed += RainSpeedAdd / 6f;
-				Player.maxFallSpeed += RainSpeedAdd;
-				Player.wingAccRunSpeed += RainSpeedAdd;
-			}
+			
 			if (SilverBuff > 0)
 			{
 				Player.maxRunSpeed += 0.05f;
@@ -185,7 +121,6 @@ namespace Everglow.Sources.Modules.MythModule.Common
 				Player.maxFallSpeed += 10000f;
 			}
 		}
-		public int IMMUNE = 0;
 		public override bool PreHurt(bool pvp, bool quiet, ref int damage, ref int hitDirection, ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource, ref int cooldownCounter)
 		{
 			if (damage < 3)
@@ -211,27 +146,23 @@ namespace Everglow.Sources.Modules.MythModule.Common
 			}
 			float Misp = (Miss + vl * Miss * 0.1f) / 100f;
 			Misp = (float)(-1.1 / (Misp + 1) + 1.1);
-			if (Main.rand.NextFloat(0, 1f) <= Misp && IMMUNE == 0)
+			if (Main.rand.NextFloat(0, 1f) <= Misp && InvincibleFrameTime == 0)
 			{
 				CombatText.NewText(new Rectangle((int)Player.Center.X - 10, (int)Player.Center.Y - 10, 20, 20), Color.Cyan, "Miss");
-				IMMUNE = 30;
+				InvincibleFrameTime = 30;
 				if (Player.longInvince)
 				{
-					IMMUNE = 45;
+					InvincibleFrameTime = 45;
 				}
 
 				return false;
 			}
-			if (IMMUNE > 0)
+			if (InvincibleFrameTime > 0)
 			{
 				return false;
 			}
 
 			return base.PreHurt(pvp, quiet, ref damage, ref hitDirection, ref crit, ref customDamage, ref playSound, ref genGore, ref damageSource, ref cooldownCounter);
-		}
-		public override void Load()
-		{
-
 		}
 	}
 }

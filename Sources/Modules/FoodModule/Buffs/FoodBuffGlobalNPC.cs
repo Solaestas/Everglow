@@ -27,7 +27,7 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
             Player player = Main.LocalPlayer;
             if (crit)
             {
-                damage *= (FoodBuffModPlayer.CritDamage + 1) / 2f;
+                damage *= (FoodBuffModPlayer.CriticalDamage + 1) / 2f;
             }
             if (player != null && player.active && !player.dead)
             {

@@ -1,5 +1,6 @@
 ﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Accessories
 {
+    [AutoloadEquip(EquipType.Neck)]
     public class JungleVitamin : ModItem
     {
         public override void SetStaticDefaults()
@@ -15,7 +16,7 @@
             Item.height = 20;
             Item.value = 1528;
             Item.accessory = true;
-            Item.rare = 2;
+            Item.rare = ItemRarityID.Green;
         }
         public override void UpdateAccessory(Player player, bool hideVisual)
         {

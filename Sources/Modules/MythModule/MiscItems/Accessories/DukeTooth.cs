@@ -15,10 +15,9 @@
         {
             Item.width = 38;
             Item.height = 48;
-            Item.value = 20000;
+            Item.value = 26090;
             Item.accessory = true;
-            Item.rare = 7;
-            //Item.vanity = true;
+            Item.rare = ItemRarityID.Lime;
         }
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
