@@ -6,17 +6,11 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Accessories
     [AutoloadEquip(EquipType.Neck)]
     public class GoldLiquidPupil : ModItem
     {
-        public override void SetStaticDefaults()
-        {
-            ItemGlowManager.AutoLoadItemGlow(this);
-        }
-        public static short GetGlowMask = 0;
         public override void SetDefaults()
         {
-            Item.glowMask = ItemGlowManager.GetItemGlow(this);
-            Item.width = 26;
-            Item.height = 22;
-            Item.value = 5500;
+            Item.width = 58;
+            Item.height = 62;
+            Item.value = 5503;
             Item.accessory = true;
             Item.rare = ItemRarityID.Pink;
         }
