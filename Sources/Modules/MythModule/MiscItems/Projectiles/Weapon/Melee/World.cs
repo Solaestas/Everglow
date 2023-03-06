@@ -333,7 +333,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
                                     if (Crit)
                                     {
                                         MythContentPlayer myplayer = player.GetModPlayer<MythContentPlayer>();
-                                        player.addDPS((int)((Dam - Main.npc[v].defDefense) * (0.6 + myplayer.CritDamage)));
+                                        player.addDPS((int)((Dam - Main.npc[v].defDefense) * (0.6 + myplayer.CriticalDamage)));
                                     }
                                     else
                                     {

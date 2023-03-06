@@ -1,7 +1,4 @@
-﻿using Everglow.Sources.Commons.Function.FeatureFlags;
-using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons;
-using Terraria.DataStructures;
+﻿using Everglow.Sources.Modules.MythModule.Common;
 using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
