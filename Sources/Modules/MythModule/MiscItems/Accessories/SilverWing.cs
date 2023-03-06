@@ -9,7 +9,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Accessories
         {
             Item.width = 60;
             Item.height = 26;
-            Item.value = 1000;
+            Item.value = 1093;
             Item.accessory = true;
             Item.rare = ItemRarityID.White;
         }
@@ -38,7 +38,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Accessories
             {
                 noContinueUsingWeaponTime++;
             }
-            if(noContinueUsingWeaponTime == 0)
+            if(noContinueUsingWeaponTime >= 180)
             {
                 SliverWingEquiper sWE = player.GetModPlayer<SliverWingEquiper>();
                 sWE.SliverWingEnable = true;
@@ -51,7 +51,8 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Accessories
         public bool SliverWingEnable = false;
         public override void ModifyHitNPC(Item item, NPC target, ref int damage, ref float knockback, ref bool crit)
         {
-            if(SliverWingEnable)
+            Main.NewText(SliverWingEnable);
+            if (SliverWingEnable)
             {
                 damage = (int)(damage * 1.4f);
                 SliverWingEnable = false;
