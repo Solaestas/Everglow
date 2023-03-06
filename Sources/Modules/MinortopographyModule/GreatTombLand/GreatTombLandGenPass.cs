@@ -1,5 +1,4 @@
-﻿using Everglow.Sources.Modules.MinortopographyModule.GiantPinetree.TilesAndWalls;
-using Everglow.Sources.Modules.ZYModule.Commons.Function.MapIO;
+﻿using Everglow.Sources.Modules.ZYModule.Commons.Function.MapIO;
 using Terraria.DataStructures;
 using Terraria.IO;
 using Terraria.WorldBuilding;
@@ -37,7 +36,7 @@ namespace Everglow.Sources.Modules.MinortopographyModule.GreatTombLand
             {
                 //Todo:翻译：生成森林的大墓地 HJSON
                 //Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everlow.Common.WorldSystem.BuildGreatTombLand");
-                progress.Message = ("正在为森林增添一些阴森的墓地……");
+                progress.Message = ("正在生成丛林的阴森墓穴集群……");
                 //构建墓地的主要方法
                 BuildGreatTombLand();
             }
@@ -61,43 +60,95 @@ namespace Everglow.Sources.Modules.MinortopographyModule.GreatTombLand
         public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight) => tasks.Add(new GreatTombLandGenPass());
 
         /// <summary>
-        /// 生成森林墓穴（不同的世界尺寸有不同的墓穴|Demo)
+        /// 生成森林墓穴
         /// </summary>
         public static void BuildGreatTombLand()
         {
             //获取目标点
-            Point16 CenterPoint = RandomPointInForest();
+            Point16 CenterPoint = RandomGreatTombLandGenPass();
             int X0 = CenterPoint.X;
-            int Y0 = CenterPoint.Y+Main.rand.Next(15,25);
+            int Y0 = CenterPoint.Y - 90;
             float Width = 5;
 
             for (int i = (int)-Width; i <= (int)Width; i++)
             {
+
                 if (i <= -Width + 7 || i >= Width - 7)
                 {
-                    QuickBuild(X0, Y0, "GreatTombLandDemo.mapio");
+                    while (GetMergeToJungle(X0, Y0) <= 10)
+                    {
+                        X0 = Main.rand.Next(300, Main.maxTilesX - 600);
+                        Y0 = Main.rand.Next(500, Main.maxTilesY - 700);
+                    }
+                    switch (Main.rand.Next(6))
+                    {
+                        //默认区域
+                        case 0:
+                        default:
+                            QuickBuild(X0, Y0, "GreatTombLandDemo-1.mapio");
+                        break;
+                           //其他Roll
+                        case 1:
+                        case 2:
+                            QuickBuild(X0, Y0, "GreatTombLandDemo-1.mapio");
+                            break;
+                        case 3:
+                        case 4:
+                            QuickBuild(X0, Y0, "GreatTombLandDemo-1.mapio");
+                            break;
+                        case 5:
+                        case 6:
+                            QuickBuild(X0, Y0, "GreatTombLandDemo-1.mapio");
+                            break;
+                    }
+                   
                 }
             }
         }
 
-        public static Point16 RandomPointInForest()
+        private static int GetMergeToJungle(int PoX, int PoY)
+        {
+            int CrashCount = 0;
+            ushort[] MustHaveTileType = new ushort[]
+            {
+                TileID.JungleGrass,//丛林草方块
+                TileID.JunglePlants,//丛林草
+                TileID.JungleVines,//丛林藤
+                TileID.JunglePlants2,//高大丛林草
+                TileID.PlantDetritus//丛林花
+            };
+            for (int x = -256; x < 257; x += 8)
+            {
+                for (int y = -128; y < 129; y += 8)
+                {
+                    if (Array.Exists(MustHaveTileType, Ttype => Ttype == Main.tile[x + PoX, y + PoY].TileType))
+                    {
+                        CrashCount++;
+                    }
+                }
+            }
+            return CrashCount;
+        }
+
+        public static Point16 RandomGreatTombLandGenPass()
         {
             //目标取点
             List<Point16> AimPoint = new List<Point16>();
 
 
-            int Jmin = Main.maxTilesY - 100;
+            int Jmin = Main.maxTilesY-300;
             for (int i = 33; i < Main.maxTilesX - 34; i += 33)
             {
-                for (int j = 12; j < Main.maxTilesY - 100; j += 6)
+                for (int j = 12; j < Main.maxTilesY - 300; j += 6)
                 {
                     Tile tile = Main.tile[i, j];
-                    if (tile.TileType == TileID.MushroomGrass && tile.HasTile)
+                    //是丛林植物2，且在地下300的深度
+                    if (tile.TileType == TileID.LihzahrdBrick)
                     {
                         AimPoint.Add(new Point16(i, j));
                         if (j < Jmin)
                         {
-                            Jmin = j;
+                            Jmin = Main.maxTilesY - 300;
                         }
                         break;
                     }
