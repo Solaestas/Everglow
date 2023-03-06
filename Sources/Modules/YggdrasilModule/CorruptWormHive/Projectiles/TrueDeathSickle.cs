@@ -59,11 +59,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
             float Size = 0.864f;
             double baseRotation = 0.7854;
 
-            float exScale = 1;
-            if (longHandle)
-            {
-                exScale += 1f;
-            }
+            float exScale = 2f;
             Vector2 origin = new Vector2(longHandle ? texWidth / 2 : 5, texHeight / 2);
 
             Vector2 Zoom = new Vector2(exScale * drawScaleFactor * mainVec.Length() / tex.Width, 1.2f) * Projectile.scale;
@@ -107,6 +103,82 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
 
             List<Vertex2D> vertex2Ds = new List<Vertex2D>
             {
+                new Vertex2D(drawCenter2 + TopLeft, lightColor, new Vector3(sourceTopLeft.X, sourceTopLeft.Y, 0)),
+                new Vertex2D(drawCenter2 + BottomLeft, lightColor, new Vector3(sourceBottomLeft.X, sourceBottomLeft.Y, 0)),
+                new Vertex2D(drawCenter + TopRight, lightColor, new Vector3(sourceTopRight.X, sourceTopRight.Y, 0)),
+
+                new Vertex2D(drawCenter2 + BottomLeft, lightColor, new Vector3(sourceBottomLeft.X, sourceBottomLeft.Y, 0)),
+                new Vertex2D(drawCenter + BottomRight, lightColor, new Vector3(sourceBottomRight.X, sourceBottomRight.Y, 0)),
+                new Vertex2D(drawCenter + TopRight, lightColor, new Vector3(sourceTopRight.X, sourceTopRight.Y, 0))
+            };
+
+            Main.graphics.GraphicsDevice.Textures[0] = tex;
+            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
+        }
+        public void DrawOcclusion(VFXBatch spriteBatch)
+        {
+            Player player = Main.player[Projectile.owner];
+            Texture2D tex = YggdrasilContent.QuickTexture("CorruptWormHive/Projectiles/TrueDeathSickle_Shade_Handle");
+            if (attackType == 1)
+            {
+                tex = YggdrasilContent.QuickTexture("CorruptWormHive/Projectiles/TrueDeathSickle_Shade_Handle_Flip");
+            }
+            if (attackType == 2)
+            {
+                tex = YggdrasilContent.QuickTexture("CorruptWormHive/Projectiles/TrueDeathSickle_Shade");
+                spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, new Rectangle(0,0,tex.Width,tex.Height), new Color(255, 255, 255, 255), Projectile.rotation + (float)(Math.PI / 4d) * player.direction - 0.25f, new Vector2(0, player.direction == -1 ? 0 : tex.Height), 1.22f, player.direction == -1 ? SpriteEffects.FlipVertically : SpriteEffects.None);
+                return;
+            }
+            float texWidth = 208;
+            float texHeight = 188;
+            float Size = 0.864f;
+            double baseRotation = 0.7854;
+
+            float exScale = 2f;
+            Vector2 origin = new Vector2(longHandle ? texWidth / 2 : 5, texHeight / 2);
+
+            Vector2 Zoom = new Vector2(exScale * drawScaleFactor * mainVec.Length() / tex.Width, 1.2f) * Projectile.scale;
+
+            double ProjRotation = MainVec_WithoutGravDir.ToRotation() + Math.PI / 4;
+
+            float QuarterSqrtTwo = 0.35355f;
+
+            Vector2 drawCenter = ProjCenter_WithoutGravDir - Main.screenPosition;
+            Vector2 CenterMoveByPlayerRotation = new Vector2(6 * player.direction, -player.height * player.gravDir) - new Vector2(0, -player.height * player.gravDir).RotatedBy(player.fullRotation);
+            Vector2 drawCenter2 = drawCenter - CenterMoveByPlayerRotation;
+
+            Vector2 INormal = new Vector2(texHeight * QuarterSqrtTwo).RotatedBy(ProjRotation - (baseRotation - Math.PI / 4)) * Zoom.Y * Size;
+            Vector2 JNormal = new Vector2(texWidth * QuarterSqrtTwo).RotatedBy(ProjRotation - (baseRotation + Math.PI / 4)) * Zoom.X * Size;
+
+            Vector2 ITexNormal = new Vector2(texHeight * QuarterSqrtTwo).RotatedBy(-(baseRotation - Math.PI / 4));
+            ITexNormal.X /= tex.Width;
+            ITexNormal.Y /= tex.Height;
+            Vector2 JTexNormal = new Vector2(texWidth * QuarterSqrtTwo).RotatedBy(-(baseRotation + Math.PI / 4));
+            JTexNormal.X /= tex.Width;
+            JTexNormal.Y /= tex.Height;
+
+            Vector2 TopLeft/*原水平贴图的左上角,以此类推*/ = Vector2.Normalize(INormal) * origin.Y - Vector2.Normalize(JNormal) * origin.X;
+            Vector2 TopRight = Vector2.Normalize(JNormal) * (JNormal.Length() * 2 - origin.X) + Vector2.Normalize(INormal) * origin.Y;
+            Vector2 BottomLeft = -Vector2.Normalize(INormal) * (INormal.Length() * 2 - origin.Y) - Vector2.Normalize(JNormal) * origin.X;
+            Vector2 BottomRight = Vector2.Normalize(JNormal) * (JNormal.Length() * 2 - origin.X) - Vector2.Normalize(INormal) * (INormal.Length() * 2 - origin.Y);
+
+
+            Vector2 sourceTopLeft = new Vector2(0.5f) + ITexNormal - JTexNormal;
+            Vector2 sourceTopRight = new Vector2(0.5f) + ITexNormal + JTexNormal;
+            Vector2 sourceBottomLeft = new Vector2(0.5f) - ITexNormal - JTexNormal;
+            Vector2 sourceBottomRight = new Vector2(0.5f) - ITexNormal + JTexNormal;
+
+            if (Player.direction * Player.gravDir == -1)
+            {
+                sourceTopLeft = sourceBottomLeft;
+                sourceTopRight = sourceBottomRight;
+                sourceBottomLeft = new Vector2(0.5f) + ITexNormal - JTexNormal;
+                sourceBottomRight = new Vector2(0.5f) + ITexNormal + JTexNormal;
+            }
+
+            Color lightColor = new Color(255, 0, 0, 255);
+            List<Vertex2D> vertex2Ds = new List<Vertex2D>
+            {
                     new Vertex2D(drawCenter2 + TopLeft, lightColor, new Vector3(sourceTopLeft.X, sourceTopLeft.Y, 0)),
                     new Vertex2D(drawCenter2 + BottomLeft, lightColor, new Vector3(sourceBottomLeft.X, sourceBottomLeft.Y, 0)),
                     new Vertex2D(drawCenter + TopRight, lightColor, new Vector3(sourceTopRight.X, sourceTopRight.Y, 0)),
@@ -116,9 +188,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
                     new Vertex2D(drawCenter + TopRight, lightColor, new Vector3(sourceTopRight.X, sourceTopRight.Y, 0))
             };
 
-            Main.graphics.GraphicsDevice.Textures[0] = tex;
-            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
-
+            spriteBatch.Draw(tex, vertex2Ds, PrimitiveType.TriangleList);
         }
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
@@ -362,7 +432,6 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
                 VFXManager.spriteBatch.End();
             }
         }
-
         public void DrawWarp(VFXBatch spriteBatch)
         {
             List<Vector2> SmoothTrailX = CatmullRom.SmoothPath(trailVecs.ToList());//平滑
@@ -386,37 +455,51 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
             {
                 float factor = i / (length - 1f);
                 float w = 1f;
-                float d = trail[i].ToRotation() + 1.57f;
+                float d = trail[i].ToRotation() + 3.14f + 1.57f;
+                if (d > 6.28f)
+                {
+                    d -= 6.28f;
+                }
                 float dir = d / MathHelper.TwoPi;
+
+                float dir1 = dir;
+                if (i > 0)
+                {
+                    float d1 = trail[i - 1].ToRotation() + 3.14f + 1.57f;
+                    if (d1 > 6.28f)
+                    {
+                        d1 -= 6.28f;
+                    }
+                    dir1 = d1 / MathHelper.TwoPi;
+                }
+
+                if (dir - dir1 > 0.5)
+                {
+                    var midValue = (1 - dir) / (1 - dir + dir1);
+                    var midPoint = midValue * trail[i] + (1 - midValue) * trail[i - 1];
+                    var oldFactor = (i - 1) / (length - 1f);
+                    var midFactor = midValue * factor + (1 - midValue) * oldFactor;
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(0, w, 0, 1), new Vector3(midFactor, 1, 1)));
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + midPoint * Projectile.scale * 1.1f, new Color(0, w, 0, 1), new Vector3(midFactor, 0, 1)));
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(1, w, 0, 1), new Vector3(midFactor, 1, 1)));
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + midPoint * Projectile.scale * 1.1f, new Color(1, w, 0, 1), new Vector3(midFactor, 0, 1)));
+                }
+                if (dir1 - dir > 0.5)
+                {
+                    var midValue = (1 - dir1) / (1 - dir1 + dir);
+                    var midPoint = midValue * trail[i - 1] + (1 - midValue) * trail[i];
+                    var oldFactor = (i - 1) / (length - 1f);
+                    var midFactor = midValue * oldFactor + (1 - midValue) * factor;
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(1, w, 0, 1), new Vector3(midFactor, 1, 1)));
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + midPoint * Projectile.scale * 1.1f, new Color(1, w, 0, 1), new Vector3(midFactor, 0, 1)));
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(0, w, 0, 1), new Vector3(midFactor, 1, 1)));
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + midPoint * Projectile.scale * 1.1f, new Color(0, w, 0, 1), new Vector3(midFactor, 0, 1)));
+                }
                 bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(dir, w, 0, 1), new Vector3(factor, 1, w)));
                 bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + trail[i] * Projectile.scale * 1.1f, new Color(dir, w, 0, 1), new Vector3(factor, 0, w)));
-                if(i < length - 1)
-                {
-                    float d1 = trail[i + 1].ToRotation() + 1.57f;
-                    float dir1 = d1 / MathHelper.TwoPi;
-                    if(dir1 - dir > 0.8)
-                    {
-                        float midValue = dir / (1 - dir1 + dir);
-                        Vector2 drawMidPoint = trail[i] * midValue + trail[i + 1] * (1 - midValue);
-                        bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(0, w, 0, 1), new Vector3(factor, 1, w)));
-                        bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + drawMidPoint * Projectile.scale * 1.1f, new Color(0, w, 0, 1), new Vector3(factor, 0, w)));
-                        bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(1, w, 0, 1), new Vector3(factor, 1, w)));
-                        bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + drawMidPoint * Projectile.scale * 1.1f, new Color(1, w, 0, 1), new Vector3(factor, 0, w)));
-                    }
-                    if (dir - dir1 > 0.8)
-                    {
-                        float midValue = dir1 / (1 - dir + dir1);
-                        Vector2 drawMidPoint = trail[i + 1] * midValue + trail[i] * (1 - midValue);
-                        bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(1, w, 0, 1), new Vector3(factor, 1, w)));
-                        bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + drawMidPoint * Projectile.scale * 1.1f, new Color(1, w, 0, 1), new Vector3(factor, 0, w)));
-                        bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(0, w, 0, 1), new Vector3(factor, 1, w)));
-                        bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + drawMidPoint * Projectile.scale * 1.1f, new Color(0, w, 0, 1), new Vector3(factor, 0, w)));
-                    }
-                }
             }
             
             spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/Images/Warp").Value, bars, PrimitiveType.TriangleStrip);
-
             DrawOcclusion(spriteBatch);
             return;
         }
@@ -468,7 +551,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
             }
 
             var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-            var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
+            var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 
             Effect MeleeTrail = YggdrasilContent.QuickEffect("Effects/FlameTrail");
             MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
@@ -479,87 +562,6 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
             MeleeTrail.CurrentTechnique.Passes[shadertype].Apply();
 
             spriteBatch.Draw(ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value, bars, PrimitiveType.TriangleStrip);
-        }
-        public void DrawOcclusion(VFXBatch spriteBatch)
-        {
-            Player player = Main.player[Projectile.owner];
-            Texture2D tex = YggdrasilContent.QuickTexture("CorruptWormHive/Projectiles/TrueDeathSickle_Shade_Handle");
-            if (attackType == 1)
-            {
-                tex = YggdrasilContent.QuickTexture("CorruptWormHive/Projectiles/TrueDeathSickle_Shade_Handle_Flip");
-            }
-            if (attackType == 2)
-            {
-                tex = YggdrasilContent.QuickTexture("CorruptWormHive/Projectiles/TrueDeathSickle_Shade");
-                spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, null, new Color(255, 0, 0, 255), Projectile.rotation + (float)(Math.PI / 4d) * player.direction - 0.25f, new Vector2(0, player.direction == -1 ? 0 : tex.Height), 1.22f, player.direction == -1 ? SpriteEffects.FlipVertically : SpriteEffects.None);
-
-                return;
-            }
-            float texWidth = 208;
-            float texHeight = 188;
-            float Size = 0.864f;
-            double baseRotation = 0.7854;
-
-            float exScale = 1;
-            if (longHandle)
-            {
-                exScale += 1f;
-            }
-            Vector2 origin = new Vector2(longHandle ? texWidth / 2 : 5, texHeight / 2);
-
-            Vector2 Zoom = new Vector2(exScale * drawScaleFactor * mainVec.Length() / tex.Width, 1.2f) * Projectile.scale;
-
-            double ProjRotation = MainVec_WithoutGravDir.ToRotation() + Math.PI / 4;
-
-            float QuarterSqrtTwo = 0.35355f;
-
-            Vector2 drawCenter = ProjCenter_WithoutGravDir - Main.screenPosition;
-            Vector2 CenterMoveByPlayerRotation = new Vector2(6 * player.direction, -player.height * player.gravDir) - new Vector2(0, -player.height * player.gravDir).RotatedBy(player.fullRotation);
-            Vector2 drawCenter2 = drawCenter - CenterMoveByPlayerRotation;
-
-            Vector2 INormal = new Vector2(texHeight * QuarterSqrtTwo).RotatedBy(ProjRotation - (baseRotation - Math.PI / 4)) * Zoom.Y * Size;
-            Vector2 JNormal = new Vector2(texWidth * QuarterSqrtTwo).RotatedBy(ProjRotation - (baseRotation + Math.PI / 4)) * Zoom.X * Size;
-
-            Vector2 ITexNormal = new Vector2(texHeight * QuarterSqrtTwo).RotatedBy(-(baseRotation - Math.PI / 4));
-            ITexNormal.X /= tex.Width;
-            ITexNormal.Y /= tex.Height;
-            Vector2 JTexNormal = new Vector2(texWidth * QuarterSqrtTwo).RotatedBy(-(baseRotation + Math.PI / 4));
-            JTexNormal.X /= tex.Width;
-            JTexNormal.Y /= tex.Height;
-
-            Vector2 TopLeft/*原水平贴图的左上角,以此类推*/ = Vector2.Normalize(INormal) * origin.Y - Vector2.Normalize(JNormal) * origin.X;
-            Vector2 TopRight = Vector2.Normalize(JNormal) * (JNormal.Length() * 2 - origin.X) + Vector2.Normalize(INormal) * origin.Y;
-            Vector2 BottomLeft = -Vector2.Normalize(INormal) * (INormal.Length() * 2 - origin.Y) - Vector2.Normalize(JNormal) * origin.X;
-            Vector2 BottomRight = Vector2.Normalize(JNormal) * (JNormal.Length() * 2 - origin.X) - Vector2.Normalize(INormal) * (INormal.Length() * 2 - origin.Y);
-
-
-            Vector2 sourceTopLeft = new Vector2(0.5f) + ITexNormal - JTexNormal;
-            Vector2 sourceTopRight = new Vector2(0.5f) + ITexNormal + JTexNormal;
-            Vector2 sourceBottomLeft = new Vector2(0.5f) - ITexNormal - JTexNormal;
-            Vector2 sourceBottomRight = new Vector2(0.5f) - ITexNormal + JTexNormal;
-
-            if (Player.direction * Player.gravDir == -1)
-            {
-                sourceTopLeft = sourceBottomLeft;
-                sourceTopRight = sourceBottomRight;
-                sourceBottomLeft = new Vector2(0.5f) + ITexNormal - JTexNormal;
-                sourceBottomRight = new Vector2(0.5f) + ITexNormal + JTexNormal;
-            }
-
-            Color lightColor = new Color(255,0,0,255);
-            List<Vertex2D> vertex2Ds = new List<Vertex2D>
-            {
-                    new Vertex2D(drawCenter2 + TopLeft, lightColor, new Vector3(sourceTopLeft.X, sourceTopLeft.Y, 0)),
-                    new Vertex2D(drawCenter2 + BottomLeft, lightColor, new Vector3(sourceBottomLeft.X, sourceBottomLeft.Y, 0)),
-                    new Vertex2D(drawCenter + TopRight, lightColor, new Vector3(sourceTopRight.X, sourceTopRight.Y, 0)),
-
-                    new Vertex2D(drawCenter2 + BottomLeft, lightColor, new Vector3(sourceBottomLeft.X, sourceBottomLeft.Y, 0)),
-                    new Vertex2D(drawCenter + BottomRight, lightColor, new Vector3(sourceBottomRight.X, sourceBottomRight.Y, 0)),
-                    new Vertex2D(drawCenter + TopRight, lightColor, new Vector3(sourceTopRight.X, sourceTopRight.Y, 0))
-            };
-
-            spriteBatch.Draw(tex, vertex2Ds, PrimitiveType.TriangleStrip);
-
         }
         public override void End()
         {

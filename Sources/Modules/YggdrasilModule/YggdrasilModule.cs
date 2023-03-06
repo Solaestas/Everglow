@@ -32,7 +32,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule
 
             graphicsDevice.SetRenderTarget(OcclusionRender);
             graphicsDevice.Clear(Color.Transparent);
-            bool flag = DrawOcclusion(VFXManager.spriteBatch);//TODO:@紫幽这玩意完全画不出来，无法理解
+            bool flag = DrawOcclusion(VFXManager.spriteBatch);
 
             graphicsDevice.SetRenderTarget(EffectTarget);
             graphicsDevice.Clear(Color.Transparent);
