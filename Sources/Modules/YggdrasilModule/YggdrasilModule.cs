@@ -1,5 +1,7 @@
 ﻿using Everglow.Sources.Commons.Core.ModuleSystem;
 using Everglow.Sources.Commons.Core.VFX;
+using Everglow.Sources.Modules.YggdrasilModule.Common;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria.Graphics.Effects;
 
 namespace Everglow.Sources.Modules.YggdrasilModule
@@ -36,7 +38,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule
 
             graphicsDevice.SetRenderTarget(EffectTarget);
             graphicsDevice.Clear(Color.Transparent);
-            //DrawEffect(VFXManager.spriteBatch);
+            DrawEffect(VFXManager.spriteBatch);
 
             if (flag)
             {
@@ -64,7 +66,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule
 
                 Main.spriteBatch.Draw(screen, Vector2.Zero, Color.White);
                 Main.spriteBatch.End();
-                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend,SamplerState.AnisotropicWrap,DepthStencilState.None,RasterizerState.CullNone,null,Main.GameViewMatrix.TransformationMatrix);
                 Main.spriteBatch.Draw(TotalEffeftsRender, Vector2.Zero, Color.White);
                 Main.spriteBatch.End();
             }
@@ -75,6 +77,8 @@ namespace Everglow.Sources.Modules.YggdrasilModule
         private bool DrawOcclusion(VFXBatch spriteBatch)//遮盖层
         {
             spriteBatch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
+            Effect effect = YggdrasilContent.QuickEffect("Effects/Null");
+            effect.CurrentTechnique.Passes[0].Apply();
             bool flag = false;
             foreach (Projectile proj in Main.projectile)
             {
@@ -83,17 +87,22 @@ namespace Everglow.Sources.Modules.YggdrasilModule
                     if (proj.ModProjectile is IOcclusionProjectile ModProj)
                     {
                         flag = true;
-                        ModProj.DrawOcclusion(VFXManager.spriteBatch);
+                        ModProj.DrawOcclusion(spriteBatch);
                     }
                 }
             }
-            VFXManager.spriteBatch.End();
+            spriteBatch.End();
             return flag;
         }
         private bool DrawEffect(VFXBatch spriteBatch)//特效层
         {
-            bool flag = false;
             spriteBatch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
+            Effect MeleeTrail = YggdrasilContent.QuickEffect("Effects/FlameTrail");
+            MeleeTrail.Parameters["uTime"].SetValue((float)(Main.timeForVisualEffects) * 0.007f);
+            Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/YggdrasilModule/CorruptWormHive/Projectiles/FlameLine", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+            MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>("Everglow/Sources/Modules/YggdrasilModule/CorruptWormHive/Projectiles/DeathSickle_Color", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
+            MeleeTrail.CurrentTechnique.Passes["Trail"].Apply();
+            bool flag = false;
             foreach (Projectile proj in Main.projectile)
             {
                 if (proj.active)
@@ -101,11 +110,11 @@ namespace Everglow.Sources.Modules.YggdrasilModule
                     if (proj.ModProjectile is IOcclusionProjectile ModProj)
                     {
                         flag = true;
-                        ModProj.DrawEffect(VFXManager.spriteBatch);
+                        ModProj.DrawEffect(spriteBatch);
                     }
                 }
             }
-            VFXManager.spriteBatch.End();
+            spriteBatch.End();
             return flag;
         }
         private void GetOrig(GraphicsDevice graphicsDevice)
