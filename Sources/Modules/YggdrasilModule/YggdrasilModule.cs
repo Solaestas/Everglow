@@ -66,7 +66,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule
 
                 Main.spriteBatch.Draw(screen, Vector2.Zero, Color.White);
                 Main.spriteBatch.End();
-                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend,SamplerState.AnisotropicWrap,DepthStencilState.None,RasterizerState.CullNone,null,Main.GameViewMatrix.TransformationMatrix);
+                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
                 Main.spriteBatch.Draw(TotalEffeftsRender, Vector2.Zero, Color.White);
                 Main.spriteBatch.End();
             }
@@ -77,7 +77,11 @@ namespace Everglow.Sources.Modules.YggdrasilModule
         private bool DrawOcclusion(VFXBatch spriteBatch)//遮盖层
         {
             spriteBatch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
+
             Effect effect = YggdrasilContent.QuickEffect("Effects/Null");
+            var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+            var model = Matrix.CreateTranslation(new Vector3(0, 0, 0)) * Main.GameViewMatrix.TransformationMatrix;
+            effect.Parameters["uTransform"].SetValue(model * projection);
             effect.CurrentTechnique.Passes[0].Apply();
             bool flag = false;
             foreach (Projectile proj in Main.projectile)
@@ -97,7 +101,12 @@ namespace Everglow.Sources.Modules.YggdrasilModule
         private bool DrawEffect(VFXBatch spriteBatch)//特效层
         {
             spriteBatch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
+
+
             Effect MeleeTrail = YggdrasilContent.QuickEffect("Effects/FlameTrail");
+            var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+            var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
+            MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
             MeleeTrail.Parameters["uTime"].SetValue((float)(Main.timeForVisualEffects) * 0.007f);
             Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/YggdrasilModule/CorruptWormHive/Projectiles/FlameLine", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
             MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>("Everglow/Sources/Modules/YggdrasilModule/CorruptWormHive/Projectiles/DeathSickle_Color", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);

@@ -470,23 +470,26 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
                 VFXManager.Add(df);
             }
         }
-        public void DrawBloom(SpriteBatch spriteBatch)
+        public void DrawBloom()
         {
             VFXManager.spriteBatch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
-            Effect effect = YggdrasilContent.QuickEffect("Effects/Null");
-            effect.CurrentTechnique.Passes[0].Apply();
-            DrawOcclusion(VFXManager.spriteBatch);
-            VFXManager.spriteBatch.End();
-
-            VFXManager.spriteBatch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
+            Effect MeleeTrail = YggdrasilContent.QuickEffect("Effects/FlameTrail");
             var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
             var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
-            Effect MeleeTrail = YggdrasilContent.QuickEffect("Effects/FlameTrail");
             MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
             MeleeTrail.Parameters["uTime"].SetValue(timer2 * 0.007f);
             MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
             MeleeTrail.CurrentTechnique.Passes[shadertype].Apply();
             DrawEffect(VFXManager.spriteBatch);
+            VFXManager.spriteBatch.End();
+
+
+            VFXManager.spriteBatch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
+            Effect effect = YggdrasilContent.QuickEffect("Effects/Null");
+            model = Matrix.CreateTranslation(new Vector3(0, 0, 0)) * Main.GameViewMatrix.TransformationMatrix;
+            effect.Parameters["uTransform"].SetValue(model * projection);
+            effect.CurrentTechnique.Passes[0].Apply();
+            DrawOcclusion(VFXManager.spriteBatch);
             VFXManager.spriteBatch.End();
         }
         public void DrawWarp(VFXBatch spriteBatch)
@@ -506,12 +509,17 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
             {
                 return;
             }
+            float w = 1f;
+            if (timer > 200)
+            {
+                w = Math.Max(0, (380 - timer) / 180f);
+            }
             Vector2[] trail = SmoothTrail.ToArray();
             List<Vertex2D> bars = new List<Vertex2D>();
             for (int i = 0; i < length; i++)
             {
                 float factor = i / (length - 1f);
-                float w = 1f;
+
                 float d = trail[i].ToRotation() + 3.14f + 1.57f;
                 if (d > 6.28f)
                 {
@@ -568,7 +576,6 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
         internal int timer2 = 0;
         public void DrawEffect(VFXBatch spriteBatch)
         {
-            timer2++;
             List<Vector2> SmoothTrailX = CatmullRom.SmoothPath(trailVecs.ToList());//平滑
             List<Vector2> SmoothTrail = new List<Vector2>();
             for (int x = 0; x < SmoothTrailX.Count - 1; x++)
@@ -596,8 +603,8 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
                 {
                     w *= 1.2f;
                 }
-                bars.Add(new Vertex2D(Projectile.Center + trail[i] * 0.05f * Projectile.scale - Main.screenPosition, Color.White, new Vector3(factor * 1, 1, 0f)));
-                bars.Add(new Vertex2D(Projectile.Center + trail[i] * Projectile.scale - Main.screenPosition, Color.White, new Vector3(factor * 2, 0, w)));
+                bars.Add(new Vertex2D(Projectile.Center + trail[i] * 0.05f * Projectile.scale, Color.White, new Vector3(factor * 1, 1, 0f)));
+                bars.Add(new Vertex2D(Projectile.Center + trail[i] * Projectile.scale, Color.White, new Vector3(factor * 2, 0, w)));
             }
             spriteBatch.Draw(ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value, bars, PrimitiveType.TriangleStrip);
         }

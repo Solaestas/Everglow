@@ -103,7 +103,7 @@ internal class DevilFlameDust : ShaderDraw
         {
             Vector2 normal = oldPos[i] - oldPos[i - 1];
             normal = Vector2.Normalize(normal).RotatedBy(Math.PI * 0.5);
-            Color drawcRope = new Color(fx * fx * fx * 2, 0.5f, 1, 150 / 255f);
+            Color drawcRope = new Color(fx * fx * fx * 2, 0.5f, 1, 50 / 255f);
             float width = ai[2] * (float)(Math.Sin(i / (double)(len) * Math.PI));
             bars[2 * i - 1] = (new Vertex2D(oldPos[i] + normal * width, drawcRope, new Vector3(0 + ai[0], i / 80f, 0)));
             bars[2 * i] = (new Vertex2D(oldPos[i] - normal * width, drawcRope, new Vector3(0.05f + ai[0], i / 80f, 0)));
