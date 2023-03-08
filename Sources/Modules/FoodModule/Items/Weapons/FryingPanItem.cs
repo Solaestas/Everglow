@@ -1,10 +1,5 @@
 ﻿using Everglow.Sources.Modules.FoodModule.Projectiles;
 using Everglow.Sources.Modules.MEACModule.Projectiles;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria.DataStructures;
 
 namespace Everglow.Sources.Modules.FoodModule.Items.Weapons
@@ -23,7 +18,7 @@ namespace Everglow.Sources.Modules.FoodModule.Items.Weapons
             Item.height = 1;
 
             Item.knockBack = 5f;
-            Item.damage = 25;
+            Item.damage = 5;
             Item.rare = ItemRarityID.Green;
 
             Item.DamageType = DamageClass.Melee;

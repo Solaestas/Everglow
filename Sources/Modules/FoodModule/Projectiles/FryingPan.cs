@@ -1,22 +1,9 @@
 ﻿using Everglow.Sources.Modules.MEACModule.Projectiles;
 using Everglow.Sources.Modules.MythModule;
 using Terraria.Audio;
-using Terraria.Enums;
-using Terraria.GameContent.Shaders;
-using Everglow.Sources.Commons.Function.Vertex;
-using Everglow.Sources.Commons.Function.Curves;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria;
-using Everglow.Sources.Modules.MEACModule;
-using System.Linq.Expressions;
-using Everglow.Sources.Modules.ZYModule.Commons.Core;
-using static Terraria.ModLoader.PlayerDrawLayer;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Everglow.Sources.Modules.FoodModule.Dusts;
+using System.Threading;
 
 namespace Everglow.Sources.Modules.FoodModule.Projectiles
 {
@@ -85,13 +72,12 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
             //调整各个攻击方式的伤害倍率等等
-
             ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
 
             if (attackType == 100)
             {
-                damage *= 5;
-                knockback *= 5;
+                damage = (int)(damage * 1.85);
+                knockback *= 2;
                 Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 12, 150)).RotatedByRandom(6.283);
             }
         }
@@ -123,26 +109,20 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                     Projectile.rotation = mainVec.ToRotation();
 
                     //向内的粒子效果
-                    if (timer % 10 == 0)
+                    for (int x = 0; x < 2; x++)
                     {
                         Vector2 r = Main.rand.NextVector2Unit();
-                        float dis1 = MathHelper.Clamp(chargeTime1 - timer, 0, chargeTime1) / 1;
-                        float dis2 = MathHelper.Clamp(chargeTime2 - timer, 0, chargeTime2) / 1;
-                        float dis3 = MathHelper.Clamp(chargeTime3 - timer, 0, chargeTime3) / 1;
-                        Dust d1 = Dust.NewDustDirect(Projectile.Center + r * dis1, 10, 10, DustID.AncientLight, 0, 0, 100, new Color(250, 150, 20), 0.8f);
-                        d1.velocity = -r * 4;
-                        d1.position += Main.rand.NextVector2Unit() * 5;
-                        d1.noGravity = true;
+                        float dis1 = MathHelper.Clamp(chargeTime1 - timer, 0, chargeTime1) * 4;
+                        float dis2 = MathHelper.Clamp(chargeTime2 - timer, 0, chargeTime2) * 4;
+                        float dis3 = MathHelper.Clamp(chargeTime3 - timer, 0, chargeTime3) * 4;
+                        Dust d1 = Dust.NewDustDirect(Projectile.Center + r * dis1, 10, 10, ModContent.DustType<BlackPanDust>(), 0, 0, 100, new Color(0, Projectile.owner, 20), 0.8f);
+                        d1.alpha = 255;
 
-                        Dust d2 = Dust.NewDustDirect(Projectile.Center + r * dis2, 10, 10, DustID.AncientLight, 0, 0, 100, new Color(250, 150, 20), 0.8f);
-                        d2.velocity = -r * 4;
-                        d2.position += Main.rand.NextVector2Unit() * 5;
-                        d2.noGravity = true;
+                        Dust d2 = Dust.NewDustDirect(Projectile.Center + r * dis2, 10, 10, ModContent.DustType<BlackPanDust2>(), 0, 0, 100, new Color(0, Projectile.owner, 20), 2f);
+                        d2.alpha = 255;
 
-                        Dust d3 = Dust.NewDustDirect(Projectile.Center + r * dis3, 10, 10, DustID.AncientLight, 0, 0, 100, new Color(250, 150, 20), 0.8f);
-                        d3.velocity = -r * 4;
-                        d3.position += Main.rand.NextVector2Unit() * 5;
-                        d3.noGravity = true;
+                        Dust d3 = Dust.NewDustDirect(Projectile.Center + r * dis3, 10, 10, ModContent.DustType<BlackPanDust3>(), 0, 0, 100, new Color(0, Projectile.owner, 20), 3f);
+                        d3.alpha = 255;
                     }
 
                 }
@@ -167,6 +147,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                 {
                     //进入攻击状态
                     state1 = true;
+
                     if (timer >= chargeTime2)
                     {
                         state2 = true;
@@ -177,7 +158,6 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                     }
                     timer = 10000;
                     SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
-
                 }
 
                 if (timer >= 10000)//开始挥动攻击
@@ -258,23 +238,58 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                             End();
                         }
                     }
-
-
                 }
             }
-
-
-
             if (isAttacking)
             {
                 //攻击时的粒子之类的
+            }
+        }
+        private void PlayerAnimation(Player player)
+        {
+            Vector2 vToMouse = Main.MouseWorld - player.Top;
+            int overTimer = timer - 10000;
+            float YDevideX = MathF.Abs(vToMouse.X) / (vToMouse.Length() + 0.001f);
+            if (timer > 10000)
+            {
+                if (overTimer < 24)
+                {
+                    float BodyRotation = (float)(Math.Sin((overTimer) / 40d * Math.PI)) * 0.2f * player.direction * player.gravDir * YDevideX;
+                    player.fullRotation = BodyRotation;
+                    player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
+                    player.legRotation = -BodyRotation;
+                    player.legPosition = (new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height) - player.fullRotationOrigin).RotatedBy(-BodyRotation);
+                }
+                else if(overTimer < 50)
+                {
+                    float BodyRotation = (float)(Math.Sin((overTimer - 30) / 40d * Math.PI)) * -0.2f * player.direction * player.gravDir * YDevideX;
+                    player.fullRotation = BodyRotation;
+                    player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
+                    player.legRotation = -BodyRotation;
+                    player.legPosition = (new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height) - player.fullRotationOrigin).RotatedBy(-BodyRotation);
+                }
+                else
+                {
+                    float BodyRotation = (float)(Math.Sin((overTimer) / 40d * Math.PI)) * -0.6f * player.direction * player.gravDir * YDevideX;
+                    player.fullRotation = BodyRotation;
+                    player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
+                    player.legRotation = -BodyRotation;
+                    player.legPosition = (new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height) - player.fullRotationOrigin).RotatedBy(-BodyRotation);
+                }
+            }
+            else
+            {
+                float BodyRotation = (float)(Math.Sin(-Math.Min(timer * 0.5f, 45) / 90d * Math.PI)) * 0.3f * player.direction * player.gravDir * YDevideX;
+                player.fullRotation = BodyRotation;
+                player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
+                player.legRotation = -BodyRotation;
+                player.legPosition = (new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height) - player.fullRotationOrigin).RotatedBy(-BodyRotation);
             }
         }
 
         int hittimes = 49;
         public override void AI()
         {
-
             if (attackType == 0)
             {
                 Projectile.tileCollide = true;
@@ -299,8 +314,8 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                                 Vector2 v1 = proj.velocity;
                                 Vector2 v2 = Projectile.velocity;
 
-                                float m1 = proj.width * proj.height * proj.knockBack * proj.scale;
-                                float m2 = Projectile.width * Projectile.height * Projectile.knockBack * Projectile.scale / 50;
+                                float m1 = MathF.Pow(proj.width * proj.height, 1.5f) * proj.knockBack * proj.scale;
+                                float m2 = MathF.Pow(Projectile.width * Projectile.height, 1.5f) * Projectile.knockBack * Projectile.scale / 50;
 
                                 Vector2 newvelocity1 = (v1 * (m1 - m2) + 2 * m2 * v2) / (m1 + m2);
                                 Vector2 newvelocity2 = (v2 * (m2 - m1) + 2 * m1 * v1) / (m1 + m2);
@@ -316,7 +331,6 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                                 }
                                 Projectile.velocity = newvelocity2;//这里是质心动量守恒的弹性碰撞
 
-                                Dust.NewDustPerfect(Projectile.Center - (Vector2.Normalize(dustvelocity).RotatedBy(Math.PI / 4) * 32), ModContent.DustType<Dusts.FireDust>(), Vector2.Normalize(dustvelocity) * 15, 125, new Color(250, 150, 20));
                                 Projectile.NewProjectile(null, Projectile.Center - (Vector2.Normalize(dustvelocity).RotatedBy(Math.PI / 4) * 32), Vector2.Normalize(dustvelocity) * 15, ProjectileID.Spark, Projectile.damage, Projectile.knockBack, player.whoAmI);
 
                                 int dust1 = Dust.NewDust(Projectile.Center - (Vector2.Normalize(dustvelocity).RotatedBy(Math.PI / 4) * 32), 0, 0, ModContent.DustType<MothSmog>(), Vector2.Normalize(dustvelocity).X * 5, Vector2.Normalize(dustvelocity).Y * 10, 100, default, Main.rand.NextFloat(3.7f, 5.1f));
@@ -335,7 +349,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                 mainVec = Projectile.rotation.ToRotationVector2() * 38;
                 if (Projectile.timeLeft <= 2880)
                 {
-                    Projectile.velocity = Projectile.velocity * 0.8f + Vector2.Normalize(player.Center - Projectile.Center) * 0.5f;
+                    Projectile.velocity = Projectile.velocity * 0.8f + Vector2.Normalize(player.Center - Projectile.velocity - Projectile.Center) * 12.5f;
                     Projectile.tileCollide = false;
                     Projectile.rotation += 0.3f * Projectile.spriteDirection;
                     mainVec = Projectile.rotation.ToRotationVector2() * 38;
@@ -360,11 +374,13 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
             }
             else
             {
+                PlayerAnimation(Player);
                 base.AI();
             }
         }
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
+            SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/FoodModule/Sounds/Pan1").WithVolumeScale(1), Projectile.Center);
             if (attackType == 0)
             {
                 if (Projectile.timeLeft > 2880)
@@ -383,6 +399,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
         }
         public override void OnHitPvp(Player target, int damage, bool crit)
         {
+            SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/FoodModule/Sounds/Pan1").WithVolumeScale(1), Projectile.Center);
             if (attackType == 0)
             {
                 if (Projectile.timeLeft > 2880)
@@ -401,7 +418,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
         }
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            SoundEngine.PlaySound(SoundID.NPCHit4, Projectile.Center);
+            SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/FoodModule/Sounds/Pan1" ).WithVolumeScale(1), Projectile.Center);
             if (attackType == 0)
             {
                 if (Projectile.timeLeft > 2880)
