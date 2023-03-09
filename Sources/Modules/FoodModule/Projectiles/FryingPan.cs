@@ -4,10 +4,14 @@ using Terraria.Audio;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Everglow.Sources.Modules.FoodModule.Dusts;
 using System.Threading;
+using Everglow.Sources.Commons.Core.VFX;
+using Everglow.Sources.Commons.Function.Curves;
+using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Sources.Modules.MEACModule;
 
 namespace Everglow.Sources.Modules.FoodModule.Projectiles
 {
-    public class FryingPan : MeleeProj
+    public class FryingPan : MeleeProj, IWarpProjectile
     {
         public override void SetDef()
         {
@@ -31,7 +35,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
 
             Projectile.timeLeft = 3000;
 
-
+            selfWarp = true;
             /*
              * 若要增加剑的宽度，需要增大scale并在Attack()函数中降低mainVec的长度
              */
@@ -286,8 +290,17 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                 player.legPosition = (new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height) - player.fullRotationOrigin).RotatedBy(-BodyRotation);
             }
         }
+        private void GenerateDust(Vector2 pos,int count = 60)
+        {
 
-        int hittimes = 49;
+            float strength = count / 40f;
+            for (int i = 0;i < count;i++)
+            {
+                Dust d = Dust.NewDustDirect(pos, 10, 10, ModContent.DustType<PanHitSpark>(), 0, 0, 0, default, Main.rand.NextFloat(0.85f, 1.65f) * strength);
+                d.velocity = new Vector2(0, Main.rand.NextFloat(0f, 14.7f * strength)).RotatedByRandom(6.283) * strength;
+            }
+        }
+        internal float OldSoundRot = 0;
         public override void AI()
         {
             if (attackType == 0)
@@ -299,64 +312,71 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                 Player player = Main.player[Projectile.owner];
                 Projectile.Center += Projectile.velocity;
                 useTrail = true;
-                if (timer % 10 == 0)
+                timer++;
+                if (Projectile.rotation - OldSoundRot > 6.283)
                 {
+                    OldSoundRot = Projectile.rotation;
                     AttSound(SoundID.Item1);
                 }
-                if (hittimes > 0)
-                {
-                    foreach (Projectile proj in Main.projectile)
-                    {
-                        if (proj.active && proj != Projectile && proj.GetGlobalProjectile<Canhitproj>().Canhit && proj.penetrate != -1)
-                        {
-                            if ((Projectile.Center - proj.Center).Length() <= (float)Math.Sqrt(proj.width ^ 2 + proj.height ^ 2) * proj.scale / 2 + 42 * Projectile.scale)
-                            {
-                                Vector2 v1 = proj.velocity;
-                                Vector2 v2 = Projectile.velocity;
+                //if (hittimes > 0)
+                //{
+                //    foreach (Projectile proj in Main.projectile)
+                //    {
+                //        if (proj.active && proj != Projectile && proj.GetGlobalProjectile<Canhitproj>().Canhit && proj.penetrate != -1)
+                //        {
+                //            if ((Projectile.Center - proj.Center).Length() <= (float)Math.Sqrt(proj.width ^ 2 + proj.height ^ 2) * proj.scale / 2 + 42 * Projectile.scale)
+                //            {
+                //                Vector2 v1 = proj.velocity;
+                //                Vector2 v2 = Projectile.velocity;
 
-                                float m1 = MathF.Pow(proj.width * proj.height, 1.5f) * proj.knockBack * proj.scale;
-                                float m2 = MathF.Pow(Projectile.width * Projectile.height, 1.5f) * Projectile.knockBack * Projectile.scale / 50;
+                //                float m1 = MathF.Pow(proj.width * proj.height, 1.5f) * proj.knockBack * proj.scale;
+                //                float m2 = MathF.Pow(Projectile.width * Projectile.height, 1.5f) * Projectile.knockBack * Projectile.scale / 50;
 
-                                Vector2 newvelocity1 = (v1 * (m1 - m2) + 2 * m2 * v2) / (m1 + m2);
-                                Vector2 newvelocity2 = (v2 * (m2 - m1) + 2 * m1 * v1) / (m1 + m2);
-                                Vector2 dustvelocity = newvelocity1 - v1;
+                //                Vector2 newvelocity1 = (v1 * (m1 - m2) + 2 * m2 * v2) / (m1 + m2);
+                //                Vector2 newvelocity2 = (v2 * (m2 - m1) + 2 * m1 * v1) / (m1 + m2);
+                //                Vector2 dustvelocity = newvelocity1 - v1;
 
-                                if (newvelocity1.Length() <= v1.Length())
-                                {
-                                    proj.velocity = Vector2.Normalize(newvelocity1) * v1.Length();
-                                }
-                                else
-                                {
-                                    proj.velocity = newvelocity1;
-                                }
-                                Projectile.velocity = newvelocity2;//这里是质心动量守恒的弹性碰撞
+                //                if (newvelocity1.Length() <= v1.Length())
+                //                {
+                //                    proj.velocity = Vector2.Normalize(newvelocity1) * v1.Length();
+                //                }
+                //                else
+                //                {
+                //                    proj.velocity = newvelocity1;
+                //                }
+                //                Projectile.velocity = newvelocity2;//这里是质心动量守恒的弹性碰撞
 
-                                Projectile.NewProjectile(null, Projectile.Center - (Vector2.Normalize(dustvelocity).RotatedBy(Math.PI / 4) * 32), Vector2.Normalize(dustvelocity) * 15, ProjectileID.Spark, Projectile.damage, Projectile.knockBack, player.whoAmI);
+                //                Projectile.NewProjectile(null, Projectile.Center - (Vector2.Normalize(dustvelocity).RotatedBy(Math.PI / 4) * 32), Vector2.Normalize(dustvelocity) * 15, ProjectileID.Spark, Projectile.damage, Projectile.knockBack, player.whoAmI);
 
-                                int dust1 = Dust.NewDust(Projectile.Center - (Vector2.Normalize(dustvelocity).RotatedBy(Math.PI / 4) * 32), 0, 0, ModContent.DustType<MothSmog>(), Vector2.Normalize(dustvelocity).X * 5, Vector2.Normalize(dustvelocity).Y * 10, 100, default, Main.rand.NextFloat(3.7f, 5.1f));
-                                Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 50);
-                                Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
+                //                int dust1 = Dust.NewDust(Projectile.Center - (Vector2.Normalize(dustvelocity).RotatedBy(Math.PI / 4) * 32), 0, 0, ModContent.DustType<MothSmog>(), Vector2.Normalize(dustvelocity).X * 5, Vector2.Normalize(dustvelocity).Y * 10, 100, default, Main.rand.NextFloat(3.7f, 5.1f));
+                //                Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 50);
+                //                Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
 
-                                SoundEngine.PlaySound(SoundID.NPCHit4, Projectile.Center);
-                                proj.GetGlobalProjectile<Canhitproj>().Canhit = false;
-                                hittimes--;
-                                Projectile.timeLeft = 2880;
-                            }
-                        }
-                    }
-                }
-                Projectile.rotation += 0.3f * Projectile.spriteDirection;
+                //                SoundEngine.PlaySound(SoundID.NPCHit4, Projectile.Center);
+                //                proj.GetGlobalProjectile<Canhitproj>().Canhit = false;
+                //                hittimes--;
+                //                Projectile.timeLeft = 2980;
+                //            }
+                //        }
+                //    }
+                //}
+                Projectile.rotation += 0.1f * Projectile.spriteDirection;
                 mainVec = Projectile.rotation.ToRotationVector2() * 38;
-                if (Projectile.timeLeft <= 2880)
+                if (Projectile.timeLeft <= 2980)
                 {
-                    Projectile.velocity = Projectile.velocity * 0.8f + Vector2.Normalize(player.Center - Projectile.velocity - Projectile.Center) * 12.5f;
-                    Projectile.tileCollide = false;
-                    Projectile.rotation += 0.3f * Projectile.spriteDirection;
+                    float mulVelocity = Math.Min((2960 - Projectile.timeLeft) / 16f, 16f);
+                    Projectile.velocity = Projectile.velocity * 0.8f + Vector2.Normalize(player.Center - Projectile.velocity - Projectile.Center) * mulVelocity;
+                    
+                    Projectile.rotation += (mulVelocity / 12f) * Projectile.spriteDirection;
                     mainVec = Projectile.rotation.ToRotationVector2() * 38;
                     if ((player.Center - Projectile.Center).Length() < 32)
                     {
                         Projectile.timeLeft = 0;
                     }
+                }
+                if(Projectile.timeLeft <= 2980 - 40)
+                {
+                    Projectile.tileCollide = false;
                 }
 
                 if (useTrail)
@@ -378,67 +398,139 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
                 base.AI();
             }
         }
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public void DrawWarp(VFXBatch spriteBatch)
         {
-            SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/FoodModule/Sounds/Pan1").WithVolumeScale(1), Projectile.Center);
-            if (attackType == 0)
+            List<Vector2> SmoothTrailX = CatmullRom.SmoothPath(trailVecs.ToList());//平滑
+            List<Vector2> SmoothTrail = new List<Vector2>();
+            for (int x = 0; x < SmoothTrailX.Count - 1; x++)
             {
-                if (Projectile.timeLeft > 2880)
+                SmoothTrail.Add(SmoothTrailX[x]);
+            }
+            if (trailVecs.Count != 0)
+            {
+                SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
+            }
+            int length = SmoothTrail.Count;
+            if (length <= 3)
+            {
+                return;
+            }
+            Vector2[] trail = SmoothTrail.ToArray();
+            List<Vertex2D> bars = new List<Vertex2D>();
+            for (int i = 0; i < length; i++)
+            {
+                float factor = i / (length - 1f);
+                float w = 0.2f;
+                float d = trail[i].ToRotation() + 3.14f + 1.57f;
+                if (d > 6.28f)
                 {
-                    if (Projectile.ai[1] != 0)
-                    {
-                        return;
-                    }
-                    Projectile.velocity.X = Projectile.velocity.X * -1f;
-                    Projectile.velocity.Y = Projectile.velocity.Y * -1f;
-                    Projectile.timeLeft = 2880;
+                    d -= 6.28f;
                 }
+                float dir = d / MathHelper.TwoPi;
+
+                float dir1 = dir;
+                if (i > 0)
+                {
+                    float d1 = trail[i - 1].ToRotation() + 3.14f + 1.57f;
+                    if (d1 > 6.28f)
+                    {
+                        d1 -= 6.28f;
+                    }
+                    dir1 = d1 / MathHelper.TwoPi;
+                }
+
+                if (dir - dir1 > 0.5)
+                {
+                    var midValue = (1 - dir) / (1 - dir + dir1);
+                    var midPoint = midValue * trail[i] + (1 - midValue) * trail[i - 1];
+                    var oldFactor = (i - 1) / (length - 1f);
+                    var midFactor = midValue * factor + (1 - midValue) * oldFactor;
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(0, w, 0, 1), new Vector3(midFactor, 1, 1)));
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + midPoint * Projectile.scale * 1.1f, new Color(0, w, 0, 1), new Vector3(midFactor, 0, 1)));
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(1, w, 0, 1), new Vector3(midFactor, 1, 1)));
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + midPoint * Projectile.scale * 1.1f, new Color(1, w, 0, 1), new Vector3(midFactor, 0, 1)));
+                }
+                if (dir1 - dir > 0.5)
+                {
+                    var midValue = (1 - dir1) / (1 - dir1 + dir);
+                    var midPoint = midValue * trail[i - 1] + (1 - midValue) * trail[i];
+                    var oldFactor = (i - 1) / (length - 1f);
+                    var midFactor = midValue * oldFactor + (1 - midValue) * factor;
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(1, w, 0, 1), new Vector3(midFactor, 1, 1)));
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + midPoint * Projectile.scale * 1.1f, new Color(1, w, 0, 1), new Vector3(midFactor, 0, 1)));
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(0, w, 0, 1), new Vector3(midFactor, 1, 1)));
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + midPoint * Projectile.scale * 1.1f, new Color(0, w, 0, 1), new Vector3(midFactor, 0, 1)));
+                }
+                bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(dir, w, 0, 1), new Vector3(factor, 1, w)));
+                bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + trail[i] * Projectile.scale * 1.1f, new Color(dir, w, 0, 1), new Vector3(factor, 0, w)));
             }
 
+            spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/Images/Warp").Value, bars, PrimitiveType.TriangleStrip);
+            return;
+        }
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        {
+            
+            if (attackType == 0)
+            {
+                SoundEngine.PlaySound((new SoundStyle("Everglow/Sources/Modules/FoodModule/Sounds/Pan1").WithVolumeScale(0.3f).WithPitchOffset(1f)), Projectile.Center);
+                if (Projectile.timeLeft > 2960)
+                {
+                    Projectile.velocity.X = Projectile.velocity.X * -1f;
+                    Projectile.velocity.Y = Projectile.velocity.Y * -1f;
+                    Projectile.timeLeft = 2960;
+                }
+                GenerateDust(target.Center, 20);
+            }
+            else
+            {
+                GenerateDust(target.Center, 50);
+                SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/FoodModule/Sounds/Pan1").WithVolumeScale(1), Projectile.Center);
+            }
+           
             return;
         }
         public override void OnHitPvp(Player target, int damage, bool crit)
         {
-            SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/FoodModule/Sounds/Pan1").WithVolumeScale(1), Projectile.Center);
             if (attackType == 0)
             {
-                if (Projectile.timeLeft > 2880)
+                SoundEngine.PlaySound((new SoundStyle("Everglow/Sources/Modules/FoodModule/Sounds/Pan1").WithVolumeScale(0.3f).WithPitchOffset(1f)), Projectile.Center);
+                if (Projectile.timeLeft > 2960)
                 {
-                    if (Projectile.ai[1] != 0)
-                    {
-                        return;
-                    }
                     Projectile.velocity.X = Projectile.velocity.X * -1f;
                     Projectile.velocity.Y = Projectile.velocity.Y * -1f;
 
-                    Projectile.timeLeft = 2880;
+                    Projectile.timeLeft = 2960;
                 }
+                GenerateDust(target.Center, 20);
             }
+            else
+            {
+                SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/FoodModule/Sounds/Pan1").WithVolumeScale(1), Projectile.Center);
+                GenerateDust(target.Center, 50);
+            }
+
             return;
         }
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
-            SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/FoodModule/Sounds/Pan1" ).WithVolumeScale(1), Projectile.Center);
+            SoundEngine.PlaySound((new SoundStyle("Everglow/Sources/Modules/FoodModule/Sounds/Pan1").WithVolumeScale(0.3f).WithPitchOffset(1f)), Projectile.Center);
             if (attackType == 0)
             {
-                if (Projectile.timeLeft > 2880)
+                if (Projectile.timeLeft > 2960)
                 {
-                    if (Projectile.ai[1] != 0)
+                    if (Projectile.velocity.X != oldVelocity.X)
                     {
-                        return true;
+                        Projectile.velocity.X = -oldVelocity.X;
                     }
-                    Projectile.soundDelay = 10;
-                    if (Projectile.velocity.X != oldVelocity.X && Math.Abs(oldVelocity.X) > 1f)
+                    if (Projectile.velocity.Y != oldVelocity.Y)
                     {
-                        Projectile.velocity.X = oldVelocity.X * -1f;
+                        Projectile.velocity.Y = -oldVelocity.Y;
                     }
-                    if (Projectile.velocity.Y != oldVelocity.Y && Math.Abs(oldVelocity.Y) > 1f)
-                    {
-                        Projectile.velocity.Y = oldVelocity.Y * -1f;
-                    }
-                    Projectile.timeLeft = 2880;
+                    Projectile.timeLeft = 2960;
                 }
             }
+            GenerateDust(Projectile.Center + Projectile.oldVelocity, 40);
             return false;
         }
     }

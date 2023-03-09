@@ -12,13 +12,13 @@ namespace Everglow.Sources.Modules.FoodModule.Items.Weapons
         public override void SetDefaults()
         {
             Item.useStyle = ItemUseStyleID.Swing;
-            Item.useTime = 10;
-            Item.useAnimation = 10;
+            Item.useTime = 22;
+            Item.useAnimation = 22;
             Item.width = 1;
             Item.height = 1;
 
             Item.knockBack = 5f;
-            Item.damage = 5;
+            Item.damage = 16;
             Item.rare = ItemRarityID.Green;
 
             Item.DamageType = DamageClass.Melee;
@@ -66,7 +66,7 @@ namespace Everglow.Sources.Modules.FoodModule.Items.Weapons
         {
             if (player.altFunctionUse != 2)//左键
             {
-                Projectile proj = Projectile.NewProjectileDirect(source, player.Center, velocity, type, damage, knockback, Main.LocalPlayer.whoAmI, 0f, 0f);
+                Projectile proj = Projectile.NewProjectileDirect(source, player.Center, velocity * 1.5f, type, damage, knockback * 2, Main.LocalPlayer.whoAmI, 0f, 0f);
                 proj.scale *= Item.scale;
             }
             
