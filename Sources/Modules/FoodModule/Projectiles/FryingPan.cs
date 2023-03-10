@@ -70,7 +70,7 @@ namespace Everglow.Sources.Modules.FoodModule.Projectiles
 
         public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, float HorizontalWidth, float HorizontalHeight, float DrawScale, string GlowPath, double DrawRotation)
         {
-            base.DrawSelf(spriteBatch, lightColor, 70, 40, 1f, "", 0.666667);
+            base.DrawSelf(spriteBatch, lightColor, 70, 40, 1.04f, "", 0.666667);
         }
 
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
