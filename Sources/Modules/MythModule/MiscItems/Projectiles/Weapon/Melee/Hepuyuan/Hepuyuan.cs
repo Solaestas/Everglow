@@ -127,7 +127,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
                 Projectile.velocity *= 0.4f;
             }
             MythContentPlayer myplayer = player.GetModPlayer<MythContentPlayer>();
-            myplayer.IMMUNE = 15;
+            myplayer.InvincibleFrameTime = 15;
             return false;
         }
 
