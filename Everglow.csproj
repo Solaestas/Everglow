@@ -32,12 +32,12 @@
 		<Compile Remove="Sources\Modules\MythModule\TheFirefly\Tiles\Furniture\**" />
 		<Compile Remove="Sources\Modules\MythModule\TheFirefly\UI\**" />
 		<Compile Remove="Sources\Tools\**" />
-		<EmbeddedResource Remove="Everglow-UnitTest\**" />
+    <EmbeddedResource Remove="Everglow-UnitTest\**" />
 		<EmbeddedResource Remove="Resources\Tools\ImageToBinary\**" />
 		<EmbeddedResource Remove="Sources\Modules\DeltaMachine\**" />
 		<EmbeddedResource Remove="Sources\Modules\MythModule\TheFirefly\Tiles\Furniture\**" />
 		<EmbeddedResource Remove="Sources\Modules\MythModule\TheFirefly\UI\**" />
-		<EmbeddedResource Remove="Sources\Tools\**" />
+		<EmbeddedResource Remove="Sources\Tools\**" />    
 		<None Remove="Everglow-UnitTest\**" />
 		<None Remove="Resources\Tools\ImageToBinary\**" />
 		<None Remove="Sources\Modules\DeltaMachine\**" />

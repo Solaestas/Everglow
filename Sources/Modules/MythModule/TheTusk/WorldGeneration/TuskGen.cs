@@ -74,10 +74,10 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration
                     SkyManager.Instance.Deactivate("TuskSky");
                 }
             }
-            tileColor *= (1 - TuskS * 0.6f);
-            tileColor.G = (byte)(tileColor.G * (1 - TuskS * 0.6f));
-            tileColor.B = (byte)(tileColor.B * (1 - TuskS * 0.6f));
-            backgroundColor *= (1 - TuskS * 0.6f);
+            tileColor *= (1 - TuskS * 0.4f);
+            tileColor.G = (byte)(tileColor.G * (1 - TuskS * 0.4f));
+            tileColor.B = (byte)(tileColor.B * (1 - TuskS * 0.4f));
+            backgroundColor *= (1 - TuskS * 0.4f);
             backgroundColor.A = 255;
             base.ModifySunLightColor(ref tileColor, ref backgroundColor);
         }
