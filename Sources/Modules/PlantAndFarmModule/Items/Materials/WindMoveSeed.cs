@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Materials
+﻿namespace Everglow.Sources.Modules.PlantAndFarmModule.Items.Materials
 {
     public class WindMoveSeed : ModItem
     {
