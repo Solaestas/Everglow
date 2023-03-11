@@ -1,7 +1,7 @@
 ﻿using ReLogic.Content;
 using Terraria.GameContent;
 
-namespace Everglow.Sources.Modules.AssetReplaceModule
+namespace Everglow.Sources.Modules.AssetReplaceModule.UIReplace
 {
     public class ClassicBar
     {
@@ -13,13 +13,15 @@ namespace Everglow.Sources.Modules.AssetReplaceModule
         /// 根据传入的路径读取Texture2D
         /// </summary>
         /// <param name="path">贴图组在Resources文件夹内的名字，比如UISkinMyth</param>
-        public void LoadTextures(string path) {
-            BlueStar = AssetReplaceModule.GetTexture($"{path}/Bars/Classic/BlueStar");
-            RedHeart = AssetReplaceModule.GetTexture($"{path}/Bars/Classic/RedHeart");
-            GoldHeart = AssetReplaceModule.GetTexture($"{path}/Bars/Classic/GoldHeart");
+        public void LoadTextures(string path)
+        {
+            BlueStar = UIReplaceModule.GetTexture($"{path}/Bars/Classic/BlueStar");
+            RedHeart = UIReplaceModule.GetTexture($"{path}/Bars/Classic/RedHeart");
+            GoldHeart = UIReplaceModule.GetTexture($"{path}/Bars/Classic/GoldHeart");
         }
 
-        public void ReplaceTextures() {
+        public void ReplaceTextures()
+        {
             TextureAssets.Mana = BlueStar;
             TextureAssets.Heart = RedHeart;
             TextureAssets.Heart2 = GoldHeart;

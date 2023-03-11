@@ -1,23 +1,24 @@
 ﻿using ReLogic.Content;
 using Terraria.GameContent;
 
-namespace Everglow.Sources.Modules.AssetReplaceModule
+namespace Everglow.Sources.Modules.AssetReplaceModule.UIReplace
 {
     internal class EternalAssets
     {
         public Asset<Texture2D>[] InventoryBacks = new Asset<Texture2D>[5];
-
-        // 这里自己再写一遍了，毕竟除了这里也没其他地方会读取原版贴图
-        public void LoadTextures() {
+        
+        public void LoadTextures()
+        {
             for (int i = 0; i <= 4; i++)
-                InventoryBacks[i] = AssetReplaceModule.GetTexture($"UISkinEternal/Inventory/ItemSlot_{i}");
+                InventoryBacks[i] = UIReplaceModule.GetTexture($"UISkinEternal/Inventory/ItemSlot_{i}");
         }
 
-        public void Apply() {
+        public void Apply()
+        {
             // 永恒意志还没有自己的HP, MP槽样式，所以这里用原版的把它覆盖了
-            AssetReplaceModule.TerrariaAssets.ClassicBar.ReplaceTextures(); 
-            AssetReplaceModule.TerrariaAssets.FancyBar.ReplaceTextures(); 
-            AssetReplaceModule.TerrariaAssets.HorizontalBar.ReplaceTextures();
+            UIReplaceModule.TerrariaAssets.ClassicBar.ReplaceTextures();
+            UIReplaceModule.TerrariaAssets.FancyBar.ReplaceTextures();
+            UIReplaceModule.TerrariaAssets.HorizontalBar.ReplaceTextures();
             TextureAssets.InventoryBack = InventoryBacks[0];
             TextureAssets.InventoryBack2 = InventoryBacks[0];
             TextureAssets.InventoryBack3 = InventoryBacks[0];

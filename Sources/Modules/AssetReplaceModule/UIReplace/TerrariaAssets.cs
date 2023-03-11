@@ -1,7 +1,7 @@
 ﻿using ReLogic.Content;
 using Terraria.GameContent;
 
-namespace Everglow.Sources.Modules.AssetReplaceModule
+namespace Everglow.Sources.Modules.AssetReplaceModule.UIReplace
 {
     internal class TerrariaAssets
     {
@@ -11,7 +11,8 @@ namespace Everglow.Sources.Modules.AssetReplaceModule
         public HorizontalBar HorizontalBar = new();
 
         // 这里自己再写一遍了，毕竟除了这里也没其他地方会读取原版贴图
-        public void LoadTextures() {
+        public void LoadTextures()
+        {
             InventoryBacks[0] = TextureAssets.InventoryBack;
             InventoryBacks[1] = TextureAssets.InventoryBack2;
             InventoryBacks[2] = TextureAssets.InventoryBack3;
@@ -31,9 +32,9 @@ namespace Everglow.Sources.Modules.AssetReplaceModule
             InventoryBacks[16] = TextureAssets.InventoryBack17;
             InventoryBacks[17] = TextureAssets.InventoryBack18;
 
-            ClassicBar.BlueStar = AssetReplaceModule.LoadVanillaAsset<Texture2D>($"Images/Mana");
-            ClassicBar.RedHeart = AssetReplaceModule.LoadVanillaAsset<Texture2D>($"Images/Heart");
-            ClassicBar.GoldHeart = AssetReplaceModule.LoadVanillaAsset<Texture2D>($"Images/Heart2");
+            ClassicBar.BlueStar = UIReplaceModule.LoadVanillaAsset<Texture2D>($"Images/Mana");
+            ClassicBar.RedHeart = UIReplaceModule.LoadVanillaAsset<Texture2D>($"Images/Heart");
+            ClassicBar.GoldHeart = UIReplaceModule.LoadVanillaAsset<Texture2D>($"Images/Heart2");
 
             var mode = AssetRequestMode.ImmediateLoad;
 
@@ -63,7 +64,8 @@ namespace Everglow.Sources.Modules.AssetReplaceModule
             HorizontalBar.MpPanelRight = Main.Assets.Request<Texture2D>(str + "MP_Panel_Right", mode);
         }
 
-        public void Apply() {
+        public void Apply()
+        {
             TextureAssets.InventoryBack = InventoryBacks[0];
             TextureAssets.InventoryBack2 = InventoryBacks[1];
             TextureAssets.InventoryBack3 = InventoryBacks[2];
