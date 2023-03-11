@@ -25,7 +25,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.WorldGeneration
 
             protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
             {
-                Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everlow.Common.WorldSystem.BuildtheTreeWorld");
+                Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everglow.Common.WorldSystem.BuildtheTreeWorld");
                 BuildtheTreeWorld();
             }
         }
@@ -176,11 +176,11 @@ namespace Everglow.Sources.Modules.YggdrasilModule.WorldGeneration
 
                                 if (pixel.R == 122 && pixel.G == 5 && pixel.B == 255)//FolkHouseofWood£¦StoneStruture TypeA  28x11
                                 {
-                                    QuickBuild(x, y, "YggdrasilTown/MapIOs/2FolkHouseofWood&StoneStrutureTypeA28x11.mapio");
+                                    QuickBuild(x, y, "YggdrasilTown/MapIOs/2FolkHouseofWoodStoneStrutureTypeA28x11.mapio");
                                 }
                                 if (pixel.R == 123 && pixel.G == 5 && pixel.B == 255)//FolkHouseofWood£¦StoneStruture TypeB  28x11
                                 {
-                                    QuickBuild(x, y, "YggdrasilTown/MapIOs/2FolkHouseofWood&StoneStrutureTypeB28x11.mapio");
+                                    QuickBuild(x, y, "YggdrasilTown/MapIOs/2FolkHouseofWoodStoneStrutureTypeB28x11.mapio");
                                 }
 
                                 if (pixel.R == 124 && pixel.G == 5 && pixel.B == 255)//Smithy TypeA  22x8

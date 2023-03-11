@@ -1,0 +1,21 @@
+Translated using DeepL Translator | 使用DeepL 翻译器进行翻译
+
+Cocoon: Current default WorldGen Map for Firefly Biome in Firefly Subworld
+CocoonWorld: Current default WorldGen Map for Firefly Subworld
+WorldCocoon: Current default WorldGen Map for Terraria World
+CocoonSub: New WorldGen Map for Firefly Biome in Firefly Subworld
+CocoonSolo: New WorldGen Map for Firefly Biome in Terraria World (If SubworldModule is disabled)
+
+CocoonOld: Obsolete WorldGen Map for Reference purposes
+CocoonOlder: Historical Obsolete WorldGen Map for Reference purposes
+
+------------------------------------------------
+
+Cocoon: 萤火虫子世界中的萤火虫生物群落的当前默认世界观地图
+CocoonWorld: 当前默认的萤火虫子世界的世界观地图
+WorldCocoon: 目前默认的泰拉瑞亚世界的世界观地图
+CocoonSub：萤火虫子世界中萤火虫生物群的新世界观地图
+CocoonSolo：泰拉瑞亚世界中萤火虫生物群的新世界地图 (如果子世界模块被禁用)
+
+CocoonOld: 供参考的过时的世界基因地图
+CocoonOlder: 供参考的历史性过时的世界基因地图

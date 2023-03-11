@@ -34,7 +34,7 @@ internal class DevilFlamePipeline : Pipeline
     {
         var effect = this.effect.Value;
         var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-        var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
+        var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
         effect.Parameters["uTransform"].SetValue(model * projection);
         Texture2D FlameColor = YggdrasilContent.QuickTexture("CorruptWormHive/VFXs/DeathSickle_Color");
         VFXManager.spriteBatch.BindTexture<Vertex2D>(FlameColor);
@@ -103,7 +103,7 @@ internal class DevilFlameDust : ShaderDraw
         {
             Vector2 normal = oldPos[i] - oldPos[i - 1];
             normal = Vector2.Normalize(normal).RotatedBy(Math.PI * 0.5);
-            Color drawcRope = new Color(fx * fx * fx * 2, 0.5f, 1, 150 / 255f);
+            Color drawcRope = new Color(fx * fx * fx * 2, 0.5f, 1, 50 / 255f);
             float width = ai[2] * (float)(Math.Sin(i / (double)(len) * Math.PI));
             bars[2 * i - 1] = (new Vertex2D(oldPos[i] + normal * width, drawcRope, new Vector3(0 + ai[0], i / 80f, 0)));
             bars[2 * i] = (new Vertex2D(oldPos[i] - normal * width, drawcRope, new Vector3(0.05f + ai[0], i / 80f, 0)));

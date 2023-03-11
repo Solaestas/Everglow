@@ -4,7 +4,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("This is a modded door.");
         }
 
         public override void SetDefaults()

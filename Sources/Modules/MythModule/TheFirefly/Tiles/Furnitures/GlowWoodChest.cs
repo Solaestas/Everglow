@@ -30,10 +30,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             ChestDrop = ModContent.ItemType<Items.Furnitures.GlowWoodChest>();
 
             // Names
-            ContainerName.SetDefault("GlowWood Chest");
+            ContainerName.SetDefault(Language.GetTextValue("ItemName.Chest"));
 
             ModTranslation name = CreateMapEntryName();
-            name.SetDefault("GlowWood Chest");
+            name.SetDefault(Language.GetTextValue("ItemName.Chest"));
             AddMapEntry(new Color(0, 14, 175), name);
 
             // Placement
