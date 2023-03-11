@@ -42,24 +42,33 @@ namespace Everglow.Sources.Modules.OceanModule.Projectiles.Weapons
                 {
                     ScreenShaker Gsplayer = player.GetModPlayer<ScreenShaker>();
                     Gsplayer.FlyCamPosition = new Vector2(0, 2).RotatedByRandom(6.283);
-
-                    SoundEngine.PlaySound(SoundID.Item10, Projectile.Center);
+                    if(Power == 16)
+                    {
+                        SoundEngine.PlaySound((new SoundStyle("Everglow/Sources/Modules/OceanModule/Sounds/SharkGun0").WithVolumeScale(0.6f)).WithPitchOffset(0.2f), Projectile.Center);
+                    }
+                    else
+                    {
+                        SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/OceanModule/Sounds/SharkGun0").WithVolumeScale(0.4f), Projectile.Center);
+                    }
                     Vector2 newvelocity = velocity.RotatedBy(Main.rand.NextFloat(-Power / 244f, Power / 244f));
                     Projectile p = Projectile.NewProjectileDirect(item.GetSource_ItemUse(item), Projectile.Center + offset + velocity * 0.0f + random, newvelocity, rampage.ShootType, item.damage, item.knockBack, player.whoAmI);
                     p.CritChance = (int)(item.crit + player.GetCritChance(DamageClass.Generic));
 
-                    Dust d = Dust.NewDustDirect(Projectile.Center + offset + velocity * 0.7f - new Vector2(4, 8) + random, 0, 0, ModContent.DustType<BulletShell>(), velocity.X, velocity.Y, 0, default, 1.2f);
-                    d.velocity = velocity.RotatedBy(-1.57 * player.direction - Main.rand.NextFloat(0.75f) * player.direction) * 0.4f * (24 + Power) / 36f;
+                    Dust d = Dust.NewDustDirect(Projectile.Center + offset + velocity * 0.7f - new Vector2(4, 8) + random, 0, 0, ModContent.DustType<BulletShell>(), velocity.X, velocity.Y, 0, default, 1f);
+                    d.velocity = velocity.RotatedBy(-1.57 * player.direction - Main.rand.NextFloat(1.25f, 1.75f) * player.direction) * 0.4f * (24 + Power) / 54f;
                     d.noGravity = false;
+                    d.scale= 1f;
 
+                    Dust smog = Dust.NewDustDirect(Projectile.Center + offset + velocity * 1.3f - new Vector2(4, 8) + random, 0, 0, ModContent.DustType<MythModule.TheFirefly.Dusts.MothSmog>(), 0, - 2f, 0, default, 2f);
+                    smog.alpha = 180;
                     float rot = newvelocity.ToRotation();
-                    Projectile.NewProjectile(item.GetSource_ItemUse(item), Projectile.Center + offset * 1.5f + velocity * 1.3f + random, Vector2.Zero, ModContent.ProjectileType<RampageSharkHit>(), item.damage, item.knockBack, player.whoAmI, 0.1f, rot);
+                    Projectile.NewProjectile(item.GetSource_ItemUse(item), Projectile.Center + offset * 1.5f + velocity * 1.3f + random, Vector2.Zero, ModContent.ProjectileType<RampageSharkHit>(), item.damage, item.knockBack, player.whoAmI, 0.06f, rot);
                 }
                 else
                 {
                     ScreenShaker Gsplayer = player.GetModPlayer<ScreenShaker>();
                     Gsplayer.FlyCamPosition = new Vector2(0, 75).RotatedByRandom(6.283);
-                    SoundEngine.PlaySound(SoundID.DD2_GoblinBomb, Projectile.Center);
+                    SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/OceanModule/Sounds/SharkGun1").WithPitchOffset(-0.8f), Projectile.Center);
                     int Times = Main.rand.Next(4, 7);
 
                     for (int i = 0; i < Times; i++)
@@ -67,11 +76,14 @@ namespace Everglow.Sources.Modules.OceanModule.Projectiles.Weapons
                         Vector2 newvelocity = velocity.RotatedBy(Main.rand.NextFloat(-Power / 66f, Power / 66f));
                         Projectile p = Projectile.NewProjectileDirect(item.GetSource_ItemUse(item), Projectile.Center + offset + velocity * 0.0f + random, newvelocity, rampage.ShootType, item.damage, item.knockBack, player.whoAmI);
                         p.CritChance = (int)(item.crit + player.GetCritChance(DamageClass.Generic));
-                        Dust d = Dust.NewDustDirect(Projectile.Center + offset + velocity * 0.7f - new Vector2(4, 8) + random, 0, 0, ModContent.DustType<BulletShell>(), velocity.X, velocity.Y, 0, default, 1.2f);
-                        d.velocity = velocity.RotatedBy(-1.57 * player.direction - Main.rand.NextFloat(0.75f) * player.direction) * 0.4f * (24 + Power) / 36f;
+                        Dust d = Dust.NewDustDirect(Projectile.Center + offset + velocity * 0.7f - new Vector2(4, 8) + random, 0, 0, ModContent.DustType<BulletShell>(), velocity.X, velocity.Y, 0, default, 1f);
+                        d.velocity = velocity.RotatedBy(-1.57 * player.direction - Main.rand.NextFloat(1.25f, 1.75f) * player.direction) * 0.4f * (24 + Power) / 54f;
                         d.noGravity = false;
+                        d.scale = 1f;
+                        Dust smog = Dust.NewDustDirect(Projectile.Center + offset + velocity * 1.3f - new Vector2(4, 8) + random, 0, 0, ModContent.DustType<MythModule.TheFirefly.Dusts.MothSmog>(), velocity.X * 0.15f, -2f, 0, default, 2.5f);
+                        smog.alpha = 180;
                         float rot = newvelocity.ToRotation();
-                        Projectile.NewProjectile(item.GetSource_ItemUse(item), Projectile.Center + offset * 1.5f + velocity * 1.3f + random, Vector2.Zero, ModContent.ProjectileType<RampageSharkHit>(), item.damage, item.knockBack, player.whoAmI, 0.16f, rot);
+                        Projectile.NewProjectile(item.GetSource_ItemUse(item), Projectile.Center + offset * 1.5f + velocity * 1.3f + random, Vector2.Zero, ModContent.ProjectileType<RampageSharkHit>(), item.damage, item.knockBack, player.whoAmI, 0.12f, rot);
                     }
 
                 }
@@ -139,9 +151,9 @@ namespace Everglow.Sources.Modules.OceanModule.Projectiles.Weapons
             Texture2D TexMainG = OceanContent.QuickTexture("Projectiles/Weapons/RampageShark/RampageShark_glow");
             Texture2D TexEye = OceanContent.QuickTexture("Projectiles/Weapons/RampageShark/RampageShark_redEye");
             Texture2D TexStar = OceanContent.QuickTexture("Projectiles/Weapons/RampageShark/HitStar");
-            if (Power >= 16)
+            if (Main.timeForVisualEffects % 6 >= 3)
             {
-                TexMain = OceanContent.QuickTexture("Projectiles/Weapons/RampageShark/RampageShark_anger");
+                TexMain = OceanContent.QuickTexture("Projectiles/Weapons/RampageShark/RampageShark_gunii");
             }
             SpriteEffects se = SpriteEffects.None;
             if (Projectile.Center.X < player.Center.X)
