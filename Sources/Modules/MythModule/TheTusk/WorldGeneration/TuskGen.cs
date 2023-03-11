@@ -285,21 +285,22 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration
                 }
             }
 
-            PlaceStone(x - 14, y);
-            PlaceStone(x - 6, y);
-            PlaceStone(x + 6, y);
-            PlaceStone(x + 14, y);
+            PlaceStone(x - 14, y, 1);
+            PlaceStone(x - 6, y, 2);
+            PlaceStone(x + 6, y, 3);
+            PlaceStone(x + 14, y, 4);
 
             var tileWheel = Main.tile[x, y + 14];
             tileWheel.TileType = (ushort)ModContent.TileType<BloodyMossWheel>();
             tileWheel.HasTile = true;
         }
-        /// <summary>
-        /// 放置石碑
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        public static void PlaceStone(int x, int y)
+		/// <summary>
+		/// 放置石碑
+		/// </summary>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		/// <param name="stonetype"></param>
+		public static void PlaceStone(int x, int y, int stonetype)
         {
             for (int j = 0; j < 71; j++)
             {
@@ -314,7 +315,21 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration
                         tileDown.TileType = (ushort)ModContent.TileType<TuskFlesh>();
                         tileDown.HasTile = true;
                     }
-                    MythUtils.PlaceFrameImportantTiles(x, y + j - 7, 1, 7, ModContent.TileType<StrangeTuskStone1>());
+                    switch (stonetype)
+                    {
+                        case 1:
+							MythUtils.PlaceFrameImportantTiles(x, y + j - 7, 1, 7, ModContent.TileType<StrangeTuskStone1>());
+                            break;
+                        case 2:
+							MythUtils.PlaceFrameImportantTiles(x, y + j - 7, 1, 7, ModContent.TileType<StrangeTuskStone2>());
+                            break;
+                        case 3:
+							MythUtils.PlaceFrameImportantTiles(x, y + j - 7, 1, 7, ModContent.TileType<StrangeTuskStone3>());
+							break;
+                        case 4:
+							MythUtils.PlaceFrameImportantTiles(x, y + j - 7, 1, 7, ModContent.TileType<StrangeTuskStone4>());
+							break;
+					}
                     break;
                 }
             }
