@@ -1,15 +1,17 @@
-﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
-using Everglow.Sources.Modules.MythModule.Common;
-using Terraria.ID;
+﻿using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
     public class GlowMoth : ModProjectile
     {
+        FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 4;
         }
+
         public override void SetDefaults()
         {
             Projectile.width = 36;
@@ -17,7 +19,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Projectile.tileCollide = false; // Makes the minion go through tiles freely
             Projectile.hostile = false;
             Projectile.timeLeft = 720;
-            Projectile.friendly = true; // Only controls if it deals damage to enemies on contact (more on that later)							  
+            Projectile.friendly = true; // Only controls if it deals damage to enemies on contact (more on that later)
             Projectile.minionSlots = 1; // Amount of slots this minion occupies from the total minion slots available to the player (more on that later)
             Projectile.penetrate = -1; // Needed so the minion doesn't despawn on collision with enemies or tiles
             Projectile.aiStyle = -1;
@@ -26,6 +28,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5;
         }
+
         public override void AI()
         {
             UpdateDrawParameter();
@@ -40,15 +43,17 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 
             Projectile.damage = (int)(Projectile.damage * Power);
         }
-        int SpecialTimeAfterSpawn = 60;
-        Vector2 TargetPos = Vector2.Zero;
-        int AutoAddingTimer = 0;
-        float[] OldRotation = new float[12];
-        int[] OldFrame = new int[12];
-        int PlayerStickTime = 0;
-        bool SleepOutside = false;
-        float Power = 0.25f;
-        void UpdateDrawParameter()
+
+        private int SpecialTimeAfterSpawn = 60;
+        private Vector2 TargetPos = Vector2.Zero;
+        private int AutoAddingTimer = 0;
+        private float[] OldRotation = new float[12];
+        private int[] OldFrame = new int[12];
+        private int PlayerStickTime = 0;
+        private bool SleepOutside = false;
+        private float Power = 0.25f;
+
+        private void UpdateDrawParameter()
         {
             Player player = Main.player[Projectile.owner];
             MothOwner mothOwner = player.GetModPlayer<MothOwner>();
@@ -111,7 +116,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 SpecialTimeAfterSpawn--;
             }
         }
-        void CheckKill()
+
+        private void CheckKill()
         {
             Player player = Main.player[Projectile.owner];
             if (player.dead || !player.active)
@@ -128,12 +134,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 Projectile.Kill();
             }
         }
-        void CheckPlayerDistance()
+
+        private void CheckPlayerDistance()
         {
             Player player = Main.player[Projectile.owner];
             if ((player.Center - Projectile.Center).Length() > 2000)
             {
-                Projectile.Center = player.Center + new Vector2(0, Main.rand.Next(-80, -20)).RotatedBy(Main.rand.NextFloat(-1.8f,1.8f));
+                Projectile.Center = player.Center + new Vector2(0, Main.rand.Next(-80, -20)).RotatedBy(Main.rand.NextFloat(-1.8f, 1.8f));
                 for (int i = 0; i < 18; i++)
                 {
                     Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Clentaminator_Blue, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, 0.6f);
@@ -146,7 +153,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 }
             }
         }
-        void FindEnemies()
+
+        private void FindEnemies()
         {
             Player player = Main.player[Projectile.owner];
             MothOwner mothOwner = player.GetModPlayer<MothOwner>();
@@ -168,7 +176,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             }
             for (int j = 0; j < 200; j++)
             {
-                if(player.MinionAttackTargetNPC == j)
+                if (player.MinionAttackTargetNPC == j)
                 {
                     Vector2 v0 = Main.npc[j].Center;
                     flag = true;
@@ -181,15 +189,32 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 Vector2 v0 = TargetPos - Projectile.Center;
                 Vector2 v1 = new Vector2(0, Projectile.ai[0] / 2f + 120f).RotatedBy(Projectile.ai[1] + Main.time * (0.03 + Projectile.ai[0] / 12000d));
                 Vector2 v2 = v0 + v1;
-                if((AutoAddingTimer + (int)(Projectile.ai[0])) % 72 == 0)
+                if ((AutoAddingTimer + (int)(Projectile.ai[0])) % 72 == 0)
                 {
-                    Projectile p = Projectile.NewProjectileDirect(Projectile.InheritSource(Projectile), Projectile.Center, Utils.SafeNormalize(v0, Vector2.Zero) * 3, ModContent.ProjectileType<Projectiles.BlackCorruptRainFriendly>(),(int)(Projectile.damage * Power * 4), Projectile.knockBack, Projectile.owner);
+                    Projectile p = Projectile.NewProjectileDirect(Projectile.InheritSource(Projectile), Projectile.Center, Utils.SafeNormalize(v0, Vector2.Zero) * 3, ModContent.ProjectileType<Projectiles.BlackCorruptRainFriendly>(), (int)(Projectile.damage * Power * 4), Projectile.knockBack, Projectile.owner);
                     p.CritChance = Projectile.CritChance;
                     p.friendly = true;
+                    if (MothEye.LocalOwner != null && MothEye.LocalOwner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
+                    {
+                        if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
+                        {
+                            p.tileCollide = false;
+                            if (Main.rand.NextBool(10))
+                            {
+                                Projectile p3 = Projectile.NewProjectileDirect(Projectile.InheritSource(Projectile), Projectile.Center, Utils.SafeNormalize(v0, Vector2.Zero) * 3, ModContent.ProjectileType<Projectiles.BlackCorruptRain3Friendly>(), (int)(Projectile.damage * Power * 5), Projectile.knockBack, Projectile.owner);
+                                p3.CritChance = Projectile.CritChance;
+                                p3.friendly = true;
+                            }
+                        }
+                        else
+                        {
+                            p.tileCollide = true;
+                        }
+                    }
                 }
                 Projectile.velocity = (Projectile.velocity * 10f + v2 / v2.Length() * 9f) / 11f;
                 mothOwner.WhoSleepInPlayer[player.whoAmI] = -1;
-                if(Power >= 0.0125f)
+                if (Power >= 0.0125f)
                 {
                     Power -= 0.0003f;
                 }
@@ -203,15 +228,16 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 }
             }
         }
-        void CheckRecoverMagic()
+
+        private void CheckRecoverMagic()
         {
-            foreach(Projectile p in Main.projectile)
+            foreach (Projectile p in Main.projectile)
             {
-                if(p.active)
+                if (p.active)
                 {
-                    if(p.type == ModContent.ProjectileType<MothMagicArray>())
+                    if (p.type == ModContent.ProjectileType<MothMagicArray>())
                     {
-                        if((p.Center - Projectile.Center).Length() < 300)
+                        if ((p.Center - Projectile.Center).Length() < 300)
                         {
                             if (Power <= 0.25f)
                             {
@@ -222,13 +248,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 }
             }
         }
-        void NoFindAnyEmeny()
+
+        private void NoFindAnyEmeny()
         {
             Player player = Main.player[Projectile.owner];
             MothOwner mothOwner = player.GetModPlayer<MothOwner>();
             //SleepInPlayer
             Vector2 PlayerBody = player.TopLeft + player.fullRotationOrigin + new Vector2(-20 * player.direction, -32).RotatedBy(player.fullRotation);
-            if(player.mount._type == -1)
+            if (player.mount._type == -1)
             {
                 PlayerBody = player.Hitbox.Center() + new Vector2(-16 * player.direction, -0);
             }
@@ -242,7 +269,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 }
                 Projectile.velocity = (Projectile.velocity * 10f + v / v.Length() * 5f) / 11f;
             }
-            else if(mothOwner.WhoSleepInPlayer[player.whoAmI] == Projectile.whoAmI/*停留在玩家身上的正是本蛾*/)
+            else if (mothOwner.WhoSleepInPlayer[player.whoAmI] == Projectile.whoAmI/*停留在玩家身上的正是本蛾*/)
             {
                 if (player.velocity.Length() < 6f && Math.Abs(player.fullRotation) < 0.3)
                 {
@@ -255,7 +282,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             }
             else/*其他的飞蛾*/
             {
-                if(player.velocity.Length() < 0.5f)
+                if (player.velocity.Length() < 0.5f)
                 {
                     PlayerStickTime++;
                 }
@@ -283,14 +310,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 Vector2 v = player.MountedCenter + ProduceFlyTrace(Projectile.ai[0]) - Projectile.Center;
 
                 Projectile.velocity = (Projectile.velocity * 10f + v / v.Length() * 5f) / 11f;
-                if(!Main.projectile[mothOwner.WhoSleepInPlayer[player.whoAmI]].active || Main.projectile[mothOwner.WhoSleepInPlayer[player.whoAmI]].type != Projectile.type)
+                if (!Main.projectile[mothOwner.WhoSleepInPlayer[player.whoAmI]].active || Main.projectile[mothOwner.WhoSleepInPlayer[player.whoAmI]].type != Projectile.type)
                 {
                     mothOwner.WhoSleepInPlayer[player.whoAmI] = -1;
                 }
             }
 
             //CheckSleepInPlayer
-            if(mothOwner.WhoSleepInPlayer[player.whoAmI] >= 0)
+            if (mothOwner.WhoSleepInPlayer[player.whoAmI] >= 0)
             {
                 if (!Main.projectile[mothOwner.WhoSleepInPlayer[player.whoAmI]].active)
                 {
@@ -304,28 +331,31 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 }
             }
         }
-        Vector2 ProduceFlyTrace(float baseValue)
+
+        private Vector2 ProduceFlyTrace(float baseValue)
         {
             float k0 = Projectile.ai[1] * 0.05f;
             return new Vector2((float)(Math.Sin(baseValue + Main.time / (30d + k0))) * 150, (float)(Math.Sin(baseValue + Main.time / (120d + 4 * k0))) * 40 - 40);
         }
-        void produceDust()
+
+        private void ProduceDust()
         {
             if (AutoAddingTimer % 144 == 0)
             {
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<MothBlue>(), Projectile.velocity.X, Projectile.velocity.Y, 0, default(Color), Main.rand.NextFloat(0.6f, 0.8f));
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<MothBlue>(), Projectile.velocity.X, Projectile.velocity.Y, 0, default, Main.rand.NextFloat(0.6f, 0.8f));
                 Vector2 v = new Vector2(0, Main.rand.NextFloat(0.3f, 1.4f)).RotatedByRandom(Math.PI);
 
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.SpookyWood, v.X + Projectile.velocity.X, v.Y + Projectile.velocity.Y, 0, default(Color), Main.rand.NextFloat(0.3f, 0.7f));
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.SpookyWood, v.X + Projectile.velocity.X, v.Y + Projectile.velocity.Y, 0, default, Main.rand.NextFloat(0.3f, 0.7f));
             }
             if (AutoAddingTimer % 144 == 72)
             {
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<MothBlue2>(), Projectile.velocity.X, Projectile.velocity.Y, 0, default(Color), Main.rand.NextFloat(0.6f, 0.8f));
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<MothBlue2>(), Projectile.velocity.X, Projectile.velocity.Y, 0, default, Main.rand.NextFloat(0.6f, 0.8f));
                 Vector2 v = new Vector2(0, Main.rand.NextFloat(0.3f, 1.4f)).RotatedByRandom(Math.PI);
 
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.SpookyWood, v.X + Projectile.velocity.X, v.Y + Projectile.velocity.Y, 0, default(Color), Main.rand.NextFloat(0.3f, 0.7f));
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.SpookyWood, v.X + Projectile.velocity.X, v.Y + Projectile.velocity.Y, 0, default, Main.rand.NextFloat(0.3f, 0.7f));
             }
         }
+
         public override void Kill(int timeLeft)
         {
             Player player = Main.player[Projectile.owner];
@@ -343,10 +373,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             {
                 for (int i = 0; i < 2; i++)
                 {
-                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.SpookyWood, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default(Color), 0.6f);
+                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.SpookyWood, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, 0.6f);
                 }
             }
         }
+
         public override void PostDraw(Color lightColor)
         {
             Player player = Main.player[Projectile.owner];
@@ -375,11 +406,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 {
                     sf = SpriteEffects.FlipHorizontally;
                 }
-                if(player.gravDir == -1)
+                if (player.gravDir == -1)
                 {
                     sf = SpriteEffects.FlipVertically;
                 }
-                if(Projectile.spriteDirection == -1 && player.gravDir == -1)
+                if (Projectile.spriteDirection == -1 && player.gravDir == -1)
                 {
                     sf = SpriteEffects.None;
                     AddRotation = (float)(Math.PI);
@@ -394,25 +425,29 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 {
                     Main.spriteBatch.Draw(Gtexture, DrawPos, DrawRect, new Color(kColor, kColor, kColor, 0), OldRotation[i] + AddRotation, Draworigin, Projectile.scale, sf, 0);
                 }
-                if(i == 0)
+                if (i == 0)
                 {
                     DrawRect = new Rectangle(0, Projectile.frame * Projectile.height, Projectile.width, Projectile.height);
                     Main.spriteBatch.Draw(Gtexture, Projectile.Center - Main.screenPosition, DrawRect, new Color(1f, 1f, 1f, 0), Projectile.rotation + AddRotation, Draworigin, Projectile.scale, sf, 0);
                 }
             }
         }
+
         public override bool PreDraw(ref Color lightColor)
         {
             return true;
         }
     }
-    class MothOwner : ModPlayer
+
+    internal class MothOwner : ModPlayer
     {
         public int[] WhoSleepInPlayer = new int[256];
+
         public override void OnEnterWorld(Player player)
         {
             WhoSleepInPlayer[Player.whoAmI] = -1;
         }
+
         public override void PostUpdate()
         {
             if (Player.ownedProjectileCounts[ModContent.ProjectileType<GlowMoth>()] == 0)

@@ -5,6 +5,7 @@ using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Commons.Function.Curves;
 using Terraria.Audio;
+using Everglow.Sources.Commons.Core.VFX;
 
 namespace Everglow.Sources.Modules.PlantModule.Projectiles.Melee
 {
@@ -335,7 +336,7 @@ namespace Everglow.Sources.Modules.PlantModule.Projectiles.Melee
 				bars.Add(new Vertex2D(trailUp[i] - Radial * 15f - Main.screenPosition, c0, new Vector3(factor, 0, w)));
 			}
 			Main.spriteBatch.End();
-			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone);
+			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
 			Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/PlantModule/Projectiles/Melee/CactusBallTrail", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 
@@ -344,7 +345,7 @@ namespace Everglow.Sources.Modules.PlantModule.Projectiles.Melee
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		}
-		public void DrawWarp()
+		public void DrawWarp(VFXBatch sb)
 		{
 			Player player = Main.player[Projectile.owner];
 			List<Vector2> SmoothTrailXUp = CatmullRom.SmoothPath(trailVecsUp.ToList());//平滑
@@ -379,14 +380,8 @@ namespace Everglow.Sources.Modules.PlantModule.Projectiles.Melee
 				bars.Add(new Vertex2D(trailUp[i] + Radial * 25f - Main.screenPosition, new Color(dir * SpinAcc / 15f, w * SpinAcc / 15f, 0, 1), new Vector3(factor, 1, w)));
 				bars.Add(new Vertex2D(trailUp[i] - Radial * 15f - Main.screenPosition, new Color(dir * SpinAcc / 15f, w * SpinAcc / 15f, 0, 1), new Vector3(factor, 0, w)));
 			}
-			Main.spriteBatch.End();
-			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-			Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-			Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/PlantModule/Projectiles/Melee/CactusBallTrail").Value;//扭曲用贴图
-			KEx.CurrentTechnique.Passes[0].Apply();
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-			Main.spriteBatch.End();
-			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
+			sb.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/PlantModule/Projectiles/Melee/CactusBallTrail").Value,bars,PrimitiveType.TriangleStrip);
 		}
 	}
 }

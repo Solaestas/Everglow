@@ -3,11 +3,13 @@ using Mono.Cecil.Cil;
 using MonoMod.Cil;
 
 namespace Everglow.Sources.Modules.ZYModule.TileModule.EntityColliding;
+
 internal class PlayerColliding : ModPlayer
 {
     public PlayerHandler handler;
     protected override bool CloneNewInstances => true;
     public override bool IsCloneable => true;
+
     public override void Load()
     {
         On.Terraria.Player.CanFitSpace += Player_CanFitSpace;
@@ -24,7 +26,6 @@ internal class PlayerColliding : ModPlayer
         {
             HookException.Throw("Player_WallslideMovement_Error", ex);
         }
-
     }
 
     public override ModPlayer Clone(Player newEntity)
@@ -33,14 +34,30 @@ internal class PlayerColliding : ModPlayer
         clone.handler = new PlayerHandler(newEntity);
         return clone;
     }
+
     private float jumpSpeed;
     private int jumpTime;
+
     public void Jump() => Jump(Player.jump, Player.velocity.Y);
+
     public void Jump(int time, float speed)
     {
         jumpTime = time;
         jumpSpeed = speed;
     }
+
+    //阻止玩家自动吸附
+    public void ResetAttach()
+    {
+        if (handler.attachDir != Commons.Core.Direction.Bottom)
+        {
+            return;
+        }
+
+        Player.position.Y -= Player.gfxOffY;
+        Player.gfxOffY = 0;
+    }
+
     internal static void Player_JumpMovement(On.Terraria.Player.orig_JumpMovement orig, Player self)
     {
         var player = self.GetModPlayer<PlayerColliding>();
@@ -59,6 +76,7 @@ internal class PlayerColliding : ModPlayer
         }
         orig(self);
     }
+
     private static void Player_DryCollision(On.Terraria.Player.orig_DryCollision orig, Player self, bool fallThrough, bool ignorePlats)
     {
         if (!TileSystem.Enable || self.ghost)
@@ -68,11 +86,13 @@ internal class PlayerColliding : ModPlayer
         }
         TileSystem.EnableCollisionHook = false;
         var player = self.GetModPlayer<PlayerColliding>();
+        player.ResetAttach();
         player.handler.position = self.position;//记录位置，否则会把传送当成位移
         orig(self, fallThrough, ignorePlats);
         self.GetModPlayer<PlayerColliding>().handler.Update(ignorePlats || fallThrough);
         TileSystem.EnableCollisionHook = true;
     }
+
     private static void Player_WaterCollision(On.Terraria.Player.orig_WaterCollision orig, Player self, bool fallThrough, bool ignorePlats)
     {
         if (!TileSystem.Enable || self.ghost)
@@ -83,11 +103,13 @@ internal class PlayerColliding : ModPlayer
 
         TileSystem.EnableCollisionHook = false;
         var player = self.GetModPlayer<PlayerColliding>();
+        player.ResetAttach();
         player.handler.position = self.position;//记录位置，否则会把传送当成位移
         orig(self, fallThrough, ignorePlats);
         self.GetModPlayer<PlayerColliding>().handler.Update(ignorePlats || fallThrough);
         TileSystem.EnableCollisionHook = true;
     }
+
     private static void Player_HoneyCollision(On.Terraria.Player.orig_HoneyCollision orig, Player self, bool fallThrough, bool ignorePlats)
     {
         if (!TileSystem.Enable || self.ghost)
@@ -98,11 +120,13 @@ internal class PlayerColliding : ModPlayer
 
         TileSystem.EnableCollisionHook = false;
         var player = self.GetModPlayer<PlayerColliding>();
+        player.ResetAttach();
         player.handler.position = self.position;//记录位置，否则会把传送当成位移
         orig(self, fallThrough, ignorePlats);
         self.GetModPlayer<PlayerColliding>().handler.Update(ignorePlats || fallThrough);
         TileSystem.EnableCollisionHook = true;
     }
+
     private static bool Player_CanFitSpace(On.Terraria.Player.orig_CanFitSpace orig, Player self, int heightBoost)
     {
         TileSystem.EnableCollisionHook = false;
@@ -110,6 +134,7 @@ internal class PlayerColliding : ModPlayer
         TileSystem.EnableCollisionHook = true;
         return flag;
     }
+
     private static void Player_WallslideMovement_IL(ILContext il)
     {
         var cursor = new ILCursor(il);
@@ -138,6 +163,7 @@ internal class PlayerColliding : ModPlayer
         }
         cursor.MarkLabel(skipControlCheck);
     }
+
     private static void Player_WallslideMovement_On(On.Terraria.Player.orig_WallslideMovement orig, Player self)
     {
         TileSystem.EnableCollisionHook = false;

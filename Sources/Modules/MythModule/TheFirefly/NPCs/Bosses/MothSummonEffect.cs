@@ -1,5 +1,6 @@
 using Everglow.Sources.Commons.Function.Vertex;
 using Terraria.Localization;
+
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 {
     public class MothSummonEffect : ModNPC
@@ -10,13 +11,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
         private float Ome = 0;
         private float kx = 1;
         private int AimN = -1;
-        private Effect ef;
         public override string Texture => "Terraria/Images/NPC_0";
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("");
             DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "");
         }
+
         public override void SetDefaults()
         {
             NPC.width = 10;
@@ -112,10 +114,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
                 }
             }
         }
+
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             return false;
         }
+
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             List<Vertex2D> bars = new List<Vertex2D>();
@@ -131,7 +135,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
                 normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
 
                 var factor = i / (float)NPC.oldPos.Length;
-                var color = new Color(0,70,255,0);
+                var color = new Color(0, 70, 255, 0);
 
                 var w = MathHelper.Lerp(1f, 0.05f, factor);
 
@@ -140,8 +144,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
             }
 
             List<Vertex2D> triangleList = new List<Vertex2D>();
-
-
 
             if (bars.Count > 2)
             {

@@ -7,35 +7,37 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
     internal class GlowBeadGun : ModProjectile
     {
         public override string Texture => "Everglow/Sources/Modules/MythModule/TheFirefly/Projectiles/GlowBeadGunTex/GlowBeadGun";
+
         public override void SetDefaults()
         {
             Projectile.width = 36;
             Projectile.height = 36;
             Projectile.friendly = false;
             Projectile.hostile = false;
-            Projectile.timeLeft = 350;
+            Projectile.timeLeft = 720;
             Projectile.tileCollide = false;
             Projectile.DamageType = DamageClass.Magic;
         }
+
         public override Color? GetAlpha(Color lightColor)
         {
             return new Color(255 - Projectile.alpha, 255 - Projectile.alpha, 255 - Projectile.alpha, 0);
         }
 
-        private bool Release = true;
         private Vector2 oldPo = Vector2.Zero;
         private int Energy = 0;
+
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-            if (Projectile.timeLeft % 5 == 0)
+            if (Projectile.timeLeft % 5 == 0 && Energy < 180)
             {
                 player.statMana--;
             }
-            Energy++;
+            Energy = Math.Min(++Energy, 180);
             Vector2 v0 = Main.MouseWorld - Main.player[Projectile.owner].MountedCenter;
             v0 = Vector2.Normalize(v0);
-            if (Main.mouseLeft && Release)
+            if (player.controlUseItem)
             {
                 Projectile.ai[0] *= 0.9f;
                 Projectile.ai[1] -= 1f;
@@ -45,7 +47,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 Projectile.Center = oldPo;
                 Projectile.velocity *= 0;
             }
-            if (!Main.mouseLeft && Release)
+            if (!player.controlUseItem)
             {
                 if (Projectile.ai[1] > 0)
                 {
@@ -58,11 +60,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                     Shoot();
                 }
             }
-            if (Energy == 180 || player.statMana <= 0)
+            if (player.statMana <= 0 || Projectile.timeLeft < 2)
             {
                 Shoot();
             }
         }
+
         private void Shoot()
         {
             SoundEngine.PlaySound(SoundID.Item72, Projectile.Center);
@@ -86,7 +89,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             {
                 Vector2 v = newVelocity / 27f * j;
                 Vector2 v1 = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) * 0.3f + v;
-                int num20 = Dust.NewDust(basePos, 0, 0, ModContent.DustType<BlueGlowAppearStoppedByTile>(), v1.X, v1.Y, 100, default(Color), Main.rand.NextFloat(0.6f, 1.8f) * 0.4f);
+                int num20 = Dust.NewDust(basePos, 0, 0, ModContent.DustType<BlueGlowAppearStoppedByTile>(), v1.X, v1.Y, 100, default, Main.rand.NextFloat(0.6f, 1.8f) * 0.4f);
                 Main.dust[num20].noGravity = true;
             }
             for (int j = 0; j < Energy * 2; j++)
@@ -94,7 +97,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 Vector2 v = newVelocity / 54f * j;
                 Vector2 v1 = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) * 0.3f + v;
                 float Scale = Main.rand.NextFloat(3.7f, 5.1f);
-                int num21 = Dust.NewDust(basePos + new Vector2(4, 4.5f), 0, 0, ModContent.DustType<BlueParticleDark2StoppedByTile>(), v1.X, v1.Y, 100, default(Color), Scale);
+                int num21 = Dust.NewDust(basePos + new Vector2(4, 4.5f), 0, 0, ModContent.DustType<BlueParticleDark2StoppedByTile>(), v1.X, v1.Y, 100, default, Scale);
                 Main.dust[num21].alpha = (int)(Main.dust[num21].scale * 50);
             }
             for (int j = 0; j < 16; j++)
@@ -103,23 +106,21 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 Vector2 v1 = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) * 0.3f + v;
                 v1 *= 0.2f;
                 float Scale = Main.rand.NextFloat(3.7f, 5.1f);
-                int num21 = Dust.NewDust(basePos + new Vector2(4, 4.5f), 0, 0, ModContent.DustType<MothSmog>(), v1.X, v1.Y, 100, default(Color), Scale);
+                int num21 = Dust.NewDust(basePos + new Vector2(4, 4.5f), 0, 0, ModContent.DustType<MothSmog>(), v1.X, v1.Y, 100, default, Scale);
                 Main.dust[num21].alpha = (int)(Main.dust[num21].scale * 50);
             }
             player.velocity -= newVelocity;
 
             Projectile.Kill();
         }
+
         public override bool PreDraw(ref Color lightColor)
         {
             return false;
         }
+
         public override void PostDraw(Color lightColor)
         {
-            if (!Release)
-            {
-                return;
-            }
             Player player = Main.player[Projectile.owner];
             player.heldProj = Projectile.whoAmI;
             Vector2 v0 = Projectile.Center - player.MountedCenter;
@@ -132,8 +133,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Texture2D TexMainG = MythContent.QuickTexture("TheFirefly/Projectiles/GlowBeadGunTex/GlowBeadGunGlow");
 
             Projectile.frame = (int)((Energy % 45) / 5f);
-            
-           
+
             Color drawColor = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
             SpriteEffects se = SpriteEffects.None;
             if (Projectile.Center.X < player.Center.X)
@@ -146,7 +146,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 player.direction = 1;
             }
             Main.spriteBatch.Draw(TexMain, Projectile.Center - Main.screenPosition - new Vector2(0, 6), null, drawColor, Projectile.rotation - (float)(Math.PI * 0.25) + (float)(Projectile.ai[0] / -3d) * player.direction, new Vector2(35, 22), 1f, se, 0);
-            Main.spriteBatch.Draw(TexMainG, Projectile.Center - Main.screenPosition - new Vector2(0, 6), new Rectangle(0,0,(int)(Energy / 180f * 74f) + 30,TexMainG.Height), new Color(255, 255, 255, 0), Projectile.rotation - (float)(Math.PI * 0.25) + (float)(Projectile.ai[0] / -3d) * player.direction, new Vector2(35, 22), 1f, se, 0);
+            Main.spriteBatch.Draw(TexMainG, Projectile.Center - Main.screenPosition - new Vector2(0, 6), new Rectangle(0, 0, (int)(Energy / 180f * 74f) + 30, TexMainG.Height), new Color(255, 255, 255, 0), Projectile.rotation - (float)(Math.PI * 0.25) + (float)(Projectile.ai[0] / -3d) * player.direction, new Vector2(35, 22), 1f, se, 0);
         }
     }
 }

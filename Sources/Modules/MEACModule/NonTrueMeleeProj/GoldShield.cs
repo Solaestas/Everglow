@@ -1,3 +1,4 @@
+using Everglow.Sources.Commons.Core.VFX;
 using Everglow.Sources.Commons.Function.Vertex;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -16,13 +17,13 @@ namespace Everglow.Sources.Modules.MEACModule.NonTrueMeleeProj
             Projectile.timeLeft = 1200;
             Projectile.penetrate = -1;
         }
-        public void DrawWarp()
+        public void DrawWarp(VFXBatch spriteBatch)
         {
             float WaveRange = 0.7f;
             //Texture2D BackG = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/NonTrueMeleeProj/Black").Value;
 
             float k0 = (float)Math.Sqrt(1200 - Projectile.timeLeft) / 6f;//画方波
-            if (k0 < 1 && k0 > 0)
+            if (k0 is < 1 and > 0)
             {
                 k0 = Math.Max(k0 - 0.025f, 0);
                 float k1 = 1 - k0;
@@ -30,30 +31,42 @@ namespace Everglow.Sources.Modules.MEACModule.NonTrueMeleeProj
                 float k3 = (float)Math.Sqrt(k1);
                 Vector2 DrawCen = Projectile.Center - Main.screenPosition;
 
+                DrawDoubleLine(spriteBatch,DrawCen + new Vector2(0, -k0 * 150) * WaveRange, DrawCen + new Vector2(k0 * 75, -k0 * 75) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));
+                DrawDoubleLine(spriteBatch, DrawCen + new Vector2(k0 * 75, -k0 * 75) * WaveRange, DrawCen + new Vector2(k0 * 150, 0) * WaveRange, new Color(1f * k2, 0.7f * k2, 0f, 0f), new Color(1f * k3, 0.6f * k3, 0f, 0f));
+                DrawDoubleLine(spriteBatch, DrawCen + new Vector2(0, -k0 * 150) * WaveRange, DrawCen + new Vector2(-k0 * 75, -k0 * 75) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));
+                DrawDoubleLine(spriteBatch, DrawCen + new Vector2(-k0 * 75, -k0 * 75) * WaveRange, DrawCen + new Vector2(-k0 * 150, 0) * WaveRange, new Color(1f * k2, 0.7f * k2, 0f, 0f), new Color(1f * k3, 0.6f * k3, 0f, 0f));
 
-                Main.spriteBatch.End();
-                Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-                Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-                KEx.CurrentTechnique.Passes[0].Apply();
-
-                DrawDoubleLine(DrawCen + new Vector2(0, -k0 * 150) * WaveRange, DrawCen + new Vector2(k0 * 75, -k0 * 75) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));
-                DrawDoubleLine(DrawCen + new Vector2(k0 * 75, -k0 * 75) * WaveRange, DrawCen + new Vector2(k0 * 150, 0) * WaveRange, new Color(1f * k2, 0.7f * k2, 0f, 0f), new Color(1f * k3, 0.6f * k3, 0f, 0f));
-                DrawDoubleLine(DrawCen + new Vector2(0, -k0 * 150) * WaveRange, DrawCen + new Vector2(-k0 * 75, -k0 * 75) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));
-                DrawDoubleLine(DrawCen + new Vector2(-k0 * 75, -k0 * 75) * WaveRange, DrawCen + new Vector2(-k0 * 150, 0) * WaveRange, new Color(1f * k2, 0.7f * k2, 0f, 0f), new Color(1f * k3, 0.6f * k3, 0f, 0f));
-
-                DrawDoubleLine(DrawCen + new Vector2(0, k0 * 150) * WaveRange, DrawCen + new Vector2(k0 * 75, k0 * 75) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));
-                DrawDoubleLine(DrawCen + new Vector2(k0 * 75, k0 * 75) * WaveRange, DrawCen + new Vector2(k0 * 150, 0) * WaveRange, new Color(1f * k2, 0.7f * k2, 0f, 0f), new Color(1f * k3, 0.6f * k3, 0f, 0f));
-                DrawDoubleLine(DrawCen + new Vector2(0, k0 * 150) * WaveRange, DrawCen + new Vector2(-k0 * 75, k0 * 75) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));
-                DrawDoubleLine(DrawCen + new Vector2(-k0 * 75, k0 * 75) * WaveRange, DrawCen + new Vector2(-k0 * 150, 0) * WaveRange, new Color(1f * k2, 0.7f * k2, 0f, 0f), new Color(1f * k3, 0.6f * k3, 0f, 0f));
+                DrawDoubleLine(spriteBatch, DrawCen + new Vector2(0, k0 * 150) * WaveRange, DrawCen + new Vector2(k0 * 75, k0 * 75) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));
+                DrawDoubleLine(spriteBatch, DrawCen + new Vector2(k0 * 75, k0 * 75) * WaveRange, DrawCen + new Vector2(k0 * 150, 0) * WaveRange, new Color(1f * k2, 0.7f * k2, 0f, 0f), new Color(1f * k3, 0.6f * k3, 0f, 0f));
+                DrawDoubleLine(spriteBatch, DrawCen + new Vector2(0, k0 * 150) * WaveRange, DrawCen + new Vector2(-k0 * 75, k0 * 75) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));
+                DrawDoubleLine(spriteBatch, DrawCen + new Vector2(-k0 * 75, k0 * 75) * WaveRange, DrawCen + new Vector2(-k0 * 150, 0) * WaveRange, new Color(1f * k2, 0.7f * k2, 0f, 0f), new Color(1f * k3, 0.6f * k3, 0f, 0f));
             }
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+        }
+        public void DrawDoubleLine(VFXBatch spriteBatch, Vector2 StartPos, Vector2 EndPos, Color color1, Color color2)
+        {
+            Vector2 DrawCen = Projectile.Center - Main.screenPosition;
+            float Wid = (Projectile.timeLeft - 1170) / 2f;
+            Vector2 WidthS = Vector2.Normalize(StartPos - DrawCen).RotatedBy(Math.PI / 2d) * Wid;
+            Vector2 WidthE = Vector2.Normalize(EndPos - DrawCen).RotatedBy(Math.PI / 2d) * Wid;
+            List<Vertex2D> vertex2Ds = new List<Vertex2D>();
+
+            for (int x = 0; x < 3; x++)
+            {
+                vertex2Ds.Add(new Vertex2D(StartPos + WidthS + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(0, 0, 0)));
+                vertex2Ds.Add(new Vertex2D(EndPos + WidthE + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(0, 0, 0)));
+                vertex2Ds.Add(new Vertex2D(StartPos - WidthS + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(0, 0, 0)));
+
+                vertex2Ds.Add(new Vertex2D(EndPos + WidthE + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(0, 0, 0)));
+                vertex2Ds.Add(new Vertex2D(EndPos - WidthE + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(0, 0, 0)));
+                vertex2Ds.Add(new Vertex2D(StartPos - WidthS + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(0, 0, 0)));
+            }
+
+            spriteBatch.Draw(TextureAssets.MagicPixel.Value,vertex2Ds,PrimitiveType.TriangleList);
         }
         public void DrawDoubleLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2)
         {
             Vector2 DrawCen = Projectile.Center - Main.screenPosition;
             float Wid = (Projectile.timeLeft - 1170) / 2f;
-            Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
             Vector2 WidthS = Vector2.Normalize(StartPos - DrawCen).RotatedBy(Math.PI / 2d) * Wid;
             Vector2 WidthE = Vector2.Normalize(EndPos - DrawCen).RotatedBy(Math.PI / 2d) * Wid;
             List<Vertex2D> vertex2Ds = new List<Vertex2D>();
@@ -138,12 +151,12 @@ namespace Everglow.Sources.Modules.MEACModule.NonTrueMeleeProj
             }
             Projectile.Center = Main.player[Projectile.owner].Center;
             Projectile.hide = true;
-            Lighting.AddLight((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16),0.8f,0.6f,0);
+            Lighting.AddLight((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16), 0.8f, 0.6f, 0);
         }
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
         {
             overPlayers.Add(index);
-            base.DrawBehind(index, behindNPCsAndTiles, behindNPCs, behindProjectiles, overPlayers, overWiresUI);
+
         }
         public override bool PreDraw(ref Color lightColor)
         {
@@ -152,7 +165,7 @@ namespace Everglow.Sources.Modules.MEACModule.NonTrueMeleeProj
             float glowStrength = 0;
             float glowStrength2 = 0;
 
-            if(Projectile.ai[0] > 0)
+            if (Projectile.ai[0] > 0)
             {
                 if (Projectile.ai[0] < 10)
                 {
@@ -165,7 +178,7 @@ namespace Everglow.Sources.Modules.MEACModule.NonTrueMeleeProj
             {
                 glowStrength = (float)(-Math.Cos(LeftTime / 10d * Math.PI) + 1) * 120f;
             }
-            else if(LeftTime < 40)
+            else if (LeftTime < 40)
             {
                 glowStrength = (float)(-Math.Cos((LeftTime + 75) / 30d * Math.PI) + 1) * 120f;
             }
@@ -180,7 +193,7 @@ namespace Everglow.Sources.Modules.MEACModule.NonTrueMeleeProj
             }
             if (glowStrength + glowStrength2 > 0)//光效
             {
-                for(int x = 0;x < glowStrength + glowStrength2;x++)
+                for (int x = 0; x < glowStrength + glowStrength2; x++)
                 {
                     Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition + new Vector2(0, -12) * Main.player[Projectile.owner].gravDir + new Vector2(x / 20f).RotatedBy(x), null, new Color(2, 2, 2, 0), Projectile.rotation, new Vector2(tex.Width / 2f, tex.Height / 2f), 1, SpriteEffects.None, 0);
                 }
@@ -221,12 +234,12 @@ namespace Everglow.Sources.Modules.MEACModule.NonTrueMeleeProj
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
 
-            
+
             float WaveRange = 0.7f;
             //Texture2D BackG = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/NonTrueMeleeProj/Black").Value;
 
             float k0 = (float)Math.Sqrt(1200 - Projectile.timeLeft) / 6f;//画方波
-            if (k0 < 1 && k0 > 0)
+            if (k0 is < 1 and > 0)
             {
                 k0 = Math.Max(k0 - 0.025f, 0);
                 float k1 = 1 - k0;
@@ -310,7 +323,7 @@ namespace Everglow.Sources.Modules.MEACModule.NonTrueMeleeProj
 
             return true;
         }
-        public int DownUpdate(int value)
+        public static int DownUpdate(int value)
         {
             if (value > 0)
             {
@@ -325,7 +338,7 @@ namespace Everglow.Sources.Modules.MEACModule.NonTrueMeleeProj
         public override void PostUpdate()
         {
             immuneTime = DownUpdate(immuneTime);
-            if(immuneTime > 0)
+            if (immuneTime > 0)
             {
                 Player.immune = true;
             }

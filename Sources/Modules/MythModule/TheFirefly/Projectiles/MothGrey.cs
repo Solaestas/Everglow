@@ -1,5 +1,6 @@
 using Everglow.Sources.Commons.Function.Vertex;
 using Terraria.Localization;
+
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
     public class MothGrey : ModProjectile
@@ -9,6 +10,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             DisplayName.SetDefault("");
             DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "");
         }
+
         public override void SetDefaults()
         {
             Projectile.width = 2;
@@ -25,16 +27,20 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 60;
         }
+
         public override void AI()
         {
             Projectile.velocity = Projectile.velocity.RotatedBy(5f / Projectile.timeLeft * Projectile.ai[0] + Math.Sin(Main.time / 10f) * 0.17f);
             Projectile.velocity *= 0.95f;
         }
+
         public override Color? GetAlpha(Color lightColor)
         {
             return new Color?(new Color(0, 0, 0, 0));
         }
+
         private int TrueL = 1;
+
         public override void PostDraw(Color lightColor)
         {
             Main.spriteBatch.End();

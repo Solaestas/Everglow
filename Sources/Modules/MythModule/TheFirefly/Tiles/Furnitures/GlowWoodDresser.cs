@@ -1,6 +1,5 @@
-using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Everglow.Sources.Commons.Core.Utils;
-using Terraria.Audio;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;
@@ -30,7 +29,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
 
             // Names
-            ContainerName.SetDefault("GlowWood Dresser");
+            ContainerName.SetDefault(Language.GetTextValue("ItemName.Dresser"));
             ModTranslation name = CreateMapEntryName();
             name.SetDefault("GlowWood Dresser");
             AddMapEntry(new Color(0, 14, 175), name);
@@ -48,6 +47,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
             TileObjectData.addTile(Type);
         }
+
         public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
 
         public override void ModifySmartInteractCoords(ref int width, ref int height, ref int frameWidth, ref int frameHeight, ref int extraY)
@@ -55,6 +55,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             width = 3;
             height = 1;
         }
+
         public override bool RightClick(int i, int j)
         {
             return FurnitureUtils.DresserRightClick();
@@ -76,6 +77,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
         {
             num = fail ? 1 : 3;
         }
+
         public override void KillMultiTile(int x, int y, int frameX, int frameY)
         {
             Item.NewItem(new EntitySource_TileBreak(x, y), x * 16, y * 16, 16, 32, DresserDrop);

@@ -1,14 +1,17 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using Terraria.GameContent;
+﻿using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MEACModule.Projectiles;
-using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories;
 using Terraria.Audio;
+using Terraria.GameContent;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
     internal class ShadowWingBow : ModProjectile
     {
+        FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
         public override string Texture => "Everglow/Sources/Modules/MythModule/TheFirefly/Projectiles/ShadowWingBowTex/ShadowWingBowMain";
+
         public override void SetDefaults()
         {
             Projectile.width = 36;
@@ -25,6 +28,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         }
 
         private int Ran = -1;
+
         //private int Tokill = -1;
         public override Color? GetAlpha(Color lightColor)
         {
@@ -32,14 +36,17 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
         }
 
         private bool Release = true;
+
         //private int PdamF = 0;
         private Vector2 oldPo = Vector2.Zero;
+
         private float[] ArRot = new float[5];
         private float[] ArVel = new float[5];
         private float[] SArVel = new float[5];
         private float[] ArVelφ = new float[5];
         private float[] Arcol = new float[5];
         private int addi = 0;
+
         public override void AI()
         {
             addi++;
@@ -54,7 +61,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             {
                 if (player.direction == -1)
                 {
-                    if (AddHeadRotation >= 0.57f && AddHeadRotation < 2)
+                    if (AddHeadRotation is >= 0.57f and < 2)
                     {
                         AddHeadRotation = 0.57f;
                     }
@@ -71,7 +78,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             {
                 if (player.direction == -1)
                 {
-                    if (AddHeadRotation >= 2 && AddHeadRotation < 5.71f)
+                    if (AddHeadRotation is >= 2 and < 5.71f)
                     {
                         AddHeadRotation = 5.71f;
                     }
@@ -108,7 +115,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                     ArVelφ[s] = Main.rand.NextFloat(0, 6.283f);
                 }
             }
-            if (Energy > 60 && Energy < 120)
+            if (Energy is > 60 and < 120)
             {
                 for (int s = 0; s < 5; s++)
                 {
@@ -121,14 +128,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             }
             for (int s = 0; s < 5; s++)
             {
-                Arcol[s] = Math.Clamp((float)((Math.Abs(s - 2.5) * 100) + (Energy - 90) * 7) / 255f, 0, 1f)*0.6f;
+                Arcol[s] = Math.Clamp((float)((Math.Abs(s - 2.5) * 100) + (Energy - 90) * 7) / 255f, 0, 1f) * 0.6f;
             }
             Vector2 v0 = Main.MouseWorld - Main.player[Projectile.owner].Center;
 
             Projectile.rotation = (float)(Math.Atan2(v0.Y, v0.X) + Math.PI * 0.25);
             Projectile.Center = Main.player[Projectile.owner].Center + Vector2.Normalize(v0) * 22f;
             Projectile.velocity *= 0;
-            
+
             if (player.controlUseItem && Release)
             {
                 Projectile.timeLeft = 5 + Energy;
@@ -136,7 +143,16 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 {
                     if (addi % 2 == 1)
                     {
-                        Energy++;
+                        if (MothEye.LocalOwner != null && MothEye.LocalOwner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
+                        {
+                            if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
+                            {
+                                Energy++; Energy++;
+                            }
+                            else
+                                Energy++;
+                        }
+
                     }
                     Energy++;
                 }
@@ -147,8 +163,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             }
             if (!Main.mouseLeft && Release)//发射
             {
-                SoundEngine.PlaySound(SoundID.Item5,Projectile.Center);
-                Projectile.NewProjectileDirect(Projectile.InheritSource(Projectile), Projectile.Center, Vector2.Normalize(v0) * 20f, (int)(Projectile.ai[0]), Projectile.damage + Energy / 5, Projectile.knockBack, player.whoAmI).extraUpdates++;
+                SoundEngine.PlaySound(SoundID.Item5, Projectile.Center);
+                Projectile.NewProjectileDirect(Projectile.InheritSource(Projectile), Projectile.Center, Vector2.Normalize(v0) * (Energy + 6) / 9f, (int)(Projectile.ai[0]), Projectile.damage + Energy / 5, Projectile.knockBack, player.whoAmI).extraUpdates++;
                 for (int s = 0; s < 5; s++)
                 {
                     if (Arcol[s] > 0)
@@ -173,8 +189,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 else
                 {
                     Tplayer.HeadRotation = 0;
-                    if(Projectile.timeLeft>10)
-                    Projectile.timeLeft = 10;
+                    if (Projectile.timeLeft > 10)
+                    {
+                        Projectile.timeLeft = 10;
+                    }
                 }
             }
             if (Ran == -1)
@@ -182,23 +200,25 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 Ran = Main.rand.Next(9);
             }
         }
+
         public override bool PreDraw(ref Color lightColor)
         {
             return false;
         }
 
         private int Energy = 0;
+
         private void DrawString()
         {
             Player player = Main.player[Projectile.owner];
             Vector2 vec = player.DirectionTo(Main.MouseWorld);
             Vector2 v = vec.RotatedBy(1.57f);
 
-            Vector2 basePos = player.MountedCenter + vec * 7;
+            Vector2 basePos = player.MountedCenter + vec * 7 + new Vector2(0, 8);
             float b0 = Math.Clamp(Energy / 2f, 0, 60);
             float b3 = (b0 / 60f) * (b0 / 60f);
 
-            Vector2 arrowPosition = basePos+ vec * (-12f * b3);
+            Vector2 arrowPosition = basePos + vec * (-12f * b3);
 
             Vector2[] pos = new Vector2[] { //通过这三点连成弦
                 basePos + v * 20 ,
@@ -207,13 +227,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             };
 
             Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone,null,Main.GameViewMatrix.TransformationMatrix);
-            Color c = new Color(1f,1f,1f,1f);
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            Color c = new Color(1f, 1f, 1f, 1f);
             List<Vertex2D> vertices = new List<Vertex2D>();
-            for(int i=0;i<pos.Length;i++)
+            for (int i = 0; i < pos.Length; i++)
             {
                 vertices.Add(new Vertex2D(pos[i] - Main.screenPosition, c, new Vector3(0, (float)i / pos.Length, 1)));
-                vertices.Add(new Vertex2D(pos[i] - Main.screenPosition + vec*6, c, new Vector3(1, (float)i / pos.Length, 1)));
+                vertices.Add(new Vertex2D(pos[i] - Main.screenPosition + vec * 6, c, new Vector3(1, (float)i / pos.Length, 1)));
             }
             Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("TheFirefly/Projectiles/ShadowWingBowTex/ShadowWingBowString");
             if (vertices.Count > 2)
@@ -224,8 +244,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             }
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.Transform);
-
         }
+
         public override void PostDraw(Color lightColor)
         {
             Player player = Main.player[Projectile.owner];
@@ -249,7 +269,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             float b1 = b0 / 60f;
             float b2 = b1;
             float b3 = b2 * b2;
-            Color drawColor =lightColor;
+            Color drawColor = lightColor;
             SpriteEffects se = SpriteEffects.None;
             if (Projectile.Center.X < player.MountedCenter.X)
             {
@@ -259,7 +279,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             {
                 player.direction = 1;
             }
-            if(player.direction == -1)
+            if (player.direction == -1)
             {
                 se = SpriteEffects.FlipVertically;
             }
@@ -267,7 +287,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             {
                 se = SpriteEffects.FlipVertically;
             }
-            if(player.gravDir == -1 && player.direction == -1)
+            if (player.gravDir == -1 && player.direction == -1)
             {
                 se = SpriteEffects.None;
             }
@@ -298,8 +318,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 Vector2 vProB = Main.player[Projectile.owner].Center + Vector2.Normalize(v0).RotatedBy(ArRot[s]) * (ArVel[s] * 1.4f - 16f * b3);
                 Main.spriteBatch.Draw(TexMothArrow, vProB - Main.screenPosition, null, new Color(Arcol[s], Arcol[s], Arcol[s], 0), Projectile.rotation + ArRot[s], new Vector2(TexMothArrow.Width / 2f, TexMothArrow.Height / 2f), 1f, SpriteEffects.None, 0);
             }
-            if(Release)
-            Main.spriteBatch.Draw(TexArrow, vProA - Main.screenPosition, new Rectangle(0, 0, TexArrow.Width, TexArrow.Height), drawColor, Projectile.rotation + (float)(Math.PI * 0.25), new Vector2(TexArrow.Width / 2f, TexArrow.Height / 2f), 1f, SpriteEffects.None, 0);
+            if (Release)
+            {
+                Main.spriteBatch.Draw(TexArrow, vProA - Main.screenPosition, new Rectangle(0, 0, TexArrow.Width, TexArrow.Height), drawColor, Projectile.rotation + (float)(Math.PI * 0.25), new Vector2(TexArrow.Width / 2f, TexArrow.Height / 2f), 1f, SpriteEffects.None, 0);
+            }
+
             float rotu0 = Energy / 1200f;
             float rotu1 = Energy / 750f;
             float rotu2 = Energy / 600f;

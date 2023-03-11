@@ -152,7 +152,10 @@ internal class MapIO
         ReadTile(reader, new TileAccessor(x, y, x + width, y + height), entry);
         ReadChest(reader, Rectangle);
         ReadSign(reader, Rectangle);
-        ReadTileEntity(reader, Rectangle, entry);
+        if(stream.Length != stream.Position)
+        {
+            ReadTileEntity(reader, Rectangle, entry);
+        }        
     }
     public int ReadWidth(string path)
     {
@@ -168,6 +171,27 @@ internal class MapIO
     public int ReadHeight(string path)
     {
         using var stream = File.OpenRead(path);
+        var entry = new ModEntry();
+        using var zip = new GZipStream(stream, CompressionMode.Decompress);
+        using var reader = new BinaryReader(zip);
+        entry.Read(reader);
+        width = reader.ReadInt32();
+        height = reader.ReadInt32();
+        return height;
+    }
+
+    public int ReadWidth(Stream stream)
+    {
+        var entry = new ModEntry();
+        using var zip = new GZipStream(stream, CompressionMode.Decompress);
+        using var reader = new BinaryReader(zip);
+        entry.Read(reader);
+        width = reader.ReadInt32();
+        height = reader.ReadInt32(); ;
+        return width;
+    }
+    public int ReadHeight(Stream stream)
+    {
         var entry = new ModEntry();
         using var zip = new GZipStream(stream, CompressionMode.Decompress);
         using var reader = new BinaryReader(zip);

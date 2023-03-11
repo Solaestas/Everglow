@@ -1,21 +1,21 @@
-﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
-using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
-using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
 using Terraria.DataStructures;
-using Terraria.ID;
+using Terraria.Localization;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 {
     public class EvilChrysalis : ModItem
     {
+        FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
         public override void SetStaticDefaults()
         {
-            GetGlowMask = MythContent.SetStaticDefaultsGlowMask(this);
+            ItemGlowManager.AutoLoadItemGlow(this);
         }
-        public static short GetGlowMask = 0;
+
         public override void SetDefaults()
         {
-            Item.glowMask = GetGlowMask;
+            Item.glowMask = ItemGlowManager.GetItemGlow(this);
             Item.damage = 24;
             Item.mana = 6;
             Item.width = 50;
@@ -34,11 +34,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             Item.DamageType = DamageClass.Summon;
             Item.noUseGraphic = true;
         }
+
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, Main.rand.NextFloat(0, 200f), Main.rand.NextFloat(0, 200f));
             return false;
         }
+
         public override bool CanUseItem(Player player)
         {
             if (base.CanUseItem(player))
@@ -55,6 +57,22 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
             }
             return base.CanUseItem(player);
         }
+        public override void ModifyTooltips(List<TooltipLine> tooltips)
+        {
+            if (MothEye.LocalOwner != null && MothEye.LocalOwner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
+            {
+                if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
+                {
+                    tooltips.AddRange(new TooltipLine[]
+                    {
+                        new(Everglow.Instance, "MothEyeBonusText", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeBonusText")),
+                        new(Everglow.Instance, "MothEyeEChryBonus", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextMothChry0")),
+                        new(Everglow.Instance, "MothEyeEChryBonus", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextMothChry1")),
+                    });
+                }
+            }
+        }
+
         public override bool AltFunctionUse(Player player)
         {
             return true;

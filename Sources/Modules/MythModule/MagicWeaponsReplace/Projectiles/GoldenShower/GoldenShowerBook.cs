@@ -1,374 +1,180 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Terraria.DataStructures;
 using Everglow.Sources.Commons.Function.Vertex;
+using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MEACModule;
-using Terraria.GameContent;
+using Terraria.Audio;
+using Everglow.Sources.Commons.Core.VFX;
 
 namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.GoldenShower
 {
-    internal class GoldenShowerBook : ModProjectile
+    internal class GoldenShowerBook : MagicBookProjectile, IWarpProjectile
     {
-        public override void SetDefaults()
+        public override void SetDef()
         {
-            Projectile.width = 28;
-            Projectile.height = 28;
-            Projectile.friendly = true;
-            Projectile.hostile = false;
-            Projectile.penetrate = -1;
-            Projectile.timeLeft = 10000;
-            Projectile.DamageType = DamageClass.Summon;
-            Projectile.tileCollide = false;
-            Projectile.alpha = 255;
+            DustType = DustID.Ichor;
+            ItemType = ItemID.GoldenShower;
+            string pathBase = "MagicWeaponsReplace/Textures/";
+            FrontTexPath = pathBase + "GoldenShower_A";
+            PaperTexPath = pathBase + "GoldenShower_C";
+            BackTexPath = pathBase + "GoldenShower_B";
+            GlowPath = pathBase + "GoldenShower_E";
+
+            TexCoordTop = new Vector2(6, 0);
+            TexCoordLeft = new Vector2(0, 24);
+            TexCoordDown = new Vector2(22, 24);
+            TexCoordRight = new Vector2(28, 0);
+
+            effectColor = new Color(255, 175, 0, 0);
         }
-        public override void AI()
+        public override void SpecialAI()
         {
             Player player = Main.player[Projectile.owner];
-            Projectile.Center = Projectile.Center * 0.7f + (player.Center + new Vector2(player.direction * 22, 12 * player.gravDir * (float)(0.2 + Math.Sin(Main.time / 18d) / 2d))) * 0.3f;
-            Projectile.spriteDirection = player.direction;
-            Projectile.velocity *= 0;
-            if (player.itemTime > 0 && player.HeldItem.type == ItemID.GoldenShower)
+            ConstantUsingTime++;
+
+            if (player.itemTime <= 0 || player.HeldItem.type != ItemID.GoldenShower)
             {
-                Projectile.timeLeft = player.itemTime + 60;
-                if (Timer < 30)
-                {
-                    Timer++;
-                }
-            }
-            else
-            {
-                Timer--;
                 if (Timer < 0)
                 {
+                    int Rain = Math.Min(ConstantUsingTime / 6, 120);
+                    for (int d = 0; d < Rain; d++)
+                    {
+                        Vector2 velocity = new Vector2(0, Main.rand.NextFloat(-16f, -12f)).RotatedBy(Main.rand.NextFloat(-(Rain / 120f), (Rain / 120f)));
+                        Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 + new Vector2(0, -10), velocity, ModContent.ProjectileType<GoldenShowerII>(), player.HeldItem.damage * 2, player.HeldItem.knockBack, player.whoAmI);
+                        p0.CritChance = player.GetWeaponCrit(player.HeldItem);
+                    }
+
+                    for (int i = 0; i < 15 + ConstantUsingTime / 15; ++i)
+                    {
+                        Vector2 BasePos = Projectile.Center ;
+                        Dust d0 = Dust.NewDustDirect(BasePos, 0, 0, DustType);
+                        d0.noGravity = true;
+                        d0.velocity = ConstantUsingTime / 80f * new Vector2(0, Main.rand.NextFloat(0f, 1f)).RotatedByRandom(6.283);
+                        Dust d1 = Dust.NewDustDirect(BasePos, 0, 0, DustType);
+                        d1.noGravity = true;
+                        d1.velocity = ConstantUsingTime / 80f * new Vector2(0, Main.rand.NextFloat(0f, 1f)).RotatedByRandom(6.283);
+                    }
+                    ConstantUsingTime = 0;
+                    SoundEngine.PlaySound(SoundID.Item20, Projectile.Center);
+                    int HitType = ModContent.ProjectileType<GoldenShowerBomb>();
+                    Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, Projectile.damage, Projectile.knockBack * 6, Projectile.owner, Rain / 4f, Projectile.rotation + Main.rand.NextFloat(6.283f));
+                    p.CritChance = player.GetWeaponCrit(player.HeldItem);
                     Projectile.Kill();
                 }
             }
-            Player.CompositeArmStretchAmount PCAS = Player.CompositeArmStretchAmount.Full;
-
-            player.SetCompositeArmFront(true, PCAS, (float)(-Math.Sin(Main.time / 18d) * 0.6 + 1.2) * -player.direction);
-            Vector2 vTOMouse = Main.MouseWorld - player.Center;
-            player.SetCompositeArmBack(true, PCAS, (float)(Math.Atan2(vTOMouse.Y, vTOMouse.X) - Math.PI / 2d));
-            Projectile.rotation = player.fullRotation;
-            if (player.itemTime == 2)
+            if (player.itemTime == 2 && player.HeldItem.type == ItemType)
             {
-                Vector2 velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero) * player.HeldItem.shootSpeed;
-                Projectile.NewProjectile(Projectile.GetSource_FromAI(),Projectile.Center + velocity * -2, velocity, ProjectileID.GoldenShowerFriendly, player.HeldItem.damage, player.HeldItem.knockBack, player.whoAmI);
-            }
-        }
-        public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
-        {
-            overPlayers.Add(index);
-        }
-        internal int Timer = 0;
-        internal float BookScale = 12f;
-        public override void PostDraw(Color lightColor)
-        {
-            Player player = Main.player[Projectile.owner];
-            Texture2D Book = TextureAssets.Item[ItemID.GoldenShower].Value;
-            Texture2D BookGlow = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Item_"+ ItemID.GoldenShower +"_Glow");
-            Texture2D Paper = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/GoldenShower/GoldenShowerPaper");
-            Color c0 = Lighting.GetColor((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f));
-
-            Projectile.hide = false;
-            DrawBack(Book);
-            DrawBack(BookGlow, true);
-            DrawPaper(Paper);
-            DrawFront(Book);
-            DrawFront(BookGlow, true);
-
-        }
-        public void DrawPaper(Texture2D tex)
-        {
-            Player player = Main.player[Projectile.owner];
-            Vector2 X0 = new Vector2(BookScale * player.direction, BookScale * player.gravDir) * 0.45f;
-            Vector2 Y0 = new Vector2(BookScale * player.direction, -BookScale * player.gravDir) * 0.64f;
-            Color c0 = Lighting.GetColor((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f));
-
-            for (int x = 0; x < 8; x++)
-            {
-                List<Vertex2D> bars = new List<Vertex2D>();
-                for (int i = 0; i < 10; ++i)
+                if(Main.mouseRight)
                 {
-                    double rot = Timer / 270d + i * Timer / 400d * (1 + Math.Sin(Main.time / 7d) * 0.4);
-                    rot -= x / 18d / 30d * (Timer);
-                    rot += Projectile.rotation;
-                    Vector2 BasePos = Projectile.Center + X0 - X0.RotatedBy(rot) * i / 4.5f;
-
-                    float UpX = MathHelper.Lerp(16f / 28f, 27f / 28f, i / 9f);
-                    float UpY = MathHelper.Lerp(0 / 30f, 11f / 30f, i / 9f);
-                    Vector2 Up = new Vector2(UpX, UpY);
-                    Vector2 Down = Up + new Vector2(-15f / 28f, 15f / 30f);
-
-                    if (Math.Abs(rot) > Math.PI / 2d)
+                    ConstantUsingTime+=3;
+                    player.statMana -= 7;
+                    for (int d = 0; d < 2; d++)
                     {
-                        if (player.direction * player.gravDir == 1)
-                        {
-                            bars.Add(new Vertex2D(BasePos - Y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
-                            bars.Add(new Vertex2D(BasePos + Y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
-                        }
-                        else
-                        {
-                            bars.Add(new Vertex2D(BasePos + Y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
-                            bars.Add(new Vertex2D(BasePos - Y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
-                        }
-                    }
-                    else
-                    {
-                        if (player.direction * player.gravDir == 1)
-                        {
-                            bars.Add(new Vertex2D(BasePos + Y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
-                            bars.Add(new Vertex2D(BasePos - Y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
-                        }
-                        else
-                        {
-                            bars.Add(new Vertex2D(BasePos - Y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
-                            bars.Add(new Vertex2D(BasePos + Y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
-                        }
-                    }
-                }
-                if (bars.Count > 0)
-                {
-                    Main.graphics.GraphicsDevice.Textures[0] = tex;
-                    Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-                }
-            }
-            List<Vertex2D> barsII = new List<Vertex2D>();
-            for (int i = 0; i < 10; ++i)
-            {
-                double rotII = -Timer / 270d - i * Timer / 400d * (1 + Math.Sin(Main.time / 7d + 1) * 0.4);
-                rotII += 8 / 18d / 30d * (Timer);
-
-                double rotIII = Timer / 270d + i * Timer / 400d * (1 + Math.Sin(Main.time / 7d) * 0.4);
-                rotIII -= 8 / 18d / 30d * (Timer);
-
-                double rotIV = MathHelper.Lerp((float)rotII, (float)rotIII, (float)(Main.time / 15d + Math.Sin(Main.time / 62d) * 9) % 1f);
-                rotIV += Projectile.rotation;
-                Vector2 BasePos = Projectile.Center + X0 - X0.RotatedBy(rotIV) * i / 4.5f - Y0 * 0.05f - X0 * 0.02f;
-
-                float UpX = MathHelper.Lerp(16f / 28f, 27f / 28f, i / 9f);
-                float UpY = MathHelper.Lerp(0 / 30f, 11f / 30f, i / 9f);
-                Vector2 Up = new Vector2(UpX, UpY);
-                Vector2 Down = Up + new Vector2(-15f / 28f, 15f / 30f);
-
-                if (Math.Abs(rotIV) > Math.PI / 2d)
-                {
-                    if(player.direction == 1)
-                    {
-                        barsII.Add(new Vertex2D(BasePos - Y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
-                        barsII.Add(new Vertex2D(BasePos + Y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
-                    }
-                    else
-                    {
-                        barsII.Add(new Vertex2D(BasePos + Y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
-                        barsII.Add(new Vertex2D(BasePos - Y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
+                        Vector2 velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero).RotatedBy(Main.rand.NextFloat(-0.1f, 0.1f)) * player.HeldItem.shootSpeed * 1.3f;
+                        Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 + new Vector2(0, -10), velocity, ModContent.ProjectileType<GoldenShowerII>(), player.HeldItem.damage * 2, player.HeldItem.knockBack, player.whoAmI);
+                        p.CritChance = player.GetWeaponCrit(player.HeldItem);
                     }
                 }
                 else
                 {
-                    if (player.direction * player.gravDir == 1)
-                    {
-                        barsII.Add(new Vertex2D(BasePos + Y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
-                        barsII.Add(new Vertex2D(BasePos - Y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
-                    }
-                    else
-                    {
-                        barsII.Add(new Vertex2D(BasePos - Y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
-                        barsII.Add(new Vertex2D(BasePos + Y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
-                    }
+                    Vector2 velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero) * player.HeldItem.shootSpeed * 1.3f;
+                    Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 + new Vector2(0, -10), velocity, ModContent.ProjectileType<GoldenShowerII>(), player.HeldItem.damage * 2, player.HeldItem.knockBack, player.whoAmI);
+                    p.CritChance = player.GetWeaponCrit(player.HeldItem);
                 }
             }
-            if (barsII.Count > 0)
-            {
-                Main.graphics.GraphicsDevice.Textures[0] = tex;
-                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, barsII.ToArray(), 0, barsII.Count - 2);
-            }
 
-            for (int x = 0; x < 8; x++)
-            {
-                List<Vertex2D> bars = new List<Vertex2D>();
-                for (int i = 0; i < 10; ++i)
-                {
-                    double rot = -Timer / 270d - i * Timer / 400d * (1 + Math.Sin(Main.time / 7d + 1) * 0.4);
-                    rot += x / 18d / 30d * (Timer);
-                    rot += Projectile.rotation;
-                    Vector2 BasePos = Projectile.Center + X0 - X0.RotatedBy(rot) * i / 4.5f - Y0 * 0.05f - X0 * 0.02f;
-
-                    float UpX = MathHelper.Lerp(16f / 28f, 27f / 28f, i / 9f);
-                    float UpY = MathHelper.Lerp(0 / 30f, 11f / 30f, i / 9f);
-                    Vector2 Up = new Vector2(UpX, UpY);
-                    Vector2 Down = Up + new Vector2(-15f / 28f, 15f / 30f);
-
-                    if (Math.Abs(rot) > Math.PI / 2d)
-                    {
-                        if (player.direction * player.gravDir == 1)
-                        {
-                            bars.Add(new Vertex2D(BasePos - Y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
-                            bars.Add(new Vertex2D(BasePos + Y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
-                        }
-                        else
-                        {
-                            bars.Add(new Vertex2D(BasePos + Y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
-                            bars.Add(new Vertex2D(BasePos - Y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
-                        }
-                    }
-                    else
-                    {
-                        if (player.direction * player.gravDir == 1)
-                        {
-                            bars.Add(new Vertex2D(BasePos + Y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
-                            bars.Add(new Vertex2D(BasePos - Y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
-                        }
-                        else
-                        {
-                            bars.Add(new Vertex2D(BasePos - Y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
-                            bars.Add(new Vertex2D(BasePos + Y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
-                        }
-                    }
-                }
-                if (bars.Count > 0)
-                {
-                    Main.graphics.GraphicsDevice.Textures[0] = tex;
-                    Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-                }
-            }
         }
-        public void DrawBack(Texture2D tex, bool Glowing = false)
+        public override void OnSpawn(IEntitySource source)
         {
             Player player = Main.player[Projectile.owner];
-            Vector2 X0 = new Vector2(BookScale * player.direction, BookScale * player.gravDir) * 0.5f;
-            Vector2 Y0 = new Vector2(BookScale * player.direction, -BookScale * player.gravDir) * 0.707f;
-            Color c0 = new Color(255, 255, 255, 0);
-            if (!Glowing)
+            for (int d = 0; d < 16; d++)
             {
-                c0 = Lighting.GetColor((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f));
-            }
-
-
-            List<Vertex2D> bars = new List<Vertex2D>();
-            for (int i = 0; i < 10; ++i)
-            {
-                double rot = Timer / 270d + i * Timer / 400d * (1 + Math.Sin(Main.time / 7d) * 0.4);
-                Vector2 BasePos = Projectile.Center + X0 - X0.RotatedBy(rot) * i / 4.5f;
-
-                float UpX = MathHelper.Lerp(16f / 28f, 27f / 28f, i / 9f);
-                float UpY = MathHelper.Lerp(0 / 30f, 11f / 30f, i / 9f);
-                Vector2 Up = new Vector2(UpX, UpY);
-                Vector2 Down = Up + new Vector2(-15f / 28f, 15f / 30f);
-
-                rot += Projectile.rotation;
-                if (Math.Abs(rot) > Math.PI / 2d)
-                {
-                        if (player.direction * player.gravDir == 1)
-                        {
-                            bars.Add(new Vertex2D(BasePos - Y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
-                            bars.Add(new Vertex2D(BasePos + Y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
-                        }
-                        else
-                        {
-                            bars.Add(new Vertex2D(BasePos + Y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
-                            bars.Add(new Vertex2D(BasePos - Y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
-                        }
-                    }
-                    else
-                    {
-                        if (player.direction * player.gravDir == 1)
-                        {
-                            bars.Add(new Vertex2D(BasePos + Y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
-                            bars.Add(new Vertex2D(BasePos - Y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
-                        }
-                        else
-                        {
-                            bars.Add(new Vertex2D(BasePos - Y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
-                            bars.Add(new Vertex2D(BasePos + Y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
-                        }
-                }
-
-            }
-            if (bars.Count > 0)
-            {
-                Main.graphics.GraphicsDevice.Textures[0] = tex;
-                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+                Vector2 velocity = new Vector2(0, Main.rand.NextFloat(-16f, -12f)).RotatedBy(Main.rand.NextFloat(-0.6f, 0.6f));
+                Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 + new Vector2(0, -20), velocity, ModContent.ProjectileType<GoldenShowerII>(), player.HeldItem.damage * 2, player.HeldItem.knockBack, player.whoAmI);
             }
         }
-        public void DrawFront(Texture2D tex, bool Glowing = false)
+        internal int ConstantUsingTime = 0;
+
+        public override void SpecialDraw()
         {
-            Player player = Main.player[Projectile.owner];
-            Vector2 X0 = new Vector2(BookScale * player.direction, BookScale * player.gravDir) * 0.5f;
-            Vector2 Y0 = new Vector2(BookScale * player.direction, -BookScale * player.gravDir) * 0.707f;
-            Color c0 = new Color(255, 255, 255, 0);
-            if (!Glowing)
+            if(Timer < 24 && ConstantUsingTime > 150)
             {
-                c0 = Lighting.GetColor((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f));
+                float tTimer = Timer - 6;
+                float Rain = Math.Min(ConstantUsingTime / 6, 120) / 120f;
+                float Fade = (24 - tTimer) / 24f;
+                if(Fade < 0)
+                {
+                    Fade = 0;
+                }
+                Rain *= Fade;
+                DrawTexCircle(tTimer * 24 * Rain / Fade, 184 * Fade, new Color(Rain, Rain, Rain, Rain), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/DarklineWave"), 0);
+                DrawTexCircle(tTimer * 24 * Rain / Fade, 184 * Fade, new Color(Rain, Rain * 0.9f, 0, 0), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/LightlineWave"), 0);
             }
 
-
-            List<Vertex2D> bars = new List<Vertex2D>();
-            for (int i = 0; i < 10; ++i)
+            if (Timer < 12 && ConstantUsingTime > 150)
             {
-                double rot = -Timer / 270d - i * Timer / 400d * (1+ Math.Sin(Main.time / 7d + 1) * 0.4);
-                rot += Projectile.rotation;
-                Vector2 BasePos = Projectile.Center + X0 - X0.RotatedBy(rot) * i / 4.5f - Y0 * 0.05f - X0 *0.02f;
-
-                float UpX = MathHelper.Lerp(16f / 28f, 27f / 28f, i / 9f);
-                float UpY = MathHelper.Lerp(0 / 30f, 11f / 30f, i / 9f);
-                Vector2 Up = new Vector2(UpX, UpY);
-                Vector2 Down = Up + new Vector2(-15f / 28f, 15f / 30f);
-
-                if (Math.Abs(rot) > Math.PI / 2d)
-                {
-                    if (player.direction * player.gravDir == 1)
-                    {
-                        bars.Add(new Vertex2D(BasePos - Y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
-                        bars.Add(new Vertex2D(BasePos + Y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
-                    }
-                    else
-                    {
-                        bars.Add(new Vertex2D(BasePos + Y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
-                        bars.Add(new Vertex2D(BasePos - Y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
-                    }
-                }
-                else
-                {
-                    if (player.direction * player.gravDir == 1)
-                    {
-                        bars.Add(new Vertex2D(BasePos + Y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
-                        bars.Add(new Vertex2D(BasePos - Y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
-                    }
-                    else
-                    {
-                        bars.Add(new Vertex2D(BasePos - Y0 - Main.screenPosition, c0, new Vector3(Down, 0)));
-                        bars.Add(new Vertex2D(BasePos + Y0 - Main.screenPosition, c0, new Vector3(Up, 0)));
-                    }
-                }
-            }
-            if (bars.Count > 0)
-            {
-                Main.graphics.GraphicsDevice.Textures[0] = tex;
-                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+                float Rain = Math.Min(ConstantUsingTime / 6, 120) / 120f;
+                float Fade = (12 - Timer) / 12f;
+                Rain *= Fade;
+                DrawTexCircle(Timer * 40 * Rain / Fade, 184 * Fade, new Color(Rain, Rain, Rain, Rain), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/DarklineWave"), 0);
+                DrawTexCircle(Timer * 40 * Rain / Fade, 184 * Fade, new Color(Rain, Rain * 0.9f, 0, 0), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/LightlineWave"), 0);
             }
         }
-        public override void Kill(int timeLeft)
+        private static void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
         {
-            Player player = Main.player[Projectile.owner];
-            Vector2 X0 = new Vector2(BookScale * player.direction, BookScale * player.gravDir) * 0.5f;
-            Vector2 Y0 = new Vector2(BookScale * player.direction, -BookScale * player.gravDir) * 0.707f;
-            for (int i = 0; i < 10; ++i)
+            List<Vertex2D> circle = new List<Vertex2D>();
+            for (int h = 0; h < radious / 2; h++)
             {
-                double rot = 0;
-                rot += Projectile.rotation;
-                Vector2 BasePos = Projectile.Center + X0 - X0.RotatedBy(rot) * i / 4.5f;
-                Dust d0 = Dust.NewDustDirect(BasePos - Y0, 0, 0, DustID.Ichor);
-                d0.noGravity = true;
-                Dust d1 = Dust.NewDustDirect(BasePos + Y0, 0, 0, DustID.Ichor);
-                d1.noGravity = true;
+                circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3((h * 24 / radious) % 1, 1, 0)));
+                circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3((h * 24 / radious) % 1, 0, 0)));
             }
-            for (int i = 0; i < 14; ++i)
+            circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(1, 1, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(1, 0, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(0, 1, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0, 0, 0)));
+            if (circle.Count > 0)
             {
-                double rot = 0;
-                rot += Projectile.rotation;
-                Vector2 BasePos = Projectile.Center + Y0 - Y0.RotatedBy(rot) * i / 4.5f;
-                Dust d0 = Dust.NewDustDirect(BasePos - X0, 0, 0, DustID.Ichor);
-                d0.noGravity = true;
-                Dust d1 = Dust.NewDustDirect(BasePos + X0, 0, 0, DustID.Ichor);
-                d1.noGravity = true;
+                Main.graphics.GraphicsDevice.Textures[0] = tex;
+                Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
+            }
+        }
+        private static void DrawTexCircle(VFXBatch sb,float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
+        {
+            List<Vertex2D> circle = new List<Vertex2D>();
+            for (int h = 0; h < radious / 2; h++)
+            {
+                circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3((h * 24 / radious) % 1, 1, 0)));
+                circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3((h * 24 / radious) % 1, 0, 0)));
+            }
+            circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(1, 1, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(1, 0, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(0, 1, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0, 0, 0)));
+            if (circle.Count > 0)
+            {
+                sb.Draw(tex,circle,PrimitiveType.TriangleStrip);
+            }
+        }
+        public void DrawWarp(VFXBatch sb)
+        {
+            if (Timer < 24 && ConstantUsingTime > 150)
+            {
+                float tTimer = Timer - 6;
+                float Rain = Math.Min(ConstantUsingTime / 6, 120) / 120f;
+                float Fade = (24 - tTimer) / 24f;
+                if (Fade < 0)
+                {
+                    Fade = 0;
+                }
+                Rain *= Fade;
+                DrawTexCircle(sb,tTimer * 24 * Rain / Fade, 184 * Fade, new Color(Rain, Rain * 0.9f, 0, 0), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/LightlineWave"), 0);
+            }
+
+            if (Timer < 22 && ConstantUsingTime > 150)
+            {
+                float Rain = Math.Min(ConstantUsingTime / 6, 120) / 120f;
+                float Fade = (22 - Timer) / 22f;
+                Rain *= Fade;
+                DrawTexCircle(sb, Timer * 40 * Rain / Fade, 184 * Fade, new Color(Rain, Rain * 0.9f, 0, 0), Projectile.Center - Main.screenPosition, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/LightlineWave"), 0);
             }
         }
     }
