@@ -24,6 +24,7 @@ namespace Everglow.Sources.Modules.MinortopographyModule.GiantPinetree
 
         public static void placePineLeaves(int i, int j, int iteration, float strength, Vector2 direction)
         {
+            return;//TODO:为了保证Master的安全性，暂且封起来了。后续优化记得解
             if (iteration > 50)//万一发散就完了
                 return;
             for (int x = 0; x < strength; x++)

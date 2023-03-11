@@ -61,6 +61,7 @@ namespace Everglow.Sources.Modules.MinortopographyModule.GreatTombLand
         /// </summary>
         public static void BuildGreatTombLand()
         {
+            return;//TODO:保障Master安全,先封起来
             //TODO 自适应尚未完成
             Point16 CenterPoint = RandomGreatTombLandGenPass();
             int X0 = CenterPoint.X;
