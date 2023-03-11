@@ -1,6 +1,5 @@
 ﻿using Everglow.Sources.Commons.Core.ModuleSystem;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds;
-using Everglow.Sources.Modules.MythModule.TheFirefly.UI;
 using Everglow.Sources.Modules.MythModule.Common.FogEffect.Sky;
 using MonoMod.Cil;
 using ReLogic.Content;
