@@ -151,9 +151,10 @@ namespace Everglow.Sources.Modules.OceanModule.Projectiles.Weapons
             Texture2D TexMainG = OceanContent.QuickTexture("Projectiles/Weapons/RampageShark/RampageShark_glow");
             Texture2D TexEye = OceanContent.QuickTexture("Projectiles/Weapons/RampageShark/RampageShark_redEye");
             Texture2D TexStar = OceanContent.QuickTexture("Projectiles/Weapons/RampageShark/HitStar");
+            Rectangle gunTexRectangle = new Rectangle(0, 0, 72, 34);
             if (Main.timeForVisualEffects % 6 >= 3)
             {
-                TexMain = OceanContent.QuickTexture("Projectiles/Weapons/RampageShark/RampageShark_gunii");
+                gunTexRectangle.Y = ((int)(Main.timeForVisualEffects / 6f) % 4) * 34;
             }
             SpriteEffects se = SpriteEffects.None;
             if (Projectile.Center.X < player.Center.X)
@@ -171,7 +172,7 @@ namespace Everglow.Sources.Modules.OceanModule.Projectiles.Weapons
                 new Vector2(0, Main.rand.NextFloat(Power)).RotatedByRandom(6.283);
             }
             Vector2 offset = new Vector2(0, -5);
-            Main.spriteBatch.Draw(TexMain, Projectile.Center - Main.screenPosition + offset - random, null, lightColor, Projectile.rotation - (float)(Math.PI * 0.25), TexMain.Size() / 2f, 1f, se, 0);
+            Main.spriteBatch.Draw(TexMain, Projectile.Center - Main.screenPosition + offset - random, gunTexRectangle, lightColor, Projectile.rotation - (float)(Math.PI * 0.25), new Vector2(TexMain.Size().X / 2f, TexMain.Size().Y / 8f), 1f, se, 0);
             float glow = Power / 16f;
             Main.spriteBatch.Draw(TexMainG, Projectile.Center - Main.screenPosition + offset - random, null, new Color(glow, glow * 0.2f, glow * 0.2f, 0), Projectile.rotation - (float)(Math.PI * 0.25), TexMainG.Size() / 2f, 1f, se, 0);
             if (Power >= 15 && Power < 16)
