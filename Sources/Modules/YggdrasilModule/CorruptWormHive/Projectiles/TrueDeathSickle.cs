@@ -604,7 +604,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.CorruptWormHive.Projectiles
                     w *= 1.2f;
                 }
                 bars.Add(new Vertex2D(Projectile.Center + trail[i] * 0.05f * Projectile.scale, Color.White, new Vector3(factor * 1, 1, 0f)));
-                bars.Add(new Vertex2D(Projectile.Center + trail[i] * Projectile.scale, Color.White, new Vector3(factor * 2, 0, w)));
+                bars.Add(new Vertex2D(Projectile.Center + trail[i] * Projectile.scale * 1.08f, Color.White, new Vector3(factor * 2, 0, w)));
             }
             spriteBatch.Draw(ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value, bars, PrimitiveType.TriangleStrip);
         }
