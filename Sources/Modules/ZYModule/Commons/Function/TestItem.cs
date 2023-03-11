@@ -1,6 +1,6 @@
 ﻿using Everglow.Sources.Commons.Core.VFX;
 using Everglow.Sources.Modules.ExampleModule.VFX;
-
+using Everglow.Sources.Modules.YggdrasilModule.Common.Elevator;
 namespace Everglow.Sources.Modules.ZYModule.Commons.Function;
 
 internal class TestItem : ModItem
@@ -16,8 +16,7 @@ internal class TestItem : ModItem
     }
     public override bool CanUseItem(Player player)
     {
-
-        VFXManager.Add(new WhiteDust() { position = Main.MouseWorld });
+        TileModule.TileSystem.AddTile(new YggdrasilElevator() { Position = Main.MouseWorld });
 
         return false;
     }
