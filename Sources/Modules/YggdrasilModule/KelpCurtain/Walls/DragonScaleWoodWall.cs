@@ -6,8 +6,6 @@
         {
             Main.wallHouse[Type] = true;
             DustType = DustID.WoodFurniture;
-            ModTranslation modTranslation = base.CreateMapEntryName(null);
-            modTranslation.SetDefault("");
             ItemDrop = ModContent.ItemType<Items.DragonScaleWoodWall>();
             AddMapEntry(new Color(32, 8, 0));
         }

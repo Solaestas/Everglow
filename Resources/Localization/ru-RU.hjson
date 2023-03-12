@@ -1473,6 +1473,9 @@
 			NotThirsty : "You don't want to drink"
 			SatietyLevel: 
 			{
+				-3: "starving"
+				-2: "hungry"
+				-1: "peckish"
 				0 : "empty"
 				1 : "well fed"
 				2 : "satisfied"

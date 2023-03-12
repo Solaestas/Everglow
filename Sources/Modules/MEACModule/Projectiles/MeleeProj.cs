@@ -485,6 +485,10 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         Vector2 r = Vector2.One;
         public void DrawWarp(VFXBatch spriteBatch)
         {
+            if(selfWarp)
+            {
+                return;
+            }
             List<Vector2> SmoothTrailX = CatmullRom.SmoothPath(trailVecs.ToList());//平滑
             List<Vector2> SmoothTrail = new List<Vector2>();
             for (int x = 0; x < SmoothTrailX.Count - 1; x++)
