@@ -8,6 +8,10 @@ namespace Everglow.Sources.Modules.OceanModule.Dusts
         {
             return true;
         }
+        public override void OnSpawn(Dust dust)
+        {
+           dust.frame.Width = 10;
+        }
         public override bool Update(Dust dust)
         {
             if (Collision.SolidCollision(dust.position, 8, 8))
