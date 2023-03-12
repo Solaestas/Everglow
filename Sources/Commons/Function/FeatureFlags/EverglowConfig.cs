@@ -1,4 +1,4 @@
-﻿using Everglow.Sources.Modules.AssetReplaceModule;
+﻿using Everglow.Sources.Modules.AssetReplaceModule.UIReplace;
 using System.ComponentModel;
 
 using Terraria.ModLoader.Config;
@@ -35,8 +35,10 @@ namespace Everglow.Sources.Commons.Function.FeatureFlags
         /// 用于各个客户端的个性化设置
         /// </summary>
         public override ConfigScope Mode => ConfigScope.ClientSide;
+
         [Header("$Mods.Everglow.Config.Header.TextureReplace")]
-        [DefaultValue(TextureReplaceMode.Terraria)]
+
+        [DefaultValue(TextureReplaceMode.Default)]
         [Label("$Mods.Everglow.Config.TextureReplace.Label")]
         [Tooltip("$Mods.Everglow.Config.TextureReplace.Tooltip")]
         [DrawTicks]
@@ -61,7 +63,7 @@ namespace Everglow.Sources.Commons.Function.FeatureFlags
         public TuskAudioReplaceMode TuskAudioReplace;
 
         public override void OnChanged() {
-            if ((int)TextureReplace >= 3) {
+            if ((int)TextureReplace >= 4) {
                 TextureReplace = TextureReplaceMode.Terraria;
             }
             if ((int)MothAudioReplace >= 3)
@@ -72,8 +74,8 @@ namespace Everglow.Sources.Commons.Function.FeatureFlags
             {
                 TuskAudioReplace = TuskAudioReplaceMode.TuskFighting;
             }
-            if (AssetReplaceModule.IsLoaded)
-                AssetReplaceModule.ReplaceTextures(TextureReplace);
+            if (UIReplaceModule.IsLoaded)
+                UIReplaceModule.ReplaceTextures(TextureReplace);
             base.OnChanged();
 		}
         public static int ReplaceMothAudio
@@ -90,7 +92,8 @@ namespace Everglow.Sources.Commons.Function.FeatureFlags
         Terraria,
         [Label("Eternal Resolve")]
         EternalResolve,
-        Myth
+        Myth,
+        Default
     }
     public enum MothAudioReplaceMode
     {

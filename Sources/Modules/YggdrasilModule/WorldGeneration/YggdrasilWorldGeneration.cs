@@ -112,6 +112,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule.WorldGeneration
                                 {
                                     tile.TileType = (ushort)ModContent.TileType<BloodLightCrystal>();
                                     tile.HasTile = true;
+                                    ModContent.GetInstance<BloodLightCrystalEntity>().Place(x + a, y + b);
                                 }
 
 
@@ -135,11 +136,32 @@ namespace Everglow.Sources.Modules.YggdrasilModule.WorldGeneration
                                 }
                                 break;
                             case 2:
-                                if (pixel.R == 24 && pixel.G == 0 && pixel.B == 0)
+                                if (pixel.R == 24 && pixel.G == 0 && pixel.B == 0)//Ê¯»¯ÁúÁÛÄ¾
                                 {
                                     if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
                                     {
                                         tile.WallType = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
+                                    }
+                                }
+                                if (pixel.R == 40 && pixel.G == 32 && pixel.B == 31)//ÁúÁÛÄ¾
+                                {
+                                    if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+                                    {
+                                        tile.WallType = (ushort)ModContent.WallType<DragonScaleWoodWall>();
+                                    }
+                                }
+                                if (pixel.R == 56 && pixel.G == 56 && pixel.B == 56)//Ê¯Ç½
+                                {
+                                    if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+                                    {
+                                        tile.WallType = WallID.Stone;
+                                    }
+                                }
+                                if (pixel.R == 25 && pixel.G == 14 && pixel.B == 12)//Ììñ·ÍÁÇ½
+                                {
+                                    if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+                                    {
+                                        tile.WallType = (ushort)ModContent.WallType<YggdrasilDirtWall>();
                                     }
                                 }
                                 break;
@@ -155,11 +177,11 @@ namespace Everglow.Sources.Modules.YggdrasilModule.WorldGeneration
 
                                 if (pixel.R == 122 && pixel.G == 5 && pixel.B == 255)//FolkHouseofWood£¦StoneStruture TypeA  28x11
                                 {
-                                    QuickBuild(x, y, "YggdrasilTown/MapIOs/2FolkHouseofWood£¦StoneStrutureTypeA28x11.mapio");
+                                    QuickBuild(x, y, "YggdrasilTown/MapIOs/2FolkHouseofWoodStoneStrutureTypeA28x11.mapio");
                                 }
                                 if (pixel.R == 123 && pixel.G == 5 && pixel.B == 255)//FolkHouseofWood£¦StoneStruture TypeB  28x11
                                 {
-                                    QuickBuild(x, y, "YggdrasilTown/MapIOs/2FolkHouseofWood£¦StoneStrutureTypeA28x11.mapio");
+                                    QuickBuild(x, y, "YggdrasilTown/MapIOs/2FolkHouseofWoodStoneStrutureTypeB28x11.mapio");
                                 }
 
                                 if (pixel.R == 124 && pixel.G == 5 && pixel.B == 255)//Smithy TypeA  22x8

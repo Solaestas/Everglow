@@ -87,12 +87,14 @@ namespace Everglow.Sources.Modules.YggdrasilModule.KelpCurtain.Background
         {
             var texSky = YggdrasilContent.QuickTexture("KelpCurtain/Background/KelpCurtainSky");
             var texClose = YggdrasilContent.QuickTexture("KelpCurtain/Background/KelpCurtainClose");
+            var texC0 = YggdrasilContent.QuickTexture("KelpCurtain/Background/KelpCurtainMiddleClose");
             var texC1 = YggdrasilContent.QuickTexture("KelpCurtain/Background/KelpCurtainMiddle");
             var texC2 = YggdrasilContent.QuickTexture("KelpCurtain/Background/KelpCurtainFar");
 
             BackgroundManager.QuickDrawBG(texSky, GetDrawRect(texSky.Size(), 0f, true), baseColor, 148000, 173375, true, true);
             BackgroundManager.QuickDrawBG(texC2, GetDrawRect(texC2.Size(), 0.10f, true), baseColor, 148000, 173375, false, false);
             BackgroundManager.QuickDrawBG(texC1, GetDrawRect(texC1.Size(), 0.15f, true), baseColor, 148000, 173375, false, false);
+            BackgroundManager.QuickDrawBG(texC0, GetDrawRect(texC1.Size(), 0.25f, true), baseColor, 148000, 173375, false, false);
             BackgroundManager.QuickDrawBG(texClose, GetDrawRect(texClose.Size(), 0.35f, true), baseColor, 148000, 173375, false, false);
         }
         /// <summary>
