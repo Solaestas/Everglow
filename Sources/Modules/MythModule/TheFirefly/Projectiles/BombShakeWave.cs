@@ -7,10 +7,6 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
     public class BombShakeWave : ModProjectile, IWarpProjectile
     {
-        public override void SetStaticDefaults()
-        {
-        }
-
         public override void SetDefaults()
         {
             Projectile.extraUpdates = 6;
@@ -27,7 +23,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 
         public override void AI()
         {
-            Projectile.hide = true;
+            Projectile.hide = false;
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -48,10 +44,38 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 1, 0)));
                 circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0, 0)));
             }
-            circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(1, 1, 0)));
-            circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(1, 0, 0)));
-            circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(0, 1, 0)));
-            circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0, 0, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(0, 0.8f, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0, 0.2f, 0)));
+            if (circle.Count > 2)
+            {
+                spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
+            }
+        }
+        private static void DrawWarpTexCircle_VFXBatch(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
+        {
+            List<Vertex2D> circle = new List<Vertex2D>();
+
+            for (int h = 0; h < radious / 2; h += 1)
+            {
+                float colorR = (h / radious * MathF.PI * 4 + (float)addRot + 1.57f) % (MathF.PI * 2f) / (MathF.PI * 2f);
+                float color2R = ((h + 1) / radious * MathF.PI * 4 + (float)addRot + 1.57f) % (MathF.PI * 2f) / (MathF.PI * 2f);
+
+                color = new Color(colorR, color.G / 255f, 0, 0);
+                circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0.8f, 0)));
+                circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0.2f, 0)));
+                if (Math.Abs(color2R - colorR) > 0.8f)
+                {
+                    float midValue = (1f - colorR) / (float)(color2R + (1f - colorR));
+                    color.R = 255;
+                    circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy((h + midValue) / radious * Math.PI * 4 + addRot), color, new Vector3((h + midValue) * 2 / radious, 0.8f, 0)));
+                    circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy((h + midValue) / radious * Math.PI * 4 + addRot), color, new Vector3((h + midValue) * 2 / radious, 0.2f, 0)));
+                    color.R = 0;
+                    circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy((h + midValue) / radious * Math.PI * 4 + addRot), color, new Vector3((h + midValue) * 2 / radious, 0.8f, 0)));
+                    circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy((h + midValue) / radious * Math.PI * 4 + addRot), color, new Vector3((h + midValue) * 2 / radious, 0.2f, 0)));
+                }
+            }
+            circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(0, 0.8f, 0)));
+            circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0, 0.2f, 0)));
             if (circle.Count > 2)
             {
                 spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
@@ -68,8 +92,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             {
                 width = Projectile.timeLeft;
             }
-
-            DrawTexCircle_VFXBatch(sb, value * 450 * Projectile.ai[0], width * 20 * Projectile.ai[0], new Color(colorV, colorV * 0.7f * Projectile.ai[1], colorV, 0f), Projectile.Center - Main.screenPosition, t);
+            DrawWarpTexCircle_VFXBatch(sb, value * 450 * Projectile.ai[0], width * 20 * Projectile.ai[0], new Color(colorV, colorV * 0.07f * Projectile.ai[1], 0, 0f), Projectile.Center - Main.screenPosition, t);
         }
     }
 }

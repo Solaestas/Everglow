@@ -100,7 +100,7 @@ Mods:
 			Sunflower : "Sunflower Disc"
 			ThunderFlower : "Flower of Lighting"
 			World : "The World"
-			XmaxWhip : "Christmas Tree Whip"
+			XmasWhip : "Christmas Tree Whip"
 			BloodGoldBlade : "Dull Gold Massacre"
 			BloodLightCyanFlame : "Bloody Lasers and Cyan Flames"
 			BlueRain : "Seperate Ocean"
@@ -185,29 +185,29 @@ Mods:
 			FragransMagic : Moon & Fragrans Magic
 			FragransSpear : Moon Dosn't Shine
 			FragransStaff : Fragrans Bomb Staff
-			BlackWoodenClub : Ebonwood Club
-			BloodClub : Crimson Club
-			BloodLiquidClub : Ichor Club
+			EbonwoodClub : Ebonwood Club
+			CrimsonClub : Crimson Club
+			IchorClub : Ichor Club
 			CactusClub : Cactus Club
 			CobaltClub : Cobalt Club
-			ColdWoodenClub : Boreal Wood Club
+			BorealWoodClub : Boreal Wood Club
 			CopperClub : Copper Club
 			CorruptClub : Corruption Club
 			CrystalClub : Crystal Club
 			CurseClub : Cursed Flame Club
-			DarkWoodenClub : Shadewood Club
+			ShadewoodClub : Shadewood Club
 			GoldClub : Gold Club
 			IronClub : Iron Club
 			LeadClub : Lead Club
-			LeafClub : Chlorophyte Club
+			ChlorophyteClub : Chlorophyte Club
 			MeteorClub : Meteor Club
 			MithrilClub : Mythril Club
-			MountainCuClub : Orichalcum Club
+			OrichalcumClub : Orichalcum Club
 			PalladiumClub : Palladium Club
-			PalmWoodenClub : Palm Wood Club
-			PearlWoodenClub : Pearlwood Club
+			PalmWoodClub : Palm Wood Club
+			PearlwoodClub : Pearlwood Club
 			PlatinumClub : Platinum Club
-			RedWoodenClub : Mahogany Club
+			RichMahoganyClub : Mahogany Club
 			RefinedClub : Adamantite Club
 			SilverClub : Silver Club
 			SpikeClub : Spike Club
@@ -452,7 +452,7 @@ Mods:
 			Sunflower : "'A weapon made of sunflowers, has a color of hope'"
 			ThunderFlower : "Fires thunderstrom orbs\n'Too many projectiles!'"
 			World : "Summons 'World' at the curser, right click to switch between following mode and slashing mode when it is summoned\n'Power of the entire land is accumulated here...'"
-			XmaxWhip : "{$Mods.Everglow.Common.WarWhipGT}\nBursts out damaging Christmas lights on hit\n'Much better than the Christmas Tree Sword'"
+			XmasWhip : "{$Mods.Everglow.Common.WarWhipGT}\nBursts out damaging Christmas lights on hit\n'Much better than the Christmas Tree Sword'"
 			BloodGoldBlade : "{$Mods.Everglow.Common.MythWeapon}\nEmits ichor blades to surrounding\nA god-slaying blade, contaminated by blood of gods"
 			BloodLightCyanFlame : "{$Mods.Everglow.Common.LegendWeapon}\nAlternately throws boomerblades of laser or cursed flame\n'They should be weapons of the Twins, fortunately you have saved the Mechanic'"
 			BlueRain : "{$Mods.Everglow.Common.LegendWeapon}\nRight click and hold to make a charged attack\n'Rain drops refused to be blend with sea water to maintain their purity, finally converged to this form in chaotic currents'"
@@ -630,29 +630,29 @@ Mods:
 			FragransMagic : Don't be lonely when moon and fragrans bright, breeze and moon still.
 			FragransSpear : Don't be lonely when moon and fragrans bright, breeze and moon still.
 			FragransStaff : Don't be lonely when moon and fragrans bright, breeze and moon still.
-			BlackWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
-			BloodClub : "{$Mods.Everglow.Common.ClubGT}"
-			BloodLiquidClub : "{$Mods.Everglow.Common.ClubGT}"
+			EbonwoodClub : "{$Mods.Everglow.Common.ClubGT}"
+			CrimsonClub : "{$Mods.Everglow.Common.ClubGT}"
+			IchorClub : "{$Mods.Everglow.Common.ClubGT}"
 			CactusClub : "{$Mods.Everglow.Common.ClubGT}"
 			CobaltClub : "{$Mods.Everglow.Common.ClubGT}"
-			ColdWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
+			BorealWoodClub : "{$Mods.Everglow.Common.ClubGT}"
 			CopperClub : "{$Mods.Everglow.Common.ClubGT}"
 			CorruptClub : "{$Mods.Everglow.Common.ClubGT}"
 			CrystalClub : "{$Mods.Everglow.Common.ClubGT}"
 			CurseClub : "{$Mods.Everglow.Common.ClubGT}"
-			DarkWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
+			ShadewoodClub : "{$Mods.Everglow.Common.ClubGT}"
 			GoldClub : "{$Mods.Everglow.Common.ClubGT}"
 			IronClub : "{$Mods.Everglow.Common.ClubGT}"
 			LeadClub : "{$Mods.Everglow.Common.ClubGT}"
-			LeafClub : "{$Mods.Everglow.Common.ClubGT}"
+			ChlorophyteClub : "{$Mods.Everglow.Common.ClubGT}"
 			MeteorClub : "{$Mods.Everglow.Common.ClubGT}"
 			MithrilClub : "{$Mods.Everglow.Common.ClubGT}"
-			MountainCuClub : "{$Mods.Everglow.Common.ClubGT}"
+			OrichalcumClub : "{$Mods.Everglow.Common.ClubGT}"
 			PalladiumClub : "{$Mods.Everglow.Common.ClubGT}"
-			PalmWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
-			PearlWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
+			PalmWoodClub : "{$Mods.Everglow.Common.ClubGT}"
+			PearlwoodClub : "{$Mods.Everglow.Common.ClubGT}"
 			PlatinumClub : "{$Mods.Everglow.Common.ClubGT}"
-			RedWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
+			RichMahoganyClub : "{$Mods.Everglow.Common.ClubGT}"
 			RefinedClub : "{$Mods.Everglow.Common.ClubGT}"
 			SilverClub : "{$Mods.Everglow.Common.ClubGT}"
 			SpikeClub : "{$Mods.Everglow.Common.ClubGT}"

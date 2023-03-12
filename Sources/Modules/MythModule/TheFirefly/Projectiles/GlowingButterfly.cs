@@ -357,7 +357,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
              Main.spriteBatch.End();
              Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
              List<VertexBase.CustomVertexInfo> bars = new List<VertexBase.CustomVertexInfo>();
-             ef = (Effect)ModContent.Request<Effect>("MythMod/Effects/Trail").Value;
+             ef = (Effect)ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/Trail").Value;
              for (int i = 1; i < Projectile.oldPos.Length; ++i)
              {
                  if (Projectile.oldPos[i] == Vector2.Zero) break;

@@ -27,7 +27,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
             player.maxMinions += 1;
             player.maxTurrets += 1;
             player.GetDamage(DamageClass.Summon) *= 1.06f;
-            if (fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
+            if (fireflyBiome.IsBiomeActive(Main.LocalPlayer))
             {
                 player.manaSickReduction += 4;
                 player.manaCost -= 0.05f;
@@ -35,7 +35,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
         }
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
-            if (fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
+            if (fireflyBiome.IsBiomeActive(Main.LocalPlayer))
             {
                 tooltips.AddRange(new TooltipLine[]
                 {
@@ -114,7 +114,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
         }
         public override void ModifyWeaponDamage(Item item, ref StatModifier damage)
         {
-            if (fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
+            if (fireflyBiome.IsBiomeActive(Main.LocalPlayer))
             {
                 for (int f = 0; f < Player.armor.Length; f++)
                 {

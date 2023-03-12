@@ -34,7 +34,7 @@ internal class CursedFlamePipeline : Pipeline
     {
         var effect = this.effect.Value;
         var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-        var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
+        var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
         effect.Parameters["uTransform"].SetValue(model * projection);
         Texture2D FlameColor = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/Cursed_Color");
         VFXManager.spriteBatch.BindTexture<Vertex2D>(FlameColor);

@@ -10,12 +10,11 @@
             Projectile.hostile = true;
             Projectile.penetrate = 1;
             Projectile.timeLeft = 720;
-            //Projectile.extraUpdates = 10;
             Projectile.tileCollide = true;
             Projectile.DamageType = DamageClass.Ranged;
         }
 
-        private float K = 10;
+
 
         public override void Kill(int timeLeft)
         {

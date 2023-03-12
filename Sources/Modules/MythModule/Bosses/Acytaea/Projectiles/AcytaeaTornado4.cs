@@ -23,7 +23,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
         {
         }
 
-        private float ka = 0;
         private int AIMNpc = -1;
 
         public override void AI()

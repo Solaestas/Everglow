@@ -24,7 +24,7 @@
             Item.value = 0;
             Item.rare = ItemRarityID.White;
             Item.autoReuse = true;
-            Item.shoot = ModContent.ProjectileType<MiscProjectiles.CloudBall>();
+            Item.shoot = ModContent.ProjectileType<MiscItems.Projectiles.CloudBall>();
             Item.shootSpeed = 4;
             Item.crit = 2;
             Item.ammo = Item.type;

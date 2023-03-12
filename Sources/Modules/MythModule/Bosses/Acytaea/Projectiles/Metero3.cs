@@ -23,12 +23,9 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
         }
 
         private float ka = 0;
-        private int AIMNpc = -1;
-        private Vector2 AIMpos;
 
         public override void AI()
         {
-            Player player = Main.player[Player.FindClosest(Projectile.position, Projectile.width, Projectile.height)];
             ka = 1;
             if (Projectile.timeLeft < 60f)
             {

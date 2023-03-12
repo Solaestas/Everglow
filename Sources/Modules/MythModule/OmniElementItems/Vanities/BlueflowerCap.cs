@@ -25,7 +25,7 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Vanities
 
         public override void Load()
         {
-            On.Terraria.Main.DrawPlayers_AfterProjectiles += DrawHat;
+            //On.Terraria.Main.DrawPlayers_AfterProjectiles += DrawHat;
             On.Terraria.Main.DrawPlayers_BehindNPCs += DrawDress;
         }
 
