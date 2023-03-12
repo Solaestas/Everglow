@@ -57,7 +57,7 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
         public bool CantaloupeJellyBuff;
         public bool GreenStormBuff;
 
-        public static float CritDamage;
+        public static float CriticalDamage;
         public static float AddCritDamage;
 
         public override void UpdateDead()
@@ -103,7 +103,7 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
             CantaloupeJellyBuff = false;
             GreenStormBuff = false;
 
-            CritDamage = 1f;
+            CriticalDamage = 1f;
             AddCritDamage = 0;
         }
         public override void ResetEffects()
@@ -149,7 +149,7 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
             CantaloupeJellyBuff = false;
             GreenStormBuff = false;
 
-            CritDamage = 1f;
+            CriticalDamage = 1f;
             AddCritDamage = 0;
 
         }
@@ -177,7 +177,7 @@ namespace Everglow.Sources.Modules.FoodModule.Buffs
         }
         public override void PostUpdate()
         {
-            CritDamage += AddCritDamage;
+            CriticalDamage += AddCritDamage;
             base.PostUpdate();
         }
         public override bool CanConsumeAmmo(Item weapon, Item ammo)
