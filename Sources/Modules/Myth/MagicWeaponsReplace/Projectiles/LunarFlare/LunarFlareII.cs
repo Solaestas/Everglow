@@ -53,7 +53,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
             if (Main.rand.NextBool(3))
             {
                 Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * Projectile.scale * MulScale * 0.2f;
-                int dust0 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, DustID.UltraBrightTorch, v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(0.1f, 1f) * Projectile.scale * MulScale);
+                int dust0 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, DustID.UltraBrightTorch, v0.X, v0.Y, 100, default, Main.rand.NextFloat(0.1f, 1f) * Projectile.scale * MulScale);
                 Main.dust[dust0].noGravity = true;
                 Main.dust[dust0].alpha = 175;
             }

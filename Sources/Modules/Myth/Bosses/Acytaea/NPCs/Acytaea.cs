@@ -109,7 +109,14 @@ public class Acytaea : VisualNPC
     {
         return canDespawn;
     }
-
+    public override void OnKill()
+    {
+        NPC.SetEventFlagCleared(ref DownedBossSystem.downedAcytaea, -1);
+        if (Main.netMode == NetmodeID.Server)
+        {
+            NetMessage.SendData(MessageID.WorldData);
+        }
+    }
     public void UseBlade(int timerBegin, int add, int mul)
     {
         ref float Timer = ref NPC.localAI[0];
@@ -654,7 +661,7 @@ public class Acytaea : VisualNPC
             if (Timer % 2 == 1)
             {
                 //TODO 震屏
-                //MythPlayer mplayer = Main.player[Main.myPlayer].GetModPlayer<MythPlayer>();
+                //MythContentPlayer mplayer = Main.player[Main.myPlayer].GetModPlayer<MythContentPlayer>();
                 //mplayer.ShakeStrength = 7;
                 //mplayer.Shake = 1;
                 ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
@@ -2318,7 +2325,7 @@ public class Acytaea : VisualNPC
         {
             NPC.friendly = false;
             NPC.aiStyle = -1;
-
+            
             NPC.lifeMax = 165000;
             NPC.life = 165000;
             if (Main.expertMode)

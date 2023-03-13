@@ -38,7 +38,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
             //ModTranslation name = CreateMapEntryName();
             //name.SetDefault("Chandelier");
             AddMapEntry(new Color(0, 14, 175));
-            //TODO:è¿™ä¸ªTileä½œä¸ºä¸€ç§æ¤ç‰©å¯èƒ½æ¯”ç¯å…·æ›´åŠ åˆç†ä¸€ç‚¹
+            //TODO:Õâ¸öTile×÷ÎªÒ»ÖÖÖ²Îï¿ÉÄÜ±ÈµÆ¾ß¸ü¼ÓºÏÀíÒ»µã
         }
 
         public override void HitWire(int i, int j)

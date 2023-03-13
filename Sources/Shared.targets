@@ -1,32 +1,65 @@
 ﻿<Project>
-	<UsingTask TaskName="BuildEffect" AssemblyFile="$(TaskPath)" />
-	<UsingTask TaskName="BuildImage" AssemblyFile="$(TaskPath)" />
-	<Target Name="BuildEffect" BeforeTargets="Build" 
-			Inputs="@(EffectFile)" 
-			Outputs="@(EffectFile->'$(EverglowOutputDirectory)Assets\$(AssetsPrefix)\%(RelativeDir)%(Filename).xnb')">
-		<BuildEffect BuilderDirectory="$(ContentBuilderDirectory)" 
-					 InputFiles="@(EffectFile)" 
-					 TargetPlatform="Windows" 
-					 TargetProfile="HiDef" 
-					 BuildConfiguration="Release" 
-					 IntermediateDirectory="$(IntermediateOutputPath)Assets\"
-					 OutputDirectory="$(EverglowOutputDirectory)Assets\$(AssetsPrefix)\" />
+	<UsingTask TaskName="BuildEffect"
+						 AssemblyFile="$(TaskPath)" />
+	<UsingTask TaskName="BuildImage"
+						 AssemblyFile="$(TaskPath)" />
+	<Target Name="BuildEffect"
+					BeforeTargets="Build"
+					Inputs="@(EffectFile)"
+					Outputs="@(EffectFile->'$(EverglowOutputDirectory)Assets\$(AssetsPrefix)\%(RelativeDir)%(Filename).xnb')">
+		<BuildEffect BuilderDirectory="$(ContentBuilderDirectory)"
+								 InputFiles="@(EffectFile)"
+								 TargetPlatform="Windows"
+								 TargetProfile="HiDef"
+								 BuildConfiguration="Release"
+								 IntermediateDirectory="$(IntermediateOutputPath)Assets\"
+								 OutputDirectory="$(EverglowOutputDirectory)Assets\$(AssetsPrefix)\" />
 	</Target>
-	<Target Name="BuildImage" BeforeTargets="Build"
-			Inputs="@(ImageFile)"
-			Outputs="@(ImageFile->'$(EverglowOutputDirectory)Assets\$(AssetsPrefix)\%(RelativeDir)%(Filename).rawimg')">
-		<BuildImage InputFiles="@(ImageFile)" OutputDirectory="$(EverglowOutputDirectory)Assets\$(AssetsPrefix)\" />
+	<Target Name="BuildImage"
+					BeforeTargets="Build"
+					Inputs="@(ImageFile)"
+					Outputs="@(ImageFile->'$(EverglowOutputDirectory)Assets\$(AssetsPrefix)\%(RelativeDir)%(Filename).rawimg')">
+		<BuildImage InputFiles="@(ImageFile)"
+								OutputDirectory="$(EverglowOutputDirectory)Assets\$(AssetsPrefix)\" />
 	</Target>
-	<Target Name="AssetList" BeforeTargets="Build">
-		<WriteLinesToFile File="$(EverglowDirectory)obj\$(AssetsPrefix).asset.list" Lines="@(EffectFile);@(ImageFile)" Overwrite="true"/>
+	<Target Name="AssetList"
+					BeforeTargets="Build">
+		<WriteLinesToFile File="$(EverglowDirectory)obj\$(AssetsPrefix).asset.list"
+											Lines="@(EffectFile);@(ImageFile)"
+											Overwrite="true" />
 	</Target>
-	<Target Name="ResourceList" BeforeTargets="Build">
-		<WriteLinesToFile File="$(EverglowDirectory)obj\$(AssetsPrefix).resource.list" Lines="@(ResourceFile)" Overwrite="true" />
+	<Target Name="ResourceList"
+					BeforeTargets="Build">
+		<WriteLinesToFile File="$(EverglowDirectory)obj\$(AssetsPrefix).resource.list"
+											Lines="@(ResourceFile)"
+											Overwrite="true" />
 	</Target>
-	<Target Name="CleanAsset" BeforeTargets="Clean">
-		<Delete Files="@(ImageFile->'$(EverglowOutputDirectory)Assets\$(AssetsPrefix)\%(RelativeDir)%(Filename).rawimg')"/>
-		<Delete Files="@(EffectFile->'$(EverglowOutputDirectory)Assets\$(AssetsPrefix)\%(RelativeDir)%(Filename).xnb')"/>
+	<Target Name="CleanAsset"
+					BeforeTargets="Clean">
+		<Delete Files="@(ImageFile->'$(EverglowOutputDirectory)Assets\$(AssetsPrefix)\%(RelativeDir)%(Filename).rawimg')" />
+		<Delete Files="@(EffectFile->'$(EverglowOutputDirectory)Assets\$(AssetsPrefix)\%(RelativeDir)%(Filename).xnb')" />
 		<Delete Files="$(IntermediateOutputPath)$(AssetsPrefix).asset.list" />
 		<Delete Files="$(IntermediateOutputPath)$(AssetsPrefix).resource.list" />
 	</Target>
+
+	<UsingTask TaskName="GeneratePath"
+						 AssemblyFile="$(TaskPath)" />
+	<Target Name="GeneratePath"
+					Condition="$(GeneratePath) != ''"
+					BeforeTargets="BeforeCompile">
+		<PropertyGroup>
+			<PathNamespace Condition="$(PathNamespace) == ''">$(RootNamespace)</PathNamespace>
+		</PropertyGroup>
+		<GeneratePath AssetFiles="@(EffectFile);@(ImageFile);@(ResourceFile)"
+									Namespace="$(PathNamespace)"
+									AssetPrefix="$(ModuleName)"
+									OutputDirectory="$(BaseIntermediateOutputPath)" />
+	</Target>
+	<ItemGroup Condition="$(GeneratePath) != ''">
+		<!--VS会显示Visible为false的文件的所在文件夹，加一个Link修改显示位置-->
+		<Compile Include="$(BaseIntermediateOutputPath)ModAsset.g.cs"
+						 Visible="false"
+						 AutoGen="true"
+						 Link="%(Filename)%(Extension)" />
+	</ItemGroup>
 </Project>

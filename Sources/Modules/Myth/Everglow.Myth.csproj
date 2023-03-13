@@ -1,22 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<Import Project="..\Module.props" />
+	<PropertyGroup>
+		<GeneratePath>true</GeneratePath>	
+	</PropertyGroup>
 
-	<UsingTask TaskName="GeneratePath"
-						 AssemblyFile="$(TaskPath)" />
-	<Target Name="GeneratePath"
-					BeforeTargets="BeforeCompile">
-		<PropertyGroup>
-			<PathNamespace Condition="$(PathNamespace) == ''">$(RootNamespace)</PathNamespace>
-		</PropertyGroup>
-		<GeneratePath AssetFiles="@(EffectFile);@(ImageFile);@(ResourceFile)"
-									Namespace="$(PathNamespace)"
-									OutputDirectory="$(BaseIntermediateOutputPath)" />
-	</Target>
-	<ItemGroup>
-		<!--VS会显示Visible为false的文件的所在文件夹，加一个Link修改显示位置-->
-		<Compile Include="$(BaseIntermediateOutputPath)ModPath.g.cs"
-						 Visible="false"
-						 AutoGen="true"
-						 Link="%(Filename)%(Extension)" />
-	</ItemGroup>
 </Project>

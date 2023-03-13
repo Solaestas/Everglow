@@ -23,7 +23,6 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
         }
 
         private float ka = 0;
-        private int AIMNpc = -1;
         private Vector2 AIMpos;
 
         public override void AI()
@@ -37,14 +36,14 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
             Lighting.AddLight(Projectile.Center, (255 - Projectile.alpha) * 1.2f / 50f * ka, 0, 0);
             if (Projectile.timeLeft > 300)
             {
-                AIMpos = new Vector2(0, -700).RotatedBy(Projectile.timeLeft / 18d + Projectile.ai[0] * Math.PI / 2d);
+                AIMpos = new Vector2(0, -700).RotatedBy((Projectile.timeLeft / 18d) + (Projectile.ai[0] * Math.PI / 2d));
                 if (Projectile.timeLeft < 320)
                 {
-                    AIMpos = new Vector2(0, -700).RotatedBy((Projectile.timeLeft / 18d + Projectile.ai[0] * Math.PI / 2d) * (Projectile.timeLeft - 300) / 20d);
+                    AIMpos = new Vector2(0, -700).RotatedBy(((Projectile.timeLeft / 18d) + (Projectile.ai[0] * Math.PI / 2d)) * (Projectile.timeLeft - 300) / 20d);
                 }
                 Vector2 v0 = AIMpos + player.Center;
                 Vector2 v1 = Vector2.Normalize(v0 - Projectile.Center);
-                v1 = (v0 - Projectile.Center + v1 * 60f) / 480f;
+                v1 = (v0 - Projectile.Center + (v1 * 60f)) / 480f;
                 Projectile.velocity += v1;
             }
             else
@@ -94,14 +93,14 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
                 var factor = i / (float)TrueL;
                 var w = MathHelper.Lerp(1f, 0.05f, factor);
 
-                bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(10, 10) - Main.screenPosition, new Color(255, 0, 0, 0), new Vector3(factor, 1, w)));
-                bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(10, 10) - Main.screenPosition, new Color(255, 0, 0, 0), new Vector3(factor, 0, w)));
+                bars.Add(new Vertex2D(Projectile.oldPos[i] + (normalDir * width) + new Vector2(10, 10) - Main.screenPosition, new Color(255, 0, 0, 0), new Vector3(factor, 1, w)));
+                bars.Add(new Vertex2D(Projectile.oldPos[i] + (normalDir * -width) + new Vector2(10, 10) - Main.screenPosition, new Color(255, 0, 0, 0), new Vector3(factor, 0, w)));
             }
             List<Vertex2D> Vx = new List<Vertex2D>();
             if (bars.Count > 2)
             {
                 Vx.Add(bars[0]);
-                var vertex = new Vertex2D((bars[0].position + bars[1].position) * 0.5f + Vector2.Normalize(Projectile.velocity) * 30, new Color(255, 0, 0, 0), new Vector3(0, 0.5f, 1));
+                var vertex = new Vertex2D(((bars[0].position + bars[1].position) * 0.5f) + (Vector2.Normalize(Projectile.velocity) * 30), new Color(255, 0, 0, 0), new Vector3(0, 0.5f, 1));
                 Vx.Add(bars[1]);
                 Vx.Add(vertex);
                 for (int i = 0; i < bars.Count - 2; i += 2)

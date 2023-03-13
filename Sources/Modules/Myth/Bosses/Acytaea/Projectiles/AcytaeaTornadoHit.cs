@@ -21,7 +21,6 @@
         {
         }
 
-        private float ka = 0;
         private int AIMNpc = -1;
 
         public override void AI()

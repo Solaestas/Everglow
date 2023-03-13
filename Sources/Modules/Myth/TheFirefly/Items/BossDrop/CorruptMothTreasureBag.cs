@@ -1,4 +1,4 @@
-﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons;
+using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons;
 using Terraria.GameContent;
 using Terraria.GameContent.Creative;
 

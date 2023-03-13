@@ -51,15 +51,15 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
             }
             Player player = Main.player[Projectile.owner];
             player.heldProj = Projectile.whoAmI;
-            if (Power == 24 && Main.mouseLeft)
+            if (Power == 24 && player.controlUseItem)
             {
-                SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/MiscItems/Weapons/Slingshots/Sounds/NewSlingshot" + Main.rand.Next(8).ToString()), Projectile.Center);
+                SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/MiscItems/Weapons/Slingshots/Sounds/NewSlingshot" + Main.rand.Next(8).ToString()).WithVolumeScale(0.4f), Projectile.Center);
             }
             Vector2 MouseToPlayer = Main.MouseWorld - player.MountedCenter;
-            if (Main.mouseLeft && Release)
+            if (player.controlUseItem && Release)
             {
                 Projectile.rotation = (float)(Math.Atan2(MouseToPlayer.Y, MouseToPlayer.X) + Math.PI * 0.25);
-                Projectile.Center = Main.player[Projectile.owner].MountedCenter + Vector2.Normalize(MouseToPlayer) * 15f + new Vector2(0, -4);
+                Projectile.Center = player.MountedCenter + Vector2.Normalize(MouseToPlayer) * 15f + new Vector2(0, -4);
                 Projectile.timeLeft = 5 + Power;
             }
             float DrawRot;
@@ -71,7 +71,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
             else
             {
                 player.direction = 1;
-                DrawRot = Projectile.rotation - MathF.PI * 0.25f;
+                DrawRot = Projectile.rotation - MathF.PI / 4f;
             }
             Vector2 MinusShootDir = new Vector2(SlingshotLength, -SlingshotLength).RotatedBy(DrawRot) + Projectile.Center - Main.MouseWorld;
             Vector2 SlingshotStringHead = new Vector2(SlingshotLength, -SlingshotLength).RotatedBy(DrawRot) + Vector2.Normalize(MinusShootDir) * Power / 3f;
@@ -80,9 +80,9 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
                 MinusShootDir = new Vector2(SlingshotLength, -SlingshotLength).RotatedBy(DrawRot + Math.PI / 2d) + Projectile.Center - Main.MouseWorld;
                 SlingshotStringHead = new Vector2(SlingshotLength, -SlingshotLength).RotatedBy(DrawRot + Math.PI / 2d) + Vector2.Normalize(MinusShootDir) * Power / 3f;
             }
-            if (!Main.mouseLeft && Release)
+            if (!player.controlUseItem && Release)
             {
-                Projectile.Center = Main.player[Projectile.owner].MountedCenter + Vector2.Normalize(MouseToPlayer) * 15f + new Vector2(0, -4);
+                Projectile.Center = player.MountedCenter + Vector2.Normalize(MouseToPlayer) * 15f + new Vector2(0, -4);
                 SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/MiscItems/Weapons/Slingshots/Sounds/SlingshotShoot"), Projectile.Center);
                 if (Power == MaxPower) {
                     SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/MiscItems/Weapons/Slingshots/Sounds/SlingshotShoot2"), Projectile.Center);
@@ -92,9 +92,9 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
                 Projectile.timeLeft = 5;
                 Release = false;
             }
-            if (!Main.mouseLeft && !Release)
+            if (!player.controlUseItem && !Release)
             {
-                Projectile.Center = Main.player[Projectile.owner].MountedCenter + Vector2.Normalize(MouseToPlayer) * 15f + new Vector2(0, -4);
+                Projectile.Center = player.MountedCenter + Vector2.Normalize(MouseToPlayer) * 15f + new Vector2(0, -4);
             }
         }
        
@@ -126,7 +126,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
             {
                 player.direction = -1;
                 spriteEffect = SpriteEffects.FlipVertically;
-                if (Main.mouseLeft)
+                if (player.controlUseItem)
                 {
                     player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(MouseToPlayer.Y, MouseToPlayer.X) - MathF.PI * 0.75f));
                     player.SetCompositeArmBack(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(SlingshotStringTailToPlayer.Y, SlingshotStringTailToPlayer.X) - MathF.PI * 1.5f));
@@ -135,7 +135,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
             else
             {
                 player.direction = 1;
-                if (Main.mouseLeft)
+                if (player.controlUseItem)
                 {
                     player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(MouseToPlayer.Y, MouseToPlayer.X) - MathF.PI * 0.25f));
                     player.SetCompositeArmBack(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(SlingshotStringTailToPlayer.Y, SlingshotStringTailToPlayer.X) + MathF.PI * 0.5f));
