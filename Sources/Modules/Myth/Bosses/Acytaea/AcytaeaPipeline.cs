@@ -46,8 +46,8 @@ internal class AcytaeaPipeline : PostPipeline
 
 	public override void Load()
 	{
-		texture = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Cosmic");
-		effect = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/BigTentacle");
+		texture = ModContent.Request<Texture2D>("Everglow/Myth/Bosses/Acytaea/Cosmic");
+		effect = ModContent.Request<Effect>("Everglow/Myth/Bosses/Acytaea/BigTentacle");
 
 	}
 }

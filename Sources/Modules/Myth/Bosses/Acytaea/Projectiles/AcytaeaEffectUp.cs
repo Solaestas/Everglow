@@ -105,7 +105,7 @@ internal class AcytaeaEffectUp : ModProjectile
 					Vx.Add(bars[i + 3]);
 				}
 			}
-			Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/ForgeWave2").Value;
+			Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/ForgeWave2").Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t;//GoldenBloodScaleMirror
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 		}

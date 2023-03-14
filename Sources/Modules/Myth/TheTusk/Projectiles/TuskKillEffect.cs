@@ -72,7 +72,7 @@ public class TuskKillEffect : ModNPC
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
 		var bars = new List<VertexBase.CustomVertexInfo>();
-		ef = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/Trail").Value;
+		ef = ModContent.Request<Effect>("Everglow/Myth/Effects/Trail").Value;
 		Vector2 v = Cent - NPC.Center;
 		int width = (int)(4 * kx);
 		for (int i = 1; i < NPC.oldPos.Length - 1; ++i)
@@ -114,9 +114,9 @@ public class TuskKillEffect : ModNPC
 			var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
 			ef.Parameters["uTransform"].SetValue(model * projection);
 			ef.Parameters["uTime"].SetValue(0);
-			Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/heatmapBloodTusk").Value;
-			Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Projectiles/Metero").Value;
-			Main.graphics.GraphicsDevice.Textures[2] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Projectiles/Metero").Value;
+			Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/heatmapBloodTusk").Value;
+			Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Myth/Bosses/Acytaea/Projectiles/Metero").Value;
+			Main.graphics.GraphicsDevice.Textures[2] = ModContent.Request<Texture2D>("Everglow/Myth/Bosses/Acytaea/Projectiles/Metero").Value;
 			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 			Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
 			Main.graphics.GraphicsDevice.SamplerStates[2] = SamplerState.PointWrap;

@@ -162,7 +162,7 @@ public class CrimsonTuskFireWork : ModNPC
 					Tusk.Add(new VertexBase.CustomVertexInfo(NPC.Center + new Vector2(lengTusk[g] * size * 2.5f, 0).RotatedBy(rotTusk[g]) - Main.screenPosition, colori, new Vector3(0.5f, 0, 0)));
 					Tusk.Add(new VertexBase.CustomVertexInfo(NPC.Center + new Vector2(0, -9 * size).RotatedBy(rotTusk[g]) - Main.screenPosition, colori, new Vector3(0, 1, 0)));
 					Tusk.Add(new VertexBase.CustomVertexInfo(NPC.Center + new Vector2(0, 9 * size).RotatedBy(rotTusk[g]) - Main.screenPosition, colori, new Vector3(1, 1, 0)));
-					Texture2D t1 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/CrimsonTuskflip").Value;
+					Texture2D t1 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/CrimsonTuskflip").Value;
 					Main.graphics.GraphicsDevice.Textures[0] = t1;//GlodenBloodScaleMirror
 					Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Tusk.ToArray(), 0, Tusk.Count / 3);
 				}
@@ -270,11 +270,11 @@ public class CrimsonTuskFireWork : ModNPC
 							VxB.Add(barsB[iz + 3]);
 						}
 					}
-					Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/TuskShade").Value;
+					Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/TuskShade").Value;
 					Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
 					Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, VxB.ToArray(), 0, VxB.Count / 3);
 
-					t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Projectiles/AcytaeaLaser").Value;
+					t = ModContent.Request<Texture2D>("Everglow/Myth/Bosses/Acytaea/Projectiles/AcytaeaLaser").Value;
 					Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
 					Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 
@@ -305,7 +305,7 @@ public class CrimsonTuskFireWork : ModNPC
 				triangleList2.Add(bars2[i + 2]);
 				triangleList2.Add(bars2[i + 3]);
 			}
-			Texture2D t1 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/Tusk/BloodRope").Value;
+			Texture2D t1 = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/Tusk/BloodRope").Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t1;//GlodenBloodScaleMirror
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList2.ToArray(), 0, triangleList2.Count / 3);
 

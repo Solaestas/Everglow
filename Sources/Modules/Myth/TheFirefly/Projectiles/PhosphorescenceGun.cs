@@ -4,7 +4,7 @@ namespace Everglow.Myth.TheFirefly.Projectiles;
 
 internal class PhosphorescenceGun : ModProjectile
 {
-	public override string Texture => "Everglow/Sources/Modules/MythModule/TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGun";
+	public override string Texture => "Everglow/Myth/TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGun";
 
 	public override void SetDefaults()
 	{

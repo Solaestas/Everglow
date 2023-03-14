@@ -25,7 +25,7 @@ public class MothBackground : ModSystem
 	{
 		if (Main.netMode != NetmodeID.Server)
 		{
-			Everglow.HookSystem.AddMethod(DrawBackground, Commons.Core.CallOpportunity.PostDrawBG);
+			Everglow.HookSystem.AddMethod(DrawBackground, Commons.Core.CodeLayer.PostDrawBG);
 			Terraria.Graphics.Light.On_TileLightScanner.GetTileLight += TileLightScanner_GetTileLight;
 		}
 	}
@@ -126,7 +126,7 @@ public class MothBackground : ModSystem
 	/// <exception cref="Exception"></exception>
 	public void GetGlowPos(string Shapepath)
 	{
-		var imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Sources/Modules/MythModule/TheFirefly/Backgrounds/" + Shapepath);
+		var imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Myth/TheFirefly/Backgrounds/" + Shapepath);
 		imageData.ProcessPixelRows(accessor =>
 		{
 			for (int y = 0; y < accessor.Height; y++)
@@ -149,7 +149,7 @@ public class MothBackground : ModSystem
 	/// <exception cref="Exception"></exception>
 	public void GetGlowPosSec(string Shapepath)
 	{
-		var imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Sources/Modules/MythModule/TheFirefly/Backgrounds/" + Shapepath);
+		var imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Myth/TheFirefly/Backgrounds/" + Shapepath);
 		imageData.ProcessPixelRows(accessor =>
 		{
 			for (int y = 0; y < accessor.Height; y++)
@@ -457,7 +457,7 @@ public class MothBackground : ModSystem
 			ropeManager = new RopeManager(1, 1, new Color(11, 9, 25));
 			var mothLand = ModContent.GetInstance<MothLand>();
 
-			ropes = ropeManager.LoadRope("Everglow/Sources/Modules/MythModule/TheFirefly/Backgrounds/TreeRope",
+			ropes = ropeManager.LoadRope("Everglow/Myth/TheFirefly/Backgrounds/TreeRope",
 				null,
 				Vector2.Zero,
 				() => Vector2.Zero);

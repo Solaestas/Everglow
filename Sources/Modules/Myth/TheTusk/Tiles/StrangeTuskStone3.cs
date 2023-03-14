@@ -63,6 +63,6 @@ public class StrangeTuskStone3 : ModTile
 		int C = 255 - (int)(player.Center - new Vector2(i * 16, j * 16)).Length();
 		if (C < 0)
 			C = 0;
-		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Tiles/StrangeTuskStoneGlow").Value, new Vector2(i * 16 - 24 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(128, tile.TileFrameY, 64, 18), new Color(C, C, C, 0), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Tiles/StrangeTuskStoneGlow").Value, new Vector2(i * 16 - 24 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(128, tile.TileFrameY, 64, 18), new Color(C, C, C, 0), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 	}
 }

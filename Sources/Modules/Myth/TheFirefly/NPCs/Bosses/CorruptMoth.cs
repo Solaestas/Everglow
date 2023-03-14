@@ -75,7 +75,7 @@ public class CorruptMoth : ModNPC
 		Main.npcFrameCount[NPC.type] = 10;
 		var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
 		{
-			CustomTexturePath = "Everglow/Sources/Modules/MythModule/TheFirefly/NPCs/Bosses/CorruptMothBoss",
+			CustomTexturePath = "Everglow/Myth/TheFirefly/NPCs/Bosses/CorruptMothBoss",
 			Position = new Vector2(40f, 24f),
 			PortraitPositionXOverride = 0f,
 			PortraitPositionYOverride = 12f
@@ -240,10 +240,10 @@ public class CorruptMoth : ModNPC
 			startLoading = true;
 			Task.Factory.StartNew(() =>
 			{
-				BBowColors = ImageReader.ReadImageKeyPoints("Everglow/Sources/Modules/MythModule/TheFirefly/Projectiles/BBow", IdentifierValue);
-				BArrowColors = ImageReader.ReadImageKeyPoints("Everglow/Sources/Modules/MythModule/TheFirefly/Projectiles/BArrow", IdentifierValue);
-				BSwordColors = ImageReader.ReadImageKeyPoints("Everglow/Sources/Modules/MythModule/TheFirefly/Projectiles/BSword", IdentifierValue);
-				BFistColors = ImageReader.ReadImageKeyPoints("Everglow/Sources/Modules/MythModule/TheFirefly/Projectiles/BFist", IdentifierValue);
+				BBowColors = ImageReader.ReadImageKeyPoints("Everglow/Myth/TheFirefly/Projectiles/BBow", IdentifierValue);
+				BArrowColors = ImageReader.ReadImageKeyPoints("Everglow/Myth/TheFirefly/Projectiles/BArrow", IdentifierValue);
+				BSwordColors = ImageReader.ReadImageKeyPoints("Everglow/Myth/TheFirefly/Projectiles/BSword", IdentifierValue);
+				BFistColors = ImageReader.ReadImageKeyPoints("Everglow/Myth/TheFirefly/Projectiles/BFist", IdentifierValue);
 			});
 		}
 		bool phase2 = NPC.life < NPC.lifeMax * 0.6f;

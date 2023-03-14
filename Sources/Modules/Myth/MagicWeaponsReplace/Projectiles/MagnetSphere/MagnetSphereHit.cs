@@ -39,7 +39,7 @@ public class MagnetSphereHit : ModProjectile, IWarpProjectile
 				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.01f, 0.01f), Main.rand.NextFloat(1.6f, 2f) * mulVelocity },
 				position = Projectile.Center - vel * 3
 			};
-			VFXManager.Add(me);
+			Ins.VFXManager.Add(me);
 		}
 		for (int g = 0; g < Frequency; g++)
 		{
@@ -53,7 +53,7 @@ public class MagnetSphereHit : ModProjectile, IWarpProjectile
 				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.01f, 0.01f), Main.rand.NextFloat(1.6f, 2f) * mulVelocity },
 				position = Projectile.Center - vel * 3
 			};
-			VFXManager.Add(me);
+			Ins.VFXManager.Add(me);
 		}
 	}
 	public override void OnSpawn(IEntitySource source)

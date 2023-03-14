@@ -108,8 +108,8 @@ public class FloatLantern : ModNPC
 	public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
 		var texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
-		Texture2D tg = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/LanternMoon/NPCs/FloatLanternGlow").Value;
-		Texture2D tg2 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/LanternMoon/NPCs/FloatLanternGlow2").Value;
+		Texture2D tg = ModContent.Request<Texture2D>("Everglow/Myth/LanternMoon/NPCs/FloatLanternGlow").Value;
+		Texture2D tg2 = ModContent.Request<Texture2D>("Everglow/Myth/LanternMoon/NPCs/FloatLanternGlow2").Value;
 		SpriteEffects effects = SpriteEffects.None;
 		if (NPC.spriteDirection == 1)
 			effects = SpriteEffects.FlipHorizontally;

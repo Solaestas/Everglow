@@ -171,7 +171,7 @@ public class Hepuyuan : ModProjectile, IWarpProjectile
 		}
 
 
-		spriteBatch.Draw(MythContent.QuickTexture("UIimages/VisualTextures/BladeShadow"), VxII, PrimitiveType.TriangleList);
+		spriteBatch.Draw(MythContent.QuickTexture("UIImages/VisualTextures/BladeShadow"), VxII, PrimitiveType.TriangleList);
 	}
 	public override void PostDraw(Color lightColor)
 	{
@@ -239,7 +239,7 @@ public class Hepuyuan : ModProjectile, IWarpProjectile
 			}
 
 			RasterizerState originalState = Main.graphics.GraphicsDevice.RasterizerState;
-			Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("UIimages/VisualTextures/EShoot");
+			Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("UIImages/VisualTextures/EShoot");
 
 
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, VxII.ToArray(), 0, VxII.Count / 3);
@@ -308,9 +308,9 @@ public class Hepuyuan : ModProjectile, IWarpProjectile
 				}
 			}
 
-			Texture2D t0 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/heatmapShadeXiao").Value;
+			Texture2D t0 = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/heatmapShadeXiao").Value;
 			if (d == 0)
-				t0 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/heatmapShadeXiaoGreen").Value;
+				t0 = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/heatmapShadeXiaoGreen").Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t0;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, VxII.ToArray(), 0, VxII.Count / 3);
 		}

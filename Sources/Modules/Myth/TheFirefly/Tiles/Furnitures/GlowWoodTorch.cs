@@ -53,7 +53,7 @@ public class GlowWoodTorch : ModTile
 
 		// Assets
 		if (!Main.dedServ)
-			flameTexture = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheFirefly/Tiles/Furnitures/GlowWoodTorch_Flame");
+			flameTexture = ModContent.Request<Texture2D>("Everglow/Myth/TheFirefly/Tiles/Furnitures/GlowWoodTorch_Flame");
 	}
 
 	public override float GetTorchLuck(Player player)

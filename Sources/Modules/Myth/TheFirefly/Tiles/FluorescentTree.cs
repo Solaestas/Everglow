@@ -26,7 +26,7 @@ public class FluorescentTree : ModTile
 		ItemDrop = ModContent.ItemType<GlowWood>();
 		AdjTiles = new int[] { Type };
 
-		Everglow.HookSystem.AddMethod(DrawRopes, Commons.Core.CallOpportunity.PostDrawTiles);
+		Everglow.HookSystem.AddMethod(DrawRopes, Commons.Core.CodeLayer.PostDrawTiles);
 	}
 	private RopeManager ropeManager = new RopeManager();
 	private List<Rope>[] ropes = new List<Rope>[16];

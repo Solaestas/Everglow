@@ -5,7 +5,7 @@ namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.CursedFlames;
 
 internal abstract class ShaderDraw : Visual
 {
-	public override CallOpportunity DrawLayer => CallOpportunity.PostDrawDusts;
+	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 	public Vector2 position;
 	public Vector2 velocity;
 	public float[] ai;
@@ -22,7 +22,7 @@ internal class CursedFlamePipeline : Pipeline
 {
 	public override void Load()
 	{
-		effect = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/MagicWeaponsReplace/Projectiles/CursedFlames/CursedFlame", AssetRequestMode.ImmediateLoad);
+		effect = ModContent.Request<Effect>("Everglow/Myth/MagicWeaponsReplace/Projectiles/CursedFlames/CursedFlame", AssetRequestMode.ImmediateLoad);
 		effect.Value.Parameters["uNoise"].SetValue(ModContent.Request<Texture2D>("Everglow/Sources/Modules/ExampleModule/VFX/Perlin", AssetRequestMode.ImmediateLoad).Value);
 	}
 	public override void BeginRender()

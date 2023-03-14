@@ -117,7 +117,7 @@ internal class LunarFlareArray : ModProjectile
 			this.index = index;
 			//在非服务器上请求图片
 			if (Main.netMode != NetmodeID.Server)
-				Texture ??= ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MagicWeaponsReplace/Projectiles/LunarFlare/Star", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+				Texture ??= ModContent.Request<Texture2D>("Everglow/Myth/MagicWeaponsReplace/Projectiles/LunarFlare/Star", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		}
 		internal void SendExtraAI(BinaryWriter writer)
 		{
@@ -206,7 +206,7 @@ internal class StarrySkySystem : ModSystem
 	public override void OnModLoad()
 	{
 		if (Main.netMode != NetmodeID.Server)
-			Everglow.HookSystem.AddMethod(DrawStarrySky, Commons.Core.CallOpportunity.PostDrawBG);
+			Everglow.HookSystem.AddMethod(DrawStarrySky, Commons.Core.CodeLayer.PostDrawBG);
 	}
 
 	public void DrawStarrySky()

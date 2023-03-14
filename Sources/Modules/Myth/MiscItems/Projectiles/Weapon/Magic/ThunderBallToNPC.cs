@@ -111,7 +111,7 @@ public class ThunderBallToNPC : ModProjectile
 				RasterizerState originalState = Main.graphics.GraphicsDevice.RasterizerState;
 
 
-				Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("UIimages/VisualTextures/heatmapBlue2");
+				Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("UIImages/VisualTextures/heatmapBlue2");
 
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList.ToArray(), 0, triangleList.Count / 3);
 

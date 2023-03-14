@@ -16,8 +16,6 @@ namespace Everglow;
 [NoJIT]
 public class Everglow : Mod
 {
-	public static event Action OnPostSetupContent;
-
 	private PacketResolver m_packetResolver;
 
 	public override void Load()
@@ -46,15 +44,15 @@ public class Everglow : Mod
 
 	public override void PostSetupContent()
 	{
-		OnPostSetupContent?.Invoke();
+		ModIns.PostSetupContent();
 	}
 
 	public override void Unload()
 	{
+		ModIns.Unload();
 		m_packetResolver = null;
 		ModIns.Mod = null;
-
-		Ins.Clear();
+		Ins.Unload();
 	}
 
 	public override void HandlePacket(BinaryReader reader, int whoAmI)

@@ -103,7 +103,7 @@ internal class SkullHand : ModProjectile
 			if (Main.rand.NextBool(2))
 				dir = -1;
 
-			SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/MothHitCocoon"), Projectile.Center);
+			SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/MothHitCocoon"), Projectile.Center);
 		}
 		if (Projectile.timeLeft > 300)
 		{

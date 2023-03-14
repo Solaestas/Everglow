@@ -100,7 +100,7 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 		AudioTimer -= Omega;
 		if (AudioTimer <= 0)
 		{
-			//SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/MiscItems/Weapons/Clubs/Projectiles/Club_wood").WithPitchOffset(-1 + Omega * 3f), Projectile.Center);
+			//SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/MiscItems/Weapons/Clubs/Projectiles/Club_wood").WithPitchOffset(-1 + Omega * 3f), Projectile.Center);
 			SoundEngine.PlaySound(SoundID.DD2_MonkStaffSwing.WithPitchOffset(-1 + Omega * 3f).WithVolumeScale(1 - Omega), Projectile.Center);
 			AudioTimer = MathF.PI;
 		}

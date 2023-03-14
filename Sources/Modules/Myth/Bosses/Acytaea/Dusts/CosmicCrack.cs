@@ -1,19 +1,9 @@
-﻿using Everglow.Myth.Bosses.Acytaea;
-using ReLogic.Content;
-
 namespace Everglow.Myth.Bosses.Acytaea.Dusts;
 
 [Pipeline(typeof(NPPipeline), typeof(AcytaeaPipeline))]
 public class CosmicCrack : Particle
 {
-	public static Asset<Texture2D> texture;
 	public float rotation;
-
-	public override void Load()
-	{
-		base.Load();
-		texture = ModContent.Request<Texture2D>((GetType().Namespace + "." + Name).Replace('.', '/'));
-	}
 
 	public override void OnSpawn()
 	{
@@ -31,6 +21,7 @@ public class CosmicCrack : Particle
 
 	public override void Draw()
 	{
-		Ins.Batch.BindTexture(texture.Value).Draw(position, null, Color.White, rotation, texture.Value.Size() / 2, scale, SpriteEffects.None);
+		var texture = ModAsset.CosmicCrack.Value;
+		Ins.Batch.BindTexture(texture).Draw(position, null, Color.White, rotation, texture.Size() / 2, scale, SpriteEffects.None);
 	}
 }

@@ -20,6 +20,6 @@ internal class CursedPipeline : PostPipeline
 
 	public override void Load()
 	{
-		effect = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/MagicWeaponsReplace/Projectiles/CursedFlames/FlameColor");
+		effect = ModContent.Request<Effect>("Everglow/Myth/MagicWeaponsReplace/Projectiles/CursedFlames/FlameColor");
 	}
 }

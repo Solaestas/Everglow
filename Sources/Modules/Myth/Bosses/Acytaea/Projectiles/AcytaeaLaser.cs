@@ -138,7 +138,7 @@ internal class AcytaeaLaser : ModProjectile
 				Vx.Add(bars[i + 3]);
 			}
 		}
-		Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Projectiles/AcytaeaLaser").Value;
+		Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/Bosses/Acytaea/Projectiles/AcytaeaLaser").Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;//GoldenBloodScaleMirror
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 
@@ -166,7 +166,7 @@ internal class AcytaeaLaser : ModProjectile
 				Vx2.Add(new Vertex2D(vf, color3, new Vector3((0.5f + CirPro0) / 25f % 1f, 1, 0)));
 			}
 		}
-		Texture2D t1 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/LightCrack").Value;
+		Texture2D t1 = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/LightCrack").Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t1;//GoldenBloodScaleMirror
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx2.ToArray(), 0, Vx2.Count / 3);
 	}

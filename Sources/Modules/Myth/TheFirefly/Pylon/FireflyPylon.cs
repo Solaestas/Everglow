@@ -28,7 +28,7 @@ public class BaseModPylon<T> : ModPylon where T : TEModdedPylon
 	public override void Load()
 	{
 		crystalTexture = ModContent.Request<Texture2D>(Texture + "_Crystal");
-		crystalHighlightTexture = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheFirefly/Pylon/CommonPylon_CrystalHighlight");
+		crystalHighlightTexture = ModContent.Request<Texture2D>("Everglow/Myth/TheFirefly/Pylon/CommonPylon_CrystalHighlight");
 		mapIcon = ModContent.Request<Texture2D>(Texture + "_MapIcon");
 	}
 

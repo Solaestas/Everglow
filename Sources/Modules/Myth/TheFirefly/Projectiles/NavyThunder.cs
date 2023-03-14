@@ -7,7 +7,7 @@ namespace Everglow.Myth.TheFirefly.Projectiles;
 
 internal class NavyThunder : ModProjectile, IWarpProjectile
 {
-	public override string Texture => "Everglow/Sources/Modules/MythModule/TheFirefly/Projectiles/NavyThunderTex/FlameSkull";
+	public override string Texture => "Everglow/Myth/TheFirefly/Projectiles/NavyThunderTex/FlameSkull";
 
 	public override void SetDefaults()
 	{

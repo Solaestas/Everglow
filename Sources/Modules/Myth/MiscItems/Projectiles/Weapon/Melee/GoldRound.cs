@@ -87,7 +87,7 @@ public class GoldRound : ModProjectile
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Projectiles/Weapon/Melee/GoldRound").Value;
+		Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/MiscItems/Projectiles/Weapon/Melee/GoldRound").Value;
 		int frameHeight = t.Height;
 		var drawOrigin = new Vector2(t.Width * 0.5f, t.Height * 0.5f);
 		for (int k = 0; k < Projectile.oldPos.Length; k++)

@@ -41,7 +41,7 @@ internal class AcytaeaBow2 : ModProjectile
 	{
 		if (Projectile.timeLeft < 30f)
 		{
-			Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Projectiles/AcytaeaWarningArrow3").Value;
+			Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/Bosses/Acytaea/Projectiles/AcytaeaWarningArrow3").Value;
 			var drawOrigin = new Vector2(t.Width * 0.5f, t.Height * 0.5f);
 			float Fade;
 			if (Projectile.timeLeft < 25f)

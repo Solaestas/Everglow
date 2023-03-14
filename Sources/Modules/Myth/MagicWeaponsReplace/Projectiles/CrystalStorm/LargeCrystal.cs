@@ -128,7 +128,7 @@ public class LargeCrystal : ModProjectile//This proj summon storm at breaking
 				position = Projectile.Center
 			};
 
-			VFXManager.Add(cp);
+			Ins.VFXManager.Add(cp);
 
 			//Vector2 v = new Vector2(0, Main.rand.NextFloat(2f, 7f)).RotatedByRandom(6.28);
 			//int ds = Projectile.NewProjectile(null, Projectile.Center + v * 3f + Projectile.velocity, v, ModContent.ProjectileType<BrokenGem>(), Projectile.damage / 4, 1, Main.myPlayer, 0);

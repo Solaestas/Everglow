@@ -76,7 +76,7 @@ public class CrimsonTuskProjGra : ModProjectile
 			{
 				if (Collision.SolidCollision(Projectile.Center + new Vector2(0, f), 1, 1))
 				{
-					Texture2D texture2 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Projectiles/TuskShade").Value;
+					Texture2D texture2 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Projectiles/TuskShade").Value;
 					float Dk = 1 - f / 1000f;
 					Dk *= (255 - Projectile.alpha) / 255f;
 					var color = new Color(Dk, Dk, Dk, Dk);
@@ -87,7 +87,7 @@ public class CrimsonTuskProjGra : ModProjectile
 		}
 		Color colorz = Lighting.GetColor((int)(Projectile.Center.X / 16d), (int)(Projectile.Center.Y / 16d));
 		colorz = Projectile.GetAlpha(colorz) * ((255 - Projectile.alpha) / 255f);
-		Texture2D texture = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Projectiles/CrimsonTuskProj").Value;
+		Texture2D texture = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Projectiles/CrimsonTuskProj").Value;
 		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, colorz, Projectile.rotation, texture.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
 		if (!Down)
 			return;

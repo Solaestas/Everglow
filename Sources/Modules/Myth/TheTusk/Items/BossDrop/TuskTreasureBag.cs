@@ -54,7 +54,7 @@ public class TuskTreasureBag : ModItem
 	private int a = 0;
 	public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
 	{
-		Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Items/BossDrop/TuskTreasureBag").Value;
+		Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Items/BossDrop/TuskTreasureBag").Value;
 		for (int i = 0; i < 4; i++)
 		{
 			Vector2 v = new Vector2(0, 8 * ((float)Math.Sin((double)(Main.GlobalTimeWrappedHourly * 6.28318548f / 4f)) * 0.3f + 0.7f)).RotatedBy((double)(Main.GlobalTimeWrappedHourly * 6.28318548f / 4f) + MathHelper.Pi * i / 2d);

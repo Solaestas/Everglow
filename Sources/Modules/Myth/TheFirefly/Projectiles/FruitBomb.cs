@@ -38,7 +38,7 @@ public class FruitBomb : ModProjectile
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D tex = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheFirefly/Projectiles/FruitBomb").Value;
+		Texture2D tex = ModContent.Request<Texture2D>("Everglow/Myth/TheFirefly/Projectiles/FruitBomb").Value;
 
 		Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 0), 0, new Vector2(600), Projectile.scale, SpriteEffects.None, 0f);
 		if (!Main.gamePaused)

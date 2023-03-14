@@ -188,7 +188,7 @@ public class HepuyuanDown : ModProjectile, IWarpProjectile
 				}
 				ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
 				mplayer.FlyCamPosition = new Vector2(0, 84).RotatedByRandom(6.283);
-				SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/Xiao"), Projectile.Center);
+				SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/Xiao"), Projectile.Center);
 				Crash = true;
 			}
 		}
@@ -256,7 +256,7 @@ public class HepuyuanDown : ModProjectile, IWarpProjectile
 			}
 		}
 
-		spriteBatch.Draw(MythContent.QuickTexture("UIimages/VisualTextures/BladeShadow"), VxII, PrimitiveType.TriangleList);
+		spriteBatch.Draw(MythContent.QuickTexture("UIImages/VisualTextures/BladeShadow"), VxII, PrimitiveType.TriangleList);
 	}
 	public override void PostDraw(Color lightColor)
 	{
@@ -319,7 +319,7 @@ public class HepuyuanDown : ModProjectile, IWarpProjectile
 				}
 			}
 			RasterizerState originalState = Main.graphics.GraphicsDevice.RasterizerState;
-			Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("UIimages/VisualTextures/EShoot");
+			Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("UIImages/VisualTextures/EShoot");
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, VxII.ToArray(), 0, VxII.Count / 3);
 			Main.graphics.GraphicsDevice.RasterizerState = originalState;
 		}
@@ -371,9 +371,9 @@ public class HepuyuanDown : ModProjectile, IWarpProjectile
 				}
 			}
 
-			Texture2D t0 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/heatmapShadeXiao").Value;
+			Texture2D t0 = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/heatmapShadeXiao").Value;
 			if (d == 0)
-				t0 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/heatmapShadeXiaoGreen").Value;
+				t0 = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/heatmapShadeXiaoGreen").Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t0;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, VxII.ToArray(), 0, VxII.Count / 3);
 		}

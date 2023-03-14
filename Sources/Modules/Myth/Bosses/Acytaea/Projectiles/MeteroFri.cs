@@ -121,7 +121,7 @@ internal class MeteroFri : ModProjectile
 				Vx.Add(bars[i + 3]);
 			}
 		}
-		Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Projectiles/Metero").Value;
+		Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/Bosses/Acytaea/Projectiles/Metero").Value;
 		if (Vx.Count >= 3)
 		{
 			Main.graphics.GraphicsDevice.Textures[0] = t;//GoldenBloodScaleMirror

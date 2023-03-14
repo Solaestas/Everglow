@@ -192,7 +192,7 @@ public class AshBone : ModProjectile
 		var list = new List<Vector2>();
 		FillWhipControlPoints(proj, list);
 		Texture2D value = TextureAssets.Projectile[proj.type].Value;
-		//Texture2D value = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Projectiles/Weapon/Summon/AshBone2").Value;
+		//Texture2D value = ModContent.Request<Texture2D>("Everglow/Myth/MiscItems/Projectiles/Weapon/Summon/AshBone2").Value;
 		Rectangle rectangle = value.Frame(1, 1, 0, 0, 0, 0);
 		var origin = new Vector2(rectangle.Width / 2, 2f);
 		Color originalColor = Color.White;
@@ -258,14 +258,14 @@ public class AshBone : ModProjectile
 			}
 			value2 += vector2;
 		}
-		value = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Projectiles/Weapon/Summon/AshBone3").Value;
+		value = ModContent.Request<Texture2D>("Everglow/Myth/MiscItems/Projectiles/Weapon/Summon/AshBone3").Value;
 		originalColor = Color.OrangeRed;
 		rectangle = value.Frame(1, 1, 0, 0, 0, 0);
 		value2 = list[0];
 		for (int i = 0; i < list.Count - 1; i++)
 		{
 			if (i == list.Count - 2)
-				value = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Projectiles/Weapon/Summon/AshBone4").Value;
+				value = ModContent.Request<Texture2D>("Everglow/Myth/MiscItems/Projectiles/Weapon/Summon/AshBone4").Value;
 			Vector2 vector = list[i];
 			Vector2 vector2 = list[i + 1] - vector;
 			float rotation = vector2.ToRotation() - 1.5707964f;
@@ -278,7 +278,7 @@ public class AshBone : ModProjectile
 	}
 	/*public static Vector2 DrawWhip_WhipSword(Projectile proj, List<Vector2> controlPoints)
 	{
-		Texture2D value = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Projectiles/Weapon/Summon/AshBone2").Value;
+		Texture2D value = ModContent.Request<Texture2D>("Everglow/Myth/MiscItems/Projectiles/Weapon/Summon/AshBone2").Value;
 		Microsoft.Xna.Framework.Rectangle rectangle = value.Frame(1, 5, 0, 0, 0, 0);
 		int height = rectangle.Height;
 		rectangle.Height -= 2;

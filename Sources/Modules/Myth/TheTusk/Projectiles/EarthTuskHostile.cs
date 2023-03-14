@@ -7,7 +7,7 @@ namespace Everglow.Myth.TheTusk.Projectiles;
 
 public class EarthTuskHostile : ModProjectile
 {
-	public override string Texture => "Everglow/Sources/Modules/MythModule/TheTusk/Projectiles/Textures/Tuskplus0";
+	public override string Texture => "Everglow/Myth/TheTusk/Projectiles/Textures/Tuskplus0";
 	public override void SetDefaults()
 	{
 		Projectile.tileCollide = false;

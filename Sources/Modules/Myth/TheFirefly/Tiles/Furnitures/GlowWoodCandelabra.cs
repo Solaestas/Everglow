@@ -37,7 +37,7 @@ public class GlowWoodCandelabra : ModTile
 		name.SetDefault("GlowWood Candelabra");
 		AddMapEntry(new Color(0, 14, 175), name);
 		if (!Main.dedServ)
-			flameTexture = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheFirefly/Tiles/Furnitures/GlowWoodCandelabra_Flame");
+			flameTexture = ModContent.Request<Texture2D>("Everglow/Myth/TheFirefly/Tiles/Furnitures/GlowWoodCandelabra_Flame");
 	}
 
 	public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)

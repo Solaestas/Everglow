@@ -1,4 +1,4 @@
-﻿using ReLogic.Content;
+using ReLogic.Content;
 using Terraria.GameContent;
 
 namespace Everglow.Myth;
@@ -13,7 +13,7 @@ public class ItemGlowManager : IModule
 	public static void AutoLoadItemGlow(ModItem modItem)
 	{
 		glowMapping[modItem.Type] = (short)glowMapping.Count;
-		glowMasks.Add(ModContent.Request<Texture2D>($"Everglow/Sources/Modules/MythModule/Glows/{modItem.GetType().Name}_glow"));
+		glowMasks.Add(ModContent.Request<Texture2D>($"Everglow/Myth/Glows/{modItem.GetType().Name}_glow"));
 	}
 
 	public static short GetItemGlow(ModItem modItem)

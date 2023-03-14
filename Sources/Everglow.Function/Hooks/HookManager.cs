@@ -25,6 +25,7 @@ public class ILHookHandler : IHookHandler
 	}
 
 	public ILHook Hook { get; init; }
+
 	public string Name => Hook.Method.Name;
 }
 
@@ -45,8 +46,10 @@ public class OnHookHandler : IHookHandler
 	}
 
 	public Hook Hook { get; init; }
+
 	public string Name => Hook.Target.Name;
 }
+
 public record HookHandler(CodeLayer Layer, dynamic Hook, string Name) : IHookHandler
 {
 	public bool Enable { get; set; } = true;
@@ -54,7 +57,6 @@ public record HookHandler(CodeLayer Layer, dynamic Hook, string Name) : IHookHan
 
 public class HookManager : ModSystem, IHookManager
 {
-
 	private static readonly CodeLayer[] validLayers = new CodeLayer[]
 	{
 		CodeLayer.PostDrawFilter,
@@ -87,6 +89,7 @@ public class HookManager : ModSystem, IHookManager
 	{
 		Ins.Set<IHookManager>(this);
 	}
+
 	public bool DisableDrawBackground { get; set; } = false;
 
 	public bool DisableDrawNPCs { get; set; } = false;
@@ -220,6 +223,7 @@ public class HookManager : ModSystem, IHookManager
 				break;
 		}
 	}
+
 	public override void Unload()
 	{
 		IL_Main.DoDraw -= Main_DoDraw;
@@ -238,6 +242,7 @@ public class HookManager : ModSystem, IHookManager
 		Main.OnResolutionChanged -= Main_OnResolutionChanged;
 		Dispose();
 	}
+
 	public void Invoke(CodeLayer layer)
 	{
 		foreach (var handler in hooks[layer].Where(h => h.Enable))
@@ -254,6 +259,7 @@ public class HookManager : ModSystem, IHookManager
 			}
 		}
 	}
+
 	private void LegacyPlayerRenderer_DrawPlayers(On_LegacyPlayerRenderer.orig_DrawPlayers orig, LegacyPlayerRenderer self, Terraria.Graphics.Camera camera, IEnumerable<Player> players)
 	{
 		orig.Invoke(self, camera, players);
@@ -288,6 +294,7 @@ public class HookManager : ModSystem, IHookManager
 			return;
 		orig(self);
 	}
+
 	private void Main_DrawDust(On_Main.orig_DrawDust orig, Main self)
 	{
 		orig.Invoke(self);
@@ -310,7 +317,6 @@ public class HookManager : ModSystem, IHookManager
 				handler.Enable = false;
 			}
 		}
-
 	}
 
 	private void Main_DrawNPCs(On_Main.orig_DrawNPCs orig, Main self, bool behindTiles)

@@ -233,7 +233,7 @@ public class MothLand : ModSystem
 	/// <param name="type"></param>
 	public static void ShapeTile(string Shapepath, int a, int b, int type)
 	{
-		var imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Sources/Modules/MythModule/TheFirefly/WorldGeneration/" + Shapepath);
+		var imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Myth/TheFirefly/WorldGeneration/" + Shapepath);
 		imageData.ProcessPixelRows(accessor =>
 		{
 			for (int y = 0; y < accessor.Height; y++)

@@ -641,7 +641,7 @@ public class FlamingDashCore : ModNPC
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
 		var bars = new List<DashCoreVertexInfo>();
-		ef2 = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/TrailRainbow").Value;
+		ef2 = ModContent.Request<Effect>("Everglow/Myth/Effects/TrailRainbow").Value;
 		// 把所有的点都生成出来，按照顺序
 
 		for (int i = 1; i < NPC.oldPos.Length; ++i)
@@ -735,9 +735,9 @@ public class FlamingDashCore : ModNPC
 			// 把变换和所需信息丢给shader
 			ef2.Parameters["uTransform"].SetValue(model * projection);
 			ef2.Parameters["uTime"].SetValue(-(float)Main.time * 0.012f);
-			Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/heatmapRainbow").Value;
-			Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/FogTraceGamma2").Value;
-			Main.graphics.GraphicsDevice.Textures[2] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/FogTraceBeta3").Value;
+			Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/heatmapRainbow").Value;
+			Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/FogTraceGamma2").Value;
+			Main.graphics.GraphicsDevice.Textures[2] = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/FogTraceBeta3").Value;
 			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 			Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
 			Main.graphics.GraphicsDevice.SamplerStates[2] = SamplerState.PointWrap;
@@ -844,12 +844,12 @@ public class FlamingDashCore : ModNPC
 		x += 0.01f;
 		float K = (float)(Math.Sin(x + Math.Sin(x) * 6) * (0.95 + Math.Sin(x + 0.24 + Math.Sin(x))) + 3) / 30f;
 		float M = (float)(Math.Sin(x + Math.Tan(x) * 6) * (0.95 + Math.Cos(x + 0.24 + Math.Sin(x))) + 3) / 30f;
-		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/LightEffect").Value, NPC.Center - Main.screenPosition, null, new Color(NPC.color.R, NPC.color.G, NPC.color.B, 0) * 0.4f, 0, new Vector2(128f, 128f), K * 2.4f * Sca, SpriteEffects.None, 0f);
-		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/LightEffect").Value, NPC.Center - Main.screenPosition, null, new Color(NPC.color.R, NPC.color.G, NPC.color.B, 0) * 0.4f, (float)(Math.PI * 0.5), new Vector2(128f, 128f), K * 2.4f * Sca, SpriteEffects.None, 0f);
-		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/LightEffect").Value, NPC.Center - Main.screenPosition, null, new Color(NPC.color.R, NPC.color.G, NPC.color.B, 0) * 0.4f, (float)(Math.PI * 0.75), new Vector2(128f, 128f), M * 2.4f * Sca, SpriteEffects.None, 0f);
-		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/LightEffect").Value, NPC.Center - Main.screenPosition, null, new Color(NPC.color.R, NPC.color.G, NPC.color.B, 0) * 0.4f, (float)(Math.PI * 0.25), new Vector2(128f, 128f), M * 2.4f * Sca, SpriteEffects.None, 0f);
-		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/LightEffect").Value, NPC.Center - Main.screenPosition, null, new Color(NPC.color.R, NPC.color.G, NPC.color.B, 0) * 0.4f, x * 6f, new Vector2(128f, 128f), (M + K) * 2.4f * Sca, SpriteEffects.None, 0f);
-		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/LightEffect").Value, NPC.Center - Main.screenPosition, null, new Color(NPC.color.R, NPC.color.G, NPC.color.B, 0) * 0.4f, -x * 6f, new Vector2(128f, 128f), (float)Math.Sqrt(M * M + K * K) * 2.4f * Sca, SpriteEffects.None, 0f);
+		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/LightEffect").Value, NPC.Center - Main.screenPosition, null, new Color(NPC.color.R, NPC.color.G, NPC.color.B, 0) * 0.4f, 0, new Vector2(128f, 128f), K * 2.4f * Sca, SpriteEffects.None, 0f);
+		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/LightEffect").Value, NPC.Center - Main.screenPosition, null, new Color(NPC.color.R, NPC.color.G, NPC.color.B, 0) * 0.4f, (float)(Math.PI * 0.5), new Vector2(128f, 128f), K * 2.4f * Sca, SpriteEffects.None, 0f);
+		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/LightEffect").Value, NPC.Center - Main.screenPosition, null, new Color(NPC.color.R, NPC.color.G, NPC.color.B, 0) * 0.4f, (float)(Math.PI * 0.75), new Vector2(128f, 128f), M * 2.4f * Sca, SpriteEffects.None, 0f);
+		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/LightEffect").Value, NPC.Center - Main.screenPosition, null, new Color(NPC.color.R, NPC.color.G, NPC.color.B, 0) * 0.4f, (float)(Math.PI * 0.25), new Vector2(128f, 128f), M * 2.4f * Sca, SpriteEffects.None, 0f);
+		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/LightEffect").Value, NPC.Center - Main.screenPosition, null, new Color(NPC.color.R, NPC.color.G, NPC.color.B, 0) * 0.4f, x * 6f, new Vector2(128f, 128f), (M + K) * 2.4f * Sca, SpriteEffects.None, 0f);
+		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/LightEffect").Value, NPC.Center - Main.screenPosition, null, new Color(NPC.color.R, NPC.color.G, NPC.color.B, 0) * 0.4f, -x * 6f, new Vector2(128f, 128f), (float)Math.Sqrt(M * M + K * K) * 2.4f * Sca, SpriteEffects.None, 0f);
 		spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		var bars = new List<Vertex2D>();
@@ -922,8 +922,8 @@ public class FlamingDashCore : ModNPC
 				Vx.Add(bars[i + 3]);
 			}
 		}
-		Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/CoreFlame").Value;
-		t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Projectiles/Metero").Value;
+		Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/CoreFlame").Value;
+		t = ModContent.Request<Texture2D>("Everglow/Myth/Bosses/Acytaea/Projectiles/Metero").Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 	}

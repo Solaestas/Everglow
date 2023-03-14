@@ -10,7 +10,7 @@ namespace Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk_New;
            // DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "鲜血獠牙");
             var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
             {
-                CustomTexturePath = "Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/BloodTusk",
+                CustomTexturePath = "Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/BloodTusk",
                 Position = new Vector2(40f, 24f),
                 PortraitPositionXOverride = 0f,
                 PortraitPositionYOverride = 12f

@@ -91,7 +91,7 @@ public class TuskSpicePro : ModProjectile
 				Vx.Add(new VertexBase.CustomVertexInfo(Vbase + v0 * 2 - v0T, cr, new Vector3(0, 0, 0)));
 				Vx.Add(new VertexBase.CustomVertexInfo(Vbase - v0T, cr, new Vector3(0, origfade, 0)));
 
-				Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/Tuskplus" + (Main.projectile[p].whoAmI % 6).ToString()).Value;
+				Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/Tuskplus" + (Main.projectile[p].whoAmI % 6).ToString()).Value;
 
 				if (Main.projectile[p].timeLeft % 6 == 0 && Main.projectile[p].timeLeft < 75)
 				{

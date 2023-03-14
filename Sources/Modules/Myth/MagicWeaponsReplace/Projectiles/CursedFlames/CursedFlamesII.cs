@@ -50,7 +50,7 @@ public class CursedFlamesII : ModProjectile, IWarpProjectile
 				maxTime = Main.rand.Next(27, 72),
 				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.01f, 0.01f), Main.rand.NextFloat(3.6f, 10f) * mulVelocity }
 			};
-			VFXManager.Add(cf);
+			Ins.VFXManager.Add(cf);
 		}
 	}
 
@@ -67,7 +67,7 @@ public class CursedFlamesII : ModProjectile, IWarpProjectile
 				maxTime = Main.rand.Next(16, 36),
 				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.18f, 0.18f), Main.rand.NextFloat(4f, 12f) }
 			};
-			VFXManager.Add(cf);
+			Ins.VFXManager.Add(cf);
 		}
 		for (int g = 0; g < Frequency; g++)
 		{
@@ -80,7 +80,7 @@ public class CursedFlamesII : ModProjectile, IWarpProjectile
 				maxTime = Main.rand.Next(12, 30),
 				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.4f, 0.4f), Main.rand.NextFloat(4f, 32f) }
 			};
-			VFXManager.Add(cf);
+			Ins.VFXManager.Add(cf);
 		}
 
 	}

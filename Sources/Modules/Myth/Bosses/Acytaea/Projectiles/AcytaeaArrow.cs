@@ -58,7 +58,7 @@ internal class AcytaeaArrow : ModProjectile
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Projectiles/AcytaeaArrow").Value;
+		Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/Bosses/Acytaea/Projectiles/AcytaeaArrow").Value;
 		var drawOrigin = new Vector2(t.Width * 0.5f, t.Height * 0.5f);
 		for (int k = 0; k < Projectile.oldPos.Length; k++)
 		{

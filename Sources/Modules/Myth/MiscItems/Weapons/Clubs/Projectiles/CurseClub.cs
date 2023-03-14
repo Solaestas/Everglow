@@ -1,4 +1,5 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Commons.Utils;
+using Everglow.Myth.Common;
 using Everglow.Myth.MagicWeaponsReplace.Projectiles.CursedFlames;
 
 namespace Everglow.Myth.MiscItems.Weapons.Clubs.Projectiles;
@@ -64,7 +65,7 @@ public class CurseClub : ClubProj
 			maxTime = Main.rand.Next(27, 72),
 			ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.01f, 0.01f), Main.rand.NextFloat(3.6f, 10f) * mulVelocity }
 		};
-		VFXManager.Add(cf);
+		Ins.VFXManager.Add(cf);
 	}
 	private void GenerateDust()
 	{
@@ -96,7 +97,7 @@ public class CurseClub : ClubProj
 	}
 	public override void PostPreDraw()
 	{
-		List<Vector2> SmoothTrailX = CatmullRom.SmoothPath(trailVecs.ToList());//平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList());//平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
 		{

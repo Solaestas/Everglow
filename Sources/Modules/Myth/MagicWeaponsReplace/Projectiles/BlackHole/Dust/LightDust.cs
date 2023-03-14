@@ -23,7 +23,7 @@ internal class LightDust : Particle
 	}
 	public override void Draw()
 	{
-		Texture2D tex = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MagicWeaponsReplace/Projectiles/BlackHole/Dust/Ball").Value;
+		Texture2D tex = ModContent.Request<Texture2D>("Everglow/Myth/MagicWeaponsReplace/Projectiles/BlackHole/Dust/Ball").Value;
 		for (int i = 0; i < 8; i++)
 		{
 			Color c = drawColor;

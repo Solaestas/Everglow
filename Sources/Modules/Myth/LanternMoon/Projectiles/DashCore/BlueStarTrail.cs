@@ -90,7 +90,7 @@ public class BlueStarTrail : ModProjectile
 				Vx.Add(bars[i + 3]);
 			}
 		}
-		Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/LanternMoon/Projectiles/DashCore/StarTrail").Value;
+		Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/LanternMoon/Projectiles/DashCore/StarTrail").Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 	}

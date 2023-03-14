@@ -47,7 +47,7 @@ internal class AcytaeaEffect : VisualProjectile
 			Vector2 v1 = new Vector2(Main.rand.NextFloat(-300f, -300f + Pro * 2) * Scale, 0).RotatedBy(0.4 * Projectile.ai[0]);
 			Vector2 v2 = new Vector2(0, Main.rand.NextFloat(0.02f, 0.3f) * Scale).RotatedBy(0.4 * Projectile.ai[0]);
 			//Dust d = Dust.NewDustDirect(Projectile.Center + v1 - Vector2.Normalize(v2) * 4, 0, 0, ModContent.DustType<Dusts.CosmicFlame>(), 0, 0, 0, default, Scale * (300 - v1.Length()) / 300f * DusS);
-			VFXManager.Add(new CosmicFlame()
+			Ins.VFXManager.Add(new CosmicFlame()
 			{
 				position = Projectile.Center + v1 - Vector2.Normalize(v2) * 4,
 				scale = Scale * (300 - v1.Length()) / 300f * DusS
@@ -63,7 +63,7 @@ internal class AcytaeaEffect : VisualProjectile
 				Vector2 v2 = new Vector2(0, Main.rand.NextFloat(0.02f, 5f) * Scale).RotatedByRandom(6.28);
 				Vector2 v3 = new Vector2(0, Main.rand.NextFloat(0.02f, 0.3f) * Scale).RotatedBy(0.4 * Projectile.ai[0]);
 				//Dust d = Dust.NewDustDirect(Projectile.Center + v1 + v2 - Vector2.Normalize(v3) * 4, 0, 0, ModContent.DustType<Dusts.CosmicFlame>(), 0, 0, 0, default, 0.7f * Main.rand.NextFloat(0.5f, 1.5f) * (1.05f - Math.Abs((150 - Pro) / 150f)) * (1.05f - Math.Abs((150 - Pro) / 150f)) + 0.25f);
-				VFXManager.Add(new CosmicFlame()
+				Ins.VFXManager.Add(new CosmicFlame()
 				{
 					position = Projectile.Center + v1 - Vector2.Normalize(v2) * 4,
 					scale = 0.7f * Main.rand.NextFloat(0.5f, 1.5f) * (1.05f - Math.Abs((150 - Pro) / 150f)) * (1.05f - Math.Abs((150 - Pro) / 150f)) + 0.25f
@@ -82,7 +82,7 @@ internal class AcytaeaEffect : VisualProjectile
 	public override void Draw()
 	{
 		//TODO Op
-		Texture2D tex2 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Dusts/CosmicCrack").Value;
+		Texture2D tex2 = ModContent.Request<Texture2D>("Everglow/Myth/Bosses/Acytaea/Dusts/CosmicCrack").Value;
 		Ins.Batch.BindTexture(tex2).Draw(v0 - Main.screenPosition, new Rectangle(0, 0, Pro, 50), Color.White, 0.4f * AI0, tex2.Size() / 2, Scale * 2, SpriteEffects.None);
 	}
 
@@ -102,7 +102,7 @@ internal class AcytaeaEffect : VisualProjectile
 				Col = f * f * f;
 			}
 		}
-		Texture2D tex2 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Dusts/CosmicCrack2").Value;
+		Texture2D tex2 = ModContent.Request<Texture2D>("Everglow/Myth/Bosses/Acytaea/Dusts/CosmicCrack2").Value;
 		Main.spriteBatch.Draw(tex2, v0 - Main.screenPosition, new Rectangle(0, 0, Pro, 50), new Color(Col, Col, Col, 0), 0.4f * AI0, tex2.Size() / 2, Scale * 2.1f, SpriteEffects.None, 0);
 		return true;
 	}

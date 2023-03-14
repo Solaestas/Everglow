@@ -1,4 +1,5 @@
-﻿using Everglow.Myth.Common.FogEffect.Sky;
+using Everglow.Commons.Modules;
+using Everglow.Myth.Common.FogEffect.Sky;
 using Everglow.Myth.TheFirefly.Backgrounds;
 using MonoMod.Cil;
 using ReLogic.Content;
@@ -7,20 +8,22 @@ using Terraria.Graphics.Shaders;
 
 namespace Everglow.Myth;
 
-public class MythModule : IModule
+public class MythModule : EverglowModule
 {
-	public string Name { get; } = "神话";
-
-	private Asset<Effect> m_waveDisortionScreen = null;
+	private static EffectPass ReplaceEffectPass = null;
 
 	private FogPass m_fogPass = null;
 
-	public void Load()
+	private Asset<Effect> m_waveDisortionScreen = null;
+
+	public override string Name => "Myth";
+
+	public override void Load()
 	{
 		if (Main.netMode != NetmodeID.Server)
 		{
 			// 水波扰动Shader
-			m_waveDisortionScreen = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/WaterDisortion", AssetRequestMode.ImmediateLoad);
+			m_waveDisortionScreen = ModContent.Request<Effect>("Everglow/Myth/Effects/WaterDisortion", AssetRequestMode.ImmediateLoad);
 			ReplaceEffectPass = m_waveDisortionScreen.Value.CurrentTechnique.Passes[0];
 
 			On_WaterShaderData.Update += WaterShaderData_Update;
@@ -29,9 +32,13 @@ public class MythModule : IModule
 
 			Terraria.Graphics.Effects.On_FilterManager.EndCapture += FilterManager_EndCapture;
 
-
 			m_fogPass = new FogPass();
 		}
+	}
+
+	public override void Unload()
+	{
+		ReplaceEffectPass = null;
 	}
 
 	private void FilterManager_EndCapture(Terraria.Graphics.Effects.On_FilterManager.orig_EndCapture orig, Terraria.Graphics.Effects.FilterManager self, RenderTarget2D finalTexture, RenderTarget2D screenTarget1, RenderTarget2D screenTarget2, Color clearColor)
@@ -41,24 +48,10 @@ public class MythModule : IModule
 		orig(self, finalTexture, screenTarget1, screenTarget2, clearColor);
 	}
 
-	private void WaterShaderData_StepLiquids(On_WaterShaderData.orig_StepLiquids orig, WaterShaderData self)
-	{
-		orig(self);
-	}
-
-	private void WaterShaderData_Update(On_WaterShaderData.orig_Update orig, WaterShaderData self, GameTime gameTime)
-	{
-		// 关掉_useViscosityFilter来防止出现明显视觉bug
-		orig(self, gameTime);
-		if (MothBackground.BiomeActive())
-			self._useViscosityFilter = false;
-	}
-
-	public static EffectPass ReplaceEffectPass = null;
-
 	private void WaterShaderData_Apply(ILContext il)
 	{
 		var c = new ILCursor(il);
+
 		// Try to find where 566 is placed onto the stack
 		if (!c.TryGotoNext(i => i.MatchCall(typeof(ScreenShaderData).FullName, "Apply")))
 			return; // Patch unable to be applied
@@ -101,8 +94,17 @@ public class MythModule : IModule
 			effect.Apply();
 		});
 	}
-	public void Unload()
+
+	private void WaterShaderData_StepLiquids(On_WaterShaderData.orig_StepLiquids orig, WaterShaderData self)
 	{
-		ReplaceEffectPass = null;
+		orig(self);
+	}
+
+	private void WaterShaderData_Update(On_WaterShaderData.orig_Update orig, WaterShaderData self, GameTime gameTime)
+	{
+		// 关掉_useViscosityFilter来防止出现明显视觉bug
+		orig(self, gameTime);
+		if (MothBackground.BiomeActive())
+			self._useViscosityFilter = false;
 	}
 }

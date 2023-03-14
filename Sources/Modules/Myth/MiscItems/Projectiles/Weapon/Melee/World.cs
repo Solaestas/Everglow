@@ -74,7 +74,7 @@ class World : ModProjectile, IWarpProjectile
 			float range = Main.rand.NextFloat(420f, 600f);
 			CrackPoint = Main.MouseWorld + Vector2.Normalize(Main.MouseWorld - CrackPoint).RotatedBy(Main.rand.NextFloat(Main.rand.NextFloat(Main.rand.NextFloat(-0.5f, -0.2f), 0.2f), 0.5f)) * range;
 			if (Projectile.ai[0] <= 0)
-				SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/Knife").WithPitchOffset(Main.rand.NextFloat(0.7f, 1f) - MathF.Min(timer / 15f, 1f)).WithVolumeScale(range / 600f), Projectile.Center);
+				SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/Knife").WithPitchOffset(Main.rand.NextFloat(0.7f, 1f) - MathF.Min(timer / 15f, 1f)).WithVolumeScale(range / 600f), Projectile.Center);
 			timer = 0;
 		}
 		OldMouseWorld[0] = Main.MouseWorld;//记录数据模板,这里记录鼠标坐标
@@ -155,7 +155,7 @@ class World : ModProjectile, IWarpProjectile
 	public override void PostDraw(Color lightColor)
 	{
 		Player player = Main.player[Projectile.owner];
-		Texture2D MainKnife = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Weapons/World").Value;
+		Texture2D MainKnife = ModContent.Request<Texture2D>("Everglow/Myth/MiscItems/Weapons/World").Value;
 		var Knife = new List<Vertex2D>();
 		float KnifeLength = 180;
 		float StartLength = -90;
@@ -349,11 +349,11 @@ class World : ModProjectile, IWarpProjectile
 						VxII.Add(barsII[i + 3]);
 					}
 				}
-				Texture2D t0 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/heatmapShade").Value;
+				Texture2D t0 = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/heatmapShade").Value;
 				Main.graphics.GraphicsDevice.Textures[0] = t0;
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, VxII.ToArray(), 0, VxII.Count / 3);
 			}
-			Texture2D t = MythContent.QuickTexture("UIimages/VisualTextures/World");
+			Texture2D t = MythContent.QuickTexture("UIImages/VisualTextures/World");
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 		}

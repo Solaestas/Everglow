@@ -103,36 +103,36 @@ public class EvilPack : ModNPC
 				{
 					omega += 0.02f;
 					NPC.ai[1] += 12;
-					SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/MothHitCocoon"), NPC.Center);
+					SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/MothHitCocoon"), NPC.Center);
 				}
 				if (NPC.ai[1] >= 19f && NPC.ai[1] - step < 19f)
 				{
 					NPC.ai[1] += 24;
 					omega -= 0.03f;
-					SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/MothHitCocoon"), NPC.Center);
+					SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/MothHitCocoon"), NPC.Center);
 				}
 				if (NPC.ai[1] >= 45f && NPC.ai[1] - step < 45f)
 				{
 					NPC.ai[1] += 22;
 					omega += 0.04f;
-					SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/MothHitCocoon"), NPC.Center);
+					SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/MothHitCocoon"), NPC.Center);
 				}
 				if (NPC.ai[1] >= 70f && NPC.ai[1] - step < 70f)
 				{
 					NPC.ai[1] += 4;
 					omega -= 0.05f;
-					SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/MothHitCocoon"), NPC.Center);
+					SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/MothHitCocoon"), NPC.Center);
 				}
 				if (NPC.ai[1] >= 76f && NPC.ai[1] - step < 76f)
 				{
 					NPC.ai[1] += 13;
 					omega += 0.02f;
-					SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/MothHitCocoon"), NPC.Center);
+					SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/MothHitCocoon"), NPC.Center);
 				}
 				if (NPC.ai[1] >= 89.7f && NPC.ai[1] - step < 89.7f)
 				{
 					omega += 0.1f;
-					SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/MothBreakCocoon"), NPC.Center);
+					SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/MothBreakCocoon"), NPC.Center);
 				}
 			}
 		}
@@ -140,7 +140,7 @@ public class EvilPack : ModNPC
 
 	public override void HitEffect(int hitDirection, double damage)
 	{
-		//SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/MothHitCocoon"), NPC.Center);
+		//SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/MothHitCocoon"), NPC.Center);
 		if (NPC.ai[0] < 10)
 			NPC.ai[0] += 1;
 		else

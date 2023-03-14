@@ -17,9 +17,9 @@ public class TuskBiome : ModBiome
 {
 	public override int Music => MythContent.QuickMusic("TuskBiome");
 	public override SceneEffectPriority Priority => SceneEffectPriority.Environment;
-	public override string BestiaryIcon => "Everglow/Sources/Modules/MythModule/TheTusk/TuskIcon";
+	public override string BestiaryIcon => "Everglow/Myth/TheTusk/TuskIcon";
 	public override string BackgroundPath => base.BackgroundPath;
-	public override string MapBackground => "Everglow/Sources/Modules/MythModule/TheTusk/Backgrounds/TuskBackground_Inside";
+	public override string MapBackground => "Everglow/Myth/TheTusk/Backgrounds/TuskBackground_Inside";
 	public override ModWaterStyle WaterStyle => ModContent.GetInstance<TuskWaterStyle>();
 	public override Color? BackgroundColor => base.BackgroundColor;
 	public override CaptureBiome.TileColorStyle TileColorStyle => CaptureBiome.TileColorStyle.Crimson;

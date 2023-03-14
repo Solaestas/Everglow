@@ -95,7 +95,7 @@ class ImmuneCircle : ModProjectile
 			Vx.Add(new Vertex2D(vf + v1, color3, new Vector3((0.999f + h) / 30f % 1f, 0, 0)));
 			Vx.Add(new Vertex2D(vf, color3, new Vector3((0.5f + h) / 30f % 1f, 1, 0)));
 		}
-		Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/LanternMoon/Projectiles/DashCore/ImmuneCircle").Value;
+		Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/LanternMoon/Projectiles/DashCore/ImmuneCircle").Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 
@@ -113,7 +113,7 @@ class ImmuneCircle : ModProjectile
 			Vx2.Add(new Vertex2D(vf + v1, color3, new Vector3((0.999f + h) / 30f % 1f, 0, 0)));
 			Vx2.Add(new Vertex2D(vf, color3, new Vector3((0.5f + h) / 30f % 1f, 1, 0)));
 		}
-		t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/LanternMoon/Projectiles/DashCore/ImmuneCircle3").Value;
+		t = ModContent.Request<Texture2D>("Everglow/Myth/LanternMoon/Projectiles/DashCore/ImmuneCircle3").Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx2.ToArray(), 0, Vx2.Count / 3);
 
@@ -139,7 +139,7 @@ class ImmuneCircle : ModProjectile
 				Vx3.Add(new Vertex2D(vf, color3, new Vector3((0.5f + h) / 30f % 1f, 1, 0)));
 			}
 		}
-		t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/LanternMoon/Projectiles/DashCore/ImmuneCircle2").Value;
+		t = ModContent.Request<Texture2D>("Everglow/Myth/LanternMoon/Projectiles/DashCore/ImmuneCircle2").Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx3.ToArray(), 0, Vx3.Count / 3);
 	}

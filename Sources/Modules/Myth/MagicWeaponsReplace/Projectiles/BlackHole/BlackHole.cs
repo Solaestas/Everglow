@@ -1,5 +1,5 @@
-﻿using Everglow.Myth.Common;
-using Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.BlackHole.Dust;
+using Everglow.Myth.Common;
+using Everglow.Myth.MagicWeaponsReplace.Projectiles.BlackHole.Dust;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 
@@ -55,13 +55,13 @@ internal class BlackHole : ModProjectile
 		if (Main.rand.NextBool(6))//暗色粒子
 		{
 			var d = new DarkDust() { position = Projectile.Center + Main.rand.NextVector2Unit() * 30, velocity = Main.rand.NextVector2Unit() * 6, scale = 0.8f, time_max = 30 };
-			VFXManager.Add(d);
+			Ins.VFXManager.Add(d);
 		}
 		if (Main.rand.NextBool(4))//光亮粒子
 		{
 			var c = new Color(0.2f, 0.7f, 1f);//颜色
 			var d = new LightDust() { drawColor = c, position = Projectile.Center + Main.rand.NextVector2Unit() * 30, velocity = Main.rand.NextVector2Unit() * 6, scale = 0.2f, time_max = 30 };
-			VFXManager.Add(d);
+			Ins.VFXManager.Add(d);
 		}
 		AbsorbMonster();
 		ScreenShake();
@@ -296,7 +296,7 @@ public class TemporarySys : ModSystem//暂时用一个ModSystem上滤镜
 			gd.SetRenderTarget(Main.screenTarget);
 			gd.Clear(Color.Transparent);
 			sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-			Effect eff = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/BlackHole", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+			Effect eff = ModContent.Request<Effect>("Everglow/Myth/Effects/BlackHole", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 			var scRes = new Vector2(Main.screenWidth, Main.screenHeight);
 			var pos = Vector2.Transform(proj.Center - Main.screenPosition, Main.Transform);
 			eff.Parameters["uPosition"].SetValue(pos / scRes);
@@ -309,7 +309,7 @@ public class TemporarySys : ModSystem//暂时用一个ModSystem上滤镜
 			sb.End();
 			sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.Default, RasterizerState.CullNone, null, Main.Transform);
 			//绘制黑洞以及前半环
-			Texture2D tex = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MagicWeaponsReplace/Projectiles/BlackHole/BlackHole").Value;
+			Texture2D tex = ModContent.Request<Texture2D>("Everglow/Myth/MagicWeaponsReplace/Projectiles/BlackHole/BlackHole").Value;
 			sb.Draw(tex, proj.Center - Main.screenPosition, null, Color.White, 0, tex.Size() / 2, proj.scale / 255f, 0, 0);
 			BlackHole.DrawRing(proj, true);
 			sb.End();

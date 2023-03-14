@@ -193,7 +193,7 @@ public class XmasWhip : ModProjectile
 		var list = new List<Vector2>();
 		FillWhipControlPoints(proj, list);
 		Texture2D value = TextureAssets.Projectile[proj.type].Value;
-		//Texture2D value = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Projectiles/Weapon/Summon/AshBone2").Value;
+		//Texture2D value = ModContent.Request<Texture2D>("Everglow/Myth/MiscItems/Projectiles/Weapon/Summon/AshBone2").Value;
 		Rectangle rectangle = value.Frame(1, 1, 0, 0, 0, 0);
 		var origin = new Vector2(rectangle.Width / 2, 2f);
 		Color originalColor = Color.White;
@@ -259,7 +259,7 @@ public class XmasWhip : ModProjectile
 			}
 			value2 += vector2;
 		}
-		value = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Projectiles/Weapon/Summon/XmasWhip2").Value;
+		value = ModContent.Request<Texture2D>("Everglow/Myth/MiscItems/Projectiles/Weapon/Summon/XmasWhip2").Value;
 		originalColor = Color.OrangeRed;
 		rectangle = value.Frame(1, 1, 0, 0, 0, 0);
 		value2 = list[0];
@@ -272,21 +272,21 @@ public class XmasWhip : ModProjectile
 			Vector2 vector3 = value2;
 			Color color = Lighting.GetColor(vector3.ToTileCoordinates());
 			var scale = new Vector2(1f, 1f);
-			value = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Projectiles/Weapon/Summon/XmasWhip2").Value;
+			value = ModContent.Request<Texture2D>("Everglow/Myth/MiscItems/Projectiles/Weapon/Summon/XmasWhip2").Value;
 			if (i == list.Count - 2)
 			{
-				value = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Projectiles/Weapon/Summon/XmasWhip3").Value;
+				value = ModContent.Request<Texture2D>("Everglow/Myth/MiscItems/Projectiles/Weapon/Summon/XmasWhip3").Value;
 				Main.spriteBatch.Draw(value, value2 - Main.screenPosition, null, color, rotation, origin, scale, SpriteEffects.None, 0f);
 				color = new Color(255, 255, 255, 0);
 			}
 			if (i % 7 == 1)
-				value = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Projectiles/Weapon/Summon/XmasWhipG").Value;
+				value = ModContent.Request<Texture2D>("Everglow/Myth/MiscItems/Projectiles/Weapon/Summon/XmasWhipG").Value;
 			if (i % 7 == 2)
-				value = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Projectiles/Weapon/Summon/XmasWhipR").Value;
+				value = ModContent.Request<Texture2D>("Everglow/Myth/MiscItems/Projectiles/Weapon/Summon/XmasWhipR").Value;
 			if (i % 7 == 4)
-				value = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Projectiles/Weapon/Summon/XmasWhipB").Value;
+				value = ModContent.Request<Texture2D>("Everglow/Myth/MiscItems/Projectiles/Weapon/Summon/XmasWhipB").Value;
 			if (i % 7 == 6)
-				value = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Projectiles/Weapon/Summon/XmasWhipY").Value;
+				value = ModContent.Request<Texture2D>("Everglow/Myth/MiscItems/Projectiles/Weapon/Summon/XmasWhipY").Value;
 			Main.spriteBatch.Draw(value, value2 - Main.screenPosition, null, color, rotation, origin, scale, SpriteEffects.None, 0f);
 			if (Main.rand.Next(34) <= i * vector2.Length() / 20f)
 			{
@@ -299,25 +299,25 @@ public class XmasWhip : ModProjectile
 			{
 				Lig[i] = value2 - Main.screenPosition;
 				RoL[i] = rotation;
-				Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Projectiles/Weapon/Summon/XmasWhipGGlow").Value, value2 - Main.screenPosition, null, new Color(255, 255, 255, 0), rotation, origin, scale, SpriteEffects.None, 0f);
+				Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/MiscItems/Projectiles/Weapon/Summon/XmasWhipGGlow").Value, value2 - Main.screenPosition, null, new Color(255, 255, 255, 0), rotation, origin, scale, SpriteEffects.None, 0f);
 			}
 			if (i % 7 == 2)
 			{
 				Lig[i] = value2 - Main.screenPosition;
 				RoL[i] = rotation;
-				Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Projectiles/Weapon/Summon/XmasWhipRGlow").Value, value2 - Main.screenPosition, null, new Color(255, 255, 255, 0), rotation, origin, scale, SpriteEffects.None, 0f);
+				Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/MiscItems/Projectiles/Weapon/Summon/XmasWhipRGlow").Value, value2 - Main.screenPosition, null, new Color(255, 255, 255, 0), rotation, origin, scale, SpriteEffects.None, 0f);
 			}
 			if (i % 7 == 4)
 			{
 				Lig[i] = value2 - Main.screenPosition;
 				RoL[i] = rotation;
-				Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Projectiles/Weapon/Summon/XmasWhipBGlow").Value, value2 - Main.screenPosition, null, new Color(255, 255, 255, 0), rotation, origin, scale, SpriteEffects.None, 0f);
+				Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/MiscItems/Projectiles/Weapon/Summon/XmasWhipBGlow").Value, value2 - Main.screenPosition, null, new Color(255, 255, 255, 0), rotation, origin, scale, SpriteEffects.None, 0f);
 			}
 			if (i % 7 == 6)
 			{
 				Lig[i] = value2 - Main.screenPosition;
 				RoL[i] = rotation;
-				Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Projectiles/Weapon/Summon/XmasWhipYGlow").Value, value2 - Main.screenPosition, null, new Color(255, 255, 255, 0), rotation, origin, scale, SpriteEffects.None, 0f);
+				Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/MiscItems/Projectiles/Weapon/Summon/XmasWhipYGlow").Value, value2 - Main.screenPosition, null, new Color(255, 255, 255, 0), rotation, origin, scale, SpriteEffects.None, 0f);
 			}
 		}
 		for (int i = 0; i < list.Count - 1; i++)
@@ -325,13 +325,13 @@ public class XmasWhip : ModProjectile
 			if (Lig[i] != Vector2.Zero)
 			{
 				if (i % 7 == 1)
-					Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Projectiles/Weapon/Summon/XmasWhipGGlow").Value, Lig[i], null, new Color(255, 255, 255, 0), RoL[i], origin, 1, SpriteEffects.None, 0f);
+					Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/MiscItems/Projectiles/Weapon/Summon/XmasWhipGGlow").Value, Lig[i], null, new Color(255, 255, 255, 0), RoL[i], origin, 1, SpriteEffects.None, 0f);
 				if (i % 7 == 2)
-					Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Projectiles/Weapon/Summon/XmasWhipRGlow").Value, Lig[i], null, new Color(255, 255, 255, 0), RoL[i], origin, 1, SpriteEffects.None, 0f);
+					Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/MiscItems/Projectiles/Weapon/Summon/XmasWhipRGlow").Value, Lig[i], null, new Color(255, 255, 255, 0), RoL[i], origin, 1, SpriteEffects.None, 0f);
 				if (i % 7 == 4)
-					Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Projectiles/Weapon/Summon/XmasWhipBGlow").Value, Lig[i], null, new Color(255, 255, 255, 0), RoL[i], origin, 1, SpriteEffects.None, 0f);
+					Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/MiscItems/Projectiles/Weapon/Summon/XmasWhipBGlow").Value, Lig[i], null, new Color(255, 255, 255, 0), RoL[i], origin, 1, SpriteEffects.None, 0f);
 				if (i % 7 == 6)
-					Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Projectiles/Weapon/Summon/XmasWhipYGlow").Value, Lig[i], null, new Color(255, 255, 255, 0), RoL[i], origin, 1, SpriteEffects.None, 0f);
+					Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/MiscItems/Projectiles/Weapon/Summon/XmasWhipYGlow").Value, Lig[i], null, new Color(255, 255, 255, 0), RoL[i], origin, 1, SpriteEffects.None, 0f);
 			}
 		}
 	}
@@ -339,7 +339,7 @@ public class XmasWhip : ModProjectile
 	float[] RoL = new float[50];
 	/*public static Vector2 DrawWhip_WhipSword(Projectile proj, List<Vector2> controlPoints)
 	{
-		Texture2D value = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Projectiles/Weapon/Summon/AshBone2").Value;
+		Texture2D value = ModContent.Request<Texture2D>("Everglow/Myth/MiscItems/Projectiles/Weapon/Summon/AshBone2").Value;
 		Microsoft.Xna.Framework.Rectangle rectangle = value.Frame(1, 5, 0, 0, 0, 0);
 		int height = rectangle.Height;
 		rectangle.Height -= 2;

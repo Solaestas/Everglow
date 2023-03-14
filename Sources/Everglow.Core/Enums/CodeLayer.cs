@@ -1,8 +1,9 @@
-﻿namespace Everglow.Commons.Enums;
+namespace Everglow.Commons.Enums;
 
 public enum CodeLayer
 {
 	None,
+	PostSetupContent,
 
 	//绘制
 	PostDrawFilter,

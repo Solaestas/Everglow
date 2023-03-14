@@ -87,9 +87,9 @@ public class LittleMouth : ModNPC
 	{
 		Color color = Lighting.GetColor((int)(NPC.Center.X / 16d), (int)(NPC.Center.Y / 16d));
 		color = NPC.GetAlpha(color) * ((255 - NPC.alpha) / 255f);
-		Texture2D t1 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/LittleMouth1").Value;
+		Texture2D t1 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/LittleMouth1").Value;
 		Main.spriteBatch.Draw(t1, NPC.Center - Main.screenPosition, null, color, NPC.rotation + Big - (float)Math.PI / 2f, new Vector2(6, t1.Height / 2f), 1f, SpriteEffects.None, 0f);
-		Texture2D t2 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/LittleMouth2").Value;
+		Texture2D t2 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/LittleMouth2").Value;
 		Main.spriteBatch.Draw(t2, NPC.Center - Main.screenPosition, null, color, NPC.rotation - Big - (float)Math.PI / 2f, new Vector2(6, t1.Height / 2f), 1f, SpriteEffects.None, 0f);
 
 		return false;

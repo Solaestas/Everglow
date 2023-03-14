@@ -27,12 +27,14 @@ public static class Ins
 		Reference<T>.reference = new WeakReference<T>(instance);
 	}
 
-	public static void Clear()
+	public static void Unload()
 	{
-		foreach (var instance in instances.OfType<IDisposable>().Reverse())
+		foreach(var instance in instances)
 		{
-			if (instance is not GraphicsDevice)
-				instance.Dispose();
+			if(instance is IDisposable dispose and not GraphicsDevice)
+			{
+				dispose.Dispose();
+			}
 		}
 		instances.Clear();
 	}

@@ -20,10 +20,10 @@ public class MothRelic : ModTile
 
 	// Every relic has its own extra floating part, should be 50x50. Optional: Expand this sheet if you want to add more, stacked vertically
 	// If you do not go the optional way, and you extend from this class, you can override this to point to a different texture
-	public virtual string RelicTextureName => "Everglow/Sources/Modules/MythModule/TheFirefly/Tiles/BossDrop/MothRelic";
+	public virtual string RelicTextureName => "Everglow/Myth/TheFirefly/Tiles/BossDrop/MothRelic";
 
 	// All relics use the same pedestal texture, this one is copied from vanilla
-	public override string Texture => "Everglow/Sources/Modules/MythModule/Common/ModelTextures/RelicPedestal";
+	public override string Texture => "Everglow/Myth/Common/ModelTextures/RelicPedestal";
 
 	public override void Load()
 	{

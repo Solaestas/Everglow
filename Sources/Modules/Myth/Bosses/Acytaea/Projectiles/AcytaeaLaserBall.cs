@@ -114,7 +114,7 @@ public class AcytaeaLaserBall : ModProjectile
 		ef2.Parameters["circleCenter"].SetValue(new Vector3(0, 0, -2));
 		ef2.Parameters["radiusOfCircle"].SetValue(1f);
 		ef2.Parameters["uTime"].SetValue((float)Main.time * 0.02f);
-		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/RedBall2").Value;
+		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/RedBall2").Value;
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
 		ef2.CurrentTechnique.Passes[0].Apply();
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList2.ToArray(), 0, triangleList2.Count / 3);

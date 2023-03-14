@@ -49,7 +49,7 @@ class RainbowWave : ModProjectile
 	public override void PostDraw(Color lightColor)
 	{
 		Rainbow = MythContent.QuickEffect("Effects/RainbowVague");
-		Texture2D RainbowTex = MythContent.QuickTexture("UIimages/VisualTextures/Rainbow");
+		Texture2D RainbowTex = MythContent.QuickTexture("UIImages/VisualTextures/Rainbow");
 		if (Projectile.timeLeft > 6)
 		{
 			LanternSky lanternSky = ModContent.GetInstance<LanternSky>();

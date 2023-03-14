@@ -223,7 +223,7 @@ public class TuskBiomeSky : CustomSky
 
 		#region #1：背景光
 		int yoffset = (int)Main.screenPosition.Y / 50;
-		Texture2D tex = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Backgrounds/TuskBiomeSky").Value;
+		Texture2D tex = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Backgrounds/TuskBiomeSky").Value;
 		Main.spriteBatch.Draw(tex, new Rectangle(0, -yoffset, Main.screenWidth, Main.screenHeight + yoffset), DrawC * Math.Min(1f, (Main.screenPosition.Y - 800f) / 1000f));
 		#endregion
 		#region #2：风暴
@@ -249,15 +249,15 @@ public class TuskBiomeSky : CustomSky
 		double OneDevideRotaSpeed = 2500d;
 
 		var CloudLine = new Texture2D[10];
-		CloudLine[1] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Backgrounds/DarkBlueGreenCloud").Value;
-		CloudLine[2] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Backgrounds/DarkGreenCloud").Value;
-		CloudLine[3] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Backgrounds/DarkGreyCloud").Value;
-		CloudLine[4] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Backgrounds/DarkGreyCloud").Value;
-		CloudLine[5] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Backgrounds/DarkGreyCloud2").Value;
-		CloudLine[6] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Backgrounds/LightGreyCloud3").Value;
-		CloudLine[7] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Backgrounds/LightGreyCloud4").Value;
-		CloudLine[8] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Backgrounds/LightGreyCloud2").Value;
-		CloudLine[9] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Backgrounds/LightGreyCloud").Value;
+		CloudLine[1] = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Backgrounds/DarkBlueGreenCloud").Value;
+		CloudLine[2] = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Backgrounds/DarkGreenCloud").Value;
+		CloudLine[3] = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Backgrounds/DarkGreyCloud").Value;
+		CloudLine[4] = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Backgrounds/DarkGreyCloud").Value;
+		CloudLine[5] = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Backgrounds/DarkGreyCloud2").Value;
+		CloudLine[6] = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Backgrounds/LightGreyCloud3").Value;
+		CloudLine[7] = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Backgrounds/LightGreyCloud4").Value;
+		CloudLine[8] = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Backgrounds/LightGreyCloud2").Value;
+		CloudLine[9] = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Backgrounds/LightGreyCloud").Value;
 
 		for (int i = 3; i < 10; i++)
 		{
@@ -360,7 +360,7 @@ public class TuskBiomeSky : CustomSky
 		VskyF.Add(new Vertex2D(FarS + new Vector2(1024, -750), DrawC, new Vector3(1, 0, 0)));
 		VskyF.Add(new Vertex2D(FarS + new Vector2(-1024, -750), DrawC, new Vector3(0, 0, 0)));
 		VskyF.Add(new Vertex2D(FarS + new Vector2(-1024, 150), DrawC, new Vector3(0, 1, 0)));
-		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Backgrounds/TuskFar").Value;
+		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Backgrounds/TuskFar").Value;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, VskyF.ToArray(), 0, VskyF.Count / 3);
 
 

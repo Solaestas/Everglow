@@ -23,17 +23,17 @@ public class TuskSurfaceBackgroundStyle : ModSurfaceBackgroundStyle
 
 	public override int ChooseFarTexture()
 	{
-		return BackgroundTextureLoader.GetBackgroundSlot("Everglow/Sources/Modules/MythModule/TheTusk/Backgrounds/TuskFar");
+		return BackgroundTextureLoader.GetBackgroundSlot("Everglow/Myth/TheTusk/Backgrounds/TuskFar");
 	}
 
 	public override int ChooseMiddleTexture()
 	{
-		return BackgroundTextureLoader.GetBackgroundSlot("Everglow/Sources/Modules/MythModule/TheTusk/Backgrounds/Empty");
+		return BackgroundTextureLoader.GetBackgroundSlot("Everglow/Myth/TheTusk/Backgrounds/Empty");
 	}
 
 	public override int ChooseCloseTexture(ref float scale, ref double parallax, ref float a, ref float b)
 	{
 		b = 1000;
-		return BackgroundTextureLoader.GetBackgroundSlot("Everglow/Sources/Modules/MythModule/TheTusk/Backgrounds/TuskMiddle");
+		return BackgroundTextureLoader.GetBackgroundSlot("Everglow/Myth/TheTusk/Backgrounds/TuskMiddle");
 	}
 }

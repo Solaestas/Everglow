@@ -97,7 +97,7 @@ class XiaoHit : ModProjectile
 				RasterizerState originalState = Main.graphics.GraphicsDevice.RasterizerState;
 
 
-				Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("UIimages/VisualTextures/EShoot");
+				Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("UIImages/VisualTextures/EShoot");
 
 
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);

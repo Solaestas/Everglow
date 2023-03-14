@@ -78,7 +78,7 @@ public class GoldLanternLine6 : ModProjectile
 				Vx.Add(bars[i + 3]);
 			}
 		}
-		Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/heatmapLanternLine").Value;
+		Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/heatmapLanternLine").Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 	}

@@ -102,13 +102,13 @@ class WorldHit : ModProjectile, IWarpProjectile
 			var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 			var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
 
-			ef.Parameters["tex0"].SetValue(MythContent.QuickTexture("UIimages/VisualTextures/heatmapLime"));
+			ef.Parameters["tex0"].SetValue(MythContent.QuickTexture("UIImages/VisualTextures/heatmapLime"));
 			ef.Parameters["uTransform"].SetValue(model * projection);
 			ef.Parameters["alphaValue"].SetValue(0.1f);
 
 			ef.CurrentTechnique.Passes[0].Apply();
 
-			Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("UIimages/VisualTextures/EShootDark");
+			Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("UIImages/VisualTextures/EShootDark");
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 
 			Main.graphics.GraphicsDevice.RasterizerState = originalState;
@@ -137,12 +137,12 @@ class WorldHit : ModProjectile, IWarpProjectile
 				var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 				var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
 
-				ef.Parameters["tex0"].SetValue(MythContent.QuickTexture("UIimages/VisualTextures/heatmapLime"));
+				ef.Parameters["tex0"].SetValue(MythContent.QuickTexture("UIImages/VisualTextures/heatmapLime"));
 				ef.Parameters["uTransform"].SetValue(model * projection);
 				ef.Parameters["alphaValue"].SetValue(0.1f);
 				ef.CurrentTechnique.Passes[0].Apply();
 
-				Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("UIimages/VisualTextures/EShootDark");
+				Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("UIImages/VisualTextures/EShootDark");
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, barsII.ToArray(), 0, barsII.Count - 2);
 
 				Main.graphics.GraphicsDevice.RasterizerState = originalState;

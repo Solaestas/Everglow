@@ -466,8 +466,8 @@ public class LanternGhostKing : ModNPC
 
 		Player player = Main.player[NPC.target];
 		var texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
-		Texture2D tg2 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/LanternMoon/NPCs/LanternGhostKing/LanternGhostKingGlow2").Value;
-		Texture2D tg3 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/LanternMoon/NPCs/LanternGhostKing/LanternGhostKingGlow3").Value;
+		Texture2D tg2 = ModContent.Request<Texture2D>("Everglow/Myth/LanternMoon/NPCs/LanternGhostKing/LanternGhostKingGlow2").Value;
+		Texture2D tg3 = ModContent.Request<Texture2D>("Everglow/Myth/LanternMoon/NPCs/LanternGhostKing/LanternGhostKingGlow3").Value;
 		var value = new Vector2(NPC.Center.X, NPC.Center.Y);
 		var vector = new Vector2(texture.Width / 2, texture.Height / Main.npcFrameCount[NPC.type] / 2);
 		Vector2 vector2 = value - Main.screenPosition;

@@ -1,4 +1,3 @@
-using Everglow.Myth;
 using Everglow.Myth.Common;
 using Everglow.Myth.LanternMoon.NPCs.LanternGhostKing;
 using Everglow.Myth.LanternMoon.Projectiles.LanternKing.VFXs;
@@ -44,7 +43,9 @@ public class DarkLanternBomb : ModProjectile, IWarpProjectile
 		if (Projectile.ai[1] % 0.15 == 0)
 		{
 			if (Projectile.frame < 2)
+			{
 				Projectile.frame++;
+			}
 			else
 			{
 				Projectile.frame = 0;
@@ -68,14 +69,16 @@ public class DarkLanternBomb : ModProjectile, IWarpProjectile
 
 
 		Texture2D textureLight = MythContent.QuickTexture("LanternMoon/Projectiles/LanternKing/LightEffect");
-		Texture2D flameRing = MythContent.QuickTexture("UIimages/VisualTextures/CoreFlame");
+		Texture2D flameRing = MythContent.QuickTexture("UIImages/VisualTextures/CoreFlame");
 		Main.spriteBatch.Draw(textureLight, Projectile.Center - Main.screenPosition, null, new Color(1f, 0.05f, 0f, 0) * 0.4f, 0, textureLight.Size() * 0.5f, new Vector2(1, (900 - Projectile.timeLeft) / 260f), SpriteEffects.None, 0f);
 		Main.spriteBatch.Draw(textureLight, Projectile.Center - Main.screenPosition, null, new Color(1f, 0.05f, 0f, 0) * 0.4f, MathF.PI * 0.5f, textureLight.Size() * 0.5f, new Vector2(1, (900 - Projectile.timeLeft) / 180f), SpriteEffects.None, 0f);
 		Main.spriteBatch.Draw(MythContent.QuickTexture("LanternMoon/Projectiles/LanternKing/LanternFire"), Projectile.Center - Main.screenPosition, new Rectangle(0, 30 * Projectile.frame, 20, 30), colorT, 0, new Vector2(10, 15), Projectile.scale * 0.5f, SpriteEffects.None, 1f);
 		for (float k = 0; k < timeValue; k += 0.5f)
 		{
 			if (k > 0.5)
+			{
 				Main.spriteBatch.Draw(MainTex, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 0), Projectile.rotation, MainTex.Size() / 2f, Projectile.scale, SpriteEffects.None, 1f);
+			}
 			else
 			{
 				Main.spriteBatch.Draw(MainTex, Projectile.Center - Main.screenPosition, null, colorT, Projectile.rotation, MainTex.Size() / 2f, Projectile.scale, SpriteEffects.None, 1f);
@@ -131,7 +134,7 @@ public class DarkLanternBomb : ModProjectile, IWarpProjectile
 				maxTime = Main.rand.Next(16, 36),
 				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.18f, 0.18f), Main.rand.NextFloat(8f, 12f) }
 			};
-			VFXManager.Add(cf);
+			Ins.VFXManager.Add(cf);
 		}
 		for (int g = 0; g < Frequency; g++)
 		{
@@ -144,7 +147,7 @@ public class DarkLanternBomb : ModProjectile, IWarpProjectile
 				maxTime = Main.rand.Next(12, 30),
 				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.4f, 0.4f), Main.rand.NextFloat(22f, 32f) }
 			};
-			VFXManager.Add(cf);
+			Ins.VFXManager.Add(cf);
 		}
 	}
 	public override void Kill(int timeLeft)

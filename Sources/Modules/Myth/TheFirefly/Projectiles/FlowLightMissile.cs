@@ -7,7 +7,7 @@ namespace Everglow.Myth.TheFirefly.Projectiles;
 
 internal class FlowLightMissile : ModProjectile
 {
-	public override string Texture => "Everglow/Sources/Modules/MythModule/TheFirefly/Projectiles/FlowLightMissile";
+	public override string Texture => "Everglow/Myth/TheFirefly/Projectiles/FlowLightMissile";
 
 	public override void SetDefaults()
 	{

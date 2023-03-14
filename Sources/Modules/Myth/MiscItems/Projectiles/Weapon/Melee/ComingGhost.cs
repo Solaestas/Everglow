@@ -125,7 +125,7 @@ class ComingGhost : ModProjectile
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Player player = Main.player[Projectile.owner];
-		Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Projectiles/Weapon/Melee/ComingGhost").Value;
+		Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/MiscItems/Projectiles/Weapon/Melee/ComingGhost").Value;
 		int frameHeight = t.Height;
 		var drawOrigin = new Vector2(t.Width * 0.5f, t.Height * 0.5f);
 		if (ExtraKnife)
@@ -279,9 +279,9 @@ class ComingGhost : ModProjectile
 			var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
 			ef2.Parameters["uTransform"].SetValue(model * projection);
 			ef2.Parameters["uTime"].SetValue(-(float)Main.time * 0.21f);
-			Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/heatmapRedBeta").Value;
-			Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/ComingGhostD" + (1 + Pdir).ToString()).Value;
-			Main.graphics.GraphicsDevice.Textures[2] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/ForgeWaveLight").Value;
+			Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/heatmapRedBeta").Value;
+			Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/ComingGhostD" + (1 + Pdir).ToString()).Value;
+			Main.graphics.GraphicsDevice.Textures[2] = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/ForgeWaveLight").Value;
 			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 			Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
 			Main.graphics.GraphicsDevice.SamplerStates[2] = SamplerState.PointWrap;
@@ -380,9 +380,9 @@ class ComingGhost : ModProjectile
 			var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
 			ef.Parameters["uTransform"].SetValue(model * projection);
 			ef.Parameters["uTime"].SetValue(0);
-			Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/heatmapRedBeta").Value;
-			Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/ComingGhost" + (1 + Pdir).ToString()).Value;
-			Main.graphics.GraphicsDevice.Textures[2] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/ComingGhost" + (1 + Pdir).ToString()).Value;
+			Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/heatmapRedBeta").Value;
+			Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/ComingGhost" + (1 + Pdir).ToString()).Value;
+			Main.graphics.GraphicsDevice.Textures[2] = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/ComingGhost" + (1 + Pdir).ToString()).Value;
 			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 			Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
 			Main.graphics.GraphicsDevice.SamplerStates[2] = SamplerState.PointWrap;

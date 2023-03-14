@@ -257,7 +257,7 @@ public class ToothMagicSplit : ModProjectile
 				Vx.Add(bars[i + 3]);
 			}
 		}
-		Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/BloodBallLine").Value;
+		Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/BloodBallLine").Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 	}

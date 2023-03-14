@@ -6,7 +6,7 @@ internal class ScreenReflectPipeline : Pipeline
 {
 	public override void Load()
 	{
-		effect = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/ScreenReflect", AssetRequestMode.ImmediateLoad);
+		effect = ModContent.Request<Effect>("Everglow/Myth/Effects/ScreenReflect", AssetRequestMode.ImmediateLoad);
 	}
 	public override void BeginRender()
 	{

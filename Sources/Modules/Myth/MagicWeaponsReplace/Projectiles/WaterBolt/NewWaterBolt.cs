@@ -154,11 +154,11 @@ public class NewWaterBolt : ModProjectile, IWarpProjectile
 		switch (Main.rand.Next(2))
 		{
 			case 0:
-				SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/MagicWeaponsReplace/Sounds/WaterBolt1"), Projectile.Center);
+				SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/MagicWeaponsReplace/Sounds/WaterBolt1"), Projectile.Center);
 				break;
 
 			case 1:
-				SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/MagicWeaponsReplace/Sounds/WaterBolt2"), Projectile.Center);
+				SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/MagicWeaponsReplace/Sounds/WaterBolt2"), Projectile.Center);
 				break;
 		}
 

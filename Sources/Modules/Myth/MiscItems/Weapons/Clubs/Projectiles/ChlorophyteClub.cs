@@ -7,7 +7,7 @@ public class ChlorophyteClub : ClubProj_metal
 		Beta = 0.0066f;
 		MaxOmega = 0.471f;
 		ReflectStrength = 3f;
-		ReflectTexturePath = "Everglow/Sources/Modules/MythModule/MiscItems/Weapons/Clubs/Projectiles/ChlorophyteClub_light";
+		ReflectTexturePath = "Everglow/Myth/MiscItems/Weapons/Clubs/Projectiles/ChlorophyteClub_light";
 	}
 	public override void AI()
 	{

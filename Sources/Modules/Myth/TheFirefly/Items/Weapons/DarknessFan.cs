@@ -116,7 +116,7 @@ public class DarknessFan : ModItem
 		position -= slotSize * Main.inventoryScale / 2f - frame.Size() * scale / 2f;
 		Vector2 drawPos = position + slotSize * Main.inventoryScale / 2f/* - texture.Size() * Main.inventoryScale / 2f*/;
 		Texture2D RArr = MythContent.QuickTexture("TheFirefly/Projectiles/GlowFanTex/RightDFan");
-		//ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/RightDFan").Value;
+		//ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/RightDFan").Value;
 		if (!Main.gamePaused)
 		{
 			if (CoolRarr > 0)

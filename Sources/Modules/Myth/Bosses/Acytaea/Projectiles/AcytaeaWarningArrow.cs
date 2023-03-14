@@ -35,7 +35,7 @@ internal class AcytaeaWarningArrow : ModProjectile
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Projectiles/AcytaeaWarningArrow2").Value;
+		Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/Bosses/Acytaea/Projectiles/AcytaeaWarningArrow2").Value;
 		int frameHeight = t.Height;
 		var drawOrigin = new Vector2(t.Width * 0.5f, t.Height * 0.5f);
 		float Fade = Projectile.timeLeft / 60f;

@@ -69,7 +69,7 @@ class XiaoBlackWave : ModProjectile
 		}
 
 
-		Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/ShadeRing").Value;
+		Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/ShadeRing").Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx4.ToArray(), 0, Vx4.Count / 3);
 		Main.spriteBatch.End();

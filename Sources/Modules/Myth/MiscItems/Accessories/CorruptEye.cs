@@ -72,7 +72,7 @@ class CorruptEyeEquiper : ModPlayer
 			maxTime = Main.rand.Next(27, 72),
 			ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.04f, 0.04f), Main.rand.NextFloat(3.6f, 10f) * mulVelocity }
 		};
-		VFXManager.Add(cf);
+		Ins.VFXManager.Add(cf);
 	}
 	private void GenerateDust()
 	{

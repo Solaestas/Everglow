@@ -250,7 +250,7 @@ public class CrimsonTuskControlable : ModNPC
 				triangleList2.Add(bars2[i + 2]);
 				triangleList2.Add(bars2[i + 3]);
 			}
-			Texture2D t1 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/Tusk/BloodRope").Value;
+			Texture2D t1 = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/Tusk/BloodRope").Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t1;//GlodenBloodScaleMirror
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList2.ToArray(), 0, triangleList2.Count / 3);
 
@@ -261,7 +261,7 @@ public class CrimsonTuskControlable : ModNPC
 		{
 			Color colorx = Lighting.GetColor((int)(NPC.Center.X / 16d), (int)(NPC.Center.Y / 16d));
 			colorx = NPC.GetAlpha(colorx);
-			Texture2D texture = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/CrimsonTuskControlable").Value;
+			Texture2D texture = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/CrimsonTuskControlable").Value;
 			Vector2 DarwV = NPC.Center;
 			if (killing is < 178 and > 0)
 				DarwV = vkilpos[1];

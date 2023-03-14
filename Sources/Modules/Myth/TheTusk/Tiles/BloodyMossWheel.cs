@@ -53,16 +53,16 @@ public class BloodyMossWheel : ModTile
 		if (Main.drawToScreen)
 			zero = Vector2.Zero;
 
-		Texture2D BaseCo1 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/Tusk/ForgeWave").Value;
-		Texture2D Sp1a = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Tiles/TileEffects/StonePanBottomLine").Value;
-		Texture2D Sp1b = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Tiles/TileEffects/StonePanBottomRedLight").Value;
-		Texture2D Sp1c = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Tiles/TileEffects/StonePanBottomFace").Value;
-		Texture2D Sp2 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Tiles/TileEffects/StonePanPin").Value;
-		Texture2D SpL1 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Tiles/TileEffects/StonePanL1").Value;
-		Texture2D SpL2 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Tiles/TileEffects/StonePanL2").Value;
-		Texture2D SpL3 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Tiles/TileEffects/StonePanL3").Value;
-		Texture2D SpL4 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Tiles/TileEffects/StonePanL4").Value;
-		Texture2D SpIC = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Tiles/TileEffects/StonePanStrick").Value;
+		Texture2D BaseCo1 = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/Tusk/ForgeWave").Value;
+		Texture2D Sp1a = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Tiles/TileEffects/StonePanBottomLine").Value;
+		Texture2D Sp1b = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Tiles/TileEffects/StonePanBottomRedLight").Value;
+		Texture2D Sp1c = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Tiles/TileEffects/StonePanBottomFace").Value;
+		Texture2D Sp2 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Tiles/TileEffects/StonePanPin").Value;
+		Texture2D SpL1 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Tiles/TileEffects/StonePanL1").Value;
+		Texture2D SpL2 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Tiles/TileEffects/StonePanL2").Value;
+		Texture2D SpL3 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Tiles/TileEffects/StonePanL3").Value;
+		Texture2D SpL4 = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Tiles/TileEffects/StonePanL4").Value;
+		Texture2D SpIC = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Tiles/TileEffects/StonePanStrick").Value;
 		var origin = new Vector2(56);
 
 		Color color = Lighting.GetColor(i, j);
@@ -143,7 +143,7 @@ public class BloodyMossWheel : ModTile
 		Vector2 CorrectedMouseScreenCenter = (Main.MouseScreen - Main.screenTarget.Size() / 2f) / vZoom.X;//鼠标的中心指向位
 		Vector2 CorrectedMouseWorld = CorrectedMouseScreenCenter + ScreenCenter;//鼠标世界坐标校正
 
-		Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Tiles/TileEffects/Symbol" + Symbol.ToString()).Value, new Vector2(i * 16 + 6, j * 16 - 68) + zero - Main.screenPosition, null, new Color(150 + (int)v.X, 150 + (int)v.X, 150 + (int)v.X, 0), 0f, origin, 1f, SpriteEffects.None, 0f);
+		Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Tiles/TileEffects/Symbol" + Symbol.ToString()).Value, new Vector2(i * 16 + 6, j * 16 - 68) + zero - Main.screenPosition, null, new Color(150 + (int)v.X, 150 + (int)v.X, 150 + (int)v.X, 0), 0f, origin, 1f, SpriteEffects.None, 0f);
 		if ((CorrectedMouseWorld - (new Vector2(i * 16 + 6, j * 16 - 64) + new Vector2(0, -50))).Length() < 12 * vZoom.X)
 		{
 			Main.spriteBatch.Draw(SpL1, new Vector2(i * 16 + 6, j * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), 0, origin, 1f, SpriteEffects.None, 0f);
@@ -229,42 +229,42 @@ public class BloodyMossWheel : ModTile
 			SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, new Vector2(i * 16 + 0, j * 16 - 72));
 			Vector2 vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28);
 			Vector2 vF2 = new Vector2(0, Main.rand.NextFloat(0, 45f)).RotatedByRandom(6.28);
-			Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Sources/Modules/MythModule/TheTusk/Gores/StonePanBreak1").Type, 1f);
+			Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Myth/TheTusk/Gores/StonePanBreak1").Type, 1f);
 			vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28);
 			vF2 = new Vector2(0, Main.rand.NextFloat(0, 45f)).RotatedByRandom(6.28);
-			Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Sources/Modules/MythModule/TheTusk/Gores/StonePanBreak1").Type, 1f);
+			Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Myth/TheTusk/Gores/StonePanBreak1").Type, 1f);
 			vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28);
 			vF2 = new Vector2(0, Main.rand.NextFloat(0, 45f)).RotatedByRandom(6.28);
-			Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Sources/Modules/MythModule/TheTusk/Gores/StonePanBreak2").Type, 1f);
+			Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Myth/TheTusk/Gores/StonePanBreak2").Type, 1f);
 			vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28);
 			vF2 = new Vector2(0, Main.rand.NextFloat(0, 45f)).RotatedByRandom(6.28);
-			Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Sources/Modules/MythModule/TheTusk/Gores/StonePanBreak3").Type, 1f);
+			Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Myth/TheTusk/Gores/StonePanBreak3").Type, 1f);
 			vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28);
 			vF2 = new Vector2(0, Main.rand.NextFloat(0, 45f)).RotatedByRandom(6.28);
-			Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Sources/Modules/MythModule/TheTusk/Gores/StonePanBreak4").Type, 1f);
+			Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Myth/TheTusk/Gores/StonePanBreak4").Type, 1f);
 			vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28);
 			vF2 = new Vector2(0, Main.rand.NextFloat(0, 45f)).RotatedByRandom(6.28);
-			Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Sources/Modules/MythModule/TheTusk/Gores/StonePanBreak5").Type, 1f);
+			Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Myth/TheTusk/Gores/StonePanBreak5").Type, 1f);
 			vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28);
 			vF2 = new Vector2(0, Main.rand.NextFloat(0, 45f)).RotatedByRandom(6.28);
-			Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Sources/Modules/MythModule/TheTusk/Gores/StonePanBreak6").Type, 1f);
+			Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Myth/TheTusk/Gores/StonePanBreak6").Type, 1f);
 			for (int h = 0; h < 7; h++)
 			{
 				vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28);
 				vF2 = new Vector2(0, Main.rand.NextFloat(0, 45f)).RotatedByRandom(6.28);
-				Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Sources/Modules/MythModule/TheTusk/Gores/StonePanBreak7").Type, 1f);
+				Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Myth/TheTusk/Gores/StonePanBreak7").Type, 1f);
 			}
 			for (int h = 0; h < 10; h++)
 			{
 				vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28);
 				vF2 = new Vector2(0, Main.rand.NextFloat(0, 45f)).RotatedByRandom(6.28);
-				Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Sources/Modules/MythModule/TheTusk/Gores/StonePanBreak8").Type, 1f);
+				Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Myth/TheTusk/Gores/StonePanBreak8").Type, 1f);
 			}
 			for (int h = 0; h < 10; h++)
 			{
 				vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28);
 				vF2 = new Vector2(0, Main.rand.NextFloat(0, 45f)).RotatedByRandom(6.28);
-				Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Sources/Modules/MythModule/TheTusk/Gores/StonePanBreak9").Type, 1f);
+				Gore.NewGore(null, new Vector2(i * 16 + 0, j * 16 - 72) + vF2, vF, ModContent.Find<ModGore>("Everglow/Myth/TheTusk/Gores/StonePanBreak9").Type, 1f);
 			}
 			for (int z = 0; z < 120; z++)
 			{
@@ -287,9 +287,9 @@ public class BloodyMossWheel : ModTile
 		if (Main.drawToScreen)
 			zero = Vector2.Zero;
 
-		Texture2D Tdoor = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/Tusk/CosmicFlame").Value;
-		Texture2D Tdoor2 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/Tusk/CosmicVort").Value;
-		Texture2D Tdoor3 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/Tusk/CosmicPerlin").Value;
+		Texture2D Tdoor = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/Tusk/CosmicFlame").Value;
+		Texture2D Tdoor2 = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/Tusk/CosmicVort").Value;
+		Texture2D Tdoor3 = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/Tusk/CosmicPerlin").Value;
 		if (CanK)
 		{
 			Killing--;

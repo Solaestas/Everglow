@@ -7,7 +7,7 @@ namespace Everglow.Myth.TheFirefly.Projectiles;
 
 internal class GlowBeadGun : ModProjectile
 {
-	public override string Texture => "Everglow/Sources/Modules/MythModule/TheFirefly/Projectiles/GlowBeadGunTex/GlowBeadGun";
+	public override string Texture => "Everglow/Myth/TheFirefly/Projectiles/GlowBeadGunTex/GlowBeadGun";
 
 	public override void SetDefaults()
 	{

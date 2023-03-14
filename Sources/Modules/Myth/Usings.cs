@@ -1,6 +1,9 @@
-global using Everglow.Commons.Vertex;
 global using Microsoft.Xna.Framework;
 global using Microsoft.Xna.Framework.Graphics;
 global using Terraria;
 global using Terraria.ID;
 global using Terraria.ModLoader;
+global using Everglow.Commons;
+global using Everglow.Commons.VFX;
+global using Everglow.Commons.VFX.Visuals;
+global using Everglow.Commons.Vertex;

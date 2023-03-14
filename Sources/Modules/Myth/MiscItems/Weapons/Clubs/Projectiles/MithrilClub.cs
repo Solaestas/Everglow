@@ -6,7 +6,7 @@ public class MithrilClub : ClubProj_metal
 	{
 		Beta = 0.005f;
 		MaxOmega = 0.43f;
-		ReflectTexturePath = "Everglow/Sources/Modules/MythModule/MiscItems/Weapons/Clubs/Projectiles/MithrilClub_light";
+		ReflectTexturePath = "Everglow/Myth/MiscItems/Weapons/Clubs/Projectiles/MithrilClub_light";
 		ReflectStrength = 2f;
 	}
 }

@@ -30,10 +30,10 @@ public class HurricaneMask : ModProjectile, IWarpProjectile
 			p.CritChance = Projectile.CritChance;
 			p.timeLeft = 100 + (int)(Projectile.ai[0] * 240);
 			if (Projectile.ai[0] < 0.5f)
-				SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/MagicWeaponsReplace/Sounds/TyphoonBlackHoleWeak").WithVolumeScale(Projectile.ai[0] * 2), Projectile.Center);
+				SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/MagicWeaponsReplace/Sounds/TyphoonBlackHoleWeak").WithVolumeScale(Projectile.ai[0] * 2), Projectile.Center);
 			else
 			{
-				SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/MagicWeaponsReplace/Sounds/TyphoonBlackHoleStrong").WithVolumeScale(Projectile.ai[0]), Projectile.Center);
+				SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/MagicWeaponsReplace/Sounds/TyphoonBlackHoleStrong").WithVolumeScale(Projectile.ai[0]), Projectile.Center);
 			}
 			Projectile.Kill();
 		}
@@ -42,7 +42,7 @@ public class HurricaneMask : ModProjectile, IWarpProjectile
 		if (Projectile.timeLeft < 100)
 			Projectile.extraUpdates = 9;
 		if (Projectile.timeLeft == 100)
-			SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/MagicWeaponsReplace/Sounds/TyphoonBlackHoleSummon").WithVolumeScale(Projectile.ai[0]).WithPitchOffset(0f), Projectile.Center);
+			SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/MagicWeaponsReplace/Sounds/TyphoonBlackHoleSummon").WithVolumeScale(Projectile.ai[0]).WithPitchOffset(0f), Projectile.Center);
 	}
 	public override void PostDraw(Color lightColor)
 	{

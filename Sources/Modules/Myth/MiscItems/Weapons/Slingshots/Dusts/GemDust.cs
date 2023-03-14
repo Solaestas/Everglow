@@ -6,7 +6,7 @@ public abstract class GemDust : ModDust
 	public override void SetStaticDefaults()
 	{
 	}
-	public override string Texture => "Everglow/Sources/Modules/MythModule/MiscItems/Weapons/Slingshots/Dusts/GemDust";
+	public override string Texture => "Everglow/Myth/MiscItems/Weapons/Slingshots/Dusts/GemDust";
 	public override void OnSpawn(Dust dust)
 	{
 		dust.noGravity = true;

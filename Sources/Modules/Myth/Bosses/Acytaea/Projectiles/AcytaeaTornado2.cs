@@ -82,7 +82,7 @@ internal class AcytaeaTornado2 : VisualProjectile
 				Vx.Add(new Vertex2D(vb - Main.screenPosition + new Vector2(0, z * 200), color3, new Vector3(h / 60f, 0, 0)));
 				Vx.Add(new Vertex2D(Main.projectile[WHOAMI].Center - Main.screenPosition + new Vector2(0, 400) + new Vector2(0, z * 200), color3, new Vector3(0.5f, 1, 0)));
 			}
-			Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Projectiles/AcytaeaTornado2").Value;
+			Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/Bosses/Acytaea/Projectiles/AcytaeaTornado2").Value;
 			//Main.graphics.GraphicsDevice.Textures[0] = t;//GoldenBloodScaleMirror
 			Ins.Batch.Draw(t, Vx, PrimitiveType.TriangleList);
 		}

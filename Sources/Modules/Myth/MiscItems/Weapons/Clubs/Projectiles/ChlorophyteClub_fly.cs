@@ -232,7 +232,7 @@ public class ChlorophyteClub_fly : ModProjectile, IWarpProjectile
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
 		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 
-		MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Weapons/Clubs/Projectiles/ChlorophyteClub_light").Value);
+		MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>("Everglow/Myth/MiscItems/Weapons/Clubs/Projectiles/ChlorophyteClub_light").Value);
 		var lightColor = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16)).ToVector4();
 		lightColor.W = 0.7f * Omega;
 		if (Projectile.timeLeft > 550)

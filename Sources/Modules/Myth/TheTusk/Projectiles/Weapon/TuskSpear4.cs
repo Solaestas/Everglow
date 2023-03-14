@@ -1,8 +1,6 @@
-﻿using Everglow.Myth.TheTusk;
-
 namespace Everglow.Myth.TheTusk.Projectiles.Weapon;
 
-class TuskSpear4 : ModProjectile
+internal class TuskSpear4 : ModProjectile
 {
 	public override void SetDefaults()
 	{
@@ -23,7 +21,7 @@ class TuskSpear4 : ModProjectile
 	{
 		for (int y = 0; y < 12; y++)
 		{
-			int num90 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) + Projectile.velocity / Projectile.velocity.Length() * 25, 4, 4, 183, 0f, 0f, 100, default, Main.rand.NextFloat(1.3f, 4.2f));
+			int num90 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) + Projectile.velocity / Projectile.velocity.Length() * 25, 4, 4, DustID.VampireHeal, 0f, 0f, 100, default, Main.rand.NextFloat(1.3f, 4.2f));
 			Main.dust[num90].noGravity = true;
 			Main.dust[num90].velocity = new Vector2(Main.rand.NextFloat(2.0f, 2.5f), Main.rand.NextFloat(1.8f, 11.5f)).RotatedByRandom(Math.PI * 2d);
 		}
@@ -60,7 +58,7 @@ class TuskSpear4 : ModProjectile
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
 		var bars = new List<VertexBase.CustomVertexInfo>();
-		ef = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/Trail").Value;
+		ef = ModContent.Request<Effect>("Everglow/Myth/Effects/Trail").Value;
 		// 把所有的点都生成出来，按照顺序
 		double o1 = Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
 		double o2 = Math.Atan2(Projectile.oldVelocity.Y, Projectile.oldVelocity.X);
@@ -120,9 +118,9 @@ class TuskSpear4 : ModProjectile
 			// 把变换和所需信息丢给shader
 			ef.Parameters["uTransform"].SetValue(model * projection);
 			ef.Parameters["uTime"].SetValue(-(float)Main.time * 0.06f);
-			Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/heatmapRedBeta").Value;
-			Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/Lightline").Value;
-			Main.graphics.GraphicsDevice.Textures[2] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/FogTrace").Value;
+			Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/heatmapRedBeta").Value;
+			Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/Lightline").Value;
+			Main.graphics.GraphicsDevice.Textures[2] = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/FogTrace").Value;
 			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 			Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
 			Main.graphics.GraphicsDevice.SamplerStates[2] = SamplerState.PointWrap;
@@ -144,7 +142,7 @@ class TuskSpear4 : ModProjectile
 	{
 		for (int y = 0; y < 12; y++)
 		{
-			int num90 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) + Projectile.velocity / Projectile.velocity.Length() * 25, 4, 4, 183, 0f, 0f, 100, default, Main.rand.NextFloat(1.3f, 4.2f));
+			int num90 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) + Projectile.velocity / Projectile.velocity.Length() * 25, 4, 4, DustID.VampireHeal, 0f, 0f, 100, default, Main.rand.NextFloat(1.3f, 4.2f));
 			Main.dust[num90].noGravity = true;
 			Main.dust[num90].velocity = new Vector2(Main.rand.NextFloat(2.0f, 2.5f), Main.rand.NextFloat(1.8f, 11.5f)).RotatedByRandom(Math.PI * 2d);
 		}

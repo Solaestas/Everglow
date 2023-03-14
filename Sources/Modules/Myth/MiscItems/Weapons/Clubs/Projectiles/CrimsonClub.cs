@@ -5,7 +5,7 @@ public class CrimsonClub : ClubProj_metal
 	public override void SetDef()
 	{
 		ReflectStrength = 3f;
-		ReflectTexturePath = "Everglow/Sources/Modules/MythModule/MiscItems/Weapons/Clubs/Projectiles/CrimsonClub_light";
+		ReflectTexturePath = "Everglow/Myth/MiscItems/Weapons/Clubs/Projectiles/CrimsonClub_light";
 	}
 	public override void AI()
 	{

@@ -58,7 +58,7 @@ public class HepuyuanSpice : ModProjectile
 			Vx.Add(new Vertex2D(Vbase + v0 * 2 * (1 - fadeK), ct, new Vector3(1 - fadeK, fadeK, 0)));
 		}
 
-		Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Projectiles/Weapon/Melee/Hepuyuan/HepuyuanSpice").Value;
+		Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/MiscItems/Projectiles/Weapon/Melee/Hepuyuan/HepuyuanSpice").Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 		return false;

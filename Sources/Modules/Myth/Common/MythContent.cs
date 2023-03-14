@@ -9,7 +9,7 @@ public class MythContent
 	/// <returns></returns>
 	public static Texture2D QuickTexture(string path)
 	{
-		return ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/" + path, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+		return ModContent.Request<Texture2D>("Everglow/Myth/" + path, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 	}
 
 	/// <summary>
@@ -19,7 +19,7 @@ public class MythContent
 	/// <returns></returns>
 	public static Effect QuickEffect(string path)
 	{
-		return ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/" + path, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+		return ModContent.Request<Effect>("Everglow/Myth/" + path, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 	}
 
 	/// <summary>

@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Reflection;
-using Everglow.Commons.Modules;
 using Everglow.Commons.Enums;
 using Everglow.Commons.Interfaces;
+using Everglow.Commons.Modules;
 using Everglow.Commons.ObjectPool;
 using ReLogic.Content;
 
@@ -26,11 +26,6 @@ public class VFXManager : IVFXManager
 	/// </summary>
 	public static Asset<Effect> DefaultEffect => ModContent.Request<Effect>("Everglow/Common/VFX/Effect/Shader2D");
 
-	public static VFXManager Instance
-	{
-		get; private set;
-	}
-
 	/// <summary>
 	/// 当前RenderTarget
 	/// </summary>
@@ -41,8 +36,6 @@ public class VFXManager : IVFXManager
 
 	public VFXManager()
 	{
-		Debug.Assert(Instance == null);
-		Instance = this;
 		foreach (var layer in drawLayers)
 		{
 			visuals[layer] = new List<IVisualCollection>();
@@ -78,8 +71,8 @@ public class VFXManager : IVFXManager
 
 	/// <summary>
 	/// </summary>
-	/// <param name="visual"></param>
-	/// <param name="flag">为了避免重复的占位符</param>
+	/// <param name="visual"> </param>
+	/// <param name="flag"> 为了避免重复的占位符 </param>
 	public void Add(IVisual visual)
 	{
 		// 将Visual实例加到对应绘制层与第一个Pipeline的位置
@@ -99,19 +92,6 @@ public class VFXManager : IVFXManager
 		{
 			visuals.Clear();
 		}
-	}
-
-	public void Dispose()
-	{
-		Ins.MainThread.AddTask(() =>
-		{
-			foreach (var pipeline in pipelineInstances)
-			{
-				pipeline.Unload();
-			}
-			tempRenderTarget?.Release();
-		});
-		GC.SuppressFinalize(this);
 	}
 
 	public void Draw(CodeLayer layer)
@@ -195,8 +175,8 @@ public class VFXManager : IVFXManager
 	/// <summary>
 	/// 获得一种Pipeline的下标，若没有此Pipeline便创建此Pipeline
 	/// </summary>
-	/// <param name="pipelineType"></param>
-	/// <returns></returns>
+	/// <param name="pipelineType"> </param>
+	/// <returns> </returns>
 	public int GetOrCreatePipeline(Type pipelineType)
 	{
 		if (pipelineTypes.Contains(pipelineType))
@@ -211,8 +191,8 @@ public class VFXManager : IVFXManager
 	/// <summary>
 	/// 获得Visual的Type
 	/// </summary>
-	/// <param name="visual"></param>
-	/// <returns></returns>
+	/// <param name="visual"> </param>
+	/// <returns> </returns>
 	public int GetVisualType(IVisual visual)
 	{
 		return visualTypes[visual.GetType()];
@@ -228,8 +208,8 @@ public class VFXManager : IVFXManager
 	/// <summary>
 	/// 注册一个Visual
 	/// </summary>
-	/// <param name="visual"></param>
-	/// <exception cref="Exception">该Visual未绑定任何Pipeline</exception>
+	/// <param name="visual"> </param>
+	/// <exception cref="Exception"> 该Visual未绑定任何Pipeline </exception>
 	public void Register(IVisual visual)
 	{
 		Type type = visual.GetType();
@@ -407,9 +387,24 @@ public class VFXManager : IVFXManager
 		return collection;
 	}
 
+	public void Dispose()
+	{
+		Ins.MainThread.AddTask(() =>
+		{
+			foreach (var pipeline in pipelineInstances)
+			{
+				pipeline.Unload();
+			}
+			tempRenderTarget?.Release();
+			Ins.Batch.Dispose();
+		});
+		GC.SuppressFinalize(this);
+	}
+
 	private class SingleVisual : IVisualCollection
 	{
 		public PipelineIndex index;
+
 		public IVisual visual;
 
 		public int Count => visual == null ? 0 : 1;
@@ -449,6 +444,7 @@ public class VFXManager : IVFXManager
 	private class VisualCollection : IVisualCollection
 	{
 		public int Count => visuals.Count;
+
 		public PipelineIndex Index => index;
 
 		public VisualCollection(PipelineIndex index)
@@ -487,6 +483,7 @@ public class VFXManager : IVFXManager
 		private static VisualComparer compare = new();
 
 		private PipelineIndex index;
+
 		private SortedSet<IVisual> visuals;
 
 		private class VisualComparer : Comparer<IVisual>
@@ -494,9 +491,9 @@ public class VFXManager : IVFXManager
 			/// <summary>
 			/// 按照Type从小到大排序，允许重复
 			/// </summary>
-			/// <param name="x"></param>
-			/// <param name="y"></param>
-			/// <returns></returns>
+			/// <param name="x"> </param>
+			/// <param name="y"> </param>
+			/// <returns> </returns>
 			public override int Compare(IVisual x, IVisual y)
 			{
 				if (x == y)

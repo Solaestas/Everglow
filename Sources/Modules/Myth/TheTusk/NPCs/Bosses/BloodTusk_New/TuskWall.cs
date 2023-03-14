@@ -68,7 +68,7 @@ public class TuskWall : ModNPC
 	{
 		SpriteEffects spriteEffects = NPC.direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 		Color color = NPC.GetAlpha(drawColor);
-		Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/TuskWallLeft").Value;
+		Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/TuskWallLeft").Value;
 		Main.spriteBatch.Draw(t, NPC.Center + new Vector2(0, 880 - NPC.ai[0] + 30) - Main.screenPosition, new Rectangle(0, 0, t.Width, (int)NPC.ai[0]), color, NPC.rotation, new Vector2(t.Width / 2f, t.Height), 1f, spriteEffects, 0f);
 		return false;
 	}

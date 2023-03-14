@@ -85,5 +85,5 @@ internal class CrystalParticleStorm : Visual
 		Ins.Batch.Draw(TextureAssets.MagicPixel.Value, Vx, PrimitiveType.TriangleList);
 	}
 
-	public override CallOpportunity DrawLayer => CallOpportunity.PostDrawNPCs;
+	public override CodeLayer DrawLayer => CodeLayer.PostDrawNPCs;
 }

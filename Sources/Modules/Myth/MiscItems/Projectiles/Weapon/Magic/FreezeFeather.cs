@@ -122,7 +122,7 @@ public class FreezeFeather : ModProjectile
 	}
 	/*public override void PostDraw(Color lightColor)
         {
-            Texture2D tex = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/FogTrace").Value;
+            Texture2D tex = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/FogTrace").Value;
             Color[] colorTex = new Color[tex.Width * tex.Height];
             tex.GetData(colorTex);
             for (int y = 0; y < tex.Height; y += 1)
@@ -136,7 +136,7 @@ public class FreezeFeather : ModProjectile
                         if(colorTex[x + y * tex.Width].B > 35 && (x + y * tex.Width) % 20 == 0)
                         {
                             int C = colorTex[x + y * tex.Width].B;
-                            Texture2D tex2 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/heatmapColdBlueCircle").Value;
+                            Texture2D tex2 = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/heatmapColdBlueCircle").Value;
                             Main.EntitySpriteDraw((Texture2D)TextureAssets.MagicPixel, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY) + new Vector2(z - tex.Width / 2f, y - tex.Height / 2f).RotatedBy(Rot), new Rectangle(0, 0, 1, 1), new Color(0, C / 4, C, 0), Projectile.rotation, new Vector2(0.5f, 0.5f), 5f, SpriteEffects.None, 0);
                         }
                     }
@@ -237,7 +237,7 @@ public class FreezeFeather : ModProjectile
 			}
 		}
 
-		Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/IceLine").Value;
+		Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/IceLine").Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 	}

@@ -13,7 +13,7 @@ public class BloodLampProj : ModProjectile
 	{
 		for (int x = -1; x < 15; x++)
 		{
-			BLantern[x + 1] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/LanternMoon/Projectiles/BloodLampFrame/BloodLamp_" + x.ToString());
+			BLantern[x + 1] = ModContent.Request<Texture2D>("Everglow/Myth/LanternMoon/Projectiles/BloodLampFrame/BloodLamp_" + x.ToString());
 		}
 		// DisplayName.SetDefault("Blood Lamp");
 	}
@@ -94,7 +94,7 @@ public class BloodLampProj : ModProjectile
 			BLantern = new Asset<Texture2D>[16];
 			for (int x = -1; x < 15; x++)
 			{
-				BLantern[x + 1] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/LanternMoon/Projectiles/BloodLampFrame/BloodLamp_" + x.ToString());
+				BLantern[x + 1] = ModContent.Request<Texture2D>("Everglow/Myth/LanternMoon/Projectiles/BloodLampFrame/BloodLamp_" + x.ToString());
 			}
 		}
 		for (int x = 0; x < 16; x++)
@@ -128,7 +128,7 @@ public class BloodLampProj : ModProjectile
 	private IEnumerator<ICoroutineInstruction> Task()
 	{
 		SoundEngine.PlaySound(new SoundStyle(
-			"Everglow/Sources/Modules/MythModule/LanternMoon/Sounds/PowerBomb"), Projectile.Center);
+			"Everglow/Myth/LanternMoon/Sounds/PowerBomb"), Projectile.Center);
 		_coroutineManager.StartCoroutine(new Coroutine(ControlVolume()));
 		_coroutineManager.StartCoroutine(new Coroutine(JitterFlash()));
 		yield return new WaitForFrames(170);

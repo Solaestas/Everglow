@@ -70,7 +70,7 @@ public class CrimsonTuskProj : ModProjectile
 
 		Color colorz = Lighting.GetColor((int)(Projectile.Center.X / 16d), (int)(Projectile.Center.Y / 16d));
 		colorz = Projectile.GetAlpha(colorz) * ((255 - Projectile.alpha) / 255f);
-		Texture2D texture = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Projectiles/CrimsonTuskProj").Value;
+		Texture2D texture = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Projectiles/CrimsonTuskProj").Value;
 		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, colorz, Projectile.rotation, texture.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
 		if (!Down)
 			return;

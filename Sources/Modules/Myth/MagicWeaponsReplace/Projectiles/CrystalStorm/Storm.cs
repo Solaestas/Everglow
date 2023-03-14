@@ -31,7 +31,7 @@ internal class Storm : ModProjectile
 				rotation = Main.rand.NextFloat(6.283f),
 				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Intensity / 1400f * Main.rand.NextFloat(0.85f, 1.15f), Projectile.whoAmI, 0 }
 			};
-			VFXManager.Add(cw);
+			Ins.VFXManager.Add(cw);
 		}
 	}
 	public override void AI()

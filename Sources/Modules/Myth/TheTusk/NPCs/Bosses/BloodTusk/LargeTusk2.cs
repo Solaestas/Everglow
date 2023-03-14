@@ -151,7 +151,7 @@ public class LargeTusk2 : ModNPC
 		BackBase.Add(new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(-600 / (VBase.Length() + 1f), 5) - Main.screenPosition, color, new Vector3(0, 1, 0)));
 		BackBase.Add(new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(0, 5) + VBase - Main.screenPosition, color, new Vector3(0.5f, 0, 0)));
 		BackBase.Add(new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(600 / (VBase.Length() + 1f), 5) - Main.screenPosition, color, new Vector3(1, 1, 0)));
-		Texture2D thang = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/LargeTuskBase").Value;
+		Texture2D thang = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/LargeTuskBase").Value;
 		Main.graphics.GraphicsDevice.Textures[0] = thang;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, BackBase.ToArray(), 0, BackBase.Count / 3);
 
@@ -165,7 +165,7 @@ public class LargeTusk2 : ModNPC
 			new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(12, V.Y - 79) - Main.screenPosition, color, new Vector3(1, 0, 0)),
 			new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(-12, 5) - Main.screenPosition, color, new Vector3(0, index, 0))
 		};
-		thang = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/Tuskplus" + RamInt.ToString()).Value;
+		thang = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/Tuskplus" + RamInt.ToString()).Value;
 		Main.graphics.GraphicsDevice.Textures[0] = thang;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx2.ToArray(), 0, Vx2.Count / 3);
 
@@ -177,7 +177,7 @@ public class LargeTusk2 : ModNPC
 			new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(600 / (VBase.Length() + 1f), 5) - Main.screenPosition, color, new Vector3(1, 1, 0))
 		};
 
-		thang = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/LargeTuskDrag").Value;
+		thang = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/LargeTuskDrag").Value;
 		Main.graphics.GraphicsDevice.Textures[0] = thang;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, ForeBase.ToArray(), 0, ForeBase.Count / 3);
 		return false;

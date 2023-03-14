@@ -59,7 +59,7 @@ internal class CursedFlamesArray : ModProjectile, IWarpProjectile
 				maxTime = Main.rand.Next(18, 40),
 				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.01f, 0.01f), Main.rand.NextFloat(4f, 12f) * ringPos.Length() / 30f }
 			};
-			VFXManager.Add(cf);
+			Ins.VFXManager.Add(cf);
 		}
 	}
 	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)

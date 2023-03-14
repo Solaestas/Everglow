@@ -50,7 +50,7 @@ public class TuskRelic : ModTile
 
 			if (tile != null && tile.HasTile)
 			{
-				Texture2D value = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Tiles/BossDrop/Tusk").Value;
+				Texture2D value = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Tiles/BossDrop/Tusk").Value;
 				int frameY = tile.TileFrameX / 54;
 				bool flag = tile.TileFrameY / 72 != 0;
 				int horizontalFrames = 1;

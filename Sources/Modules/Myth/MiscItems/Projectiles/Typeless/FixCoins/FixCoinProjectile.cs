@@ -204,7 +204,7 @@ public abstract class FixCoinProjectile : ModProjectile
 			if (bars.Count > 2)
 			{
 				RasterizerState originalState = Main.graphics.GraphicsDevice.RasterizerState;
-				Texture2D Color = MythContent.QuickTexture("UIimages/VisualTextures/ElecLine");
+				Texture2D Color = MythContent.QuickTexture("UIImages/VisualTextures/ElecLine");
 
 				Main.graphics.GraphicsDevice.Textures[0] = Color;
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
@@ -213,7 +213,7 @@ public abstract class FixCoinProjectile : ModProjectile
 		}
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Texture2D LightE = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/LightEffect").Value;
+		Texture2D LightE = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/LightEffect").Value;
 
 		Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(ColorVec.X * LightColorI * LightColorI, ColorVec.Y * LightColorI * LightColorI, ColorVec.Z * LightColorI * LightColorI, 0), -(float)Math.Sin(Main.time / 26d) + 0.6f, new Vector2(128f, 128f), 0.5f + (float)(0.25 * Math.Sin(Main.time / 26d)), SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(ColorVec.X * LightColorI * LightColorI, ColorVec.Y * LightColorI * LightColorI, ColorVec.Z * LightColorI * LightColorI, 0), (float)Math.Sin(Main.time / 12d + 2) + 1.6f, new Vector2(128f, 128f), 0.5f + (float)(0.25 * Math.Sin(Main.time / 26d)), SpriteEffects.None, 0);

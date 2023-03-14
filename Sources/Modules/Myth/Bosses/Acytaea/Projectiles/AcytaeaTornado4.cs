@@ -76,7 +76,7 @@ internal class AcytaeaTornado4 : ModProjectile
 					Vx.Add(new Vertex2D(vb - Main.screenPosition + new Vector2(0, z * 40), color3, new Vector3(h / 60f, 0, 0)));
 					Vx.Add(new Vertex2D(Main.projectile[WHOAMI].Center - Main.screenPosition + new Vector2(0, -70) + new Vector2(0, z * 40), color3, new Vector3(0.5f, 1, 0)));
 				}
-				Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Projectiles/AcytaeaTornado4").Value;
+				Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/Bosses/Acytaea/Projectiles/AcytaeaTornado4").Value;
 				Main.graphics.GraphicsDevice.Textures[0] = t;//GoldenBloodScaleMirror
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 			}

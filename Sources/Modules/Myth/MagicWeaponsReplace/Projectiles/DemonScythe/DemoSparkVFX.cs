@@ -1,3 +1,5 @@
+using Everglow.Commons.Enums;
+
 namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.DemonScythe;
 
 public class DemoSparkVFX : Visual
@@ -13,7 +15,7 @@ public class DemoSparkVFX : Visual
 		//DrawSpark(new Color(131, 0, 255, 0), Math.Min(Projectile.timeLeft / 8f, 20f), Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/SparkLight"));
 	}
 
-	public override CallOpportunity DrawLayer => throw new NotImplementedException();
+	public override CodeLayer DrawLayer => throw new NotImplementedException();
 
 	private void DrawSpark(Color c0, float width, Texture2D tex)
 	{

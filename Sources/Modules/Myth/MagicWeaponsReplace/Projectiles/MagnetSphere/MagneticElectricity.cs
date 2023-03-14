@@ -5,7 +5,7 @@ namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.MagnetSphere;
 
 internal abstract class ShaderDraw : Visual
 {
-	public override CallOpportunity DrawLayer => CallOpportunity.PostDrawDusts;
+	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 	public Vector2 position;
 	public Vector2 velocity;
 	public float[] ai;
@@ -22,7 +22,7 @@ internal class MagneticElectricityPipeline : Pipeline
 {
 	public override void Load()
 	{
-		effect = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/MagicWeaponsReplace/Projectiles/CursedFlames/CursedFlame", AssetRequestMode.ImmediateLoad);
+		effect = ModContent.Request<Effect>("Everglow/Myth/MagicWeaponsReplace/Projectiles/CursedFlames/CursedFlame", AssetRequestMode.ImmediateLoad);
 		effect.Value.Parameters["uNoise"].SetValue(ModContent.Request<Texture2D>("Everglow/Sources/Modules/ExampleModule/VFX/Perlin", AssetRequestMode.ImmediateLoad).Value);
 	}
 	public override void BeginRender()
@@ -109,5 +109,5 @@ internal class MagneticElectricity : ShaderDraw
 		bars[0] = new Vertex2D((bars[1].position + bars[2].position) * 0.5f, Color.White, new Vector3(0.5f, 0, 0));
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
 	}
-	public override CallOpportunity DrawLayer => CallOpportunity.PostDrawDusts;
+	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 }

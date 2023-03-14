@@ -53,7 +53,7 @@ public class BloodBladeShadow : ModProjectile
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
 		var bars = new List<Vertex2D>();
 		Effect ef = MythContent.QuickEffect("Effects/Trail");
-		// °ÑËùÓĞµÄµã¶¼Éú³É³öÀ´£¬°´ÕÕË³Ğò
+		// æŠŠæ‰€æœ‰çš„ç‚¹éƒ½ç”Ÿæˆå‡ºæ¥ï¼ŒæŒ‰ç…§é¡ºåº
 		int width = 40;
 		for (int i = 1; i < Projectile.oldPos.Length; ++i)
 		{
@@ -77,7 +77,7 @@ public class BloodBladeShadow : ModProjectile
 
 		if (bars.Count > 2)
 		{
-			// °´ÕÕË³ĞòÁ¬½ÓÈı½ÇĞÎ
+			// æŒ‰ç…§é¡ºåºè¿æ¥ä¸‰è§’å½¢
 			triangleList.Add(bars[0]);
 			var vertex = new Vertex2D((bars[0].position + bars[1].position) * 0.5f + Vector2.Normalize(Projectile.velocity) * 30, Color.White, new Vector3(0, 0.5f, 1));
 			triangleList.Add(bars[1]);
@@ -93,7 +93,7 @@ public class BloodBladeShadow : ModProjectile
 				triangleList.Add(bars[i + 3]);
 			}
 			RasterizerState originalState = Main.graphics.GraphicsDevice.RasterizerState;
-			// ¸Éµô×¢ÊÍµô¾Í¿ÉÒÔÖ»ÏÔÊ¾Èı½ÇĞÎÕ¤¸ñ
+			// å¹²æ‰æ³¨é‡Šæ‰å°±å¯ä»¥åªæ˜¾ç¤ºä¸‰è§’å½¢æ …æ ¼
 			//RasterizerState rasterizerState = new RasterizerState();
 			//rasterizerState.CullMode = CullMode.None;
 			//rasterizerState.FillMode = FillMode.WireFrame;
@@ -102,12 +102,12 @@ public class BloodBladeShadow : ModProjectile
 			var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 			var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
 
-			// °Ñ±ä»»ºÍËùĞèĞÅÏ¢¶ª¸øshader
+			// æŠŠå˜æ¢å’Œæ‰€éœ€ä¿¡æ¯ä¸¢ç»™shader
 			ef.Parameters["uTransform"].SetValue(model * projection);
 			ef.Parameters["uTime"].SetValue(-(float)Main.time * 0.06f);
-			Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/heatmapGrey").Value;
-			Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/DarkGrey").Value;
-			Main.graphics.GraphicsDevice.Textures[2] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/BladeShadow").Value;
+			Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/heatmapGrey").Value;
+			Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/DarkGrey").Value;
+			Main.graphics.GraphicsDevice.Textures[2] = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/BladeShadow").Value;
 			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 			Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
 			Main.graphics.GraphicsDevice.SamplerStates[2] = SamplerState.PointWrap;

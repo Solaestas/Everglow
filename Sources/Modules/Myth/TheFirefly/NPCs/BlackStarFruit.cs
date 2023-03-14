@@ -122,9 +122,9 @@ public class BlackStarFruit : ModNPC
 		SpriteEffects effects = SpriteEffects.None;
 		if (NPC.spriteDirection == 1)
 			effects = SpriteEffects.FlipHorizontally;
-		Texture2D tx = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheFirefly/Projectiles/Lightball").Value;
-		Texture2D tg = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheFirefly/Projectiles/Lightball").Value;
-		Texture2D tb = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheFirefly/NPCs/BlackStarFruitLight").Value;
+		Texture2D tx = ModContent.Request<Texture2D>("Everglow/Myth/TheFirefly/Projectiles/Lightball").Value;
+		Texture2D tg = ModContent.Request<Texture2D>("Everglow/Myth/TheFirefly/Projectiles/Lightball").Value;
+		Texture2D tb = ModContent.Request<Texture2D>("Everglow/Myth/TheFirefly/NPCs/BlackStarFruitLight").Value;
 		var vector = new Vector2(tx.Width / 2f, tx.Height / (float)Main.npcFrameCount[NPC.type] / 2f);
 		var color = new Color(10, 83, 110, 0);
 		Main.spriteBatch.Draw(tg, NPC.Center - Main.screenPosition + new Vector2(0, +19), null, color, NPC.rotation, vector, 0.025f * (float)(4 + Math.Sin(Main.time / 15d + NPC.position.X / 36d)) * E, effects, 0f);

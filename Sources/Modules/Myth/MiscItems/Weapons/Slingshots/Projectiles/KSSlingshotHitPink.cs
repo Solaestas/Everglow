@@ -30,7 +30,7 @@ class KSSlingshotHitPink : ModProjectile
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
 		var bars = new List<Vertex2D>();
-		ef = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/FadeSlingshot").Value;
+		ef = ModContent.Request<Effect>("Everglow/Myth/Effects/FadeSlingshot").Value;
 		float widx = Projectile.timeLeft / 120f;
 		float widxM = 1f - widx;
 		radious = (float)(Math.Sqrt(5 * widxM) * 20) * Projectile.ai[1];
@@ -76,9 +76,9 @@ class KSSlingshotHitPink : ModProjectile
 			ef.Parameters["uTime"].SetValue(-(float)Main.time * 0.06f);
 			ef.Parameters["maxr"].SetValue(widxM * widxM);
 			ef.Parameters["stre"].SetValue(Projectile.ai[0]);
-			Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/heatmapColdPurple").Value;
-			Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/FogTraceGamma").Value;
-			Main.graphics.GraphicsDevice.Textures[2] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/FogTraceGamma").Value;
+			Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/heatmapColdPurple").Value;
+			Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/FogTraceGamma").Value;
+			Main.graphics.GraphicsDevice.Textures[2] = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/FogTraceGamma").Value;
 			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 			Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
 			Main.graphics.GraphicsDevice.SamplerStates[2] = SamplerState.PointWrap;

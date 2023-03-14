@@ -84,7 +84,7 @@ public class TuskSpiceBlack : ModProjectile
 
 		Color colorz = Lighting.GetColor((int)(Projectile.Center.X / 16d), (int)(Projectile.Center.Y / 16d));
 		colorz = Projectile.GetAlpha(colorz) * ((255 - Projectile.alpha) / 255f);
-		Texture2D texture = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Projectiles/TuskSpice" + Fra.ToString()).Value;
+		Texture2D texture = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/Projectiles/TuskSpice" + Fra.ToString()).Value;
 
 		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), new Rectangle(0, 0, texture.Width, texture.Height - MostH), colorz, Projectile.rotation, new Vector2(12f, (texture.Height - MostH) / 2f), Projectile.scale, SpriteEffects.None, 0);
 		if (!Shot)

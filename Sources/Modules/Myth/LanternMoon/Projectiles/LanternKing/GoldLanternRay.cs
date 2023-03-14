@@ -119,7 +119,7 @@ class GoldLanternRay : ModProjectile
 				Vx.Add(bars[i + 3]);
 			}
 		}
-		Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/LanternMoon/Projectiles/LanternKing/GoldLaser").Value;
+		Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/LanternMoon/Projectiles/LanternKing/GoldLaser").Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 
@@ -147,7 +147,7 @@ class GoldLanternRay : ModProjectile
 				Vx2.Add(new Vertex2D(vf, color3, new Vector3((0.5f + CirPro0) / 25f % 1f, 1, 0)));
 			}
 		}
-		Texture2D t1 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/LightCrackGold").Value;
+		Texture2D t1 = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/LightCrackGold").Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t1;//GlodenBloodScaleMirror
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx2.ToArray(), 0, Vx2.Count / 3);
 	}
