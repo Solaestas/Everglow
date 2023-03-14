@@ -2,10 +2,6 @@ namespace Everglow.Myth.TheTusk.Items.BossDrop;
 
 public class BloodyTuskTrophy : ModItem
 {
-	public override void SetStaticDefaults()
-	{
-		// DisplayName.SetDefault("The Tusk Trophy");
-		// 	}
 	public override void SetDefaults()
 	{
 		Item.width = 32;

@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.TheFirefly.Dusts;
+using Everglow.Myth.TheFirefly.Dusts;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -6,11 +6,6 @@ namespace Everglow.Myth.TheFirefly.NPCs;
 
 public class BlackStarFruit : ModNPC
 {
-	public override void SetStaticDefaults()
-	{
-		//TODO: BlackStarFruit Localization File Text
-		// DisplayName.SetDefault("Black Star Fruit");
-		//	}
 	public override void SetDefaults()
 	{
 		NPC.damage = 0;

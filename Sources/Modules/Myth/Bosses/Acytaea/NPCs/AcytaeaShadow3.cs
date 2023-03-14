@@ -7,15 +7,11 @@ public class AcytaeaShadow3 : ModNPC
 {
 	public override void SetStaticDefaults()
 	{
-		// DisplayName.SetDefault("Acytaea");
-		/*Main.npcFrameCount[NPC.type] = 50;
-            NPCID.Sets.ExtraFramesCount[NPC.type] = 9;
-            NPCID.Sets.AttackFrameCount[NPC.type] = 4;*/
 		NPCID.Sets.DangerDetectRange[NPC.type] = 400;
 		NPCID.Sets.AttackType[NPC.type] = 0;
 		NPCID.Sets.AttackTime[NPC.type] = 60;
 		NPCID.Sets.AttackAverageChance[NPC.type] = 15;
-		//	}
+	}
 
 	private bool canDespawn = false;
 

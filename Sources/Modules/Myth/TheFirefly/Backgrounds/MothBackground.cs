@@ -7,31 +7,31 @@ namespace Everglow.Myth.TheFirefly.Backgrounds;
 
 public class MothBackground : ModSystem
 {
-	//¼ÓÁË¸ö»·¾³¹â£¬µ«»¹Òªµ÷ÕûÏÂ²»È»¿´ÉÏÈ¥ºÜ¹Ö
+	//åŠ äº†ä¸ªç¯å¢ƒå…‰ï¼Œä½†è¿˜è¦è°ƒæ•´ä¸‹ä¸ç„¶çœ‹ä¸Šå»å¾ˆæ€ª
 	public readonly Vector3 ambient = new Vector3(0.001f, 0.001f, 0.05f);
 
 	public List<GHang> GPos = new List<GHang>();
 	public List<GHang> GPosSec = new List<GHang>();
 	private float alpha = 0f;
-	private float luminance = 1f;//·¢¹âÎïÁÁ¶È£¬bossÕ½Ê±±ä°µ
-	private Vector2 RopOffset = Vector2.Zero;//Ê÷ÌõµÄÎ»ÖÃÆ«ÒÆÁ¿
+	private float luminance = 1f;//å‘å…‰ç‰©äº®åº¦ï¼Œbossæˆ˜æ—¶å˜æš—
+	private Vector2 RopOffset = Vector2.Zero;//æ ‘æ¡çš„ä½ç½®åç§»é‡
 	private List<Rope> ropes = new List<Rope>();
 	private RopeManager ropeManager;
 
 	/// <summary>
-	/// ³õÊ¼»¯
+	/// åˆå§‹åŒ–
 	/// </summary>
 	public override void OnModLoad()
 	{
 		if (Main.netMode != NetmodeID.Server)
 		{
-			Everglow.HookSystem.AddMethod(DrawBackground, Commons.Core.CodeLayer.PostDrawBG);
+			Ins.HookManager.AddHook(CodeLayer.PostDrawBG, DrawBackground);
 			Terraria.Graphics.Light.On_TileLightScanner.GetTileLight += TileLightScanner_GetTileLight;
 		}
 	}
 
 	/// <summary>
-	/// Ó«¹âĞü¹ÒÎïµÄÊı¾İ½á¹¹
+	/// è§å…‰æ‚¬æŒ‚ç‰©çš„æ•°æ®ç»“æ„
 	/// </summary>
 	public struct GHang
 	{
@@ -50,7 +50,7 @@ public class MothBackground : ModSystem
 	}
 
 	/// <summary>
-	/// »·¾³¹âµÄ¹³×Ó
+	/// ç¯å¢ƒå…‰çš„é’©å­
 	/// </summary>
 	/// <param name="orig"></param>
 	/// <param name="self"></param>
@@ -63,7 +63,7 @@ public class MothBackground : ModSystem
 		outputColor += ambient;
 	}
 
-	public override void PostUpdateEverything()//¿ªÆôµØÏÂ±³¾°
+	public override void PostUpdateEverything()//å¼€å¯åœ°ä¸‹èƒŒæ™¯
 	{
 		const float increase = 0.02f;
 		if (GlowingFlowerLandActive() && Main.BackgroundEnabled)
@@ -74,7 +74,7 @@ public class MothBackground : ModSystem
 			else
 			{
 				alpha = 1;
-				Everglow.HookSystem.DisableDrawBackground = true;
+				Ins.HookManager.DisableDrawBackground = true;
 			}
 		}
 		else
@@ -85,9 +85,9 @@ public class MothBackground : ModSystem
 			{
 				alpha = 0;
 			}
-			Everglow.HookSystem.DisableDrawBackground = false;
+			Ins.HookManager.DisableDrawBackground = false;
 		}
-		if (CorruptMoth.CorruptMothNPC != null && CorruptMoth.CorruptMothNPC.active)//·¢¹âÎïÌåÔÚbossÕ½Ê±±ä°µ
+		if (CorruptMoth.CorruptMothNPC != null && CorruptMoth.CorruptMothNPC.active)//å‘å…‰ç‰©ä½“åœ¨bossæˆ˜æ—¶å˜æš—
 			luminance = MathHelper.Lerp(luminance, 0.1f, 0.02f);
 		else
 		{
@@ -98,7 +98,7 @@ public class MothBackground : ModSystem
 	}
 
 	/// <summary>
-	/// ÅĞ¶¨ÊÇ·ñ¿ªÆôµØĞÎ
+	/// åˆ¤å®šæ˜¯å¦å¼€å¯åœ°å½¢
 	/// </summary>
 	/// <returns></returns>
 	public static bool BiomeActive()
@@ -106,21 +106,21 @@ public class MothBackground : ModSystem
 		return SubWorldModule.SubworldSystem.IsActive<MothWorld>();
 	}
 	/// <summary>
-	/// ÅĞ¶¨ÊÇ·ñ¿ªÆôµØĞÎ
+	/// åˆ¤å®šæ˜¯å¦å¼€å¯åœ°å½¢
 	/// </summary>
 	/// <returns></returns>
 	public static bool GlowingFlowerLandActive()
 	{
 		MothLand mothLand = ModContent.GetInstance<MothLand>();
-		var BiomeCenter = new Vector2(mothLand.fireflyCenterX * 16, (mothLand.fireflyCenterY - 20) * 16);//¶ÁÈ¡µØĞÎĞÅÏ¢
-		Vector2 v0 = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f - BiomeCenter;//¾àÀëÖĞĞÄMain.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f
+		var BiomeCenter = new Vector2(mothLand.fireflyCenterX * 16, (mothLand.fireflyCenterY - 20) * 16);//è¯»å–åœ°å½¢ä¿¡æ¯
+		Vector2 v0 = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f - BiomeCenter;//è·ç¦»ä¸­å¿ƒMain.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f
 		v0.Y *= 1.35f;
-		v0.X *= 0.9f;//½üËÆÓÚÍÖÔ²ĞÎ£¬ËùÒÔxy×ø±ê±ä»»
+		v0.X *= 0.9f;//è¿‘ä¼¼äºæ¤­åœ†å½¢ï¼Œæ‰€ä»¥xyåæ ‡å˜æ¢
 		return v0.Length() < 2000 && SubWorldModule.SubworldSystem.IsActive<MothWorld>();
 	}
 
 	/// <summary>
-	/// »ñÈ¡Ó«¹âĞü¹ÒÎïµãÎ»
+	/// è·å–è§å…‰æ‚¬æŒ‚ç‰©ç‚¹ä½
 	/// </summary>
 	/// <param name="Shapepath"></param>
 	/// <exception cref="Exception"></exception>
@@ -143,7 +143,7 @@ public class MothBackground : ModSystem
 	}
 
 	/// <summary>
-	/// »ñÈ¡µÚ¶ş²ãÓ«¹âĞü¹ÒÎïµãÎ»
+	/// è·å–ç¬¬äºŒå±‚è§å…‰æ‚¬æŒ‚ç‰©ç‚¹ä½
 	/// </summary>
 	/// <param name="Shapepath"></param>
 	/// <exception cref="Exception"></exception>
@@ -165,7 +165,7 @@ public class MothBackground : ModSystem
 		});
 	}
 	/// <summary>
-	/// »æÖÆÓ«¹â
+	/// ç»˜åˆ¶è§å…‰
 	/// </summary>
 	private void DrawGlow(Vector2 texSize, float MoveStep)
 	{
@@ -203,7 +203,7 @@ public class MothBackground : ModSystem
 	}
 
 	/// <summary>
-	/// ¸ù¾İÆÁÄ»·Ö±æÂÊÖØÖÃ¶¥²ãºÍÊ÷ÉÏµÄÓ«¹âĞü¹ÒÎïµãÎ»
+	/// æ ¹æ®å±å¹•åˆ†è¾¨ç‡é‡ç½®é¡¶å±‚å’Œæ ‘ä¸Šçš„è§å…‰æ‚¬æŒ‚ç‰©ç‚¹ä½
 	/// </summary>
 	/// <param name="OrigPoint"></param>
 	/// <returns></returns>
@@ -219,7 +219,7 @@ public class MothBackground : ModSystem
 	}
 
 	/// <summary>
-	/// »æÖÆµÚ¶ş²ãÓ«¹â
+	/// ç»˜åˆ¶ç¬¬äºŒå±‚è§å…‰
 	/// </summary>
 	private void DrawGlowSec(Vector2 texSize, float MoveStep)
 	{
@@ -257,7 +257,7 @@ public class MothBackground : ModSystem
 	}
 
 	/// <summary>
-	/// »ñÈ¡»æÖÆ¾ØĞÎ
+	/// è·å–ç»˜åˆ¶çŸ©å½¢
 	/// </summary>
 	/// <param name="texSize"></param>
 	/// <param name="MoveStep"></param>
@@ -285,7 +285,7 @@ public class MothBackground : ModSystem
 	}
 
 	/// <summary>
-	/// »ñÈ¡XYÏòËõ·Å±ÈÀı
+	/// è·å–XYå‘ç¼©æ”¾æ¯”ä¾‹
 	/// </summary>
 	/// <param name="texSize"></param>
 	/// <param name="MoveStep"></param>
@@ -296,7 +296,7 @@ public class MothBackground : ModSystem
 	}
 
 	/// <summary>
-	/// »ñÈ¡ÒòÎª²»Í¬·Ö±æÂÊµ¼ÖÂµãÎ»Æ«ÒÆ×ø±ê
+	/// è·å–å› ä¸ºä¸åŒåˆ†è¾¨ç‡å¯¼è‡´ç‚¹ä½åç§»åæ ‡
 	/// </summary>
 	/// <returns></returns>
 	public static Vector2 GetZoomDelta()
@@ -308,7 +308,7 @@ public class MothBackground : ModSystem
 	}
 
 	/// <summary>
-	/// Éş×ÓµÄÍ¼Æ¬×ø±ê×ªµ½½ü¾°ÎÆÀíÏÂµÄ×ø±ê
+	/// ç»³å­çš„å›¾ç‰‡åæ ‡è½¬åˆ°è¿‘æ™¯çº¹ç†ä¸‹çš„åæ ‡
 	/// </summary>
 	/// <returns></returns>
 	private Vector2 ImageSpaceToCloseTextureSpace(Vector2 posIS, Vector2 texSize)
@@ -355,7 +355,7 @@ public class MothBackground : ModSystem
 		ropeManager.luminance = luminance;
 		ropeManager.Draw();
 
-		//±ãÓÚºÏÅú£¬¶¥µã»æÖÆ·Ö¿ª´¦ÖÃ
+		//ä¾¿äºåˆæ‰¹ï¼Œé¡¶ç‚¹ç»˜åˆ¶åˆ†å¼€å¤„ç½®
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Texture2D VineTexture = MythContent.QuickTexture("TheFirefly/Backgrounds/Dark");
 		for (int i = 0; i < ropes.Count; i++)
@@ -373,7 +373,7 @@ public class MothBackground : ModSystem
 				Vector2 posSS = -targetSourceRect.TopLeft() + texClose.Size() * pos;
 
 				float width = ropes[i].mass.Length - j;
-				//Í¨¹ı¶¥µã»æÖÆÖ¦Ìõ
+				//é€šè¿‡é¡¶ç‚¹ç»˜åˆ¶ææ¡
 				branch.Add(new Vertex2D(posSS + vector.RotatedBy(Math.PI / 2d) * width, Color.White, Vector3.Zero));
 				branch.Add(new Vertex2D(posSS - vector.RotatedBy(Math.PI / 2d) * width, Color.White, Vector3.Zero));
 			}
@@ -396,7 +396,7 @@ public class MothBackground : ModSystem
 
 				var pos = ImageSpaceToCloseTextureSpace(mass.position, texClose.Size());
 
-				// Ö±½Ó»æÖÆÔÚÏà¶ÔÓÚ½ü¾°ÌùÍ¼µÄ×ø±ê£¬Ö»Òª½ü¾°Î»ÖÃÕıÈ·£¬Ğü¹ÒÎ»ÖÃ¾ÍÕıÈ·
+				// ç›´æ¥ç»˜åˆ¶åœ¨ç›¸å¯¹äºè¿‘æ™¯è´´å›¾çš„åæ ‡ï¼Œåªè¦è¿‘æ™¯ä½ç½®æ­£ç¡®ï¼Œæ‚¬æŒ‚ä½ç½®å°±æ­£ç¡®
 				Vector2 posSS = -targetSourceRect.TopLeft() + texClose.Size() * pos;
 				Main.spriteBatch.Draw(dropTexture, posSS, null, color, rotation, dropTexture.Size() / 2f, scale, SpriteEffects.None, 0);
 			}
@@ -445,7 +445,7 @@ public class MothBackground : ModSystem
 	}
 
 	/// <summary>
-	/// µ±È»ÊÇ»æÖÆÖ÷ÌåÀ²
+	/// å½“ç„¶æ˜¯ç»˜åˆ¶ä¸»ä½“å•¦
 	/// </summary>
 	private void DrawBackground()
 	{

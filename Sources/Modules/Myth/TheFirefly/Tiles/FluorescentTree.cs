@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly;
 using Everglow.Myth.TheFirefly.Dusts;
 using Everglow.Myth.TheFirefly.Gores;
@@ -20,13 +20,13 @@ public class FluorescentTree : ModTile
 		Main.tileNoAttach[Type] = false;
 
 		TileID.Sets.IsATreeTrunk[Type] = true;
-		ModTranslation modTranslation = Language.GetOrRegister("Mods.Everglow.MapEntry.FluorescentTree");
+		var modTranslation = Language.GetOrRegister("Mods.Everglow.MapEntry.FluorescentTree");
 		AddMapEntry(new Color(51, 26, 58), modTranslation);
 		DustType = ModContent.DustType<FluorescentTreeDust>();
 		ItemDrop = ModContent.ItemType<GlowWood>();
 		AdjTiles = new int[] { Type };
 
-		Everglow.HookSystem.AddMethod(DrawRopes, Commons.Core.CodeLayer.PostDrawTiles);
+		Ins.HookManager.AddHook(CodeLayer.PostDrawTiles, DrawRopes);
 	}
 	private RopeManager ropeManager = new RopeManager();
 	private List<Rope>[] ropes = new List<Rope>[16];

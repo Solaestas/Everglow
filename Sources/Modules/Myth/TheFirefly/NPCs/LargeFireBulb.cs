@@ -1,16 +1,10 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
 
 namespace Everglow.Myth.TheFirefly.NPCs;
 
 public class LargeFireBulb : ModNPC
 {
-	public override void SetStaticDefaults()
-	{
-		//TODO: LittleFireBulb Localization File Text
-		//DisplayName.SetDefault("LittleFireBulb");
-		//	}
-
 	public override void SetDefaults()
 	{
 		NPC.damage = 0;

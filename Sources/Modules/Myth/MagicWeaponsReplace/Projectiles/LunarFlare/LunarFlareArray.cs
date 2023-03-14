@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.MagicWeaponsReplace.Projectiles.LunarFlare.Walls;
 
 namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.LunarFlare;
@@ -51,7 +51,7 @@ internal class LunarFlareArray : ModProjectile
 		player.SetCompositeArmBack(true, PCAS, (float)(Math.Atan2(vTOMouse.Y, vTOMouse.X) - Math.PI / 2d));
 		Projectile.rotation = player.fullRotation;
 
-		if (Lighting.Mode != Terraria.Graphics.Light.LightMode.Color && Lighting.Mode != Terraria.Graphics.Light.LightMode.White)
+		if (Lighting.Mode is not Terraria.Graphics.Light.LightMode.Color and not Terraria.Graphics.Light.LightMode.White)
 			return;
 		RingPos = RingPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
 		Projectile.velocity = RingPos;
@@ -100,9 +100,9 @@ internal class LunarFlareArray : ModProjectile
 	internal List<SubStar> SubStars = new();
 	internal class SubStar
 	{
-		static Texture2D Texture;
-		const float k = 1;
-		Projectile parent;
+		private static Texture2D Texture;
+		private const float k = 1;
+		private Projectile parent;
 		internal int index;
 		internal float rotation;
 		internal float scale;
@@ -206,17 +206,17 @@ internal class StarrySkySystem : ModSystem
 	public override void OnModLoad()
 	{
 		if (Main.netMode != NetmodeID.Server)
-			Everglow.HookSystem.AddMethod(DrawStarrySky, Commons.Core.CodeLayer.PostDrawBG);
+			Ins.HookManager.AddHook(CodeLayer.PostDrawBG, DrawStarrySky);
 	}
 
 	public void DrawStarrySky()
 	{
-		if (Lighting.Mode != Terraria.Graphics.Light.LightMode.Color && Lighting.Mode != Terraria.Graphics.Light.LightMode.White)
+		if (Ins.VisualQuality.Low)
 			return;
 		if (Main.WaveQuality < 3)
 			return;
 		//从RT池子里抓3个
-		var renderTargets = Everglow.RenderTargetPool.GetRenderTarget2DArray(4);
+		var renderTargets = Ins.RenderTargetPool.GetRenderTarget2DArray(4);
 		RenderTarget2D screen = renderTargets.Resource[0];
 		RenderTarget2D StarryTarget = renderTargets.Resource[1];
 		RenderTarget2D blackTarget = renderTargets.Resource[2];
