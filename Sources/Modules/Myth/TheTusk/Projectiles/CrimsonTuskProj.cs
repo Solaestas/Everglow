@@ -1,6 +1,6 @@
 using Terraria.Audio;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
+namespace Everglow.Myth.TheTusk.Projectiles
 {
 	public class CrimsonTuskProj : ModProjectile
 	{
@@ -26,16 +26,12 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 		public override void AI()
 		{
 			if (Projectile.velocity.Length() < 70f)
-			{
 				Projectile.velocity *= 1.1f;
-			}
 
 			if (!Collid)
 			{
 				if (Projectile.velocity.Y != 0)
-				{
 					Projectile.rotation = (float)((Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + Math.PI * 2.5d) % MathHelper.TwoPi);
-				}
 				if (Collision.SolidCollision(Projectile.Center - Vector2.One * 5f, 10, 10))
 				{
 					for (int f = 0; f < 12; f++)
@@ -53,21 +49,15 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 				Projectile.velocity *= 0;
 				Projectile.alpha += 5;
 				if (Projectile.alpha > 254)
-				{
 					Projectile.Kill();
-				}
 			}
 			if (Dam == 0)
 			{
 				Dam = 60;
 				if (Main.expertMode)
-				{
 					Dam = 90;
-				}
 				if (Main.masterMode)
-				{
 					Dam = 120;
-				}
 			}
 		}
 		int Dam = 0;
@@ -83,9 +73,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 			Texture2D texture = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Projectiles/CrimsonTuskProj").Value;
 			Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, colorz, Projectile.rotation, texture.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
 			if (!Down)
-			{
 				return;
-			}
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
 			if (Projectile.alpha == 0)

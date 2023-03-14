@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKing
+﻿namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing
 {
 	class Redlight : ModProjectile
 	{
@@ -28,21 +28,17 @@
 			{
 				kb = Main.rand.NextFloat(-100f, 100f);
 				if (Main.rand.NextFloat(-100f, 100f) > 0)
-				{
 					AIMNpc = 1;
-				}
 			}
 			Player player = Main.player[Player.FindClosest(Projectile.position, Projectile.width, Projectile.height)];
 			AIMpos = new Vector2(-500, 0).RotatedBy(Projectile.timeLeft / 18f * AIMNpc + kb * Math.Sign((Main.time + kb) % 300 - 150));
 			ka = 1;
 			if (Projectile.timeLeft < 60f)
-			{
 				ka = Projectile.timeLeft / 60f;
-			}
-			Lighting.AddLight(Projectile.Center, (float)(255 - Projectile.alpha) * 1.2f / 50f * ka, 0, 0);
+			Lighting.AddLight(Projectile.Center, (255 - Projectile.alpha) * 1.2f / 50f * ka, 0, 0);
 			Projectile.velocity *= 0.96f;
 			Vector2 v0 = AIMpos + player.Center;
-			Vector2 v1 = Vector2.Normalize(v0 - Projectile.Center);
+			var v1 = Vector2.Normalize(v0 - Projectile.Center);
 			v1 = (v0 - Projectile.Center + v1 * 60f) / 480f;
 			Projectile.velocity += v1;
 		}
@@ -58,12 +54,10 @@
 		{
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 			float width = 100;
 			if (Projectile.timeLeft < 50)
-			{
 				width = Projectile.timeLeft * 2f;
-			}
 			TrueL = 0;
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
@@ -82,9 +76,7 @@
 				var w = MathHelper.Lerp(1f, 0.05f, factor);
 				float width2 = width;
 				if (i < 40)
-				{
 					width2 *= (float)Math.Sqrt(i / 40f);
-				}
 				if (TrueL - i < 15)
 				{
 					bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width2 + new Vector2(10, 10) - Main.screenPosition, new Color(Math.Clamp((int)(255 * (TrueL - i - 1) / 15f * ka), 0, 255), 0, 0, 0), new Vector3(factor, 1, w)));
@@ -96,7 +88,7 @@
 					bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width2 + new Vector2(10, 10) - Main.screenPosition, new Color((int)(255 * ka), 0, 0, 0), new Vector3(factor, 0, w)));
 				}
 			}
-			List<Vertex2D> Vx = new List<Vertex2D>();
+			var Vx = new List<Vertex2D>();
 			if (bars.Count > 2)
 			{
 				Vx.Add(bars[0]);

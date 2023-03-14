@@ -1,7 +1,7 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
 using Terraria.GameContent;
 
-namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
+namespace Everglow.Myth.MagicWeaponsReplace.Projectiles
 {
 	/// <summary>
 	/// 魔法书类
@@ -106,17 +106,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
 			{
 				Projectile.timeLeft = player.itemTime + 60;
 				if (Timer < 30)
-				{
 					Timer++;
-				}
 			}
 			else
 			{
 				Timer--;
 				if (Timer < 0)
-				{
 					Projectile.Kill();
-				}
 			}
 			Player.CompositeArmStretchAmount PCAS = Player.CompositeArmStretchAmount.Full;//玩家动作
 
@@ -126,13 +122,11 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
 			Projectile.rotation = player.fullRotation;
 			SpecialAI();
 			if (ProjType == -1)
-			{
 				return;
-			}
 			if (player.itemTime == player.itemTimeMax - 2 && player.HeldItem.type == ItemType)
 			{
-				Vector2 velocity = Utils.SafeNormalize(vTOMouse, Vector2.Zero) * player.HeldItem.shootSpeed;
-				Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * MulStartPosByVelocity, velocity * MulVelocity, ProjType, (int)(player.HeldItem.damage * MulDamage), player.HeldItem.knockBack, player.whoAmI);
+				Vector2 velocity = vTOMouse.SafeNormalize(Vector2.Zero) * player.HeldItem.shootSpeed;
+				var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * MulStartPosByVelocity, velocity * MulVelocity, ProjType, (int)(player.HeldItem.damage * MulDamage), player.HeldItem.knockBack, player.whoAmI);
 				p.CritChance = player.GetWeaponCrit(player.HeldItem);
 			}
 		}
@@ -146,9 +140,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
 		public override void PostDraw(Color lightColor)
 		{
 			if (ItemType == -1)
-			{
 				return;
-			}
 			Texture2D Book = TextureAssets.Item[ItemType].Value;
 			if (BackTexPath == "" && FrontTexPath == "")
 			{
@@ -157,9 +149,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
 			else
 			{
 				if (BackTexPath == "")
-				{
 					Book = MythContent.QuickTexture(FrontTexPath);
-				}
 				else
 				{
 					Book = MythContent.QuickTexture(BackTexPath);
@@ -167,15 +157,11 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
 			}
 			Texture2D BookGlow;
 			if (BackGlowPath == "" && GlowPath == "")
-			{
 				BookGlow = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Item_" + ItemType + "_Glow");
-			}
 			else
 			{
 				if (BackGlowPath == "")
-				{
 					BookGlow = MythContent.QuickTexture(GlowPath);
-				}
 				else
 				{
 					BookGlow = MythContent.QuickTexture(BackGlowPath);
@@ -183,9 +169,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
 			}
 			Texture2D Paper = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/MagicBookPaper");
 			if (PaperTexPath != "")
-			{
 				Paper = MythContent.QuickTexture(PaperTexPath);
-			}
 			Projectile.hide = true;
 
 			DrawBack(TextureAssets.MagicPixel.Value, 2, 1.2f);
@@ -194,9 +178,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
 
 			DrawBack(Book);
 			if (UseGlow)
-			{
 				DrawBack(BookGlow, 1);
-			}
 			DrawPaper(Paper);
 			if (BackTexPath == "" && FrontTexPath == "")
 			{
@@ -205,9 +187,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
 			else
 			{
 				if (FrontTexPath == "")
-				{
 					Book = MythContent.QuickTexture(BackTexPath);
-				}
 				else
 				{
 					Book = MythContent.QuickTexture(FrontTexPath);
@@ -215,17 +195,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
 			}
 			DrawFront(Book);
 			if (GlowPath == "")
-			{
 				BookGlow = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Item_" + ItemType + "_Glow");
-			}
 			else
 			{
 				BookGlow = MythContent.QuickTexture(GlowPath);
 			}
 			if (UseGlow)
-			{
 				DrawFront(BookGlow, 1);
-			}
 			SpecialDraw();
 		}
 		public virtual void SpecialDraw()
@@ -242,30 +218,26 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
 			Vector2 Y0 = new Vector2(BookScale * player.direction, -BookScale * player.gravDir) * 0.64f * MulSize;//把书本贴图（有内容部分）算作一个矩形，这里表示这个矩形的半长，方向与X0垂直，玩家朝右，重力方向朝下时指向右上
 			Color c0 = glowColor;
 			if (GlowType == 0)//如果GlowType = 0不开荧光，取光照色
-			{
 				c0 = Lighting.GetColor((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f));
-			}
 			if (GlowType == 2)//如果GlowType = 2，取光效色
-			{
 				c0 = effectColor;
-			}
 			//后部书页
 			for (int x = 0; x < 8/*一共8页*/; x++)
 			{
-				List<Vertex2D> bars = new List<Vertex2D>();
+				var bars = new List<Vertex2D>();
 				for (int i = 0; i < 10/*一页相当于10个【矩形长条】组成的曲面*/; ++i)
 				{
 					double rot = Timer / 270d + i * Timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d) * 0.4)/*一个和时间，i都有关的函数，制造了页的曲面效果，timer到30就停了，Main.timeForVisualEffects一直变化*/;
-					rot -= x / 540d * (Timer);//每一页之间的角度差
+					rot -= x / 540d * Timer;//每一页之间的角度差
 					rot += Projectile.rotation;//当然也收到弹幕本身的旋转角度影响
 					Vector2 BasePos = Projectile.Center + X0 - X0.RotatedBy(rot) * i / 4.5f;//【矩形长条】长轴的中点，借X0遍历经过弯曲的宽轴【-X0,X0】，如果你意识到了X0是半宽轴，这里就不会有什么疑问
 
 					float UpX = MathHelper.Lerp(TexCoordTop.X / tex.Width, TexCoordRight.X / tex.Width, i / 9f);//纹理坐标的横向插值
 					float UpY = MathHelper.Lerp(TexCoordTop.Y / tex.Height, TexCoordRight.Y / tex.Height, i / 9f);//纹理坐标的纵向插值
-					Vector2 Up = new Vector2(UpX, UpY);//合并
+					var Up = new Vector2(UpX, UpY);//合并
 					Vector2 DownLeft = Up + new Vector2((TexCoordLeft.X - TexCoordTop.X) / tex.Width, (TexCoordLeft.Y - TexCoordTop.Y) / tex.Height);
 					Vector2 DownRight = Up + new Vector2((TexCoordDown.X - TexCoordRight.X) / tex.Width, (TexCoordDown.Y - TexCoordRight.Y) / tex.Height);
-					Vector2 Down = Vector2.Lerp(DownLeft, DownRight, i / 9f);
+					var Down = Vector2.Lerp(DownLeft, DownRight, i / 9f);
 					//上面这几行如果看不懂，就看这个目录下的BookDrawPrinciple.png
 
 					if (Math.Abs(rot) > Math.PI / 2d)//TR不支持禁用背景剔除，只能这样取巧
@@ -303,14 +275,14 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
 			}
 
 			//正在翻起的书页
-			List<Vertex2D> barsII = new List<Vertex2D>();
+			var barsII = new List<Vertex2D>();
 			for (int i = 0; i < 10; ++i)
 			{
 				double rotII = -Timer / 270d - i * Timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d + 1) * 0.4);//翻页起点角度
-				rotII += 8 / 18d / 30d * (Timer);
+				rotII += 8 / 18d / 30d * Timer;
 
 				double rotIII = Timer / 270d + i * Timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d) * 0.4);//翻页终点角度
-				rotIII -= 8 / 18d / 30d * (Timer);
+				rotIII -= 8 / 18d / 30d * Timer;
 
 				double rotIV = MathHelper.Lerp((float)rotII, (float)rotIII, (float)(Main.timeForVisualEffects / 15d + Math.Sin(Main.timeForVisualEffects / 62d) * 9) % 1f);//翻页过程角度插值
 				rotIV += Projectile.rotation;
@@ -318,10 +290,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
 
 				float UpX = MathHelper.Lerp(TexCoordTop.X / tex.Width, TexCoordRight.X / tex.Width, i / 9f);
 				float UpY = MathHelper.Lerp(TexCoordTop.Y / tex.Height, TexCoordRight.Y / tex.Height, i / 9f);
-				Vector2 Up = new Vector2(UpX, UpY);
+				var Up = new Vector2(UpX, UpY);
 				Vector2 DownLeft = Up + new Vector2((TexCoordLeft.X - TexCoordTop.X) / tex.Width, (TexCoordLeft.Y - TexCoordTop.Y) / tex.Height);
 				Vector2 DownRight = Up + new Vector2((TexCoordDown.X - TexCoordRight.X) / tex.Width, (TexCoordDown.Y - TexCoordRight.Y) / tex.Height);
-				Vector2 Down = Vector2.Lerp(DownLeft, DownRight, i / 9f);
+				var Down = Vector2.Lerp(DownLeft, DownRight, i / 9f);
 				if (Math.Abs(rotIV) > Math.PI / 2d)
 				{
 					if (player.direction == 1)
@@ -357,20 +329,20 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
 			//前部书页
 			for (int x = 0; x < 8; x++)
 			{
-				List<Vertex2D> bars = new List<Vertex2D>();
+				var bars = new List<Vertex2D>();
 				for (int i = 0; i < 10; ++i)
 				{
 					double rot = -Timer / 270d - i * Timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d + 1) * 0.4);
-					rot += x / 18d / 30d * (Timer);
+					rot += x / 18d / 30d * Timer;
 					rot += Projectile.rotation;
 					Vector2 BasePos = Projectile.Center + X0 - X0.RotatedBy(rot) * i / 4.5f - Y0 * 0.05f - X0 * 0.02f;//【- Y0 * 0.05f - X0 * 0.02f】再现，为了不让翻起的那一页到前面时凸出来
 
 					float UpX = MathHelper.Lerp(TexCoordTop.X / tex.Width, TexCoordRight.X / tex.Width, i / 9f);
 					float UpY = MathHelper.Lerp(TexCoordTop.Y / tex.Height, TexCoordRight.Y / tex.Height, i / 9f);
-					Vector2 Up = new Vector2(UpX, UpY);
+					var Up = new Vector2(UpX, UpY);
 					Vector2 DownLeft = Up + new Vector2((TexCoordLeft.X - TexCoordTop.X) / tex.Width, (TexCoordLeft.Y - TexCoordTop.Y) / tex.Height);
 					Vector2 DownRight = Up + new Vector2((TexCoordDown.X - TexCoordRight.X) / tex.Width, (TexCoordDown.Y - TexCoordRight.Y) / tex.Height);
-					Vector2 Down = Vector2.Lerp(DownLeft, DownRight, i / 9f);
+					var Down = Vector2.Lerp(DownLeft, DownRight, i / 9f);
 					if (Math.Abs(rot) > Math.PI / 2d)
 					{
 						if (player.direction * player.gravDir == 1)
@@ -419,14 +391,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
 			Vector2 Y0 = new Vector2(BookScale * player.direction, -BookScale * player.gravDir) * 0.707f * MulSize;
 			Color c0 = glowColor;
 			if (GlowType == 0)
-			{
 				c0 = Lighting.GetColor((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f));
-			}
 			if (GlowType == 2)
-			{
 				c0 = effectColor;
-			}
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 			for (int i = 0; i < 10; ++i)
 			{
 				double rot = Timer / 270d + i * Timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d) * 0.4);
@@ -434,10 +402,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
 
 				float UpX = MathHelper.Lerp(TexCoordTop.X / tex.Width, TexCoordRight.X / tex.Width, i / 9f);
 				float UpY = MathHelper.Lerp(TexCoordTop.Y / tex.Height, TexCoordRight.Y / tex.Height, i / 9f);
-				Vector2 Up = new Vector2(UpX, UpY);
+				var Up = new Vector2(UpX, UpY);
 				Vector2 DownLeft = Up + new Vector2((TexCoordLeft.X - TexCoordTop.X) / tex.Width, (TexCoordLeft.Y - TexCoordTop.Y) / tex.Height);
 				Vector2 DownRight = Up + new Vector2((TexCoordDown.X - TexCoordRight.X) / tex.Width, (TexCoordDown.Y - TexCoordRight.Y) / tex.Height);
-				Vector2 Down = Vector2.Lerp(DownLeft, DownRight, i / 9f);
+				var Down = Vector2.Lerp(DownLeft, DownRight, i / 9f);
 				rot += Projectile.rotation;
 				if (Math.Abs(rot) > Math.PI / 2d)
 				{
@@ -484,14 +452,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
 			Vector2 Y0 = new Vector2(BookScale * player.direction, -BookScale * player.gravDir) * 0.707f * MulSize;
 			Color c0 = glowColor;
 			if (GlowType == 0)
-			{
 				c0 = Lighting.GetColor((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f));
-			}
 			if (GlowType == 2)
-			{
 				c0 = effectColor;
-			}
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 			for (int i = 0; i < 10; ++i)
 			{
 				double rot = -Timer / 270d - i * Timer / 400d * (1 + Math.Sin(Main.timeForVisualEffects / 7d + 1) * 0.4);
@@ -500,10 +464,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
 
 				float UpX = MathHelper.Lerp(TexCoordTop.X / tex.Width, TexCoordRight.X / tex.Width, i / 9f);
 				float UpY = MathHelper.Lerp(TexCoordTop.Y / tex.Height, TexCoordRight.Y / tex.Height, i / 9f);
-				Vector2 Up = new Vector2(UpX, UpY);
+				var Up = new Vector2(UpX, UpY);
 				Vector2 DownLeft = Up + new Vector2((TexCoordLeft.X - TexCoordTop.X) / tex.Width, (TexCoordLeft.Y - TexCoordTop.Y) / tex.Height);
 				Vector2 DownRight = Up + new Vector2((TexCoordDown.X - TexCoordRight.X) / tex.Width, (TexCoordDown.Y - TexCoordRight.Y) / tex.Height);
-				Vector2 Down = Vector2.Lerp(DownLeft, DownRight, i / 9f);
+				var Down = Vector2.Lerp(DownLeft, DownRight, i / 9f);
 				if (Math.Abs(rot) > Math.PI / 2d)
 				{
 					if (player.direction * player.gravDir == 1)
@@ -541,9 +505,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
 		public override void Kill(int timeLeft)
 		{
 			if (DustType == -1)
-			{
 				return;
-			}
 			Player player = Main.player[Projectile.owner];
 			Vector2 X0 = new Vector2(BookScale * player.direction, BookScale * player.gravDir) * 0.5f;
 			Vector2 Y0 = new Vector2(BookScale * player.direction, -BookScale * player.gravDir) * 0.707f;
@@ -552,23 +514,21 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
 				double rot = 0;
 				rot += Projectile.rotation;
 				Vector2 BasePos = Projectile.Center + X0 - X0.RotatedBy(rot) * i / 4.5f;
-				Dust d0 = Dust.NewDustDirect(BasePos - Y0, 0, 0, DustType);
+				var d0 = Dust.NewDustDirect(BasePos - Y0, 0, 0, DustType);
 				d0.noGravity = true;
-				Dust d1 = Dust.NewDustDirect(BasePos + Y0, 0, 0, DustType);
+				var d1 = Dust.NewDustDirect(BasePos + Y0, 0, 0, DustType);
 				d1.noGravity = true;
 			}
 			if (DustTypeII != -1)
-			{
 				DustType = DustTypeII;
-			}
 			for (int i = 0; i < 14; ++i)
 			{
 				double rot = 0;
 				rot += Projectile.rotation;
 				Vector2 BasePos = Projectile.Center + Y0 - Y0.RotatedBy(rot) * i / 4.5f;
-				Dust d0 = Dust.NewDustDirect(BasePos - X0, 0, 0, DustType);
+				var d0 = Dust.NewDustDirect(BasePos - X0, 0, 0, DustType);
 				d0.noGravity = true;
-				Dust d1 = Dust.NewDustDirect(BasePos + X0, 0, 0, DustType);
+				var d1 = Dust.NewDustDirect(BasePos + X0, 0, 0, DustType);
 				d1.noGravity = true;
 			}
 		}

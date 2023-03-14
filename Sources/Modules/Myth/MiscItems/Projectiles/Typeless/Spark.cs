@@ -1,4 +1,4 @@
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Typeless
+namespace Everglow.Myth.MiscItems.Projectiles.Typeless
 {
 	public class Spark : ModProjectile
 	{
@@ -32,16 +32,12 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Typeless
 		{
 			ka = 0.2f;
 			if (Projectile.timeLeft < 60f)
-			{
 				ka = Projectile.timeLeft / 300f;
-			}
-			Projectile.rotation = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X));
+			Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
 			Projectile.velocity.Y += 0.06f;
 			Projectile.scale *= 0.96f;
 			if (Projectile.scale < 0.15f)
-			{
 				Projectile.Kill();
-			}
 			for (int j = 0; j < 200; j++)
 			{
 				if (Main.npc[j].CanBeChasedBy(Projectile, false) && Collision.CanHit(Projectile.Center, 1, 1, Main.npc[j].Center, 1, 1) && Main.npc[j].active && !Main.npc[j].friendly)
@@ -50,9 +46,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Typeless
 					{
 						int Dam = (int)(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f)) - Main.npc[j].defDefense;
 						if (Dam < 1)
-						{
 							Dam = 1;
-						}
 						Main.npc[j].StrikeNPC(Dam, 0, Projectile.direction, Main.rand.Next(100) < Projectile.ai[0]);
 						Player p = Main.player[Projectile.owner];
 						p.dpsDamage += (int)(Dam * (100 + Projectile.ai[0]) / 100d);
@@ -75,20 +69,14 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Typeless
 		{
 			Projectile.penetrate--;
 			if (Projectile.penetrate <= 0)
-			{
 				Projectile.Kill();
-			}
 			else
 			{
 				Projectile.ai[0] += 0.1f;
 				if (Projectile.velocity.X != oldVelocity.X)
-				{
 					Projectile.velocity.X = -oldVelocity.X;
-				}
 				if (Projectile.velocity.Y != oldVelocity.Y)
-				{
 					Projectile.velocity.Y = -oldVelocity.Y;
-				}
 				Projectile.velocity *= 0.98f;
 				Projectile.scale *= 0.9f;
 			}
@@ -101,12 +89,10 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Typeless
 		{
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-			List<Vertex2D> bars = new List<Vertex2D>(); // Was List<VertexBase.CustomVertexInfo>
+			var bars = new List<Vertex2D>(); // Was List<VertexBase.CustomVertexInfo>
 			float width = 2 * Projectile.scale;
 			if (Projectile.timeLeft < 60)
-			{
 				width = Projectile.timeLeft / 30f * Projectile.scale;
-			}
 			TrueL = 0;
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
@@ -123,11 +109,11 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Typeless
 				var factor = 1f;
 				factor = i / (float)TrueL;
 				var w = MathHelper.Lerp(1f, 0.05f, factor);
-				Lighting.AddLight(Projectile.oldPos[i], (float)(255 - Projectile.alpha) * 0.5f / 50f * ka * (1 - factor), (float)(255 - Projectile.alpha) * 0.2f / 50f * ka * (1 - factor), 0);
+				Lighting.AddLight(Projectile.oldPos[i], (255 - Projectile.alpha) * 0.5f / 50f * ka * (1 - factor), (255 - Projectile.alpha) * 0.2f / 50f * ka * (1 - factor), 0);
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(8f, 8f) - Main.screenPosition, new Color(254, 254, 254, 0), new Vector3(factor, 1, w)));
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(8f, 8f) - Main.screenPosition, new Color(254, 254, 254, 0), new Vector3(factor, 0, w)));
 			}
-			List<Vertex2D> Vx = new List<Vertex2D>();
+			var Vx = new List<Vertex2D>();
 			if (bars.Count > 2)
 			{
 				Vx.Add(bars[0]);

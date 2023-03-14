@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKing
+﻿namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing
 {
 	public class GoldLanternStar : ModProjectile
 	{
@@ -32,25 +32,19 @@
 			if (Projectile.timeLeft > 60)
 			{
 				if (sca < 1)
-				{
 					sca += 0.03f;
-				}
 				else
 				{
 					sca = 1;
 				}
 				if (Projectile.timeLeft < 220)
-				{
 					Projectile.velocity *= 1.045f;
-				}
 
 			}
 			else
 			{
 				if (sca > 0)
-				{
 					sca -= 0.03f;
-				}
 				else
 				{
 					sca = 0;
@@ -58,9 +52,7 @@
 				Projectile.velocity *= 0.95f;
 			}
 			if (Wid < 12f)
-			{
 				Wid += 0.2f;
-			}
 			else
 			{
 				Wid = 12;

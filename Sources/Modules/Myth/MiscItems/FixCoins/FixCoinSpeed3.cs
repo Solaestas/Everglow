@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.FixCoins
+﻿namespace Everglow.Myth.MiscItems.FixCoins
 {
 	public class FixCoinSpeed3 : FixCoinItem
 	{
@@ -9,7 +9,7 @@
 
 		public override void SSD()
 		{
-			Item.shoot = ModContent.ProjectileType<MiscItems.Projectiles.Typeless.FixCoins.FixCoinSpeed3>();
+			Item.shoot = ModContent.ProjectileType<Projectiles.Typeless.FixCoins.FixCoinSpeed3>();
 		}
 	}
 }

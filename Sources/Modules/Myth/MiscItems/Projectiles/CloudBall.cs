@@ -1,7 +1,7 @@
 ﻿using Terraria.Audio;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles
+namespace Everglow.Myth.MiscItems.Projectiles
 {
 	public class CloudBall : ModProjectile
 	{
@@ -44,16 +44,12 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles
 		public override void AI()
 		{
 			if (Projectile.timeLeft > 3597)
-			{
 				return;
-			}
 			Projectile.alpha = 100;
 			Vector2 normalize = Projectile.velocity.SafeNormalize(Vector2.Zero);
 			float speed = MathF.Round(Projectile.velocity.Length(), 0);
 			if (DistanceCompletion >= speed)
-			{
 				DistanceCompletion -= speed;
-			}
 			else
 			{
 				for (float i = DistanceCompletion; i < speed; i += DustSpacing)

@@ -1,11 +1,11 @@
-using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures;
+using Everglow.Myth.TheFirefly.Dusts;
+using Everglow.Myth.TheFirefly.Items.Furnitures;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.ObjectData;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
+namespace Everglow.Myth.TheFirefly.Tiles.Furnitures
 {
 	//TODO: Smart Cursor Outlines and tModLoader support
 	public class GlowWoodDoorClosedType2 : ModTile

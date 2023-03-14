@@ -1,14 +1,15 @@
-﻿using Terraria.Localization;
+﻿using Everglow.Myth.TheTusk.Items;
+using Terraria.Localization;
 using Terraria.ObjectData;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
+namespace Everglow.Myth.TheTusk.Tiles
 {
 	public class StoneTuskSmall : ModTile
 	{
 		public override void PostSetDefaults()
 		{
-			Main.tileFrameImportant[(int)base.Type] = true;
-			Main.tileNoAttach[(int)base.Type] = true;
+			Main.tileFrameImportant[Type] = true;
+			Main.tileNoAttach[Type] = true;
 			TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
 			TileObjectData.newTile.Height = 2;
 			TileObjectData.newTile.Width = 1;
@@ -18,7 +19,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
 				18
 			};
 			TileObjectData.newTile.CoordinateWidth = 24;
-			TileObjectData.addTile((int)base.Type);
+			TileObjectData.addTile(Type);
 			DustType = 191;
 			ModTranslation modTranslation = base.CreateMapEntryName(null);
 			AddMapEntry(new Color(112, 83, 67), modTranslation);
@@ -28,7 +29,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
 		}
 		public override void NumDust(int i, int j, bool fail, ref int num)
 		{
-			num = (fail ? 1 : 3);
+			num = fail ? 1 : 3;
 		}
 		public override void NearbyEffects(int i, int j, bool closer)
 		{
@@ -38,12 +39,12 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
 			for (int x = 0; x < 2; x++)
 			{
 				Vector2 v = new Vector2(0, Main.rand.NextFloat(0, 60f)).RotatedByRandom(3.14159);
-				Item.NewItem(null, i * 16 + (int)v.X, j * 16 + (int)v.Y, 16, 32, ModContent.ItemType<Items.StoneTusk>());
+				Item.NewItem(null, i * 16 + (int)v.X, j * 16 + (int)v.Y, 16, 32, ModContent.ItemType<StoneTusk>());
 			}
 		}
 		public override void PlaceInWorld(int i, int j, Item item)
 		{
-			short num = (short)(Main.rand.Next(0, 12));
+			short num = (short)Main.rand.Next(0, 12);
 			Main.tile[i, j].TileFrameX = (short)(num * 24);
 			Main.tile[i, j + 1].TileFrameX = (short)(num * 24);
 		}

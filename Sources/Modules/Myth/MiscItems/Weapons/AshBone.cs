@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
+﻿namespace Everglow.Myth.MiscItems.Weapons
 {
 	public class AshBone : ModItem
 	{
@@ -13,7 +13,7 @@
 		//}
 		public override void SetDefaults()
 		{
-			DefaultToWhip(ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Summon.AshBone>(), 25, 2f, 5.4f, 30);
+			DefaultToWhip(ModContent.ProjectileType<Projectiles.Weapon.Summon.AshBone>(), 25, 2f, 5.4f, 30);
 			Item.rare = 3;
 			Item.damage = 25;
 			Item.value = Item.sellPrice(0, 3, 0, 0);
@@ -33,9 +33,7 @@
 			Player player = Main.LocalPlayer;
 			Item.autoReuse = false;
 			if (player.autoReuseGlove)
-			{
 				Item.autoReuse = true;
-			}
 			Item.autoReuse = false;
 			Item.useStyle = 1;
 			Item.useAnimation = animationTotalTime;

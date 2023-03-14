@@ -1,6 +1,6 @@
-﻿using Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration;
+﻿using Everglow.Myth.TheFirefly.WorldGeneration;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.GlobalNPCs
+namespace Everglow.Myth.TheFirefly.GlobalNPCs
 {
 	public class SpawnControl : GlobalNPC
 	{
@@ -11,9 +11,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.GlobalNPCs
 			{
 				// 生成位置在流萤地形内的原版 NPC 禁止生成。
 				if (!CanSpawnToFirefly(kv.Key, spawnInfo))
-				{
 					pool.Remove(kv.Key);
-				}
 			}
 		}
 
@@ -21,7 +19,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.GlobalNPCs
 		public static bool CanSpawnToFirefly(int type, NPCSpawnInfo spawnInfo)
 		{
 			// 0 代表是原版 NPC，不会在这里给出要生成的怪的 Type，ModNPC 会直接给出来。
-			if ((type == 0 && true) &&
+			if (type == 0 && true &&
 				(InFirefly(spawnInfo.SpawnTileX, spawnInfo.SpawnTileY) || // 在没在流萤范围
 				spawnInfo.SpawnTileType == ModContent.TileType<Tiles.DarkCocoon>())) // 在没在环境砖块上，不判断是否自然生成会导致这个物块放到哪里哪里不生成怪。
 			{
@@ -34,7 +32,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.GlobalNPCs
 		public static bool InFirefly(int tileX, int tileY)
 		{
 			MothLand mothLand = ModContent.GetInstance<MothLand>(); // 联机应该没问题。
-			Vector2 BiomeCenter = new Vector2(mothLand.fireflyCenterX * 16, (mothLand.fireflyCenterY - 20) * 16);
+			var BiomeCenter = new Vector2(mothLand.fireflyCenterX * 16, (mothLand.fireflyCenterY - 20) * 16);
 			Vector2 distance = new Vector2(tileX * 16, tileY * 16) - BiomeCenter;
 			distance.Y *= 1.35f;
 			distance.X *= 0.9f;

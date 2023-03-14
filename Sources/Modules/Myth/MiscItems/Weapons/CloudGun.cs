@@ -1,7 +1,8 @@
-﻿using Terraria.Audio;
+﻿using Everglow.Myth.MiscItems.Ammos;
+using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
+namespace Everglow.Myth.MiscItems.Weapons
 {
 	public class CloudGun : ModItem
 	{
@@ -31,9 +32,9 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
 			Item.rare = ItemRarityID.Blue;
 			Item.UseSound = SoundID.Item11;
 			Item.autoReuse = true;
-			Item.shoot = ModContent.ProjectileType<MiscItems.Projectiles.CloudBall>();
+			Item.shoot = ModContent.ProjectileType<Projectiles.CloudBall>();
 			Item.shootSpeed = 8f;
-			Item.useAmmo = ModContent.ItemType<Ammos.CloudBall>();
+			Item.useAmmo = ModContent.ItemType<CloudBall>();
 			Item.crit = 16;
 		}
 

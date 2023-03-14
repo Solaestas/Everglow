@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Dusts
+﻿namespace Everglow.Myth.MiscItems.Dusts
 {
 	public class BlackSmog : ModDust
 	{
@@ -8,7 +8,7 @@
 			dust.noGravity = true;
 			dust.noLight = false;
 			dust.scale *= 1f;
-			dust.rotation = Main.rand.NextFloat((float)(Math.PI));
+			dust.rotation = Main.rand.NextFloat((float)Math.PI);
 			dust.alpha = 0;
 		}
 		public override bool Update(Dust dust)
@@ -19,9 +19,7 @@
 			dust.velocity *= 0.95f;
 			float scale = dust.scale;
 			if (dust.scale < 0.25f)
-			{
 				dust.active = false;
-			}
 			//for(int i = 0; i < 200;i++)
 			//{
 			//    if((Main.npc[i].Center - dust.position).Length() < 10 && !Main.npc[i].dontTakeDamage && !Main.npc[i].friendly)

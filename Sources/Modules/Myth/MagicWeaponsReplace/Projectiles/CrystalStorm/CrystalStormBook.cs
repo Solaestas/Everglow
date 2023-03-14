@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.CrystalStorm
+﻿namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.CrystalStorm
 {
 	internal class CrystalStormBook : MagicBookProjectile
 	{
@@ -21,21 +21,19 @@
 				Vector2 velocity;
 				for (int f = 0; f < Main.rand.Next(2, 4); f++)
 				{
-					velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero).RotatedBy(Main.rand.NextFloat(-0.3f, 0.3f)) * player.HeldItem.shootSpeed;
-					Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -1, velocity * 1.9f, ModContent.ProjectileType<CrystalStormII>(), player.HeldItem.damage, player.HeldItem.knockBack, player.whoAmI);
+					velocity = (Main.MouseWorld - Projectile.Center).SafeNormalize(Vector2.Zero).RotatedBy(Main.rand.NextFloat(-0.3f, 0.3f)) * player.HeldItem.shootSpeed;
+					var p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -1, velocity * 1.9f, ModContent.ProjectileType<CrystalStormII>(), player.HeldItem.damage, player.HeldItem.knockBack, player.whoAmI);
 					p0.CritChance = player.GetWeaponCrit(player.HeldItem);
 				}
 				if (times % 33 == 12)
 				{
-					velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero) * player.HeldItem.shootSpeed;
-					Projectile p1 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -1, velocity * 0.6f, ModContent.ProjectileType<LargeCrystal>(), (int)(player.HeldItem.damage * 2.8), player.HeldItem.knockBack, player.whoAmI);
+					velocity = (Main.MouseWorld - Projectile.Center).SafeNormalize(Vector2.Zero) * player.HeldItem.shootSpeed;
+					var p1 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -1, velocity * 0.6f, ModContent.ProjectileType<LargeCrystal>(), (int)(player.HeldItem.damage * 2.8), player.HeldItem.knockBack, player.whoAmI);
 					p1.CritChance = player.GetWeaponCrit(player.HeldItem) * 3;
 				}
 				times++;
 				if (times > 33)
-				{
 					times = 0;
-				}
 			}
 
 			//string pathBase = "MagicWeaponsReplace/Textures/";

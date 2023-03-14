@@ -1,6 +1,6 @@
 ﻿using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKing
+namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing
 {
 	public class GoldLanternLine4 : ModProjectile
 	{
@@ -39,19 +39,13 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKin
 			Vector2 v = new Vector2(0, 3).RotatedBy(Z);
 			Z += Main.rand.NextFloat(-0.04f, 0.04f);
 			if (Projectile.timeLeft == 60)
-			{
 				Vk = (player.Center - Projectile.Center) / (player.Center - Projectile.Center).Length() * 24;
-			}
 			if (Projectile.timeLeft <= 60)
-			{
 				v = Vk;
-			}
 			Projectile.velocity = Projectile.velocity * 0.96f + v * 0.04f;
 			ka = 0.2f;
 			if (Projectile.timeLeft < 60f)
-			{
 				ka = Projectile.timeLeft / 300f;
-			}
 		}
 
 
@@ -60,12 +54,10 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKin
 		{
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 			float width = 12;
 			if (Projectile.timeLeft < 60)
-			{
 				width = Projectile.timeLeft / 5f;
-			}
 			TrueL = 0;
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
@@ -86,7 +78,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKin
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(10, 10) - Main.screenPosition, new Color(254, 254, 254, 0), new Vector3(factor, 1, w)));
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(10, 10) - Main.screenPosition, new Color(254, 254, 254, 0), new Vector3(factor, 0, w)));
 			}
-			List<Vertex2D> Vx = new List<Vertex2D>();
+			var Vx = new List<Vertex2D>();
 			if (bars.Count > 2)
 			{
 				Vx.Add(bars[0]);

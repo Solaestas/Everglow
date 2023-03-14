@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Vanities
+﻿namespace Everglow.Myth.OmniElementItems.Vanities
 {
 	//TODO Need Rewrite
 	[AutoloadEquip(EquipType.Body)]

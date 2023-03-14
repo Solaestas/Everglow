@@ -1,6 +1,6 @@
 using Terraria.Audio;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
+namespace Everglow.Myth.TheTusk.Projectiles
 {
 	public class TuskSpice : ModProjectile
 	{
@@ -42,20 +42,14 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 				{
 					Projectile.velocity += v0 * (float)Math.Log(v0.Length() / 30f + 1) * 0.005f;
 					if (v0.Length() < 25 && Projectile.velocity.Length() < 2)
-					{
 						OnPlac = true;
-					}
 					float k0 = (float)Math.Log(v0.Length() / 30f + 1);
 					if (k0 > 1.00f)
-					{
 						k0 = 1.00f;
-					}
 
 					Projectile.velocity *= k0;
 					if (Projectile.velocity.Length() > 20)
-					{
 						Projectile.velocity *= 20f / Projectile.velocity.Length();
-					}
 				}
 
 				Projectile.rotation = (float)((Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + Math.PI * 2.5d) % MathHelper.TwoPi);
@@ -96,9 +90,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 						Projectile.velocity *= 0;
 						Projectile.alpha += 5;
 						if (Projectile.alpha > 254)
-						{
 							Projectile.Kill();
-						}
 					}
 				}
 			}
@@ -106,13 +98,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 			{
 				Dam = 60;
 				if (Main.expertMode)
-				{
 					Dam = 90;
-				}
 				if (Main.masterMode)
-				{
 					Dam = 120;
-				}
 			}
 		}
 		int Dam = 0;
@@ -128,9 +116,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 			Texture2D texture = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Projectiles/TuskSpice" + Fra.ToString()).Value;
 			Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, colorz, Projectile.rotation, new Vector2(12f, 25f), Projectile.scale, SpriteEffects.None, 0);
 			if (!Down)
-			{
 				return;
-			}
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
 			if (Projectile.alpha == 0)

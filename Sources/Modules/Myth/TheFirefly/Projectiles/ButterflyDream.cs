@@ -1,4 +1,6 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
+﻿using Everglow.Myth.TheFirefly.Dusts;
+
+namespace Everglow.Myth.TheFirefly.Projectiles
 {
 	public class ButterflyDream : ModProjectile
 	{
@@ -40,14 +42,12 @@
 				Projectile.spriteDirection = Projectile.velocity.X > 0 ? -1 : 1;
 				Projectile.velocity += new Vector2(0, 0.2f * Projectile.ai[0]);
 				if (Projectile.timeLeft == 600)
-				{
 					Projectile.frame = Main.rand.Next(4);
-				}
 
 				Projectile.velocity.Y *= 0.98f;
 				if (Projectile.timeLeft % 3 == 0)
 				{
-					int num90 = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.7f, 1.9f));
+					int num90 = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.7f, 1.9f));
 					Main.dust[num90].velocity = Projectile.velocity * 0.5f;
 				}
 			}
@@ -55,9 +55,7 @@
 			if (Projectile.ai[1] == 1)//限制圈，ai0：npc
 			{
 				if (Projectile.timeLeft == 800)
-				{
 					Projectile.alpha = 200;
-				}
 
 				if (Projectile.timeLeft > 740)
 				{
@@ -82,28 +80,22 @@
 				Projectile.Center = npc.Center + Projectile.velocity;
 				if (Projectile.timeLeft < 740 && Projectile.timeLeft % 2 == 0)
 				{
-					int num90 = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.4f, 0.9f));
+					int num90 = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.4f, 0.9f));
 					Main.dust[num90].velocity = Vector2.Normalize(Projectile.velocity.RotatedBy(1.57f)) * 2;
 				}
 			}
 
 			if (Projectile.frame > 3)
-			{
 				Projectile.frame = 0;
-			}
 
 			if (Projectile.timeLeft % 10 == 0)
-			{
 				Projectile.frame++;
-			}
 		}
 
 		public override bool ShouldUpdatePosition()
 		{
 			if (Projectile.ai[1] == 1)
-			{
 				return false;
-			}
 
 			return true;
 		}

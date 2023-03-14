@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheTusk.Gores
+﻿namespace Everglow.Myth.TheTusk.Gores
 {
 	public class Blood : LiquidGore
 	{
@@ -14,9 +14,7 @@
 			gore.rotation += Main.rand.NextFloat(-0.05f, 0.05f);
 			gore.timeLeft -= 8;
 			if (Collision.SolidCollision(gore.position, (int)gore.Width, (int)gore.Height))
-			{
 				gore.timeLeft -= 150;
-			}
 			return base.Update(gore);
 		}
 	}

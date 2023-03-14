@@ -1,6 +1,6 @@
 ﻿using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
+namespace Everglow.Myth.TheFirefly.Projectiles
 {
 	public class CorMoth4DProj : ModProjectile
 	{
@@ -52,11 +52,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 		public override void AI()
 		{
 			if (Projectile.timeLeft % 3 == 0 && Main.rand.NextBool())
-			{
 				Projectile.frame++;
-			}
 
-			int t = (maxTimeleft - Projectile.timeLeft);
+			int t = maxTimeleft - Projectile.timeLeft;
 			if (t == 0)
 			{
 				Projectile.spriteDirection = Main.rand.NextBool() ? 1 : -1;
@@ -64,9 +62,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			}
 			//逐维度展开
 			if (t < 50)
-			{
 				v4Position.Y = MathHelper.Lerp(v4Position.Y, targetPos.Y, 0.05f);
-			}
 			else if (t < 100)
 			{
 				v4Position.X = MathHelper.Lerp(v4Position.X, targetPos.X, 0.05f);
@@ -121,14 +117,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 		{
 			Texture2D Light = Common.MythContent.QuickTexture("TheFirefly/Projectiles/FixCoinLight3");
 			Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
-			Vector2 origin = new Vector2(tex.Width / 2, tex.Height / 6);
+			var origin = new Vector2(tex.Width / 2, tex.Height / 6);
 			Rectangle sourceRec = tex.Frame(1, 4, 0, Projectile.frame % 4);
 			Vector3 v3 = Projection(v4Position * Projectile.ai[1] + new Vector4(Owner.Center, 0, 0), 1000);
 			if (v3.Z < 900)
 			{
 				Vector2 pos = Projection2(v3, Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2, out float scale, 1000);
 
-				Color c = new Color(55, 125, 255, 0);
+				var c = new Color(55, 125, 255, 0);
 				Main.spriteBatch.Draw(Light, pos - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, c * 0.2f, Projectile.rotation, Light.Size() / 2, Projectile.scale * scale, SpriteEffects.None, 0);
 				Main.spriteBatch.Draw(tex, pos - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), sourceRec, c, Projectile.rotation, origin, Projectile.scale * scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 			}
@@ -139,7 +135,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			float Wid = 24f;
 			Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
 
-			List<Vertex2D> vertex2Ds = new List<Vertex2D>();
+			var vertex2Ds = new List<Vertex2D>();
 			float Value0 = (float)(Main.timeForVisualEffects / 291d + 20 + AddValue) % 1f;
 			float Value1 = (float)(Main.timeForVisualEffects / 291d + 20.1 + AddValue) % 1f;
 			if (Value1 < Value0)
@@ -176,7 +172,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 		private Vector3 Projection(Vector4 vec, float viewZ)
 		{
 			float k1 = -viewZ / (vec.W - viewZ);
-			Vector3 v3 = new Vector3(vec.X, vec.Y, vec.Z);
+			var v3 = new Vector3(vec.X, vec.Y, vec.Z);
 			v3 += (k1 - 1) * (v3 - new Vector3(Owner.Center, 0));
 			return v3;
 		}
@@ -185,7 +181,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 		{
 			float k2 = -viewZ / (v3.Z - viewZ);
 			scale = k2;
-			Vector2 v = new Vector2(v3.X, v3.Y);
+			var v = new Vector2(v3.X, v3.Y);
 			return v + (k2 - 1) * (v - center);
 		}
 	}

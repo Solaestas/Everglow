@@ -1,8 +1,9 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth;
+using Everglow.Myth.Common;
 using Terraria.Audio;
 using Terraria.GameContent.Shaders;
 
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectiles
+namespace Everglow.Myth.MiscItems.Weapons.Clubs.Projectiles
 {
 	public abstract class ClubProj : ModProjectile, IWarpProjectile
 	{
@@ -100,7 +101,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
 			if (AudioTimer <= 0)
 			{
 				//SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/MiscItems/Weapons/Clubs/Projectiles/Club_wood").WithPitchOffset(-1 + Omega * 3f), Projectile.Center);
-				SoundEngine.PlaySound(((SoundID.DD2_MonkStaffSwing.WithPitchOffset(-1 + Omega * 3f)).WithVolumeScale(1 - Omega)), Projectile.Center);
+				SoundEngine.PlaySound(SoundID.DD2_MonkStaffSwing.WithPitchOffset(-1 + Omega * 3f).WithVolumeScale(1 - Omega), Projectile.Center);
 				AudioTimer = MathF.PI;
 			}
 		}
@@ -121,7 +122,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
 			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(vT0.Y, vT0.X) - Math.PI / 2d));
 			Projectile.Center = player.MountedCenter + MouseToPlayer;
 			Projectile.spriteDirection = player.direction;
-			Projectile.localNPCHitCooldown = (int)(MathF.PI / (Math.Max(Omega, 0.157)));
+			Projectile.localNPCHitCooldown = (int)(MathF.PI / Math.Max(Omega, 0.157));
 			//这个受击冷却是个麻烦的问题                                                                          
 			//旋转一周打两次，理论结果是Pi/Omega
 			//存在角加速过程
@@ -135,33 +136,23 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
 			{
 				float MeleeSpeed = player.GetAttackSpeed(Projectile.DamageType);
 				if (Omega < MeleeSpeed * MaxOmega)
-				{
 					Omega += Beta * MeleeSpeed;
-				}
 				if (Projectile.timeLeft < 22)
-				{
 					Projectile.timeLeft = 22;
-				}
 			}
 			else
 			{
 				Omega *= 0.9f;
 				if (Projectile.timeLeft > 22)
-				{
 					Projectile.timeLeft = 22;
-				}
 			}
 			Vector2 HitRange = new Vector2(HitLength, HitLength * Projectile.spriteDirection).RotatedBy(Projectile.rotation) * Projectile.scale;
 			trailVecs.Enqueue(HitRange);
 			if (trailVecs.Count > trailLength)
-			{
 				trailVecs.Dequeue();
-			}
 
 			if (player.dead)
-			{
 				Projectile.Kill();
-			}
 			player.heldProj = Projectile.whoAmI;
 			UpdateSound();
 			ProduceWaterRipples(new Vector2(HitLength * Projectile.scale));
@@ -172,9 +163,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
 			if (player.controlUseItem && !player.dead)
 			{
 				if (player.HeldItem.shoot == Projectile.type)
-				{
 					return true;
-				}
 
 			}
 			return false;
@@ -183,15 +172,13 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
 		{
 			SpriteEffects effects = SpriteEffects.None;
 			if (Projectile.spriteDirection == 1)
-			{
 				effects = SpriteEffects.FlipHorizontally;
-			}
-			Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+			var texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
 			Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, texture.Size() / 2f, Projectile.scale, effects, 0f);
 			for (int i = 0; i < 5; i++)
 			{
 				float alp = Omega / 0.4f;
-				Color color2 = new Color((int)(lightColor.R * (5 - i) / 5f * alp), (int)(lightColor.G * (5 - i) / 5f * alp), (int)(lightColor.B * (5 - i) / 5f * alp), (int)(lightColor.A * (5 - i) / 5f * alp));
+				var color2 = new Color((int)(lightColor.R * (5 - i) / 5f * alp), (int)(lightColor.G * (5 - i) / 5f * alp), (int)(lightColor.B * (5 - i) / 5f * alp), (int)(lightColor.A * (5 - i) / 5f * alp));
 				Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, color2, Projectile.rotation - i * 0.75f * Omega, texture.Size() / 2f, Projectile.scale, effects, 0f);
 			}
 			DrawTrail();
@@ -205,23 +192,19 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
 		public virtual void DrawTrail()
 		{
 			List<Vector2> SmoothTrailX = CatmullRom.SmoothPath(trailVecs.ToList());//平滑
-			List<Vector2> SmoothTrail = new List<Vector2>();
+			var SmoothTrail = new List<Vector2>();
 			for (int x = 0; x < SmoothTrailX.Count - 1; x++)
 			{
 				SmoothTrail.Add(SmoothTrailX[x]);
 			}
 			if (trailVecs.Count != 0)
-			{
 				SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
-			}
 
 			int length = SmoothTrail.Count;
 			if (length <= 3)
-			{
 				return;
-			}
 			Vector2[] trail = SmoothTrail.ToArray();
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 
 			for (int i = 0; i < length; i++)
 			{
@@ -249,7 +232,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
 			Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 
 			MeleeTrail.Parameters["tex1"].SetValue((Texture2D)ModContent.Request<Texture2D>(Texture));
-			Vector4 lightColor = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16)).ToVector4();
+			var lightColor = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16)).ToVector4();
 			lightColor.W = 0.7f * Omega;
 			MeleeTrail.Parameters["Light"].SetValue(lightColor);
 			MeleeTrail.CurrentTechnique.Passes["TrailByOrigTex"].Apply();
@@ -261,31 +244,25 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
 		public void DrawWarp(VFXBatch spriteBatch)
 		{
 			List<Vector2> SmoothTrailX = CatmullRom.SmoothPath(trailVecs.ToList());//平滑
-			List<Vector2> SmoothTrail = new List<Vector2>();
+			var SmoothTrail = new List<Vector2>();
 			for (int x = 0; x < SmoothTrailX.Count - 1; x++)
 			{
 				SmoothTrail.Add(SmoothTrailX[x]);
 			}
 			if (trailVecs.Count != 0)
-			{
 				SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
-			}
 			int length = SmoothTrail.Count;
 			if (length <= 3)
-			{
 				return;
-			}
 			Vector2[] trail = SmoothTrail.ToArray();
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 			for (int i = 0; i < length; i++)
 			{
 				float factor = i / (length - 1f);
 
 				float d = trail[i].ToRotation() + 3.14f + 1.57f;
 				if (d > 6.28f)
-				{
 					d -= 6.28f;
-				}
 				float dir = d / MathHelper.TwoPi;
 
 
@@ -294,9 +271,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
 				{
 					float d1 = trail[i - 1].ToRotation() + 3.14f + 1.57f;
 					if (d1 > 6.28f)
-					{
 						d1 -= 6.28f;
-					}
 					dir1 = d1 / MathHelper.TwoPi;
 				}
 				if (dir - dir1 > 0.5)
@@ -329,9 +304,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
 
 				float d = trail[i].ToRotation() + 3.14f + 1.57f;
 				if (d > 6.28f)
-				{
 					d -= 6.28f;
-				}
 				float dir = d / MathHelper.TwoPi;
 
 				float dir1 = dir;
@@ -339,9 +312,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
 				{
 					float d1 = trail[i - 1].ToRotation() + 3.14f + 1.57f;
 					if (d1 > 6.28f)
-					{
 						d1 -= 6.28f;
-					}
 					dir1 = d1 / MathHelper.TwoPi;
 				}
 
@@ -381,14 +352,12 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
 			float point = 0;
 			Vector2 HitRange = new Vector2(HitLength, HitLength * Projectile.spriteDirection).RotatedBy(Projectile.rotation) * Projectile.scale;
 			if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center - HitRange, Projectile.Center + HitRange, 2 * HitLength / 32f * Omega / 0.3f, ref point))
-			{
 				return true;
-			}
 			return false;
 		}
 		private void ProduceWaterRipples(Vector2 beamDims)
 		{
-			WaterShaderData shaderData = (WaterShaderData)Terraria.Graphics.Effects.Filters.Scene["WaterDistortion"].GetShader();
+			var shaderData = (WaterShaderData)Terraria.Graphics.Effects.Filters.Scene["WaterDistortion"].GetShader();
 			float waveSine = 1f * (float)Math.Sin(Main.GlobalTimeWrappedHourly * 20f);
 			Vector2 HitRange = new Vector2(HitLength, -HitLength).RotatedBy(Projectile.rotation) * Projectile.scale;
 			Vector2 ripplePos = Projectile.Center + HitRange;

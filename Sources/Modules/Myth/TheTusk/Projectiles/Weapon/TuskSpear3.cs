@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
+﻿namespace Everglow.Myth.TheTusk.Projectiles.Weapon
 {
 	public class TuskSpear3 : ModProjectile
 	{
@@ -33,21 +33,13 @@
 			Vector2 v1 = v0 / v0.Length();
 			Projectile.velocity += v1 * vscale / 10f;
 			if (Projectile.velocity.Length() > 20)
-			{
 				Projectile.velocity *= 0.99f;
-			}
 			if (Projectile.velocity.Length() > 30)
-			{
 				Projectile.velocity *= 0.99f;
-			}
 			if (Projectile.velocity.Length() > 40)
-			{
 				Projectile.velocity *= 0.99f;
-			}
 			if (Projectile.timeLeft < 120)
-			{
 				Projectile.friendly = true;
-			}
 			if (Projectile.timeLeft > 115)
 			{
 				Vd = (120 - Projectile.timeLeft) / 5f;
@@ -66,14 +58,14 @@
 				{
 					if (Main.npc[j].CanBeChasedBy(Projectile, false) && Collision.CanHit(Projectile.Center, 1, 1, Main.npc[j].Center, 1, 1))
 					{
-						float num5 = Main.npc[j].position.X + (float)(Main.npc[j].width / 2);
-						float num6 = Main.npc[j].position.Y + (float)(Main.npc[j].height / 2);
-						float num7 = Math.Abs(Projectile.position.X + (float)(Projectile.width / 2) - num5) + Math.Abs(Projectile.position.Y + (float)(Projectile.height / 2) - num6);
+						float num5 = Main.npc[j].position.X + Main.npc[j].width / 2;
+						float num6 = Main.npc[j].position.Y + Main.npc[j].height / 2;
+						float num7 = Math.Abs(Projectile.position.X + Projectile.width / 2 - num5) + Math.Abs(Projectile.position.Y + Projectile.height / 2 - num6);
 						if (num7 < 200)
 						{
 							Vector2 v = Main.npc[j].Center - Projectile.Center;
 							v = v / v.Length() * 36f;
-							Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center, v, ModContent.ProjectileType<Projectiles.Weapon.TuskSpear4>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0f, 0f);
+							Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, v, ModContent.ProjectileType<TuskSpear4>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0f, 0f);
 							Projectile.Kill();
 						}
 					}
@@ -81,7 +73,7 @@
 			}
 			if (Main.rand.NextBool(3))
 			{
-				int num91 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4), 4, 4, 183, 0f, 0f, 100, default(Color), Main.rand.NextFloat(1.3f, 9f) * Sc * 0.4f);
+				int num91 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4), 4, 4, 183, 0f, 0f, 100, default, Main.rand.NextFloat(1.3f, 9f) * Sc * 0.4f);
 				Main.dust[num91].noGravity = true;
 				Main.dust[num91].velocity = new Vector2(0, Main.rand.NextFloat(0.4f, 2.5f)).RotatedByRandom(Math.PI * 2d) * Vd * 0.5f;
 			}
@@ -92,7 +84,7 @@
 					Vector2 a0 = new Vector2(Projectile.width, Projectile.height) / 2f;
 					Vector2 v3 = Projectile.oldPosition + a0;
 					Vector2 v4 = Vector2.Normalize(Projectile.velocity) * 0.6f;
-					int num92 = Dust.NewDust(v3 + v4 * g - new Vector2(4, 4), 4, 4, DustID.Blood, 0f, 0f, 100, default(Color), Main.rand.NextFloat(1.3f, 2f) * Sc * 0.8f);
+					int num92 = Dust.NewDust(v3 + v4 * g - new Vector2(4, 4), 4, 4, DustID.Blood, 0f, 0f, 100, default, Main.rand.NextFloat(1.3f, 2f) * Sc * 0.8f);
 					Main.dust[num92].noGravity = true;
 					Main.dust[num92].velocity = new Vector2(0, Main.rand.NextFloat(0.4f, 2.5f)).RotatedByRandom(Math.PI * 2d) * 1 * 0.5f;
 				}
@@ -102,13 +94,13 @@
 		{
 			for (int y = 0; y < 12; y++)
 			{
-				int num90 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) + Projectile.velocity / Projectile.velocity.Length() * 25, 4, 4, 183, 0f, 0f, 100, default(Color), Main.rand.NextFloat(1.3f, 4.2f));
+				int num90 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) + Projectile.velocity / Projectile.velocity.Length() * 25, 4, 4, 183, 0f, 0f, 100, default, Main.rand.NextFloat(1.3f, 4.2f));
 				Main.dust[num90].noGravity = true;
 				Main.dust[num90].velocity = new Vector2(Main.rand.NextFloat(2.0f, 2.5f), Main.rand.NextFloat(1.8f, 11.5f)).RotatedByRandom(Math.PI * 2d);
 			}
 			for (int y = 0; y < 16; y++)
 			{
-				int num90 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) + Projectile.velocity / Projectile.velocity.Length() * 25, 4, 4, DustID.Blood, 0f, 0f, 100, default(Color), Main.rand.NextFloat(1.3f, 3f));
+				int num90 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) + Projectile.velocity / Projectile.velocity.Length() * 25, 4, 4, DustID.Blood, 0f, 0f, 100, default, Main.rand.NextFloat(1.3f, 3f));
 				Main.dust[num90].noGravity = false;
 				Main.dust[num90].velocity = new Vector2(Main.rand.NextFloat(0.4f, 3.5f), 0).RotatedByRandom(Math.PI * 2d);
 			}
@@ -117,13 +109,13 @@
 		{
 			for (int y = 0; y < 12; y++)
 			{
-				int num90 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) + Projectile.velocity / Projectile.velocity.Length() * 25, 4, 4, 183, 0f, 0f, 100, default(Color), Main.rand.NextFloat(1.3f, 4.2f));
+				int num90 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) + Projectile.velocity / Projectile.velocity.Length() * 25, 4, 4, 183, 0f, 0f, 100, default, Main.rand.NextFloat(1.3f, 4.2f));
 				Main.dust[num90].noGravity = true;
 				Main.dust[num90].velocity = new Vector2(Main.rand.NextFloat(2.0f, 2.5f), Main.rand.NextFloat(1.8f, 11.5f)).RotatedByRandom(Math.PI * 2d);
 			}
 			for (int y = 0; y < 48; y++)
 			{
-				int num90 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) + Projectile.velocity / Projectile.velocity.Length() * 25, 4, 4, DustID.Blood, 0f, 0f, 100, default(Color), Main.rand.NextFloat(1.3f, 4f));
+				int num90 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) + Projectile.velocity / Projectile.velocity.Length() * 25, 4, 4, DustID.Blood, 0f, 0f, 100, default, Main.rand.NextFloat(1.3f, 4f));
 				Main.dust[num90].noGravity = false;
 				Main.dust[num90].velocity = new Vector2(Main.rand.NextFloat(0.4f, 1.5f), Main.rand.NextFloat(1.8f, 11.5f)).RotatedByRandom(Math.PI * 2d);
 			}

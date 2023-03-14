@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Dusts
+﻿namespace Everglow.Myth.Bosses.Acytaea.Dusts
 {
 	public class RedEffect2 : ModDust
 	{
@@ -23,9 +23,7 @@
 			dust.velocity *= 0.95f;
 			Lighting.AddLight(dust.position, dust.scale * 2, 0f, 0f);
 			if (dust.scale < 0.15f)
-			{
 				dust.active = false;
-			}
 			return false;
 		}
 	}

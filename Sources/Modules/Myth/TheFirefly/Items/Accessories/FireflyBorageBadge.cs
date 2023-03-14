@@ -1,7 +1,8 @@
-using Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses;
+using Everglow.Myth.TheFirefly.Items;
+using Everglow.Myth.TheFirefly.NPCs.Bosses;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
+namespace Everglow.Myth.TheFirefly.Items.Accessories
 {
 	public class FireflyBorageBadge : ModItem
 	{
@@ -21,9 +22,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
 			if (CorruptMoth.CorruptMothNPC != null && CorruptMoth.CorruptMothNPC.active)
 			{
 				if (player.statDefense <= 48)
-				{
-					player.statDefense -= (player.statDefense / 4); //48 / 4, would be player.statDefense / 4, up to a value change of -12.
-				}
+					player.statDefense -= player.statDefense / 4; //48 / 4, would be player.statDefense / 4, up to a value change of -12.
 				else
 				{
 					player.statDefense -= 12;

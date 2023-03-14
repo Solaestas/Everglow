@@ -1,7 +1,7 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
 using Terraria.Audio;
 
-namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.BookofSkulls
+namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.BookofSkulls
 {
 	internal class BoneSpike : ModProjectile, IWarpProjectile
 	{
@@ -24,18 +24,16 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
 			Player player = Main.player[Projectile.owner];
 			if (!shot)
 			{
-				Vector2 AIM0 = (player.Center + new Vector2(0, 12 * player.gravDir * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d)) + new Vector2(-60 * player.direction, 30).RotatedBy((Projectile.ai[0] - 1) / 4.5 * Math.PI * player.direction) * Projectile.ai[1]);
+				Vector2 AIM0 = player.Center + new Vector2(0, 12 * player.gravDir * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d)) + new Vector2(-60 * player.direction, 30).RotatedBy((Projectile.ai[0] - 1) / 4.5 * Math.PI * player.direction) * Projectile.ai[1];
 				if (player.itemTime > 0 && player.active)
-				{
-					AIM0 = (player.Center + new Vector2(player.direction * -12, -24 * player.gravDir * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d)) + new Vector2(-120 * player.direction, 60).RotatedBy((Projectile.ai[0] - 1) / 4.5 * Math.PI * player.direction) * Projectile.ai[1]);
-				}
+					AIM0 = player.Center + new Vector2(player.direction * -12, -24 * player.gravDir * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d)) + new Vector2(-120 * player.direction, 60).RotatedBy((Projectile.ai[0] - 1) / 4.5 * Math.PI * player.direction) * Projectile.ai[1];
 				Projectile.Center = Projectile.Center * (-Projectile.ai[0] / 50f + 0.97f) + AIM0 * (Projectile.ai[0] / 50f + 0.03f);
 				Projectile.rotation = Math.Clamp(Projectile.velocity.X / 21f, -1, 1);
 				Projectile.velocity *= 0.9f;
 				if (player.itemTime == 2 && Projectile.timeLeft <= 1750)
 				{
 					Projectile.friendly = true;
-					Projectile.velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero) * 45;
+					Projectile.velocity = (Main.MouseWorld - Projectile.Center).SafeNormalize(Vector2.Zero) * 45;
 					Projectile.tileCollide = true;
 					shot = true;
 				}
@@ -91,7 +89,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
 			{
 				Pdark = (Projectile.timeLeft - 1750) / 30f;
 			}
-			Color c1 = new Color(1f * Pdark, 0.45f * Pdark * Pdark, 0f, 0f);
+			var c1 = new Color(1f * Pdark, 0.45f * Pdark * Pdark, 0f, 0f);
 			DrawTexLineColor(Projectile.Center + new Vector2(0, -70).RotatedBy(Projectile.rotation), Projectile.Center, Color.Transparent, c1, 14f * Pwidth, Power);
 			DrawTexLineColor(Projectile.Center, Projectile.Center + new Vector2(0, 70).RotatedBy(Projectile.rotation), c1, Color.Transparent, 14f * Pwidth, Power);
 		}
@@ -100,7 +98,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
 		{
 			Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
 
-			List<Vertex2D> vertex2Ds = new List<Vertex2D>();
+			var vertex2Ds = new List<Vertex2D>();
 
 			for (int x = 0; x < 3; x++)
 			{
@@ -145,7 +143,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
 		{
 			Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
 
-			List<Vertex2D> vertex2Ds = new List<Vertex2D>();
+			var vertex2Ds = new List<Vertex2D>();
 
 			for (int x = 0; x < 3; x++)
 			{
@@ -166,7 +164,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
 		{
 			Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
 
-			List<Vertex2D> vertex2Ds = new List<Vertex2D>();
+			var vertex2Ds = new List<Vertex2D>();
 
 			for (int x = 0; x < 3; x++)
 			{
@@ -212,7 +210,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
 		{
 			Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
 
-			List<Vertex2D> vertex2Ds = new List<Vertex2D>();
+			var vertex2Ds = new List<Vertex2D>();
 
 			for (int x = 0; x < 3; x++)
 			{
@@ -261,14 +259,14 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
 			for (int f = 0; f < 20; f++)
 			{
 				Vector2 v0 = new Vector2(Main.rand.NextFloat(0f, 8f), 0).RotatedByRandom(6.283);
-				Dust dust0 = Dust.NewDustDirect(Projectile.Center + Vector2.Normalize(Projectile.velocity) * 75, 0, 0, DustID.Torch, v0.X, v0.Y, 100, default, Main.rand.NextFloat(0.6f, 1.8f));
+				var dust0 = Dust.NewDustDirect(Projectile.Center + Vector2.Normalize(Projectile.velocity) * 75, 0, 0, DustID.Torch, v0.X, v0.Y, 100, default, Main.rand.NextFloat(0.6f, 1.8f));
 				dust0.velocity = v0 + Projectile.velocity * 0.2f;
 				dust0.noGravity = true;
 			}
 			for (int f = 0; f < 20; f++)
 			{
 				Vector2 v0 = new Vector2(Main.rand.NextFloat(0f, 8f), 0).RotatedByRandom(6.283);
-				Dust dust0 = Dust.NewDustDirect(Projectile.Center + Vector2.Normalize(Projectile.velocity) * 75, 0, 0, DustID.Bone, v0.X, v0.Y, 100, default, Main.rand.NextFloat(0.6f, 1.8f));
+				var dust0 = Dust.NewDustDirect(Projectile.Center + Vector2.Normalize(Projectile.velocity) * 75, 0, 0, DustID.Bone, v0.X, v0.Y, 100, default, Main.rand.NextFloat(0.6f, 1.8f));
 				dust0.velocity = v0 + Projectile.velocity * 0.2f;
 				dust0.noGravity = true;
 			}
@@ -288,10 +286,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
 			{
 				Pdark = (Projectile.timeLeft - 1750) / 30f;
 			}
-			Color c1 = new Color(0.25f * Pdark, 0.11f * Pdark * Pdark, 0f, 0f);
+			var c1 = new Color(0.25f * Pdark, 0.11f * Pdark * Pdark, 0f, 0f);
 			DrawTexLineColor(spriteBatch, Projectile.Center + new Vector2(0, -70).RotatedBy(Projectile.rotation), Projectile.Center, Color.Transparent, c1, 14f * Pwidth, Power);
 			DrawTexLineColor(spriteBatch, Projectile.Center, Projectile.Center + new Vector2(0, 70).RotatedBy(Projectile.rotation), c1, Color.Transparent, 14f * Pwidth, Power);
-			Color c2 = new Color(Projectile.rotation / 6.283f, 0.3f, 0f, 0f);
+			var c2 = new Color(Projectile.rotation / 6.283f, 0.3f, 0f, 0f);
 			if (shot)
 			{
 				DrawTexLineColor(spriteBatch, Projectile.Center + new Vector2(0, -350).RotatedBy(Projectile.rotation), Projectile.Center, Color.Transparent, c2, 14f * Pwidth, Power);

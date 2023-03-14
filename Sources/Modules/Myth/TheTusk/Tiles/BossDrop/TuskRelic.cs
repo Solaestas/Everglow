@@ -1,7 +1,7 @@
 ﻿using Terraria.Localization;
 using Terraria.ObjectData;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles.BossDrop
+namespace Everglow.Myth.TheTusk.Tiles.BossDrop
 {
 	public class TuskRelic : ModTile
 	{
@@ -34,26 +34,24 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles.BossDrop
 		}
 		public override void NumDust(int i, int j, bool fail, ref int num)
 		{
-			num = (fail ? 1 : 3);
+			num = fail ? 1 : 3;
 		}
 		public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 		{
-			Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+			var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 			if (Main.drawToScreen)
 				zero = Vector2.Zero;
 			Tile tile = Main.tile[i, j];
 			if (tile.TileFrameX != 18 || !(tile.TileFrameY == 54 || tile.TileFrameX == 126))
-			{
 				return;
-			}
 			for (int x = 0; x < 2; x++)
 			{
-				Point point = new Point(i, j);
+				var point = new Point(i, j);
 
 				if (tile != null && tile.HasTile)
 				{
 					Texture2D value = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Tiles/BossDrop/Tusk").Value;
-					int frameY = (int)(tile.TileFrameX / 54);
+					int frameY = tile.TileFrameX / 54;
 					bool flag = tile.TileFrameY / 72 != 0;
 					int horizontalFrames = 1;
 					int verticalFrames = 27;

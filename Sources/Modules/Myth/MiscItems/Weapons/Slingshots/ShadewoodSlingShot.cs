@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots
+﻿namespace Everglow.Myth.MiscItems.Weapons.Slingshots
 {
 	public class ShadewoodSlingShot : SlingshotItem
 	{

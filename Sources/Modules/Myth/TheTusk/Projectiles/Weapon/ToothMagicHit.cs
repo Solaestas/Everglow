@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
+﻿namespace Everglow.Myth.TheTusk.Projectiles.Weapon
 {
 	class ToothMagicHit : ModProjectile
 	{

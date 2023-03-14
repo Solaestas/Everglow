@@ -1,6 +1,6 @@
-﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+﻿using Everglow.Myth.TheFirefly.Dusts;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
+namespace Everglow.Myth.TheFirefly.Projectiles
 {
 	internal class MothArrow : ModProjectile
 	{
@@ -25,9 +25,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 		{
 			Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver4;
 			if (Projectile.timeLeft % 3 == 0)
-			{
 				Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<BlueGlowAppear>(), Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, Main.rand.NextFloat(0.6f, 1.8f));
-			}
 			/*
             if (Collision.SolidCollision(Projectile.Center, 1, 1))
             {

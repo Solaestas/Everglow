@@ -1,10 +1,10 @@
-using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Myth.Common;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
+namespace Everglow.Myth.TheFirefly.NPCs
 {
 	// 蜈蚣设定：起始时蜈蚣贴在物块上爬行。受到攻击后转换为钻地（蠕虫形态）
 
@@ -62,13 +62,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 		{
 			FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
 			if (!fireflyBiome.IsBiomeActive(Main.LocalPlayer))
-			{
 				return 0f;
-			}
-			if (NPC.CountNPCS(ModContent.NPCType<NPCs.Bosses.CorruptMoth>()) > 0)
-			{
+			if (NPC.CountNPCS(ModContent.NPCType<Bosses.CorruptMoth>()) > 0)
 				return 0;
-			}
 			else if (NPC.CountNPCS(ModContent.NPCType<CentipedeHead>()) > 1)
 			{
 				return 0f;
@@ -158,9 +154,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 							collision = true;
 
 							if (Main.rand.NextBool(100))
-							{
 								WorldGen.KillTile(i, j, fail: true, effectOnly: true, noItem: false);
-							}
 						}
 					}
 				}
@@ -187,9 +181,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 					Player player = Main.player[i];
 
 					if (ForcedTargetPosition is Vector2 target)
-					{
 						areaCheck = new Rectangle((int)target.X - maxDistance, (int)target.Y - maxDistance, maxDistance * 2, maxDistance * 2);
-					}
 					else if (player.active && !player.dead && !player.ghost)
 					{
 						areaCheck = new Rectangle((int)player.position.X - maxDistance, (int)player.position.Y - maxDistance, maxDistance * 2, maxDistance * 2);
@@ -207,9 +199,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 				}
 
 				if (tooFar)
-				{
 					collision = true;
-				}
 			}
 		}
 
@@ -243,9 +233,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 
 			// 如果我们没有任何类型的碰撞，我们希望NPC向下并沿X轴减速。
 			if (!collision && !CanFly)
-			{
 				HeadAI_Movement_HandleFallingFromNoCollision(dirX, speed * NPC.localAI[0], acceleration);
-			}
 			else
 			{
 				// 否则，我们要播放一些音频（soundDelay）并向我们的目标移动。
@@ -265,18 +253,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 
 			// Ensure that the NPC does not fall too quickly
 			if (NPC.velocity.Y > speed + 12.5)
-			{
 				NPC.velocity.Y = speed + 12.5f;
-			}
 
 			// 以下行为模仿了香草虫的运动
 			if (Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y) < speed * 0.4f)
 			{
 				// 速度足够快，但不能太快
 				if (NPC.velocity.X < 0.0f)
-				{
 					NPC.velocity.X -= acceleration * 1.1f;
-				}
 				else
 				{
 					NPC.velocity.X += acceleration * 1.1f;
@@ -286,9 +270,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 			{
 				// NPC has reached terminal velocity
 				if (NPC.velocity.X < dirX)
-				{
 					NPC.velocity.X += acceleration;
-				}
 				else if (NPC.velocity.X > dirX)
 				{
 					NPC.velocity.X -= acceleration;
@@ -297,9 +279,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 			else if (NPC.velocity.Y > 4)
 			{
 				if (NPC.velocity.X < 0)
-				{
 					NPC.velocity.X += acceleration * 0.9f;
-				}
 				else
 				{
 					NPC.velocity.X -= acceleration * 0.9f;
@@ -315,14 +295,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 				float num1 = length / 40f;
 
 				if (num1 < 10)
-				{
 					num1 = 10f;
-				}
 
 				if (num1 > 20)
-				{
 					num1 = 20f;
-				}
 
 				NPC.soundDelay = (int)num1;
 				Tile tile = Main.tile[(int)(NPC.Center.X / 16f), (int)(NPC.Center.Y / 16f)];
@@ -344,46 +320,38 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 			dirX *= newSpeed;
 			dirY *= newSpeed;
 			// 蠕虫速度方向和目标方向有相同方向的
-			if ((NPC.velocity.X > 0 && dirX > 0) || (NPC.velocity.X < 0 && dirX < 0) || (NPC.velocity.Y > 0 && dirY > 0) || (NPC.velocity.Y < 0 && dirY < 0))
+			if (NPC.velocity.X > 0 && dirX > 0 || NPC.velocity.X < 0 && dirX < 0 || NPC.velocity.Y > 0 && dirY > 0 || NPC.velocity.Y < 0 && dirY < 0)
 			{
 				// 该NPC正在向目标地点移动
 				if (NPC.velocity.X < dirX)
-				{
 					NPC.velocity.X += acceleration;
-				}
 				else if (NPC.velocity.X > dirX)
 				{
 					NPC.velocity.X -= acceleration;
 				}
 
 				if (NPC.velocity.Y < dirY)
-				{
 					NPC.velocity.Y += acceleration;
-				}
 				else if (NPC.velocity.Y > dirY)
 				{
 					NPC.velocity.Y -= acceleration;
 				}
 
 				// 预定的Y-速度很小，而且NPC正在向左移动，目标在NPC的右边，反之亦然。
-				if (Math.Abs(dirY) < speed * 0.2 && ((NPC.velocity.X > 0 && dirX < 0) || (NPC.velocity.X < 0 && dirX > 0)))
+				if (Math.Abs(dirY) < speed * 0.2 && (NPC.velocity.X > 0 && dirX < 0 || NPC.velocity.X < 0 && dirX > 0))
 				{
 					if (NPC.velocity.Y > 0)
-					{
 						NPC.velocity.Y += acceleration * 2f;
-					}
 					else
 					{
 						NPC.velocity.Y -= acceleration * 2f;
 					}
 				}
 				// 预定的X-速度很小，而且NPC正在向上/向下移动，目标在NPC的下方/上方。
-				if (Math.Abs(dirX) < speed * 0.2 && ((NPC.velocity.Y > 0 && dirY < 0) || (NPC.velocity.Y < 0 && dirY > 0)))
+				if (Math.Abs(dirX) < speed * 0.2 && (NPC.velocity.Y > 0 && dirY < 0 || NPC.velocity.Y < 0 && dirY > 0))
 				{
 					if (NPC.velocity.X > 0)
-					{
 						NPC.velocity.X = NPC.velocity.X + acceleration * 2f;
-					}
 					else
 					{
 						NPC.velocity.X = NPC.velocity.X - acceleration * 2f;
@@ -394,9 +362,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 			{
 				// X距离比Y距离大。 迫使沿X轴的运动更强烈
 				if (NPC.velocity.X < dirX)
-				{
 					NPC.velocity.X += acceleration * 1.1f;
-				}
 				else if (NPC.velocity.X > dirX)
 				{
 					NPC.velocity.X -= acceleration * 1.1f;
@@ -405,9 +371,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 				if (Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y) < speed * 0.5)
 				{
 					if (NPC.velocity.Y > 0)
-					{
 						NPC.velocity.Y += acceleration;
-					}
 					else
 					{
 						NPC.velocity.Y -= acceleration;
@@ -417,9 +381,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 			else
 			{
 				if (NPC.velocity.Y < dirY)
-				{
 					NPC.velocity.Y += acceleration * 1.1f;
-				}
 				else if (NPC.velocity.Y > dirY)
 				{
 					NPC.velocity.Y -= acceleration * 1.1f;
@@ -428,9 +390,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 				if (Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y) < speed * 0.5)
 				{
 					if (NPC.velocity.X > 0)
-					{
 						NPC.velocity.X += acceleration;
-					}
 					else
 					{
 						NPC.velocity.X -= acceleration;
@@ -449,27 +409,21 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 			if (collision)
 			{
 				if (NPC.localAI[0] != 1)  // 碰撞检测同步
-				{
 					NPC.netUpdate = true;
-				}
 
 				NPC.localAI[0] = 1f;
 			}
 			else
 			{
 				if (NPC.localAI[0] != 0)
-				{
 					NPC.netUpdate = true;
-				}
 
 				NPC.localAI[0] = 0f;
 			}
 
 			// 如果NPC的速度发生变化，并且没有被玩家 "击中"，则强制进行网络更新。
-			if (((NPC.velocity.X > 0 && NPC.oldVelocity.X < 0) || (NPC.velocity.X < 0 && NPC.oldVelocity.X > 0) || (NPC.velocity.Y > 0 && NPC.oldVelocity.Y < 0) || (NPC.velocity.Y < 0 && NPC.oldVelocity.Y > 0)) && !NPC.justHit)
-			{
+			if ((NPC.velocity.X > 0 && NPC.oldVelocity.X < 0 || NPC.velocity.X < 0 && NPC.oldVelocity.X > 0 || NPC.velocity.Y > 0 && NPC.oldVelocity.Y < 0 || NPC.velocity.Y < 0 && NPC.oldVelocity.Y > 0) && !NPC.justHit)
 				NPC.netUpdate = true;
-			}
 		}
 		public override void OnKill()
 		{
@@ -504,7 +458,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 	{
 		public override void SetStaticDefaults()
 		{
-			NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
+			var value = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
 			{
 				// 将此NPC从Bestiary中隐藏起来，对于你只想要一个条目的多部分NPC很有用。
 				Hide = true
@@ -541,17 +495,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 			Texture2D tex = MythContent.QuickTexture("TheFirefly/NPCs/CentipedeBody");
 			int FrameType = (int)NPC.ai[2] % 2;
 			if (FrameType == 1 && (int)NPC.ai[2] % 4 == 1)
-			{
 				FrameType = 2;
-			}
 			if (FrameType == 1)
-			{
 				tex = MythContent.QuickTexture("TheFirefly/NPCs/CentipedeBody1");
-			}
 			if (FrameType == 2)
-			{
 				tex = MythContent.QuickTexture("TheFirefly/NPCs/CentipedeBody2");
-			}
 			spriteBatch.Draw(tex, NPC.Center - Main.screenPosition + new Vector2(0, -28), null, Lighting.GetColor((int)(NPC.Center.X / 16), (int)(NPC.Center.Y / 16)), NPC.rotation + AddRot, tex.Size() / 2f, NPC.scale, SpriteEffects.None, 0);
 			return false;
 		}
@@ -561,9 +509,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 			float AddRot = (float)(Math.Sin(Main.timeForVisualEffects * 0.2 + NPC.ai[2] * 0.7) * 0.3f);
 			int FrameType = (int)NPC.ai[2] % 2;
 			if (FrameType == 1 && (int)NPC.ai[2] % 4 == 1)
-			{
 				FrameType = 2;
-			}
 			if (FrameType == 1)
 			{
 				Texture2D tex = MythContent.QuickTexture("TheFirefly/NPCs/CentipedeBody1_Glow");
@@ -581,9 +527,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 			{
 				int FrameType = (int)NPC.ai[2] % 2;
 				if (FrameType == 1 && (int)NPC.ai[2] % 4 == 1)
-				{
 					FrameType = 2;
-				}
 				if (FrameType == 0)
 				{
 					if (Main.rand.NextBool(2))
@@ -617,7 +561,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 				for (int f = 0; f < 16; f++)
 				{
 					Vector2 v0 = new Vector2(0, Main.rand.NextFloat(9f)).RotatedByRandom(6.283);
-					Dust d = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.NavyBlood>(), v0.X, v0.Y, 0, default, Main.rand.NextFloat(0.85f, 2.75f));
+					var d = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.NavyBlood>(), v0.X, v0.Y, 0, default, Main.rand.NextFloat(0.85f, 2.75f));
 				}
 			}
 		}
@@ -640,7 +584,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 	{
 		public override void SetStaticDefaults()
 		{
-			NPCID.Sets.NPCBestiaryDrawModifiers value = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
+			var value = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
 			{
 				Hide = true
 			};
@@ -695,7 +639,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 				for (int f = 0; f < 16; f++)
 				{
 					Vector2 v0 = new Vector2(0, Main.rand.NextFloat(9f)).RotatedByRandom(6.283);
-					Dust d = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.NavyBlood>(), v0.X, v0.Y, 0, default, Main.rand.NextFloat(0.85f, 2.75f));
+					var d = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.NavyBlood>(), v0.X, v0.Y, 0, default, Main.rand.NextFloat(0.85f, 2.75f));
 
 					//Dust d2 = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.BlueParticleDark2StoppedByTile>(), v0.X, v0.Y, 0, default, Main.rand.NextFloat(1.65f, 3.75f));
 					//d2.alpha = (int)(d2.scale * 50);

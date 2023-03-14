@@ -1,9 +1,9 @@
-﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
+﻿using Everglow.Myth.TheFirefly.Items.Accessories;
+using Everglow.Myth.TheFirefly.Projectiles;
 using Terraria.DataStructures;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
+namespace Everglow.Myth.TheFirefly.Items.Weapons
 {
 	public class EvilChrysalis : ModItem
 	{
@@ -47,7 +47,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 			{
 				if (Main.myPlayer == player.whoAmI)
 				{
-					if (player.altFunctionUse == 2 && player.statMana >= player.ownedProjectileCounts[ModContent.ProjectileType<Projectiles.GlowMoth>()] && player.ownedProjectileCounts[ModContent.ProjectileType<Projectiles.MothMagicArray>()] == 0)
+					if (player.altFunctionUse == 2 && player.statMana >= player.ownedProjectileCounts[ModContent.ProjectileType<GlowMoth>()] && player.ownedProjectileCounts[ModContent.ProjectileType<MothMagicArray>()] == 0)
 					{
 						Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<EvilChrysalisRightClick>(), player.GetWeaponDamage(Item), Item.knockBack, player.whoAmI);
 						Projectile.NewProjectile(player.GetSource_ItemUse(Item), Main.MouseWorld, Vector2.Zero, ModContent.ProjectileType<MothMagicArray>(), player.GetWeaponDamage(Item), Item.knockBack, player.whoAmI);

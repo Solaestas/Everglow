@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Projectiles
+﻿namespace Everglow.Myth.MiscItems.Weapons.Slingshots.Projectiles
 {
 	class JungleSlingshotHit : ModProjectile
 	{
@@ -26,13 +26,11 @@
 					{
 						int type = Main.dust[i].type;
 						if (Main.rand.Next(100) > 50)
-						{
 							type = ModContent.DustType<MiscItems.Dusts.GlowSporeFlip>();
-						}
-						int r1 = Dust.NewDust(Main.dust[i].position, 0, 0, type, 0, 0, 200, default(Color), Main.dust[i].scale * 0.75f);
+						int r1 = Dust.NewDust(Main.dust[i].position, 0, 0, type, 0, 0, 200, default, Main.dust[i].scale * 0.75f);
 						Main.dust[r1].velocity = Main.dust[i].velocity.RotatedBy(Main.rand.NextFloat(0.2f, 1.3f));
 						Main.dust[r1].noGravity = true;
-						int r2 = Dust.NewDust(Main.dust[i].position, 0, 0, type, 0, 0, 200, default(Color), Main.dust[i].scale * 0.75f);
+						int r2 = Dust.NewDust(Main.dust[i].position, 0, 0, type, 0, 0, 200, default, Main.dust[i].scale * 0.75f);
 						Main.dust[r2].velocity = Main.dust[i].velocity.RotatedBy(Main.rand.NextFloat(-1.3f, -0.2f));
 						Main.dust[r2].noGravity = true;
 						Main.dust[i].active = false;

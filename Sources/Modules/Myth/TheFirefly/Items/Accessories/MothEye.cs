@@ -1,7 +1,8 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
+using Everglow.Myth.TheFirefly.Items.Weapons;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
+namespace Everglow.Myth.TheFirefly.Items.Accessories
 {
 	[AutoloadEquip(EquipType.Neck)]
 	public class MothEye : ModItem
@@ -55,7 +56,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
 				Texture2D mEyeTex = MythContent.QuickTexture("TheFirefly/Items/Accessories/MothEye_GlowOn");
 				for (int x = 0; x < 8; x++)
 				{
-					Vector2 v0 = new Vector2(0, 6 + 2f * (float)(Math.Sin(Main.timeForVisualEffects * 0.1))).RotatedBy(x / 4d * Math.PI);
+					Vector2 v0 = new Vector2(0, 6 + 2f * (float)Math.Sin(Main.timeForVisualEffects * 0.1)).RotatedBy(x / 4d * Math.PI);
 					spriteBatch.Draw(mEyeTex, position + v0, null, new Color(0.2f, 0.2f, 0.2f, 0), 0f, origin, scale, 0, 0f);
 				}
 				spriteBatch.Draw(mEyeTex, position, null, drawColor, 0f, origin, scale, 0, 0f);
@@ -116,28 +117,24 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories
 				for (int f = 0; f < Player.armor.Length; f++)
 				{
 					if (Player.armor[f].type != ModContent.ItemType<MothEye>())
-					{
 						continue;
-					}
 					int[] FireflyWeapon =
 					{
-							ModContent.ItemType<Weapons.DarknessFan>(),
-							ModContent.ItemType<Weapons.DreamWeaver>(), // no MothEye effect
-                            ModContent.ItemType<Weapons.DustOfCorrupt>(), // no MothEye effect
-                            ModContent.ItemType<Weapons.EvilChrysalis>(),
-							ModContent.ItemType<Weapons.FlowLightMissile>(), // no MothEye effect
-                            ModContent.ItemType<Weapons.GlowBeadGun>(), // no MothEye effect
-                            ModContent.ItemType<Weapons.GlowWoodSword>(),
-							ModContent.ItemType<Weapons.MothYoyo>(),
-							ModContent.ItemType<Weapons.NavyThunder>(), // no MothEye effect
-                            ModContent.ItemType<Weapons.PhosphorescenceGun>(),
-							ModContent.ItemType<Weapons.ScaleWingBlade>(),
-							ModContent.ItemType<Weapons.ShadowWingBow>()
+							ModContent.ItemType<DarknessFan>(),
+							ModContent.ItemType<DreamWeaver>(), // no MothEye effect
+                            ModContent.ItemType<DustOfCorrupt>(), // no MothEye effect
+                            ModContent.ItemType<EvilChrysalis>(),
+							ModContent.ItemType<FlowLightMissile>(), // no MothEye effect
+                            ModContent.ItemType<GlowBeadGun>(), // no MothEye effect
+                            ModContent.ItemType<GlowWoodSword>(),
+							ModContent.ItemType<MothYoyo>(),
+							ModContent.ItemType<NavyThunder>(), // no MothEye effect
+                            ModContent.ItemType<PhosphorescenceGun>(),
+							ModContent.ItemType<ScaleWingBlade>(),
+							ModContent.ItemType<ShadowWingBow>()
 						 };
 					if (Array.IndexOf(FireflyWeapon, item.type) != -1)
-					{
 						damage *= 1.05f;
-					}
 					break;
 				}
 			}

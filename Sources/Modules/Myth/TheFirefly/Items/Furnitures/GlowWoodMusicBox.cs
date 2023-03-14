@@ -1,7 +1,7 @@
-using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Myth.Common;
 using Terraria.GameContent.Creative;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures
+namespace Everglow.Myth.TheFirefly.Items.Furnitures
 {
 	public class GlowWoodMusicBox : ModItem
 	{

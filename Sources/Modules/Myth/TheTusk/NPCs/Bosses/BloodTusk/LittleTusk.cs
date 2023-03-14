@@ -1,7 +1,8 @@
-﻿using Terraria.Audio;
+﻿using Everglow.Myth.TheTusk;
+using Terraria.Audio;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
+namespace Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk
 {
 	public class LittleTusk : ModNPC
 	{
@@ -52,23 +53,15 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 
 			Player player = Main.player[NPC.target];
 			if (NPC.collideX && Down)
-			{
 				NPC.active = false;
-			}
 			if (NPC.velocity.Length() <= 0.5f && !squ)//鼓包
 			{
 				if (wait >= 60 && wait < 90)
-				{
 					VBase = VBase * 0.9f + VBaseType1 * 0.1f;
-				}
 				if (wait >= 30 && wait < 60)
-				{
 					VBase = VBase * 0.9f + VBaseType2 * 0.1f;
-				}
 				if (wait >= 0 && wait < 30)
-				{
 					VBase = VBase * 0.9f + VBaseType3 * 0.1f;
-				}
 				if (wait < 2)
 				{
 					if (!Spr)
@@ -85,9 +78,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 			if (NPC.velocity.Length() <= 0.5f && squ)
 			{
 				if (VBase.Y <= 0)
-				{
 					VBase.Y *= 0.9f;
-				}
 			}
 			if (NPC.velocity.Length() <= 0.5f && NPC.alpha > 0 && !squ)
 			{
@@ -98,9 +89,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 				}
 				startFight = true;
 				if (NPC.alpha == 255)
-				{
 					RamInt = Main.rand.Next(7);
-				}
 				V = VMax;
 				NPC.alpha -= 25;
 			}
@@ -109,21 +98,15 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 				NPC.alpha = 0;
 				wait--;
 				if (wait == 5)
-				{
 					SoundEngine.PlaySound(SoundID.NPCDeath11.WithVolumeScale(.4f), NPC.Bottom);
-				}
 			}
 			if (wait <= 0 && !squ)
 			{
 				NPC.damage = 30;
 				if (Main.expertMode)
-				{
 					NPC.damage = 50;
-				}
 				if (Main.masterMode)
-				{
 					NPC.damage = 70;
-				}
 				V *= 0.6f;
 				/*if ((player.Center - NPC.Center).Length() < 400)
                 {
@@ -137,9 +120,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
                     mplayer.ShakeStrength = Str;
                 }*/
 				if (V.Y <= 0.5f)
-				{
 					squ = true;
-				}
 			}
 			if (squ)
 			{
@@ -148,14 +129,10 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 				{
 					NPC.alpha += 15;
 					if (NPC.alpha > 240)
-					{
 						NPC.active = false;
-					}
 				}
 				if (V.Y > 20)
-				{
 					NPC.damage = 0;
-				}
 			}
 		}
 		public override void OnHitPlayer(Player player, int damage, bool crit)
@@ -167,10 +144,8 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 		public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 		{
 			if (!startFight || NPC.velocity.Length() >= 0.5f)
-			{
 				return false;
-			}
-			List<VertexBase.CustomVertexInfo> BackBase = new List<VertexBase.CustomVertexInfo>();
+			var BackBase = new List<VertexBase.CustomVertexInfo>();
 			Color color = Lighting.GetColor((int)(NPC.Center.X / 16), (int)(NPC.Center.Y / 16));
 			float index = (34 - V.Y) / 34f;
 			BackBase.Add(new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(-600 / (VBase.Length() + 1f), 2) - Main.screenPosition, color, new Vector3(0, 1, 0)));
@@ -181,7 +156,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, BackBase.ToArray(), 0, BackBase.Count / 3);
 
 
-			List<VertexBase.CustomVertexInfo> Vx2 = new List<VertexBase.CustomVertexInfo>
+			var Vx2 = new List<VertexBase.CustomVertexInfo>
 			{
 				new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(-12, 2) - Main.screenPosition, color, new Vector3(0, index, 0)),
 				new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(12, V.Y - 32) - Main.screenPosition, color, new Vector3(1, 0, 0)),
@@ -195,7 +170,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx2.ToArray(), 0, Vx2.Count / 3);
 
 
-			List<VertexBase.CustomVertexInfo> ForeBase = new List<VertexBase.CustomVertexInfo>
+			var ForeBase = new List<VertexBase.CustomVertexInfo>
 			{
 				new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(-600 / (VBase.Length() + 1f), 2) - Main.screenPosition, color, new Vector3(0, 1, 0)),
 				new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(0, 2) + VBase - Main.screenPosition, color, new Vector3(0.5f, 0, 0)),

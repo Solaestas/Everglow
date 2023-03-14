@@ -1,6 +1,6 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
 using Terraria.Localization;
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
+namespace Everglow.Myth.TheTusk.Projectiles.Weapon
 {
 	public class ToothMagicBall : ModProjectile
 	{
@@ -30,17 +30,13 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 			Player player = Main.player[Projectile.owner];
 			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.PI / 2d));
 			if (Projectile.timeLeft >= 1000)
-			{
 				Projectile.timeLeft = 10;
-			}
 			if (Main.mouseLeft && player.statMana > player.HeldItem.mana)
-			{
 				Projectile.timeLeft = 10;
-			}
 			if (addi % player.HeldItem.useTime == 0)
 			{
 				Vector2 velocity = Vector2.Normalize(Main.MouseWorld - player.Center) * player.HeldItem.shootSpeed;
-				Projectile.NewProjectile(Projectile.InheritSource(Projectile), player.Center + new Vector2(28 * player.direction, -5), velocity, ModContent.ProjectileType<Projectiles.Weapon.ToothMagic>(), Projectile.damage, Projectile.knockBack, player.whoAmI);
+				Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), player.Center + new Vector2(28 * player.direction, -5), velocity, ModContent.ProjectileType<ToothMagic>(), Projectile.damage, Projectile.knockBack, player.whoAmI);
 			}
 			Projectile.Center = player.Center;
 			player.heldProj = Projectile.whoAmI;
@@ -70,7 +66,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 			Texture2D TT7 = MythContent.QuickTexture("TheTusk/Items/Weapons/ToothMagicBallBloodDropTusk7");
 			Texture2D TT8 = MythContent.QuickTexture("TheTusk/Items/Weapons/ToothMagicBallBloodDropTusk8");
 			Texture2D TT9 = MythContent.QuickTexture("TheTusk/Items/Weapons/ToothMagicBallBloodDropTusk9");
-			Vector2 drawOrigin = new Vector2(TC.Width * 0.5f, TC.Height * 0.5f);
+			var drawOrigin = new Vector2(TC.Width * 0.5f, TC.Height * 0.5f);
 			Color c0 = Lighting.GetColor((int)(player.Center.X / 16f), (int)(player.Center.Y / 16f));
 			SpriteEffects sp = SpriteEffects.None;
 			if (DustBlood[0] == 0)
@@ -98,9 +94,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 					{
 						Vector2 vadd = Vcen - (Main.dust[DustBlood[f]].position + new Vector2(4));
 						if (vadd.Length() < 1.2f)
-						{
 							Main.dust[DustBlood[f]].active = false;
-						}
 						else
 						{
 							if (vadd.Length() < 30f)
@@ -109,9 +103,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 								{
 									Main.dust[DustBlood[f]].velocity += Vector2.Normalize(vadd) / 30f;
 									if (Main.dust[DustBlood[f]].scale < 1)
-									{
 										Main.dust[DustBlood[f]].scale += 0.01f;
-									}
 								}
 							}
 							else
@@ -123,9 +115,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 				}
 			}
 			if (player.direction == -1)
-			{
 				sp = SpriteEffects.FlipHorizontally;
-			}
 			if (VTMax[0] == Vector2.Zero)
 			{
 				for (int s = 0; s < 10; s++)
@@ -137,7 +127,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 			{
 				VT[s] = VTMax[s] * (float)(Math.Sin(s + addi / 30f) + 0.4);
 			}
-			Main.spriteBatch.Draw(TC, player.Center + VC + new Vector2(20 * player.direction, -7) - Main.screenPosition, null, c0, 0, drawOrigin, (addi % player.HeldItem.useTime) / 26f, sp, 0);
+			Main.spriteBatch.Draw(TC, player.Center + VC + new Vector2(20 * player.direction, -7) - Main.screenPosition, null, c0, 0, drawOrigin, addi % player.HeldItem.useTime / 26f, sp, 0);
 			Main.spriteBatch.Draw(TB0, player.Center + VB[0] + new Vector2(28 * player.direction, -5) - Main.screenPosition, null, c0, 0, drawOrigin, 1, sp, 0);
 			Main.spriteBatch.Draw(TB1, player.Center + VB[1] + new Vector2(28 * player.direction, -5) - Main.screenPosition, null, c0, 0, drawOrigin, 1, sp, 0);
 			Main.spriteBatch.Draw(TB2, player.Center + VB[2] + new Vector2(28 * player.direction, -5) - Main.screenPosition, null, c0, 0, drawOrigin, 1, sp, 0);

@@ -1,5 +1,6 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
+﻿using Everglow.Myth.Common;
+
+namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Melee
 {
 	public class GoldRoundYoyo : ModProjectile
 	{
@@ -17,7 +18,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
 		{
 			if ((Projectile.Center - LastPos).Length() > 30)
 			{
-				Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<GoldRound>(), Projectile.damage / 5, 0.2f, Projectile.owner, 0f, 0f);
+				Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<GoldRound>(), Projectile.damage / 5, 0.2f, Projectile.owner, 0f, 0f);
 				LastPos = Projectile.Center;
 			}
 			ProjectileExtras.YoyoAI(Projectile.whoAmI, 60f, 300f, 14f);

@@ -1,7 +1,7 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Modules.MythModule.LanternMoon.Skies;
+﻿using Everglow.Myth.Common;
+using Everglow.Myth.LanternMoon.Skies;
 using Terraria.Graphics.Effects;
-namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
+namespace Everglow.Myth.LanternMoon.Projectiles
 {
 	class RainbowWave : ModProjectile
 	{
@@ -54,19 +54,15 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
 			{
 				LanternSky lanternSky = ModContent.GetInstance<LanternSky>();
 				if (!Filters.Scene["RainbowVague"].IsActive())
-				{
 					Filters.Scene.Activate("RainbowVague");
-				}
 				if (!SkyManager.Instance["LanternSky"].IsActive())
-				{
 					SkyManager.Instance.Activate("LanternSky");
-				}
 				Vector2 ScreenPosTOShader = Projectile.Center - Main.screenPosition;
-				ScreenPosTOShader.X /= (float)(Main.screenWidth);
-				ScreenPosTOShader.Y /= (float)(Main.screenHeight);
+				ScreenPosTOShader.X /= Main.screenWidth;
+				ScreenPosTOShader.Y /= Main.screenHeight;
 				Vector2 ScreenCenTOShader = (AimProj == -1 ? Projectile.Center : Main.projectile[AimProj].Center) - Main.screenPosition;
-				ScreenCenTOShader.X /= (float)(Main.screenWidth);
-				ScreenCenTOShader.Y /= (float)(Main.screenHeight);
+				ScreenCenTOShader.X /= Main.screenWidth;
+				ScreenCenTOShader.Y /= Main.screenHeight;
 				float WaveSize = (180 - Projectile.timeLeft) / 200f;
 				float WaveWidth = (Projectile.timeLeft - 6) / 360f;
 				float Darkness = (Projectile.timeLeft - 6) / 220f;//ProjCen//AimProj
@@ -81,9 +77,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
 			else
 			{
 				if (Filters.Scene["RainbowVague"].IsActive())
-				{
 					Filters.Scene.Deactivate("RainbowVague");
-				}
 			}
 		}
 	}

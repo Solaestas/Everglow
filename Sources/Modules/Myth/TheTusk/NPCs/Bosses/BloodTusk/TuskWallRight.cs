@@ -1,6 +1,6 @@
 ﻿using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
+namespace Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk
 {
 	public class TuskWallRight : ModNPC
 	{
@@ -36,25 +36,19 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 		{
 			/*联机情况下错误排查*/
 			if (NPC.Bottom.Y > BloodTusk.DarkCenter.Y && Collision.SolidCollision(NPC.Bottom + new Vector2(0, -10), 1, 1))
-			{
 				NPC.position.Y -= 5f;
-			}
 			NPC.TargetClosest(false);
 			VMax[0] = new Vector2(0, 840);
 			Player player = Main.player[NPC.target];
 			if (NPC.collideX && Down)
-			{
 				NPC.active = false;
-			}
 			NPC.velocity.X *= 0;
 			if (AimNPC == -1)
 			{
 				for (int a = 0; a < 200; a++)
 				{
 					if (Main.npc[a].type == ModContent.NPCType<BloodTusk>() && Main.npc[a].active)
-					{
 						AimNPC = a;
-					}
 				}
 			}
 			if (AimNPC != -1)
@@ -62,13 +56,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 				if (Main.npc[AimNPC].active && Main.npc[AimNPC].life < Main.npc[AimNPC].lifeMax * 0.5)
 				{
 					if (NPC.Center.X - Main.npc[AimNPC].Center.X > 150)
-					{
 						NPC.position.X -= 0.05f;
-					}
 					if (NPC.Center.X - Main.npc[AimNPC].Center.X < -150)
-					{
 						NPC.position.X += 0.05f;
-					}
 				}
 			}
 			if (NPC.collideY && NPC.alpha > 0 && !squ)
@@ -83,9 +73,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 				NPC.alpha -= 25;
 			}
 			if (NPC.alpha <= 0)
-			{
 				NPC.alpha = 0;
-			}
 			if (NPC.CountNPCS(ModContent.NPCType<BloodTusk>()) > 0 && !squ)
 			{
 				if (V[0].Y > 5)
@@ -101,21 +89,15 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 				}
 			}
 			if (!player.active || player.dead)
-			{
 				canDespawn = true;
-			}
 			else
 			{
 				if (NPC.CountNPCS(ModContent.NPCType<BloodTusk>()) <= 0)
-				{
 					canDespawn = true;
-				}
 				else
 				{
 					if (BloodTusk.Killing > 0)
-					{
 						canDespawn = true;
-					}
 					else
 					{
 						canDespawn = false;
@@ -124,13 +106,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 			}
 
 			if (NPC.CountNPCS(ModContent.NPCType<BloodTusk>()) <= 0)
-			{
 				squ = true;
-			}
 			if (BloodTusk.Killing > 0)
-			{
 				squ = true;
-			}
 			if (squ)
 			{
 				TuskModPlayer mplayer = Main.player[Main.myPlayer].GetModPlayer<TuskModPlayer>();
@@ -145,9 +123,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 				{
 					NPC.alpha += 15;
 					if (NPC.alpha > 240)
-					{
 						NPC.active = false;
-					}
 				}
 			}
 			if (player.Center.Y < NPC.Bottom.Y - 200)
@@ -184,9 +160,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 		public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 		{
 			if (!startFight)
-			{
 				return false;
-			}
 			BloodTusk.FogSpace[17] = NPC.Center + new Vector2(66, 412);
 			BloodTusk.FogSpace[16] = NPC.Center + new Vector2(127, 260);
 			BloodTusk.FogSpace[15] = NPC.Center + new Vector2(169, 67);

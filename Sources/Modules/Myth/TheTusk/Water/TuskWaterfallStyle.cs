@@ -1,4 +1,4 @@
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Water
+namespace Everglow.Myth.TheTusk.Water
 {
 	public class TuskWaterfallStyle : ModWaterfallStyle
 	{

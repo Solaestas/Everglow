@@ -1,6 +1,7 @@
-﻿using Everglow.Sources.Modules.MythModule.TheTusk.Gores;
+﻿using Everglow.Myth.TheTusk.Buffs;
+using Everglow.Myth.TheTusk.Gores;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
+namespace Everglow.Myth.TheTusk.Projectiles.Weapon
 {
 	class TuskSummon : ModProjectile
 	{
@@ -31,7 +32,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 			Projectile.Center = aim;
 			for (int f = 0; f < 15; f++)
 			{
-				Gore g = Gore.NewGoreDirect(null, aim, new Vector2(0, Main.rand.NextFloat(10f)).RotatedByRandom(6.283), ModContent.GoreType<Blood>(), Main.rand.NextFloat(0.65f, Main.rand.NextFloat(2.5f, 3.75f)));
+				var g = Gore.NewGoreDirect(null, aim, new Vector2(0, Main.rand.NextFloat(10f)).RotatedByRandom(6.283), ModContent.GoreType<Blood>(), Main.rand.NextFloat(0.65f, Main.rand.NextFloat(2.5f, 3.75f)));
 				g.timeLeft = Main.rand.Next(250, 500);
 			}
 		}
@@ -40,23 +41,19 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 			Vector2 v0 = aim - Projectile.velocity - Projectile.Center;
 			float val = v0.Length();
 			if (val > 100f)
-			{
 				val = 100f;
-			}
-			Projectile.velocity = Utils.SafeNormalize(aim - Projectile.velocity - Projectile.Center, Vector2.Zero) * val * speedValue;
+			Projectile.velocity = (aim - Projectile.velocity - Projectile.Center).SafeNormalize(Vector2.Zero) * val * speedValue;
 		}
 		private void CheckKill()
 		{
 			Player player = Main.player[Projectile.owner];
 			if (player.dead || !player.active)
 			{
-				player.ClearBuff(ModContent.BuffType<Buffs.TuskStaff>());
+				player.ClearBuff(ModContent.BuffType<TuskStaff>());
 				Projectile.Kill();
 			}
-			if (player.HasBuff(ModContent.BuffType<Buffs.TuskStaff>()))
-			{
+			if (player.HasBuff(ModContent.BuffType<TuskStaff>()))
 				Projectile.timeLeft = 2;
-			}
 			else
 			{
 				Projectile.Kill();
@@ -67,9 +64,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 			Player player = Main.player[Projectile.owner];
 			Vector2 detectCenter = player.Center;
 			if (Projectile.ai[0] > 5)
-			{
 				detectCenter = Projectile.Center;
-			}
 			float minDistance = 1600;
 			int threatenEnemiesCount = 0;
 			foreach (NPC npc in Main.npc)
@@ -91,9 +86,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 
 						float minDistanceII = (npc.Center - player.Center).Length();
 						if (minDistanceII < 250)
-						{
 							threatenEnemiesCount++;
-						}
 						if (threatenEnemiesCount >= 3)
 						{
 							TargetWhoAmI = -2;
@@ -108,18 +101,14 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 			if (TargetWhoAmI > -1)
 			{
 				if (!Main.npc[TargetWhoAmI].active || Main.npc[TargetWhoAmI].dontTakeDamage)
-				{
 					TargetWhoAmI = -1;
-				}
 			}
 		}
 		private void Attack()
 		{
 			NPC target;
 			if (TargetWhoAmI is >= 0 and <= 200)
-			{
 				target = Main.npc[TargetWhoAmI];
-			}
 			else
 			{
 				TargetWhoAmI = -1;
@@ -129,7 +118,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 			{
 				if ((Projectile.Center - target.Center).Length() < 170 + target.height)
 				{
-					Projectile.velocity = Utils.SafeNormalize(target.Center - Projectile.Center, Vector2.Zero) * 25f;
+					Projectile.velocity = (target.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * 25f;
 					AttackCooling = 40;
 				}
 				else
@@ -145,9 +134,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 				{
 					Projectile.velocity *= 0.1f;
 					if (Projectile.velocity.Length() > 10f)
-					{
 						Collision.HitTiles(Projectile.Center + Projectile.velocity - new Vector2(8), Projectile.velocity, 16, 16);
-					}
 				}
 			}
 			else
@@ -171,9 +158,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 			float speed = 0.5f;
 			Vector2 aim = player.MountedCenter + new Vector2((10 - Projectile.ai[0] * 30) * player.direction, -40 + MathF.Sin((float)Main.timeForVisualEffects * 0.04f - Projectile.ai[0]) * 35f);
 			if ((Projectile.Center - aim).Length() > 500f)
-			{
 				speed = (Projectile.Center - player.Center).Length() / 1000f;
-			}
 			MoveTo(aim, speed);
 			Projectile.rotation = Projectile.rotation * 0.95f + Projectile.velocity.X * 0.002f;
 		}
@@ -183,26 +168,18 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 			Projectile.hide = true;
 			CheckKill();
 			if (TelePortCooling > 0)
-			{
 				TelePortCooling--;
-			}
 			else
 			{
 				if ((player.Center - Projectile.Center).Length() > 2700f)
-				{
 					TelePortTo(player.MountedCenter + new Vector2((10 - Projectile.ai[0] * 30) * player.direction, -40 + MathF.Sin((float)Main.timeForVisualEffects * 0.04f - Projectile.ai[0]) * 35f));
-				}
 			}
 			if (TargetWhoAmI <= -1)
 			{
 				if (TargetWhoAmI == -1)
-				{
 					FlyToPlayer();
-				}
 				if (TargetWhoAmI == -2)
-				{
 					AttackII();
-				}
 				FindEnemies();
 			}
 			else
@@ -221,7 +198,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 			if (speed > 10f)
 			{
 				float fade = Math.Min((speed - 10f) * 0.1f, 1f);
-				Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+				var texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
 				for (int i = 0; i < Projectile.oldPos.Length; i++)
 				{
 					Color colori = lightColor * (1f / i) * fade;

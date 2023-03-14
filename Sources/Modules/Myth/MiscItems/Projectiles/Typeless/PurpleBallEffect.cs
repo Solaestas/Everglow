@@ -1,6 +1,6 @@
 ﻿using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Typeless
+namespace Everglow.Myth.MiscItems.Projectiles.Typeless
 {
 	public class PurpleBallEffect : ModProjectile
 	{
@@ -27,25 +27,17 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Typeless
 			v0 = Projectile.Center;
 			float DusS = 0.25f;
 			if (Projectile.timeLeft >= 200 && Projectile.timeLeft <= 210)
-			{
 				DusS = 1.2f;
-			}
 			if (Projectile.timeLeft <= 180)
-			{
 				DusS = 0.25f;
-			}
 			if (Projectile.timeLeft >= 180)
-			{
 				Pro = (240 - Projectile.timeLeft) * (240 - Projectile.timeLeft) / 12;
-			}
 			else
 			{
 				Pro = 300;
 			}
 			if (Projectile.timeLeft >= 150)
-			{
 				Scale = 1;
-			}
 			else
 			{
 				float k0 = Projectile.timeLeft / 150f;

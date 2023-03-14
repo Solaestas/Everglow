@@ -1,8 +1,8 @@
-﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds;
+﻿using Everglow.Myth.TheFirefly.Backgrounds;
 using ReLogic.Content;
 using Terraria.GameContent.Shaders;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
+namespace Everglow.Myth.TheFirefly.Water
 {
 	public class FireFlyWaterSystem : ModSystem
 	{
@@ -11,9 +11,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
 		public override void OnModLoad()
 		{
 			if (!Main.dedServ)
-			{
 				m_waterDustRenderer = new WaterDustRenderer();
-			}
 		}
 
 		public override void PostDrawTiles()
@@ -72,13 +70,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
 			m_currentDustTarget = 0;
 			m_lastDrawPosition = Vector2.Zero;
 
-			Terraria.GameContent.Shaders.On_WaterShaderData.PreDraw += WaterShaderData_PreDraw;
+			On_WaterShaderData.PreDraw += WaterShaderData_PreDraw;
 
 			m_oldScreenWidth = Main.screenWidth;
 			m_oldScreenHeight = Main.screenHeight;
 		}
 
-		private void WaterShaderData_PreDraw(Terraria.GameContent.Shaders.On_WaterShaderData.orig_PreDraw orig, WaterShaderData self, GameTime gameTime)
+		private void WaterShaderData_PreDraw(On_WaterShaderData.orig_PreDraw orig, WaterShaderData self, GameTime gameTime)
 		{
 			orig(self, gameTime);
 
@@ -100,9 +98,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
 				var disortionTarget = (RenderTarget2D)typeof(WaterShaderData).GetField("_distortionTarget", BindingFlags.NonPublic | BindingFlags.Instance)
 					.GetValue(waterShader);
 				if (disortionTarget == null)
-				{
 					return;
-				}
 				var lastDistortionDrawOffset = (Vector2)typeof(WaterShaderData).GetField("_lastDistortionDrawOffset", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(waterShader);
 				Vector2 value = new Vector2(Main.screenWidth, Main.screenHeight) * 0.5f * (Vector2.One - Vector2.One / Main.GameViewMatrix.Zoom);
 				Vector2 value2 = (Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange, Main.offScreenRange)) - Main.screenPosition - value;
@@ -147,7 +143,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
 					dustSpawnShader.Apply();
 
 					var invZoom = new Vector2(1f / Main.GameViewMatrix.Zoom.X, 1f / Main.GameViewMatrix.Zoom.Y);
-					Vector2 size = new Vector2(NextDustTarget.Width, NextDustTarget.Height);
+					var size = new Vector2(NextDustTarget.Width, NextDustTarget.Height);
 					Vector2 topLeft = size * 0.5f * (Vector2.One - invZoom);
 					size *= invZoom;
 
@@ -161,15 +157,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
 		public void PresentDusts()
 		{
 			if (CurrentDustTarget == null || NextDustTarget == null)
-			{
 				return;
-			}
 
 			MothBackground mbione = ModContent.GetInstance<MothBackground>();
 			if (!MothBackground.BiomeActive())
-			{
 				return;
-			}
 
 			if (m_oldScreenWidth != Main.screenWidth || m_oldScreenHeight != Main.screenHeight)
 			{
@@ -212,7 +204,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
 
 		public void Unload()
 		{
-			Terraria.GameContent.Shaders.On_WaterShaderData.PreDraw -= WaterShaderData_PreDraw;
+			On_WaterShaderData.PreDraw -= WaterShaderData_PreDraw;
 		}
 	}
 }

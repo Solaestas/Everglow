@@ -1,4 +1,5 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
+using Everglow.Myth.TheFirefly.Dusts;
 using ReLogic.Content;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -6,7 +7,7 @@ using Terraria.Map;
 using Terraria.ModLoader.Default;
 using Terraria.ObjectData;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Pylon;
+namespace Everglow.Myth.TheFirefly.Pylon;
 
 internal class FireflyPylonTileEntity : TEModdedPylon
 {
@@ -68,21 +69,17 @@ public class BaseModPylon<T> : ModPylon where T : TEModdedPylon
 	public static void DrawModPylon(SpriteBatch spriteBatch, int i, int j, Asset<Texture2D> crystalTexture, Asset<Texture2D> crystalHighlightTexture, Vector2 crystalOffset, Color pylonShadowColor, Color dustColor, int dustChanceDenominator, int crystalVerticalFrameCount, bool animation = true, int dustType = 43)
 	{
 		// Gets offscreen vector for different lighting modes
-		Vector2 offscreenVector = new Vector2(Main.offScreenRange);
+		var offscreenVector = new Vector2(Main.offScreenRange);
 		if (Main.drawToScreen)
-		{
 			offscreenVector = Vector2.Zero;
-		}
 
 		// Double check that the tile exists
-		Point point = new Point(i, j);
+		var point = new Point(i, j);
 		Tile tile = Main.tile[point.X, point.Y];
 		if (tile == null || !tile.HasTile)
-		{
 			return;
-		}
 
-		TileObjectData tileData = TileObjectData.GetTileData(tile);
+		var tileData = TileObjectData.GetTileData(tile);
 
 		// Calculate frame based on vanilla counters in order to line up the animation
 		int frameY = animation ? Main.tileFrameCounter[TileID.TeleportationPylon] / crystalVerticalFrameCount : 0;
@@ -97,7 +94,7 @@ public class BaseModPylon<T> : ModPylon where T : TEModdedPylon
 
 		// Calculate positional variables for actually drawing the crystal
 		Vector2 origin = crystalFrame.Size() / 2f;
-		Vector2 tileOrigin = new Vector2(tileData.CoordinateFullWidth / 2f, tileData.CoordinateFullHeight / 2f);
+		var tileOrigin = new Vector2(tileData.CoordinateFullWidth / 2f, tileData.CoordinateFullHeight / 2f);
 		Vector2 crystalPosition = point.ToWorldCoordinates(tileOrigin.X - 2f, tileOrigin.Y) + crystalOffset;
 
 		// Calculate additional drawing positions with a sine wave movement
@@ -120,7 +117,7 @@ public class BaseModPylon<T> : ModPylon where T : TEModdedPylon
 		spriteBatch.Draw(crystalTexture.Value, drawingPosition - Main.screenPosition, crystalFrame, color * 0.7f, 0f, origin, 1f, SpriteEffects.None, 0f);
 
 		// Draw the shadow effect for the crystal
-		float scale = animation ? ((float)Math.Sin(Main.GlobalTimeWrappedHourly * ((float)Math.PI * 2f) / 1f) * 0.2f + 0.8f) : 0.8f;
+		float scale = animation ? (float)Math.Sin(Main.GlobalTimeWrappedHourly * ((float)Math.PI * 2f) / 1f) * 0.2f + 0.8f : 0.8f;
 		Color shadowColor = pylonShadowColor * scale;
 		for (float shadowPos = 0f; shadowPos < 1f; shadowPos += 1f / 6f)
 		{
@@ -133,22 +130,16 @@ public class BaseModPylon<T> : ModPylon where T : TEModdedPylon
 		{
 			selectionLevel = 1;
 			if (actuallySelected)
-			{
 				selectionLevel = 2;
-			}
 		}
 
 		if (selectionLevel == 0)
-		{
 			return;
-		}
 
 		int averageBrightness = (color.R + color.G + color.B) / 3;
 
 		if (averageBrightness <= 10)
-		{
 			return;
-		}
 
 		Color selectionGlowColor = Colors.GetSelectionGlowColor(selectionLevel == 2, averageBrightness);
 		spriteBatch.Draw(crystalHighlightTexture.Value, drawingPosition - Main.screenPosition, smartCursorGlowFrame, selectionGlowColor, 0f, origin, 1f, SpriteEffects.None, 0f);
@@ -166,15 +157,13 @@ internal class FireflyPylon : BaseModPylon<FireflyPylonTileEntity>
 
 	public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		DrawModPylon(spriteBatch, i, j, crystalTexture, crystalHighlightTexture, new Vector2(0, DefaultVerticalOffset), new Color(5, 0, 55, 30), new Color(255, 0, 155, 20), 4, CrystalVerticalFrameCount, true, ModContent.DustType<Dusts.FireflyPylonDust>());
+		DrawModPylon(spriteBatch, i, j, crystalTexture, crystalHighlightTexture, new Vector2(0, DefaultVerticalOffset), new Color(5, 0, 55, 30), new Color(255, 0, 155, 20), 4, CrystalVerticalFrameCount, true, ModContent.DustType<FireflyPylonDust>());
 	}
 
 	public override void DrawMapIcon(ref MapOverlayDrawContext context, ref string mouseOverText, TeleportPylonInfo pylonInfo, bool isNearPylon, Color drawColor, float deselectedScale, float selectedScale)
 	{
 		if (!PylonSystem.Instance.shabbyPylonEnable)
-		{
 			return;
-		}
 
 		bool mouseOver = DefaultDrawMapIcon(ref context, mapIcon, pylonInfo.PositionInTiles.ToVector2() + new Vector2(1.5f, 2f), drawColor, deselectedScale, selectedScale);
 		DefaultMapClickHandle(mouseOver, pylonInfo, "Mods.Everglow.ItemName.FireflyPylonItem", ref mouseOverText);
@@ -183,12 +172,10 @@ internal class FireflyPylon : BaseModPylon<FireflyPylonTileEntity>
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		var tile = Main.tile[i, j];
-		Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 
 		if (Main.drawToScreen)
-		{
 			zero = Vector2.Zero;
-		}
 		Texture2D tex = MythContent.QuickTexture("TheFirefly/Pylon/FireflyPylonGlow");
 
 		spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(1f, 1f, 1f, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);

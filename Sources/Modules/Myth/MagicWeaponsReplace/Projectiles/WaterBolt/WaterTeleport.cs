@@ -1,8 +1,9 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
-using static Everglow.Sources.Modules.MythModule.Common.MythUtils;
-namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.WaterBolt
+﻿using Everglow.Myth.Common;
+using Everglow.Myth.MagicWeaponsReplace.Buffs;
+using Everglow.Myth.TheFirefly.Dusts;
+using Everglow.Myth.TheFirefly.Projectiles;
+using static Everglow.Myth.Common.MythUtils;
+namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.WaterBolt
 {
 	internal class WaterTeleport : ModProjectile, IWarpProjectile
 	{
@@ -21,11 +22,9 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
 		public override void AI()
 		{
 			Player player = Main.player[Projectile.owner];
-			Vector2 AIM0 = (player.Center + new Vector2(0, 12 * player.gravDir * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d)) + new Vector2(-60 * player.direction, 30).RotatedBy((Projectile.ai[0] - 1) / 4.5 * Math.PI * player.direction));
+			Vector2 AIM0 = player.Center + new Vector2(0, 12 * player.gravDir * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d)) + new Vector2(-60 * player.direction, 30).RotatedBy((Projectile.ai[0] - 1) / 4.5 * Math.PI * player.direction);
 			if (player.itemTime > 0 && player.active)
-			{
-				AIM0 = (player.Center + new Vector2(player.direction * -12, -24 * player.gravDir * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d)) + new Vector2(-120 * player.direction, 60).RotatedBy((Projectile.ai[0] - 1) / 4.5 * Math.PI * player.direction));
-			}
+				AIM0 = player.Center + new Vector2(player.direction * -12, -24 * player.gravDir * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d)) + new Vector2(-120 * player.direction, 60).RotatedBy((Projectile.ai[0] - 1) / 4.5 * Math.PI * player.direction);
 			Projectile.Center = Projectile.Center * (-Projectile.ai[0] / 50f + 0.97f) + AIM0 * (Projectile.ai[0] / 50f + 0.03f);
 			Projectile.spriteDirection = player.direction;
 			Projectile.velocity *= 0;
@@ -33,17 +32,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
 			{
 				Projectile.timeLeft = player.itemTime + 60;
 				if (Timer < 30)
-				{
 					Timer++;
-				}
 			}
 			else
 			{
 				Timer--;
 				if (Timer < 0)
-				{
 					Projectile.Kill();
-				}
 			}
 
 			if (Main.mouseRight && Main.mouseRightRelease)
@@ -96,7 +91,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
 						if (p.owner == player.whoAmI && p.type == Projectile.type)
 						{
 							p.Kill();
-							player.AddBuff(ModContent.BuffType<Buffs.WaterBoltII>(), 300);
+							player.AddBuff(ModContent.BuffType<WaterBoltII>(), 300);
 							foreach (Projectile p0 in Main.projectile)
 							{
 								if (p0.owner == player.whoAmI && p0.type == Projectile.type && p0.active)
@@ -125,9 +120,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
 			DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), new Color(0, 0.45f, 1f, 0));
 			Main.spriteBatch.Draw(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterBolt/WaterTeleport"), Projectile.Center - Main.screenPosition, null, new Color(0, 30, 255, 0), 0, new Vector2(34), Timer / 30f, SpriteEffects.None, 0);
 			if ((Main.MouseWorld - Projectile.Center).Length() < 30)
-			{
 				Utils.DrawBorderString(Main.spriteBatch, Projectile.ai[0].ToString(), Projectile.Center - Main.screenPosition, Color.AliceBlue);
-			}
 			return false;
 		}
 
@@ -148,7 +141,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
 			float Wid = 6f;
 			Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
 
-			List<Vertex2D> vertex2Ds = new List<Vertex2D>();
+			var vertex2Ds = new List<Vertex2D>();
 
 			for (int x = 0; x < 3; x++)
 			{
@@ -179,9 +172,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
 		public override void Kill(int timeLeft)
 		{
 			if (Timer < 1)
-			{
 				return;
-			}
 
 
 			float k1 = 0.3f;

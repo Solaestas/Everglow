@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKing
+﻿namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing
 {
 	public class GoldLanternLine7 : ModProjectile
 	{
@@ -33,30 +33,20 @@
 			Vector2 v2 = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.2f, 0.2f));
 			Add += 1;
 			if (Projectile.timeLeft % 200 == 0)
-			{
 				Projectile.extraUpdates += 1;
-			}
 			if (Projectile.extraUpdates > 20)
-			{
 				Projectile.Kill();
-			}
 			if (Projectile.timeLeft % 10 == 0)//Projectile.InheritSource(Projectile)
-			{
-				Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center, v2, ModContent.ProjectileType<GoldLanternLine6>(), 2, 0, player.whoAmI, 0, 0);
-			}
+				Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, v2, ModContent.ProjectileType<GoldLanternLine6>(), 2, 0, player.whoAmI, 0, 0);
 			Projectile.velocity += v;
 			if (sca < 1)
-			{
 				sca += 0.03f;
-			}
 			else
 			{
 				sca = 1;
 			}
 			if (Wid < 12f)
-			{
 				Wid += 0.2f;
-			}
 			else
 			{
 				Wid = 12;
@@ -72,7 +62,7 @@
 			for (int j = 0; j < 10; j++)
 			{
 				Vector2 v2 = Projectile.velocity.RotatedBy(j / 5f * Math.PI);
-				Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center, v2, ModContent.ProjectileType<GoldLanternLine3>(), 0, 0, player.whoAmI, 0, 0);
+				Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, v2, ModContent.ProjectileType<GoldLanternLine3>(), 0, 0, player.whoAmI, 0, 0);
 			}
 			Kill(timeLeft);
 		}
@@ -83,12 +73,10 @@
 		{
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 			int width = 60;
 			if (Projectile.timeLeft < 60)
-			{
 				width = Projectile.timeLeft;
-			}
 			TrueL = 0;
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
@@ -109,7 +97,7 @@
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(10, 10) - Main.screenPosition, new Color(255, 216, 0, 0), new Vector3(factor, 1, w)));
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(10, 10) - Main.screenPosition, new Color(255, 216, 0, 0), new Vector3(factor, 0, w)));
 			}
-			List<Vertex2D> Vx = new List<Vertex2D>();
+			var Vx = new List<Vertex2D>();
 			if (bars.Count > 2)
 			{
 				Vx.Add(bars[0]);

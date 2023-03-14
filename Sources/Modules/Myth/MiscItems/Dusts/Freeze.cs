@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Dusts
+﻿namespace Everglow.Myth.MiscItems.Dusts
 {
 	public class Freeze : ModDust
 	{
@@ -19,9 +19,7 @@
 			float scale = dust.scale;
 			Lighting.AddLight(dust.position, dust.scale * 0.05f, dust.scale * 0.1f, dust.scale * 0.25f);
 			if (dust.scale < 0.25f)
-			{
 				dust.active = false;
-			}
 			//for(int i = 0; i < 200;i++)
 			//{
 			//    if((Main.npc[i].Center - dust.position).Length() < 10 && !Main.npc[i].dontTakeDamage && !Main.npc[i].friendly)
@@ -34,9 +32,7 @@
 		public override Color? GetAlpha(Dust dust, Color lightColor)
 		{
 			if (dust.scale > 3f)
-			{
 				return new Color?(new Color(0.6f, 0.9f, 1f, 0.1f));
-			}
 			else
 			{
 				return new Color?(new Color(dust.scale * dust.scale / 9f * 0.6f, dust.scale / 3f * 0.9f, dust.scale / 3f, 0.1f));

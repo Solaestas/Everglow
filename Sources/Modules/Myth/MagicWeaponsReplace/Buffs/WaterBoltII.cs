@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Buffs
+﻿namespace Everglow.Myth.MagicWeaponsReplace.Buffs
 {
 	public class WaterBoltII : ModBuff
 	{

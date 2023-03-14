@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectiles
+﻿namespace Everglow.Myth.MiscItems.Weapons.Clubs.Projectiles
 {
 	public class ChlorophyteClub : ClubProj_metal
 	{
@@ -24,9 +24,7 @@
 				GenerateDust();
 			}
 			if (FlyClubCooling > 0)
-			{
 				FlyClubCooling--;
-			}
 		}
 		private void GenerateDust()
 		{

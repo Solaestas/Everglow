@@ -1,6 +1,6 @@
 ﻿using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Vanities
+namespace Everglow.Myth.OmniElementItems.Vanities
 {
 	[AutoloadEquip(EquipType.Legs)]
 	public class BlueflowerDress : ModItem

@@ -1,8 +1,9 @@
-﻿using Everglow.Sources.Modules.MythModule.MiscItems.Buffs;
+﻿using Everglow.Myth.MiscItems.Buffs;
+using Everglow.Myth.MiscItems.Dusts;
 //using MythMod.Buffs;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
+namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Magic
 {
 	public class FreezeBallBrake : ModProjectile
 	{
@@ -28,9 +29,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 		public override Color? GetAlpha(Color lightColor)
 		{
 			if (Projectile.timeLeft < 3584)
-			{
 				return new Color?(new Color(255, 255, 255, 0));
-			}
 			else
 			{
 				return new Color?(new Color((3600 - Projectile.timeLeft) / 14f, (3600 - Projectile.timeLeft) / 14f, (3600 - Projectile.timeLeft) / 14f, 0));
@@ -50,15 +49,13 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 				{
 					if (Projectile.timeLeft / 25f > 5)
 					{
-						int r = Dust.NewDust(Projectile.Center - new Vector2(4, 4), 0, 0, ModContent.DustType<MiscItems.Dusts.Ice>(), 0, 0, 0, default(Color), 5);
+						int r = Dust.NewDust(Projectile.Center - new Vector2(4, 4), 0, 0, ModContent.DustType<Ice>(), 0, 0, 0, default, 5);
 						Main.dust[r].velocity.X = 0;
 						Main.dust[r].velocity.Y = 0;
 						Main.dust[r].noGravity = true;
 						Main.dust[r].rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
 						if (Jnj > 0)
-						{
 							Main.dust[r].alpha = Jnj * 16;
-						}
 						else
 						{
 							Main.dust[r].alpha = 60;
@@ -66,26 +63,24 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 					}
 					else
 					{
-						int r = Dust.NewDust(Projectile.Center - new Vector2(4, 4), 0, 0, ModContent.DustType<MiscItems.Dusts.Ice>(), 0, 0, 0, default(Color), Projectile.timeLeft / 25f);
+						int r = Dust.NewDust(Projectile.Center - new Vector2(4, 4), 0, 0, ModContent.DustType<Ice>(), 0, 0, 0, default, Projectile.timeLeft / 25f);
 						Main.dust[r].velocity.X = 0;
 						Main.dust[r].velocity.Y = 0;
 						Main.dust[r].noGravity = true;
 						Main.dust[r].rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
 						if (Jnj > 0)
-						{
 							Main.dust[r].alpha = Jnj * 40;
-						}
 						else
 						{
 							Main.dust[r].alpha = 60;
 						}
 					}
 				}
-				Projectile.velocity *= 1 - 0.3f / (float)Projectile.timeLeft;
+				Projectile.velocity *= 1 - 0.3f / Projectile.timeLeft;
 			}
 			if (Jnj2 > 0)
 			{
-				int r = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4), 0, 0, ModContent.DustType<MiscItems.Dusts.Freeze>(), 0, 0, 0, default(Color), 10f);
+				int r = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4), 0, 0, ModContent.DustType<Dusts.Freeze>(), 0, 0, 0, default, 10f);
 				Main.dust[r].noGravity = true;
 			}
 			Projectile.tileCollide = false;

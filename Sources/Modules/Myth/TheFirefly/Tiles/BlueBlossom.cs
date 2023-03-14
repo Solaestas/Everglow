@@ -1,7 +1,9 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
+using Everglow.Myth.TheFirefly;
+using Everglow.Myth.TheFirefly.Items;
 using Terraria.ObjectData;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
+namespace Everglow.Myth.TheFirefly.Tiles
 {
 	public class BlueBlossom : ModTile
 	{
@@ -28,20 +30,20 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 
 		public override void NumDust(int i, int j, bool fail, ref int num)
 		{
-			num = (fail ? 1 : 3);
+			num = fail ? 1 : 3;
 		}
 
 		public override void KillMultiTile(int i, int j, int frameX, int frameY)
 		{
 			for (int x = 0; x < 5; x++)
 			{
-				Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Items.GlowingPedal>());
+				Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<GlowingPedal>());
 			}
 		}
 
 		public override void PlaceInWorld(int i, int j, Item item)
 		{
-			short num = (short)(Main.rand.Next(0, 6));
+			short num = (short)Main.rand.Next(0, 6);
 			Main.tile[i, j].TileFrameX = (short)(num * 48);
 			Main.tile[i, j + 1].TileFrameX = (short)(num * 48);
 		}
@@ -57,9 +59,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 					if (player.Hitbox.Intersects(new Rectangle(i * 16, j * 16, 16, 16)))
 					{
 						if (!TileSpin.TileRotation.ContainsKey((i, j - tile.TileFrameY / 16 + 1)))
-						{
 							TileSpin.TileRotation.Add((i, j - tile.TileFrameY / 16 + 1), new Vector2(Math.Clamp(player.velocity.X, -1, 1) * 0.2f));
-						}
 						else
 						{
 							float rot;
@@ -67,19 +67,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 							Omega = TileSpin.TileRotation[(i, j - tile.TileFrameY / 16 + 1)].X;
 							rot = TileSpin.TileRotation[(i, j - tile.TileFrameY / 16 + 1)].Y;
 							if (Math.Abs(Omega) < 0.04f && Math.Abs(rot) < 0.04f)
-							{
 								TileSpin.TileRotation[(i, j - tile.TileFrameY / 16 + 1)] = new Vector2(Omega + Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + Omega + Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
-							}
 							if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
-							{
 								TileSpin.TileRotation.Remove((i, j - tile.TileFrameY / 16 + 1));
-							}
 						}
 
 						if (!TileSpin.TileRotation.ContainsKey((i, j - tile.TileFrameY / 16)))
-						{
 							TileSpin.TileRotation.Add((i, j - tile.TileFrameY / 16), new Vector2(Math.Clamp(player.velocity.X, -1, 1) * 0.2f));
-						}
 						else
 						{
 							float rot;
@@ -87,13 +81,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 							Omega = TileSpin.TileRotation[(i, j - tile.TileFrameY / 16)].X;
 							rot = TileSpin.TileRotation[(i, j - tile.TileFrameY / 16)].Y;
 							if (Math.Abs(Omega) < 0.04f && Math.Abs(rot) < 0.04f)
-							{
 								TileSpin.TileRotation[(i, j - tile.TileFrameY / 16)] = new Vector2(Omega + Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + Omega + Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
-							}
 							if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
-							{
 								TileSpin.TileRotation.Remove((i, j - tile.TileFrameY / 16));
-							}
 						}
 					}
 				}
@@ -105,7 +95,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 			var tile = Main.tile[i, j];
 			if (tile.TileFrameY == 16)
 			{
-				TileSpin tileSpin = new TileSpin();
+				var tileSpin = new TileSpin();
 				tileSpin.UpdateBlackShrub(i, j - tile.TileFrameY / 16, 0.25f, 0.13f, new Vector2(0, -20), 0, 24);
 				tileSpin.Update(i, j - tile.TileFrameY / 16 + 1);
 				Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/BlueBlossomDraw");

@@ -1,5 +1,8 @@
+using Everglow.Myth.TheTusk;
+using Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk;
+using Everglow.Myth.TheTusk.Projectiles.Weapon;
 using Terraria.Audio;
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
+namespace Everglow.Myth.TheTusk.Projectiles
 {
 	public class TuskCurse : ModProjectile
 	{
@@ -21,7 +24,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 		}
 		public override void AI()
 		{
-			Projectile.rotation = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X));
+			Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
 			Projectile.velocity *= 0.98f;
 			Projectile.velocity.Y += 0.4f;
 		}
@@ -35,9 +38,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 				Main.dust[r].noGravity = true;
 				Main.dust[r].velocity = v3;
 			}
-			NPC.NewNPC(null, (int)Projectile.Center.X, (int)Projectile.Bottom.Y, ModContent.NPCType<NPCs.Bosses.BloodTusk.TuskPoolWave>());
-			NPC.NewNPC(null, (int)Projectile.Center.X, (int)Projectile.Bottom.Y, ModContent.NPCType<NPCs.Bosses.BloodTusk.TuskRedLight>());
-			Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<Weapon.ToothMagicHit>(), 0, Projectile.knockBack, Projectile.owner, 0f, 0f);
+			NPC.NewNPC(null, (int)Projectile.Center.X, (int)Projectile.Bottom.Y, ModContent.NPCType<TuskPoolWave>());
+			NPC.NewNPC(null, (int)Projectile.Center.X, (int)Projectile.Bottom.Y, ModContent.NPCType<TuskRedLight>());
+			Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<ToothMagicHit>(), 0, Projectile.knockBack, Projectile.owner, 0f, 0f);
 		}
 		private Effect ef;
 		public override void PostDraw(Color lightColor)
@@ -46,8 +49,8 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 			Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(255, 255, 255, 0), Projectile.rotation, new Vector2(15f, 15f), Projectile.scale, SpriteEffects.None, 0);
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-			List<VertexBase.CustomVertexInfo> bars = new List<VertexBase.CustomVertexInfo>();
-			ef = (Effect)ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/TuskFlame").Value;
+			var bars = new List<VertexBase.CustomVertexInfo>();
+			ef = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/TuskFlame").Value;
 
 			int width = 60;
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
@@ -66,7 +69,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 				bars.Add(new VertexBase.CustomVertexInfo(Projectile.oldPos[i] + normalDir * -width + new Vector2(15, 15), color, new Vector3((float)Math.Sqrt(factor), 0, w)));
 			}
 
-			List<VertexBase.CustomVertexInfo> triangleList = new List<VertexBase.CustomVertexInfo>();
+			var triangleList = new List<VertexBase.CustomVertexInfo>();
 
 			if (bars.Count > 2)
 			{

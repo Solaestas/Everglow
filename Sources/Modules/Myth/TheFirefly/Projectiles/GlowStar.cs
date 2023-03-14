@@ -1,7 +1,7 @@
-using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Everglow.Myth.TheFirefly.Dusts;
 using Terraria.Audio;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
+namespace Everglow.Myth.TheFirefly.Projectiles
 {
 	public class GlowStar : ModProjectile
 	{
@@ -34,9 +34,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			{
 				Projectile.ai[1] -= 1;
 				if (Projectile.ai[1] == 1)
-				{
 					Projectile.Kill();
-				}
 			}
 		}
 
@@ -47,38 +45,28 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			float k0 = (1000 - Projectile.timeLeft) / k1;
 			float k2 = 1f;
 			if (Projectile.timeLeft <= 1000 - k1)
-			{
 				k0 = 1;
-			}
 			if (Projectile.timeLeft < 200)
-			{
 				k2 = Projectile.timeLeft / 200f;
-			}
-			Color c0 = new Color(k0 * k0 * 0.3f, k0 * k0 * 0.8f, k0 * 0.8f + 0.2f, 1 - k0);
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var c0 = new Color(k0 * k0 * 0.3f, k0 * k0 * 0.8f, k0 * 0.8f + 0.2f, 1 - k0);
+			var bars = new List<Vertex2D>();
 			float width = 12;
 			float k3 = Projectile.ai[1] / 60f;
 			if (Projectile.ai[1] > 0)
-			{
 				width *= k3;
-			}
 			width *= (k0 / 1.8f + 0.2f) / (Projectile.ai[0] + 3) * 3.5f * k2;
 			int TrueL = 0;
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
 				if (Projectile.oldPos[i] == Vector2.Zero)
-				{
 					break;
-				}
 
 				TrueL++;
 			}
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
 				if (Projectile.oldPos[i] == Vector2.Zero)
-				{
 					break;
-				}
 
 				var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
 				normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
@@ -90,9 +78,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			Texture2D t = Common.MythContent.QuickTexture("TheFirefly/Projectiles/MothGreyLine");
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			if (bars.Count > 3)
-			{
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-			}
 			Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, c0, Projectile.rotation, Light.Size() / 2f, (k0 / 1.8f + 0.2f) / (Projectile.ai[0] + 3) * 3.5f * k2, SpriteEffects.None, 0);
 			return false;
 		}
@@ -110,9 +96,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BeadShakeWave>(), 0, 0, Projectile.owner, 2.2f / (Projectile.ai[0] + 2) * 0.6f * value, 0.3f);
 			}
 			if (timeLeft <= 0)
-			{
 				return;
-			}
 			SoundEngine.PlaySound(SoundID.Item38, Projectile.Center);
 			float k1 = Math.Clamp(Projectile.velocity.Length(), 1, 3);
 			float k2 = Math.Clamp(Projectile.velocity.Length(), 6, 10);
@@ -137,9 +121,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 				if (Dis < k0 * 50)
 				{
 					if (!target.dontTakeDamage && !target.friendly && target.CanBeChasedBy() && target.active)
-					{
 						target.StrikeNPC((int)(Projectile.damage / (Dis + 35f) * 35f), 0.2f, 1);
-					}
 				}
 			}
 		}

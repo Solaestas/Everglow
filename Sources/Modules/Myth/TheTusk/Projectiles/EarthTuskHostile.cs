@@ -1,9 +1,9 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Shaders;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
+namespace Everglow.Myth.TheTusk.Projectiles
 {
 	public class EarthTuskHostile : ModProjectile
 	{
@@ -28,18 +28,14 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 			for (int y = 0; y < 60; y++)
 			{
 				if (Collision.SolidCollision(CheckPoint, 1, 1))
-				{
 					break;
-				}
 				else
 				{
 					CheckPoint += new Vector2(0, 10) * player.gravDir;
 				}
 			}
 			if (!Collision.SolidCollision(CheckPoint, 1, 1))
-			{
 				Projectile.Kill();
-			}
 
 			Projectile.rotation = ToTileOutside(CheckPoint) - MathF.PI * 1.5f;
 		}
@@ -52,9 +48,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 				times++;
 				CheckCenter = Projectile.Center + new Vector2(times * Projectile.ai[1], 0).RotatedBy(times / 6f * Projectile.ai[1]);
 				if (times > 256)
-				{
 					Projectile.Kill();
-				}
 
 			}
 			Projectile.velocity *= 0;
@@ -102,9 +96,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 				}
 			}
 			if (TotalVector == Vector2.Zero || TCount > 35)
-			{
 				return 0;
-			}
 			float Angle = (float)Math.Atan2(TotalVector.Y, TotalVector.X);
 			return Angle;
 		}
@@ -112,7 +104,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 		{
 			if (Projectile.ai[0] > 0)
 			{
-				Vector2 Center = (SummonCenter + new Vector2(0, -80).RotatedBy(Projectile.rotation) * Projectile.scale);
+				Vector2 Center = SummonCenter + new Vector2(0, -80).RotatedBy(Projectile.rotation) * Projectile.scale;
 				float newRotation;
 				Vector2 abstractNextPoint = Center + new Vector2(8 * Projectile.ai[1], 0).RotatedBy(Projectile.rotation);
 				for (int f = 0; f < 12; f++)
@@ -162,9 +154,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 						}
 					}
 					if (times <= 256f)
-					{
 						SummonNext = abstractNextPoint + new Vector2(times - 1, 0).RotatedBy((times - 1) / 6f);
-					}
 					SummonPoint = SummonNext;
 				}
 
@@ -174,18 +164,12 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 		public override void AI()
 		{
 			if (Projectile.timeLeft > 50)
-			{
 				Projectile.Center = (SummonCenter + new Vector2(0, -80).RotatedBy(Projectile.rotation) * Projectile.scale) * 0.24f + Projectile.Center * 0.76f;
-			}
 
 			if (Projectile.timeLeft < 30)
-			{
 				Projectile.Center = SummonCenter * 0.08f + Projectile.Center * 0.92f;
-			}
 			if (Projectile.timeLeft == 55 && Projectile.ai[0] > 0)
-			{
 				Reproduct();
-			}
 			Projectile.hide = true;
 			ProduceWaterRipples(new Vector2(0, -80).RotatedBy(Projectile.rotation) * Projectile.scale);
 		}
@@ -203,7 +187,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 			Color EndColor = Lighting.GetColor((int)(ProjCenterII.X / 16f), (int)(ProjCenterII.Y / 16f));
 			float value = (Projectile.Center - SummonCenter).Length() / 80f;
 
-			List<Vertex2D> bars = new List<Vertex2D>
+			var bars = new List<Vertex2D>
 			{
 				new Vertex2D(SummonCenterII + TenNormalize - Main.screenPosition, StartColor, new Vector3(0, value, 0)),
 				new Vertex2D(SummonCenterII - TenNormalize - Main.screenPosition, StartColor, new Vector3(1, value, 0)),
@@ -220,9 +204,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 			Tile tilebelow = Main.tile[(int)(SummonCenterII.X / 16f), (int)(SummonCenterII.Y / 16f)];
 			Texture2D TileBelowTexture = TextureAssets.Tile[tilebelow.TileType].Value;
 			float leftX = tilebelow.TileFrameX / (float)TileBelowTexture.Width;
-			float rightX = (tilebelow.TileFrameX + 16f) / (float)TileBelowTexture.Width;
+			float rightX = (tilebelow.TileFrameX + 16f) / TileBelowTexture.Width;
 			float topY = tilebelow.TileFrameY / (float)TileBelowTexture.Height;
-			float bottomY = (tilebelow.TileFrameY + 16f) / (float)TileBelowTexture.Height;
+			float bottomY = (tilebelow.TileFrameY + 16f) / TileBelowTexture.Height;
 			Vector2 fragilesLeft = new Vector2(-20, 0).RotatedBy(Projectile.rotation);
 			Vector2 fragilesRight = new Vector2(20, 0).RotatedBy(Projectile.rotation);
 
@@ -240,9 +224,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 				fragilesLeftToCenter = fragilesLeft + new Vector2(16, 0).RotatedBy(-rotateValue + Projectile.rotation) * squzze;
 				fragilesLeftToCenterBottom = fragilesLeft + new Vector2(16, 16).RotatedBy(-rotateValue + Projectile.rotation) * squzze;
 				if (squzze < 0.1f)
-				{
 					break;
-				}
 			}
 			while (!Collision.SolidCollision(SummonCenterII + fragilesRight, 0, 0))
 			{
@@ -251,13 +233,11 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 				fragilesRightToCenter = fragilesRight + new Vector2(-16, 0).RotatedBy(rotateValue + Projectile.rotation) * squzze;
 				fragilesRightToCenterBottom = fragilesRight + new Vector2(-16, 16).RotatedBy(rotateValue + Projectile.rotation) * squzze;
 				if (squzze < 0.1f)
-				{
 					break;
-				}
 			}
 			Vector2 largeFragilesTop = new Vector2(0, -rotateValue * 12 - 4).RotatedBy(Projectile.rotation);
 
-			List<Vertex2D> Fragiles = new List<Vertex2D>
+			var Fragiles = new List<Vertex2D>
 			{
 				new Vertex2D(SummonCenterII + fragilesLeft - Main.screenPosition, EndColor, new Vector3(leftX, topY, 0)),
 				new Vertex2D(SummonCenterII + fragilesLeftToCenter - Main.screenPosition, EndColor, new Vector3(rightX, topY, 0)),
@@ -278,14 +258,12 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 		{
 			float point = 0;
 			if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), SummonCenter, Projectile.Center, 20, ref point))
-			{
 				return true;
-			}
 			return false;
 		}
 		private void ProduceWaterRipples(Vector2 beamDims)
 		{
-			WaterShaderData shaderData = (WaterShaderData)Terraria.Graphics.Effects.Filters.Scene["WaterDistortion"].GetShader();
+			var shaderData = (WaterShaderData)Terraria.Graphics.Effects.Filters.Scene["WaterDistortion"].GetShader();
 			float waveSine = 1f * (float)Math.Sin(Main.GlobalTimeWrappedHourly * 20f);
 			Vector2 HitRange = new Vector2(0, -80).RotatedBy(Projectile.rotation) * Projectile.scale;
 			Vector2 ripplePos = Projectile.Center + HitRange;

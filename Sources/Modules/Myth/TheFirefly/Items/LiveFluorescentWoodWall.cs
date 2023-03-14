@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items
+﻿namespace Everglow.Myth.TheFirefly.Items
 {
 	public class LiveFluorescentWoodWall : ModItem
 	{

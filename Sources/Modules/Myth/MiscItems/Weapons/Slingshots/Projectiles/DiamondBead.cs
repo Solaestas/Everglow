@@ -1,4 +1,6 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Projectiles
+﻿using Everglow.Myth.MiscItems.Weapons.Slingshots.Dusts;
+
+namespace Everglow.Myth.MiscItems.Weapons.Slingshots.Projectiles
 {
 	public class DiamondBead : GemAmmo
 	{
@@ -7,7 +9,7 @@
 			TrailTexPath = "MiscItems/Weapons/Slingshots/Projectiles/Textures/SlingshotTrailWhite";
 			TrailColor = Color.White;
 			TrailColor.A = 0;
-			dustType = ModContent.DustType<Dusts.DiamondDust>();
+			dustType = ModContent.DustType<DiamondDust>();
 		}
 	}
 }

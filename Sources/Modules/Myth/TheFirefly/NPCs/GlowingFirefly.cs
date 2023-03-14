@@ -1,8 +1,9 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
+using Everglow.Myth.TheFirefly.Items;
 using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
+namespace Everglow.Myth.TheFirefly.NPCs
 {
 	public class GlowingFirefly : ModNPC
 	{
@@ -31,9 +32,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 		{
 			FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
 			if (!fireflyBiome.IsBiomeActive(Main.LocalPlayer))
-			{
 				return 0f;
-			}
 			return 0.3f;
 		}
 
@@ -43,27 +42,21 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 			if (NPC.ai[1] > 0)
 			{
 				if (NPC.ai[0] < 4)
-				{
 					NPC.ai[0] += 0.18f;
-				}
 				else
 				{
 					NPC.ai[0] += 0.5f;
 				}
 
 				if (NPC.ai[0] >= 8f)
-				{
 					NPC.ai[0] = 4f;
-				}
 				NPC.velocity.Y = 0f;
 				UpdateMove();
 			}
 			else
 			{
 				if ((player.Center - NPC.Center).Length() < 80f || NPC.life != NPC.lifeMax)
-				{
 					NPC.ai[1] = 1f;
-				}
 				foreach (NPC same in Main.npc)
 				{
 					if (same.type == NPC.type)
@@ -98,9 +91,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 				AimPos = vNext;
 			}
 			if ((NPC.Center - AimPos).Length() >= 20)
-			{
 				NPC.velocity = Vector2.Normalize(AimPos - NPC.Center) * 1f;
-			}
 			else
 			{
 				NPC.velocity *= 0;
@@ -111,15 +102,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 		{
 			SpriteEffects effects = SpriteEffects.None;
 			if (NPC.spriteDirection == 1)
-			{
 				effects = SpriteEffects.FlipHorizontally;
-			}
 			Texture2D tx = MythContent.QuickTexture("TheFirefly/NPCs/GlowingFirefly");
 			Texture2D tg = MythContent.QuickTexture("TheFirefly/NPCs/GlowingFireflyGlow");
-			Vector2 vector = new Vector2(tx.Width / 2f, tx.Height / (float)Main.npcFrameCount[NPC.type] / 2f);
+			var vector = new Vector2(tx.Width / 2f, tx.Height / (float)Main.npcFrameCount[NPC.type] / 2f);
 
 			Color color0 = Lighting.GetColor((int)(NPC.Center.X / 16d), (int)(NPC.Center.Y / 16d));
-			Color color1 = new Color(255, 255, 255, 0);
+			var color1 = new Color(255, 255, 255, 0);
 			Main.spriteBatch.Draw(tx, NPC.Center - Main.screenPosition, new Rectangle(0, 50 * (int)NPC.ai[0], 46, 50), color0, NPC.rotation, vector, NPC.scale, effects, 0f);
 			Main.spriteBatch.Draw(tg, NPC.Center - Main.screenPosition, new Rectangle(0, 50 * (int)NPC.ai[0], 46, 50), color1, NPC.rotation, vector, NPC.scale, effects, 0f);
 
@@ -142,7 +131,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 
 		public override void ModifyNPCLoot(NPCLoot npcLoot)
 		{
-			npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.MothScaleDust>(), 1, 1, 1));
+			npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<MothScaleDust>(), 1, 1, 1));
 		}
 
 		public override void OnSpawn(IEntitySource source)

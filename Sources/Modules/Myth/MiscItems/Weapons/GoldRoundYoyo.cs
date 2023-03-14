@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
+﻿namespace Everglow.Myth.MiscItems.Weapons
 {
 	public class GoldRoundYoyo : ModItem
 	{
@@ -27,7 +27,7 @@
 			Item.UseSound = SoundID.Item1;
 			Item.DamageType = DamageClass.Melee;
 			Item.channel = true;
-			Item.shoot = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Melee.GoldRoundYoyo>();
+			Item.shoot = ModContent.ProjectileType<Projectiles.Weapon.Melee.GoldRoundYoyo>();
 			Item.useAnimation = 5;
 			Item.useTime = 14;
 			Item.shootSpeed = 0f;
@@ -36,7 +36,7 @@
 			Item.noMelee = true;
 			Item.value = Item.sellPrice(0, 5, 0, 0);
 			Item.rare = 8;
-			ItemID.Sets.Yoyo[base.Item.type] = true;
+			ItemID.Sets.Yoyo[Item.type] = true;
 		}
 	}
 }

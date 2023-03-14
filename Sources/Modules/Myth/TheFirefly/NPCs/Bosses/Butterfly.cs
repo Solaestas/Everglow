@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
+﻿namespace Everglow.Myth.TheFirefly.NPCs.Bosses
 {
 	public class Butterfly : ModNPC
 	{
@@ -70,15 +70,11 @@
 				NPC.dontTakeDamage = false;
 				Timer++;
 				if (NPC.alpha > 0)
-				{
 					NPC.alpha -= 2;
-				}
 
 				NPC.ai[2] += 0.1f;
 				if (Vector2.Distance(NPC.Center, Owner.Center) > 80)
-				{
 					MoveTo(Owner.Center + NPC.ai[2].ToRotationVector2() * 200, 20, 20);
-				}
 
 				NPC.friendly = false;
 				CheckOwnerActive();
@@ -89,9 +85,7 @@
 				NPC.dontTakeDamage = true;
 				Timer++;
 				if (NPC.alpha < 120)
-				{
 					NPC.alpha += 2;
-				}
 
 				if (Vector2.Distance(NPC.Center, Owner.Center) > 300)
 				{
@@ -108,9 +102,7 @@
 				NPC.TargetClosest(false);
 				Player player = Main.player[NPC.target];
 				if (Timer < 30)
-				{
 					NPC.dontTakeDamage = true;
-				}
 				else
 				{
 					NPC.dontTakeDamage = false;
@@ -159,13 +151,13 @@
 				if (Timer is > 60 and < 120)
 				{
 					NPC.alpha -= 2;
-					NPC.ai[2] = Utils.AngleLerp(NPC.ai[2], Owner.DirectionTo(player.Center).ToRotation(), 0.1f);
+					NPC.ai[2] = NPC.ai[2].AngleLerp(Owner.DirectionTo(player.Center).ToRotation(), 0.1f);
 					NPC.Center = Vector2.Lerp(NPC.Center, trueTargetPos, 0.1f);
 				}
 				if (Timer > 120)
 				{
 					NPC.friendly = false;
-					NPC.ai[2] = Utils.AngleLerp(NPC.ai[2], Owner.DirectionTo(player.Center + player.velocity * 20).ToRotation(), 0.15f);
+					NPC.ai[2] = NPC.ai[2].AngleLerp(Owner.DirectionTo(player.Center + player.velocity * 20).ToRotation(), 0.15f);
 					NPC.Center = Vector2.Lerp(NPC.Center, trueTargetPos, 0.4f);
 				}
 			}
@@ -192,21 +184,19 @@
 				if (Timer is > 60 and < 120)
 				{
 					NPC.alpha -= 2;
-					NPC.ai[2] = Utils.AngleLerp(NPC.ai[2], Owner.DirectionTo(player.Center).ToRotation(), 0.1f);
+					NPC.ai[2] = NPC.ai[2].AngleLerp(Owner.DirectionTo(player.Center).ToRotation(), 0.1f);
 					NPC.Center = Vector2.Lerp(NPC.Center, trueTargetPos, 0.1f);
 				}
 				if (Timer is > 120 and < 160)
 				{
 					NPC.friendly = false;
 					Vector2 d = Owner.DirectionTo(player.Center + player.velocity * 20);
-					NPC.ai[2] = Utils.AngleLerp(NPC.ai[2], d.ToRotation(), 0.2f);
+					NPC.ai[2] = NPC.ai[2].AngleLerp(d.ToRotation(), 0.2f);
 					NPC.Center = Vector2.Lerp(NPC.Center, trueTargetPos, 0.4f) + d * NPC.localAI[0];
 					NPC.localAI[0] = MathHelper.Lerp(NPC.localAI[0], -60, 0.05f);
 				}
 				if (Timer == 160)
-				{
 					NPC.velocity = NPC.ai[2].ToRotationVector2() * 30;
-				}
 				if (Timer == 220)
 				{
 					NPC.velocity *= 0.5f;
@@ -215,9 +205,7 @@
 					NPC.netUpdate2 = true;
 				}
 				if (Timer > 240)
-				{
 					Timer = 0;
-				}
 			}
 			if (NPC.ai[0] == 3)//剑
 			{
@@ -240,14 +228,14 @@
 				if (Timer is > 60 and < 120)
 				{
 					NPC.alpha = (int)MathHelper.Lerp(NPC.alpha, 0, 0.1f);
-					NPC.ai[2] = Utils.AngleLerp(NPC.ai[2], -1.57f, 0.1f);
+					NPC.ai[2] = NPC.ai[2].AngleLerp(-1.57f, 0.1f);
 					NPC.Center = Vector2.Lerp(NPC.Center, trueTargetPos, 0.15f);
 				}
 				if (Timer is > 120 and < 180)
 				{
 					NPC.friendly = false;
 					NPC.alpha = (int)MathHelper.Lerp(NPC.alpha, 0, 0.1f);
-					NPC.ai[2] = Utils.AngleLerp(NPC.ai[2], -1.57f + NPC.localAI[0] * 1f, 0.05f);
+					NPC.ai[2] = NPC.ai[2].AngleLerp(-1.57f + NPC.localAI[0] * 1f, 0.05f);
 					NPC.Center = Vector2.Lerp(NPC.Center, trueTargetPos, 0.5f);
 				}
 				if (Timer is > 180 and < 220)
@@ -289,21 +277,19 @@
 				if (Timer is > 60 and < 120)
 				{
 					NPC.alpha -= 2;
-					NPC.ai[2] = Utils.AngleLerp(NPC.ai[2], Owner.DirectionTo(player.Center).ToRotation(), 0.1f);
+					NPC.ai[2] = NPC.ai[2].AngleLerp(Owner.DirectionTo(player.Center).ToRotation(), 0.1f);
 					NPC.Center = Vector2.Lerp(NPC.Center, trueTargetPos, 0.1f);
 				}
 				if (Timer is > 120 and < 160)
 				{
 					NPC.friendly = false;
 					Vector2 d = Owner.DirectionTo(player.Center);
-					NPC.ai[2] = Utils.AngleLerp(NPC.ai[2], d.ToRotation(), 0.2f);
+					NPC.ai[2] = NPC.ai[2].AngleLerp(d.ToRotation(), 0.2f);
 					NPC.Center = Vector2.Lerp(NPC.Center, trueTargetPos, 0.4f) + d * NPC.localAI[0];
 					NPC.localAI[0] = MathHelper.Lerp(NPC.localAI[0], -70, 0.05f);
 				}
 				if (Timer == 160)
-				{
 					NPC.velocity = NPC.ai[2].ToRotationVector2() * 40;
-				}
 				if (Timer == 200)
 				{
 					NPC.velocity = Main.rand.NextVector2Unit() * Main.rand.Next(2, 10);
@@ -317,21 +303,17 @@
 
 		private void MoveTo(Vector2 targetPos, float Speed, float n)
 		{
-			Vector2 targetVec = Utils.SafeNormalize(targetPos - NPC.Center, Vector2.Zero) * Speed;
+			Vector2 targetVec = (targetPos - NPC.Center).SafeNormalize(Vector2.Zero) * Speed;
 			NPC.velocity = (NPC.velocity * n + targetVec) / (n + 1);
 		}
 
 		public override void FindFrame(int frameHeight)
 		{
 			if (NPC.frame.Y > 102)
-			{
 				NPC.frame.Y = 0;
-			}
 
 			if (Timer % 10 == 0)
-			{
 				NPC.frame.Y += 34;
-			}
 
 			if (Timer % 16 == 0 && NPC.alpha < 20)
 			{

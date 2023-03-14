@@ -1,7 +1,7 @@
-﻿using Everglow.Sources.Modules.MythModule.LanternMoon.LanternCommon;
+﻿using Everglow.Myth.LanternMoon.LanternCommon;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs
+namespace Everglow.Myth.LanternMoon.NPCs
 {
 
 	public class FloatLantern : ModNPC
@@ -46,36 +46,24 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs
 			}
 			num4 += 0.01f;
 			if (num1 > 0 && num1 <= 120)
-			{
 				num = num1 / 120f;
-			}
 			NPC.TargetClosest(false);
 			Player player = Main.player[NPC.target];
 			NPC.rotation = NPC.velocity.X / 30f;
 			A2 += 1;
 			if (A2 % 45 < 15)
-			{
 				NPC.frame.Y = 0;
-			}
 			if (A2 % 45 >= 15 && A2 % 45 < 30)
-			{
 				NPC.frame.Y = 74;
-			}
 			if (A2 % 45 >= 30 && A2 % 45 < 45)
-			{
 				NPC.frame.Y = 148;
-			}
 			Vector2 v = player.Center + new Vector2((float)Math.Sin(A2 / 40f) * 500f, (float)Math.Sin((A2 + 200) / 40f) * 50f - 150) - NPC.Center;
 			if (NPC.velocity.Length() < 9f)
-			{
 				NPC.velocity += v / v.Length() * 0.35f;
-			}
 			NPC.velocity *= 0.96f;
 
 			if (Main.dayTime)
-			{
 				NPC.velocity.Y += 1;
-			}
 		}
 		public override void OnHitPlayer(Player player, int damage, bool crit)
 		{
@@ -108,7 +96,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs
 				for (int f = 0; f < 55; f++)
 				{
 					Vector2 v3 = new Vector2(0, Main.rand.NextFloat(0, 12f)).RotatedByRandom(MathHelper.TwoPi);
-					int r = Dust.NewDust(NPC.Center - new Vector2(4, 4) - new Vector2(4, 4), 8, 8, ModContent.DustType<Dusts.Flame4>(), v3.X, v3.Y, 0, default(Color), Main.rand.NextFloat(0.6f, 1.8f));
+					int r = Dust.NewDust(NPC.Center - new Vector2(4, 4) - new Vector2(4, 4), 8, 8, ModContent.DustType<Dusts.Flame4>(), v3.X, v3.Y, 0, default, Main.rand.NextFloat(0.6f, 1.8f));
 					Main.dust[r].noGravity = true;
 					Main.dust[r].velocity = v3;
 				}
@@ -119,22 +107,20 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs
 		private float num4 = 0;
 		public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 		{
-			Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+			var texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
 			Texture2D tg = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/LanternMoon/NPCs/FloatLanternGlow").Value;
 			Texture2D tg2 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/LanternMoon/NPCs/FloatLanternGlow2").Value;
 			SpriteEffects effects = SpriteEffects.None;
 			if (NPC.spriteDirection == 1)
-			{
 				effects = SpriteEffects.FlipHorizontally;
-			}
-			Vector2 value = new Vector2(NPC.Center.X, NPC.Center.Y);
-			Vector2 vector = new Vector2((float)(texture.Width / 2), (float)(texture.Height / Main.npcFrameCount[NPC.type] / 2));
+			var value = new Vector2(NPC.Center.X, NPC.Center.Y);
+			var vector = new Vector2(texture.Width / 2, texture.Height / Main.npcFrameCount[NPC.type] / 2);
 			Vector2 vector2 = value - Main.screenPosition;
-			vector2 -= new Vector2((float)tg.Width, (float)(tg.Height / Main.npcFrameCount[NPC.type])) * 1f / 2f;
+			vector2 -= new Vector2(tg.Width, tg.Height / Main.npcFrameCount[NPC.type]) * 1f / 2f;
 			vector2 += vector * 1f + new Vector2(0f, 4f + NPC.gfxOffY);
 			Main.spriteBatch.Draw(tg, vector2, new Rectangle(0, NPC.frame.Y, 62, 74), new Color(200, 200, 200, 0), NPC.rotation, vector, 1f, effects, 0f);
 			x += 0.01f;
-			Color colorT = new Color(1f * num * (float)(Math.Sin(num4) + 2) / 3f, 1f * num * (float)(Math.Sin(num4) + 2) / 3f, 1f * num * (float)(Math.Sin(num4) + 2) / 3f, 0.15f * num * (float)(Math.Sin(num4) + 2) / 3f);
+			var colorT = new Color(1f * num * (float)(Math.Sin(num4) + 2) / 3f, 1f * num * (float)(Math.Sin(num4) + 2) / 3f, 1f * num * (float)(Math.Sin(num4) + 2) / 3f, 0.15f * num * (float)(Math.Sin(num4) + 2) / 3f);
 			Main.spriteBatch.Draw(tg2, vector2, new Rectangle(0, NPC.frame.Y, 62, 74), colorT, NPC.rotation, vector, 1f, effects, 0f);
 		}
 		private float x = 0;

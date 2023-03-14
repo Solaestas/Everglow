@@ -1,7 +1,11 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
+using Everglow.Myth.TheFirefly;
+using Everglow.Myth.TheFirefly.Dusts;
+using Everglow.Myth.TheFirefly.Gores;
+using Everglow.Myth.TheFirefly.Items;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
+namespace Everglow.Myth.TheFirefly.Tiles
 {
 	public class FluorescentTree : ModTile
 	{
@@ -18,8 +22,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 			TileID.Sets.IsATreeTrunk[Type] = true;
 			ModTranslation modTranslation = Language.GetOrRegister("Mods.Everglow.MapEntry.FluorescentTree");
 			AddMapEntry(new Color(51, 26, 58), modTranslation);
-			DustType = ModContent.DustType<Dusts.FluorescentTreeDust>();
-			ItemDrop = ModContent.ItemType<Items.GlowWood>();
+			DustType = ModContent.DustType<FluorescentTreeDust>();
+			ItemDrop = ModContent.ItemType<GlowWood>();
 			AdjTiles = new int[] { Type };
 
 			Everglow.HookSystem.AddMethod(DrawRopes, Commons.Core.CallOpportunity.PostDrawTiles);
@@ -34,7 +38,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 		/// </summary>
 		public List<(int x, int y, int style)> GetRopeStyleList()
 		{
-			List<(int x, int y, int style)> result = new List<(int x, int y, int style)>();
+			var result = new List<(int x, int y, int style)>();
 			foreach (var keyvaluepair in hasRope)
 			{
 				result.Add((keyvaluepair.Key.x, keyvaluepair.Key.y, keyvaluepair.Value.style));
@@ -62,20 +66,20 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 			Texture2D treeTexture = MythContent.QuickTexture("TheFirefly/Tiles/FluorescentTree");
 
 
-			Point point = new Point(xTS, yTS);
+			var point = new Point(xTS, yTS);
 			Vector2 tileCenterWS = point.ToWorldCoordinates(0, 0);
 
 			if (ropes[style] is null)
 			{
 				if (style != 2)
 				{
-					Vector2 HalfSize = new Vector2(-5, 24);
+					var HalfSize = new Vector2(-5, 24);
 					ropes[style] = ropeManager.LoadRope(new Rectangle(0, 0, 4, 2), tileCenterWS + HalfSize, () => Vector2.Zero);
 					hasRope.Add((xTS, yTS), (style, ropes[style]));
 				}
 				else
 				{
-					Vector2 HalfSize = new Vector2(-32, -70);
+					var HalfSize = new Vector2(-32, -70);
 					ropes[style] = ropeManager.LoadRope(new Rectangle(0, 0, 16, 4), tileCenterWS + HalfSize, () => Vector2.Zero);
 					hasRope.Add((xTS, yTS), (style, ropes[style]));
 				}
@@ -84,7 +88,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 			else if (!hasRope.ContainsKey((xTS, yTS)))
 			{
 				Vector2 deltaPosition = tileCenterWS - basePositions[style];
-				List<Rope> rs = ropes[style].Select(r => r.Clone(deltaPosition)).ToList();
+				var rs = ropes[style].Select(r => r.Clone(deltaPosition)).ToList();
 				ropeManager.LoadRope(rs);
 				hasRope.Add((xTS, yTS), (style, rs));
 			}
@@ -119,9 +123,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 				}
 			}
 			if (tile.TileFrameY > 3)
-			{
 				Gore.NewGore(null, new Vector2(i * 16, j * 16) + new Vector2(Main.rand.Next(16), Main.rand.Next(16)), new Vector2(0, Main.rand.NextFloat(0f, 1f)).RotatedByRandom(6.283), ModContent.GoreType<FireflyTree_Leaf>(), Main.rand.NextFloat(0.65f, 1.45f));
-			}
 
 			if (!hasRope.ContainsKey((i, j)))
 			{
@@ -132,19 +134,17 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 			var ropes = hasRope[(i, j)].ropes;
 			foreach (var r in ropes)
 			{
-				Vector2 acc = new Vector2(Main.rand.NextFloat(-1, 1), 0);
+				var acc = new Vector2(Main.rand.NextFloat(-1, 1), 0);
 				foreach (var m in r.mass)
 				{
 					m.force += acc;
 					if (Main.rand.NextBool(7))
 					{
-						Dust d = Dust.NewDustDirect(m.position, 0, 0, ModContent.DustType<Dusts.GlowBluePedal>());
+						var d = Dust.NewDustDirect(m.position, 0, 0, ModContent.DustType<GlowBluePedal>());
 						d.velocity = m.velocity * 0.01f;
 					}
 					if (Main.rand.NextBool(10))
-					{
-						Gore.NewGoreDirect(null, m.position, m.velocity * 0.1f, ModContent.GoreType<Gores.Branch>());
-					}
+						Gore.NewGoreDirect(null, m.position, m.velocity * 0.1f, ModContent.GoreType<Branch>());
 					//被砍时对mass操纵写这里
 				}
 			}
@@ -164,9 +164,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 					}
 				}
 				if (frameY > 3)
-				{
 					Gore.NewGore(null, new Vector2(i * 16, j * 16) + new Vector2(Main.rand.Next(16), Main.rand.Next(16)), new Vector2(0, Main.rand.NextFloat(0f, 1f)).RotatedByRandom(6.283), ModContent.GoreType<FireflyTree_Leaf>(), Main.rand.NextFloat(0.65f, 1.45f));
-				}
 			}
 
 			if (!hasRope.ContainsKey((i, j)))
@@ -178,19 +176,17 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 			var ropes = hasRope[(i, j)].ropes;
 			foreach (var r in ropes)
 			{
-				Vector2 acc = new Vector2(Main.rand.NextFloat(-1, 1), 0);
+				var acc = new Vector2(Main.rand.NextFloat(-1, 1), 0);
 				foreach (var m in r.mass)
 				{
 					m.force += acc;
 					if (Main.rand.NextBool(70))
 					{
-						Dust d = Dust.NewDustDirect(m.position, 0, 0, ModContent.DustType<Dusts.GlowBluePedal>());
+						var d = Dust.NewDustDirect(m.position, 0, 0, ModContent.DustType<GlowBluePedal>());
 						d.velocity = m.velocity * 0.01f;
 					}
 					if (Main.rand.NextBool(100))
-					{
-						Gore.NewGoreDirect(null, m.position, m.velocity * 0.1f, ModContent.GoreType<Gores.Branch>());
-					}
+						Gore.NewGoreDirect(null, m.position, m.velocity * 0.1f, ModContent.GoreType<Branch>());
 					//被砍时对mass操纵写这里
 				}
 			}
@@ -227,18 +223,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 						if (tileLeft.TileType == Type)
 						{
 							if (tileLeft.TileFrameY == 2)
-							{
 								break;
-							}
 							Shake(i - 1, j + Dy, tileLeft.TileFrameY);
 							Drop(i - 1, j + Dy);
 						}
 						if (tileRight.TileType == Type)
 						{
 							if (tileRight.TileFrameY == 2)
-							{
 								break;
-							}
 							Shake(i + 1, j + Dy, tileRight.TileFrameY);
 							Drop(i + 1, j + Dy);
 						}
@@ -249,14 +241,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 					Dy = -1;//向上破坏的自变化Y坐标
 					tileLeft = Main.tile[i - 1, j];
 					if (tileLeft.TileType == Type)
-					{
 						tileLeft.HasTile = false;
-					}
 					tileRight = Main.tile[i + 1, j];
 					if (tileRight.TileType == Type)
-					{
 						tileRight.HasTile = false;
-					}
 					while (Main.tile[i, j + Dy].TileType == Type && Dy > -100)
 					{
 						Tile baseTile = Main.tile[i, j + Dy];
@@ -266,13 +254,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 						tileLeft = Main.tile[i - 1, j + Dy];
 						tileRight = Main.tile[i + 1, j + Dy];
 						if (tileLeft.TileType == Type)
-						{
 							tileLeft.HasTile = false;
-						}
 						if (tileRight.TileType == Type)
-						{
 							tileRight.HasTile = false;
-						}
 						Dy -= 1;
 					}
 				}
@@ -291,13 +275,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 					{
 						if (Main.rand.NextBool(7))
 						{
-							Dust d = Dust.NewDustDirect(m.position, 0, 0, ModContent.DustType<Dusts.GlowBluePedal>());
+							var d = Dust.NewDustDirect(m.position, 0, 0, ModContent.DustType<GlowBluePedal>());
 							d.velocity = m.velocity * 0.01f;
 						}
 						if (Main.rand.NextBool(10))
-						{
-							Gore.NewGoreDirect(null, m.position, m.velocity * 0.1f, ModContent.GoreType<Gores.Branch>());
-						}
+							Gore.NewGoreDirect(null, m.position, m.velocity * 0.1f, ModContent.GoreType<Branch>());
 					}
 				}
 				ropeManager.RemoveRope(hasRope[(i, j)].ropes);
@@ -315,17 +297,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 					if (tileLeft.TileType == Type)
 					{
 						if (tileLeft.TileFrameY == 2)
-						{
 							break;
-						}
 						Shake(i - 1, j + Dy, tileLeft.TileFrameY);
 					}
 					if (tileRight.TileType == Type)
 					{
 						if (tileRight.TileFrameY == 2)
-						{
 							break;
-						}
 						Shake(i + 1, j + Dy, tileRight.TileFrameY);
 					}
 					Dy -= 1;
@@ -336,11 +314,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 		{
 
 			Texture2D treeTexture = MythContent.QuickTexture("TheFirefly/Tiles/FluorescentTree");
-			Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+			var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 			if (Main.drawToScreen)
-			{
 				zero = Vector2.Zero;
-			}
 			Tile tile = Main.tile[i, j];
 			int Width;
 			int Height = 16;
@@ -367,13 +343,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 					Height = 132;
 					TexCoordY = 46;
 					float Wind = Main.windSpeedCurrent / 15f;
-					Rot = Wind + (float)(Math.Sin(j + Main.timeForVisualEffects / 30f)) * Wind * 0.3f;
+					Rot = Wind + (float)Math.Sin(j + Main.timeForVisualEffects / 30f) * Wind * 0.3f;
 					OffsetY = 24;
 					//对挂条的生成
 					if (!hasRope.ContainsKey((i, j)))
-					{
 						InsertOneTreeRope(i, j, 2);
-					}
 					Lighting.AddLight(i, j, 0.4f, 0.4f, 0.4f);
 					break;
 				case 3:  //粗树干
@@ -390,9 +364,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 					TexCoordY = 240;
 					//对挂条的生成
 					if (!hasRope.ContainsKey((i, j)))
-					{
 						InsertOneTreeRope(i, j, 0);
-					}
 
 					break;
 				case 5:  //右树枝
@@ -403,12 +375,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 					TexCoordY = 206;
 					//对挂条的生成
 					if (!hasRope.ContainsKey((i, j)))
-					{
 						InsertOneTreeRope(i, j, 0);
-					}
 					break;
 			}
-			Vector2 origin = new Vector2(Width / 2f, Height);
+			var origin = new Vector2(Width / 2f, Height);
 			spriteBatch.Draw(treeTexture, new Vector2(i * 16 + OffsetX + 8, j * 16 + OffsetY) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX * Width, TexCoordY, Width, Height), color, Rot, origin, 1, SpriteEffects.None, 0);
 			spriteBatch.Draw(treeTexture, new Vector2(i * 16 + OffsetX + 8, j * 16 + OffsetY) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX * Width, TexCoordY + 274, Width, Height), new Color(1f, 1f, 1f, 0), Rot, origin, 1, SpriteEffects.None, 0);
 
@@ -416,7 +386,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 
 			if (tile.TileFrameY == 2 || tile.TileFrameY >= 4)
 			{
-				Point point = new Point(i, j);
+				var point = new Point(i, j);
 				Vector2 tileCenterWS = point.ToWorldCoordinates(8f, 8f);
 				if (tileCenterWS.Distance(Main.LocalPlayer.position) < 200)
 				{
@@ -427,9 +397,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 						foreach (var m in rope.mass)
 						{
 							if (playerRect.Contains(m.position.ToPoint()))
-							{
 								m.force += Main.LocalPlayer.velocity / 1.5f;
-							}
 						}
 					}
 				}

@@ -1,7 +1,7 @@
 ﻿using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
+namespace Everglow.Myth.MiscItems.Weapons
 {
 	public class FireFeatherMagic : ModItem
 	{
@@ -25,7 +25,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
 			Item.rare = ItemRarityID.LightRed;
 			Item.UseSound = SoundID.Item71;
 			Item.autoReuse = true;
-			Item.shoot = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Magic.FireFeather>();
+			Item.shoot = ModContent.ProjectileType<Projectiles.Weapon.Magic.FireFeather>();
 			Item.shootSpeed = 8;
 			Item.crit = 16;
 			Item.mana = 12;

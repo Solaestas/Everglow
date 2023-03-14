@@ -1,6 +1,6 @@
-﻿using Everglow.Sources.Modules.MythModule.LanternMoon.Gores;
+﻿using Everglow.Myth.LanternMoon.Gores;
 
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Gores
+namespace Everglow.Myth.MiscItems.Gores
 {
 	public class XiaoDash0 : DissolveGore
 	{

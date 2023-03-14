@@ -1,6 +1,6 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
 
-namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles
+namespace Everglow.Myth.OmniElementItems.Projectiles
 {
 	public class LilyHarpNoteKill : ModProjectile//, IWarpProjectile
 	{
@@ -32,14 +32,10 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles
 			float value = (200 - Projectile.timeLeft) / (float)Projectile.timeLeft * 1.4f;
 
 			if (value < 1)
-			{
 				DrawCircle(value * 110, 15 * (1 - value) + 3, new Color(0, 0.15f * (1 - value), 0.03f * (1 - value), 0f), Projectile.Center - Main.screenPosition);
-			}
 			value -= 0.2f;
 			if (value is < 1 and > 0)
-			{
 				DrawCircle(value * 90, 8 * (1 - value) + 3, new Color(0, 0.10f * (1 - value), 0.06f * (1 - value), 0f), Projectile.Center - Main.screenPosition);
-			}
 			return false;
 		}
 
@@ -50,7 +46,7 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles
 
 		private static void DrawCircle(float radious, float width, Color color, Vector2 center)
 		{
-			List<Vertex2D> circle = new List<Vertex2D>();
+			var circle = new List<Vertex2D>();
 			for (int h = 0; h < radious / 2; h++)
 			{
 				circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4), color, new Vector3(0.5f, 1, 0)));
@@ -67,7 +63,7 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles
 		}
 		private static void DrawCircle(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center)
 		{
-			List<Vertex2D> circle = new List<Vertex2D>();
+			var circle = new List<Vertex2D>();
 			for (int h = 0; h < radious / 2; h++)
 			{
 				circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4), color, new Vector3(0.5f, 1, 0)));
@@ -87,14 +83,10 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles
 			float value = (200 - Projectile.timeLeft) / (float)Projectile.timeLeft * 1.4f;
 
 			if (value < 1)
-			{
 				DrawCircle(spriteBatch, value * 110, 15 * (1 - value) + 3, new Color(0, 0.15f * (1 - value), 0.03f * (1 - value), 0f), Projectile.Center - Main.screenPosition);
-			}
 			value -= 0.2f;
 			if (value is < 1 and > 0)
-			{
 				DrawCircle(spriteBatch, value * 90, 8 * (1 - value) + 3, new Color(0, 0.10f * (1 - value), 0.06f * (1 - value), 0f), Projectile.Center - Main.screenPosition);
-			}
 		}
 	}
 }

@@ -1,4 +1,6 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
+﻿using Everglow.Myth;
+
+namespace Everglow.Myth.TheFirefly.Items.Weapons
 {
 	public class DreamWeaver : ModItem//TODO:织梦丝雨
 	{

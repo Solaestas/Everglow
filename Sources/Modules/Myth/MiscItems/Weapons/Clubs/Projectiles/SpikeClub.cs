@@ -1,6 +1,6 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
 
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectiles
+namespace Everglow.Myth.MiscItems.Weapons.Clubs.Projectiles
 {
 	public class SpikeClub : ClubProj_metal
 	{
@@ -39,23 +39,19 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
 			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
 			List<Vector2> SmoothTrailX = CatmullRom.SmoothPath(listVec.ToList());//平滑
-			List<Vector2> SmoothTrail = new List<Vector2>();
+			var SmoothTrail = new List<Vector2>();
 			for (int x = 0; x < SmoothTrailX.Count - 1; x++)
 			{
 				SmoothTrail.Add(SmoothTrailX[x]);
 			}
 			if (listVec.Count != 0)
-			{
 				SmoothTrail.Add(listVec.ToArray()[listVec.Count - 1]);
-			}
 
 			int length = SmoothTrail.Count;
 			if (length <= 3)
-			{
 				return;
-			}
 
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 			Color light = Lighting.GetColor((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f));
 			light *= 2;
 			light.A /= 4;
@@ -65,9 +61,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
 				float delta = (1 - timeLeft / 60f * 0.45f) * Omega / MaxOmega + 1 - Omega / MaxOmega;
 				float maxValue = 20f;
 				if (length < maxValue)
-				{
 					delta = delta * length / maxValue + (maxValue - length) / maxValue;
-				}
 				bars.Add(new Vertex2D(Projectile.Center + SmoothTrail[i] * delta * Projectile.scale - Main.screenPosition, light, new Vector3(factor, 1, 0f)));
 				bars.Add(new Vertex2D(Projectile.Center + SmoothTrail[i] * Projectile.scale - Main.screenPosition, light, new Vector3(factor, 0, 0f)));
 			}
@@ -82,23 +76,17 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
 			{
 				float value = 1;
 				if (listVec.Count > 6)
-				{
 					value = 6 / (float)listVec.Count;
-				}
 				listVec.Add(listVec[listVec.Count - 1].RotatedBy(Omega * value));
 			}
 		}
 		private void ActivateMoon(ref List<Vector2> listVec)
 		{
 			if (listVec.Count > 0)
-			{
 				return;
-			}
 			listVec = new List<Vector2>();
 			if (Main.rand.NextBool(2))
-			{
 				listVec.Add(trailVecs.ToList()[1] * Main.rand.NextFloat(0.95f, Math.Min(1.75f, 1 + Omega * 1.5f)));
-			}
 			else
 			{
 				listVec.Add(trailVecs.ToList()[1] * -Main.rand.NextFloat(0.95f, Math.Min(1.75f, 1 + Omega * 1.5f)));
@@ -113,31 +101,25 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
 			float point = 0;
 			Vector2 HitRange = new Vector2(HitLength, HitLength * Projectile.spriteDirection).RotatedBy(Projectile.rotation) * Projectile.scale;
 			if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center - HitRange / 32f * 45f, Projectile.Center + HitRange / 32f * 45f, 2 * HitLength / 32f * Omega / 0.3f, ref point))
-			{
 				return true;
-			}
 			return false;
 		}
 		public override void PostPreDraw()
 		{
 			List<Vector2> SmoothTrailX = CatmullRom.SmoothPath(trailVecs.ToList());//平滑
-			List<Vector2> SmoothTrail = new List<Vector2>();
+			var SmoothTrail = new List<Vector2>();
 			for (int x = 0; x < SmoothTrailX.Count - 1; x++)
 			{
 				SmoothTrail.Add(SmoothTrailX[x]);
 			}
 			if (trailVecs.Count != 0)
-			{
 				SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
-			}
 
 			int length = SmoothTrail.Count;
 			if (length <= 3)
-			{
 				return;
-			}
 			Vector2[] trail = SmoothTrail.ToArray();
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 
 			for (int i = 0; i < length; i++)
 			{
@@ -180,7 +162,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
 					MeleeTrail.Parameters["tex1"].SetValue((Texture2D)ModContent.Request<Texture2D>(Texture));
 				}
 			}
-			Vector4 lightColor = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16)).ToVector4();
+			var lightColor = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16)).ToVector4();
 			lightColor.W = 0.7f * Omega;
 			MeleeTrail.Parameters["Light"].SetValue(lightColor);
 			MeleeTrail.CurrentTechnique.Passes["TrailByOrigTex"].Apply();
@@ -193,15 +175,11 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
 			if (!Main.gamePaused)
 			{
 				if (Main.rand.NextBool(10) && Omega > 0.1f)
-				{
 					ActivateMoon(ref MoonBladeI);
-				}
 				if (MoonBladeI.Count > 20 && timeI == 60)
 				{
 					if (Main.rand.Next(MoonBladeI.Count, 50) > 44)
-					{
 						timeI--;
-					}
 				}
 				if (timeI < 60)
 				{
@@ -214,15 +192,11 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
 				}
 
 				if (Main.rand.NextBool(10) && Omega > 0.1f)
-				{
 					ActivateMoon(ref MoonBladeII);
-				}
 				if (MoonBladeII.Count > 20 && timeII == 60)
 				{
 					if (Main.rand.Next(MoonBladeII.Count, 50) > 44)
-					{
 						timeII--;
-					}
 				}
 				if (timeII < 60)
 				{
@@ -235,15 +209,11 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
 				}
 
 				if (Main.rand.NextBool(10) && Omega > 0.1f)
-				{
 					ActivateMoon(ref MoonBladeIII);
-				}
 				if (MoonBladeIII.Count > 20 && timeIII == 60)
 				{
 					if (Main.rand.Next(MoonBladeIII.Count, 50) > 44)
-					{
 						timeIII--;
-					}
 				}
 				if (timeIII < 60)
 				{
@@ -255,15 +225,11 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
 					}
 				}
 				if (Main.rand.NextBool(10) && Omega > 0.1f)
-				{
 					ActivateMoon(ref MoonBladeIV);
-				}
 				if (MoonBladeIV.Count > 20 && timeIV == 60)
 				{
 					if (Main.rand.Next(MoonBladeIV.Count, 50) > 44)
-					{
 						timeIV--;
-					}
 				}
 				if (timeIV < 60)
 				{

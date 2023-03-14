@@ -1,4 +1,6 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Dusts
+﻿using Everglow.Myth.MagicWeaponsReplace.Projectiles.CrystalStorm;
+
+namespace Everglow.Myth.MagicWeaponsReplace.Dusts
 {
 	public class CrystalAppearStoppedByTileInAStorm : ModDust
 	{
@@ -7,8 +9,8 @@
 			dust.noGravity = true;
 			dust.frame = new Rectangle(0, 0, 16, 16);
 			dust.color.R = (byte)(dust.scale * 100f);//用红度存尺寸极值
-			dust.color.G = (byte)(Main.rand.NextFloat(0f, 255f));//用绿度存相位
-			dust.alpha = (byte)(Main.rand.NextFloat(0f, 55f));//用透明度存timeleft
+			dust.color.G = (byte)Main.rand.NextFloat(0f, 255f);//用绿度存相位
+			dust.alpha = (byte)Main.rand.NextFloat(0f, 55f);//用透明度存timeleft
 		}
 
 		public override bool Update(Dust dust)
@@ -21,21 +23,19 @@
 			dust.position += dust.velocity;
 			dust.color.B = (byte)(dust.color.B * 0.95 + xCoefficient * 0.05);//蓝度用来存加速度
 
-			if (!Main.projectile[dust.dustIndex].active || Main.projectile[dust.dustIndex].type != ModContent.ProjectileType<Projectiles.CrystalStorm.Storm>())
+			if (!Main.projectile[dust.dustIndex].active || Main.projectile[dust.dustIndex].type != ModContent.ProjectileType<Storm>())
 			{
 				dust.velocity.Y += 0.05f;
 				dust.velocity *= 0.95f;
 			}
 			else
 			{
-				dust.velocity = dust.velocity * 0.75f + new Vector2(Utils.SafeNormalize(((AimCenter + new Vector2(xCoefficient * (float)(Math.Sin(Main.timeForVisualEffects * 0.1 + dust.color.G)), 0)) - dust.position), new Vector2(0, 0.05f)).X, -dust.color.A/*颜色透明度用来存上升系数*/ / 700f) * 0.25f / dust.color.B * 500f;
+				dust.velocity = dust.velocity * 0.75f + new Vector2((AimCenter + new Vector2(xCoefficient * (float)Math.Sin(Main.timeForVisualEffects * 0.1 + dust.color.G), 0) - dust.position).SafeNormalize(new Vector2(0, 0.05f)).X, -dust.color.A/*颜色透明度用来存上升系数*/ / 700f) * 0.25f / dust.color.B * 500f;
 			}
 
 			dust.scale = (float)(Math.Sin(dust.alpha / 25d * Math.PI + dust.color.G) + 1.5f) * dust.color.R * 0.003f;
 			if (dust.alpha > 200)
-			{
 				dust.scale *= (255 - dust.alpha) / 55f;
-			}
 			Lighting.AddLight(dust.position, 0.0096f * dust.scale / 1.8f, 0.0955f * dust.scale / 1.8f, 0.4758f * dust.scale / 1.8f);
 			if (Collision.SolidCollision(dust.position, 8, 8))
 			{
@@ -54,9 +54,7 @@
 				dust.velocity = v0;
 			}
 			if (dust.alpha > 254)
-			{
 				dust.active = false;
-			}
 
 			return false;
 		}

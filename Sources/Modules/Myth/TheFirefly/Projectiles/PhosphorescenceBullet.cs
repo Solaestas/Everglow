@@ -1,6 +1,6 @@
-using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Everglow.Myth.TheFirefly.Dusts;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
+namespace Everglow.Myth.TheFirefly.Projectiles
 {
 	public class PhosphorescenceBullet : ModProjectile
 	{
@@ -29,7 +29,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 				Projectile.timeLeft = Main.rand.Next(80, 110);
 				aTm = true;
 			}
-			Projectile.rotation = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X));
+			Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
 			if (Projectile.timeLeft < 60)
 			{
 				Projectile.scale *= 0.96f;

@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheTusk
+﻿namespace Everglow.Myth.TheTusk
 {
 	public class TuskModPlayer : ModPlayer
 	{
@@ -10,15 +10,11 @@
 		public static void ScreenShake(float i, Vector2 center, int dis = 2000)
 		{
 			if (Main.netMode == NetmodeID.Server)
-			{
 				return;
-			}
 			foreach (Player p in Main.player)
 			{
 				if ((p.Center - center).Length() < dis)
-				{
 					p.GetModPlayer<TuskModPlayer>().screenShake = i;
-				}
 			}
 		}
 

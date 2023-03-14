@@ -1,6 +1,6 @@
 ﻿using Terraria.Audio;
 
-namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
+namespace Everglow.Myth.Bosses.Acytaea.Projectiles
 {
 	internal class AcytaeaArrowGra : ModProjectile
 	{
@@ -44,16 +44,12 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 		{
 			ka = 1;
 			if (Projectile.timeLeft < 60f)
-			{
 				ka = Projectile.timeLeft / 60f;
-			}
 			Lighting.AddLight(Projectile.Center, (255 - Projectile.alpha) * 1.2f / 250f * ka, 0, 0);
 			Projectile.velocity.Y += 0.15f;
 			Projectile.rotation = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + Math.PI * 0.25);
 			if (Projectile.timeLeft < 19)
-			{
 				Projectile.tileCollide = true;
-			}
 			int num22 = Dust.NewDust(Projectile.Center - new Vector2(4, 4) + new Vector2(0, Main.rand.NextFloat(0, 8f)).RotatedByRandom(Math.PI * 2), 2, 2, ModContent.DustType<Dusts.RedEffect2>(), 0, 0, 0, default, 1.5f);
 			Main.dust[num22].velocity *= 0.2f;
 		}
@@ -61,13 +57,13 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 		public override bool PreDraw(ref Color lightColor)
 		{
 			Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Projectiles/AcytaeaArrow").Value;
-			Vector2 drawOrigin = new Vector2(t.Width * 0.5f, t.Height * 0.5f);
+			var drawOrigin = new Vector2(t.Width * 0.5f, t.Height * 0.5f);
 			for (int k = 0; k < Projectile.oldPos.Length; k++)
 			{
 				Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(1f, Projectile.gfxOffY);
-				Color color = new Color(255, 255, 255, 0);
+				var color = new Color(255, 255, 255, 0);
 				float Fad = (Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length;
-				Color color2 = new Color((int)(color.R * Fad * Fad), (int)(color.G * Fad * Fad), (int)(color.B * Fad), (int)(color.A * Fad));
+				var color2 = new Color((int)(color.R * Fad * Fad), (int)(color.G * Fad * Fad), (int)(color.B * Fad), (int)(color.A * Fad));
 				Main.spriteBatch.Draw(t, drawPos, null, color2, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
 			}
 			return true;

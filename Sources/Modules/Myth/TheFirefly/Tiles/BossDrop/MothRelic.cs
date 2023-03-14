@@ -4,7 +4,7 @@ using Terraria.Enums;
 using Terraria.Localization;
 using Terraria.ObjectData;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.BossDrop
+namespace Everglow.Myth.TheFirefly.Tiles.BossDrop
 {
 	// Common code for a Master Mode boss relic
 	// Contains comments for optional Item.placeStyle handling if you wish to add more relics but use the same tile type (then it would be wise to name this class something more generic like BossRelic)
@@ -28,10 +28,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.BossDrop
 		public override void Load()
 		{
 			if (!Main.dedServ)
-			{
 				// Cache the extra texture displayed on the pedestal
 				RelicTexture = ModContent.Request<Texture2D>(RelicTextureName);
-			}
 		}
 
 		public override void Unload()
@@ -87,10 +85,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.BossDrop
 			}
 
 			if (itemType > 0)
-			{
 				// Spawn the item
 				Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 32, 32, itemType);
-			}
 		}
 
 		public override bool CreateDust(int i, int j, ref int type)
@@ -113,27 +109,21 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.BossDrop
 			// Therefore we register the top-left of the tile as a "special point"
 			// This allows us to draw things in SpecialDraw
 			if (drawData.tileFrameX % FrameWidth == 0 && drawData.tileFrameY % FrameHeight == 0)
-			{
 				Main.instance.TilesRenderer.AddSpecialLegacyPoint(i, j);
-			}
 		}
 
 		public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch)
 		{
 			// This is lighting-mode specific, always include this if you draw tiles manually
-			Vector2 offScreen = new Vector2(Main.offScreenRange);
+			var offScreen = new Vector2(Main.offScreenRange);
 			if (Main.drawToScreen)
-			{
 				offScreen = Vector2.Zero;
-			}
 
 			// Take the tile, check if it actually exists
-			Point p = new Point(i, j);
+			var p = new Point(i, j);
 			Tile tile = Main.tile[p.X, p.Y];
 			if (tile == null || !tile.HasTile)
-			{
 				return;
-			}
 
 			// Get the initial draw parameters
 			Texture2D texture = RelicTexture.Value;

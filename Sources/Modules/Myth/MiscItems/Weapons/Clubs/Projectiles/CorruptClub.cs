@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectiles
+﻿namespace Everglow.Myth.MiscItems.Weapons.Clubs.Projectiles
 {
 	public class CorruptClub : ClubProj_metal
 	{
@@ -23,13 +23,11 @@
 		}
 		private void GenerateDust()
 		{
-			Vector2 v0 = new Vector2(1, 1);
+			var v0 = new Vector2(1, 1);
 			v0 *= Main.rand.NextFloat(Main.rand.NextFloat(1, HitLength), HitLength);
 			v0.X *= Projectile.spriteDirection;
 			if (Main.rand.NextBool(2))
-			{
 				v0 *= -1;
-			}
 			v0 = v0.RotatedBy(Projectile.rotation);
 			float Speed = Math.Min(Omega * 0.5f, 0.14f);
 			Dust.NewDust(Projectile.Center + v0 - new Vector2(4)/*Dust的Size=8x8*/, 0, 0, DustID.Demonite, -v0.Y * Speed, v0.X * Speed, 150, default, Main.rand.NextFloat(0.4f, 0.8f));

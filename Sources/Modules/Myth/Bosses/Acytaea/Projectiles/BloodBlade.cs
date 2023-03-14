@@ -1,6 +1,6 @@
 using Terraria.Audio;
 
-namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
+namespace Everglow.Myth.Bosses.Acytaea.Projectiles
 {
 	public class BloodBlade : ModProjectile
 	{
@@ -29,9 +29,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 			Projectile.rotation = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + Math.PI * 0.25);
 			Projectile.velocity *= 1 + 0.5f / Projectile.velocity.Length();
 			if (Projectile.penetrate <= 0)
-			{
 				Projectile.Kill();
-			}
 
 			int num = Dust.NewDust(Projectile.Center - new Vector2(4, 4) + new Vector2(0, 12).RotatedBy(Projectile.timeLeft / 4f), 2, 2, ModContent.DustType<Dusts.RedEffect2>(), 0, 0, 0, default, 1f);
 			Main.dust[num].noGravity = false;
@@ -44,9 +42,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 			int num22 = Dust.NewDust(Projectile.Center - new Vector2(4, 4) + new Vector2(0, Main.rand.NextFloat(0, 8f)).RotatedByRandom(Math.PI * 2), 2, 2, ModContent.DustType<Dusts.RedEffect2>(), 0, 0, 0, default, 1.5f);
 			Main.dust[num22].velocity *= 0.2f;
 			if (Collision.CanHit(Projectile.Center - Vector2.Normalize(Projectile.velocity) * 84, 1, 1, Main.player[Player.FindClosest(Projectile.Center, 60, 60)].Center, 1, 1))
-			{
 				Projectile.tileCollide = true;
-			}
 		}
 
 		public override void Kill(int timeLeft)
@@ -65,7 +61,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 		}
 		public override bool PreDraw(ref Color lightColor)
 		{
-			Texture2D texture2D = (Texture2D)ModContent.Request<Texture2D>(Texture);
+			var texture2D = (Texture2D)ModContent.Request<Texture2D>(Texture);
 			Main.spriteBatch.Draw(texture2D, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, Projectile.GetAlpha(lightColor), Projectile.rotation, new Vector2(61, 61), Projectile.scale, SpriteEffects.None, 0f);
 			return false;
 		}
@@ -73,16 +69,14 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 		{
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 			Effect ef = Common.MythContent.QuickEffect("Effects/Trail");
 
 			int width = 40;
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
 				if (Projectile.oldPos[i] == Vector2.Zero)
-				{
 					break;
-				}
 
 				var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
 				normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
@@ -95,7 +89,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(30, 30), color, new Vector3((float)Math.Sqrt(factor), 0, w)));
 			}
 
-			List<Vertex2D> triangleList = new List<Vertex2D>();
+			var triangleList = new List<Vertex2D>();
 
 			if (bars.Count > 2)
 			{

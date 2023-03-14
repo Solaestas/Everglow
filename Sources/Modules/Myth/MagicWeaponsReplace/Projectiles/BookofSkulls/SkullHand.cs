@@ -1,7 +1,8 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth;
+using Everglow.Myth.Common;
 using Terraria.Audio;
 
-namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.BookofSkulls
+namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.BookofSkulls
 {
 	internal class SkullHand : ModProjectile
 	{
@@ -63,7 +64,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
 						TotalVector += v0 * 0.5f;
 					}
 				}
-				Direction = Utils.SafeNormalize(TotalVector, new Vector2(0, -1));
+				Direction = TotalVector.SafeNormalize(new Vector2(0, -1));
 				Projectile.velocity = Direction * 0.15f;
 				Projectile.Center -= Projectile.velocity * 600;
 				finLength1[0] = 66;
@@ -100,9 +101,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
 				finRot3[2] = 0.08f;
 				finRot3[3] = 0.16f;
 				if (Main.rand.NextBool(2))
-				{
 					dir = -1;
-				}
 
 				SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/MothHitCocoon"), Projectile.Center);
 			}
@@ -162,9 +161,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
 			ThumbPos[2] = ThumbPos[1] + new Vector2(0, -finLength2[4]).RotatedBy(finRot2[4] * dir + Ang);
 
 			if (Projectile.timeLeft > 535)
-			{
 				Projectile.velocity *= 1.04f;
-			}
 			else if (Projectile.timeLeft > 300)
 			{
 				Projectile.velocity *= 0.97f;
@@ -201,7 +198,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
 				for (int f = 0; f < 80; f++)
 				{
 					Vector2 v0 = new Vector2(Main.rand.NextFloat(3f, 5f), 0).RotatedByRandom(6.283);
-					Dust dust0 = Dust.NewDustDirect(Projectile.Center + Vector2.Normalize(Projectile.velocity) * 75, 0, 0, DustID.Torch, v0.X, v0.Y, 100, default, Main.rand.NextFloat(0.6f, 1.8f));
+					var dust0 = Dust.NewDustDirect(Projectile.Center + Vector2.Normalize(Projectile.velocity) * 75, 0, 0, DustID.Torch, v0.X, v0.Y, 100, default, Main.rand.NextFloat(0.6f, 1.8f));
 					dust0.velocity = v0;
 				}
 				SoundEngine.PlaySound(SoundID.Item89, Projectile.Center);
@@ -245,7 +242,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
 				Pwidth = 1f;
 				Pdark = (Projectile.timeLeft - 20) / 260f;
 			}
-			Color c1 = new Color(1f * Pdark, 0.45f * Pdark * Pdark, 0f, 0f);
+			var c1 = new Color(1f * Pdark, 0.45f * Pdark * Pdark, 0f, 0f);
 			DrawPowerLine(ArmPos - Direction * 80f, ArmPos, c1, 32f * Pwidth, Power);
 			for (int x = 3; x >= 0; x--)
 			{
@@ -278,7 +275,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
 		{
 			Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
 
-			List<Vertex2D> vertex2Ds = new List<Vertex2D>();
+			var vertex2Ds = new List<Vertex2D>();
 
 			for (int x = 0; x < 3; x++)
 			{
@@ -299,7 +296,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bo
 		{
 			Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
 
-			List<Vertex2D> vertex2Ds = new List<Vertex2D>();
+			var vertex2Ds = new List<Vertex2D>();
 
 			for (int x = 0; x < 3; x++)
 			{

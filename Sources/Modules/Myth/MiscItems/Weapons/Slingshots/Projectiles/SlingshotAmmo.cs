@@ -1,8 +1,8 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Projectiles
+namespace Everglow.Myth.MiscItems.Weapons.Slingshots.Projectiles
 {
 	public abstract class SlingshotAmmo : ModProjectile
 	{
@@ -47,18 +47,12 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
 		public override void AI()
 		{
 			if (TimeTokill >= 0 && TimeTokill <= 2)
-			{
 				Projectile.Kill();
-			}
 			if (TimeTokill <= 15 && TimeTokill > 0)
-			{
 				Projectile.velocity = Projectile.oldVelocity;
-			}
 			TimeTokill--;
 			if (TimeTokill < 0)
-			{
 				Projectile.velocity.Y += 0.17f;
-			}
 			else
 			{
 				if (TimeTokill < 10)
@@ -89,7 +83,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
 		public virtual void AmmoHit()
 		{
 			Projectile.velocity = Projectile.oldVelocity;
-			Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center + Projectile.velocity, Vector2.Zero, ModContent.ProjectileType<NormalHit>(), Projectile.damage, Projectile.knockBack, Projectile.owner, Projectile.velocity.Length(), Main.rand.NextFloat(6.283f));
+			Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center + Projectile.velocity, Vector2.Zero, ModContent.ProjectileType<NormalHit>(), Projectile.damage, Projectile.knockBack, Projectile.owner, Projectile.velocity.Length(), Main.rand.NextFloat(6.283f));
 			for (int x = 0; x < 5; x++)
 			{
 				Dust.NewDust(Projectile.Center + Projectile.velocity - new Vector2(4), Projectile.width, Projectile.height, DustID.Dirt, 0f, 0f, 0, default, 0.7f);
@@ -99,12 +93,10 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
 		public override bool PreDraw(ref Color lightColor)
 		{
 			if (TimeTokill > 0)
-			{
 				return false;
-			}
 			else
 			{
-				Texture2D TexMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
+				var TexMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
 				if (Projectile.type == ModContent.ProjectileType<StarAmmo>())
 				{
 					Main.spriteBatch.Draw(TexMain, Projectile.Center - Main.screenPosition - Projectile.velocity, null, new Color(255, 255, 120, 0), Projectile.rotation, TexMain.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
@@ -122,16 +114,14 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
 		{
 			float DrawC = Projectile.ai[0] * Projectile.ai[0];
 
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 			int TrueL = 0;
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
 				if (Projectile.oldPos[i] == Vector2.Zero)
 				{
 					if (i == 1)
-					{
 						return;
-					}
 					break;
 				}
 
@@ -140,17 +130,13 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
 				if (Projectile.oldPos[i] == Vector2.Zero)
-				{
 					break;
-				}
 
 				float width = 6;
 				if (Projectile.timeLeft <= 30)
-				{
 					width *= Projectile.timeLeft / 30f;
-				}
 				var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
-				normalDir = Utils.SafeNormalize(new Vector2(-normalDir.Y, normalDir.X), Vector2.Zero);
+				normalDir = new Vector2(-normalDir.Y, normalDir.X).SafeNormalize(Vector2.Zero);
 
 				var factor = i / (float)TrueL;
 				var color = Color.Lerp(new Color(DrawC, DrawC, DrawC, 0), new Color(0, 0, 0, 0), factor);

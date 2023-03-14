@@ -1,7 +1,9 @@
-﻿using Terraria.Audio;
+﻿using Everglow.Myth.LanternMoon.Buffs;
+using Everglow.Myth.LanternMoon.Projectiles.DashCore;
+using Terraria.Audio;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
+namespace Everglow.Myth.LanternMoon.NPCs.FlamingDashCore
 {
 	//[AutoloadBossHead]
 	public class BlueCore : ModNPC
@@ -36,7 +38,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 		public override void FindFrame(int frameHeight)
 		{
 			NPC.frameCounter += 0.2f;
-			NPC.frameCounter %= (double)Main.npcFrameCount[NPC.type];
+			NPC.frameCounter %= Main.npcFrameCount[NPC.type];
 			int num = (int)NPC.frameCounter;
 			NPC.frame.Y = num * frameHeight;
 		}
@@ -44,9 +46,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 		{
 			NPC.localAI[0] += 1;
 			if (NPC.localAI[0] <= 15)
-			{
 				Sca = NPC.localAI[0] / 15f;
-			}
 			else
 			{
 				Sca = 1;
@@ -99,23 +99,21 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 				{
 					if (Main.player[d].active && !Main.player[d].dead)
 					{
-						Main.player[d].ClearBuff(ModContent.BuffType<Buffs.RedImmune>());
-						Main.player[d].ClearBuff(ModContent.BuffType<Buffs.BlueImmune>());
-						Main.player[d].ClearBuff(ModContent.BuffType<Buffs.GreenImmune>());
-						Main.player[d].ClearBuff(ModContent.BuffType<Buffs.YellowImmune>());
-						Main.player[d].ClearBuff(ModContent.BuffType<Buffs.PinkImmune>());
-						Main.player[d].ClearBuff(ModContent.BuffType<Buffs.PurpleImmune>());
-						Main.player[d].ClearBuff(ModContent.BuffType<Buffs.BrownImmune>());
-						Main.player[d].ClearBuff(ModContent.BuffType<Buffs.WhiteImmune>());
-						Main.player[d].AddBuff(ModContent.BuffType<Buffs.BlueImmune>(), 1800);
+						Main.player[d].ClearBuff(ModContent.BuffType<RedImmune>());
+						Main.player[d].ClearBuff(ModContent.BuffType<BlueImmune>());
+						Main.player[d].ClearBuff(ModContent.BuffType<GreenImmune>());
+						Main.player[d].ClearBuff(ModContent.BuffType<YellowImmune>());
+						Main.player[d].ClearBuff(ModContent.BuffType<PinkImmune>());
+						Main.player[d].ClearBuff(ModContent.BuffType<PurpleImmune>());
+						Main.player[d].ClearBuff(ModContent.BuffType<BrownImmune>());
+						Main.player[d].ClearBuff(ModContent.BuffType<WhiteImmune>());
+						Main.player[d].AddBuff(ModContent.BuffType<BlueImmune>(), 1800);
 						for (int q = 0; q < Main.projectile.Length; q++)
 						{
-							if (Main.projectile[q].type == ModContent.ProjectileType<Projectiles.DashCore.ImmuneCircle>())
-							{
+							if (Main.projectile[q].type == ModContent.ProjectileType<ImmuneCircle>())
 								Main.projectile[q].Kill();
-							}
 						}
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), Main.player[d].Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.DashCore.ImmuneCircle>(), 0, 0, d, d);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), Main.player[d].Center, Vector2.Zero, ModContent.ProjectileType<ImmuneCircle>(), 0, 0, d, d);
 					}
 				}
 			}
@@ -137,9 +135,9 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 
 			public CustomVertexInfo(Vector2 position, Color color, Vector3 texCoord)
 			{
-				this.Position = position;
-				this.Color = color;
-				this.TexCoord = texCoord;
+				Position = position;
+				Color = color;
+				TexCoord = texCoord;
 			}
 
 			public VertexDeclaration VertexDeclaration

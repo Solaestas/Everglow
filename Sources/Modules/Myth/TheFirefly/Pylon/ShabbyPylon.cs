@@ -5,7 +5,7 @@ using Terraria.Map;
 using Terraria.ModLoader.Default;
 using Terraria.ObjectData;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Pylon;
+namespace Everglow.Myth.TheFirefly.Pylon;
 
 internal class ShabbyPylonTileEntity : TEModdedPylon
 {
@@ -32,7 +32,7 @@ internal class ShabbyPylon : BaseModPylon<ShabbyPylonTileEntity>
 		if (PylonSystem.Instance.shabbyPylonEnable)
 		{
 			AscensionTimer = MathUtils.Approach(AscensionTimer, MaxAscensionTime, 1);
-			float factor = (AscensionTimer / MaxAscensionTime);
+			float factor = AscensionTimer / MaxAscensionTime;
 			offset = DefaultVerticalOffset * factor;
 			shadowColor = Color.White * 0.1f * factor;
 			animation = true;
@@ -55,9 +55,7 @@ internal class ShabbyPylon : BaseModPylon<ShabbyPylonTileEntity>
 	public override void DrawMapIcon(ref MapOverlayDrawContext context, ref string mouseOverText, TeleportPylonInfo pylonInfo, bool isNearPylon, Color drawColor, float deselectedScale, float selectedScale)
 	{
 		if (!PylonSystem.Instance.shabbyPylonEnable)
-		{
 			return;
-		}
 
 		if (Main.mapFullscreen && PylonSystem.Instance.firstEnableAnimation)
 		{
@@ -68,9 +66,7 @@ internal class ShabbyPylon : BaseModPylon<ShabbyPylonTileEntity>
 			//TODO 这里直接改screenPosition没用，需要一个改屏幕位置和阻止玩家操作的轮子
 			Main.screenPosition = (AnimationTimer / MaxTime).Lerp(Main.screenPosition, target);
 			if (AnimationTimer >= MaxTime)
-			{
 				PylonSystem.Instance.firstEnableAnimation = false;
-			}
 			return;
 		}
 
@@ -92,9 +88,7 @@ internal class ShabbyPylonItem : ModItem
 		var bottom = position.ToTileCoordinates();
 
 		if (TileObject.CanPlace(bottom.X, bottom.Y, TileID, 0, 0, out var tileObject) && TileObject.Place(tileObject))
-		{
 			TileObjectData.CallPostPlacementPlayerHook(bottom.X, bottom.Y, TileID, 0, 0, 0, tileObject);
-		}
 
 		return base.CanUseItem(player);
 	}
@@ -129,18 +123,12 @@ internal class ScreenMovePlayer : ModPlayer
 				AnimationTimer++;
 				float Value = (1 - MathF.Cos(AnimationTimer / 60f * MathF.PI)) / 2f;
 				if (AnimationTimer >= 60 && AnimationTimer < 540)
-				{
 					Value = 1;
-				}
 				if (AnimationTimer >= 540)
-				{
 					Value = (1 + MathF.Cos((AnimationTimer - 540) / 60f * MathF.PI)) / 2f;
-				}
-				Main.screenPosition = (Value).Lerp(Main.screenPosition, target);
+				Main.screenPosition = Value.Lerp(Main.screenPosition, target);
 				if (AnimationTimer >= MaxTime)
-				{
 					PylonSystem.Instance.firstEnableAnimation = false;
-				}
 				Player.immune = true;
 				Player.immuneTime = 2;
 			}

@@ -1,6 +1,6 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
 
-namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKing
+namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing
 {
 	public class GoldLanternLine3 : ModProjectile
 	{
@@ -20,9 +20,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKin
 		{
 			Projectile.velocity = Projectile.velocity * 0.95f;
 			if (Projectile.timeLeft == 90)
-			{
 				x = Main.rand.NextFloat(0, (float)(Math.PI * 2));
-			}
 		}
 		public override void PostDraw(Color lightColor)
 		{

@@ -1,12 +1,12 @@
-using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Everglow.Myth.Common;
+using Everglow.Myth.TheFirefly.Dusts;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.Localization;
 using Terraria.ObjectData;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
+namespace Everglow.Myth.TheFirefly.Tiles.Furnitures
 {
 	public class GlowWoodChest : ModTile
 	{
@@ -64,25 +64,17 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 			int top = j;
 			Tile tile = Main.tile[i, j];
 			if (tile.TileFrameX % 36 != 0)
-			{
 				left--;
-			}
 
 			if (tile.TileFrameY != 0)
-			{
 				top--;
-			}
 
 			int chest = Chest.FindChest(left, top);
 			if (chest < 0)
-			{
 				return Language.GetTextValue("LegacyChestType.0");
-			}
 
 			if (Main.chest[chest].name == "")
-			{
 				return name;
-			}
 
 			return name + ": " + Main.chest[chest].name;
 		}
@@ -118,11 +110,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 		public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 		{
 			var tile = Main.tile[i, j];
-			Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+			var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 			if (Main.drawToScreen)
-			{
 				zero = Vector2.Zero;
-			}
 			Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodChestGlow");
 			spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(0.8f, 0.8f, 0.8f, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
 

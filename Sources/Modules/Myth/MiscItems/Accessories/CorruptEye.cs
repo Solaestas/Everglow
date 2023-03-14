@@ -1,7 +1,8 @@
-﻿using Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.CursedFlames;
+﻿using Everglow.Myth;
+using Everglow.Myth.MagicWeaponsReplace.Projectiles.CursedFlames;
 using Terraria.Audio;
 
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Accessories
+namespace Everglow.Myth.MiscItems.Accessories
 {
 	[AutoloadEquip(EquipType.Neck)]
 	public class CorruptEye : ModItem
@@ -43,7 +44,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Accessories
 				for (int i = 0; i < 5; i++)
 				{
 					Vector2 velocity = new Vector2(0, Main.rand.NextFloat(4.3f, 6f)).RotatedByRandom(6.283);
-					Projectile CursedFlame = Projectile.NewProjectileDirect(Player.GetSource_FromThis(), Player.Center, velocity, ProjectileID.CursedFlameFriendly, 60, 1.5f, Player.whoAmI);
+					var CursedFlame = Projectile.NewProjectileDirect(Player.GetSource_FromThis(), Player.Center, velocity, ProjectileID.CursedFlameFriendly, 60, 1.5f, Player.whoAmI);
 					CursedFlame.timeLeft = Main.rand.Next(25, 45);
 				}
 				for (int i = 0; i < 18; i++)
@@ -54,7 +55,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Accessories
 				{
 					GenerateDust();
 				}
-				SoundEngine.PlaySound((SoundID.DD2_FlameburstTowerShot.WithPitchOffset(-0.2f)), Player.Center);
+				SoundEngine.PlaySound(SoundID.DD2_FlameburstTowerShot.WithPitchOffset(-0.2f), Player.Center);
 			}
 		}
 		private void GenerateVFX()
@@ -62,7 +63,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Accessories
 			Vector2 v2 = Player.velocity;
 			float mulVelocity = 0.3f + v2.Length() / 10f;
 			Vector2 velocity = new Vector2(0, Main.rand.NextFloat(4.3f, 14f)).RotatedByRandom(6.283);
-			CursedFlameDust cf = new CursedFlameDust
+			var cf = new CursedFlameDust
 			{
 				velocity = velocity,
 				Active = true,
@@ -76,7 +77,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Accessories
 		private void GenerateDust()
 		{
 			Vector2 velocity = new Vector2(0, Main.rand.NextFloat(4.3f, 6f)).RotatedByRandom(6.283);
-			Dust D = Dust.NewDustDirect(Player.Center - new Vector2(4)/*Dust的Size=8x8*/, 0, 0, DustID.CursedTorch, 0, 0, 150, default, Main.rand.NextFloat(0.4f, 1.1f));
+			var D = Dust.NewDustDirect(Player.Center - new Vector2(4)/*Dust的Size=8x8*/, 0, 0, DustID.CursedTorch, 0, 0, 150, default, Main.rand.NextFloat(0.4f, 1.1f));
 			D.noGravity = true;
 			D.velocity = velocity;
 		}

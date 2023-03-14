@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheFirefly.Dusts
+﻿namespace Everglow.Myth.TheFirefly.Dusts
 {
 	public class PureBlue : ModDust
 	{
@@ -23,9 +23,7 @@
 
 			Lighting.AddLight(dust.position, dust.scale * 0f, dust.scale * 0f, dust.scale * 0.25f);
 			if (dust.scale < 0.25f)
-			{
 				dust.active = false;
-			}
 			//for(int i = 0; i < 200;i++)
 			//{
 			//    if((Main.npc[i].Center - dust.position).Length() < 10 && !Main.npc[i].dontTakeDamage && !Main.npc[i].friendly)

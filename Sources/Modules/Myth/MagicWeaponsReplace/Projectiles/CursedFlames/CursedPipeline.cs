@@ -1,6 +1,6 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
 
-namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.CursedFlames
+namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.CursedFlames
 {
 	internal class CursedPipeline : PostPipeline
 	{

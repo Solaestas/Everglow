@@ -1,4 +1,6 @@
-﻿namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
+﻿using Everglow.Myth;
+
+namespace Everglow.Myth.Bosses.Acytaea.Projectiles
 {
 	internal class AcytaeaEffectUp : ModProjectile
 	{
@@ -51,7 +53,7 @@
 			{
 				Main.spriteBatch.End();
 				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-				List<Vertex2D> bars = new List<Vertex2D>();
+				var bars = new List<Vertex2D>();
 
 				float step = 8;
 				float fx = (200 - Projectile.timeLeft) / 200f;
@@ -63,9 +65,7 @@
 				for (int i = 1; i < Count; ++i)
 				{
 					if (Vlaser[k, i] == Vector2.Zero)
-					{
 						break;
-					}
 
 					var normalDir = Vlaser[k, i - 1] - Vlaser[k, i];
 					normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
@@ -87,7 +87,7 @@
 						bars.Add(new Vertex2D(Vlaser[k, i] + normalDir * -width - Main.screenPosition, new Color(155, 0, 0, 0), new Vector3(factor % 1f, 0, w)));
 					}
 				}
-				List<Vertex2D> Vx = new List<Vertex2D>();
+				var Vx = new List<Vertex2D>();
 				if (bars.Count > 2)
 				{
 					Vx.Add(bars[0]);

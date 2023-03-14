@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheTusk.Buffs
+﻿namespace Everglow.Myth.TheTusk.Buffs
 {
 	public class TuskStaff : ModBuff
 	{

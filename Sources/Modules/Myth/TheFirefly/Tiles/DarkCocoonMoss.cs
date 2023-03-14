@@ -1,6 +1,6 @@
-using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Myth.Common;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
+namespace Everglow.Myth.TheFirefly.Tiles
 {
 	public class DarkCocoonMoss : ModTile
 	{
@@ -36,25 +36,25 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 				Tile t4 = Main.tile[i - 1, j];
 				if (t0.Slope == SlopeType.Solid && !t2.HasTile)
 				{
-					t2.TileType = (ushort)ModContent.TileType<Tiles.FireflyMoss>();
+					t2.TileType = (ushort)ModContent.TileType<FireflyMoss>();
 					t2.HasTile = true;
 					t2.TileFrameY = (short)(Main.rand.Next(3, 6) * 18);
 				}
 				if (t0.Slope == SlopeType.Solid && !t4.HasTile)
 				{
-					t4.TileType = (ushort)ModContent.TileType<Tiles.FireflyMoss>();
+					t4.TileType = (ushort)ModContent.TileType<FireflyMoss>();
 					t4.HasTile = true;
 					t4.TileFrameY = (short)(Main.rand.Next(9, 12) * 18);
 				}
 				if (t0.Slope == SlopeType.Solid && !t3.HasTile)
 				{
-					t3.TileType = (ushort)ModContent.TileType<Tiles.FireflyMoss>();
+					t3.TileType = (ushort)ModContent.TileType<FireflyMoss>();
 					t3.HasTile = true;
 					t3.TileFrameY = (short)(Main.rand.Next(6, 9) * 18);
 				}
 				if (t0.Slope == SlopeType.Solid && !t1.HasTile)
 				{
-					t1.TileType = (ushort)ModContent.TileType<Tiles.FireflyMoss>();
+					t1.TileType = (ushort)ModContent.TileType<FireflyMoss>();
 					t1.HasTile = true;
 					t1.TileFrameY = (short)(Main.rand.Next(0, 3) * 18);
 				}
@@ -64,12 +64,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 		public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 		{
 			var tile = Main.tile[i, j];
-			Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+			var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 
 			if (Main.drawToScreen)
-			{
 				zero = Vector2.Zero;
-			}
 			Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/DarkCocoonMossGlow");
 
 			spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(55, 55, 55, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);

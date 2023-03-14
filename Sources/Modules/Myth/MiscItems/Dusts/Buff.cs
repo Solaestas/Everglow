@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Dusts
+﻿namespace Everglow.Myth.MiscItems.Dusts
 {
 	public class Buff : ModDust
 	{

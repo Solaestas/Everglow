@@ -1,4 +1,6 @@
-﻿namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
+﻿using Everglow.Myth.Common;
+
+namespace Everglow.Myth.LanternMoon.Projectiles
 {
 	class LBloodEffect : ModProjectile
 	{
@@ -33,13 +35,9 @@
 		public override void AI()
 		{
 			if (Omega == 0)
-			{
 				Omega = Main.rand.NextFloat(-0.4f, 0.4f);
-			}
 			if (Projectile.timeLeft <= 160)
-			{
 				Omega *= 0.96f;
-			}
 			if (AimProj == -1)
 			{
 				AIMpos = Main.projectile[(int)Projectile.ai[0]].Center;
@@ -52,9 +50,7 @@
 					}
 				}
 				if (Projectile.velocity.Length() > 7f)
-				{
 					Projectile.velocity *= 0.95f;
-				}
 			}
 			else
 			{
@@ -66,9 +62,7 @@
 				Acc = (AIMpos - Projectile.Center) / 530f;
 				Projectile.velocity += Acc;
 				if (Projectile.timeLeft <= 160)
-				{
 					Projectile.velocity = Projectile.velocity.RotatedBy(Omega);
-				}
 			}
 			else
 			{
@@ -85,12 +79,10 @@
 		}
 		public override void PostDraw(Color lightColor)
 		{
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 			float width = 6;
 			if (Projectile.timeLeft < 60)
-			{
 				width = Projectile.timeLeft / 10f;
-			}
 			TrueL = 0;
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
@@ -111,7 +103,7 @@
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(10, 10) - Main.screenPosition, new Color(255, 0, 0, 0), new Vector3(factor, 1, w)));
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(10, 10) - Main.screenPosition, new Color(255, 0, 0, 0), new Vector3(factor, 0, w)));
 			}
-			List<Vertex2D> Vx = new List<Vertex2D>();
+			var Vx = new List<Vertex2D>();
 			if (bars.Count > 2)
 			{
 				Vx.Add(bars[0]);
@@ -132,7 +124,7 @@
 			}
 			if (Vx.Count > 2)
 			{
-				Texture2D t = Common.MythContent.QuickTexture("LanternMoon/Projectiles/LBloodEffect");
+				Texture2D t = MythContent.QuickTexture("LanternMoon/Projectiles/LBloodEffect");
 				Main.graphics.GraphicsDevice.Textures[0] = t;
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 			}

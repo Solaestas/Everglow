@@ -1,6 +1,6 @@
 ﻿using Terraria.Audio;
 using Terraria.DataStructures;
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Weapons
+namespace Everglow.Myth.TheTusk.Items.Weapons
 {
 	public class ToothSpear : ModItem
 	{
@@ -33,9 +33,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Weapons
 		public override bool? UseItem(Player player)
 		{
 			if (!Main.dedServ)
-			{
 				SoundEngine.PlaySound(Item.UseSound, player.Center);
-			}
 			return null;
 		}
 	}

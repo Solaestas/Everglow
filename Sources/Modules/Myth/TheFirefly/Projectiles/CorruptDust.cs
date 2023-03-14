@@ -1,6 +1,6 @@
-using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Everglow.Myth.TheFirefly.Dusts;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
+namespace Everglow.Myth.TheFirefly.Projectiles
 {
 	public class CorruptDust : ModProjectile
 	{

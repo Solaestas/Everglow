@@ -1,7 +1,9 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+﻿using Everglow.Myth;
+using Everglow.Myth.Common;
+using Everglow.Myth.TheFirefly.Buffs;
+using Everglow.Myth.TheFirefly.Dusts;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
+namespace Everglow.Myth.TheFirefly.Projectiles
 {
 	internal class EvilChrysalis : ModProjectile
 	{
@@ -28,13 +30,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.PI / 2d));
 			if (Projectile.timeLeft == 75)
 			{
-				player.AddBuff(ModContent.BuffType<Buffs.GlowMothBuff>(), 18000);
-				Projectile p = Projectile.NewProjectileDirect(Projectile.InheritSource(Projectile), player.Bottom + new Vector2(Main.rand.NextFloat(-60, 60), -5), new Vector2(0, Main.rand.NextFloat(-8, -2)), ModContent.ProjectileType<Projectiles.GlowMoth>(), Projectile.damage, Projectile.knockBack, player.whoAmI, Main.rand.NextFloat(0, 200f), Main.rand.NextFloat(0, 200f));
+				player.AddBuff(ModContent.BuffType<GlowMothBuff>(), 18000);
+				var p = Projectile.NewProjectileDirect(Terraria.Entity.InheritSource(Projectile), player.Bottom + new Vector2(Main.rand.NextFloat(-60, 60), -5), new Vector2(0, Main.rand.NextFloat(-8, -2)), ModContent.ProjectileType<GlowMoth>(), Projectile.damage, Projectile.knockBack, player.whoAmI, Main.rand.NextFloat(0, 200f), Main.rand.NextFloat(0, 200f));
 				p.damage /= 400;
 
 				for (int f = 0; f < 12; f++)
 				{
-					Projectile.NewProjectile(Projectile.InheritSource(Projectile), player.Bottom + new Vector2(Main.rand.NextFloat((f - 5.5f) * 10, (f - 4.5f) * 10), Main.rand.NextFloat(-5, 15)), new Vector2(0, Main.rand.NextFloat(-12, -4)), ModContent.ProjectileType<DarkEffect>(), Projectile.damage, Projectile.knockBack, player.whoAmI, Main.rand.NextFloat(7f, 15f), 0);
+					Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), player.Bottom + new Vector2(Main.rand.NextFloat((f - 5.5f) * 10, (f - 4.5f) * 10), Main.rand.NextFloat(-5, 15)), new Vector2(0, Main.rand.NextFloat(-12, -4)), ModContent.ProjectileType<DarkEffect>(), Projectile.damage, Projectile.knockBack, player.whoAmI, Main.rand.NextFloat(7f, 15f), 0);
 
 					for (int z = 0; z < 4; z++)
 					{
@@ -68,18 +70,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			Player player = Main.player[Projectile.owner];
 			Texture2D t = MythContent.QuickTexture("TheFirefly/Projectiles/EvilChrysalisTex/EvilChrysalis");
 			Texture2D tG = MythContent.QuickTexture("TheFirefly/Projectiles/EvilChrysalisTex/EvilChrysalisG");
-			Vector2 drawOrigin = new Vector2(t.Width * 0.5f, t.Height * 0.5f);
+			var drawOrigin = new Vector2(t.Width * 0.5f, t.Height * 0.5f);
 			Color c0 = Lighting.GetColor((int)(player.Center.X / 16f), (int)(player.Center.Y / 16f));
 			SpriteEffects sp = SpriteEffects.None;
 			if (player.direction == -1)
-			{
 				sp = SpriteEffects.FlipHorizontally;
-			}
 
 			if (Projectile.timeLeft >= 75)
-			{
 				Dy += 0.5f;
-			}
 			else
 			{
 				Dy = 0;
@@ -183,12 +181,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 				Vector2 Vbase = player.Center - Main.screenPosition;
 
-				List<Vertex2D> Vx3 = new List<Vertex2D>();
+				var Vx3 = new List<Vertex2D>();
 				for (int h = 0; h < 120; h++)
 				{
-					Vx3.Add(new Vertex2D(Vbase + Circle2D[(h) % 120] - new Vector2(0, Cy2), Color.White, new Vector3(((h + cirpro) / 30f) % 1f, 0, 0)));
-					Vx3.Add(new Vertex2D(Vbase + Circle2D[(h + 1) % 120] - new Vector2(0, Cy2), Color.White, new Vector3(((0.999f + h + cirpro) / 30f) % 1f, 0, 0)));
-					Vx3.Add(new Vertex2D(Vbase + new Vector2(0, -0.3f * Rad) - new Vector2(0, Cy2), Color.White, new Vector3(((0.5f + h + cirpro) / 30f) % 1f, 1, 0)));
+					Vx3.Add(new Vertex2D(Vbase + Circle2D[h % 120] - new Vector2(0, Cy2), Color.White, new Vector3((h + cirpro) / 30f % 1f, 0, 0)));
+					Vx3.Add(new Vertex2D(Vbase + Circle2D[(h + 1) % 120] - new Vector2(0, Cy2), Color.White, new Vector3((0.999f + h + cirpro) / 30f % 1f, 0, 0)));
+					Vx3.Add(new Vertex2D(Vbase + new Vector2(0, -0.3f * Rad) - new Vector2(0, Cy2), Color.White, new Vector3((0.5f + h + cirpro) / 30f % 1f, 1, 0)));
 				}
 
 				Texture2D t = MythContent.QuickTexture("TheFirefly/Projectiles/EvilChrysalisTex/BlackHalo");

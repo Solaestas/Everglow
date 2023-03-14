@@ -1,6 +1,6 @@
-﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+﻿using Everglow.Myth.TheFirefly.Dusts;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
+namespace Everglow.Myth.TheFirefly.Projectiles
 {
 	public class PhantomMoth : ModProjectile
 	{
@@ -56,13 +56,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 					}
 				}
 				if (TargetPos != Vector2.Zero)
-				{
 					Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(TargetPos) * 15, 0.05f);
-				}
 				else if (Projectile.timeLeft > 240)
 				{
-					Vector2 AimPos = new Vector2(Projectile.ai[0], Projectile.ai[1]);
-					Vector2 v0 = Utils.SafeNormalize(AimPos - Projectile.Center, Vector2.Zero);
+					var AimPos = new Vector2(Projectile.ai[0], Projectile.ai[1]);
+					Vector2 v0 = (AimPos - Projectile.Center).SafeNormalize(Vector2.Zero);
 					Projectile.velocity = Vector2.Lerp(Projectile.velocity, v0 * 15, 0.05f);
 				}
 			}
@@ -71,22 +69,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 				Projectile.velocity *= 0.98f;
 			}
 			if (Projectile.timeLeft < 10)
-			{
 				Projectile.scale -= 0.1f;
-			}
 
 			if (Projectile.timeLeft == 300)
-			{
 				Projectile.frame = Main.rand.Next(3);
-			}
 			if (Projectile.frame > 3)
-			{
 				Projectile.frame = 0;
-			}
 			if (Projectile.timeLeft % 6 == 0)
-			{
 				Projectile.frame++;
-			}
 			if (Projectile.timeLeft % 3 == 0)
 			{
 				int index = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<BlueGlowAppear>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.7f, 1.9f) * Projectile.timeLeft / 300f);

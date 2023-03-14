@@ -1,6 +1,6 @@
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
+namespace Everglow.Myth.TheFirefly.Projectiles
 {
 	public class MothGrey : ModProjectile
 	{
@@ -44,28 +44,22 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 		{
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 			float width = 2;
 			if (Projectile.timeLeft < 60)
-			{
 				width = Projectile.timeLeft / 30f;
-			}
 			TrueL = 0;
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
 				if (Projectile.oldPos[i] == Vector2.Zero)
-				{
 					break;
-				}
 
 				TrueL++;
 			}
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
 				if (Projectile.oldPos[i] == Vector2.Zero)
-				{
 					break;
-				}
 
 				var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
 				normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
@@ -74,7 +68,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(1f, 1f) - Main.screenPosition, Color.White, new Vector3(factor, 1, w)));
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(1f, 1f) - Main.screenPosition, Color.White, new Vector3(factor, 0, w)));
 			}
-			List<Vertex2D> Vx = new List<Vertex2D>();
+			var Vx = new List<Vertex2D>();
 			if (bars.Count > 2)
 			{
 				Vx.Add(bars[0]);
@@ -95,9 +89,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			Texture2D t = Common.MythContent.QuickTexture("TheFirefly/Projectiles/MothGreyLine");
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			if (Vx.Count > 3)
-			{
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
-			}
 		}
 	}
 }

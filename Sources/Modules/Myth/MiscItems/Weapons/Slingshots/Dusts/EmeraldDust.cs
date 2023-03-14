@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Dusts
+﻿namespace Everglow.Myth.MiscItems.Weapons.Slingshots.Dusts
 {
 	public class EmeraldDust : GemDust
 	{

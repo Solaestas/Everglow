@@ -1,5 +1,6 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Projectiles
+﻿using Everglow.Myth.Common;
+
+namespace Everglow.Myth.MiscItems.Weapons.Slingshots.Projectiles
 {
 	public class AmbiguousLine : ModProjectile
 	{
@@ -19,22 +20,18 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
 		{
 			Projectile.scale = Projectile.timeLeft / 60f;
 			if (Projectile.timeLeft <= 58)
-			{
 				Projectile.friendly = false;
-			}
 		}
 		public override bool PreDraw(ref Color lightColor)
 		{
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-			Texture2D TexMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
+			var TexMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
 			Main.spriteBatch.Draw(TexMain, Projectile.Center - Main.screenPosition, null, Color.White, MathF.PI / 2, TexMain.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
 			foreach (var proj in Main.projectile)
 			{
 				if (proj.ai[0] == Projectile.ai[0])
-				{
 					DrawShadowLine(proj.Center - Main.screenPosition, Projectile.Center - Main.screenPosition, Projectile.scale * 15);
-				}
 			}
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
@@ -44,7 +41,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
 		{
 			Color color = Color.White;
 			Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * width * 4;
-			List<Vertex2D> vertex2Ds = new List<Vertex2D>();
+			var vertex2Ds = new List<Vertex2D>();
 			vertex2Ds.Add(new Vertex2D(StartPos + Width, color, new Vector3(0, 0, 0)));
 			vertex2Ds.Add(new Vertex2D(StartPos - Width, color, new Vector3(0, 1, 0)));
 			vertex2Ds.Add(new Vertex2D(EndPos + Width, color, new Vector3(1, 0, 0)));

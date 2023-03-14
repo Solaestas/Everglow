@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles
+﻿namespace Everglow.Myth.MagicWeaponsReplace.Projectiles
 {
 	internal class MagicBookGlobalProjectile : GlobalProjectile
 	{

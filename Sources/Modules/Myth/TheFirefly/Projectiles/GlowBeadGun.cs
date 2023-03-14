@@ -1,8 +1,9 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+﻿using Everglow.Myth;
+using Everglow.Myth.Common;
+using Everglow.Myth.TheFirefly.Dusts;
 using Terraria.Audio;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
+namespace Everglow.Myth.TheFirefly.Projectiles
 {
 	internal class GlowBeadGun : ModProjectile
 	{
@@ -31,9 +32,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 		{
 			Player player = Main.player[Projectile.owner];
 			if (Projectile.timeLeft % 5 == 0 && Energy < 180)
-			{
 				player.statMana--;
-			}
 			Energy = Math.Min(++Energy, 180);
 			Vector2 v0 = Main.MouseWorld - Main.player[Projectile.owner].MountedCenter;
 			v0 = Vector2.Normalize(v0);
@@ -61,9 +60,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 				}
 			}
 			if (player.statMana <= 0 || Projectile.timeLeft < 2)
-			{
 				Shoot();
-			}
 		}
 
 		private void Shoot()
@@ -77,7 +74,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			int NumProjectiles = (int)(Energy / 20f) + 1;
 			for (int i = 0; i < NumProjectiles; i++)
 			{
-				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + v0 * 62, v0 * (12 - i) * (Energy + 20) / 240f, ModContent.ProjectileType<Projectiles.GlowStar>(), (int)(Projectile.damage / (i + 19f) * 19f * (Energy + 120) / 180f), Projectile.knockBack, player.whoAmI, i * (Energy + 20) / 180f, 0);
+				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + v0 * 62, v0 * (12 - i) * (Energy + 20) / 240f, ModContent.ProjectileType<GlowStar>(), (int)(Projectile.damage / (i + 19f) * 19f * (Energy + 120) / 180f), Projectile.knockBack, player.whoAmI, i * (Energy + 20) / 180f, 0);
 			}
 
 			Vector2 newVelocity = v0;
@@ -125,14 +122,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			player.heldProj = Projectile.whoAmI;
 			Vector2 v0 = Projectile.Center - player.MountedCenter;
 			if (Main.mouseLeft)
-			{
 				player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(v0.Y, v0.X) - Math.PI / 2d));
-			}
 
 			Texture2D TexMain = MythContent.QuickTexture("TheFirefly/Projectiles/GlowBeadGunTex/GlowBeadGunOff");
 			Texture2D TexMainG = MythContent.QuickTexture("TheFirefly/Projectiles/GlowBeadGunTex/GlowBeadGunGlow");
 
-			Projectile.frame = (int)((Energy % 45) / 5f);
+			Projectile.frame = (int)(Energy % 45 / 5f);
 
 			Color drawColor = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
 			SpriteEffects se = SpriteEffects.None;

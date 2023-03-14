@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
+﻿namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Melee
 {
 	public class Sunflower : ModProjectile
 	{
@@ -19,13 +19,9 @@
 			{
 				Projectile.soundDelay = 10;
 				if (Projectile.velocity.X != oldVelocity.X && Math.Abs(oldVelocity.X) > 1f)
-				{
 					Projectile.velocity.X = oldVelocity.X * -0.9f;
-				}
 				if (Projectile.velocity.Y != oldVelocity.Y && Math.Abs(oldVelocity.Y) > 1f)
-				{
 					Projectile.velocity.Y = oldVelocity.Y * -0.9f;
-				}
 			}
 			return false;
 		}
@@ -49,33 +45,23 @@
 			if (Projectile.timeLeft <= 2950)
 			{
 				if (num7 < 9f)
-				{
 					Projectile.velocity *= 1.2f;
-				}
 				if (num7 > 10f)
-				{
 					Projectile.velocity *= 0.86f;
-				}
-				int num3 = (int)Player.FindClosest(Projectile.Center, 1, 1);
+				int num3 = Player.FindClosest(Projectile.Center, 1, 1);
 				Projectile.velocity = Projectile.velocity * 0.98f + (p.Center - Projectile.Center) / num6 * 3.5f;
 				Projectile.tileCollide = false;
 			}
 			else
 			{
 				if (num7 < 9f)
-				{
 					Projectile.velocity *= 1.2f;
-				}
 				if (num7 > 10f)
-				{
 					Projectile.velocity *= 0.96f;
-				}
 				Projectile.velocity = Projectile.velocity * 0.995f + (p.Center - Projectile.Center) / num6 * 0.15f;
 			}
 			if (num6 < 60 && Projectile.timeLeft < 2950)
-			{
 				Projectile.timeLeft = 0;
-			}
 		}
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
@@ -85,7 +71,7 @@
 				for (int t = 0; t < 4; t++)
 				{
 					Vector2 v2 = new Vector2(0, Main.rand.NextFloat(0, 4f)).RotatedByRandom(Math.PI * 2d);
-					int y = Projectile.NewProjectile(Projectile.InheritSource(Projectile), v1.X, v1.Y, v2.X, v2.Y, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Melee.SunFlowerpetal>(), Projectile.damage / 2, 0.5f, Main.myPlayer);
+					int y = Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), v1.X, v1.Y, v2.X, v2.Y, ModContent.ProjectileType<SunFlowerpetal>(), Projectile.damage / 2, 0.5f, Main.myPlayer);
 					Main.projectile[y].scale = Main.rand.NextFloat(0.9f, 1.1f);
 					Main.projectile[y].damage = (int)(Projectile.damage * Main.projectile[y].scale);
 					Main.projectile[y].frame = Main.rand.Next(0, 8);

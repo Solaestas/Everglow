@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
+﻿namespace Everglow.Myth.TheTusk.Projectiles
 {
 	public class TuskCrack : ModProjectile
 	{
@@ -20,23 +20,17 @@
 			{
 				int Frequ = 24;
 				if (Main.expertMode && !Main.masterMode)
-				{
 					Frequ = 18;
-				}
 				if (Main.masterMode)
-				{
 					Frequ = 3;
-				}
 				if (Projectile.timeLeft % Frequ == 0)
 				{
 					float RanX = Main.rand.NextFloat(-400, 400);
-					Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center + new Vector2(RanX, -RanX / 15f) + new Vector2(0, -5), new Vector2(0, 0.3f), ModContent.ProjectileType<Projectiles.TuskSpiceBlack>(), (int)((double)Projectile.damage / 6), Projectile.knockBack, Projectile.owner, 0f, 0f);
+					Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center + new Vector2(RanX, -RanX / 15f) + new Vector2(0, -5), new Vector2(0, 0.3f), ModContent.ProjectileType<TuskSpiceBlack>(), (int)((double)Projectile.damage / 6), Projectile.knockBack, Projectile.owner, 0f, 0f);
 				}
 			}
 			if (Projectile.velocity.Length() > 46)
-			{
 				Projectile.velocity = Projectile.velocity / Projectile.velocity.Length() * 46;
-			}
 			//ef2.Parameters["Strds"].SetValue(100);
 		}
 	}

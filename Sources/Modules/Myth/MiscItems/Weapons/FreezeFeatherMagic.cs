@@ -1,7 +1,8 @@
-﻿using Terraria.DataStructures;
+﻿using Everglow.Myth.MiscItems.Projectiles.Weapon.Magic;
+using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
+namespace Everglow.Myth.MiscItems.Weapons
 {
 	public class FreezeFeatherMagic : ModItem
 	{
@@ -31,7 +32,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
 			Item.rare = ItemRarityID.LightRed;
 			Item.UseSound = SoundID.Item71;
 			Item.autoReuse = true;
-			Item.shoot = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Magic.FreezeFeather>(); // Shoot a black bolt, also known as the projectile shot from the onyx blaster.
+			Item.shoot = ModContent.ProjectileType<FreezeFeather>(); // Shoot a black bolt, also known as the projectile shot from the onyx blaster.
 			Item.shootSpeed = 8; // How fast the item shoots the projectile.
 			Item.crit = 8; // The percent chance at hitting an enemy with a crit, plus the default amount of 4.
 			Item.mana = 15; // This is how much mana the item uses.

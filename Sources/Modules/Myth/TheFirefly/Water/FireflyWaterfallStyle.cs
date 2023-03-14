@@ -1,4 +1,4 @@
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
+namespace Everglow.Myth.TheFirefly.Water
 {
 	public class FireflyWaterfallStyle : ModWaterfallStyle
 	{

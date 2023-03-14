@@ -1,7 +1,9 @@
+using Everglow.Myth;
+using Everglow.Myth.Common;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.MagnetSphere
+namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.MagnetSphere
 {
 	public class MagnetSphereII : ModProjectile
 	{
@@ -31,7 +33,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
 			Player player = Main.player[Projectile.owner];
 			Lighting.AddLight((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16), 0, 0.46f * Projectile.scale, 0.4f * Projectile.scale);
 			Projectile.velocity *= 0.999f;
-			Projectile.scale = 0.6f + (float)(Math.Sin(Main.timeForVisualEffects / 1.8f + Projectile.ai[0])) * 0.45f;
+			Projectile.scale = 0.6f + (float)Math.Sin(Main.timeForVisualEffects / 1.8f + Projectile.ai[0]) * 0.45f;
 			Projectile.timeLeft -= player.ownedProjectileCounts[Projectile.type];
 			if (Main.rand.NextBool(8))
 			{
@@ -49,14 +51,12 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
 									ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
 									Gsplayer.FlyCamPosition = new Vector2(0, 11).RotatedByRandom(6.283);
 									int HitType = ModContent.ProjectileType<MagnetSphereLighting>();
-									Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center, Vector2.One, HitType, (int)(Projectile.damage * 1), Projectile.knockBack, Projectile.owner, Projectile.whoAmI, Projectile.rotation + Main.rand.NextFloat(6.283f));
+									var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center, Vector2.One, HitType, Projectile.damage * 1, Projectile.knockBack, Projectile.owner, Projectile.whoAmI, Projectile.rotation + Main.rand.NextFloat(6.283f));
 									p.CritChance = Projectile.CritChance;
 									SoundEngine.PlaySound(SoundID.DD2_LightningBugZap, target.Center);
 									Projectile.penetrate--;
 									if (Projectile.penetrate < 0)
-									{
 										Projectile.Kill();
-									}
 								}
 							}
 						}
@@ -70,18 +70,18 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
 		}
 		public override bool PreDraw(ref Color lightColor)
 		{
-			Texture2D Light = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/MagnetSphere/MagnetSphereII");
-			Texture2D Light2 = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/MagnetSphere/Projectile_254");
-			Texture2D Shade = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterBolt/NewWaterBoltShade");
+			Texture2D Light = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/MagnetSphere/MagnetSphereII");
+			Texture2D Light2 = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/MagnetSphere/Projectile_254");
+			Texture2D Shade = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterBolt/NewWaterBoltShade");
 
-			Color c0 = new Color(0, 199, 129, 0);
+			var c0 = new Color(0, 199, 129, 0);
 
 
 			Main.spriteBatch.Draw(Shade, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, Color.White, Projectile.rotation, Shade.Size() / 2f, 1.08f * Projectile.scale, SpriteEffects.None, 0);
 
 
 			Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, c0, Projectile.rotation, Light.Size() / 2f, 0.8f * Projectile.scale, SpriteEffects.None, 0);
-			Rectangle rt = new Rectangle(0, 44 * (int)((Main.timeForVisualEffects / 6f) % 5), 38, 44);
+			var rt = new Rectangle(0, 44 * (int)(Main.timeForVisualEffects / 6f % 5), 38, 44);
 			Main.spriteBatch.Draw(Light2, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), rt, new Color(95, 95, 95, 55), Projectile.rotation, rt.Size() / 2f, Projectile.scale * 0.2f + 1.2f, SpriteEffects.None, 0);
 			return false;
 		}
@@ -96,11 +96,11 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
 			for (int d = 0; d < 14; d++)
 			{
 				Vector2 BasePos = Projectile.Center - new Vector2(4) - Projectile.velocity;
-				Dust d0 = Dust.NewDustDirect(BasePos, 0, 0, DustID.Electric, 0, 0, 0, default, 0.6f);
+				var d0 = Dust.NewDustDirect(BasePos, 0, 0, DustID.Electric, 0, 0, 0, default, 0.6f);
 				d0.velocity = new Vector2(0, Main.rand.NextFloat(1.65f, 5.5f)).RotatedByRandom(6.283) * 3;
 			}
 			int HitType = ModContent.ProjectileType<MagnetSphereHit>();
-			Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, (int)(Projectile.damage * 3f), Projectile.knockBack, Projectile.owner, 24, Projectile.rotation + Main.rand.NextFloat(6.283f));
+			var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, (int)(Projectile.damage * 3f), Projectile.knockBack, Projectile.owner, 24, Projectile.rotation + Main.rand.NextFloat(6.283f));
 			p.CritChance = Projectile.CritChance;
 		}
 
@@ -120,16 +120,14 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
 			for (int d = 0; d < 10; d++)
 			{
 				Vector2 BasePos = Projectile.Center - new Vector2(4) - Projectile.velocity;
-				Dust d0 = Dust.NewDustDirect(BasePos, 0, 0, DustID.Electric, 0, 0, 0, default, 0.6f);
+				var d0 = Dust.NewDustDirect(BasePos, 0, 0, DustID.Electric, 0, 0, 0, default, 0.6f);
 				d0.velocity = new Vector2(0, Main.rand.NextFloat(1.65f, 5.5f)).RotatedByRandom(6.283);
 			}
 			Projectile.penetrate -= 5;
 			if (Projectile.penetrate < 0)
-			{
 				Projectile.Kill();
-			}
 			int HitType = ModContent.ProjectileType<MagnetSphereHit>();
-			Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, (int)(Projectile.damage * 2f), Projectile.knockBack, Projectile.owner, 18, Projectile.rotation + Main.rand.NextFloat(6.283f));
+			var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, HitType, (int)(Projectile.damage * 2f), Projectile.knockBack, Projectile.owner, 18, Projectile.rotation + Main.rand.NextFloat(6.283f));
 			p.CritChance = Projectile.CritChance;
 			Projectile.damage = (int)(Projectile.damage * 1.2);
 		}
@@ -137,19 +135,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
 		{
 			Spark();
 			if (Projectile.velocity.X != oldVelocity.X)
-			{
 				Projectile.velocity.X = -oldVelocity.X;
-			}
 			if (Projectile.velocity.Y != oldVelocity.Y)
-			{
 				Projectile.velocity.Y = -oldVelocity.Y;
-			}
 			Projectile.velocity *= 0.98f;
 			Projectile.penetrate -= 5;
 			if (Projectile.penetrate < 0)
-			{
 				Projectile.Kill();
-			}
 			return false;
 		}
 	}

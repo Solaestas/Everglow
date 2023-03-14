@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
+﻿namespace Everglow.Myth.Bosses.Acytaea.Projectiles
 {
 	internal class AcytaeaTornado5 : ModProjectile
 	{
@@ -36,9 +36,7 @@
 				}
 			}
 			if (AIMNpc >= 0)
-			{
 				Projectile.Center = Main.npc[AIMNpc].Center;
-			}
 			Timer = Projectile.timeLeft / 15f + 6;
 			WHOAMI = Projectile.whoAmI;
 		}
@@ -57,7 +55,7 @@
 			{
 				for (int z = -15; z < 16; z++)
 				{
-					List<Vertex2D> Vx = new List<Vertex2D>();
+					var Vx = new List<Vertex2D>();
 
 					for (int h = 0; h < 60; h++)
 					{
@@ -68,15 +66,11 @@
 						Vector2 vCla = new Vector2(120 * MinCosZ, 0).RotatedBy(Timer - 0.1f - h * 0.1f + z * z);
 						vCla.Y *= 0.3f;
 						Vector2 vc = Main.projectile[WHOAMI].Center + vCla + new Vector2(0, -80);
-						Color color3 = new Color(255, 255, 255, 0);
+						var color3 = new Color(255, 255, 255, 0);
 						if (Main.projectile[WHOAMI].timeLeft < 255)
-						{
 							color3 = new Color(Main.projectile[WHOAMI].timeLeft, Main.projectile[WHOAMI].timeLeft, Main.projectile[WHOAMI].timeLeft, 0);
-						}
 						if (Main.projectile[WHOAMI].timeLeft > 945)
-						{
 							color3 = new Color(1200 - Main.projectile[WHOAMI].timeLeft, 1200 - Main.projectile[WHOAMI].timeLeft, 1200 - Main.projectile[WHOAMI].timeLeft, 0);
-						}
 						Vx.Add(new Vertex2D(vc - Main.screenPosition + new Vector2(0, z * 40), color3, new Vector3((h + 1) / 60f, 0, 0)));
 						Vx.Add(new Vertex2D(vb - Main.screenPosition + new Vector2(0, z * 40), color3, new Vector3(h / 60f, 0, 0)));
 						Vx.Add(new Vertex2D(Main.projectile[WHOAMI].Center - Main.screenPosition + new Vector2(0, z * 40), color3, new Vector3(0.5f, 1, 0)));

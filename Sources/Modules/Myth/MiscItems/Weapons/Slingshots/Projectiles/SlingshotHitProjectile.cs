@@ -1,6 +1,6 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
 
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Projectiles
+namespace Everglow.Myth.MiscItems.Weapons.Slingshots.Projectiles
 {
 	/// <summary>
 	/// ai[0]强度ai[1]角度
@@ -27,7 +27,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
 		}
 		private static void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 		{
-			List<Vertex2D> circle = new List<Vertex2D>();
+			var circle = new List<Vertex2D>();
 			for (int h = 0; h < radious / 2; h++)
 			{
 				circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 1, 0)));
@@ -57,7 +57,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
 		}
 		private static void DrawTexCircle_VFXBatch(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 		{
-			List<Vertex2D> circle = new List<Vertex2D>();
+			var circle = new List<Vertex2D>();
 
 			for (int h = 0; h < radious / 2; h += 1)
 			{
@@ -81,9 +81,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
 			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(0, 0.8f, 0)));
 			circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0, 0.2f, 0)));
 			if (circle.Count > 2)
-			{
 				spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
-			}
 		}
 		public void DrawWarp(VFXBatch spriteBatch)
 		{

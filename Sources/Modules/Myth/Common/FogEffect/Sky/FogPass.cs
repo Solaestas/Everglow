@@ -1,6 +1,6 @@
-﻿using Everglow.Sources.Modules.MythModule.Common.FogEffect.Configs;
+﻿using Everglow.Myth.Common.FogEffect.Configs;
 using ReLogic.Content;
-namespace Everglow.Sources.Modules.MythModule.Common.FogEffect.Sky
+namespace Everglow.Myth.Common.FogEffect.Sky
 {
 	public struct FogState
 	{
@@ -147,7 +147,7 @@ namespace Everglow.Sources.Modules.MythModule.Common.FogEffect.Sky
 			m_currentState.BloomScatteringRatio = fogConfig.FogBloomRate;
 			//m_currentState.FogScatterWithDistance = fogConfig.FogScatterWithDistance;
 
-			m_shouldResetRenderTargets |= (m_currentState.OffscreenTileCount != fogConfig.OffscreenTiles);
+			m_shouldResetRenderTargets |= m_currentState.OffscreenTileCount != fogConfig.OffscreenTiles;
 			m_currentState.OffscreenTileCount = fogConfig.OffscreenTiles;
 			m_useGaussian = fogConfig.GaussianKernel;
 			m_enableLightUpload = fogConfig.EnableLightUpload;
@@ -225,9 +225,7 @@ namespace Everglow.Sources.Modules.MythModule.Common.FogEffect.Sky
 			if (Main.time % 400 < 1)
 			{
 				if ((int)(Main.time / 400) % 2 == 0)
-				{
 					SwitchState(Default, 150);
-				}
 				else
 				{
 					SwitchState(DayThickFog, 150);
@@ -245,10 +243,8 @@ namespace Everglow.Sources.Modules.MythModule.Common.FogEffect.Sky
 			int l = 0;
 			for (; l < MAX_BLUR_LEVELS; l++)
 			{
-				if ((m_frameWidth >> l) == 0 || (m_frameHeight >> l) == 0)
-				{
+				if (m_frameWidth >> l == 0 || m_frameHeight >> l == 0)
 					break;
-				}
 				m_blurRenderTargets[l] = new RenderTarget2D(Main.graphics.GraphicsDevice,
 						m_frameWidth >> l, m_frameWidth >> l, false,
 						m_surfaceFormat, DepthFormat.None);
@@ -263,7 +259,7 @@ namespace Everglow.Sources.Modules.MythModule.Common.FogEffect.Sky
 			}
 
 			m_renderTargetSwap = new RenderTarget2D(Main.graphics.GraphicsDevice,
-					m_frameWidth >> Math.Min(m_maxBlurLevel - 1, (4 + BloomRadius)), m_frameHeight >> Math.Min(m_maxBlurLevel - 1, (4 + BloomRadius)),
+					m_frameWidth >> Math.Min(m_maxBlurLevel - 1, 4 + BloomRadius), m_frameHeight >> Math.Min(m_maxBlurLevel - 1, 4 + BloomRadius),
 					false, m_surfaceFormat, DepthFormat.None);
 			m_filteredScreenTarget = new RenderTarget2D(Main.graphics.GraphicsDevice,
 					m_screenWidth, m_screenHeight,
@@ -304,16 +300,12 @@ namespace Everglow.Sources.Modules.MythModule.Common.FogEffect.Sky
 				if (i % 2 == 0)
 				{
 					if (m_startTileX > 0)
-					{
 						m_startTileX--;
-					}
 				}
 				else
 				{
 					if (endTileX < Main.maxTilesX - 1)
-					{
 						endTileX++;
-					}
 				}
 				i++;
 			}
@@ -327,16 +319,12 @@ namespace Everglow.Sources.Modules.MythModule.Common.FogEffect.Sky
 				if (i % 2 == 0)
 				{
 					if (m_startTileY > 0)
-					{
 						m_startTileY--;
-					}
 				}
 				else
 				{
 					if (endTileY < Main.maxTilesY - 1)
-					{
 						endTileY++;
-					}
 				}
 				i++;
 			}
@@ -351,9 +339,7 @@ namespace Everglow.Sources.Modules.MythModule.Common.FogEffect.Sky
 
 					var s = color.ToVector3();
 					if ((s.X + s.Y + s.Z) * 0.333f > m_currentState.LuminanceThreashold)
-					{
 						m_lightMap[y * cols + x] = color;
-					}
 				}
 			});
 
@@ -411,9 +397,7 @@ namespace Everglow.Sources.Modules.MythModule.Common.FogEffect.Sky
 
 			// 因为涉及光照数据获取，这里暂时不支持截屏，原版会在截屏结束后把光照信息抹除
 			if (screenTarget1 != Main.screenTarget)
-			{
 				return;
-			}
 
 			if (m_screenWidth != Main.screenWidth || m_screenHeight != Main.screenHeight
 				|| m_shouldResetRenderTargets)
@@ -504,8 +488,8 @@ namespace Everglow.Sources.Modules.MythModule.Common.FogEffect.Sky
 			// Downsampling
 			for (int i = 4; i < 4 + downLevels; i++)
 			{
-				int curWidth = m_frameWidth >> (i + 1);
-				int curHeight = m_frameHeight >> (i + 1);
+				int curWidth = m_frameWidth >> i + 1;
+				int curHeight = m_frameHeight >> i + 1;
 				Main.graphics.GraphicsDevice.SetRenderTarget(m_blurRenderTargets[i + 1]);
 				Main.graphics.GraphicsDevice.Clear(Color.Transparent);
 				spriteBatch.Begin(SpriteSortMode.Immediate,
@@ -526,8 +510,8 @@ namespace Everglow.Sources.Modules.MythModule.Common.FogEffect.Sky
 			// Upsampling
 			for (int i = 4 + downLevels - 1; i >= 0; i--)
 			{
-				int curWidth = m_frameWidth >> (i);
-				int curHeight = m_frameHeight >> (i);
+				int curWidth = m_frameWidth >> i;
+				int curHeight = m_frameHeight >> i;
 				graphicsDevice.SetRenderTarget(m_blurRenderTargets[i]);
 				graphicsDevice.Clear(Color.Transparent);
 				spriteBatch.Begin(SpriteSortMode.Immediate,

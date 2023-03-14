@@ -1,6 +1,6 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using static Everglow.Sources.Modules.MythModule.Common.MythUtils;
-namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.RazorbladeTyphoon
+﻿using Everglow.Myth.Common;
+using static Everglow.Myth.Common.MythUtils;
+namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.RazorbladeTyphoon
 {
 	internal class RazorbladeTyphoonArray : ModProjectile, IWarpProjectile
 	{
@@ -25,17 +25,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ra
 			{
 				Projectile.timeLeft = player.itemTime + 60;
 				if (Timer < 30)
-				{
 					Timer++;
-				}
 			}
 			else
 			{
 				Timer--;
 				if (Timer < 0)
-				{
 					Projectile.Kill();
-				}
 			}
 			Player.CompositeArmStretchAmount PCAS = Player.CompositeArmStretchAmount.Full;
 
@@ -69,7 +65,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ra
 		{
 			Player player = Main.player[Projectile.owner];
 			Texture2D Water = tex;
-			Color c1 = new Color(c0.R * 0.39f / 255f, c0.G * 0.39f / 255f, c0.B * 0.39f / 255f, c0.A * 0.39f / 255f);
+			var c1 = new Color(c0.R * 0.39f / 255f, c0.G * 0.39f / 255f, c0.B * 0.39f / 255f, c0.A * 0.39f / 255f);
 			DrawTexCircle(Timer * 1.6f, 32, c0, player.Center + RingPos - Main.screenPosition, Water, Main.timeForVisualEffects / 4);
 			DrawTexCircle(Timer * 1.3f, 32, c1, player.Center + RingPos - Main.screenPosition, Water, -Main.timeForVisualEffects / 4);
 
@@ -97,7 +93,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ra
 			float Wid = 6f;
 			Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
 
-			List<Vertex2D> vertex2Ds = new List<Vertex2D>();
+			var vertex2Ds = new List<Vertex2D>();
 
 			for (int x = 0; x < 3; x++)
 			{

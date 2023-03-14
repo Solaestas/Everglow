@@ -1,7 +1,7 @@
-﻿using Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles;
+﻿using Everglow.Myth.Bosses.Acytaea.Projectiles;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
+namespace Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk
 {
 	public class HugeMouth : ModNPC
 	{
@@ -34,13 +34,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 		{
 			NPC.rotation = (float)(Math.Atan2(NPC.velocity.Y, NPC.velocity.X) + Math.PI / 2d);
 			if (!Collision.SolidCollision(NPC.Center, 1, 1) && Ty == 0)
-			{
 				Ty += 1;
-			}
 			if (Ty >= 1)
-			{
 				cooling--;
-			}
 			if (Collision.SolidCollision(NPC.Center, 1, 1) && Ty == 1 && cooling <= 0)
 			{
 				Ty += 1;
@@ -55,18 +51,12 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 			{
 				Tokill--;
 				if (Tokill <= 3)
-				{
 					NPC.active = false;
-				}
 			}
 			if (Big < BigMax)
-			{
 				Big += 0.02f;
-			}
 			if (Big >= BigMax && !MaxB)
-			{
 				MaxB = true;
-			}
 			if (MaxB)
 			{
 				Big -= 0.15f;
@@ -85,13 +75,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 			{
 				Dam = 100;
 				if (Main.expertMode)
-				{
 					Dam = 150;
-				}
 				if (Main.masterMode)
-				{
 					Dam = 250;
-				}
 			}
 		}
 
@@ -121,15 +107,11 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 						if (!Main.LocalPlayer.dead)
 						{
 							if ((Main.LocalPlayer.Center - NPC.Center + new Vector2(-x, 0).RotatedBy(NPC.rotation - Big - (float)Math.PI / 2f)).Length() < 30)
-							{
 								// 弹幕
 								Projectile.NewProjectile(null, Main.LocalPlayer.Center, Vector2.Zero, ModContent.ProjectileType<playerHit>(), Dam / 8, 0, 0, 0, 0);
-							}
 							if ((Main.LocalPlayer.Center - NPC.Center + new Vector2(-x, 0).RotatedBy(NPC.rotation + Big - (float)Math.PI / 2f)).Length() < 30)
-							{
 								// 弹幕
 								Projectile.NewProjectile(null, Main.LocalPlayer.Center, Vector2.Zero, ModContent.ProjectileType<playerHit>(), Dam / 8, 0, 0, 0, 0);
-							}
 						}
 					}
 				}

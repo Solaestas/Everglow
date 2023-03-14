@@ -1,6 +1,6 @@
 ﻿using Terraria.DataStructures;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
+namespace Everglow.Myth.TheFirefly.Items.Weapons
 {
 	public class DustOfCorrupt : ModItem
 	{

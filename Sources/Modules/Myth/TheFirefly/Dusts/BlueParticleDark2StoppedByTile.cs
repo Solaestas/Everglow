@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheFirefly.Dusts
+﻿namespace Everglow.Myth.TheFirefly.Dusts
 {
 	public class BlueParticleDark2StoppedByTile : ModDust
 	{
@@ -34,20 +34,16 @@
 				dust.velocity = v0;
 			}
 			if (dust.alpha > 254)
-			{
 				dust.active = false;
-			}
 			return false;
 		}
 
 		public override Color? GetAlpha(Dust dust, Color lightColor)
 		{
 			float k = (255 - dust.alpha) / 255f;
-			float k2 = (float)(Math.Sqrt(k));
+			float k2 = (float)Math.Sqrt(k);
 			if (dust.scale > 0.6f)
-			{
 				return new Color?(new Color(0.4f * k * k, 0.1f * k2, 0.9f * k, 0f));
-			}
 			else
 			{
 				return new Color?(new Color(0.4f * k * k, 0.1f * k2, 0.9f * k, 0));

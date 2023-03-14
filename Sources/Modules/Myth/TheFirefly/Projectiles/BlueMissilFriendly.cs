@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
+﻿namespace Everglow.Myth.TheFirefly.Projectiles
 {
 	public class BlueMissilFriendly : ModProjectile
 	{
@@ -26,19 +26,13 @@
 		public override void AI()
 		{
 			if (Stre2 > 0)
-			{
 				Stre2 -= 0.01f;
-			}
 			if (Projectile.ai[0] != 2)
 			{
 				if (va == Vector2.Zero)
-				{
 					va = Projectile.velocity;
-				}
 				if (Projectile.timeLeft < 90)
-				{
 					Projectile.velocity = va;
-				}
 				else
 				{
 					Projectile.velocity *= 0.94f;

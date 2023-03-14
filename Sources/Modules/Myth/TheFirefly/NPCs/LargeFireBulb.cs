@@ -1,6 +1,7 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
+using Everglow.Myth.TheFirefly.Dusts;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
+namespace Everglow.Myth.TheFirefly.NPCs
 {
 	public class LargeFireBulb : ModNPC
 	{
@@ -65,7 +66,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 						if (NPC.velocity.Length() < 0.05f)
 						{
 							NPC.velocity *= 0;
-							MaxL = (NPC.Center.Y - StaCen.Y);
+							MaxL = NPC.Center.Y - StaCen.Y;
 							HitT = true;
 						}
 					}
@@ -76,7 +77,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 					if (NPC.velocity.Length() < 0.05f)
 					{
 						NPC.velocity *= 0;
-						MaxL = (NPC.Center.Y - StaCen.Y);
+						MaxL = NPC.Center.Y - StaCen.Y;
 						HitT = true;
 					}
 				}
@@ -91,9 +92,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 				NPC.velocity += new Vector2(0, 0.15f);
 				NPC.velocity += TOCen / TOCen.Length() * (TOCen.Length() - MaxL) * 0.001f;
 				if (NPC.velocity.Length() > 1f)
-				{
 					NPC.velocity -= NPC.velocity * 0.003f;
-				}
 			}
 			NPC.rotation = (float)(Math.Atan2(TOCen.Y, TOCen.X) + Math.PI / 2d);
 			Lighting.AddLight((int)(NPC.Center.X / 16), (int)(NPC.Center.Y / 16 - 1), 0, 0.1f, 0.8f);
@@ -108,30 +107,30 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 				NPC.life = 1;
 				NPC.active = true;
 				HitCount++;
-				if (HitCount >= (8 + Main.rand.Next(3, 5))) //Attempted random hit count criteria. ~Setnour6
+				if (HitCount >= 8 + Main.rand.Next(3, 5)) //Attempted random hit count criteria. ~Setnour6
 				{
 					for (int h = 0; h < 60; h += 3)
 					{
 						Vector2 v3 = new Vector2(0, (float)Math.Sin(h * Math.PI / 4d) + 2).RotatedBy(h * Math.PI / 10d) * Main.rand.NextFloat(0.2f, 1.1f);
-						int r = Dust.NewDust(NPC.Center - new Vector2(4, 4), 0, 0, ModContent.DustType<Dusts.PureBlue>(), 0, 0, 0, default, 4f * Main.rand.NextFloat(0.7f, 5.9f));
+						int r = Dust.NewDust(NPC.Center - new Vector2(4, 4), 0, 0, ModContent.DustType<PureBlue>(), 0, 0, 0, default, 4f * Main.rand.NextFloat(0.7f, 5.9f));
 						Main.dust[r].noGravity = true;
 						Main.dust[r].velocity = v3 * 4;
 					}
 					for (int y = 0; y < 30; y += 3)
 					{
-						int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.9f, 4.2f));
+						int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.9f, 4.2f));
 						Main.dust[index].noGravity = true;
 						Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(1.8f, 8.5f)).RotatedByRandom(Math.PI * 2d);
 					}
 					for (int y = 0; y < 30; y += 3)
 					{
-						int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(2f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.9f, 4.2f));
+						int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(2f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.9f, 4.2f));
 						Main.dust[index].noGravity = true;
 						Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(3.0f, 10f)).RotatedByRandom(Math.PI * 2d);
 					}
 					for (int y = 0; y < 18; y++)
 					{
-						int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.8f, 3.2f));
+						int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.8f, 3.2f));
 						Main.dust[index].noGravity = true;
 						Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(1.8f, 4.5f)).RotatedByRandom(Math.PI * 2d);
 					}
@@ -147,26 +146,22 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 		{
 			SpriteEffects effects = SpriteEffects.None;
 			if (NPC.spriteDirection == 1)
-			{
 				effects = SpriteEffects.FlipHorizontally;
-			}
 			Texture2D tx = MythContent.QuickTexture("TheFirefly/NPCs/LargeFireBulb");
 			Texture2D tg = MythContent.QuickTexture("TheFirefly/NPCs/LargeFireBulb_Glow");
-			Vector2 vector = new Vector2(tx.Width / 2f, tx.Height / (float)Main.npcFrameCount[NPC.type] / 2f);
+			var vector = new Vector2(tx.Width / 2f, tx.Height / (float)Main.npcFrameCount[NPC.type] / 2f);
 
 			Color color0 = Lighting.GetColor((int)(NPC.Center.X / 16d), (int)(NPC.Center.Y / 16d));
 			Main.spriteBatch.Draw(tx, NPC.Center - Main.screenPosition, new Rectangle(0, 128, 128, 128), color0, NPC.rotation, vector, 1f, effects, 0f);
 
 			Main.spriteBatch.Draw(tx, StaCen - Main.screenPosition + new Vector2(0, 24), new Rectangle(0, 0, 128, 64), color0, 0, vector, 1f, effects, 0f);
-			Color color = new Color(255, 255, 255, 0);
+			var color = new Color(255, 255, 255, 0);
 			Main.spriteBatch.Draw(tg, NPC.Center - Main.screenPosition, new Rectangle(0, 128, 128, 128), color, NPC.rotation, vector, 1f, effects, 0f);
 			vPos[0] = NPC.Center + new Vector2(0, -34);
 			for (int f = 1; f < 200; f++)
 			{
 				if ((StaCen - vPos[f - 1]).Length() < 24)
-				{
 					break;
-				}
 				vPos[f] = vPos[f - 1] + (StaCen - vPos[f - 1]) / (StaCen - vPos[f - 1]).Length() * 6;
 				Color color2 = Lighting.GetColor((int)(vPos[f].X / 16d), (int)(vPos[f].Y / 16d));
 				Main.spriteBatch.Draw(tx, vPos[f] - Main.screenPosition + new Vector2(0, 40), new Rectangle(0, 64, 128, 6), color2, NPC.rotation, vector, 1f, effects, 0f);

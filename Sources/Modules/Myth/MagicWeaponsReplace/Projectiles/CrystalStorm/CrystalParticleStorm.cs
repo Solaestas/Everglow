@@ -1,7 +1,7 @@
-﻿using Everglow.Sources.Modules.MythModule.Common.VFXPipelines;
+﻿using Everglow.Myth.Common.VFXPipelines;
 using Terraria.GameContent;
 
-namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.CrystalStorm
+namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.CrystalStorm
 {
 	[Pipeline(typeof(ScreenReflectPipeline))]
 	internal class CrystalParticleStorm : Visual
@@ -38,28 +38,26 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
 		public override void Update()
 		{
 			float Dy = -position.Y;
-			float xCoefficient = (Dy * Dy / 600f) - (0.4f * Dy) + 50;
-			Vector2 TrueAim = new Vector2(xCoefficient * (float)Math.Sin((Main.timeForVisualEffects * 0.1) + 0), 0) - position;
+			float xCoefficient = Dy * Dy / 600f - 0.4f * Dy + 50;
+			Vector2 TrueAim = new Vector2(xCoefficient * (float)Math.Sin(Main.timeForVisualEffects * 0.1 + 0), 0) - position;
 
-			AI2 = (byte)((AI2 * 0.95) + (xCoefficient * 0.05));
+			AI2 = (byte)(AI2 * 0.95 + xCoefficient * 0.05);
 
 			if (!Main.mouseRight)
 			{
-				velocity = (velocity * 0.75f) + (new Vector2(Utils.SafeNormalize(TrueAim, new Vector2(0, 0.05f)).X, 0) * 0.25f / AI2 * 500f);
+				velocity = velocity * 0.75f + new Vector2(TrueAim.SafeNormalize(new Vector2(0, 0.05f)).X, 0) * 0.25f / AI2 * 500f;
 				velocity *= Main.rand.NextFloat(0.85f, 1.15f);
 			}
 			else
 			{
-				velocity = (velocity * 0.75f) + (new Vector2(Utils.SafeNormalize(TrueAim, new Vector2(0, 0.05f)).X, 0) * 0.25f / AI2 * 500f);
+				velocity = velocity * 0.75f + new Vector2(TrueAim.SafeNormalize(new Vector2(0, 0.05f)).X, 0) * 0.25f / AI2 * 500f;
 				velocity *= Main.rand.NextFloat(0.85f, 1.15f);
 			}
 
 			position += velocity;
 			timeLeft -= 1;
 			if (timeLeft <= 0)
-			{
 				Kill();
-			}
 
 			Theta += Ros;
 			po1 = new Vector2(p1.X, p1.Y * (float)Math.Sin(Theta)) * 90 * size;
@@ -67,20 +65,16 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
 			po3 = new Vector2(p3.X, p3.Y * (float)Math.Sin(Theta)) * 90 * size;
 
 			if (timeLeft < 20)
-			{
 				size *= 0.9f;
-			}
 			if (timeLeft > 100)
-			{
 				size *= 1.1f;
-			}
 		}
 
 		public override void Draw()
 		{
 			Color colorD;
 
-			List<Vertex2D> Vx = new List<Vertex2D>();
+			var Vx = new List<Vertex2D>();
 			colorD = new Color(1, 1, velocity.X / 30f, 1f);
 			Vx.Add(new Vertex2D(po1 + position, colorD, new Vector3(0.04f, 0.06f, 0.06f)));
 			Vx.Add(new Vertex2D(po2 + position, colorD, new Vector3(0.02f, 0.03f, 0.09f)));

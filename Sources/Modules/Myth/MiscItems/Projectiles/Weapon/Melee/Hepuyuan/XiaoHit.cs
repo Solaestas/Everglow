@@ -1,7 +1,7 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Modules.MythModule.TheTusk;
+﻿using Everglow.Myth.Common;
+using Everglow.Myth.TheTusk;
 
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee.Hepuyuan
+namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Melee.Hepuyuan
 {
 	class XiaoHit : ModProjectile
 	{
@@ -61,16 +61,14 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
 			for (int i = 0; i < 23; i++)
 			{
 
-				List<VertexBase.CustomVertexInfo> barsII = new List<VertexBase.CustomVertexInfo>();
+				var barsII = new List<VertexBase.CustomVertexInfo>();
 
 
 				for (int z = 1; z < 18; ++z)
 				{
 					float widthII = Math.Clamp((DrawLine[i, z] - DrawLine[i, z - 1]).Length(), 0, 20 * Projectile.ai[0]);//宽度为距离(速度决定,上限20)
 					if (z > 13)
-					{
 						widthII *= (18 - z) / 5f;
-					}
 					var normalDir = Vector2.Normalize(DrawLine[i, z] - DrawLine[i, z - 1]).RotatedBy(1.57);
 					var factor = z / 18f;
 					var w = MathHelper.Lerp(1f, 0.05f, 0.5f);
@@ -78,7 +76,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
 					barsII.Add(new VertexBase.CustomVertexInfo(DrawLine[i, z] + normalDir * -widthII - Main.screenPosition, new Color(0, 0.7f, 1f, 0.5f), new Vector3((float)Math.Sqrt(factor), 0, w)));
 				}
 
-				List<VertexBase.CustomVertexInfo> Vx = new List<VertexBase.CustomVertexInfo>();
+				var Vx = new List<VertexBase.CustomVertexInfo>();
 
 				if (barsII.Count > 2)
 				{

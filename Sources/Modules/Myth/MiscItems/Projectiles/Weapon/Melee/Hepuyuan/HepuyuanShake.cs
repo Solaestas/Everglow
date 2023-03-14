@@ -1,4 +1,4 @@
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee.Hepuyuan
+namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Melee.Hepuyuan
 {
 	public class HepuyuanShake : ModProjectile
 	{
@@ -24,26 +24,26 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
 		public override bool PreDraw(ref Color lightColor)
 		{
 			Player player = Main.player[Projectile.owner];
-			List<Vertex2D> Vx = new List<Vertex2D>();
+			var Vx = new List<Vertex2D>();
 			Vector2 Vbase = Projectile.Center - Main.screenPosition + new Vector2(0, 24 * player.gravDir);
-			Vector2 v0 = new Vector2(0, -1);
-			Vector2 v0T = new Vector2(1, 0);
+			var v0 = new Vector2(0, -1);
+			var v0T = new Vector2(1, 0);
 			float length = Projectile.ai[0];
 			v0 = v0 * length * Math.Clamp((80 - Projectile.timeLeft) / 24f, 0, 1f);
 			v0T = v0T * 77.77f * Projectile.timeLeft / 120f;
 			v0 = v0.RotatedBy(Projectile.rotation);
 			v0T = v0T.RotatedBy(Projectile.rotation);
 
-			Color cr = new Color(0.0f, 0.17f, 0.17f, 0);
+			var cr = new Color(0.0f, 0.17f, 0.17f, 0);
 			float fadeK = Math.Clamp((Projectile.timeLeft - 10) / 24f, 0, 1f);
 
 			Vx.Add(new Vertex2D(Vbase + v0 * 2, cr, new Vector3(1, 0, 0)));
-			Vx.Add(new Vertex2D(Vbase + (v0 + v0T) * fadeK + (v0 * 2) * (1 - fadeK), cr, new Vector3(1, fadeK, 0)));
-			Vx.Add(new Vertex2D(Vbase + (v0 * 2) * (1 - fadeK), cr, new Vector3(1 - fadeK, fadeK, 0)));
+			Vx.Add(new Vertex2D(Vbase + (v0 + v0T) * fadeK + v0 * 2 * (1 - fadeK), cr, new Vector3(1, fadeK, 0)));
+			Vx.Add(new Vertex2D(Vbase + v0 * 2 * (1 - fadeK), cr, new Vector3(1 - fadeK, fadeK, 0)));
 
 			Vx.Add(new Vertex2D(Vbase + v0 * 2, cr, new Vector3(1, 0, 0)));
-			Vx.Add(new Vertex2D(Vbase + (v0 * 2) * (1 - fadeK), cr, new Vector3(1 - fadeK, fadeK, 0)));
-			Vx.Add(new Vertex2D(Vbase + (v0 - v0T) * fadeK + (v0 * 2) * (1 - fadeK), cr, new Vector3(1 - fadeK, 0, 0)));
+			Vx.Add(new Vertex2D(Vbase + v0 * 2 * (1 - fadeK), cr, new Vector3(1 - fadeK, fadeK, 0)));
+			Vx.Add(new Vertex2D(Vbase + (v0 - v0T) * fadeK + v0 * 2 * (1 - fadeK), cr, new Vector3(1 - fadeK, 0, 0)));
 
 			Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Projectiles/Weapon/Melee/Hepuyuan/HepuyuanShake").Value;
 

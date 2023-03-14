@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.BlackHole.Dust
+﻿namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.BlackHole.Dust
 {
 	[Pipeline(typeof(WCSPipeline))]
 	internal class DarkDust : Particle

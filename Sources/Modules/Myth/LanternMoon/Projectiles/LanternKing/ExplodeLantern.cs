@@ -1,7 +1,7 @@
-using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Myth.Common;
 using Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKing.VFXs;
 using Terraria.Audio;
-namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKing
+namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing
 {
 	public class ExplodeLantern : ModProjectile, IWarpProjectile
 	{
@@ -29,16 +29,12 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKin
 		public override void AI()
 		{
 			if (!Appear)
-			{
 				timeToAppear -= 1;
-			}
 			else
 			{
 				Projectile.velocity *= 1.14f;
 				if (Projectile.ai[0] < 1)
-				{
 					Projectile.ai[0] += 0.05f;
-				}
 				else
 				{
 					Projectile.ai[0] = 1f;
@@ -50,16 +46,14 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKin
 					Projectile.hostile = true;
 				}
 				if (Projectile.velocity.Length() > 150)
-				{
 					Projectile.Kill();
-				}
 				for (int g = 0; g < Projectile.velocity.Length() / 22f; g++)
 				{
-					int r = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) - Projectile.velocity / Projectile.velocity.Length() * g * 4, 0, 0, ModContent.DustType<Dusts.Flame>(), 0, 0, 0, default(Color), 4f * Sc);
+					int r = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) - Projectile.velocity / Projectile.velocity.Length() * g * 4, 0, 0, ModContent.DustType<Dusts.Flame>(), 0, 0, 0, default, 4f * Sc);
 					Main.dust[r].noGravity = true;
 					if (Main.rand.Next(100) > 60)
 					{
-						int r0 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) + new Vector2(0, Main.rand.NextFloat(0, 36f)).RotatedByRandom(MathHelper.TwoPi) - Projectile.velocity / Projectile.velocity.Length() * g * 4, 0, 0, ModContent.DustType<Dusts.Flame3>(), 0, 0, 0, default(Color), 7f * Sc);
+						int r0 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) + new Vector2(0, Main.rand.NextFloat(0, 36f)).RotatedByRandom(MathHelper.TwoPi) - Projectile.velocity / Projectile.velocity.Length() * g * 4, 0, 0, ModContent.DustType<Dusts.Flame3>(), 0, 0, 0, default, 7f * Sc);
 						Main.dust[r0].noGravity = true;
 					}
 				}
@@ -74,32 +68,26 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKin
 			if (Projectile.ai[1] % 0.15 == 0)
 			{
 				if (Projectile.frame < 2)
-				{
 					Projectile.frame++;
-				}
 				else
 				{
 					Projectile.frame = 0;
 				}
 			}
 			if (Main.rand.NextBool(4))
-			{
 				GenerateVFX(1);
-			}
 		}
 		public override bool OnTileCollide(Vector2 oldVelocity)
 		{
 			if (Appear)
-			{
 				Projectile.Kill();
-			}
 			return false;
 		}
 		public void GenerateVFXExpolode(int Frequency, float mulVelocity = 1f)
 		{
 			for (int g = 0; g < Frequency * 3; g++)
 			{
-				FlameDust cf = new FlameDust
+				var cf = new FlameDust
 				{
 					velocity = new Vector2(0, Main.rand.NextFloat(4.65f, 5.5f)).RotatedByRandom(6.283) * mulVelocity,
 					Active = true,
@@ -112,7 +100,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKin
 			}
 			for (int g = 0; g < Frequency; g++)
 			{
-				FlameDust cf = new FlameDust
+				var cf = new FlameDust
 				{
 					velocity = new Vector2(0, Main.rand.NextFloat(6.65f, 10.5f)).RotatedByRandom(6.283) * mulVelocity,
 					Active = true,
@@ -129,9 +117,9 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKin
 			float mulVelocity = 1f;
 			for (int g = 0; g < Frequency; g++)
 			{
-				FlameDust cf = new FlameDust
+				var cf = new FlameDust
 				{
-					velocity = Projectile.velocity * Main.rand.NextFloat(0.65f, 2.5f) * mulVelocity + Utils.SafeNormalize(Projectile.velocity, new Vector2(0, -1)),
+					velocity = Projectile.velocity * Main.rand.NextFloat(0.65f, 2.5f) * mulVelocity + Projectile.velocity.SafeNormalize(new Vector2(0, -1)),
 					Active = true,
 					Visible = true,
 					position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * 1,
@@ -151,7 +139,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKin
 			for (int d = 0; d < 70; d++)
 			{
 				Vector2 BasePos = Projectile.Center - new Vector2(4) - Projectile.velocity;
-				Dust d0 = Dust.NewDustDirect(BasePos, 0, 0, DustID.Torch, 0, 0, 0, default, 0.6f);
+				var d0 = Dust.NewDustDirect(BasePos, 0, 0, DustID.Torch, 0, 0, 0, default, 0.6f);
 				d0.velocity = new Vector2(0, Main.rand.NextFloat(3.65f, 7.5f)).RotatedByRandom(6.283);
 			}
 
@@ -176,9 +164,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKin
 				{
 					float Dis = (player.Center - Projectile.Center).Length();
 					if (Dis < 125)
-					{
 						Projectile.NewProjectile(Projectile.GetSource_FromAI(), player.Center, Vector2.Zero, HitType, Projectile.damage, Projectile.knockBack, Projectile.owner);
-					}
 				}
 			}
 			SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithVolumeScale(0.4f), Projectile.Center);
@@ -186,14 +172,14 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKin
 		public override bool PreDraw(ref Color lightColor)
 		{
 			DrawTrail();
-			Texture2D texture2D = (Texture2D)ModContent.Request<Texture2D>(Texture);
+			var texture2D = (Texture2D)ModContent.Request<Texture2D>(Texture);
 			int frameHeight = texture2D.Height;
 
 			if (Appear)
 			{
 				float ColorValue = 1f * Projectile.ai[0] * (float)(Math.Sin(Projectile.ai[1]) + 2) / 3f;
-				Color colorT = new Color(ColorValue, ColorValue, ColorValue, 0.5f * ColorValue);
-				Main.spriteBatch.Draw(texture2D, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), new Rectangle?(new Rectangle(0, 0, texture2D.Width, frameHeight)), colorT, Projectile.rotation, new Vector2((float)texture2D.Width / 2f, frameHeight / 2f), Projectile.scale, SpriteEffects.None, 1f);
+				var colorT = new Color(ColorValue, ColorValue, ColorValue, 0.5f * ColorValue);
+				Main.spriteBatch.Draw(texture2D, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), new Rectangle?(new Rectangle(0, 0, texture2D.Width, frameHeight)), colorT, Projectile.rotation, new Vector2(texture2D.Width / 2f, frameHeight / 2f), Projectile.scale, SpriteEffects.None, 1f);
 				Main.spriteBatch.Draw(MythContent.QuickTexture("LanternMoon/Projectiles/LanternKing/LanternFire"), Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), new Rectangle?(new Rectangle(0, 30 * Projectile.frame, 20, 30)), colorT, 0, new Vector2(10, 15), Projectile.scale * 0.5f, SpriteEffects.None, 1f);
 			}
 
@@ -203,9 +189,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKin
 				v.Y *= 0.2f;
 				float S = 1f / v.Length() + 0.2f;
 				if (Projectile.velocity.Length() > 0.01f)
-				{
-					S /= (Projectile.velocity.Length() * 100f);
-				}
+					S /= Projectile.velocity.Length() * 100f;
 				Main.spriteBatch.Draw(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/LightEffect"), Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY) + v, new Rectangle?(new Rectangle(0, 0, 256, 256)), new Color(S, 0, 0, 0), 0, new Vector2(128, 128f), 0.7f * (S + 0.2f), SpriteEffects.None, 1f);
 			}
 			return false;
@@ -230,16 +214,14 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKin
 		{
 			float DrawC = Projectile.ai[0] * Projectile.ai[0];
 
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 			int TrueL = 0;
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
 				if (Projectile.oldPos[i] == Vector2.Zero)
 				{
 					if (i == 1)
-					{
 						return;
-					}
 					break;
 				}
 
@@ -248,17 +230,13 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKin
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
 				if (Projectile.oldPos[i] == Vector2.Zero)
-				{
 					break;
-				}
 
 				float width = 6;
 				if (Projectile.timeLeft <= 30)
-				{
 					width *= Projectile.timeLeft / 30f;
-				}
 				var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
-				normalDir = Utils.SafeNormalize(new Vector2(-normalDir.Y, normalDir.X), Vector2.Zero);
+				normalDir = new Vector2(-normalDir.Y, normalDir.X).SafeNormalize(Vector2.Zero);
 
 				var factor = i / (float)TrueL;
 				var color = Color.Lerp(new Color(DrawC, DrawC, DrawC, 0), new Color(0, 0, 0, 0), factor);

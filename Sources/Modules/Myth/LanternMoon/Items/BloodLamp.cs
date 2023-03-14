@@ -1,7 +1,9 @@
-﻿using Everglow.Sources.Modules.MythModule.LanternMoon.LanternCommon;
+﻿using Everglow.Myth;
+using Everglow.Myth.LanternMoon.LanternCommon;
+using Everglow.Myth.LanternMoon.Projectiles;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.LanternMoon.Items
+namespace Everglow.Myth.LanternMoon.Items
 {
 	public class BloodLamp : ModItem
 	{
@@ -36,19 +38,17 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Items
 			//}
 			for (int x = 0; x < Main.maxProjectiles; x++)
 			{
-				if (Main.projectile[x].type == ModContent.ProjectileType<Projectiles.BloodLampProj>() && Main.projectile[x].active)
-				{
+				if (Main.projectile[x].type == ModContent.ProjectileType<BloodLampProj>() && Main.projectile[x].active)
 					return false;
-				}
 			}
 			LanternMoonProgress LanternMoon = ModContent.GetInstance<LanternMoonProgress>();
 			if (!LanternMoon.OnLanternMoon && !Main.dayTime && !Main.snowMoon && !Main.pumpkinMoon)
 			{
-				Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center + new Vector2(12, 0) * player.direction, new Vector2(16, 0) * player.direction, ModContent.ProjectileType<Projectiles.BloodLampProj>(), 0, 0, player.whoAmI);
+				Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center + new Vector2(12, 0) * player.direction, new Vector2(16, 0) * player.direction, ModContent.ProjectileType<BloodLampProj>(), 0, 0, player.whoAmI);
 				LanternMoon.OnLanternMoon = true;
 				LanternMoon.Point = 0;
 				LanternMoon.WavePoint = 0;
-				Color messageColor = new Color(175, 75, 255);
+				var messageColor = new Color(175, 75, 255);
 				Color messageColor1 = Color.PaleGreen;
 				Main.NewText(Language.GetTextValue("Lantern Moon is raising..."), messageColor1);
 				Main.NewText(Language.GetTextValue("Wave 1:"), messageColor);

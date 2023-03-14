@@ -1,6 +1,6 @@
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles;
+namespace Everglow.Myth.Bosses.Acytaea.Projectiles;
 
 public class playerHit : ModProjectile
 {

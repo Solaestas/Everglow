@@ -2,7 +2,7 @@
 using Terraria.GameContent.Creative;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Weapons
+namespace Everglow.Myth.TheTusk.Items.Weapons
 {
 	public class ToothMagicBall : ModItem
 	{
@@ -38,9 +38,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Weapons
 		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
 			if (player.ownedProjectileCounts[ModContent.ProjectileType<Projectiles.Weapon.ToothMagicBall>()] < 1)
-			{
 				return true;
-			}
 			return false;
 		}
 	}

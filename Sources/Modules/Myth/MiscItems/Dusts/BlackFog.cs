@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Dusts
+﻿namespace Everglow.Myth.MiscItems.Dusts
 {
 	public class BlackFog : ModDust
 	{
@@ -7,7 +7,7 @@
 			dust.noGravity = true;
 			dust.noLight = true;
 			dust.scale *= 1f;
-			dust.rotation = Main.rand.NextFloat((float)(Math.PI));
+			dust.rotation = Main.rand.NextFloat((float)Math.PI);
 		}
 		public override bool Update(Dust dust)
 		{
@@ -16,9 +16,7 @@
 			dust.scale *= 0.995f;
 			dust.velocity.X = (float)(Math.Sin(Main.time / 30d + dust.frame.Y) * 0.3f * dust.scale);
 			if (dust.scale < 0.05f)
-			{
 				dust.active = false;
-			}
 			return false;
 		}
 		public override Color? GetAlpha(Dust dust, Color lightColor)

@@ -1,7 +1,7 @@
-﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories;
+﻿using Everglow.Myth.TheFirefly.Items.Accessories;
 using Terraria.GameContent;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
+namespace Everglow.Myth.TheFirefly.Projectiles
 {
 	internal class MothYoyoProjectile : ModProjectile
 	{
@@ -40,7 +40,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			{
 				for (int i = 0; i < cubeVec.Length; i++)
 				{
-					Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<MothYoyoSub>(), Projectile.damage / 2, 0, Projectile.owner, Projectile.whoAmI);
+					var proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<MothYoyoSub>(), Projectile.damage / 2, 0, Projectile.owner, Projectile.whoAmI);
 					(proj.ModProjectile as MothYoyoSub).targetPos = cubeVec[i] * 30;
 					proj.CritChance = Projectile.CritChance;
 					proj.netUpdate2 = true;
@@ -51,7 +51,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 					{
 						for (int i = 0; i < cubeVec.Length; i++)
 						{
-							Projectile proj2 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<MothYoyoSub>(), Projectile.damage / 2, 0, Projectile.owner, Projectile.whoAmI);
+							var proj2 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<MothYoyoSub>(), Projectile.damage / 2, 0, Projectile.owner, Projectile.whoAmI);
 							(proj2.ModProjectile as MothYoyoSub).targetPos = cubeVec[i] * 60;
 							proj2.CritChance = Projectile.CritChance;
 							proj2.netUpdate2 = true;
@@ -76,17 +76,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			{
 				int num6 = -1;
 				if (Projectile.position.X + Projectile.width / 2 < Main.player[Projectile.owner].position.X + Main.player[Projectile.owner].width / 2)
-				{
 					num6 = 1;
-				}
 				num6 *= -1;
 				Main.player[Projectile.owner].itemRotation = (float)Math.Atan2((double)(num5 * num6), (double)(num4 * num6));
 			}
 			bool flag = true;
 			if (num4 == 0f && num5 == 0f)
-			{
 				flag = false;
-			}
 			else
 			{
 				float num7 = (float)Math.Sqrt((double)(num4 * num4 + num5 * num5));
@@ -104,9 +100,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 				float num9 = (float)Math.Sqrt((double)(num4 * num4 + num5 * num5));
 				float num10 = num9;
 				if (float.IsNaN(num9) || float.IsNaN(num10))
-				{
 					flag = false;
-				}
 				else
 				{
 					if (num9 < 20f)
@@ -126,21 +120,15 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 						float num11 = 0.3f;
 						float num12 = Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y);
 						if (num12 > 16f)
-						{
 							num12 = 16f;
-						}
 						num12 = 1f - num12 / 16f;
 						num11 *= num12;
 						num12 = num10 / 80f;
 						if (num12 > 1f)
-						{
 							num12 = 1f;
-						}
 						num11 *= num12;
 						if (num11 < 0f)
-						{
 							num11 = 0f;
-						}
 						num11 *= num12;
 						num11 *= 0.5f;
 						if (num5 > 0f)
@@ -152,27 +140,23 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 						{
 							num12 = Math.Abs(Projectile.velocity.X) / 3f;
 							if (num12 > 1f)
-							{
 								num12 = 1f;
-							}
 							num12 -= 0.5f;
 							num11 *= num12;
 							if (num11 > 0f)
-							{
 								num11 *= 2f;
-							}
 							num5 *= 1f + num11;
 							num4 *= 1f - num11;
 						}
 					}
 					rotation = (float)Math.Atan2((double)num5, (double)num4) - 1.57f;
-					Microsoft.Xna.Framework.Color color = Microsoft.Xna.Framework.Color.White;
+					Color color = Color.White;
 					color.A = (byte)(color.A * 0.4f);
 					color = new Color(0, 150, 255, 0) * 0.5f;//改个色
 															 //Main.NewText(color);
 															 //color = Lighting.GetColor((int)vector.X / 16, (int)(vector.Y / 16f), color);
 															 //color = new Microsoft.Xna.Framework.Color((int)((byte)((float)color.R * num13)), (int)((byte)((float)color.G * num13)), (int)((byte)((float)color.B * num13)), (int)((byte)((float)color.A * num13)));
-					Main.EntitySpriteDraw(TextureAssets.FishingLine.Value, new Vector2(vector.X - Main.screenPosition.X + TextureAssets.FishingLine.Width() * 0.5f, vector.Y - Main.screenPosition.Y + TextureAssets.FishingLine.Height() * 0.5f) - new Vector2(6f, 0f), new Microsoft.Xna.Framework.Rectangle?(new Microsoft.Xna.Framework.Rectangle(0, 0, TextureAssets.FishingLine.Width(), (int)num8)), color, rotation, new Vector2(TextureAssets.FishingLine.Width() * 0.5f, 0f), 1f, SpriteEffects.None, 0);
+					Main.EntitySpriteDraw(TextureAssets.FishingLine.Value, new Vector2(vector.X - Main.screenPosition.X + TextureAssets.FishingLine.Width() * 0.5f, vector.Y - Main.screenPosition.Y + TextureAssets.FishingLine.Height() * 0.5f) - new Vector2(6f, 0f), new Rectangle?(new Rectangle(0, 0, TextureAssets.FishingLine.Width(), (int)num8)), color, rotation, new Vector2(TextureAssets.FishingLine.Width() * 0.5f, 0f), 1f, SpriteEffects.None, 0);
 				}
 			}
 

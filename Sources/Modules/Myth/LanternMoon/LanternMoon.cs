@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.LanternMoon
+﻿namespace Everglow.Myth.LanternMoon
 {
 	public class LanternMoon : ModSystem//灯笼月
 	{

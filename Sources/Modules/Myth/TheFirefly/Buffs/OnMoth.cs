@@ -1,6 +1,7 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
+using Everglow.Myth.TheFirefly.Projectiles;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Buffs
+namespace Everglow.Myth.TheFirefly.Buffs
 {
 	public class OnMoth : ModBuff
 	{
@@ -18,7 +19,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Buffs
 				{
 					if (npc.buffTime[t] < 10)
 					{
-						MothBuffTarget mothBuffTarget = new MothBuffTarget
+						var mothBuffTarget = new MothBuffTarget
 						{
 							MothStack = 0
 						};
@@ -38,10 +39,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Buffs
 		{
 			if (npc.HasBuff(ModContent.BuffType<OnMoth>()))
 			{
-				if (projectile.type == ModContent.ProjectileType<Projectiles.DarkFanFly>() || projectile.type == ModContent.ProjectileType<Projectiles.GlowingButterfly>())
-				{
-					damage *= (int)(1.0f + (MothStack) / 10f);
-				}
+				if (projectile.type == ModContent.ProjectileType<DarkFanFly>() || projectile.type == ModContent.ProjectileType<GlowingButterfly>())
+					damage *= (int)(1.0f + MothStack / 10f);
 			}
 			base.ModifyHitByProjectile(npc, projectile, ref damage, ref knockback, ref crit, ref hitDirection);
 		}
@@ -57,7 +56,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Buffs
 					if (npc.buffType[t] == ModContent.BuffType<OnMoth>())
 					{
 						Stre = Math.Clamp((npc.buffTime[t] - 280) / 20f, 0, 1);
-						Stre2 = Math.Clamp((npc.buffTime[t]) / 120f, 0, 0.3f);
+						Stre2 = Math.Clamp(npc.buffTime[t] / 120f, 0, 0.3f);
 						break;
 					}
 				}

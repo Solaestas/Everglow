@@ -3,7 +3,7 @@ using Terraria.Enums;
 using Terraria.GameContent;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Summon
+namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Summon
 {
 	public class AshBone : ModProjectile
 	{
@@ -33,13 +33,13 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Summo
 		private int PreC = 0;
 		public override bool? CanCutTiles()
 		{
-			this.WhipPointsForCollision.Clear();
+			WhipPointsForCollision.Clear();
 			FillWhipControlPoints(Projectile, WhipPointsForCollision);
-			Vector2 value = new Vector2((float)Projectile.width * Projectile.scale / 2f, 0f);
-			for (int i = 0; i < this.WhipPointsForCollision.Count; i++)
+			var value = new Vector2(Projectile.width * Projectile.scale / 2f, 0f);
+			for (int i = 0; i < WhipPointsForCollision.Count; i++)
 			{
 				DelegateMethods.tilecut_0 = TileCuttingContext.AttackProjectile;
-				Utils.PlotTileLine(this.WhipPointsForCollision[i] - value, this.WhipPointsForCollision[i] + value, (float)Projectile.height * Projectile.scale, new Utils.TileActionAttempt(DelegateMethods.CutTiles));
+				Utils.PlotTileLine(WhipPointsForCollision[i] - value, WhipPointsForCollision[i] + value, Projectile.height * Projectile.scale, new Utils.TileActionAttempt(DelegateMethods.CutTiles));
 			}
 			return base.CanCutTiles();
 		}
@@ -49,17 +49,15 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Summo
 		}
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{
-			this.WhipPointsForCollision.Clear();
-			FillWhipControlPoints(Projectile, this.WhipPointsForCollision);
+			WhipPointsForCollision.Clear();
+			FillWhipControlPoints(Projectile, WhipPointsForCollision);
 
-			for (int n = 0; n < this.WhipPointsForCollision.Count; n++)
+			for (int n = 0; n < WhipPointsForCollision.Count; n++)
 			{
-				Point point = this.WhipPointsForCollision[n].ToPoint();
+				var point = WhipPointsForCollision[n].ToPoint();
 				projHitbox.Location = new Point(point.X - projHitbox.Width / 2, point.Y - projHitbox.Height / 2);
 				if (projHitbox.Intersects(targetHitbox))
-				{
 					return true;
-				}
 			}
 			return false;
 		}
@@ -81,16 +79,16 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Summo
 			GetWhipSettings(Projectile, out num, out num2, out num3);
 			Projectile.tileCollide = false;
 			Projectile.Center = Main.GetPlayerArmPosition(Projectile) + Projectile.velocity * (Projectile.ai[0] - 1f);
-			Projectile.spriteDirection = ((Vector2.Dot(Projectile.velocity, Vector2.UnitX) < 0f) ? -1 : 1);
+			Projectile.spriteDirection = Vector2.Dot(Projectile.velocity, Vector2.UnitX) < 0f ? -1 : 1;
 			if (Projectile.ai[0] >= num || player.itemAnimation == 0)
 			{
 				Projectile.Kill();
 				return;
 			}
 			player.heldProj = Projectile.whoAmI;
-			player.itemAnimation = player.itemAnimationMax - (int)(Projectile.ai[0] / (float)Projectile.MaxUpdates);
+			player.itemAnimation = player.itemAnimationMax - (int)(Projectile.ai[0] / Projectile.MaxUpdates);
 			player.itemTime = player.itemAnimation;
-			if (Projectile.ai[0] == (float)((int)(num / 2f)))
+			if (Projectile.ai[0] == (int)(num / 2f))
 			{
 				WhipPointsForCollision.Clear();
 				FillWhipControlPoints(Projectile, WhipPointsForCollision);
@@ -106,22 +104,20 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Summo
 				Rectangle rectangle = Utils.CenteredRectangle(WhipPointsForCollision[num5], new Vector2(30f, 30f));
 				int num6 = 57;
 				if (Main.rand.NextBool(3))
-				{
 					num6 = 43;
-				}
-				Dust dust = Dust.NewDustDirect(rectangle.TopLeft(), rectangle.Width, rectangle.Height, DustID.Bone, 0f, 0f, 100, Color.White, 1f);
+				var dust = Dust.NewDustDirect(rectangle.TopLeft(), rectangle.Width, rectangle.Height, DustID.Bone, 0f, 0f, 100, Color.White, 1f);
 				dust.position = WhipPointsForCollision[num5];
 				dust.fadeIn = 0.3f;
 				Vector2 spinningpoint = WhipPointsForCollision[num5] - WhipPointsForCollision[num5 - 1];
 				dust.noGravity = true;
 				dust.velocity *= 0.5f;
-				dust.velocity += spinningpoint.RotatedBy((double)((float)player.direction * 1.5707964f), default(Vector2));
+				dust.velocity += spinningpoint.RotatedBy((double)(player.direction * 1.5707964f), default);
 				dust.velocity *= 0.5f;
 			}
 		}
 		public static void GetWhipSettings(Projectile proj, out float timeToFlyOut, out int segments, out float rangeMultiplier)
 		{
-			timeToFlyOut = (float)(Main.player[proj.owner].itemAnimationMax * proj.MaxUpdates);
+			timeToFlyOut = Main.player[proj.owner].itemAnimationMax * proj.MaxUpdates;
 			rangeMultiplier = 1f;
 			int num = proj.type;
 
@@ -137,7 +133,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Summo
 			float num4 = proj.ai[0] / num;
 			float num5 = 0.5f;
 			float num6 = 1f + num5;
-			float num7 = 31.415928f * (1f - num4 * num6) * (float)(-(float)proj.spriteDirection) / (float)num2;
+			float num7 = 31.415928f * (1f - num4 * num6) * (float)-(float)proj.spriteDirection / num2;
 			float num8 = num4 * num6;
 			float num9 = 0f;
 			if (num8 > 1f)
@@ -148,33 +144,33 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Summo
 			float num10 = proj.ai[0] - 1f;
 			Player player = Main.player[proj.owner];
 			Item heldItem = Main.player[proj.owner].HeldItem;
-			num10 = (float)(ContentSamples.ItemsByType[heldItem.type].useAnimation * 2) * num4 * player.whipRangeMultiplier;
-			float num11 = proj.velocity.Length() * num10 * num8 * num3 / (float)num2;
+			num10 = ContentSamples.ItemsByType[heldItem.type].useAnimation * 2 * num4 * player.whipRangeMultiplier;
+			float num11 = proj.velocity.Length() * num10 * num8 * num3 / num2;
 			float num12 = 1f;
 			Vector2 playerArmPosition = Main.GetPlayerArmPosition(proj);
 			Vector2 vector = playerArmPosition;
 			float num13 = 0f;
 			float num14 = num13 - 1.5707964f;
 			Vector2 value = vector;
-			float num15 = num13 + 1.5707964f + 1.5707964f * (float)proj.spriteDirection;
+			float num15 = num13 + 1.5707964f + 1.5707964f * proj.spriteDirection;
 			Vector2 value2 = vector;
 			float num16 = num13 + 1.5707964f;
 			controlPoints.Add(playerArmPosition);
 			for (int i = 0; i < num2; i++)
 			{
-				float num17 = (float)i / (float)num2;
+				float num17 = i / (float)num2;
 				float num18 = num7 * num17 * num12;
 				Vector2 vector2 = vector + num14.ToRotationVector2() * num11;
 				Vector2 vector3 = value2 + num16.ToRotationVector2() * (num11 * 2f);
 				Vector2 vector4 = value + num15.ToRotationVector2() * (num11 * 2f);
 				float num19 = 1f - num8;
 				float num20 = 1f - num19 * num19;
-				Vector2 value3 = Vector2.Lerp(vector3, vector2, num20 * 0.9f + 0.1f);
-				Vector2 value4 = Vector2.Lerp(vector4, value3, num20 * 0.7f + 0.3f);
+				var value3 = Vector2.Lerp(vector3, vector2, num20 * 0.9f + 0.1f);
+				var value4 = Vector2.Lerp(vector4, value3, num20 * 0.7f + 0.3f);
 				Vector2 spinningpoint = playerArmPosition + (value4 - playerArmPosition) * new Vector2(1f, num6);
 				float num21 = num9;
 				num21 *= num21;
-				Vector2 item = spinningpoint.RotatedBy((double)(proj.rotation + 4.712389f * num21 * (float)proj.spriteDirection), playerArmPosition);
+				Vector2 item = spinningpoint.RotatedBy((double)(proj.rotation + 4.712389f * num21 * proj.spriteDirection), playerArmPosition);
 				controlPoints.Add(item);
 				num14 += num18;
 				num16 += num18;
@@ -193,15 +189,15 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Summo
 		private void DrawWhip(Projectile proj)
 		{
 			Player player = Main.player[Projectile.owner];
-			List<Vector2> list = new List<Vector2>();
+			var list = new List<Vector2>();
 			FillWhipControlPoints(proj, list);
 			Texture2D value = TextureAssets.Projectile[proj.type].Value;
 			//Texture2D value = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Projectiles/Weapon/Summon/AshBone2").Value;
-			Microsoft.Xna.Framework.Rectangle rectangle = value.Frame(1, 1, 0, 0, 0, 0);
-			Vector2 origin = new Vector2((float)(rectangle.Width / 2), 2f);
-			Microsoft.Xna.Framework.Color originalColor = Microsoft.Xna.Framework.Color.White;
+			Rectangle rectangle = value.Frame(1, 1, 0, 0, 0, 0);
+			var origin = new Vector2(rectangle.Width / 2, 2f);
+			Color originalColor = Color.White;
 			int type = proj.type;
-			originalColor = Microsoft.Xna.Framework.Color.OrangeRed;
+			originalColor = Color.OrangeRed;
 			Vector2 value2 = list[0];
 			for (int i = 0; i < list.Count - 1; i++)
 			{
@@ -209,9 +205,9 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Summo
 				Vector2 vector2 = list[i + 1] - vector;
 				float rotation = vector2.ToRotation() - 1.5707964f;
 				Vector2 vector3 = value2;
-				Microsoft.Xna.Framework.Color color = Lighting.GetColor(vector3.ToTileCoordinates());
-				Vector2 scale = new Vector2(1f, (vector2.Length() + 2f) / (float)rectangle.Height);
-				Main.spriteBatch.Draw(value, value2 - Main.screenPosition, new Microsoft.Xna.Framework.Rectangle?(rectangle), color, rotation, origin, scale, SpriteEffects.None, 0f);
+				Color color = Lighting.GetColor(vector3.ToTileCoordinates());
+				var scale = new Vector2(1f, (vector2.Length() + 2f) / rectangle.Height);
+				Main.spriteBatch.Draw(value, value2 - Main.screenPosition, new Rectangle?(rectangle), color, rotation, origin, scale, SpriteEffects.None, 0f);
 
 				for (int x = -3; x < 4; x++)
 				{
@@ -219,9 +215,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Summo
 					{
 						int TT = Main.tile[(int)(value2.X / 16f) + x, (int)(value2.Y / 16f) + y].TileType;
 						if (TT == 3 || TT == 69 || TT == 71 || TT == 73 || TT == 74 || TT == 82 || TT == TileID.Pots || TT == TileID.VineFlowers || TT == TileID.Vines || TT == TileID.CrimsonVines || TT == TileID.CrimsonVines || TT == TileID.HallowedVines || TT == TileID.JungleVines || TT == 84 || TT == 110 || TT == 113 || TT == 184 || TT == 236 || TT == 24 || TT == 32)
-						{
 							WorldGen.KillTile((int)(value2.X / 16f) + x, (int)(value2.Y / 16f) + y);
-						}
 					}
 				}
 
@@ -236,18 +230,16 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Summo
 							Main.npc[j].StrikeNPC((int)(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f)), 8, Math.Sign(Projectile.velocity.X), Main.rand.Next(100) < CritC);
 							player.addDPS((int)(Projectile.damage * (1 + CritC / 100f) * 1.0f));
 							int[] array = Projectile.localNPCImmunity;
-							bool flag = (!Projectile.usesLocalNPCImmunity && !Projectile.usesIDStaticNPCImmunity) || (Projectile.usesLocalNPCImmunity && array[j] == 0) || (Projectile.usesIDStaticNPCImmunity && Projectile.IsNPCIndexImmuneToProjectileType(Projectile.type, j));
+							bool flag = !Projectile.usesLocalNPCImmunity && !Projectile.usesIDStaticNPCImmunity || Projectile.usesLocalNPCImmunity && array[j] == 0 || Projectile.usesIDStaticNPCImmunity && Projectile.IsNPCIndexImmuneToProjectileType(Projectile.type, j);
 							if (Main.npc[j].active && !Main.npc[j].dontTakeDamage && flag && (Main.npc[j].aiStyle != 112 || Main.npc[j].ai[2] <= 1f))
 							{
 								if (Main.npc[j].active)
-								{
 									Main.player[Projectile.owner].MinionAttackTargetNPC = j;
-								}
 							}
 							for (int z = 0; z < 40; z++)
 							{
 								Vector2 v4 = new Vector2(0, Main.rand.NextFloat(0.15f, 5.05f)).RotatedByRandom(MathHelper.TwoPi);
-								int h = Dust.NewDust(Main.npc[j].Center, 0, 0, DustID.Bone, v4.X, v4.Y, 0, default(Color), Main.rand.NextFloat(1.5f, 3f));
+								int h = Dust.NewDust(Main.npc[j].Center, 0, 0, DustID.Bone, v4.X, v4.Y, 0, default, Main.rand.NextFloat(1.5f, 3f));
 								Main.dust[h].noGravity = true;
 							}
 							for (int z = 0; z < 12; z++)
@@ -257,7 +249,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Summo
 								{
 									//SoundEngine.PlaySound(SoundID.Item33, Projectile.Center);
 									Vector2 v = new Vector2(0, Main.rand.NextFloat(4f, 8f)).RotatedBy(Math.PI * z / 6d + num7);
-									int num2 = Projectile.NewProjectile(Projectile.InheritSource(Projectile), Main.npc[j].Center + v * 7, v, ProjectileID.Bone, Projectile.damage, 0.2f, Main.LocalPlayer.whoAmI, player.GetCritChance(DamageClass.Summon), (int)(Projectile.damage * 0.3));
+									int num2 = Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Main.npc[j].Center + v * 7, v, ProjectileID.Bone, Projectile.damage, 0.2f, Main.LocalPlayer.whoAmI, player.GetCritChance(DamageClass.Summon), (int)(Projectile.damage * 0.3));
 									PreC += 1;
 								}
 							}
@@ -267,21 +259,19 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Summo
 				value2 += vector2;
 			}
 			value = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Projectiles/Weapon/Summon/AshBone3").Value;
-			originalColor = Microsoft.Xna.Framework.Color.OrangeRed;
+			originalColor = Color.OrangeRed;
 			rectangle = value.Frame(1, 1, 0, 0, 0, 0);
 			value2 = list[0];
 			for (int i = 0; i < list.Count - 1; i++)
 			{
 				if (i == list.Count - 2)
-				{
 					value = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Projectiles/Weapon/Summon/AshBone4").Value;
-				}
 				Vector2 vector = list[i];
 				Vector2 vector2 = list[i + 1] - vector;
 				float rotation = vector2.ToRotation() - 1.5707964f;
 				Vector2 vector3 = value2;
-				Microsoft.Xna.Framework.Color color = Lighting.GetColor(vector3.ToTileCoordinates());
-				Vector2 scale = new Vector2(1f, 1f);
+				Color color = Lighting.GetColor(vector3.ToTileCoordinates());
+				var scale = new Vector2(1f, 1f);
 				Main.spriteBatch.Draw(value, value2 - Main.screenPosition, null, color, rotation, origin, scale, SpriteEffects.None, 0f);
 				value2 += vector2;
 			}

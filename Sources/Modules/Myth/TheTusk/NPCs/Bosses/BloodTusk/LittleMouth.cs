@@ -1,6 +1,6 @@
 ﻿using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
+namespace Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk
 {
 	public class LittleMouth : ModNPC
 	{
@@ -26,13 +26,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 			NPC.dontTakeDamage = true;
 			NPC.damage = 80;
 			if (Main.expertMode)
-			{
 				NPC.damage = 120;
-			}
 			if (Main.masterMode)
-			{
 				NPC.damage = 150;
-			}
 		}
 		private int Ty = 0;
 		private int Tokill = -1;
@@ -41,13 +37,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 		{
 			NPC.rotation = (float)(Math.Atan2(NPC.velocity.Y, NPC.velocity.X) + Math.PI / 2d);
 			if (!Collision.SolidCollision(NPC.Center, 1, 1) && Ty == 0)
-			{
 				Ty += 1;
-			}
 			if (Ty >= 1)
-			{
 				cooling--;
-			}
 			if (Collision.SolidCollision(NPC.Center, 1, 1) && Ty == 1 && cooling <= 0)
 			{
 				Ty += 1;
@@ -62,18 +54,12 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 			{
 				Tokill--;
 				if (Tokill <= 3)
-				{
 					NPC.active = false;
-				}
 			}
 			if (Big < BigMax)
-			{
 				Big += 0.02f;
-			}
 			if (Big >= BigMax && !MaxB)
-			{
 				MaxB = true;
-			}
 			if (MaxB)
 			{
 				Big -= 0.15f;

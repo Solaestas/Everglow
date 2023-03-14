@@ -1,6 +1,6 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Gores
+namespace Everglow.Myth.TheTusk.Gores
 {
 
 	public abstract class LiquidGore : ModGore
@@ -23,13 +23,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Gores
 		private string CheckHasNameSpace(string path)
 		{
 			if (!path.Contains("Everglow"))
-			{
 				return "Everglow/" + path;
-			}
 			if (path.Contains("Everglow/Everglow/"))
-			{
 				return path.Replace("Everglow/Everglow/", "Everglow/");
-			}
 			return path;
 		}
 		public virtual void SSD()
@@ -79,18 +75,16 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Gores
 	{
 		public static void Load()
 		{
-			Terraria.On_Main.DrawGore += DrawShaderLiquid;
+			On_Main.DrawGore += DrawShaderLiquid;
 		}
-		private static void DrawShaderLiquid(Terraria.On_Main.orig_DrawGore orig, Terraria.Main self)
+		private static void DrawShaderLiquid(On_Main.orig_DrawGore orig, Main self)
 		{
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 			foreach (Gore gore in Main.gore)
 			{
 				if (gore.ModGore is LiquidGore dGore && gore.active)
-				{
 					dGore.DrawDissolve(gore);
-				}
 			}
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);

@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Accessories
+﻿namespace Everglow.Myth.MiscItems.Accessories
 {
 	public class Odd8Ring : ModItem
 	{
@@ -28,9 +28,7 @@
 			if (Odd8Enable)
 			{
 				if (damage < 8)
-				{
 					GoldStrike = 1;
-				}
 				damage = Math.Max(8, damage);
 			}
 		}
@@ -39,9 +37,7 @@
 			if (Odd8Enable)
 			{
 				if (damage < 8)
-				{
 					GoldStrike = 1;
-				}
 				damage = Math.Max(8, damage);
 			}
 		}
@@ -50,9 +46,7 @@
 			if (Odd8Enable)
 			{
 				if (damage < 8)
-				{
 					GoldStrike = 1;
-				}
 				damage = Math.Max(8, damage);
 			}
 		}
@@ -62,18 +56,16 @@
 			if (Odd8Enable)
 			{
 				if (damage < 8)
-				{
 					GoldStrike = 1;
-				}
 				damage = Math.Max(8, damage);
 			}
 		}
 		public static int GoldStrike = 0;
 		public override void Load()
 		{
-			Terraria.On_CombatText.NewText_Rectangle_Color_string_bool_bool += CombatText_NewText_Rectangle_Color_string_bool_bool;
+			On_CombatText.NewText_Rectangle_Color_string_bool_bool += CombatText_NewText_Rectangle_Color_string_bool_bool;
 		}
-		private int CombatText_NewText_Rectangle_Color_string_bool_bool(Terraria.On_CombatText.orig_NewText_Rectangle_Color_string_bool_bool orig, Rectangle location, Color color, string text, bool dramatic, bool dot)
+		private int CombatText_NewText_Rectangle_Color_string_bool_bool(On_CombatText.orig_NewText_Rectangle_Color_string_bool_bool orig, Rectangle location, Color color, string text, bool dramatic, bool dot)
 		{
 			if (GoldStrike > 0)
 			{

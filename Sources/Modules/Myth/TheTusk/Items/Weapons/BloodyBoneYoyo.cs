@@ -1,7 +1,7 @@
 ﻿using Terraria.GameContent.Creative;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Weapons
+namespace Everglow.Myth.TheTusk.Items.Weapons
 {
 	public class BloodyBoneYoyo : ModItem
 	{
@@ -36,7 +36,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Weapons
 			Item.noMelee = true;
 			Item.value = Item.sellPrice(0, 0, 2, 0);
 			Item.rare = ItemRarityID.Green;
-			ItemID.Sets.Yoyo[base.Item.type] = true;
+			ItemID.Sets.Yoyo[Item.type] = true;
 		}
 	}
 }

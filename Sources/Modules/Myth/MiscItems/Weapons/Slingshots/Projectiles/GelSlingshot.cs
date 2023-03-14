@@ -1,6 +1,6 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
 
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Projectiles
+namespace Everglow.Myth.MiscItems.Weapons.Slingshots.Projectiles
 {
 	internal class GelSlingshot : SlingshotProjectile
 	{
@@ -15,18 +15,14 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
 			Color drawColor = Lighting.GetColor((int)(Projectile.Center.X / 16.0), (int)(Projectile.Center.Y / 16.0));
 			float DrawRot;
 			if (Projectile.Center.X < player.MountedCenter.X)
-			{
 				DrawRot = Projectile.rotation - MathF.PI / 4f;
-			}
 			else
 			{
 				DrawRot = Projectile.rotation - MathF.PI * 0.25f;
 			}
 			Vector2 HeadCenter = new Vector2(SlingshotLength, -SlingshotLength).RotatedBy(DrawRot);
 			if (player.direction == -1)
-			{
 				HeadCenter = new Vector2(SlingshotLength, -SlingshotLength).RotatedBy(DrawRot + Math.PI / 2d);
-			}
 			HeadCenter += Projectile.Center - Main.screenPosition;
 			Vector2 SlingshotStringHead = new Vector2(SlingshotLength, -SlingshotLength).RotatedBy(DrawRot) + Projectile.Center - Main.MouseWorld;
 			Vector2 SlingshotStringTail = new Vector2(SlingshotLength, -SlingshotLength).RotatedBy(DrawRot) + Vector2.Normalize(SlingshotStringHead) * Power * 0.2625f;
@@ -36,12 +32,12 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
 				SlingshotStringTail = new Vector2(SlingshotLength, -SlingshotLength).RotatedBy(DrawRot + Math.PI / 2d) + Vector2.Normalize(SlingshotStringHead) * Power * 0.2625f;
 			}
 			SlingshotStringTail += Projectile.Center - Main.screenPosition;
-			Vector2 Head1 = HeadCenter + Utils.SafeNormalize(HeadCenter.RotatedBy(Math.PI / 8 + DrawRot), Vector2.Zero) * SplitBranchDis;
-			Vector2 Head2 = HeadCenter - Utils.SafeNormalize(HeadCenter.RotatedBy(Math.PI / 8 + DrawRot), Vector2.Zero) * SplitBranchDis;
+			Vector2 Head1 = HeadCenter + HeadCenter.RotatedBy(Math.PI / 8 + DrawRot).SafeNormalize(Vector2.Zero) * SplitBranchDis;
+			Vector2 Head2 = HeadCenter - HeadCenter.RotatedBy(Math.PI / 8 + DrawRot).SafeNormalize(Vector2.Zero) * SplitBranchDis;
 			if (player.direction == -1)
 			{
-				Head1 = HeadCenter + Utils.SafeNormalize(HeadCenter.RotatedBy(Math.PI / 8 * 5 + DrawRot), Vector2.Zero) * SplitBranchDis;
-				Head2 = HeadCenter - Utils.SafeNormalize(HeadCenter.RotatedBy(Math.PI / 8 * 5 + DrawRot), Vector2.Zero) * SplitBranchDis;
+				Head1 = HeadCenter + HeadCenter.RotatedBy(Math.PI / 8 * 5 + DrawRot).SafeNormalize(Vector2.Zero) * SplitBranchDis;
+				Head2 = HeadCenter - HeadCenter.RotatedBy(Math.PI / 8 * 5 + DrawRot).SafeNormalize(Vector2.Zero) * SplitBranchDis;
 			}
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
@@ -56,7 +52,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
 		{
 			Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * width;
 
-			List<Vertex2D> vertex2Ds = new List<Vertex2D>();
+			var vertex2Ds = new List<Vertex2D>();
 
 			vertex2Ds.Add(new Vertex2D(StartPos + Width, color, new Vector3(0, 0, 0)));
 			vertex2Ds.Add(new Vertex2D(StartPos - Width, color, new Vector3(0, 1, 0)));

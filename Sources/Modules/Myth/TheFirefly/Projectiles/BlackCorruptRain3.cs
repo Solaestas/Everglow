@@ -1,6 +1,6 @@
 ﻿using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
+namespace Everglow.Myth.TheFirefly.Projectiles
 {
 	public class BlackCorruptRain3 : ModProjectile
 	{
@@ -33,10 +33,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 		public override void AI()
 		{
 			if (Projectile.velocity.Length() < 5f)
-			{
 				Projectile.velocity *= 1.018f;
-			}
-			Lighting.AddLight(base.Projectile.Center, 0, 0.4f, 0.9f);
+			Lighting.AddLight(Projectile.Center, 0, 0.4f, 0.9f);
 		}
 
 		public override void PostDraw(Color lightColor)
@@ -44,9 +42,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			Texture2D t = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/FogTraceLight");
 			float width = 20;
 			if (Projectile.timeLeft < 120)
-			{
 				width = Projectile.timeLeft / 6f;
-			}
 			VFXManager.spriteBatch.Begin();
 			DrawTexCircle_VFXBatch(VFXManager.spriteBatch, 30 + 7 * MathF.Sin((float)(Main.timeForVisualEffects / 3f + Projectile.ai[0])), width, new Color(0, 150, 255, 0) * 0.4f, Projectile.Center - Main.screenPosition, t, (float)(Main.timeForVisualEffects / 3.8f + Projectile.ai[0]));
 			VFXManager.spriteBatch.End();
@@ -60,7 +56,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 		}
 		private static void DrawTexCircle_VFXBatch(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 		{
-			List<Vertex2D> circle = new List<Vertex2D>();
+			var circle = new List<Vertex2D>();
 
 			for (int h = 0; h < radious / 2; h += 1)
 			{
@@ -72,9 +68,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(0, 0.2f, 0)));
 			circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0, 0.8f, 0)));
 			if (circle.Count > 2)
-			{
 				spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
-			}
 		}
 	}
 }

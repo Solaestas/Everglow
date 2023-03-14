@@ -1,8 +1,9 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
+using Everglow.Myth.TheFirefly.Items;
 using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
+namespace Everglow.Myth.TheFirefly.NPCs
 {
 	public class Dendroid_normal : ModNPC
 	{
@@ -28,9 +29,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 		{
 			FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
 			if (!fireflyBiome.IsBiomeActive(Main.LocalPlayer))
-			{
 				return 0f;
-			}
 			return 0.24f;
 		}
 
@@ -38,9 +37,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 		{
 			Player player = Main.player[NPC.FindClosestPlayer()];
 			if (NPC.velocity.X > 0)
-			{
 				NPC.spriteDirection = 1;
-			}
 			else
 			{
 				NPC.spriteDirection = -1;
@@ -49,7 +46,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 			{
 				NPC.velocity.X += NPC.spriteDirection * NPC.scale * 0.3f;
 
-				Vector2 ToPlayer = (player.Center - NPC.Center);
+				Vector2 ToPlayer = player.Center - NPC.Center;
 				if (ToPlayer.X * NPC.velocity.X < 0)
 				{
 					if (ToPlayer.Length() > 1000 * NPC.scale || Main.rand.NextBool(240))
@@ -69,16 +66,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 			if (NPC.collideY || NPC.collideX)
 			{
 				if (NPC.frame.Y < 6 * frameHeight)
-				{
 					NPC.frame.Y = 6 * frameHeight;
-				}
 				if (NPC.frameCounter > frameChangeFrequency)
 				{
 					NPC.frameCounter = 0;
 					if (NPC.frame.Y < 19 * frameHeight)
-					{
 						NPC.frame.Y += frameHeight;
-					}
 					else
 					{
 						NPC.frame.Y = 6 * frameHeight;
@@ -111,7 +104,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 
 		public override void ModifyNPCLoot(NPCLoot npcLoot)
 		{
-			npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.MothScaleDust>(), 1, 1, 1));
+			npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<MothScaleDust>(), 1, 1, 1));
 		}
 
 		public override void OnSpawn(IEntitySource source)

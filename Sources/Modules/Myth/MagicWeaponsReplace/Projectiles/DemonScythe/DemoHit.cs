@@ -1,6 +1,6 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using static Everglow.Sources.Modules.MythModule.Common.MythUtils;
-namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.DemonScythe
+﻿using Everglow.Myth.Common;
+using static Everglow.Myth.Common.MythUtils;
+namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.DemonScythe
 {
 	public class DemoHit : ModProjectile, IWarpProjectile, IBloomProjectile
 	{
@@ -26,9 +26,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
 			Projectile.velocity *= 0.95f;
 
 			if (Projectile.timeLeft <= 198)
-			{
 				Projectile.friendly = false;
-			}
 
 
 			int MaxC = (int)(Projectile.ai[0] / 6 + 5);
@@ -49,19 +47,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
 					SparkOldPos[x, y] = SparkOldPos[x, y - 1];
 				}
 				if (Collision.SolidCollision(SparkOldPos[x, 0] + new Vector2(SparkVelocity[x].X, 0), 0, 0))
-				{
 					SparkVelocity[x].X *= -0.95f;
-				}
 				if (Collision.SolidCollision(SparkOldPos[x, 0] + new Vector2(0, SparkVelocity[x].Y), 0, 0))
-				{
 					SparkVelocity[x].Y *= -0.95f;
-				}
 				SparkOldPos[x, 0] += SparkVelocity[x];
 
 				if (SparkVelocity[x].Length() > 0.3f)
-				{
 					SparkVelocity[x] *= 0.95f;
-				}
 				SparkVelocity[x].Y += 0.04f;
 			}
 			Projectile.velocity *= 0;
@@ -69,13 +61,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
 		public override void PostDraw(Color lightColor)
 		{
 			Texture2D Shadow = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/CursedHitLight");
-			float Dark = Math.Max(((Projectile.timeLeft - 150) / 50f), 0);
+			float Dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
 			Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, new Color(55, 0, 145, 0) * Dark, 0, Shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 15f * Dark, SpriteEffects.None, 0);
 		}
 		public override bool PreDraw(ref Color lightColor)
 		{
 			Texture2D Shadow = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/CursedHit");
-			float Dark = Math.Max(((Projectile.timeLeft - 150) / 50f), 0);
+			float Dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
 			Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, Color.White * Dark, 0, Shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 15f, SpriteEffects.None, 0);
 			Texture2D light = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/CursedHitStar");
 			Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(55, 0, 145, 0), 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, Dark * Dark) * Projectile.ai[0] / 20f, SpriteEffects.None, 0);
@@ -95,25 +87,21 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
 		{
 			int MaxC = (int)(Projectile.ai[0] / 6 + 5);
 			MaxC = Math.Min(26, MaxC);
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 			for (int x = 0; x < MaxC; x++)
 			{
 				int TrueL = 0;
 				for (int i = 1; i < 40; ++i)
 				{
 					if (SparkOldPos[x, i] == Vector2.Zero)
-					{
 						break;
-					}
 
 					TrueL++;
 				}
 				for (int i = 1; i < 40; ++i)
 				{
 					if (SparkOldPos[x, i] == Vector2.Zero)
-					{
 						break;
-					}
 
 					var normalDir = SparkOldPos[x, i - 1] - SparkOldPos[x, i];
 					normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
@@ -137,9 +125,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
 				Main.graphics.GraphicsDevice.Textures[0] = t;
 			}
 			if (bars.Count > 3)
-			{
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-			}
 		}
 
 		public void DrawWarp(VFXBatch spriteBatch)
@@ -147,9 +133,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
 			float value = (200 - Projectile.timeLeft) / (float)Projectile.timeLeft * 1.4f;
 			float colorV = 0.9f * (1 - value);
 			if (Projectile.ai[0] >= 10)
-			{
 				colorV *= Projectile.ai[0] / 10f;
-			}
 			Texture2D t = MythContent.QuickTexture("OmniElementItems/Projectiles/Wave");
 			DrawTexCircle(value * 16 * Projectile.ai[0], 100, new Color(colorV, colorV * 0.2f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
 		}

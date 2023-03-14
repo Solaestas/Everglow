@@ -1,6 +1,7 @@
-﻿using Terraria.Audio;
+﻿using Everglow.Myth.MagicWeaponsReplace.Projectiles;
+using Terraria.Audio;
 
-namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.DemonScythe
+namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.DemonScythe
 {
 	internal class DemonScytheBook : MagicBookProjectile//
 	{
@@ -26,8 +27,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
 			Player player = Main.player[Projectile.owner];
 			if (player.itemTime == 2 && player.HeldItem.type == ItemType)
 			{
-				Vector2 velocity = Utils.SafeNormalize(Main.MouseWorld - Projectile.Center, Vector2.Zero) * player.HeldItem.shootSpeed;
-				Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + Utils.SafeNormalize(velocity, Vector2.Zero) * 25, velocity * 16, ModContent.ProjectileType<DemonScythePlus>()/*ProjectileID.DemonScythe*/, player.HeldItem.damage, player.HeldItem.knockBack, player.whoAmI);
+				Vector2 velocity = (Main.MouseWorld - Projectile.Center).SafeNormalize(Vector2.Zero) * player.HeldItem.shootSpeed;
+				var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity.SafeNormalize(Vector2.Zero) * 25, velocity * 16, ModContent.ProjectileType<DemonScythePlus>()/*ProjectileID.DemonScythe*/, player.HeldItem.damage, player.HeldItem.knockBack, player.whoAmI);
 				SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/MagicWeaponsReplace/Sounds/DemonScyth"), Projectile.Center);
 				p.CritChance = player.GetWeaponCrit(player.HeldItem);
 			}

@@ -1,5 +1,5 @@
 using Terraria.Audio;
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
+namespace Everglow.Myth.TheTusk.Projectiles
 {
 	public class TuskSpiceBlack : ModProjectile
 	{
@@ -30,19 +30,13 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 			{
 				Projectile.rotation = (float)((Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + Math.PI * 2.5d) % MathHelper.TwoPi);
 				if (Projectile.timeLeft <= 300)
-				{
 					Projectile.velocity = Projectile.velocity / Projectile.velocity.Length() * 25;
-				}
 				if (Projectile.velocity.Length() > 20)
-				{
 					Shot = true;
-				}
 				if (Projectile.timeLeft % 2 == 1)
 				{
 					if (MostH > 0)
-					{
 						MostH--;
-					}
 				}
 
 			}
@@ -68,22 +62,16 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 					Projectile.velocity *= 0;
 					Projectile.alpha += 5;
 					if (Projectile.alpha > 254)
-					{
 						Projectile.Kill();
-					}
 				}
 			}
 			if (Dam == 0)
 			{
 				Dam = 60;
 				if (Main.expertMode)
-				{
 					Dam = 90;
-				}
 				if (Main.masterMode)
-				{
 					Dam = 120;
-				}
 			}
 		}
 		int Dam = 0;
@@ -100,9 +88,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 
 			Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), new Rectangle(0, 0, texture.Width, texture.Height - MostH), colorz, Projectile.rotation, new Vector2(12f, (texture.Height - MostH) / 2f), Projectile.scale, SpriteEffects.None, 0);
 			if (!Shot)
-			{
 				return;
-			}
 			if (Projectile.alpha == 0)
 			{
 				for (int f = 0; f < Projectile.oldPos.Length; f++)

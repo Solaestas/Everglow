@@ -1,6 +1,7 @@
-﻿using Terraria.DataStructures;
+﻿using Everglow.Myth.MiscItems.Projectiles.Weapon.Magic;
+using Terraria.DataStructures;
 
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
+namespace Everglow.Myth.MiscItems.Weapons
 {
 	public class ThunderFlower : ModItem
 	{
@@ -30,7 +31,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
 			Item.rare = 6;
 			Item.UseSound = SoundID.Item43;
 			Item.autoReuse = true;
-			Item.shoot = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Magic.ThunderBall>();
+			Item.shoot = ModContent.ProjectileType<ThunderBall>();
 			Item.shootSpeed = 12f;
 		}
 		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)

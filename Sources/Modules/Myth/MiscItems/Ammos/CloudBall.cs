@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Ammos
+﻿namespace Everglow.Myth.MiscItems.Ammos
 {
 	public class CloudBall : ModItem
 	{
@@ -24,7 +24,7 @@
 			Item.value = 0;
 			Item.rare = ItemRarityID.White;
 			Item.autoReuse = true;
-			Item.shoot = ModContent.ProjectileType<MiscItems.Projectiles.CloudBall>();
+			Item.shoot = ModContent.ProjectileType<Projectiles.CloudBall>();
 			Item.shootSpeed = 4;
 			Item.crit = 2;
 			Item.ammo = Item.type;

@@ -1,7 +1,7 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
 using ReLogic.Content;
 
-namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKing.VFXs;
+namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing.VFXs;
 
 internal abstract class ShaderDraw : Visual
 {
@@ -61,30 +61,22 @@ internal class FlameDust : ShaderDraw
 		position += velocity;
 		oldPos.Add(position);
 		if (oldPos.Count > 15)
-		{
 			oldPos.RemoveAt(0);
-		}
 		velocity *= 0.96f;
 		timer++;
 		if (timer > maxTime)
-		{
 			Active = false;
-		}
 		velocity = velocity.RotatedBy(ai[1]);
 
 		for (int f = oldPos.Count - 1; f > 0; f--)
 		{
 			if (oldPos[f] != Vector2.Zero)
-			{
 				oldPos[f] += vsadd;
-			}
 		}
 		float delC = ai[2] * 0.05f * (float)Math.Sin((maxTime - timer) / 40d * Math.PI);
 		Lighting.AddLight((int)(position.X / 16), (int)(position.Y / 16), 0.85f * delC, 0.15f * delC, 0.1f * delC);
 		if (Collision.SolidCollision(position, 0, 0))
-		{
 			Active = false;
-		}
 	}
 
 	public override void Draw()
@@ -93,18 +85,16 @@ internal class FlameDust : ShaderDraw
 		float fx = timer / maxTime;
 		int len = pos.Length;
 		if (len <= 2)
-		{
 			return;
-		}
-		Vertex2D[] bars = new Vertex2D[len * 2 - 1];
+		var bars = new Vertex2D[len * 2 - 1];
 		for (int i = 1; i < len; i++)
 		{
 			Vector2 normal = oldPos[i] - oldPos[i - 1];
 			normal = Vector2.Normalize(normal).RotatedBy(Math.PI * 0.5);
-			Color drawcRope = new Color(fx * fx * fx * 2, 0.5f, 1, 150 / 255f);
-			float width = ai[2] * (float)(Math.Sin(i / (double)(len) * Math.PI));
-			bars[2 * i - 1] = (new Vertex2D(oldPos[i] + normal * width, drawcRope, new Vector3(0 + ai[0], i / 80f, 0)));
-			bars[2 * i] = (new Vertex2D(oldPos[i] - normal * width, drawcRope, new Vector3(0.05f + ai[0], i / 80f, 0)));
+			var drawcRope = new Color(fx * fx * fx * 2, 0.5f, 1, 150 / 255f);
+			float width = ai[2] * (float)Math.Sin(i / (double)len * Math.PI);
+			bars[2 * i - 1] = new Vertex2D(oldPos[i] + normal * width, drawcRope, new Vector3(0 + ai[0], i / 80f, 0));
+			bars[2 * i] = new Vertex2D(oldPos[i] - normal * width, drawcRope, new Vector3(0.05f + ai[0], i / 80f, 0));
 		}
 		bars[0] = new Vertex2D((bars[1].position + bars[2].position) * 0.5f, Color.White, new Vector3(0.5f, 0, 0));
 		VFXManager.spriteBatch.Draw(bars, PrimitiveType.TriangleStrip);

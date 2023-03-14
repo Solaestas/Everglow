@@ -1,6 +1,6 @@
-﻿using Everglow.Sources.Modules.MythModule.TheTusk;
+﻿using Everglow.Myth.TheTusk;
 
-namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.DashCore
+namespace Everglow.Myth.LanternMoon.Projectiles.DashCore
 {
 	class BlueFlame0 : ModProjectile
 	{
@@ -27,20 +27,14 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.DashCore
 		float ka = 1;
 		public override void AI()
 		{
-			Projectile.rotation = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X));
+			Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
 			if (Projectile.ai[0] != 15)
-			{
 				Projectile.velocity *= 0.995f;
-			}
 			if (Projectile.timeLeft < 60f)
-			{
 				ka *= 0.97f;
-			}
 			Lighting.AddLight(Projectile.Center, (byte)(color0.R * ka) / 100f, (byte)(color0.G * ka) / 100f, (byte)(color0.B * ka) / 100f);
 			if (Projectile.timeLeft < 60)
-			{
 				Projectile.scale *= 0.97f;
-			}
 			for (int j = 0; j < Main.player.Length; j++)
 			{
 				if (Main.player[j].active)
@@ -50,9 +44,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.DashCore
 						if (!Main.player[j].dead)
 						{
 							if ((Main.player[j].Center - Projectile.Center).Length() < 24)
-							{
 								Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<Bosses.Acytaea.Projectiles.playerHit>(), Projectile.damage, 0, j, 0, 0);
-							}
 						}
 					}
 				}
@@ -79,17 +71,15 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.DashCore
 		int TrueL = 1;
 		public override void PostDraw(Color lightColor)
 		{
-			Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+			var texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
 			Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, new Color(color0.R, color0.G, color0.B, 0), Projectile.rotation, new Vector2(17, 17), Projectile.scale * 2.2f, SpriteEffects.None, 0);
 			Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/LanternMoon/Projectiles/DashCore/DashCoreLight").Value, Projectile.Center - Main.screenPosition, null, new Color(color0.R / 155f * kb, color0.G / 155f * kb, color0.B / 155f * kb, 0), Projectile.rotation, new Vector2(56, 56), Projectile.scale * 2f, SpriteEffects.None, 0);
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-			List<VertexBase.CustomVertexInfo> bars = new List<VertexBase.CustomVertexInfo>();
+			var bars = new List<VertexBase.CustomVertexInfo>();
 			float width = 20;
 			if (Projectile.timeLeft < 60)
-			{
 				width = Projectile.timeLeft / 3f;
-			}
 			TrueL = 0;
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
@@ -107,10 +97,10 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.DashCore
 				var factor = i / (float)TrueL;
 				var w = MathHelper.Lerp(1f, 0.05f, factor);
 				// Using Vertex2D didn't work here
-				bars.Add(new VertexBase.CustomVertexInfo(Projectile.oldPos[i] + (normalDir * width) + new Vector2(17, 17) - Main.screenPosition, new Color(84, 53, 46, 0), new Vector3(factor, 1, w)));
+				bars.Add(new VertexBase.CustomVertexInfo(Projectile.oldPos[i] + normalDir * width + new Vector2(17, 17) - Main.screenPosition, new Color(84, 53, 46, 0), new Vector3(factor, 1, w)));
 				bars.Add(new VertexBase.CustomVertexInfo(Projectile.oldPos[i] + normalDir * -width + new Vector2(17, 17) - Main.screenPosition, new Color(84, 53, 46, 0), new Vector3(factor, 0, w)));
 			}
-			List<VertexBase.CustomVertexInfo> Vx = new List<VertexBase.CustomVertexInfo>();
+			var Vx = new List<VertexBase.CustomVertexInfo>();
 			if (bars.Count > 2)
 			{
 				Vx.Add(bars[0]);

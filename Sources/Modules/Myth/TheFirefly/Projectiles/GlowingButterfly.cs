@@ -1,7 +1,7 @@
-﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories;
+﻿using Everglow.Myth.TheFirefly.Dusts;
+using Everglow.Myth.TheFirefly.Items.Accessories;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
+namespace Everglow.Myth.TheFirefly.Projectiles
 {
 	public class GlowingButterfly : ModProjectile
 	{
@@ -22,9 +22,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			if (MothEye.LocalOwner != null && MothEye.LocalOwner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
 			{
 				if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
-				{
 					Projectile.timeLeft = 400;
-				}
 				else
 				{
 					Projectile.timeLeft = 100;
@@ -55,17 +53,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 						y = ItemUseStyleID.Swing;
 					}
 					if (Projectile.timeLeft > 100 && Projectile.alpha >= 8)
-					{
 						Projectile.alpha -= 4;
-					}
 					if (Projectile.timeLeft <= 66)
-					{
 						Projectile.alpha += 4;
-					}
 					if (Projectile.alpha < 100)
-					{
 						Projectile.friendly = true;
-					}
 					else
 					{
 						Projectile.friendly = false;
@@ -82,17 +74,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 						y = ItemUseStyleID.Swing;
 					}
 					if (Projectile.timeLeft > 50 && Projectile.alpha >= 8)
-					{
 						Projectile.alpha -= 8;
-					}
 					if (Projectile.timeLeft <= 33)
-					{
 						Projectile.alpha += 8;
-					}
 					if (Projectile.alpha < 50)
-					{
 						Projectile.friendly = true;
-					}
 					else
 					{
 						Projectile.friendly = false;
@@ -105,37 +91,27 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			Projectile.velocity = Projectile.velocity.RotatedBy(Ome);
 			Ome += Math.Sign(Ome) * 0.001f;
 			if (Projectile.frame != 5)
-			{
 				Projectile.velocity *= 1.04f;
-			}
 			else
 			{
 				Projectile.velocity *= 0.98f;
 			}
-			if (Collision.SolidCollision((Projectile.Center - Projectile.velocity), 1, 1))
-			{
+			if (Collision.SolidCollision(Projectile.Center - Projectile.velocity, 1, 1))
 				Projectile.tileCollide = true;
-			}
 			Stre = Math.Clamp((100 - Projectile.timeLeft) / 10f, 0, 1f);
 
 			if (Projectile.timeLeft % 5 == 0)
 			{
 				if (Projectile.frame != 5)
-				{
 					Projectile.frame++;
-				}
 				else
 				{
 					if (Main.rand.NextFloat(0, 7) >= Projectile.velocity.Length())
-					{
 						Projectile.frame = 0;
-					}
 				}
 			}
 			if (Projectile.frame > 5)
-			{
 				Projectile.frame = 0;
-			}
 			Projectile.velocity.Y *= 0.96f;
 			if (Projectile.timeLeft % 6 == 0)
 			{
@@ -186,18 +162,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 				if (i != Projectile.whoAmI && other.active && other.owner == Projectile.owner && Math.Abs(Projectile.position.X - other.position.X) + Math.Abs(Projectile.position.Y - other.position.Y) < Projectile.width)
 				{
 					if (Projectile.position.X < other.position.X)
-					{
 						Projectile.velocity.X -= overlapVelocity;
-					}
 					else
 					{
 						Projectile.velocity.X += overlapVelocity;
 					}
 
 					if (Projectile.position.Y < other.position.Y)
-					{
 						Projectile.velocity.Y -= overlapVelocity;
-					}
 					else
 					{
 						Projectile.velocity.Y += overlapVelocity;
@@ -245,7 +217,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 						// The number depends on various parameters seen in the movement code below. Test different ones out until it works alright
 						bool closeThroughWall = between < 100f;
 
-						if (((closest && inRange) || !foundTarget) && (lineOfSight || closeThroughWall))
+						if ((closest && inRange || !foundTarget) && (lineOfSight || closeThroughWall))
 						{
 							distanceFromTarget = between;
 							targetCenter = npc.Center;
@@ -330,9 +302,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 		public override void Kill(int timeLeft)
 		{
 			if (Projectile.alpha > 180)
-			{
 				return;
-			}
 			for (int i = 0; i < 18; i++)
 			{
 				Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Clentaminator_Blue, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, 0.6f * Stre);
@@ -347,7 +317,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 
 		public override Color? GetAlpha(Color lightColor)
 		{
-			return new Color((255 - Projectile.alpha), (255 - Projectile.alpha), (255 - Projectile.alpha), (255 - Projectile.alpha) / 3);
+			return new Color(255 - Projectile.alpha, 255 - Projectile.alpha, 255 - Projectile.alpha, (255 - Projectile.alpha) / 3);
 		}
 
 		/*private Effect ef;

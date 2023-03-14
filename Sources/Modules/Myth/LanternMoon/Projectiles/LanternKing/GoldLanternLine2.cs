@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKing
+﻿namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing
 {
 	public class GoldLanternLine2 : ModProjectile
 	{
@@ -35,12 +35,10 @@
 		}
 		public override void PostDraw(Color lightColor)
 		{
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 			float width = 12;
 			if (Projectile.timeLeft < 60)
-			{
 				width = Projectile.timeLeft / 5f;
-			}
 			int TrueL = 0;
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
@@ -56,9 +54,7 @@
 				normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
 				var factor = 1f;
 				if (Projectile.oldPos.Length > 0)
-				{
 					factor = i / (float)Projectile.oldPos.Length;
-				}
 				var w = MathHelper.Lerp(1f, 0.05f, factor);
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(0.5f, 0.5f) - Main.screenPosition, new Color(254, 254, 254, 0), new Vector3(factor, 1, w)));
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(0.5f, 0.5f) - Main.screenPosition, new Color(254, 254, 254, 0), new Vector3(factor, 0, w)));

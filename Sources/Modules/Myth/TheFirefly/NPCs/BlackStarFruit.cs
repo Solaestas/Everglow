@@ -1,7 +1,8 @@
-﻿using Terraria.Audio;
+﻿using Everglow.Myth.TheFirefly.Dusts;
+using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
+namespace Everglow.Myth.TheFirefly.NPCs
 {
 	public class BlackStarFruit : ModNPC
 	{
@@ -19,7 +20,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 			NPC.defense = 0;
 			NPC.lifeMax = 1;
 			NPC.knockBackResist = 0f;
-			NPC.value = (float)Item.buyPrice(0, 0, 0, 0);
+			NPC.value = Item.buyPrice(0, 0, 0, 0);
 			NPC.color = new Color(0, 0, 0, 0);
 			NPC.alpha = 0;
 			NPC.boss = false;
@@ -40,15 +41,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 		{
 			FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
 			if (!fireflyBiome.IsBiomeActive(Main.LocalPlayer))
-			{
 				return 0f;
-			}
 			return 0.5f;
 		}
 		private float E = 0;
 		public override void AI()
 		{
-			NPC.velocity = new Vector2(0, (float)(Math.Sin(Main.time / 50f + NPC.Center.X + NPC.whoAmI)) * 0.25f);
+			NPC.velocity = new Vector2(0, (float)Math.Sin(Main.time / 50f + NPC.Center.X + NPC.whoAmI) * 0.25f);
 			if (E <= 0.2f)
 			{
 				for (int j = 0; j < 12; j++)
@@ -67,9 +66,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 				}
 			}
 			if (E < 1)
-			{
 				E += 0.01f;
-			}
 			else
 			{
 				NPC.dontTakeDamage = false;
@@ -82,25 +79,25 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 			for (int h = 0; h < 60; h += 3)
 			{
 				Vector2 v3 = new Vector2(0, (float)Math.Sin(h * Math.PI / 4d) + 2).RotatedBy(h * Math.PI / 10d) * Main.rand.NextFloat(0.2f, 1.1f);
-				int r = Dust.NewDust(NPC.Center - new Vector2(4, 4), 0, 0, ModContent.DustType<Dusts.PureBlue>(), 0, 0, 0, default, 4f * Main.rand.NextFloat(0.7f, 2.9f));
+				int r = Dust.NewDust(NPC.Center - new Vector2(4, 4), 0, 0, ModContent.DustType<PureBlue>(), 0, 0, 0, default, 4f * Main.rand.NextFloat(0.7f, 2.9f));
 				Main.dust[r].noGravity = true;
 				Main.dust[r].velocity = v3 * 2;
 			}
 			for (int y = 0; y < 30; y += 3)
 			{
-				int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.5f, 2.2f));
+				int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.5f, 2.2f));
 				Main.dust[index].noGravity = true;
 				Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(1.8f, 5.5f)).RotatedByRandom(Math.PI * 2d);
 			}
 			for (int y = 0; y < 30; y += 3)
 			{
-				int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(2f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.5f, 2.2f));
+				int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(2f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.5f, 2.2f));
 				Main.dust[index].noGravity = true;
 				Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(3.0f, 7.5f)).RotatedByRandom(Math.PI * 2d);
 			}
 			for (int y = 0; y < 18; y++)
 			{
-				int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.4f, 2.2f));
+				int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.4f, 2.2f));
 				Main.dust[index].noGravity = true;
 				Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(1.8f, 2.5f)).RotatedByRandom(Math.PI * 2d);
 			}
@@ -111,13 +108,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 				{
 					int Dam = 20;
 					if (Main.expertMode)
-					{
 						Dam = 24;
-					}
 					if (Main.masterMode)
-					{
 						Dam = 30;
-					}
 					Main.npc[j].StrikeNPC((int)(Dam * Main.rand.NextFloat(0.85f, 1.15f)), 2, Math.Sign(NPC.velocity.X), Main.rand.Next(100) < 10);
 				}
 			}
@@ -128,14 +121,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 		{
 			SpriteEffects effects = SpriteEffects.None;
 			if (NPC.spriteDirection == 1)
-			{
 				effects = SpriteEffects.FlipHorizontally;
-			}
 			Texture2D tx = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheFirefly/Projectiles/Lightball").Value;
 			Texture2D tg = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheFirefly/Projectiles/Lightball").Value;
 			Texture2D tb = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheFirefly/NPCs/BlackStarFruitLight").Value;
-			Vector2 vector = new Vector2(tx.Width / 2f, tx.Height / (float)Main.npcFrameCount[NPC.type] / 2f);
-			Color color = new Color(10, 83, 110, 0);
+			var vector = new Vector2(tx.Width / 2f, tx.Height / (float)Main.npcFrameCount[NPC.type] / 2f);
+			var color = new Color(10, 83, 110, 0);
 			Main.spriteBatch.Draw(tg, NPC.Center - Main.screenPosition + new Vector2(0, +19), null, color, NPC.rotation, vector, 0.025f * (float)(4 + Math.Sin(Main.time / 15d + NPC.position.X / 36d)) * E, effects, 0f);
 			for (int j = 0; j < 12; j++)
 			{

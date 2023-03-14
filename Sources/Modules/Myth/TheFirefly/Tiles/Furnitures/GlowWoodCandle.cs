@@ -1,9 +1,9 @@
-using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Everglow.Myth.TheFirefly.Dusts;
 using ReLogic.Content;
 using Terraria.DataStructures;
 using Terraria.ObjectData;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
+namespace Everglow.Myth.TheFirefly.Tiles.Furnitures
 {
 	public class GlowWoodCandle : ModTile
 	{
@@ -38,9 +38,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 			if (!Main.dedServ)
 			{
 				if (!Main.dedServ)
-				{
 					flameTexture = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheFirefly/Tiles/Furnitures/GlowWoodCandle_Flame");
-				}
 			}
 		}
 
@@ -67,20 +65,16 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 				offsetY = 2;
 
 				if (WorldGen.SolidTile(i - 1, j + 1) || WorldGen.SolidTile(i + 1, j + 1))
-				{
 					offsetY = 4;
-				}
 			}
 
-			Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+			var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 
 			if (Main.drawToScreen)
-			{
 				zero = Vector2.Zero;
-			}
 
 			ulong randSeed = Main.TileFrameSeed ^ (ulong)((long)j << 32 | (uint)i); // Don't remove any casts.
-			Color color = new Color(100, 100, 100, 0);
+			var color = new Color(100, 100, 100, 0);
 			int width = 20;
 			int height = 20;
 			var tile = Main.tile[i, j];

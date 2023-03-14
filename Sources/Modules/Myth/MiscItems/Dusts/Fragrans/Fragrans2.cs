@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Dusts.Fragrans
+﻿namespace Everglow.Myth.MiscItems.Dusts.Fragrans
 {
 	public class Fragrans2 : ModDust
 	{
@@ -9,35 +9,27 @@
 			// If our texture had 3 different dust on top of each other (a 30x90 pixel image), we might do this:
 			dust.frame = new Rectangle(0, Main.rand.Next(3) * 14, 12, 14);
 			dust.alpha = 0;
-			dust.rotation = Main.rand.NextFloat((float)(MathHelper.TwoPi));
+			dust.rotation = Main.rand.NextFloat(MathHelper.TwoPi);
 		}
 
 		public override bool Update(Dust dust)
 		{
 			// Move the dust based on its velocity and reduce its size to then remove it, as the 'return false;' at the end will prevent vanilla logic.
 			if (dust.velocity.Y > -0.24f)
-			{
 				dust.velocity.Y += 0.03f;
-			}
 			if (dust.velocity.Y < -0.5f)
-			{
 				dust.velocity.Y *= 0.98f;
-			}
 			dust.rotation += Main.rand.NextFloat(-0.04f, 0.04f);
 			dust.velocity.X += Main.rand.NextFloat(-0.07f, 0.07f) + Main.windSpeedCurrent / 30f;
 			dust.velocity.Y += Main.rand.NextFloat(-0.03f, 0.03f);
 			if (Math.Abs(dust.velocity.X) > 1.7f)
-			{
 				dust.velocity.X *= 0.98f;
-			}
 			dust.position += dust.velocity;
 
-			if ((int)(Main.time / 5d) % 5 == (int)(dust.position.X) % 5 && !(Collision.SolidCollision(dust.position - Vector2.One * 5f, 10, 10) && dust.fadeIn == 0f))
+			if ((int)(Main.time / 5d) % 5 == (int)dust.position.X % 5 && !(Collision.SolidCollision(dust.position - Vector2.One * 5f, 10, 10) && dust.fadeIn == 0f))
 			{
 				if (dust.frame.Y < 126)
-				{
 					dust.frame.Y += 14;
-				}
 				else
 				{
 					dust.frame.Y = 0;

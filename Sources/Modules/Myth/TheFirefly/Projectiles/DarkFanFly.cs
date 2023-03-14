@@ -1,7 +1,7 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Buffs;
+﻿using Everglow.Myth.Common;
+using Everglow.Myth.TheFirefly.Buffs;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
+namespace Everglow.Myth.TheFirefly.Projectiles
 {
 	internal class DarkFanFly : ModProjectile
 	{
@@ -26,13 +26,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			Player player = Main.player[Projectile.owner];
 			Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<FanHit>(), 0, 0, player.whoAmI, Math.Max(Projectile.velocity.Length() * 0.2f, 0.4f));
 			int[] array = Projectile.localNPCImmunity;
-			bool flag = (!Projectile.usesLocalNPCImmunity && !Projectile.usesIDStaticNPCImmunity) || (Projectile.usesLocalNPCImmunity && array[target.whoAmI] == 0) || (Projectile.usesIDStaticNPCImmunity && Projectile.IsNPCIndexImmuneToProjectileType(Projectile.type, target.whoAmI));
+			bool flag = !Projectile.usesLocalNPCImmunity && !Projectile.usesIDStaticNPCImmunity || Projectile.usesLocalNPCImmunity && array[target.whoAmI] == 0 || Projectile.usesIDStaticNPCImmunity && Projectile.IsNPCIndexImmuneToProjectileType(Projectile.type, target.whoAmI);
 			if (target.active && !target.dontTakeDamage && flag && (target.aiStyle != 112 || target.ai[2] <= 1f))
 			{
 				if (target.active)
-				{
 					Main.player[Projectile.owner].MinionAttackTargetNPC = target.whoAmI;
-				}
 			}
 			int Count = (int)Projectile.ai[0];
 			if (Projectile.ai[0] > 3 + player.maxMinions / 5)
@@ -47,7 +45,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			for (int g = 0; g < Count; g++)
 			{
 				Vector2 va = new Vector2(0, Main.rand.NextFloat(9f, 11f)).RotatedByRandom(Math.PI * 2);
-				Projectile.NewProjectile(Projectile.InheritSource(Projectile), target.Center + va, va, ModContent.ProjectileType<Projectiles.GlowingButterfly>(), Projectile.damage / 3, Projectile.knockBack, player.whoAmI, player.GetCritChance(DamageClass.Summon) + 8, 0f);
+				Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), target.Center + va, va, ModContent.ProjectileType<GlowingButterfly>(), Projectile.damage / 3, Projectile.knockBack, player.whoAmI, player.GetCritChance(DamageClass.Summon) + 8, 0f);
 			}
 			for (int i = 0; i < 18; i++)
 			{
@@ -59,24 +57,18 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 				Main.dust[num90].velocity = new Vector2(0, Main.rand.NextFloat(5f, 10f)).RotatedByRandom(6.283);
 				Main.dust[num90].noGravity = true;
 			}
-			target.AddBuff(ModContent.BuffType<Buffs.OnMoth>(), 300);
+			target.AddBuff(ModContent.BuffType<OnMoth>(), 300);
 			int MaxS = -1;
 			for (int p = 0; p < 58; p++)
 			{
 				if (player.inventory[p].type == player.HeldItem.type)
-				{
 					MaxS += 1;
-				}
 			}
 			if (MaxS > 5)
-			{
 				MaxS = 5;
-			}
 			MothBuffTarget mothBuffTarget = target.GetGlobalNPC<MothBuffTarget>();
 			if (mothBuffTarget.MothStack < 5 + MaxS * 0)
-			{
 				mothBuffTarget.MothStack += 1;
-			}
 			else
 			{
 				mothBuffTarget.MothStack = 5 + MaxS * 0;
@@ -94,9 +86,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			if (Projectile.timeLeft is < 180 and > 60)
 			{
 				if (v0.Length() < 48)
-				{
 					Projectile.timeLeft = 60;
-				}
 			}
 			Projectile.velocity *= 0.99f;
 			for (int x = 58; x >= 0; x--)
@@ -111,13 +101,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			}
 			OldScale[0] = Projectile.scale;
 			if (Projectile.timeLeft < 100)
-			{
 				Projectile.tileCollide = false;
-			}
 			if (Projectile.timeLeft < 60)
-			{
 				Projectile.timeLeft -= 4;
-			}
 		}
 
 		public override void Kill(int timeLeft)
@@ -139,26 +125,20 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 		public override void PostDraw(Color lightColor)
 		{
 			if (Projectile.timeLeft < 60)
-			{
 				Projectile.scale = Projectile.timeLeft / 40f;
-			}
 			int TrueL = 0;
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
 				if (Projectile.oldPos[i] == Vector2.Zero)
-				{
 					break;
-				}
 
 				TrueL++;
 			}
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
 				if (Projectile.oldPos[i] == Vector2.Zero)
-				{
 					break;
-				}
 				var factor = i / (float)TrueL;
 				var w = MathHelper.Lerp(1f, 0.05f, factor);
 
@@ -179,7 +159,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			Texture2D Tex = MythContent.QuickTexture("TheFirefly/Projectiles/DarkFanFly");
 			Texture2D TexG = MythContent.QuickTexture("TheFirefly/Projectiles/DarkFanFlyGlow");
 			Color color = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
-			List<Vertex2D> Vx = new List<Vertex2D>();
+			var Vx = new List<Vertex2D>();
 			Vector2 v0 = PosRot0.RotatedBy(Projectile.timeLeft / 10f);
 			v0 = new Vector2(v0.X, v0.Y / 2f).RotatedBy(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X));
 			Vector2 v1 = PosRot1.RotatedBy(Projectile.timeLeft / 10f);
@@ -204,13 +184,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			Player player = Main.player[Projectile.owner];
 			Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + Projectile.velocity, Vector2.Zero, ModContent.ProjectileType<FanHit>(), Projectile.damage, 0, player.whoAmI, Math.Max(Projectile.velocity.Length() * 0.2f, 0.4f));
 			if (Projectile.velocity.X != oldVelocity.X)
-			{
 				Projectile.velocity.X = -oldVelocity.X;
-			}
 			if (Projectile.velocity.Y != oldVelocity.Y)
-			{
 				Projectile.velocity.Y = -oldVelocity.Y;
-			}
 			Projectile.velocity *= 0.98f;
 			for (int i = 0; i < 18; i++)
 			{

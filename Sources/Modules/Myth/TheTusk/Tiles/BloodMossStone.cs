@@ -1,4 +1,4 @@
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
+namespace Everglow.Myth.TheTusk.Tiles
 {
 	public class BloodMossStone : ModTile
 	{

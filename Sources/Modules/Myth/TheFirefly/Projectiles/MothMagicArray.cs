@@ -1,7 +1,7 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
 using Terraria.GameContent;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
+namespace Everglow.Myth.TheFirefly.Projectiles
 {
 	public class MothMagicArray : ModProjectile
 	{
@@ -26,21 +26,19 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			if (Projectile.timeLeft == 21)
 			{
 			}
-			if (Main.mouseRight && player.statMana >= player.ownedProjectileCounts[ModContent.ProjectileType<Projectiles.GlowMoth>()] && Projectile.timeLeft >= 18)
+			if (Main.mouseRight && player.statMana >= player.ownedProjectileCounts[ModContent.ProjectileType<GlowMoth>()] && Projectile.timeLeft >= 18)
 			{
 				if (Projectile.localAI[0] % AttackTime == 0)
 				{
-					for (int f = 0; f < player.ownedProjectileCounts[ModContent.ProjectileType<Projectiles.GlowMoth>()]; f++)
+					for (int f = 0; f < player.ownedProjectileCounts[ModContent.ProjectileType<GlowMoth>()]; f++)
 					{
-						Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Main.rand.NextVector2Unit() * Main.rand.Next(6, 13), ModContent.ProjectileType<PhantomMoth>(), (int)(Projectile.damage * 0.7), 0, Projectile.owner, Main.MouseWorld.X, Main.MouseWorld.Y);
+						var proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Main.rand.NextVector2Unit() * Main.rand.Next(6, 13), ModContent.ProjectileType<PhantomMoth>(), (int)(Projectile.damage * 0.7), 0, Projectile.owner, Main.MouseWorld.X, Main.MouseWorld.Y);
 						proj.netUpdate2 = true;
 						proj.CritChance = Projectile.CritChance;
 					}
 				}
 				if (Projectile.localAI[0] % (AttackTime / 5) == 0)
-				{
-					player.statMana -= player.ownedProjectileCounts[ModContent.ProjectileType<Projectiles.GlowMoth>()];
-				}
+					player.statMana -= player.ownedProjectileCounts[ModContent.ProjectileType<GlowMoth>()];
 				Projectile.timeLeft = 20;
 			}
 			else
@@ -53,7 +51,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			float Wid = 1f;
 			Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
 
-			List<Vertex2D> vertex2Ds = new List<Vertex2D>();
+			var vertex2Ds = new List<Vertex2D>();
 
 			for (int x = 0; x < 3; x++)
 			{
@@ -74,7 +72,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 
 		public Color GetProjectileAlpha(Color orig)
 		{
-			Color color = new Color(0, 0, 0, 0)
+			var color = new Color(0, 0, 0, 0)
 			{
 				R = (byte)(orig.R * (255 - Projectile.alpha) / 255f),
 				G = (byte)(orig.G * (255 - Projectile.alpha) / 255f),
@@ -93,9 +91,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			CirR0 += 0.007f;
 			float Rad;
 			if (Projectile.timeLeft >= 20)
-			{
 				Rad = Math.Min(Projectile.localAI[0] * 3, 90);
-			}
 			else
 			{
 				Rad = Math.Min(Projectile.localAI[0] * 3, 90) * Projectile.timeLeft / 20f;
@@ -103,27 +99,27 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			Rad = Rad * Rad / 90f;
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-			List<Vertex2D> Vx = new List<Vertex2D>();
+			var Vx = new List<Vertex2D>();
 
 			Vector2 vf = Projectile.Center - Main.screenPosition;
-			Color color2 = new Color(0, 120, 255, 0);
+			var color2 = new Color(0, 120, 255, 0);
 
-			Color color3 = new Color(0, 120, 255, 0);
+			var color3 = new Color(0, 120, 255, 0);
 			color3.G = (byte)(color3.G * (Math.Cos(Projectile.localAI[0] / (AttackTime * 0.5) * Math.PI) + 1) / 2d);
 			color3.B = (byte)(color3.B * (Math.Cos(Projectile.localAI[0] / (AttackTime * 0.5) * Math.PI) + 1) / 2d);
 
 			color3 = GetProjectileAlpha(color3);
 
-			Color color4 = new Color(0, 120, 255, 0);
+			var color4 = new Color(0, 120, 255, 0);
 			color4 = GetProjectileAlpha(color4);
 
 			for (int h = 0; h < 90; h++)
 			{
 				Vector2 v0 = new Vector2(0, Rad * 0.78f).RotatedBy(h / 45d * Math.PI - CirR0 * 0.3f);
 				Vector2 v1 = new Vector2(0, Rad * 0.78f).RotatedBy((h + 1) / 45d * Math.PI - CirR0 * 0.3f);
-				Vx.Add(new Vertex2D(vf + v0, new Color(0, 0, 0, 0.1f * Rad / 90f), new Vector3(((h) / 30f) % 1f, 0, 0)));
-				Vx.Add(new Vertex2D(vf + v1, new Color(0, 0, 0, 0.1f * Rad / 90f), new Vector3(((0.999f + h) / 30f) % 1f, 0, 0)));
-				Vx.Add(new Vertex2D(vf, new Color(0, 0, 0, 0.9f * Rad / 90f), new Vector3(((0.5f + h) / 30f) % 1f, 1, 0)));
+				Vx.Add(new Vertex2D(vf + v0, new Color(0, 0, 0, 0.1f * Rad / 90f), new Vector3(h / 30f % 1f, 0, 0)));
+				Vx.Add(new Vertex2D(vf + v1, new Color(0, 0, 0, 0.1f * Rad / 90f), new Vector3((0.999f + h) / 30f % 1f, 0, 0)));
+				Vx.Add(new Vertex2D(vf, new Color(0, 0, 0, 0.9f * Rad / 90f), new Vector3((0.5f + h) / 30f % 1f, 1, 0)));
 			}
 			Texture2D t = TextureAssets.MagicPixel.Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t;
@@ -135,7 +131,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			Main.spriteBatch.Draw(t, Main.MouseScreen, null, new Color(0.5f, 0.5f, 0.5f, 0), 0, t.Size() / 2f, 0.75f, SpriteEffects.None, 0);
 
 			//攻击位置,此处顺带标记距离小于120的
-			if ((Projectile.localAI[0]) % AttackTime == 0)
+			if (Projectile.localAI[0] % AttackTime == 0)
 			{
 				OldAimPos = Main.MouseWorld;
 				float distance = 120;
@@ -153,7 +149,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			}
 			if (OldAimPos != Vector2.Zero)
 			{
-				float k = (AttackTime - (Projectile.localAI[0]) % AttackTime) / (AttackTime * 0.5f);
+				float k = (AttackTime - Projectile.localAI[0] % AttackTime) / (AttackTime * 0.5f);
 				k = Math.Min(k, 1);
 				Vector2 v2 = OldAimPos - Main.screenPosition;
 				for (int h = 0; h < 90; h++)
@@ -161,9 +157,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 					Vector2 v0 = new Vector2(0, Rad * 0.4f * k).RotatedBy(h / 45d * Math.PI - CirR0 * 2.3f);
 					Vector2 v1 = new Vector2(0, Rad * 0.4f * k).RotatedBy((h + 1) / 45d * Math.PI - CirR0 * 2.3f);
 
-					Vx.Add(new Vertex2D(v2 + v0, color3, new Vector3(((h) / 30f) % 1f, 0, 0)));
-					Vx.Add(new Vertex2D(v2 + v1, color3, new Vector3(((1 + h) / 30f) % 1f, 0, 0)));
-					Vx.Add(new Vertex2D(v2, color3, new Vector3(((0.5f + h) / 30f) % 1f, 1, 0)));
+					Vx.Add(new Vertex2D(v2 + v0, color3, new Vector3(h / 30f % 1f, 0, 0)));
+					Vx.Add(new Vertex2D(v2 + v1, color3, new Vector3((1 + h) / 30f % 1f, 0, 0)));
+					Vx.Add(new Vertex2D(v2, color3, new Vector3((0.5f + h) / 30f % 1f, 1, 0)));
 				}
 				t = MythContent.QuickTexture("TheFirefly/Projectiles/Circle0");
 				Main.graphics.GraphicsDevice.Textures[0] = t;
@@ -178,45 +174,45 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			{
 				Vector2 v0 = new Vector2(0, Rad).RotatedBy(h / 45d * Math.PI - CirR0 * 0.3f);
 				Vector2 v1 = new Vector2(0, Rad).RotatedBy((h + 1) / 45d * Math.PI - CirR0 * 0.3f);
-				Vx.Add(new Vertex2D(vf + v0, color2, new Vector3(((h) / 30f) % 1f, 0, 0)));
-				Vx.Add(new Vertex2D(vf + v1, color2, new Vector3(((0.999f + h) / 30f) % 1f, 0, 0)));
-				Vx.Add(new Vertex2D(vf, color2, new Vector3(((0.5f + h) / 30f) % 1f, 1, 0)));
+				Vx.Add(new Vertex2D(vf + v0, color2, new Vector3(h / 30f % 1f, 0, 0)));
+				Vx.Add(new Vertex2D(vf + v1, color2, new Vector3((0.999f + h) / 30f % 1f, 0, 0)));
+				Vx.Add(new Vertex2D(vf, color2, new Vector3((0.5f + h) / 30f % 1f, 1, 0)));
 			}
 			t = MythContent.QuickTexture("TheFirefly/Projectiles/Circle0");
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 
 			//噪声圈
-			List<Vertex2D> Vx2 = new List<Vertex2D>();
+			var Vx2 = new List<Vertex2D>();
 			for (int h = 0; h < 90; h++)
 			{
 				Vector2 v0 = new Vector2(0, Rad).RotatedBy(h / 45d * Math.PI + CirR0 * 0.4f);
 				Vector2 v1 = new Vector2(0, Rad).RotatedBy((h + 1) / 45d * Math.PI + CirR0 * 0.4f);
-				Vx2.Add(new Vertex2D(vf + v0, color4, new Vector3((h / 30f) % 1f, 0, 0)));
-				Vx2.Add(new Vertex2D(vf + v1, color4, new Vector3(((1 + h) / 30f) % 1f, 0, 0)));
-				Vx2.Add(new Vertex2D(vf, color4, new Vector3(((0.5f + h) / 30f) % 1f, 1, 0)));
+				Vx2.Add(new Vertex2D(vf + v0, color4, new Vector3(h / 30f % 1f, 0, 0)));
+				Vx2.Add(new Vertex2D(vf + v1, color4, new Vector3((1 + h) / 30f % 1f, 0, 0)));
+				Vx2.Add(new Vertex2D(vf, color4, new Vector3((0.5f + h) / 30f % 1f, 1, 0)));
 			}
 			t = MythContent.QuickTexture("TheFirefly/Projectiles/Circle1");
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx2.ToArray(), 0, Vx2.Count / 3);
 
 			//内部圈
-			List<Vertex2D> Vx3 = new List<Vertex2D>();
+			var Vx3 = new List<Vertex2D>();
 			for (int h = 0; h < 90; h++)
 			{
 				Vector2 v0 = new Vector2(0, Rad).RotatedBy(h / 45d * Math.PI + CirR0);
 				Vector2 v1 = new Vector2(0, Rad).RotatedBy((h + 1) / 45d * Math.PI + CirR0);
 				if (h % 2 == 1)
 				{
-					Vx3.Add(new Vertex2D(vf + v0, color3, new Vector3(((h) / 30f) % 1f, 0, 0)));
-					Vx3.Add(new Vertex2D(vf + v1, color3, new Vector3(((1 + h) / 30f) % 1f, 0, 0)));
-					Vx3.Add(new Vertex2D(vf, color3, new Vector3(((0.5f + h) / 30f) % 1f, 1, 0)));
+					Vx3.Add(new Vertex2D(vf + v0, color3, new Vector3(h / 30f % 1f, 0, 0)));
+					Vx3.Add(new Vertex2D(vf + v1, color3, new Vector3((1 + h) / 30f % 1f, 0, 0)));
+					Vx3.Add(new Vertex2D(vf, color3, new Vector3((0.5f + h) / 30f % 1f, 1, 0)));
 				}
 				else
 				{
-					Vx3.Add(new Vertex2D(vf + v0, color3, new Vector3(((1 + h) / 30f) % 1f, 0, 0)));
-					Vx3.Add(new Vertex2D(vf + v1, color3, new Vector3(((h) / 30f) % 1f, 0, 0)));
-					Vx3.Add(new Vertex2D(vf, color3, new Vector3(((0.5f + h) / 30f) % 1f, 1, 0)));
+					Vx3.Add(new Vertex2D(vf + v0, color3, new Vector3((1 + h) / 30f % 1f, 0, 0)));
+					Vx3.Add(new Vertex2D(vf + v1, color3, new Vector3(h / 30f % 1f, 0, 0)));
+					Vx3.Add(new Vertex2D(vf, color3, new Vector3((0.5f + h) / 30f % 1f, 1, 0)));
 				}
 			}
 			t = MythContent.QuickTexture("TheFirefly/Projectiles/Circle2");
@@ -224,11 +220,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx3.ToArray(), 0, Vx3.Count / 3);
 
 			//旋转线
-			Color color5 = new Color(84, 0, 255, 0);
+			var color5 = new Color(84, 0, 255, 0);
 			for (int h = 0; h < 7; h++)
 			{
 				Vector2 v0 = new Vector2(0, Rad * 0.78f).RotatedBy(h / 3.5 * Math.PI - CirR0 * 0.9);
-				Vector2 v1 = new Vector2(0, Rad * 0.78f).RotatedBy(h / 3.5 * Math.PI - CirR0 * 0.9 + (Projectile.localAI[0] + (AttackTime * 0.5)) / (AttackTime * 0.5) * Math.PI);
+				Vector2 v1 = new Vector2(0, Rad * 0.78f).RotatedBy(h / 3.5 * Math.PI - CirR0 * 0.9 + (Projectile.localAI[0] + AttackTime * 0.5) / (AttackTime * 0.5) * Math.PI);
 				DrawDoubleLine(vf + v0, vf + (v1 + v0) * 0.5f, new Color(0, 0, 40, 0), color3);
 				DrawDoubleLine(vf + (v1 + v0) * 0.5f, vf + v1, color3, new Color(0, 0, 40, 0));
 			}
@@ -243,7 +239,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			for (int h = 0; h < 7; h++)
 			{
 				Vector2 v0 = new Vector2(0, Rad * 0.78f).RotatedBy(h / 3.5 * Math.PI - CirR0 * 0.3);
-				Vector2 v1 = new Vector2(0, Rad * 0.78f).RotatedBy(h / 3.5 * Math.PI - CirR0 * 0.3 - (4 + ((Projectile.localAI[0] + (AttackTime * 0.5)) % (AttackTime * 2) > AttackTime ? 0 : 2)) / 7d * Math.PI);
+				Vector2 v1 = new Vector2(0, Rad * 0.78f).RotatedBy(h / 3.5 * Math.PI - CirR0 * 0.3 - (4 + ((Projectile.localAI[0] + AttackTime * 0.5) % (AttackTime * 2) > AttackTime ? 0 : 2)) / 7d * Math.PI);
 				DrawDoubleLine(vf + v0, vf + (v1 + v0) * 0.5f, new Color(0, 0, 0, 0), color5);
 				DrawDoubleLine(vf + (v1 + v0) * 0.5f, vf + v1, color5, new Color(0, 0, 0, 0));
 			}
@@ -255,10 +251,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 					if (p.type == ModContent.ProjectileType<GlowMoth>())
 					{
 						Vector2 v0 = p.Center - Projectile.Center;
-						Vector2 v1 = Utils.SafeNormalize(v0, Vector2.Zero);
+						Vector2 v1 = v0.SafeNormalize(Vector2.Zero);
 						if (v0.Length() < 300 && v0.Length() > Rad * 0.78f)
 						{
-							Color color6 = new Color(0, 0, 0, 0);
+							var color6 = new Color(0, 0, 0, 0);
 							float kDis = 300 - v0.Length();
 							kDis /= 300f;
 							kDis *= Projectile.timeLeft / 20f;
@@ -266,9 +262,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 							color6.G = (byte)(color2.G * kDis);
 							color6.B = (byte)(color2.B * kDis);
 
-							Color color7 = new Color(0, 0, 0, 0);
+							var color7 = new Color(0, 0, 0, 0);
 
-							kDis = (float)(Math.Clamp(Math.Sqrt(kDis) - 0.5f, 0, 1));
+							kDis = (float)Math.Clamp(Math.Sqrt(kDis) - 0.5f, 0, 1);
 							color7.R = (byte)(color2.R * kDis);
 							color7.G = (byte)(color2.G * kDis);
 							color7.B = (byte)(color2.B * kDis);
@@ -303,7 +299,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 		//}
 		private static void DrawCircle(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center, bool Black = false)
 		{
-			List<Vertex2D> circle = new List<Vertex2D>();
+			var circle = new List<Vertex2D>();
 			for (int h = 0; h < radious / 2; h += 5)
 			{
 				circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4), color, new Vector3(0.5f, 1, 0)));
@@ -315,16 +311,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			{
 				Texture2D t = MythContent.QuickTexture("OmniElementItems/Projectiles/Wave");
 				if (Black)
-				{
 					t = MythContent.QuickTexture("OmniElementItems/Projectiles/WaveBlack");
-				}
 				Main.graphics.GraphicsDevice.Textures[0] = t;
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
 			}
 		}
 		private static void DrawCircle(float radious, float width, Color color, Vector2 center, float value0 = 0, float valu1 = 0)
 		{
-			List<Vertex2D> circle = new List<Vertex2D>();
+			var circle = new List<Vertex2D>();
 			for (int h = 0; h < radious / 2; h++)
 			{
 				circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4), color, new Vector3((h / (float)radious * 6 + (float)Main.timeForVisualEffects / 200f) % 1, 1, 0)));

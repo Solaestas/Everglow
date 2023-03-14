@@ -1,5 +1,6 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectiles
+﻿using Everglow.Myth.Common;
+
+namespace Everglow.Myth.MiscItems.Weapons.Clubs.Projectiles
 {
 	public class MeteorClub : ClubProj
 	{
@@ -14,7 +15,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
 			int type = DustID.Flare;
 			for (float d = 0.1f; d < Omega; d += 0.04f)
 			{
-				Dust D = Dust.NewDustDirect(target.Center - new Vector2(4)/*Dust的Size=8x8*/, 0, 0, type, 0, 0, 150, default, Main.rand.NextFloat(0.4f, 1.1f));
+				var D = Dust.NewDustDirect(target.Center - new Vector2(4)/*Dust的Size=8x8*/, 0, 0, type, 0, 0, 150, default, Main.rand.NextFloat(0.4f, 1.1f));
 				D.noGravity = true;
 				D.velocity = new Vector2(0, Main.rand.NextFloat(Omega * 25f)).RotatedByRandom(6.283);
 			}
@@ -35,25 +36,21 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
 		public override void PostPreDraw()
 		{
 			List<Vector2> SmoothTrailX = CatmullRom.SmoothPath(trailVecs.ToList());//平滑
-			List<Vector2> SmoothTrail = new List<Vector2>();
+			var SmoothTrail = new List<Vector2>();
 			for (int x = 0; x < SmoothTrailX.Count - 1; x++)
 			{
 				SmoothTrail.Add(SmoothTrailX[x]);
 			}
 			if (trailVecs.Count != 0)
-			{
 				SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
-			}
 
 			int length = SmoothTrail.Count;
 			if (length <= 3)
-			{
 				return;
-			}
 			Vector2[] trail = SmoothTrail.ToArray();
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 			var BasePos = Projectile.Center - Main.screenPosition;
-			Color c0 = new Color(MathF.Sqrt(Omega), Omega * Omega * 0.8f, Omega * Omega * 0.2f, Omega * 0.3f);
+			var c0 = new Color(MathF.Sqrt(Omega), Omega * Omega * 0.8f, Omega * Omega * 0.2f, Omega * 0.3f);
 			for (int i = 0; i < length; i++)
 			{
 				float factor = i / (length - 1f);
@@ -87,16 +84,14 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
 		{
 			SpriteEffects effects = SpriteEffects.None;
 			if (Projectile.spriteDirection == 1)
-			{
 				effects = SpriteEffects.FlipHorizontally;
-			}
 			Texture2D texture = MythContent.QuickTexture("MiscItems/Weapons/Clubs/Projectiles/MeteorClub_glow");
 			Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, texture.Size() / 2f, Projectile.scale, effects, 0f);
 			for (int i = 0; i < 5; i++)
 			{
 				float fade = Omega * 2f + 0.2f;
 				fade *= (5 - i) / 5f;
-				Color color2 = new Color(fade, fade, fade, 0);
+				var color2 = new Color(fade, fade, fade, 0);
 				Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, color2, Projectile.rotation - i * 0.75f * Omega, texture.Size() / 2f, Projectile.scale, effects, 0f);
 			}
 		}

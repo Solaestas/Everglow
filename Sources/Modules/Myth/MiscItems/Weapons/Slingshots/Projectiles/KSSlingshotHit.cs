@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Projectiles
+﻿namespace Everglow.Myth.MiscItems.Weapons.Slingshots.Projectiles
 {
 	class KSSlingshotHit : ModProjectile
 	{
@@ -29,8 +29,8 @@
 		{
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-			List<Vertex2D> bars = new List<Vertex2D>();
-			ef = (Effect)ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/FadeSlingshot").Value;
+			var bars = new List<Vertex2D>();
+			ef = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/FadeSlingshot").Value;
 			float widx = Projectile.timeLeft / 120f;
 			float widxM = 1f - widx;
 			radious = (float)(Math.Sqrt(5 * widxM) * 20);
@@ -43,16 +43,14 @@
 				var factor = i / 12.5f;
 				var color = Color.Lime;
 				var w = MathHelper.Lerp(1f, 0.05f, 0.5f);
-				float delk0 = (width - radious) / (float)(width) / 2f;
+				float delk0 = (width - radious) / (float)width / 2f;
 				if (delk0 < 0)
-				{
 					delk0 = 0;
-				}
 				bars.Add(new Vertex2D(vDp + Projectile.Center + normalDir * width, color, new Vector3((float)Math.Sqrt(factor), 1, w)));
-				bars.Add(new Vertex2D(vDp + Projectile.Center + normalDir * -(Math.Clamp(width, 0, radious)), color, new Vector3((float)Math.Sqrt(factor), delk0, w)));
+				bars.Add(new Vertex2D(vDp + Projectile.Center + normalDir * -Math.Clamp(width, 0, radious), color, new Vector3((float)Math.Sqrt(factor), delk0, w)));
 			}
 
-			List<Vertex2D> triangleList = new List<Vertex2D>();
+			var triangleList = new List<Vertex2D>();
 
 			if (bars.Count > 2)
 			{

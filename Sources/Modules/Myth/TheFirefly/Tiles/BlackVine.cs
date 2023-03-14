@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
+﻿namespace Everglow.Myth.TheFirefly.Tiles
 {
 	public class BlackVine : ModTile//TODO:Need to copy some code from vanilla.This is a kind of vine,it will swaying in the wind or dragged by moving-players.
 	{

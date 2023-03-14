@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Dusts
+﻿namespace Everglow.Myth.MagicWeaponsReplace.Dusts
 {
 	public class DemoFlame : ModDust
 	{
@@ -21,13 +21,9 @@
 
 			//Lighting.AddLight(dust.position, 1f * dust.scale, 0.28f * dust.scale, 0.68f);
 			if (dust.scale < 0.15f)
-			{
 				dust.active = false;
-			}
 			if (dust.fadeIn < 0)
-			{
 				dust.active = false;
-			}
 
 			if (Collision.SolidCollision(dust.position, 8, 8))
 			{
@@ -48,9 +44,7 @@
 				dust.velocity = v0;
 			}
 			if (dust.alpha == 120)
-			{
 				dust.velocity *= 0.9f;
-			}
 			return false;
 		}
 
@@ -62,7 +56,7 @@
 			{
 				float k2 = (k0 - k1) / (1 - k1);
 				float k3 = Math.Min(k2 * k2 * 1.6f, 0.4f);
-				return new Color?(new Color(k3, 0, (float)(Math.Sqrt(k2)) * 2, 1 - k2));
+				return new Color?(new Color(k3, 0, (float)Math.Sqrt(k2) * 2, 1 - k2));
 			}
 			else
 			{

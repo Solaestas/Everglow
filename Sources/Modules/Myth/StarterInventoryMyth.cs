@@ -1,7 +1,7 @@
-using Everglow.Sources.Modules.MythModule.OmniElementItems;
+using Everglow.Myth.OmniElementItems;
 using static Steamworks.SteamUser;
 
-namespace Everglow.Sources.Modules.MythModule
+namespace Everglow.Myth
 {
 	public class StarterInventoryMyth : ModPlayer
 	{

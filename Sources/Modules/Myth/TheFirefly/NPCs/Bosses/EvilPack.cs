@@ -1,10 +1,10 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+﻿using Everglow.Myth.Common;
+using Everglow.Myth.TheFirefly.Dusts;
 using Terraria.Audio;
 using Terraria.Localization;
 using static Steamworks.SteamUser;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
+namespace Everglow.Myth.TheFirefly.NPCs.Bosses
 {
 	public class EvilPack : ModNPC
 	{
@@ -44,11 +44,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 			omega *= 0.97f;
 			int valueTime = (int)(Main.timeForVisualEffects * 0.13) % 7;
 			NPC.frame = new Rectangle(186 * valueTime, 0, 186, 278);
-			float ValueLight = (MathUtils.Sin((float)((Main.timeForVisualEffects * 0.26 * Math.PI / 7d) + 0.5)) * 0.2f) + 0.2f;
+			float ValueLight = MathUtils.Sin((float)(Main.timeForVisualEffects * 0.26 * Math.PI / 7d + 0.5)) * 0.2f + 0.2f;
 			if (ValueLight > 1)
-			{
 				ValueLight *= ValueLight;
-			}
 			//Lighting.AddLight((int)(NPC.Center.X / 16f), (int)(NPC.Center.Y / 16f),0.2f * ValueLight, 0.2f * ValueLight, 0.4f * ValueLight);
 			if (NPC.ai[0] < 10)
 			{
@@ -69,25 +67,23 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 						}
 						for (int x = 0; x < 72; x++)
 						{
-							Dust d = Dust.NewDustDirect(NPC.position + new Vector2(26 - 20, 106 - 30), 40, 60, ModContent.DustType<BlueGlowAppear>(), 0, 0, 0, default, Main.rand.NextFloat(0.7f, 1.7f));
+							var d = Dust.NewDustDirect(NPC.position + new Vector2(26 - 20, 106 - 30), 40, 60, ModContent.DustType<BlueGlowAppear>(), 0, 0, 0, default, Main.rand.NextFloat(0.7f, 1.7f));
 							d.velocity = new Vector2(0, Main.rand.Next(16)).RotatedByRandom(6.283) + new Vector2(-4, 4);
 
 							for (int k = 0; k < 3; k++)
 							{
-								Dust d2 = Dust.NewDustDirect(NPC.position + new Vector2(26 - 20, 106 - 30), 40, 60, ModContent.DustType<BlueParticleDark2>(), 0, 0, 0, default, Main.rand.NextFloat(3.7f, 5.1f));
+								var d2 = Dust.NewDustDirect(NPC.position + new Vector2(26 - 20, 106 - 30), 40, 60, ModContent.DustType<BlueParticleDark2>(), 0, 0, 0, default, Main.rand.NextFloat(3.7f, 5.1f));
 								d2.velocity = new Vector2(0, Main.rand.Next(12)).RotatedByRandom(6.283) + new Vector2(-4, 4);
 								d2.alpha = (int)(d2.scale * 50);
 							}
 
-							Dust d3 = Dust.NewDustDirect(NPC.position + new Vector2(26 - 20, 106 - 30), 40, 60, DustID.SpookyWood, 0, 0, 0, default, Main.rand.NextFloat(0.7f, 1.7f));
+							var d3 = Dust.NewDustDirect(NPC.position + new Vector2(26 - 20, 106 - 30), 40, 60, DustID.SpookyWood, 0, 0, 0, default, Main.rand.NextFloat(0.7f, 1.7f));
 							d3.velocity = new Vector2(0, Main.rand.Next(16)).RotatedByRandom(6.283) + new Vector2(-4, 4);
 						}
 						if (!NPC.AnyNPCs(ModContent.NPCType<CorruptMoth>()))
 						{
 							if ((SteamID64 == 76561198074262598 /*Cataclysmic Armageddon*/ || SteamID64 == 76561198300589095 /*Setnour6*/) && EverglowConfig.DebugMode == true)
-							{
 								Main.NewText("Cataclysmic Armageddon's Long Lost Older Cousin Calamatious Annihilation the Corrupted Moth " + $"{Language.GetTextValue(Language.GetTextValue("Mods.Everglow.Common.Message.HasAwoken"))}", 175, 75, 255);
-							}
 							else
 							{
 								Main.NewText($"{Language.GetTextValue("Mods.Everglow.NPCName.CorruptMoth")} {Language.GetTextValue("Mods.Everglow.Common.Message.HasAwoken")}", 175, 75, 255);
@@ -146,15 +142,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 		{
 			//SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/MothHitCocoon"), NPC.Center);
 			if (NPC.ai[0] < 10)
-			{
 				NPC.ai[0] += 1;
-			}
 			else
 			{
 				if (NPC.ai[1] < 90f)
-				{
 					NPC.ai[1] += 0.01f;
-				}
 				else
 				{
 					NPC.ai[1] = 91f;
@@ -162,9 +154,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 			}
 			NPC.life = NPC.lifeMax;
 			if (Math.Abs(omega) < 0.2f)
-			{
 				omega -= Math.Min(hitDirection * (float)damage / 10000f, 0.05f);
-			}
 		}
 
 		public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -205,15 +195,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 		{
 			SpriteEffects effects = SpriteEffects.None;
 			if (NPC.spriteDirection == 1)
-			{
 				effects = SpriteEffects.FlipHorizontally;
-			}
 			Texture2D tg = MythContent.QuickTexture("TheFirefly/NPCs/Bosses/EvilHiveGlow");
-			float C = ((float)Math.Sqrt(Math.Max((90 - NPC.ai[1]) / 90f, 0)) * 0.6f) + Math.Abs(omega * 15);
-			C = 0.8f + (C * 0.2f);
-			Color color = new Color(C, C, C, 0);
-			Vector2 drawOrigin = new Vector2(tg.Width / 2f / Main.npcFrameCount[NPC.type], 0);
-			Vector2 drawOffset = new Vector2(67, -90);
+			float C = (float)Math.Sqrt(Math.Max((90 - NPC.ai[1]) / 90f, 0)) * 0.6f + Math.Abs(omega * 15);
+			C = 0.8f + C * 0.2f;
+			var color = new Color(C, C, C, 0);
+			var drawOrigin = new Vector2(tg.Width / 2f / Main.npcFrameCount[NPC.type], 0);
+			var drawOffset = new Vector2(67, -90);
 
 			Main.spriteBatch.Draw(tg, NPC.position + drawOffset - Main.screenPosition, new Rectangle?(NPC.frame), color, NPC.rotation, drawOrigin, 1f, effects, 0f);
 
@@ -244,20 +232,20 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 		{
 			Texture2D t0 = MythContent.QuickTexture("TheFirefly/NPCs/Bosses/Crack" + type.ToString());
 
-			List<Vertex2D> vertex2Ds = new List<Vertex2D>();
+			var vertex2Ds = new List<Vertex2D>();
 			for (int a = 1; a < Power + 1; a++)
 			{
-				Color color = new Color(1f / a, 1f / a, 1f / a, 0);
-				float scale = 2 + ((a - 1) / 8f);
+				var color = new Color(1f / a, 1f / a, 1f / a, 0);
+				float scale = 2 + (a - 1) / 8f;
 				Vector2 Move = new Vector2(-1, 1) * a;
 				for (int x = 0; x < 10; x++)
 				{
 					Vector2 DrawPoint1 = new Vector2(0, -Radius).RotatedBy(x / 5d * Math.PI);
 					Vector2 DrawPoint2 = new Vector2(0, -Radius).RotatedBy((x + 1) / 5d * Math.PI);
-					Vector2 dp1 = (DrawPoint1.RotatedBy(NPC.rotation) * scale) + Move;
-					Vector2 dp2 = (DrawPoint2.RotatedBy(NPC.rotation) * scale) + Move;
-					vertex2Ds.Add(new Vertex2D(DrawCenter + dp1, color, new Vector3(0.5f + (DrawPoint1.X / t0.Width), 0.5f + (DrawPoint1.Y / t0.Height), 0)));
-					vertex2Ds.Add(new Vertex2D(DrawCenter + dp2, color, new Vector3(0.5f + (DrawPoint2.X / t0.Width), 0.5f + (DrawPoint2.Y / t0.Height), 0)));
+					Vector2 dp1 = DrawPoint1.RotatedBy(NPC.rotation) * scale + Move;
+					Vector2 dp2 = DrawPoint2.RotatedBy(NPC.rotation) * scale + Move;
+					vertex2Ds.Add(new Vertex2D(DrawCenter + dp1, color, new Vector3(0.5f + DrawPoint1.X / t0.Width, 0.5f + DrawPoint1.Y / t0.Height, 0)));
+					vertex2Ds.Add(new Vertex2D(DrawCenter + dp2, color, new Vector3(0.5f + DrawPoint2.X / t0.Width, 0.5f + DrawPoint2.Y / t0.Height, 0)));
 					vertex2Ds.Add(new Vertex2D(DrawCenter, color, new Vector3(0.5f, 0.5f, 0)));
 				}
 			}

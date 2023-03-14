@@ -1,4 +1,4 @@
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Walls
+namespace Everglow.Myth.TheTusk.Walls
 {
 	public class BloodyStoneWall : ModWall
 	{

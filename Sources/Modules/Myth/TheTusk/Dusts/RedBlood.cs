@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheTusk.Dusts
+﻿namespace Everglow.Myth.TheTusk.Dusts
 {
 	public class RedBlood : ModDust
 	{
@@ -12,9 +12,7 @@
 			dust.scale *= 0.99f;
 			dust.velocity.Y += 0.25f;
 			if (Collision.SolidCollision(dust.position, 0, 0))
-			{
 				dust.active = false;
-			}
 			return true;
 		}
 	}

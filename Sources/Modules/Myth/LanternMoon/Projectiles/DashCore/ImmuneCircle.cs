@@ -1,4 +1,6 @@
-﻿namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.DashCore
+﻿using Everglow.Myth.LanternMoon.Buffs;
+
+namespace Everglow.Myth.LanternMoon.Projectiles.DashCore
 {
 	class ImmuneCircle : ModProjectile
 	{
@@ -24,59 +26,37 @@
 		public override void AI()
 		{
 			if (Projectile.timeLeft < 60f)
-			{
 				ka *= 0.97f;
-			}
 			Lighting.AddLight(Projectile.Center, (byte)(color0.R * ka) / 300f, (byte)(color0.G * ka) / 300f, (byte)(color0.B * ka) / 300f);
 			int AimPlayer = Projectile.owner;
 			if (Main.player[AimPlayer].active)
 			{
 				Projectile.Center = Main.player[AimPlayer].Center + new Vector2(0, -24);
 				Aimcolor = new Color(0, 0, 0);
-				if (Main.player[AimPlayer].HasBuff(ModContent.BuffType<Buffs.WhiteImmune>()))
-				{
+				if (Main.player[AimPlayer].HasBuff(ModContent.BuffType<WhiteImmune>()))
 					Aimcolor = new Color(255, 255, 255);
-				}
-				if (Main.player[AimPlayer].HasBuff(ModContent.BuffType<Buffs.RedImmune>()))
-				{
+				if (Main.player[AimPlayer].HasBuff(ModContent.BuffType<RedImmune>()))
 					Aimcolor = new Color(255, 0, 0);
-				}
-				if (Main.player[AimPlayer].HasBuff(ModContent.BuffType<Buffs.GreenImmune>()))
-				{
+				if (Main.player[AimPlayer].HasBuff(ModContent.BuffType<GreenImmune>()))
 					Aimcolor = new Color(0, 255, 17);
-				}
-				if (Main.player[AimPlayer].HasBuff(ModContent.BuffType<Buffs.BlueImmune>()))
-				{
+				if (Main.player[AimPlayer].HasBuff(ModContent.BuffType<BlueImmune>()))
 					Aimcolor = new Color(0, 131, 255);
-				}
-				if (Main.player[AimPlayer].HasBuff(ModContent.BuffType<Buffs.BrownImmune>()))
-				{
+				if (Main.player[AimPlayer].HasBuff(ModContent.BuffType<BrownImmune>()))
 					Aimcolor = new Color(107, 53, 0);
-				}
-				if (Main.player[AimPlayer].HasBuff(ModContent.BuffType<Buffs.PurpleImmune>()))
-				{
+				if (Main.player[AimPlayer].HasBuff(ModContent.BuffType<PurpleImmune>()))
 					Aimcolor = new Color(129, 4, 224);
-				}
-				if (Main.player[AimPlayer].HasBuff(ModContent.BuffType<Buffs.PinkImmune>()))
-				{
+				if (Main.player[AimPlayer].HasBuff(ModContent.BuffType<PinkImmune>()))
 					Aimcolor = new Color(255, 0, 191);
-				}
-				if (Main.player[AimPlayer].HasBuff(ModContent.BuffType<Buffs.YellowImmune>()))
-				{
+				if (Main.player[AimPlayer].HasBuff(ModContent.BuffType<YellowImmune>()))
 					Aimcolor = new Color(255, 204, 0);
-				}
 			}
 			else
 			{
 				if (Projectile.timeLeft > 65)
-				{
 					Projectile.timeLeft = 60;
-				}
 			}
 			if (Aimcolor == new Color(0, 0, 0) && Projectile.timeLeft > 65)
-			{
 				Projectile.timeLeft = 60;
-			}
 			color0.R = (byte)(color0.R * 0.94f + Aimcolor.R * 0.06f);
 			color0.G = (byte)(color0.G * 0.94f + Aimcolor.G * 0.06f);
 			color0.B = (byte)(color0.B * 0.94f + Aimcolor.B * 0.06f);
@@ -99,10 +79,10 @@
 			CirPro0 += 0.1f;
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-			List<Vertex2D> Vx = new List<Vertex2D>();
+			var Vx = new List<Vertex2D>();
 
 			Vector2 vf = Projectile.Center - Main.screenPosition;
-			Color color3 = new Color(color0.R, color0.G, color0.B, 0);
+			var color3 = new Color(color0.R, color0.G, color0.B, 0);
 			for (int h = 0; h < 90; h++)
 			{
 				color3.A = 0;
@@ -111,16 +91,16 @@
 				color3.B = (byte)(color3.B * (255 - Projectile.alpha) / 255f);
 				Vector2 v0 = new Vector2(0, 50).RotatedBy(h / 45d * Math.PI + CirR0);
 				Vector2 v1 = new Vector2(0, 50).RotatedBy((h + 1) / 45d * Math.PI + CirR0);
-				Vx.Add(new Vertex2D(vf + v0, color3, new Vector3(((h) / 30f) % 1f, 0, 0)));
-				Vx.Add(new Vertex2D(vf + v1, color3, new Vector3(((0.999f + h) / 30f) % 1f, 0, 0)));
-				Vx.Add(new Vertex2D(vf, color3, new Vector3(((0.5f + h) / 30f) % 1f, 1, 0)));
+				Vx.Add(new Vertex2D(vf + v0, color3, new Vector3(h / 30f % 1f, 0, 0)));
+				Vx.Add(new Vertex2D(vf + v1, color3, new Vector3((0.999f + h) / 30f % 1f, 0, 0)));
+				Vx.Add(new Vertex2D(vf, color3, new Vector3((0.5f + h) / 30f % 1f, 1, 0)));
 			}
 			Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/LanternMoon/Projectiles/DashCore/ImmuneCircle").Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 
 
-			List<Vertex2D> Vx2 = new List<Vertex2D>();
+			var Vx2 = new List<Vertex2D>();
 			for (int h = 0; h < 90; h++)
 			{
 				color3.A = 0;
@@ -129,15 +109,15 @@
 				color3.B = (byte)(color3.B * (255 - Projectile.alpha) / 255f);
 				Vector2 v0 = new Vector2(0, 50).RotatedBy(h / 45d * Math.PI + CirR0);
 				Vector2 v1 = new Vector2(0, 50).RotatedBy((h + 1) / 45d * Math.PI + CirR0);
-				Vx2.Add(new Vertex2D(vf + v0, color3, new Vector3(((h) / 30f) % 1f, 0, 0)));
-				Vx2.Add(new Vertex2D(vf + v1, color3, new Vector3(((0.999f + h) / 30f) % 1f, 0, 0)));
-				Vx2.Add(new Vertex2D(vf, color3, new Vector3(((0.5f + h) / 30f) % 1f, 1, 0)));
+				Vx2.Add(new Vertex2D(vf + v0, color3, new Vector3(h / 30f % 1f, 0, 0)));
+				Vx2.Add(new Vertex2D(vf + v1, color3, new Vector3((0.999f + h) / 30f % 1f, 0, 0)));
+				Vx2.Add(new Vertex2D(vf, color3, new Vector3((0.5f + h) / 30f % 1f, 1, 0)));
 			}
 			t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/LanternMoon/Projectiles/DashCore/ImmuneCircle3").Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx2.ToArray(), 0, Vx2.Count / 3);
 
-			List<Vertex2D> Vx3 = new List<Vertex2D>();
+			var Vx3 = new List<Vertex2D>();
 			for (int h = 0; h < 90; h++)
 			{
 				color3.A = 0;
@@ -148,15 +128,15 @@
 				Vector2 v1 = new Vector2(0, 50).RotatedBy((h + 1) / 45d * Math.PI + CirR0);
 				if (h % 2 == 1)
 				{
-					Vx3.Add(new Vertex2D(vf + v0, color3, new Vector3(((h) / 30f) % 1f, 0, 0)));
-					Vx3.Add(new Vertex2D(vf + v1, color3, new Vector3(((0.999f + h) / 30f) % 1f, 0, 0)));
-					Vx3.Add(new Vertex2D(vf, color3, new Vector3(((0.5f + h) / 30f) % 1f, 1, 0)));
+					Vx3.Add(new Vertex2D(vf + v0, color3, new Vector3(h / 30f % 1f, 0, 0)));
+					Vx3.Add(new Vertex2D(vf + v1, color3, new Vector3((0.999f + h) / 30f % 1f, 0, 0)));
+					Vx3.Add(new Vertex2D(vf, color3, new Vector3((0.5f + h) / 30f % 1f, 1, 0)));
 				}
 				else
 				{
-					Vx3.Add(new Vertex2D(vf + v0, color3, new Vector3(((0.999f + h) / 30f) % 1f, 0, 0)));
-					Vx3.Add(new Vertex2D(vf + v1, color3, new Vector3(((h) / 30f) % 1f, 0, 0)));
-					Vx3.Add(new Vertex2D(vf, color3, new Vector3(((0.5f + h) / 30f) % 1f, 1, 0)));
+					Vx3.Add(new Vertex2D(vf + v0, color3, new Vector3((0.999f + h) / 30f % 1f, 0, 0)));
+					Vx3.Add(new Vertex2D(vf + v1, color3, new Vector3(h / 30f % 1f, 0, 0)));
+					Vx3.Add(new Vertex2D(vf, color3, new Vector3((0.5f + h) / 30f % 1f, 1, 0)));
 				}
 			}
 			t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/LanternMoon/Projectiles/DashCore/ImmuneCircle2").Value;

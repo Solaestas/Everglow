@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Dusts
+﻿namespace Everglow.Myth.MiscItems.Dusts
 {
 	public class XiaoDust : ModDust
 	{
@@ -15,9 +15,7 @@
 			dust.velocity *= 0.9f;
 			dust.scale *= 0.9f;
 			if (dust.scale < 0.05f)
-			{
 				dust.active = false;
-			}
 			return false;
 		}
 	}

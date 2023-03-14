@@ -1,7 +1,7 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
 using Terraria.ObjectData;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
+namespace Everglow.Myth.TheFirefly.Tiles
 {
 	public class EoWPostAndBead : ModTile
 	{
@@ -27,18 +27,16 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 			TileObjectData.newTile.StyleHorizontal = true;
 			TileObjectData.addTile(Type);
 
-			base.AddMapEntry(new Color(87, 84, 96));
+			AddMapEntry(new Color(87, 84, 96));
 		}
 
 		public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 		{
 			var tile = Main.tile[i, j];
-			Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+			var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 
 			if (Main.drawToScreen)
-			{
 				zero = Vector2.Zero;
-			}
 			Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/EoWPostAndBead_glow");
 
 			spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(1f, 1f, 1f, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);

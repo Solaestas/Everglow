@@ -1,7 +1,7 @@
-﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories;
+﻿using Everglow.Myth.TheFirefly.Items.Accessories;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
+namespace Everglow.Myth.TheFirefly.Items.Weapons
 {
 	public class ScaleWingBlade : ModItem
 	{
@@ -41,12 +41,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 				if (Main.myPlayer == player.whoAmI)
 				{
 					if (player.altFunctionUse != 2)
-					{
 						Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<ScaleWingBladeProj>(), player.GetWeaponDamage(Item), Item.knockBack, player.whoAmI);
-					}
 					else//右键
 					{
-						Projectile proj = Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<ScaleWingBladeProj>(), player.GetWeaponDamage(Item), Item.knockBack, player.whoAmI);
+						var proj = Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<ScaleWingBladeProj>(), player.GetWeaponDamage(Item), Item.knockBack, player.whoAmI);
 						(proj.ModProjectile as MeleeProj).attackType = 100;
 						(proj.ModProjectile as MeleeProj).isRightClick = true;
 						proj.netUpdate2 = true;

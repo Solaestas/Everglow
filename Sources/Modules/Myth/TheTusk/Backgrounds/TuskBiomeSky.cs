@@ -1,7 +1,7 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration;
+﻿using Everglow.Myth.Common;
+using Everglow.Myth.TheTusk.WorldGeneration;
 using Terraria.Graphics.Effects;
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Backgrounds
+namespace Everglow.Myth.TheTusk.Backgrounds
 {
 
 	public class TuskBiomeSky : CustomSky
@@ -29,7 +29,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Backgrounds
 
 		public override bool IsActive()
 		{
-			return /*this.skyActive ||*/ this.opacity > 0f;
+			return /*this.skyActive ||*/ opacity > 0f;
 		}
 
 		public override void Activate(Vector2 position, params object[] args)
@@ -82,14 +82,14 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Backgrounds
 				int counts = Main.rand.Next(15, 80);
 				if (sub)
 					counts = Main.rand.Next(5, 12);
-				Vector2 vec = new Vector2(pos.X, pos.Y);
+				var vec = new Vector2(pos.X, pos.Y);
 				for (int i = 0; i < counts; i++)
 				{
 					nodes.Add(vec);
 					vec += (rotation + Main.rand.NextFloatDirection() * 0.5f).ToRotationVector2() * Main.rand.Next(90, 150);
 					if (!sub && i < 12 && Main.rand.NextBool(15))
 					{
-						RedLightning l = new RedLightning() { pos = new Vector3(vec, pos.Z), rotation = rotation + Main.rand.NextFloatDirection() * 1f, maxTimeleft = maxTimeleft - 10, sub = true };
+						var l = new RedLightning() { pos = new Vector3(vec, pos.Z), rotation = rotation + Main.rand.NextFloatDirection() * 1f, maxTimeleft = maxTimeleft - 10, sub = true };
 						l.Create();
 						lightnings.Add(l);
 					}
@@ -105,7 +105,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Backgrounds
 			{
 				Vector2 offset = Main.rand.NextVector2Unit() * Main.rand.Next(700, 3000);
 				Vector3 pos = cloudCenter + new Vector3(offset.X, 0, offset.Y);
-				RedLightning l = new RedLightning() { pos = pos, rotation = 1.57f, maxTimeleft = 60 };
+				var l = new RedLightning() { pos = pos, rotation = 1.57f, maxTimeleft = 60 };
 				l.Create();
 				lightnings.Add(l);
 
@@ -118,7 +118,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Backgrounds
 					lightning.timeleft--;
 					if (!lightning.sub && lightning.pos.Z < 8000)
 					{
-						float a = MathHelper.Clamp(1 - (lightning.pos.Z) / 8000f, 0f, 1f);
+						float a = MathHelper.Clamp(1 - lightning.pos.Z / 8000f, 0f, 1f);
 						Main.ColorOfTheSkies = Color.Lerp(Main.ColorOfTheSkies, new Color(0.8f, 0.6f, 0.6f), 0.5f * a * lightning.timeleft / 60f);//闪电背景颜色
 					}
 					if (lightning.timeleft <= 0)
@@ -130,9 +130,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Backgrounds
 				RedLightning lightning = lightnings[i];
 				float alpha = 0;
 				if (lightning.pos.Z > 7000)
-				{
 					alpha = (lightning.pos.Z - 7000) / 10000f;
-				}
 				Vertex3D_2[] vertices = lightning.GetVertices(90, new Color(1, 1f - alpha, 1f - alpha, 0f));
 				Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("TheTusk/Backgrounds/Lightning");
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices, 0, vertices.Length - 2);
@@ -156,10 +154,10 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Backgrounds
 
 					rock.pos += rock.velocity;
 
-					Vector2 vecToCenter = new Vector2(cloudCenter.X - rock.pos.X, cloudCenter.Z - rock.pos.Z);
+					var vecToCenter = new Vector2(cloudCenter.X - rock.pos.X, cloudCenter.Z - rock.pos.Z);
 					if (vecToCenter.Length() > 320)//向心的加速
 					{
-						Vector2 velxz = new Vector2(rock.velocity.X, rock.velocity.Z);
+						var velxz = new Vector2(rock.velocity.X, rock.velocity.Z);
 						Vector2 acc = 2.8f * Vector2.Normalize(vecToCenter) * velxz.LengthSquared() / vecToCenter.Length();
 						rock.velocity.X += acc.X;
 						rock.velocity.Z += acc.Y;
@@ -179,7 +177,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Backgrounds
 				{
 					float alpha = (cloudCenter.Y + 300 - rock.pos.Y) / 400f;
 					if (alpha > 0)
-						color *= (1 - alpha);
+						color *= 1 - alpha;
 				}
 
 				Texture2D tex = MythContent.QuickTexture("TheTusk/Backgrounds/Stone" + rock.style);//贴图
@@ -204,7 +202,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Backgrounds
 		public Rectangle GetDrawRect(Vector2 texSize, float MoveStep, float MulSize = 1)
 		{
 			Vector2 sampleTopleft = Vector2.Zero;
-			Vector2 sampleCenter = sampleTopleft + (texSize / 2);
+			Vector2 sampleCenter = sampleTopleft + texSize / 2;
 			Vector2 screenSize = new Vector2(Main.screenWidth, Main.screenHeight) / MulSize;
 			TuskGen tuskGen = ModContent.GetInstance<TuskGen>();
 			Vector2 TuskBiomeCenter = new Vector2(tuskGen.tuskCenterX, tuskGen.tuskCenterY) * 16;
@@ -213,7 +211,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Backgrounds
 			int RX = (int)(sampleCenter.X - screenSize.X / 2f + deltaPos.X);
 			int RY = (int)(sampleCenter.Y - screenSize.Y / 2f + deltaPos.Y);
 
-			return new Rectangle(RX, RY, (int)(screenSize.X), (int)(screenSize.Y));
+			return new Rectangle(RX, RY, (int)screenSize.X, (int)screenSize.Y);
 		}
 
 		public override void Draw(SpriteBatch spriteBatch, float minDepth, float maxDepth)
@@ -234,9 +232,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Backgrounds
 
 
 			//计算矩阵
-			Vector3 camPos = new Vector3(Main.screenWidth / 2 + Main.screenPosition.X, Main.screenHeight / 2 + Main.screenPosition.Y, -300);
+			var camPos = new Vector3(Main.screenWidth / 2 + Main.screenPosition.X, Main.screenHeight / 2 + Main.screenPosition.Y, -300);
 			int lookup = 50;//往上看
-			Matrix matrix = Matrix.CreateLookAt(camPos, new Vector3(camPos.X, camPos.Y - lookup, 1), Vector3.Down);
+			var matrix = Matrix.CreateLookAt(camPos, new Vector3(camPos.X, camPos.Y - lookup, 1), Vector3.Down);
 			matrix *= Matrix.CreatePerspectiveFieldOfView(MathHelper.Pi / 5, Main.graphics.GraphicsDevice.Viewport.AspectRatio, 1, 15000);
 
 			Effect eff = MythContent.QuickEffect("Effects/DrawPrim3D");
@@ -250,7 +248,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Backgrounds
 			float ABdevide = 0.32085f;
 			double OneDevideRotaSpeed = 2500d;
 
-			Texture2D[] CloudLine = new Texture2D[10];
+			var CloudLine = new Texture2D[10];
 			CloudLine[1] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Backgrounds/DarkBlueGreenCloud").Value;
 			CloudLine[2] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Backgrounds/DarkGreenCloud").Value;
 			CloudLine[3] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Backgrounds/DarkGreyCloud").Value;
@@ -311,22 +309,18 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Backgrounds
 					OneDevideRotaSpeed = 220d;
 				}
 				#endregion
-				List<Vertex3D_2> Vx = new List<Vertex3D_2>();
+				var Vx = new List<Vertex3D_2>();
 				float counts = 30;
 
-				Vector3 center = new Vector3(SkyVortex.X + 1000, SkyVortex.Y - 3250 + (float)Math.Pow(i, 1f) * 130, 6000);//云的中心位置
+				var center = new Vector3(SkyVortex.X + 1000, SkyVortex.Y - 3250 + (float)Math.Pow(i, 1f) * 130, 6000);//云的中心位置
 
 				if (i == 7)
-				{
 					CreateAndDrawLightning(center);
-				}
 				if (i == 9)
-				{
 					CreateAndDrawRocks(center + new Vector3(0, -400, 0));
-				}
 				for (int u = 0; u <= counts; u++)
 				{
-					Matrix rot = Matrix.CreateRotationY((float)(1f / OneDevideRotaSpeed * Main.timeForVisualEffects + u * MathHelper.TwoPi / counts));
+					var rot = Matrix.CreateRotationY((float)(1f / OneDevideRotaSpeed * Main.timeForVisualEffects + u * MathHelper.TwoPi / counts));
 					Vector3 offset = Vector3.Transform(Vector3.UnitX, rot) * Blength * 7;
 
 					Color c = DrawC;
@@ -358,7 +352,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Backgrounds
 
 
 			Vector2 FarS = new Vector2(Main.screenWidth / 2f, Main.screenHeight + 80) - TuskBiomeCenterToScreenPosition * 0.04f;
-			List<Vertex2D> VskyF = new List<Vertex2D>();
+			var VskyF = new List<Vertex2D>();
 			VskyF.Add(new Vertex2D(FarS + new Vector2(1024, -750), DrawC, new Vector3(1, 0, 0)));
 			VskyF.Add(new Vertex2D(FarS + new Vector2(1024, 150), DrawC, new Vector3(1, 1, 0)));
 			VskyF.Add(new Vertex2D(FarS + new Vector2(-1024, 150), DrawC, new Vector3(0, 1, 0)));
@@ -380,7 +374,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Backgrounds
 
 			float UpY = rvcII.Y / (float)texCloseII.Height;
 			float DownY = (rvcII.Y + rvcII.Height) / (float)texCloseII.Height;
-			List<Vertex2D> CloseII = new List<Vertex2D>
+			var CloseII = new List<Vertex2D>
 			{
 				new Vertex2D(new Vector2(0, 0), DrawC, new Vector3(rvcII.X / (float)texCloseII.Width, UpY, 0)),
 				new Vertex2D(new Vector2(Main.screenWidth, 0), DrawC, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, UpY, 0)),
@@ -418,19 +412,17 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Backgrounds
 		public override void Update(GameTime gameTime)
 		{
 			bool skyActive = TuskGen.TuskLandActive();
-			if (skyActive && this.opacity < 1f)
+			if (skyActive && opacity < 1f)
 			{
-				this.opacity += 0.02f;
+				opacity += 0.02f;
 				return;
 			}
-			if (!skyActive && this.opacity > 0f)
-			{
-				this.opacity -= 0.02f;
-			}
+			if (!skyActive && opacity > 0f)
+				opacity -= 0.02f;
 		}
 		public override float GetCloudAlpha()
 		{
-			return (1f - this.opacity) * 0.97f + 0.03f;
+			return (1f - opacity) * 0.97f + 0.03f;
 		}
 
 		private float opacity;

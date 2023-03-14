@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheTusk
+﻿namespace Everglow.Myth.TheTusk
 {
 	public class VertexBase
 	{
@@ -16,9 +16,9 @@
 
 			public CustomVertexInfo(Vector2 position, Color color, Vector3 texCoord)
 			{
-				this.Position = position;
-				this.Color = color;
-				this.TexCoord = texCoord;
+				Position = position;
+				Color = color;
+				TexCoord = texCoord;
 			}
 
 			public VertexDeclaration VertexDeclaration
@@ -43,9 +43,9 @@
 
 			public CustomVertexInfoFor3D(Vector3 position, Vector3 texcoord, Vector3 normal)
 			{
-				this.Position = position;
-				this.Texcoord = texcoord;
-				this.Normal = normal;
+				Position = position;
+				Texcoord = texcoord;
+				Normal = normal;
 			}
 
 			public VertexDeclaration VertexDeclaration

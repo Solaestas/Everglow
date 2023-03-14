@@ -1,7 +1,7 @@
 ﻿using Terraria.Localization;
 using Terraria.ObjectData;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
+namespace Everglow.Myth.TheTusk.Tiles
 {
 	public class BloodyMossWheelFinished : ModTile
 	{
@@ -41,18 +41,14 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
 			if ((player.Center - new Vector2(i * 16, j * 16 - 72)).Length() < 80)
 			{
 				if (!Main.gamePaused)
-				{
 					TpTime += 3;
-				}
 				Col = 100;
 
 			}
 			else
 			{
 				if (Col > 0)
-				{
 					Col -= 5;
-				}
 				else
 				{
 					Col = 0;
@@ -93,16 +89,14 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
 		private int TpH = -200;
 		public static void DrawAll(SpriteBatch sb)
 		{
-			Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+			var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 			if (Main.drawToScreen)
-			{
 				zero = Vector2.Zero;
-			}
 
 			Texture2D Tdoor = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/Tusk/CosmicFlame").Value;
 			Texture2D Tdoor2 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/Tusk/CosmicVort").Value;
 			Texture2D Tdoor3 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/Tusk/CosmicPerlin").Value;
-			Vector2 Correction = new Vector2(-186f, -260f);
+			var Correction = new Vector2(-186f, -260f);
 			sb.Draw(Tdoor, new Vector2(TileI * 16, TileJ * 16) + Correction - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 30f, new Vector2(56), 65f / 45f, SpriteEffects.None, 0f);
 			sb.Draw(Tdoor, new Vector2(TileI * 16, TileJ * 16) + Correction - Main.screenPosition + zero, null, new Color(100, 100, 100, 0), -(float)Main.time / 20f, new Vector2(56), 65f / 45f, SpriteEffects.None, 0f);
 			sb.Draw(Tdoor, new Vector2(TileI * 16, TileJ * 16) + Correction - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 15f, new Vector2(56), 65f / 50f, SpriteEffects.None, 0f);

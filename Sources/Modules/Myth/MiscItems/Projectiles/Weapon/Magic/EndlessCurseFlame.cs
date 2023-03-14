@@ -1,6 +1,6 @@
 ﻿using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
+namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Magic
 {
 	public class EndlessCurseFlame : ModProjectile
 	{
@@ -33,14 +33,14 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 			if (Projectile.timeLeft > 100)
 			{
 				Vector2 v = new Vector2(0, Main.rand.NextFloat(0f, 10f)).RotatedByRandom(Math.PI * 2f);
-				int num3 = Dust.NewDust(Projectile.Center, 0, 0, 75, (float)v.X, (float)v.Y, 0, default(Color), 3f);
+				int num3 = Dust.NewDust(Projectile.Center, 0, 0, 75, v.X, v.Y, 0, default, 3f);
 				Main.dust[num3].noGravity = true;
 				Main.dust[num3].velocity = v;
 			}
 			else
 			{
-				Vector2 v = new Vector2(0, Main.rand.NextFloat(0f, 10f) * (float)Projectile.timeLeft / 100f).RotatedByRandom(Math.PI * 2f);
-				int num3 = Dust.NewDust(Projectile.Center, 0, 0, 75, (float)v.X, (float)v.Y, 0, default(Color), 3f * (float)Projectile.timeLeft / 100f);
+				Vector2 v = new Vector2(0, Main.rand.NextFloat(0f, 10f) * Projectile.timeLeft / 100f).RotatedByRandom(Math.PI * 2f);
+				int num3 = Dust.NewDust(Projectile.Center, 0, 0, 75, v.X, v.Y, 0, default, 3f * Projectile.timeLeft / 100f);
 				Main.dust[num3].noGravity = true;
 				Main.dust[num3].velocity = v;
 			}

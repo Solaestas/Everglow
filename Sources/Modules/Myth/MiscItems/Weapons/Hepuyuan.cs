@@ -1,8 +1,9 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
+using Everglow.Myth.MiscItems.Projectiles.Weapon.Melee.Hepuyuan;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
+namespace Everglow.Myth.MiscItems.Weapons
 {
 	public class Hepuyuan : ModItem
 	{
@@ -22,7 +23,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
 			Item.DamageType = DamageClass.Melee;
 			Item.noMelee = true;
 			Item.shootSpeed = 17f;
-			Item.shoot = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Melee.Hepuyuan.Hepuyuan>();
+			Item.shoot = ModContent.ProjectileType<Projectiles.Weapon.Melee.Hepuyuan.Hepuyuan>();
 		}
 		public override bool AltFunctionUse(Player player)
 		{
@@ -64,8 +65,8 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
 
 			if (player.altFunctionUse == 2)
 			{
-				Vector2 VelcD = new Vector2(0, player.gravDir);
-				Projectile.NewProjectile(source, position, VelcD, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Melee.Hepuyuan.HepuyuanDown>(), damage * 5, knockback, player.whoAmI, 0f, 0f);
+				var VelcD = new Vector2(0, player.gravDir);
+				Projectile.NewProjectile(source, position, VelcD, ModContent.ProjectileType<HepuyuanDown>(), damage * 5, knockback, player.whoAmI, 0f, 0f);
 				player.velocity += VelcD * 4;
 				HepuyuanOwner.MouseCooling = 40;
 				return false;
@@ -76,49 +77,35 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
 				if (Main.npc[d].active && !Main.npc[d].friendly && !Main.npc[d].dontTakeDamage && Collision.CanHit(player, Main.npc[d]))//活着,敌对,能被打
 				{
 					if ((Main.npc[d].Center - player.Center).Length() > 1500)//距离
-					{
 						continue;
-					}
 					Threaten[d] += 1;
 					if ((Main.npc[d].Center - player.Center).Length() < 500)//距离
-					{
 						Threaten[d] += (500 - (Main.npc[d].Center - player.Center).Length()) * 12;
-					}
 					if ((Main.npc[d].Center - player.Center).Length() < 800)//距离
 					{
 						Threaten[d] += Main.npc[d].life + Main.npc[d].lifeMax * 0.2f;//血量和血量上限
 						Threaten[d] += Main.npc[d].damage * 12f;//伤害
 						if (Main.npc[d].boss)
-						{
 							Threaten[d] += 1000;//Boss需要额外增加威胁度
-						}
 						if (Main.npc[d].CanBeChasedBy(null, false))
-						{
 							Threaten[d] += 10;//能被追踪
-						}
 						if (Main.npc[d].velocity.Length() > 3)//速度
 						{
 							Threaten[d] += Main.npc[d].velocity.Length() * 110;//速度威胁
 							Vector2 VplayerToNPC = Vector2.Normalize(Main.npc[d].Center - player.Center) * 40;
 							float EscapeT = Vector2.Dot(VplayerToNPC, Main.npc[d].velocity) / Main.npc[d].life * 300;//逃跑系数
 							if (EscapeT > 0)
-							{
 								Threaten[d] += EscapeT;
-							}
 							float CrashT = Vector2.Dot(VplayerToNPC, -Main.npc[d].velocity) * Main.npc[d].damage / 100f;//撞击系数
 							if (CrashT > 0)
-							{
 								Threaten[d] += CrashT;
-							}
 						}
 					}
-					Vector2 playerToNPC = Vector2.Normalize(Main.npc[d].Center - player.Center);
-					Vector2 playerToMouseWorld = Vector2.Normalize(Main.MouseWorld - player.Center);
+					var playerToNPC = Vector2.Normalize(Main.npc[d].Center - player.Center);
+					var playerToMouseWorld = Vector2.Normalize(Main.MouseWorld - player.Center);
 					float CosineTheta = Math.Clamp(Vector2.Dot(playerToNPC, playerToMouseWorld), 0, 1);//用于计算鼠标方向权重
 					if (Main.npc[d].type == NPCID.TargetDummy)
-					{
 						Threaten[d] = 1;
-					}
 					float k0 = HepuyuanOwner.MouseCooling / 20f;
 					Threaten[d] = Threaten[d] * CosineTheta * (1 - k0) + Threaten[d] * k0;
 				}
@@ -149,11 +136,9 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
 			}*/
 			Vector2 NewVelocity = velocity;
 			if (MaxT > 0 && HepuyuanOwner.MouseCooling > 3)
-			{
 
-				NewVelocity = Vector2.Normalize((Main.npc[MaxD].Center + Main.npc[MaxD].velocity * 2) - player.Center) * velocity.Length();
-			}
-			Projectile.NewProjectile(source, position, NewVelocity, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Melee.Hepuyuan.Hepuyuan>(), damage * 2, knockback, player.whoAmI, 0f, 0f);
+				NewVelocity = Vector2.Normalize(Main.npc[MaxD].Center + Main.npc[MaxD].velocity * 2 - player.Center) * velocity.Length();
+			Projectile.NewProjectile(source, position, NewVelocity, ModContent.ProjectileType<Projectiles.Weapon.Melee.Hepuyuan.Hepuyuan>(), damage * 2, knockback, player.whoAmI, 0f, 0f);
 
 			player.velocity += NewVelocity * 4;
 			HepuyuanOwner.MouseCooling = 30;
@@ -161,16 +146,14 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
 		}
 		public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
 		{
-			Vector2 slotSize = new Vector2(52f, 52f);
+			var slotSize = new Vector2(52f, 52f);
 			position -= slotSize * Main.inventoryScale / 2f - frame.Size() * scale / 2f;
 			Vector2 drawPos = position + slotSize * Main.inventoryScale / 2f;
 			Texture2D RArr = MythContent.QuickTexture("MiscItems/Projectiles/Weapon/Melee/Hepuyuan/RightGreenSpice");
 			if (!Main.gamePaused)
 			{
 				if (!CanDown)
-				{
 					spriteBatch.Draw(RArr, drawPos + new Vector2(42) * scale, null, new Color(0, 0, 0, 255), 0f, new Vector2(8), scale * 3, SpriteEffects.None, 0f);
-				}
 				else
 				{
 					spriteBatch.Draw(RArr, drawPos + new Vector2(42) * scale, null, new Color(255, 255, 255, 0), 0f, new Vector2(8), scale * 3, SpriteEffects.None, 0f);
@@ -183,9 +166,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
 		public override bool? UseItem(Player player)
 		{
 			if (!Main.dedServ)
-			{
 				SoundEngine.PlaySound(Item.UseSound, player.Center);
-			}
 
 			return null;
 		}
@@ -196,9 +177,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
 		public override void PostUpdate()
 		{
 			if (MouseCooling > 0)
-			{
 				MouseCooling--;
-			}
 			else
 			{
 				MouseCooling = 0;
@@ -208,9 +187,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
 		public override void UpdateEquips()
 		{
 			if (Player.HeldItem.type == ModContent.ItemType<Hepuyuan>())
-			{
 				Player.jumpSpeedBoost += 12.75f;
-			}
 		}
 	}
 }

@@ -1,10 +1,10 @@
-﻿using Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles;
+﻿using Everglow.Myth.Bosses.Acytaea.Projectiles;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
+namespace Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk
 {
 	[AutoloadBossHead]
 	public class BloodTusk : ModNPC
@@ -27,9 +27,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 		{
 			string tex = "It was just a wolf tooth, dropped to the Crimson when its owner was defeated by a hero, gradually corrupted by the power of Cthulhu and granted mentality.";
 			if (Language.ActiveCulture.Name == "zh-Hans")
-			{
 				tex = "原本只是一颗狼牙,在它的主人被勇士讨伐时掉落至猩红之地,逐渐为克苏鲁的力量所沾染,有了自己的意识";
-			}
 			// We can use AddRange instead of calling Add multiple times in order to add multiple items at once
 			bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
 			{
@@ -94,9 +92,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 		{
 			NPC.SetEventFlagCleared(ref DownedBossSystem.downedTusk, -1);
 			if (Main.netMode == NetmodeID.Server)
-			{
 				NetMessage.SendData(MessageID.WorldData);
-			}
 		}
 		public override void Load()
 		{
@@ -109,20 +105,14 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 		public override void BossHeadSlot(ref int index)
 		{
 			if (fir == 9999999)
-			{
 				fir = index;
-			}
 			int slot = secondStageHeadSlot;
 			if (Transparent && slot != -1)
-			{
 				//If the boss is in its second stage, display the other head icon instead
 				index = slot;
-			}
 			if (!Transparent)
-			{
 				//If the boss is in its second stage, display the other head icon instead
 				index = fir;
-			}
 		}
 
 		private int PhaseChange = 200;
@@ -168,28 +158,18 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 						}
 					}
 					if (DarkCenter != Vector2.Zero)
-					{
 						break;
-					}
 				}
 				if (DarkCenter == Vector2.Zero)
-				{
 					DarkCenter = NPC.Bottom;
-				}
 			}
 			/*联机情况下错误排查*/
 			if (NPC.Bottom.Y > DarkCenter.Y && Collision.SolidCollision(NPC.Bottom + new Vector2(0, -10), 1, 1))
-			{
 				NPC.position.Y -= 5f;
-			}
 			if (FirstPos == Vector2.Zero)
-			{
 				FirstPos = NPC.position;
-			}
 			if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || !Main.player[NPC.target].active)
-			{
 				NPC.TargetClosest();
-			}
 
 			Player player = Main.player[NPC.target];
 			StartTime++;
@@ -206,9 +186,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 			for (int n = 0; n < 10; n++)
 			{
 				if (fightT < 60)
-				{
 					V[n] = V[n] * fightT / 60f + VMax[n] * (60 - fightT) / 60f;
-				}
 				else
 				{
 					if (NPC.life >= NPC.lifeMax * 0.5)
@@ -218,43 +196,30 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 							if (I[n] == 0)
 							{
 								if (V[n].Length() > 0.5f && n < 8)
-								{
 									V[n] = V[n] * 0.95f;
-								}
 								else
 								{
 									if (Main.rand.NextBool(600) && n < 8)
-
-									{
 										I[n] = 1;
-									}
 								}
 							}
 							if (I[n] == 1)
 							{
 								if ((V[n] - VMax[n]).Length() > 0.5f && n < 8)
-								{
 									V[n] = V[n] * 0.95f + VMax[n] * 0.05f;
-								}
 								else
 								{
 									if (Main.rand.NextBool(240) && n < 8)
-									{
 										I[n] = 0;
-									}
 								}
 							}
 						}
 						else
 						{
 							if (OSquzze)
-							{
 								V[n] = V[n] * 0.85f + VMax[n] * 0.15f;
-							}
 							if (DSquzze)
-							{
 								V[n] = V[n] * 0.85f;
-							}
 						}
 					}
 					else
@@ -264,43 +229,30 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 							if (I[n] == 0)
 							{
 								if (V[n].Length() > 0.5f && n < 8)
-								{
 									V[n] = V[n] * 0.95f;
-								}
 								else
 								{
 									if (Main.rand.NextBool(600) && n < 8)
-
-									{
 										I[n] = 1;
-									}
 								}
 							}
 							if (I[n] == 1)
 							{
 								if ((V[n] - VMax[n]).Length() > 0.5f && n < 8)
-								{
 									V[n] = V[n] * 0.95f + VMax[n] * 0.05f;
-								}
 								else
 								{
 									if (Main.rand.NextBool(240) && n < 8)
-									{
 										I[n] = 0;
-									}
 								}
 							}
 						}
 						else
 						{
 							if (OSquzze)
-							{
 								V[n] = V[n] * 0.85f + VMax[n] * 0.15f;
-							}
 							if (DSquzze)
-							{
 								V[n] = V[n] * 0.85f;
-							}
 						}
 					}
 				}
@@ -330,9 +282,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 			{
 				Tile tilev = Main.tile[(int)(NPC.Bottom.X / 16f) + i, (int)(NPC.Bottom.Y / 16f)];
 				if (tilev.TileType == 19)
-				{
 					NPC.position.Y += 16;
-				}
 			}
 			if (startFight)
 			{
@@ -340,13 +290,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 				{
 					NPC.damage = 80;
 					if (Main.expertMode)
-					{
 						NPC.damage = 120;
-					}
 					if (Main.masterMode)
-					{
 						NPC.damage = 160;
-					}
 					if (fightT < 60)
 					{
 						fightT += 1;
@@ -356,24 +302,18 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 					{
 						fightT = 60;
 						if (NPC.life >= NPC.lifeMax * 0.5f)
-						{
 							NPC.localAI[0] += 1;
-						}
 					}
 				}
 			}
 			if (NPC.life < NPC.lifeMax * 0.5f)
 			{
 				if (NPC.localAI[0] < 89)
-				{
 					NPC.localAI[0] += 1;
-				}
 				if (NPC.localAI[0] >= 89)
 				{
 					if (pulltime <= 0)
-					{
 						NPC.localAI[0] += 1;
-					}
 					else
 					{
 						pulltime--;
@@ -385,9 +325,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 					if (fightT >= 60)
 					{
 						if (NPC.localAI[0] > 6000)
-						{
 							NPC.localAI[0] = 0;
-						}
 					}
 					if (PhaseChange > 0)
 					{
@@ -415,9 +353,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 						Mouth2Vel = new Vector2(-1, 0);
 					}
 					if (NPC.localAI[0] < 33 && NPC.localAI[0] > 30)//调整基座高度
-					{
 						BasePos = NPC.position;
-					}
 					if (NPC.localAI[0] < 90 && NPC.localAI[0] > 30)//升起来
 					{
 						float k = (NPC.localAI[0] - 30f) / 60f;
@@ -451,18 +387,12 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 
 						double fx0 = (NPC.localAI[0] - 490) / 115f * Math.PI;
 						if (NPC.localAI[0] > 720)
-						{
 							fx0 = Math.PI;
-						}
 						double fx1 = Math.Sin(fx0) * fx0 / 9d * Math.PI / 2d;
 						if (NPC.localAI[0] > 605)
-						{
 							fx1 = Math.Sin(fx0) * Math.PI / 2d;
-						}
 						if (NPC.localAI[0] > 674)
-						{
 							fx1 = Math.Sin(1.6 * Math.PI) * Math.PI / 2d;
-						}
 
 						Mouth1[0] = NPC.Center + new Vector2(0, 75);
 						int MaxCountMouth1 = 0;//最大数量
@@ -507,24 +437,16 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 						}
 
 						if (MaxCountMouth1 > 380 && MaxCountMouth1 != 399)//上翘
-						{
 							Mouth1Vel = Mouth1Vel.RotatedBy(-0.1);
-						}
 						if (MaxCountMouth1 > 300)
 						{
 							if (Mouth1Vel.Length() < 3)
-							{
 								Mouth1Vel *= 1.02f;
-							}
 						}
 						if (Mouth1[4] != Vector2.Zero)//平衡
-						{
 							Mouth1[2] = Mouth1[2] * 0.9f + (Mouth1[4] + Mouth1[0]) * 0.05f;
-						}
 						if (Mouth1[2] != Vector2.Zero)
-						{
 							Mouth1[1] = Mouth1[1] * 0.9f + (Mouth1[2] + Mouth1[0]) * 0.05f;
-						}
 
 
 
@@ -570,25 +492,17 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 							}
 						}
 						if (MaxCountMouth2 > 380 && MaxCountMouth1 != 399)//上翘
-						{
 							Mouth2Vel = Mouth2Vel.RotatedBy(0.1);
-						}
 
 						if (MaxCountMouth2 > 300)
 						{
 							if (Mouth2Vel.Length() < 3)
-							{
 								Mouth2Vel *= 1.02f;
-							}
 						}
 						if (Mouth2[4] != Vector2.Zero)//平衡
-						{
 							Mouth2[2] = Mouth2[2] * 0.9f + (Mouth2[4] + Mouth2[0]) * 0.05f;
-						}
 						if (Mouth2[2] != Vector2.Zero)
-						{
 							Mouth2[1] = Mouth2[1] * 0.9f + (Mouth2[2] + Mouth2[0]) * 0.05f;
-						}
 					}
 
 					if (NPC.localAI[0] == 750)//降落
@@ -620,13 +534,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 						NPC.buffImmune[f] = true;
 					}
 					if (NPC.localAI[0] % 850 == 60)
-					{
 						OSquzze = true;
-					}
 					if (NPC.localAI[0] % 850 == 80)
-					{
 						OSquzze = false;
-					}
 					if (NPC.localAI[0] % 850 >= 80 && NPC.localAI[0] % 850 < 100)
 					{
 						if (NPC.localAI[0] % 850 == 80)
@@ -641,9 +551,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 						{
 							NPC.alpha = 255;
 							if (!player.active || player.dead)
-							{
 								NPC.active = false;
-							}
 						}
 						else
 						{
@@ -654,23 +562,15 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 					{
 						NPC.position += new Vector2(0, -400).RotatedBy(Main.rand.NextFloat(-1.4f, -0.8f) * Math.Sign(NPC.Center.X - player.Center.X));
 						if (NPC.position.X > FirstPos.X)
-						{
 							NPC.position.X = FirstPos.X;
-						}
 						if (NPC.position.X < FirstPos.X)
-						{
 							NPC.position.X = FirstPos.X;
-						}
 						NPC.velocity.Y = 10f;
 					}
 					if (NPC.localAI[0] % 850 == 250)
-					{
 						DSquzze = true;
-					}
 					if (NPC.localAI[0] % 850 == 270)
-					{
 						DSquzze = false;
-					}
 					if (NPC.localAI[0] % 850 >= 200 && NPC.localAI[0] % 850 < 220)
 					{
 						NPC.dontTakeDamage = false;
@@ -701,13 +601,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 				if (NPC.localAI[0] >= 1450 && NPC.localAI[0] < 2000)
 				{
 					if (NPC.localAI[0] == 1453)
-					{
 						NPC.NewNPC(null, (int)(NPC.Bottom.X + 600), (int)(NPC.Bottom.Y - 16), ModContent.NPCType<TuskWaveHuge>(), 0, -1, 1);
-					}
 					if (NPC.localAI[0] == 1497)
-					{
 						NPC.NewNPC(null, (int)(NPC.Bottom.X - 400), (int)(NPC.Bottom.Y - 16), ModContent.NPCType<TuskWaveHuge>(), 0, 0.6f, 0.8f);
-					}
 				}
 				if (NPC.localAI[0] >= 2000 && NPC.localAI[0] < 2800)
 				{
@@ -718,7 +614,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 						float dx = (NPC.localAI[0] - 2000) / 400f;
 						float sinx = (float)(Math.Sin(dx * Math.PI) * 800f);
 						float y = (float)(-Math.Cos(dx * Math.PI) * 40f);
-						Vector2 v = new Vector2(sinx, y);
+						var v = new Vector2(sinx, y);
 						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v + new Vector2(0, -20), Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
 						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - v + new Vector2(0, -20), Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
 					}
@@ -735,27 +631,19 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 				{
 					int Freq = 60;
 					if (Main.expertMode)
-					{
 						Freq = 50;
-					}
 					if (Main.masterMode)
-					{
 						Freq = 40;
-					}
 					int times = 8;
 					if (Main.expertMode)
-					{
 						times = 10;
-					}
 					if (Main.masterMode)
-					{
 						times = 12;
-					}
 					if (NPC.localAI[0] % Freq == 0)
 					{
 						for (int f = 0; f < 12; f++)
 						{
-							Vector2 v0 = new Vector2(0, -16f);
+							var v0 = new Vector2(0, -16f);
 							Vector2 v1 = v0.RotatedBy((f - (times / 2 - 0.5)) / (double)(times + 5d));
 							Vector2 v2 = v1.RotatedBy((NPC.localAI[0] % 7 - 3.5) * 0.1);
 							v2.Y -= 6f;
@@ -767,16 +655,12 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 				{
 					int Freq = 10;
 					if (Main.expertMode)
-					{
 						Freq = 7;
-					}
 					if (Main.masterMode)
-					{
 						Freq = 4;
-					}
 					if (NPC.localAI[0] % Freq == 0)
 					{
-						Vector2 v0 = new Vector2(0, -16f);
+						var v0 = new Vector2(0, -16f);
 						Vector2 v2 = v0.RotatedBy((NPC.localAI[0] % 41 - 20) * 0.04);
 						v2.Y -= 3f;
 						Projectile.NewProjectile(null, new Vector2(-3, 80) + NPC.Center, v2, ModContent.ProjectileType<Projectiles.CrimsonTuskProjGra>(), NPC.damage / 9, 1);
@@ -786,20 +670,16 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 				{
 					int Freq = 180;
 					if (Main.expertMode)
-					{
 						Freq = 150;
-					}
 					if (Main.masterMode)
-					{
 						Freq = 99;
-					}
 					if (NPC.localAI[0] % Freq == 0)
 					{
 						for (int ec = 0; ec < 9; ec++)
 						{
 							for (int f = 0; f < 4; f++)
 							{
-								Vector2 v0 = new Vector2((NPC.localAI[0] + 4600 + f * 27 + ec * 222) % 2000 - 1000, -20f);
+								var v0 = new Vector2((NPC.localAI[0] + 4600 + f * 27 + ec * 222) % 2000 - 1000, -20f);
 								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v0, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
 							}
 						}
@@ -810,7 +690,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 						{
 							for (int f = 0; f < 4; f++)
 							{
-								Vector2 v0 = new Vector2((NPC.localAI[0] + 4600 + f * 27 + ec * 222 + 67) % 2000 - 1000, -20f);
+								var v0 = new Vector2((NPC.localAI[0] + 4600 + f * 27 + ec * 222 + 67) % 2000 - 1000, -20f);
 								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v0, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
 							}
 						}
@@ -821,16 +701,14 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 						{
 							for (int f = 0; f < 4; f++)
 							{
-								Vector2 v0 = new Vector2((NPC.localAI[0] + 4600 + f * 27 + ec * 222 + 133) % 2000 - 1000, -20f);
+								var v0 = new Vector2((NPC.localAI[0] + 4600 + f * 27 + ec * 222 + 133) % 2000 - 1000, -20f);
 								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v0, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
 							}
 						}
 					}
 				}
 				if (NPC.localAI[0] >= 5400)
-				{
 					NPC.localAI[0] = 0;
-				}
 			}//Phase2
 			else
 			{
@@ -839,9 +717,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 				if (fightT >= 60)
 				{
 					if (NPC.localAI[0] > 6000)
-					{
 						NPC.localAI[0] = 0;
-					}
 				}
 				if (NPC.localAI[0] < 600)
 				{
@@ -850,13 +726,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 						NPC.buffImmune[f] = true;
 					}
 					if (NPC.localAI[0] % 300 == 60)
-					{
 						OSquzze = true;
-					}
 					if (NPC.localAI[0] % 300 == 80)
-					{
 						OSquzze = false;
-					}
 					if (NPC.localAI[0] % 300 >= 80 && NPC.localAI[0] % 300 < 100)
 					{
 						if (NPC.localAI[0] % 300 == 80)
@@ -871,9 +743,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 						{
 							NPC.alpha = 255;
 							if (!player.active || player.dead)
-							{
 								NPC.active = false;
-							}
 						}
 						else
 						{
@@ -884,23 +754,15 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 					{
 						NPC.position += new Vector2(0, -400).RotatedBy(Main.rand.NextFloat(-1.4f, -0.8f) * Math.Sign(NPC.Center.X - player.Center.X));
 						if (NPC.position.X > FirstPos.X + 600)
-						{
 							NPC.position.X = FirstPos.X + 600;
-						}
 						if (NPC.position.X < FirstPos.X - 600)
-						{
 							NPC.position.X = FirstPos.X - 600;
-						}
 						NPC.velocity.Y = 10f;
 					}
 					if (NPC.localAI[0] % 300 == 250)
-					{
 						DSquzze = true;
-					}
 					if (NPC.localAI[0] % 300 == 270)
-					{
 						DSquzze = false;
-					}
 					if (NPC.localAI[0] % 300 >= 200 && NPC.localAI[0] % 300 < 220)
 					{
 						NPC.dontTakeDamage = false;
@@ -924,24 +786,16 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 						int X = Main.rand.Next(-50, 50);
 						int Dist = 15;
 						if (!Main.expertMode && !Main.masterMode)
-						{
 							Dist = 15;
-						}
 						if (Main.expertMode && !Main.masterMode)
-						{
 							Dist = 20;
-						}
 						if (Main.masterMode)
-						{
 							Dist = 24;
-						}
 						for (int i = 1; i < Dist; i++)
 						{
 							int dX = Main.rand.Next(-5, 5);
 							if (!Main.rand.NextBool(3))
-							{
 								NPC.NewNPC(null, (int)NPC.Center.X + (int)(96 * i * 15f / Dist) + X + dX, (int)player.Center.Y - 20, ModContent.NPCType<LittleTusk>());
-							}
 							else
 							{
 								NPC.NewNPC(null, (int)NPC.Center.X + (int)(96 * i * 15f / Dist) + X + dX, (int)player.Center.Y - 20, ModContent.NPCType<LargeTusk>());
@@ -949,9 +803,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 							dX = Main.rand.Next(-5, 5);
 
 							if (!Main.rand.NextBool(3))
-							{
 								NPC.NewNPC(null, (int)NPC.Center.X - (int)(96 * i * 15f / Dist) + X + dX, (int)player.Center.Y - 20, ModContent.NPCType<LittleTusk>());
-							}
 							else
 							{
 								NPC.NewNPC(null, (int)NPC.Center.X - (int)(96 * i * 15f / Dist) + X + dX, (int)player.Center.Y - 20, ModContent.NPCType<LargeTusk>());
@@ -963,33 +815,23 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 				{
 					int Dist = 10;
 					if (!Main.expertMode && !Main.masterMode)
-					{
 						Dist = 10;
-					}
 					if (Main.expertMode && !Main.masterMode)
-					{
 						Dist = 8;
-					}
 					if (Main.masterMode)
-					{
 						Dist = 6;
-					}
 					if (NPC.localAI[0] % (Dist * 2) == Dist)
 					{
 						int X = Main.rand.Next(-15, 15);
 						if (!Main.rand.NextBool(3))
-						{
 							NPC.NewNPC(null, (int)NPC.Center.X + (int)(NPC.localAI[0] % 200) * 5 + X, (int)player.Center.Y - 20, ModContent.NPCType<LittleTusk>());
-						}
 						else
 						{
 							NPC.NewNPC(null, (int)NPC.Center.X + (int)(NPC.localAI[0] % 200) * 5 + X, (int)player.Center.Y - 20, ModContent.NPCType<LargeTusk>());
 						}
 						X = Main.rand.Next(-15, 15);
 						if (!Main.rand.NextBool(3))
-						{
 							NPC.NewNPC(null, (int)NPC.Center.X - (int)(NPC.localAI[0] % 200) * 5 + X, (int)player.Center.Y - 20, ModContent.NPCType<LittleTusk>());
-						}
 						else
 						{
 							NPC.NewNPC(null, (int)NPC.Center.X - (int)(NPC.localAI[0] % 200) * 5 + X, (int)player.Center.Y - 20, ModContent.NPCType<LargeTusk>());
@@ -1001,7 +843,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 						{
 							if (NPC.localAI[0] % Dist == 0)
 							{
-								Vector2 v = new Vector2((NPC.localAI[0] - 1300) * 12, -20 + (NPC.localAI[0] - 1300) * 0.04f);
+								var v = new Vector2((NPC.localAI[0] - 1300) * 12, -20 + (NPC.localAI[0] - 1300) * 0.04f);
 								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
 							}
 						}
@@ -1009,7 +851,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 						{
 							if (NPC.localAI[0] % Dist == 0)
 							{
-								Vector2 v = new Vector2(-(NPC.localAI[0] - 1500) * 12, -20 + (NPC.localAI[0] - 1500) * 0.04f);
+								var v = new Vector2(-(NPC.localAI[0] - 1500) * 12, -20 + (NPC.localAI[0] - 1500) * 0.04f);
 								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
 							}
 						}
@@ -1017,7 +859,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 						{
 							if (NPC.localAI[0] % Dist == 0)
 							{
-								Vector2 v = new Vector2((NPC.localAI[0] - 1700) * 12, -20 + (NPC.localAI[0] - 1700) * 0.04f);
+								var v = new Vector2((NPC.localAI[0] - 1700) * 12, -20 + (NPC.localAI[0] - 1700) * 0.04f);
 								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
 							}
 						}
@@ -1026,17 +868,11 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 				if (NPC.localAI[0] > 1800 && NPC.localAI[0] < 2400)
 				{
 					if (NPC.localAI[0] < 1830)
-					{
 						V[8] = V[8] * 0.85f + new Vector2(0, 180) * 0.15f;
-					}
 					if (NPC.localAI[0] < 1930 && NPC.localAI[0] > 1830)
-					{
 						Hm += 1 / 100f;
-					}
 					if (NPC.localAI[0] > 2300)
-					{
 						Hm -= 1 / 100f;
-					}
 					if (NPC.localAI[0] > 1850 && NPC.localAI[0] < 2350)
 					{
 						for (int i = 0; i < 10; i++)
@@ -1045,13 +881,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 						}
 						int Freq = 18;
 						if (Main.expertMode && !Main.masterMode)
-						{
 							Freq = 12;
-						}
 						if (Main.masterMode)
-						{
 							Freq = 10;
-						}
 						if (NPC.localAI[0] % Freq == 1)
 						{
 							int r = /*NPC.NewNPC(null, (int)(NPC.Center.X - 3), (int)(NPC.Center.Y + 80), ModContent.NPCType<CrimsonTusk>())*/Projectile.NewProjectile(null, new Vector2(-3, 80) + NPC.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.CrimsonTuskProjGra>(), NPC.damage / 9, 1);
@@ -1059,21 +891,15 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 						}
 					}
 					if (NPC.localAI[0] > 2370)
-					{
 						V[8] = V[8] * 0.85f;
-					}
 				}
 				if (NPC.localAI[0] > 2400 && NPC.localAI[0] <= 2600)
 				{
 					int Freq = 15;
 					if (Main.expertMode && !Main.masterMode)
-					{
 						Freq = 10;
-					}
 					if (Main.masterMode)
-					{
 						Freq = 5;
-					}
 					if (NPC.localAI[0] % Freq == 0)
 					{
 						Vector2 v = new Vector2(0, -28).RotatedBy(Math.Sin(NPC.localAI[0] / 100d * Math.PI));
@@ -1097,13 +923,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 				{
 					int Freq = 15;
 					if (Main.expertMode && !Main.masterMode)
-					{
 						Freq = 10;
-					}
 					if (Main.masterMode)
-					{
 						Freq = 5;
-					}
 					if (NPC.localAI[0] % Freq == 0)
 					{
 						Vector2 v = new Vector2(0, -360).RotatedBy(Math.Sin(NPC.localAI[0] / 100d * Math.PI));
@@ -1111,7 +933,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 					}
 					if (NPC.localAI[0] % Freq == 0)
 					{
-						Vector2 v = new Vector2((NPC.localAI[0] - 2700) * 6, -220 + (NPC.localAI[0] - 2700) * 0.4f);
+						var v = new Vector2((NPC.localAI[0] - 2700) * 6, -220 + (NPC.localAI[0] - 2700) * 0.4f);
 						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
 					}
 				}
@@ -1119,13 +941,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 				{
 					int Freq = 15;
 					if (Main.expertMode && !Main.masterMode)
-					{
 						Freq = 10;
-					}
 					if (Main.masterMode)
-					{
 						Freq = 5;
-					}
 					if (NPC.localAI[0] % Freq == 0)
 					{
 						Vector2 v = new Vector2(0, -500).RotatedBy(Math.Sin(NPC.localAI[0] / 100d * Math.PI));
@@ -1150,35 +968,23 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 					if (!Main.expertMode && !Main.masterMode)
 					{
 						if (NPC.localAI[0] % 24 == 0)
-						{
 							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100), new Vector2(0, -15).RotatedBy(-Math.Sin((NPC.localAI[0] - 3000) / 40f)), ModContent.ProjectileType<Projectiles.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) + 240);
-						}
 						if (NPC.localAI[0] % 24 == 12)
-						{
 							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100), new Vector2(0, -15).RotatedBy(Math.Sin((NPC.localAI[0] - 3000) / 40f)), ModContent.ProjectileType<Projectiles.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, -Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) - 240);
-						}
 					}
 					if (Main.expertMode && !Main.masterMode)
 					{
 						if (NPC.localAI[0] % 12 == 0)
-						{
 							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100), new Vector2(0, -15).RotatedBy(-Math.Sin((NPC.localAI[0] - 3000) / 40f)), ModContent.ProjectileType<Projectiles.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) + 240);
-						}
 						if (NPC.localAI[0] % 12 == 6)
-						{
 							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100), new Vector2(0, -15).RotatedBy(Math.Sin((NPC.localAI[0] - 3000) / 40f)), ModContent.ProjectileType<Projectiles.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, -Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) - 240);
-						}
 					}
 					if (Main.masterMode)
 					{
 						if (NPC.localAI[0] % 6 == 0)
-						{
 							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100), new Vector2(0, -15).RotatedBy(-Math.Sin((NPC.localAI[0] - 3000) / 40f)), ModContent.ProjectileType<Projectiles.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) + 240);
-						}
 						if (NPC.localAI[0] % 6 == 3)
-						{
 							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-3, 100), new Vector2(0, -15).RotatedBy(Math.Sin((NPC.localAI[0] - 3000) / 40f)), ModContent.ProjectileType<Projectiles.TuskSpice>(), NPC.damage / 9, 3f, Main.myPlayer, -Math.Abs(((NPC.localAI[0] - 3000) / 4f % 70 - 35) * 18) - 240);
-						}
 					}
 				}
 				if (NPC.localAI[0] > 3200 && NPC.localAI[0] <= 3400)
@@ -1284,21 +1090,13 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 						NPC.NewNPC(null, Dx1, (int)(player.Center.Y - 10), ModContent.NPCType<BloodyMouth2>(), 0, -1, 0);
 					}
 					if (NPC.localAI[0] % 10 == 0 && NPC.localAI[0] >= 3605 && NPC.localAI[0] <= 3720)
-					{
 						NPC.NewNPC(null, Dx1 + Main.rand.Next(260, 800), (int)player.Center.Y - 20, ModContent.NPCType<LittleTusk>());
-					}
 					if (NPC.localAI[0] % 10 == 2 && NPC.localAI[0] >= 3605 && NPC.localAI[0] <= 3720)
-					{
 						NPC.NewNPC(null, Dx1 - Main.rand.Next(260, 800), (int)player.Center.Y - 20, ModContent.NPCType<LargeTusk>());
-					}
 					if (NPC.localAI[0] % 10 == 5 && NPC.localAI[0] >= 3605 && NPC.localAI[0] <= 3720)
-					{
 						NPC.NewNPC(null, Dx1 - Main.rand.Next(260, 800), (int)player.Center.Y - 20, ModContent.NPCType<LittleTusk>());
-					}
 					if (NPC.localAI[0] % 10 == 8 && NPC.localAI[0] >= 3605 && NPC.localAI[0] <= 3720)
-					{
 						NPC.NewNPC(null, Dx1 + Main.rand.Next(260, 800), (int)player.Center.Y - 20, ModContent.NPCType<LargeTusk>());
-					}
 				}
 				if (NPC.localAI[0] > 4200 && NPC.localAI[0] <= 4800)
 				{
@@ -1346,13 +1144,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 				{
 					int MaxTusk = 6;
 					if (Main.expertMode && !Main.masterMode)
-					{
 						MaxTusk = 10;
-					}
 					if (Main.masterMode)
-					{
 						MaxTusk = 15;
-					}
 					if (NPC.localAI[0] == 4801)
 					{
 						for (int i = 0; i < MaxTusk; i++)
@@ -1367,7 +1161,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 					{
 						for (int i = 0; i < MaxTusk; i++)
 						{
-							Vector2 v = new Vector2(-i * 18 - 1200, -20);
+							var v = new Vector2(-i * 18 - 1200, -20);
 							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
 							v = new Vector2(-i * 18 - 600, -20);
 							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
@@ -1394,7 +1188,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 					{
 						for (int i = 0; i < MaxTusk; i++)
 						{
-							Vector2 v = new Vector2(-i * 18 - 900, -20);
+							var v = new Vector2(-i * 18 - 900, -20);
 							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
 							v = new Vector2(-i * 18 - 300, -20);
 							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
@@ -1418,7 +1212,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 					{
 						for (int i = 0; i < MaxTusk; i++)
 						{
-							Vector2 v = new Vector2(-i * 18 - 1200, -20);
+							var v = new Vector2(-i * 18 - 1200, -20);
 							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
 							v = new Vector2(-i * 18 - 600, -20);
 							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + v, Vector2.Zero, ModContent.ProjectileType<Projectiles.EarthTuskHostile>(), NPC.damage / 12, 0, Main.myPlayer, 0);
@@ -1435,13 +1229,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 				{
 					int Freq = 12;
 					if (Main.expertMode && !Main.masterMode)
-					{
 						Freq = 9;
-					}
 					if (Main.masterMode)
-					{
 						Freq = 6;
-					}
 					if (NPC.localAI[0] % Freq == 0)
 					{
 						NPC.NewNPC(null, (int)(NPC.Center.X - 1300 + (NPC.localAI[0] - 5400) % 200 * 13f), (int)player.Center.Y - 20, ModContent.NPCType<LargeTusk2>());
@@ -1455,13 +1245,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 			{
 				iMax = 2;
 				if (Main.expertMode)
-				{
 					iMax = 3;
-				}
 				if (Main.masterMode)
-				{
 					iMax = 4;
-				}
 				Cen = NPC.Center + new Vector2(-3, 90);
 				NPC.localAI[1] += 1;
 				if (summon)
@@ -1485,34 +1271,24 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 							{
 								Vector2 v = player.Center - Main.npc[N[i]].Center;
 								if (i % 2 == 0)
-								{
 									v = new Vector2(-v.X, v.Y);
-								}
 								v = v / v.Length() * 7f;
 								Main.npc[N[i]].velocity = Main.npc[N[i]].velocity * 0.95f + v * 0.05f;
 								int k = i + 1;
 								if (k >= 4)
-								{
 									k = 0;
-								}
 								v = player.Center - Main.npc[N[k]].Center;
 								if (i % 2 == 0)
-								{
 									v = new Vector2(-v.X, v.Y);
-								}
 								v = v / v.Length() * 7f;
 								Main.npc[N[k]].velocity = Main.npc[N[k]].velocity * 0.975f + v * 0.025f;
 							}
 							if (Main.npc[N[i]].Center.Y > NPC.Center.Y - 240)
-							{
 								Main.npc[N[i]].velocity.Y -= 0.25f;
-							}
 							Back[i] = false;
 						}
 						if (NPC.localAI[1] > 600)
-						{
 							NPC.localAI[1] = 0;
-						}
 					}
 					else
 					{
@@ -1527,9 +1303,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 							else
 							{
 								if (!Back[i])
-								{
 									Back[i] = true;
-								}
 								Main.npc[N[i]].position = Cen - new Vector2(15, 20);
 								Main.npc[N[i]].velocity = Main.npc[N[i]].velocity / Main.npc[N[i]].velocity.Length() * 0.5f;
 							}
@@ -1546,34 +1320,24 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 							{
 								Vector2 v = player.Center - Main.npc[N[i]].Center;
 								if (i % 2 == 0)
-								{
 									v = new Vector2(-v.X, v.Y);
-								}
 								v = v / v.Length() * 7f;
 								Main.npc[N[i]].velocity = Main.npc[N[i]].velocity * 0.95f + v * 0.05f;
 								int k = i + 1;
 								if (k >= 4)
-								{
 									k = 0;
-								}
 								v = player.Center - Main.npc[N[k]].Center;
 								if (i % 2 == 0)
-								{
 									v = new Vector2(-v.X, v.Y);
-								}
 								v = v / v.Length() * 7f;
 								Main.npc[N[k]].velocity = Main.npc[N[k]].velocity * 0.975f + v * 0.025f;
 							}
 							if (Main.npc[N[i]].Center.Y > NPC.Center.Y - 240)
-							{
 								Main.npc[N[i]].velocity.Y -= 0.25f;
-							}
 							Back[i] = false;
 						}
 						if (NPC.localAI[1] > 600)
-						{
 							NPC.localAI[1] = 0;
-						}
 					}
 					else
 					{
@@ -1588,9 +1352,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 							else
 							{
 								if (!Back[i])
-								{
 									Back[i] = true;
-								}
 								Main.npc[N[i]].position = Cen - new Vector2(15, 20);
 								Main.npc[N[i]].velocity = Main.npc[N[i]].velocity / Main.npc[N[i]].velocity.Length() * 0.5f;
 							}
@@ -1606,9 +1368,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 				}
 				NPC.alpha += 5;
 				if (NPC.alpha > 250)
-				{
 					NPC.active = false;
-				}
 			}
 			if (HasbeenKilled)
 			{
@@ -1766,9 +1526,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 				float num = NPC.life / (float)NPC.lifeMax;
 				bool flag2 = num > 1f;
 				if (flag2)
-				{
 					num = 1f;
-				}
 				int num2 = (int)(36f * num);
 				float num3 = position.X - 18f * scale;
 				float num4 = position.Y;
@@ -1800,63 +1558,41 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 				num6 *= num9;
 				bool flag5 = num8 < 0f;
 				if (flag5)
-				{
 					num8 = 0f;
-				}
 				bool flag6 = num8 > 255f;
 				if (flag6)
-				{
 					num8 = 255f;
-				}
 				bool flag7 = num7 < 0f;
 				if (flag7)
-				{
 					num7 = 0f;
-				}
 				bool flag8 = num7 > 255f;
 				if (flag8)
-				{
 					num7 = 255f;
-				}
 				bool flag9 = num6 < 0f;
 				if (flag9)
-				{
 					num6 = 0f;
-				}
 				bool flag10 = num6 > 255f;
 				if (flag10)
-				{
 					num6 = 255f;
-				}
-				Color color = new Color((byte)num8, (byte)num7, (byte)num5, (byte)num6);
+				var color = new Color((byte)num8, (byte)num7, (byte)num5, (byte)num6);
 				bool flag11 = num2 < 3;
 				if (flag11)
-				{
 					num2 = 3;
-				}
 				bool flag12 = num2 < 38;
 				if (flag12)
 				{
 					bool flag13 = num2 < 40;
 					if (flag13)
-					{
 						Main.spriteBatch.Draw(TextureAssets.Hb2.Value, new Vector2(num3 - Main.screenPosition.X + num2 * scale, num4 - Main.screenPosition.Y), new Rectangle?(new Rectangle(2, 0, 2, TextureAssets.Hb2.Height())), color, 0f, new Vector2(0f, 0f), scale, SpriteEffects.None, 0f);
-					}
 					bool flag14 = num2 < 38;
 					if (flag14)
-					{
 						Main.spriteBatch.Draw(TextureAssets.Hb2.Value, new Vector2(num3 - Main.screenPosition.X + (num2 + 2) * scale, num4 - Main.screenPosition.Y), new Rectangle?(new Rectangle(num2 + 2, 0, 36 - num2 - 2, TextureAssets.Hb2.Height())), color, 0f, new Vector2(0f, 0f), scale, SpriteEffects.None, 0f);
-					}
 					bool flag15 = num2 > 2;
 					if (flag15)
-					{
 						Main.spriteBatch.Draw(TextureAssets.Hb1.Value, new Vector2(num3 - Main.screenPosition.X, num4 - Main.screenPosition.Y), new Rectangle?(new Rectangle(0, 0, num2 - 2, TextureAssets.Hb1.Height())), color, 0f, new Vector2(0f, 0f), scale, SpriteEffects.None, 0f);
-					}
 					bool flag16 = num2 > 18;//分血条
 					if (flag16)
-					{
 						Main.spriteBatch.Draw(TextureAssets.Hb1.Value, new Vector2(num3 - Main.screenPosition.X + 17, num4 - Main.screenPosition.Y), new Rectangle?(new Rectangle(0, 0, 4, TextureAssets.Hb1.Height())), color, 0f, new Vector2(0f, 0f), scale, SpriteEffects.None, 0f);
-					}
 					else
 					{
 						Main.spriteBatch.Draw(TextureAssets.Hb2.Value, new Vector2(num3 - Main.screenPosition.X + 17, num4 - Main.screenPosition.Y), new Rectangle?(new Rectangle(0, 0, 4, TextureAssets.Hb1.Height())), color, 0f, new Vector2(0f, 0f), scale, SpriteEffects.None, 0f);
@@ -1867,14 +1603,10 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 				{
 					bool flag16 = num2 < 40;
 					if (flag16)
-					{
 						Main.spriteBatch.Draw(TextureAssets.Hb2.Value, new Vector2(num3 - Main.screenPosition.X + num2 * scale, num4 - Main.screenPosition.Y), new Rectangle?(new Rectangle(num2, 0, 36 - num2, TextureAssets.Hb2.Height())), color, 0f, new Vector2(0f, 0f), scale, SpriteEffects.None, 0f);
-					}
 					bool flag17 = num2 > 18;//分血条
 					if (flag17)
-					{
 						Main.spriteBatch.Draw(TextureAssets.Hb1.Value, new Vector2(num3 - Main.screenPosition.X + 17, num4 - Main.screenPosition.Y), new Rectangle?(new Rectangle(0, 0, 4, TextureAssets.Hb1.Height())), color, 0f, new Vector2(0f, 0f), scale, SpriteEffects.None, 0f);
-					}
 					else
 					{
 						Main.spriteBatch.Draw(TextureAssets.Hb2.Value, new Vector2(num3 - Main.screenPosition.X + 17, num4 - Main.screenPosition.Y), new Rectangle?(new Rectangle(0, 0, 4, TextureAssets.Hb1.Height())), color, 0f, new Vector2(0f, 0f), scale, SpriteEffects.None, 0f);
@@ -1931,7 +1663,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 					NPC.position.Y = NPC.position.Y - NPC.height / 2;
 					float vFX = Main.rand.Next(-2000, 2000) / 5000f;
 
-					Vector2 vF = new Vector2(vFX, -(float)Math.Cos(vFX * Math.PI) * 6f);
+					var vF = new Vector2(vFX, -(float)Math.Cos(vFX * Math.PI) * 6f);
 					Gore.NewGore(null, NPC.position, vF, ModContent.Find<ModGore>("Everglow/Sources/Modules/MythModule/TheTusk/Gores/BloodTuskBroken1").Type, 1f);
 					vFX = Main.rand.Next(-2000, 2000) / 5000f;
 					vF = new Vector2(vFX, -(float)Math.Cos(vFX * Math.PI) * 6f);
@@ -1950,42 +1682,28 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 					Gore.NewGore(null, NPC.position, vF, ModContent.Find<ModGore>("Everglow/Sources/Modules/MythModule/TheTusk/Gores/BloodTuskBroken6").Type, 1f);
 					if (!Main.expertMode && !Main.masterMode)
 					{
-						int itemType = ModContent.ItemType<TheTusk.Items.Weapons.ToothKnife>();
+						int itemType = ModContent.ItemType<Items.Weapons.ToothKnife>();
 						h = Main.rand.Next(6);
 						if (h == 1)
-						{
 							itemType = ModContent.ItemType<Items.Weapons.ToothStaff>();
-						}
 						if (h == 2)
-						{
 							itemType = ModContent.ItemType<Items.Accessories.TuskLace>();
-						}
 						if (h == 3)
-						{
 							itemType = ModContent.ItemType<Items.Weapons.ToothMagicBall>();
-						}
 						if (h == 4)
-						{
 							itemType = ModContent.ItemType<Items.Weapons.BloodyBoneYoyo>();
-						}
 						if (h == 5)
-						{
 							itemType = ModContent.ItemType<Items.Weapons.SpineGun>();
-						}
 						Item.NewItem(null, NPC.Hitbox, itemType);
 					}
 					else
 					{
 						Item.NewItem(null, NPC.Hitbox, ModContent.ItemType<Items.BossDrop.TuskTreasureBag>());
 						if (Main.masterMode)
-						{
 							Item.NewItem(null, NPC.Hitbox, ModContent.ItemType<Items.BossDrop.TuskRelic>());
-						}
 					}
 					if (Main.rand.NextBool(10))
-					{
 						Item.NewItem(null, NPC.Hitbox, ModContent.ItemType<Items.BossDrop.BloodyTuskTrophy>());
-					}
 
 					OSquzze = false;
 					DSquzze = false;
@@ -2023,9 +1741,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 			{
 				ReallyStart = true;
 				if (!Main.dedServ)
-				{
 					Music = Common.MythContent.QuickMusic("TuskFighting");
-				}
 				Main.NewText("The Tusk has awoken!", 175, 75, 255);
 				NPC.NewNPC(null, (int)NPC.Center.X - 800, (int)NPC.Center.Y - 200, ModContent.NPCType<TuskWallLeft>());
 				NPC.NewNPC(null, (int)NPC.Center.X + 800, (int)NPC.Center.Y - 200, ModContent.NPCType<TuskWallRight>());
@@ -2064,9 +1780,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 		public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 		{
 			if (!startFight)
-			{
 				return false;
-			}
 			Color color = Lighting.GetColor((int)(NPC.Center.X / 16d), (int)(NPC.Center.Y / 16d));
 			color = NPC.GetAlpha(color) * ((255 - NPC.alpha) / 255f);
 			color.R = (byte)Math.Clamp(color.R + tuskHitMove.Length() * tuskHitMove.Length() * 10f, 0f, 255f);
@@ -2102,9 +1816,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 			Texture2D TuskS8 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskS8").Value;
 
 			if (!Main.gamePaused)
-			{
 				tuskHitMove *= SprK;
-			}
 			if (NPC.life < NPC.lifeMax / 2f)
 			{
 				if (!Main.gamePaused)
@@ -2112,13 +1824,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 					for (int i = 0; i < 7; i++)
 					{
 						if (Main.rand.NextBool(400) && Eye[i] == 0 && EyeMove[i] == Vector2.Zero)
-						{
 							Eye[i] = 60;
-						}
 						if (Eye[i] > 0)
-						{
 							Eye[i]--;
-						}
 						int Eyevalue = 30 - Math.Abs(Eye[i] - 30);
 						if (Main.rand.NextBool(400) && EyeMove[i] == Vector2.Zero && Eye[i] == 0)
 						{
@@ -2132,78 +1840,52 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 						{
 							EyeMotivate[i]--;
 							if (EyeMotivate[i] == 0)
-							{
 								EyeMove[i] = Vector2.Zero;
-							}
 						}
 						if (i == 0)
 						{
 							if (Eyevalue > 6 && Eyevalue <= 12)
-							{
 								TuskBaseE1 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskEye1C").Value;
-							}
 							if (Eyevalue > 12 && Eyevalue <= 18)
-							{
 								TuskBaseE1 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskEye1L").Value;
-							}
 							if (Eyevalue > 18 && Eyevalue <= 24)
-							{
 								TuskBaseE1 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskEye1O").Value;
-							}
 							if (Eyevalue > 24)
-							{
 								TuskBaseE1 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/BloodTusk_Head_Boss_Void").Value;
-							}
 						}
 						if (i == 1)
 						{
 							if (Eyevalue > 16 && Eyevalue <= 24)
-							{
 								TuskBaseE2 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskEye2C").Value;
-							}
 							if (Eyevalue > 24)
-							{
 								TuskBaseE2 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/BloodTusk_Head_Boss_Void").Value;
-							}
 						}
 						if (i == 2)
 						{
 							if (Eyevalue > 16 && Eyevalue <= 24)
-							{
 								TuskBaseE3 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskEye3C").Value;
-							}
 							if (Eyevalue > 24)
-							{
 								TuskBaseE3 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/BloodTusk_Head_Boss_Void").Value;
-							}
 						}
 						if (i == 3)
 						{
 							if (Eyevalue > 18)
-							{
 								TuskBaseE4 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/BloodTusk_Head_Boss_Void").Value;
-							}
 						}
 						if (i == 4)
 						{
 							if (Eyevalue > 18)
-							{
 								TuskBaseE5 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/BloodTusk_Head_Boss_Void").Value;
-							}
 						}
 						if (i == 5)
 						{
 							if (Eyevalue > 18)
-							{
 								TuskBaseE6 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/BloodTusk_Head_Boss_Void").Value;
-							}
 						}
 						if (i == 6)
 						{
 							if (Eyevalue > 18)
-							{
 								TuskBaseE7 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/BloodTusk_Head_Boss_Void").Value;
-							}
 						}
 					}
 				}
@@ -2215,9 +1897,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 						V[nm] = V[nm] * 0.85f;
 					}
 					if (NPC.alpha > 0)
-					{
 						NPC.alpha -= 13;
-					}
 					else
 					{
 						NPC.alpha = 0;
@@ -2226,8 +1906,8 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 				if (NPC.localAI[0] < 750 && NPC.localAI[0] > 90)
 				{
 					//向下开口
-					List<VertexBase.CustomVertexInfo> bars1 = new List<VertexBase.CustomVertexInfo>();
-					List<VertexBase.CustomVertexInfo> bars2 = new List<VertexBase.CustomVertexInfo>();
+					var bars1 = new List<VertexBase.CustomVertexInfo>();
+					var bars2 = new List<VertexBase.CustomVertexInfo>();
 
 					for (int i = 1; i < 400; ++i)//右侧
 					{
@@ -2235,13 +1915,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 						{
 							float width = 9;
 							if (i > 380)
-							{
 								width = 9 + 6 * (float)(Math.Sin((i - 380) / 20d * Math.PI) + 1);
-							}
 							if (NPC.localAI[0] >= 700)
-							{
 								width *= Math.Clamp((750 - NPC.localAI[0]) / 50f, 0f, 1f);
-							}
 							var normalDir = Mouth1[i - 1] - Mouth1[i];
 							normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
 							Color colori = Lighting.GetColor((int)(Mouth1[i].X / 16d), (int)(Mouth1[i].Y / 16d));
@@ -2256,7 +1932,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 								Main.spriteBatch.End();
 								Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 								float Len = (float)(NPC.localAI[0] - 373 - Math.Sqrt(i));
-								List<VertexBase.CustomVertexInfo> Tusk1 = new List<VertexBase.CustomVertexInfo>
+								var Tusk1 = new List<VertexBase.CustomVertexInfo>
 								{
 									new VertexBase.CustomVertexInfo(Mouth1[i] + normalDir.RotatedBy(1.57) * width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(0, 0, 0)),
 									new VertexBase.CustomVertexInfo(Mouth1[i] + normalDir.RotatedBy(1.57) * -width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(1, 0, 0)),
@@ -2272,9 +1948,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 										if (!Main.player[j].dead)
 										{
 											if ((Main.player[j].Center - (Mouth1[i] + new Vector2(0, -10) + normalDir * Math.Clamp(Len, 0, HangMaxL1[i]))).Length() < 30)
-											{
 												Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<playerHit>(), NPC.damage / 8, 0, j, 0, 0);
-											}
 										}
 									}
 								}
@@ -2286,7 +1960,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 								Main.spriteBatch.End();
 								Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 								float Len = (float)(NPC.localAI[0] - 373 - Math.Sqrt(i));
-								List<VertexBase.CustomVertexInfo> Tusk1 = new List<VertexBase.CustomVertexInfo>
+								var Tusk1 = new List<VertexBase.CustomVertexInfo>
 								{
 									new VertexBase.CustomVertexInfo(Mouth1[i] + normalDir.RotatedBy(1.57) * width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(0, 0, 0)),
 									new VertexBase.CustomVertexInfo(Mouth1[i] + normalDir.RotatedBy(1.57) * -width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(1, 0, 0)),
@@ -2302,9 +1976,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 										if (!Main.player[j].dead)
 										{
 											if ((Main.player[j].Center - (Mouth1[i] + new Vector2(0, -10) + normalDir * Math.Clamp(Len, 0, HangMaxL1[i]))).Length() < 30)
-											{
 												Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<playerHit>(), NPC.damage / 8, 0, j, 0, 0);
-											}
 										}
 									}
 								}
@@ -2320,13 +1992,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 						{
 							float width = 9;
 							if (i > 380)
-							{
 								width = 9 + 6 * (float)(Math.Sin((i - 380) / 20d * Math.PI) + 1);
-							}
 							if (NPC.localAI[0] >= 700)
-							{
 								width *= Math.Clamp((750 - NPC.localAI[0]) / 50f, 0f, 1f);
-							}
 							var normalDir = Mouth2[i - 1] - Mouth2[i];
 							normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
 							Color colori = Lighting.GetColor((int)(Mouth2[i].X / 16d), (int)(Mouth2[i].Y / 16d));
@@ -2340,7 +2008,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 								Main.spriteBatch.End();
 								Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 								float Len = (float)(NPC.localAI[0] - 373 - Math.Sqrt(i));
-								List<VertexBase.CustomVertexInfo> Tusk2 = new List<VertexBase.CustomVertexInfo>
+								var Tusk2 = new List<VertexBase.CustomVertexInfo>
 								{
 									new VertexBase.CustomVertexInfo(Mouth2[i] + normalDir.RotatedBy(1.57) * width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(0, 0, 0)),
 									new VertexBase.CustomVertexInfo(Mouth2[i] + normalDir.RotatedBy(1.57) * -width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(1, 0, 0)),
@@ -2356,9 +2024,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 										if (!Main.player[j].dead)
 										{
 											if ((Main.player[j].Center - (Mouth2[i] + new Vector2(0, -10) + normalDir * Math.Clamp(Len, 0, HangMaxL2[i]))).Length() < 30)
-											{
 												Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<playerHit>(), NPC.damage / 8, 0, j, 0, 0);
-											}
 										}
 									}
 								}
@@ -2370,7 +2036,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 								Main.spriteBatch.End();
 								Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 								float Len = (float)(NPC.localAI[0] - 373 - Math.Sqrt(i));
-								List<VertexBase.CustomVertexInfo> Tusk2 = new List<VertexBase.CustomVertexInfo>
+								var Tusk2 = new List<VertexBase.CustomVertexInfo>
 								{
 									new VertexBase.CustomVertexInfo(Mouth2[i] + normalDir.RotatedBy(1.57) * width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(0, 0, 0)),
 									new VertexBase.CustomVertexInfo(Mouth2[i] + normalDir.RotatedBy(1.57) * -width + new Vector2(0, -10) - Main.screenPosition, colori, new Vector3(1, 0, 0)),
@@ -2386,9 +2052,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 										if (!Main.player[j].dead)
 										{
 											if ((Main.player[j].Center - (Mouth2[i] + new Vector2(0, -10) + normalDir * Math.Clamp(Len, 0, HangMaxL2[i]))).Length() < 30)
-											{
 												Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<playerHit>(), NPC.damage / 8, 0, j, 0, 0);
-											}
 										}
 									}
 								}
@@ -2397,8 +2061,8 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 							}
 						}
 					}
-					List<VertexBase.CustomVertexInfo> triangleList1 = new List<VertexBase.CustomVertexInfo>();
-					List<VertexBase.CustomVertexInfo> triangleList2 = new List<VertexBase.CustomVertexInfo>();
+					var triangleList1 = new List<VertexBase.CustomVertexInfo>();
+					var triangleList2 = new List<VertexBase.CustomVertexInfo>();
 					if (bars1.Count > 2)
 					{
 						Main.spriteBatch.End();
@@ -2508,13 +2172,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 
 				//阶段切换shader
 				if (!Main.gamePaused)
-				{
 					HasTranSkin--;
-				}
 				if (HasTranSkin == 239)
-				{
 					SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/TuskCrack")/*, NPC.Bottom*/); //Camera moves to boss when going in phase 2. ~Setnour6
-				}
 				Main.spriteBatch.End();
 				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
@@ -2554,7 +2214,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 					for (int z = 0; z < 4; z++)
 					{
 						hangItem[z] = new Vector2(0, 25 * (float)Math.Sin(Main.time / 70d + z) * (BasePos.Y - NPC.position.Y) / 50f);
-						List<VertexBase.CustomVertexInfo> Vx2 = new List<VertexBase.CustomVertexInfo>
+						var Vx2 = new List<VertexBase.CustomVertexInfo>
 						{
 							new VertexBase.CustomVertexInfo(NPC.position + new Vector2(-95, 162) - Main.screenPosition, color, new Vector3(0, 0, 0)),
 							new VertexBase.CustomVertexInfo(NPC.position + new Vector2(125, 162) - Main.screenPosition, color, new Vector3(1, 0, 0)),
@@ -2569,7 +2229,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 						Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx2.ToArray(), 0, Vx2.Count / 3);
 					}
 
-					List<VertexBase.CustomVertexInfo> Vx = new List<VertexBase.CustomVertexInfo>
+					var Vx = new List<VertexBase.CustomVertexInfo>
 					{
 						new VertexBase.CustomVertexInfo(NPC.position + new Vector2(-95, 162) - Main.screenPosition, color, new Vector3(0, 0, 0)),
 						new VertexBase.CustomVertexInfo(NPC.position + new Vector2(125, 162) - Main.screenPosition, color, new Vector3(1, 0, 0)),
@@ -2641,26 +2301,18 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 		public override void OnHitByItem(Player player, Item item, int damage, float knockback, bool crit)
 		{
 			if (tuskHitMove.Length() > 1)
-			{
 				SprK *= 0.9f;
-			}
 			SprK = 0.09f + SprK * 0.9f;
 			if (NPC.Center - player.Center != Vector2.Zero)
-			{
 				tuskHitMove += Vector2.Normalize(NPC.Center - player.Center) * Math.Clamp(item.knockBack, 0, 20f);
-			}
 		}
 		public override void OnHitByProjectile(Projectile projectile, int damage, float knockback, bool crit)
 		{
 			if (tuskHitMove.Length() > 1)
-			{
 				SprK *= 0.9f;
-			}
 			SprK = 0.09f + SprK * 0.9f;
 			if (projectile.velocity != Vector2.Zero)
-			{
 				tuskHitMove += Vector2.Normalize(projectile.velocity) * Math.Clamp(projectile.knockBack, 0, 20f);
-			}
 		}
 		private int h = 0;
 		public override void ModifyNPCLoot(NPCLoot npcLoot)
@@ -2690,7 +2342,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 		public static bool CheckUpdate = false;
 		public static void DrawDarkFog(SpriteBatch sb)
 		{
-			Color color2 = new Color(255, 255, 255, 0);
+			var color2 = new Color(255, 255, 255, 0);
 			Color color = Color.White;
 			Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/White").Value, Vector2.Zero, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White, 0, new Vector2(Main.screenWidth / 2f, Main.screenHeight / 2f), 5f, SpriteEffects.None, 0f);
 
@@ -2699,8 +2351,8 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 				Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/DarkFog").Value, DarkCenter - Main.screenPosition, null, color, 0, new Vector2(500, 500), 4f, SpriteEffects.None, 0f);
 				Main.spriteBatch.End();
 				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-				List<VertexBase.CustomVertexInfo> Vx = new List<VertexBase.CustomVertexInfo>();
-				List<VertexBase.CustomVertexInfo> Vx2 = new List<VertexBase.CustomVertexInfo>();
+				var Vx = new List<VertexBase.CustomVertexInfo>();
+				var Vx2 = new List<VertexBase.CustomVertexInfo>();
 				if (!CheckUpdate)
 				{
 					for (int f = 0; f < 200; f++)

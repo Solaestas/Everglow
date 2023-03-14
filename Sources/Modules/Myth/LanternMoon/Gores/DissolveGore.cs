@@ -1,6 +1,6 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
 
-namespace Everglow.Sources.Modules.MythModule.LanternMoon.Gores
+namespace Everglow.Myth.LanternMoon.Gores
 {
 
 	public abstract class DissolveGore : ModGore
@@ -37,13 +37,9 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Gores
 		private string CheckHasNameSpace(string path)
 		{
 			if (!path.Contains("Everglow"))
-			{
 				return "Everglow/" + path;
-			}
 			if (path.Contains("Everglow/Everglow/"))
-			{
 				return path.Replace("Everglow/Everglow/", "Everglow/");
-			}
 			return path;
 		}
 		public virtual void SSD()
@@ -102,20 +98,18 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Gores
 	{
 		public static void Load()
 		{
-			Terraria.On_Main.DrawGore += DrawShaderLantern;
+			On_Main.DrawGore += DrawShaderLantern;
 		}
 		public static void UnLoad()
 		{
 			//On.Terraria.Main.DrawGore -= DrawShaderLantern;
 		}
-		private static void DrawShaderLantern(Terraria.On_Main.orig_DrawGore orig, Terraria.Main self)
+		private static void DrawShaderLantern(On_Main.orig_DrawGore orig, Main self)
 		{
 			foreach (Gore gore in Main.gore)
 			{
 				if (gore.ModGore is DissolveGore dGore)
-				{
 					dGore.DrawDissolve(gore);
-				}
 			}
 			orig.Invoke(self);
 		}

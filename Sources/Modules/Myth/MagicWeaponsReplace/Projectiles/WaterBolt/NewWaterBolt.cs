@@ -1,8 +1,9 @@
-using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
+using Everglow.Myth.Common;
+using Everglow.Myth.TheFirefly.Dusts;
+using Everglow.Myth.TheFirefly.Projectiles;
 using Terraria.Audio;
 
-namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.WaterBolt
+namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.WaterBolt
 {
 	public class NewWaterBolt : ModProjectile, IWarpProjectile
 	{
@@ -36,48 +37,38 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
 			{
 				Projectile.ai[1] -= 1;
 				if (Projectile.ai[1] == 1)
-				{
 					Projectile.Kill();
-				}
 			}
 		}
 
 		public override bool PreDraw(ref Color lightColor)
 		{
-			Texture2D Light = Common.MythContent.QuickTexture("TheFirefly/Projectiles/GlowStar");
-			Texture2D Shade = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterBolt/NewWaterBoltShade");
+			Texture2D Light = MythContent.QuickTexture("TheFirefly/Projectiles/GlowStar");
+			Texture2D Shade = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterBolt/NewWaterBoltShade");
 			float k1 = (100f + Projectile.ai[0] * 25) * 0.3f;
 			float k0 = (1000 - Projectile.timeLeft) / k1;
 			float k2 = 1f;
 			if (Projectile.timeLeft <= 1000 - k1)
-			{
 				k0 = 1;
-			}
 			if (Projectile.timeLeft < 200)
-			{
 				k2 = Projectile.timeLeft / 200f;
-			}
-			Color c0 = new Color(0, k0 * k0 * 0.3f, k0 * 0.8f + 0.8f, 0);
+			var c0 = new Color(0, k0 * k0 * 0.3f, k0 * 0.8f + 0.8f, 0);
 
-			List<Vertex2D> bars0 = new List<Vertex2D>();
+			var bars0 = new List<Vertex2D>();
 			float width = 24;
 
 			int TrueL = 0;
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
 				if (Projectile.oldPos[i] == Vector2.Zero)
-				{
 					break;
-				}
 
 				TrueL++;
 			}
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
 				if (Projectile.oldPos[i] == Vector2.Zero)
-				{
 					break;
-				}
 
 				var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
 				normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
@@ -88,22 +79,18 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
 				bars0.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, Color.White, new Vector3(x0, 1, w)));
 				bars0.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, Color.White, new Vector3(x0, 0, w)));
 			}
-			Texture2D t = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLineBlack");
+			Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLineBlack");
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			if (bars0.Count > 3)
-			{
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars0.ToArray(), 0, bars0.Count - 2);
-			}
 
 			Main.spriteBatch.Draw(Shade, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, Color.White, Projectile.rotation, Light.Size() / 2f, (k0 / 1.8f + 0.2f) / (Projectile.ai[0] + 3) * 3.5f * k2, SpriteEffects.None, 0);
 
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
 				if (Projectile.oldPos[i] == Vector2.Zero)
-				{
 					break;
-				}
 
 				var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
 				normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
@@ -114,43 +101,35 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 1, w)));
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 0, w)));
 			}
-			t = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine");
+			t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine");
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			if (bars.Count > 3)
-			{
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-			}
 			Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, c0, Projectile.rotation, Light.Size() / 2f, (k0 / 1.8f + 0.2f) / (Projectile.ai[0] + 3) * 3.5f * k2, SpriteEffects.None, 0);
 			if (bars.Count > 3)
-			{
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-			}
 			Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, c0, Projectile.rotation, Light.Size() / 2f, (k0 / 1.8f + 0.2f) / (Projectile.ai[0] + 3) * 3.5f * k2, SpriteEffects.None, 0);
 			return false;
 		}
 
 		public void DrawWarp(VFXBatch spriteBatch)
 		{
-			Color c0 = new Color(0.6f, 0.3f, 0f);
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var c0 = new Color(0.6f, 0.3f, 0f);
+			var bars = new List<Vertex2D>();
 			float width = 48;
 
 			int TrueL = 0;
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
 				if (Projectile.oldPos[i] == Vector2.Zero)
-				{
 					break;
-				}
 
 				TrueL++;
 			}
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
 				if (Projectile.oldPos[i] == Vector2.Zero)
-				{
 					break;
-				}
 
 				var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
 				normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
@@ -161,23 +140,17 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 1, w)));
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 0, w)));
 			}
-			Texture2D t = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine");
+			Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine");
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			if (bars.Count > 3)
-			{
 				spriteBatch.Draw(t, bars, PrimitiveType.TriangleStrip);
-			}
 		}
 		public override void Kill(int timeLeft)
 		{
 			if (timeLeft > 0)
-			{
 				Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BeadShakeWave>(), 0, 0, Projectile.owner, 1f, 3f);
-			}
 			if (timeLeft <= 0)
-			{
 				return;
-			}
 			switch (Main.rand.Next(2))
 			{
 				case 0:
@@ -209,9 +182,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Wa
 				if (Dis < 250)
 				{
 					if (!target.dontTakeDamage && !target.friendly && target.CanBeChasedBy() && target.active)
-					{
 						target.StrikeNPC((int)(Projectile.damage / (Dis + 35f) * 35f), 0.2f, 1);
-					}
 				}
 			}
 		}

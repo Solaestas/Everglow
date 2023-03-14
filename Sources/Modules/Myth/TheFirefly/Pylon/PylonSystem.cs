@@ -2,7 +2,7 @@
 using Terraria.Localization;
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Pylon;
+namespace Everglow.Myth.TheFirefly.Pylon;
 
 internal class PylonSystem : ModSystem
 {
@@ -13,7 +13,7 @@ internal class PylonSystem : ModSystem
 
 	public override void SaveWorldData(TagCompound tag)
 	{
-		tag[DataName] = (Byte)(new BitsByte(shabbyPylonEnable, firstEnableAnimation));
+		tag[DataName] = (byte)new BitsByte(shabbyPylonEnable, firstEnableAnimation);
 	}
 
 	public override void LoadWorldData(TagCompound tag)

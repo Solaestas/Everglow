@@ -1,6 +1,7 @@
-﻿using Terraria.DataStructures;
+﻿using Everglow.Myth.TheTusk.Projectiles.Weapon;
+using Terraria.DataStructures;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Weapons
+namespace Everglow.Myth.TheTusk.Items.Weapons
 {
 	public class ToothBow : ModItem
 	{
@@ -35,22 +36,16 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Weapons
 			Vector2 target = Main.screenPosition + new Vector2(Main.mouseX, Main.mouseY);
 			float ceilingLimit = target.Y;
 			if (ceilingLimit > player.Center.Y - 200f)
-			{
 				ceilingLimit = player.Center.Y - 200f;
-			}
 			position = player.Center - new Vector2(Main.rand.NextFloat(401) * player.direction, 600f);
 			position.Y -= 100;
 			Vector2 heading = target - position;
 
 			if (heading.Y < 0f)
-			{
 				heading.Y *= -1f;
-			}
 
 			if (heading.Y < 20f)
-			{
 				heading.Y = 20f;
-			}
 			count += 1;
 			heading.Normalize();
 			heading *= velocity.Length() * 3f;
@@ -58,7 +53,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Weapons
 			if (count % 2 == 0)
 			{
 				count = 0;
-				Projectile.NewProjectile(source, position, heading, ModContent.ProjectileType<Projectiles.Weapon.TuskArrow>(), damage, knockback * 0.2f, player.whoAmI, 0f, ceilingLimit);
+				Projectile.NewProjectile(source, position, heading, ModContent.ProjectileType<TuskArrow>(), damage, knockback * 0.2f, player.whoAmI, 0f, ceilingLimit);
 			}
 			return true;
 		}

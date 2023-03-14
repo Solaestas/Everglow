@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Dusts
+﻿namespace Everglow.Myth.MiscItems.Dusts
 {
 	public class BoneFlame : ModDust
 	{
@@ -18,9 +18,7 @@
 			float scale = dust.scale;
 			Lighting.AddLight(dust.position, dust.color.R, dust.color.G, dust.color.B);
 			if (dust.scale < 0.25f)
-			{
 				dust.active = false;
-			}
 			//for(int i = 0; i < 200;i++)
 			//{
 			//    if((Main.npc[i].Center - dust.position).Length() < 10 && !Main.npc[i].dontTakeDamage && !Main.npc[i].friendly)
@@ -33,9 +31,7 @@
 		public override Color? GetAlpha(Dust dust, Color lightColor)
 		{
 			if (dust.scale > 1.5f)
-			{
 				return new Color?(new Color(1f, 0.5f, 0.85f, 0.05f));
-			}
 			else
 			{
 				return new Color?(new Color(dust.scale / 1.5f * dust.scale / 1.5f, dust.scale / 3f * dust.scale / 1.5f, dust.scale / 1.275f * dust.scale / 1.5f, dust.scale / 1.5f));

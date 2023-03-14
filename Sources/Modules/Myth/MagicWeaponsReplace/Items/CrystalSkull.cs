@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Items
+﻿namespace Everglow.Myth.MagicWeaponsReplace.Items
 {
 	public class CrystalSkull : ModItem
 	{

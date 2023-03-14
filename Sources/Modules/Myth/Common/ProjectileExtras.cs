@@ -1,5 +1,5 @@
 ﻿using Terraria.GameContent;
-namespace Everglow.Sources.Modules.MythModule.Common
+namespace Everglow.Myth.Common
 {
 	public static class ProjectileExtras
 	{
@@ -20,23 +20,17 @@ namespace Everglow.Sources.Modules.MythModule.Common
 			for (int i = 0; i < projectile.whoAmI; i++)
 			{
 				if (Main.projectile[i].active && Main.projectile[i].owner == projectile.owner && Main.projectile[i].type == projectile.type)
-				{
 					checkSelf = true;
-				}
 			}
 			if (projectile.owner == Main.myPlayer)
 			{
 				projectile.localAI[0] += 1f;
 				if (checkSelf)
-				{
 					projectile.localAI[0] += Main.rand.NextFloat(1.0f, 3.1f);
-				}
 				float num = projectile.localAI[0] / 60f;
 				num /= (1f + player.GetAttackSpeed(DamageClass.Generic)) / 2f;
 				if (num > seconds)
-				{
 					projectile.ai[0] = -1f;
-				}
 			}
 			if (player.dead)
 			{
@@ -59,30 +53,22 @@ namespace Everglow.Sources.Modules.MythModule.Common
 					projectile.direction = -1;
 				}
 			}
-			if (Utils.HasNaNs(projectile.velocity))
-			{
+			if (projectile.velocity.HasNaNs())
 				projectile.Kill();
-			}
 			projectile.timeLeft = 6;
 
 			if (player.yoyoString)
-			{
 				length = length * 1.25f + 30f;
-			}
 			length /= (1f + player.GetAttackSpeed(DamageClass.Generic) * 3f) / 4f;
 			float num3 = acceleration / ((1f + player.GetAttackSpeed(DamageClass.Generic) * 3f) / 4f);
 			float num4 = 14f - num3 / 2f;
 			float num5 = 5f + num3 / 2f;
 			if (checkSelf)
-			{
 				num5 += 20f;
-			}
 			if (projectile.ai[0] >= 0f)
 			{
 				if (projectile.velocity.Length() > num3)
-				{
 					projectile.velocity *= 0.98f;
-				}
 				bool flag3 = false;
 				bool flag4 = false;
 				Vector2 vector = player.Center - projectile.Center;
@@ -90,9 +76,7 @@ namespace Everglow.Sources.Modules.MythModule.Common
 				{
 					flag3 = true;
 					if ((double)vector.Length() > (double)length * 1.3)
-					{
 						flag4 = true;
-					}
 				}
 				if (projectile.owner == Main.myPlayer)
 				{
@@ -118,7 +102,7 @@ namespace Everglow.Sources.Modules.MythModule.Common
 						}
 						if (projectile.ai[0] != x || projectile.ai[1] != y)
 						{
-							Vector2 value = new Vector2(x, y);
+							var value = new Vector2(x, y);
 							Vector2 vector4 = value - player.Center;
 							if (vector4.Length() > length - 1f)
 							{
@@ -146,23 +130,15 @@ namespace Everglow.Sources.Modules.MythModule.Common
 						num4 /= 2f;
 						num3 *= 2f;
 						if (projectile.Center.X > player.Center.X && projectile.velocity.X > 0f)
-						{
 							projectile.velocity.X = projectile.velocity.X * 0.5f;
-						}
 						if (projectile.Center.Y > player.Center.Y && projectile.velocity.Y > 0f)
-						{
 							projectile.velocity.Y = projectile.velocity.Y * 0.5f;
-						}
 						if (projectile.Center.X < player.Center.X && projectile.velocity.X > 0f)
-						{
 							projectile.velocity.X = projectile.velocity.X * 0.5f;
-						}
 						if (projectile.Center.Y < player.Center.Y && projectile.velocity.Y > 0f)
-						{
 							projectile.velocity.Y = projectile.velocity.Y * 0.5f;
-						}
 					}
-					Vector2 value2 = new Vector2(projectile.ai[0], projectile.ai[1]);
+					var value2 = new Vector2(projectile.ai[0], projectile.ai[1]);
 					Vector2 vector5 = value2 - projectile.Center;
 					projectile.velocity.Length();
 					if (vector5.Length() > num5)
@@ -200,9 +176,7 @@ namespace Everglow.Sources.Modules.MythModule.Common
 				Vector2 vector6 = player.position - projectile.Center;
 				float num6 = vector6.Length();
 				if (num6 < num3 + 10f || num6 == 0f)
-				{
 					projectile.Kill();
-				}
 				else
 				{
 					vector6.Normalize();
@@ -212,17 +186,15 @@ namespace Everglow.Sources.Modules.MythModule.Common
 			}
 			projectile.rotation += rotationSpeed;
 		}
-		public static void DrawString(int index, Vector2 to = default(Vector2))
+		public static void DrawString(int index, Vector2 to = default)
 		{
 			Projectile projectile = Main.projectile[index];
 			Player player = Main.player[projectile.owner];
 			Vector2 mountedCenter = player.MountedCenter;
 			Vector2 vector = mountedCenter;
 			vector.Y += player.gfxOffY;
-			if (to != default(Vector2))
-			{
+			if (to != default)
 				vector = to;
-			}
 			float num = projectile.Center.X - vector.X;
 			float num2 = projectile.Center.Y - vector.Y;
 			Math.Sqrt((double)(num * num + num2 * num2));
@@ -230,18 +202,14 @@ namespace Everglow.Sources.Modules.MythModule.Common
 			if (!projectile.counterweight)
 			{
 				int num3 = -1;
-				if (projectile.position.X + (float)(projectile.width / 2) < player.position.X + (float)(player.width / 2))
-				{
+				if (projectile.position.X + projectile.width / 2 < player.position.X + player.width / 2)
 					num3 = 1;
-				}
 				num3 *= -1;
-				player.itemRotation = (float)Math.Atan2((double)(num2 * (float)num3), (double)(num * (float)num3));
+				player.itemRotation = (float)Math.Atan2((double)(num2 * num3), (double)(num * num3));
 			}
 			bool checkSelf = true;
 			if (num == 0f && num2 == 0f)
-			{
 				checkSelf = false;
-			}
 			else
 			{
 				float num4 = (float)Math.Sqrt((double)(num * num + num2 * num2));
@@ -250,8 +218,8 @@ namespace Everglow.Sources.Modules.MythModule.Common
 				num2 *= num4;
 				vector.X -= num * 0.1f;
 				vector.Y -= num2 * 0.1f;
-				num = projectile.position.X + (float)projectile.width * 0.5f - vector.X;
-				num2 = projectile.position.Y + (float)projectile.height * 0.5f - vector.Y;
+				num = projectile.position.X + projectile.width * 0.5f - vector.X;
+				num2 = projectile.position.Y + projectile.height * 0.5f - vector.Y;
 			}
 			while (checkSelf)
 			{
@@ -259,9 +227,7 @@ namespace Everglow.Sources.Modules.MythModule.Common
 				float num6 = (float)Math.Sqrt((double)(num * num + num2 * num2));
 				float num7 = num6;
 				if (float.IsNaN(num6) || float.IsNaN(num7))
-				{
 					checkSelf = false;
-				}
 				else
 				{
 					if (num6 < 20f)
@@ -274,28 +240,22 @@ namespace Everglow.Sources.Modules.MythModule.Common
 					num2 *= num6;
 					vector.X += num;
 					vector.Y += num2;
-					num = projectile.position.X + (float)projectile.width * 0.5f - vector.X;
-					num2 = projectile.position.Y + (float)projectile.height * 0.1f - vector.Y;
+					num = projectile.position.X + projectile.width * 0.5f - vector.X;
+					num2 = projectile.position.Y + projectile.height * 0.1f - vector.Y;
 					if (num7 > 12f)
 					{
 						float num8 = 0.3f;
 						float num9 = Math.Abs(projectile.velocity.X) + Math.Abs(projectile.velocity.Y);
 						if (num9 > 16f)
-						{
 							num9 = 16f;
-						}
 						num9 = 1f - num9 / 16f;
 						num8 *= num9;
 						num9 = num7 / 80f;
 						if (num9 > 1f)
-						{
 							num9 = 1f;
-						}
 						num8 *= num9;
 						if (num8 < 0f)
-						{
 							num8 = 0f;
-						}
 						num8 *= num9;
 						num8 *= 0.5f;
 						if (num2 > 0f)
@@ -307,15 +267,11 @@ namespace Everglow.Sources.Modules.MythModule.Common
 						{
 							num9 = Math.Abs(projectile.velocity.X) / 3f;
 							if (num9 > 1f)
-							{
 								num9 = 1f;
-							}
 							num9 -= 0.5f;
 							num8 *= num9;
 							if (num8 > 0f)
-							{
 								num8 *= 2f;
-							}
 							num2 *= 1f + num8;
 							num *= 1f - num8;
 						}
@@ -324,21 +280,13 @@ namespace Everglow.Sources.Modules.MythModule.Common
 					int stringColor = player.stringColor;
 					Color color = WorldGen.paintColor(stringColor);
 					if (color.R < 75)
-					{
 						color.R = 75;
-					}
 					if (color.G < 75)
-					{
 						color.G = 75;
-					}
 					if (color.B < 75)
-					{
 						color.B = 75;
-					}
 					if (stringColor == 13)
-					{
 						color = new Color(20, 20, 20);
-					}
 					else if (stringColor == 14 || stringColor == 0)
 					{
 						color = new Color(200, 200, 200);
@@ -351,12 +299,12 @@ namespace Everglow.Sources.Modules.MythModule.Common
 					{
 						color = new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB);
 					}
-					color.A = (byte)((float)color.A * 0.4f);
+					color.A = (byte)(color.A * 0.4f);
 					float num10 = 0.5f;
 					color = Lighting.GetColor((int)vector.X / 16, (int)(vector.Y / 16f), color);
-					color = new Color((int)((byte)((float)color.R * num10)), (int)((byte)((float)color.G * num10)), (int)((byte)((float)color.B * num10)), (int)((byte)((float)color.A * num10)));
+					color = new Color((byte)(color.R * num10), (byte)(color.G * num10), (byte)(color.B * num10), (byte)(color.A * num10));
 					Texture2D tex = TextureAssets.FishingLine.Value;
-					Main.spriteBatch.Draw(tex, new Vector2(vector.X - Main.screenPosition.X + (float)tex.Width * 0.5f, vector.Y - Main.screenPosition.Y + (float)tex.Height * 0.5f) - new Vector2(6f, 0f), new Rectangle?(new Rectangle(0, 0, tex.Width, (int)num5)), color, rotation, new Vector2((float)tex.Width * 0.5f, 0f), 1f, SpriteEffects.None, 0f);
+					Main.spriteBatch.Draw(tex, new Vector2(vector.X - Main.screenPosition.X + tex.Width * 0.5f, vector.Y - Main.screenPosition.Y + tex.Height * 0.5f) - new Vector2(6f, 0f), new Rectangle?(new Rectangle(0, 0, tex.Width, (int)num5)), color, rotation, new Vector2(tex.Width * 0.5f, 0f), 1f, SpriteEffects.None, 0f);
 				}
 			}
 		}

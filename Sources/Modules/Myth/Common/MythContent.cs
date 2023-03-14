@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.Common
+﻿namespace Everglow.Myth.Common
 {
 	public class MythContent
 	{
@@ -31,9 +31,7 @@
 		{
 			Mod everglow = ModLoader.GetMod("Everglow");
 			if (everglow != null)
-			{
 				return MusicLoader.GetMusicSlot(everglow, "Sources/Modules/MythModule/Musics/" + path);
-			}
 			else
 			{
 				return 0;
@@ -54,9 +52,7 @@
 			if (Main.LocalPlayer != null)
 			{
 				if (Main.LocalPlayer.gravDir == -1)
-				{
 					return new Vector2(StarX, Main.screenHeight - StarY);
-				}
 			}
 
 			return new Vector2(StarX, StarY);

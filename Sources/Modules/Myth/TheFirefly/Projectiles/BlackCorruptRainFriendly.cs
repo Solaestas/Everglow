@@ -1,7 +1,8 @@
-﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+﻿using Everglow.Myth.Common;
+using Everglow.Myth.TheFirefly.Dusts;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
+namespace Everglow.Myth.TheFirefly.Projectiles
 {
 	public class BlackCorruptRainFriendly : ModProjectile
 	{
@@ -46,22 +47,18 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 				b = Main.rand.Next(-50, 50);
 				initialization = false;
 				if (Main.rand.Next(0, 2) == 1)
-				{
 					Y = (float)Math.Sin(X / 5d * Math.PI) / 1000f + 1;
-				}
 				else
 				{
 					Y = (float)Math.Sin(-X / 5d * Math.PI) / 1000f + 1;
 				}
 			}
 			if (Stre2 > 0.2)
-			{
 				Stre2 -= 0.005f;
-			}
 			Projectile.velocity *= 0.995f;
 			if (Projectile.timeLeft < 995)
 			{
-				Vector2 vector = Projectile.Center - new Vector2(4) - Utils.SafeNormalize(Projectile.velocity, Vector2.Zero) * 5;
+				Vector2 vector = Projectile.Center - new Vector2(4) - Projectile.velocity.SafeNormalize(Vector2.Zero) * 5;
 				int index = Dust.NewDust(vector, 0, 0, DustID.SpookyWood, 0f, 0f, 0, default, Projectile.scale * 0.6f * Projectile.velocity.Length());
 				Main.dust[index].velocity *= 0.0f;
 				Main.dust[index].noGravity = true;
@@ -71,22 +68,16 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			if (Projectile.timeLeft is < 600 and >= 585)
 			{
 				if (Y < 1)
-				{
 					Projectile.scale *= Y / (Projectile.timeLeft / 585f);
-				}
 				else
 				{
 					Projectile.scale *= Y * Projectile.timeLeft / 585f;
 				}
 			}
 			if (Projectile.timeLeft < 580 && Projectile.timeLeft >= 100 + b)
-			{
 				Projectile.scale *= Y;
-			}
 			if (Projectile.timeLeft < 100 + b)
-			{
 				Projectile.scale *= 0.95f;
-			}
 			Projectile.velocity.Y += 0.001f;
 			float kColor = (255 - Projectile.alpha) / 255f;
 			Lighting.AddLight(Projectile.Center, 0, kColor * 0.01f, kColor * 0.6f * Projectile.scale);
@@ -94,7 +85,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 
 		public override bool PreDraw(ref Color lightColor)
 		{
-			Texture2D Light = Common.MythContent.QuickTexture("TheFirefly/Projectiles/FixCoinLight3");
+			Texture2D Light = MythContent.QuickTexture("TheFirefly/Projectiles/FixCoinLight3");
 			int C = (int)(255 * Stre2);
 			Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(C, C, C, 0), Projectile.rotation, new Vector2(56f, 56f), Projectile.scale, SpriteEffects.None, 0);
 			return true;

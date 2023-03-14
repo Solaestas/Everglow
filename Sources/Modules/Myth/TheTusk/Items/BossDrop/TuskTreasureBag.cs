@@ -1,12 +1,15 @@
-﻿using Terraria.Localization;
+﻿using Everglow.Myth.TheTusk.Items.Accessories;
+using Everglow.Myth.TheTusk.Items.Weapons;
+using Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk;
+using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.BossDrop
+namespace Everglow.Myth.TheTusk.Items.BossDrop
 {
 	public class TuskTreasureBag : ModItem
 	{
 		//Sets the associated NPC this treasure bag is dropped from
 		[Obsolete]
-		public override int BossBagNPC => ModContent.NPCType<NPCs.Bosses.BloodTusk.BloodTusk>();
+		public override int BossBagNPC => ModContent.NPCType<BloodTusk>();
 
 		public override void SetStaticDefaults()
 		{
@@ -36,29 +39,17 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.BossDrop
 
 			int h = Main.rand.Next(5);
 			if (h == 0)
-			{
-				player.QuickSpawnItem(null, ModContent.ItemType<Items.Weapons.ToothKnife>(), 1);
-			}
+				player.QuickSpawnItem(null, ModContent.ItemType<ToothKnife>(), 1);
 			if (h == 1)
-			{
-				player.QuickSpawnItem(null, ModContent.ItemType<Items.Accessories.TuskLace>(), 1);
-			}
+				player.QuickSpawnItem(null, ModContent.ItemType<TuskLace>(), 1);
 			if (h == 2)
-			{
-				player.QuickSpawnItem(null, ModContent.ItemType<Items.Weapons.ToothStaff>(), 1);
-			}
+				player.QuickSpawnItem(null, ModContent.ItemType<ToothStaff>(), 1);
 			if (h == 3)
-			{
-				player.QuickSpawnItem(null, ModContent.ItemType<Items.Weapons.ToothMagicBall>(), 1);
-			}
+				player.QuickSpawnItem(null, ModContent.ItemType<ToothMagicBall>(), 1);
 			if (h == 4)
-			{
-				player.QuickSpawnItem(null, ModContent.ItemType<Items.Weapons.BloodyBoneYoyo>(), 1);
-			}
+				player.QuickSpawnItem(null, ModContent.ItemType<BloodyBoneYoyo>(), 1);
 			if (h == 5)
-			{
-				player.QuickSpawnItem(null, ModContent.ItemType<Items.Weapons.SpineGun>(), 1);
-			}
+				player.QuickSpawnItem(null, ModContent.ItemType<SpineGun>(), 1);
 		}
 		private int a = 0;
 		public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)

@@ -1,4 +1,6 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
+﻿using Everglow.Myth;
+
+namespace Everglow.Myth.MiscItems.Weapons
 {
 	public class XmasWhip : ModItem
 	{
@@ -16,7 +18,7 @@
 		public override void SetDefaults()
 		{
 			Item.glowMask = ItemGlowManager.GetItemGlow(this);
-			DefaultToWhip(ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Summon.XmasWhip>(), 348, 2f, 5.4f, 30);
+			DefaultToWhip(ModContent.ProjectileType<Projectiles.Weapon.Summon.XmasWhip>(), 348, 2f, 5.4f, 30);
 			Item.rare = 11;
 			Item.damage = 308;
 			Item.value = Item.sellPrice(0, 10, 0, 0);
@@ -36,9 +38,7 @@
 			Player player = Main.LocalPlayer;
 			Item.autoReuse = false;
 			if (player.autoReuseGlove)
-			{
 				Item.autoReuse = true;
-			}
 			Item.useStyle = 1;
 			Item.useAnimation = animationTotalTime;
 			Item.useTime = animationTotalTime;

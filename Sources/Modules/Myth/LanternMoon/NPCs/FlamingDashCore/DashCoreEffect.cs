@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
+﻿namespace Everglow.Myth.LanternMoon.NPCs.FlamingDashCore
 {
 	public class DashCoreEffect : ModSystem
 	{
@@ -11,15 +11,11 @@
 		{
 			Color colorShine = FlamingDashCore.ColorShine;
 			if (NPC.CountNPCS(ModContent.NPCType<FlamingDashCore>()) > 0 && FlamingDashCore.Shine > 0)
-			{
 				RDas = 1f;
-			}
 			else
 			{
 				if (RDas > 0)
-				{
 					RDas -= 0.01f;
-				}
 				else
 				{
 					RDas = 0;

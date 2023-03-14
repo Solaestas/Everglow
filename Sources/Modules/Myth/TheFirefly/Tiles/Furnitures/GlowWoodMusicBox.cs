@@ -1,7 +1,7 @@
 using Terraria.DataStructures;
 using Terraria.ObjectData;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
+namespace Everglow.Myth.TheFirefly.Tiles.Furnitures
 {
 	// See ExampleMod/Common/Systems/MusicLoadingSystem for an explanation on music.
 	public class GlowWoodMusicBox : ModTile

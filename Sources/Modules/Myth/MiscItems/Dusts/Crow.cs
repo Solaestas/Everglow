@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Dusts
+﻿namespace Everglow.Myth.MiscItems.Dusts
 {
 	public class Crow : ModDust
 	{
@@ -19,17 +19,13 @@
 			float scale = dust.scale;
 			//Lighting.AddLight(dust.position, 1f * dust.scale, 0.28f * dust.scale, 0.68f);
 			if (dust.scale < 0.15f)
-			{
 				dust.active = false;
-			}
 			return false;
 		}
 		public override Color? GetAlpha(Dust dust, Color lightColor)
 		{
 			if (dust.scale > 1.5f)
-			{
 				return new Color?(new Color(255, 255, 255, 255));
-			}
 			else
 			{
 				return new Color?(new Color((dust.scale - 0.25f) / 1.25f, (dust.scale - 0.25f) / 1.25f, (dust.scale - 0.25f) / 1.25f, (dust.scale - 0.25f) / 1.25f));

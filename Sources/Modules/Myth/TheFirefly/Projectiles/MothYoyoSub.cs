@@ -1,7 +1,7 @@
-﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+﻿using Everglow.Myth.TheFirefly.Dusts;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
+namespace Everglow.Myth.TheFirefly.Projectiles
 {
 	public class MothYoyoSub : ModProjectile
 	{
@@ -53,30 +53,22 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			Lighting.AddLight(Projectile.Center, new Vector3(0, 0.3f, 0.75f));
 			Projectile owner = Main.projectile[(int)Projectile.ai[0]];
 			if (!owner.active || owner.type != ModContent.ProjectileType<MothYoyoProjectile>())
-			{
 				Projectile.Kill();
-			}
 
 			int t = 114514 - Projectile.timeLeft;
 			if (Projectile.timeLeft % 5 == 0 && !Main.rand.NextBool(5))
 			{
 				Projectile.frame++;
 				if (Main.rand.NextBool(5))
-				{
 					Projectile.spriteDirection *= -1;
-				}
 			}
 			if (t < 20)//开始
-			{
 				v3Position = Vector3.Lerp(v3Position, targetPos, 0.1f);
-			}
 			else if (owner.ai[0] == -1)//收回
 			{
 				v3Position = Vector3.Lerp(v3Position, Vector3.Zero, 0.1f);
 				if (Projectile.scale > 0)
-				{
 					Projectile.scale -= 0.05f;
-				}
 			}
 			else//旋转
 			{
@@ -98,13 +90,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 		{
 			Texture2D Light = Common.MythContent.QuickTexture("TheFirefly/Projectiles/FixCoinLight3");
 			Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
-			Vector2 origin = new Vector2(tex.Width / 2, tex.Height / 6);
+			var origin = new Vector2(tex.Width / 2, tex.Height / 6);
 			Rectangle sourceRec = tex.Frame(1, 4, 0, Projectile.frame % 4);
 
 			Projectile owner = Main.projectile[(int)Projectile.ai[0]];
 			Vector2 pos = Projection(v3Position + new Vector3(owner.Center.X, owner.Center.Y, 0), Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2, out float scale, 1000);
 			;
-			Color c = new Color(185, 185, 255, 0);
+			var c = new Color(185, 185, 255, 0);
 			Main.spriteBatch.Draw(Light, pos - Main.screenPosition, null, c * 0.2f, Projectile.rotation, Light.Size() / 2, Projectile.scale * scale, SpriteEffects.None, 0);
 			Main.spriteBatch.Draw(tex, pos - Main.screenPosition, sourceRec, c, Projectile.rotation, origin, Projectile.scale * scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 			return false;
@@ -114,7 +106,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 		{
 			float k2 = -viewZ / (v3.Z - viewZ);
 			scale = k2;
-			Vector2 v = new Vector2(v3.X, v3.Y);
+			var v = new Vector2(v3.X, v3.Y);
 			return v + (k2 - 1) * (v - center);
 		}
 	}

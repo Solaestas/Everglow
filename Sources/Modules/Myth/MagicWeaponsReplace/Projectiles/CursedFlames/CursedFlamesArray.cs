@@ -1,6 +1,6 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
 
-namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.CursedFlames
+namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.CursedFlames
 {
 	internal class CursedFlamesArray : ModProjectile, IWarpProjectile
 	{
@@ -26,17 +26,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
 			{
 				Projectile.timeLeft = player.itemTime + 60;
 				if (Timer < 30)
-				{
 					Timer++;
-				}
 			}
 			else
 			{
 				Timer--;
 				if (Timer < 0)
-				{
 					Projectile.Kill();
-				}
 			}
 			Player.CompositeArmStretchAmount PCAS = Player.CompositeArmStretchAmount.Full;
 
@@ -54,7 +50,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
 			float mulVelocity = 1f;
 			for (int g = 0; g < Frequency; g++)
 			{
-				CursedFlameDust cf = new CursedFlameDust
+				var cf = new CursedFlameDust
 				{
 					velocity = ringPos * mulVelocity * 0.1f + player.velocity,
 					Active = true,
@@ -88,7 +84,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
 		{
 			Player player = Main.player[Projectile.owner];
 			Texture2D Water = tex;
-			Color c1 = new Color(c0.R * 0.39f / 255f, c0.G * 0.39f / 255f, c0.B * 0.39f / 255f, c0.A * 0.39f / 255f);
+			var c1 = new Color(c0.R * 0.39f / 255f, c0.G * 0.39f / 255f, c0.B * 0.39f / 255f, c0.A * 0.39f / 255f);
 			DrawTexCircle(Timer * 1.6f, 22, c0, player.Center + RingPos - Main.screenPosition, Water, Main.timeForVisualEffects / 12f);
 			DrawTexCircle(Timer * 1.3f, 32, c1, player.Center + RingPos - Main.screenPosition, Water, -Main.timeForVisualEffects / 36f);
 
@@ -114,7 +110,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
 
 		private static void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 		{
-			List<Vertex2D> circle = new List<Vertex2D>();
+			var circle = new List<Vertex2D>();
 			for (int h = 0; h < radious / 2; h++)
 			{
 				circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 1, 0)));
@@ -133,7 +129,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
 		}
 		private static void DrawTexCircle(VFXBatch sb, float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 		{
-			List<Vertex2D> circle = new List<Vertex2D>();
+			var circle = new List<Vertex2D>();
 			for (int h = 0; h < radious / 2; h++)
 			{
 				circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 1, 0)));
@@ -145,16 +141,14 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cu
 			circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(addRot), color, new Vector3(0, 0, 0)));
 
 			if (circle.Count > 0)
-			{
 				sb.Draw(tex, circle, PrimitiveType.TriangleStrip);
-			}
 		}
 		public static void DrawTexLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2, Texture2D tex)
 		{
 			float Wid = 3f;
 			Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
 
-			List<Vertex2D> vertex2Ds = new List<Vertex2D>();
+			var vertex2Ds = new List<Vertex2D>();
 
 			for (int x = 0; x < 3; x++)
 			{

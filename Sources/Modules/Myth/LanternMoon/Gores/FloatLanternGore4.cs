@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.LanternMoon.Gores
+﻿namespace Everglow.Myth.LanternMoon.Gores
 {
 	public class FloatLanternGore4 : DissolveGore
 	{

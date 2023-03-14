@@ -2,7 +2,7 @@
 using Terraria.GameContent.Creative;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Weapons
+namespace Everglow.Myth.TheTusk.Items.Weapons
 {
 	public class SpineGun : ModItem
 	{
@@ -49,9 +49,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Weapons
 		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
 			if (player.ownedProjectileCounts[ModContent.ProjectileType<Projectiles.Weapon.SpineGun>()] < 1)
-			{
-				Projectile.NewProjectileDirect(source, position + (velocity * 2.0f) - new Vector2(0, 4), Vector2.Zero, ModContent.ProjectileType<Projectiles.Weapon.SpineGun>(), damage, knockback, player.whoAmI, 1f, Item.useAnimation);
-			}
+				Projectile.NewProjectileDirect(source, position + velocity * 2.0f - new Vector2(0, 4), Vector2.Zero, ModContent.ProjectileType<Projectiles.Weapon.SpineGun>(), damage, knockback, player.whoAmI, 1f, Item.useAnimation);
 			else
 			{
 				for (int x = 0; x < Main.projectile.Length; x++)
@@ -73,10 +71,8 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Weapons
 			newVelocity *= 1f - Main.rand.NextFloat(0.1f);
 			float Beilv = 1f;
 			if (type == 242)
-			{
 				Beilv = 2.4f;
-			}
-			Projectile.NewProjectileDirect(source, position + (newVelocity * 0.9f) + new Vector2(0, -6), newVelocity * 2 * Beilv, ModContent.ProjectileType<Projectiles.Weapon.SplieSpineBullet>(), damage, knockback, player.whoAmI, player.GetCritChance(DamageClass.Ranged) + player.GetCritChance(DamageClass.Generic), type);
+			Projectile.NewProjectileDirect(source, position + newVelocity * 0.9f + new Vector2(0, -6), newVelocity * 2 * Beilv, ModContent.ProjectileType<Projectiles.Weapon.SplieSpineBullet>(), damage, knockback, player.whoAmI, player.GetCritChance(DamageClass.Ranged) + player.GetCritChance(DamageClass.Generic), type);
 			return false;
 		}
 		public override Vector2? HoldoutOffset()

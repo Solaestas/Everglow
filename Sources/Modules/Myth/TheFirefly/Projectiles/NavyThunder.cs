@@ -1,8 +1,9 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+﻿using Everglow.Myth;
+using Everglow.Myth.Common;
+using Everglow.Myth.TheFirefly.Dusts;
 using Terraria.Audio;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
+namespace Everglow.Myth.TheFirefly.Projectiles
 {
 	internal class NavyThunder : ModProjectile, IWarpProjectile
 	{
@@ -45,9 +46,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 				else
 				{
 					if (Projectile.timeLeft > 21)
-					{
 						Projectile.timeLeft = 20;
-					}
 					for (int j = 0; j < 16; j++)
 					{
 						Vector2 v1 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * Projectile.scale;
@@ -58,20 +57,18 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 				}
 			}
 			if (Main.player[Projectile.owner].itemTime == 2)
-			{
 				Shoot();
-			}
 		}
 
 		private void Shoot()
 		{
 			SoundEngine.PlaySound(SoundID.DD2_FlameburstTowerShot, Projectile.Center);
 			Player player = Main.player[Projectile.owner];
-			Vector2 v0 = new Vector2(Math.Sign((Main.MouseWorld - Main.player[Projectile.owner].MountedCenter).X), 0.6f * player.gravDir);
+			var v0 = new Vector2(Math.Sign((Main.MouseWorld - Main.player[Projectile.owner].MountedCenter).X), 0.6f * player.gravDir);
 			Vector2 ShootCenter = Projectile.Center + new Vector2(0, 16f * player.gravDir);
 			ScreenShaker Gsplayer = player.GetModPlayer<ScreenShaker>();
 			Gsplayer.FlyCamPosition = new Vector2(0, 2).RotatedByRandom(6.283);
-			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), ShootCenter, v0 * 3, ModContent.ProjectileType<Projectiles.NavyThunderBomb>(), Projectile.damage, Projectile.knockBack, player.whoAmI, 0, 0);
+			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), ShootCenter, v0 * 3, ModContent.ProjectileType<NavyThunderBomb>(), Projectile.damage, Projectile.knockBack, player.whoAmI, 0, 0);
 			Vector2 newVelocity = v0;
 			newVelocity *= 1f - Main.rand.NextFloat(0.3f);
 			newVelocity *= 2f;
@@ -101,29 +98,23 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 		public override void PostDraw(Color lightColor)
 		{
 			if (!Release)
-			{
 				return;
-			}
 			Player player = Main.player[Projectile.owner];
 			player.heldProj = Projectile.whoAmI;
 			Vector2 v0 = Projectile.Center - player.MountedCenter;
 			if (Main.mouseLeft)
-			{
 				player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(v0.Y, v0.X) - Math.PI / 2d));
-			}
 
 			Texture2D TexMain = MythContent.QuickTexture("TheFirefly/Projectiles/NavyThunderTex/FlameSkull");
 			Texture2D TexMainG = MythContent.QuickTexture("TheFirefly/Projectiles/NavyThunderTex/FlameSkullGlow");
 
-			Projectile.frame = (int)((addi % 25) / 5f);
-			Rectangle DrawRect = new Rectangle(0, Projectile.frame * Projectile.height, Projectile.width, Projectile.height);
+			Projectile.frame = (int)(addi % 25 / 5f);
+			var DrawRect = new Rectangle(0, Projectile.frame * Projectile.height, Projectile.width, Projectile.height);
 
 			Color drawColor = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
 			SpriteEffects se = SpriteEffects.None;
 			if (player.direction == 1)
-			{
 				se = SpriteEffects.FlipHorizontally;
-			}
 
 			Main.spriteBatch.Draw(TexMain, Projectile.Center - Main.screenPosition, DrawRect, drawColor, Projectile.rotation, new Vector2(27, 42), 1f, se, 0);
 			Main.spriteBatch.Draw(TexMainG, Projectile.Center - Main.screenPosition, DrawRect, new Color(255, 255, 255, 0), Projectile.rotation, new Vector2(27, 42), 1f, se, 0);
@@ -134,7 +125,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			float Wid = 6f;
 			Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
 
-			List<Vertex2D> vertex2Ds = new List<Vertex2D>();
+			var vertex2Ds = new List<Vertex2D>();
 
 			for (int x = 0; x < 3; x++)
 			{
@@ -156,27 +147,21 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 		public void DrawWarp(VFXBatch sb)
 		{
 			if (!Release)
-			{
 				return;
-			}
 			Player player = Main.player[Projectile.owner];
 			player.heldProj = Projectile.whoAmI;
 			Vector2 v0 = Projectile.Center - player.MountedCenter;
 			if (Main.mouseLeft)
-			{
 				player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(v0.Y, v0.X) - Math.PI / 2d));
-			}
 
 			Texture2D TexMainG = MythContent.QuickTexture("TheFirefly/Projectiles/NavyThunderTex/FlameSkullWarp");
 
-			Projectile.frame = (int)((addi % 25) / 5f);
-			Rectangle DrawRect = new Rectangle(0, Projectile.frame * Projectile.height, Projectile.width, Projectile.height);
+			Projectile.frame = (int)(addi % 25 / 5f);
+			var DrawRect = new Rectangle(0, Projectile.frame * Projectile.height, Projectile.width, Projectile.height);
 
 			SpriteEffects se = SpriteEffects.None;
 			if (player.direction == 1)
-			{
 				se = SpriteEffects.FlipHorizontally;
-			}
 			sb.Draw(TexMainG, Projectile.Center - Main.screenPosition, DrawRect, new Color(0.3f, 0.3f, 0.2f, 0), Projectile.rotation, new Vector2(27, 42), 1f, se);
 		}
 	}

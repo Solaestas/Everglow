@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Accessories
+﻿namespace Everglow.Myth.TheTusk.Items.Accessories
 {
 	[AutoloadEquip(EquipType.Neck)]
 	public class TuskLace : ModItem

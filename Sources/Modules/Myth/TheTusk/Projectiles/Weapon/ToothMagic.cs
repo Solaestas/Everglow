@@ -1,7 +1,8 @@
+using Everglow.Myth.Common;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
+namespace Everglow.Myth.TheTusk.Projectiles.Weapon
 {
 	public class ToothMagic : ModProjectile, IWarpProjectile
 	{
@@ -53,9 +54,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 		{
 			Player player = Main.player[Projectile.owner];
 			if (Projectile.timeLeft > 500)
-			{
 				Projectile.scale = 0.8f;
-			}
 			else
 			{
 				Projectile.velocity *= 0.996f;
@@ -65,9 +64,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 				if (Projectile.timeLeft % 10 == 1)
 				{
 					if (Projectile.damage > 0)
-					{
 						Projectile.damage--;
-					}
 					else
 					{
 						Projectile.damage = 0;
@@ -81,13 +78,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 
 
 			if (TimeTokill >= 0 && TimeTokill <= 2)
-			{
 				Projectile.Kill();
-			}
 			if (TimeTokill <= 15 && TimeTokill > 0)
-			{
 				Projectile.velocity = Projectile.oldVelocity;
-			}
 			TimeTokill--;
 			if (TimeTokill >= 0)
 			{
@@ -102,7 +95,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 			{
 				for (int i = 1; i < 3; ++i)
 				{
-					Dust d = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Blood, Projectile.velocity.X * 2, Projectile.velocity.Y * 2, 100, default, Main.rand.NextFloat(0.85f, 1.85f) * Projectile.scale);
+					var d = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Blood, Projectile.velocity.X * 2, Projectile.velocity.Y * 2, 100, default, Main.rand.NextFloat(0.85f, 1.85f) * Projectile.scale);
 					d.noGravity = true;
 				}
 			}
@@ -117,9 +110,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 					Projectile.velocity += Vector2.Normalize(v0) * 0.5f;
 
 					if (player.HeldItem.type == ItemID.RazorbladeTyphoon)
-					{
 						Projectile.velocity = Vector2.Normalize(Projectile.velocity) * player.HeldItem.shootSpeed;
-					}
 					else
 					{
 						Projectile.velocity = Vector2.Normalize(Projectile.velocity) * 6f;
@@ -153,25 +144,21 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 
 		public override bool PreDraw(ref Color lightColor)
 		{
-			Texture2D Light = Common.MythContent.QuickTexture("TheTusk/Projectiles/Weapon/BloodProj");
-			Texture2D Shade = Common.MythContent.QuickTexture("TheTusk/Projectiles/Weapon/BloodShade");
-			Color c0 = new Color(193, 0, 29, 0);
+			Texture2D Light = MythContent.QuickTexture("TheTusk/Projectiles/Weapon/BloodProj");
+			Texture2D Shade = MythContent.QuickTexture("TheTusk/Projectiles/Weapon/BloodShade");
+			var c0 = new Color(193, 0, 29, 0);
 
 			float width = 24;
 			float MulByTimeLeft = 1f;
 			if (Projectile.timeLeft < 500)
-			{
 				MulByTimeLeft = Projectile.timeLeft / 500f;
-			}
 			width *= MulByTimeLeft;
 			c0 *= MulByTimeLeft;
 			int TrueL = 0;
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
 				if (Projectile.oldPos[i] == Vector2.Zero)
-				{
 					break;
-				}
 				TrueL++;
 			}
 
@@ -183,7 +170,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 			{
 				Color c2 = Lighting.GetColor((int)Projectile.Center.X / 16, (int)Projectile.Center.Y / 16);
 				float MulColor = (c2.R + c2.G + c2.B) / 765f;
-				Rectangle Frame = new Rectangle(0, (int)((Main.timeForVisualEffects / 10f) % 7) * 32, 32, 32);
+				var Frame = new Rectangle(0, (int)(Main.timeForVisualEffects / 10f % 7) * 32, 32, 32);
 				Main.spriteBatch.Draw(Shade, Projectile.Center - Main.screenPosition, Frame, Color.White * MulByTimeLeft, Projectile.rotation, Frame.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
 				Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition, Frame, c0 * MulColor, Projectile.rotation, Frame.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
 			}
@@ -195,37 +182,29 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 		}
 		private void DrawFlameTrail(int TrueL, float width, bool Shade = false, Color c0 = new Color(), float Mulfactor = 1.6f)
 		{
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
 				if (Projectile.oldPos[i] == Vector2.Zero)
-				{
 					break;
-				}
 				float MulColor = 1f;
 				var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
 				normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
 				if (i == 1)
-				{
 					MulColor = 0f;
-				}
 				if (i >= 2)
 				{
 					var normalDirII = Projectile.oldPos[i - 2] - Projectile.oldPos[i - 1];
 					normalDirII = Vector2.Normalize(new Vector2(-normalDirII.Y, normalDirII.X));
 					if (Vector2.Dot(normalDirII, normalDir) <= 0.965f)
-					{
 						MulColor = 0f;
-					}
 				}
 				if (i < Projectile.oldPos.Length - 1)
 				{
 					var normalDirII = Projectile.oldPos[i] - Projectile.oldPos[i + 1];
 					normalDirII = Vector2.Normalize(new Vector2(-normalDirII.Y, normalDirII.X));
 					if (Vector2.Dot(normalDirII, normalDir) <= 0.965f)
-					{
 						MulColor = 0f;
-					}
 				}
 				Vector2 DrawCenter = Projectile.oldPos[i] + new Vector2(9f);
 				Color c2 = Lighting.GetColor((int)DrawCenter.X / 16, (int)DrawCenter.Y / 16);
@@ -249,75 +228,57 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 					bars.Add(new Vertex2D(DrawCenter + normalDir * width * (1 - factorIII) - Main.screenPosition, c0 * MulColor, new Vector3(0, 0, 0)));
 				}
 			}
-			Texture2D t = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/FogTrace");
+			Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/FogTrace");
 			if (Shade)
-			{
-				t = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/FogTraceShade5xDark");
-			}
+				t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/FogTraceShade5xDark");
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 
 			if (bars.Count > 3)
-			{
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-			}
 		}
 		public void DrawWarp(VFXBatch spriteBatch)
 		{
 			float width = 24;
 			float MulByTimeLeft = 1f;
 			if (Projectile.timeLeft < 500)
-			{
 				MulByTimeLeft = Projectile.timeLeft / 500f;
-			}
 			width *= MulByTimeLeft;
 			int TrueL = 0;
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
 				if (Projectile.oldPos[i] == Vector2.Zero)
-				{
 					break;
-				}
 				TrueL++;
 			}
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
 				if (Projectile.oldPos[i] == Vector2.Zero)
-				{
 					break;
-				}
 				float MulColor = 1f;
 				var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
 				normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
 				if (i == 1)
-				{
 					MulColor = 0f;
-				}
 				if (i >= 2)
 				{
 					var normalDirII = Projectile.oldPos[i - 2] - Projectile.oldPos[i - 1];
 					normalDirII = Vector2.Normalize(new Vector2(-normalDirII.Y, normalDirII.X));
 					if (Vector2.Dot(normalDirII, normalDir) <= 0.965f)
-					{
 						MulColor = 0f;
-					}
 				}
 				if (i < Projectile.oldPos.Length - 1)
 				{
 					var normalDirII = Projectile.oldPos[i] - Projectile.oldPos[i + 1];
 					normalDirII = Vector2.Normalize(new Vector2(-normalDirII.Y, normalDirII.X));
 					if (Vector2.Dot(normalDirII, normalDir) <= 0.965f)
-					{
 						MulColor = 0f;
-					}
 				}
 
-				float k0 = (float)(Math.Atan2(normalDir.Y, normalDir.X));
+				float k0 = (float)Math.Atan2(normalDir.Y, normalDir.X);
 				k0 += 3.14f + 1.57f;
 				if (k0 > 6.28f)
-				{
 					k0 -= 6.28f;
-				}
 				Color c0 = new Color(k0, 0.4f, 0, 0) * MulByTimeLeft;
 
 				var factor = i / (float)TrueL;
@@ -339,12 +300,10 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 					bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factorIII) + new Vector2(9f) - Main.screenPosition, c0 * MulColor, new Vector3(0, 0, 0)));
 				}
 			}
-			Texture2D t = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/FogTraceLight");
+			Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/FogTraceLight");
 
 			if (bars.Count > 3)
-			{
 				spriteBatch.Draw(t, bars, PrimitiveType.TriangleStrip);
-			}
 		}
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{

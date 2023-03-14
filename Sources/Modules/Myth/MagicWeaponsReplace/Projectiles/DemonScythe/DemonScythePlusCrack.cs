@@ -1,6 +1,6 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
 
-namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.DemonScythe
+namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.DemonScythe
 {
 	internal class DemonScythePlusCrack : ModProjectile
 	{
@@ -30,20 +30,16 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
 			for (float x = -vL; x < vL + 1; x += 1)
 			{
 				if (x < vL * 0.6f)
-				{
 					continue;
-				}
 				float size = Main.rand.NextFloat(1.45f, 1.75f) * kSize * Projectile.ai[0] * 0.5f;
-				Dust d0 = Dust.NewDustDirect(Projectile.Center - new Vector2(size * 4, size * 4.5f), 0, 0, ModContent.DustType<Dusts.DemoFlame>(), 0, 0, 0, default, size);
+				var d0 = Dust.NewDustDirect(Projectile.Center - new Vector2(size * 4, size * 4.5f), 0, 0, ModContent.DustType<Dusts.DemoFlame>(), 0, 0, 0, default, size);
 				d0.fadeIn = 12f;
 				d0.scale *= kTime;
 			}
 
 			Lighting.AddLight((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16), 0.11f * kTime, 0f, 0.45f * kTime);
 			if (Collision.SolidCollision(Projectile.Center, 0, 0))
-			{
 				Projectile.velocity *= 0.6f;
-			}
 			else
 			{
 				Projectile.rotation += 0.3f;
@@ -68,19 +64,15 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
 
 		public override bool PreDraw(ref Color lightColor)
 		{
-			Color c0 = new Color(0.4f, 0.0f, 0.8f, 0);
+			var c0 = new Color(0.4f, 0.0f, 0.8f, 0);
 			float width = 16 * Projectile.ai[0];
 			if (Projectile.timeLeft < 30)
-			{
 				width *= Projectile.timeLeft / 30f;
-			}
 			int TrueL = 0;
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
 				if (Projectile.oldPos[i] == Vector2.Zero)
-				{
 					break;
-				}
 				TrueL++;
 			}
 
@@ -91,11 +83,9 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
 
 			float Scl = 1f;
 			if (Projectile.timeLeft < 30)
-			{
 				Scl *= Projectile.timeLeft / 30f;
-			}
 			Vector2 BasePos = Projectile.Center - Main.screenPosition;
-			List<Vertex2D> circle = new List<Vertex2D>();
+			var circle = new List<Vertex2D>();
 			circle.Add(new Vertex2D(BasePos + new Vector2(10, -10).RotatedBy(Projectile.rotation) * Scl, Color.Violet, new Vector3(0.5f, 1, 0)));
 			circle.Add(new Vertex2D(BasePos + new Vector2(0, 15).RotatedBy(Projectile.rotation) * Scl, Color.Violet, new Vector3(0.5f, 1, 0)));
 			circle.Add(new Vertex2D(BasePos + new Vector2(-10, -10).RotatedBy(Projectile.rotation) * Scl, Color.Violet, new Vector3(0.5f, 1, 0)));
@@ -108,37 +98,29 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
 		}
 		private void DrawFlameTrail(int TrueL, float width, bool Shade = false, Color c0 = new Color(), float Mulfactor = 1.6f)
 		{
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
 				if (Projectile.oldPos[i] == Vector2.Zero)
-				{
 					break;
-				}
 				float MulColor = 1f;
 				var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
 				normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
 				if (i == 1)
-				{
 					MulColor = 0f;
-				}
 				if (i >= 2)
 				{
 					var normalDirII = Projectile.oldPos[i - 2] - Projectile.oldPos[i - 1];
 					normalDirII = Vector2.Normalize(new Vector2(-normalDirII.Y, normalDirII.X));
 					if (Vector2.Dot(normalDirII, normalDir) <= 0.965f)
-					{
 						MulColor = 0f;
-					}
 				}
 				if (i < Projectile.oldPos.Length - 1)
 				{
 					var normalDirII = Projectile.oldPos[i] - Projectile.oldPos[i + 1];
 					normalDirII = Vector2.Normalize(new Vector2(-normalDirII.Y, normalDirII.X));
 					if (Vector2.Dot(normalDirII, normalDir) <= 0.965f)
-					{
 						MulColor = 0f;
-					}
 				}
 				var factor = i / (float)TrueL;
 				float x0 = factor * Mulfactor - (float)(Main.timeForVisualEffects / 15d) + 100000;
@@ -159,17 +141,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
 					bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factorIII) + new Vector2(13f) - Main.screenPosition, c0 * MulColor, new Vector3(0, 0, 0)));
 				}
 			}
-			Texture2D t = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/ElecLine");
+			Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/ElecLine");
 			if (Shade)
-			{
-				t = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Darkline");
-			}
+				t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Darkline");
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 
 			if (bars.Count > 3)
-			{
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-			}
 		}
 	}
 }

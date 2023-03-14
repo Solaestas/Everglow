@@ -1,8 +1,10 @@
-using Everglow.Sources.Modules.MythModule.TheTusk.Backgrounds;
-using Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration;
+using Everglow.Myth.Common;
+using Everglow.Myth.TheTusk.Backgrounds;
+using Everglow.Myth.TheTusk.Water;
+using Everglow.Myth.TheTusk.WorldGeneration;
 using Terraria.Graphics.Capture;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk
+namespace Everglow.Myth.TheTusk
 {
 	public class TuskBiomeBG : ModSurfaceBackgroundStyle
 	{
@@ -13,12 +15,12 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk
 
 	public class TuskBiome : ModBiome
 	{
-		public override int Music => Common.MythContent.QuickMusic("TuskBiome");
+		public override int Music => MythContent.QuickMusic("TuskBiome");
 		public override SceneEffectPriority Priority => SceneEffectPriority.Environment;
 		public override string BestiaryIcon => "Everglow/Sources/Modules/MythModule/TheTusk/TuskIcon";
 		public override string BackgroundPath => base.BackgroundPath;
 		public override string MapBackground => "Everglow/Sources/Modules/MythModule/TheTusk/Backgrounds/TuskBackground_Inside";
-		public override ModWaterStyle WaterStyle => ModContent.GetInstance<Water.TuskWaterStyle>();
+		public override ModWaterStyle WaterStyle => ModContent.GetInstance<TuskWaterStyle>();
 		public override Color? BackgroundColor => base.BackgroundColor;
 		public override CaptureBiome.TileColorStyle TileColorStyle => CaptureBiome.TileColorStyle.Crimson;
 		public override ModSurfaceBackgroundStyle SurfaceBackgroundStyle => ModContent.GetInstance<TuskSurfaceBackgroundStyle>();

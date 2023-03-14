@@ -1,5 +1,6 @@
 //using Everglow.Sources.Modules.MythModule.TheFirefly.NPCs;
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
+
+namespace Everglow.Myth.TheFirefly.Tiles
 {
 	public class DarkCocoon : ModTile
 	{
@@ -34,24 +35,20 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 							if (j + y > 20)
 							{
 								if (Main.tile[i + x, j + y].HasTile || Main.tile[i + x, j + y].LiquidAmount > 3)
-								{
 									return;
-								}
 							}
 							MaxHeight = -y;
 						}
 					}
 					if (MaxHeight > 7)
-					{
 						BuildFluorescentTree(i, j - 1, MaxHeight);
-					}
 				}
 			}
 
 			if (!Main.tile[i, j - 1].HasTile && Main.tile[i, j].Slope == SlopeType.Solid && Main.tile[i, j - 1].LiquidAmount > 0)
 			{
 				Tile tile = Main.tile[i, j - 1];
-				tile.TileType = (ushort)(ModContent.TileType<Tiles.LampLotus>());
+				tile.TileType = (ushort)ModContent.TileType<LampLotus>();
 				tile.HasTile = true;
 				tile.TileFrameX = (short)(28 * Main.rand.Next(8));
 			}
@@ -62,7 +59,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 				Tile t2 = Main.tile[i, j + 1];
 				if (t0.Slope == SlopeType.Solid && !t2.HasTile)
 				{
-					t2.TileType = (ushort)ModContent.TileType<Tiles.BlackVine>();
+					t2.TileType = (ushort)ModContent.TileType<BlackVine>();
 					t2.HasTile = true;
 					t2.TileFrameY = (short)(Main.rand.Next(6, 9) * 18);
 				}
@@ -76,27 +73,19 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 					{
 						Tile t0 = Main.tile[i + x, j + y];
 						if (t0.HasTile)
-						{
 							count++;
-						}
 						Tile t1 = Main.tile[i + x, j + y - 1];
 						if (y == 1 && (!t1.HasTile || t1.Slope != SlopeType.Solid))
-						{
 							count++;
-						}
 					}
 				}
 				if (count == 0)
-				{
-					Common.MythUtils.PlaceFrameImportantTiles(i - 1, j + 1, 3, 3, ModContent.TileType<Tiles.Furnitures.GlowingDrop>());
-				}
+					Common.MythUtils.PlaceFrameImportantTiles(i - 1, j + 1, 3, 3, ModContent.TileType<Furnitures.GlowingDrop>());
 
 			}
 			Tile tx = Main.tile[i, j + 1];
 			if (!tx.HasTile)
-			{
 				NPC.NewNPC(null, i * 16 + Main.rand.Next(-8, 9), j * 16 + 32, ModContent.NPCType<NPCs.LittleFireBulb>());
-			}
 			if (Main.rand.NextBool(3))//Á÷Ó©µÎ
 			{
 				int count = 0;
@@ -106,30 +95,22 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 					{
 						Tile t0 = Main.tile[i + x, j + y];
 						if (t0.HasTile)
-						{
 							count++;
-						}
 						Tile t1 = Main.tile[i + x, j + y - 1];
 						if (y == 1 && (!t1.HasTile || t1.Slope != SlopeType.Solid))
-						{
 							count++;
-						}
 					}
 					foreach (var npc in Main.npc)
 					{
 						if (npc.active)
 						{
-							if ((Math.Abs(npc.Center.X - i * 16)) < 20)
-							{
+							if (Math.Abs(npc.Center.X - i * 16) < 20)
 								count++;
-							}
 						}
 					}
 				}
 				if (count == 0)
-				{
 					NPC.NewNPC(null, i * 16 + Main.rand.Next(-8, 9), j * 16 + 180, ModContent.NPCType<NPCs.LargeFireBulb>());
-				}
 			}
 			if (!Main.tile[i, j - 1].HasTile && !Main.tile[i + 1, j - 1].HasTile && !Main.tile[i - 1, j - 1].HasTile && Main.tile[i, j].Slope == SlopeType.Solid && Main.tile[i - 1, j].Slope == SlopeType.Solid && Main.tile[i + 1, j].Slope == SlopeType.Solid)//ºÚÓ©ÜÄ
 			{
@@ -141,9 +122,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 					for (int y = -3; y < 4; y++)
 					{
 						if (Main.tile[i + x, j + y].LiquidAmount > 3)
-						{
 							return;
-						}
 					}
 				}
 				if (Main.rand.NextBool(2))
@@ -151,8 +130,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 					switch (Main.rand.Next(1, 10))
 					{
 						case 1:
-							t1.TileType = (ushort)ModContent.TileType<Tiles.BlackStarShrubSmall>();
-							t2.TileType = (ushort)ModContent.TileType<Tiles.BlackStarShrubSmall>();
+							t1.TileType = (ushort)ModContent.TileType<BlackStarShrubSmall>();
+							t2.TileType = (ushort)ModContent.TileType<BlackStarShrubSmall>();
 							t1.HasTile = true;
 							t2.HasTile = true;
 							short numa = (short)(Main.rand.Next(0, 6) * 48);
@@ -163,8 +142,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 							break;
 
 						case 2:
-							t1.TileType = (ushort)ModContent.TileType<Tiles.BlackStarShrubSmall>();
-							t2.TileType = (ushort)ModContent.TileType<Tiles.BlackStarShrubSmall>();
+							t1.TileType = (ushort)ModContent.TileType<BlackStarShrubSmall>();
+							t2.TileType = (ushort)ModContent.TileType<BlackStarShrubSmall>();
 							t1.HasTile = true;
 							t2.HasTile = true;
 							short num = (short)(Main.rand.Next(0, 6) * 48);
@@ -175,9 +154,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 							break;
 
 						case 3:
-							t1.TileType = (ushort)ModContent.TileType<Tiles.BlackStarShrub>();
-							t2.TileType = (ushort)ModContent.TileType<Tiles.BlackStarShrub>();
-							t3.TileType = (ushort)ModContent.TileType<Tiles.BlackStarShrub>();
+							t1.TileType = (ushort)ModContent.TileType<BlackStarShrub>();
+							t2.TileType = (ushort)ModContent.TileType<BlackStarShrub>();
+							t3.TileType = (ushort)ModContent.TileType<BlackStarShrub>();
 							t1.HasTile = true;
 							t2.HasTile = true;
 							t3.HasTile = true;
@@ -191,9 +170,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 							break;
 
 						case 4:
-							t1.TileType = (ushort)ModContent.TileType<Tiles.BlueBlossom>();
-							t2.TileType = (ushort)ModContent.TileType<Tiles.BlueBlossom>();
-							t3.TileType = (ushort)ModContent.TileType<Tiles.BlueBlossom>();
+							t1.TileType = (ushort)ModContent.TileType<BlueBlossom>();
+							t2.TileType = (ushort)ModContent.TileType<BlueBlossom>();
+							t3.TileType = (ushort)ModContent.TileType<BlueBlossom>();
 							t1.HasTile = true;
 							t2.HasTile = true;
 							t3.HasTile = true;
@@ -207,27 +186,27 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 							break;
 
 						case 5:
-							WorldGen.Place3x2(i - 1, j - 1, (ushort)ModContent.TileType<Tiles.BlackFrenLarge>(), Main.rand.Next(3));
+							WorldGen.Place3x2(i - 1, j - 1, (ushort)ModContent.TileType<BlackFrenLarge>(), Main.rand.Next(3));
 							break;
 
 						case 6:
-							WorldGen.Place2x2(i - 1, j - 1, (ushort)ModContent.TileType<Tiles.BlackFren>(), Main.rand.Next(3));
+							WorldGen.Place2x2(i - 1, j - 1, (ushort)ModContent.TileType<BlackFren>(), Main.rand.Next(3));
 							break;
 
 						case 7:
-							WorldGen.Place3x2(i - 1, j - 1, (ushort)ModContent.TileType<Tiles.BlackFrenLarge>(), Main.rand.Next(3));
+							WorldGen.Place3x2(i - 1, j - 1, (ushort)ModContent.TileType<BlackFrenLarge>(), Main.rand.Next(3));
 							break;
 
 						case 8:
-							WorldGen.Place2x2(i - 1, j - 1, (ushort)ModContent.TileType<Tiles.BlackFren>(), Main.rand.Next(3));
+							WorldGen.Place2x2(i - 1, j - 1, (ushort)ModContent.TileType<BlackFren>(), Main.rand.Next(3));
 							break;
 
 						case 9:
-							WorldGen.Place2x1(i - 1, j - 1, (ushort)ModContent.TileType<Tiles.CocoonRock>(), Main.rand.Next(3));
+							WorldGen.Place2x1(i - 1, j - 1, (ushort)ModContent.TileType<CocoonRock>(), Main.rand.Next(3));
 							break;
 
 						case 10:
-							WorldGen.Place2x1(i - 1, j - 1, (ushort)ModContent.TileType<Tiles.CocoonRock>(), Main.rand.Next(3));
+							WorldGen.Place2x1(i - 1, j - 1, (ushort)ModContent.TileType<CocoonRock>(), Main.rand.Next(3));
 							break;
 					}
 				}
@@ -236,9 +215,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 		public static void BuildFluorescentTree(int i, int j, int height = 0)
 		{
 			if (j < 30)
-			{
 				return;
-			}
 			int Height = Main.rand.Next(7, height);
 
 			for (int g = 0; g < Height; g++)

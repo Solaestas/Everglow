@@ -1,6 +1,6 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
 
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Accessories
+namespace Everglow.Myth.MiscItems.Accessories
 {
 	[AutoloadEquip(EquipType.Neck)]
 	public class WalnutClip : ModItem
@@ -26,9 +26,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Accessories
 			MythContentPlayer mplayer = player.GetModPlayer<MythContentPlayer>();
 			mplayer.CriticalDamage += 0.16f;
 			if (player.statLifeMax2 / 2f > player.statLife)
-			{
 				player.GetDamage(DamageClass.Generic) *= (player.statLifeMax2 / 2f - player.statLife) / 400f + 1;
-			}
 		}
 	}
 }

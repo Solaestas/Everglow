@@ -1,6 +1,6 @@
 ﻿using Terraria.DataStructures;
 
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
+namespace Everglow.Myth.MiscItems.Weapons
 {
 	public class Sunflower : ModItem
 	{
@@ -20,7 +20,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
 			Item.glowMask = ItemGlowManager.GetItemGlow(this);
 			Item.useStyle = 1;
 			Item.shootSpeed = 9f;
-			Item.shoot = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Melee.Sunflower>();
+			Item.shoot = ModContent.ProjectileType<Projectiles.Weapon.Melee.Sunflower>();
 			Item.DamageType = DamageClass.Melee;
 			Item.width = 46;
 			Item.height = 46;

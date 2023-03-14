@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.BossDrop
+﻿namespace Everglow.Myth.TheFirefly.Items.BossDrop
 {
 	public class MothRelic : ModItem
 	{

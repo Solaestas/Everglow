@@ -1,6 +1,6 @@
 ﻿using Terraria.DataStructures;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
+namespace Everglow.Myth.TheFirefly.Tiles
 {
 	public class FireflyTree_Leaf : ModGore
 	{
@@ -23,9 +23,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 			if (gore.frameCounter > 4)
 			{
 				if (gore.frame < 7)
-				{
 					gore.frame++;
-				}
 				else
 				{
 					gore.frame = 0;

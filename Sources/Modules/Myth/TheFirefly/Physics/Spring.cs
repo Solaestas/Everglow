@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
+﻿namespace Everglow.Myth.TheFirefly.Physics
 {
 	internal class Spring
 	{
@@ -37,11 +37,9 @@
 		{
 			// 求解阻尼简谐运动的微分方程解析解
 			if (4 * elasticity - damping * damping <= 0)
-			{
 				return;
-			}
 			float gamma = 0.5f * MathF.Sqrt(4 * elasticity - damping * damping);
-			Vector2 unit = Vector2.Normalize(m1.position - m2.position);
+			var unit = Vector2.Normalize(m1.position - m2.position);
 			Vector2 dir = m1.position - m2.position - unit * restLength;
 			Vector2 c = dir * (damping / (2 * gamma)) + m1.velocity * (1.0f / gamma);
 			Vector2 target = dir * MathF.Cos(gamma * deltaTime) + c * MathF.Sin(gamma * deltaTime);

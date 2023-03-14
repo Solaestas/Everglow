@@ -1,4 +1,6 @@
-﻿namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
+﻿using Everglow.Myth.Common;
+
+namespace Everglow.Myth.LanternMoon.Projectiles
 {
 	class LBloodEffectGra : ModProjectile
 	{
@@ -28,9 +30,7 @@
 			Projectile.velocity *= 0.96f;
 			Projectile.scale -= 0.005f;
 			if (Projectile.scale <= 0.005f)
-			{
 				Projectile.Kill();
-			}
 		}
 		public override bool PreDraw(ref Color lightColor)
 		{
@@ -38,12 +38,10 @@
 		}
 		public override void PostDraw(Color lightColor)
 		{
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 			float width = 6 * Projectile.scale;
 			if (Projectile.timeLeft < 60)
-			{
 				width = Projectile.timeLeft / 10f * Projectile.scale;
-			}
 			TrueL = 0;
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
@@ -64,7 +62,7 @@
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(10, 10) - Main.screenPosition, new Color(255, 0, 0, 0), new Vector3(factor, 1, w)));
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(10, 10) - Main.screenPosition, new Color(255, 0, 0, 0), new Vector3(factor, 0, w)));
 			}
-			List<Vertex2D> Vx = new List<Vertex2D>();
+			var Vx = new List<Vertex2D>();
 			if (bars.Count > 2)
 			{
 				Vx.Add(bars[0]);
@@ -85,7 +83,7 @@
 			}
 			if (Vx.Count > 2)
 			{
-				Texture2D t = Common.MythContent.QuickTexture("LanternMoon/Projectiles/LBloodEffect");
+				Texture2D t = MythContent.QuickTexture("LanternMoon/Projectiles/LBloodEffect");
 				Main.graphics.GraphicsDevice.Textures[0] = t;
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 			}

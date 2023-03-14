@@ -1,4 +1,4 @@
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Walls
+namespace Everglow.Myth.TheFirefly.Walls
 {
 	public class DarkCocoonWall : ModWall
 	{

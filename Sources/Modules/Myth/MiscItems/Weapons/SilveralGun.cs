@@ -1,6 +1,6 @@
 ﻿using Terraria.DataStructures;
 
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
+namespace Everglow.Myth.MiscItems.Weapons
 {
 	public class SilveralGun : ModItem
 	{

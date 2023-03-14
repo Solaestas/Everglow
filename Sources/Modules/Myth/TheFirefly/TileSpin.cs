@@ -1,4 +1,6 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheFirefly
+﻿using Everglow.Myth.TheFirefly.Dusts;
+
+namespace Everglow.Myth.TheFirefly
 {
 	internal class TileSpin
 	{
@@ -22,9 +24,7 @@
 				Omega = Omega * k1 - rot * k2;
 				TileRotation[(i, j)] = new Vector2(Omega, rot + Omega);
 				if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
-				{
 					TileRotation.Remove((i, j));
-				}
 			}
 		}
 
@@ -48,8 +48,8 @@
 				float Strength = Math.Abs(Omega) + Math.Abs(rot);
 				if (Main.rand.NextBool(Math.Clamp((int)(100 - Strength * 1200f * k1), 1, 900)))
 				{
-					Dust d = Dust.NewDustDirect(new Vector2(i * 16 + Addx, j * 16 + Addy) + offset.RotatedBy(rot), width, height, ModContent.DustType<Dusts.BlueParticleDark>());
-					Dust d2 = Dust.NewDustDirect(new Vector2(i * 16 + Addx, j * 16 + Addy) + offset.RotatedBy(rot), width, height, ModContent.DustType<Dusts.BlueParticle>());
+					var d = Dust.NewDustDirect(new Vector2(i * 16 + Addx, j * 16 + Addy) + offset.RotatedBy(rot), width, height, ModContent.DustType<BlueParticleDark>());
+					var d2 = Dust.NewDustDirect(new Vector2(i * 16 + Addx, j * 16 + Addy) + offset.RotatedBy(rot), width, height, ModContent.DustType<BlueParticle>());
 					d.alpha = (int)(255 - Strength * 2000f * k1);
 					d2.scale = Strength * 10f;
 					d.scale *= k1;
@@ -58,9 +58,7 @@
 					d2.velocity = (offset.RotatedBy(rot) - offset.RotatedBy(rot - Omega)) * k1 * 1f;
 				}
 				if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
-				{
 					TileRotation.Remove((i, j));
-				}
 			}
 		}
 
@@ -77,17 +75,13 @@
 		public void DrawRotatedChandelier(int i, int j, Texture2D tex, float offsetX = 0, float offsetY = 0, bool specialColor = false, Color color = new Color())
 		{
 			float rot = 0;
-			Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+			var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 			var tile = Main.tile[i, j];
 			if (Main.drawToScreen)
-			{
 				zero = Vector2.Zero;
-			}
 			Color c = Lighting.GetColor(i, j);
 			if (specialColor)
-			{
 				c = color;
-			}
 			if (TileRotation.ContainsKey((i, j)))
 			{
 				rot = TileRotation[(i, j)].Y;
@@ -112,17 +106,13 @@
 		public void DrawRotatedLamp(int i, int j, Texture2D tex, float offsetX = 0, float offsetY = 0, bool specialColor = false, Color color = new Color())
 		{
 			float rot = 0;
-			Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+			var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 			var tile = Main.tile[i, j];
 			if (Main.drawToScreen)
-			{
 				zero = Vector2.Zero;
-			}
 			Color c = Lighting.GetColor(i, j);
 			if (specialColor)
-			{
 				c = color;
-			}
 			if (TileRotation.ContainsKey((i, j)))
 			{
 				rot = TileRotation[(i, j)].Y;
@@ -149,16 +139,12 @@
 		public void DrawRotatedTile(int i, int j, Texture2D tex, Rectangle sourceRectangle, Vector2 origin, float offsetX = 0, float offsetY = 0, bool specialColor = false, Color color = new Color())
 		{
 			float rot = 0;
-			Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+			var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 			if (Main.drawToScreen)
-			{
 				zero = Vector2.Zero;
-			}
 			Color c = Lighting.GetColor(i, j);
 			if (specialColor)
-			{
 				c = color;
-			}
 			if (TileRotation.ContainsKey((i, j)))
 			{
 				rot = TileRotation[(i, j)].Y;
@@ -186,16 +172,12 @@
 		public void DrawRotatedTile(int i, int j, Texture2D tex, Rectangle sourceRectangle, Vector2 origin, float offsetX = 0, float offsetY = 0, float kRot = 1, bool specialColor = false, Color color = new Color())
 		{
 			float rot = 0;
-			Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+			var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 			if (Main.drawToScreen)
-			{
 				zero = Vector2.Zero;
-			}
 			Color c = Lighting.GetColor(i, j);
 			if (specialColor)
-			{
 				c = color;
-			}
 			if (TileRotation.ContainsKey((i, j)))
 			{
 				rot = TileRotation[(i, j)].Y;
@@ -219,16 +201,12 @@
 		public void DrawReed(int i, int j, int Length, Texture2D texFlower, Texture2D texReed, Rectangle flowerRectangle, Rectangle reedRectangle, Vector2 flowerOrigin, Vector2 reedOrigin, float offsetX = 0, float offsetY = 0, float kRot = 1, bool specialColor = false, Color color = new Color())
 		{
 			float rot = 0;
-			Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+			var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 			if (Main.drawToScreen)
-			{
 				zero = Vector2.Zero;
-			}
 			Color c = Lighting.GetColor(i, j);
 			if (specialColor)
-			{
 				c = color;
-			}
 
 			if (TileRotation.ContainsKey((i, j)))//有旋转
 			{
@@ -244,7 +222,7 @@
 				for (int x = 0; x < Length; x++)
 				{
 					float value0 = Length - x;
-					float LowerRotation = 1 / (value0) * rot * kRot;
+					float LowerRotation = 1 / value0 * rot * kRot;
 
 					float dx = MathUtils.Sin(LowerRotation) * 16;
 
@@ -287,7 +265,7 @@
 		{
 			Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
 
-			List<Vertex2D> vertex2Ds = new List<Vertex2D>();
+			var vertex2Ds = new List<Vertex2D>();
 
 			for (int x = 0; x < 3; x++)
 			{

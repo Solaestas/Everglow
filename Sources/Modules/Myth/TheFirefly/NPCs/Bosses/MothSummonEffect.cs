@@ -1,6 +1,7 @@
+using Everglow.Myth.Common;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
+namespace Everglow.Myth.TheFirefly.NPCs.Bosses
 {
 	public class MothSummonEffect : ModNPC
 	{
@@ -41,9 +42,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 		public override void AI()
 		{
 			if (++NPC.ai[0] > 180)
-			{
 				NPC.active = false;
-			}
 
 			if (!Start)
 			{
@@ -83,9 +82,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 				Start = true;
 			}
 			if (AimN != -1)
-			{
 				Cent = Main.npc[AimN].Center;
-			}
 			Vector2 v0 = Cent - NPC.Center;
 			if (v0.Length() >= 15)
 			{
@@ -93,14 +90,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 				Vector2 v2 = v / v.Length() * 0.05f * (float)(1 + Math.Log(v.Length() + 1));
 
 				Acc *= 0.95f;
-				NPC.velocity += (Acc + v2);
+				NPC.velocity += Acc + v2;
 				NPC.velocity = NPC.velocity.RotatedBy(Ome);
 				Ome *= 0.96f;
 				kx = 20 - v0.Length() / 12f;
 				if (kx < 1)
-				{
 					kx = 1;
-				}
 			}
 			else
 			{
@@ -121,14 +116,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 
 		public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 		{
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 			int width = (int)(2 * kx);
 			for (int i = 1; i < NPC.oldPos.Length - 1; ++i)
 			{
 				if (NPC.oldPos[i] == Vector2.Zero)
-				{
 					break;
-				}
 
 				var normalDir = NPC.oldPos[i - 1] - NPC.oldPos[i];
 				normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
@@ -142,7 +135,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 				bars.Add(new Vertex2D(NPC.oldPos[i] + normalDir * -width + new Vector2(4, 35) - Main.screenPosition, color, new Vector3((float)Math.Sqrt(factor), 0, w)));
 			}
 
-			List<Vertex2D> triangleList = new List<Vertex2D>();
+			var triangleList = new List<Vertex2D>();
 
 			if (bars.Count > 2)
 			{
@@ -160,12 +153,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 					triangleList.Add(bars[i + 2]);
 					triangleList.Add(bars[i + 3]);
 				}
-				Texture2D t = Common.MythContent.QuickTexture("TheFirefly/NPCs/Bosses/MeteroD");
+				Texture2D t = MythContent.QuickTexture("TheFirefly/NPCs/Bosses/MeteroD");
 				Main.graphics.GraphicsDevice.Textures[0] = t;
 				if (triangleList.Count > 3)
-				{
 					Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList.ToArray(), 0, triangleList.Count / 3);
-				}
 			}
 		}
 	}

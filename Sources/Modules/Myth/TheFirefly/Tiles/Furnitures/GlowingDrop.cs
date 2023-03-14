@@ -1,10 +1,11 @@
-using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Everglow.Myth.Common;
+using Everglow.Myth.TheFirefly;
+using Everglow.Myth.TheFirefly.Dusts;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ObjectData;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
+namespace Everglow.Myth.TheFirefly.Tiles.Furnitures
 {
 	public class GlowingDrop : ModTile
 	{
@@ -29,7 +30,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 			// Placement
 			TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3);
 			TileObjectData.newTile.AnchorTop = new AnchorData(AnchorType.SolidTile, TileObjectData.newTile.Width, 0);
-			TileObjectData.newTile.AnchorBottom = default(AnchorData);
+			TileObjectData.newTile.AnchorBottom = default;
 			TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16 };
 			TileObjectData.addTile(Type);
 
@@ -74,9 +75,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 						if (player.Hitbox.Intersects(new Rectangle(i * 16 + 11, j * 16 + 32, 10, 12)))
 						{
 							if (!TileSpin.TileRotation.ContainsKey((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18)))
-							{
 								TileSpin.TileRotation.Add((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18), new Vector2(-Math.Clamp(player.velocity.X, -1, 1) * 0.2f));
-							}
 							else
 							{
 								float rot;
@@ -84,22 +83,16 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 								Omega = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18)].X;
 								rot = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18)].Y;
 								if (Math.Abs(Omega) < 0.04f && Math.Abs(rot) < 0.04f)
-								{
 									TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18)] = new Vector2(Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
-								}
 								if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
-								{
 									TileSpin.TileRotation.Remove((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18));
-								}
 							}
 						}
 
 						if (player.Hitbox.Intersects(new Rectangle(i * 16 + 21, j * 16 + 12, 10, 12)))
 						{
 							if (!TileSpin.TileRotation.ContainsKey((i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18)))
-							{
 								TileSpin.TileRotation.Add((i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18), new Vector2(-Math.Clamp(player.velocity.X, -1, 1) * 0.2f));
-							}
 							else
 							{
 								float rot;
@@ -107,22 +100,16 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 								Omega = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18)].X;
 								rot = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18)].Y;
 								if (Math.Abs(Omega) < 0.04f && Math.Abs(rot) < 0.04f)
-								{
 									TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18)] = new Vector2(Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
-								}
 								if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
-								{
 									TileSpin.TileRotation.Remove((i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18));
-								}
 							}
 						}
 
 						if (player.Hitbox.Intersects(new Rectangle(i * 16 - 1, j * 16 + 18, 10, 12)))
 						{
 							if (!TileSpin.TileRotation.ContainsKey((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1)))
-							{
 								TileSpin.TileRotation.Add((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1), new Vector2(-Math.Clamp(player.velocity.X, -1, 1) * 0.2f));
-							}
 							else
 							{
 								float rot;
@@ -130,22 +117,16 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 								Omega = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1)].X;
 								rot = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1)].Y;
 								if (Math.Abs(Omega) < 0.04f && Math.Abs(rot) < 0.04f)
-								{
 									TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1)] = new Vector2(Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
-								}
 								if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
-								{
 									TileSpin.TileRotation.Remove((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1));
-								}
 							}
 						}
 
 						if (player.Hitbox.Intersects(new Rectangle(i * 16 - 13, j * 16 + 26, 10, 12)))
 						{
 							if (!TileSpin.TileRotation.ContainsKey((i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18)))
-							{
 								TileSpin.TileRotation.Add((i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18), new Vector2(-Math.Clamp(player.velocity.X, -1, 1) * 0.2f));
-							}
 							else
 							{
 								float rot;
@@ -153,13 +134,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 								Omega = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18)].X;
 								rot = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18)].Y;
 								if (Math.Abs(Omega) < 0.04f && Math.Abs(rot) < 0.04f)
-								{
 									TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18)] = new Vector2(Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
-								}
 								if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
-								{
 									TileSpin.TileRotation.Remove((i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18));
-								}
 							}
 						}
 					}
@@ -172,12 +149,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 			var tile = Main.tile[i, j];
 			int Adx = 0;
 			if (tile.TileFrameX > 54)
-			{
 				Adx = 54;
-			}
 			if (tile.TileFrameX % 54 == 18 && tile.TileFrameY == 0)
 			{
-				TileSpin tileSpin = new TileSpin();
+				var tileSpin = new TileSpin();
 				tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18);
 				Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowingDrop");
 				tileSpin.DrawRotatedTile(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, tex, new Rectangle(30 + Adx, 0, 10, 48), new Vector2(5, 0), 16, -2, 1);

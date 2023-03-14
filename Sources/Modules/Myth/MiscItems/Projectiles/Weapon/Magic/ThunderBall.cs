@@ -1,5 +1,5 @@
 using Terraria.Audio;
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
+namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Magic
 {
 	public class ThunderBall : ModProjectile
 	{
@@ -30,25 +30,21 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 		{
 			Projectile.penetrate--;
 			if (Projectile.velocity.X != oldVelocity.X)
-			{
 				Projectile.velocity.X = -oldVelocity.X;
-			}
 			if (Projectile.velocity.Y != oldVelocity.Y)
-			{
 				Projectile.velocity.Y = -oldVelocity.Y;
-			}
 			float a = Main.rand.NextFloat(0, 500.5f);
 			Player player = Main.player[Projectile.owner];
 			for (int y = 0; y < 3; y++)
 			{
 				Vector2 v = Projectile.velocity.RotatedBy(Math.PI * y / 1.5 + a) / Projectile.velocity.Length() * 15f;
-				int h = Projectile.NewProjectile(null, Projectile.Center - v, v, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Magic.ThunderBall2>(), Projectile.damage / 3, Projectile.knockBack, player.whoAmI, player.GetCritChance(DamageClass.Magic) * 100 + 16);
+				int h = Projectile.NewProjectile(null, Projectile.Center - v, v, ModContent.ProjectileType<ThunderBall2>(), Projectile.damage / 3, Projectile.knockBack, player.whoAmI, player.GetCritChance(DamageClass.Magic) * 100 + 16);
 				Main.projectile[h].timeLeft = Main.rand.Next(4, 16);
 			}
 			for (int θ = 0; θ < 40; θ++)
 			{
 				Vector2 v = new Vector2(0, Main.rand.Next(25, 75) / 50f).RotatedByRandom(Math.PI * 2);
-				int num25 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 88, v.X, v.Y, 150, default(Color), 0.6f);
+				int num25 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 88, v.X, v.Y, 150, default, 0.6f);
 				Main.dust[num25].noGravity = false;
 			}
 			return false;
@@ -60,13 +56,13 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 			for (int y = 0; y < 3; y++)
 			{
 				Vector2 v = Projectile.velocity.RotatedBy(Math.PI * y / 1.5 + a) / Projectile.velocity.Length() * 15f;
-				int h = Projectile.NewProjectile(null, Projectile.Center, v, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Magic.ThunderBall2>(), Projectile.damage / 3, Projectile.knockBack, player.whoAmI);
+				int h = Projectile.NewProjectile(null, Projectile.Center, v, ModContent.ProjectileType<ThunderBall2>(), Projectile.damage / 3, Projectile.knockBack, player.whoAmI);
 				Main.projectile[h].timeLeft = Main.rand.Next(4, 16);
 			}
 			for (int θ = 0; θ < 40; θ++)
 			{
 				Vector2 v = new Vector2(0, Main.rand.Next(25, 75) / 50f).RotatedByRandom(Math.PI * 2);
-				int num25 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 88, v.X, v.Y, 150, default(Color), 0.6f);
+				int num25 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 88, v.X, v.Y, 150, default, 0.6f);
 				Main.dust[num25].noGravity = false;
 			}
 		}
@@ -74,9 +70,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 		{
 			addi += 1;
 			if (addi % 60 == 1)
-			{
 				SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/ElectricCurrency"), Projectile.Center);
-			}
 			Projectile.velocity.Y += 0.15f;
 			if (Projectile.timeLeft >= 1079)
 			{
@@ -95,7 +89,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 						coolingHit[j] = 8;
 						HasBeenHit[j] = true;
 						TotalPower--;
-						Projectile.NewProjectile(Projectile.InheritSource(Projectile), Main.npc[j].Center, Vector2.Zero, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Magic.ThunderBallToNPC>(), Projectile.damage / 3, Projectile.knockBack, Projectile.owner, Projectile.whoAmI, j);
+						Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Main.npc[j].Center, Vector2.Zero, ModContent.ProjectileType<ThunderBallToNPC>(), Projectile.damage / 3, Projectile.knockBack, Projectile.owner, Projectile.whoAmI, j);
 					}
 					if (HasCool[j] == 0 && (Main.npc[j].Center - Projectile.Center).Length() < 70 && !Main.npc[j].dontTakeDamage && !Main.npc[j].friendly && Main.npc[j].active)
 					{
@@ -105,15 +99,11 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 						HasCool[j] = 15;
 					}
 					if (HasCool[j] > 0)
-					{
 						HasCool[j]--;
-					}
 					if (HasBeenHit[j])
 					{
 						if (coolingHit[j] > 0)
-						{
 							coolingHit[j]--;
-						}
 						else
 						{
 							coolingHit[j] = 0;
@@ -140,14 +130,10 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 			{
 				vdp[i] += new Vector2(0, Main.rand.NextFloat(0, 0.5f)).RotatedByRandom(Math.PI * 2d);
 				if (vdp[i].Length() > 12)
-				{
 					vdp[i] = new Vector2(0, Main.rand.NextFloat(0, 5f)).RotatedByRandom(Math.PI * 2d);
-				}
 			}
 			if (Tokill >= 0 && Tokill <= 2)
-			{
 				Projectile.Kill();
-			}
 			Player player = Main.player[Projectile.owner];
 			if (Tokill <= 44 && Tokill > 0)
 			{
@@ -161,7 +147,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 					for (int i = 0; i < 4; i++)
 					{
 						Vector2 v = new Vector2(0, Main.rand.Next(25, 75) / 50f).RotatedByRandom(Math.PI * 2);
-						int num25 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 88, v.X, v.Y, 150, default(Color), 0.6f);
+						int num25 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 88, v.X, v.Y, 150, default, 0.6f);
 						Main.dust[num25].noGravity = false;
 					}
 				}
@@ -171,7 +157,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 				for (int i = 0; i < 4; i++)
 				{
 					Vector2 v = new Vector2(0, Main.rand.Next(25, 75) / 50f).RotatedByRandom(Math.PI * 2);
-					int num25 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 88, v.X * Projectile.timeLeft / 60f, v.Y * Projectile.timeLeft / 60f, 150, default(Color), 0.6f * Projectile.timeLeft / 60f);
+					int num25 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 88, v.X * Projectile.timeLeft / 60f, v.Y * Projectile.timeLeft / 60f, 150, default, 0.6f * Projectile.timeLeft / 60f);
 					Main.dust[num25].noGravity = false;
 				}
 			}
@@ -185,9 +171,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 			{
 
 				if (Projectile.timeLeft > 60f)
-				{
 					return new Color?(new Color(255, 255, 255, 0));
-				}
 				else
 				{
 					return new Color?(new Color(Projectile.timeLeft / 60f, Projectile.timeLeft / 60f, Projectile.timeLeft / 60f, 0));
@@ -195,13 +179,13 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 			}
 			else
 			{
-				return new Color?(new Color((float)Tokill / 45f, (float)Tokill / 45f, (float)Tokill / 45f, 0));
+				return new Color?(new Color(Tokill / 45f, Tokill / 45f, Tokill / 45f, 0));
 			}
 		}
 
 		public override void PostDraw(Color lightColor)
 		{
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
 				int g = (i + 1080 - Projectile.timeLeft) % 60;
@@ -209,9 +193,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 					break;
 				float width = 5;
 				if (Projectile.timeLeft > 30)
-				{
 					width = 5;
-				}
 				else
 				{
 					width = Projectile.timeLeft / 6f;
@@ -225,9 +207,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 						i++;
 						var normalDir2 = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
 						if (normalDir2.Length() >= 0.2f)
-						{
 							break;
-						}
 					}
 				}
 				normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
@@ -248,7 +228,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 					bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(6, 6) - Main.screenPosition, color, new Vector3((float)Math.Sqrt(factor), 0, w)));
 				}
 			}
-			List<Vertex2D> triangleList = new List<Vertex2D>();
+			var triangleList = new List<Vertex2D>();
 			if (bars.Count > 2)
 			{
 				triangleList.Add(bars[0]);

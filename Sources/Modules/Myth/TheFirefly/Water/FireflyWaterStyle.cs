@@ -1,7 +1,7 @@
-using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Everglow.Myth.TheFirefly.Dusts;
 using static Terraria.ModLoader.ModContent;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
+namespace Everglow.Myth.TheFirefly.Water
 {
 	public class FireflyWaterStyle : ModWaterStyle
 	{
@@ -9,7 +9,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Water
 
 		public override int GetSplashDust() => DustType<MothBlue2>();
 
-		public override int GetDropletGore() => base.Slot;
+		public override int GetDropletGore() => Slot;
 
 		public override void LightColorMultiplier(ref float r, ref float g, ref float b)
 		{

@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Buffs.Fragrans
+﻿namespace Everglow.Myth.MiscItems.Buffs.Fragrans
 {
 	public class MoonAndFragransIII : ModBuff
 	{

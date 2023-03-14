@@ -1,8 +1,8 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
 using Terraria.GameContent;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.LanternMoon.LanternCommon
+namespace Everglow.Myth.LanternMoon.LanternCommon
 {
 	public class LanternMoonProgress : ModSystem//灯笼月
 	{
@@ -62,35 +62,21 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.LanternCommon
 			if (OnLanternMoon)
 			{
 				if (Wave == 0)
-				{
 					WavePoint = Point;
-				}
 				if (WavePoint > PreWavePoint[Wave])
 				{
 					if (Wave == 0)
-					{
 						Main.NewText("Wave 2:", new Color(175, 75, 255));
-					}
 					if (Wave == 1)
-					{
 						Main.NewText("Wave 3:", new Color(175, 75, 255));
-					}
 					if (Wave == 2)
-					{
 						Main.NewText("Wave 4:", new Color(175, 75, 255));
-					}
 					if (Wave == 3)
-					{
 						Main.NewText("Wave 5:", new Color(175, 75, 255));
-					}
 					if (Wave == 4)
-					{
 						Main.NewText("Wave 6:", new Color(175, 75, 255));
-					}
 					if (Wave == 5)
-					{
 						Main.NewText("Wave 7:", new Color(175, 75, 255));
-					}
 					WavePoint -= PreWavePoint[Wave];
 					Wave++;
 				}
@@ -109,9 +95,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.LanternCommon
 		public override void PostDrawInterface(SpriteBatch spriteBatch)
 		{
 			if (!OnLanternMoon)
-			{
 				return;
-			}
 			Main.invasionProgressMax = PreWavePoint[Wave];
 			Main.invasionProgress = WavePoint;
 			if (OnLanternMoon)
@@ -121,18 +105,12 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.LanternCommon
 				Main.invasionProgressWave = Wave + 1;
 			}
 			if (Main.invasionProgressMode == 2 && Main.invasionProgressNearInvasion && Main.invasionProgressDisplayLeft < 160)
-			{
 				Main.invasionProgressDisplayLeft = 160;
-			}
 
 			if (!Main.gamePaused && Main.invasionProgressDisplayLeft > 0)
-			{
 				Main.invasionProgressDisplayLeft--;
-			}
 			if (Main.invasionProgressDisplayLeft > 0)
-			{
 				Main.invasionProgressAlpha += 0.005f;
-			}
 			else
 			{
 				Main.invasionProgressAlpha -= 0.005f;
@@ -146,9 +124,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.LanternCommon
 
 			Main.invasionProgressAlpha = MathHelper.Clamp(Main.invasionProgressAlpha, 0, 1);
 			if (Main.invasionProgressAlpha == 0f)
-			{
 				return;
-			}
 
 
 			float fadinAlpha = 0.5f + Main.invasionProgressAlpha * 0.5f;
@@ -158,7 +134,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.LanternCommon
 			Color BGColor = Color.White;
 			int barSizeX = (int)(200f * fadinAlpha);
 			int barSizeY = (int)(45f * fadinAlpha);
-			Vector2 barCenter = new Vector2(Main.screenWidth - 120, Main.screenHeight - 40);
+			var barCenter = new Vector2(Main.screenWidth - 120, Main.screenHeight - 40);
 			string waveStage = Main.invasionProgressMax == 0 ?
 				WavePoint.ToString() :
 				(int)(Main.invasionProgress * 100f / Main.invasionProgressMax) + "%";
@@ -166,9 +142,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.LanternCommon
 			float textSizeY = 8f * fadinAlpha;
 			Texture2D colorBar = TextureAssets.ColorBar.Value;
 			if (Main.invasionProgressWave > 0)
-			{
 				waveStage = Language.GetTextValue("Game.WaveMessage", Main.invasionProgressWave, waveStage);
-			}
 			else
 			{
 				waveStage = Language.GetTextValue("Game.WaveCleared", waveStage);
@@ -222,9 +196,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.LanternCommon
 			Vector2 lanternMoonSize = FontAssets.MouseText.Value.MeasureString(LanternMoon);
 			float OffsetX = 120f;
 			if (lanternMoonSize.X > 200f)
-			{
 				OffsetX += lanternMoonSize.X - 200f;
-			}
 			Rectangle BGRectangle = Utils.CenteredRectangle(
 				new Vector2(Main.screenWidth - OffsetX, Main.screenHeight - 80),
 				(lanternMoonSize + new Vector2(lanternMoonImage.Width + 12, 6f)) * fadinAlpha);

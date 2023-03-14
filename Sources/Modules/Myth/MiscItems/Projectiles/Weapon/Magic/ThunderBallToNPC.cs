@@ -1,6 +1,6 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
 
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
+namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Magic
 {
 	public class ThunderBallToNPC : ModProjectile
 	{
@@ -18,10 +18,8 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 		}
 		public override void AI()
 		{
-			if (Main.npc[(int)(Projectile.ai[1])].active)
-			{
-				Projectile.Center = Main.npc[(int)(Projectile.ai[1])].Center;
-			}
+			if (Main.npc[(int)Projectile.ai[1]].active)
+				Projectile.Center = Main.npc[(int)Projectile.ai[1]].Center;
 			else
 			{
 				Projectile.extraUpdates = 20;
@@ -58,9 +56,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 				for (int i = 0; i < 600; ++i)
 				{
 					if (vP[a, i].Length() < 3f)
-					{
 						vP[a, i] += vvP[a, i];
-					}
 					else
 					{
 						vvP[a, i] = new Vector2(0, Main.rand.NextFloat(0.03f, 0.4f)).RotatedByRandom(6.283);
@@ -70,18 +66,16 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 			}
 			for (int a = 0; a < streng; ++a)
 			{
-				List<Vertex2D> bars = new List<Vertex2D>();
+				var bars = new List<Vertex2D>();
 				float widx = Projectile.timeLeft / 120f;
 				float width = widx * widx * 3f;
 				Vector2 VStart = Projectile.Center;
 				for (int i = 0; i < 600; ++i)
 				{
-					Vector2 WholeLeng = Main.projectile[(int)(Projectile.ai[0])].Center - VStart;
+					Vector2 WholeLeng = Main.projectile[(int)Projectile.ai[0]].Center - VStart;
 					if (WholeLeng.Length() < 4)
-					{
 						break;
-					}
-					Vector2 NDpos = Vector2.Normalize(Main.projectile[(int)(Projectile.ai[0])].Center - VStart);
+					var NDpos = Vector2.Normalize(Main.projectile[(int)Projectile.ai[0]].Center - VStart);
 					Vector2 vDp = NDpos.RotatedBy(Math.PI / 2d);
 					var normalDir = Vector2.Normalize(vDp);
 
@@ -91,14 +85,12 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 					var w = MathHelper.Lerp(1f, 0.05f, 0.5f);
 					Vector2 va = Vector2.Zero;
 					if (a > 1)
-					{
 						va = new Vector2(0, 1).RotatedBy(a / 4d * Math.PI);
-					}
 					bars.Add(new Vertex2D(VStart + normalDir * width + va, color, new Vector3(factor, 1, w)));
 					bars.Add(new Vertex2D(VStart + normalDir * -width + va, color, new Vector3(factor, 0, w)));
 				}
 
-				List<Vertex2D> triangleList = new List<Vertex2D>();
+				var triangleList = new List<Vertex2D>();
 
 				if (bars.Count > 2)
 				{

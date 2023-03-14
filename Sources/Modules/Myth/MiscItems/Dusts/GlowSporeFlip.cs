@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Dusts
+﻿namespace Everglow.Myth.MiscItems.Dusts
 {
 	public class GlowSporeFlip : ModDust
 	{
@@ -15,26 +15,22 @@
 			dust.velocity = dust.velocity.RotatedBy(-0.03f * Main.rand.NextFloat(0.75f, 1.25f));
 			dust.velocity *= 0.98f;
 			dust.scale *= 0.98f;
-			Lighting.AddLight(dust.position, 0.5296f * (float)dust.scale / 1.8f, 0.5855f * (float)dust.scale / 1.8f, 0.0758f * (float)dust.scale / 1.8f);
+			Lighting.AddLight(dust.position, 0.5296f * dust.scale / 1.8f, 0.5855f * dust.scale / 1.8f, 0.0758f * dust.scale / 1.8f);
 			if (Main.rand.NextBool(3))
 			{
 				int type = dust.type;
 				if (Main.rand.Next(100) > 50)
-				{
-					type = ModContent.DustType<MiscItems.Dusts.GlowSpore>();
-				}
-				int r1 = Dust.NewDust(dust.position, 0, 0, type, 0, 0, 200, default(Color), dust.scale * 0.75f);
+					type = ModContent.DustType<GlowSpore>();
+				int r1 = Dust.NewDust(dust.position, 0, 0, type, 0, 0, 200, default, dust.scale * 0.75f);
 				Main.dust[r1].velocity = dust.velocity.RotatedBy(Main.rand.NextFloat(0.2f, 1.3f));
 				Main.dust[r1].noGravity = true;
-				int r2 = Dust.NewDust(dust.position, 0, 0, type, 0, 0, 200, default(Color), dust.scale * 0.75f);
+				int r2 = Dust.NewDust(dust.position, 0, 0, type, 0, 0, 200, default, dust.scale * 0.75f);
 				Main.dust[r2].velocity = dust.velocity.RotatedBy(Main.rand.NextFloat(-1.3f, -0.2f));
 				Main.dust[r2].noGravity = true;
 				//dust.active = false;
 			}
 			if (dust.scale < 0.01f)
-			{
 				dust.active = false;
-			}
 			/*if(Main.tile[(int)((dust.position.X + dust.velocity.X * 6) / 16f), (int)((dust.position.Y + dust.velocity.Y * 6) / 16f)].CollisionType == 0)
             {
                 dust.velocity *= -1;

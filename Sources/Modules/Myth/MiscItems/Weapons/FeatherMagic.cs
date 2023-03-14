@@ -1,7 +1,7 @@
 ﻿using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
+namespace Everglow.Myth.MiscItems.Weapons
 {
 	public class FeatherMagic : ModItem
 	{

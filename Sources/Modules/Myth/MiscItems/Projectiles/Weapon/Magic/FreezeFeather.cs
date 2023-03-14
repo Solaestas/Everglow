@@ -1,9 +1,11 @@
 ﻿//using MythMod.Buffs;
-using Everglow.Sources.Modules.MythModule.MiscItems.Buffs;
+using Everglow.Myth.MiscItems.Buffs;
+using Everglow.Myth.MiscItems.Dusts;
+using Everglow.Myth.TheFirefly.Dusts;
 using Terraria.Audio;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
+namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Magic
 {
 	public class FreezeFeather : ModProjectile
 	{
@@ -35,7 +37,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 		private float b;
 		public override void AI()
 		{
-			Projectile.rotation = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X));
+			Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
 			Projectile.velocity *= 1.01f;
 			/*if (Main.rand.NextBool(6))
             {
@@ -51,9 +53,9 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 			{
 				if (Main.npc[j].CanBeChasedBy(Projectile, false) && Collision.CanHit(Projectile.Center, 1, 1, Main.npc[j].Center, 1, 1))
 				{
-					float num5 = Main.npc[j].position.X + (float)(Main.npc[j].width / 2);
-					float num6 = Main.npc[j].position.Y + (float)(Main.npc[j].height / 2);
-					float num7 = Math.Abs(Projectile.position.X + (float)(Projectile.width / 2) - num5) + Math.Abs(Projectile.position.Y + (float)(Projectile.height / 2) - num6);
+					float num5 = Main.npc[j].position.X + Main.npc[j].width / 2;
+					float num6 = Main.npc[j].position.Y + Main.npc[j].height / 2;
+					float num7 = Math.Abs(Projectile.position.X + Projectile.width / 2 - num5) + Math.Abs(Projectile.position.Y + Projectile.height / 2 - num6);
 					if (num7 < num4)
 					{
 						num4 = num7;
@@ -66,7 +68,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 			if (flag)
 			{
 				float num8 = 20f;
-				Vector2 vector1 = new Vector2(Projectile.position.X + (float)Projectile.width * 0.5f, Projectile.position.Y + (float)Projectile.height * 0.5f);
+				var vector1 = new Vector2(Projectile.position.X + Projectile.width * 0.5f, Projectile.position.Y + Projectile.height * 0.5f);
 				float num9 = num2 - vector1.X;
 				float num10 = num3 - vector1.Y;
 				float num11 = (float)Math.Sqrt((double)(num9 * num9 + num10 * num10));
@@ -76,13 +78,11 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 				Projectile.velocity.X = (Projectile.velocity.X * 200f + num9) / 201f;
 				Projectile.velocity.Y = (Projectile.velocity.Y * 200f + num10) / 201f;
 			}
-			int r = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) + Projectile.velocity / Projectile.velocity.Length() * 12f, 0, 0, ModContent.DustType<MiscItems.Dusts.Freeze>(), 0, 0, 0, default(Color), 4f);
+			int r = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) + Projectile.velocity / Projectile.velocity.Length() * 12f, 0, 0, ModContent.DustType<Dusts.Freeze>(), 0, 0, 0, default, 4f);
 			Main.dust[r].noGravity = true;
 			ka = 1;
 			if (Projectile.timeLeft < 60f)
-			{
 				ka = Projectile.timeLeft / 60f;
-			}
 		}
 		public override void Kill(int timeLeft)
 		{
@@ -90,7 +90,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 			for (int k = 0; k <= 2; k++)
 			{
 				Vector2 v = new Vector2(0, Main.rand.NextFloat(2.5f, 6f)).RotatedByRandom(MathHelper.TwoPi);
-				int num4 = Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center, v, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Magic.FreezeBallBrake>(), Projectile.damage / 5, 1, Projectile.owner, 0f, 10f);
+				int num4 = Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, v, ModContent.ProjectileType<FreezeBallBrake>(), Projectile.damage / 5, 1, Projectile.owner, 0f, 10f);
 				//Projectile.NewProjectile(Projectile.Center.X, Projectile.Center.Y, (float)((float)l * Math.Cos((float)a)) * 0.06f, (float)((float)l * Math.Sin((float)a)) * 0.06f, ModContent.ProjectileType<Projectiles.Magic.FreezeBallBrake>(), Projectile.damage / 5, Projectile.knockBack, Projectile.owner, 0f, 20);
 				Main.projectile[num4].timeLeft = (int)(80 * Main.rand.NextFloat(0.2f, 0.7f));
 			}
@@ -98,14 +98,14 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 			{
 				Vector2 v1 = new Vector2(0, Main.rand.NextFloat(0, 16f)).RotatedByRandom(MathHelper.TwoPi);
 				Vector2 v3 = new Vector2(0, Main.rand.NextFloat(0, 5.6f)).RotatedByRandom(MathHelper.TwoPi);
-				int r = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) + v1, 0, 0, ModContent.DustType<MiscItems.Dusts.Freeze>(), v3.X, v3.Y, 0, default(Color), 6f);
+				int r = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) + v1, 0, 0, ModContent.DustType<Dusts.Freeze>(), v3.X, v3.Y, 0, default, 6f);
 				Main.dust[r].noGravity = true;
 				Main.dust[r].velocity = v3;
 			}
 			for (int h = 0; h < 20; h++)
 			{
 				Vector2 v3 = new Vector2(0, (float)Math.Sin(h * Math.PI / 4d + Projectile.ai[0]) + 5).RotatedBy(h * Math.PI / 10d) * Main.rand.NextFloat(0.2f, 1.1f);
-				int r = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4), 0, 0, ModContent.DustType<TheFirefly.Dusts.PureBlue>(), 0, 0, 0, default(Color), 15f * Main.rand.NextFloat(0.4f, 1.1f));
+				int r = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4), 0, 0, ModContent.DustType<PureBlue>(), 0, 0, 0, default, 15f * Main.rand.NextFloat(0.4f, 1.1f));
 				Main.dust[r].noGravity = true;
 				Main.dust[r].velocity = v3;
 				//Main.dust[r].dustIndex = (int)(Math.Cos(h * Math.PI / 10d + Projectile.ai[0]) * 100d);
@@ -114,12 +114,10 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 		public override Color? GetAlpha(Color lightColor)
 		{
 			if (Projectile.timeLeft > 60)
-			{
 				return new Color?(new Color(255, 255, 255, 100));
-			}
 			else
 			{
-				return new Color?(new Color((float)Projectile.timeLeft / 60f, (float)Projectile.timeLeft / 60f, (float)Projectile.timeLeft / 60f, (float)Projectile.timeLeft / 60f * 100f / 255f));
+				return new Color?(new Color(Projectile.timeLeft / 60f, Projectile.timeLeft / 60f, Projectile.timeLeft / 60f, Projectile.timeLeft / 60f * 100f / 255f));
 			}
 		}
 		/*public override void PostDraw(Color lightColor)
@@ -196,12 +194,10 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 		{
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 			float width = 12;
 			if (Projectile.timeLeft < 60)
-			{
 				width = Projectile.timeLeft / 5f;
-			}
 			TrueL = 0;
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
@@ -218,11 +214,11 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 
 				var factor = i / (float)TrueL;
 				var w = MathHelper.Lerp(1f, 0.05f, factor);
-				Lighting.AddLight(Projectile.oldPos[i], (float)(255 - Projectile.alpha) * 0.0f / 50f * ka * (1 - factor), (float)(255 - Projectile.alpha) * 0.5f / 50f * ka * (1 - factor), (float)(255 - Projectile.alpha) * 1.3f / 50f * ka * (1 - factor));
+				Lighting.AddLight(Projectile.oldPos[i], (255 - Projectile.alpha) * 0.0f / 50f * ka * (1 - factor), (255 - Projectile.alpha) * 0.5f / 50f * ka * (1 - factor), (255 - Projectile.alpha) * 1.3f / 50f * ka * (1 - factor));
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(17, 17) - Main.screenPosition, new Color(254, 254, 254, 0), new Vector3(factor, 1, w)));
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(17, 17) - Main.screenPosition, new Color(254, 254, 254, 0), new Vector3(factor, 0, w)));
 			}
-			List<Vertex2D> Vx = new List<Vertex2D>();
+			var Vx = new List<Vertex2D>();
 			if (bars.Count > 2)
 			{
 				Vx.Add(bars[0]);
@@ -253,7 +249,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 				spriteEffects = SpriteEffects.FlipHorizontally;
 
 			// Getting texture of Projectile
-			Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+			var texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
 
 			// Calculating frameHeight and current Y pos dependence of frame
 			// If texture without animation frameHeight = texture.Height is always and startY is always 0
@@ -261,13 +257,13 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 			int startY = frameHeight * Projectile.frame;
 
 			// Get this frame on texture
-			Rectangle sourceRectangle = new Rectangle(0, startY, texture.Width, frameHeight);
+			var sourceRectangle = new Rectangle(0, startY, texture.Width, frameHeight);
 			Vector2 origin = sourceRectangle.Size() / 2f;
 
 			// If image isn't centered or symetrical you can specify origin of the sprite
 			// (0,0) for the upper-left corner 
 			float offsetX = 20f;
-			origin.X = (float)(Projectile.spriteDirection == 1 ? sourceRectangle.Width - offsetX : offsetX);
+			origin.X = Projectile.spriteDirection == 1 ? sourceRectangle.Width - offsetX : offsetX;
 
 			// If sprite is vertical
 			// float offsetY = 20f;

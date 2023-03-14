@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
+﻿namespace Everglow.Myth.Bosses.Acytaea.Projectiles
 {
 	internal class AcytaeaBow : ModProjectile
 	{
@@ -34,9 +34,7 @@
 		{
 			ka = 1;
 			if (Projectile.timeLeft < 60f)
-			{
 				ka = Projectile.timeLeft / 60f;
-			}
 			Lighting.AddLight(Projectile.Center, (255 - Projectile.alpha) * 1.2f / 250f * ka, 0, 0);
 			Projectile.rotation = Projectile.ai[0];
 		}
@@ -46,12 +44,10 @@
 			if (Projectile.timeLeft < 30f)
 			{
 				Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Projectiles/AcytaeaWarningArrow3").Value;
-				Vector2 drawOrigin = new Vector2(t.Width * 0.5f, t.Height * 0.5f);
+				var drawOrigin = new Vector2(t.Width * 0.5f, t.Height * 0.5f);
 				float Fade;
 				if (Projectile.timeLeft < 25f)
-				{
 					Fade = Projectile.timeLeft / 25f;
-				}
 				else
 				{
 					float ad = (30 - Projectile.timeLeft) / 5f;

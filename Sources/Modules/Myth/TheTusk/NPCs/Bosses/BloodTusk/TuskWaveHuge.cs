@@ -1,7 +1,7 @@
 ﻿using Terraria.Audio;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
+namespace Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk
 {
 	public class TuskWaveHuge : ModNPC
 	{
@@ -37,23 +37,15 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 				wait--;
 				heig = 1;
 				if (wait > 390)
-				{
 					heig = (450 - wait) / 60f;
-				}
 				if (wait < 60)
-				{
 					heig = wait / 60f;
-				}
 				if (wait <= 0)
-				{
 					NPC.active = false;
-				}
 				if (wait == 100)
 				{
 					if (NPC.CountNPCS(ModContent.NPCType<HugeMouth>()) == 0)
-					{
 						SoundEngine.PlaySound(SoundID.Roar, NPC.Bottom);
-					}
 					int m = NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y + 150, ModContent.NPCType<HugeMouth>());
 					Main.npc[m].velocity = new Vector2(NPC.ai[0] * Main.rand.NextFloat(11f, 12f), NPC.ai[1] * Main.rand.NextFloat(-16f, -14f));
 					TuskModPlayer tmplayer = Main.player[Main.myPlayer].GetModPlayer<TuskModPlayer>();
@@ -63,20 +55,16 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 		}
 		public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 		{
-			List<VertexBase.CustomVertexInfo> BackBase = new List<VertexBase.CustomVertexInfo>();
+			var BackBase = new List<VertexBase.CustomVertexInfo>();
 			Color color = Lighting.GetColor((int)(NPC.Center.X / 16), (int)(NPC.Center.Y / 16));
 			float index = 1;
 			for (int x = -300; x < 300; x += 4)
 			{
 				float DelY = Math.Clamp((float)(Math.Sin(wait / 18d + x / 16d) * 0.9f + Math.Sin(wait / 3.6d + x / 8d) * 0.7f), -1, 2) * 5 + 10;//复合的正弦函数
 				if (x < -260)
-				{
 					index = (x + 300) / 40f;
-				}
 				if (x > 260)
-				{
 					index = (300 - x) / 40f;
-				}
 				BackBase.Add(new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(x, 0) - Main.screenPosition, color, new Vector3(0, 1, 0)));
 				BackBase.Add(new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(x + 4, -DelY * index * heig) - Main.screenPosition, color, new Vector3(1, 0, 0)));
 				BackBase.Add(new VertexBase.CustomVertexInfo(NPC.Bottom + new Vector2(x + 4, 0) - Main.screenPosition, color, new Vector3(1, 1, 0)));

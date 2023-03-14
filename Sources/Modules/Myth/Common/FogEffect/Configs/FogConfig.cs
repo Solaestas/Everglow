@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using Terraria.ModLoader.Config;
 
-namespace Everglow.Sources.Modules.MythModule.Common.FogEffect.Configs
+namespace Everglow.Myth.Common.FogEffect.Configs
 {
 	/// <summary>
 	/// 用于给美术调节雾效最终效果

@@ -1,4 +1,4 @@
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs
+namespace Everglow.Myth.MiscItems.Weapons.Clubs
 {
 	public class CobaltClub : ClubItem
 	{

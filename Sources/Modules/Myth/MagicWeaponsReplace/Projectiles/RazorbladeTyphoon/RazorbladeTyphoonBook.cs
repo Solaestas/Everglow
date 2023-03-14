@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.RazorbladeTyphoon
+﻿namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.RazorbladeTyphoon
 {
 	internal class RazorbladeTyphoonBook : MagicBookProjectile
 	{
@@ -31,13 +31,11 @@
 			int HitType = ModContent.ProjectileType<HurricaneMask>();
 			float WindHole = Math.Min(ConstantUsingTime / 720f - 0.2f, 1f);
 			if (WindHole > 0 && WindHole < 0.3f)
-			{
 				WindHole = 0.3f;
-			}
 			if (WindHole > 0)
 			{
 
-				Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, HitType, Projectile.damage, Projectile.knockBack * 6, Projectile.owner, WindHole/*ai[0]代表强度*/, 0);
+				var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, HitType, Projectile.damage, Projectile.knockBack * 6, Projectile.owner, WindHole/*ai[0]代表强度*/, 0);
 				p.CritChance = (int)Main.player[Projectile.owner].GetTotalCritChance(DamageClass.Magic);
 			}
 			ConstantUsingTime = 0;

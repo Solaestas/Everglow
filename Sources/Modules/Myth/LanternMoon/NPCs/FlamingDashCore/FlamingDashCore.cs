@@ -1,7 +1,10 @@
-﻿using Terraria.Audio;
+﻿using Everglow.Myth;
+using Everglow.Myth.Common;
+using Everglow.Myth.LanternMoon.Projectiles.DashCore;
+using Terraria.Audio;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
+namespace Everglow.Myth.LanternMoon.NPCs.FlamingDashCore
 {
 	[AutoloadBossHead]
 	public class FlamingDashCore : ModNPC
@@ -42,9 +45,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 			Player player = Main.player[NPC.target];
 			NPC.localAI[0] += 1;
 			if (NPC.localAI[0] <= 15)
-			{
 				Sca = NPC.localAI[0] / 15f;
-			}
 			else
 			{
 				Sca = 1;
@@ -66,9 +67,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 				NPCOldWidth[f] = NPCOldWidth[f - 1];
 			}
 			if (Shine > 0)
-			{
 				Shine -= 1;
-			}
 			else
 			{
 				Shine = 0;
@@ -77,33 +76,23 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 			{
 				Aimcolor = Color.Red;
 				if (NPC.localAI[0] == 100)
-				{
-					NPC.NewNPC(null, (int)(NPC.Center.X), (int)(NPC.Center.Y), ModContent.NPCType<NPCs.FlamingDashCore.RedCore>());
-				}
+					NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<RedCore>());
 			}//教程
 			if (NPC.localAI[0] > 180 && NPC.localAI[0] <= 360)
 			{
 				Aimcolor = new Color(0, 255, 17);
 				if (NPC.localAI[0] == 250)
-				{
-					NPC.NewNPC(null, (int)(NPC.Center.X), (int)(NPC.Center.Y), ModContent.NPCType<NPCs.FlamingDashCore.GreenCore>());
-				}
+					NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<GreenCore>());
 			}//教程
 			if (NPC.localAI[0] > 360 && NPC.localAI[0] <= 540)
-			{
 				Aimcolor = new Color(129, 4, 224);
-			}//教程
 			if (NPC.localAI[0] > 540 && NPC.localAI[0] <= 690)
-			{
 				Aimcolor = new Color(255, 204, 0);
-			}//教程
 			if (NPC.localAI[0] <= 690)
 			{
 				Vector2 v = player.Center + new Vector2((float)Math.Sin(NPC.localAI[0] / 40f) * 500f, (float)Math.Sin((NPC.localAI[0] + 200) / 40f) * 50f - 150) - NPC.Center;
 				if (NPC.velocity.Length() < 9f)
-				{
 					NPC.velocity += Vector2.Normalize(v) * 0.35f;
-				}
 				NPC.velocity *= 0.96f;
 			}//教程
 
@@ -112,9 +101,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 				if (NPC.localAI[0] <= 880)
 				{
 					if (Math.Abs(60 - NPC.localAI[0] % 60) < 15)
-					{
 						Aimcolor = new Color(0, 255, 17);
-					}
 					else
 					{
 						Aimcolor = Color.Red;
@@ -125,17 +112,13 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 					Aimcolor = new Color(255, 157, 0);
 				}
 				if (NPC.localAI[0] % 60 == 42)
-				{
 					AimPos = new Vector2(0, -400).RotatedByRandom(6.283);
-				}
 				//颜色
 				Vector2 v0 = player.Center + AimPos - NPC.Center;
 				Vector2 v1 = player.Center + AimPos - NPC.Center + Vector2.Normalize(v0) * 60;
-				Vector2 v2 = Vector2.Normalize(v1);
+				var v2 = Vector2.Normalize(v1);
 				if (NPC.velocity.Length() < 129f)
-				{
 					NPC.velocity += v2;
-				}
 				NPC.velocity *= 0.95f;
 				//动作
 				if (NPC.localAI[0] == 700)
@@ -148,27 +131,25 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 					mplayer.FlyCamPosition = new Vector2(0, 56).RotatedByRandom(6.283);
 
 					if ((player.Center - NPC.Center).Length() > 100)
-					{
 						Str = 100 / (player.Center - NPC.Center).Length();
-					}
 					mplayer.DirFlyCamPosStrength = Str; //Using Direct FlyCamPosition because FlyCamPosition itself being used causes errors (see ScreenShaker ModPlayer) ~Setnour6
 					SoundEngine.PlaySound(SoundID.Item36, NPC.Center);//特效
 					Vector2 vn = new Vector2(0, -20).RotatedBy(NPC.localAI[0] / 90d);
 					for (int h = 0; h < 6; h++)
 					{
 						Vector2 vm = vn.RotatedBy(h / 3d * Math.PI);
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<Projectiles.DashCore.RedFlame0>(), Dam, 0f, player.whoAmI, 0, 0);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<RedFlame0>(), Dam, 0f, player.whoAmI, 0, 0);
 					}
 					for (int h = 0; h < 6; h++)
 					{
 						Vector2 vm = vn.RotatedBy(h / 3d * Math.PI + 0.15);
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm * 0.7f, ModContent.ProjectileType<Projectiles.DashCore.GreenFlame0Little>(), Dam, 0f, player.whoAmI, 0, 0);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm * 0.7f, ModContent.ProjectileType<GreenFlame0Little>(), Dam, 0f, player.whoAmI, 0, 0);
 						vm = vn.RotatedBy(h / 3d * Math.PI - 0.15);
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm * 0.7f, ModContent.ProjectileType<Projectiles.DashCore.GreenFlame0Little>(), Dam, 0f, player.whoAmI, 0, 0);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm * 0.7f, ModContent.ProjectileType<GreenFlame0Little>(), Dam, 0f, player.whoAmI, 0, 0);
 						vm = vn.RotatedBy(h / 3d * Math.PI + 0.25);
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm * 0.6f, ModContent.ProjectileType<Projectiles.DashCore.GreenFlame0Little>(), Dam, 0f, player.whoAmI, 0, 0);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm * 0.6f, ModContent.ProjectileType<GreenFlame0Little>(), Dam, 0f, player.whoAmI, 0, 0);
 						vm = vn.RotatedBy(h / 3d * Math.PI - 0.25);
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm * 0.6f, ModContent.ProjectileType<Projectiles.DashCore.GreenFlame0Little>(), Dam, 0f, player.whoAmI, 0, 0);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm * 0.6f, ModContent.ProjectileType<GreenFlame0Little>(), Dam, 0f, player.whoAmI, 0, 0);
 					}
 				}
 				if (NPC.localAI[0] == 760)
@@ -180,27 +161,25 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 					ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
 					mplayer.FlyCamPosition = new Vector2(0, 56).RotatedByRandom(6.283);
 					if ((player.Center - NPC.Center).Length() > 100)
-					{
 						Str = 100 / (player.Center - NPC.Center).Length();
-					}
 					mplayer.DirFlyCamPosStrength = Str;
 					SoundEngine.PlaySound(SoundID.Item36, NPC.Center);//特效
 					Vector2 vn = new Vector2(0, -20).RotatedBy(NPC.localAI[0] / 90d);
 					for (int h = 0; h < 6; h++)
 					{
 						Vector2 vm = vn.RotatedBy(h / 3d * Math.PI);
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<Projectiles.DashCore.RedFlame0Split>(), Dam, 0f, player.whoAmI, 0, 0);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<RedFlame0Split>(), Dam, 0f, player.whoAmI, 0, 0);
 					}
 					for (int h = 0; h < 6; h++)
 					{
 						Vector2 vm = vn.RotatedBy(h / 3d * Math.PI + 0.15);
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm * 0.7f, ModContent.ProjectileType<Projectiles.DashCore.RedFlame0Little>(), Dam, 0f, player.whoAmI, 0, 0);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm * 0.7f, ModContent.ProjectileType<RedFlame0Little>(), Dam, 0f, player.whoAmI, 0, 0);
 						vm = vn.RotatedBy(h / 3d * Math.PI - 0.15);
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm * 0.7f, ModContent.ProjectileType<Projectiles.DashCore.GreenFlame0Little>(), Dam, 0f, player.whoAmI, 0, 0);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm * 0.7f, ModContent.ProjectileType<GreenFlame0Little>(), Dam, 0f, player.whoAmI, 0, 0);
 						vm = vn.RotatedBy(h / 3d * Math.PI + 0.25);
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm * 0.6f, ModContent.ProjectileType<Projectiles.DashCore.RedFlame0Little>(), Dam, 0f, player.whoAmI, 0, 0);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm * 0.6f, ModContent.ProjectileType<RedFlame0Little>(), Dam, 0f, player.whoAmI, 0, 0);
 						vm = vn.RotatedBy(h / 3d * Math.PI - 0.25);
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm * 0.6f, ModContent.ProjectileType<Projectiles.DashCore.GreenFlame0Little>(), Dam, 0f, player.whoAmI, 0, 0);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm * 0.6f, ModContent.ProjectileType<GreenFlame0Little>(), Dam, 0f, player.whoAmI, 0, 0);
 					}
 				}
 				if (NPC.localAI[0] == 820)
@@ -212,21 +191,19 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 					ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
 					mplayer.FlyCamPosition = new Vector2(0, 56).RotatedByRandom(6.283);
 					if ((player.Center - NPC.Center).Length() > 100)
-					{
 						Str = 100 / (player.Center - NPC.Center).Length();
-					}
 					mplayer.DirFlyCamPosStrength = Str;
 					SoundEngine.PlaySound(SoundID.Item36, NPC.Center);//特效
 					Vector2 vn = new Vector2(0, -14).RotatedBy(NPC.localAI[0] / 90d);
 					for (int h = 0; h < 3; h++)
 					{
 						Vector2 vm = vn.RotatedBy(h / 1.5d * Math.PI);
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<Projectiles.DashCore.RedFlame1Split>(), Dam, 0f, player.whoAmI, 0, 0);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<RedFlame1Split>(), Dam, 0f, player.whoAmI, 0, 0);
 					}
 					for (int h = 0; h < 3; h++)
 					{
 						Vector2 vm = vn.RotatedBy((h + 0.5) / 1.5d * Math.PI);
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<Projectiles.DashCore.GreenFlame1Split>(), Dam, 0f, player.whoAmI, 0, 0);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<GreenFlame1Split>(), Dam, 0f, player.whoAmI, 0, 0);
 					}
 				}
 				if (NPC.localAI[0] == 880)
@@ -238,21 +215,19 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 					ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
 					mplayer.FlyCamPosition = new Vector2(0, 56).RotatedByRandom(6.283);
 					if ((player.Center - NPC.Center).Length() > 100)
-					{
 						Str = 100 / (player.Center - NPC.Center).Length();
-					}
 					mplayer.DirFlyCamPosStrength = Str;
 					SoundEngine.PlaySound(SoundID.Item36, NPC.Center);//特效
 					Vector2 vn = new Vector2(0, -17).RotatedBy(NPC.localAI[0] / 90d);
 					for (int h = 0; h < 12; h++)
 					{
 						Vector2 vm = vn.RotatedBy(h / 12d * Math.PI);
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<Projectiles.DashCore.GreenFlame0Little>(), Dam, 0f, player.whoAmI, 0, 0);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<GreenFlame0Little>(), Dam, 0f, player.whoAmI, 0, 0);
 					}
 					for (int h = 12; h < 24; h++)
 					{
 						Vector2 vm = vn.RotatedBy(h / 12d * Math.PI);
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<Projectiles.DashCore.RedFlame0Little>(), Dam, 0f, player.whoAmI, 0, 0);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<RedFlame0Little>(), Dam, 0f, player.whoAmI, 0, 0);
 					}
 				}
 				if (NPC.localAI[0] == 894)
@@ -264,17 +239,15 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 					ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
 					mplayer.FlyCamPosition = new Vector2(0, 56).RotatedByRandom(6.283);
 					if ((player.Center - NPC.Center).Length() > 100)
-					{
 						Str = 100 / (player.Center - NPC.Center).Length();
-					}
 					mplayer.DirFlyCamPosStrength = Str;//特效
 					SoundEngine.PlaySound(SoundID.Item36, NPC.Center);
 					for (int h = 0; h < 36; h++)
 					{
 						Vector2 vm = new Vector2(0, Main.rand.NextFloat(Main.rand.NextFloat(0f, 14f), 24f)).RotatedByRandom(6.283);
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<Projectiles.DashCore.YellowFlame0>(), Dam, 0f, player.whoAmI, 0, 0);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<YellowFlame0>(), Dam, 0f, player.whoAmI, 0, 0);
 						vm = new Vector2(0, Main.rand.NextFloat(Main.rand.NextFloat(0f, 14f), 24f)).RotatedByRandom(6.283);
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<Projectiles.DashCore.BrownFlame0>(), Dam, 0f, player.whoAmI, 0, 0);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<BrownFlame0>(), Dam, 0f, player.whoAmI, 0, 0);
 					}
 				}
 				//弹幕
@@ -297,9 +270,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
                     Aimcolor = new Color(255, 157, 0);
                 }*/
 				if (NPC.localAI[0] <= 960)
-				{
 					AimPos = new Vector2(0, -400);
-				}
 				else
 				{
 					double kd = (NPC.localAI[0] - 960) / 120d;
@@ -310,9 +281,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 				Vector2 v1 = player.Center + AimPos - NPC.Center - Vector2.Normalize(v0) * 60;
 				Vector2 v2 = v1 / 40f;
 				if (NPC.velocity.Length() < 729f)
-				{
 					NPC.velocity += v2;
-				}
 				NPC.velocity *= 0.95f;
 				//动作
 				if (NPC.localAI[0] >= 930)
@@ -331,15 +300,13 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 					double kd = (NPC.localAI[0] - 960) / 60d;
 					Vector2 vn = new Vector2(0, (float)(-kd * 260)).RotatedBy(kd * kd + Math.Sin(NPC.localAI[0] / 20d) * 5);
 					if (NPC.localAI[0] == 960)
-					{
 						Pos960 = NPC.Center;
-					}
 					if (NPC.localAI[0] % 8 == 2 && NPC.localAI[0] > 960 && NPC.localAI[0] < 1400)
 					{
 						for (int h = 0; h < 6; h++)
 						{
 							Vector2 vm = vn.RotatedBy(h / 3d * Math.PI);
-							Projectile.NewProjectile(NPC.GetSource_FromAI(), Pos960 + vm, Vector2.Zero, ModContent.ProjectileType<Projectiles.DashCore.BlueFlame1Boom>(), Dam, 0f, player.whoAmI, (float)(h / 3d * Math.PI + NPC.localAI[0] / 35d), 0);
+							Projectile.NewProjectile(NPC.GetSource_FromAI(), Pos960 + vm, Vector2.Zero, ModContent.ProjectileType<BlueFlame1Boom>(), Dam, 0f, player.whoAmI, (float)(h / 3d * Math.PI + NPC.localAI[0] / 35d), 0);
 						}
 					}
 					if (NPC.localAI[0] == 934)
@@ -347,41 +314,31 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 						for (int h = 0; h < 4; h++)
 						{
 							Vector2 vm = vn.RotatedBy(h / 2d * Math.PI);
-							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<Projectiles.DashCore.RedFlame2Split>(), Dam, 0f, player.whoAmI, 0, 0);
+							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<RedFlame2Split>(), Dam, 0f, player.whoAmI, 0, 0);
 						}
 					}
 					if (NPC.localAI[0] == 934)
-					{
 						Freq = 24;
-					}
 					if (NPC.localAI[0] >= 1200 && NPC.localAI[0] % 7 == 0)
 					{
 						if (Freq > 2)
-						{
 							Freq--;
-						}
 					}
 					if (NPC.localAI[0] >= 1200 && NPC.localAI[0] % Freq == 0)
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity / Freq, ModContent.ProjectileType<YellowToRedFlame0Little>(), Dam, 0f, player.whoAmI, 0, 0);
+					if (NPC.localAI[0] == 1200 && player.ownedProjectileCounts[ModContent.ProjectileType<GoldDashLine>()] < 2)
 					{
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity / (float)(Freq), ModContent.ProjectileType<Projectiles.DashCore.YellowToRedFlame0Little>(), Dam, 0f, player.whoAmI, 0, 0);
-					}
-					if (NPC.localAI[0] == 1200 && player.ownedProjectileCounts[ModContent.ProjectileType<Projectiles.DashCore.GoldDashLine>()] < 2)
-					{
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(0, 350), new Vector2(8, 0), ModContent.ProjectileType<Projectiles.DashCore.GoldDashLine>(), Dam, 0f, player.whoAmI, 0, 0);
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(0, -350), new Vector2(-8, 0), ModContent.ProjectileType<Projectiles.DashCore.GoldDashLine>(), Dam, 0f, player.whoAmI, 0, 0);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(0, 350), new Vector2(8, 0), ModContent.ProjectileType<GoldDashLine>(), Dam, 0f, player.whoAmI, 0, 0);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(0, -350), new Vector2(-8, 0), ModContent.ProjectileType<GoldDashLine>(), Dam, 0f, player.whoAmI, 0, 0);
 					}
 				}
 				if (EverglowConfig.DebugMode)
-				{
 					Main.NewText(Main.MouseWorld.ToString(), 255, 0, 0);
-				}
 			}//红绿花火
 			if (NPC.localAI[0] > 1820 && NPC.localAI[0] <= 2560)//蓝黄风车
 			{
 				if (Math.Abs(60 - NPC.localAI[0] % 60) < 15)
-				{
 					Aimcolor = new Color(0, 131, 255);
-				}
 				else
 				{
 					Aimcolor = new Color(255, 204, 0);
@@ -390,16 +347,12 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 				if (NPC.localAI[0] < 1500)
 				{
 					if (NPC.localAI[0] % 100 == 2)
-					{
 						AimPos = new Vector2(0, -400);
-					}
 					Vector2 v0 = player.Center + AimPos - NPC.Center;
 					Vector2 v1 = player.Center + AimPos - NPC.Center + Vector2.Normalize(v0) * 60;
-					Vector2 v2 = Vector2.Normalize(v1);
+					var v2 = Vector2.Normalize(v1);
 					if (NPC.velocity.Length() < 129f)
-					{
 						NPC.velocity += v2;
-					}
 					NPC.velocity *= 0.95f;
 				}
 				else
@@ -413,15 +366,15 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 					for (int h = 0; h < 6; h++)
 					{
 						Vector2 vm = vn.RotatedBy(h / 3d * Math.PI);
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(-100, 0), vm, ModContent.ProjectileType<Projectiles.DashCore.YellowFlame0Little>(), Dam, 0f, player.whoAmI, 0, 0);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(-100, 0), vm, ModContent.ProjectileType<YellowFlame0Little>(), Dam, 0f, player.whoAmI, 0, 0);
 					}
 					for (int h = 0; h < 6; h++)
 					{
 						Vector2 vm = vn.RotatedBy(h / 3d * Math.PI);
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(100, 0), vm, ModContent.ProjectileType<Projectiles.DashCore.BlueFlame0Little>(), Dam, 0f, player.whoAmI, 0, 0);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(100, 0), vm, ModContent.ProjectileType<BlueFlame0Little>(), Dam, 0f, player.whoAmI, 0, 0);
 					}
-					NPC.NewNPC(null, (int)(player.Center.X + 100), (int)(player.Center.Y), ModContent.NPCType<NPCs.FlamingDashCore.BlueCore>());
-					NPC.NewNPC(null, (int)(player.Center.X - 100), (int)(player.Center.Y), ModContent.NPCType<NPCs.FlamingDashCore.YellowCore>());
+					NPC.NewNPC(null, (int)(player.Center.X + 100), (int)player.Center.Y, ModContent.NPCType<BlueCore>());
+					NPC.NewNPC(null, (int)(player.Center.X - 100), (int)player.Center.Y, ModContent.NPCType<YellowCore>());
 				}
 				if (NPC.localAI[0] > 1990)
 				{
@@ -434,13 +387,13 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 						for (int h = 0; h < 5; h++)
 						{
 							Vector2 vm = vn.RotatedBy(h / 2.5d * Math.PI);
-							int f = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<Projectiles.DashCore.YellowFlame0Little>(), Dam, 0f, player.whoAmI, 15, 0);
+							int f = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<YellowFlame0Little>(), Dam, 0f, player.whoAmI, 15, 0);
 							Main.projectile[f].timeLeft = 100;
 						}
 						for (int h = 0; h < 5; h++)
 						{
 							Vector2 vm = vn2.RotatedBy(h / 2.5d * Math.PI);
-							int f = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<Projectiles.DashCore.BlueFlame0Little>(), Dam, 0f, player.whoAmI, 15, 0);
+							int f = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<BlueFlame0Little>(), Dam, 0f, player.whoAmI, 15, 0);
 							Main.projectile[f].timeLeft = 100;
 						}
 					}
@@ -455,12 +408,12 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 							for (int h = 0; h < 5; h++)
 							{
 								Vector2 vm = vn.RotatedBy(h / 2.5d * Math.PI);
-								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<Projectiles.DashCore.YellowFlame0>(), Dam, 0f, player.whoAmI, 15, 0);
+								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<YellowFlame0>(), Dam, 0f, player.whoAmI, 15, 0);
 							}
 							for (int h = 0; h < 5; h++)
 							{
 								Vector2 vm = vn2.RotatedBy(h / 2.5d * Math.PI);
-								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<Projectiles.DashCore.BlueFlame0>(), Dam, 0f, player.whoAmI, 15, 0);
+								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<BlueFlame0>(), Dam, 0f, player.whoAmI, 15, 0);
 							}
 						}
 					}
@@ -472,42 +425,28 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 				if (Math.Abs(60 - NPC.localAI[0] % 60) < 15)
 				{
 					if (NPC.localAI[0] >= 2550 && NPC.localAI[0] <= 2610)
-					{
 						Aimcolor = new Color(224, 3, 0);
-					}
 					if (NPC.localAI[0] >= 2610 && NPC.localAI[0] <= 2670)
-					{
 						Aimcolor = new Color(129, 4, 224);
-					}
 					if (NPC.localAI[0] >= 2670 && NPC.localAI[0] <= 2730)
-					{
 						Aimcolor = new Color(196, 125, 129);
-					}
 					if (NPC.localAI[0] >= 2730 && NPC.localAI[0] <= 2790)
-					{
 						Aimcolor = new Color(255, 204, 0);
-					}
 					if (NPC.localAI[0] >= 2790 && NPC.localAI[0] <= 2850)
-					{
 						Aimcolor = new Color(225, 186, 96);
-					}
 				}
 				else
 				{
 					Aimcolor = Color.Red;
 				}
 				if (NPC.localAI[0] % 60 == 2)
-				{
 					AimPos = new Vector2(0, -500).RotatedByRandom(6.283);
-				}
 				//颜色
 				Vector2 v0 = player.Center + AimPos - NPC.Center;
 				Vector2 v1 = player.Center + AimPos - NPC.Center + Vector2.Normalize(v0) * 60;
-				Vector2 v2 = Vector2.Normalize(v1);
+				var v2 = Vector2.Normalize(v1);
 				if (NPC.velocity.Length() < 129f)
-				{
 					NPC.velocity += v2 * 2;
-				}
 				NPC.velocity *= 0.95f;
 				//动作
 				if (NPC.localAI[0] % 60 == 0)
@@ -519,9 +458,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 					ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
 					mplayer.FlyCamPosition = new Vector2(0, 56).RotatedByRandom(6.283);
 					if ((player.Center - NPC.Center).Length() > 100)
-					{
 						Str = 100 / (player.Center - NPC.Center).Length();
-					}
 					mplayer.DirFlyCamPosStrength = Str;
 					SoundEngine.PlaySound(SoundID.Item36, NPC.Center);//特效
 					if (NPC.localAI[0] >= 2550 && NPC.localAI[0] <= 2610)
@@ -529,12 +466,12 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 						for (int h = 0; h < 72; h++)
 						{
 							Vector2 vm = new Vector2(0, Main.rand.NextFloat(Main.rand.NextFloat(0f, 14f), 24f)).RotatedByRandom(6.283);
-							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<Projectiles.DashCore.BrownFlame0>(), Dam, 0f, player.whoAmI, 0, 0);
+							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<BrownFlame0>(), Dam, 0f, player.whoAmI, 0, 0);
 						}
 						for (int h = 0; h < 24; h++)
 						{
 							Vector2 vm = new Vector2(0, Main.rand.NextFloat(Main.rand.NextFloat(0f, 7f), 12f)).RotatedByRandom(6.283);
-							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<Projectiles.DashCore.RedFlame0Little>(), Dam, 0f, player.whoAmI, 0, 0);
+							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<RedFlame0Little>(), Dam, 0f, player.whoAmI, 0, 0);
 						}
 					}
 					if (NPC.localAI[0] >= 2610 && NPC.localAI[0] <= 2670)
@@ -542,7 +479,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 						for (int h = 0; h < 72; h++)
 						{
 							Vector2 vm = new Vector2(0, Main.rand.NextFloat(Main.rand.NextFloat(0f, 14f), 24f)).RotatedByRandom(6.283);
-							int d = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<Projectiles.DashCore.PurpleGreenFlame0>(), Dam, 0f, player.whoAmI, 0, 0);
+							int d = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<PurpleGreenFlame0>(), Dam, 0f, player.whoAmI, 0, 0);
 							Main.projectile[d].timeLeft = Main.rand.Next(170, 190);
 						}
 					}
@@ -555,13 +492,13 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 							float Fx = (float)(Math.Sin(h / 30d * Math.PI) * (1 - SqY) + 0.5f);
 							Vector2 vm = new Vector2(0, 30).RotatedBy(h / 15d * Math.PI);
 							Vector2 vn = (vm * SqY).RotatedBy(RandomA);
-							int f = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vn, ModContent.ProjectileType<Projectiles.DashCore.GreenFlame0>(), Dam, 0f, player.whoAmI, 0, 0);
+							int f = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vn, ModContent.ProjectileType<GreenFlame0>(), Dam, 0f, player.whoAmI, 0, 0);
 							Main.projectile[f].scale = Fx;
 						}
 						for (int h = 0; h < 24; h++)
 						{
 							Vector2 vm = new Vector2(0, Main.rand.NextFloat(Main.rand.NextFloat(0f, 7f), 12f)).RotatedByRandom(6.283);
-							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<Projectiles.DashCore.PinkFlame0>(), Dam, 0f, player.whoAmI, 0, 0);
+							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<PinkFlame0>(), Dam, 0f, player.whoAmI, 0, 0);
 						}
 					}
 					if (NPC.localAI[0] >= 2730 && NPC.localAI[0] <= 2790)
@@ -569,7 +506,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 						for (int h = 0; h < 72; h++)
 						{
 							Vector2 vm = new Vector2(0, Main.rand.NextFloat(Main.rand.NextFloat(0f, 14f), 24f)).RotatedByRandom(6.283);
-							int d = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<Projectiles.DashCore.YellowFlame0Shine>(), Dam, 0f, player.whoAmI, 0, 0);
+							int d = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<YellowFlame0Shine>(), Dam, 0f, player.whoAmI, 0, 0);
 							Main.projectile[d].timeLeft = Main.rand.Next(170, 190);
 						}
 					}
@@ -578,13 +515,13 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 						for (int h = 0; h < 8; h++)
 						{
 							Vector2 vm = new Vector2(0, Main.rand.NextFloat(Main.rand.NextFloat(0f, 14f), 24f)).RotatedByRandom(6.283);
-							int d = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<Projectiles.DashCore.GreenFlame0Split>(), Dam, 0f, player.whoAmI, 0, 0);
+							int d = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<GreenFlame0Split>(), Dam, 0f, player.whoAmI, 0, 0);
 							Main.projectile[d].timeLeft = Main.rand.Next(170, 190);
 						}
 						for (int h = 0; h < 8; h++)
 						{
 							Vector2 vm = new Vector2(0, Main.rand.NextFloat(Main.rand.NextFloat(0f, 14f), 24f)).RotatedByRandom(6.283);
-							int d = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<Projectiles.DashCore.RedFlame0Split>(), Dam, 0f, player.whoAmI, 0, 0);
+							int d = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vm, ModContent.ProjectileType<RedFlame0Split>(), Dam, 0f, player.whoAmI, 0, 0);
 							Main.projectile[d].timeLeft = Main.rand.Next(170, 190);
 						}
 					}
@@ -598,16 +535,12 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 				if (NPC.localAI[0] < 2900)
 				{
 					if (NPC.localAI[0] % 100 == 2)
-					{
 						AimPos = new Vector2(-200, -300);
-					}
 					Vector2 v0 = player.Center + AimPos - NPC.Center;
 					Vector2 v1 = player.Center + AimPos - NPC.Center + Vector2.Normalize(v0) * 60;
-					Vector2 v2 = Vector2.Normalize(v1);
+					var v2 = Vector2.Normalize(v1);
 					if (NPC.velocity.Length() < 129f)
-					{
 						NPC.velocity += v2;
-					}
 					NPC.velocity *= 0.95f;
 				}
 				else
@@ -619,15 +552,15 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 				{
 					Vector2 vm = new Vector2(0, Main.rand.NextFloat(Main.rand.NextFloat(150, 1000f), 1001f)).RotatedByRandom(6.283);
 					float VLength = vm.Length() - 149.99f;
-					int d = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + vm, vm.RotatedBy(Math.PI * 1.5) / 10000000f * VLength, ModContent.ProjectileType<Projectiles.DashCore.BlueStarTrail>(), Dam, 0f, player.whoAmI, 0, 0);
+					int d = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + vm, vm.RotatedBy(Math.PI * 1.5) / 10000000f * VLength, ModContent.ProjectileType<BlueStarTrail>(), Dam, 0f, player.whoAmI, 0, 0);
 					Main.projectile[d].timeLeft = Main.rand.Next(536, 618);
 					for (int f = 0; f < Main.projectile.Length; f++)
 					{
-						if (Main.projectile[f].type == ModContent.ProjectileType<Projectiles.DashCore.BlueStarTrail>())
+						if (Main.projectile[f].type == ModContent.ProjectileType<BlueStarTrail>())
 						{
 							Main.projectile[f].velocity *= 0.97f;
 							Vector2 v0 = NPC.Center - Main.projectile[f].Center;
-							float VL0 = (150f) / (v0.Length() + 150f);
+							float VL0 = 150f / (v0.Length() + 150f);
 							Main.projectile[f].position += Vector2.Normalize(v0).RotatedBy(VL0 * Math.PI) * (VL0 + 1) * SwirlSpeed;
 						}
 					}
@@ -637,29 +570,25 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 				{
 					Vector2 vm = new Vector2(0, Main.rand.NextFloat(Main.rand.NextFloat(150, 1000f), 1001f)).RotatedByRandom(6.283);
 					float VLength = vm.Length() - 149.99f;
-					int d = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + vm, vm.RotatedBy(Math.PI * 1.5) / 10000000f * VLength, ModContent.ProjectileType<Projectiles.DashCore.BlueStarTrail>(), Dam, 0f, player.whoAmI, 0, 0);
+					int d = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + vm, vm.RotatedBy(Math.PI * 1.5) / 10000000f * VLength, ModContent.ProjectileType<BlueStarTrail>(), Dam, 0f, player.whoAmI, 0, 0);
 					Main.projectile[d].timeLeft = Main.rand.Next(536, 618);
 					for (int f = 0; f < Main.projectile.Length; f++)
 					{
-						if (Main.projectile[f].type == ModContent.ProjectileType<Projectiles.DashCore.BlueStarTrail>())
+						if (Main.projectile[f].type == ModContent.ProjectileType<BlueStarTrail>())
 						{
 							Main.projectile[f].velocity *= 0.97f;
 							Vector2 v0 = NPC.Center - Main.projectile[f].Center;
 							if (v0.Length() < 200)
 							{
 								if (Main.projectile[f].timeLeft > 90)
-								{
 									Main.projectile[f].timeLeft = 80;
-								}
 							}
-							float VL0 = (150f) / (v0.Length() + 150f);
+							float VL0 = 150f / (v0.Length() + 150f);
 							Main.projectile[f].position += Vector2.Normalize(v0).RotatedBy(VL0 * Math.PI) * (VL0 + 1) * SwirlSpeed;
 						}
 					}
 					if (SwirlSpeed < 8)
-					{
 						SwirlSpeed += 0.15f;
-					}
 					else
 					{
 						SwirlSpeed = 8f;
@@ -669,28 +598,24 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 				{
 					for (int f = 0; f < Main.projectile.Length; f++)
 					{
-						if (Main.projectile[f].type == ModContent.ProjectileType<Projectiles.DashCore.BlueStarTrail>())
-						{
+						if (Main.projectile[f].type == ModContent.ProjectileType<BlueStarTrail>())
 							Main.projectile[f].timeLeft = Main.rand.Next(46, 62);
-						}
 					}
 				}
 				if (NPC.localAI[0] >= 3200)
 				{
 					for (int f = 0; f < Main.projectile.Length; f++)
 					{
-						if (Main.projectile[f].type == ModContent.ProjectileType<Projectiles.DashCore.BlueStarTrail>())
-						{
+						if (Main.projectile[f].type == ModContent.ProjectileType<BlueStarTrail>())
 							Main.projectile[f].timeLeft = Main.rand.Next(46, 62);
-						}
 					}
 					for (int f = 0; f < Main.projectile.Length; f++)
 					{
-						if (Main.projectile[f].type == ModContent.ProjectileType<Projectiles.DashCore.BlueStarTrail>())
+						if (Main.projectile[f].type == ModContent.ProjectileType<BlueStarTrail>())
 						{
 							Main.projectile[f].velocity *= 0.97f;
 							Vector2 v0 = NPC.Center - Main.projectile[f].Center;
-							float VL0 = (150f) / (v0.Length() + 150f);
+							float VL0 = 150f / (v0.Length() + 150f);
 							Main.projectile[f].position += Vector2.Normalize(v0).RotatedBy(VL0 * Math.PI) * (VL0 + 1) * SwirlSpeed;
 						}
 					}
@@ -699,9 +624,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 				//弹幕
 			}//蓝黄花火
 			if (NPC.localAI[0] > 3800)//清零
-			{
 				NPC.localAI[0] = 600;
-			}
 
 		}
 		float SwirlSpeed = 0;
@@ -717,8 +640,8 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 		{
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-			List<DashCoreVertexInfo> bars = new List<DashCoreVertexInfo>();
-			ef2 = (Effect)ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/TrailRainbow").Value;
+			var bars = new List<DashCoreVertexInfo>();
+			ef2 = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/TrailRainbow").Value;
 			// 把所有的点都生成出来，按照顺序
 
 			for (int i = 1; i < NPC.oldPos.Length; ++i)
@@ -727,9 +650,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 				if (Tokill > 0)
 				{
 					if (Tokill < 60)
-					{
 						width = NPCOldWidth[i] * Tokill / 60f;
-					}
 				}
 				if (NPC.oldPos[i] == Vector2.Zero)
 					break;
@@ -753,9 +674,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 				max = Math.Max(tmp, B);
 				H = 0;
 				if (max == min)
-				{
 					H = 0;
-				}
 				else if (max == R && G > B)
 				{
 					H = 60 * (G - B) * 1f / (max - min) + 0;
@@ -773,9 +692,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 					H = 60 * (R - G) * 1f / (max - min) + 240;
 				}
 				if (Math.Abs(H - oldH) > 200)
-				{
-					bars.Add(new DashCoreVertexInfo(NPC.oldPos[i] + normalDir * width + new Vector2(20, 20), color, new Vector4((float)Math.Sqrt(factor), 1, w, (float)oldH / 360f)));
-				}
+					bars.Add(new DashCoreVertexInfo(NPC.oldPos[i] + normalDir * width + new Vector2(20, 20), color, new Vector4((float)Math.Sqrt(factor), 1, w, oldH / 360f)));
 				else
 				{
 					bars.Add(new DashCoreVertexInfo(NPC.oldPos[i] + normalDir * width + new Vector2(20, 20), color, new Vector4((float)Math.Sqrt(factor), 1, w, (float)H / 360f)));
@@ -784,14 +701,14 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 				oldH = H;
 			}
 
-			List<DashCoreVertexInfo> triangleList = new List<DashCoreVertexInfo>();
+			var triangleList = new List<DashCoreVertexInfo>();
 
 			if (bars.Count > 2)
 			{
 
 				// 按照顺序连接三角形
 				triangleList.Add(bars[0]);
-				var vertex = new DashCoreVertexInfo((bars[0].Position + bars[1].Position) * 0.5f + Vector2.Normalize(NPC.velocity) * 30, Color.White, new Vector4(0, 0.5f, 1, (float)oldH / 360f));
+				var vertex = new DashCoreVertexInfo((bars[0].Position + bars[1].Position) * 0.5f + Vector2.Normalize(NPC.velocity) * 30, Color.White, new Vector4(0, 0.5f, 1, oldH / 360f));
 				triangleList.Add(bars[1]);
 				triangleList.Add(vertex);
 				for (int i = 0; i < bars.Count - 2; i += 2)
@@ -859,9 +776,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 			max = Math.Max(tmp, B);
 			H = 0;
 			if (max == min)
-			{
 				H = 0;
-			}
 			else if (max == R && G > B)
 			{
 				H = 60 * (G - B) * 1f / (max - min) + 0;
@@ -898,17 +813,13 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 				Main.InGameUI.IsVisible = true;
 				Main.gamePaused = true;
 				if (VagueStre < 0.08f)
-				{
 					VagueStre += 0.001f;
-				}
 				else
 				{
 					VagueStre = 0.08f;
 				}
 				if (PauseCool > 0)
-				{
 					PauseCool--;
-				}
 				else
 				{
 					if (Main.mouseLeft)
@@ -922,13 +833,9 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 			if (!CheckNewBoss)
 			{
 				if (!Main.dedServ)
-				{
-					Music = Common.MythContent.QuickMusic("DashCore");
-				}
+					Music = MythContent.QuickMusic("DashCore");
 				if (VagueStre > 0f)
-				{
 					VagueStre -= 0.001f;
-				}
 				else
 				{
 					VagueStre = 0;
@@ -945,23 +852,19 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 			spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/LightEffect").Value, NPC.Center - Main.screenPosition, null, new Color(NPC.color.R, NPC.color.G, NPC.color.B, 0) * 0.4f, -x * 6f, new Vector2(128f, 128f), (float)Math.Sqrt(M * M + K * K) * 2.4f * Sca, SpriteEffects.None, 0f);
 			spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 			float width = 12;
 			if (Tokill > 0)
 			{
 				if (Tokill < 60)
-				{
 					width = Tokill / 5f;
-				}
 			}
 			if (Tokill > 0)
 			{
 				if (Tokill < 100)
 				{
 					if (ka > 0.005)
-					{
 						ka *= 0.96f;
-					}
 					else
 					{
 						ka = 0;
@@ -971,9 +874,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 			else
 			{
 				if (ka < 1)
-				{
 					ka += 0.01f;
-				}
 				else
 				{
 					ka = 1;
@@ -995,15 +896,15 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 				//width *= (float)((Math.Log((i + 6)) / 6) / (double)(i + 6) * 24d - 12.7 * (i / 2000f));
 				var factor = i / (float)TrueL;
 				var w = MathHelper.Lerp(1f, 0.05f, factor);
-				var NewFac = (float)Math.Sqrt((i + 1)) / (float)TrueL * 24 - NPC.localAI[0] / 30f;
-				var NewFac2 = (float)Math.Sqrt((i)) / (float)TrueL * 24 - NPC.localAI[0] / 30f;
-				Lighting.AddLight(NPC.oldPos[i], (float)(255 - NPC.alpha) * 1.2f / 50f * ka * (1 - factor), (float)(255 - NPC.alpha) * 0.7f / 50f * ka * (1 - factor), 0);
+				var NewFac = (float)Math.Sqrt(i + 1) / TrueL * 24 - NPC.localAI[0] / 30f;
+				var NewFac2 = (float)Math.Sqrt(i) / TrueL * 24 - NPC.localAI[0] / 30f;
+				Lighting.AddLight(NPC.oldPos[i], (255 - NPC.alpha) * 1.2f / 50f * ka * (1 - factor), (255 - NPC.alpha) * 0.7f / 50f * ka * (1 - factor), 0);
 				//bars.Add(new VertexBase.CustomVertexInfo(NPC.oldPos[i] + normalDir * width + new Vector2(20, 20) - Main.screenPosition, new Color(254, 254, 254, 0), new Vector3(NewFac % 1f + 0.5f, 1, w)));
 				//bars.Add(new VertexBase.CustomVertexInfo(NPC.oldPos[i] + normalDir * -width + new Vector2(20, 20) - Main.screenPosition, new Color(254, 254, 254, 0), new Vector3(NewFac % 1f + 0.5f, 0, w)));
 				bars.Add(new Vertex2D(NPC.oldPos[i] + normalDir * width + new Vector2(20, 20) - Main.screenPosition, new Color(NPCOldColor[i].R, NPCOldColor[i].G, NPCOldColor[i].B, 0), new Vector3(factor, 1, w)));
 				bars.Add(new Vertex2D(NPC.oldPos[i] + normalDir * -width + new Vector2(20, 20) - Main.screenPosition, new Color(NPCOldColor[i].R, NPCOldColor[i].G, NPCOldColor[i].B, 0), new Vector3(factor, 0, w)));
 			}
-			List<Vertex2D> Vx = new List<Vertex2D>();
+			var Vx = new List<Vertex2D>();
 			if (bars.Count > 2)
 			{
 				Vx.Add(bars[0]);
@@ -1040,9 +941,9 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.FlamingDashCore
 
 			public DashCoreVertexInfo(Vector2 position, Color color, Vector4 texCoord)
 			{
-				this.Position = position;
-				this.Color = color;
-				this.TexCoord = texCoord;
+				Position = position;
+				Color = color;
+				TexCoord = texCoord;
 			}
 
 			public VertexDeclaration VertexDeclaration

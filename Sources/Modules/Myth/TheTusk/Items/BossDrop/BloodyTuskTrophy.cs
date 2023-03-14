@@ -1,6 +1,6 @@
 ﻿using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.BossDrop
+namespace Everglow.Myth.TheTusk.Items.BossDrop
 {
 	public class BloodyTuskTrophy : ModItem
 	{

@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
+﻿namespace Everglow.Myth.MiscItems.Weapons
 {
 	public class CyanFrost : ModItem
 	{

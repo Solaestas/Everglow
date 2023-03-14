@@ -1,6 +1,6 @@
 using Terraria.Audio;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
+namespace Everglow.Myth.TheTusk.Projectiles
 {
 	public class CrimsonTuskProjGra : ModProjectile
 	{
@@ -31,9 +31,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 			if (!Collid)
 			{
 				if (Projectile.velocity.Y != 0)
-				{
 					Projectile.rotation = (float)((Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + Math.PI * 2.5d) % MathHelper.TwoPi);
-				}
 				if (Projectile.timeLeft < 380)
 				{
 					if (Collision.SolidCollision(Projectile.Center - Vector2.One * 5f, 10, 10))
@@ -54,21 +52,15 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 				Projectile.velocity *= 0;
 				Projectile.alpha += 5;
 				if (Projectile.alpha > 254)
-				{
 					Projectile.Kill();
-				}
 			}
 			if (Dam == 0)
 			{
 				Dam = 60;
 				if (Main.expertMode)
-				{
 					Dam = 90;
-				}
 				if (Main.masterMode)
-				{
 					Dam = 120;
-				}
 			}
 		}
 		int Dam = 0;
@@ -87,7 +79,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 						Texture2D texture2 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Projectiles/TuskShade").Value;
 						float Dk = 1 - f / 1000f;
 						Dk *= (255 - Projectile.alpha) / 255f;
-						Color color = new Color(Dk, Dk, Dk, Dk);
+						var color = new Color(Dk, Dk, Dk, Dk);
 						Main.spriteBatch.Draw(texture2, Projectile.Center + new Vector2(0, f + texture2.Height / 2f) - Main.screenPosition, null, color, 0, texture2.Size() / 2f, 1f, SpriteEffects.None, 0);
 						break;
 					}
@@ -98,9 +90,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 			Texture2D texture = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Projectiles/CrimsonTuskProj").Value;
 			Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, colorz, Projectile.rotation, texture.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
 			if (!Down)
-			{
 				return;
-			}
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
 

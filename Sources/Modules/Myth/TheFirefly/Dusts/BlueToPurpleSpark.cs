@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheFirefly.Dusts
+﻿namespace Everglow.Myth.TheFirefly.Dusts
 {
 	public class BlueToPurpleSpark : ModDust
 	{
@@ -19,18 +19,14 @@
 			dust.velocity.Y -= 0.03f;
 			Lighting.AddLight(dust.position, 0, 0, dust.scale * 0.75f);
 			if (dust.scale < 0.15f)
-			{
 				dust.active = false;
-			}
 			return false;
 		}
 
 		public override Color? GetAlpha(Dust dust, Color lightColor)
 		{
 			if (dust.scale > 1f)
-			{
 				return new Color(0f, 0.3f, 0.9f, 0.3f);
-			}
 			else
 			{
 				return new Color(1 - dust.scale, dust.scale * 2 - 1.7f, dust.scale * 0.9f, (1.5f - dust.scale) * 0.6f);

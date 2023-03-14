@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheFirefly.Dusts
+﻿namespace Everglow.Myth.TheFirefly.Dusts
 {
 	public class BlueGlow : ModDust
 	{
@@ -21,9 +21,7 @@
 			dust.scale *= 0.96f;
 			Lighting.AddLight(dust.position, 0.0096f * dust.scale / 1.8f, 0.0955f * dust.scale / 1.8f, 0.4758f * dust.scale / 1.8f);
 			if (dust.scale < 0.07f)
-			{
 				dust.active = false;
-			}
 			/*if(Main.tile[(int)((dust.position.X + dust.velocity.X * 6) / 16f), (int)((dust.position.Y + dust.velocity.Y * 6) / 16f)].CollisionType == 0)
 {
    dust.velocity *= -1;

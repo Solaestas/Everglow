@@ -1,6 +1,6 @@
 ﻿using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
+namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Magic
 {
 	public class ThunderBall2 : ModProjectile
 	{
@@ -34,7 +34,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 			if (Main.rand.NextBool(8))
 			{
 				Vector2 v = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-1.5f, 1.5f));
-				int h = Projectile.NewProjectile(null, Projectile.Center - v, v, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Magic.ThunderBall2>(), Projectile.damage / 2, Projectile.knockBack, player.whoAmI, player.GetCritChance(DamageClass.Magic) * 100 + 16);
+				int h = Projectile.NewProjectile(null, Projectile.Center - v, v, ModContent.ProjectileType<ThunderBall2>(), Projectile.damage / 2, Projectile.knockBack, player.whoAmI, player.GetCritChance(DamageClass.Magic) * 100 + 16);
 				Main.projectile[h].timeLeft = Projectile.timeLeft;
 			}
 			for (int j = 0; j < 200; j++)
@@ -46,7 +46,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 					for (int θ = 0; θ < 8; θ++)
 					{
 						Vector2 v = new Vector2(0, Main.rand.Next(25, 75) / 50f).RotatedByRandom(Math.PI * 2);
-						int num25 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 88, v.X, v.Y, 150, default(Color), 0.6f);
+						int num25 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 88, v.X, v.Y, 150, default, 0.6f);
 						Main.dust[num25].noGravity = false;
 					}
 				}
@@ -57,12 +57,10 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 		public override Color? GetAlpha(Color lightColor)
 		{
 			if (!Nul)
-			{
 				return new Color?(new Color(255, 255, 255, 0));
-			}
 			else
 			{
-				return new Color?(new Color((float)Tokill / 45f, (float)Tokill / 45f, (float)Tokill / 45f, 0));
+				return new Color?(new Color(Tokill / 45f, Tokill / 45f, Tokill / 45f, 0));
 			}
 		}
 		private Vector2[] vdp = new Vector2[65];
@@ -72,7 +70,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 			Projectile.ai[0] = Tokill;
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
 				if (Projectile.oldPos[i] == Vector2.Zero)
@@ -84,18 +82,14 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 					break;
 				float width = 18;
 				if (Projectile.timeLeft > 30)
-				{
 					width = 18;
-				}
 				else
 				{
 					width = Projectile.timeLeft / 5f * 3;
 				}
 				var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
 				if (normalDir.Length() < 0.2f)
-				{
 					normalDir = Projectile.velocity / Projectile.velocity.Length();
-				}
 				normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
 
 				var factor = i / (float)Projectile.oldPos.Length;
@@ -105,15 +99,13 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(6, 6) - Main.screenPosition, color, new Vector3((float)Math.Sqrt(factor), 1, w)));
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(6, 6) - Main.screenPosition, color, new Vector3((float)Math.Sqrt(factor), 0, w)));
 			}
-			List<Vertex2D> triangleList = new List<Vertex2D>();
+			var triangleList = new List<Vertex2D>();
 			if (bars.Count > 2)
 			{
 				triangleList.Add(bars[0]);
 				Vector2 va = Projectile.velocity * 1.5f;
 				if (Tokill <= 44 && Tokill > 0)
-				{
 					va = Projectile.velocity * 0.05f;
-				}
 				var vertex = new Vertex2D((bars[0].position + bars[1].position) * 0.5f + va, new Color(0, 0.9f, 1f, 0), new Vector3(0, 0.5f, 1));
 				triangleList.Add(bars[1]);
 				triangleList.Add(vertex);

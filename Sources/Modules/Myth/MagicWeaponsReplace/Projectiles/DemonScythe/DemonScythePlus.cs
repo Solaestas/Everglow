@@ -1,7 +1,8 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
+using Everglow.Myth.MagicWeaponsReplace.Dusts;
 using Terraria.Audio;
 
-namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.DemonScythe
+namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.DemonScythe
 {
 	internal class DemonScythePlus : ModProjectile, IWarpProjectile
 	{
@@ -23,13 +24,9 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
 		{
 			Lighting.AddLight((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16), 0.22f, 0f, 0.9f);
 			if (Timer < 30)
-			{
 				Timer += 2;
-			}
 			if (Projectile.velocity.Length() < 48f)
-			{
 				Projectile.velocity *= 1.05f;
-			}
 			float vL = Projectile.velocity.Length() * 0.1f;
 			vL = Math.Min(vL, 4f);
 			float kSize = Math.Min(vL, 1f);
@@ -39,16 +36,14 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
 				Vector2 lineVel = new Vector2(0, 24).RotatedBy(Math.PI * 0.5 - Main.timeForVisualEffects / 1.8 + x / 2d);
 				lineVel = RotAndEclipse(lineVel);
 
-				Dust d0 = Dust.NewDustDirect(Projectile.Center + lineVel - new Vector2(size * 4, size * 4.5f), 0, 0, ModContent.DustType<Dusts.DemoFlame>(), 0, 0, 0, default, size);
+				var d0 = Dust.NewDustDirect(Projectile.Center + lineVel - new Vector2(size * 4, size * 4.5f), 0, 0, ModContent.DustType<DemoFlame>(), 0, 0, 0, default, size);
 				d0.fadeIn = 12f;
 				Vector2 lineVel2 = new Vector2(0, 24).RotatedBy(Math.PI * 1 - Main.timeForVisualEffects / 1.8 + x / 2d);
 				lineVel2 = RotAndEclipse(lineVel2);
 				d0.velocity = Projectile.velocity + lineVel2 * 0.1f + Main.rand.NextVector2Unit() * 0.3f;
 			}
 			if (Collision.SolidCollision(Projectile.Center, 0, 0))
-			{
 				Projectile.Kill();
-			}
 		}
 
 		public override void Kill(int timeLeft)
@@ -58,7 +53,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
 			float k = Math.Clamp(Projectile.velocity.Length() / 20f, 1f, 5f) / 1.3f;
 			for (int x = 0; x < Projectile.velocity.Length() / 4 - 2; x++)
 			{
-				Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center - Projectile.velocity * 2, Projectile.velocity.RotatedByRandom(6.283) * 0.4f, ModContent.ProjectileType<DemonScythePlusCrack>(), (int)(Projectile.damage * k * 0.1), (int)(Projectile.knockBack * k * 0.3), Projectile.owner, Projectile.velocity.Length() / 60f, Main.rand.NextFloat(8f, 24f));
+				var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center - Projectile.velocity * 2, Projectile.velocity.RotatedByRandom(6.283) * 0.4f, ModContent.ProjectileType<DemonScythePlusCrack>(), (int)(Projectile.damage * k * 0.1), (int)(Projectile.knockBack * k * 0.3), Projectile.owner, Projectile.velocity.Length() / 60f, Main.rand.NextFloat(8f, 24f));
 				p.CritChance = (int)(Projectile.CritChance * k / 10);
 				p.timeLeft = Main.rand.Next(45) + (int)Projectile.velocity.Length();
 			}
@@ -69,7 +64,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
 			float k = Math.Clamp(Projectile.velocity.Length() / 30f, 1f, 5f) / 1.3f;
 			for (int x = 0; x < Projectile.velocity.Length() / 12 - 2; x++)
 			{
-				Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center - Projectile.velocity * 2, Projectile.velocity.RotatedByRandom(6.283) * 0.4f, ModContent.ProjectileType<DemonScythePlusCrack>(), (int)(Projectile.damage * k * 0.1), (int)(Projectile.knockBack * k * 0.3), Projectile.owner, Projectile.velocity.Length() / 120f, Main.rand.NextFloat(8f, 24f));
+				var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center - Projectile.velocity * 2, Projectile.velocity.RotatedByRandom(6.283) * 0.4f, ModContent.ProjectileType<DemonScythePlusCrack>(), (int)(Projectile.damage * k * 0.1), (int)(Projectile.knockBack * k * 0.3), Projectile.owner, Projectile.velocity.Length() / 120f, Main.rand.NextFloat(8f, 24f));
 				p.timeLeft = Main.rand.Next(30) + (int)Projectile.velocity.Length();
 			}
 			knockback = Projectile.knockBack * Projectile.velocity.Length() * 0.12f;
@@ -92,8 +87,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
 		public void DrawMagicArray(Texture2D tex, Color c0)
 		{
 			Texture2D Water = tex;
-			Color c1 = new Color(c0.R * 0.19f / 255f, c0.G * 0.19f / 255f, c0.B * 0.19f / 255f, c0.A * 0.19f / 255f);
-			Color c2 = new Color(c0.R * 0.09f / 255f, c0.G * 0.09f / 255f, c0.B * 0.09f / 255f, c0.A * 0.09f / 255f);
+			var c1 = new Color(c0.R * 0.19f / 255f, c0.G * 0.19f / 255f, c0.B * 0.19f / 255f, c0.A * 0.19f / 255f);
+			var c2 = new Color(c0.R * 0.09f / 255f, c0.G * 0.09f / 255f, c0.B * 0.09f / 255f, c0.A * 0.09f / 255f);
 			float Size1 = (float)(Math.Sin((Main.timeForVisualEffects + 40) / 24) / 7d + 1);
 			float Size2 = Timer / 30f;
 			DrawTexCircle(24, 25 * Size2, c0 * Size1, Projectile.Center - Main.screenPosition, Water, -Main.timeForVisualEffects / 7);
@@ -104,7 +99,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
 
 		private void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 		{
-			List<Vertex2D> circle = new List<Vertex2D>();
+			var circle = new List<Vertex2D>();
 			for (int h = 0; h < radious / 2; h++)
 			{
 				circle.Add(new Vertex2D(center + RotAndEclipse(new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot)), color, new Vector3(h * 2 / radious, 1, 0)));
@@ -121,7 +116,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
 
 		private void DrawTexMoon(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 		{
-			List<Vertex2D> circle = new List<Vertex2D>();
+			var circle = new List<Vertex2D>();
 			for (int h = 0; h < radious * 5; h++)
 			{
 				Vector2 up = new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 0.27 + addRot);
@@ -141,7 +136,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
 		}
 		private void DrawTexMoon(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 		{
-			List<Vertex2D> circle = new List<Vertex2D>();
+			var circle = new List<Vertex2D>();
 			for (int h = 0; h < radious * 5; h++)
 			{
 				Vector2 up = new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 0.27 + addRot);
@@ -154,9 +149,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
 			//circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0.5f, 1, 0)));
 			//circle.Add(new Vertex2D(center + new Vector2(0, radious + width).RotatedBy(addRot), color, new Vector3(0.5f, 0, 0)));
 			if (circle.Count > 0)
-			{
 				spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
-			}
 		}
 		private Vector2 RotAndEclipse(Vector2 orig)
 		{
@@ -168,7 +161,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
 			float Wid = 6f;
 			Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
 
-			List<Vertex2D> vertex2Ds = new List<Vertex2D>();
+			var vertex2Ds = new List<Vertex2D>();
 
 			for (int x = 0; x < 3; x++)
 			{

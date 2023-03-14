@@ -1,8 +1,9 @@
-﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories;
+﻿using Everglow.Myth;
+using Everglow.Myth.TheFirefly.Items.Accessories;
 using Terraria.DataStructures;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
+namespace Everglow.Myth.TheFirefly.Items.Weapons
 {
 	public class ShadowWingBow : ModItem
 	{
@@ -46,9 +47,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
 			if (player.ownedProjectileCounts[ModContent.ProjectileType<Projectiles.ShadowWingBow>()] <= 0)
-			{
 				Projectile.NewProjectile(source, position, Vector2.Zero, ModContent.ProjectileType<Projectiles.ShadowWingBow>(), (int)(damage * 0.65f), knockback, player.whoAmI, type, Item.useAnimation);
-			}
 			return false;
 		}
 		public override void ModifyTooltips(List<TooltipLine> tooltips)

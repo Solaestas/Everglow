@@ -1,6 +1,6 @@
 ﻿using Terraria.DataStructures;
 
-namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKing
+namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing
 {
 	class GoldLanternRay : ModProjectile
 	{
@@ -28,13 +28,9 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKin
 
 			Projectile.rotation = Projectile.rotation * 0.96f + Projectile.ai[1] * 0.04f;
 			if (Projectile.timeLeft < 60)
-			{
 				yd = Projectile.timeLeft / 60f;
-			}
 			if (Projectile.timeLeft > 340)
-			{
 				yd = (400 - Projectile.timeLeft) / 60f;
-			}
 			CirR0 += 0.001f;
 			CirPro0 += 0.3f;
 		}
@@ -54,16 +50,14 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKin
 		{
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 
 			float step = 4;
 			int Count = 0;
 			for (int m = 0; m < 500; ++m)
 			{
 				if (Collision.SolidCollision(Projectile.Center + new Vector2(0, step).RotatedBy(Projectile.rotation) * m, 1, 1))
-				{
 					break;
-				}
 				Vlaser[m] = Projectile.Center + new Vector2(0, step).RotatedBy(Projectile.rotation) * m;
 				++Count;
 			}
@@ -74,16 +68,14 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKin
 				var normalDir = Vlaser[i - 1] - Vlaser[i];
 				normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
 
-				var factor = (float)Math.Sqrt((i + 1)) / (float)TrueL / 9f + Projectile.timeLeft / 60f;
+				var factor = (float)Math.Sqrt(i + 1) / TrueL / 9f + Projectile.timeLeft / 60f;
 				var w = MathHelper.Lerp(1f, 0.05f, factor);
 				float width = 60;
 				if (i <= 25)
-				{
 					width = 60 * (float)Math.Sqrt(i) / 5f;
-				}
 
 				width *= yd;
-				Lighting.AddLight(Vlaser[i], (float)(255 - Projectile.alpha) * 1.2f / 50f * yd, 0, 0);
+				Lighting.AddLight(Vlaser[i], (255 - Projectile.alpha) * 1.2f / 50f * yd, 0, 0);
 				if (Count - i < 5)
 				{
 					bars.Add(new Vertex2D(Vlaser[i] + normalDir * width - Main.screenPosition, new Color(Math.Clamp((int)(255 * (Count - i - 1) / 5f), 0, 255), 0, 0, 0), new Vector3(factor % 1f, 1, w)));
@@ -103,15 +95,13 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKin
 							if (!Main.player[j].dead)
 							{
 								if ((Main.player[j].Center - Vlaser[i]).Length() < 40)
-								{
 									Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<Bosses.Acytaea.Projectiles.playerHit>(), Projectile.damage, 0, j, 0, 0);
-								}
 							}
 						}
 					}
 				}
 			}
-			List<Vertex2D> Vx = new List<Vertex2D>();
+			var Vx = new List<Vertex2D>();
 			if (bars.Count > 2)
 			{
 				Vx.Add(bars[0]);
@@ -135,26 +125,26 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKin
 
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-			List<Vertex2D> Vx2 = new List<Vertex2D>();
+			var Vx2 = new List<Vertex2D>();
 
 			Vector2 vf = Vlaser[Math.Clamp(Count - 1, 0, 507)] - Main.screenPosition;
 			float ACircleR = 150 * yd;
 			for (int h = 0; h < 100; h++)
 			{
-				Color color3 = new Color(254, 254, 254, 0);
+				var color3 = new Color(254, 254, 254, 0);
 				Vector2 v0 = new Vector2(0, ACircleR).RotatedBy(h / 50d * Math.PI + CirR0);
 				Vector2 v1 = new Vector2(0, ACircleR).RotatedBy((h + 1) / 50d * Math.PI + CirR0);
 				if (h % 20 >= 10)
 				{
-					Vx2.Add(new Vertex2D(vf + v0, color3, new Vector3(((0.999f + CirPro0) / 25f) % 1f, 0, 0)));
-					Vx2.Add(new Vertex2D(vf + v1, color3, new Vector3(((CirPro0) / 25f) % 1f, 0, 0)));
-					Vx2.Add(new Vertex2D(vf, color3, new Vector3(((0.5f + CirPro0) / 25f) % 1f, 1, 0)));
+					Vx2.Add(new Vertex2D(vf + v0, color3, new Vector3((0.999f + CirPro0) / 25f % 1f, 0, 0)));
+					Vx2.Add(new Vertex2D(vf + v1, color3, new Vector3(CirPro0 / 25f % 1f, 0, 0)));
+					Vx2.Add(new Vertex2D(vf, color3, new Vector3((0.5f + CirPro0) / 25f % 1f, 1, 0)));
 				}
 				else
 				{
-					Vx2.Add(new Vertex2D(vf + v0, color3, new Vector3(((CirPro0) / 25f) % 1f, 0, 0)));
-					Vx2.Add(new Vertex2D(vf + v1, color3, new Vector3(((0.999f + CirPro0) / 25f) % 1f, 0, 0)));
-					Vx2.Add(new Vertex2D(vf, color3, new Vector3(((0.5f + CirPro0) / 25f) % 1f, 1, 0)));
+					Vx2.Add(new Vertex2D(vf + v0, color3, new Vector3(CirPro0 / 25f % 1f, 0, 0)));
+					Vx2.Add(new Vertex2D(vf + v1, color3, new Vector3((0.999f + CirPro0) / 25f % 1f, 0, 0)));
+					Vx2.Add(new Vertex2D(vf, color3, new Vector3((0.5f + CirPro0) / 25f % 1f, 1, 0)));
 				}
 			}
 			Texture2D t1 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/LightCrackGold").Value;

@@ -1,6 +1,6 @@
 ﻿using Terraria.GameContent.Creative;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures
+namespace Everglow.Myth.TheFirefly.Items.Furnitures
 {
 	public class GlowWoodSinkType2 : ModItem
 	{

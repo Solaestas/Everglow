@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles;
+﻿namespace Everglow.Myth.Bosses.Acytaea.Projectiles;
 
 internal class AcytaeaLight : ModProjectile
 {
@@ -31,9 +31,7 @@ internal class AcytaeaLight : ModProjectile
 		fx = (float)((-(1 / (dx / 4d + 0.25) + Math.Log(dx / 4d + 0.4)) + 3.95) * 40f);
 		Projectile.velocity *= 0.99f;
 		if (ka == 0)
-		{
 			ka = Main.rand.NextFloat(Main.rand.NextFloat(0.15f, 1f), 1f);
-		}
 	}
 
 	private float Range = 30;
@@ -47,14 +45,14 @@ internal class AcytaeaLight : ModProjectile
 		int width = (int)fx;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-		List<Vertex2D> bars = new List<Vertex2D>();
+		var bars = new List<Vertex2D>();
 		Effect ef = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/Trail", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 
 		for (int i = 0; i < Range; ++i)
 		{
 			Player player = Main.player[Projectile.owner];
 			Vector2 v = new Vector2(Range, 0).RotatedBy((i - Range / 2d) / Range * 2);
-			Vector2 v2 = new Vector2(v.X, v.Y * Projectile.ai[0]);
+			var v2 = new Vector2(v.X, v.Y * Projectile.ai[0]);
 			Vector2 v3 = v2.RotatedBy(o1);
 			/*for (int j = 0; j < 150; j++)
             {
@@ -102,15 +100,13 @@ internal class AcytaeaLight : ModProjectile
 			{
 				float h0 = 1;
 				if (Projectile.timeLeft < 60f)
-				{
 					h0 = Projectile.timeLeft / 60f;
-				}
 				float k0 = (255 - Projectile.alpha) * (float)Math.Sin(factor * Math.PI) / 555f * h0;
 				Lighting.AddLight(Projectile.Center + v3 * (1 + width / 200f) / (float)Math.Sqrt(ka), k0, 0, 0);
 			}
 		}
 
-		List<Vertex2D> triangleList = new List<Vertex2D>();
+		var triangleList = new List<Vertex2D>();
 
 		if (bars.Count > 2)
 		{

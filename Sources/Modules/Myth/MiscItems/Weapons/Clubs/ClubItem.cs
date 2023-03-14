@@ -1,5 +1,5 @@
 using Terraria.DataStructures;
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs
+namespace Everglow.Myth.MiscItems.Weapons.Clubs
 {
 	/// <summary>
 	/// Default damage = 5 width*height = 48*48 useT = useA = 4 useStyle = ItemUseStyleID.Shoot rare = ItemRarityID.White value = 50 
@@ -44,9 +44,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs
 		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
 			if (player.ownedProjectileCounts[type] < 1)
-			{
 				Projectile.NewProjectile(source, position + velocity * 2f, Vector2.Zero, type, damage, knockback, player.whoAmI, 0f, 0f);
-			}
 			return false;
 		}
 	}

@@ -1,9 +1,9 @@
-﻿using Everglow.Sources.Modules.MythModule.TheTusk.Backgrounds;
-using Everglow.Sources.Modules.MythModule.TheTusk.Water;
+﻿using Everglow.Myth.TheTusk.Backgrounds;
+using Everglow.Myth.TheTusk.Water;
 using Terraria.Graphics.Capture;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration
+namespace Everglow.Myth.TheTusk.WorldGeneration
 {
 	// Shows setting up two basic biomes. For a more complicated example, please request.
 	public class TuskSurfaceBiome : ModBiome
@@ -34,7 +34,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration
 		public override bool IsBiomeActive(Player player)
 		{
 
-			bool b1 = TheTusk.Backgrounds.TuskBiomeSky.Open;
+			bool b1 = TuskBiomeSky.Open;
 			/*if(b1)
             {
 				MythMod.MiscItems.Projectiles.Weapon.Fragrans.Fragrans.ZoneTusk = 2;

@@ -1,5 +1,8 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
+﻿using Everglow.Myth.Common;
+using Everglow.Myth.TheFirefly.Dusts;
+using Everglow.Myth.TheFirefly.Items.BossDrop;
+using Everglow.Myth.TheFirefly.Items.Weapons;
+using Everglow.Myth.TheFirefly.Projectiles;
 using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
@@ -7,7 +10,7 @@ using Terraria.Localization;
 using Color = Microsoft.Xna.Framework.Color;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
+namespace Everglow.Myth.TheFirefly.NPCs.Bosses
 {
 	[AutoloadBossHead]
 	public class CorruptMoth : ModNPC
@@ -101,9 +104,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 		{
 			//NPC.SetEventFlagCleared(ref DownedBossSystem.downedMoth, -1);
 			if (Main.netMode == NetmodeID.Server)
-			{
 				NetMessage.SendData(MessageID.WorldData);
-			}
 		}
 
 		public override void SetDefaults()
@@ -135,7 +136,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 			}
 			NPC.knockBackResist = 0f;
 			NPC.value = Item.buyPrice(0, 5, 0, 0);
-			NPC.color = new Microsoft.Xna.Framework.Color(0, 0, 0, 0);
+			NPC.color = new Color(0, 0, 0, 0);
 			NPC.alpha = 0;
 			NPC.aiStyle = -1;
 			NPC.boss = true;
@@ -151,9 +152,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 			if (!Main.dedServ)
 			{
 				if (EverglowClientConfig.ReplaceMothAudio == 0) //ModContent.GetInstance<EverglowClientConfig>().MothAudioReplace == MothAudioReplaceMode.MothFighting
-				{
 					Music = MythContent.QuickMusic("MothFighting");
-				}
 				else if (EverglowClientConfig.ReplaceMothAudio == 1)
 				{
 					Music = MythContent.QuickMusic("MothFightingAlt");
@@ -191,7 +190,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 						Vector3 v2 = cubeVec[(ii + 1) % 4 + a] * scale;
 						for (int i = 0; i < counts - 1; i++)
 						{
-							Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CorMoth4DProj>(), NPC.damage / 7, 0, Main.myPlayer, NPC.whoAmI);
+							var proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CorMoth4DProj>(), NPC.damage / 7, 0, Main.myPlayer, NPC.whoAmI);
 							(proj.ModProjectile as CorMoth4DProj).targetPos = new Vector4(Vector3.Lerp(v1, v2, (float)i / (counts - 1)), w);
 							proj.netUpdate2 = true;
 						}
@@ -200,7 +199,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 					Vector3 v4 = cubeVec[ii + 4] * scale;
 					for (int i = 1; i < counts - 1; i++)
 					{
-						Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CorMoth4DProj>(), NPC.damage / 7, 0, Main.myPlayer, NPC.whoAmI);
+						var proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CorMoth4DProj>(), NPC.damage / 7, 0, Main.myPlayer, NPC.whoAmI);
 						(proj.ModProjectile as CorMoth4DProj).targetPos = new Vector4(Vector3.Lerp(v3, v4, (float)i / (counts - 1)), w);
 						proj.netUpdate2 = true;
 					}
@@ -213,7 +212,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 				for (int i = 1; i < counts - 1; i++)
 				{
 					float c = (counts - 1) / 2;
-					Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CorMoth4DProj>(), NPC.damage / 7, 0, Main.myPlayer, NPC.whoAmI);
+					var proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<CorMoth4DProj>(), NPC.damage / 7, 0, Main.myPlayer, NPC.whoAmI);
 					(proj.ModProjectile as CorMoth4DProj).targetPos = new Vector4(v * scale, (float)(i - c) * scale / c);
 					proj.netUpdate2 = true;
 				}
@@ -227,14 +226,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 				damage = 1;
 				SoundEngine.PlaySound(SoundID.NPCHit4, NPC.Center);
 				if (lightVisual < 0.6f)
-				{
 					lightVisual += 0.5f;
-				}
 
 				if (Main.rand.NextBool() && Main.netMode != NetmodeID.MultiplayerClient)
-				{
-					Projectile.NewProjectile(NPC.GetSource_OnHurt(projectile), projectile.Center, Utils.SafeNormalize(projectile.Center - NPC.Center, Vector2.One) * 12, ModContent.ProjectileType<BlueMissil>(), NPC.damage / 6, 0, Main.myPlayer); // Higher number on NPC.damage / int = less damage
-				}
+					Projectile.NewProjectile(NPC.GetSource_OnHurt(projectile), projectile.Center, (projectile.Center - NPC.Center).SafeNormalize(Vector2.One) * 12, ModContent.ProjectileType<BlueMissil>(), NPC.damage / 6, 0, Main.myPlayer); // Higher number on NPC.damage / int = less damage
 			}
 		}
 
@@ -255,30 +250,22 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 			Lighting.AddLight(NPC.Center, 0f, 0f, 0.8f * (1 - NPC.alpha / 255f));
 			NPC.friendly = NPC.dontTakeDamage;
 			if (lightVisual > 0)//光效
-			{
 				lightVisual -= 0.04f;
-			}
 			else
 			{
 				lightVisual = 0;
 			}
 			if (Timer % 15 == 0)
-			{
 				NPC.netUpdate2 = true;
-			}
 			//贴图旋转
 			if (NPC.spriteDirection > 0)
-			{
 				NPC.rotation = NPC.velocity.Y / 20;
-			}
 			else
 			{
 				NPC.rotation = -NPC.velocity.Y / 20;
 			}
 			if (Math.Abs(NPC.rotation) > 1.2f)
-			{
 				NPC.rotation = Math.Sign(NPC.rotation) * 1.2f;
-			}
 
 			#region #前言
 
@@ -317,9 +304,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 				{
 					NPC.velocity = new Vector2(0f, 10f);
 					if (NPC.timeLeft > 150)
-					{
 						NPC.timeLeft = 150;
-					}
 					return;
 				}
 			}
@@ -354,17 +339,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 					GetDir_ByPlayer();
 				}
 				if (Timer == 200)
-				{
 					NPC.ai[2] = phase2 ? 1 : 0;
-				}
 				if (Timer > 200 && Timer < 650 && NPC.ai[2] == 0)//冲刺
 				{
 					int tt = (Timer - 200) % 150;
-					Vector2 getVec = new Vector2(NPC.direction);
+					var getVec = new Vector2(NPC.direction);
 					if (Timer > 500)
-					{
 						getVec = new Vector2(NPC.direction, 0);
-					}
 
 					if (tt < 50)
 					{
@@ -372,17 +353,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 						MoveTo(player.Center - getVec * 300, 15, 15);
 					}
 					if (tt is > 50 and < 70)//前摇
-					{
 						NPC.velocity = Vector2.Lerp(NPC.velocity, -getVec * 10, 0.1f);
-					}
 					if (tt is > 30 and < 70)
-					{
 						PhamtomDis += (50 - tt) * 0.5f;
-					}
 					if (tt == 70)
-					{
 						lightVisual = 2;
-					}
 					if (tt is > 70 and < 120)//冲刺
 					{
 						if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -393,16 +368,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, -2), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer);
 								if (Main.getGoodWorld)
 								{
-									Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(-1.4f, -3), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
-									Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(1.4f, -3), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
+									Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(-1.4f, -3), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
+									Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(1.4f, -3), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
 								}
 							}
 						}
-						Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<TheFirefly.Dusts.BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
+						Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
 						if (Timer > 500)
-						{
 							NPC.velocity = Vector2.Lerp(NPC.velocity, getVec * 20, 0.15f);
-						}
 						else if (Vector2.Distance(NPC.Center, player.Center) > 100)
 						{
 							NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(player.Center) * 20, 0.1f);
@@ -411,9 +384,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 					if (tt > 120)
 					{
 						if (Vector2.Distance(NPC.Center, player.Center) > 600)
-						{
 							Timer++;
-						}
 
 						GetDir_ByPlayer();
 						MoveTo(player.Center, 6, 20);
@@ -422,11 +393,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 				if (Timer > 200 && Timer < 500 && NPC.ai[2] == 1)//二阶段冲刺
 				{
 					int tt = Timer % 100;
-					Vector2 getVec = new Vector2(NPC.direction);
+					var getVec = new Vector2(NPC.direction);
 					if (Timer > 400)
-					{
 						getVec = new Vector2(NPC.direction, 0);
-					}
 
 					if (tt < 20)
 					{
@@ -434,17 +403,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 						MoveTo(player.Center + player.velocity * 10 - getVec * 300, 15, 15);
 					}
 					if (tt is > 20 and < 40)//前摇
-					{
 						NPC.velocity = Vector2.Lerp(NPC.velocity, -getVec * 10, 0.1f);
-					}
 					if (tt is > 0 and < 40)
-					{
 						PhamtomDis += (20 - tt) * 0.5f;
-					}
 					if (tt == 40)
-					{
 						lightVisual = 2;
-					}
 					if (tt is > 40 and < 80)//冲刺
 					{
 						if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -455,16 +418,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, -2), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer);
 								if (Main.getGoodWorld)
 								{
-									Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(-1.4f, -3), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
-									Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(1.4f, -3), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
+									Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(-1.4f, -3), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
+									Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(1.4f, -3), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
 								}
 							}
 						}
-						Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<TheFirefly.Dusts.BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
+						Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
 						if (Timer > 500)
-						{
 							NPC.velocity = Vector2.Lerp(NPC.velocity, getVec * 20, 0.15f);
-						}
 						else if (Vector2.Distance(NPC.Center, player.Center) > 100)
 						{
 							NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(player.Center) * 21, 0.1f);
@@ -473,9 +434,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 					if (tt > 80)
 					{
 						if (Vector2.Distance(NPC.Center, player.Center) > 600)
-						{
 							Timer++;
-						}
 
 						GetDir_ByPlayer();
 						MoveTo(player.Center, 6, 20);
@@ -488,9 +447,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 					NPC.ai[0]++;
 					Timer = 0;
 					if (phase2)
-					{
 						Timer += 80;
-					}
 				}
 			}//冲刺1
 			if (NPC.ai[0] == 2)
@@ -504,59 +461,45 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 				{
 					int tt = (Timer - 100) % 150;
 					if (tt < 20)
-					{
 						NPC.velocity = Vector2.Lerp(NPC.velocity, new Vector2(0, -8), 0.1f);
-					}
 
 					if (tt is > 20 and < 120)
 					{
 						int Freq = 27;
 						if (Main.expertMode)
-						{
 							Freq = 20;
-						}
 						if (Main.masterMode)
-						{
 							Freq = 16;
-						}
 						if (Main.getGoodWorld)
-						{
 							Freq -= 4;
-						}
 						GetDir_ByVel();
 						if (!phase2)
-						{
 							MoveTo(player.Center + new Vector2(0, -230), Timer > 400 ? 18 : 10, 30);
-						}
 						else
 						{
 							MoveTo(player.Center + new Vector2(0, -200), Timer > 400 ? 22 : 13, 30);
 						}
-						Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<TheFirefly.Dusts.MothBlue>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
-						Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<TheFirefly.Dusts.MothBlue2>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
+						Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<MothBlue>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
+						Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<MothBlue2>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
 						if (Timer % Freq == 0 && Main.netMode != NetmodeID.MultiplayerClient)
 						{
-							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, 1), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
+							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, 1), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
 							if (Main.expertMode && !Main.masterMode)
-							{
-								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, -2), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
-							}
+								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, -2), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
 							if (Main.masterMode)
 							{
-								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(-1.4f, -2), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
-								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(1.4f, -2), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
+								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(-1.4f, -2), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
+								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(1.4f, -2), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
 							}
 							if (Main.getGoodWorld)
 							{
-								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(-1.8f, -3), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1); //Originally: NPC.damage / 4
-								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(1.8f, -3), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
+								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(-1.8f, -3), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1); //Originally: NPC.damage / 4
+								Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(1.8f, -3), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
 							}
 						}
 					}
 					if (tt is > 120 and < 150)
-					{
 						MoveTo(player.Center + NPC.DirectionFrom(player.Center) * 150, 10, 20);
-					}
 					/*
                     if (Timer == 220 && phase2 && Main.netMode != NetmodeID.MultiplayerClient)
                     {
@@ -571,9 +514,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 				{
 					Timer = 0;
 					if (NPC.life < NPC.lifeMax * 0.9f)
-					{
 						NPC.ai[0]++;
-					}
 					else
 					{
 						NPC.ai[0] = 1;
@@ -603,45 +544,37 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 					NPC.alpha = 255;
 					NPC.netUpdate2 = true;
 					if (phase2)
-					{
 						Timer += 20;
-					}
 				}
 				if (Timer is > 60 and < 90)
 				{
 					if (Timer == 70)
-					{
 						NPC.dontTakeDamage = false;
-					}
 
 					NPC.alpha -= (int)(255 / 30f);
-					PhamtomDis += (75 - Timer);
+					PhamtomDis += 75 - Timer;
 					NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionFrom(player.Center) * 10, 0.08f);
 				}
 				if (Timer == 90)
-				{
 					lightVisual = 2;
-				}
 
 				if (Timer is > 90 and < 130)//冲刺中
 				{
 					GreyVFx();
 					GetDir_ByVel();
-					Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<TheFirefly.Dusts.BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
+					Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
 					if (Timer % 8 == 0 && (NPC.ai[2] == 2 || phase2) && Main.netMode != NetmodeID.MultiplayerClient)
 					{
 						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, -2), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer);
 						if (Main.getGoodWorld)
 						{
-							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(-1.4f, -3), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
-							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(1.4f, -3), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
+							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(-1.4f, -3), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
+							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(1.4f, -3), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
 						}
 					}
 
 					if (Vector2.Distance(NPC.Center, player.Center) > 100)
-					{
 						NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(player.Center) * 20, 0.1f);
-					}
 				}
 				if (Timer > 130 && Timer < endTime)
 				{
@@ -661,9 +594,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 			if (NPC.ai[0] == 4)
 			{
 				if (PhamtomDis > 0)
-				{
 					PhamtomDis -= 1;
-				}
 
 				if (++Timer < 60)
 				{
@@ -682,7 +613,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 						//NPC.Center += NPC.DirectionTo(player.Center)*Main.rand.Next(100,150);
 						for (int y = 0; y < 60; y++)
 						{
-							int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<TheFirefly.Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(1.3f, 4.2f));
+							int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(1.3f, 4.2f));
 							Main.dust[index].noGravity = true;
 							Main.dust[index].velocity = new Vector2(Main.rand.NextFloat(0.0f, 2.5f), Main.rand.NextFloat(1.8f, 5.5f)).RotatedByRandom(Math.PI * 2d);
 						}
@@ -700,7 +631,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 									for (int j = -3; j <= 3; j++)
 									{
 										Vector2 v = new Vector2(0.1f + j * 0.11f, 0).RotatedBy(j * 0.15f + i * MathHelper.TwoPi / c + r);
-										Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v, ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain3>(), NPC.damage / 6, 0f, Main.myPlayer, Main.rand.NextFloat(MathF.PI * 2)); //Originally: NPC.damage / 5
+										Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v, ModContent.ProjectileType<BlackCorruptRain3>(), NPC.damage / 6, 0f, Main.myPlayer, Main.rand.NextFloat(MathF.PI * 2)); //Originally: NPC.damage / 5
 									}
 								}
 							}
@@ -710,16 +641,16 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 								{
 									for (int i = 0; i < 40; i++)
 									{
-										Vector2 v = new Vector2(0.1f + (i % 5) / 16f, 0).RotatedBy(i * MathHelper.TwoPi / 40 + r);
-										Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v, ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain3>(), NPC.damage / 6, 0f, Main.myPlayer, Main.rand.NextFloat(MathF.PI * 2));
+										Vector2 v = new Vector2(0.1f + i % 5 / 16f, 0).RotatedBy(i * MathHelper.TwoPi / 40 + r);
+										Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v, ModContent.ProjectileType<BlackCorruptRain3>(), NPC.damage / 6, 0f, Main.myPlayer, Main.rand.NextFloat(MathF.PI * 2));
 									}
 								}
 								else
 								{
 									for (int i = 0; i < 30; i++)
 									{
-										Vector2 v = new Vector2(0.1f + (i % 5) / 16f, 0).RotatedBy(i * MathHelper.TwoPi / 30 + r);
-										Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v, ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain3>(), NPC.damage / 6, 0f, Main.myPlayer, Main.rand.NextFloat(MathF.PI * 2));
+										Vector2 v = new Vector2(0.1f + i % 5 / 16f, 0).RotatedBy(i * MathHelper.TwoPi / 30 + r);
+										Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v, ModContent.ProjectileType<BlackCorruptRain3>(), NPC.damage / 6, 0f, Main.myPlayer, Main.rand.NextFloat(MathF.PI * 2));
 									}
 								}
 							}
@@ -729,7 +660,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 								for (int i = 0; i < c; i++)
 								{
 									Vector2 v = new Vector2(0.18f + (float)Math.Sin(i * MathHelper.TwoPi / 10) * 0.17f, 0).RotatedBy(i * MathHelper.TwoPi / c + r);
-									Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v, ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain3>(), NPC.damage / 6, 0f, Main.myPlayer, Main.rand.NextFloat(MathF.PI * 2));
+									Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v, ModContent.ProjectileType<BlackCorruptRain3>(), NPC.damage / 6, 0f, Main.myPlayer, Main.rand.NextFloat(MathF.PI * 2));
 								}
 							}
 						}
@@ -743,9 +674,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 					NPC.ai[2] = 0;
 					Timer = 0;
 					if (phase2)
-					{
 						NPC.ai[0]++;
-					}
 					else
 					{
 						NPC.ai[0] = 1;
@@ -759,9 +688,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 					MoveTo(player.Center, 8, 20);
 					GetDir_ByPlayer();
 					if (Timer > 20)
-					{
 						PhamtomDis = MathHelper.Lerp(PhamtomDis, 120, 0.1f);
-					}
 				}
 
 				if (Timer is > 50 and < 80)
@@ -770,27 +697,23 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 					GetDir_ByPlayer();
 				}
 				if (Timer is > 70 and < 90)
-				{
 					PhamtomDis = MathHelper.Lerp(PhamtomDis, 0, 0.1f);
-				}
 				if (Timer is > 80 and < 90)
-				{
 					NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(player.Center).RotatedBy(NPC.spriteDirection * 1.57f) * 20f, 0.1f);
-				}
 				if (Timer is > 90 and < 140)
 				{
 					lightVisual = 1;
 					SpinAI(NPC, player.Center, NPC.spriteDirection * MathHelper.TwoPi / 30, true);
-					int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<TheFirefly.Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(1.3f, 4.2f));
+					int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(1.3f, 4.2f));
 					Main.dust[index].noGravity = true;
 					Main.dust[index].velocity = new Vector2(Main.rand.NextFloat(0.0f, 2.5f), Main.rand.NextFloat(1.8f, 5.5f)).RotatedByRandom(Math.PI * 2d);
 					if (Timer % 2 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
 					{
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.05f + new Vector2(0, -2), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.05f + new Vector2(0, -2), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
 						if (Main.getGoodWorld)
 						{
-							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.15f + new Vector2(-1.4f, -3), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
-							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.15f + new Vector2(1.4f, -3), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
+							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.15f + new Vector2(-1.4f, -3), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
+							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.15f + new Vector2(1.4f, -3), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
 						}
 					}
 					//GetDir_ByVel();
@@ -814,16 +737,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 				{
 					lightVisual += 1;
 					if (Main.netMode != NetmodeID.MultiplayerClient)
-					{
 						Create4DCube();
-					}
 				}
 				if (Timer >= 60 && Timer <= 210 && (Timer - 10) % 50 == 0)
 				{
 					int counts = Timer / 10;
 					for (int y = 0; y < counts; y++)
 					{
-						int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<TheFirefly.Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(1.3f, 4.2f));
+						int index = Dust.NewDust(NPC.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(1.3f, 4.2f));
 						Main.dust[index].noGravity = true;
 						Main.dust[index].velocity = new Vector2(Main.rand.NextFloat(0.0f, 2.5f), Main.rand.NextFloat(1.8f, 5.5f)).RotatedByRandom(Math.PI * 2d);
 					}
@@ -854,9 +775,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 				{
 					Timer = 0;
 					if (NPC.life < NPC.lifeMax * 0.5f)
-					{
 						NPC.ai[0]++;
-					}
 					else
 					{
 						NPC.ai[0] = 1;
@@ -867,9 +786,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 			if (NPC.ai[0] == 8)
 			{
 				if (++Timer < 60)
-				{
 					MoveTo(player.Center - new Vector2(0, 500), 10, 20);
-				}
 				if (Timer is > 60 and < 120)
 				{
 					GetDir_ByPlayer();
@@ -885,9 +802,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 					if (Timer % 8 == 0)
 					{
 						if (Timer < 140)
-						{
 							NPC.ai[2] += 2;
-						}
 						else
 						{
 							NPC.ai[2] -= 2;
@@ -905,19 +820,19 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 									r = Main.rand.NextFloat(0, 1f);
 									vel = (r + i * MathHelper.TwoPi / NPC.ai[2]).ToRotationVector2();
 									vel.Y *= 0.5f;
-									int ra = Dust.NewDust(NPC.Center, 0, 0, ModContent.DustType<Dusts.PureBlue>(), 0, 0, 0, default, 4f * Main.rand.NextFloat(0.7f, 2.9f));
+									int ra = Dust.NewDust(NPC.Center, 0, 0, ModContent.DustType<PureBlue>(), 0, 0, 0, default, 4f * Main.rand.NextFloat(0.7f, 2.9f));
 									Main.dust[ra].noGravity = true;
 									Main.dust[ra].velocity = vel * NPC.ai[2] * 8;
 
-									int index = Dust.NewDust(NPC.Center, 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.3f, 2.2f));
+									int index = Dust.NewDust(NPC.Center, 0, 0, ModContent.DustType<BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.3f, 2.2f));
 									Main.dust[index].noGravity = true;
 									Main.dust[index].velocity = vel * NPC.ai[2] * 1;
 
-									index = Dust.NewDust(NPC.Center, 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.3f, 2.2f));
+									index = Dust.NewDust(NPC.Center, 0, 0, ModContent.DustType<BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.3f, 2.2f));
 									Main.dust[index].noGravity = true;
 									Main.dust[index].velocity = vel * NPC.ai[2] * 1;
 
-									index = Dust.NewDust(NPC.Center, 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.3f, 2.2f));
+									index = Dust.NewDust(NPC.Center, 0, 0, ModContent.DustType<BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.3f, 2.2f));
 									Main.dust[index].noGravity = true;
 									Main.dust[index].velocity = vel * NPC.ai[2] * 1;
 								}
@@ -944,9 +859,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 					GetDir_ByPlayer();
 				}
 				if (Timer == 60 && Main.netMode != NetmodeID.MultiplayerClient)
-				{
 					Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<MothBall>(), NPC.damage / 4, 0, Main.myPlayer);
-				}
 				if (Timer is > 60 and < 700)
 				{
 					MoveTo(player.Center, 6, 20);
@@ -966,9 +879,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 					foreach (NPC NPC in Main.npc)//记录所有蝴蝶
 					{
 						if (NPC.active && NPC.type == ModContent.NPCType<Butterfly>())
-						{
 							butterfies.Push(NPC);
-						}
 					}
 
 					int scale = 15;
@@ -1050,9 +961,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 				if (Timer is > 120 and < 180)
 				{
 					if (Timer < 150)
-					{
 						PhamtomDis += 4;
-					}
 					else
 					{
 						PhamtomDis -= 4;
@@ -1061,9 +970,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 				if (Timer is > 340 and < 400)
 				{
 					if (Timer < 370)
-					{
 						PhamtomDis += 4;
-					}
 					else
 					{
 						PhamtomDis -= 4;
@@ -1084,9 +991,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 				{
 					MoveTo(player.Center + new Vector2(0, -200), 8, 20);
 					if (Timer is > 140 and < 160)
-					{
 						PhamtomDis += 5;
-					}
 					else
 					{
 						PhamtomDis -= 5;
@@ -1098,9 +1003,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 					NPC.velocity = NPC.DirectionTo(player.Center) * 20;
 				}
 				if (Timer > 220)
-				{
 					MoveTo(player.Center, 5, 20);
-				}
 				GetDir_ByPlayer();
 				if (Timer == 0)
 				{
@@ -1108,9 +1011,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 					foreach (NPC NPC in Main.npc)//记录所有蝴蝶
 					{
 						if (NPC.active && NPC.type == ModContent.NPCType<Butterfly>())
-						{
 							butterfies.Push(NPC);
-						}
 					}
 
 					float rot = 0.785f;
@@ -1119,9 +1020,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 					foreach (var keypoint in BSwordColors)
 					{
 						if (butterfies.Count == 0)
-						{
 							break;
-						}
 						NPC butterfly = butterfies.Pop();
 						butterfly.ai[0] = 3;            //切换为剑AI
 						butterfly.ai[1] = 0;            //清空计时器
@@ -1172,9 +1071,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 				{
 					MoveTo(player.Center + NPC.DirectionFrom(player.Center) * 600, 8, 20);
 					if (Timer < 140)
-					{
 						PhamtomDis += 5;
-					}
 					else
 					{
 						PhamtomDis -= 5;
@@ -1192,9 +1089,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 					foreach (NPC NPC in Main.npc)//记录所有蝴蝶
 					{
 						if (NPC.active && NPC.type == ModContent.NPCType<Butterfly>())
-						{
 							butterfies.Push(NPC);
-						}
 					}
 
 					float rot = 3.14f;
@@ -1203,9 +1098,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 					foreach (var keypoint in BFistColors)
 					{
 						if (butterfies.Count == 0)
-						{
 							break;
-						}
 						NPC butterfly = butterfies.Pop();
 						butterfly.ai[0] = 4;            //切换为拳AI
 						butterfly.ai[1] = 0;            //清空计时器
@@ -1248,9 +1141,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 				foreach (NPC NPC in Main.npc)
 				{
 					if (NPC.type == ModContent.NPCType<Butterfly>() && NPC.active)
-					{
 						counts++;
-					}
 				}
 				if (Timer == 0)
 				{
@@ -1268,20 +1159,18 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 				{
 					if (Main.netMode != NetmodeID.MultiplayerClient)
 					{
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, 1), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, 1), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
 						if (Main.expertMode && !Main.masterMode)
-						{
-							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, -2), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
-						}
+							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, -2), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
 						if (Main.masterMode)
 						{
-							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(-1.4f, -2), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
-							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(1.4f, -2), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
+							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(-1.4f, -2), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
+							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(1.4f, -2), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
 						}
 						if (Main.getGoodWorld)
 						{
-							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(-1.8f, -3), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
-							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(1.8f, -3), ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
+							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(-1.8f, -3), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
+							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(1.8f, -3), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer, 1);
 						}
 					}
 				}
@@ -1309,7 +1198,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 
 		private void MoveTo(Vector2 targetPos, float Speed, float n)
 		{
-			Vector2 targetVec = Utils.SafeNormalize(targetPos - NPC.Center, Vector2.Zero) * Speed;
+			Vector2 targetVec = (targetPos - NPC.Center).SafeNormalize(Vector2.Zero) * Speed;
 			NPC.velocity = (NPC.velocity * n + targetVec) / (n + 1);
 		}
 
@@ -1327,9 +1216,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 			foreach (var keypoint in keypoints)
 			{
 				if (butterflies.Count == 0)
-				{
 					break;
-				}
 				NPC butterfly = butterflies.Pop();
 				butterfly.ai[0] = AISwitch;
 				butterfly.ai[1] = 0;            //清空计时器
@@ -1358,19 +1245,15 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 			if (NPC.velocity.Length() > 10 && Main.netMode != NetmodeID.MultiplayerClient)
 			{
 				if (Timer % 12 == 0)
-				{
-					Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, Main.rand.NextFloat(0, 50f)).RotatedByRandom(3.14), NPC.velocity, ModContent.ProjectileType<TheFirefly.Projectiles.MothGrey>(), 0, 0f, Main.myPlayer, 1);
-				}
+					Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, Main.rand.NextFloat(0, 50f)).RotatedByRandom(3.14), NPC.velocity, ModContent.ProjectileType<MothGrey>(), 0, 0f, Main.myPlayer, 1);
 				if (Timer % 12 == 6)
-				{
-					Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, Main.rand.NextFloat(0, 50f)).RotatedByRandom(3.14), NPC.velocity, ModContent.ProjectileType<TheFirefly.Projectiles.MothGrey>(), 0, 0f, Main.myPlayer, -1);
-				}
+					Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, Main.rand.NextFloat(0, 50f)).RotatedByRandom(3.14), NPC.velocity, ModContent.ProjectileType<MothGrey>(), 0, 0f, Main.myPlayer, -1);
 			}
 		}
 
 		private void GetDir_ByPlayer()
 		{
-			NPC.direction = NPC.spriteDirection = (NPC.Center.X - Player.Center.X) > 0 ? -1 : 1;
+			NPC.direction = NPC.spriteDirection = NPC.Center.X - Player.Center.X > 0 ? -1 : 1;
 		}
 
 		private void GetDir_ByVel()
@@ -1382,9 +1265,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 		public override void HitEffect(int hitDirection, double damage)
 		{
 			if (lightVisual < 1)
-			{
 				lightVisual += 0.3f;
-			}
 		}
 
 		public override void OnHitPlayer(Player player, int damage, bool crit)
@@ -1393,21 +1274,21 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 
 		public override void ModifyNPCLoot(NPCLoot npcLoot)
 		{
-			npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<Items.BossDrop.CorruptMothTreasureBag>()));
-			npcLoot.Add(ItemDropRule.MasterModeCommonDrop(ModContent.ItemType<Items.BossDrop.MothRelic>()));
-			npcLoot.Add(ItemDropRule.ByCondition(new Conditions.NotExpert(), ModContent.ItemType<Items.Weapons.DarknessFan>(), 100, 1, 1, 1)); //Classic Darkness Fan
+			npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<CorruptMothTreasureBag>()));
+			npcLoot.Add(ItemDropRule.MasterModeCommonDrop(ModContent.ItemType<MothRelic>()));
+			npcLoot.Add(ItemDropRule.ByCondition(new Conditions.NotExpert(), ModContent.ItemType<DarknessFan>(), 100, 1, 1, 1)); //Classic Darkness Fan
 			if (Main.expertMode)
-				npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsExpert(), ModContent.ItemType<Items.Weapons.DarknessFan>(), 25, 1, 1, 1)); //Expert Darkness Fan
+				npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsExpert(), ModContent.ItemType<DarknessFan>(), 25, 1, 1, 1)); //Expert Darkness Fan
 			else if (Main.masterMode)
-				npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsMasterMode(), ModContent.ItemType<Items.Weapons.DarknessFan>(), 10, 1, 1, 1)); //Master Darkness Fan
+				npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsMasterMode(), ModContent.ItemType<DarknessFan>(), 10, 1, 1, 1)); //Master Darkness Fan
 			npcLoot.Add(ItemDropRule.ByCondition(new Conditions.NotExpert(), ModContent.ItemType<Items.Weapons.GlowBeadGun>(), 80, 1, 1, 1)); //Classic Bead Gun
 			if (Main.expertMode)
 				npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsExpert(), ModContent.ItemType<Items.Weapons.GlowBeadGun>(), 20, 1, 1, 1)); //Expert Bead Gun
 			else if (Main.masterMode)
 				npcLoot.Add(ItemDropRule.ByCondition(new Conditions.IsMasterMode(), ModContent.ItemType<Items.Weapons.GlowBeadGun>(), 8, 1, 1, 1)); //Master Bead Gun
 
-			LeadingConditionRule rule = new LeadingConditionRule(new Conditions.NotExpert());
-			rule.OnSuccess(ItemDropRule.OneFromOptions(1, ModContent.ItemType<Items.Weapons.ShadowWingBow>(), ModContent.ItemType<Items.Weapons.ScaleWingBlade>(), ModContent.ItemType<Items.Weapons.PhosphorescenceGun>(), ModContent.ItemType<Items.Weapons.EvilChrysalis>(), ModContent.ItemType<Items.Weapons.DustOfCorrupt>()));
+			var rule = new LeadingConditionRule(new Conditions.NotExpert());
+			rule.OnSuccess(ItemDropRule.OneFromOptions(1, ModContent.ItemType<Items.Weapons.ShadowWingBow>(), ModContent.ItemType<ScaleWingBlade>(), ModContent.ItemType<Items.Weapons.PhosphorescenceGun>(), ModContent.ItemType<Items.Weapons.EvilChrysalis>(), ModContent.ItemType<DustOfCorrupt>()));
 
 			npcLoot.Add(rule);
 
@@ -1468,9 +1349,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 					Vector2 v2Pos = Projection2(pos, new Vector2(Main.screenWidth, Main.screenHeight) / 2, out float scale, 1000);
 					float alpha = 1;
 					if (i is 2 or 3)
-					{
 						alpha *= 0.5f;
-					}
 
 					vertices.Add(new(v2Pos, color * alpha, Vector3.Zero));
 					;
@@ -1486,7 +1365,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 		{
 			float k2 = -viewZ / (v3.Z - viewZ);
 			scale = k2;
-			Vector2 v = new Vector2(v3.X, v3.Y);
+			var v = new Vector2(v3.X, v3.Y);
 			return v + (k2 - 1) * (v - center);
 		}
 
@@ -1494,13 +1373,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses
 		{
 			SpriteEffects effects = SpriteEffects.None;
 			if (NPC.spriteDirection == 1)
-			{
 				effects = SpriteEffects.FlipHorizontally;
-			}
 			if (NPC.ai[0] == 6 && Timer > 260)
-			{
 				DrawCube();
-			}
 
 			Texture2D tx = ModContent.Request<Texture2D>(Texture).Value;
 			Texture2D GlowTexture = MythContent.QuickTexture("TheFirefly/NPCs/Bosses/CorruptMoth_Glow");

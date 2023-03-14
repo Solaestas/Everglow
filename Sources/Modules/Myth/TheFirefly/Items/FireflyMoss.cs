@@ -1,4 +1,6 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items
+﻿using Everglow.Myth;
+
+namespace Everglow.Myth.TheFirefly.Items
 {
 	public class FireflyMoss : ModItem
 	{

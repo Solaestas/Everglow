@@ -1,6 +1,6 @@
 ﻿using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Typeless
+namespace Everglow.Myth.MiscItems.Projectiles.Typeless
 {
 	public class FlowerPetalPurple : ModProjectile
 	{
@@ -23,9 +23,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Typeless
 		public override Color? GetAlpha(Color lightColor)
 		{
 			if (Projectile.timeLeft < 60)
-			{
 				return new Color?(new Color(0.5f * Projectile.timeLeft / 60f, 0.5f * Projectile.timeLeft / 60f, 0.5f * Projectile.timeLeft / 60f, 0));
-			}
 			else
 			{
 				return new Color?(new Color(0.5f, 0.5f, 0.5f, 0));
@@ -42,13 +40,9 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Typeless
 				Projectile.timeLeft = TLF;
 			}
 			if (num2 == 0)
-			{
 				num2 = Main.rand.Next(-100, 100) / 1000f;
-			}
 			if (Projectile.timeLeft < TLF - 20)
-			{
 				Projectile.friendly = true;
-			}
 			if (Projectile.velocity.Length() > 0.1f)
 			{
 				Projectile.frameCounter++;
@@ -58,35 +52,27 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Typeless
 					Projectile.frameCounter = 0;
 				}
 				if (Projectile.frame > 7)
-				{
 					Projectile.frame = 0;
-				}
 			}
 			if (!Hittil)
 			{
 				Projectile.rotation += num2;
 				if (Projectile.velocity.Length() < 3.6f && Projectile.timeLeft > 60)
-				{
 					Projectile.velocity.Y += 0.025f;
-				}
 				if (Projectile.timeLeft > 60)
-				{
-					Projectile.velocity.X += (float)(Math.Sin(Projectile.timeLeft / 30f)) * 0.035f;
-				}
+					Projectile.velocity.X += (float)Math.Sin(Projectile.timeLeft / 30f) * 0.035f;
 				if (Projectile.velocity.Length() > 3.6f)
-				{
 					Projectile.velocity *= 0.96f;
-				}
 				Projectile.velocity += new Vector2(Main.windSpeedCurrent * 0.05f, 0);
 			}
 			if (Projectile.timeLeft >= 60)
 			{
 				Projectile.alpha = 0;
-				Lighting.AddLight(Projectile.Center, (float)(255 - Projectile.alpha) * 0.12f / 255f, (float)(255 - Projectile.alpha) * 0f / 255f, (float)(255 - Projectile.alpha) * 0.12f / 255f);
+				Lighting.AddLight(Projectile.Center, (255 - Projectile.alpha) * 0.12f / 255f, (255 - Projectile.alpha) * 0f / 255f, (255 - Projectile.alpha) * 0.12f / 255f);
 			}
 			else
 			{
-				Lighting.AddLight(Projectile.Center, (float)(255 - Projectile.alpha) * 0.12f / 255f * Projectile.timeLeft / 60f, (float)(255 - Projectile.alpha) * 0f / 255f * Projectile.timeLeft / 60f, (float)(255 - Projectile.alpha) * 0.12f / 255f * Projectile.timeLeft / 60f);
+				Lighting.AddLight(Projectile.Center, (255 - Projectile.alpha) * 0.12f / 255f * Projectile.timeLeft / 60f, (255 - Projectile.alpha) * 0f / 255f * Projectile.timeLeft / 60f, (255 - Projectile.alpha) * 0.12f / 255f * Projectile.timeLeft / 60f);
 				Projectile.alpha = (int)((60 - Projectile.timeLeft) / 60f * 255f);
 			}
 		}
@@ -126,10 +112,10 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Typeless
 		}
 		public override bool PreDraw(ref Color lightColor)
 		{
-			Texture2D texture2D = (Texture2D)ModContent.Request<Texture2D>(Texture);
+			var texture2D = (Texture2D)ModContent.Request<Texture2D>(Texture);
 			int num = texture2D.Height / Main.projFrames[Projectile.type];
 			int y = num * Projectile.frame;
-			Main.spriteBatch.Draw(texture2D, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY + Projectile.height / 2f), new Rectangle?(new Rectangle(0, y, texture2D.Width, num)), Projectile.GetAlpha(lightColor), Projectile.rotation, new Vector2((float)texture2D.Width / 2f, (float)num / 2f), Projectile.scale, SpriteEffects.None, 0f);
+			Main.spriteBatch.Draw(texture2D, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY + Projectile.height / 2f), new Rectangle?(new Rectangle(0, y, texture2D.Width, num)), Projectile.GetAlpha(lightColor), Projectile.rotation, new Vector2(texture2D.Width / 2f, num / 2f), Projectile.scale, SpriteEffects.None, 0f);
 			return false;
 		}
 	}

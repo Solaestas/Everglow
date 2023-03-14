@@ -1,6 +1,7 @@
-using Everglow.Sources.Modules.MythModule.TheFirefly.NPCs.Bosses;
+using Everglow.Myth;
+using Everglow.Myth.TheFirefly.NPCs.Bosses;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items
+namespace Everglow.Myth.TheFirefly.Items
 {
 	public class EvilCocoon : ModItem
 	{

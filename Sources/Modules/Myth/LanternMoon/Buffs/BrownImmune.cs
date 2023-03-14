@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.LanternMoon.Buffs
+﻿namespace Everglow.Myth.LanternMoon.Buffs
 {
 	public class BrownImmune : ModBuff
 	{

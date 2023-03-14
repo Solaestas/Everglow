@@ -1,4 +1,4 @@
-namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.DemonScythe
+namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.DemonScythe
 {
 	public class DemoSpark : ModProjectile
 	{
@@ -25,7 +25,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
 
 		public override void AI()
 		{
-			int MaxC = (int)(Projectile.ai[0]);
+			int MaxC = (int)Projectile.ai[0];
 			MaxC = Math.Min(26, MaxC);
 			if (Projectile.timeLeft >= 200)
 			{
@@ -43,19 +43,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
 					SparkOldPos[x, y] = SparkOldPos[x, y - 1];
 				}
 				if (Collision.SolidCollision(SparkOldPos[x, 0] + new Vector2(SparkVelocity[x].X, 0), 0, 0))
-				{
 					SparkVelocity[x].X *= -0.95f;
-				}
 				if (Collision.SolidCollision(SparkOldPos[x, 0] + new Vector2(0, SparkVelocity[x].Y), 0, 0))
-				{
 					SparkVelocity[x].Y *= -0.95f;
-				}
 				SparkOldPos[x, 0] += SparkVelocity[x];
 
 				if (SparkVelocity[x].Length() > 0.3f)
-				{
 					SparkVelocity[x] *= 0.95f;
-				}
 				SparkVelocity[x].Y += 0.001f;
 			}
 		}
@@ -70,27 +64,23 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
 
 		private void DrawSpark(Color c0, float width, Texture2D tex)
 		{
-			int MaxC = (int)(Projectile.ai[0]);
+			int MaxC = (int)Projectile.ai[0];
 			MaxC = Math.Min(26, MaxC);
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 			for (int x = 0; x < MaxC; x++)
 			{
 				int TrueL = 0;
 				for (int i = 1; i < 40; ++i)
 				{
 					if (SparkOldPos[x, i] == Vector2.Zero)
-					{
 						break;
-					}
 
 					TrueL++;
 				}
 				for (int i = 1; i < 40; ++i)
 				{
 					if (SparkOldPos[x, i] == Vector2.Zero)
-					{
 						break;
-					}
 
 					var normalDir = SparkOldPos[x, i - 1] - SparkOldPos[x, i];
 					normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
@@ -114,9 +104,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
 				Main.graphics.GraphicsDevice.Textures[0] = t;
 			}
 			if (bars.Count > 3)
-			{
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-			}
 		}
 
 		public override bool PreKill(int timeLeft)
@@ -131,13 +119,9 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
 		public override bool OnTileCollide(Vector2 oldVelocity)
 		{
 			if (Projectile.velocity.X != oldVelocity.X)
-			{
 				Projectile.velocity.X = -oldVelocity.X;
-			}
 			if (Projectile.velocity.Y != oldVelocity.Y)
-			{
 				Projectile.velocity.Y = -oldVelocity.Y;
-			}
 			Projectile.velocity *= 0.98f;
 
 			return false;

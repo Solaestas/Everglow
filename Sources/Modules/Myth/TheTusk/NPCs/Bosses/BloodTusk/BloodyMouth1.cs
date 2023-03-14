@@ -1,7 +1,7 @@
-﻿using Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles;
+﻿using Everglow.Myth.Bosses.Acytaea.Projectiles;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
+namespace Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk
 {
 	public class BloodyMouth1 : ModNPC
 	{
@@ -43,9 +43,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 			NPC.TargetClosest(false);
 
 			if (NPC.collideX && Down)
-			{
 				NPC.active = false;
-			}
 			if (NPC.collideY)
 			{
 				if (V[0] == VMax[0])
@@ -98,31 +96,23 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 						{
 							V[1] *= 0.99f;
 							if (V[1].Y <= 15f)
-							{
 								V[1] *= 0.96f;
-							}
 						}
 
 						if (V[1].Y <= 2.5f)
 						{
 							VMax[2].X *= 0.9f;
 							if (NPC.rotation > -1.9f)
-							{
 								NPC.rotation = -1.57f + VMax[2].X;
-							}
 							else
 							{
 								if (VMax[2].Y == 0)
-								{
 									VMax[2].Y = 1;
-								}
 							}
 						}
 					}
 					if (Coo <= 0)
-					{
 						squ = true;
-					}
 				}
 			}
 			if (squ)
@@ -132,9 +122,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 				{
 					NPC.alpha += 15;
 					if (NPC.alpha > 240)
-					{
 						NPC.active = false;
-					}
 				}
 			}
 			/*if (!Main.gamePaused)
@@ -154,13 +142,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 			{
 				Dam = 150;
 				if (Main.expertMode)
-				{
 					Dam = 200;
-				}
 				if (Main.masterMode)
-				{
 					Dam = 300;
-				}
 			}
 		}
 
@@ -172,9 +156,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 		public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 		{
 			if (!startFight)
-			{
 				return false;
-			}
 			Color color = Lighting.GetColor((int)(NPC.Center.X / 16d), (int)(NPC.Center.Y / 16d));
 			color = NPC.GetAlpha(color) * ((255 - NPC.alpha) / 255f);
 			Texture2D t0 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/BloodyMouth1").Value;
@@ -187,13 +169,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 						if (!Main.LocalPlayer.dead)
 						{
 							if ((Main.LocalPlayer.Center - NPC.Center + new Vector2(-x, 0).RotatedBy(NPC.rotation)).Length() < 30)
-							{
 								Projectile.NewProjectile(null, Main.LocalPlayer.Center, Vector2.Zero, ModContent.ProjectileType<playerHit>(), Dam / 8, 1, 0, 0, 0);
-							}
 							if ((Main.LocalPlayer.Center - NPC.Center + new Vector2(-x, 0).RotatedBy(NPC.rotation)).Length() < 30)
-							{
 								Projectile.NewProjectile(null, Main.LocalPlayer.Center, Vector2.Zero, ModContent.ProjectileType<playerHit>(), Dam / 8, 1, 0, 0, 0);
-							}
 						}
 					}
 				}
@@ -202,11 +180,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 			{
 				if (Coo >= 120)
 				{
-					int xz = 910 - (Coo * 2);
+					int xz = 910 - Coo * 2;
 					if (xz > t0.Height)
-					{
 						xz = t0.Height;
-					}
 					Main.spriteBatch.Draw(t0, NPC.position - Main.screenPosition + new Vector2(96, 0).RotatedBy(NPC.rotation) + V[1] - new Vector2(0, 8), new Rectangle(0, 0, t0.Width, xz), color, NPC.rotation, new Vector2(t0.Width / 2f, t0.Height / 2f), 1f, SpriteEffects.None, 0f);
 				}
 				else
@@ -221,9 +197,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 						}
 
 						if (V[1].Y > VMax[1].Y + 32)
-						{
 							NPC.active = false;
-						}
 					}
 
 					Main.spriteBatch.Draw(t0, NPC.position - Main.screenPosition + new Vector2(96, 0).RotatedBy(NPC.rotation) + V[1] + new Vector2(0, -52), new Rectangle((int)V[1].Y + 160, 0, t0.Width - (int)V[1].Y - 40, t0.Height), color, NPC.rotation, new Vector2((t0.Width - (int)V[1].Y - 40) / 2f, t0.Height / 2f), 1f, SpriteEffects.None, 0f);

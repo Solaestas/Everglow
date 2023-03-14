@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Dusts
+﻿namespace Everglow.Myth.MiscItems.Dusts
 {
 	public class PureWhite : ModDust
 	{
@@ -19,9 +19,7 @@
 
 			Lighting.AddLight(dust.position, dust.scale * 0.05f, dust.scale * 0.05f, dust.scale * 0.05f);
 			if (dust.scale < 0.25f)
-			{
 				dust.active = false;
-			}
 			return false;
 		}
 		public override Color? GetAlpha(Dust dust, Color lightColor)

@@ -1,4 +1,6 @@
-namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
+using Everglow.Myth.Common;
+
+namespace Everglow.Myth.Bosses.Acytaea.Projectiles
 {
 	public class BloodBladeShadow : ModProjectile
 	{
@@ -36,13 +38,11 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 			Projectile.rotation = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + Math.PI * 0.25);
 			Projectile.velocity *= 1 + 0.5f / Projectile.velocity.Length();
 			if (Projectile.penetrate <= 0)
-			{
 				Projectile.Kill();
-			}
 		}
 		public override bool PreDraw(ref Color lightColor)
 		{
-			Texture2D texture2D = (Texture2D)ModContent.Request<Texture2D>(Texture);
+			var texture2D = (Texture2D)ModContent.Request<Texture2D>(Texture);
 			Main.spriteBatch.Draw(texture2D, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, Projectile.GetAlpha(lightColor), Projectile.rotation, new Vector2(61, 61), Projectile.scale, SpriteEffects.None, 0f);
 			return false;
 		}
@@ -51,16 +51,14 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 		{
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-			List<Vertex2D> bars = new List<Vertex2D>();
-			Effect ef = Common.MythContent.QuickEffect("Effects/Trail");
+			var bars = new List<Vertex2D>();
+			Effect ef = MythContent.QuickEffect("Effects/Trail");
 			// 把所有的点都生成出来，按照顺序
 			int width = 40;
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
 				if (Projectile.oldPos[i] == Vector2.Zero)
-				{
 					break;
-				}
 				//spriteBatch.Draw(Main.magicPixel, Projectile.oldPos[i] - Main.screenPosition,
 				//    new Rectangle(0, 0, 1, 1), Color.White, 0f, new Vector2(0.5f, 0.5f), 5f, SpriteEffects.None, 0f);
 
@@ -75,7 +73,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(30, 30), color, new Vector3((float)Math.Sqrt(factor), 0, w)));
 			}
 
-			List<Vertex2D> triangleList = new List<Vertex2D>();
+			var triangleList = new List<Vertex2D>();
 
 			if (bars.Count > 2)
 			{

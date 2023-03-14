@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Dusts
+﻿namespace Everglow.Myth.MiscItems.Weapons.Slingshots.Dusts
 {
 	public class LittleJungleSpore : ModDust
 	{
@@ -43,9 +43,7 @@
 				dust.velocity = v0;
 			}
 			if (dust.scale < 0.01f)
-			{
 				dust.active = false;
-			}
 			return false;
 		}
 		public override Color? GetAlpha(Dust dust, Color lightColor)

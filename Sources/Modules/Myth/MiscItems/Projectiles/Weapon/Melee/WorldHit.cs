@@ -1,7 +1,7 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
 using Terraria.DataStructures;
 
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
+namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Melee
 {
 	class WorldHit : ModProjectile, IWarpProjectile
 	{
@@ -22,7 +22,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
 		{
 			for (int f = 0; f < Projectile.ai[0] * 30f; f++)
 			{
-				Dust d = Dust.NewDustDirect(Projectile.Center - new Vector2(4), 0, 0, DustID.GemEmerald, 0, 0, 0, default, Main.rand.NextFloat(2f));
+				var d = Dust.NewDustDirect(Projectile.Center - new Vector2(4), 0, 0, DustID.GemEmerald, 0, 0, 0, default, Main.rand.NextFloat(2f));
 				d.velocity = new Vector2(0, 25).RotatedByRandom(6.283) * Main.rand.NextFloat(1f);
 				d.noGravity = true;
 			}
@@ -67,16 +67,12 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
 		public override void PostDraw(Color lightColor)
 		{
 			if (FirstRo == 0)
-			{
 				FirstRo = Main.rand.NextFloat(0, 6.283f);
-			}
 			if (SecondRo == 0)
-			{
 				SecondRo = Main.rand.NextFloat(0, 6.283f);
-			}
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 			ef = MythContent.QuickEffect("Effects/FadeCurseGreen");
 			float widx = Projectile.timeLeft / 120f;
 			float widxM = 1f - widx;
@@ -92,9 +88,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
 				var w = MathHelper.Lerp(1f, 0.05f, 0.5f);
 
 				if (width < radious)
-				{
 					bars.Add(new Vertex2D(Projectile.Center, color, new Vector3(factor, 0, w)));
-				}
 				else
 				{
 					bars.Add(new Vertex2D(vDp + Projectile.Center + normalDir * width, color, new Vector3(factor, 1, w)));
@@ -123,16 +117,14 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
 			for (int i = 0; i < 23; i++)
 			{
 
-				List<Vertex2D> barsII = new List<Vertex2D>();
+				var barsII = new List<Vertex2D>();
 
 
 				for (int z = 1; z < 18; ++z)
 				{
 					float widthII = Math.Clamp((DrawLine[i, z] - DrawLine[i, z - 1]).Length(), 0, 20 * Projectile.ai[0]);//宽度为距离(速度决定,上限20)
 					if (z > 13)
-					{
 						widthII *= (18 - z) / 5f;
-					}
 					var normalDir = Vector2.Normalize(DrawLine[i, z] - DrawLine[i, z - 1]).RotatedBy(1.57);
 					var factor = z / 18f;
 					var w = MathHelper.Lerp(1f, 0.05f, 0.5f);

@@ -1,7 +1,7 @@
 ﻿using Terraria.GameContent;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
+namespace Everglow.Myth.TheTusk.Projectiles.Weapon
 {
 	public class SplieSpineBullet : ModProjectile
 	{
@@ -33,10 +33,10 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 			{
 				for (int j = 0; j < 200; j++)
 				{
-					if ((Main.npc[j].Center - (Projectile.Center + (Projectile.velocity * 1.5f))).Length() < 120 && !Main.npc[j].dontTakeDamage && !Main.npc[j].friendly && Main.npc[j].active)
+					if ((Main.npc[j].Center - (Projectile.Center + Projectile.velocity * 1.5f)).Length() < 120 && !Main.npc[j].dontTakeDamage && !Main.npc[j].friendly && Main.npc[j].active)
 					{
-						Vector2 v0 = Vector2.Normalize(Projectile.velocity);
-						Vector2 v1 = Vector2.Normalize(Main.npc[j].Center - Projectile.Center);
+						var v0 = Vector2.Normalize(Projectile.velocity);
+						var v1 = Vector2.Normalize(Main.npc[j].Center - Projectile.Center);
 						float CosAng = Vector2.Dot(v0, v1);//夹角余弦值大于0.707,即为45°
 						if (CosAng > 0.707)//爆
 						{
@@ -48,13 +48,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 
 			}
 			if (Tokill is >= 0 and <= 2)
-			{
 				Projectile.Kill();
-			}
 			if (Tokill > 0)
-			{
 				Tokill--;
-			}
 			if (Tokill is <= 44 and > 0)
 			{
 				Projectile.position = Projectile.oldPosition;
@@ -70,7 +66,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 			{
 				Vector2 newVelocity = Projectile.velocity.RotatedByRandom(MathHelper.ToRadians(35));
 				newVelocity *= 0.6f - Main.rand.NextFloat(0.2f);
-				Projectile.NewProjectileDirect(Projectile.InheritSource(Projectile), Projectile.Center, newVelocity, (int)Projectile.ai[1], Projectile.damage, Projectile.knockBack, Projectile.owner);
+				Projectile.NewProjectileDirect(Terraria.Entity.InheritSource(Projectile), Projectile.Center, newVelocity, (int)Projectile.ai[1], Projectile.damage, Projectile.knockBack, Projectile.owner);
 			}
 			for (int i = 0; i < 26; i++)
 			{
@@ -111,35 +107,29 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 		{
 			Texture2D t = TextureAssets.Projectile[Math.Clamp((int)Projectile.ai[1], 0, TextureAssets.Projectile.Length)].Value;
 			//获取贴图中央颜色像素块,后面用于光照
-			Color[] Lig = new Color[t.Width * t.Height];
+			var Lig = new Color[t.Width * t.Height];
 			t.GetData(Lig);
-			Color c0 = Lig[(int)((t.Width * t.Height / 2f) - 1)];
+			Color c0 = Lig[(int)(t.Width * t.Height / 2f - 1)];
 
 
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 			float width = 2 * Projectile.scale;
 			if (Projectile.timeLeft < 60)
-			{
 				width = Projectile.timeLeft / 30f * Projectile.scale;
-			}
 			TrueL = 0;
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
 				if (Projectile.oldPos[i] == Vector2.Zero)
-				{
 					break;
-				}
 
 				TrueL++;
 			}
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
 				if (Projectile.oldPos[i] == Vector2.Zero)
-				{
 					break;
-				}
 
 				var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
 				normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
@@ -150,13 +140,11 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 				float Tb = c0.B / 300f;
 				float mulLight = 0.2f;
 				if (Projectile.timeLeft < 60f)
-				{
 					mulLight = Projectile.timeLeft / 300f;
-				}
 				float lightValue = (255 - Projectile.alpha) / 50f * mulLight * (1 - factor);
 				Lighting.AddLight(Projectile.oldPos[i], Tr * lightValue, Tg * lightValue, Tb * lightValue);
-				bars.Add(new Vertex2D(Projectile.oldPos[i] + (normalDir * width) + new Vector2(4f, 4f) - Main.screenPosition, new Color(254, 254, 254, 0), new Vector3(1, factor, 0)));
-				bars.Add(new Vertex2D(Projectile.oldPos[i] + (normalDir * -width) + new Vector2(4f, 4f) - Main.screenPosition, new Color(254, 254, 254, 0), new Vector3(0, factor, 0)));
+				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(4f, 4f) - Main.screenPosition, new Color(254, 254, 254, 0), new Vector3(1, factor, 0)));
+				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(4f, 4f) - Main.screenPosition, new Color(254, 254, 254, 0), new Vector3(0, factor, 0)));
 			}
 			Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);

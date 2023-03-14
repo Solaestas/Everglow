@@ -1,6 +1,7 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
+using Everglow.Myth.MagicWeaponsReplace.Projectiles.LunarFlare.Walls;
 
-namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.LunarFlare
+namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.LunarFlare
 {
 	internal class LunarFlareArray : ModProjectile
 	{
@@ -25,9 +26,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
 			{
 				Projectile.timeLeft = player.itemTime + 99;
 				if (Timer < 99)
-				{
 					Timer++;
-				}
 				if (Timer % 5 == 0)
 				{
 					SubStars.Add(new SubStar(Projectile, SubStars.Count)
@@ -42,9 +41,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
 			{
 				Timer--;
 				if (Timer < 0)
-				{
 					Projectile.Kill();
-				}
 			}
 			Projectile.scale = Timer / 99f;
 			Player.CompositeArmStretchAmount PCAS = Player.CompositeArmStretchAmount.Full;
@@ -55,24 +52,20 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
 			Projectile.rotation = player.fullRotation;
 
 			if (Lighting.Mode != Terraria.Graphics.Light.LightMode.Color && Lighting.Mode != Terraria.Graphics.Light.LightMode.White)
-			{
 				return;
-			}
 			RingPos = RingPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
 			Projectile.velocity = RingPos;
 			for (int x = (int)(-Timer * 3.5f); x <= Timer * 3.5f; x += 8)
 			{
 				for (int y = (int)(-Timer * 3.5f); y <= Timer * 3.5f; y += 8)
 				{
-					Vector2 AddRange = new Vector2(x, y);
+					var AddRange = new Vector2(x, y);
 					if (AddRange.Length() < Timer * 3.5f)
 					{
 						Vector2 tPos = Projectile.Center + AddRange;
 						Tile tile = Main.tile[(int)(tPos.X / 16f), (int)(tPos.Y / 16f)];
 						if (tile.WallType == 0)
-						{
-							tile.WallType = (ushort)ModContent.WallType<Walls.NightEffectWall>();
-						}
+							tile.WallType = (ushort)ModContent.WallType<NightEffectWall>();
 					}
 				}
 			}
@@ -124,9 +117,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
 				this.index = index;
 				//在非服务器上请求图片
 				if (Main.netMode != NetmodeID.Server)
-				{
 					Texture ??= ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MagicWeaponsReplace/Projectiles/LunarFlare/Star", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-				}
 			}
 			internal void SendExtraAI(BinaryWriter writer)
 			{
@@ -155,9 +146,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
 					drawdelay--;
 					//如果绘制延迟结束重置随机起始角度
 					if (drawdelay == 0)
-					{
 						rotation = Main.rand.NextFloat(MathHelper.TwoPi);
-					}
 					return;
 				}
 				//更新旋转角度
@@ -189,17 +178,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
 				scale = Math.Clamp(scale, 0, scalemax);
 				//scale为0说明已经完成依次绘制,赋予随机绘制延迟
 				if (scale == 0)
-				{
 					drawdelay = Main.rand.Next(15, 60);
-				}
 			}
 			internal void Draw()
 			{
 				//绘制延迟(不应绘制)或者图片异常(不能绘制)时不绘制
 				if (drawdelay > 0 || Texture is null)
-				{
 					return;
-				}
 				//获得持有者玩家对象
 				Player player = Main.player[parent.owner];
 				//已玩家中心计算螺旋位置,基础偏移16像素(避免被玩家遮挡),每偏向外延展8*k像素
@@ -221,21 +206,15 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
 		public override void OnModLoad()
 		{
 			if (Main.netMode != NetmodeID.Server)
-			{
 				Everglow.HookSystem.AddMethod(DrawStarrySky, Commons.Core.CallOpportunity.PostDrawBG);
-			}
 		}
 
 		public void DrawStarrySky()
 		{
 			if (Lighting.Mode != Terraria.Graphics.Light.LightMode.Color && Lighting.Mode != Terraria.Graphics.Light.LightMode.White)
-			{
 				return;
-			}
 			if (Main.WaveQuality < 3)
-			{
 				return;
-			}
 			//从RT池子里抓3个
 			var renderTargets = Everglow.RenderTargetPool.GetRenderTarget2DArray(4);
 			RenderTarget2D screen = renderTargets.Resource[0];

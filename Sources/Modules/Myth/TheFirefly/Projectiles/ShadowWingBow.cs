@@ -1,9 +1,9 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories;
+﻿using Everglow.Myth.Common;
+using Everglow.Myth.TheFirefly.Items.Accessories;
 using Terraria.Audio;
 using Terraria.GameContent;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
+namespace Everglow.Myth.TheFirefly.Projectiles
 {
 	internal class ShadowWingBow : ModProjectile
 	{
@@ -60,16 +60,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 				if (player.direction == -1)
 				{
 					if (AddHeadRotation is >= 0.57f and < 2)
-					{
 						AddHeadRotation = 0.57f;
-					}
 				}
 				else
 				{
 					if (AddHeadRotation <= -0.57f)
-					{
 						AddHeadRotation = -0.57f;
-					}
 				}
 			}
 			else
@@ -77,16 +73,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 				if (player.direction == -1)
 				{
 					if (AddHeadRotation is >= 2 and < 5.71f)
-					{
 						AddHeadRotation = 5.71f;
-					}
 				}
 				else
 				{
 					if (AddHeadRotation >= 0.57f)
-					{
 						AddHeadRotation = 0.57f;
-					}
 				}
 			}
 			Tplayer.HeadRotation = AddHeadRotation;
@@ -126,7 +118,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			}
 			for (int s = 0; s < 5; s++)
 			{
-				Arcol[s] = Math.Clamp((float)((Math.Abs(s - 2.5) * 100) + (Energy - 90) * 7) / 255f, 0, 1f) * 0.6f;
+				Arcol[s] = Math.Clamp((float)(Math.Abs(s - 2.5) * 100 + (Energy - 90) * 7) / 255f, 0, 1f) * 0.6f;
 			}
 			Vector2 v0 = Main.MouseWorld - Main.player[Projectile.owner].Center;
 
@@ -163,21 +155,17 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			if (!Main.mouseLeft && Release)//发射
 			{
 				SoundEngine.PlaySound(SoundID.Item5, Projectile.Center);
-				Projectile.NewProjectileDirect(Projectile.InheritSource(Projectile), Projectile.Center, Vector2.Normalize(v0) * (Energy + 6) / 9f, (int)(Projectile.ai[0]), Projectile.damage + Energy / 5, Projectile.knockBack, player.whoAmI).extraUpdates++;
+				Projectile.NewProjectileDirect(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Vector2.Normalize(v0) * (Energy + 6) / 9f, (int)Projectile.ai[0], Projectile.damage + Energy / 5, Projectile.knockBack, player.whoAmI).extraUpdates++;
 				for (int s = 0; s < 5; s++)
 				{
 					if (Arcol[s] > 0)
-					{
-						Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center, Vector2.Normalize(v0).RotatedBy(ArRot[s]) * ArVel[s] * 1f, ModContent.ProjectileType<MothArrow>(), (int)((Projectile.damage + Energy / 5) * 0.47), Projectile.knockBack, player.whoAmI, 0, player.HeldItem.crit + player.GetCritChance(DamageClass.Ranged) + player.GetCritChance(DamageClass.Generic));
-					}
+						Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Vector2.Normalize(v0).RotatedBy(ArRot[s]) * ArVel[s] * 1f, ModContent.ProjectileType<MothArrow>(), (int)((Projectile.damage + Energy / 5) * 0.47), Projectile.knockBack, player.whoAmI, 0, player.HeldItem.crit + player.GetCritChance(DamageClass.Ranged) + player.GetCritChance(DamageClass.Generic));
 				}
 				Energy = 0;
 				Release = false;
 			}
 			if (Projectile.ai[1] > 0)
-			{
 				Projectile.ai[1] -= 1f;
-			}
 			if (!Main.mouseLeft && !Release)
 			{
 				if (Projectile.ai[1] > 0)
@@ -189,15 +177,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 				{
 					Tplayer.HeadRotation = 0;
 					if (Projectile.timeLeft > 10)
-					{
 						Projectile.timeLeft = 10;
-					}
 				}
 			}
 			if (Ran == -1)
-			{
 				Ran = Main.rand.Next(9);
-			}
 		}
 
 		public override bool PreDraw(ref Color lightColor)
@@ -215,11 +199,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 
 			Vector2 basePos = player.MountedCenter + vec * 7 + new Vector2(0, 8);
 			float b0 = Math.Clamp(Energy / 2f, 0, 60);
-			float b3 = (b0 / 60f) * (b0 / 60f);
+			float b3 = b0 / 60f * (b0 / 60f);
 
 			Vector2 arrowPosition = basePos + vec * (-12f * b3);
 
-			Vector2[] pos = new Vector2[] { //通过这三点连成弦
+			var pos = new Vector2[] { //通过这三点连成弦
                 basePos + v * 20 ,
 				arrowPosition,
 				basePos - v * 20
@@ -227,8 +211,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-			Color c = new Color(1f, 1f, 1f, 1f);
-			List<Vertex2D> vertices = new List<Vertex2D>();
+			var c = new Color(1f, 1f, 1f, 1f);
+			var vertices = new List<Vertex2D>();
 			for (int i = 0; i < pos.Length; i++)
 			{
 				vertices.Add(new Vertex2D(pos[i] - Main.screenPosition, c, new Vector3(0, (float)i / pos.Length, 1)));
@@ -258,7 +242,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			Texture2D TexMainD1 = MythContent.QuickTexture("TheFirefly/Projectiles/ShadowWingBowTex/ShadowWingBowD1");
 			Texture2D TexMain = MythContent.QuickTexture("TheFirefly/Projectiles/ShadowWingBowTex/ShadowWingBowMain");
 			Texture2D TexMainG = MythContent.QuickTexture("TheFirefly/Projectiles/ShadowWingBowTex/ShadowWingBowMainGlow");
-			Texture2D TexArrow = TextureAssets.Projectile[(int)(Projectile.ai[0])].Value;
+			Texture2D TexArrow = TextureAssets.Projectile[(int)Projectile.ai[0]].Value;
 			Texture2D TexMothArrow = MythContent.QuickTexture("TheFirefly/Projectiles/MothArrow");
 			//float a0 = Energy % 60f;
 			//float a1 = (60 - a0) / 60f;
@@ -271,25 +255,17 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			Color drawColor = lightColor;
 			SpriteEffects se = SpriteEffects.None;
 			if (Projectile.Center.X < player.MountedCenter.X)
-			{
 				player.direction = -1;
-			}
 			else
 			{
 				player.direction = 1;
 			}
 			if (player.direction == -1)
-			{
 				se = SpriteEffects.FlipVertically;
-			}
 			if (player.gravDir == -1)
-			{
 				se = SpriteEffects.FlipVertically;
-			}
 			if (player.gravDir == -1 && player.direction == -1)
-			{
 				se = SpriteEffects.None;
-			}
 			//int StringFrame = 0;
 			//StringFrame = Math.Clamp((int)(Energy / 20f), 0, 5);
 			//TexString = MythContent.QuickTexture("TheFirefly/Projectiles/ShadowWingBowTex/ShadowWingBowString" + StringFrame.ToString());
@@ -298,17 +274,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			{
 				Player.CompositeArmStretchAmount PCAS = Player.CompositeArmStretchAmount.Full;
 				if (Energy > 30)
-				{
 					PCAS = Player.CompositeArmStretchAmount.ThreeQuarters;
-				}
 				if (Energy > 60)
-				{
 					PCAS = Player.CompositeArmStretchAmount.Quarter;
-				}
 				if (Energy > 90)
-				{
 					PCAS = Player.CompositeArmStretchAmount.None;
-				}
 				player.SetCompositeArmFront(true, PCAS, (float)(Math.Atan2(v0.Y, v0.X) * player.gravDir - Math.PI / 2d));
 			}
 			Vector2 vProA = Main.player[Projectile.owner].Center + Vector2.Normalize(v0) * (28f - 12f * b3);
@@ -318,9 +288,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 				Main.spriteBatch.Draw(TexMothArrow, vProB - Main.screenPosition, null, new Color(Arcol[s], Arcol[s], Arcol[s], 0), Projectile.rotation + ArRot[s], new Vector2(TexMothArrow.Width / 2f, TexMothArrow.Height / 2f), 1f, SpriteEffects.None, 0);
 			}
 			if (Release)
-			{
 				Main.spriteBatch.Draw(TexArrow, vProA - Main.screenPosition, new Rectangle(0, 0, TexArrow.Width, TexArrow.Height), drawColor, Projectile.rotation + (float)(Math.PI * 0.25), new Vector2(TexArrow.Width / 2f, TexArrow.Height / 2f), 1f, SpriteEffects.None, 0);
-			}
 
 			float rotu0 = Energy / 1200f;
 			float rotu1 = Energy / 750f;

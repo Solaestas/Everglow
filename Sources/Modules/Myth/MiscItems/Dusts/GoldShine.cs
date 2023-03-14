@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Dusts
+﻿namespace Everglow.Myth.MiscItems.Dusts
 {
 	public class GoldShine : ModDust
 	{
@@ -19,7 +19,7 @@
 			dust.velocity += new Vector2(0, 0.015f).RotatedByRandom(MathHelper.Pi * 2d);
 			dust.velocity *= 0.95f;
 			dust.scale *= 0.96f;
-			Lighting.AddLight(dust.position, 0.6196f * (float)dust.scale / 1.8f, 0.4855f * (float)dust.scale / 1.8f, 0.0758f * (float)dust.scale / 1.8f);
+			Lighting.AddLight(dust.position, 0.6196f * dust.scale / 1.8f, 0.4855f * dust.scale / 1.8f, 0.0758f * dust.scale / 1.8f);
 			if (dust.scale < 0.07f)
 				dust.active = false;
 			/*if(Main.tile[(int)((dust.position.X + dust.velocity.X * 6) / 16f), (int)((dust.position.Y + dust.velocity.Y * 6) / 16f)].CollisionType == 0)

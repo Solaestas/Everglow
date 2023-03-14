@@ -1,6 +1,6 @@
 ﻿using Terraria.ObjectData;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
+namespace Everglow.Myth.TheFirefly.Tiles
 {
 	public class BlackFren : ModTile
 	{
@@ -18,7 +18,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 
 		public override void NumDust(int i, int j, bool fail, ref int num)
 		{
-			num = (fail ? 1 : 3);
+			num = fail ? 1 : 3;
 		}
 
 		public override void KillMultiTile(int i, int j, int frameX, int frameY)
@@ -31,7 +31,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 
 		public override void PlaceInWorld(int i, int j, Item item)
 		{
-			short num = (short)(Main.rand.Next(0, 6));
+			short num = (short)Main.rand.Next(0, 6);
 			Main.tile[i, j].TileFrameX = (short)(num * 48);
 			Main.tile[i, j + 1].TileFrameX = (short)(num * 48);
 		}

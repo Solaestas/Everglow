@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee.Hepuyuan
+﻿namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Melee.Hepuyuan
 {
 	class XiaoBlackWave : ModProjectile
 	{
@@ -49,23 +49,23 @@
 			}
 			for (int d = 0; d < 120; d++)
 			{
-				Circle2D[d] = new Vector2(CirclePoint[d].X / (float)CirclePoint[d].Z, CirclePoint[d].Y / (float)CirclePoint[d].Z + 0.3f/*二维Y向校正量*/) * Rad * (float)(1 + Math.Sin(addi / 31d + 5) / 7d);//落回2D
+				Circle2D[d] = new Vector2(CirclePoint[d].X / CirclePoint[d].Z, CirclePoint[d].Y / CirclePoint[d].Z + 0.3f/*二维Y向校正量*/) * Rad * (float)(1 + Math.Sin(addi / 31d + 5) / 7d);//落回2D
 			}
 			//背景层
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 			Vector2 Vbase = Projectile.Center - Main.screenPosition;
 
-			List<Vertex2D> Vx4 = new List<Vertex2D>();
+			var Vx4 = new List<Vertex2D>();
 
 			float kt = Projectile.timeLeft / 120f;
 			kt = (float)Math.Sqrt(kt);
-			Color cr = new Color(kt, kt, kt, kt);
+			var cr = new Color(kt, kt, kt, kt);
 			for (int h = 0; h < 120; h++)
 			{
-				Vx4.Add(new Vertex2D(Vbase + Circle2D[(h) % 120].RotatedBy(Projectile.rotation), cr, new Vector3(((h + cirpro) / 30f) % 1f, 0, 0)));
-				Vx4.Add(new Vertex2D(Vbase + Circle2D[(h + 1) % 120].RotatedBy(Projectile.rotation), cr, new Vector3(((0.999f + h + cirpro) / 30f) % 1f, 0, 0)));
-				Vx4.Add(new Vertex2D(Vbase + new Vector2(0, -0.3f * Rad * (float)(1 + Math.Sin(addi / 31d + 5) / 7d)).RotatedBy(Projectile.rotation), cr, new Vector3(((0.5f + h + cirpro) / 30f) % 1f, 1, 0)));
+				Vx4.Add(new Vertex2D(Vbase + Circle2D[h % 120].RotatedBy(Projectile.rotation), cr, new Vector3((h + cirpro) / 30f % 1f, 0, 0)));
+				Vx4.Add(new Vertex2D(Vbase + Circle2D[(h + 1) % 120].RotatedBy(Projectile.rotation), cr, new Vector3((0.999f + h + cirpro) / 30f % 1f, 0, 0)));
+				Vx4.Add(new Vertex2D(Vbase + new Vector2(0, -0.3f * Rad * (float)(1 + Math.Sin(addi / 31d + 5) / 7d)).RotatedBy(Projectile.rotation), cr, new Vector3((0.5f + h + cirpro) / 30f % 1f, 1, 0)));
 			}
 
 

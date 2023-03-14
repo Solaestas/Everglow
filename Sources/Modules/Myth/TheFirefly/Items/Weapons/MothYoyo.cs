@@ -1,8 +1,8 @@
-﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
+﻿using Everglow.Myth.TheFirefly.Items.Accessories;
+using Everglow.Myth.TheFirefly.Projectiles;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
+namespace Everglow.Myth.TheFirefly.Items.Weapons
 {
 	public class MothYoyo : ModItem
 	{
@@ -44,9 +44,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 		public override bool AllowPrefix(int pre)
 		{
 			if (Array.IndexOf(unwantedPrefixes, pre) > -1)
-			{
 				return false;
-			}
 			return true;
 		}
 		public override void ModifyTooltips(List<TooltipLine> tooltips)

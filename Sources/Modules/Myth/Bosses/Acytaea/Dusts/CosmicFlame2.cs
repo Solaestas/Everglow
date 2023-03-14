@@ -1,6 +1,7 @@
-﻿using ReLogic.Content;
+﻿using Everglow.Myth.Bosses.Acytaea;
+using ReLogic.Content;
 
-namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Dusts;
+namespace Everglow.Myth.Bosses.Acytaea.Dusts;
 
 [Pipeline(typeof(NPPipeline), typeof(AcytaeaPipeline))]
 public class CosmicFlame2 : Particle
@@ -18,9 +19,7 @@ public class CosmicFlame2 : Particle
 		scale *= 0.99f;
 		velocity *= 1.05f;
 		if (scale <= 0.1f)
-		{
 			Active = false;
-		}
 	}
 
 	public override void Draw()

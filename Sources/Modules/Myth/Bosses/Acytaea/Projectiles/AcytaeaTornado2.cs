@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles;
+﻿namespace Everglow.Myth.Bosses.Acytaea.Projectiles;
 
 [Pipeline(typeof(NPPipeline), typeof(AcytaeaPipeline))]
 internal class AcytaeaTornado2 : VisualProjectile
@@ -38,9 +38,7 @@ internal class AcytaeaTornado2 : VisualProjectile
 			}
 		}
 		if (AIMNpc >= 0)
-		{
 			Projectile.Center = Main.npc[AIMNpc].Center;
-		}
 		Timer = Projectile.timeLeft / 15f + 6;
 		WHOAMI = Projectile.whoAmI;
 		Typ2 = Projectile.type;
@@ -59,7 +57,7 @@ internal class AcytaeaTornado2 : VisualProjectile
 	{
 		for (int z = -3; z < 4; z++)
 		{
-			List<Vertex2D> Vx = new List<Vertex2D>();
+			var Vx = new List<Vertex2D>();
 
 			for (int h = 0; h < 60; h++)
 			{
@@ -70,15 +68,11 @@ internal class AcytaeaTornado2 : VisualProjectile
 				Vector2 vCla = new Vector2(60 * MinCosZ, 0).RotatedBy(Timer - 0.1f - h * 0.1f + z * z);
 				vCla.Y *= 0.3f;
 				Vector2 vc = Main.projectile[WHOAMI].Center + vCla + new Vector2(0, 0);
-				Color color3 = new Color(255, 255, 255, 0);
+				var color3 = new Color(255, 255, 255, 0);
 				if (Main.projectile[WHOAMI].timeLeft < 255)
-				{
 					color3 = new Color(Main.projectile[WHOAMI].timeLeft, Main.projectile[WHOAMI].timeLeft, Main.projectile[WHOAMI].timeLeft, 0);
-				}
 				if (Main.projectile[WHOAMI].timeLeft > 945)
-				{
 					color3 = new Color(1200 - Main.projectile[WHOAMI].timeLeft, 1200 - Main.projectile[WHOAMI].timeLeft, 1200 - Main.projectile[WHOAMI].timeLeft, 0);
-				}
 				float a0 = (float)Math.Sqrt((3 - Math.Abs(z)) / 3f);
 				color3.R = (byte)(color3.R * a0);
 				color3.G = (byte)(color3.G * a0);

@@ -1,8 +1,8 @@
-using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
+using Everglow.Myth.TheFirefly.Dusts;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
+namespace Everglow.Myth.TheFirefly.Projectiles
 {
 	public class DreamWeaver : ModProjectile, IWarpProjectile
 	{
@@ -34,15 +34,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			if (Projectile.ai[0] == 3)
 			{
 				if (Projectile.velocity.Length() > 5f)
-				{
 					Projectile.velocity *= 0.95f;
-				}
 			}
 			float kTime = 1f;
 			if (Projectile.timeLeft < 90f)
-			{
 				kTime = Projectile.timeLeft / 90f;
-			}
 			Lighting.AddLight((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16), 0.32f * kTime, 0.23f * kTime, 0);
 			if (Projectile.timeLeft < breakTime && Projectile.ai[0] != 3)
 			{
@@ -51,7 +47,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 					for (int x = 0; x < 6; x++)
 					{
 						Vector2 velocity = new Vector2(0, Main.rand.NextFloat(2f, 12f)).RotatedByRandom(6.283);
-						Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 - Projectile.velocity * 4, velocity + Projectile.velocity, ModContent.ProjectileType<DreamWeaver>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 3f/*If ai[0] equal to 3, another ai will be execute*/);
+						var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 - Projectile.velocity * 4, velocity + Projectile.velocity, ModContent.ProjectileType<DreamWeaver>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 3f/*If ai[0] equal to 3, another ai will be execute*/);
 						SoundEngine.PlaySound(SoundID.Item54);
 						p.friendly = false;
 						p.damage = Projectile.damage / 4;
@@ -60,7 +56,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 					for (int x = 0; x < 15; x++)
 					{
 						Vector2 BasePos = Projectile.Center - new Vector2(4) - Projectile.velocity;
-						Dust d0 = Dust.NewDustDirect(BasePos, 0, 0, ModContent.DustType<BlueGlowAppearStoppedByTile>(), 0, 0, 0, default, 0.6f);
+						var d0 = Dust.NewDustDirect(BasePos, 0, 0, ModContent.DustType<BlueGlowAppearStoppedByTile>(), 0, 0, 0, default, 0.6f);
 						d0.noGravity = true;
 					}
 				}
@@ -94,7 +90,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 						for (int x = 0; x < 15 / (Projectile.ai[0] + 1); x++)
 						{
 							Vector2 BasePos = Projectile.Center - new Vector2(4) - Projectile.velocity;
-							Dust d1 = Dust.NewDustDirect(BasePos, 0, 0, ModContent.DustType<BlueGlowAppearStoppedByTile>(), 0, 0, 0, default, 0.6f);
+							var d1 = Dust.NewDustDirect(BasePos, 0, 0, ModContent.DustType<BlueGlowAppearStoppedByTile>(), 0, 0, 0, default, 0.6f);
 							d1.velocity = new Vector2(0, Main.rand.NextFloat(0f, 3f)).RotatedByRandom(6.283);
 							d1.noGravity = true;
 						}
@@ -103,7 +99,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 							for (int x = 0; x < 3; x++)
 							{
 								Vector2 velocity = new Vector2(0, Main.rand.NextFloat(2f, 6f)).RotatedByRandom(6.283) - Projectile.velocity * 0.2f;
-								Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 - Projectile.velocity * 2, velocity, ModContent.ProjectileType<DreamWeaver>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 3f/*If ai[0] equal to 3, another ai will be execute*/);
+								var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2 - Projectile.velocity * 2, velocity, ModContent.ProjectileType<DreamWeaver>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 3f/*If ai[0] equal to 3, another ai will be execute*/);
 								SoundEngine.PlaySound(SoundID.Item54);
 								p.friendly = false;
 							}
@@ -115,15 +111,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 				else
 				{
 					if (Projectile.extraUpdates == 2)
-					{
 						Projectile.extraUpdates = 1;
-					}
 				}
 			}
 			if (Projectile.timeLeft == 210)
-			{
 				Projectile.friendly = true;
-			}
 		}
 		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
@@ -131,7 +123,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			for (int x = 0; x < 15; x++)
 			{
 				Vector2 BasePos = Projectile.Center - new Vector2(4) - Projectile.velocity;
-				Dust d0 = Dust.NewDustDirect(BasePos, 0, 0, ModContent.DustType<BlueGlowAppearStoppedByTile>(), 0, 0, 0, default, 0.6f);
+				var d0 = Dust.NewDustDirect(BasePos, 0, 0, ModContent.DustType<BlueGlowAppearStoppedByTile>(), 0, 0, 0, default, 0.6f);
 				d0.noGravity = true;
 			}
 			if (Projectile.ai[0] != 3)
@@ -139,7 +131,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 				for (int x = 0; x < 3; x++)
 				{
 					Vector2 velocity = new Vector2(0, Main.rand.NextFloat(2f, 6f)).RotatedByRandom(6.283) - Projectile.velocity * 0.2f;
-					Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2, velocity, ModContent.ProjectileType<DreamWeaver>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 3f/*If ai[0] equal to 3, another ai will be execute*/);
+					var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + velocity * -2, velocity, ModContent.ProjectileType<DreamWeaver>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 3f/*If ai[0] equal to 3, another ai will be execute*/);
 					SoundEngine.PlaySound(SoundID.Item54);
 					p.friendly = false;
 				}
@@ -151,21 +143,17 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			float k0 = (240 - Projectile.timeLeft) / k1;
 
 			if (Projectile.timeLeft <= 240 - k1)
-			{
 				k0 = 1;
-			}
 
-			Color c0 = new Color(0, k0 * k0 * 0.4f + 0.2f, k0 * 0.8f + 0.2f, 0);
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var c0 = new Color(0, k0 * k0 * 0.4f + 0.2f, k0 * 0.8f + 0.2f, 0);
+			var bars = new List<Vertex2D>();
 
 
 			int TrueL = 0;
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
 				if (Projectile.oldPos[i] == Vector2.Zero)
-				{
 					break;
-				}
 
 				TrueL++;
 			}
@@ -173,21 +161,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			{
 				float width = 36;
 				if (Projectile.timeLeft <= 40)
-				{
 					width = Projectile.timeLeft * 0.9f;
-				}
 				if (i < 10)
-				{
 					width *= i / 10f;
-				}
 				if (Projectile.ai[0] == 3)
-				{
 					width *= 0.5f;
-				}
 				if (Projectile.oldPos[i] == Vector2.Zero)
-				{
 					break;
-				}
 
 				var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
 				normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
@@ -203,9 +183,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			Texture2D t = Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/GoldLine");
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			if (bars.Count > 3)
-			{
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-			}
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 			return false;
@@ -219,51 +197,39 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
 				if (Projectile.oldPos[i] == Vector2.Zero)
-				{
 					break;
-				}
 				TrueL++;
 			}
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
 				if (Projectile.oldPos[i] == Vector2.Zero)
-				{
 					break;
-				}
 				float MulColor = 1f;
 				var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
 				normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
 				if (i == 1)
-				{
 					MulColor = 0f;
-				}
 				if (i >= 2)
 				{
 					var normalDirII = Projectile.oldPos[i - 2] - Projectile.oldPos[i - 1];
 					normalDirII = Vector2.Normalize(new Vector2(-normalDirII.Y, normalDirII.X));
 					if (Vector2.Dot(normalDirII, normalDir) <= 0.965f)
-					{
 						MulColor = 0f;
-					}
 				}
 				if (i < Projectile.oldPos.Length - 1)
 				{
 					var normalDirII = Projectile.oldPos[i] - Projectile.oldPos[i + 1];
 					normalDirII = Vector2.Normalize(new Vector2(-normalDirII.Y, normalDirII.X));
 					if (Vector2.Dot(normalDirII, normalDir) <= 0.965f)
-					{
 						MulColor = 0f;
-					}
 				}
 
-				float k0 = (float)(Math.Atan2(normalDir.Y, normalDir.X));
+				float k0 = (float)Math.Atan2(normalDir.Y, normalDir.X);
 				k0 += 3.14f + 1.57f;
 				if (k0 > 6.28f)
-				{
 					k0 -= 6.28f;
-				}
-				Color c0 = new Color(k0, 0.4f, 0, 0);
+				var c0 = new Color(k0, 0.4f, 0, 0);
 
 				var factor = i / (float)TrueL;
 				float x0 = factor * 1.3f - (float)(Main.timeForVisualEffects / 15d) + 100000;

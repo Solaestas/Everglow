@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.FixCoins
+﻿namespace Everglow.Myth.MiscItems.FixCoins
 {
 	public class FixCoinSpeed2 : FixCoinItem
 	{

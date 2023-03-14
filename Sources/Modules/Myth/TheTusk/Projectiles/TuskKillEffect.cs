@@ -1,4 +1,4 @@
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
+namespace Everglow.Myth.TheTusk.Projectiles
 {
 	public class TuskKillEffect : ModNPC
 	{
@@ -44,14 +44,12 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 				Vector2 v2 = v / v.Length() * 0.05f * (float)(1 + Math.Log(v.Length() + 1));
 
 				Acc *= 0.95f;
-				NPC.velocity += (Acc + v2);
+				NPC.velocity += Acc + v2;
 				NPC.velocity = NPC.velocity.RotatedBy(Ome);
 				Ome *= 0.96f;
 				kx = 20 - v0.Length() / 12f;
 				if (kx < 1)
-				{
 					kx = 1;
-				}
 			}
 			else
 			{
@@ -73,8 +71,8 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 		{
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-			List<VertexBase.CustomVertexInfo> bars = new List<VertexBase.CustomVertexInfo>();
-			ef = (Effect)ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/Trail").Value;
+			var bars = new List<VertexBase.CustomVertexInfo>();
+			ef = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/Trail").Value;
 			Vector2 v = Cent - NPC.Center;
 			int width = (int)(4 * kx);
 			for (int i = 1; i < NPC.oldPos.Length - 1; ++i)
@@ -93,7 +91,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 				bars.Add(new VertexBase.CustomVertexInfo(NPC.oldPos[i] + normalDir * -width + new Vector2(4, 35), color, new Vector3((float)Math.Sqrt(factor), 0, w)));
 			}
 
-			List<VertexBase.CustomVertexInfo> triangleList = new List<VertexBase.CustomVertexInfo>();
+			var triangleList = new List<VertexBase.CustomVertexInfo>();
 
 			if (bars.Count > 2)
 			{

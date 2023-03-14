@@ -1,6 +1,6 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
+namespace Everglow.Myth.TheFirefly.Projectiles
 {
 	internal class PhosphorescenceGun : ModProjectile
 	{
@@ -58,22 +58,18 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 		public override void PostDraw(Color lightColor)
 		{
 			if (!Release)
-			{
 				return;
-			}
 			Player player = Main.player[Projectile.owner];
 			player.heldProj = Projectile.whoAmI;
 			Vector2 v0 = Projectile.Center - player.MountedCenter;
 			if (Main.mouseLeft)
-			{
 				player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(v0.Y, v0.X) - Math.PI / 2d));
-			}
 
 			Texture2D TexMain = MythContent.QuickTexture("TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGun");
 			Texture2D TexMainG = MythContent.QuickTexture("TheFirefly/Projectiles/PhosphorescenceGunTex/PhosphorescenceGunGlow");
 
-			Projectile.frame = (int)((addi % 45) / 5f);
-			Rectangle DrawRect = new Rectangle(0, Projectile.frame * 44, 70, 40);
+			Projectile.frame = (int)(addi % 45 / 5f);
+			var DrawRect = new Rectangle(0, Projectile.frame * 44, 70, 40);
 
 			Color drawColor = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
 			SpriteEffects se = SpriteEffects.None;

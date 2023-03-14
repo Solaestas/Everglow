@@ -1,8 +1,9 @@
-﻿using Terraria.Audio;
+﻿using Everglow.Myth.MiscItems.FixCoins;
+using Terraria.Audio;
 using Terraria.Localization;
 using Terraria.ObjectData;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
+namespace Everglow.Myth.TheTusk.Tiles
 {
 	public class BloodyMossWheel : ModTile
 	{
@@ -48,11 +49,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
 		public static bool CanK = false;
 		public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 		{
-			Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+			var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 			if (Main.drawToScreen)
-			{
 				zero = Vector2.Zero;
-			}
 
 			Texture2D BaseCo1 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/Tusk/ForgeWave").Value;
 			Texture2D Sp1a = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Tiles/TileEffects/StonePanBottomLine").Value;
@@ -64,7 +63,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
 			Texture2D SpL3 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Tiles/TileEffects/StonePanL3").Value;
 			Texture2D SpL4 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Tiles/TileEffects/StonePanL4").Value;
 			Texture2D SpIC = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Tiles/TileEffects/StonePanStrick").Value;
-			Vector2 origin = new Vector2(56);
+			var origin = new Vector2(56);
 
 			Color color = Lighting.GetColor(i, j);
 			Vector2 v = new Vector2(0, 100).RotatedBy(Main.time / 60f);
@@ -74,9 +73,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
 			if (StepChange > 0)
 			{
 				if (StepChange > 10)
-				{
 					Main.spriteBatch.Draw(Sp1b, new Vector2(i * 16 + 6, j * 16 - 68) - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), 0f, origin, (30 - StepChange) / 20f, SpriteEffects.None, 0f);
-				}
 				else
 				{
 					Main.spriteBatch.Draw(Sp1b, new Vector2(i * 16 + 6, j * 16 - 68) - Main.screenPosition + zero, null, new Color(StepChange * 25, StepChange * 25, StepChange * 25, 0), 0f, origin, 0.95f, SpriteEffects.None, 0f);
@@ -88,15 +85,11 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
 				StepChange = 0;
 			}
 			if (Step == 0)
-			{
 				Rot2 = 0;
-			}
 			if (Step == 1)
 			{
 				if (StepChange > 0)
-				{
 					Rot2 = (float)(Math.PI / 2d) * (30 - StepChange) / 30f;
-				}
 				else
 				{
 					Rot2 = (float)(Math.PI / 2d);
@@ -105,12 +98,10 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
 			if (Step == 2)
 			{
 				if (StepChange > 0)
-				{
 					Rot2 = (float)(Math.PI / 2d) * (30 - StepChange) / 30f + (float)(Math.PI / 2d);
-				}
 				else
 				{
-					Rot2 = (float)(Math.PI);
+					Rot2 = (float)Math.PI;
 				}
 			}
 			Main.spriteBatch.Draw(Sp1c, new Vector2(i * 16 + 6, j * 16 - 68) - Main.screenPosition + zero, null, color, 0f, origin, 1f, SpriteEffects.None, 0f);
@@ -162,9 +153,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
 					{
 						Dir[0]++;
 						if (Dir[0] >= 8)
-						{
 							Dir[0] = 0;
-						}
 						AimRot[0] = (float)Math.PI / 4f * Dir[0];
 						Cooling[0] = 4;
 					}
@@ -179,9 +168,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
 					{
 						Dir[1]++;
 						if (Dir[1] >= 8)
-						{
 							Dir[1] = 0;
-						}
 						AimRot[1] = (float)Math.PI / 4f * Dir[1];
 						Cooling[1] = 4;
 					}
@@ -196,9 +183,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
 					{
 						Dir[2]++;
 						if (Dir[2] >= 8)
-						{
 							Dir[2] = 0;
-						}
 						AimRot[2] = (float)Math.PI / 4f * Dir[2];
 						Cooling[2] = 4;
 					}
@@ -213,9 +198,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
 					{
 						Dir[3]++;
 						if (Dir[3] >= 8)
-						{
 							Dir[3] = 0;
-						}
 						AimRot[3] = (float)Math.PI / 4f * Dir[3];
 						Cooling[3] = 4;
 					}
@@ -241,7 +224,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
 			if (Killing < -5)
 			{
 				CanK = false;
-				TuskModPlayer mplayer = Terraria.Main.player[Terraria.Main.myPlayer].GetModPlayer<TuskModPlayer>();
+				TuskModPlayer mplayer = Main.player[Main.myPlayer].GetModPlayer<TuskModPlayer>();
 				mplayer.Shake = 6;
 				SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, new Vector2(i * 16 + 0, j * 16 - 72));
 				Vector2 vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28);
@@ -289,10 +272,10 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
 					vF2 = new Vector2(0, Main.rand.NextFloat(0, 45f)).RotatedByRandom(6.28);
 					Dust.NewDust(new Vector2(i * 16 + 0, j * 16 - 72) + vF2, 0, 0, DustID.TintableDust, vF.X, vF.Y, 0, default, Main.rand.NextFloat(0.8f, 2.1f));
 				}
-				int[] Ty = { ModContent.ItemType<MiscItems.FixCoins.FixCoinDamage3>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinCrit3>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinDefense3>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinSpeed3>(), ModContent.ItemType<MiscItems.FixCoins.FixCoinMelee3>() };
+				int[] Ty = { ModContent.ItemType<FixCoinDamage3>(), ModContent.ItemType<FixCoinCrit3>(), ModContent.ItemType<FixCoinDefense3>(), ModContent.ItemType<FixCoinSpeed3>(), ModContent.ItemType<FixCoinMelee3>() };
 				Item.NewItem(null, new Vector2(i * 16 + 0, j * 16 - 72), Ty[Main.rand.Next(Ty.Length)]);
 				Item.NewItem(null, new Vector2(i * 16 + 0, j * 16 - 72), ItemID.GoldCoin, 5);
-				Main.tile[i, j].TileType = (ushort)ModContent.TileType<Tiles.BloodyMossWheelFinished>();
+				Main.tile[i, j].TileType = (ushort)ModContent.TileType<BloodyMossWheelFinished>();
 				((Tile)Main.tile[i, j]).HasTile = true;
 			}
 			TileI = i;
@@ -300,11 +283,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
 		}
 		public static void DrawAll(SpriteBatch sb)
 		{
-			Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+			var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 			if (Main.drawToScreen)
-			{
 				zero = Vector2.Zero;
-			}
 
 			Texture2D Tdoor = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/Tusk/CosmicFlame").Value;
 			Texture2D Tdoor2 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/Tusk/CosmicVort").Value;
@@ -312,7 +293,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
 			if (CanK)
 			{
 				Killing--;
-				Vector2 Correction = new Vector2(-186f, -260f);
+				var Correction = new Vector2(-186f, -260f);
 				Main.spriteBatch.Draw(Tdoor, new Vector2(TileI * 16, TileJ * 16) + Correction - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 30f, new Vector2(56), (60 - Killing) / 45f, SpriteEffects.None, 0f);
 				Main.spriteBatch.Draw(Tdoor, new Vector2(TileI * 16, TileJ * 16) + Correction - Main.screenPosition + zero, null, new Color(100, 100, 100, 0), -(float)Main.time / 20f, new Vector2(56), (60 - Killing) / 45f, SpriteEffects.None, 0f);
 				Main.spriteBatch.Draw(Tdoor, new Vector2(TileI * 16, TileJ * 16) + Correction - Main.screenPosition + zero, null, new Color(255, 255, 255, 0), (float)Main.time / 15f, new Vector2(56), (60 - Killing) / 50f, SpriteEffects.None, 0f);

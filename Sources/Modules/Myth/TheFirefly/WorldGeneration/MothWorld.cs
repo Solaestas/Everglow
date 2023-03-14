@@ -1,6 +1,6 @@
 ﻿using Terraria.WorldBuilding;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.WorldGeneration
+namespace Everglow.Myth.TheFirefly.WorldGeneration
 {
 	internal class MothWorld : SubWorldModule.Subworld
 	{

@@ -1,7 +1,7 @@
 ﻿using Terraria.Localization;
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Sources.Modules.MythModule
+namespace Everglow.Myth
 {
 	// Acts as a container for "downed boss" flags.
 	// Set a flag like this in your bosses OnKill hook:
@@ -57,17 +57,11 @@ namespace Everglow.Sources.Modules.MythModule
 		public override void SaveWorldData(TagCompound tag)
 		{
 			if (downedTusk)
-			{
 				tag["downedTusk"] = true;
-			}
 			if (downedMoth)
-			{
 				tag["downedMoth"] = true;
-			}
 			if (downedAcytaea)
-			{
 				tag["downedAcytaea"] = true;
-			}
 
 			// if (downedOtherBoss) {
 			//	tag["downedOtherBoss"] = true;

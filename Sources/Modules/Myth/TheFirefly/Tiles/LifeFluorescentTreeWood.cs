@@ -1,4 +1,4 @@
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
+namespace Everglow.Myth.TheFirefly.Tiles
 {
 	public class LifeFluorescentTreeWood : ModTile
 	{

@@ -1,6 +1,6 @@
-﻿using Everglow.Sources.Modules.MythModule.MiscItems.Buffs;
+﻿using Everglow.Myth.MiscItems.Buffs;
 
-namespace Everglow.Sources.Modules.MythModule.Common
+namespace Everglow.Myth.Common
 {
 	public class MythContentGlobalNPC : GlobalNPC
 	{
@@ -20,14 +20,14 @@ namespace Everglow.Sources.Modules.MythModule.Common
 				{
 					for (int i = 0; i < 20; i++)
 					{
-						Dust.NewDust(npc.position, npc.width, npc.height, DustID.Water, 0, 0, 0, default(Color), 3f);
+						Dust.NewDust(npc.position, npc.width, npc.height, DustID.Water, 0, 0, 0, default, 3f);
 					}
 				}
 				else
 				{
 					for (int i = 0; i < 20; i++)
 					{
-						Dust.NewDust(npc.position, npc.width, npc.height, DustID.Water, 0, 0, 0, default(Color), 2f);
+						Dust.NewDust(npc.position, npc.width, npc.height, DustID.Water, 0, 0, 0, default, 2f);
 					}
 				}
 			}
@@ -39,9 +39,7 @@ namespace Everglow.Sources.Modules.MythModule.Common
 		public override bool PreAI(NPC npc)
 		{
 			if (npc.HasBuff(ModContent.BuffType<Freeze>()))
-			{
 				return false;
-			}
 			return true;
 		}
 	}

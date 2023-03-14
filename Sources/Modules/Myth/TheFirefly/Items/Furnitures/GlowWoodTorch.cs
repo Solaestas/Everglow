@@ -1,6 +1,6 @@
 using Terraria.GameContent.Creative;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures
+namespace Everglow.Myth.TheFirefly.Items.Furnitures
 {
 	public class GlowWoodTorch : ModItem
 	{
@@ -35,9 +35,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures
 
 		public override void HoldItem(Player player)
 		{
-			if (Main.rand.NextBool((player.itemAnimation > 0) ? 10 : 20))
+			if (Main.rand.NextBool(player.itemAnimation > 0 ? 10 : 20))
 			{
-				Dust d = Dust.NewDustDirect(new Vector2(player.itemLocation.X + 10f * player.direction - 6, player.itemLocation.Y - 14f * player.gravDir), 4, 4, ModContent.DustType<Dusts.BlueToPurpleSpark>(), 0, 0, 0, default, Main.rand.NextFloat(0.95f, 1.65f));
+				var d = Dust.NewDustDirect(new Vector2(player.itemLocation.X + 10f * player.direction - 6, player.itemLocation.Y - 14f * player.gravDir), 4, 4, ModContent.DustType<Dusts.BlueToPurpleSpark>(), 0, 0, 0, default, Main.rand.NextFloat(0.95f, 1.65f));
 				d.velocity.Y = -2;
 				d.velocity.X *= 0.05f;
 			}

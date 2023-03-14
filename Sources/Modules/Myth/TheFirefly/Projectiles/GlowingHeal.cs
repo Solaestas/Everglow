@@ -1,8 +1,8 @@
-using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Myth.Common;
 using Terraria.Localization;
 
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
+namespace Everglow.Myth.TheFirefly.Projectiles
 {
 	public class GlowingHeal : ModNPC
 	{
@@ -56,14 +56,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 				Vector2 v2 = v / v.Length() * 0.05f * (float)(1 + Math.Log(v.Length() + 1));
 
 				Acc *= 0.95f;
-				NPC.velocity += (Acc + v2);
+				NPC.velocity += Acc + v2;
 				NPC.velocity = NPC.velocity.RotatedBy(Ome);
 				Ome *= 0.96f;
 				kx = 20 - v0.Length() / 12f;
 				if (kx < 1)
-				{
 					kx = 1;
-				}
 			}
 			else
 			{
@@ -83,9 +81,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 				NPC.velocity *= 0.8f;
 				kx--;
 				if (kx <= 1)
-				{
 					NPC.active = false;
-				}
 			}
 		}
 		public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -97,8 +93,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 		{
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-			List<Vertex2D> bars = new List<Vertex2D>();
-			ef = (Effect)MythContent.QuickEffect("Effects/Trail");
+			var bars = new List<Vertex2D>();
+			ef = MythContent.QuickEffect("Effects/Trail");
 			Vector2 v = Cent - NPC.Center;
 			int width = (int)(kx / 2);
 			for (int i = 1; i < NPC.oldPos.Length - 1; ++i)
@@ -117,7 +113,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 				bars.Add(new Vertex2D(NPC.oldPos[i] + normalDir * -width + new Vector2(4, 35), color, new Vector3((float)Math.Sqrt(factor), 0, w)));
 			}
 
-			List<Vertex2D> triangleList = new List<Vertex2D>();
+			var triangleList = new List<Vertex2D>();
 
 
 

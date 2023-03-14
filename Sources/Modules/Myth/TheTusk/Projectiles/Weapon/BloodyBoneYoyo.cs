@@ -1,5 +1,6 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
+﻿using Everglow.Myth.Common;
+
+namespace Everglow.Myth.TheTusk.Projectiles.Weapon
 {
 	public class BloodyBoneYoyo : ModProjectile
 	{
@@ -37,7 +38,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 			{
 				for (int y = 0; y < 5; y++)
 				{
-					Projectile.NewProjectile(null, Projectile.Center, Projectile.velocity.RotatedBy(Math.PI * y / 2.5 + a) / Projectile.velocity.Length() * 9f, ModContent.ProjectileType<Projectiles.Weapon.LittleTusk0>(), Projectile.damage / 2, Projectile.knockBack, player.whoAmI);
+					Projectile.NewProjectile(null, Projectile.Center, Projectile.velocity.RotatedBy(Math.PI * y / 2.5 + a) / Projectile.velocity.Length() * 9f, ModContent.ProjectileType<LittleTusk0>(), Projectile.damage / 2, Projectile.knockBack, player.whoAmI);
 				}
 				for (int j = 0; j < 5; j++)
 				{

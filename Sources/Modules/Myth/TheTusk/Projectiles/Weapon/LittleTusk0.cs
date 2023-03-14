@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
+﻿namespace Everglow.Myth.TheTusk.Projectiles.Weapon
 {
 	internal class LittleTusk0 : ModProjectile
 	{
@@ -23,7 +23,7 @@
 		private float Sc = 0;
 		public override void AI()
 		{
-			float Rot1 = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + (Math.PI * 0.25));
+			float Rot1 = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + Math.PI * 0.25);
 			Projectile.rotation = Rot1;
 			Player player = Main.player[Projectile.owner];
 			Vector2 v0 = player.Center + new Vector2(-20 * player.direction, -40) - Projectile.Center;
@@ -31,17 +31,11 @@
 			Vector2 v1 = v0 / v0.Length();
 			Projectile.velocity += v1 * vscale / 10f;
 			if (Projectile.velocity.Length() > 20)
-			{
 				Projectile.velocity *= 0.99f;
-			}
 			if (Projectile.velocity.Length() > 30)
-			{
 				Projectile.velocity *= 0.99f;
-			}
 			if (Projectile.velocity.Length() > 40)
-			{
 				Projectile.velocity *= 0.99f;
-			}
 			if (Projectile.timeLeft > 230)
 			{
 				Vd = (240 - Projectile.timeLeft) / 10f;
@@ -66,7 +60,7 @@
 						{
 							Vector2 v = Main.npc[j].Center - Projectile.Center;
 							v = v / v.Length() * 20f;
-							Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center, v, ModContent.ProjectileType<Projectiles.Weapon.Tusk>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0f, 0f);
+							Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, v, ModContent.ProjectileType<Tusk>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0f, 0f);
 							Projectile.Kill();
 						}
 					}
@@ -85,7 +79,7 @@
 					Vector2 a0 = new Vector2(Projectile.width, Projectile.height) / 2f;
 					Vector2 v3 = Projectile.oldPosition + a0;
 					Vector2 v4 = Vector2.Normalize(Projectile.velocity) * 0.6f;
-					int num92 = Dust.NewDust(v3 + (v4 * g) - new Vector2(4, 4), 4, 4, DustID.Blood, 0f, 0f, 100, default, Main.rand.NextFloat(1.3f, 2f) * Sc * 0.4f);
+					int num92 = Dust.NewDust(v3 + v4 * g - new Vector2(4, 4), 4, 4, DustID.Blood, 0f, 0f, 100, default, Main.rand.NextFloat(1.3f, 2f) * Sc * 0.4f);
 					Main.dust[num92].noGravity = true;
 					Main.dust[num92].velocity = new Vector2(0, Main.rand.NextFloat(0.4f, 2.5f)).RotatedByRandom(Math.PI * 2d) * Vd * 0.5f;
 				}

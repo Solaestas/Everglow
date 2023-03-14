@@ -1,6 +1,6 @@
 using Terraria.Audio;
 
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
+namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Magic
 {
 	public class FireFeather : ModProjectile
 	{
@@ -17,7 +17,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 		}
 		public override void AI()
 		{
-			Projectile.rotation = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X));
+			Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
 			Projectile.velocity *= 1.01f;
 			int num90 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(12, 12) - Projectile.velocity, 16, 16, 6, 0f, 0f, 100, default, Main.rand.NextFloat(1f, 2.6f));
 			Main.dust[num90].noGravity = true;
@@ -30,9 +30,9 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 			{
 				if (Main.npc[j].CanBeChasedBy(Projectile, false) && Collision.CanHit(Projectile.Center, 1, 1, Main.npc[j].Center, 1, 1))
 				{
-					float num5 = Main.npc[j].position.X + (float)(Main.npc[j].width / 2);
-					float num6 = Main.npc[j].position.Y + (float)(Main.npc[j].height / 2);
-					float num7 = Math.Abs(Projectile.position.X + (float)(Projectile.width / 2) - num5) + Math.Abs(Projectile.position.Y + (float)(Projectile.height / 2) - num6);
+					float num5 = Main.npc[j].position.X + Main.npc[j].width / 2;
+					float num6 = Main.npc[j].position.Y + Main.npc[j].height / 2;
+					float num7 = Math.Abs(Projectile.position.X + Projectile.width / 2 - num5) + Math.Abs(Projectile.position.Y + Projectile.height / 2 - num6);
 					if (num7 < num4)
 					{
 						num4 = num7;
@@ -45,7 +45,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 			if (flag)
 			{
 				float num8 = 20f;
-				Vector2 vector1 = new Vector2(Projectile.position.X + (float)Projectile.width * 0.5f, Projectile.position.Y + (float)Projectile.height * 0.5f);
+				var vector1 = new Vector2(Projectile.position.X + Projectile.width * 0.5f, Projectile.position.Y + Projectile.height * 0.5f);
 				float num9 = num2 - vector1.X;
 				float num10 = num3 - vector1.Y;
 				float num11 = (float)Math.Sqrt((double)(num9 * num9 + num10 * num10));
@@ -95,10 +95,10 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Magic
 			SpriteEffects spriteEffects = SpriteEffects.None;
 			if (Projectile.spriteDirection == -1)
 				spriteEffects = SpriteEffects.FlipHorizontally;
-			Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+			var texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
 			int frameHeight = texture.Height / Main.projFrames[Projectile.type];
 			int startY = frameHeight * Projectile.frame;
-			Rectangle sourceRectangle = new Rectangle(0, startY, texture.Width, frameHeight);
+			var sourceRectangle = new Rectangle(0, startY, texture.Width, frameHeight);
 			Vector2 origin = sourceRectangle.Size() / 2f;
 			float offsetX = 20f;
 			origin.X = Projectile.spriteDirection == 1 ? sourceRectangle.Width - offsetX : offsetX;

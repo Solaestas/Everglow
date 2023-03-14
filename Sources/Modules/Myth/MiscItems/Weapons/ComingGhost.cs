@@ -1,7 +1,7 @@
 ﻿using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
+namespace Everglow.Myth.MiscItems.Weapons
 {
 	public class ComingGhost : ModItem
 	{
@@ -29,7 +29,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
 			Item.rare = ItemRarityID.Pink;
 			Item.UseSound = SoundID.Item1;
 			Item.autoReuse = true;
-			Item.shoot = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Melee.ComingGhost>();
+			Item.shoot = ModContent.ProjectileType<Projectiles.Weapon.Melee.ComingGhost>();
 			Item.shootSpeed = 8;
 			Item.crit = 8;
 		}
@@ -37,20 +37,18 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
 		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
 			if (l % 4 == 0)
-			{
-				type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Melee.ComingGhost>();
-			}
+				type = ModContent.ProjectileType<Projectiles.Weapon.Melee.ComingGhost>();
 			else if (l % 4 == 1)
 			{
-				type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Melee.ComingGhost2>();
+				type = ModContent.ProjectileType<Projectiles.Weapon.Melee.ComingGhost2>();
 			}
 			else if (l % 4 == 2)
 			{
-				type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Melee.ComingGhost>();
+				type = ModContent.ProjectileType<Projectiles.Weapon.Melee.ComingGhost>();
 			}
 			else
 			{
-				type = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Melee.ComingGhost2>();
+				type = ModContent.ProjectileType<Projectiles.Weapon.Melee.ComingGhost2>();
 			}
 			Projectile.NewProjectile(source, position + new Vector2(0, -24), velocity, type, damage, knockback, player.whoAmI, 0f, 0f);
 			l++;

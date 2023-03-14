@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
+﻿namespace Everglow.Myth.Bosses.Acytaea.Projectiles
 {
 	internal class AcytaeaLaser : ModProjectile
 	{
@@ -39,19 +39,13 @@
 				}
 			}
 			if (AIMNpc != -1)
-			{
 				vp = Main.npc[AIMNpc].Center - Projectile.Center;
-			}
 			float Rot = (float)Math.Atan2(vp.Y, vp.X) + (float)(Math.PI / 2d);
 			Projectile.rotation = Rot;
 			if (Projectile.timeLeft < 60)
-			{
 				yd = Projectile.timeLeft / 60f;
-			}
 			if (Projectile.timeLeft > 640)
-			{
 				yd = (700 - Projectile.timeLeft) / 60f;
-			}
 			CirR0 += 0.001f;
 			CirPro0 += 0.3f;
 		}
@@ -74,25 +68,21 @@
 		{
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 
 			float step = 4;
 			int Count = 0;
 			for (int m = 0; m < 500; ++m)
 			{
 				if (Collision.SolidCollision(Projectile.Center + new Vector2(0, step).RotatedBy(Projectile.rotation) * m, 1, 1))
-				{
 					break;
-				}
 				Vlaser[m] = Projectile.Center + new Vector2(0, step).RotatedBy(Projectile.rotation) * m;
 				++Count;
 			}
 			for (int i = 1; i < Count; ++i)
 			{
 				if (Vlaser[i] == Vector2.Zero)
-				{
 					break;
-				}
 
 				var normalDir = Vlaser[i - 1] - Vlaser[i];
 				normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
@@ -101,9 +91,7 @@
 				var w = MathHelper.Lerp(1f, 0.05f, factor);
 				float width = 60;
 				if (i <= 25)
-				{
 					width = 60 * (float)Math.Sqrt(i) / 5f;
-				}
 
 				width *= yd;
 				Lighting.AddLight(Vlaser[i], (255 - Projectile.alpha) * 1.2f / 50f * yd, 0, 0);
@@ -126,15 +114,13 @@
 							if (!Main.player[j].dead)
 							{
 								if ((Main.player[j].Center - Vlaser[i]).Length() < 40)
-								{
-									Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.playerHit>(), Projectile.damage, 0, j, 0, 0);
-								}
+									Projectile.NewProjectile(null, Main.player[j].Center, Vector2.Zero, ModContent.ProjectileType<playerHit>(), Projectile.damage, 0, j, 0, 0);
 							}
 						}
 					}
 				}
 			}
-			List<Vertex2D> Vx = new List<Vertex2D>();
+			var Vx = new List<Vertex2D>();
 			if (bars.Count > 2)
 			{
 				Vx.Add(bars[0]);
@@ -158,13 +144,13 @@
 
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-			List<Vertex2D> Vx2 = new List<Vertex2D>();
+			var Vx2 = new List<Vertex2D>();
 
 			Vector2 vf = Vlaser[Math.Clamp(Count - 1, 0, 507)] - Main.screenPosition;
 			float ACircleR = 150 * yd;
 			for (int h = 0; h < 100; h++)
 			{
-				Color color3 = new Color(255, 0, 0, 0);
+				var color3 = new Color(255, 0, 0, 0);
 				Vector2 v0 = new Vector2(0, ACircleR).RotatedBy(h / 50d * Math.PI + CirR0);
 				Vector2 v1 = new Vector2(0, ACircleR).RotatedBy((h + 1) / 50d * Math.PI + CirR0);
 				if (h % 20 >= 10)

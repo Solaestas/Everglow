@@ -1,15 +1,17 @@
-using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons;
+using Everglow.Myth.TheFirefly.Items.Accessories;
+using Everglow.Myth.TheFirefly.Items.Weapons;
+using Everglow.Myth.TheFirefly.NPCs.Bosses;
 using Terraria.GameContent;
 using Terraria.GameContent.Creative;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.BossDrop
+namespace Everglow.Myth.TheFirefly.Items.BossDrop
 {
 	// Basic code for a boss treasure bag
 	public class CorruptMothTreasureBag : ModItem
 	{
 		// Sets the associated NPC this treasure bag is dropped from
 		[Obsolete]
-		public override int BossBagNPC => ModContent.NPCType<TheFirefly.NPCs.Bosses.CorruptMoth>();
+		public override int BossBagNPC => ModContent.NPCType<CorruptMoth>();
 
 		public override void SetStaticDefaults()
 		{
@@ -79,12 +81,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.BossDrop
 					break;
 			}
 			if (Main.rand.NextBool(2))
-			{
-				player.QuickSpawnItem(entitySource, ModContent.ItemType<Accessories.MothEye>());
-			}
+				player.QuickSpawnItem(entitySource, ModContent.ItemType<MothEye>());
 			else if (Main.masterMode)
 			{
-				player.QuickSpawnItem(entitySource, ModContent.ItemType<Accessories.MothEye>());
+				player.QuickSpawnItem(entitySource, ModContent.ItemType<MothEye>());
 			}
 		}
 
@@ -108,9 +108,9 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.BossDrop
 				// This creates a randomly rotated vector of length 1, which gets it's components multiplied by the parameters
 				Vector2 direction = Main.rand.NextVector2CircularEdge(Item.width * 0.6f, Item.height * 0.6f);
 				float distance = 0.3f + Main.rand.NextFloat() * 0.5f;
-				Vector2 velocity = new Vector2(0f, -Main.rand.NextFloat() * 0.3f - 1.5f);
+				var velocity = new Vector2(0f, -Main.rand.NextFloat() * 0.3f - 1.5f);
 
-				Dust dust = Dust.NewDustPerfect(center + direction * distance, DustID.SilverFlame, velocity);
+				var dust = Dust.NewDustPerfect(center + direction * distance, DustID.SilverFlame, velocity);
 				dust.scale = 0.5f;
 				dust.fadeIn = 1.1f;
 				dust.noGravity = true;
@@ -127,17 +127,15 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.BossDrop
 			Rectangle frame;
 
 			if (Main.itemAnimations[Item.type] != null)
-			{
 				// In case this item is animated, this picks the correct frame
 				frame = Main.itemAnimations[Item.type].GetFrame(texture, Main.itemFrameCounter[whoAmI]);
-			}
 			else
 			{
 				frame = texture.Frame();
 			}
 
 			Vector2 frameOrigin = frame.Size() / 2f;
-			Vector2 offset = new Vector2(Item.width / 2 - frameOrigin.X, Item.height - frame.Height);
+			var offset = new Vector2(Item.width / 2 - frameOrigin.X, Item.height - frame.Height);
 			Vector2 drawPos = Item.position - Main.screenPosition + frameOrigin + offset;
 
 			float time = Main.GlobalTimeWrappedHourly;
@@ -147,9 +145,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.BossDrop
 			time /= 2f;
 
 			if (time >= 1f)
-			{
 				time = 2f - time;
-			}
 
 			time = time * 0.5f + 0.5f;
 

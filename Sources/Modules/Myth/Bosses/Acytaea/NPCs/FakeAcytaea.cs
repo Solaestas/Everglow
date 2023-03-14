@@ -1,6 +1,6 @@
 ﻿using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
+namespace Everglow.Myth.Bosses.Acytaea.NPCs
 {
 	[AutoloadBossHead]
 	public class FakeAcytaea : ModNPC
@@ -62,9 +62,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.NPCs
 				if (Main.npc[AIMNPC].life <= 0 || Main.npc[AIMNPC].active == false || Main.npc[AIMNPC].type != ModContent.NPCType<Acytaea>() || !Main.npc[AIMNPC].boss || Acytaea.BossIndex == 0)
 				{
 					if (NPC.active)
-					{
 						NPC.active = false;
-					}
 				}
 			}
 		}

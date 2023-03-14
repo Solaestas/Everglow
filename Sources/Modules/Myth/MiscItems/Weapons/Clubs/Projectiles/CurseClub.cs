@@ -1,7 +1,7 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.CursedFlames;
+﻿using Everglow.Myth.Common;
+using Everglow.Myth.MagicWeaponsReplace.Projectiles.CursedFlames;
 
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectiles
+namespace Everglow.Myth.MiscItems.Weapons.Clubs.Projectiles
 {
 	public class CurseClub : ClubProj
 	{
@@ -24,17 +24,13 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
 				{
 					GenerateDust();
 					if (Main.rand.NextBool(2))
-					{
 						GenerateVFX();
-					}
 				}
 				if (FlyClubCooling > 0)
-				{
 					FlyClubCooling--;
-				}
 				if (FlyClubCooling <= 0 && Omega > 0.2f)
 				{
-					FlyClubCooling = (int)(44);
+					FlyClubCooling = 44;
 					Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<CurseClub_fly>(), (int)(Projectile.damage * 0.3f), Projectile.knockBack * 0.4f, Projectile.owner);
 				}
 			}
@@ -42,9 +38,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
 			{
 				GenerateDust();
 				if (Main.rand.NextBool(2))
-				{
 					GenerateVFX();
-				}
 			}
 		}
 		private int FlyClubCooling = 0;
@@ -52,18 +46,16 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
 		{
 			Vector2 v2 = Main.player[Projectile.owner].velocity;
 			float mulVelocity = 0.3f + Omega + v2.Length() / 10f;
-			Vector2 v0 = new Vector2(1, 1);
+			var v0 = new Vector2(1, 1);
 			v0 *= Main.rand.NextFloat(Main.rand.NextFloat(HitLength * 0.75f, HitLength), HitLength);
 			v0.X *= Projectile.spriteDirection;
 			if (Main.rand.NextBool(2))
-			{
 				v0 *= -1;
-			}
 			v0 = v0.RotatedBy(Projectile.rotation + Main.rand.NextFloat(Omega));
 			float Speed = Math.Min(Omega * 0.15f, 0.061f);
-			Vector2 v1 = new Vector2(-v0.Y * Speed, v0.X * Speed);
+			var v1 = new Vector2(-v0.Y * Speed, v0.X * Speed);
 
-			CursedFlameDust cf = new CursedFlameDust
+			var cf = new CursedFlameDust
 			{
 				velocity = v1 + v2 * 0.5f,
 				Active = true,
@@ -76,16 +68,14 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
 		}
 		private void GenerateDust()
 		{
-			Vector2 v0 = new Vector2(1, 1);
+			var v0 = new Vector2(1, 1);
 			v0 *= Main.rand.NextFloat(Main.rand.NextFloat(1, HitLength), HitLength);
 			v0.X *= Projectile.spriteDirection;
 			if (Main.rand.NextBool(2))
-			{
 				v0 *= -1;
-			}
 			v0 = v0.RotatedBy(Projectile.rotation);
 			float Speed = Math.Min(Omega * 0.5f, 0.221f);
-			Dust D = Dust.NewDustDirect(Projectile.Center + v0 - new Vector2(4)/*Dust的Size=8x8*/, 0, 0, DustID.CursedTorch, -v0.Y * Speed, v0.X * Speed, 150, default, Main.rand.NextFloat(0.4f, 1.1f));
+			var D = Dust.NewDustDirect(Projectile.Center + v0 - new Vector2(4)/*Dust的Size=8x8*/, 0, 0, DustID.CursedTorch, -v0.Y * Speed, v0.X * Speed, 150, default, Main.rand.NextFloat(0.4f, 1.1f));
 			D.noGravity = true;
 			D.velocity = new Vector2(-v0.Y * Speed, v0.X * Speed);
 		}
@@ -93,42 +83,36 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
 		{
 			SpriteEffects effects = SpriteEffects.None;
 			if (Projectile.spriteDirection == 1)
-			{
 				effects = SpriteEffects.FlipHorizontally;
-			}
 			Texture2D texture = MythContent.QuickTexture("MiscItems/Weapons/Clubs/Projectiles/CurseClub_glow");
 			Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, texture.Size() / 2f, Projectile.scale, effects, 0f);
 			for (int i = 0; i < 5; i++)
 			{
 				float fade = Omega * 2f + 0.2f;
 				fade *= (5 - i) / 5f;
-				Color color2 = new Color(fade, fade, fade, 0);
+				var color2 = new Color(fade, fade, fade, 0);
 				Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, color2, Projectile.rotation - i * 0.75f * Omega, texture.Size() / 2f, Projectile.scale, effects, 0f);
 			}
 		}
 		public override void PostPreDraw()
 		{
 			List<Vector2> SmoothTrailX = CatmullRom.SmoothPath(trailVecs.ToList());//平滑
-			List<Vector2> SmoothTrail = new List<Vector2>();
+			var SmoothTrail = new List<Vector2>();
 			for (int x = 0; x < SmoothTrailX.Count - 1; x++)
 			{
 				SmoothTrail.Add(SmoothTrailX[x]);
 			}
 			if (trailVecs.Count != 0)
-			{
 				SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
-			}
 
 			int length = SmoothTrail.Count;
 			if (length <= 3)
-			{
 				return;
-			}
 			Vector2[] trail = SmoothTrail.ToArray();
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 
 			float fade = Omega * 2f + 0.2f;
-			Color color2 = new Color(Math.Min(fade * 0.6f, 0.6f), fade, fade * 0.01f, fade);
+			var color2 = new Color(Math.Min(fade * 0.6f, 0.6f), fade, fade * 0.01f, fade);
 
 			for (int i = 0; i < length; i++)
 			{
@@ -171,7 +155,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectile
 			//        MeleeTrail.Parameters["tex1"].SetValue((Texture2D)ModContent.Request<Texture2D>(Texture));
 			//    }
 			//}
-			Vector4 lightColor = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16)).ToVector4();
+			var lightColor = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16)).ToVector4();
 			lightColor.W = 0.7f * Omega;
 			//MeleeTrail.Parameters["Light"].SetValue(lightColor);
 			//MeleeTrail.CurrentTechnique.Passes["TrailByOrigTex"].Apply();

@@ -1,8 +1,9 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
+using Everglow.Myth.LanternMoon.Dusts;
 using ReLogic.Content;
 using Terraria.Audio;
 
-namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
+namespace Everglow.Myth.LanternMoon.Projectiles
 {
 	public class BloodLampProj : ModProjectile
 	{
@@ -77,9 +78,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
 			Projectile.rotation = Projectile.velocity.X * 0.05f;
 			Projectile.velocity *= 0.9f * Projectile.timeLeft / 600f;
 			if (Projectile.velocity.Length() > 0.3f)
-			{
 				Projectile.velocity.Y -= 0.15f * Projectile.timeLeft / 600f;
-			}
 		}
 
 		public override void PostDraw(Color lightColor)
@@ -89,9 +88,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
 			PearlRot += PearlOmega;
 			Color color = Lighting.GetColor((int)(Projectile.Center.X / 16d), (int)(Projectile.Center.Y / 16d));
 			if (NoPedal == null)
-			{
 				NoPedal = new bool[16];
-			}
 			if (BLantern == null)
 			{
 				BLantern = new Asset<Texture2D>[16];
@@ -103,11 +100,9 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
 			for (int x = 0; x < 16; x++)
 			{
 				float Rot = Projectile.rotation;
-				Vector2 Cen = new Vector2(19f, 19f);
+				var Cen = new Vector2(19f, 19f);
 				if (x >= 2)
-				{
-					Rot = -(float)(Math.Sin(Main.time / 26d + x)) / 7f + Projectile.rotation;
-				}
+					Rot = -(float)Math.Sin(Main.time / 26d + x) / 7f + Projectile.rotation;
 				else if (x == 0)
 				{
 					Rot = PearlRot;
@@ -118,7 +113,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
 					Main.spriteBatch.Draw(BLantern[x].Value, Projectile.Center - Main.screenPosition + Cen - BLantern[x].Size() / 2f/*坐标校正*/, null, color, Rot, Cen, 1, SpriteEffects.None, 0);
 					if (!NoPedal[x] && x == 1)
 					{
-						Vector2 Cen2 = new Vector2(19f, 19f);
+						var Cen2 = new Vector2(19f, 19f);
 						Texture2D Glow = MythContent.QuickTexture("LanternMoon/Projectiles/BloodLampFrame/BloodLamp_Glow");
 						Main.spriteBatch.Draw(Glow, Projectile.Center - Main.screenPosition + Cen2 - Glow.Size() / 2f/*坐标校正*/, null, new Color(Col, Col, Col, 0), Projectile.rotation, Cen2, 1, SpriteEffects.None, 0);
 					}
@@ -195,7 +190,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
 					{
 						NoPedal[x] = true;
 						Vector2 Cen = PedalPos[x] - new Vector2(6f, 7f);
-						Dust.NewDust(Projectile.Center + Cen - BLantern[x].Size() / 2f, 0, 0, ModContent.DustType<Dusts.BloodPedal>());
+						Dust.NewDust(Projectile.Center + Cen - BLantern[x].Size() / 2f, 0, 0, ModContent.DustType<BloodPedal>());
 						Projectile.NewProjectile(null, Projectile.Center + Cen - BLantern[x].Size() / 2f,
 							new Vector2(0, Main.rand.NextFloat(12, 20f)).RotatedByRandom(6.283),
 							ModContent.ProjectileType<LBloodEffect>(), 0, 0, Projectile.owner, Projectile.whoAmI);

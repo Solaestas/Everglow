@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
+﻿namespace Everglow.Myth.TheTusk.Projectiles.Weapon
 {
 	class Tusk0 : ModProjectile
 	{
@@ -28,17 +28,11 @@
 			Vector2 v1 = v0 / v0.Length();
 			Projectile.velocity += v1 * vscale / 10f;
 			if (Projectile.velocity.Length() > 20)
-			{
 				Projectile.velocity *= 0.99f;
-			}
 			if (Projectile.velocity.Length() > 30)
-			{
 				Projectile.velocity *= 0.99f;
-			}
 			if (Projectile.velocity.Length() > 40)
-			{
 				Projectile.velocity *= 0.99f;
-			}
 			if (Projectile.timeLeft > 640)
 			{
 				Vd = (720 - Projectile.timeLeft) / 80f;
@@ -53,14 +47,14 @@
 			{
 				if (Main.npc[j].CanBeChasedBy(Projectile, false) && Collision.CanHit(Projectile.Center, 1, 1, Main.npc[j].Center, 1, 1))
 				{
-					float num5 = Main.npc[j].position.X + (float)(Main.npc[j].width / 2);
-					float num6 = Main.npc[j].position.Y + (float)(Main.npc[j].height / 2);
-					float num7 = Math.Abs(Projectile.position.X + (float)(Projectile.width / 2) - num5) + Math.Abs(Projectile.position.Y + (float)(Projectile.height / 2) - num6);
+					float num5 = Main.npc[j].position.X + Main.npc[j].width / 2;
+					float num6 = Main.npc[j].position.Y + Main.npc[j].height / 2;
+					float num7 = Math.Abs(Projectile.position.X + Projectile.width / 2 - num5) + Math.Abs(Projectile.position.Y + Projectile.height / 2 - num6);
 					if (num7 < 200)
 					{
 						Vector2 v = Main.npc[j].Center - Projectile.Center;
 						v = v / v.Length() * 36f;
-						Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center, v, ModContent.ProjectileType<Projectiles.Weapon.Tusk>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0f, 0f);
+						Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, v, ModContent.ProjectileType<Tusk>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0f, 0f);
 						Projectile.Kill();
 					}
 				}

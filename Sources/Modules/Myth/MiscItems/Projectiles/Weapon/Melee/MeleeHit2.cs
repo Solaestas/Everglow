@@ -1,6 +1,6 @@
 ﻿using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
+namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Melee
 {
 	public class MeleeHit2 : ModProjectile
 	{

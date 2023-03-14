@@ -1,4 +1,6 @@
-﻿namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles
+﻿using Everglow.Myth.Common;
+
+namespace Everglow.Myth.LanternMoon.Projectiles
 {
 	class LMeteor : ModProjectile
 	{
@@ -33,13 +35,11 @@
 		public override void AI()
 		{
 			if (Projectile.timeLeft >= 140)
-			{
 				Sca = (float)(-Math.Cos((180 - Projectile.timeLeft) / 40d * Math.PI) + 1) * 0.65f;
-			}
 			else
 			{
 				Sca = 0.96f + Sca * 0.04f;
-				Lighting.AddLight(Projectile.Center, (float)(255 - Projectile.alpha) * 1.2f / 50f * ka, 0, 0);
+				Lighting.AddLight(Projectile.Center, (255 - Projectile.alpha) * 1.2f / 50f * ka, 0, 0);
 				Projectile.velocity.Y -= 0.25f;
 			}
 		}
@@ -49,12 +49,10 @@
 		}
 		public override void PostDraw(Color lightColor)
 		{
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 			int width = 60;
 			if (Projectile.timeLeft < 60)
-			{
 				width = Projectile.timeLeft;
-			}
 			TrueL = 0;
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
@@ -75,7 +73,7 @@
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(10, 10) - Main.screenPosition, new Color(255, 0, 0, 0), new Vector3(factor, 1, w)));
 				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(10, 10) - Main.screenPosition, new Color(255, 0, 0, 0), new Vector3(factor, 0, w)));
 			}
-			List<Vertex2D> Vx = new List<Vertex2D>();
+			var Vx = new List<Vertex2D>();
 			if (bars.Count > 2)
 			{
 				Vx.Add(bars[0]);
@@ -96,13 +94,13 @@
 			}
 			if (Vx.Count > 2)
 			{
-				Texture2D t = Common.MythContent.QuickTexture("LanternMoon/Projectiles/LMeteor");
+				Texture2D t = MythContent.QuickTexture("LanternMoon/Projectiles/LMeteor");
 				Main.graphics.GraphicsDevice.Textures[0] = t;
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 			}
-			Texture2D LightE = Common.MythContent.QuickTexture("VisualTextures/LightEffect");
-			Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition, null, new Color(0.3f * Stre * Stre, 0.21f * Stre * Stre, 0, 0), -(float)(Math.Sin(Main.time / 26d)) + 0.6f, new Vector2(128f, 128f), (1.5f + (float)(0.75 * Math.Sin(Main.time / 26d))) * Sca, SpriteEffects.None, 0);
-			Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition, null, new Color(1f * Stre * Stre, 0.7f * Stre * Stre, 0, 0), (float)(Math.Sin(Main.time / 12d + 2)) + 1.6f, new Vector2(128f, 128f), (1.5f + (float)(0.75 * Math.Sin(Main.time / 26d))) * Sca, SpriteEffects.None, 0);
+			Texture2D LightE = MythContent.QuickTexture("VisualTextures/LightEffect");
+			Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition, null, new Color(0.3f * Stre * Stre, 0.21f * Stre * Stre, 0, 0), -(float)Math.Sin(Main.time / 26d) + 0.6f, new Vector2(128f, 128f), (1.5f + (float)(0.75 * Math.Sin(Main.time / 26d))) * Sca, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition, null, new Color(1f * Stre * Stre, 0.7f * Stre * Stre, 0, 0), (float)Math.Sin(Main.time / 12d + 2) + 1.6f, new Vector2(128f, 128f), (1.5f + (float)(0.75 * Math.Sin(Main.time / 26d))) * Sca, SpriteEffects.None, 0);
 			Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition, null, new Color(0.3f * Stre * Stre, 0.21f * Stre * Stre, 0, 0), (float)Math.PI / 2f + (float)(Main.time / 9d), new Vector2(128f, 128f), (1.5f + (float)(0.75 * Math.Sin(Main.time / 26d + 1.57))) * Sca, SpriteEffects.None, 0);
 			Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition, null, new Color(1f * Stre * Stre, 0.7f * Stre * Stre, 0, 0), (float)(Main.time / 26d), new Vector2(128f, 128f), (1.5f + (float)(0.75 * Math.Sin(Main.time / 26d + 3.14))) * Sca, SpriteEffects.None, 0);
 			Main.spriteBatch.Draw(LightE, Projectile.Center - Main.screenPosition, null, new Color(1f * Stre * Stre, 0.7f * Stre * Stre, 0, 0), -(float)(Main.time / 26d), new Vector2(128f, 128f), (1.5f + (float)(0.75 * Math.Sin(Main.time / 26d + 4.71))) * Sca, SpriteEffects.None, 0);

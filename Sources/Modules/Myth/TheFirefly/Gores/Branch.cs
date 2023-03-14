@@ -1,6 +1,6 @@
 using Terraria.DataStructures;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Gores
+namespace Everglow.Myth.TheFirefly.Gores
 {
 	public class Branch : ModGore
 	{

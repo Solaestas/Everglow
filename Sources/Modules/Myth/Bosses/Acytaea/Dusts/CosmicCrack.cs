@@ -1,6 +1,7 @@
-﻿using ReLogic.Content;
+﻿using Everglow.Myth.Bosses.Acytaea;
+using ReLogic.Content;
 
-namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Dusts;
+namespace Everglow.Myth.Bosses.Acytaea.Dusts;
 
 [Pipeline(typeof(NPPipeline), typeof(AcytaeaPipeline))]
 public class CosmicCrack : Particle
@@ -25,9 +26,7 @@ public class CosmicCrack : Particle
 		scale -= 0.03f;
 		velocity *= 0.99f;
 		if (scale <= 0)
-		{
 			Active = false;
-		}
 	}
 
 	public override void Draw()

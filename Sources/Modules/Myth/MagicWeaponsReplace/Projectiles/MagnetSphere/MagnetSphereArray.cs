@@ -1,6 +1,6 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using static Everglow.Sources.Modules.MythModule.Common.MythUtils;
-namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.MagnetSphere
+﻿using Everglow.Myth.Common;
+using static Everglow.Myth.Common.MythUtils;
+namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.MagnetSphere
 {
 	internal class MagnetSphereArray : ModProjectile, IWarpProjectile
 	{
@@ -26,17 +26,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
 			{
 				Projectile.timeLeft = player.itemTime + 60;
 				if (Timer < 30)
-				{
 					Timer++;
-				}
 			}
 			else
 			{
 				Timer--;
 				if (Timer < 0)
-				{
 					Projectile.Kill();
-				}
 			}
 			Player.CompositeArmStretchAmount PCAS = Player.CompositeArmStretchAmount.Full;
 
@@ -68,7 +64,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
 		{
 			Player player = Main.player[Projectile.owner];
 			Texture2D Water = tex;
-			Color c1 = new Color(c0.R * 0.39f / 255f, c0.G * 0.39f / 255f, c0.B * 0.39f / 255f, c0.A * 0.39f / 255f);
+			var c1 = new Color(c0.R * 0.39f / 255f, c0.G * 0.39f / 255f, c0.B * 0.39f / 255f, c0.A * 0.39f / 255f);
 			DrawTexCircle(Timer * 1.6f, 22, c0, player.Center + RingPos - Main.screenPosition, Water, Main.timeForVisualEffects / 17);
 			DrawTexCircle(Timer * 1.3f, 32, c1, player.Center + RingPos - Main.screenPosition, Water, -Main.timeForVisualEffects / 17);
 

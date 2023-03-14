@@ -1,6 +1,6 @@
 ﻿using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Weapons
+namespace Everglow.Myth.TheTusk.Items.Weapons
 {
 	public class ToothStaff : ModItem
 	{
@@ -43,9 +43,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Weapons
 		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
 			if (player.numMinions >= player.maxMinions)
-			{
 				return false;
-			}
 			player.AddBuff(ModContent.BuffType<Buffs.TuskStaff>(), 18000);
 			Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, velocity, type, damage, knockback, player.whoAmI, player.ownedProjectileCounts[type] + 1);
 			int ai0 = 1;

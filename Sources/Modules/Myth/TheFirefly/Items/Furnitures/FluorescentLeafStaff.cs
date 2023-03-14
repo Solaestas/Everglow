@@ -1,6 +1,8 @@
+using Everglow.Myth.TheFirefly.Items;
+using Everglow.Myth.TheFirefly.Tiles;
 using Terraria.GameContent.Creative;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures
+namespace Everglow.Myth.TheFirefly.Items.Furnitures
 {
 	public class FluorescentLeafStaff : ModItem
 	{
@@ -21,7 +23,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures
 
 			Item.useAmmo = ModContent.ItemType<GlowWood>();
 			Item.value = 2000;
-			Item.createTile = ModContent.TileType<Tiles.LifeFluorescentTreeLeaf>();
+			Item.createTile = ModContent.TileType<LifeFluorescentTreeLeaf>();
 		}
 	}
 }

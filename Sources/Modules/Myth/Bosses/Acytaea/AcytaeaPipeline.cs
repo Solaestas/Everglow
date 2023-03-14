@@ -1,6 +1,6 @@
 ﻿using ReLogic.Content;
 
-namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea;
+namespace Everglow.Myth.Bosses.Acytaea;
 
 
 internal class NPPipeline : Pipeline

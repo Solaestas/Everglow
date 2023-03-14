@@ -1,7 +1,7 @@
 using Terraria.GameContent.ItemDropRules;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.Common
+namespace Everglow.Myth.Common
 {
 
 	public class MythContentNPCLoot : GlobalNPC
@@ -300,9 +300,7 @@ namespace Everglow.Sources.Modules.MythModule.Common
 		{
 			string desc = "Only hardmode and in the Crimson";
 			if (Language.ActiveCulture.Name == "zh-Hans")
-			{
 				desc = "仅在困难模式的猩红之地";
-			}
 			return desc;
 		}
 	}
@@ -321,9 +319,7 @@ namespace Everglow.Sources.Modules.MythModule.Common
 		{
 			string desc = "Only hardmode and in the  Crimson";
 			if (Language.ActiveCulture.Name == "zh-Hans")
-			{
 				desc = "仅在困难模式的猩红之地";
-			}
 			return desc;
 		}
 	}
@@ -342,9 +338,7 @@ namespace Everglow.Sources.Modules.MythModule.Common
 		{
 			string desc = "Only hardmode and in the  Crimson";
 			if (Language.ActiveCulture.Name == "zh-Hans")
-			{
 				desc = "仅在困难模式的猩红之地";
-			}
 			return desc;
 		}
 	}
@@ -363,9 +357,7 @@ namespace Everglow.Sources.Modules.MythModule.Common
 		{
 			string desc = "Only hardmode and in the Corrupt";
 			if (Language.ActiveCulture.Name == "zh-Hans")
-			{
 				desc = "仅在困难模式的腐化之地";
-			}
 			return desc;
 		}
 	}
@@ -384,9 +376,7 @@ namespace Everglow.Sources.Modules.MythModule.Common
 		{
 			string desc = "Only hardmode and in the Corrupt";
 			if (Language.ActiveCulture.Name == "zh-Hans")
-			{
 				desc = "仅在困难模式的腐化之地";
-			}
 			return desc;
 		}
 	}
@@ -405,9 +395,7 @@ namespace Everglow.Sources.Modules.MythModule.Common
 		{
 			string desc = "Only hardmode and in the Corrupt";
 			if (Language.ActiveCulture.Name == "zh-Hans")
-			{
 				desc = "仅在困难模式的腐化之地";
-			}
 			return desc;
 		}
 	}
@@ -426,9 +414,7 @@ namespace Everglow.Sources.Modules.MythModule.Common
 		{
 			string desc = "Only hardmode and in the Hallow";
 			if (Language.ActiveCulture.Name == "zh-Hans")
-			{
 				desc = "仅在困难模式的神圣之地";
-			}
 			return desc;
 		}
 	}
@@ -447,9 +433,7 @@ namespace Everglow.Sources.Modules.MythModule.Common
 		{
 			string desc = "Only hardmode and in the Hallow";
 			if (Language.ActiveCulture.Name == "zh-Hans")
-			{
 				desc = "仅在困难模式的神圣之地";
-			}
 			return desc;
 		}
 	}
@@ -468,9 +452,7 @@ namespace Everglow.Sources.Modules.MythModule.Common
 		{
 			string desc = "Only hardmode and in the Hallow";
 			if (Language.ActiveCulture.Name == "zh-Hans")
-			{
 				desc = "仅在困难模式的神圣之地";
-			}
 			return desc;
 		}
 	}
@@ -489,9 +471,7 @@ namespace Everglow.Sources.Modules.MythModule.Common
 		{
 			string desc = "Only defeated Plantera and in the Eclipse";
 			if (Language.ActiveCulture.Name == "zh-Hans")
-			{
 				desc = "仅在世纪之花后日食";
-			}
 			return desc;
 		}
 	}
@@ -510,9 +490,7 @@ namespace Everglow.Sources.Modules.MythModule.Common
 		{
 			string desc = "Only defeated Plantera and in the Eclipse";
 			if (Language.ActiveCulture.Name == "zh-Hans")
-			{
 				desc = "仅在世纪之花后日食";
-			}
 			return desc;
 		}
 	}
@@ -531,9 +509,7 @@ namespace Everglow.Sources.Modules.MythModule.Common
 		{
 			string desc = "Only defeated Plantera and in the Eclipse";
 			if (Language.ActiveCulture.Name == "zh-Hans")
-			{
 				desc = "仅在世纪之花后日食";
-			}
 			return desc;
 		}
 	}
@@ -552,9 +528,7 @@ namespace Everglow.Sources.Modules.MythModule.Common
 		{
 			string desc = "Only Frost Moon during Chrismas";
 			if (Language.ActiveCulture.Name == "zh-Hans")
-			{
 				desc = "仅在圣诞节期间霜月";
-			}
 			return desc;
 		}
 	}
@@ -573,9 +547,7 @@ namespace Everglow.Sources.Modules.MythModule.Common
 		{
 			string desc = "Only Pumpkin Moon during Chrismas";
 			if (Language.ActiveCulture.Name == "zh-Hans")
-			{
 				desc = "仅在圣诞节期间霜月";
-			}
 			return desc;
 		}
 	}

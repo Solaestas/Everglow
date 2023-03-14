@@ -1,8 +1,8 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Modules.MythModule.MiscItems.Gores;
+﻿using Everglow.Myth.Common;
+using Everglow.Myth.MiscItems.Gores;
 using Terraria.Audio;
 
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee.Hepuyuan
+namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Melee.Hepuyuan
 {
 	public class HepuyuanDown : ModProjectile, IWarpProjectile
 	{
@@ -37,14 +37,14 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
 			{
 				Vector2 v1 = new Vector2(Main.rand.NextFloat(0.8f, 10f), 0).RotatedByRandom(6.28);
 				Vector2 v2 = new Vector2(Main.rand.NextFloat(30f), 0).RotatedByRandom(6.28);
-				Dust.NewDust(OldplCen[0] - new Vector2(4) + v2, 1, 1, Main.rand.NextBool(2) ? ModContent.DustType<MiscItems.Dusts.XiaoDustCyan>() : ModContent.DustType<MiscItems.Dusts.XiaoDust>(), (Projectile.velocity * 0.35f + v1).X, (Projectile.velocity * 0.35f + v1).Y, 0, default, Main.rand.NextFloat(0.85f, Main.rand.NextFloat(0.85f, 3.75f)));
+				Dust.NewDust(OldplCen[0] - new Vector2(4) + v2, 1, 1, Main.rand.NextBool(2) ? ModContent.DustType<Dusts.XiaoDustCyan>() : ModContent.DustType<Dusts.XiaoDust>(), (Projectile.velocity * 0.35f + v1).X, (Projectile.velocity * 0.35f + v1).Y, 0, default, Main.rand.NextFloat(0.85f, Main.rand.NextFloat(0.85f, 3.75f)));
 			}
 
 			timer++;
 			if (timer % 10 == 1 && Projectile.timeLeft > 30)
 			{
-				Vector2 v = Vector2.Normalize(Projectile.velocity);
-				int h = Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Melee.Hepuyuan.XiaoBlackWave>(), 0, 0, player.whoAmI, Math.Clamp(Projectile.velocity.Length() / 8f, 0f, 4f), 0);
+				var v = Vector2.Normalize(Projectile.velocity);
+				int h = Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<XiaoBlackWave>(), 0, 0, player.whoAmI, Math.Clamp(Projectile.velocity.Length() / 8f, 0f, 4f), 0);
 				Main.projectile[h].rotation = (float)(Math.Atan2(v.Y, v.X) + Math.PI / 2d);
 			}
 			for (int f = OldplCen.Length - 1; f > 0; f--)
@@ -57,27 +57,19 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
 				wid[f] = wid[f - 1];
 			}
 			if (player.direction == -Math.Sign(Projectile.velocity.X))
-			{
 				player.direction *= -1;
-			}
 			player.heldProj = Projectile.whoAmI;
 			if (Projectile.timeLeft > duration)
-			{
 				Projectile.timeLeft = (int)duration;
-			}
 			if (Projectile.timeLeft <= 6)
 			{
 				if (Collision.SolidCollision(player.Top, 1, 1))
-				{
 					player.position.Y -= 64 * player.gravDir;
-				}
 			}
 			float halfDuration = duration * 0.5f;
 
 			if (Projectile.timeLeft < halfDuration + 2 && !max)
-			{
 				max = true;
-			}
 
 			Projectile.velocity *= 0.995f;
 
@@ -96,9 +88,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
 					{
 						Vector2 v = Projectile.Center - Vector2.Normalize(Projectile.velocity) * 16 * h;
 						if (Collision.SolidCollision(v, 1, 1))
-						{
 							Collision.HitTiles(v, Projectile.velocity * 20, 16, 16);
-						}
 					}
 				}
 				if (!Crash)
@@ -111,20 +101,18 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
 						for (int i = 0; i < 5; i++)
 						{
 							if (Collision.SolidCollision(Pos, 1, 1))
-							{
 								Pos.Y -= 16 * player.gravDir;
-							}
 						}
 						Vector2 Dy = v0 + new Vector2(0, Main.rand.NextFloat(Math.Abs(Dx) - 278, 0) / 12f);
 						Dy.Y *= player.gravDir;
 						if (Main.rand.NextBool(2))
 						{
-							Gore g = Gore.NewGoreDirect(null, Pos, Dy * 2f, ModContent.GoreType<XiaoDash0>(), Main.rand.NextFloat(1f, 4.5f));
+							var g = Gore.NewGoreDirect(null, Pos, Dy * 2f, ModContent.GoreType<XiaoDash0>(), Main.rand.NextFloat(1f, 4.5f));
 							g.timeLeft = Main.rand.Next(250, 600);
 						}
 						else
 						{
-							Gore g = Gore.NewGoreDirect(null, Pos, Dy * 2f, ModContent.GoreType<XiaoDash1>(), Main.rand.NextFloat(1f, 4.5f));
+							var g = Gore.NewGoreDirect(null, Pos, Dy * 2f, ModContent.GoreType<XiaoDash1>(), Main.rand.NextFloat(1f, 4.5f));
 							g.timeLeft = Main.rand.Next(250, 600);
 						}
 					}
@@ -136,14 +124,12 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
 						for (int i = 0; i < 5; i++)
 						{
 							if (Collision.SolidCollision(Pos, 1, 1))
-							{
 								Pos.Y -= 16 * player.gravDir;
-							}
 						}
 						Vector2 Dy = v0 + new Vector2(0, Main.rand.NextFloat(Math.Abs(Dx) - 278, 0) / 12f);
 						Dy.Y *= player.gravDir;
 						Vector2 v2 = new Vector2(Main.rand.NextFloat(30f), 0).RotatedByRandom(6.28);
-						Dust.NewDust(Pos - new Vector2(4) + v2, 1, 1, Main.rand.NextBool(2) ? ModContent.DustType<MiscItems.Dusts.XiaoDustCyan>() : ModContent.DustType<MiscItems.Dusts.XiaoDust>(), Dy.X * 2f, Dy.Y * 2f, 0, default, Main.rand.NextFloat(0.85f, Main.rand.NextFloat(0.85f, 5.75f)));
+						Dust.NewDust(Pos - new Vector2(4) + v2, 1, 1, Main.rand.NextBool(2) ? ModContent.DustType<Dusts.XiaoDustCyan>() : ModContent.DustType<Dusts.XiaoDust>(), Dy.X * 2f, Dy.Y * 2f, 0, default, Main.rand.NextFloat(0.85f, Main.rand.NextFloat(0.85f, 5.75f)));
 					}
 					for (int f = 0; f < 8; f++)
 					{
@@ -162,14 +148,10 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
 							}
 						}
 						if (empty)
-						{
 							continue;
-						}
-						int h = Projectile.NewProjectile(Projectile.InheritSource(Projectile), Pos, Vector2.Zero, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Melee.Hepuyuan.HepuyuanSpice>(), Projectile.damage, Projectile.knockBack, player.whoAmI, Main.rand.NextFloat(50f, 110f), 0);
+						int h = Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Pos, Vector2.Zero, ModContent.ProjectileType<Hepuyuan.HepuyuanSpice>(), Projectile.damage, Projectile.knockBack, player.whoAmI, Main.rand.NextFloat(50f, 110f), 0);
 						if (player.gravDir == 1)
-						{
 							Main.projectile[h].rotation = Main.rand.NextFloat((f - 3.5f) / 15f - 0.3f, (f - 3.5f) / 15f + 0.3f);
-						}
 						else
 						{
 							Main.projectile[h].rotation = MathF.PI - Main.rand.NextFloat((f - 3.5f) / 15f - 0.3f, (f - 3.5f) / 15f + 0.3f);
@@ -193,22 +175,18 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
 							}
 						}
 						if (empty)
-						{
 							continue;
-						}
-						int h = Projectile.NewProjectile(Projectile.InheritSource(Projectile), Pos, Vector2.Zero, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Melee.Hepuyuan.HepuyuanShake>(), 0, Projectile.knockBack, player.whoAmI, Main.rand.NextFloat(17f, 32f) * (Math.Abs(f - 5.5f) + 0.5f), 0);
+						int h = Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Pos, Vector2.Zero, ModContent.ProjectileType<Hepuyuan.HepuyuanShake>(), 0, Projectile.knockBack, player.whoAmI, Main.rand.NextFloat(17f, 32f) * (Math.Abs(f - 5.5f) + 0.5f), 0);
 
 
 						if (player.gravDir == 1)
-						{
 							Main.projectile[h].rotation = Main.rand.NextFloat((f - 5.5f) / 15f - 0.1f + Math.Sign(f - 5.5f) * 0.75f, (f - 5.5f) / 15f + 0.1f + Math.Sign(f - 5.5f) * 0.75f);
-						}
 						else
 						{
 							Main.projectile[h].rotation = MathF.PI - Main.rand.NextFloat((f - 5.5f) / 15f - 0.1f + Math.Sign(f - 5.5f) * 0.75f, (f - 5.5f) / 15f + 0.1f + Math.Sign(f - 5.5f) * 0.75f);
 						}
 					}
-					ScreenShaker mplayer = Main.player[Terraria.Main.myPlayer].GetModPlayer<ScreenShaker>();
+					ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
 					mplayer.FlyCamPosition = new Vector2(0, 84).RotatedByRandom(6.283);
 					SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/MythModule/Sounds/Xiao"), Projectile.Center);
 					Crash = true;
@@ -217,18 +195,12 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
 			else
 			{
 				if (Projectile.velocity.Length() < 100)
-				{
 					Projectile.velocity *= addK;
-				}
 				if (addK < 1.5f)
-				{
 					addK += 0.001f;
-				}
 			}
 			if (Projectile.timeLeft > 6 && !Collision.SolidCollision(Projectile.Center, 1, 1))
-			{
 				player.velocity = Projectile.velocity * 6;
-			}
 			if (Projectile.timeLeft < 6)
 			{
 				player.velocity *= 0.4f;
@@ -241,13 +213,11 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
 		public void DrawWarp(VFXBatch spriteBatch)
 		{
 			if (FirstVel == Vector2.Zero)
-			{
 				FirstVel = Vector2.Normalize(Projectile.velocity);
-			}
 			Vector2 FlipVel = FirstVel.RotatedBy(Math.PI / 2d);
 
-			List<Vertex2D> VxII = new List<Vertex2D>();
-			List<Vertex2D> barsII = new List<Vertex2D>();
+			var VxII = new List<Vertex2D>();
+			var barsII = new List<Vertex2D>();
 
 
 
@@ -259,14 +229,12 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
 				Vector2 DeltaV0 = -OldplCen[i] + OldplCen[i - 1];
 				float d = DeltaV0.ToRotation() + 3.14f + 1.57f;
 				if (d > 6.28f)
-				{
 					d -= 6.28f;
-				}
 				float dir = d / MathHelper.TwoPi;
 				var factor = i / 60f;
-				var factor2 = i / (float)(TrueL);
+				var factor2 = i / (float)TrueL;
 
-				Color c0 = new Color(dir, MathF.Sin(factor * 3.14159f), 0, 0);
+				var c0 = new Color(dir, MathF.Sin(factor * 3.14159f), 0, 0);
 				barsII.Add(new Vertex2D(OldplCen[i] + FlipVel * wid[i] * widk - Main.screenPosition, c0, new Vector3((float)Math.Sqrt(factor), 1, 1 - factor2)));
 				barsII.Add(new Vertex2D(OldplCen[i] - FlipVel * wid[i] * widk - Main.screenPosition, c0, new Vector3((float)Math.Sqrt(factor), 0, 1 - factor2)));
 			}
@@ -293,9 +261,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
 		public override void PostDraw(Color lightColor)
 		{
 			if (FirstVel == Vector2.Zero)
-			{
 				FirstVel = Vector2.Normalize(Projectile.velocity);
-			}
 			Vector2 FlipVel = FirstVel.RotatedBy(Math.PI / 2d);
 
 			for (int i = 1; i < 60; ++i)
@@ -307,8 +273,8 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
 
 			for (int d = 0; d < 4; d++)
 			{
-				List<Vertex2D> VxII = new List<Vertex2D>();
-				List<Vertex2D> barsII = new List<Vertex2D>();
+				var VxII = new List<Vertex2D>();
+				var barsII = new List<Vertex2D>();
 				Vector2 deltaPos = new Vector2(0, 24).RotatedBy(d / 2d * Math.PI + Main.time / 32d);
 				float widk = Vector2.Dot(Vector2.Normalize(deltaPos), Vector2.Normalize(Projectile.velocity)) + 1f;
 				float widV = (float)Math.Clamp(1.6 - Math.Sqrt(Projectile.velocity.Length() / 16f), 0, 1.6f);
@@ -320,9 +286,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
 				else
 				{
 					if (statrP[d] == 0)
-					{
 						statrP[d] = Main.rand.NextFloat(1f, 2f);
-					}
 				}
 				for (int i = 1; i < 60; ++i)
 				{
@@ -331,19 +295,15 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
 					var factor = i / 60f;
 					var w = statrP[d] - factor;
 					if (w > 1)
-					{
 						w = 2 - w;
-					}
-					barsII.Add(new Vertex2D(deltaPos * (float)(Math.Clamp(Math.Sqrt(factor * 3), 0, 1)) * widV + OldplCen[i] + FlipVel * wid[i] * widk * widk * 0.6f - Main.screenPosition, new Color(0, 0.7f, 0.7f, 0.5f), new Vector3((float)Math.Sqrt(factor), 1, w)));
-					barsII.Add(new Vertex2D(deltaPos * (float)(Math.Clamp(Math.Sqrt(factor * 3), 0, 1)) * widV + OldplCen[i] - FlipVel * wid[i] * widk * widk * 0.6f - Main.screenPosition, new Color(0, 0.7f, 0.7f, 0.5f), new Vector3((float)Math.Sqrt(factor), 0, w)));
+					barsII.Add(new Vertex2D(deltaPos * (float)Math.Clamp(Math.Sqrt(factor * 3), 0, 1) * widV + OldplCen[i] + FlipVel * wid[i] * widk * widk * 0.6f - Main.screenPosition, new Color(0, 0.7f, 0.7f, 0.5f), new Vector3((float)Math.Sqrt(factor), 1, w)));
+					barsII.Add(new Vertex2D(deltaPos * (float)Math.Clamp(Math.Sqrt(factor * 3), 0, 1) * widV + OldplCen[i] - FlipVel * wid[i] * widk * widk * 0.6f - Main.screenPosition, new Color(0, 0.7f, 0.7f, 0.5f), new Vector3((float)Math.Sqrt(factor), 0, w)));
 				}
 				if (barsII.Count > 2)
 				{
 					VxII.Add(barsII[0]);
 					if (statrP[d] > 1)
-					{
 						statrP[d] = 2 - statrP[d];
-					}
 					var vertex = new Vertex2D((barsII[0].position + barsII[1].position) * 0.5f + Vector2.Normalize(Projectile.velocity) * 30, new Color(0, 0.7f, 1f, 0.5f), new Vector3(0, 0.5f, statrP[d]));
 					VxII.Add(barsII[1]);
 					VxII.Add(vertex);
@@ -368,14 +328,12 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
 		{
 			Player player = Main.player[Projectile.owner];
 			if (FirstVel == Vector2.Zero)
-			{
 				FirstVel = Vector2.Normalize(Projectile.velocity);
-			}
 			Vector2 FlipVel = FirstVel.RotatedBy(Math.PI / 2d);
 			for (int d = 0; d < 7; d++)
 			{
-				List<Vertex2D> VxII = new List<Vertex2D>();
-				List<Vertex2D> barsII = new List<Vertex2D>();
+				var VxII = new List<Vertex2D>();
+				var barsII = new List<Vertex2D>();
 				Vector2 deltaPos = new Vector2(0, 24).RotatedBy(d / 3d * Math.PI + Main.time / 7d);
 				float widk = Vector2.Dot(Vector2.Normalize(deltaPos), Vector2.Normalize(Projectile.velocity)) + 1.2f;
 				float widV = (float)Math.Clamp(1.6 - Math.Sqrt(Projectile.velocity.Length() / 16f), 0, 1.6f);
@@ -391,9 +349,9 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
 					if (OldplCen[i] == Vector2.Zero)
 						break;
 					var factor = i / 60f;
-					var factor2 = i / (float)(TrueL);
-					barsII.Add(new Vertex2D(deltaPos * (float)(Math.Clamp(Math.Sqrt(factor * 3), 0, 1)) * widV + OldplCen[i] + FlipVel * wid[i] * widk - Main.screenPosition, c0, new Vector3((float)Math.Sqrt(factor), 1, 1 - factor2)));
-					barsII.Add(new Vertex2D(deltaPos * (float)(Math.Clamp(Math.Sqrt(factor * 3), 0, 1)) * widV + OldplCen[i] - FlipVel * wid[i] * widk - Main.screenPosition, c0, new Vector3((float)Math.Sqrt(factor), 0, 1 - factor2)));
+					var factor2 = i / (float)TrueL;
+					barsII.Add(new Vertex2D(deltaPos * (float)Math.Clamp(Math.Sqrt(factor * 3), 0, 1) * widV + OldplCen[i] + FlipVel * wid[i] * widk - Main.screenPosition, c0, new Vector3((float)Math.Sqrt(factor), 1, 1 - factor2)));
+					barsII.Add(new Vertex2D(deltaPos * (float)Math.Clamp(Math.Sqrt(factor * 3), 0, 1) * widV + OldplCen[i] - FlipVel * wid[i] * widk - Main.screenPosition, c0, new Vector3((float)Math.Sqrt(factor), 0, 1 - factor2)));
 				}
 				if (barsII.Count > 2)
 				{
@@ -415,13 +373,11 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
 
 				Texture2D t0 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/heatmapShadeXiao").Value;
 				if (d == 0)
-				{
 					t0 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/UIimages/VisualTextures/heatmapShadeXiaoGreen").Value;
-				}
 				Main.graphics.GraphicsDevice.Textures[0] = t0;
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, VxII.ToArray(), 0, VxII.Count / 3);
 			}
-			Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+			var texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
 			Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition - new Vector2(0, player.gravDir * 140f), null, lightColor, player.gravDir == 1 ? MathF.PI * 1.25f : MathF.PI * 0.25f, texture.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
 			return false;
 		}
@@ -429,14 +385,14 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
 		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
 		{
 			CyanStrike = 1;
-			Projectile.NewProjectile(Projectile.InheritSource(Projectile), target.Center, Vector2.Zero, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Melee.Hepuyuan.XiaoHit>(), 0, 0, Projectile.owner, 0.45f);
+			Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), target.Center, Vector2.Zero, ModContent.ProjectileType<XiaoHit>(), 0, 0, Projectile.owner, 0.45f);
 			base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
 		}
 		public override void Load()
 		{
-			Terraria.On_CombatText.NewText_Rectangle_Color_string_bool_bool += CombatText_NewText_Rectangle_Color_string_bool_bool;
+			On_CombatText.NewText_Rectangle_Color_string_bool_bool += CombatText_NewText_Rectangle_Color_string_bool_bool;
 		}
-		private int CombatText_NewText_Rectangle_Color_string_bool_bool(Terraria.On_CombatText.orig_NewText_Rectangle_Color_string_bool_bool orig, Rectangle location, Color color, string text, bool dramatic, bool dot)
+		private int CombatText_NewText_Rectangle_Color_string_bool_bool(On_CombatText.orig_NewText_Rectangle_Color_string_bool_bool orig, Rectangle location, Color color, string text, bool dramatic, bool dot)
 		{
 			if (CyanStrike > 0)
 			{

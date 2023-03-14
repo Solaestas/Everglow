@@ -1,4 +1,6 @@
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
+using Everglow.Myth.TheFirefly.Dusts;
+
+namespace Everglow.Myth.TheFirefly.Tiles
 {
 	public class LifeFluorescentTreeLeaf : ModTile
 	{
@@ -8,7 +10,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 			Main.tileBlockLight[Type] = true;
 			Main.tileMerge[Type][ModContent.TileType<LifeFluorescentTreeWood>()] = true;
 			Main.tileMerge[ModContent.TileType<LifeFluorescentTreeWood>()][Type] = true;
-			DustType = ModContent.DustType<Dusts.FluorescentLeafDust>();
+			DustType = ModContent.DustType<FluorescentLeafDust>();
 
 			AddMapEntry(new Color(0, 53, 158));
 		}

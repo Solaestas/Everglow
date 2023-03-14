@@ -3,7 +3,7 @@ using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ObjectData;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
+namespace Everglow.Myth.TheFirefly.Tiles.Furnitures
 {
 	public class GlowWoodTorch : ModTile
 	{
@@ -53,9 +53,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 
 			// Assets
 			if (!Main.dedServ)
-			{
 				flameTexture = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheFirefly/Tiles/Furnitures/GlowWoodTorch_Flame");
-			}
 		}
 
 		public override float GetTorchLuck(Player player)
@@ -102,9 +100,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 				offsetY = 2;
 
 				if (WorldGen.SolidTile(i - 1, j + 1) || WorldGen.SolidTile(i + 1, j + 1))
-				{
 					offsetY = 4;
-				}
 			}
 		}
 
@@ -119,20 +115,16 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 				offsetY = 2;
 
 				if (WorldGen.SolidTile(i - 1, j + 1) || WorldGen.SolidTile(i + 1, j + 1))
-				{
 					offsetY = 4;
-				}
 			}
 
-			Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+			var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 
 			if (Main.drawToScreen)
-			{
 				zero = Vector2.Zero;
-			}
 
 			ulong randSeed = Main.TileFrameSeed ^ (ulong)((long)j << 32 | (uint)i); // Don't remove any casts.
-			Color color = new Color(55, 5, 255, 0);
+			var color = new Color(55, 5, 255, 0);
 			int width = 20;
 			int height = 20;
 			var tile = Main.tile[i, j];

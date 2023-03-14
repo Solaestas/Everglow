@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKing
+﻿namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing
 {
 	public class floatLantern5 : ModProjectile
 	{
@@ -39,9 +39,7 @@
 				num4 = Main.rand.NextFloat(0.3f, 1800f);
 				num5 = Main.rand.NextFloat(2.85f, 3.15f);
 				if (Projectile.timeLeft > 6000)
-				{
 					Projectile.timeLeft = 3000;
-				}
 				for (int i = 0; i < 4; i++)
 				{
 					V4[i] = new Vector2(0, Main.rand.NextFloat(5f, 40f)).RotatedByRandom(Math.PI * 2d);
@@ -53,7 +51,7 @@
 			num1 += 1;
 			num2 -= 1;
 			num4 += 0.01f;
-			Projectile.rotation = (float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) - (float)Math.PI * 0.5f;
+			Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) - (float)Math.PI * 0.5f;
 			/*if (Projectile.timeLeft < 995)
             {
                 Vector2 vector = Projectile.Center - new Vector2(4, 4);
@@ -64,13 +62,9 @@
                 Main.dust[num].alpha = 200;
             }*/
 			if (num1 > 0 && num1 <= 120)
-			{
 				num = num1 / 120f;
-			}
 			if (Projectile.timeLeft < 120)
-			{
 				num = Projectile.timeLeft / 120f;
-			}
 			//Lighting.AddLight(Projectile.Center, (float)(255 - Projectile.alpha) * 0.8f / 255f * Projectile.scale * num1, (float)(255 - Projectile.alpha) * 0.2f / 255f * Projectile.scale * num1, (float)(255 - Projectile.alpha) * 0f / 255f * Projectile.scale * num1);
 		}
 		private float num = 0;
@@ -87,7 +81,7 @@
 		private float[] F4 = new float[4];
 		public override bool PreDraw(ref Color lightColor)
 		{
-			Texture2D texture2D = (Texture2D)ModContent.Request<Texture2D>(Texture);
+			var texture2D = (Texture2D)ModContent.Request<Texture2D>(Texture);
 			int nuM = texture2D.Height;
 			fyc += 1;
 			if (fyc == 8)
@@ -96,14 +90,12 @@
 				Fy += 1;
 			}
 			if (Fy > 3)
-			{
 				Fy = 0;
-			}
-			Color colorT = new Color(1f * num * (float)(Math.Sin(num4) + 2) / 3f, 1f * num * (float)(Math.Sin(num4) + 2) / 3f, 1f * num * (float)(Math.Sin(num4) + 2) / 3f, 0.5f * num * (float)(Math.Sin(num4) + 2) / 3f);
+			var colorT = new Color(1f * num * (float)(Math.Sin(num4) + 2) / 3f, 1f * num * (float)(Math.Sin(num4) + 2) / 3f, 1f * num * (float)(Math.Sin(num4) + 2) / 3f, 0.5f * num * (float)(Math.Sin(num4) + 2) / 3f);
 
 			for (int i = 0; i < 4; i++)
 			{
-				Main.spriteBatch.Draw(texture2D, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY) + V4[i], new Rectangle?(new Rectangle(0, 0, texture2D.Width, nuM)), colorT, Projectile.rotation, new Vector2((float)texture2D.Width / 2f, (float)nuM / 2f), Projectile.scale * F4[i], SpriteEffects.None, 1f);
+				Main.spriteBatch.Draw(texture2D, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY) + V4[i], new Rectangle?(new Rectangle(0, 0, texture2D.Width, nuM)), colorT, Projectile.rotation, new Vector2(texture2D.Width / 2f, nuM / 2f), Projectile.scale * F4[i], SpriteEffects.None, 1f);
 				Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/LanternMoon/Projectiles/LanternKing/LanternFire").Value, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY) + V4[i], new Rectangle?(new Rectangle(0, 30 * Fy, 20, 30)), colorT, 0, new Vector2(10, 15), Projectile.scale * 0.5f * F4[i], SpriteEffects.None, 1f);
 			}
 			return false;

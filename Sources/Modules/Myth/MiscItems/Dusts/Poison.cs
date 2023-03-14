@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Dusts
+﻿namespace Everglow.Myth.MiscItems.Dusts
 {
 	public class Poison : ModDust
 	{
@@ -19,9 +19,7 @@
 			float scale = dust.scale;
 			Lighting.AddLight(dust.position, dust.color.R * 0.0005f, dust.color.G * 0.0005f, dust.color.B * 0.0005f);
 			if (dust.scale < 0.25f)
-			{
 				dust.active = false;
-			}
 			//for(int i = 0; i < 200;i++)
 			//{
 			//    if((Main.npc[i].Center - dust.position).Length() < 10 && !Main.npc[i].dontTakeDamage && !Main.npc[i].friendly)
@@ -34,9 +32,7 @@
 		public override Color? GetAlpha(Dust dust, Color lightColor)
 		{
 			if (dust.scale > 4f)
-			{
 				return new Color?(new Color(0.6f, 0.8f, 0.1f, 0f));
-			}
 			else
 			{
 				return new Color?(new Color(0.6f, 0.8f, 0.1f, (4f - dust.scale) / 4f));

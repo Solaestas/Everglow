@@ -1,4 +1,6 @@
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs
+using Everglow.Myth;
+
+namespace Everglow.Myth.MiscItems.Weapons.Clubs
 {
 	public class CurseClub : ClubItem
 	{

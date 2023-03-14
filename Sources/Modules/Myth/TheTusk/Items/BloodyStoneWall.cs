@@ -1,6 +1,6 @@
 ﻿using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Items
+namespace Everglow.Myth.TheTusk.Items
 {
 	public class BloodyStoneWall : ModItem
 	{

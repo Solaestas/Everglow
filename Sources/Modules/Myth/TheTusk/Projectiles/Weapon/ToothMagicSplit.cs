@@ -1,6 +1,7 @@
-﻿using Terraria.Localization;
+﻿using Everglow.Myth.TheTusk;
+using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
+namespace Everglow.Myth.TheTusk.Projectiles.Weapon
 {
 	public class ToothMagicSplit : ModProjectile
 	{
@@ -30,7 +31,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 		int MaxAdd = -1;
 		public override void AI()
 		{
-			Projectile.rotation = (float)(Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X));
+			Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
 			/*int num91 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(12, 12) - Projectile.velocity, 16, 16, DustID.Blood, 0f, 0f, 100, default, Main.rand.NextFloat(1f, 2.6f));
             Main.dust[num91].noGravity = true;
             Main.dust[num91].velocity *= 0.5f;
@@ -48,9 +49,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 				{
 					if (Main.npc[j].CanBeChasedBy(Projectile, false) && Collision.CanHit(Projectile.Center, 1, 1, Main.npc[j].Center, 1, 1))
 					{
-						float num5 = Main.npc[j].position.X + (float)(Main.npc[j].width / 2);
-						float num6 = Main.npc[j].position.Y + (float)(Main.npc[j].height / 2);
-						float num7 = Math.Abs(Projectile.position.X + (float)(Projectile.width / 2) - num5) + Math.Abs(Projectile.position.Y + (float)(Projectile.height / 2) - num6);
+						float num5 = Main.npc[j].position.X + Main.npc[j].width / 2;
+						float num6 = Main.npc[j].position.Y + Main.npc[j].height / 2;
+						float num7 = Math.Abs(Projectile.position.X + Projectile.width / 2 - num5) + Math.Abs(Projectile.position.Y + Projectile.height / 2 - num6);
 						if (num7 < num4)
 						{
 							num4 = num7;
@@ -63,7 +64,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 				if (flag)
 				{
 					float num8 = 20f;
-					Vector2 vector1 = new Vector2(Projectile.position.X + (float)Projectile.width * 0.5f, Projectile.position.Y + (float)Projectile.height * 0.5f);
+					var vector1 = new Vector2(Projectile.position.X + Projectile.width * 0.5f, Projectile.position.Y + Projectile.height * 0.5f);
 					float num9 = num2 - vector1.X;
 					float num10 = num3 - vector1.Y;
 					float num11 = (float)Math.Sqrt((double)(num9 * num9 + num10 * num10));
@@ -75,13 +76,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 				}
 			}
 			if (Tokill >= 0 && Tokill <= 2)
-			{
 				Projectile.Kill();
-			}
 			if (Tokill > 0)
-			{
 				Tokill--;
-			}
 			Player player = Main.player[Projectile.owner];
 			if (Tokill <= 44 && Tokill > 0)
 			{
@@ -93,17 +90,11 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
             int r = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4) + Projectile.velocity / Projectile.velocity.Length() * 12f, 0, 0, 183, 0, 0, 0, default, 4f);
             Main.dust[r].noGravity = true;*/
 			if (MaxAdd == -1)
-			{
 				MaxAdd = Main.rand.Next(12, 27);
-			}
 			if (FirstVel == Vector2.Zero)
-			{
 				FirstVel = Vector2.Normalize(Projectile.velocity).RotatedBy(Main.rand.NextFloat(-1.5f, 1.5f)) * 0.9f;
-			}
 			if (addi < MaxAdd)
-			{
 				Projectile.velocity += (float)(1 - Math.Cos(addi / 7.5d * Math.PI)) * FirstVel;
-			}
 			else
 			{
 				if (Tokill < 0)
@@ -113,21 +104,17 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 				}
 			}
 			if (Projectile.damage <= 0 && Tokill <= 0)
-			{
 				Projectile.Kill();
-			}
 			if (MaxP < 2)
 			{
 				if (Main.rand.NextBool(13))
 				{
-					Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center, Projectile.velocity, ModContent.ProjectileType<Projectiles.Weapon.ToothMagicSplit2>(), (int)(Projectile.damage * 0.75f), Projectile.knockBack, player.whoAmI);
+					Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Projectile.velocity, ModContent.ProjectileType<ToothMagicSplit2>(), (int)(Projectile.damage * 0.75f), Projectile.knockBack, player.whoAmI);
 					MaxP++;
 				}
 			}
 			if (Projectile.velocity.Length() > 7)
-			{
 				Projectile.velocity = Projectile.velocity.RotatedBy(Projectile.velocity.Length() / 30f * (Projectile.whoAmI % 2 - 0.5f)) * 0.96f;
-			}
 			else
 			{
 				Projectile.velocity = Projectile.velocity.RotatedBy(Projectile.velocity.Length() / 100f * (Projectile.whoAmI % 2 - 0.5f));
@@ -165,17 +152,13 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 		public override void PostDraw(Color lightColor)
 		{
 			if (DelX == -1)
-			{
 				DelX = Main.rand.NextFloat(1f, 40f);
-			}
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-			List<VertexBase.CustomVertexInfo> bars = new List<VertexBase.CustomVertexInfo>();
+			var bars = new List<VertexBase.CustomVertexInfo>();
 			float width = 2;
 			if (Projectile.timeLeft < 45 && Tokill > 0)
-			{
 				width = Projectile.timeLeft / 22.5f;
-			}
 			TrueL = 0;
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
@@ -186,9 +169,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 					for (int j = 0; j < Projectile.oldPos.Length - 2; ++j)
 					{
 						if (Projectile.oldPos[i] == Projectile.oldPos[i - 1])
-						{
 							i++;
-						}
 						else
 						{
 							//i+=2;
@@ -224,9 +205,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 					for (int j = 0; j < Projectile.oldPos.Length - 2; ++j)
 					{
 						if (Projectile.oldPos[i] == Projectile.oldPos[i - 1])
-						{
 							i++;
-						}
 						else
 						{
 							//i+=2;
@@ -242,19 +221,13 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 
 				float CosWid = 1.5f;//粗细
 				if (TrueL - i < 25)
-				{
 					CosWid *= (float)(Math.Cos((25 - Math.Clamp(TrueL - i, 0, 25)) / 25d * Math.PI) + 1) / 2f;
-				}
 				if (wid == -1)
-				{
 					wid = Main.rand.NextFloat(1.0f, 2f);
-				}
 				float SinFx0 = 0;//摆动函数
 				float CosFx0 = 1 * CosWid * wid;//求导简便计算透视投影
 				if (Projectile.timeLeft < 30)
-				{
 					CosFx0 *= Projectile.timeLeft / 30f;
-				}
 				Vector2 P0 = Projectile.oldPos[i] + normalDir * SinFx0 + normalDir * width * CosFx0 + new Vector2(9, 9);
 				Vector2 P1 = Projectile.oldPos[i] + normalDir * SinFx0 + normalDir * -width * CosFx0 + new Vector2(9, 9);
 				Color c0 = Lighting.GetColor((int)(P0.X / 16f), (int)(P0.Y / 16f));
@@ -262,14 +235,12 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
 				bars.Add(new VertexBase.CustomVertexInfo(P0 - Main.screenPosition, c0, new Vector3(factor, 1, w)));
 				bars.Add(new VertexBase.CustomVertexInfo(P1 - Main.screenPosition, c1, new Vector3(factor, 0, w)));
 			}
-			List<VertexBase.CustomVertexInfo> Vx = new List<VertexBase.CustomVertexInfo>();
+			var Vx = new List<VertexBase.CustomVertexInfo>();
 			if (bars.Count > 2)
 			{
 				Vx.Add(bars[0]);
 				if (Projectile.velocity.Length() > 0.05f)
-				{
 					ovel = Projectile.velocity;
-				}
 				Vector2 P2 = (bars[0].Position + bars[1].Position) * 0.5f + Vector2.Normalize(ovel) * 30;
 				Color c2 = Lighting.GetColor((int)(P2.X / 16f), (int)(P2.Y / 16f));
 				var vertex = new VertexBase.CustomVertexInfo(P2, c2, new Vector3(0, 0.5f, 1));

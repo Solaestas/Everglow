@@ -1,4 +1,4 @@
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds
+namespace Everglow.Myth.TheFirefly.Backgrounds
 {
 	public class MothUndergroundBackground : ModUndergroundBackgroundStyle
 	{

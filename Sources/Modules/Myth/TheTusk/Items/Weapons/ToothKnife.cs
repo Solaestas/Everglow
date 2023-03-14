@@ -1,6 +1,7 @@
-﻿using Everglow.Sources.Modules.MythModule.TheTusk.Projectiles;
+﻿using Everglow.Myth.TheTusk.Projectiles;
+using Everglow.Myth.TheTusk.Projectiles.Weapon;
 using Terraria.DataStructures;
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Weapons
+namespace Everglow.Myth.TheTusk.Items.Weapons
 {
 	public class ToothKnife : ModItem
 	{
@@ -24,7 +25,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Items.Weapons
 			Item.rare = ItemRarityID.Green;
 			Item.UseSound = SoundID.Item1;
 
-			Item.shoot = ModContent.ProjectileType<Projectiles.Weapon.Tusk0>();
+			Item.shoot = ModContent.ProjectileType<Tusk0>();
 			Item.shootSpeed = 8f;
 		}
 		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)

@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.Common
+﻿namespace Everglow.Myth.Common
 {
 	public class MythUtils
 	{
@@ -7,7 +7,7 @@
 			float Wid = 6f;
 			Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
 
-			List<Vertex2D> vertex2Ds = new List<Vertex2D>();
+			var vertex2Ds = new List<Vertex2D>();
 
 			for (int x = 0; x < 3; x++)
 			{
@@ -53,7 +53,7 @@
 			float Wid = 6f;
 			Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
 
-			List<Vertex2D> vertex2Ds = new List<Vertex2D>();
+			var vertex2Ds = new List<Vertex2D>();
 
 			for (int x = 0; x < 3; x++)
 			{
@@ -94,7 +94,7 @@
 		}
 		public static void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 		{
-			List<Vertex2D> circle = new List<Vertex2D>();
+			var circle = new List<Vertex2D>();
 			for (int h = 0; h < radious / 2; h += 2)
 			{
 				circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 1, 0)));
@@ -113,7 +113,7 @@
 
 		public static void DrawTexCircle(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 		{
-			List<Vertex2D> circle = new List<Vertex2D>();
+			var circle = new List<Vertex2D>();
 
 			for (int h = 0; h < radious / 2; h += 1)
 			{
@@ -139,9 +139,7 @@
 		public static void PlaceFrameImportantTiles(int x, int y, int width, int height, int type)
 		{
 			if (x > Main.maxTilesX - width || x < 0 || y > Main.maxTilesY - height || y < 0)
-			{
 				return;
-			}
 			for (int i = 0; i < width; i++)
 			{
 				for (int j = 0; j < height; j++)

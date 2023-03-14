@@ -1,7 +1,7 @@
 ﻿using Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk_New.DTiles;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk_New
+namespace Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk_New
 {
 
 	public class TuskWall : ModNPC
@@ -50,9 +50,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk_New
 			}
 
 			if (NPC.ai[1] < 60)
-			{
 				NPC.ai[1]++;
-			}
 			else
 			{
 				if (NPC.ai[0] < 880)

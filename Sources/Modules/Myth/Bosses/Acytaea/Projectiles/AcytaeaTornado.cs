@@ -1,4 +1,6 @@
-﻿namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles;
+﻿using Everglow.Myth.Bosses.Acytaea;
+
+namespace Everglow.Myth.Bosses.Acytaea.Projectiles;
 
 [Pipeline(typeof(NPPipeline), typeof(AcytaeaPipeline))]
 internal class AcytaeaTornado : VisualProjectile
@@ -34,9 +36,7 @@ internal class AcytaeaTornado : VisualProjectile
 			}
 		}
 		if (AIMNpc >= 0)
-		{
 			Projectile.Center = Main.npc[AIMNpc].Center;
-		}
 		Timer = Projectile.timeLeft / 15f;
 		WHOAMI = Projectile.whoAmI;
 		Typ = Projectile.type;
@@ -55,7 +55,7 @@ internal class AcytaeaTornado : VisualProjectile
 	{
 		for (int z = -15; z < 16; z++)
 		{
-			List<Vertex2D> Vx = new List<Vertex2D>();
+			var Vx = new List<Vertex2D>();
 
 			for (int h = 0; h < 60; h++)
 			{
@@ -66,15 +66,11 @@ internal class AcytaeaTornado : VisualProjectile
 				Vector2 vCla = new Vector2(120 * MinCosZ, 0).RotatedBy(Timer - 0.1f - h * 0.1f + z * z);
 				vCla.Y *= 0.3f;
 				Vector2 vc = Main.projectile[WHOAMI].Center + vCla + new Vector2(0, -80);
-				Color color3 = new Color(255, 255, 255, 0);
+				var color3 = new Color(255, 255, 255, 0);
 				if (Main.projectile[WHOAMI].timeLeft < 255)
-				{
 					color3 = new Color(Main.projectile[WHOAMI].timeLeft, Main.projectile[WHOAMI].timeLeft, Main.projectile[WHOAMI].timeLeft, 0);
-				}
 				if (Main.projectile[WHOAMI].timeLeft > 945)
-				{
 					color3 = new Color(1200 - Main.projectile[WHOAMI].timeLeft, 1200 - Main.projectile[WHOAMI].timeLeft, 1200 - Main.projectile[WHOAMI].timeLeft, 0);
-				}
 				float a0 = (float)Math.Sqrt((3 - Math.Abs(z)) / 3f);
 				color3.R = (byte)(color3.R * a0);
 				color3.G = (byte)(color3.G * a0);
@@ -86,9 +82,7 @@ internal class AcytaeaTornado : VisualProjectile
 			}
 			float ka = 1;
 			if (Main.projectile[WHOAMI].timeLeft < 60f)
-			{
 				ka = Main.projectile[WHOAMI].timeLeft / 60f;
-			}
 			Lighting.AddLight(Main.projectile[WHOAMI].Center + new Vector2(0, z * 40), (255 - Main.projectile[WHOAMI].alpha) * 1.2f / 250f * ka, 0, 0);
 			Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Projectiles/AcytaeaTornado").Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t;//GoldenBloodScaleMirror

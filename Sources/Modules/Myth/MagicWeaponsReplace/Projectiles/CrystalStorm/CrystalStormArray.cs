@@ -1,6 +1,6 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
 
-namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.CrystalStorm
+namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.CrystalStorm
 {
 	internal class CrystalStormArray : ModProjectile
 	{
@@ -26,17 +26,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
 			{
 				Projectile.timeLeft = player.itemTime + 60;
 				if (Timer < 30)
-				{
 					Timer++;
-				}
 			}
 			else
 			{
 				Timer--;
 				if (Timer < 0)
-				{
 					Projectile.Kill();
-				}
 			}
 			Player.CompositeArmStretchAmount PCAS = Player.CompositeArmStretchAmount.Full;
 
@@ -78,8 +74,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
 				Crystalline = tex;
 				CrystalLight = tex;
 			}
-			Color c1 = new Color(155, 0, 225, 0);
-			Color c2 = new Color(0, 0, 255, 0);
+			var c1 = new Color(155, 0, 225, 0);
+			var c2 = new Color(0, 0, 255, 0);
 			DrawTexSquire(Timer * 2.88f, 11, c0, player.Center + RingPos - Main.screenPosition, Water, -Main.timeForVisualEffects / 300);
 			DrawTexSquire(Timer * 3.1f, 24, c2, player.Center + RingPos - Main.screenPosition, Crystalline, -Main.timeForVisualEffects / 300);
 
@@ -135,7 +131,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
 
 		private static void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 		{
-			List<Vertex2D> circle = new List<Vertex2D>();
+			var circle = new List<Vertex2D>();
 			for (int h = 0; h < radious / 2; h++)
 			{
 				circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 1, 0)));
@@ -153,7 +149,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
 		}
 		private static void DrawTexSquire(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 		{
-			List<Vertex2D> circle = new List<Vertex2D>();
+			var circle = new List<Vertex2D>();
 			for (int h = 0; h < 5; h++)
 			{
 				float Value0 = (float)(h / 4f + Main.timeForVisualEffects / 191d) % 1f;
@@ -192,7 +188,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Cr
 			float Wid = 24f;
 			Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
 
-			List<Vertex2D> vertex2Ds = new List<Vertex2D>();
+			var vertex2Ds = new List<Vertex2D>();
 			float Value0 = (float)(Main.timeForVisualEffects / 291d + 20 + AddValue) % 1f;
 			float Value1 = (float)(Main.timeForVisualEffects / 291d + 20.1 + AddValue) % 1f;
 			if (Value1 < Value0)

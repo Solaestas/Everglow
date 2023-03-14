@@ -1,10 +1,11 @@
-﻿using Everglow.Sources.Modules.MythModule.TheFirefly.Dusts;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles;
+﻿using Everglow.Myth;
+using Everglow.Myth.TheFirefly.Dusts;
+using Everglow.Myth.TheFirefly.Items.Accessories;
+using Everglow.Myth.TheFirefly.Projectiles;
 using Terraria.DataStructures;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
+namespace Everglow.Myth.TheFirefly.Items.Weapons
 {
 	public class PhosphorescenceGun : ModItem
 	{
@@ -46,9 +47,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 			Gsplayer.FlyCamPosition = new Vector2(0, 100).RotatedByRandom(6.283);
 			const int NumProjectiles = 4;
 			if (player.ownedProjectileCounts[ModContent.ProjectileType<Projectiles.PhosphorescenceGun>()] < 1)
-			{
 				Projectile.NewProjectileDirect(source, position + velocity * 2.0f - new Vector2(0, 4), Vector2.Zero, ModContent.ProjectileType<Projectiles.PhosphorescenceGun>(), damage, knockback, player.whoAmI, 1f, Item.useAnimation);
-			}
 			else
 			{
 				for (int x = 0; x < Main.projectile.Length; x++)
@@ -64,9 +63,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 								if (MothEye.LocalOwner != null && MothEye.LocalOwner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
 								{
 									if (!mothEyePlayer.MothEyeEquipped && !fireflyBiome.IsBiomeActive(Main.LocalPlayer) && !Main.hardMode)
-									{
 										player.velocity -= velocity * 0.2f;
-									}
 								}
 							}
 						}
@@ -86,9 +83,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 				if (MothEye.LocalOwner != null && MothEye.LocalOwner.TryGetModPlayer(out MothEyePlayer mothEyePlayer))
 				{
 					if (mothEyePlayer.MothEyeEquipped && fireflyBiome.IsBiomeActive(Main.LocalPlayer) && Main.hardMode)
-					{
 						Projectile.NewProjectileDirect(source, position + velocity * 2.0f - new Vector2(0, 4), newVelocity, ModContent.ProjectileType<PhosphorescenceBullet>(), (int)(damage * 0.39f), knockback, player.whoAmI);
-					}
 					else
 					{
 						Projectile.NewProjectileDirect(source, position + velocity * 2.0f - new Vector2(0, 4), newVelocity, ModContent.ProjectileType<PhosphorescenceBullet>(), (int)(damage * 0.26f), knockback, player.whoAmI);

@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
+﻿namespace Everglow.Myth.Bosses.Acytaea.Projectiles
 {
 	internal class AcytaeaMagicBook : ModProjectile
 	{
@@ -28,9 +28,7 @@
 			if (Projectile.timeLeft % 5 == 0)
 			{
 				if (Projectile.frame < 4)
-				{
 					Projectile.frame++;
-				}
 				else
 				{
 					Projectile.frame = 0;

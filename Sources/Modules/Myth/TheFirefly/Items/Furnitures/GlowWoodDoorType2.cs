@@ -1,4 +1,7 @@
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures
+using Everglow.Myth.TheFirefly.Items;
+using Everglow.Myth.TheFirefly.Tiles.Furnitures;
+
+namespace Everglow.Myth.TheFirefly.Items.Furnitures
 {
 	public class GlowWoodDoorType2 : ModItem
 	{
@@ -18,7 +21,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures
 			Item.useStyle = ItemUseStyleID.Swing;
 			Item.consumable = true;
 			Item.value = 150;
-			Item.createTile = ModContent.TileType<Tiles.Furnitures.GlowWoodDoorClosedType2>();
+			Item.createTile = ModContent.TileType<GlowWoodDoorClosedType2>();
 		}
 
 		public override void AddRecipes()

@@ -1,6 +1,6 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
+namespace Everglow.Myth.TheFirefly.Projectiles
 {
 	public class BeadShakeWave : ModProjectile, IWarpProjectile
 	{
@@ -29,16 +29,14 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 
 		public override bool PreDraw(ref Color lightColor)
 		{
-			float value = (200 - Projectile.timeLeft) / (200f);
+			float value = (200 - Projectile.timeLeft) / 200f;
 			value = MathF.Sqrt(value);
 			float colorV = 0.9f * (1 - value);
 			colorV *= 10;
 			Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Lightline");
 			float width = 120;
 			if (Projectile.timeLeft < 120)
-			{
 				width = Projectile.timeLeft;
-			}
 			VFXManager.spriteBatch.Begin();
 			DrawTexCircle_VFXBatch(VFXManager.spriteBatch, value * 270 * Projectile.ai[0], width, new Color(0, colorV * 0.2f, colorV, 0f) * 0.4f, Projectile.Center - Main.screenPosition, t);
 			DrawTexCircle_VFXBatch(VFXManager.spriteBatch, value * 160 * Projectile.ai[0], width * 0.6f, new Color(0, colorV * 0.2f, colorV, 0f) * 0.4f, Projectile.Center - Main.screenPosition, t);
@@ -53,7 +51,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 
 		private static void DrawWarpTexCircle_VFXBatch(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 		{
-			List<Vertex2D> circle = new List<Vertex2D>();
+			var circle = new List<Vertex2D>();
 
 			for (int h = 0; h < radious / 2; h += 1)
 			{
@@ -77,13 +75,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(0, 0.8f, 0)));
 			circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0, 0.2f, 0)));
 			if (circle.Count > 2)
-			{
 				spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
-			}
 		}
 		private static void DrawTexCircle_VFXBatch(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 		{
-			List<Vertex2D> circle = new List<Vertex2D>();
+			var circle = new List<Vertex2D>();
 
 			for (int h = 0; h < radious / 2; h += 1)
 			{
@@ -93,22 +89,18 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(0, 0.8f, 0)));
 			circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0, 0.2f, 0)));
 			if (circle.Count > 2)
-			{
 				spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
-			}
 		}
 		public void DrawWarp(VFXBatch spriteBatch)
 		{
-			float value = (200 - Projectile.timeLeft) / (200f);
+			float value = (200 - Projectile.timeLeft) / 200f;
 			value = MathF.Sqrt(value);
 			float colorV = 0.9f * (1 - value);
 			colorV *= 10;
 			Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Lightline");
 			float width = 120;
 			if (Projectile.timeLeft < 120)
-			{
 				width = Projectile.timeLeft;
-			}
 
 			DrawWarpTexCircle_VFXBatch(spriteBatch, value * 270 * Projectile.ai[0], width, new Color(colorV, colorV * 0.7f * Projectile.ai[1], colorV, 0f), Projectile.Center - Main.screenPosition, t);
 

@@ -1,7 +1,7 @@
 ﻿using ReLogic.Content;
 using Terraria.GameContent;
 
-namespace Everglow.Sources.Modules.MythModule;
+namespace Everglow.Myth;
 
 public class ItemGlowManager : IModule
 {

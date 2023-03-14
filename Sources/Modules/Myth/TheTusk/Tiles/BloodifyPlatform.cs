@@ -1,7 +1,7 @@
 ﻿using Terraria.Localization;
 using Terraria.ObjectData;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
+namespace Everglow.Myth.TheTusk.Tiles
 {
 	public class BloodifyPlatform : ModTile
 	{
@@ -27,7 +27,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
 			TileObjectData.newTile.UsesCustomCanPlace = false;
 			TileObjectData.newTile.LavaDeath = true;
 			TileObjectData.addTile(Type);
-			base.AddToArray(ref TileID.Sets.RoomNeeds.CountsAsDoor);
+			AddToArray(ref TileID.Sets.RoomNeeds.CountsAsDoor);
 			ModTranslation modTranslation = base.CreateMapEntryName(null);
 			AddMapEntry(new Color(168, 11, 0), modTranslation);
 			modTranslation.SetDefault("Bloodify Platform");
@@ -46,13 +46,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Tiles
 		public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 		{
 			if (Main.rand.NextBool(30))
-			{
 				Dust.NewDust(new Vector2(i, j) * 16f, 16, 16, DustID.Blood, 0f, 0f, 1, Color.White, 1f);
-			}
 			if (Main.rand.NextBool(300))
-			{
 				WorldGen.KillTile(i, j);
-			}
 			return base.PreDraw(i, j, spriteBatch);
 		}
 		public override void NumDust(int i, int j, bool fail, ref int num)

@@ -1,4 +1,6 @@
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
+using Everglow.Myth.MiscItems.Projectiles.Weapon.Melee.Hepuyuan;
+
+namespace Everglow.Myth.TheTusk.Projectiles
 {
 	public class TuskSpicePro : ModProjectile
 	{
@@ -22,9 +24,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 		public override void AI()
 		{
 			if (Projectile.timeLeft <= 78)
-			{
 				Projectile.friendly = false;
-			}
 		}
 		public static int CyanStrike = 0;
 		public override bool PreDraw(ref Color lightColor)
@@ -34,14 +34,14 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
 		{
 			CyanStrike = 1;
-			Projectile.NewProjectile(Projectile.InheritSource(Projectile), target.Center, Vector2.Zero, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Melee.Hepuyuan.XiaoHit>(), 0, 0, Projectile.owner, 0.45f);
+			Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), target.Center, Vector2.Zero, ModContent.ProjectileType<XiaoHit>(), 0, 0, Projectile.owner, 0.45f);
 			base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
 		}
 
 		public override void Load()
 		{
-			Terraria.On_CombatText.NewText_Rectangle_Color_string_bool_bool += CombatText_NewText_Rectangle_Color_string_bool_bool;
-			Terraria.On_Main.DoDraw_Tiles_NonSolid += DrawTusk;
+			On_CombatText.NewText_Rectangle_Color_string_bool_bool += CombatText_NewText_Rectangle_Color_string_bool_bool;
+			On_Main.DoDraw_Tiles_NonSolid += DrawTusk;
 		}
 		public override void Unload()
 		{
@@ -49,7 +49,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 			//On.Terraria.Main.DoDraw_Tiles_NonSolid -= DrawTusk;
 		}
 		public bool[,] hasHit = new bool[200, 1000];
-		private void DrawTusk(Terraria.On_Main.orig_DoDraw_Tiles_NonSolid orig, Terraria.Main self)
+		private void DrawTusk(On_Main.orig_DoDraw_Tiles_NonSolid orig, Main self)
 		{
 			for (int p = 0; p < Main.projectile.Length; p++)
 			{
@@ -64,17 +64,15 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 					}
 					Main.spriteBatch.End();
 					Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-					List<VertexBase.CustomVertexInfo> Vx = new List<VertexBase.CustomVertexInfo>();
+					var Vx = new List<VertexBase.CustomVertexInfo>();
 					Vector2 Vbase = Main.projectile[p].Center - Main.screenPosition;
-					Vector2 v0 = new Vector2(0, -1);
-					Vector2 v0T = new Vector2(1, 0);
+					var v0 = new Vector2(0, -1);
+					var v0T = new Vector2(1, 0);
 
 					float length = Main.projectile[p].ai[0];
 					float origfade = Math.Clamp((80 - Main.projectile[p].timeLeft) / 24f, 0, 1f);
 					if (Main.projectile[p].timeLeft < 20)
-					{
 						origfade = Main.projectile[p].timeLeft / 20f;
-					}
 					v0 = v0.RotatedBy(Main.projectile[p].rotation);
 					Vbase -= v0 * 16f;
 					v0 = v0 * length * origfade;
@@ -113,9 +111,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 											Main.npc[j].StrikeNPC(Dam, 0, Math.Sign(Main.projectile[p].velocity.X), Main.rand.Next(100) < Main.projectile[p].ai[0]);
 											Player player2 = Main.player[Main.projectile[p].owner];
 											if (Crit)
-											{
 												player2.addDPS((Dam - Main.npc[j].defense) * 2);
-											}
 											else
 											{
 												player2.addDPS((Dam - Main.npc[j].defense) * 2);
@@ -135,7 +131,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles
 			}
 			orig(self);
 		}
-		private int CombatText_NewText_Rectangle_Color_string_bool_bool(Terraria.On_CombatText.orig_NewText_Rectangle_Color_string_bool_bool orig, Rectangle location, Color color, string text, bool dramatic, bool dot)
+		private int CombatText_NewText_Rectangle_Color_string_bool_bool(On_CombatText.orig_NewText_Rectangle_Color_string_bool_bool orig, Rectangle location, Color color, string text, bool dramatic, bool dot)
 		{
 			if (CyanStrike > 0)
 			{

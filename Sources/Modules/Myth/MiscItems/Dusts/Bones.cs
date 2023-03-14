@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Dusts
+﻿namespace Everglow.Myth.MiscItems.Dusts
 {
 	public class Bones : ModDust
 	{
@@ -9,7 +9,7 @@
 			// If our texture had 3 different dust on top of each other (a 30x90 pixel image), we might do this:
 			dust.frame = new Rectangle(0, Main.rand.Next(3) * 15, 15, 15);
 			dust.alpha = 0;
-			dust.rotation = Main.rand.NextFloat((float)(MathHelper.TwoPi));
+			dust.rotation = Main.rand.NextFloat(MathHelper.TwoPi);
 		}
 
 		public override bool Update(Dust dust)

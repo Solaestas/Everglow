@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
+﻿namespace Everglow.Myth.Bosses.Acytaea.Projectiles
 {
 	internal class AcytaeaTornadoHit : ModProjectile
 	{
@@ -37,9 +37,7 @@
 				}
 			}
 			if (AIMNpc >= 0)
-			{
 				Projectile.Center = Main.npc[AIMNpc].Center;
-			}
 			Timer = Projectile.timeLeft / 15f;
 			WHOAMI = Projectile.whoAmI;
 			Typ = Projectile.type;

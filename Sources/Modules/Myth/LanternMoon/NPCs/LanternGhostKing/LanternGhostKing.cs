@@ -1,8 +1,10 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
+using Everglow.Myth.LanternMoon.NPCs;
+using Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 using Terraria.DataStructures;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.LanternGhostKing
+namespace Everglow.Myth.LanternMoon.NPCs.LanternGhostKing
 {
 	[AutoloadBossHead]
 	public class LanternGhostKing : ModNPC
@@ -17,9 +19,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.LanternGhostKing
 		{
 			NPC.damage = 100;
 			if (Main.expertMode)
-			{
 				NPC.lifeMax = 20000;
-			}
 			else
 			{
 				NPC.lifeMax = 30000;
@@ -45,7 +45,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.LanternGhostKing
 		internal bool canDespawn;
 		public override bool CheckActive()
 		{
-			return this.canDespawn;
+			return canDespawn;
 		}
 
 		public override void OnSpawn(IEntitySource source)
@@ -57,41 +57,29 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.LanternGhostKing
 			NPC.TargetClosest(false);
 			Player player = Main.player[NPC.target];
 			if (NPC.localAI[0] > 14400)
-			{
 				NPC.ai[0] = (14680 - NPC.localAI[0]) / 240f;
-			}
 			else
 			{
 				NPC.ai[0] = 1;
 			}
 			if (Main.dayTime)
-			{
 				canDespawn = true;
-			}
 			else
 			{
 				canDespawn = false;
 			}
 			if (NPC.localAI[0] == -2)
-			{
 				RingCenter = NPC.Center;
-			}
 			if (NPC.localAI[0] % 15 == 0)
-			{
 				NPC.frameCounter += 1;
-			}
 			NPC.localAI[0] += 1;
-			Lighting.AddLight(NPC.Center, (float)(255 - NPC.alpha) * 0.75f / 255f * NPC.scale, (float)(255 - NPC.alpha) * 0.24f * NPC.scale / 255f, (float)(255 - NPC.alpha) * 0f / 255f * NPC.scale);
+			Lighting.AddLight(NPC.Center, (255 - NPC.alpha) * 0.75f / 255f * NPC.scale, (255 - NPC.alpha) * 0.24f * NPC.scale / 255f, (255 - NPC.alpha) * 0f / 255f * NPC.scale);
 			if (!NearDie)
-			{
 				NPC.dontTakeDamage = false;
-			}
 			if (player.dead)
 			{
 				if (NPC.life < NPC.lifeMax)
-				{
 					NPC.life += 10;
-				}
 				else
 				{
 					NPC.life = NPC.lifeMax;
@@ -103,9 +91,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.LanternGhostKing
 				NPC.rotation = NPC.velocity.X / 120f;
 				Vector2 v = player.Center + new Vector2((float)Math.Sin(NPC.localAI[0] / 40f) * 500f, (float)Math.Sin((NPC.localAI[0] + 200) / 40f) * 50f - 350) - NPC.Center;
 				if (NPC.velocity.Length() < 9f)
-				{
 					NPC.velocity += v / v.Length() * 0.35f;
-				}
 				NPC.velocity *= 0.96f;
 				RingCenterTrend = NPC.Center;
 				RingRadiusTrend = 1200;
@@ -116,23 +102,17 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.LanternGhostKing
 				NPC.rotation = NPC.velocity.X / 120f;
 				Vector2 v = player.Center + new Vector2((float)Math.Sin(NPC.localAI[0] / 40f) * 500f, (float)Math.Sin((NPC.localAI[0] + 200) / 40f) * 50f - 350) - NPC.Center;
 				if (NPC.velocity.Length() < 9f)
-				{
 					NPC.velocity += v / v.Length() * 0.35f;
-				}
 				NPC.velocity *= 0.96f;
 				if (NPC.localAI[0] % 30 == 1)
-				{
 					ShootGoldLines();
-				}
 				RingCenterTrend = NPC.Center;
 				RingRadiusTrend = 1200;
 			}
 			if (NPC.localAI[0] >= 700 && NPC.localAI[0] < 1500)
 			{
 				if (NPC.localAI[0] % 250 == 0)
-				{
 					Lantern3RingCenter = new Vector2(0, -300).RotatedBy(Main.rand.NextFloat(-0.25f, 0.25f) * Math.PI);
-				}
 				if (NPC.localAI[0] % 250 < 20)
 				{
 					NPC.velocity *= 0.95f;
@@ -149,7 +129,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.LanternGhostKing
 					{
 						Vector2 v1 = new Vector2(0, 100).RotatedBy(i / 6d * Math.PI);
 						Vector2 v2 = v1 + NPC.Center;
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), v2.X, v2.Y, 0, 0, ModContent.ProjectileType<Projectiles.LanternKing.DarkLantern>(), 50, 0f, player.whoAmI, 120 - NPC.localAI[0] % 250, (float)(i / 6d * Math.PI));
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), v2.X, v2.Y, 0, 0, ModContent.ProjectileType<DarkLantern>(), 50, 0f, player.whoAmI, 120 - NPC.localAI[0] % 250, (float)(i / 6d * Math.PI));
 					}
 				}
 				if (NPC.localAI[0] % 250 == 60)
@@ -158,7 +138,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.LanternGhostKing
 					{
 						Vector2 v1 = new Vector2(0, 150).RotatedBy(i / 12d * Math.PI);
 						Vector2 v2 = v1 + NPC.Center;
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), v2.X, v2.Y, 0, 0, ModContent.ProjectileType<Projectiles.LanternKing.DarkLantern>(), 50, 0f, player.whoAmI, 120 - NPC.localAI[0] % 250, (float)(i / 12d * Math.PI));
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), v2.X, v2.Y, 0, 0, ModContent.ProjectileType<DarkLantern>(), 50, 0f, player.whoAmI, 120 - NPC.localAI[0] % 250, (float)(i / 12d * Math.PI));
 					}
 				}
 				if (NPC.localAI[0] % 250 == 90)
@@ -167,7 +147,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.LanternGhostKing
 					{
 						Vector2 v1 = new Vector2(0, 200).RotatedBy(i / 18d * Math.PI);
 						Vector2 v2 = v1 + NPC.Center;
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), v2.X, v2.Y, 0, 0, ModContent.ProjectileType<Projectiles.LanternKing.DarkLantern>(), 50, 0f, player.whoAmI, 120 - NPC.localAI[0] % 250, (float)(i / 18d * Math.PI));
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), v2.X, v2.Y, 0, 0, ModContent.ProjectileType<DarkLantern>(), 50, 0f, player.whoAmI, 120 - NPC.localAI[0] % 250, (float)(i / 18d * Math.PI));
 					}
 				}
 				if (NPC.localAI[0] % 250 > 120)
@@ -175,9 +155,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.LanternGhostKing
 					Vector2 v = player.Center + Lantern3RingCenter + player.velocity * 30f;
 					NPC.velocity += (v - NPC.Center) / (v - NPC.Center).Length() * 0.25f;
 					if (NPC.velocity.Length() > 20f)
-					{
 						NPC.velocity *= 0.96f;
-					}
 				}
 				RingCenterTrend = NPC.Center;
 				RingRadiusTrend = 1200;
@@ -191,7 +169,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.LanternGhostKing
 					for (int j = 0; j < 150; j++)
 					{
 						Vector2 v2 = new Vector2(0, Main.rand.Next(Main.rand.Next(0, 1200), 1200)).RotatedByRandom(Math.PI * 2);
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), v2.X + NPC.Center.X, v2.Y + NPC.Center.Y, 0, 0, ModContent.ProjectileType<Projectiles.LanternKing.DarkLanternBomb>(), 50, 0f, player.whoAmI, v2.Length() / 4f, 0);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), v2.X + NPC.Center.X, v2.Y + NPC.Center.Y, 0, 0, ModContent.ProjectileType<DarkLanternBomb>(), 50, 0f, player.whoAmI, v2.Length() / 4f, 0);
 					}
 				}
 			}
@@ -203,10 +181,8 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.LanternGhostKing
 				{
 					for (int t = 0; t < Main.projectile.Length; t++)
 					{
-						if (Main.projectile[t].type == ModContent.ProjectileType<Projectiles.LanternKing.DarkLantern>() && Main.projectile[t].active && Main.projectile[t].timeLeft > 180)
-						{
+						if (Main.projectile[t].type == ModContent.ProjectileType<DarkLantern>() && Main.projectile[t].active && Main.projectile[t].timeLeft > 180)
 							Main.projectile[t].timeLeft = 180;
-						}
 					}
 				}
 				if (NPC.localAI[0] % 9 == 0)
@@ -215,17 +191,17 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.LanternGhostKing
 					for (int j = 0; j < 6; j++)
 					{
 						Vector2 v2 = new Vector2(0, 1 + dx).RotatedBy(Math.PI * j / 3d + dx * dx * 4);
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), v2.X + NPC.Center.X, v2.Y + NPC.Center.Y, v2.X, v2.Y, ModContent.ProjectileType<Projectiles.LanternKing.floatLantern2>(), 50, 0f, player.whoAmI, 0, 0);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), v2.X + NPC.Center.X, v2.Y + NPC.Center.Y, v2.X, v2.Y, ModContent.ProjectileType<floatLantern2>(), 50, 0f, player.whoAmI, 0, 0);
 					}
 					for (int j = 0; j < 3; j++)
 					{
 						Vector2 v2 = new Vector2(0, 1 + dx).RotatedBy(Math.PI * j / 1.5 + dx * dx * 4);
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), v2.X + NPC.Center.X, v2.Y + NPC.Center.Y, v2.X, v2.Y, ModContent.ProjectileType<Projectiles.LanternKing.floatLantern3>(), 50, 0f, player.whoAmI, 0, 0);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), v2.X + NPC.Center.X, v2.Y + NPC.Center.Y, v2.X, v2.Y, ModContent.ProjectileType<floatLantern3>(), 50, 0f, player.whoAmI, 0, 0);
 					}
 					for (int j = 0; j < 3; j++)
 					{
 						Vector2 v2 = new Vector2(0, 1 + dx).RotatedBy(Math.PI * (j + 1.5) / 1.5 + dx * dx * 4);
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), v2.X + NPC.Center.X, v2.Y + NPC.Center.Y, v2.X, v2.Y, ModContent.ProjectileType<Projectiles.LanternKing.floatLantern4>(), 50, 0f, player.whoAmI, 0, 0);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), v2.X + NPC.Center.X, v2.Y + NPC.Center.Y, v2.X, v2.Y, ModContent.ProjectileType<floatLantern4>(), 50, 0f, player.whoAmI, 0, 0);
 					}
 				}
 			}
@@ -240,9 +216,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.LanternGhostKing
 				}
 				NPC.velocity *= 0.96f;
 				if (NPC.localAI[0] % 60 == 0)
-				{
-					NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y + 100, ModContent.NPCType<NPCs.FloatLantern>(), 0, 0, 0, 0, 0, 255);
-				}
+					NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y + 100, ModContent.NPCType<FloatLantern>(), 0, 0, 0, 0, 0, 255);
 				RingCenterTrend = NPC.Center;
 				RingRadiusTrend = 1200;
 			}
@@ -259,7 +233,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.LanternGhostKing
 				if (NPC.localAI[0] % 6 == 0)
 				{
 					Vector2 v = new Vector2(0, -1.8f).RotatedBy(Main.rand.NextFloat(-1f, 1f));
-					Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center.X + Main.rand.Next(-600, 600), player.Center.Y - 500, v.X + NPC.velocity.X, v.Y + NPC.velocity.Y, ModContent.ProjectileType<Projectiles.LanternKing.floatLantern>(), 50, 0f, player.whoAmI, 0, 0);
+					Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center.X + Main.rand.Next(-600, 600), player.Center.Y - 500, v.X + NPC.velocity.X, v.Y + NPC.velocity.Y, ModContent.ProjectileType<floatLantern>(), 50, 0f, player.whoAmI, 0, 0);
 				}
 				if (NPC.localAI[0] % 120 == 0)
 				{
@@ -267,7 +241,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.LanternGhostKing
 					{
 						Vector2 v0 = new Vector2(0, -Main.rand.Next(120, 570)).RotatedBy(Main.rand.NextFloat(-1.4f, 1.4f));
 						Vector2 v = v0 / 1000000f;
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center.X + v0.X, player.Center.Y + v0.Y, -v.X, -v.Y, ModContent.ProjectileType<Projectiles.LanternKing.ExplodeLantern>(), 50, 0f, player.whoAmI, 0, 0);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center.X + v0.X, player.Center.Y + v0.Y, -v.X, -v.Y, ModContent.ProjectileType<ExplodeLantern>(), 50, 0f, player.whoAmI, 0, 0);
 					}
 				}
 				RingCenterTrend = NPC.Center;
@@ -281,23 +255,23 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.LanternGhostKing
 				{
 					for (int j = 0; j < 6; j++)
 					{
-						Vector2 v2 = new Vector2(0, 1);
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), RingCenterTrend.X + (j - 2.5f) * 360 + (float)(Math.Sin(NPC.localAI[0] / 50f + j) * 150f), RingCenterTrend.Y - 1400, v2.X, v2.Y, ModContent.ProjectileType<Projectiles.LanternKing.floatLantern2>(), 16, 0f, player.whoAmI, 0, 0);
+						var v2 = new Vector2(0, 1);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), RingCenterTrend.X + (j - 2.5f) * 360 + (float)(Math.Sin(NPC.localAI[0] / 50f + j) * 150f), RingCenterTrend.Y - 1400, v2.X, v2.Y, ModContent.ProjectileType<floatLantern2>(), 16, 0f, player.whoAmI, 0, 0);
 					}
 				}
 				if (NPC.localAI[0] == 13000)
 				{
 					for (int j = 0; j < 30; j++)
 					{
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), RingCenter.X, RingCenter.Y, 0, 0, ModContent.ProjectileType<Projectiles.LanternKing.DarkLantern3>(), 16, 0f, player.whoAmI, j, 360);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), RingCenter.X, RingCenter.Y, 0, 0, ModContent.ProjectileType<DarkLantern3>(), 16, 0f, player.whoAmI, j, 360);
 					}
 					for (int j = 0; j < 30; j++)
 					{
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), RingCenter.X, RingCenter.Y, 0, 0, ModContent.ProjectileType<Projectiles.LanternKing.DarkLantern3>(), 16, 0f, player.whoAmI, j + 1, 720);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), RingCenter.X, RingCenter.Y, 0, 0, ModContent.ProjectileType<DarkLantern3>(), 16, 0f, player.whoAmI, j + 1, 720);
 					}
 					for (int j = 0; j < 30; j++)
 					{
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), RingCenter.X, RingCenter.Y, 0, 0, ModContent.ProjectileType<Projectiles.LanternKing.DarkLantern3>(), 16, 0f, player.whoAmI, j + 2, 1080);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), RingCenter.X, RingCenter.Y, 0, 0, ModContent.ProjectileType<DarkLantern3>(), 16, 0f, player.whoAmI, j + 2, 1080);
 					}
 				}
 				if (NPC.localAI[0] % 300 == 0)
@@ -306,13 +280,13 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.LanternGhostKing
 					{
 						Vector2 v = new Vector2(0, 120).RotatedBy(j / 5d * Math.PI);
 						Vector2 v2 = v.RotatedBy(Math.PI * 1.5) / v.Length();
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), RingCenter.X + v.X, RingCenter.Y + v.Y, v2.X, v2.Y, ModContent.ProjectileType<Projectiles.LanternKing.floatLantern2>(), 16, 0f, player.whoAmI, 0, 0);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), RingCenter.X + v.X, RingCenter.Y + v.Y, v2.X, v2.Y, ModContent.ProjectileType<floatLantern2>(), 16, 0f, player.whoAmI, 0, 0);
 					}
 					for (int j = 0; j < 10; j++)
 					{
 						Vector2 v = new Vector2(0, 300).RotatedBy(j / 5d * Math.PI);
 						Vector2 v2 = v.RotatedBy(Math.PI * 1.5) / v.Length();
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), RingCenter.X + v.X, RingCenter.Y + v.Y, v2.X, v2.Y, ModContent.ProjectileType<Projectiles.LanternKing.floatLantern2>(), 16, 0f, player.whoAmI, 0, 0);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), RingCenter.X + v.X, RingCenter.Y + v.Y, v2.X, v2.Y, ModContent.ProjectileType<floatLantern2>(), 16, 0f, player.whoAmI, 0, 0);
 					}
 				}
 				RingCenterTrend = NPC.Center + new Vector2(0, -500);
@@ -327,32 +301,22 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.LanternGhostKing
 					for (int l = 0; l < 5; l++)
 					{
 						Vector2 v0 = new Vector2(0, -7).RotatedBy(Main.rand.NextFloat(0f, 6.28f));
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v0, ModContent.ProjectileType<Projectiles.LanternKing.Redlight>(), 0, 0f, player.whoAmI, 0, 0);
+						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v0, ModContent.ProjectileType<Redlight>(), 0, 0f, player.whoAmI, 0, 0);
 					}
 				}
 				if (NPC.localAI[0] == 13700)
-				{
-					Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center.X, NPC.Center.Y, 48, 0, ModContent.ProjectileType<Projectiles.LanternKing.GoldLanternLine8>(), 0, 0f, player.whoAmI, 0, 0);
-				}
+					Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center.X, NPC.Center.Y, 48, 0, ModContent.ProjectileType<GoldLanternLine8>(), 0, 0f, player.whoAmI, 0, 0);
 				RingCenterTrend = NPC.Center + new Vector2(0, -300);
 				RingRadiusTrend = 1000;
 			}
 			if (NPC.localAI[0] == 2998)
-			{
 				NPC.localAI[0] = 1;
-			}
 			if (NPC.localAI[0] == 2999)
-			{
 				NPC.localAI[0] = 1;
-			}
 			if (NPC.localAI[0] >= 14200)
-			{
 				NPC.StrikeNPC(10005, 0, 1);
-			}
 			if (Main.dayTime)
-			{
 				NPC.velocity.Y += 1;
-			}
 			RingRadius = RingRadius * 0.99f + RingRadiusTrend * 0.01f;
 			RingCenter = RingCenter * 0.99f + RingCenterTrend * 0.01f;
 		}
@@ -362,13 +326,11 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.LanternGhostKing
 			Vector2 v2 = new Vector2(0, Main.rand.NextFloat(0, 0.25f)).RotatedByRandom(Math.PI * 2f);
 			Vector2 v4 = new Vector2(0, Main.rand.NextFloat(0, 7f)).RotatedByRandom(Math.PI * 2f);
 			if (NPC.localAI[0] % 60 == 1)
-			{
-				Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center.X + v4.X, NPC.Center.Y + 110f + v4.Y, NPC.velocity.X / 3f + v2.X, NPC.velocity.Y * 0.25f + v2.Y, ModContent.ProjectileType<Projectiles.LanternKing.GoldLanternLine>(), 75, 0f, player.whoAmI, 0f, 0f);
-			}
+				Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center.X + v4.X, NPC.Center.Y + 110f + v4.Y, NPC.velocity.X / 3f + v2.X, NPC.velocity.Y * 0.25f + v2.Y, ModContent.ProjectileType<GoldLanternLine>(), 75, 0f, player.whoAmI, 0f, 0f);
 			for (int h = 0; h < 15; h++)
 			{
 				Vector2 vn = new Vector2(0, -20).RotatedBy(Main.rand.NextFloat(-2f, 2f) + NPC.rotation);
-				Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center.X + vn.X * 5, NPC.Center.Y + vn.Y * 5, NPC.velocity.X + vn.X, NPC.velocity.Y + vn.Y, ModContent.ProjectileType<Projectiles.LanternKing.GoldLanternLine4>(), 25, 0f, player.whoAmI, 0, 0);
+				Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center.X + vn.X * 5, NPC.Center.Y + vn.Y * 5, NPC.velocity.X + vn.X, NPC.velocity.Y + vn.Y, ModContent.ProjectileType<GoldLanternLine4>(), 25, 0f, player.whoAmI, 0, 0);
 			}
 		}
 		public override void HitEffect(int hitDirection, double damage)
@@ -495,7 +457,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.LanternGhostKing
 
 		public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 		{
-			Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+			var texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
 			Main.spriteBatch.Draw(texture, NPC.Center - Main.screenPosition + new Vector2(0f, NPC.gfxOffY), NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, new Vector2(250, 110), NPC.scale, SpriteEffects.None, 0f);
 			return false;
 		}
@@ -503,16 +465,16 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.LanternGhostKing
 		{
 
 			Player player = Main.player[NPC.target];
-			Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+			var texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
 			Texture2D tg2 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/LanternMoon/NPCs/LanternGhostKing/LanternGhostKingGlow2").Value;
 			Texture2D tg3 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/LanternMoon/NPCs/LanternGhostKing/LanternGhostKingGlow3").Value;
-			Vector2 value = new Vector2(NPC.Center.X, NPC.Center.Y);
-			Vector2 vector = new Vector2(texture.Width / 2, texture.Height / Main.npcFrameCount[NPC.type] / 2);
+			var value = new Vector2(NPC.Center.X, NPC.Center.Y);
+			var vector = new Vector2(texture.Width / 2, texture.Height / Main.npcFrameCount[NPC.type] / 2);
 			Vector2 vector2 = value - Main.screenPosition;
 			vector2 -= new Vector2(tg2.Width, tg2.Height / Main.npcFrameCount[NPC.type]) * 1f / 2f;
 			vector2 += vector * 1f + new Vector2(0f, 4f + NPC.gfxOffY);
-			Main.spriteBatch.Draw(tg2, vector2 + new Vector2(0, 60), new Rectangle(0, (int)(NPC.frameCounter) % 4 * 220, 500, 220), new Color((int)(100 * NPC.ai[0]), (int)(100 * NPC.ai[0]), (int)(100 * NPC.ai[0]), 0), NPC.rotation, vector, 1f, SpriteEffects.None, 0f);
-			Main.spriteBatch.Draw(tg3, vector2 + new Vector2(0, 34), new Rectangle(0, (int)(NPC.frameCounter) % 3 * 280, 500, 220), new Color((int)(325 * NPC.ai[0]), (int)(325 * NPC.ai[0]), (int)(325 * NPC.ai[0]), 0), NPC.rotation, vector, 1f, SpriteEffects.None, 0f);
+			Main.spriteBatch.Draw(tg2, vector2 + new Vector2(0, 60), new Rectangle(0, (int)NPC.frameCounter % 4 * 220, 500, 220), new Color((int)(100 * NPC.ai[0]), (int)(100 * NPC.ai[0]), (int)(100 * NPC.ai[0]), 0), NPC.rotation, vector, 1f, SpriteEffects.None, 0f);
+			Main.spriteBatch.Draw(tg3, vector2 + new Vector2(0, 34), new Rectangle(0, (int)NPC.frameCounter % 3 * 280, 500, 220), new Color((int)(325 * NPC.ai[0]), (int)(325 * NPC.ai[0]), (int)(325 * NPC.ai[0]), 0), NPC.rotation, vector, 1f, SpriteEffects.None, 0f);
 
 
 			if (!Main.gamePaused)
@@ -535,15 +497,15 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.NPCs.LanternGhostKing
 		}
 		public void DrawFlameRing(float phase, float range, Vector2 center, Texture2D tex, float TexCoord = 0)
 		{
-			List<Vertex2D> Vx = new List<Vertex2D>();
+			var Vx = new List<Vertex2D>();
 			for (int h = 0; h < 200; h++)
 			{
-				Color color3 = new Color((int)(255 * NPC.ai[0]), (int)(255 * NPC.ai[0]), (int)(255 * NPC.ai[0]), 0);
+				var color3 = new Color((int)(255 * NPC.ai[0]), (int)(255 * NPC.ai[0]), (int)(255 * NPC.ai[0]), 0);
 				Vector2 v0 = new Vector2(0, range).RotatedBy(h / 100d * Math.PI + phase);
 				Vector2 v1 = new Vector2(0, range).RotatedBy((h + 1) / 100d * Math.PI + phase);
 				Vx.Add(new Vertex2D(center + v0, color3, new Vector3((TexCoord + h / 20f) % 1f, 0, 0)));
-				Vx.Add(new Vertex2D(center + v1, color3, new Vector3(Math.Clamp((TexCoord + (h) / 20f) % 1f + 1f / 20f, 0, 1f), 0, 0)));
-				Vx.Add(new Vertex2D(center, color3, new Vector3(Math.Clamp((TexCoord + (h) / 20f) % 1f + 0.5f / 20f, 0, 1f), 1, 0)));
+				Vx.Add(new Vertex2D(center + v1, color3, new Vector3(Math.Clamp((TexCoord + h / 20f) % 1f + 1f / 20f, 0, 1f), 0, 0)));
+				Vx.Add(new Vertex2D(center, color3, new Vector3(Math.Clamp((TexCoord + h / 20f) % 1f + 0.5f / 20f, 0, 1f), 1, 0)));
 			}
 
 			Main.graphics.GraphicsDevice.Textures[0] = tex;

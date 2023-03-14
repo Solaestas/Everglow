@@ -1,4 +1,6 @@
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
+using Everglow.Myth.TheFirefly.NPCs.Bosses;
+
+namespace Everglow.Myth.TheFirefly.Tiles
 {
 	public class DarkCocoonSpecial : ModTile//用来生成魔茧
 	{
@@ -24,10 +26,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 		}
 		public override void NearbyEffects(int i, int j, bool closer)
 		{
-			if (NPC.CountNPCS(ModContent.NPCType<NPCs.Bosses.EvilPack>()) < 1)
-			{
-				NPC.NewNPC(null, i * 16, j * 16 + 244, ModContent.NPCType<NPCs.Bosses.EvilPack>());
-			}
+			if (NPC.CountNPCS(ModContent.NPCType<EvilPack>()) < 1)
+				NPC.NewNPC(null, i * 16, j * 16 + 244, ModContent.NPCType<EvilPack>());
 		}
 	}
 }

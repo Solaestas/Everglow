@@ -1,11 +1,11 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Modules.MythModule.TheTusk.Tiles;
+﻿using Everglow.Myth.Common;
+using Everglow.Myth.TheTusk.Tiles;
 using Terraria.Graphics.Effects;
 using Terraria.IO;
 using Terraria.ModLoader.IO;
 using Terraria.WorldBuilding;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration
+namespace Everglow.Myth.TheTusk.WorldGeneration
 {
 	public class TuskGen : ModSystem
 	{
@@ -14,7 +14,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration
 		}
 		public static void QuickBuild(int x, int y, string Path)
 		{
-			MapIO mapIO = new MapIO(x, y);
+			var mapIO = new MapIO(x, y);
 
 			mapIO.Read(Everglow.Instance.GetFileStream("Sources/Modules/MythModule/" + Path));
 
@@ -42,9 +42,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration
 			if (TuskLandActive())
 			{
 				if (TuskS < 1)
-				{
 					TuskS += 0.01f;
-				}
 				else
 				{
 					TuskS = 1f;
@@ -52,29 +50,23 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration
 
 
 				if (!SkyManager.Instance["TuskSky"].IsActive())
-				{
 					SkyManager.Instance.Activate("TuskSky");
-				}
 			}
 			else
 			{
 				if (TuskS > 0)
-				{
 					TuskS -= 0.01f;
-				}
 				else
 				{
 					TuskS = 0;
 				}
 				if (SkyManager.Instance["TuskSky"].IsActive())
-				{
 					SkyManager.Instance.Deactivate("TuskSky");
-				}
 			}
-			tileColor *= (1 - TuskS * 0.4f);
+			tileColor *= 1 - TuskS * 0.4f;
 			tileColor.G = (byte)(tileColor.G * (1 - TuskS * 0.4f));
 			tileColor.B = (byte)(tileColor.B * (1 - TuskS * 0.4f));
-			backgroundColor *= (1 - TuskS * 0.4f);
+			backgroundColor *= 1 - TuskS * 0.4f;
 			backgroundColor.A = 255;
 			base.ModifySunLightColor(ref tileColor, ref backgroundColor);
 		}
@@ -129,23 +121,15 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration
 				{
 					var pixelRow = accessor.GetRowSpan(y);
 					if (y + b < 20)
-					{
 						continue;
-					}
 					if (y + b > Main.maxTilesY - 20)
-					{
 						break;
-					}
 					for (int x = 0; x < pixelRow.Length; x++)
 					{
 						if (x + a < 20)
-						{
 							continue;
-						}
 						if (x + a > Main.maxTilesX - 20)
-						{
 							break;
-						}
 						ref var pixel = ref pixelRow[x];
 						Tile tile = Main.tile[x + a, y + b];
 						switch (type)//21是箱子
@@ -154,17 +138,15 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration
 								if (pixel.R == 255 && pixel.G == 0 && pixel.B == 0)
 								{
 									if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
-									{
 										tile.ClearEverything();
-									}
 								}
 								break;
 
 							case 1:
 								int Ty = 0;
 								int c = 0;
-								Vector2[] Plc = new Vector2[30];
-								Vector2[] Plc2 = new Vector2[60];
+								var Plc = new Vector2[30];
+								var Plc2 = new Vector2[60];
 								if (pixel.R == 158 && pixel.G == 26 && pixel.B == 37)
 								{
 									if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
@@ -177,7 +159,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration
 								{
 									if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
 									{
-										tile.TileType = (ushort)TileID.BoneBlock;
+										tile.TileType = TileID.BoneBlock;
 										tile.HasTile = true;
 									}
 								}
@@ -195,9 +177,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration
 								if (pixel.R == 96 && pixel.G == 8 && pixel.B == 14)
 								{
 									if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
-									{
 										tile.WallType = (ushort)ModContent.WallType<Walls.BloodyStoneWall>();
-									}
 								}
 								break;
 						}
@@ -244,16 +224,14 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration
 			{
 				for (int j = -30; j < 31; j++)
 				{
-					float Length = (new Vector2(i, j)).Length();
+					float Length = new Vector2(i, j).Length();
 					var tile = Main.tile[x + i, y + j];
 					if (Length is < 30f and > 18f)
 					{
 						if (tile.HasTile)
 						{
 							if (Main.tileSolid[tile.TileType])
-							{
 								tile.TileType = (ushort)ModContent.TileType<TuskFlesh>();
-							}
 							else
 							{
 								tile.ClearEverything();
@@ -268,16 +246,12 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration
 					if (Length < 19f)
 					{
 						if (tile.HasTile)
-						{
 							tile.HasTile = false;
-						}
 					}
 					if (Length < 28f)
 					{
-						if (tile.WallType != 0 || (Length < 22f && j > -5))
-						{
+						if (tile.WallType != 0 || Length < 22f && j > -5)
 							tile.WallType = (ushort)ModContent.WallType<Walls.TuskFleshWall>();
-						}
 					}
 				}
 			}
@@ -359,21 +333,15 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration
 		public static bool CanPlaceTusk(Point position)
 		{
 			if (position.X < 20 || position.Y - 60 < 20)
-			{
 				return false;
-			}
 			if (position.X + 160 > Main.maxTilesX - 20 || position.Y + 80 > Main.maxTilesY - 20)
-			{
 				return false;
-			}
 			for (int x = 0; x < 161; x++)
 			{
 				for (int y = -60; y < 81; y++)
 				{
 					if (Main.tile[x + position.X, y + position.Y].HasTile)
-					{
 						return false;
-					}
 				}
 			}
 			return true;
@@ -391,7 +359,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.WorldGeneration
 			{
 				for (int x = 0; x < height; x += 1)
 				{
-					if (Main.tile[x + a, y + b].TileType == (ushort)ModContent.TileType<Tiles.TuskFlesh>())
+					if (Main.tile[x + a, y + b].TileType == (ushort)ModContent.TileType<TuskFlesh>())
 					{
 						Tile.SmoothSlope(x + a, y + b, false);
 						WorldGen.TileFrame(x + a, y + b, true, false);

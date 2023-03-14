@@ -1,10 +1,10 @@
-using Everglow.Sources.Modules.MythModule.Common;
+using Everglow.Myth.Common;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.ObjectData;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
+namespace Everglow.Myth.TheFirefly.Tiles.Furnitures
 {
 	public class GlowWoodCampfire : ModTile
 	{
@@ -68,17 +68,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 			Tile tile = Main.tile[i, j];
 			Player player = Main.LocalPlayer;
 			if (player != null && !player.dead && player.active && tile.TileFrameX < 54)
-			{
 				Main.SceneMetrics.HasCampfire = true;
-				//player.AddBuff(BuffID.Campfire, 2, true, false);
-			}
 			if (tile.TileFrameX < 54 && tile.TileFrameY == 18)
 			{
 				int frequency = 24;
 				if (tile.TileFrameX == 18)
-				{
 					frequency = 8;
-				}
 				if (!Main.gamePaused && Main.instance.IsActive && (!Lighting.UpdateEveryFrame || Main.rand.NextBool(4)) && Main.rand.NextBool(frequency))
 				{
 					Rectangle dustBox = Utils.CenteredRectangle(new Vector2(i * 16, j * 16), new Vector2(16, 16));
@@ -133,9 +128,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 				for (int n = y; n < y + tileY; n++)
 				{
 					if (!tile.HasTile)
-					{
 						continue;
-					}
 					if (tile.TileType == Type)
 					{
 						tile = Main.tile[m, n];
@@ -177,17 +170,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles.Furnitures
 		public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 		{
 			var tile = Main.tile[i, j];
-			Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+			var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 			if (Main.drawToScreen)
-			{
 				zero = Vector2.Zero;
-			}
 			Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodCampfireGlow");
 			int frameYOffset = Main.tileFrame[Type] * AnimationFrameHeight;
 			if (tile.TileFrameX < 54)
-			{
 				spriteBatch.Draw(tex, new Vector2(i * 16, j * 16 + 3) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY + frameYOffset, 16, 16), new Color(0.8f, 0.8f, 0.8f, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
-			}
 			if (tile.TileFrameX == 18 && tile.TileFrameY % 36 == 0)
 			{
 				Color cTile = Lighting.GetColor(i, j - 1);

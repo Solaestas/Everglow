@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Accessories
+﻿namespace Everglow.Myth.MiscItems.Accessories
 {
 	public class GreenGel : ModItem
 	{

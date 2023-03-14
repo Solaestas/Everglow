@@ -1,4 +1,4 @@
-namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.LunarFlare.Walls
+namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.LunarFlare.Walls
 {
 	public class NightEffectWall : ModWall
 	{
@@ -9,9 +9,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Lu
 		public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 		{
 			if (Main.rand.NextBool(12))
-			{
 				Main.tile[i, j].WallType = 0;
-			}
 			return true;
 		}
 	}

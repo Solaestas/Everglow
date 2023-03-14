@@ -1,11 +1,13 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Items.Accessories;
+﻿using Everglow.Myth;
+using Everglow.Myth.Common;
+using Everglow.Myth.TheFirefly.Items.Accessories;
+using Everglow.Myth.TheFirefly.Projectiles;
 using ReLogic.Graphics;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
+namespace Everglow.Myth.TheFirefly.Items.Weapons
 {
 	public class DarknessFan : ModItem
 	{
@@ -33,7 +35,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 			Item.rare = ItemRarityID.LightRed;
 			Item.UseSound = SoundID.DD2_GhastlyGlaivePierce;
 			Item.autoReuse = true;
-			Item.shoot = ModContent.ProjectileType<Projectiles.GlowingButterfly>();
+			Item.shoot = ModContent.ProjectileType<GlowingButterfly>();
 			Item.shootSpeed = 8;
 		}
 
@@ -44,27 +46,25 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 			if (player.altFunctionUse == 2 && CoolRarr == 0)
 			{
 				CoolRarr = 120;
-				Projectile.NewProjectile(source, position + new Vector2(0, -24), velocity * 3.4f, ModContent.ProjectileType<Projectiles.DarkFanFly>(), damage * 2, knockback, player.whoAmI, 6 + player.maxMinions * 1.5f, 0f);
+				Projectile.NewProjectile(source, position + new Vector2(0, -24), velocity * 3.4f, ModContent.ProjectileType<DarkFanFly>(), damage * 2, knockback, player.whoAmI, 6 + player.maxMinions * 1.5f, 0f);
 				Item.useTime = 6;
 				Item.useAnimation = 6;
 				//Item.UseSound = SoundID.DD2_JavelinThrowersAttack;
 				return false;
 			}
 			if (l % 4 == 0)
-			{
-				type = ModContent.ProjectileType<Projectiles.DarkFan>();
-			}
+				type = ModContent.ProjectileType<DarkFan>();
 			else if (l % 4 == 1)
 			{
-				type = ModContent.ProjectileType<Projectiles.DarkFan>();
+				type = ModContent.ProjectileType<DarkFan>();
 			}
 			else if (l % 4 == 2)
 			{
-				type = ModContent.ProjectileType<Projectiles.DarkFan>();
+				type = ModContent.ProjectileType<DarkFan>();
 			}
 			else
 			{
-				type = ModContent.ProjectileType<Projectiles.DarkFan>();
+				type = ModContent.ProjectileType<DarkFan>();
 			}
 			Projectile.NewProjectile(source, position + new Vector2(0, -24), velocity, type, damage, knockback, player.whoAmI, 0f, 0f);
 			Item.useTime = 36;
@@ -112,7 +112,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 		}
 		public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
 		{
-			Vector2 slotSize = new Vector2(52f, 52f);
+			var slotSize = new Vector2(52f, 52f);
 			position -= slotSize * Main.inventoryScale / 2f - frame.Size() * scale / 2f;
 			Vector2 drawPos = position + slotSize * Main.inventoryScale / 2f/* - texture.Size() * Main.inventoryScale / 2f*/;
 			Texture2D RArr = MythContent.QuickTexture("TheFirefly/Projectiles/GlowFanTex/RightDFan");

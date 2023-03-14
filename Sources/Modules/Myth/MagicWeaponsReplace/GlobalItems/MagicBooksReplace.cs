@@ -1,7 +1,16 @@
-﻿using Terraria.DataStructures;
+﻿using Everglow.Myth.MagicWeaponsReplace.Projectiles.BookofSkulls;
+using Everglow.Myth.MagicWeaponsReplace.Projectiles.CrystalStorm;
+using Everglow.Myth.MagicWeaponsReplace.Projectiles.CursedFlames;
+using Everglow.Myth.MagicWeaponsReplace.Projectiles.DreamWeaver;
+using Everglow.Myth.MagicWeaponsReplace.Projectiles.GoldenShower;
+using Everglow.Myth.MagicWeaponsReplace.Projectiles.LunarFlare;
+using Everglow.Myth.MagicWeaponsReplace.Projectiles.MagnetSphere;
+using Everglow.Myth.MagicWeaponsReplace.Projectiles.RazorbladeTyphoon;
+using Everglow.Myth.MagicWeaponsReplace.Projectiles.WaterBolt;
+using Terraria.DataStructures;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
+namespace Everglow.Myth.MagicWeaponsReplace.GlobalItems
 {
 	public class MagicBooksReplace : GlobalItem
 	{
@@ -31,41 +40,23 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
 			if (Main.LocalPlayer.GetModPlayer<MagicBookPlayer>().MagicBookLevel == 1)
 			{
 				if (item.type == ItemID.WaterBolt)
-				{
 					tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "ExtraTooltip", SpellbookGTV("WaterBolt")));
-				}
 				if (item.type == ItemID.DemonScythe)
-				{
 					tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "ExtraTooltip", SpellbookGTV("DemonScythe")));
-				}
 				if (item.type == ItemID.BookofSkulls)
-				{
 					tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "ExtraTooltip", SpellbookGTV("BookofSkulls")));
-				}
 				if (item.type == ItemID.CrystalStorm)
-				{
 					tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "ExtraTooltip", SpellbookGTV("CrystalStorm")));
-				}
 				if (item.type == ItemID.CursedFlames)
-				{
 					tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "ExtraTooltip", SpellbookGTV("CursedFlames")));
-				}
 				if (item.type == ItemID.GoldenShower)
-				{
 					tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "ExtraTooltip", SpellbookGTV("GoldenShower")));
-				}
 				if (item.type == ItemID.MagnetSphere)
-				{
 					tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "ExtraTooltip", SpellbookGTV("MagnetSphere")));
-				}
 				if (item.type == ItemID.RazorbladeTyphoon)
-				{
 					tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "ExtraTooltip", SpellbookGTV("RazorbladeTyphoon")));
-				}
 				if (item.type == ItemID.LunarFlareBook)
-				{
 					tooltips.Add(new TooltipLine(ModLoader.GetMod("Everglow"), "ExtraTooltip", SpellbookGTV("LunarFlareBook")));
-				}
 			}
 		}
 
@@ -74,215 +65,143 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
 			if (player.GetModPlayer<MagicBookPlayer>().MagicBookLevel == 0)
 			{
 				if (item.type == ItemID.WaterBolt)
-				{
 					item.noUseGraphic = false;
-				}
 				if (item.type == ItemID.BookofSkulls)
-				{
 					item.noUseGraphic = false;
-				}
 				if (item.type == ItemID.DemonScythe)
 				{
 					item.autoReuse = false;
 					item.noUseGraphic = false;
 				}
 				if (item.type == ItemID.CursedFlames)
-				{
 					item.noUseGraphic = false;
-				}
 				if (item.type == ItemID.GoldenShower)
-				{
 					item.noUseGraphic = false;
-				}
 				if (item.type == ItemID.CrystalStorm)
-				{
 					item.noUseGraphic = false;
-				}
 				if (item.type == ItemID.MagnetSphere)
-				{
 					item.noUseGraphic = false;
-				}
 				if (item.type == ItemID.RazorbladeTyphoon)
-				{
 					item.noUseGraphic = false;
-				}
 				if (item.type == ItemID.LunarFlareBook)
-				{
 					item.noUseGraphic = false;
-				}
 				if (item.type == ModContent.ItemType<TheFirefly.Items.Weapons.DreamWeaver>())
-				{
 					item.noUseGraphic = false;
-				}
 				return base.UseItem(item, player);
 			}
 			if (item.type == ItemID.WaterBolt)
-			{
 				item.noUseGraphic = true;
-			}
 			if (item.type == ItemID.BookofSkulls)
-			{
 				item.noUseGraphic = true;
-			}
 			if (item.type == ItemID.DemonScythe)
 			{
 				item.autoReuse = true;
 				item.noUseGraphic = true;
 			}
 			if (item.type == ItemID.CursedFlames)
-			{
 				item.noUseGraphic = true;
-			}
 			if (item.type == ItemID.GoldenShower)
-			{
 				item.noUseGraphic = true;
-			}
 			if (item.type == ItemID.CrystalStorm)
-			{
 				item.noUseGraphic = true;
-			}
 			if (item.type == ItemID.MagnetSphere)
 			{
 				item.autoReuse = true;
 				item.noUseGraphic = true;
 			}
 			if (item.type == ItemID.RazorbladeTyphoon)
-			{
 				item.noUseGraphic = true;
-			}
 			if (item.type == ItemID.LunarFlareBook)
-			{
 				item.noUseGraphic = true;
-			}
 			if (item.type == ModContent.ItemType<TheFirefly.Items.Weapons.DreamWeaver>())
-			{
 				item.noUseGraphic = true;
-			}
 			// Aim Types
 			if (item.type == ItemID.WaterBolt)
 			{
-				int aimType = ModContent.ProjectileType<Projectiles.WaterBolt.WaterBoltBook>();
+				int aimType = ModContent.ProjectileType<WaterBoltBook>();
 				if (player.ownedProjectileCounts[aimType] < 1)
-				{
 					Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
-				}
-				aimType = ModContent.ProjectileType<Projectiles.WaterBolt.WaterBoltArray>();
+				aimType = ModContent.ProjectileType<WaterBoltArray>();
 				if (player.ownedProjectileCounts[aimType] < 1)
-				{
 					Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
-				}
 			}
 			if (item.type == ItemID.DemonScythe)
 			{
 				int aimType = ModContent.ProjectileType<Projectiles.DemonScythe.DemonScytheBook>();
 				if (player.ownedProjectileCounts[aimType] < 1)
-				{
 					Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
-				}
 				aimType = ModContent.ProjectileType<Projectiles.DemonScythe.DemonScytheArray>();
 				if (player.ownedProjectileCounts[aimType] < 1)
-				{
 					Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
-				}
 			}
 			if (item.type == ItemID.MagnetSphere)
 			{
-				int aimType = ModContent.ProjectileType<Projectiles.MagnetSphere.MagnetSphereBook>();
+				int aimType = ModContent.ProjectileType<MagnetSphereBook>();
 				if (player.ownedProjectileCounts[aimType] < 1)
-				{
 					Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
-				}
-				aimType = ModContent.ProjectileType<Projectiles.MagnetSphere.MagnetSphereArray>();
+				aimType = ModContent.ProjectileType<MagnetSphereArray>();
 				if (player.ownedProjectileCounts[aimType] < 1)
-				{
 					Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
-				}
 			}
 			if (item.type == ItemID.RazorbladeTyphoon)
 			{
-				int aimType = ModContent.ProjectileType<Projectiles.RazorbladeTyphoon.RazorbladeTyphoonBook>();
+				int aimType = ModContent.ProjectileType<RazorbladeTyphoonBook>();
 				if (player.ownedProjectileCounts[aimType] < 1)
-				{
 					Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, player.HeldItem.damage, 0, player.whoAmI);
-				}
-				aimType = ModContent.ProjectileType<Projectiles.RazorbladeTyphoon.RazorbladeTyphoonArray>();
+				aimType = ModContent.ProjectileType<RazorbladeTyphoonArray>();
 				if (player.ownedProjectileCounts[aimType] < 1)
-				{
 					Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
-				}
 			}
 			if (item.type == ItemID.CursedFlames)
 			{
-				int aimType = ModContent.ProjectileType<Projectiles.CursedFlames.CursedFlamesBook>();
+				int aimType = ModContent.ProjectileType<CursedFlamesBook>();
 				if (player.ownedProjectileCounts[aimType] < 1)
-				{
 					Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
-				}
-				aimType = ModContent.ProjectileType<Projectiles.CursedFlames.CursedFlamesArray>();
+				aimType = ModContent.ProjectileType<CursedFlamesArray>();
 				if (player.ownedProjectileCounts[aimType] < 1)
-				{
 					Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
-				}
 			}
 			if (item.type == ItemID.CrystalStorm)
 			{
-				int aimType = ModContent.ProjectileType<Projectiles.CrystalStorm.CrystalStormBook>();
+				int aimType = ModContent.ProjectileType<CrystalStormBook>();
 				if (player.ownedProjectileCounts[aimType] < 1)
-				{
 					Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
-				}
-				aimType = ModContent.ProjectileType<Projectiles.CrystalStorm.CrystalStormArray>();
+				aimType = ModContent.ProjectileType<CrystalStormArray>();
 				if (player.ownedProjectileCounts[aimType] < 1)
-				{
 					Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
-				}
 			}
 			if (item.type == ItemID.BookofSkulls)
 			{
-				int aimType = ModContent.ProjectileType<Projectiles.BookofSkulls.BookofSkullsBook>();
+				int aimType = ModContent.ProjectileType<BookofSkullsBook>();
 				if (player.ownedProjectileCounts[aimType] < 1)
-				{
 					Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
-				}
-				aimType = ModContent.ProjectileType<Projectiles.BookofSkulls.BookofSkullsArray>();
+				aimType = ModContent.ProjectileType<BookofSkullsArray>();
 				if (player.ownedProjectileCounts[aimType] < 1)
-				{
 					Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
-				}
 			}
 			if (item.type == ItemID.GoldenShower)
 			{
-				int aimType = ModContent.ProjectileType<Projectiles.GoldenShower.GoldenShowerBook>();
+				int aimType = ModContent.ProjectileType<GoldenShowerBook>();
 				if (player.ownedProjectileCounts[aimType] < 1)
-				{
 					Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
-				}
-				aimType = ModContent.ProjectileType<Projectiles.GoldenShower.GoldenShowerArray>();
+				aimType = ModContent.ProjectileType<GoldenShowerArray>();
 				if (player.ownedProjectileCounts[aimType] < 1)
-				{
 					Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
-				}
 			}
 			if (item.type == ItemID.LunarFlareBook)
 			{
-				int aimType = ModContent.ProjectileType<Projectiles.LunarFlare.LunarFlareBook>();
+				int aimType = ModContent.ProjectileType<LunarFlareBook>();
 				if (player.ownedProjectileCounts[aimType] < 1)
-				{
 					Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
-				}
-				aimType = ModContent.ProjectileType<Projectiles.LunarFlare.LunarFlareArray>();
+				aimType = ModContent.ProjectileType<LunarFlareArray>();
 				if (player.ownedProjectileCounts[aimType] < 1)
-				{
 					Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
-				}
 			}
 			if (item.type == ModContent.ItemType<TheFirefly.Items.Weapons.DreamWeaver>())
 			{
-				int aimType = ModContent.ProjectileType<Projectiles.DreamWeaver.DreamWeaverBook>();
+				int aimType = ModContent.ProjectileType<DreamWeaverBook>();
 				if (player.ownedProjectileCounts[aimType] < 1)
-				{
 					Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, aimType, 0, 0, player.whoAmI);
-				}
 			}
 			return base.UseItem(item, player);
 		}
@@ -290,45 +209,25 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
 		public override bool Shoot(Item item, Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
 			if (player.GetModPlayer<MagicBookPlayer>().MagicBookLevel == 0)
-			{
 				return base.Shoot(item, player, source, position, velocity, type, damage, knockback);
-			}
 			if (item.type == ItemID.WaterBolt)
-			{
 				return false;
-			}
 			if (item.type == ItemID.DemonScythe)
-			{
 				return false;
-			}
 			if (item.type == ItemID.BookofSkulls)
-			{
 				return false;
-			}
 			if (item.type == ItemID.GoldenShower)
-			{
 				return false;
-			}
 			if (item.type == ItemID.CursedFlames)
-			{
 				return false;
-			}
 			if (item.type == ItemID.CrystalStorm)
-			{
 				return false;
-			}
 			if (item.type == ItemID.MagnetSphere)
-			{
 				return false;
-			}
 			if (item.type == ItemID.RazorbladeTyphoon)
-			{
 				return false;
-			}
 			if (item.type == ItemID.LunarFlareBook)
-			{
 				return false;
-			}
 			return base.Shoot(item, player, source, position, velocity, type, damage, knockback);
 		}
 
@@ -346,7 +245,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
 							if (Collision.SolidCollision(Main.MouseWorld + new Vector2(0, g * 5 * player.gravDir), 1, 1))
 							{
 								Vector2 ReleasePoint = Main.MouseWorld + new Vector2(0, g * 5 * player.gravDir);
-								Projectile p = Projectile.NewProjectileDirect(item.GetSource_FromAI(), ReleasePoint, Vector2.Zero, ModContent.ProjectileType<Projectiles.BookofSkulls.SkullHand>(), player.HeldItem.damage * 3, player.HeldItem.knockBack * 6, player.whoAmI);
+								var p = Projectile.NewProjectileDirect(item.GetSource_FromAI(), ReleasePoint, Vector2.Zero, ModContent.ProjectileType<SkullHand>(), player.HeldItem.damage * 3, player.HeldItem.knockBack * 6, player.whoAmI);
 								p.CritChance = player.GetWeaponCrit(player.HeldItem);
 
 								mplayer.HandCooling = 18;
@@ -370,9 +269,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
 		{
 			MagicBookLevel = 0;
 			if (HandCooling > 0)
-			{
 				HandCooling--;
-			}
 			base.PreUpdate();
 		}
 
@@ -382,16 +279,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.GlobalItems
 			if (WaterBoltHasHit > 0)
 			{
 				if (Player.HeldItem.type != ItemID.WaterBolt || MagicBookLevel == 0)
-				{
 					WaterBoltHasHit = 0;
-					/*foreach(Projectile p in Main.projectile)
-                    {
-                        if(p.owner == Player.whoAmI && p.type == ModContent.ProjectileType<Projectiles.WaterBolt.WaterTeleport>())
-                        {
-                            p.Kill();
-                        }
-                    }*/
-				}
 			}
 			return base.PreItemCheck();
 		}

@@ -1,4 +1,4 @@
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
+namespace Everglow.Myth.TheFirefly.Projectiles
 {
 	public class FruitBomb : ModProjectile
 	{
@@ -33,10 +33,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 			b *= 0.99f;
 			Projectile.scale = b / 2f;
 			if (Projectile.scale > 0.5f)
-			{
 				Projectile.Kill();
-			}
-			Lighting.AddLight(base.Projectile.Center, (float)(255 - base.Projectile.alpha) * 0f / 255f * Projectile.scale, (float)(255 - base.Projectile.alpha) * 0.01f / 255f, (float)(255 - base.Projectile.alpha) * 0.6f / 255f * Projectile.scale);
+			Lighting.AddLight(Projectile.Center, (255 - Projectile.alpha) * 0f / 255f * Projectile.scale, (255 - Projectile.alpha) * 0.01f / 255f, (255 - Projectile.alpha) * 0.6f / 255f * Projectile.scale);
 		}
 		public override bool PreDraw(ref Color lightColor)
 		{

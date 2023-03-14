@@ -1,4 +1,4 @@
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Backgrounds
+namespace Everglow.Myth.TheTusk.Backgrounds
 {
 	public class TuskSurfaceBackgroundStyle : ModSurfaceBackgroundStyle
 	{
@@ -10,17 +10,13 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Backgrounds
 				{
 					fades[i] += transitionSpeed;
 					if (fades[i] > 1f)
-					{
 						fades[i] = 1f;
-					}
 				}
 				else
 				{
 					fades[i] -= transitionSpeed;
 					if (fades[i] < 0f)
-					{
 						fades[i] = 0f;
-					}
 				}
 			}
 		}

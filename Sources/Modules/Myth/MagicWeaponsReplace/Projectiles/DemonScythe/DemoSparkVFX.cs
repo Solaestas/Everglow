@@ -1,4 +1,4 @@
-namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.DemonScythe
+namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.DemonScythe
 {
 	public class DemoSparkVFX : Visual
 	{
@@ -17,7 +17,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.De
 
 		private void DrawSpark(Color c0, float width, Texture2D tex)
 		{
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 		}
 	}
 }

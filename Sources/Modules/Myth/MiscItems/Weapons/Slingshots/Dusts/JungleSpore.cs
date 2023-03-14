@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Dusts
+﻿namespace Everglow.Myth.MiscItems.Weapons.Slingshots.Dusts
 {
 	public class JungleSpore : ModDust
 	{
@@ -16,7 +16,7 @@
 			dust.position += dust.velocity;
 			dust.velocity += new Vector2(0, 0.015f).RotatedByRandom(MathHelper.Pi * 2d);
 			dust.velocity *= 0.95f;
-			dust.scale = (float)(Math.Sin(dust.alpha / 255d * Math.PI)) * dust.rotation;
+			dust.scale = (float)Math.Sin(dust.alpha / 255d * Math.PI) * dust.rotation;
 			Lighting.AddLight(dust.position, 0.16f * dust.scale / 1.8f, 0.655f * dust.scale / 1.8f, 0f * dust.scale / 1.8f);
 			if (Collision.SolidCollision(dust.position, 8, 8))
 			{
@@ -35,9 +35,7 @@
 				dust.velocity = v0;
 			}
 			if (dust.alpha > 254)
-			{
 				dust.active = false;
-			}
 
 			return false;
 		}

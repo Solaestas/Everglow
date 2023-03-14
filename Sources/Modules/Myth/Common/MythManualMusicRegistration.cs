@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.Common
+﻿namespace Everglow.Myth.Common
 {
 	public sealed class MythManualMusicRegistration : ILoadable
 	{

@@ -1,10 +1,10 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
-using Everglow.Sources.Modules.MythModule.TheFirefly.Physics;
+﻿using Everglow.Myth.Common;
+using Everglow.Myth.TheFirefly.Physics;
 using SixLabors.ImageSharp.PixelFormats;
 
 using Terraria.GameContent;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly
+namespace Everglow.Myth.TheFirefly
 {
 	internal class Rope
 	{
@@ -37,7 +37,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
 
 		public Rope Clone(Vector2 deltaPosition)
 		{
-			Rope clone = new Rope
+			var clone = new Rope
 			{
 				mass = new Mass[mass.Length],
 				spring = new Spring[mass.Length - 1]
@@ -88,7 +88,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
 		/// <returns></returns>
 		public List<Rope> LoadRope(string ropeImagePath, Rectangle? rectangle, Vector2 basePosition, Func<Vector2> offset)
 		{
-			List<Rope> result = new List<Rope>();
+			var result = new List<Rope>();
 			var image = ImageReader.Read<Rgb24>(ropeImagePath);
 			Rectangle rect;
 			rect = rectangle ?? new Rectangle(0, 0, image.Width, image.Height);
@@ -120,7 +120,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
 		/// <returns></returns>
 		public List<Rope> LoadRope(Rectangle rectangle, Vector2 basePosition, Func<Vector2> offset)
 		{
-			List<Rope> result = new List<Rope>();
+			var result = new List<Rope>();
 			for (int j = 0; j < rectangle.Height; j++)
 			{
 				for (int i = 0; i < rectangle.Width; i++)
@@ -129,9 +129,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
 					{
 						int MaxCount = 4;
 						if (rectangle.Width > 10)
-						{
 							MaxCount = 6;
-						}
 						var rope = new Rope(new Vector2(i * 5, j * 5) + basePosition, (Main.rand.Next(0, 60) + 140) / 300f, Main.rand.Next(2, MaxCount + 1), offset);
 						ropes.Add(rope);
 						result.Add(rope);
@@ -163,14 +161,12 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
 		/// <param name="outRange"></param>
 		public void Clear(int outRange)
 		{
-			Rectangle validRange = new Rectangle((int)Main.screenPosition.X - outRange, (int)Main.screenPosition.Y - outRange,
+			var validRange = new Rectangle((int)Main.screenPosition.X - outRange, (int)Main.screenPosition.Y - outRange,
 				Main.screenWidth + outRange * 2, Main.screenHeight + outRange * 2);
 			for (int i = 0; i < ropes.Count; i++)
 			{
 				if (!validRange.Contains((ropes[i].mass[0].position + ropes[i].GetOffset()).ToPoint()))
-				{
 					ropes.RemoveAt(i--);
-				}
 			}
 		}
 
@@ -194,7 +190,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
 				}
 				foreach (var m in rope.mass)
 				{
-					m.force += new Vector2(0.12f * (float)(Math.Sin(Main.timeForVisualEffects / 72f + m.position.X / 13d + m.position.Y / 4d)) + Main.windSpeedCurrent * 0.13f, 0)
+					m.force += new Vector2(0.12f * (float)Math.Sin(Main.timeForVisualEffects / 72f + m.position.X / 13d + m.position.Y / 4d) + Main.windSpeedCurrent * 0.13f, 0)
 						+ new Vector2(0, gravity * m.mass);
 					m.Update(deltaTime);
 				}
@@ -205,26 +201,22 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
 		{
 			var gd = Main.instance.GraphicsDevice;
 			var sb = Main.spriteBatch;
-			List<Vertex2D> vertices = new List<Vertex2D>(100);
-			List<int> indices = new List<int>(100);
+			var vertices = new List<Vertex2D>(100);
+			var indices = new List<int>(100);
 			const int extraRange = 500;
-			Rectangle drawRange = new Rectangle((int)Main.screenPosition.X - extraRange, (int)Main.screenPosition.Y - extraRange,
+			var drawRange = new Rectangle((int)Main.screenPosition.X - extraRange, (int)Main.screenPosition.Y - extraRange,
 				Main.screenWidth + extraRange * 2, Main.screenHeight + extraRange * 2);
 			foreach (var rope in ropes)
 			{
 				Vector2 offset = rope.GetOffset();
 				if (!drawRange.Contains((offset + rope.mass[0].position).ToPoint()))
-				{
 					continue;
-				}
 				List<Vector2> massPositionsSmooth = Commons.Function.Curves.CatmullRom.SmoothPath(rope.mass.Select(m => m.position + offset), 4);
 
 				DrawRope(massPositionsSmooth, vertices, indices);
 			}
 			if (vertices.Count < 3)
-			{
 				return;
-			}
 			sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null,
 				Matrix.CreateTranslation(-Main.screenPosition.X, -Main.screenPosition.Y, 0) * Main.GameViewMatrix.TransformationMatrix);
 			//gd.Textures[0] = MythContent.QuickTexture("TheFirefly/Tiles/Branch");
@@ -258,7 +250,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly
 			int baseIndex = vertices.Count;
 			for (int i = 1; i < count; i++)
 			{
-				Vector2 normal = Vector2.Normalize(path[i] - path[i - 1]);
+				var normal = Vector2.Normalize(path[i] - path[i - 1]);
 				(normal.X, normal.Y) = (-normal.Y, normal.X);
 				float width = baseWidth * (1 - (float)i / (count - 1));
 				float factor = (i - 1f) / (count - 2);

@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheFirefly.Dusts
+﻿namespace Everglow.Myth.TheFirefly.Dusts
 {
 	public class FluorescentLeafDust : ModDust
 	{

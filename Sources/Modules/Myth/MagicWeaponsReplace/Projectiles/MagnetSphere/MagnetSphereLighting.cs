@@ -1,8 +1,9 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
+using Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.MagnetSphere;
 using Terraria.DataStructures;
-using static Everglow.Sources.Modules.MythModule.Common.MythUtils;
+using static Everglow.Myth.Common.MythUtils;
 
-namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.MagnetSphere
+namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.MagnetSphere
 {
 	public class MagnetSphereLighting : ModProjectile, IWarpProjectile
 	{
@@ -29,7 +30,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
 			for (int g = 0; g < Frequency * 3; g++)
 			{
 				Vector2 vel = new Vector2(0, Main.rand.NextFloat(4.65f, 5.5f)).RotatedByRandom(6.283) * mulVelocity;
-				MagneticElectricity me = new MagneticElectricity
+				var me = new MagneticElectricity
 				{
 					velocity = vel,
 					Active = true,
@@ -43,7 +44,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
 			for (int g = 0; g < Frequency; g++)
 			{
 				Vector2 vel = new Vector2(0, Main.rand.NextFloat(6.65f, 10.5f)).RotatedByRandom(6.283) * mulVelocity;
-				MagneticElectricity me = new MagneticElectricity
+				var me = new MagneticElectricity
 				{
 					velocity = vel,
 					Active = true,
@@ -64,14 +65,10 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
 			Projectile.velocity *= 0.95f;
 
 			if (Projectile.timeLeft <= 198)
-			{
 				Projectile.friendly = false;
-			}
 			float LightS = Projectile.timeLeft / 2f - 95f;
 			if (LightS > 0)
-			{
 				Lighting.AddLight((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16), 0, LightS * 0.83f, LightS * 0.8f);
-			}
 
 			Projectile.velocity *= 0;
 
@@ -80,7 +77,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
 		public override void PostDraw(Color lightColor)
 		{
 			Texture2D Shadow = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/CursedHitLight");
-			float Dark = Math.Max(((Projectile.timeLeft - 150) / 50f), 0);
+			float Dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
 			Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, new Color(0, 199, 129, 0) * Dark, 0, Shadow.Size() / 2f, 22 / 15f * Dark, SpriteEffects.None, 0);
 		}
 		public override bool PreDraw(ref Color lightColor)
@@ -89,17 +86,15 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
 			DrawLightingBolt(new Color(0, 255, 199, 0));
 
 			Texture2D Shadow = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/CursedHit");
-			float Dark = Math.Max(((Projectile.timeLeft - 150) / 50f), 0);
+			float Dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
 			Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, Color.White * Dark, 0, Shadow.Size() / 2f, 22f / 15f, SpriteEffects.None, 0);
 			Texture2D light = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/CursedFlames/CursedHitStar");
 			Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0, 199, 129, 0), 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, Dark * Dark) / 2f, SpriteEffects.None, 0);
 			Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, new Color(0, 199, 129, 0), 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.8f, Dark / 2f), SpriteEffects.None, 0);
 
-			float value = (480 - Projectile.timeLeft * 2.4f) / (float)Projectile.timeLeft * 1.4f;
+			float value = (480 - Projectile.timeLeft * 2.4f) / Projectile.timeLeft * 1.4f;
 			if (value < 0)
-			{
 				value = 0;
-			}
 			float colorV = 0.9f * (1 - value);
 
 			Texture2D t = MythContent.QuickTexture("OmniElementItems/Projectiles/Wave");
@@ -112,34 +107,24 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
 		internal Vector2[] LightPos = new Vector2[30];
 		private void DrawLightingBolt(Color c0)
 		{
-			Vector2[] BasePos = new Vector2[30];
+			var BasePos = new Vector2[30];
 			float width = (Projectile.timeLeft - 170) / 1.8f;
 			if (c0 == Color.White * 0.3f)
-			{
 				width *= 0.2f;
-			}
 			int LengthII = 0;
 			if (width < 0)
-			{
 				return;
-			}
 			if (!Main.projectile[(int)Projectile.ai[0]].active)
-			{
 				return;
-			}
 			Vector2 AimC = Main.projectile[(int)Projectile.ai[0]].Center;
 			if ((Projectile.Center - AimC).Length() > 900)
-			{
 				return;
-			}
 			if (LightPos[1] == Vector2.Zero)
 			{
 				BasePos[0] = Projectile.Center;
 				float Length = AimC.Length() / 40f;
 				if (Length > 30)
-				{
 					Length = 30;
-				}
 				Vector2 VLight = new Vector2(0, Main.rand.NextFloat(3f, 5f)).RotatedByRandom(6.283);
 				for (int a = 1; a < Length - 1; a++)
 				{
@@ -158,9 +143,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
 						LightPos[a] = new Vector2(0, Main.rand.NextFloat(0f, 5f)).RotatedByRandom(6.283);
 					}
 					if (a + 1 >= Length)
-					{
 						LightPos[a + 1] = Vector2.Zero;
-					}
 				}
 			}
 			for (int a = 1; a < 30; a++)
@@ -182,25 +165,21 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Ma
 				if (BasePos[a] != Vector2.Zero)
 				{
 					if (a % 4 == 0)
-					{
 						Lighting.AddLight((int)(BasePos[a].X / 16), (int)(BasePos[a].Y / 16), 0, width / 45f, width / 50f);
-					}
 				}
 				else
 				{
 					break;
 				}
 			}
-			List<Vertex2D> lighting = new List<Vertex2D>();
+			var lighting = new List<Vertex2D>();
 			for (int a = 0; a < LengthII; a++)
 			{
 				if (BasePos[a] != Vector2.Zero)
 				{
-					Vector2 NormalizedToTarget = Utils.SafeNormalize((AimC - Projectile.Center), Vector2.One).RotatedBy(1.57) * width;
+					Vector2 NormalizedToTarget = (AimC - Projectile.Center).SafeNormalize(Vector2.One).RotatedBy(1.57) * width;
 					if (a >= 1)
-					{
-						NormalizedToTarget = Utils.SafeNormalize((BasePos[a] - BasePos[a - 1]), Vector2.One).RotatedBy(-1.57) * width;
-					}
+						NormalizedToTarget = (BasePos[a] - BasePos[a - 1]).SafeNormalize(Vector2.One).RotatedBy(-1.57) * width;
 					lighting.Add(new Vertex2D(BasePos[a] - NormalizedToTarget - Main.screenPosition, c0, new Vector3(0, 0, 0)));
 					lighting.Add(new Vertex2D(BasePos[a] + NormalizedToTarget - Main.screenPosition, c0, new Vector3(0, 1, 0)));
 

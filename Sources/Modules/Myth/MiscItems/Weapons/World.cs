@@ -1,5 +1,5 @@
 ﻿using Terraria.DataStructures;
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
+namespace Everglow.Myth.MiscItems.Weapons
 {
 	public class World : ModItem
 	{
@@ -18,16 +18,14 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons
 			Item.value = 20000;
 			Item.rare = ItemRarityID.Red;
 			Item.autoReuse = true;
-			Item.shoot = ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Melee.World>();
+			Item.shoot = ModContent.ProjectileType<Projectiles.Weapon.Melee.World>();
 			Item.shootSpeed = 0;
 			Item.crit = 8;
 		}
 		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
 			if (player.ownedProjectileCounts[type] == 0)
-			{
 				Projectile.NewProjectile(source, player.Center, velocity, type, damage, knockback, player.whoAmI, 2, 0f);
-			}
 			return false;
 		}
 	}

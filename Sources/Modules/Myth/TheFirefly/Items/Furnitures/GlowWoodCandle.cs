@@ -1,6 +1,7 @@
+using Everglow.Myth.TheFirefly.Items;
 using Terraria.GameContent.Creative;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures
+namespace Everglow.Myth.TheFirefly.Items.Furnitures
 {
 	public class GlowWoodCandle : ModItem
 	{

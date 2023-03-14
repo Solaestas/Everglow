@@ -1,4 +1,4 @@
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee.Hepuyuan
+namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Melee.Hepuyuan
 {
 	public class HepuyuanSpice : ModProjectile
 	{
@@ -21,41 +21,41 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
 		public override bool PreDraw(ref Color lightColor)
 		{
 			Player player = Main.player[Projectile.owner];
-			List<Vertex2D> Vx = new List<Vertex2D>();
+			var Vx = new List<Vertex2D>();
 			Vector2 Vbase = Projectile.Center - Main.screenPosition + new Vector2(0, 24 * player.gravDir);
-			Vector2 v0 = new Vector2(0, -1);
-			Vector2 v0T = new Vector2(1, 0);
+			var v0 = new Vector2(0, -1);
+			var v0T = new Vector2(1, 0);
 			float length = Projectile.ai[0];
 			v0 = v0 * length * Math.Clamp((80 - Projectile.timeLeft) / 12f, 0, 1f);
 			v0T = v0T * 77.77f;
 			v0 = v0.RotatedBy(Projectile.rotation);
 			v0T = v0T.RotatedBy(Projectile.rotation);
 
-			Color ct = Lighting.GetColor((int)(Projectile.Center.X) / 16, (int)(Projectile.Center.Y) / 16);
+			Color ct = Lighting.GetColor((int)Projectile.Center.X / 16, (int)Projectile.Center.Y / 16);
 			ct.A = 180;
-			Color cp = new Color(200, 200, 200, 0);
+			var cp = new Color(200, 200, 200, 0);
 			float fadeK = Math.Clamp((Projectile.timeLeft - 10) / 24f, 0, 1f);
 			float fadeG = Math.Clamp((Projectile.timeLeft - 10) / 24f + 0.12f, 0, 1f);
 
 			Vx.Add(new Vertex2D(Vbase + v0 * 2, cp, new Vector3(1, 0, 0)));
-			Vx.Add(new Vertex2D(Vbase + (v0 + v0T) * fadeG + (v0 * 2) * (1 - fadeG), cp, new Vector3(1, fadeG, 0)));
-			Vx.Add(new Vertex2D(Vbase + (v0 * 2) * (1 - fadeG), cp, new Vector3(1 - fadeG, fadeG, 0)));
+			Vx.Add(new Vertex2D(Vbase + (v0 + v0T) * fadeG + v0 * 2 * (1 - fadeG), cp, new Vector3(1, fadeG, 0)));
+			Vx.Add(new Vertex2D(Vbase + v0 * 2 * (1 - fadeG), cp, new Vector3(1 - fadeG, fadeG, 0)));
 
 			Vx.Add(new Vertex2D(Vbase + v0 * 2, cp, new Vector3(1, 0, 0)));
-			Vx.Add(new Vertex2D(Vbase + (v0 * 2) * (1 - fadeG), cp, new Vector3(1 - fadeG, fadeG, 0)));
-			Vx.Add(new Vertex2D(Vbase + (v0 - v0T) * fadeG + (v0 * 2) * (1 - fadeG), cp, new Vector3(1 - fadeG, 0, 0)));
+			Vx.Add(new Vertex2D(Vbase + v0 * 2 * (1 - fadeG), cp, new Vector3(1 - fadeG, fadeG, 0)));
+			Vx.Add(new Vertex2D(Vbase + (v0 - v0T) * fadeG + v0 * 2 * (1 - fadeG), cp, new Vector3(1 - fadeG, 0, 0)));
 
 			if (Projectile.Center.X > player.Center.X)
 			{
 				Vx.Add(new Vertex2D(Vbase + v0 * 2, ct, new Vector3(1, 0, 0)));
-				Vx.Add(new Vertex2D(Vbase + (v0 * 2) * (1 - fadeK), ct, new Vector3(1 - fadeK, fadeK, 0)));
-				Vx.Add(new Vertex2D(Vbase + (v0 - v0T) * fadeK + (v0 * 2) * (1 - fadeK), ct, new Vector3(1 - fadeK, 0, 0)));
+				Vx.Add(new Vertex2D(Vbase + v0 * 2 * (1 - fadeK), ct, new Vector3(1 - fadeK, fadeK, 0)));
+				Vx.Add(new Vertex2D(Vbase + (v0 - v0T) * fadeK + v0 * 2 * (1 - fadeK), ct, new Vector3(1 - fadeK, 0, 0)));
 			}
 			else
 			{
 				Vx.Add(new Vertex2D(Vbase + v0 * 2, ct, new Vector3(1, 0, 0)));
-				Vx.Add(new Vertex2D(Vbase + (v0 + v0T) * fadeK + (v0 * 2) * (1 - fadeK), ct, new Vector3(1, fadeK, 0)));
-				Vx.Add(new Vertex2D(Vbase + (v0 * 2) * (1 - fadeK), ct, new Vector3(1 - fadeK, fadeK, 0)));
+				Vx.Add(new Vertex2D(Vbase + (v0 + v0T) * fadeK + v0 * 2 * (1 - fadeK), ct, new Vector3(1, fadeK, 0)));
+				Vx.Add(new Vertex2D(Vbase + v0 * 2 * (1 - fadeK), ct, new Vector3(1 - fadeK, fadeK, 0)));
 			}
 
 			Texture2D t = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/MiscItems/Projectiles/Weapon/Melee/Hepuyuan/HepuyuanSpice").Value;
@@ -66,23 +66,21 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Projectiles.Weapon.Melee
 		public override void AI()
 		{
 			if (Projectile.timeLeft <= 78)
-			{
 				Projectile.friendly = false;
-			}
 			Projectile.hide = true;
 		}
 		public static int CyanStrike = 0;
 		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
 		{
 			CyanStrike = 1;
-			Projectile.NewProjectile(Projectile.InheritSource(Projectile), target.Center, Vector2.Zero, ModContent.ProjectileType<MiscItems.Projectiles.Weapon.Melee.Hepuyuan.XiaoHit>(), 0, 0, Projectile.owner, 0.45f);
+			Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), target.Center, Vector2.Zero, ModContent.ProjectileType<XiaoHit>(), 0, 0, Projectile.owner, 0.45f);
 			base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
 		}
 		public override void Load()
 		{
-			Terraria.On_CombatText.NewText_Rectangle_Color_string_bool_bool += CombatText_NewText_Rectangle_Color_string_bool_bool;
+			On_CombatText.NewText_Rectangle_Color_string_bool_bool += CombatText_NewText_Rectangle_Color_string_bool_bool;
 		}
-		private int CombatText_NewText_Rectangle_Color_string_bool_bool(Terraria.On_CombatText.orig_NewText_Rectangle_Color_string_bool_bool orig, Rectangle location, Color color, string text, bool dramatic, bool dot)
+		private int CombatText_NewText_Rectangle_Color_string_bool_bool(On_CombatText.orig_NewText_Rectangle_Color_string_bool_bool orig, Rectangle location, Color color, string text, bool dramatic, bool dot)
 		{
 			if (CyanStrike > 0)
 			{

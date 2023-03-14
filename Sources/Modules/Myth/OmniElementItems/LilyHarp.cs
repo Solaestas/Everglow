@@ -1,7 +1,7 @@
 ﻿using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.Sources.Modules.MythModule.OmniElementItems
+namespace Everglow.Myth.OmniElementItems
 {
 	public class LilyHarp : ModItem
 	{
@@ -54,13 +54,9 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems
 
 			SoundStyle++;
 			if (SoundStyle >= 4)
-			{
 				SoundStyle = 0;
-			}
 			if (player.ownedProjectileCounts[Item.shoot] > 0)
-			{
 				return false;
-			}
 			return true;
 		}
 
@@ -71,9 +67,7 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems
 				if (Main.myPlayer == player.whoAmI)
 				{
 					if (player.altFunctionUse == 2)
-					{
 						return false;
-					}
 				}
 			}
 			return base.CanUseItem(player);

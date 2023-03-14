@@ -1,23 +1,24 @@
-﻿using Terraria.Graphics.Effects;
+﻿using Everglow.Myth.Common;
+using Terraria.Graphics.Effects;
 
-namespace Everglow.Sources.Modules.MythModule.LanternMoon.Skies
+namespace Everglow.Myth.LanternMoon.Skies
 {
 	public class LanternSky : CustomSky
 	{
 		public static bool Open = false;
 		public override void Deactivate(params object[] args)
 		{
-			this.skyActive = false;
+			skyActive = false;
 		}
 
 		public override void Reset()
 		{
-			this.skyActive = false;
+			skyActive = false;
 		}
 
 		public override bool IsActive()
 		{
-			return this.skyActive || this.opacity > 0f;
+			return skyActive || opacity > 0f;
 		}
 		public override void Activate(Vector2 position, params object[] args)
 		{
@@ -26,43 +27,41 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Skies
 			OldStar = new Vector2[240];
 			HitTimer = 0;
 			MoonLight = 0;
-			this.skyActive = true;
+			skyActive = true;
 		}
 		public override void Draw(SpriteBatch spriteBatch, float minDepth, float maxDepth)
 		{
 			if (maxDepth >= 3E+38f && minDepth < 3E+38f)
 			{
-				Texture2D LightE = Common.MythContent.QuickTexture("VisualTextures/LightEffect");
-				Main.spriteBatch.Draw(LightE, StarPos, null, new Color(0.3f, 0.21f, 0, 0), -(float)(Math.Sin(Main.time / 26d)) + 0.6f, new Vector2(128f, 128f), (1.5f + (float)(0.75 * Math.Sin(Main.time / 26d))) * 0.05f, SpriteEffects.None, 0);
-				Main.spriteBatch.Draw(LightE, StarPos, null, new Color(1f, 0.7f, 0, 0), (float)(Math.Sin(Main.time / 12d + 2)) + 1.6f, new Vector2(128f, 128f), (1.5f + (float)(0.75 * Math.Sin(Main.time / 26d))) * 0.05f, SpriteEffects.None, 0);
+				Texture2D LightE = MythContent.QuickTexture("VisualTextures/LightEffect");
+				Main.spriteBatch.Draw(LightE, StarPos, null, new Color(0.3f, 0.21f, 0, 0), -(float)Math.Sin(Main.time / 26d) + 0.6f, new Vector2(128f, 128f), (1.5f + (float)(0.75 * Math.Sin(Main.time / 26d))) * 0.05f, SpriteEffects.None, 0);
+				Main.spriteBatch.Draw(LightE, StarPos, null, new Color(1f, 0.7f, 0, 0), (float)Math.Sin(Main.time / 12d + 2) + 1.6f, new Vector2(128f, 128f), (1.5f + (float)(0.75 * Math.Sin(Main.time / 26d))) * 0.05f, SpriteEffects.None, 0);
 				Main.spriteBatch.Draw(LightE, StarPos, null, new Color(0.3f, 0.21f, 0, 0), (float)Math.PI / 2f + (float)(Main.time / 9d), new Vector2(128f, 128f), (1.5f + (float)(0.75 * Math.Sin(Main.time / 26d + 1.57))) * 0.05f, SpriteEffects.None, 0);
 				Main.spriteBatch.Draw(LightE, StarPos, null, new Color(1f, 0.7f, 0, 0), (float)(Main.time / 26d), new Vector2(128f, 128f), (1.5f + (float)(0.75 * Math.Sin(Main.time / 26d + 3.14))) * 0.05f, SpriteEffects.None, 0);
 				Main.spriteBatch.Draw(LightE, StarPos, null, new Color(1f, 0.7f, 0, 0), -(float)(Main.time / 26d), new Vector2(128f, 128f), (1.5f + (float)(0.75 * Math.Sin(Main.time / 26d + 4.71))) * 0.05f, SpriteEffects.None, 0);
 				//spriteBatch.Draw(Common.MythContent.QuickTexture("LanternMoon/Skies/LanternSky"), new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), new Color(255, 255, 255, 255));
 			}
-			Texture2D LMoon = Common.MythContent.QuickTexture("LanternMoon/Skies/LanternMoon");
+			Texture2D LMoon = MythContent.QuickTexture("LanternMoon/Skies/LanternMoon");
 			float HalfMaxTime = Main.dayTime ? 27000 : 16200;
 			float rotation = (float)(Main.time / HalfMaxTime) - 7.3f;
-			if ((StarPos - Common.MythContent.GetSunPos()).Length() < 30)
+			if ((StarPos - MythContent.GetSunPos()).Length() < 30)
 			{
 				HitTimer++;
-				MoonLight = Math.Clamp((HitTimer * HitTimer) / 500f, 0, 1);
-				spriteBatch.Draw(LMoon, Common.MythContent.GetSunPos(), new Rectangle(0, Main.moonPhase * 25, 50, 50), new Color(MoonLight, MoonLight, MoonLight, MoonLight), rotation, new Vector2(25), Main.ForcedMinimumZoom, SpriteEffects.None, 0);
+				MoonLight = Math.Clamp(HitTimer * HitTimer / 500f, 0, 1);
+				spriteBatch.Draw(LMoon, MythContent.GetSunPos(), new Rectangle(0, Main.moonPhase * 25, 50, 50), new Color(MoonLight, MoonLight, MoonLight, MoonLight), rotation, new Vector2(25), Main.ForcedMinimumZoom, SpriteEffects.None, 0);
 			}
 			if (StarPos == Vector2.Zero)
 			{
-				StarPos = new Vector2(Main.screenWidth, Main.screenHeight * 2) - Common.MythContent.GetSunPos();
-				StarVel = Vector2.Normalize(Common.MythContent.GetSunPos() - StarPos).RotatedBy(0.6);
+				StarPos = new Vector2(Main.screenWidth, Main.screenHeight * 2) - MythContent.GetSunPos();
+				StarVel = Vector2.Normalize(MythContent.GetSunPos() - StarPos).RotatedBy(0.6);
 			}
-			Vector2 StarAcc = Vector2.Normalize((Common.MythContent.GetSunPos() - StarVel * 4f) - StarPos);
+			var StarAcc = Vector2.Normalize(MythContent.GetSunPos() - StarVel * 4f - StarPos);
 			StarVel = StarVel * 0.99f + StarAcc * 0.0095f;
 			StarPos += StarVel;
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 			float width = 6;
 			if (TimeLeft < 60)
-			{
 				width = TimeLeft / 10f;
-			}
 			OldStar[0] = StarPos;
 			for (int x = OldStar.Length - 1; x > 0; x--)
 			{
@@ -88,7 +87,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Skies
 				bars.Add(new Vertex2D(OldStar[i] + normalDir * width, new Color(255, 0, 0, 0), new Vector3(factor, 1, w)));
 				bars.Add(new Vertex2D(OldStar[i] + normalDir * -width, new Color(255, 0, 0, 0), new Vector3(factor, 0, w)));
 			}
-			List<Vertex2D> Vx = new List<Vertex2D>();
+			var Vx = new List<Vertex2D>();
 			if (bars.Count > 2)
 			{
 				Vx.Add(bars[0]);
@@ -109,7 +108,7 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Skies
 			}
 			if (Vx.Count > 2)
 			{
-				Texture2D t = Common.MythContent.QuickTexture("LanternMoon/Projectiles/LBloodEffect");
+				Texture2D t = MythContent.QuickTexture("LanternMoon/Projectiles/LBloodEffect");
 				Main.graphics.GraphicsDevice.Textures[0] = t;
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 			}
@@ -118,24 +117,20 @@ namespace Everglow.Sources.Modules.MythModule.LanternMoon.Skies
 
 		public override void Update(GameTime gameTime)
 		{
-			if (this.skyActive && this.opacity < 1f)
+			if (skyActive && opacity < 1f)
 			{
-				this.opacity += 0.02f;
+				opacity += 0.02f;
 				return;
 			}
-			if (!this.skyActive && this.opacity > 0f)
-			{
-				this.opacity -= 0.02f;
-			}
+			if (!skyActive && opacity > 0f)
+				opacity -= 0.02f;
 			TimeLeft--;
 			if (TimeLeft <= 0)
-			{
 				Deactivate();
-			}
 		}
 		public override float GetCloudAlpha()
 		{
-			return (1f - this.opacity) * 0.97f + 0.03f;
+			return (1f - opacity) * 0.97f + 0.03f;
 		}
 		private Vector2 StarPos = Vector2.Zero;
 

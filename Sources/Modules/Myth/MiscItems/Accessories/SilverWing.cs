@@ -1,6 +1,6 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
 
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Accessories
+namespace Everglow.Myth.MiscItems.Accessories
 {
 	[AutoloadEquip(EquipType.Neck)]
 	public class SilverWing : ModItem
@@ -31,9 +31,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Accessories
 			MythContentPlayer mplayer = player.GetModPlayer<MythContentPlayer>();
 			mplayer.CriticalDamage += 0.08f;
 			if (player.controlUseItem)
-			{
 				noContinueUsingWeaponTime = 0;
-			}
 			else
 			{
 				noContinueUsingWeaponTime++;

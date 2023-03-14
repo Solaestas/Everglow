@@ -1,9 +1,9 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
 using Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.BlackHole.Dust;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 
-namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.BlackHole
+namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.BlackHole
 {
 	//[Pipeline(typeof(BlackHolePipeline))]
 	internal class BlackHole : ModProjectile
@@ -27,9 +27,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bl
 		public static bool ProjActive()
 		{
 			if (proj != null)
-			{
 				return proj.active && Main.projectile[proj.whoAmI].active && Main.projectile[proj.whoAmI].type == ModContent.ProjectileType<BlackHole>();
-			}
 			else
 			{
 				return false;
@@ -38,9 +36,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bl
 		public override void OnSpawn(IEntitySource source)
 		{
 			if (ProjActive() && proj != Projectile)
-			{
 				Projectile.Kill();
-			}
 			else
 			{
 				proj = Projectile;
@@ -50,9 +46,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bl
 		public override void AI()
 		{
 			if (Projectile.timeLeft > 20)
-			{
 				proj.scale = MathHelper.Lerp(proj.scale, 280 * Projectile.ai[0], 0.1f);
-			}
 			else
 			{
 				proj.scale = MathHelper.Lerp(proj.scale, 0, 0.25f);
@@ -60,13 +54,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bl
 
 			if (Main.rand.NextBool(6))//暗色粒子
 			{
-				DarkDust d = new DarkDust() { position = Projectile.Center + (Main.rand.NextVector2Unit() * 30), velocity = Main.rand.NextVector2Unit() * 6, scale = 0.8f, time_max = 30 };
+				var d = new DarkDust() { position = Projectile.Center + Main.rand.NextVector2Unit() * 30, velocity = Main.rand.NextVector2Unit() * 6, scale = 0.8f, time_max = 30 };
 				VFXManager.Add(d);
 			}
 			if (Main.rand.NextBool(4))//光亮粒子
 			{
-				Color c = new Color(0.2f, 0.7f, 1f);//颜色
-				LightDust d = new LightDust() { drawColor = c, position = Projectile.Center + (Main.rand.NextVector2Unit() * 30), velocity = Main.rand.NextVector2Unit() * 6, scale = 0.2f, time_max = 30 };
+				var c = new Color(0.2f, 0.7f, 1f);//颜色
+				var d = new LightDust() { drawColor = c, position = Projectile.Center + Main.rand.NextVector2Unit() * 30, velocity = Main.rand.NextVector2Unit() * 6, scale = 0.2f, time_max = 30 };
 				VFXManager.Add(d);
 			}
 			AbsorbMonster();
@@ -85,9 +79,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bl
 			float MinDis = 2550 * Projectile.ai[0];
 			float MaxSpeed = 100f * Projectile.ai[0];
 			if (Projectile.timeLeft < 20f)
-			{
 				MaxSpeed = Projectile.timeLeft * 5f;
-			}
 			foreach (var target in Main.npc)
 			{
 				if (target.active)
@@ -95,13 +87,9 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bl
 					if (!target.dontTakeDamage && !target.friendly)
 					{
 						if (target.type == NPCID.TargetDummy)
-						{
 							continue;
-						}
 						if (target.velocity.Length() <= 0.001f)
-						{
 							continue;
-						}
 						Vector2 ToTarget = target.Center - Projectile.Center;
 						float dis = ToTarget.Length();
 						if (dis < MinDis && ToTarget != Vector2.Zero)
@@ -111,19 +99,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bl
 							mess = (float)Math.Sqrt(mess);
 							Vector2 Addvel = Vector2.Normalize(ToTarget) / mess / (dis + 10) * 40000f * (target.knockBackResist + 0.3f) * Projectile.ai[0];
 							if (!target.noGravity)
-							{
 								Addvel.Y *= 30f;
-							}
 							target.velocity -= Addvel;
 							float kSpeed = 1f;
 							if (dis < 100)
-							{
 								kSpeed = (dis + 100) / 200f;
-							}
 							if (target.velocity.Length() > MaxSpeed * kSpeed)
-							{
 								target.velocity *= MaxSpeed * kSpeed / target.velocity.Length();
-							}
 						}
 					}
 				}
@@ -139,27 +121,19 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bl
 						if (dis < 45)
 						{
 							if (target.type is >= ItemID.CopperCoin and <= ItemID.PlatinumCoin or ItemID.Star or ItemID.Heart)
-							{
 								target.position = Main.player[Projectile.owner].Center;
-							}
 						}
 						if ((target.position - Main.player[Projectile.owner].Center).Length() < 75)
-						{
 							continue;
-						}
 						float mess = target.width * target.height;
 						mess = (float)Math.Sqrt(mess);
 						Vector2 Addvel = Vector2.Normalize(ToTarget) / mess / (dis + 10) * 20000f * Projectile.ai[0];
 						target.velocity -= Addvel;
 						float kSpeed = 1f;
 						if (dis < 100)
-						{
 							kSpeed = (dis + 100) / 200f;
-						}
 						if (target.velocity.Length() > MaxSpeed * kSpeed)
-						{
 							target.velocity *= MaxSpeed * kSpeed / target.velocity.Length();
-						}
 					}
 				}
 			}
@@ -177,13 +151,9 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bl
 						target.velocity -= Addvel;
 						float kSpeed = 1f;
 						if (dis < 100)
-						{
 							kSpeed = (dis + 100) / 200f;
-						}
 						if (target.velocity.Length() > MaxSpeed * kSpeed)
-						{
 							target.velocity *= MaxSpeed * kSpeed / target.velocity.Length();
-						}
 						target.timeLeft -= 24;
 					}
 				}
@@ -202,13 +172,9 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bl
 						target.velocity -= Addvel;
 						float kSpeed = 1f;
 						if (dis < 10)
-						{
 							kSpeed = (dis + 10) / 20f;
-						}
 						if (target.velocity.Length() > MaxSpeed * kSpeed)
-						{
 							target.velocity *= MaxSpeed * kSpeed / target.velocity.Length();
-						}
 					}
 				}
 			}
@@ -216,13 +182,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bl
 		public static Vector2 Projection(Vector3 vec, Vector2 center)
 		{
 			float k1 = -1200 / (vec.Z - 1200);
-			Vector2 v = new Vector2(vec.X, vec.Y);
-			return v + ((k1 - 1) * (v - center));
+			var v = new Vector2(vec.X, vec.Y);
+			return v + (k1 - 1) * (v - center);
 		}
 		public static void DrawRing(Projectile Projectile, bool front = false)//分前后两段(由front参数决定)绘制环
 		{
 
-			Color c = new Color(0.2f, 0.7f, 1f);//环的颜色
+			var c = new Color(0.2f, 0.7f, 1f);//环的颜色
 
 			float time = (float)Main.timeForVisualEffects * 0.02f;
 			Main.spriteBatch.End();
@@ -232,14 +198,14 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bl
 			(int, int) r = front ? (50, 100) : (0, 50);
 			for (int i = r.Item1; i <= r.Item2; i++)
 			{
-				Vector3 v3 = Vector3.Transform(Vector3.UnitX * Projectile.scale * 0.8f, Matrix.CreateRotationY(i * MathHelper.TwoPi / 100));
+				var v3 = Vector3.Transform(Vector3.UnitX * Projectile.scale * 0.8f, Matrix.CreateRotationY(i * MathHelper.TwoPi / 100));
 
 				Vector2 v2 = Projection(new Vector3(Projectile.Center.X + v3.X - Main.screenPosition.X, Projectile.Center.Y + v3.Y - Main.screenPosition.Y, v3.Z), new Vector2(Main.screenWidth, Main.screenHeight) / 2);
-				vertices.Add(new Vertex2D(v2, c * 0.8f, new Vector3(time + (i / 50f), 0, 0)));
+				vertices.Add(new Vertex2D(v2, c * 0.8f, new Vector3(time + i / 50f, 0, 0)));
 
 				v3 *= 2.7f;
 				v2 = Projection(new Vector3(Projectile.Center.X + v3.X - Main.screenPosition.X, Projectile.Center.Y + v3.Y - Main.screenPosition.Y, v3.Z), new Vector2(Main.screenWidth, Main.screenHeight) / 2);
-				vertices.Add(new Vertex2D(v2, c, new Vector3(time + (i / 50f), 1, 0)));
+				vertices.Add(new Vertex2D(v2, c, new Vector3(time + i / 50f, 1, 0)));
 			}
 			Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/BlackHole/tex3");
 			//Effect ef = MythContent.QuickEffect("MagicWeaponsReplace/Projectiles/BlackHole/Colorize");
@@ -254,14 +220,14 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bl
 				r = front ? (50, 100) : (0, 50);
 				for (int i = r.Item1; i <= r.Item2; i++)
 				{
-					Vector3 v3 = Vector3.Transform(Vector3.UnitX * Projectile.scale * 0.8f, Matrix.CreateRotationY(i * MathHelper.TwoPi / 100));
+					var v3 = Vector3.Transform(Vector3.UnitX * Projectile.scale * 0.8f, Matrix.CreateRotationY(i * MathHelper.TwoPi / 100));
 					v3.Y -= 0.009f * Projectile.scale;
 					Vector2 v2 = Projection(new Vector3(Projectile.Center.X + v3.X - Main.screenPosition.X, Projectile.Center.Y + v3.Y - Main.screenPosition.Y, v3.Z), new Vector2(Main.screenWidth, Main.screenHeight) / 2);
-					vertices.Add(new Vertex2D(v2, c * 0.8f, new Vector3(time + (i / 50f), 0, 0)));
+					vertices.Add(new Vertex2D(v2, c * 0.8f, new Vector3(time + i / 50f, 0, 0)));
 
 					v3 *= MathF.Sin(Projectile.timeLeft / 10f) * 0.2f + 1.9f;
 					v2 = Projection(new Vector3(Projectile.Center.X + v3.X - Main.screenPosition.X, Projectile.Center.Y + v3.Y - Main.screenPosition.Y, v3.Z), new Vector2(Main.screenWidth, Main.screenHeight) / 2);
-					vertices.Add(new Vertex2D(v2, c, new Vector3(time + (i / 50f), 1, 0)));
+					vertices.Add(new Vertex2D(v2, c, new Vector3(time + i / 50f, 1, 0)));
 				}
 				Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/EShoot");
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);
@@ -271,7 +237,7 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bl
 				r = front ? (50, 100) : (0, 50);
 				for (int i = r.Item1; i <= r.Item2; i++)
 				{
-					Vector3 v3 = Vector3.Transform(Vector3.UnitX * Projectile.scale * 0.8f, Matrix.CreateRotationY(i * MathHelper.TwoPi / 100));
+					var v3 = Vector3.Transform(Vector3.UnitX * Projectile.scale * 0.8f, Matrix.CreateRotationY(i * MathHelper.TwoPi / 100));
 					v3.Y += 0.009f * Projectile.scale;
 					Vector2 v2 = Projection(new Vector3(Projectile.Center.X + v3.X - Main.screenPosition.X, Projectile.Center.Y + v3.Y - Main.screenPosition.Y, v3.Z), new Vector2(Main.screenWidth, Main.screenHeight) / 2);
 					vertices.Add(new Vertex2D(v2, c * 0.8f, new Vector3(time, 0, 0)));
@@ -294,16 +260,13 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bl
 			Texture2D tex = TextureAssets.MagicPixel.Value;
 			Main.spriteBatch.Draw(tex, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), new Color(0, 0, 0, (float)(100f / ((Main.LocalPlayer.Center - Projectile.Center).Length() + 100f)) * Projectile.scale / 60f));
 			if (!Main.drawToScreen)
-			{
 				DrawRing(Projectile);
-
-			}
 			else//低特效
 			{
 				DrawRing(Projectile);
 				tex = ModContent.Request<Texture2D>(Texture).Value;
 				Main.spriteBatch.Draw(tex, proj.Center - Main.screenPosition, null, Color.White, 0, tex.Size() / 2, proj.scale / 255f, 0, 0);
-				BlackHole.DrawRing(proj, true);
+				DrawRing(proj, true);
 
 			}
 			return false;
@@ -334,8 +297,8 @@ namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.Bl
 				gd.Clear(Color.Transparent);
 				sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 				Effect eff = ModContent.Request<Effect>("Everglow/Sources/Modules/MythModule/Effects/BlackHole", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-				Vector2 scRes = new Vector2(Main.screenWidth, Main.screenHeight);
-				Vector2 pos = Vector2.Transform(proj.Center - Main.screenPosition, Main.Transform);
+				var scRes = new Vector2(Main.screenWidth, Main.screenHeight);
+				var pos = Vector2.Transform(proj.Center - Main.screenPosition, Main.Transform);
 				eff.Parameters["uPosition"].SetValue(pos / scRes);
 				eff.Parameters["uRatio"].SetValue(scRes.X / scRes.Y);
 				eff.Parameters["uRadius"].SetValue(0.001f * proj.scale * Main.Transform.M11 / (Main.screenWidth / 1920f));//乘了一个总缩放系数

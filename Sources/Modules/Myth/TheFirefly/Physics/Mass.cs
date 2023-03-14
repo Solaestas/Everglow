@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheFirefly.Physics
+﻿namespace Everglow.Myth.TheFirefly.Physics
 {
 	internal class Mass
 	{
@@ -39,9 +39,7 @@
 		public void Update(float deltaTime)
 		{
 			if (isStatic)
-			{
 				return;
-			}
 			velocity += force / mass * deltaTime;
 			position += velocity * deltaTime;
 			force = Vector2.Zero;

@@ -1,4 +1,4 @@
-namespace Everglow.Sources.Modules.MythModule.Prefixs
+namespace Everglow.Myth.Perfixs
 {
 	/// <summary>
 	/// 功能尚未完善

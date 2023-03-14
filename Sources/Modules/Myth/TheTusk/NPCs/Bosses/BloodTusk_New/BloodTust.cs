@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk_New
+﻿namespace Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk_New
 {
 	/*
     [AutoloadBossHead]

@@ -1,7 +1,7 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
+namespace Everglow.Myth.Bosses.Acytaea.Projectiles
 {
 	public class AcytaeaLaserBall : ModProjectile
 	{
@@ -34,9 +34,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 		public override void AI()
 		{
 			if (Projectile.timeLeft < 60)
-			{
 				St *= 0.96f;
-			}
 			else
 			{
 				St += 40f;
@@ -61,9 +59,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 			if (AIMNpc != -1)
 			{
 				if (Main.npc[AIMNpc].type == ModContent.NPCType<NPCs.Acytaea>() && Main.npc[AIMNpc].active)
-				{
 					Projectile.velocity += Vector2.Normalize(Main.npc[AIMNpc].Center - Projectile.Center) * 1 / Radius;
-				}
 			}
 			if (Projectile.timeLeft == 750)
 			{
@@ -83,9 +79,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 			if (ControlP != -1)
 			{
 				if (Main.projectile[ControlP].type == ModContent.ProjectileType<AcytaeaLaser>() && Main.projectile[ControlP].active)
-				{
 					Main.projectile[ControlP].Center = Projectile.Center;
-				}
 			}
 			St *= 0.99f;
 		}
@@ -98,7 +92,7 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 		{
 
 			Effect ef2 = MythContent.QuickEffect("Bosses/Acytaea/SpherePerspective3");
-			List<Vertex2D> triangleList2 = new List<Vertex2D>();
+			var triangleList2 = new List<Vertex2D>();
 			int radius = (int)(St / 80f);//sss
 			triangleList2.Add(new Vertex2D(Projectile.Center - new Vector2(radius, radius), Color.White, new Vector3(-1, 1, 0)));
 			triangleList2.Add(new Vertex2D(Projectile.Center - new Vector2(radius, -radius), Color.White, new Vector3(-1, -1, 0)));

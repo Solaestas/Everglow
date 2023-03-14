@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.LunarFlare
+﻿namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.LunarFlare
 {
 	internal class StarProj : ModProjectile
 	{

@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheTusk.Projectiles.Weapon
+﻿namespace Everglow.Myth.TheTusk.Projectiles.Weapon
 {
 	internal class SpineGun : ModProjectile
 	{
@@ -32,8 +32,8 @@
 			{
 				Projectile.ai[0] *= 0.9f;
 				Projectile.ai[1] -= 1f;
-				Projectile.rotation = (float)(Math.Atan2(v0.Y, v0.X) + (Math.PI * 0.25));
-				Projectile.Center = Main.player[Projectile.owner].MountedCenter + (Vector2.Normalize(v0).RotatedBy(Projectile.ai[0] / 4d) * (8f - (Projectile.ai[0] * 4)));
+				Projectile.rotation = (float)(Math.Atan2(v0.Y, v0.X) + Math.PI * 0.25);
+				Projectile.Center = Main.player[Projectile.owner].MountedCenter + Vector2.Normalize(v0).RotatedBy(Projectile.ai[0] / 4d) * (8f - Projectile.ai[0] * 4);
 				oldPo = Projectile.Center;
 				Projectile.Center = oldPo;
 				Projectile.velocity *= 0;
@@ -44,7 +44,7 @@
 				{
 					Projectile.ai[0] *= 0.9f;
 					Projectile.ai[1] -= 1f;
-					Projectile.Center = Main.player[Projectile.owner].MountedCenter + (Vector2.Normalize(v0).RotatedBy(Projectile.ai[0] / 4d) * (8f - (Projectile.ai[0] * 4)));
+					Projectile.Center = Main.player[Projectile.owner].MountedCenter + Vector2.Normalize(v0).RotatedBy(Projectile.ai[0] / 4d) * (8f - Projectile.ai[0] * 4);
 				}
 				else
 				{
@@ -52,9 +52,7 @@
 				}
 			}
 			if (Ran == -1)
-			{
 				Ran = Main.rand.Next(9);
-			}
 		}
 		public override bool PreDraw(ref Color lightColor)
 		{
@@ -63,16 +61,12 @@
 		public override void PostDraw(Color lightColor)
 		{
 			if (!Release)
-			{
 				return;
-			}
 			Player player = Main.player[Projectile.owner];
 			player.heldProj = Projectile.whoAmI;
 			Vector2 v0 = Projectile.Center - player.MountedCenter;
 			if (Main.mouseLeft)
-			{
-				player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(v0.Y, v0.X) - (Math.PI / 2d)));
-			}
+				player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(v0.Y, v0.X) - Math.PI / 2d));
 
 			Texture2D TexMain = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/Items/Weapons/SpineGun").Value;
 			Color drawColor = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
@@ -104,9 +98,9 @@
 
 			public CustomVertexInfo(Vector2 position, Color color, Vector3 texCoord)
 			{
-				this.Position = position;
-				this.Color = color;
-				this.TexCoord = texCoord;
+				Position = position;
+				Color = color;
+				TexCoord = texCoord;
 			}
 
 			public VertexDeclaration VertexDeclaration

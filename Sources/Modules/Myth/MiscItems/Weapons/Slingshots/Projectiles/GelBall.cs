@@ -1,6 +1,6 @@
-﻿using Everglow.Sources.Modules.MythModule.Common;
+﻿using Everglow.Myth.Common;
 using Terraria.Audio;
-namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Projectiles
+namespace Everglow.Myth.MiscItems.Weapons.Slingshots.Projectiles
 {
 	public class GelBall : SlingshotAmmo
 	{
@@ -15,16 +15,14 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
 		public override void DrawTrail()
 		{
 			DrawShade();
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 			int TrueL = 0;
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
 				if (Projectile.oldPos[i] == Vector2.Zero)
 				{
 					if (i == 1)
-					{
 						return;
-					}
 					break;
 				}
 
@@ -34,35 +32,27 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
 			{
 				float MulColor = 1f;
 				if (Projectile.oldPos[i] == Vector2.Zero)
-				{
 					break;
-				}
 
 				float width = 4;
 				if (Projectile.timeLeft <= 30)
-				{
 					width *= Projectile.timeLeft / 30f;
-				}
 				var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
-				normalDir = Utils.SafeNormalize(new Vector2(-normalDir.Y, normalDir.X), Vector2.Zero);
+				normalDir = new Vector2(-normalDir.Y, normalDir.X).SafeNormalize(Vector2.Zero);
 
 				if (i >= 2)
 				{
 					var normalDirII = Projectile.oldPos[i - 2] - Projectile.oldPos[i - 1];
 					normalDirII = Vector2.Normalize(new Vector2(-normalDirII.Y, normalDirII.X));
 					if (Vector2.Dot(normalDirII, normalDir) <= 0.965f)
-					{
 						MulColor = 0f;
-					}
 				}
 				if (i < Projectile.oldPos.Length - 1)
 				{
 					var normalDirII = Projectile.oldPos[i] - Projectile.oldPos[i + 1];
 					normalDirII = Vector2.Normalize(new Vector2(-normalDirII.Y, normalDirII.X));
 					if (Vector2.Dot(normalDirII, normalDir) <= 0.965f)
-					{
 						MulColor = 0f;
-					}
 				}
 
 				var factor = i / (float)TrueL;
@@ -71,7 +61,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
 				var color = Color.Lerp(drawColor, new Color(0, 0, 0, 0), factor);
 
 				float fac1 = factor * 3 + (float)(-Main.timeForVisualEffects * 0.03) + 100000;
-				float fac2 = ((i + 1) / (float)TrueL) * 3 + (float)(-Main.timeForVisualEffects * 0.03) + 100000;
+				float fac2 = (i + 1) / (float)TrueL * 3 + (float)(-Main.timeForVisualEffects * 0.03) + 100000;
 				//TODO:925分钟之后会炸
 
 				fac1 %= 1f;
@@ -85,7 +75,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
 						float fac3 = 1 - fac1;
 						fac3 /= 3 / (float)TrueL;
 						normalDir = Projectile.oldPos[i] - Projectile.oldPos[i + 1];
-						normalDir = Utils.SafeNormalize(new Vector2(-normalDir.Y, normalDir.X), Vector2.Zero);
+						normalDir = new Vector2(-normalDir.Y, normalDir.X).SafeNormalize(Vector2.Zero);
 						bars.Add(new Vertex2D(Projectile.oldPos[i + 1] * (1 - fac3) + Projectile.oldPos[i] * fac3 + normalDir * -width + new Vector2(10, 10) - Main.screenPosition, color * MulColor, new Vector3(1, 0, 0)));
 						bars.Add(new Vertex2D(Projectile.oldPos[i + 1] * (1 - fac3) + Projectile.oldPos[i] * fac3 + normalDir * width + new Vector2(10, 10) - Main.screenPosition, color * MulColor, new Vector3(1, 1, 0)));
 
@@ -109,16 +99,14 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
 		}
 		private void DrawShade()
 		{
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var bars = new List<Vertex2D>();
 			int TrueL = 0;
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
 				if (Projectile.oldPos[i] == Vector2.Zero)
 				{
 					if (i == 1)
-					{
 						return;
-					}
 					break;
 				}
 
@@ -128,42 +116,34 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
 			{
 				float MulColor = 1f;
 				if (Projectile.oldPos[i] == Vector2.Zero)
-				{
 					break;
-				}
 
 				float width = 4;
 				if (Projectile.timeLeft <= 30)
-				{
 					width *= Projectile.timeLeft / 30f;
-				}
 				var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
-				normalDir = Utils.SafeNormalize(new Vector2(-normalDir.Y, normalDir.X), Vector2.Zero);
+				normalDir = new Vector2(-normalDir.Y, normalDir.X).SafeNormalize(Vector2.Zero);
 
 				if (i >= 2)
 				{
 					var normalDirII = Projectile.oldPos[i - 2] - Projectile.oldPos[i - 1];
 					normalDirII = Vector2.Normalize(new Vector2(-normalDirII.Y, normalDirII.X));
 					if (Vector2.Dot(normalDirII, normalDir) <= 0.965f)
-					{
 						MulColor = 0f;
-					}
 				}
 				if (i < Projectile.oldPos.Length - 1)
 				{
 					var normalDirII = Projectile.oldPos[i] - Projectile.oldPos[i + 1];
 					normalDirII = Vector2.Normalize(new Vector2(-normalDirII.Y, normalDirII.X));
 					if (Vector2.Dot(normalDirII, normalDir) <= 0.965f)
-					{
 						MulColor = 0f;
-					}
 				}
 
 				var factor = i / (float)TrueL;
 				var color = Color.Lerp(Color.White * 0.6f, new Color(0, 0, 0, 0), factor);
 
 				float fac1 = factor * 3 + (float)(-Main.timeForVisualEffects * 0.03) + 100000;
-				float fac2 = ((i + 1) / (float)TrueL) * 3 + (float)(-Main.timeForVisualEffects * 0.03) + 100000;
+				float fac2 = (i + 1) / (float)TrueL * 3 + (float)(-Main.timeForVisualEffects * 0.03) + 100000;
 
 				fac1 %= 1f;
 				fac2 %= 1f;
@@ -176,7 +156,7 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
 						float fac3 = 1 - fac1;
 						fac3 /= 3 / (float)TrueL;
 						normalDir = Projectile.oldPos[i] - Projectile.oldPos[i + 1];
-						normalDir = Utils.SafeNormalize(new Vector2(-normalDir.Y, normalDir.X), Vector2.Zero);
+						normalDir = new Vector2(-normalDir.Y, normalDir.X).SafeNormalize(Vector2.Zero);
 						bars.Add(new Vertex2D(Projectile.oldPos[i + 1] * (1 - fac3) + Projectile.oldPos[i] * fac3 + normalDir * -width + new Vector2(10, 10) - Main.screenPosition, color * MulColor, new Vector3(1, 0, 0)));
 						bars.Add(new Vertex2D(Projectile.oldPos[i + 1] * (1 - fac3) + Projectile.oldPos[i] * fac3 + normalDir * width + new Vector2(10, 10) - Main.screenPosition, color * MulColor, new Vector3(1, 1, 0)));
 
@@ -200,11 +180,11 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
 		public override void AmmoHit()
 		{
 			SoundEngine.PlaySound(SoundID.Drip, Projectile.Center);
-			Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<NormalHit>(), Projectile.damage, Projectile.knockBack, Projectile.owner, Projectile.velocity.Length(), Main.rand.NextFloat(6.283f));
+			Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<NormalHit>(), Projectile.damage, Projectile.knockBack, Projectile.owner, Projectile.velocity.Length(), Main.rand.NextFloat(6.283f));
 			float Power = Projectile.ai[0] + 0.5f;
 			for (int x = 0; x < 14; x++)
 			{
-				Dust d = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.t_Slime, 0, 0, 150, new Color(0, 0, 251, 0), Main.rand.NextFloat(0.75f, 1.15f));
+				var d = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.t_Slime, 0, 0, 150, new Color(0, 0, 251, 0), Main.rand.NextFloat(0.75f, 1.15f));
 				d.velocity = new Vector2(0, Main.rand.NextFloat(Main.rand.NextFloat(1f, 2f), 4f)).RotatedByRandom(6.283) * Power;
 			}
 		}
@@ -215,13 +195,9 @@ namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Proje
 			if (Projectile.penetrate >= 2)
 			{
 				if (Projectile.velocity.X != oldVelocity.X)
-				{
 					Projectile.velocity.X = -oldVelocity.X;
-				}
 				if (Projectile.velocity.Y != oldVelocity.Y)
-				{
 					Projectile.velocity.Y = -oldVelocity.Y;
-				}
 				Projectile.velocity *= 0.98f;
 			}
 			if (Projectile.penetrate < 2)

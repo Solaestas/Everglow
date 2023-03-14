@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.LanternMoon.Projectiles.LanternKing
+﻿namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing
 {
 	class GoldLanternLine : ModProjectile
 	{
@@ -27,7 +27,7 @@
 			if (Projectile.timeLeft >= 60)
 			{
 				Vector2 v2 = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.2f, 0.2f));
-				Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center, v2, ModContent.ProjectileType<GoldLanternLine2>(), 2, 0, player.whoAmI, 0, 0);
+				Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, v2, ModContent.ProjectileType<GoldLanternLine2>(), 2, 0, player.whoAmI, 0, 0);
 			}
 
 			Vector2 v = Vector2.Normalize(player.Center - Projectile.Center) * 0.15f;
@@ -40,7 +40,7 @@
 					for (int j = 0; j < 10; j++)
 					{
 						Vector2 va = Projectile.velocity.RotatedBy(j / 5f * Math.PI);
-						Projectile.NewProjectile(Projectile.InheritSource(Projectile), Projectile.Center, va * 3f, ModContent.ProjectileType<GoldLanternLine3>(), 0, 0, player.whoAmI, 0, 0);
+						Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, va * 3f, ModContent.ProjectileType<GoldLanternLine3>(), 0, 0, player.whoAmI, 0, 0);
 					}
 					HasPro = true;
 				}
@@ -52,9 +52,7 @@
 			{
 				HasColid = true;
 				if (Projectile.timeLeft >= 60)
-				{
 					Projectile.timeLeft = 60;
-				}
 			}
 			Projectile.velocity *= 0.2f;
 			return false;
@@ -69,21 +67,17 @@
 			float k0 = (240 - Projectile.timeLeft) / k1;
 
 			if (Projectile.timeLeft <= 240 - k1)
-			{
 				k0 = 1;
-			}
 
-			Color c0 = new Color(k0 * 0.8f + 0.2f, k0 * k0 * 0.4f + 0.2f, 0f, 0);
-			List<Vertex2D> bars = new List<Vertex2D>();
+			var c0 = new Color(k0 * 0.8f + 0.2f, k0 * k0 * 0.4f + 0.2f, 0f, 0);
+			var bars = new List<Vertex2D>();
 
 
 			int TrueL = 0;
 			for (int i = 1; i < Projectile.oldPos.Length; ++i)
 			{
 				if (Projectile.oldPos[i] == Vector2.Zero)
-				{
 					break;
-				}
 
 				TrueL++;
 			}
@@ -91,21 +85,13 @@
 			{
 				float width = 36;
 				if (Projectile.timeLeft <= 40)
-				{
 					width = Projectile.timeLeft * 0.9f;
-				}
 				if (i < 10)
-				{
 					width *= i / 10f;
-				}
 				if (Projectile.ai[0] == 3)
-				{
 					width *= 0.5f;
-				}
 				if (Projectile.oldPos[i] == Vector2.Zero)
-				{
 					break;
-				}
 
 				var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
 				normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
@@ -119,9 +105,7 @@
 			Texture2D t = Common.MythContent.QuickTexture("LanternMoon/Projectiles/LanternKing/GoldLaser");
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			if (bars.Count > 3)
-			{
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-			}
 			return true;
 		}
 	}

@@ -1,6 +1,6 @@
 ﻿using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
+namespace Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk
 {
 	public class TuskRedLight : ModNPC
 	{
@@ -38,9 +38,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 			}
 			wait--;
 			if (wait == 0)
-			{
 				NPC.active = false;
-			}
 			V[3].Y += 1;
 			VMax[0] = new Vector2(0, 84);
 			NPC.TargetClosest(false);
@@ -57,13 +55,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 				}
 			}
 			if (NPC.localAI[0] % 30 == 8)
-			{
 				NPC.NewNPC(null, (int)(NPC.Center.X + Main.rand.Next(-120, 120)), (int)player.Center.Y - 20, ModContent.NPCType<LargeTusk>());
-			}
 			if (NPC.localAI[0] % 20 == 0)
-			{
 				NPC.NewNPC(null, (int)(NPC.Center.X + Main.rand.Next(-120, 120)), (int)player.Center.Y - 20, ModContent.NPCType<LittleTusk>());
-			}
 			if (NPC.localAI[0] % 60 == 10)
 			{
 				int Ax = Main.rand.Next(-120, 120);

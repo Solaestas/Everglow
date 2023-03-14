@@ -1,6 +1,6 @@
 using static Terraria.ModLoader.ModContent;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.Water
+namespace Everglow.Myth.TheTusk.Water
 {
 	public class TuskWaterStyle : ModWaterStyle
 	{
@@ -8,7 +8,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.Water
 
 		public override int GetSplashDust() => DustID.Blood;
 
-		public override int GetDropletGore() => base.Slot;
+		public override int GetDropletGore() => Slot;
 
 		public override void LightColorMultiplier(ref float r, ref float g, ref float b)
 		{

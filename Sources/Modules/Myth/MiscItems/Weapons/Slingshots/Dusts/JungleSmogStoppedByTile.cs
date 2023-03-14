@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Dusts
+﻿namespace Everglow.Myth.MiscItems.Weapons.Slingshots.Dusts
 {
 	public class JungleSmogStoppedByTile : ModDust
 	{
@@ -34,9 +34,7 @@
 				dust.velocity = v0;
 			}
 			if (dust.alpha > 254)
-			{
 				dust.active = false;
-			}
 			//低损耗挂毒
 			int LuckTarget = Main.rand.Next(200);
 			NPC target = Main.npc[LuckTarget];
@@ -49,9 +47,7 @@
 						if (!target.buffImmune[BuffID.Poisoned])
 						{
 							if ((target.Center - dust.position).Length() < 60)
-							{
 								target.AddBuff(BuffID.Poisoned, 180);
-							}
 						}
 					}
 				}
@@ -63,9 +59,7 @@
 		{
 			float k = (255 - dust.alpha) / 255f;
 			if (dust.scale > 0.6f)
-			{
 				return new Color?(new Color(0.3f * k * k, 0.9f * k, 0, 0f));
-			}
 			else
 			{
 				return new Color?(new Color(0.3f * k * k, 0.9f * k, 0, 0));

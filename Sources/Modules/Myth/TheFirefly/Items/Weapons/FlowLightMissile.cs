@@ -1,6 +1,6 @@
 ﻿using Terraria.DataStructures;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
+namespace Everglow.Myth.TheFirefly.Items.Weapons
 {
 	public class FlowLightMissile : ModItem
 	{
@@ -31,9 +31,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Weapons
 		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
 			if (player.ownedProjectileCounts[Item.shoot] < 1)
-			{
 				Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, 0, 0);
-			}
 			return false;
 		}
 	}

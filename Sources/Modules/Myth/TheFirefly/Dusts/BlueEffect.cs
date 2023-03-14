@@ -1,4 +1,4 @@
-﻿namespace Everglow.Sources.Modules.MythModule.TheFirefly.Dusts
+﻿namespace Everglow.Myth.TheFirefly.Dusts
 {
 	public class BlueEffect : ModDust
 	{
@@ -23,9 +23,7 @@
 			dust.velocity *= 0.95f;
 			Lighting.AddLight(dust.position, dust.color.R * 0.0f, dust.color.G * 0.0f, 1f);
 			if (dust.scale < 0.15f)
-			{
 				dust.active = false;
-			}
 			return false;
 		}
 	}

@@ -1,6 +1,6 @@
 ﻿using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
+namespace Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk
 {
 	public class CrimsonTusk : ModNPC
 	{
@@ -14,13 +14,9 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 			NPC.behindTiles = true;
 			NPC.damage = 20;
 			if (Main.expertMode)
-			{
 				NPC.damage = 50;
-			}
 			if (Main.masterMode)
-			{
 				NPC.damage = 80;
-			}
 			NPC.width = 30;
 			NPC.height = 30;
 			NPC.defense = 0;
@@ -55,9 +51,7 @@ namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk
 				{
 					NPC.alpha += 15;
 					if (NPC.alpha > 240)
-					{
 						NPC.active = false;
-					}
 				}
 				else
 				{

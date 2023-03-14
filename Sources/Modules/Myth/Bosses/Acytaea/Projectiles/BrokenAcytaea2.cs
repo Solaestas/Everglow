@@ -1,7 +1,7 @@
 ﻿using Terraria.GameContent;
 using Terraria.Localization;
 
-namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
+namespace Everglow.Myth.Bosses.Acytaea.Projectiles
 {
 	public class BrokenAcytaea2 : ModProjectile
 	{
@@ -68,15 +68,13 @@ namespace Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles
 			Projectile.velocity *= 0.99f;
 			Projectile.scale *= 0.94f;
 			if (Projectile.scale < 0.15f)
-			{
 				Projectile.Kill();
-			}
 		}
 		public override void PostDraw(Color lightColor)
 		{
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-			List<VertexInfo2> Vx = new List<VertexInfo2>
+			var Vx = new List<VertexInfo2>
 			{
 				new VertexInfo2(po1 + Projectile.Center - Main.screenPosition, new Color(255, (int)(122.5 + Math.Sin(RamdomC) * 122.5) / 3, (int)(122.5 + Math.Sin(RamdomC) * 122.5) / 3, 0), new Vector3(0, 0, 0)),
 				new VertexInfo2(po2 + Projectile.Center - Main.screenPosition, new Color(255, (int)(122.5 + Math.Sin(RamdomC) * 122.5) / 3, (int)(122.5 + Math.Sin(RamdomC) * 122.5) / 3, 0), new Vector3(0, 0, 0)),

@@ -1,6 +1,6 @@
 using Terraria.DataStructures;
 
-namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
+namespace Everglow.Myth.TheFirefly.NPCs
 {
 	public enum WormSegmentType
 	{
@@ -127,7 +127,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 		/// 当HasCustomBodySegments为true时，才会调用该方法
 		/// </summary>
 		/// <param name="segmentCount">预计将产生多少个身体分段</param>
-		/// <returns>The whoAmI of the most-recently spawned NPC, which is the result of calling <see cref="NPC.NewNPC(Terraria.DataStructures.IEntitySource, int, int, int, int, float, float, float, float, int)"/></returns>
+		/// <returns>The whoAmI of the most-recently spawned NPC, which is the result of calling <see cref="NPC.NewNPC(IEntitySource, int, int, int, int, float, float, float, float, int)"/></returns>
 		public virtual int SpawnBodySegments(int segmentCount)
 		{
 			// Defaults to just returning this NPC's whoAmI, since the tail segment uses the return value as its "following" NPC index
@@ -190,10 +190,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 					IEntitySource source = NPC.GetSource_FromAI();
 
 					if (HasCustomBodySegments)
-					{
 						// 调用处理催生体段的方法
 						latestNPC = SpawnBodySegments(distance);
-					}
 					else
 					{
 						// 像往常一样产生体节
@@ -217,9 +215,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 						NPC n = Main.npc[i];
 
 						if (n.active && (n.type == Type || n.type == BodyType || n.type == TailType) && n.realLife == NPC.whoAmI)
-						{
 							count++;
-						}
 					}
 
 					if (count != randomWormLength)
@@ -499,14 +495,10 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.NPCs
 		internal static void CommonAI_BodyTail(FireWorm worm)
 		{
 			if (!worm.NPC.HasValidTarget)
-			{
 				worm.NPC.TargetClosest(true);
-			}
 
 			if (Main.player[worm.NPC.target].dead && worm.NPC.timeLeft > 30000)
-			{
 				worm.NPC.timeLeft = 10;
-			}
 
 			NPC following = worm.NPC.ai[1] >= Main.maxNPCs ? null : worm.FollowingNPC;
 			if (Main.netMode != NetmodeID.MultiplayerClient)
