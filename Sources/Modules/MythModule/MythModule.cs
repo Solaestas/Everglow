@@ -29,11 +29,11 @@ namespace Everglow.Sources.Modules.MythModule
                 IL.Terraria.GameContent.Shaders.WaterShaderData.Apply += WaterShaderData_Apply;
                 On.Terraria.GameContent.Shaders.WaterShaderData.StepLiquids += WaterShaderData_StepLiquids;
 
-                On.Terraria.Graphics.Effects.FilterManager.EndCapture += FilterManager_EndCapture;
+				On.Terraria.Graphics.Effects.FilterManager.EndCapture += FilterManager_EndCapture;
+				SkyManager.Instance["TuskSky"] = new TheTusk.Backgrounds.TuskBiomeSky();
 
-
-                m_fogPass = new FogPass();
-            }
+				m_fogPass = new FogPass();
+			}
         }
 
         private void FilterManager_EndCapture(On.Terraria.Graphics.Effects.FilterManager.orig_EndCapture orig, Terraria.Graphics.Effects.FilterManager self, RenderTarget2D finalTexture, RenderTarget2D screenTarget1, RenderTarget2D screenTarget2, Color clearColor)
