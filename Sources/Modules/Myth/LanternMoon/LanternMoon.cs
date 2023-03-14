@@ -1,24 +1,24 @@
 ﻿namespace Everglow.Sources.Modules.MythModule.LanternMoon
 {
-    public class LanternMoon : ModSystem//灯笼月
-    {
-        public static Effect LanternGore, LanternGoreFlame, OcenaUBG, TrailRainbow, XiaoDash;
-        public override void Load()
-        {
-            Gores.ShaderLanternGore.Load();
+	public class LanternMoon : ModSystem//灯笼月
+	{
+		public static Effect LanternGore, LanternGoreFlame, OcenaUBG, TrailRainbow, XiaoDash;
+		public override void Load()
+		{
+			Gores.ShaderLanternGore.Load();
 			base.Load();
-        }
-        public override void Unload()
-        {
-            Gores.ShaderLanternGore.UnLoad();
-            base.Unload();
-        }
-        public override void SetStaticDefaults()
-        {
+		}
+		public override void Unload()
+		{
+			Gores.ShaderLanternGore.UnLoad();
+			base.Unload();
+		}
+		public override void SetStaticDefaults()
+		{
 			base.SetStaticDefaults();
-        }
-    }
-    /*public class DrawLanternMoon
+		}
+	}
+	/*public class DrawLanternMoon
     {
         public static float OffsetUIY = 300;
         public static float Col = 1f;

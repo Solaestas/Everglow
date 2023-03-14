@@ -23,76 +23,76 @@ namespace Everglow.Sources.Modules.MythModule.Common
 		public bool create1sand = false;
 		public bool Turn = true;
 		public int Dashcool = 0;
-		
+
 		public float Miss = 0;
 		public float CriticalDamage = 1f;
 		public int SilverBuff = 0;
-        public override void ResetEffects()//这个是更新帧刷的函数,在UpdateAccessory之前
-        {
-            CriticalDamage = 0f;
-        }
-        public override void ModifyHitNPC(Item item, NPC target, ref int damage, ref float knockback, ref bool crit)
-        {
-            if (crit)
+		public override void ResetEffects()//这个是更新帧刷的函数,在UpdateAccessory之前
+		{
+			CriticalDamage = 0f;
+		}
+		public override void ModifyHitNPC(Item item, NPC target, ref int damage, ref float knockback, ref bool crit)
+		{
+			if (crit)
 			{
-                damage = (int)(damage * (CriticalDamage + 1));
-            }
-        }
-        public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
-        {
-            if (crit)
-            {
-                damage = (int)(damage * (CriticalDamage + 1));
-            }
-        }
-        public override void ModifyHitPvp(Item item, Player target, ref int damage, ref bool crit)
-        {
-            if (crit)
-            {
-                damage = (int)(damage * (CriticalDamage + 1));
-            }
-        }
-        public override void ModifyHitPvpWithProj(Projectile proj, Player target, ref int damage, ref bool crit)
-        {
-            if (crit)
-            {
-                damage = (int)(damage * (CriticalDamage + 1));
-            }
-        }
-        public int InvincibleFrameTime = 0;
+				damage = (int)(damage * (CriticalDamage + 1));
+			}
+		}
+		public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		{
+			if (crit)
+			{
+				damage = (int)(damage * (CriticalDamage + 1));
+			}
+		}
+		public override void ModifyHitPvp(Item item, Player target, ref int damage, ref bool crit)
+		{
+			if (crit)
+			{
+				damage = (int)(damage * (CriticalDamage + 1));
+			}
+		}
+		public override void ModifyHitPvpWithProj(Projectile proj, Player target, ref int damage, ref bool crit)
+		{
+			if (crit)
+			{
+				damage = (int)(damage * (CriticalDamage + 1));
+			}
+		}
+		public int InvincibleFrameTime = 0;
 		internal void UpdateDecrease(ref int value)
 		{
-            if (value > 0)
-            {
-                value--;
-            }
-            else
-            {
-                value = 0;
-            }
-        }
+			if (value > 0)
+			{
+				value--;
+			}
+			else
+			{
+				value = 0;
+			}
+		}
 		public override void PreUpdate()
 		{
 			UpdateDecrease(ref GoldLiquidPupil);
-            UpdateDecrease(ref WhitePedal);
-            UpdateDecrease(ref ThreeColorCrownBuff3);
-            UpdateDecrease(ref ThreeColorCrownBuff2);
-            UpdateDecrease(ref ThreeColorCrownBuff1);
-            UpdateDecrease(ref ThreeColorCrownCool);
-            UpdateDecrease(ref ThreeColorCrown);
-            UpdateDecrease(ref OrangeStickCool);
-            UpdateDecrease(ref OrangeStick);
-            UpdateDecrease(ref PurpleBallFlowerCool);
-            UpdateDecrease(ref PurpleBallFlower);
-            UpdateDecrease(ref CyanBranchCool);
-            UpdateDecrease(ref CyanBranch);
-            UpdateDecrease(ref CyanPedal);
-            UpdateDecrease(ref BlueTorchFlower);
-            UpdateDecrease(ref BlueTorchFlowerTime);
-            UpdateDecrease(ref CyanBranch);
-            UpdateDecrease(ref SilverBuff);
-            UpdateDecrease(ref Dashcool);
-            UpdateDecrease(ref InvincibleFrameTime);
+			UpdateDecrease(ref WhitePedal);
+			UpdateDecrease(ref ThreeColorCrownBuff3);
+			UpdateDecrease(ref ThreeColorCrownBuff2);
+			UpdateDecrease(ref ThreeColorCrownBuff1);
+			UpdateDecrease(ref ThreeColorCrownCool);
+			UpdateDecrease(ref ThreeColorCrown);
+			UpdateDecrease(ref OrangeStickCool);
+			UpdateDecrease(ref OrangeStick);
+			UpdateDecrease(ref PurpleBallFlowerCool);
+			UpdateDecrease(ref PurpleBallFlower);
+			UpdateDecrease(ref CyanBranchCool);
+			UpdateDecrease(ref CyanBranch);
+			UpdateDecrease(ref CyanPedal);
+			UpdateDecrease(ref BlueTorchFlower);
+			UpdateDecrease(ref BlueTorchFlowerTime);
+			UpdateDecrease(ref CyanBranch);
+			UpdateDecrease(ref SilverBuff);
+			UpdateDecrease(ref Dashcool);
+			UpdateDecrease(ref InvincibleFrameTime);
 		}
 		public override void PostUpdateMiscEffects()
 		{
@@ -108,7 +108,7 @@ namespace Everglow.Sources.Modules.MythModule.Common
 			{
 				Miss += 8;
 			}
-			
+
 			if (SilverBuff > 0)
 			{
 				Player.maxRunSpeed += 0.05f;

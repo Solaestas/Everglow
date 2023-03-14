@@ -3,33 +3,33 @@ using Everglow.Sources.Modules.MythModule.OmniElementItems.Dusts;
 
 namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles
 {
-    public class LilyHarpNote : ModProjectile
-    {
-        public override void SetStaticDefaults()
-        {
-        }
+	public class LilyHarpNote : ModProjectile
+	{
+		public override void SetStaticDefaults()
+		{
+		}
 
-        public override void SetDefaults()
-        {
-            Projectile.extraUpdates = 1;
-            Projectile.width = 24;
-            Projectile.height = 24;
-            Projectile.hostile = false;
-            Projectile.friendly = false;
-            Projectile.ignoreWater = true;
-            Projectile.tileCollide = true;
-            Projectile.penetrate = 1;
-            Projectile.timeLeft = 300;
-            Projectile.aiStyle = -1;
-        }
+		public override void SetDefaults()
+		{
+			Projectile.extraUpdates = 1;
+			Projectile.width = 24;
+			Projectile.height = 24;
+			Projectile.hostile = false;
+			Projectile.friendly = false;
+			Projectile.ignoreWater = true;
+			Projectile.tileCollide = true;
+			Projectile.penetrate = 1;
+			Projectile.timeLeft = 300;
+			Projectile.aiStyle = -1;
+		}
 
-        public override void AI()
-        {
-            Projectile.hide = true;
+		public override void AI()
+		{
+			Projectile.hide = true;
 
-            if (Projectile.timeLeft < 220)
-            {
-                /*if(Projectile.ai[1] != -1)
+			if (Projectile.timeLeft < 220)
+			{
+				/*if(Projectile.ai[1] != -1)
                 {
                     Projectile.friendly = true;
                     if(Main.npc[(int)Projectile.ai[1]].active)
@@ -53,80 +53,80 @@ namespace Everglow.Sources.Modules.MythModule.OmniElementItems.Projectiles
                 {
                     CheckEmemies();
                 }*/
-                Projectile.friendly = true;
-                if (Main.mouseLeft)
-                {
-                    Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.MouseWorld) * 15, 0.05f);
-                }
-            }
-            else
-            {
-                Projectile.velocity *= 0.93f;
-            }
-        }
+				Projectile.friendly = true;
+				if (Main.mouseLeft)
+				{
+					Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.MouseWorld) * 15, 0.05f);
+				}
+			}
+			else
+			{
+				Projectile.velocity *= 0.93f;
+			}
+		}
 
-        internal void CheckEmemies()
-        {
-            int AimWhoAmI = -1;
-            for (int j = 0; j < 200; j++)
-            {
-                if (Main.npc[j].CanBeChasedBy(Projectile, false) && Collision.CanHit(Projectile.Center, 1, 1, Main.npc[j].Center, 1, 1))
-                {
-                    Vector2 v1 = Main.npc[j].Center;
-                    Vector2 v2 = Main.MouseWorld;
+		internal void CheckEmemies()
+		{
+			int AimWhoAmI = -1;
+			for (int j = 0; j < 200; j++)
+			{
+				if (Main.npc[j].CanBeChasedBy(Projectile, false) && Collision.CanHit(Projectile.Center, 1, 1, Main.npc[j].Center, 1, 1))
+				{
+					Vector2 v1 = Main.npc[j].Center;
+					Vector2 v2 = Main.MouseWorld;
 
-                    if (AimWhoAmI == -1)
-                    {
-                        AimWhoAmI = j;
-                    }
-                    else if ((v1 - v2).Length() < (Main.npc[j].Center - v2).Length())
-                    {
-                        AimWhoAmI = j;
-                    }
-                }
-            }
-            Projectile.ai[1] = AimWhoAmI;
-        }
+					if (AimWhoAmI == -1)
+					{
+						AimWhoAmI = j;
+					}
+					else if ((v1 - v2).Length() < (Main.npc[j].Center - v2).Length())
+					{
+						AimWhoAmI = j;
+					}
+				}
+			}
+			Projectile.ai[1] = AimWhoAmI;
+		}
 
-        public override bool PreDraw(ref Color lightColor)
-        {
-            Texture2D t = MythContent.QuickTexture("OmniElementItems/Projectiles/LilyHarpNote" + ((int)Projectile.ai[0]).ToString());
-            SpriteEffects se = SpriteEffects.None;
-            if (Main.player[Projectile.owner].gravDir == -1)
-            {
-                se = SpriteEffects.FlipVertically;
-            }
-            Main.spriteBatch.Draw(t, Projectile.Center - Main.screenLastPosition, null, new Color(255, 255, 255, 120), Projectile.rotation, t.Size() / 2f, Projectile.scale, se, 0);
-            return false;
-        }
+		public override bool PreDraw(ref Color lightColor)
+		{
+			Texture2D t = MythContent.QuickTexture("OmniElementItems/Projectiles/LilyHarpNote" + ((int)Projectile.ai[0]).ToString());
+			SpriteEffects se = SpriteEffects.None;
+			if (Main.player[Projectile.owner].gravDir == -1)
+			{
+				se = SpriteEffects.FlipVertically;
+			}
+			Main.spriteBatch.Draw(t, Projectile.Center - Main.screenLastPosition, null, new Color(255, 255, 255, 120), Projectile.rotation, t.Size() / 2f, Projectile.scale, se, 0);
+			return false;
+		}
 
-        public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
-        {
-            behindProjectiles.Add(index);
-        }
+		public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
+		{
+			behindProjectiles.Add(index);
+		}
 
-        public override void Kill(int timeLeft)
-        {
-            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<LilyHarpNoteKill>(), 0, 0);
-            for (int i = 0; i < 18; i++)
-            {
-                int index = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<GreenParticle>(), 0f, 0f, 0, default, Main.rand.NextFloat(1.7f, 3.1f));
-                Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(2f, 4f)).RotatedByRandom(6.283);
-                Main.dust[index].alpha = 230;
-                Main.dust[index].rotation = Main.rand.NextFloat(0, 6.283f);
-            }
-            for (int i = 0; i < 6; i++)
-            {
-                int index2 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<LilyLeaf>(), Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, Main.rand.NextFloat(1.7f, 3.1f));
-                Main.dust[index2].velocity = new Vector2(0, Main.rand.NextFloat(2f, 4f)).RotatedByRandom(6.283);
-            }
-            /*float k0 = Main.rand.NextFloat(0, 6.283f);
+		public override void Kill(int timeLeft)
+		{
+			Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<LilyHarpNoteKill>(), 0, 0);
+			for (int i = 0; i < 18; i++)
+			{
+				int index = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<GreenParticle>(), 0f, 0f, 0, default, Main.rand.NextFloat(1.7f, 3.1f));
+				Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(2f, 4f)).RotatedByRandom(6.283);
+				Main.dust[index].alpha = 230;
+				Main.dust[index].rotation = Main.rand.NextFloat(0, 6.283f);
+			}
+			for (int i = 0; i < 6; i++)
+			{
+				int index2 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<LilyLeaf>(), Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, Main.rand.NextFloat(1.7f, 3.1f));
+				Main.dust[index2].velocity = new Vector2(0, Main.rand.NextFloat(2f, 4f)).RotatedByRandom(6.283);
+			}
+			/*float k0 = Main.rand.NextFloat(0, 6.283f);
             for(int i = 0; i < 3; i++)
             {
                 Vector2 v0 = new Vector2(0, 6).RotatedBy(k0 + i / 1.5d * Math.PI);
                 Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, v0, ModContent.ProjectileType<VineProj>(), 0, 0, Projectile.owner, Main.rand.Next(100), Main.rand.NextFloat(0, 2f));
             }*/
-            base.Kill(timeLeft);
-        }
-    }
+			base.Kill(timeLeft);
+		}
+	}
 }

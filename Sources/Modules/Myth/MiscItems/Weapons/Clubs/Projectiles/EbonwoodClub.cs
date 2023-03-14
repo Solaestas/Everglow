@@ -1,6 +1,6 @@
 ﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Clubs.Projectiles
 {
-    public class EbonwoodClub : ClubProj
-    {
-    }
+	public class EbonwoodClub : ClubProj
+	{
+	}
 }

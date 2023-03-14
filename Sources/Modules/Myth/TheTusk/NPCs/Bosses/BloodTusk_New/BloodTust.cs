@@ -1,15 +1,6 @@
-﻿using System;
-using Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Projectiles;
-using Terraria.Audio;
-using Terraria.GameContent;
-using Terraria.GameContent.Bestiary;
-using Terraria.GameContent.ItemDropRules;
-using Terraria.Localization;
-using Terraria.ID;
-
-namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk_New
+﻿namespace Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk_New
 {
-    /*
+	/*
     [AutoloadBossHead]
     public  class BloodTust_New : ModNPC
     {

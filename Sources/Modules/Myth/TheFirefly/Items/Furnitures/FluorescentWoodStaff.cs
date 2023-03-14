@@ -2,26 +2,26 @@ using Terraria.GameContent.Creative;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Items.Furnitures
 {
-    public class FluorescentWoodStaff : ModItem
-    {
-        public override void SetStaticDefaults()
-        {
-            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-        }
+	public class FluorescentWoodStaff : ModItem
+	{
+		public override void SetStaticDefaults()
+		{
+			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+		}
 
-        public override void SetDefaults()
-        {
-            Item.width = 48;
-            Item.height = 48;
-            Item.useTurn = true;
-            Item.autoReuse = true;
-            Item.useAnimation = 15;
-            Item.useTime = 10;
-            Item.useStyle = ItemUseStyleID.Swing;
+		public override void SetDefaults()
+		{
+			Item.width = 48;
+			Item.height = 48;
+			Item.useTurn = true;
+			Item.autoReuse = true;
+			Item.useAnimation = 15;
+			Item.useTime = 10;
+			Item.useStyle = ItemUseStyleID.Swing;
 
-            Item.useAmmo = ModContent.ItemType<GlowWood>();
-            Item.value = 2000;
-            Item.createTile = ModContent.TileType<Tiles.LifeFluorescentTreeWood>();
-        }
-    }
+			Item.useAmmo = ModContent.ItemType<GlowWood>();
+			Item.value = 2000;
+			Item.createTile = ModContent.TileType<Tiles.LifeFluorescentTreeWood>();
+		}
+	}
 }

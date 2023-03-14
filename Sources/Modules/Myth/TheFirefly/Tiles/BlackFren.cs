@@ -2,42 +2,42 @@
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
 {
-    public class BlackFren : ModTile
-    {
-        public override void PostSetDefaults()
-        {
-            Main.tileFrameImportant[Type] = true;
-            Main.tileNoAttach[Type] = true;
-            TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
-            TileObjectData.addTile(Type);
-            DustType = 191;
-            ModTranslation modTranslation = base.CreateMapEntryName(null);
-            AddMapEntry(new Color(11, 11, 11), modTranslation);
-            HitSound = SoundID.Grass;
-        }
+	public class BlackFren : ModTile
+	{
+		public override void PostSetDefaults()
+		{
+			Main.tileFrameImportant[Type] = true;
+			Main.tileNoAttach[Type] = true;
+			TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
+			TileObjectData.addTile(Type);
+			DustType = 191;
+			ModTranslation modTranslation = base.CreateMapEntryName(null);
+			AddMapEntry(new Color(11, 11, 11), modTranslation);
+			HitSound = SoundID.Grass;
+		}
 
-        public override void NumDust(int i, int j, bool fail, ref int num)
-        {
-            num = (fail ? 1 : 3);
-        }
+		public override void NumDust(int i, int j, bool fail, ref int num)
+		{
+			num = (fail ? 1 : 3);
+		}
 
-        public override void KillMultiTile(int i, int j, int frameX, int frameY)
-        {
-            //for (int x = 0; x < 2; x++)
-            //{
-            //    Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Items.BlackStarShrub>());
-            //}
-        }
+		public override void KillMultiTile(int i, int j, int frameX, int frameY)
+		{
+			//for (int x = 0; x < 2; x++)
+			//{
+			//    Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Items.BlackStarShrub>());
+			//}
+		}
 
-        public override void PlaceInWorld(int i, int j, Item item)
-        {
-            short num = (short)(Main.rand.Next(0, 6));
-            Main.tile[i, j].TileFrameX = (short)(num * 48);
-            Main.tile[i, j + 1].TileFrameX = (short)(num * 48);
-        }
+		public override void PlaceInWorld(int i, int j, Item item)
+		{
+			short num = (short)(Main.rand.Next(0, 6));
+			Main.tile[i, j].TileFrameX = (short)(num * 48);
+			Main.tile[i, j + 1].TileFrameX = (short)(num * 48);
+		}
 
-        public override void NearbyEffects(int i, int j, bool closer)
-        {/*
+		public override void NearbyEffects(int i, int j, bool closer)
+		{/*
             if (closer)
             {
                 var tile = Main.tile[i, j];
@@ -87,11 +87,11 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                     }
                 }
             }*/
-        }
+		}
 
-        public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
-        {
-            /* var tile = Main.tile[i, j];
+		public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
+		{
+			/* var tile = Main.tile[i, j];
              if (tile.TileFrameY == 16)
              {
                  TileSpin tileSpin = new TileSpin();
@@ -106,7 +106,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
                  tileSpin.DrawRotatedTile(i, j - tile.TileFrameY / 16, tex, new Rectangle(tile.TileFrameX, 146, 48, 36), new Vector2(24, 36), 8, 40, 0.19f);
                  tileSpin.DrawRotatedTile(i, j - tile.TileFrameY / 16, tex, new Rectangle(tile.TileFrameX, 182, 48, 36), new Vector2(24, 36), 8, 40, 0.27f);
              }*/
-            return true;
-        }
-    }
+			return true;
+		}
+	}
 }

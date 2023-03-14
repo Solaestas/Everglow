@@ -1,6 +1,6 @@
 ﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Projectiles
 {
-    public class NormalAmmo : SlingshotAmmo
-    {
-    }
+	public class NormalAmmo : SlingshotAmmo
+	{
+	}
 }

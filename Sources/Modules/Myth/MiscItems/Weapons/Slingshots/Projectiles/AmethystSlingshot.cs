@@ -1,12 +1,12 @@
 ﻿namespace Everglow.Sources.Modules.MythModule.MiscItems.Weapons.Slingshots.Projectiles
 {
-    internal class AmethystSlingshot : GemSlingshotProjectile
-    {
-        public override void SetDef()
-        {
-            ShootProjType = ModContent.ProjectileType<AmethystBead>();
-            TexPath = "MiscItems/Weapons/Slingshots/Projectiles/Amethyst";
-            base.SetDef();
-        }
-    }
+	internal class AmethystSlingshot : GemSlingshotProjectile
+	{
+		public override void SetDef()
+		{
+			ShootProjType = ModContent.ProjectileType<AmethystBead>();
+			TexPath = "MiscItems/Weapons/Slingshots/Projectiles/Amethyst";
+			base.SetDef();
+		}
+	}
 }

@@ -9,7 +9,7 @@ namespace Everglow.Sources.Modules.MythModule.Common
 			return true;
 		}
 		public override bool StrikeNPC(NPC npc, ref double damage, int defense, ref float knockback, int hitDirection, ref bool crit)
-		{			
+		{
 			return true;
 		}
 		public override void UpdateLifeRegen(NPC npc, ref int damage)
@@ -33,7 +33,7 @@ namespace Everglow.Sources.Modules.MythModule.Common
 			}
 		}
 		public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
-		{			
+		{
 
 		}
 		public override bool PreAI(NPC npc)
