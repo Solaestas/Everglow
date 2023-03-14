@@ -1,16 +1,10 @@
-﻿using Everglow.Myth.Bosses.Acytaea.Projectiles;
+using Everglow.Myth.Bosses.Acytaea.Projectiles;
 using Terraria.Localization;
 
 namespace Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk;
 
 public class BloodyMouth1 : ModNPC
 {
-	public override void SetStaticDefaults()
-	{
-		// DisplayName.SetDefault("");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "");
-	}
-
 	private int Coo = 720;
 	private Vector2[] V = new Vector2[10];
 	private Vector2[] VMax = new Vector2[10];

@@ -8,9 +8,7 @@ public class ToothStaff : ModItem
 	{
 		//TODO:翻译完记得删掉注释
 		//DisplayName.SetDefault("Tusk Staff");
-		//DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "獠牙法杖");
-		//DisplayName.AddTranslation((int)GameCulture.CultureName.Russian, "Посох-клык");
-		//Tooltip.SetDefault("Raises tusks from the ground");
+		//		//		//Tooltip.SetDefault("Raises tusks from the ground");
 		//Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "释放拔地而起的獠牙刺");
 		//Tooltip.AddTranslation((int)GameCulture.CultureName.Russian, "Поднимает клыки с земли");
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;

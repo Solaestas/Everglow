@@ -1,4 +1,5 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Commons.Utilities;
+using Everglow.Myth.Common;
 using Everglow.Myth.MagicWeaponsReplace.Projectiles.GoldenShower;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -230,7 +231,7 @@ public class IchorRing : ModProjectile
 	internal int timeIV = 64;
 	private void DrawMoon(List<Vector2> listVec, float timeLeft)
 	{
-		List<Vector2> SmoothTrailX = CatmullRom.SmoothPath(listVec.ToList());//平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(listVec.ToList());//平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
 		{

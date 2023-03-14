@@ -7,8 +7,7 @@ public class GoldLanternLine4 : ModProjectile
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Gold Lantern Line");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "灯笼须4");
-	}
+			}
 	public override void SetDefaults()
 	{
 		Projectile.width = 1;

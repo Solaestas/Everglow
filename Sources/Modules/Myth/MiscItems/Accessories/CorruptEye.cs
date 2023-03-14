@@ -9,12 +9,12 @@ public class CorruptEye : ModItem
 {
 	public override void SetStaticDefaults()
 	{
-		ItemGlowManager.AutoLoadItemGlow(this);
+		
 	}
-	public static short GetGlowMask = 0;
+
 	public override void SetDefaults()
 	{
-		Item.glowMask = ItemGlowManager.GetItemGlow(this);
+		
 		Item.width = 32;
 		Item.height = 32;
 		Item.value = 5000;

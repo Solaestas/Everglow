@@ -9,8 +9,7 @@ public class LargeFireBulb : ModNPC
 	{
 		//TODO: LittleFireBulb Localization File Text
 		//DisplayName.SetDefault("LittleFireBulb");
-		//DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "萤火泡");
-	}
+		//	}
 
 	public override void SetDefaults()
 	{

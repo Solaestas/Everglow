@@ -7,8 +7,7 @@ public class TuskRelic : ModItem
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("The Tusk Relic");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "鲜血獠牙圣物");
-	}
+			}
 	public override void SetDefaults()
 	{
 		Item.width = 38;

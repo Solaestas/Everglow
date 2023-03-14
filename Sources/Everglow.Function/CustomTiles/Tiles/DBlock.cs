@@ -1,7 +1,7 @@
 using Everglow.Commons.CustomTiles.Collide;
 using Everglow.Commons.CustomTiles.DataStructures;
 using Everglow.Commons.CustomTiles.EntityColliding;
-using Everglow.Commons.Utils;
+using Everglow.Commons.Utilities;
 using Terraria.GameContent;
 
 namespace Everglow.Commons.CustomTiles.Tiles;

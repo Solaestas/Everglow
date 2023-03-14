@@ -11,8 +11,7 @@ public class FakeAcytaea : ModNPC
 		/*Main.npcFrameCount[NPC.type] = 50;
             NPCID.Sets.ExtraFramesCount[NPC.type] = 9;
             NPCID.Sets.AttackFrameCount[NPC.type] = 4;*/
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "雅斯塔亚");
-	}
+			}
 
 	private bool canDespawn = false;
 

@@ -5,9 +5,7 @@ public class CloudBall : ModItem
 	/*public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Cloud Cluster");
-           // DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "云团");
-           // DisplayName.AddTranslation((int)GameCulture.CultureName.Russian, "Облачный кластер");
-        }*/
+           //            //         }*/
 
 	public override void SetDefaults()
 	{

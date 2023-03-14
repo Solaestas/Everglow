@@ -9,8 +9,7 @@ public class BlackCorruptRainFriendly : ModProjectile
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Black Corrupt Rain");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "黑蚀雨");
-	}
+			}
 
 	public override void SetDefaults()
 	{

@@ -9,9 +9,7 @@ public class ToothMagicBall : ModItem
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Sanguine Orb");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "血色法球");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Russian, "Сангвинический Шар");
-		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+						CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 	}
 
 	public override void SetDefaults()

@@ -1,5 +1,7 @@
-﻿namespace Everglow.Myth.TheFirefly.WorldGeneration;
+namespace Everglow.Myth.TheFirefly.WorldGeneration;
 
+// TODO net rework
+#if false
 internal class MothPositionPacket : IPacket
 {
 	public int fireflyCenterX;
@@ -65,3 +67,4 @@ internal class MothPositionPacketHandler : IPacketHandler
 		}
 	}
 }
+#endif

@@ -5,8 +5,7 @@ public class BloodyTuskTrophy : ModItem
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("The Tusk Trophy");
-		// DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "鲜血獠牙纪念章");
-	}
+		// 	}
 	public override void SetDefaults()
 	{
 		Item.width = 32;

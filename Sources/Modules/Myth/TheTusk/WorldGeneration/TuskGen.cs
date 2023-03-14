@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.TheTusk.Tiles;
 using Terraria.Graphics.Effects;
 using Terraria.IO;
@@ -16,7 +16,7 @@ public class TuskGen : ModSystem
 	{
 		var mapIO = new MapIO(x, y);
 
-		mapIO.Read(Everglow.Instance.GetFileStream("Sources/Modules/MythModule/" + Path));
+		mapIO.Read(ModIns.Mod.GetFileStream("Sources/Modules/MythModule/" + Path));
 
 		var it = mapIO.GetEnumerator();
 		while (it.MoveNext())

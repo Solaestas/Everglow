@@ -8,9 +8,7 @@ public class ThunderFlower : ModItem
 	public override void SetStaticDefaults()
 	{
 		/*DisplayName.SetDefault("Flower of Lighting");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Russian, "Цветок света");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "雷之花");
-		Tooltip.SetDefault("Fires thunderstrom orbs\n'Too many projectiles!'");
+						Tooltip.SetDefault("Fires thunderstrom orbs\n'Too many projectiles!'");
 		Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "射出雷暴球\n'射弹太多了！'");
 		Tooltip.AddTranslation((int)GameCulture.CultureName.Russian, "Стреляет грозовыми шарами \n'Слишком много снарядов!'");*/
 	}

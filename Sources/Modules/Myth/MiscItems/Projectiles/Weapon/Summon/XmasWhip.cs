@@ -13,8 +13,7 @@ public class XmasWhip : ModProjectile
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Xmas Whip");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "彩灯鞭");
-		DefaultToWhip();
+				DefaultToWhip();
 	}
 	private void DefaultToWhip()
 	{

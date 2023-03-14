@@ -25,8 +25,7 @@ public class RedPackBomber : ModNPC
 	{
 		// DisplayName.SetDefault("Redpack Bomber");
 		Main.npcFrameCount[NPC.type] = 4;
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "封包轰炸机");
-
+		
 	}
 	public override void SetDefaults()
 	{

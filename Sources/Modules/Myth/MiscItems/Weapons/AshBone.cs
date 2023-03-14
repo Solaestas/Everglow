@@ -5,9 +5,7 @@ public class AshBone : ModItem
 	//public override void SetStaticDefaults()
 	//{
 	//	DisplayName.SetDefault("Stashed Bones");
-	//	DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "烬中白骨");
-	//	DisplayName.AddTranslation((int)GameCulture.CultureName.Russian, "Раздробленные Кости");
-	//	Tooltip.SetDefault("No summon tag damage\nYour summons will focus struck enemies\nBrusts out several damaging bones and olden enemies struck, weaken their attack and defense");
+	//		//		//	Tooltip.SetDefault("No summon tag damage\nYour summons will focus struck enemies\nBrusts out several damaging bones and olden enemies struck, weaken their attack and defense");
 	//	Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "无召唤标记伤害\n你的召唤物将集中打击被击中的敌人\n命中时爆出数根伤害性的的白骨并使敌人衰老,削弱其攻防");
 	//	Tooltip.AddTranslation((int)GameCulture.CultureName.Russian, "Урон от метки призыва отсутствует\nваш призыв будет фокусироваться на пораженных врагах\nНаносит несколько повреждений костям и поражая старением врагов, ослабляет их атаку и защиту");
 	//}

@@ -4,6 +4,8 @@ namespace Everglow.Commons.VFX;
 
 public class FakeManager : IVFXManager
 {
+	public RenderTarget2D CurrentRenderTarget => throw new NotImplementedException(nameof(FakeManager));
+
 	public void Add(IVisual visual)
 	{
 	}
@@ -20,5 +22,9 @@ public class FakeManager : IVFXManager
 	public int GetVisualType(IVisual visual)
 	{
 		return 0;
+	}
+
+	public void SwapRenderTarget()
+	{
 	}
 }

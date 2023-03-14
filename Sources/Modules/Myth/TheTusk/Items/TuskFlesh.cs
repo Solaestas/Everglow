@@ -7,8 +7,7 @@ public class TuskFlesh : ModItem
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Living Tissue");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "活组织");
-	}
+			}
 
 	public override void SetDefaults()
 	{

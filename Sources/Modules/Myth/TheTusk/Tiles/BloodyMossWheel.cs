@@ -21,10 +21,8 @@ public class BloodyMossWheel : ModTile
 		TileObjectData.newTile.CoordinateWidth = 16;
 		TileObjectData.addTile(Type);
 		DustType = 4;
-		ModTranslation modTranslation = base.CreateMapEntryName(null);
-		modTranslation.SetDefault("Dusty RockyBar");
-		modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "破旧的石盘");
-		base.AddMapEntry(new Color(96, 93, 91), modTranslation);
+		var modTranslation = CreateMapEntryName();
+						AddMapEntry(new Color(96, 93, 91), modTranslation);
 	}
 	public override bool CanExplode(int i, int j)
 	{

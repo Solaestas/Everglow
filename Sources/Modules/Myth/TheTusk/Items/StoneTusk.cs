@@ -7,8 +7,7 @@ public class StoneTusk : ModItem
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Fossilized Tusk");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "石化牙");
-	}
+			}
 	public override void SetDefaults()
 	{
 		Item.width = 32;

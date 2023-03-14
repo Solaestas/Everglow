@@ -11,6 +11,7 @@
 		<ProjectReference Include="..\Everglow.Core\Everglow.Core.csproj" />
 		<PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.0" ExcludeAssets="runtime" />
 		<Publicize Include="tModLoader" />
+		<Publicize Include="ReLogic" />
 		<Publicize Include="MonoMod.RuntimeDetour" />
 		<Publicize Include="MonoMod.Utils" />
 	</ItemGroup>

@@ -2,7 +2,7 @@ using Everglow.Commons.CustomTiles.Collide;
 using Everglow.Commons.CustomTiles.DataStructures;
 using Everglow.Commons.CustomTiles.EntityColliding;
 using Everglow.Commons.DataStructures;
-using Everglow.Commons.Utils;
+using Everglow.Commons.Utilities;
 
 namespace Everglow.Commons.CustomTiles.Tiles;
 

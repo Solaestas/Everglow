@@ -11,7 +11,7 @@ public class BlackFrenLarge : ModTile
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style3x2);
 		TileObjectData.addTile(Type);
 		DustType = 191;
-		ModTranslation modTranslation = base.CreateMapEntryName(null);
+		var modTranslation = CreateMapEntryName();
 		AddMapEntry(new Color(11, 11, 11), modTranslation);
 		HitSound = SoundID.Grass;
 	}

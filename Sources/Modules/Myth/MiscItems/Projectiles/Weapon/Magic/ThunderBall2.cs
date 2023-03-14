@@ -7,8 +7,7 @@ public class ThunderBall2 : ModProjectile
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("ThunderBall");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "雷暴球");
-	}
+			}
 	public override void SetDefaults()
 	{
 		Projectile.width = 12;

@@ -8,8 +8,7 @@ public class LargeTusk : ModNPC
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Tusk Spike"); //Large Tusk Spike
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "獠牙刺");
-	}
+			}
 
 	private Vector2 V = Vector2.Zero;
 	private Vector2 VMax = Vector2.Zero;

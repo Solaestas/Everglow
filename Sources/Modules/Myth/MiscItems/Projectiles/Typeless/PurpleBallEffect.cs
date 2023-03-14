@@ -7,8 +7,7 @@ public class PurpleBallEffect : ModProjectile
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("PurpleBallEffect");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "紫花爆炸");
-	}
+			}
 	public override void SetDefaults()
 	{
 		Projectile.width = 20;

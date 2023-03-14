@@ -23,8 +23,7 @@ public class TuskSurfaceBiome : ModBiome
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Cursed Jaw");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "诅咒之颌");
-	}
+			}
 	public override void Load()
 	{
 		//On.Terraria.Main.DrawWaters += Main_DrawWaters;

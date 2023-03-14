@@ -7,8 +7,7 @@ public class TuskStatusIII : ModItem
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Crimson Statue III");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "猩红碑文石·其三");
-	}
+			}
 
 	public override void SetDefaults()
 	{

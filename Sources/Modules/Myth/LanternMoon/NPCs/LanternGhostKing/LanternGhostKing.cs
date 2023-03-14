@@ -12,8 +12,7 @@ public class LanternGhostKing : ModNPC
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Lantern Ghost King");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "灯笼鬼王");
-		Main.npcFrameCount[NPC.type] = 3;
+				Main.npcFrameCount[NPC.type] = 3;
 	}
 	public override void SetDefaults()
 	{

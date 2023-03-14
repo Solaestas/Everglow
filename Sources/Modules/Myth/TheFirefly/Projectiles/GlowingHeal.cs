@@ -9,8 +9,7 @@ public class GlowingHeal : ModNPC
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "");
-	}
+			}
 	public override void SetDefaults()
 	{
 		NPC.width = 10;

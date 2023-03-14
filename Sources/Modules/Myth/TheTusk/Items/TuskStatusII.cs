@@ -7,8 +7,7 @@ public class TuskStatusII : ModItem
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Crimson Statue II");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "猩红碑文石·其二");
-	}
+			}
 
 	public override void SetDefaults()
 	{

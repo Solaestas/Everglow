@@ -1,4 +1,5 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Commons.Coroutines;
+using Everglow.Myth.Common;
 using Everglow.Myth.LanternMoon.Dusts;
 using ReLogic.Content;
 using Terraria.Audio;

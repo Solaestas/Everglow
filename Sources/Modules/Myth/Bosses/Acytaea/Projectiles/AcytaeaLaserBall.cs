@@ -8,8 +8,7 @@ public class AcytaeaLaserBall : ModProjectile
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Red Laser");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "红光束");
-	}
+			}
 
 	public override void SetDefaults()
 	{

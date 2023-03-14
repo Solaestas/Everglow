@@ -7,12 +7,12 @@ public class DreamWeaver : ModItem//TODO:织梦丝雨
 	public override void SetStaticDefaults()
 	{
 		Item.staff[Item.type] = true;
-		ItemGlowManager.AutoLoadItemGlow(this);
+		
 	}
 
 	public override void SetDefaults()
 	{
-		Item.glowMask = ItemGlowManager.GetItemGlow(this);
+		
 		Item.damage = 13;
 		Item.DamageType = DamageClass.Magic;
 		Item.mana = 4;

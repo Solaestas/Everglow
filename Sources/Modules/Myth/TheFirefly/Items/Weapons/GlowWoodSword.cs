@@ -8,11 +8,11 @@ public class GlowWoodSword : ModItem
 	FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
 	public override void SetStaticDefaults()
 	{
-		ItemGlowManager.AutoLoadItemGlow(this);
+		
 	}
 	public override void SetDefaults()
 	{
-		Item.glowMask = ItemGlowManager.GetItemGlow(this);
+		
 		Item.damage = 13;
 		Item.DamageType = DamageClass.Melee;
 		Item.width = 56;
@@ -43,9 +43,9 @@ public class GlowWoodSword : ModItem
 			{
 				tooltips.AddRange(new TooltipLine[]
 				{
-					new(Everglow.Instance, "MothEyeBonusText", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeBonusText")),
-					new(Everglow.Instance, "MothEyeGlowSwordBonus0", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextGlowSword0")),
-					new(Everglow.Instance, "MothEyeGlowSwordBonus1", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextGlowSword1")),
+					new(ModIns.Mod, "MothEyeBonusText", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeBonusText")),
+					new(ModIns.Mod, "MothEyeGlowSwordBonus0", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextGlowSword0")),
+					new(ModIns.Mod, "MothEyeGlowSwordBonus1", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextGlowSword1")),
 				});
 			}
 		}

@@ -1,4 +1,3 @@
-﻿using Everglow.Myth;
 using Everglow.Myth.LanternMoon.LanternCommon;
 using Everglow.Myth.LanternMoon.Projectiles;
 using Terraria.Localization;
@@ -7,21 +6,14 @@ namespace Everglow.Myth.LanternMoon.Items;
 
 public class BloodLamp : ModItem
 {
-	public override void SetStaticDefaults()
-	{
-		ItemGlowManager.AutoLoadItemGlow(this);
-	}
-
-	public static short GetGlowMask = 0;
 	public override void SetDefaults()
 	{
-		Item.glowMask = ItemGlowManager.GetItemGlow(this);
 		Item.noUseGraphic = true;
 		Item.width = 38;
 		Item.height = 60;
-		Item.rare = 2;
+		Item.rare = ItemRarityID.Green;
 		Item.scale = 1;
-		Item.useStyle = 4;
+		Item.useStyle = ItemUseStyleID.HoldUp;
 		Item.useTurn = true;
 		Item.useAnimation = 1;
 		Item.useTime = 1;

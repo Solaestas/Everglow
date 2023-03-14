@@ -1,4 +1,6 @@
-﻿using Terraria.GameContent;
+using Everglow.Commons.Enums;
+using Everglow.Commons.VFX.Pipelines;
+using Terraria.GameContent;
 
 namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.CrystalStorm;
 

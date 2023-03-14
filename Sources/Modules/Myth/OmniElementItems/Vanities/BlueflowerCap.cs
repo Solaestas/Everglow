@@ -9,8 +9,7 @@ public class BlueflowerCap : ModItem
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Blue Flower Hat");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "蓝花阔边帽");
-	}
+			}
 
 	public override void SetDefaults()
 	{

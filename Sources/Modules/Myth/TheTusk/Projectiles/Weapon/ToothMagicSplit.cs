@@ -8,8 +8,7 @@ public class ToothMagicSplit : ModProjectile
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Tooth Magic Ball");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "血色法球");
-	}
+			}
 	public override void SetDefaults()
 	{
 		Projectile.width = 18;

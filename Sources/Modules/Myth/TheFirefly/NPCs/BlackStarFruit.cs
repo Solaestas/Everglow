@@ -10,8 +10,7 @@ public class BlackStarFruit : ModNPC
 	{
 		//TODO: BlackStarFruit Localization File Text
 		// DisplayName.SetDefault("Black Star Fruit");
-		//DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "萤灯果");
-	}
+		//	}
 	public override void SetDefaults()
 	{
 		NPC.damage = 0;

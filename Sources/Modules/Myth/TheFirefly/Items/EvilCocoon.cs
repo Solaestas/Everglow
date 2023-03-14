@@ -7,12 +7,12 @@ public class EvilCocoon : ModItem
 {
 	public override void SetStaticDefaults()
 	{
-		ItemGlowManager.AutoLoadItemGlow(this);
+		
 	}
 
 	public override void SetDefaults()
 	{
-		Item.glowMask = ItemGlowManager.GetItemGlow(this);
+		
 		Item.width = 20;
 		Item.height = 32;
 		Item.useAnimation = 45;

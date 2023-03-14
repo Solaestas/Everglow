@@ -14,7 +14,7 @@ public abstract class Visual : IVisual
 
 	public virtual bool Visible { get; set; } = true;
 
-	public int Type => VFXManager.Instance.GetVisualType(this);
+	public int Type => Ins.VFXManager.GetVisualType(this);
 
 	public virtual string Name => GetType().Name;
 

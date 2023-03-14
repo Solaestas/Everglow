@@ -10,9 +10,7 @@ public class SpineGun : ModItem
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Spine Musket");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "脊骨火铳");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Russian, "Позвоночный мушкет");
-		// Tooltip.SetDefault("Fires bullets which split upon detecting enemies");
+						// Tooltip.SetDefault("Fires bullets which split upon detecting enemies");
 		Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "射出一发勘测到敌人就会分裂的子母弹");
 		Tooltip.AddTranslation((int)GameCulture.CultureName.Russian, "Стреляет пулями, которые расщепляются при обнаружении врагов");
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;

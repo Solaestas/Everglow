@@ -11,8 +11,7 @@ public class ToothSpear : ModProjectile
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Tooth Spear");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "龙齿矛");
-
+		
 	}
 	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 	{

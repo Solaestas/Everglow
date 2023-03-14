@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.MiscItems.Gores;
 using Terraria.Audio;
 
@@ -149,7 +149,7 @@ public class HepuyuanDown : ModProjectile, IWarpProjectile
 					}
 					if (empty)
 						continue;
-					int h = Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Pos, Vector2.Zero, ModContent.ProjectileType<Hepuyuan.HepuyuanSpice>(), Projectile.damage, Projectile.knockBack, player.whoAmI, Main.rand.NextFloat(50f, 110f), 0);
+					int h = Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Pos, Vector2.Zero, ModContent.ProjectileType<HepuyuanSpice>(), Projectile.damage, Projectile.knockBack, player.whoAmI, Main.rand.NextFloat(50f, 110f), 0);
 					if (player.gravDir == 1)
 						Main.projectile[h].rotation = Main.rand.NextFloat((f - 3.5f) / 15f - 0.3f, (f - 3.5f) / 15f + 0.3f);
 					else
@@ -176,7 +176,7 @@ public class HepuyuanDown : ModProjectile, IWarpProjectile
 					}
 					if (empty)
 						continue;
-					int h = Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Pos, Vector2.Zero, ModContent.ProjectileType<Hepuyuan.HepuyuanShake>(), 0, Projectile.knockBack, player.whoAmI, Main.rand.NextFloat(17f, 32f) * (Math.Abs(f - 5.5f) + 0.5f), 0);
+					int h = Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Pos, Vector2.Zero, ModContent.ProjectileType<HepuyuanShake>(), 0, Projectile.knockBack, player.whoAmI, Main.rand.NextFloat(17f, 32f) * (Math.Abs(f - 5.5f) + 0.5f), 0);
 
 
 					if (player.gravDir == 1)

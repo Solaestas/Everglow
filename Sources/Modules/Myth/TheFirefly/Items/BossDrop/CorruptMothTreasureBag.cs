@@ -9,9 +9,6 @@ namespace Everglow.Myth.TheFirefly.Items.BossDrop;
 // Basic code for a boss treasure bag
 public class CorruptMothTreasureBag : ModItem
 {
-	// Sets the associated NPC this treasure bag is dropped from
-	[Obsolete]
-	public override int BossBagNPC => ModContent.NPCType<CorruptMoth>();
 
 	public override void SetStaticDefaults()
 	{
@@ -37,6 +34,12 @@ public class CorruptMothTreasureBag : ModItem
 	{
 		return true;
 	}
+
+	// TODO 不知道改成啥了
+#if false
+	// Sets the associated NPC this treasure bag is dropped from
+	[Obsolete]
+	public override int BossBagNPC => ModContent.NPCType<CorruptMoth>();
 
 	[Obsolete]
 	public override void OpenBossBag(Player player)
@@ -87,6 +90,7 @@ public class CorruptMothTreasureBag : ModItem
 			player.QuickSpawnItem(entitySource, ModContent.ItemType<MothEye>());
 		}
 	}
+#endif
 
 	// Below is code for the visuals
 

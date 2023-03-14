@@ -6,8 +6,7 @@ public class BlueflowerDress : ModItem
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Blue flower Dress");
-		//DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "黑蓝色花裙");
-	}
+		//	}
 
 	public override void SetDefaults()
 	{

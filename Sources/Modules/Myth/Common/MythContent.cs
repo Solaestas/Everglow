@@ -1,12 +1,12 @@
-﻿namespace Everglow.Myth.Common;
+namespace Everglow.Myth.Common;
 
 public class MythContent
 {
 	/// <summary>
 	/// 对于神话模块专用的获取图片封装
 	/// </summary>
-	/// <param name="path"></param>
-	/// <returns></returns>
+	/// <param name="path"> </param>
+	/// <returns> </returns>
 	public static Texture2D QuickTexture(string path)
 	{
 		return ModContent.Request<Texture2D>("Everglow/Myth/" + path, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
@@ -15,8 +15,8 @@ public class MythContent
 	/// <summary>
 	/// 对于神话模块专用的获取特效封装
 	/// </summary>
-	/// <param name="path"></param>
-	/// <returns></returns>
+	/// <param name="path"> </param>
+	/// <returns> </returns>
 	public static Effect QuickEffect(string path)
 	{
 		return ModContent.Request<Effect>("Everglow/Myth/" + path, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
@@ -25,17 +25,11 @@ public class MythContent
 	/// <summary>
 	/// 对于神话模块专用的获取音乐封装
 	/// </summary>
-	/// <param name="path"></param>
-	/// <returns></returns>
+	/// <param name="path"> </param>
+	/// <returns> </returns>
 	public static int QuickMusic(string path)
 	{
-		Mod everglow = ModLoader.GetMod("Everglow");
-		if (everglow != null)
-			return MusicLoader.GetMusicSlot(everglow, "Sources/Modules/MythModule/Musics/" + path);
-		else
-		{
-			return 0;
-		}
+		return MusicLoader.GetMusicSlot(ModIns.Mod, "Myth/Musics/" + path);
 	}
 
 	/// <summary>

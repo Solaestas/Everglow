@@ -9,8 +9,7 @@ public class WalnutClip : ModItem
 	{
 		//TODO:低于半血后伤害增加(半血血量-当前血量)%→低于半血后伤害增加(半血血量-当前血量) * 0.25%
 		//DisplayName.SetDefault("Nutcracker");
-		//DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "胡桃夹子");
-		//Tooltip.SetDefault("Increases crit damage by 16%\nWhen your Hp is below 50% of the max Hp, increases damage by (50% of max Hp - current Hp) * 0.25%\n'Besides cracking nuts and crabs, it can crack enemies, too'");
+		//		//Tooltip.SetDefault("Increases crit damage by 16%\nWhen your Hp is below 50% of the max Hp, increases damage by (50% of max Hp - current Hp) * 0.25%\n'Besides cracking nuts and crabs, it can crack enemies, too'");
 		//Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "暴击伤害增加16%\n低于半血后伤害增加(半血血量-当前血量) * 0.25%\n'除了夹碎胡桃和螃蟹,它还能夹碎敌人'");
 	}
 	public override void SetDefaults()

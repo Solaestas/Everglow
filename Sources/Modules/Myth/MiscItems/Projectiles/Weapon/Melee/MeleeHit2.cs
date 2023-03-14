@@ -7,8 +7,7 @@ public class MeleeHit2 : ModProjectile
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Null");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "错误代码C:\\user");
-	}
+			}
 	public override void SetDefaults()
 	{
 		Projectile.width = 40;

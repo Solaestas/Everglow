@@ -9,8 +9,7 @@ public class SplieSpineBullet : ModProjectile
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("SplieSpineBullet");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "脊骨母弹");
-	}
+			}
 	public override void SetDefaults()
 	{
 		Projectile.width = 8;

@@ -100,9 +100,9 @@ public class BloomPipeline : PostPipeline
 
 		sb.End();
 
-		var cur = VFXManager.Instance.CurrentRenderTarget;
-		VFXManager.Instance.SwapRenderTarget();
-		gd.SetRenderTarget(VFXManager.Instance.CurrentRenderTarget);
+		var cur = Ins.VFXManager.CurrentRenderTarget;
+		Ins.VFXManager.SwapRenderTarget();
+		gd.SetRenderTarget(Ins.VFXManager.CurrentRenderTarget);
 		sb.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone);
 		sb.Draw(cur, Vector2.Zero, Color.White);
 

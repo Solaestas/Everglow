@@ -10,12 +10,12 @@ public class EvilChrysalis : ModItem
 	FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
 	public override void SetStaticDefaults()
 	{
-		ItemGlowManager.AutoLoadItemGlow(this);
+		
 	}
 
 	public override void SetDefaults()
 	{
-		Item.glowMask = ItemGlowManager.GetItemGlow(this);
+		
 		Item.damage = 24;
 		Item.mana = 6;
 		Item.width = 50;
@@ -65,9 +65,9 @@ public class EvilChrysalis : ModItem
 			{
 				tooltips.AddRange(new TooltipLine[]
 				{
-					new(Everglow.Instance, "MothEyeBonusText", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeBonusText")),
-					new(Everglow.Instance, "MothEyeEChryBonus", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextMothChry0")),
-					new(Everglow.Instance, "MothEyeEChryBonus", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextMothChry1")),
+					new(ModIns.Mod, "MothEyeBonusText", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeBonusText")),
+					new(ModIns.Mod, "MothEyeEChryBonus", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextMothChry0")),
+					new(ModIns.Mod, "MothEyeEChryBonus", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextMothChry1")),
 				});
 			}
 		}

@@ -8,8 +8,7 @@ public class BoneFeather : ModProjectile
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("BoneFeather");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "骨羽");
-	}
+			}
 	public override void SetDefaults()
 	{
 		Projectile.width = 34;

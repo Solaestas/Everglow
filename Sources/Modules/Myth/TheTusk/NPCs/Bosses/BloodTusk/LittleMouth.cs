@@ -7,8 +7,7 @@ public class LittleMouth : ModNPC
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "无主之颌");
-	}
+			}
 	public override void SetDefaults()
 	{
 		NPC.behindTiles = true;

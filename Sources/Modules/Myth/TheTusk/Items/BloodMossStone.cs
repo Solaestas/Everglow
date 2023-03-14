@@ -7,8 +7,7 @@ public class BloodMossStone : ModItem
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Blood Moss Stone");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "血苔石");
-	}
+			}
 
 	public override void SetDefaults()
 	{

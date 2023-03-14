@@ -1,5 +1,5 @@
-﻿using Everglow.Myth.Common;
-using Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.MagnetSphere;
+using Everglow.Commons.MEAC;
+using Everglow.Myth.Common;
 using Terraria.DataStructures;
 using static Everglow.Myth.Common.MythUtils;
 

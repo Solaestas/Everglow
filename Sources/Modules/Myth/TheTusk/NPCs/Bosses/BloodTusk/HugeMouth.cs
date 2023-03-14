@@ -8,8 +8,7 @@ public class HugeMouth : ModNPC
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "");
-	}
+			}
 	public override void SetDefaults()
 	{
 		NPC.behindTiles = true;

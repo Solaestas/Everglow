@@ -10,12 +10,12 @@ public class ShadowWingBow : ModItem
 	FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
 	public override void SetStaticDefaults()
 	{
-		ItemGlowManager.AutoLoadItemGlow(this);
+		
 	}
 
 	public override void SetDefaults()
 	{
-		Item.glowMask = ItemGlowManager.GetItemGlow(this);
+		
 		Item.width = 46;
 		Item.height = 82;
 		Item.rare = ItemRarityID.Green;
@@ -58,8 +58,8 @@ public class ShadowWingBow : ModItem
 			{
 				tooltips.AddRange(new TooltipLine[]
 				{
-					new(Everglow.Instance, "MothEyeBonusText", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeBonusText")),
-					new(Everglow.Instance, "MothEyeBowBonus", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextMothBow")),
+					new(ModIns.Mod, "MothEyeBonusText", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeBonusText")),
+					new(ModIns.Mod, "MothEyeBowBonus", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextMothBow")),
 				});
 			}
 		}

@@ -7,9 +7,7 @@ public class SilveralGun : ModItem
 	public override void SetStaticDefaults()
 	{
 		/*DisplayName.SetDefault("Fox Hunter Fx01");
-           // DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "银猎之狐Fx01");
-           // DisplayName.AddTranslation((int)GameCulture.CultureName.Russian, "Охотник на лис Fx01");
-            Tooltip.SetDefault("5% increased movement speed and damage after hitting enemies");
+           //            //             Tooltip.SetDefault("5% increased movement speed and damage after hitting enemies");
             Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "命中后移速和伤害提升5%,持续5秒");
             Tooltip.AddTranslation((int)GameCulture.CultureName.Russian, "на 5% увеличена скорость передвижения и урон после попадания во врагов");*/
 	}

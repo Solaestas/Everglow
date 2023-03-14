@@ -5,8 +5,7 @@ public class Spark : ModProjectile
 	//public override void SetStaticDefaults()
 	//{
 	//    DisplayName.SetDefault("spark");
-	//   // DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "火花");
-	//}
+	//   // 	//}
 	public override void SetDefaults()
 	{
 		Projectile.width = 16;

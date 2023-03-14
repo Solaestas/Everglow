@@ -9,8 +9,7 @@ public class BoneFeatherMagic : ModItem
 	{
 		/*DisplayName.SetDefault("Book of Bone Feather");
            // DisplayName\.AddTranslation((int)GameCulture.CultureName.Chinese, "白骨羽箭");
-           // DisplayName.AddTranslation((int)GameCulture.CultureName.Russian, "Книга костяного пера");
-            Tooltip.SetDefault("Shoots piercing bone feathers, olden enemies struck, weaken their attack and defence");
+           //             Tooltip.SetDefault("Shoots piercing bone feathers, olden enemies struck, weaken their attack and defence");
             Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "射出穿透性骨羽，使命中的敌人衰老，削弱其攻防");
             Tooltip.AddTranslation((int)GameCulture.CultureName.Russian, "Стреляет пронзающими костяными перьями, поражая старением врагов, ослабляют их атаку и защиту");*/
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;

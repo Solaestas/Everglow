@@ -9,8 +9,7 @@ public class CorMoth4DProj : ModProjectile
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Dream Butterfly");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "蓝蝶幻梦");
-		Main.projFrames[Projectile.type] = 4;
+				Main.projFrames[Projectile.type] = 4;
 	}
 
 	public override void SetDefaults()

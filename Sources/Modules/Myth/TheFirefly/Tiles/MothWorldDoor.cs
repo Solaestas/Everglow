@@ -25,9 +25,8 @@ public class MothWorldDoor : ModTile
 		};
 		TileObjectData.newTile.StyleHorizontal = true;
 		TileObjectData.addTile(Type);
-		ModTranslation modTranslation = base.CreateMapEntryName(null);
-		modTranslation.SetDefault("MothWorld");
-		base.AddMapEntry(new Color(148, 0, 255), modTranslation);
+		var modTranslation = CreateMapEntryName();
+				AddMapEntry(new Color(148, 0, 255), modTranslation);
 	}
 
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)

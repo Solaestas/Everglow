@@ -12,12 +12,12 @@ public class PhosphorescenceGun : ModItem
 	FireflyBiome fireflyBiome = ModContent.GetInstance<FireflyBiome>();
 	public override void SetStaticDefaults()
 	{
-		ItemGlowManager.AutoLoadItemGlow(this);
+		
 	}
 
 	public override void SetDefaults()
 	{
-		Item.glowMask = ItemGlowManager.GetItemGlow(this);
+		
 
 		Item.width = 70;
 		Item.height = 40;
@@ -123,9 +123,9 @@ public class PhosphorescenceGun : ModItem
 			{
 				tooltips.AddRange(new TooltipLine[]
 				{
-					new(Everglow.Instance, "MothEyeBonusText", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeBonusText")),
-					new(Everglow.Instance, "MothEyeGunBonus0", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextMothGun0")),
-					new(Everglow.Instance, "MothEyeGunBonus1", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextMothGun1")),
+					new(ModIns.Mod, "MothEyeBonusText", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeBonusText")),
+					new(ModIns.Mod, "MothEyeGunBonus0", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextMothGun0")),
+					new(ModIns.Mod, "MothEyeGunBonus1", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextMothGun1")),
 				});
 			}
 		}

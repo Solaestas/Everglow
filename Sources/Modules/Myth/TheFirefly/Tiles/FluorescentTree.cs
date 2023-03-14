@@ -127,7 +127,7 @@ public class FluorescentTree : ModTile
 
 		if (!hasRope.ContainsKey((i, j)))
 		{
-			Everglow.Instance.Logger.Warn("Drop: Trying to access an non-existent FluorescentTree rope" + (i, j).ToString());
+			ModIns.Mod.Logger.Warn("Drop: Trying to access an non-existent FluorescentTree rope" + (i, j).ToString());
 			return false;
 		}
 
@@ -169,7 +169,7 @@ public class FluorescentTree : ModTile
 
 		if (!hasRope.ContainsKey((i, j)))
 		{
-			Everglow.Instance.Logger.Warn("Shake: Trying to access an non-existent FluorescentTree rope" + (i, j).ToString());
+			ModIns.Mod.Logger.Warn("Shake: Trying to access an non-existent FluorescentTree rope" + (i, j).ToString());
 			return;
 		}
 
@@ -264,7 +264,7 @@ public class FluorescentTree : ModTile
 
 			if (!hasRope.ContainsKey((i, j)))
 			{
-				Everglow.Instance.Logger.Warn("KillTile: Trying to access an non-existent FluorescentTree rope" + (i, j).ToString());
+				ModIns.Mod.Logger.Warn("KillTile: Trying to access an non-existent FluorescentTree rope" + (i, j).ToString());
 				return;
 			}
 

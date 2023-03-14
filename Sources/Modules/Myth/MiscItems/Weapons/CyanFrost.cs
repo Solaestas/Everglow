@@ -5,9 +5,7 @@ public class CyanFrost : ModItem
 	/*public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Cyfrost Blade");
-           // DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "青霜剑");
-           // DisplayName.AddTranslation((int)GameCulture.CultureName.Russian, "Морозно-голубой клинок");
-        }*/
+           //            //         }*/
 	private int o = 0;
 	public override void SetDefaults()
 	{

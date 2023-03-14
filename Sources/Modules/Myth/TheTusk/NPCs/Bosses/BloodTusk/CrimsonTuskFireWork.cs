@@ -10,8 +10,7 @@ public class CrimsonTuskFireWork : ModNPC
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Tusk Spike Fireworks");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "獠牙喷射爪");
-	}
+			}
 	public override void SetDefaults()
 	{
 		NPC.behindTiles = true;

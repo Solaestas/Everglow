@@ -1,4 +1,4 @@
-﻿using Terraria.Localization;
+using Terraria.Localization;
 using Terraria.ObjectData;
 
 namespace Everglow.Myth.TheTusk.Tiles.BossDrop;
@@ -23,10 +23,8 @@ public class TuskRelic : ModTile
 
 		DustType = DustID.Gold;
 		AdjTiles = new int[] { Type };
-		ModTranslation modTranslation = base.CreateMapEntryName(null);
-		modTranslation.SetDefault("Relic");
-		modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "圣物");
-		base.AddMapEntry(new Color(233, 207, 94), modTranslation);
+		var modTranslation = CreateMapEntryName();
+		AddMapEntry(new Color(233, 207, 94), modTranslation);
 	}
 	public override void KillMultiTile(int i, int j, int frameX, int frameY)
 	{

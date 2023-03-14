@@ -4,12 +4,12 @@ public class FireflyPigment : ModItem
 {
 	public override void SetStaticDefaults()
 	{
-		ItemGlowManager.AutoLoadItemGlow(this);
+		
 	}
 
 	public override void SetDefaults()
 	{
-		Item.glowMask = ItemGlowManager.GetItemGlow(this);
+		
 		Item.width = 18;
 		Item.height = 30;
 		Item.maxStack = 999;

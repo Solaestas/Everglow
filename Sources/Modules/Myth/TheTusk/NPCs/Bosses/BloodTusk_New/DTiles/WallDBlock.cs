@@ -1,4 +1,6 @@
-﻿namespace Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk_New.DTiles;
+using Everglow.Commons.CustomTiles.Tiles;
+
+namespace Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk_New.DTiles;
 
 internal class WallDBlock : DBlock
 {

@@ -11,8 +11,7 @@ public class RedCore : ModNPC
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Red Core");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "红焰核心");
-		Main.npcFrameCount[NPC.type] = 4;
+				Main.npcFrameCount[NPC.type] = 4;
 	}
 	public override void SetDefaults()
 	{

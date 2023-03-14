@@ -1,4 +1,4 @@
-namespace Everglow.Commons.Utils;
+namespace Everglow.Commons.Utilities;
 public static class GraphicsUtils
 {
 	/// <summary>

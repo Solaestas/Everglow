@@ -1,19 +1,12 @@
-﻿//using MythMod.Buffs;
+//using MythMod.Buffs;
 using Everglow.Myth.MiscItems.Buffs;
-using Everglow.Myth.MiscItems.Dusts;
 using Everglow.Myth.TheFirefly.Dusts;
 using Terraria.Audio;
-using Terraria.Localization;
 
 namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Magic;
 
 public class FreezeFeather : ModProjectile
 {
-	public override void SetStaticDefaults()
-	{
-		// DisplayName.SetDefault("FreezeFeather");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "冰羽");
-	}
 	public override void SetDefaults()
 	{
 		Projectile.width = 34;
@@ -114,7 +107,9 @@ public class FreezeFeather : ModProjectile
 	public override Color? GetAlpha(Color lightColor)
 	{
 		if (Projectile.timeLeft > 60)
+		{
 			return new Color?(new Color(255, 255, 255, 100));
+		}
 		else
 		{
 			return new Color?(new Color(Projectile.timeLeft / 60f, Projectile.timeLeft / 60f, Projectile.timeLeft / 60f, Projectile.timeLeft / 60f * 100f / 255f));
@@ -145,7 +140,7 @@ public class FreezeFeather : ModProjectile
         }*/
 	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 	{
-		if (target.type != 396 && target.type != 397 && target.type != 398)
+		if (target.type is not NPCID.MoonLordHead and not NPCID.MoonLordHand and not NPCID.MoonLordCore)
 		{
 			if (!target.HasBuff(ModContent.BuffType<Freeze>()))
 			{
@@ -153,11 +148,11 @@ public class FreezeFeather : ModProjectile
 				target.AddBuff(ModContent.BuffType<Freeze2>(), (int)Projectile.ai[1] + 2);
 			}
 		}
-		if (target.type == 113)
+		if (target.type == NPCID.WallofFlesh)
 		{
 			for (int i = 0; i < 200; i++)
 			{
-				if (Main.npc[i].type == 113 || Main.npc[i].type == 114)
+				if (Main.npc[i].type is 113 or 114)
 				{
 					if (!target.HasBuff(ModContent.BuffType<Freeze>()))
 					{
@@ -167,11 +162,11 @@ public class FreezeFeather : ModProjectile
 				}
 			}
 		}
-		if (target.type == 114)
+		if (target.type == NPCID.WallofFleshEye)
 		{
 			for (int i = 0; i < 200; i++)
 			{
-				if (Main.npc[i].type == 113 || Main.npc[i].type == 114)
+				if (Main.npc[i].type is 113 or 114)
 				{
 					if (!target.HasBuff(ModContent.BuffType<Freeze>()))
 					{
@@ -188,8 +183,8 @@ public class FreezeFeather : ModProjectile
 		target.AddBuff(ModContent.BuffType<Freeze2>(), (int)Projectile.ai[1] + 2);
 	}
 	private Effect ef;
-	int TrueL = 1;
-	float ka = 0;
+	private int TrueL = 1;
+	private float ka = 0;
 	public override void PostDraw(Color lightColor)
 	{
 		Main.spriteBatch.End();

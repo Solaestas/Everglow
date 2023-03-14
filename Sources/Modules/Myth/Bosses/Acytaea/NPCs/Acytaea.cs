@@ -69,8 +69,7 @@ public class Acytaea : VisualNPC
 		NPCID.Sets.AttackTime[NPC.type] = 60;
 		NPCID.Sets.AttackAverageChance[NPC.type] = 15;
 		NPCID.Sets.ActsLikeTownNPC[Type] = true;
-		//DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "雅斯塔亚");
-		var antiColor = ModContent.Request<Effect>("Everglow/Myth/Bosses/Acytaea/AntiColor").Value;
+		//		var antiColor = ModContent.Request<Effect>("Everglow/Myth/Bosses/Acytaea/AntiColor").Value;
 		Filters.Scene["AntiColor"] = new Filter(new Terraria.Graphics.Shaders.ScreenShaderData(new Ref<Effect>(antiColor), "Test"), EffectPriority.Medium);
 		Filters.Scene["AntiColor"].Load();
 	}

@@ -11,8 +11,7 @@ public class BlueCore : ModNPC
 	public override void SetStaticDefaults()
 	{ //TODO: Localization Needed
 	  // DisplayName.SetDefault("Blue Core");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "蓝焰核心");
-		Main.npcFrameCount[NPC.type] = 4;
+				Main.npcFrameCount[NPC.type] = 4;
 	}
 	public override void SetDefaults()
 	{

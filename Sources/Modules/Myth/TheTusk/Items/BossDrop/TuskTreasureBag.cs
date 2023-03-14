@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.TheTusk.Items.Accessories;
+using Everglow.Myth.TheTusk.Items.Accessories;
 using Everglow.Myth.TheTusk.Items.Weapons;
 using Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk;
 using Terraria.Localization;
@@ -7,17 +7,6 @@ namespace Everglow.Myth.TheTusk.Items.BossDrop;
 
 public class TuskTreasureBag : ModItem
 {
-	//Sets the associated NPC this treasure bag is dropped from
-	[Obsolete]
-	public override int BossBagNPC => ModContent.NPCType<BloodTusk>();
-
-	public override void SetStaticDefaults()
-	{
-		// DisplayName.SetDefault("Treasure Bag(The Tusk)");
-		// Tooltip.SetDefault("{$CommonItemTooltip.RightClickToOpen}");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "宝藏袋(鲜血獠牙)");
-	}
-
 	public override void SetDefaults()
 	{
 		Item.maxStack = 999;
@@ -32,6 +21,10 @@ public class TuskTreasureBag : ModItem
 	{
 		return true;
 	}
+	//TODO 迁移
+#if false
+	[Obsolete]
+	public override int BossBagNPC => ModContent.NPCType<BloodTusk>();
 	[Obsolete]
 	public override void OpenBossBag(Player player)
 	{
@@ -51,6 +44,7 @@ public class TuskTreasureBag : ModItem
 		if (h == 5)
 			player.QuickSpawnItem(null, ModContent.ItemType<SpineGun>(), 1);
 	}
+#endif
 	private int a = 0;
 	public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
 	{

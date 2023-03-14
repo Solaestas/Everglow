@@ -12,8 +12,7 @@ public class FloatLantern : ModNPC
 	{
 		// DisplayName.SetDefault("Lantern Ghost");
 		Main.npcFrameCount[NPC.type] = 3;
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "鬼灯笼");
-	}
+			}
 	public override void SetDefaults()
 	{
 		NPC.damage = 100;

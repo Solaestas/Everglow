@@ -11,8 +11,7 @@ public class YellowCore : ModNPC
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Yellow Core");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "黄焰核心");
-		Main.npcFrameCount[NPC.type] = 4;
+				Main.npcFrameCount[NPC.type] = 4;
 	}
 	public override void SetDefaults()
 	{

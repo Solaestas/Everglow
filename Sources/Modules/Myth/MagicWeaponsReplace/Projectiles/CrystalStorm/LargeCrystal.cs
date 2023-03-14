@@ -1,6 +1,5 @@
 using Everglow.Myth.Common;
 using Everglow.Myth.MagicWeaponsReplace.Dusts;
-using Everglow.Sources.Modules.MythModule.MagicWeaponsReplace.Projectiles.CrystalStorm;
 using Terraria.Audio;
 
 namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.CrystalStorm;

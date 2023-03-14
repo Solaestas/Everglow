@@ -7,8 +7,7 @@ public class FlowerPetalPurple : ModProjectile
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Flower Petal Purple");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "紫色落英");
-		Main.projFrames[Projectile.type] = 8;
+				Main.projFrames[Projectile.type] = 8;
 	}
 	public override void SetDefaults()
 	{

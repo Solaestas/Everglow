@@ -20,7 +20,7 @@ public class GlowingReed : ModTile
 		};
 		TileObjectData.addTile(Type);
 		DustType = 191;
-		ModTranslation modTranslation = base.CreateMapEntryName(null);
+		var modTranslation = CreateMapEntryName();
 		AddMapEntry(new Color(11, 11, 160), modTranslation);
 		HitSound = SoundID.Grass;
 	}

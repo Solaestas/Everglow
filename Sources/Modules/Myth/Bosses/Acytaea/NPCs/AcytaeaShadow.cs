@@ -1,5 +1,3 @@
-﻿using Terraria.Localization;
-
 namespace Everglow.Myth.Bosses.Acytaea.NPCs;
 
 [AutoloadBossHead]
@@ -15,7 +13,6 @@ public class AcytaeaShadow : ModNPC
 		NPCID.Sets.AttackType[NPC.type] = 0;
 		NPCID.Sets.AttackTime[NPC.type] = 60;
 		NPCID.Sets.AttackAverageChance[NPC.type] = 15;
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "雅斯塔亚");
 	}
 
 	private int Dam = 12;
@@ -35,6 +32,7 @@ public class AcytaeaShadow : ModNPC
 		NPC.friendly = false;
 		NPC.dontTakeDamage = true;
 		NPC.noTileCollide = true;
+
 		// NPC.aiStyle = -1;
 		//NPC.lifeMax = 50000;
 		//NPC.life = 50000;
@@ -45,9 +43,13 @@ public class AcytaeaShadow : ModNPC
 	}
 
 	public bool Fly = false;
+
 	public bool Battle = false;
+
 	public bool CanUseWing = false;
+
 	private Vector2 AIMpos = new Vector2(200, 0);
+
 	private int MinorDir = -1;
 
 	public override void AI()
@@ -214,18 +216,31 @@ public class AcytaeaShadow : ModNPC
 	}
 
 	private Vector2 RightArmPos;
+
 	private Vector2 LeftWingPos;
+
 	private Vector2 RightWingPos;
+
 	private float RightArmRot = 0;
+
 	private float BladePro = 0;
+
 	private float BladeRot = 0;
+
 	private float OldBladeRot = 0;
+
 	private float BladeSquz = 1;
+
 	private float AimBladeSquz = 1;
+
 	private int wingFrame = 0;
+
 	private int headFrame = 0;
+
 	private bool HasBlade = false;
+
 	private int DrawAI = 0;
+
 	private Vector2[] OldBladePos = new Vector2[70];
 
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

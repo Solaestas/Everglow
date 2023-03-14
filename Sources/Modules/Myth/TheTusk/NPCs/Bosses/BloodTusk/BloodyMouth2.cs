@@ -8,8 +8,7 @@ public class BloodyMouth2 : ModNPC
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "");
-	}
+			}
 
 	private int Coo = 720;
 	private Vector2[] V = new Vector2[10];

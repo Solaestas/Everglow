@@ -9,12 +9,12 @@ public class ComingGhost : ModItem
 	{
 
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-		ItemGlowManager.AutoLoadItemGlow(this);
+		
 	}
-	public static short GetGlowMask = 0;
+
 	public override void SetDefaults()
 	{
-		Item.glowMask = ItemGlowManager.GetItemGlow(this);
+		
 		Item.damage = 57;
 		Item.DamageType = DamageClass.Melee;
 		Item.width = 54;

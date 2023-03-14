@@ -13,12 +13,12 @@ public class MothYoyo : ModItem
 		ItemID.Sets.Yoyo[Item.type] = true;
 		ItemID.Sets.GamepadExtraRange[Item.type] = 15;
 		ItemID.Sets.GamepadSmartQuickReach[Item.type] = true;
-		ItemGlowManager.AutoLoadItemGlow(this);
+		
 	}
 
 	public override void SetDefaults()
 	{
-		Item.glowMask = ItemGlowManager.GetItemGlow(this);
+		
 		Item.useStyle = ItemUseStyleID.Shoot;
 		Item.width = 24;
 		Item.height = 24;
@@ -55,8 +55,8 @@ public class MothYoyo : ModItem
 			{
 				tooltips.AddRange(new TooltipLine[]
 				{
-					new(Everglow.Instance, "MothEyeBonusText", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeBonusText")),
-					new(Everglow.Instance, "MothEyeYoyoBonus", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextMothYoyo")),
+					new(ModIns.Mod, "MothEyeBonusText", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeBonusText")),
+					new(ModIns.Mod, "MothEyeYoyoBonus", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextMothYoyo")),
 				});
 			}
 		}

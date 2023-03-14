@@ -7,17 +7,15 @@ public class Sunflower : ModItem
 	public override void SetStaticDefaults()
 	{
 		/*DisplayName.SetDefault("Sunflower Disc");
-           // DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "向日飞盘");
-           // DisplayName.AddTranslation((int)GameCulture.CultureName.Russian, "Диск-подсолнух");
-            Tooltip.SetDefault("'A weapon made of sunflowers, has a color of hope'");
+           //            //             Tooltip.SetDefault("'A weapon made of sunflowers, has a color of hope'");
             Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "葵花打造的武器,拥有象征希望的色彩");
             Tooltip.AddTranslation((int)GameCulture.CultureName.Russian, "Оружие, сделанное из подсолнухов, имеет цвет надежды");*/
-		ItemGlowManager.AutoLoadItemGlow(this);
+		
 	}
-	public static short GetGlowMask = 0;
+
 	public override void SetDefaults()
 	{
-		Item.glowMask = ItemGlowManager.GetItemGlow(this);
+		
 		Item.useStyle = 1;
 		Item.shootSpeed = 9f;
 		Item.shoot = ModContent.ProjectileType<Projectiles.Weapon.Melee.Sunflower>();

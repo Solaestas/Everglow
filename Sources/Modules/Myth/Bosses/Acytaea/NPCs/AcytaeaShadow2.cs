@@ -16,8 +16,7 @@ public class AcytaeaShadow2 : ModNPC
 		NPCID.Sets.AttackType[NPC.type] = 0;
 		NPCID.Sets.AttackTime[NPC.type] = 60;
 		NPCID.Sets.AttackAverageChance[NPC.type] = 15;
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "雅斯塔亚");
-	}
+			}
 
 	private bool canDespawn = false;
 

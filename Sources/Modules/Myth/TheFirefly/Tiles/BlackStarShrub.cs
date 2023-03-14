@@ -22,7 +22,7 @@ public class BlackStarShrub : ModTile
 		TileObjectData.newTile.CoordinateWidth = 72;
 		TileObjectData.addTile(Type);
 		DustType = 191;
-		ModTranslation modTranslation = base.CreateMapEntryName(null);
+		var modTranslation = CreateMapEntryName();
 		AddMapEntry(new Color(84, 172, 255), modTranslation);
 		HitSound = SoundID.Grass;
 	}

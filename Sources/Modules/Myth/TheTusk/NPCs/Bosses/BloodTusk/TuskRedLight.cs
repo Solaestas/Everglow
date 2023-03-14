@@ -7,8 +7,7 @@ public class TuskRedLight : ModNPC
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "獠牙致命池");
-	}
+			}
 	private Vector2[] V = new Vector2[10];
 	private Vector2[] VMax = new Vector2[10];
 	public override void SetDefaults()

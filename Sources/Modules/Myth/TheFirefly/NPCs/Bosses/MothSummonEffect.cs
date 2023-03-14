@@ -16,8 +16,7 @@ public class MothSummonEffect : ModNPC
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "");
-	}
+			}
 
 	public override void SetDefaults()
 	{

@@ -7,8 +7,7 @@ public class BloodyStoneWall : ModItem
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Bloody Stone Wall");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "血石砖墙");
-	}
+			}
 
 	public override void SetDefaults()
 	{

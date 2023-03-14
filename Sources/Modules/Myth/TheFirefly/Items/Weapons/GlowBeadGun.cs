@@ -7,12 +7,12 @@ public class GlowBeadGun : ModItem
 {
 	public override void SetStaticDefaults()
 	{
-		ItemGlowManager.AutoLoadItemGlow(this);
+		
 	}
 
 	public override void SetDefaults()
 	{
-		Item.glowMask = ItemGlowManager.GetItemGlow(this);
+		
 		Item.damage = 22;
 		Item.DamageType = DamageClass.Magic;
 		Item.mana = 4;

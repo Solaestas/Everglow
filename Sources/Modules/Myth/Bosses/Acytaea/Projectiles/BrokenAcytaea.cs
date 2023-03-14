@@ -8,8 +8,7 @@ public class BrokenAcytaea : ModProjectile
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Broken Acytaea");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "碎雅斯塔亚");
-	}
+			}
 
 	private float RamdomC = -1;
 	private float RamdomC2 = -1;

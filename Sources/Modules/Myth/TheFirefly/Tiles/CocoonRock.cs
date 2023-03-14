@@ -14,7 +14,7 @@ public class CocoonRock : ModTile
 		TileObjectData.newTile.RandomStyleRange = 3;
 		TileObjectData.addTile(Type);
 		DustType = 191;
-		ModTranslation modTranslation = base.CreateMapEntryName(null);
+		var modTranslation = CreateMapEntryName();
 		AddMapEntry(new Color(25, 24, 25), modTranslation);
 		HitSound = SoundID.Dig;
 	}

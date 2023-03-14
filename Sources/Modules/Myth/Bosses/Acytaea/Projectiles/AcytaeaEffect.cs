@@ -1,4 +1,4 @@
-﻿using Everglow.Sources.Modules.MythModule.Bosses.Acytaea.Dusts;
+using Everglow.Myth.Bosses.Acytaea.Dusts;
 using Terraria.Localization;
 
 namespace Everglow.Myth.Bosses.Acytaea.Projectiles;
@@ -6,12 +6,6 @@ namespace Everglow.Myth.Bosses.Acytaea.Projectiles;
 [Pipeline(typeof(NPPipeline), typeof(AcytaeaPipeline))]
 internal class AcytaeaEffect : VisualProjectile
 {
-	public override void SetStaticDefaults()
-	{
-		DisplayName.SetDefault("AcytaeaEffect");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "AcytaeaEffect");
-	}
-
 	public override void SetDefaults()
 	{
 		Projectile.width = 20;

@@ -9,9 +9,7 @@ public class FreezeFeatherMagic : ModItem
 	public override void SetStaticDefaults()
 	{
 		/*DisplayName.SetDefault("Book of Ice Feather");
-           // DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "寒冰羽箭");
-           // DisplayName.AddTranslation((int)GameCulture.CultureName.Russian, "Книга ледяного пера");
-            Tooltip.SetDefault("Shoots icebounding feathers");
+           //            //             Tooltip.SetDefault("Shoots icebounding feathers");
             Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "射出冰封羽毛");
             Tooltip.AddTranslation((int)GameCulture.CultureName.Russian, "Стреляет обледеняющими перьями");*/
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;

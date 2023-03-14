@@ -23,7 +23,7 @@ public class BlueBlossom : ModTile
 		TileObjectData.newTile.CoordinateWidth = 60;
 		TileObjectData.addTile(Type);
 		DustType = 191;
-		ModTranslation modTranslation = base.CreateMapEntryName(null);
+		var modTranslation = CreateMapEntryName();
 		AddMapEntry(new Color(81, 110, 255), modTranslation);
 		HitSound = SoundID.Grass;
 	}

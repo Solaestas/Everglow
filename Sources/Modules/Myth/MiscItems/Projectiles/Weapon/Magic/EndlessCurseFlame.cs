@@ -7,8 +7,7 @@ public class EndlessCurseFlame : ModProjectile
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("EndlessCurseFlame");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "不断咒火");
-	}
+			}
 	public override void SetDefaults()
 	{
 		Projectile.width = 210;

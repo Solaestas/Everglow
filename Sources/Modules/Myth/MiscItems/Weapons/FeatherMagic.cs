@@ -8,9 +8,7 @@ public class FeatherMagic : ModItem
 	public override void SetStaticDefaults()
 	{
 		/*DisplayName.SetDefault("Book of Feather");
-           // DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "羽箭");
-           // DisplayName.AddTranslation((int)GameCulture.CultureName.Russian, "Книга перьев");
-            Tooltip.SetDefault("'I love harpies♥'");
+           //            //             Tooltip.SetDefault("'I love harpies♥'");
             Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "'我爱鸟妖♥'");
             Tooltip.AddTranslation((int)GameCulture.CultureName.Russian, "'Я люблю гарпий♥'");*/
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;

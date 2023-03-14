@@ -12,8 +12,7 @@ public class FlamingDashCore : ModNPC
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Spiritual Fiery Core");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "花火幻魂心");
-	}
+			}
 	public override void SetDefaults()
 	{
 		NPC.damage = 180;

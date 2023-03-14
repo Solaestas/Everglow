@@ -8,9 +8,7 @@ public class BloodyBoneYoyo : ModItem
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Bloody Bone Yoyo");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "血骨球");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Russian, "Кровавые кости");
-		// Tooltip.SetDefault("Releases tusk nails on every 5 hits");
+						// Tooltip.SetDefault("Releases tusk nails on every 5 hits");
 		Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "每击中5次敌人会释放1次獠牙钉");
 		Tooltip.AddTranslation((int)GameCulture.CultureName.Russian, "Выпускает гвозди из клыков при каждых 5 попаданиях");
 		ItemID.Sets.Yoyo[Item.type] = true;

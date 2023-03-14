@@ -8,8 +8,7 @@ public class Tester : ModItem
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Tester");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "测试");
-	}
+			}
 	public override void SetDefaults()
 	{
 		Item.width = 32;

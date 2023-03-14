@@ -11,8 +11,7 @@ public class GreenCore : ModNPC
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Green Core");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "绿焰核心");
-		Main.npcFrameCount[NPC.type] = 4;
+				Main.npcFrameCount[NPC.type] = 4;
 	}
 	public override void SetDefaults()
 	{

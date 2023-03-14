@@ -12,8 +12,7 @@ public class AshBone : ModProjectile
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Ash Bone");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "烬中白骨");
-		DefaultToWhip();
+				DefaultToWhip();
 	}
 	private void DefaultToWhip()
 	{

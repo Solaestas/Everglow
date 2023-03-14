@@ -1,4 +1,6 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Commons.Enums;
+using Everglow.Commons.VFX.Pipelines;
+using Everglow.Myth.Common;
 using ReLogic.Content;
 
 namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing.VFXs;

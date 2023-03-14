@@ -1,4 +1,5 @@
-﻿using Everglow.Sources.Modules.MythModule.TheTusk.NPCs.Bosses.BloodTusk_New.DTiles;
+using Everglow.Commons.CustomTiles;
+using Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk_New.DTiles;
 using Terraria.Localization;
 
 namespace Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk_New;
@@ -6,11 +7,6 @@ namespace Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk_New;
 
 public class TuskWall : ModNPC
 {
-	public override void SetStaticDefaults()
-	{
-		// DisplayName.SetDefault("Tusk Wall");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "獠牙");
-	}
 	public override void SetDefaults()
 	{
 		NPC.behindTiles = true;
@@ -35,8 +31,8 @@ public class TuskWall : ModNPC
 		if (NPC.ai[2] == 0)
 		{
 			NPC.ai[2] = 1;
-			TileSystem.AddTile(new WallDBlock { npc = NPC, id = 0, dir = NPC.direction });
-			TileSystem.AddTile(new WallDBlock { npc = NPC, id = 1, dir = NPC.direction });
+			TileSystem.Instance.AddTile(new WallDBlock { npc = NPC, id = 0, dir = NPC.direction });
+			TileSystem.Instance.AddTile(new WallDBlock { npc = NPC, id = 1, dir = NPC.direction });
 		}
 
 		if (NPC.ai[0] < 880)

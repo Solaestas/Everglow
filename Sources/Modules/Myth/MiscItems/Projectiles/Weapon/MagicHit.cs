@@ -7,8 +7,7 @@ public class MagicHit : ModProjectile
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "");
-	}
+			}
 	public override void SetDefaults()
 	{
 		Projectile.width = 50;

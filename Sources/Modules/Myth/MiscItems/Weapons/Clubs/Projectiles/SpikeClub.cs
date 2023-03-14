@@ -38,7 +38,7 @@ public class SpikeClub : ClubProj_metal
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-		List<Vector2> SmoothTrailX = CatmullRom.SmoothPath(listVec.ToList());//平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(listVec.ToList());//平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
 		{
@@ -106,7 +106,7 @@ public class SpikeClub : ClubProj_metal
 	}
 	public override void PostPreDraw()
 	{
-		List<Vector2> SmoothTrailX = CatmullRom.SmoothPath(trailVecs.ToList());//平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList());//平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
 		{

@@ -6,8 +6,7 @@ public class GoldRound : ModProjectile
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("GoldRound");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "金边球");
-	}
+			}
 	public override void SetDefaults()
 	{
 		Projectile.width = 16;

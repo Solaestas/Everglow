@@ -7,8 +7,7 @@ public class TuskWave : ModNPC
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Tusk Spike");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "獠牙潜伏");
-	}
+			}
 	public override void SetDefaults()
 	{
 		NPC.behindTiles = true;

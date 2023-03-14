@@ -28,11 +28,9 @@ public class BloodifyPlatform : ModTile
 		TileObjectData.newTile.LavaDeath = true;
 		TileObjectData.addTile(Type);
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsDoor);
-		ModTranslation modTranslation = base.CreateMapEntryName(null);
+		var modTranslation = CreateMapEntryName();
 		AddMapEntry(new Color(168, 11, 0), modTranslation);
-		modTranslation.SetDefault("Bloodify Platform");
-		modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "血化平台");
-		HitSound = SoundID.Grass;
+						HitSound = SoundID.Grass;
 	}
 	public override bool CreateDust(int i, int j, ref int type)
 	{

@@ -2,7 +2,7 @@ using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.Localization;
 
-namespace Everglow.Commons.Utils;
+namespace Everglow.Commons.Utilities;
 
 public static class FurnitureUtils
 {

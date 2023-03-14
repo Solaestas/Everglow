@@ -28,11 +28,9 @@ public class StrangeTuskStone3 : ModTile
 		TileObjectData.newTile.CoordinateWidth = 64;
 		TileObjectData.addTile(Type);
 		DustType = 1;
-		ModTranslation modTranslation = base.CreateMapEntryName(null);
+		var modTranslation = CreateMapEntryName();
 		AddMapEntry(new Color(100, 90, 90), modTranslation);
-		modTranslation.SetDefault("strange stone");
-		modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "猩红碑文石");
-		HitSound = SoundID.DD2_SkeletonHurt;
+						HitSound = SoundID.DD2_SkeletonHurt;
 	}
 	public override void NumDust(int i, int j, bool fail, ref int num)
 	{

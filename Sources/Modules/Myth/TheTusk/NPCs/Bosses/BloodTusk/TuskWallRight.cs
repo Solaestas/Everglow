@@ -7,8 +7,7 @@ public class TuskWallRight : ModNPC
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Tusk Wall");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "獠牙");
-	}
+			}
 	private Vector2[] V = new Vector2[10];
 	private Vector2[] VMax = new Vector2[10];
 	public override void SetDefaults()

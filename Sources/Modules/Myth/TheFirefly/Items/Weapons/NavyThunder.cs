@@ -6,13 +6,13 @@ public class NavyThunder : ModItem
 {
 	public override void SetStaticDefaults()
 	{
-		ItemGlowManager.AutoLoadItemGlow(this);
+		
 		Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(6, 5));
 	}
 
 	public override void SetDefaults()
 	{
-		Item.glowMask = ItemGlowManager.GetItemGlow(this);
+		
 		Item.damage = 78;
 		Item.DamageType = DamageClass.Magic;
 		Item.mana = 10;

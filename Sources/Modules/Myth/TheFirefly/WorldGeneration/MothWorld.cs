@@ -1,7 +1,9 @@
-﻿using Terraria.WorldBuilding;
+using Terraria.WorldBuilding;
 
 namespace Everglow.Myth.TheFirefly.WorldGeneration;
 
+// TODO Subworld 先别急
+#if false
 internal class MothWorld : SubWorldModule.Subworld
 {
 	//public override int Width => 800;
@@ -49,3 +51,4 @@ internal class MothWorld : SubWorldModule.Subworld
 		GenVars.waterLine = Main.maxTilesY;
 	}
 }
+#endif

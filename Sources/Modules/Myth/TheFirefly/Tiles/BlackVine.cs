@@ -6,7 +6,7 @@ public class BlackVine : ModTile//TODO:Need to copy some code from vanilla.This 
 	{
 		Main.tileFrameImportant[Type] = true;
 		DustType = 191;
-		ModTranslation modTranslation = base.CreateMapEntryName(null);
+		var modTranslation = CreateMapEntryName();
 		AddMapEntry(new Color(11, 11, 11), modTranslation);
 		HitSound = SoundID.Grass;
 	}

@@ -10,8 +10,7 @@ public class FreezeBallBrake : ModProjectile
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("FreezingMagic");
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "冰封魔咒");
-	}
+			}
 	public override void SetDefaults()
 	{
 		Projectile.width = 32;

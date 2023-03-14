@@ -9,9 +9,7 @@ public class CloudGun : ModItem
 	/*public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Cloud Cannon");
-           // DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "云导炮");
-           // DisplayName.AddTranslation((int)GameCulture.CultureName.Russian, "Облачная пушка");
-            Tooltip.SetDefault("Launches cloud clusters");
+           //            //             Tooltip.SetDefault("Launches cloud clusters");
             Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "发射云团");
             Tooltip.AddTranslation((int)GameCulture.CultureName.Russian, "Запускает облачные кластеры");
         }*/
