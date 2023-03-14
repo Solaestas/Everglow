@@ -608,9 +608,9 @@ public class CCircle : Collider
 //}
 //public class CTriangle : CPolygon
 //{
-//    internal Vector2 vertexA;
-//    internal Vector2 vertexB;
-//    internal Vector2 vertexC;
+//    public Vector2 vertexA;
+//    public Vector2 vertexB;
+//    public Vector2 vertexC;
 //    public Vector2 VertexA
 //    {
 //        get => vertexA;
@@ -656,9 +656,9 @@ public class CCircle : Collider
 //}
 //public class CLineSegment : CPolygon
 //{
-//    internal Vector2 start;
-//    internal Vector2 end;
-//    internal float width;
+//    public Vector2 start;
+//    public Vector2 end;
+//    public float width;
 //    public Vector2 Start
 //    {
 //        get => start;

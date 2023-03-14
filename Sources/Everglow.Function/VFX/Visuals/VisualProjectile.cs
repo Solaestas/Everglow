@@ -4,7 +4,7 @@ using Everglow.Commons.VFX;
 
 namespace Everglow.Commons.VFX.Visuals;
 
-internal abstract class VisualProjectile : ModProjectile, IVisual
+public abstract class VisualProjectile : ModProjectile, IVisual
 {
 	public bool Active => Projectile.active && Main.projectile[Projectile.whoAmI] == Projectile;
 

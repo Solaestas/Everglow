@@ -2,7 +2,7 @@
 
 namespace Everglow.Commons.UI.UIElements;
 
-internal class UIText : BaseElement
+public class UIText : BaseElement
 {
 	private string text;
 

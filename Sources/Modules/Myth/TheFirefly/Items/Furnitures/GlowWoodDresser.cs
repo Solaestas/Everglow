@@ -1,35 +1,34 @@
 using Terraria.GameContent.Creative;
 
-namespace Everglow.Myth.TheFirefly.Items.Furnitures
+namespace Everglow.Myth.TheFirefly.Items.Furnitures;
+
+public class GlowWoodDresser : ModItem
 {
-	public class GlowWoodDresser : ModItem
+	public override void SetStaticDefaults()
 	{
-		public override void SetStaticDefaults()
-		{
-			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-		}
+		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+	}
 
-		public override void SetDefaults()
-		{
-			Item.width = 26;
-			Item.height = 22;
-			Item.maxStack = 99;
-			Item.useTurn = true;
-			Item.autoReuse = true;
-			Item.useAnimation = 15;
-			Item.useTime = 10;
-			Item.useStyle = ItemUseStyleID.Swing;
-			Item.consumable = true;
-			Item.value = 500;
-			Item.createTile = ModContent.TileType<Tiles.Furnitures.GlowWoodDresser>();
-		}
+	public override void SetDefaults()
+	{
+		Item.width = 26;
+		Item.height = 22;
+		Item.maxStack = 99;
+		Item.useTurn = true;
+		Item.autoReuse = true;
+		Item.useAnimation = 15;
+		Item.useTime = 10;
+		Item.useStyle = ItemUseStyleID.Swing;
+		Item.consumable = true;
+		Item.value = 500;
+		Item.createTile = ModContent.TileType<Tiles.Furnitures.GlowWoodDresser>();
+	}
 
-		public override void AddRecipes()
-		{
-			Recipe recipe = CreateRecipe();
-			recipe.AddIngredient(ModContent.ItemType<GlowWood>(), 16);
-			recipe.AddTile(TileID.WorkBenches);
-			recipe.Register();
-		}
+	public override void AddRecipes()
+	{
+		Recipe recipe = CreateRecipe();
+		recipe.AddIngredient(ModContent.ItemType<GlowWood>(), 16);
+		recipe.AddTile(TileID.WorkBenches);
+		recipe.Register();
 	}
 }

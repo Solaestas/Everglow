@@ -1,9 +1,8 @@
-﻿namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.LunarFlare
+﻿namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.LunarFlare;
+
+internal class StarProj : ModProjectile
 {
-	internal class StarProj : ModProjectile
+	public override void SetDefaults()
 	{
-		public override void SetDefaults()
-		{
-		}
 	}
 }

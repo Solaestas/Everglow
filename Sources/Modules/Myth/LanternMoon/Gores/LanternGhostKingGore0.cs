@@ -1,10 +1,9 @@
-﻿namespace Everglow.Myth.LanternMoon.Gores
+﻿namespace Everglow.Myth.LanternMoon.Gores;
+
+public class LanternGhostKingGore0 : DissolveGore
 {
-	public class LanternGhostKingGore0 : DissolveGore
+	public override void SSD()
 	{
-		public override void SSD()
-		{
-			HasBone = true;
-		}
+		HasBone = true;
 	}
 }

@@ -32,15 +32,15 @@ internal class MagneticElectricityPipeline : Pipeline
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		Texture2D FlameColor = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/MagnetSphere/Magnetic_Color");
-		VFXManager.spriteBatch.BindTexture<Vertex2D>(FlameColor);
+		Ins.Batch.BindTexture<Vertex2D>(FlameColor);
 		Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.AnisotropicClamp;
-		VFXManager.spriteBatch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearWrap, RasterizerState.CullNone);
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearWrap, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
 	}
 
 	public override void EndRender()
 	{
-		VFXManager.spriteBatch.End();
+		Ins.Batch.End();
 	}
 }
 [Pipeline(typeof(MagneticElectricityPipeline), typeof(BloomPipeline))]
@@ -107,7 +107,7 @@ internal class MagneticElectricity : ShaderDraw
 			bars[2 * i] = new Vertex2D(oldPos[i] - normal * width, drawcRope, new Vector3(0.05f + ai[0], i / 320f, 0));
 		}
 		bars[0] = new Vertex2D((bars[1].position + bars[2].position) * 0.5f, Color.White, new Vector3(0.5f, 0, 0));
-		VFXManager.spriteBatch.Draw(bars, PrimitiveType.TriangleStrip);
+		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
 	}
 	public override CallOpportunity DrawLayer => CallOpportunity.PostDrawDusts;
 }

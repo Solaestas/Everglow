@@ -1,16 +1,15 @@
-﻿namespace Everglow.Myth.MiscItems.FixCoins
-{
-	public class FixCoinMelee3 : FixCoinItem
-	{
-		public override int Level()
-		{
-			return 3;
-		}
+﻿namespace Everglow.Myth.MiscItems.FixCoins;
 
-		public override void SSD()
-		{
-			Item.shoot = ModContent.ProjectileType<Projectiles.Typeless.FixCoins.FixCoinMelee3>();
-		}
+public class FixCoinMelee3 : FixCoinItem
+{
+	public override int Level()
+	{
+		return 3;
+	}
+
+	public override void SSD()
+	{
+		Item.shoot = ModContent.ProjectileType<Projectiles.Typeless.FixCoins.FixCoinMelee3>();
 	}
 }
 

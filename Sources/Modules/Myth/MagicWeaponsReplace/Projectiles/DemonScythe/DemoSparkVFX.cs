@@ -1,23 +1,22 @@
-namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.DemonScythe
+namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.DemonScythe;
+
+public class DemoSparkVFX : Visual
 {
-	public class DemoSparkVFX : Visual
+	public override void Update()
 	{
-		public override void Update()
-		{
-			base.Update();
-		}
+		base.Update();
+	}
 
-		public override void Draw()
-		{
-			//DrawSpark(Color.White, Math.Min(Projectile.timeLeft / 8f, 20f), Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/SparkDark"));
-			//DrawSpark(new Color(131, 0, 255, 0), Math.Min(Projectile.timeLeft / 8f, 20f), Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/SparkLight"));
-		}
+	public override void Draw()
+	{
+		//DrawSpark(Color.White, Math.Min(Projectile.timeLeft / 8f, 20f), Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/SparkDark"));
+		//DrawSpark(new Color(131, 0, 255, 0), Math.Min(Projectile.timeLeft / 8f, 20f), Common.MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/SparkLight"));
+	}
 
-		public override CallOpportunity DrawLayer => throw new NotImplementedException();
+	public override CallOpportunity DrawLayer => throw new NotImplementedException();
 
-		private void DrawSpark(Color c0, float width, Texture2D tex)
-		{
-			var bars = new List<Vertex2D>();
-		}
+	private void DrawSpark(Color c0, float width, Texture2D tex)
+	{
+		var bars = new List<Vertex2D>();
 	}
 }

@@ -1,10 +1,9 @@
-﻿namespace Everglow.Myth.MiscItems.Weapons.Slingshots.Dusts
+﻿namespace Everglow.Myth.MiscItems.Weapons.Slingshots.Dusts;
+
+public class SapphireDust : GemDust
 {
-	public class SapphireDust : GemDust
+	public override void SetDef()
 	{
-		public override void SetDef()
-		{
-			dustColor = Color.Blue;
-		}
+		dustColor = Color.Blue;
 	}
 }

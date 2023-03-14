@@ -1,20 +1,19 @@
-﻿namespace Everglow.Myth.MiscItems.Accessories
+﻿namespace Everglow.Myth.MiscItems.Accessories;
+
+[AutoloadEquip(EquipType.Neck)]
+public class BlueGel : ModItem
 {
-	[AutoloadEquip(EquipType.Neck)]
-	public class BlueGel : ModItem
+	public override void SetDefaults()
 	{
-		public override void SetDefaults()
-		{
-			Item.width = 34;
-			Item.height = 26;
-			Item.value = 1342;
-			Item.accessory = true;
-			Item.rare = ItemRarityID.Orange;
-		}
-		public override void UpdateAccessory(Player player, bool hideVisual)
-		{
-			player.statManaMax2 += 30;
-			player.manaRegen += 4;
-		}
+		Item.width = 34;
+		Item.height = 26;
+		Item.value = 1342;
+		Item.accessory = true;
+		Item.rare = ItemRarityID.Orange;
+	}
+	public override void UpdateAccessory(Player player, bool hideVisual)
+	{
+		player.statManaMax2 += 30;
+		player.manaRegen += 4;
 	}
 }

@@ -1,6 +1,5 @@
-﻿namespace Everglow.Myth.MiscItems.Weapons.Clubs.Projectiles
+﻿namespace Everglow.Myth.MiscItems.Weapons.Clubs.Projectiles;
+
+public class CopperClub : ClubProj_metal
 {
-	public class CopperClub : ClubProj_metal
-	{
-	}
 }

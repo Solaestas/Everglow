@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Everglow.Commons.Hooks;
 
-internal class HookException : Exception
+public class HookException : Exception
 {
 	public HookException(string message = default, Exception innerException = null, [CallerFilePath] string file = default, [CallerLineNumber] int line = 0)
 		: base(GetMessage(message ?? string.Empty, file, line), innerException)

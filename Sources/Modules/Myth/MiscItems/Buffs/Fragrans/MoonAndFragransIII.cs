@@ -1,11 +1,10 @@
-﻿namespace Everglow.Myth.MiscItems.Buffs.Fragrans
+﻿namespace Everglow.Myth.MiscItems.Buffs.Fragrans;
+
+public class MoonAndFragransIII : ModBuff
 {
-	public class MoonAndFragransIII : ModBuff
+	public override void SetStaticDefaults()
 	{
-		public override void SetStaticDefaults()
-		{
-			Main.buffNoSave[Type] = true;
-			Main.buffNoTimeDisplay[Type] = false;
-		}
+		Main.buffNoSave[Type] = true;
+		Main.buffNoTimeDisplay[Type] = false;
 	}
 }

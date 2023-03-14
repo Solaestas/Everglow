@@ -1,11 +1,11 @@
 ﻿namespace Everglow.Commons.UI.UIElements;
 
-internal class UIImage : BaseElement
+public class UIImage : BaseElement
 {
 	/// <summary>
 	/// 计算实际位置时的方式
 	/// </summary>
-	internal enum CalculationStyle
+	public enum CalculationStyle
 	{
 		/// <summary>
 		/// 默认

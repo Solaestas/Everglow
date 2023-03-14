@@ -1,10 +1,9 @@
-﻿namespace Everglow.Myth.TheFirefly.Dusts
+﻿namespace Everglow.Myth.TheFirefly.Dusts;
+
+public class FluorescentLeafDust : ModDust
 {
-	public class FluorescentLeafDust : ModDust
+	public override bool Update(Dust dust)
 	{
-		public override bool Update(Dust dust)
-		{
-			return true;
-		}
+		return true;
 	}
 }

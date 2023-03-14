@@ -1,6 +1,5 @@
-﻿namespace Everglow.Myth.LanternMoon.Gores
+﻿namespace Everglow.Myth.LanternMoon.Gores;
+
+public class LanternGhostKingGore8 : DissolveGore
 {
-	public class LanternGhostKingGore8 : DissolveGore
-	{
-	}
 }

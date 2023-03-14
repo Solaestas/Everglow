@@ -3,7 +3,7 @@ using ReLogic.Content;
 
 namespace Everglow.Commons.UI.UIElements;
 
-internal class VerticalScrollbar : BaseElement
+public class VerticalScrollbar : BaseElement
 {
 	private Texture2D uiScrollbarTexture;
 	private UIImage inner;

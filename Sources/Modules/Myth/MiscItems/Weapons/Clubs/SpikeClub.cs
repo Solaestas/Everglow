@@ -1,19 +1,18 @@
-namespace Everglow.Myth.MiscItems.Weapons.Clubs
+namespace Everglow.Myth.MiscItems.Weapons.Clubs;
+
+public class SpikeClub : ClubItem
 {
-	public class SpikeClub : ClubItem
+	public override void SetDef()
 	{
-		public override void SetDef()
-		{
-			Item.damage = 21;
-			Item.value = 450;
-			ProjType = ModContent.ProjectileType<Projectiles.SpikeClub>();
-		}
-		public override void AddRecipes()
-		{
-			CreateRecipe()
-				.AddIngredient(ItemID.Spike, 114)
-				.AddTile(TileID.Anvils)
-				.Register();
-		}
+		Item.damage = 21;
+		Item.value = 450;
+		ProjType = ModContent.ProjectileType<Projectiles.SpikeClub>();
+	}
+	public override void AddRecipes()
+	{
+		CreateRecipe()
+			.AddIngredient(ItemID.Spike, 114)
+			.AddTile(TileID.Anvils)
+			.Register();
 	}
 }

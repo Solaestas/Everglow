@@ -3,9 +3,9 @@ using Terraria.GameContent;
 
 namespace Everglow.Commons.UI.UIElements;
 
-internal delegate bool CheckPutSlotCondition(Item mouseItem);
-internal delegate void ExchangeItemHandler(BaseElement target);
-internal class UIItemSlot : BaseElement
+public delegate bool CheckPutSlotCondition(Item mouseItem);
+public delegate void ExchangeItemHandler(BaseElement target);
+public class UIItemSlot : BaseElement
 {
 	/// <summary>
 	/// 框贴图

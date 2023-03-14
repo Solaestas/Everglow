@@ -238,7 +238,7 @@ public class HookManager : ModSystem, IHookManager
 		Main.OnResolutionChanged -= Main_OnResolutionChanged;
 		Dispose();
 	}
-	internal void Invoke(CodeLayer layer)
+	public void Invoke(CodeLayer layer)
 	{
 		foreach (var handler in hooks[layer].Where(h => h.Enable))
 		{

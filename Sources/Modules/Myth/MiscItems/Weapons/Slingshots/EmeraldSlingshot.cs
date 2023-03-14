@@ -1,25 +1,24 @@
-﻿namespace Everglow.Myth.MiscItems.Weapons.Slingshots
+﻿namespace Everglow.Myth.MiscItems.Weapons.Slingshots;
+
+public class EmeraldSlingshot : SlingshotItem
 {
-	public class EmeraldSlingshot : SlingshotItem
+	public override void SetDef()
 	{
-		public override void SetDef()
-		{
-			ProjType = ModContent.ProjectileType<Projectiles.EmeraldSlingshot>();
-			Item.damage = 21;
-			Item.width = 38;
-			Item.height = 36;
-			Item.useTime = 37;
-			Item.useAnimation = 37;
-			Item.rare = ItemRarityID.Orange;
-			Item.value = Item.sellPrice(0, 0, 14, 0);
-		}
-		public override void AddRecipes()
-		{
-			CreateRecipe()
-				.AddIngredient(ItemID.Emerald, 8)
-				.AddIngredient(ItemID.TungstenBar, 6)
-				.AddTile(TileID.Anvils)
-				.Register();
-		}
+		ProjType = ModContent.ProjectileType<Projectiles.EmeraldSlingshot>();
+		Item.damage = 21;
+		Item.width = 38;
+		Item.height = 36;
+		Item.useTime = 37;
+		Item.useAnimation = 37;
+		Item.rare = ItemRarityID.Orange;
+		Item.value = Item.sellPrice(0, 0, 14, 0);
+	}
+	public override void AddRecipes()
+	{
+		CreateRecipe()
+			.AddIngredient(ItemID.Emerald, 8)
+			.AddIngredient(ItemID.TungstenBar, 6)
+			.AddTile(TileID.Anvils)
+			.Register();
 	}
 }

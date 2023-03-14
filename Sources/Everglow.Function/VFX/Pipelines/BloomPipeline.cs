@@ -3,7 +3,7 @@ using Everglow.Commons.VFX;
 
 namespace Everglow.Commons.VFX.Pipelines;
 
-internal class BloomPipeline : PostPipeline
+public class BloomPipeline : PostPipeline
 {
 	private RenderTarget2D[] blurScreens;
 	private RenderTarget2D blurScreenSwap;

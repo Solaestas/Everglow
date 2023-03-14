@@ -1,16 +1,15 @@
 ﻿using Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk;
 
-namespace Everglow.Myth.Common
+namespace Everglow.Myth.Common;
+
+public class NewBossBar : ModSystem//Boss血条修改
 {
-	public class NewBossBar : ModSystem//Boss血条修改
+	public override void PostDrawInterface(SpriteBatch spriteBatch)
 	{
-		public override void PostDrawInterface(SpriteBatch spriteBatch)
+		for (int f = 0; f < 200; f++)
 		{
-			for (int f = 0; f < 200; f++)
-			{
-				if (Main.npc[f].type == ModContent.NPCType<BloodTusk>() && Main.npc[f].active && !Main.npc[f].friendly)
-					Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskBar").Value, new Vector2(Main.screenWidth / 2f - 2, Main.screenHeight - 55), null, Color.White, 0f, new Vector2(21, 22), 1f, SpriteEffects.None, 0f);
-			}
+			if (Main.npc[f].type == ModContent.NPCType<BloodTusk>() && Main.npc[f].active && !Main.npc[f].friendly)
+				Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/BloodTuskBar").Value, new Vector2(Main.screenWidth / 2f - 2, Main.screenHeight - 55), null, Color.White, 0f, new Vector2(21, 22), 1f, SpriteEffects.None, 0f);
 		}
 	}
 }

@@ -1,13 +1,13 @@
-﻿namespace Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk_New
-{
-	/*
+namespace Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk_New;
+
+/*
     [AutoloadBossHead]
     public  class BloodTust_New : ModNPC
     {
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Bloody Tusk");
-            DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "鲜血獠牙");
+           // DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "鲜血獠牙");
             var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
             {
                 CustomTexturePath = "Everglow/Sources/Modules/MythModule/TheTusk/NPCs/Bosses/BloodTusk/BloodTusk",
@@ -26,9 +26,9 @@
             }
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
             {
-				BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
+			BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheCrimson, 
-				new FlavorTextBestiaryInfoElement(tex)
+			new FlavorTextBestiaryInfoElement(tex)
             });
         }
         public override void SetDefaults()
@@ -231,4 +231,3 @@
             return false;
         }
     }*/
-}

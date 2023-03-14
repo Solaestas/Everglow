@@ -307,5 +307,5 @@ public static class CollisionUtils
 		return v;
 	}
 
-	internal static AABB ToAABB(this Rectangle rectangle) => new(rectangle.TopLeft(), rectangle.Size());
+	public static AABB ToAABB(this Rectangle rectangle) => new(rectangle.TopLeft(), rectangle.Size());
 }

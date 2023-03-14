@@ -3,7 +3,7 @@
 /// <summary>
 /// 表示一种IVisual所需的所有Pipeline的排列
 /// </summary>
-internal class PipelineIndex : IEquatable<PipelineIndex>
+public class PipelineIndex : IEquatable<PipelineIndex>
 {
 	public int index;
 	public PipelineIndex next;

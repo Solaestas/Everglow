@@ -2,7 +2,7 @@
 
 namespace Everglow.Commons.UI;
 
-internal class EverglowUISystem
+public class EverglowUISystem
 {
 	/// <summary>
 	/// 存放着所有<see cref="ContainerElement"/>实例的字典

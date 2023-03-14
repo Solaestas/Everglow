@@ -1,11 +1,10 @@
-﻿namespace Everglow.Myth.MiscItems.Weapons.Clubs.Projectiles
+﻿namespace Everglow.Myth.MiscItems.Weapons.Clubs.Projectiles;
+
+public class AdamantiteClub : ClubProj_metal
 {
-	public class AdamantiteClub : ClubProj_metal
+	public override void SetDef()
 	{
-		public override void SetDef()
-		{
-			Beta = 0.006f;
-			MaxOmega = 0.465f;
-		}
+		Beta = 0.006f;
+		MaxOmega = 0.465f;
 	}
 }

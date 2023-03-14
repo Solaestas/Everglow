@@ -1,12 +1,11 @@
-namespace Everglow.Myth.TheTusk.Walls
+namespace Everglow.Myth.TheTusk.Walls;
+
+public class TuskFleshWall : ModWall
 {
-	public class TuskFleshWall : ModWall
+	public override void SetStaticDefaults()
 	{
-		public override void SetStaticDefaults()
-		{
-			Main.wallHouse[Type] = true;
-			DustType = DustID.Blood;
-			AddMapEntry(new Color(25, 0, 4));
-		}
+		Main.wallHouse[Type] = true;
+		DustType = DustID.Blood;
+		AddMapEntry(new Color(25, 0, 4));
 	}
 }

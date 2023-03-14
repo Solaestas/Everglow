@@ -5,7 +5,7 @@ namespace Everglow.Commons.VFX.Pipelines;
 /// <summary>
 /// 世界坐标系Pipeline，会自动剪去Main.screenPosition
 /// </summary>
-internal class WCSPipeline : Pipeline
+public class WCSPipeline : Pipeline
 {
 	public override void BeginRender()
 	{

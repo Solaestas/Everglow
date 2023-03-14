@@ -1,6 +1,5 @@
-﻿namespace Everglow.Myth.MiscItems.Weapons.Clubs.Projectiles
+﻿namespace Everglow.Myth.MiscItems.Weapons.Clubs.Projectiles;
+
+public class ShadewoodClub : ClubProj
 {
-	public class ShadewoodClub : ClubProj
-	{
-	}
 }

@@ -83,7 +83,7 @@ internal class AcytaeaEffect : VisualProjectile
 	{
 		//TODO Op
 		Texture2D tex2 = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MythModule/Bosses/Acytaea/Dusts/CosmicCrack").Value;
-		VFXManager.spriteBatch.BindTexture(tex2).Draw(v0 - Main.screenPosition, new Rectangle(0, 0, Pro, 50), Color.White, 0.4f * AI0, tex2.Size() / 2, Scale * 2, SpriteEffects.None);
+		Ins.Batch.BindTexture(tex2).Draw(v0 - Main.screenPosition, new Rectangle(0, 0, Pro, 50), Color.White, 0.4f * AI0, tex2.Size() / 2, Scale * 2, SpriteEffects.None);
 	}
 
 	public override bool PreDraw(ref Color lightColor)

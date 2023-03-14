@@ -1,10 +1,9 @@
-﻿namespace Everglow.Myth.MiscItems.Weapons.Slingshots.Projectiles
+﻿namespace Everglow.Myth.MiscItems.Weapons.Slingshots.Projectiles;
+
+internal class WoodSlingshot : SlingshotProjectile
 {
-	internal class WoodSlingshot : SlingshotProjectile
+	public override void SetDef()
 	{
-		public override void SetDef()
-		{
-			ShootProjType = ModContent.ProjectileType<NormalAmmo>();
-		}
+		ShootProjType = ModContent.ProjectileType<NormalAmmo>();
 	}
 }

@@ -1,18 +1,17 @@
-namespace Everglow.Myth.MiscItems.Projectiles.Typeless.FixCoins
+namespace Everglow.Myth.MiscItems.Projectiles.Typeless.FixCoins;
+
+public class FixCoinDefense5 : FixCoinProjectile
 {
-	public class FixCoinDefense5 : FixCoinProjectile
+	public override string HeatMapTexture()
 	{
-		public override string HeatMapTexture()
-		{
-			return "heatmapGoldYellow";
-		}
-		public override int PrefixID()
-		{
-			return 0;
-		}
-		public override int Level()
-		{
-			return 5;
-		}
+		return "heatmapGoldYellow";
+	}
+	public override int PrefixID()
+	{
+		return 0;
+	}
+	public override int Level()
+	{
+		return 5;
 	}
 }

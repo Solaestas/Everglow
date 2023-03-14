@@ -1,19 +1,18 @@
-namespace Everglow.Myth.MiscItems.Weapons.Clubs
+namespace Everglow.Myth.MiscItems.Weapons.Clubs;
+
+public class CorruptClub : ClubItem
 {
-	public class CorruptClub : ClubItem
+	public override void SetDef()
 	{
-		public override void SetDef()
-		{
-			Item.damage = 12;
-			Item.value = 169;
-			ProjType = ModContent.ProjectileType<Projectiles.CorruptClub>();
-		}
-		public override void AddRecipes()
-		{
-			CreateRecipe()
-				.AddIngredient(ItemID.DemoniteBar, 18)
-				.AddTile(TileID.Anvils)
-				.Register();
-		}
+		Item.damage = 12;
+		Item.value = 169;
+		ProjType = ModContent.ProjectileType<Projectiles.CorruptClub>();
+	}
+	public override void AddRecipes()
+	{
+		CreateRecipe()
+			.AddIngredient(ItemID.DemoniteBar, 18)
+			.AddTile(TileID.Anvils)
+			.Register();
 	}
 }

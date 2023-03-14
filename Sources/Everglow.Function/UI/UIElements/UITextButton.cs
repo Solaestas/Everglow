@@ -2,7 +2,7 @@
 
 namespace Everglow.Commons.UI.UIElements;
 
-internal class UITextButton : UIPanel
+public class UITextButton : UIPanel
 {
 	public UIText UIText;
 

@@ -1,9 +1,9 @@
-﻿using Everglow.Commons.Interfaces;
+using Everglow.Commons.Interfaces;
 using ReLogic.Content;
 
 namespace Everglow.Commons.VFX;
 
-internal abstract class PostPipeline : IPipeline
+public abstract class PostPipeline : IPipeline
 {
 	protected Asset<Effect> effect;
 
