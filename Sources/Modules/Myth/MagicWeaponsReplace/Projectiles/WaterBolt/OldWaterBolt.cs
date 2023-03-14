@@ -1,10 +1,11 @@
 using Everglow.Myth.MagicWeaponsReplace.GlobalItems;
+using Terraria;
 
 namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.WaterBolt;
 
 public class OldWaterBolt : GlobalProjectile
 {
-	public override void OnHitNPC(Projectile projectile, NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(Projectile projectile, NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		if (Main.player[projectile.owner].GetModPlayer<MagicBookPlayer>().MagicBookLevel == 1)
 		{

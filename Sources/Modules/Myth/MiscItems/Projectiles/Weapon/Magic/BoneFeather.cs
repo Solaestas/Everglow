@@ -1,4 +1,5 @@
-﻿using Terraria.Audio;
+﻿using Terraria;
+using Terraria.Audio;
 using Terraria.Localization;
 
 namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Magic;
@@ -132,7 +133,7 @@ public class BoneFeather : ModProjectile
 			}
 		}
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		stick = true;
 		v = Projectile.position - target.position;

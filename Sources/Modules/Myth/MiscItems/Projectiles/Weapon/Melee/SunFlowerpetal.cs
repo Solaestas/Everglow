@@ -1,4 +1,5 @@
-﻿namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Melee;
+﻿using Terraria;
+namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Melee;
 
 public class SunFlowerpetal : ModProjectile
 {
@@ -89,7 +90,7 @@ public class SunFlowerpetal : ModProjectile
 	{
             Main.PlaySound(2, (int)Projectile.position.X, (int)Projectile.position.Y, 37, 0.5f, 0f);
         }*/
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 	}
 	public override bool PreDraw(ref Color lightColor)

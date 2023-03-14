@@ -1,5 +1,6 @@
 using Everglow.Myth.Common;
 using Everglow.Myth.LanternMoon.Projectiles.LanternKing.VFXs;
+using Terraria;
 using Terraria.Audio;
 namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 
@@ -194,7 +195,7 @@ public class ExplodeLantern : ModProjectile, IWarpProjectile
 		}
 		return false;
 	}
-	public override void OnHitPlayer(Player target, int damage, bool crit)
+	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
 		Projectile.Kill();
 	}

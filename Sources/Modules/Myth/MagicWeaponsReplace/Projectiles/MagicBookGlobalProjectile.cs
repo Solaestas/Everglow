@@ -1,8 +1,9 @@
-﻿namespace Everglow.Myth.MagicWeaponsReplace.Projectiles;
+﻿using Terraria;
+namespace Everglow.Myth.MagicWeaponsReplace.Projectiles;
 
 internal class MagicBookGlobalProjectile : GlobalProjectile
 {
-	public override void ModifyHitNPC(Projectile projectile, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+	public override void ModifyHitNPC(Projectile projectile, NPC target, ref NPC.HitModifiers modifiers)
 	{
 		if (projectile.type == ProjectileID.LunarFlare)
 		{

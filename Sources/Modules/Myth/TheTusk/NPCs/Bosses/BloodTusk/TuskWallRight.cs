@@ -1,4 +1,5 @@
-﻿using Terraria.Localization;
+﻿using Terraria;
+using Terraria.Localization;
 
 namespace Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk;
 
@@ -152,7 +153,7 @@ public class TuskWallRight : ModNPC
 	{
 		return canDespawn;
 	}
-	public override void OnHitPlayer(Player player, int damage, bool crit)
+	public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
 	{
 	}
 	private bool startFight = false;

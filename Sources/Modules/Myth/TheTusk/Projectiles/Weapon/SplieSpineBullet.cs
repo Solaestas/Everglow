@@ -1,4 +1,5 @@
-﻿using Terraria.GameContent;
+﻿using Terraria;
+using Terraria.GameContent;
 using Terraria.Localization;
 
 namespace Everglow.Myth.TheTusk.Projectiles.Weapon;
@@ -85,7 +86,7 @@ public class SplieSpineBullet : ModProjectile
 		Projectile.ignoreWater = true;
 		Projectile.aiStyle = -1;
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		Explosion();
 	}

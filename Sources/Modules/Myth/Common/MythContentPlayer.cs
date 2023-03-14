@@ -1,4 +1,5 @@
 ﻿using Everglow.Myth.MiscItems.Projectiles.Weapon.Melee.Hepuyuan;
+using Terraria;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.Common;
@@ -32,22 +33,22 @@ public class MythContentPlayer : ModPlayer
 	{
 		CriticalDamage = 0f;
 	}
-	public override void ModifyHitNPC(Item item, NPC target, ref int damage, ref float knockback, ref bool crit)
+	public override void ModifyHitNPCWithItem(Item item, NPC target, ref NPC.HitModifiers modifiers)/* tModPorter If you don't need the Item, consider using ModifyHitNPC instead */
 	{
 		if (crit)
 			damage = (int)(damage * (CriticalDamage + 1));
 	}
-	public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+	public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)/* tModPorter If you don't need the Projectile, consider using ModifyHitNPC instead */
 	{
 		if (crit)
 			damage = (int)(damage * (CriticalDamage + 1));
 	}
-	public override void ModifyHitPvp(Item item, Player target, ref int damage, ref bool crit)
+	public override void ModifyHitPvp(Item item, Player target, ref int damage, ref bool crit)/* tModPorter Note: Removed. Use ModifyHurt on the receiving player and check modifiers.PvP. Use modifiers.DamageSource.SourcePlayerIndex to get the attacking player */
 	{
 		if (crit)
 			damage = (int)(damage * (CriticalDamage + 1));
 	}
-	public override void ModifyHitPvpWithProj(Projectile proj, Player target, ref int damage, ref bool crit)
+	public override void ModifyHitPvpWithProj(Projectile proj, Player target, ref int damage, ref bool crit)/* tModPorter Note: Removed. Use ModifyHurt on the receiving player and check modifiers.PvP. Use modifiers.DamageSource.SourcePlayerIndex to get the attacking player */
 	{
 		if (crit)
 			damage = (int)(damage * (CriticalDamage + 1));
@@ -104,7 +105,7 @@ public class MythContentPlayer : ModPlayer
 		if (Player.ownedProjectileCounts[ModContent.ProjectileType<Hepuyuan>()] + Player.ownedProjectileCounts[ModContent.ProjectileType<HepuyuanDown>()] > 0)
 			Player.maxFallSpeed += 10000f;
 	}
-	public override bool PreHurt(bool pvp, bool quiet, ref int damage, ref int hitDirection, ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource, ref int cooldownCounter)
+	public override void ModifyHurt(ref Player.HurtModifiers modifiers)
 	{
 		if (damage < 3)
 			return false;
@@ -131,6 +132,6 @@ public class MythContentPlayer : ModPlayer
 		if (InvincibleFrameTime > 0)
 			return false;
 
-		return base.PreHurt(pvp, quiet, ref damage, ref hitDirection, ref crit, ref customDamage, ref playSound, ref genGore, ref damageSource, ref cooldownCounter);
+		return base.ModifyHurt(pvp, quiet, ref damage, ref hitDirection, ref crit, ref customDamage, ref playSound, ref genGore, ref damageSource, ref cooldownCounter);
 	}
 }

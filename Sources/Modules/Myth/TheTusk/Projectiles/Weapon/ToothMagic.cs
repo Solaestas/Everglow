@@ -1,4 +1,5 @@
 using Everglow.Myth.Common;
+using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -305,11 +306,11 @@ public class ToothMagic : ModProjectile, IWarpProjectile
 		if (bars.Count > 3)
 			spriteBatch.Draw(t, bars, PrimitiveType.TriangleStrip);
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		ProjHit();
 	}
-	public override void OnHitPvp(Player target, int damage, bool crit)
+	public override void OnHitPvp(Player target, int damage, bool crit)/* tModPorter Note: Removed. Use OnHitPlayer and check info.PvP */
 	{
 		ProjHit();
 	}

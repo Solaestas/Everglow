@@ -1,4 +1,5 @@
-﻿namespace Everglow.Myth.Bosses.Acytaea.Projectiles;
+﻿using Terraria;
+namespace Everglow.Myth.Bosses.Acytaea.Projectiles;
 
 [Pipeline(typeof(NPPipeline), typeof(AcytaeaPipeline))]
 internal class AcytaeaTornado2 : VisualProjectile
@@ -18,7 +19,7 @@ internal class AcytaeaTornado2 : VisualProjectile
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 70;
 	}
 
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 	}
 

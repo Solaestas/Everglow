@@ -1,5 +1,6 @@
 ﻿using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Projectiles;
+using Terraria;
 
 namespace Everglow.Myth.TheFirefly.Buffs;
 
@@ -35,7 +36,7 @@ public class MothBuffTarget : GlobalNPC
 	public int MothStack = 0; //TODO: Have this increase. Currently stays at 0
 	public override bool InstancePerEntity => true;
 
-	public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+	public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers)
 	{
 		if (npc.HasBuff(ModContent.BuffType<OnMoth>()))
 		{

@@ -1,4 +1,5 @@
-using Everglow.Myth.Bosses.Acytaea.Projectiles;
+﻿using Everglow.Myth.Bosses.Acytaea.Projectiles;
+using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
@@ -1721,7 +1722,7 @@ public class BloodTusk : ModNPC
 	private bool HasbeenKilled = false;
 	public static int Killing = 0;
 	//int locktime = 0;
-	public override void HitEffect(int hitDirection, double damage)
+	public override void HitEffect(NPC.HitInfo hit)
 	{
 		/*if (NPC.life < NPC.lifeMax / 2)
             {
@@ -1761,7 +1762,7 @@ public class BloodTusk : ModNPC
 			}
 		}
 	}
-	public override void OnHitPlayer(Player player, int damage, bool crit)
+	public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
 	{
 		player.AddBuff(BuffID.Bleeding, 120);
 	}
@@ -2296,7 +2297,7 @@ public class BloodTusk : ModNPC
 	private Vector2 Mouth2Vel = new Vector2(-1, 0);
 	private float[] HangMaxL1 = new float[400];
 	private float[] HangMaxL2 = new float[400];
-	public override void OnHitByItem(Player player, Item item, int damage, float knockback, bool crit)
+	public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
 	{
 		if (tuskHitMove.Length() > 1)
 			SprK *= 0.9f;
@@ -2304,7 +2305,7 @@ public class BloodTusk : ModNPC
 		if (NPC.Center - player.Center != Vector2.Zero)
 			tuskHitMove += Vector2.Normalize(NPC.Center - player.Center) * Math.Clamp(item.knockBack, 0, 20f);
 	}
-	public override void OnHitByProjectile(Projectile projectile, int damage, float knockback, bool crit)
+	public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
 	{
 		if (tuskHitMove.Length() > 1)
 			SprK *= 0.9f;

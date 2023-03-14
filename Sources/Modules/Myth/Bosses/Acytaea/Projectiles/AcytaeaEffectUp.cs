@@ -1,4 +1,5 @@
 ﻿using Everglow.Myth;
+using Terraria;
 
 namespace Everglow.Myth.Bosses.Acytaea.Projectiles;
 
@@ -17,7 +18,7 @@ internal class AcytaeaEffectUp : ModProjectile
 		Projectile.extraUpdates = 6;
 	}
 
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 	}
 

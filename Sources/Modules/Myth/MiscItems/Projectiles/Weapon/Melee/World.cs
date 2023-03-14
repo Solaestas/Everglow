@@ -1,4 +1,5 @@
 ﻿using Everglow.Myth.Common;
+using Terraria;
 using Terraria.Audio;
 
 namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Melee;
@@ -143,7 +144,7 @@ class World : ModProjectile, IWarpProjectile
 		UpdateOldWidth(ref OldWidthIV);
 		UpdateOldWidth(ref OldWidthV);
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 
 	}

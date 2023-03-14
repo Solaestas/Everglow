@@ -1,4 +1,5 @@
-﻿using Terraria.Localization;
+﻿using Terraria;
+using Terraria.Localization;
 
 namespace Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk;
 
@@ -74,7 +75,7 @@ public class LittleMouth : ModNPC
 			}
 		}
 	}
-	public override void OnHitPlayer(Player player, int damage, bool crit)
+	public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
 	{
 		player.AddBuff(BuffID.Bleeding, 120);
 	}

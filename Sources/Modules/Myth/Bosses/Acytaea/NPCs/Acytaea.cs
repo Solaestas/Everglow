@@ -1,5 +1,6 @@
-using Everglow.Myth.Bosses.Acytaea.Dusts;
+﻿using Everglow.Myth.Bosses.Acytaea.Dusts;
 using Everglow.Myth.Bosses.Acytaea.Projectiles;
+using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.Personalities;
@@ -1985,7 +1986,7 @@ public class Acytaea : VisualNPC
 		});
 	}
 
-	public override void HitEffect(int hitDirection, double damage)
+	public override void HitEffect(NPC.HitInfo hit)
 	{
 		if (NPC.life <= 0)
 		{

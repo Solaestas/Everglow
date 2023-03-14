@@ -1,5 +1,6 @@
 using Everglow.Myth.Common;
 using Everglow.Myth.MiscItems.Gores;
+using Terraria;
 using Terraria.Audio;
 
 namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Melee.Hepuyuan;
@@ -382,7 +383,7 @@ public class HepuyuanDown : ModProjectile, IWarpProjectile
 		return false;
 	}
 	public static int CyanStrike = 0;
-	public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 		CyanStrike = 1;
 		Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), target.Center, Vector2.Zero, ModContent.ProjectileType<XiaoHit>(), 0, 0, Projectile.owner, 0.45f);

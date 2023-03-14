@@ -1,4 +1,5 @@
-﻿namespace Everglow.Myth.MiscItems.Weapons.Clubs.Projectiles;
+﻿using Terraria;
+namespace Everglow.Myth.MiscItems.Weapons.Clubs.Projectiles;
 
 public class ChlorophyteClub : ClubProj_metal
 {
@@ -41,7 +42,7 @@ public class ChlorophyteClub : ClubProj_metal
 		//dust.noGravity = true;
 	}
 	private int FlyClubCooling = 0;
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		if (FlyClubCooling == 0 && Omega > 0.3f)
 		{

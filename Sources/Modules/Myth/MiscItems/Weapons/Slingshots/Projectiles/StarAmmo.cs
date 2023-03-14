@@ -1,4 +1,5 @@
 ﻿using Everglow.Myth.Common;
+using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -148,7 +149,7 @@ public class StarAmmo : SlingshotAmmo
 		Projectile.friendly = false;
 		Projectile.velocity *= 0f;
 	}
-	public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 		if (!Main.dayTime)
 			damage = (int)(damage * 1.25f);

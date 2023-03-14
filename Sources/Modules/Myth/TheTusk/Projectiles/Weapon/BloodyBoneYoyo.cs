@@ -1,4 +1,5 @@
 ﻿using Everglow.Myth.Common;
+using Terraria;
 
 namespace Everglow.Myth.TheTusk.Projectiles.Weapon;
 
@@ -30,7 +31,7 @@ public class BloodyBoneYoyo : ModProjectile
 		}
 	}
 	internal int hit = 0;
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		float a = Main.rand.NextFloat(0, 100f);
 		Player player = Main.player[Projectile.owner];

@@ -1,5 +1,6 @@
 ﻿using Everglow.Myth.Common;
 using Everglow.Myth.MagicWeaponsReplace.Dusts;
+using Terraria;
 using Terraria.Audio;
 
 namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.DemonScythe;
@@ -59,7 +60,7 @@ internal class DemonScythePlus : ModProjectile, IWarpProjectile
 		}
 	}
 
-	public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 		float k = Math.Clamp(Projectile.velocity.Length() / 30f, 1f, 5f) / 1.3f;
 		for (int x = 0; x < Projectile.velocity.Length() / 12 - 2; x++)

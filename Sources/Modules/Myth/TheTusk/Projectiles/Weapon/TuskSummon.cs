@@ -1,5 +1,6 @@
 ﻿using Everglow.Myth.TheTusk.Buffs;
 using Everglow.Myth.TheTusk.Gores;
+using Terraria;
 
 namespace Everglow.Myth.TheTusk.Projectiles.Weapon;
 
@@ -207,7 +208,7 @@ class TuskSummon : ModProjectile
 		}
 		return base.PreDraw(ref lightColor);
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		target.AddBuff(BuffID.Bleeding, 600);
 	}

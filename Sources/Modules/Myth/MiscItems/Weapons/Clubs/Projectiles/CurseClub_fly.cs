@@ -1,7 +1,8 @@
-using Everglow.Commons.Utilities;
+﻿using Everglow.Commons.Utilities;
 using Everglow.Myth;
 using Everglow.Myth.Common;
 using Everglow.Myth.MagicWeaponsReplace.Projectiles.CursedFlames;
+using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.Shaders;
 
@@ -106,7 +107,7 @@ public class CurseClub_fly : ModProjectile, IWarpProjectile
 		D.velocity = new Vector2(-v0.Y * Speed, v0.X * Speed);
 	}
 
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		target.AddBuff(BuffID.CursedInferno, (int)(818 * Omega));
 	}
@@ -118,7 +119,7 @@ public class CurseClub_fly : ModProjectile, IWarpProjectile
 	{
 		return "Everglow/Sources/Modules/MEACModule/Images/Melee";
 	}
-	public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 		float power = Math.Max(StrikeOmegaDecrease - MathF.Pow(target.knockBackResist / 4f, 3), MinStrikeOmegaDecrease);
 

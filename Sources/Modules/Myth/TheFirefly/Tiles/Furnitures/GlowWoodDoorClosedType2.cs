@@ -27,7 +27,7 @@ public class GlowWoodDoorClosedType2 : ModTile
 
 		DustType = ModContent.DustType<BlueGlow>();
 		AdjTiles = new int[] { TileID.ClosedDoor };
-		OpenDoorID = ModContent.TileType<GlowWoodDoorOpenedType2>();
+		OpenDoorID/* tModPorter Note: Removed. Use TileID.Sets.OpenDoorID instead */ = ModContent.TileType<GlowWoodDoorOpenedType2>();
 
 		// Names
 		ModTranslation name = CreateMapEntryName();

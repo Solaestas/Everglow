@@ -3,6 +3,7 @@ using Everglow.Myth.TheFirefly.Dusts;
 using Everglow.Myth.TheFirefly.Items.BossDrop;
 using Everglow.Myth.TheFirefly.Items.Weapons;
 using Everglow.Myth.TheFirefly.Projectiles;
+using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
@@ -219,7 +220,7 @@ public class CorruptMoth : ModNPC
 		}
 	}
 
-	public override void ModifyHitByProjectile(Projectile projectile, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+	public override void ModifyHitByProjectile(Projectile projectile, ref NPC.HitModifiers modifiers)
 	{
 		if (NPC.ai[0] == 6 && Timer > 260)
 		{
@@ -1262,13 +1263,13 @@ public class CorruptMoth : ModNPC
 	}
 
 	//int locktime = 0;
-	public override void HitEffect(int hitDirection, double damage)
+	public override void HitEffect(NPC.HitInfo hit)
 	{
 		if (lightVisual < 1)
 			lightVisual += 0.3f;
 	}
 
-	public override void OnHitPlayer(Player player, int damage, bool crit)
+	public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
 	{
 	}
 

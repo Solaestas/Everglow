@@ -1,6 +1,6 @@
-namespace Everglow.ZY.Commons.Function.MapIO;
+namespace Everglow.Commons.MapIO;
 
-internal class TileAccessor : ITileAccessor
+public class TileAccessor : ITileAccessor
 {
 	private readonly int minX;
 	private readonly int minY;

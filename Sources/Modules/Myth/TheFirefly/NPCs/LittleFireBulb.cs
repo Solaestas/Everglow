@@ -1,5 +1,6 @@
 ﻿using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
+using Terraria;
 
 namespace Everglow.Myth.TheFirefly.NPCs;
 
@@ -107,7 +108,7 @@ public class LittleFireBulb : ModNPC
 	//    return 2f;
 	//}
 	int HitCount = 0;
-	public override void HitEffect(int hitDirection, double damage)
+	public override void HitEffect(NPC.HitInfo hit)
 	{
 		if (NPC.life <= 0)
 		{

@@ -1,4 +1,5 @@
-﻿using Terraria.Localization;
+﻿using Terraria;
+using Terraria.Localization;
 
 namespace Everglow.Myth.LanternMoon.NPCs;
 
@@ -73,10 +74,10 @@ public class RedPackBomber : ModNPC
 		if (A2 % 32 >= 24)
 			NPC.frame.Y = 108;
 	}
-	public override void OnHitPlayer(Player player, int damage, bool crit)
+	public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
 	{
 	}
-	public override void HitEffect(int hitDirection, double damage)
+	public override void HitEffect(NPC.HitInfo hit)
 	{
 
 	}

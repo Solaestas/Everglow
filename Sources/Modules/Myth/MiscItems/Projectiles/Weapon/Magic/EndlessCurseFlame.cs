@@ -1,4 +1,5 @@
-﻿using Terraria.Localization;
+﻿using Terraria;
+using Terraria.Localization;
 
 namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Magic;
 
@@ -20,7 +21,7 @@ public class EndlessCurseFlame : ModProjectile
 		Projectile.extraUpdates = 3;
 		Projectile.timeLeft = 300;
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		target.AddBuff(39, 60, false);
 	}

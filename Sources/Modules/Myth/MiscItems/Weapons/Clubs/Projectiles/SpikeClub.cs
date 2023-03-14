@@ -1,4 +1,5 @@
 ﻿using Everglow.Myth.Common;
+using Terraria;
 
 namespace Everglow.Myth.MiscItems.Weapons.Clubs.Projectiles;
 
@@ -9,7 +10,7 @@ public class SpikeClub : ClubProj_metal
 		HitLength = 32f;
 		ReflectStrength = 6f;
 	}
-	public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 		base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
 		int k = (int)(Omega * 10);
@@ -21,7 +22,7 @@ public class SpikeClub : ClubProj_metal
 		knockback *= 0.4f;
 
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		target.AddBuff(BuffID.Bleeding, 600);
 	}

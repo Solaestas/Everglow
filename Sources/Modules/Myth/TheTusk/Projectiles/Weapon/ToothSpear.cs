@@ -1,4 +1,5 @@
 ﻿using Everglow.Myth.Common;
+using Terraria;
 using Terraria.Localization;
 
 namespace Everglow.Myth.TheTusk.Projectiles.Weapon;
@@ -13,7 +14,7 @@ public class ToothSpear : ModProjectile
 		// DisplayName.SetDefault("Tooth Spear");
 		
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		for (int y = 0; y < 12; y++)
 		{

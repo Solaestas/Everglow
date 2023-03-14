@@ -1,4 +1,5 @@
 using System.IO.Compression;
+using Everglow.Commons.MapIO;
 using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
 

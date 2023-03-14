@@ -1,4 +1,5 @@
-﻿namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Melee;
+﻿using Terraria;
+namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Melee;
 
 public class Sunflower : ModProjectile
 {
@@ -63,7 +64,7 @@ public class Sunflower : ModProjectile
 		if (num6 < 60 && Projectile.timeLeft < 2950)
 			Projectile.timeLeft = 0;
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		Vector2 v1 = target.Center;
 		if (Projectile.frame < 4)

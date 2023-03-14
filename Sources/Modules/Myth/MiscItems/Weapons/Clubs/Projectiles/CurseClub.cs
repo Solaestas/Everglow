@@ -1,6 +1,7 @@
-using Everglow.Commons.Utilities;
+﻿using Everglow.Commons.Utilities;
 using Everglow.Myth.Common;
 using Everglow.Myth.MagicWeaponsReplace.Projectiles.CursedFlames;
+using Terraria;
 
 namespace Everglow.Myth.MiscItems.Weapons.Clubs.Projectiles;
 
@@ -11,7 +12,7 @@ public class CurseClub : ClubProj
 		Beta = 0.005f;
 		MaxOmega = 0.45f;
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		target.AddBuff(BuffID.CursedInferno, (int)(818 * Omega));
 	}

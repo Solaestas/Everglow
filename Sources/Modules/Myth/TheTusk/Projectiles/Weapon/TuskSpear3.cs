@@ -1,4 +1,5 @@
-﻿namespace Everglow.Myth.TheTusk.Projectiles.Weapon;
+﻿using Terraria;
+namespace Everglow.Myth.TheTusk.Projectiles.Weapon;
 
 public class TuskSpear3 : ModProjectile
 {
@@ -90,7 +91,7 @@ public class TuskSpear3 : ModProjectile
 			}
 		}
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		for (int y = 0; y < 12; y++)
 		{

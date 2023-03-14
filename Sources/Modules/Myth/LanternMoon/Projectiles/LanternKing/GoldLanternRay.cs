@@ -1,4 +1,5 @@
-﻿using Terraria.DataStructures;
+﻿using Terraria;
+using Terraria.DataStructures;
 
 namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 
@@ -15,7 +16,7 @@ class GoldLanternRay : ModProjectile
 		Projectile.tileCollide = false;
 		Projectile.DamageType = DamageClass.Melee;
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 	}
 	public override void OnSpawn(IEntitySource source)

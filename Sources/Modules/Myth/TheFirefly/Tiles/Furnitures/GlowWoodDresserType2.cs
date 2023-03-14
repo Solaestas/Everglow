@@ -25,7 +25,7 @@ public class GlowWoodDresserType2 : ModTile
 
 		DustType = ModContent.DustType<BlueGlow>();
 		AdjTiles = new int[] { TileID.Dressers };
-		DresserDrop = ModContent.ItemType<Items.Furnitures.GlowWoodDresserType2>();
+		ItemDrop = ModContent.ItemType<Items.Furnitures.GlowWoodDresserType2>();
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
 
 		// Names
@@ -74,7 +74,7 @@ public class GlowWoodDresserType2 : ModTile
 
 	public override void KillMultiTile(int x, int y, int frameX, int frameY)
 	{
-		Item.NewItem(new EntitySource_TileBreak(x, y), x * 16, y * 16, 16, 32, DresserDrop);
+		Item.NewItem(new EntitySource_TileBreak(x, y), x * 16, y * 16, 16, 32, ItemDrop);
 		Chest.DestroyChest(x, y);
 	}
 

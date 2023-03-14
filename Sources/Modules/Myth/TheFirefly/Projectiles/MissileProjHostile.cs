@@ -1,6 +1,7 @@
 using Everglow.Myth;
 using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
+using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -84,7 +85,7 @@ public class MissileProjHostile : ModProjectile, IWarpProjectile
 			Projectile.hostile = true;
 	}
 	private int TimeTokill = -1;
-	public override void OnHitPlayer(Player target, int damage, bool crit)
+	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
 		HitToAnything();
 	}

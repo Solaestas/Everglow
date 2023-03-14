@@ -1,4 +1,5 @@
 ﻿using Everglow.Myth.Common;
+using Terraria;
 
 namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.DemonScythe;
 
@@ -54,7 +55,7 @@ internal class DemonScythePlusCrack : ModProjectile
 
 	}
 
-	public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 		knockback = Projectile.knockBack * Projectile.velocity.Length() * 0.12f;
 		float k = Math.Clamp(Projectile.velocity.Length() / 48f, 1f, 5f);

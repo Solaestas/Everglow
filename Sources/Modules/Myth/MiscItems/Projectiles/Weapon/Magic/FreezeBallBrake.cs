@@ -1,5 +1,6 @@
 ﻿using Everglow.Myth.MiscItems.Buffs;
 using Everglow.Myth.MiscItems.Dusts;
+using Terraria;
 //using MythMod.Buffs;
 using Terraria.Localization;
 
@@ -84,7 +85,7 @@ public class FreezeBallBrake : ModProjectile
 		}
 		Projectile.tileCollide = false;
 	}
-	public override void OnHitPvp(Player target, int damage, bool crit)
+	public override void OnHitPvp(Player target, int damage, bool crit)/* tModPorter Note: Removed. Use OnHitPlayer and check info.PvP */
 	{
 		if (!target.HasBuff(ModContent.BuffType<Freeze>()))
 		{
@@ -92,7 +93,7 @@ public class FreezeBallBrake : ModProjectile
 			target.AddBuff(ModContent.BuffType<Freeze2>(), (int)Projectile.ai[1] + 2);
 		}
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		if (target.type != 396 && target.type != 397 && target.type != 398)
 		{

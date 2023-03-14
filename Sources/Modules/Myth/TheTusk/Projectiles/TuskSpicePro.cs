@@ -1,4 +1,5 @@
 using Everglow.Myth.MiscItems.Projectiles.Weapon.Melee.Hepuyuan;
+using Terraria;
 
 namespace Everglow.Myth.TheTusk.Projectiles;
 
@@ -31,7 +32,7 @@ public class TuskSpicePro : ModProjectile
 	{
 		return false;
 	}
-	public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 		CyanStrike = 1;
 		Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), target.Center, Vector2.Zero, ModContent.ProjectileType<XiaoHit>(), 0, 0, Projectile.owner, 0.45f);

@@ -1,4 +1,5 @@
 ﻿using Everglow.Myth.MiscItems.Dusts;
+using Terraria;
 using Terraria.Audio;
 using Terraria.Enums;
 using Terraria.GameContent;
@@ -43,7 +44,7 @@ public class XmasWhip : ModProjectile
 		}
 		return base.CanCutTiles();
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 
 	}

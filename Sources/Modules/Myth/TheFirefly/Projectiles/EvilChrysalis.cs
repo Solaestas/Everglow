@@ -2,6 +2,7 @@
 using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Buffs;
 using Everglow.Myth.TheFirefly.Dusts;
+using Terraria;
 
 namespace Everglow.Myth.TheFirefly.Projectiles;
 
@@ -19,7 +20,7 @@ internal class EvilChrysalis : ModProjectile
 		Projectile.DamageType = DamageClass.Summon;
 	}
 
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		Player player = Main.player[Projectile.owner];
 	}

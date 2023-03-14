@@ -1,4 +1,5 @@
 ﻿using Everglow.Myth.LanternMoon.Buffs;
+using Terraria;
 
 namespace Everglow.Myth.LanternMoon.Projectiles.DashCore;
 
@@ -15,7 +16,7 @@ class ImmuneCircle : ModProjectile
 		Projectile.tileCollide = false;
 		Projectile.DamageType = DamageClass.Magic;
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 	}
 	public override Color? GetAlpha(Color lightColor)

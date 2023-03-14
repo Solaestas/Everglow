@@ -1,5 +1,6 @@
 ﻿using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Buffs;
+using Terraria;
 
 namespace Everglow.Myth.TheFirefly.Projectiles;
 
@@ -27,7 +28,7 @@ internal class DarkFan : ModProjectile
 	private float Prot = 0;
 	private bool ExtraKnife = false;
 
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		Player player = Main.player[Projectile.owner];
 		Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<FanHit>(), 0, 0, player.whoAmI, 0.75f);

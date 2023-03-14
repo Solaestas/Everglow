@@ -1,4 +1,5 @@
-﻿using Terraria.Localization;
+﻿using Terraria;
+using Terraria.Localization;
 
 namespace Everglow.Myth.MiscItems.Projectiles.Typeless;
 
@@ -106,7 +107,7 @@ public class FlowerPetalPurple : ModProjectile
 	{
             Main.PlaySound(2, (int)Projectile.position.X, (int)Projectile.position.Y, 37, 0.5f, 0f);
         }*/
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 	}
 	public override bool PreDraw(ref Color lightColor)

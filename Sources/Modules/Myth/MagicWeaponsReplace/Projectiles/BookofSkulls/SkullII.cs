@@ -1,5 +1,6 @@
 using Everglow.Myth.Common;
 using Everglow.Myth.MagicWeaponsReplace.GlobalItems;
+using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -261,7 +262,7 @@ public class SkullII : ModProjectile, IWarpProjectile
 
 	}
 
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		SoundEngine.PlaySound(SoundID.NPCHit2, Projectile.Center);
 		int type = ModContent.ProjectileType<BoneSpike>();
@@ -302,7 +303,7 @@ public class SkullII : ModProjectile, IWarpProjectile
 			d0.noGravity = true;
 		}
 	}
-	public override void OnHitPvp(Player target, int damage, bool crit)
+	public override void OnHitPvp(Player target, int damage, bool crit)/* tModPorter Note: Removed. Use OnHitPlayer and check info.PvP */
 	{
 		SoundEngine.PlaySound(SoundID.NPCHit2, Projectile.Center);
 		int type = ModContent.ProjectileType<BoneSpike>();

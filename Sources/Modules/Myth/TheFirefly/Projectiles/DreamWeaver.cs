@@ -1,4 +1,5 @@
 using Everglow.Myth.TheFirefly.Dusts;
+using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -117,7 +118,7 @@ public class DreamWeaver : ModProjectile, IWarpProjectile
 		if (Projectile.timeLeft == 210)
 			Projectile.friendly = true;
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		SoundEngine.PlaySound(SoundID.Drip, Projectile.Center);
 		for (int x = 0; x < 15; x++)

@@ -1,4 +1,5 @@
-﻿using Terraria.Localization;
+﻿using Terraria;
+using Terraria.Localization;
 
 namespace Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk;
 
@@ -64,7 +65,7 @@ public class TuskRedLight : ModNPC
 			Main.npc[m].velocity = new Vector2(-Math.Sign(Ax) * Main.rand.NextFloat(2f, 5f), Main.rand.NextFloat(-8f, -5f));
 		}
 	}
-	public override void OnHitPlayer(Player player, int damage, bool crit)
+	public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
 	{
 	}
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

@@ -1,4 +1,5 @@
 ﻿using Everglow.Myth.TheTusk.Gores;
+using Terraria;
 
 namespace Everglow.Myth.TheTusk.Projectiles.Weapon;
 
@@ -17,7 +18,7 @@ class TuskArrow : ModProjectile, IWarpProjectile
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 30;
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		for (int f = 0; f < 8; f++)
 		{

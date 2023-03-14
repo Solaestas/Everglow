@@ -1,4 +1,5 @@
 using Everglow.Myth.Common;
+using Terraria;
 using Terraria.DataStructures;
 using static Everglow.Myth.Common.MythUtils;
 
@@ -203,10 +204,10 @@ public class MagnetSphereLighting : ModProjectile, IWarpProjectile
 		Texture2D t = MythContent.QuickTexture("OmniElementItems/Projectiles/Wave");
 		DrawTexCircle(spriteBatch, value * 160, 100, new Color(colorV, colorV * 0.2f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 	}
-	public override void OnHitPvp(Player target, int damage, bool crit)
+	public override void OnHitPvp(Player target, int damage, bool crit)/* tModPorter Note: Removed. Use OnHitPlayer and check info.PvP */
 	{
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using Everglow.Myth.Common;
+using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.Shaders;
 
@@ -63,7 +64,7 @@ public class CrystalClub_fly : ModProjectile, IWarpProjectile
 
 		trailVecs = new Queue<Vector2>(trailLength + 1);
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		float Rnd = Main.rand.NextFloat(6.283f);
 		for (int d = 0; d < 9; d++)
@@ -132,7 +133,7 @@ public class CrystalClub_fly : ModProjectile, IWarpProjectile
 	{
 		return "Everglow/Sources/Modules/MEACModule/Images/Melee";
 	}
-	public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 		float power = Math.Max(StrikeOmegaDecrease - MathF.Pow(target.knockBackResist / 4f, 3), MinStrikeOmegaDecrease);
 

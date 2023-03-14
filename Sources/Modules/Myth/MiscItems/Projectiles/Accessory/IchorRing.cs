@@ -1,6 +1,7 @@
-using Everglow.Commons.Utilities;
+﻿using Everglow.Commons.Utilities;
 using Everglow.Myth.Common;
 using Everglow.Myth.MagicWeaponsReplace.Projectiles.GoldenShower;
+using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -33,12 +34,12 @@ public class IchorRing : ModProjectile
 		if (Projectile.timeLeft < 60)
 			Projectile.friendly = false;
 	}
-	public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 		if (Projectile.timeLeft > 690)
 			damage *= 5;
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		for (int x = 0; x < 2; x++)
 		{

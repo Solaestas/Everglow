@@ -1,5 +1,6 @@
 using Everglow.Commons.VFX;
 using Everglow.Myth.Common;
+using Terraria;
 
 namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.CursedFlames;
 
@@ -166,11 +167,11 @@ public class CursedFlameHit : ModProjectile, IWarpProjectile, IBloomProjectile
 		if (size > 0)
 			DrawSpark(new Color(255, 255, 255, 0), size, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/SparkLight"));
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		target.AddBuff(BuffID.CursedInferno, 300);
 	}
-	public override void OnHitPvp(Player target, int damage, bool crit)
+	public override void OnHitPvp(Player target, int damage, bool crit)/* tModPorter Note: Removed. Use OnHitPlayer and check info.PvP */
 	{
 		target.AddBuff(BuffID.CursedInferno, 300);
 	}

@@ -1,4 +1,5 @@
-﻿using Terraria.Audio;
+﻿using Terraria;
+using Terraria.Audio;
 using Terraria.Enums;
 using Terraria.GameContent;
 using Terraria.Localization;
@@ -42,7 +43,7 @@ public class AshBone : ModProjectile
 		}
 		return base.CanCutTiles();
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 
 	}

@@ -1,5 +1,6 @@
 ﻿using Everglow.Myth.Common;
 using Everglow.Myth.MiscItems.Weapons.Slingshots.Buffs;
+using Terraria;
 using Terraria.Audio;
 namespace Everglow.Myth.MiscItems.Weapons.Slingshots.Projectiles;
 
@@ -161,7 +162,7 @@ public class AmbiguousNightAmmo : SlingshotAmmo
 		Projectile.friendly = false;
 		TimeTokill = 30;
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		target.AddBuff(ModContent.BuffType<ShadowSupervisor>(), (int)(600 * Projectile.ai[0]) + 120);
 	}

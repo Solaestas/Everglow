@@ -1,4 +1,5 @@
-﻿namespace Everglow.Myth.Bosses.Acytaea.Projectiles;
+﻿using Terraria;
+namespace Everglow.Myth.Bosses.Acytaea.Projectiles;
 
 internal class AcytaeaLaser : ModProjectile
 {
@@ -14,7 +15,7 @@ internal class AcytaeaLaser : ModProjectile
 		Projectile.DamageType = DamageClass.Melee;
 	}
 
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 	}
 

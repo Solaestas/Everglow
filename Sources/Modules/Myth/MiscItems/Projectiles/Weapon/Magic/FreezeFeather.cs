@@ -1,6 +1,7 @@
 //using MythMod.Buffs;
 using Everglow.Myth.MiscItems.Buffs;
 using Everglow.Myth.TheFirefly.Dusts;
+using Terraria;
 using Terraria.Audio;
 
 namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Magic;
@@ -138,7 +139,7 @@ public class FreezeFeather : ModProjectile
                 }
             }
         }*/
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		if (target.type is not NPCID.MoonLordHead and not NPCID.MoonLordHand and not NPCID.MoonLordCore)
 		{
@@ -177,7 +178,7 @@ public class FreezeFeather : ModProjectile
 			}
 		}
 	}
-	public override void OnHitPvp(Player target, int damage, bool crit)
+	public override void OnHitPvp(Player target, int damage, bool crit)/* tModPorter Note: Removed. Use OnHitPlayer and check info.PvP */
 	{
 		target.AddBuff(ModContent.BuffType<Freeze>(), (int)Projectile.ai[1]);
 		target.AddBuff(ModContent.BuffType<Freeze2>(), (int)Projectile.ai[1] + 2);

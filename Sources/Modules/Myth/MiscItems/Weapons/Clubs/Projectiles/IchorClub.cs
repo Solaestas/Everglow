@@ -1,5 +1,6 @@
 ﻿using Everglow.Myth.Common;
 using Everglow.Myth.MagicWeaponsReplace.Projectiles.GoldenShower;
+using Terraria;
 
 namespace Everglow.Myth.MiscItems.Weapons.Clubs.Projectiles;
 
@@ -11,7 +12,7 @@ public class IchorClub : ClubProj
 		MaxOmega = 0.45f;
 		WarpValue = 0.3f;
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		for (int x = 0; x < 2; x++)
 		{

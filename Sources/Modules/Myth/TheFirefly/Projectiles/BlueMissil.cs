@@ -1,4 +1,5 @@
 ﻿using Everglow.Myth.Common;
+using Terraria;
 
 namespace Everglow.Myth.TheFirefly.Projectiles;
 
@@ -45,7 +46,7 @@ public class BlueMissil : ModProjectile
 		Main.dust[num90].velocity = Projectile.velocity * 0.8f;
 	}
 
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 	}
 

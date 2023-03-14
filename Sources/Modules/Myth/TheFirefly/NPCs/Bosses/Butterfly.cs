@@ -1,4 +1,5 @@
-﻿namespace Everglow.Myth.TheFirefly.NPCs.Bosses;
+﻿using Terraria;
+namespace Everglow.Myth.TheFirefly.NPCs.Bosses;
 
 public class Butterfly : ModNPC
 {
@@ -322,7 +323,7 @@ public class Butterfly : ModNPC
 		}
 	}
 
-	public override void HitEffect(int hitDirection, double damage)
+	public override void HitEffect(NPC.HitInfo hit)
 	{
 		for (int i = 0; i < 6; i++)
 		{

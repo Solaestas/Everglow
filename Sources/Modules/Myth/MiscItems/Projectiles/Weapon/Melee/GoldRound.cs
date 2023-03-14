@@ -1,4 +1,5 @@
-﻿using Terraria.Localization;
+﻿using Terraria;
+using Terraria.Localization;
 namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Melee;
 
 public class GoldRound : ModProjectile
@@ -71,7 +72,7 @@ public class GoldRound : ModProjectile
 		if (Projectile.timeLeft < 52)
 			Projectile.alpha += 5;
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		for (int i = 0; i < 15; i++)
 		{

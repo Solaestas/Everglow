@@ -1,4 +1,5 @@
 ﻿using Everglow.Myth.TheFirefly.Dusts;
+using Terraria;
 
 namespace Everglow.Myth.TheFirefly.Projectiles;
 
@@ -87,7 +88,7 @@ public class PhantomMoth : ModProjectile
 		Main.dust[index2].alpha = (int)(Main.dust[index2].scale * 50) + 300 - Projectile.timeLeft;
 	}
 
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 	}
 

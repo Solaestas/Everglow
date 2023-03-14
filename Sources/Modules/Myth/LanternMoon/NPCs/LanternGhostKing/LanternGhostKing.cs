@@ -1,6 +1,7 @@
 ﻿using Everglow.Myth.Common;
 using Everglow.Myth.LanternMoon.NPCs;
 using Everglow.Myth.LanternMoon.Projectiles.LanternKing;
+using Terraria;
 using Terraria.DataStructures;
 using Terraria.Localization;
 
@@ -332,7 +333,7 @@ public class LanternGhostKing : ModNPC
 			Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center.X + vn.X * 5, NPC.Center.Y + vn.Y * 5, NPC.velocity.X + vn.X, NPC.velocity.Y + vn.Y, ModContent.ProjectileType<GoldLanternLine4>(), 25, 0f, player.whoAmI, 0, 0);
 		}
 	}
-	public override void HitEffect(int hitDirection, double damage)
+	public override void HitEffect(NPC.HitInfo hit)
 	{
 		if (NPC.life <= 0)
 		{

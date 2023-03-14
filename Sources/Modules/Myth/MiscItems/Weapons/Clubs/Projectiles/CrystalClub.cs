@@ -1,4 +1,5 @@
 ﻿using Everglow.Myth.Common;
+using Terraria;
 
 namespace Everglow.Myth.MiscItems.Weapons.Clubs.Projectiles;
 
@@ -10,7 +11,7 @@ public class CrystalClub : ClubProj
 		MaxOmega = 0.45f;
 		WarpValue = 0.3f;
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		int type = 0;
 		switch (Main.rand.Next(3))

@@ -1,6 +1,6 @@
-﻿namespace Everglow.ZY.Commons.Function.MapIO;
+namespace Everglow.Commons.MapIO;
 
-internal class AirWall : ModWall
+public class AirWall : ModWall
 {
 	public override void SetStaticDefaults()
 	{
@@ -8,7 +8,7 @@ internal class AirWall : ModWall
 	}
 }
 
-internal class AirWallItem : ModItem
+public class AirWallItem : ModItem
 {
 	public override void SetDefaults()
 	{

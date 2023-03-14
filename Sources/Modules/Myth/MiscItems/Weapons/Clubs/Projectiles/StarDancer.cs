@@ -1,4 +1,5 @@
 ﻿using Everglow.Myth.Common;
+using Terraria;
 using Terraria.Audio;
 
 namespace Everglow.Myth.MiscItems.Weapons.Clubs.Projectiles;
@@ -11,7 +12,7 @@ public class StarDancer : ClubProj
 		MaxOmega = 0.45f;
 		WarpValue = 0.5f;
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		if (Main.rand.NextBool(7))
 		{

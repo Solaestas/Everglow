@@ -1,4 +1,5 @@
-﻿namespace Everglow.Myth.LanternMoon.Projectiles.DashCore;
+﻿using Terraria;
+namespace Everglow.Myth.LanternMoon.Projectiles.DashCore;
 
 class RedFlame0Little : ModProjectile
 {
@@ -15,7 +16,7 @@ class RedFlame0Little : ModProjectile
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 40;
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 	}
 	public override Color? GetAlpha(Color lightColor)

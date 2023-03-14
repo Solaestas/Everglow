@@ -1,4 +1,5 @@
-﻿namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
+﻿using Terraria;
+namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 
 public class GoldLanternLine7 : ModProjectile
 {
@@ -52,7 +53,7 @@ public class GoldLanternLine7 : ModProjectile
 			Wid = 12;
 		}
 	}
-	public override void OnHitPlayer(Player target, int damage, bool crit)
+	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
 		Projectile.Kill();
 	}

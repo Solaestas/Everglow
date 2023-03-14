@@ -1,5 +1,6 @@
 ﻿using Everglow.Myth.Common;
 using Everglow.Myth.MiscItems.Dusts;
+using Terraria;
 
 namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Melee;
 
@@ -26,7 +27,7 @@ class ComingGhost2 : ModProjectile
 	private float Prot = 0;
 	private bool ExtraKnife = false;
 	private int HasHit = 0;
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		HasHit++;
 		if (HasHit > 2)

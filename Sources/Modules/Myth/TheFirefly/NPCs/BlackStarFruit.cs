@@ -1,4 +1,5 @@
 using Everglow.Myth.TheFirefly.Dusts;
+using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -67,7 +68,7 @@ public class BlackStarFruit : ModNPC
 		}
 		Lighting.AddLight((int)(NPC.Center.X / 16), (int)(NPC.Center.Y / 16 - 1), 0, 0.1f, 0.8f);
 	}
-	public override void HitEffect(int hitDirection, double damage)
+	public override void HitEffect(NPC.HitInfo hit)
 	{
 		SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, NPC.Center);
 		for (int h = 0; h < 60; h += 3)

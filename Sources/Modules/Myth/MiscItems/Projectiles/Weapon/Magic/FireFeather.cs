@@ -1,3 +1,4 @@
+using Terraria;
 using Terraria.Audio;
 
 namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Magic;
@@ -86,7 +87,7 @@ public class FireFeather : ModProjectile
 			Gore.NewGore(null, Projectile.Center, new Vector2(0, Main.rand.NextFloat(0.7f, 2.2f)).RotatedByRandom(MathHelper.TwoPi), Main.rand.Next(61, 64), Main.rand.NextFloat(1f, 1.6f));
 		}
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		target.AddBuff(24, 600);
 	}

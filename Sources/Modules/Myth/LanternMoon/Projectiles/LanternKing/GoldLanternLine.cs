@@ -1,4 +1,5 @@
-﻿namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
+﻿using Terraria;
+namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 
 class GoldLanternLine : ModProjectile
 {
@@ -15,7 +16,7 @@ class GoldLanternLine : ModProjectile
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 70;
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 	}
 	bool HasColid = false;

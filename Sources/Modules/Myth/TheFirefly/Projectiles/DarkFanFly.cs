@@ -1,5 +1,6 @@
 ﻿using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Buffs;
+using Terraria;
 
 namespace Everglow.Myth.TheFirefly.Projectiles;
 
@@ -21,7 +22,7 @@ internal class DarkFanFly : ModProjectile
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 30;
 	}
 
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		Player player = Main.player[Projectile.owner];
 		Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<FanHit>(), 0, 0, player.whoAmI, Math.Max(Projectile.velocity.Length() * 0.2f, 0.4f));

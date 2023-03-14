@@ -1,4 +1,5 @@
 ﻿using Everglow.Myth.MiscItems.Buffs;
+using Terraria;
 
 namespace Everglow.Myth.Common;
 
@@ -8,7 +9,7 @@ public class MythContentGlobalNPC : GlobalNPC
 	{
 		return true;
 	}
-	public override bool StrikeNPC(NPC npc, ref double damage, int defense, ref float knockback, int hitDirection, ref bool crit)
+	public override void ModifyIncomingHit(NPC npc, ref NPC.HitModifiers modifiers)
 	{
 		return true;
 	}

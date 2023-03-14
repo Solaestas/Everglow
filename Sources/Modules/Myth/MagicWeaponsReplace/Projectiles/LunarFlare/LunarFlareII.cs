@@ -1,3 +1,4 @@
+using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -232,7 +233,7 @@ public class LunarFlareII : ModProjectile, IWarpProjectile//将接口改为使用IWarpP
 
 		return false;
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		SoundEngine.PlaySound(SoundID.DD2_CrystalCartImpact.WithVolumeScale(0.2f), Projectile.Center);
 		Projectile.velocity *= 0;

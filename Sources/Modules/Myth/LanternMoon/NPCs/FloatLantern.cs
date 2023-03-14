@@ -1,4 +1,5 @@
 ﻿using Everglow.Myth.LanternMoon.LanternCommon;
+using Terraria;
 using Terraria.Localization;
 
 namespace Everglow.Myth.LanternMoon.NPCs;
@@ -64,10 +65,10 @@ public class FloatLantern : ModNPC
 		if (Main.dayTime)
 			NPC.velocity.Y += 1;
 	}
-	public override void OnHitPlayer(Player player, int damage, bool crit)
+	public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
 	{
 	}
-	public override void HitEffect(int hitDirection, double damage)
+	public override void HitEffect(NPC.HitInfo hit)
 	{
 		if (NPC.life <= 0)
 		{

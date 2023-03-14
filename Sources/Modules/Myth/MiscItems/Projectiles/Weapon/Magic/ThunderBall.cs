@@ -1,3 +1,4 @@
+﻿using Terraria;
 using Terraria.Audio;
 namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Magic;
 
@@ -49,7 +50,7 @@ public class ThunderBall : ModProjectile
 		}
 		return false;
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		float a = Main.rand.NextFloat(0, 500.5f);
 		Player player = Main.player[Projectile.owner];

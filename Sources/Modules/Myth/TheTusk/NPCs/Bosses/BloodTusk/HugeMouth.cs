@@ -1,4 +1,5 @@
 ﻿using Everglow.Myth.Bosses.Acytaea.Projectiles;
+using Terraria;
 using Terraria.Localization;
 
 namespace Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk;
@@ -81,7 +82,7 @@ public class HugeMouth : ModNPC
 	}
 
 	private int Dam = 0;
-	public override void OnHitPlayer(Player player, int damage, bool crit)
+	public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
 	{
 		player.AddBuff(BuffID.Bleeding, 120);
 	}

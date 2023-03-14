@@ -1,4 +1,5 @@
 ﻿using Everglow.Myth.TheTusk;
+using Terraria;
 using Terraria.Localization;
 
 namespace Everglow.Myth.TheTusk.Projectiles.Weapon;
@@ -123,7 +124,7 @@ public class ToothMagicSplit2 : ModProjectile
 		Projectile.aiStyle = -1;
 		return false;
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		Projectile.velocity = Projectile.oldVelocity;
 		Tokill = 45;//0.75s后消掉

@@ -1,8 +1,8 @@
-﻿using System.Collections;
+using System.Collections;
 
-namespace Everglow.ZY.Commons.Function.MapIO;
+namespace Everglow.Commons.MapIO;
 
-internal interface ITileAccessor : IEnumerator<Tile>
+public interface ITileAccessor : IEnumerator<Tile>
 {
 	/// <summary>
 	/// 用来进行多格移动的从0开始的下标

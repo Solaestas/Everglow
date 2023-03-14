@@ -1,4 +1,5 @@
-using Everglow.Myth.Common;
+﻿using Everglow.Myth.Common;
+using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
@@ -439,7 +440,7 @@ internal class CentipedeHead : FireWormHead
 			Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, ModContent.DustType<Dusts.NavyBlood>(), v0.X, v0.Y, 0, default, Main.rand.NextFloat(0.85f, 2.75f));
 		}
 	}
-	public override void HitEffect(int hitDirection, double damage)
+	public override void HitEffect(NPC.HitInfo hit)
 	{
 		for (int f = 0; f < 8; f++)
 		{
@@ -565,7 +566,7 @@ internal class CentipedeBody : FireWormBody
 			}
 		}
 	}
-	public override void HitEffect(int hitDirection, double damage)
+	public override void HitEffect(NPC.HitInfo hit)
 	{
 		for (int f = 0; f < 8; f++)
 		{
@@ -614,7 +615,7 @@ internal class CentipedeTail : FireWormTail
 	{
 		CentipedeHead.CommonWormInit(this);
 	}
-	public override void HitEffect(int hitDirection, double damage)
+	public override void HitEffect(NPC.HitInfo hit)
 	{
 		for (int f = 0; f < 8; f++)
 		{

@@ -1,4 +1,5 @@
-﻿namespace Everglow.Myth.LanternMoon.Projectiles.DashCore;
+﻿using Terraria;
+namespace Everglow.Myth.LanternMoon.Projectiles.DashCore;
 
 public class GoldDashLine : ModProjectile
 {
@@ -75,7 +76,7 @@ public class GoldDashLine : ModProjectile
 			}
 		}
 	}
-	public override void OnHitPlayer(Player target, int damage, bool crit)
+	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
 		Projectile.Kill();
 	}

@@ -1,4 +1,4 @@
-using Everglow.Myth.Common;
+﻿using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly;
 using Everglow.Myth.TheFirefly.Dusts;
 using Everglow.Myth.TheFirefly.Gores;
@@ -103,7 +103,7 @@ public class FluorescentTree : ModTile
 		}
 		ropeManager.Draw();
 	}
-	public override bool Drop(int i, int j)
+	public override bool Drop(int i, int j)/* tModPorter Note: Removed. Use CanDrop to decide if an item should drop. Use GetItemDrops to decide which item drops. Item drops based on placeStyle are handled automatically now, so this method might be able to be removed altogether. */
 	{
 		Item.NewItem(null, new Rectangle(i * 16 - 16, j * 16, 48, 16), ItemDrop, 1, false, 0, false, true);
 		for (int x = 0; x < 6; x++)

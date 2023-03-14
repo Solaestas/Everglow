@@ -1,5 +1,6 @@
 ﻿using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
+using Terraria;
 using Terraria.Audio;
 using Terraria.Localization;
 using static Steamworks.SteamUser;
@@ -138,7 +139,7 @@ public class EvilPack : ModNPC
 		}
 	}
 
-	public override void HitEffect(int hitDirection, double damage)
+	public override void HitEffect(NPC.HitInfo hit)
 	{
 		//SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/MothHitCocoon"), NPC.Center);
 		if (NPC.ai[0] < 10)

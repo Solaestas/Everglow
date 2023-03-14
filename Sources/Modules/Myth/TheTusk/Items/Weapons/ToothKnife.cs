@@ -1,5 +1,6 @@
 ﻿using Everglow.Myth.TheTusk.Projectiles;
 using Everglow.Myth.TheTusk.Projectiles.Weapon;
+using Terraria;
 using Terraria.DataStructures;
 namespace Everglow.Myth.TheTusk.Items.Weapons;
 
@@ -32,7 +33,7 @@ public class ToothKnife : ModItem
 	{
 		return false;
 	}
-	public override void ModifyHitNPC(Player player, NPC target, ref int damage, ref float knockBack, ref bool crit)
+	public override void ModifyHitNPC(Player player, NPC target, ref NPC.HitModifiers modifiers)
 	{
 		if (crit)
 		{

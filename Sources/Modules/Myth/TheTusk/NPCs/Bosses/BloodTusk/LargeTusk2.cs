@@ -1,4 +1,5 @@
-﻿using Terraria.Audio;
+﻿using Terraria;
+using Terraria.Audio;
 using Terraria.Localization;
 
 namespace Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk;
@@ -134,7 +135,7 @@ public class LargeTusk2 : ModNPC
 				NPC.damage = 0;
 		}
 	}
-	public override void OnHitPlayer(Player player, int damage, bool crit)
+	public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
 	{
 		player.AddBuff(BuffID.Bleeding, 120);
 	}

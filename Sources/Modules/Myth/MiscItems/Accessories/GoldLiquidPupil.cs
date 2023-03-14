@@ -1,4 +1,5 @@
 ﻿using Everglow.Myth.MiscItems.Projectiles.Accessory;
+using Terraria;
 using Terraria.Audio;
 
 namespace Everglow.Myth.MiscItems.Accessories;
@@ -27,7 +28,7 @@ class GoldLiquidPupilEquiper : ModPlayer
 	{
 		GoldLiquidPupilEnable = false;
 	}
-	public override void PostHurt(bool pvp, bool quiet, double damage, int hitDirection, bool crit, int cooldownCounter)
+	public override void PostHurt(Player.HurtInfo info)
 	{
 		if (GoldLiquidPupilEnable)
 		{
@@ -42,22 +43,22 @@ class GoldLiquidPupilEquiper : ModPlayer
 			}
 		}
 	}
-	public override void ModifyHitNPC(Item item, NPC target, ref int damage, ref float knockback, ref bool crit)
+	public override void ModifyHitNPCWithItem(Item item, NPC target, ref NPC.HitModifiers modifiers)/* tModPorter If you don't need the Item, consider using ModifyHitNPC instead */
 	{
 		if (GoldLiquidPupilEnable)
 			damage = (int)(damage + target.defense * 0.175f);
 	}
-	public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+	public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)/* tModPorter If you don't need the Projectile, consider using ModifyHitNPC instead */
 	{
 		if (GoldLiquidPupilEnable)
 			damage = (int)(damage + target.defense * 0.175f);
 	}
-	public override void ModifyHitPvp(Item item, Player target, ref int damage, ref bool crit)
+	public override void ModifyHitPvp(Item item, Player target, ref int damage, ref bool crit)/* tModPorter Note: Removed. Use ModifyHurt on the receiving player and check modifiers.PvP. Use modifiers.DamageSource.SourcePlayerIndex to get the attacking player */
 	{
 		if (GoldLiquidPupilEnable)
 			damage = (int)(damage + target.statDefense * 0.175f);
 	}
-	public override void ModifyHitPvpWithProj(Projectile proj, Player target, ref int damage, ref bool crit)
+	public override void ModifyHitPvpWithProj(Projectile proj, Player target, ref int damage, ref bool crit)/* tModPorter Note: Removed. Use ModifyHurt on the receiving player and check modifiers.PvP. Use modifiers.DamageSource.SourcePlayerIndex to get the attacking player */
 	{
 		if (GoldLiquidPupilEnable)
 			damage = (int)(damage + target.statDefense * 0.175f);

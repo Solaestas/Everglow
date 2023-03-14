@@ -1,3 +1,4 @@
+using Terraria;
 namespace Everglow.Myth.MiscItems.Projectiles.Typeless;
 
 public class Spark : ModProjectile
@@ -59,7 +60,7 @@ public class Spark : ModProjectile
 	{
 		return new Color?(new Color(255, 255, 255, 0));
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		target.AddBuff(BuffID.OnFire, 120);
 		Projectile.Kill();

@@ -1,4 +1,5 @@
 ﻿using Everglow.Myth.Common;
+using Terraria;
 
 namespace Everglow.Myth.MiscItems.Accessories;
 
@@ -47,7 +48,7 @@ public class SilverWing : ModItem
 class SliverWingEquiper : ModPlayer
 {
 	public bool SliverWingEnable = false;
-	public override void ModifyHitNPC(Item item, NPC target, ref int damage, ref float knockback, ref bool crit)
+	public override void ModifyHitNPCWithItem(Item item, NPC target, ref NPC.HitModifiers modifiers)/* tModPorter If you don't need the Item, consider using ModifyHitNPC instead */
 	{
 		Main.NewText(SliverWingEnable);
 		if (SliverWingEnable)
@@ -56,7 +57,7 @@ class SliverWingEquiper : ModPlayer
 			SliverWingEnable = false;
 		}
 	}
-	public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+	public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)/* tModPorter If you don't need the Projectile, consider using ModifyHitNPC instead */
 	{
 		if (SliverWingEnable)
 		{
@@ -64,7 +65,7 @@ class SliverWingEquiper : ModPlayer
 			SliverWingEnable = false;
 		}
 	}
-	public override void ModifyHitPvp(Item item, Player target, ref int damage, ref bool crit)
+	public override void ModifyHitPvp(Item item, Player target, ref int damage, ref bool crit)/* tModPorter Note: Removed. Use ModifyHurt on the receiving player and check modifiers.PvP. Use modifiers.DamageSource.SourcePlayerIndex to get the attacking player */
 	{
 		if (SliverWingEnable)
 		{
@@ -72,7 +73,7 @@ class SliverWingEquiper : ModPlayer
 			SliverWingEnable = false;
 		}
 	}
-	public override void ModifyHitPvpWithProj(Projectile proj, Player target, ref int damage, ref bool crit)
+	public override void ModifyHitPvpWithProj(Projectile proj, Player target, ref int damage, ref bool crit)/* tModPorter Note: Removed. Use ModifyHurt on the receiving player and check modifiers.PvP. Use modifiers.DamageSource.SourcePlayerIndex to get the attacking player */
 	{
 		if (SliverWingEnable)
 		{

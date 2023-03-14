@@ -1,6 +1,7 @@
-using Everglow.Commons.Utilities;
+﻿using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
+using Terraria;
 using Terraria.Audio;
 using Terraria.Enums;
 using Terraria.GameContent.Shaders;
@@ -130,7 +131,7 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 		disFromPlayer = reader.ReadSingle();
 		//Projectile.spriteDirection = reader.ReadInt32();
 	}
-	public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 		hitDirection = target.Center.X > Main.player[Projectile.owner].Center.X ? 1 : -1;
 	}

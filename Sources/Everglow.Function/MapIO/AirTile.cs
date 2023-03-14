@@ -1,6 +1,6 @@
-﻿namespace Everglow.ZY.Commons.Function.MapIO;
+namespace Everglow.Commons.MapIO;
 
-internal class AirTile : ModTile
+public class AirTile : ModTile
 {
 	public override void SetStaticDefaults()
 	{
@@ -11,7 +11,7 @@ internal class AirTile : ModTile
 	}
 }
 
-internal class AirTileItem : ModItem
+public class AirTileItem : ModItem
 {
 	public override void SetDefaults()
 	{

@@ -1,5 +1,6 @@
 ﻿using Everglow.Myth.LanternMoon.Buffs;
 using Everglow.Myth.LanternMoon.Projectiles.DashCore;
+using Terraria;
 using Terraria.Audio;
 using Terraria.Localization;
 
@@ -72,7 +73,7 @@ public class RedCore : ModNPC
 		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/LightEffect").Value, NPC.Center - Main.screenPosition, null, new Color(NPC.color.R, NPC.color.G, NPC.color.B, 0) * 0.4f, -x * 6f, new Vector2(128f, 128f), (float)Math.Sqrt(M * M + K * K) * 2.4f * Sca, SpriteEffects.None, 0f);
 		return true;
 	}
-	public override void HitEffect(int hitDirection, double damage)
+	public override void HitEffect(NPC.HitInfo hit)
 	{
 		SoundEngine.PlaySound(SoundID.DD2_WitherBeastCrystalImpact, NPC.Center);
 		if (NPC.life <= 0)

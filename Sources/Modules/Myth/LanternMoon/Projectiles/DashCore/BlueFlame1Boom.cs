@@ -1,4 +1,5 @@
 ﻿using Everglow.Myth.LanternMoon.Buffs;
+using Terraria;
 
 namespace Everglow.Myth.LanternMoon.Projectiles.DashCore;
 
@@ -18,7 +19,7 @@ class BlueFlame1Boom : ModProjectile
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 40;
 		Projectile.scale = 0;
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 	}
 	public override Color? GetAlpha(Color lightColor)
