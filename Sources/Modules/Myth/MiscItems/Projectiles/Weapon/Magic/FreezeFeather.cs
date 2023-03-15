@@ -1,7 +1,6 @@
 //using MythMod.Buffs;
 using Everglow.Myth.MiscItems.Buffs;
 using Everglow.Myth.TheFirefly.Dusts;
-using Terraria;
 using Terraria.Audio;
 
 namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Magic;
@@ -25,10 +24,15 @@ public class FreezeFeather : ModProjectile
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
 	}
+
 	private bool initialization = true;
+
 	private double X;
+
 	private float Omega;
+
 	private float b;
+
 	public override void AI()
 	{
 		Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
@@ -78,6 +82,7 @@ public class FreezeFeather : ModProjectile
 		if (Projectile.timeLeft < 60f)
 			ka = Projectile.timeLeft / 60f;
 	}
+
 	public override void Kill(int timeLeft)
 	{
 		SoundEngine.PlaySound(SoundID.DD2_WitherBeastCrystalImpact, Projectile.Center);
@@ -85,6 +90,7 @@ public class FreezeFeather : ModProjectile
 		{
 			Vector2 v = new Vector2(0, Main.rand.NextFloat(2.5f, 6f)).RotatedByRandom(MathHelper.TwoPi);
 			int num4 = Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, v, ModContent.ProjectileType<FreezeBallBrake>(), Projectile.damage / 5, 1, Projectile.owner, 0f, 10f);
+
 			//Projectile.NewProjectile(Projectile.Center.X, Projectile.Center.Y, (float)((float)l * Math.Cos((float)a)) * 0.06f, (float)((float)l * Math.Sin((float)a)) * 0.06f, ModContent.ProjectileType<Projectiles.Magic.FreezeBallBrake>(), Projectile.damage / 5, Projectile.knockBack, Projectile.owner, 0f, 20);
 			Main.projectile[num4].timeLeft = (int)(80 * Main.rand.NextFloat(0.2f, 0.7f));
 		}
@@ -102,9 +108,11 @@ public class FreezeFeather : ModProjectile
 			int r = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - new Vector2(4, 4), 0, 0, ModContent.DustType<PureBlue>(), 0, 0, 0, default, 15f * Main.rand.NextFloat(0.4f, 1.1f));
 			Main.dust[r].noGravity = true;
 			Main.dust[r].velocity = v3;
+
 			//Main.dust[r].dustIndex = (int)(Math.Cos(h * Math.PI / 10d + Projectile.ai[0]) * 100d);
 		}
 	}
+
 	public override Color? GetAlpha(Color lightColor)
 	{
 		if (Projectile.timeLeft > 60)
@@ -116,6 +124,7 @@ public class FreezeFeather : ModProjectile
 			return new Color?(new Color(Projectile.timeLeft / 60f, Projectile.timeLeft / 60f, Projectile.timeLeft / 60f, Projectile.timeLeft / 60f * 100f / 255f));
 		}
 	}
+
 	/*public override void PostDraw(Color lightColor)
         {
             Texture2D tex = ModContent.Request<Texture2D>("Everglow/Myth/UIImages/VisualTextures/FogTrace").Value;
@@ -139,6 +148,7 @@ public class FreezeFeather : ModProjectile
                 }
             }
         }*/
+
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		if (target.type is not NPCID.MoonLordHead and not NPCID.MoonLordHand and not NPCID.MoonLordCore)
@@ -178,14 +188,21 @@ public class FreezeFeather : ModProjectile
 			}
 		}
 	}
-	public override void OnHitPvp(Player target, int damage, bool crit)/* tModPorter Note: Removed. Use OnHitPlayer and check info.PvP */
+
+	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
-		target.AddBuff(ModContent.BuffType<Freeze>(), (int)Projectile.ai[1]);
-		target.AddBuff(ModContent.BuffType<Freeze2>(), (int)Projectile.ai[1] + 2);
+		// TODO 原函数为OnHitPvp，是否需要移除Pvp判断？
+		if (info.PvP)
+		{
+			target.AddBuff(ModContent.BuffType<Freeze>(), (int)Projectile.ai[1]);
+			target.AddBuff(ModContent.BuffType<Freeze2>(), (int)Projectile.ai[1] + 2);
+		}
 	}
-	private Effect ef;
+
 	private int TrueL = 1;
+
 	private float ka = 0;
+
 	public override void PostDraw(Color lightColor)
 	{
 		Main.spriteBatch.End();
@@ -237,6 +254,7 @@ public class FreezeFeather : ModProjectile
 		Main.graphics.GraphicsDevice.Textures[0] = t;//GlodenBloodScaleMirror
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		// SpriteEffects helps to flip texture horizontally and vertically
@@ -247,8 +265,8 @@ public class FreezeFeather : ModProjectile
 		// Getting texture of Projectile
 		var texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
 
-		// Calculating frameHeight and current Y pos dependence of frame
-		// If texture without animation frameHeight = texture.Height is always and startY is always 0
+		// Calculating frameHeight and current Y pos dependence of frame If texture without
+		// animation frameHeight = texture.Height is always and startY is always 0
 		int frameHeight = texture.Height / Main.projFrames[Projectile.type];
 		int startY = frameHeight * Projectile.frame;
 
@@ -256,19 +274,18 @@ public class FreezeFeather : ModProjectile
 		var sourceRectangle = new Rectangle(0, startY, texture.Width, frameHeight);
 		Vector2 origin = sourceRectangle.Size() / 2f;
 
-		// If image isn't centered or symetrical you can specify origin of the sprite
-		// (0,0) for the upper-left corner 
+		// If image isn't centered or symetrical you can specify origin of the sprite (0,0) for the
+		// upper-left corner
 		float offsetX = 20f;
 		origin.X = Projectile.spriteDirection == 1 ? sourceRectangle.Width - offsetX : offsetX;
 
-		// If sprite is vertical
-		// float offsetY = 20f;
-		// origin.Y = (float)(Projectile.spriteDirection == 1 ? sourceRectangle.Height - offsetY : offsetY);
-
+		// If sprite is vertical float offsetY = 20f; origin.Y = (float)(Projectile.spriteDirection
+		// == 1 ? sourceRectangle.Height - offsetY : offsetY);
 
 		// Appling lighting and draw current frame
 		Color drawColor = Projectile.GetAlpha(lightColor);
 		Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), sourceRectangle, drawColor, Projectile.rotation, origin, Projectile.scale, spriteEffects, 0);
+
 		// It's important to return false, otherwise we also draw the original texture.
 		return false;
 	}

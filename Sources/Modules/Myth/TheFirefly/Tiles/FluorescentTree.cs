@@ -1,5 +1,4 @@
-﻿using Everglow.Myth.Common;
-using Everglow.Myth.TheFirefly;
+using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
 using Everglow.Myth.TheFirefly.Gores;
 using Everglow.Myth.TheFirefly.Items;
@@ -28,10 +27,14 @@ public class FluorescentTree : ModTile
 
 		Ins.HookManager.AddHook(CodeLayer.PostDrawTiles, DrawRopes);
 	}
-	private RopeManager ropeManager = new RopeManager();
+
+	private RopeManager ropeManager = new();
+
 	private List<Rope>[] ropes = new List<Rope>[16];
+
 	private Vector2[] basePositions = new Vector2[16];
-	private Dictionary<(int x, int y), (int style, List<Rope> ropes)> hasRope = new Dictionary<(int x, int y), (int style, List<Rope>)>();
+
+	private Dictionary<(int x, int y), (int style, List<Rope> ropes)> hasRope = new();
 
 	/// <summary>
 	/// 记录当前每个有树枝的节点的绳子Style（即TileFrameX / 256）
@@ -64,7 +67,6 @@ public class FluorescentTree : ModTile
 	public void InsertOneTreeRope(int xTS, int yTS, int style)
 	{
 		Texture2D treeTexture = MythContent.QuickTexture("TheFirefly/Tiles/FluorescentTree");
-
 
 		var point = new Point(xTS, yTS);
 		Vector2 tileCenterWS = point.ToWorldCoordinates(0, 0);
@@ -103,9 +105,14 @@ public class FluorescentTree : ModTile
 		}
 		ropeManager.Draw();
 	}
-	public override bool Drop(int i, int j)/* tModPorter Note: Removed. Use CanDrop to decide if an item should drop. Use GetItemDrops to decide which item drops. Item drops based on placeStyle are handled automatically now, so this method might be able to be removed altogether. */
+
+	public override IEnumerable<Item> GetItemDrops(int i, int j)
 	{
-		Item.NewItem(null, new Rectangle(i * 16 - 16, j * 16, 48, 16), ItemDrop, 1, false, 0, false, true);
+		yield return Main.item[Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, j), new Rectangle(i * 16 - 16, j * 16, 48, 16), ItemDrop, 1, false, 0, false, true)];
+	}
+
+	public override bool CanDrop(int i, int j)
+	{
 		for (int x = 0; x < 6; x++)
 		{
 			Dust.NewDust(new Vector2(i * 16, j * 16), 16, 16, DustType, 0, 0, 0, default, Main.rand.NextFloat(0.5f, 1f));
@@ -145,6 +152,7 @@ public class FluorescentTree : ModTile
 				}
 				if (Main.rand.NextBool(10))
 					Gore.NewGoreDirect(null, m.position, m.velocity * 0.1f, ModContent.GoreType<Branch>());
+
 				//被砍时对mass操纵写这里
 			}
 		}
@@ -152,6 +160,7 @@ public class FluorescentTree : ModTile
 		hasRope.Remove((i, j));
 		return false;
 	}
+
 	private void Shake(int i, int j, int frameY)
 	{
 		if (Main.rand.NextBool(7))
@@ -187,12 +196,15 @@ public class FluorescentTree : ModTile
 				}
 				if (Main.rand.NextBool(100))
 					Gore.NewGoreDirect(null, m.position, m.velocity * 0.1f, ModContent.GoreType<Branch>());
+
 				//被砍时对mass操纵写这里
 			}
 		}
 	}
+
 	public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
 	{
+		// TODO 处理手动的Drop调用
 		int Dy = -1;//向上破坏的自变化Y坐标
 		if (!fail)
 		{
@@ -205,18 +217,18 @@ public class FluorescentTree : ModTile
 				if (tileLeft.TileType == Type)
 				{
 					Shake(i - 1, j, tileLeft.TileFrameY);
-					Drop(i - 1, j);
+					CanDrop(i - 1, j);
 				}
 				tileRight = Main.tile[i + 1, j];
 				if (tileRight.TileType == Type)
 				{
 					Shake(i + 1, j, tileRight.TileFrameY);
-					Drop(i + 1, j);
+					CanDrop(i + 1, j);
 				}
 				while (Main.tile[i, j + Dy].HasTile && Main.tile[i, j + Dy].TileType == Type && Dy > -100)
 				{
 					Shake(i, j + Dy, Main.tile[i, j + Dy].TileFrameY);
-					Drop(i, j + Dy);
+					CanDrop(i, j + Dy);
 
 					tileLeft = Main.tile[i - 1, j + Dy];
 					tileRight = Main.tile[i + 1, j + Dy];
@@ -225,18 +237,17 @@ public class FluorescentTree : ModTile
 						if (tileLeft.TileFrameY == 2)
 							break;
 						Shake(i - 1, j + Dy, tileLeft.TileFrameY);
-						Drop(i - 1, j + Dy);
+						CanDrop(i - 1, j + Dy);
 					}
 					if (tileRight.TileType == Type)
 					{
 						if (tileRight.TileFrameY == 2)
 							break;
 						Shake(i + 1, j + Dy, tileRight.TileFrameY);
-						Drop(i + 1, j + Dy);
+						CanDrop(i + 1, j + Dy);
 					}
 					Dy -= 1;
 				}
-
 
 				Dy = -1;//向上破坏的自变化Y坐标
 				tileLeft = Main.tile[i - 1, j];
@@ -260,6 +271,7 @@ public class FluorescentTree : ModTile
 					Dy -= 1;
 				}
 			}
+
 			//清除吊挂的藤条
 
 			if (!hasRope.ContainsKey((i, j)))
@@ -310,9 +322,9 @@ public class FluorescentTree : ModTile
 			}
 		}
 	}
+
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-
 		Texture2D treeTexture = MythContent.QuickTexture("TheFirefly/Tiles/FluorescentTree");
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 		if (Main.drawToScreen)
@@ -329,15 +341,18 @@ public class FluorescentTree : ModTile
 		{
 			default:
 				return false;
+
 			case 0:  //树桩
 				Width = 74;
 				Height = 24;
 				TexCoordY = 180;
 				break;
+
 			case 1:  //树干
 				Width = 26;
 				TexCoordY = 2;
 				break;
+
 			case 2:  //树冠
 				Width = 150;
 				Height = 132;
@@ -345,34 +360,40 @@ public class FluorescentTree : ModTile
 				float Wind = Main.windSpeedCurrent / 15f;
 				Rot = Wind + (float)Math.Sin(j + Main.timeForVisualEffects / 30f) * Wind * 0.3f;
 				OffsetY = 24;
+
 				//对挂条的生成
 				if (!hasRope.ContainsKey((i, j)))
 					InsertOneTreeRope(i, j, 2);
 				Lighting.AddLight(i, j, 0.4f, 0.4f, 0.4f);
 				break;
+
 			case 3:  //粗树干
 				Width = 50;
 				Height = 24;
 				TexCoordY = 20;
 				OffsetY = 28;
 				break;
+
 			case 4:  //左树枝
 				Width = 34;
 				Height = 32;
 				OffsetY = 32;
 				OffsetX = -8;
 				TexCoordY = 240;
+
 				//对挂条的生成
 				if (!hasRope.ContainsKey((i, j)))
 					InsertOneTreeRope(i, j, 0);
 
 				break;
+
 			case 5:  //右树枝
 				Width = 34;
 				Height = 32;
 				OffsetY = 32;
 				OffsetX = 8;
 				TexCoordY = 206;
+
 				//对挂条的生成
 				if (!hasRope.ContainsKey((i, j)))
 					InsertOneTreeRope(i, j, 0);
@@ -382,9 +403,7 @@ public class FluorescentTree : ModTile
 		spriteBatch.Draw(treeTexture, new Vector2(i * 16 + OffsetX + 8, j * 16 + OffsetY) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX * Width, TexCoordY, Width, Height), color, Rot, origin, 1, SpriteEffects.None, 0);
 		spriteBatch.Draw(treeTexture, new Vector2(i * 16 + OffsetX + 8, j * 16 + OffsetY) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX * Width, TexCoordY + 274, Width, Height), new Color(1f, 1f, 1f, 0), Rot, origin, 1, SpriteEffects.None, 0);
 
-
-
-		if (tile.TileFrameY == 2 || tile.TileFrameY >= 4)
+		if (tile.TileFrameY is 2 or >= 4)
 		{
 			var point = new Point(i, j);
 			Vector2 tileCenterWS = point.ToWorldCoordinates(8f, 8f);

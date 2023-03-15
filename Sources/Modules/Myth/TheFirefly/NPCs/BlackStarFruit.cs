@@ -1,5 +1,4 @@
 using Everglow.Myth.TheFirefly.Dusts;
-using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -61,7 +60,9 @@ public class BlackStarFruit : ModNPC
 			}
 		}
 		if (E < 1)
+		{
 			E += 0.01f;
+		}
 		else
 		{
 			NPC.dontTakeDamage = false;
@@ -106,7 +107,14 @@ public class BlackStarFruit : ModNPC
 					Dam = 24;
 				if (Main.masterMode)
 					Dam = 30;
-				Main.npc[j].StrikeNPC((int)(Dam * Main.rand.NextFloat(0.85f, 1.15f)), 2, Math.Sign(NPC.velocity.X), Main.rand.Next(100) < 10);
+				Main.npc[j].StrikeNPC(new NPC.HitInfo()
+				{
+					Damage = (int)(Dam * Main.rand.NextFloat(0.85f, 1.15f)),
+					HitDirection = Math.Sign(NPC.velocity.X),
+					Crit = Main.rand.NextBool(10),
+					KnockBack = 2,
+				});
+
 			}
 		}
 	}

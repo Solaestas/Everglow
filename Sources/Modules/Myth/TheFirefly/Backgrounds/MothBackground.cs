@@ -1,5 +1,4 @@
 using Everglow.Myth.Common;
-using Everglow.Myth.TheFirefly;
 using Everglow.Myth.TheFirefly.NPCs.Bosses;
 using Everglow.Myth.TheFirefly.WorldGeneration;
 
@@ -11,11 +10,17 @@ public class MothBackground : ModSystem
 	public readonly Vector3 ambient = new Vector3(0.001f, 0.001f, 0.05f);
 
 	public List<GHang> GPos = new List<GHang>();
+
 	public List<GHang> GPosSec = new List<GHang>();
+
 	private float alpha = 0f;
+
 	private float luminance = 1f;//发光物亮度，boss战时变暗
+
 	private Vector2 RopOffset = Vector2.Zero;//树条的位置偏移量
+
 	private List<Rope> ropes = new List<Rope>();
+
 	private RopeManager ropeManager;
 
 	/// <summary>
@@ -36,8 +41,11 @@ public class MothBackground : ModSystem
 	public struct GHang
 	{
 		public Vector2 Pos;
+
 		public float Length;
+
 		public float Size;
+
 		public int Type;
 
 		public GHang(Vector2 pos, float length, float size, int type)
@@ -52,11 +60,11 @@ public class MothBackground : ModSystem
 	/// <summary>
 	/// 环境光的钩子
 	/// </summary>
-	/// <param name="orig"></param>
-	/// <param name="self"></param>
-	/// <param name="x"></param>
-	/// <param name="y"></param>
-	/// <param name="outputColor"></param>
+	/// <param name="orig"> </param>
+	/// <param name="self"> </param>
+	/// <param name="x"> </param>
+	/// <param name="y"> </param>
+	/// <param name="outputColor"> </param>
 	private void TileLightScanner_GetTileLight(Terraria.Graphics.Light.On_TileLightScanner.orig_GetTileLight orig, Terraria.Graphics.Light.TileLightScanner self, int x, int y, out Vector3 outputColor)
 	{
 		orig(self, x, y, out outputColor);
@@ -74,7 +82,7 @@ public class MothBackground : ModSystem
 			else
 			{
 				alpha = 1;
-				Ins.HookManager.DisableDrawBackground = true;
+				Ins.HookManager.Disable(TerrariaFunction.DrawBackground);
 			}
 		}
 		else
@@ -85,7 +93,7 @@ public class MothBackground : ModSystem
 			{
 				alpha = 0;
 			}
-			Ins.HookManager.DisableDrawBackground = false;
+			Ins.HookManager.Enable(TerrariaFunction.DrawBackground);
 		}
 		if (CorruptMoth.CorruptMothNPC != null && CorruptMoth.CorruptMothNPC.active)//发光物体在boss战时变暗
 			luminance = MathHelper.Lerp(luminance, 0.1f, 0.02f);
@@ -100,15 +108,17 @@ public class MothBackground : ModSystem
 	/// <summary>
 	/// 判定是否开启地形
 	/// </summary>
-	/// <returns></returns>
+	/// <returns> </returns>
 	public static bool BiomeActive()
 	{
-		return SubWorldModule.SubworldSystem.IsActive<MothWorld>();
+		return false;
+		// return SubWorldModule.SubworldSystem.IsActive<MothWorld>();
 	}
+
 	/// <summary>
 	/// 判定是否开启地形
 	/// </summary>
-	/// <returns></returns>
+	/// <returns> </returns>
 	public static bool GlowingFlowerLandActive()
 	{
 		MothLand mothLand = ModContent.GetInstance<MothLand>();
@@ -116,14 +126,15 @@ public class MothBackground : ModSystem
 		Vector2 v0 = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f - BiomeCenter;//距离中心Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f
 		v0.Y *= 1.35f;
 		v0.X *= 0.9f;//近似于椭圆形，所以xy坐标变换
-		return v0.Length() < 2000 && SubWorldModule.SubworldSystem.IsActive<MothWorld>();
+		// TODO World
+		return v0.Length() < 2000 /*&& SubWorldModule.SubworldSystem.IsActive<MothWorld>()*/;
 	}
 
 	/// <summary>
 	/// 获取荧光悬挂物点位
 	/// </summary>
-	/// <param name="Shapepath"></param>
-	/// <exception cref="Exception"></exception>
+	/// <param name="Shapepath"> </param>
+	/// <exception cref="Exception"> </exception>
 	public void GetGlowPos(string Shapepath)
 	{
 		var imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Myth/TheFirefly/Backgrounds/" + Shapepath);
@@ -145,8 +156,8 @@ public class MothBackground : ModSystem
 	/// <summary>
 	/// 获取第二层荧光悬挂物点位
 	/// </summary>
-	/// <param name="Shapepath"></param>
-	/// <exception cref="Exception"></exception>
+	/// <param name="Shapepath"> </param>
+	/// <exception cref="Exception"> </exception>
 	public void GetGlowPosSec(string Shapepath)
 	{
 		var imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Myth/TheFirefly/Backgrounds/" + Shapepath);
@@ -164,6 +175,7 @@ public class MothBackground : ModSystem
 			}
 		});
 	}
+
 	/// <summary>
 	/// 绘制荧光
 	/// </summary>
@@ -205,8 +217,8 @@ public class MothBackground : ModSystem
 	/// <summary>
 	/// 根据屏幕分辨率重置顶层和树上的荧光悬挂物点位
 	/// </summary>
-	/// <param name="OrigPoint"></param>
-	/// <returns></returns>
+	/// <param name="OrigPoint"> </param>
+	/// <returns> </returns>
 	private static Vector2 PointCorrection(Vector2 OrigPoint)
 	{
 		Vector2 ScreenCen = new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
@@ -259,9 +271,9 @@ public class MothBackground : ModSystem
 	/// <summary>
 	/// 获取绘制矩形
 	/// </summary>
-	/// <param name="texSize"></param>
-	/// <param name="MoveStep"></param>
-	/// <returns></returns>
+	/// <param name="texSize"> </param>
+	/// <param name="MoveStep"> </param>
+	/// <returns> </returns>
 	public Rectangle GetDrawRect(Vector2 texSize, float MoveStep, bool Correction)
 	{
 		MothLand mothLand = ModContent.GetInstance<MothLand>();
@@ -287,9 +299,9 @@ public class MothBackground : ModSystem
 	/// <summary>
 	/// 获取XY向缩放比例
 	/// </summary>
-	/// <param name="texSize"></param>
-	/// <param name="MoveStep"></param>
-	/// <returns></returns>
+	/// <param name="texSize"> </param>
+	/// <param name="MoveStep"> </param>
+	/// <returns> </returns>
 	public static Vector2 GetZoomByScreenSize()
 	{
 		return Vector2.One;
@@ -298,7 +310,7 @@ public class MothBackground : ModSystem
 	/// <summary>
 	/// 获取因为不同分辨率导致点位偏移坐标
 	/// </summary>
-	/// <returns></returns>
+	/// <returns> </returns>
 	public static Vector2 GetZoomDelta()
 	{
 		var screenSize = new Vector2(Main.screenWidth, Main.screenHeight);
@@ -310,7 +322,7 @@ public class MothBackground : ModSystem
 	/// <summary>
 	/// 绳子的图片坐标转到近景纹理下的坐标
 	/// </summary>
-	/// <returns></returns>
+	/// <returns> </returns>
 	private Vector2 ImageSpaceToCloseTextureSpace(Vector2 posIS, Vector2 texSize)
 	{
 		Vector2 mappedIS = posIS + new Vector2(0, 465);
@@ -373,6 +385,7 @@ public class MothBackground : ModSystem
 				Vector2 posSS = -targetSourceRect.TopLeft() + texClose.Size() * pos;
 
 				float width = ropes[i].mass.Length - j;
+
 				//通过顶点绘制枝条
 				branch.Add(new Vertex2D(posSS + vector.RotatedBy(Math.PI / 2d) * width, Color.White, Vector3.Zero));
 				branch.Add(new Vertex2D(posSS - vector.RotatedBy(Math.PI / 2d) * width, Color.White, Vector3.Zero));
@@ -439,7 +452,6 @@ public class MothBackground : ModSystem
 			Main.spriteBatch.Draw(texCloseII, new Rectangle(0, (int)DrawY, Main.screenWidth, Main.screenHeight - (int)DrawY), new Rectangle(1000, 1100, 1, 1), colorCloseII);
 		}
 
-
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 	}
@@ -467,6 +479,7 @@ public class MothBackground : ModSystem
 		DrawFarBG(baseColor);
 		DrawCloseBG(baseColor);
 	}
+
 	private Color GetLuminace(Color color)
 	{
 		if (luminance != 1)

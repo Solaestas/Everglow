@@ -11,7 +11,7 @@ while read -r line; do
     fi
 done <Everglow/Module.Build.props
 echo "Avaliable Module:"
-ls Modules
+ms=$(ls Modules/ -I props)
 echo "Operations: 
 add [name]
 remove [name] 

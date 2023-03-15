@@ -79,7 +79,7 @@ public class ChlorophyteClub_fly : ModProjectile, IWarpProjectile
 	}
 	public string TrailShapeTex()
 	{
-		return "Everglow/Sources/Modules/MEACModule/Images/Melee";
+		return "Everglow/MEAC/Images/Melee";
 	}
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
@@ -346,7 +346,7 @@ public class ChlorophyteClub_fly : ModProjectile, IWarpProjectile
 			bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition - trail[i] * Projectile.scale * 1.1f, new Color(dir, Omega, 0, 1), new Vector3(factor, 0, 1)));
 		}
 
-		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/Images/Warp").Value, bars, PrimitiveType.TriangleStrip);
+		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/MEAC/Images/Warp").Value, bars, PrimitiveType.TriangleStrip);
 	}
 	public float TrailAlpha(float factor)
 	{

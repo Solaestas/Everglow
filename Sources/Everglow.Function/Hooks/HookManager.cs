@@ -16,7 +16,9 @@ public class ILHookHandler : IHookHandler
 		set
 		{
 			if (value)
+			{
 				Hook.Apply();
+			}
 			else
 			{
 				Hook.Undo();
@@ -37,7 +39,9 @@ public class OnHookHandler : IHookHandler
 		set
 		{
 			if (value)
+			{
 				Hook.Apply();
+			}
 			else
 			{
 				Hook.Undo();
@@ -89,12 +93,6 @@ public class HookManager : ModSystem, IHookManager
 	{
 		Ins.Set<IHookManager>(this);
 	}
-
-	public bool DisableDrawBackground { get; set; } = false;
-
-	public bool DisableDrawNPCs { get; set; } = false;
-
-	public bool DisableDrawSkyAndHell { get; set; } = false;
 
 	public static void ClearReflectionCache()
 	{
@@ -283,14 +281,14 @@ public class HookManager : ModSystem, IHookManager
 
 	private void Main_DrawBackground(On_Main.orig_DrawBackground orig, Main self)
 	{
-		if (DisableDrawBackground)
+		if (disableFlags.Has(TerrariaFunction.DrawBackground))
 			return;
 		orig(self);
 	}
 
 	private void Main_DrawBG(On_Main.orig_DrawBG orig, Main self)
 	{
-		if (DisableDrawSkyAndHell)
+		if (disableFlags.Has(TerrariaFunction.DrawSkyAndHell))
 			return;
 		orig(self);
 	}
@@ -365,5 +363,16 @@ public class HookManager : ModSystem, IHookManager
 	{
 		orig();
 		Invoke(CodeLayer.PostEnterWorld_Server);
+	}
+
+	private TerrariaFunction disableFlags;
+	public void Disable(TerrariaFunction function)
+	{
+		disableFlags |= function;
+	}
+
+	public void Enable(TerrariaFunction function)
+	{
+		disableFlags &= ~function;
 	}
 }

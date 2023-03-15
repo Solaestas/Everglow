@@ -387,7 +387,6 @@ public class HepuyuanDown : ModProjectile, IWarpProjectile
 	{
 		CyanStrike = 1;
 		Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), target.Center, Vector2.Zero, ModContent.ProjectileType<XiaoHit>(), 0, 0, Projectile.owner, 0.45f);
-		base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
 	}
 	public override void Load()
 	{

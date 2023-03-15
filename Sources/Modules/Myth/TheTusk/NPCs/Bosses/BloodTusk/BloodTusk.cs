@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Bosses.Acytaea.Projectiles;
+using Everglow.Myth.Bosses.Acytaea.Projectiles;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -1709,7 +1709,12 @@ public class BloodTusk : ModNPC
 				Transparent = false;
 				fir = 9999999;
 				Dam = 0;
-				NPC.StrikeNPC(1, 0, 1);
+				NPC.StrikeNPC(new NPC.HitInfo()
+				{
+					Damage = 1,
+					KnockBack = 0,
+					HitDirection = 1,
+				});
 				NPC.active = false;
 			}
 			return false;
@@ -1764,7 +1769,7 @@ public class BloodTusk : ModNPC
 	}
 	public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
 	{
-		player.AddBuff(BuffID.Bleeding, 120);
+		target.AddBuff(BuffID.Bleeding, 120);
 	}
 	private bool startFight = false;
 	private bool ReallyStart = false;

@@ -1,4 +1,4 @@
-﻿using Everglow.Commons.Utilities;
+using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using Terraria;
@@ -133,7 +133,7 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 	}
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
-		hitDirection = target.Center.X > Main.player[Projectile.owner].Center.X ? 1 : -1;
+		modifiers.HitDirectionOverride = target.Center.X > Main.player[Projectile.owner].Center.X ? 1 : -1;
 	}
 	public float GetMeleeSpeed(Player player, float max = 100)
 	{

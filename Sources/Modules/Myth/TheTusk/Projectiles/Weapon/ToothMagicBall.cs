@@ -1,14 +1,9 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Terraria.Localization;
 namespace Everglow.Myth.TheTusk.Projectiles.Weapon;
 
 public class ToothMagicBall : ModProjectile
 {
-	//TODO
-	public override void SetStaticDefaults()
-	{
-		// DisplayName.SetDefault("Tooth Magic Ball");
-			}
 	public override void SetDefaults()
 	{
 		Projectile.width = 18;

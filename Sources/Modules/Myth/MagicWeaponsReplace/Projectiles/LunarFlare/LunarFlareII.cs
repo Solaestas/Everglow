@@ -142,7 +142,7 @@ public class LunarFlareII : ModProjectile, IWarpProjectile//将接口改为使用IWarpP
 		/*不再用开启shader
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-            Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+            Effect KEx = ModContent.Request<Effect>("Everglow/MEAC/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
             KEx.CurrentTechnique.Passes[0].Apply();
             */
 		float width = 16;
