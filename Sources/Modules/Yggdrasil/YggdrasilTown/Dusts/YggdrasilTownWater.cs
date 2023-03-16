@@ -1,14 +1,13 @@
-﻿namespace Everglow.Yggdrasil.YggdrasilTown.Dusts
-{
-	public class YggdrasilTownWater : ModDust
-	{
-		public override void OnSpawn(Dust dust)
-		{
-		}
+﻿namespace Everglow.Yggdrasil.YggdrasilTown.Dusts;
 
-		public override bool Update(Dust dust)
-		{
-			return true;
-		}
+public class YggdrasilTownWater : ModDust
+{
+	public override void OnSpawn(Dust dust)
+	{
+	}
+
+	public override bool Update(Dust dust)
+	{
+		return true;
 	}
 }

@@ -1,10 +1,9 @@
-﻿namespace Everglow.Food.Utils
+﻿namespace Everglow.Food.Utils;
+
+internal static class FoodUtils
 {
-	internal static class FoodUtils
+	public static int GetFrames(int hours, int minutes, int seconds, int frames)
 	{
-		public static int GetFrames(int hours, int minutes, int seconds, int frames)
-		{
-			return ((hours * 60 + minutes) * 60 + seconds) * 60 + frames;
-		}
+		return ((hours * 60 + minutes) * 60 + seconds) * 60 + frames;
 	}
 }

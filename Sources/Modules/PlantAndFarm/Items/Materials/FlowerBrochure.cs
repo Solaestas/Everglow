@@ -1,22 +1,21 @@
-﻿namespace Everglow.PlantAndFarm.Items.Materials
+﻿namespace Everglow.PlantAndFarm.Items.Materials;
+
+public class FlowerBrochure : ModItem
 {
-	public class FlowerBrochure : ModItem
+	public override void SetStaticDefaults()
 	{
-		public override void SetStaticDefaults()
-		{
-			//DisplayName.SetDefault("Wild-flower-collecting Handbook");
-			//DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "野花收集指南");
-			//Tooltip.SetDefault("Allows you to collect wild flowers while in inventory");
-			//Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "携带后可以收集野花");
-		}
-		public override void SetDefaults()
-		{
-			Item.width = 24;
-			Item.height = 30;
-			Item.maxStack = 1;
-			Item.value = 10000;
-			Item.rare = ItemRarityID.Blue;
-			Item.material = true;
-		}
+		//DisplayName.SetDefault("Wild-flower-collecting Handbook");
+		//DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "野花收集指南");
+		//Tooltip.SetDefault("Allows you to collect wild flowers while in inventory");
+		//Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "携带后可以收集野花");
+	}
+	public override void SetDefaults()
+	{
+		Item.width = 24;
+		Item.height = 30;
+		Item.maxStack = 1;
+		Item.value = 10000;
+		Item.rare = ItemRarityID.Blue;
+		Item.material = true;
 	}
 }

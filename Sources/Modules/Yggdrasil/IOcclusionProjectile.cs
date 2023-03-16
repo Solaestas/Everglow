@@ -1,10 +1,7 @@
-﻿using Everglow.Sources.Commons.Core.VFX;
+﻿namespace Everglow.Yggdrasil;
 
-namespace Everglow.Yggdrasil
+public interface IOcclusionProjectile
 {
-	public interface IOcclusionProjectile
-	{
-		void DrawOcclusion(VFXBatch spriteBatch);
-		void DrawEffect(VFXBatch spriteBatch);
-	}
+	void DrawOcclusion(VFXBatch spriteBatch);
+	void DrawEffect(VFXBatch spriteBatch);
 }

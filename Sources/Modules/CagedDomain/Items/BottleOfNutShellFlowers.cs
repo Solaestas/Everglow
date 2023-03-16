@@ -1,30 +1,29 @@
-﻿namespace Everglow.CagedDomain.Items
+﻿namespace Everglow.CagedDomain.Items;
+
+public class BottleOfNutShellFlowers : ModItem
 {
-	public class BottleOfNutShellFlowers : ModItem
+	public override void SetDefaults()
 	{
-		public override void SetDefaults()
-		{
-			Item.width = 22;
-			Item.height = 34;
-			Item.maxStack = 999;
-			Item.value = 10000;
-			Item.rare = ItemUseStyleID.Swing;
-			Item.autoReuse = true;
-			Item.useStyle = ItemUseStyleID.Swing;
-			Item.consumable = true;
-			Item.createTile = ModContent.TileType<Tiles.BottleOfNutShellFlowers>();
-			Item.placeStyle = 0;
-			Item.useTime = 10;
-			Item.useAnimation = 10;
-		}
-		public override bool? UseItem(Player player)
-		{
-			return base.UseItem(player);
-		}
-		public override void HoldItem(Player player)
-		{
-			Item.placeStyle = Math.Max(player.direction, 0);
-			base.HoldItem(player);
-		}
+		Item.width = 22;
+		Item.height = 34;
+		Item.maxStack = 999;
+		Item.value = 10000;
+		Item.rare = ItemUseStyleID.Swing;
+		Item.autoReuse = true;
+		Item.useStyle = ItemUseStyleID.Swing;
+		Item.consumable = true;
+		Item.createTile = ModContent.TileType<Tiles.BottleOfNutShellFlowers>();
+		Item.placeStyle = 0;
+		Item.useTime = 10;
+		Item.useAnimation = 10;
+	}
+	public override bool? UseItem(Player player)
+	{
+		return base.UseItem(player);
+	}
+	public override void HoldItem(Player player)
+	{
+		Item.placeStyle = Math.Max(player.direction, 0);
+		base.HoldItem(player);
 	}
 }

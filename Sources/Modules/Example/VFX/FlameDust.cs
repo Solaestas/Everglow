@@ -1,9 +1,4 @@
-﻿using Everglow.Sources.Commons.Core;
-using Everglow.Sources.Commons.Core.VFX;
-using Everglow.Sources.Commons.Core.VFX.Pipelines;
-using Everglow.Sources.Commons.Core.VFX.Visuals;
-using Everglow.Sources.Commons.Function.Vertex;
-using ReLogic.Content;
+﻿using ReLogic.Content;
 
 namespace Everglow.Example.VFX;
 

@@ -1,9 +1,8 @@
-namespace Everglow.Yggdrasil.KelpCurtain.Water
+namespace Everglow.Yggdrasil.KelpCurtain.Water;
+
+public class KelpCurtainWaterfallStyle : ModWaterfallStyle
 {
-	public class KelpCurtainWaterfallStyle : ModWaterfallStyle
+	public override void AddLight(int i, int j)
 	{
-		public override void AddLight(int i, int j)
-		{
-		}
 	}
 }
