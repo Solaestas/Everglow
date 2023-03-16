@@ -1,8 +1,8 @@
-﻿using Everglow.Sources.Modules.PlantModule.Items.Weapons.Melee;
+﻿using Everglow.Plant.Items.Weapons.Melee;
 
-namespace Everglow.Sources.Modules.PlantModule.Common
+namespace Everglow.Plant.Common
 {
-    public class PlantGlobalTile : GlobalTile
+	public class PlantGlobalTile : GlobalTile
 	{
 		public override void KillTile(int i, int j, int type, ref bool fail, ref bool effectOnly, ref bool noItem)
 		{

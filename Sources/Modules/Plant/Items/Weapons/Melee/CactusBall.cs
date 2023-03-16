@@ -1,9 +1,9 @@
-﻿using Everglow.Sources.Modules.PlantModule.Common;
-using Everglow.Sources.Modules.PlantModule.Projectiles.Melee;
+﻿using Everglow.Plant.Projectiles.Melee;
+using Everglow.Sources.Modules.PlantModule.Common;
 
-namespace Everglow.Sources.Modules.PlantModule.Items.Weapons.Melee
+namespace Everglow.Plant.Items.Weapons.Melee
 {
-    public class CactusBall : ModItem
+	public class CactusBall : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
@@ -29,7 +29,7 @@ namespace Everglow.Sources.Modules.PlantModule.Items.Weapons.Melee
 		}
 		public override void AddRecipes()
 		{
-            CreateRecipe(1)
+			CreateRecipe(1)
 				.AddIngredient(ItemID.RollingCactus, 1)
 				.AddIngredient(ItemID.PinkPricklyPear, 1)
 				.AddIngredient(ItemID.Leather, 5)

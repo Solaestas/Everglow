@@ -143,7 +143,7 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 	{
 		Player.heldProj = Projectile.whoAmI;
 		Player.GetModPlayer<MEACPlayer>().isUsingMeleeProj = true;
-		Projectile.Center = Player.Center + Utils.SafeNormalize(mainVec, Vector2.One) * disFromPlayer;
+		Projectile.Center = Player.Center + Utilities.SafeNormalize(mainVec, Vector2.One) * disFromPlayer;
 		isAttacking = false;
 
 		Projectile.timeLeft++;
@@ -213,7 +213,7 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 		var cut = new Terraria.Utils.TileActionAttempt(DelegateMethods.CutTiles);
 		Vector2 beamStartPos = Projectile.Center;
 		Vector2 beamEndPos = beamStartPos + mainVec;
-		Utils.PlotTileLine(beamStartPos, beamEndPos, Projectile.width * Projectile.scale, cut);
+		Utilities.PlotTileLine(beamStartPos, beamEndPos, Projectile.width * Projectile.scale, cut);
 	}
 	public void ScreenShake(int time)
 	{

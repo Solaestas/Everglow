@@ -3,74 +3,76 @@ using Everglow.Sources.Commons.Function.FeatureFlags;
 using ReLogic.Content;
 using Terraria.GameContent.UI.ResourceSets;
 
-namespace Everglow.Sources.Modules.AssetReplaceModule.UIReplace
+namespace Everglow.AssetReplace.UIReplace
 {
-    public class UIReplaceModule : IModule
-    {
-        public string Name => "UI Assets Replacement";
+	public class UIReplaceModule : IModule
+	{
+		public string Name => "UI Assets Replacement";
 
-        public static Dictionary<string, IPlayerResourcesDisplaySet> PlayerResourceSets =>
-            (Dictionary<string, IPlayerResourcesDisplaySet>)typeof(PlayerResourceSetsManager).GetField("_sets", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(Main.ResourceSetsManager);
+		public static Dictionary<string, IPlayerResourcesDisplaySet> PlayerResourceSets =>
+			(Dictionary<string, IPlayerResourcesDisplaySet>)typeof(PlayerResourceSetsManager).GetField("_sets", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(Main.ResourceSetsManager);
 
-        internal static TerrariaAssets TerrariaAssets = new();
-        internal static EternalAssets EternalAssets = new();
-        internal static MythAssets MythAssets = new();
-        internal static DefaultAssets DefaultAssets = new();
+		internal static TerrariaAssets TerrariaAssets = new();
+		internal static EternalAssets EternalAssets = new();
+		internal static MythAssets MythAssets = new();
+		internal static DefaultAssets DefaultAssets = new();
 
-        public static bool IsLoaded = false;
+		public static bool IsLoaded = false;
 
-        public static Asset<Texture2D> GetTexture(string path) =>
-            ModContent.Request<Texture2D>("Everglow/Resources/" + path, AssetRequestMode.ImmediateLoad);
-        public static Asset<T> LoadVanillaAsset<T>(string assetName) where T : class => Main.Assets.Request<T>(assetName, AssetRequestMode.ImmediateLoad);
-        
-        public void Load() {
-            if (Main.netMode == NetmodeID.Server) {
-                return;
-            }
+		public static Asset<Texture2D> GetTexture(string path) =>
+			ModContent.Request<Texture2D>("Everglow/Resources/" + path, AssetRequestMode.ImmediateLoad);
+		public static Asset<T> LoadVanillaAsset<T>(string assetName) where T : class => Main.Assets.Request<T>(assetName, AssetRequestMode.ImmediateLoad);
 
-            TerrariaAssets.LoadTextures();
-            EternalAssets.LoadTextures();
-            MythAssets.LoadTextures();
-            DefaultAssets.LoadTextures();
-            ReplaceTextures(ModContent.GetInstance<EverglowClientConfig>().TextureReplace);
-            IsLoaded = true;
-        }
+		public void Load()
+		{
+			if (Main.netMode == NetmodeID.Server)
+				return;
 
-        public static void ReplaceTextures(TextureReplaceMode mode) {
-            switch (mode) {
-                case TextureReplaceMode.Terraria:
-                    TerrariaAssets.Apply();
-                    break;
-                case TextureReplaceMode.EternalResolve:
-                    EternalAssets.Apply();
-                    break;
-                case TextureReplaceMode.Myth:
-                    MythAssets.Apply();
-                    break;
-                case TextureReplaceMode.Default:
-                    DefaultAssets.Apply();
-                    break;
-                // 有人直接改config配置文件？
-                default:
-                    TerrariaAssets.Apply();
-                    break;
-            }
-        }
+			TerrariaAssets.LoadTextures();
+			EternalAssets.LoadTextures();
+			MythAssets.LoadTextures();
+			DefaultAssets.LoadTextures();
+			ReplaceTextures(ModContent.GetInstance<EverglowClientConfig>().TextureReplace);
+			IsLoaded = true;
+		}
 
-        public void Unload() {
-            if (Main.netMode == NetmodeID.Server) {
-                return;
-            }
+		public static void ReplaceTextures(TextureReplaceMode mode)
+		{
+			switch (mode)
+			{
+				case TextureReplaceMode.Terraria:
+					TerrariaAssets.Apply();
+					break;
+				case TextureReplaceMode.EternalResolve:
+					EternalAssets.Apply();
+					break;
+				case TextureReplaceMode.Myth:
+					MythAssets.Apply();
+					break;
+				case TextureReplaceMode.Default:
+					DefaultAssets.Apply();
+					break;
+				// 有人直接改config配置文件？
+				default:
+					TerrariaAssets.Apply();
+					break;
+			}
+		}
 
-            ReplaceTextures(TextureReplaceMode.Terraria);
-            TerrariaAssets.Apply();
+		public void Unload()
+		{
+			if (Main.netMode == NetmodeID.Server)
+				return;
 
-            TerrariaAssets = null;
-            EternalAssets = null;
-            MythAssets = null;
-            DefaultAssets = null;
+			ReplaceTextures(TextureReplaceMode.Terraria);
+			TerrariaAssets.Apply();
 
-            IsLoaded = false;
-        }
-    }
+			TerrariaAssets = null;
+			EternalAssets = null;
+			MythAssets = null;
+			DefaultAssets = null;
+
+			IsLoaded = false;
+		}
+	}
 }

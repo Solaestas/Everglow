@@ -3,26 +3,28 @@ using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Everglow.Sources.Modules.FoodModule.Buffs.ModFoodBuffs;
+using Everglow.Food.Buffs.ModFoodBuffs;
+using Everglow.Food;
 
-namespace Everglow.Sources.Modules.FoodModule.Items.ModFood
+namespace Everglow.Food.Items.ModFood
 {
 	public class Durian : FoodBase
 	{
-        public override FoodInfo FoodInfo
-        {
-            get
-            {
+		public override FoodInfo FoodInfo
+		{
+			get
+			{
 				return new FoodInfo()
 				{
 					Satiety = 20,
 					BuffType = ModContent.BuffType<DurianBuff>(),
 					BuffTime = new FoodDuration(6, 0, 0),
 					Name = "DurianBuff"
-                };
-            }
-        }
-        public override void SetStaticDefaults() {
+				};
+			}
+		}
+		public override void SetStaticDefaults()
+		{
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 5;
 
 			Main.RegisterItemAnimation(Type, new DrawAnimationVertical(int.MaxValue, 3));
@@ -33,12 +35,13 @@ namespace Everglow.Sources.Modules.FoodModule.Items.ModFood
 				new Color(99, 82, 0)
 			};
 
-			ItemID.Sets.IsFood[Type] = true; 
+			ItemID.Sets.IsFood[Type] = true;
 		}
 
-		public override void SetDefaults() {
+		public override void SetDefaults()
+		{
 
-			Item.DefaultToFood(22, 22, BuffID.WellFed3, 57600); 
+			Item.DefaultToFood(22, 22, BuffID.WellFed3, 57600);
 			Item.value = Item.buyPrice(0, 3);
 			Item.rare = ItemRarityID.Blue;
 		}

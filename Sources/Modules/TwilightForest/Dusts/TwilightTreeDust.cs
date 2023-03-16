@@ -1,6 +1,6 @@
-﻿namespace Everglow.Sources.Modules.TwilightForestModule.Dusts
+﻿namespace Everglow.TwilightForest.Dusts
 {
-    public class TwilightTreeDust : ModDust
-    {
-    }
+	public class TwilightTreeDust : ModDust
+	{
+	}
 }

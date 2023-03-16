@@ -1,8 +1,8 @@
 using Terraria.DataStructures;
 
-namespace Everglow.Sources.Modules.TwilightForestModule.Tiles
+namespace Everglow.TwilightForest.Tiles
 {
-    public class TwilightTree_Vine : ModGore
-    {
-    }
+	public class TwilightTree_Vine : ModGore
+	{
+	}
 }

@@ -1,6 +1,6 @@
-﻿namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Items
+﻿namespace Everglow.Yggdrasil.YggdrasilTown.Items
 {
-    public class StoneDragonScaleWoodWall : ModItem
+	public class StoneDragonScaleWoodWall : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
@@ -16,12 +16,12 @@
 			Item.useTime = 7;
 			Item.useStyle = ItemUseStyleID.Swing;
 			Item.consumable = true;
-            Item.createWall = ModContent.WallType<Walls.StoneDragonScaleWoodWall>();
+			Item.createWall = ModContent.WallType<Walls.StoneDragonScaleWoodWall>();
 		}
 		public override void AddRecipes()
 		{
 			CreateRecipe(4)
-				.AddIngredient(ModContent.ItemType<Items.StoneDragonScaleWood>(), 1)
+				.AddIngredient(ModContent.ItemType<StoneDragonScaleWood>(), 1)
 				.AddTile(TileID.WorkBenches)
 				.Register();
 		}

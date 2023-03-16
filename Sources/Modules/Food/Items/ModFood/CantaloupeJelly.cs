@@ -1,6 +1,4 @@
 ﻿using Everglow.Sources.Modules.FoodModule.Buffs.VanillaFoodBuffs;
-using Everglow.Sources.Modules.FoodModule;
-using Everglow.Sources.Modules.FoodModule.Items;
 using Everglow.Sources.Modules.FoodModule.Utils;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -8,26 +6,27 @@ using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Everglow.Sources.Modules.FoodModule.Buffs.ModFoodBuffs;
+using Everglow.Food.Buffs.ModFoodBuffs;
 
-namespace Everglow.Sources.Modules.FoodModule.Items.ModFood
+namespace Everglow.Food.Items.ModFood
 {
 	public class CantaloupeJelly : FoodBase
 	{
-        public override FoodInfo FoodInfo
-        {
-            get
-            {
+		public override FoodInfo FoodInfo
+		{
+			get
+			{
 				return new FoodInfo()
 				{
 					Satiety = 10,
 					BuffType = ModContent.BuffType<CantaloupeJellyBuff>(),
 					BuffTime = new FoodDuration(4, 0, 0),
 					Name = "CantaloupeJellyBuff"
-                };
-            }
-        }
-        public override void SetStaticDefaults() {
+				};
+			}
+		}
+		public override void SetStaticDefaults()
+		{
 
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 5;
 
@@ -39,12 +38,13 @@ namespace Everglow.Sources.Modules.FoodModule.Items.ModFood
 				new Color(244, 139, 58)
 			};
 
-			ItemID.Sets.IsFood[Type] = true; 
+			ItemID.Sets.IsFood[Type] = true;
 		}
 
-		public override void SetDefaults() {
+		public override void SetDefaults()
+		{
 
-			Item.DefaultToFood(22, 22, BuffID.WellFed3, 57600); 
+			Item.DefaultToFood(22, 22, BuffID.WellFed3, 57600);
 			Item.value = Item.buyPrice(0, 3);
 			Item.rare = ItemRarityID.Blue;
 		}

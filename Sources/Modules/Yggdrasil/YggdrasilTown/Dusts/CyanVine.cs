@@ -1,14 +1,14 @@
-﻿namespace Everglow.Sources.Modules.YggdrasilModule.YggdrasilTown.Dusts
+﻿namespace Everglow.Yggdrasil.YggdrasilTown.Dusts
 {
-    public class CyanVine : ModDust
-    {
-        public override void OnSpawn(Dust dust)
-        {
-        }
+	public class CyanVine : ModDust
+	{
+		public override void OnSpawn(Dust dust)
+		{
+		}
 
-        public override bool Update(Dust dust)
-        {
-            return true;
-        }
-    }
+		public override bool Update(Dust dust)
+		{
+			return true;
+		}
+	}
 }

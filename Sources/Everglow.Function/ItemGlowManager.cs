@@ -1,8 +1,7 @@
-using Everglow.Commons;
 using ReLogic.Content;
 using Terraria.GameContent;
 
-namespace Everglow.Myth;
+namespace Everglow.Commons;
 
 /// <summary>
 /// 通过GlobalItem实现自动加载Glow
@@ -23,10 +22,10 @@ public class ItemGlowManager : GlobalItem
 		// 只读，线程安全
 		var asset = ModIns.Mod.Assets._assets;
 		short index = 0;
-		foreach(var item in ModIns.Mod.GetContent<ModItem>())
+		foreach (var item in ModIns.Mod.GetContent<ModItem>())
 		{
 			var path = item.Texture + "_glow";
-			if(asset.TryGetValue(path, out var glow) && glow is Asset<Texture2D> texture)
+			if (asset.TryGetValue(path, out var glow) && glow is Asset<Texture2D> texture)
 			{
 				glowMasks.Add(texture);
 				glowMapping.Add(item.Type, (short)(begin + index));
@@ -37,10 +36,8 @@ public class ItemGlowManager : GlobalItem
 	}
 	public override void SetDefaults(Item item)
 	{
-		if(glowMapping.TryGetValue(item.type, out var index))
-		{
+		if (glowMapping.TryGetValue(item.type, out var index))
 			item.glowMask = glowMapping[index];
-		}
 	}
 	public override void Unload()
 	{

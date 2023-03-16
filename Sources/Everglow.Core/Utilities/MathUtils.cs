@@ -1,4 +1,4 @@
-﻿using Everglow.Commons.DataStructures;
+using Everglow.Commons.DataStructures;
 
 namespace Everglow.Commons.Utilities;
 

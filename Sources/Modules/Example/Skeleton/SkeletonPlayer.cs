@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria.ModLoader;
 
-namespace Everglow.Sources.Modules.ExampleModule.Skeleton
+namespace Everglow.Example.Skeleton
 {
-    public class SkeletonPlayer : ModPlayer
-    {
-    }
+	public class SkeletonPlayer : ModPlayer
+	{
+	}
 }

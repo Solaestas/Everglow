@@ -1,8 +1,8 @@
 ﻿using Terraria.ModLoader.IO;
 
-namespace Everglow.Sources.Modules.PlantModule.Common
+namespace Everglow.Plant.Common
 {
-    public class PlantModSystem : ModSystem
+	public class PlantModSystem : ModSystem
 	{
 		public override void SaveWorldData(TagCompound tag)
 		{
