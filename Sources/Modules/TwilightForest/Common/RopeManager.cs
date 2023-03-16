@@ -208,7 +208,7 @@ internal class RopeManager
 			Vector2 offset = rope.GetOffset();
 			if (!drawRange.Contains((offset + rope.mass[0].position).ToPoint()))
 				continue;
-			List<Vector2> massPositionsSmooth = Commons.Function.Curves.CatmullRom.SmoothPath(rope.mass.Select(m => m.position + offset), 4);
+			List<Vector2> massPositionsSmooth = Commons.Function.Curves.GraphicsUtils.CatmullRom(rope.mass.Select(m => m.position + offset), 4);
 
 			DrawRope(massPositionsSmooth, vertices, indices);
 		}

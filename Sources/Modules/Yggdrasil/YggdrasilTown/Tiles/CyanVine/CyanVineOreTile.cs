@@ -15,10 +15,8 @@ public class CyanVineOreTile : ModTile
 		MinPick = 40;
 		DustType = ModContent.DustType<Dusts.CyanVine>();
 
-		ModTranslation modTranslation = base.CreateMapEntryName(null);
+		var modTranslation  = CreateMapEntryName();
 		AddMapEntry(new Color(80, 130, 154), modTranslation);
-		modTranslation.SetDefault("Cyan Ore");
-		modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "За¶Рїу");
 	}
 	public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
 	{

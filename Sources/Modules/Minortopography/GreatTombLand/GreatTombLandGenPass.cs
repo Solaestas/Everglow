@@ -1,4 +1,5 @@
-﻿using Terraria.DataStructures;
+using Everglow.Commons.TileHelper;
+using Terraria.DataStructures;
 using Terraria.IO;
 using Terraria.WorldBuilding;
 
@@ -43,7 +44,7 @@ public class GreatTombLand : ModSystem
 	{
 		var mapIO = new MapIO(x, y);
 
-		mapIO.Read(Everglow.Instance.GetFileStream("Sources/Modules/MinortopographyModule/MapIO/" + Path));
+		mapIO.Read(ModIns.Mod.GetFileStream("Sources/Modules/MinortopographyModule/MapIO/" + Path));
 
 		var it = mapIO.GetEnumerator();
 		while (it.MoveNext())
@@ -53,7 +54,7 @@ public class GreatTombLand : ModSystem
 		}
 	}
 
-	public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight) => tasks.Add(new GreatTombLandGenPass());
+	public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) => tasks.Add(new GreatTombLandGenPass());
 
 	/// <summary>
 	/// 生成森林墓穴

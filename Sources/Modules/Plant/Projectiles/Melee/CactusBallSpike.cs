@@ -1,4 +1,4 @@
-﻿using Everglow.Plant.Buffs;
+using Everglow.Plant.Buffs;
 using Everglow.Plant.Common;
 using Terraria;
 using Terraria.ModLoader;
@@ -8,11 +8,6 @@ namespace Everglow.Plant.Projectiles.Melee;
 public class CactusBallSpike : ModProjectile
 {
 	public override string Texture => "Terraria/Images/Projectile_763";
-	public override void SetStaticDefaults()
-	{
-		// DisplayName.SetDefault("Cactus spike");
-		DisplayName.AddTranslation(PlantUtils.LocaizationChinese, "仙人掌刺");
-	}
 	public override void SetDefaults()
 	{
 		Projectile.CloneDefaults(763);

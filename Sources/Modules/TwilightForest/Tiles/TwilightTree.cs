@@ -1,4 +1,6 @@
+using Everglow.Commons.Enums;
 using Everglow.TwilightForest.Common;
+using Terraria.Localization;
 
 namespace Everglow.TwilightForest.Tiles;
 
@@ -15,18 +17,18 @@ public class TwilightTree : ModTile
 		Main.tileNoAttach[Type] = false;
 
 		TileID.Sets.IsATreeTrunk[Type] = true;
-		ModTranslation modTranslation = LocalizationLoader.GetOrCreateTranslation("Mods.Everglow.MapEntry.TwilightTree");
+		var modTranslation = Language.GetText("Mods.Everglow.MapEntry.TwilightTree");
 		AddMapEntry(new Color(58, 53, 50), modTranslation);
 		DustType = ModContent.DustType<Dusts.TwilightTreeDust>();
 		ItemDrop = ModContent.ItemType<Items.TwilightWood>();
 		AdjTiles = new int[] { Type };
 
-		Everglow.HookSystem.AddMethod(DrawRopes, Commons.Core.CallOpportunity.PostDrawTiles);
+		Ins.HookManager.AddHook(CodeLayer.PostDrawTiles, DrawRopes);
 	}
-	private RopeManager ropeManager = new RopeManager();
+	private RopeManager ropeManager = new();
 	private List<Rope>[] ropes = new List<Rope>[16];
 	private Vector2[] basePositions = new Vector2[16];
-	private Dictionary<(int x, int y), (int style, List<Rope> ropes)> hasRope = new Dictionary<(int x, int y), (int style, List<Rope>)>();
+	private Dictionary<(int x, int y), (int style, List<Rope> ropes)> hasRope = new();
 
 	/// <summary>
 	/// 记录当前每个有树枝的节点的绳子Style（即TileFrameX / 256）
@@ -98,9 +100,12 @@ public class TwilightTree : ModTile
 		}
 		ropeManager.Draw();
 	}
-	public override bool Drop(int i, int j)
+	public override IEnumerable<Item> GetItemDrops(int i, int j)
 	{
-		Item.NewItem(null, new Rectangle(i * 16 - 16, j * 16, 48, 16), ItemDrop, 1, false, 0, false, true);
+		yield return Main.item[Item.NewItem(null, new Rectangle(i * 16 - 16, j * 16, 48, 16), ItemDrop, 1, false, 0, false, true)];
+	}
+	public override bool CanDrop(int i, int j)
+	{
 		for (int x = 0; x < 6; x++)
 		{
 			Dust.NewDust(new Vector2(i * 16, j * 16), 16, 16, DustType, 0, 0, 0, default, Main.rand.NextFloat(0.5f, 1f));
@@ -122,7 +127,7 @@ public class TwilightTree : ModTile
 
 		if (!hasRope.ContainsKey((i, j)))
 		{
-			Everglow.Instance.Logger.Warn("Drop: Trying to access an non-existent TwilightTree rope" + (i, j).ToString());
+			Ins.Logger.Warn("Drop: Trying to access an non-existent TwilightTree rope" + (i, j).ToString());
 			return false;
 		}
 
@@ -159,7 +164,7 @@ public class TwilightTree : ModTile
 
 		if (!hasRope.ContainsKey((i, j)))
 		{
-			Everglow.Instance.Logger.Warn("Shake: Trying to access an non-existent TwilightTree rope" + (i, j).ToString());
+			Ins.Logger.Warn("Shake: Trying to access an non-existent TwilightTree rope" + (i, j).ToString());
 			return;
 		}
 
@@ -176,122 +181,123 @@ public class TwilightTree : ModTile
 			}
 		}
 	}
+	// TODO 144
 	public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
 	{
-		int Dy = -1;//向上破坏的自变化Y坐标
-		if (!fail)//判定为已破碎
-		{
-			//以下是破坏的特效,比如落叶
-			if (Main.tile[i, j].TileFrameY < 4)
-			{
-				Tile tileLeft;
-				Tile tileRight;
-				tileLeft = Main.tile[i - 1, j];
-				if (tileLeft.TileType == Type)
-				{
-					Shake(i - 1, j, tileLeft.TileFrameY);
-					Drop(i - 1, j);
-				}
-				tileRight = Main.tile[i + 1, j];
-				if (tileRight.TileType == Type)
-				{
-					Shake(i + 1, j, tileRight.TileFrameY);
-					Drop(i + 1, j);
-				}
-				while (Main.tile[i, j + Dy].HasTile && Main.tile[i, j + Dy].TileType == Type && Dy > -100)
-				{
-					Shake(i, j + Dy, Main.tile[i, j + Dy].TileFrameY);
-					Drop(i, j + Dy);
+		//int Dy = -1;//向上破坏的自变化Y坐标
+		//if (!fail)//判定为已破碎
+		//{
+		//	//以下是破坏的特效,比如落叶
+		//	if (Main.tile[i, j].TileFrameY < 4)
+		//	{
+		//		Tile tileLeft;
+		//		Tile tileRight;
+		//		tileLeft = Main.tile[i - 1, j];
+		//		if (tileLeft.TileType == Type)
+		//		{
+		//			Shake(i - 1, j, tileLeft.TileFrameY);
+		//			Drop(i - 1, j);
+		//		}
+		//		tileRight = Main.tile[i + 1, j];
+		//		if (tileRight.TileType == Type)
+		//		{
+		//			Shake(i + 1, j, tileRight.TileFrameY);
+		//			Drop(i + 1, j);
+		//		}
+		//		while (Main.tile[i, j + Dy].HasTile && Main.tile[i, j + Dy].TileType == Type && Dy > -100)
+		//		{
+		//			Shake(i, j + Dy, Main.tile[i, j + Dy].TileFrameY);
+		//			Drop(i, j + Dy);
 
-					tileLeft = Main.tile[i - 1, j + Dy];
-					tileRight = Main.tile[i + 1, j + Dy];
-					if (tileLeft.TileType == Type)
-					{
-						if (tileLeft.TileFrameY == 2)
-							break;
-						Shake(i - 1, j + Dy, tileLeft.TileFrameY);
-						Drop(i - 1, j + Dy);
-					}
-					if (tileRight.TileType == Type)
-					{
-						if (tileRight.TileFrameY == 2)
-							break;
-						Shake(i + 1, j + Dy, tileRight.TileFrameY);
-						Drop(i + 1, j + Dy);
-					}
-					Dy -= 1;
-				}
+		//			tileLeft = Main.tile[i - 1, j + Dy];
+		//			tileRight = Main.tile[i + 1, j + Dy];
+		//			if (tileLeft.TileType == Type)
+		//			{
+		//				if (tileLeft.TileFrameY == 2)
+		//					break;
+		//				Shake(i - 1, j + Dy, tileLeft.TileFrameY);
+		//				Drop(i - 1, j + Dy);
+		//			}
+		//			if (tileRight.TileType == Type)
+		//			{
+		//				if (tileRight.TileFrameY == 2)
+		//					break;
+		//				Shake(i + 1, j + Dy, tileRight.TileFrameY);
+		//				Drop(i + 1, j + Dy);
+		//			}
+		//			Dy -= 1;
+		//		}
 
 
-				Dy = -1;//向上破坏的自变化Y坐标
-				tileLeft = Main.tile[i - 1, j];
-				if (tileLeft.TileType == Type)
-					tileLeft.HasTile = false;
-				tileRight = Main.tile[i + 1, j];
-				if (tileRight.TileType == Type)
-					tileRight.HasTile = false;
-				while (Main.tile[i, j + Dy].TileType == Type && Dy > -100)
-				{
-					Tile baseTile = Main.tile[i, j + Dy];
+		//		Dy = -1;//向上破坏的自变化Y坐标
+		//		tileLeft = Main.tile[i - 1, j];
+		//		if (tileLeft.TileType == Type)
+		//			tileLeft.HasTile = false;
+		//		tileRight = Main.tile[i + 1, j];
+		//		if (tileRight.TileType == Type)
+		//			tileRight.HasTile = false;
+		//		while (Main.tile[i, j + Dy].TileType == Type && Dy > -100)
+		//		{
+		//			Tile baseTile = Main.tile[i, j + Dy];
 
-					baseTile.HasTile = false;
+		//			baseTile.HasTile = false;
 
-					tileLeft = Main.tile[i - 1, j + Dy];
-					tileRight = Main.tile[i + 1, j + Dy];
-					if (tileLeft.TileType == Type)
-						tileLeft.HasTile = false;
-					if (tileRight.TileType == Type)
-						tileRight.HasTile = false;
-					Dy -= 1;
-				}
-			}
-			//清除吊挂的藤条
+		//			tileLeft = Main.tile[i - 1, j + Dy];
+		//			tileRight = Main.tile[i + 1, j + Dy];
+		//			if (tileLeft.TileType == Type)
+		//				tileLeft.HasTile = false;
+		//			if (tileRight.TileType == Type)
+		//				tileRight.HasTile = false;
+		//			Dy -= 1;
+		//		}
+		//	}
+		//	//清除吊挂的藤条
 
-			if (!hasRope.ContainsKey((i, j)))
-			{
-				Everglow.Instance.Logger.Warn("KillTile: Trying to access an non-existent TwilightTree rope" + (i, j).ToString());
-				return;
-			}
+		//	if (!hasRope.ContainsKey((i, j)))
+		//	{
+		//		Ins.Logger.Warn("KillTile: Trying to access an non-existent TwilightTree rope" + (i, j).ToString());
+		//		return;
+		//	}
 
-			var ropes = hasRope[(i, j)].ropes;
-			foreach (var r in ropes)
-			{
-				var acc = new Vector2(Main.rand.NextFloat(-1, 1), 0);
-				foreach (var m in r.mass)
-				{
-					m.force += acc;
-					if (Main.rand.NextBool(10))
-						Gore.NewGoreDirect(null, m.position, m.velocity * 0.1f, ModContent.GoreType<TwilightTree_Vine>());
-					//被砍时对mass操纵写这里
-				}
-			}
-			ropeManager.RemoveRope(hasRope[(i, j)].ropes);
-			hasRope.Remove((i, j));
-		}
-		else
-		{
-			Tile tileLeft;
-			Tile tileRight;
-			while (Main.tile[i, j + Dy].HasTile && Main.tile[i, j + Dy].TileType == Type && Dy > -100)
-			{
-				Shake(i, j + Dy, Main.tile[i, j + Dy].TileFrameY);
-				tileLeft = Main.tile[i - 1, j + Dy];
-				tileRight = Main.tile[i + 1, j + Dy];
-				if (tileLeft.TileType == Type)
-				{
-					if (tileLeft.TileFrameY == 2)
-						break;
-					Shake(i - 1, j + Dy, tileLeft.TileFrameY);
-				}
-				if (tileRight.TileType == Type)
-				{
-					if (tileRight.TileFrameY == 2)
-						break;
-					Shake(i + 1, j + Dy, tileRight.TileFrameY);
-				}
-				Dy -= 1;
-			}
-		}
+		//	var ropes = hasRope[(i, j)].ropes;
+		//	foreach (var r in ropes)
+		//	{
+		//		var acc = new Vector2(Main.rand.NextFloat(-1, 1), 0);
+		//		foreach (var m in r.mass)
+		//		{
+		//			m.force += acc;
+		//			if (Main.rand.NextBool(10))
+		//				Gore.NewGoreDirect(null, m.position, m.velocity * 0.1f, ModContent.GoreType<TwilightTree_Vine>());
+		//			//被砍时对mass操纵写这里
+		//		}
+		//	}
+		//	ropeManager.RemoveRope(hasRope[(i, j)].ropes);
+		//	hasRope.Remove((i, j));
+		//}
+		//else
+		//{
+		//	Tile tileLeft;
+		//	Tile tileRight;
+		//	while (Main.tile[i, j + Dy].HasTile && Main.tile[i, j + Dy].TileType == Type && Dy > -100)
+		//	{
+		//		Shake(i, j + Dy, Main.tile[i, j + Dy].TileFrameY);
+		//		tileLeft = Main.tile[i - 1, j + Dy];
+		//		tileRight = Main.tile[i + 1, j + Dy];
+		//		if (tileLeft.TileType == Type)
+		//		{
+		//			if (tileLeft.TileFrameY == 2)
+		//				break;
+		//			Shake(i - 1, j + Dy, tileLeft.TileFrameY);
+		//		}
+		//		if (tileRight.TileType == Type)
+		//		{
+		//			if (tileRight.TileFrameY == 2)
+		//				break;
+		//			Shake(i + 1, j + Dy, tileRight.TileFrameY);
+		//		}
+		//		Dy -= 1;
+		//	}
+		//}
 	}
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{

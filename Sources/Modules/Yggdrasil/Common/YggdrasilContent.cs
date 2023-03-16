@@ -11,7 +11,7 @@ public class YggdrasilContent
 	/// <returns></returns>
 	public static Texture2D QuickTexture(string path)
 	{
-		return ModContent.Request<Texture2D>("Everglow/Sources/Modules/YggdrasilModule/" + path, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+		return ModContent.Request<Texture2D>("Everglow/Yggdrasil/" + path, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 	}
 	/// <summary>
 	/// 对于天穹模块专用的获取特效封装
@@ -20,7 +20,7 @@ public class YggdrasilContent
 	/// <returns></returns>
 	public static Effect QuickEffect(string path)
 	{
-		return ModContent.Request<Effect>("Everglow/Sources/Modules/YggdrasilModule/" + path, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+		return ModContent.Request<Effect>("Everglow/Yggdrasil/" + path, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 	}
 	/// <summary>
 	/// 对于天穹模块专用的获取音乐封装
@@ -51,7 +51,7 @@ public class YggdrasilContent
 			{
 				glowMasks[i] = TextureAssets.GlowMask[i];
 			}
-			glowMasks[glowMasks.Length - 1] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/YggdrasilModule/Glows/" + modItem.GetType().Name + "_glow");
+			glowMasks[glowMasks.Length - 1] = ModContent.Request<Texture2D>("Everglow/Yggdrasil/Glows/" + modItem.GetType().Name + "_glow");
 			TextureAssets.GlowMask = glowMasks;
 			return (short)(glowMasks.Length - 1);
 		}

@@ -5,7 +5,7 @@ namespace Everglow.MEAC.Projectiles;
 
 public class VortexVanquisher3 : ModProjectile
 {
-	public override string Texture => "Everglow/Sources/Modules/MEACModule/Projectiles/VortexVanquisher";
+	public override string Texture => "Everglow/MEAC/Projectiles/VortexVanquisher";
 	public override void SetStaticDefaults()
 	{
 		DisplayName.SetDefault("");
@@ -85,7 +85,7 @@ public class VortexVanquisher3 : ModProjectile
 	{
 		Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
 		Main.spriteBatch.Draw(tex, Projectile.Center - StartVelocity * 90 - Main.screenPosition, null, lightColor, Projectile.rotation, tex.Size() / 2, Projectile.scale, 0, 0);
-		Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/Projectiles/VortexVanquisherGlow").Value, Projectile.Center - StartVelocity * 90 - Main.screenPosition, null, new Color(255, 255, 255, 0), Projectile.rotation, tex.Size() / 2, Projectile.scale, 0, 0);
+		Main.spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/MEAC/Projectiles/VortexVanquisherGlow").Value, Projectile.Center - StartVelocity * 90 - Main.screenPosition, null, new Color(255, 255, 255, 0), Projectile.rotation, tex.Size() / 2, Projectile.scale, 0, 0);
 		if (Projectile.timeLeft < 10)
 		{
 			for (int x = 0; x < 10 - Projectile.timeLeft; x++)

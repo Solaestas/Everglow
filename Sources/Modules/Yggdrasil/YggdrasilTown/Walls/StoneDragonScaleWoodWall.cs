@@ -1,4 +1,4 @@
-﻿namespace Everglow.Yggdrasil.YggdrasilTown.Walls;
+namespace Everglow.Yggdrasil.YggdrasilTown.Walls;
 
 public class StoneDragonScaleWoodWall : ModWall
 {
@@ -6,8 +6,6 @@ public class StoneDragonScaleWoodWall : ModWall
 	{
 		Main.wallHouse[Type] = true;
 		DustType = DustID.WoodFurniture;
-		ModTranslation modTranslation = base.CreateMapEntryName(null);
-		modTranslation.SetDefault("");
 		ItemDrop = ModContent.ItemType<Items.StoneDragonScaleWoodWall>();
 		AddMapEntry(new Color(24, 0, 0));
 	}

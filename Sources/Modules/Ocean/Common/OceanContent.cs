@@ -9,7 +9,7 @@ public class OceanContent
 	/// <returns></returns>
 	public static Texture2D QuickTexture(string path)
 	{
-		return ModContent.Request<Texture2D>("Everglow/Sources/Modules/OceanModule/" + path, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+		return ModContent.Request<Texture2D>("Everglow/Ocean/" + path, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 	}
 
 	/// <summary>
@@ -19,7 +19,7 @@ public class OceanContent
 	/// <returns></returns>
 	public static Effect QuickEffect(string path)
 	{
-		return ModContent.Request<Effect>("Everglow/Sources/Modules/OceanModule/" + path, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+		return ModContent.Request<Effect>("Everglow/Ocean/" + path, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 	}
 
 	/// <summary>

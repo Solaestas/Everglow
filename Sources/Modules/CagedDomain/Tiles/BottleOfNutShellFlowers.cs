@@ -27,7 +27,7 @@ public class BottleOfNutShellFlowers : ModTile
 		TileObjectData.newTile.Origin = new Point16(0, 5);
 		TileObjectData.addTile(Type);
 		DustType = 1;
-		ModTranslation modTranslation = base.CreateMapEntryName(null);
+		var modTranslation  = CreateMapEntryName();
 		AddMapEntry(new Color(90, 90, 90), modTranslation);
 		HitSound = SoundID.DD2_SkeletonHurt;
 	}

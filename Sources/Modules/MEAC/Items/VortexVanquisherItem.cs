@@ -31,7 +31,7 @@ public class VortexVanquisherItem : ModItem
 		var slotSize = new Vector2(52f, 52f);
 		position -= slotSize * Main.inventoryScale / 2f - frame.Size() * scale / 2f;
 		Vector2 drawPos = position + slotSize * Main.inventoryScale / 2f;
-		Texture2D RArr = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/NonTrueMeleeProj/Post").Value;
+		Texture2D RArr = ModContent.Request<Texture2D>("Everglow/MEAC/NonTrueMeleeProj/Post").Value;
 		if (!Main.gamePaused)
 		{
 			if (CoolTimeForE > 0)

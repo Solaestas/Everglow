@@ -101,10 +101,10 @@ public class DashingLightEff : ModProjectile
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone);
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * (base.Projectile.ai[0] == 0 ? Main.GameViewMatrix.ZoomMatrix : Main.Transform);
-		Effect MeleeTrail = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/MeleeTrail", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+		Effect MeleeTrail = ModContent.Request<Effect>("Everglow/MEAC/Effects/MeleeTrail", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
-		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/Images/tex4", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-		MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/Images/img_color", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
+		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/MEAC/Images/tex4", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+		MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>("Everglow/MEAC/Images/img_color", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
 		MeleeTrail.CurrentTechnique.Passes[0].Apply();
 		if (bars.Count >= 3)
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);

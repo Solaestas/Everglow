@@ -6,7 +6,7 @@ namespace Everglow.Ocean.Projectiles.Weapons;
 
 public class RampageShark : ModProjectile
 {
-	public override string Texture => "Everglow/Sources/Modules/OceanModule/Projectiles/Weapons/RampageShark/RampageShark_gun";
+	public override string Texture => "Everglow/Ocean/Projectiles/Weapons/RampageShark/RampageShark_gun";
 	public override void SetDefaults()
 	{
 		Projectile.aiStyle = -1;
@@ -36,10 +36,10 @@ public class RampageShark : ModProjectile
 				ScreenShaker Gsplayer = player.GetModPlayer<ScreenShaker>();
 				Gsplayer.FlyCamPosition = new Vector2(0, 2).RotatedByRandom(6.283);
 				if (Power == 16)
-					SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/OceanModule/Sounds/SharkGun0").WithVolumeScale(0.6f).WithPitchOffset(0.2f), Projectile.Center);
+					SoundEngine.PlaySound(new SoundStyle("Everglow/Ocean/Sounds/SharkGun0").WithVolumeScale(0.6f).WithPitchOffset(0.2f), Projectile.Center);
 				else
 				{
-					SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/OceanModule/Sounds/SharkGun0").WithVolumeScale(0.4f), Projectile.Center);
+					SoundEngine.PlaySound(new SoundStyle("Everglow/Ocean/Sounds/SharkGun0").WithVolumeScale(0.4f), Projectile.Center);
 				}
 				Vector2 newvelocity = velocity.RotatedBy(Main.rand.NextFloat(-Power / 244f, Power / 244f));
 				Projectile p = Projectile.NewProjectileDirect(item.GetSource_ItemUse(item), Projectile.Center + offset + velocity * 0.0f + random, newvelocity, rampage.ShootType, item.damage, item.knockBack, player.whoAmI);
@@ -59,7 +59,7 @@ public class RampageShark : ModProjectile
 			{
 				ScreenShaker Gsplayer = player.GetModPlayer<ScreenShaker>();
 				Gsplayer.FlyCamPosition = new Vector2(0, 75).RotatedByRandom(6.283);
-				SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/OceanModule/Sounds/SharkGun1").WithPitchOffset(-0.8f), Projectile.Center);
+				SoundEngine.PlaySound(new SoundStyle("Everglow/Ocean/Sounds/SharkGun1").WithPitchOffset(-0.8f), Projectile.Center);
 				int Times = Main.rand.Next(4, 7);
 
 				for (int i = 0; i < Times; i++)
@@ -169,9 +169,9 @@ public class RampageShark : ModProjectile
 			Main.spriteBatch.Draw(TexStar, StarCenter, null, new Color(1f, 0, 0, 0), Projectile.rotation + progress * 1f, TexStar.Size() / 2f, new Vector2(progress * 2, powerII * powerII) * 0.36f, se, 0);
 			Main.spriteBatch.Draw(TexStar, StarCenter, null, new Color(1f, 0, 0, 0), Projectile.rotation + progress * 1f - MathF.PI * 0.5f, TexStar.Size() / 2f, new Vector2(progress * 2, powerII * powerII) * 0.36f, se, 0);
 
-			VFXManager.spriteBatch.Begin();
-			DrawTexCircle_VFXBatch(VFXManager.spriteBatch, progress * 120f, (1f - progress) * 10, new Color(1f - progress, 0, 0, 0), StarCenter, OceanContent.QuickTexture("Projectiles/Textures/FogTraceLight"));
-			VFXManager.spriteBatch.End();
+			Ins.Batch.Begin();
+			DrawTexCircle_VFXBatch(Ins.Batch, progress * 120f, (1f - progress) * 10, new Color(1f - progress, 0, 0, 0), StarCenter, OceanContent.QuickTexture("Projectiles/Textures/FogTraceLight"));
+			Ins.Batch.End();
 		}
 		else if (Power >= 16)
 		{

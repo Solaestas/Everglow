@@ -1,4 +1,5 @@
-﻿using Terraria.Localization;
+using Everglow.Commons.CustomTiles;
+using Terraria.Localization;
 using Terraria.ObjectData;
 
 namespace Everglow.Yggdrasil.Common.Elevator.Tiles;
@@ -21,15 +22,13 @@ public class LiftLamp : ModTile
 		TileObjectData.newTile.CoordinateWidth = 32;
 		TileObjectData.addTile(Type);
 		DustType = DustID.Iron;
-		ModTranslation modTranslation = base.CreateMapEntryName(null);
+		var modTranslation  = CreateMapEntryName();
 		AddMapEntry(new Color(191, 142, 111), modTranslation);
-		modTranslation.SetDefault("Lift Lamp");
-		modTranslation.AddTranslation((int)GameCulture.CultureName.Chinese, "电梯指示灯");
 	}
 	public override void NearbyEffects(int i, int j, bool closer)
 	{
 		int FrameX = 0;
-		foreach (var Dtile in TileSystem.GetTiles<YggdrasilElevator>())
+		foreach (var Dtile in TileSystem.Instance.GetTiles<YggdrasilElevator>())
 		{
 			Vector2 Dc = Dtile.Center;
 			if (Math.Abs(Dc.Y / 16f - j) < 4 && Main.tile[i, j].TileFrameY == 0 && Math.Abs(Dc.X / 16f - i) < Dtile.size.X / 32f + 5)

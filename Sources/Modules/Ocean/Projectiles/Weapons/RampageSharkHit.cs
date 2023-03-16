@@ -4,7 +4,7 @@ namespace Everglow.Ocean.Projectiles.Weapons;
 
 public class RampageSharkHit : ModProjectile, IWarpProjectile, IBloomProjectile
 {
-	public override string Texture => "Everglow/Sources/Modules/OceanModule/Projectiles/Weapons/RampageShark/RampageShark_gun";
+	public override string Texture => "Everglow/Ocean/Projectiles/Weapons/RampageShark/RampageShark_gun";
 	public override void SetDefaults()
 	{
 		Projectile.width = 32;
@@ -87,9 +87,9 @@ public class RampageSharkHit : ModProjectile, IWarpProjectile, IBloomProjectile
 		float width = 120;
 		if (Projectile.timeLeft < 120)
 			width = Projectile.timeLeft;
-		VFXManager.spriteBatch.Begin();
-		DrawTexFlame_VFXBatch(VFXManager.spriteBatch, value * 1370 * Projectile.ai[0], width * 0.2f, new Color(colorV * 12f, colorV * colorV * 1.6f, 0, 0f), Projectile.Center - Main.screenPosition, t, Projectile.ai[1], (float)-Main.timeForVisualEffects * 0.32f + 1000000 + Projectile.ai[1] * 200);
-		VFXManager.spriteBatch.End();
+		Ins.Batch.Begin();
+		DrawTexFlame_VFXBatch(Ins.Batch, value * 1370 * Projectile.ai[0], width * 0.2f, new Color(colorV * 12f, colorV * colorV * 1.6f, 0, 0f), Projectile.Center - Main.screenPosition, t, Projectile.ai[1], (float)-Main.timeForVisualEffects * 0.32f + 1000000 + Projectile.ai[1] * 200);
+		Ins.Batch.End();
 		return false;
 	}
 	public void DrawWarp(VFXBatch spriteBatch)
@@ -113,8 +113,8 @@ public class RampageSharkHit : ModProjectile, IWarpProjectile, IBloomProjectile
 		float width = 120;
 		if (Projectile.timeLeft < 120)
 			width = Projectile.timeLeft;
-		VFXManager.spriteBatch.Begin();
-		DrawTexFlame_VFXBatch(VFXManager.spriteBatch, value * 1370 * Projectile.ai[0], width * 0.2f, new Color(colorV * 12f, colorV * colorV * 1.6f, 0, 0f), Projectile.Center - Main.screenPosition, t, Projectile.ai[1], (float)-Main.timeForVisualEffects * 0.32f + 1000000 + Projectile.ai[1] * 200);
-		VFXManager.spriteBatch.End();
+		Ins.Batch.Begin();
+		DrawTexFlame_VFXBatch(Ins.Batch, value * 1370 * Projectile.ai[0], width * 0.2f, new Color(colorV * 12f, colorV * colorV * 1.6f, 0, 0f), Projectile.Center - Main.screenPosition, t, Projectile.ai[1], (float)-Main.timeForVisualEffects * 0.32f + 1000000 + Projectile.ai[1] * 200);
+		Ins.Batch.End();
 	}
 }

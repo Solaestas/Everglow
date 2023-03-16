@@ -1,7 +1,6 @@
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
-using Terraria;
 using Terraria.Audio;
 using Terraria.Enums;
 using Terraria.GameContent.Shaders;
@@ -33,52 +32,52 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 	{
 
 	}
-	internal int attackType = 0;
-	internal int maxAttackType = 3;
-	internal Vector2 mainVec;
-	internal Queue<Vector2> trailVecs;
-	internal int trailLength = 40;
-	internal int timer = 0;
+	public int attackType = 0;
+	public int maxAttackType = 3;
+	public Vector2 mainVec;
+	public Queue<Vector2> trailVecs;
+	public int trailLength = 40;
+	public int timer = 0;
 
 	/// <summary>
 	/// 是否采用自己的DrawWarp
 	/// </summary>
-	internal bool selfWarp = false;
-	internal bool isAttacking = false;
-	internal bool useTrail = true;
+	public bool selfWarp = false;
+	public bool isAttacking = false;
+	public bool useTrail = true;
 	/// <summary>
 	/// 断开左键是否自动结束攻击
 	/// </summary>
-	internal bool AutoEnd = true;
+	public bool AutoEnd = true;
 	/// <summary>
 	/// 绑定AutoEnd参数,用于判定上次攻击结束前是否按下鼠标左键从而实现连击
 	/// </summary>
-	internal bool HasContinueLeftClick = false;
+	public bool HasContinueLeftClick = false;
 	/// <summary>
 	/// 允许长按左键?(一般情况用来做重击)
 	/// </summary>
-	internal bool CanLongLeftClick = false;
+	public bool CanLongLeftClick = false;
 	/// <summary>
 	/// 绑定CanLongLeftClick,用于判定重击
 	/// </summary>
-	internal int Clicktimer = 0;
+	public int Clicktimer = 0;
 	/// <summary>
 	/// 绑定CanLongLeftClick,用于判定重击所需要的蓄力时长
 	/// </summary>
-	internal int ClickMaxtimer = 90;
+	public int ClickMaxtimer = 90;
 	/// <summary>
 	/// 能否穿墙攻击敌人
 	/// </summary>
-	internal bool CanIgnoreTile = false;
+	public bool CanIgnoreTile = false;
 	/// <summary>
 	/// 是否为长柄武器
 	/// </summary>
-	internal bool longHandle = false;
+	public bool longHandle = false;
 
-	internal float drawScaleFactor = 1f;
+	public float drawScaleFactor = 1f;
 
-	internal float disFromPlayer = 6;
-	internal string shadertype = "Trail0";
+	public float disFromPlayer = 6;
+	public string shadertype = "Trail0";
 	public bool isRightClick = false;
 	public Player Player => Main.player[Projectile.owner];
 	public Vector2 MainVec_WithoutGravDir
@@ -143,7 +142,7 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 	{
 		Player.heldProj = Projectile.whoAmI;
 		Player.GetModPlayer<MEACPlayer>().isUsingMeleeProj = true;
-		Projectile.Center = Player.Center + Utilities.SafeNormalize(mainVec, Vector2.One) * disFromPlayer;
+		Projectile.Center = Player.Center + Utils.SafeNormalize(mainVec, Vector2.One) * disFromPlayer;
 		isAttacking = false;
 
 		Projectile.timeLeft++;
@@ -185,7 +184,9 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 		if (CanLongLeftClick)
 		{
 			if (Main.mouseLeft)
+			{
 				Clicktimer++;
+			}
 			else
 			{
 				Clicktimer = 0;
@@ -197,7 +198,10 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 	{
 
 	}
-	public override bool ShouldUpdatePosition() => false;
+	public override bool ShouldUpdatePosition()
+	{
+		return false;
+	}
 
 	private void ProduceWaterRipples(Vector2 beamDims)
 	{
@@ -213,7 +217,7 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 		var cut = new Terraria.Utils.TileActionAttempt(DelegateMethods.CutTiles);
 		Vector2 beamStartPos = Projectile.Center;
 		Vector2 beamEndPos = beamStartPos + mainVec;
-		Utilities.PlotTileLine(beamStartPos, beamEndPos, Projectile.width * Projectile.scale, cut);
+		Utils.PlotTileLine(beamStartPos, beamEndPos, Projectile.width * Projectile.scale, cut);
 	}
 	public void ScreenShake(int time)
 	{
@@ -382,7 +386,7 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 				new Vertex2D(drawCenter + BottomRight, new Color(255,255,255,0), new Vector3(sourceBottomRight.X, sourceBottomRight.Y, 0)),
 				new Vertex2D(drawCenter + TopRight, new Color(255,255,255,0), new Vector3(sourceTopRight.X, sourceTopRight.Y, 0))
 			};
-			Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/" + GlowPath).Value;
+			Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/MEAC/" + GlowPath).Value;
 			;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
 		}
@@ -398,11 +402,11 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 	}
 	public virtual string TrailShapeTex()
 	{
-		return "Everglow/Sources/Modules/MEACModule/Images/Melee";
+		return "Everglow/MEAC/Images/Melee";
 	}
 	public virtual string TrailColorTex()
 	{
-		return "Everglow/Sources/Modules/MEACModule/Images/TestColor";
+		return "Everglow/MEAC/Images/TestColor";
 	}
 	public virtual BlendState TrailBlendState()
 	{
@@ -445,7 +449,7 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
 
-		Effect MeleeTrail = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/MeleeTrail", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+		Effect MeleeTrail = ModContent.Request<Effect>("Everglow/MEAC/Effects/MeleeTrail", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
 		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		//Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
@@ -520,7 +524,7 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 			bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + trail[i] * Projectile.scale * 1.1f, new Color(dir, w, 0, 1), new Vector3(factor, 0, w)));
 		}
 
-		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/Images/Warp").Value, bars, PrimitiveType.TriangleStrip);
+		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/MEAC/Images/Warp").Value, bars, PrimitiveType.TriangleStrip);
 	}
 	/// <summary>
 	/// 根据鼠标位置锁定玩家方向

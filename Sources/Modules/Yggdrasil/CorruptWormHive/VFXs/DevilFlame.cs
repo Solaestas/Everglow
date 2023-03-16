@@ -1,11 +1,15 @@
-﻿using Everglow.Yggdrasil.Common;
+using Everglow.Commons.Enums;
+using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX;
+using Everglow.Commons.VFX.Pipelines;
+using Everglow.Yggdrasil.Common;
 using ReLogic.Content;
 
 namespace Everglow.Yggdrasil.CorruptWormHive.VFXs;
 
 internal abstract class ShaderDraw : Visual
 {
-	public override CallOpportunity DrawLayer => CallOpportunity.PostDrawDusts;
+	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 	public Vector2 position;
 	public Vector2 velocity;
 	public float[] ai;
@@ -22,8 +26,8 @@ internal class DevilFlamePipeline : Pipeline
 {
 	public override void Load()
 	{
-		effect = ModContent.Request<Effect>("Everglow/Sources/Modules/YggdrasilModule/CorruptWormHive/VFXs/DevilFlame", AssetRequestMode.ImmediateLoad);
-		effect.Value.Parameters["uNoise"].SetValue(ModContent.Request<Texture2D>("Everglow/Sources/Modules/ExampleModule/VFX/Perlin", AssetRequestMode.ImmediateLoad).Value);
+		effect = ModContent.Request<Effect>("Everglow/Yggdrasil/CorruptWormHive/VFXs/DevilFlame", AssetRequestMode.ImmediateLoad);
+		effect.Value.Parameters["uNoise"].SetValue(ModContent.Request<Texture2D>("Everglow/Example/VFX/Perlin", AssetRequestMode.ImmediateLoad).Value);
 	}
 	public override void BeginRender()
 	{
@@ -32,15 +36,15 @@ internal class DevilFlamePipeline : Pipeline
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		Texture2D FlameColor = YggdrasilContent.QuickTexture("CorruptWormHive/VFXs/DeathSickle_Color");
-		VFXManager.spriteBatch.BindTexture<Vertex2D>(FlameColor);
+		Ins.Batch.BindTexture<Vertex2D>(FlameColor);
 		Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.AnisotropicClamp;
-		VFXManager.spriteBatch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearWrap, RasterizerState.CullNone);
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearWrap, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
 	}
 
 	public override void EndRender()
 	{
-		VFXManager.spriteBatch.End();
+		Ins.Batch.End();
 	}
 }
 [Pipeline(typeof(DevilFlamePipeline), typeof(BloomPipeline))]
@@ -96,7 +100,7 @@ internal class DevilFlameDust : ShaderDraw
 			bars[2 * i] = new Vertex2D(oldPos[i] - normal * width, drawcRope, new Vector3(0.05f + ai[0], i / 80f, 0));
 		}
 		bars[0] = new Vertex2D((bars[1].position + bars[2].position) * 0.5f, Color.White, new Vector3(0.5f, 0, 0));
-		VFXManager.spriteBatch.Draw(bars, PrimitiveType.TriangleStrip);
+		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
 	}
-	public override CallOpportunity DrawLayer => CallOpportunity.PostDrawTiles;
+	public override CodeLayer DrawLayer => CodeLayer.PostDrawTiles;
 }

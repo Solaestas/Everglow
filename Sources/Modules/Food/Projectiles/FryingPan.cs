@@ -1,5 +1,6 @@
-﻿using Terraria.Audio;
+using Terraria.Audio;
 using Everglow.Food.Dusts;
+using Everglow.Commons.MEAC;
 
 namespace Everglow.Food.Projectiles;
 
@@ -45,11 +46,11 @@ public class FryingPan : MeleeProj, IWarpProjectile
 	}
 	public override string TrailShapeTex()
 	{
-		return "Everglow/Sources/Modules/MEACModule/Images/Melee";
+		return "Everglow/MEAC/Images/Melee";
 	}
 	public override string TrailColorTex()
 	{
-		return "Everglow/Sources/Modules/FoodModule/Images/PanColor";
+		return "Everglow/Food/Images/PanColor";
 	}
 
 	//拖尾的混合模式，通常使用NonPremultiplied（暗）或者Additive（亮）
@@ -366,7 +367,7 @@ public class FryingPan : MeleeProj, IWarpProjectile
 	}
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
-		List<Vector2> SmoothTrailX = CatmullRom.SmoothPath(trailVecs.ToList());//平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList());//平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
 		{
@@ -423,7 +424,7 @@ public class FryingPan : MeleeProj, IWarpProjectile
 			bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + trail[i] * Projectile.scale * 1.1f, new Color(dir, w, 0, 1), new Vector3(factor, 0, w)));
 		}
 
-		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/Images/Warp").Value, bars, PrimitiveType.TriangleStrip);
+		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/MEAC/Images/Warp").Value, bars, PrimitiveType.TriangleStrip);
 		return;
 	}
 	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
@@ -431,7 +432,7 @@ public class FryingPan : MeleeProj, IWarpProjectile
 
 		if (attackType == 0)
 		{
-			SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/FoodModule/Sounds/Pan1").WithVolumeScale(0.3f).WithPitchOffset(1f), Projectile.Center);
+			SoundEngine.PlaySound(new SoundStyle("Everglow/Food/Sounds/Pan1").WithVolumeScale(0.3f).WithPitchOffset(1f), Projectile.Center);
 			if (Projectile.timeLeft > 2960)
 			{
 				Projectile.velocity.X = Projectile.velocity.X * -1f;
@@ -443,7 +444,7 @@ public class FryingPan : MeleeProj, IWarpProjectile
 		else
 		{
 			GenerateDust(target.Center, 50);
-			SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/FoodModule/Sounds/Pan1").WithVolumeScale(1), Projectile.Center);
+			SoundEngine.PlaySound(new SoundStyle("Everglow/Food/Sounds/Pan1").WithVolumeScale(1), Projectile.Center);
 		}
 
 		return;
@@ -452,7 +453,7 @@ public class FryingPan : MeleeProj, IWarpProjectile
 	{
 		if (attackType == 0)
 		{
-			SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/FoodModule/Sounds/Pan1").WithVolumeScale(0.3f).WithPitchOffset(1f), Projectile.Center);
+			SoundEngine.PlaySound(new SoundStyle("Everglow/Food/Sounds/Pan1").WithVolumeScale(0.3f).WithPitchOffset(1f), Projectile.Center);
 			if (Projectile.timeLeft > 2960)
 			{
 				Projectile.velocity.X = Projectile.velocity.X * -1f;
@@ -464,7 +465,7 @@ public class FryingPan : MeleeProj, IWarpProjectile
 		}
 		else
 		{
-			SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/FoodModule/Sounds/Pan1").WithVolumeScale(1), Projectile.Center);
+			SoundEngine.PlaySound(new SoundStyle("Everglow/Food/Sounds/Pan1").WithVolumeScale(1), Projectile.Center);
 			GenerateDust(target.Center, 50);
 		}
 
@@ -472,7 +473,7 @@ public class FryingPan : MeleeProj, IWarpProjectile
 	}
 	public override bool OnTileCollide(Vector2 oldVelocity)
 	{
-		SoundEngine.PlaySound(new SoundStyle("Everglow/Sources/Modules/FoodModule/Sounds/Pan1").WithVolumeScale(0.3f).WithPitchOffset(1f), Projectile.Center);
+		SoundEngine.PlaySound(new SoundStyle("Everglow/Food/Sounds/Pan1").WithVolumeScale(0.3f).WithPitchOffset(1f), Projectile.Center);
 		if (attackType == 0)
 		{
 			if (Projectile.timeLeft > 2960)

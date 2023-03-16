@@ -4,7 +4,7 @@ namespace Everglow.TwilightForest.Tiles;
 
 public class TwilightTree_Leaf : ModGore
 {
-	public override string Texture => "Everglow/Sources/Modules/TwilightForestModule/Tiles/TwilightTree_Leaf";
+	public override string Texture => "Everglow/TwilightForest/Tiles/TwilightTree_Leaf";
 
 	public override bool Update(Gore gore)
 	{

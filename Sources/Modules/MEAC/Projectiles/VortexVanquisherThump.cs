@@ -1,11 +1,10 @@
-﻿namespace Everglow.MEAC.Projectiles;
+namespace Everglow.MEAC.Projectiles;
 
 public class VortexVanquisherThump : ModProjectile
 {
-	public override string Texture => "Everglow/Sources/Modules/MEACModule/Projectiles/VortexVanquisher";
+	public override string Texture => "Everglow/MEAC/Projectiles/VortexVanquisher";
 	public override void SetStaticDefaults()
 	{
-		DisplayName.SetDefault("");
 		Main.projFrames[Projectile.type] = 3;
 	}
 	public override void SetDefaults()

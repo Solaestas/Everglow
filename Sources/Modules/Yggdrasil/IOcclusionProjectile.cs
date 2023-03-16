@@ -1,4 +1,6 @@
-﻿namespace Everglow.Yggdrasil;
+using Everglow.Commons.VFX;
+
+namespace Everglow.Yggdrasil;
 
 public interface IOcclusionProjectile
 {

@@ -9,7 +9,7 @@ public class TwilightForestContent
 	/// <returns></returns>
 	public static Texture2D QuickTexture(string path)
 	{
-		return ModContent.Request<Texture2D>("Everglow/Sources/Modules/TwilightForestModule/" + path, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+		return ModContent.Request<Texture2D>("Everglow/TwilightForest/" + path, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 	}
 
 	/// <summary>
@@ -19,7 +19,7 @@ public class TwilightForestContent
 	/// <returns></returns>
 	public static Effect QuickEffect(string path)
 	{
-		return ModContent.Request<Effect>("Everglow/Sources/Modules/TwilightForestModule/" + path, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+		return ModContent.Request<Effect>("Everglow/TwilightForest/" + path, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 	}
 
 	/// <summary>

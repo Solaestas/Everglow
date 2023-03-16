@@ -16,11 +16,11 @@ public class AcroporaSpear : MeleeProj
 	}
 	public override string TrailShapeTex()
 	{
-		return "Everglow/Sources/Modules/MEACModule/Images/Melee";
+		return "Everglow/MEAC/Images/Melee";
 	}
 	public override string TrailColorTex()
 	{
-		return "Everglow/Sources/Modules/YggdrasilModule/KelpCurtain/Projectiles/Acropora_Color";
+		return "Everglow/Yggdrasil/KelpCurtain/Projectiles/Acropora_Color";
 	}
 	public override float TrailAlpha(float factor)
 	{
@@ -193,7 +193,7 @@ public class AcroporaSpear : MeleeProj
 			if (timer == 8)
 			{
 				AttSound(new SoundStyle(
-			"Everglow/Sources/Modules/MEACModule/Sounds/TrueMeleeSwing"));
+			"Everglow/MEAC/Sounds/TrueMeleeSwing"));
 			}
 
 			if (timer > 20 && timer < 35)
@@ -229,7 +229,7 @@ public class AcroporaSpear : MeleeProj
 			if (timer == 8)
 			{
 				AttSound(new SoundStyle(
-			"Everglow/Sources/Modules/MEACModule/Sounds/TrueMeleeSwing"));
+			"Everglow/MEAC/Sounds/TrueMeleeSwing"));
 			}
 			if (timer % 10 == 8 && timer > 30)
 				SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
@@ -256,7 +256,7 @@ public class AcroporaSpear : MeleeProj
 	public override void DrawTrail(Color color)
 	{
 		base.DrawTrail(color);
-		List<Vector2> SmoothTrailX = CatmullRom.SmoothPath(trailVecs.ToList());//平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList());//平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
 		{
@@ -291,7 +291,7 @@ public class AcroporaSpear : MeleeProj
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
 
-		Effect MeleeTrail = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/MeleeTrailFade", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+		Effect MeleeTrail = ModContent.Request<Effect>("Everglow/MEAC/Effects/MeleeTrailFade", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
 		Main.graphics.GraphicsDevice.Textures[0] = YggdrasilContent.QuickTexture("KelpCurtain/Projectiles/Acropora_RedColor");
 		float k0 = timer / 80f + 0.3f;

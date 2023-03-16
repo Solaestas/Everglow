@@ -63,6 +63,6 @@ public class FancyBar
 			field["_starFill"].SetValue(value, StarFill);
 			return;
 		}
-		Everglow.Instance.Logger.Warn("FancyBar sprites replacement loading failed, sprite replacement would not work.");
+		Ins.Logger.Warn("FancyBar sprites replacement loading failed, sprite replacement would not work.");
 	}
 }

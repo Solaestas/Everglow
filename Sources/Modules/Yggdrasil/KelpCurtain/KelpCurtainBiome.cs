@@ -7,9 +7,9 @@ public class KelpCurtainBiome : ModBiome
 {
 	public override int Music => YggdrasilContent.QuickMusic("KelpCurtainBGM");
 	public override SceneEffectPriority Priority => SceneEffectPriority.Environment;
-	public override string BestiaryIcon => "Everglow/Sources/Modules/YggdrasilModule/KelpCurtain/KelpCurtainIcon";
+	public override string BestiaryIcon => "Everglow/Yggdrasil/KelpCurtain/KelpCurtainIcon";
 	public override string BackgroundPath => base.BackgroundPath;
-	public override string MapBackground => "Everglow/Sources/Modules/YggdrasilModule/KelpCurtain/Backgrounds/KelpCurtain_MapBackground";
+	public override string MapBackground => "Everglow/Yggdrasil/KelpCurtain/Backgrounds/KelpCurtain_MapBackground";
 	public override ModWaterStyle WaterStyle => ModContent.GetInstance<Water.KelpCurtainWaterStyle>();
 	public override Color? BackgroundColor => base.BackgroundColor;
 

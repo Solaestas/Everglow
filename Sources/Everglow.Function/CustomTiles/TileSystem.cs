@@ -111,6 +111,8 @@ public class TileSystem
 
 	public CustomTile GetTile(int whoAmI) => _tiles[whoAmI];
 
+	public IEnumerable<T> GetTiles<T>() => _tiles.OfType<T>();
+
 	/// <summary>
 	/// 求出所有路径上的物块和碰撞信息
 	/// </summary>

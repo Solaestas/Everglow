@@ -1,4 +1,5 @@
-﻿using Terraria.Audio;
+using Everglow.Commons.MEAC;
+using Terraria.Audio;
 
 namespace Everglow.MEAC.Projectiles;
 
@@ -15,7 +16,7 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 	}
 	public override string TrailColorTex()
 	{
-		return "Everglow/Sources/Modules/MEACModule/Images/img_color";
+		return "Everglow/MEAC/Images/img_color";
 	}
 	public override float TrailAlpha(float factor)
 	{
@@ -29,24 +30,25 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 	{
 		base.DrawSelf(spriteBatch, lightColor, 240, 40, 0.75f, "Projectiles/VortexVanquisherGlow");
 	}
-	public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
-		//伤害倍率
-		ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
-		float ShakeStrength = 0.2f;
-		if (attackType == 0)
-		{
-			damage *= 2;
-			ShakeStrength = 1f;
-		}
-		if (attackType == 4)
-		{
-			damage *= 4;
-			ShakeStrength = 2f;
-			Player player = Main.player[Projectile.owner];
-			player.velocity *= -0.05f;
-		}
-		Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 12f * ShakeStrength, 100)).RotatedByRandom(6.283);
+		// TODO 144
+		////伤害倍率
+		//ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
+		//float ShakeStrength = 0.2f;
+		//if (attackType == 0)
+		//{
+		//	damage *= 2;
+		//	ShakeStrength = 1f;
+		//}
+		//if (attackType == 4)
+		//{
+		//	damage *= 4;
+		//	ShakeStrength = 2f;
+		//	Player player = Main.player[Projectile.owner];
+		//	player.velocity *= -0.05f;
+		//}
+		//Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 12f * ShakeStrength, 100)).RotatedByRandom(6.283);
 	}
 	public override void Attack()
 	{
@@ -148,7 +150,7 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 			if (timer == 8)
 			{
 				AttSound(new SoundStyle(
-			"Everglow/Sources/Modules/MEACModule/Sounds/TrueMeleeSwing"));
+			"Everglow/MEAC/Sounds/TrueMeleeSwing"));
 			}
 			if (timer > 20 && timer < 35)
 			{

@@ -54,7 +54,7 @@ public class GiantPinetree : ModSystem
 			}
 		}
 	}
-	public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight) => tasks.Add(new GiantPinetreeGenPass());
+	public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) => tasks.Add(new GiantPinetreeGenPass());
 	/// <summary>
 	/// 建造巨大的雪松
 	/// </summary>

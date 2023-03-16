@@ -9,6 +9,7 @@ namespace Everglow.Commons.CustomTiles.Tiles;
 public abstract class DBlock : CustomTile, IGrabbable, IHookable
 {
 	public Vector2 size;
+	public Vector2 Center => position + size / 2;
 	public override bool IsGrabbable => true;
 	public DBlock()
 	{

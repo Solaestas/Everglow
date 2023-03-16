@@ -1,20 +1,24 @@
-﻿using Terraria.Audio;
-using Everglow.Plant.Dusts;
+using Everglow.Commons.MEAC;
+using Everglow.Commons.Utilities;
+using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX;
 using Everglow.Plant.Buffs;
 using Everglow.Plant.Common;
+using Everglow.Plant.Dusts;
+using Terraria.Audio;
 
 namespace Everglow.Plant.Projectiles.Melee;
 
 public class CactusBallProj : ModProjectile, IWarpProjectile
 {
 	public override string Texture => "Terraria/Images/Projectile_727";
+
 	public override void SetStaticDefaults()
 	{
-		DisplayName.SetDefault("Cactus boulder");
-		DisplayName.AddTranslation(PlantUtils.LocaizationChinese, "仙人掌球");
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 6;
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 1;
 	}
+
 	public override void SetDefaults()
 	{
 		Projectile.width = Projectile.height = 32;
@@ -32,11 +36,17 @@ public class CactusBallProj : ModProjectile, IWarpProjectile
 		trailVecsUp = new Queue<Vector2>(trailLength + 1);
 		trailVecsDown = new Queue<Vector2>(trailLength + 1);
 	}
+
 	internal int trailLength = 16;
+
 	internal Queue<Vector2> trailVecsUp;
+
 	internal Queue<Vector2> trailVecsDown;
+
 	internal float SpinAcc = 0f;
+
 	internal int SwirlTime = 0;
+
 	public void SetDef()
 	{
 	}
@@ -133,38 +143,37 @@ public class CactusBallProj : ModProjectile, IWarpProjectile
 		else
 		{
 			player.fullRotation = 0;
-
 		}
-
 
 		Vector2 vector2 = player.Center - Projectile.Center;
 		Projectile.rotation = (float)(Math.Atan2(vector2.Y, vector2.X) + Math.PI / 2d);
 	}
-	public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
-		int size = target.width * target.height;
-		if (Projectile.ai[1] <= 10f)
-			damage = (int)(damage / 5d * 0.45f * SpinAcc);
-		else
-			damage = (int)(Projectile.damage * 0.45f * SpinAcc);
-		if (size > 1000 && Projectile.ai[1] != 0)
-		{
-			Projectile.penetrate = 0;
-			Projectile.Kill();
-		}
+		// TODO 144
+		//int size = target.width * target.height;
+		//if (Projectile.ai[1] <= 10f)
+		//	damage = (int)(damage / 5d * 0.45f * SpinAcc);
+		//else
+		//	damage = (int)(Projectile.damage * 0.45f * SpinAcc);
+		//if (size > 1000 && Projectile.ai[1] != 0)
+		//{
+		//	Projectile.penetrate = 0;
+		//	Projectile.Kill();
+		//}
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		target.AddBuff(ModContent.BuffType<CactusBallBuff>(), 150, false);
 	}
-	public override void OnHitPvp(Player target, int damage, bool crit)
+
+	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
 		target.AddBuff(ModContent.BuffType<CactusBallBuff>(), 150, true, false);
 	}
-	public override void ModifyHitPvp(Player target, ref int damage, ref bool crit)
-	{
-		damage *= 1;
-	}
+
 	public override bool OnTileCollide(Vector2 oldVelocity)
 	{
 		Projectile.ai[1] = 60f;
@@ -198,11 +207,13 @@ public class CactusBallProj : ModProjectile, IWarpProjectile
 		}
 		return true;
 	}
+
 	public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
 	{
 		width = height = 1;
 		return true;
 	}
+
 	public override void Kill(int timeLeft)
 	{
 		SoundEngine.PlaySound(SoundID.Dig);
@@ -239,6 +250,7 @@ public class CactusBallProj : ModProjectile, IWarpProjectile
 		Collision.HitTiles(Projectile.Center - new Vector2(48), Projectile.velocity, 96, 96);
 		Main.player[Projectile.owner].fullRotation = 0;
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		DrawTrail(lightColor);
@@ -246,12 +258,12 @@ public class CactusBallProj : ModProjectile, IWarpProjectile
 		Player player = Main.player[Projectile.owner];
 		if (Projectile.ai[1] < 25f && (Projectile.Center - player.Center).Length() <= 120)
 		{
-			Texture2D chain = PlantUtils.GetTexture("Everglow/Sources/Modules/PlantModule/Projectiles/Melee/CactusBallChain");
+			Texture2D chain = PlantUtils.GetTexture("Everglow/Plant/Projectiles/Melee/CactusBallChain");
 			Main.spriteBatch.Draw(chain, (Projectile.Center + player.Center) / 2f - Main.screenPosition, null, alpha, Projectile.AngleToSafe(player.Center),
 				chain.Size() / 2f, new Vector2((Projectile.Center - player.Center).Length() / 62f, Projectile.scale), 0, 0f);
 		}
 ;
-		Texture2D flower = PlantUtils.GetTexture("Everglow/Sources/Modules/PlantModule/Projectiles/Melee/CactusBallFlower");
+		Texture2D flower = PlantUtils.GetTexture("Everglow/Plant/Projectiles/Melee/CactusBallFlower");
 		float dir = Projectile.ai[1] < 15f ? Projectile.AngleFromSafe(player.Center) : Projectile.velocity.ToRotation();
 		Main.spriteBatch.Draw(flower, Projectile.Center - dir.ToRotationVector2() * 25f * Projectile.scale - Main.screenPosition, null,
 			alpha, dir, flower.Size() / 2f, 1f, 0, 0f);
@@ -270,14 +282,17 @@ public class CactusBallProj : ModProjectile, IWarpProjectile
 		}
 		return false;
 	}
+
 	public virtual string TrailShapeTex()
 	{
-		return "Everglow/Sources/Modules/MEACModule/Images/Melee";
+		return "Everglow/MEAC/Images/Melee";
 	}
+
 	public virtual string TrailColorTex()
 	{
-		return "Everglow/Sources/Modules/MEACModule/Images/TestColor";
+		return "Everglow/MEAC/Images/TestColor";
 	}
+
 	public virtual float TrailAlpha(float factor)
 	{
 		float w;
@@ -290,10 +305,11 @@ public class CactusBallProj : ModProjectile, IWarpProjectile
 
 		return w;
 	}
+
 	public void DrawTrail(Color color)
 	{
 		Player player = Main.player[Projectile.owner];
-		List<Vector2> SmoothTrailXUp = CatmullRom.SmoothPath(trailVecsUp.ToList());//平滑
+		List<Vector2> SmoothTrailXUp = GraphicsUtils.CatmullRom(trailVecsUp.ToList());//平滑
 		var SmoothTrailUp = new List<Vector2>();
 		for (int x = 0; x < SmoothTrailXUp.Count; x++)
 		{
@@ -324,24 +340,24 @@ public class CactusBallProj : ModProjectile, IWarpProjectile
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-		Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/PlantModule/Projectiles/Melee/CactusBallTrail", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-
+		Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>("Everglow/Plant/Projectiles/Melee/CactusBallTrail", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 	}
+
 	public void DrawWarp(VFXBatch sb)
 	{
 		Player player = Main.player[Projectile.owner];
-		List<Vector2> SmoothTrailXUp = CatmullRom.SmoothPath(trailVecsUp.ToList());//平滑
+		List<Vector2> SmoothTrailXUp = GraphicsUtils.CatmullRom(trailVecsUp.ToList());//平滑
 		var SmoothTrailUp = new List<Vector2>();
 		for (int x = 0; x < SmoothTrailXUp.Count; x++)
 		{
 			SmoothTrailUp.Add(SmoothTrailXUp[x]);
 		}
 		var SmoothTrailDown = new List<Vector2>();
-		List<Vector2> SmoothTrailXDown = CatmullRom.SmoothPath(trailVecsDown.ToList());//平滑
+		List<Vector2> SmoothTrailXDown = GraphicsUtils.CatmullRom(trailVecsDown.ToList());//平滑
 		for (int x = 0; x < SmoothTrailXDown.Count; x++)
 		{
 			SmoothTrailDown.Add(SmoothTrailXDown[x]);
@@ -365,6 +381,6 @@ public class CactusBallProj : ModProjectile, IWarpProjectile
 			bars.Add(new Vertex2D(trailUp[i] - Radial * 15f - Main.screenPosition, new Color(dir * SpinAcc / 15f, w * SpinAcc / 15f, 0, 1), new Vector3(factor, 0, w)));
 		}
 
-		sb.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/PlantModule/Projectiles/Melee/CactusBallTrail").Value, bars, PrimitiveType.TriangleStrip);
+		sb.Draw(ModContent.Request<Texture2D>("Everglow/Plant/Projectiles/Melee/CactusBallTrail").Value, bars, PrimitiveType.TriangleStrip);
 	}
 }

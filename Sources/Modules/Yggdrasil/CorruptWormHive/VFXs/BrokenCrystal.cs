@@ -96,5 +96,5 @@ internal class BrokenCrystal : Visual
 		gd.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count - 2);
 	}
 
-	public override CallOpportunity DrawLayer => CallOpportunity.PostDrawBG;
+	public override CodeLayer DrawLayer => CodeLayer.PostDrawBG;
 }

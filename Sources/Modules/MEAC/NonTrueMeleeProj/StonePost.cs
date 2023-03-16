@@ -1,3 +1,6 @@
+using Everglow.Commons.MEAC;
+using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX;
 using Terraria.GameContent;
 namespace Everglow.MEAC.NonTrueMeleeProj;
 
@@ -82,11 +85,11 @@ public class StonePost : ModProjectile, IWarpProjectile
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D BackG = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/NonTrueMeleeProj/StonePostBackGround").Value;
-		Texture2D Front = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/NonTrueMeleeProj/StonePost").Value;
-		Texture2D FaceBackG = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/NonTrueMeleeProj/StonePostFaceBackGround").Value;
-		Texture2D FaceBackGGlow = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/NonTrueMeleeProj/StonePostFaceBackGroundGlow").Value;
-		Texture2D Root = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/NonTrueMeleeProj/StonePostRoot").Value;
+		Texture2D BackG = ModContent.Request<Texture2D>("Everglow/MEAC/NonTrueMeleeProj/StonePostBackGround").Value;
+		Texture2D Front = ModContent.Request<Texture2D>("Everglow/MEAC/NonTrueMeleeProj/StonePost").Value;
+		Texture2D FaceBackG = ModContent.Request<Texture2D>("Everglow/MEAC/NonTrueMeleeProj/StonePostFaceBackGround").Value;
+		Texture2D FaceBackGGlow = ModContent.Request<Texture2D>("Everglow/MEAC/NonTrueMeleeProj/StonePostFaceBackGroundGlow").Value;
+		Texture2D Root = ModContent.Request<Texture2D>("Everglow/MEAC/NonTrueMeleeProj/StonePostRoot").Value;
 
 		lightColor = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16));
 		Main.spriteBatch.End();
@@ -94,7 +97,7 @@ public class StonePost : ModProjectile, IWarpProjectile
 
 		float WaveRange = 1.7f;
 
-		float k0 = (float)Math.Sqrt(1 - Projectile.timeLeft * 0.004 % 1) * 2;//»­·½²¨
+		float k0 = (float)Math.Sqrt(1 - Projectile.timeLeft * 0.004 % 1) * 2;//ç”»æ–¹æ³¢
 		float k1 = 1 - k0;
 		float k2 = k1 * k1;
 		float k3 = (float)Math.Sqrt(k1);
@@ -118,10 +121,10 @@ public class StonePost : ModProjectile, IWarpProjectile
 				Main.spriteBatch.End();
 				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-				Effect efS = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/StoneColorII", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+				Effect efS = ModContent.Request<Effect>("Everglow/MEAC/Effects/StoneColorII", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 				efS.Parameters["Str"].SetValue(0.1f);
 				efS.Parameters["uTime"].SetValue((float)(-Projectile.timeLeft * 0.004));
-				efS.Parameters["tex0"].SetValue(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/Images/StonePostLight", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
+				efS.Parameters["tex0"].SetValue(ModContent.Request<Texture2D>("Everglow/MEAC/Images/StonePostLight", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
 				efS.CurrentTechnique.Passes[0].Apply();
 
 				Main.spriteBatch.Draw(BackG, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 255), Projectile.rotation, new Vector2(BackG.Width / 2f, BackG.Height), 1, SpriteEffects.None, 0);
@@ -134,10 +137,10 @@ public class StonePost : ModProjectile, IWarpProjectile
 				Main.spriteBatch.End();
 				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-				Effect efS = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/StoneColorII", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+				Effect efS = ModContent.Request<Effect>("Everglow/MEAC/Effects/StoneColorII", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 				efS.Parameters["Str"].SetValue(0.08f);
 				efS.Parameters["uTime"].SetValue((float)(-Projectile.timeLeft * 0.004));
-				efS.Parameters["tex0"].SetValue(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/Images/StonePostLight", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
+				efS.Parameters["tex0"].SetValue(ModContent.Request<Texture2D>("Everglow/MEAC/Images/StonePostLight", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
 				efS.CurrentTechnique.Passes[0].Apply();
 
 				Main.spriteBatch.Draw(BackG, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 255), Projectile.rotation, new Vector2(BackG.Width / 2f, BackG.Height), new Vector2(0.1f, 1f), SpriteEffects.None, 0);
@@ -150,11 +153,11 @@ public class StonePost : ModProjectile, IWarpProjectile
 				Main.spriteBatch.End();
 				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-				Effect efS = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/StoneColorII", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+				Effect efS = ModContent.Request<Effect>("Everglow/MEAC/Effects/StoneColorII", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 				efS.Parameters["Str"].SetValue(0.1f);
 				efS.Parameters["uTime"].SetValue((float)(Projectile.timeLeft * 0.004 + 0.7));
 
-				efS.Parameters["tex0"].SetValue(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/Images/StonePostLight", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
+				efS.Parameters["tex0"].SetValue(ModContent.Request<Texture2D>("Everglow/MEAC/Images/StonePostLight", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
 				efS.CurrentTechnique.Passes[0].Apply();
 
 				Main.spriteBatch.Draw(FaceBackGGlow, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 255), Projectile.rotation, new Vector2(BackG.Width / 2f, BackG.Height), new Vector2(0.9f, 1f), SpriteEffects.None, 0);
@@ -171,7 +174,7 @@ public class StonePost : ModProjectile, IWarpProjectile
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-			if (k0 < 1)//»­·½²¨
+			if (k0 < 1)//ç”»æ–¹æ³¢
 			{
 				DrawDoubleLine(DrawCen + RotByPro(new Vector2(0, k0 * 50)) * WaveRange, DrawCen + RotByPro(new Vector2(k0 * 75, k0 * 25)) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));
 				DrawDoubleLine(DrawCen + RotByPro(new Vector2(k0 * 75, k0 * 25)) * WaveRange, DrawCen + RotByPro(new Vector2(k0 * 150, 0)) * WaveRange, new Color(1f * k2, 0.7f * k2, 0f, 0f), new Color(1f * k3, 0.6f * k3, 0f, 0f));
@@ -214,14 +217,14 @@ public class StonePost : ModProjectile, IWarpProjectile
 		{
 			glowStrength = (float)(-Math.Cos((Projectile.timeLeft + 20) / 30d * Math.PI) + 1) / 2f;
 		}
-		if (glowStrength > 0)//ÏûÊ§¹âÐ§
+		if (glowStrength > 0)//æ¶ˆå¤±å…‰æ•ˆ
 		{
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-			Effect efS = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/StoneColor", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+			Effect efS = ModContent.Request<Effect>("Everglow/MEAC/Effects/StoneColor", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 			efS.Parameters["Str"].SetValue(glowStrength);
-			efS.Parameters["tex0"].SetValue(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/Images/img_color", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
+			efS.Parameters["tex0"].SetValue(ModContent.Request<Texture2D>("Everglow/MEAC/Images/img_color", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
 			efS.CurrentTechnique.Passes[0].Apply();
 
 			Main.spriteBatch.Draw(BackG, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 255), Projectile.rotation, new Vector2(BackG.Width / 2f, BackG.Height), 1, SpriteEffects.None, 0);
@@ -237,9 +240,9 @@ public class StonePost : ModProjectile, IWarpProjectile
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 		float WaveRange = 1.7f;
-		Texture2D BackG = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/NonTrueMeleeProj/Black").Value;
+		Texture2D BackG = ModContent.Request<Texture2D>("Everglow/MEAC/NonTrueMeleeProj/Black").Value;
 
-		float k0 = (float)Math.Sqrt(1 - Projectile.timeLeft * 0.004 % 1) * 2;//»­·½²¨
+		float k0 = (float)Math.Sqrt(1 - Projectile.timeLeft * 0.004 % 1) * 2;//ç”»æ–¹æ³¢
 		k0 = Math.Max(k0 - 0.025f, 0);
 		float k1 = 1 - k0;
 		float k2 = k1 * k1;

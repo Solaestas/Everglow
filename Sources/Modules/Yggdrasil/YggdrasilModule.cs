@@ -1,27 +1,31 @@
-﻿using Everglow.Yggdrasil.Common;
-using Microsoft.Xna.Framework.Graphics;
+using Everglow.Commons.Modules;
+using Everglow.Commons.VFX;
+using Everglow.Yggdrasil.Common;
 using Terraria.Graphics.Effects;
 
 namespace Everglow.Yggdrasil;
 
-internal class YggdrasilModule : IModule
+internal class YggdrasilModule : EverglowModule
 {
-	string IModule.Name => "Yggdrasil";
+	public override string Name => "Yggdrasil";
+
 	private RenderTarget2D screen = null, OcclusionRender = null, EffectTarget = null, TotalEffeftsRender = null;
+
 	private Effect ScreenOcclusion;
-	void IModule.Load()
+
+	public override void Load()
 	{
 		if (!Main.dedServ)
 		{
-			On.Terraria.Graphics.Effects.FilterManager.EndCapture += FilterManager_EndCapture;
-			ScreenOcclusion = ModContent.Request<Effect>("Everglow/Sources/Modules/YggdrasilModule/Effects/Occlusion", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+			On_FilterManager.EndCapture += FilterManager_EndCapture;
+			ScreenOcclusion = ModContent.Request<Effect>("Everglow/Yggdrasil/Effects/Occlusion", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		}
 	}
 
-	private void FilterManager_EndCapture(On.Terraria.Graphics.Effects.FilterManager.orig_EndCapture orig, FilterManager self, RenderTarget2D finalTexture, RenderTarget2D screenTarget1, RenderTarget2D screenTarget2, Color clearColor)
+	private void FilterManager_EndCapture(On_FilterManager.orig_EndCapture orig, FilterManager self, RenderTarget2D finalTexture, RenderTarget2D screenTarget1, RenderTarget2D screenTarget2, Color clearColor)
 	{
 		// 直接从RT池子里取
-		var renderTargets = Everglow.RenderTargetPool.GetRenderTarget2DArray(4);
+		var renderTargets = Ins.RenderTargetPool.GetRenderTarget2DArray(4);
 		screen = renderTargets.Resource[0];
 		OcclusionRender = renderTargets.Resource[1];
 		EffectTarget = renderTargets.Resource[2];
@@ -32,11 +36,11 @@ internal class YggdrasilModule : IModule
 
 		graphicsDevice.SetRenderTarget(OcclusionRender);
 		graphicsDevice.Clear(Color.Transparent);
-		bool flag = DrawOcclusion(VFXManager.spriteBatch);
+		bool flag = DrawOcclusion(Ins.Batch);
 
 		graphicsDevice.SetRenderTarget(EffectTarget);
 		graphicsDevice.Clear(Color.Transparent);
-		DrawEffect(VFXManager.spriteBatch);
+		DrawEffect(Ins.Batch);
 
 		if (flag)
 		{
@@ -72,6 +76,7 @@ internal class YggdrasilModule : IModule
 		renderTargets.Release();
 		orig(self, finalTexture, screenTarget1, screenTarget2, clearColor);
 	}
+
 	private bool DrawOcclusion(VFXBatch spriteBatch)//遮盖层
 	{
 		spriteBatch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
@@ -96,18 +101,18 @@ internal class YggdrasilModule : IModule
 		spriteBatch.End();
 		return flag;
 	}
+
 	private bool DrawEffect(VFXBatch spriteBatch)//特效层
 	{
 		spriteBatch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
-
 
 		Effect MeleeTrail = YggdrasilContent.QuickEffect("Effects/FlameTrail");
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
 		MeleeTrail.Parameters["uTime"].SetValue((float)Main.timeForVisualEffects * 0.007f);
-		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Sources/Modules/YggdrasilModule/CorruptWormHive/Projectiles/FlameLine", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-		MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>("Everglow/Sources/Modules/YggdrasilModule/CorruptWormHive/Projectiles/DeathSickle_Color", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
+		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/Yggdrasil/CorruptWormHive/Projectiles/FlameLine", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+		MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>("Everglow/Yggdrasil/CorruptWormHive/Projectiles/DeathSickle_Color", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
 		MeleeTrail.CurrentTechnique.Passes["Trail"].Apply();
 		bool flag = false;
 		foreach (Projectile proj in Main.projectile)
@@ -124,16 +129,13 @@ internal class YggdrasilModule : IModule
 		spriteBatch.End();
 		return flag;
 	}
+
 	private void GetOrig(GraphicsDevice graphicsDevice)
 	{
 		graphicsDevice.SetRenderTarget(screen);
 		graphicsDevice.Clear(Color.Transparent);
-		VFXManager.spriteBatch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
-		VFXManager.spriteBatch.Draw(Main.screenTarget, Vector2.Zero, Color.White);
-		VFXManager.spriteBatch.End();
-	}
-
-	void IModule.Unload()
-	{
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
+		Ins.Batch.Draw(Main.screenTarget, Vector2.Zero, Color.White);
+		Ins.Batch.End();
 	}
 }

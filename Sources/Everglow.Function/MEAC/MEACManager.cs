@@ -12,7 +12,7 @@ internal class MEACManager : ILoadable
 		{
 			Main.OnResolutionChanged += Main_OnResolutionChanged;
 			On_FilterManager.EndCapture += FilterManager_EndCapture;
-			ScreenWarp = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/ScreenWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+			ScreenWarp = ModContent.Request<Effect>("Everglow/MEAC/Effects/ScreenWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		}
 	}
 
@@ -42,7 +42,7 @@ internal class MEACManager : ILoadable
 	{
 		if (HasBloom())
 		{
-			Effect Bloom = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/Bloom1", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+			Effect Bloom = ModContent.Request<Effect>("Everglow/MEAC/Effects/Bloom1", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 			//保存原图
 			graphicsDevice.SetRenderTarget(Main.screenTargetSwap);
 			graphicsDevice.Clear(Color.Transparent);
@@ -143,7 +143,7 @@ internal class MEACManager : ILoadable
 	{
 		bool flag = false;
 		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
-		Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+		Effect KEx = ModContent.Request<Effect>("Everglow/MEAC/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		KEx.Parameters["uTransform"].SetValue(Main.Transform * Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1));
 		KEx.CurrentTechnique.Passes[0].Apply();
 		foreach (Projectile proj in Main.projectile)

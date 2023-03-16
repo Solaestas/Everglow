@@ -10,7 +10,7 @@ public class TrueDeathSickleHit : ModProjectile, IWarpProjectile, IBloomProjecti
 	private int FraX = 0;
 	private int FraY = 0;
 	private float Stre2 = 1;
-	public override string Texture => "Everglow/Sources/Modules/MythModule/TheFirefly/Projectiles/MothBall";
+	public override string Texture => "Everglow/Myth/TheFirefly/Projectiles/MothBall";
 	protected override bool CloneNewInstances => false;
 	public override bool IsCloneable => false;
 

@@ -20,11 +20,11 @@ public class TrueDeathSickle : MeleeProj, IOcclusionProjectile, IWarpProjectile,
 	}
 	public override string TrailShapeTex()
 	{
-		return "Everglow/Sources/Modules/YggdrasilModule/CorruptWormHive/Projectiles/FlameLine";
+		return "Everglow/Yggdrasil/CorruptWormHive/Projectiles/FlameLine";
 	}
 	public override string TrailColorTex()
 	{
-		return "Everglow/Sources/Modules/YggdrasilModule/CorruptWormHive/Projectiles/DeathSickle_Color";
+		return "Everglow/Yggdrasil/CorruptWormHive/Projectiles/DeathSickle_Color";
 	}
 	public override float TrailAlpha(float factor)
 	{
@@ -36,9 +36,9 @@ public class TrueDeathSickle : MeleeProj, IOcclusionProjectile, IWarpProjectile,
 	}
 	public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, float HorizontalWidth, float HorizontalHeight, float DrawScale, string GlowPath, double DrawRotation)
 	{
-		VFXManager.spriteBatch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
-		//DrawEffect(VFXManager.spriteBatch);
-		VFXManager.spriteBatch.End();
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
+		//DrawEffect(Ins.Batch);
+		Ins.Batch.End();
 		Player player = Main.player[Projectile.owner];
 		Texture2D tex = YggdrasilContent.QuickTexture("CorruptWormHive/Projectiles/TrueDeathSickle_Handle");
 		if (attackType == 1 && timer > 18)
@@ -267,7 +267,7 @@ public class TrueDeathSickle : MeleeProj, IOcclusionProjectile, IWarpProjectile,
 			if (timer == 20)
 			{
 				AttSound(new SoundStyle(
-			"Everglow/Sources/Modules/MEACModule/Sounds/TrueMeleeSwing"));
+			"Everglow/MEAC/Sounds/TrueMeleeSwing"));
 
 			}
 
@@ -315,7 +315,7 @@ public class TrueDeathSickle : MeleeProj, IOcclusionProjectile, IWarpProjectile,
 			if (timer == 50)
 			{
 				AttSound(new SoundStyle(
-			"Everglow/Sources/Modules/MEACModule/Sounds/TrueMeleeSwing"));
+			"Everglow/MEAC/Sounds/TrueMeleeSwing"));
 			}
 
 			if (timer == 70)
@@ -368,7 +368,7 @@ public class TrueDeathSickle : MeleeProj, IOcclusionProjectile, IWarpProjectile,
 			if (timer == 30)
 			{
 				AttSound(new SoundStyle(
-			"Everglow/Sources/Modules/MEACModule/Sounds/TrueMeleePowerSwing"));
+			"Everglow/MEAC/Sounds/TrueMeleePowerSwing"));
 			}
 			if (timer == 50)
 			{
@@ -441,7 +441,7 @@ public class TrueDeathSickle : MeleeProj, IOcclusionProjectile, IWarpProjectile,
 	}
 	public void DrawBloom()
 	{
-		VFXManager.spriteBatch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
 		Effect MeleeTrail = YggdrasilContent.QuickEffect("Effects/FlameTrail");
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
@@ -449,21 +449,21 @@ public class TrueDeathSickle : MeleeProj, IOcclusionProjectile, IWarpProjectile,
 		MeleeTrail.Parameters["uTime"].SetValue(timer2 * 0.007f);
 		MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
 		MeleeTrail.CurrentTechnique.Passes[shadertype].Apply();
-		DrawEffect(VFXManager.spriteBatch);
-		VFXManager.spriteBatch.End();
+		DrawEffect(Ins.Batch);
+		Ins.Batch.End();
 
 
-		VFXManager.spriteBatch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
 		Effect effect = YggdrasilContent.QuickEffect("Effects/Null");
 		model = Matrix.CreateTranslation(new Vector3(0, 0, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		effect.CurrentTechnique.Passes[0].Apply();
-		DrawOcclusion(VFXManager.spriteBatch);
-		VFXManager.spriteBatch.End();
+		DrawOcclusion(Ins.Batch);
+		Ins.Batch.End();
 	}
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
-		List<Vector2> SmoothTrailX = CatmullRom.SmoothPath(trailVecs.ToList());//平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList());//平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
 		{
@@ -523,7 +523,7 @@ public class TrueDeathSickle : MeleeProj, IOcclusionProjectile, IWarpProjectile,
 			bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + trail[i] * Projectile.scale * 1.1f, new Color(dir, w, 0, 1), new Vector3(factor, 0, w)));
 		}
 
-		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/Images/Warp").Value, bars, PrimitiveType.TriangleStrip);
+		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/MEAC/Images/Warp").Value, bars, PrimitiveType.TriangleStrip);
 
 		DrawOcclusion(spriteBatch);
 		return;
@@ -535,7 +535,7 @@ public class TrueDeathSickle : MeleeProj, IOcclusionProjectile, IWarpProjectile,
 	internal int timer2 = 0;
 	public void DrawEffect(VFXBatch spriteBatch)
 	{
-		List<Vector2> SmoothTrailX = CatmullRom.SmoothPath(trailVecs.ToList());//平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList());//平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
 		{

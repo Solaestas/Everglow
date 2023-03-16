@@ -1,42 +1,46 @@
 using Terraria.Audio;
 using Everglow.Yggdrasil.Common.Elevator.Tiles;
+using Everglow.Commons.CustomTiles.Tiles;
+using Everglow.Commons.CustomTiles;
+using Everglow.Commons.CustomTiles.DataStructures;
+using Everglow.Commons.Vertex;
 
 namespace Everglow.Yggdrasil.Common.Elevator;
 
 internal class YggdrasilElevator : DBlock
 {
 	/// <summary>
-	/// ½ÓÏÂÀ´ÔËĞĞµÄ·½Ïò
+	/// æ¥ä¸‹æ¥è¿è¡Œçš„æ–¹å‘
 	/// </summary>
 	internal int RunningDirection = 1;
 	/// <summary>
-	/// Í£¿¿Ê±¼ä
+	/// åœé æ—¶é—´
 	/// </summary>
 	internal int PauseTime = 0;
 	/// <summary>
-	/// ³ÖĞø¼ÓËÙÊ±¼ä
+	/// æŒç»­åŠ é€Ÿæ—¶é—´
 	/// </summary>
 	internal int AccelerateTimeLeft = 0;
 	/// <summary>
-	/// Òò¹ÊÕÏ¿¨¶ÙµÄÖÍÁôÊ±¼ä
+	/// å› æ•…éšœå¡é¡¿çš„æ»ç•™æ—¶é—´
 	/// </summary>
 	internal int DetentionTime = 0;
 	/// <summary>
-	/// ÆğÊ¼Y×ø±ê
+	/// èµ·å§‹Yåæ ‡
 	/// </summary>
 	internal float StartCoordY = 0;
 	/// <summary>
-	/// µçÌİÉÏµÄµÆÓĞÃ»ÓĞ¿ª
+	/// ç”µæ¢¯ä¸Šçš„ç¯æœ‰æ²¡æœ‰å¼€
 	/// </summary>
 	internal bool LampOn = false;
 	/// <summary>
-	/// ³õÊ¼»¯µÄ¼ìÑé
+	/// åˆå§‹åŒ–çš„æ£€éªŒ
 	/// </summary>
 	internal bool CheckDefault = false;
 
 	public override void OnCollision(AABB aabb, Direction dir)
 	{
-		//´ËÇøÓò½öÓÃ×÷²âÊÔ
+		//æ­¤åŒºåŸŸä»…ç”¨ä½œæµ‹è¯•
 		//Main.NewText(StartCoordY);
 		//Main.NewText(DetentionTime, Color.Red);
 		//Main.NewText(AccelerateTimeLeft, Color.Green);
@@ -50,18 +54,18 @@ internal class YggdrasilElevator : DBlock
 			StartCoordY = position.Y;
 			CheckDefault = true;
 		}
-		//Åö×²Ìå»ı,¸ß¶ÈÒª+1Òª²»È»»á±»Îü×ß£¬×ÏÓÄ¿ÉÒÔÊÔ×ÅĞŞ¸´Õâ¸öBug£¨<= 16¸ß¶È¾Í»á±»Ô­°æµÄÎï¿éÎü¸½¹á´©£©
+		//ç¢°æ’ä½“ç§¯,é«˜åº¦è¦+1è¦ä¸ç„¶ä¼šè¢«å¸èµ°ï¼Œç´«å¹½å¯ä»¥è¯•ç€ä¿®å¤è¿™ä¸ªBugï¼ˆ<= 16é«˜åº¦å°±ä¼šè¢«åŸç‰ˆçš„ç‰©å—å¸é™„è´¯ç©¿ï¼‰
 		size = new Vector2(96, 17);
 
 		Vector2 TileCenter = Center / 16f;
 		int TCX = (int)TileCenter.X;
 		int TCY = (int)TileCenter.Y;
-		//µçÌİÆ½Ì¨µÄ°ë¿í¶È
+		//ç”µæ¢¯å¹³å°çš„åŠå®½åº¦
 		int TCWidth = (int)(size.X / 32f);
 
 		if (PauseTime > 0)
 		{
-			//Í£»ú¼õËÙ
+			//åœæœºå‡é€Ÿ
 			PauseTime--;
 			velocity *= 0.9f;
 			if (velocity.Length() < 0.01f)
@@ -69,7 +73,7 @@ internal class YggdrasilElevator : DBlock
 		}
 		else
 		{
-			//¿ª»ú¼ÓËÙ
+			//å¼€æœºåŠ é€Ÿ
 			PauseTime = 0;
 			if (velocity.Length() < 2f)
 				velocity.Y += 0.1f * RunningDirection;
@@ -85,7 +89,7 @@ internal class YggdrasilElevator : DBlock
 			AccelerateTimeLeft = 0;
 			if (PauseTime == 0)
 			{
-				//¼ì²âÕ¾Ì¨,µ½ÁË¾ÍÍ£
+				//æ£€æµ‹ç«™å°,åˆ°äº†å°±åœ
 				for (int dx = 0; dx < 5; dx++)
 				{
 					if (TCX - (TCWidth + dx) < Main.maxTilesX - 20 && TCX + TCWidth + dx < Main.maxTilesX - 20 && TCY + (1 - RunningDirection) * RunningDirection < Main.maxTilesY - 20 && TCY + (1 - RunningDirection) * RunningDirection > 20 && TCX + TCWidth + dx > 20 && TCX - (TCWidth + dx) > 20)
@@ -100,14 +104,14 @@ internal class YggdrasilElevator : DBlock
 				}
 			}
 		}
-		//ÒªÆô¶¯ÁË
+		//è¦å¯åŠ¨äº†
 		if (PauseTime == 2)
 			CheckRunningDirection();
-		//Í£»úÊ±¼ä¼ì²â
+		//åœæœºæ—¶é—´æ£€æµ‹
 		if (Math.Abs(velocity.Y) <= 0.2f)
 		{
 			DetentionTime++;
-			//Í£»úÌ«¾Ã,ÅĞ¶¨Îª¿¨ËÀ£¬ÖØÆô
+			//åœæœºå¤ªä¹…,åˆ¤å®šä¸ºå¡æ­»ï¼Œé‡å¯
 			if (DetentionTime > 300)
 			{
 				PauseTime = 10;
@@ -118,7 +122,7 @@ internal class YggdrasilElevator : DBlock
 		{
 			DetentionTime = 0;
 		}
-		//Î»ÖÃÌ«¸ßĞèÒªÖØÆô
+		//ä½ç½®å¤ªé«˜éœ€è¦é‡å¯
 		if (position.Y < StartCoordY - 1)
 		{
 			if (PauseTime == 0 && AccelerateTimeLeft == 0)
@@ -130,11 +134,11 @@ internal class YggdrasilElevator : DBlock
 		Vector2 TileCenter = Center / 16f;
 		int TCX = (int)TileCenter.X;
 		int TCY = (int)TileCenter.Y;
-		//µçÌİÆ½Ì¨µÄ°ë¿í¶È
+		//ç”µæ¢¯å¹³å°çš„åŠå®½åº¦
 		int TCWidth = (int)(size.X / 32f);
 		int Lamp = 0;
 		int distanceToWinch = 1000;
-		//ÏòÉÏ1000¸ñ¼ìË÷½ÊÅÌ
+		//å‘ä¸Š1000æ ¼æ£€ç´¢ç»ç›˜
 		for (int dy = 0; dy < 1000; dy++)
 		{
 			if (TCX < Main.maxTilesX - 20 && TCY + dy * RunningDirection < Main.maxTilesY - 20 && TCY + dy * RunningDirection > 20 && TCX > 20)
@@ -187,7 +191,7 @@ internal class YggdrasilElevator : DBlock
 	public override Color MapColor => new Color(122, 91, 79);
 	public override void Draw()
 	{
-		//»æÖÆÇøÍêÈ«²»ÓÃ¹Ü
+		//ç»˜åˆ¶åŒºå®Œå…¨ä¸ç”¨ç®¡
 		if (position.X / 16f < Main.maxTilesX - 28 && position.Y / 16f < Main.maxTilesY - 28 && position.X / 16f > 28 && position.Y / 16f > 28)
 		{
 			Color drawc = Lighting.GetColor((int)(Center.X / 16f), (int)(Center.Y / 16f) - 3);

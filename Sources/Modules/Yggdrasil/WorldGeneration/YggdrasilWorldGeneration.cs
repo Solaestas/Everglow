@@ -36,7 +36,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	/// <param name="type"></param>
 	public static void ShapeTile(string Shapepath, int a, int b, int type)
 	{
-		var imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Sources/Modules/YggdrasilModule/WorldGeneration/" + Shapepath);
+		var imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Yggdrasil/WorldGeneration/" + Shapepath);
 		imageData.ProcessPixelRows(accessor =>
 		{
 			for (int y = 0; y < accessor.Height; y++)
@@ -678,7 +678,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	{
 		var mapIO = new MapIO(x, y);
 
-		mapIO.Read(Everglow.Instance.GetFileStream("Sources/Modules/YggdrasilModule/" + Path));
+		mapIO.Read(Ins.GetFileStream("Sources/Modules/YggdrasilModule/" + Path));
 
 		var it = mapIO.GetEnumerator();
 		while (it.MoveNext())

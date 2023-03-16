@@ -1,15 +1,14 @@
-﻿namespace Everglow.Food;
+using Everglow.Commons.Modules;
 
-internal class FoodSystem : IModule
+namespace Everglow.Food;
+
+internal class FoodSystem : EverglowModule
 {
-	string IModule.Name => "食物系统";
-	void IModule.Load()
+	public override string Name => "Food";
+
+	public override void Load()
 	{
-		Terraria.On_Player.UpdateStarvingState += Player_UpdateStarvingState;
-	}
-	void IModule.Unload()
-	{
-		Terraria.On_Player.UpdateStarvingState -= Player_UpdateStarvingState;
+		On_Player.UpdateStarvingState += Player_UpdateStarvingState;
 	}
 	private void Player_UpdateStarvingState(Terraria.On_Player.orig_UpdateStarvingState orig, Player self, bool withEmote)
 	{

@@ -1,7 +1,6 @@
 using Everglow.Commons.MEAC;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
-using Terraria.DataStructures;
 using Terraria.GameContent;
 namespace Everglow.MEAC.NonTrueMeleeProj;
 
@@ -21,7 +20,7 @@ public class GoldShield : ModProjectile, IWarpProjectile
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 		float WaveRange = 0.7f;
-		//Texture2D BackG = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/NonTrueMeleeProj/Black").Value;
+		//Texture2D BackG = ModContent.Request<Texture2D>("Everglow/MEAC/NonTrueMeleeProj/Black").Value;
 
 		float k0 = (float)Math.Sqrt(1200 - Projectile.timeLeft) / 6f;//画方波
 		if (k0 is < 1 and > 0)
@@ -93,7 +92,9 @@ public class GoldShield : ModProjectile, IWarpProjectile
 		var vertex2Ds = new List<Vertex2D>();
 		Vector2 DrawCen = Main.player[Projectile.owner].Center - Main.screenPosition - new Vector2(Main.screenWidth / 2f, Main.screenHeight / 2f);
 		if (DrawCen.Length() < 5f)
+		{
 			DrawCen = new Vector2(Main.screenWidth / 2f, Main.screenHeight / 2f);
+		}
 		else
 		{
 			DrawCen = Main.player[Projectile.owner].Center - Main.screenPosition;
@@ -141,7 +142,9 @@ public class GoldShield : ModProjectile, IWarpProjectile
 	public override void AI()
 	{
 		if (Projectile.ai[0] > 0)
+		{
 			Projectile.ai[0]--;
+		}
 		else
 		{
 			Projectile.ai[0] = 0;
@@ -170,14 +173,18 @@ public class GoldShield : ModProjectile, IWarpProjectile
 
 
 		if (LeftTime < 10)
+		{
 			glowStrength = (float)(-Math.Cos(LeftTime / 10d * Math.PI) + 1) * 120f;
+		}
 		else if (LeftTime < 40)
 		{
 			glowStrength = (float)(-Math.Cos((LeftTime + 75) / 30d * Math.PI) + 1) * 120f;
 		}
 
 		if (Projectile.timeLeft < 10)
+		{
 			glowStrength = (float)(-Math.Cos(Projectile.timeLeft / 10d * Math.PI) + 1) * 120f;
+		}
 		else if (Projectile.timeLeft < 40)
 		{
 			glowStrength = (float)(-Math.Cos((Projectile.timeLeft + 75) / 30d * Math.PI) + 1) * 120f;
@@ -209,17 +216,17 @@ public class GoldShield : ModProjectile, IWarpProjectile
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Effect Post = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/Post", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+		Effect Post = ModContent.Request<Effect>("Everglow/MEAC/Effects/Post", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		Post.Parameters["uTime"].SetValue((float)(Main.timeForVisualEffects * 0.003));
 		Post.CurrentTechnique.Passes[0].Apply();
 
-		Texture2D StoneSquire = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/NonTrueMeleeProj/GoldShieldGlowMap").Value;
+		Texture2D StoneSquire = ModContent.Request<Texture2D>("Everglow/MEAC/NonTrueMeleeProj/GoldShieldGlowMap").Value;
 		DrawPost(new Color(255, 255, 255, 0), 200, 50, 1, StoneSquire);
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Post.CurrentTechnique.Passes[0].Apply();
-		Texture2D StoneSquireD = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/NonTrueMeleeProj/GoldShieldDarkMap").Value;
+		Texture2D StoneSquireD = ModContent.Request<Texture2D>("Everglow/MEAC/NonTrueMeleeProj/GoldShieldDarkMap").Value;
 		DrawPost(new Color(255, 255, 255, 155), 200, 50, 1, StoneSquireD);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
@@ -227,7 +234,7 @@ public class GoldShield : ModProjectile, IWarpProjectile
 
 
 		float WaveRange = 0.7f;
-		//Texture2D BackG = ModContent.Request<Texture2D>("Everglow/Sources/Modules/MEACModule/NonTrueMeleeProj/Black").Value;
+		//Texture2D BackG = ModContent.Request<Texture2D>("Everglow/MEAC/NonTrueMeleeProj/Black").Value;
 
 		float k0 = (float)Math.Sqrt(1200 - Projectile.timeLeft) / 6f;//画方波
 		if (k0 is < 1 and > 0)
@@ -241,7 +248,7 @@ public class GoldShield : ModProjectile, IWarpProjectile
 
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-			Effect KEx = ModContent.Request<Effect>("Everglow/Sources/Modules/MEACModule/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+			Effect KEx = ModContent.Request<Effect>("Everglow/MEAC/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 			KEx.CurrentTechnique.Passes[0].Apply();
 
 			DrawDoubleLine(DrawCen + new Vector2(0, -k0 * 150) * WaveRange, DrawCen + new Vector2(k0 * 75, -k0 * 75) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));
@@ -277,43 +284,46 @@ public class GoldShield : ModProjectile, IWarpProjectile
 public class GlodShieldPlayer : ModPlayer
 {
 	public int immuneTime = 0;
-	public override bool PreHurt(bool pvp, bool quiet, ref int damage, ref int hitDirection, ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource, ref int cooldownCounter)
+	// TODO 叫人来修
+	public override void ModifyHurt(ref Player.HurtModifiers modifiers)
 	{
-		if (immuneTime > 0)
-			return false;
-		immuneTime = 30;
-		if (Player.longInvince)
-			immuneTime = 45;
-		for (int x = 0; x < Main.projectile.Length; x++)
-		{
-			if (Main.projectile[x].owner == Player.whoAmI)
-			{
-				if (Main.projectile[x].type == ModContent.ProjectileType<GoldShield>() && Main.projectile[x].active)
-				{
+		//if (immuneTime > 0)
+		//{
+		//	return false;
+		//}
+		//immuneTime = 30;
+		//if (Player.longInvince)
+		//	immuneTime = 45;
+		//for (int x = 0; x < Main.projectile.Length; x++)
+		//{
+		//	if (Main.projectile[x].owner == Player.whoAmI)
+		//	{
+		//		if (Main.projectile[x].type == ModContent.ProjectileType<GoldShield>() && Main.projectile[x].active)
+		//		{
 
-					if (Main.projectile[x].ai[1] >= damage)
-					{
-						Main.projectile[x].ai[1] -= damage;
-						Main.projectile[x].ai[0] = 10;
-						return false;
-					}
-					else
-					{
-						damage -= (int)Main.projectile[x].ai[1];
-						Main.projectile[x].ai[1] = 0;
-						Main.projectile[x].timeLeft = 14;
-					}
-				}
-			}
+		//			if (Main.projectile[x].ai[1] >= damage)
+		//			{
+		//				Main.projectile[x].ai[1] -= damage;
+		//				Main.projectile[x].ai[0] = 10;
+		//				return false;
+		//			}
+		//			else
+		//			{
+		//				damage -= (int)Main.projectile[x].ai[1];
+		//				Main.projectile[x].ai[1] = 0;
+		//				Main.projectile[x].timeLeft = 14;
+		//			}
+		//		}
+		//	}
 
-		}
-
-		return true;
+		//}
 	}
 	public static int DownUpdate(int value)
 	{
 		if (value > 0)
+		{
 			value--;
+		}
 		else
 		{
 			value = 0;
@@ -325,6 +335,5 @@ public class GlodShieldPlayer : ModPlayer
 		immuneTime = DownUpdate(immuneTime);
 		if (immuneTime > 0)
 			Player.immune = true;
-		base.PostUpdate();
 	}
 }

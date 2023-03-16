@@ -1,5 +1,3 @@
-//using Everglow.Sources.Modules.MythModule.TheFirefly.NPCs;
-
 namespace Everglow.Myth.TheFirefly.Tiles;
 
 public class DarkCocoon : ModTile
@@ -25,7 +23,7 @@ public class DarkCocoon : ModTile
 		if (Main.rand.NextBool(6))
 		{
 			if (Main.tile[i, j].Slope == SlopeType.Solid && Main.tile[i + 1, j].Slope == SlopeType.Solid && Main.tile[i - 1, j].Slope == SlopeType.Solid && Main.tile[i + 2, j].Slope == SlopeType.Solid && Main.tile[i - 2, j].Slope == SlopeType.Solid &&
-				Main.tile[i, j + 1].Slope == SlopeType.Solid && Main.tile[i + 1, j + 1].Slope == SlopeType.Solid && Main.tile[i - 1, j + 1].Slope == SlopeType.Solid && Main.tile[i + 2, j + 1].Slope == SlopeType.Solid && Main.tile[i - 2, j + 1].Slope == SlopeType.Solid)// ˜ƒæ
+				Main.tile[i, j + 1].Slope == SlopeType.Solid && Main.tile[i + 1, j + 1].Slope == SlopeType.Solid && Main.tile[i - 1, j + 1].Slope == SlopeType.Solid && Main.tile[i + 2, j + 1].Slope == SlopeType.Solid && Main.tile[i - 2, j + 1].Slope == SlopeType.Solid)//Ê†ëÊú®
 			{
 				int MaxHeight = 0;
 				for (int x = -2; x < 3; x++)
@@ -52,7 +50,7 @@ public class DarkCocoon : ModTile
 			tile.HasTile = true;
 			tile.TileFrameX = (short)(28 * Main.rand.Next(8));
 		}
-		if (Main.rand.NextBool(6))//∫⁄”©ÃŸ¬˚
+		if (Main.rand.NextBool(6))//ÈªëËê§Ëó§Ëîì
 		{
 			Tile t0 = Main.tile[i, j];
 
@@ -64,7 +62,7 @@ public class DarkCocoon : ModTile
 				t2.TileFrameY = (short)(Main.rand.Next(6, 9) * 18);
 			}
 		}
-		if (Main.rand.NextBool(3))//¡˜”©µŒ
+		if (Main.rand.NextBool(3))//ÊµÅËê§Êª¥
 		{
 			int count = 0;
 			for (int x = -1; x <= 1; x++)
@@ -86,7 +84,7 @@ public class DarkCocoon : ModTile
 		Tile tx = Main.tile[i, j + 1];
 		if (!tx.HasTile)
 			NPC.NewNPC(null, i * 16 + Main.rand.Next(-8, 9), j * 16 + 32, ModContent.NPCType<NPCs.LittleFireBulb>());
-		if (Main.rand.NextBool(3))//¡˜”©µŒ
+		if (Main.rand.NextBool(3))//ÊµÅËê§Êª¥
 		{
 			int count = 0;
 			for (int x = -1; x <= 1; x++)
@@ -112,7 +110,7 @@ public class DarkCocoon : ModTile
 			if (count == 0)
 				NPC.NewNPC(null, i * 16 + Main.rand.Next(-8, 9), j * 16 + 180, ModContent.NPCType<NPCs.LargeFireBulb>());
 		}
-		if (!Main.tile[i, j - 1].HasTile && !Main.tile[i + 1, j - 1].HasTile && !Main.tile[i - 1, j - 1].HasTile && Main.tile[i, j].Slope == SlopeType.Solid && Main.tile[i - 1, j].Slope == SlopeType.Solid && Main.tile[i + 1, j].Slope == SlopeType.Solid)//∫⁄”©‹ƒ
+		if (!Main.tile[i, j - 1].HasTile && !Main.tile[i + 1, j - 1].HasTile && !Main.tile[i - 1, j - 1].HasTile && Main.tile[i, j].Slope == SlopeType.Solid && Main.tile[i - 1, j].Slope == SlopeType.Solid && Main.tile[i + 1, j].Slope == SlopeType.Solid)//ÈªëËê§Ëã£
 		{
 			Tile t1 = Main.tile[i, j - 1];
 			Tile t2 = Main.tile[i, j - 2];

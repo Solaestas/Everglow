@@ -20,6 +20,6 @@ internal class DevilPipeline : PostPipeline
 
 	public override void Load()
 	{
-		effect = ModContent.Request<Effect>("Everglow/Sources/Modules/YggdrasilModule/CorruptWormHive/VFXs/FlameColor");
+		effect = ModContent.Request<Effect>("Everglow/Yggdrasil/CorruptWormHive/VFXs/FlameColor");
 	}
 }

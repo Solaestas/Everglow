@@ -54,6 +54,6 @@ public class HorizontalBar
 			field["_panelRightMP"].SetValue(value, MpPanelRight);
 			return;
 		}
-		Everglow.Instance.Logger.Warn("HorizontalBar sprites replacement loading failed, sprite replacement would not work.");
+		Ins.Logger.Warn("HorizontalBar sprites replacement loading failed, sprite replacement would not work.");
 	}
 }
