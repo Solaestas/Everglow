@@ -9,5 +9,11 @@
 	<ItemGroup>
 		<ProjectReference Include="$(MSBuildThisFileDirectory)\..\Everglow.Core\Everglow.Core.csproj" />
 		<ProjectReference Include="$(MSBuildThisFileDirectory)\..\Everglow.Function\Everglow.Function.csproj" />
+		<Using Include="Terraria" />
+		<Using Include="Terraria.ModLoader" />
+		<Using Include="Terraria.ID" />
+		<Using Include="Microsoft.Xna.Framework"/>
+		<Using Include="Microsoft.Xna.Framework.Graphics"/>
+		<Using Include="Everglow.Commons"/>
 	</ItemGroup>
 </Project>
