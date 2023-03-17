@@ -1,4 +1,7 @@
-﻿using Everglow.Yggdrasil.Common;
+using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX;
+using Everglow.Myth.Common;
+using Everglow.Yggdrasil.Common;
 
 namespace Everglow.Yggdrasil.CorruptWormHive.Projectiles;
 

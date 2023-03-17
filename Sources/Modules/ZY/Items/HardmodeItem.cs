@@ -28,7 +28,7 @@ internal class HardmodeItem : ModItem
 			Main.hardMode = false;
 		}
 
-		// VFXManager.Add(new WhiteDust() { position = Main.MouseWorld });
+		//Ins.VFXManager.Add(new WhiteDust() { position = Main.MouseWorld });
 		return true;
 	}
 

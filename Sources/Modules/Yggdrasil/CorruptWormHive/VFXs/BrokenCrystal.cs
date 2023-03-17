@@ -1,4 +1,8 @@
-﻿using Terraria.GameContent;
+using Everglow.Commons.Enums;
+using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX;
+using Everglow.Commons.VFX.Pipelines;
+using Terraria.GameContent;
 
 namespace Everglow.Yggdrasil.CorruptWormHive.VFXs;
 

@@ -1,7 +1,12 @@
-﻿using Terraria.Audio;
+using Terraria.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Everglow.Yggdrasil.CorruptWormHive.Buffs;
 using Everglow.Yggdrasil.Common;
+using Everglow.Commons.VFX;
+using Everglow.Commons.Utilities;
+using Everglow.Commons.MEAC;
+using Everglow.Commons.Vertex;
+using Everglow.Yggdrasil.CorruptWormHive.VFXs;
 
 namespace Everglow.Yggdrasil.CorruptWormHive.Projectiles;
 
@@ -420,7 +425,7 @@ public class TrueDeathSickle : MeleeProj, IOcclusionProjectile, IWarpProjectile,
 				maxTime = Main.rand.Next(9, 24),
 				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(0.01f, 0.1f) * dir, Main.rand.NextFloat(8f, 32f) }
 			};
-			VFXManager.Add(df);
+			Ins.VFXManager.Add(df);
 		}
 	}
 	public void GenerateVFXFromTarget(NPC target, int Frequency, float mulVelocity = 1f)
@@ -436,7 +441,7 @@ public class TrueDeathSickle : MeleeProj, IOcclusionProjectile, IWarpProjectile,
 				maxTime = Main.rand.Next(12, 30),
 				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.1f, 0.1f), Main.rand.NextFloat(8f, 32f) }
 			};
-			VFXManager.Add(df);
+			Ins.VFXManager.Add(df);
 		}
 	}
 	public void DrawBloom()

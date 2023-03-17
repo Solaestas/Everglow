@@ -1,3 +1,5 @@
+using Everglow.Commons.Vertex;
+
 namespace Everglow.Commons.Skeleton2D;
 
 public abstract class Attachment
