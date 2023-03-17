@@ -1,7 +1,5 @@
-using Everglow.Myth;
 using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
-using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -102,7 +100,9 @@ public class MissileProj : ModProjectile, IWarpProjectile
 			Projectile.velocity = Projectile.oldVelocity;
 		TimeTokill--;
 		if (TimeTokill < 0)
+		{
 			ChaseTarget();
+		}
 		else
 		{
 			if (TimeTokill < 10)
@@ -122,7 +122,7 @@ public class MissileProj : ModProjectile, IWarpProjectile
 	{
 		HitToAnything();
 	}
-	public override void OnHitPvp(Player target, int damage, bool crit)/* tModPorter Note: Removed. Use OnHitPlayer and check info.PvP */
+	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
 		HitToAnything();
 	}
@@ -156,7 +156,13 @@ public class MissileProj : ModProjectile, IWarpProjectile
 					if (!target.dontTakeDamage && !target.friendly && target.CanBeChasedBy() && target.active)
 					{
 						bool crit = Main.rand.NextBool(33, 100);
-						target.StrikeNPC((int)(Projectile.damage * Main.rand.NextFloat(1.70f, 2.30f)), 2f, 1, crit);
+						target.StrikeNPC(new NPC.HitInfo()
+						{
+							Damage = (int)(Projectile.damage * Main.rand.NextFloat(1.70f, 2.30f)),
+							KnockBack = 2,
+							HitDirection = 1,
+							Crit = crit,
+						});
 
 						player.addDPS(Math.Max(0, target.defDamage));
 					}
@@ -203,7 +209,13 @@ public class MissileProj : ModProjectile, IWarpProjectile
 				if (!target.dontTakeDamage && !target.friendly && target.CanBeChasedBy() && target.active)
 				{
 					bool crit = Main.rand.NextBool(33, 100);
-					target.StrikeNPC((int)(Projectile.damage * Main.rand.NextFloat(1.70f, 2.30f)), 2f, 1, crit);
+					target.StrikeNPC(new NPC.HitInfo()
+					{
+						Damage = (int)(Projectile.damage * Main.rand.NextFloat(1.70f, 2.30f)),
+						KnockBack = 2f,
+						HitDirection = 1,
+						Crit = crit
+					});
 
 					player.addDPS(Math.Max(0, target.defDamage));
 				}

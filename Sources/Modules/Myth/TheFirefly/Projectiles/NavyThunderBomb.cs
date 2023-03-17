@@ -1,5 +1,4 @@
-﻿using Everglow.Myth;
-using Everglow.Myth.Common;
+﻿using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
 using Terraria.Audio;
 using static Everglow.Myth.Common.MythUtils;

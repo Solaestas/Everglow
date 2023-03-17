@@ -1,6 +1,6 @@
-﻿namespace Everglow.Myth.TheFirefly.Physics;
+namespace Everglow.Commons.Physics;
 
-internal class Mass
+public class Mass
 {
 	/// <summary>
 	/// 质量

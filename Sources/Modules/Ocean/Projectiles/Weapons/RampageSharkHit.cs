@@ -1,4 +1,7 @@
-﻿using Everglow.Ocean.Common;
+using Everglow.Commons.MEAC;
+using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX;
+using Everglow.Ocean.Common;
 
 namespace Everglow.Ocean.Projectiles.Weapons;
 

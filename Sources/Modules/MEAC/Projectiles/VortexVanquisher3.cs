@@ -1,4 +1,4 @@
-﻿using Terraria.Audio;
+using Terraria.Audio;
 using Terraria.GameContent.Shaders;
 
 namespace Everglow.MEAC.Projectiles;
@@ -8,7 +8,6 @@ public class VortexVanquisher3 : ModProjectile
 	public override string Texture => "Everglow/MEAC/Projectiles/VortexVanquisher";
 	public override void SetStaticDefaults()
 	{
-		DisplayName.SetDefault("");
 		Main.projFrames[Projectile.type] = 3;
 	}
 	public override void SetDefaults()

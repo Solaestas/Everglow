@@ -1,4 +1,7 @@
-﻿using SixLabors.ImageSharp.PixelFormats;
+using Everglow.Commons.Physics;
+using Everglow.Commons.Utilities;
+using Everglow.Commons.Vertex;
+using SixLabors.ImageSharp.PixelFormats;
 using Terraria.GameContent;
 //TODO:拆出物理效果和渲染器两个部分
 namespace Everglow.TwilightForest.Common;
@@ -208,7 +211,7 @@ internal class RopeManager
 			Vector2 offset = rope.GetOffset();
 			if (!drawRange.Contains((offset + rope.mass[0].position).ToPoint()))
 				continue;
-			List<Vector2> massPositionsSmooth = Commons.Function.Curves.GraphicsUtils.CatmullRom(rope.mass.Select(m => m.position + offset), 4);
+			List<Vector2> massPositionsSmooth = GraphicsUtils.CatmullRom(rope.mass.Select(m => m.position + offset), 4);
 
 			DrawRope(massPositionsSmooth, vertices, indices);
 		}

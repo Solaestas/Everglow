@@ -320,16 +320,6 @@ public class TyphoonII : ModProjectile, IWarpProjectile
 	}
 
 
-	public override void Kill(int timeLeft)
-	{
-	}
-
-	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-	{
-	}
-	public override void OnHitPvp(Player target, int damage, bool crit)/* tModPorter Note: Removed. Use OnHitPlayer and check info.PvP */
-	{
-	}
 
 	public override bool OnTileCollide(Vector2 oldVelocity)
 	{

@@ -1,4 +1,4 @@
-﻿using Terraria;
+using Terraria;
 namespace Everglow.Myth.MiscItems.Accessories;
 
 public class Odd8Ring : ModItem

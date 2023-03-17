@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 
 namespace Everglow.Myth.MiscItems.Accessories;
 

@@ -1,5 +1,4 @@
 using Everglow.Commons.MEAC;
-using Everglow.Myth;
 using Everglow.Myth.Common;
 using Terraria;
 using Terraria.Audio;

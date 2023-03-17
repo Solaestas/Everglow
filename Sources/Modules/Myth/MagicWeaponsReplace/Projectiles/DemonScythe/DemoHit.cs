@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using static Everglow.Myth.Common.MythUtils;
 using Terraria;
 namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.DemonScythe;
@@ -148,9 +148,6 @@ public class DemoHit : ModProjectile, IWarpProjectile, IBloomProjectile
             }*/
 	}
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-	{
-	}
-	public override void OnHitPvp(Player target, int damage, bool crit)/* tModPorter Note: Removed. Use OnHitPlayer and check info.PvP */
 	{
 	}
 }

@@ -1,4 +1,3 @@
-using Everglow.Myth;
 using Everglow.Myth.Common;
 using Terraria;
 using Terraria.Audio;
@@ -105,11 +104,11 @@ public class MagnetSphereII : ModProjectile
 		p.CritChance = Projectile.CritChance;
 	}
 
-	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+	public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers)
 	{
 		Spark();
 	}
-	public override void OnHitPvp(Player target, int damage, bool crit)/* tModPorter Note: Removed. Use OnHitPlayer and check info.PvP */
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 		Spark();
 	}

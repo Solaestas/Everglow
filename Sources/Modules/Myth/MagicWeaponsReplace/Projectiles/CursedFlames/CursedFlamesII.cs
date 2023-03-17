@@ -1,4 +1,3 @@
-using Everglow.Myth;
 using Everglow.Myth.Common;
 using Terraria;
 using Terraria.Audio;
@@ -227,7 +226,7 @@ public class CursedFlamesII : ModProjectile, IWarpProjectile
 
 		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot.WithVolumeScale(0.4f), Projectile.Center);
 	}
-	public override void OnHitPvp(Player target, int damage, bool crit)/* tModPorter Note: Removed. Use OnHitPlayer and check info.PvP */
+	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
 		ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
 		Gsplayer.FlyCamPosition = new Vector2(0, 11).RotatedByRandom(6.283);

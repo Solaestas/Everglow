@@ -1,8 +1,6 @@
-﻿using Everglow.Myth.MiscItems.Buffs;
+using Everglow.Myth.MiscItems.Buffs;
 using Everglow.Myth.MiscItems.Dusts;
-using Terraria;
-//using MythMod.Buffs;
-using Terraria.Localization;
+using Freeze = Everglow.Myth.MiscItems.Buffs.Freeze;
 
 namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Magic;
 
@@ -11,7 +9,7 @@ public class FreezeBallBrake : ModProjectile
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("FreezingMagic");
-			}
+	}
 	public override void SetDefaults()
 	{
 		Projectile.width = 32;
@@ -29,7 +27,9 @@ public class FreezeBallBrake : ModProjectile
 	public override Color? GetAlpha(Color lightColor)
 	{
 		if (Projectile.timeLeft < 3584)
+		{
 			return new Color?(new Color(255, 255, 255, 0));
+		}
 		else
 		{
 			return new Color?(new Color((3600 - Projectile.timeLeft) / 14f, (3600 - Projectile.timeLeft) / 14f, (3600 - Projectile.timeLeft) / 14f, 0));
@@ -55,7 +55,9 @@ public class FreezeBallBrake : ModProjectile
 					Main.dust[r].noGravity = true;
 					Main.dust[r].rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
 					if (Jnj > 0)
+					{
 						Main.dust[r].alpha = Jnj * 16;
+					}
 					else
 					{
 						Main.dust[r].alpha = 60;
@@ -69,7 +71,9 @@ public class FreezeBallBrake : ModProjectile
 					Main.dust[r].noGravity = true;
 					Main.dust[r].rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
 					if (Jnj > 0)
+					{
 						Main.dust[r].alpha = Jnj * 40;
+					}
 					else
 					{
 						Main.dust[r].alpha = 60;
@@ -85,7 +89,7 @@ public class FreezeBallBrake : ModProjectile
 		}
 		Projectile.tileCollide = false;
 	}
-	public override void OnHitPvp(Player target, int damage, bool crit)/* tModPorter Note: Removed. Use OnHitPlayer and check info.PvP */
+	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
 		if (!target.HasBuff(ModContent.BuffType<Freeze>()))
 		{
@@ -95,7 +99,7 @@ public class FreezeBallBrake : ModProjectile
 	}
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		if (target.type != 396 && target.type != 397 && target.type != 398)
+		if (target.type != NPCID.MoonLordHead && target.type != NPCID.MoonLordHand && target.type != NPCID.MoonLordCore)
 		{
 			if (!target.HasBuff(ModContent.BuffType<Freeze>()))
 			{
@@ -103,11 +107,11 @@ public class FreezeBallBrake : ModProjectile
 				target.AddBuff(ModContent.BuffType<Freeze2>(), (int)Projectile.ai[1] + 2);
 			}
 		}
-		if (target.type == 113)
+		if (target.type == NPCID.WallofFlesh)
 		{
 			for (int i = 0; i < 200; i++)
 			{
-				if (Main.npc[i].type == 113 || Main.npc[i].type == 114)
+				if (Main.npc[i].type == NPCID.WallofFlesh || Main.npc[i].type == NPCID.WallofFleshEye)
 				{
 					if (!target.HasBuff(ModContent.BuffType<Freeze>()))
 					{
@@ -117,11 +121,11 @@ public class FreezeBallBrake : ModProjectile
 				}
 			}
 		}
-		if (target.type == 114)
+		if (target.type == NPCID.WallofFleshEye)
 		{
 			for (int i = 0; i < 200; i++)
 			{
-				if (Main.npc[i].type == 113 || Main.npc[i].type == 114)
+				if (Main.npc[i].type == NPCID.WallofFlesh || Main.npc[i].type == NPCID.WallofFleshEye)
 				{
 					if (!target.HasBuff(ModContent.BuffType<Freeze>()))
 					{

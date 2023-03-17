@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Terraria;
 
 namespace Everglow.Myth.MiscItems.Accessories;
@@ -39,46 +39,8 @@ public class SilverWing : ModItem
 		}
 		if (noContinueUsingWeaponTime >= 180)
 		{
-			SliverWingEquiper sWE = player.GetModPlayer<SliverWingEquiper>();
-			sWE.SliverWingEnable = true;
+			player.GetDamage(DamageClass.Generic) *= 1.4f;
 		}
 	}
 	internal int noContinueUsingWeaponTime = 0;
-}
-class SliverWingEquiper : ModPlayer
-{
-	public bool SliverWingEnable = false;
-	public override void ModifyHitNPCWithItem(Item item, NPC target, ref NPC.HitModifiers modifiers)/* tModPorter If you don't need the Item, consider using ModifyHitNPC instead */
-	{
-		Main.NewText(SliverWingEnable);
-		if (SliverWingEnable)
-		{
-			damage = (int)(damage * 1.4f);
-			SliverWingEnable = false;
-		}
-	}
-	public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)/* tModPorter If you don't need the Projectile, consider using ModifyHitNPC instead */
-	{
-		if (SliverWingEnable)
-		{
-			damage = (int)(damage * 1.4f);
-			SliverWingEnable = false;
-		}
-	}
-	public override void ModifyHitPvp(Item item, Player target, ref int damage, ref bool crit)/* tModPorter Note: Removed. Use ModifyHurt on the receiving player and check modifiers.PvP. Use modifiers.DamageSource.SourcePlayerIndex to get the attacking player */
-	{
-		if (SliverWingEnable)
-		{
-			damage = (int)(damage * 1.4f);
-			SliverWingEnable = false;
-		}
-	}
-	public override void ModifyHitPvpWithProj(Projectile proj, Player target, ref int damage, ref bool crit)/* tModPorter Note: Removed. Use ModifyHurt on the receiving player and check modifiers.PvP. Use modifiers.DamageSource.SourcePlayerIndex to get the attacking player */
-	{
-		if (SliverWingEnable)
-		{
-			damage = (int)(damage * 1.4f);
-			SliverWingEnable = false;
-		}
-	}
 }

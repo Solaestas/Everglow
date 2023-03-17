@@ -1,6 +1,6 @@
-﻿namespace Everglow.Myth.TheFirefly.Physics;
+namespace Everglow.Commons.Physics;
 
-internal class Spring
+public class Spring
 {
 	/// <summary>
 	/// 弹簧的弹性常数

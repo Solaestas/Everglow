@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.MiscItems.Weapons.Slingshots.Dusts;
 using Terraria;
 using Terraria.Audio;
@@ -207,7 +207,7 @@ public class GlowSporeBead : SlingshotAmmo
 	{
 		target.AddBuff(BuffID.Poisoned, 540);
 	}
-	public override void OnHitPvp(Player target, int damage, bool crit)/* tModPorter Note: Removed. Use OnHitPlayer and check info.PvP */
+	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
 		target.AddBuff(BuffID.Poisoned, 540);
 	}

@@ -1,6 +1,5 @@
-using Everglow.Commons.Utilities;
+using Everglow.Commons.Physics;
 using Everglow.Myth.Common;
-using Everglow.Myth.TheFirefly.Physics;
 using SixLabors.ImageSharp.PixelFormats;
 
 using Terraria.GameContent;
@@ -10,7 +9,9 @@ namespace Everglow.Myth.TheFirefly;
 internal class Rope
 {
 	public Mass[] mass;
+
 	public Spring[] spring;
+
 	public Func<Vector2> GetOffset;
 
 	private Rope()
@@ -59,8 +60,11 @@ internal class Rope
 internal class RopeManager
 {
 	private float gravity;
+
 	private List<Rope> ropes;
+
 	public Color drawColor;
+
 	public float luminance;
 
 	public RopeManager(float luminance, float gravity, Color drawColor)
@@ -82,11 +86,11 @@ internal class RopeManager
 	/// <summary>
 	/// 根据图片加载Rope，并返回由本次Load所增加的Rope组成List
 	/// </summary>
-	/// <param name="ropeImagePath"></param>
-	/// <param name="rectangle"></param>
-	/// <param name="basePosition"></param>
-	/// <param name="offset"></param>
-	/// <returns></returns>
+	/// <param name="ropeImagePath"> </param>
+	/// <param name="rectangle"> </param>
+	/// <param name="basePosition"> </param>
+	/// <param name="offset"> </param>
+	/// <returns> </returns>
 	public List<Rope> LoadRope(string ropeImagePath, Rectangle? rectangle, Vector2 basePosition, Func<Vector2> offset)
 	{
 		var result = new List<Rope>();
@@ -112,13 +116,14 @@ internal class RopeManager
 		});
 		return result;
 	}
+
 	/// <summary>
 	/// 在指定区域随机生成Rope
 	/// </summary>
-	/// <param name="rectangle"></param>
-	/// <param name="basePosition"></param>
-	/// <param name="offset"></param>
-	/// <returns></returns>
+	/// <param name="rectangle"> </param>
+	/// <param name="basePosition"> </param>
+	/// <param name="offset"> </param>
+	/// <returns> </returns>
 	public List<Rope> LoadRope(Rectangle rectangle, Vector2 basePosition, Func<Vector2> offset)
 	{
 		var result = new List<Rope>();
@@ -148,7 +153,7 @@ internal class RopeManager
 	/// <summary>
 	/// 移除Ropes
 	/// </summary>
-	/// <param name="ropes"></param>
+	/// <param name="ropes"> </param>
 	public void RemoveRope(IEnumerable<Rope> ropes)
 	{
 		var first = ropes.First();
@@ -159,7 +164,7 @@ internal class RopeManager
 	/// <summary>
 	/// 清除屏幕外的Rope
 	/// </summary>
-	/// <param name="outRange"></param>
+	/// <param name="outRange"> </param>
 	public void Clear(int outRange)
 	{
 		var validRange = new Rectangle((int)Main.screenPosition.X - outRange, (int)Main.screenPosition.Y - outRange,
@@ -174,7 +179,7 @@ internal class RopeManager
 	/// <summary>
 	/// 清除所有Rope
 	/// </summary>
-	/// <param name="outRange"></param>
+	/// <param name="outRange"> </param>
 	public void Clear()
 	{
 		ropes.Clear();
@@ -220,6 +225,7 @@ internal class RopeManager
 			return;
 		sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null,
 			Matrix.CreateTranslation(-Main.screenPosition.X, -Main.screenPosition.Y, 0) * Main.GameViewMatrix.TransformationMatrix);
+
 		//gd.Textures[0] = MythContent.QuickTexture("TheFirefly/Tiles/Branch");
 		gd.Textures[0] = TextureAssets.MagicPixel.Value;
 		gd.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, vertices.ToArray(), 0, vertices.Count, indices.ToArray(), 0, indices.Count / 3);

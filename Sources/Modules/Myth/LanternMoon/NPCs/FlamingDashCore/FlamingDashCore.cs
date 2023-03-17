@@ -1,5 +1,4 @@
-﻿using Everglow.Myth;
-using Everglow.Myth.Common;
+﻿using Everglow.Myth.Common;
 using Everglow.Myth.LanternMoon.Projectiles.DashCore;
 using Terraria.Audio;
 using Terraria.Localization;

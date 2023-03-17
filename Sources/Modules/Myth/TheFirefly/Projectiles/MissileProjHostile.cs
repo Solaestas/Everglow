@@ -1,4 +1,3 @@
-using Everglow.Myth;
 using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
 using Terraria;

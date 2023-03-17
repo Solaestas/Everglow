@@ -1,6 +1,9 @@
 using Terraria.Audio;
 using Everglow.Food.Dusts;
 using Everglow.Commons.MEAC;
+using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX;
+using Everglow.Commons.Utilities;
 
 namespace Everglow.Food.Projectiles;
 
@@ -64,15 +67,15 @@ public class FryingPan : MeleeProj, IWarpProjectile
 		base.DrawSelf(spriteBatch, lightColor, 70, 40, 1.04f, "", 0.666667);
 	}
 
-	public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 		//调整各个攻击方式的伤害倍率等等
 		ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
 
 		if (attackType == 100)
 		{
-			damage = (int)(damage * 1.85);
-			knockback *= 2;
+			modifiers.FinalDamage *= 1.85f;
+			modifiers.Knockback *= 2;
 			Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 12, 150)).RotatedByRandom(6.283);
 		}
 	}
@@ -427,9 +430,8 @@ public class FryingPan : MeleeProj, IWarpProjectile
 		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/MEAC/Images/Warp").Value, bars, PrimitiveType.TriangleStrip);
 		return;
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-
 		if (attackType == 0)
 		{
 			SoundEngine.PlaySound(new SoundStyle("Everglow/Food/Sounds/Pan1").WithVolumeScale(0.3f).WithPitchOffset(1f), Projectile.Center);
@@ -449,7 +451,7 @@ public class FryingPan : MeleeProj, IWarpProjectile
 
 		return;
 	}
-	public override void OnHitPvp(Player target, int damage, bool crit)
+	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
 		if (attackType == 0)
 		{

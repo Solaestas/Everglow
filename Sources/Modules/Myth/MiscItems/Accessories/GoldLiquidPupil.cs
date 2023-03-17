@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.MiscItems.Projectiles.Accessory;
+using Everglow.Myth.MiscItems.Projectiles.Accessory;
 using Terraria;
 using Terraria.Audio;
 
@@ -43,25 +43,24 @@ class GoldLiquidPupilEquiper : ModPlayer
 			}
 		}
 	}
-	public override void ModifyHitNPCWithItem(Item item, NPC target, ref NPC.HitModifiers modifiers)/* tModPorter If you don't need the Item, consider using ModifyHitNPC instead */
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
-		if (GoldLiquidPupilEnable)
-			damage = (int)(damage + target.defense * 0.175f);
+		if(GoldLiquidPupilEnable)
+		{
+			modifiers.FinalDamage += target.defense * 0.175f;
+		}
 	}
-	public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)/* tModPorter If you don't need the Projectile, consider using ModifyHitNPC instead */
+
+	public override void ModifyHurt(ref Player.HurtModifiers modifiers)
 	{
-		if (GoldLiquidPupilEnable)
-			damage = (int)(damage + target.defense * 0.175f);
-	}
-	public override void ModifyHitPvp(Item item, Player target, ref int damage, ref bool crit)/* tModPorter Note: Removed. Use ModifyHurt on the receiving player and check modifiers.PvP. Use modifiers.DamageSource.SourcePlayerIndex to get the attacking player */
-	{
-		if (GoldLiquidPupilEnable)
-			damage = (int)(damage + target.statDefense * 0.175f);
-	}
-	public override void ModifyHitPvpWithProj(Projectile proj, Player target, ref int damage, ref bool crit)/* tModPorter Note: Removed. Use ModifyHurt on the receiving player and check modifiers.PvP. Use modifiers.DamageSource.SourcePlayerIndex to get the attacking player */
-	{
-		if (GoldLiquidPupilEnable)
-			damage = (int)(damage + target.statDefense * 0.175f);
+		if(modifiers.PvP)
+		{
+			var attacker = Main.player[modifiers.DamageSource.SourcePlayerIndex];
+			if(attacker.GetModPlayer<GoldLiquidPupilEquiper>().GoldLiquidPupilEnable)
+			{
+				modifiers.FinalDamage += Player.statDefense * 0.175f;
+			}
+		}
 	}
 	private void GenerateDust()
 	{

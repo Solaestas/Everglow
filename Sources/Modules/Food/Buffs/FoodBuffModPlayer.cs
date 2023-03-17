@@ -1,4 +1,4 @@
-﻿using Terraria.DataStructures;
+using Terraria.DataStructures;
 using Terraria.Audio;
 using Terraria.Localization;
 using Everglow.Food.Buffs.VanillaFoodBuffs;
@@ -177,13 +177,13 @@ public class FoodBuffModPlayer : ModPlayer
 		return true;
 	}
 
-	public override void Hurt(bool pvp, bool quiet, double damage, int hitDirection, bool crit, int cooldownCounter)
+	public override void ModifyHurt(ref Player.HurtModifiers modifiers)
 	{
 		if (Player.whoAmI == Main.myPlayer && SmoothieofDarknessBuff && Main.rand.NextBool(2))
 			Player.NinjaDodge();
 	}
 
-	public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		if (DragonfruitBuff)
 		{
@@ -196,23 +196,6 @@ public class FoodBuffModPlayer : ModPlayer
 			Player.statLife += 2;
 			BloodyMoscatoHealCount += 2;
 		}
-		base.OnHitNPC(item, target, damage, knockback, crit);
-	}
-	public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
-	{
-
-		if (DragonfruitBuff)
-		{
-			target.AddBuff(BuffID.Oiled, 600);
-			target.AddBuff(BuffID.OnFire, 600);
-		}
-		if (BloodyMoscatoBuff && BloodyMoscatoHealCount <= (Main.hardMode ? 150 : 75))
-		{
-			Player.HealEffect(2, true);
-			Player.statLife += 2;
-			BloodyMoscatoHealCount += 2;
-		}
-		base.OnHitNPCWithProj(proj, target, damage, knockback, crit);
 	}
 	public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
 	{
@@ -248,7 +231,6 @@ public class FoodBuffModPlayer : ModPlayer
 			CombatText.NewText(Player.Hitbox, Color.HotPink, Language.GetTextValue("Mods.Everglow.Common.FoodSystem.Khan"));
 			Player.ClearBuff(ModContent.BuffType<CherryBuff>());
 		}
-		base.Kill(damage, hitDirection, pvp, damageSource);
 	}
 
 	public override void UpdateBadLifeRegen()

@@ -1,3 +1,6 @@
+using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX;
+using Everglow.Myth.TheFirefly.Dusts;
 using Everglow.Ocean.Common;
 using Everglow.Ocean.Dusts;
 using Terraria.Audio;
@@ -50,7 +53,7 @@ public class RampageShark : ModProjectile
 				d.noGravity = false;
 				d.scale = 1f;
 
-				Dust smog = Dust.NewDustDirect(Projectile.Center + offset + velocity * 1.3f - new Vector2(4, 8) + random, 0, 0, ModContent.DustType<MythModule.TheFirefly.Dusts.MothSmog>(), 0, -2f, 0, default, 2f);
+				Dust smog = Dust.NewDustDirect(Projectile.Center + offset + velocity * 1.3f - new Vector2(4, 8) + random, 0, 0, ModContent.DustType<MothSmog>(), 0, -2f, 0, default, 2f);
 				smog.alpha = 180;
 				float rot = newvelocity.ToRotation();
 				Projectile.NewProjectile(item.GetSource_ItemUse(item), Projectile.Center + offset * 1.5f + velocity * 1.3f + random, Vector2.Zero, ModContent.ProjectileType<RampageSharkHit>(), item.damage, item.knockBack, player.whoAmI, 0.06f, rot);
@@ -71,7 +74,7 @@ public class RampageShark : ModProjectile
 					d.velocity = velocity.RotatedBy(-1.57 * player.direction - Main.rand.NextFloat(1.25f, 1.75f) * player.direction) * 0.4f * (24 + Power) / 54f;
 					d.noGravity = false;
 					d.scale = 1f;
-					Dust smog = Dust.NewDustDirect(Projectile.Center + offset + velocity * 1.3f - new Vector2(4, 8) + random, 0, 0, ModContent.DustType<MythModule.TheFirefly.Dusts.MothSmog>(), velocity.X * 0.15f, -2f, 0, default, 2.5f);
+					Dust smog = Dust.NewDustDirect(Projectile.Center + offset + velocity * 1.3f - new Vector2(4, 8) + random, 0, 0, ModContent.DustType<MothSmog>(), velocity.X * 0.15f, -2f, 0, default, 2.5f);
 					smog.alpha = 180;
 					float rot = newvelocity.ToRotation();
 					Projectile.NewProjectile(item.GetSource_ItemUse(item), Projectile.Center + offset * 1.5f + velocity * 1.3f + random, Vector2.Zero, ModContent.ProjectileType<RampageSharkHit>(), item.damage, item.knockBack, player.whoAmI, 0.12f, rot);

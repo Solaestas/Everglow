@@ -132,10 +132,4 @@ public class MagnetSphereHit : ModProjectile, IWarpProjectile
 
 		DrawTexCircle_VFXBatch(spriteBatch, value * 12 * Projectile.ai[0], width * 2, new Color(colorV, colorV * 0.7f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
 	}
-	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-	{
-	}
-	public override void OnHitPvp(Player target, int damage, bool crit)/* tModPorter Note: Removed. Use OnHitPlayer and check info.PvP */
-	{
-	}
 }

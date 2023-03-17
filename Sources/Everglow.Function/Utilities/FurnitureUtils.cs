@@ -342,7 +342,7 @@ public static class FurnitureUtils
 			player.cursorItemIconText = Language.GetTextValue("LegacyDresserType.0");
 		else
 		{
-			string defaultName = TileLoader.ContainerName(tile.TileType, left, top); // This gets the ContainerName text for the currently selected language
+			string defaultName = TileLoader.DefaultContainerName(tile.TileType, left, top); // This gets the ContainerName text for the currently selected language
 			if (player.cursorItemIconText == defaultName)
 				player.cursorItemIconText = Main.chest[chestIndex].name;
 			else

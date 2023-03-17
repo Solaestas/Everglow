@@ -1,110 +1,60 @@
-﻿using Everglow.Myth.MiscItems.Projectiles.Weapon.Melee.Hepuyuan;
-using Terraria;
-using Terraria.DataStructures;
+using Everglow.Myth.MiscItems.Projectiles.Weapon.Melee.Hepuyuan;
 
 namespace Everglow.Myth.Common;
 
 public class MythContentPlayer : ModPlayer
 {
-	public int GoldLiquidPupil = 0;
-	public int WhitePedal = 0;
-	public int ThreeColorCrown = 0;
-	public int ThreeColorCrownCool = 0;
-	public int ThreeColorCrownBuff1 = 0;
-	public int ThreeColorCrownBuff2 = 0;
-	public int ThreeColorCrownBuff3 = 0;
-	public int OrangeStickCool = 0;
-	public int OrangeStick = 0;
-	public int PurpleBallFlower = 0;
-	public int PurpleBallFlowerCool = 0;
-	public int CyanPedal = 0;
-	public int CyanBranch = 0;
-	public int CyanBranchCool = 0;
 	public int BlueTorchFlower = 0;
+
 	public int BlueTorchFlowerTime = 0;
+
 	public bool create1sand = false;
-	public bool Turn = true;
+
+	public float CriticalDamage = 1f;
+
+	public int CyanBranch = 0;
+
+	public int CyanBranchCool = 0;
+
+	public int CyanPedal = 0;
+
 	public int Dashcool = 0;
 
-	public float Miss = 0;
-	public float CriticalDamage = 1f;
-	public int SilverBuff = 0;
-	public override void ResetEffects()//这个是更新帧刷的函数,在UpdateAccessory之前
-	{
-		CriticalDamage = 0f;
-	}
-	public override void ModifyHitNPCWithItem(Item item, NPC target, ref NPC.HitModifiers modifiers)/* tModPorter If you don't need the Item, consider using ModifyHitNPC instead */
-	{
-		if (crit)
-			damage = (int)(damage * (CriticalDamage + 1));
-	}
-	public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)/* tModPorter If you don't need the Projectile, consider using ModifyHitNPC instead */
-	{
-		if (crit)
-			damage = (int)(damage * (CriticalDamage + 1));
-	}
-	public override void ModifyHitPvp(Item item, Player target, ref int damage, ref bool crit)/* tModPorter Note: Removed. Use ModifyHurt on the receiving player and check modifiers.PvP. Use modifiers.DamageSource.SourcePlayerIndex to get the attacking player */
-	{
-		if (crit)
-			damage = (int)(damage * (CriticalDamage + 1));
-	}
-	public override void ModifyHitPvpWithProj(Projectile proj, Player target, ref int damage, ref bool crit)/* tModPorter Note: Removed. Use ModifyHurt on the receiving player and check modifiers.PvP. Use modifiers.DamageSource.SourcePlayerIndex to get the attacking player */
-	{
-		if (crit)
-			damage = (int)(damage * (CriticalDamage + 1));
-	}
-	public int InvincibleFrameTime = 0;
-	internal void UpdateDecrease(ref int value)
-	{
-		if (value > 0)
-			value--;
-		else
-		{
-			value = 0;
-		}
-	}
-	public override void PreUpdate()
-	{
-		UpdateDecrease(ref GoldLiquidPupil);
-		UpdateDecrease(ref WhitePedal);
-		UpdateDecrease(ref ThreeColorCrownBuff3);
-		UpdateDecrease(ref ThreeColorCrownBuff2);
-		UpdateDecrease(ref ThreeColorCrownBuff1);
-		UpdateDecrease(ref ThreeColorCrownCool);
-		UpdateDecrease(ref ThreeColorCrown);
-		UpdateDecrease(ref OrangeStickCool);
-		UpdateDecrease(ref OrangeStick);
-		UpdateDecrease(ref PurpleBallFlowerCool);
-		UpdateDecrease(ref PurpleBallFlower);
-		UpdateDecrease(ref CyanBranchCool);
-		UpdateDecrease(ref CyanBranch);
-		UpdateDecrease(ref CyanPedal);
-		UpdateDecrease(ref BlueTorchFlower);
-		UpdateDecrease(ref BlueTorchFlowerTime);
-		UpdateDecrease(ref CyanBranch);
-		UpdateDecrease(ref SilverBuff);
-		UpdateDecrease(ref Dashcool);
-		UpdateDecrease(ref InvincibleFrameTime);
-	}
-	public override void PostUpdateMiscEffects()
-	{
-		if (CyanPedal > 0)
-			Miss += 4;
-		if (WhitePedal > 0)
-			Miss += 2;
-		if (CyanBranchCool > 0)
-			Miss += 8;
+	public int GoldLiquidPupil = 0;
 
-		if (SilverBuff > 0)
-		{
-			Player.maxRunSpeed += 0.05f;
-			Player.maxFallSpeed += 1.5f;
-			Player.wingAccRunSpeed += 0.05f;
-			Player.GetDamage(DamageClass.Generic) *= 1.05f;
-		}
-		if (Player.ownedProjectileCounts[ModContent.ProjectileType<Hepuyuan>()] + Player.ownedProjectileCounts[ModContent.ProjectileType<HepuyuanDown>()] > 0)
-			Player.maxFallSpeed += 10000f;
+	public int InvincibleFrameTime = 0;
+
+	public float Miss = 0;
+
+	public int OrangeStick = 0;
+
+	public int OrangeStickCool = 0;
+
+	public int PurpleBallFlower = 0;
+
+	public int PurpleBallFlowerCool = 0;
+
+	public int SilverBuff = 0;
+
+	public int ThreeColorCrown = 0;
+
+	public int ThreeColorCrownBuff1 = 0;
+
+	public int ThreeColorCrownBuff2 = 0;
+
+	public int ThreeColorCrownBuff3 = 0;
+
+	public int ThreeColorCrownCool = 0;
+
+	public bool Turn = true;
+
+	public int WhitePedal = 0;
+
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+	{
+		modifiers.CritDamage += CriticalDamage;
 	}
+
 	public override void ModifyHurt(ref Player.HurtModifiers modifiers)
 	{
 		if (damage < 3)
@@ -133,5 +83,66 @@ public class MythContentPlayer : ModPlayer
 			return false;
 
 		return base.ModifyHurt(pvp, quiet, ref damage, ref hitDirection, ref crit, ref customDamage, ref playSound, ref genGore, ref damageSource, ref cooldownCounter);
+	}
+
+	public override void PostUpdateMiscEffects()
+	{
+		if (CyanPedal > 0)
+			Miss += 4;
+		if (WhitePedal > 0)
+			Miss += 2;
+		if (CyanBranchCool > 0)
+			Miss += 8;
+
+		if (SilverBuff > 0)
+		{
+			Player.maxRunSpeed += 0.05f;
+			Player.maxFallSpeed += 1.5f;
+			Player.wingAccRunSpeed += 0.05f;
+			Player.GetDamage(DamageClass.Generic) *= 1.05f;
+		}
+		if (Player.ownedProjectileCounts[ModContent.ProjectileType<Hepuyuan>()] + Player.ownedProjectileCounts[ModContent.ProjectileType<HepuyuanDown>()] > 0)
+			Player.maxFallSpeed += 10000f;
+	}
+
+	public override void PreUpdate()
+	{
+		UpdateDecrease(ref GoldLiquidPupil);
+		UpdateDecrease(ref WhitePedal);
+		UpdateDecrease(ref ThreeColorCrownBuff3);
+		UpdateDecrease(ref ThreeColorCrownBuff2);
+		UpdateDecrease(ref ThreeColorCrownBuff1);
+		UpdateDecrease(ref ThreeColorCrownCool);
+		UpdateDecrease(ref ThreeColorCrown);
+		UpdateDecrease(ref OrangeStickCool);
+		UpdateDecrease(ref OrangeStick);
+		UpdateDecrease(ref PurpleBallFlowerCool);
+		UpdateDecrease(ref PurpleBallFlower);
+		UpdateDecrease(ref CyanBranchCool);
+		UpdateDecrease(ref CyanBranch);
+		UpdateDecrease(ref CyanPedal);
+		UpdateDecrease(ref BlueTorchFlower);
+		UpdateDecrease(ref BlueTorchFlowerTime);
+		UpdateDecrease(ref CyanBranch);
+		UpdateDecrease(ref SilverBuff);
+		UpdateDecrease(ref Dashcool);
+		UpdateDecrease(ref InvincibleFrameTime);
+	}
+
+	public override void ResetEffects()//这个是更新帧刷的函数,在UpdateAccessory之前
+	{
+		CriticalDamage = 0f;
+	}
+
+	internal static void UpdateDecrease(ref int value)
+	{
+		if (value > 0)
+		{
+			value--;
+		}
+		else
+		{
+			value = 0;
+		}
 	}
 }

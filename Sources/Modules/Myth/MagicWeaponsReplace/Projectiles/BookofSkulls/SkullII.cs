@@ -303,7 +303,7 @@ public class SkullII : ModProjectile, IWarpProjectile
 			d0.noGravity = true;
 		}
 	}
-	public override void OnHitPvp(Player target, int damage, bool crit)/* tModPorter Note: Removed. Use OnHitPlayer and check info.PvP */
+	public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers)
 	{
 		SoundEngine.PlaySound(SoundID.NPCHit2, Projectile.Center);
 		int type = ModContent.ProjectileType<BoneSpike>();

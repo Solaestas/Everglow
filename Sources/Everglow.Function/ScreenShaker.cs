@@ -1,4 +1,4 @@
-﻿namespace Everglow.Myth;
+namespace Everglow.Commons;
 
 public class ScreenShaker : ModPlayer
 {

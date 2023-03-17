@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Terraria;
 
 namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.LunarFlare;
@@ -162,11 +162,5 @@ public class LunarFlareHit : ModProjectile, IWarpProjectile, IBloomProjectile
 		float size = Math.Clamp(Projectile.timeLeft / 8f - 60, 0f, 20f);
 		if (size > 0)
 			DrawSpark(new Color(255, 255, 255, 0), size, MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/SparkLight"));
-	}
-	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-	{
-	}
-	public override void OnHitPvp(Player target, int damage, bool crit)/* tModPorter Note: Removed. Use OnHitPlayer and check info.PvP */
-	{
 	}
 }

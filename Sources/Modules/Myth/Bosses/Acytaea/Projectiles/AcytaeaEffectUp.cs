@@ -1,5 +1,4 @@
-﻿using Everglow.Myth;
-using Terraria;
+﻿using Terraria;
 
 namespace Everglow.Myth.Bosses.Acytaea.Projectiles;
 

@@ -1,13 +1,11 @@
-﻿using Terraria;
+using Everglow.Commons.Skeleton2D;
+using Everglow.Commons.Skeleton2D.Reader;
 using Terraria.DataStructures;
-using Terraria.ModLoader;
-using Terraria.ID;
 
 namespace Everglow.Example.Skeleton;
 
 public class SkeletonPlayerLayer : PlayerDrawLayer
 {
-
 	private Skeleton2D skeleton2D;
 	public override void Load()
 	{

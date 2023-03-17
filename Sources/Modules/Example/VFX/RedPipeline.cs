@@ -1,8 +1,9 @@
-﻿namespace Everglow.Example.VFX;
+using Everglow.Commons.VFX;
+
+namespace Everglow.Example.VFX;
 
 internal class RedPipeline : PostPipeline
 {
-
 	public override void Render(RenderTarget2D rt2D)
 	{
 		var sb = Main.spriteBatch;

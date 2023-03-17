@@ -1,4 +1,4 @@
-﻿namespace Everglow.Food.InfoDisplays;
+namespace Everglow.Food.InfoDisplays;
 
 internal class ThirstystateInfoDisplay : InfoDisplay
 {
@@ -7,9 +7,8 @@ internal class ThirstystateInfoDisplay : InfoDisplay
 		return Main.LocalPlayer.GetModPlayer<ThirstystateInfoDisplayplayer>().ShowThirstystate;
 	}
 
-	public override string DisplayValue()
+	public override string DisplayValue(ref Color displayColor)
 	{
-
 		bool Thirstystate = Main.LocalPlayer.GetModPlayer<FoodModPlayer>().Thirstystate;
 		if (Thirstystate)
 			return Terraria.Localization.Language.GetTextValue("Mods.Everglow.InfoDisplay.Thirsty");

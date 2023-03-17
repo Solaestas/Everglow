@@ -1,4 +1,6 @@
-﻿namespace Everglow.TwilightForest.Items;
+using Everglow.Myth.TheFirefly.Tiles;
+
+namespace Everglow.TwilightForest.Items;
 
 public class TwilightWood : ModItem
 {

@@ -1,5 +1,4 @@
-﻿using Everglow.Myth;
-using Everglow.Myth.TheFirefly.Dusts;
+﻿using Everglow.Myth.TheFirefly.Dusts;
 using Terraria.Audio;
 
 namespace Everglow.Myth.TheFirefly.Projectiles;

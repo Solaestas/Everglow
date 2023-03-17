@@ -1,4 +1,7 @@
-﻿using Terraria.GameContent;
+using Everglow.Commons.VFX;
+using Everglow.Commons.VFX.Pipelines;
+using Everglow.Commons.VFX.Visuals;
+using Terraria.GameContent;
 
 namespace Everglow.Example.VFX;
 

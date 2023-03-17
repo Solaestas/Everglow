@@ -1,5 +1,4 @@
 ﻿using Everglow.Commons.Utilities;
-using Everglow.Myth;
 using Everglow.Myth.Common;
 using Everglow.Myth.MagicWeaponsReplace.Projectiles.CursedFlames;
 using Terraria;

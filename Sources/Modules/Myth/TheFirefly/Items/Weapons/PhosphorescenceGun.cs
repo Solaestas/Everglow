@@ -1,5 +1,4 @@
-﻿using Everglow.Myth;
-using Everglow.Myth.TheFirefly.Dusts;
+﻿using Everglow.Myth.TheFirefly.Dusts;
 using Everglow.Myth.TheFirefly.Items.Accessories;
 using Everglow.Myth.TheFirefly.Projectiles;
 using Terraria.DataStructures;
