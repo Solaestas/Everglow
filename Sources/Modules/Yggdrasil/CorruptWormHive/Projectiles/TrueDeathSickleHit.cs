@@ -17,11 +17,6 @@ public class TrueDeathSickleHit : ModProjectile, IWarpProjectile, IBloomProjecti
 	protected override bool CloneNewInstances => false;
 	public override bool IsCloneable => false;
 
-	public override void SetStaticDefaults()
-	{
-		DisplayName.SetDefault("Navy Thunder Bomb");
-	}
-
 	public override void SetDefaults()
 	{
 		Projectile.width = 32;

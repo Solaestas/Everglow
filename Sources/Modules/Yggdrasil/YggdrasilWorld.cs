@@ -1,8 +1,8 @@
-﻿using Terraria.WorldBuilding;
+using Terraria.WorldBuilding;
 
 namespace Everglow.Yggdrasil;
 
-internal class YggdrasilWorld : SubWorldModule.Subworld
+internal class YggdrasilWorld /*: SubWorldModule.Subworld*/
 {
 	//public override int Width => 1200;
 
@@ -20,21 +20,21 @@ internal class YggdrasilWorld : SubWorldModule.Subworld
 	//    Main.rockLayer = Main.maxTilesY - 1;
 	//    WorldGen.waterLine = Main.maxTilesY;
 	//}
-	public override SaveSetting HowSaveWorld { get; init; } = SaveSetting.PerWorld;
-	public override int Width { get; init; } = 1200;
-	public override int Height { get; init; } = 12000;
-	public override List<GenPass> Tasks { get; init; } = new() { new WorldGeneration.YggdrasilWorldGeneration.YggdrasilWorldGenPass() };
-	public override bool NormalTime => true;
-	public override bool HideUnderworld => true;
-	public override void ModifyPlayerBasicGravity(Player player, ref float basicgravity, ref float maxFallSpeed)
-	{
-		base.ModifyPlayerBasicGravity(player, ref basicgravity, ref maxFallSpeed);
-	}
-	public override void OnLoad()
-	{
-		Main.worldSurface = Main.maxTilesY - 2;
-		Main.rockLayer = Main.maxTilesY - 1;
-		WorldGen.waterLine = Main.maxTilesY;
-	}
+	//public override SaveSetting HowSaveWorld { get; init; } = SaveSetting.PerWorld;
+	//public override int Width { get; init; } = 1200;
+	//public override int Height { get; init; } = 12000;
+	//public override List<GenPass> Tasks { get; init; } = new() { new WorldGeneration.YggdrasilWorldGeneration.YggdrasilWorldGenPass() };
+	//public override bool NormalTime => true;
+	//public override bool HideUnderworld => true;
+	//public override void ModifyPlayerBasicGravity(Player player, ref float basicgravity, ref float maxFallSpeed)
+	//{
+	//	base.ModifyPlayerBasicGravity(player, ref basicgravity, ref maxFallSpeed);
+	//}
+	//public override void OnLoad()
+	//{
+	//	Main.worldSurface = Main.maxTilesY - 2;
+	//	Main.rockLayer = Main.maxTilesY - 1;
+	//	WorldGen.waterLine = Main.maxTilesY;
+	//}
 }
 
