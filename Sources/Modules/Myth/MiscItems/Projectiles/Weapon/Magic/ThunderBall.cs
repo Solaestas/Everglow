@@ -1,4 +1,4 @@
-﻿using Terraria;
+using Terraria;
 using Terraria.Audio;
 namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Magic;
 
@@ -94,9 +94,11 @@ public class ThunderBall : ModProjectile
 				}
 				if (HasCool[j] == 0 && (Main.npc[j].Center - Projectile.Center).Length() < 70 && !Main.npc[j].dontTakeDamage && !Main.npc[j].friendly && Main.npc[j].active)
 				{
-					Main.npc[j].StrikeNPC((int)(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f)), 2, Math.Sign(Projectile.velocity.X), Main.rand.Next(100) < Projectile.ai[0]);
-					Player player2 = Main.player[Projectile.owner];
-					player2.dpsDamage += (int)(Projectile.damage * (1 + Projectile.ai[0] / 100f) * 1.0f);
+					Player player = Main.player[Projectile.owner];
+					NPC.HitModifiers npchitmodifier = new NPC.HitModifiers();
+					NPC.HitInfo hit = npchitmodifier.ToHitInfo(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f),Main.rand.NextFloat(100f) < player.GetTotalCritChance(Projectile.DamageType), 2);
+					Main.npc[j].StrikeNPC(hit, true, true);
+					NetMessage.SendStrikeNPC(Main.npc[j], hit);
 					HasCool[j] = 15;
 				}
 				if (HasCool[j] > 0)
@@ -135,7 +137,6 @@ public class ThunderBall : ModProjectile
 		}
 		if (Tokill >= 0 && Tokill <= 2)
 			Projectile.Kill();
-		Player player = Main.player[Projectile.owner];
 		if (Tokill <= 44 && Tokill > 0)
 		{
 			Projectile.position = Projectile.oldPosition;

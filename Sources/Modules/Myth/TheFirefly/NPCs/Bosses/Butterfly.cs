@@ -1,4 +1,4 @@
-﻿using Terraria;
+using Terraria;
 namespace Everglow.Myth.TheFirefly.NPCs.Bosses;
 
 public class Butterfly : ModNPC
@@ -331,7 +331,6 @@ public class Butterfly : ModNPC
 			Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(5f, 10f)).RotatedByRandom(6.283);
 			Main.dust[index].noGravity = true;
 		}
-		base.HitEffect(hitDirection, damage);
 	}
 
 	public override Color? GetAlpha(Color lightColor)

@@ -15,10 +15,6 @@ public class GlowWoodMusicBox : ModTile
 		TileObjectData.newTile.LavaDeath = false;
 		TileObjectData.newTile.DrawYOffset = 2;
 		TileObjectData.addTile(Type);
-
-		ModTranslation name = CreateMapEntryName();
-		name.SetDefault("Music Box");
-		AddMapEntry(new Color(200, 200, 200), name);
 	}
 
 	public override void KillMultiTile(int i, int j, int frameX, int frameY)

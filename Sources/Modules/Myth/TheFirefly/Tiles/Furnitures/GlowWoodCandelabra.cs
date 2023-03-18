@@ -31,11 +31,6 @@ public class GlowWoodCandelabra : ModTile
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2); // this style already takes care of direction for us
 		TileObjectData.newTile.CoordinateHeights = new[] { 16, 16 };
 		TileObjectData.addTile(Type);
-
-		// Etc
-		ModTranslation name = CreateMapEntryName();
-		name.SetDefault("GlowWood Candelabra");
-		AddMapEntry(new Color(0, 14, 175), name);
 		if (!Main.dedServ)
 			flameTexture = ModContent.Request<Texture2D>("Everglow/Myth/TheFirefly/Tiles/Furnitures/GlowWoodCandelabra_Flame");
 	}

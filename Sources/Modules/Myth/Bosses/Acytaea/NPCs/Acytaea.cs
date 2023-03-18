@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Bosses.Acytaea.Dusts;
+using Everglow.Myth.Bosses.Acytaea.Dusts;
 using Everglow.Myth.Bosses.Acytaea.Projectiles;
 using Terraria;
 using Terraria.Audio;
@@ -70,9 +70,6 @@ public class Acytaea : VisualNPC
 		NPCID.Sets.AttackTime[NPC.type] = 60;
 		NPCID.Sets.AttackAverageChance[NPC.type] = 15;
 		NPCID.Sets.ActsLikeTownNPC[Type] = true;
-		//		var antiColor = ModContent.Request<Effect>("Everglow/Myth/Bosses/Acytaea/AntiColor").Value;
-		Filters.Scene["AntiColor"] = new Filter(new Terraria.Graphics.Shaders.ScreenShaderData(new Ref<Effect>(antiColor), "Test"), EffectPriority.Medium);
-		Filters.Scene["AntiColor"].Load();
 	}
 
 	public override void SetDefaults()
@@ -623,20 +620,7 @@ public class Acytaea : VisualNPC
 			}
 
 			HasBlade = true;//拿刀
-			/*if(Timer % 4 == 0)
-            {
-                if (!Filters.Scene["AntiColor"].IsActive())
-                {
-                    Filters.Scene.Activate("AntiColor");
-                }
-            }
-            if (Timer % 4 == 2)
-            {
-                if (Filters.Scene["AntiColor"].IsActive())
-                {
-                    Filters.Scene.Deactivate("AntiColor");
-                }
-            }*/
+
 			if (Timer % 4 == 0)
 			{
 				bool Trans = true;
@@ -689,9 +673,6 @@ public class Acytaea : VisualNPC
 			SwirlPro = 1 - s2;
 			COmega += s / 400f;
 			COmega *= 0.99f;
-			//滤镜
-			if (Filters.Scene["AntiColor"].IsActive())
-				Filters.Scene.Deactivate("AntiColor");
 			HasBlade = true;//拿刀
 							//TODO 音频
 							//SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/Item_71_Flurry"), NPC.Center); //TO DO: Make sound follow NPC/relative to NPC.

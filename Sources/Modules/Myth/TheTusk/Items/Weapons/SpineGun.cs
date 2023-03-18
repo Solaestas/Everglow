@@ -1,4 +1,4 @@
-﻿using Terraria.DataStructures;
+using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.Localization;
 
@@ -6,16 +6,6 @@ namespace Everglow.Myth.TheTusk.Items.Weapons;
 
 public class SpineGun : ModItem
 {
-	//TODO：翻译，如果做完了就删掉
-	public override void SetStaticDefaults()
-	{
-		// DisplayName.SetDefault("Spine Musket");
-						// Tooltip.SetDefault("Fires bullets which split upon detecting enemies");
-		Tooltip.AddTranslation((int)GameCulture.CultureName.Chinese, "射出一发勘测到敌人就会分裂的子母弹");
-		Tooltip.AddTranslation((int)GameCulture.CultureName.Russian, "Стреляет пулями, которые расщепляются при обнаружении врагов");
-		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-	}
-
 	public override void SetDefaults()
 	{
 		// Common Properties

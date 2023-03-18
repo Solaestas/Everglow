@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Terraria;
 
 namespace Everglow.Myth.MiscItems.Weapons.Clubs.Projectiles;
@@ -12,14 +12,15 @@ public class SpikeClub : ClubProj_metal
 	}
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
-		base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
 		int k = (int)(Omega * 10);
 		k = Main.rand.Next(k * 2);
 		for (int x = 0; x < k; x++)
 		{
-			target.StrikeNPC((int)(Projectile.damage * 0.5f * Omega), 0, 1);
+			NPC.HitInfo hit = modifiers.ToHitInfo(Projectile.damage * 0.5f * Omega, Main.rand.NextFloat(100f) < Main.player[Projectile.owner].GetTotalCritChance(Projectile.DamageType), 0);
+			target.StrikeNPC(hit, true, true);
+			NetMessage.SendStrikeNPC(target, hit);
 		}
-		knockback *= 0.4f;
+		modifiers.Knockback *= 0.4f;
 
 	}
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)

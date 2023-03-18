@@ -1,4 +1,4 @@
-﻿using Terraria;
+using Terraria;
 using Terraria.Audio;
 using Terraria.Enums;
 using Terraria.GameContent;
@@ -226,9 +226,13 @@ public class AshBone : ModProjectile
 					if ((Main.npc[j].Center - value2).Length() < 60 && !Main.npc[j].dontTakeDamage && !Main.npc[j].friendly && Main.npc[j].active && Collision.CanHit(value2, 1, 1, Main.npc[j].Center, 1, 1))
 					{
 						Hitj[j] = true;
-						float CritC = player.GetCritChance(DamageClass.Summon);
-						Main.npc[j].StrikeNPC((int)(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f)), 8, Math.Sign(Projectile.velocity.X), Main.rand.Next(100) < CritC);
-						player.addDPS((int)(Projectile.damage * (1 + CritC / 100f) * 1.0f));
+						float CritC = player.GetTotalCritChance(Projectile.DamageType);
+
+						NPC.HitModifiers npchitmodifier = new NPC.HitModifiers();
+						NPC.HitInfo hit = npchitmodifier.ToHitInfo(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f), Main.rand.NextFloat(100f) < CritC, 8);
+						Main.npc[j].StrikeNPC(hit, true, true);
+						NetMessage.SendStrikeNPC(Main.npc[j], hit);
+
 						int[] array = Projectile.localNPCImmunity;
 						bool flag = !Projectile.usesLocalNPCImmunity && !Projectile.usesIDStaticNPCImmunity || Projectile.usesLocalNPCImmunity && array[j] == 0 || Projectile.usesIDStaticNPCImmunity && Projectile.IsNPCIndexImmuneToProjectileType(Projectile.type, j);
 						if (Main.npc[j].active && !Main.npc[j].dontTakeDamage && flag && (Main.npc[j].aiStyle != 112 || Main.npc[j].ai[2] <= 1f))

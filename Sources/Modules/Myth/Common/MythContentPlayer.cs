@@ -57,8 +57,6 @@ public class MythContentPlayer : ModPlayer
 
 	public override void ModifyHurt(ref Player.HurtModifiers modifiers)
 	{
-		if (damage < 3)
-			return false;
 		if (OrangeStick > 0)
 			OrangeStickCool = 300;
 		if (CyanBranch > 0)
@@ -72,17 +70,21 @@ public class MythContentPlayer : ModPlayer
 		Misp = (float)(-1.1 / (Misp + 1) + 1.1);
 		if (Main.rand.NextFloat(0, 1f) <= Misp && InvincibleFrameTime == 0)
 		{
+			modifiers.FinalDamage *= 0;
 			CombatText.NewText(new Rectangle((int)Player.Center.X - 10, (int)Player.Center.Y - 10, 20, 20), Color.Cyan, "Miss");
 			InvincibleFrameTime = 30;
 			if (Player.longInvince)
+			{
 				InvincibleFrameTime = 45;
+			}
 
-			return false;
+			return;
 		}
 		if (InvincibleFrameTime > 0)
-			return false;
-
-		return base.ModifyHurt(pvp, quiet, ref damage, ref hitDirection, ref crit, ref customDamage, ref playSound, ref genGore, ref damageSource, ref cooldownCounter);
+		{
+			modifiers.FinalDamage *= 0;
+			return;
+		}
 	}
 
 	public override void PostUpdateMiscEffects()

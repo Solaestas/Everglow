@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.TheTusk.Items;
+using Everglow.Myth.TheTusk.Items;
 using Terraria.Localization;
 using Terraria.ObjectData;
 
@@ -37,7 +37,7 @@ public class StoneTuskSmall : ModTile
 		for (int x = 0; x < 2; x++)
 		{
 			Vector2 v = new Vector2(0, Main.rand.NextFloat(0, 60f)).RotatedByRandom(3.14159);
-			Item.NewItem(null, i * 16 + (int)v.X, j * 16 + (int)v.Y, 16, 32, ModContent.ItemType<StoneTusk>());
+			Item.NewItem(null, i * 16 + (int)v.X, j * 16 + (int)v.Y, 16, 32, ModContent.ItemType<Items.StoneTusk>());
 		}
 	}
 	public override void PlaceInWorld(int i, int j, Item item)

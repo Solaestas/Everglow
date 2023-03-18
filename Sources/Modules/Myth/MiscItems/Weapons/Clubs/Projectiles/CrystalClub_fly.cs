@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.Shaders;
@@ -123,6 +123,7 @@ public class CrystalClub_fly : ModProjectile, IWarpProjectile
 			D.noGravity = true;
 			D.velocity = new Vector2(0, Main.rand.NextFloat(20f)).RotatedByRandom(6.283) * scale;
 		}
+		hit.HitDirection = target.Center.X > Main.player[Projectile.owner].Center.X ? 1 : -1;
 		Projectile.Kill();
 	}
 	public BlendState TrailBlendState()
@@ -140,10 +141,9 @@ public class CrystalClub_fly : ModProjectile, IWarpProjectile
 		ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
 		float ShakeStrength = Omega * 0.04f;
 		Omega *= power;
-		damage = (int)(damage / power);
+		modifiers.FinalDamage /= power;
 		Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 12f * ShakeStrength, 100)).RotatedByRandom(6.283);
-		hitDirection = target.Center.X > Main.player[Projectile.owner].Center.X ? 1 : -1;
-		knockback *= Omega * 3;
+		modifiers.Knockback *= Omega * 3;
 	}
 	public override void AI()
 	{

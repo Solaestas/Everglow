@@ -1,4 +1,4 @@
-﻿using Terraria;
+using Terraria;
 namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Melee;
 
 public class Sunflower : ModProjectile
@@ -79,6 +79,5 @@ public class Sunflower : ModProjectile
 			}
 			Projectile.frame++;
 		}
-		base.OnHitNPC(target, damage, knockback, crit);
 	}
 }

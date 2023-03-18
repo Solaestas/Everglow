@@ -1,9 +1,10 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.LanternMoon.NPCs;
 using Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Localization;
+using Terraria.WorldBuilding;
 
 namespace Everglow.Myth.LanternMoon.NPCs.LanternGhostKing;
 
@@ -314,7 +315,12 @@ public class LanternGhostKing : ModNPC
 		if (NPC.localAI[0] == 2999)
 			NPC.localAI[0] = 1;
 		if (NPC.localAI[0] >= 14200)
-			NPC.StrikeNPC(10005, 0, 1);
+		{
+			NPC.HitModifiers npcHitM = new NPC.HitModifiers();
+			NPC.HitInfo hit = npcHitM.ToHitInfo(10005, false, 0);
+			NPC.StrikeNPC(hit, true, false);
+			NetMessage.SendStrikeNPC(NPC, hit);
+		}
 		if (Main.dayTime)
 			NPC.velocity.Y += 1;
 		RingRadius = RingRadius * 0.99f + RingRadiusTrend * 0.01f;

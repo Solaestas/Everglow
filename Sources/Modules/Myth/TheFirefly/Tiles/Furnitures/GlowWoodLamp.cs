@@ -29,11 +29,6 @@ public class GlowWoodLamp : ModTile
 		TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 18 };
 		TileObjectData.newTile.CoordinatePaddingFix = new Point16(0, -2);
 		TileObjectData.addTile(Type);
-
-		// Etc
-		ModTranslation name = CreateMapEntryName();
-		name.SetDefault("GlowWood Lamp");
-		AddMapEntry(new Color(0, 14, 175), name);
 	}
 
 	public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)

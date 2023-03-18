@@ -1,4 +1,5 @@
-﻿using Everglow.Myth.TheFirefly.Backgrounds;
+using System.Reflection;
+using Everglow.Myth.TheFirefly.Backgrounds;
 using ReLogic.Content;
 using Terraria.GameContent.Shaders;
 
@@ -53,7 +54,7 @@ internal class WaterDustRenderer
 		m_dustDrawEffect = ModContent.Request<Effect>("Everglow/Myth/Effects/DustDraw");
 		m_dustSpawnEffect = ModContent.Request<Effect>("Everglow/Myth/Effects/DustSpawn");
 		m_dustTargetSwap = new RenderTarget2D[2];
-		Everglow.MainThreadContext.AddTask(() =>
+		Ins.MainThread.AddTask(() =>
 		{
 			m_dustTargetSwap[0] = new RenderTarget2D(Main.graphics.GraphicsDevice,
 				Main.screenWidth,

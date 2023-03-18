@@ -9,7 +9,7 @@ public class LiveFluorescentWoodWall : ModWall
 	{
 		Main.wallHouse[Type] = true;
 		DustType = ModContent.DustType<FluorescentTreeDust>();
-		ItemDrop = ModContent.ItemType<DarkCocoonWall>();
+		ItemDrop = ModContent.ItemType<Items.DarkCocoonWall>();
 		HitSound = SoundID.Dig;
 		AddMapEntry(new Color(33, 1, 53));
 	}

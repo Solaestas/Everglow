@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
 using Terraria.Audio;
 
@@ -109,10 +109,10 @@ internal class FlowLightMissile : ModProjectile
 			{
 				if (!target.dontTakeDamage && !target.friendly && target.CanBeChasedBy() && target.active)
 				{
-					bool crit = Main.rand.NextBool(33, 100);
-					target.StrikeNPC((int)(Projectile.damage * Main.rand.NextFloat(1.70f, 2.30f)), 2f, 1, crit);
-
-					player.addDPS(Math.Max(0, target.defDamage));
+					NPC.HitModifiers npcHitM = new NPC.HitModifiers();
+					NPC.HitInfo hit = npcHitM.ToHitInfo(Projectile.damage * Main.rand.NextFloat(1.70f, 2.30f), Main.rand.NextFloat(100f) < player.GetTotalCritChance(Projectile.DamageType), 2);
+					target.StrikeNPC(hit, true, true);
+					NetMessage.SendStrikeNPC(target, hit);
 				}
 			}
 		}

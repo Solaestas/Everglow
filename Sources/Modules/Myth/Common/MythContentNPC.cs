@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.MiscItems.Buffs;
+using Everglow.Myth.MiscItems.Buffs;
 using Terraria;
 
 namespace Everglow.Myth.Common;
@@ -6,10 +6,6 @@ namespace Everglow.Myth.Common;
 public class MythContentGlobalNPC : GlobalNPC
 {
 	public override bool AppliesToEntity(NPC npc, bool lateInstatiation)
-	{
-		return true;
-	}
-	public override void ModifyIncomingHit(NPC npc, ref NPC.HitModifiers modifiers)
 	{
 		return true;
 	}

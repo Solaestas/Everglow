@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.MagicWeaponsReplace.Dusts;
 using Terraria;
 using Terraria.Audio;
@@ -68,10 +68,10 @@ internal class DemonScythePlus : ModProjectile, IWarpProjectile
 			var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center - Projectile.velocity * 2, Projectile.velocity.RotatedByRandom(6.283) * 0.4f, ModContent.ProjectileType<DemonScythePlusCrack>(), (int)(Projectile.damage * k * 0.1), (int)(Projectile.knockBack * k * 0.3), Projectile.owner, Projectile.velocity.Length() / 120f, Main.rand.NextFloat(8f, 24f));
 			p.timeLeft = Main.rand.Next(30) + (int)Projectile.velocity.Length();
 		}
-		knockback = Projectile.knockBack * Projectile.velocity.Length() * 0.12f;
+		modifiers.Knockback *= Projectile.velocity.Length() * 0.12f;
 		Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center - Projectile.velocity * 2, Vector2.One, ModContent.ProjectileType<DemoHit>(), 0, 0, Projectile.owner, Projectile.velocity.Length() / 3f, Projectile.rotation + Main.rand.NextFloat(6.283f));
 
-		damage = (int)(damage * k);
+		modifiers.FinalDamage *= k;
 		target.AddBuff(BuffID.ShadowFlame, 60);
 	}
 

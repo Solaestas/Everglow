@@ -25,6 +25,5 @@ public class OldWaterBolt : GlobalProjectile
 				}
 			}
 		}
-		base.OnHitNPC(projectile, target, damage, knockback, crit);
 	}
 }

@@ -1,13 +1,9 @@
-﻿using Terraria.Localization;
+using Terraria.Localization;
 
 namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Magic;
 
 public class ThunderBall2 : ModProjectile
 {
-	public override void SetStaticDefaults()
-	{
-		// DisplayName.SetDefault("ThunderBall");
-			}
 	public override void SetDefaults()
 	{
 		Projectile.width = 12;
@@ -40,8 +36,10 @@ public class ThunderBall2 : ModProjectile
 		{
 			if ((Main.npc[j].Center - Projectile.Center).Length() < 25 && !Main.npc[j].dontTakeDamage && !Main.npc[j].friendly && Main.npc[j].active)
 			{
-				Main.npc[j].StrikeNPC((int)(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f)), 2, Math.Sign(Projectile.velocity.X), Main.rand.Next(100) < Projectile.ai[0]);
-				player.addDPS((int)(Projectile.damage * (1 + Projectile.ai[0] / 100f) * 1.0f));
+				NPC.HitModifiers npchitmodifier = new NPC.HitModifiers();
+				NPC.HitInfo hit = npchitmodifier.ToHitInfo(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f), Main.rand.NextFloat(100f) < player.GetTotalCritChance(Projectile.DamageType), 2);
+				Main.npc[j].StrikeNPC(hit, true, true);
+				NetMessage.SendStrikeNPC(Main.npc[j], hit);
 				for (int θ = 0; θ < 8; θ++)
 				{
 					Vector2 v = new Vector2(0, Main.rand.Next(25, 75) / 50f).RotatedByRandom(Math.PI * 2);

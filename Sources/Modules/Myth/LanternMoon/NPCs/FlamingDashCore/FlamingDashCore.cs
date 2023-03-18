@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.LanternMoon.Projectiles.DashCore;
 using Terraria.Audio;
 using Terraria.Localization;
@@ -330,8 +330,8 @@ public class FlamingDashCore : ModNPC
 					Projectile.NewProjectile(NPC.GetSource_FromAI(), player.Center + new Vector2(0, -350), new Vector2(-8, 0), ModContent.ProjectileType<GoldDashLine>(), Dam, 0f, player.whoAmI, 0, 0);
 				}
 			}
-			if (EverglowConfig.DebugMode)
-				Main.NewText(Main.MouseWorld.ToString(), 255, 0, 0);
+			//if (EverglowConfig.DebugMode)
+			//	Main.NewText(Main.MouseWorld.ToString(), 255, 0, 0);
 		}//红绿花火
 		if (NPC.localAI[0] > 1820 && NPC.localAI[0] <= 2560)//蓝黄风车
 		{

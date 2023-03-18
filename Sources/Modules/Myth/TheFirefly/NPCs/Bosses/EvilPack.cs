@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
 using Terraria;
 using Terraria.Audio;
@@ -83,7 +83,7 @@ public class EvilPack : ModNPC
 					}
 					if (!NPC.AnyNPCs(ModContent.NPCType<CorruptMoth>()))
 					{
-						if ((SteamID64 == 76561198074262598 /*Cataclysmic Armageddon*/ || SteamID64 == 76561198300589095 /*Setnour6*/) && EverglowConfig.DebugMode == true)
+						if ((SteamID64 == 76561198074262598 /*Cataclysmic Armageddon*/ || SteamID64 == 76561198300589095 /*Setnour6*/)/* && EverglowConfig.DebugMode*/)
 							Main.NewText("Cataclysmic Armageddon's Long Lost Older Cousin Calamatious Annihilation the Corrupted Moth " + $"{Language.GetTextValue(Language.GetTextValue("Mods.Everglow.Common.Message.HasAwoken"))}", 175, 75, 255);
 						else
 						{
@@ -141,7 +141,6 @@ public class EvilPack : ModNPC
 
 	public override void HitEffect(NPC.HitInfo hit)
 	{
-		//SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/MothHitCocoon"), NPC.Center);
 		if (NPC.ai[0] < 10)
 			NPC.ai[0] += 1;
 		else
@@ -155,7 +154,7 @@ public class EvilPack : ModNPC
 		}
 		NPC.life = NPC.lifeMax;
 		if (Math.Abs(omega) < 0.2f)
-			omega -= Math.Min(hitDirection * (float)damage / 10000f, 0.05f);
+			omega -= Math.Min(hit.HitDirection * (float)hit.Damage / 10000f, 0.05f);
 	}
 
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

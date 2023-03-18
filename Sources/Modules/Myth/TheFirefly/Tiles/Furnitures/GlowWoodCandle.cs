@@ -30,11 +30,7 @@ public class GlowWoodCandle : ModTile
 		TileObjectData.newTile.CopyFrom(TileObjectData.StyleOnTable1x1); // this style already takes care of direction for us
 		TileObjectData.addTile(Type);
 
-		// Etc
-		ModTranslation name = CreateMapEntryName();
-		name.SetDefault("GlowWood Candle");
 
-		AddMapEntry(new Color(0, 14, 175), name);
 		if (!Main.dedServ)
 		{
 			if (!Main.dedServ)

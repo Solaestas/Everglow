@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Terraria;
 using Terraria.Audio;
 
@@ -286,7 +286,11 @@ class World : ModProjectile, IWarpProjectile
 									Damk = Math.Clamp(width / 6f, 0.1f, 15f);
 								int Dam = (int)(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f) * Damk);
 								bool Crit = Main.rand.Next(100) < player.GetCritChance(DamageClass.Generic) + player.GetCritChance(DamageClass.Melee) + 15 + width * 1.5f;
-								Main.npc[v].StrikeNPC(Dam, 2 * width / 72f, Math.Sign(Projectile.velocity.X), Crit);
+								NPC.HitModifiers npchitmodifier = new NPC.HitModifiers();
+								NPC.HitInfo hit = npchitmodifier.ToHitInfo(Dam, Crit, 2 * width / 72f);
+								Main.npc[v].StrikeNPC(hit, true, true);
+								NetMessage.SendStrikeNPC(Main.npc[v], hit);
+
 								if (Crit)
 								{
 									MythContentPlayer myplayer = player.GetModPlayer<MythContentPlayer>();

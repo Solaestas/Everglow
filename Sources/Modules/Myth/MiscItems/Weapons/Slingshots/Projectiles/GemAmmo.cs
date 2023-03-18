@@ -1,5 +1,6 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.MiscItems.Weapons.Slingshots.Dusts;
+using Newtonsoft.Json.Linq;
 using Terraria.Audio;
 
 namespace Everglow.Myth.MiscItems.Weapons.Slingshots.Projectiles;
@@ -186,12 +187,14 @@ public abstract class GemAmmo : SlingshotAmmo
 			var d = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, dustType, 0, 0, 150, default, Main.rand.NextFloat(0.35f, 1.35f) * Power * 3);
 			d.velocity = new Vector2(0, Main.rand.NextFloat(Main.rand.NextFloat(1f, 4f), 16f) / d.scale).RotatedByRandom(6.283) * Power;
 		}
-		for (int j = 0; j < 200; j++)
+		foreach (NPC target in Main.npc)
 		{
-			if ((Main.npc[j].Center - Projectile.Center).Length() < 25 * (1 + Power * 3) && !Main.npc[j].dontTakeDamage && !Main.npc[j].friendly)
+			if ((target.Center - Projectile.Center).Length() < 25 * (1 + Power * 3) && !target.dontTakeDamage && !target.friendly)
 			{
-				Main.npc[j].StrikeNPC((int)(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f)), 2, Math.Sign(Projectile.velocity.X), Main.rand.Next(100) < Projectile.ai[0]);
-				player.addDPS((int)(Projectile.damage * (1 + Projectile.ai[0] / 100f) * 1f));
+				NPC.HitModifiers npcHitM = new NPC.HitModifiers();
+				NPC.HitInfo hit = npcHitM.ToHitInfo(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f), Main.rand.NextFloat(100f) < player.GetTotalCritChance(Projectile.DamageType), 0);
+				target.StrikeNPC(hit, true, true);
+				NetMessage.SendStrikeNPC(target, hit);
 			}
 		}
 		Projectile.velocity *= 0f;

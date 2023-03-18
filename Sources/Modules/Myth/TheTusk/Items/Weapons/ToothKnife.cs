@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.TheTusk.Projectiles;
+using Everglow.Myth.TheTusk.Projectiles;
 using Everglow.Myth.TheTusk.Projectiles.Weapon;
 using Terraria;
 using Terraria.DataStructures;
@@ -33,9 +33,9 @@ public class ToothKnife : ModItem
 	{
 		return false;
 	}
-	public override void ModifyHitNPC(Player player, NPC target, ref NPC.HitModifiers modifiers)
+	public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		if (crit)
+		if(hit.Crit)
 		{
 			Projectile.NewProjectile(Item.GetSource_OnHit(target), target.Center + new Vector2(80, 0), new Vector2(Main.rand.NextFloat(-1f, 1f), 0), ModContent.ProjectileType<EarthTusk>(), Item.damage, Item.knockBack * 0.8f, player.whoAmI, 2, 1);
 			Projectile.NewProjectile(Item.GetSource_OnHit(target), target.Center + new Vector2(-80, 0), new Vector2(Main.rand.NextFloat(-1f, 1f), 0), ModContent.ProjectileType<EarthTusk>(), Item.damage, Item.knockBack * 0.8f, player.whoAmI, 2, -1);

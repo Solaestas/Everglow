@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.Shaders;
@@ -83,6 +83,10 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 	{
 		return "Everglow/MEAC/Images/Melee";
 	}
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+	{
+		hit.HitDirection = target.Center.X > Main.player[Projectile.owner].Center.X ? 1 : -1;
+	}
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 		float power = Math.Max(StrikeOmegaDecrease - MathF.Pow(target.knockBackResist / 4f, 3), MinStrikeOmegaDecrease);
@@ -90,10 +94,9 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 		ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
 		float ShakeStrength = Omega;
 		Omega *= power;
-		damage = (int)(damage / power);
+		modifiers.FinalDamage /= power;
 		Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 12f * ShakeStrength, 100)).RotatedByRandom(6.283);
-		hitDirection = target.Center.X > Main.player[Projectile.owner].Center.X ? 1 : -1;
-		knockback *= Omega * 3;
+		modifiers.Knockback *= Omega * 3;
 	}
 	public virtual void UpdateSound()
 	{

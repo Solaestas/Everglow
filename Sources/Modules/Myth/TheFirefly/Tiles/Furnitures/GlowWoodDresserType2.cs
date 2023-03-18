@@ -28,12 +28,6 @@ public class GlowWoodDresserType2 : ModTile
 		ItemDrop = ModContent.ItemType<Items.Furnitures.GlowWoodDresserType2>();
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
 
-		// Names
-		ContainerName.SetDefault(Language.GetTextValue("ItemName.Dresser"));
-		ModTranslation name = CreateMapEntryName();
-		name.SetDefault("GlowWood Dresser");
-		AddMapEntry(new Color(0, 14, 175), name);
-
 		// Placement
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style3x2);
 		TileObjectData.newTile.Height = 2;
@@ -55,17 +49,18 @@ public class GlowWoodDresserType2 : ModTile
 		return FurnitureUtils.DresserRightClick();
 	}
 
-	public override void MouseOverFar(int i, int j)
-	{
-		string chestName = ContainerName.GetDefault();
-		FurnitureUtils.DresserMouseFar<Items.Furnitures.GlowWoodDresserType2>(chestName);
-	}
+	//不确定hjson能否解决，先禁掉了
+	//public override void MouseOver(int i, int j)
+	//{
+	//	string chestName = LocalizedText;
+	//	FurnitureUtils.ChestMouseOver<Items.Furnitures.GlowWoodChest>(chestName, i, j);
+	//}
 
-	public override void MouseOver(int i, int j)
-	{
-		string chestName = ContainerName.GetDefault();
-		FurnitureUtils.DresserMouseOver<Items.Furnitures.GlowWoodDresserType2>(chestName);
-	}
+	//public override void MouseOverFar(int i, int j)
+	//{
+	//	string chestName = ContainerName.GetDefault();
+	//	FurnitureUtils.ChestMouseFar<Items.Furnitures.GlowWoodChest>(chestName, i, j);
+	//}
 
 	public override void NumDust(int i, int j, bool fail, ref int num)
 	{

@@ -21,10 +21,6 @@ public class GlowWoodSink : ModTile
 
 		DustType = ModContent.DustType<BlueGlow>();
 		AdjTiles = new int[] { Type };
-
-		ModTranslation name = CreateMapEntryName();
-		name.SetDefault("GlowWood Sink");
-		AddMapEntry(new Color(0, 14, 175), name);
 	}
 
 	public override void NumDust(int i, int j, bool fail, ref int num)

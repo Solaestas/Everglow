@@ -1,6 +1,7 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Buffs;
 using Everglow.Myth.TheFirefly.Dusts;
+using Newtonsoft.Json.Linq;
 using Terraria;
 
 namespace Everglow.Myth.TheFirefly.Projectiles;
@@ -51,13 +52,15 @@ internal class EvilChrysalis : ModProjectile
 		{
 			ScreenShaker Splayer = player.GetModPlayer<ScreenShaker>();
 			Splayer.FlyCamPosition = new Vector2(0, 32).RotatedByRandom(6.283);
-			float CritC = player.GetCritChance(DamageClass.Summon) + player.GetCritChance(DamageClass.Generic);
-			for (int j = 0; j < 200; j++)
+
+			foreach (NPC target in Main.npc)
 			{
-				if ((Main.npc[j].Center - Projectile.Center).Length() < 60 && !Main.npc[j].dontTakeDamage && !Main.npc[j].friendly)
+				if ((target.Center - Projectile.Center).Length() < 60 && !target.dontTakeDamage && !target.friendly)
 				{
-					Main.npc[j].StrikeNPC((int)(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f) * 4.0f), 2, Math.Sign(Projectile.velocity.X), Main.rand.Next(100) < CritC);
-					player.addDPS((int)(Projectile.damage * (1 + CritC / 100f)));
+					NPC.HitModifiers npcHitM = new NPC.HitModifiers();
+					NPC.HitInfo hit = npcHitM.ToHitInfo(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f) * 4, Main.rand.NextFloat(100f) < player.GetTotalCritChance(Projectile.DamageType), 2);
+					target.StrikeNPC(hit, true, true);
+					NetMessage.SendStrikeNPC(target, hit);
 				}
 			}
 		}

@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.TheTusk;
+using Everglow.Myth.TheTusk;
 using Terraria;
 using Terraria.Localization;
 
@@ -193,9 +193,11 @@ public class ToothMagicSplit : ModProjectile
 						if (!HasBeenHit[j] && (Main.npc[j].Center - (Projectile.oldPos[i] + new Vector2(Projectile.width / 2f, Projectile.height / 2f))).Length() < 40 && !Main.npc[j].dontTakeDamage && !Main.npc[j].friendly)
 						{
 							HasBeenHit[j] = true;
-							Main.npc[j].StrikeNPC((int)(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f)), 2, Math.Sign(Projectile.velocity.X), Main.rand.Next(100) < Projectile.ai[0]);
 							Player player = Main.player[Projectile.owner];
-							player.addDPS((int)(Projectile.damage * (1 + Projectile.ai[0] / 100f)));
+							NPC.HitModifiers npcHitM = new NPC.HitModifiers();
+							NPC.HitInfo hit = npcHitM.ToHitInfo(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f), Main.rand.NextFloat(100f) < player.GetTotalCritChance(Projectile.DamageType), 2);
+							Main.npc[j].StrikeNPC(hit, true, true);
+							NetMessage.SendStrikeNPC(Main.npc[j], hit);
 						}
 					}
 				}

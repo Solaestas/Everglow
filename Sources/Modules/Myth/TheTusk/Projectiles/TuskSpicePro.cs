@@ -36,7 +36,6 @@ public class TuskSpicePro : ModProjectile
 	{
 		CyanStrike = 1;
 		Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), target.Center, Vector2.Zero, ModContent.ProjectileType<XiaoHit>(), 0, 0, Projectile.owner, 0.45f);
-		base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
 	}
 
 	public override void Load()
@@ -93,37 +92,6 @@ public class TuskSpicePro : ModProjectile
 				Vx.Add(new VertexBase.CustomVertexInfo(Vbase - v0T, cr, new Vector3(0, origfade, 0)));
 
 				Texture2D t = ModContent.Request<Texture2D>("Everglow/Myth/TheTusk/NPCs/Bosses/BloodTusk/Tuskplus" + (Main.projectile[p].whoAmI % 6).ToString()).Value;
-
-				if (Main.projectile[p].timeLeft % 6 == 0 && Main.projectile[p].timeLeft < 75)
-				{
-					for (int j = 0; j < 200; j++)
-					{
-						if (!hasHit[j, p])
-						{
-							for (int X0 = 0; X0 < 6; X0++)
-							{
-								Rectangle hbx = Main.npc[j].Hitbox;
-								if (hbx.Intersects(new Rectangle((int)(Main.projectile[p].Center + v0 * 0.4f * X0).X - 20, (int)(Main.projectile[p].Center + v0 * 0.4f * X0).Y - 20, 40, 40)))
-								{
-									if (!Main.npc[j].dontTakeDamage && !Main.npc[j].friendly && Main.npc[j].active)
-									{
-										int Dam = Projectile.damage;
-										bool Crit = Main.rand.Next(100) < Main.projectile[p].ai[0];
-										Main.npc[j].StrikeNPC(Dam, 0, Math.Sign(Main.projectile[p].velocity.X), Main.rand.Next(100) < Main.projectile[p].ai[0]);
-										Player player2 = Main.player[Main.projectile[p].owner];
-										if (Crit)
-											player2.addDPS((Dam - Main.npc[j].defense) * 2);
-										else
-										{
-											player2.addDPS((Dam - Main.npc[j].defense) * 2);
-										}
-										hasHit[j, p] = true;
-									}
-								}
-							}
-						}
-					}
-				}
 				Main.graphics.GraphicsDevice.Textures[0] = t;
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 				Main.spriteBatch.End();

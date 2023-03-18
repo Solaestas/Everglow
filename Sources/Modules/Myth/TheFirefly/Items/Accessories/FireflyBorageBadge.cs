@@ -71,7 +71,7 @@ public class FireflyBorageBadge : ModItem
 	public override void AddRecipes()
 	{
 		CreateRecipe()
-			.AddIngredient(ModContent.ItemType<PlantAndFarmModule.Items.Materials.WindMoveSeed>(), 8) // 15
+			//.AddIngredient(ModContent.ItemType<Everglow.PlantAndFarm.Items.Materials.WindMoveSeed>(), 8) // 15
 			.AddIngredient(ModContent.ItemType<BlackStarShrub>(), 24)
 			.AddIngredient(ModContent.ItemType<GlowingPedal>(), 6)
 			.AddTile(TileID.LivingLoom)

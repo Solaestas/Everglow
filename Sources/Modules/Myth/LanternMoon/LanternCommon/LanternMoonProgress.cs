@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Terraria.GameContent;
 using Terraria.Localization;
 
@@ -8,11 +8,13 @@ public class LanternMoonProgress : ModSystem//灯笼月
 {
 	public override void PostUpdateInvasions()
 	{
-		if (EverglowConfig.DebugMode)
-		{
-			WavePoint++;
-			Point++;
-		}
+		//if (EverglowConfig.DebugMode)
+		//{
+		//	WavePoint++;
+		//	Point++;
+		//}
+		WavePoint++;
+		Point++;
 		if (PreWavePoint[0] == 0)//共计40波，每一波需要的分数
 		{
 			PreWavePoint[0] = 100;

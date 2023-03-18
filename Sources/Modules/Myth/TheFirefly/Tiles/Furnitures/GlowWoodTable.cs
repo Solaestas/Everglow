@@ -28,11 +28,6 @@ public class GlowWoodTable : ModTile
 		TileObjectData.addTile(Type);
 
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
-
-		// Etc
-		ModTranslation name = CreateMapEntryName();
-		name.SetDefault("GlowWood Table");
-		AddMapEntry(new Color(0, 14, 175), name);
 	}
 
 	public override void NumDust(int x, int y, bool fail, ref int num)

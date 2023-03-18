@@ -32,11 +32,6 @@ public class GlowWoodChandelierType4 : ModTile
 		TileObjectData.newTile.AnchorBottom = default;
 		TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16 };
 		TileObjectData.addTile(Type);
-
-		// Etc
-		ModTranslation name = CreateMapEntryName();
-		name.SetDefault("Chandelier");
-		AddMapEntry(new Color(0, 14, 175), name);
 	}
 
 	public override void HitWire(int i, int j)

@@ -28,11 +28,6 @@ public class GlowWoodChair : ModTile
 		DustType = ModContent.DustType<BlueGlow>();
 		AdjTiles = new int[] { TileID.Chairs };
 
-		// Names
-		ModTranslation name = CreateMapEntryName();
-		name.SetDefault("GlowWood Chair");
-		AddMapEntry(new Color(0, 14, 175), name);
-
 		// Placement
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x2);
 		TileObjectData.newTile.CoordinateHeights = new[] { 16, 18 };

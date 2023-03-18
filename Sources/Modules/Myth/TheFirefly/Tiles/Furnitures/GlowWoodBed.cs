@@ -29,11 +29,6 @@ public class GlowWoodBed : ModTile
 		TileObjectData.newTile.CoordinateHeights = new[] { 16, 18 };
 		TileObjectData.newTile.CoordinatePaddingFix = new Point16(0, -2);
 		TileObjectData.addTile(Type);
-
-		// Etc
-		ModTranslation name = CreateMapEntryName();
-		name.SetDefault("GlowWood Bed");
-		AddMapEntry(new Color(0, 14, 175), name);
 	}
 
 	public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)

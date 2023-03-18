@@ -1,8 +1,9 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.MagicWeaponsReplace.Items;
 using Everglow.Myth.TheFirefly.Pylon;
 using Everglow.Myth.TheFirefly.Tiles;
 using Everglow.Myth.TheFirefly.Walls;
+using Everglow.Commons.TileHelper;
 using Terraria.DataStructures;
 using Terraria.IO;
 using Terraria.ModLoader.Default;
@@ -35,10 +36,6 @@ public class MothLand : ModSystem
 			WorldGen.SquareTileFrame(it.CurrentCoord.X, it.CurrentCoord.Y);
 			WorldGen.SquareWallFrame(it.CurrentCoord.X, it.CurrentCoord.Y);
 		}
-	}
-	private void BuildLivingFluorescentTree()
-	{
-
 	}
 	public static void BuildShabbyCastle()
 	{

@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Bosses.Acytaea.Projectiles;
+using Everglow.Myth.Bosses.Acytaea.Projectiles;
 using Terraria;
 using Terraria.Localization;
 
@@ -84,7 +84,7 @@ public class HugeMouth : ModNPC
 	private int Dam = 0;
 	public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
 	{
-		player.AddBuff(BuffID.Bleeding, 120);
+		target.AddBuff(BuffID.Bleeding, 120);
 	}
 
 	private float Big = 0;

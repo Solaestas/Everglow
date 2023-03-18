@@ -1,5 +1,6 @@
-﻿using Everglow.Myth.TheFirefly.Items.Accessories;
+using Everglow.Myth.TheFirefly.Items.Accessories;
 using Terraria.Localization;
+using Everglow.Myth.TheFirefly.Projectiles;
 
 namespace Everglow.Myth.TheFirefly.Items.Weapons;
 

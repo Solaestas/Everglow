@@ -204,14 +204,13 @@ public class FoodBuffModPlayer : ModPlayer
 			SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode);
 			ScreenShaker Gsplayer = Player.GetModPlayer<ScreenShaker>();
 			Gsplayer.FlyCamPosition = new Vector2(0, 150).RotatedByRandom(6.283);
-			Projectile.NewProjectile(Player.GetSource_Death("CherryBuff"), Player.Center, Vector2.Zero, ModContent.ProjectileType<BombShakeWave>(), 0, 0, Player.whoAmI, 0.4f, 2f);
+
 			float k1 = Math.Clamp(Player.velocity.Length(), 1, 3);
 			float k2 = Math.Clamp(Player.velocity.Length(), 6, 10);
 			float k0 = 1f / 4 * k2;
 			for (int j = 0; j < 16 * k0; j++)
 			{
 				Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * k1;
-				int dust1 = Dust.NewDust(Player.Center - Vector2.Normalize(v0).RotatedBy(Math.PI / 4) * 32, 0, 0, ModContent.DustType<MothSmog>(), Vector2.Normalize(v0).X * 5, Vector2.Normalize(v0).Y * 10, 100, default, Main.rand.NextFloat(5.1f, 7.5f));
 				Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 25);
 				Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
 			}

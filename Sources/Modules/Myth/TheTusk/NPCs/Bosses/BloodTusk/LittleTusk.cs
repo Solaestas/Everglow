@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.TheTusk;
+using Everglow.Myth.TheTusk;
 using Terraria;
 using Terraria.Audio;
 using Terraria.Localization;
@@ -137,7 +137,7 @@ public class LittleTusk : ModNPC
 	}
 	public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
 	{
-		player.AddBuff(BuffID.Bleeding, 120);
+		target.AddBuff(BuffID.Bleeding, 120);
 	}
 	private bool startFight = false;
 	private int RamInt = 0;

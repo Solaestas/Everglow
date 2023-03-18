@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
 using ReLogic.Content;
 using Terraria.DataStructures;
@@ -49,9 +49,6 @@ public class BaseModPylon<T> : ModPylon where T : TEModdedPylon
 		TileID.Sets.InteractibleByNPCs[Type] = true;
 		TileID.Sets.PreventsSandfall[Type] = true;
 		AddToArray(ref TileID.Sets.CountsAsPylon);
-
-		ModTranslation pylonName = CreateMapEntryName();
-		AddMapEntry(new Color(68, 68, 106), pylonName);
 	}
 
 	public override void KillMultiTile(int i, int j, int frameX, int frameY)

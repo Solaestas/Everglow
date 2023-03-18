@@ -1,4 +1,4 @@
-﻿using Everglow.Commons.Utilities;
+using Everglow.Commons.Utilities;
 using Everglow.Myth.Common;
 using Everglow.Myth.MagicWeaponsReplace.Projectiles.GoldenShower;
 using Terraria;
@@ -37,7 +37,7 @@ public class IchorRing : ModProjectile
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 		if (Projectile.timeLeft > 690)
-			damage *= 5;
+			modifiers.FinalDamage *= 5;
 	}
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{

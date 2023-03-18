@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Projectiles;
 using Terraria;
 
@@ -41,9 +41,8 @@ public class MothBuffTarget : GlobalNPC
 		if (npc.HasBuff(ModContent.BuffType<OnMoth>()))
 		{
 			if (projectile.type == ModContent.ProjectileType<DarkFanFly>() || projectile.type == ModContent.ProjectileType<GlowingButterfly>())
-				damage *= (int)(1.0f + MothStack / 10f);
+				modifiers.FinalDamage *= (int)(1.0f + MothStack / 10f);
 		}
-		base.ModifyHitByProjectile(npc, projectile, ref damage, ref knockback, ref crit, ref hitDirection);
 	}
 
 	public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

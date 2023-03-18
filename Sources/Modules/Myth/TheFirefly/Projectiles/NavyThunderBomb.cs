@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
 using Terraria.Audio;
 using static Everglow.Myth.Common.MythUtils;
@@ -109,10 +109,10 @@ public class NavyThunderBomb : ModProjectile, IWarpProjectile
 			{
 				if (!target.dontTakeDamage && !target.friendly && target.CanBeChasedBy() && target.active)
 				{
-					bool crit = Main.rand.NextBool(33, 100);
-					target.StrikeNPC(Projectile.damage, 2f, 1, crit);
-
-					player.addDPS(Math.Max(0, target.defDamage));
+					NPC.HitModifiers npcHitM = new NPC.HitModifiers();
+					NPC.HitInfo hit = npcHitM.ToHitInfo(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f), Main.rand.NextFloat(100f) < Main.player[Projectile.owner].GetTotalCritChance(Projectile.DamageType), 2);
+					target.StrikeNPC(hit, true, true);
+					NetMessage.SendStrikeNPC(target, hit);
 				}
 			}
 		}

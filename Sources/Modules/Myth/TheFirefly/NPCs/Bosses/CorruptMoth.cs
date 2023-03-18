@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
 using Everglow.Myth.TheFirefly.Items.BossDrop;
 using Everglow.Myth.TheFirefly.Items.Weapons;
@@ -152,16 +152,7 @@ public class CorruptMoth : ModNPC
 		//NPCID.Sets.TrailingMode[NPC.type] = 0;
 		if (!Main.dedServ)
 		{
-			if (EverglowClientConfig.ReplaceMothAudio == 0) //ModContent.GetInstance<EverglowClientConfig>().MothAudioReplace == MothAudioReplaceMode.MothFighting
-				Music = MythContent.QuickMusic("MothFighting");
-			else if (EverglowClientConfig.ReplaceMothAudio == 1)
-			{
-				Music = MythContent.QuickMusic("MothFightingAlt");
-			}
-			else if (EverglowClientConfig.ReplaceMothAudio == 2)
-			{
-				Music = MythContent.QuickMusic("MothFightingOld2");
-			}
+			Music = MythContent.QuickMusic("MothFighting");
 		}
 	}
 
@@ -224,7 +215,7 @@ public class CorruptMoth : ModNPC
 	{
 		if (NPC.ai[0] == 6 && Timer > 260)
 		{
-			damage = 1;
+			modifiers.FinalDamage *= 0.0001f;
 			SoundEngine.PlaySound(SoundID.NPCHit4, NPC.Center);
 			if (lightVisual < 0.6f)
 				lightVisual += 0.5f;

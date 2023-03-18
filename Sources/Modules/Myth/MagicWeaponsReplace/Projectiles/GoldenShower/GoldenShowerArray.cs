@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using static Everglow.Myth.Common.MythUtils;
 namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.GoldenShower;
 
@@ -61,7 +61,7 @@ internal class GoldenShowerArray : ModProjectile, IWarpProjectile
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * (Projectile.ai[0] == 0 ? Main.GameViewMatrix.ZoomMatrix : Main.Transform);
 		Fade.Parameters["uTransform"].SetValue(model * projection);
-		Fade.Parameters["alphaValue"].SetValue(Commons.Core.Utils.MathUtils.Sqrt(k0));
+		Fade.Parameters["alphaValue"].SetValue(MathF.Sqrt(k0));
 		Fade.Parameters["tex0"].SetValue(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/GoldenShower/Golden"));
 		Fade.CurrentTechnique.Passes[0].Apply();
 		DrawMagicArray(MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLine"), new Color(255, 199, 0, 0));

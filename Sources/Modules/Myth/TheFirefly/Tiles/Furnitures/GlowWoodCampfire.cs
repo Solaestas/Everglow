@@ -32,11 +32,6 @@ public class GlowWoodCampfire : ModTile
 		TileObjectData.newTile.DrawYOffset = 3;
 		TileObjectData.addTile(Type);
 
-		// Etc
-		ModTranslation name = CreateMapEntryName();
-		name.SetDefault("GlowWood Camfire");
-		AddMapEntry(new Color(0, 14, 175), name);
-
 		AnimationFrameHeight = 36;
 	}
 

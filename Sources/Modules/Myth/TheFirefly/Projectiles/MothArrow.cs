@@ -1,4 +1,5 @@
-﻿using Everglow.Myth.TheFirefly.Dusts;
+using Everglow.Myth.TheFirefly.Dusts;
+using Newtonsoft.Json.Linq;
 using Terraria;
 
 namespace Everglow.Myth.TheFirefly.Projectiles;
@@ -57,17 +58,14 @@ internal class MothArrow : ModProjectile
 			int num21 = Dust.NewDust(Projectile.Center + Vector2.Normalize(Projectile.velocity) * 16f, 0, 0, ModContent.DustType<BlueParticleDark2>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(3.7f, 5.1f));
 			Main.dust[num21].alpha = (int)(Main.dust[num21].scale * 50);
 		}
-		//写得不是很好的范围杀伤
-		for (int j = 0; j < 200; j++)
+		foreach (NPC target in Main.npc)
 		{
-			if (Main.npc[j].active)
+			if (!target.dontTakeDamage && !target.friendly && target.CanBeChasedBy() && target.active)
 			{
-				if ((Main.npc[j].Center - Projectile.Center).Length() < 100 && !Main.npc[j].dontTakeDamage && !Main.npc[j].friendly)
-				{
-					Main.npc[j].StrikeNPC((int)(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f)), 2, Math.Sign(Projectile.velocity.X), true);
-					Player player = Main.player[Projectile.owner];
-					player.addDPS((int)(Projectile.damage * (1 + Projectile.ai[1] / 100f) * 1.0f));
-				}
+				NPC.HitModifiers npcHitM = new NPC.HitModifiers();
+				NPC.HitInfo hit = npcHitM.ToHitInfo(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f), Main.rand.NextFloat(100f) < Main.player[Projectile.owner].GetTotalCritChance(Projectile.DamageType), 2);
+				target.StrikeNPC(hit, true, true);
+				NetMessage.SendStrikeNPC(target, hit);
 			}
 		}
 	}

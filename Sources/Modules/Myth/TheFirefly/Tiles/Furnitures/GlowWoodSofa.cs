@@ -28,11 +28,6 @@ public class GlowWoodSofa : ModTile
 		DustType = ModContent.DustType<BlueGlow>();
 		AdjTiles = new int[] { TileID.Benches };
 
-		// Names
-		ModTranslation name = CreateMapEntryName();
-		name.SetDefault("GlowWood Sofa");
-		AddMapEntry(new Color(0, 14, 175), name);
-
 		// Placement
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style3x2);
 		TileObjectData.newTile.CoordinateHeights = new[] { 16, 18 };

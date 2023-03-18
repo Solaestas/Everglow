@@ -121,7 +121,12 @@ public class GlowStar : ModProjectile
 			if (Dis < k0 * 50)
 			{
 				if (!target.dontTakeDamage && !target.friendly && target.CanBeChasedBy() && target.active)
-					target.StrikeNPC((int)(Projectile.damage / (Dis + 35f) * 35f), 0.2f, 1);
+				{
+					NPC.HitModifiers npcHitM = new NPC.HitModifiers();
+					NPC.HitInfo hit = npcHitM.ToHitInfo(Projectile.damage / (Dis + 35f) * 35f, Main.rand.NextFloat(100f) < Main.player[Projectile.owner].GetTotalCritChance(Projectile.DamageType), 0.2f);
+					target.StrikeNPC(hit, true, true);
+					NetMessage.SendStrikeNPC(target, hit);
+				}
 			}
 		}
 	}

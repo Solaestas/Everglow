@@ -1,4 +1,4 @@
-﻿using Terraria;
+using Terraria;
 using Terraria.Audio;
 using Terraria.Localization;
 
@@ -25,7 +25,6 @@ public class BoneFeather : ModProjectile
 		Projectile.penetrate = 3;
 		Projectile.scale = 1;
 	}
-	private bool initialization = true;
 	private bool stick = false;
 	private int u = 0;
 	private NPC m = Main.npc[0];
@@ -73,9 +72,15 @@ public class BoneFeather : ModProjectile
 				int Dam = (int)(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f) / 4d);
 				if (Dam < 1)
 					Dam = 1;
-				m.StrikeNPC(Dam, Projectile.knockBack, Projectile.direction, Main.rand.Next(100) < Projectile.ai[0]);
-				Player p = Main.LocalPlayer;
-				p.dpsDamage += (int)(Dam * (100 + Projectile.ai[0]) / 100d);
+
+				Player player = Main.LocalPlayer;
+				NPC.HitModifiers npchitmodifier = new NPC.HitModifiers();
+				NPC.HitInfo hit = npchitmodifier.ToHitInfo(Dam, false, Projectile.knockBack);
+				m.StrikeNPC(hit, true, true);
+				NetMessage.SendStrikeNPC(m, hit);
+
+
+				player.dpsDamage += (int)(Dam * (100 + Projectile.ai[0]) / 100d);
 				Projectile.penetrate--;
 			}
 		}

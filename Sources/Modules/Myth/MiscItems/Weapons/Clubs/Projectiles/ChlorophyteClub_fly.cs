@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Terraria;
 using Terraria.GameContent.Shaders;
 
@@ -67,10 +67,7 @@ public class ChlorophyteClub_fly : ModProjectile, IWarpProjectile
 	private int FlyClubCooling = 0;
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		if (FlyClubCooling == 0 && Omega > 0.1f)
-		{
-
-		}
+		hit.HitDirection = target.Center.X > Main.player[Projectile.owner].Center.X ? 1 : -1;
 	}
 	public BlendState TrailBlendState()
 	{
@@ -87,10 +84,9 @@ public class ChlorophyteClub_fly : ModProjectile, IWarpProjectile
 		ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
 		float ShakeStrength = Omega * 0.4f;
 		Omega *= power;
-		damage = (int)(damage / power);
+		modifiers.FinalDamage /= power;
 		Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 12f * ShakeStrength, 100)).RotatedByRandom(6.283);
-		hitDirection = target.Center.X > Main.player[Projectile.owner].Center.X ? 1 : -1;
-		knockback *= Omega * 3;
+		modifiers.Knockback *= Omega * 3;
 	}
 	public override void AI()
 	{

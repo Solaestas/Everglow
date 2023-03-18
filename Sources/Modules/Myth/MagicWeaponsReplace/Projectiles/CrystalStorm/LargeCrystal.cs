@@ -129,17 +129,8 @@ public class LargeCrystal : ModProjectile//This proj summon storm at breaking
 
 			Ins.VFXManager.Add(cp);
 
-			//Vector2 v = new Vector2(0, Main.rand.NextFloat(2f, 7f)).RotatedByRandom(6.28);
-			//int ds = Projectile.NewProjectile(null, Projectile.Center + v * 3f + Projectile.velocity, v, ModContent.ProjectileType<BrokenGem>(), Projectile.damage / 4, 1, Main.myPlayer, 0);
-			//Main.projectile[ds].scale = Main.rand.NextFloat(0.85f, 1.25f);
 		}
 
-		//for (int j = 0; j < 16 * k0; j++)
-		//{
-		//    Vector2 v = new Vector2(0, Main.rand.NextFloat(2f, 7f)).RotatedByRandom(6.28);
-		//    int ds = Projectile.NewProjectile(null, Projectile.Center + v * 3f + Projectile.velocity, v, ModContent.ProjectileType<BrokenGem>(), Projectile.damage / 4, 1, Main.myPlayer, 0);
-		//    Main.projectile[ds].scale = Main.rand.NextFloat(0.85f, 1.25f);
-		//}
 
 		for (int j = 0; j < 3 * k0; j++)
 		{
@@ -167,7 +158,12 @@ public class LargeCrystal : ModProjectile//This proj summon storm at breaking
 			if (Dis < k0 * 50)
 			{
 				if (!target.dontTakeDamage && !target.friendly && target.CanBeChasedBy() && target.active)
-					target.StrikeNPC((int)(Projectile.damage / (Dis + 35f) * 35f), 0.2f, 1);
+				{
+					NPC.HitModifiers npcHitM = new NPC.HitModifiers();
+					NPC.HitInfo hit = npcHitM.ToHitInfo((int)(Projectile.damage / (Dis + 35f) * 35f), false, 1);
+					target.StrikeNPC(hit, true, true);
+					NetMessage.SendStrikeNPC(target, hit);
+				}
 			}
 		}
 		SoundEngine.PlaySound(SoundID.Item27, Projectile.Center);

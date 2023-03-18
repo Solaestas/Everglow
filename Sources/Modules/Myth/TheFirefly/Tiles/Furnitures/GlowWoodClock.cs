@@ -26,11 +26,6 @@ public class GlowWoodClock : ModTile
 		TileObjectData.newTile.Height = 5;
 		TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16, 16, 18 };
 		TileObjectData.addTile(Type);
-
-		// Etc
-		ModTranslation name = CreateMapEntryName();
-		name.SetDefault("GlowWood Clock");
-		AddMapEntry(new Color(0, 14, 175), name);
 	}
 
 	public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)

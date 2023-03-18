@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Terraria;
 
 namespace Everglow.Myth.TheTusk.Projectiles.Weapon;
@@ -30,12 +30,12 @@ public class BloodyBoneYoyo : ModProjectile
 			}
 		}
 	}
-	internal int hit = 0;
+	internal int hitTimes = 0;
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		float a = Main.rand.NextFloat(0, 100f);
 		Player player = Main.player[Projectile.owner];
-		if (hit >= 4)
+		if (hitTimes >= 4)
 		{
 			for (int y = 0; y < 5; y++)
 			{
@@ -61,7 +61,7 @@ public class BloodyBoneYoyo : ModProjectile
 				Vector2 v = new Vector2(0, Main.rand.NextFloat(2, 7)).RotatedByRandom(MathHelper.TwoPi);
 				Dust.NewDust(target.position, target.width, target.height, DustID.VampireHeal, v.X, v.Y, 150, default, Main.rand.NextFloat(0.5f, 1.2f));
 			}
-			hit = 0;
+			hitTimes = 0;
 		}
 		for (int y = 0; y < 16; y++)
 		{
@@ -69,6 +69,6 @@ public class BloodyBoneYoyo : ModProjectile
 			Main.dust[num90].noGravity = false;
 			Main.dust[num90].velocity = new Vector2(Main.rand.NextFloat(0.4f, 2.2f), 0).RotatedByRandom(Math.PI * 2d);
 		}
-		hit++;
+		hitTimes++;
 	}
 }

@@ -44,13 +44,6 @@ public class GlowWoodTorch : ModTile
 		TileObjectData.addAlternate(0);
 		TileObjectData.addTile(Type);
 
-		// Etc
-		ModTranslation name = CreateMapEntryName();
-
-		name.SetDefault("GlowWood Torch");
-
-		AddMapEntry(new Color(0, 14, 175), name);
-
 		// Assets
 		if (!Main.dedServ)
 			flameTexture = ModContent.Request<Texture2D>("Everglow/Myth/TheFirefly/Tiles/Furnitures/GlowWoodTorch_Flame");

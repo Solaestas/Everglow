@@ -1,4 +1,4 @@
-﻿using Everglow.Commons.Utilities;
+using Everglow.Commons.Utilities;
 using Everglow.Myth.Common;
 using Everglow.Myth.MagicWeaponsReplace.Projectiles.CursedFlames;
 using Terraria;
@@ -108,6 +108,7 @@ public class CurseClub_fly : ModProjectile, IWarpProjectile
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
+		hit.HitDirection = target.Center.X > Main.player[Projectile.owner].Center.X ? 1 : -1;
 		target.AddBuff(BuffID.CursedInferno, (int)(818 * Omega));
 	}
 	public BlendState TrailBlendState()
@@ -125,10 +126,9 @@ public class CurseClub_fly : ModProjectile, IWarpProjectile
 		ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
 		float ShakeStrength = Omega * 0.04f;
 		Omega *= power;
-		damage = (int)(damage / power);
+		modifiers.FinalDamage /= power;
 		Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 12f * ShakeStrength, 100)).RotatedByRandom(6.283);
-		hitDirection = target.Center.X > Main.player[Projectile.owner].Center.X ? 1 : -1;
-		knockback *= Omega * 3;
+		modifiers.Knockback *= Omega * 3;
 	}
 	public override void AI()
 	{
