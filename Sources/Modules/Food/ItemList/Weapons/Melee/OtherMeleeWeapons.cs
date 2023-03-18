@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Everglow.Resources.ItemList.Weapons.Melee
+namespace Everglow.Food.ItemList.Weapons.Melee
 {
-    public class OtherMeleeWeapons : GlobalItem
+	public class OtherMeleeWeapons : GlobalItem
     {
         public static List<int> vanillaOtherMeleeWeapons;
         public override void Unload()

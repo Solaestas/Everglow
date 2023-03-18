@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Everglow.Resources.ItemList.Weapons.Summon
+namespace Everglow.Food.ItemList.Weapons.Summon
 {
-    public class Minions : GlobalItem
+	public class Minions : GlobalItem
     {
         public static List<int> vanillaMinions;
         public override void Unload()

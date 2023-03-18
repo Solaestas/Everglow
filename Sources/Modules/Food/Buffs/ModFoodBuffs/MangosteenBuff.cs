@@ -1,4 +1,6 @@
-﻿namespace Everglow.Food.Buffs.ModFoodBuffs;
+using Everglow.Food.ItemList.Weapons.Melee;
+
+namespace Everglow.Food.Buffs.ModFoodBuffs;
 
 public class MangosteenBuff : ModBuff
 {

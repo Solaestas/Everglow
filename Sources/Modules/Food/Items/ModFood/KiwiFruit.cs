@@ -1,9 +1,9 @@
-﻿using Terraria.DataStructures;
+using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Everglow.Food.Buffs.ModFoodBuffs;
+using Everglow.Food.Utils;
 
 namespace Everglow.Food.Items.ModFood;
-
 public class KiwiFruit : FoodBase
 {
 	public override FoodInfo FoodInfo

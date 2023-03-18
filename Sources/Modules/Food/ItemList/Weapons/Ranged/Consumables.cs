@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Humanizer.In;
-
-namespace Everglow.Resources.ItemList.Weapons.Ranged
+namespace Everglow.Food.ItemList.Weapons.Ranged
 {
-    public class Consumables : GlobalItem
+	public class Consumables : GlobalItem
     {
         public static List<int> vanillaConsumables;
         public override void Unload()

@@ -1,5 +1,6 @@
-﻿using Everglow.Food.Projectiles;
+using Everglow.Food.Projectiles;
 using Terraria.DataStructures;
+using Everglow.Commons.MEAC;
 
 namespace Everglow.Food.Items.Weapons;
 

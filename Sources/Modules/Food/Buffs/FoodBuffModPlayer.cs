@@ -208,12 +208,7 @@ public class FoodBuffModPlayer : ModPlayer
 			float k1 = Math.Clamp(Player.velocity.Length(), 1, 3);
 			float k2 = Math.Clamp(Player.velocity.Length(), 6, 10);
 			float k0 = 1f / 4 * k2;
-			for (int j = 0; j < 16 * k0; j++)
-			{
-				Vector2 v0 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * k1;
-				Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 25);
-				Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
-			}
+
 			foreach (NPC target in Main.npc)
 			{
 				float Dis = (target.Center - Player.Center).Length();

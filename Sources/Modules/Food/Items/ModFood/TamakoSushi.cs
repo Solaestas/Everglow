@@ -1,13 +1,9 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
-using Terraria.ID;
-using Terraria.ModLoader;
 using Everglow.Food.Buffs.ModFoodBuffs;
+using Everglow.Food.Utils;
 
 namespace Everglow.Food.Items.ModFood;
-
 public class TamakoSushi : FoodBase
 {
 	public override FoodInfo FoodInfo

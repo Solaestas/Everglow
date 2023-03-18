@@ -1,5 +1,6 @@
-﻿namespace Everglow.Food.Buffs.VanillaFoodBuffs;
+using Everglow.Food.ItemList.Weapons.Ranged;
 
+namespace Everglow.Food.Buffs.VanillaFoodBuffs;
 public class BananaBuff : ModBuff
 {
 	public override void SetStaticDefaults()

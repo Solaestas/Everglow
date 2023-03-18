@@ -1,11 +1,7 @@
-﻿using Everglow.Food.Buffs.ModDrinkBuffs;
-using Microsoft.Xna.Framework;
-using Terraria;
+using Everglow.Food.Buffs.ModDrinkBuffs;
+using Everglow.Food.Utils;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
-using Terraria.ID;
-using Terraria.ModLoader;
-
 namespace Everglow.Food.Items.ModDrink;
 
 public class LonelyJellyfish : DrinkBase
@@ -25,10 +21,6 @@ public class LonelyJellyfish : DrinkBase
 	}
 	public override void SetStaticDefaults()
 	{
-		DisplayName.SetDefault("孤独的水母");
-
-		Tooltip.SetDefault("{$CommonItemTooltip.MediumStats}\n'观赏完就一饮而尽吧'");
-
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 5;
 
 		Main.RegisterItemAnimation(Type, new DrawAnimationVertical(int.MaxValue, 3));

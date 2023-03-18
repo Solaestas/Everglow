@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Everglow.Resources.ItemList.Weapons.Ranged
+namespace Everglow.Food.ItemList.Weapons.Ranged
 {
-    public class OtherRengedWeapons : GlobalItem
+	public class OtherRengedWeapons : GlobalItem
     {
         public static List<int> vanillaOtherRengedWeapons;
         public override void Unload()
@@ -58,7 +52,7 @@ namespace Everglow.Resources.ItemList.Weapons.Ranged
                 ItemID.PiranhaGun,
 
                 //精灵熔炉
-                ItemID.EldMelter,//确定不是拼错了？
+                ItemID.ElfMelter,//确定不是拼错了？
 
                 //超级300颗
                 ItemID.SuperStarCannon,

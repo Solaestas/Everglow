@@ -1,10 +1,7 @@
-﻿using Everglow.Food.Buffs.ModDrinkBuffs;
-using Microsoft.Xna.Framework;
-using Terraria;
+using Everglow.Food.Buffs.ModDrinkBuffs;
+using Everglow.Food.Utils;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace Everglow.Food.Items.ModDrink;
 
@@ -25,10 +22,6 @@ public class QuinceMarry : DrinkBase
 	}
 	public override void SetStaticDefaults()
 	{
-		DisplayName.SetDefault("榅桲玛丽");
-
-		Tooltip.SetDefault("{$CommonItemTooltip.MediumStats}\n'炙热与温柔'");
-
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 5;
 		Main.RegisterItemAnimation(Type, new DrawAnimationVertical(int.MaxValue, 3));
 		ItemID.Sets.FoodParticleColors[Item.type] = new Color[3] {

@@ -1,4 +1,4 @@
-﻿using Terraria.Localization;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Everglow.Food.Buffs.VanillaFoodBuffs;
 using Everglow.Food.Items;
@@ -698,7 +698,9 @@ public class FoodGlobalItem : GlobalItem
 	{
 		// 如果是原版的食物，那么就手动处理
 		if (m_vanillaFoodInfos.ContainsKey(item.type))
+		{
 			var FoodInfo = m_vanillaFoodInfos[item.type];
+		}
 		base.SetDefaults(item);
 	}
 

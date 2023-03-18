@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Everglow.Resources.ItemList.Weapons.Ranged
+namespace Everglow.Food.ItemList.Weapons.Ranged
 {
     public class Bows : GlobalItem
     {

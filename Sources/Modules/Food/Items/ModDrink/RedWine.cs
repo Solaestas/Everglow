@@ -1,11 +1,7 @@
-﻿using Everglow.Food.Buffs.ModDrinkBuffs;
-using Microsoft.Xna.Framework;
-using Terraria;
+using Everglow.Food.Buffs.ModDrinkBuffs;
+using Everglow.Food.Utils;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
-using Terraria.ID;
-using Terraria.ModLoader;
-
 namespace Everglow.Food.Items.ModDrink;
 
 public class RedWine : DrinkBase
@@ -25,9 +21,6 @@ public class RedWine : DrinkBase
 	}
 	public override void SetStaticDefaults()
 	{
-		DisplayName.SetDefault("红酒");
-		Tooltip.SetDefault("{$CommonItemTooltip.MediumStats}\n'上流与优雅'");
-
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 5;
 		Main.RegisterItemAnimation(Type, new DrawAnimationVertical(int.MaxValue, 3));
 		ItemID.Sets.FoodParticleColors[Item.type] = new Color[3] {

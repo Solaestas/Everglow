@@ -1,4 +1,6 @@
-﻿namespace Everglow.Food.Buffs.VanillaFoodBuffs;
+using Everglow.Food.ItemList.Weapons.Ranged;
+
+namespace Everglow.Food.Buffs.VanillaFoodBuffs;
 
 public class BananaSplitBuff : ModBuff
 {

@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Everglow.Resources.ItemList.Weapons.Magic
+namespace Everglow.Food.ItemList.Weapons.Magic
 {
-    public class MagicGuns : GlobalItem
+	public class MagicGuns : GlobalItem
     {
         public static List<int> vanillaMagicGuns;
         public override void Unload()

@@ -1,4 +1,5 @@
-﻿using Terraria.DataStructures;
+using Terraria.DataStructures;
+using Everglow.Food.ItemList.Weapons.Ranged;
 
 namespace Everglow.Food.Buffs;
 

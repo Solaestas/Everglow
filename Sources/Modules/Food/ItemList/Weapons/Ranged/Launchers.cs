@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Everglow.Resources.ItemList.Weapons.Ranged
+namespace Everglow.Food.ItemList.Weapons.Ranged
 {
-    public class Launchers : GlobalItem
+	public class Launchers : GlobalItem
     {
         public static List<int> vanillaLaunchers;
         public override void Unload()

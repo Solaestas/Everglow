@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Everglow.Resources.ItemList.Weapons.Melee
+namespace Everglow.Food.ItemList.Weapons.Melee
 {
     public class Boomerangs : GlobalItem
     {

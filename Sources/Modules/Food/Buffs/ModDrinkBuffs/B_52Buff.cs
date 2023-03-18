@@ -1,5 +1,6 @@
-﻿namespace Everglow.Food.Buffs.ModDrinkBuffs;
+using Everglow.Food.ItemList.Weapons.Ranged;
 
+namespace Everglow.Food.Buffs.ModDrinkBuffs;
 public class B_52Buff : ModBuff
 {
 	public override void SetStaticDefaults()

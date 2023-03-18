@@ -1,11 +1,7 @@
-﻿using Everglow.Food.Buffs.ModDrinkBuffs;
-using Microsoft.Xna.Framework;
-using Terraria;
+using Everglow.Food.Buffs.ModDrinkBuffs;
+using Everglow.Food.Utils;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
-using Terraria.ID;
-using Terraria.ModLoader;
-
 namespace Everglow.Food.Items.ModDrink;
 
 public class GreenStorm : DrinkBase
@@ -25,10 +21,6 @@ public class GreenStorm : DrinkBase
 	}
 	public override void SetStaticDefaults()
 	{
-		DisplayName.SetDefault("绿色风暴");
-
-		Tooltip.SetDefault("{$CommonItemTooltip.MediumStats}\n'别以为草便宜,没上规模前,它比苹果核桃什么的都贵。'");
-
 		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 5;
 
 		Main.RegisterItemAnimation(Type, new DrawAnimationVertical(int.MaxValue, 3));

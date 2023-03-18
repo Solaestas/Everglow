@@ -266,7 +266,9 @@ public class DrinkGlobalItem : GlobalItem
 
 		// 如果是原版的饮料，那么就手动处理
 		if (m_vanillaDrinkInfos.ContainsKey(item.type))
+		{
 			var drinkInfo = m_vanillaDrinkInfos[item.type];
+		}
 		base.SetDefaults(item);
 	}
 

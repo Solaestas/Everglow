@@ -4,6 +4,7 @@ using Everglow.Commons.MEAC;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using Everglow.Commons.Utilities;
+using Everglow.Myth;
 
 namespace Everglow.Food.Projectiles;
 
