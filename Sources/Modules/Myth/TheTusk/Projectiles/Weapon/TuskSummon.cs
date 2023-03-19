@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.TheTusk.Buffs;
+using Everglow.Myth.TheTusk.Buffs;
 using Everglow.Myth.TheTusk.Gores;
 using Terraria;
 
@@ -33,7 +33,7 @@ class TuskSummon : ModProjectile
 		Projectile.Center = aim;
 		for (int f = 0; f < 15; f++)
 		{
-			var g = Gore.NewGoreDirect(null, aim, new Vector2(0, Main.rand.NextFloat(10f)).RotatedByRandom(6.283), ModContent.GoreType<Blood>(), Main.rand.NextFloat(0.65f, Main.rand.NextFloat(2.5f, 3.75f)));
+			var g = Gore.NewGoreDirect(null, aim, new Vector2(0, Main.rand.NextFloat(10f)).RotatedByRandom(6.283), ModContent.GoreType<BloodVFX>(), Main.rand.NextFloat(0.65f, Main.rand.NextFloat(2.5f, 3.75f)));
 			g.timeLeft = Main.rand.Next(250, 500);
 		}
 	}

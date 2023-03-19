@@ -1,6 +1,6 @@
-﻿namespace Everglow.Myth.TheTusk.Gores;
+namespace Everglow.Myth.TheTusk.Gores;
 
-public class Blood : LiquidGore
+public class BloodVFX : LiquidGore
 {
 	//TODO:这里我不太会翻译成VFX,yiyang做獠牙的时候需要的话可以翻译一下
 	public override string EffectPath()
