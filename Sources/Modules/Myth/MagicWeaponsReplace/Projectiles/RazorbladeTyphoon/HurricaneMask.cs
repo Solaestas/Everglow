@@ -5,7 +5,7 @@ namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.RazorbladeTyphoon;
 
 public class HurricaneMask : ModProjectile, IWarpProjectile
 {
-	protected override bool CloneNewInstances => false;
+	public override bool CloneNewInstances => false;
 	public override bool IsCloneable => false;
 
 	public override void SetDefaults()

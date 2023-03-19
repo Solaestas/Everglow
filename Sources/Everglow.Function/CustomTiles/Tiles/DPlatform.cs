@@ -25,13 +25,13 @@ public abstract class DPlatform : CustomTile, IHookable
 	{
 
 	}
-	protected DPlatform(Vector2 position, Vector2 velocity, float width)
+	public DPlatform(Vector2 position, Vector2 velocity, float width)
 	{
 		this.position = position;
 		this.velocity = velocity;
 		this.width = width;
 	}
-	protected DPlatform(Vector2 position, Vector2 velocity, float width, Rotation rotation, float miu)
+	public DPlatform(Vector2 position, Vector2 velocity, float width, Rotation rotation, float miu)
 	{
 		this.position = position;
 		this.velocity = velocity;
@@ -39,7 +39,7 @@ public abstract class DPlatform : CustomTile, IHookable
 		this.rotation = rotation;
 		this.miu = miu;
 	}
-	protected DPlatform(Vector2 position, Vector2 velocity, float width, Rotation rotation, Rotation angularVelocity, float miu)
+	public DPlatform(Vector2 position, Vector2 velocity, float width, Rotation rotation, Rotation angularVelocity, float miu)
 	{
 		this.position = position;
 		this.velocity = velocity;

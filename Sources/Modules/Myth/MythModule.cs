@@ -10,7 +10,7 @@ namespace Everglow.Myth;
 
 public class MythModule : EverglowModule
 {
-	private static EffectPass ReplaceEffectPass = null;
+	public static EffectPass ReplaceEffectPass = null;
 
 	private FogPass m_fogPass = null;
 

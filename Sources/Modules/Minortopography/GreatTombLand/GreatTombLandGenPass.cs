@@ -29,7 +29,7 @@ public class GreatTombLand : ModSystem
 
 
 		//将东西写入WordGen里面并生效
-		protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
+		public override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
 		{
 			//Todo:翻译：生成森林的大墓地 HJSON
 			//Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everlow.Common.WorldSystem.BuildGreatTombLand");

@@ -141,7 +141,7 @@ public abstract class FireWormHead : FireWorm
 	/// <param name="type">蠕虫NPC的段的ID。T</param>
 	/// <param name="latestNPC">The whoAmI of the most-recently spawned segment NPC in the worm, including the head</param>
 	/// <returns></returns>
-	protected int SpawnSegment(IEntitySource source, int type, int latestNPC, int ai2 = 0)
+	public int SpawnSegment(IEntitySource source, int type, int latestNPC, int ai2 = 0)
 	{
 		int oldLatest = latestNPC;
 

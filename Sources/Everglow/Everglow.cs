@@ -1,3 +1,4 @@
+using System.Reflection;
 using Everglow.Commons;
 using Everglow.Commons.Interfaces;
 using Everglow.Commons.Modules;
@@ -28,9 +29,28 @@ public class Everglow : Mod
 		Ins.Set<ModuleManager>(new ModuleManager());
 		foreach (var config in Ins.ModuleManager.CreateInstances<ModConfig>())
 		{
-			AddConfig(config.Name, config);
+			var name = config.GetType().Name;
+			config.Mod = this;
+			if (config.Mode == ConfigScope.ServerSide && (Side == ModSide.Client || Side == ModSide.NoSync)) // Client and NoSync mods can't have ServerSide ModConfigs. Server can, but won't be synced.
+			{
+				throw new Exception($"The ModConfig {config.Name} can't be loaded because the config is ServerSide but this Mods ModSide isn't Both or Server");
+			}
+
+			if (config.Mode == ConfigScope.ClientSide && Side == ModSide.Server) // Doesn't make sense.
+			{
+				throw new Exception($"The ModConfig {config.Name} can't be loaded because the config is ClientSide but this Mods ModSide is Server");
+			}
+
+			if (config.Autoload(ref name))
+			{
+				AddConfig(name, config);
+			}
 		}
-		foreach (var ins in Ins.ModuleManager.CreateInstances<ILoadable>())
+		foreach (var ins in Ins.ModuleManager.CreateInstances<ILoadable>(type =>
+		{
+			var attr = type.GetCustomAttributes<AutoloadAttribute>().FirstOrDefault();
+			return attr == null || attr.NeedsAutoloading;
+		}))
 		{
 			AddContent(ins);
 		}

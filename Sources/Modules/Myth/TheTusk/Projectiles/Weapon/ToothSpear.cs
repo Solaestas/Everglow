@@ -6,8 +6,8 @@ namespace Everglow.Myth.TheTusk.Projectiles.Weapon;
 
 public class ToothSpear : ModProjectile
 {
-	protected virtual float HoldoutRangeMin => 24f;
-	protected virtual float HoldoutRangeMax => 150f;
+	public virtual float HoldoutRangeMin => 24f;
+	public virtual float HoldoutRangeMax => 150f;
 
 	public override void SetStaticDefaults()
 	{

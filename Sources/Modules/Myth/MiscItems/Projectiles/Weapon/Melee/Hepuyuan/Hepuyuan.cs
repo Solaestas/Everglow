@@ -7,8 +7,8 @@ namespace Everglow.Myth.MiscItems.Projectiles.Weapon.Melee.Hepuyuan;
 
 public class Hepuyuan : ModProjectile, IWarpProjectile
 {
-	protected virtual float HoldoutRangeMin => 24f;
-	protected virtual float HoldoutRangeMax => 150f;
+	public virtual float HoldoutRangeMin => 24f;
+	public virtual float HoldoutRangeMax => 150f;
 
 	public override void SetDefaults()
 	{

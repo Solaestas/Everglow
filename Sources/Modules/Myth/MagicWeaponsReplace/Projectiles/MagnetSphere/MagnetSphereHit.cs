@@ -8,7 +8,7 @@ namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.MagnetSphere;
 
 public class MagnetSphereHit : ModProjectile, IWarpProjectile
 {
-	protected override bool CloneNewInstances => false;
+	public override bool CloneNewInstances => false;
 	public override bool IsCloneable => false;
 
 	public override void SetDefaults()

@@ -8,17 +8,21 @@ namespace Everglow.Commons;
 /// </summary>
 public class ItemGlowManager : GlobalItem
 {
-	private Dictionary<int, short> glowMapping = new Dictionary<int, short>();
-	private List<Asset<Texture2D>> glowMasks = new List<Asset<Texture2D>>();
-	private short begin = 0;
+	private static short begin = 0;
+
+	private static Dictionary<int, short> glowMapping = new Dictionary<int, short>();
+
+	private static List<Asset<Texture2D>> glowMasks = new List<Asset<Texture2D>>();
 
 	public override void Load()
 	{
 		ModIns.OnPostSetupContent += LoadGlowMasks;
 	}
-	public void LoadGlowMasks()
+
+	public static void LoadGlowMasks()
 	{
 		begin = (short)TextureAssets.GlowMask.Length;
+
 		// 只读，线程安全
 		var asset = ModIns.Mod.Assets._assets;
 		short index = 0;
@@ -34,14 +38,18 @@ public class ItemGlowManager : GlobalItem
 		}
 		TextureAssets.GlowMask = TextureAssets.GlowMask.Concat(glowMasks).ToArray();
 	}
+
 	public override void SetDefaults(Item item)
 	{
 		if (glowMapping.TryGetValue(item.type, out var index))
 			item.glowMask = glowMapping[index];
 	}
+
 	public override void Unload()
 	{
 		ModIns.OnPostSetupContent -= LoadGlowMasks;
 		TextureAssets.GlowMask = TextureAssets.GlowMask[..begin].Concat(TextureAssets.GlowMask[(begin + glowMasks.Count)..]).ToArray();
+		glowMapping.Clear();
+		glowMasks.Clear();
 	}
 }

@@ -62,7 +62,7 @@ public class UIPanel : BaseElement
 		}
 	}
 
-	protected override void DrawSelf(SpriteBatch sb)
+	public override void DrawSelf(SpriteBatch sb)
 	{
 		base.DrawSelf(sb);
 		Texture2D texture = ModContent.Request<Texture2D>("Everglow/Common/UI/Images/Panel", AssetRequestMode.ImmediateLoad).Value;

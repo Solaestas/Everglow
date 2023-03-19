@@ -490,7 +490,7 @@ public class BaseElement
 	/// 绘制自己
 	/// </summary>
 	/// <param name="sb">画笔</param>
-	protected virtual void DrawSelf(SpriteBatch sb)
+	public virtual void DrawSelf(SpriteBatch sb)
 	{
 	}
 
@@ -500,7 +500,7 @@ public class BaseElement
 	/// 绘制子元素
 	/// </summary>
 	/// <param name="sb">画笔</param>
-	protected virtual void DrawChildren(SpriteBatch sb)
+	public virtual void DrawChildren(SpriteBatch sb)
 	{
 		ChildrenElements.ForEach(child =>
 		{

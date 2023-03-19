@@ -5,7 +5,7 @@ namespace Everglow.Commons.VFX;
 
 public abstract class PostPipeline : IPipeline
 {
-	protected Asset<Effect> effect;
+	public Asset<Effect> effect;
 
 	public virtual void Load()
 	{

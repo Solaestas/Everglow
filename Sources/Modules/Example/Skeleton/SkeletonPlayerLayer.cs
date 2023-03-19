@@ -4,6 +4,8 @@ using Terraria.DataStructures;
 
 namespace Everglow.Example.Skeleton;
 
+// TODO Resource
+[Autoload(false)]
 public class SkeletonPlayerLayer : PlayerDrawLayer
 {
 	private Skeleton2D skeleton2D;
@@ -23,7 +25,7 @@ public class SkeletonPlayerLayer : PlayerDrawLayer
 		return true;
 	}
 
-	protected override void Draw(ref PlayerDrawSet drawInfo)
+	public override void Draw(ref PlayerDrawSet drawInfo)
 	{
 		var player = drawInfo.drawPlayer;
 		if (player.HeldItem == null || player.HeldItem.type == ItemID.None)

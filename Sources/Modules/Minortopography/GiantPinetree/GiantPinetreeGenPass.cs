@@ -13,7 +13,7 @@ public class GiantPinetree : ModSystem
 		{
 		}
 
-		protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
+		public override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
 		{
 			//Todo:翻译：建造巨大的雪松
 			Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everlow.Common.WorldSystem.BuildMothCave");

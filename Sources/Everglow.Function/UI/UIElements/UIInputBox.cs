@@ -230,7 +230,7 @@ public class UIInputBox : UIPanel
 		}
 	}
 
-	protected override void DrawChildren(SpriteBatch sb)
+	public override void DrawChildren(SpriteBatch sb)
 	{
 		var texts = Text.Split('\n');
 		float offsetY = 0f;

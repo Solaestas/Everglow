@@ -2,7 +2,7 @@ using Terraria.Localization;
 
 namespace Everglow.Food.InfoDisplays;
 
-internal class FoodSatietyInfoDisplay : InfoDisplay
+public class FoodSatietyInfoDisplay : InfoDisplay
 {
 	public override bool Active()
 	{

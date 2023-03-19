@@ -19,7 +19,7 @@ public class UIContainerPanel : BaseElement
 			return ParentElement.ContainsPoint(point);
 		}
 
-		protected override void DrawChildren(SpriteBatch sb)
+		public override void DrawChildren(SpriteBatch sb)
 		{
 			ChildrenElements.ForEach(element =>
 			{

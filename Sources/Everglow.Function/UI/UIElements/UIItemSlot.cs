@@ -190,7 +190,7 @@ public class UIItemSlot : BaseElement
 		base.Update(gameTime);
 	}
 
-	protected override void DrawSelf(SpriteBatch sb)
+	public override void DrawSelf(SpriteBatch sb)
 	{
 		base.DrawSelf(sb);
 

@@ -39,7 +39,7 @@ public abstract class EntityHandler<TEntity> : EntityHandler where TEntity : Ent
 
 	public TEntity Entity => entity;
 
-	protected EntityHandler(TEntity entity)
+	public EntityHandler(TEntity entity)
 	{
 		this.entity = entity;
 		position = entity.position;

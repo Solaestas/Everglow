@@ -5,7 +5,7 @@ namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.LunarFlare;
 
 public class LunarFlareHit : ModProjectile, IWarpProjectile, IBloomProjectile
 {
-	protected override bool CloneNewInstances => false;
+	public override bool CloneNewInstances => false;
 	public override bool IsCloneable => false;
 
 	public override void SetDefaults()

@@ -14,7 +14,7 @@ public class MothBall : ModProjectile
 	private Vector2[] vloB = new Vector2[15];
 	private int[] yB = new int[15];
 	private float Stre2 = 1;
-	protected override bool CloneNewInstances => false;
+	public override bool CloneNewInstances => false;
 	public override bool IsCloneable => false;
 
 	public override void SetStaticDefaults()

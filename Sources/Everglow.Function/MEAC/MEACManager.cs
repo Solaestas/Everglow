@@ -12,7 +12,7 @@ internal class MEACManager : ILoadable
 		{
 			Main.OnResolutionChanged += Main_OnResolutionChanged;
 			On_FilterManager.EndCapture += FilterManager_EndCapture;
-			ScreenWarp = ModContent.Request<Effect>("Everglow/MEAC/Effects/ScreenWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+			ScreenWarp = ModAsset.ScreenWarp.Value;
 		}
 	}
 
@@ -42,7 +42,7 @@ internal class MEACManager : ILoadable
 	{
 		if (HasBloom())
 		{
-			Effect Bloom = ModContent.Request<Effect>("Everglow/MEAC/Effects/Bloom1", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+			Effect Bloom = ModAsset.Bloom1.Value;
 			//保存原图
 			graphicsDevice.SetRenderTarget(Main.screenTargetSwap);
 			graphicsDevice.Clear(Color.Transparent);

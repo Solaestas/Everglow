@@ -17,7 +17,7 @@ namespace Everglow.Myth.TheFirefly.NPCs.Bosses;
 public class CorruptMoth : ModNPC
 {
 	public static NPC CorruptMothNPC;
-	protected override bool CloneNewInstances => true;
+	public override bool CloneNewInstances => true;
 
 	private readonly Color IdentifierValue = new Color(58, 169, 255);
 

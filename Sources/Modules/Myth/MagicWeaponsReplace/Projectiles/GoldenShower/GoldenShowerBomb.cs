@@ -4,7 +4,7 @@ namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.GoldenShower;
 
 public class GoldenShowerBomb : ModProjectile, IWarpProjectile, IBloomProjectile
 {
-	protected override bool CloneNewInstances => false;
+	public override bool CloneNewInstances => false;
 	public override bool IsCloneable => false;
 
 	public override void SetDefaults()

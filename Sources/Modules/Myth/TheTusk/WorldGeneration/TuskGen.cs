@@ -15,7 +15,7 @@ public class TuskGen : ModSystem
 	}
 	public static void QuickBuild(int x, int y, string Path)
 	{
-		var mapIO = new MapIO(x, y);
+		var mapIO = new Commons.TileHelper.MapIO(x, y);
 
 		mapIO.Read(ModIns.Mod.GetFileStream("Sources/Modules/MythModule/" + Path));
 
@@ -77,7 +77,7 @@ public class TuskGen : ModSystem
 		{
 		}
 
-		protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
+		public override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
 		{
 			Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everglow.Common.WorldSystem.BuildWorldTuskTable");
 			BuildTuskLand();

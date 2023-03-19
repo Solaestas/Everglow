@@ -52,7 +52,7 @@
 		</PropertyGroup>
 		<GeneratePath AssetFiles="@(EffectFile);@(ImageFile);@(ResourceFile)"
 									Namespace="$(PathNamespace)"
-									AssetPrefix="$(ModuleName)"
+									AssetPrefix="$(AssetsPrefix)"
 									OutputDirectory="$(BaseIntermediateOutputPath)" />
 	</Target>
 	<ItemGroup Condition="$(GeneratePath) != ''">

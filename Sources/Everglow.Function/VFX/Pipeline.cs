@@ -5,7 +5,7 @@ namespace Everglow.Commons.VFX;
 
 public abstract class Pipeline : IPipeline
 {
-	protected Asset<Effect> effect;
+	public Asset<Effect> effect;
 
 	/// <summary>
 	/// 准备开始渲染

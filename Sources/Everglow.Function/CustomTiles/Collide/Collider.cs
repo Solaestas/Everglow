@@ -714,8 +714,8 @@ public class CCircle : Collider
 //}
 //public class CPolygon : ICollider
 //{
-//    protected Vertices vertices;
-//    protected Vector2[] normals;
+//    public Vertices vertices;
+//    public Vector2[] normals;
 
 //    public CRectangle AABB => vertices.AABB;
 
@@ -761,7 +761,7 @@ public class CCircle : Collider
 //        vertices.RemoveAt(index);
 //        Initialize();
 //    }
-//    protected void Initialize()
+//    public void Initialize()
 //    {
 //        if (!vertices.IsConvex())
 //        {

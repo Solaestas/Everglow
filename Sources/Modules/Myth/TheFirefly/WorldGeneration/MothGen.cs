@@ -26,7 +26,7 @@ public class MothLand : ModSystem
 	}
 	public static void QuickBuild(int x, int y, string Path)
 	{
-		var mapIO = new MapIO(x, y);
+		var mapIO = new Commons.TileHelper.MapIO(x, y);
 
 		mapIO.Read(ModIns.Mod.GetFileStream("Sources/Modules/MythModule/" + Path));
 
@@ -41,7 +41,7 @@ public class MothLand : ModSystem
 	{
 		Point16 sbpp = ShabbyPylonPos();
 		string Path = "MapIOResources/ShabbyCastle0" + (Main.rand.Next(7) + 1) + ".mapio";
-		var mapIO = new MapIO(sbpp.X, sbpp.Y);
+		var mapIO = new Commons.TileHelper.MapIO(sbpp.X, sbpp.Y);
 		int Height = mapIO.ReadHeight(ModIns.Mod.GetFileStream("Sources/Modules/MythModule/" + Path));
 		QuickBuild(sbpp.X, sbpp.Y - Height / 2, Path);
 
@@ -96,7 +96,7 @@ public class MothLand : ModSystem
 		{
 		}
 
-		protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
+		public override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
 		{
 			Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everglow.Common.WorldSystem.BuildMothCave");
 			BuildMothCave();
@@ -111,7 +111,7 @@ public class MothLand : ModSystem
 		{
 		}
 
-		protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
+		public override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
 		{
 			Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everglow.Common.WorldSystem.BuildWorldMothCave");
 			BuildWorldMothCave();

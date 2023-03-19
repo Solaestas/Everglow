@@ -35,7 +35,7 @@ public class UIImage : BaseElement
 		Info.Height.Pixel = texture.Height;
 	}
 
-	protected override void DrawSelf(SpriteBatch sb)
+	public override void DrawSelf(SpriteBatch sb)
 	{
 		base.DrawSelf(sb);
 		sb.Draw(_texture, Info.TotalHitBox, _color);

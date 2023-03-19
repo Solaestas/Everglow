@@ -127,7 +127,7 @@ public class VerticalScrollbar : BaseElement
 			Calculation();
 	}
 
-	protected override void DrawSelf(SpriteBatch sb)
+	public override void DrawSelf(SpriteBatch sb)
 	{
 		sb.Draw(uiScrollbarTexture, new Rectangle(
 			Info.HitBox.X + (Info.HitBox.Width - uiScrollbarTexture.Width) / 2,

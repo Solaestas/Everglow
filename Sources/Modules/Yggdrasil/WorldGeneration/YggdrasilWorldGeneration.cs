@@ -19,7 +19,7 @@ public class YggdrasilWorldGeneration : ModSystem
 		{
 		}
 
-		protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
+		public override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
 		{
 			Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everglow.Common.WorldSystem.BuildtheTreeWorld");
 			BuildtheTreeWorld();

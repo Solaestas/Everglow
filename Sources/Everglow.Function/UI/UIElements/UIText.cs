@@ -70,7 +70,7 @@ public class UIText : BaseElement
 		base.Calculation();
 	}
 
-	protected override void DrawSelf(SpriteBatch sb)
+	public override void DrawSelf(SpriteBatch sb)
 	{
 		base.DrawSelf(sb);
 		sb.DrawString(font, text, Info.Location, Color, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0f);

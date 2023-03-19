@@ -5,7 +5,7 @@ namespace Everglow.ZY.Items;
 
 internal class HardmodeItem : ModItem
 {
-	// protected override bool CloneNewInstances => true;
+	// public override bool CloneNewInstances => true;
 	public override string Texture => "Terraria/Images/UI/Wires_0";
 
 	public override void SetDefaults()

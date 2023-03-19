@@ -6,7 +6,7 @@ namespace Everglow.Myth.MagicWeaponsReplace.Projectiles.CursedFlames;
 
 public class CursedFlameHit : ModProjectile, IWarpProjectile, IBloomProjectile
 {
-	protected override bool CloneNewInstances => false;
+	public override bool CloneNewInstances => false;
 	public override bool IsCloneable => false;
 
 	public override void SetDefaults()

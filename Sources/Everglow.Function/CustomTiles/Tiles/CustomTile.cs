@@ -27,22 +27,22 @@ public abstract class CustomTile
 	/// <summary>
 	/// 上一帧的速度，为了避免碰撞判定后修改速度导致出现差错，使用 <see cref="oldVelocity" /> 来决定移动距离
 	/// </summary>
-	protected Vector2 oldVelocity;
+	public Vector2 oldVelocity;
 
 	/// <summary>
 	/// 位置
 	/// </summary>
-	protected Vector2 position;
+	public Vector2 position;
 
 	/// <summary>
 	/// 速度
 	/// </summary>
-	protected Vector2 velocity;
+	public Vector2 velocity;
 
 	/// <summary>
 	/// 在数组中的下标
 	/// </summary>
-	protected int whoAmI = -1;
+	public int whoAmI = -1;
 
 	/// <summary>
 	/// 是否激活

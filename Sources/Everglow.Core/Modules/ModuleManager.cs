@@ -5,12 +5,15 @@ namespace Everglow.Commons.Modules;
 public class ModuleManager : IDisposable
 {
 	private List<Assembly> _assemblies;
+
 	private List<IModule> _modules;
 
 	public ModuleManager()
 	{
 		var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-		// 为什么重新加载时之前的程序集还在-		assemblies	{System.Reflection.RuntimeAssembly[127]}	System.Reflection.Assembly[] {System.Reflection.RuntimeAssembly[]}
+
+		// 为什么重新加载时之前的程序集还在- assemblies {System.Reflection.RuntimeAssembly[127]}
+		// System.Reflection.Assembly[] {System.Reflection.RuntimeAssembly[]}
 
 		var main = assemblies.Last(asm => asm.GetName().Name == "Everglow");
 
@@ -36,9 +39,12 @@ public class ModuleManager : IDisposable
 	public IEnumerable<Type> Types => _assemblies.SelectMany(s => s.GetTypes())
 		.Where(t => t.GetCustomAttribute(typeof(ModuleHideTypeAttribute)) is null);
 
-	public IEnumerable<T> CreateInstances<T>() => Types
+	public IEnumerable<T> CreateInstances<T>() => CreateInstances<T>(type => true);
+
+	public IEnumerable<T> CreateInstances<T>(Func<Type, bool> condition) => Types
 		.Where(t => t.IsAssignableTo(typeof(T)))
 		.Where(t => !t.IsAbstract && !t.IsInterface)
+		.Where(condition)
 		.Select(Activator.CreateInstance)
 		.Cast<T>();
 
@@ -50,5 +56,4 @@ public class ModuleManager : IDisposable
 		}
 		GC.SuppressFinalize(this);
 	}
-
 }

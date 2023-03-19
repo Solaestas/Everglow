@@ -7,7 +7,7 @@ namespace Everglow.Myth.MiscItems.Weapons.Slingshots.Projectiles;
 /// </summary>
 public abstract class SlingshotHitProjectile : ModProjectile, IWarpProjectile
 {
-	protected override bool CloneNewInstances => false;
+	public override bool CloneNewInstances => false;
 	public override bool IsCloneable => false;
 
 	public override void SetDefaults()
