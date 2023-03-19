@@ -4,7 +4,7 @@ public class MothUndergroundBackground : ModUndergroundBackgroundStyle
 {
 	public override void FillTextureArray(int[] textureSlots)
 	{
-		string Path = "Sources/Modules/MythModule/TheFirefly/Backgrounds/FireflyUnderground";
+		string Path = "Myth/TheFirefly/Backgrounds/FireflyUnderground";
 		textureSlots[0] = BackgroundTextureLoader.GetBackgroundSlot(Mod, Path + "0");
 		textureSlots[1] = BackgroundTextureLoader.GetBackgroundSlot(Mod, Path + "1");
 		textureSlots[2] = BackgroundTextureLoader.GetBackgroundSlot(Mod, Path + "2");

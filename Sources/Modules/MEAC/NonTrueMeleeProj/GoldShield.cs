@@ -216,7 +216,7 @@ public class GoldShield : ModProjectile, IWarpProjectile
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Effect Post = ModContent.Request<Effect>("Everglow/MEAC/Effects/Post", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+		Effect Post = ModContent.Request<Effect>("Everglow/Commons/MEAC/Effects/Post", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		Post.Parameters["uTime"].SetValue((float)(Main.timeForVisualEffects * 0.003));
 		Post.CurrentTechnique.Passes[0].Apply();
 
@@ -248,7 +248,7 @@ public class GoldShield : ModProjectile, IWarpProjectile
 
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-			Effect KEx = ModContent.Request<Effect>("Everglow/MEAC/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+			Effect KEx = Everglow.Commons.ModAsset.DrawWarp.Value;
 			KEx.CurrentTechnique.Passes[0].Apply();
 
 			DrawDoubleLine(DrawCen + new Vector2(0, -k0 * 150) * WaveRange, DrawCen + new Vector2(k0 * 75, -k0 * 75) * WaveRange, new Color(1f * k3, 0.6f * k3, 0f, 0f), new Color(1f * k2, 0.7f * k2, 0f, 0f));

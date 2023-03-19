@@ -31,7 +31,7 @@ public class TwilightForestContent
 	{
 		Mod everglow = ModLoader.GetMod("Everglow");
 		if (everglow != null)
-			return MusicLoader.GetMusicSlot(everglow, "Sources/Modules/TwilightForestModule/Musics/" + path);
+			return MusicLoader.GetMusicSlot(everglow, "TwilightForest/Musics/" + path);
 		else
 		{
 			return 0;

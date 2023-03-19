@@ -29,7 +29,7 @@ public class BloomPipeline : PostPipeline
 			blurScreenSwap?.Dispose();
 			AllocateRenderTarget();
 		}, "Realloc RenderTarget");
-		effect = ModContent.Request<Effect>("Everglow/Common/VFX/Effect/Bloom");
+		effect = ModAsset.Bloom;
 	}
 
 	private void AllocateRenderTarget()

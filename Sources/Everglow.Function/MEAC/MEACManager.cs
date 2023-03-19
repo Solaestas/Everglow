@@ -143,7 +143,7 @@ internal class MEACManager : ILoadable
 	{
 		bool flag = false;
 		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.AnisotropicWrap, RasterizerState.CullNone);
-		Effect KEx = ModContent.Request<Effect>("Everglow/MEAC/Effects/DrawWarp", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+		Effect KEx = Everglow.Commons.ModAsset.DrawWarp.Value;
 		KEx.Parameters["uTransform"].SetValue(Main.Transform * Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1));
 		KEx.CurrentTechnique.Passes[0].Apply();
 		foreach (Projectile proj in Main.projectile)

@@ -31,7 +31,7 @@ public class YggdrasilContent
 	{
 		Mod everglow = ModLoader.GetMod("Everglow");
 		if (everglow != null)
-			return MusicLoader.GetMusicSlot(everglow, "Sources/Modules/YggdrasilModule/Musics/" + path);
+			return MusicLoader.GetMusicSlot(everglow, "Yggdrasil/Musics/" + path);
 		else
 		{
 			return 0;

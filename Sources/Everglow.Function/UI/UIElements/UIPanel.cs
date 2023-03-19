@@ -65,7 +65,7 @@ public class UIPanel : BaseElement
 	public override void DrawSelf(SpriteBatch sb)
 	{
 		base.DrawSelf(sb);
-		Texture2D texture = ModContent.Request<Texture2D>("Everglow/Common/UI/Images/Panel", AssetRequestMode.ImmediateLoad).Value;
+		Texture2D texture = ModContent.Request<Texture2D>("Everglow/Commons/UI/Images/Panel", AssetRequestMode.ImmediateLoad).Value;
 		Point textureSize = new(texture.Width, texture.Height);
 		Rectangle rectangle = Info.TotalHitBox;
 

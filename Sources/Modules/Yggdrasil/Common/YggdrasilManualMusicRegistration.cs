@@ -4,8 +4,8 @@ public sealed class YggdrasilManualMusicRegistration : ILoadable
 {
 	public void Load(Mod mod)
 	{
-		MusicLoader.AddMusic(mod, "Sources/Modules/YggdrasilModule/Musics/KelpCurtainBGM");
-		MusicLoader.AddMusic(mod, "Sources/Modules/YggdrasilModule/Musics/YggdrasilTownBGM");
+		MusicLoader.AddMusic(mod, "Yggdrasil/Musics/KelpCurtainBGM");
+		MusicLoader.AddMusic(mod, "Yggdrasil/Musics/YggdrasilTownBGM");
 	}
 
 	public void Unload()

@@ -44,7 +44,7 @@ public class GreatTombLand : ModSystem
 	{
 		var mapIO = new MapIO(x, y);
 
-		mapIO.Read(ModIns.Mod.GetFileStream("Sources/Modules/MinortopographyModule/MapIO/" + Path));
+		mapIO.Read(ModIns.Mod.GetFileStream("Minortopography/MapIO/" + Path));
 
 		var it = mapIO.GetEnumerator();
 		while (it.MoveNext())

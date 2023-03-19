@@ -1,4 +1,3 @@
-using Everglow.Commons.TileHelper;
 using Everglow.Myth.Common;
 using Everglow.Myth.TheTusk.Tiles;
 using Terraria.Graphics.Effects;
@@ -17,7 +16,7 @@ public class TuskGen : ModSystem
 	{
 		var mapIO = new Commons.TileHelper.MapIO(x, y);
 
-		mapIO.Read(ModIns.Mod.GetFileStream("Sources/Modules/MythModule/" + Path));
+		mapIO.Read(ModIns.Mod.GetFileStream("Myth/" + Path));
 
 		var it = mapIO.GetEnumerator();
 		while (it.MoveNext())
@@ -43,7 +42,9 @@ public class TuskGen : ModSystem
 		if (TuskLandActive())
 		{
 			if (TuskS < 1)
+			{
 				TuskS += 0.01f;
+			}
 			else
 			{
 				TuskS = 1f;
@@ -51,25 +52,30 @@ public class TuskGen : ModSystem
 
 
 			if (!SkyManager.Instance["TuskSky"].IsActive())
+			{
 				SkyManager.Instance.Activate("TuskSky");
+			}
 		}
 		else
 		{
 			if (TuskS > 0)
+			{
 				TuskS -= 0.01f;
+			}
 			else
 			{
 				TuskS = 0;
 			}
 			if (SkyManager.Instance["TuskSky"].IsActive())
+			{
 				SkyManager.Instance.Deactivate("TuskSky");
+			}
 		}
 		tileColor *= 1 - TuskS * 0.4f;
 		tileColor.G = (byte)(tileColor.G * (1 - TuskS * 0.4f));
 		tileColor.B = (byte)(tileColor.B * (1 - TuskS * 0.4f));
 		backgroundColor *= 1 - TuskS * 0.4f;
 		backgroundColor.A = 255;
-		base.ModifySunLightColor(ref tileColor, ref backgroundColor);
 	}
 	internal class WorldTuskLandGenPass : GenPass
 	{
@@ -83,7 +89,10 @@ public class TuskGen : ModSystem
 			BuildTuskLand();
 		}
 	}
-	public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) => tasks.Add(new WorldTuskLandGenPass());
+	public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight)
+	{
+		tasks.Add(new WorldTuskLandGenPass());
+	}
 
 	/// <summary>
 	/// 地形中心坐标
@@ -122,15 +131,27 @@ public class TuskGen : ModSystem
 			{
 				var pixelRow = accessor.GetRowSpan(y);
 				if (y + b < 20)
+				{
 					continue;
+				}
+
 				if (y + b > Main.maxTilesY - 20)
+				{
 					break;
+				}
+
 				for (int x = 0; x < pixelRow.Length; x++)
 				{
 					if (x + a < 20)
+					{
 						continue;
+					}
+
 					if (x + a > Main.maxTilesX - 20)
+					{
 						break;
+					}
+
 					ref var pixel = ref pixelRow[x];
 					Tile tile = Main.tile[x + a, y + b];
 					switch (type)//21是箱子
@@ -139,13 +160,13 @@ public class TuskGen : ModSystem
 							if (pixel.R == 255 && pixel.G == 0 && pixel.B == 0)
 							{
 								if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+								{
 									tile.ClearEverything();
+								}
 							}
 							break;
 
 						case 1:
-							int Ty = 0;
-							int c = 0;
 							var Plc = new Vector2[30];
 							var Plc2 = new Vector2[60];
 							if (pixel.R == 158 && pixel.G == 26 && pixel.B == 37)
@@ -178,7 +199,9 @@ public class TuskGen : ModSystem
 							if (pixel.R == 96 && pixel.G == 8 && pixel.B == 14)
 							{
 								if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+								{
 									tile.WallType = (ushort)ModContent.WallType<Walls.BloodyStoneWall>();
+								}
 							}
 							break;
 					}
@@ -232,7 +255,9 @@ public class TuskGen : ModSystem
 					if (tile.HasTile)
 					{
 						if (Main.tileSolid[tile.TileType])
+						{
 							tile.TileType = (ushort)ModContent.TileType<TuskFlesh>();
+						}
 						else
 						{
 							tile.ClearEverything();
@@ -247,12 +272,16 @@ public class TuskGen : ModSystem
 				if (Length < 19f)
 				{
 					if (tile.HasTile)
+					{
 						tile.HasTile = false;
+					}
 				}
 				if (Length < 28f)
 				{
-					if (tile.WallType != 0 || Length < 22f && j > -5)
+					if (tile.WallType != 0 || (Length < 22f && j > -5))
+					{
 						tile.WallType = (ushort)ModContent.WallType<Walls.TuskFleshWall>();
+					}
 				}
 			}
 		}
@@ -334,15 +363,23 @@ public class TuskGen : ModSystem
 	public static bool CanPlaceTusk(Point position)
 	{
 		if (position.X < 20 || position.Y - 60 < 20)
+		{
 			return false;
+		}
+
 		if (position.X + 160 > Main.maxTilesX - 20 || position.Y + 80 > Main.maxTilesY - 20)
+		{
 			return false;
+		}
+
 		for (int x = 0; x < 161; x++)
 		{
 			for (int y = -60; y < 81; y++)
 			{
 				if (Main.tile[x + position.X, y + position.Y].HasTile)
+				{
 					return false;
+				}
 			}
 		}
 		return true;

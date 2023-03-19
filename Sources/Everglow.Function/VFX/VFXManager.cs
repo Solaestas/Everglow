@@ -24,7 +24,7 @@ public class VFXManager : IVFXManager
 	/// <summary>
 	/// 包含uTransform，对s0进行采样的普通Shader
 	/// </summary>
-	public static Asset<Effect> DefaultEffect => ModContent.Request<Effect>("Everglow/Common/VFX/Effect/Shader2D");
+	public static Asset<Effect> DefaultEffect => ModAsset.Shader2D;
 
 	/// <summary>
 	/// 当前RenderTarget

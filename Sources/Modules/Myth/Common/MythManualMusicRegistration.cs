@@ -5,24 +5,24 @@ public sealed class MythManualMusicRegistration : ILoadable
 	public void Load(Mod mod)
 	{
 		// Title Music
-		MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Musics/BaseMusic");
-		MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Musics/MenuMusic");
+		MusicLoader.AddMusic(mod, "Myth/Musics/BaseMusic");
+		MusicLoader.AddMusic(mod, "Myth/Musics/MenuMusic");
 		// Moth Musics
-		MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Musics/MothBiome");
-		MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Musics/MothFighting");
+		MusicLoader.AddMusic(mod, "Myth/Musics/MothBiome");
+		MusicLoader.AddMusic(mod, "Myth/Musics/MothFighting");
 		// Other Moth Music
-		//MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Musics/MothFightingAlt");
-		//MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Musics/MothFightingOld");
-		//MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Musics/MothFightingOld2");
+		//MusicLoader.AddMusic(mod, "Myth/Musics/MothFightingAlt");
+		//MusicLoader.AddMusic(mod, "Myth/Musics/MothFightingOld");
+		//MusicLoader.AddMusic(mod, "Myth/Musics/MothFightingOld2");
 		// Acytaea
-		MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Musics/AcytaeaFighting");
+		MusicLoader.AddMusic(mod, "Myth/Musics/AcytaeaFighting");
 
 		// Tusk Musics
-		MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Musics/TuskBiome");
-		MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Musics/TuskTension");
-		MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Musics/TuskFighting");
+		MusicLoader.AddMusic(mod, "Myth/Musics/TuskBiome");
+		MusicLoader.AddMusic(mod, "Myth/Musics/TuskTension");
+		MusicLoader.AddMusic(mod, "Myth/Musics/TuskFighting");
 		// Lantern Moon Musics
-		MusicLoader.AddMusic(mod, "Sources/Modules/MythModule/Musics/DashCore");
+		MusicLoader.AddMusic(mod, "Myth/Musics/DashCore");
 	}
 	public void Unload()
 	{

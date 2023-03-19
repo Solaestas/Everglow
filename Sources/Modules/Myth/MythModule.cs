@@ -4,6 +4,7 @@ using Everglow.Myth.TheFirefly.Backgrounds;
 using MonoMod.Cil;
 using ReLogic.Content;
 using Terraria.GameContent.Shaders;
+using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 
 namespace Everglow.Myth;
@@ -30,7 +31,8 @@ public class MythModule : EverglowModule
 			IL_WaterShaderData.Apply += WaterShaderData_Apply;
 			On_WaterShaderData.StepLiquids += WaterShaderData_StepLiquids;
 
-			Terraria.Graphics.Effects.On_FilterManager.EndCapture += FilterManager_EndCapture;
+			On_FilterManager.EndCapture += FilterManager_EndCapture;
+			SkyManager.Instance["TuskSky"] = new TheTusk.Backgrounds.TuskBiomeSky();
 
 			m_fogPass = new FogPass();
 		}
@@ -41,7 +43,7 @@ public class MythModule : EverglowModule
 		ReplaceEffectPass = null;
 	}
 
-	private void FilterManager_EndCapture(Terraria.Graphics.Effects.On_FilterManager.orig_EndCapture orig, Terraria.Graphics.Effects.FilterManager self, RenderTarget2D finalTexture, RenderTarget2D screenTarget1, RenderTarget2D screenTarget2, Color clearColor)
+	private void FilterManager_EndCapture(On_FilterManager.orig_EndCapture orig, FilterManager self, RenderTarget2D finalTexture, RenderTarget2D screenTarget1, RenderTarget2D screenTarget2, Color clearColor)
 	{
 		m_fogPass.Update();
 		m_fogPass.Apply(screenTarget1, screenTarget2);

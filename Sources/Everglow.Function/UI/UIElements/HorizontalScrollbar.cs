@@ -36,7 +36,7 @@ public class HorizontalScrollbar : BaseElement
 		Info.LeftMargin.Pixel = 5f;
 		Info.RightMargin.Pixel = 5f;
 		Info.IsSensitive = true;
-		uiScrollbarTexture = ModContent.Request<Texture2D>("Everglow/Common/UI/Images/HorizontalScrollbar", AssetRequestMode.ImmediateLoad).Value;
+		uiScrollbarTexture = ModContent.Request<Texture2D>("Everglow/Commons/UI/Images/HorizontalScrollbar", AssetRequestMode.ImmediateLoad).Value;
 		WheelValue = wheelValue;
 	}
 
@@ -60,7 +60,7 @@ public class HorizontalScrollbar : BaseElement
 	public override void OnInitialization()
 	{
 		base.OnInitialization();
-		inner = new UIImage(ModContent.Request<Texture2D>("Everglow/Common/UI/Images/HorizontalScrollbarInner", AssetRequestMode.ImmediateLoad).Value, Color.White);
+		inner = new UIImage(ModContent.Request<Texture2D>("Everglow/Commons/UI/Images/HorizontalScrollbarInner", AssetRequestMode.ImmediateLoad).Value, Color.White);
 		inner.Info.Top.Pixel = -(inner.Info.Height.Pixel - Info.Height.Pixel) / 2f;
 		Register(inner);
 	}

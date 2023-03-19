@@ -28,7 +28,7 @@ public class MothLand : ModSystem
 	{
 		var mapIO = new Commons.TileHelper.MapIO(x, y);
 
-		mapIO.Read(ModIns.Mod.GetFileStream("Sources/Modules/MythModule/" + Path));
+		mapIO.Read(ModIns.Mod.GetFileStream("Myth/" + Path));
 
 		var it = mapIO.GetEnumerator();
 		while (it.MoveNext())
@@ -42,7 +42,7 @@ public class MothLand : ModSystem
 		Point16 sbpp = ShabbyPylonPos();
 		string Path = "MapIOResources/ShabbyCastle0" + (Main.rand.Next(7) + 1) + ".mapio";
 		var mapIO = new Commons.TileHelper.MapIO(sbpp.X, sbpp.Y);
-		int Height = mapIO.ReadHeight(ModIns.Mod.GetFileStream("Sources/Modules/MythModule/" + Path));
+		int Height = mapIO.ReadHeight(ModIns.Mod.GetFileStream("Myth/" + Path));
 		QuickBuild(sbpp.X, sbpp.Y - Height / 2, Path);
 
 		var pylonBottom = new Point(sbpp.X + Main.rand.Next(8, 16), sbpp.Y - Height / 2 + 8);

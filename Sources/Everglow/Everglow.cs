@@ -14,7 +14,6 @@ using Terraria.ModLoader.Config;
 
 namespace Everglow;
 
-[NoJIT]
 public class Everglow : Mod
 {
 	private PacketResolver m_packetResolver;
@@ -48,6 +47,10 @@ public class Everglow : Mod
 		}
 		foreach (var ins in Ins.ModuleManager.CreateInstances<ILoadable>(type =>
 		{
+			if(type.IsSubclassOf(typeof(ModGore)))
+			{
+				return false;
+			}
 			var attr = type.GetCustomAttributes<AutoloadAttribute>().FirstOrDefault();
 			return attr == null || attr.NeedsAutoloading;
 		}))

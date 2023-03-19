@@ -56,7 +56,7 @@
 							{
 								var ext = Path.GetExtension(line);
 								var item = new TaskItem("..\\Modules\\" + name + '\\' + line);
-								item.SetMetadata("ModPath", line);
+								item.SetMetadata("ModPath", name + '\\' + line);
 								return item;
 							}));
 						}

@@ -13,7 +13,7 @@ internal class FireflyPylonTileEntity : TEModdedPylon
 {
 }
 
-public class BaseModPylon<T> : ModPylon where T : TEModdedPylon
+public abstract class BaseModPylon<T> : ModPylon where T : TEModdedPylon
 {
 	public const int DefaultVerticalOffset = -12;
 
