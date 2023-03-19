@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 
 namespace Everglow.Myth.LanternMoon.Gores;
 
@@ -65,7 +65,6 @@ public abstract class DissolveGore : ModGore
 	}
 	public virtual void DrawDissolve(Gore gore)
 	{
-		//TODO:I cant understand! WHY!!!
 		DissolveAnimationTexture = CheckHasNameSpace(DissolveAnimationTexture);
 		FreshDeathTexture = CheckHasNameSpace(FreshDeathTexture);
 		BurnedTexture = CheckHasNameSpace(BurnedTexture);
