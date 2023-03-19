@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.TheTusk.Gores;
+using Everglow.Myth.TheTusk.Gores;
 using Terraria;
 
 namespace Everglow.Myth.TheTusk.Projectiles.Weapon;
@@ -22,7 +22,7 @@ class TuskArrow : ModProjectile, IWarpProjectile
 	{
 		for (int f = 0; f < 8; f++)
 		{
-			var g = Gore.NewGoreDirect(null, target.Center, new Vector2(0, Main.rand.NextFloat(10f)).RotatedByRandom(6.283), ModContent.GoreType<Blood>(), Main.rand.NextFloat(0.65f, Main.rand.NextFloat(2.5f, 3.75f)));
+			var g = Gore.NewGoreDirect(null, target.Center, new Vector2(0, Main.rand.NextFloat(10f)).RotatedByRandom(6.283), ModContent.GoreType<BloodVFX>(), Main.rand.NextFloat(0.65f, Main.rand.NextFloat(2.5f, 3.75f)));
 			g.timeLeft = Main.rand.Next(250, 500);
 		}
 		for (int y = 0; y < 16; y++)
@@ -114,7 +114,7 @@ class TuskArrow : ModProjectile, IWarpProjectile
 		}
 		if (Main.rand.NextBool(6))
 		{
-			var g = Gore.NewGoreDirect(null, Projectile.Center, new Vector2(0, Main.rand.NextFloat(10f)).RotatedByRandom(6.283), ModContent.GoreType<Blood>(), Main.rand.NextFloat(0.65f, Main.rand.NextFloat(1.0f, 1.75f)));
+			var g = Gore.NewGoreDirect(null, Projectile.Center, new Vector2(0, Main.rand.NextFloat(10f)).RotatedByRandom(6.283), ModContent.GoreType<BloodVFX>(), Main.rand.NextFloat(0.65f, Main.rand.NextFloat(1.0f, 1.75f)));
 			g.timeLeft = Main.rand.Next(150, 200);
 		}
 	}
