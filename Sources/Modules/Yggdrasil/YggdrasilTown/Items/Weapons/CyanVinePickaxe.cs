@@ -1,4 +1,5 @@
-﻿using Everglow.Yggdrasil.YggdrasilTown.Tiles;
+﻿using System.Reflection;
+using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
 using MonoMod.RuntimeDetour.HookGen;
 
@@ -25,6 +26,7 @@ public class CyanVinePickaxe : ModItem
 
 		Item.pick = 65;
 	}
+
 	public override void AddRecipes()
 	{
 		CreateRecipe()
@@ -32,16 +34,17 @@ public class CyanVinePickaxe : ModItem
 			.AddTile(TileID.WorkBenches)
 			.Register();
 	}
+	// TODO ?
 
-	delegate int orig_GetPickaxeDamage(Player player, int x, int y, int pickPower, int hitBufferIndex, Tile tileTarget);
-	delegate int Hook_GetPickaxeDamage(orig_GetPickaxeDamage orig, Player player, int x, int y, int pickPower, int hitBufferIndex, Tile tileTarget);
+	private delegate int orig_GetPickaxeDamage(Player player, int x, int y, int pickPower, int hitBufferIndex, Tile tileTarget);
+
+	private delegate int Hook_GetPickaxeDamage(orig_GetPickaxeDamage orig, Player player, int x, int y, int pickPower, int hitBufferIndex, Tile tileTarget);
+
 	public override void Load()
 	{
-		HookEndpointManager.Add<Hook_GetPickaxeDamage>(MethodBase.GetMethodFromHandle(typeof(Player).GetMethod("GetPickaxeDamage", BindingFlags.NonPublic | BindingFlags.Instance).MethodHandle), Hook_Player_GetPickaxeDamage);
+		HookEndpointManager.Add<Hook_GetPickaxeDamage>(typeof(Player).GetMethod("GetPickaxeDamage", BindingFlags.NonPublic | BindingFlags.Instance), Hook_Player_GetPickaxeDamage);
 	}
-	public override void Unload()
-	{
-	}
+
 	private static int Hook_Player_GetPickaxeDamage(orig_GetPickaxeDamage orig, Player player, int x, int y, int pickPower, int hitBufferIndex, Tile tileTarget)
 	{
 		if (Main.LocalPlayer.HeldItem.type == ModContent.ItemType<CyanVinePickaxe>())

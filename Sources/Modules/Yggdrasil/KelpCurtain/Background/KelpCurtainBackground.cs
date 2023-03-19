@@ -15,7 +15,7 @@ public class KelpCurtainBackground : ModSystem
 	//	if (Main.netMode != NetmodeID.Server)
 	//	{
 	//		Ins.HookManager.AddMethod(DrawBackground, Commons.Core.CodeLayer.PostDrawBG);
-	//		On.Terraria.Graphics.Light.TileLightScanner.GetTileLight += TileLightScanner_GetTileLight;
+	//		On_TileLightScanner.GetTileLight += TileLightScanner_GetTileLight;
 	//		//GetRopePosFir("TreeRope");
 	//		//InitMass_Spring();
 	//	}
@@ -28,7 +28,7 @@ public class KelpCurtainBackground : ModSystem
 	///// <param name="x"></param>
 	///// <param name="y"></param>
 	///// <param name="outputColor"></param>
-	//private void TileLightScanner_GetTileLight(On.Terraria.Graphics.Light.TileLightScanner.orig_GetTileLight orig, Terraria.Graphics.Light.TileLightScanner self, int x, int y, out Vector3 outputColor)
+	//private void TileLightScanner_GetTileLight(On_TileLightScanner.orig_GetTileLight orig, Terraria.Graphics.Light.TileLightScanner self, int x, int y, out Vector3 outputColor)
 	//{
 	//	orig(self, x, y, out outputColor);
 	//	outputColor += BiomeActive() ? new Vector3(0.001f, 0.001f, 0.05f) : Vector3.Zero;

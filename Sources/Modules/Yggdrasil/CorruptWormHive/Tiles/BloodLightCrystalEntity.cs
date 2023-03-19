@@ -13,7 +13,7 @@ public class BloodLightCrystalEntity : ModTileEntity
 			dissolveProgress += DISSOLVE_STEP;
 
 			if (Main.rand.NextBool(50))
-				BloodLightCrystal.summonDust(Position.X, Position.Y);
+				BloodLightCrystal.SummonDust(Position.X, Position.Y);
 
 			//Main.NewText("Updated: [" + Position.X + "," + Position.Y + "]");
 

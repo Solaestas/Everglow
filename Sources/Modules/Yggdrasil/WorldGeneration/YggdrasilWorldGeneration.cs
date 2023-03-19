@@ -7,7 +7,7 @@ using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using Everglow.Yggdrasil.HurricaneMaze.Tiles;
 using Everglow.Yggdrasil.CorruptWormHive.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Walls;
-
+using Everglow.Commons.TileHelper;
 
 namespace Everglow.Yggdrasil.WorldGeneration;
 
@@ -46,7 +46,7 @@ public class YggdrasilWorldGeneration : ModSystem
 				{
 					ref var pixel = ref pixelRow[x];
 					Tile tile = Main.tile[x + a, y + b];
-					switch (type)//21 «œ‰◊”
+					switch (type)//21ÊòØÁÆ±Â≠ê
 					{
 						case 0:
 							if (pixel.R == 255 && pixel.G == 0 && pixel.B == 0)
@@ -56,36 +56,36 @@ public class YggdrasilWorldGeneration : ModSystem
 							}
 							break;
 						case 1:
-							//ÃÏÒ∑π≈µ¿
-							if (pixel.R == 44 && pixel.G == 40 && pixel.B == 37)// ØªØ¡˙¡€ƒæ
+							//Â§©Á©πÂè§ÈÅì
+							if (pixel.R == 44 && pixel.G == 40 && pixel.B == 37)//Áü≥ÂåñÈæôÈ≥ûÊú®
 							{
 								tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
 								tile.HasTile = true;
 							}
-							if (pixel.R == 155 && pixel.G == 173 && pixel.B == 183)//«‡∂–øÛ
+							if (pixel.R == 155 && pixel.G == 173 && pixel.B == 183)//ÈùíÁºéÁüø
 							{
 								tile.TileType = (ushort)ModContent.TileType<CyanVineStone>();
 								tile.HasTile = true;
 							}
 
-							if (pixel.R == 31 && pixel.G == 26 && pixel.B == 45)//∫⁄”Ÿƒ‡
+							if (pixel.R == 31 && pixel.G == 26 && pixel.B == 45)//ÈªëÊ∑§Ê≥•
 							{
 								tile.TileType = (ushort)ModContent.TileType<DarkMud>();
 								tile.HasTile = true;
 							}
 
-							//≤‘Ã¶¬˚¡±
-							if (pixel.R == 82 && pixel.G == 62 && pixel.B == 44)//¡˙¡€ƒæ
+							//ËãçËãîËîìÂ∏ò
+							if (pixel.R == 82 && pixel.G == 62 && pixel.B == 44)//ÈæôÈ≥ûÊú®
 							{
 								tile.TileType = (ushort)ModContent.TileType<DragonScaleWood>();
 								tile.HasTile = true;
 							}
-							if (pixel.R == 81 && pixel.G == 107 && pixel.B == 18)//π≈Ã¶ﬁ∫
+							if (pixel.R == 81 && pixel.G == 107 && pixel.B == 18)//Âè§ËãîËóì
 							{
 								tile.TileType = (ushort)ModContent.TileType<OldMoss>();
 								tile.HasTile = true;
 							}
-							if (pixel.R == 53 && pixel.G == 29 && pixel.B == 26)//ÃÏÒ∑ƒ‡
+							if (pixel.R == 53 && pixel.G == 29 && pixel.B == 26)//Â§©Á©πÊ≥•
 							{
 								tile.TileType = (ushort)ModContent.TileType<YggdrasilDirt>();
 								tile.HasTile = true;
@@ -93,16 +93,16 @@ public class YggdrasilWorldGeneration : ModSystem
 
 
 
-							//Ï´∑Á√‘π¨
-							if (pixel.R == 65 && pixel.G == 84 && pixel.B == 63)//«‡∏⁄—“
+							//È£ìÈ£éËø∑ÂÆ´
+							if (pixel.R == 65 && pixel.G == 84 && pixel.B == 63)//ÈùíÂ≤óÂ≤©
 							{
 								tile.TileType = (ushort)ModContent.TileType<CyanWindGranite>();
 								tile.HasTile = true;
 							}
 
 
-							//«˘∞‹÷Æ—®
-							if (pixel.R == 107 && pixel.G == 34 && pixel.B == 21)//—™Ω‚π‚ Ø
+							//ËõÜË¥•‰πãÁ©¥
+							if (pixel.R == 107 && pixel.G == 34 && pixel.B == 21)//Ë°ÄËß£ÂÖâÁü≥
 							{
 								tile.TileType = (ushort)ModContent.TileType<BloodLightCrystal>();
 								tile.HasTile = true;
@@ -111,55 +111,55 @@ public class YggdrasilWorldGeneration : ModSystem
 
 
 
-							//≥£πÊ
-							if (pixel.R == 0 && pixel.G == 0 && pixel.B == 255)//ÀÆ
+							//Â∏∏ËßÑ
+							if (pixel.R == 0 && pixel.G == 0 && pixel.B == 255)//Ê∞¥
 							{
 								tile.LiquidType = LiquidID.Water;
 								tile.LiquidAmount = 200;
 								tile.HasTile = false;
 							}
-							if (pixel.R == 128 && pixel.G == 128 && pixel.B == 128)//—“ Ø
+							if (pixel.R == 128 && pixel.G == 128 && pixel.B == 128)//Â≤©Áü≥
 							{
 								tile.TileType = TileID.Stone;
 								tile.HasTile = true;
 							}
-							if (pixel.R == 186 && pixel.G == 168 && pixel.B == 84)//…≥
+							if (pixel.R == 186 && pixel.G == 168 && pixel.B == 84)//Ê≤ô
 							{
 								tile.TileType = TileID.Sand;
 								tile.HasTile = true;
 							}
 							break;
 						case 2:
-							if (pixel.R == 24 && pixel.G == 0 && pixel.B == 0)// ØªØ¡˙¡€ƒæ
+							if (pixel.R == 24 && pixel.G == 0 && pixel.B == 0)//Áü≥ÂåñÈæôÈ≥ûÊú®
 							{
 								if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
 									tile.WallType = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
 							}
-							if (pixel.R == 40 && pixel.G == 32 && pixel.B == 31)//¡˙¡€ƒæ
+							if (pixel.R == 40 && pixel.G == 32 && pixel.B == 31)//ÈæôÈ≥ûÊú®
 							{
 								if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
 									tile.WallType = (ushort)ModContent.WallType<DragonScaleWoodWall>();
 							}
-							if (pixel.R == 56 && pixel.G == 56 && pixel.B == 56)// Ø«Ω
+							if (pixel.R == 56 && pixel.G == 56 && pixel.B == 56)//Áü≥Â¢ô
 							{
 								if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
 									tile.WallType = WallID.Stone;
 							}
-							if (pixel.R == 25 && pixel.G == 14 && pixel.B == 12)//ÃÏÒ∑Õ¡«Ω
+							if (pixel.R == 25 && pixel.G == 14 && pixel.B == 12)//Â§©Á©πÂúüÂ¢ô
 							{
 								if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
 									tile.WallType = (ushort)ModContent.WallType<YggdrasilDirtWall>();
 							}
 							break;
-						case 3://ÃÏÒ∑π≈µ¿Ω®÷˛
+						case 3://Â§©Á©πÂè§ÈÅìÂª∫Á≠ë
 							if (pixel.R == 121 && pixel.G == 5 && pixel.B == 255)//FolkHouseofChineseStyle TypeA  28x11
 								QuickBuild(x, y, "YggdrasilTown/MapIOs/1FolkHouseofChineseStyleTypeA28x11.mapio");
 							if (pixel.R == 120 && pixel.G == 5 && pixel.B == 255)//FolkHouseofChineseStyle TypeB  28x11
 								QuickBuild(x, y, "YggdrasilTown/MapIOs/1FolkHouseofChineseStyleTypeB28x11.mapio");
 
-							if (pixel.R == 122 && pixel.G == 5 && pixel.B == 255)//FolkHouseofWood£¶StoneStruture TypeA  28x11
+							if (pixel.R == 122 && pixel.G == 5 && pixel.B == 255)//FolkHouseofWoodÔºÜStoneStruture TypeA  28x11
 								QuickBuild(x, y, "YggdrasilTown/MapIOs/2FolkHouseofWoodStoneStrutureTypeA28x11.mapio");
-							if (pixel.R == 123 && pixel.G == 5 && pixel.B == 255)//FolkHouseofWood£¶StoneStruture TypeB  28x11
+							if (pixel.R == 123 && pixel.G == 5 && pixel.B == 255)//FolkHouseofWoodÔºÜStoneStruture TypeB  28x11
 								QuickBuild(x, y, "YggdrasilTown/MapIOs/2FolkHouseofWoodStoneStrutureTypeB28x11.mapio");
 
 							if (pixel.R == 124 && pixel.G == 5 && pixel.B == 255)//Smithy TypeA  22x8
@@ -187,15 +187,15 @@ public class YggdrasilWorldGeneration : ModSystem
 								QuickBuild(x, y, "YggdrasilTown/MapIOs/Church80x51.mapio");
 							break;
 						case 4:
-							if (pixel.R == 195 && pixel.G == 217 && pixel.B == 229)//¥Û«‡∂–øÛ
+							if (pixel.R == 195 && pixel.G == 217 && pixel.B == 229)//Â§ßÈùíÁºéÁüø
 								PlaceLargeCyanVineOre(x, y);
-							if (pixel.R == 195 && pixel.G == 217 && pixel.B == 230)//÷–«‡∂–øÛ
+							if (pixel.R == 195 && pixel.G == 217 && pixel.B == 230)//‰∏≠ÈùíÁºéÁüø
 								PlaceMiddleCyanVineOre(x, y);
-							if (pixel.R == 195 && pixel.G == 217 && pixel.B == 231)//–°«‡∂–øÛ
+							if (pixel.R == 195 && pixel.G == 217 && pixel.B == 231)//Â∞èÈùíÁºéÁüø
 								PlaceSmallCyanVineOre(x, y);
-							if (pixel.R == 195 && pixel.G == 217 && pixel.B == 232)//µππ“–°«‡∂–øÛ
+							if (pixel.R == 195 && pixel.G == 217 && pixel.B == 232)//ÂÄíÊåÇÂ∞èÈùíÁºéÁüø
 								PlaceSmallUpCyanVineOre(x, y);
-							if (pixel.R == 195 && pixel.G == 217 && pixel.B == 233)//µππ“¥Û«‡∂–øÛ
+							if (pixel.R == 195 && pixel.G == 217 && pixel.B == 233)//ÂÄíÊåÇÂ§ßÈùíÁºéÁüø
 								PlaceLargeUpCyanVineOre(x, y);
 							break;
 					}
@@ -678,7 +678,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	{
 		var mapIO = new MapIO(x, y);
 
-		mapIO.Read(Ins.GetFileStream("Sources/Modules/YggdrasilModule/" + Path));
+		mapIO.Read(ModIns.Mod.GetFileStream("Yggdrasil/" + Path));
 
 		var it = mapIO.GetEnumerator();
 		while (it.MoveNext())
@@ -688,7 +688,7 @@ public class YggdrasilWorldGeneration : ModSystem
 		}
 	}
 	/// <summary>
-	/// Ω®‘ÏÃÏÒ∑ ˜
+	/// Âª∫ÈÄ†Â§©Á©πÊ†ë
 	/// </summary>
 	public static void BuildtheTreeWorld()
 	{

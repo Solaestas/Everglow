@@ -1,4 +1,4 @@
-﻿using Terraria.ObjectData;
+using Terraria.ObjectData;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
 
@@ -17,8 +17,7 @@ public class CyanVineBar : ModTile
 
 		ItemDrop = ModContent.ItemType<Items.CyanVineBar>();
 
-		ModTranslation modTranslation = CreateMapEntryName(null);
-		modTranslation.SetDefault("Metal Bar");
+		var modTranslation = CreateMapEntryName();
 		AddMapEntry(new Color(224, 194, 101), modTranslation);
 	}
 	public override bool CreateDust(int i, int j, ref int type)

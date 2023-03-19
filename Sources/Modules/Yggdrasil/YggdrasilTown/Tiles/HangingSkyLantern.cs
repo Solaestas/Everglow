@@ -34,8 +34,7 @@ public class HangingSkyLantern : ModTile
 		TileObjectData.addTile(Type);
 
 		// Etc
-		ModTranslation name = CreateMapEntryName();
-		name.SetDefault("Chandelier");
+		var name = CreateMapEntryName();
 		AddMapEntry(new Color(216, 172, 125), name);
 	}
 	public override void HitWire(int i, int j)

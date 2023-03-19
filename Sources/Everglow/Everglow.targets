@@ -55,7 +55,9 @@
 							resources.AddRange(lines.Select(line =>
 							{
 								var ext = Path.GetExtension(line);
-								return new TaskItem("..\\Module\\" + name + '\\' + line);
+								var item = new TaskItem("..\\Modules\\" + name + '\\' + line);
+								item.SetMetadata("ModPath", line);
+								return item;
 							}));
 						}
 						Resources = resources.ToArray();

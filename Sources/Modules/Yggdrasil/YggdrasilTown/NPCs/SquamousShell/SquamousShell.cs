@@ -8,9 +8,7 @@ public class SquamousShell : ModNPC
 {
 	public override void SetStaticDefaults()
 	{
-		DisplayName.SetDefault("Squamous Shell");
 		Main.npcFrameCount[NPC.type] = 4;
-		DisplayName.AddTranslation((int)GameCulture.CultureName.Chinese, "龙鳞古壳");
 	}
 	public override float SpawnChance(NPCSpawnInfo spawnInfo)
 	{
@@ -510,8 +508,5 @@ public class SquamousShell : ModNPC
 		Main.graphics.GraphicsDevice.Textures[0] = tex0;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, BodyV.ToArray(), 0, BodyV.Count / 3);
 
-	}
-	public override void HitEffect(int hitDirection, double damage)
-	{
 	}
 }

@@ -110,7 +110,7 @@ csharp_preferred_modifier_order = public,private,protected,internal,file,static,
 csharp_style_prefer_readonly_struct = true:suggestion
 
 # 代码块首选项
-csharp_prefer_braces = when_multiline:silent
+csharp_prefer_braces = true:silent
 csharp_prefer_simple_using_statement = true:suggestion
 csharp_style_namespace_declarations = file_scoped:silent
 csharp_style_prefer_method_group_conversion = true:silent

@@ -226,7 +226,7 @@ public class TrueDeathSickle : MeleeProj, IOcclusionProjectile, IWarpProjectile,
 		if (vertex2Ds.Count == 4)
 			spriteBatch.Draw(tex, vertex2Ds, PrimitiveType.TriangleStrip);
 	}
-	public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 		Player player = Main.player[Projectile.owner];
 
@@ -234,12 +234,12 @@ public class TrueDeathSickle : MeleeProj, IOcclusionProjectile, IWarpProjectile,
 		ScreenShaker Gsplayer = player.GetModPlayer<ScreenShaker>();
 		float ShakeStrength = 3f;
 		Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 24f * ShakeStrength, 100)).RotatedByRandom(6.283);
-		knockback *= 5f;
+		modifiers.Knockback *= 5f;
 		int HitType = ModContent.ProjectileType<TrueDeathSickleHit>();
 		if (attackType == 2)
 		{
-			damage = (int)(damage * 2.3f);
-			knockback *= 2.3f;
+			modifiers.FinalDamage *= 2.3f;
+			modifiers.Knockback *= 2.3f;
 			GenerateVFXFromTarget(target, 36, 2.6f);
 			if (player.ownedProjectileCounts[HitType] < 5)
 				Projectile.NewProjectile(Projectile.GetSource_FromAI(), target.Center, Vector2.One, HitType, 0, 0, Projectile.owner, 30, Projectile.rotation);
@@ -579,7 +579,7 @@ public class TrueDeathSickle : MeleeProj, IOcclusionProjectile, IWarpProjectile,
 		Projectile.Kill();
 		player.GetModPlayer<MEACPlayer>().isUsingMeleeProj = false;
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		target.AddBuff(ModContent.BuffType<DeathFlame>(), 1800);
 	}

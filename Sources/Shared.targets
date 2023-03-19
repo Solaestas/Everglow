@@ -11,7 +11,7 @@
 								 InputFiles="@(EffectFile)"
 								 TargetPlatform="Windows"
 								 TargetProfile="HiDef"
-								 BuildConfiguration="Release"
+								 BuildConfiguration="Debug"
 								 IntermediateDirectory="$(IntermediateOutputPath)Assets\"
 								 OutputDirectory="$(EverglowOutputDirectory)Assets\$(AssetsPrefix)\" />
 	</Target>

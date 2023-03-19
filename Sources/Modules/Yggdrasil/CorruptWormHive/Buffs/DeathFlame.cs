@@ -1,4 +1,6 @@
-﻿namespace Everglow.Yggdrasil.CorruptWormHive.Buffs;
+using Everglow.Yggdrasil.CorruptWormHive.VFXs;
+
+namespace Everglow.Yggdrasil.CorruptWormHive.Buffs;
 
 public class DeathFlame : ModBuff
 {
@@ -23,7 +25,7 @@ public class DeathFlame : ModBuff
 					maxTime = Main.rand.Next(9, 30),
 					ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.02f, 0.02f), Main.rand.NextFloat(8f, 12f) }
 				};
-				VFXManager.Add(df);
+				Ins.VFXManager.Add(df);
 			}
 		}
 		int BuffDamage = (int)((1 - npc.life / (float)npc.lifeMax) * 400 + npc.defense + 40);
@@ -42,7 +44,7 @@ public class DeathFlame : ModBuff
 					maxTime = Main.rand.Next(9, 48),
 					ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.02f, 0.02f), Main.rand.NextFloat(8f, 24f) }
 				};
-				VFXManager.Add(df);
+				Ins.VFXManager.Add(df);
 			}
 		}
 	}

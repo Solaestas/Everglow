@@ -1,4 +1,4 @@
-﻿using Terraria.Audio;
+using Terraria.Audio;
 using Everglow.Yggdrasil.Common;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles;
@@ -36,14 +36,14 @@ public class AcroporaSpear : MeleeProj
 	{
 		base.DrawSelf(spriteBatch, lightColor, 173, 69, 0.9f);
 	}
-	public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 		//伤害倍率
 		ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
 		float ShakeStrength = 0.2f;
 		if (attackType == 0)
 		{
-			damage = (int)(damage * 1.4);
+			modifiers.FinalDamage *= 1.4f;
 			ShakeStrength = 1f;
 		}
 
@@ -295,7 +295,7 @@ public class AcroporaSpear : MeleeProj
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
 		Main.graphics.GraphicsDevice.Textures[0] = YggdrasilContent.QuickTexture("KelpCurtain/Projectiles/Acropora_RedColor");
 		float k0 = timer / 80f + 0.3f;
-		MeleeTrail.Parameters["FadeValue"].SetValue(Commons.Core.Utils.MathUtils.Sqrt(k0 * 1.2f));
+		MeleeTrail.Parameters["FadeValue"].SetValue(MathF.Sqrt(k0 * 1.2f));
 		MeleeTrail.Parameters["tex1"].SetValue(YggdrasilContent.QuickTexture("KelpCurtain/Projectiles/texBlood"));
 		MeleeTrail.CurrentTechnique.Passes[shadertype].Apply();
 
@@ -318,7 +318,7 @@ public class AcroporaSpear : MeleeProj
 		Projectile.Kill();
 		player.GetModPlayer<MEACPlayer>().isUsingMeleeProj = false;
 	}
-	public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		target.AddBuff(BuffID.Poisoned, 600);
 	}

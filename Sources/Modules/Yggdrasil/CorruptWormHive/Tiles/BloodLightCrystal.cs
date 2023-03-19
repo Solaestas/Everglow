@@ -2,6 +2,7 @@ using Terraria.DataStructures;
 using Terraria.ObjectData;
 using Everglow.Yggdrasil.Common;
 using Everglow.Yggdrasil.CorruptWormHive.Dusts;
+using Everglow.Yggdrasil.CorruptWormHive.VFXs;
 
 namespace Everglow.Yggdrasil.CorruptWormHive.Tiles;
 
@@ -43,7 +44,7 @@ public class BloodLightCrystal : ModTile
 			{
 				existingAsT.startDissolve();
 				if (Main.rand.NextBool(10))
-					summonCrystal(i, j);
+					SummonCrystal(i, j);
 			}
 
 			//WorldGen.KillTile(i, j,false,false,true);
@@ -87,10 +88,10 @@ public class BloodLightCrystal : ModTile
 	}
 	public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
 	{
-		// ´ý¶¨
+		// å¾…å®š
 	}
 
-	public static void summonDust(int i, int j)
+	public static void SummonDust(int i, int j)
 	{
 		Dust d = Dust.NewDustDirect(new Vector2(i * 16, j * 16), 16, 16, ModContent.DustType<BloodSpark>());
 		d.velocity = new Vector2(Main.rand.NextFloat(1.5f, 4f), 0).RotatedByRandom(6.283);
@@ -100,7 +101,7 @@ public class BloodLightCrystal : ModTile
 		d.noGravity = true;
 	}
 
-	public static void summonCrystal(int i, int j)
+	public static void SummonCrystal(int i, int j)
 	{
 		var bc = new BrokenCrystal
 		{
@@ -111,6 +112,6 @@ public class BloodLightCrystal : ModTile
 			Visible = true,
 			position = new Vector2(i * 16 + 8, j * 16 + 8)
 		};
-		VFXManager.Add(bc);
+		Ins.VFXManager.Add(bc);
 	}
 }
