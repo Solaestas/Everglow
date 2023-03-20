@@ -3,7 +3,7 @@
     "Terraria": {
       "commandName": "Executable",
       "executablePath": "dotnet",
-      "commandLineArgs": "$(tMLPath)",
+      "commandLineArgs": "\"$(tMLPath)\"",
       "workingDirectory": "$(tMLSteamPath)"
     },
     "TerrariaServer": {
