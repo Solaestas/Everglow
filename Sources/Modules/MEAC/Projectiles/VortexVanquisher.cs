@@ -28,7 +28,7 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 	}
 	public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, float HorizontalWidth, float HorizontalHeight, float DrawScale, string GlowPath, double DrawRotation)
 	{
-		base.DrawSelf(spriteBatch, lightColor, 240, 40, 0.75f, "Projectiles/VortexVanquisherGlow");
+		base.DrawSelf(spriteBatch, lightColor, 240, 40, 0.75f, "MEAC/Projectiles/VortexVanquisherGlow");
 	}
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{

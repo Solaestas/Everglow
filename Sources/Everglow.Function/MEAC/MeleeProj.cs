@@ -386,7 +386,7 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 				new Vertex2D(drawCenter + BottomRight, new Color(255,255,255,0), new Vector3(sourceBottomRight.X, sourceBottomRight.Y, 0)),
 				new Vertex2D(drawCenter + TopRight, new Color(255,255,255,0), new Vector3(sourceTopRight.X, sourceTopRight.Y, 0))
 			};
-			Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/MEAC/" + GlowPath).Value;
+			Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Everglow/" + GlowPath).Value;
 			;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
 		}

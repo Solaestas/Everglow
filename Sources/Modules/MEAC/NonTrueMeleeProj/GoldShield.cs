@@ -216,7 +216,7 @@ public class GoldShield : ModProjectile, IWarpProjectile
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Effect Post = ModContent.Request<Effect>("Everglow/Commons/MEAC/Effects/Post", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+		Effect Post = ModContent.Request<Effect>("Everglow/MEAC/Effects/Post", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		Post.Parameters["uTime"].SetValue((float)(Main.timeForVisualEffects * 0.003));
 		Post.CurrentTechnique.Passes[0].Apply();
 

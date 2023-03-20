@@ -32,7 +32,7 @@ public class ScaleWingBladeProj : MeleeProj
 	}
 	public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, float HorizontalWidth, float HorizontalHeight, float DrawScale, string GlowPath, double DrawRotation)
 	{
-		base.DrawSelf(spriteBatch, lightColor, 85, 30, 0.9f, "Projectiles/ScaleWingBladeProjGlow");
+		base.DrawSelf(spriteBatch, lightColor, 85, 30, 0.9f, "Myth/TheFirefly/Projectiles/ScaleWingBladeProjGlow");
 	}
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{	
