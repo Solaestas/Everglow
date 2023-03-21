@@ -26,7 +26,6 @@ public class CorruptDust : ModProjectile
 	{
 		if (Collision.SolidCollision(Projectile.Center + Projectile.velocity, 0, 0))
 		{
-			Projectile.velocity = Projectile.velocity.RotatedBy(Math.Sin(Projectile.whoAmI) * 0.1f);
 			Projectile.velocity *= 0.93f;
 			Projectile.friendly = false;
 		}
@@ -57,13 +56,24 @@ public class CorruptDust : ModProjectile
 	public override void PostDraw(Color lightColor)
 	{
 		float dark = 0.7f;
-		DrawTrail(new Color(dark, dark, dark, dark), ModAsset.GoldLightDark.Value);
-		DrawTrail(new Color(0, 0.6f, 1f, 0), ModAsset.TheFirefly_GoldLine.Value);
+		DrawTrail(new Color(dark, dark, dark, dark), ModAsset.CorruptDustDark.Value);
+		DrawTrail(new Color(0, 0.6f, 1f, 0), ModAsset.CorruptDustLine.Value);
+		for (int i = 1; i < Projectile.oldPos.Length - 5; i += 5)
+		{
+			if (Projectile.oldPos[i] == Vector2.Zero)
+			{
+				break;
+			}
+			float k0 = Projectile.timeLeft / 120f;
+			int length = 60 - Projectile.timeLeft;
+			var factor = i / (float)length;
+			Lighting.AddLight(Projectile.Center, factor * 0.2f * k0, (1 - factor) * 0.3f * k0, k0);
+		}
 	}
 
 	private void DrawTrail(Color c0, Texture2D tex, Texture fadeTexture = null)
 	{
-		fadeTexture ??= ModAsset.GoldLineFadePowder.Value;
+		fadeTexture ??= ModAsset.CorruptDustFadePowder.Value;
 		float k0 = Projectile.timeLeft / 60f;
 		var bars = new List<Vertex2D>();
 
@@ -80,10 +90,7 @@ public class CorruptDust : ModProjectile
 		for (int i = 1; i < Projectile.oldPos.Length; ++i)
 		{
 			float width = 108 - k0 * 36;
-			if (width > Projectile.velocity.Length() * 9f)
-			{
-				width = Projectile.velocity.Length() * 9;
-			}
+
 			if (i < 10)
 			{
 				width *= i / 10f;
