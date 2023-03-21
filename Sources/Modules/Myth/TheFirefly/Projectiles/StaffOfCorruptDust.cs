@@ -1,5 +1,3 @@
-using Everglow.Myth.Common;
-
 namespace Everglow.Myth.TheFirefly.Projectiles;
 
 internal class StaffOfCorruptDust : ModProjectile
@@ -28,7 +26,7 @@ internal class StaffOfCorruptDust : ModProjectile
 		Vector2 PlayerToProjectileNowCenter = Projectile.Center - player.MountedCenter;
 		PlayerToProjectileNowCenter = Vector2.Normalize(PlayerToProjectileNowCenter);
 		float sinTheta = Vector3.Cross(new Vector3(MidProjectileNextCenter, 0), new Vector3(PlayerToProjectileNowCenter, 0)).Z;
-		if(Math.Abs(sinTheta) < 0.18f)
+		if (Math.Abs(sinTheta) < 0.18f)
 		{
 			Projectile.Center = MidProjectileNextCenter * ProjectileToPlayerDistance + player.MountedCenter;
 		}

@@ -6,8 +6,8 @@ public class CorruptDust : ModProjectile
 {
 	public override void SetDefaults()
 	{
-		Projectile.width = 10;
-		Projectile.height = 10;
+		Projectile.width = 40;
+		Projectile.height = 40;
 		Projectile.aiStyle = -1;
 		Projectile.friendly = true;
 		Projectile.hostile = false;
@@ -113,8 +113,8 @@ public class CorruptDust : ModProjectile
 			x0 %= 1f;
 			c0.R = (byte)(factor * 120f);
 			c0.G = (byte)((1 - factor) * 140f);
-			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f, 5f), c0, new Vector3(x0, 1, k0 - factor * 0.5f)));
-			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f, 5f), c0, new Vector3(x0, 0, k0 - factor * 0.5f)));
+			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(Projectile.width / 2f, Projectile.height / 2f), c0, new Vector3(x0, 1, k0 - factor * 0.5f)));
+			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(Projectile.width / 2f, Projectile.height / 2f), c0, new Vector3(x0, 0, k0 - factor * 0.5f)));
 			if (i < Projectile.oldPos.Length - 1)
 			{
 				if (Projectile.oldPos[i + 1] == Vector2.Zero)
@@ -131,10 +131,10 @@ public class CorruptDust : ModProjectile
 					var factorIII = factorII * (1 - MidValue) + factor * MidValue;
 					Vector2 MidPoint = Projectile.oldPos[i] * (1 - MidValue) + Projectile.oldPos[i + 1] * MidValue;
 					c0.G = (byte)((1 - factor) * 140f);
-					bars.Add(new Vertex2D(MidPoint + normalDir * -width * (1 - factorIII) + new Vector2(5f), c0, new Vector3(1, 1, k0 - factorIII * 0.5f)));
-					bars.Add(new Vertex2D(MidPoint + normalDir * width * (1 - factorIII) + new Vector2(5f), c0, new Vector3(1, 0, k0 - factorIII * 0.5f)));
-					bars.Add(new Vertex2D(MidPoint + normalDir * -width * (1 - factorIII) + new Vector2(5f), c0, new Vector3(0, 1, k0 - factorIII * 0.5f)));
-					bars.Add(new Vertex2D(MidPoint + normalDir * width * (1 - factorIII) + new Vector2(5f), c0, new Vector3(0, 0, k0 - factorIII * 0.5f)));
+					bars.Add(new Vertex2D(MidPoint + normalDir * -width * (1 - factorIII) + new Vector2(Projectile.width / 2f, Projectile.height / 2f), c0, new Vector3(1, 1, k0 - factorIII * 0.5f)));
+					bars.Add(new Vertex2D(MidPoint + normalDir * width * (1 - factorIII) + new Vector2(Projectile.width / 2f, Projectile.height / 2f), c0, new Vector3(1, 0, k0 - factorIII * 0.5f)));
+					bars.Add(new Vertex2D(MidPoint + normalDir * -width * (1 - factorIII) + new Vector2(Projectile.width / 2f, Projectile.height / 2f), c0, new Vector3(0, 1, k0 - factorIII * 0.5f)));
+					bars.Add(new Vertex2D(MidPoint + normalDir * width * (1 - factorIII) + new Vector2(Projectile.width / 2f, Projectile.height / 2f), c0, new Vector3(0, 0, k0 - factorIII * 0.5f)));
 				}
 			}
 		}
