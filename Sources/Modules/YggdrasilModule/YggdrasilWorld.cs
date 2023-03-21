@@ -29,7 +29,7 @@ namespace Everglow.Sources.Modules.YggdrasilModule
         public override int Width { get; init; } = 1200;
         public override int Height { get; init; } = 12000;
         public override List<GenPass> Tasks { get; init; } = new() { new WorldGeneration.YggdrasilWorldGeneration.YggdrasilWorldGenPass() };
-        public override bool NormalTime => false;
+        public override bool NormalTime => true;
         public override bool HideUnderworld => true;
         public override void ModifyPlayerBasicGravity(Player player, ref float basicgravity, ref float maxFallSpeed)
         {

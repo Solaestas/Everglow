@@ -1,9 +1,4 @@
-﻿using Everglow.Sources.Modules.FoodModule.Buffs.VanillaFoodBuffs;
-using Everglow.Sources.Modules.FoodModule;
-using Everglow.Sources.Modules.FoodModule.Items;
-using Everglow.Sources.Modules.FoodModule.Utils;
-using Microsoft.Xna.Framework;
-using Terraria;
+﻿using Everglow.Sources.Modules.FoodModule.Utils;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.ID;

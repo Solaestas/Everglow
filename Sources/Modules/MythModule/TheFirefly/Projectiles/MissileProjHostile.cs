@@ -113,47 +113,33 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             TimeTokill = 90;
             Projectile.velocity = Projectile.oldVelocity;
             Gsplayer.FlyCamPosition = new Vector2(0, 30).RotatedByRandom(6.283);
-            Projectile P = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BombShakeWave>(), 0, 0, Projectile.owner, 1, 2f);
-            P.timeLeft = 200;
-            foreach (NPC target in Main.npc)
-            {
-                float Dis = (target.Center - Projectile.Center).Length();
+            Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BombShakeWave>(), 0, 0, Projectile.owner, 1f, 0.1f);
+            Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BeadShakeWave>(), 0, 0, Projectile.owner, 1.4f, 1f);
 
-                if (Dis < 150)
-                {
-                    if (!target.dontTakeDamage && !target.friendly && target.CanBeChasedBy() && target.active)
-                    {
-                        bool crit = Main.rand.NextBool(33, 100);
-                        target.StrikeNPC(Projectile.damage, 2f, 1, crit);
-
-                        player.addDPS(Math.Max(0, target.defDamage));
-                    }
-                }
-            }
-            for (int h = 0; h < 120; h += 3)
+            for (int h = 0; h < 40; h += 3)
             {
-                Vector2 v3 = new Vector2(0, (float)Math.Sin(h * Math.PI / 4d + Projectile.ai[0]) + 5).RotatedBy(h * Math.PI / 10d) * Main.rand.NextFloat(0.2f, 1.1f);
-                int r = Dust.NewDust(Projectile.Center - new Vector2(4, 4), 0, 0, ModContent.DustType<Dusts.PureBlue>(), 0, 0, 0, default(Color), 15f * Main.rand.NextFloat(0.7f, 2.9f));
+                Vector2 v3 = new Vector2(0, (float)Math.Sin(h * Math.PI / 4d + Projectile.ai[0]) + 5).RotatedBy(h * Math.PI / 10d) * Main.rand.NextFloat(0.8f, 1.4f);
+                int r = Dust.NewDust(Projectile.Center - new Vector2(4, 4), 0, 0, ModContent.DustType<Dusts.PureBlue>(), 0, 0, 0, default, 35f * Main.rand.NextFloat(0.7f, 1.9f));
                 Main.dust[r].noGravity = true;
-                Main.dust[r].velocity = v3 * 6;
+                Main.dust[r].velocity = v3;
             }
-            for (int y = 0; y < 180; y += 3)
+            for (int y = 0; y < 40; y += 3)
             {
-                int index = Dust.NewDust(Projectile.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(1.3f, 6.2f));
+                int index = Dust.NewDust(Projectile.Center - new Vector2(8) + new Vector2(0, Main.rand.NextFloat(12f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(3.3f, 5.2f));
                 Main.dust[index].noGravity = true;
-                Main.dust[index].velocity = new Vector2(Main.rand.NextFloat(0.0f, 4.5f), Main.rand.NextFloat(1.8f, 5.5f)).RotatedByRandom(Math.PI * 2d);
+                Main.dust[index].velocity = new Vector2(Main.rand.NextFloat(0.0f, 10.5f), 0).RotatedByRandom(Math.PI * 2d);
             }
-            for (int y = 0; y < 180; y += 3)
+            for (int y = 0; y < 40; y += 3)
             {
-                int index = Dust.NewDust(Projectile.Center + new Vector2(0, Main.rand.NextFloat(2f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(1.3f, 6.2f));
+                int index = Dust.NewDust(Projectile.Center - new Vector2(8) + new Vector2(0, Main.rand.NextFloat(2f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(3.3f, 5.2f));
                 Main.dust[index].noGravity = true;
-                Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(3.0f, 27.5f)).RotatedByRandom(Math.PI * 2d);
+                Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(1.0f, 8.5f)).RotatedByRandom(Math.PI * 2d);
             }
-            for (int y = 0; y < 36; y++)
+            for (int y = 0; y < 16; y++)
             {
-                int index = Dust.NewDust(Projectile.Center + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default(Color), Main.rand.NextFloat(1.3f, 4.2f));
+                int index = Dust.NewDust(Projectile.Center - new Vector2(8) + new Vector2(0, Main.rand.NextFloat(48f)).RotatedByRandom(3.1415926 * 2), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(1.3f, 4.2f));
                 Main.dust[index].noGravity = true;
-                Main.dust[index].velocity = new Vector2(Main.rand.NextFloat(0.0f, 2.5f), Main.rand.NextFloat(1.8f, 5.5f)).RotatedByRandom(Math.PI * 2d);
+                Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(0.8f, 7.5f)).RotatedByRandom(Math.PI * 2d);
             }
             Projectile.hostile = false;
         }

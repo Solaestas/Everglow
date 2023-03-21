@@ -24,7 +24,7 @@ namespace Everglow.Sources.Modules.MEACModule.Items
             Item.useTime = 5;
             Item.shootSpeed = 5f;
             Item.knockBack = 6.5f;
-            Item.damage = 90; //Original: Item.damage = 30
+            Item.damage = 90;
             Item.rare = ItemRarityID.Green;
 
             Item.DamageType = DamageClass.Melee;

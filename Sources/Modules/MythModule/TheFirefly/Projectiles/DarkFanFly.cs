@@ -1,7 +1,6 @@
 ﻿using Everglow.Sources.Commons.Function.Vertex;
 using Everglow.Sources.Modules.MythModule.Common;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Buffs;
-using Terraria.ID;
 
 namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 {
@@ -53,7 +52,7 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             }
             for (int i = 0; i < 18; i++)
             {
-                Dust.NewDust(target.Center, 0, 0, DustID.Clentaminator_Blue, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default(Color), 0.6f);
+                Dust.NewDust(target.Center, 0, 0, DustID.Clentaminator_Blue, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, 0.6f);
             }
             for (int i = 0; i < 6; i++)
             {
@@ -140,10 +139,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
 
         public override void PostDraw(Color lightColor)
         {
-            float width = 12;
             if (Projectile.timeLeft < 60)
             {
-                width = Projectile.timeLeft / 5f;
                 Projectile.scale = Projectile.timeLeft / 40f;
             }
             int TrueL = 0;
@@ -163,38 +160,20 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
                 {
                     break;
                 }
-
-                var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
-                float NLength = normalDir.Length();
-                normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
-                float delta = 0;
-                if (i >= 2)
-                {
-                    var OldnormalDir = Projectile.oldPos[i - 2] - Projectile.oldPos[i - 1];
-                    OldnormalDir = Vector2.Normalize(new Vector2(-OldnormalDir.Y, OldnormalDir.X));
-                    float sinTheta = Vector3.Cross(new Vector3(normalDir, 0), new Vector3(OldnormalDir, 0)).Z;
-                    float cosTheta = Vector2.Dot(normalDir, OldnormalDir);
-                    int signS = Math.Sign(sinTheta);
-                    if (NLength < width * sinTheta * signS)
-                    {
-                        delta = -(1 - cosTheta * NLength / width) * signS;
-                    }
-                }
                 var factor = i / (float)TrueL;
                 var w = MathHelper.Lerp(1f, 0.05f, factor);
-                var UpValue = ((delta > 0 ? delta : 0) - 1);
-                var DownValue = ((delta < 0 ? delta : 0) + 1);
 
                 Vector2 v3 = new Vector2(0.707f, -0.707f).RotatedBy((Projectile.timeLeft + i) / 10f);
                 double rot = Math.Atan2(OldVelocity[i].Y, OldVelocity[i].X);
                 v3 = new Vector2(v3.X, v3.Y / 2f).RotatedBy(rot);
-                bars.Add(new Vertex2D(Projectile.oldPos[i] + v3 * 45 * OldScale[i] + new Vector2(29) - Main.screenPosition, new Color(254, 254, 254, 255), new Vector3(factor, 0, w)));
-                bars.Add(new Vertex2D(Projectile.oldPos[i] + v3 * 45 * OldScale[i] + width * normalDir * 2 + new Vector2(29) - Main.screenPosition, new Color(254, 254, 254, 255), new Vector3(factor, 1, w)));
+                Vector2 v4 = Projectile.oldPos[i] + new Vector2(29) - Main.screenPosition;
+                bars.Add(new Vertex2D(v4 + v3 * 45 * OldScale[i], new Color(254, 254, 254, 255), new Vector3(factor, 0, w)));
+                bars.Add(new Vertex2D(v4, new Color(254, 254, 254, 255), new Vector3(factor, 1, w)));
             }
             Texture2D t = MythContent.QuickTexture("TheFirefly/Projectiles/heatmapShade");
             if (bars.Count > 0)
             {
-                Main.graphics.GraphicsDevice.Textures[0] = t;//GoldenBloodScaleMirror
+                Main.graphics.GraphicsDevice.Textures[0] = t;
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
             }
 
@@ -211,13 +190,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             Vx.Add(new Vertex2D(Projectile.Center + v0 * Projectile.scale - Main.screenPosition, color, new Vector3(84f / 200f, 0f / 200f, 0)));
             Vx.Add(new Vertex2D(Projectile.Center + v1 * Projectile.scale - Main.screenPosition, color, new Vector3(200f / 200f, 100f / 200f, 0)));
             Vx.Add(new Vertex2D(Projectile.Center + v2 * Projectile.scale - Main.screenPosition, color, new Vector3(0f / 200f, 200f / 200f, 0)));
-            Main.graphics.GraphicsDevice.Textures[0] = Tex;//
+            Main.graphics.GraphicsDevice.Textures[0] = Tex;
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 
             Vx.Add(new Vertex2D(Projectile.Center + v0 * Projectile.scale - Main.screenPosition, new Color(255, 255, 255, 0), new Vector3(84f / 200f, 0f / 200f, 0)));
             Vx.Add(new Vertex2D(Projectile.Center + v1 * Projectile.scale - Main.screenPosition, new Color(255, 255, 255, 0), new Vector3(200f / 200f, 100f / 200f, 0)));
             Vx.Add(new Vertex2D(Projectile.Center + v2 * Projectile.scale - Main.screenPosition, new Color(255, 255, 255, 0), new Vector3(0f / 200f, 200f / 200f, 0)));
-            Main.graphics.GraphicsDevice.Textures[0] = TexG;//
+            Main.graphics.GraphicsDevice.Textures[0] = TexG;
             Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
         }
 

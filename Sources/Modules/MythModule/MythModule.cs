@@ -1,5 +1,6 @@
 ﻿using Everglow.Sources.Commons.Core.ModuleSystem;
 using Everglow.Sources.Modules.MythModule.TheFirefly.Backgrounds;
+using Everglow.Sources.Modules.MythModule.Common.FogEffect.Sky;
 using MonoMod.Cil;
 using ReLogic.Content;
 using Terraria.GameContent.Shaders;
@@ -14,6 +15,8 @@ namespace Everglow.Sources.Modules.MythModule
 
         private Asset<Effect> m_waveDisortionScreen = null;
 
+        private FogPass m_fogPass = null;
+
         public void Load()
         {
             if (Main.netMode != NetmodeID.Server)
@@ -25,7 +28,19 @@ namespace Everglow.Sources.Modules.MythModule
                 On.Terraria.GameContent.Shaders.WaterShaderData.Update += WaterShaderData_Update;
                 IL.Terraria.GameContent.Shaders.WaterShaderData.Apply += WaterShaderData_Apply;
                 On.Terraria.GameContent.Shaders.WaterShaderData.StepLiquids += WaterShaderData_StepLiquids;
-            }
+
+				On.Terraria.Graphics.Effects.FilterManager.EndCapture += FilterManager_EndCapture;
+				SkyManager.Instance["TuskSky"] = new TheTusk.Backgrounds.TuskBiomeSky();
+
+				m_fogPass = new FogPass();
+			}
+        }
+
+        private void FilterManager_EndCapture(On.Terraria.Graphics.Effects.FilterManager.orig_EndCapture orig, Terraria.Graphics.Effects.FilterManager self, RenderTarget2D finalTexture, RenderTarget2D screenTarget1, RenderTarget2D screenTarget2, Color clearColor)
+        {
+            m_fogPass.Update();
+            m_fogPass.Apply(screenTarget1, screenTarget2);
+            orig(self, finalTexture, screenTarget1, screenTarget2, clearColor);
         }
 
         private void WaterShaderData_StepLiquids(On.Terraria.GameContent.Shaders.WaterShaderData.orig_StepLiquids orig, WaterShaderData self)

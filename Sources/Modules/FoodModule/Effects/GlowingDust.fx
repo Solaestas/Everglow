@@ -19,12 +19,9 @@ float2 uTargetPosition;
 
 float4 PixelShaderFunction(float2 coords : TEXCOORD0) : COLOR0
 {
-	float4 color = tex2D(uImage0, float2(abs(fmod(coords.x, 1.0)), coords.y));
-	float3 bright = color.xyz * color.w * uColor + (color.w > 0.4 ? ((color.w - 0.4) * 2.5) : float3(0, 0, 0));
-	 
-	float avg = ((uColor.x + uColor.y + uColor.z) / 3.0);
+	float4 color = tex2D(uImage0, float2(coords.x, 0.5 - coords.y + coords.y / uColor.r));//红度用来存扁度，就像囊肿，越红越圆 ，越淡越扁
 
-	return float4(bright, color.w * avg) * avg;
+	return color;
 }
 
 technique Technique1

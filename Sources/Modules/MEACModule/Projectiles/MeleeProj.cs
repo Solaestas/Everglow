@@ -485,6 +485,10 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
         Vector2 r = Vector2.One;
         public void DrawWarp(VFXBatch spriteBatch)
         {
+            if(selfWarp)
+            {
+                return;
+            }
             List<Vector2> SmoothTrailX = CatmullRom.SmoothPath(trailVecs.ToList());//平滑
             List<Vector2> SmoothTrail = new List<Vector2>();
             for (int x = 0; x < SmoothTrailX.Count - 1; x++)
@@ -512,7 +516,40 @@ namespace Everglow.Sources.Modules.MEACModule.Projectiles
                     d -= 6.28f;
                 }
                 float dir = d / MathHelper.TwoPi;
-                
+
+                float dir1 = dir;
+                if (i > 0)
+                {
+                    float d1 = trail[i - 1].ToRotation() + 3.14f + 1.57f;
+                    if (d1 > 6.28f)
+                    {
+                        d1 -= 6.28f;
+                    }
+                    dir1 = d1 / MathHelper.TwoPi;
+                }
+
+                if (dir - dir1 > 0.5)
+                {
+                    var midValue = (1 - dir) / (1 - dir + dir1);
+                    var midPoint = midValue * trail[i] + (1 - midValue) * trail[i - 1];
+                    var oldFactor = (i - 1) / (length - 1f);
+                    var midFactor = midValue * factor + (1 - midValue) * oldFactor;
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(0, w, 0, 1), new Vector3(midFactor, 1, 1)));
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + midPoint * Projectile.scale * 1.1f, new Color(0, w, 0, 1), new Vector3(midFactor, 0, 1)));
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(1, w, 0, 1), new Vector3(midFactor, 1, 1)));
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + midPoint * Projectile.scale * 1.1f, new Color(1, w, 0, 1), new Vector3(midFactor, 0, 1)));
+                }
+                if (dir1 - dir > 0.5)
+                {
+                    var midValue = (1 - dir1) / (1 - dir1 + dir);
+                    var midPoint = midValue * trail[i - 1] + (1 - midValue) * trail[i];
+                    var oldFactor = (i - 1) / (length - 1f);
+                    var midFactor = midValue * oldFactor + (1 - midValue) * factor;
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(1, w, 0, 1), new Vector3(midFactor, 1, 1)));
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + midPoint * Projectile.scale * 1.1f, new Color(1, w, 0, 1), new Vector3(midFactor, 0, 1)));
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(0, w, 0, 1), new Vector3(midFactor, 1, 1)));
+                    bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + midPoint * Projectile.scale * 1.1f, new Color(0, w, 0, 1), new Vector3(midFactor, 0, 1)));
+                }
                 bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(dir, w, 0, 1), new Vector3(factor, 1, w)));
                 bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + trail[i] * Projectile.scale * 1.1f, new Color(dir, w, 0, 1), new Vector3(factor, 0, w)));
             }

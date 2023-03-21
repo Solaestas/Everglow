@@ -104,7 +104,7 @@
 			Sunflower : "Диск-подсолнух"
 			ThunderFlower : "Цветок света"
 			World : "Мир"
-			XmaxWhip : "Хлыст Рождественской елки"
+			XmasWhip : "Хлыст Рождественской елки"
 			BlueGel : "Коагулированный Синий Гель"
 			BlueTorchFlower : "Нефритово-Голубой Ледяной покер"
 			CorruptEye : "Чешуйчатый Проклятый Глаз"
@@ -174,29 +174,29 @@
 			FragransMagic : Магия Луны и Драцены
 			FragransSpear : Луна Не Светит
 			FragransStaff : Посох бомб Драцены
-			BlackWoodenClub : Эбеновая дубинка
-			BloodClub : Багряновая дубинка
-			BloodLiquidClub : Ихоровая дубинка
+			EbonwoodClub : Эбеновая дубинка
+			CrimsonClub : Багряновая дубинка
+			IchorClub : Ихоровая дубинка
 			CactusClub : Кактусовая дубинка
 			CobaltClub : Кобальтовая дубинка
-			ColdWoodenClub : Boreal Wood Club
+			BorealWoodClub : Boreal Wood Club
 			CopperClub : Медная дубинка
 			CorruptClub : Corruption Club
 			CrystalClub : Кристальная дубинка
 			CurseClub : Cursed Flame Club
-			DarkWoodenClub : Shadewood Club
+			ShadewoodClub : Shadewood Club
 			GoldClub : Золотая дубинка
 			IronClub : Железная дубинка
 			LeadClub : Свинцовая дубинка
-			LeafClub : Хлорофитовая дубинка
+			ChlorophyteClub : Хлорофитовая дубинка
 			MeteorClub : Метеоритовая дубинка
 			MithrilClub : Мифриловая дубинка
-			MountainCuClub : Орихалковая дубинка
+			OrichalcumClub : Орихалковая дубинка
 			PalladiumClub : Паладиевая дубинка
-			PalmWoodenClub : Дубинка из пальмового дерева
-			PearlWoodenClub : Перламутровая дубинка
+			PalmWoodClub : Дубинка из пальмового дерева
+			PearlwoodClub : Перламутровая дубинка
 			PlatinumClub : Платиновая дубинка
-			RedWoodenClub : Mahogany Club
+			RichMahoganyClub : Mahogany Club
 			RefinedClub : Адамантитовая Club
 			SilverClub : Серебряная дубинка
 			SpikeClub : Шипастая дубинка
@@ -259,9 +259,6 @@
 			LanternPost1 : Фонарный столб
 			LanternPost2 : Фонарный столб
 			YellowDynastyShingles : Черепица Желтой Династии
-			DiscordBallF1 : Discord Crystal Ball · The Ancient Path
-			LiftLamp : Lift Indicator
-			TestItem : Деревянный Подъемник
 			EkandaBrick : Ekanda Brick
 			Guding : Ekanda Alloy
 			NoFlawsDream : Flawless Dream
@@ -396,6 +393,10 @@
 				WatermelonPlate : "Watermelon Plate"
 
 			#Yggdrasil Items
+			YggdrasilCapital : "'An Illusion of The Yggdrasil'"
+			DiscordBallF1 : Discord Crystal Ball · The Ancient Path
+			LiftLamp : Lift Indicator
+			TestItem : Деревянный Подъемник
 
 				#Yggdrasil Town
 				ChinesePartitionLamp : "Chinese Partition Lamp"
@@ -445,7 +446,7 @@
 			Sunflower : "Оружие, сделанное из подсолнухов, имеет цвет надежды"
 			ThunderFlower : "Стреляет грозовыми шарами \n'Слишком много снарядов!'"
 			World : "Призывает 'Мир' на курсоре, щелкните правой кнопкой мыши, когда он вызывается, чтобы переключиться между режимом следования и режимом разреза\n 'Здесь собрана сила всей земли...'"
-			XmaxWhip : "{$Mods.Everglow.Common.WarWhipGTooltip}\nНаносит урон рождественским огням при попадании во врагов \n 'Намного лучше, чем меч Рождественской елки'"
+			XmasWhip : "{$Mods.Everglow.Common.WarWhipGTooltip}\nНаносит урон рождественским огням при попадании во врагов \n 'Намного лучше, чем меч Рождественской елки'"
 			BlueGel : "Увеличивает максимальную ману на 30 и регенерацию маны на 4"
 			BlueTorchFlower : "Увеличивает максимальную ману на 20\nУдар по врагу восстанавливает 2 маны, этот эффект имеет 0,2 сек кд\n'Разновидность раскаленного докрасна покера'"
 			CorruptEye : "5 защиты\nувеличивает шанс крита на 4%\nДает иммунитет к Проклятому Огню\nВысвобождает проклятое пламя при ударе\nКуда бы ни ушел его владелец, он все еще полон проклятий врагам'"
@@ -609,29 +610,29 @@
 			FragransMagic : Don't be lonely when moon and fragrans bright, breeze and moon still.
 			FragransSpear : Don't be lonely when moon and fragrans bright, breeze and moon still.
 			FragransStaff : Don't be lonely when moon and fragrans bright, breeze and moon still.
-			BlackWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
-			BloodClub : "{$Mods.Everglow.Common.ClubGT}"
-			BloodLiquidClub : "{$Mods.Everglow.Common.ClubGT}"
+			EbonwoodClub : "{$Mods.Everglow.Common.ClubGT}"
+			CrimsonClub : "{$Mods.Everglow.Common.ClubGT}"
+			IchorClub : "{$Mods.Everglow.Common.ClubGT}"
 			CactusClub : "{$Mods.Everglow.Common.ClubGT}"
 			CobaltClub : "{$Mods.Everglow.Common.ClubGT}"
-			ColdWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
+			BorealWoodClub : "{$Mods.Everglow.Common.ClubGT}"
 			CopperClub : "{$Mods.Everglow.Common.ClubGT}"
 			CorruptClub : "{$Mods.Everglow.Common.ClubGT}"
 			CrystalClub : "{$Mods.Everglow.Common.ClubGT}"
 			CurseClub : "{$Mods.Everglow.Common.ClubGT}"
-			DarkWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
+			ShadewoodClub : "{$Mods.Everglow.Common.ClubGT}"
 			GoldClub : "{$Mods.Everglow.Common.ClubGT}"
 			IronClub : "{$Mods.Everglow.Common.ClubGT}"
 			LeadClub : "{$Mods.Everglow.Common.ClubGT}"
-			LeafClub : "{$Mods.Everglow.Common.ClubGT}"
+			ChlorophyteClub : "{$Mods.Everglow.Common.ClubGT}"
 			MeteorClub : "{$Mods.Everglow.Common.ClubGT}"
 			MithrilClub : "{$Mods.Everglow.Common.ClubGT}"
-			MountainCuClub : "{$Mods.Everglow.Common.ClubGT}"
+			OrichalcumClub : "{$Mods.Everglow.Common.ClubGT}"
 			PalladiumClub : "{$Mods.Everglow.Common.ClubGT}"
-			PalmWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
-			PearlWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
+			PalmWoodClub : "{$Mods.Everglow.Common.ClubGT}"
+			PearlwoodClub : "{$Mods.Everglow.Common.ClubGT}"
 			PlatinumClub : "{$Mods.Everglow.Common.ClubGT}"
-			RedWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
+			RichMahoganyClub : "{$Mods.Everglow.Common.ClubGT}"
 			RefinedClub : "{$Mods.Everglow.Common.ClubGT}"
 			SilverClub : "{$Mods.Everglow.Common.ClubGT}"
 			SpikeClub : "{$Mods.Everglow.Common.ClubGT}"
@@ -644,8 +645,6 @@
 			TitaniumClub : "{$Mods.Everglow.Common.ClubGT}"
 			TungstenClub : "{$Mods.Everglow.Common.ClubGT}"
 			WoodenClub : "{$Mods.Everglow.Common.ClubGT}"
-			LiftLamp : ""
-			TestItem : ""
 			EkandaBrick : ""
 			Guding : ""
 			NoFlawsDream : ""
@@ -674,6 +673,12 @@
 				'''
 
 			#流萤系列物品
+			FireflyCapital : 
+				'''
+				Brings you to The Firefly
+				{$Mods.Everglow.Common.DebugItem}
+				'''
+
 			GlowBeadGun : 
 				'''
 				Hold attack to charge
@@ -697,12 +702,31 @@
 			DarknessFan : "{$Mods.Everglow.Common.LegendWeapon}\n{$Mods.Everglow.Common.WarWhipGT}\nStrike enemies with the fan and Phantom Butterflies (PBs)\nRight click to throw out the fan\nThe fan itself inflicts Mark of PB (stackable), each level increases damage dealt by PBs by 10%\nMax stack increases with Sync level"
 
 			# 天穹树系列物品
+			YggdrasilCapital : 
+				'''
+				Brings you to The Yggdrasil
+				{$Mods.Everglow.Common.DebugItem}
+				'''
+			# LiftLamp
+			TestItem : 
+				'''
+				{$Mods.Everglow.Common.DebugItem}
+				'''
 				# 天穹树小镇
 				CyanVinePickaxe : 
 					'''
 					Allows you to destroy Fossilised Dragonscale Woods
 					Mines Cyan Ores faster
 					'''
+			# Extra Debug Items
+			HardmodeItem : 
+			'''
+			{$Mods.Everglow.Common.DebugItem}
+			'''
+			LifeMaxItem : 
+			'''
+			{$Mods.Everglow.Common.DebugItem}
+			'''
 
 			#Music Boxes
 			GlowWoodMusicBox : "Plays 'Setnour6 - Within the Giant Cocoon (身陷巨茧)'"
@@ -1449,6 +1473,9 @@
 			NotThirsty : "You don't want to drink"
 			SatietyLevel: 
 			{
+				-3: "starving"
+				-2: "hungry"
+				-1: "peckish"
 				0 : "empty"
 				1 : "well fed"
 				2 : "satisfied"
@@ -1463,13 +1490,23 @@
 			}
 			FireflyItems :
 			{
+				MothEyeCriteriaText : "[c/6B6BB2:In order to harness a fragment of the ommateum, a powerful underworld creature must be slain]"
 				MothEyeText0 : "[c/7FC1FF:While in the Firefly biome:]"
 				MothEyeText1 : "[c/7FC1FF:- Mana cost is reduced by 5%]"
 				MothEyeText2 : "[c/7FC1FF:- The effectiveness of mana sickness is reduced by 4]"
 				MothEyeText3 : "[c/7FC1FF:- All Firefly weapons deal 5% more damage]"
 				MothEyeText4 : "[c/7FC1FF:- Some Firefly-related items gain bonuses]"
 				MothEyeBonusText : "[c/7FC1FF:Bonus gained from {$Mods.Everglow.ItemName.MothEye}:]"
-				MEyeBonusTextMothBlade : "[c/7FC1FF:More moths appear from the blade]"
+				MEyeBonusTextMothBlade : "[c/7FC1FF:- Moths appearing from this blade move faster]"
+				MEyeBonusTextMothBow : "[c/7FC1FF:- Reduces the charging time of the bow]"
+				MEyeBonusTextMothGun0 : "[c/7FC1FF:- The phosphorescent bullets deal more damage]"
+				MEyeBonusTextMothGun1 : "[c/7FC1FF:- Prevents recoil from occuring]"
+				MEyeBonusTextMothYoyo : "[c/7FC1FF:- More moths appear from this yoyo]"
+				MEyeBonusTextMothChry0 : "[c/7FC1FF:- Projectiles summoned from the moths can go through tiles]"
+				MEyeBonusTextMothChry1 : "[c/7FC1FF:- The moths have a chance to shoot a stronger projectile]"
+				MEyeBonusTextMothFan : "[c/7FC1FF:- Moths appearing from this fan last longer]"
+				MEyeBonusTextGlowSword0 : "[c/7FC1FF:- The initial scale of the glow wood sword projectiles are larger]"
+				MEyeBonusTextGlowSword1 : "[c/7FC1FF:- Glow sword projectiles deal more damage]"
 				FFBBadge0 : "[c/7FC1FF:'Affected by rage of that giant moth, your attacks become wilder']"
 				FFBBadge1 : "[c/7FC1FF:Defense is lowered based on how much defense you currently have, up to -12]"
 				FFBBadge2 : "[c/7FC1FF:Increases damage by 18%]"

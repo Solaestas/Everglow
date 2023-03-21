@@ -26,6 +26,11 @@ Mods:
 			ExcluWeapon : 专属武器
 			MythWeapon : 神话武器
 			LegendWeapon : 传说武器
+			DebugItem : 
+				'''
+				! 调试物品 !
+				后果自负
+				'''
 
 			#世界系统WorldSystem
 			WorldSystem:
@@ -95,7 +100,7 @@ Mods:
 			Sunflower : "向日飞盘"
 			ThunderFlower : "雷之花"
 			World : "世界"
-			XmaxWhip : "圣诞树鞭"
+			XmasWhip : "圣诞树鞭"
 			BloodGoldBlade : "暗金屠杀"
 			BloodLightCyanFlame : "血光青炎"
 			BlueRain : "雨落蓝池"
@@ -180,29 +185,29 @@ Mods:
 			FragransMagic : 金堆作浪
 			FragransSpear : 月色无芒
 			FragransStaff : 闪耀金花
-			BlackWoodenClub : 乌木棍棒
-			BloodClub : 猩红破风棍
-			BloodLiquidClub : 灵液棍
+			EbonwoodClub : 乌木棍棒
+			CrimsonClub : 猩红破风棍
+			IchorClub : 灵液棍
 			CactusClub : 仙人掌棍
 			CobaltClub : 钴棍
-			ColdWoodenClub : 针叶木棍
+			BorealWoodClub : 针叶木棍
 			CopperClub : 铜棍
 			CorruptClub : 魔影棍
 			CrystalClub : 水晶棍
 			CurseClub : 咒火棍
-			DarkWoodenClub : 暗影木棍
+			ShadewoodClub : 暗影木棍
 			GoldClub : 金棍
 			IronClub : 铁棍
 			LeadClub : 铅棍
-			LeafClub : 叶绿棍
+			ChlorophyteClub : 叶绿棍
 			MeteorClub : 流星棍
 			MithrilClub : 秘银棍
-			MountainCuClub : 山铜棍
+			OrichalcumClub : 山铜棍
 			PalladiumClub : 钯金棍
-			PalmWoodenClub : 棕榈木棍
-			PearlWoodenClub : 珍珠木棍
+			PalmWoodClub : 棕榈木棍
+			PearlwoodClub : 珍珠木棍
 			PlatinumClub : 铂金棍
-			RedWoodenClub : 红木棍
+			RichMahoganyClub : 红木棍
 			RefinedClub : 精金棍
 			SilverClub : 银棍
 			SpikeClub : 尖刺棍
@@ -261,9 +266,6 @@ Mods:
 			LanternCrystal : 皇城晶塔
 			LanternPost1 : 灯笼柱
 			LanternPost2 : 灯笼柱
-			DiscordBallF1 : 混沌晶球·天穹古道
-			LiftLamp : 电梯指示灯
-			TestItem : 木制升降梯
 			EkandaBrick : 埃坎达砖
 			Guding : 埃坎达合金
 			NoFlawsDream : 无瑕梦境
@@ -398,6 +400,9 @@ Mods:
 				WatermelonPlate : "西瓜拼盘"
 
 			#天穹树系列物品
+			YggdrasilCapital : "'天穹印象'"
+			LiftLamp : 电梯指示灯
+			TestItem : 木制升降梯
 
 				#天穹树小镇
 				ChinesePartitionLamp : "中式屏风灯"
@@ -413,6 +418,7 @@ Mods:
 				StreetLantern : "灯笼街灯"
 				YellowDynastyShingles : "黄王朝瓦"
 				CyanVinePickaxe : "青缎镐"
+				DiscordBallF1 : 混沌晶球·天穹古道
 
 			#Plant Module Items
 			CactusBall : "仙人球棍"
@@ -446,7 +452,7 @@ Mods:
 			Sunflower : "葵花打造的武器,拥有象征希望的色彩"
 			ThunderFlower : "射出雷暴球\n'射弹太多了！'"
 			World : "在鼠标处召唤“世界”，召唤时右键以在跟随与斩击模式间切换\n'整片大地的力量,归结于此...'"
-			XmaxWhip : "{$Mods.Everglow.Common.WarWhipGT}\n击中敌人时爆出伤害性的彩灯\n'比圣诞树剑好太多'"
+			XmasWhip : "{$Mods.Everglow.Common.WarWhipGT}\n击中敌人时爆出伤害性的彩灯\n'比圣诞树剑好太多'"
 			BloodGoldBlade : "{$Mods.Everglow.Common.MythWeapon}\n向四周释放灵液刃\n弑神之刃,沾染了众神之血"
 			BloodLightCyanFlame : "{$Mods.Everglow.Common.LegendWeapon}\n交替掷出激光旋刃和咒火旋刃\n'它们本应是双子魔眼的武器,幸好你救出了机械师'"
 			BlueRain : "{$Mods.Everglow.Common.LegendWeapon}\n长按右键蓄力重击\n雨滴为保持纯净抗拒与海水融合,最终在深海的乱流中汇聚成这个形状"
@@ -624,29 +630,29 @@ Mods:
 			# ToothKnfe : ""
 			# ToothMagicBall : ""
 			ToothStaff : 释放拔地而起的獠牙刺
-			BlackWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
-			BloodClub : "{$Mods.Everglow.Common.ClubGT}"
-			BloodLiquidClub : "{$Mods.Everglow.Common.ClubGT}"
+			EbonwoodClub : "{$Mods.Everglow.Common.ClubGT}"
+			CrimsonClub : "{$Mods.Everglow.Common.ClubGT}"
+			IchorClub : "{$Mods.Everglow.Common.ClubGT}"
 			CactusClub : "{$Mods.Everglow.Common.ClubGT}"
 			CobaltClub : "{$Mods.Everglow.Common.ClubGT}"
-			ColdWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
+			BorealWoodClub : "{$Mods.Everglow.Common.ClubGT}"
 			CopperClub : "{$Mods.Everglow.Common.ClubGT}"
 			CorruptClub : "{$Mods.Everglow.Common.ClubGT}"
 			CrystalClub : "{$Mods.Everglow.Common.ClubGT}"
 			CurseClub : "{$Mods.Everglow.Common.ClubGT}"
-			DarkWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
+			ShadewoodClub : "{$Mods.Everglow.Common.ClubGT}"
 			GoldClub : "{$Mods.Everglow.Common.ClubGT}"
 			IronClub : "{$Mods.Everglow.Common.ClubGT}"
 			LeadClub : "{$Mods.Everglow.Common.ClubGT}"
-			LeafClub : "{$Mods.Everglow.Common.ClubGT}"
+			ChlorophyteClub : "{$Mods.Everglow.Common.ClubGT}"
 			MeteorClub : "{$Mods.Everglow.Common.ClubGT}"
 			MithrilClub : "{$Mods.Everglow.Common.ClubGT}"
-			MountainCuClub : "{$Mods.Everglow.Common.ClubGT}"
+			OrichalcumClub : "{$Mods.Everglow.Common.ClubGT}"
 			PalladiumClub : "{$Mods.Everglow.Common.ClubGT}"
-			PalmWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
-			PearlWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
+			PalmWoodClub : "{$Mods.Everglow.Common.ClubGT}"
+			PearlwoodClub : "{$Mods.Everglow.Common.ClubGT}"
 			PlatinumClub : "{$Mods.Everglow.Common.ClubGT}"
-			RedWoodenClub : "{$Mods.Everglow.Common.ClubGT}"
+			RichMahoganyClub : "{$Mods.Everglow.Common.ClubGT}"
 			RefinedClub : "{$Mods.Everglow.Common.ClubGT}"
 			SilverClub : "{$Mods.Everglow.Common.ClubGT}"
 			SpikeClub : "{$Mods.Everglow.Common.ClubGT}"
@@ -659,8 +665,6 @@ Mods:
 			TitaniumClub : "{$Mods.Everglow.Common.ClubGT}"
 			TungstenClub : "{$Mods.Everglow.Common.ClubGT}"
 			WoodenClub : "{$Mods.Everglow.Common.ClubGT}"
-			# LiftLamp : ""
-			# TestItem : ""
 			# EkandaBrick : ""
 			# Guding : ""
 			# NoFlawsDream : ""
@@ -689,6 +693,12 @@ Mods:
 				'''
 
 			#流萤系列物品
+			FireflyCapital : 
+				'''
+				带你到流萤
+				{$Mods.Everglow.Common.DebugItem}
+				'''
+
 			GlowBeadGun : 
 				'''
 				长按攻击键以充能
@@ -716,12 +726,31 @@ Mods:
 			DarknessFan : "{$Mods.Everglow.Common.LegendWeapon}\n无召唤标记伤害\n你的召唤物将集中打击敌人\n无召唤标记伤害\n你的召唤物将集中打击被扇子击中的敌人\n以扇子和幻蝶打击敌人，右键扔出扇子\n扇子本体施加幻蝶之印(可叠加), 每层使幻蝶造成的伤害提高10%\n层数上限随共鸣层数增长\n'蕴含着被巨蛾吞噬的灵魂'"
 
 			# 天穹树系列物品
+			YggdrasilCapital : 
+				'''
+				带你到天穹树
+				{$Mods.Everglow.Common.DebugItem}
+				'''
+			# LiftLamp
+			TestItem : 
+				'''
+				{$Mods.Everglow.Common.DebugItem}
+				'''
 				# 天穹树小镇
 				CyanVinePickaxe : 
 					'''
 					允许你破坏石化龙鳞木
 					加速破坏青缎矿
 					'''
+			# Extra Debug Items
+			HardmodeItem : 
+			'''
+			{$Mods.Everglow.Common.DebugItem}
+			'''
+			LifeMaxItem : 
+			'''
+			{$Mods.Everglow.Common.DebugItem}
+			'''
 
 			#Music Boxes
 			GlowWoodMusicBox : "播放 'Setnour6 - Within the Giant Cocoon (身陷巨茧)'"
@@ -1461,10 +1490,13 @@ Mods:
 			NotThirsty : "你不想喝东西"
 			SatietyLevel: 
 			{
-				0 : "腹中空空"
-				1 : "吃得好"
-				2 : "很满意"
-				3 : "吃撑了"
+				-3: "极饿"
+				-2: "饥饿"
+				-1: "稍饿"
+				0: "腹中空空"
+				1: "吃得好"
+				2: "很满意"
+				3: "吃撑了"
 			}
 		}
 		ExtraTooltip : 
@@ -1475,13 +1507,23 @@ Mods:
 			}
 			FireflyItems :
 			{
+				MothEyeCriteriaText : "[c/6B6BB2:为了掌控这块蛾眼碎片, 必须先杀死一只强大的地下生物]"
 				MothEyeText0 : "[c/7FC1FF:处于流萤群系时:]"
 				MothEyeText1 : "[c/7FC1FF:- 降低5%魔力消耗]"
 				MothEyeText2 : "[c/7FC1FF:- 降低4魔力病的效力]"
 				MothEyeText3 : "[c/7FC1FF:- 增加5%流萤武器的伤害]"
 				MothEyeText4 : "[c/7FC1FF:- 部分流萤物品获得增幅]"
 				MothEyeBonusText : "[c/7FC1FF:来自 {$Mods.Everglow.ItemName.MothEye} 的增幅:]"
-				MEyeBonusTextMothBlade : "[c/7FC1FF:释放更多幻影蛾]"
+				MEyeBonusTextMothBlade : "[c/7FC1FF:- 从此刃中飞出的飞蛾移速更快]"
+				MEyeBonusTextMothBow : "[c/7FC1FF:- 此弓蓄力更快]"
+				MEyeBonusTextMothGun0 : "[c/7FC1FF:- 磷光弹造成更多伤害]"
+				MEyeBonusTextMothGun1 : "[c/7FC1FF:- 不再产生后坐]"
+				MEyeBonusTextMothYoyo : "[c/7FC1FF:- 更多飞蛾从此球中飞出]"
+				MEyeBonusTextMothChry0 : "[c/7FC1FF:- 小飞蛾发出的射弹无视物块]"
+				MEyeBonusTextMothChry1 : "[c/7FC1FF:- 小飞蛾有几率发射更强的射弹]"
+				MEyeBonusTextMothFan : "[c/7FC1FF:- 从此扇中飞出的飞蛾存活更久]"
+				MEyeBonusTextGlowSword0 : "[c/7FC1FF:- 萤火木剑的射弹的初始大小变大]"
+				MEyeBonusTextGlowSword1 : "[c/7FC1FF:- 萤火木剑的射弹造成更多伤害]"
 				FFBBadge0 : "[c/7FC1FF:'受到那只巨蛾怒气的影响,你的攻击变得更加狂野']"
 				FFBBadge1 : "[c/7FC1FF:防御基于当前的值降低, 最多-12]"
 				FFBBadge2 : "[c/7FC1FF:增加18%伤害]"

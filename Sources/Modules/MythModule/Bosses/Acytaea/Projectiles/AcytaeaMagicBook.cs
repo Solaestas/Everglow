@@ -21,9 +21,7 @@
             Projectile.DamageType = DamageClass.Magic;
         }
 
-        private float K = 10;
         private int AIMNpc = -1;
-        private float ka = 1;
 
         public override void AI()
         {
@@ -39,7 +37,6 @@
                     Projectile.NewProjectile(null, Projectile.Center, new Vector2(Projectile.spriteDirection * 5, -3), ModContent.ProjectileType<MeteroFri>(), 40, 3, Main.myPlayer);
                 }
             }
-            ka = 1;
             for (int f = 0; f < 200; f++)
             {
                 if (Main.npc[f].type == ModContent.NPCType<NPCs.Acytaea>())

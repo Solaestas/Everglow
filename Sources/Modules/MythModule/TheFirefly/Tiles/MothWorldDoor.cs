@@ -63,6 +63,8 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Tiles
             {
                 if (SubWorldModule.SubworldSystem.IsActive<MothWorld>())
                 {
+                    player.position.X -= 256;
+                    player.position.Y -= 128;
                     SubWorldModule.SubworldSystem.Exit();
                 }
                 else

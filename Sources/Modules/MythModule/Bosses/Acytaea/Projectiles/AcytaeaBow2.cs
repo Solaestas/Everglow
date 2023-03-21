@@ -14,9 +14,6 @@
             Projectile.tileCollide = true;
             Projectile.DamageType = DamageClass.Ranged;
         }
-
-        private float K = 10;
-
         public override void Kill(int timeLeft)
         {
             Projectile.NewProjectile(null, Projectile.Center, new Vector2(34, 0).RotatedBy(Projectile.ai[0]), ModContent.ProjectileType<AcytaeaArrow>(), Projectile.damage, 3, Main.LocalPlayer.whoAmI);

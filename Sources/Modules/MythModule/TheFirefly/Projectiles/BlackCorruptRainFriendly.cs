@@ -105,13 +105,13 @@ namespace Everglow.Sources.Modules.MythModule.TheFirefly.Projectiles
             for (int j = 0; j < timeLeft / 24; j++)
             {
                 Vector2 v0 = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) * Projectile.scale * 0.3f;
-                int dust0 = Dust.NewDust(Projectile.Center + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<BlueGlowAppear>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(0.6f, 1.8f) * Projectile.scale * 0.4f);
+                int dust0 = Dust.NewDust(Projectile.Center + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<BlueGlowAppear>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(0.6f, 1.8f) * Projectile.scale * 0.4f);
                 Main.dust[dust0].noGravity = true;
             }
             for (int j = 0; j < timeLeft / 12; j++)
             {
                 Vector2 v0 = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) * Projectile.scale * 0.3f;
-                int dust1 = Dust.NewDust(Projectile.Center + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<BlueParticleDark2>(), v0.X, v0.Y, 100, default(Color), Main.rand.NextFloat(3.7f, 5.1f));
+                int dust1 = Dust.NewDust(Projectile.Center + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<BlueParticleDark2>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(3.7f, 5.1f));
                 Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 50);
             }
         }
