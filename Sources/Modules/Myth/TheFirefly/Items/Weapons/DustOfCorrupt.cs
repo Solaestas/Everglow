@@ -4,15 +4,8 @@ namespace Everglow.Myth.TheFirefly.Items.Weapons;
 
 public class DustOfCorrupt : ModItem
 {
-	public override void SetStaticDefaults()
-	{
-		Item.staff[Item.type] = true;
-		
-	}
-
 	public override void SetDefaults()
 	{
-		
 		Item.damage = 13;
 		Item.DamageType = DamageClass.Magic;
 		Item.mana = 4;
@@ -29,6 +22,11 @@ public class DustOfCorrupt : ModItem
 		Item.autoReuse = true;
 		Item.shoot = ModContent.ProjectileType<Projectiles.CorruptDust>();
 		Item.shootSpeed = 17f;
+	}
+
+	public override void SetStaticDefaults()
+	{
+		Item.staff[Item.type] = true;
 	}
 
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)

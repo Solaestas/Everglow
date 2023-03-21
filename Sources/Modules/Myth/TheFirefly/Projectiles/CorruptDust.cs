@@ -1,16 +1,9 @@
-using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
-using Terraria;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Everglow.Myth.TheFirefly.Projectiles;
 
 public class CorruptDust : ModProjectile
 {
-	public override void SetStaticDefaults()
-	{
-	}
-
 	public override void SetDefaults()
 	{
 		Projectile.width = 18;
@@ -31,8 +24,7 @@ public class CorruptDust : ModProjectile
 
 	public override void AI()
 	{
-		
-		if(Collision.SolidCollision(Projectile.Center + Projectile.velocity,0,0))
+		if (Collision.SolidCollision(Projectile.Center + Projectile.velocity, 0, 0))
 		{
 			Projectile.velocity = Projectile.velocity.RotatedBy(Math.Sin(Projectile.whoAmI) * 0.1f);
 			Projectile.velocity *= 0.93f;
@@ -40,7 +32,7 @@ public class CorruptDust : ModProjectile
 		}
 		else
 		{
-			if(Main.rand.NextBool(2))
+			if (Main.rand.NextBool(2))
 			{
 				float timeValue = Projectile.timeLeft / 60f;
 				int index = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<BlueGlowAppear>(), 0f, 0f, 0, default, Main.rand.NextFloat(0.2f, 0.9f) * timeValue);
@@ -57,10 +49,6 @@ public class CorruptDust : ModProjectile
 		}
 	}
 
-	public override void Kill(int timeLeft)
-	{
-	}
-
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		Projectile.velocity *= Main.rand.NextFloat(0.3f, 0.8f);
@@ -69,22 +57,25 @@ public class CorruptDust : ModProjectile
 	public override void PostDraw(Color lightColor)
 	{
 		float dark = 0.7f;
-		DrawTrail(new Color(dark, dark, dark, dark), MythContent.QuickTexture("TheFirefly/Projectiles/GoldLightDark"));
-		DrawTrail(new Color(0, 0.6f, 1f, 0), MythContent.QuickTexture("TheFirefly/Projectiles/GoldLine"));
+		DrawTrail(new Color(dark, dark, dark, dark), ModAsset.GoldLightDark.Value);
+		DrawTrail(new Color(0, 0.6f, 1f, 0), ModAsset.TheFirefly_GoldLine.Value);
 	}
-	private void DrawTrail(Color c0, Texture2D tex, string fadeTex = "TheFirefly/Projectiles/GoldLineFadePowder")
+
+	private void DrawTrail(Color c0, Texture2D tex, Texture fadeTexture = null)
 	{
+		fadeTexture ??= ModAsset.GoldLineFadePowder.Value;
 		float k0 = Projectile.timeLeft / 60f;
 		var bars = new List<Vertex2D>();
 
-
-		int TrueL = 0;
+		int length = 0;
 		for (int i = 1; i < Projectile.oldPos.Length; ++i)
 		{
 			if (Projectile.oldPos[i] == Vector2.Zero)
+			{
 				break;
+			}
 
-			TrueL++;
+			length++;
 		}
 		for (int i = 1; i < Projectile.oldPos.Length; ++i)
 		{
@@ -94,27 +85,37 @@ public class CorruptDust : ModProjectile
 				width = Projectile.velocity.Length() * 9;
 			}
 			if (i < 10)
+			{
 				width *= i / 10f;
+			}
+
 			if (Projectile.ai[0] == 3)
+			{
 				width *= 0.5f;
+			}
 
 			if (Projectile.oldPos[i] == Vector2.Zero)
+			{
 				break;
+			}
 
 			var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
 			normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
-			var factor = i / (float)TrueL;
+			var factor = i / (float)length;
 			float x0 = factor * 1.6f - (float)(Main.timeForVisualEffects / 315d) + 10000 + MathF.Sin(Projectile.whoAmI);
 			x0 %= 1f;
 			c0.R = (byte)(factor * 120f);
 			c0.G = (byte)((1 - factor) * 140f);
 			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f, 5f), c0, new Vector3(x0, 1, k0 - factor * 0.5f)));
 			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f, 5f), c0, new Vector3(x0, 0, k0 - factor * 0.5f)));
-			if(i < Projectile.oldPos.Length - 1)
+			if (i < Projectile.oldPos.Length - 1)
 			{
 				if (Projectile.oldPos[i + 1] == Vector2.Zero)
+				{
 					break;
-				var factorII = (i + 1) / (float)TrueL;
+				}
+
+				var factorII = (i + 1) / (float)length;
 				var x1 = factorII * 1.6f - (float)(Main.timeForVisualEffects / 315d) + 10000 + MathF.Sin(Projectile.whoAmI);
 				x1 %= 1f;
 				if (x0 > x1)
@@ -130,19 +131,17 @@ public class CorruptDust : ModProjectile
 				}
 			}
 		}
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Effect ef = MythContent.QuickEffect("TheFirefly/Effects/Powderlization");
-		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
-		ef.Parameters["uTransform"].SetValue(model * projection);
-		ef.Parameters["tex0"].SetValue(MythContent.QuickTexture(fadeTex));
-		ef.CurrentTechnique.Passes["Test"].Apply();
-		Texture2D t = tex;
-		Main.graphics.GraphicsDevice.Textures[0] = t;
+
 		if (bars.Count > 3)
+		{
+			Effect e = ModAsset.Powderlization.Value;
+			var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+			var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
+			e.Parameters["uTransform"].SetValue(model * projection);
+			e.Parameters["tex0"].SetValue(fadeTexture);
+			e.CurrentTechnique.Passes["Test"].Apply();
+			Main.graphics.GraphicsDevice.Textures[0] = tex;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		}
 	}
 }
