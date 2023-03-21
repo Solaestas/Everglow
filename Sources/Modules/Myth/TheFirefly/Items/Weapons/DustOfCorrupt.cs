@@ -1,4 +1,4 @@
-﻿using Terraria.DataStructures;
+using Terraria.DataStructures;
 
 namespace Everglow.Myth.TheFirefly.Items.Weapons;
 
@@ -28,12 +28,12 @@ public class DustOfCorrupt : ModItem
 		Item.UseSound = SoundID.Item20;
 		Item.autoReuse = true;
 		Item.shoot = ModContent.ProjectileType<Projectiles.CorruptDust>();
-		Item.shootSpeed = 12f;
+		Item.shootSpeed = 17f;
 	}
 
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
-		Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, 0, player.GetCritChance(DamageClass.Magic));
+		Projectile.NewProjectile(source, position + Vector2.Normalize(velocity) * 48, velocity, type, damage, knockback, player.whoAmI, 0, player.GetCritChance(DamageClass.Magic));
 		return false;
 	}
 }

@@ -1,6 +1,7 @@
 using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
 using Terraria;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Everglow.Myth.TheFirefly.Projectiles;
 
@@ -19,25 +20,41 @@ public class CorruptDust : ModProjectile
 		Projectile.hostile = false;
 		Projectile.ignoreWater = true;
 		Projectile.DamageType = DamageClass.Magic;
-		Projectile.tileCollide = true;
-		Projectile.timeLeft = 1080;
-		Projectile.alpha = 0;
-		Projectile.penetrate = 1;
-		Projectile.scale = 1;
+		Projectile.tileCollide = false;
+		Projectile.timeLeft = 60;
+		Projectile.penetrate = -1;
+		Projectile.usesLocalNPCImmunity = true;
+		Projectile.localNPCHitCooldown = 6;
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 90;
 	}
 
 	public override void AI()
 	{
-		if (Projectile.timeLeft % 3 == 0)
+		
+		if(Collision.SolidCollision(Projectile.Center + Projectile.velocity,0,0))
 		{
-			int index = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<BlueGlowAppear>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.7f, 1.9f));
-			Main.dust[index].velocity = Projectile.velocity * 0.5f;
+			Projectile.velocity = Projectile.velocity.RotatedBy(Math.Sin(Projectile.whoAmI) * 0.1f);
+			Projectile.velocity *= 0.93f;
+			Projectile.friendly = false;
 		}
-		int index2 = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<BlueParticleDark2>(), 0f, 0f, 0, default, Main.rand.NextFloat(3.7f, 5.1f));
-		Main.dust[index2].velocity = Projectile.velocity * 0.5f;
-		Main.dust[index2].alpha = (int)(Main.dust[index2].scale * 50);
+		else
+		{
+			if(Main.rand.NextBool(2))
+			{
+				float timeValue = Projectile.timeLeft / 60f;
+				int index = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<BlueGlowAppear>(), 0f, 0f, 0, default, Main.rand.NextFloat(0.2f, 0.9f) * timeValue);
+				Main.dust[index].velocity = Projectile.velocity * 0.7f + new Vector2(0, 1f).RotatedByRandom(6.283f);
+				Main.dust[index].alpha = Main.rand.Next(240);
+			}
+			if (Main.rand.NextBool(8))
+			{
+				float timeValue = Projectile.timeLeft / 60f;
+				int index = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<BlueGlowAppear>(), 0f, 0f, 0, default, Main.rand.NextFloat(1.2f, 1.9f) * timeValue);
+				Main.dust[index].velocity = Projectile.velocity * 0.5f + new Vector2(0, 1f).RotatedByRandom(6.283f);
+				Main.dust[index].alpha = Main.rand.Next(240);
+			}
+		}
 	}
 
 	public override void Kill(int timeLeft)
@@ -46,21 +63,18 @@ public class CorruptDust : ModProjectile
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
+		Projectile.velocity *= Main.rand.NextFloat(0.3f, 0.8f);
 	}
 
 	public override void PostDraw(Color lightColor)
 	{
-		DrawTrail();
+		float dark = 0.7f;
+		DrawTrail(new Color(dark, dark, dark, dark), MythContent.QuickTexture("TheFirefly/Projectiles/GoldLightDark"));
+		DrawTrail(new Color(0, 0.6f, 1f, 0), MythContent.QuickTexture("TheFirefly/Projectiles/GoldLine"));
 	}
-	private void DrawTrail()
+	private void DrawTrail(Color c0, Texture2D tex, string fadeTex = "TheFirefly/Projectiles/GoldLineFadePowder")
 	{
-		float k1 = 60f;
-		float k0 = (2400 - Projectile.timeLeft) / k1;
-
-		if (Projectile.timeLeft <= 2400 - k1)
-			k0 = 1;
-
-		var c0 = new Color(0, k0 * k0 * 0.4f + 0.2f, k0 * 0.8f + 0.2f, 0);
+		float k0 = Projectile.timeLeft / 60f;
 		var bars = new List<Vertex2D>();
 
 
@@ -74,45 +88,61 @@ public class CorruptDust : ModProjectile
 		}
 		for (int i = 1; i < Projectile.oldPos.Length; ++i)
 		{
-			float width = 36;
-			if (Projectile.timeLeft <= 40)
-				width = Projectile.timeLeft * 0.9f;
+			float width = 108 - k0 * 36;
+			if (width > Projectile.velocity.Length() * 9f)
+			{
+				width = Projectile.velocity.Length() * 9;
+			}
 			if (i < 10)
 				width *= i / 10f;
 			if (Projectile.ai[0] == 3)
 				width *= 0.5f;
+
 			if (Projectile.oldPos[i] == Vector2.Zero)
 				break;
 
 			var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
 			normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
 			var factor = i / (float)TrueL;
-			var w = MathHelper.Lerp(1f, 0.05f, factor);
-			float x0 = factor * 0.6f - (float)(Main.timeForVisualEffects / 35d) + 10000;
+			float x0 = factor * 1.6f - (float)(Main.timeForVisualEffects / 315d) + 10000 + MathF.Sin(Projectile.whoAmI);
 			x0 %= 1f;
-			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 1, w)));
-			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(x0, 0, w)));
-			var factorII = (i + 1) / (float)TrueL;
-			var x1 = factorII * 0.6f - (float)(Main.timeForVisualEffects / 35d) + 10000;
-			x1 %= 1f;
-			if (x0 > x1)
+			c0.R = (byte)(factor * 120f);
+			c0.G = (byte)((1 - factor) * 140f);
+			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f, 5f), c0, new Vector3(x0, 1, k0 - factor * 0.5f)));
+			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f, 5f), c0, new Vector3(x0, 0, k0 - factor * 0.5f)));
+			if(i < Projectile.oldPos.Length - 1)
 			{
-				float DeltaValue = 1 - x0;
-				var factorIII = factorII * x0 + factor * DeltaValue;
-				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factorIII) + new Vector2(5f) - Main.screenPosition, c0, new Vector3(1, 1, 0)));
-				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factorIII) + new Vector2(5f) - Main.screenPosition, c0, new Vector3(1, 0, 0)));
-				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factorIII) + new Vector2(5f) - Main.screenPosition, c0, new Vector3(0, 1, 0)));
-				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factorIII) + new Vector2(5f) - Main.screenPosition, c0, new Vector3(0, 0, 0)));
+				if (Projectile.oldPos[i + 1] == Vector2.Zero)
+					break;
+				var factorII = (i + 1) / (float)TrueL;
+				var x1 = factorII * 1.6f - (float)(Main.timeForVisualEffects / 315d) + 10000 + MathF.Sin(Projectile.whoAmI);
+				x1 %= 1f;
+				if (x0 > x1)
+				{
+					float MidValue = (1 - x0) / (1 - x0 + x1);
+					var factorIII = factorII * (1 - MidValue) + factor * MidValue;
+					Vector2 MidPoint = Projectile.oldPos[i] * (1 - MidValue) + Projectile.oldPos[i + 1] * MidValue;
+					c0.G = (byte)((1 - factor) * 140f);
+					bars.Add(new Vertex2D(MidPoint + normalDir * -width * (1 - factorIII) + new Vector2(5f), c0, new Vector3(1, 1, k0 - factorIII * 0.5f)));
+					bars.Add(new Vertex2D(MidPoint + normalDir * width * (1 - factorIII) + new Vector2(5f), c0, new Vector3(1, 0, k0 - factorIII * 0.5f)));
+					bars.Add(new Vertex2D(MidPoint + normalDir * -width * (1 - factorIII) + new Vector2(5f), c0, new Vector3(0, 1, k0 - factorIII * 0.5f)));
+					bars.Add(new Vertex2D(MidPoint + normalDir * width * (1 - factorIII) + new Vector2(5f), c0, new Vector3(0, 0, k0 - factorIII * 0.5f)));
+				}
 			}
 		}
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Texture2D t = MythContent.QuickTexture("TheFirefly/Projectiles/GoldLine");
+		Effect ef = MythContent.QuickEffect("TheFirefly/Effects/Powderlization");
+		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
+		ef.Parameters["uTransform"].SetValue(model * projection);
+		ef.Parameters["tex0"].SetValue(MythContent.QuickTexture(fadeTex));
+		ef.CurrentTechnique.Passes["Test"].Apply();
+		Texture2D t = tex;
 		Main.graphics.GraphicsDevice.Textures[0] = t;
 		if (bars.Count > 3)
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-
 	}
 }
