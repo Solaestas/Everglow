@@ -1,6 +1,7 @@
 ﻿using Everglow.Sources.Commons.Core.ModuleSystem;
 using Everglow.Sources.Commons.Core.VFX;
 using Everglow.Sources.Commons.Function.ObjectPool;
+using Everglow.Sources.Modules.IIIDModule.Projectiles.NonIIIDProj.GoldenCrack;
 using System;
 using System.Collections.Generic;
 using System.Linq;
