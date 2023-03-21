@@ -6,8 +6,8 @@ public class CorruptDust : ModProjectile
 {
 	public override void SetDefaults()
 	{
-		Projectile.width = 18;
-		Projectile.height = 18;
+		Projectile.width = 10;
+		Projectile.height = 10;
 		Projectile.aiStyle = -1;
 		Projectile.friendly = true;
 		Projectile.hostile = false;
@@ -46,6 +46,17 @@ public class CorruptDust : ModProjectile
 				Main.dust[index].alpha = Main.rand.Next(240);
 			}
 		}
+		for (int i = 1; i < Projectile.oldPos.Length - 5; i += 5)
+		{
+			if (Projectile.oldPos[i] == Vector2.Zero)
+			{
+				break;
+			}
+			float k0 = Projectile.timeLeft / 120f;
+			int length = 60 - Projectile.timeLeft;
+			var factor = i / (float)length;
+			Lighting.AddLight(Projectile.Center, factor * 0.2f * k0, (1 - factor) * 0.3f * k0, k0);
+		}
 	}
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
@@ -58,17 +69,6 @@ public class CorruptDust : ModProjectile
 		float dark = 0.7f;
 		DrawTrail(new Color(dark, dark, dark, dark), ModAsset.CorruptDustDark.Value);
 		DrawTrail(new Color(0, 0.6f, 1f, 0), ModAsset.CorruptDustLine.Value);
-		for (int i = 1; i < Projectile.oldPos.Length - 5; i += 5)
-		{
-			if (Projectile.oldPos[i] == Vector2.Zero)
-			{
-				break;
-			}
-			float k0 = Projectile.timeLeft / 120f;
-			int length = 60 - Projectile.timeLeft;
-			var factor = i / (float)length;
-			Lighting.AddLight(Projectile.Center, factor * 0.2f * k0, (1 - factor) * 0.3f * k0, k0);
-		}
 	}
 
 	private void DrawTrail(Color c0, Texture2D tex, Texture fadeTexture = null)
@@ -90,7 +90,7 @@ public class CorruptDust : ModProjectile
 		for (int i = 1; i < Projectile.oldPos.Length; ++i)
 		{
 			float width = 108 - k0 * 36;
-
+			width *= Projectile.ai[0];
 			if (i < 10)
 			{
 				width *= i / 10f;
