@@ -34,14 +34,14 @@ public class CorruptDust : ModProjectile
 			if (Main.rand.NextBool(2))
 			{
 				float timeValue = Projectile.timeLeft / 60f;
-				int index = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<BlueGlowAppear>(), 0f, 0f, 0, default, Main.rand.NextFloat(0.2f, 0.9f) * timeValue);
+				int index = Dust.NewDust(Projectile.Center - new Vector2(5), 2, 2, ModContent.DustType<BlueGlowAppear>(), 0f, 0f, 0, default, Main.rand.NextFloat(0.2f, 0.9f) * timeValue);
 				Main.dust[index].velocity = Projectile.velocity * 0.7f + new Vector2(0, 1f).RotatedByRandom(6.283f);
 				Main.dust[index].alpha = Main.rand.Next(240);
 			}
 			if (Main.rand.NextBool(8))
 			{
 				float timeValue = Projectile.timeLeft / 60f;
-				int index = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<BlueGlowAppear>(), 0f, 0f, 0, default, Main.rand.NextFloat(1.2f, 1.9f) * timeValue);
+				int index = Dust.NewDust(Projectile.Center - new Vector2(5), 2, 2, ModContent.DustType<BlueGlowAppear>(), 0f, 0f, 0, default, Main.rand.NextFloat(1.2f, 1.9f) * timeValue);
 				Main.dust[index].velocity = Projectile.velocity * 0.5f + new Vector2(0, 1f).RotatedByRandom(6.283f);
 				Main.dust[index].alpha = Main.rand.Next(240);
 			}
