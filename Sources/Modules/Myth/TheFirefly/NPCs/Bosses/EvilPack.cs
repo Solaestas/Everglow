@@ -1,3 +1,4 @@
+using Everglow.Commons.FeatureFlags;
 using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
 using Terraria;
@@ -83,7 +84,7 @@ public class EvilPack : ModNPC
 					}
 					if (!NPC.AnyNPCs(ModContent.NPCType<CorruptMoth>()))
 					{
-						if ((SteamID64 == 76561198074262598 /*Cataclysmic Armageddon*/ || SteamID64 == 76561198300589095 /*Setnour6*/)/* && EverglowConfig.DebugMode*/)
+						if ((SteamID64 == 76561198074262598 /*Cataclysmic Armageddon*/ || SteamID64 == EverglowConfig.GetDevSteamID64() /*76561198300589095*/ /*Setnour6*/)/* && EverglowConfig.DebugMode*/)
 							Main.NewText("Cataclysmic Armageddon's Long Lost Older Cousin Calamatious Annihilation the Corrupted Moth " + $"{Language.GetTextValue(Language.GetTextValue("Mods.Everglow.Common.Message.HasAwoken"))}", 175, 75, 255);
 						else
 						{
