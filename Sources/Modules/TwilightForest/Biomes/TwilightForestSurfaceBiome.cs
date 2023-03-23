@@ -60,12 +60,11 @@ namespace Everglow.TwilightForest.Biomes
 					InsertBiomeValue = 0;
 				}
 			}
-			tileColor *= 1 - InsertBiomeValue * 0.1f;
+			tileColor *= 1 + InsertBiomeValue * 2.7f;
 			tileColor.R = (byte)(tileColor.R * (1 + InsertBiomeValue * 0.13f));
 			tileColor.G = (byte)(tileColor.G * (1 - InsertBiomeValue * 0.22f));
 			tileColor.B = (byte)(tileColor.B * (1 + InsertBiomeValue * 0.7f));
-			backgroundColor *= 1 + InsertBiomeValue * 0.4f;
-			backgroundColor.A = 255;
+			Main.ColorOfTheSkies = tileColor * 100.0f;
 		}
 	}
 }

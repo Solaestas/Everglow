@@ -76,8 +76,8 @@ public class TwilightTree : ModTile
 			}
 			else
 			{
-				var HalfSize = new Vector2(-60, -60);
-				ropes[style] = ropeManager.LoadRope(new Rectangle(0, 0, 30, 6), tileCenterWS + HalfSize, () => Vector2.Zero);
+				var HalfSize = new Vector2(-30, -50);
+				ropes[style] = ropeManager.LoadRope(new Rectangle(0, 0, 18, 6), tileCenterWS + HalfSize, () => Vector2.Zero);
 				hasRope.Add((xTS, yTS), (style, ropes[style]));
 			}
 			basePositions[style] = tileCenterWS;
