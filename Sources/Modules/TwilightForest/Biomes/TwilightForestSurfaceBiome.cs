@@ -7,6 +7,7 @@ using Everglow.TwilightForest.Tiles;
 using Everglow.Myth.TheFirefly.Water;
 using System.Threading.Tasks;
 using Terraria.Graphics.Effects;
+using Everglow.TwilightForest.Common;
 
 namespace Everglow.TwilightForest.Biomes
 {
@@ -15,7 +16,8 @@ namespace Everglow.TwilightForest.Biomes
 		public override ModWaterStyle WaterStyle => ModContent.GetInstance<TwilightForestWaterStyle>();
 		public override ModSurfaceBackgroundStyle SurfaceBackgroundStyle => ModContent.GetInstance<TwilightForestSurfaceBackgroundStyle>();
 		public override CaptureBiome.TileColorStyle TileColorStyle => CaptureBiome.TileColorStyle.Crimson;
-		public override int Music => 0;//TODO:Need a music
+		public override int Music => TwilightForestContent.QuickMusic("PlaceholderTwilightForestBGM");// This is a placeholder song //TODO:Make official BGM
+		public override SceneEffectPriority Priority => SceneEffectPriority.BiomeLow;
 		public override string BestiaryIcon => base.BestiaryIcon;
 		public override string BackgroundPath => base.BackgroundPath;
 		public override Color? BackgroundColor => base.BackgroundColor;

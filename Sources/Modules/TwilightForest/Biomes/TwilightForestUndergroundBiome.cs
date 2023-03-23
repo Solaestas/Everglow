@@ -1,3 +1,4 @@
+using Everglow.TwilightForest.Common;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
@@ -8,7 +9,7 @@ namespace Everglow.TwilightForest.Biomes
 	public class TwilightForestUndergroundBiome : ModBiome
 	{
 		public override ModUndergroundBackgroundStyle UndergroundBackgroundStyle => ModContent.Find<ModUndergroundBackgroundStyle>("TwilightForest/Backgrounds/TwilightForestFar");
-		public override int Music => 0;//TODO:Need a music
+		public override int Music => TwilightForestContent.QuickMusic("PlaceholderTwilightForestUndergroundBGM");// This is a placeholder song //TODO: Make official BGM
 		public override SceneEffectPriority Priority => SceneEffectPriority.BiomeLow;
 		public override string BestiaryIcon => base.BestiaryIcon;
 		public override string BackgroundPath => base.BackgroundPath;
