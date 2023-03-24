@@ -1,9 +1,8 @@
-using Everglow.Myth.Common;
-
 namespace Everglow.Myth.TheFirefly.Projectiles;
 
-public class BeadShakeWave : ModProjectile, IWarpProjectile
+public class GlowStarExplosion : ModProjectile, IWarpProjectile
 {
+	public override string Texture => "Everglow/Myth/TheFirefly/Projectiles/GlowStar";
 	public override void SetDefaults()
 	{
 		Projectile.extraUpdates = 3;
@@ -29,13 +28,15 @@ public class BeadShakeWave : ModProjectile, IWarpProjectile
 		value = MathF.Sqrt(value);
 		float colorV = 0.9f * (1 - value);
 		colorV *= 10;
-		Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Lightline");
+		Texture2D t = ModAsset.Projectiles_EShoot.Value;
+		Texture2D shade = ModAsset.FogTraceShade5xDark.Value;
 		float width = 120;
 		if (Projectile.timeLeft < 120)
 			width = Projectile.timeLeft;
 		Ins.Batch.Begin();
-		DrawTexCircle_VFXBatch(Ins.Batch, value * 270 * Projectile.ai[0], width, new Color(0, colorV * 0.2f, colorV, 0f) * 0.4f, Projectile.Center - Main.screenPosition, t);
-		DrawTexCircle_VFXBatch(Ins.Batch, value * 160 * Projectile.ai[0], width * 0.6f, new Color(0, colorV * 0.2f, colorV, 0f) * 0.4f, Projectile.Center - Main.screenPosition, t);
+		DrawTexCircle_VFXBatch(Ins.Batch, value * 270 * Projectile.ai[0], width, new Color(0, colorV * 0.2f, colorV, 0f) * 0.4f, Projectile.Center - Main.screenPosition, t, Projectile.ai[0] * 25f);
+		DrawTexCircle_VFXBatch(Ins.Batch, value * 200 * Projectile.ai[0], width, Color.White, Projectile.Center - Main.screenPosition, shade, Main.timeForVisualEffects * 0.03f + Projectile.ai[0] * 25f);
+
 		Ins.Batch.End();
 		return false;
 	}
@@ -68,6 +69,8 @@ public class BeadShakeWave : ModProjectile, IWarpProjectile
 				circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy((h + midValue) / radious * Math.PI * 4 + addRot), color, new Vector3((h + midValue) * 2 / radious, 0.2f, 0)));
 			}
 		}
+		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(1, 0.8f, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(1, 0.2f, 0)));
 		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(0, 0.8f, 0)));
 		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0, 0.2f, 0)));
 		if (circle.Count > 2)
@@ -82,6 +85,8 @@ public class BeadShakeWave : ModProjectile, IWarpProjectile
 			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0.8f, 0)));
 			circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0.2f, 0)));
 		}
+		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(1, 0.8f, 0)));
+		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(1, 0.2f, 0)));
 		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(0, 0.8f, 0)));
 		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(0, 0.2f, 0)));
 		if (circle.Count > 2)
@@ -93,13 +98,11 @@ public class BeadShakeWave : ModProjectile, IWarpProjectile
 		value = MathF.Sqrt(value);
 		float colorV = 0.9f * (1 - value);
 		colorV *= 10;
-		Texture2D t = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/Lightline");
+		Texture2D t = ModAsset.FogTraceLight.Value;
 		float width = 120;
 		if (Projectile.timeLeft < 120)
 			width = Projectile.timeLeft;
 
-		DrawWarpTexCircle_VFXBatch(spriteBatch, value * 270 * Projectile.ai[0], width, new Color(colorV, colorV * 0.7f * Projectile.ai[1], colorV, 0f), Projectile.Center - Main.screenPosition, t);
-
-		DrawWarpTexCircle_VFXBatch(spriteBatch, value * 160 * Projectile.ai[0], width * 0.6f, new Color(colorV, colorV * 0.7f * Projectile.ai[1], colorV, 0f), Projectile.Center - Main.screenPosition, t);
+		DrawWarpTexCircle_VFXBatch(spriteBatch, value * 270 * Projectile.ai[0], width, new Color(colorV, colorV * 0.2f * Projectile.ai[1], colorV, 0f), Projectile.Center - Main.screenPosition, t);
 	}
 }

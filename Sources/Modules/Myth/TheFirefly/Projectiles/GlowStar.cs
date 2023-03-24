@@ -23,24 +23,56 @@ public class GlowStar : ModProjectile
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 60;
 	}
-
+	public int targetWhoAmI = -1;
 	public override void AI()
 	{
-		Projectile.velocity *= 0.993f;
-		float k0 = 1f / (Projectile.ai[0] + 2) * 2;
-		Vector2 v0 = new Vector2(Main.rand.NextFloat(0, 6f), 0).RotatedByRandom(6.283) * Projectile.scale * 0.3f;
-		Dust.NewDust(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<BlueGlowAppear>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(0.6f, 1.8f) * Projectile.scale * 0.4f * k0);
-		if (Projectile.ai[1] > 0)
+		Projectile.velocity *= 0.9993f;
+		float minDistance = 450 - Projectile.ai[0] * 25;
+
+		if (targetWhoAmI == -1)
 		{
-			Projectile.ai[1] -= 1;
-			if (Projectile.ai[1] == 1)
-				Projectile.Kill();
+			foreach (NPC target in Main.npc)
+			{
+				Vector2 toTarget = target.Center - Projectile.Center - Projectile.velocity;
+				float Dis = toTarget.Length();
+
+				if (Dis < minDistance)
+				{
+					minDistance = Dis;
+					if (!target.dontTakeDamage && !target.friendly && target.CanBeChasedBy() && target.active)
+					{
+						if(Main.rand.NextBool(75))
+						{
+							targetWhoAmI = target.whoAmI;
+							break;
+						}
+					}
+				}
+			}
+		}
+		else
+		{ 
+			if(!Main.npc[targetWhoAmI].active)
+			{
+				targetWhoAmI = -1;
+				return;
+			}
+			Vector2 toTarget = Main.npc[targetWhoAmI].Center - Projectile.Center - Projectile.velocity;
+			Projectile.velocity = Projectile.velocity * 0.96f + Vector2.Normalize(toTarget) * (3f) * 0.04f;
+			if (Projectile.velocity.Length() > 15f)
+			{
+				Projectile.velocity = Vector2.Normalize(Projectile.velocity) * 15f;
+			}
 		}
 	}
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D Light = Common.MythContent.QuickTexture("TheFirefly/Projectiles/GlowStar");
+		Texture2D Light = ModAsset.GlowStar.Value;
+		if((int)(Projectile.ai[0] * 25 + Main.timeForVisualEffects) % 8 >= 5)
+		{
+			Light = ModAsset.BlueFlameDark.Value;
+		}
 		float k1 = (100f + Projectile.ai[0] * 25) * 0.3f;
 		float k0 = (1000 - Projectile.timeLeft) / k1;
 		float k2 = 1f;
@@ -49,6 +81,14 @@ public class GlowStar : ModProjectile
 		if (Projectile.timeLeft < 200)
 			k2 = Projectile.timeLeft / 200f;
 		var c0 = new Color(k0 * k0 * 0.3f, k0 * k0 * 0.8f, k0 * 0.8f + 0.2f, 1 - k0);
+		if ((int)(Projectile.ai[0] * 25 + Main.timeForVisualEffects) % 8 >= 5)
+		{
+			c0 = Color.White;
+		}
+		else if ((int)(Projectile.ai[0] * 25 + Main.timeForVisualEffects) % 8 >= 3)
+		{
+			c0 = new Color(0, 0, 1, 0);
+		}
 		var bars = new List<Vertex2D>();
 		float width = 12;
 		float k3 = Projectile.ai[1] / 60f;
@@ -82,36 +122,29 @@ public class GlowStar : ModProjectile
 		Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, c0, Projectile.rotation, Light.Size() / 2f, (k0 / 1.8f + 0.2f) / (Projectile.ai[0] + 3) * 3.5f * k2, SpriteEffects.None, 0);
 		return false;
 	}
-
 	public override bool PreKill(int timeLeft)
 	{
-		return true;
+		return timeLeft < 995;
 	}
-
 	public override void Kill(int timeLeft)
 	{
-		if (timeLeft > 0)
-		{
-			float value = Math.Min(Projectile.damage / 30f, 1f);
-			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<BeadShakeWave>(), 0, 0, Projectile.owner, 2.2f / (Projectile.ai[0] + 2) * 0.6f * value, 0.3f);
-		}
-		if (timeLeft <= 0)
-			return;
+		float value = Math.Min(Projectile.damage / 30f, 1f);
+		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<GlowStarExplosion>(), 0, 0, Projectile.owner, 2.2f / (Projectile.ai[0] + 2) * 0.6f * value, 0.3f);
 		SoundEngine.PlaySound(SoundID.Item38, Projectile.Center);
 		float k1 = Math.Clamp(Projectile.velocity.Length(), 1, 3);
 		float k2 = Math.Clamp(Projectile.velocity.Length(), 6, 10);
 		float k0 = 1f / (Projectile.ai[0] + 2) * 2 * k2;
-		for (int j = 0; j < 1 * k0; j++)
+		for (int j = 0; j < 30; j++)
 		{
 			Vector2 v0 = new Vector2(Main.rand.NextFloat(1, 3f), 0).RotatedByRandom(6.283) * Projectile.scale * k1;
-			int dust0 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<BlueGlowAppearStoppedByTile>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(0.2f, 0.6f) * Projectile.scale * 0.01f * k0);
+			int dust0 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<BlueGlowAppear>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(0.2f, 0.6f) * Projectile.scale);
 			Main.dust[dust0].noGravity = true;
 		}
-		for (int j = 0; j < 2 * k0; j++)
+		for (int j = 0; j < 30; j++)
 		{
 			Vector2 v0 = new Vector2(Main.rand.NextFloat(1, 3f), 0).RotatedByRandom(6.283) * Projectile.scale * k1;
-			int dust1 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<BlueParticleDark2StoppedByTile>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(0.7f, 1.5f) * 0.01f * k0);
-			Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 50 / k0);
+			int dust1 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<BlueParticleDark2>(), v0.X, v0.Y, 100, default, Main.rand.NextFloat(0.7f, 2.5f));
+			Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 50);
 			Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
 		}
 		foreach (NPC target in Main.npc)
