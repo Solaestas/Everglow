@@ -1,3 +1,4 @@
+using Terraria;
 using Terraria.ObjectData;
 
 namespace Everglow.TwilightForest.Tiles;
@@ -21,17 +22,33 @@ public class TwilightGrassBlock : ModTile
 	public override void RandomUpdate(int i, int j)
 	{
 		Tile ThisTile = Main.tile[i, j];
-		for (int d = 0; d < 32; d++)
+		if (Main.dayTime)
 		{
-			int x = Main.rand.Next(-12, 13);
-			int y = Main.rand.Next(-12, 13);
-			var tile = Main.tile[i + x, j + y];
-			if (tile.TileType == TileID.Grass && tile.HasTile)
+			for (int d = 0; d < 128; d++)
 			{
-				tile.TileType = ThisTile.TileType;
-				//WorldGen.TileRunner(i + x, j + y, 2, 1, ThisTile.TileType);
+				int x = Main.rand.Next(-32, 33);
+				int y = Main.rand.Next(-32, 33);
+				var tile = Main.tile[i + x, j + y];
+
+				if (tile.TileType == ThisTile.TileType)
+				{
+					tile.TileType = TileID.Grass;
+				}
 			}
-		}//扩散
+		}
+		else
+		{
+			for (int d = 0; d < 32; d++)
+			{
+				int x = Main.rand.Next(-12, 13);
+				int y = Main.rand.Next(-12, 13);
+				var tile = Main.tile[i + x, j + y];
+				if (tile.TileType == TileID.Grass && tile.HasTile)
+				{
+					tile.TileType = ThisTile.TileType;
+				}
+			}
+		}
 		var UpTile = Main.tile[i, j - 1];
 		var DownTile = Main.tile[i, j + 1];
 		var LeftTile = Main.tile[i - 1, j];
