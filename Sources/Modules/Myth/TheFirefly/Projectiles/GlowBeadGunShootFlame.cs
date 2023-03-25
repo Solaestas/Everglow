@@ -2,7 +2,7 @@ namespace Everglow.Myth.TheFirefly.Projectiles;
 
 public class GlowBeadGunShootFlame : ModProjectile, IWarpProjectile, IBloomProjectile
 {
-	public override string Texture => "Everglow/Ocean/Projectiles/Weapons/RampageShark/RampageShark_gun";
+	public override string Texture => "Everglow/Myth/TheFirefly/Projectiles/GlowBeadGunTex/GlowBeadGunOff";
 	public override void SetDefaults()
 	{
 		Projectile.width = 32;

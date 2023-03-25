@@ -63,7 +63,7 @@ public class GlowStar : ModProjectile
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Texture2D Light = ModAsset.GlowStar.Value;
-		if((int)(Projectile.ai[0] * 25 + Main.timeForVisualEffects) % 8 >= 5 && Projectile.timeLeft >= 900)
+		if((int)(Projectile.ai[0] * 25 + Main.timeForVisualEffects) % 8 >= 5 && Projectile.timeLeft >= 1000)
 		{
 			Light = ModAsset.BlueFlameDark.Value;
 		}
@@ -75,11 +75,11 @@ public class GlowStar : ModProjectile
 		if (Projectile.timeLeft < 200)
 			k2 = Projectile.timeLeft / 200f;
 		var c0 = new Color(k0 * k0 * 0.3f, k0 * k0 * 0.8f, k0 * 0.8f + 0.2f, 1 - k0);
-		if ((int)(Projectile.ai[0] * 25 + Main.timeForVisualEffects) % 8 >= 5 && Projectile.timeLeft >= 900)
+		if ((int)(Projectile.ai[0] * 25 + Main.timeForVisualEffects) % 8 >= 5 && Projectile.timeLeft >= 1000)
 		{
 			c0 = Color.White;
 		}
-		else if ((int)(Projectile.ai[0] * 25 + Main.timeForVisualEffects) % 8 >= 3 && Projectile.timeLeft >= 900)
+		else if ((int)(Projectile.ai[0] * 25 + Main.timeForVisualEffects) % 8 >= 3 && Projectile.timeLeft >= 1000)
 		{
 			c0 = new Color(0, 0, 1, 0);
 		}
