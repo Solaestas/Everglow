@@ -31,22 +31,16 @@ public class GlowStar : ModProjectile
 
 		if (targetWhoAmI == -1)
 		{
-			foreach (NPC target in Main.npc)
-			{
-				Vector2 toTarget = target.Center - Projectile.Center - Projectile.velocity;
-				float Dis = toTarget.Length();
+			int tryRandomTarget = Main.rand.Next(Main.npc.Length);
+			NPC target = Main.npc[tryRandomTarget];
+			Vector2 toTarget = target.Center - Projectile.Center - Projectile.velocity;
+			float Dis = toTarget.Length();
 
-				if (Dis < minDistance)
+			if (Dis < minDistance)
+			{
+				if (!target.dontTakeDamage && !target.friendly && target.CanBeChasedBy() && target.active)
 				{
-					minDistance = Dis;
-					if (!target.dontTakeDamage && !target.friendly && target.CanBeChasedBy() && target.active)
-					{
-						if(Main.rand.NextBool(75))
-						{
-							targetWhoAmI = target.whoAmI;
-							break;
-						}
-					}
+					targetWhoAmI = target.whoAmI;
 				}
 			}
 		}
