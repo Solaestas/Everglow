@@ -147,6 +147,11 @@ internal class FireflyPylon : BaseModPylon<FireflyPylonTileEntity>
 {
 	public override int DropItemType => ModContent.ItemType<FireflyPylonItem>();
 
+	public override int? IsPylonForSale(int npcType, Player player, bool isNPCHappyEnough)
+	{
+		return null;
+	}
+
 	public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		DrawModPylon(spriteBatch, i, j, crystalTexture, crystalHighlightTexture, new Vector2(0, DefaultVerticalOffset), new Color(5, 0, 55, 30), new Color(255, 0, 155, 20), 4, CrystalVerticalFrameCount, true, ModContent.DustType<FireflyPylonDust>());
