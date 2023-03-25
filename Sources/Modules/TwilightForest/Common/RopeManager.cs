@@ -255,6 +255,7 @@ internal class RopeManager
 					bars.Add(new Vertex2D(JointCenter - Width, color, new Vector3(1, 202 / 270f, 0)));
 					bars.Add(new Vertex2D(JointCenter + Width, Color.Transparent, new Vector3(152 / 162f, 208 / 270f, 0)));
 					bars.Add(new Vertex2D(JointCenter - Width, Color.Transparent, new Vector3(1, 208 / 270f, 0)));
+					Lighting.AddLight(JointCenter - Width,new Vector3(0,0.6f,1.8f));
 				}
 				else
 				{
