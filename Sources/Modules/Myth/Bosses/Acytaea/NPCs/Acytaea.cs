@@ -2155,7 +2155,6 @@ public class Acytaea : VisualNPC
 
 	public override void OnChatButtonClicked(bool firstButton, ref string shopName)
 	{
-		shop = false;
 		if (firstButton)
 		{
 			NPC.friendly = false;
