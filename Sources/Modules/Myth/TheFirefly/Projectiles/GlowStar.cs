@@ -62,29 +62,19 @@ public class GlowStar : ModProjectile
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D Light = ModAsset.GlowStar.Value;
-		if((int)(Projectile.ai[0] * 25 + Main.timeForVisualEffects) % 8 >= 5 && Projectile.timeLeft >= 1000)
-		{
-			Light = ModAsset.BlueFlameDark.Value;
-		}
-		float k1 = (100f + Projectile.ai[0] * 25) * 0.3f;
+
+		float k1 = 200;
 		float k0 = (1000 - Projectile.timeLeft) / k1;
 		float k2 = 1f;
+		float mulFactor = 1f;
 		if (Projectile.timeLeft <= 1000 - k1)
 			k0 = 1;
 		if (Projectile.timeLeft < 200)
 			k2 = Projectile.timeLeft / 200f;
-		var c0 = new Color(k0 * k0 * 0.3f, k0 * k0 * 0.8f, k0 * 0.8f + 0.2f, 1 - k0);
-		if ((int)(Projectile.ai[0] * 25 + Main.timeForVisualEffects) % 8 >= 5 && Projectile.timeLeft >= 1000)
-		{
-			c0 = Color.White;
-		}
-		else if ((int)(Projectile.ai[0] * 25 + Main.timeForVisualEffects) % 8 >= 3 && Projectile.timeLeft >= 1000)
-		{
-			c0 = new Color(0, 0, 1, 0);
-		}
+		var c0 = new Color((1f - k0) * 0.6f, 1.5f - k0, 2f - k0, 0);
+
 		var bars = new List<Vertex2D>();
-		float width = 12;
+		float width = 24;
 		float k3 = Projectile.ai[1] / 60f;
 		if (Projectile.ai[1] > 0)
 			width *= k3;
@@ -97,6 +87,7 @@ public class GlowStar : ModProjectile
 
 			TrueL++;
 		}
+		Color c1 = new Color(0.2f, 0.4f, 0.6f, 0);
 		for (int i = 1; i < Projectile.oldPos.Length; ++i)
 		{
 			if (Projectile.oldPos[i] == Vector2.Zero)
@@ -105,15 +96,37 @@ public class GlowStar : ModProjectile
 			var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
 			normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
 			var factor = i / (float)TrueL;
-			var w = MathHelper.Lerp(1f, 0.05f, factor);
-			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(factor, 1, w)));
-			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f, 5f) - Main.screenPosition, c0, new Vector3(factor, 0, w)));
+
+			float x0 = factor * mulFactor - (float)(Main.timeForVisualEffects / 15d) + 100000;
+			x0 %= 1f;
+			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f) - Main.screenPosition, c1, new Vector3(x0, 1, 0)));
+			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f) - Main.screenPosition, c1, new Vector3(x0, 0, 0)));
+			var factorII = factor;
+			factor = (i + 1) / (float)TrueL;
+			var x1 = factor * mulFactor - (float)(Main.timeForVisualEffects / 15d) + 100000;
+			x1 %= 1f;
+			if (x0 > x1)
+			{
+				float DeltaValue = 1 - x0;
+				var factorIII = factorII * x0 + factor * DeltaValue;
+				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factorIII) + new Vector2(5f) - Main.screenPosition, c1, new Vector3(1, 1, 0)));
+				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factorIII) + new Vector2(5f) - Main.screenPosition, c1, new Vector3(1, 0, 0)));
+				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factorIII) + new Vector2(5f) - Main.screenPosition, c1, new Vector3(0, 1, 0)));
+				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factorIII) + new Vector2(5f) - Main.screenPosition, c1, new Vector3(0, 0, 0)));
+			}
 		}
-		Texture2D t = Common.MythContent.QuickTexture("TheFirefly/Projectiles/MothGreyLine");
+		Texture2D t = ModAsset.FogTraceLight.Value;
 		Main.graphics.GraphicsDevice.Textures[0] = t;
 		if (bars.Count > 3)
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-		Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, c0, Projectile.rotation, Light.Size() / 2f, (k0 / 1.8f + 0.2f) / (Projectile.ai[0] + 3) * 3.5f * k2, SpriteEffects.None, 0);
+		Texture2D dark = ModAsset.BlueFlameDark.Value;
+		Texture2D Light = ModAsset.GlowStar.Value;
+		float scale = (k0 / 1.8f + 0.2f) / (Projectile.ai[0] + 3) * k2;
+		Main.spriteBatch.Draw(dark, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, Color.White, Projectile.rotation, dark.Size() / 2f, scale * 1.8f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, c0, Projectile.rotation, Light.Size() / 2f, scale * 3.5f, SpriteEffects.None, 0);
+		//Color c2 = new Color(0, 1.5f - k0, 2f - k0, 0);
+		//Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, c2 * (1.1f - k0), Projectile.rotation, Light.Size() / 2f, new Vector2(16f, scale * 1.5f), SpriteEffects.None, 0);
+		//Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, c2 * (1.1f - k0), Projectile.rotation, Light.Size() / 2f, new Vector2(scale * 1.5f, 4f), SpriteEffects.None, 0);
 		return false;
 	}
 	public override bool PreKill(int timeLeft)
