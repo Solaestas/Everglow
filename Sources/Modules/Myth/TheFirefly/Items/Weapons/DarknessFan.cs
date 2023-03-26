@@ -1,4 +1,4 @@
-﻿using Everglow.Myth;
+using Everglow.Myth;
 using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Items.Accessories;
 using Everglow.Myth.TheFirefly.Projectiles;
@@ -112,7 +112,7 @@ public class DarknessFan : ModItem
 	}
 	public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
 	{
-		var slotSize = new Vector2(52f, 52f);
+		var slotSize = new Vector2(42f, 42f);
 		position -= slotSize * Main.inventoryScale / 2f - frame.Size() * scale / 2f;
 		Vector2 drawPos = position + slotSize * Main.inventoryScale / 2f/* - texture.Size() * Main.inventoryScale / 2f*/;
 		Texture2D RArr = MythContent.QuickTexture("TheFirefly/Projectiles/GlowFanTex/RightDFan");
@@ -122,13 +122,13 @@ public class DarknessFan : ModItem
 			if (CoolRarr > 0)
 			{
 				CoolRarr--;
-				spriteBatch.Draw(RArr, drawPos + new Vector2(33.6f) * scale, null, new Color(0, 0, 0, 255), 0f, new Vector2(8), scale * 2.4f, SpriteEffects.None, 0f);
-				Main.spriteBatch.DrawString(FontAssets.MouseText.Value, ((int)(CoolRarr / 60f)).ToString(), drawPos + new Vector2(28.8f) * scale, Color.Red, 0f, Vector2.Zero, scale * 2.4f, SpriteEffects.None, 0);
+				spriteBatch.Draw(RArr, drawPos + new Vector2(6.6f) * scale, null, new Color(0, 0, 0, 255), 0f, new Vector2(8), scale * 2.4f, SpriteEffects.None, 0f);
+				Main.spriteBatch.DrawString(FontAssets.MouseText.Value, ((int)(CoolRarr / 60f)).ToString(), drawPos + new Vector2(6.23f) * scale, Color.Red, 0f, Vector2.Zero, scale * 2.4f, SpriteEffects.None, 0);
 			}
 			else
 			{
 				CoolRarr = 0;
-				spriteBatch.Draw(RArr, drawPos + new Vector2(33.6f) * scale, null, new Color(255, 255, 255, 150), 0f, new Vector2(8), scale * 2.4f, SpriteEffects.None, 0f);
+				spriteBatch.Draw(RArr, drawPos + new Vector2(6.6f) * scale, null, new Color(255, 255, 255, 150), 0f, new Vector2(8), scale * 2.4f, SpriteEffects.None, 0f);
 			}
 		}
 	}

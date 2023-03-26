@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.MiscItems.Projectiles.Weapon.Melee.Hepuyuan;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -146,17 +146,17 @@ public class Hepuyuan : ModItem
 	}
 	public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
 	{
-		var slotSize = new Vector2(52f, 52f);
+		var slotSize = new Vector2(42f, 42f);
 		position -= slotSize * Main.inventoryScale / 2f - frame.Size() * scale / 2f;
 		Vector2 drawPos = position + slotSize * Main.inventoryScale / 2f;
 		Texture2D RArr = MythContent.QuickTexture("MiscItems/Projectiles/Weapon/Melee/Hepuyuan/RightGreenSpice");
 		if (!Main.gamePaused)
 		{
 			if (!CanDown)
-				spriteBatch.Draw(RArr, drawPos + new Vector2(42) * scale, null, new Color(0, 0, 0, 255), 0f, new Vector2(8), scale * 3, SpriteEffects.None, 0f);
+				spriteBatch.Draw(RArr, drawPos + new Vector2(6) * scale, null, new Color(0, 0, 0, 255), 0f, new Vector2(8), scale * 3, SpriteEffects.None, 0f);
 			else
 			{
-				spriteBatch.Draw(RArr, drawPos + new Vector2(42) * scale, null, new Color(255, 255, 255, 0), 0f, new Vector2(8), scale * 3, SpriteEffects.None, 0f);
+				spriteBatch.Draw(RArr, drawPos + new Vector2(6) * scale, null, new Color(255, 255, 255, 0), 0f, new Vector2(8), scale * 3, SpriteEffects.None, 0f);
 			}
 		}
 	}
