@@ -42,7 +42,6 @@ public class TwilightTree : ModTile
 		}
 		return result;
 	}
-
 	public void InitTreeRopes(List<(int x, int y, int style)> ropesData)
 	{
 		hasRope.Clear();
@@ -57,7 +56,6 @@ public class TwilightTree : ModTile
 			InsertOneTreeRope(x, y, style);
 		}
 	}
-
 	public void InsertOneTreeRope(int xTS, int yTS, int style)
 	{
 		Texture2D treeTexture = TwilightForestContent.QuickTexture("Tiles/TwilightTree");
@@ -90,7 +88,6 @@ public class TwilightTree : ModTile
 			hasRope.Add((xTS, yTS), (style, rs));
 		}
 	}
-
 	public void DrawRopes()
 	{
 		if (!Main.gamePaused)
@@ -370,5 +367,63 @@ public class TwilightTree : ModTile
 			}
 		}
 		return false;
+	}
+	private void KillWholeTree(int i, int j)
+	{
+		int thisTileType = Main.tile[i, j].TileType;
+		int y = 0;
+		List<Point> tileShouldKill = new List<Point>();
+
+		for(int x = -1;x < 2;x++)
+		{
+			while (Main.tile[i + x, j + y].TileType == thisTileType)
+			{
+				tileShouldKill.Add(new Point(i + x, j + y));
+				y += 1;
+			}
+			y = -1;
+			while (Main.tile[i + x, j + y].TileType == thisTileType)
+			{
+				tileShouldKill.Add(new Point(i + x, j + y));
+				y -= 1;
+			}
+		}
+		foreach (Point point in tileShouldKill)
+		{
+			WorldGen.KillTile(point.X, point.Y);
+		}
+	}
+	private void SpreadKilling(int i, int j)
+	{
+		Tile thisTile = Main.tile[i, j];
+		Tile topTile = Main.tile[i, j - 1];
+		Tile bottomTile = Main.tile[i, j + 1];
+		Tile leftTile = Main.tile[i - 1, j];
+		Tile rightTile = Main.tile[i + 1, j];
+		WorldGen.KillTile(i, j);
+		if (topTile.TileType ==Type && topTile.HasTile)
+		{
+			SpreadKilling(i, j - 1);
+		}
+		if (bottomTile.TileType ==Type && bottomTile.HasTile)
+		{
+			SpreadKilling(i, j + 1);
+		}
+		if (leftTile.TileType == Type && leftTile.HasTile)
+		{
+			SpreadKilling(i - 1, j);
+		}
+		if (rightTile.TileType ==Type && rightTile.HasTile)
+		{
+			SpreadKilling(i + 1, j);
+		}
+	}
+	public override void RandomUpdate(int i, int j)
+	{
+		if(Main.dayTime)
+		{
+			SpreadKilling(i, j);
+		}
+		base.RandomUpdate(i, j);
 	}
 }

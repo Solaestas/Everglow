@@ -36,7 +36,7 @@ internal class TreePlacer : ModItem
 		}
 
 	}
-	public static void BuildTwilightTree(int i, int j, int height = 10)
+	public void BuildTwilightTree(int i, int j, int height = 10)
 	{
 		if (j < 30)
 			return;
