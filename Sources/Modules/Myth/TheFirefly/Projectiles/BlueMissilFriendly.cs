@@ -1,8 +1,9 @@
-﻿using Terraria;
+using Terraria;
 namespace Everglow.Myth.TheFirefly.Projectiles;
 
 public class BlueMissilFriendly : ModProjectile
 {
+	public override string Texture => "Everglow/Myth/TheFirefly/Projectiles/BlueMissil";
 	public override void SetStaticDefaults()
 	{
 		// base.DisplayName.SetDefault("蓝鳞粉");
