@@ -39,16 +39,17 @@ public class CyanVinePickaxe : ModItem
 	}
 	// TODO ?
 
-	private delegate int orig_GetPickaxeDamage(Player player, int x, int y, int pickPower, int hitBufferIndex, Tile tileTarget);
+	private delegate int orig_GetPickaxeDamage(int x, int y, int pickPower, int hitBufferIndex, Tile tileTarget);
 
-	private delegate int Hook_GetPickaxeDamage(orig_GetPickaxeDamage orig, Player player, int x, int y, int pickPower, int hitBufferIndex, Tile tileTarget);
+	private delegate int Hook_GetPickaxeDamage(orig_GetPickaxeDamage orig, int x, int y, int pickPower, int hitBufferIndex, Tile tileTarget);
 
 	public override void Load()
 	{
-		Ins.HookManager.AddHook(typeof(Player).GetMethod("GetPickaxeDamage", BindingFlags.NonPublic | BindingFlags.Instance), Hook_Player_GetPickaxeDamage);
+		//HookEndpointManager.Add<Hook_GetPickaxeDamage>(typeof(Player).GetMethod("GetPickaxeDamage", BindingFlags.NonPublic | BindingFlags.Instance), Hook_Player_GetPickaxeDamage);
+		Ins.HookManager.AddHook(typeof(Player).GetMethod("GetPickaxeDamage", BindingFlags.Public | BindingFlags.Instance), Hook_Player_GetPickaxeDamage);
 	}
 
-	private static int Hook_Player_GetPickaxeDamage(orig_GetPickaxeDamage orig, Player player, int x, int y, int pickPower, int hitBufferIndex, Tile tileTarget)
+	private static int Hook_Player_GetPickaxeDamage(orig_GetPickaxeDamage orig, int x, int y, int pickPower, int hitBufferIndex, Tile tileTarget)
 	{
 		if (Main.LocalPlayer.HeldItem.type == ModContent.ItemType<CyanVinePickaxe>())
 		{
@@ -69,6 +70,6 @@ public class CyanVinePickaxe : ModItem
 			if (tileTarget.TileType == ModContent.TileType<CyanVineStone>())
 				return 60;
 		}
-		return orig(player, x, y, pickPower, hitBufferIndex, tileTarget);
+		return orig(x, y, pickPower, hitBufferIndex, tileTarget);
 	}
 }
