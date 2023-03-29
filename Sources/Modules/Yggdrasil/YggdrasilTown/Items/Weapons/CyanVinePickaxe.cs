@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
 using MonoMod.RuntimeDetour.HookGen;
