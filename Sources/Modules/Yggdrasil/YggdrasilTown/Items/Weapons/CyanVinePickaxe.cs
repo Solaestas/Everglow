@@ -1,7 +1,10 @@
-﻿using System.Reflection;
+using System.Collections.Generic;
+using System.Reflection;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
+using Everglow.Commons.Hooks;
 using MonoMod.RuntimeDetour.HookGen;
+using Everglow.Commons.Interfaces;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
 
@@ -42,7 +45,7 @@ public class CyanVinePickaxe : ModItem
 
 	public override void Load()
 	{
-		HookEndpointManager.Add<Hook_GetPickaxeDamage>(typeof(Player).GetMethod("GetPickaxeDamage", BindingFlags.NonPublic | BindingFlags.Instance), Hook_Player_GetPickaxeDamage);
+		Ins.HookManager.AddHook(typeof(Player).GetMethod("GetPickaxeDamage", BindingFlags.NonPublic | BindingFlags.Instance), Hook_Player_GetPickaxeDamage);
 	}
 
 	private static int Hook_Player_GetPickaxeDamage(orig_GetPickaxeDamage orig, Player player, int x, int y, int pickPower, int hitBufferIndex, Tile tileTarget)
