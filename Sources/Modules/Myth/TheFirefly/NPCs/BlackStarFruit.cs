@@ -112,7 +112,7 @@ public class BlackStarFruit : ModNPC
 					Damage = (int)(Dam * Main.rand.NextFloat(0.85f, 1.15f)),
 					HitDirection = Math.Sign(NPC.velocity.X),
 					Crit = Main.rand.NextBool(10),
-					KnockBack = 2,
+					Knockback = 2,
 				});
 
 			}
