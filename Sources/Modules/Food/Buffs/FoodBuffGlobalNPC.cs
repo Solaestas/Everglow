@@ -80,7 +80,7 @@ public class FoodBuffGlobalNPC : GlobalNPC
 							target.StrikeNPC(new NPC.HitInfo()
 							{
 								Damage = Main.rand.Next(80, 160) - target.defense,
-								KnockBack = Main.rand.Next(8, 24),
+								Knockback = Main.rand.Next(8, 24),
 								HitDirection = 0,
 								Crit = Main.rand.NextBool(22, 33),
 							});

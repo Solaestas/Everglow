@@ -1712,7 +1712,7 @@ public class BloodTusk : ModNPC
 				NPC.StrikeNPC(new NPC.HitInfo()
 				{
 					Damage = 1,
-					KnockBack = 0,
+					Knockback = 0,
 					HitDirection = 1,
 				});
 				NPC.active = false;

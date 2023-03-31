@@ -1,12 +1,28 @@
-﻿using System.Reflection;
+using System.Reflection;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
-using MonoMod.RuntimeDetour.HookGen;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
 
 public class CyanVinePickaxe : ModItem
 {
+	private delegate int GetPickaxeDamageDelegate(Player self, int x, int y, int pickPower, int hitBufferIndex, Tile tileTarget);
+
+	private delegate int Hook_GetPickaxeDamage(GetPickaxeDamageDelegate orig, int x, int y, int pickPower, int hitBufferIndex, Tile tileTarget);
+
+	public override void AddRecipes()
+	{
+		CreateRecipe()
+			.AddIngredient(ModContent.ItemType<CyanVineBar>(), 16)
+			.AddTile(TileID.WorkBenches)
+			.Register();
+	}
+
+	public override void Load()
+	{
+		Ins.HookManager.AddHook(typeof(Player).GetMethod(nameof(Player.GetPickaxeDamage), BindingFlags.NonPublic | BindingFlags.Instance), Hook_Player_GetPickaxeDamage);
+	}
+
 	public override void SetDefaults()
 	{
 		Item.useStyle = ItemUseStyleID.Swing;
@@ -27,25 +43,7 @@ public class CyanVinePickaxe : ModItem
 		Item.pick = 65;
 	}
 
-	public override void AddRecipes()
-	{
-		CreateRecipe()
-			.AddIngredient(ModContent.ItemType<CyanVineBar>(), 16)
-			.AddTile(TileID.WorkBenches)
-			.Register();
-	}
-	// TODO ?
-
-	private delegate int orig_GetPickaxeDamage(Player player, int x, int y, int pickPower, int hitBufferIndex, Tile tileTarget);
-
-	private delegate int Hook_GetPickaxeDamage(orig_GetPickaxeDamage orig, Player player, int x, int y, int pickPower, int hitBufferIndex, Tile tileTarget);
-
-	public override void Load()
-	{
-		HookEndpointManager.Add<Hook_GetPickaxeDamage>(typeof(Player).GetMethod("GetPickaxeDamage", BindingFlags.NonPublic | BindingFlags.Instance), Hook_Player_GetPickaxeDamage);
-	}
-
-	private static int Hook_Player_GetPickaxeDamage(orig_GetPickaxeDamage orig, Player player, int x, int y, int pickPower, int hitBufferIndex, Tile tileTarget)
+	private static int Hook_Player_GetPickaxeDamage(GetPickaxeDamageDelegate orig, Player self, int x, int y, int pickPower, int hitBufferIndex, Tile tileTarget)
 	{
 		if (Main.LocalPlayer.HeldItem.type == ModContent.ItemType<CyanVinePickaxe>())
 		{
@@ -66,6 +64,6 @@ public class CyanVinePickaxe : ModItem
 			if (tileTarget.TileType == ModContent.TileType<CyanVineStone>())
 				return 60;
 		}
-		return orig(player, x, y, pickPower, hitBufferIndex, tileTarget);
+		return orig(self, x, y, pickPower, hitBufferIndex, tileTarget);
 	}
 }
