@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.MiscItems.Weapons.Slingshots.Buffs;
 using Terraria;
 using Terraria.Audio;
@@ -40,9 +40,8 @@ public class AmbiguousNightAmmo : SlingshotAmmo
 			width *= 1 - factor;
 			var color = new Color(255, 255, 255, 0);
 
-			float fac1 = factor * 3 + (float)(-Main.timeForVisualEffects * 0.03) + 100000;
-			float fac2 = (i + 1) / (float)TrueL * 3 + (float)(-Main.timeForVisualEffects * 0.03) + 100000;
-			//TODO:925分钟之后会炸
+			float fac1 = factor * 3 + Math.Abs((float)(-Main.timeForVisualEffects * 0.03) + 100000);
+			float fac2 = (i + 1) / (float)TrueL * 3 + Math.Abs((float)(-Main.timeForVisualEffects * 0.03) + 100000);
 
 			fac1 %= 1f;
 			fac2 %= 1f;
