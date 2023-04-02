@@ -64,7 +64,7 @@ public class AmbiguousNightAmmo : SlingshotAmmo
 			position = Projectile.Center,
 			maxTime = 100,
 			radius = 0,
-			ai = new float[] { Main.rand.NextFloat(0.1f, 1f), 3, 94f }
+			ai = new float[] { Main.rand.NextFloat(0.1f, 1f), 2, 44f }
 		};
 		Ins.VFXManager.Add(darknessWave);
 	}
@@ -210,11 +210,13 @@ public class AmbiguousNightAmmo : SlingshotAmmo
 		GenerateVFXKill();
 		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot.WithVolumeScale(Projectile.ai[0]), Projectile.Center);
 		Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<NormalHit>(), Projectile.damage, Projectile.knockBack, Projectile.owner, Projectile.velocity.Length(), Main.rand.NextFloat(6.283f));
+		Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<AmbiguousNightHit>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0.08f, Main.rand.NextFloat(6.283f));
 		float Power = Projectile.ai[0] + 0.5f;
 
 		for (int x = 0; x < 100 * Power; x++)
 		{
-			int index = Dust.NewDust(Projectile.position - new Vector2(4), Projectile.width, Projectile.height, DustID.WaterCandle, 0f, 0f, 0, default, Power * Main.rand.NextFloat(1.7f, 2.3f));
+			int index = Dust.NewDust(Projectile.position - new Vector2(4), Projectile.width, Projectile.height, DustID.WaterCandle, 0f, 0f, 0, default, Power * Main.rand.NextFloat(0.7f, 1.3f));
+			Main.dust[index].noGravity= true;
 			Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(3.5f, 4f)).RotatedByRandom(6.283) * Power;
 		}
 		Projectile.friendly = false;

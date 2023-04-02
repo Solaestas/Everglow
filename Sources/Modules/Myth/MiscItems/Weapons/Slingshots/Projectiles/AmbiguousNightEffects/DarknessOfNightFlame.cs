@@ -79,8 +79,8 @@ internal class DarknessOfNightDust : ShaderDraw
 			if (oldPos[f] != Vector2.Zero)
 				oldPos[f] += vsadd;
 		}
-		float delC = ai[2] * 0.05f * (float)Math.Sin((maxTime - timer) / 40d * Math.PI);
-		Lighting.AddLight((int)(position.X / 16), (int)(position.Y / 16), 0.05f * delC, 0, 0.85f * delC);
+		float delC = ai[2] * 0.05f * (float)Math.Sin((maxTime - timer) / maxTime * Math.PI);
+		Lighting.AddLight((int)(position.X / 16), (int)(position.Y / 16), 0.015f * delC, 0, 0.45f * delC);
 		if (Collision.SolidCollision(position, 0, 0))
 			Active = false;
 	}
@@ -136,8 +136,8 @@ internal class DarknessOfNightWave : ShaderDraw
 			Active = false;
 
 
-		float delC = ai[2] * 0.05f * (float)Math.Sin((maxTime - timer) / 40d * Math.PI);
-		Lighting.AddLight((int)(position.X / 16), (int)(position.Y / 16), 0.05f * delC, 0, 0.85f * delC);
+		float delC = ai[2] * 0.05f * (float)Math.Sin((maxTime - timer) / maxTime * Math.PI);
+		Lighting.AddLight((int)(position.X / 16), (int)(position.Y / 16), 0.015f * delC, 0, 0.45f * delC);
 	}
 
 	public override void Draw()
