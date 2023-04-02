@@ -159,7 +159,7 @@ public class MissileProj : ModProjectile, IWarpProjectile
 						target.StrikeNPC(new NPC.HitInfo()
 						{
 							Damage = (int)(Projectile.damage * Main.rand.NextFloat(1.70f, 2.30f)),
-							KnockBack = 2,
+							Knockback = 2,
 							HitDirection = 1,
 							Crit = crit,
 						});
@@ -212,7 +212,7 @@ public class MissileProj : ModProjectile, IWarpProjectile
 					target.StrikeNPC(new NPC.HitInfo()
 					{
 						Damage = (int)(Projectile.damage * Main.rand.NextFloat(1.70f, 2.30f)),
-						KnockBack = 2f,
+						Knockback = 2f,
 						HitDirection = 1,
 						Crit = crit
 					});

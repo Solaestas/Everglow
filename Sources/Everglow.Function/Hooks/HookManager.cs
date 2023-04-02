@@ -61,36 +61,17 @@ public record HookHandler(CodeLayer Layer, dynamic Hook, string Name) : IHookHan
 
 public class HookManager : ModSystem, IHookManager
 {
-	private static readonly CodeLayer[] validLayers = new CodeLayer[]
+	private TrueHookManager _manager;
+
+	public static void Initialize()
 	{
-		CodeLayer.PostDrawFilter,
-		CodeLayer.PostDrawTiles,
-		CodeLayer.PostDrawProjectiles,
-		CodeLayer.PostDrawDusts,
-		CodeLayer.PostDrawNPCs,
-		CodeLayer.PostDrawPlayers,
-		CodeLayer.PostDrawMapIcons,
-		CodeLayer.PostDrawBG,
-
-		CodeLayer.PostUpdateEverything,
-		CodeLayer.PostUpdateProjectiles,
-		CodeLayer.PostUpdatePlayers,
-		CodeLayer.PostUpdateNPCs,
-		CodeLayer.PostUpdateDusts,
-		CodeLayer.PostUpdateInvasions,
-
-		CodeLayer.PostEnterWorld_Single,
-		CodeLayer.PostExitWorld_Single,
-		CodeLayer.PostEnterWorld_Server,
-		CodeLayer.ResolutionChanged,
-	};
-
-	private Dictionary<CodeLayer, List<HookHandler>> hooks = validLayers.ToDictionary(l => l, l => new List<HookHandler>());
-
-	private List<IDisposable> monoHooks = new();
+		Ins.Set<IHookManager>(new TrueHookManager());
+	}
 
 	public HookManager()
 	{
+		_manager = Ins.HookManager as TrueHookManager;
+		Debug.Assert(_manager is not null);
 		Ins.Set<IHookManager>(this);
 	}
 
@@ -101,41 +82,52 @@ public class HookManager : ModSystem, IHookManager
 		ReflectionHelper.ResolveReflectionCache.Clear();
 	}
 
-	public IHookHandler AddHook(CodeLayer layer, Delegate hook, string name = default)
+	public IHookHandler AddHook(CodeLayer layer, Delegate hook, string name = null)
 	{
-		var handler = new HookHandler(layer, hook, name ?? string.Empty);
-		hooks[layer].Add(handler);
-		return handler;
+		return _manager.AddHook(layer, hook, name);
 	}
 
 	public IHookHandler AddHook(MethodInfo target, Delegate hook)
 	{
-		var on = new Hook(target, hook);
-		monoHooks.Add(on);
-		return new OnHookHandler
-		{
-			Hook = on,
-		};
+		return _manager.AddHook(target, hook);
 	}
 
 	public IHookHandler AddHook(MethodInfo target, ILContext.Manipulator hook)
 	{
-		var il = new ILHook(target, hook);
-		monoHooks.Add(il);
-		return new ILHookHandler
-		{
-			Hook = il,
-		};
+		return _manager.AddHook(target, hook);
+	}
+
+	public void Disable(TerrariaFunction function)
+	{
+		_manager.Disable(function);
 	}
 
 	public void Dispose()
 	{
-		foreach (var hook in monoHooks)
-		{
-			hook.Dispose();
-		}
-		ClearReflectionCache();
+		_manager.Dispose();
 		GC.SuppressFinalize(this);
+	}
+
+	public void Enable(TerrariaFunction function)
+	{
+		_manager.Enable(function);
+	}
+
+	public void Invoke(CodeLayer layer)
+	{
+		foreach (var handler in _manager.hooks[layer].Where(h => h.Enable))
+		{
+			try
+			{
+				handler.Hook.Invoke();
+			}
+			catch (Exception ex)
+			{
+				Debug.Fail(ex.ToString());
+				Ins.Logger.Error($"{handler} 抛出了异常 {ex}");
+				handler.Enable = false;
+			}
+		}
 	}
 
 	public override void Load()
@@ -191,35 +183,9 @@ public class HookManager : ModSystem, IHookManager
 		Invoke(CodeLayer.PostUpdateProjectiles);
 	}
 
-	/// <summary>
-	/// 移除所有被Disable的Hook
-	/// </summary>
-	public void RemoveDisabledHook()
-	{
-		foreach (var layer in validLayers)
-		{
-			hooks[layer].RemoveAll(handler => !handler.Enable);
-		}
-	}
-
 	public void RemoveHook(IHookHandler handler)
 	{
-		switch (handler)
-		{
-			case ILHookHandler il:
-				il.Hook.Dispose();
-				monoHooks.Remove(il.Hook);
-				break;
-
-			case OnHookHandler on:
-				on.Hook.Dispose();
-				monoHooks.Remove(on.Hook);
-				break;
-
-			case HookHandler hook:
-				hooks[hook.Layer].Remove(hook);
-				break;
-		}
+		_manager.RemoveHook(handler);
 	}
 
 	public override void Unload()
@@ -241,23 +207,6 @@ public class HookManager : ModSystem, IHookManager
 		Dispose();
 	}
 
-	public void Invoke(CodeLayer layer)
-	{
-		foreach (var handler in hooks[layer].Where(h => h.Enable))
-		{
-			try
-			{
-				handler.Hook.Invoke();
-			}
-			catch (Exception ex)
-			{
-				Debug.Fail(ex.ToString());
-				Ins.Logger.Error($"{handler} 抛出了异常 {ex}");
-				handler.Enable = false;
-			}
-		}
-	}
-
 	private void LegacyPlayerRenderer_DrawPlayers(On_LegacyPlayerRenderer.orig_DrawPlayers orig, LegacyPlayerRenderer self, Terraria.Graphics.Camera camera, IEnumerable<Player> players)
 	{
 		orig.Invoke(self, camera, players);
@@ -269,7 +218,10 @@ public class HookManager : ModSystem, IHookManager
 	{
 		var cursor = new ILCursor(il);
 		if (!cursor.TryGotoNext(MoveType.Before, ins => ins.MatchLdcI4(36)))
+		{
 			throw new Exception("Main_DoDraw_NotFound_1");
+		}
+
 		cursor.EmitDelegate(() => Invoke(CodeLayer.PostDrawFilter));
 	}
 
@@ -281,15 +233,21 @@ public class HookManager : ModSystem, IHookManager
 
 	private void Main_DrawBackground(On_Main.orig_DrawBackground orig, Main self)
 	{
-		if (disableFlags.Has(TerrariaFunction.DrawBackground))
+		if (_manager.disableFlags.Has(TerrariaFunction.DrawBackground))
+		{
 			return;
+		}
+
 		orig(self);
 	}
 
 	private void Main_DrawBG(On_Main.orig_DrawBG orig, Main self)
 	{
-		if (disableFlags.Has(TerrariaFunction.DrawSkyAndHell))
+		if (_manager.disableFlags.Has(TerrariaFunction.DrawSkyAndHell))
+		{
 			return;
+		}
+
 		orig(self);
 	}
 
@@ -302,7 +260,7 @@ public class HookManager : ModSystem, IHookManager
 	private void Main_DrawMiscMapIcons(On_Main.orig_DrawMiscMapIcons orig, Main self, SpriteBatch spriteBatch, Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale, float drawScale, ref string mouseTextString)
 	{
 		orig(self, spriteBatch, mapTopLeft, mapX2Y2AndOff, mapRect, mapScale, drawScale, ref mouseTextString);
-		foreach (var handler in hooks[CodeLayer.PostDrawMapIcons].Where(h => h.Enable))
+		foreach (var handler in _manager.hooks[CodeLayer.PostDrawMapIcons].Where(h => h.Enable))
 		{
 			try
 			{
@@ -321,7 +279,9 @@ public class HookManager : ModSystem, IHookManager
 	{
 		orig.Invoke(self, behindTiles);
 		if (!behindTiles)
+		{
 			Invoke(CodeLayer.PostDrawNPCs);
+		}
 	}
 
 	private void Main_DrawProjectiles(On_Main.orig_DrawProjectiles orig, Main self)
@@ -332,7 +292,7 @@ public class HookManager : ModSystem, IHookManager
 
 	private void Main_OnResolutionChanged(Vector2 obj)
 	{
-		foreach (var handler in hooks[CodeLayer.ResolutionChanged].Where(h => h.Enable))
+		foreach (var handler in _manager.hooks[CodeLayer.ResolutionChanged].Where(h => h.Enable))
 		{
 			try
 			{
@@ -365,14 +325,103 @@ public class HookManager : ModSystem, IHookManager
 		Invoke(CodeLayer.PostEnterWorld_Server);
 	}
 
-	private TerrariaFunction disableFlags;
-	public void Disable(TerrariaFunction function)
+	private class TrueHookManager : IHookManager
 	{
-		disableFlags |= function;
-	}
+		public TerrariaFunction disableFlags;
 
-	public void Enable(TerrariaFunction function)
-	{
-		disableFlags &= ~function;
+		public Dictionary<CodeLayer, List<HookHandler>> hooks = validLayers.ToDictionary(l => l, l => new List<HookHandler>());
+
+		private static readonly CodeLayer[] validLayers = new CodeLayer[]
+		{
+			CodeLayer.PostDrawFilter,
+			CodeLayer.PostDrawTiles,
+			CodeLayer.PostDrawProjectiles,
+			CodeLayer.PostDrawDusts,
+			CodeLayer.PostDrawNPCs,
+			CodeLayer.PostDrawPlayers,
+			CodeLayer.PostDrawMapIcons,
+			CodeLayer.PostDrawBG,
+
+			CodeLayer.PostUpdateEverything,
+			CodeLayer.PostUpdateProjectiles,
+			CodeLayer.PostUpdatePlayers,
+			CodeLayer.PostUpdateNPCs,
+			CodeLayer.PostUpdateDusts,
+			CodeLayer.PostUpdateInvasions,
+
+			CodeLayer.PostEnterWorld_Single,
+			CodeLayer.PostExitWorld_Single,
+			CodeLayer.PostEnterWorld_Server,
+			CodeLayer.ResolutionChanged,
+		};
+
+		private List<IDisposable> monoHooks = new();
+
+		public IHookHandler AddHook(CodeLayer layer, Delegate hook, string name = default)
+		{
+			var handler = new HookHandler(layer, hook, name ?? string.Empty);
+			hooks[layer].Add(handler);
+			return handler;
+		}
+
+		public IHookHandler AddHook(MethodInfo target, Delegate hook)
+		{
+			var on = new Hook(target, hook);
+			monoHooks.Add(on);
+			return new OnHookHandler
+			{
+				Hook = on,
+			};
+		}
+
+		public IHookHandler AddHook(MethodInfo target, ILContext.Manipulator hook)
+		{
+			var il = new ILHook(target, hook);
+			monoHooks.Add(il);
+			return new ILHookHandler
+			{
+				Hook = il,
+			};
+		}
+
+		public void Disable(TerrariaFunction function)
+		{
+			disableFlags |= function;
+		}
+
+		public void Dispose()
+		{
+			foreach (var hook in monoHooks)
+			{
+				hook.Dispose();
+			}
+			ClearReflectionCache();
+			GC.SuppressFinalize(this);
+		}
+
+		public void Enable(TerrariaFunction function)
+		{
+			disableFlags &= ~function;
+		}
+
+		public void RemoveHook(IHookHandler handler)
+		{
+			switch (handler)
+			{
+				case ILHookHandler il:
+					il.Hook.Dispose();
+					monoHooks.Remove(il.Hook);
+					break;
+
+				case OnHookHandler on:
+					on.Hook.Dispose();
+					monoHooks.Remove(on.Hook);
+					break;
+
+				case HookHandler hook:
+					hooks[hook.Layer].Remove(hook);
+					break;
+			}
+		}
 	}
 }
