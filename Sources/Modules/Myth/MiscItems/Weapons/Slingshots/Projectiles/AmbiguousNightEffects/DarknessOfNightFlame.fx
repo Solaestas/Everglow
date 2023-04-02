@@ -1,4 +1,13 @@
 ﻿sampler2D uImage : register(s0);
+texture2D uPowder;
+sampler2D uPowderTex = sampler_state
+{
+    Texture = <uPowder>;
+    MinFilter = Linear;
+    MagFilter = Linear;
+    AddressU = Wrap;
+    AddressV = Wrap;
+};
 texture uNoise;
 sampler uNoiseSampler =
 sampler_state
@@ -41,27 +50,22 @@ PSInput VertexShaderFunction(VSInput input)
 
 float4 PixelShaderFunction(PSInput input) : COLOR0
 {
-    float4 color = tex2D(uNoiseSampler, float2(input.Texcoord.x, input.Texcoord.y + input.Color.g));
-    float4 colorFlame = tex2D(uImage, input.Texcoord.xy);
-    
-    float valueD = input.Color.r + input.Texcoord.z * 0.5f;
-    float4 smog = float4(0, 0, 0, max(color.r / valueD * 3 - valueD - 1.5, 0));
-    float4 flame = tex2D(uImage, float2((1 - color.r) / (1 - valueD), 0.5));
-    smog.a *= input.Color.a;
-    flame.a *= input.Color.a;
-    if (!any(color))
-        return float4(0, 0, 0, 0);
-    if (color.r >= valueD)
-        return flame;
-    else
-        return smog;
+    float4 color = tex2D(uNoiseSampler, input.Texcoord.xy);
+    float light = min((1 - color.r) * (1 - input.Color.r) + input.Color.r, 1);
+    float4 flame = tex2D(uImage, float2(light, 0.5));
+
+    float4 fadePowder = tex2D(uPowderTex, input.Texcoord.xy);
+    float fadeLight = fadePowder.r;
+    if (input.Texcoord.z > fadeLight)
+        return flame * fadePowder.r * 4;
+    return float4(0, 0, 0, 0);
 }
 
 technique Technique1
 {
     pass Test
     {
-        VertexShader = compile vs_2_0 VertexShaderFunction();
-        PixelShader = compile ps_2_0 PixelShaderFunction();
+        VertexShader = compile vs_3_0 VertexShaderFunction();
+        PixelShader = compile ps_3_0 PixelShaderFunction();
     }
 }

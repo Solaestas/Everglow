@@ -3,7 +3,7 @@ using ReLogic.Content;
 
 namespace Everglow.Myth.MiscItems.Weapons.Slingshots.Projectiles.AmbiguousNightEffects;
 
-internal abstract class DarknessOfNight : Visual
+internal abstract class ShaderDraw : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 	public Vector2 position;
@@ -22,8 +22,9 @@ internal class DarknessOfNightPipeline : Pipeline
 {
 	public override void Load()
 	{
-		effect = ModContent.Request<Effect>("Everglow/Myth/MagicWeaponsReplace/Projectiles/DarknessOfNights/DarknessOfNight", AssetRequestMode.ImmediateLoad);
-		effect.Value.Parameters["uNoise"].SetValue(ModContent.Request<Texture2D>("Everglow/Example/VFX/Perlin", AssetRequestMode.ImmediateLoad).Value);
+		effect = ModContent.Request<Effect>("Everglow/Myth/MiscItems/Weapons/Slingshots/Projectiles/AmbiguousNightEffects/DarknessOfNightFlame", AssetRequestMode.ImmediateLoad);
+		effect.Value.Parameters["uNoise"].SetValue(ModAsset.HiveCyberNoise.Value);
+		effect.Value.Parameters["uPowder"].SetValue(ModAsset.NoiseSand.Value);
 	}
 	public override void BeginRender()
 	{
@@ -31,7 +32,7 @@ internal class DarknessOfNightPipeline : Pipeline
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
-		Texture2D FlameColor = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/DarknessOfNights/Cursed_Color");
+		Texture2D FlameColor = ModAsset.DarknessOfNight_Color.Value;
 		Ins.Batch.BindTexture<Vertex2D>(FlameColor);
 		Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.AnisotropicClamp;
 		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearWrap, RasterizerState.CullNone);
@@ -59,10 +60,10 @@ internal class DarknessOfNightDust : ShaderDraw
 	public override void Update()
 	{
 		position += velocity;
+		velocity.Y += 0.045f;
 		oldPos.Add(position);
 		if (oldPos.Count > 15)
 			oldPos.RemoveAt(0);
-		velocity *= 0.96f;
 		timer++;
 		if (timer > maxTime)
 			Active = false;
@@ -91,10 +92,14 @@ internal class DarknessOfNightDust : ShaderDraw
 		{
 			Vector2 normal = oldPos[i] - oldPos[i - 1];
 			normal = Vector2.Normalize(normal).RotatedBy(Math.PI * 0.5);
-			var drawcRope = new Color(fx * fx * fx * 2, 0.5f, 1, 150 / 255f);
+			var drawcRope = new Color(fx * fx * fx * 2 - 0.1f, 0.5f, 1, 150 / 255f);
 			float width = ai[2] * (float)Math.Sin(i / (double)len * Math.PI);
-			bars[2 * i - 1] = new Vertex2D(oldPos[i] + normal * width, drawcRope, new Vector3(0 + ai[0], i / 80f, 0));
-			bars[2 * i] = new Vertex2D(oldPos[i] - normal * width, drawcRope, new Vector3(0.05f + ai[0], i / 80f, 0));
+			if(timer < 10)
+			{
+				width *= timer / 10f;
+			}
+			bars[2 * i - 1] = new Vertex2D(oldPos[i] + normal * width, drawcRope, new Vector3(0 + ai[0], i / 80f, 0.8f - fx));
+			bars[2 * i] = new Vertex2D(oldPos[i] - normal * width, drawcRope, new Vector3(0.07f + ai[0], i / 80f, 0.8f - fx));
 		}
 		bars[0] = new Vertex2D((bars[1].position + bars[2].position) * 0.5f, Color.White, new Vector3(0.5f, 0, 0));
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
