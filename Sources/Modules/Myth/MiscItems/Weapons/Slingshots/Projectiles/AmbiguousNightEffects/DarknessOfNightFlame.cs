@@ -47,6 +47,11 @@ internal class DarknessOfNightPipeline : Pipeline
 [Pipeline(typeof(DarknessOfNightPipeline), typeof(BloomPipeline))]
 internal class DarknessOfNightDust : ShaderDraw
 {
+	/// <summary>
+	/// ai[0]x相位
+	/// ai[1]角速度
+	/// ai[2]宽度
+	/// </summary>
 	private Vector2 vsadd = Vector2.Zero;
 	public List<Vector2> oldPos = new List<Vector2>();
 	public float timer;
@@ -75,7 +80,7 @@ internal class DarknessOfNightDust : ShaderDraw
 				oldPos[f] += vsadd;
 		}
 		float delC = ai[2] * 0.05f * (float)Math.Sin((maxTime - timer) / 40d * Math.PI);
-		Lighting.AddLight((int)(position.X / 16), (int)(position.Y / 16), 0.45f * delC, 0.85f * delC, 0f);
+		Lighting.AddLight((int)(position.X / 16), (int)(position.Y / 16), 0.05f * delC, 0, 0.85f * delC);
 		if (Collision.SolidCollision(position, 0, 0))
 			Active = false;
 	}
@@ -102,6 +107,64 @@ internal class DarknessOfNightDust : ShaderDraw
 			bars[2 * i] = new Vertex2D(oldPos[i] - normal * width, drawcRope, new Vector3(0.07f + ai[0], i / 80f, 0.8f - fx));
 		}
 		bars[0] = new Vertex2D((bars[1].position + bars[2].position) * 0.5f, Color.White, new Vector3(0.5f, 0, 0));
+		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
+	}
+}
+[Pipeline(typeof(DarknessOfNightPipeline), typeof(BloomPipeline))]
+internal class DarknessOfNightWave : ShaderDraw
+{
+	/// <summary>
+	/// ai[0]x相位
+	/// ai[1]波速
+	/// ai[2]宽度
+	/// </summary>
+	public float timer;
+	public float maxTime;
+	public float radius;
+	public DarknessOfNightWave() { }
+	public DarknessOfNightWave(int maxTime, Vector2 position, Vector2 velocity, params float[] ai) : base(position, velocity, ai)
+	{
+		this.maxTime = maxTime;
+	}
+
+	public override void Update()
+	{
+		position += velocity;
+		radius += ai[1] * ((maxTime - timer) / maxTime);
+		timer++;
+		if (timer > maxTime)
+			Active = false;
+
+
+		float delC = ai[2] * 0.05f * (float)Math.Sin((maxTime - timer) / 40d * Math.PI);
+		Lighting.AddLight((int)(position.X / 16), (int)(position.Y / 16), 0.05f * delC, 0, 0.85f * delC);
+	}
+
+	public override void Draw()
+	{
+		float fx = timer / maxTime;
+		int len = (int)(radius / 3f);
+		if (len <= 2)
+			return;
+		var bars = new Vertex2D[len * 2 + 2];
+		for (int i = 0; i < len + 1; i++)
+		{
+			Vector2 normal = new Vector2(0, 1).RotatedBy(i / (double)len * Math.PI * 2);
+			Vector2 radiousDraw = normal * radius;
+
+			var drawcRope = new Color(fx * fx * fx * 2 - 0.1f, 0.5f, 1, 150 / 255f);
+			float width = ai[2];
+			float texCoordWidth = 0.37f;
+			if (width > radiousDraw.Length())
+			{
+				texCoordWidth *= radiousDraw.Length() / width;
+				width = radiousDraw.Length();
+			}
+
+			bars[2 * i] = new Vertex2D(position + radiousDraw, drawcRope, new Vector3(ai[0] + timer / maxTime, i / (float)len * 2, 0.8f - fx));
+			bars[2 * i + 1] = new Vertex2D(position + radiousDraw - normal * width, drawcRope, new Vector3(texCoordWidth + ai[0] + timer / maxTime, i / (float)len * 2, 0.8f - fx));
+		}
+
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
 	}
 }

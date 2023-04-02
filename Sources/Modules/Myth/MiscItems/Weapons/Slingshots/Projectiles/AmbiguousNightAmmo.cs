@@ -24,7 +24,6 @@ public class AmbiguousNightAmmo : SlingshotAmmo
 	}
 	public override void Kill(int timeLeft)
 	{
-		//GenerateVFXKill(30);
 		base.Kill(timeLeft);
 	}
 	public void GenerateVFX(int Frequency)
@@ -55,24 +54,19 @@ public class AmbiguousNightAmmo : SlingshotAmmo
 			Ins.VFXManager.Add(darknessNight);
 		}
 	}
-	public void GenerateVFXKill(int Frequency)
+	public void GenerateVFXKill()
 	{
-		float mulVelocity = 2f;
-		for (int g = 0; g < Frequency; g++)
+		var darknessWave = new DarknessOfNightWave
 		{
-
-			Vector2 vFXVelocity = new Vector2(0, Main.rand.NextFloat(4.5f, 5f)).RotatedByRandom(6.283);
-			var darknessNight = new DarknessOfNightDust
-			{
-				velocity = vFXVelocity * Main.rand.NextFloat(0.25f, 0.45f) * mulVelocity,
-				Active = true,
-				Visible = true,
-				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + vFXVelocity * Main.rand.NextFloat(-3f, 2f),
-				maxTime = Main.rand.Next(27, 72),
-				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), 0, Main.rand.NextFloat(6.6f, 18f)}
-			};
-			Ins.VFXManager.Add(darknessNight);
-		}
+			velocity = Vector2.Zero,
+			Active = true,
+			Visible = true,
+			position = Projectile.Center,
+			maxTime = 100,
+			radius = 0,
+			ai = new float[] { Main.rand.NextFloat(0.1f, 1f), 3, 94f }
+		};
+		Ins.VFXManager.Add(darknessWave);
 	}
 	public override void DrawTrail()
 	{
@@ -213,6 +207,7 @@ public class AmbiguousNightAmmo : SlingshotAmmo
 	}
 	public override void AmmoHit()
 	{
+		GenerateVFXKill();
 		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot.WithVolumeScale(Projectile.ai[0]), Projectile.Center);
 		Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<NormalHit>(), Projectile.damage, Projectile.knockBack, Projectile.owner, Projectile.velocity.Length(), Main.rand.NextFloat(6.283f));
 		float Power = Projectile.ai[0] + 0.5f;
