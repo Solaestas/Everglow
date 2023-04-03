@@ -56,6 +56,11 @@ public class AmbiguousNightAmmo : SlingshotAmmo
 	}
 	public void GenerateVFXKill()
 	{
+		float size =1f;
+		if (Projectile.velocity.Length() > 12f)
+		{
+			size = Projectile.velocity.Length() / 12f;
+		}
 		var darknessWave = new DarknessOfNightWave
 		{
 			velocity = Vector2.Zero,
@@ -64,7 +69,7 @@ public class AmbiguousNightAmmo : SlingshotAmmo
 			position = Projectile.Center,
 			maxTime = 100,
 			radius = 0,
-			ai = new float[] { Main.rand.NextFloat(0.1f, 1f), 2, 44f }
+			ai = new float[] { Main.rand.NextFloat(0.1f, 1f), 2f * size, 44f * size }
 		};
 		Ins.VFXManager.Add(darknessWave);
 	}
@@ -210,7 +215,12 @@ public class AmbiguousNightAmmo : SlingshotAmmo
 		GenerateVFXKill();
 		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot.WithVolumeScale(Projectile.ai[0]), Projectile.Center);
 		Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<NormalHit>(), Projectile.damage, Projectile.knockBack, Projectile.owner, Projectile.velocity.Length(), Main.rand.NextFloat(6.283f));
-		Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<AmbiguousNightHit>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0.08f, Main.rand.NextFloat(6.283f));
+		float blackHoleSize = 0.08f;
+		if(Projectile.velocity.Length() > 12f)
+		{
+			blackHoleSize = Projectile.velocity.Length() / 12f * 0.08f;
+		}
+		Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<AmbiguousNightHit>(), Projectile.damage, Projectile.knockBack, Projectile.owner, blackHoleSize, Main.rand.NextFloat(6.283f));
 		float Power = Projectile.ai[0] + 0.5f;
 
 		for (int x = 0; x < 100 * Power; x++)

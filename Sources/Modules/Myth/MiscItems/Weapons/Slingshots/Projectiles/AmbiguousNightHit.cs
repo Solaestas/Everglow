@@ -39,6 +39,19 @@ public class AmbiguousNightHit : ModProjectile
 				}
 			}
 		}
+		if (Projectile.ai[0] > 0.09f)
+		{
+			float value = (Projectile.ai[0]) * 100;
+			if(Projectile.timeLeft % 20 == 0 && Projectile.timeLeft > 150)
+			{
+				Vector2 targetCenter = new Vector2(0, Main.rand.NextFloat(0.45f * value, 1.55f * value)).RotatedByRandom(6.283) * 10 + Projectile.Center;
+				int x = (int)Main.timeForVisualEffects;
+				Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.AmbiguousLine>(), 40, 0, Projectile.owner, x, 0);
+				Projectile.NewProjectile(Projectile.GetSource_FromAI(), targetCenter, Vector2.Zero, ModContent.ProjectileType<Projectiles.AmbiguousLine>(), 40, 0, Projectile.owner, x, 1/*ai1 = 1才绘制*/);
+				ScreenShaker Gsplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
+				Gsplayer.FlyCamPosition = new Vector2(0, 2).RotatedByRandom(6.283);
+			}
+		}
 	}
 	public override void PostDraw(Color lightColor)
 	{
