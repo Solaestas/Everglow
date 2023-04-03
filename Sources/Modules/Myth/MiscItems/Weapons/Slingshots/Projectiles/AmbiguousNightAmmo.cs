@@ -1,9 +1,6 @@
 using Everglow.Myth.Common;
-using Everglow.Myth.MagicWeaponsReplace.Projectiles.CursedFlames;
 using Everglow.Myth.MiscItems.Weapons.Slingshots.Buffs;
 using Everglow.Myth.MiscItems.Weapons.Slingshots.Projectiles.AmbiguousNightEffects;
-using SteelSeries.GameSense;
-using Terraria;
 using Terraria.Audio;
 namespace Everglow.Myth.MiscItems.Weapons.Slingshots.Projectiles;
 

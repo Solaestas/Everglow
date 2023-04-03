@@ -1,4 +1,3 @@
-using Everglow.Myth.Common;
 using ReLogic.Content;
 
 namespace Everglow.Myth.MiscItems.Weapons.Slingshots.Projectiles.AmbiguousNightEffects;

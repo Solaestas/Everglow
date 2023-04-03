@@ -1,5 +1,4 @@
 using Everglow.Myth.Common;
-using Everglow.Myth.MagicWeaponsReplace.Projectiles.BlackHole;
 
 namespace Everglow.Myth.MiscItems.Weapons.Slingshots.Projectiles;
 

@@ -1,6 +1,3 @@
-using Terraria;
-using static Terraria.ModLoader.PlayerDrawLayer;
-
 namespace Everglow.Myth.MiscItems.Weapons.Slingshots.Projectiles;
 
 public class AmbiguousNightHit : ModProjectile
