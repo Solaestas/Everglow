@@ -1,3 +1,4 @@
+using Terraria;
 using static Terraria.ModLoader.PlayerDrawLayer;
 
 namespace Everglow.Myth.MiscItems.Weapons.Slingshots.Projectiles;
@@ -21,7 +22,23 @@ public class AmbiguousNightHit : ModProjectile
 
 	public override void AI()
 	{
-
+		NPC target = Main.npc[Main.rand.Next(Main.npc.Length)];
+		if (!target.dontTakeDamage && target.active)
+		{
+			if (!target.friendly)
+			{
+				if ((target.Center - Projectile.position).Length() < 200)
+				{
+					int x = (int)Main.timeForVisualEffects;
+					Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<NormalHit>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 6f, Main.rand.NextFloat(6.283f));
+					Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.AmbiguousLine>(), 40, 0, Projectile.owner, x, 0);
+					Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), target.Center, Vector2.Zero, ModContent.ProjectileType<NormalHit>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 6f, Main.rand.NextFloat(6.283f));
+					Projectile.NewProjectile(Projectile.GetSource_FromAI(), target.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.AmbiguousLine>(), 40, 0, Projectile.owner, x, 1/*ai1 = 1才绘制*/);
+					ScreenShaker Gsplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
+					Gsplayer.FlyCamPosition = new Vector2(0, 2).RotatedByRandom(6.283);
+				}
+			}
+		}
 	}
 	public override void PostDraw(Color lightColor)
 	{

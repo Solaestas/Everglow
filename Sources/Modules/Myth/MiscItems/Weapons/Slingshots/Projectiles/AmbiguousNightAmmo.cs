@@ -225,5 +225,6 @@ public class AmbiguousNightAmmo : SlingshotAmmo
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		target.AddBuff(ModContent.BuffType<ShadowSupervisor>(), (int)(600 * Projectile.ai[0]) + 120);
+		AmmoHit();
 	}
 }
