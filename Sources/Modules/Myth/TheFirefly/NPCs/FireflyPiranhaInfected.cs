@@ -74,6 +74,7 @@ public class FireflyPiranhaInfected : ModNPC
 					PhysicalStrength = 600;
 				}
 			}
+			NPC.rotation = NPC.velocity.ToRotation() + (1 - NPC.spriteDirection) * MathF.PI / 2f;
 		}
 		else
 		{
@@ -85,11 +86,27 @@ public class FireflyPiranhaInfected : ModNPC
 			NPC.localAI[0]+=1;
 			NPC.noGravity= false;
 			NPC.velocity.Y += 0.15f;
-			if (NPC.localAI[0] % 20 == 0 && NPC.velocity == Vector2.Zero)
+			if (NPC.localAI[0] % 4 == 0 && NPC.collideY)
 			{
-				NPC.velocity += new Vector2(Main.rand.NextFloat(-2f, 2f),Main.rand.NextFloat(-12f, -6f));
+				PhysicalStrength -= 100;
+				NPC.velocity += new Vector2(Main.rand.NextFloat(-2f, 2f), Main.rand.NextFloat(-24f, -12f));
+				NPC.rotation = Main.rand.NextFloat(-0.2f, 0.2f);
+			}
+			if (NPC.collideX)
+			{
+				PhysicalStrength -= 100;
+				NPC.velocity += new Vector2(Main.rand.NextFloat(-6f, 6f), Main.rand.NextFloat(-4f, -2f));
+				NPC.rotation = Main.rand.NextFloat(-0.2f, 0.2f);
 			}
 			NPC.velocity *= MathF.Pow(0.996f,NPC.velocity.Length());
+			if (PhysicalStrength > 0)
+			{
+				NPC.rotation = NPC.velocity.ToRotation() + (1 - NPC.spriteDirection) * MathF.PI / 2f;
+			}
+			else
+			{
+				NPC.rotation += MathF.Sin((float)Main.time * 0.03f + NPC.whoAmI) * 0.03f;
+			}
 		}
 		if(NPC.velocity.X > 0)
 		{
@@ -99,7 +116,6 @@ public class FireflyPiranhaInfected : ModNPC
 		{
 			NPC.spriteDirection = -1;
 		}
-		NPC.rotation = NPC.velocity.ToRotation() + (1 - NPC.spriteDirection) * MathF.PI / 2f;
 	}
 	private void NormalAttack(Player target)
 	{
