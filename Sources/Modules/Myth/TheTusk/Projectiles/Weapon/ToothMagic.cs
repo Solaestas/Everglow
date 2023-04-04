@@ -1,4 +1,6 @@
 using Everglow.Myth.Common;
+using Everglow.Myth.TheTusk.VFXs;
+using SteelSeries.GameSense;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -32,6 +34,34 @@ public class ToothMagic : ModProjectile, IWarpProjectile
 	{
 		// Projectile.position.Y -= 15f;
 	}
+	public void GenerateVFX(int Frequency)
+	{
+		float mulVelocity = 1f;
+		for (int g = 0; g < Frequency; g++)
+		{
+
+			Vector2 afterVelocity = Projectile.velocity;
+			if (afterVelocity.Length() > 25)
+			{
+				afterVelocity = afterVelocity * 25 / afterVelocity.Length();
+			}
+			float mulWidth = 1f;
+			if (afterVelocity.Length() < 10)
+			{
+				mulWidth = afterVelocity.Length() / 10f;
+			}
+			var blood = new BloodLiquidDust
+			{
+				velocity = afterVelocity * Main.rand.NextFloat(0.25f, 0.45f) * mulVelocity + Projectile.velocity.SafeNormalize(new Vector2(0, -1)),
+				Active = true,
+				Visible = true,
+				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * Main.rand.NextFloat(-3f, 2f),
+				maxTime = Main.rand.Next(27, 72),
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0, Main.rand.NextFloat(6.6f, 18f) * mulWidth }
+			};
+			Ins.VFXManager.Add(blood);
+		}
+	}
 	public void ProjHit()
 	{
 		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot.WithVolumeScale(Projectile.ai[0]), Projectile.Center);
@@ -54,6 +84,7 @@ public class ToothMagic : ModProjectile, IWarpProjectile
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
+		GenerateVFX(1);
 		if (Projectile.timeLeft > 500)
 			Projectile.scale = 0.8f;
 		else
