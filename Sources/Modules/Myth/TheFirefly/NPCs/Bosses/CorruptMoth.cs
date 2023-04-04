@@ -1,10 +1,14 @@
 using Everglow.Myth.Common;
+using Everglow.Myth.MagicWeaponsReplace.Projectiles.CursedFlames;
 using Everglow.Myth.TheFirefly.Dusts;
 using Everglow.Myth.TheFirefly.Items.BossDrop;
 using Everglow.Myth.TheFirefly.Items.Weapons;
 using Everglow.Myth.TheFirefly.Projectiles;
+using Everglow.Myth.TheFirefly.VFXs;
+using SteelSeries.GameSense;
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.Localization;
@@ -70,51 +74,24 @@ public class CorruptMoth : ModNPC
 	}
 
 	private Player Player => Main.player[NPC.target];
-
 	public override void SetStaticDefaults()
 	{
-		Main.npcFrameCount[NPC.type] = 10;
+		Main.npcFrameCount[NPC.type] = 11;
 		var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers(0)
 		{
 			CustomTexturePath = "Everglow/Myth/TheFirefly/NPCs/Bosses/CorruptMothBoss",
-			Position = new Vector2(40f, 24f),
+			Position = new Vector2(20f, 24f),
 			PortraitPositionXOverride = 0f,
 			PortraitPositionYOverride = 12f
 		};
 		NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
 		NPCID.Sets.TrailCacheLength[NPC.type] = 4;
-		//NPCID.Sets.TrailingMode[NPC.type] = 0;
 	}
-
-	public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
-	{
-		// We can use AddRange instead of calling Add multiple times in order to add multiple items at once
-		bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
-		{
-			// Sets the spawning conditions of this NPC that is listed in the bestiary.
-			BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
-			BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheCorruption,
-
-			// Sets the description of this NPC that is listed in the bestiary.
-
-			new FlavorTextBestiaryInfoElement(Language.GetTextValue("Mods.Everglow.Bestiary.CorruptMoth.Flavor"))
-		});
-	}
-
-	public override void OnKill()
-	{
-		//NPC.SetEventFlagCleared(ref DownedBossSystem.downedMoth, -1);
-		if (Main.netMode == NetmodeID.Server)
-			NetMessage.SendData(MessageID.WorldData);
-	}
-
 	public override void SetDefaults()
 	{
-		Main.npcFrameCount[NPC.type] = 10;
-
 		NPC.behindTiles = true;
 		NPC.damage = 40;
-		NPC.width = 80;
+		NPC.width = 120;
 		NPC.height = 120;
 		NPC.defense = 5;
 		NPC.lifeMax = 9000;
@@ -155,16 +132,33 @@ public class CorruptMoth : ModNPC
 			Music = MythContent.QuickMusic("MothFighting");
 		}
 	}
+	public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+	{
+		// We can use AddRange instead of calling Add multiple times in order to add multiple items at once
+		bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[]
+		{
+			// Sets the spawning conditions of this NPC that is listed in the bestiary.
+			BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
+			BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.TheCorruption,
 
+			// Sets the description of this NPC that is listed in the bestiary.
+
+			new FlavorTextBestiaryInfoElement(Language.GetTextValue("Mods.Everglow.Bestiary.CorruptMoth.Flavor"))
+		});
+	}
+	public override void OnKill()
+	{
+		//NPC.SetEventFlagCleared(ref DownedBossSystem.downedMoth, -1);
+		if (Main.netMode == NetmodeID.Server)
+			NetMessage.SendData(MessageID.WorldData);
+	}
 	public override bool CheckActive()
 	{
 		return canDespawn;
 	}
-
 	public override void BossHeadSlot(ref int index)
 	{
 	}
-
 	/// <summary>
 	/// 发射弹幕，调用前检测服务端
 	/// </summary>
@@ -210,7 +204,6 @@ public class CorruptMoth : ModNPC
 			}
 		}
 	}
-
 	public override void ModifyHitByProjectile(Projectile projectile, ref NPC.HitModifiers modifiers)
 	{
 		if (NPC.ai[0] == 6 && Timer > 260)
@@ -239,7 +232,7 @@ public class CorruptMoth : ModNPC
 			});
 		}
 		bool phase2 = NPC.life < NPC.lifeMax * 0.6f;
-		Lighting.AddLight(NPC.Center, 0f, 0f, 0.8f * (1 - NPC.alpha / 255f));
+		Lighting.AddLight(NPC.Center, 0f, 0f, 0.1f * (1 - NPC.alpha / 255f));
 		NPC.friendly = NPC.dontTakeDamage;
 		if (lightVisual > 0)//光效
 			lightVisual -= 0.04f;
@@ -354,7 +347,7 @@ public class CorruptMoth : ModNPC
 				{
 					if (Main.netMode != NetmodeID.MultiplayerClient)
 					{
-						GreyVFx();
+						GenerateGrayVFX(1);
 						if (Timer > 500 && Timer % 10 == 0)
 						{
 							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, -2), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer);
@@ -365,7 +358,13 @@ public class CorruptMoth : ModNPC
 							}
 						}
 					}
-					Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
+					for (int d = 0; d < 2; d++)
+					{
+						float scale = Main.rand.NextFloat(0.8f, 2.7f);
+						Dust dust = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, ModContent.DustType<BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default, scale);
+						dust.position += NPC.velocity.RotatedBy(-Math.PI * 0.75 * NPC.spriteDirection + Main.rand.NextFloat(-0.4f, 0.4f)) * MathF.Cos(NPC.frame.Y / 5016f * MathF.PI * 2) * 6;
+						dust.velocity = NPC.velocity * scale * 0.3f;
+					}
 					if (Timer > 500)
 						NPC.velocity = Vector2.Lerp(NPC.velocity, getVec * 20, 0.15f);
 					else if (Vector2.Distance(NPC.Center, player.Center) > 100)
@@ -404,7 +403,7 @@ public class CorruptMoth : ModNPC
 				{
 					if (Main.netMode != NetmodeID.MultiplayerClient)
 					{
-						GreyVFx();
+						GenerateGrayVFX(1);
 						if (Timer > 400 && Timer % 6 == 0)
 						{
 							Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, -2), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer);
@@ -415,7 +414,13 @@ public class CorruptMoth : ModNPC
 							}
 						}
 					}
-					Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
+					for (int d = 0; d < 2; d++)
+					{
+						float scale = Main.rand.NextFloat(0.8f, 2.7f);
+						Dust dust = Dust.NewDustDirect(-NPC.position, NPC.width, NPC.height, ModContent.DustType<BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default, scale);
+						dust.position += NPC.velocity.RotatedBy(Math.PI * 0.75 * NPC.spriteDirection + Main.rand.NextFloat(-0.4f, 0.4f)) * MathF.Cos(NPC.frame.Y / 5016f * MathF.PI * 2) * 6;
+						dust.velocity = NPC.velocity * scale * 0.3f;
+					}
 					if (Timer > 500)
 						NPC.velocity = Vector2.Lerp(NPC.velocity, getVec * 20, 0.15f);
 					else if (Vector2.Distance(NPC.Center, player.Center) > 100)
@@ -492,15 +497,6 @@ public class CorruptMoth : ModNPC
 				}
 				if (tt is > 120 and < 150)
 					MoveTo(player.Center + NPC.DirectionFrom(player.Center) * 150, 10, 20);
-				/*
-                    if (Timer == 220 && phase2 && Main.netMode != NetmodeID.MultiplayerClient)
-                    {
-                        for (int i = 0; i < 20; i++)
-                        {
-                            Vector2 v = new Vector2(0.1f + (i % 4) / 16f, 0).RotatedBy(i * MathHelper.TwoPi / 20);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, v, ModContent.ProjectileType<TheFirefly.Projectiles.BlackCorruptRain3>(), NPC.damage / 5, 0f, Main.myPlayer, 0);
-                        }
-                    }*/
 			}
 			if (Timer > 550)
 			{
@@ -552,9 +548,15 @@ public class CorruptMoth : ModNPC
 
 			if (Timer is > 90 and < 130)//冲刺中
 			{
-				GreyVFx();
+				GenerateGrayVFX(1);
 				GetDir_ByVel();
-				Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default, Main.rand.NextFloat(0.8f, 1.7f));
+				for (int d = 0; d < 2; d++)
+				{
+					float scale = Main.rand.NextFloat(0.8f, 2.7f);
+					Dust dust = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, ModContent.DustType<BlueGlow>(), NPC.velocity.X, NPC.velocity.Y, 0, default, scale);
+					dust.position += NPC.velocity.RotatedBy(-Math.PI * 0.75 * NPC.spriteDirection + Main.rand.NextFloat(-0.4f, 0.4f)) * MathF.Cos(NPC.frame.Y / 5016f * MathF.PI * 2) * 6;
+					dust.velocity = NPC.velocity * scale * 0.3f;
+				}
 				if (Timer % 8 == 0 && (NPC.ai[2] == 2 || phase2) && Main.netMode != NetmodeID.MultiplayerClient)
 				{
 					Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * 0.2f + new Vector2(0, -2), ModContent.ProjectileType<BlackCorruptRain>(), NPC.damage / 8, 0f, Main.myPlayer);
@@ -1232,14 +1234,25 @@ public class CorruptMoth : ModNPC
 	/// <summary>
 	/// 发射弹幕，在调用时判断是否不为客户端
 	/// </summary>
-	private void GreyVFx()
+	private void GenerateGrayVFX(int Frequency)
 	{
 		if (NPC.velocity.Length() > 10 && Main.netMode != NetmodeID.MultiplayerClient)
 		{
-			if (Timer % 12 == 0)
-				Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, Main.rand.NextFloat(0, 50f)).RotatedByRandom(3.14), NPC.velocity, ModContent.ProjectileType<MothGrey>(), 0, 0f, Main.myPlayer, 1);
-			if (Timer % 12 == 6)
-				Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, Main.rand.NextFloat(0, 50f)).RotatedByRandom(3.14), NPC.velocity, ModContent.ProjectileType<MothGrey>(), 0, 0f, Main.myPlayer, -1);
+			float mulVelocity = 2f;
+			for (int g = 0; g < Frequency; g++)
+			{
+				float rotatedVelocity = Main.rand.NextFloat(-0.2f, 0.2f);
+				var gFL = new GrayFlowLine
+				{
+					velocity = NPC.velocity.RotatedBy(rotatedVelocity) * Main.rand.NextFloat(0.85f,1.15f) * mulVelocity + NPC.velocity.SafeNormalize(new Vector2(0, -1)),
+					Active = true,
+					Visible = true,
+					position = NPC.Center + new Vector2(Main.rand.NextFloat(-50f, 50f), 0).RotatedByRandom(6.283) - NPC.velocity * 12,
+					maxTime = Main.rand.Next(25, 40),
+					ai = new float[] { Main.rand.NextFloat(-1f, 1f), -rotatedVelocity * 0.2f * Main.rand.NextFloat(0.5f, 1.5f), Main.rand.NextFloat(1.8f, 2f)}
+				};
+				Ins.VFXManager.Add(gFL);
+			}
 		}
 	}
 
@@ -1253,7 +1266,6 @@ public class CorruptMoth : ModNPC
 		NPC.direction = NPC.spriteDirection = NPC.velocity.X > 0 ? 1 : -1;
 	}
 
-	//int locktime = 0;
 	public override void HitEffect(NPC.HitInfo hit)
 	{
 		if (lightVisual < 1)
@@ -1370,38 +1382,42 @@ public class CorruptMoth : ModNPC
 			DrawCube();
 
 		Texture2D tx = ModContent.Request<Texture2D>(Texture).Value;
-		Texture2D GlowTexture = MythContent.QuickTexture("TheFirefly/NPCs/Bosses/CorruptMoth_Glow");
+		Texture2D GlowTexture = ModAsset.CorruptMoth_Glow.Value;
+		Texture2D WingDustTexture = ModAsset.CorruptMoth_WingEffect.Value;
 		Vector2 origin = new Vector2(tx.Width, tx.Height / 11) / 2;
 		Color origColor = NPC.GetAlpha(drawColor);
 		for (int k = 0; k < NPC.oldPos.Length; k++)
 		{
-			Color color = origColor * ((NPC.oldPos.Length - k) / (float)NPC.oldPos.Length);
+			float fadeValue = ((NPC.oldPos.Length - k) / (float)NPC.oldPos.Length);
+			fadeValue *= fadeValue;
+			if (NPC.velocity.Length() < 10)
+			{
+				fadeValue *= (NPC.velocity.Length() - 5) / 5f;
+			}
+			if (NPC.velocity.Length() < 5)
+			{
+				break;
+			}
+			Color color = origColor * fadeValue;
 			spriteBatch.Draw(tx, NPC.oldPos[k] - Main.screenPosition, NPC.frame, color, NPC.rotation, origin, NPC.scale, effects, 0f);
 		}
 		spriteBatch.Draw(tx, NPC.Center - Main.screenPosition, NPC.frame, origColor, NPC.rotation, origin, NPC.scale, effects, 0f);
-		//origColor.A = 0;
-		//spriteBatch.Draw(tx, NPC.Center - Main.screenPosition, NPC.frame, origColor * 0.6f, NPC.rotation, origin, NPC.scale * 1.05f, effects, 0f);
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		float t = (float)Main.timeForVisualEffects * 0.2f;
-		for (int i = 0; i < 6; i++)//周围的幻影
-		{
-			Color color = NPC.GetAlpha(Color.White) * (PhamtomDis / 120f) * 0.6f;
-			spriteBatch.Draw(GlowTexture, NPC.Center + (t * 0.1f + i * t / 6).ToRotationVector2() * PhamtomDis * 0.8f - Main.screenPosition, NPC.frame, color, NPC.rotation, origin, NPC.scale, effects, 0f);
-		}
-		if (lightVisual > 0)//发光特效
-		{
-			for (int k = 0; k < NPC.oldPos.Length; k++)
-			{
-				Color color = Color.White * ((1 + NPC.oldPos.Length - k) / (float)NPC.oldPos.Length) * lightVisual;
-				spriteBatch.Draw(GlowTexture, NPC.oldPos[k] - Main.screenPosition, NPC.frame, color, NPC.rotation, origin, NPC.scale, effects, 0f);
-			}
-		}
-		Main.spriteBatch.Draw(GlowTexture, NPC.Center - Main.screenPosition, new Rectangle?(NPC.frame), NPC.GetAlpha(new Color(0, 0.5f, 1, 0f)) * 0.5f, NPC.rotation, origin, 1f, effects, 0f);
+
+		Main.spriteBatch.Draw(GlowTexture, NPC.Center - Main.screenPosition, new Rectangle?(NPC.frame), Color.White * ((255 - NPC.alpha) / 255f), NPC.rotation, origin, NPC.scale, effects, 0f);
+		Main.spriteBatch.Draw(WingDustTexture, NPC.Center - Main.screenPosition, new Rectangle?(NPC.frame), Color.White * (MathF.Pow(NPC.velocity.Length() / 20f, 1.0f)), NPC.rotation, origin, NPC.scale, effects, 0f);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
+
+		//删掉注释显示碰撞箱
+		//Texture2D tBox = TextureAssets.MagicPixel.Value;
+		//Rectangle rt = NPC.Hitbox;
+		//rt.X -= (int)Main.screenPosition.X;
+		//rt.Y -= (int)Main.screenPosition.Y;
+		//Main.spriteBatch.Draw(tBox, rt, new Color(55, 0, 0, 0));
 		return false;
 	}
 }
