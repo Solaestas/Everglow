@@ -1,12 +1,3 @@
-using System.Security.Policy;
-using Terraria.Audio;
-using Terraria.DataStructures;
-using Terraria.GameContent;
-using Terraria.GameContent.Events;
-using Terraria.GameContent.Personalities;
-using static Humanizer.In;
-using Terraria.ID;
-
 namespace Everglow.Myth.TheFirefly.Buffs;
 
 public class ShadowPotionBuff : ModBuff
