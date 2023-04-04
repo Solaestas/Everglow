@@ -39,6 +39,10 @@ public class AmbiguousNightAmmo : SlingshotAmmo
 			{
 				mulWidth = afterVelocity.Length() / 10f;
 			}
+			if(Projectile.timeLeft > 3580)
+			{
+				mulWidth *= (3600 - Projectile.timeLeft) / 20f;
+			}
 			var darknessNight = new DarknessOfNightDust
 			{
 				velocity = afterVelocity * Main.rand.NextFloat(0.25f, 0.45f) * mulVelocity + Projectile.velocity.SafeNormalize(new Vector2(0, -1)),
