@@ -107,6 +107,37 @@ public class ToothMagic : ModProjectile, IWarpProjectile
 			};
 			Ins.VFXManager.Add(blood);
 		}
+		mulVelocity = 1.4f;
+		for (int g = 0; g < Frequency; g++)
+		{
+			Vector2 afterVelocity = new Vector2(0, 2f).RotatedBy(g / (float)Frequency * 2 * Math.PI);
+			var blood = new BloodLiquidDust
+			{
+				velocity = afterVelocity * mulVelocity + Projectile.velocity.SafeNormalize(new Vector2(0, -1)),
+				Active = true,
+				Visible = true,
+				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) - Projectile.velocity * Main.rand.NextFloat(3f, 14f),
+				maxTime = Main.rand.Next(42, 64),
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0, Main.rand.NextFloat(6f, 12f) }
+			};
+			Ins.VFXManager.Add(blood);
+		}
+		mulVelocity = 0.8f;
+		Frequency /= 3;
+		for (int g = 0; g < Frequency; g++)
+		{
+			Vector2 afterVelocity = new Vector2(0, 2f).RotatedBy(g / (float)Frequency * 2 * Math.PI);
+			var blood = new ThickBloodLiquidDust
+			{
+				velocity = afterVelocity * mulVelocity + Projectile.velocity.SafeNormalize(new Vector2(0, -1)),
+				Active = true,
+				Visible = true,
+				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) - Projectile.velocity * Main.rand.NextFloat(3f, 14f),
+				maxTime = Main.rand.Next(42, 64),
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0, Main.rand.NextFloat(12f, 20f) }
+			};
+			Ins.VFXManager.Add(blood);
+		}
 	}
 	public void ProjHit()
 	{
@@ -118,12 +149,17 @@ public class ToothMagic : ModProjectile, IWarpProjectile
 			int index = Dust.NewDust(Projectile.position - new Vector2(4), Projectile.width, Projectile.height, ModContent.DustType<Dusts.RedBlood>(), 0f, 0f, 0, default, Main.rand.NextFloat(0.3f, 0.7f));
 			Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(1.5f, 12f)).RotatedByRandom(6.283);
 		}
+		for (int x = 0; x < 170; x++)
+		{
+			int index = Dust.NewDust(Projectile.position - new Vector2(4), Projectile.width, Projectile.height, ModContent.DustType<Dusts.RedBlood>(), 0f, 0f, 0, default, Main.rand.NextFloat(0.5f, 0.7f));
+			Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(1.5f, 8f)).RotatedByRandom(6.283);
+		}
 		for (int x = 0; x < 10; x++)
 		{
 			int index = Dust.NewDust(Projectile.position - new Vector2(4), Projectile.width, Projectile.height, ModContent.DustType<Dusts.RedBlood>(), 0f, 0f, 0, default, Main.rand.NextFloat(0.9f, 1.1f));
 			Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(2.5f, 8f)).RotatedByRandom(6.283);
 		}
-		GenerateVFXKill(40);
+		GenerateVFXKill(20);
 
 		Projectile.friendly = false;
 		TimeTokill = 120;
@@ -200,7 +236,7 @@ public class ToothMagic : ModProjectile, IWarpProjectile
 		}
 		else
 		{
-			if (Projectile.timeLeft % 15 == 0)
+			if (Projectile.timeLeft % 25 == 0)
 			{
 				GenerateVFX(1);
 			}
@@ -367,7 +403,7 @@ public class ToothMagic : ModProjectile, IWarpProjectile
 			k0 += 3.14f + 1.57f;
 			if (k0 > 6.28f)
 				k0 -= 6.28f;
-			Color c0 = new Color(k0, 0.4f, 0, 0) * MulByTimeLeft;
+			Color c0 = new Color(k0, 0.2f, 0, 0) * MulByTimeLeft;
 
 			var factor = i / (float)TrueL;
 			float x0 = factor * 1.3f - (float)(Main.time / 150d) + 100000;
