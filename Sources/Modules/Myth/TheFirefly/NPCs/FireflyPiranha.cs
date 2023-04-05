@@ -279,11 +279,11 @@ public class FireflyPiranha : ModNPC
 	public override void OnKill()
 	{
 		Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, Main.rand.Next(40)).RotatedByRandom(6.283),
-			   new Vector2(0, Main.rand.Next(8)).RotatedByRandom(6.283), ModContent.Find<ModGore>("Everglow/FireflyPiranha0").Type);
+			   new Vector2(0, Main.rand.NextFloat(8)).RotatedByRandom(6.283), ModContent.Find<ModGore>("Everglow/FireflyPiranha0").Type);
 		Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, Main.rand.Next(40)).RotatedByRandom(6.283),
-			   new Vector2(0, Main.rand.Next(8)).RotatedByRandom(6.283), ModContent.Find<ModGore>("Everglow/FireflyPiranha1").Type);
+			   new Vector2(0, Main.rand.NextFloat(8)).RotatedByRandom(6.283), ModContent.Find<ModGore>("Everglow/FireflyPiranha1").Type);
 		Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, Main.rand.Next(40)).RotatedByRandom(6.283),
-			   new Vector2(0, Main.rand.Next(8)).RotatedByRandom(6.283), ModContent.Find<ModGore>("Everglow/FireflyPiranha2").Type);
+			   new Vector2(0, Main.rand.NextFloat(8)).RotatedByRandom(6.283), ModContent.Find<ModGore>("Everglow/FireflyPiranha2").Type);
 		for (int f = 0; f < 24; f++)
 		{
 			Vector2 v0 = new Vector2(0, Main.rand.NextFloat(15f)).RotatedByRandom(6.283);

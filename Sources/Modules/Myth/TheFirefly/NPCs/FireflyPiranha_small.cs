@@ -38,7 +38,6 @@ public class FireflyPiranha_small : ModNPC
 			{
 				NPC.TargetClosest();
 				WanderingWithoutTarget();
-				NPCFrameAnimationType = 0;
 			}
 			NPC.knockBackResist = 0.4f;
 			NPC.noGravity= true;
@@ -46,7 +45,6 @@ public class FireflyPiranha_small : ModNPC
 			{
 				Player player = Main.player[NPC.target];
 				NormalAttack(player);
-				NPCFrameAnimationType = 1;
 				PhysicalStrength -= 1;
 				if(PhysicalStrength <= 2)
 				{
@@ -65,7 +63,6 @@ public class FireflyPiranha_small : ModNPC
 			{
 				Player player = Main.player[NPC.target];
 				Wander(player);
-				NPCFrameAnimationType = 0;
 				PhysicalStrength++;
 				if (PhysicalStrength >= 0)
 				{
@@ -271,7 +268,6 @@ public class FireflyPiranha_small : ModNPC
 			NPC.velocity.Y *= 0.94f;
 		}
 	}
-	private int NPCFrameAnimationType = 0;
 	public override void FindFrame(int frameHeight)
 	{
 		frameHeight = 38;
@@ -305,11 +301,11 @@ public class FireflyPiranha_small : ModNPC
 	public override void OnKill()
 	{
 		Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, Main.rand.Next(40)).RotatedByRandom(6.283),
-			   new Vector2(0, Main.rand.Next(8)).RotatedByRandom(6.283), ModContent.Find<ModGore>("Everglow/FireflyPiranha0").Type);
+			   new Vector2(0, Main.rand.NextFloat(4)).RotatedByRandom(6.283), ModContent.Find<ModGore>("Everglow/FireflyPiranhaSmall0").Type);
 		Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, Main.rand.Next(40)).RotatedByRandom(6.283),
-			   new Vector2(0, Main.rand.Next(8)).RotatedByRandom(6.283), ModContent.Find<ModGore>("Everglow/FireflyPiranha1").Type);
+			   new Vector2(0, Main.rand.NextFloat(4)).RotatedByRandom(6.283), ModContent.Find<ModGore>("Everglow/FireflyPiranhaSmall1").Type);
 		Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, Main.rand.Next(40)).RotatedByRandom(6.283),
-			   new Vector2(0, Main.rand.Next(8)).RotatedByRandom(6.283), ModContent.Find<ModGore>("Everglow/FireflyPiranha2").Type);
+			   new Vector2(0, Main.rand.NextFloat(4)).RotatedByRandom(6.283), ModContent.Find<ModGore>("Everglow/FireflyPiranhaSmall2").Type);
 		for (int f = 0; f < 32; f++)
 		{
 			Vector2 v0 = new Vector2(0, Main.rand.NextFloat(15f)).RotatedByRandom(6.283);
