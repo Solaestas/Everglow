@@ -1,6 +1,6 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.MiscItems.Weapons.Slingshots.Buffs;
-using Terraria;
+using Everglow.Myth.MiscItems.Weapons.Slingshots.Projectiles.AmbiguousNightEffects;
 using Terraria.Audio;
 namespace Everglow.Myth.MiscItems.Weapons.Slingshots.Projectiles;
 
@@ -8,6 +8,71 @@ public class AmbiguousNightAmmo : SlingshotAmmo
 {
 	public override void SetDef()
 	{
+	}
+	public override void AI()
+	{
+		if(Projectile.velocity.Length() > 1)
+		{
+			GenerateVFX(2);
+		}
+		int index = Dust.NewDust(Projectile.position - new Vector2(4), Projectile.width, Projectile.height, DustID.WaterCandle, 0f, 0f, 0, default, Main.rand.NextFloat(0.4f, 0.8f));
+		Main.dust[index].velocity = Projectile.velocity * Main.rand.NextFloat(0.85f, 1.15f) * 0.55f;
+		base.AI();
+	}
+	public override void Kill(int timeLeft)
+	{
+		base.Kill(timeLeft);
+	}
+	public void GenerateVFX(int Frequency)
+	{
+		float mulVelocity = 1f;
+		for (int g = 0; g < Frequency; g++)
+		{
+
+			Vector2 afterVelocity = Projectile.velocity;
+			if(afterVelocity.Length() > 25)
+			{
+				afterVelocity = afterVelocity * 25 / afterVelocity.Length();
+			}
+			float mulWidth = 1f;
+			if (afterVelocity.Length() < 10)
+			{
+				mulWidth = afterVelocity.Length() / 10f;
+			}
+			if(Projectile.timeLeft > 3580)
+			{
+				mulWidth *= (3600 - Projectile.timeLeft) / 20f;
+			}
+			var darknessNight = new DarknessOfNightDust
+			{
+				velocity = afterVelocity * Main.rand.NextFloat(0.25f, 0.45f) * mulVelocity + Projectile.velocity.SafeNormalize(new Vector2(0, -1)),
+				Active = true,
+				Visible = true,
+				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * Main.rand.NextFloat(-3f, 2f),
+				maxTime = Main.rand.Next(27, 72),
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0, Main.rand.NextFloat(6.6f, 18f) * mulWidth }
+			};
+			Ins.VFXManager.Add(darknessNight);
+		}
+	}
+	public void GenerateVFXKill()
+	{
+		float size =1f;
+		if (Projectile.velocity.Length() > 12f)
+		{
+			size = Projectile.velocity.Length() / 12f;
+		}
+		var darknessWave = new DarknessOfNightWave
+		{
+			velocity = Vector2.Zero,
+			Active = true,
+			Visible = true,
+			position = Projectile.Center,
+			maxTime = 100,
+			radius = 0,
+			ai = new float[] { Main.rand.NextFloat(0.1f, 1f), 2f * size, 44f * size }
+		};
+		Ins.VFXManager.Add(darknessWave);
 	}
 	public override void DrawTrail()
 	{
@@ -40,9 +105,8 @@ public class AmbiguousNightAmmo : SlingshotAmmo
 			width *= 1 - factor;
 			var color = new Color(255, 255, 255, 0);
 
-			float fac1 = factor * 3 + (float)(-Main.timeForVisualEffects * 0.03) + 100000;
-			float fac2 = (i + 1) / (float)TrueL * 3 + (float)(-Main.timeForVisualEffects * 0.03) + 100000;
-			//TODO:925分钟之后会炸
+			float fac1 = factor * 3 + Math.Abs((float)(-Main.timeForVisualEffects * 0.03) + 100000);
+			float fac2 = (i + 1) / (float)TrueL * 3 + Math.Abs((float)(-Main.timeForVisualEffects * 0.03) + 100000);
 
 			fac1 %= 1f;
 			fac2 %= 1f;
@@ -149,15 +213,22 @@ public class AmbiguousNightAmmo : SlingshotAmmo
 	}
 	public override void AmmoHit()
 	{
+		GenerateVFXKill();
 		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot.WithVolumeScale(Projectile.ai[0]), Projectile.Center);
 		Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<NormalHit>(), Projectile.damage, Projectile.knockBack, Projectile.owner, Projectile.velocity.Length(), Main.rand.NextFloat(6.283f));
+		float blackHoleSize = 0.08f;
+		if(Projectile.velocity.Length() > 12f)
+		{
+			blackHoleSize = Projectile.velocity.Length() / 12f * 0.08f;
+		}
+		Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<AmbiguousNightHit>(), Projectile.damage, Projectile.knockBack, Projectile.owner, blackHoleSize, Main.rand.NextFloat(6.283f));
 		float Power = Projectile.ai[0] + 0.5f;
 
 		for (int x = 0; x < 100 * Power; x++)
 		{
-			int index = Dust.NewDust(Projectile.position - new Vector2(4), Projectile.width, Projectile.height, DustID.WaterCandle, 0f, 0f, 0, default, Power * Main.rand.NextFloat(1.7f, 2.3f));
+			int index = Dust.NewDust(Projectile.position - new Vector2(4), Projectile.width, Projectile.height, DustID.WaterCandle, 0f, 0f, 0, default, Power * Main.rand.NextFloat(0.7f, 1.3f));
+			Main.dust[index].noGravity= true;
 			Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(3.5f, 4f)).RotatedByRandom(6.283) * Power;
-
 		}
 		Projectile.friendly = false;
 		TimeTokill = 30;
@@ -165,5 +236,6 @@ public class AmbiguousNightAmmo : SlingshotAmmo
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		target.AddBuff(ModContent.BuffType<ShadowSupervisor>(), (int)(600 * Projectile.ai[0]) + 120);
+		AmmoHit();
 	}
 }
