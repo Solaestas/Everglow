@@ -42,7 +42,7 @@ internal class PylonValidCheck : GlobalPylon
 		{
 			if (!PylonSystem.Instance.shabbyPylonEnable)
 			{
-				errorKey = Language.GetTextValue("Mods.Everglow.Common.NotActivated");
+				errorKey = Language.GetTextValue("Mods.Everglow.Myth.Common.NotActivated");
 				return;
 			}
 
@@ -53,7 +53,7 @@ internal class PylonValidCheck : GlobalPylon
 			}
 			else
 			{
-				errorKey = Language.GetTextValue("Mods.Everglow.PylonSystem.FireflyPylonLimit");
+				errorKey = Language.GetTextValue("Mods.Everglow.Myth.PylonSystem.FireflyPylonLimit");
 				destinationPylonValid = false;
 			}
 		}

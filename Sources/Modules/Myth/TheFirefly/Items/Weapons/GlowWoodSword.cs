@@ -43,9 +43,9 @@ public class GlowWoodSword : ModItem
 			{
 				tooltips.AddRange(new TooltipLine[]
 				{
-					new(ModIns.Mod, "MothEyeBonusText", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeBonusText")),
-					new(ModIns.Mod, "MothEyeGlowSwordBonus0", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextGlowSword0")),
-					new(ModIns.Mod, "MothEyeGlowSwordBonus1", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextGlowSword1")),
+					new(ModIns.Mod, "MothEyeBonusText", Language.GetTextValue("Mods.Everglow.Myth.ExtraTooltip.FireflyItems.MothEyeBonusText")),
+					new(ModIns.Mod, "MothEyeGlowSwordBonus0", Language.GetTextValue("Mods.Everglow.Myth.ExtraTooltip.FireflyItems.MEyeBonusTextGlowSword0")),
+					new(ModIns.Mod, "MothEyeGlowSwordBonus1", Language.GetTextValue("Mods.Everglow.Myth.ExtraTooltip.FireflyItems.MEyeBonusTextGlowSword1")),
 				});
 			}
 		}

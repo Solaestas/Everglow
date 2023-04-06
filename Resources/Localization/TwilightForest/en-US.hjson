@@ -1,0 +1,30 @@
+
+Mods: {
+	Everglow: {
+		TwilightForest: {
+			Common: {
+				Hour: hour
+				Minute: minute
+				Second: second
+				Duration: duration
+			}
+
+			Items: {
+				TreePlacer.DisplayName: Tree Placer
+				TwilightWood.DisplayName: Twilight Wood
+			}
+
+			MapEntry: {
+				TwilightTree: Mods.Everglow.MapEntry.TwilightTree
+			}
+
+			Biomes: {
+				FireflyBiome.DisplayName: Glowing Cocoon
+				TuskBiome.DisplayName: Tusk Biome
+				TuskSurfaceBiome.DisplayName: Cursed Jaw
+				KelpCurtainBiome.DisplayName: Kelp Curtain
+				YggdrasilTownBiome.DisplayName: Yggdrasil Town
+			}
+		}
+	}
+}

@@ -84,10 +84,10 @@ public class EvilPack : ModNPC
 					if (!NPC.AnyNPCs(ModContent.NPCType<CorruptMoth>()))
 					{
 						if ((SteamID64 == 76561198074262598 /*Cataclysmic Armageddon*/ || SteamID64 == 76561198300589095 /*Setnour6*/)/* && EverglowConfig.DebugMode*/)
-							Main.NewText("Cataclysmic Armageddon's Long Lost Older Cousin Calamatious Annihilation the Corrupted Moth " + $"{Language.GetTextValue(Language.GetTextValue("Mods.Everglow.Common.Message.HasAwoken"))}", 175, 75, 255);
+							Main.NewText("Cataclysmic Armageddon's Long Lost Older Cousin Calamatious Annihilation the Corrupted Moth " + $"{Language.GetTextValue(Language.GetTextValue("Mods.Everglow.Myth.Common.Message.HasAwoken"))}", 175, 75, 255);
 						else
 						{
-							Main.NewText($"{Language.GetTextValue("Mods.Everglow.NPCName.CorruptMoth")} {Language.GetTextValue("Mods.Everglow.Common.Message.HasAwoken")}", 175, 75, 255);
+							Main.NewText($"{Language.GetTextValue("Mods.Everglow.Myth.NPCName.CorruptMoth")} {Language.GetTextValue("Mods.Everglow.Myth.Common.Message.HasAwoken")}", 175, 75, 255);
 						}
 					}
 					int n = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.position.X + 26, (int)NPC.position.Y + 106, ModContent.NPCType<CorruptMoth>());

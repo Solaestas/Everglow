@@ -1,0 +1,32 @@
+
+Mods: {
+	Everglow: {
+		MEAC: {
+			Common: {
+				Hour: hour
+				Minute: minute
+				Second: second
+			}
+
+			Items: {
+				VortexVanquisherItem: {
+					DisplayName: Vortex Vanquisher
+					Tooltip:
+						'''
+						{$Mods.Everglow.Common.ExcluWeapon}
+						[c/B4B16E:'This is Order']
+						Left click in succession to perform different attacks
+						The last attack slightly propels you to the cursor
+						Left click and hold to dash and summon falling spears
+						Right click to summon a pillar and grant you a damage-reducing shield
+						'''
+				}
+			}
+
+			Projectiles: {
+				GoldShield.DisplayName: Gold Shield
+				VortexVanquisher.DisplayName: Vortex Vanquisher
+			}
+		}
+	}
+}

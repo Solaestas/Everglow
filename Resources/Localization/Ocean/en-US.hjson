@@ -1,0 +1,22 @@
+
+Mods: {
+	Everglow: {
+		Ocean: {
+			Common: {
+				Hour: hour
+				Minute: minute
+				Second: second
+				Duration: duration
+			}
+
+			Items: {
+				RampageShark.DisplayName: Rampage Shark
+			}
+
+			Projectiles: {
+				RampageShark.DisplayName: Rampage Shark
+				RampageSharkHit.DisplayName: Rampage Shark Hit
+			}
+		}
+	}
+}

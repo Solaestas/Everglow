@@ -56,14 +56,14 @@ public class FireflyBorageBadge : ModItem
 			{
 				tooltips.AddRange(new TooltipLine[]
 				{
-				   new(ModIns.Mod, "FFBBadge0", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.FFBBadge0")),
-				   new(ModIns.Mod, "FFBBadge1", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.FFBBadge1")),
-				   new(ModIns.Mod, "FFBBadge2", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.FFBBadge2")),
-				   new(ModIns.Mod, "FFBBadge3", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.FFBBadge3")),
-				   new(ModIns.Mod, "FFBBadge4", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.FFBBadge4")),
+				   new(ModIns.Mod, "FFBBadge0", Language.GetTextValue("Mods.Everglow.Myth.ExtraTooltip.FireflyItems.FFBBadge0")),
+				   new(ModIns.Mod, "FFBBadge1", Language.GetTextValue("Mods.Everglow.Myth.ExtraTooltip.FireflyItems.FFBBadge1")),
+				   new(ModIns.Mod, "FFBBadge2", Language.GetTextValue("Mods.Everglow.Myth.ExtraTooltip.FireflyItems.FFBBadge2")),
+				   new(ModIns.Mod, "FFBBadge3", Language.GetTextValue("Mods.Everglow.Myth.ExtraTooltip.FireflyItems.FFBBadge3")),
+				   new(ModIns.Mod, "FFBBadge4", Language.GetTextValue("Mods.Everglow.Myth.ExtraTooltip.FireflyItems.FFBBadge4")),
 				});
 			}
-			tooltips.Add(new TooltipLine(ModIns.Mod, "UnfinishedItem", Language.GetTextValue("Mods.Everglow.ExtraTooltip.Misc.UnfinishedItem")));
+			tooltips.Add(new TooltipLine(ModIns.Mod, "UnfinishedItem", Language.GetTextValue("Mods.Everglow.Myth.ExtraTooltip.Misc.UnfinishedItem")));
 		}
 		base.ModifyTooltips(tooltips);
 	}

@@ -32,7 +32,7 @@ public class GreatTombLand : ModSystem
 		public override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
 		{
 			//Todo:翻译：生成森林的大墓地 HJSON
-			//Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everlow.Common.WorldSystem.BuildGreatTombLand");
+			//Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everglow.Minortopography.Common.WorldSystem.BuildGreatTombLand");
 			progress.Message = "正在生成丛林的阴森墓穴集群……";
 			//构建墓地的主要方法
 			BuildGreatTombLand();

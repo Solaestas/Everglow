@@ -17,7 +17,7 @@ public class TwilightTree : ModTile
 		Main.tileNoAttach[Type] = false;
 
 		TileID.Sets.IsATreeTrunk[Type] = true;
-		var modTranslation = Language.GetText("Mods.Everglow.MapEntry.TwilightTree");
+		var modTranslation = Language.GetText("Mods.Everglow.TwilightForest.MapEntry.TwilightTree");
 		AddMapEntry(new Color(58, 53, 50), modTranslation);
 		DustType = ModContent.DustType<Dusts.TwilightTreeDust>();
 		ItemDrop = ModContent.ItemType<Items.TwilightWood>();

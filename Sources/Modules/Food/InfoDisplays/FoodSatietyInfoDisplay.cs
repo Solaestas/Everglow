@@ -13,7 +13,7 @@ public class FoodSatietyInfoDisplay : InfoDisplay
 	{
 		int currentSatiety = Main.LocalPlayer.GetModPlayer<FoodModPlayer>().CurrentSatiety;
 		int level = Main.LocalPlayer.GetModPlayer<FoodModPlayer>().SatietyLevel;
-		return Language.GetTextValue("Mods.Everglow.InfoDisplay.Satiety", currentSatiety, Language.GetTextValue($"Mods.Everglow.InfoDisplay.SatietyLevel.{level}"));
+		return Language.GetTextValue("Mods.Everglow.Food.InfoDisplay.Satiety", currentSatiety, Language.GetTextValue($"Mods.Everglow.Food.InfoDisplay.SatietyLevel.{level}"));
 	}
 }
 

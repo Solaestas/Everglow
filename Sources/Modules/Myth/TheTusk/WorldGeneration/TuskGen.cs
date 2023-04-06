@@ -85,7 +85,7 @@ public class TuskGen : ModSystem
 
 		public override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
 		{
-			Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everglow.Common.WorldSystem.BuildWorldTuskTable");
+			Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everglow.Myth.Common.WorldSystem.BuildWorldTuskTable");
 			BuildTuskLand();
 		}
 	}

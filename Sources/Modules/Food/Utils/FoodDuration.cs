@@ -99,16 +99,16 @@ public class FoodDuration
 	{
 		var sb = new StringBuilder();
 		if (m_hours != 0)
-			sb.Append($"{m_hours} " + Language.GetTextValue("Mods.Everglow.Common.Hour"));
+			sb.Append($"{m_hours} " + Language.GetTextValue("Mods.Everglow.Food.Common.Hour"));
 		if (m_minutes != 0)
-			sb.Append($"{m_minutes} " + Language.GetTextValue("Mods.Everglow.Common.Minute"));
+			sb.Append($"{m_minutes} " + Language.GetTextValue("Mods.Everglow.Food.Common.Minute"));
 		if (m_seconds != 0 && m_frames == 0)
-			sb.Append($"{m_seconds} " + Language.GetTextValue("Mods.Everglow.Common.Second"));
+			sb.Append($"{m_seconds} " + Language.GetTextValue("Mods.Everglow.Food.Common.Second"));
 		else if (m_seconds != 0 && m_frames != 0)
 		{
-			sb.Append($"{(m_seconds + m_frames / 60.0).ToString("0.##")} " + Language.GetTextValue("Mods.Everglow.Common.Second"));
+			sb.Append($"{(m_seconds + m_frames / 60.0).ToString("0.##")} " + Language.GetTextValue("Mods.Everglow.Food.Common.Second"));
 		}
-		sb.Append(" " + Language.GetTextValue("Mods.Everglow.Common.Duration"));
+		sb.Append(" " + Language.GetTextValue("Mods.Everglow.Food.Common.Duration"));
 		return sb.ToString();
 	}
 }

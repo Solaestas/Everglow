@@ -1,0 +1,1506 @@
+
+Mods: {
+	Everglow: {
+		Food: {
+			Common: {
+				Hour: hour
+				Minute: minute
+				Second: second
+				Duration: duration
+				#食物系统FoodSystem
+				FoodSystem: {
+					Satiety: Satiety
+					CannotEat: You are full
+					CannotDrink: You don't feel like drinking
+					Khan: Khan, take me on one more charge
+				}
+			}
+			Items: {
+				BloodGlucoseMonitor: {
+					# 食物系统物品
+					DisplayName: Blood Glucose Monitor
+					#食物系统物品
+					Tooltip: Display hunger information
+				}
+
+				OsmoticPressureMonitor: {
+					DisplayName: Osmotic Pressure Monitor
+					Tooltip: Display thirst information
+				}
+
+				FryingPanItem: {
+					DisplayName: Frying Pan
+					Tooltip: Left click to throw it as a boomerang, right click and hold to swing it as a sword
+				}
+
+				B_52: {
+					# Modded items
+					# Modded drink items
+					DisplayName: B_52
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						'轰炸机！！！'
+						'''
+				}
+
+				BlueHawaii: {
+					DisplayName: 蓝色夏威夷
+					# Modded items
+					# Modded drink items
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						'海风吹拂'
+						'''
+				}
+
+				DreamYearning: {
+					DisplayName: 魂牵梦萦
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						'思君忆君，魂牵梦萦，翠销香暖云屏，更哪堪酒醒。'
+						'''
+				}
+
+				DryMartini: {
+					DisplayName: 干马提尼
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						'经典之作'
+						'''
+				}
+
+				GreenStorm: {
+					DisplayName: 绿色风暴
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						'别以为草便宜,没上规模前,它比苹果核桃什么的都贵。'
+						'''
+				}
+
+				KiwiJuice: {
+					DisplayName: 猕猴桃果汁
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						'浓缩的奇异之力'
+						'''
+				}
+
+				LonelyJellyfish: {
+					DisplayName: 孤独的水母
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						'观赏完就一饮而尽吧'
+						'''
+				}
+
+				OrangeJuice: {
+					DisplayName: 橙汁
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						'嗯，有点像LCL'
+						'''
+				}
+
+				PiercoldWind: {
+					DisplayName: 寒风凛冽
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						'长啸出原野，凛然寒风生。'
+						'''
+				}
+
+				PurpleHooter: {
+					DisplayName: 紫色汽笛
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						'高贵与深沉'
+						'''
+				}
+
+				QuinceMarry: {
+					DisplayName: 榅桲玛丽
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						'炙热与温柔'
+						'''
+				}
+
+				RedWine: {
+					DisplayName: 红酒
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						'上流与优雅'
+						'''
+				}
+
+				Sunrise: {
+					DisplayName: 日出
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						'阳光与明媚'
+						'''
+				}
+
+				Tricolour: {
+					DisplayName: 三色旗
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						'复杂与专一'
+						'''
+				}
+
+				WaterMelonJuice: {
+					DisplayName: 西瓜汁
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						'浓缩的打击力度'
+						'''
+				}
+
+				ArcticshellfishWarship: {
+					# Modded food items
+					DisplayName: Arctic Shellfish Warship
+					# Modded food items
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						Increases defense
+						'Delicious arctic shellfish warship'
+						'''
+				}
+
+				BakedMussel: {
+					DisplayName: Baked Mussel
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						6% increased crit damage and 4 increased defense
+						'Seems to be less raw'
+						'''
+				}
+
+				BakedOyster: {
+					DisplayName: Baked Oyster
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						4 increased armor penetration and defense
+						'Parasites slain'
+						'''
+				}
+
+				CantaloupeJelly: {
+					DisplayName: Cantaloupe Jelly
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						Your projectiles can penetrate one more time
+						'Duang, duang, duang'
+						'''
+				}
+
+				CaramelPudding: {
+					DisplayName: Caramel Pudding
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						Your projectiles can penetrate one more time
+						'Duang, duang, duang'
+						'''
+				}
+
+				CrabseedWarship: {
+					DisplayName: Crab Roe Warship
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						Increases crit chance
+						'Delicious crab roe warship'
+						'''
+				}
+
+				Durian: {
+					DisplayName: Durian
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						Speeds up digestion
+						'Helps digestion'
+						'''
+				}
+
+				EggTart: {
+					DisplayName: Egg Tart
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						5% increased crit damage 
+						'Crispy crust'
+						'''
+				}
+
+				KiwiFruit: {
+					DisplayName: Kiwi Fruit
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						20% increased weapon size
+						'Also called Chinese gooseberry'
+						'''
+				}
+
+				KiwiIceCream: {
+					DisplayName: Kiwi Icecream
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						10% increased weapon size and increases attack speed
+						'Kiwi power'
+						'''
+				}
+
+				Mangosteen: {
+					DisplayName: Mangosteen
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						Increases attack range of boomerangs, yoyos and flails
+						'Nurishing'
+						'''
+				}
+
+				OrangeIcecream: {
+					DisplayName: Orange Icecream
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						Extends invincibility frames
+						'The reality is in your mind'
+						'''
+				}
+
+				SalmonInPepper: {
+					DisplayName: Pepper Salmon
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						Increases movement speed, especially in water
+						'Queen of the Arctic ocean'
+						'''
+				}
+
+				SalmonWarship: {
+					DisplayName: Salmon Warship
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						Increases movement speed
+						'Delicious salmon warship'
+						'''
+				}
+
+				SeafoodPizza: {
+					DisplayName: Seafood Pizza
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						Increases most stats
+						'It's not easy to finish this by one'
+						'''
+				}
+
+				StinkyTofu: {
+					DisplayName: Stinky Tofu
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						Confuses nearby enemies
+						'Appetizing but stinky'
+						'''
+				}
+
+				Strawberry: {
+					DisplayName: Strawberry
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						Nearer enemies take more damage
+						'Popular fruit'
+						'''
+				}
+
+				StrawberryIcecream: {
+					DisplayName: Strawberry Icecream
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						Nearer enemies take more damage
+						'Cold as you, but still I can't part with it'
+						'''
+				}
+
+				SweetshrimpSushi: {
+					DisplayName: Sweetshrimp Sushi
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						Increases damage
+						'Delicious sweetshrip sushi'
+						'''
+				}
+
+				TamakoSushi: {
+					DisplayName: Tamago Sushi
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						Increases life regeneration
+						'Delicious tamago sushi'
+						'''
+				}
+
+				WakameWarship: {
+					DisplayName: Wakame Warship
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						Increases mana regeneration
+						'Delicious wakame sushi'
+						'''
+				}
+
+				Watermelon: {
+					DisplayName: Watermelon
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						8% increases knockback
+						'I'm more curious about how you can eat it whole than the watermelon itself'
+						'''
+				}
+
+				WatermelonPlate: {
+					DisplayName: Watermelon Plate
+					Tooltip:
+						'''
+						{$CommonItemTooltip.MediumStats}
+						6% increased crit chance and crit damage
+						'Unpretentious arrangement'
+						'''
+				}
+			}
+
+			Buffs: {
+				FoodBuff: {
+					#Food system buff
+					DisplayName: You just finished eating
+					#食物系统buff
+					Description: Food Buff
+				}
+
+				AleBuff: {
+					#New buffs to the original food
+					DisplayName: Tipsy
+					#原版食物的新buff
+					Description:
+						'''
+						150% increased whip range and speed
+						'Drunk'
+						'''
+				}
+
+				AppleBuff: {
+					DisplayName: Apple
+					Description:
+						'''
+						5% increased damage reduction
+						'An apple a day, doctors away'
+						'''
+				}
+
+				AppleJuiceBuff: {
+					DisplayName: Apple Juice
+					Description:
+						'''
+						60% increased damage reduction
+						'An apple a day, doctors away'
+						'''
+				}
+
+				ApplePieBuff: {
+					DisplayName: Apple Pie
+					Description:
+						'''
+						5% increased damage reduction and 1 increased life regen
+						'An apple a day, doctors away'
+						'''
+				}
+
+				ApricotBuff: {
+					DisplayName: Apricot
+					Description:
+						'''
+						4 increased mana regen
+						'Quenching'
+						'''
+				}
+
+				BaconBuff: {
+					DisplayName: Bacon
+					Description:
+						'''
+						2 increased life regen, take less damage from cold sources
+						'Warmth'
+						'''
+				}
+
+				BananaBuff: {
+					DisplayName: Banana
+					Description:
+						'''
+						20% chance to not consume ammo, 5% increased ranged damage
+						'Low blood preasure'
+						'''
+				}
+
+				BananaDaiquiriBuff: {
+					DisplayName: Banana Daiquiri
+					Description:
+						'''
+						No ammo consumption, greatly increased ranged damage and crit change
+						'Low body temperature and blood pressure'
+						'''
+				}
+
+				BananaSplitBuff: {
+					DisplayName: Banana Split
+					Description:
+						'''
+						33% to not consume ammo, 8% increased ranged crit chance
+						'Low blood preasure'
+						'''
+				}
+
+				BBQRibsBuff: {
+					DisplayName: BBQ Ribs
+					Description:
+						'''
+						50 increased max life
+						'Hematinic'
+						'''
+				}
+
+				BlackCurrantBuff: {
+					DisplayName: Black Currant
+					Description:
+						'''
+						You get increased night vision and can see nearby harzards
+						'Improves vision'
+						'''
+				}
+
+				BloodOrangeBuff: {
+					DisplayName: Blood Orange
+					Description:
+						'''
+						25 increased max life
+						'Not Calamity'
+						'''
+				}
+
+				BloodyMoscatoBuff: {
+					DisplayName: Bloody Moscato
+					Description:
+						'''
+						Each of your attacks heals you by 2
+						'Sanguine'
+						'''
+				}
+
+				BowlofSoupBuff: {
+					DisplayName: Bowl of Soup
+					Description:
+						'''
+						20 increased max mana and 5% increased magic damage
+						'Brain food'
+						'''
+				}
+
+				BunnyStewBuff: {
+					DisplayName: Bunny Stew
+					Description:
+						'''
+						Enabled auto jump and increased jumping ability
+						'No rabit was hurt during production process'
+						'''
+				}
+
+				BurgerBuff: {
+					DisplayName: Burger
+					Description:
+						'''
+						Reduced movement speed but increased defense
+						'Calorie bomb'
+						'''
+				}
+
+				CherryBuff: {
+					DisplayName: Cherry
+					Description:
+						'''
+						Lauches an explosion on death and apply this buff to all targets
+						'Your love, is your life'
+						'''
+				}
+
+				ChickenNuggetBuff: {
+					DisplayName: Chicken Nugget
+					Description:
+						'''
+						1 increased life regen and 4% increased attack speed
+						'Finger-licking good!'
+						'''
+				}
+
+				ChocolateChipCookieBuff: {
+					DisplayName: Chocolate Chip Cookie
+					Description:
+						'''
+						2 increased life and mana regen
+						'Restoring energy'
+						'''
+				}
+
+				ChristmasPuddingBuff: {
+					DisplayName: Christmas Pudding
+					Description:
+						'''
+						800 decreased aggro
+						'Beauty'
+						'''
+				}
+
+				CoconutBuff: {
+					DisplayName: Coconut
+					Description:
+						'''
+						4 increased defense and 3% increased damage reduction
+						'From bra to BRA(Not true)'
+						'''
+				}
+
+				CoffeeCupBuff: {
+					DisplayName: Coffee Cup
+					Description:
+						'''
+						Greatly increased wall-placing speed, highlights enemies, traps, chests and you emit light
+						'Treasure of corporate slaves'
+						'''
+				}
+
+				CookedFishBuff: {
+					DisplayName: Cooked Fish
+					Description:
+						'''
+						40 increased max mana and 4% increased magic crit chance
+						'Benifits spleen'
+						'''
+				}
+
+				CookedMarshmallowBuff: {
+					DisplayName: Cooked Marshmallow
+					Description:
+						'''
+						75% decreased max falling speed
+						'Pily'
+						'''
+				}
+
+				CookedShrimpBuff: {
+					DisplayName: Cooked Shrimp
+					Description:
+						'''
+						10 increased defense and 4 increased armor penetration
+						'Calcium supplement'
+						'''
+				}
+
+				CreamSodaBuff: {
+					DisplayName: Cream Soda
+					Description:
+						'''
+						Greatly increased melee ability and aggro
+						'Diarrhea!'
+						'''
+				}
+
+				DragonfruitBuff: {
+					DisplayName: Milk Carton
+					Description:
+						'''
+						Attacks inflict On Fire! and Oiled
+						'Redot-rehot'
+						'''
+				}
+
+				ElderberryBuff: {
+					DisplayName: Elderberry
+					Description:
+						'''
+						You may dash slightly
+						'Antioxidation'
+						'''
+				}
+
+				EscargotBuff: {
+					DisplayName: Escargo
+					Description:
+						'''
+						You can hardly move but 25% increased damage reduction
+						'Potion of the Turtle Master?'
+						'''
+				}
+
+				FriedEggBuff: {
+					DisplayName: Fried Egg
+					Description:
+						'''
+						Increased attack range of throwing weapons
+						'Protein'
+						'''
+				}
+
+				FriesBuff: {
+					DisplayName: Fries
+					Description:
+						'''
+						4 increased defense and 8% increased crit chance
+						'High oil and salt'
+						'''
+				}
+
+				FroggleBunwichBuff: {
+					DisplayName: Froggle Bunwich
+					Description:
+						'''
+						Enabled auto jump, increased damage and jumping ability
+						'You can really taste the narsh'
+						'''
+				}
+
+				FruitJuiceBuff: {
+					DisplayName: Fruit Juice
+					Description:
+						'''
+						Greatly increased certain stats
+						'Vitamin!'
+						'''
+				}
+
+				FruitSaladBuff: {
+					DisplayName: Fruit Salad
+					Description:
+						'''
+						Increased most stats
+						'Long-lasting vitamin!'
+						'''
+				}
+
+				GingerbreadCookieBuff: {
+					DisplayName: Gingerbread Cookie
+					Description:
+						'''
+						2 increased life regen and reduced damage from cold sources
+						'Warmth'
+						'''
+				}
+
+				GoldenDelightBuff: {
+					DisplayName: Golden Delight
+					Description:
+						'''
+						Your attacks inflict Midas, increased most stats
+						'Golden!'
+						'''
+				}
+
+				GrapefruitBuff: {
+					DisplayName: Grapefruit
+					Description:
+						'''
+						50% increased minion knockback
+						'Avoid renal failure'
+						'''
+				}
+
+				GrapeJuiceBuff: {
+					DisplayName: Grape Juice
+					Description:
+						'''
+						You are feeling extremely lucky
+						'Concentrated happiness'
+						'''
+				}
+
+				GrapesBuff: {
+					DisplayName: Grapes
+					Description:
+						'''
+						1 increased max minion, 10% increased luck but 12 decreased defense
+						'Fruitful'
+						'''
+				}
+
+				GrilledSquirrelBuff: {
+					DisplayName: Grilled Squirrel
+					Description:
+						'''
+						Increased jumping ability
+						'Delight'
+						'''
+				}
+
+				GrubSoupBuff: {
+					DisplayName: Grub Soup
+					Description:
+						'''
+						25 increased fishing power but you lose 2 life per second
+						'You get what you eat, but a bit disgusting'
+						'''
+				}
+
+				HotdogBuff: {
+					DisplayName: Hotdog
+					Description:
+						'''
+						Reduced movement speed but increased melee damage
+						'Yee~~'
+						'''
+				}
+
+				IceCreamBuff: {
+					DisplayName: Ice Cream
+					Description:
+						'''
+						Immune to On Fire! and fire blocks
+						'Eat snow(Nope'
+						'''
+				}
+
+				LemonadeBuff: {
+					DisplayName: Lemonade
+					Description:
+						'''
+						Doubled ranged knockback and 2400 reduced aggro
+						'Beauty'
+						'''
+				}
+
+				LemonBuff: {
+					DisplayName: Lemon
+					Description:
+						'''
+						4% increased ranged crit chance and 300 reduced aggro
+						'Beauty'
+						'''
+				}
+
+				LobsterTailBuff: {
+					DisplayName: Lobster Tail
+					Description:
+						'''
+						6 increased defense and 25% increased mining speed
+						'Life force'
+						'''
+				}
+
+				MangoBuff: {
+					DisplayName: Mango
+					Description:
+						'''
+						Reduced continuous life loss caused by food buff
+						“Detoxifying”
+						'''
+				}
+
+				MarshmallowBuff: {
+					DisplayName: Marshmallow
+					Description:
+						'''
+						Allows you to double jump
+						'Like the cloud'
+						'''
+				}
+
+				MilkCartonBuff: {
+					DisplayName: Milk Carton
+					Description:
+						'''
+						Immune to most debuffs
+						'Milk removes every debuff'
+						'''
+				}
+
+				MilkshakeBuff: {
+					DisplayName: Milkshake
+					Description:
+						'''
+						Greatly increased movement speed
+						'Diet'
+						'''
+				}
+
+				MonsterLasagnaBuff: {
+					DisplayName: Monster Lasagna
+					Description:
+						'''
+						25% increased crit chance but you lose 3 life per second
+						'Cooked devil is still a devil, it won't change even in lasagna'
+						'''
+				}
+
+				NachosBuff: {
+					DisplayName: Nachos
+					Description:
+						'''
+						Amplifies launchers
+						'Popcorn'
+						'''
+				}
+
+				PadThaiBuff: {
+					DisplayName: Pad Thai
+					Description:
+						'''
+						50% increased minion knockback
+						'Exotic flavour'
+						'''
+				}
+
+				PeachBuff: {
+					DisplayName: Peach
+					Description:
+						'''
+						Increased heart pickup range and 1 increased life regen
+						'I'm thinking of peach'
+						'''
+				}
+
+				PeachSangriaBuff: {
+					DisplayName: Milk Carton
+					Description:
+						'''
+						Greatly increased life regen and increased heart pickup range
+						'I' a Peachisfied user too'
+						'''
+				}
+
+				PhoBuff: {
+					DisplayName: Pho
+					Description:
+						'''
+						8% increased summon damage
+						'Exotic flavour'
+						'''
+				}
+
+				PinaColadaBuff: {
+					DisplayName: Pina Colada
+					Description:
+						'''
+						Melee attackers take 1000% damage back (maximum 1000)
+						'Never add flavour to pretend fresh pina juice'
+						'''
+				}
+
+				PineappleBuff: {
+					DisplayName: Pineapple
+					Description:
+						'''
+						6 increased defense, attackers take 50% damage
+						'Promelain'
+						'''
+				}
+
+				PizzaBuff: {
+					DisplayName: Pizza
+					Description:
+						'''
+						10 increased armor penetration
+						'Pineapple pizza which ingrones Italians' defense'
+						'''
+				}
+
+				PlumBuff: {
+					DisplayName: Plum
+					Description:
+						'''
+						600 increased aggro and 8% increased attack speed
+						'As to my suggestion, is to wait!'
+						'''
+				}
+
+				PotatoChipsBuff: {
+					DisplayName: Potato Chips
+					Description:
+						'''
+						4 increased defense amd 8% increased damage
+						'High oil and salt'
+						'''
+				}
+
+				PrismaticPunchBuff: {
+					DisplayName: Prismatic Punch
+					Description:
+						'''
+						5 increased max minion and max sentry, 50% increased summon damage and minion knockback
+						'Elegant interest'
+						'''
+				}
+
+				PumpkinPieBuff: {
+					DisplayName: Pumpkin Pie
+					Description:
+						'''
+						50 increased max life
+						'The happiness of harvest'
+						'''
+				}
+
+				RambutanBuff: {
+					DisplayName: Rambutan
+					Description:
+						'''
+						Immune to Poisoned, Acid Venom and debuffs which the Ankh Shield is immune to
+						'Improves immunity'
+						'''
+				}
+
+				RoastedBirdBuff: {
+					DisplayName: Roasted Bird
+					Description:
+						'''
+						Increased flying ability
+						'I am a little-little-little-little bird'
+						'''
+				}
+
+				RoastedDuckBuff: {
+					DisplayName: Roasted Duck
+					Description:
+						'''
+						Increased flying ability, you can walk on water, press DOWN to enter water
+						'This is roasted duck'
+						'''
+				}
+
+				SakeBuff: {
+					DisplayName: Sake
+					Description:
+						'''
+						18 decreased defense but greatly increased melee ability
+						'The Purity, so high'
+						'''
+				}
+
+				SashimiBuff: {
+					DisplayName: Sashimi
+					Description:
+						'''
+						Move like normal in water, you can breathe in water
+						10% increased damage and 20% increased movement speed but you lose 3 life per second
+						'Parasites!'
+						'''
+				}
+
+				SauteedFrogLegsBuff: {
+					DisplayName: Sauteed FrogLegs
+					Description:
+						'''
+						Enabled auto jump and increased jumping ability
+						'Haven't fish the Frog Leg? Then eat it!'
+						'''
+				}
+
+				SeafoodDinnerBuff: {
+					DisplayName: Seafood Dinner
+					Description:
+						'''
+						12% increased damage, crit chance and attack speed
+						'Raw enough!'
+						'''
+				}
+
+				ShrimpPoBoyBuff: {
+					DisplayName: Shrimp-Po-Boy
+					Description:
+						'''
+						6 increased defense and 25% increased mining speed
+						'Life force'
+						'''
+				}
+
+				ShuckedOysterBuff: {
+					DisplayName: Shucked Oyster
+					Description:
+						'''
+						10 increased armor penetration but 5 decreased defense, you lose 3 life per second
+						'Parasites!'
+						'''
+				}
+
+				SmoothieofDarknessBuff: {
+					DisplayName: Smoothie of Darkness
+					Description:
+						'''
+						50% increased dodge chance
+						'Dark(literally)'
+						'''
+				}
+
+				SpaghettiBuff: {
+					DisplayName: Spaghetti
+					Description:
+						'''
+						1 increased max minion
+						'Exotic flavour'
+						'''
+				}
+
+				StarfruitBuff: {
+					DisplayName: Starfruit
+					Description:
+						'''
+						Shotguns shot one more bullet
+						'Despotic power of The Emperor 1437'
+						'''
+				}
+
+				SteakBuff: {
+					DisplayName: Steak
+					Description:
+						'''
+						33% reduced mana consumption
+						'Upper class'
+						'''
+				}
+
+				SugarCookieBuff: {
+					DisplayName: Sugar Cookie
+					Description:
+						'''
+						5% increased ranged damage
+						'Nourishing'
+						'''
+				}
+
+				TeacupBuff: {
+					DisplayName: Teacup
+					Description:
+						'''
+						Greatly increased mana regen, magic damage and magic crit chance
+						'Fragrant'
+						'''
+				}
+
+				TropicalSmoothieBuff: {
+					DisplayName: Tropical Smoothie
+					Description:
+						'''
+						Greatly increased magic damage and magic crit chance, your mana cost is reduced to 1
+						'Tropical storm'
+						'''
+				}
+
+				B_52Buff: {
+					# Modded buffs
+					# Modded drink buffs
+					DisplayName: B_52
+					Description:
+						'''
+						Greatly increases launchers' speed, damage and crit chance
+						'Bomber'
+						'''
+				}
+
+				BlueHawaiiBuff: {
+					DisplayName: Blue Hawaii
+					# Modded buffs
+					# Modded drink buffs
+					Description:
+						'''
+						Increases speed of your projectiles
+						'Sea wind breezes'
+						'''
+				}
+
+				DreamYearningBuff: {
+					DisplayName: Yearning Dream
+					Description:
+						'''
+						Your projectiles will home into nearby enemies
+						'Thinking of thou and missing thou, yearning in intoxicated dream
+						browpowder fades, frangrance dissipates, sobriety suffers more'
+						'''
+				}
+
+				DryMartiniBuff: {
+					DisplayName: Dry Martini
+					Description:
+						'''
+						Greatly increases damage
+						'Classic'
+						'''
+				}
+
+				GreenStormBuff: {
+					DisplayName: Green Storm
+					Description:
+						'''
+						Shoots chlorophyte crystals and spore clouds in succession
+						'Don't think grasses are cheap, they're more expensive than apples and walnuts until mass production'
+						'''
+				}
+
+				KiwiJuiceBuff: {
+					DisplayName: Kiwi Juice
+					Description:
+						'''
+						Greatly increases weapon size
+						'Concentrated Kiwi power'
+						'''
+				}
+
+				LonelyJellyfishBuff: {
+					DisplayName: A Lonely Jellyfish
+					Description:
+						'''
+						Makes you invisible and summon jellyfish electrspheres
+						'Toss it off after appreciating'
+						'''
+				}
+
+				OrangeJuiceBuff: {
+					DisplayName: Orange Juice
+					Description:
+						'''
+						Grants you invincibility
+						'Emm, kind of like LCL'
+						'''
+				}
+
+				PiercoldWindBuff: {
+					DisplayName: Piercingly Cold Winds
+					Description:
+						'''
+						Effectively against the Lantern Moon enemies
+						'长啸出原野, 凛然寒风生'
+						'''
+				}
+
+				PurpleHooterBuff: {
+					DisplayName: Purple Hooter
+					Description:
+						'''
+						Effectively against the Blood Moon enemies
+						'Nobleness and profoundness'
+						'''
+				}
+
+				QuinceMarryBuff: {
+					DisplayName: Quince Marry
+					Description:
+						'''
+						Effectively against the Pumpkin Moon enemies
+						'Hotness and gentleness'
+						'''
+				}
+
+				RedWineBuff: {
+					DisplayName: Red Wine
+					Description:
+						'''
+						Effectively against the Frost Moon enemies
+						'The upper class and elegance'
+						'''
+				}
+
+				SunriseBuff: {
+					DisplayName: Sunrise
+					Description:
+						'''
+						Effectively against the Solar Eclipse enemies
+						'Sunshine and brightness'
+						'''
+				}
+
+				TricolourBuff: {
+					DisplayName: Tricoloured
+					Description:
+						'''
+						Effectively against bosses' minions
+						'Complexity and specificity'
+						'''
+				}
+
+				WaterMelonJuiceBuff: {
+					DisplayName: Watermelon Juice
+					Description:
+						'''
+						Greatly increases crit chance and knockback
+						'Focused striking force'
+						'''
+				}
+
+				ArcticshellfishWarshipBuff: {
+					# Modded food buffs
+					DisplayName: Arctic Shellfish Warship
+					# Modded food buffs
+					Description:
+						'''
+						Increases defense
+						'Delicious arctic shellfish warship'
+						'''
+				}
+
+				BakedMusselBuff: {
+					DisplayName: Baked Mussel
+					Description:
+						'''
+						6% increased crit damage and 4 increased defense
+						'Seems to be less raw'
+						'''
+				}
+
+				BakedOysterBuff: {
+					DisplayName: Baked Oyster
+					Description:
+						'''
+						4 increased armor penetration and defense
+						'Parasites slain'
+						'''
+				}
+
+				CantaloupeJellyBuff: {
+					DisplayName: Cantaloupe Jelly
+					Description:
+						'''
+						Your projectiles can penetrate one more time
+						'Duang, duang, duang'
+						'''
+				}
+
+				CaramelPuddingBuff: {
+					DisplayName: Caramel Pudding
+					Description:
+						'''
+						Your projectiles can bounce one more time
+						'Duang, duang, duang'
+						'''
+				}
+
+				CrabseedWarshipBuff: {
+					DisplayName: Crab Roe Warship
+					Description:
+						'''
+						Increases crit chance
+						'Delicious crab roe warship'
+						'''
+				}
+
+				DurianBuff: {
+					DisplayName: Durian
+					Description:
+						'''
+						Speeds up digestion
+						'Helps digestion'
+						'''
+				}
+
+				EggTartBuff: {
+					DisplayName: Egg Tart
+					Description:
+						'''
+						5% increased crit damage 
+						'Crispy crust'
+						'''
+				}
+
+				KiwiFruitBuff: {
+					DisplayName: Kiwi Fruit
+					Description:
+						'''
+						20% increased weapon size
+						'Also called Chinese gooseberry'
+						'''
+				}
+
+				KiwiIceCreamBuff: {
+					DisplayName: Kiwi Icecream
+					Description:
+						'''
+						10% increased weapon size and increases attack speed
+						'Kiwi power'
+						'''
+				}
+
+				MangosteenBuff: {
+					DisplayName: Mangosteen
+					Description:
+						'''
+						Increases attack range of boomerangs, yoyos and flails
+						'Nurishing'
+						'''
+				}
+
+				OrangeIcecreamBuff: {
+					DisplayName: Orange Icecream
+					Description:
+						'''
+						Extends invincibility frames
+						'The reality is in your mind'
+						'''
+				}
+
+				SalmonInPepperBuff: {
+					DisplayName: Pepper Salmon
+					Description:
+						'''
+						Increases movement speed, especially in water
+						'Queen of the Arctic ocean'
+						'''
+				}
+
+				SalmonWarshipBuff: {
+					DisplayName: Salmon Warship
+					Description:
+						'''
+						Increases movement speed
+						'Delicious salmon warship'
+						'''
+				}
+
+				SeafoodPizzaBuff: {
+					DisplayName: Seafood Pizza
+					Description:
+						'''
+						Increases most stats
+						'It's not easy to finish this by one'
+						'''
+				}
+
+				StinkyTofuBuff: {
+					DisplayName: Stinky Tofu
+					Description:
+						'''
+						Confuses nearby enemies
+						'Appetizing but stinky'
+						'''
+				}
+
+				StrawberryBuff: {
+					DisplayName: Strawberry
+					Description:
+						'''
+						Nearer enemies take more damage
+						'Popular fruit'
+						'''
+				}
+
+				StrawberryIcecreamBuff: {
+					DisplayName: Strawberry Icecream
+					Description:
+						'''
+						Nearer enemies take more damage
+						'Cold as you, but still I can't part with it'
+						'''
+				}
+
+				SweetshrimpSushiBuff: {
+					DisplayName: Sweetshrimp Sushi
+					Description:
+						'''
+						Increases damage
+						'Delicious sweetshrip sushi'
+						'''
+				}
+
+				TamakoSushiBuff: {
+					DisplayName: Tamago Sushi
+					Description:
+						'''
+						Increases life regeneration
+						'Delicious tamago sushi'
+						'''
+				}
+
+				WakameWarshipBuff: {
+					DisplayName: Wakame Warship
+					Description:
+						'''
+						Increases mana regeneration
+						'Delicious wakame sushi'
+						'''
+				}
+
+				WatermelonBuff: {
+					DisplayName: Watermelon
+					Description:
+						'''
+						8% increases knockback
+						'I'm more curious about how you can eat it whole than the watermelon itself'
+						'''
+				}
+
+				WatermelonPlateBuff: {
+					DisplayName: Watermelon Plate
+					Description:
+						'''
+						6% increased crit chance and crit damage
+						'Unpretentious arrangement'
+						'''
+				}
+			}
+
+			InfoDisplays: {
+				FoodSatietyInfoDisplay.DisplayName: Satiety
+				ThirstystateInfoDisplay.DisplayName: State of Thirst
+			}
+
+			InfoDisplay: {
+				Satiety: "{0} satiety, {1}"
+				Thirsty: You are thirsty
+				NotThirsty: You don't want to drink
+
+				SatietyLevel: {
+					-3: starving
+					-2: hungry
+					-1: peckish
+					0: empty
+					1: well fed
+					2: satisfied
+					3: stuffed
+				}
+			}
+			
+			Projectiles: {
+				FryingPan.DisplayName: Frying Pan
+			}
+		}
+	}
+}

@@ -104,8 +104,8 @@ public class DarknessFan : ModItem
 			{
 				tooltips.AddRange(new TooltipLine[]
 				{
-					new(ModIns.Mod, "MothEyeBonusText", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeBonusText")),
-					new(ModIns.Mod, "MothEyeDFanBonus", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextMothFan")),
+					new(ModIns.Mod, "MothEyeBonusText", Language.GetTextValue("Mods.Everglow.Myth.ExtraTooltip.FireflyItems.MothEyeBonusText")),
+					new(ModIns.Mod, "MothEyeDFanBonus", Language.GetTextValue("Mods.Everglow.Myth.ExtraTooltip.FireflyItems.MEyeBonusTextMothFan")),
 				});
 			}
 		}

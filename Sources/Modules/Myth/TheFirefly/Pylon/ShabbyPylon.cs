@@ -71,7 +71,7 @@ internal class ShabbyPylon : BaseModPylon<ShabbyPylonTileEntity>
 		}
 
 		bool mouseOver = DefaultDrawMapIcon(ref context, mapIcon, pylonInfo.PositionInTiles.ToVector2() + new Vector2(1.5f, 2f), drawColor, deselectedScale, selectedScale);
-		DefaultMapClickHandle(mouseOver, pylonInfo, "Mods.Everglow.ItemName.ShabbyPylonItem", ref mouseOverText);
+		DefaultMapClickHandle(mouseOver, pylonInfo, "Mods.Everglow.Myth.ItemName.ShabbyPylonItem", ref mouseOverText);
 	}
 }
 
@@ -103,7 +103,7 @@ internal class ShabbyPylonUpdate : GlobalNPC
 			{
 				PylonSystem.Instance.shabbyPylonEnable = true;
 				PylonSystem.Instance.firstEnableAnimation = true;
-				Main.NewText(Language.GetTextValue("Mods.Everglow.Common.PylonSystem.ShabbyPylonRepairedTip"));
+				Main.NewText(Language.GetTextValue("Mods.Everglow.Myth.Common.PylonSystem.ShabbyPylonRepairedTip"));
 			}
 		}
 	}

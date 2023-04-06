@@ -646,14 +646,14 @@ public class FoodGlobalItem : GlobalItem
 			if (firstIndex >= 0)
 			{
 				tooltips.RemoveAll((tp) => tp.Name.Contains("Tooltip"));
-				tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.BuffDescription." + FoodInfo.Name)));
-				tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, FoodInfo.Satiety + Language.GetTextValue("Mods.Everglow.Common.FoodSystem.Satiety")));
+				tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.Food.BuffDescription." + FoodInfo.Name)));
+				tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, FoodInfo.Satiety + Language.GetTextValue("Mods.Everglow.Food.Common.FoodSystem.Satiety")));
 			}
 			else
 			{
 				// 否则加到最后面
-				tooltips.Add(new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.BuffDescription." + FoodInfo.Name)));
-				tooltips.Add(new TooltipLine(Mod, item.Name, FoodInfo.Satiety + Language.GetTextValue("Mods.Everglow.Common.FoodSystem.Satiety")));
+				tooltips.Add(new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.Food.BuffDescription." + FoodInfo.Name)));
+				tooltips.Add(new TooltipLine(Mod, item.Name, FoodInfo.Satiety + Language.GetTextValue("Mods.Everglow.Food.Common.FoodSystem.Satiety")));
 			}
 
 			int buffTimeIndex = tooltips.FindIndex((tp) => tp.Name.Contains("BuffTime"));
@@ -673,14 +673,14 @@ public class FoodGlobalItem : GlobalItem
 			if (firstIndex >= 0)
 			{
 				tooltips.RemoveAll((tp) => tp.Name.Contains("Tooltip"));
-				tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.BuffDescription." + FoodInfo.Name)));
-				tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, FoodInfo.Satiety + Language.GetTextValue("Mods.Everglow.Common.FoodSystem.Satiety")));
+				tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.Food.BuffDescription." + FoodInfo.Name)));
+				tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, FoodInfo.Satiety + Language.GetTextValue("Mods.Everglow.Food.Common.FoodSystem.Satiety")));
 			}
 			else
 			{
 				// 否则加到最后面
-				tooltips.Add(new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.BuffDescription." + FoodInfo.Name)));
-				tooltips.Add(new TooltipLine(Mod, item.Name, FoodInfo.Satiety + Language.GetTextValue("Mods.Everglow.Common.FoodSystem.Satiety")));
+				tooltips.Add(new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.Food.BuffDescription." + FoodInfo.Name)));
+				tooltips.Add(new TooltipLine(Mod, item.Name, FoodInfo.Satiety + Language.GetTextValue("Mods.Everglow.Food.Common.FoodSystem.Satiety")));
 			}
 
 			int buffTimeIndex = tooltips.FindIndex((tp) => tp.Name.Contains("BuffTime"));
@@ -742,7 +742,7 @@ public class FoodGlobalItem : GlobalItem
 			{
 				CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height),
 				new Color(255, 0, 0),
-				Language.GetTextValue("Mods.Everglow.Common.FoodSystem.CannotEat"),
+				Language.GetTextValue("Mods.Everglow.Food.Common.FoodSystem.CannotEat"),
 				true, false);
 
 				foodPlayer.TextTimer = FoodUtils.GetFrames(0, 0, 2, 30);
@@ -757,7 +757,7 @@ public class FoodGlobalItem : GlobalItem
 			{
 				CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height),
 				new Color(255, 0, 0),
-				Language.GetTextValue("Mods.Everglow.Common.FoodSystem.CannotEat"),
+				Language.GetTextValue("Mods.Everglow.Food.Common.FoodSystem.CannotEat"),
 				true, false);
 
 				foodPlayer.TextTimer = FoodUtils.GetFrames(0, 0, 2, 30);

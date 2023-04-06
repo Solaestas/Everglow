@@ -56,7 +56,7 @@ internal class CentipedeHead : FireWormHead
 			BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Underground,
 			BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Caverns,
 
-			new FlavorTextBestiaryInfoElement(Language.GetTextValue("Mods.Everglow.Bestiary.Centipede.Flavor"))
+			new FlavorTextBestiaryInfoElement(Language.GetTextValue("Mods.Everglow.Myth.Bestiary.Centipede.Flavor"))
 		});
 	}
 	public override float SpawnChance(NPCSpawnInfo spawnInfo)

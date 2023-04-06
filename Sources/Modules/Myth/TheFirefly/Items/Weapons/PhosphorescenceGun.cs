@@ -122,9 +122,9 @@ public class PhosphorescenceGun : ModItem
 			{
 				tooltips.AddRange(new TooltipLine[]
 				{
-					new(ModIns.Mod, "MothEyeBonusText", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeBonusText")),
-					new(ModIns.Mod, "MothEyeGunBonus0", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextMothGun0")),
-					new(ModIns.Mod, "MothEyeGunBonus1", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextMothGun1")),
+					new(ModIns.Mod, "MothEyeBonusText", Language.GetTextValue("Mods.Everglow.Myth.ExtraTooltip.FireflyItems.MothEyeBonusText")),
+					new(ModIns.Mod, "MothEyeGunBonus0", Language.GetTextValue("Mods.Everglow.Myth.ExtraTooltip.FireflyItems.MEyeBonusTextMothGun0")),
+					new(ModIns.Mod, "MothEyeGunBonus1", Language.GetTextValue("Mods.Everglow.Myth.ExtraTooltip.FireflyItems.MEyeBonusTextMothGun1")),
 				});
 			}
 		}

@@ -55,8 +55,8 @@ public class MothYoyo : ModItem
 			{
 				tooltips.AddRange(new TooltipLine[]
 				{
-					new(ModIns.Mod, "MothEyeBonusText", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MothEyeBonusText")),
-					new(ModIns.Mod, "MothEyeYoyoBonus", Language.GetTextValue("Mods.Everglow.ExtraTooltip.FireflyItems.MEyeBonusTextMothYoyo")),
+					new(ModIns.Mod, "MothEyeBonusText", Language.GetTextValue("Mods.Everglow.Myth.ExtraTooltip.FireflyItems.MothEyeBonusText")),
+					new(ModIns.Mod, "MothEyeYoyoBonus", Language.GetTextValue("Mods.Everglow.Myth.ExtraTooltip.FireflyItems.MEyeBonusTextMothYoyo")),
 				});
 			}
 		}

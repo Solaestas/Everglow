@@ -1,0 +1,17 @@
+
+Mods: {
+	Everglow: {
+		CagedDomain: {
+			Items: {
+				BottleOfNutShellFlowers.DisplayName: Bottle Of Nut Shell Flowers
+				PlumBlossomInABowl.DisplayName: Plum Blossom In A Bowl
+				WhiteLotusBonsai.DisplayName: White Lotus Bonsai
+			}
+			Tiles: {
+				BottleOfNutShellFlowers.MapEntry: Mods.Everglow.MapObject.BottleOfNutShellFlowers
+				PlumBlossomInABowl.MapEntry: Mods.Everglow.MapObject.PlumBlossomInABowl
+				WhiteLotusBonsai.MapEntry: Mods.Everglow.MapObject.WhiteLotusBonsai
+			}
+		}
+	}
+}

@@ -88,7 +88,7 @@ public class FoodBuffGlobalNPC : GlobalNPC
 					}
 				}
 			}
-			CombatText.NewText(npc.Hitbox, Color.HotPink, Language.GetTextValue("Mods.Everglow.Common.FoodSystem.Khan"));
+			CombatText.NewText(npc.Hitbox, Color.HotPink, Language.GetTextValue("Mods.Everglow.Food.Common.FoodSystem.Khan"));
 			npc.DelBuff(npc.FindBuffIndex(ModContent.BuffType<CherryBuff>()));
 		}
 	}

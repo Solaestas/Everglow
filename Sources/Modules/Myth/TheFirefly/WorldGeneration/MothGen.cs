@@ -98,7 +98,7 @@ public class MothLand : ModSystem
 
 		public override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
 		{
-			Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everglow.Common.WorldSystem.BuildMothCave");
+			Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everglow.Myth.Common.WorldSystem.BuildMothCave");
 			BuildMothCave();
 			Main.spawnTileX = 723;
 			Main.spawnTileY = 226;
@@ -113,7 +113,7 @@ public class MothLand : ModSystem
 
 		public override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
 		{
-			Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everglow.Common.WorldSystem.BuildWorldMothCave");
+			Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everglow.Myth.Common.WorldSystem.BuildWorldMothCave");
 			BuildWorldMothCave();
 			BuildShabbyCastle();
 		}

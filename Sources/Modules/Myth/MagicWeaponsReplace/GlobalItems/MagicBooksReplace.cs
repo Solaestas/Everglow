@@ -14,7 +14,7 @@ namespace Everglow.Myth.MagicWeaponsReplace.GlobalItems;
 
 public class MagicBooksReplace : GlobalItem
 {
-	private static string SpellbookExtra = "Mods.Everglow.ExtraTooltip.Spellbook.";
+	private static string SpellbookExtra = "Mods.Everglow.Myth.ExtraTooltip.Spellbook.";
 	private static string SpellbookGTV(string key) => Language.GetTextValue(SpellbookExtra + key);
 	public override void SetDefaults(Item item)
 	{

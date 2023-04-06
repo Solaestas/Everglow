@@ -217,12 +217,12 @@ public class DrinkGlobalItem : GlobalItem
 			if (firstIndex >= 0)
 			{
 				tooltips.RemoveAll((tp) => tp.Name.Contains("Tooltip"));
-				tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.BuffDescription." + DrinkInfo.Name)));
+				tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.Food.BuffDescription." + DrinkInfo.Name)));
 			}
 			else
 			{
 				// 否则加到最后面
-				tooltips.Add(new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.BuffDescription." + DrinkInfo.Name)));
+				tooltips.Add(new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.Food.BuffDescription." + DrinkInfo.Name)));
 			}
 
 			int buffTimeIndex = tooltips.FindIndex((tp) => tp.Name.Contains("BuffTime"));
@@ -242,12 +242,12 @@ public class DrinkGlobalItem : GlobalItem
 			if (firstIndex >= 0)
 			{
 				tooltips.RemoveAll((tp) => tp.Name.Contains("Tooltip"));
-				tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.BuffDescription." + drinkInfo.Name)));
+				tooltips.Insert(firstIndex, new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.Food.BuffDescription." + drinkInfo.Name)));
 			}
 			else
 			{
 				// 否则加到最后面
-				tooltips.Add(new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.BuffDescription." + drinkInfo.Name)));
+				tooltips.Add(new TooltipLine(Mod, item.Name, Language.GetTextValue("Mods.Everglow.Food.BuffDescription." + drinkInfo.Name)));
 			}
 
 			int buffTimeIndex = tooltips.FindIndex((tp) => tp.Name.Contains("BuffTime"));
@@ -309,7 +309,7 @@ public class DrinkGlobalItem : GlobalItem
 			{
 				CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height),
 				new Color(255, 0, 0),
-				Language.GetTextValue("Mods.Everglow.Common.FoodSystem.CannotDrink"),
+				Language.GetTextValue("Mods.Everglow.Food.Common.FoodSystem.CannotDrink"),
 				true, false);
 
 				foodPlayer.TextTimer = FoodUtils.GetFrames(0, 0, 2, 30);
@@ -324,7 +324,7 @@ public class DrinkGlobalItem : GlobalItem
 			{
 				CombatText.NewText(new Rectangle((int)player.position.X, (int)player.position.Y, player.width, player.height),
 				new Color(255, 0, 0),
-				Language.GetTextValue("Mods.Everglow.Common.FoodSystem.CannotDrink"),
+				Language.GetTextValue("Mods.Everglow.Food.Common.FoodSystem.CannotDrink"),
 				true, false);
 
 				foodPlayer.TextTimer = FoodUtils.GetFrames(0, 0, 2, 30);
@@ -344,7 +344,7 @@ public class DrinkGlobalItem : GlobalItem
 		{
 			var drinkInfo = m_vanillaDrinkInfos[item.type];
 			if (!foodPlayer.CanDrink(drinkInfo))
-				//Main.NewText(Language.GetTextValue("Mods.Everglow.Common.FoodSystem.CannotDrink"));
+				//Main.NewText(Language.GetTextValue("Mods.Everglow.Food.Common.FoodSystem.CannotDrink"));
 
 				return false;
 		}
@@ -353,7 +353,7 @@ public class DrinkGlobalItem : GlobalItem
 			var foodItem = item.ModItem as DrinkBase;
 			var drinkInfo = foodItem.DrinkInfo;
 			if (!foodPlayer.CanDrink(drinkInfo))
-				//Main.NewText(Language.GetTextValue("Mods.Everglow.Common.FoodSystem.CannotDrink"));
+				//Main.NewText(Language.GetTextValue("Mods.Everglow.Food.Common.FoodSystem.CannotDrink"));
 				return false;
 		}
 		return base.ConsumeItem(item, player);

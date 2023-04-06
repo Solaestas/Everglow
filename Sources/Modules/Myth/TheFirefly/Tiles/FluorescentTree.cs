@@ -19,7 +19,7 @@ public class FluorescentTree : ModTile
 		Main.tileNoAttach[Type] = false;
 
 		TileID.Sets.IsATreeTrunk[Type] = true;
-		var modTranslation = Language.GetOrRegister("Mods.Everglow.MapEntry.FluorescentTree");
+		var modTranslation = Language.GetOrRegister("Mods.Everglow.Myth.MapEntry.FluorescentTree");
 		AddMapEntry(new Color(51, 26, 58), modTranslation);
 		DustType = ModContent.DustType<FluorescentTreeDust>();
 		ItemDrop = ModContent.ItemType<GlowWood>();

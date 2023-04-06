@@ -1,0 +1,324 @@
+
+Mods: {
+	Everglow: {
+		PlantAndFarm: {
+			Common: {
+				Hour: hour
+				Minute: minute
+				Second: second
+				Duration: duration
+				NotActivated: Unactivated
+				WarWhipGT:
+					'''
+					No summon tag damage
+					Your summons will focus struck enemies
+					'''
+				WhipGT:
+					'''
+					 summon tag damage
+					Your summons will focus struck enemies
+					'''
+				ClubGT: Spin to strike enemies
+				RapierGT: Right click and hold to charge an invincibility dash with high damage
+				NoAmmoConsum: Does not consume ammo
+				Acytaea: Acytaea
+				ExcluWeapon: Exclusive Weapon
+				MythWeapon: Mythical Weapon
+				LegendWeapon: Legendary Weapon
+				DebugItem:
+					'''
+					! Debug item !
+					Use on your own risk
+					'''
+
+				#世界系统WorldSystem
+				WorldSystem: {
+					WorldCreate_Def: Generating World
+					WorldEnter_Def: Entering World
+					BuildMothCave: Generating The Cocoon
+				}
+
+				#食物系统FoodSystem
+				FoodSystem: {
+					Satiety: Satiety
+					CannotEat: You are full
+					CannotDrink: You don't feel like drinking
+					Khan: Khan, take me on one more charge
+				}
+
+				PylonSystem.ShabbyPylonRepairedTip: Pylon reconnected
+				Message.HasAwoken: has awoken!
+			}
+
+			NPCs: {
+				CorruptMoth.DisplayName: Corrupted Moth
+				EvilPack.DisplayName: Magical Cocoon
+				Butterfly.DisplayName: Phantasm Moth
+				CentipedeHead.DisplayName: Glowing Centipede
+				CentipedeBody.DisplayName: Glowing Centipede
+				CentipedeTail.DisplayName: Glowing Centipede
+				Dendroid_normal.DisplayName: Dendroid
+				GlowingFirefly.DisplayName: Glowing Firefly
+				LittleFireBulb.DisplayName: Firefly Bulb
+				Acytaea.DisplayName: Acytaea
+				AcytaeaShadow.DisplayName: Acytaea
+				AcytaeaShadow2.DisplayName: Acytaea
+				AcytaeaShadow3.DisplayName: Acytaea
+				FakeAcytaea.DisplayName: Acytaea
+				BlueCore.DisplayName: Blue Core
+				FlamingDashCore.DisplayName: Spiritual Fiery Core
+				GreenCore.DisplayName: Green Core
+				RedCore.DisplayName: Red Core
+				YellowCore.DisplayName: Yellow Core
+				FloatLantern.DisplayName: Lantern Ghost
+				LanternGhostKing.DisplayName: Lantern Ghost King
+				RedPackBomber.DisplayName: Redpack Bomber
+				BlackStarFruit.DisplayName: Black Star Fruit
+				LargeFireBulb.DisplayName: Large Fire Bulb
+				TuskWall.DisplayName: Tusk Wall
+				BloodTusk.DisplayName: Bloody Tusk
+				CrimsonTuskFireWork.DisplayName: Tusk Spike Fireworks
+				LargeTusk.DisplayName: Tusk Spike
+				LargeTusk2.DisplayName: Tusk Spike
+				LittleTusk.DisplayName: Tusk Spike
+				TuskPoolWave.DisplayName: Tusk Spike
+				TuskWallLeft.DisplayName: Tusk Wall
+				TuskWallRight.DisplayName: Tusk Wall
+				TuskWave.DisplayName: Tusk Spike
+				TuskWaveHuge.DisplayName: Tusk Spike
+				TuskKillEffect.DisplayName: Tusk Kill Effect
+				CyanOreBeetle.DisplayName: Cyan Ore Beetle
+				SquamousShell.DisplayName: Squamous Shell
+				TestNPC.DisplayName: Test N P C
+			}
+
+			Bestiary: {
+				CorruptMoth.Flavor: Sometimes, corrupted worm can metamorphose...
+				Centipede.Flavor: Seems like a centipede, with an unexpectedly hard head
+			}
+
+			Items: {
+				BlueTorchFlower: {
+					DisplayName: Jade Blue Icy Poker
+					Tooltip:
+						'''
+						Increases max mana by 20
+						strike an enemy recovers 2 mana, this effect has a 0.2s CD
+						'A varietas of red hot poker'
+						'''
+				}
+
+				CyanBranch: {
+					DisplayName: Porcelianized Flower
+					Tooltip:
+						'''
+						Increases evade by 8 for 10s after struck
+						'It's pretty hard, but also brittle'
+						'''
+				}
+
+				CyanPedal: {
+					DisplayName: Four-pointed Borage Flower
+					Tooltip:
+						'''
+						Increases evade by 4
+						'The missing petal was converted to your braveness'
+						'''
+				}
+
+				DarkHat: {
+					DisplayName: Ornamental Poppy
+					Tooltip:
+						'''
+						Increases crit chance by 4% and crit damage by 12%
+						'Not recommanded to use except for combat or decoration purpose'
+						'''
+				}
+
+				GoldRound: {
+					DisplayName: Marigoldisc
+					Tooltip:
+						'''
+						7 defence
+						Increases damage by 7%
+						'Traditional Terrarians usually wear this to keep them healthy'
+						'''
+				}
+
+				HotPinkCrown: {
+					DisplayName: Vitalized Tulip
+					Tooltip:
+						'''
+						Increases crit damage by (Max Hp * 5%)%
+						'Catalyzed by Essence of Wind, now it will react to vitality'
+						'''
+				}
+
+				LightPurplePen: {
+					DisplayName: Rabit Hair Calligraphy Brush
+					Tooltip:
+						'''
+						Increases melee damege, melee crit chance and melee speed by 6%
+						'No rabit was hurt during the production process'
+						'''
+				}
+
+				ManyWhiteFlower: {
+					DisplayName: Bouquet of Silk Star
+					Tooltip:
+						'''
+						Increases melee speed by 18%
+						'You don't want these lovely magical flowers to be dameged'
+						'''
+				}
+
+				OrangeCrown: {
+					DisplayName: Tenacious Tulip
+					Tooltip:
+						'''
+						Increases defense by (max Hp * 3%)%
+						'A tulip blessed by Aeolus, its structural strength is suprisingly high'
+						'''
+				}
+
+				OrangeStick: {
+					DisplayName: Pennisetum Arantius
+					Tooltip:
+						'''
+						After struck, grants 5 defence and immunity to knockback for 3s
+						'Different from most grasses, it stands fast when wind blows fiercely'
+						'''
+				}
+
+				PinkFourPedal: {
+					DisplayName: Pink Samsara
+					Tooltip:
+						'''
+						Increases max Hp by 40
+						'It's said that injured animals will eat it to recover...it's true, but it seems not to be effective to human'
+						'''
+				}
+
+				PurpleBall: {
+					DisplayName: Purple Hydrangea Pandents
+					Tooltip:
+						'''
+						Hitting enemies around you launches an explosion of petals
+						Damage of the petals increases with damage of the attack
+						Has a 0.5s CD
+						'Angry Hydrangea Purpura'
+						'''
+				}
+
+				PurpleReedHalo: {
+					DisplayName: Purple Reed Headband
+					Tooltip:
+						'''
+						Increases max Hp by 30
+						Increases max mana by 40
+						'smells good and looks good'
+						'''
+				}
+
+				RedTriangle: {
+					DisplayName: Three-pointed Red Blossom
+					Tooltip:
+						'''
+						Increases crit damage by 18%
+						'It is an aggressive shape in Terrarian culture'
+						'''
+				}
+
+				SilverCupFlower: {
+					DisplayName: Royal Goblet
+					Tooltip:
+						'''
+						8 defense
+						Increases max Hp by 20
+						'There was a vicious king who has really tried to use it as a goblet, he failed to drink anything'
+						'''
+				}
+
+				ThreeColorCrown: {
+					DisplayName: Three-colored Wreath
+					Tooltip:
+						'''
+						Hitting enemies randomly grants you one of the three effects below for 7s
+						Red:Inceasing damage by 22%, increasing crit chance by 11%
+						Violet:Immunity to most debuffs
+						Blue:Increasing max mana by 300
+						It has a 30s CD
+						'Pray for not being so lucky'
+						'''
+				}
+
+				WhiteCrown: {
+					DisplayName: Flower of Hope
+					Tooltip:
+						'''
+						Increases running speed by (max Hp * 0.2%)
+						'A plain white flower, seems to mourn for someone'
+						'''
+				}
+
+				WhitePedal: {
+					DisplayName: Veil of Light
+					Tooltip:
+						'''
+						Increases evade by 2
+						Increases crit chance by 4%
+						'It's such a gauzy petal'
+						'''
+				}
+
+				WhiteWoodFlower: {
+					DisplayName: Snow Ear Flower
+					Tooltip:
+						'''
+						Increases minion slots by 2
+						'Fantastic symbiosis'
+						'''
+				}
+
+				WindMoveSeed.DisplayName: Aeolus' Seed
+
+				YellowBellFlower: {
+					DisplayName: Bananea of the Valley
+					Tooltip:
+						'''
+						Increases damage by (defense * 20%)%
+						'Rare and beautiful'
+						'''
+				}
+				
+				BlueFreeze.DisplayName: Blue Freeze
+				BluePedal.DisplayName: Blue Pedal
+				CyanHyacinth.DisplayName: Cyan Hyacinth
+				DarkPoppy.DisplayName: Dark Poppy
+				FlowerBrochure.DisplayName: Flower Brochure
+				GoldCup.DisplayName: Gold Cup
+				GoldWhip.DisplayName: Gold Whip
+				HotPinkTulip.DisplayName: Hot Pink Tulip
+				Lavender.DisplayName: Lavender
+				LightChrysanthemum.DisplayName: Light Chrysanthemum
+				LightPurpleBalls.DisplayName: Light Purple Balls
+				OrangeSausage.DisplayName: Orange Sausage
+				OrangeTulip.DisplayName: Orange Tulip
+				PinkSun.DisplayName: Pink Sun
+				PurplePhantom.DisplayName: Purple Phantom
+				PurpleTail.DisplayName: Purple Tail
+				RedFlame.DisplayName: Red Flame
+				ShallowNight.DisplayName: Shallow Night
+				SilverClock.DisplayName: Silver Clock
+				WhiteStar.DisplayName: White Star
+				WhiteTulip.DisplayName: White Tulip
+			}
+
+			Projectiles: {
+				FlowerPetalPurple.DisplayName: Flower Petal Purple
+				PurpleBallEffect.DisplayName: PurpleBallEffect
+				Spark.DisplayName: Spark
+			}
+		}
+	}
+}

@@ -97,7 +97,7 @@ public class CorruptMoth : ModNPC
 
 			// Sets the description of this NPC that is listed in the bestiary.
 
-			new FlavorTextBestiaryInfoElement(Language.GetTextValue("Mods.Everglow.Bestiary.CorruptMoth.Flavor"))
+			new FlavorTextBestiaryInfoElement(Language.GetTextValue("Mods.Everglow.Myth.Bestiary.CorruptMoth.Flavor"))
 		});
 	}
 

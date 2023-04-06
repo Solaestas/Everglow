@@ -158,7 +158,7 @@ internal class FireflyPylon : BaseModPylon<FireflyPylonTileEntity>
 			return;
 
 		bool mouseOver = DefaultDrawMapIcon(ref context, mapIcon, pylonInfo.PositionInTiles.ToVector2() + new Vector2(1.5f, 2f), drawColor, deselectedScale, selectedScale);
-		DefaultMapClickHandle(mouseOver, pylonInfo, "Mods.Everglow.ItemName.FireflyPylonItem", ref mouseOverText);
+		DefaultMapClickHandle(mouseOver, pylonInfo, "Mods.Everglow.Myth.ItemName.FireflyPylonItem", ref mouseOverText);
 	}
 
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
