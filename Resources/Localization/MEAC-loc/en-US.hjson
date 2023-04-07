@@ -6,6 +6,12 @@ Mods: {
 				Hour: hour
 				Minute: minute
 				Second: second
+				
+				DebugItem:
+					'''
+					! Debug item !
+					Use on your own risk
+					'''
 			}
 
 			Items: {
@@ -24,6 +30,7 @@ Mods: {
 			}
 
 			Projectiles: {
+				StonePost.DisplayName: Stone Post
 				GoldShield.DisplayName: Gold Shield
 				VortexVanquisher.DisplayName: Vortex Vanquisher
 			}

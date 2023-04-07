@@ -7,6 +7,14 @@ Mods: {
 				Minute: minute
 				Second: second
 				Duration: duration
+				
+				DebugItem:
+					'''
+					! Debug item !
+					Use on your own risk
+					'''
+				
+				
 				#食物系统FoodSystem
 				FoodSystem: {
 					Satiety: Satiety

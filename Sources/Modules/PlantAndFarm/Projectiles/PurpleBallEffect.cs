@@ -1,13 +1,9 @@
-﻿using Terraria.Localization;
+using Terraria.Localization;
 
-namespace Everglow.Myth.MiscItems.Projectiles.Typeless;
+namespace Everglow.PlantAndFarm.Projectiles;
 
 public class PurpleBallEffect : ModProjectile
 {
-	public override void SetStaticDefaults()
-	{
-		// DisplayName.SetDefault("PurpleBallEffect");
-			}
 	public override void SetDefaults()
 	{
 		Projectile.width = 20;

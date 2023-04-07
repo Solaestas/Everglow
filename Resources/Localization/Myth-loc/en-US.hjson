@@ -25,6 +25,12 @@ Mods: {
 				MythWeapon: Mythical Weapon
 				LegendWeapon: Legendary Weapon
 
+				DebugItem:
+					'''
+					! Debug item !
+					Use on your own risk
+					'''
+
 				PylonSystem.ShabbyPylonRepairedTip: Pylon reconnected
 				Message.HasAwoken: has awoken!
 			}
@@ -332,16 +338,6 @@ Mods: {
 					Tooltip: Increases max mana by 30 and mana regen by 4
 				}
 
-				BlueTorchFlower: {
-					DisplayName: Jade Blue Icy Poker
-					Tooltip:
-						'''
-						Increases max mana by 20
-						strike an enemy recovers 2 mana, this effect has a 0.2s CD
-						'A varietas of red hot poker'
-						'''
-				}
-
 				CorruptEye: {
 					DisplayName: Scaled Cursed Eye
 					Tooltip:
@@ -351,33 +347,6 @@ Mods: {
 						Grants immunity to Cursed Inferno
 						Release cursed flame when struck
 						Tough its owner has gone, it's still filled with curse to enemies'
-						'''
-				}
-
-				CyanBranch: {
-					DisplayName: Porcelianized Flower
-					Tooltip:
-						'''
-						Increases evade by 8 for 10s after struck
-						'It's pretty hard, but also brittle'
-						'''
-				}
-
-				CyanPedal: {
-					DisplayName: Four-pointed Borage Flower
-					Tooltip:
-						'''
-						Increases evade by 4
-						'The missing petal was converted to your braveness'
-						'''
-				}
-
-				DarkHat: {
-					DisplayName: Ornamental Poppy
-					Tooltip:
-						'''
-						Increases crit chance by 4% and crit damage by 12%
-						'Not recommanded to use except for combat or decoration purpose'
 						'''
 				}
 
@@ -412,16 +381,6 @@ Mods: {
 						'''
 				}
 
-				GoldRound: {
-					DisplayName: Marigoldisc
-					Tooltip:
-						'''
-						7 defence
-						Increases damage by 7%
-						'Traditional Terrarians usually wear this to keep them healthy'
-						'''
-				}
-
 				GreenGel: {
 					DisplayName: Coagulated Green Gel
 					Tooltip:
@@ -431,39 +390,12 @@ Mods: {
 						'''
 				}
 
-				HotPinkCrown: {
-					DisplayName: Vitalized Tulip
-					Tooltip:
-						'''
-						Increases crit damage by (Max Hp * 5%)%
-						'Catalyzed by Essence of Wind, now it will react to vitality'
-						'''
-				}
-
 				JungleVitamin: {
 					DisplayName: Jungle Vitamin
 					Tooltip:
 						'''
 						Increases max Hp by 50
 						'It helps a lot in humid, dangerous jungle'
-						'''
-				}
-
-				LightPurplePen: {
-					DisplayName: Rabit Hair Calligraphy Brush
-					Tooltip:
-						'''
-						Increases melee damege, melee crit chance and melee speed by 6%
-						'No rabit was hurt during the production process'
-						'''
-				}
-
-				ManyWhiteFlower: {
-					DisplayName: Bouquet of Silk Star
-					Tooltip:
-						'''
-						Increases melee speed by 18%
-						'You don't want these lovely magical flowers to be dameged'
 						'''
 				}
 
@@ -1024,6 +956,7 @@ Mods: {
 					DisplayName: Tusk Staff
 					Tooltip: Raises tusks from the ground
 				}
+				
 				Chinalamp1.DisplayName: Traditional Lamp
 				Chinalamp2.DisplayName: Traditional Lamp
 				LanternCrystal.DisplayName: Royal City Pylon
@@ -1457,7 +1390,6 @@ Mods: {
 			PylonSystem.FireflyPylonLimit: A Firefly Pylon can only teleport you to another Firefly Pylon
 
 			Projectiles: {
-				StonePost.DisplayName: Stone Post
 				ButterflyDreamFriendly.DisplayName: 蓝蝶幻梦
 				DashingLightEff.DisplayName: Dashing Light Eff
 				ScaleWingBladeProj.DisplayName: Scale Wing Blade Proj
@@ -1618,7 +1550,6 @@ Mods: {
 				FixCoinSpeed2.DisplayName: Fix Coin Speed2
 				FixCoinSpeed3.DisplayName: Fix Coin Speed3
 				FlowerPetalPurple.DisplayName: Flower Petal Purple
-				PurpleBallEffect.DisplayName: PurpleBallEffect
 				Spark.DisplayName: Spark
 				BoneFeather.DisplayName: BoneFeather
 				EndlessCurseFlame.DisplayName: EndlessCurseFlame

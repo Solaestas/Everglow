@@ -7,6 +7,12 @@ Mods: {
 				Minute: minute
 				Second: second
 				Duration: duration
+				
+				DebugItem:
+					'''
+					! Debug item !
+					Use on your own risk
+					'''
 			}
 
 			Items: {
@@ -16,14 +22,6 @@ Mods: {
 
 			MapEntry: {
 				TwilightTree: Mods.Everglow.MapEntry.TwilightTree
-			}
-
-			Biomes: {
-				FireflyBiome.DisplayName: Glowing Cocoon
-				TuskBiome.DisplayName: Tusk Biome
-				TuskSurfaceBiome.DisplayName: Cursed Jaw
-				KelpCurtainBiome.DisplayName: Kelp Curtain
-				YggdrasilTownBiome.DisplayName: Yggdrasil Town
 			}
 		}
 	}

@@ -1,0 +1,120 @@
+
+Mods: {
+	Everglow: {
+		EternalResolve: {
+			Common: {
+				Hour: 小时
+				Minute: 分钟
+				Second: 秒
+				Duration: 持续时间
+				NotActivated: 未激活
+				RapierGT: 按住右键为一次高伤害, 附带无敌的冲刺充能
+				NoAmmoConsum: 不消耗弹药
+				
+				DebugItem:
+					'''
+					! 调试物品 !
+					后果自负
+					'''
+			}
+
+			Items: {
+			
+				EkandaBrick: {
+					DisplayName: 埃坎达砖
+					// Tooltip: ""
+				}
+
+				Guding: {
+					DisplayName: 埃坎达合金
+					// Tooltip: ""
+				}
+
+				NoFlawsDream: {
+					DisplayName: 无瑕梦境
+					// Tooltip: ""
+				}
+
+				Origin: {
+					DisplayName: 纯洁蓝宝石
+					Tooltip: 传说中珍贵的起源之石
+				}
+
+				DurableAxe: {
+					DisplayName: 坚固的斧头
+					// Tooltip: ""
+				}
+
+				ElectricHeatingPlate: {
+					DisplayName: 电热板斧
+					// Tooltip: ""
+				}
+
+				BrokenPick: {
+					DisplayName: 破损的镐子
+					// Tooltip: ""
+				}
+
+				BloodGoldBayonet: {
+					DisplayName: 血金刺剑
+					// Tooltip: "{$Mods.Everglow.Common.RapierGT}"
+				}
+
+				DreamStar: {
+					DisplayName: 梦晨星
+					// Tooltip: "{$Mods.Everglow.Common.RapierGT}"
+				}
+
+				EternalNight: {
+					DisplayName: 永夜西洋刺剑
+					// Tooltip: "{$Mods.Everglow.Common.RapierGT}"
+				}
+
+				GoldenStabbingSword: {
+					DisplayName: 金刺剑
+					// Tooltip: "{$Mods.Everglow.Common.RapierGT}"
+				}
+
+				IronStabbingSword: {
+					DisplayName: 铁刺剑
+					// Tooltip: "{$Mods.Everglow.Common.RapierGT}"
+				}
+
+				LeadStabbingSword: {
+					DisplayName: 铅刺剑
+					// Tooltip: "{$Mods.Everglow.Common.RapierGT}"
+				}
+
+				PlatinumStabbingSword: {
+					DisplayName: 铂金刺剑
+					// Tooltip: "{$Mods.Everglow.Common.RapierGT}"
+				}
+
+				PrisonFireBayonet: {
+					DisplayName: 狱火刺剑
+					// Tooltip: "{$Mods.Everglow.Common.RapierGT}"
+				}
+
+				RottenGoldBayonet: {
+					DisplayName: 暗影刺剑
+					// Tooltip: "{$Mods.Everglow.Common.RapierGT}"
+				}
+
+				SilverStabbingSword: {
+					DisplayName: 银刺剑
+					// Tooltip: "{$Mods.Everglow.Common.RapierGT}"
+				}
+
+				VegetationBayonet: {
+					DisplayName: 草木刺剑
+					// Tooltip: "{$Mods.Everglow.Common.RapierGT}"
+				}
+
+				TDMT: {
+					DisplayName: 陨雷之劫
+					// Tooltip: "{$Mods.Everglow.Common.RapierGT}"
+				}
+			}
+		}
+	}
+}

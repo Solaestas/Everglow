@@ -7,6 +7,12 @@ Mods: {
 				Minute: minute
 				Second: second
 				Duration: duration
+				
+				DebugItem:
+					'''
+					! Debug item !
+					Use on your own risk
+					'''
 			}
 
 			Items: {

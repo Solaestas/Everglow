@@ -10,6 +10,12 @@ Mods: {
 				NotActivated: Unactivated
 				RapierGT: Right click and hold to charge an invincibility dash with high damage
 				NoAmmoConsum: Does not consume ammo
+				
+				DebugItem:
+					'''
+					! Debug item !
+					Use on your own risk
+					'''
 			}
 
 			Items: {

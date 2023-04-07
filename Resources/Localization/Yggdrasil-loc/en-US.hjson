@@ -8,6 +8,12 @@ Mods: {
 				Second: second
 				Duration: duration
 				NotActivated: Unactivated
+				
+				DebugItem:
+					'''
+					! Debug item !
+					Use on your own risk
+					'''
 			}
 
 			NPCs: {
