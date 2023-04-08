@@ -1,5 +1,6 @@
 using System.Reflection;
 using Everglow.Commons;
+using Everglow.Commons.Hooks;
 using Everglow.Commons.Interfaces;
 using Everglow.Commons.Modules;
 using Everglow.Commons.Network.PacketHandle;
@@ -26,6 +27,7 @@ public class Everglow : Mod
 		Ins.Set<GraphicsDevice>(Main.instance.GraphicsDevice);
 		Ins.Set<IVisualQualityController>(new VisualQualityController());
 		Ins.Set<ModuleManager>(new ModuleManager());
+		HookManager.Initialize();
 		foreach (var config in Ins.ModuleManager.CreateInstances<ModConfig>())
 		{
 			var name = config.GetType().Name;
