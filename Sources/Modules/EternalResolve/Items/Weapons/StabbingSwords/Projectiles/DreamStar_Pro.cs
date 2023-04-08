@@ -1,11 +1,11 @@
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
-    public class SilverStabbingSword_Pro : StabbingProjectile
+    public class DreamStar_Pro : StabbingProjectile
     {
+        public override int SoundTimer => 10;
         public override void SetDefaults()
         {
-            Color = new Color(180, 191, 193);
-            base.SetDefaults();
+            Color = Color.Gold;
 			TradeLength = 4;
 			TradeShade = 0.3f;
 			Shade = 0.2f;
@@ -13,7 +13,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			FadeScale = 1;
 			TradeLightColorValue = 1f;
 			FadeLightColorValue = 0.4f;
-			MaxLength = 0.75f;
-		}
+			MaxLength = 1.05f;
+			base.SetDefaults();
+        }
     }
 }

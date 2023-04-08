@@ -4,10 +4,15 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
     {
         public override void SetDefaults()
         {
-            Projectile.GetGlobalProjectile<StabbingDrawer>().Color = Color.Red;
-            base.SetDefaults();
-            Projectile.localNPCHitCooldown = 5;
-            Projectile.GetGlobalProjectile<StabbingDrawer>().Shade = 0.5f;
-        }
+            Color = Color.Red;
+			TradeLength = 8;
+			TradeShade = 0.7f;
+			Shade = 0.5f;
+			FadeTradeShade = 0.6f;
+			FadeScale = 1;
+			TradeLightColorValue = 0.6f;
+			FadeLightColorValue = 0.1f;
+			base.SetDefaults();
+		}
     }
 }

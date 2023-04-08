@@ -1,13 +1,19 @@
-﻿namespace MythMod.EternalResolveMod.Items.Weapons.Stabbings.Proj
+namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
     public class PlatinumStabbingSword_Pro : StabbingProjectile
     {
         public override void SetDefaults()
         {
-            Projectile.GetGlobalProjectile<StabbingDrawer>().Color = new Color(206, 226, 226);
+            Color = new Color(166, 166, 226);
             base.SetDefaults();
-            Projectile.localNPCHitCooldown = 5;
-            Projectile.GetGlobalProjectile<StabbingDrawer>().Shade = 0.2f;
-        }
+			TradeLength = 4;
+			TradeShade = 0.7f;
+			Shade = 0.2f;
+			FadeTradeShade = 0.64f;
+			FadeScale = 1;
+			TradeLightColorValue = 1f;
+			FadeLightColorValue = 0.4f;
+			MaxLength = 0.90f;
+		}
     }
 }
