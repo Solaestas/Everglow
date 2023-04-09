@@ -61,8 +61,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		/// </summary>
 		public override void SetDefaults()
         {
-            Projectile.width = 10;
-			Projectile.height = 110;
+            Projectile.width = 30;
+			Projectile.height = 30;
 			Projectile.aiStyle = -1;
             Projectile.friendly = true;
             Projectile.tileCollide = false;
@@ -136,8 +136,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
 			float point = 0;
-			Vector2 HitRange = Projectile.velocity.SafeNormalize(Vector2.Zero) * MaxLength * Projectile.height;
-			if (Collision.CanHit(Projectile.Center, 0, 0, new Vector2(targetHitbox.Left, targetHitbox.Top), targetHitbox.Width, targetHitbox.Height))
+			Vector2 HitRange = Projectile.velocity.SafeNormalize(Vector2.Zero) * MaxLength * 100;
+			if (Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, new Vector2(targetHitbox.Left + targetHitbox.Width / 2f, targetHitbox.Top + targetHitbox.Height / 2f), 0, 0))
 			{
 				if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + HitRange, Projectile.width, ref point))
 				{
@@ -149,7 +149,17 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
         public override void CutTiles()
         {
             DelegateMethods.tilecut_0 = TileCuttingContext.AttackProjectile;
-            Vector2 end = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.UnitX) * 164f * Projectile.scale * MaxLength;
+			float cutLength = 164f;
+            Vector2 end = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.UnitX) * cutLength * Projectile.scale * MaxLength;
+			while(!Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, end, 0, 0))
+			{
+				cutLength -= 8;
+				if(cutLength < 0)
+				{
+					break;
+				}
+				end = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.UnitX) * cutLength * Projectile.scale * MaxLength;
+			}
             Utils.PlotTileLine(Projectile.Center, end, 80f * Projectile.scale, DelegateMethods.CutTiles);
         }
         public override bool PreDraw(ref Color lightColor)
@@ -203,12 +213,19 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 
 			float rndRange = rand.NextFloat(MaxLength * 0.5f, MaxLength * 1.21f) * 2f;
 			float rndDirction = rand.NextFloatDirection();
-			Vector2 drawSize = new Vector2(rndRange, DrawWidth) * lerpedTwice;
 			float drawRotation = Projectile.rotation + rndDirction * (MathF.PI * 2f) * 0.03f;
 			float additiveDrawPos = MaxLength * 15f + MathHelper.Lerp(0f, 50f, rndFloat) + rndRange * 16f;
 			Vector2 drawPos = Pos + drawRotation.ToRotationVector2() * additiveDrawPos + rand.NextVector2Circular(20f, 20f);
-
-
+			while (!Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, drawPos + Vector2.Normalize(Projectile.velocity) * 36f * rndRange * lerpedTwice, 0, 0))
+			{
+				rndRange *= 0.9f;
+				drawPos -= Projectile.velocity * 0.2f;
+				if (rndRange < 0.3f)
+				{
+					break;
+				}
+			}
+			Vector2 drawSize = new Vector2(rndRange, DrawWidth) * lerpedTwice;
 			if (TradeLength > 0)
 			{
 				for (int f = TradeLength - 1; f > 0; f--)
@@ -245,10 +262,19 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 
 			float rndRange = rand.NextFloat(MaxLength * 0.5f, MaxLength * 1.21f) * 2f;
 			float rndDirction = rand.NextFloatDirection();
-			Vector2 drawSize = new Vector2(rndRange, DrawWidth) * lerpedTwice;
 			float drawRotation = Projectile.rotation + rndDirction * (MathF.PI * 2f) * 0.03f;
 			float additiveDrawPos = MaxLength * 15f + MathHelper.Lerp(0f, 50f, rndFloat) + rndRange * 16f;
 			Vector2 drawPos = Pos + drawRotation.ToRotationVector2() * additiveDrawPos + rand.NextVector2Circular(20f, 20f);
+			while (!Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, drawPos + Vector2.Normalize(Projectile.velocity) * 36f * rndRange * lerpedTwice, 0, 0))
+			{
+				rndRange *= 0.9f;
+				drawPos -= Projectile.velocity * 0.2f;
+				if (rndRange < 0.3f)
+				{
+					break;
+				}		
+			}
+			Vector2 drawSize = new Vector2(rndRange, DrawWidth) * lerpedTwice;
 			LightDraw.Postion = drawPos;
 			LightDraw.Size = drawSize;
 			LightDraw.Rotation = drawRotation;

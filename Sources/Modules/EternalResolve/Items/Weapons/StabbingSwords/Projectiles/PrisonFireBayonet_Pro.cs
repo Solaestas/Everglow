@@ -1,3 +1,5 @@
+using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
+
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
     public class PrisonFireBayonet_Pro : StabbingProjectile
@@ -15,6 +17,71 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			FadeLightColorValue = 0.4f;
 			MaxLength = 0.90f;
 			DrawWidth = 0.6f;
+		}
+		public int SuddenCooling = 0;
+		public override void AI()
+		{
+			base.AI();
+			Player player = Main.player[Projectile.owner];
+			if (!player.wet || player.lavaWet)
+			{
+				for (int x = 0; x < 4; x++)
+				{
+					Vector2 pos = Projectile.position + Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.4f, 6f);
+					Vector2 vel = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.2f, 0.4f);
+					if (Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, pos + vel, 0, 0))
+					{
+						Dust dust = Dust.NewDustDirect(pos, Projectile.width, Projectile.height, ModContent.DustType<FlameShine>(), 0, 0, 0, default, Main.rand.NextFloat(0.35f, 0.6f));
+						dust.velocity = vel;
+					}
+				}
+				if (SuddenCooling > 0)
+				{
+					for (int x = 0; x < 4; x++)
+					{
+						Vector2 posII = Projectile.position + Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.4f, 8f);
+						Vector2 velII = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.04f, 0.08f) + new Vector2(Main.rand.NextFloat(-1f, 1f), -SuddenCooling / 12f);
+						if (Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, posII + velII, 0, 0))
+						{
+							Dust dust = Dust.NewDustDirect(posII, Projectile.width, Projectile.height, DustID.Smoke, 0, 0, 180, default, Main.rand.NextFloat(0.95f, 3.7f));
+							dust.velocity = velII;
+						}
+					}
+					SuddenCooling -= 1;
+				}
+				else
+				{
+					SuddenCooling = 0;
+				}
+			}
+			else
+			{
+				Vector2 pos = Projectile.position + Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.4f, 8f);
+				Vector2 vel = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.04f, 0.08f);
+				if (Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, pos + vel, 0, 0))
+				{
+					Dust dust = Dust.NewDustDirect(pos, Projectile.width, Projectile.height, DustID.Smoke, 0, 0, 200, default, Main.rand.NextFloat(0.95f, 1.7f));
+					dust.velocity = vel;
+				}
+				if (SuddenCooling < 60)
+				{
+					SuddenCooling += 1;
+					for (int x = 0; x < 4; x++)
+					{
+						Vector2 posII = Projectile.position + Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.4f, 8f);
+						Vector2 velII = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.04f, 0.08f) + new Vector2(Main.rand.NextFloat(-1f, 1f), (SuddenCooling - 60f) / 12f);
+						if (Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, posII + velII, 0, 0))
+						{
+							Dust dust = Dust.NewDustDirect(posII, Projectile.width, Projectile.height, DustID.Smoke, 0, 0, 180, default, Main.rand.NextFloat(0.95f, 3.7f));
+							dust.velocity = velII;
+						}
+					}
+				}
+				else
+				{
+					SuddenCooling = 60;
+				}
+			}
 		}
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
