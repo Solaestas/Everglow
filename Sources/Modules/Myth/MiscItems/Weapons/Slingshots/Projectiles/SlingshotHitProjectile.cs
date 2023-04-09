@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 
 namespace Everglow.Myth.MiscItems.Weapons.Slingshots.Projectiles;
 
@@ -61,8 +61,8 @@ public abstract class SlingshotHitProjectile : ModProjectile, IWarpProjectile
 
 		for (int h = 0; h < radious / 2; h += 1)
 		{
-			float colorR = (h / radious * MathF.PI * 4 + (float)addRot + 1.57f) % (MathF.PI * 2f) / (MathF.PI * 2f);
-			float color2R = ((h + 1) / radious * MathF.PI * 4 + (float)addRot + 1.57f) % (MathF.PI * 2f) / (MathF.PI * 2f);
+			float colorR = (h / radious * MathF.PI * 4 + (float)addRot + MathF.PI * 1.5f) % (MathF.PI * 2f) / (MathF.PI * 2f);
+			float color2R = ((h + 1) / radious * MathF.PI * 4 + (float)addRot + MathF.PI * 1.5f) % (MathF.PI * 2f) / (MathF.PI * 2f);
 
 			color = new Color(colorR, color.G / 255f, 0, 0);
 			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(h / radious * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radious, 0.8f, 0)));
