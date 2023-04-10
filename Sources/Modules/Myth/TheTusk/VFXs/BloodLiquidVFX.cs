@@ -60,6 +60,7 @@ internal class BloodLiquidDust : ShaderDraw
 	public List<Vector2> oldPos = new List<Vector2>();
 	public float timer;
 	public float maxTime;
+	public float alpha;
 	public BloodLiquidDust() { }
 	public BloodLiquidDust(int maxTime, Vector2 position, Vector2 velocity, params float[] ai) : base(position, velocity, ai)
 	{
@@ -91,6 +92,13 @@ internal class BloodLiquidDust : ShaderDraw
 			{
 				Active = false;
 			}
+		}
+		if (Main.tile[(int)(position.X / 16f), (int)(position.Y / 16f)].LiquidAmount > 0)
+		{
+			ai[2] += 2.8f;
+			alpha += 0.05f;
+			velocity *= 0.9f;
+			timer += 3;
 		}
 	}
 
