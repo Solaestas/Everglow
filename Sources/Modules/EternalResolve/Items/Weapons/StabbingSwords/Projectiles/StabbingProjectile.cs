@@ -119,9 +119,12 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
                     Projectile.velocity = toMouse;
 					Projectile.timeLeft = TradeLength;
 				}
-            }
-
-            Projectile.position = player.RotatedRelativePoint(player.MountedCenter, reverseRotation: false, addGfxOffY: false) - Projectile.Size / 2f;
+			}
+			if (!player.controlUseItem && Projectile.timeLeft > TradeLength)
+			{
+				Projectile.timeLeft = TradeLength;
+			}
+			Projectile.position = player.RotatedRelativePoint(player.MountedCenter, reverseRotation: false, addGfxOffY: false) - Projectile.Size / 2f;
             Projectile.rotation = Projectile.velocity.ToRotation();
             Projectile.spriteDirection = Projectile.direction;
             player.ChangeDir(Projectile.direction);

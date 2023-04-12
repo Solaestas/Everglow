@@ -4,6 +4,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 {
     public class BloodGoldBayonet : StabbingSwordItem
 	{
+		//命中敌人后有1/45的概率吸血,吸血量为造成伤害的30%
 		public override void SetDefaults()
 		{
 			Item.damage = 11;

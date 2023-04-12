@@ -17,6 +17,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			TradeLightColorValue = 1f;
 			FadeLightColorValue = 0.9f;
 			MaxLength = 1.05f;
+			DrawWidth = 0.4f;
 			base.SetDefaults();
         }
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
