@@ -46,7 +46,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		}
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
-			if (Main.rand.NextBool(45))
+			if (Main.rand.NextBool(25))
 			{
 				if (target.type != NPCID.TargetDummy)
 				{

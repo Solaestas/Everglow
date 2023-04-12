@@ -4,6 +4,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 {
     public class VegetationBayonet : StabbingSwordItem
 	{
+		internal int specialDelay = 0;
 		public override void SetDefaults()
 		{
 			Item.damage = 9;
@@ -22,6 +23,17 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 				AddTile(TileID.Anvils).
 				Register();
 			base.AddRecipes();
+		}
+		public override void UpdateInventory(Player player)
+		{
+			if (specialDelay > 360)
+			{
+				player.AddBuff(BuffID.Rabies, 2);
+			}
+			if (player.ownedProjectileCounts[Item.shoot] <= 0)
+			{
+				specialDelay = 0;
+			}
 		}
 	}
 }

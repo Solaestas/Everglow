@@ -1,3 +1,5 @@
+using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles;
+
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts
 {
 	/// <summary>
@@ -12,9 +14,9 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts
 				dust.active = false;
 			}
 			Projectile proj = Main.projectile[dust.color.G * 255 + dust.color.R];
-			if(!proj.active || proj == null)
+			if(!proj.active || proj == null || proj.type != ModContent.ProjectileType<RottenGoldBayonet_Mark>())
 			{
-				dust.scale *= 0.8f;
+				dust.scale *= 0.1f;
 			}
 			else if (proj.timeLeft > 54f)
 			{

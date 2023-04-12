@@ -1,4 +1,5 @@
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
+using Terraria.DataStructures;
 using Terraria.GameContent;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
@@ -18,6 +19,22 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			FadeLightColorValue = 0.1f;
 			DrawWidth = 0.4f;
 		}
+		VegetationBayonet sourceItem = null;
+		public override void OnSpawn(IEntitySource source)
+		{
+			if (source is EntitySource_ItemUse_WithAmmo eiw)
+			{
+				sourceItem = eiw.Item.ModItem as VegetationBayonet;
+				if (sourceItem is null)
+				{
+					Projectile.Kill();
+				}
+				else
+				{
+					sourceItem.specialDelay = 0;
+				}
+			}
+		}
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			target.buffImmune[BuffID.Poisoned] = false;
@@ -33,6 +50,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				Dust dust = Dust.NewDustDirect(pos, Projectile.width, Projectile.height, ModContent.DustType<LeafShine>(), 0, 0, 0, default, Main.rand.NextFloat(0.95f, 1.1f));
 				dust.velocity = vel;
 			}
+			sourceItem.specialDelay++;
 		}
 		public override void PostDraw(Color lightColor)
 		{

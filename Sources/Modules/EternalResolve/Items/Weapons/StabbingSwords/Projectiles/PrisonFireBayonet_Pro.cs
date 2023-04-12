@@ -91,6 +91,14 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				target.AddBuff(BuffID.OnFire, 150);
 			}
         }
+		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+		{
+			Player player = Main.player[Projectile.owner];
+			if (player.lavaWet)
+			{
+				modifiers.FinalDamage *= 2f;
+			}
+		}
 		public override void PostDraw(Color lightColor)
 		{
 			Player player = Main.player[Projectile.owner];
