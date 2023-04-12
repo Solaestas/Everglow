@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Everglow.Commons.Geometry;
+namespace Everglow.Commons.Geometries;
 internal class Transform
 {
 	Vector3 _position;
 	Quaternion _rotation;
 	Vector3 _scale;
-	List<MeshFilter> _meshFilters;
+	public List<MeshFilter> MeshFilters = new();
 	bool _changed;
 	public Vector3 Position
 	{
@@ -43,7 +43,7 @@ internal class Transform
 	{
 		if(_changed)
 		{
-			_meshFilters.ForEach(filter => filter.Mesh.ApplyTransform(this));
+			MeshFilters.ForEach(filter => filter.Mesh.ApplyTransform(this));
 			_changed = false;
 		}
 	}
