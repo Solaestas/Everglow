@@ -16,7 +16,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			FadeScale = 1;
 			TradeLightColorValue = 0.6f;
 			FadeLightColorValue = 0.1f;
-        }
+			DrawWidth = 0.4f;
+		}
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			target.buffImmune[BuffID.Poisoned] = false;
