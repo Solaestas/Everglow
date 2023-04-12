@@ -4,6 +4,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 {
     public class RottenGoldBayonet : StabbingSwordItem
 	{
+		internal int specialDelay = 0;
 		public override void SetDefaults()
 		{
 			Item.damage = 10;
@@ -21,6 +22,13 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 				AddTile(TileID.Anvils).
 				Register();
 			base.AddRecipes();
+		}
+		public override void UpdateInventory(Player player)
+		{
+			if (specialDelay > 0)
+			{
+				specialDelay--;
+			}
 		}
 	}
 }
