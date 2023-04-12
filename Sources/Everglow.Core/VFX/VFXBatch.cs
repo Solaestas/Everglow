@@ -245,13 +245,17 @@ public class VFXBatch : IDisposable
 	public void Draw<T>(IEnumerable<T> vertices, PrimitiveType type) where T : struct, IVertexType
 	{
 		if (!vertices.Any())
+		{
 			return;
+		}
 
 		Debug.Assert(hasBegun, "Begin not called!");
 		if (!Buffer<T>.CheckSize(vertices.Count()))
 		{
 			if (Buffer<T>.Textures.Count == 0)
+			{
 				Flush<T>();
+			}
 			else
 			{
 				var tex = Buffer<T>.CurrentTexture;
@@ -292,7 +296,10 @@ public class VFXBatch : IDisposable
 	/// </summary>
 	/// <param name="texture"></param>
 	/// <returns>this</returns>
-	public VFXBatch BindTexture(Texture2D texture) => BindTexture<VFX2D>(texture);
+	public VFXBatch BindTexture(Texture2D texture)
+	{
+		return BindTexture<VFX2D>(texture);
+	}
 
 	/// <summary>
 	/// 绑定Texture2D用于该顶点类型下一次的Draw
@@ -309,7 +316,9 @@ public class VFXBatch : IDisposable
 		}
 
 		if (Buffer<T>.CurrentTexture == texture)
+		{
 			return this;
+		}
 
 		Buffer<T>.Textures.Add(texture);
 		Buffer<T>.SameTexture.Enqueue((Buffer<T>.IndexPosition, Buffer<T>.VertexPosition));
@@ -349,7 +358,6 @@ public class VFXBatch : IDisposable
 
 	public void Flush<T>() where T : struct, IVertexType
 	{
-		Debug.Assert(!hasBegun);
 		Buffer<T>.Instance.DrawPrimitive();
 		Buffer<T>.Instance.Clear();
 	}
@@ -364,7 +372,10 @@ public class VFXBatch : IDisposable
 		needFlush.Add(false);
 	}
 
-	private int GetBufferIndex<T>() where T : struct, IVertexType => buffers.IndexOf(Buffer<T>.Instance);
+	private int GetBufferIndex<T>() where T : struct, IVertexType
+	{
+		return buffers.IndexOf(Buffer<T>.Instance);
+	}
 
 	private struct VFX2D : IVertexType
 	{
@@ -527,7 +538,10 @@ public class VFXBatch : IDisposable
 				if (sameTexture.Count == 0)
 				{
 					if (textures.Count != 0)
+					{
 						graphicsDevice.Textures[0] = textures[0];
+					}
+
 					graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, vertexPosition, 0, indexPosition / 3);
 					return;
 				}
@@ -539,7 +553,10 @@ public class VFXBatch : IDisposable
 				{
 					var (nextIndex, nextVertex) = sameTexture.Dequeue();
 					if (currentVertex == nextVertex || currentIndex == nextIndex)
+					{
 						continue;
+					}
+
 					graphicsDevice.Textures[0] = textures[count++];
 					graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, nextVertex, currentIndex, (nextIndex - currentIndex) / 3);
 					(currentIndex, currentVertex) = (nextIndex, nextVertex);
