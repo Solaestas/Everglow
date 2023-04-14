@@ -282,7 +282,14 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			LightDraw.Size = drawSize;
 			LightDraw.Rotation = drawRotation;
 		}
+		public virtual void DrawBeforeItem()
+		{
 
+		}
+		public virtual void DrawAfterItem()
+		{
+
+		}
 		public override void PostDraw(Color lightColor)
 		{
 			Player player = Main.player[Projectile.owner];
@@ -291,7 +298,9 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			Texture2D light = ModAsset.StabbingProjectile.Value;
 			Vector2 drawOrigin = light.Size() / 2f;
 			Vector2 drawShadowOrigin = Shadow.Size() / 2f;
+			DrawBeforeItem();
 			Main.spriteBatch.Draw(itemTexture, ItemDraw.Postion - Main.screenPosition, null, lightColor, ItemDraw.Rotation, itemTexture.Size() / 2f, ItemDraw.Size, ItemDraw.SpriteEffect, 0f);
+			DrawAfterItem();
 			if (TradeShade > 0)
 			{
 				for (int f = TradeLength - 1; f > -1; f--)
