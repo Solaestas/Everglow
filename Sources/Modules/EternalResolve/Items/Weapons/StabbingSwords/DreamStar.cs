@@ -6,7 +6,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 	{
 		public override void SetDefaults()
 		{
-			Item.damage = 33;
+			Item.damage = 10;
 			Item.knockBack = 1.5f;
 			Item.rare = ItemRarityID.LightRed;
 			Item.value = Item.sellPrice(0, 2, 27, 15);

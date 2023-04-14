@@ -13,14 +13,6 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts
 			}
 			dust.velocity *= 0.9f;
 			dust.rotation += 0.9f;
-			if(dust.color.A < 255)
-			{
-				dust.color.A += 9;
-			}
-			else
-			{
-				dust.color.A = 255;
-			}
 			if(Collision.SolidCollision(dust.position, 0, 0))
 			{
 				dust.active = false;
@@ -41,7 +33,6 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts
 		public override void OnSpawn(Dust dust)
 		{
 			dust.frame = new Rectangle(0, Main.rand.Next(3) * 10, 10, 10);
-			dust.color.A = (byte)Main.rand.Next(0, 70);
 			base.OnSpawn(dust);
 		}
 	}

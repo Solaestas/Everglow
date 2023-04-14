@@ -38,6 +38,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		}
 		public override bool PreDraw(ref Color lightColor)
 		{
+			Vector2 hitCenter = StartCenter + Vector2.Normalize(Projectile.velocity) * 120f;
+			lightColor = Lighting.GetColor((int)(hitCenter.X / 16f), (int)(hitCenter.Y / 16f));
 			float value0 = (120 - Projectile.timeLeft) / 120f;
 			float value1 = MathF.Pow(value0, 0.5f);
 			float width = (1 - MathF.Cos(value1 * 2f * MathF.PI)) * 10f;

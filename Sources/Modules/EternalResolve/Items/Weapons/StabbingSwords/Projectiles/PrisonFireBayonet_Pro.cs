@@ -1,4 +1,6 @@
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
+using Terraria.Audio;
+using Terraria.DataStructures;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
@@ -19,6 +21,18 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			DrawWidth = 0.4f;
 		}
 		public int SuddenCooling = 0;
+		public override void OnSpawn(IEntitySource source)
+		{
+			Player player = Main.player[Projectile.owner];
+			if (!player.wet || player.lavaWet)
+			{
+				SuddenCooling = 0;
+			}
+			else
+			{
+				SuddenCooling = 60;
+			}
+		}
 		public override void AI()
 		{
 			base.AI();
@@ -75,6 +89,10 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 							Dust dust = Dust.NewDustDirect(posII, Projectile.width, Projectile.height, DustID.Smoke, 0, 0, 180, default, Main.rand.NextFloat(0.95f, 3.7f));
 							dust.velocity = velII;
 						}
+					}
+					if(SuddenCooling == 1)
+					{
+						SoundEngine.PlaySound(new SoundStyle("Everglow/EternalResolve/Sounds/CoolingSword"), Projectile.Center);
 					}
 				}
 				else

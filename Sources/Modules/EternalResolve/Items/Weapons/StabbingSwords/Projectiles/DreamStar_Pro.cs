@@ -1,3 +1,5 @@
+using Everglow.Commons.Vertex;
+using Everglow.EternalResolve.Items.Misc;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
 using Terraria.GameContent;
 
@@ -5,7 +7,10 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
     public class DreamStar_Pro : StabbingProjectile
     {
-        public override int SoundTimer => 10;
+		NPC LastHitTarget = null;
+		NPC StarNPC = null;
+		internal int ContinuousHit = 0;
+		public override int SoundTimer => 10;
         public override void SetDefaults()
         {
             Color = Color.Gold;
@@ -22,6 +27,37 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
         }
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
+			if(LastHitTarget != null)
+			{
+				if(LastHitTarget == target)
+				{
+					if(StarNPC != target)
+					{
+						ContinuousHit++;
+						if (ContinuousHit >= 5)
+						{
+							if (StarNPC != null)
+							{
+								Projectile.NewProjectile(Projectile.GetSource_FromAI(), StarNPC.Center, Vector2.zeroVector, ModContent.ProjectileType<DreamStar_Explosion>(), (int)(Projectile.damage * 4.26), Projectile.knockBack * 4.26f, Projectile.owner, ContinuousHit / 5f);
+								Projectile.NewProjectile(Projectile.GetSource_FromAI(), target.Center, Vector2.zeroVector, ModContent.ProjectileType<DreamStar_Explosion>(), (int)(Projectile.damage * 4.26), Projectile.knockBack * 4.26f, Projectile.owner, ContinuousHit / 5f);
+							}
+							StarNPC = target;
+							ContinuousHit = 0;
+						}
+					}
+				}
+				else
+				{
+					Projectile.NewProjectile(Projectile.GetSource_FromAI(), LastHitTarget.Center, Vector2.zeroVector, ModContent.ProjectileType<DreamStar_Explosion>(), (int)(Projectile.damage * 2.20 * ContinuousHit / 5f), Projectile.knockBack * 2.20f * ContinuousHit / 5f, Projectile.owner, ContinuousHit / 5f);
+					Projectile.NewProjectile(Projectile.GetSource_FromAI(), target.Center, Vector2.zeroVector, ModContent.ProjectileType<DreamStar_Explosion>(), (int)(Projectile.damage * 2.20 * ContinuousHit / 5f), Projectile.knockBack * 2.20f * ContinuousHit / 5f, Projectile.owner, ContinuousHit / 5f);
+					LastHitTarget = target;
+					ContinuousHit = 0;
+				}
+			}
+			else
+			{
+				LastHitTarget = target;
+			}
 		}
 		public override void AI()
 		{
@@ -37,6 +73,22 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				}
 				Dust dust = Dust.NewDustDirect(pos, Projectile.width, Projectile.height, type, 0, 0, 0, default, Main.rand.NextFloat(0.75f, 1.25f));
 				dust.velocity = vel;
+			}
+			if (StarNPC != null)
+			{
+				if(!StarNPC.active)
+				{
+					Projectile.NewProjectile(Projectile.GetSource_FromAI(), StarNPC.Center, Vector2.zeroVector, ModContent.ProjectileType<DreamStar_Explosion>(), (int)(Projectile.damage * 4.26), Projectile.knockBack * 4.26f);
+					Item.NewItem(StarNPC.GetSource_Death(), StarNPC.Hitbox, ModContent.ItemType<StarSeed>());
+					StarNPC = null;
+				}
+			}
+			if (LastHitTarget != null)
+			{
+				if (!LastHitTarget.active)
+				{
+					LastHitTarget = null;
+				}
 			}
 		}
 		public override void PostDraw(Color lightColor)
@@ -79,6 +131,57 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 					Main.spriteBatch.Draw(light, LightDraw.Postion - Main.screenPosition, null, new Color(Color.R / 255f, Color.G / 255f, lightColor.B / 255f * Color.B / 255f, 0), LightDraw.Rotation, drawOrigin, LightDraw.Size, SpriteEffects.None, 0f);
 				}
 			}
+			Main.spriteBatch.End();
+			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+			float drawTimer = (float)Main.time * 0.04f;
+			if (StarNPC != null)
+			{
+				float starSize = MathF.Sqrt(StarNPC.width * StarNPC.height) * 0.8f;
+				Vector2 drawStarCenter = StarNPC.Center - Main.screenPosition;
+				Color drawColor = Color.Yellow;
+				drawColor.A = 0;
+				List<Vertex2D> bars = new List<Vertex2D>();
+				for(int x = 0;x < 5;x++)
+				{
+					Vector2 bump = new Vector2(0, starSize).RotatedBy(x / 5.0 * Math.PI * 2 + drawTimer * -0.4);
+					bars.Add(new Vertex2D(drawStarCenter + bump, drawColor, new Vector3(x / 5.0f + drawTimer, 0, 0)));
+					bars.Add(new Vertex2D(drawStarCenter + bump * 0.1f, drawColor, new Vector3(x / 5.0f + drawTimer, 1, 0)));
+					Vector2 dent = new Vector2(0, starSize * 0.5f).RotatedBy((x + 0.5) / 5.0 * Math.PI * 2 + drawTimer * -0.4);
+					bars.Add(new Vertex2D(drawStarCenter + dent, drawColor, new Vector3((x + 0.5f) / 5.0f + drawTimer, 0, 0)));
+					bars.Add(new Vertex2D(drawStarCenter + dent * 0.1f, drawColor, new Vector3((x + 0.5f) / 5.0f + drawTimer, 1, 0)));
+					if(x == 4)
+					{
+						bump = new Vector2(0, starSize).RotatedBy((x + 1) / 5.0 * Math.PI * 2 + drawTimer * -0.4);
+						bars.Add(new Vertex2D(drawStarCenter + bump, drawColor, new Vector3((x + 1) / 5.0f + drawTimer, 0, 0)));
+						bars.Add(new Vertex2D(drawStarCenter + bump * 0.1f, drawColor, new Vector3((x + 1) / 5.0f + drawTimer, 1, 0)));
+					}
+				}
+				Main.graphics.GraphicsDevice.Textures[0] = ModAsset.StabbingProjectile.Value;
+				if (bars.Count > 3)
+					Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+			}
+			if (LastHitTarget != null)
+			{
+				float lastHitSize = MathF.Sqrt(LastHitTarget.width * LastHitTarget.height) * 0.8f;
+				Vector2 drawTargetCenter = LastHitTarget.Center - Main.screenPosition;
+				Color drawColor = Color.Yellow;
+				drawColor.A = 0;
+				List<Vertex2D> bars = new List<Vertex2D>();
+				for (int x = 0; x < ContinuousHit; x++)
+				{
+					Vector2 bump = new Vector2(0, lastHitSize).RotatedBy(x / 5.0 * Math.PI * 2 + drawTimer * -0.4);
+					bars.Add(new Vertex2D(drawTargetCenter + bump, drawColor, new Vector3(x / 5.0f + drawTimer, 0, 0)));
+					bars.Add(new Vertex2D(drawTargetCenter + bump * 0.1f, drawColor, new Vector3(x / 5.0f + drawTimer, 1, 0)));
+					Vector2 dent = new Vector2(0, lastHitSize * 0.5f).RotatedBy((x + 0.5) / 5.0 * Math.PI * 2 + drawTimer * -0.4);
+					bars.Add(new Vertex2D(drawTargetCenter + dent, drawColor, new Vector3((x + 0.5f) / 5.0f + drawTimer, 0, 0)));
+					bars.Add(new Vertex2D(drawTargetCenter + dent * 0.1f, drawColor, new Vector3((x + 0.5f) / 5.0f + drawTimer, 1, 0)));
+				}
+				Main.graphics.GraphicsDevice.Textures[0] = ModAsset.StabbingProjectile.Value;
+				if (bars.Count > 3)
+					Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+			}
+			Main.spriteBatch.End();
+			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		}
 	}
 }
