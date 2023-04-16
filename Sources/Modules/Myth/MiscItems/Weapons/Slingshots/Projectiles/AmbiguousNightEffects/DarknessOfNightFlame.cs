@@ -102,8 +102,8 @@ internal class DarknessOfNightDust : ShaderDraw
 			{
 				width *= timer / 10f;
 			}
-			bars[2 * i - 1] = new Vertex2D(oldPos[i] + normal * width, drawcRope, new Vector3(0 + ai[0], i / 80f, 0.8f - fx));
-			bars[2 * i] = new Vertex2D(oldPos[i] - normal * width, drawcRope, new Vector3(0.07f + ai[0], i / 80f, 0.8f - fx));
+			bars[2 * i - 1] = new Vertex2D(oldPos[i] + normal * width, drawcRope, new Vector3(0 + ai[0], (i + 15 - len) / 80f, 0.8f - fx));
+			bars[2 * i] = new Vertex2D(oldPos[i] - normal * width, drawcRope, new Vector3(0.07f + ai[0], (i + 15 - len) / 80f, 0.8f - fx));
 		}
 		bars[0] = new Vertex2D((bars[1].position + bars[2].position) * 0.5f, Color.White, new Vector3(0.5f, 0, 0));
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
