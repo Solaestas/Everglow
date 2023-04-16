@@ -10,9 +10,9 @@ public class ItemGlowManager : GlobalItem
 {
 	private static short begin = 0;
 
-	private static Dictionary<int, short> glowMapping = new Dictionary<int, short>();
+	private static Dictionary<int, short> glowMapping = new();
 
-	private static List<Asset<Texture2D>> glowMasks = new List<Asset<Texture2D>>();
+	private static List<Asset<Texture2D>> glowMasks = new();
 
 	public override void Load()
 	{
@@ -24,16 +24,29 @@ public class ItemGlowManager : GlobalItem
 		begin = (short)TextureAssets.GlowMask.Length;
 
 		// 只读，线程安全
-		var asset = ModIns.Mod.Assets._assets;
+		var asset = ModIns.Mod.Assets;
+		var source = ModIns.Mod.RootContentSource;
 		short index = 0;
 		foreach (var item in ModIns.Mod.GetContent<ModItem>())
 		{
-			var path = item.Texture + "_glow";
-			if (asset.TryGetValue(path, out var glow) && glow is Asset<Texture2D> texture)
+			var itemLocation = item.Texture.AsSpan(9);
+			var path = string.Concat(itemLocation, "_glow");
+			if (source.HasAsset(path))
 			{
-				glowMasks.Add(texture);
+				glowMasks.Add(asset.Request<Texture2D>(path, AssetRequestMode.ImmediateLoad));
 				glowMapping.Add(item.Type, (short)(begin + index));
 				index++;
+				continue;
+			}
+
+			var moduleName = itemLocation[..(itemLocation.IndexOf('/') + 1)];
+			path = string.Concat(moduleName, "Glows/", item.Name, "_glow");
+			if (source.HasAsset(path))
+			{
+				glowMasks.Add(asset.Request<Texture2D>(path, AssetRequestMode.ImmediateLoad));
+				glowMapping.Add(item.Type, (short)(begin + index));
+				index++;
+				continue;
 			}
 		}
 		TextureAssets.GlowMask = TextureAssets.GlowMask.Concat(glowMasks).ToArray();
@@ -42,7 +55,9 @@ public class ItemGlowManager : GlobalItem
 	public override void SetDefaults(Item item)
 	{
 		if (glowMapping.TryGetValue(item.type, out var index))
-			item.glowMask = glowMapping[index];
+		{
+			item.glowMask = index;
+		}
 	}
 
 	public override void Unload()
