@@ -33,8 +33,6 @@ internal class NavyThunder : ModProjectile, IWarpProjectile
 
 	public override void AI()
 	{
-		Main.NewText($"Projectile: {GetType().Name}");
-
 		// 用的舒服点
 		ref float ai0 = ref Projectile.ai[0];
 		ref float ai1 = ref Projectile.ai[1];
