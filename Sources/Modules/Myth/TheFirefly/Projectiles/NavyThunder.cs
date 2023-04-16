@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
 using Terraria.Audio;
 
@@ -19,44 +19,78 @@ internal class NavyThunder : ModProjectile, IWarpProjectile
 		Projectile.DamageType = DamageClass.Magic;
 	}
 
-	private bool Release = true;
-	private Vector2 oldPo = Vector2.Zero;
+	/// <summary>
+	/// 我不知道干嘛用的，没设置过值，只有判断，先改成 const
+	/// </summary>
+	private const bool Release = true;
+
+	/// <summary>
+	/// 没看到使用的地方
+	/// </summary>
+	//private Vector2 oldPo = Vector2.Zero;
+
 	private int addi = 0;
 
 	public override void AI()
 	{
+		Main.NewText($"Projectile: {GetType().Name}");
+
+		// 用的舒服点
+		ref float ai0 = ref Projectile.ai[0];
+		ref float ai1 = ref Projectile.ai[1];
+
+		Player player = Main.player[Projectile.owner];
+
 		addi++;
-		Vector2 v0 = Main.MouseWorld - Main.player[Projectile.owner].MountedCenter;
-		if (Main.mouseLeft && Release)
+
+		// 为什么要按着才更新位置呢？注释了！
+		if (/*Main.mouseLeft &&*/ Release)
 		{
-			Player player = Main.player[Projectile.owner];
-			Projectile.Center = Projectile.Center * 0.7f + (player.Center + new Vector2(player.direction * 32, -22 * player.gravDir * (float)(1.2 + Math.Sin(Main.time / 18d) / 8d))) * 0.3f;
+			// 拆分是为了看着短一点
+			Projectile.Center = Projectile.Center * 0.7f + player.Center * 0.3f;
+
+			// 面朝方向 X 轴偏移
+			Projectile.position.X += player.direction * 32 * 0.3f;
+			Projectile.position.Y += -22 * player.gravDir * (float)(1.2 + Math.Sin(Main.time / 18d) / 8d) * 0.3f;
+
+			// 防止玩家移动的时候，弹幕贴脸，XY 轴都会因为移动一点点，但是不会很多
+			Projectile.position += player.velocity * 0.7f;
+			Projectile.position -= Vector2.Clamp(player.velocity * 0.1f, new Vector2(-10), new Vector2(10));
+
 			Projectile.spriteDirection = player.direction;
 			Projectile.velocity *= 0;
 		}
+
 		if (!Main.mouseLeft && Release)
 		{
-			if (Projectile.ai[1] > 0)
+			if (ai1 > 0)
 			{
-				Projectile.ai[0] *= 0.9f;
-				Projectile.ai[1] -= 1f;
-				Projectile.Center = Main.player[Projectile.owner].MountedCenter + Vector2.Normalize(v0).RotatedBy(Projectile.ai[0] / 4d) * (8f - Projectile.ai[0] * 4);
+				ai0 *= 0.9f;
+				ai1 -= 1f;
+				Vector2 isWhat = Main.MouseWorld - player.MountedCenter;
+				Projectile.Center = player.MountedCenter + Vector2.Normalize(isWhat).RotatedBy(ai0 / 4d) * (8f - ai0 * 4);
 			}
 			else
 			{
 				if (Projectile.timeLeft > 21)
+				{
 					Projectile.timeLeft = 20;
+				}
+
 				for (int j = 0; j < 16; j++)
 				{
-					Vector2 v1 = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * Projectile.scale;
-					int dust1 = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<MothSmog>(), v1.X, v1.Y, 100, default, Main.rand.NextFloat(3.7f, 5.1f) * 0.13f);
-					Main.dust[dust1].alpha = (int)(Main.dust[dust1].scale * 0.3);
-					Main.dust[dust1].rotation = Main.rand.NextFloat(0, 6.283f);
+					Vector2 iDoNotKnowWhat = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * Projectile.scale;
+					int dust = Dust.NewDust(Projectile.Center - Projectile.velocity * 3 + Vector2.Normalize(Projectile.velocity) * 16f - new Vector2(4), 0, 0, ModContent.DustType<MothSmog>(), iDoNotKnowWhat.X, iDoNotKnowWhat.Y, 100, default, Main.rand.NextFloat(3.7f, 5.1f) * 0.13f);
+					Main.dust[dust].alpha = (int)(Main.dust[dust].scale * 0.3);
+					Main.dust[dust].rotation = Main.rand.NextFloat(0, 6.283f);
 				}
 			}
 		}
-		if (Main.player[Projectile.owner].itemTime == 2)
+
+		if (player.itemTime == 2)
+		{
 			Shoot();
+		}
 	}
 
 	private void Shoot()
