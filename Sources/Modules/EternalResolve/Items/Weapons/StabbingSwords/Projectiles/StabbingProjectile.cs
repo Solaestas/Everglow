@@ -1,3 +1,4 @@
+using Everglow.Commons.Vertex;
 using Terraria.Audio;
 using Terraria.Enums;
 using Terraria.GameContent;
@@ -286,21 +287,58 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		{
 
 		}
+		/// <summary>
+		/// mulVelocity 决定了旗帜下方两个角收到弹幕速度的影响大小
+		/// </summary>
+		/// <param name="lightColor"></param>
+		/// <param name="offset"></param>
+		/// <param name="flagTexture"></param>
+		/// <param name="mulVelocityLeft"></param>
+		/// <param name="mulVelocityRight"></param>
+		public void DrawFlags(Color lightColor, float flagLeftX, float flagTopY, Texture2D flagTexture, float mulVelocityLeft = 1f, float mulVelocityRight = 1f)
+		{
+			Player player = Main.player[Projectile.owner];
+			float flagRightX = flagLeftX + flagTexture.Width;
+			Vector2 flagTopLeft = ItemDraw.Postion + new Vector2(flagLeftX, flagTopY).RotatedBy(ItemDraw.Rotation) - Main.screenPosition;
+			Vector2 flagTopRight = ItemDraw.Postion + new Vector2(flagRightX, flagTopY).RotatedBy(ItemDraw.Rotation) - Main.screenPosition;
+			if (ItemDraw.SpriteEffect == SpriteEffects.FlipHorizontally)
+			{
+				flagTopLeft = ItemDraw.Postion + new Vector2(-flagRightX, flagTopY).RotatedBy(ItemDraw.Rotation) - Main.screenPosition;
+				flagTopRight = ItemDraw.Postion + new Vector2(-flagLeftX, flagTopY).RotatedBy(ItemDraw.Rotation) - Main.screenPosition;
+			}
+			Vector2 flagBottomLeft = flagTopLeft + new Vector2(0, flagTexture.Height) - Projectile.velocity * mulVelocityLeft - player.velocity;
+			Vector2 flagBottomRight = flagTopRight + new Vector2(0, flagTexture.Height) - Projectile.velocity * mulVelocityRight - player.velocity;
+			Vector2 deltaBottom = flagBottomRight - flagBottomLeft;
+			float velBottomLeft = (deltaBottom.X - 10f) * 1f;
+			float velBottomRight = -(deltaBottom.X - 10f) * 1f;
+			flagBottomLeft.X += velBottomLeft;
+			flagBottomRight.X += velBottomRight;
+			List<Vertex2D> bars = new List<Vertex2D>();
+			bars.Add(new Vertex2D(flagTopLeft, lightColor, new Vector3(0, 0, 0)));
+			bars.Add(new Vertex2D(flagTopRight, lightColor, new Vector3(1, 0, 0)));
+			bars.Add(new Vertex2D(flagBottomLeft, lightColor, new Vector3(0, 1, 0)));
+			bars.Add(new Vertex2D(flagBottomRight, lightColor, new Vector3(1, 1, 0)));
+			Main.graphics.GraphicsDevice.Textures[0] = flagTexture;
+			if (bars.Count > 3)
+				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		}
+		public virtual void DrawItem(Color lightColor)
+		{
+			Player player = Main.player[Projectile.owner];
+			Texture2D itemTexture = TextureAssets.Item[player.HeldItem.type].Value;
+			Main.spriteBatch.Draw(itemTexture, ItemDraw.Postion - Main.screenPosition, null, lightColor, ItemDraw.Rotation, itemTexture.Size() / 2f, ItemDraw.Size, ItemDraw.SpriteEffect, 0f);
+		}
 		public virtual void DrawAfterItem()
 		{
 
 		}
-		public override void PostDraw(Color lightColor)
+		public virtual void DrawEffect(Color lightColor)
 		{
 			Player player = Main.player[Projectile.owner];
-			Texture2D itemTexture = TextureAssets.Item[Main.player[Projectile.owner].HeldItem.type].Value;
 			Texture2D Shadow = ModAsset.StabbingProjectileShade.Value;
 			Texture2D light = ModAsset.StabbingProjectile.Value;
 			Vector2 drawOrigin = light.Size() / 2f;
 			Vector2 drawShadowOrigin = Shadow.Size() / 2f;
-			DrawBeforeItem();
-			Main.spriteBatch.Draw(itemTexture, ItemDraw.Postion - Main.screenPosition, null, lightColor, ItemDraw.Rotation, itemTexture.Size() / 2f, ItemDraw.Size, ItemDraw.SpriteEffect, 0f);
-			DrawAfterItem();
 			if (TradeShade > 0)
 			{
 				for (int f = TradeLength - 1; f > -1; f--)
@@ -317,21 +355,22 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 					}
 				}
 			}
-			if (Main.myPlayer == Projectile.owner)
+			if (Shade > 0)
 			{
-				if (player.channel && !player.noItems && !player.CCed)
-				{
-					if (Shade > 0)
-					{
-						Main.spriteBatch.Draw(Shadow, LightDraw.Postion - Main.screenPosition, null, Color.White * Shade, LightDraw.Rotation, drawShadowOrigin, LightDraw.Size, SpriteEffects.None, 0f);
-					}
-					Main.spriteBatch.Draw(light, LightDraw.Postion - Main.screenPosition, null, new Color(lightColor.R / 255f * Color.R / 255f, lightColor.G / 255f * Color.G / 255f, lightColor.B / 255f * Color.B / 255f, 0), LightDraw.Rotation, drawOrigin, LightDraw.Size, SpriteEffects.None, 0f);
-					if (GlowColor != Color.Transparent)
-					{
-						Main.spriteBatch.Draw(light, LightDraw.Postion - Main.screenPosition, null, GlowColor, LightDraw.Rotation, drawShadowOrigin, LightDraw.Size, SpriteEffects.None, 0f);
-					}
-				}
+				Main.spriteBatch.Draw(Shadow, LightDraw.Postion - Main.screenPosition, null, Color.White * Shade, LightDraw.Rotation, drawShadowOrigin, LightDraw.Size, SpriteEffects.None, 0f);
 			}
+			Main.spriteBatch.Draw(light, LightDraw.Postion - Main.screenPosition, null, new Color(lightColor.R / 255f * Color.R / 255f, lightColor.G / 255f * Color.G / 255f, lightColor.B / 255f * Color.B / 255f, 0), LightDraw.Rotation, drawOrigin, LightDraw.Size, SpriteEffects.None, 0f);
+			if (GlowColor != Color.Transparent)
+			{
+				Main.spriteBatch.Draw(light, LightDraw.Postion - Main.screenPosition, null, GlowColor, LightDraw.Rotation, drawShadowOrigin, LightDraw.Size, SpriteEffects.None, 0f);
+			}
+		}
+		public override void PostDraw(Color lightColor)
+		{	
+			DrawBeforeItem();
+			DrawItem(lightColor);
+			DrawAfterItem();
+			DrawEffect(lightColor);
 		}
 	}
 }

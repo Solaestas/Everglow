@@ -44,6 +44,7 @@ float4 PixelShaderFunction(PSInput input) : COLOR0
     float4 color = tex2D(uNoiseSampler, input.Texcoord.xy);
     float light = min((1 - color.r) * (1 - input.Color.r) + input.Color.r, 1);
     float4 flame = tex2D(uImage, float2(light, 0.5));
+    flame.a *= 0.3;
     return flame;
 }
 technique Technique1

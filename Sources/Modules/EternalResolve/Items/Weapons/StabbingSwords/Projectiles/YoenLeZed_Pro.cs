@@ -1,5 +1,6 @@
 using Everglow.EternalResolve.Buffs;
 using Everglow.EternalResolve.VFXs;
+using Terraria;
 using Terraria.GameContent;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
@@ -24,6 +25,16 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		{
 			base.AI();
 			GenerateVFX(1);
+			if(Projectile.wet)
+			{
+				GenerateVFX(2);
+			}
+			Dust dust = Dust.NewDustDirect(Projectile.Center, 0, 0, DustID.Electric);
+			Vector2 addPos = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(-0.1f, 12.4f);
+			dust.position += addPos;
+			dust.velocity = new Vector2(0, Main.rand.NextFloat(5f)).RotatedByRandom(6.283);
+			dust.scale = Main.rand.NextFloat(0.55f, 0.85f) * (300 - addPos.Length()) / 300f;
+			dust.noGravity = true;
 		}
 		public void GenerateVFX(int Frequency)
 		{
@@ -37,6 +48,27 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				var yoenLeZedElecticFlowDust = new YoenLeZedElecticFlowDust
 				{
 					velocity = afterVelocity * Main.rand.NextFloat(1.5f,1.6f) * mulVelocity,
+					Active = true,
+					Visible = true,
+					position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * Main.rand.NextFloat(-2.0f, -1.2f),
+					maxTime = Main.rand.Next(6, 11),
+					ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.08f, 0.08f), Main.rand.NextFloat(26.6f, 28f) * mulWidth, Projectile.owner }
+				};
+				Ins.VFXManager.Add(yoenLeZedElecticFlowDust);
+			}
+		}
+		public void SplitVFX(int Frequency)
+		{
+			float mulVelocity = 1f;
+			for (int g = 0; g < Frequency; g++)
+			{
+
+				Vector2 afterVelocity = Projectile.velocity;
+				afterVelocity.RotatedBy(Main.rand.NextFloat(-0.3f, 0.3f));
+				float mulWidth = 1f;
+				var yoenLeZedElecticFlowDust = new YoenLeZedElecticFlowDust
+				{
+					velocity = afterVelocity * Main.rand.NextFloat(1.5f, 1.6f) * mulVelocity,
 					Active = true,
 					Visible = true,
 					position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * Main.rand.NextFloat(-2.0f, -1.2f),

@@ -91,6 +91,26 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				}
 			}
 		}
+		float bottomPos1 = 0f;
+		float bottomPos2 = 0f;
+		public override void DrawItem(Color lightColor)
+		{
+			Texture2D itemTexture = ModAsset.DreamStar_withouFlag.Value;
+			Main.spriteBatch.Draw(itemTexture, ItemDraw.Postion - Main.screenPosition, null, lightColor, ItemDraw.Rotation, itemTexture.Size() / 2f, ItemDraw.Size, ItemDraw.SpriteEffect, 0f);
+			Main.spriteBatch.Draw(ModAsset.DreamStar_glow.Value, ItemDraw.Postion - Main.screenPosition, null, lightColor, ItemDraw.Rotation, itemTexture.Size() / 2f, ItemDraw.Size, ItemDraw.SpriteEffect, 0f);
+			if (!Main.gamePaused)
+			{
+				bottomPos1 = bottomPos1 * 0.8f + Main.rand.NextFloat(0.45f, 1.75f) * 0.2f;
+				bottomPos2 = bottomPos2 * 0.8f + Main.rand.NextFloat(0.45f, 1.75f) * 0.2f;
+			}
+			else
+			{
+				//暂停的时候可以有一个渐停效果，看起来很好
+				bottomPos1 = bottomPos1 * 0.9f;
+				bottomPos2 = bottomPos2 * 0.9f;
+			}
+			DrawFlags(lightColor, -8, 10, ModAsset.DreamStar_flag.Value, bottomPos1, bottomPos2);
+		}
 		public override void PostDraw(Color lightColor)
 		{
 			Player player = Main.player[Projectile.owner];
@@ -99,7 +119,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			Texture2D light = ModAsset.StabbingProjectile.Value;
 			Vector2 drawOrigin = light.Size() / 2f;
 			Vector2 drawShadowOrigin = Shadow.Size() / 2f;
-			Main.spriteBatch.Draw(itemTexture, ItemDraw.Postion - Main.screenPosition, null, lightColor, ItemDraw.Rotation, itemTexture.Size() / 2f, ItemDraw.Size, ItemDraw.SpriteEffect, 0f);
+			DrawItem(lightColor);
 			if (TradeShade > 0)
 			{
 				for (int f = TradeLength - 1; f > -1; f--)
