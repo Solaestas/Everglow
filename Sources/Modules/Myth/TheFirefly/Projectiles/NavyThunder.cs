@@ -42,7 +42,7 @@ internal class NavyThunder : ModProjectile, IWarpProjectile
 		addi++;
 
 		// 为什么要按着才更新位置呢？注释了！
-		if (/*Main.mouseLeft &&*/ Release)
+		if (/*player.controlUseItem &&*/ Release)
 		{
 			// 拆分是为了看着短一点
 			Projectile.Center = Projectile.Center * 0.7f + player.Center * 0.3f;
@@ -59,7 +59,7 @@ internal class NavyThunder : ModProjectile, IWarpProjectile
 			Projectile.velocity *= 0;
 		}
 
-		if (!Main.mouseLeft && Release)
+		if (!player.controlUseItem && Release)
 		{
 			if (ai1 > 0)
 			{
@@ -130,11 +130,15 @@ internal class NavyThunder : ModProjectile, IWarpProjectile
 	{
 		if (!Release)
 			return;
+
 		Player player = Main.player[Projectile.owner];
 		player.heldProj = Projectile.whoAmI;
 		Vector2 v0 = Projectile.Center - player.MountedCenter;
-		if (Main.mouseLeft)
+		
+		if (player.controlUseItem)
+		{
 			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(v0.Y, v0.X) - Math.PI / 2d));
+		}
 
 		Texture2D TexMain = MythContent.QuickTexture("TheFirefly/Projectiles/NavyThunderTex/FlameSkull");
 		Texture2D TexMainG = MythContent.QuickTexture("TheFirefly/Projectiles/NavyThunderTex/FlameSkullGlow");
@@ -182,8 +186,11 @@ internal class NavyThunder : ModProjectile, IWarpProjectile
 		Player player = Main.player[Projectile.owner];
 		player.heldProj = Projectile.whoAmI;
 		Vector2 v0 = Projectile.Center - player.MountedCenter;
-		if (Main.mouseLeft)
+		
+		if (player.controlUseItem)
+		{
 			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(v0.Y, v0.X) - Math.PI / 2d));
+		}
 
 		Texture2D TexMainG = MythContent.QuickTexture("TheFirefly/Projectiles/NavyThunderTex/FlameSkullWarp");
 
