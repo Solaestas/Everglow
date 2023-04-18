@@ -29,7 +29,6 @@ internal class NavyThunder : ModProjectile, IWarpProjectile
 	/// </summary>
 	//private Vector2 oldPo = Vector2.Zero;
 
-	private int addi = 0;
 
 	public override void AI()
 	{
@@ -38,9 +37,7 @@ internal class NavyThunder : ModProjectile, IWarpProjectile
 		ref float ai1 = ref Projectile.ai[1];
 
 		Player player = Main.player[Projectile.owner];
-
-		addi++;
-
+		Projectile.frame = (int)(Main.timeForVisualEffects % 25 / 5f);
 		// 为什么要按着才更新位置呢？注释了！
 		if (/*Main.mouseLeft &&*/ Release)
 		{
@@ -139,7 +136,6 @@ internal class NavyThunder : ModProjectile, IWarpProjectile
 		Texture2D TexMain = MythContent.QuickTexture("TheFirefly/Projectiles/NavyThunderTex/FlameSkull");
 		Texture2D TexMainG = MythContent.QuickTexture("TheFirefly/Projectiles/NavyThunderTex/FlameSkullGlow");
 
-		Projectile.frame = (int)(addi % 25 / 5f);
 		var DrawRect = new Rectangle(0, Projectile.frame * Projectile.height, Projectile.width, Projectile.height);
 
 		Color drawColor = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
@@ -186,8 +182,6 @@ internal class NavyThunder : ModProjectile, IWarpProjectile
 			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(v0.Y, v0.X) - Math.PI / 2d));
 
 		Texture2D TexMainG = MythContent.QuickTexture("TheFirefly/Projectiles/NavyThunderTex/FlameSkullWarp");
-
-		Projectile.frame = (int)(addi % 25 / 5f);
 		var DrawRect = new Rectangle(0, Projectile.frame * Projectile.height, Projectile.width, Projectile.height);
 
 		SpriteEffects se = SpriteEffects.None;
