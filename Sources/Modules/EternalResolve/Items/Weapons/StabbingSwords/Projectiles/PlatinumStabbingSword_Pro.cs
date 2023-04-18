@@ -37,7 +37,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				bottomPos1 = bottomPos1 * 0.9f;
 				bottomPos2 = bottomPos2 * 0.9f;
 			}
-			DrawFlags(lightColor, -7, 5, ModAsset.PlatinumStabbingSword_flag.Value, bottomPos1, bottomPos2);
+			float scale = MathF.Sin((float)Main.timeForVisualEffects);
+			DrawFlags(lightColor, -7, 5, ModAsset.PlatinumStabbingSword_flag.Value, bottomPos1 * scale, bottomPos2 * scale);
 		}
 	}
 }

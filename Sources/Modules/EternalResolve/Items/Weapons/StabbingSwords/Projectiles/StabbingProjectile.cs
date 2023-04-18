@@ -309,8 +309,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			Vector2 flagBottomLeft = flagTopLeft + new Vector2(0, flagTexture.Height) - Projectile.velocity * mulVelocityLeft - player.velocity;
 			Vector2 flagBottomRight = flagTopRight + new Vector2(0, flagTexture.Height) - Projectile.velocity * mulVelocityRight - player.velocity;
 			Vector2 deltaBottom = flagBottomRight - flagBottomLeft;
-			float velBottomLeft = (deltaBottom.X - 10f) * 1f;
-			float velBottomRight = -(deltaBottom.X - 10f) * 1f;
+			float velBottomLeft = (deltaBottom.X - flagTexture.Width) * 1f;
+			float velBottomRight = -(deltaBottom.X - flagTexture.Width) * 1f;
 			flagBottomLeft.X += velBottomLeft;
 			flagBottomRight.X += velBottomRight;
 			List<Vertex2D> bars = new List<Vertex2D>();
@@ -334,7 +334,6 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		}
 		public virtual void DrawEffect(Color lightColor)
 		{
-			Player player = Main.player[Projectile.owner];
 			Texture2D Shadow = ModAsset.StabbingProjectileShade.Value;
 			Texture2D light = ModAsset.StabbingProjectile.Value;
 			Vector2 drawOrigin = light.Size() / 2f;

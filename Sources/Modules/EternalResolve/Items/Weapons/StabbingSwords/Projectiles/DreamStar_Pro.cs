@@ -106,7 +106,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				bottomPos1 = bottomPos1 * 0.9f;
 				bottomPos2 = bottomPos2 * 0.9f;
 			}
-			DrawFlags(lightColor, -8, 10, ModAsset.DreamStar_flag.Value, bottomPos1, bottomPos2);
+			float scale = MathF.Sin((float)Main.timeForVisualEffects);
+			DrawFlags(lightColor, -8, 10, ModAsset.DreamStar_flag.Value, bottomPos1 * scale, bottomPos2 * scale);
 
 			Texture2D itemTexture = ModAsset.DreamStar_withouFlag.Value;
 			Main.spriteBatch.Draw(itemTexture, ItemDraw.Postion - Main.screenPosition, null, lightColor, ItemDraw.Rotation, itemTexture.Size() / 2f, ItemDraw.Size, ItemDraw.SpriteEffect, 0f);
@@ -124,7 +125,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				for (int f = TradeLength - 1; f > -1; f--)
 				{
 					Main.spriteBatch.Draw(Shadow, DarkDraw[f].Postion - Main.screenPosition, null, Color.White * (DarkDraw[f].Color.A / 255f), DarkDraw[f].Rotation, drawShadowOrigin, DarkDraw[f].Size, SpriteEffects.None, 0f);
-					Color fadeLight = new Color(140, 120, 195) * (DarkDraw[f].Color.A / 255f);
+					Color fadeLight = new Color(230, 120, 195) * (DarkDraw[f].Color.A / 255f);
 					fadeLight.A = 0;
 					fadeLight = fadeLight * TradeLightColorValue * MathF.Pow(FadeLightColorValue, f);
 					if(fadeLight.G > 20)

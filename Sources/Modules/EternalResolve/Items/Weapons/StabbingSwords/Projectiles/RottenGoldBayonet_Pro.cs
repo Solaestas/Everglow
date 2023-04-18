@@ -68,7 +68,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				bottomPos1 = bottomPos1 * 0.9f;
 				bottomPos2 = bottomPos2 * 0.9f;
 			}
-			DrawFlags(lightColor, -12, 12, ModAsset.RottenGoldBayonet_flag.Value, bottomPos1, bottomPos2);
+			float scale = MathF.Sin((float)Main.timeForVisualEffects);
+			DrawFlags(lightColor, -12, 12, ModAsset.RottenGoldBayonet_flag.Value, bottomPos1 * scale, bottomPos2 * scale);
 
 			Texture2D itemTexture = ModAsset.RottenGoldBayonet_withouFlag.Value;
 			Main.spriteBatch.Draw(itemTexture, ItemDraw.Postion - Main.screenPosition, null, lightColor, ItemDraw.Rotation, itemTexture.Size() / 2f, ItemDraw.Size, ItemDraw.SpriteEffect, 0f);

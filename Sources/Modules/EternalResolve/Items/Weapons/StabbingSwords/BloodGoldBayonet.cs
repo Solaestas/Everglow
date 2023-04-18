@@ -4,7 +4,10 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 {
     public class BloodGoldBayonet : StabbingSwordItem
 	{
-		//命中敌人后有1/45的概率吸血,吸血量为造成伤害的30%
+		//TODO:翻译
+		//命中敌人后有1/25的概率吸血,吸血量为造成伤害的30%
+		//命中的敌人未死之前,你的生命回复+2
+		//据不完全统计，多数吸血鬼并不会吸取史莱姆汁
 		public override void SetDefaults()
 		{
 			Item.damage = 11;

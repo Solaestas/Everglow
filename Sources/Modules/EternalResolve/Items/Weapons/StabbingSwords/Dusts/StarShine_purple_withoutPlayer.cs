@@ -35,7 +35,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts
 		}
 		public override Color? GetAlpha(Dust dust, Color lightColor)
 		{
-			Color c0 = new Color(105, 0, 175, 155);
+			Color c0 = new Color(235, 120, 195, 155);
 			return c0;
 		}
 	}

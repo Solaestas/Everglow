@@ -1,3 +1,4 @@
+using Everglow.Commons.Vertex;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -72,8 +73,14 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				bottomPos1 = bottomPos1 * 0.9f;
 				bottomPos2 = bottomPos2 * 0.9f;
 			}
-			DrawFlags(lightColor, -5, 11, ModAsset.VegetationBayonet_flag.Value, bottomPos1, bottomPos2);
-			DrawFlags(new Color(255,255,255,0), -5, 11, ModAsset.VegetationBayonet_flag.Value, bottomPos1, bottomPos2);
+			float scale = MathF.Sin((float)Main.time * 0.8f);
+			DrawGlowBerry(lightColor, -5, 11, ModAsset.VegetationBayonet_flag.Value, scale);
+			DrawGlowBerry(new Color(255,255,255,0), -5, 11, ModAsset.VegetationBayonet_flag.Value, scale);
+		}
+		public void DrawGlowBerry(Color lightColor, float flagLeftX, float flagTopY, Texture2D flagTexture, float addRotation = 0f)
+		{
+			float flagTopCenter = flagLeftX + flagTexture.Width / 2f;
+			Main.spriteBatch.Draw(flagTexture,ItemDraw.Postion + new Vector2(flagTopCenter, flagTopY).RotatedBy(ItemDraw.Rotation) - Main.screenPosition, null,lightColor, addRotation, new Vector2(0, flagTexture.Width / 2f),Projectile.scale,SpriteEffects.None,0);
 		}
 		public override void PostDraw(Color lightColor)
 		{
