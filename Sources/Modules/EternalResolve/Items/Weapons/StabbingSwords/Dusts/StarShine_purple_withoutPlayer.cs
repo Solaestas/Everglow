@@ -7,9 +7,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts
 		{
 			dust.frame = new Rectangle(0, Main.rand.Next(3) * 10, 10, 10);
 			dust.color.A = (byte)Main.rand.Next(0, 140);
-			dust.color.R = (byte)(dust.scale * 100f);
 			dust.rotation = Main.rand.NextFromList(6.283f);
-			base.OnSpawn(dust);
 		}
 		public override bool Update(Dust dust)
 		{

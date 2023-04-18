@@ -14,20 +14,5 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 			PowerfulStabProj = 1;
 			base.SetDefaults();
 		}
-		public override void AddRecipes()
-        {
-            CreateRecipe().
-                AddIngredient(ModContent.ItemType<PrisonFireBayonet>(), 1).
-                AddIngredient(ModContent.ItemType<VegetationBayonet>(), 1).
-                AddIngredient(ModContent.ItemType<BloodGoldBayonet>(), 1).
-                AddTile(TileID.DemonAltar).
-                Register();
-            CreateRecipe().
-                AddIngredient(ModContent.ItemType<PrisonFireBayonet>(), 1).
-                AddIngredient(ModContent.ItemType<VegetationBayonet>(), 1).
-                AddIngredient(ModContent.ItemType<RottenGoldBayonet>(), 1).
-                AddTile(TileID.DemonAltar).
-                Register();
-        }
     }
 }

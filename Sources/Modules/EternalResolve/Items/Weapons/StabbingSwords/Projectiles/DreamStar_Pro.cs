@@ -38,8 +38,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 						{
 							if (StarNPC != null)
 							{
-								Projectile.NewProjectile(Projectile.GetSource_FromAI(), StarNPC.Center, Vector2.zeroVector, ModContent.ProjectileType<DreamStar_Explosion>(), (int)(Projectile.damage * 4.26), Projectile.knockBack * 4.26f, Projectile.owner, ContinuousHit / 5f);
-								Projectile.NewProjectile(Projectile.GetSource_FromAI(), target.Center, Vector2.zeroVector, ModContent.ProjectileType<DreamStar_Explosion>(), (int)(Projectile.damage * 4.26), Projectile.knockBack * 4.26f, Projectile.owner, ContinuousHit / 5f);
+								Projectile.NewProjectile(Projectile.GetSource_FromAI(), StarNPC.Center, Vector2.zeroVector, ModContent.ProjectileType<DreamStar_Explosion>(), (int)(Projectile.damage * 4.26), Projectile.knockBack * 4.26f, Projectile.owner, 1.2f);
+								Projectile.NewProjectile(Projectile.GetSource_FromAI(), target.Center, Vector2.zeroVector, ModContent.ProjectileType<DreamStar_Explosion>(), (int)(Projectile.damage * 4.26), Projectile.knockBack * 4.26f, Projectile.owner, 1.2f);
 							}
 							StarNPC = target;
 							ContinuousHit = 0;
@@ -48,8 +48,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				}
 				else
 				{
-					Projectile.NewProjectile(Projectile.GetSource_FromAI(), LastHitTarget.Center, Vector2.zeroVector, ModContent.ProjectileType<DreamStar_Explosion>(), (int)(Projectile.damage * 2.20 * ContinuousHit / 5f), Projectile.knockBack * 2.20f * ContinuousHit / 5f, Projectile.owner, ContinuousHit / 5f);
-					Projectile.NewProjectile(Projectile.GetSource_FromAI(), target.Center, Vector2.zeroVector, ModContent.ProjectileType<DreamStar_Explosion>(), (int)(Projectile.damage * 2.20 * ContinuousHit / 5f), Projectile.knockBack * 2.20f * ContinuousHit / 5f, Projectile.owner, ContinuousHit / 5f);
+					Projectile.NewProjectile(Projectile.GetSource_FromAI(), LastHitTarget.Center, Vector2.zeroVector, ModContent.ProjectileType<DreamStar_Explosion>(), (int)(Projectile.damage * 2.20 * (ContinuousHit / 5f + 0.00f)), Projectile.knockBack * 2.20f * (ContinuousHit / 5f + 0.05f), Projectile.owner, ContinuousHit / 5f + 0.05f);
+					Projectile.NewProjectile(Projectile.GetSource_FromAI(), target.Center, Vector2.zeroVector, ModContent.ProjectileType<DreamStar_Explosion>(), (int)(Projectile.damage * 2.20 * (ContinuousHit / 5f + 0.00f)), Projectile.knockBack * 2.20f * (ContinuousHit / 5f + 0.05f), Projectile.owner, ContinuousHit / 5f + 0.05f);
 					LastHitTarget = target;
 					ContinuousHit = 0;
 				}
