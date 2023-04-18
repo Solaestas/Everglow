@@ -18,12 +18,6 @@ internal class NavyThunder : ModProjectile, IWarpProjectile
 		Projectile.tileCollide = false;
 		Projectile.DamageType = DamageClass.Magic;
 	}
-
-	/// <summary>
-	/// 我不知道干嘛用的，没设置过值，只有判断，先改成 const
-	/// </summary>
-	private const bool Release = true;
-
 	/// <summary>
 	/// 没看到使用的地方
 	/// </summary>
@@ -39,24 +33,21 @@ internal class NavyThunder : ModProjectile, IWarpProjectile
 		Player player = Main.player[Projectile.owner];
 		Projectile.frame = (int)(Main.timeForVisualEffects % 25 / 5f);
 		// 为什么要按着才更新位置呢？注释了！
-		if (/*player.controlUseItem &&*/ Release)
-		{
-			// 拆分是为了看着短一点
-			Projectile.Center = Projectile.Center * 0.7f + player.Center * 0.3f;
+		// 拆分是为了看着短一点
+		Projectile.Center = Projectile.Center * 0.7f + player.Center * 0.3f;
 
-			// 面朝方向 X 轴偏移
-			Projectile.position.X += player.direction * 32 * 0.3f;
-			Projectile.position.Y += -22 * player.gravDir * (float)(1.2 + Math.Sin(Main.time / 18d) / 8d) * 0.3f;
+		// 面朝方向 X 轴偏移
+		Projectile.position.X += player.direction * 32 * 0.3f;
+		Projectile.position.Y += -22 * player.gravDir * (float)(1.2 + Math.Sin(Main.time / 18d) / 8d) * 0.3f;
 
-			// 防止玩家移动的时候，弹幕贴脸，XY 轴都会因为移动一点点，但是不会很多
-			Projectile.position += player.velocity * 0.7f;
-			Projectile.position -= Vector2.Clamp(player.velocity * 0.1f, new Vector2(-10), new Vector2(10));
+		// 防止玩家移动的时候，弹幕贴脸，XY 轴都会因为移动一点点，但是不会很多
+		Projectile.position += player.velocity * 0.7f;
+		Projectile.position -= Vector2.Clamp(player.velocity * 0.1f, new Vector2(-10), new Vector2(10));
 
-			Projectile.spriteDirection = player.direction;
-			Projectile.velocity *= 0;
-		}
+		Projectile.spriteDirection = player.direction;
+		Projectile.velocity *= 0;
 
-		if (!player.controlUseItem && Release)
+		if (!player.controlUseItem)
 		{
 			if (ai1 > 0)
 			{
@@ -125,9 +116,6 @@ internal class NavyThunder : ModProjectile, IWarpProjectile
 
 	public override void PostDraw(Color lightColor)
 	{
-		if (!Release)
-			return;
-
 		Player player = Main.player[Projectile.owner];
 		player.heldProj = Projectile.whoAmI;
 		Vector2 v0 = Projectile.Center - player.MountedCenter;
@@ -177,8 +165,6 @@ internal class NavyThunder : ModProjectile, IWarpProjectile
 
 	public void DrawWarp(VFXBatch sb)
 	{
-		if (!Release)
-			return;
 		Player player = Main.player[Projectile.owner];
 		player.heldProj = Projectile.whoAmI;
 		Vector2 v0 = Projectile.Center - player.MountedCenter;
