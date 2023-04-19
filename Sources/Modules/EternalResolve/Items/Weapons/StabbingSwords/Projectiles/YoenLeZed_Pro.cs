@@ -1,6 +1,7 @@
 using Everglow.EternalResolve.Buffs;
 using Everglow.EternalResolve.VFXs;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
@@ -35,6 +36,18 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			dust.velocity = new Vector2(0, Main.rand.NextFloat(5f)).RotatedByRandom(6.283);
 			dust.scale = Main.rand.NextFloat(0.55f, 0.85f) * (300 - addPos.Length()) / 300f;
 			dust.noGravity = true;
+			if(Main.timeForVisualEffects % 10 == 0)
+			{
+				SoundEngine.PlaySound(new SoundStyle("Everglow/EternalResolve/Sounds/ElectricCurrency").WithVolume(0.6f), Projectile.Center);
+			}
+		}
+		public override void Kill(int timeLeft)
+		{
+			ActiveSound sound = SoundEngine.FindActiveSound(new SoundStyle("Everglow/EternalResolve/Sounds/ElectricCurrency").WithVolume(0.6f));
+			if (sound != null)
+			{
+				sound.Stop();
+			}
 		}
 		public void GenerateVFX(int Frequency)
 		{

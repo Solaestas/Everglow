@@ -1,4 +1,5 @@
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
+using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
@@ -48,6 +49,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				}
 				dust.velocity = new Vector2(0, Main.rand.NextFloat(Main.rand.NextFloat(0f, 7f), 7f)).RotatedByRandom(6.283) * Projectile.ai[0];
 			}
+			SoundEngine.PlaySound(SoundID.Shatter.WithVolumeScale(Projectile.ai[0]), Projectile.Center);
 		}
 		public override void AI()
 		{

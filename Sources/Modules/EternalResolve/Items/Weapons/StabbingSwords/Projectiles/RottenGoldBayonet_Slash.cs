@@ -1,5 +1,6 @@
 using Everglow.Commons.Vertex;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
+using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
@@ -34,6 +35,10 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				Vector2 vel = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.01f, 0.01f)) * Main.rand.NextFloat(14f, 28f);
 				Dust dust = Dust.NewDustDirect(Projectile.position - Vector2.Normalize(Projectile.velocity) * Main.rand.NextFloat(0f, (120 - Projectile.timeLeft) * 3f), Projectile.width, Projectile.height, ModContent.DustType<CorruptShine_withoutPlayer>(), 0, 0, 0, default, Main.rand.NextFloat(0.95f, 1.7f));
 				dust.velocity = vel;
+			}
+			if(Projectile.timeLeft == 114)
+			{
+				SoundEngine.PlaySound(new SoundStyle("Everglow/EternalResolve/Sounds/Slash").WithVolumeScale(0.5f), Projectile.Center);
 			}
 		}
 		public override bool PreDraw(ref Color lightColor)
