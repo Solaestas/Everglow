@@ -4,6 +4,7 @@ using Terraria.Localization;
 
 namespace Everglow.Myth.TheFirefly.Items.Potions
 {
+	//TODO:翻译 幽夜药剂 NightElixir
 	public class ShadowPotion : ModItem
 	{
 		public static LocalizedText RestoreLifeText { get; private set; }
@@ -33,6 +34,16 @@ namespace Everglow.Myth.TheFirefly.Items.Potions
 		public override void ModifyTooltips(List<TooltipLine> tooltips)
 		{
 			//TODO: Use actual tooltips
+		}
+		public override void AddRecipes()
+		{
+			Recipe recipe = CreateRecipe();
+			recipe.AddIngredient(ModContent.ItemType<GlowingPedal>(), 1);
+			recipe.AddIngredient(ModContent.ItemType<GlowingFirefly>(), 1);
+			recipe.AddIngredient(ItemID.Moonglow, 1);
+			recipe.AddIngredient(ItemID.BottledWater, 1);
+			recipe.AddTile(TileID.AlchemyTable);
+			recipe.Register();
 		}
 	}
 }
