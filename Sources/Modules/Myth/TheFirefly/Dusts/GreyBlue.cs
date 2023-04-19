@@ -1,6 +1,6 @@
 namespace Everglow.Myth.TheFirefly.Dusts;
 
-public class PureBlue : ModDust
+public class GreyBlue : ModDust
 {
 	public override void OnSpawn(Dust dust)
 	{
@@ -26,6 +26,6 @@ public class PureBlue : ModDust
 
 	public override Color? GetAlpha(Dust dust, Color lightColor)
 	{
-		return new Color?(new Color(0f, 0f, 0.5f, 0f));
+		return new Color?(new Color(0.06f, 0.08f, 0.4f, 0f));
 	}
 }

@@ -14,7 +14,7 @@ internal class NavyThunder : ModProjectile, IWarpProjectile
 		Projectile.height = 84;
 		Projectile.friendly = false;
 		Projectile.hostile = false;
-		Projectile.timeLeft = 90000;
+		Projectile.timeLeft = 10;
 		Projectile.tileCollide = false;
 		Projectile.DamageType = DamageClass.Magic;
 	}
@@ -58,11 +58,10 @@ internal class NavyThunder : ModProjectile, IWarpProjectile
 			}
 			else
 			{
-				if (Projectile.timeLeft > 21)
+				if (Projectile.timeLeft > player.itemTime + 1)
 				{
-					Projectile.timeLeft = 20;
+					Projectile.timeLeft = player.itemTime;
 				}
-
 				for (int j = 0; j < 16; j++)
 				{
 					Vector2 iDoNotKnowWhat = new Vector2(Main.rand.NextFloat(9, 11f), 0).RotatedByRandom(6.283) * Projectile.scale;
@@ -72,8 +71,11 @@ internal class NavyThunder : ModProjectile, IWarpProjectile
 				}
 			}
 		}
-
-		if (player.itemTime == 2)
+		else
+		{
+			Projectile.timeLeft = player.itemTime;
+		}
+		if (Projectile.timeLeft == 2)
 		{
 			Shoot();
 		}
@@ -138,31 +140,6 @@ internal class NavyThunder : ModProjectile, IWarpProjectile
 		Main.spriteBatch.Draw(TexMain, Projectile.Center - Main.screenPosition, DrawRect, drawColor, Projectile.rotation, new Vector2(27, 42), 1f, se, 0);
 		Main.spriteBatch.Draw(TexMainG, Projectile.Center - Main.screenPosition, DrawRect, new Color(255, 255, 255, 0), Projectile.rotation, new Vector2(27, 42), 1f, se, 0);
 	}
-
-	public static void DrawTexLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2, Texture2D tex)
-	{
-		float Wid = 6f;
-		Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
-
-		var vertex2Ds = new List<Vertex2D>();
-
-		for (int x = 0; x < 3; x++)
-		{
-			float Value0 = (float)(Main.time / 291d + 20) % 1f;
-			float Value1 = (float)(Main.time / 291d + 20.03) % 1f;
-			vertex2Ds.Add(new Vertex2D(StartPos + Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(Value0, 0, 0)));
-			vertex2Ds.Add(new Vertex2D(EndPos + Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(Value1, 0, 0)));
-			vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(Value0, 1, 0)));
-
-			vertex2Ds.Add(new Vertex2D(EndPos + Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(Value1, 0, 0)));
-			vertex2Ds.Add(new Vertex2D(EndPos - Width + new Vector2(x / 3f).RotatedBy(x), color2, new Vector3(Value1, 1, 0)));
-			vertex2Ds.Add(new Vertex2D(StartPos - Width + new Vector2(x / 3f).RotatedBy(x), color1, new Vector3(Value0, 1, 0)));
-		}
-
-		Main.graphics.GraphicsDevice.Textures[0] = tex;
-		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
-	}
-
 	public void DrawWarp(VFXBatch sb)
 	{
 		Player player = Main.player[Projectile.owner];
