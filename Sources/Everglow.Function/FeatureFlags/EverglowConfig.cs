@@ -45,8 +45,11 @@ public class EverglowConfig : ModConfig
 		76561199070402024 /*FelixYang777*/,
 		76561198826286747 /*Colin Weiss*/,
 		76561198827572696 /*SilverMoon | 942293328*/,
-		76561198300589095 /*Setnour6*/
-    };
+		76561198300589095 /*Setnour6*/,
+		76561198303973664 /*Nomis*/, 
+		76561198409524739 /*DomesticFoxcy*/,
+		76561198985306698 /*Plantare*/
+	};
 
 		return devSteamID64;
 	}
