@@ -78,7 +78,7 @@ public class NavyThunderBomb : ModProjectile, IWarpProjectile
 			if(Main.rand.NextBool(4))
 			{
 				Vector2 v3 = new Vector2(0, Main.rand.NextFloat(1.0f, 14.5f)).RotatedByRandom(6.283);
-				int SparkleStrength = Dust.NewDust(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<PureBlue>(), 0, 0, 0, default, 15f * Main.rand.NextFloat(0.7f, 2.9f));
+				int SparkleStrength = Dust.NewDust(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<GreyBlue>(), 0, 0, 0, default, 15f * Main.rand.NextFloat(0.7f, 2.9f));
 				Main.dust[SparkleStrength].noGravity = true;
 				Main.dust[SparkleStrength].velocity = v3;
 			}
