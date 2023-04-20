@@ -1,0 +1,102 @@
+﻿<Project>
+	<UsingTask TaskName="BuildMod"
+						 AssemblyFile="$(TaskPath)" />
+	<UsingTask TaskName="ReadAssets"
+						 TaskFactory="CodeTaskFactory"
+						 AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+		<ParameterGroup>
+			<AssetLists ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
+			<Assets ParameterType="Microsoft.Build.Framework.ITaskItem[]" Output="true" />
+			<AssetPath ParameterType="System.String"
+									Required="true"/>
+		</ParameterGroup>
+		<Task>
+			<Code Type="Fragment"
+						Language="cs">
+				<![CDATA[
+          	List<ITaskItem> assets = new List<ITaskItem>();
+						foreach (var list in AssetLists)
+						{
+							var name = Path.GetFileNameWithoutExtension(list.GetMetadata("Filename"));
+							var lines = File.ReadAllLines(list.ItemSpec);
+							assets.AddRange(lines.Select(line =>
+							{
+								var ext = Path.GetExtension(line);
+								if(ext == ".fx")
+									line = Path.ChangeExtension(line, "xnb");
+								else
+									line = Path.ChangeExtension(line, "rawimg");
+								return new TaskItem(AssetPath + name + '\\' + line);
+							}));
+						}
+						Assets = assets.ToArray();
+        ]]>
+			</Code>
+		</Task>
+	</UsingTask>
+	<UsingTask TaskName="ReadResources"
+						 TaskFactory="CodeTaskFactory"
+						 AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+		<ParameterGroup>
+			<ResourceLists ParameterType="Microsoft.Build.Framework.ITaskItem[]"
+									Required="true" />
+			<Resources ParameterType="Microsoft.Build.Framework.ITaskItem[]"
+							Output="true" />
+		</ParameterGroup>
+		<Task>
+			<Code Type="Fragment"
+						Language="cs">
+				<![CDATA[
+          	List<ITaskItem> resources = new List<ITaskItem>();
+						foreach (var list in ResourceLists)
+						{
+							var name = Path.GetFileNameWithoutExtension(list.GetMetadata("Filename"));
+							var lines = File.ReadAllLines(list.ItemSpec);
+							resources.AddRange(lines.Select(line =>
+							{
+								var ext = Path.GetExtension(line);
+								var item = new TaskItem("..\\Modules\\" + name + '\\' + line);
+								item.SetMetadata("ModPath", name + '\\' + line);
+								return item;
+							}));
+						}
+						Resources = resources.ToArray();
+        ]]>
+			</Code>
+		</Task>
+	</UsingTask>
+
+	<Target Name="PrepareBuildMod"
+					BeforeTargets="BuildMod">
+		<ItemGroup>
+			<!--在此Include可以使模组csproj对ImageFile和EffectFile的修改生效-->
+			<AssetLists Include="$(BaseIntermediateOutputPath)*.asset.list" />
+			<ResourceLists Include="$(BaseIntermediateOutputPath)*.resource.list" />
+			<AssemblyFile Include="$(OutputPath)*.dll" />
+		</ItemGroup>
+		<ReadAssets AssetLists="@(AssetLists)"
+							AssetPath="$(OutputPath)Assets\">
+			<Output TaskParameter="Assets"
+							ItemName="AssetFile" />
+		</ReadAssets>
+		<ReadResources ResourceLists="@(ResourceLists)">
+			<Output TaskParameter="Resources"
+							ItemName="ResourceFile" />
+		</ReadResources>
+
+	</Target>
+
+	<Target Name="BuildMod"
+					AfterTargets="AfterBuild"
+					Inputs="@(ResourceFile);@(AssetFile);@(AssemblyFile);@(ModFile)"
+					Outputs="$(ModDirectory)$(AssemblyName).tmod">
+		<BuildMod ModSourceDirectory="$(MSBuildProjectDirectory)\"
+							ModName="$(AssemblyName)"
+							OutputDirectory="$(OutputPath)"
+							ModDirectory="$(ModDirectory)"
+							Configuration="$(Configuration)"
+							IgnoreBuildFile="true"
+							AssetFiles="@(AssetFile);"
+							ResourceFiles="@(ResourceFile)" />
+	</Target>
+</Project>

@@ -1,7 +1,0 @@
-displayName = Everglow
-author = Dream Chaser Group
-version = 0.1
-includePDB = true
-noCompile = true
-dllReferences = MethodBoundaryAspect, SixLabors.ImageSharp
-buildIgnore = Everglow-UnitTest/*, Sources/Tools/*, Documents/*, *.md. *.txt

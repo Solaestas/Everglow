@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\Shared.props" />
+	<Import Project="Module.Build.props" />
+	<Import Project="Everglow.targets"/>
+	<ItemGroup>
+		<ProjectReference Include="..\Everglow.Core\Everglow.Core.csproj" />
+		<ProjectReference Include="..\Everglow.Function\Everglow.Function.csproj" />
+	</ItemGroup>
+</Project>
