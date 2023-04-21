@@ -22,9 +22,8 @@ public class GiantPinetree : ModSystem
 		}
 	}
 
-	public static void placePineLeaves(int i, int j, int iteration, float strength, Vector2 direction)
+	public static void PlacePineLeaves(int i, int j, int iteration, float strength, Vector2 direction)
 	{
-		return;//TODO:为了保证Master的安全性，暂且封起来了。后续优化记得解
 		if (iteration > 50)//万一发散就完了
 			return;
 		for (int x = 0; x < strength; x++)
@@ -47,9 +46,9 @@ public class GiantPinetree : ModSystem
 				if (y == 0)
 				{
 					if (x % 6 == 1)
-						placePineLeaves(a, b, iteration + 1, (strength - x) * 0.34f, normalizedDirection.RotatedBy(Math.PI * 0.3));
+						PlacePineLeaves(a, b, iteration + 1, (strength - x) * 0.34f, normalizedDirection.RotatedBy(Math.PI * 0.3));
 					if (x % 6 == 4)
-						placePineLeaves(a, b, iteration + 1, (strength - x) * 0.34f, normalizedDirection.RotatedBy(-Math.PI * 0.3));
+						PlacePineLeaves(a, b, iteration + 1, (strength - x) * 0.34f, normalizedDirection.RotatedBy(-Math.PI * 0.3));
 				}
 			}
 		}
@@ -72,7 +71,7 @@ public class GiantPinetree : ModSystem
 		int Y0 = Main.maxTilesX == 4200 ? CenterPoint.Y - 10 : CenterPoint.Y - 26;
 
 		float Size = Main.rand.NextFloat(16f, 20f);
-		placePineLeaves(X0, Y0, 0, Size * 7.5f, new Vector2(0, -1));
+		PlacePineLeaves(X0, Y0, 0, Size * 7.5f, new Vector2(0, -1));
 		if (Main.snowBG[2] == 260)//在这种条件下，背景符合这段代码生成的松树
 		{
 
