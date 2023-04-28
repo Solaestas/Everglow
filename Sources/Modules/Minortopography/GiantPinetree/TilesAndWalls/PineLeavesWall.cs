@@ -8,8 +8,4 @@ public class PineLeavesWall : ModWall
 		DustType = DustID.GreenMoss;
 		AddMapEntry(new Color(0, 32, 22));
 	}
-	public override bool CanExplode(int i, int j)
-	{
-		return false;
-	}
 }

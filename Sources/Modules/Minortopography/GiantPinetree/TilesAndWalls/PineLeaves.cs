@@ -1,6 +1,6 @@
 namespace Everglow.Minortopography.GiantPinetree.TilesAndWalls;
 
-public class PineWood : ModTile
+public class PineLeaves : ModTile
 {
 	public override void PostSetDefaults()
 	{
@@ -8,9 +8,8 @@ public class PineWood : ModTile
 		Main.tileBlockLight[Type] = true;
 		Main.tileMerge[Type][TileID.PineTree] = true;
 		Main.tileMerge[TileID.PineTree][Type] = true;
-		DustType = DustID.BorealWood;
-		HitSound = SoundID.Dig;
-		ItemDrop = ItemID.BorealWood;
-		AddMapEntry(new Color(45, 15, 3));
+		DustType = DustID.GreenMoss;
+		HitSound = SoundID.Grass;
+		AddMapEntry(new Color(36, 64, 50));
 	}
 }
