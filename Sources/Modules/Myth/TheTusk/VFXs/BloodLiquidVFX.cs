@@ -1,4 +1,5 @@
 using Everglow.Myth.Common;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
 using ReLogic.Content;
 
 namespace Everglow.Myth.TheTusk.VFXs;
@@ -60,6 +61,7 @@ internal class BloodLiquidDust : ShaderDraw
 	public List<Vector2> oldPos = new List<Vector2>();
 	public float timer;
 	public float maxTime;
+	public float alpha;
 	public BloodLiquidDust() { }
 	public BloodLiquidDust(int maxTime, Vector2 position, Vector2 velocity, params float[] ai) : base(position, velocity, ai)
 	{
@@ -68,7 +70,7 @@ internal class BloodLiquidDust : ShaderDraw
 
 	public override void Update()
 	{
-		position += velocity;
+		position += velocity * 0.001f;
 		oldPos.Add(position);
 		if (oldPos.Count > 15)
 			oldPos.RemoveAt(0);
@@ -92,6 +94,23 @@ internal class BloodLiquidDust : ShaderDraw
 				Active = false;
 			}
 		}
+		if (Main.tile[(int)(position.X / 16f), (int)(position.Y / 16f)].LiquidAmount > 0)
+		{
+			ai[2] += 0.02f;
+			alpha += 0.004f;
+			velocity *= 0.9f;
+			if(MathF.Abs(velocity.X) > 2)
+			{
+				velocity.X *= 0.8f;
+			}
+			velocity += new Vector2(Main.rand.NextFloat(0.5f), 0).RotatedByRandom(6.283) + new Vector2(0, 1.2f - Math.Abs(velocity.X) * alpha * 2f);
+			position += velocity * 0.5f;
+			timer -= 0.4f;
+		}
+		else
+		{
+			position += velocity;
+		}
 	}
 
 	public override void Draw()
@@ -108,10 +127,32 @@ internal class BloodLiquidDust : ShaderDraw
 			normal = Vector2.Normalize(normal).RotatedBy(Math.PI * 0.5);
 			Color light = Lighting.GetColor((int)(oldPos[i].X / 16f), (int)(oldPos[i].Y / 16f));
 
-			var drawcRope = new Color(Math.Min(fx * fx * fx + 0.2f - i / (float)len, 0.8f), light.R / 255f, light.G / 255f, light.B / 255f);
+			var drawcRope = new Color(Math.Min(fx * fx * fx + 0.2f - i / (float)len, 0.8f), light.R / 255f * (1 - alpha), light.G / 255f * (1 - alpha), light.B / 255f * (1 - alpha));
 			float width = ai[2] * (float)Math.Sin(i / (double)len * Math.PI);
-			bars[2 * i - 1] = new Vertex2D(oldPos[i] + normal * width, drawcRope, new Vector3(0 + ai[0], (i + 15 - len) / 30f + timer / 1500f * velocity.Length(), light.A / 255f));
-			bars[2 * i] = new Vertex2D(oldPos[i] - normal * width, drawcRope, new Vector3(0.4f + ai[0], (i + 15 - len) / 30f + timer / 1500f * velocity.Length(), light.A / 255f));
+			Vector2 pointUp = oldPos[i] + normal * width;
+			Vector2 pointDown = oldPos[i] - normal * width;
+			Vector2 widthUp = new Vector2(normal.X * width, 0);
+			Vector2 widthDown = -new Vector2(normal.X * width, 0);
+			if (Main.tile[(int)(pointUp.X / 16f), (int)(pointUp.Y / 16f) - 1].LiquidAmount > 0)
+			{
+				widthUp *= MathF.Sqrt(alpha) * 4f;
+			}
+			else
+			{
+				widthUp *= 0f;
+			}
+			if (Main.tile[(int)(pointDown.X / 16f), (int)(pointDown.Y / 16f) - 1].LiquidAmount > 0)
+			{
+				widthDown *= MathF.Sqrt(alpha) * 4f;
+			}
+			else
+			{
+				widthDown *= 0f;
+			}
+			
+			float drawAlpha = MathF.Pow(1 - alpha, 3f);
+			bars[2 * i - 1] = new Vertex2D(oldPos[i] + normal * width + widthUp, drawcRope, new Vector3(0 + ai[0], (i + 15 - len) / 30f + timer / 1500f * velocity.Length() * drawAlpha, drawAlpha));
+			bars[2 * i] = new Vertex2D(oldPos[i] - normal * width + widthDown, drawcRope, new Vector3(0.4f + ai[0], (i + 15 - len) / 30f + timer / 1500f * velocity.Length() * drawAlpha, drawAlpha));
 		}
 		bars[0] = new Vertex2D((bars[1].position + bars[2].position) * 0.5f, Color.White, new Vector3(0.5f, 0, 0));
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
@@ -124,6 +165,7 @@ internal class ThickBloodLiquidDust : ShaderDraw
 	public List<Vector2> oldPos = new List<Vector2>();
 	public float timer;
 	public float maxTime;
+	public float alpha;
 	public ThickBloodLiquidDust() { }
 	public ThickBloodLiquidDust(int maxTime, Vector2 position, Vector2 velocity, params float[] ai) : base(position, velocity, ai)
 	{
@@ -132,7 +174,7 @@ internal class ThickBloodLiquidDust : ShaderDraw
 
 	public override void Update()
 	{
-		position += velocity;
+		position += velocity * 0.001f;
 		oldPos.Add(position);
 		if (oldPos.Count > 15)
 			oldPos.RemoveAt(0);
@@ -156,6 +198,23 @@ internal class ThickBloodLiquidDust : ShaderDraw
 				Active = false;
 			}
 		}
+		if (Main.tile[(int)(position.X / 16f), (int)(position.Y / 16f)].LiquidAmount > 0)
+		{
+			ai[2] += 0.01f;
+			alpha += 0.004f;
+			velocity *= 0.9f;
+			if (MathF.Abs(velocity.X) > 2)
+			{
+				velocity.X *= 0.8f;
+			}
+			velocity += new Vector2(Main.rand.NextFloat(0.5f), 0).RotatedByRandom(6.283) + new Vector2(0, 1.2f - Math.Abs(velocity.X) * alpha * 2f);
+			position += velocity * 0.5f;
+			timer -= 0.4f;
+		}
+		else
+		{
+			position += velocity;
+		}
 	}
 
 	public override void Draw()
@@ -172,10 +231,31 @@ internal class ThickBloodLiquidDust : ShaderDraw
 			normal = Vector2.Normalize(normal).RotatedBy(Math.PI * 0.5);
 			Color light = Lighting.GetColor((int)(oldPos[i].X / 16f), (int)(oldPos[i].Y / 16f));
 
-			var drawcRope = new Color(Math.Min(fx * fx * fx + 0.2f - i / (float)len, 0.8f), light.R / 255f, light.G / 255f, light.B / 255f);
+			var drawcRope = new Color(Math.Min(fx * fx * fx + 0.2f - i / (float)len, 0.8f), light.R / 255f * (1 - alpha), light.G / 255f * (1 - alpha), light.B / 255f * (1 - alpha));
 			float width = ai[2] * (float)Math.Sin(i / (double)len * Math.PI / 2f + Math.PI / 2f);
-			bars[2 * i - 1] = new Vertex2D(oldPos[i] + normal * width, drawcRope, new Vector3(0 + ai[0], (i + 15 - len) / 30f + timer / 1000f * velocity.Length(), light.A / 255f));
-			bars[2 * i] = new Vertex2D(oldPos[i] - normal * width, drawcRope, new Vector3(0.2f + ai[0], (i + 15 - len) / 30f + timer / 1000f * velocity.Length(), light.A / 255f));
+			Vector2 pointUp = oldPos[i] + normal * width;
+			Vector2 pointDown = oldPos[i] - normal * width;
+			Vector2 widthUp = new Vector2(normal.X * width, 0);
+			Vector2 widthDown = -new Vector2(normal.X * width, 0);
+			if (Main.tile[(int)(pointUp.X / 16f), (int)(pointUp.Y / 16f) - 1].LiquidAmount > 0)
+			{
+				widthUp *= alpha * 3f;
+			}
+			else
+			{
+				widthUp *= 0f;
+			}
+			if (Main.tile[(int)(pointDown.X / 16f), (int)(pointDown.Y / 16f) - 1].LiquidAmount > 0)
+			{
+				widthDown *= alpha * 3f;
+			}
+			else
+			{
+				widthDown *= 0f;
+			}
+			float drawAlpha = MathF.Pow(1 - alpha, 3f);
+			bars[2 * i - 1] = new Vertex2D(oldPos[i] + normal * width + widthUp, drawcRope, new Vector3(0 + ai[0], (i + 15 - len) / 30f + timer / 1500f * velocity.Length(), drawAlpha));
+			bars[2 * i] = new Vertex2D(oldPos[i] - normal * width + widthDown, drawcRope, new Vector3(0.4f + ai[0], (i + 15 - len) / 30f + timer / 1500f * velocity.Length(), drawAlpha));
 		}
 		bars[0] = new Vertex2D((bars[1].position + bars[2].position) * 0.5f, Color.White, new Vector3(0.5f, 0, 0));
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
