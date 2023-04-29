@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Everglow.Commons;
-public class ShackInfo
+public class ShakerInfo
 {
 	internal Vector2 center;
 	internal Vector2 dir;
@@ -51,9 +51,9 @@ public class ShackInfo
 		effect += attenuatedStrength * vdir;
 	}
 }
-public class UndirectedShackInfo : ShackInfo
+public class UndirectedShakerInfo : ShakerInfo
 {
-	public static UndirectedShackInfo Create(Vector2 center,float strength = 1, float period = 1, float speed = 1, float acv = 0.9f, float acp = 0.9f, int maxtick = -1)
+	public static UndirectedShakerInfo Create(Vector2 center,float strength = 1, float period = 1, float speed = 1, float acv = 0.9f, float acp = 0.9f, int maxtick = -1)
 	{
 		if (period < 0)
 		{
@@ -71,7 +71,7 @@ public class UndirectedShackInfo : ShackInfo
 		{
 			throw new ArgumentException("不合法的物理参数.传播衰减不可能为负数或0.这样的震动不可能存在!");
 		}
-		return new UndirectedShackInfo()
+		return new UndirectedShakerInfo()
 		{
 			center = center,
 			strength = strength,
@@ -103,19 +103,19 @@ public class UndirectedShackInfo : ShackInfo
 		effect += attenuatedStrength * vdir;
 	}
 }
-public class ShackManager : ModSystem
+public class ShakerManager : ModSystem
 {
-	static List<ShackInfo> shacks;
-	static List<ShackInfo> waitremove;
+	static List<ShakerInfo> shakers;
+	static List<ShakerInfo> waitremove;
 	public override void Load()
 	{
-		shacks = new();
+		shakers = new();
 		waitremove = new();
 	}
 	public override void Unload()
 	{
-		shacks.Clear();
-		shacks = null;
+		shakers.Clear();
+		shakers = null;
 		waitremove.Clear();
 		waitremove = null;
 	}
@@ -124,7 +124,7 @@ public class ShackManager : ModSystem
 	{
 		Main.screenPosition += GetEffectOn(Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2);
 	}
-	public static void AddShack(Vector2 center, Vector2 dir, float strength = 1, float period = 1, float speed = 1, float acv = 0.9f, float acp = 0.9f, int maxtick = -1)
+	public static void AddShaker(Vector2 center, Vector2 dir, float strength = 1, float period = 1, float speed = 1, float acv = 0.9f, float acp = 0.9f, int maxtick = -1)
 	{
 		if (period < 0)
 		{
@@ -142,7 +142,7 @@ public class ShackManager : ModSystem
 		{
 			throw new ArgumentException("不合法的物理参数.传播衰减不可能为负数或0.这样的震动不可能存在!");
 		}
-		shacks.Add(new()
+		shakers.Add(new()
 		{
 			center = center,
 			dir = dir,
@@ -155,27 +155,27 @@ public class ShackManager : ModSystem
 			maxTick = maxtick
 		});
 	}
-	public static void AddShack(ShackInfo info)
+	public static void AddShaker(ShakerInfo info)
 	{
-		shacks.Add(info);
+		shakers.Add(info);
 	}
-	public static void Clear() => shacks.Clear();
+	public static void Clear() => shakers.Clear();
 	static void Update()
 	{
 		waitremove.Clear();
-		foreach (ShackInfo info in shacks)
+		foreach (ShakerInfo info in shakers)
 		{
 			if (!info.Update())
 			{
 				waitremove.Add(info);
 			}
 		}
-		shacks.RemoveAll(waitremove.Contains);
+		shakers.RemoveAll(waitremove.Contains);
 	}
 	public static Vector2 GetEffectOn(Vector2 pos)
 	{
 		Vector2 effect = Vector2.Zero;
-		foreach (ShackInfo info in shacks)
+		foreach (ShakerInfo info in shakers)
 		{
 			info.ApplyTo(pos, ref effect);
 		}
