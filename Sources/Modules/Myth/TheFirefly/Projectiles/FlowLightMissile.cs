@@ -30,9 +30,12 @@ internal class FlowLightMissile : ModProjectile
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
+		int holdMana = player.statManaMax - 8;
 		player.heldProj = Projectile.whoAmI;
 		if (Projectile.timeLeft % 5 == 0)
-			player.statMana--;
+		{ player.statMana--; holdMana--; }
+		if (player.statMana > holdMana)
+		{ player.statMana = holdMana; }
 		Energy += 2;
 		Vector2 MouseToPlayer = Main.MouseWorld - player.MountedCenter;
 		MouseToPlayer = Vector2.Normalize(MouseToPlayer);
@@ -146,7 +149,7 @@ internal class FlowLightMissile : ModProjectile
 	}
 	private void Shoot()
 	{
-		SoundEngine.PlaySound(SoundID.Item72.WithVolumeScale(0.2f), Projectile.Center);
+		SoundEngine.PlaySound(SoundID.Item72.WithVolumeScale(0.5f), Projectile.Center);
 		Vector2 v0 = Main.MouseWorld - Main.player[Projectile.owner].MountedCenter;
 		v0 = Vector2.Normalize(v0);
 		Player player = Main.player[Projectile.owner];
