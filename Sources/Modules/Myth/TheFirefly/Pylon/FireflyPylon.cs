@@ -146,7 +146,7 @@ public abstract class BaseModPylon<T> : ModPylon where T : TEModdedPylon
 internal class FireflyPylon : BaseModPylon<FireflyPylonTileEntity>
 {
 	public override int DropItemType => ModContent.ItemType<FireflyPylonItem>();
-
+	public override void PostSetDefaults() => AddMapEntry(new Color(85, 62, 255));
 	public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		DrawModPylon(spriteBatch, i, j, crystalTexture, crystalHighlightTexture, new Vector2(0, DefaultVerticalOffset), new Color(5, 0, 55, 30), new Color(255, 0, 155, 20), 4, CrystalVerticalFrameCount, true, ModContent.DustType<FireflyPylonDust>());
