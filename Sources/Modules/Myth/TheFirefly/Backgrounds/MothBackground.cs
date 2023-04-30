@@ -111,7 +111,12 @@ public class MothBackground : ModSystem
 	/// <returns> </returns>
 	public static bool BiomeActive()
 	{
-		return false;
+		MothLand mothLand = ModContent.GetInstance<MothLand>();
+		Vector2 BiomeCenter = new Vector2(mothLand.fireflyCenterX * 16, (mothLand.fireflyCenterY - 20) * 16);//¶ÁÈ¡µØÐÎÐÅÏ¢
+		Vector2 v0 = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f - BiomeCenter;//¾àÀëÖÐÐÄMain.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f
+		v0.Y *= 1.35f;
+		v0.X *= 0.9f;//½üËÆÓÚÍÖÔ²ÐÎ£¬ËùÒÔxy×ø±ê±ä»»
+		return (v0.Length() < 2000);
 		// return SubWorldModule.SubworldSystem.IsActive<MothWorld>();
 	}
 

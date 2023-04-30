@@ -125,7 +125,7 @@ public class DarkCocoon : ModTile
 			}
 			if (Main.rand.NextBool(2))
 			{
-				switch (Main.rand.Next(1, 10))
+				switch (Main.rand.Next(1, 11))
 				{
 					case 1:
 						t1.TileType = (ushort)ModContent.TileType<BlackStarShrubSmall>();
