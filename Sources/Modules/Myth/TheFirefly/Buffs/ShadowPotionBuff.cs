@@ -18,20 +18,12 @@ public class ShadowPotionBuff : ModBuff
 			player.statDefense += 15;
 			player.allDamage += 0.2f;
 			LightTime++;
-			if (EverglowConfig.DebugMode && LightTime is not 0 or 20)
-			{
-				CombatText.NewText(player.Hitbox, Color.White, "LightTime++");
-			}
 		}
 		if (Math.Max(Math.Max(playerLight.R, playerLight.G), playerLight.B) >= 230)
 		{
 			player.lifeRegen -= (int)(player.statLifeMax2 * 0.01f);
 			player.lifeRegenTime = 0;
 			LightTime--;
-			if (EverglowConfig.DebugMode && LightTime is not 0 or 20)
-			{
-				CombatText.NewText(player.Hitbox, Color.White, "LightTime++");
-			}
 		}
 		if (LightTime > 4)
 		{
