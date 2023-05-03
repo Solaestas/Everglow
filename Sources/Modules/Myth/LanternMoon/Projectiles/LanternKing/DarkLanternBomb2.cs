@@ -17,7 +17,6 @@ public class DarkLanternBomb2 : ModProjectile, IWarpProjectile
         Projectile.ignoreWater = true;
         Projectile.tileCollide = false;
         Projectile.extraUpdates = 3;
-
     }
 	public override void OnSpawn(IEntitySource source)
 	{
@@ -67,7 +66,6 @@ public class DarkLanternBomb2 : ModProjectile, IWarpProjectile
             Projectile.scale += 0.05f;
             Projectile.hostile = true;
         }
-        //Lighting.AddLight(Projectile.Center, (float)(255 - Projectile.alpha) * 0.8f / 255f * Projectile.scale * num1, (float)(255 - Projectile.alpha) * 0.2f / 255f * Projectile.scale * num1, (float)(255 - Projectile.alpha) * 0f / 255f * Projectile.scale * num1);
     }
 	
 	public override bool PreDraw(ref Color lightColor)
