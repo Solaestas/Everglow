@@ -1,0 +1,64 @@
+
+Mods: {
+	Everglow: {
+		ZY: {
+			Common: {
+				Hour: 小时
+				Minute: 分钟
+				Second: 秒
+				Duration: 持续时间
+				NotActivated: 未激活
+				
+				DebugItem:
+					'''
+					! 调试物品 !
+					后果自负
+					'''
+			}
+
+			NPCs: {
+				// TestNPC.DisplayName: Test N P C
+			}
+
+			Items: {
+				TestItem: {
+					DisplayName: 木制升降梯
+					# LiftLamp
+					// Tooltip: "{$Mods.Everglow.Common.DebugItem}"
+				}
+
+				WoodShield: {
+					# Shields
+					DisplayName: 木制盾牌
+					# Shields
+					Tooltip:
+						'''
+						左键攻击，右键防御
+						只是一面普通的盾牌，不会有人想用盾牌去打人吧
+						'''
+				}
+
+				HardmodeItem: {
+					// DisplayName: Hardmode Item
+					# Extra Debug Items
+					// Tooltip: "{$Mods.Everglow.Common.DebugItem}"
+				}
+
+				LifeMaxItem: {
+					// DisplayName: Life Max Item
+					// Tooltip: "{$Mods.Everglow.Common.DebugItem}"
+				}
+
+				// AirTileItem.DisplayName: Air Tile Item
+				// AirWallItem.DisplayName: Air Wall Item
+				// SightOfTile.DisplayName: Sight Of Tile
+			}
+
+			Projectiles: {
+				// SightOfTileProj.DisplayName: Sight Of Tile Proj
+				// SightOfTileProjRead.DisplayName: Sight Of Tile Proj Read
+				// WoodShieldProj.DisplayName: Shield
+			}
+		}
+	}
+}

@@ -1,0 +1,20 @@
+
+Mods: {
+	Everglow: {
+		Minortopography: {
+			Common: {
+				Hour: 小时
+				Minute: 分钟
+				Second: 秒
+				Duration: 持续时间
+
+				#世界系统WorldSystem
+				WorldSystem: {
+					WorldCreate_Def: 开始创建世界
+					WorldEnter_Def: 正在进入世界
+					BuildMothCave: 正在生成流萤之茧
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,120 @@
+
+Mods: {
+	Everglow: {
+		EternalResolve: {
+			Common: {
+				Hour: hour
+				Minute: minute
+				Second: second
+				Duration: duration
+				NotActivated: Unactivated
+				RapierGT: Right click and hold to charge an invincibility dash with high damage
+				NoAmmoConsum: Does not consume ammo
+				
+				DebugItem:
+					'''
+					! Debug item !
+					Use on your own risk
+					'''
+			}
+
+			Items: {
+
+				EkandaBrick: {
+					DisplayName: Ekanda Brick
+					Tooltip: ""
+				}
+
+				Guding: {
+					DisplayName: Ekanda Alloy
+					Tooltip: ""
+				}
+
+				NoFlawsDream: {
+					DisplayName: Flawless Dream
+					Tooltip: ""
+				}
+
+				Origin: {
+					DisplayName: Pure Sapphire
+					Tooltip: Invaluable gem of origin in tales
+				}
+
+				DurableAxe: {
+					DisplayName: Durable Axe
+					Tooltip: ""
+				}
+
+				ElectricHeatingPlate: {
+					DisplayName: Electric Heating Axe
+					Tooltip: ""
+				}
+
+				BrokenPick: {
+					DisplayName: Broken Pickaxe
+					Tooltip: ""
+				}
+
+				BloodGoldBayonet: {
+					DisplayName: Crimson Rapier
+					Tooltip: "{$Mods.Everglow.Common.RapierGT}"
+				}
+
+				DreamStar: {
+					DisplayName: Star of Dream
+					Tooltip: "{$Mods.Everglow.Common.RapierGT}"
+				}
+
+				EternalNight: {
+					DisplayName: Eternal Night Rapier
+					Tooltip: "{$Mods.Everglow.Common.RapierGT}"
+				}
+
+				GoldenStabbingSword: {
+					DisplayName: Gold Rapier
+					Tooltip: "{$Mods.Everglow.Common.RapierGT}"
+				}
+
+				IronStabbingSword: {
+					DisplayName: Iran Rapier
+					Tooltip: "{$Mods.Everglow.Common.RapierGT}"
+				}
+
+				LeadStabbingSword: {
+					DisplayName: Lead Rapier
+					Tooltip: "{$Mods.Everglow.Common.RapierGT}"
+				}
+
+				PlatinumStabbingSword: {
+					DisplayName: Platinum Rapier
+					Tooltip: "{$Mods.Everglow.Common.RapierGT}"
+				}
+
+				PrisonFireBayonet: {
+					DisplayName: Molten Rapier
+					Tooltip: "{$Mods.Everglow.Common.RapierGT}"
+				}
+
+				RottenGoldBayonet: {
+					DisplayName: Corrupted Rapier
+					Tooltip: "{$Mods.Everglow.Common.RapierGT}"
+				}
+
+				SilverStabbingSword: {
+					DisplayName: Silver Rapier
+					Tooltip: "{$Mods.Everglow.Common.RapierGT}"
+				}
+
+				VegetationBayonet: {
+					DisplayName: Rapier of Grass
+					Tooltip: "{$Mods.Everglow.Common.RapierGT}"
+				}
+
+				TDMT: {
+					DisplayName: Catastrophic Lightning
+					Tooltip: "{$Mods.Everglow.Common.RapierGT}"
+				}
+			}
+		}
+	}
+}

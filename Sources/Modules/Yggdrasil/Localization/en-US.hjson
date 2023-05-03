@@ -1,0 +1,124 @@
+
+Mods: {
+	Everglow: {
+		Yggdrasil: {
+			Common: {
+				Hour: hour
+				Minute: minute
+				Second: second
+				Duration: duration
+				NotActivated: Unactivated
+				
+				DebugItem:
+					'''
+					! Debug item !
+					Use on your own risk
+					'''
+			}
+
+			NPCs: {
+				CyanOreBeetle.DisplayName: Cyan Ore Beetle
+				SquamousShell.DisplayName: Squamous Shell
+				TestNPC.DisplayName: Test N P C
+			}
+
+			Items: {
+				Acropora.DisplayName: Acropora
+				Basalt.DisplayName: Basalt
+				DragonScaleWood.DisplayName: Dragon Scale Wood
+				GoldGorgonianBranch.DisplayName: GoldGorgonianBranch
+				GorgonianPiece.DisplayName: Gorgonian Piece
+				OldMoss.DisplayName: Moss
+				Chinalamp1.DisplayName: Traditional Lamp
+				Chinalamp2.DisplayName: Traditional Lamp
+				LanternCrystal.DisplayName: Royal City Pylon
+				LanternPost1.DisplayName: Lantern Post
+				LanternPost2.DisplayName: Lantern Post
+
+				YggdrasilCapital: {
+					# Yggdrasil Items
+					DisplayName: "'An Illusion of The Yggdrasil'"
+					# 天穹树系列物品
+					Tooltip:
+						'''
+						Brings you to The Yggdrasil
+						{$Mods.Everglow.Common.DebugItem}
+						'''
+				}
+
+				DiscordBallF1.DisplayName: Discord Crystal Ball · The Ancient Path
+				LiftLamp.DisplayName: Lift Indicator
+
+				TestItem: {
+					DisplayName: Wooden Lift
+					# LiftLamp
+					Tooltip: "{$Mods.Everglow.Common.DebugItem}"
+				}
+
+				#Yggdrasil Town
+				ChinesePartitionLamp.DisplayName: Chinese Partition Lamp
+				ChineseStyleFloorLamp.DisplayName: Chinese Style Floor Lamp
+				CyanVineBar.DisplayName: Cyan Bar
+				CyanVineOre.DisplayName: Cyan Ore
+				DoubleArmsChineseStreetLamp.DisplayName: Chinese Double Arms Street Lamp
+				HangingSkyLantern.DisplayName: Hanging Sky Lantern
+				HexagonalCeilingLamp.DisplayName: Hexagonal Ceiling Lamp
+				ShoreMud.DisplayName: Dark Mud
+				SideHangingLantern.DisplayName: Side Hanging Lantern
+				StoneDragonScaleWood.DisplayName: Fossilized Dragon Scale Wood
+				StreetLantern.DisplayName: Street Lantern
+				YellowDynastyShingles.DisplayName: Yellow Dynasty Shingles
+
+				CyanVinePickaxe: {
+					DisplayName: Cyan Pickaxe
+					# 天穹树小镇
+					Tooltip:
+						'''
+						Allows you to destroy Fossilised Dragonscale Woods
+						Mines Cyan Ores faster
+						'''
+				}
+
+				LiftWinch.DisplayName: Lift Winch
+				BloodLightCrystal.DisplayName: Blood Light Crystal
+				TrueDeathSickle.DisplayName: True Death Sickle
+				CyanWindGranite.DisplayName: Cyan Wind Granite
+				DragonScaleWoodWall.DisplayName: Dragon Scale Wood Wall
+				AcroporaSpear.DisplayName: Acropora Spear
+				YggdrasilDirt.DisplayName: Yggdrasil Dirt
+				StoneDragonScaleWoodWall.DisplayName: Stone Dragon Scale Wood Wall
+				CyanVineAxe.DisplayName: Cyan Vine Axe
+				CyanVineHammer.DisplayName: Cyan Vine Hammer
+				CyanVineSword.DisplayName: Cyan Vine Sword
+				CyanVineThrowingSpear.DisplayName: Cyan Vine Throwing Spear
+				YggdrasilAmber.DisplayName: Yggdrasil Amber
+			}
+
+			MapEntry: {
+				SideHangingLantern: Side Hanging Lantern
+			}
+
+			Projectiles: {
+				TrueDeathSickle.DisplayName: True Death Sickle
+				TrueDeathSickleHit.DisplayName: Navy Thunder Bomb
+				AcroporaSpear.DisplayName: Acropora Spear
+				AcroporaThumpEff.DisplayName: Acropora Thump Eff
+				CyanVineThrowingSpear.DisplayName: Cyan Vine Throwing Spear
+			}
+
+			Biomes: {
+				KelpCurtainBiome.DisplayName: Kelp Curtain
+				YggdrasilTownBiome.DisplayName: Yggdrasil Town
+			}
+
+			Tiles: {
+				LiftLamp.MapEntry: Lift Lamp
+				CyanVineBar.MapEntry: Metal Bar
+				CyanVineOreTile.MapEntry: Cyan Ore
+				CyanVineStone.MapEntry: Cyan Ore
+				HangingSkyLantern.MapEntry: Chandelier
+				HexagonalCeilingLamp.MapEntry: Chandelier
+			}
+		}
+	}
+}

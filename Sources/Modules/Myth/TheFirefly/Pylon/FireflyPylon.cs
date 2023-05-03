@@ -3,6 +3,7 @@ using Everglow.Myth.TheFirefly.Dusts;
 using ReLogic.Content;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.Localization;
 using Terraria.Map;
 using Terraria.ModLoader.Default;
 using Terraria.ObjectData;
@@ -158,7 +159,7 @@ internal class FireflyPylon : BaseModPylon<FireflyPylonTileEntity>
 			return;
 
 		bool mouseOver = DefaultDrawMapIcon(ref context, mapIcon, pylonInfo.PositionInTiles.ToVector2() + new Vector2(1.5f, 2f), drawColor, deselectedScale, selectedScale);
-		DefaultMapClickHandle(mouseOver, pylonInfo, "Mods.Everglow.Myth.ItemName.FireflyPylonItem", ref mouseOverText);
+		DefaultMapClickHandle(mouseOver, pylonInfo, Language.GetTextValue("Mods.Everglow.Myth.ItemName.FireflyPylonItem"), ref mouseOverText);
 	}
 
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
