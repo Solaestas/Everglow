@@ -1,20 +1,23 @@
-﻿using ReLogic.Graphics;
+using Microsoft.Xna.Framework;
 
-namespace Everglow.Commons.UI.UIElements;
+using ReLogic.Graphics;
 
-public class UITextButton : UIPanel
+namespace Everglow.Commons.UI.UIElements
 {
-	public UIText UIText;
-
-	public UITextButton(string text, DynamicSpriteFont font, float scale = 1f)
+	internal class UITextButton : UIPanel
 	{
-		Info.IsSensitive = true;
-		CanDrag = false;
-		Info.SetMargin(0f);
-		UIText = new UIText(text, font, scale);
-		UIText.Color = Color.Black;
-		UIText.CenterX = new PositionStyle(0f, 0.5f);
-		UIText.CenterY = new PositionStyle(0f, 0.5f);
-		Register(UIText);
+		public UIText UIText;
+
+		public UITextButton(string text, DynamicSpriteFont font, float scale = 1f)
+		{
+			Info.IsSensitive = true;
+			CanDrag = false;
+			Info.SetMargin(0f);
+			UIText = new UIText(text, font, scale);
+			UIText.Color = Color.Black;
+			UIText.CenterX = new PositionStyle(0f, 0.5f);
+			UIText.CenterY = new PositionStyle(0f, 0.5f);
+			Register(UIText);
+		}
 	}
 }
