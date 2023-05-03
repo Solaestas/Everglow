@@ -170,7 +170,7 @@ public class LanternGhostKing : ModNPC
 				for (int j = 0; j < 150; j++)
 				{
 					Vector2 v2 = new Vector2(0, Main.rand.Next(Main.rand.Next(0, 1200), 1200)).RotatedByRandom(Math.PI * 2);
-					Projectile.NewProjectile(NPC.GetSource_FromAI(), v2.X + NPC.Center.X, v2.Y + NPC.Center.Y, 0, 0, ModContent.ProjectileType<DarkLanternBomb>(), 50, 0f, player.whoAmI, v2.Length() / 4f, 0);
+					Projectile.NewProjectile(NPC.GetSource_FromAI(), v2.X + NPC.Center.X, v2.Y + NPC.Center.Y, 0, 0, ModContent.ProjectileType<DarkLanternBomb2>(), 50, 0f, player.whoAmI, v2.Length() / 4f, 0);
 				}
 			}
 		}
