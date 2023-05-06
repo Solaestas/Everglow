@@ -6,7 +6,7 @@ using Microsoft.VisualBasic;
 using Terraria;
 using Terraria.ModLoader;
 using Everglow.Minortopography.Common.Elevator.Tiles;
-
+using Everglow.Minortopography.Common;
 namespace Everglow.Minortopography.GiantPinetree;
 
 public class GiantPinetree : ModSystem
@@ -76,33 +76,40 @@ public class GiantPinetree : ModSystem
 
 		}
 		float trunkWidth = treeSize;//随机摇宽度
-		int buildCoordY = 0;
 		for (int a = -3; a <= 3; a++)
 		{
 			GenerateRoots(new Point16(positonX, positonY), 0, a / 2f);//随机发射树根
 		}
+
+		int killCoordY = -3;
 		while (trunkWidth > 0)
 		{
-			buildCoordY--;
-			if (buildCoordY + positonY >= Main.maxTilesY - 10 || buildCoordY + positonY <= 10 || positonX <= 20 || positonX >= Main.maxTilesX - 20)//防止超界
+			killCoordY--;
+			if (killCoordY + positonY >= Main.maxTilesY - 10 || killCoordY + positonY <= 10 || positonX <= 20 || positonX >= Main.maxTilesX - 20)//防止超界
 				break;
 			for (int i = (int)-trunkWidth; i <= (int)trunkWidth; i++)
 			{
-				Tile tile = SafeGetTile(i + positonX, buildCoordY + positonY);
+				Tile tile = SafeGetTile(i + positonX, killCoordY + positonY);
 				if (i > -trunkWidth + 4 || i < trunkWidth - 4 || trunkWidth < 4)
 				{
-					tile.HasTile = false;
-					tile.wall = (ushort)ModContent.WallType<PineLeavesWall>();
+					if(Main.rand.Next(Math.Abs(i)) < trunkWidth - 6)
+					{
+						tile.wall = (ushort)ModContent.WallType<PineLeavesWall>();
+					}
+					if (Main.rand.Next(Math.Abs(i)) < trunkWidth - 6)
+					{
+						tile.HasTile = false;
+					}
 				}
 			}
-			trunkWidth -= (float)(Math.Sin(buildCoordY * 0.8) * 0.5 + 0.4);
+			trunkWidth -= (float)(Math.Sin(killCoordY * 0.8) * 0.5 + 0.4);
 		}
 		GenerateTrunkWall(new Point16(positonX, positonY + 6), 7, 56);
 		GenerateBranch(new Point16(positonX, positonY - 10), -1.4f, 26);
 		GenerateBranch(new Point16(positonX, positonY - 26), 1.4f, 20);
-		GeneratePineTreeHouse(new Point16(positonX - 15, positonY - 12), Main.rand.Next(11, 15), Main.rand.Next(11, 15), 13, new int[] { 0, Main.rand.Next(5, 7), Main.rand.Next(1620, 1980), 185 ,-1, 255});
-		GeneratePineTreeHouse(new Point16(positonX + 12, positonY - 28), Main.rand.Next(11, 15), Main.rand.Next(11, 15), 13, new int[] { 1, Main.rand.Next(5, 7), Main.rand.Next(1620, 1980), 185 ,1, -6 });
-		GeneratePineTreeHouse(new Point16(positonX + Main.rand.Next(-3, 4), positonY - 58), Main.rand.Next(4, 6), Main.rand.Next(4, 6), 8, new int[] { 0, Main.rand.Next(3, 5), Main.rand.Next(810, 1000), 185, 0 ,255});
+		GeneratePineTreeHouse(new Point16(positonX - 15, positonY - 12), Main.rand.Next(11, 15), Main.rand.Next(11, 15), 13, new int[] { 0, Main.rand.Next(5, 7), Main.rand.Next(1620, 1980), 185 ,-1, 255, Main.rand.Next(5, 7) ,4});
+		GeneratePineTreeHouse(new Point16(positonX + 12, positonY - 28), Main.rand.Next(11, 15), Main.rand.Next(11, 15), 13, new int[] { 1, Main.rand.Next(5, 7), Main.rand.Next(1620, 1980), 185 ,1, -8, 0, 0 });
+		GeneratePineTreeHouse(new Point16(positonX + Main.rand.Next(-3, 4), positonY - 58), Main.rand.Next(4, 6), Main.rand.Next(4, 6), 8, new int[] { 0, Main.rand.Next(3, 5), Main.rand.Next(810, 1000), 185, 0 ,255, 0, 0 });
 		//平滑木头部分
 		SmoothTile(positonX - 60, positonY - 10, 120, 250, ModContent.TileType<PineWood>());
 	}
@@ -136,18 +143,6 @@ public class GiantPinetree : ModSystem
 				if (buildCoordY + positonY >= Main.maxTilesY - 10 || buildCoordY + positonY <= 10 || -10 + positonX <= 10 || 10 + positonX >= Main.maxTilesX + 10)//防止超界
 					break;
 				Tile tile = SafeGetTile(i + positonX, buildCoordY + positonY);
-				//if(a == (int)trunkWidth && trunkWidth <= 2)//孤立像素一般的物块自动剪除，然后破
-				//{
-				//	Tile tileTop = SafeGetTile(i + positonX, buildCoordY + positonY - 1];
-				//	Tile tileBottom = SafeGetTile(i + positonX, buildCoordY + positonY + 1];
-				//	Tile tileLeft = SafeGetTile(i + positonX - 1, buildCoordY + positonY];
-				//	Tile tileRight = SafeGetTile(i + positonX + 1, buildCoordY + positonY];
-				//	if(tileTop.TileType != (ushort)ModContent.TileType<PineWood>() && tileBottom.TileType != (ushort)ModContent.TileType<PineWood>() && tileLeft.TileType != (ushort)ModContent.TileType<PineWood>() && tileRight.TileType != (ushort)ModContent.TileType<PineWood>())
-				//	{
-				//		trunkWidth = 0;
-				//		break;
-				//	}
-				//}
 				if (a <= -trunkWidth + 4 || a >= trunkWidth - 4)//在靠边的部位为实木块
 				{
 					if (tile.WallType != ModContent.WallType<PineWoodWall>())//防止松树块互相重合
@@ -203,8 +198,6 @@ public class GiantPinetree : ModSystem
 					break;
 				}
 			}
-			
-
 		}
 	}
 	/// <summary>
@@ -249,34 +242,47 @@ public class GiantPinetree : ModSystem
 	/// <summary>
 	/// 第二种方式生成树叶
 	/// </summary>
-	/// <param name="i"></param>
-	/// <param name="buildCoordY"></param>
-	/// <param name="iteration"></param>
-	/// <param name="strength"></param>
-	/// <param name="direction"></param>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
 	public static void PlacePineLeavesStyleII(int x, int y)
 	{
-		void LineTileRunner(int type, Vector2 pos, Vector2 vel, float strength, int length)
+		void LineTileRunner(int type, Vector2 pos, Vector2 vel, int length)
 		{
 			Point p = pos.ToTileCoordinates();
 			vel.Normalize();
 			for (int i = 0; i < length; i++)
 			{
 				Tile tile = Main.tile[p.X + (int)(vel.X * i), p.Y + (int)(vel.Y * i)];
-				tile.TileType = (ushort)ModContent.TileType<PineLeaves>();
+				tile.TileType = (ushort)type;
 				tile.HasTile = true;
-				if(i <= length - 1)
+				tile.wall = (ushort)ModContent.WallType<PineLeavesWall>();
+				tile = Main.tile[p.X + (int)(vel.X * i) + Main.rand.Next(-1, 2), p.Y + (int)(vel.Y * i) + Main.rand.Next(-1, 2)];
+				tile.wall = (ushort)ModContent.WallType<PineLeavesWall>();
+				if (i <= length - 1)
 				{
-					tile.wall = (ushort)ModContent.WallType<PineLeavesWall>();
-					tile = Main.tile[p.X + (int)(vel.X * i), p.Y + (int)(vel.Y * i) + 1];
-					tile.TileType = (ushort)ModContent.TileType<PineLeaves>();
-					tile.HasTile = true;
+					if (Main.rand.NextBool(2))
+					{
+						tile = Main.tile[p.X + (int)(vel.X * i), p.Y + (int)(vel.Y * i) + 1];
+						tile.TileType = (ushort)type;
+						tile.HasTile = true;
+					}
+					else
+					{
+						tile.wall = (ushort)ModContent.WallType<PineLeavesWall>();
+					}
 				}
 				if (i <= length - 3)
 				{
-					tile = Main.tile[p.X + (int)(vel.X * i), p.Y + (int)(vel.Y * i) - 1];
-					tile.TileType = (ushort)ModContent.TileType<PineLeaves>();
-					tile.HasTile = true;
+					if (Main.rand.NextBool(2))
+					{
+						tile = Main.tile[p.X + (int)(vel.X * i), p.Y + (int)(vel.Y * i) + 1];
+						tile.TileType = (ushort)type;
+						tile.HasTile = true;
+					}
+					else
+					{
+						tile.wall = (ushort)ModContent.WallType<PineLeavesWall>();
+					}
 				}
 			}
 		}
@@ -312,9 +318,9 @@ public class GiantPinetree : ModSystem
 			float min = 3 * factor;
 			if (length < min)
 				length = min;
-			LineTileRunner(ModContent.TileType<PineLeaves>(), cPos, vel, 4, (int)length);
+			LineTileRunner(ModContent.TileType<PineLeaves>(), cPos, vel, (int)length);
 			vel.X *= -1;
-			LineTileRunner(ModContent.TileType<PineLeaves>(), cPos, vel, 4, (int)length);
+			LineTileRunner(ModContent.TileType<PineLeaves>(), cPos, vel, (int)length);
 		}
 
 		Rectangle frameRec = new Rectangle(x - 75, y - 150, 150, 200);
@@ -390,6 +396,7 @@ public class GiantPinetree : ModSystem
 	/// [3] 尖顶弧度>100内凹<100外凸
 	/// [4] 门口位置 -1门在右 1门在左
 	/// [5] 电梯位置 相较于中间的位置，电梯生成于房屋底部 绝对值大于等于255则不生成电梯
+	/// [6] 窗户
 	/// </summary>
 	/// <param name="origin"></param>
 	/// <param name="leftWidth"></param>
@@ -514,7 +521,7 @@ public class GiantPinetree : ModSystem
 					tile.HasTile = false;
 				}
 			}
-			Common.TileUtils.PlaceFrameImportantTiles(leftX + 1, positonY - 2, 1, 3, ModContent.TileType<SnowPineDoorClosed>());
+			TileUtils.PlaceFrameImportantTiles(leftX + 1, positonY - 2, 1, 3, ModContent.TileType<SnowPineDoorClosed>());
 			for (int i = leftX + 6; i <= leftX + 8; i++)
 			{
 				int deltaHeight = i - (leftX + 6);
@@ -568,14 +575,90 @@ public class GiantPinetree : ModSystem
 			}
 			if(addJ != 21)
 			{
-				for(int addI = -3; addI < 4; addI++)
+				for (int addJJ = 0; addJJ < 6; addJJ++)
 				{
-					Tile tileKill = Main.tile[origin.X + styleSeed[5] + addI, origin.Y + 2 + addJ];
-					tileKill.HasTile = false;
+					for (int addI = -3; addI < 4; addI++)
+					{
+						Tile tileKill = Main.tile[origin.X + styleSeed[5] + addI, origin.Y + 2 + addJ + addJJ];
+						tileKill.HasTile = false;
+					}
 				}
 				Tile tile = Main.tile[origin.X + styleSeed[5], origin.Y + 2 + addJ];
 				tile.TileType = (ushort)ModContent.TileType<PineWinch>();
 				tile.HasTile = true;
+			}
+		}
+		//生成窗户
+		if (Math.Abs(styleSeed[6]) > 0)
+		{
+			int top = topY + 2;
+			int left = leftX + styleSeed[6];
+			for(int times = 0; times < 4;times++)
+			{
+				switch (times)
+				{
+					case 1:
+						top += 4;
+						break;
+					case 2:
+						left += 4;
+						break;
+					case 3:
+						top -= 4;
+						break;
+					default: 
+						break;
+				}
+
+				for (int x = 0; x < 3; x++)
+				{
+					for (int y = 0; y < 3; y++)
+					{
+						Tile tile = Main.tile[left + x, top + y];
+						tile.wall = WallID.Glass;
+					}
+				}
+			}
+		}
+		//生成松塔
+		if (Math.Abs(styleSeed[7]) > 0)
+		{
+			int top = positonY - 2;
+			int left = leftX + styleSeed[7];
+			while(SafeGetTile(left, top).TileType != (ushort)ModContent.TileType<PineWood>())
+			{
+				top++;
+				if(top > 20)
+				{
+					break;
+				}
+			}
+			if(top != 21)
+			{
+				int count = 0;
+				while (left < positonX + rightWidth - 10)
+				{				
+					switch (count)
+					{
+						case 0:
+							top -= 6;
+							TileUtils.PlaceFrameImportantTiles(left, top, 6, 6, (ushort)ModContent.TileType<GiantPineCone_0>());
+							top += 6;
+							left += 6;
+							break;
+						case 1:
+							top -= 4;
+							TileUtils.PlaceFrameImportantTiles(left, top, 5, 4, (ushort)ModContent.TileType<GiantPineCone_1>());
+							top += 4;
+							left += 5;
+							break;
+					}
+					count++;
+					if (count > 1)
+					{
+						break;
+					}
+				}
 			}
 		}
 	}
