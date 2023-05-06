@@ -11,6 +11,6 @@ public class PineWood : ModTile
 		DustType = DustID.BorealWood;
 		HitSound = SoundID.Dig;
 		ItemDrop = ItemID.BorealWood;
-		AddMapEntry(new Color(45, 15, 3));
+		AddMapEntry(new Color(60, 45, 39));
 	}
 }
