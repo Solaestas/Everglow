@@ -7,7 +7,7 @@ public class TileUtils
 	/// </summary>
 	/// <param name="path"></param>
 	/// <returns></returns>
-	public static void PlaceFrameImportantTiles(int x, int y, int width, int height, int type)
+	public static void PlaceFrameImportantTiles(int x, int y, int width, int height, int type, int xStartAt = 0, int yStartAt = 0)
 	{
 		if (x > Main.maxTilesX - width || x < 0 || y > Main.maxTilesY - height || y < 0)
 			return;
@@ -17,8 +17,8 @@ public class TileUtils
 			{
 				Tile tile = Main.tile[x + i, y + j];
 				tile.TileType = (ushort)type;
-				tile.TileFrameX = (short)(i * 18);
-				tile.TileFrameY = (short)(j * 18);
+				tile.TileFrameX = (short)(i * 18 + xStartAt);
+				tile.TileFrameY = (short)(j * 18 + yStartAt);
 				tile.HasTile = true;
 			}
 		}

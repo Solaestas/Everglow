@@ -3,6 +3,7 @@ using Everglow.Commons.CustomTiles;
 using Everglow.Commons.CustomTiles.DataStructures;
 using Everglow.Commons.Vertex;
 using Everglow.Minortopography.Common.Elevator.Tiles;
+using Terraria.DataStructures;
 
 namespace Everglow.Minortopography.Common.Elevator;
 
@@ -32,6 +33,14 @@ internal class PineTreeLiftTile : DBlock
 	/// 初始化的检验
 	/// </summary>
 	internal bool CheckDefault = false;
+	/// <summary>
+	/// 灯位置
+	/// </summary>
+	internal Vector2 LanternPos = Vector2.Zero;
+	/// <summary>
+	/// 灯速度
+	/// </summary>
+	internal Vector2 LanternVel = Vector2.Zero;
 
 	public override void OnCollision(AABB aabb, Direction dir)
 	{
@@ -99,6 +108,34 @@ internal class PineTreeLiftTile : DBlock
 			if (PauseTime == 0 && AccelerateTimeLeft == 0)
 				PauseTime = 300;
 		}
+		UpdateLantern();
+	}
+	private void UpdateLantern()
+	{
+		Vector2 worldPos = Center + new Vector2(1, -54) + LanternPos;
+		LanternPos += LanternVel;
+		LanternVel += (velocity - oldVelocity) * 1.5f;
+		Point16 worldCoord = new Point16((int)(worldPos.X / 16), (int)(worldPos.Y / 16));
+		Tile tile = Main.tile[Math.Clamp(worldCoord.X, 20, Main.maxTilesX - 20), Math.Clamp(worldCoord.Y, 20, Main.maxTilesY - 20)];
+		if(tile.wall <= 0)
+		{
+			LanternVel.X += Main.windSpeedCurrent / 10f;
+		}
+		LanternVel -= LanternPos * 0.05f;
+		LanternVel *= 0.95f;
+		foreach(Player player in Main.player)
+		{
+			if(player.active)
+			{
+				if((player.Center - worldPos).Length() < 20)
+				{
+					if(LanternPos.Length() < 10f)
+					{
+						LanternVel += player.velocity * 0.5f;
+					}
+				}
+			}
+		}
 	}
 	private void CheckRunningDirection()
 	{
@@ -148,20 +185,21 @@ internal class PineTreeLiftTile : DBlock
 			Color drawc = Lighting.GetColor((int)(Center.X / 16f), (int)(Center.Y / 16f) - 3);
 			Main.spriteBatch.Draw(ModAsset.PineLiftTile.Value, position - Main.screenPosition, new Rectangle(0, 0, (int)size.X, (int)size.Y), drawc);
 			Texture2D liftShell = ModAsset.PineLiftShell.Value;
+			Texture2D liftShellBack = ModAsset.PineLiftShell_background.Value;
 			Texture2D liftLantern = ModAsset.PineLiftLantern.Value;
 			Texture2D liftLanternFirefly = ModAsset.PineLiftLanternFirefly.Value;
-
-			
 
 			var drawcLampGlow = new Color(255, 255, 255, 0);
 
 			Texture2D liftCable = ModAsset.VineRope.Value;
 
-			Main.spriteBatch.Draw(liftLantern, Center - Main.screenPosition + new Vector2(0, -80), null, drawc, 0, liftShell.Size() / 2f, 1, SpriteEffects.None, 0);
+			float lightValue = MathF.Sin((float)(Main.time * 0.2)) * 0.3f + 0.4f + Math.Min(LanternVel.Length() * 0.2f, 2f);
+			Main.spriteBatch.Draw(liftShellBack, Center - Main.screenPosition + new Vector2(0, -80), null, new Color(0.2f * lightValue + drawc.R / 255f * 0.2f, 0.8f * lightValue + drawc.G / 255f * 0.2f, drawc.B / 255f * 0.2f, drawc.A / 255f), 0, liftShell.Size() / 2f, 1, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(liftLantern, Center - Main.screenPosition + new Vector2(1, -54) + LanternPos, null, drawc, (LanternPos + new Vector2(0, 20)).ToRotation() - 1.57f, liftLantern.Size() / 2f, 1, SpriteEffects.None, 0);
 			Main.spriteBatch.Draw(liftShell, Center - Main.screenPosition + new Vector2(0, -80), null, drawc, 0, liftShell.Size() / 2f, 1, SpriteEffects.None, 0);
-			Main.spriteBatch.Draw(liftLanternFirefly, Center - Main.screenPosition + new Vector2(1, -52) + new Vector2(MathF.Sin((float)Main.time * 0.24f) * 3.1f, MathF.Sin((float)Main.time * 0.08f + 0.6f) * 5.7f), new Rectangle(0, 10 * (int)((Main.time * 0.2) % 4), 10, 10), drawcLampGlow, 0, new Vector2(5), 0.5f, SpriteEffects.None, 0);
-			Main.spriteBatch.Draw(liftLanternFirefly, Center - Main.screenPosition + new Vector2(1, -52) + new Vector2(MathF.Sin((float)Main.time * 0.18f + 2.6f) * 3.1f, MathF.Sin((float)Main.time * 0.09f + 4.6f) * 5.7f), new Rectangle(0, 10 * (int)((Main.time * 0.2 + 15) % 4), 10, 10), drawcLampGlow, 0, new Vector2(5), 1f, SpriteEffects.None, 0);
-			float lightValue = MathF.Sin((float)(Main.time * 0.2)) * 0.3f + 0.4f;
+			Main.spriteBatch.Draw(liftLanternFirefly, Center - Main.screenPosition + new Vector2(1, -52) + LanternPos + new Vector2(MathF.Sin((float)Main.time * 0.24f) * 3.1f, MathF.Sin((float)Main.time * 0.08f + 0.6f) * 5.7f), new Rectangle(0, 10 * (int)((Main.time * 0.2) % 4), 10, 10), drawcLampGlow, 0, new Vector2(5), 0.5f, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(liftLanternFirefly, Center - Main.screenPosition + new Vector2(1, -52) + LanternPos + new Vector2(MathF.Sin((float)Main.time * 0.18f + 2.6f) * 3.1f, MathF.Sin((float)Main.time * 0.09f + 4.6f) * 5.7f), new Rectangle(0, 10 * (int)((Main.time * 0.2 + 15) % 4), 10, 10), drawcLampGlow, 0, new Vector2(5), 1f, SpriteEffects.None, 0);
+
 			Lighting.AddLight((int)(position.X / 16f) + 1, (int)(position.Y / 16f) - 3, 0.2f * lightValue, 0.8f * lightValue, 0f);
 
 			Main.spriteBatch.End();
@@ -177,10 +215,31 @@ internal class PineTreeLiftTile : DBlock
 				int dx = 1;
 				if ((int)(position.X / 16f) + 2 + dx < Main.maxTilesX - 28 && (int)((position.Y - f * 12) / 16f) - 7 < Main.maxTilesY - 28 && (int)(position.X / 16f) + 2 + dx > 28 && (int)((position.Y - f * 12) / 16f) - 7 > 28)
 				{
-					Tile tile0 = Main.tile[(int)(position.X / 16f) + 2 + dx, (int)((position.Y - f * 12) / 16f) - 7];
+					Tile tile0 = Main.tile[(int)(position.X / 16f) + 2 + dx, Math.Max((int)((position.Y - f * 12) / 16f) - 7, 20)];
 					if (tile0.TileType == ModContent.TileType<PineWinch>() && tile0.HasTile)
 						break;
 				}
+				if(f == 999)
+				{
+					Kill();
+					return;
+				}
+			}
+			if (bars.Count > 2)
+			{
+				Main.graphics.GraphicsDevice.Textures[0] = liftCable;
+				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+			}
+			bars = new List<Vertex2D>();
+			Vector2 lanternTail = Center - Main.screenPosition + new Vector2(1, -60) + LanternPos;
+			Vector2 lanternTie = Center - Main.screenPosition + new Vector2(1, -90);
+			for (int x = 0;x < 10;x++)
+			{
+				float value = x / 10f;
+				Vector2 normolized = Utils.SafeNormalize(lanternTail - lanternTie, Vector2.zeroVector).RotatedBy(1.57) * 2;
+				float gravityDragY = MathF.Sqrt((0.5f - Math.Abs(value - 0.5f)) * 2) * 3;
+				bars.Add(new Vertex2D(lanternTail * value + lanternTie * (1 - value) + new Vector2(0, gravityDragY) + normolized, drawc, new Vector3(0, x / 10f, 0)));
+				bars.Add(new Vertex2D(lanternTail * value + lanternTie * (1 - value) + new Vector2(0, gravityDragY) - normolized, drawc, new Vector3(1, x / 10f, 0)));
 			}
 			if (bars.Count > 2)
 			{

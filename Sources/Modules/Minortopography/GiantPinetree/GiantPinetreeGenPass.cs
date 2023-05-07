@@ -2,18 +2,16 @@ using Terraria.DataStructures;
 using Terraria.IO;
 using Terraria.WorldBuilding;
 using Everglow.Minortopography.GiantPinetree.TilesAndWalls;
-using Microsoft.VisualBasic;
-using Terraria;
-using Terraria.ModLoader;
 using Everglow.Minortopography.Common.Elevator.Tiles;
 using Everglow.Minortopography.Common;
+
 namespace Everglow.Minortopography.GiantPinetree;
 
 public class GiantPinetree : ModSystem
 {
 	private class GiantPinetreeGenPass : GenPass
 	{
-		public GiantPinetreeGenPass() : base("GiantPinetree", 990)
+		public GiantPinetreeGenPass() : base("GiantPinetree", 300)
 		{
 		}
 
@@ -38,8 +36,22 @@ public class GiantPinetree : ModSystem
 			for (int buildCoordY = 12; buildCoordY < Main.maxTilesY - 100; buildCoordY += 6)
 			{
 				Tile tile = SafeGetTile(i, buildCoordY);
-				if (tile.TileType == TileID.SnowBlock && tile.HasTile)
+				if (tile.TileType == TileID.SnowBlock && tile.HasTile && tile.LiquidAmount == 0)
 				{
+					bool hasAirIsland = false;
+					for (int j = 0; j < 100; j++)
+					{
+						Tile tileCheckCloud = SafeGetTile(i, buildCoordY - j);
+						if(tileCheckCloud.TileType == TileID.Cloud)
+						{
+							hasAirIsland = true;
+							break;
+						}
+					}
+					if(hasAirIsland)
+					{
+						break;
+					}
 					aimPoint.Add(new Point16(i, buildCoordY));
 					if (buildCoordY < minYCoord)
 						minYCoord = buildCoordY;
@@ -53,6 +65,10 @@ public class GiantPinetree : ModSystem
 			if (point.Y <= minYCoord + 30)
 				newAimPoint.Add(point);
 		}
+		if(newAimPoint.Count == 0)
+		{
+			return new Point16(0, 0);
+		}
 		return newAimPoint[Main.rand.Next(newAimPoint.Count)];
 	}
 	/// <summary>
@@ -62,6 +78,10 @@ public class GiantPinetree : ModSystem
 	{
 
 		Point16 centerPoint = RandomPointInSurfaceSnow();
+		if(centerPoint == new Point16(0, 0))
+		{
+			return;
+		}
 		//避免小世界生成位置突兀
 		int positonX = Main.maxTilesX == 4200 ? centerPoint.X + 2 : centerPoint.X;
 
@@ -70,7 +90,7 @@ public class GiantPinetree : ModSystem
 
 		float treeSize = Main.rand.NextFloat(16f, 20f);
 		//PlacePineLeaves(positonX, positonY, 0, treeSize * 7.5f, new Vector2(0, -1));
-		PlacePineLeavesStyleII(positonX, positonY - 6);
+		PlacePineLeavesStyleII(positonX, positonY - 16);
 		if (Main.snowBG[2] == 260)//在这种条件下，背景符合这段代码生成的松树
 		{
 
@@ -81,7 +101,7 @@ public class GiantPinetree : ModSystem
 			GenerateRoots(new Point16(positonX, positonY), 0, a / 2f);//随机发射树根
 		}
 
-		int killCoordY = -3;
+		int killCoordY = -13;
 		while (trunkWidth > 0)
 		{
 			killCoordY--;
@@ -104,14 +124,18 @@ public class GiantPinetree : ModSystem
 			}
 			trunkWidth -= (float)(Math.Sin(killCoordY * 0.8) * 0.5 + 0.4);
 		}
-		GenerateTrunkWall(new Point16(positonX, positonY + 6), 7, 56);
-		GenerateBranch(new Point16(positonX, positonY - 10), -1.4f, 26);
-		GenerateBranch(new Point16(positonX, positonY - 26), 1.4f, 20);
-		GeneratePineTreeHouse(new Point16(positonX - 15, positonY - 12), Main.rand.Next(11, 15), Main.rand.Next(11, 15), 13, new int[] { 0, Main.rand.Next(5, 7), Main.rand.Next(1620, 1980), 185 ,-1, 255, Main.rand.Next(5, 7) ,4});
-		GeneratePineTreeHouse(new Point16(positonX + 12, positonY - 28), Main.rand.Next(11, 15), Main.rand.Next(11, 15), 13, new int[] { 1, Main.rand.Next(5, 7), Main.rand.Next(1620, 1980), 185 ,1, -8, 0, 0 });
-		GeneratePineTreeHouse(new Point16(positonX + Main.rand.Next(-3, 4), positonY - 58), Main.rand.Next(4, 6), Main.rand.Next(4, 6), 8, new int[] { 0, Main.rand.Next(3, 5), Main.rand.Next(810, 1000), 185, 0 ,255, 0, 0 });
+		GenerateTrunkWall(new Point16(positonX, positonY + 6), 7, 66);
+		GenerateBranch(new Point16(positonX, positonY - 20), -1.4f, 26);
+		GenerateBranch(new Point16(positonX, positonY - 36), 1.4f, 20);
+		GeneratePineTreeHouse(new Point16(positonX - 15, positonY - 22), Main.rand.Next(11, 15), Main.rand.Next(11, 15), 13, new int[] { 0, Main.rand.Next(5, 7), Main.rand.Next(1620, 1980), 185 ,-1, 255, Main.rand.Next(5, 7) ,0});
+		GeneratePineTreeHouse(new Point16(positonX + 12, positonY - 38), Main.rand.Next(11, 15), Main.rand.Next(11, 15), 13, new int[] { 1, Main.rand.Next(5, 7), Main.rand.Next(1620, 1980), 185 ,1, -8, 0, 0 });
+		GeneratePineTreeHouse(new Point16(positonX + Main.rand.Next(-3, 4), positonY - 68), 5, 4, 9, new int[] { 0, Main.rand.Next(3, 5), Main.rand.Next(810, 1000), 185, 0 ,255, 0, 1 });
 		//平滑木头部分
-		SmoothTile(positonX - 60, positonY - 10, 120, 250, ModContent.TileType<PineWood>());
+		SmoothTile(positonX - 60, positonY - 20, 120, 250, ModContent.TileType<PineWood>());
+		DistributePineCone(new Point16(positonX, positonY - 10), 40, 40);
+		DistributePineCone(new Point16(positonX, positonY - 60), 20, 20);
+		DistributePineCone(new Point16(positonX, positonY), 80, 80);
+		DistributeLittlePineCone(700, new Point16(positonX, positonY - 90), 1800);
 	}
 
 	/// <summary>
@@ -342,7 +366,6 @@ public class GiantPinetree : ModSystem
 		Vector2 branchVelocity = new Vector2(0, -1).RotatedBy(startRotation);//根系当前速度
 		Vector2 branchTrendVelocity = branchVelocity;//根系稳定趋势速度
 		int iteration = 0;
-		int averageY = positonY;
 		while (trunkWidth > 0)
 		{
 			iteration++;
@@ -575,9 +598,9 @@ public class GiantPinetree : ModSystem
 			}
 			if(addJ != 21)
 			{
-				for (int addJJ = 0; addJJ < 6; addJJ++)
+				for (int addJJ = 0; addJJ < 12; addJJ++)
 				{
-					for (int addI = -3; addI < 4; addI++)
+					for (int addI = -4; addI < 5; addI++)
 					{
 						Tile tileKill = Main.tile[origin.X + styleSeed[5] + addI, origin.Y + 2 + addJ + addJJ];
 						tileKill.HasTile = false;
@@ -620,43 +643,150 @@ public class GiantPinetree : ModSystem
 				}
 			}
 		}
-		//生成松塔
+		//生成巨大松塔
 		if (Math.Abs(styleSeed[7]) > 0)
 		{
-			int top = positonY - 2;
-			int left = leftX + styleSeed[7];
-			while(SafeGetTile(left, top).TileType != (ushort)ModContent.TileType<PineWood>())
+			TileUtils.PlaceFrameImportantTiles(leftX + 2, topY + 2, 6, 6, (ushort)ModContent.TileType<GiantPineCone_0>());
+		}
+	}
+	/// <summary>
+	/// 随机生成小松塔
+	/// </summary>
+	/// <param name="length"></param>
+	/// <param name="position"></param>
+	/// <param name="range"></param>
+	public static void DistributePineCone(Point16 position, int leftWidth, int rightWidth)
+	{
+		for(int time = -leftWidth; time < rightWidth; time++)
+		{
+			int addJ = 0;	
+			Point16 newPos = position + new Point16(time, 0);
+			while(!SafeGetTile(newPos.X, newPos.Y + addJ).HasTile)
 			{
-				top++;
-				if(top > 20)
+				addJ++;
+			}
+			newPos = position + new Point16(time, addJ - 2);
+			int valid = 9;
+			for (int i = 0; i < 3; i++)//这里是0~2,因为下面手动-1
+			{
+				for (int j = 0; j < 3; j++)
 				{
-					break;
+					Tile tile = SafeGetTile(newPos.X - 1 + i, newPos.Y + j);
+					if (!tile.HasTile && j < 2)
+					{
+						valid--;
+					}
+					if (tile.HasTile && j == 2)
+					{
+						if(tile.blockType() == 0 && Main.tileSolid[tile.type])
+						{
+							valid--;
+						}
+					}
 				}
 			}
-			if(top != 21)
+			if(valid == 0)
 			{
-				int count = 0;
-				while (left < positonX + rightWidth - 10)
-				{				
-					switch (count)
+				TileUtils.PlaceFrameImportantTiles(newPos.X - 1, newPos.Y, 3, 2, ModContent.TileType<TilesAndWalls.PineCone>(),54 * Main.rand.Next(3));
+				time += Main.rand.Next(4);
+			}
+		}
+	}
+	/// <summary>
+	/// 随机生成小小松塔
+	/// </summary>
+	/// <param name="length"></param>
+	/// <param name="position"></param>
+	/// <param name="range"></param>
+	public static void DistributeLittlePineCone(int length, Point16 position, int range)
+	{
+		for (int time = 0; time < length; time++)
+		{
+			Vector2 addPos = new Vector2(0, Main.rand.NextFloat(Main.rand.NextFloat(0, range), range)).RotatedBy(Main.rand.NextFloat(-1.57f, 1.57f)) / 16f;
+			Point16 newPos = position + new Point16((int)(addPos.X), (int)(addPos.Y));
+			Tile tile = SafeGetTile(newPos.X, newPos.Y);
+			if (!tile.HasTile)
+			{
+				List<byte> direction = new List<byte>();
+				if (SafeGetTile(newPos.X + 1, newPos.Y).TileType == ModContent.TileType<PineLeaves>() && SafeGetTile(newPos.X + 1, newPos.Y).HasTile)
+				{
+					direction.Add(1);
+				}
+				if (SafeGetTile(newPos.X, newPos.Y + 1).TileType == ModContent.TileType<PineLeaves>() && SafeGetTile(newPos.X, newPos.Y + 1).HasTile)
+				{
+					direction.Add(2);
+				}
+				if (SafeGetTile(newPos.X - 1, newPos.Y).TileType == ModContent.TileType<PineLeaves>() && SafeGetTile(newPos.X - 1, newPos.Y).HasTile)
+				{
+					direction.Add(3);
+				}
+				if (SafeGetTile(newPos.X, newPos.Y - 1).TileType == ModContent.TileType<PineLeaves>() && SafeGetTile(newPos.X, newPos.Y - 1).HasTile)
+				{
+					direction.Add(4);
+				}
+				if (SafeGetTile(newPos.X, newPos.Y).wall == ModContent.WallType<PineLeavesWall>() && SafeGetTile(newPos.X + 1, newPos.Y).HasTile)
+				{
+					direction.Add(0);
+				}
+				if (direction.Contains(1) && direction.Contains(2))
+				{
+					direction.Add(5);
+				}
+				if (direction.Contains(2) && direction.Contains(3))
+				{
+					direction.Add(6);
+				}
+				if (direction.Contains(3) && direction.Contains(4))
+				{
+					direction.Add(7);
+				}
+				if (direction.Contains(4) && direction.Contains(1))
+				{
+					direction.Add(8);
+				}
+				if (direction.Count > 0)
+				{
+					int frameType = direction[Main.rand.Next(direction.Count)];
+					tile.TileType = (ushort)ModContent.TileType<PineCone_little>();
+					tile.HasTile = true;
+					switch (frameType)
 					{
 						case 0:
-							top -= 6;
-							TileUtils.PlaceFrameImportantTiles(left, top, 6, 6, (ushort)ModContent.TileType<GiantPineCone_0>());
-							top += 6;
-							left += 6;
+							tile.frameX = 18;
+							tile.frameY = 18;
 							break;
 						case 1:
-							top -= 4;
-							TileUtils.PlaceFrameImportantTiles(left, top, 5, 4, (ushort)ModContent.TileType<GiantPineCone_1>());
-							top += 4;
-							left += 5;
+							tile.frameX = 0;
+							tile.frameY = 18;
 							break;
-					}
-					count++;
-					if (count > 1)
-					{
-						break;
+						case 2:
+							tile.frameX = 18;
+							tile.frameY = 0;
+							break;
+						case 3:
+							tile.frameX = 36;
+							tile.frameY = 18;
+							break;
+						case 4:
+							tile.frameX = 18;
+							tile.frameY = 36;
+							break;
+						case 5:
+							tile.frameX = 0;
+							tile.frameY = 0;
+							break;
+						case 6:
+							tile.frameX = 36;
+							tile.frameY = 0;
+							break;
+						case 7:
+							tile.frameX = 36;
+							tile.frameY = 36;
+							break;
+						case 8:
+							tile.frameX = 0;
+							tile.frameY = 36;
+							break;
 					}
 				}
 			}

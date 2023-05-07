@@ -12,19 +12,59 @@ public class PineWinch : ModTile
 		AddMapEntry(new Color(112, 75, 75));
 		DustType = DustID.BorealWood;
 	}
-	public override bool CanKillTile(int i, int j, ref bool blockDamaged)
-	{
-		blockDamaged = false;
-		return false;
-	}
 	public override bool CanExplode(int i, int j)
 	{
-		return false;
+		return true;
 	}
 	public override void PlaceInWorld(int i, int j, Item item)
 	{
 		Tile thisTile = Main.tile[i, j];
 		thisTile.TileFrameX = 0;
+	}
+	/// <summary>
+	/// 被挖掉时清理电梯
+	/// </summary>
+	/// <param name="i"></param>
+	/// <param name="j"></param>
+	/// <param name="fail"></param>
+	/// <param name="effectOnly"></param>
+	/// <param name="noItem"></param>
+	public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
+	{
+		base.KillTile(i, j, ref fail, ref effectOnly, ref noItem);
+		bool hasLift = false;
+		for (int x = -2; x < 4; x++)
+		{
+			for (int y = 1; y < 16; y++)
+			{
+				if (Main.tile[i + x, j + y].HasTile)
+					return;
+			}
+		}
+		foreach (var dTile in TileSystem.Instance.GetTiles<PineTreeLiftTile>())
+		{
+			Vector2 dTileCenter = dTile.Center;
+			float dPosY = Math.Abs(dTileCenter.Y / 16f - j);
+			//电梯至少要在绞盘下10格
+			if (dTileCenter.X / 16f - i == 0 && dPosY > 10)
+			{
+				hasLift = true;
+				//确保这个电梯的所有绞盘是自己,如果不是就手动生成电梯
+				for (int y = 0; y < dTileCenter.Y / 16f - 20; y++)
+				{
+					int coordPosY = (int)(dTileCenter.Y / 16f) - y;
+					Tile tile = Main.tile[i, coordPosY];
+					if (coordPosY < j + 5)
+						break;
+					if (tile.TileType == Type)
+						hasLift = false;
+				}
+			}
+			if(hasLift)
+			{
+				dTile.Kill();
+			}
+		}
 	}
 	public override void NearbyEffects(int i, int j, bool closer)
 	{
