@@ -16,7 +16,7 @@ public class DarkLanternBombExplosion : ModProjectile, IWarpProjectile
         Projectile.hostile = true;
         Projectile.ignoreWater = true;
         Projectile.tileCollide = false;
-		Projectile.timeLeft = 120;
+		Projectile.timeLeft = 30;
 		Projectile.penetrate = -1;
 	}
 	public override void OnSpawn(IEntitySource source)

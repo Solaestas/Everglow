@@ -36,9 +36,13 @@ public class DarkLanternBomb2 : ModProjectile, IWarpProjectile
 		Projectile.timeLeft = (int)(900 + MinDis * 0.3);
 		Projectile.ai[0] = Main.rand.NextFloat(0.3f, 1800f);
 	}
-    public override void AI()
+	private float lightInit = 0f;
+	public override void AI()
     {
-        Projectile.velocity *= 0f;
+		if (lightInit < 1) { lightInit += 0.01f; }
+		else { lightInit = 1f; }
+
+		Projectile.velocity *= 0f;
         if (Projectile.timeLeft < 90)
         {
             Projectile.scale += 0.05f;
@@ -61,8 +65,8 @@ public class DarkLanternBomb2 : ModProjectile, IWarpProjectile
         float sizeValue = (float)(Math.Sin(timer + Math.Sin(timer) * 6) * (0.95 + Math.Sin(timer + 0.24 + Math.Sin(timer))) + 3) / 30f;
 		Texture2D textureLight = ModAsset.LanternKing_LightEffect.Value;
 		Texture2D flameRing = ModAsset.CoreFlame.Value;
-		Main.spriteBatch.Draw(textureLight, Projectile.Center - Main.screenPosition, null, new Color(1f, 0.05f, 0f, 0) * 0.4f, 0, textureLight.Size() / 2f, sizeValue * 12f, SpriteEffects.None, 0f);
-        Main.spriteBatch.Draw(textureLight, Projectile.Center - Main.screenPosition, null, new Color(1f, 0.05f, 0f, 0) * 0.4f, (float)(Math.PI * 0.5), textureLight.Size() / 2f, sizeValue * 6f, SpriteEffects.None, 0f);
+		Main.spriteBatch.Draw(textureLight, Projectile.Center - Main.screenPosition, null, new Color(1f, 0.05f, 0f, 0) * 0.4f, 0, textureLight.Size() / 2f, sizeValue * 12f * lightInit, SpriteEffects.None, 0f);
+        Main.spriteBatch.Draw(textureLight, Projectile.Center - Main.screenPosition, null, new Color(1f, 0.05f, 0f, 0) * 0.4f, (float)(Math.PI * 0.5), textureLight.Size() / 2f, sizeValue * 6f * lightInit, SpriteEffects.None, 0f);
 		Main.spriteBatch.Draw(ModAsset.LanternFire.Value, Projectile.Center - Main.screenPosition, new Rectangle(0, 30 * Projectile.frame, 20, 30), colorT, 0, new Vector2(10, 15), Projectile.scale * 0.5f, SpriteEffects.None, 1f);
 		for (float k = 0; k < timeValue; k += 0.5f)
         {
