@@ -50,7 +50,7 @@ internal class LanternExplosion : ShaderDraw
 		if (timer > maxTime)
 			Active = false;
 
-		float delC = ai[1] * 25f * (float)Math.Sin((maxTime - timer) / maxTime * Math.PI);
+		float delC = ai[1] * ai[1] * ai[1] * 0.17f * (float)Math.Sin((maxTime - timer) / maxTime * Math.PI);
 		Lighting.AddLight((int)(position.X / 16), (int)(position.Y / 16), 0.85f * delC, 0.15f * delC, 0.1f * delC);
 	}
 
