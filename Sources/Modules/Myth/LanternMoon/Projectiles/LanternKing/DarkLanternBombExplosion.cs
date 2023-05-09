@@ -102,14 +102,14 @@ public class DarkLanternBombExplosion : ModProjectile, IWarpProjectile
 	}
 	public void DrawWarp(VFXBatch sb)
 	{
-		float value = (120 - Projectile.timeLeft) / 60f;
+		float value = (30 - Projectile.timeLeft) / 15f;
 		value = MathF.Sqrt(value);
 
 		Texture2D t = ModAsset.Vague.Value;
-		float width = 60;
-		if (Projectile.timeLeft < 60)
+		float width = 15;
+		if (Projectile.timeLeft < 15)
 			width = Projectile.timeLeft;
-		DrawWarpTexCircle_VFXBatch(sb, value * value * 80 + 90, width * 2, Projectile.Center - Main.screenPosition, t, Projectile.timeLeft / 400f);
+		DrawWarpTexCircle_VFXBatch(sb, value * value * 80 + 90, width * 8, Projectile.Center - Main.screenPosition, t, Projectile.timeLeft / 400f);
 	}
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{

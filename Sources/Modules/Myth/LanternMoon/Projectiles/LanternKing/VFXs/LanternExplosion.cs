@@ -60,7 +60,7 @@ internal class LanternExplosion : ShaderDraw
 		int times = FireBallVelocity.Length;
 		var bars = new List<Vertex2D>();
 		var drawcRope = new Color(timerValue * timerValue * timerValue * 2, 0.5f, 1, 150 / 255f);
-		for (int i = 0; i < times; i++)
+		for (int i = 10; i < times; i++)
 		{
 			float size = ai[1];
 			float iProgress = i / 12f;
