@@ -93,13 +93,12 @@ public class LanternBombRemoteControl : ModItem
 			}
 			return false;
 		}
-		if (player.ownedProjectileCounts[ModContent.ProjectileType<DarkLanternBomb2>()] <= 0)
+		for (int j = 0; j < 100; j++)
 		{
-			for (int j = 0; j < 150; j++)
-			{
-				Vector2 v2 = new Vector2(0, Main.rand.Next(Main.rand.Next(0, 1200), 1200)).RotatedByRandom(Math.PI * 2);
-				Projectile.NewProjectile(null, v2.X + Main.MouseWorld.X, v2.Y + Main.MouseWorld.Y, 0, 0, ModContent.ProjectileType<DarkLanternBomb2>(), 50, 0f, Main.myPlayer, 0, 0);
-			}
+			Vector2 v2 = new Vector2(0, Main.rand.Next(Main.rand.Next(0, 1200), 1200)).RotatedByRandom(Math.PI * 2);
+			Projectile p = Projectile.NewProjectileDirect(Item.GetSource_ItemUse(Item), v2 + Main.MouseWorld, Vector2.zeroVector, ModContent.ProjectileType<DarkLanternBomb2>(), 50, 0f, Main.myPlayer, 0, 0);
+			p.friendly = true;
+			p.hostile = false;
 		}
 		return false;
 	}
