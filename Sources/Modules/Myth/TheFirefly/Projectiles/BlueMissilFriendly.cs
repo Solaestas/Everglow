@@ -3,13 +3,6 @@ namespace Everglow.Myth.TheFirefly.Projectiles;
 
 public class BlueMissilFriendly : ModProjectile
 {
-	public override string Texture => "Everglow/Myth/TheFirefly/Projectiles/BlueMissil";
-	public override void SetStaticDefaults()
-	{
-		// base.DisplayName.SetDefault("蓝鳞粉");
-		Main.projFrames[Projectile.type] = 3;
-	}
-
 	public override void SetDefaults()
 	{
 		Projectile.width = 34;
@@ -21,58 +14,34 @@ public class BlueMissilFriendly : ModProjectile
 		Projectile.tileCollide = true;
 		Projectile.usesLocalNPCImmunity = false;
 	}
-
-	private Vector2 va;
-	private float Stre2 = 1;
-
 	public override void AI()
 	{
-		if (Stre2 > 0)
-			Stre2 -= 0.01f;
-		if (Projectile.ai[0] != 2)
-		{
-			if (va == Vector2.Zero)
-				va = Projectile.velocity;
-			if (Projectile.timeLeft < 90)
-				Projectile.velocity = va;
-			else
-			{
-				Projectile.velocity *= 0.94f;
-			}
-		}
-		int num90 = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.7f, 3.9f));
-		Main.dust[num90].velocity = Projectile.velocity * 0.8f;
+		Projectile.velocity *= 0.98f;
+		float lightValue = Projectile.timeLeft / 120f;
+		Dust dust = Dust.NewDustDirect(Projectile.Center - new Vector2(4), 0, 0, ModContent.DustType<Dusts.BlueGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(0.7f, 1.9f) * lightValue);
+		dust.velocity = Projectile.velocity * 0.8f;
+		Projectile.scale *= 0.98f;
 	}
-
-	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-	{
-	}
-
 	public override void Kill(int timeLeft)
 	{
 		for (int i = 0; i < 18; i++)
 		{
-			Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Clentaminator_Blue, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, 0.6f);
+			Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Clentaminator_Blue, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, 0.6f * Projectile.scale);
 		}
 		for (int i = 0; i < 6; i++)
 		{
-			int num90 = Dust.NewDust(Projectile.position - new Vector2(8), Projectile.width, Projectile.height, DustID.Electric, 0f, 0f, 100, Color.Blue, Main.rand.NextFloat(0.7f, 1.2f));
-			Main.dust[num90].velocity = new Vector2(0, Main.rand.NextFloat(5f, 10f)).RotatedByRandom(6.283);
-			Main.dust[num90].noGravity = true;
+			Dust dust = Dust.NewDustDirect(Projectile.position - new Vector2(4), Projectile.width, Projectile.height, DustID.Electric, 0f, 0f, 100, Color.Blue, Main.rand.NextFloat(0.7f, 1.2f) * Projectile.scale);
+			dust.velocity = new Vector2(0, Main.rand.NextFloat(5f, 10f)).RotatedByRandom(6.283);
+			dust.noGravity = true;
 		}
 	}
-
-	public override Color? GetAlpha(Color lightColor)
-	{
-		return new Color(1f, 1f, 1f, 0);
-	}
-
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D Light = Common.MythContent.QuickTexture("TheFirefly/Projectiles/FixCoinLight3");
-		Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color((int)(255 * Stre2), (int)(255 * Stre2), (int)(255 * Stre2), 0), Projectile.rotation, new Vector2(56f, 56f), Projectile.scale * 2, SpriteEffects.None, 0);
-		Texture2D Star = Common.MythContent.QuickTexture("TheFirefly/Projectiles/BlueMissil");
-		Main.spriteBatch.Draw(Star, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(255, 255, 255, 0), 0, new Vector2(17f, 17f), Projectile.scale * 2, SpriteEffects.None, 0);
-		return true;
+		float lightValue = Projectile.timeLeft / 120f;
+		Texture2D Light = ModAsset.FixCoinLight3.Value;
+		Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(lightValue, lightValue, lightValue, 0), Projectile.rotation, Light.Size() / 2, Projectile.scale * 2, SpriteEffects.None, 0);
+		Texture2D Star = ModAsset.BlueMissil.Value;
+		Main.spriteBatch.Draw(Star, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), null, new Color(255, 255, 255, 0), 0, Star.Size() * 0.5f, Projectile.scale * 2, SpriteEffects.None, 0);
+		return false;
 	}
 }
