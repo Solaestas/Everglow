@@ -3,6 +3,7 @@ namespace Everglow.Myth.TheFirefly.Projectiles;
 
 public class BlueMissilFriendly : ModProjectile
 {
+	public override string Texture => "Everglow/Myth/TheFirefly/Projectiles/BlueMissil";
 	public override void SetDefaults()
 	{
 		Projectile.width = 34;
