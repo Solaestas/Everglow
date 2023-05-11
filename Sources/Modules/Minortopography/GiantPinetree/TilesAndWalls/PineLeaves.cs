@@ -13,3 +13,22 @@ public class PineLeaves : ModTile
 		AddMapEntry(new Color(36, 64, 50));
 	}
 }
+public class PineSnowSystem : ModSystem
+{
+	public int PineLeavesCount;
+
+	public override void TileCountsAvailable(ReadOnlySpan<int> tileCounts)
+	{
+		PineLeavesCount = tileCounts[ModContent.TileType<PineLeaves>()];
+	}
+	public override void Load()
+	{
+		On_SceneMetrics.ExportTileCountsToMain += SceneMetrics_ExportTileCountsToMain;
+	}
+	private void SceneMetrics_ExportTileCountsToMain(On_SceneMetrics.orig_ExportTileCountsToMain orig, Terraria.SceneMetrics self)
+	{
+		orig(self);
+		Main.SceneMetrics.SnowTileCount += PineLeavesCount * 5;
+	}
+}
+

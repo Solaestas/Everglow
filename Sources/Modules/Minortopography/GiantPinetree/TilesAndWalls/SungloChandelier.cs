@@ -10,15 +10,10 @@ public class SungloChandelier : ModTile
 	public override void SetStaticDefaults()
 	{
 		Main.tileFrameImportant[Type] = true;
-		Main.tileNoAttach[Type] = true;
 		Main.tileLavaDeath[Type] = true;
 		Main.tileLighted[Type] = true;
 		Main.tileSolid[Type] = false;
-		Main.tileNoFail[Type] = true;
 		TileID.Sets.HasOutlines[Type] = true;
-		TileID.Sets.CanBeSleptIn[Type] = true; // Facilitates calling ModifySleepingTargetInfo
-		TileID.Sets.InteractibleByNPCs[Type] = true; // Town NPCs will palm their hand at this tile
-		TileID.Sets.IsValidSpawnPoint[Type] = true;
 
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
 
@@ -32,7 +27,10 @@ public class SungloChandelier : ModTile
 		TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16 };
 		TileObjectData.addTile(Type);
 	}
-
+	public override IEnumerable<Item> GetItemDrops(int i, int j)
+	{
+		yield return new Item(ModContent.ItemType<Items.SungloChandelier>());
+	}
 	public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
 	{
 		r = 0.4f;
@@ -80,14 +78,5 @@ public class SungloChandelier : ModTile
 			tileSpin.DrawRotatedChandelier(i, j, tex, 8, -2);
 		}
 		return false;
-	}
-
-	public override void KillMultiTile(int x, int y, int frameX, int frameY)
-	{
-		var tile = Main.tile[x, y];
-		if (tile.TileFrameX % 54 == 18 && tile.TileFrameY % 50 == 0)
-		{
-			Item.NewItem(new EntitySource_TileBreak(x, y), x * 16, y * 16, 1, 1, ModContent.ItemType<Items.SungloChandelier>(), 1);
-		}
 	}
 }
