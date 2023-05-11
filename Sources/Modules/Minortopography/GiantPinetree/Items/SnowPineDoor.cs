@@ -18,6 +18,6 @@ public class SnowPineDoor : ModItem
 		Item.useStyle = ItemUseStyleID.Swing;
 		Item.consumable = true;
 		Item.value = 150;
-		Item.createTile = ModContent.TileType<TilesAndWalls.SnowPineDoor>();
+		Item.createTile = ModContent.TileType<TilesAndWalls.SnowPineDoorClosed>();
 	}
 }

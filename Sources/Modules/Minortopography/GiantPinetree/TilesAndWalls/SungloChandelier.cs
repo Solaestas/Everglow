@@ -33,8 +33,8 @@ public class SungloChandelier : ModTile
 	}
 	public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
 	{
-		r = 0.4f;
-		g = 0.9f;
+		r = 1.2f;
+		g = 2.7f;
 		b = 0f;
 	}
 
