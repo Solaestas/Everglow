@@ -10,6 +10,7 @@ public class PineLeaves : ModTile
 		Main.tileMerge[TileID.PineTree][Type] = true;
 		DustType = DustID.GreenMoss;
 		HitSound = SoundID.Grass;
+		ItemDrop = -1;
 		AddMapEntry(new Color(36, 64, 50));
 	}
 }
