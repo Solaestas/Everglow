@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Everglow.Commons;
-public class ShakerInfo
+public class ShakerInfo : ModType
 {
 	internal Vector2 center;
 	internal Vector2 dir;
@@ -18,6 +18,7 @@ public class ShakerInfo
 	internal int maxTick;
 	internal int propagationDelayTimer;
 	internal int maxPropagationTime;
+	internal bool NeedNetSync = false;
 	public virtual bool Update()
 	{
 		tickTimer++;
@@ -31,7 +32,7 @@ public class ShakerInfo
 		}
 		return true;
 	}
-	public virtual void ApplyTo(Vector2 pos,ref Vector2 effect)
+	public virtual void ApplyTo(Vector2 pos, ref Vector2 effect)
 	{
 		int tracetime = (int)(Vector2.Distance(center, pos) / propagationSpeed);
 		if (tickTimer < tracetime)
@@ -50,10 +51,52 @@ public class ShakerInfo
 		float attenuatedStrength = vStrength * attenuation;
 		effect += attenuatedStrength * vdir;
 	}
+	//根据标识头(FullName)调用解析
+	public virtual ShakerInfo NetRecive(BinaryReader reader)
+	{
+		return new()
+		{
+			center = new(reader.ReadSingle(), reader.ReadSingle()),
+			strength = reader.ReadSingle(),
+			period = reader.ReadSingle(),
+			propagationSpeed = reader.ReadSingle(),
+			ac_vibration = reader.ReadSingle(),
+			ac_propagation = reader.ReadSingle(),
+			tickTimer = reader.ReadInt32(),
+			maxTick = reader.ReadInt32(),
+			propagationDelayTimer = reader.ReadInt32(),
+			maxPropagationTime = reader.ReadInt32()
+		};
+	}
+	//调用此方法前写入标识头，便于根据标识头(FullName)调用解析
+	public virtual void NetSend(BinaryWriter writer)
+	{
+		writer.Write(center.X);
+		writer.Write(center.Y);
+		writer.Write(strength);
+		writer.Write(period);
+		writer.Write(propagationSpeed);
+		writer.Write(ac_vibration);
+		writer.Write(ac_propagation);
+		writer.Write(tickTimer);
+		writer.Write(maxTick);
+		writer.Write(propagationSpeed);
+		writer.Write(maxPropagationTime);
+	}
+	public sealed override void Load()
+	{
+	}
+	public sealed override void Unload()
+	{
+	}
+	public sealed override void Register()
+	{
+		ShakerManager.Register(this);
+	}
 }
 public class UndirectedShakerInfo : ShakerInfo
 {
-	public static UndirectedShakerInfo Create(Vector2 center,float strength = 1, float period = 1, float speed = 1, float acv = 0.9f, float acp = 0.9f, int maxtick = -1)
+	public static UndirectedShakerInfo Create(Vector2 center,float strength = 1, float period = 1, float speed = 1, float acv = 0.9f, float acp = 0.9f, int maxtick = -1,bool needNetSync=false)
 	{
 		if (period < 0)
 		{
@@ -80,7 +123,8 @@ public class UndirectedShakerInfo : ShakerInfo
 			ac_vibration = acv,
 			ac_propagation = acp,
 			maxPropagationTime = (int)Math.Floor(1 / acp / speed) + 1,
-			maxTick = maxtick
+			maxTick = maxtick,
+			NeedNetSync = needNetSync
 		};
 	}
 	public override void ApplyTo(Vector2 pos, ref Vector2 effect)
@@ -102,11 +146,35 @@ public class UndirectedShakerInfo : ShakerInfo
 		float attenuatedStrength = vStrength * attenuation;
 		effect += attenuatedStrength * vdir;
 	}
+	public override ShakerInfo NetRecive(BinaryReader reader)
+	{
+		return new()
+		{
+			center = new(reader.ReadSingle(), reader.ReadSingle()),
+			strength = reader.ReadSingle(),
+			period = reader.ReadSingle(),
+			propagationSpeed = reader.ReadSingle(),
+			ac_vibration = reader.ReadSingle(),
+			ac_propagation = reader.ReadSingle(),
+			tickTimer = reader.ReadInt32(),
+			maxTick = reader.ReadInt32(),
+			propagationDelayTimer = reader.ReadInt32(),
+			maxPropagationTime = reader.ReadInt32()
+		};
+	}
 }
 public class ShakerManager : ModSystem
 {
 	static List<ShakerInfo> shakers;
 	static List<ShakerInfo> waitremove;
+	/// <summary>
+	/// 关闭此震动系统的屏幕移动效果,每帧重置
+	/// </summary>
+	public static bool LockScreen { get; set; }
+	internal static void Register(ShakerInfo originfo)
+	{
+		ModTypeLookup<ShakerInfo>.Register(originfo);
+	}
 	public override void Load()
 	{
 		shakers = new();
@@ -122,9 +190,27 @@ public class ShakerManager : ModSystem
 	public override void PostUpdateEverything() => Update();
 	public override void ModifyScreenPosition()
 	{
+		if (LockScreen)
+		{
+			LockScreen = false;
+			return;
+		}
 		Main.screenPosition += GetEffectOn(Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2);
 	}
-	public static void AddShaker(Vector2 center, Vector2 dir, float strength = 1, float period = 1, float speed = 1, float acv = 0.9f, float acp = 0.9f, int maxtick = -1)
+	/// <summary>
+	/// 加入一个默认有向振动源
+	/// </summary>
+	/// <param name="center">震动中心</param>
+	/// <param name="dir">震动方向</param>
+	/// <param name="strength">震动强度</param>
+	/// <param name="period">震动周期</param>
+	/// <param name="speed">传播速度</param>
+	/// <param name="acv">强度衰减系数</param>
+	/// <param name="acp">传播衰减系数</param>
+	/// <param name="maxtick">最大持续帧数</param>
+	/// <param name="needNetSync">是否需要联机同步</param>
+	/// <exception cref="ArgumentException"></exception>
+	public static void AddShaker(Vector2 center, Vector2 dir, float strength = 1, float period = 1, float speed = 1, float acv = 0.9f, float acp = 0.9f, int maxtick = -1, bool needNetSync = false)
 	{
 		if (period < 0)
 		{
@@ -142,7 +228,7 @@ public class ShakerManager : ModSystem
 		{
 			throw new ArgumentException("不合法的物理参数.传播衰减不可能为负数或0.这样的震动不可能存在!");
 		}
-		shakers.Add(new()
+		ShakerInfo info = new()
 		{
 			center = center,
 			dir = dir,
@@ -152,13 +238,55 @@ public class ShakerManager : ModSystem
 			ac_vibration = acv,
 			ac_propagation = acp,
 			maxPropagationTime = (int)Math.Floor(1 / acp / speed) + 1,
-			maxTick = maxtick
-		});
+			maxTick = maxtick,
+			NeedNetSync = needNetSync
+		};
+		if (CheckNeedNetSync(info))
+		{
+			shakers.Add(info);
+		}
 	}
+	/// <summary>
+	/// 加入一个自定义震动源
+	/// <br>由联机同步得到的震动源务必关闭<see cref="ShakerInfo.NeedNetSync"/>以避免无限同步</br>
+	/// </summary>
+	/// <param name="info"></param>
 	public static void AddShaker(ShakerInfo info)
 	{
-		shakers.Add(info);
+		if (CheckNeedNetSync(info))
+		{
+			shakers.Add(info);
+		}
 	}
+	//返回true表示此震动在此进程有效(寄单机或者不需要同步的震动)
+	//有联机同步接收的震动务必关闭NeedNetUpdate导致无限同步
+	static bool CheckNeedNetSync(ShakerInfo info)
+	{
+		if (Main.netMode == NetmodeID.SinglePlayer)
+		{
+			return true;
+		}
+		else
+		{
+			if (!info.NeedNetSync)
+			{
+				return true;
+			}
+			if (Main.netMode == NetmodeID.Server)
+			{
+				//TODO 同步数据到所有客机
+				//服务器上执行震动无意义
+			}
+			else
+			{
+				//本地不执行添加，同步请求到服务器，再由服务器广播
+			}
+			return false;
+		}
+	}
+	/// <summary>
+	/// 清空所有震动源
+	/// </summary>
 	public static void Clear() => shakers.Clear();
 	static void Update()
 	{
@@ -172,6 +300,11 @@ public class ShakerManager : ModSystem
 		}
 		shakers.RemoveAll(waitremove.Contains);
 	}
+	/// <summary>
+	/// 获取某一点受到该震动系统内所有震源的影响效果
+	/// </summary>
+	/// <param name="pos"></param>
+	/// <returns></returns>
 	public static Vector2 GetEffectOn(Vector2 pos)
 	{
 		Vector2 effect = Vector2.Zero;

@@ -71,13 +71,14 @@ public class FryingPan : MeleeProj, IWarpProjectile
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 		//调整各个攻击方式的伤害倍率等等
-		ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
+		//ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
 
 		if (attackType == 100)
 		{
 			modifiers.FinalDamage *= 1.85f;
 			modifiers.Knockback *= 2;
-			Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 12, 150)).RotatedByRandom(6.283);
+			//Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 12, 150)).RotatedByRandom(6.283);
+			ShakerManager.AddShaker(UndirectedShakerInfo.Create(target.Center, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 12, 150)));
 		}
 	}
 
