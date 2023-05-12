@@ -2,8 +2,10 @@ using Everglow.Commons.CustomTiles.Tiles;
 using Everglow.Commons.CustomTiles;
 using Everglow.Commons.CustomTiles.DataStructures;
 using Everglow.Commons.Vertex;
+using Everglow.Commons.Physics;
 using Everglow.Minortopography.Common.Elevator.Tiles;
 using Terraria.DataStructures;
+using Newtonsoft.Json.Linq;
 
 namespace Everglow.Minortopography.Common.Elevator;
 
@@ -34,18 +36,80 @@ internal class PineTreeLiftTile : DBlock
 	/// </summary>
 	internal bool CheckDefault = false;
 	/// <summary>
-	/// 灯位置
+	/// 灯的缆绳模型
 	/// </summary>
-	internal Vector2 LanternPos = Vector2.Zero;
+	internal Mass[] LampCableMasses = new Mass[]
+	{
+		new Mass(100,Vector2.zeroVector,true),
+		new Mass(6,new Vector2(0, 2),false),
+		new Mass(6,new Vector2(0, 6),false),
+		new Mass(6,new Vector2(0, 10),false),
+		new Mass(6,new Vector2(0, 14),false),
+		new Mass(40,new Vector2(0, 18),false)
+	};
 	/// <summary>
-	/// 灯速度
+	/// 吊挂的缆绳模型1
 	/// </summary>
-	internal Vector2 LanternVel = Vector2.Zero;
-
+	internal Mass[] BackgroundCableIMasses = new Mass[]
+		{
+		new Mass(100,Vector2.zeroVector,true),
+		new Mass(6,new Vector2(0, 10),false),
+		new Mass(6,new Vector2(0, 20),false),
+		new Mass(6,new Vector2(0, 30),false),
+		new Mass(6,new Vector2(0, 40),false),
+		new Mass(6,new Vector2(0, 50),false),
+		new Mass(6,new Vector2(0, 60),false),
+		new Mass(6,new Vector2(0, 70),false),
+		new Mass(100,new Vector2(0, 75),true)
+		};
+	/// <summary>
+	/// 吊挂的缆绳模型2
+	/// </summary>
+	internal Mass[] BackgroundCableIIMasses = new Mass[]
+	{
+		new Mass(100,Vector2.zeroVector,true),
+		new Mass(6,new Vector2(0, 10),false),
+		new Mass(6,new Vector2(0, 20),false),
+		new Mass(6,new Vector2(0, 30),false),
+		new Mass(6,new Vector2(0, 40),false),
+		new Mass(6,new Vector2(0, 50),false),
+		new Mass(6,new Vector2(0, 60),false),
+		new Mass(6,new Vector2(0, 70),false),
+		new Mass(100,new Vector2(0, 75),true)
+	};
+	/// <summary>
+	/// 吊挂的缆绳模型3
+	/// </summary>
+	internal Mass[] BackgroundCableIIIMasses = new Mass[]
+	{
+		new Mass(100,Vector2.zeroVector,true),
+		new Mass(6,new Vector2(0, 10),false),
+		new Mass(6,new Vector2(0, 20),false),
+		new Mass(6,new Vector2(0, 30),false),
+		new Mass(6,new Vector2(0, 40),false),
+		new Mass(6,new Vector2(0, 50),false),
+		new Mass(6,new Vector2(0, 60),false),
+		new Mass(6,new Vector2(0, 70),false),
+		new Mass(100,new Vector2(0, 75),true)
+	};
+	/// <summary>
+	/// 吊挂的缆绳模型4
+	/// </summary>
+	internal Mass[] BackgroundCableIVMasses = new Mass[]
+	{
+		new Mass(100,Vector2.zeroVector,true),
+		new Mass(6,new Vector2(0, 10),false),
+		new Mass(6,new Vector2(0, 20),false),
+		new Mass(6,new Vector2(0, 30),false),
+		new Mass(6,new Vector2(0, 40),false),
+		new Mass(6,new Vector2(0, 50),false),
+		new Mass(6,new Vector2(0, 60),false),
+		new Mass(6,new Vector2(0, 70),false),
+		new Mass(100,new Vector2(0, 75),true)
+	};
 	public override void OnCollision(AABB aabb, Direction dir)
 	{
 	}
-
 	public override void AI()
 	{
 		if (!CheckDefault)
@@ -109,32 +173,65 @@ internal class PineTreeLiftTile : DBlock
 				PauseTime = 300;
 		}
 		UpdateLantern();
+		UpdateBackgroundCables(ref BackgroundCableIMasses, new Vector2(-26, -82.5f));
+		UpdateBackgroundCables(ref BackgroundCableIIMasses, new Vector2(-42.5f, -82.5f));
+		UpdateBackgroundCables(ref BackgroundCableIIIMasses, new Vector2(26, -82.5f));
+		UpdateBackgroundCables(ref BackgroundCableIVMasses, new Vector2(42.5f, -82.5f));
 	}
-	private void UpdateLantern()
+	private void UpdateBackgroundCables(ref Mass[] masses, Vector2 topPosition)
 	{
-		Vector2 worldPos = Center + new Vector2(1, -54) + LanternPos;
-		LanternPos += LanternVel;
-		LanternVel += (velocity - oldVelocity) * 1.5f;
-		Point16 worldCoord = new Point16((int)(worldPos.X / 16), (int)(worldPos.Y / 16));
-		Tile tile = Main.tile[Math.Clamp(worldCoord.X, 20, Main.maxTilesX - 20), Math.Clamp(worldCoord.Y, 20, Main.maxTilesY - 20)];
-		if(tile.wall <= 0)
+		for (int i = 0; i < masses.Length - 1; i++)
 		{
-			LanternVel.X += Main.windSpeedCurrent / 10f;
-		}
-		LanternVel -= LanternPos * 0.05f;
-		LanternVel *= 0.95f;
-		foreach(Player player in Main.player)
-		{
-			if(player.active)
+			Spring spring = new Spring(0.999f, 1f, 0.01f, masses[i], masses[i + 1]);
+			Vector2 worldPos = Center + topPosition + spring.mass2.position;
+			Point16 worldCoord = new Point16((int)(worldPos.X / 16), (int)(worldPos.Y / 16));
+			Tile tile = Main.tile[Math.Clamp(worldCoord.X, 20, Main.maxTilesX - 20), Math.Clamp(worldCoord.Y, 20, Main.maxTilesY - 20)];
+			if (tile.wall <= 0)
 			{
-				if((player.Center - worldPos).Length() < 20)
+				spring.mass2.force.X += Main.windSpeedCurrent / 10f * (1 + MathF.Sin((float)Main.time * 0.03f + topPosition.Y * 0.2f - topPosition.X * 0.4f));
+			}
+			spring.mass2.force.Y += spring.mass2.mass * 0.04f;
+			spring.mass2.force += (velocity - oldVelocity) * 0.2f;
+			foreach (Player player in Main.player)
+			{
+				if (player.active)
 				{
-					if(LanternPos.Length() < 10f)
+					if ((player.Center - worldPos).Length() < 20)
 					{
-						LanternVel += player.velocity * 0.5f;
+						spring.mass2.force += player.velocity * 0.12f;
 					}
 				}
 			}
+			spring.mass2.Update(1f);
+			spring.ApplyForce(1f);
+		}
+	}
+	private void UpdateLantern()
+	{
+		for(int i = 0;i < LampCableMasses.Length - 1;i++)
+		{
+			Spring spring = new Spring(0.999f, 0.2f, 0.01f, LampCableMasses[i], LampCableMasses[i + 1]);
+			Vector2 worldPos = Center + new Vector2(1, -54) + spring.mass2.position;
+			Point16 worldCoord = new Point16((int)(worldPos.X / 16), (int)(worldPos.Y / 16));
+			Tile tile = Main.tile[Math.Clamp(worldCoord.X, 20, Main.maxTilesX - 20), Math.Clamp(worldCoord.Y, 20, Main.maxTilesY - 20)];
+			if (tile.wall <= 0)
+			{
+				spring.mass2.force.X += Main.windSpeedCurrent / 10f * (1 + MathF.Sin((float)Main.time * 0.03f + spring.mass2.position.Y * 0.02f - spring.mass2.position.X * 0.01f));
+			}
+			spring.mass2.force.Y += spring.mass2.mass * 0.04f;
+			spring.mass2.force += (velocity - oldVelocity) * 0.2f;
+			foreach (Player player in Main.player)
+			{
+				if (player.active)
+				{
+					if ((player.Center - worldPos).Length() < 20)
+					{
+						spring.mass2.force += player.velocity * 0.12f;
+					}
+				}
+			}
+			spring.mass2.Update(2f);
+			spring.ApplyForce(2f);
 		}
 	}
 	private void CheckRunningDirection()
@@ -193,15 +290,18 @@ internal class PineTreeLiftTile : DBlock
 
 			Texture2D liftCable = ModAsset.VineRope.Value;
 
-			float lightValue = MathF.Sin((float)(Main.time * 0.2)) * 0.3f + 0.4f + Math.Min(LanternVel.Length() * 0.2f, 2f);
+			float lightValue = MathF.Sin((float)(Main.time * 0.2)) * 0.3f + 0.4f + Math.Min(LampCableMasses.Last().velocity.Length() * 0.2f, 2f);
 			Main.spriteBatch.Draw(liftShellBack, Center - Main.screenPosition + new Vector2(0, -80), null, new Color(0.2f * lightValue + drawc.R / 255f * 0.2f, 0.8f * lightValue + drawc.G / 255f * 0.2f, drawc.B / 255f * 0.2f, drawc.A / 255f), 0, liftShell.Size() / 2f, 1, SpriteEffects.None, 0);
-			Main.spriteBatch.Draw(liftLantern, Center - Main.screenPosition + new Vector2(1, -54) + LanternPos, null, drawc, (LanternPos + new Vector2(0, 20)).ToRotation() - 1.57f, liftLantern.Size() / 2f, 1, SpriteEffects.None, 0);
+			Vector2 normalizedLampVel = LampCableMasses.Last().position - LampCableMasses[LampCableMasses.Length - 2].position;
+			float lanternRot = (normalizedLampVel).ToRotation() - 1.57f;
+			Main.spriteBatch.Draw(liftLantern, Center - Main.screenPosition + new Vector2(1, -92) + LampCableMasses.Last().position, null, drawc, lanternRot, new Vector2(liftLantern.Width / 2f, 0), 1, SpriteEffects.None, 0);
 			Main.spriteBatch.Draw(liftShell, Center - Main.screenPosition + new Vector2(0, -80), null, drawc, 0, liftShell.Size() / 2f, 1, SpriteEffects.None, 0);
-			Main.spriteBatch.Draw(liftLanternFirefly, Center - Main.screenPosition + new Vector2(1, -52) + LanternPos + new Vector2(MathF.Sin((float)Main.time * 0.24f) * 3.1f, MathF.Sin((float)Main.time * 0.08f + 0.6f) * 5.7f), new Rectangle(0, 10 * (int)((Main.time * 0.2) % 4), 10, 10), drawcLampGlow, 0, new Vector2(5), 0.5f, SpriteEffects.None, 0);
-			Main.spriteBatch.Draw(liftLanternFirefly, Center - Main.screenPosition + new Vector2(1, -52) + LanternPos + new Vector2(MathF.Sin((float)Main.time * 0.18f + 2.6f) * 3.1f, MathF.Sin((float)Main.time * 0.09f + 4.6f) * 5.7f), new Rectangle(0, 10 * (int)((Main.time * 0.2 + 15) % 4), 10, 10), drawcLampGlow, 0, new Vector2(5), 1f, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(liftLanternFirefly, Center - Main.screenPosition + new Vector2(1, -88) + LampCableMasses.Last().position + new Vector2(MathF.Sin((float)Main.time * 0.24f) * 3.1f, MathF.Sin((float)Main.time * 0.08f + 0.6f) * 5.7f), new Rectangle(0, 10 * (int)((Main.time * 0.2) % 4), 10, 10), drawcLampGlow, lanternRot, new Vector2(liftLantern.Width / 2f, 0), 0.5f, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(liftLanternFirefly, Center - Main.screenPosition + new Vector2(1, -88) + LampCableMasses.Last().position + new Vector2(MathF.Sin((float)Main.time * 0.18f + 2.6f) * 3.1f, MathF.Sin((float)Main.time * 0.09f + 4.6f) * 5.7f), new Rectangle(0, 10 * (int)((Main.time * 0.2 + 15) % 4), 10, 10), drawcLampGlow, lanternRot, new Vector2(liftLantern.Width / 2f, 0), 1f, SpriteEffects.None, 0);
 
 			Lighting.AddLight((int)(position.X / 16f) + 1, (int)(position.Y / 16f) - 3, 0.2f * lightValue, 0.8f * lightValue, 0f);
 
+			//绘制电梯缆绳
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 			var bars = new List<Vertex2D>();
@@ -230,24 +330,52 @@ internal class PineTreeLiftTile : DBlock
 				Main.graphics.GraphicsDevice.Textures[0] = liftCable;
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 			}
+			//绘制电梯吊灯的缆绳
 			bars = new List<Vertex2D>();
-			Vector2 lanternTail = Center - Main.screenPosition + new Vector2(1, -60) + LanternPos;
 			Vector2 lanternTie = Center - Main.screenPosition + new Vector2(1, -90);
-			for (int x = 0;x < 10;x++)
+			for (int i = 0; i < LampCableMasses.Length; i++)
 			{
-				float value = x / 10f;
-				Vector2 normolized = Utils.SafeNormalize(lanternTail - lanternTie, Vector2.zeroVector).RotatedBy(1.57) * 2;
-				float gravityDragY = MathF.Sqrt((0.5f - Math.Abs(value - 0.5f)) * 2) * 3;
-				bars.Add(new Vertex2D(lanternTail * value + lanternTie * (1 - value) + new Vector2(0, gravityDragY) + normolized, drawc, new Vector3(0, x / 10f, 0)));
-				bars.Add(new Vertex2D(lanternTail * value + lanternTie * (1 - value) + new Vector2(0, gravityDragY) - normolized, drawc, new Vector3(1, x / 10f, 0)));
+				float value = i / 10f;
+				Vector2 normolized = new Vector2(0, 1);
+				if (i > 0)
+				{
+					normolized = Utils.SafeNormalize(LampCableMasses[i].position - LampCableMasses[i - 1].position, Vector2.zeroVector).RotatedBy(1.57) * 2;
+				}
+				bars.Add(new Vertex2D(LampCableMasses[i].position + lanternTie + normolized, drawc, new Vector3(0, value, 0)));
+				bars.Add(new Vertex2D(LampCableMasses[i].position + lanternTie - normolized, drawc, new Vector3(1, value, 0)));
 			}
 			if (bars.Count > 2)
 			{
 				Main.graphics.GraphicsDevice.Textures[0] = liftCable;
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 			}
+			drawEnumerableMasses(BackgroundCableIMasses, new Vector2(-26, -82.5f), drawc, liftCable);
+			drawEnumerableMasses(BackgroundCableIIMasses, new Vector2(-42.5f, -82.5f), drawc, liftCable);
+			drawEnumerableMasses(BackgroundCableIIIMasses, new Vector2(26, -82.5f), drawc, liftCable);
+			drawEnumerableMasses(BackgroundCableIVMasses, new Vector2(42.5f, -82.5f), drawc, liftCable);
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		}
+		void drawEnumerableMasses(Mass[] masses, Vector2 offset, Color drawColor, Texture2D tex)
+		{
+			offset += Center - Main.screenPosition;
+			List<Vertex2D> bars = new List<Vertex2D>();
+			for (int i = 0; i < masses.Length; i++)
+			{
+				float value = i / 10f;
+				Vector2 normolized = new Vector2(-1, 0);
+				if (i > 0)
+				{
+					normolized = Utils.SafeNormalize(masses[i].position - masses[i - 1].position, Vector2.zeroVector).RotatedBy(1.57) * 2;
+				}
+				bars.Add(new Vertex2D(masses[i].position + offset + normolized * 2, drawColor, new Vector3(0.5f + 0.5f * Math.Sign((offset - (Center - Main.screenPosition)).X), value, 0)));
+				bars.Add(new Vertex2D(masses[i].position + offset - normolized * 2, drawColor, new Vector3(0.5f - 0.5f * Math.Sign((offset - (Center - Main.screenPosition)).X), value, 0)));
+			}
+			if (bars.Count > 2)
+			{
+				Main.graphics.GraphicsDevice.Textures[0] = tex;
+				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+			}
 		}
 	}
 	public override void DrawToMap(Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale)

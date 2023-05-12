@@ -10,7 +10,6 @@ public class PineWood : ModTile
 		Main.tileMerge[TileID.PineTree][Type] = true;
 		DustType = DustID.BorealWood;
 		HitSound = SoundID.Dig;
-		ItemDrop = ItemID.BorealWood;
 		AddMapEntry(new Color(60, 45, 39));
 	}
 }

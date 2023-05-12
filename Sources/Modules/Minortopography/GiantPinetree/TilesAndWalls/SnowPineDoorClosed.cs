@@ -42,17 +42,13 @@ public class SnowPineDoorClosed : ModTile
 		TileObjectData.newAlternate.Origin = new Point16(0, 2);
 		TileObjectData.addAlternate(0);
 		TileObjectData.addTile(Type);
+		AddMapEntry(new Color(50, 40, 35));
 	}
 
 	public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
 	{
 		return true;
 	}
-	public override void KillMultiTile(int i, int j, int frameX, int frameY)
-	{
-		Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 48, ModContent.ItemType<Items.SnowPineDoor>());
-	}
-
 	public override void MouseOver(int i, int j)
 	{
 		Player player = Main.LocalPlayer;
