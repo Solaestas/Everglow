@@ -34,7 +34,11 @@ public class BlueBlossom : ModTile
 	}
 	public override IEnumerable<Item> GetItemDrops(int i, int j)
 	{
-		yield return new Item(ModContent.ItemType<GlowingPedal>(), 5);
+		yield return new Item(ModContent.ItemType<GlowingPedal>());
+		yield return new Item(ModContent.ItemType<GlowingPedal>());
+		yield return new Item(ModContent.ItemType<GlowingPedal>());
+		yield return new Item(ModContent.ItemType<GlowingPedal>());
+		yield return new Item(ModContent.ItemType<GlowingPedal>());
 	}
 	public override void PlaceInWorld(int i, int j, Item item)
 	{
