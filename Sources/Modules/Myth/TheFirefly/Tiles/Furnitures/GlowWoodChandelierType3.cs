@@ -112,9 +112,4 @@ public class GlowWoodChandelierType3 : ModTile
 		//spriteBatch.Draw(TextureAssets.MagicPixel.Value,rc,new Color(0.5f,0,0,0));
 		return false;
 	}
-
-	public override void KillMultiTile(int x, int y, int frameX, int frameY)
-	{
-		Item.NewItem(new EntitySource_TileBreak(x, y), x * 16, y * 16, 48, 32, ModContent.ItemType<Items.Furnitures.GlowWoodChandelierType3>());
-	}
 }

@@ -1,4 +1,4 @@
-﻿namespace Everglow.Myth.TheFirefly.Dusts;
+namespace Everglow.Myth.TheFirefly.Dusts;
 
 public class BlueParticleDark2StoppedByTile : ModDust
 {
@@ -15,7 +15,7 @@ public class BlueParticleDark2StoppedByTile : ModDust
 		dust.position += dust.velocity;
 		dust.rotation += 0.1f;
 		dust.velocity *= 0.95f;
-		dust.alpha++;
+		dust.alpha += 3;
 		Lighting.AddLight(dust.position, 0, 0, (float)((255 - dust.alpha) * 0.0015f));
 		if (Collision.SolidCollision(dust.position, 8, 8))
 		{
