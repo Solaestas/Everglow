@@ -26,8 +26,7 @@ public class GlowWoodChest : ModTile
 
 		DustType = ModContent.DustType<BlueGlow>();
 		AdjTiles = new int[] { TileID.Containers };
-		ItemDrop = ModContent.ItemType<Items.Furnitures.GlowWoodChest>();
-
+		
 		// Placement
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
 		TileObjectData.newTile.Origin = new Point16(0, 1);
@@ -76,13 +75,6 @@ public class GlowWoodChest : ModTile
 	{
 		num = 1;
 	}
-
-	public override void KillMultiTile(int i, int j, int frameX, int frameY)
-	{
-		Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 32, 32, ItemDrop);
-		Chest.DestroyChest(i, j);
-	}
-
 	public override bool RightClick(int i, int j)
 	{
 		return FurnitureUtils.ChestRightClick(i, j);

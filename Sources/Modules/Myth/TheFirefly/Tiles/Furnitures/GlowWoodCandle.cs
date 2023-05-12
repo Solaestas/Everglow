@@ -25,8 +25,7 @@ public class GlowWoodCandle : ModTile
 
 		DustType = ModContent.DustType<BlueGlow>();
 		AdjTiles = new int[] { TileID.Candles };
-		ItemDrop = ModContent.ItemType<Items.Furnitures.GlowWoodCandle>();
-		// Placement
+				// Placement
 		TileObjectData.newTile.CopyFrom(TileObjectData.StyleOnTable1x1); // this style already takes care of direction for us
 		TileObjectData.addTile(Type);
 

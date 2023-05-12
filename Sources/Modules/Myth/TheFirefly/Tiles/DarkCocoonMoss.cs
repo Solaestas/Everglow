@@ -13,21 +13,20 @@ public class DarkCocoonMoss : ModTile
 		Main.tileMoss[Type] = true;
 		MinPick = 175;
 		DustType = 191;
-		ItemDrop = ModContent.ItemType<Items.DarkCocoon>();
 		AddMapEntry(new Color(35, 49, 122));
 	}
 
 	public override void NearbyEffects(int i, int j, bool closer)
 	{
 		Lighting.AddLight(i, j, 0.02f, 0.1f, 0.24f);
-		RandomUpdate(i, j);//TODO:为了让这玩意效果正常强行采取的暴力措施，如果sublib更新了就删掉
+		RandomUpdate(i, j);//TODO:涓轰簡璁╄繖鐜╂剰鏁堟灉姝ｅ父寮鸿閲囧彇鐨勬毚鍔涙帾鏂斤紝濡傛灉sublib鏇存柊浜嗗氨鍒犳帀
 
 		base.NearbyEffects(i, j, closer);
 	}
 
 	public override void RandomUpdate(int i, int j)
 	{
-		if (Main.rand.NextBool(2))//黑萤苔藓
+		if (Main.rand.NextBool(2))//榛戣悿鑻旇棑
 		{
 			Tile t0 = Main.tile[i, j];
 			Tile t1 = Main.tile[i, j - 1];

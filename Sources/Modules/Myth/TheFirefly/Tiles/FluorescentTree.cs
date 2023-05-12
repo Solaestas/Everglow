@@ -22,8 +22,7 @@ public class FluorescentTree : ModTile
 		var modTranslation = Language.GetOrRegister("Mods.Everglow.MapEntry.FluorescentTree");
 		AddMapEntry(new Color(51, 26, 58), modTranslation);
 		DustType = ModContent.DustType<FluorescentTreeDust>();
-		ItemDrop = ModContent.ItemType<GlowWood>();
-		AdjTiles = new int[] { Type };
+				AdjTiles = new int[] { Type };
 
 		Ins.HookManager.AddHook(CodeLayer.PostDrawTiles, DrawRopes);
 	}
@@ -108,9 +107,8 @@ public class FluorescentTree : ModTile
 
 	public override IEnumerable<Item> GetItemDrops(int i, int j)
 	{
-		yield return Main.item[Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, j), new Rectangle(i * 16 - 16, j * 16, 48, 16), ItemDrop, 1, false, 0, false, true)];
+		yield return new Item(ModContent.ItemType<Items.GlowWood>());
 	}
-
 	public override bool CanDrop(int i, int j)
 	{
 		for (int x = 0; x < 6; x++)

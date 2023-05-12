@@ -1,4 +1,4 @@
-﻿namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
+namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
 
 public class DarkMud : ModTile
 {
@@ -15,9 +15,6 @@ public class DarkMud : ModTile
 		DustType = DustID.BorealWood;
 		MinPick = 150;
 		HitSound = SoundID.Dig;
-
-		ItemDrop = ModContent.ItemType<Items.StoneDragonScaleWood>();
-
 		AddMapEntry(new Color(31, 26, 45));
 
 	}
