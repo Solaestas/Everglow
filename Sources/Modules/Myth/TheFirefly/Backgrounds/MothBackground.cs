@@ -1,6 +1,7 @@
 using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.NPCs.Bosses;
 using Everglow.Myth.TheFirefly.WorldGeneration;
+using SubworldLibrary;
 
 namespace Everglow.Myth.TheFirefly.Backgrounds;
 
@@ -111,8 +112,7 @@ public class MothBackground : ModSystem
 	/// <returns> </returns>
 	public static bool BiomeActive()
 	{
-		return false;
-		// return SubWorldModule.SubworldSystem.IsActive<MothWorld>();
+		return SubworldSystem.IsActive<MothWorld>();
 	}
 
 	/// <summary>
@@ -127,7 +127,7 @@ public class MothBackground : ModSystem
 		v0.Y *= 1.35f;
 		v0.X *= 0.9f;//近似于椭圆形，所以xy坐标变换
 		// TODO World
-		return v0.Length() < 2000 /*&& SubWorldModule.SubworldSystem.IsActive<MothWorld>()*/;
+		return v0.Length() < 2200 && SubworldSystem.IsActive<MothWorld>();
 	}
 
 	/// <summary>

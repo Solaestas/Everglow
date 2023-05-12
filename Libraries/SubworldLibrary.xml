@@ -38,6 +38,13 @@
             <br/>Default: false
             </summary>
         </member>
+        <member name="P:SubworldLibrary.Subworld.ManualAudioUpdates">
+            <summary>
+            If <see cref="M:SubworldLibrary.Subworld.ChangeAudio"/> returns true, this completely disables vanilla audio updating.
+            <br/>Typically not required. Only enable this if you know what you are doing.
+            <br/>Default: false
+            </summary>
+        </member>
         <member name="M:SubworldLibrary.Subworld.OnEnter">
             <summary>
             Called when entering a subworld.
@@ -116,6 +123,13 @@
             <summary>
             Called by DrawSetup to draw the subworld's loading menu.
             <br/>Defaults to text on a black background.
+            </summary>
+        </member>
+        <member name="M:SubworldLibrary.Subworld.ChangeAudio">
+            <summary>
+            Called before music is chosen, including in the loading menu.
+            <br/>Return true to disable vanilla behaviour, allowing for modification of variables such as <see cref="F:Terraria.Main.newMusic"/>.
+            <br/>Default: false
             </summary>
         </member>
         <member name="M:SubworldLibrary.Subworld.GetLight(Terraria.Tile,System.Int32,System.Int32,Terraria.Utilities.FastRandom@,Microsoft.Xna.Framework.Vector3@)">

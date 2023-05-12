@@ -3,4 +3,9 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\Myth\Everglow.Myth.csproj" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Reference Include="SubworldLibrary">
+	    <HintPath>..\..\..\Libraries\SubworldLibrary.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
 </Project>

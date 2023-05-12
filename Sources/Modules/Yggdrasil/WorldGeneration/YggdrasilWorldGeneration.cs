@@ -25,7 +25,10 @@ public class YggdrasilWorldGeneration : ModSystem
 			BuildtheTreeWorld();
 		}
 	}
-
+	public static Tile SafeGetTile(int i, int j)
+	{
+		return Main.tile[Math.Clamp(i, 1, Main.maxTilesX - 1), Math.Clamp(j, 1, Main.maxTilesY - 1)];
+	}
 	//public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight) => tasks.Add(new YggdrasilWorldGenPass());
 	/// <summary>
 	/// type = 0:Kill,type = 1:place Tiles,type = 2:place Walls
@@ -45,13 +48,13 @@ public class YggdrasilWorldGeneration : ModSystem
 				for (int x = 0; x < pixelRow.Length; x++)
 				{
 					ref var pixel = ref pixelRow[x];
-					Tile tile = Main.tile[x + a, y + b];
+					Tile tile = SafeGetTile(x + a, y + b);
 					switch (type)//21是箱子
 					{
 						case 0:
 							if (pixel.R == 255 && pixel.G == 0 && pixel.B == 0)
 							{
-								if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+								if (tile.TileType != 21 && SafeGetTile(x + a, y + b - 1).TileType != 21)
 									tile.ClearEverything();
 							}
 							break;
@@ -132,22 +135,22 @@ public class YggdrasilWorldGeneration : ModSystem
 						case 2:
 							if (pixel.R == 24 && pixel.G == 0 && pixel.B == 0)//石化龙鳞木
 							{
-								if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+								if (tile.TileType != 21 && SafeGetTile(x + a, y + b - 1).TileType != 21)
 									tile.WallType = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
 							}
 							if (pixel.R == 40 && pixel.G == 32 && pixel.B == 31)//龙鳞木
 							{
-								if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+								if (tile.TileType != 21 && SafeGetTile(x + a, y + b - 1).TileType != 21)
 									tile.WallType = (ushort)ModContent.WallType<DragonScaleWoodWall>();
 							}
 							if (pixel.R == 56 && pixel.G == 56 && pixel.B == 56)//石墙
 							{
-								if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+								if (tile.TileType != 21 && SafeGetTile(x + a, y + b - 1).TileType != 21)
 									tile.WallType = WallID.Stone;
 							}
 							if (pixel.R == 25 && pixel.G == 14 && pixel.B == 12)//天穹土墙
 							{
-								if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
+								if (tile.TileType != 21 && SafeGetTile(x + a, y + b - 1).TileType != 21)
 									tile.WallType = (ushort)ModContent.WallType<YggdrasilDirtWall>();
 							}
 							break;
@@ -212,7 +215,7 @@ public class YggdrasilWorldGeneration : ModSystem
 				{
 					for (int y = 0; y < 3; y++)
 					{
-						var tile = Main.tile[i + x, j + y];
+						var tile = SafeGetTile(i + x, j + y);
 						if (x == 0 && y == 0)
 							continue;
 						if (x == 4 && y == 0)
@@ -257,7 +260,7 @@ public class YggdrasilWorldGeneration : ModSystem
 				{
 					for (int y = 1; y < 3; y++)
 					{
-						var tile = Main.tile[i + x, j + y];
+						var tile = SafeGetTile(i + x, j + y);
 						if (x == 4 && y == 1)
 							continue;
 						if (x == 2 && y == 2)
@@ -295,7 +298,7 @@ public class YggdrasilWorldGeneration : ModSystem
 				{
 					for (int y = 0; y < 3; y++)
 					{
-						var tile = Main.tile[i + x, j + y];
+						var tile = SafeGetTile(i + x, j + y);
 						if (x == 0 && y == 0)
 							continue;
 						if (x == 1 && y == 0)
@@ -331,7 +334,7 @@ public class YggdrasilWorldGeneration : ModSystem
 				{
 					for (int y = 1; y < 3; y++)
 					{
-						var tile = Main.tile[i + x, j + y];
+						var tile = SafeGetTile(i + x, j + y);
 
 						if (x == 0 && y == 1)
 							continue;
@@ -364,7 +367,7 @@ public class YggdrasilWorldGeneration : ModSystem
 				{
 					for (int y = 1; y < 3; y++)
 					{
-						var tile = Main.tile[i + x, j + y];
+						var tile = SafeGetTile(i + x, j + y);
 
 						if (x == 3 && y == 1)
 							continue;
@@ -388,7 +391,7 @@ public class YggdrasilWorldGeneration : ModSystem
 				{
 					for (int y = 1; y < 3; y++)
 					{
-						var tile = Main.tile[i + x, j + y];
+						var tile = SafeGetTile(i + x, j + y);
 
 						if (x == 0 && y == 1)
 							continue;
@@ -436,7 +439,7 @@ public class YggdrasilWorldGeneration : ModSystem
 				{
 					for (int y = 0; y < 2; y++)
 					{
-						var tile = Main.tile[i + x, j + y];
+						var tile = SafeGetTile(i + x, j + y);
 						if (x == 0 && y == 0)
 							continue;
 						if (x == 0 && y == 1)
@@ -459,7 +462,7 @@ public class YggdrasilWorldGeneration : ModSystem
 				{
 					for (int y = 0; y < 2; y++)
 					{
-						var tile = Main.tile[i + x, j + y];
+						var tile = SafeGetTile(i + x, j + y);
 
 						if (x == 0 && y == 0)
 						{
@@ -499,7 +502,7 @@ public class YggdrasilWorldGeneration : ModSystem
 				{
 					for (int y = 0; y < 2; y++)
 					{
-						var tile = Main.tile[i + x, j + y];
+						var tile = SafeGetTile(i + x, j + y);
 
 						if (x == 0 && y == 0)
 							continue;
@@ -538,13 +541,13 @@ public class YggdrasilWorldGeneration : ModSystem
 		{
 			case 0:
 				{
-					var tile = Main.tile[i + 1, j];
+					var tile = SafeGetTile(i + 1, j);
 					tile.TileType = (ushort)ModContent.TileType<CyanVineOreSmallUp>();
 					tile.TileFrameX = 18;
 					tile.TileFrameY = 0;
 					tile.HasTile = true;
 
-					var tileII = Main.tile[i + 1, j + 1];
+					var tileII = SafeGetTile(i + 1, j + 1);
 					tileII.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
 					tileII.TileFrameX = 18;
 					tileII.TileFrameY = 18;
@@ -555,13 +558,13 @@ public class YggdrasilWorldGeneration : ModSystem
 				break;
 			case 1:
 				{
-					var tile = Main.tile[i + 1, j];
+					var tile = SafeGetTile(i + 1, j);
 					tile.TileType = (ushort)ModContent.TileType<CyanVineOreSmallUp>();
 					tile.TileFrameX = 72;
 					tile.TileFrameY = 0;
 					tile.HasTile = true;
 
-					var tileII = Main.tile[i + 1, j + 1];
+					var tileII = SafeGetTile(i + 1, j + 1);
 					tileII.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
 					tileII.TileFrameX = 18;
 					tileII.TileFrameY = 18;
@@ -570,26 +573,26 @@ public class YggdrasilWorldGeneration : ModSystem
 				break;
 			case 2:
 				{
-					var tile = Main.tile[i + 1, j];
+					var tile = SafeGetTile(i + 1, j);
 					tile.TileType = (ushort)ModContent.TileType<CyanVineOreSmallUp>();
 					tile.TileFrameX = 126;
 					tile.TileFrameY = 0;
 					tile.HasTile = true;
 
-					var tileII = Main.tile[i + 1, j + 1];
+					var tileII = SafeGetTile(i + 1, j + 1);
 					tileII.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
 					tileII.TileFrameX = 18;
 					tileII.TileFrameY = 18;
 					tileII.HasTile = true;
 
-					var tileIII = Main.tile[i, j];
+					var tileIII = SafeGetTile(i, j);
 					tileIII.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
 					tileIII.TileFrameX = 0;
 					tileIII.TileFrameY = 0;
 					tileIII.Slope = SlopeType.SlopeUpRight;
 					tileIII.HasTile = true;
 
-					var tileIV = Main.tile[i + 2, j];
+					var tileIV = SafeGetTile(i + 2, j);
 					tileIV.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
 					tileIV.TileFrameX = 36;
 					tileIV.TileFrameY = 0;
@@ -599,26 +602,26 @@ public class YggdrasilWorldGeneration : ModSystem
 				break;
 			case 3:
 				{
-					var tile = Main.tile[i + 1, j];
+					var tile = SafeGetTile(i + 1, j);
 					tile.TileType = (ushort)ModContent.TileType<CyanVineOreSmallUp>();
 					tile.TileFrameX = 180;
 					tile.TileFrameY = 0;
 					tile.HasTile = true;
 
-					var tileII = Main.tile[i + 1, j + 1];
+					var tileII = SafeGetTile(i + 1, j + 1);
 					tileII.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
 					tileII.TileFrameX = 18;
 					tileII.TileFrameY = 18;
 					tileII.Slope = SlopeType.SlopeUpRight;
 					tileII.HasTile = true;
 
-					var tileIII = Main.tile[i, j];
+					var tileIII = SafeGetTile(i, j);
 					tileIII.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
 					tileIII.TileFrameX = 0;
 					tileIII.TileFrameY = 0;
 					tileIII.HasTile = true;
 
-					var tileIV = Main.tile[i + 2, j];
+					var tileIV = SafeGetTile(i + 2, j);
 					tileIV.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
 					tileIV.TileFrameX = 36;
 					tileIV.TileFrameY = 0;
@@ -634,7 +637,7 @@ public class YggdrasilWorldGeneration : ModSystem
 		{
 			for (int y = 0; y < 3; y++)
 			{
-				var tile = Main.tile[i + x, j + y];
+				var tile = SafeGetTile(i + x, j + y);
 				if (x == 1 && y == 2)
 					continue;
 				if (x == 3 && y == 2)

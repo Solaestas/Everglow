@@ -1,3 +1,4 @@
+using SubworldLibrary;
 namespace Everglow.Yggdrasil;
 
 public class YggdrasilCapital : ModItem
@@ -17,18 +18,17 @@ public class YggdrasilCapital : ModItem
 	public override bool? UseItem(Player player)
 	{
 		// TODO world
-		//if (player.itemAnimation == player.itemAnimationMax)
-		//{
-		//	if (SubWorldModule.SubworldSystem.IsActive<YggdrasilWorld>())
-		//		SubWorldModule.SubworldSystem.Exit();
-		//	else
-		//	{
-		//		if (!SubWorldModule.SubworldSystem.Enter<YggdrasilWorld>())
-		//			Main.NewText("Fail!");
-		//	}
-		//}
-		//return base.UseItem(player);
-		return false;
+		if (player.itemAnimation == player.itemAnimationMax)
+		{
+			if (SubworldSystem.IsActive<YggdrasilWorld>())
+				SubworldSystem.Exit();
+			else
+			{
+				if (!SubworldSystem.Enter<YggdrasilWorld>())
+					Main.NewText("Fail!");
+			}
+		}
+		return base.UseItem(player);
 	}
 	public override void AddRecipes()
 	{
