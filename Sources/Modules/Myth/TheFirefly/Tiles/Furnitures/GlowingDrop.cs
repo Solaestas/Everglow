@@ -38,7 +38,7 @@ public class GlowingDrop : ModTile
 		//ModTranslation name = CreateMapEntryName();
 		//name.SetDefault("Chandelier");
 		AddMapEntry(new Color(0, 14, 175));
-		//TODO:Õâ¸öTile×÷ÎªÒ»ÖÖÖ²Îï¿ÉÄÜ±ÈµÆ¾ß¸ü¼ÓºÏÀíÒ»µã
+		//TODO:è¿™ä¸ªTileä½œä¸ºä¸€ç§æ¤ç‰©å¯èƒ½æ¯”ç¯å…·æ›´åŠ åˆç†ä¸€ç‚¹
 	}
 
 	public override void HitWire(int i, int j)
@@ -168,10 +168,5 @@ public class GlowingDrop : ModTile
 		}
 
 		return false;
-	}
-
-	public override void KillMultiTile(int x, int y, int frameX, int frameY)
-	{
-		Item.NewItem(new EntitySource_TileBreak(x, y), x * 16, y * 16, 48, 32, ModContent.ItemType<Items.Furnitures.GlowingDrop>());
 	}
 }

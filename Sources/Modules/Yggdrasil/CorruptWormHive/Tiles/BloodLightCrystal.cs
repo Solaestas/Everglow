@@ -21,7 +21,6 @@ public class BloodLightCrystal : ModTile
 	{
 		Main.tileSolid[Type] = true;
 		MinPick = 375;
-		ItemDrop = ModContent.ItemType<Items.BloodLightCrystal>();
 
 		AddMapEntry(new Color(107, 34, 21, 205));
 	}

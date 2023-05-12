@@ -6,7 +6,6 @@ public class StoneDragonScaleWoodWall : ModWall
 	{
 		Main.wallHouse[Type] = true;
 		DustType = DustID.WoodFurniture;
-		ItemDrop = ModContent.ItemType<Items.StoneDragonScaleWoodWall>();
 		AddMapEntry(new Color(24, 0, 0));
 	}
 	public override bool CanExplode(int i, int j)

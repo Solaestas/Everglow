@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.TheTusk.Items;
+using Everglow.Myth.TheTusk.Items;
 using Terraria.Localization;
 using Terraria.ObjectData;
 
@@ -47,16 +47,25 @@ public class StrangeTuskStone : ModTile
 	{
 		return false;
 	}
-	public override void KillMultiTile(int i, int j, int frameX, int frameY)
+	public override IEnumerable<Item> GetItemDrops(int i, int j)
 	{
-		if (frameX == 0)
-			Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<TuskStatusI>());
-		if (frameX == 64)
-			Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<TuskStatusII>());
-		if (frameX == 128)
-			Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<TuskStatusIII>());
-		if (frameX == 192)
-			Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<TuskStatusIV>());
+		Tile tile = Main.tile[i, j];
+		int style = TileObjectData.GetTileStyle(tile);
+		switch (style)
+		{
+			case 0:
+				yield return new Item(ModContent.ItemType<TuskStatusI>());
+				break;
+			case 1:
+				yield return new Item(ModContent.ItemType<TuskStatusII>());
+				break;
+			case 2:
+				yield return new Item(ModContent.ItemType<TuskStatusIII>());
+				break;
+			case 3:
+				yield return new Item(ModContent.ItemType<TuskStatusIV>());
+				break;
+		}
 	}
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 	{

@@ -1,4 +1,4 @@
-﻿using Terraria.ObjectData;
+using Terraria.ObjectData;
 using Terraria.Enums;
 using Terraria.DataStructures;
 using Everglow.Yggdrasil.Common.Utils;
@@ -39,11 +39,6 @@ public class StreetLantern : ModTile
 
 		DustType = DustID.DynastyWood;
 		AddMapEntry(new Color(151, 31, 32));
-	}
-
-	public override void KillMultiTile(int i, int j, int frameX, int frameY)
-	{
-		Item.NewItem(null, i * 16, j * 16, 16, 48, ModContent.ItemType<Items.StreetLantern>());
 	}
 	public override void HitWire(int i, int j)
 	{
