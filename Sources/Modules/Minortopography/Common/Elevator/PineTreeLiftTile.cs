@@ -60,7 +60,7 @@ internal class PineTreeLiftTile : DBlock
 		new Mass(6,new Vector2(0, 50),false),
 		new Mass(6,new Vector2(0, 60),false),
 		new Mass(6,new Vector2(0, 70),false),
-		new Mass(100,new Vector2(0, 75),true)
+		new Mass(100,new Vector2(0, 80),true)
 		};
 	/// <summary>
 	/// 吊挂的缆绳模型2
@@ -75,7 +75,7 @@ internal class PineTreeLiftTile : DBlock
 		new Mass(6,new Vector2(0, 50),false),
 		new Mass(6,new Vector2(0, 60),false),
 		new Mass(6,new Vector2(0, 70),false),
-		new Mass(100,new Vector2(0, 75),true)
+		new Mass(100,new Vector2(0, 80),true)
 	};
 	/// <summary>
 	/// 吊挂的缆绳模型3
@@ -90,7 +90,7 @@ internal class PineTreeLiftTile : DBlock
 		new Mass(6,new Vector2(0, 50),false),
 		new Mass(6,new Vector2(0, 60),false),
 		new Mass(6,new Vector2(0, 70),false),
-		new Mass(100,new Vector2(0, 75),true)
+		new Mass(100,new Vector2(0, 80),true)
 	};
 	/// <summary>
 	/// 吊挂的缆绳模型4
@@ -105,7 +105,7 @@ internal class PineTreeLiftTile : DBlock
 		new Mass(6,new Vector2(0, 50),false),
 		new Mass(6,new Vector2(0, 60),false),
 		new Mass(6,new Vector2(0, 70),false),
-		new Mass(100,new Vector2(0, 75),true)
+		new Mass(100,new Vector2(0, 80),true)
 	};
 	public override void OnCollision(AABB aabb, Direction dir)
 	{
@@ -173,10 +173,10 @@ internal class PineTreeLiftTile : DBlock
 				PauseTime = 300;
 		}
 		UpdateLantern();
-		UpdateBackgroundCables(ref BackgroundCableIMasses, new Vector2(-26, -82.5f));
-		UpdateBackgroundCables(ref BackgroundCableIIMasses, new Vector2(-42.5f, -82.5f));
-		UpdateBackgroundCables(ref BackgroundCableIIIMasses, new Vector2(26, -82.5f));
-		UpdateBackgroundCables(ref BackgroundCableIVMasses, new Vector2(42.5f, -82.5f));
+		UpdateBackgroundCables(ref BackgroundCableIMasses, new Vector2(-22.4f, -85.3f));
+		UpdateBackgroundCables(ref BackgroundCableIIMasses, new Vector2(-37.5f, -85.3f));
+		UpdateBackgroundCables(ref BackgroundCableIIIMasses, new Vector2(22.4f, -85.3f));
+		UpdateBackgroundCables(ref BackgroundCableIVMasses, new Vector2(37.5f, -85.3f));
 	}
 	private void UpdateBackgroundCables(ref Mass[] masses, Vector2 topPosition)
 	{
@@ -349,10 +349,10 @@ internal class PineTreeLiftTile : DBlock
 				Main.graphics.GraphicsDevice.Textures[0] = liftCable;
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 			}
-			drawEnumerableMasses(BackgroundCableIMasses, new Vector2(-26, -82.5f), drawc, liftCable);
-			drawEnumerableMasses(BackgroundCableIIMasses, new Vector2(-42.5f, -82.5f), drawc, liftCable);
-			drawEnumerableMasses(BackgroundCableIIIMasses, new Vector2(26, -82.5f), drawc, liftCable);
-			drawEnumerableMasses(BackgroundCableIVMasses, new Vector2(42.5f, -82.5f), drawc, liftCable);
+			drawEnumerableMasses(BackgroundCableIMasses, new Vector2(-22.4f, -85.3f), drawc, ModAsset.Vine0.Value);
+			drawEnumerableMasses(BackgroundCableIIMasses, new Vector2(-37.5f, -85.3f), drawc, ModAsset.Vine1.Value);
+			drawEnumerableMasses(BackgroundCableIIIMasses, new Vector2(22.4f, -85.3f), drawc, ModAsset.Vine2.Value);
+			drawEnumerableMasses(BackgroundCableIVMasses, new Vector2(37.5f, -85.3f), drawc, ModAsset.Vine3.Value);
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		}
@@ -362,14 +362,14 @@ internal class PineTreeLiftTile : DBlock
 			List<Vertex2D> bars = new List<Vertex2D>();
 			for (int i = 0; i < masses.Length; i++)
 			{
-				float value = i / 10f;
+				float value = i / (float)(masses.Length);
 				Vector2 normolized = new Vector2(-1, 0);
 				if (i > 0)
 				{
 					normolized = Utils.SafeNormalize(masses[i].position - masses[i - 1].position, Vector2.zeroVector).RotatedBy(1.57) * 2;
 				}
-				bars.Add(new Vertex2D(masses[i].position + offset + normolized * 2, drawColor, new Vector3(0.5f + 0.5f * Math.Sign((offset - (Center - Main.screenPosition)).X), value, 0)));
-				bars.Add(new Vertex2D(masses[i].position + offset - normolized * 2, drawColor, new Vector3(0.5f - 0.5f * Math.Sign((offset - (Center - Main.screenPosition)).X), value, 0)));
+				bars.Add(new Vertex2D(masses[i].position + offset + normolized * 5, drawColor, new Vector3(0.5f + 0.5f * Math.Sign((offset - (Center - Main.screenPosition)).X), value, 0)));
+				bars.Add(new Vertex2D(masses[i].position + offset - normolized * 5, drawColor, new Vector3(0.5f - 0.5f * Math.Sign((offset - (Center - Main.screenPosition)).X), value, 0)));
 			}
 			if (bars.Count > 2)
 			{
