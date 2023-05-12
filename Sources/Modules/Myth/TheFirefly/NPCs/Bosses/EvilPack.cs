@@ -83,8 +83,11 @@ public class EvilPack : ModNPC
 					}
 					if (!NPC.AnyNPCs(ModContent.NPCType<CorruptMoth>()))
 					{
-						if ((SteamID64 == 76561198074262598 /*Cataclysmic Armageddon*/ || SteamID64 == 76561198300589095 /*Setnour6*/)/* && EverglowConfig.DebugMode*/)
+						string playerName = Main.player[((ModNPC)this).NPC.target].name ?? "";
+						if (((Entity)Main.player[((ModNPC)this).NPC.target]).active && playerName is "Cataclysmic Armageddon" or "Setnour6")
+						{
 							Main.NewText("Cataclysmic Armageddon's Long Lost Older Cousin Calamatious Annihilation the Corrupted Moth " + $"{Language.GetTextValue(Language.GetTextValue("Mods.Everglow.Common.Message.HasAwoken"))}", 175, 75, 255);
+						}
 						else
 						{
 							Main.NewText($"{Language.GetTextValue("Mods.Everglow.NPCName.CorruptMoth")} {Language.GetTextValue("Mods.Everglow.Common.Message.HasAwoken")}", 175, 75, 255);
