@@ -9,6 +9,6 @@ public class LifeFluorescentTreeWood : ModTile
 		Main.tileMerge[Type][ModContent.TileType<LifeFluorescentTreeLeaf>()] = true;
 		Main.tileMerge[ModContent.TileType<LifeFluorescentTreeLeaf>()][Type] = true;
 		DustType = ModContent.DustType<Dusts.FluorescentLeafDust>();
-				AddMapEntry(new Color(55, 24, 63));
+		AddMapEntry(new Color(55, 24, 63));
 	}
 }

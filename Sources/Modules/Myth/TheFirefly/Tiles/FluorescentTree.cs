@@ -104,7 +104,6 @@ public class FluorescentTree : ModTile
 		}
 		ropeManager.Draw();
 	}
-
 	public override IEnumerable<Item> GetItemDrops(int i, int j)
 	{
 		yield return new Item(ModContent.ItemType<Items.GlowWood>());

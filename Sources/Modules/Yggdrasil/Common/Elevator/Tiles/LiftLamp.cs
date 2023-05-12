@@ -59,9 +59,5 @@ public class LiftLamp : ModTile
 		if (Main.tile[i, j].TileFrameX == 32)
 			Lighting.AddLight(new Vector2(i * 16, j * 16), new Vector3(1f, 0.8f, 0.3f));
 	}
-	public override void KillMultiTile(int i, int j, int frameX, int frameY)
-	{
-		Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Items.LiftLamp>());
-	}
 }
 

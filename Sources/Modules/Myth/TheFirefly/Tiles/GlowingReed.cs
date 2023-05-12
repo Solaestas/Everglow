@@ -1,4 +1,4 @@
-﻿using Terraria.ObjectData;
+using Terraria.ObjectData;
 
 namespace Everglow.Myth.TheFirefly.Tiles;
 
@@ -24,15 +24,6 @@ public class GlowingReed : ModTile
 		AddMapEntry(new Color(11, 11, 160), modTranslation);
 		HitSound = SoundID.Grass;
 	}
-
-	public override void KillMultiTile(int i, int j, int frameX, int frameY)
-	{
-		//for (int x = 0; x < 2; x++)
-		//{
-		//    Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Items.BlackStarShrub>());
-		//}
-	}
-
 	public override void RandomUpdate(int i, int j)
 	{
 		base.RandomUpdate(i, j);
