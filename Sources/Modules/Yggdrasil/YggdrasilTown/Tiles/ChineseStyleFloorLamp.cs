@@ -1,4 +1,4 @@
-﻿using Terraria.ObjectData;
+using Terraria.ObjectData;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
 
@@ -29,10 +29,6 @@ public class ChineseStyleFloorLamp : ModTile
 	{
 		if (Main.tile[i, j].TileFrameX < 40 && Main.tile[i, j].TileFrameY < 40)
 			Lighting.AddLight(new Vector2(i * 16, j * 16), new Vector3(1f, 0.8f, 0.5f));
-	}
-	public override void KillMultiTile(int i, int j, int frameX, int frameY)
-	{
-		Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Items.ChineseStyleFloorLamp>());
 	}
 	public override void PlaceInWorld(int i, int j, Item item)
 	{

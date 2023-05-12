@@ -6,7 +6,6 @@ public class BloodyStoneWall : ModWall
 	{
 		Main.wallHouse[Type] = true;
 		DustType = DustID.Stone;
-		ItemDrop = ModContent.ItemType<Items.BloodyStoneWall>();
 		AddMapEntry(new Color(61, 13, 11));
 	}
 }

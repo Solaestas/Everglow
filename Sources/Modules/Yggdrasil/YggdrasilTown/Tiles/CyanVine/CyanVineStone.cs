@@ -10,7 +10,6 @@ public class CyanVineStone : ModTile
 		Main.tileBlockLight[Type] = true;
 		DustType = ModContent.DustType<Dusts.CyanVine>();
 		MineResist = 4f;
-		ItemDrop = ModContent.ItemType<Items.CyanVineOre>();
 		Main.tileSpelunker[Type] = true;
 		var modTranslation = CreateMapEntryName();
 		AddMapEntry(new Color(155, 173, 183), modTranslation);

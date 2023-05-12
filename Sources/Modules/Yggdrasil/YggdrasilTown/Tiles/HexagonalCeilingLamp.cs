@@ -103,8 +103,4 @@ public class HexagonalCeilingLamp : ModTile
 		}
 		return false;
 	}
-	public override void KillMultiTile(int x, int y, int frameX, int frameY)
-	{
-		Item.NewItem(new EntitySource_TileBreak(x, y), x * 16, y * 16, 48, 32, ModContent.ItemType<Items.HexagonalCeilingLamp>());
-	}
 }
