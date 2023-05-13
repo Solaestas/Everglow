@@ -98,10 +98,10 @@ public class MothLand : ModSystem
 
 		public override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
 		{
-			//Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everglow.Common.WorldSystem.BuildMothCave"); //comment out until sublib is ported
-			//BuildMothCave();
-			//Main.spawnTileX = 723;
-			//Main.spawnTileY = 226;
+			Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everglow.Common.WorldSystem.BuildMothCave");
+			BuildMothCave();
+			Main.spawnTileX = 723;
+			Main.spawnTileY = 226;
 		}
 	}
 
@@ -114,7 +114,7 @@ public class MothLand : ModSystem
 		public override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
 		{
 			Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everglow.Common.WorldSystem.BuildWorldMothCave");
-			BuildMothCave(); //BuildWorldMothCave();
+			BuildWorldMothCave();
 			BuildShabbyCastle();
 		}
 	}
@@ -125,8 +125,9 @@ public class MothLand : ModSystem
 	/// <summary>
 	/// 地形中心坐标
 	/// </summary>
-	public int fireflyCenterX = 1000; //400;
-	public int fireflyCenterY = 500; //300;
+	public int fireflyCenterX = 400;
+
+	public int fireflyCenterY = 300;
 
 	public override void SaveWorldData(TagCompound tag)
 	{
@@ -252,7 +253,7 @@ public class MothLand : ModSystem
 						case 0:
 							if (pixel.R == 255 && pixel.G == 0 && pixel.B == 0)// == new SixLabors.ImageSharp.PixelFormats.Rgb24(255, 0, 0))
 							{
-								if (/*tile.TileType != 21 && */Main.tile[x + a, y + b - 1].TileType != 21)
+								if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
 									tile.ClearEverything();
 							}
 							break;
@@ -263,14 +264,6 @@ public class MothLand : ModSystem
 								if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
 								{
 									tile.TileType = (ushort)ModContent.TileType<DarkCocoon>();
-									tile.HasTile = true;
-								}
-							}
-							if (pixel.R == 106 && pixel.G == 48 && pixel.B == 61)// == new SixLabors.ImageSharp.PixelFormats.Rgb24(56, 48, 61))
-							{
-								if (tile.TileType != 21 && Main.tile[x + a, y + b - 1].TileType != 21)
-								{
-									tile.TileType = (ushort)ModContent.TileType<DarkCocoonSpawn>();
 									tile.HasTile = true;
 								}
 							}
@@ -312,7 +305,7 @@ public class MothLand : ModSystem
 
 						case 3:
 							if (pixel.R == 165 && pixel.G == 0 && pixel.B == 255)
-								//MythUtils.PlaceFrameImportantTiles(a + x, b + y, 5, 7, ModContent.TileType<MothWorldDoor>()); // comment out until sublib is ported
+								MythUtils.PlaceFrameImportantTiles(a + x, b + y, 5, 7, ModContent.TileType<MothWorldDoor>());
 							if (pixel.R == 45 && pixel.G == 49 && pixel.B == 255)
 							{
 								MythUtils.PlaceFrameImportantTiles(a + x, b + y, 3, 4, ModContent.TileType<FireflyPylon>());
@@ -325,7 +318,7 @@ public class MothLand : ModSystem
 								for (int i = -2; i <= 2; i++)
 								{
 									var PylonTile = Main.tile[bottom.X + i, bottom.Y + 1];
-									PylonTile.TileType = (ushort)ModContent.TileType<DarkCocoonSpawn>();
+									PylonTile.TileType = (ushort)ModContent.TileType<DarkCocoon>();
 									PylonTile.HasTile = true;
 									PylonTile.Slope = SlopeType.Solid;
 									PylonTile.IsHalfBlock = false;
@@ -348,23 +341,23 @@ public class MothLand : ModSystem
 	/// </summary>
 	public static void BuildMothCave()
 	{
-		Point16 AB = CocoonPos();
-		int a = AB.X;//230; // until sublib is ported
-		int b = AB.Y;//200;
+		//Point16 AB = CocoonPos();
+		int a = 230;//AB.X;
+		int b = 200;//AB.Y;
 		MothLand mothLand = ModContent.GetInstance<MothLand>();
 		mothLand.fireflyCenterX = a + 140;
 		mothLand.fireflyCenterY = b + 140;
-		//Main.statusText = "CocoonStart"; //comment out until sublib is ported
-		//ShapeTile("CocoonWorld.bmp", 0, 0, 1);
-		//ShapeTile("CocoonWorldWall.bmp", 0, 0, 2);
-		Main.statusText = "CocoonKillStart";
-		ShapeTile("CocoonSoloKill.bmp", a, b, 0);
 		Main.statusText = "CocoonStart";
-		ShapeTile("CocoonSoloClosed.bmp", a, b, 1);
+		ShapeTile("CocoonWorld.bmp", 0, 0, 1);
+		ShapeTile("CocoonWorldWall.bmp", 0, 0, 2);
+		Main.statusText = "CocoonKillStart";
+		ShapeTile("CocoonSubKill.bmp", a, b, 0);
+		Main.statusText = "CocoonStart";
+		ShapeTile("CocoonSub.bmp", a, b, 1);
 		Main.statusText = "CocoonWallStart";
-		ShapeTile("CocoonSoloWall.bmp", a, b, 2);
+		ShapeTile("CocoonSubWall.bmp", a, b, 2);
 		Main.statusText = "CocoonAnotherStart";
-		ShapeTile("CocoonSoloClosed.bmp", a, b, 3);
+		ShapeTile("CocoonSub.bmp", a, b, 3);
 		SmoothMothTile(a, b);
 		for (int x = 20; x < Main.maxTilesX - 20; x++)
 		{

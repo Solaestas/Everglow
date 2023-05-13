@@ -20,13 +20,10 @@ public class FireflyCapital : ModItem
 	{
 		if (player.itemAnimation == player.itemAnimationMax)
 		{
-			MothLand mothLand = ModContent.GetInstance<MothLand>();
-			player.position = new Vector2(mothLand.fireflyCenterX, mothLand.fireflyCenterY) * 16;
 			//if (SubWorldModule.SubworldSystem.IsActive<MothWorld>())
 			//	SubWorldModule.SubworldSystem.Exit();
 			//else
 			//{
-			//	SubworldSystem.Enter<MothWorld>();
 			//	if (!SubWorldModule.SubworldSystem.Enter<MothWorld>())
 			//		Main.NewText("Fail!");
 			//}
