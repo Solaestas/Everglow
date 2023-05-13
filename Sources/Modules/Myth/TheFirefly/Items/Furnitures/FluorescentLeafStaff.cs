@@ -20,8 +20,7 @@ public class FluorescentLeafStaff : ModItem
 		Item.useAnimation = 15;
 		Item.useTime = 10;
 		Item.useStyle = ItemUseStyleID.Swing;
-
-		Item.useAmmo = ModContent.ItemType<GlowWood>();
+		Item.tileWand = ModContent.ItemType<GlowWood>();
 		Item.value = 2000;
 		Item.createTile = ModContent.TileType<LifeFluorescentTreeLeaf>();
 	}
