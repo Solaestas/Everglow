@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.TheTusk.Items;
+using Everglow.Myth.TheTusk.Items;
 using Terraria.Localization;
 using Terraria.ObjectData;
 
@@ -46,10 +46,6 @@ public class StrangeTuskStone4 : ModTile
 	public override bool CanKillTile(int i, int j, ref bool blockDamaged)
 	{
 		return false;
-	}
-	public override void KillMultiTile(int i, int j, int frameX, int frameY)
-	{
-		Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<TuskStatusIV>());
 	}
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 	{

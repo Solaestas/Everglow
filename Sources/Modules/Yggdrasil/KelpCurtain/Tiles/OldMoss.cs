@@ -1,4 +1,4 @@
-﻿namespace Everglow.Yggdrasil.KelpCurtain.Tiles;
+namespace Everglow.Yggdrasil.KelpCurtain.Tiles;
 
 public class OldMoss : ModTile
 {
@@ -16,7 +16,6 @@ public class OldMoss : ModTile
 		DustType = DustID.BrownMoss;
 		MinPick = 50;
 		HitSound = SoundID.Dig;
-		ItemDrop = ModContent.ItemType<Items.YggdrasilDirt>();
 		AddMapEntry(new Color(81, 107, 18));
 	}
 	public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)

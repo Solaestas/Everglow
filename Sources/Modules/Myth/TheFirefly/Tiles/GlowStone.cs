@@ -13,8 +13,7 @@ public class GlowStone : ModTile
 		Main.tileBouncy[Type] = true;
 		MinPick = 175;
 		DustType = 191;
-		ItemDrop = ModContent.ItemType<Items.GlowMetal>();
-		AddMapEntry(new Color(0, 90, 146));
+				AddMapEntry(new Color(0, 90, 146));
 	}
 
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
