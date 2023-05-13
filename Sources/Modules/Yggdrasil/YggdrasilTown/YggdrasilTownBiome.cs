@@ -18,8 +18,7 @@ public class YggdrasilTownBiome : ModBiome
 	}
 	public override bool IsBiomeActive(Player player)
 	{
-		//return Background.MineRoadBackground.BiomeActive();
-		return false;
+		return Background.MineRoadBackground.BiomeActive();
 	}
 
 	public override void OnInBiome(Player player)
