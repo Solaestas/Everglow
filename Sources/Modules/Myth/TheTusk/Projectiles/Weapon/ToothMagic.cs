@@ -1,4 +1,6 @@
 using Everglow.Myth.Common;
+using Everglow.Myth.TheTusk.VFXs;
+using SteelSeries.GameSense;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -32,21 +34,132 @@ public class ToothMagic : ModProjectile, IWarpProjectile
 	{
 		// Projectile.position.Y -= 15f;
 	}
+	public void GenerateVFX(int Frequency)
+	{
+		float mulVelocity = 3f;
+		for (int g = 0; g < Frequency; g++)
+		{
+
+			Vector2 afterVelocity = Projectile.velocity;
+			if (afterVelocity.Length() > 25)
+			{
+				afterVelocity = afterVelocity * 25 / afterVelocity.Length();
+			}
+			float mulWidth = 1f;
+			if (afterVelocity.Length() < 10)
+			{
+				mulWidth = afterVelocity.Length() / 10f;
+			}
+			var blood = new BloodLiquidDust
+			{
+				velocity = afterVelocity * mulVelocity + Projectile.velocity.SafeNormalize(new Vector2(0, -1)),
+				Active = true,
+				Visible = true,
+				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) - Projectile.velocity * Main.rand.NextFloat(3f, 14f),
+				maxTime = Main.rand.Next(48, 56),
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0, Main.rand.NextFloat(18f, 28f) * mulWidth }
+			};
+			Ins.VFXManager.Add(blood);
+		}
+	}
+	public void GenerateVFXWhileChasing(int Frequency)
+	{
+		float mulVelocity = 2f;
+		for (int g = 0; g < Frequency; g++)
+		{
+
+			Vector2 afterVelocity = Projectile.velocity;
+			if (afterVelocity.Length() > 25)
+			{
+				afterVelocity = afterVelocity * 25 / afterVelocity.Length();
+			}
+			float mulWidth = 1f;
+			if (afterVelocity.Length() < 10)
+			{
+				mulWidth = afterVelocity.Length() / 10f;
+			}
+			var blood = new BloodLiquidDust
+			{
+				velocity = afterVelocity * mulVelocity + Projectile.velocity.SafeNormalize(new Vector2(0, -1)),
+				Active = true,
+				Visible = true,
+				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) - Projectile.velocity * Main.rand.NextFloat(3f, 14f),
+				maxTime = Main.rand.Next(12, 14),
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0, Main.rand.NextFloat(18f, 28f) * mulWidth }
+			};
+			Ins.VFXManager.Add(blood);
+		}
+	}
+	public void GenerateVFXKill(int Frequency)
+	{
+		float mulVelocity = 1.5f;
+		for (int g = 0; g < Frequency; g++)
+		{
+			Vector2 afterVelocity = new Vector2(0, 2f).RotatedBy(g / (float)Frequency * 2 * Math.PI);
+			var blood = new BloodLiquidDust
+			{
+				velocity = afterVelocity * mulVelocity + Projectile.velocity.SafeNormalize(new Vector2(0, -1)),
+				Active = true,
+				Visible = true,
+				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) - Projectile.velocity * Main.rand.NextFloat(3f, 14f),
+				maxTime = Main.rand.Next(42, 64),
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0, Main.rand.NextFloat(6f, 12f) }
+			};
+			Ins.VFXManager.Add(blood);
+		}
+		mulVelocity = 1.1f;
+		for (int g = 0; g < Frequency; g++)
+		{
+			Vector2 afterVelocity = new Vector2(0, 2f).RotatedBy(g / (float)Frequency * 2 * Math.PI);
+			var blood = new BloodLiquidDust
+			{
+				velocity = afterVelocity * mulVelocity + Projectile.velocity.SafeNormalize(new Vector2(0, -1)),
+				Active = true,
+				Visible = true,
+				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) - Projectile.velocity * Main.rand.NextFloat(3f, 14f),
+				maxTime = Main.rand.Next(42, 64),
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0, Main.rand.NextFloat(6f, 12f) }
+			};
+			Ins.VFXManager.Add(blood);
+		}
+		mulVelocity = 0.8f;
+		Frequency /= 3;
+		for (int g = 0; g < Frequency; g++)
+		{
+			Vector2 afterVelocity = new Vector2(0, 2f).RotatedBy(g / (float)Frequency * 2 * Math.PI);
+			var blood = new ThickBloodLiquidDust
+			{
+				velocity = afterVelocity * mulVelocity + Projectile.velocity.SafeNormalize(new Vector2(0, -1)),
+				Active = true,
+				Visible = true,
+				position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) - Projectile.velocity * Main.rand.NextFloat(3f, 14f),
+				maxTime = Main.rand.Next(42, 64),
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0, Main.rand.NextFloat(12f, 20f) }
+			};
+			Ins.VFXManager.Add(blood);
+		}
+	}
 	public void ProjHit()
 	{
 		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot.WithVolumeScale(Projectile.ai[0]), Projectile.Center);
 		//Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<NormalHit>(), Projectile.damage, Projectile.knockBack, Projectile.owner, Projectile.velocity.Length(), Main.rand.NextFloat(6.283f));
 
-		for (int x = 0; x < 70; x++)
+		for (int x = 0; x < 40; x++)
 		{
 			int index = Dust.NewDust(Projectile.position - new Vector2(4), Projectile.width, Projectile.height, ModContent.DustType<Dusts.RedBlood>(), 0f, 0f, 0, default, Main.rand.NextFloat(0.3f, 0.7f));
 			Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(1.5f, 12f)).RotatedByRandom(6.283);
 		}
-		for (int x = 0; x < 30; x++)
+		for (int x = 0; x < 80; x++)
 		{
-			int index = Dust.NewDust(Projectile.position - new Vector2(4), Projectile.width, Projectile.height, ModContent.DustType<Dusts.RedBlood>(), 0f, 0f, 0, default, Main.rand.NextFloat(0.9f, 1.7f));
+			int index = Dust.NewDust(Projectile.position - new Vector2(4), Projectile.width, Projectile.height, ModContent.DustType<Dusts.RedBlood>(), 0f, 0f, 0, default, Main.rand.NextFloat(0.5f, 0.7f));
 			Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(1.5f, 8f)).RotatedByRandom(6.283);
 		}
+		for (int x = 0; x < 10; x++)
+		{
+			int index = Dust.NewDust(Projectile.position - new Vector2(4), Projectile.width, Projectile.height, ModContent.DustType<Dusts.RedBlood>(), 0f, 0f, 0, default, Main.rand.NextFloat(0.9f, 1.1f));
+			Main.dust[index].velocity = new Vector2(0, Main.rand.NextFloat(2.5f, 8f)).RotatedByRandom(6.283);
+		}
+		GenerateVFXKill(10);
 
 		Projectile.friendly = false;
 		TimeTokill = 120;
@@ -54,6 +167,8 @@ public class ToothMagic : ModProjectile, IWarpProjectile
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
+		
+
 		if (Projectile.timeLeft > 500)
 			Projectile.scale = 0.8f;
 		else
@@ -96,8 +211,12 @@ public class ToothMagic : ModProjectile, IWarpProjectile
 		{
 			for (int i = 1; i < 3; ++i)
 			{
-				var d = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Blood, Projectile.velocity.X * 2, Projectile.velocity.Y * 2, 100, default, Main.rand.NextFloat(0.85f, 1.85f) * Projectile.scale);
+				var d = Dust.NewDustDirect(Projectile.position - Projectile.velocity * 4, Projectile.width, Projectile.height, DustID.Blood, Projectile.velocity.X * 2, Projectile.velocity.Y * 2, 100, default, Main.rand.NextFloat(0.85f, 1.85f) * Projectile.scale);
 				d.noGravity = true;
+			}
+			if (Projectile.wet)
+			{
+				ProjHit();
 			}
 		}
 
@@ -116,6 +235,14 @@ public class ToothMagic : ModProjectile, IWarpProjectile
 				{
 					Projectile.velocity = Vector2.Normalize(Projectile.velocity) * 6f;
 				}
+			}
+			GenerateVFXWhileChasing(1);
+		}
+		else
+		{
+			if (Projectile.timeLeft % 25 == 0)
+			{
+				GenerateVFX(1);
 			}
 		}
 		if (Main.rand.NextBool(2))
@@ -145,9 +272,9 @@ public class ToothMagic : ModProjectile, IWarpProjectile
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D Light = MythContent.QuickTexture("TheTusk/Projectiles/Weapon/BloodProj");
-		Texture2D Shade = MythContent.QuickTexture("TheTusk/Projectiles/Weapon/BloodShade");
-		var c0 = new Color(193, 0, 29, 0);
+		Texture2D Light = ModAsset.BloodProj.Value;
+		Texture2D Shade = ModAsset.BloodShade.Value;
+		var c0 = new Color(93, 0, 21, 0);
 
 		float width = 24;
 		float MulByTimeLeft = 1f;
@@ -164,16 +291,16 @@ public class ToothMagic : ModProjectile, IWarpProjectile
 		}
 
 
-		DrawFlameTrail(TrueL, width, true, new Color(255, 255, 255, 180));
+		DrawFlameTrail(TrueL, width, true, new Color(255, 255, 255, 40));
 
 
 		if (TimeTokill <= 0)
 		{
 			Color c2 = Lighting.GetColor((int)Projectile.Center.X / 16, (int)Projectile.Center.Y / 16);
 			float MulColor = (c2.R + c2.G + c2.B) / 765f;
-			var Frame = new Rectangle(0, (int)(Main.timeForVisualEffects / 10f % 7) * 32, 32, 32);
+			var Frame = new Rectangle(0, (int)(Main.time / 100f % 7) * 32, 32, 32);
 			Main.spriteBatch.Draw(Shade, Projectile.Center - Main.screenPosition, Frame, Color.White * MulByTimeLeft, Projectile.rotation, Frame.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
-			Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition, Frame, c0 * MulColor, Projectile.rotation, Frame.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(Light, Projectile.Center - Main.screenPosition, Frame, new Color(255, 0, 21, 0) * MulColor, Projectile.rotation, Frame.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
 		}
 		DrawFlameTrail(TrueL, width, false, c0);
 
@@ -211,13 +338,13 @@ public class ToothMagic : ModProjectile, IWarpProjectile
 			Color c2 = Lighting.GetColor((int)DrawCenter.X / 16, (int)DrawCenter.Y / 16);
 			MulColor *= (c2.R + c2.G + c2.B) / 765f;
 			var factor = i / (float)TrueL;
-			float x0 = factor * Mulfactor - (float)(Main.timeForVisualEffects / 15d) + 100000;
+			float x0 = factor * Mulfactor - (float)(Main.time / 150d) + 100000;
 			x0 %= 1f;
 			bars.Add(new Vertex2D(DrawCenter + normalDir * -width * (1 - factor) - Main.screenPosition, c0 * MulColor, new Vector3(x0, 1, 0)));
 			bars.Add(new Vertex2D(DrawCenter + normalDir * width * (1 - factor) - Main.screenPosition, c0 * MulColor, new Vector3(x0, 0, 0)));
 			var factorII = factor;
 			factor = (i + 1) / (float)TrueL;
-			var x1 = factor * Mulfactor - (float)(Main.timeForVisualEffects / 15d) + 100000;
+			var x1 = factor * Mulfactor - (float)(Main.time / 150d) + 100000;
 			x1 %= 1f;
 			if (x0 > x1)
 			{
@@ -280,16 +407,16 @@ public class ToothMagic : ModProjectile, IWarpProjectile
 			k0 += 3.14f + 1.57f;
 			if (k0 > 6.28f)
 				k0 -= 6.28f;
-			Color c0 = new Color(k0, 0.4f, 0, 0) * MulByTimeLeft;
+			Color c0 = new Color(k0, 0.2f, 0, 0) * MulByTimeLeft;
 
 			var factor = i / (float)TrueL;
-			float x0 = factor * 1.3f - (float)(Main.timeForVisualEffects / 15d) + 100000;
+			float x0 = factor * 1.3f - (float)(Main.time / 150d) + 100000;
 			x0 %= 1f;
 			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(9f) - Main.screenPosition, c0 * MulColor, new Vector3(x0, 1, 0)));
 			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(9f) - Main.screenPosition, c0 * MulColor, new Vector3(x0, 0, 0)));
 			var factorII = factor;
 			factor = (i + 1) / (float)TrueL;
-			var x1 = factor * 1.3f - (float)(Main.timeForVisualEffects / 15d) + 100000;
+			var x1 = factor * 1.3f - (float)(Main.time / 150d) + 100000;
 			x1 %= 1f;
 			if (x0 > x1)
 			{

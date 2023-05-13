@@ -31,9 +31,9 @@ public class BottleOfNutShellFlowers : ModTile
 		AddMapEntry(new Color(90, 90, 90), modTranslation);
 		HitSound = SoundID.DD2_SkeletonHurt;
 	}
-	public override void KillMultiTile(int i, int j, int frameX, int frameY)
+	public override IEnumerable<Item> GetItemDrops(int i, int j)
 	{
-		Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Items.BottleOfNutShellFlowers>());
+		yield return new Item(ModContent.ItemType<Items.BottleOfNutShellFlowers>());
 	}
 	public override void PlaceInWorld(int i, int j, Item item)
 	{

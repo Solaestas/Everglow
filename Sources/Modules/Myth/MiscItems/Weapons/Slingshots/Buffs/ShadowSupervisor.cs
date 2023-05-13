@@ -1,5 +1,3 @@
-﻿using Everglow.Myth.Common;
-
 namespace Everglow.Myth.MiscItems.Weapons.Slingshots.Buffs;
 
 public class ShadowSupervisor : ModBuff
@@ -12,6 +10,9 @@ public class ShadowSupervisor : ModBuff
 
 	public override void Update(NPC npc, ref int buffIndex)
 	{
+		Dust index = Dust.NewDustDirect(npc.position - new Vector2(4), npc.width, npc.height, DustID.WaterCandle, 0f, 0f, 0, default, Main.rand.NextFloat(0.6f, 2.3f));
+		index.velocity = new Vector2(0, Main.rand.NextFloat(0.5f, 2f)).RotatedByRandom(6.283) + new Vector2(0, -Main.rand.NextFloat(1.1f, 2f));
+		index.noGravity = true;
 		int LuckyTarget = Main.rand.Next(200);
 		if (LuckyTarget == npc.whoAmI)
 			return;
@@ -36,25 +37,6 @@ public class ShadowSupervisor : ModBuff
 						}
 					}
 				}
-			}
-		}
-	}
-}
-
-public class ShadowSupervisorTarget : GlobalNPC
-{
-
-	public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
-	{
-		if (npc.HasBuff(ModContent.BuffType<ShadowSupervisor>()))
-		{
-			Texture2D Mark = MythContent.QuickTexture("MiscItems/Weapons/Slingshots/Buffs/ShadowSupervisorMark");
-
-			if (4f * npc.width * npc.height / 10300f * npc.scale > 1.5f)
-				spriteBatch.Draw(Mark, npc.Center - Main.screenPosition, null, Color.White, 0, Mark.Size() / 2f, 0.3f, SpriteEffects.None, 0f);
-			else
-			{
-				spriteBatch.Draw(Mark, npc.Center - Main.screenPosition, null, Color.White, 0, Mark.Size() / 2f, 4f * npc.width * npc.height / 10300f * npc.scale * 0.3f, SpriteEffects.None, 0f);
 			}
 		}
 	}

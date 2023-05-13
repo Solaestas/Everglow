@@ -21,7 +21,6 @@ public class GlowingReed : ModTile
 		AddMapEntry(new Color(11, 11, 160), modTranslation);
 		HitSound = SoundID.Grass;
 	}
-
 	public override void RandomUpdate(int i, int j)
 	{
 		base.RandomUpdate(i, j);

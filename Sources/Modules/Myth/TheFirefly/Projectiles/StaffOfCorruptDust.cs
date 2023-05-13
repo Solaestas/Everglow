@@ -1,3 +1,7 @@
+using static Terraria.ModLoader.PlayerDrawLayer;
+using Terraria.Audio;
+using Terraria.DataStructures;
+
 namespace Everglow.Myth.TheFirefly.Projectiles;
 
 internal class StaffOfCorruptDust : ModProjectile
@@ -12,8 +16,14 @@ internal class StaffOfCorruptDust : ModProjectile
 		Projectile.tileCollide = false;
 		Projectile.ignoreWater = true;
 	}
+	public override void OnSpawn(IEntitySource source)
+	{
+		Projectile.localAI[0] = 0;
+		SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/CorruptDust_start"), Projectile.Center);
+	}
 	public override void AI()
 	{
+
 		Player player = Main.player[Projectile.owner];
 		float ProjectileToPlayerDistance = 48f;
 		Projectile.velocity *= 0;
@@ -40,6 +50,12 @@ internal class StaffOfCorruptDust : ModProjectile
 		{
 			Projectile.timeLeft = 5;
 		}
+
+		Projectile.localAI[0] += 1;
+		if (Projectile.localAI[0] % 12 == 2)
+		{
+			SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/CorruptDust_medium").WithPitchOffset(Main.rand.NextFloat(-0.1f,0.1f)), Projectile.Center);
+		}
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
@@ -59,5 +75,10 @@ internal class StaffOfCorruptDust : ModProjectile
 
 		Main.spriteBatch.Draw(t, Projectile.Center - Main.screenPosition, null, color, Projectile.rotation + MathF.PI * 0.27f, t.Size() / 2f, Projectile.scale, S, 0f);
 		return false;
+	}
+	public override void Kill(int timeLeft)
+	{
+		SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/CorruptDust_end"), Projectile.Center);
+		base.Kill(timeLeft);
 	}
 }

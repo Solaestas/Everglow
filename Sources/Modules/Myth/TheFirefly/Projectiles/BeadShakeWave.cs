@@ -1,13 +1,9 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 
 namespace Everglow.Myth.TheFirefly.Projectiles;
 
 public class BeadShakeWave : ModProjectile, IWarpProjectile
 {
-	public override void SetStaticDefaults()
-	{
-	}
-
 	public override void SetDefaults()
 	{
 		Projectile.extraUpdates = 3;

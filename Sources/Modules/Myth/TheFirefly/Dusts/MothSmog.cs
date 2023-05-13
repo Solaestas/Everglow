@@ -1,13 +1,9 @@
-﻿namespace Everglow.Myth.TheFirefly.Dusts;
+namespace Everglow.Myth.TheFirefly.Dusts;
 
 public class MothSmog : ModDust
 {
 	public override void OnSpawn(Dust dust)
 	{
-		dust.noGravity = true;
-		dust.noLight = false;
-		dust.scale *= 1f;
-		dust.alpha = 0;
 	}
 
 	public override bool Update(Dust dust)
@@ -16,7 +12,7 @@ public class MothSmog : ModDust
 		dust.rotation += 0.1f;
 		dust.velocity *= 0.95f;
 		dust.velocity.Y -= 0.1f;
-		dust.alpha++;
+		dust.alpha += 4;
 		Lighting.AddLight(dust.position, 0, 0, (float)((255 - dust.alpha) * 0.0015f));
 		if (dust.alpha > 254)
 			dust.active = false;

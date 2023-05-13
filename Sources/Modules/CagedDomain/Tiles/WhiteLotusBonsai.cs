@@ -36,10 +36,6 @@ public class WhiteLotusBonsai : ModTile
 		AddMapEntry(new Color(90, 90, 90), modTranslation);
 		HitSound = SoundID.DD2_SkeletonHurt;
 	}
-	public override void KillMultiTile(int i, int j, int frameX, int frameY)
-	{
-		Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Items.WhiteLotusBonsai>());
-	}
 	public override void PlaceInWorld(int i, int j, Item item)
 	{
 		Main.tile[i, j].TileFrameX += (short)(item.placeStyle * 108);

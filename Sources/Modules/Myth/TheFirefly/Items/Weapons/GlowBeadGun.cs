@@ -1,19 +1,14 @@
-﻿using Everglow.Myth;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.TheFirefly.Items.Weapons;
 
 public class GlowBeadGun : ModItem
 {
-	public override void SetStaticDefaults()
-	{
-		
-	}
 
 	public override void SetDefaults()
 	{
 		
-		Item.damage = 22;
+		Item.damage = 34;
 		Item.DamageType = DamageClass.Magic;
 		Item.mana = 4;
 		Item.width = 104;
@@ -35,7 +30,23 @@ public class GlowBeadGun : ModItem
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
 		if (player.ownedProjectileCounts[type] > 0)
+		{
+			foreach(Projectile projectile in Main.projectile)
+			{
+				if (player.ownedProjectileCounts[type] > 1)
+				{
+					if(projectile.type == type && projectile.owner == player.whoAmI)
+					{
+						projectile.Kill();
+					}
+				}
+				else
+				{
+					break;
+				}
+			}
 			return false;
+		}		
 		return true;
 	}
 }

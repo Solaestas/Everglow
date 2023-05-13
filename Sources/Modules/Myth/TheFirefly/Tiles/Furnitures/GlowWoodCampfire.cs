@@ -155,13 +155,6 @@ public class GlowWoodCampfire : ModTile
 		player.cursorItemIconEnabled = true;
 		player.cursorItemIconID = ModContent.ItemType<Items.Furnitures.GlowWoodCampfire>();
 	}
-
-	public override void KillMultiTile(int x, int y, int frameX, int frameY)
-	{
-		Item.NewItem(new EntitySource_TileBreak(x, y), x * 16, y * 16, 48, 32, ModContent.ItemType<Items.Furnitures.GlowWoodCampfire>());
-	}
-
-
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		var tile = Main.tile[i, j];

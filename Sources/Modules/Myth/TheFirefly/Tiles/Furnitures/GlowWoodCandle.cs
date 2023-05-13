@@ -25,8 +25,7 @@ public class GlowWoodCandle : ModTile
 
 		DustType = ModContent.DustType<BlueGlow>();
 		AdjTiles = new int[] { TileID.Candles };
-		ItemDrop = ModContent.ItemType<Items.Furnitures.GlowWoodCandle>();
-		// Placement
+				// Placement
 		TileObjectData.newTile.CopyFrom(TileObjectData.StyleOnTable1x1); // this style already takes care of direction for us
 		TileObjectData.addTile(Type);
 
@@ -89,10 +88,5 @@ public class GlowWoodCandle : ModTile
 	public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY)
 	{
 		offsetY = 2;
-	}
-
-	public override void KillMultiTile(int x, int y, int frameX, int frameY)
-	{
-		Item.NewItem(new EntitySource_TileBreak(x, y), x * 16, y * 16, 48, 32, ModContent.ItemType<Items.Furnitures.GlowWoodCandle>());
 	}
 }
