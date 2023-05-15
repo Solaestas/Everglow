@@ -58,57 +58,9 @@ public class DarkCocoon : ModTile
 			{
 				t2.TileType = (ushort)ModContent.TileType<BlackVine>();
 				t2.HasTile = true;
-				t2.TileFrameY = (short)(Main.rand.Next(6, 9) * 18);
 			}
 		}
-		if (Main.rand.NextBool(3))//流萤滴
-		{
-			int count = 0;
-			for (int x = -1; x <= 1; x++)
-			{
-				for (int y = 1; y <= 3; y++)
-				{
-					Tile t0 = Main.tile[i + x, j + y];
-					if (t0.HasTile)
-						count++;
-					Tile t1 = Main.tile[i + x, j + y - 1];
-					if (y == 1 && (!t1.HasTile || t1.Slope != SlopeType.Solid))
-						count++;
-				}
-			}
-			if (count == 0)
-				Common.MythUtils.PlaceFrameImportantTiles(i - 1, j + 1, 3, 3, ModContent.TileType<Furnitures.GlowingDrop>());
 
-		}
-		Tile tx = Main.tile[i, j + 1];
-		if (!tx.HasTile)
-			NPC.NewNPC(null, i * 16 + Main.rand.Next(-8, 9), j * 16 + 32, ModContent.NPCType<NPCs.LittleFireBulb>());
-		if (Main.rand.NextBool(3))//流萤滴
-		{
-			int count = 0;
-			for (int x = -1; x <= 1; x++)
-			{
-				for (int y = 1; y <= 10; y++)
-				{
-					Tile t0 = Main.tile[i + x, j + y];
-					if (t0.HasTile)
-						count++;
-					Tile t1 = Main.tile[i + x, j + y - 1];
-					if (y == 1 && (!t1.HasTile || t1.Slope != SlopeType.Solid))
-						count++;
-				}
-				foreach (var npc in Main.npc)
-				{
-					if (npc.active)
-					{
-						if (Math.Abs(npc.Center.X - i * 16) < 20)
-							count++;
-					}
-				}
-			}
-			if (count == 0)
-				NPC.NewNPC(null, i * 16 + Main.rand.Next(-8, 9), j * 16 + 180, ModContent.NPCType<NPCs.LargeFireBulb>());
-		}
 		if (!Main.tile[i, j - 1].HasTile && !Main.tile[i + 1, j - 1].HasTile && !Main.tile[i - 1, j - 1].HasTile && Main.tile[i, j].Slope == SlopeType.Solid && Main.tile[i - 1, j].Slope == SlopeType.Solid && Main.tile[i + 1, j].Slope == SlopeType.Solid)//黑萤苣
 		{
 			Tile t1 = Main.tile[i, j - 1];
@@ -265,7 +217,7 @@ public class DarkCocoon : ModTile
 			{
 				tile.TileType = (ushort)ModContent.TileType<FluorescentTree>();
 				tile.TileFrameY = 2;
-				tile.TileFrameX = 0;
+				tile.TileFrameX = (short)Main.rand.Next(2);
 				tile.HasTile = true;
 				continue;
 			}

@@ -1,4 +1,4 @@
-﻿using Terraria.ObjectData;
+using Terraria.ObjectData;
 
 namespace Everglow.Myth.TheFirefly.Tiles;
 
@@ -11,6 +11,10 @@ public class CocoonRock : ModTile
 		Main.tileMerge[ModContent.TileType<DarkCocoon>()][Type] = true;
 		Main.tileMerge[Type][ModContent.TileType<DarkCocoon>()] = true;
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style2x1);
+		TileObjectData.newTile.CoordinateHeights = new int[]
+		{
+			18
+		};
 		TileObjectData.newTile.RandomStyleRange = 3;
 		TileObjectData.addTile(Type);
 		DustType = 191;

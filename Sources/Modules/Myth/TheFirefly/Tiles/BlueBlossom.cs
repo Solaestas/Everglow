@@ -95,7 +95,7 @@ public class BlueBlossom : ModTile
 		if (tile.TileFrameY == 16)
 		{
 			var tileSpin = new TileSpin();
-			tileSpin.UpdateBlackShrub(i, j - tile.TileFrameY / 16, 0.25f, 0.13f, new Vector2(0, -20), 0, 24);
+			tileSpin.UpdateBlackShrub(i, j - tile.TileFrameY / 16, 0, 0.13f, new Vector2(0, -20), 0, 24);
 			tileSpin.Update(i, j - tile.TileFrameY / 16 + 1);
 			Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/BlueBlossomDraw");
 			tileSpin.DrawRotatedTile(i, j - tile.TileFrameY / 16, tex, new Rectangle(tile.TileFrameX, 0, 120, 108), new Vector2(60, 108), 16, 54, false);

@@ -9,6 +9,11 @@ public class BlackFrenLarge : ModTile
 		Main.tileFrameImportant[Type] = true;
 		Main.tileNoAttach[Type] = true;
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style3x2);
+		TileObjectData.newTile.CoordinateHeights = new int[]
+		{
+			16,
+			18
+		};
 		TileObjectData.addTile(Type);
 		DustType = 191;
 		var modTranslation = CreateMapEntryName();
@@ -20,13 +25,6 @@ public class BlackFrenLarge : ModTile
 	{
 		num = fail ? 1 : 3;
 	}
-	public override void PlaceInWorld(int i, int j, Item item)
-	{
-		short num = (short)Main.rand.Next(0, 6);
-		Main.tile[i, j].TileFrameX = (short)(num * 48);
-		Main.tile[i, j + 1].TileFrameX = (short)(num * 48);
-	}
-
 	public override void NearbyEffects(int i, int j, bool closer)
 	{/*
             if (closer)

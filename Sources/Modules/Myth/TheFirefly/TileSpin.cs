@@ -1,11 +1,56 @@
-﻿using Everglow.Myth.TheFirefly.Dusts;
+using Everglow.Commons.Physics;
+using Everglow.Myth.TheFirefly.Dusts;
 
 namespace Everglow.Myth.TheFirefly;
 
 internal class TileSpin
 {
 	public static Dictionary<(int, int), Vector2> TileRotation = new Dictionary<(int, int), Vector2>();
+	public static Dictionary<(int, int), List<Mass>> SwayVine = new Dictionary<(int, int), List<Mass>>();
 
+	public void UpdateVine(int i, int j, float elasticity = 0.5f, float damping = 0.5f)
+	{
+		if (SwayVine.ContainsKey((i, j)) && !Main.gamePaused)
+		{
+			int length = SwayVine[(i, j)].Count;
+			while (Main.tile[i, j + length].TileType == ModContent.TileType<Tiles.BlackVine>())
+			{
+				SwayVine[(i, j)].Add(new Mass(10, new Vector2(0, SwayVine[(i, j)].Count * 16), false));
+				length++;
+			}
+			while (Main.tile[i, j + length - 1].TileType != ModContent.TileType<Tiles.BlackVine>())
+			{
+				int restCount = SwayVine[(i, j)].Count;
+				if(restCount <= 0)
+				{
+					SwayVine.Remove((i, j));
+					return;
+				}
+				SwayVine[(i, j)].RemoveAt(restCount - 1);
+				length--;
+			}
+			length = SwayVine[(i, j)].Count;
+			for (int x = 0;x < length - 1;x++)
+			{
+				Spring spring = new Spring(elasticity, 12, damping, SwayVine[(i, j)][x], SwayVine[(i, j)][x + 1]);
+				SwayVine[(i, j)][x + 1].force.Y += SwayVine[(i, j)][x + 1].mass * 0.032f;//Gravity
+				if (Main.tile[i, j + x].wall <= 0)
+				{
+					SwayVine[(i, j)][x + 1].force.X += Main.windSpeedCurrent * 0.1f * (1 + MathF.Sin(i * 0.25f + j * 0.25f + x * 0.45f + (float)(Main.time) * 0.03f) * 1.4f);
+				}
+				Vector2 worldCoord = new Vector2(i, j) * 16 + SwayVine[(i, j)][x + 1].position + new Vector2(8);
+				foreach (Player player in Main.player)
+				{
+					if(player.Hitbox.Right().X > worldCoord.X && player.Hitbox.Left().X < worldCoord.X && player.Hitbox.Bottom().Y > worldCoord.Y && player.Hitbox.Top().Y < worldCoord.Y)
+					{
+						SwayVine[(i, j)][x + 1].force += player.velocity * 0.6f;
+					}
+				}
+				spring.ApplyForce(3f);
+				SwayVine[(i, j)][x + 1].Update(3f);
+			}
+		}
+	}
 	/// <summary>
 	/// 更新旋转
 	/// </summary>

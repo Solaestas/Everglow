@@ -20,9 +20,6 @@ public class GlowWoodChandelier : ModTile
 		Main.tileSolid[Type] = false;
 		Main.tileNoFail[Type] = true;
 		TileID.Sets.HasOutlines[Type] = true;
-		TileID.Sets.CanBeSleptIn[Type] = true; // Facilitates calling ModifySleepingTargetInfo
-		TileID.Sets.InteractibleByNPCs[Type] = true; // Town NPCs will palm their hand at this tile
-		TileID.Sets.IsValidSpawnPoint[Type] = true;
 
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
 

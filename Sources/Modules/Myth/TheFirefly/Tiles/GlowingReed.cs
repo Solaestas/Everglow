@@ -25,7 +25,10 @@ public class GlowingReed : ModTile
 	{
 		base.RandomUpdate(i, j);
 	}
-
+	public override IEnumerable<Item> GetItemDrops(int i, int j)
+	{
+		yield break;
+	}
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		return true;
