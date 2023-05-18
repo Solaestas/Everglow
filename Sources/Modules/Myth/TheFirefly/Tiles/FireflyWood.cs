@@ -1,5 +1,4 @@
 using Everglow.Myth.Common;
-using Everglow.Myth.TheFirefly.Items;
 
 namespace Everglow.Myth.TheFirefly.Tiles;
 
