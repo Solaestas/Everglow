@@ -71,15 +71,22 @@ public class GlowWoodLantern : ModTile
 					else
 					{
 						float rot;
-						float Omega;
-						Omega = TileSpin.TileRotation[(i, j - tile.TileFrameY / 18)].X;
+						float omega;
+						omega = TileSpin.TileRotation[(i, j - tile.TileFrameY / 18)].X;
 						rot = TileSpin.TileRotation[(i, j - tile.TileFrameY / 18)].Y;
-						if (Math.Abs(Omega) < 0.04f && Math.Abs(rot) < 0.04f)
-							TileSpin.TileRotation[(i, j - tile.TileFrameY / 18)] = new Vector2(Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
-						if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
+						float mass = 15f;
+						float MaxSpeed = Math.Abs(Math.Clamp(player.velocity.X / mass, -0.5f, 0.5f));
+						if (Math.Abs(omega) < MaxSpeed && Math.Abs(rot) < MaxSpeed)
+							TileSpin.TileRotation[(i, j - tile.TileFrameY / 18)] = new Vector2(omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
+						if (Math.Abs(omega) < 0.001f && Math.Abs(rot) < 0.001f)
 							TileSpin.TileRotation.Remove((i, j - tile.TileFrameY / 18));
 					}
 				}
+			}
+			if (tile.WallType == 0)
+			{
+				if (!TileSpin.TileRotation.ContainsKey((i, j - tile.TileFrameY / 18)))
+					TileSpin.TileRotation.Add((i, j - tile.TileFrameY / 18), new Vector2(Main.windSpeedCurrent * 0.2f, 0));
 			}
 		}
 	}

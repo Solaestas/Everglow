@@ -12,11 +12,8 @@ public class GlowWoodChest : ModTile
 {
 	public override void SetStaticDefaults()
 	{
-		// Properties
 		Main.tileSpelunker[Type] = true;
 		Main.tileContainer[Type] = true;
-		Main.tileShine2[Type] = true;
-		Main.tileShine[Type] = 1200;
 		Main.tileFrameImportant[Type] = true;
 		Main.tileNoAttach[Type] = true;
 		Main.tileOreFinderPriority[Type] = 500;
@@ -27,7 +24,6 @@ public class GlowWoodChest : ModTile
 		DustType = ModContent.DustType<BlueGlow>();
 		AdjTiles = new int[] { TileID.Containers };
 		
-		// Placement
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
 		TileObjectData.newTile.Origin = new Point16(0, 1);
 		TileObjectData.newTile.CoordinateHeights = new[] { 16, 16 };
@@ -100,7 +96,7 @@ public class GlowWoodChest : ModTile
 		if (Main.drawToScreen)
 			zero = Vector2.Zero;
 		Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodChestGlow");
-		spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(0.8f, 0.8f, 0.8f, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
+		spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(0.2f, 0.2f, 0.2f, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
 
 		base.PostDraw(i, j, spriteBatch);
 	}

@@ -68,12 +68,12 @@ public class LampLotus : ModTile
 						else
 						{
 							float rot;
-							float Omega;
-							Omega = TileSpin.TileRotation[(i, j)].X;
+							float omega;
+							omega = TileSpin.TileRotation[(i, j)].X;
 							rot = TileSpin.TileRotation[(i, j)].Y;
-							if (Math.Abs(Omega) < 0.4f && Math.Abs(rot) < 0.4f)
-								TileSpin.TileRotation[(i, j)] = new Vector2(Omega + Math.Clamp(player.velocity.X * 0.02f, -1, 1) * 2f, rot + Omega + Math.Clamp(player.velocity.X * 0.02f, -1, 1) * 2f);
-							if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
+							if (Math.Abs(omega) < 0.4f && Math.Abs(rot) < 0.4f)
+								TileSpin.TileRotation[(i, j)] = new Vector2(omega + Math.Clamp(player.velocity.X * 0.02f, -1, 1) * 2f, rot + omega + Math.Clamp(player.velocity.X * 0.02f, -1, 1) * 2f);
+							if (Math.Abs(omega) < 0.001f && Math.Abs(rot) < 0.001f)
 								TileSpin.TileRotation.Remove((i, j));
 						}
 					}
@@ -84,11 +84,11 @@ public class LampLotus : ModTile
 						else
 						{
 							float rot;
-							float Omega;
-							Omega = TileSpin.TileRotation[(i, j)].X;
+							float omega;
+							omega = TileSpin.TileRotation[(i, j)].X;
 							rot = TileSpin.TileRotation[(i, j)].Y;
-							if (Math.Abs(Omega) < 4f && Math.Abs(rot) < 4f)
-								TileSpin.TileRotation[(i, j)] = new Vector2(Omega * 0.999f + Math.Clamp(Main.windSpeedCurrent, -1, 1) * (0.3f + MathUtils.Sin(i + (float)Main.time / 24f) * 0.1f) * 0.002f, rot * 0.999f + Math.Clamp(Main.windSpeedCurrent, -1, 1) * (0.3f + MathUtils.Sin(i + (float)Main.time / 24f) * 0.1f) * 0.002f);
+							if (Math.Abs(omega) < 4f && Math.Abs(rot) < 4f)
+								TileSpin.TileRotation[(i, j)] = new Vector2(omega * 0.999f + Math.Clamp(Main.windSpeedCurrent, -1, 1) * (0.3f + MathUtils.Sin(i + (float)Main.time / 24f) * 0.1f) * 0.002f, rot * 0.999f + Math.Clamp(Main.windSpeedCurrent, -1, 1) * (0.3f + MathUtils.Sin(i + (float)Main.time / 24f) * 0.1f) * 0.002f);
 						}
 					}
 				}

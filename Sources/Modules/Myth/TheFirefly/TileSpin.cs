@@ -8,7 +8,41 @@ internal class TileSpin
 	public static Dictionary<(int, int), Vector2> TileRotation = new Dictionary<(int, int), Vector2>();
 	public static Dictionary<(int, int), List<Mass>> SwayVine = new Dictionary<(int, int), List<Mass>>();
 
+	/// <summary>
+	/// 此项仅用于复杂的组合吊灯
+	/// </summary>
+	/// <param name="ij"></param>
+	/// <param name="strength"></param>
+	public static void ActivateTileSpin((int, int) ij, float strength)
+	{
+		if (!TileRotation.ContainsKey(ij))
+			TileRotation.Add(ij, new Vector2(-Math.Clamp(strength, -1, 1) * 0.2f));
+		else
+		{
+			float rot;
+			float omega;
+			omega = TileRotation[ij].X;
+			rot = TileRotation[ij].Y;
+			if (CanAddForce(rot, strength) || CanAddForce(omega, strength))
+				TileRotation[ij] = new Vector2(omega - Math.Clamp(strength, -1, 1) * 0.2f, rot + omega - Math.Clamp(strength, -1, 1) * 0.2f);
+			if (Math.Abs(omega) < 0.001f && Math.Abs(rot) < 0.001f)
+				TileRotation.Remove(ij);
+		}
+	}
+	//Return true if value1 * value2 < 0 || Math.Abs(value1) < Math.Abs(value2)
+	public static bool CanAddForce(float value1, float value2)
+	{
+		return value1 * value2 < 0 || Math.Abs(value1) < Math.Abs(value2);
+	}
+	/// <summary>
+	/// 藤蔓物理
+	/// </summary>
+	/// <param name="i"></param>
+	/// <param name="j"></param>
+	/// <param name="elasticity"></param>
+	/// <param name="damping"></param>
 	public void UpdateVine(int i, int j, float elasticity = 0.5f, float damping = 0.5f)
+
 	{
 		if (SwayVine.ContainsKey((i, j)) && !Main.gamePaused)
 		{
@@ -67,7 +101,11 @@ internal class TileSpin
 			Omega = TileRotation[(i, j)].X;
 			rot = TileRotation[(i, j)].Y;
 			Omega = Omega * k1 - rot * k2;
+
+			if (Main.tile[i, j].WallType == 0)
+				Omega = Omega * 0.99f - Math.Clamp(Main.windSpeedCurrent, -1, 1) * (0.3f + MathUtils.Sin(j + i + (float)Main.time / 12f) * 0.1f) * 0.2f;
 			TileRotation[(i, j)] = new Vector2(Omega, rot + Omega);
+
 			if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
 				TileRotation.Remove((i, j));
 		}
@@ -85,12 +123,12 @@ internal class TileSpin
 		if (TileRotation.ContainsKey((i, j)) && !Main.gamePaused)
 		{
 			float rot;
-			float Omega;
-			Omega = TileRotation[(i, j)].X;
+			float omega;
+			omega = TileRotation[(i, j)].X;
 			rot = TileRotation[(i, j)].Y;
-			Omega = Omega * 0.75f - rot * 0.13f;
-			TileRotation[(i, j)] = new Vector2(Omega, rot + Omega);
-			float Strength = Math.Abs(Omega) + Math.Abs(rot);
+			omega = omega * 0.75f - rot * 0.13f;
+			TileRotation[(i, j)] = new Vector2(omega, rot + omega);
+			float Strength = Math.Abs(omega) + Math.Abs(rot);
 			if (Main.rand.NextBool(Math.Clamp((int)(100 - Strength * 1200f * k1), 1, 900)))
 			{
 				var d = Dust.NewDustDirect(new Vector2(i * 16 + Addx, j * 16 + Addy) + offset.RotatedBy(rot), width, height, ModContent.DustType<BlueParticleDark>());
@@ -98,11 +136,11 @@ internal class TileSpin
 				d.alpha = (int)(255 - Strength * 2000f * k1);
 				d2.scale = Strength * 10f;
 				d.scale *= k1;
-				d.velocity = (offset.RotatedBy(rot) - offset.RotatedBy(rot - Omega)) * k1 * 1f;
+				d.velocity = (offset.RotatedBy(rot) - offset.RotatedBy(rot - omega)) * k1 * 1f;
 				d2.scale *= k1;
-				d2.velocity = (offset.RotatedBy(rot) - offset.RotatedBy(rot - Omega)) * k1 * 1f;
+				d2.velocity = (offset.RotatedBy(rot) - offset.RotatedBy(rot - omega)) * k1 * 1f;
 			}
-			if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
+			if (Math.Abs(omega) < 0.001f && Math.Abs(rot) < 0.001f)
 				TileRotation.Remove((i, j));
 		}
 	}

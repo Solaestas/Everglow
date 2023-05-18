@@ -22,7 +22,7 @@ public class TuskSpice : ModProjectile
 		Projectile.damage = 0;
 	}
 	Vector2 SP = Vector2.Zero;
-	float Omega = 0;
+	float omega = 0;
 	bool OnPlac = false;
 	bool Down = false;
 	bool Collid = false;
@@ -58,11 +58,11 @@ public class TuskSpice : ModProjectile
 		{
 			if (!Down)
 			{
-				Omega += (float)(Math.PI - Projectile.rotation) / 23f;
-				Omega *= 0.96f;
-				Projectile.rotation += Omega;
+				omega += (float)(Math.PI - Projectile.rotation) / 23f;
+				omega *= 0.96f;
+				Projectile.rotation += omega;
 				Projectile.velocity = new Vector2(0, 0.01f);
-				if (Math.Abs(Math.PI - Projectile.rotation) < 0.05f && Math.Abs(Omega) < 0.05f)
+				if (Math.Abs(Math.PI - Projectile.rotation) < 0.05f && Math.Abs(omega) < 0.05f)
 				{
 					Down = true;
 					Projectile.velocity.Y += 0.25f;

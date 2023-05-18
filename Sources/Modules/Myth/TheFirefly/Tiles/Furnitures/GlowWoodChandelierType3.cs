@@ -74,12 +74,19 @@ public class GlowWoodChandelierType3 : ModTile
 						float Omega;
 						Omega = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18)].X;
 						rot = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18)].Y;
-						if (Math.Abs(Omega) < 0.04f && Math.Abs(rot) < 0.04f)
+						float mass = 26f;
+						float MaxSpeed = Math.Abs(Math.Clamp(player.velocity.X / mass, -0.5f, 0.5f));
+						if (Math.Abs(Omega) < MaxSpeed && Math.Abs(rot) < MaxSpeed)
 							TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18)] = new Vector2(Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
 						if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
 							TileSpin.TileRotation.Remove((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18));
 					}
 				}
+			}
+			if (tile.WallType == 0)
+			{
+				if (!TileSpin.TileRotation.ContainsKey((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18)))
+					TileSpin.TileRotation.Add((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18), new Vector2(Main.windSpeedCurrent * 0.2f, 0));
 			}
 		}
 	}

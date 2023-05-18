@@ -1,6 +1,7 @@
 using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly;
 using Everglow.Myth.TheFirefly.Dusts;
+using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ObjectData;
@@ -18,8 +19,8 @@ public class GlowingDrop : ModTile
 		Main.tileSolid[Type] = false;
 		Main.tileNoFail[Type] = true;
 		TileID.Sets.HasOutlines[Type] = true;
-		TileID.Sets.CanBeSleptIn[Type] = true; // Facilitates calling ModifySleepingTargetInfo
-		TileID.Sets.InteractibleByNPCs[Type] = true; // Town NPCs will palm their hand at this tile
+		TileID.Sets.CanBeSleptIn[Type] = true;
+		TileID.Sets.InteractibleByNPCs[Type] = true;
 		TileID.Sets.IsValidSpawnPoint[Type] = true;
 
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
@@ -27,18 +28,13 @@ public class GlowingDrop : ModTile
 		DustType = ModContent.DustType<BlueGlow>();
 		AdjTiles = new int[] { TileID.Chandeliers };
 
-		// Placement
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3);
 		TileObjectData.newTile.AnchorTop = new AnchorData(AnchorType.SolidTile, TileObjectData.newTile.Width, 0);
 		TileObjectData.newTile.AnchorBottom = default;
 		TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16 };
 		TileObjectData.addTile(Type);
 
-		// Etc
-		//ModTranslation name = CreateMapEntryName();
-		//name.SetDefault("Chandelier");
 		AddMapEntry(new Color(0, 14, 175));
-		//TODO:这个Tile作为一种植物可能比灯具更加合理一点
 	}
 
 	public override void HitWire(int i, int j)
@@ -68,82 +64,44 @@ public class GlowingDrop : ModTile
 		if (closer)
 		{
 			var tile = Main.tile[i, j];
+			bool windSway = tile.wall <= 0;
 			if (tile.TileFrameX % 54 == 18 && tile.TileFrameY == 0)
 			{
+				if(windSway && !Main.gamePaused)
+				{
+					if(Main.windSpeedCurrent != 0)
+					{
+						TileSpin.ActivateTileSpin((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18), Main.windSpeedCurrent * (1 + MathF.Sin(i + j + 1 + (float)(Main.time * 0.06)) * 0.75f) * 0.2f);
+						TileSpin.ActivateTileSpin((i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18), Main.windSpeedCurrent * (1 + MathF.Sin(i + j + 2 + (float)(Main.time * 0.06)) * 0.75f) * 0.2f);
+						TileSpin.ActivateTileSpin((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1), Main.windSpeedCurrent * (1 + MathF.Sin(i + j + 3 + (float)(Main.time * 0.06)) * 0.75f) * 0.2f);
+						TileSpin.ActivateTileSpin((i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18), Main.windSpeedCurrent * (1 + MathF.Sin(i + j + 4 + (float)(Main.time * 0.06)) * 0.75f) * 0.2f);
+					}
+				}
 				foreach (Player player in Main.player)
 				{
 					if (player.Hitbox.Intersects(new Rectangle(i * 16 + 11, j * 16 + 32, 10, 12)))
 					{
-						if (!TileSpin.TileRotation.ContainsKey((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18)))
-							TileSpin.TileRotation.Add((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18), new Vector2(-Math.Clamp(player.velocity.X, -1, 1) * 0.2f));
-						else
-						{
-							float rot;
-							float Omega;
-							Omega = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18)].X;
-							rot = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18)].Y;
-							if (Math.Abs(Omega) < 0.04f && Math.Abs(rot) < 0.04f)
-								TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18)] = new Vector2(Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
-							if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
-								TileSpin.TileRotation.Remove((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18));
-						}
+						TileSpin.ActivateTileSpin((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18), player.velocity.X * 0.1f);
 					}
 
 					if (player.Hitbox.Intersects(new Rectangle(i * 16 + 21, j * 16 + 12, 10, 12)))
 					{
-						if (!TileSpin.TileRotation.ContainsKey((i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18)))
-							TileSpin.TileRotation.Add((i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18), new Vector2(-Math.Clamp(player.velocity.X, -1, 1) * 0.2f));
-						else
-						{
-							float rot;
-							float Omega;
-							Omega = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18)].X;
-							rot = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18)].Y;
-							if (Math.Abs(Omega) < 0.04f && Math.Abs(rot) < 0.04f)
-								TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18)] = new Vector2(Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
-							if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
-								TileSpin.TileRotation.Remove((i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18));
-						}
+						TileSpin.ActivateTileSpin((i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18), player.velocity.X * 0.1f);
 					}
 
 					if (player.Hitbox.Intersects(new Rectangle(i * 16 - 1, j * 16 + 18, 10, 12)))
 					{
-						if (!TileSpin.TileRotation.ContainsKey((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1)))
-							TileSpin.TileRotation.Add((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1), new Vector2(-Math.Clamp(player.velocity.X, -1, 1) * 0.2f));
-						else
-						{
-							float rot;
-							float Omega;
-							Omega = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1)].X;
-							rot = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1)].Y;
-							if (Math.Abs(Omega) < 0.04f && Math.Abs(rot) < 0.04f)
-								TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1)] = new Vector2(Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
-							if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
-								TileSpin.TileRotation.Remove((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1));
-						}
+						TileSpin.ActivateTileSpin((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1), player.velocity.X * 0.1f);
 					}
 
 					if (player.Hitbox.Intersects(new Rectangle(i * 16 - 13, j * 16 + 26, 10, 12)))
 					{
-						if (!TileSpin.TileRotation.ContainsKey((i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18)))
-							TileSpin.TileRotation.Add((i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18), new Vector2(-Math.Clamp(player.velocity.X, -1, 1) * 0.2f));
-						else
-						{
-							float rot;
-							float Omega;
-							Omega = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18)].X;
-							rot = TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18)].Y;
-							if (Math.Abs(Omega) < 0.04f && Math.Abs(rot) < 0.04f)
-								TileSpin.TileRotation[(i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18)] = new Vector2(Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + Omega - Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
-							if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
-								TileSpin.TileRotation.Remove((i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18));
-						}
+						TileSpin.ActivateTileSpin((i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18), player.velocity.X * 0.1f);
 					}
 				}
 			}
 		}
 	}
-
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		var tile = Main.tile[i, j];
@@ -155,16 +113,16 @@ public class GlowingDrop : ModTile
 			var tileSpin = new TileSpin();
 			tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18);
 			Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowingDrop");
-			tileSpin.DrawRotatedTile(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, tex, new Rectangle(30 + Adx, 0, 10, 48), new Vector2(5, 0), 16, -2, 1);
+			tileSpin.DrawRotatedTile(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, tex, new Rectangle(30 + Adx, (int)((Math.Sin(i + j) * 100 + 100) % 22), 10, 48), new Vector2(5, 0), 16, -2, 1);
 
 			tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18);
-			tileSpin.DrawRotatedTile(i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18, tex, new Rectangle(40 + Adx, 0, 10, 48), new Vector2(5, 0), 10, -2, 1);
+			tileSpin.DrawRotatedTile(i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18, tex, new Rectangle(40 + Adx, (int)((Math.Sin(i + j) * 100 + 100) % 14), 10, 48), new Vector2(5, 0), 10, -2, 1);
 
 			tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1);
-			tileSpin.DrawRotatedTile(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1, tex, new Rectangle(18 + Adx, 0, 10, 48), new Vector2(5, 0), 4, -18, 1);
+			tileSpin.DrawRotatedTile(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1, tex, new Rectangle(18 + Adx, (int)((Math.Sin(i + j) * 100 + 100) % 14), 10, 48), new Vector2(5, 0), 4, -18, 1);
 
 			tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18);
-			tileSpin.DrawRotatedTile(i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18, tex, new Rectangle(6 + Adx, 0, 10, 48), new Vector2(5, 0), 8, -2, 1);
+			tileSpin.DrawRotatedTile(i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18, tex, new Rectangle(6 + Adx, (int)((Math.Sin(i + j) * 100 + 100) % 26), 10, 48), new Vector2(5, 0), 8, -2, 1);
 		}
 
 		return false;

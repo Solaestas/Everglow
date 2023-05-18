@@ -43,11 +43,14 @@ public class BlackVine : ModTile
 		{
 			return;
 		}
-		var tileBelow = Main.tile[i, j + 1];
-		if(!tileBelow.HasTile)
+		if(Main.rand.NextBool(Math.Max(1, deltaY * deltaY - 40)))
 		{
-			tileBelow.TileType = Type;
-			tileBelow.HasTile = true;
+			var tileBelow = Main.tile[i, j + 1];
+			if (!tileBelow.HasTile)
+			{
+				tileBelow.TileType = Type;
+				tileBelow.HasTile = true;
+			}
 		}
 		base.RandomUpdate(i, j);
 	}

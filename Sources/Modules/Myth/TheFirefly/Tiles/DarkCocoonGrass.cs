@@ -2,7 +2,7 @@ using Terraria.ObjectData;
 
 namespace Everglow.Myth.TheFirefly.Tiles;
 
-public class GlowingReed : ModTile
+public class DarkCocoonGrass : ModTile
 {
 	public override void PostSetDefaults()
 	{
@@ -13,7 +13,7 @@ public class GlowingReed : ModTile
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
 		TileObjectData.newTile.CoordinateHeights = new int[]
 		{
-			34
+           34
 		};
 		TileObjectData.newTile.CoordinateWidth = 16;
 		TileObjectData.addTile(Type);
@@ -26,13 +26,13 @@ public class GlowingReed : ModTile
 	public override void RandomUpdate(int i, int j)
 	{
 		Tile tile = Main.tile[i, j];
-		tile.TileFrameX += 90;
+		tile.TileFrameX += 108;
 		base.RandomUpdate(i, j);
 	}
 	public override void PlaceInWorld(int i, int j, Item item)
 	{
 		Tile tile = Main.tile[i, j];
-		short frameXStyle = (short)(Main.rand.Next(5) * 18);
+		short frameXStyle = (short)(Main.rand.Next(6) * 18);
 		tile.TileFrameX = frameXStyle;
 		base.PlaceInWorld(i, j, item);
 	}

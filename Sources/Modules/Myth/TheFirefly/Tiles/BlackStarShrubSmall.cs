@@ -51,12 +51,12 @@ public class BlackStarShrubSmall : ModTile
 					else
 					{
 						float rot;
-						float Omega;
-						Omega = TileSpin.TileRotation[(i, j - tile.TileFrameY / 16 + 1)].X;
+						float omega;
+						omega = TileSpin.TileRotation[(i, j - tile.TileFrameY / 16 + 1)].X;
 						rot = TileSpin.TileRotation[(i, j - tile.TileFrameY / 16 + 1)].Y;
-						if (Math.Abs(Omega) < 0.04f && Math.Abs(rot) < 0.04f)
-							TileSpin.TileRotation[(i, j - tile.TileFrameY / 16 + 1)] = new Vector2(Omega + Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + Omega + Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
-						if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
+						if (Math.Abs(omega) < 0.04f && Math.Abs(rot) < 0.04f)
+							TileSpin.TileRotation[(i, j - tile.TileFrameY / 16 + 1)] = new Vector2(omega + Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + omega + Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
+						if (Math.Abs(omega) < 0.001f && Math.Abs(rot) < 0.001f)
 							TileSpin.TileRotation.Remove((i, j - tile.TileFrameY / 16 + 1));
 					}
 
@@ -65,12 +65,12 @@ public class BlackStarShrubSmall : ModTile
 					else
 					{
 						float rot;
-						float Omega;
-						Omega = TileSpin.TileRotation[(i, j - tile.TileFrameY / 16)].X;
+						float omega;
+						omega = TileSpin.TileRotation[(i, j - tile.TileFrameY / 16)].X;
 						rot = TileSpin.TileRotation[(i, j - tile.TileFrameY / 16)].Y;
-						if (Math.Abs(Omega) < 0.04f && Math.Abs(rot) < 0.04f)
-							TileSpin.TileRotation[(i, j - tile.TileFrameY / 16)] = new Vector2(Omega + Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + Omega + Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
-						if (Math.Abs(Omega) < 0.001f && Math.Abs(rot) < 0.001f)
+						if (Math.Abs(omega) < 0.04f && Math.Abs(rot) < 0.04f)
+							TileSpin.TileRotation[(i, j - tile.TileFrameY / 16)] = new Vector2(omega + Math.Clamp(player.velocity.X, -1, 1) * 0.2f, rot + omega + Math.Clamp(player.velocity.X, -1, 1) * 0.2f);
+						if (Math.Abs(omega) < 0.001f && Math.Abs(rot) < 0.001f)
 							TileSpin.TileRotation.Remove((i, j - tile.TileFrameY / 16));
 					}
 				}
