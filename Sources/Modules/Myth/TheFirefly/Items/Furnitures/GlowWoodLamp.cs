@@ -29,7 +29,7 @@ public class GlowWoodLamp : ModItem
 	{
 		Recipe recipe = CreateRecipe();
 		recipe.AddIngredient(ModContent.ItemType<GlowWood>(), 3);
-		recipe.AddIngredient(ItemID.Torch, 1);
+		recipe.AddIngredient(ModContent.ItemType<GlowWoodTorch>(), 1);
 		recipe.AddTile(TileID.WorkBenches);
 		recipe.Register();
 	}

@@ -152,4 +152,43 @@ public class MythUtils
 			}
 		}
 	}
+	public static float GetHourHandRotation()
+	{
+		double timeInSecond = Main.time + 16200;
+		if(!Main.dayTime)
+		{
+			timeInSecond = Main.time + 70200;
+			if (timeInSecond > 86400)
+			{
+				timeInSecond -= 86400;
+			}
+		}
+		return (float)(timeInSecond / 43200 * MathHelper.TwoPi);
+	}
+	public static float GetMinuteHandRotation()
+	{
+		double timeInSecond = Main.time + 16200;
+		if (!Main.dayTime)
+		{
+			timeInSecond = Main.time + 70200;
+			if (timeInSecond > 86400)
+			{
+				timeInSecond -= 86400;
+			}
+		}
+		return (float)(timeInSecond / 3600 * MathHelper.TwoPi);
+	}
+	public static float GetSecondHandRotation()
+	{
+		double timeInSecond = Main.time + 16200;
+		if (!Main.dayTime)
+		{
+			timeInSecond = Main.time + 70200;
+			if (timeInSecond > 86400)
+			{
+				timeInSecond -= 86400;
+			}
+		}
+		return (float)(timeInSecond / 60 * MathHelper.TwoPi);
+	}
 }
