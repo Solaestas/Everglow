@@ -11,21 +11,9 @@ public class GlowWoodTorch : ModItem
 
 	public override void SetDefaults()
 	{
-		Item.flame = true;
-		Item.width = 10;
-		Item.height = 12;
-		Item.value = 50;
-		Item.maxStack = 999;
-		Item.holdStyle = 1;
-		Item.noWet = false;
-		Item.useTurn = true;
-		Item.autoReuse = true;
-		Item.useAnimation = 15;
-		Item.useTime = 10;
-		Item.useStyle = ItemUseStyleID.Swing;
-		Item.holdStyle = ItemHoldStyleID.HoldFront;
-		Item.consumable = true;
-		Item.createTile = ModContent.TileType<Tiles.Furnitures.GlowWoodTorch>();
+		Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.Furnitures.GlowWoodTorch>());
+		Item.width = 20;
+		Item.height = 20;
 	}
 
 	public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup)
