@@ -34,7 +34,7 @@ public class VFXManager : IVFXManager
 		get; private set;
 	}
 
-	public VFXManager()
+	public VFXManager(IHookManager hookManager, IMainThreadContext mainThread)
 	{
 		foreach (var layer in drawLayers)
 		{
@@ -55,8 +55,8 @@ public class VFXManager : IVFXManager
 				Ins.HookManager.AddHook(layer, () => Draw(layer), $"VFX {layer}");
 			}
 		}
-		Ins.HookManager.AddHook(CodeLayer.PostUpdateEverything, Update, "VFX Update");
-		Ins.MainThread.AddTask(() => tempRenderTarget = Ins.RenderTargetPool.GetRenderTarget2D());
+		hookManager.AddHook(CodeLayer.PostUpdateEverything, Update, "VFX Update");
+		mainThread.AddTask(() => tempRenderTarget = Ins.RenderTargetPool.GetRenderTarget2D());
 		foreach (var visual in Ins.ModuleManager.CreateInstances<IVisual>())
 		{
 			Register(visual);

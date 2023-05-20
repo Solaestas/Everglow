@@ -1,3 +1,4 @@
+using Everglow.Commons.Interfaces;
 using Everglow.Commons.Vertex;
 
 namespace Everglow.Commons.VFX;
@@ -22,10 +23,10 @@ public class VFXBatch : IDisposable
 
 	#endregion Private Field
 
-	public VFXBatch()
+	public VFXBatch(GraphicsDevice graphics, IMainThreadContext mainThread)
 	{
-		graphicsDevice = Ins.Device;
-		Ins.MainThread.AddTask(() =>
+		graphicsDevice = graphics;
+		mainThread.AddTask(() =>
 		{
 			RegisterVertex<VFX2D>(MAX_VERTICES, MAX_VERTICES * 6 / 4);//四个顶点两个三角形六个下标
 			RegisterVertex<Vertex2D>();

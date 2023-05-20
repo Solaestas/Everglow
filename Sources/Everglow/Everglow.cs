@@ -23,11 +23,36 @@ public class Everglow : Mod
 	{
 		ModIns.Mod = this;
 
-		Ins.Set<ILog>(Logger);
-		Ins.Set<GraphicsDevice>(Main.instance.GraphicsDevice);
-		Ins.Set<IVisualQualityController>(new VisualQualityController());
-		Ins.Set<ModuleManager>(new ModuleManager());
-		HookManager.Initialize();
+		AddServices();
+		AddContents();
+
+		m_packetResolver = new PacketResolver(this);
+	}
+
+	private void AddServices()
+	{
+		Ins.Begin();
+		Ins.Add<ILog>(args => Logger);
+		Ins.Add<GraphicsDevice>(args => Main.instance.GraphicsDevice);
+		Ins.Add<IVisualQualityController, VisualQualityController>();
+		Ins.Add<ModuleManager>();
+		Ins.Add<IHookManager, HookManager.TrueHookManager>();
+		Ins.Add<IMainThreadContext, MainThreadContext>();
+		if (Main.netMode != NetmodeID.Server)
+		{
+			Ins.Add<RenderTargetPool>();
+			Ins.Add<IVFXManager, VFXManager>();
+			Ins.Add<VFXBatch>();
+		}
+		else
+		{
+			Ins.Add<IVFXManager, FakeManager>();
+		}
+		Ins.End();
+	}
+
+	private void AddContents()
+	{
 		foreach (var config in Ins.ModuleManager.CreateInstances<ModConfig>())
 		{
 			var name = config.GetType().Name;
@@ -49,7 +74,7 @@ public class Everglow : Mod
 		}
 		foreach (var ins in Ins.ModuleManager.CreateInstances<ILoadable>(type =>
 		{
-			if(type.IsSubclassOf(typeof(ModGore)))
+			if (type.IsSubclassOf(typeof(ModGore)))
 			{
 				return false;
 			}
@@ -59,12 +84,6 @@ public class Everglow : Mod
 		{
 			AddContent(ins);
 		}
-		Ins.Set<IMainThreadContext>(new MainThreadContext());
-		Ins.Set<RenderTargetPool>(Main.netMode != NetmodeID.Server ? new RenderTargetPool() : null);
-		Ins.Set<VFXBatch>(Main.netMode != NetmodeID.Server ? new VFXBatch() : null);
-		Ins.Set<IVFXManager>(Main.netMode != NetmodeID.Server ? new VFXManager() : new FakeManager());
-
-		m_packetResolver = new PacketResolver(this);
 	}
 
 	public override void PostSetupContent()
@@ -77,7 +96,7 @@ public class Everglow : Mod
 		ModIns.Unload();
 		m_packetResolver = null;
 		ModIns.Mod = null;
-		Ins.Unload();
+		Ins.Clear();
 	}
 
 	public override void HandlePacket(BinaryReader reader, int whoAmI)
