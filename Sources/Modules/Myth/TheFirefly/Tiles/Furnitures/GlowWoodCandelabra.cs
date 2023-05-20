@@ -1,6 +1,7 @@
 using Everglow.Myth.TheFirefly.Dusts;
 using ReLogic.Content;
 using Terraria.DataStructures;
+using Terraria.Localization;
 using Terraria.ObjectData;
 
 namespace Everglow.Myth.TheFirefly.Tiles.Furnitures;
@@ -33,6 +34,9 @@ public class GlowWoodCandelabra : ModTile
 		TileObjectData.addTile(Type);
 		if (!Main.dedServ)
 			flameTexture = ModContent.Request<Texture2D>("Everglow/Myth/TheFirefly/Tiles/Furnitures/GlowWoodCandelabra_Flame");
+
+		LocalizedText name = CreateMapEntryName();
+		AddMapEntry(new Color(69, 36, 78), name);
 	}
 
 	public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)

@@ -3,6 +3,7 @@ using Everglow.Myth.TheFirefly.Dusts;
 using ReLogic.Content;
 using Terraria.DataStructures;
 using Terraria.Enums;
+using Terraria.Localization;
 using Terraria.ObjectData;
 
 namespace Everglow.Myth.TheFirefly.Tiles.Furnitures;
@@ -35,6 +36,9 @@ public class GlowWoodChandelier : ModTile
 
 		if (!Main.dedServ)
 			flameTexture = ModContent.Request<Texture2D>("Everglow/Myth/TheFirefly/Tiles/Furnitures/GlowWoodChandelier_Flame");
+
+		LocalizedText name = CreateMapEntryName();
+		AddMapEntry(new Color(69, 36, 78), name);
 	}
 
 	public override void HitWire(int i, int j)
@@ -100,7 +104,7 @@ public class GlowWoodChandelier : ModTile
 		{
 			var tileSpin = new TileSpin();
 			tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18);
-			Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodChandelier");
+			Texture2D tex = ModAsset.Tiles_GlowWoodChandelier.Value;
 			tileSpin.DrawRotatedChandelier(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, tex, 8, -2);
 
 			ulong randSeed = Main.TileFrameSeed ^ (ulong)((long)j << 32 | (uint)i); // Don't remove any casts.
@@ -111,7 +115,7 @@ public class GlowWoodChandelier : ModTile
 				{
 					float xx = Utils.RandomInt(ref randSeed, -10, 11) * 0.15f;
 					float yy = Utils.RandomInt(ref randSeed, -10, 1) * 0.35f;
-					tileSpin.DrawRotatedChandelier(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, flameTexture.Value, xx + 8, yy * 0.6f - 2, true, color);
+					tileSpin.DrawRotatedChandelier(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, flameTexture.Value, xx + 8, yy * 0.6f - 2, -1, -1, 54, 48, true, color);
 				}
 			}
 		}

@@ -2,6 +2,7 @@ using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
 using Terraria.DataStructures;
 using Terraria.Enums;
+using Terraria.Localization;
 using Terraria.ObjectData;
 
 namespace Everglow.Myth.TheFirefly.Tiles.Furnitures;
@@ -33,6 +34,9 @@ public class GlowWoodLantern : ModTile
 		TileObjectData.newTile.AnchorBottom = default;
 		TileObjectData.newTile.CoordinateHeights = new[] { 16, 16 };
 		TileObjectData.addTile(Type);
+
+		LocalizedText name = CreateMapEntryName();
+		AddMapEntry(new Color(69, 36, 78), name);
 	}
 
 	public override void HitWire(int i, int j)

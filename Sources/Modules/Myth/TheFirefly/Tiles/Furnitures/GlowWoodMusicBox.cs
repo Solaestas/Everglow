@@ -1,9 +1,9 @@
 using Terraria.DataStructures;
+using Terraria.Localization;
 using Terraria.ObjectData;
 
 namespace Everglow.Myth.TheFirefly.Tiles.Furnitures;
 
-// See ExampleMod/Common/Systems/MusicLoadingSystem for an explanation on music.
 public class GlowWoodMusicBox : ModTile
 {
 	public override void SetStaticDefaults()
@@ -15,6 +15,9 @@ public class GlowWoodMusicBox : ModTile
 		TileObjectData.newTile.LavaDeath = false;
 		TileObjectData.newTile.DrawYOffset = 2;
 		TileObjectData.addTile(Type);
+
+		LocalizedText name = CreateMapEntryName();
+		AddMapEntry(new Color(69, 36, 78), name);
 	}
 	public override void MouseOver(int i, int j)
 	{

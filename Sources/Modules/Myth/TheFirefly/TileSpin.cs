@@ -155,7 +155,7 @@ internal class TileSpin
 	/// <param name="offsetY"></param>
 	/// <param name="specialColor"></param>
 	/// <param name="color"></param>
-	public void DrawRotatedChandelier(int i, int j, Texture2D tex, float offsetX = 0, float offsetY = 0, bool specialColor = false, Color color = new Color())
+	public void DrawRotatedChandelier(int i, int j, Texture2D tex, float offsetX = 8, float offsetY = 0, int frameX = -1, int frameY = -1, int width = 54, int height = 48, bool specialColor = false, Color color = new Color())
 	{
 		float rot = 0;
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
@@ -168,11 +168,31 @@ internal class TileSpin
 		if (TileRotation.ContainsKey((i, j)))
 		{
 			rot = TileRotation[(i, j)].Y;
-			Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, new Rectangle(tile.TileFrameX - 18, 0, 54, 48), c, rot, new Vector2(27, 0), 1f, SpriteEffects.None, 0f);
+			int frX = tile.TileFrameX - 18;
+			if(frameX != -1)
+			{
+				frX = frameX;
+			}
+			int frY = 0;
+			if(frY != -1)
+			{
+				frY = frameY;
+			}
+			Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, new Rectangle(frX, frY, width, height), c, rot, new Vector2(width / 2f, 0), 1f, SpriteEffects.None, 0f);
 		}
 		else
 		{
-			Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, new Rectangle(tile.TileFrameX - 18, 0, 54, 48), c, rot, new Vector2(27, 0), 1f, SpriteEffects.None, 0f);
+			int frX = tile.TileFrameX - 18;
+			if (frameX != -1)
+			{
+				frX = frameX;
+			}
+			int frY = 0;
+			if (frY != -1)
+			{
+				frY = frameY;
+			}
+			Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, new Rectangle(frX, frY, width, height), c, rot, new Vector2(width / 2f, 0), 1f, SpriteEffects.None, 0f);
 		}
 	}
 

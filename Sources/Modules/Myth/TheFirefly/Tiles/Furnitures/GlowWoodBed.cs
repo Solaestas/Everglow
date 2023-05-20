@@ -2,6 +2,7 @@ using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
 using Terraria.DataStructures;
 using Terraria.GameContent.ObjectInteractions;
+using Terraria.Localization;
 using Terraria.ObjectData;
 
 namespace Everglow.Myth.TheFirefly.Tiles.Furnitures;
@@ -29,6 +30,9 @@ public class GlowWoodBed : ModTile
 		TileObjectData.newTile.CoordinateHeights = new[] { 16, 18 };
 		TileObjectData.newTile.CoordinatePaddingFix = new Point16(0, -2);
 		TileObjectData.addTile(Type);
+
+		LocalizedText name = CreateMapEntryName();
+		AddMapEntry(new Color(69, 36, 78), name);
 	}
 
 	public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)

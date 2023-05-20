@@ -2,6 +2,7 @@ using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
 using Terraria.DataStructures;
 using Terraria.Enums;
+using Terraria.Localization;
 using Terraria.ObjectData;
 
 namespace Everglow.Myth.TheFirefly.Tiles.Furnitures;
@@ -32,6 +33,9 @@ public class GlowWoodChandelierType4 : ModTile
 		TileObjectData.newTile.AnchorBottom = default;
 		TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16 };
 		TileObjectData.addTile(Type);
+
+		LocalizedText name = CreateMapEntryName();
+		AddMapEntry(new Color(69, 36, 78), name);
 	}
 
 	public override void HitWire(int i, int j)
@@ -97,8 +101,13 @@ public class GlowWoodChandelierType4 : ModTile
 		{
 			var tileSpin = new TileSpin();
 			tileSpin.Update(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18);
-			Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodChandelierType4");
-			tileSpin.DrawRotatedChandelier(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, tex, 8, -2);
+			Texture2D tex = ModAsset.Tiles_GlowWoodChandelierType4.Value;
+			int frameX = tile.TileFrameX - 18;
+			if(frameX >= 54)
+			{
+				frameX = 60;
+			}
+			tileSpin.DrawRotatedChandelier(i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18, tex, 8, -2, frameX, 0, 58, 36);
 		}
 		return false;
 	}

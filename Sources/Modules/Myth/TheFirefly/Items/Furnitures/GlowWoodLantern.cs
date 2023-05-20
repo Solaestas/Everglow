@@ -12,17 +12,10 @@ public class GlowWoodLantern : ModItem
 
 	public override void SetDefaults()
 	{
-		Item.width = 28;
-		Item.height = 20;
-		Item.maxStack = 99;
-		Item.useTurn = true;
-		Item.autoReuse = true;
-		Item.useAnimation = 15;
-		Item.useTime = 10;
-		Item.useStyle = ItemUseStyleID.Swing;
-		Item.consumable = true;
+		Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.Furnitures.GlowWoodLantern>());
+		Item.width = 16;
+		Item.height = 32;
 		Item.value = 2000;
-		Item.createTile = ModContent.TileType<Tiles.Furnitures.GlowWoodLantern>();
 	}
 
 	public override void AddRecipes()

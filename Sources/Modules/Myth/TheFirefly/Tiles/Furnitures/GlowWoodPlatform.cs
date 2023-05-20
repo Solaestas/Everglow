@@ -1,5 +1,6 @@
 using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
+using Terraria.Localization;
 using Terraria.ObjectData;
 
 namespace Everglow.Myth.TheFirefly.Tiles.Furnitures;
@@ -35,6 +36,9 @@ public class GlowWoodPlatform : ModTile
 		TileObjectData.newTile.UsesCustomCanPlace = false;
 		TileObjectData.newTile.LavaDeath = true;
 		TileObjectData.addTile(Type);
+
+		LocalizedText name = CreateMapEntryName();
+		AddMapEntry(new Color(69, 36, 78), name);
 	}
 
 	public override void PostSetDefaults() => Main.tileNoSunLight[Type] = false;

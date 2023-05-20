@@ -4,6 +4,7 @@ using Everglow.Myth.TheFirefly.Items.Furnitures;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;
+using Terraria.Localization;
 using Terraria.ObjectData;
 
 namespace Everglow.Myth.TheFirefly.Tiles.Furnitures;
@@ -66,6 +67,9 @@ public class GlowWoodDoorOpened : ModTile
 		TileObjectData.newAlternate.Direction = TileObjectDirection.PlaceLeft;
 		TileObjectData.addAlternate(1);
 		TileObjectData.addTile(Type);
+
+		LocalizedText name = CreateMapEntryName();
+		AddMapEntry(new Color(69, 36, 78), name);
 	}
 
 	public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
@@ -91,8 +95,8 @@ public class GlowWoodDoorOpened : ModTile
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 		if (Main.drawToScreen)
 			zero = Vector2.Zero;
-		Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodDoorOpenedGlow");
-		spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(0.8f, 0.8f, 0.8f, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
+		Texture2D tex = ModAsset.GlowWoodDoorOpenedGlow.Value;
+		spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(0.2f, 0.2f, 0.2f, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
 
 		base.PostDraw(i, j, spriteBatch);
 	}

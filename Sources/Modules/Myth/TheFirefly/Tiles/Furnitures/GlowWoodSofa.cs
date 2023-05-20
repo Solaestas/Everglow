@@ -4,6 +4,7 @@ using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent;
 using Terraria.GameContent.ObjectInteractions;
+using Terraria.Localization;
 using Terraria.ObjectData;
 
 namespace Everglow.Myth.TheFirefly.Tiles.Furnitures;
@@ -39,6 +40,9 @@ public class GlowWoodSofa : ModTile
 		TileObjectData.newAlternate.Direction = TileObjectDirection.PlaceRight;
 		TileObjectData.addAlternate(1); // Facing right will use the second texture style
 		TileObjectData.addTile(Type);
+
+		LocalizedText name = CreateMapEntryName();
+		AddMapEntry(new Color(69, 36, 78), name);
 	}
 
 	public override void NumDust(int i, int j, bool fail, ref int num)

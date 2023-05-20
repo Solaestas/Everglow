@@ -1,6 +1,7 @@
 using ReLogic.Content;
 using Terraria.DataStructures;
 using Terraria.Enums;
+using Terraria.Localization;
 using Terraria.ObjectData;
 
 namespace Everglow.Myth.TheFirefly.Tiles.Furnitures;
@@ -43,9 +44,11 @@ public class GlowWoodTorch : ModTile
 		TileObjectData.addAlternate(0);
 		TileObjectData.addTile(Type);
 
-		// Assets
 		if (!Main.dedServ)
 			flameTexture = ModContent.Request<Texture2D>("Everglow/Myth/TheFirefly/Tiles/Furnitures/GlowWoodTorch_Flame");
+
+		LocalizedText name = CreateMapEntryName();
+		AddMapEntry(new Color(69, 36, 78), name);
 	}
 
 	public override float GetTorchLuck(Player player)

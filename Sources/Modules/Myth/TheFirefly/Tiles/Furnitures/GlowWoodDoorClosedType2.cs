@@ -3,6 +3,7 @@ using Everglow.Myth.TheFirefly.Items.Furnitures;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;
+using Terraria.Localization;
 using Terraria.ObjectData;
 
 namespace Everglow.Myth.TheFirefly.Tiles.Furnitures;
@@ -47,6 +48,9 @@ public class GlowWoodDoorClosedType2 : ModTile
 		TileObjectData.newAlternate.Origin = new Point16(0, 2);
 		TileObjectData.addAlternate(0);
 		TileObjectData.addTile(Type);
+
+		LocalizedText name = CreateMapEntryName();
+		AddMapEntry(new Color(69, 36, 78), name);
 	}
 
 	public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
