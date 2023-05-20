@@ -31,4 +31,19 @@ public class GlowWoodMusicBox : ModTile
 	{
 		FurnitureUtils.LightHitwire(i, j, Type, 2, 2);
 	}
+	public override void NearbyEffects(int i, int j, bool closer)
+	{
+		if(closer)
+		{
+			Tile tile = Main.tile[i, j];
+			if(tile.TileFrameX == 36 && tile.TileFrameY == 0)
+			{
+				if((int)(Main.timeForVisualEffects) % 25 == 0)
+				{
+					Gore.NewGore(new Vector2(i, j) * 16, new Vector2(Main.windSpeedCurrent, Main.rand.NextFloat(-0.5f, -0.4f)), Main.rand.Next(570, 573));
+				}
+			}
+		}
+		base.NearbyEffects(i, j, closer);
+	}
 }
