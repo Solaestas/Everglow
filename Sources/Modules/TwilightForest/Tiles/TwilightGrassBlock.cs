@@ -22,7 +22,6 @@ public class TwilightGrassBlock : ModTile
 		Main.tileMerge[Type][TileID.MushroomGrass] = true;
 		Main.tileBlockLight[Type] = true;
 		DustType = DustID.Dirt;
-		ItemDrop = ItemID.DirtBlock;
 		AddMapEntry(new Color(33, 140, 141));
 	}
 	public override void RandomUpdate(int i, int j)
@@ -43,7 +42,7 @@ public class TwilightGrassBlock : ModTile
 					WorldGen.TileRunner(i, j, 5, 1, ThisTile.TileType);
 				}
 			}
-		}//À©É¢
+		}//æ‰©æ•£
 		var UpTile = Main.tile[i, j - 1];
 		var DownTile = Main.tile[i, j + 1];
 		var LeftTile = Main.tile[i - 1, j];
@@ -56,5 +55,9 @@ public class TwilightGrassBlock : ModTile
 		if (tile.TileType == TileID.Dirt && tile.HasTile)
 			return true;
 		return false;
+	}
+	public override IEnumerable<Item> GetItemDrops(int i, int j)
+	{
+		yield return new Item(ItemID.DirtBlock);
 	}
 }

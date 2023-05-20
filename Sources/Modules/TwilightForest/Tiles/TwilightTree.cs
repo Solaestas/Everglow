@@ -20,7 +20,6 @@ public class TwilightTree : ModTile
 		var modTranslation = Language.GetText("Mods.Everglow.MapEntry.TwilightTree");
 		AddMapEntry(new Color(58, 53, 50), modTranslation);
 		DustType = ModContent.DustType<Dusts.TwilightTreeDust>();
-		ItemDrop = ModContent.ItemType<Items.TwilightWood>();
 		AdjTiles = new int[] { Type };
 
 		Ins.HookManager.AddHook(CodeLayer.PostDrawTiles, DrawRopes);
@@ -102,7 +101,7 @@ public class TwilightTree : ModTile
 	}
 	public override IEnumerable<Item> GetItemDrops(int i, int j)
 	{
-		yield return Main.item[Item.NewItem(null, new Rectangle(i * 16 - 16, j * 16, 48, 16), ItemDrop, 1, false, 0, false, true)];
+		yield return new Item(ModContent.ItemType<Items.TwilightWood>());
 	}
 	public override bool CanDrop(int i, int j)
 	{

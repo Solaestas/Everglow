@@ -34,12 +34,6 @@ public class GlowWoodTable : ModTile
 	{
 		num = fail ? 1 : 3;
 	}
-
-	public override void KillMultiTile(int x, int y, int frameX, int frameY)
-	{
-		Item.NewItem(new EntitySource_TileBreak(x, y), x * 16, y * 16, 48, 32, ModContent.ItemType<Items.Furnitures.GlowWoodTable>());
-	}
-
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		var tile = Main.tile[i, j];

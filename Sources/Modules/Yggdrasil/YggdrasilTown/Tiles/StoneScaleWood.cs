@@ -1,4 +1,4 @@
-﻿using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
+using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
 
@@ -23,8 +23,6 @@ public class StoneScaleWood : ModTile
 		DustType = DustID.BorealWood;
 		MinPick = 150;
 		HitSound = SoundID.Dig;
-
-		ItemDrop = ModContent.ItemType<Items.StoneDragonScaleWood>();
 
 		AddMapEntry(new Color(44, 40, 37));
 	}
