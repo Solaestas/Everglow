@@ -38,7 +38,7 @@ public class LampLotus : ModTile
 			{
 				tile2.TileType = (ushort)ModContent.TileType<LampLotus>();
 				tile2.HasTile = true;
-				tile2.TileFrameX = (short)(Main.rand.Next(8) * 28);
+				tile2.TileFrameX = (short)(Main.rand.Next(8) * 16);
 			}
 		}
 	}
@@ -111,8 +111,8 @@ public class LampLotus : ModTile
 			Texture2D texflowerGlow = ModAsset.LampLotusGlow.Value;
 			var tsp = new TileSpin();
 			tsp.Update(i, j);
-			tsp.DrawReed(i, j, length, texflower, texflower, new Rectangle(tile.TileFrameX, 0, 28, 34), new Rectangle(tile.TileFrameX, 36, 28, 16), new Vector2(14, 34), new Vector2(14, 16), 8, 16);
-			tsp.DrawReed(i, j, length, texflower, texflowerGlow, new Rectangle(tile.TileFrameX, 0, 28, 34), new Rectangle(tile.TileFrameX, 36, 28, 16), new Vector2(14, 34), new Vector2(14, 16), 8, 16, 1, true, new Color(0, 155, 255, 0));
+			tsp.DrawReed(i, j, length, texflower, texflower, new Rectangle(tile.TileFrameX / 16 * 28, 0, 28, 34), new Rectangle(tile.TileFrameX / 16 * 28, 36, 28, 16), new Vector2(14, 34), new Vector2(14, 16), 8, 16);
+			tsp.DrawReed(i, j, length, texflower, texflowerGlow, new Rectangle(tile.TileFrameX / 16 * 28, 0, 28, 34), new Rectangle(tile.TileFrameX / 16 * 28, 36, 28, 16), new Vector2(14, 34), new Vector2(14, 16), 8, 16, 1, true, new Color(0, 155, 255, 0));
 		}
 		return false;
 	}

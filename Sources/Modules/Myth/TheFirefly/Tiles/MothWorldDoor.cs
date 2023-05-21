@@ -9,6 +9,7 @@ public class MothWorldDoor : ModTile
 	{
 		Main.tileFrameImportant[Type] = true;
 		Main.tileLavaDeath[Type] = false;
+		Main.tileLighted[Type] = true;
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
 		TileObjectData.newTile.Height = 7;
 		TileObjectData.newTile.Width = 5;
@@ -29,9 +30,9 @@ public class MothWorldDoor : ModTile
 	}
 	public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
 	{
-		r = 0.0f;
-		g = 0.6f;
-		b = 1.3f;
+		r = 0f;
+		g = 0f;
+		b = 0f;
 	}
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 	{
@@ -59,7 +60,29 @@ public class MothWorldDoor : ModTile
 	{
 		return false;
 	}
-
+	public override void RandomUpdate(int i, int j)
+	{
+		if(DrawMagicArraySystem.ArrayPosition != Vector2.zeroVector)
+		{
+			float playerDistance = 2000;
+			foreach (Player player in Main.player)
+			{
+				if (player.active && !player.dead)
+				{
+					float distance = (player.Center - (new Vector2(i, j) * 16 + new Vector2(-24, -27))).Length();
+					if (distance < playerDistance)
+					{
+						playerDistance = distance;
+					}
+				}
+			}
+			if(playerDistance > 1800)
+			{
+				DrawMagicArraySystem.ArrayPosition = Vector2.zeroVector;
+			}
+		}
+		base.RandomUpdate(i, j);
+	}
 	public override void NearbyEffects(int i, int j, bool closer)
 	{
 		Player player = Main.LocalPlayer;
@@ -103,6 +126,7 @@ public class DrawMagicArraySystem : ModSystem
 	public static Vector2 ArrayPosition = Vector2.zeroVector;
 	public static void DrawMagicArray()
 	{
+
 		if (ArrayPosition == Vector2.zeroVector)
 		{
 			return;
@@ -114,7 +138,7 @@ public class DrawMagicArraySystem : ModSystem
 		{
 			if(player.active && !player.dead)
 			{
-				float distance = (player.Center - (ArrayPosition * 16 + new Vector2(-24, -32))).Length();
+				float distance = (player.Center - (ArrayPosition * 16 + new Vector2(-24, -27))).Length();
 				if (distance < playerDistance)
 				{
 					playerDistance = distance;
@@ -124,17 +148,10 @@ public class DrawMagicArraySystem : ModSystem
 		}
 		float mulColor = Math.Max((150 - playerDistance) / 150f, 0.25f);
 		c0 *= mulColor;
-		if (playerWhoAmI > -1)
-		{
-			if (Main.player[playerWhoAmI].controlUp)
-			{
-				c0 *= 2;
-			}
-		}
-		
 		float timer = (float)(Main.time * 0.003f);
-		Vector2 pos = ArrayPosition * 16 - Main.screenPosition + new Vector2(-24, -32);
+		Vector2 pos = ArrayPosition * 16 - Main.screenPosition + new Vector2(-24, -27);
 
+		Lighting.AddLight(pos + Main.screenPosition, 0, 1.2f * mulColor, 2.6f * mulColor);
 		Texture2D magicSeal = ModAsset.HiveCyberNoiseThicker.Value;
 		DrawTexCircle(26, 12, c0, pos, magicSeal, -timer);
 		DrawTexCircle(22, 12, c0, pos, magicSeal, timer);
@@ -158,6 +175,8 @@ public class DrawMagicArraySystem : ModSystem
 		DrawTexLine(Point4, Point5, c1, c1, magicSeal);
 		DrawTexLine(Point5, Point6, c1, c1, magicSeal);
 		DrawTexLine(Point6, Point4, c1, c1, magicSeal);
+
+	
 	}
 	public static void DrawTexLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2, Texture2D tex)
 	{
