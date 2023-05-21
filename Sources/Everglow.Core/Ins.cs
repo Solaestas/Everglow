@@ -38,6 +38,8 @@ public static class Ins
 
 	public static void Add<T>(Func<IServiceProvider, T> factory) where T : class => services.AddSingleton(factory);
 
+	public static void Add<T>(T instance) where T : class => services.AddSingleton(instance);
+
 	public static T Get<T>() where T : class
 	{
 		var service = provider.GetService<T>();
@@ -49,7 +51,12 @@ public static class Ins
 
 	public static void End() => provider = services.BuildServiceProvider();
 
-	public static void Clear() => services.Clear();
+	public static void Clear()
+	{
+		services.Remove(services.FirstOrDefault(s => s.ServiceType == typeof(GraphicsDevice)));
+		provider.Dispose();
+		services.Clear();
+	}
 
 	private static ServiceCollection services = null;
 

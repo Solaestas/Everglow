@@ -12,7 +12,7 @@ public class VFXManager : IVFXManager
 {
 	public static readonly CodeLayer[] drawLayers = new CodeLayer[]
 	{
-		CodeLayer.PostDrawFilter,
+		CodeLayer.PreDrawFilter,
 		CodeLayer.PostDrawProjectiles,
 		CodeLayer.PostDrawTiles,
 		CodeLayer.PostDrawDusts,

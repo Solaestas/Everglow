@@ -32,8 +32,8 @@ public class Everglow : Mod
 	private void AddServices()
 	{
 		Ins.Begin();
-		Ins.Add<ILog>(args => Logger);
-		Ins.Add<GraphicsDevice>(args => Main.instance.GraphicsDevice);
+		Ins.Add<ILog>(Logger);
+		Ins.Add<GraphicsDevice>(Main.instance.GraphicsDevice);
 		Ins.Add<IVisualQualityController, VisualQualityController>();
 		Ins.Add<ModuleManager>();
 		Ins.Add<IHookManager, HookManager.TrueHookManager>();

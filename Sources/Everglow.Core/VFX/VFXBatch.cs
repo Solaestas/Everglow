@@ -15,7 +15,9 @@ public class VFXBatch : IDisposable
 
 	private List<IBuffers> buffers = new();
 
-	private GraphicsDevice graphicsDevice;
+	private GraphicsDevice _graphicsDevice;
+
+	private IMainThreadContext _mainThread;
 
 	private bool hasBegun = false;
 
@@ -25,7 +27,8 @@ public class VFXBatch : IDisposable
 
 	public VFXBatch(GraphicsDevice graphics, IMainThreadContext mainThread)
 	{
-		graphicsDevice = graphics;
+		_graphicsDevice = graphics;
+		_mainThread = mainThread;
 		mainThread.AddTask(() =>
 		{
 			RegisterVertex<VFX2D>(MAX_VERTICES, MAX_VERTICES * 6 / 4);//四个顶点两个三角形六个下标
@@ -33,7 +36,7 @@ public class VFXBatch : IDisposable
 		});
 	}
 
-	public GraphicsDevice GraphicsDevice => graphicsDevice;
+	public GraphicsDevice GraphicsDevice => _graphicsDevice;
 
 	#region Draw Method
 
@@ -285,10 +288,10 @@ public class VFXBatch : IDisposable
 	public void Begin(BlendState blendState, DepthStencilState depthStencilState, SamplerState samplerState, RasterizerState rasterizerState)
 	{
 		Debug.Assert(!hasBegun);
-		graphicsDevice.RasterizerState = rasterizerState;
-		graphicsDevice.DepthStencilState = depthStencilState;
-		graphicsDevice.SamplerStates[0] = samplerState;
-		graphicsDevice.BlendState = blendState;
+		_graphicsDevice.RasterizerState = rasterizerState;
+		_graphicsDevice.DepthStencilState = depthStencilState;
+		_graphicsDevice.SamplerStates[0] = samplerState;
+		_graphicsDevice.BlendState = blendState;
 		hasBegun = true;
 	}
 
@@ -328,7 +331,7 @@ public class VFXBatch : IDisposable
 
 	public void Dispose()
 	{
-		Ins.MainThread.AddTask(() =>
+		_mainThread.AddTask(() =>
 		{
 			foreach (var buffer in buffers)
 			{
