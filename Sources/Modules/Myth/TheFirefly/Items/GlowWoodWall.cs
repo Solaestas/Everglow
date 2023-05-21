@@ -5,7 +5,7 @@ public class GlowWoodWall : ModItem
 	public override void SetDefaults()
 	{
 		Item.DefaultToPlaceableWall(ModContent.WallType<Walls.GlowWoodWall>());
-		Item.width = 20;
-		Item.height = 20;
+		Item.width = 24;
+		Item.height = 24;
 	}
 }
