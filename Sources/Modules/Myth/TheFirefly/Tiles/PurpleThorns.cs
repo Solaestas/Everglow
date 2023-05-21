@@ -1,3 +1,5 @@
+using Terraria.ObjectData;
+
 namespace Everglow.Myth.TheFirefly.Tiles;
 
 public class PurpleThorns : ModTile
@@ -8,8 +10,16 @@ public class PurpleThorns : ModTile
 		Main.tileCut[Type] = true;
 		TileID.Sets.TouchDamageDestroyTile[Type] = true;
 		TileID.Sets.TouchDamageImmediate[Type] = 12;
-		DustType = 191;	
+		DustType = 191;
 		AddMapEntry(new Color(35, 9, 35));
+	}
+	public override bool IsTileDangerous(int i, int j, Player player)
+	{
+		if(player.HasBuff(BuffID.Dangersense))
+		{
+			return true;
+		}
+		return false;
 	}
 	public override void RandomUpdate(int i, int j)
 	{

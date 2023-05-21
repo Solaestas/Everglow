@@ -86,10 +86,10 @@ public class BlackStarShrubSmall : ModTile
 			var tileSpin = new TileSpin();
 			tileSpin.UpdateBlackShrub(i, j - tile.TileFrameY / 16, 0.25f, 0.13f, new Vector2(0, -20), 0, 24);
 			tileSpin.Update(i, j - tile.TileFrameY / 16 + 1);
-			Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/BlackStarShrubSmallDraw");
+			Texture2D tex = ModAsset.BlackStarShrubSmallDraw.Value;
 			tileSpin.DrawRotatedTile(i, j - tile.TileFrameY / 16, tex, new Rectangle(tile.TileFrameX, 2, 48, 36), new Vector2(24, 36), 8, 40, 0.25f);
 			tileSpin.DrawRotatedTile(i, j - tile.TileFrameY / 16 + 1, tex, new Rectangle(tile.TileFrameX, 38, 48, 36), new Vector2(24, 36), 8, 24, 1.0f);
-			tileSpin.DrawRotatedTile(i, j - tile.TileFrameY / 16 + 1, tex, new Rectangle(tile.TileFrameX, 218, 48, 36), new Vector2(24, 36), 8, 24, 1.0f, true, new Color(0.57f, 0.57f, 0.57f, 0));
+			tileSpin.DrawRotatedTile(i, j - tile.TileFrameY / 16 + 1, tex, new Rectangle(tile.TileFrameX, 218, 48, 36), new Vector2(24, 36), 8, 24, 1.0f, true, new Color(0.27f, 0.27f, 0.27f, 0));
 			tileSpin.DrawRotatedTile(i, j - tile.TileFrameY / 16, tex, new Rectangle(tile.TileFrameX, 72, 48, 36), new Vector2(24, 36), 8, 40, 0.3f);
 			tileSpin.DrawRotatedTile(i, j - tile.TileFrameY / 16, tex, new Rectangle(tile.TileFrameX, 110, 48, 36), new Vector2(24, 36), 8, 40, 0.24f);
 			tileSpin.DrawRotatedTile(i, j - tile.TileFrameY / 16, tex, new Rectangle(tile.TileFrameX, 146, 48, 36), new Vector2(24, 36), 8, 40, 0.19f);
