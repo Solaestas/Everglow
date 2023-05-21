@@ -16,7 +16,7 @@ public class GlowingReed : ModTile
 			34
 		};
 		TileObjectData.newTile.CoordinateWidth = 16;
-		TileObjectData.newTile.DrawYOffset = -14;
+		TileObjectData.newTile.DrawYOffset = -16;
 		TileObjectData.addTile(Type);
 		TileID.Sets.SwaysInWindBasic[Type] = true;
 		DustType = 191;
@@ -27,7 +27,10 @@ public class GlowingReed : ModTile
 	public override void RandomUpdate(int i, int j)
 	{
 		Tile tile = Main.tile[i, j];
-		tile.TileFrameX += 90;
+		if(tile.TileFrameX < 180)
+		{
+			tile.TileFrameX += 90;
+		}
 		base.RandomUpdate(i, j);
 	}
 	public override void PlaceInWorld(int i, int j, Item item)

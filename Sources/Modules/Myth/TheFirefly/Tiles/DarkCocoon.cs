@@ -293,7 +293,17 @@ public class DarkCocoon : ModTile
 			}
 			else
 			{
-				Common.MythUtils.PlaceFrameImportantTiles(i, j - 1, 1, 1, ModContent.TileType<DarkCocoonGrass>(), 18 * Main.rand.Next(6));
+				switch (Main.rand.Next(2))
+				{
+
+					case 0:
+						Common.MythUtils.PlaceFrameImportantTiles(i, j - 1, 1, 1, ModContent.TileType<DarkCocoonGrass>(), 18 * Main.rand.Next(6));
+						break;
+
+					case 1:
+						WorldGen.PlaceTile(i,j - 1, ModContent.TileType<Tiles.PurpleThorns>());
+						break;
+				}
 			}
 		}
 	}

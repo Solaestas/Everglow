@@ -11,6 +11,7 @@ public class BlackVine : ModTile
 	{
 		Main.tileSolid[Type] = false;
 		TileID.Sets.IsVine[Type] = true;
+		TileID.Sets.VineThreads[Type] = true;
 		DustType = 191;
 		Main.tileCut[Type] = true;
 		var modTranslation = CreateMapEntryName();

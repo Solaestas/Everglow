@@ -71,12 +71,16 @@ public class GlowingDrop : ModTile
 			{
 				if(windSway && !Main.gamePaused)
 				{
-					if(Main.windSpeedCurrent != 0)
+					if (tile.WallType == 0)
 					{
-						TileSpin.ActivateTileSpin((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18), Main.windSpeedCurrent * (1 + MathF.Sin(i + j + 1 + (float)(Main.time * 0.06)) * 0.75f) * 0.2f);
-						TileSpin.ActivateTileSpin((i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18), Main.windSpeedCurrent * (1 + MathF.Sin(i + j + 2 + (float)(Main.time * 0.06)) * 0.75f) * 0.2f);
-						TileSpin.ActivateTileSpin((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1), Main.windSpeedCurrent * (1 + MathF.Sin(i + j + 3 + (float)(Main.time * 0.06)) * 0.75f) * 0.2f);
-						TileSpin.ActivateTileSpin((i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18), Main.windSpeedCurrent * (1 + MathF.Sin(i + j + 4 + (float)(Main.time * 0.06)) * 0.75f) * 0.2f);
+						if (!TileSpin.TileRotation.ContainsKey((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18)))
+							TileSpin.TileRotation.Add((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18), new Vector2(Main.windSpeedCurrent * 0.2f, 0));
+						if (!TileSpin.TileRotation.ContainsKey((i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18)))
+							TileSpin.TileRotation.Add((i - (tile.TileFrameX % 54 - 18) / 18 + 1, j - tile.TileFrameY / 18), new Vector2(Main.windSpeedCurrent * 0.2f, 0));
+						if (!TileSpin.TileRotation.ContainsKey((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1)))
+							TileSpin.TileRotation.Add((i - (tile.TileFrameX % 54 - 18) / 18, j - tile.TileFrameY / 18 + 1), new Vector2(Main.windSpeedCurrent * 0.2f, 0));
+						if (!TileSpin.TileRotation.ContainsKey((i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18)))
+							TileSpin.TileRotation.Add((i - (tile.TileFrameX % 54 - 18) / 18 - 1, j - tile.TileFrameY / 18), new Vector2(Main.windSpeedCurrent * 0.2f, 0));
 					}
 				}
 				foreach (Player player in Main.player)
