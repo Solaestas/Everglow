@@ -1,4 +1,5 @@
 using Terraria.ObjectData;
+using Windows.Win32.Foundation;
 
 namespace Everglow.Myth.TheFirefly.Tiles;
 
@@ -26,7 +27,12 @@ public class MothWorldDoor : ModTile
 		var modTranslation = CreateMapEntryName();
 				AddMapEntry(new Color(148, 0, 255), modTranslation);
 	}
-
+	public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
+	{
+		r = 0.0f;
+		g = 0.6f;
+		b = 1.3f;
+	}
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		var tile = Main.tile[i, j];
@@ -73,6 +79,17 @@ public class MothWorldDoor : ModTile
 		}
 		base.NearbyEffects(i, j, closer);
 	}
+	public override void MouseOver(int i, int j)
+	{
+		Player player = Main.LocalPlayer;
+		player.noThrow = 2;
+		player.cursorItemIconEnabled = true;
+		player.cursorItemIconID = ModContent.ItemType<Items.FireflyImpression>();
+	}
+	public override bool RightClick(int i, int j)
+	{
+		return base.RightClick(i, j);
+	}
 }
 public class DrawMagicArraySystem : ModSystem
 {
@@ -90,7 +107,31 @@ public class DrawMagicArraySystem : ModSystem
 		{
 			return;
 		}
-		Color c0 = new Color(0, 120, 255, 0);
+		Color c0 = new Color(0, 70, 155, 0);
+		int playerWhoAmI = -1;
+		float playerDistance = 150;
+		foreach (Player player in Main.player)
+		{
+			if(player.active && !player.dead)
+			{
+				float distance = (player.Center - (ArrayPosition * 16 + new Vector2(-24, -32))).Length();
+				if (distance < playerDistance)
+				{
+					playerDistance = distance;
+					playerWhoAmI = player.whoAmI;
+				}
+			}
+		}
+		float mulColor = Math.Max((150 - playerDistance) / 150f, 0.25f);
+		c0 *= mulColor;
+		if (playerWhoAmI > -1)
+		{
+			if (Main.player[playerWhoAmI].controlUp)
+			{
+				c0 *= 2;
+			}
+		}
+		
 		float timer = (float)(Main.time * 0.003f);
 		Vector2 pos = ArrayPosition * 16 - Main.screenPosition + new Vector2(-24, -32);
 
@@ -126,12 +167,12 @@ public class DrawMagicArraySystem : ModSystem
 		var vertex2Ds = new List<Vertex2D>();
 
 		float texcoordHeight = 1f;
-		float value0 = (float)(Main.time / 91d + 20) % 1f;
-		float value1 = (float)(Main.time / 91d + 20.4) % 1f;
+		float value0 = (float)(Main.time / 391d + 20) % 1f;
+		float value1 = (float)(Main.time / 391d + 20.4) % 1f;
 
 		if (value1 < value0)
 		{
-			float valueMiddle = (1 - value1) / (0.4f);
+			float valueMiddle = (1 - value0) / (0.4f);
 			Vector2 Delta = EndPos - StartPos;
 			vertex2Ds.Add(new Vertex2D(StartPos + Width, color1, new Vector3(value0, 0, 0)));
 			vertex2Ds.Add(new Vertex2D(StartPos + Delta * valueMiddle + Width, color2, new Vector3(1, 0, 0)));
@@ -159,57 +200,13 @@ public class DrawMagicArraySystem : ModSystem
 			vertex2Ds.Add(new Vertex2D(EndPos - Width, color2, new Vector3(value1, texcoordHeight, 0)));
 			vertex2Ds.Add(new Vertex2D(StartPos - Width, color1, new Vector3(value0, texcoordHeight, 0)));
 		}
-		Main.NewText(vertex2Ds.Count);
 		Main.graphics.GraphicsDevice.Textures[0] = tex;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
-	}
-	public static void DrawTexLineStrip(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2, Texture2D tex)
-	{
-		float Wid = 4f;
-		Vector2 Width = Vector2.Normalize(StartPos - EndPos).RotatedBy(Math.PI / 2d) * Wid;
-
-		var vertex2Ds = new List<Vertex2D>();
-
-		float texcoordHeight = 1f;
-		float value0 = (float)(Main.time / 91d + 20) % 1f;
-		float value1 = (float)(Main.time / 91d + 20.4) % 1f;
-
-		if (value1 < value0)
-		{
-			float valueMiddle = 1 - value0;
-			Vector2 Delta = EndPos - StartPos;
-			vertex2Ds.Add(new Vertex2D(StartPos + Width, color1, new Vector3(value0, 0, 0)));
-			vertex2Ds.Add(new Vertex2D(StartPos - Width, color1, new Vector3(value0, texcoordHeight, 0)));
-
-			vertex2Ds.Add(new Vertex2D(StartPos + Delta * valueMiddle + Width, color2, new Vector3(1, 0, 0)));
-			vertex2Ds.Add(new Vertex2D(StartPos + Delta * valueMiddle - Width, color2, new Vector3(1, texcoordHeight, 0)));
-
-			vertex2Ds.Add(new Vertex2D(StartPos + Delta * valueMiddle + Width, color1, new Vector3(0, 0, 0)));
-			vertex2Ds.Add(new Vertex2D(StartPos + Delta * valueMiddle - Width, color1, new Vector3(0, texcoordHeight, 0)));
-
-			vertex2Ds.Add(new Vertex2D(EndPos + Width, color2, new Vector3(value1, 0, 0)));
-			vertex2Ds.Add(new Vertex2D(EndPos - Width, color2, new Vector3(value1, texcoordHeight, 0)));
-		}
-		else
-		{
-			vertex2Ds.Add(new Vertex2D(StartPos + Width, color1, new Vector3(value0, 0, 0)));
-			vertex2Ds.Add(new Vertex2D(StartPos - Width, color1, new Vector3(value0, texcoordHeight, 0)));
-
-			vertex2Ds.Add(new Vertex2D(EndPos + Width, color2, new Vector3(value1, 0, 0)));
-			vertex2Ds.Add(new Vertex2D(EndPos - Width, color2, new Vector3(value1, texcoordHeight, 0)));
-		}
-
-		if (vertex2Ds.Count > 2)
-		{
-			Main.NewText(vertex2Ds.Count);
-			Main.graphics.GraphicsDevice.Textures[0] = tex;
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertex2Ds.ToArray(), 0, vertex2Ds.Count - 2);
-		}
 	}
 	public static void DrawTexCircle(float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
 		float timer = (float)(Main.time * 0.003f);
-		float sinValue = 0.8f * (MathF.Sin(timer + radious) * 0.5f + 0.5f);
+		float sinValue = 0.8f * (MathF.Sin(timer + radious / 8 * MathF.PI) * 0.5f + 0.5f);
 		var circle = new List<Vertex2D>();
 		for (int h = 0; h < 60; h += 1)
 		{

@@ -2,7 +2,7 @@ using Everglow.Myth.TheFirefly.WorldGeneration;
 
 namespace Everglow.Myth.TheFirefly.Items;
 
-public class FireflyCapital : ModItem
+public class FireflyImpression : ModItem
 {
 	public override void SetDefaults()
 	{

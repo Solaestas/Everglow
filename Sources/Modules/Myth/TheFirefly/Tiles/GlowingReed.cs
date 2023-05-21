@@ -16,6 +16,7 @@ public class GlowingReed : ModTile
 			34
 		};
 		TileObjectData.newTile.CoordinateWidth = 16;
+		TileObjectData.newTile.DrawYOffset = -14;
 		TileObjectData.addTile(Type);
 		TileID.Sets.SwaysInWindBasic[Type] = true;
 		DustType = 191;

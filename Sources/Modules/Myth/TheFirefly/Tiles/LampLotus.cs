@@ -27,17 +27,18 @@ public class LampLotus : ModTile
 		var tile = Main.tile[i, j];
 		var tile2 = Main.tile[i, j - 1];
 
-		if (tile2.TileType != tile.TileType)
+		if (tile2.TileType != tile.TileType && !tile2.HasTile)
 		{
 			int length = 0;
-			while (Main.tile[i, j + length].TileType == tile.TileType && Main.tile[i, j + length].LiquidAmount == 0)
+			while (Main.tile[i, j + length].TileType == tile.TileType)
 			{
 				length++;
 			}
-			if (length <= 9)
+			if (length <= 4)
 			{
 				tile2.TileType = (ushort)ModContent.TileType<LampLotus>();
 				tile2.HasTile = true;
+				tile2.TileFrameX = (short)(Main.rand.Next(8) * 28);
 			}
 		}
 	}
@@ -106,8 +107,8 @@ public class LampLotus : ModTile
 			{
 				length++;
 			}
-			Texture2D texflower = MythContent.QuickTexture("TheFirefly/Tiles/LampLotus");
-			Texture2D texflowerGlow = MythContent.QuickTexture("TheFirefly/Tiles/LampLotusGlow");
+			Texture2D texflower = ModAsset.LampLotus.Value;
+			Texture2D texflowerGlow = ModAsset.LampLotusGlow.Value;
 			var tsp = new TileSpin();
 			tsp.Update(i, j);
 			tsp.DrawReed(i, j, length, texflower, texflower, new Rectangle(tile.TileFrameX, 0, 28, 34), new Rectangle(tile.TileFrameX, 36, 28, 16), new Vector2(14, 34), new Vector2(14, 16), 8, 16);
