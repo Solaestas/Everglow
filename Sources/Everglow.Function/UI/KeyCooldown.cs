@@ -1,5 +1,3 @@
-using System;
-
 namespace Everglow.Commons.UI
 {
 	internal class KeyCooldown

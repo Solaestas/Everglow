@@ -1,5 +1,4 @@
 using Everglow.Commons.Interfaces;
-using Everglow.Commons.VFX;
 
 namespace Everglow.Commons.Utilities;
 

@@ -1,5 +1,3 @@
-using Terraria.ID;
-
 namespace Everglow.Commons.UI.UIContainers.Sidebar.SidebarElements;
 
 internal class SlashAllTheItem : SidebarElementBase

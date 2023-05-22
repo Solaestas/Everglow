@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
 namespace Everglow.Commons.UI.UIElements
 {
 	internal class BaseElement

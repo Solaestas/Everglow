@@ -39,13 +39,11 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 			};
 			mainPanel.Register(quickBar);
 
-			loadSidebarElement(quickBar);
+			LoadSidebarElement(quickBar);
 
-			//这是展开和收回箭头，不过没给贴图我就注释了
-			/*
-			UIImage image = new UIImage(
-				ModContent.Request<Texture2D>("",
-				ReLogic.Content.AssetRequestMode.ImmediateLoad).Value, Color.White);
+			//这是展开和收回箭头
+
+			UIImage image = new UIImage(ModAsset.AirTile.Value, Color.White);
 			image.Info.Left.SetValue(2f, 1f);
 			image.Info.Top.SetValue(-image.Info.Height.Pixel / 2f, 0.5f);
 			image.Events.OnUpdate += (element, gt) =>
@@ -60,10 +58,10 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 				open = !open;
 			};
 			mainPanel.Register(image);
-			*/
+
 		}
 
-		private void loadSidebarElement(SidebarList quickBar)
+		private void LoadSidebarElement(SidebarList quickBar)
 		{
 			var containers = from c in GetType().Assembly.GetTypes()
 							 where !c.IsAbstract && c.IsSubclassOf(typeof(SidebarElementBase))

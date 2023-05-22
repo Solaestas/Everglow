@@ -1,4 +1,3 @@
-using Everglow.Commons;
 using Microsoft.Xna.Framework.Input;
 
 namespace Everglow.Commons.UI.UIElements

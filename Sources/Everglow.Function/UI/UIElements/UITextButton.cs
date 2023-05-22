@@ -1,5 +1,3 @@
-using Microsoft.Xna.Framework;
-
 using ReLogic.Graphics;
 
 namespace Everglow.Commons.UI.UIElements

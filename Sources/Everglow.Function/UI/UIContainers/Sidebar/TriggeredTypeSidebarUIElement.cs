@@ -1,6 +1,3 @@
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
 namespace Everglow.Commons.UI.UIContainers.Sidebar
 {
 	internal class TriggeredTypeSidebarUIElement : SidebarUIElement
