@@ -1,15 +1,13 @@
 using SubworldLibrary;
 namespace Everglow.Yggdrasil;
 
-public class YggdrasilCapital : ModItem
+public class YggdrasilImpression : ModItem
 {
 	public override void SetDefaults()
 	{
-		Item.width = 20;
-		Item.height = 20;
-		Item.maxStack = 999;
+		Item.width = 50;
+		Item.height = 50;
 		Item.useTurn = true;
-		Item.autoReuse = true;
 		Item.useAnimation = 15;
 		Item.useTime = 7;
 		Item.useStyle = ItemUseStyleID.Swing;
