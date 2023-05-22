@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Everglow.Commons;
 public class ShakerInfo : ModType
 {
@@ -96,7 +90,7 @@ public class ShakerInfo : ModType
 }
 public class UndirectedShakerInfo : ShakerInfo
 {
-	public static UndirectedShakerInfo Create(Vector2 center,float strength = 1, float period = 1, float speed = 1, float acv = 0.9f, float acp = 0.9f, int maxtick = -1,bool needNetSync=false)
+	public static UndirectedShakerInfo Create(Vector2 center, float strength = 1, float period = 1, float speed = 1, float acv = 0.9f, float acp = 0.9f, int maxtick = -1, bool needNetSync = false)
 	{
 		if (period < 0)
 		{

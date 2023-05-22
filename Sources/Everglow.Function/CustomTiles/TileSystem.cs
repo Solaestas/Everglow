@@ -3,7 +3,6 @@ using Everglow.Commons.CustomTiles.DataStructures;
 using Everglow.Commons.CustomTiles.EntityColliding;
 using Everglow.Commons.CustomTiles.Tiles;
 using Everglow.Commons.Enums;
-using On.Terraria;
 
 namespace Everglow.Commons.CustomTiles;
 
