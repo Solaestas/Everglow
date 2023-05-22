@@ -615,9 +615,8 @@ public class Acytaea : VisualNPC
 				//MythContentPlayer mplayer = Main.player[Main.myPlayer].GetModPlayer<MythContentPlayer>();
 				//mplayer.ShakeStrength = 7;
 				//mplayer.Shake = 1;
-				//ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
-				//mplayer.FlyCamPosition = new Vector2(0, 28).RotatedByRandom(6.283);
-				ShakerManager.AddShaker(UndirectedShakerInfo.Create(Main.LocalPlayer.Center, 28));
+				ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
+				mplayer.FlyCamPosition = new Vector2(0, 28).RotatedByRandom(6.283);
 			}
 
 			HasBlade = true;//拿刀
