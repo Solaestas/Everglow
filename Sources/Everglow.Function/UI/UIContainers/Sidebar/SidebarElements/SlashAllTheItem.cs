@@ -11,7 +11,7 @@ internal class SlashAllTheItem : SidebarElementBase
 		for (int i = 0; i < 50; i++)
 		{
 			var item = Main.LocalPlayer.inventory[i];
-			if (item != null && item.type != ItemID.None && !item.favorited)
+			if (!item.favorited)
 			{
 				item.SetDefaults();
 			}
