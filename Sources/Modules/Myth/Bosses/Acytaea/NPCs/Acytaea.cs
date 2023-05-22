@@ -1964,7 +1964,7 @@ public class Acytaea : VisualNPC
 
 				new FlavorTextBestiaryInfoElement(tx1),
 			new FlavorTextBestiaryInfoElement(tx2),
-			new FlavorTextBestiaryInfoElement("Mods.MythMod.Bestiary.Acytaea")
+			new FlavorTextBestiaryInfoElement("Mods.Everglow.Bestiary.Acytaea")
 		});
 	}
 

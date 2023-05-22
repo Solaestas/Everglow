@@ -1,5 +1,3 @@
-using Everglow.Commons.VFX;
-
 namespace Everglow.Commons.VFX.Pipelines;
 
 /// <summary>

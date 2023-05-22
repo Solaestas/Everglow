@@ -1,63 +1,64 @@
+using System.Diagnostics.Contracts;
 using Everglow.Commons.Interfaces;
 using Everglow.Commons.Modules;
 using Everglow.Commons.ObjectPool;
 using Everglow.Commons.VFX;
 using log4net;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Everglow.Commons;
 
 /// <summary>
-/// 手动（伪）单例（？），代替Everglow的作用，存在一些依赖关系
+/// 依赖注入
 /// </summary>
 public static class Ins
 {
 	public static VFXBatch Batch => Get<VFXBatch>();
+
 	public static GraphicsDevice Device => Get<GraphicsDevice>();
+
 	public static IHookManager HookManager => Get<IHookManager>();
+
 	public static ILog Logger => Get<ILog>();
+
 	public static IMainThreadContext MainThread => Get<IMainThreadContext>();
+
 	public static ModuleManager ModuleManager => Get<ModuleManager>();
+
 	public static RenderTargetPool RenderTargetPool => Get<RenderTargetPool>();
+
 	public static IVFXManager VFXManager => Get<IVFXManager>();
+
 	public static IVisualQualityController VisualQuality => Get<IVisualQualityController>();
 
-	public static void Set<T>(T instance) where T : class
-	{
-		instances.Add(instance);
-		Reference<T>.reference = new WeakReference<T>(instance);
-	}
+	public static void Add<T>() where T : class => services.AddSingleton<T>();
 
-	public static void Unload()
-	{
-		foreach(var instance in instances)
-		{
-			if(instance is IDisposable dispose and not GraphicsDevice)
-			{
-				dispose.Dispose();
-			}
-		}
-		instances.Clear();
-	}
+	public static void Add<TService, TImplementation>() where TService : class where TImplementation : class, TService
+		=> services.AddSingleton<TService, TImplementation>();
+
+	public static void Add<T>(Func<IServiceProvider, T> factory) where T : class => services.AddSingleton(factory);
+
+	public static void Add<T>(T instance) where T : class => services.AddSingleton(instance);
 
 	public static T Get<T>() where T : class
 	{
-		if (Reference<T>.reference == null)
-			return null;
-
-		if (Reference<T>.reference.TryGetTarget(out var target))
-			return target;
-
-		return null;
+		var service = provider.GetService<T>();
+		Contract.Ensures(Contract.Result<T>() != null);
+		return service;
 	}
 
-	private static List<object> instances = new();
+	public static void Begin() => services = new ServiceCollection();
 
-	/// <summary>
-	/// 我也不清楚用泛型弱引用快还是直接用字典存实例强制转换快，建议来个人测一下，我摸了（）
-	/// </summary>
-	/// <typeparam name="T"></typeparam>
-	private static class Reference<T> where T : class
+	public static void End() => provider = services.BuildServiceProvider();
+
+	public static void Clear()
 	{
-		public static WeakReference<T> reference;
+		services.Remove(services.FirstOrDefault(s => s.ServiceType == typeof(GraphicsDevice)));
+		provider.Dispose();
+		services.Clear();
 	}
+
+	private static ServiceCollection services = null;
+
+	private static ServiceProvider provider = null;
 }

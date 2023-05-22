@@ -2,7 +2,7 @@ using Everglow.Myth.TheFirefly.NPCs.Bosses;
 
 namespace Everglow.Myth.TheFirefly.Tiles;
 
-public class DarkCocoonSpecial : ModTile//用来生成魔茧
+public class DarkCocoonSpecial : ModTile//鐢ㄦ潵鐢熸垚榄旇導
 {
 	public override void SetStaticDefaults()
 	{
@@ -12,8 +12,7 @@ public class DarkCocoonSpecial : ModTile//用来生成魔茧
 		Main.tileMerge[Type][ModContent.TileType<DarkCocoon>()] = true;
 		MinPick = 17500;
 		DustType = 191;
-		ItemDrop = ModContent.ItemType<Items.DarkCocoon>();
-		AddMapEntry(new Color(17, 16, 17));
+				AddMapEntry(new Color(17, 16, 17));
 	}
 
 	public override bool CanExplode(int i, int j)

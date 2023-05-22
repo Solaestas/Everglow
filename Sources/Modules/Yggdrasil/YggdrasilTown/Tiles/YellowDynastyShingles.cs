@@ -1,4 +1,4 @@
-﻿namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
+namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
 
 public class YellowDynastyShingles : ModTile
 {
@@ -14,7 +14,6 @@ public class YellowDynastyShingles : ModTile
 		MinPick = 0;
 		HitSound = SoundID.Grass;
 
-		ItemDrop = ModContent.ItemType<Items.YellowDynastyShingles>();
 		Main.tileSpelunker[Type] = true;
 		AddMapEntry(new Color(229, 128, 4));
 

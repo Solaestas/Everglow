@@ -44,6 +44,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Everglow.PlantAndFarm", "So
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Everglow.TwilightForest", "Sources\Modules\TwilightForest\Everglow.TwilightForest.csproj", "{21728E84-33B6-4CC2-8A6E-448A3F7B3AC8}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Everglow.EternalResolve", "Sources\Modules\EternalResolve\Everglow.EternalResolve.csproj", "{22C04480-AA0F-49C9-80D9-2391B1572A26}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -117,6 +119,10 @@ Global
 		{21728E84-33B6-4CC2-8A6E-448A3F7B3AC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21728E84-33B6-4CC2-8A6E-448A3F7B3AC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21728E84-33B6-4CC2-8A6E-448A3F7B3AC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22C04480-AA0F-49C9-80D9-2391B1572A26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22C04480-AA0F-49C9-80D9-2391B1572A26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22C04480-AA0F-49C9-80D9-2391B1572A26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22C04480-AA0F-49C9-80D9-2391B1572A26}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

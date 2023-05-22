@@ -1,10 +1,11 @@
-﻿using Everglow.Commons.Interfaces;
+using Everglow.Commons.Interfaces;
 
 namespace Everglow.Commons;
 
 public class Future<T>
 {
 	private bool isLoaded;
+
 	private T value;
 
 	public T Value
@@ -27,11 +28,19 @@ public class Future<T>
 
 	public bool IsLoaded => isLoaded;
 }
+
 public class MainThreadContext : IMainThreadContext
 {
 	public void AddTask(Action task)
 	{
-		Main.QueueMainThreadAction(task);
+		if (ThreadCheck.IsMainThread)
+		{
+			task.Invoke();
+		}
+		else
+		{
+			Main.QueueMainThreadAction(task);
+		}
 	}
 
 	public Future<Color[]> DelayGetColors(Texture2D texture)

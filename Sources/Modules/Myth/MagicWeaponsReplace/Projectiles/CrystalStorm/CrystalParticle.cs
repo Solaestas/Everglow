@@ -113,5 +113,5 @@ internal class CrystalParticle : Visual
 		Ins.Batch.Draw(TextureAssets.MagicPixel.Value, Vx, PrimitiveType.TriangleList);
 	}
 
-	public override CodeLayer DrawLayer => CodeLayer.PostDrawFilter;
+	public override CodeLayer DrawLayer => CodeLayer.PreDrawFilter;
 }

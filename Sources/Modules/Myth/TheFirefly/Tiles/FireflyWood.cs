@@ -12,7 +12,6 @@ public class FireflyWood : ModTile
 		Main.tileBlockLight[Type] = true;
 		MinPick = 175;
 		DustType = 191;
-		ItemDrop = ModContent.ItemType<GlowWood>();
 		AddMapEntry(new Color(37, 46, 47));
 	}
 

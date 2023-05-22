@@ -23,8 +23,9 @@ public struct Vertex3D_2 : IVertexType
 		Color = color;
 	}
 
-	public VertexDeclaration VertexDeclaration
+	public override string ToString()
 	{
-		get => _vertexDeclaration;
+		return $"[{Position}, {Color}, {TexCoord}]";
 	}
+	public VertexDeclaration VertexDeclaration => _vertexDeclaration;
 }
