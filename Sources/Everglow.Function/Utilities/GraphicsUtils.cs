@@ -78,7 +78,7 @@ public static class GraphicsUtils
 	public static void PushSpriteBatchState(SpriteBatch sb)
 	{
 		states.Push(new SpriteBatchState(sb.sortMode, sb.blendState, sb.samplerState, sb.depthStencilState, sb.rasterizerState));
-		if(sb.beginCalled)
+		if (sb.beginCalled)
 		{
 			sb.End();
 		}
@@ -90,7 +90,7 @@ public static class GraphicsUtils
 	/// <param name="sb"></param>
 	public static void PopSpriteBatchState(SpriteBatch sb)
 	{
-		if(sb.beginCalled)
+		if (sb.beginCalled)
 		{
 			sb.End();
 		}
