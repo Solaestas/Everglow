@@ -1,5 +1,5 @@
 namespace Everglow.Commons;
-public class ShakerInfo : ModType
+public class ShakerInfo
 {
 	internal Vector2 center;
 	internal Vector2 dir;
@@ -12,7 +12,6 @@ public class ShakerInfo : ModType
 	internal int maxTick;
 	internal int propagationDelayTimer;
 	internal int maxPropagationTime;
-	internal bool NeedNetSync = false;
 	public virtual bool Update()
 	{
 		tickTimer++;
@@ -77,20 +76,10 @@ public class ShakerInfo : ModType
 		writer.Write(propagationSpeed);
 		writer.Write(maxPropagationTime);
 	}
-	public sealed override void Load()
-	{
-	}
-	public sealed override void Unload()
-	{
-	}
-	public sealed override void Register()
-	{
-		ShakerManager.Register(this);
-	}
 }
 public class UndirectedShakerInfo : ShakerInfo
 {
-	public static UndirectedShakerInfo Create(Vector2 center, float strength = 1, float period = 1, float speed = 1, float acv = 0.9f, float acp = 0.9f, int maxtick = -1, bool needNetSync = false)
+	public static UndirectedShakerInfo Create(Vector2 center, float strength = 1, float period = 1, float speed = 1, float acv = 0.9f, float acp = 0.9f, int maxtick = -1)
 	{
 		if (period < 0)
 		{
@@ -118,7 +107,6 @@ public class UndirectedShakerInfo : ShakerInfo
 			ac_propagation = acp,
 			maxPropagationTime = (int)Math.Floor(1 / acp / speed) + 1,
 			maxTick = maxtick,
-			NeedNetSync = needNetSync
 		};
 	}
 	public override void ApplyTo(Vector2 pos, ref Vector2 effect)
@@ -165,10 +153,6 @@ public class ShakerManager : ModSystem
 	/// 关闭此震动系统的屏幕移动效果,每帧重置
 	/// </summary>
 	public static bool LockScreen { get; set; }
-	internal static void Register(ShakerInfo originfo)
-	{
-		ModTypeLookup<ShakerInfo>.Register(originfo);
-	}
 	public override void Load()
 	{
 		shakers = new();
@@ -233,12 +217,8 @@ public class ShakerManager : ModSystem
 			ac_propagation = acp,
 			maxPropagationTime = (int)Math.Floor(1 / acp / speed) + 1,
 			maxTick = maxtick,
-			NeedNetSync = needNetSync
 		};
-		if (CheckNeedNetSync(info))
-		{
-			shakers.Add(info);
-		}
+		shakers.Add(info);
 	}
 	/// <summary>
 	/// 加入一个自定义震动源
@@ -247,36 +227,7 @@ public class ShakerManager : ModSystem
 	/// <param name="info"></param>
 	public static void AddShaker(ShakerInfo info)
 	{
-		if (CheckNeedNetSync(info))
-		{
-			shakers.Add(info);
-		}
-	}
-	//返回true表示此震动在此进程有效(寄单机或者不需要同步的震动)
-	//有联机同步接收的震动务必关闭NeedNetUpdate导致无限同步
-	static bool CheckNeedNetSync(ShakerInfo info)
-	{
-		if (Main.netMode == NetmodeID.SinglePlayer)
-		{
-			return true;
-		}
-		else
-		{
-			if (!info.NeedNetSync)
-			{
-				return true;
-			}
-			if (Main.netMode == NetmodeID.Server)
-			{
-				//TODO 同步数据到所有客机
-				//服务器上执行震动无意义
-			}
-			else
-			{
-				//本地不执行添加，同步请求到服务器，再由服务器广播
-			}
-			return false;
-		}
+		shakers.Add(info);
 	}
 	/// <summary>
 	/// 清空所有震动源
