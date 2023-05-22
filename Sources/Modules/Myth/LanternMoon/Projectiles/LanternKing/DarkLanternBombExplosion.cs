@@ -1,21 +1,17 @@
-using Everglow.Myth.Common;
-using Everglow.Myth.LanternMoon.NPCs.LanternGhostKing;
 using Everglow.Myth.LanternMoon.Projectiles.LanternKing.VFXs;
-using Terraria.Audio;
 using Terraria.DataStructures;
-using static Everglow.Myth.Common.MythUtils;
 
 namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 public class DarkLanternBombExplosion : ModProjectile, IWarpProjectile
 {
-    public override void SetDefaults()
-    {
-        Projectile.width = 100;
-        Projectile.height = 100;
-        Projectile.aiStyle = -1;
-        Projectile.hostile = true;
-        Projectile.ignoreWater = true;
-        Projectile.tileCollide = false;
+	public override void SetDefaults()
+	{
+		Projectile.width = 100;
+		Projectile.height = 100;
+		Projectile.aiStyle = -1;
+		Projectile.hostile = true;
+		Projectile.ignoreWater = true;
+		Projectile.tileCollide = false;
 		Projectile.timeLeft = 30;
 		Projectile.penetrate = -1;
 	}
@@ -32,7 +28,7 @@ public class DarkLanternBombExplosion : ModProjectile, IWarpProjectile
 			FireBallVelocity = new Vector2[]
 			{
 				RandomVector2(4f, 3f),
-				RandomVector2(4f, 3f), 
+				RandomVector2(4f, 3f),
 				RandomVector2(4f, 3f),
 				RandomVector2(4f, 3f),
 				RandomVector2(3f, 2f),
@@ -42,7 +38,7 @@ public class DarkLanternBombExplosion : ModProjectile, IWarpProjectile
 				RandomVector2(2.5f, 0.5f),
 				RandomVector2(2.5f, 0.01f),
 				RandomVector2(2, 0.01f),
-				RandomVector2(1, 0.01f) 
+				RandomVector2(1, 0.01f)
 			}
 		};
 		Ins.VFXManager.Add(lanternExplosion);
@@ -55,7 +51,7 @@ public class DarkLanternBombExplosion : ModProjectile, IWarpProjectile
 				Active = true,
 				Visible = true,
 				position = Projectile.Center,
-				maxTime = Main.rand.Next(26,96),
+				maxTime = Main.rand.Next(26, 96),
 				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), 0, Main.rand.NextFloat(1f, 3.4f) }
 			};
 			Ins.VFXManager.Add(flameDust);
@@ -63,16 +59,16 @@ public class DarkLanternBombExplosion : ModProjectile, IWarpProjectile
 	}
 	public Vector2 RandomVector2(float maxLength, float minLength = 0)
 	{
-		if(maxLength <= minLength)
+		if (maxLength <= minLength)
 		{
 			maxLength = minLength + 0.001f;
 		}
 		return new Vector2(Main.rand.NextFloat(minLength, maxLength), 0).RotatedByRandom(6.283);
 	}
 	public override bool PreDraw(ref Color lightColor)
-    {
+	{
 		return false;
-    }
+	}
 	private void DrawWarpTexCircle_VFXBatch(VFXBatch spriteBatch, float radious, float width, Vector2 center, Texture2D tex, float warpStrength, double addRot = 0)
 	{
 		var circle = new List<Vertex2D>();
