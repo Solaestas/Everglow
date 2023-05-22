@@ -40,9 +40,11 @@ public class VortexVanquisher3 : ModProjectile
 				Crash = true;
 				Projectile.timeLeft = 70;
 				Projectile.extraUpdates = 2;
-				ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
+				//ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
 
-				Gsplayer.FlyCamPosition = new Vector2(0, 28).RotatedByRandom(6.283);
+				//Gsplayer.FlyCamPosition = new Vector2(0, 28).RotatedByRandom(6.283);
+				//震动示例
+				ShakerManager.AddShaker(Projectile.Center - StartVelocity * 12, Projectile.velocity, 28, 0.4f, 8, 0.97f, 0.8f, 60);
 				SoundEngine.PlaySound(SoundID.NPCHit4);
 			}
 		}

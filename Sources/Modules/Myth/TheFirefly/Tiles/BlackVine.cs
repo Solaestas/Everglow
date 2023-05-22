@@ -1,4 +1,4 @@
-﻿namespace Everglow.Myth.TheFirefly.Tiles;
+namespace Everglow.Myth.TheFirefly.Tiles;
 
 public class BlackVine : ModTile//TODO:Need to copy some code from vanilla.This is a kind of vine,it will swaying in the wind or dragged by moving-players.
 {
@@ -10,11 +10,6 @@ public class BlackVine : ModTile//TODO:Need to copy some code from vanilla.This 
 		AddMapEntry(new Color(11, 11, 11), modTranslation);
 		HitSound = SoundID.Grass;
 	}
-
-	public override void KillMultiTile(int i, int j, int frameX, int frameY)
-	{
-	}
-
 	public override void PlaceInWorld(int i, int j, Item item)
 	{
 	}

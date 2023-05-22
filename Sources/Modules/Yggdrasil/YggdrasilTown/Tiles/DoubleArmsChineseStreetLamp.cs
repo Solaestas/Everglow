@@ -1,4 +1,4 @@
-﻿using Terraria.ObjectData;
+using Terraria.ObjectData;
 using Everglow.Yggdrasil.Common.Utils;
 using Everglow.Yggdrasil.Common;
 
@@ -83,11 +83,6 @@ public class DoubleArmsChineseStreetLamp : ModTile
 				}
 			}
 		}
-	}
-
-	public override void KillMultiTile(int i, int j, int frameX, int frameY)
-	{
-		Item.NewItem(null, i * 16, j * 16, 16, 32, ModContent.ItemType<Items.DoubleArmsChineseStreetLamp>());
 	}
 	public override void HitWire(int i, int j)
 	{

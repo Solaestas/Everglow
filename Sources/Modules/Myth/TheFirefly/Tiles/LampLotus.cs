@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common;
+using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly;
 using Terraria.ObjectData;
 
@@ -22,11 +22,6 @@ public class LampLotus : ModTile
 		AddMapEntry(new Color(81, 110, 255), modTranslation);
 		HitSound = SoundID.Grass;
 	}
-
-	public override void KillMultiTile(int i, int j, int frameX, int frameY)
-	{
-	}
-
 	public override void RandomUpdate(int i, int j)
 	{
 		var tile = Main.tile[i, j];

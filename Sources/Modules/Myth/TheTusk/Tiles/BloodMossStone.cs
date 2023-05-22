@@ -10,7 +10,6 @@ public class BloodMossStone : ModTile
 		MinPick = 200;
 		DustType = DustID.Blood;
 		HitSound = SoundID.Pixie;
-		ItemDrop = ModContent.ItemType<Items.BloodMossStone>();
 		AddMapEntry(new Color(62, 61, 84));
 	}
 }

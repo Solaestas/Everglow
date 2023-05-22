@@ -125,12 +125,14 @@ public class FlamingDashCore : ModNPC
 				ColorShine = NPC.color;
 				//MythContentPlayer mplayer = Terraria.Main.player[Terraria.Main.myPlayer].GetModPlayer<MythContentPlayer>();
 				//mplayer.Shake = 3;
-				ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
-				mplayer.FlyCamPosition = new Vector2(0, 56).RotatedByRandom(6.283);
+				//ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
+				//mplayer.FlyCamPosition = new Vector2(0, 56).RotatedByRandom(6.283);
+				ShakerManager.AddShaker(UndirectedShakerInfo.Create(Main.LocalPlayer.Center, 56));
 
 				if ((player.Center - NPC.Center).Length() > 100)
 					Str = 100 / (player.Center - NPC.Center).Length();
-				mplayer.DirFlyCamPosStrength = Str; //Using Direct FlyCamPosition because FlyCamPosition itself being used causes errors (see ScreenShaker ModPlayer) ~Setnour6
+				//mplayer.DirFlyCamPosStrength = Str; //Using Direct FlyCamPosition because FlyCamPosition itself being used causes errors (see ScreenShaker ModPlayer) ~Setnour6
+				ShakerManager.AddShaker(UndirectedShakerInfo.Create(Main.LocalPlayer.Center, Str));
 				SoundEngine.PlaySound(SoundID.Item36, NPC.Center);//特效
 				Vector2 vn = new Vector2(0, -20).RotatedBy(NPC.localAI[0] / 90d);
 				for (int h = 0; h < 6; h++)
@@ -639,7 +641,7 @@ public class FlamingDashCore : ModNPC
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
 		var bars = new List<DashCoreVertexInfo>();
-		ef2 = ModContent.Request<Effect>("Everglow/Myth/Effects/TrailRainbow").Value;
+		ef2 = ModAsset.TrailRainbow.Value;
 		// 把所有的点都生成出来，按照顺序
 
 		for (int i = 1; i < NPC.oldPos.Length; ++i)

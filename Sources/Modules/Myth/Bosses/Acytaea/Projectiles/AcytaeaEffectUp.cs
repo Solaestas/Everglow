@@ -1,4 +1,4 @@
-﻿using Terraria;
+using Terraria;
 
 namespace Everglow.Myth.Bosses.Acytaea.Projectiles;
 
@@ -25,8 +25,9 @@ internal class AcytaeaEffectUp : ModProjectile
 	public override void AI()
 	{
 		//TODO Shake verify and adjust if needed
-		ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
-		mplayer.FlyCamPosition = new Vector2(0, 28).RotatedByRandom(6.283);
+		//ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
+		//mplayer.FlyCamPosition = new Vector2(0, 28).RotatedByRandom(6.283);
+		ShakerManager.AddShaker(UndirectedShakerInfo.Create(Main.LocalPlayer.Center, 28));
 		//if (!shake) // KEEP FOR REFERENCE
 		//{
 		//    MythContentPlayer mplayer = Main.player[Main.myPlayer].GetModPlayer<MythContentPlayer>();

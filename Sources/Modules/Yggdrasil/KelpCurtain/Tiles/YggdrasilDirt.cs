@@ -1,4 +1,4 @@
-﻿namespace Everglow.Yggdrasil.KelpCurtain.Tiles;
+namespace Everglow.Yggdrasil.KelpCurtain.Tiles;
 
 public class YggdrasilDirt : ModTile
 {
@@ -14,7 +14,6 @@ public class YggdrasilDirt : ModTile
 		DustType = DustID.Dirt;
 		MinPick = 50;
 		HitSound = SoundID.Dig;
-		ItemDrop = ModContent.ItemType<Items.YggdrasilDirt>();
 		AddMapEntry(new Color(53, 29, 26));
 	}
 	public override bool CanExplode(int i, int j)
