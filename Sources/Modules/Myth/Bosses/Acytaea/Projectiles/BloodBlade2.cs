@@ -89,9 +89,8 @@ public class BloodBlade2 : ModProjectile
 	}
 	public override void Kill(int timeLeft)
 	{
-		//ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
-		//mplayer.FlyCamPosition = new Vector2(0, 12).RotatedByRandom(6.283);
-		ShakerManager.AddShaker(UndirectedShakerInfo.Create(Main.LocalPlayer.Center, 12));
+		ScreenShaker mplayer = Main.player[Main.myPlayer].GetModPlayer<ScreenShaker>();
+		mplayer.FlyCamPosition = new Vector2(0, 12).RotatedByRandom(6.283);
 		SoundEngine.PlaySound(SoundID.DD2_WitherBeastCrystalImpact, Projectile.Center);
 		for (int j = 0; j < 6; j++)
 		{

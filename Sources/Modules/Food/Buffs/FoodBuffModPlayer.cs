@@ -202,9 +202,8 @@ public class FoodBuffModPlayer : ModPlayer
 		if (CherryBuff)
 		{
 			SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode);
-			//ScreenShaker Gsplayer = Player.GetModPlayer<ScreenShaker>();
-			//Gsplayer.FlyCamPosition = new Vector2(0, 150).RotatedByRandom(6.283);
-			ShakerManager.AddShaker(UndirectedShakerInfo.Create(Player.Center,150));
+			ScreenShaker Gsplayer = Player.GetModPlayer<ScreenShaker>();
+			Gsplayer.FlyCamPosition = new Vector2(0, 150).RotatedByRandom(6.283);
 
 			float k1 = Math.Clamp(Player.velocity.Length(), 1, 3);
 			float k2 = Math.Clamp(Player.velocity.Length(), 6, 10);
