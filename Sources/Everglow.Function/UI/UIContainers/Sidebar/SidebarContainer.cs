@@ -43,7 +43,7 @@ namespace Everglow.Commons.UI.UIContainers.Sidebar
 
 			//这是展开和收回箭头
 
-			UIImage image = new UIImage(ModAsset.AirTile.Value, Color.White);
+			UIImage image = new UIImage(ModAsset.Array.Value, Color.White);
 			image.Info.Left.SetValue(2f, 1f);
 			image.Info.Top.SetValue(-image.Info.Height.Pixel / 2f, 0.5f);
 			image.Events.OnUpdate += (element, gt) =>
