@@ -72,7 +72,7 @@ public class SideHangingLantern : ModTile
 	}
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		Texture2D tPostTexture = YggdrasilContent.QuickTexture("YggdrasilTown/Tiles/SideHangingLantern_Post");
+		Texture2D tPostTexture = ModAsset.SideHangingLantern_Post.Value;
 		var rt = new Rectangle(i * 16, j * 16, 16, 16);
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 		if (Main.drawToScreen)
@@ -87,7 +87,7 @@ public class SideHangingLantern : ModTile
 		{
 			var tileSpin = new TileSpin();
 			tileSpin.Update(i, j);
-			Texture2D tex = YggdrasilContent.QuickTexture("YggdrasilTown/Tiles/SideHangingLantern_Lantern");
+			Texture2D tex = ModAsset.SideHangingLantern_Lantern.Value;
 			int FrameX = 0;
 			if (tile.TileFrameY == 54)
 				FrameX = 26;
