@@ -6,7 +6,9 @@ public class GlowWoodTorch : ModItem
 {
 	public override void SetStaticDefaults()
 	{
-		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 100;
+		Item.ResearchUnlockCount = 100;
+		ItemID.Sets.SingleUseInGamepad[Type] = true;
+		ItemID.Sets.Torches[Type] = true;
 	}
 
 	public override void SetDefaults()
@@ -35,11 +37,6 @@ public class GlowWoodTorch : ModItem
 	public override void PostUpdate()
 	{
 		Lighting.AddLight(Item.Center, 1f, 1f, 1f);
-	}
-
-	public override void AutoLightSelect(ref bool dryTorch, ref bool wetTorch, ref bool glowstick)
-	{
-		wetTorch = true;
 	}
 	public override void AddRecipes()
 	{

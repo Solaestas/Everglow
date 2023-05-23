@@ -1,4 +1,4 @@
-﻿namespace Everglow.Commons.Vertex;
+namespace Everglow.Commons.Vertex;
 
 public struct Vertex2D : IVertexType
 {
@@ -19,11 +19,10 @@ public struct Vertex2D : IVertexType
 		this.texCoord = texCoord;
 	}
 
-	public VertexDeclaration VertexDeclaration
+	public override string ToString()
 	{
-		get
-		{
-			return _vertexDeclaration;
-		}
+		return $"[{position}, {color}, {texCoord}]";
 	}
+
+	public VertexDeclaration VertexDeclaration => _vertexDeclaration;
 }
