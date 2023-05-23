@@ -8,11 +8,14 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
 
 public class SideHangingLantern : ModTile
 {
-	public override void PostSetDefaults()
+	public override void SetStaticDefaults()
 	{
 		Main.tileFrameImportant[Type] = true;
 		Main.tileNoAttach[Type] = true;
-		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
+		Main.tileSolidTop[Type] = true;
+		DustType = DustID.DynastyWood;
+
+		TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
 		TileObjectData.newTile.Height = 3;
 		TileObjectData.newTile.Width = 2;
 		TileObjectData.newTile.CoordinateHeights = new int[]
@@ -21,16 +24,18 @@ public class SideHangingLantern : ModTile
 			16,
 			16
 		};
+		TileObjectData.newAlternate.Alternates = new List<TileObjectData>();
 		TileObjectData.newTile.StyleHorizontal = true;
-
 		TileObjectData.newTile.CoordinateWidth = 16;
+
+		TileObjectData.newTile.AnchorBottom = new AnchorData(0, 0, 0);
+		TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
 		TileObjectData.newAlternate.AnchorLeft = new AnchorData(AnchorType.SolidTile | AnchorType.SolidSide | AnchorType.Tree | AnchorType.AlternateTile, TileObjectData.newTile.Height, 0);
-		TileObjectData.addAlternate(0);
-		TileObjectData.newAlternate.AnchorRight = new AnchorData(AnchorType.SolidTile | AnchorType.SolidSide | AnchorType.Tree | AnchorType.AlternateTile, TileObjectData.newTile.Height, 0);
 		TileObjectData.addAlternate(1);
+		TileObjectData.newTile.AnchorRight = new AnchorData(AnchorType.SolidTile | AnchorType.SolidSide | AnchorType.Tree | AnchorType.AlternateTile, TileObjectData.newTile.Height, 0);
 
 		TileObjectData.addTile(Type);
-		DustType = DustID.DynastyWood;
+
 		AddMapEntry(new Color(151, 31, 32));
 	}
 	public override void NearbyEffects(int i, int j, bool closer)
@@ -68,7 +73,40 @@ public class SideHangingLantern : ModTile
 	}
 	public override void HitWire(int i, int j)
 	{
-		FurnitureUtils.LightHitwire(i, j, Type, 1, 5, 54);
+		Tile tile = Main.tile[i, j];
+		int x = i - tile.TileFrameX / 18 % 2;
+		int y = j - tile.TileFrameY / 18 % 3;
+		for (int m = x; m < x + 2; m++)
+		{
+			for (int n = y; n < y + 3; n++)
+			{
+				if (!tile.HasTile)
+					continue;
+				if (tile.TileType == Type)
+				{
+					tile = Main.tile[m, n];
+					if (tile.TileFrameY < 18 * 3)
+					{
+						tile = Main.tile[m, n];
+						tile.TileFrameY += 54;
+					}
+					else
+					{
+						tile = Main.tile[m, n];
+						tile.TileFrameY -= 54;
+					}
+				}
+			}
+		}
+		if (!Wiring.running)
+			return;
+		for (int k = 0; k < 2; k++)
+		{
+			for (int l = 0; l < 3; l++)
+			{
+				Wiring.SkipWire(x + k, y + l);
+			}
+		}
 	}
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
@@ -80,7 +118,7 @@ public class SideHangingLantern : ModTile
 		rt.X -= (int)(Main.screenPosition.X - zero.X);
 		rt.Y -= (int)(Main.screenPosition.Y - zero.Y);
 		Tile tile = Main.tile[i, j];
-
+		spriteBatch.samplerState = SamplerState.AnisotropicWrap;
 		spriteBatch.Draw(tPostTexture, rt, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), Lighting.GetColor(i, j));
 
 		if (tile.TileFrameY % 54 == 0 && (tile.TileFrameX == 0 || tile.TileFrameX == 36))
@@ -92,7 +130,7 @@ public class SideHangingLantern : ModTile
 			if (tile.TileFrameY == 54)
 				FrameX = 26;
 			tileSpin.DrawRotatedTile(i, j, tex, new Rectangle(FrameX, 0, 26, 36), new Vector2(13, 0), 16, 6);
-			if (tile.TileFrameX == 0)
+			if (tile.TileFrameY == 54)
 			{
 				Lighting.AddLight(i, j, 1f, 0.45f, 0.15f);
 				Lighting.AddLight(i, j + 1, 1f, 0.45f, 0.15f);
