@@ -44,7 +44,7 @@ public class VortexVanquisher3 : ModProjectile
 
 				//Gsplayer.FlyCamPosition = new Vector2(0, 28).RotatedByRandom(6.283);
 				//震动示例
-				ShakerManager.AddShaker(Projectile.Center - StartVelocity * 12, Projectile.velocity, 14, 0.2f, 8, 0.9f, 0.8f, 60);
+				ShakerManager.AddShaker(Projectile.Center - StartVelocity * 12, Projectile.velocity, 6, 0.8f, 16, 0.9f, 0.8f, 30);
 				SoundEngine.PlaySound(SoundID.NPCHit4);
 			}
 		}
