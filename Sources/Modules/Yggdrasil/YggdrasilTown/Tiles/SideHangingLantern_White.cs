@@ -6,7 +6,7 @@ using Everglow.Yggdrasil.Common;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
 
-public class SideHangingLantern : ModTile
+public class SideHangingLantern_White : ModTile
 {
 	public override void SetStaticDefaults()
 	{
@@ -36,7 +36,7 @@ public class SideHangingLantern : ModTile
 
 		TileObjectData.addTile(Type);
 
-		AddMapEntry(new Color(151, 31, 32));
+		AddMapEntry(new Color(135, 103, 90));
 	}
 	public override void NearbyEffects(int i, int j, bool closer)
 	{
@@ -110,7 +110,7 @@ public class SideHangingLantern : ModTile
 	}
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		Texture2D tPostTexture = ModAsset.SideHangingLantern_Post.Value;
+		Texture2D tPostTexture = ModAsset.SideHangingLantern_White_Post.Value;
 		var rt = new Rectangle(i * 16, j * 16, 16, 16);
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 		if (Main.drawToScreen)
@@ -125,17 +125,15 @@ public class SideHangingLantern : ModTile
 		{
 			var tileSpin = new TileSpin();
 			tileSpin.Update(i, j);
-			Texture2D tex = ModAsset.SideHangingLantern_Lantern.Value;
+			Texture2D tex = ModAsset.SideHangingLantern_White_Lantern.Value;
 			int FrameX = 0;
 			if (tile.TileFrameY == 54)
 				FrameX = 26;
 			tileSpin.DrawRotatedTile(i, j, tex, new Rectangle(FrameX, 0, 26, 36), new Vector2(13, 0), 16, 6);
 			if (tile.TileFrameY == 0)
 			{
-				Texture2D texGlow = ModAsset.SideHangingLantern_Lantern_glow.Value;
-				tileSpin.DrawRotatedTile(i, j, texGlow, new Rectangle(FrameX, 0, 26, 36), new Vector2(13, 0), 16, 6, true, new Color(155,155,155,0));
-				Lighting.AddLight(i, j, 1f, 0.45f, 0.15f);
-				Lighting.AddLight(i, j + 1, 1f, 0.45f, 0.15f);
+				Lighting.AddLight(i, j, 0.8f, 0.6f, 0.4f);
+				Lighting.AddLight(i, j + 1, 0.8f, 0.6f, 0.4f);
 			}
 		}
 		return false;

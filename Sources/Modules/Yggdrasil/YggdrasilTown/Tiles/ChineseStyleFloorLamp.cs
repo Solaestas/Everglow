@@ -1,3 +1,4 @@
+using Terraria.DataStructures;
 using Terraria.ObjectData;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
@@ -8,6 +9,7 @@ public class ChineseStyleFloorLamp : ModTile
 	{
 		Main.tileFrameImportant[Type] = true;
 		Main.tileNoAttach[Type] = true;
+		TileObjectData.newTile.Origin = new Point16(0, 5);
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
 		TileObjectData.newTile.Height = 6;
 		TileObjectData.newTile.Width = 1;
@@ -20,10 +22,11 @@ public class ChineseStyleFloorLamp : ModTile
 			16,
 			16
 		};
+		TileObjectData.newTile.Origin = new Point16(0, 5);
 		TileObjectData.newTile.CoordinateWidth = 48;
 		TileObjectData.addTile(Type);
 		DustType = DustID.DynastyWood;
-		AddMapEntry(new Color(151, 31, 32));
+		AddMapEntry(new Color(135, 103, 90));
 	}
 	public override void NearbyEffects(int i, int j, bool closer)
 	{

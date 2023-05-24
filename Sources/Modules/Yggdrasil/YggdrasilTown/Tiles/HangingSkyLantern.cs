@@ -16,14 +16,10 @@ public class HangingSkyLantern : ModTile
 		Main.tileLighted[Type] = true;
 		Main.tileSolid[Type] = false;
 		Main.tileNoFail[Type] = true;
-		TileID.Sets.HasOutlines[Type] = true;
-		TileID.Sets.CanBeSleptIn[Type] = true; // Facilitates calling ModifySleepingTargetInfo
-		TileID.Sets.InteractibleByNPCs[Type] = true; // Town NPCs will palm their hand at this tile
-		TileID.Sets.IsValidSpawnPoint[Type] = true;
 
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
 
-		DustType = DustID.Pearlwood;
+		DustType = DustID.DynastyWood;
 		AdjTiles = new int[] { TileID.Chandeliers };
 
 		// Placement
@@ -31,11 +27,10 @@ public class HangingSkyLantern : ModTile
 		TileObjectData.newTile.AnchorTop = new AnchorData(AnchorType.SolidTile, TileObjectData.newTile.Width, 0);
 		TileObjectData.newTile.AnchorBottom = default;
 		TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16 };
+
 		TileObjectData.addTile(Type);
 
-		// Etc
-		var name = CreateMapEntryName();
-		AddMapEntry(new Color(216, 172, 125), name);
+		AddMapEntry(new Color(135, 103, 90));
 	}
 	public override void HitWire(int i, int j)
 	{
