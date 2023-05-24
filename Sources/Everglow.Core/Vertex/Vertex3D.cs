@@ -1,7 +1,7 @@
 namespace Everglow.Commons.Vertex;
 
 /// <summary>
-/// ¶¥µãÊı¾İ½á¹¹£º¿Õ¼ä×ø±ê,ÎÆÀí×ø±ê,·¨ÏßÏòÁ¿
+/// é¡¶ç‚¹æ•°æ®ç»“æ„ï¼šç©ºé—´åæ ‡,çº¹ç†åæ ‡,æ³•çº¿å‘é‡
 /// </summary>
 public struct Vertex3D : IVertexType
 {
@@ -22,11 +22,10 @@ public struct Vertex3D : IVertexType
 		this.normal = normal;
 	}
 
-	public VertexDeclaration VertexDeclaration
+	public override string ToString()
 	{
-		get
-		{
-			return _vertexDeclaration;
-		}
+		return $"[{position}, {texcoord}, {normal}]";
 	}
+
+	public VertexDeclaration VertexDeclaration => _vertexDeclaration;
 }
