@@ -24,6 +24,7 @@ public class SideHangingLantern_White : ModTile
 			16,
 			16
 		};
+
 		TileObjectData.newAlternate.Alternates = new List<TileObjectData>();
 		TileObjectData.newTile.StyleHorizontal = true;
 		TileObjectData.newTile.CoordinateWidth = 16;
@@ -33,7 +34,6 @@ public class SideHangingLantern_White : ModTile
 		TileObjectData.newAlternate.AnchorLeft = new AnchorData(AnchorType.SolidTile | AnchorType.SolidSide | AnchorType.Tree | AnchorType.AlternateTile, TileObjectData.newTile.Height, 0);
 		TileObjectData.addAlternate(1);
 		TileObjectData.newTile.AnchorRight = new AnchorData(AnchorType.SolidTile | AnchorType.SolidSide | AnchorType.Tree | AnchorType.AlternateTile, TileObjectData.newTile.Height, 0);
-
 		TileObjectData.addTile(Type);
 
 		AddMapEntry(new Color(135, 103, 90));

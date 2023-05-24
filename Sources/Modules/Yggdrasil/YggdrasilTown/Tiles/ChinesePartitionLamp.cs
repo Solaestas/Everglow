@@ -20,10 +20,11 @@ public class ChinesePartitionLamp : ModTile
 			16,
 			16,
 			16,
-			18
+			16
 		};
 		TileObjectData.newTile.CoordinateWidth = 48;
 		TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
+		TileObjectData.newTile.Origin = new Point16(0, 3);
 		// The following 3 lines are needed if you decide to add more styles and stack them vertically
 		TileObjectData.newTile.StyleWrapLimit = 2;
 		TileObjectData.newTile.StyleMultiplier = 2;
@@ -32,6 +33,7 @@ public class ChinesePartitionLamp : ModTile
 		TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
 		TileObjectData.newAlternate.Direction = TileObjectDirection.PlaceRight;
 		TileObjectData.addAlternate(1); // Facing right will use the second texture style
+		TileObjectData.newTile.Origin = new Point16(0, 3);
 		TileObjectData.addTile(Type);
 
 		DustType = DustID.DynastyWood;

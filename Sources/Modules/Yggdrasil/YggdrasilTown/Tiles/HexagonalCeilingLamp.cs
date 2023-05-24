@@ -25,7 +25,7 @@ public class HexagonalCeilingLamp : ModTile
 		TileObjectData.newTile.AnchorTop = new AnchorData(AnchorType.SolidTile, TileObjectData.newTile.Width, 0);
 		TileObjectData.newTile.AnchorBottom = default;
 		TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16 };
-
+		TileObjectData.newTile.Origin = new Point16(1, 0);
 		TileObjectData.addTile(Type);
 		// Etc
 		AddMapEntry(new Color(135, 103, 90));

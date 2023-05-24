@@ -11,6 +11,7 @@ public class DoubleArmsChineseStreetLamp : ModTile
 	{
 		Main.tileFrameImportant[Type] = true;
 		Main.tileNoAttach[Type] = true;
+
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
 		TileObjectData.newTile.Height = 5;
 		TileObjectData.newTile.Width = 1;
@@ -23,6 +24,7 @@ public class DoubleArmsChineseStreetLamp : ModTile
 			18
 		};
 		TileObjectData.newTile.CoordinateWidth = 54;
+		TileObjectData.newTile.Origin = new Point16(0, 4);
 		TileObjectData.addTile(Type);
 		DustType = DustID.DynastyWood;
 	}

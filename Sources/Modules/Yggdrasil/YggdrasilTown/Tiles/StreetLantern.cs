@@ -12,6 +12,7 @@ public class StreetLantern : ModTile
 	{
 		Main.tileFrameImportant[Type] = true;
 		Main.tileNoAttach[Type] = true;
+
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
 		TileObjectData.newTile.Height = 6;
 		TileObjectData.newTile.Width = 1;
@@ -26,6 +27,7 @@ public class StreetLantern : ModTile
 		};
 		TileObjectData.newTile.CoordinateWidth = 48;
 		TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
+		TileObjectData.newTile.Origin = new Point16(0, 5);
 		TileObjectData.newTile.CoordinatePaddingFix = new Point16(0, -2);
 		// The following 3 lines are needed if you decide to add more styles and stack them vertically
 		TileObjectData.newTile.StyleWrapLimit = 2;
@@ -35,6 +37,7 @@ public class StreetLantern : ModTile
 		TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
 		TileObjectData.newAlternate.Direction = TileObjectDirection.PlaceRight;
 		TileObjectData.addAlternate(1); // Facing right will use the second texture style
+		TileObjectData.newTile.Origin = new Point16(0, 5);
 		TileObjectData.addTile(Type);
 
 		DustType = DustID.DynastyWood;
