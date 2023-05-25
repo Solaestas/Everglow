@@ -30,6 +30,10 @@ public class HexagonalCeilingLamp : ModTile
 		// Etc
 		AddMapEntry(new Color(135, 103, 90));
 	}
+	public override void NumDust(int i, int j, bool fail, ref int num)
+	{
+		num = 0;
+	}
 	public override void HitWire(int i, int j)
 	{
 		FurnitureUtils.LightHitwire(i, j, Type, 3, 3);

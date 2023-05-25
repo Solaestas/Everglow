@@ -38,6 +38,10 @@ public class SideHangingLantern : ModTile
 
 		AddMapEntry(new Color(151, 31, 32));
 	}
+	public override void NumDust(int i, int j, bool fail, ref int num)
+	{
+		num = 0;
+	}
 	public override void NearbyEffects(int i, int j, bool closer)
 	{
 		if (closer)

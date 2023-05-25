@@ -28,6 +28,10 @@ public class DoubleArmsChineseStreetLamp : ModTile
 		TileObjectData.addTile(Type);
 		DustType = DustID.DynastyWood;
 	}
+	public override void NumDust(int i, int j, bool fail, ref int num)
+	{
+		num = 0;
+	}
 	public override void NearbyEffects(int i, int j, bool closer)
 	{
 		if (closer)

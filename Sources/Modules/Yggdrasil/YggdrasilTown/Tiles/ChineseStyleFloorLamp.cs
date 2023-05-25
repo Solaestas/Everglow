@@ -33,8 +33,9 @@ public class ChineseStyleFloorLamp : ModTile
 		if (Main.tile[i, j].TileFrameX < 40 && Main.tile[i, j].TileFrameY < 40)
 			Lighting.AddLight(new Vector2(i * 16, j * 16), new Vector3(1f, 0.8f, 0.5f));
 	}
-	public override void PlaceInWorld(int i, int j, Item item)
+	public override void NumDust(int i, int j, bool fail, ref int num)
 	{
+		num = 0;
 	}
 	public override void HitWire(int i, int j)
 	{
