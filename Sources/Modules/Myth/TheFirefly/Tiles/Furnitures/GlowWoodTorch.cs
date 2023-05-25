@@ -57,7 +57,10 @@ public class GlowWoodTorch : ModTile
 		return inFireflyBiome ? 1f : -0.1f;
 	}
 
-	public override void NumDust(int i, int j, bool fail, ref int num) => num = Main.rand.Next(1, 3);
+	public override void NumDust(int i, int j, bool fail, ref int num)
+	{
+		num = 0;
+	}
 
 	public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
 	{

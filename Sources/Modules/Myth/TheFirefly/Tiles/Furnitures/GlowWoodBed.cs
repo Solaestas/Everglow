@@ -34,7 +34,10 @@ public class GlowWoodBed : ModTile
 		LocalizedText name = CreateMapEntryName();
 		AddMapEntry(new Color(69, 36, 78), name);
 	}
-
+	public override void NumDust(int i, int j, bool fail, ref int num)
+	{
+		num = 0;
+	}
 	public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
 	{
 		return true;
@@ -51,11 +54,6 @@ public class GlowWoodBed : ModTile
 		// Default values match the regular vanilla bed
 		// You might need to mess with the info here if your bed is not a typical 4x2 tile
 		info.VisualOffset.Y += 4f; // Move player down a notch because the bed is not as high as a regular bed
-	}
-
-	public override void NumDust(int i, int j, bool fail, ref int num)
-	{
-		num = 1;
 	}
 	public override bool RightClick(int i, int j)
 	{

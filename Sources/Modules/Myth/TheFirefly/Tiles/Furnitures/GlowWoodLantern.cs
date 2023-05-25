@@ -32,13 +32,21 @@ public class GlowWoodLantern : ModTile
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x2);
 		TileObjectData.newTile.AnchorTop = new AnchorData(AnchorType.SolidTile, TileObjectData.newTile.Width, 0);
 		TileObjectData.newTile.AnchorBottom = default;
+		TileObjectData.newTile.DrawYOffset = 0;
+		TileObjectData.addAlternate(1);
+		TileObjectData.newTile.AnchorTop = new AnchorData(AnchorType.Platform, TileObjectData.newTile.Width, 0);
+		TileObjectData.newTile.AnchorBottom = default;
+		TileObjectData.newTile.DrawYOffset = -12;
 		TileObjectData.newTile.CoordinateHeights = new[] { 16, 16 };
 		TileObjectData.addTile(Type);
 
 		LocalizedText name = CreateMapEntryName();
-		AddMapEntry(new Color(69, 36, 78), name);
+		AddMapEntry(new Color(251, 235, 127), name);
 	}
-
+	public override void NumDust(int i, int j, bool fail, ref int num)
+	{
+		num = 0;
+	}
 	public override void HitWire(int i, int j)
 	{
 		FurnitureUtils.LightHitwire(i, j, Type, 1, 2);

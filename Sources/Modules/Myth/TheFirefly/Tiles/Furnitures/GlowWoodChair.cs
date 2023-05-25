@@ -47,10 +47,9 @@ public class GlowWoodChair : ModTile
 		LocalizedText name = CreateMapEntryName();
 		AddMapEntry(new Color(69, 36, 78), name);
 	}
-
 	public override void NumDust(int i, int j, bool fail, ref int num)
 	{
-		num = fail ? 1 : 3;
+		num = 0;
 	}
 	public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
 	{
