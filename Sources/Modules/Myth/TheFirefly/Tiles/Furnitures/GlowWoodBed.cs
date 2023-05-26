@@ -71,37 +71,20 @@ public class GlowWoodBed : ModTile
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 		if (Main.drawToScreen)
 			zero = Vector2.Zero;
-		Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodBedGlow");
+		Texture2D tex = ModAsset.GlowWoodBedGlow.Value;
 		spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(0.8f, 0.8f, 0.8f, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
 
 		if (tile.TileFrameX == 54 && tile.TileFrameY == 0)
 		{
 			Color cTile = Lighting.GetColor(i, j);
-			tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodBedExtra");
+			tex = ModAsset.GlowWoodBedExtra.Value;
 			spriteBatch.Draw(tex, new Vector2(i * 16, j * 16 - 4) - Main.screenPosition + zero, new Rectangle(0, 0, 20, 20), cTile, 0, new Vector2(0), 1, SpriteEffects.None, 0);
-			//var tileTarget = Main.tile[Player.tileTargetX, Player.tileTargetY];
-			//if (tileTarget.TileFrameX == tile.TileFrameX + (Player.tileTargetX - i) * 18)
-			//{
-			//    if (tileTarget.TileFrameY == tile.TileFrameY + (Player.tileTargetY - j) * 18)
-			//    {
-			//        if (Main.SmartCursorIsUsed)
-			//        {
-			//            tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodBedExtra");
-			//            Color drawC = Color.Wheat;
-			//            if (Player.tileTargetX - i <= -2)
-			//            {
-			//                drawC = Color.Gray;
-			//            }
-			//            spriteBatch.Draw(tex, new Vector2(i * 16, j * 16 - 4) - Main.screenPosition + zero, new Rectangle(0, 22, 20, 20), drawC, 0, new Vector2(0), 1, SpriteEffects.None, 0);
-			//        }
-			//    }
-			//}
 		}
 
 		if (tile.TileFrameX == 72 && tile.TileFrameY == 0)
 		{
 			Color cTile = Lighting.GetColor(i, j);
-			tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodBedExtra");
+			tex = ModAsset.GlowWoodBedExtra.Value;
 			spriteBatch.Draw(tex, new Vector2(i * 16 - 4, j * 16 - 4) - Main.screenPosition + zero, new Rectangle(22, 0, 20, 20), cTile, 0, new Vector2(0), 1, SpriteEffects.None, 0);
 		}
 	}

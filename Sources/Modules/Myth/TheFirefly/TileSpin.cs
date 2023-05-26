@@ -206,7 +206,7 @@ internal class TileSpin
 	/// <param name="offsetY"></param>
 	/// <param name="specialColor"></param>
 	/// <param name="color"></param>
-	public void DrawRotatedLamp(int i, int j, Texture2D tex, float offsetX = 0, float offsetY = 0, bool specialColor = false, Color color = new Color())
+	public void DrawRotatedLamp(int i, int j, Texture2D tex, float offsetX = 0, float offsetY = 0, int width = 18, int height = 34, bool specialColor = false, Color color = new Color())
 	{
 		float rot = 0;
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
@@ -219,11 +219,11 @@ internal class TileSpin
 		if (TileRotation.ContainsKey((i, j)))
 		{
 			rot = TileRotation[(i, j)].Y;
-			Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, new Rectangle(tile.TileFrameX, 0, 18, 34), c, rot, new Vector2(9, 0), 1f, SpriteEffects.None, 0f);
+			Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, new Rectangle(tile.TileFrameX, 0, width, height), c, rot, new Vector2(width / 2f, 0), 1f, SpriteEffects.None, 0f);
 		}
 		else
 		{
-			Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, new Rectangle(tile.TileFrameX, 0, 18, 34), c, rot, new Vector2(9, 0), 1f, SpriteEffects.None, 0f);
+			Main.spriteBatch.Draw(tex, new Vector2(i * 16 + offsetX, j * 16 + offsetY) + zero - Main.screenPosition, new Rectangle(tile.TileFrameX, 0, width, height), c, rot, new Vector2(width / 2f, 0), 1f, SpriteEffects.None, 0f);
 		}
 	}
 
@@ -383,5 +383,13 @@ internal class TileSpin
 
 		Main.graphics.GraphicsDevice.Textures[0] = tex;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
+	}
+}
+public class LinearTile : GlobalTile
+{
+	public override void PostDraw(int i, int j, int type, SpriteBatch spriteBatch)
+	{
+		spriteBatch.samplerState = SamplerState.PointClamp;
+		base.PostDraw(i, j, type, spriteBatch);
 	}
 }

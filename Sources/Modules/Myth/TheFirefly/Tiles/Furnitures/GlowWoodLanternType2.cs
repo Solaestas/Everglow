@@ -1,6 +1,7 @@
 using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly;
 using Everglow.Myth.TheFirefly.Dusts;
+using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.Localization;
@@ -19,26 +20,25 @@ public class GlowWoodLanternType2 : ModTile
 		Main.tileLighted[Type] = true;
 		Main.tileSolid[Type] = false;
 		Main.tileNoFail[Type] = true;
-		TileID.Sets.HasOutlines[Type] = true;
-		TileID.Sets.CanBeSleptIn[Type] = true; // Facilitates calling ModifySleepingTargetInfo
-		TileID.Sets.InteractibleByNPCs[Type] = true; // Town NPCs will palm their hand at this tile
-		TileID.Sets.IsValidSpawnPoint[Type] = true;
 
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
 
-		DustType = ModContent.DustType<BlueGlow>();
 		AdjTiles = new int[] { TileID.HangingLanterns };
 
 		// Placement
-		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x2);
-		TileObjectData.newTile.AnchorTop = new AnchorData(AnchorType.SolidTile, TileObjectData.newTile.Width, 0);
+		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x2Top);
 		TileObjectData.newTile.AnchorBottom = default;
-		TileObjectData.newTile.DrawYOffset = 0;
+
+		TileObjectData.newAlternate.CopyFrom(TileObjectData.Style1x2Top);
+		TileObjectData.newAlternate.AnchorTop = new AnchorData(AnchorType.SolidTile & AnchorType.SolidBottom, TileObjectData.newTile.Width, 0);
+		TileObjectData.newAlternate.DrawYOffset = -4;
 		TileObjectData.addAlternate(1);
-		TileObjectData.newTile.AnchorTop = new AnchorData(AnchorType.Platform, TileObjectData.newTile.Width, 0);
-		TileObjectData.newTile.AnchorBottom = default;
-		TileObjectData.newTile.DrawYOffset = -12;
-		TileObjectData.newTile.CoordinateHeights = new[] { 16, 16 };
+
+		TileObjectData.newAlternate.CopyFrom(TileObjectData.Style1x2Top);
+		TileObjectData.newAlternate.AnchorTop = new AnchorData(AnchorType.Platform, TileObjectData.newTile.Width, 0);
+		TileObjectData.newAlternate.DrawYOffset = -10;
+		TileObjectData.addAlternate(0);
+
 		TileObjectData.addTile(Type);
 
 		LocalizedText name = CreateMapEntryName();
@@ -107,12 +107,13 @@ public class GlowWoodLanternType2 : ModTile
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		var tile = Main.tile[i, j];
+
 		if (tile.TileFrameY == 0)
 		{
 			var tileSpin = new TileSpin();
 			tileSpin.Update(i, j - tile.TileFrameY / 18);
-			Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodLanternType2Draw");
-			tileSpin.DrawRotatedLamp(i, j - tile.TileFrameY / 18, tex, 8, -2);
+			Texture2D tex = ModAsset.GlowWoodLanternType2Draw.Value;
+			tileSpin.DrawRotatedLamp(i, j - tile.TileFrameY / 18, tex, 8, TileObjectData.GetTileData(tile).DrawYOffset, 16);
 		}
 		return false;
 	}

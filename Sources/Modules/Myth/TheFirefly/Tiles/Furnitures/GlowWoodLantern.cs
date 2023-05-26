@@ -18,26 +18,25 @@ public class GlowWoodLantern : ModTile
 		Main.tileLighted[Type] = true;
 		Main.tileSolid[Type] = false;
 		Main.tileNoFail[Type] = true;
-		TileID.Sets.HasOutlines[Type] = true;
-		TileID.Sets.CanBeSleptIn[Type] = true; // Facilitates calling ModifySleepingTargetInfo
-		TileID.Sets.InteractibleByNPCs[Type] = true; // Town NPCs will palm their hand at this tile
-		TileID.Sets.IsValidSpawnPoint[Type] = true;
-
+		
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
 
-		DustType = ModContent.DustType<BlueGlow>();
 		AdjTiles = new int[] { TileID.HangingLanterns };
 
 		// Placement
-		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x2);
-		TileObjectData.newTile.AnchorTop = new AnchorData(AnchorType.SolidTile, TileObjectData.newTile.Width, 0);
+		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x2Top);
 		TileObjectData.newTile.AnchorBottom = default;
-		TileObjectData.newTile.DrawYOffset = 0;
+
+		TileObjectData.newAlternate.CopyFrom(TileObjectData.Style1x2Top);
+		TileObjectData.newAlternate.AnchorTop = new AnchorData(AnchorType.SolidTile & AnchorType.SolidBottom, TileObjectData.newTile.Width, 0);
+		TileObjectData.newAlternate.DrawYOffset = -2;
 		TileObjectData.addAlternate(1);
-		TileObjectData.newTile.AnchorTop = new AnchorData(AnchorType.Platform, TileObjectData.newTile.Width, 0);
-		TileObjectData.newTile.AnchorBottom = default;
-		TileObjectData.newTile.DrawYOffset = -12;
-		TileObjectData.newTile.CoordinateHeights = new[] { 16, 16 };
+
+		TileObjectData.newAlternate.CopyFrom(TileObjectData.Style1x2Top);
+		TileObjectData.newAlternate.AnchorTop = new AnchorData(AnchorType.Platform, TileObjectData.newTile.Width, 0);
+		TileObjectData.newAlternate.DrawYOffset = -8;
+		TileObjectData.addAlternate(0);
+
 		TileObjectData.addTile(Type);
 
 		LocalizedText name = CreateMapEntryName();
@@ -110,8 +109,9 @@ public class GlowWoodLantern : ModTile
 		{
 			var tileSpin = new TileSpin();
 			tileSpin.Update(i, j - tile.TileFrameY / 18);
-			Texture2D tex = MythContent.QuickTexture("TheFirefly/Tiles/Furnitures/GlowWoodLanternDraw");
-			tileSpin.DrawRotatedLamp(i, j - tile.TileFrameY / 18, tex, 8, -2);
+			Texture2D tex = ModAsset.GlowWoodLanternDraw.Value;
+			var tileUp = Main.tile[i, j - 1];
+			tileSpin.DrawRotatedLamp(i, j - tile.TileFrameY / 18, tex, 8, TileObjectData.GetTileData(tile).DrawYOffset, 16);
 		}
 		return false;
 	}
