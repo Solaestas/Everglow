@@ -15,8 +15,6 @@ public class CyanVineBar : ModTile
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
 		TileObjectData.addTile(Type);
 
-		ItemDrop = ModContent.ItemType<Items.CyanVineBar>();
-
 		var modTranslation = CreateMapEntryName();
 		AddMapEntry(new Color(224, 194, 101), modTranslation);
 	}

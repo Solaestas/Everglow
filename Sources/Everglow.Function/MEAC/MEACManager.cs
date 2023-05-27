@@ -5,14 +5,25 @@ namespace Everglow.Commons.MEAC;
 internal class MEACManager : ILoadable
 {
 	private RenderTarget2D screen = null, bloomTarget1 = null, bloomTarget2 = null;
+
 	private Effect ScreenWarp;
+
 	public void Load(Mod mod)
 	{
 		if (!Main.dedServ)
 		{
-			Main.OnResolutionChanged += Main_OnResolutionChanged;
-			On_FilterManager.EndCapture += FilterManager_EndCapture;
+			var hookManager = Ins.HookManager;
+			hookManager.AddHook(Enums.CodeLayer.ResolutionChanged, Main_OnResolutionChanged);
+			hookManager.AddHook(Enums.CodeLayer.PreDrawFilter, FilterManager_EndCapture);
 			ScreenWarp = ModAsset.ScreenWarp.Value;
+			ModIns.OnUnload += () =>
+			{
+				Ins.MainThread.AddTask(() =>
+				{
+					bloomTarget1?.Dispose();
+					bloomTarget2?.Dispose();
+				});
+			};
 		}
 	}
 
@@ -21,10 +32,12 @@ internal class MEACManager : ILoadable
 		bloomTarget1 = new RenderTarget2D(Main.graphics.GraphicsDevice, (int)v.X / 3, (int)v.Y / 3);
 		bloomTarget2 = new RenderTarget2D(Main.graphics.GraphicsDevice, (int)v.X / 3, (int)v.Y / 3);
 	}
+
 	private void Main_OnResolutionChanged(Vector2 obj)
 	{
 		CreateRender(obj);
 	}
+
 	private bool HasBloom()
 	{
 		bool flag = false;
@@ -38,11 +51,13 @@ internal class MEACManager : ILoadable
 		}
 		return flag;
 	}
+
 	private void UseBloom(GraphicsDevice graphicsDevice)
 	{
 		if (HasBloom())
 		{
 			Effect Bloom = ModAsset.Bloom1.Value;
+
 			//保存原图
 			graphicsDevice.SetRenderTarget(Main.screenTargetSwap);
 			graphicsDevice.Clear(Color.Transparent);
@@ -89,6 +104,7 @@ internal class MEACManager : ILoadable
 
 			graphicsDevice.SetRenderTarget(Main.screenTarget);
 			graphicsDevice.Clear(Color.Transparent);
+
 			//叠加
 			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
 			Main.spriteBatch.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
@@ -96,7 +112,8 @@ internal class MEACManager : ILoadable
 			Main.spriteBatch.End();
 		}
 	}
-	private void FilterManager_EndCapture(On_FilterManager.orig_EndCapture orig, FilterManager self, RenderTarget2D finalTexture, RenderTarget2D screenTarget1, RenderTarget2D screenTarget2, Color clearColor)
+
+	private void FilterManager_EndCapture()
 	{
 		// 直接从RT池子里取
 		var renderTargets = Ins.RenderTargetPool.GetRenderTarget2DArray(1);
@@ -126,8 +143,8 @@ internal class MEACManager : ILoadable
 		UseBloom(graphicsDevice);
 		screen = null;
 		renderTargets.Release();
-		orig(self, finalTexture, screenTarget1, screenTarget2, clearColor);
 	}
+
 	private void DrawBloom(SpriteBatch sb)//发光层
 	{
 		foreach (Projectile proj in Main.projectile)
@@ -139,6 +156,7 @@ internal class MEACManager : ILoadable
 			}
 		}
 	}
+
 	private bool DrawWarp(SpriteBatch sb)//扭曲层
 	{
 		bool flag = false;
@@ -160,10 +178,11 @@ internal class MEACManager : ILoadable
 		Ins.Batch.End();
 		return flag;
 	}
+
 	/// <summary>
 	/// 往screen上保存原图
 	/// </summary>
-	/// <param name="graphicsDevice"></param>
+	/// <param name="graphicsDevice"> </param>
 	private void GetOrig(GraphicsDevice graphicsDevice)
 	{
 		graphicsDevice.SetRenderTarget(screen);
@@ -175,10 +194,5 @@ internal class MEACManager : ILoadable
 
 	public void Unload()
 	{
-		Ins.MainThread.AddTask(() =>
-		{
-			bloomTarget1?.Dispose();
-			bloomTarget2?.Dispose();
-		});
 	}
 }

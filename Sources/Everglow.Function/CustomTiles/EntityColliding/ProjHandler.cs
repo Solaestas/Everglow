@@ -1,5 +1,4 @@
-﻿using Everglow.Commons.CustomTiles;
-using Everglow.Commons.CustomTiles.Tiles;
+﻿using Everglow.Commons.CustomTiles.Tiles;
 
 namespace Everglow.Commons.CustomTiles.EntityColliding;
 
