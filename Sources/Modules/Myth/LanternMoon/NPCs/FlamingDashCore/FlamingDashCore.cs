@@ -639,7 +639,7 @@ public class FlamingDashCore : ModNPC
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
 		var bars = new List<DashCoreVertexInfo>();
-		ef2 = ModContent.Request<Effect>("Everglow/Myth/Effects/TrailRainbow").Value;
+		ef2 = ModAsset.TrailRainbow.Value;
 		// 把所有的点都生成出来，按照顺序
 
 		for (int i = 1; i < NPC.oldPos.Length; ++i)
