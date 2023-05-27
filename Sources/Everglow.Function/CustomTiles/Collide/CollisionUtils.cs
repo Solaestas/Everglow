@@ -1,5 +1,4 @@
 using System.Runtime.CompilerServices;
-using Everglow.Commons.CustomTiles;
 using Everglow.Commons.CustomTiles.Collide;
 using Everglow.Commons.CustomTiles.DataStructures;
 
