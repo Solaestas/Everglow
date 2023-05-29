@@ -5,6 +5,7 @@ namespace Everglow.Myth.TheFirefly.WorldGeneration;
 internal class MothWorld : Subworld
 {
 	public override bool ShouldSave => true;
+	public override bool NoPlayerSaving => false;
 	public override int Width => 800;
 	public override int Height => 600;
 	public override List<GenPass> Tasks => new List<GenPass>()
