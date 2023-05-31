@@ -55,7 +55,13 @@ public class TsunamiShark : ModProjectile
 			SoundEngine.PlaySound(new SoundStyle("Everglow/Ocean/Sounds/WaterGun").WithVolumeScale(0.4f), Projectile.Center);
 
 
-			Projectile p = Projectile.NewProjectileDirect(item.GetSource_ItemUse(item), Projectile.Center + toMuzzle + random, velocity, ModContent.ProjectileType<TsunamiShark_bullet>(), item.damage, item.knockBack, player.whoAmI, tsunamiS.ShootType);
+			Projectile p = Projectile.NewProjectileDirect(item.GetSource_ItemUse(item),
+                Projectile.Center + toMuzzle + random, 
+				velocity,
+				ModContent.ProjectileType<TsunamiShark_bullet>(),
+				overridedamage == -1 ? item.damage : overridedamage,
+				item.knockBack,
+				player.whoAmI);
 			p.CritChance = (int)(item.crit + player.GetCritChance(DamageClass.Generic));
 
 			float rot = velocity.ToRotation();
