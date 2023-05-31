@@ -109,7 +109,19 @@ public class TsunamiShark_missile : ModProjectile
 					if(OldTarget == null)
 					{
 						OldTarget = target;
-						yield return new WaitForFrames((uint)Main.rand.Next(120));
+						uint length = (uint)Main.rand.Next(120);
+						for(int a = 0;a < length;a++)
+						{
+							Projectile.friendly = false;
+							Vector2 swing = new Vector2(MathF.Sin((float)Main.time * 0.3f + Projectile.whoAmI) * 72 * Projectile.ai[0] * Projectile.ai[0], MathF.Sin((float)Main.time * 0.1f + Projectile.whoAmI * 0.1f) * 10 - Projectile.ai[0] * 200 + 200);
+							Vector2 aimVelPlayer = player.Center + new Vector2(-player.direction * 36, -player.gravDir * 30) + swing - Projectile.Center;
+							if (aimVelPlayer != Vector2.zeroVector)
+							{
+								aimVelPlayer = Vector2.Normalize(aimVelPlayer) * maxVel * Projectile.ai[0] * Projectile.ai[0];
+							}
+							Projectile.velocity = Projectile.velocity * 0.95f + aimVelPlayer * 0.05f;
+							yield return new SkipThisFrame();
+						}
 					}
 					Projectile.friendly = true;
 					Vector2 aimVel = target.Center - Projectile.Center - Projectile.velocity;
