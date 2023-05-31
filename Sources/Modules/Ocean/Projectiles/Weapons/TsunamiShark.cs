@@ -6,13 +6,9 @@ using Everglow.Ocean.Common;
 using Everglow.Ocean.Dusts;
 using Everglow.Ocean.VFXs;
 using Terraria.Audio;
+using Terraria.DataStructures;
 
 namespace Everglow.Ocean.Projectiles.Weapons;
-
-public class tsunamiplayer : ModPlayer
-{
-
-}
 
 public class TsunamiShark : ModProjectile
 {
@@ -27,6 +23,22 @@ public class TsunamiShark : ModProjectile
 		Projectile.DamageType = DamageClass.Ranged;
 	}
 	private int UseCount = 0;
+	private int overridedamage;
+	public override void OnSpawn(IEntitySource source)
+	{
+		if (source is EntitySource_ItemUse_WithAmmo withammo && withammo.Entity is Player owner)
+		{
+			var modifer = owner.GetTotalDamage(withammo.Item.DamageType);
+			modifer.CombineWith(owner.bulletDamage);
+			CombinedHooks.ModifyWeaponDamage(owner, withammo.Item, ref modifer);
+			overridedamage = Math.Max(1, 
+				(int)modifer.ApplyTo(withammo.Item.damage + ContentSamples.ItemsByType[withammo.AmmoItemIdUsed].damage));
+		}
+		else
+		{
+			overridedamage = -1;
+		}
+	}
 	private void Shoot()
 	{
 		Vector2 toMuzzle = new Vector2(15, -15);
@@ -35,9 +47,7 @@ public class TsunamiShark : ModProjectile
 		Vector2 toMouse = Projectile.Center - player.MountedCenter;
 		Vector2 velocity = Vector2.Normalize(toMouse) * 27;
 		Item item = player.HeldItem;
-		ModPlayer modPlayer = player.GetModPlayer<tsunamiplayer>();
-		var tsunamiS = item.ModItem as Items.Weapons.TsunamiShark;
-		if (tsunamiS != null)
+		if (item.ModItem is Items.Weapons.TsunamiShark tsunamiS)
 		{
 			Vector2 random = new Vector2(0, Main.rand.NextFloat(1f)).RotatedByRandom(6.283);
 			ScreenShaker Gsplayer = player.GetModPlayer<ScreenShaker>();
@@ -50,7 +60,15 @@ public class TsunamiShark : ModProjectile
 
 			float rot = velocity.ToRotation();
 			//TODO:子弹伤害校正，要求和被消耗的弹药种类挂钩
-			Projectile.NewProjectile(item.GetSource_ItemUse(item), Projectile.Center + toMuzzle * 1.5f + velocity * 2.2f + random, Vector2.Zero, ModContent.ProjectileType<TsunamiShark_flame>(), item.damage, item.knockBack, player.whoAmI, 0.36f, rot);
+			Projectile.NewProjectile(item.GetSource_ItemUse(item),
+				Projectile.Center + toMuzzle * 1.5f + velocity * 2.2f + random,
+				Vector2.Zero,
+				ModContent.ProjectileType<TsunamiShark_flame>(),
+				overridedamage == -1 ? item.damage : overridedamage,
+				item.knockBack,
+				player.whoAmI,
+				0.36f,
+				rot);
 		}
 		UseCount++;
 		if(UseCount == 12)
