@@ -224,7 +224,6 @@ public class TsunamiShark_missile : ModProjectile
 		Texture2D shark = ModAsset.TsunamiShark_missile.Value;
 		if(TimeTokill < 0)
 		{
-			Vector4 c0 = lightColor.ToVector4() * 0.5f + new Color(0, 0.4f, 1f, 0).ToVector4() * 0.5f;
 			Lighting.AddLight(Projectile.Center, 0, 0.4f, 1f);
 			Main.spriteBatch.Draw(shark, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, shark.Size() / 2f, 1f, SpriteEffects.None, 0);
 		}
@@ -260,7 +259,6 @@ public class TsunamiShark_missile : ModProjectile
 
 			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(5) - Main.screenPosition, color, new Vector3(factor, 0, 0)));
 			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(5) - Main.screenPosition, color, new Vector3(factor, 1, 0)));
-
 		}
 
 		if (bars.Count > 2)

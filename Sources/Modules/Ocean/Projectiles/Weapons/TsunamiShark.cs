@@ -81,7 +81,7 @@ public class TsunamiShark : ModProjectile
 		{
 			if (player.ownedProjectileCounts[ModContent.ProjectileType<TsunamiShark_missile>()] < 20)
 			{
-				Projectile.NewProjectileDirect(item.GetSource_ItemUse(item), Projectile.Center + toMuzzle, velocity.RotatedBy(-Main.rand.NextFloat(-0.2f, 0.4f) * player.direction) * 2.4f, ModContent.ProjectileType<TsunamiShark_missile>(), (int)(item.damage * 3.64f), item.knockBack, player.whoAmI, Main.rand.NextFloat(0.6f, 1.4f));
+				Projectile.NewProjectileDirect(item.GetSource_ItemUse(item), Projectile.Center + toMuzzle, velocity.RotatedBy(-Main.rand.NextFloat(-0.2f, 0.4f) * player.direction) * 2.4f, ModContent.ProjectileType<TsunamiShark_missile>(), (int)((overridedamage == -1 ? item.damage : overridedamage) * 3.64f), item.knockBack, player.whoAmI, Main.rand.NextFloat(0.6f, 1.4f));
 			}
 			UseCount = 0;
 		}
