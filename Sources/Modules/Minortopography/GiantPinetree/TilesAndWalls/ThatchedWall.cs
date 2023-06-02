@@ -1,12 +1,12 @@
 namespace Everglow.Minortopography.GiantPinetree.TilesAndWalls;
 
-public class PineLeavesWall : ModWall
+public class ThatchedWall : ModWall
 {
 	public override void SetStaticDefaults()
 	{
 		Main.wallHouse[Type] = true;
-		DustType = DustID.GreenMoss;
+		DustType = ModContent.DustType<Dusts.ThatchedDust>();
 		HitSound = SoundID.Grass;
-		AddMapEntry(new Color(0, 32, 22));
+		AddMapEntry(new Color(60, 33, 16));
 	}
 }
