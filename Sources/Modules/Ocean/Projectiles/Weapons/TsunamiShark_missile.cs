@@ -142,6 +142,7 @@ public class TsunamiShark_missile : ModProjectile
 						aimVel = Vector2.Normalize(aimVel) * maxVel * Projectile.ai[0] * Projectile.ai[0];
 					}
 					Projectile.velocity = Projectile.velocity * 0.95f + aimVel * 0.05f;
+
 				}
 			}
 			else
@@ -155,6 +156,10 @@ public class TsunamiShark_missile : ModProjectile
 					aimVel = Vector2.Normalize(aimVel) * maxVel * Projectile.ai[0] * Projectile.ai[0];
 				}
 				Projectile.velocity = Projectile.velocity * 0.95f + aimVel * 0.05f;
+				if (Main.rand.NextBool(60))
+				{
+					AmmoHit();
+				}
 			}
 			yield return new SkipThisFrame();
 		}
